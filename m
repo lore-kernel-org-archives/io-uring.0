@@ -2,87 +2,70 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D078C433EF
-	for <io-uring@archiver.kernel.org>; Sat, 29 Jan 2022 23:31:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA28C433F5
+	for <io-uring@archiver.kernel.org>; Mon, 31 Jan 2022 19:04:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353211AbiA2Xa6 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 29 Jan 2022 18:30:58 -0500
-Received: from ip59.38.31.103.in-addr.arpa.unknwn.cloudhost.asia ([103.31.38.59]:49292
-        "EHLO gnuweeb.org" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238951AbiA2Xa6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 29 Jan 2022 18:30:58 -0500
-Received: from [192.168.88.87] (unknown [36.81.38.25])
-        by gnuweeb.org (Postfix) with ESMTPSA id AE5C8C32D0;
-        Sat, 29 Jan 2022 23:30:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gnuweeb.org;
-        s=default; t=1643499055;
-        bh=B4K+3+JFTWWKU/O0tyev275Y374cFJ34SuhCQURx7oc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JKJ5Ct61wVnrR2iphOOxgQYDqWKHYayo3MF1SEnxb+dYFC0P7aw2idbQ1+YoOhngb
-         Wfkb89NKejxQCeTxH4CWHkbjtRsG7pIj5zktfZT0kPzn9bMyUvtgicacW1FFwLRK3p
-         LYnE7fh5WJIpxBqXMoVo4LAArpgAxK/IEXPT00uFhLkIZFJG8zKXO016l1qH/RhrMH
-         Hx2N0lsxNpHe3lpPcQgWY/+HUwJ6IkJ9jpIZX6sQ0V7ThEfaXCLVpQn3ekYrLlL3uq
-         YxK4kUYb395e8tCKQC9goRn4GwgbKq3TK69ts9um/JEMhdJ77rZOzaY/KrO95ambO1
-         bsnQtR12AyXng==
-Message-ID: <8c5e3b16-15ac-45fe-d9c2-14615eccb981@gnuweeb.org>
-Date:   Sun, 30 Jan 2022 06:30:52 +0700
+        id S234669AbiAaTE0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 31 Jan 2022 14:04:26 -0500
+Received: from wrqvvpzp.outbound-mail.sendgrid.net ([149.72.131.227]:31364
+        "EHLO wrqvvpzp.outbound-mail.sendgrid.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358998AbiAaTE0 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 31 Jan 2022 14:04:26 -0500
+X-Greylist: delayed 361 seconds by postgrey-1.27 at vger.kernel.org; Mon, 31 Jan 2022 14:04:25 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=catern.com;
+        h=from:subject:mime-version:to:content-type:content-transfer-encoding;
+        s=s1; bh=Hbj6qVYSv0E3VFswWVNNr1celefnDHzNQNQ/1s3SNLc=;
+        b=1JOMiUM7INiYj7SX3OLqZb49xEh+/PTga+SpppoQqIZRV4OYotQF1bcZDspycDO9BoWe
+        t0uG5BrSAtStLU2O83dLpEPalgTMbECnBU2iOHYQZoLZjThT2ONyhqOF5bXzxKHya4OtZw
+        5kdozmLeNRfUjRKr2fDHWONMoatiAdjYEIvdG2HfoIADU2lF4Yg/v0Ld+rU56KMokPuaxs
+        ufHOCM7uv3zDtCmsykl5YA6hryyjkrhVKbREauuSMnnAGi4Ot+o0pxUK522+SfUr5aAsat
+        JC17HaFLqUqzwsgipRjwV6/ewOgmTJztRJmPdm2sxug2mbnlhPhHzA1fttf2dkNg==
+Received: by filterdrecv-7bc86b958d-6sxkj with SMTP id filterdrecv-7bc86b958d-6sxkj-1-61F83098-9
+        2022-01-31 18:55:20.170223817 +0000 UTC m=+13120499.550416994
+Received: from earth.catern.com (unknown)
+        by ismtpd0168p1mdw1.sendgrid.net (SG) with ESMTP id XoXStXjcRqazTt9Irpsawg
+        for <io-uring@vger.kernel.org>; Mon, 31 Jan 2022 18:55:19.993 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=::1; helo=localhost; envelope-from=sbaugh@catern.com; receiver=<UNKNOWN> 
+Received: from localhost (localhost [IPv6:::1])
+        by earth.catern.com (Postfix) with ESMTPSA id 22080600A9
+        for <io-uring@vger.kernel.org>; Mon, 31 Jan 2022 13:55:19 -0500 (EST)
+From:   Spencer Baugh <sbaugh@catern.com>
+Subject: FlexSC influence on io_uring
+Date:   Mon, 31 Jan 2022 18:55:20 +0000 (UTC)
+Message-ID: <87o83r7n1k.fsf@catern.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH for-5.18 v1 0/3] Add `sendto(2)` and `recvfrom(2)` support
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
-        netdev Mailing List <netdev@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        Tea Inside Mailing List <timl@vger.teainside.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Nugra <richiisei@gmail.com>,
-        Praveen Kumar <kpraveen.lkml@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
-References: <20220129125021.15223-1-ammarfaizi2@gnuweeb.org>
- <98d4f268-5945-69a7-cec7-bccfcdedde1c@kernel.dk>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <98d4f268-5945-69a7-cec7-bccfcdedde1c@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-SG-EID: =?us-ascii?Q?GW3oCMoYnalRiojMOuLzE6x2H5kORXvlCdz1UwQVRMVT4fbh9ODEfCogOe74cO?=
+ =?us-ascii?Q?rI4e0V+MFZgakz9Re5a6=2FCgkFJF3YJBpVHNlGj3?=
+ =?us-ascii?Q?d1zR=2FKtDhRRtpWOBsu59J3aMntgUCtQOzGzE1d6?=
+ =?us-ascii?Q?MYcTqpT4ca76osGdvdjDfQqQ+U5mgfa+JtTjYb9?=
+ =?us-ascii?Q?hzhWO4+YIq0MjU2hcoQ0xkO80dwI0RqXx30BcoA?=
+ =?us-ascii?Q?qIqGSiir7P2FjWmWvzqP0skvMCzLA0E+spZGOz?=
+To:     io-uring@vger.kernel.org
+X-Entity-ID: d/0VcHixlS0t7iB1YKCv4Q==
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 1/30/22 1:32 AM, Jens Axboe wrote:
-> On 1/29/22 5:50 AM, Ammar Faizi wrote:
->> Hello,
->>
->> This patchset adds sendto(2) and recvfrom(2) support for io_uring. It
->> also addresses an issue in the liburing GitHub repository [1].
->>
->> ## Motivations:
->>
->> 1) By using `sendto()` and `recvfrom()` we can make the submission
->>     simpler compared to always using `sendmsg()` and `recvmsg()` from
->>     the userspace. Especially for UDP socket.
->>
->> 2) There is a historical patch that tried to add the same
->>     functionality, but did not end up being applied. [2]
-> 
-> As far as I can tell, the only win from sendto/recvfrom is that we can
-> handle async offload a bit cheaper compared to sendmsg/recvmsg. Is this
-> enough to warrant adding them separately? I don't know, which is why
-> this has been somewhat stalled for a while.
-> 
-> Maybe you have done some testing and have numbers (or other reasons) to
-> back up the submission? There's not a whole lot of justification in this
-> patchset.
-> 
 
-So far, I haven't done it. I only created a test that ensures the
-functionality is working properly.
+Hi,
 
-I will play with this further. If I win, I will submit the v2 of
-this series for review. Thanks, Jens!
+To what extent, if any, was the FlexSC paper an influence on io_uring?
 
--- 
-Ammar Faizi
+FlexSC is described in a paper from 2010:
+https://www.usenix.org/legacy/events/osdi10/tech/full_papers/Soares.pdf
+
+FlexSC is a system for asynchronous system calls aimed at achieving
+high-performance by avoiding the cost of system calls, in particular the
+locality costs of executing kernel code and user code on the same core.
+
+Implementation-wise, it seems broadly similar to io_uring, in that
+system calls are submitted by writing to some location in memory, which
+is later picked up by a syscall-execution thread (ala
+IORING_SETUP_SQPOLL) which executes it and writes back the result.
+
+I'm just curious if there was any influence from FlexSC on io_uring.
+
+Thanks,
+Spencer Baugh
