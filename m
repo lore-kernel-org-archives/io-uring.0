@@ -2,33 +2,55 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85E1EC433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7422BC433EF
 	for <io-uring@archiver.kernel.org>; Mon,  7 Feb 2022 14:13:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiBGOMh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 7 Feb 2022 09:12:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S235254AbiBGOMi (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 7 Feb 2022 09:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347860AbiBGOGJ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Feb 2022 09:06:09 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E2AC043188;
-        Mon,  7 Feb 2022 06:06:07 -0800 (PST)
-Received: from integral2.. (unknown [36.72.214.231])
-        by gnuweeb.org (Postfix) with ESMTPSA id 2708E7E24F;
-        Mon,  7 Feb 2022 14:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1644242766;
-        bh=G0B/qx9vzzQxYGDcP1samCsqc9aLd8Wtz9Gxg69dd2I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F6YNv0l9aRMeGzi7VwFsEMtzG3zQaKwAxd1XnR2M3BlpSiMHYKFvabS7/OpjqfbXi
-         eMVuZ5yNmJcV54+mSeqvGkRHHqSrI0i1CwI5GJlXMco28NE9L5Hjr5LhCqVUXR2AV+
-         YxVMPyTunprBdUMqqdd8cuEWNrgC/Xjn48JaucpXdDFMF1Q1UhFyluTujQEY/z1ZUA
-         oLk9/QWwoTatM/PuQ/80T585UTJWC+zoR2UOPIs01NmXGivafTILP12QQe7C8SdAOV
-         yastEbo9QPOn2C9M8r4oVMAlV8Rh2tZLKZtNkv2MAiVfSdnynzTtMzM7k9oJ1bnJte
-         lKz9eZJAsrGgA==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Jens Axboe <axboe@kernel.dk>
+        with ESMTP id S1384887AbiBGNqG (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Feb 2022 08:46:06 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3537C043181
+        for <io-uring@vger.kernel.org>; Mon,  7 Feb 2022 05:46:00 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id e6so13022211pfc.7
+        for <io-uring@vger.kernel.org>; Mon, 07 Feb 2022 05:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+fYYVy93BDFqw0cCdynsbSRegfY0xYWHIfwAqDxymeY=;
+        b=hp3MMQ8ZMedpHg9Nevp1XeEuuEA7IKnvKqo3RmIMgSgkNZVcw4jBrSu78B7Dx97yzi
+         ChG12kiPN5PHLwvGlce9A0y5Co7qoc5PD33ihFDc/g1bGg4tbNHvi4ffk8p1O6Ksm5My
+         8BtSs5gvT2LhokIb2C3tAO+hrK5GTuyzQrRXirbOgMOoWQh3fse1cb5JMHqHIXxI8Fre
+         uYUXkpw437r8QzNVs6c23wTMj6+Kfq6yj2oLsk7GzdQPcsInWy68JVklCfUL8CbW6oGC
+         7JMcutC1k+rlN6rp3tNzXDqgVacnpF5Doatrua7fNfYRD/YTFpNYv00gpZYUSBG4Ylf1
+         eI3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+fYYVy93BDFqw0cCdynsbSRegfY0xYWHIfwAqDxymeY=;
+        b=H5CdNCyKegJYmxQYP6XRtUtLnnJE+DV9YYoCm4wwl845g5Sy6qFpOC5uI1Fb5ecXbO
+         UZg/O7VulCIxWGnnjk7D/VBvv/7L1A9Q/37qRSSJsWD96MZKhYCyEqFISFBQXSZCABDI
+         DSpQbILw41JgWFnmks/k57YS9h0WXDmqBimGPkQFwYManaJRckbbN6ueiRFYuwqQNAvb
+         gCg80mDKNphN6YQFX/hliMpoG70CrC+GBfe5uWO1cvnBP/2Ki2TWtLrkAhC7vYGm5LFb
+         6VjewIVO80fwuCMPXrXQvLFo4JGo1bZ/jbA7QbapvO8quQbAKpwaCmQ+NzBRUXLH/oRj
+         +rkQ==
+X-Gm-Message-State: AOAM533f8wo0m1bFoz7brGpKBvewTlPPnRf0b2GVIbrcFakEao8UfSSw
+        RxmefUrSdb+fvD4VqNtldi17pA==
+X-Google-Smtp-Source: ABdhPJy13wPQSgj1YQJzHPhdlM4opHdCLY6oe1/iBRCUm78RUTw3mK/LTWyJn4eAdyiaxbyeS+SOEw==
+X-Received: by 2002:a63:e647:: with SMTP id p7mr9358380pgj.23.1644241560350;
+        Mon, 07 Feb 2022 05:46:00 -0800 (PST)
+Received: from [192.168.1.116] ([66.219.217.159])
+        by smtp.gmail.com with ESMTPSA id c11sm12279229pfv.76.2022.02.07.05.45.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Feb 2022 05:45:59 -0800 (PST)
+Subject: Re: [PATCH io_uring-5.17] io_uring: Fix build error potential reading
+ uninitialized value
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
 Cc:     GNU/Weeb Mailing List <gwml@gnuweeb.org>,
         io-uring Mailing list <io-uring@vger.kernel.org>,
         Tea Inside Mailing List <timl@vger.teainside.org>,
@@ -37,82 +59,46 @@ Cc:     GNU/Weeb Mailing List <gwml@gnuweeb.org>,
         kernel test robot <lkp@intel.com>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         "Chen, Rong A" <rong.a.chen@intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH io_uring-5.17 v2] io_uring: Clean up a false-positive warning from GCC 9.3.0
-Date:   Mon,  7 Feb 2022 21:05:33 +0700
-Message-Id: <20220207140533.565411-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk>
-References: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com> <20220207114315.555413-1-ammarfaizi2@gnuweeb.org> <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk>
+        Pavel Begunkov <asml.silence@gmail.com>
+References: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com>
+ <20220207114315.555413-1-ammarfaizi2@gnuweeb.org>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk>
+Date:   Mon, 7 Feb 2022 06:45:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220207114315.555413-1-ammarfaizi2@gnuweeb.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
+On 2/7/22 4:43 AM, Ammar Faizi wrote:
+> From: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
+> 
+> In io_recv() if import_single_range() fails, the @flags variable is
+> uninitialized, then it will goto out_free.
+> 
+> After the goto, the compiler doesn't know that (ret < min_ret) is
+> always true, so it thinks the "if ((flags & MSG_WAITALL) ..."  path
+> could be taken.
+> 
+> The complaint comes from gcc-9 (Debian 9.3.0-22) 9.3.0:
+> ```
+>   fs/io_uring.c:5238 io_recvfrom() error: uninitialized symbol 'flags'
+> ```
+> Fix this by bypassing the @ret and @flags check when
+> import_single_range() fails.
 
-In io_recv(), if import_single_range() fails, the @flags variable is
-uninitialized, then it will goto out_free.
+The compiler should be able to deduce this, and I guess newer compilers
+do which is why we haven't seen this warning before. I'm fine with doing
+this as a cleanup, but I think the commit title should be modified a
+bit. It sounds like there might be an issue reading uninitialized data,
+which isn't actually true.
 
-After the goto, the compiler doesn't know that (ret < min_ret) is
-always true, so it thinks the "if ((flags & MSG_WAITALL) ..."  path
-could be taken.
-
-The complaint comes from gcc-9 (Debian 9.3.0-22) 9.3.0:
-```
-  fs/io_uring.c:5238 io_recvfrom() error: uninitialized symbol 'flags'
-```
-Fix this by bypassing the @ret and @flags check when
-import_single_range() fails.
-
-Reasons:
- 1. import_single_range() only returns -EFAULT when it fails.
- 2. At that point, @flags is uninitialized and shouldn't be read.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reported-by: "Chen, Rong A" <rong.a.chen@intel.com>
-Link: https://lore.gnuweeb.org/timl/d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com/
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Suggested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Fixes: 7297ce3d59449de49d3c9e1f64ae25488750a1fc ("io_uring: improve send/recv error handling")
-Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
- v2:
-   - Update the subject line
-
- fs/io_uring.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 2e04f718319d..3445c4da0153 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5228,7 +5228,6 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 		min_ret = iov_iter_count(&msg.msg_iter);
- 
- 	ret = sock_recvmsg(sock, &msg, flags);
--out_free:
- 	if (ret < min_ret) {
- 		if (ret == -EAGAIN && force_nonblock)
- 			return -EAGAIN;
-@@ -5236,9 +5235,9 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 			ret = -EINTR;
- 		req_set_fail(req);
- 	} else if ((flags & MSG_WAITALL) && (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC))) {
-+out_free:
- 		req_set_fail(req);
- 	}
--
- 	__io_req_complete(req, issue_flags, ret, io_put_kbuf(req));
- 	return 0;
- }
-
-base-commit: f6133fbd373811066c8441737e65f384c8f31974
 -- 
-2.32.0
+Jens Axboe
 
