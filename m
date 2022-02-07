@@ -2,138 +2,91 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08E10C433F5
-	for <io-uring@archiver.kernel.org>; Sun,  6 Feb 2022 09:52:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC0FCC433F5
+	for <io-uring@archiver.kernel.org>; Mon,  7 Feb 2022 10:57:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbiBFJwy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 6 Feb 2022 04:52:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
+        id S236908AbiBGK5T (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 7 Feb 2022 05:57:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbiBFJwx (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 6 Feb 2022 04:52:53 -0500
-Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1868C061A73
-        for <io-uring@vger.kernel.org>; Sun,  6 Feb 2022 01:52:52 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0V3fxVZ3_1644141169;
-Received: from localhost.localdomain(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V3fxVZ3_1644141169)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Sun, 06 Feb 2022 17:52:50 +0800
-From:   Hao Xu <haoxu@linux.alibaba.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>
-Subject: [PATCH 2/3] io-wq: reduce acct->lock crossing functions lock/unlock
-Date:   Sun,  6 Feb 2022 17:52:40 +0800
-Message-Id: <20220206095241.121485-3-haoxu@linux.alibaba.com>
+        with ESMTP id S1352158AbiBGKuq (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Feb 2022 05:50:46 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5254BC0401C1
+        for <io-uring@vger.kernel.org>; Mon,  7 Feb 2022 02:50:45 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id e3so9988701wra.0
+        for <io-uring@vger.kernel.org>; Mon, 07 Feb 2022 02:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EZDSS2MYdieKNY+ptNKFPV1o4mbS/p6IjuUtTxEmOkI=;
+        b=duNxmxAdk7clYt7ndWPXMcPdSolXHBq4k1vpVSHdqeR3Y4OWFGyd1weIqSmOvwZb6S
+         Spl+lEN4s/4eqR+CV2VBUi31PwqNpLhu1spSm9qyFUZFnw96KF9rCAhnyUvDBEIf11z1
+         PSnr7JICxX6dz2N2SJiFNsqmL9hadf/eri3EZFXn1w2FkBwZdwQP/eyRjWS5wMaFGvdn
+         ZF0lDFr030L6E1u3lhpYKRKDd4tReFjacJB9q+g0p4uS1S2/apocHH72RqIDegc24uK8
+         2jrlj+s/8rx96MGL4wDFQmWS8/lusi4cE2hPx9vSkIyDaelQhP2a0llYAaxuDq8JyPit
+         J5CA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EZDSS2MYdieKNY+ptNKFPV1o4mbS/p6IjuUtTxEmOkI=;
+        b=Mqeh22Meplf05U4vxvvtPpI7zQMod1/MsF0uR5LrSvaxfAuB9rLFkGktvzG3/4FLoi
+         C9zxWflMtx5BgIUUL7lp0SI1IFBCKzLj0mfna6t+3S64Pp0XQbZVNGbRcw75yeBXT6tq
+         z8sSebuAGc483/uUemYNjHvlJtqBmu8u9Ojoy2H7pdMXmVtJQ7ylk/Pn4KfJyzdxVY3T
+         vBnId9dVzR9Tirw5obNDG+Kr/4tsZjSqo5lTqNTnIa+p7ShOc5WPrah2ahji/58ADQyC
+         GyKwnOLoq7tDDhVQghFjHiMU9maEcAteoKU0YUCXLtdRNXaXr2nEAq+rj7dQ2iewIkUv
+         VY3Q==
+X-Gm-Message-State: AOAM533wQL0uspgtd8L72Pq5ZOK/NLUGYFsLp/TlTLYE50dLgfo6ObrV
+        oH8Hb4BrCYKDt4YcRW9mfJRKWfGDcV5LMw==
+X-Google-Smtp-Source: ABdhPJxLDom1n0BQAQA7DNHaMf3QjJwyZDXY+ENwGqJe57G5ZW9q1SeMh9v9S8yRdiIbSkPeP/Mi6A==
+X-Received: by 2002:a5d:6486:: with SMTP id o6mr8980127wri.454.1644231043764;
+        Mon, 07 Feb 2022 02:50:43 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:9277:27e1:ecf9:6ab6])
+        by smtp.gmail.com with ESMTPSA id a22sm112080wmq.45.2022.02.07.02.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Feb 2022 02:50:43 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com,
+        linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com, lkp@lists.01.org, lkp@intel.com,
+        Usama Arif <usama.arif@bytedance.com>,
+        kernel test robot <oliver.sang@intel.com>
+Subject: [PATCH] io_uring: unregister eventfd while holding lock when freeing ring ctx
+Date:   Mon,  7 Feb 2022 10:50:40 +0000
+Message-Id: <20220207105040.2662467-1-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220206095241.121485-1-haoxu@linux.alibaba.com>
-References: <20220206095241.121485-1-haoxu@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-reduce acct->lock lock and unlock in different functions to make the
-code clearer.
+This is because ctx->io_ev_fd is rcu_dereference_protected using
+ctx->uring_lock in io_eventfd_unregister. Not locking the function
+resulted in suspicious RCU usage reported by kernel test robot.
 
-Signed-off-by: Hao Xu <haoxu@linux.alibaba.com>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
- fs/io-wq.c | 32 ++++++++++++--------------------
- 1 file changed, 12 insertions(+), 20 deletions(-)
+ fs/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/io-wq.c b/fs/io-wq.c
-index 9595616ccaa3..f7b7fa396faf 100644
---- a/fs/io-wq.c
-+++ b/fs/io-wq.c
-@@ -239,10 +239,15 @@ static void io_worker_exit(struct io_worker *worker)
- 
- static inline bool io_acct_run_queue(struct io_wqe_acct *acct)
- {
-+	bool ret = false;
-+
-+	raw_spin_lock(&acct->lock);
- 	if (!wq_list_empty(&acct->work_list) &&
- 	    !test_bit(IO_ACCT_STALLED_BIT, &acct->flags))
--		return true;
--	return false;
-+		ret = true;
-+	raw_spin_unlock(&acct->lock);
-+
-+	return ret;
- }
- 
- /*
-@@ -395,13 +400,9 @@ static void io_wqe_dec_running(struct io_worker *worker)
- 
- 	if (!atomic_dec_and_test(&acct->nr_running))
- 		return;
--	raw_spin_lock(&wqe->lock);
--	if (!io_acct_run_queue(acct)) {
--		raw_spin_unlock(&wqe->lock);
-+	if (!io_acct_run_queue(acct))
- 		return;
--	}
- 
--	raw_spin_unlock(&wqe->lock);
- 	atomic_inc(&acct->nr_running);
- 	atomic_inc(&wqe->wq->worker_refs);
- 	io_queue_worker_create(worker, acct, create_worker_cb);
-@@ -544,7 +545,6 @@ static void io_assign_current_work(struct io_worker *worker,
- static void io_wqe_enqueue(struct io_wqe *wqe, struct io_wq_work *work);
- 
- static void io_worker_handle_work(struct io_worker *worker)
--	__releases(acct->lock)
- {
- 	struct io_wqe_acct *acct = io_wqe_get_acct(worker);
- 	struct io_wqe *wqe = worker->wqe;
-@@ -561,6 +561,7 @@ static void io_worker_handle_work(struct io_worker *worker)
- 		 * can't make progress, any work completion or insertion will
- 		 * clear the stalled flag.
- 		 */
-+		raw_spin_lock(&acct->lock);
- 		work = io_get_next_work(acct, worker);
- 		raw_spin_unlock(&acct->lock);
- 		if (work) {
-@@ -614,8 +615,6 @@ static void io_worker_handle_work(struct io_worker *worker)
- 					wake_up(&wq->hash->wait);
- 			}
- 		} while (work);
--
--		raw_spin_lock(&acct->lock);
- 	} while (1);
- }
- 
-@@ -639,14 +638,9 @@ static int io_wqe_worker(void *data)
- 		long ret;
- 
- 		set_current_state(TASK_INTERRUPTIBLE);
--loop:
--		raw_spin_lock(&acct->lock);
--		if (io_acct_run_queue(acct)) {
-+		while (io_acct_run_queue(acct))
- 			io_worker_handle_work(worker);
--			goto loop;
--		} else {
--			raw_spin_unlock(&acct->lock);
--		}
-+
- 		raw_spin_lock(&wqe->lock);
- 		/* timed out, exit unless we're the last worker */
- 		if (last_timeout && acct->nr_workers > 1) {
-@@ -671,10 +665,8 @@ static int io_wqe_worker(void *data)
- 		last_timeout = !ret;
- 	}
- 
--	if (test_bit(IO_WQ_BIT_EXIT, &wq->state)) {
--		raw_spin_lock(&acct->lock);
-+	if (test_bit(IO_WQ_BIT_EXIT, &wq->state))
- 		io_worker_handle_work(worker);
--	}
- 
- 	audit_free(current);
- 	io_worker_exit(worker);
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index ad8f84376955..dbc9d3f3f6c5 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -9471,8 +9471,8 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+ 		__io_sqe_files_unregister(ctx);
+ 	if (ctx->rings)
+ 		__io_cqring_overflow_flush(ctx, true);
+-	mutex_unlock(&ctx->uring_lock);
+ 	io_eventfd_unregister(ctx);
++	mutex_unlock(&ctx->uring_lock);
+ 	io_destroy_buffers(ctx);
+ 	if (ctx->sq_creds)
+ 		put_cred(ctx->sq_creds);
 -- 
 2.25.1
 
