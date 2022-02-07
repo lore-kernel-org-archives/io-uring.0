@@ -2,137 +2,106 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D57C7C433EF
-	for <io-uring@archiver.kernel.org>; Mon,  7 Feb 2022 15:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D207AC433F5
+	for <io-uring@archiver.kernel.org>; Mon,  7 Feb 2022 16:38:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237342AbiBGPq5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 7 Feb 2022 10:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
+        id S235971AbiBGQhq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 7 Feb 2022 11:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345487AbiBGPhz (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Feb 2022 10:37:55 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747CC0401CF
-        for <io-uring@vger.kernel.org>; Mon,  7 Feb 2022 07:37:54 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id s18so17187500ioa.12
-        for <io-uring@vger.kernel.org>; Mon, 07 Feb 2022 07:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=OVQkazA38Xs9TAErBTjWdO6iUtOuwl/winaYJ9o81FU=;
-        b=48XlmHJS3i0F3tDt8IW0RPM3YClhDQwRwMrwLBb2zN9KGmi6BULuL/eoN60AZtMDTp
-         dI9oc4EWlTAyVpe9OK+NVU2RFXFVZ+n70oJwyW+EW1xkrBX/+ZJ/ibA/qOCBcMpE+WqK
-         etwyeVa2uJjc26Wckq74cCNHsYm5qebX8cDv3FiJLbqNnKUleCh5i92zCtCdzh/NYocQ
-         nmyCcJ2iGPu/K+wD/njpw0wjqBKzP6J9AwMqZ72ptG6zZSAeXNzg+SzEuTnvogeWGAQi
-         kKlCsRrcdujp4G/usKOvDv3eCoaouB7/HjNgymyeIt21prhZflRIDdRjMmj2bxQiB3+E
-         tH1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=OVQkazA38Xs9TAErBTjWdO6iUtOuwl/winaYJ9o81FU=;
-        b=QXLN4VmW8cGOejaoLyJhxlVUKxK/y3jqRzdbT9BHgzt/ruTVL3YbEi3LI8MqhOFA9R
-         M91MDm7lCrvKQqueRJxi0HUzScoLQLZ5Iz1KKN1h1dXPXNBp0MLlfusNpMxiTBNuKO37
-         FgabJQ2uIy06V/gy0aeWasWf2YegQ089loluVbMNscLGMyRm6ZQlIhLEX6BfsUwm/RBC
-         dKrxagh2k1kcw2r6CeFw+njj1M7DtcL6KCGPZB0homXOSEwDXOkb9wXiNQsCC8+tVr4L
-         zBjTK43a0ZNwEsdJaqdKhuqkFU8OyGNCY7aYhDSXzrlie9nrUahxD2bcZVN3xTYnPfYJ
-         8bPg==
-X-Gm-Message-State: AOAM530b0BeCoa9V7G9AdCxzMtkiYZmEMDpOjXRHC7v/KgfxO7dfOYW/
-        VdIepN0BdgxhS2yyk5hmyTD/2Q==
-X-Google-Smtp-Source: ABdhPJwEVJPTtO4O5g1aR8TU5u2jGY2/Fd+8lMSh+MkotBvUoDaXZ/ULqHa0zOSCIghSgzPfUnSPKA==
-X-Received: by 2002:a05:6638:1305:: with SMTP id r5mr112912jad.154.1644248273876;
-        Mon, 07 Feb 2022 07:37:53 -0800 (PST)
-Received: from [192.168.1.30] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id p11sm6431831iov.38.2022.02.07.07.37.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Feb 2022 07:37:53 -0800 (PST)
-Subject: Re: [PATCH io_uring-5.17] io_uring: Fix build error potential reading
- uninitialized value
-To:     Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        io-uring Mailing list <io-uring@vger.kernel.org>,
-        Tea Inside Mailing List <timl@vger.teainside.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        "Chen, Rong A" <rong.a.chen@intel.com>,
+        with ESMTP id S238884AbiBGQYo (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Feb 2022 11:24:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00C5C0401D2;
+        Mon,  7 Feb 2022 08:24:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C8DD60915;
+        Mon,  7 Feb 2022 16:24:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576DDC004E1;
+        Mon,  7 Feb 2022 16:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1644251082;
+        bh=wizEBetaRGWa2xd5IXRmfnLE9oVDJtn3/BtteleiDC4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PrD+e3xkXH15yxqW3MWnSPrWcDpaDckn1bQQf3urWGrunHqlZq4miFYHCoW2lJF5M
+         wnwqUSZ5pjlTXm3nIDgY8AhFC3dQK4Fq92rIWuMq9mzlXnGsWalP3qTSMrF+XvZAV9
+         sFEVLpgEeftZxEoczh4UhCpZ+1yRo4HRn5fQRUw2hxTrrzTzp41ZxKrNpxvtUp53du
+         zSZ2pOgFJLqT/vEgjrGNt1o/d3MVv4X3obbGu+yG8CAtCjX+ldxOg67atZ9AfIU5kM
+         QZJhPnGjL4VInsqw+GToch6hUanMSRBv2TlltnCIoCdJQb8r20a1qVrdKpkr1mBGnZ
+         y73rN3je0sxJA==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
-References: <d33bb5a9-8173-f65b-f653-51fc0681c6d6@intel.com>
- <20220207114315.555413-1-ammarfaizi2@gnuweeb.org>
- <91e8ca64-0670-d998-73d8-f75ec5264cb0@kernel.dk>
- <20220207142046.GP1978@kadam>
- <CAOG64qN1fQ_surhMJSuygyf_emSvFm3HKRgj_JAZteFVjaP3+A@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <e3373f74-d7a5-6279-0440-2342092eef90@kernel.dk>
-Date:   Mon, 7 Feb 2022 08:37:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] io_uring: Fix use of uninitialized ret in io_eventfd_register()
+Date:   Mon,  7 Feb 2022 09:24:11 -0700
+Message-Id: <20220207162410.1013466-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <CAOG64qN1fQ_surhMJSuygyf_emSvFm3HKRgj_JAZteFVjaP3+A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 2/7/22 7:33 AM, Alviro Iskandar Setiawan wrote:
-> On Mon, Feb 7, 2022 at 9:21 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->> On Mon, Feb 07, 2022 at 06:45:57AM -0700, Jens Axboe wrote:
->>> On 2/7/22 4:43 AM, Ammar Faizi wrote:
->>>> From: Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>
->>>>
->>>> In io_recv() if import_single_range() fails, the @flags variable is
->>>> uninitialized, then it will goto out_free.
->>>>
->>>> After the goto, the compiler doesn't know that (ret < min_ret) is
->>>> always true, so it thinks the "if ((flags & MSG_WAITALL) ..."  path
->>>> could be taken.
->>>>
->>>> The complaint comes from gcc-9 (Debian 9.3.0-22) 9.3.0:
->>>> ```
->>>>   fs/io_uring.c:5238 io_recvfrom() error: uninitialized symbol 'flags'
->>>> ```
->>>> Fix this by bypassing the @ret and @flags check when
->>>> import_single_range() fails.
->>>
->>> The compiler should be able to deduce this, and I guess newer compilers
->>> do which is why we haven't seen this warning before.
-> 
-> The compiler can't deduce this because the import_single_range() is
-> located in a different translation unit (different C file), so it
-> can't prove that (ret < min_ret) is always true as it can't see the
-> function definition (in reality, it is always true because it only
-> returns either 0 or -EFAULT).
+Clang warns:
 
-Yes you are right, I forgot this is the generic helper, and not our
-internal one.
+  fs/io_uring.c:9396:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+          return ret;
+                 ^~~
+  fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence this warning
+          int fd, ret;
+                     ^
+                      = 0
+  1 warning generated.
 
->> No, we disabled GCC's uninitialized variable checking a couple years
->> back.  Linus got sick of the false positives.  You can still see it if
->> you enable W=2
->>
->> fs/io_uring.c: In function ‘io_recv’:
->> fs/io_uring.c:5252:20: warning: ‘flags’ may be used uninitialized in this function [-Wmaybe-uninitialized]
->>   } else if ((flags & MSG_WAITALL) && (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC))) {
->>              ~~~~~~~^~~~~~~~~~~~~~
->>
->> If you introduce an uninitialized variable bug then likelyhood is the
->> kbuild-bot will send you a Clang warning or a Smatch warning or both.
->> I don't think anyone looks at GCC W=2 warnings.
->>
-> 
-> This warning is valid, and the compiler should really warn that. But
-> again, in reality, this is still a false-positive warning, because
-> that "else if" will never be taken from the "goto out_free" path.
+Just return 0 directly and reduce the scope of ret to the if statement,
+as that is the only place that it is used, which is how the function was
+before the fixes commit.
 
-Right, as mentioned in my email, there is no bug there. But I do like
-the patch as it cleans it up too, the error-out path should not include
-non-cleanup items.
+Fixes: 1a75fac9a0f9 ("io_uring: avoid ring quiesce while registering/unregistering eventfd")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1579
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ fs/io_uring.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 5479f0607430..7ef04bb66da1 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+ {
+ 	struct io_ev_fd *ev_fd;
+ 	__s32 __user *fds = arg;
+-	int fd, ret;
++	int fd;
+ 
+ 	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
+ 					lockdep_is_held(&ctx->uring_lock));
+@@ -9386,14 +9386,14 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+ 
+ 	ev_fd->cq_ev_fd = eventfd_ctx_fdget(fd);
+ 	if (IS_ERR(ev_fd->cq_ev_fd)) {
+-		ret = PTR_ERR(ev_fd->cq_ev_fd);
++		int ret = PTR_ERR(ev_fd->cq_ev_fd);
+ 		kfree(ev_fd);
+ 		return ret;
+ 	}
+ 	ev_fd->eventfd_async = eventfd_async;
+ 
+ 	rcu_assign_pointer(ctx->io_ev_fd, ev_fd);
+-	return ret;
++	return 0;
+ }
+ 
+ static void io_eventfd_put(struct rcu_head *rcu)
+
+base-commit: 88a0394bc27de2dd8a8715970f289c5627052532
 -- 
-Jens Axboe
+2.35.1
 
