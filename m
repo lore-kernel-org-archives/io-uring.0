@@ -2,70 +2,144 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A2EC433EF
-	for <io-uring@archiver.kernel.org>; Wed,  9 Feb 2022 12:08:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A90BC433F5
+	for <io-uring@archiver.kernel.org>; Wed,  9 Feb 2022 19:06:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbiBIMI1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 9 Feb 2022 07:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
+        id S233631AbiBITGx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 9 Feb 2022 14:06:53 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbiBIMGg (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Feb 2022 07:06:36 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2013EC03C1B6;
-        Wed,  9 Feb 2022 03:06:32 -0800 (PST)
-Received: from [192.168.88.87] (unknown [36.68.63.145])
-        by gnuweeb.org (Postfix) with ESMTPSA id 3CFF57E254;
-        Wed,  9 Feb 2022 11:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1644404791;
-        bh=CMIyqS9DnDZDs9eLANac+euir/RYD6fyCVyaDWjZp/w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QA2XpAp7H5Eh/37AmSmulLKjlB59txXBn0mTK/RATT1dH06TPnEMzMQOe2+F9c4G2
-         B+KmB/XL6d9hvIXa+s/wWu8+6GmV3kDVuyqAt4xt3vY2CdLzxrWa8RKY5wE3Yi23nm
-         jySsr8e7vwiEY9nZBpt19UV2Iewcd72Md132dwo7A4M2F1IPO3eX2AIRviYoY5pA+Y
-         OOq+DeYmmmRmikP1WpmurdJndxYpAJcuOriLZtv8yKpHveTWnv9kdOIfYCxq//ecDu
-         IbsdF8d/MChqxI7Pw30+jJgS/6o5k0od2kifbR3AsNC0ZkTogetMdVxHzcKNFUS2np
-         zbygG0YMGzOUg==
-Message-ID: <ff729ee0-fbc0-bb6f-d638-cc33dd4734a6@gnuweeb.org>
-Date:   Wed, 9 Feb 2022 18:06:15 +0700
+        with ESMTP id S232088AbiBITGv (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Feb 2022 14:06:51 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D99C03648B
+        for <io-uring@vger.kernel.org>; Wed,  9 Feb 2022 11:06:37 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 219HJDcL008832
+        for <io-uring@vger.kernel.org>; Wed, 9 Feb 2022 11:04:08 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=B29aiok3gtQHPM97MjQj8A4nnXH6ycdgspJBr86o1Uw=;
+ b=e/fzMLrWolxVwr3IY9iFSUIWDHa3fW8zPL9y6kCyeiMmEYW0G202irgxkj1AMR4voDD4
+ IG9U+xQGVTfBgUREAw06P/jg/8xtcn8mI35Fbi/FrOHr8HMaLGOUO+at5esdnTzs/jSu
+ bbcccn9qWXSYvQq1QfLtPyeqUhqFNWQbdqk= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e4e8ntmfr-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Wed, 09 Feb 2022 11:04:08 -0800
+Received: from twshared29821.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 9 Feb 2022 11:04:06 -0800
+Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
+        id 3F82FA855534; Wed,  9 Feb 2022 11:03:52 -0800 (PST)
+From:   Stefan Roesch <shr@fb.com>
+To:     <io-uring@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <kernel-team@fb.com>
+CC:     <viro@zeniv.linux.org.uk>, <shr@fb.com>
+Subject: [PATCH v1 2/2] io-uring: Copy path name during prepare stage for statx
+Date:   Wed, 9 Feb 2022 11:03:45 -0800
+Message-ID: <20220209190345.2374478-3-shr@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220209190345.2374478-1-shr@fb.com>
+References: <20220209190345.2374478-1-shr@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] io_uring: Fix uninitialized use of ret in
- io_eventfd_register()
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, axboe@kernel.dk
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: RGX1qnYGpMPeAZuo6naRUOdH8x6gzgwB
+X-Proofpoint-ORIG-GUID: RGX1qnYGpMPeAZuo6naRUOdH8x6gzgwB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2022-02-09_10,2022-02-09_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 suspectscore=0
+ mlxlogscore=788 lowpriorityscore=0 malwarescore=0 phishscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2201110000 definitions=main-2202090101
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 2/9/22 5:26 PM, Jiapeng Chong wrote:
-> In some scenarios, ret is not assigned in the whole process, so it
-> needs to be initialized at the beginning.
-> 
-> Clean up the following clang warning:
-> 
-> fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence
-> this warning.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
+One of the key architectual tenets is to keep the parameters for
+io-uring stable. After the call has been submitted, its value can
+be changed. Unfortunaltely this is not the case for the current statx
+implementation.
 
-This is already fixed in commit
-4c65723081332607ca331072b0f8a90189e2e447 ("io_uring: Fix use of uninitialized ret in io_eventfd_register()")
+This changes replaces the const char * filename pointer in the io_statx
+structure with a struct filename *. In addition it also creates the
+filename object during the prepare phase.
 
-https://lore.kernel.org/all/20220207162410.1013466-1-nathan@kernel.org/T/
+With this change, the opcode also needs to invoke cleanup, so the
+filename object gets freed after processing the request.
 
-https://github.com/torvalds/linux/commit/4c65723081332607ca331072b0f8a90189e2e447.patch
+Signed-off-by: Stefan Roesch <shr@fb.com>
+---
+ fs/io_uring.c | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
--- 
-Ammar Faizi
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 2e04f718319d..86e2c8c4f216 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -642,7 +642,7 @@ struct io_statx {
+ 	int				dfd;
+ 	unsigned int			mask;
+ 	unsigned int			flags;
+-	const char __user		*filename;
++	struct filename			*filename;
+ 	struct statx __user		*buffer;
+ };
+=20
+@@ -4721,6 +4721,8 @@ static int io_fadvise(struct io_kiocb *req, unsigne=
+d int issue_flags)
+=20
+ static int io_statx_prep(struct io_kiocb *req, const struct io_uring_sqe=
+ *sqe)
+ {
++	const char __user *path;
++
+ 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
+ 		return -EINVAL;
+ 	if (sqe->ioprio || sqe->buf_index || sqe->splice_fd_in)
+@@ -4730,10 +4732,22 @@ static int io_statx_prep(struct io_kiocb *req, co=
+nst struct io_uring_sqe *sqe)
+=20
+ 	req->statx.dfd =3D READ_ONCE(sqe->fd);
+ 	req->statx.mask =3D READ_ONCE(sqe->len);
+-	req->statx.filename =3D u64_to_user_ptr(READ_ONCE(sqe->addr));
++	path =3D u64_to_user_ptr(READ_ONCE(sqe->addr));
+ 	req->statx.buffer =3D u64_to_user_ptr(READ_ONCE(sqe->addr2));
+ 	req->statx.flags =3D READ_ONCE(sqe->statx_flags);
+=20
++	req->statx.filename =3D getname_flags(path,
++					getname_statx_lookup_flags(req->statx.flags),
++					NULL);
++
++	if (IS_ERR(req->statx.filename)) {
++		int ret =3D PTR_ERR(req->statx.filename);
++
++		req->statx.filename =3D NULL;
++		return ret;
++	}
++
++	req->flags |=3D REQ_F_NEED_CLEANUP;
+ 	return 0;
+ }
+=20
+@@ -6709,6 +6723,10 @@ static void io_clean_op(struct io_kiocb *req)
+ 			putname(req->hardlink.oldpath);
+ 			putname(req->hardlink.newpath);
+ 			break;
++		case IORING_OP_STATX:
++			if (req->statx.filename)
++				putname(req->statx.filename);
++			break;
+ 		}
+ 	}
+ 	if ((req->flags & REQ_F_POLLED) && req->apoll) {
+--=20
+2.30.2
+
