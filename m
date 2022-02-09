@@ -2,65 +2,70 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FF37C433EF
-	for <io-uring@archiver.kernel.org>; Wed,  9 Feb 2022 10:40:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A2EC433EF
+	for <io-uring@archiver.kernel.org>; Wed,  9 Feb 2022 12:08:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiBIKj7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 9 Feb 2022 05:39:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S232464AbiBIMI1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 9 Feb 2022 07:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiBIKj6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Feb 2022 05:39:58 -0500
-Received: from out199-2.us.a.mail.aliyun.com (out199-2.us.a.mail.aliyun.com [47.90.199.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A1E09DDAC;
-        Wed,  9 Feb 2022 02:26:48 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V4.4LdI_1644402398;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V4.4LdI_1644402398)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Feb 2022 18:26:44 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     axboe@kernel.dk
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] io_uring: Fix uninitialized use of ret in io_eventfd_register()
-Date:   Wed,  9 Feb 2022 18:26:37 +0800
-Message-Id: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        with ESMTP id S233096AbiBIMGg (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Feb 2022 07:06:36 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2013EC03C1B6;
+        Wed,  9 Feb 2022 03:06:32 -0800 (PST)
+Received: from [192.168.88.87] (unknown [36.68.63.145])
+        by gnuweeb.org (Postfix) with ESMTPSA id 3CFF57E254;
+        Wed,  9 Feb 2022 11:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1644404791;
+        bh=CMIyqS9DnDZDs9eLANac+euir/RYD6fyCVyaDWjZp/w=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QA2XpAp7H5Eh/37AmSmulLKjlB59txXBn0mTK/RATT1dH06TPnEMzMQOe2+F9c4G2
+         B+KmB/XL6d9hvIXa+s/wWu8+6GmV3kDVuyqAt4xt3vY2CdLzxrWa8RKY5wE3Yi23nm
+         jySsr8e7vwiEY9nZBpt19UV2Iewcd72Md132dwo7A4M2F1IPO3eX2AIRviYoY5pA+Y
+         OOq+DeYmmmRmikP1WpmurdJndxYpAJcuOriLZtv8yKpHveTWnv9kdOIfYCxq//ecDu
+         IbsdF8d/MChqxI7Pw30+jJgS/6o5k0od2kifbR3AsNC0ZkTogetMdVxHzcKNFUS2np
+         zbygG0YMGzOUg==
+Message-ID: <ff729ee0-fbc0-bb6f-d638-cc33dd4734a6@gnuweeb.org>
+Date:   Wed, 9 Feb 2022 18:06:15 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] io_uring: Fix uninitialized use of ret in
+ io_eventfd_register()
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, axboe@kernel.dk
+Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220209102637.34088-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-In some scenarios, ret is not assigned in the whole process, so it
-needs to be initialized at the beginning.
+On 2/9/22 5:26 PM, Jiapeng Chong wrote:
+> In some scenarios, ret is not assigned in the whole process, so it
+> needs to be initialized at the beginning.
+> 
+> Clean up the following clang warning:
+> 
+> fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence
+> this warning.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
 
-Clean up the following clang warning:
+This is already fixed in commit
+4c65723081332607ca331072b0f8a90189e2e447 ("io_uring: Fix use of uninitialized ret in io_eventfd_register()")
 
-fs/io_uring.c:9373:13: note: initialize the variable 'ret' to silence
-this warning.
+https://lore.kernel.org/all/20220207162410.1013466-1-nathan@kernel.org/T/
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- fs/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://github.com/torvalds/linux/commit/4c65723081332607ca331072b0f8a90189e2e447.patch
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 5479f0607430..7f277890f1ec 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -9370,7 +9370,7 @@ static int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
- {
- 	struct io_ev_fd *ev_fd;
- 	__s32 __user *fds = arg;
--	int fd, ret;
-+	int fd, ret = 0;
- 
- 	ev_fd = rcu_dereference_protected(ctx->io_ev_fd,
- 					lockdep_is_held(&ctx->uring_lock));
 -- 
-2.20.1.7.g153144c
-
+Ammar Faizi
