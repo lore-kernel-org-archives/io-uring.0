@@ -2,568 +2,113 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1052EC433F5
-	for <io-uring@archiver.kernel.org>; Thu, 10 Feb 2022 13:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92ECBC433F5
+	for <io-uring@archiver.kernel.org>; Thu, 10 Feb 2022 15:29:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237360AbiBJNR7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 10 Feb 2022 08:17:59 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:48940 "EHLO
+        id S243614AbiBJP3o (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 10 Feb 2022 10:29:44 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242065AbiBJNR5 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 10 Feb 2022 08:17:57 -0500
-X-Greylist: delayed 529 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 10 Feb 2022 05:17:56 PST
-Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E2A1BB;
-        Thu, 10 Feb 2022 05:17:56 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 807F047755;
-        Thu, 10 Feb 2022 13:09:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :references:in-reply-to:x-mailer:message-id:date:date:subject
-        :subject:from:from:received:received:received; s=mta-01; t=
-        1644498549; x=1646312950; bh=zJuO5KYthVaQdujA+S9MFsNEG61XiLFyOv0
-        7wW1QBzw=; b=Mp2uNkrNa3NFIxmoFXb2VDTOKQHX423d5TC0jzHBBJvFdSbEyli
-        uYbKp1W5pKYlW99THFFnqq63q60ohYz8J58RaI2VDm1NCdIGvBbyVAqUt+Akmu87
-        FYOYy2SOQN3nJZ3+KMglGyO3ehTWQhnGrU2CJrrjekmYh7ZpLYSST8H8=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XUYDuGSTFJaf; Thu, 10 Feb 2022 16:09:09 +0300 (MSK)
-Received: from T-EXCH-04.corp.yadro.com (t-exch-04.corp.yadro.com [172.17.100.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 605E641846;
-        Thu, 10 Feb 2022 16:09:09 +0300 (MSK)
-Received: from localhost.localdomain (10.178.114.63) by
- T-EXCH-04.corp.yadro.com (172.17.100.104) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
- 15.1.669.32; Thu, 10 Feb 2022 16:09:08 +0300
-From:   "Alexander V. Buev" <a.buev@yadro.com>
-To:     <linux-block@vger.kernel.org>
-CC:     <io-uring@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>,
-        Mikhail Malygin <m.malygin@yadro.com>, <linux@yadro.com>,
-        "Alexander V. Buev" <a.buev@yadro.com>
-Subject: [PATCH v2 2/3] block: io_uring: add READV_PI/WRITEV_PI operations
-Date:   Thu, 10 Feb 2022 16:08:24 +0300
-Message-ID: <20220210130825.657520-3-a.buev@yadro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220210130825.657520-1-a.buev@yadro.com>
-References: <20220210130825.657520-1-a.buev@yadro.com>
+        with ESMTP id S234557AbiBJP3n (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 10 Feb 2022 10:29:43 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1DCC5
+        for <io-uring@vger.kernel.org>; Thu, 10 Feb 2022 07:29:45 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id v13-20020a17090ac90d00b001b87bc106bdso8862840pjt.4
+        for <io-uring@vger.kernel.org>; Thu, 10 Feb 2022 07:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XReVY2xQtHetUZYvyEAVJNhsvn3U+rEGg4o8H/7DTLc=;
+        b=Jlh8jCc2fq18b8yPUJsd2qBJb4Fdwb7OR+mzBaaIP1Jk5jw5hkbAcZy6I/XbHtRkOe
+         7mlQ7ckygOGe/0FTs+3lXTKnDN5eSGFPmG4ZvloTITOpf+HLJoZ59Co229sPknHmQeCC
+         wNAVX5rf1HyQE5JV0UxVQ31UBZVMr19vZ5N6zTUIRy9k99CkWKxd0DYyk2eeEk/vI8nN
+         galsylQyIXHk1f1L7hLwUWDSgstMhPF5iJrBriihElB6Ks5/PWMt1l/LFLN4YuEvPD5c
+         JYcPu/gxSyMz1LILKgX8inQHPpPhKniBsc5VBXhZY2owpJksYOTIasv8Ftu1u/lGb03o
+         KB2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XReVY2xQtHetUZYvyEAVJNhsvn3U+rEGg4o8H/7DTLc=;
+        b=zTQ3DeZRTu2CgH1THFXAEVdgYRQPC1maFSpJ7olxQrCSv+d21ofEix5DXkL2xN6tBH
+         W4vFkHvFJLnZfcit+ldpvMBXfCYU3iodXWQz5AsJuNQMSKCTxLrDaw/Eyg47H6uyMRXo
+         2K6FKBqKhP1o+rm+g4/LjS7d24zpLVPL3jiikI5mqeYzVAoJN6xHL3lOO7EJG9kOpEXe
+         HwTw0G5bXtVjWetG55+YVk9qhqIe7IEsIg9kEr3TzwwVoPu5NyamD5CV5fW1Gt9v+WqO
+         8aMZysQMgf9yDQzrxJDBPxV/kYbh1XlKN5bW1DL3nViPrsCaJTfN78J+vgpJsfhp8gIk
+         2cXA==
+X-Gm-Message-State: AOAM5304sEYw8ep1TjZuFoMckD9bW/Nv0oArYpfcRYttlgldrGJqXsxk
+        N6hYF1/CbDfZH/ZmRF313jqPQSac83k=
+X-Google-Smtp-Source: ABdhPJwaC32t5N7Que1odAMj/S7ZnJe4TkUmnp0rPmFcAUtF1yTXg3xmFSh4OIzZjF/HCQIkTQaeOQ==
+X-Received: by 2002:a17:902:8215:: with SMTP id x21mr315423pln.10.1644506984288;
+        Thu, 10 Feb 2022 07:29:44 -0800 (PST)
+Received: from localhost.localdomain ([240f:34:212d:1:850b:c1e2:34a1:2aa4])
+        by smtp.gmail.com with ESMTPSA id c8sm24844022pfv.57.2022.02.10.07.29.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Feb 2022 07:29:43 -0800 (PST)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>
+Subject: [PATCH] Fix __io_uring_get_cqe() for IORING_SETUP_IOPOLL
+Date:   Fri, 11 Feb 2022 00:29:24 +0900
+Message-Id: <20220210152924.14413-1-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.178.114.63]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-04.corp.yadro.com (172.17.100.104)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Added new READV_PI/WRITEV_PI operations to io_uring.
-Added new pi_addr & pi_len fields to SQE struct.
-Added new pi_iter field and IOCB_USE_PI flag to kiocb struct.
-Make corresponding corrections to io uring trace event.
+If __io_uring_get_cqe() is called for the ring setup with IOPOLL, we must enter the kernel
+to get completion events. Even if that is called with wait_nr is zero.
 
-Signed-off-by: Alexander V. Buev <a.buev@yadro.com>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 ---
- fs/io_uring.c                   | 209 ++++++++++++++++++++++++++++++++
- include/linux/fs.h              |   2 +
- include/trace/events/io_uring.h |  17 +--
- include/uapi/linux/io_uring.h   |   6 +-
- include/uapi/linux/uio.h        |   3 +-
- 5 files changed, 228 insertions(+), 9 deletions(-)
+ src/queue.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 2e04f718319d..6e941040f228 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -563,6 +563,19 @@ struct io_rw {
- 	u64				len;
- };
- 
-+struct io_rw_pi_state {
-+	struct iov_iter			iter;
-+	struct iov_iter_state		iter_state;
-+	struct iovec			fast_iov[UIO_FASTIOV_PI];
-+};
-+
-+struct io_rw_pi {
-+	struct io_rw			rw;
-+	struct iovec			*pi_iov;
-+	u32				nr_pi_segs;
-+	struct io_rw_pi_state		*s;
-+};
-+
- struct io_connect {
- 	struct file			*file;
- 	struct sockaddr __user		*addr;
-@@ -716,6 +729,12 @@ struct io_async_rw {
- 	struct wait_page_queue		wpq;
- };
- 
-+struct io_async_rw_pi {
-+	struct io_async_rw		async;
-+	const struct iovec		*free_iovec;
-+	struct io_rw_pi_state		s;
-+};
-+
- enum {
- 	REQ_F_FIXED_FILE_BIT	= IOSQE_FIXED_FILE_BIT,
- 	REQ_F_IO_DRAIN_BIT	= IOSQE_IO_DRAIN_BIT,
-@@ -744,6 +763,7 @@ enum {
- 	/* keep async read/write and isreg together and in order */
- 	REQ_F_SUPPORT_NOWAIT_BIT,
- 	REQ_F_ISREG_BIT,
-+	REQ_F_USE_PI_BIT,
- 
- 	/* not a real bit, just to check we're not overflowing the space */
- 	__REQ_F_LAST_BIT,
-@@ -799,6 +819,8 @@ enum {
- 	REQ_F_ASYNC_DATA	= BIT(REQ_F_ASYNC_DATA_BIT),
- 	/* don't post CQEs while failing linked requests */
- 	REQ_F_SKIP_LINK_CQES	= BIT(REQ_F_SKIP_LINK_CQES_BIT),
-+	/* pi metadata present */
-+	REQ_F_USE_PI		= BIT(REQ_F_USE_PI_BIT)
- };
- 
- struct async_poll {
-@@ -855,6 +877,7 @@ struct io_kiocb {
- 		struct io_mkdir		mkdir;
- 		struct io_symlink	symlink;
- 		struct io_hardlink	hardlink;
-+		struct io_rw_pi		rw_pi;
- 	};
- 
- 	u8				opcode;
-@@ -1105,6 +1128,24 @@ static const struct io_op_def io_op_defs[] = {
- 	[IORING_OP_MKDIRAT] = {},
- 	[IORING_OP_SYMLINKAT] = {},
- 	[IORING_OP_LINKAT] = {},
-+	[IORING_OP_READV_PI] = {
-+		.needs_file		= 1,
-+		.unbound_nonreg_file	= 1,
-+		.pollin			= 1,
-+		.buffer_select		= 1,
-+		.needs_async_setup	= 1,
-+		.plug			= 1,
-+		.async_size		= sizeof(struct io_async_rw_pi),
-+	},
-+	[IORING_OP_WRITEV_PI] = {
-+		.needs_file		= 1,
-+		.hash_reg_file		= 1,
-+		.unbound_nonreg_file	= 1,
-+		.pollout		= 1,
-+		.needs_async_setup	= 1,
-+		.plug			= 1,
-+		.async_size		= sizeof(struct io_async_rw_pi),
-+	},
- };
- 
- /* requests with any of those set should undergo io_disarm_next() */
-@@ -3053,6 +3094,18 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return 0;
+diff --git a/src/queue.c b/src/queue.c
+index eb0c736..f8384d1 100644
+--- a/src/queue.c
++++ b/src/queue.c
+@@ -31,6 +31,11 @@ static inline bool cq_ring_needs_flush(struct io_uring *ring)
+ 	return IO_URING_READ_ONCE(*ring->sq.kflags) & IORING_SQ_CQ_OVERFLOW;
  }
  
-+static int io_prep_rw_pi(struct io_kiocb *req, const struct io_uring_sqe *sqe)
++static inline bool cq_ring_needs_enter(struct io_uring *ring)
 +{
-+	if (!(req->file->f_flags & O_DIRECT))
-+		return -EINVAL;
-+
-+	req->rw.kiocb.ki_flags |= IOCB_USE_PI;
-+	req->flags |= REQ_F_USE_PI;
-+	req->rw_pi.pi_iov = u64_to_user_ptr(READ_ONCE(sqe->pi_addr));
-+	req->rw_pi.nr_pi_segs = READ_ONCE(sqe->pi_len);
-+	return 0;
++	return (ring->flags & IORING_SETUP_IOPOLL) || cq_ring_needs_flush(ring);
 +}
 +
- static inline void io_rw_done(struct kiocb *kiocb, ssize_t ret)
- {
- 	switch (ret) {
-@@ -3505,10 +3558,39 @@ static int io_setup_async_rw(struct io_kiocb *req, const struct iovec *iovec,
- 		iorw = req->async_data;
- 		/* we've copied and mapped the iter, ensure state is saved */
- 		iov_iter_save_state(&iorw->s.iter, &iorw->s.iter_state);
-+		if (req->flags & REQ_F_USE_PI) {
-+			struct io_async_rw_pi *iorw_pi = req->async_data;
-+
-+			/* copy iter from req to async ctx */
-+			iorw_pi->s.iter = req->rw_pi.s->iter;
-+
-+			if (req->rw_pi.s->iter.iov == req->rw_pi.s->fast_iov) {
-+				memcpy(iorw_pi->s.fast_iov,  req->rw_pi.s->fast_iov,
-+					sizeof(iorw_pi->s.fast_iov));
-+				iorw_pi->s.iter.iov = iorw_pi->s.fast_iov;
-+				iorw_pi->free_iovec = 0;
-+			} else {
-+				req->flags |= REQ_F_NEED_CLEANUP;
-+				iorw_pi->free_iovec = req->rw_pi.s->iter.iov;
-+			}
-+
-+			iov_iter_save_state(&iorw_pi->s.iter, &iorw_pi->s.iter_state);
-+		}
- 	}
- 	return 0;
- }
+ static int __io_uring_peek_cqe(struct io_uring *ring,
+ 			       struct io_uring_cqe **cqe_ptr,
+ 			       unsigned *nr_available)
+@@ -84,7 +89,6 @@ static int _io_uring_get_cqe(struct io_uring *ring, struct io_uring_cqe **cqe_pt
  
-+static inline
-+int io_import_pi_iovec(struct io_kiocb *req, int rw, unsigned int fast_segs,
-+			struct iovec **fast_iov, struct iov_iter *iter)
-+{
-+	void __user *buf = req->rw_pi.pi_iov;
-+
-+	return __import_iovec(rw, buf, req->rw_pi.nr_pi_segs, fast_segs,
-+				fast_iov, iter, req->ctx->compat);
-+}
-+
-+
- static inline int io_rw_prep_async(struct io_kiocb *req, int rw)
- {
- 	struct io_async_rw *iorw = req->async_data;
-@@ -3527,6 +3609,25 @@ static inline int io_rw_prep_async(struct io_kiocb *req, int rw)
- 	return 0;
- }
- 
-+static inline int io_rw_prep_async_pi(struct io_kiocb *req, int rw)
-+{
-+	int ret = 0;
-+	struct io_async_rw_pi *iorw_pi = req->async_data;
-+	struct iovec *pi_iov = iorw_pi->s.fast_iov;
-+
-+	ret = io_import_pi_iovec(req, rw, UIO_FASTIOV_PI, &pi_iov, &iorw_pi->s.iter);
-+	if (unlikely(ret < 0))
-+		return ret;
-+
-+	iorw_pi->free_iovec = pi_iov;
-+
-+	if (pi_iov)
-+		req->flags |= REQ_F_NEED_CLEANUP;
-+	iov_iter_save_state(&iorw_pi->s.iter, &iorw_pi->s.iter_state);
-+
-+	return io_rw_prep_async(req, rw);
-+}
-+
- static int io_read_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	if (unlikely(!(req->file->f_mode & FMODE_READ)))
-@@ -3534,6 +3635,15 @@ static int io_read_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return io_prep_rw(req, sqe);
- }
- 
-+static int io_read_prep_pi(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+{
-+	int ret = io_read_prep(req, sqe);
-+
-+	if (ret)
-+		return ret;
-+	return io_prep_rw_pi(req, sqe);
-+}
-+
- /*
-  * This is our waitqueue callback handler, registered through __folio_lock_async()
-  * when we initially tried to do the IO with the iocb armed our waitqueue.
-@@ -3690,6 +3800,9 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 	 * manually if we need to.
- 	 */
- 	iov_iter_restore(&s->iter, &s->iter_state);
-+	if (req->flags & REQ_F_USE_PI)
-+		iov_iter_restore(kiocb->pi_iter, &req->rw_pi.s->iter_state);
-+
- 
- 	ret2 = io_setup_async_rw(req, iovec, s, true);
- 	if (ret2)
-@@ -3714,6 +3827,8 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
+ 	do {
+ 		bool need_enter = false;
+-		bool cq_overflow_flush = false;
+ 		unsigned flags = 0;
+ 		unsigned nr_available;
+ 		int ret;
+@@ -93,13 +97,13 @@ static int _io_uring_get_cqe(struct io_uring *ring, struct io_uring_cqe **cqe_pt
+ 		if (err)
  			break;
- 		rw->bytes_done += ret;
- 		iov_iter_save_state(&s->iter, &s->iter_state);
-+		if (req->flags & REQ_F_USE_PI)
-+			iov_iter_save_state(kiocb->pi_iter, &req->rw_pi.s->iter_state);
- 
- 		/* if we can retry, do so with the callbacks armed */
- 		if (!io_rw_should_retry(req)) {
-@@ -3733,6 +3848,8 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 		/* we got some bytes, but not all. retry. */
- 		kiocb->ki_flags &= ~IOCB_WAITQ;
- 		iov_iter_restore(&s->iter, &s->iter_state);
-+		if (req->flags & REQ_F_USE_PI)
-+			iov_iter_restore(kiocb->pi_iter, &req->rw_pi.s->iter_state);
- 	} while (ret > 0);
- done:
- 	kiocb_done(req, ret, issue_flags);
-@@ -3743,6 +3860,34 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 	return 0;
- }
- 
-+static int io_read_pi(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	if (req_has_async_data(req)) {
-+		struct io_async_rw_pi *iorw_pi = req->async_data;
-+
-+		iov_iter_restore(&iorw_pi->s.iter, &iorw_pi->s.iter_state);
-+		req->rw.kiocb.pi_iter = &iorw_pi->s.iter;
-+		req->rw_pi.s = &iorw_pi->s;
-+		return io_read(req, issue_flags);
-+	} else {
-+		int ret;
-+		struct io_rw_pi_state __s, *s = &__s;
-+		struct iovec *pi_iov = __s.fast_iov;
-+
-+		ret = io_import_pi_iovec(req, READ, UIO_FASTIOV_PI, &pi_iov, &s->iter);
-+		if (unlikely(ret < 0))
-+			return ret;
-+		iov_iter_save_state(&s->iter, &s->iter_state);
-+		req->rw.kiocb.pi_iter = &s->iter;
-+		req->rw_pi.s = s;
-+
-+		ret = io_read(req, issue_flags);
-+		if (pi_iov && !(ret == -EAGAIN && req_has_async_data(req)))
-+			kfree(pi_iov);
-+		return ret;
-+	}
-+}
-+
- static int io_write_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	if (unlikely(!(req->file->f_mode & FMODE_WRITE)))
-@@ -3751,6 +3896,15 @@ static int io_write_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return io_prep_rw(req, sqe);
- }
- 
-+static int io_write_prep_pi(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+{
-+	int ret = io_write_prep(req, sqe);
-+
-+	if (ret)
-+		return ret;
-+	return io_prep_rw_pi(req, sqe);
-+}
-+
- static int io_write(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_rw_state __s, *s = &__s;
-@@ -3836,6 +3990,10 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
- 	} else {
- copy_iov:
- 		iov_iter_restore(&s->iter, &s->iter_state);
-+
-+		if (req->flags & REQ_F_USE_PI)
-+			iov_iter_restore(kiocb->pi_iter, &req->rw_pi.s->iter_state);
-+
- 		ret = io_setup_async_rw(req, iovec, s, false);
- 		return ret ?: -EAGAIN;
- 	}
-@@ -3846,6 +4004,34 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
- 	return ret;
- }
- 
-+static int io_write_pi(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	if (req_has_async_data(req)) {
-+		struct io_async_rw_pi *iorw_pi = req->async_data;
-+
-+		req->rw.kiocb.pi_iter = &iorw_pi->s.iter;
-+		req->rw_pi.s = &iorw_pi->s;
-+		iov_iter_restore(&iorw_pi->s.iter, &iorw_pi->s.iter_state);
-+		return io_write(req, issue_flags);
-+	} else {
-+		int ret;
-+		struct io_rw_pi_state __s, *s = &__s;
-+		struct iovec *pi_iov = __s.fast_iov;
-+
-+		ret = io_import_pi_iovec(req, WRITE, UIO_FASTIOV_PI, &pi_iov, &s->iter);
-+		if (unlikely(ret < 0))
-+			return ret;
-+		iov_iter_save_state(&s->iter, &s->iter_state);
-+		req->rw.kiocb.pi_iter = &s->iter;
-+		req->rw_pi.s = s;
-+
-+		ret = io_write(req, issue_flags);
-+		if (pi_iov && !(ret == -EAGAIN && req_has_async_data(req)))
-+			kfree(pi_iov);
-+		return ret;
-+	}
-+}
-+
- static int io_renameat_prep(struct io_kiocb *req,
- 			    const struct io_uring_sqe *sqe)
- {
-@@ -6500,10 +6686,14 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	case IORING_OP_READ_FIXED:
- 	case IORING_OP_READ:
- 		return io_read_prep(req, sqe);
-+	case IORING_OP_READV_PI:
-+		return io_read_prep_pi(req, sqe);
- 	case IORING_OP_WRITEV:
- 	case IORING_OP_WRITE_FIXED:
- 	case IORING_OP_WRITE:
- 		return io_write_prep(req, sqe);
-+	case IORING_OP_WRITEV_PI:
-+		return io_write_prep_pi(req, sqe);
- 	case IORING_OP_POLL_ADD:
- 		return io_poll_add_prep(req, sqe);
- 	case IORING_OP_POLL_REMOVE:
-@@ -6589,6 +6779,10 @@ static int io_req_prep_async(struct io_kiocb *req)
- 		return io_rw_prep_async(req, READ);
- 	case IORING_OP_WRITEV:
- 		return io_rw_prep_async(req, WRITE);
-+	case IORING_OP_READV_PI:
-+		return io_rw_prep_async_pi(req, READ);
-+	case IORING_OP_WRITEV_PI:
-+		return io_rw_prep_async_pi(req, WRITE);
- 	case IORING_OP_SENDMSG:
- 		return io_sendmsg_prep_async(req);
- 	case IORING_OP_RECVMSG:
-@@ -6670,7 +6864,14 @@ static void io_clean_op(struct io_kiocb *req)
- 		case IORING_OP_WRITE_FIXED:
- 		case IORING_OP_WRITE: {
- 			struct io_async_rw *io = req->async_data;
-+			kfree(io->free_iovec);
-+			break;
-+			}
-+		case IORING_OP_READV_PI:
-+		case IORING_OP_WRITEV_PI: {
-+			struct io_async_rw_pi *io = req->async_data;
- 
-+			kfree(io->async.free_iovec);
- 			kfree(io->free_iovec);
- 			break;
+ 		if (!cqe && !data->wait_nr && !data->submit) {
+-			if (!cq_ring_needs_flush(ring)) {
++			if (!cq_ring_needs_enter(ring)) {
+ 				err = -EAGAIN;
+ 				break;
  			}
-@@ -6750,11 +6951,17 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 	case IORING_OP_READ:
- 		ret = io_read(req, issue_flags);
- 		break;
-+	case IORING_OP_READV_PI:
-+		ret = io_read_pi(req, issue_flags);
-+		break;
- 	case IORING_OP_WRITEV:
- 	case IORING_OP_WRITE_FIXED:
- 	case IORING_OP_WRITE:
- 		ret = io_write(req, issue_flags);
- 		break;
-+	case IORING_OP_WRITEV_PI:
-+		ret = io_write_pi(req, issue_flags);
-+		break;
- 	case IORING_OP_FSYNC:
- 		ret = io_fsync(req, issue_flags);
- 		break;
-@@ -11218,6 +11425,8 @@ static int __init io_uring_init(void)
- 	BUILD_BUG_SQE_ELEM(42, __u16,  personality);
- 	BUILD_BUG_SQE_ELEM(44, __s32,  splice_fd_in);
- 	BUILD_BUG_SQE_ELEM(44, __u32,  file_index);
-+	BUILD_BUG_SQE_ELEM(48, __u64,  pi_addr);
-+	BUILD_BUG_SQE_ELEM(56, __u32,  pi_len);
- 
- 	BUILD_BUG_ON(sizeof(struct io_uring_files_update) !=
- 		     sizeof(struct io_uring_rsrc_update));
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index e2d892b201b0..c45ec5073300 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -316,6 +316,7 @@ enum rw_hint {
- #define IOCB_NOIO		(1 << 20)
- /* can use bio alloc cache */
- #define IOCB_ALLOC_CACHE	(1 << 21)
-+#define IOCB_USE_PI		(1 << 22)
- 
- struct kiocb {
- 	struct file		*ki_filp;
-@@ -330,6 +331,7 @@ struct kiocb {
- 	u16			ki_hint;
- 	u16			ki_ioprio; /* See linux/ioprio.h */
- 	struct wait_page_queue	*ki_waitq; /* for async buffered IO */
-+	struct iov_iter		*pi_iter;
- 	randomized_struct_fields_end
- };
- 
-diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_uring.h
-index 7346f0164cf4..8a435df796b9 100644
---- a/include/trace/events/io_uring.h
-+++ b/include/trace/events/io_uring.h
-@@ -524,8 +524,9 @@ TRACE_EVENT(io_uring_req_failed,
- 		__field( u16,	buf_index )
- 		__field( u16,	personality )
- 		__field( u32,	file_index )
--		__field( u64,	pad1 )
--		__field( u64,	pad2 )
-+		__field(u64,	pi_addr)
-+		__field(u32,	pi_len)
-+		__field(u32,	pad)
- 		__field( int,	error )
- 	),
- 
-@@ -541,21 +542,23 @@ TRACE_EVENT(io_uring_req_failed,
- 		__entry->buf_index	= sqe->buf_index;
- 		__entry->personality	= sqe->personality;
- 		__entry->file_index	= sqe->file_index;
--		__entry->pad1		= sqe->__pad2[0];
--		__entry->pad2		= sqe->__pad2[1];
-+		__entry->pi_addr	= sqe->pi_addr;
-+		__entry->pi_len		= sqe->pi_len;
-+		__entry->pad		= sqe->__pad2;
- 		__entry->error		= error;
- 	),
- 
- 	TP_printk("op %d, flags=0x%x, prio=%d, off=%llu, addr=%llu, "
- 		  "len=%u, rw_flags=0x%x, user_data=0x%llx, buf_index=%d, "
--		  "personality=%d, file_index=%d, pad=0x%llx/%llx, error=%d",
-+		  "personality=%d, file_index=%d, pi_addr=0x%llx, pi_len=%u, "
-+		  "pad=%u, error=%d",
- 		  __entry->opcode, __entry->flags, __entry->ioprio,
- 		  (unsigned long long)__entry->off,
- 		  (unsigned long long) __entry->addr, __entry->len,
- 		  __entry->op_flags, (unsigned long long) __entry->user_data,
- 		  __entry->buf_index, __entry->personality, __entry->file_index,
--		  (unsigned long long) __entry->pad1,
--		  (unsigned long long) __entry->pad2, __entry->error)
-+		  (unsigned long long) __entry->pi_addr, __entry->pi_len,
-+		  __entry->pad, __entry->error)
- );
- 
- #endif /* _TRACE_IO_URING_H */
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 787f491f0d2a..87ea512c2c8d 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -60,7 +60,9 @@ struct io_uring_sqe {
- 		__s32	splice_fd_in;
- 		__u32	file_index;
- 	};
--	__u64	__pad2[2];
-+	__u64	pi_addr;  /* pointer to iovec */
-+	__u32	pi_len;
-+	__u32	__pad2;
- };
- 
- enum {
-@@ -143,6 +145,8 @@ enum {
- 	IORING_OP_MKDIRAT,
- 	IORING_OP_SYMLINKAT,
- 	IORING_OP_LINKAT,
-+	IORING_OP_READV_PI,
-+	IORING_OP_WRITEV_PI,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
-diff --git a/include/uapi/linux/uio.h b/include/uapi/linux/uio.h
-index 059b1a9147f4..c9eaaa6cdb0f 100644
---- a/include/uapi/linux/uio.h
-+++ b/include/uapi/linux/uio.h
-@@ -23,9 +23,10 @@ struct iovec
- /*
-  *	UIO_MAXIOV shall be at least 16 1003.1g (5.4.1.1)
-  */
-- 
-+
- #define UIO_FASTIOV	8
- #define UIO_MAXIOV	1024
-+#define UIO_FASTIOV_PI	1
- 
- 
- #endif /* _UAPI__LINUX_UIO_H */
+-			cq_overflow_flush = true;
++			need_enter = true;
+ 		}
+-		if (data->wait_nr > nr_available || cq_overflow_flush) {
++		if (data->wait_nr > nr_available || need_enter) {
+ 			flags = IORING_ENTER_GETEVENTS | data->get_flags;
+ 			need_enter = true;
+ 		}
 -- 
-2.34.1
+2.25.1
 
