@@ -2,105 +2,67 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1601C4332F
-	for <io-uring@archiver.kernel.org>; Thu, 10 Feb 2022 01:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB4F9C4332F
+	for <io-uring@archiver.kernel.org>; Thu, 10 Feb 2022 01:58:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiBJBZP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 9 Feb 2022 20:25:15 -0500
-Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:50562 "EHLO
+        id S233771AbiBJB57 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 9 Feb 2022 20:57:59 -0500
+Received: from gmail-smtp-in.l.google.com ([23.128.96.19]:33254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiBJBZO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Feb 2022 20:25:14 -0500
-X-Greylist: delayed 7188 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Feb 2022 17:25:15 PST
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA453261F;
-        Wed,  9 Feb 2022 17:25:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Cc:To:From:Date:Message-ID;
-        bh=vPnlkbWR5HgIGL04GSDBl0UvRCFHTEXuwzUZuwp1LfE=; b=zblNw58dqdSJhAuts7LK/1qI+H
-        QUA188YjLPPeroeIMzrvUK9e3jE4A3JrXlIpHfhGCNgv7T8DQ4jqFZtBp4p8oXI8NqrS4YSpk7QNW
-        auVgKOp5dz8vArulC+uigNr/hpoFsqfusVAEOVA5H8Xxws/K96v+o9h7mb265vDOe2naQ35exOUSS
-        caW7DPOrZIwXk0LLgx9hEc5EXaJVG2M6ZDZ7cAnJDN3sWx57DPMKxs54vws7TSHLDzbWZ0jXHpxY6
-        uJp1lcAM7UvDFnQ3YMcCC/vWRbzSF6ViF/7jd5rvuJbRGrWC9rkOxj7XXbzqVPYsKVNHX2Imyxsh+
-        i13kAd3iJs/E6eSk2lYbXMGXMw0TdDLwyVRf0CnCzhInEhIviqp2CcaaX4q7n1FVy4TkfatEmRhJj
-        T8YzJ3JC1VEkQUWqJeVKATswx6fnl45C4f2eTnDWSTh497Qd+1z1DUl/WdKgTTQBLKPt5dXUAlr/Y
-        xuGTcoH2Mn0C1MPlb8LkKOUd;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1nHvy7-002zPp-Tj; Wed, 09 Feb 2022 23:01:48 +0000
-Message-ID: <e5171c3d-4df7-1e70-ce3e-badcd6ea855d@samba.org>
-Date:   Thu, 10 Feb 2022 00:01:47 +0100
+        with ESMTP id S233778AbiBJB4N (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Feb 2022 20:56:13 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A1C2BB0B
+        for <io-uring@vger.kernel.org>; Wed,  9 Feb 2022 17:49:22 -0800 (PST)
+Received: from [192.168.88.87] (unknown [36.68.63.145])
+        by gnuweeb.org (Postfix) with ESMTPSA id 9D8FD7E293;
+        Thu, 10 Feb 2022 00:53:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1644454396;
+        bh=RhaqlBcGEM3GHKEe42966QCKUQeu1VAnmA/cCE9/Wjw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=h17H12BkxytErkLh/h9VCtE994BAgn3Ydqavaw1JPKzdHFFQ81VMQqgU0ZiPPU5F6
+         aVfNi+mB+eG2cqY/PQPosKYJqRsyHUNP0D/coX50txElcM9AeE/gY7BL1HnFBMAvKB
+         nSCgO08KC1LWeiwyZi4AFX5xhBagP/EhEL+DboCb5LQDZxP+iHwzoCFqG7Qer7NKGh
+         DthgQBC2t/dmC9Cr87HhfMDz2HpXIPTFisX4kwCENQAzJ8VOI+bsooUF+8P5VVpAH8
+         ndrpq2VIwuxHpsMZ93ya95PIwHzU/E4gIZJBJxHFI19e3fTZtOr7ou07jNEKPhBH8K
+         5xEHndabb4/oQ==
+Message-ID: <01a82b31-cd8c-b40d-ab30-c3a67e29ea41@gnuweeb.org>
+Date:   Thu, 10 Feb 2022 07:53:01 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.5.0
+Subject: Re: [PATCH v1] liburing: add test for stable statx api
 Content-Language: en-US
-From:   Stefan Metzmacher <metze@samba.org>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Daniel Black <daniel@mariadb.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-block@vger.kernel.org, io-uring@vger.kernel.org,
-        stable@vger.kernel.org
-References: <c6d6bffe-1770-c51d-11c6-c5483bde1766@kernel.dk>
- <bd7289c8-0b01-4fcf-e584-273d372f8343@kernel.dk>
- <6d0ca779-3111-bc5e-88c0-22a98a6974b8@kernel.dk>
- <281147cc-7da4-8e45-2d6f-3f7c2a2ca229@kernel.dk>
- <c92f97e5-1a38-e23f-f371-c00261cacb6d@kernel.dk>
- <CABVffEN0LzLyrHifysGNJKpc_Szn7qPO4xy7aKvg7LTNc-Fpng@mail.gmail.com>
- <00d6e7ad-5430-4fca-7e26-0774c302be57@kernel.dk>
- <CABVffEM79CZ+4SW0+yP0+NioMX=sHhooBCEfbhqs6G6hex2YwQ@mail.gmail.com>
- <3aaac8b2-e2f6-6a84-1321-67409b2a3dce@kernel.dk>
- <98f8a00f-c634-4a1a-4eba-f97be5b2e801@kernel.dk> <YZ5lvtfqsZEllUJq@kroah.com>
- <c0a7ac89-2a8c-b1e3-00c2-96ee259582b4@kernel.dk>
- <96d6241f-7bf0-cefe-947e-ee03d83fb828@samba.org>
- <6d6fc76f-880a-938d-64dd-527e6be3009e@kernel.dk>
- <5217de38-d166-de32-c115-fd34399eb234@samba.org>
-Subject: Re: uring regression - lost write request
-In-Reply-To: <5217de38-d166-de32-c115-fd34399eb234@samba.org>
+To:     Stefan Roesch <shr@fb.com>, io-uring@vger.kernel.org,
+        kernel-team@fb.com
+Cc:     viro@zeniv.linux.org.uk
+References: <20220209190430.2378305-1-shr@fb.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20220209190430.2378305-1-shr@fb.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+On 2/10/22 2:04 AM, Stefan Roesch wrote:
+> @@ -156,6 +211,16 @@ int main(int argc, char *argv[])
+>   		goto err;
+>   	}
+>   
+> +	ret = test_statx_stable(&ring, fname);
+> +	if (ret) {
+> +		if (ret == -EINVAL) {
+> +			fprintf(stdout, "statx not supported, skipping\n");
+> +			goto done;
+> +		}
+> +		fprintf(stderr, "test_statx_loop failed: %d\n", ret);
+> +		goto err;
+> +	}
+> +
 
-Hi Jens,
+Why do we call it test_statx_loop? Isn't the function name test_statx_stable?
 
->>>>>> Looks good to me - Greg, would you mind queueing this up for
->>>>>> 5.14-stable?
->>>>>
->>>>> 5.14 is end-of-life and not getting any more releases (the front page of
->>>>> kernel.org should show that.)
->>>>
->>>> Oh, well I guess that settles that...
->>>>
->>>>> If this needs to go anywhere else, please let me know.
->>>>
->>>> Should be fine, previous 5.10 isn't affected and 5.15 is fine too as it
->>>> already has the patch.
->>>
->>> Are 5.11 and 5.13 are affected, these are hwe kernels for ubuntu,
->>> I may need to open a bug for them...
->>
->> Please do, then we can help get the appropriate patches lined up for
->> 5.11/13. They should need the same set, basically what ended up in 5.14
->> plus the one I posted today.
-> 
-> Ok, I've created https://bugs.launchpad.net/bugs/1952222
-
-At least for 5.14 the patch is included in
-
-https://git.launchpad.net/~canonical-kernel/ubuntu/+source/linux-oem/+git/focal/log/?h=Ubuntu-oem-5.14-5.14.0-1023.25
-
-https://git.launchpad.net/~canonical-kernel/ubuntu/+source/linux-oem/+git/focal/commit/?h=Ubuntu-oem-5.14-5.14.0-1023.25&id=9e2b95e7c9dd103297e6a3ccd98a7bf11ef66921
-
-apt-get install -V -t focal-proposed linux-oem-20.04d linux-tools-oem-20.04d
-installs linux-image-5.14.0-1023-oem (5.14.0-1023.25)
-
-Do we have any reproducer I can use to reproduce the problem
-and demonstrate the bug if fixed?
-
-Thanks!
-metze
+-- 
+Ammar Faizi
