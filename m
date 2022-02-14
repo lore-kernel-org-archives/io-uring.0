@@ -2,45 +2,45 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF66AC433FE
-	for <io-uring@archiver.kernel.org>; Mon, 14 Feb 2022 17:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 19EBBC4167D
+	for <io-uring@archiver.kernel.org>; Mon, 14 Feb 2022 17:44:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356631AbiBNRok (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 14 Feb 2022 12:44:40 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34818 "EHLO
+        id S1357202AbiBNRol (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 14 Feb 2022 12:44:41 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357208AbiBNRod (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Feb 2022 12:44:33 -0500
+        with ESMTP id S1357205AbiBNRob (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Feb 2022 12:44:31 -0500
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995C165439
-        for <io-uring@vger.kernel.org>; Mon, 14 Feb 2022 09:44:25 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21ECHW45005573
-        for <io-uring@vger.kernel.org>; Mon, 14 Feb 2022 09:44:24 -0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCAF65486
+        for <io-uring@vger.kernel.org>; Mon, 14 Feb 2022 09:44:22 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21E9KNeY025658
+        for <io-uring@vger.kernel.org>; Mon, 14 Feb 2022 09:44:22 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=sk+j4IRk3PfnWSQ2NA03xb7dzT85yytAB7SgmygMQh8=;
- b=C9br4Imcr4Dz9XV03g5RrEW09KpRTM6o2Zr61B94ak/fsklep4gEDdvz3Qsrr3t0dy92
- 1ipwghG2/NZ9Y8ZmJu1geUHMy7bvZGWIMM3R5Q9D7DH5bGeOqBM7j6ctBJeNdPYaMe1q
- 4e8w7J6r9gy3r52RqJYP+EiUqn6oOEXkKLg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e7pxr25us-5
+ bh=HeRa2xrPrzZWD3nBwmQhy5/qvO2TqyLuQ8Y3Q09V+fQ=;
+ b=YGm+a3Ur7LIiy+gx4ZBHMIrifsmQgdAq+U5TZR801eM2CaRQD2Dbl5PGZavpyjmIaUh0
+ 2HJ3Tik4cbS04Ig1GFIc/daIKtiM9duwIfj5jKpa0VCLv1wSudwNKBG2ouqiyS0R9NBj
+ caAmL71NKoIq/CF5kLWb8R6jGskEFenEWHI= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3e7mbx2vwt-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 14 Feb 2022 09:44:24 -0800
-Received: from twshared7634.08.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Mon, 14 Feb 2022 09:44:21 -0800
+Received: from twshared0983.05.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 14 Feb 2022 09:44:23 -0800
+ 15.1.2308.21; Mon, 14 Feb 2022 09:44:15 -0800
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id A818AABBD0FD; Mon, 14 Feb 2022 09:44:09 -0800 (PST)
+        id 94151ABBD0F7; Mon, 14 Feb 2022 09:44:09 -0800 (PST)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
         <linux-block@vger.kernel.org>, <kernel-team@fb.com>
 CC:     <shr@fb.com>
-Subject: [PATCH v1 05/14] fs: split off __alloc_page_buffers function
-Date:   Mon, 14 Feb 2022 09:43:54 -0800
-Message-ID: <20220214174403.4147994-6-shr@fb.com>
+Subject: [PATCH v1 02/14] mm: Introduce do_generic_perform_write
+Date:   Mon, 14 Feb 2022 09:43:51 -0800
+Message-ID: <20220214174403.4147994-3-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220214174403.4147994-1-shr@fb.com>
 References: <20220214174403.4147994-1-shr@fb.com>
@@ -48,94 +48,113 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: WUVzlBBRFFPqB01bs6vhRUmwzgNN4lsp
-X-Proofpoint-GUID: WUVzlBBRFFPqB01bs6vhRUmwzgNN4lsp
+X-Proofpoint-GUID: RDhWEvkm0vK9J-R2RwGI8hhd0zY2r2hY
+X-Proofpoint-ORIG-GUID: RDhWEvkm0vK9J-R2RwGI8hhd0zY2r2hY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-14_07,2022-02-14_03,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 adultscore=0
- bulkscore=0 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
- phishscore=0 impostorscore=0 clxscore=1015 mlxscore=0 suspectscore=0
- malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202140105
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 malwarescore=0
+ phishscore=0 bulkscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 mlxlogscore=750 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202140105
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This splits off the __alloc_page_buffers() function from the
-alloc_page_buffers_function(). In addition it adds a gfp_t parameter, so
-the caller can specify the allocation flags.
+This splits off the do generic_perform_write() function, so an
+additional flags parameter can be specified. It uses the new flag
+parameter to support async buffered writes.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- fs/buffer.c | 37 ++++++++++++++++++++++---------------
- 1 file changed, 22 insertions(+), 15 deletions(-)
+ include/linux/fs.h |  1 +
+ mm/filemap.c       | 20 +++++++++++++++-----
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/fs/buffer.c b/fs/buffer.c
-index 6e6a69a12eed..a1986f95a39a 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -802,26 +802,13 @@ int remove_inode_buffers(struct inode *inode)
- 	return ret;
- }
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index e2d892b201b0..e62dba6ed453 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -278,6 +278,7 @@ enum positive_aop_returns {
+ #define AOP_FLAG_NOFS			0x0002 /* used by filesystem to direct
+ 						* helper code (eg buffer layer)
+ 						* to clear GFP_FS from alloc */
++#define AOP_FLAGS_NOWAIT		0x0004 /* async nowait buffered writes */
 =20
--/*
-- * Create the appropriate buffers when given a page for data area and
-- * the size of each buffer.. Use the bh->b_this_page linked list to
-- * follow the buffers created.  Return NULL if unable to create more
-- * buffers.
-- *
-- * The retry flag is used to differentiate async IO (paging, swapping)
-- * which may not fail from ordinary buffer allocations.
-- */
--struct buffer_head *alloc_page_buffers(struct page *page, unsigned long =
-size,
--		bool retry)
-+struct buffer_head *__alloc_page_buffers(struct page *page, unsigned lon=
-g size,
-+		gfp_t gfp)
+ /*
+  * oh the beauties of C type declarations.
+diff --git a/mm/filemap.c b/mm/filemap.c
+index ad8c39d90bf9..d2fb817c0845 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -3725,14 +3725,13 @@ generic_file_direct_write(struct kiocb *iocb, str=
+uct iov_iter *from)
+ }
+ EXPORT_SYMBOL(generic_file_direct_write);
+=20
+-ssize_t generic_perform_write(struct file *file,
+-				struct iov_iter *i, loff_t pos)
++static ssize_t do_generic_perform_write(struct file *file, struct iov_it=
+er *i,
++					loff_t pos, int flags)
  {
- 	struct buffer_head *bh, *head;
--	gfp_t gfp =3D GFP_NOFS | __GFP_ACCOUNT;
- 	long offset;
- 	struct mem_cgroup *memcg, *old_memcg;
+ 	struct address_space *mapping =3D file->f_mapping;
+ 	const struct address_space_operations *a_ops =3D mapping->a_ops;
+ 	long status =3D 0;
+ 	ssize_t written =3D 0;
+-	unsigned int flags =3D 0;
 =20
--	if (retry)
--		gfp |=3D __GFP_NOFAIL;
--
- 	/* The page lock pins the memcg */
- 	memcg =3D page_memcg(page);
- 	old_memcg =3D set_active_memcg(memcg);
-@@ -859,6 +846,26 @@ struct buffer_head *alloc_page_buffers(struct page *=
-page, unsigned long size,
+ 	do {
+ 		struct page *page;
+@@ -3801,6 +3800,12 @@ ssize_t generic_perform_write(struct file *file,
 =20
- 	goto out;
+ 	return written ? written : status;
  }
 +
-+/*
-+ * Create the appropriate buffers when given a page for data area and
-+ * the size of each buffer.. Use the bh->b_this_page linked list to
-+ * follow the buffers created.  Return NULL if unable to create more
-+ * buffers.
-+ *
-+ * The retry flag is used to differentiate async IO (paging, swapping)
-+ * which may not fail from ordinary buffer allocations.
-+ */
-+struct buffer_head *alloc_page_buffers(struct page *page, unsigned long =
-size,
-+		bool retry)
++ssize_t generic_perform_write(struct file *file,
++				struct iov_iter *i, loff_t pos)
 +{
-+	gfp_t gfp =3D GFP_NOFS | __GFP_ACCOUNT;
-+
-+	if (retry)
-+		gfp |=3D __GFP_NOFAIL;
-+
-+	return __alloc_page_buffers(page, size, gfp);
++	return do_generic_perform_write(file, i, pos, 0);
 +}
- EXPORT_SYMBOL_GPL(alloc_page_buffers);
+ EXPORT_SYMBOL(generic_perform_write);
 =20
- static inline void
+ /**
+@@ -3832,6 +3837,10 @@ ssize_t __generic_file_write_iter(struct kiocb *io=
+cb, struct iov_iter *from)
+ 	ssize_t		written =3D 0;
+ 	ssize_t		err;
+ 	ssize_t		status;
++	int             flags =3D 0;
++
++	if (iocb->ki_flags & IOCB_NOWAIT)
++		flags |=3D AOP_FLAGS_NOWAIT;
+=20
+ 	/* We can write back this queue in page reclaim */
+ 	current->backing_dev_info =3D inode_to_bdi(inode);
+@@ -3857,7 +3866,8 @@ ssize_t __generic_file_write_iter(struct kiocb *ioc=
+b, struct iov_iter *from)
+ 		if (written < 0 || !iov_iter_count(from) || IS_DAX(inode))
+ 			goto out;
+=20
+-		status =3D generic_perform_write(file, from, pos =3D iocb->ki_pos);
++		status =3D do_generic_perform_write(file, from, pos =3D iocb->ki_pos, =
+flags);
++
+ 		/*
+ 		 * If generic_perform_write() returned a synchronous error
+ 		 * then we want to return the number of bytes which were
+@@ -3889,7 +3899,7 @@ ssize_t __generic_file_write_iter(struct kiocb *ioc=
+b, struct iov_iter *from)
+ 			 */
+ 		}
+ 	} else {
+-		written =3D generic_perform_write(file, from, iocb->ki_pos);
++		written =3D do_generic_perform_write(file, from, iocb->ki_pos, flags);
+ 		if (likely(written > 0))
+ 			iocb->ki_pos +=3D written;
+ 	}
 --=20
 2.30.2
 
