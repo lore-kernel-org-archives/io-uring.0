@@ -2,24 +2,24 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 19DAEC433F5
-	for <io-uring@archiver.kernel.org>; Wed, 16 Feb 2022 03:12:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67862C433F5
+	for <io-uring@archiver.kernel.org>; Wed, 16 Feb 2022 12:14:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237750AbiBPDMb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 15 Feb 2022 22:12:31 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:46842 "EHLO
+        id S233068AbiBPMOm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 16 Feb 2022 07:14:42 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236446AbiBPDMb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 15 Feb 2022 22:12:31 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE508939D3
-        for <io-uring@vger.kernel.org>; Tue, 15 Feb 2022 19:12:19 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V4bHGHq_1644981136;
-Received: from 30.225.24.82(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V4bHGHq_1644981136)
+        with ESMTP id S230059AbiBPMOl (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Feb 2022 07:14:41 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DA22A229C
+        for <io-uring@vger.kernel.org>; Wed, 16 Feb 2022 04:14:28 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=haoxu@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0V4d7eK5_1645013665;
+Received: from 30.225.24.82(mailfrom:haoxu@linux.alibaba.com fp:SMTPD_---0V4d7eK5_1645013665)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 16 Feb 2022 11:12:17 +0800
-Message-ID: <4d889559-9268-7948-eb6b-1cb60d90016f@linux.alibaba.com>
-Date:   Wed, 16 Feb 2022 11:12:16 +0800
+          Wed, 16 Feb 2022 20:14:26 +0800
+Message-ID: <f7f658cd-d76f-26c4-6549-0b3d2008d249@linux.alibaba.com>
+Date:   Wed, 16 Feb 2022 20:14:25 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
  Gecko/20100101 Thunderbird/91.3.0
@@ -73,19 +73,157 @@ X-Mailing-List: io-uring@vger.kernel.org
 > *AFTER* my epoll -> io_uring transition (I don't recall exactly the
 > sequence of my learning process).
 > 
-I read your code, I guess the thing is the sk->napi_id is set from
-skb->napi_id and the latter is set when the net device received some
-packets.
 > With my current knowledge, it makes little sense why busy polling would
 > not be possible with RPS. Also, what exactly is a NAPI device is quite
 > nebulous to me... Looking into the Intel igb driver code, it seems like
 > 1 NAPI device is created for each interrupt vector/Rx buffer of the
 > device.
-AFAIK, yes, each Rx ring has its own NAPI.
 > 
 > Bottomline, it seems like I have fallen into a new rabbit hole. It may
 > take me a day or 2 to figure it all... you are welcome to enlight me if
 > you know a thing or 2 about those topics... I am kinda lost right
 > now...
 > 
+Hi Olivier,
+I've write something to express my idea, it would be great if you can
+try it.
+It's totally untested and only does polling in sqthread, won't be hard
+to expand it to cqring_wait. My original idea is to poll all the napi
+device but seems that may be not efficient. so for a request, just
+do napi polling for one napi.
+There is still one problem: when to delete the polled NAPIs.
+
+Regards,
+Hao
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 538f90bd0508..2e32d5fe0641 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -63,6 +63,7 @@
+  #include <net/sock.h>
+  #include <net/af_unix.h>
+  #include <net/scm.h>
++#include <net/busy_poll.h>
+  #include <linux/anon_inodes.h>
+  #include <linux/sched/mm.h>
+  #include <linux/uaccess.h>
+@@ -443,6 +444,7 @@ struct io_ring_ctx {
+                 spinlock_t                      rsrc_ref_lock;
+         };
+
++       struct list_head                napi_list;
+         /* Keep this last, we don't need it for the fast path */
+         struct {
+                 #if defined(CONFIG_UNIX)
+@@ -1457,6 +1459,7 @@ static __cold struct io_ring_ctx 
+*io_ring_ctx_alloc(struct io_uring_params *p)
+         INIT_WQ_LIST(&ctx->locked_free_list);
+         INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
+         INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
++       INIT_LIST_HEAD(&ctx->napi_list);
+         return ctx;
+  err:
+         kfree(ctx->dummy_ubuf);
+@@ -5419,6 +5422,70 @@ IO_NETOP_FN(send);
+  IO_NETOP_FN(recv);
+  #endif /* CONFIG_NET */
+
++#ifdef CONFIG_NET_RX_BUSY_POLL
++struct napi_entry {
++       struct list_head        list;
++       unsigned int            napi_id;
++};
++
++static void io_add_napi(struct file *file, struct io_ring_ctx *ctx)
++{
++       unsigned int napi_id;
++       struct socket *sock;
++       struct sock *sk;
++       struct napi_entry *ne;
++
++       if (!net_busy_loop_on())
++               return;
++
++       sock = sock_from_file(file);
++       if (!sock)
++               return;
++
++       sk = sock->sk;
++       if (!sk)
++               return;
++
++       napi_id = READ_ONCE(sk->sk_napi_id);
++       if (napi_id < MIN_NAPI_ID)
++               return;
++
++       list_for_each_entry(ne, &ctx->napi_list, list) {
++               if (ne->napi_id == napi_id)
++                       return;
++       }
++
++       ne = kmalloc(sizeof(*ne), GFP_KERNEL);
++       if (!ne)
++               return;
++
++       list_add_tail(&ne->list, &ctx->napi_list);
++}
++
++static void io_napi_busy_loop(struct io_ring_ctx *ctx)
++{
++       struct napi_entry *ne;
++
++       if (list_empty(&ctx->napi_list) || !net_busy_loop_on())
++               return;
++
++       list_for_each_entry(ne, &ctx->napi_list, list)
++               napi_busy_loop(ne->napi_id, NULL, NULL, false, 
+BUSY_POLL_BUDGET);
++}
++#else
++
++static inline void io_add_napi(struct file *file, struct io_ring_ctx *ctx)
++{
++       return;
++}
++
++static inline void io_napi_busy_loop(struct io_ring_ctx *ctx)
++{
++       return;
++}
++#endif /* CONFIG_NET_RX_BUSY_POLL */
++
++
+  struct io_poll_table {
+         struct poll_table_struct pt;
+         struct io_kiocb *req;
+@@ -5583,6 +5650,7 @@ static void io_poll_task_func(struct io_kiocb 
+*req, bool *locked)
+         struct io_ring_ctx *ctx = req->ctx;
+         int ret;
+
++       io_add_napi(req->file, req->ctx);
+         ret = io_poll_check_events(req);
+         if (ret > 0)
+                 return;
+@@ -5608,6 +5676,7 @@ static void io_apoll_task_func(struct io_kiocb 
+*req, bool *locked)
+         struct io_ring_ctx *ctx = req->ctx;
+         int ret;
+
++       io_add_napi(req->file, req->ctx);
+         ret = io_poll_check_events(req);
+         if (ret > 0)
+                 return;
+@@ -7544,6 +7613,9 @@ static int __io_sq_thread(struct io_ring_ctx *ctx, 
+bool cap_entries)
+                         wake_up(&ctx->sqo_sq_wait);
+                 if (creds)
+                         revert_creds(creds);
++#ifdef CONFIG_NET_RX_BUSY_POLL
++               io_napi_busy_loop(ctx);
++#endif
+         }
+
+         return ret;
 
