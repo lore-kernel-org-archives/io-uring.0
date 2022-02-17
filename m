@@ -2,74 +2,117 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1872FC433EF
-	for <io-uring@archiver.kernel.org>; Thu, 17 Feb 2022 17:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4ACB1C433F5
+	for <io-uring@archiver.kernel.org>; Thu, 17 Feb 2022 17:56:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243900AbiBQRwv (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 17 Feb 2022 12:52:51 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54794 "EHLO
+        id S243937AbiBQR4y (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 17 Feb 2022 12:56:54 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:32824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243887AbiBQRwu (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 17 Feb 2022 12:52:50 -0500
-X-Greylist: delayed 110 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Feb 2022 09:52:36 PST
-Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA30F297206;
-        Thu, 17 Feb 2022 09:52:35 -0800 (PST)
-Received: from [45.44.224.220] (port=39848 helo=localhost)
-        by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <olivier@trillion01.com>)
-        id 1nKkxG-0001kw-Ba; Thu, 17 Feb 2022 12:52:34 -0500
-From:   Olivier Langlois <olivier@trillion01.com>
+        with ESMTP id S240904AbiBQR4x (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 17 Feb 2022 12:56:53 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D1886E38;
+        Thu, 17 Feb 2022 09:56:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6ckybct3FPMLo0xdtJt/GmtfVHGW/Fz7SoVWRuRzIWI=; b=TUk9ZD8zmd4WwF2rBQG9Jy/e5p
+        5/RU/3srRwzJ89C2uJkDKgQuUAGrU8foXgaLFUMGR2nd11CEsvw2Fw0ISiVnq6/VKwHMlzZrPSpmJ
+        ElBjW1AZ30cUxiqF4MLaObpeC6e2QMklaIVBovHi/3AZudcLuRvJoXiKbpySC9wiyCbVXK2AQKyaw
+        BQyXz9oUsgb1xwPDCTO+GJG8q9dEhlOQGxGLKLT6rdqKneCfI1OGhMvMMrE2fRfYiyDIJv1pD+xhz
+        4BmfyHUJ/USaLx3Ho9w3G8yhtnYjljxZzb4t8Lt24dtC/yqRYdI3ekqAGwztwJx0/iF1LU4piW2qB
+        QTXPatVQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nKl1B-00BeVy-81; Thu, 17 Feb 2022 17:56:37 +0000
+Date:   Thu, 17 Feb 2022 09:56:37 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring <io-uring@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <bd7c0495f7656e803e5736708591bb665e6eaacd.1645041650.git.olivier@trillion01.com>
-Date:   Wed, 16 Feb 2022 14:53:42 -0500
-Subject: [PATCH] io_uring: Remove unneeded test in io_run_task_work_sig()
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - trillion01.com
-X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
-X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Cc:     Kanchan Joshi <joshiiitr@gmail.com>,
+        Kanchan Joshi <joshi.k@samsung.com>, io-uring@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier@javigon.com>,
+        Anuj Gupta <anuj20.g@samsung.com>,
+        Pankaj Raghav <pankydev8@gmail.com>
+Subject: Re: [RFC 01/13] io_uring: add infra for uring_cmd completion in
+ submitter-task
+Message-ID: <Yg6MVe2Qpy92CsNF@bombadil.infradead.org>
+References: <20211220141734.12206-1-joshi.k@samsung.com>
+ <CGME20211220142228epcas5p2978d92d38f2015148d5f72913d6dbc3e@epcas5p2.samsung.com>
+ <20211220141734.12206-2-joshi.k@samsung.com>
+ <Yg2vP7lo3hGLGakx@bombadil.infradead.org>
+ <CA+1E3rLpKp0h2x7CoFPXwsYOc4ZYg_sqQQ+ed8cJhq77ESOAjg@mail.gmail.com>
+ <b11ede2b-b737-f99a-7b31-20d6b4eccb42@kernel.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b11ede2b-b737-f99a-7b31-20d6b4eccb42@kernel.dk>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
-Message-ID: <20220216195342.GeDHrg_2yhf08nnvhrrs3R8vunX7JIEYmtsF-Jq8it4@z>
 
-Avoid testing TIF_NOTIFY_SIGNAL twice by calling task_sigpending()
-directly from io_run_task_work_sig()
+On Thu, Feb 17, 2022 at 08:50:59AM -0700, Jens Axboe wrote:
+> On 2/17/22 8:39 AM, Kanchan Joshi wrote:
+> > On Thu, Feb 17, 2022 at 7:43 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >>
+> >> On Mon, Dec 20, 2021 at 07:47:22PM +0530, Kanchan Joshi wrote:
+> >>> Completion of a uring_cmd ioctl may involve referencing certain
+> >>> ioctl-specific fields, requiring original submitter context.
+> >>> Export an API that driver can use for this purpose.
+> >>> The API facilitates reusing task-work infra of io_uring, while driver
+> >>> gets to implement cmd-specific handling in a callback.
+> >>>
+> >>> Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
+> >>> Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+> >>> ---
+> >>>  fs/io_uring.c            | 16 ++++++++++++++++
+> >>>  include/linux/io_uring.h |  8 ++++++++
+> >>>  2 files changed, 24 insertions(+)
+> >>>
+> >>> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> >>> index e96ed3d0385e..246f1085404d 100644
+> >>> --- a/fs/io_uring.c
+> >>> +++ b/fs/io_uring.c
+> >>> @@ -2450,6 +2450,22 @@ static void io_req_task_submit(struct io_kiocb *req, bool *locked)
+> >>>               io_req_complete_failed(req, -EFAULT);
+> >>>  }
+> >>>
+> >>> +static void io_uring_cmd_work(struct io_kiocb *req, bool *locked)
+> >>> +{
+> >>> +     req->uring_cmd.driver_cb(&req->uring_cmd);
+> >>
+> >> If the callback memory area is gone, boom.
+> > 
+> > Why will the memory area be gone?
+> > Module removal is protected because try_module_get is done anyway when
+> > the namespace was opened.
+> 
+> And the req isn't going away before it's completed.
 
-Signed-off-by: Olivier Langlois <olivier@trillion01.com>
----
- fs/io_uring.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Groovy, it would be nice to add a little /* comment */ to just remind
+the reader?
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 77b9c7e4793b..9b320b5f158c 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -7683,11 +7683,11 @@ static int io_run_task_work_sig(void)
- {
- 	if (io_run_task_work())
- 		return 1;
--	if (!signal_pending(current))
--		return 0;
- 	if (test_thread_flag(TIF_NOTIFY_SIGNAL))
- 		return -ERESTARTSYS;
--	return -EINTR;
-+	if (task_sigpending(current))
-+		return -EINTR;
-+	return 0;
- }
- 
- /* when returns >0, the caller should retry */
--- 
-2.35.1
+> >>> +{
+> >>> +     struct io_kiocb *req = container_of(ioucmd, struct io_kiocb, uring_cmd);
+> >>> +
+> >>> +     req->uring_cmd.driver_cb = driver_cb;
+> >>> +     req->io_task_work.func = io_uring_cmd_work;
+> >>> +     io_req_task_work_add(req, !!(req->ctx->flags & IORING_SETUP_SQPOLL));
+> >>
+> >> This can schedules, and so the callback may go fishing in the meantime.
+> > 
+> > io_req_task_work_add is safe to be called in atomic context. FWIW,
+> > io_uring uses this for regular (i.e. direct block) io completion too.
+> 
+> Correct, it doesn't schedule and is safe from irq context as long as the
+> task is pinned (which it is, via the req itself).
 
+Great, a kdoc explaining the routine and that it can be called from
+atomic context and the rationale would be very useful to users. And ..
+so the callback *must* be safe in atomic context too or can it sleep?
+
+  Luis
