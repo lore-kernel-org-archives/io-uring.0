@@ -2,45 +2,45 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BEF9C433EF
-	for <io-uring@archiver.kernel.org>; Fri, 18 Feb 2022 19:58:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A72A6C433EF
+	for <io-uring@archiver.kernel.org>; Fri, 18 Feb 2022 19:58:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238479AbiBRT6Q (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 18 Feb 2022 14:58:16 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44188 "EHLO
+        id S238704AbiBRT6W (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 18 Feb 2022 14:58:22 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238476AbiBRT6Q (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 18 Feb 2022 14:58:16 -0500
+        with ESMTP id S238583AbiBRT6W (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 18 Feb 2022 14:58:22 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D7931C
-        for <io-uring@vger.kernel.org>; Fri, 18 Feb 2022 11:57:59 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21IFr9RB026039
-        for <io-uring@vger.kernel.org>; Fri, 18 Feb 2022 11:57:59 -0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 346391EAFE
+        for <io-uring@vger.kernel.org>; Fri, 18 Feb 2022 11:58:04 -0800 (PST)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21IA79xv030766
+        for <io-uring@vger.kernel.org>; Fri, 18 Feb 2022 11:58:04 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=zcQrDPv3eW71zY4XW+9wjHujhsnhMRVqCLVW8ftO+VU=;
- b=i4FhaxWqZyH/Ab7xkJHmk7gZe4IyVEm+3PD6IJxkX7L3/NE3PFbCD6b5o6nhTVWWPPcA
- fZ2YGHIHfALt9xRtcn7DyAliPHT8uNMjJ2UVazjCZt7/ZUFdle/ocSdsBwtCVh8U8y8j
- kBNq5fxHoxaLV9rYjet4oFQKYsdAm3W8HtA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ea1mp5p21-2
+ bh=BwSx3L7ogY20VkY+MOK+kIbEIgoxq4mLJVLVeNC1mH0=;
+ b=DhT+scriyqFJcGhM03Xbq8i26DL15mlZgTQDRA37Z0H/bhX87cHQlq6A12u79+DOq5N0
+ pAcBOPJLfGcNCpdE69H/ZEsqsQt2+6r7hNQb6j35Cxcpapuh6yrT7RvV1czIs36FhncP
+ HiRKbJJ9NWc3nSOsscBVSS5byYLObsA0Tps= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ea9dm3m2h-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Fri, 18 Feb 2022 11:57:58 -0800
-Received: from twshared27297.14.frc2.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Fri, 18 Feb 2022 11:58:03 -0800
+Received: from twshared7634.08.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Fri, 18 Feb 2022 11:57:58 -0800
+ 15.1.2308.21; Fri, 18 Feb 2022 11:58:02 -0800
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 9C739AEB6605; Fri, 18 Feb 2022 11:57:50 -0800 (PST)
+        id 8A082AEB65FF; Fri, 18 Feb 2022 11:57:50 -0800 (PST)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
         <linux-block@vger.kernel.org>, <kernel-team@fb.com>
 CC:     <shr@fb.com>
-Subject: [PATCH v2 04/13] fs: split off __alloc_page_buffers function
-Date:   Fri, 18 Feb 2022 11:57:30 -0800
-Message-ID: <20220218195739.585044-5-shr@fb.com>
+Subject: [PATCH v2 01/13] fs: Add flags parameter to __block_write_begin_int
+Date:   Fri, 18 Feb 2022 11:57:27 -0800
+Message-ID: <20220218195739.585044-2-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220218195739.585044-1-shr@fb.com>
 References: <20220218195739.585044-1-shr@fb.com>
@@ -48,93 +48,108 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: QGK8nnmb0IQGGQzVkDiCafP3hjES7XMT
-X-Proofpoint-ORIG-GUID: QGK8nnmb0IQGGQzVkDiCafP3hjES7XMT
+X-Proofpoint-GUID: D7qyajtRbQLOU59klcrXtBlm-bq4Ie6w
+X-Proofpoint-ORIG-GUID: D7qyajtRbQLOU59klcrXtBlm-bq4Ie6w
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-18_09,2022-02-18_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- suspectscore=0 mlxlogscore=999 mlxscore=0 malwarescore=0 phishscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2201110000 definitions=main-2202180122
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 phishscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 suspectscore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1015 bulkscore=0 impostorscore=0
+ mlxlogscore=823 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2201110000 definitions=main-2202180122
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This splits off the __alloc_page_buffers() function from the
-alloc_page_buffers_function(). In addition it adds a gfp_t parameter, so
-the caller can specify the allocation flags.
+This adds a flags parameter to the __begin_write_begin_int() function.
+This allows to pass flags down the stack.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- fs/buffer.c | 37 ++++++++++++++++++++++---------------
- 1 file changed, 22 insertions(+), 15 deletions(-)
+ fs/buffer.c            | 7 ++++---
+ fs/internal.h          | 3 ++-
+ fs/iomap/buffered-io.c | 4 ++--
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/fs/buffer.c b/fs/buffer.c
-index 6e6a69a12eed..2858eaf433c8 100644
+index 8e112b6bd371..6e6a69a12eed 100644
 --- a/fs/buffer.c
 +++ b/fs/buffer.c
-@@ -802,26 +802,13 @@ int remove_inode_buffers(struct inode *inode)
- 	return ret;
+@@ -1970,7 +1970,8 @@ iomap_to_bh(struct inode *inode, sector_t block, st=
+ruct buffer_head *bh,
  }
 =20
--/*
-- * Create the appropriate buffers when given a page for data area and
-- * the size of each buffer.. Use the bh->b_this_page linked list to
-- * follow the buffers created.  Return NULL if unable to create more
-- * buffers.
-- *
-- * The retry flag is used to differentiate async IO (paging, swapping)
-- * which may not fail from ordinary buffer allocations.
-- */
--struct buffer_head *alloc_page_buffers(struct page *page, unsigned long =
-size,
--		bool retry)
-+static struct buffer_head *__alloc_page_buffers(struct page *page,
-+						unsigned long size, gfp_t gfp)
+ int __block_write_begin_int(struct folio *folio, loff_t pos, unsigned le=
+n,
+-		get_block_t *get_block, const struct iomap *iomap)
++			get_block_t *get_block, const struct iomap *iomap,
++			unsigned int flags)
  {
- 	struct buffer_head *bh, *head;
--	gfp_t gfp =3D GFP_NOFS | __GFP_ACCOUNT;
- 	long offset;
- 	struct mem_cgroup *memcg, *old_memcg;
-=20
--	if (retry)
--		gfp |=3D __GFP_NOFAIL;
--
- 	/* The page lock pins the memcg */
- 	memcg =3D page_memcg(page);
- 	old_memcg =3D set_active_memcg(memcg);
-@@ -859,6 +846,26 @@ struct buffer_head *alloc_page_buffers(struct page *=
-page, unsigned long size,
-=20
- 	goto out;
+ 	unsigned from =3D pos & (PAGE_SIZE - 1);
+ 	unsigned to =3D from + len;
+@@ -2058,7 +2059,7 @@ int __block_write_begin(struct page *page, loff_t p=
+os, unsigned len,
+ 		get_block_t *get_block)
+ {
+ 	return __block_write_begin_int(page_folio(page), pos, len, get_block,
+-				       NULL);
++				       NULL, 0);
  }
-+
-+/*
-+ * Create the appropriate buffers when given a page for data area and
-+ * the size of each buffer.. Use the bh->b_this_page linked list to
-+ * follow the buffers created.  Return NULL if unable to create more
-+ * buffers.
-+ *
-+ * The retry flag is used to differentiate async IO (paging, swapping)
-+ * which may not fail from ordinary buffer allocations.
-+ */
-+struct buffer_head *alloc_page_buffers(struct page *page, unsigned long =
-size,
-+		bool retry)
-+{
-+	gfp_t gfp =3D GFP_NOFS | __GFP_ACCOUNT;
-+
-+	if (retry)
-+		gfp |=3D __GFP_NOFAIL;
-+
-+	return __alloc_page_buffers(page, size, gfp);
-+}
- EXPORT_SYMBOL_GPL(alloc_page_buffers);
+ EXPORT_SYMBOL(__block_write_begin);
 =20
- static inline void
+@@ -2118,7 +2119,7 @@ int block_write_begin(struct address_space *mapping=
+, loff_t pos, unsigned len,
+ 	if (!page)
+ 		return -ENOMEM;
+=20
+-	status =3D __block_write_begin(page, pos, len, get_block);
++	status =3D __block_write_begin_int(page_folio(page), pos, len, get_bloc=
+k, NULL, flags);
+ 	if (unlikely(status)) {
+ 		unlock_page(page);
+ 		put_page(page);
+diff --git a/fs/internal.h b/fs/internal.h
+index 8590c973c2f4..7432df23f3ce 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -38,7 +38,8 @@ static inline int emergency_thaw_bdev(struct super_bloc=
+k *sb)
+  * buffer.c
+  */
+ int __block_write_begin_int(struct folio *folio, loff_t pos, unsigned le=
+n,
+-		get_block_t *get_block, const struct iomap *iomap);
++			get_block_t *get_block, const struct iomap *iomap,
++			unsigned int flags);
+=20
+ /*
+  * char_dev.c
+diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
+index 6c51a75d0be6..47c519952725 100644
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@ -646,7 +646,7 @@ static int iomap_write_begin(const struct iomap_iter =
+*iter, loff_t pos,
+ 	if (srcmap->type =3D=3D IOMAP_INLINE)
+ 		status =3D iomap_write_begin_inline(iter, folio);
+ 	else if (srcmap->flags & IOMAP_F_BUFFER_HEAD)
+-		status =3D __block_write_begin_int(folio, pos, len, NULL, srcmap);
++		status =3D __block_write_begin_int(folio, pos, len, NULL, srcmap, 0);
+ 	else
+ 		status =3D __iomap_write_begin(iter, pos, len, folio);
+=20
+@@ -979,7 +979,7 @@ static loff_t iomap_folio_mkwrite_iter(struct iomap_i=
+ter *iter,
+=20
+ 	if (iter->iomap.flags & IOMAP_F_BUFFER_HEAD) {
+ 		ret =3D __block_write_begin_int(folio, iter->pos, length, NULL,
+-					      &iter->iomap);
++					      &iter->iomap, 0);
+ 		if (ret)
+ 			return ret;
+ 		block_commit_write(&folio->page, 0, length);
 --=20
 2.30.2
 
