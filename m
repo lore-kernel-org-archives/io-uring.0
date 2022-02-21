@@ -2,160 +2,384 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 985A7C433F5
-	for <io-uring@archiver.kernel.org>; Mon, 21 Feb 2022 14:17:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84287C433EF
+	for <io-uring@archiver.kernel.org>; Mon, 21 Feb 2022 14:18:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377518AbiBUORy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 21 Feb 2022 09:17:54 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:54724 "EHLO
+        id S231704AbiBUOTM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 21 Feb 2022 09:19:12 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:56786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377511AbiBUORt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Feb 2022 09:17:49 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17061EAF0
-        for <io-uring@vger.kernel.org>; Mon, 21 Feb 2022 06:17:25 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21LANSdc002488
-        for <io-uring@vger.kernel.org>; Mon, 21 Feb 2022 06:17:25 -0800
+        with ESMTP id S1377521AbiBUOTL (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Feb 2022 09:19:11 -0500
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47841EAFC
+        for <io-uring@vger.kernel.org>; Mon, 21 Feb 2022 06:18:47 -0800 (PST)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 21L4cvgx027120
+        for <io-uring@vger.kernel.org>; Mon, 21 Feb 2022 06:18:47 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=XsWZ+dstq9O1Y74mqKTBcqdLDX5wS+fQHRNAdVW6HtI=;
- b=FU7SzZ/Jra+9EUb9f96ooumawIM+nllcAogPUHOwgQ6+VjhS6bjtwsMZj3eciCQfwHHp
- 33wCN6DTt8YkIezFAOpGoU1i7H7ZcJBenSDsxeHkdock0guH/lLGaI2Q/hJSvS9P9AJS
- gWKJ8by1Ls1rCUWVZTkOSEitM2ncZI0ou4Q= 
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=wdY92JVsYERUoWMw8SYzfgNnoxRWSWWbHWR4uXwRh6g=;
+ b=Zd1DTQcRZgeSoWWXVtr87ygWs8uU9PNQ7tlIsKGMf8exOjBc19rPha5OsSDgPKWWgqBl
+ gt56qmvGEbQGS9+axAAP4V7nhDbtxViM+8Qw+GuCxRz2b8vZ34etALMUWYDMvVaY7FSu
+ rJwTbEqr5WIVMFiG33IaPORMchg7HTVv/1o= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ec8xnh0ss-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3eaxhx98t4-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 21 Feb 2022 06:17:24 -0800
-Received: from twshared26885.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Mon, 21 Feb 2022 06:18:47 -0800
+Received: from twshared9880.08.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Mon, 21 Feb 2022 06:17:23 -0800
+ 15.1.2308.21; Mon, 21 Feb 2022 06:18:46 -0800
 Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
-        id D594D46F0930; Mon, 21 Feb 2022 06:17:16 -0800 (PST)
+        id 8DADF46F0C69; Mon, 21 Feb 2022 06:18:40 -0800 (PST)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH v2 3/4] io_uring: do not recalculate ppos unnecessarily
-Date:   Mon, 21 Feb 2022 06:16:48 -0800
-Message-ID: <20220221141649.624233-4-dylany@fb.com>
+CC:     <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH v2 liburing] Test consistent file position updates
+Date:   Mon, 21 Feb 2022 06:18:35 -0800
+Message-ID: <20220221141835.636567-1-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220221141649.624233-1-dylany@fb.com>
-References: <20220221141649.624233-1-dylany@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: ZLL67D2Hp1ukquJ-QBdoWcc_ruoJgFwK
-X-Proofpoint-ORIG-GUID: ZLL67D2Hp1ukquJ-QBdoWcc_ruoJgFwK
+X-Proofpoint-ORIG-GUID: HiDZ8-YizTasEIVU_oqg93qNXlBij9oq
+X-Proofpoint-GUID: HiDZ8-YizTasEIVU_oqg93qNXlBij9oq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.816,Hydra:6.0.425,FMLib:17.11.62.513
  definitions=2022-02-21_07,2022-02-21_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 clxscore=1015
- priorityscore=1501 malwarescore=0 mlxscore=0 phishscore=0 adultscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=641 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_outbound_notspam policy=fb_outbound score=0 mlxscore=0
+ clxscore=1015 phishscore=0 priorityscore=1501 adultscore=0 mlxlogscore=913
+ suspectscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2201110000 definitions=main-2202210086
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-There is a slight optimisation to be had by calculating the correct pos
-pointer inside io_kiocb_update_pos and then using that later.
+read(2)/write(2) and friends support sequential reads without giving an
+explicit offset. The result of these should leave the file with an
+incremented offset.
 
-It seems code size drops by a bit:
-000000000000a1b0 0000000000000400 t io_read
-000000000000a5b0 0000000000000319 t io_write
+Add tests for both read and write to check that io_uring behaves
+consistently in these scenarios. Expect that if you queue many
+reads/writes, and set the IOSQE_IO_LINK flag, that they will behave
+similarly to calling read(2)/write(2) in sequence.
 
-vs
-000000000000a1b0 00000000000003f6 t io_read
-000000000000a5b0 0000000000000310 t io_write
+Set IOSQE_ASYNC as well in a set of tests. This exacerbates the problem b=
+y
+forcing work to happen in different threads to submission.
+
+Also add tests for not setting IOSQE_IO_LINK, but allow the file offset t=
+o
+progress past the end of the file.
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- fs/io_uring.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 50b93ff2ee12..abd8c739988e 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -3066,17 +3066,21 @@ static inline void io_rw_done(struct kiocb *kiocb=
-, ssize_t ret)
- 	}
- }
-=20
--static inline void
-+static inline loff_t*
- io_kiocb_update_pos(struct io_kiocb *req, struct kiocb *kiocb)
- {
-+	bool is_stream =3D req->file->f_mode & FMODE_STREAM;
- 	if (kiocb->ki_pos =3D=3D -1) {
--		if (!(req->file->f_mode & FMODE_STREAM)) {
-+		if (!is_stream) {
- 			req->flags |=3D REQ_F_CUR_POS;
- 			kiocb->ki_pos =3D req->file->f_pos;
-+			return &kiocb->ki_pos;
- 		} else {
- 			kiocb->ki_pos =3D 0;
-+			return NULL;
- 		}
- 	}
-+	return is_stream ? NULL : &kiocb->ki_pos;
- }
-=20
- static void kiocb_done(struct io_kiocb *req, ssize_t ret,
-@@ -3637,6 +3641,7 @@ static int io_read(struct io_kiocb *req, unsigned i=
-nt issue_flags)
- 	bool force_nonblock =3D issue_flags & IO_URING_F_NONBLOCK;
- 	struct io_async_rw *rw;
- 	ssize_t ret, ret2;
-+	loff_t *ppos;
-=20
- 	if (!req_has_async_data(req)) {
- 		ret =3D io_import_iovec(READ, req, &iovec, s, issue_flags);
-@@ -3667,9 +3672,9 @@ static int io_read(struct io_kiocb *req, unsigned i=
-nt issue_flags)
- 		kiocb->ki_flags &=3D ~IOCB_NOWAIT;
- 	}
-=20
--	io_kiocb_update_pos(req, kiocb);
-+	ppos =3D io_kiocb_update_pos(req, kiocb);
-=20
--	ret =3D rw_verify_area(READ, req->file, io_kiocb_ppos(kiocb), req->resu=
-lt);
-+	ret =3D rw_verify_area(READ, req->file, ppos, req->result);
- 	if (unlikely(ret)) {
- 		kfree(iovec);
- 		return ret;
-@@ -3768,6 +3773,7 @@ static int io_write(struct io_kiocb *req, unsigned =
-int issue_flags)
- 	struct kiocb *kiocb =3D &req->rw.kiocb;
- 	bool force_nonblock =3D issue_flags & IO_URING_F_NONBLOCK;
- 	ssize_t ret, ret2;
-+	loff_t *ppos;
-=20
- 	if (!req_has_async_data(req)) {
- 		ret =3D io_import_iovec(WRITE, req, &iovec, s, issue_flags);
-@@ -3798,9 +3804,9 @@ static int io_write(struct io_kiocb *req, unsigned =
-int issue_flags)
- 		kiocb->ki_flags &=3D ~IOCB_NOWAIT;
- 	}
-=20
--	io_kiocb_update_pos(req, kiocb);
-+	ppos =3D io_kiocb_update_pos(req, kiocb);
-=20
--	ret =3D rw_verify_area(WRITE, req->file, io_kiocb_ppos(kiocb), req->res=
-ult);
-+	ret =3D rw_verify_area(WRITE, req->file, ppos, req->result);
- 	if (unlikely(ret))
- 		goto out_free;
-=20
+v2:
+ - fixed a bug in how cqe ordering was processed
+ - enforce sequential reads for !IOSQE_IO_LINK
+
+ test/Makefile |   1 +
+ test/fpos.c   | 270 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 271 insertions(+)
+ create mode 100644 test/fpos.c
+
+diff --git a/test/Makefile b/test/Makefile
+index 1e318f7..f421f53 100644
+--- a/test/Makefile
++++ b/test/Makefile
+@@ -78,6 +78,7 @@ test_srcs :=3D \
+ 	file-update.c \
+ 	file-verify.c \
+ 	fixed-link.c \
++	fpos.c \
+ 	fsync.c \
+ 	hardlink.c \
+ 	io-cancel.c \
+diff --git a/test/fpos.c b/test/fpos.c
+new file mode 100644
+index 0000000..2c6c139
+--- /dev/null
++++ b/test/fpos.c
+@@ -0,0 +1,270 @@
++/* SPDX-License-Identifier: MIT */
++/*
++ * Description: test io_uring fpos handling
++ *
++ */
++#include <errno.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <stdlib.h>
++#include <string.h>
++#include <fcntl.h>
++#include <assert.h>
++
++#include "helpers.h"
++#include "liburing.h"
++
++#define FILE_SIZE 10000
++#define QUEUE_SIZE 4096
++
++static void create_file(const char *file, size_t size)
++{
++	ssize_t ret;
++	char *buf;
++	size_t idx;
++	int fd;
++
++	buf =3D t_malloc(size);
++	for (idx =3D 0; idx < size; ++idx) {
++		/* write 0 or 1 */
++		buf[idx] =3D (unsigned char)(idx & 0x01);
++	}
++
++	fd =3D open(file, O_WRONLY | O_CREAT, 0644);
++	assert(fd >=3D 0);
++
++	ret =3D write(fd, buf, size);
++	fsync(fd);
++	close(fd);
++	free(buf);
++	assert(ret =3D=3D size);
++}
++
++static int
++test_read(struct io_uring *ring, bool async, bool link, int blocksize)
++{
++	int ret, fd, i;
++	bool done =3D false;
++	struct io_uring_sqe *sqe;
++	struct io_uring_cqe *cqe;
++	loff_t current, expected =3D 0;
++	int count_ok;
++	int count_0 =3D 0, count_1 =3D 0;
++	unsigned char buff[QUEUE_SIZE * blocksize];
++	unsigned char reordered[QUEUE_SIZE * blocksize];
++
++	create_file(".test_read", FILE_SIZE);
++	fd =3D open(".test_read", O_RDONLY);
++	unlink(".test_read");
++	assert(fd >=3D 0);
++
++	while (!done) {
++		for (i =3D 0; i < QUEUE_SIZE; ++i) {
++			sqe =3D io_uring_get_sqe(ring);
++			if (!sqe) {
++				fprintf(stderr, "no sqe\n");
++				return -1;
++			}
++			io_uring_prep_read(sqe, fd,
++					buff + i * blocksize,
++					blocksize, -1);
++			sqe->user_data =3D i;
++			if (async)
++				sqe->flags |=3D IOSQE_ASYNC;
++			if (link && i !=3D QUEUE_SIZE - 1)
++				sqe->flags |=3D IOSQE_IO_LINK;
++		}
++		ret =3D io_uring_submit_and_wait(ring, QUEUE_SIZE);
++		if (ret !=3D QUEUE_SIZE) {
++			fprintf(stderr, "submit failed: %d\n", ret);
++			return 1;
++		}
++		count_ok  =3D 0;
++		for (i =3D 0; i < QUEUE_SIZE; ++i) {
++			int res;
++
++			ret =3D io_uring_peek_cqe(ring, &cqe);
++			if (ret) {
++				fprintf(stderr, "peek failed: %d\n", ret);
++				return ret;
++			}
++			assert(cqe->user_data < QUEUE_SIZE);
++			memcpy(reordered + count_ok
++				, buff + cqe->user_data * blocksize
++				, blocksize);
++			res =3D cqe->res;
++			io_uring_cqe_seen(ring, cqe);
++			if (res =3D=3D 0) {
++				done =3D true;
++			} else if (res =3D=3D -ECANCELED) {
++				/* cancelled, probably ok */
++			} else if (res < 0 || res > blocksize) {
++				fprintf(stderr, "bad read: %d\n", res);
++				return -1;
++			} else {
++				expected +=3D res;
++				count_ok +=3D res;
++			}
++		}
++		ret =3D 0;
++		for (i =3D 0; i < count_ok; i++) {
++			if (reordered[i] =3D=3D 1) {
++				count_1++;
++			} else if (reordered[i] =3D=3D 0) {
++				count_0++;
++			} else {
++				fprintf(stderr, "odd read %d\n",
++					(int)reordered[i]);
++				ret =3D -1;
++				break;
++			}
++		}
++		if (labs(count_1 - count_0) > 1) {
++			fprintf(stderr, "inconsistent reads, got 0s:%d 1s:%d\n",
++				count_0, count_1);
++			ret =3D -1;
++		}
++		current =3D lseek(fd, 0, SEEK_CUR);
++		if (current !=3D expected) {
++			bool ignore =3D current > expected && !link;
++			fprintf(stderr,
++				"f_pos incorrect, expected %ld have %ld%s\n",
++				expected,
++				current,
++				ignore ? ", (ignoring as it is accepted)":"");
++			if (!ignore)
++				ret =3D -1;
++		}
++		if (ret)
++			return ret;
++	}
++	return 0;
++}
++
++
++static int
++test_write(struct io_uring *ring, bool async, bool link, int blocksize)
++{
++	int ret, fd, i;
++	struct io_uring_sqe *sqe;
++	struct io_uring_cqe *cqe;
++	bool fail =3D false;
++	loff_t current;
++	char data[blocksize+1];
++	char readbuff[QUEUE_SIZE*blocksize+1];
++
++	fd =3D open(".test_write", O_RDWR | O_CREAT, 0644);
++	unlink(".test_write");
++	assert(fd >=3D 0);
++
++	for(i =3D 0; i < blocksize; i++) {
++		data[i] =3D 'A' + i;
++	}
++	data[blocksize] =3D '\0';
++
++	for (i =3D 0; i < QUEUE_SIZE; ++i) {
++		sqe =3D io_uring_get_sqe(ring);
++		if (!sqe) {
++			fprintf(stderr, "no sqe\n");
++			return -1;
++		}
++		io_uring_prep_write(sqe, fd, data + (i % blocksize), 1, -1);
++		sqe->user_data =3D 1;
++		if (async)
++			sqe->flags |=3D IOSQE_ASYNC;
++		if (link && i !=3D QUEUE_SIZE - 1)
++			sqe->flags |=3D IOSQE_IO_LINK;
++	}
++	ret =3D io_uring_submit_and_wait(ring, QUEUE_SIZE);
++	if (ret !=3D QUEUE_SIZE) {
++		fprintf(stderr, "submit failed: %d\n", ret);
++		return 1;
++	}
++	for (i =3D 0; i < QUEUE_SIZE; ++i) {
++		int res;
++
++		ret =3D io_uring_peek_cqe(ring, &cqe);
++		res =3D cqe->res;
++		if (ret) {
++			fprintf(stderr, "peek failed: %d\n", ret);
++			return ret;
++		}
++		io_uring_cqe_seen(ring, cqe);
++		if (!fail && res !=3D 1) {
++			fprintf(stderr, "bad result %d\n", res);
++			fail =3D true;
++		}
++	}
++	current =3D lseek(fd, 0, SEEK_CUR);
++	if (current !=3D QUEUE_SIZE) {
++		fprintf(stderr,
++			"f_pos incorrect, expected %ld have %d\n",
++			current,
++			QUEUE_SIZE);
++		fail =3D true;
++	}
++	current =3D lseek(fd, 0, SEEK_SET);
++	if (current !=3D 0) {
++		perror("seek to start");
++		return -1;
++	}
++	ret =3D read(fd, readbuff, QUEUE_SIZE);
++	if (ret !=3D QUEUE_SIZE) {
++		fprintf(stderr, "did not write enough: %d\n", ret);
++		return -1;
++	}
++	i =3D 0;
++	while (i < QUEUE_SIZE - blocksize) {
++		if (strncmp(readbuff + i, data, blocksize)) {
++			char bad[QUEUE_SIZE+1];
++
++			memcpy(bad, readbuff + i, blocksize);
++			bad[blocksize] =3D '\0';
++			fprintf(stderr, "unexpected data %s\n", bad);
++			fail =3D true;
++		}
++		i +=3D blocksize;
++	}
++
++	return fail ? -1 : 0;
++}
++
++
++int main(int argc, char *argv[])
++{
++	struct io_uring ring;
++	int ret;
++	int failed =3D 0;
++	int blocksizes[] =3D {1, 8, 15, 0};
++
++	if (argc > 1)
++		return 0;
++
++	ret =3D io_uring_queue_init(QUEUE_SIZE, &ring, 0);
++	if (ret) {
++		fprintf(stderr, "ring setup failed\n");
++		return 1;
++	}
++
++	for (int *blocksize =3D blocksizes; *blocksize; blocksize++) {
++	for (int async =3D 0; async < 2; async++) {
++	for (int link =3D 0; link < 2; link++) {
++	for (int write =3D 0; write < 2; write++) {
++		fprintf(stderr, "*********\n");
++		ret =3D write
++			? test_write(&ring, !!async, !!link, *blocksize)
++			: test_read(&ring, !!async, !!link, *blocksize);
++		fprintf(stderr, "test %s async=3D%d link=3D%d blocksize=3D%d:\t%s\n",
++			write ? "write":"read",
++			async, link,
++			*blocksize,
++			ret ? "failed" : "passed");
++
++		if (ret)
++			failed =3D 1;
++	}
++	}
++	}
++	}
++	return failed ? -1 : 0;
++}
+
+base-commit: 20bb37e0f828909742f845b8113b2bb7e1065cd1
 --=20
 2.30.2
 
