@@ -2,143 +2,81 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30D0FC433EF
-	for <io-uring@archiver.kernel.org>; Thu, 24 Feb 2022 22:25:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7159CC433F5
+	for <io-uring@archiver.kernel.org>; Thu, 24 Feb 2022 22:34:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233190AbiBXWZc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 24 Feb 2022 17:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
+        id S235524AbiBXWfD (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 24 Feb 2022 17:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiBXWZc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Feb 2022 17:25:32 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE76624776C
-        for <io-uring@vger.kernel.org>; Thu, 24 Feb 2022 14:25:01 -0800 (PST)
-Received: from integral2.. (unknown [36.78.50.60])
-        by gnuweeb.org (Postfix) with ESMTPSA id ECC467E292;
-        Thu, 24 Feb 2022 22:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1645741501;
-        bh=6vctS5iYH0YyIX2EePWweCYuhNIlTlk1uUwKmBJaHlA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bM+8fB0UkQqCju7XlkdcKMEi24KR6u1yp/9TxwhoXkHY51aJzVi2qvC6hdqaXzXqO
-         6nrLjh7nBO0xSxXjYirmHP6b3jCTvy/a99zF+EM8ajJZudOzubS1GBG4JD8lcHQr+K
-         mPWrMO11jKeyQC6pEJWH9vf12YEXq1xDEHNQFLO8tftY8vBsVfWK33GBcVc0ObNfGb
-         0stzavrx97OKW14prGeA98aQ2J7ushuDqzAfNhT7P6MZ25s6NUQQgaFSKYcq2DbP7n
-         in93igPIBnWkOqKrp64yQC1L/Zuk4Jd6LJIo66qYWAr4TCgXdZolUxbcsyQAREkfde
-         l//88G8GIplrQ==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+        with ESMTP id S231328AbiBXWfC (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Feb 2022 17:35:02 -0500
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F7C1DFDFB
+        for <io-uring@vger.kernel.org>; Thu, 24 Feb 2022 14:34:29 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id i1so3147495plr.2
+        for <io-uring@vger.kernel.org>; Thu, 24 Feb 2022 14:34:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=puf/8FKdbLYr0quA4rpvgcZpxrpDxz2P+EMGDZo/H/8=;
+        b=zW1XQed7hZqIDys1FFIRwDgCwawIM8Wlc0HH7sHO9m3Py+lyaGDIlZ5e9W6kIDlm2E
+         tfRHJFz1yrsLOGZKCw+pV7qAE2aCyGJ/+BiTuRUUoOvGJ8itTnUV+4eMy3+LUwxn83ll
+         yqhWHMbZ8TIoPo0kUa320x80m7l0Vboh+VAQPNVJfRlpvOo6T7eLUd0Bxd96WjHd3zR5
+         LsQtjr4HTN8GJ5J5Dw6MaC4kF/3xFz4JH/ETEvat9tChhXw6XTfbZLsKazed5lgLfn+z
+         VU+roUqbuJ13GHYCsqLKi+yxF6uS5yA7a+xtY9R8hn6Z79KolamVt8KQlCwK55hgVeCK
+         TEgQ==
+X-Gm-Message-State: AOAM532hdIeHfw7MS6bj/nG5IT8MNg+WK1HoxVUVNODMO7qQbSETKynw
+        thGrd9VtHJDe3PM+8rRokbA=
+X-Google-Smtp-Source: ABdhPJzRDjZLym3li7hQ1xawBNXudqozQ0BsjH0SuPNJGvDI9I0OWzXtLRm+ZuRQbprUfctKxS5dAg==
+X-Received: by 2002:a17:902:b08e:b0:14f:11f7:db14 with SMTP id p14-20020a170902b08e00b0014f11f7db14mr4511843plr.106.1645742069068;
+        Thu, 24 Feb 2022 14:34:29 -0800 (PST)
+Received: from garbanzo (136-24-173-63.cab.webpass.net. [136.24.173.63])
+        by smtp.gmail.com with ESMTPSA id my6-20020a17090b4c8600b001bc2cb011dasm305319pjb.4.2022.02.24.14.34.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Feb 2022 14:34:27 -0800 (PST)
+Date:   Thu, 24 Feb 2022 14:34:25 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>, Nugra <richiisei@gmail.com>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Tea Inside Mailing List <timl@vger.teainside.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>
-Subject: [PATCH liburing v1] src/Makefile: Don't use stack protector for all builds by default
-Date:   Fri, 25 Feb 2022 05:24:27 +0700
-Message-Id: <20220224222427.66206-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.32.0
+Cc:     Christoph Hellwig <hch@lst.de>, io-uring@vger.kernel.org,
+        joshi.k@samsung.com, kbusch@kernel.org,
+        linux-nvme@lists.infradead.org, metze@samba.org
+Subject: Re: [PATCH 1/8] io_uring: split up io_uring_sqe into hdr + main
+Message-ID: <20220224223425.yb2bs5sp3vhttjz3@garbanzo>
+References: <20210317221027.366780-1-axboe@kernel.dk>
+ <20210317221027.366780-2-axboe@kernel.dk>
+ <20210318053454.GA28063@lst.de>
+ <04ffff78-4a34-0848-4131-8b3cfd9a24f7@kernel.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <04ffff78-4a34-0848-4131-8b3cfd9a24f7@kernel.dk>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Stack protector adds extra mov, extra stack allocation and extra branch
-to save and validate the stack canary. While this feature could be
-useful to detect stack corruption in some scenarios, it is not really
-needed for liburing which is simple enough to review.
+On Thu, Mar 18, 2021 at 12:40:25PM -0600, Jens Axboe wrote:
+> I'm not at all interested
+> in having a v3 down the line as well. And I'd need to be able to do this
+> seamlessly, both from an application point of view, and a performance
+> point of view (no stupid conversions inline).
 
-Good code shouldn't corrupt the stack. We don't need this extra
-checking at the moment. Just for comparison, let's take a hot function
-__io_uring_get_cqe.
+At this point I've now traced the history of effort of wanting to do
+io-uring "ioctl" work through 3 sepearate independent efforts:
 
-Before this patch:
-```
-0000000000002b80 <__io_uring_get_cqe>:
-  2b80:   f3 0f 1e fa             endbr64
-  2b84:   48 83 ec 28             sub    $0x28,%rsp
-  2b88:   64 48 8b 04 25 28 00    mov    %fs:0x28,%rax
-  2b8f:   00 00
-  2b91:   48 89 44 24 18          mov    %rax,0x18(%rsp)
-  2b96:   31 c0                   xor    %eax,%eax
-  2b98:   89 14 24                mov    %edx,(%rsp)
-  2b9b:   48 89 e2                mov    %rsp,%rdx
-  2b9e:   48 b8 00 00 00 00 08    movabs $0x800000000,%rax
-  2ba5:   00 00 00
-  2ba8:   89 4c 24 04             mov    %ecx,0x4(%rsp)
-  2bac:   48 89 44 24 08          mov    %rax,0x8(%rsp)
-  2bb1:   4c 89 44 24 10          mov    %r8,0x10(%rsp)
-  2bb6:   e8 45 fe ff ff          call   2a00 <_io_uring_get_cqe>
-  2bbb:   48 8b 54 24 18          mov    0x18(%rsp),%rdx
-  2bc0:   64 48 2b 14 25 28 00    sub    %fs:0x28,%rdx
-  2bc7:   00 00
-  2bc9:   75 05                   jne    2bd0 <__io_uring_get_cqe+0x50>
-  2bcb:   48 83 c4 28             add    $0x28,%rsp
-  2bcf:   c3                      ret
-  2bd0:   e8 9b f5 ff ff          call   2170 <__stack_chk_fail@plt>
-  2bd5:   66 66 2e 0f 1f 84 00    data16 cs nopw 0x0(%rax,%rax,1)
-  2bdc:   00 00 00 00
-```
+2019-12-14: Pavel Begunkov - https://lore.kernel.org/all/f77ac379ddb6a67c3ac6a9dc54430142ead07c6f.1576336565.git.asml.silence@gmail.com/
+2020-11-02: Hao Xu - https://lore.kernel.org/all/1604303041-184595-1-git-send-email-haoxu@linux.alibaba.com/
+2021-01-27: Kanchan Joshi - https://lore.kernel.org/linux-nvme/20210127150029.13766-1-joshi.k@samsung.com/#r
 
-After this patch:
-```
-0000000000002ab0 <__io_uring_get_cqe>:
-  2ab0:   f3 0f 1e fa             endbr64
-  2ab4:   48 b8 00 00 00 00 08    movabs $0x800000000,%rax
-  2abb:   00 00 00
-  2abe:   48 83 ec 28             sub    $0x28,%rsp
-  2ac2:   89 14 24                mov    %edx,(%rsp)
-  2ac5:   48 89 e2                mov    %rsp,%rdx
-  2ac8:   89 4c 24 04             mov    %ecx,0x4(%rsp)
-  2acc:   48 89 44 24 08          mov    %rax,0x8(%rsp)
-  2ad1:   4c 89 44 24 10          mov    %r8,0x10(%rsp)
-  2ad6:   e8 55 fe ff ff          call   2930 <_io_uring_get_cqe>
-  2adb:   48 83 c4 28             add    $0x28,%rsp
-  2adf:   c3                      ret
-```
+So clearly there is interest in this moving forward.
 
-Previously, we only use `-fno-stack-protector` for nolibc build as the
-stack protector needs to call `__stack_chk_fail@plt` function from the
-libc. Now, we always use `-fno-stack-protector` for both nolibc and
-libc builds to generate shorter Assembly code.
+On the same day as Joshi's post you posted your file_operations based
+implemenation. So that's 2 years, 2 months to this day since Pavel's
+first patchset... Wouldn't we be a bit too much of a burden to ensure a
+v2 will suffice for *all* use cases? If so, adaptability for evolution
+sounds like a more fitting use case for design here. That way
+we reduce our requirements and allow for experimentation, while
+enabling improvements on future design.
 
-Cc: Nugra <richiisei@gmail.com>
-Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Cc: GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Cc: Tea Inside Mailing List <timl@vger.teainside.org>
-Cc: io-uring Mailing List <io-uring@vger.kernel.org>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- src/Makefile | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/src/Makefile b/src/Makefile
-index cc6c871..3e1192f 100644
---- a/src/Makefile
-+++ b/src/Makefile
-@@ -8,7 +8,7 @@ libdevdir ?= $(prefix)/lib
- CPPFLAGS ?=
- override CPPFLAGS += -D_GNU_SOURCE \
- 	-Iinclude/ -include ../config-host.h
--CFLAGS ?= -g -fomit-frame-pointer -O2 -Wall -Wextra
-+CFLAGS ?= -g -fomit-frame-pointer -O2 -Wall -Wextra -fno-stack-protector
- override CFLAGS += -Wno-unused-parameter -Wno-sign-compare -DLIBURING_INTERNAL
- SO_CFLAGS=-fPIC $(CFLAGS)
- L_CFLAGS=$(CFLAGS)
-@@ -36,8 +36,8 @@ liburing_srcs := setup.c queue.c register.c
- 
- ifeq ($(CONFIG_NOLIBC),y)
- 	liburing_srcs += nolibc.c
--	override CFLAGS += -nostdlib -nodefaultlibs -ffreestanding -fno-stack-protector
--	override CPPFLAGS += -nostdlib -nodefaultlibs -ffreestanding -fno-stack-protector
-+	override CFLAGS += -nostdlib -nodefaultlibs -ffreestanding
-+	override CPPFLAGS += -nostdlib -nodefaultlibs -ffreestanding
- 	override LINK_FLAGS += -nostdlib -nodefaultlibs
- else
- 	liburing_srcs += syscall.c
-
-base-commit: 896a1d3ab14a8777a45db6e7b67cf557a44923fb
--- 
-2.32.0
-
+  Luis
