@@ -2,108 +2,62 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99DE8C433F5
-	for <io-uring@archiver.kernel.org>; Sun,  6 Mar 2022 21:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F080C433EF
+	for <io-uring@archiver.kernel.org>; Tue,  8 Mar 2022 07:57:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbiCFVgu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 6 Mar 2022 16:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S240538AbiCHH6Z (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Mar 2022 02:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiCFVgu (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 6 Mar 2022 16:36:50 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4414DF42
-        for <io-uring@vger.kernel.org>; Sun,  6 Mar 2022 13:35:57 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id qx21so28027866ejb.13
-        for <io-uring@vger.kernel.org>; Sun, 06 Mar 2022 13:35:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t8G2F30Vq8FJacMzZEIjevAum7/PAf0xCdof4XSHZFw=;
-        b=feyHWzTQU2d+/LUEjCk2actwWez6bzYLIr76zom8fXMEuVx+5CRQYbHoB57yTNgbly
-         wEOSr8JaCiIEFJISErMIZIKh0M7uAy4Kq1siFbk+2dsfCwh8eC9RWQdJeq6mrYXFmIcl
-         rGPHtoO/83vwK7UKKAOggrQQmsTm2gy8IyHs/DuAyqd4JJFbuX0ROvFmkkonGo1aLuoI
-         bOUwgGPZlZRDrfTVObUnAMQo6Z5mTku/H49UhVXOUTzZ9rBKseJBUHYecYpivSqpv3QJ
-         Br/tDnb1sAVmFtwIckQ0bVsYzgmrThedQpfPesZ6XOVAPyZGPi+ZDX4lc5WHU9Z0KdLa
-         zOrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t8G2F30Vq8FJacMzZEIjevAum7/PAf0xCdof4XSHZFw=;
-        b=IRUSj25GTraGx42cs1z7tq1oeqJOVTKWlzFajOsPmmWaJXuWQCD800chSk2Kr91NxZ
-         ThozvSHVtLOEJxSjkxh58DeMlRP65TLyf1uP+T91xVgZtpPEWYY176NYtPKSERDsdtyW
-         5uqLUFovkLIfLUFy/tXlKHUKvFOi49jdHmYlcPAwhLa7dcb+8beZYtJpnWzp2G1lDbRW
-         tdl53erQxuxndz5JnY6Yik9i/xXvUewlYlPxTfxGsLoWrUB4tPhEc80HB45M3blE1SNe
-         W+9iS48h16BIsZSQkIog2BN8vWJccYcv28NFGXsEnPUIcqwcqNV0Si6cLubEYcABUABx
-         jdcg==
-X-Gm-Message-State: AOAM533sSpUOMxwyWVhByGha45V6wz9A4pCLm3/rEyA5w8Go34mZvVMj
-        chXvmhhvS7QMMo8vMeoFDOp49470RW8fD3ox+zQ=
-X-Google-Smtp-Source: ABdhPJwI0nV7x4tshXwqaCn3yqISpd1vtgHUjmg+3Q8VvYvZXhOSQAYMq7w1hxfvXDgbw7QEXTuACA==
-X-Received: by 2002:a17:907:7b8d:b0:6db:a30:8b96 with SMTP id ne13-20020a1709077b8d00b006db0a308b96mr5101355ejc.221.1646602555800;
-        Sun, 06 Mar 2022 13:35:55 -0800 (PST)
-Received: from [10.0.2.15] (89-139-33-239.bb.netvision.net.il. [89.139.33.239])
-        by smtp.gmail.com with ESMTPSA id z92-20020a509e65000000b00416466dc220sm687037ede.87.2022.03.06.13.35.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Mar 2022 13:35:55 -0800 (PST)
-Message-ID: <b1699cff-b899-bc20-e7b8-14f7583a3193@gmail.com>
-Date:   Sun, 6 Mar 2022 23:35:30 +0200
+        with ESMTP id S237428AbiCHH6Y (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Mar 2022 02:58:24 -0500
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8776BBF3;
+        Mon,  7 Mar 2022 23:57:27 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0V6dZ1Bq_1646726239;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0V6dZ1Bq_1646726239)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 08 Mar 2022 15:57:25 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] io_uring: Fix an unsigned subtraction which can never be negative.
+Date:   Tue,  8 Mar 2022 15:57:17 +0800
+Message-Id: <20220308075717.37734-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH] io_uring: fix memory ordering when SQPOLL thread goes to
- sleep
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com
-References: <20220306103544.96974-1-almogkh@gmail.com>
- <768398e5-4909-6c7a-aee7-f36210f41a8f@gmail.com>
- <33f74159-3dfa-f0ab-0b55-09916db837e8@kernel.dk>
-From:   Almog Khaikin <almogkh@gmail.com>
-In-Reply-To: <33f74159-3dfa-f0ab-0b55-09916db837e8@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 3/6/22 23:00, Jens Axboe wrote:
-> On 3/6/22 6:32 AM, Almog Khaikin wrote:
->> On 3/6/22 12:35, Almog Khaikin wrote:
->>> Without a full memory barrier between the store to the flags and the
->>> load of the SQ tail the two operations can be reordered and this can
->>> lead to a situation where the SQPOLL thread goes to sleep while the
->>> application writes to the SQ tail and doesn't see the wakeup flag.
->>> This memory barrier pairs with a full memory barrier in the application
->>> between its store to the SQ tail and its load of the flags.
->>
->> The IOPOLL list is internal to the kernel, userspace doesn't interact
->> with it. AFAICT it can't cause any races with userspace so the check if
->> the list is empty seems unnecessary. The flags and the SQ tail are the
->> only things that are shared that can cause any problems when the kernel
->> thread goes to sleep so I think it's safe to remove that check.
->>
->> The race here can result in a situation where the kernel thread goes to
->> sleep while the application updates the SQ tail and doesn't see the
->> NEED_WAKEUP flag. Checking the SQ tail after setting the wakeup flag
->> along with the full barrier would ensure that either we see the tail
->> update or the application sees the wakeup flag. The IOPOLL list doesn't
->> tie into any of this.
-> 
-> I think you're mixing up two different things, and even if not, the
-> IOPOLL change should be a separate change.
-> 
-> The iopoll list check isn't about synchronizing with userspace, it's
-> about not going to sleep if we have entries to reap. If we're running
-> with IOPOLL|SQPOLL, then it's the sq poll thread that does the polling
-> and reaping.
+Eliminate the follow smatch warnings:
 
-I understand that, but the iopoll list check is already done earlier in
-the function and if the list isn't empty, the timer is reset. Checking
-again just a little later in the function and after writing the
-NEED_WAKEUP flag seems unnecessary but regardless, I guess it's not
-really relevant to this patch as it's not a bug that the check is
-there. The patch in the original message along with the liburing pull
-request should fix the race.
+fs/io_uring.c:10358 __do_sys_io_uring_enter() warn: unsigned 'fd' is
+never less than zero.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ fs/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 23e7f93d3956..d970c94804db 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -10355,7 +10355,7 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
+ 		if (!tctx)
+ 			return -EINVAL;
+ 		if (fd != tctx->last_reg_fd) {
+-			if (fd < 0 || fd >= IO_RINGFD_REG_MAX || !tctx)
++			if (fd >= IO_RINGFD_REG_MAX || !tctx)
+ 				return -EINVAL;
+ 			tctx->last_reg_fd = array_index_nospec(fd,
+ 							IO_RINGFD_REG_MAX);
+-- 
+2.20.1.7.g153144c
+
