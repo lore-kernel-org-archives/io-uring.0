@@ -2,31 +2,31 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73D2FC3527A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3972C3527B
 	for <io-uring@archiver.kernel.org>; Thu, 10 Mar 2022 10:32:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241291AbiCJKdp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S241294AbiCJKdp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 10 Mar 2022 05:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241436AbiCJKde (ORCPT
+        with ESMTP id S241433AbiCJKde (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Thu, 10 Mar 2022 05:33:34 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56FE1039
-        for <io-uring@vger.kernel.org>; Thu, 10 Mar 2022 02:32:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE441145
+        for <io-uring@vger.kernel.org>; Thu, 10 Mar 2022 02:32:32 -0800 (PST)
 Received: from localhost.localdomain (unknown [138.197.159.143])
-        by gnuweeb.org (Postfix) with ESMTPSA id C7FFE7E2B2;
-        Thu, 10 Mar 2022 10:32:27 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 133717E2E4;
+        Thu, 10 Mar 2022 10:32:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1646908348;
-        bh=3LklH9xcZlJsW8N4l5LemR/TtMKAc+MebSjm6DfEsr0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Q2zE2VHtA+gUXZnZHIvFjJnDzlVqdZhK+XxreiA/18lop0G1jwwLK791s11wkVk8r
-         cWCXK20MN5plNkegoP9ryQzsZtmatNLs0+LY//iX1CjGTXwo51/MZ7vVlFGGnOheys
-         56RunSz/M5FR8y3lmhk0qVjGCuHZqok5l1B634omZGXNFA/P1DQcOIKnep9bs1TcrP
-         2MqoNdtIXwEwu6iwPsjbKC33NCB8SrxvhiD7x19KqBK5cTn4QnBT6zBUjlOH0/kJLW
-         DnXRZzdP/mRCaU8gsBZyCh8EH1ans/BTjAFJg5OXroECw6vm/0GlsrLAlWNVAcyWG3
-         hn2M3Q/RLqwxQ==
+        s=default; t=1646908351;
+        bh=fY4q6lGnj3OamfZVejrbTHNDiPr3EM8Yt0ZMFUXi+Ss=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GCxFdJrP5cc8EuTQcq4RKoJV5WFwO0Rh9VC8ytbS/J1Y1s+yI5dxEXmgh3KLTWbi2
+         xHVY8RLc9n1sfZNKTnE43zTeYVw5XPlVHmdgEEGUqekmW06rH+0HDwL2IDX+KmRqqK
+         9QpIKqU5e4FTWIw/wpTtwnd5WsDOdRDRP83SO37pDVoxsM3JQs5/ljUnvbaT9d8fMd
+         Cc0IAWa4BhnD4M/eyIB8E8Ll5B3Ez1wObHZ1M0ZoEmvxpLwutVEX4AA6D5NuGDjjxH
+         7tSFBztDeAFxDXQDq8dBi5YHbToHkXghejB3eYvnPbPl1BKj3ZYznKUlFXDqreWy2J
+         RGWR3P1QkhhXg==
 From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
@@ -34,65 +34,41 @@ Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
         io-uring <io-uring@vger.kernel.org>, gwml <gwml@vger.gnuweeb.org>
-Subject: [PATCH liburing v2 0/4] Changes for Makefile
-Date:   Thu, 10 Mar 2022 10:32:20 +0000
-Message-Id: <20220310103224.1675123-1-alviro.iskandar@gnuweeb.org>
+Subject: [PATCH liburing v2 4/4] examples/Makefile: Add liburing.a as a dependency
+Date:   Thu, 10 Mar 2022 10:32:24 +0000
+Message-Id: <20220310103224.1675123-5-alviro.iskandar@gnuweeb.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220310103224.1675123-1-alviro.iskandar@gnuweeb.org>
+References: <20220310103224.1675123-1-alviro.iskandar@gnuweeb.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hello sir,
-
-This patchset (v2) changes Makefile. 4 patches here:
-
-1. Remove -fomit-frame-pointer flag, because it's already covered
-   by the -O2 optimization flag.
-
-2. When the header files are modified, the compiled objects are
-   not going to be recompiled because the header files are not
-   marked as a dependency for the objects.
-
-  - Instruct the compiler to generate dependency files.
-
-  - Include those files from src/Makefile. Ensure if any changes are
-    made, files that depend on the changes are recompiled.
-
-3. The test binaries statically link liburing using liburing.a file.
-   When liburing.a is recompiled, make sure the tests are also
-   recompiled to ensure changes are applied to the test binary. It
-   makes "make clean" command optional when making changes.
-
-4. Same as no. 3, but for examples.
-
-please review,
-thx
-
-link v1: https://lore.kernel.org/io-uring/20220308224002.3814225-1-alviro.iskandar@gnuweeb.org/
-v1 -> v2:
-  - Instruct the compiler to generate dependency files instead
-    of hard code it in the Makefile.
-  - Add liburing.a to dependency for test (patch 3).
-  - Add liburing.a to dependency for examples (patch 4).
+The example binaries statically link liburing using liburing.a file.
+When liburing.a is recompiled, make sure the example binaries are also
+recompiled to ensure changes are applied to the binaries. It makes
+"make clean" command optional when making changes.
 
 Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 ---
+ examples/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Alviro Iskandar Setiawan (4):
-  src/Makefile: Remove `-fomit-frame-pointer` from default build
-  src/Makefile: Add header files as dependency
-  test/Makefile: Add liburing.a as a dependency
-  examples/Makefile: Add liburing.a as a dependency
-
- examples/Makefile |  2 +-
- src/Makefile      | 13 ++++++-------
- test/Makefile     |  4 ++--
- 3 files changed, 9 insertions(+), 10 deletions(-)
-
-
-base-commit: 6231f56da7881bde6fb011e1b54d672f8fe5a224
+diff --git a/examples/Makefile b/examples/Makefile
+index f966f94..95a45f9 100644
+--- a/examples/Makefile
++++ b/examples/Makefile
+@@ -29,7 +29,7 @@ all_targets += $(example_targets)
+ 
+ all: $(example_targets)
+ 
+-%: %.c
++%: %.c ../src/liburing.a
+ 	$(QUIET_CC)$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $< $(LDFLAGS)
+ 
+ clean:
 -- 
 2.25.1
 
