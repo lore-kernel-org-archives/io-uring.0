@@ -2,86 +2,103 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EC09C433FE
-	for <io-uring@archiver.kernel.org>; Thu, 10 Mar 2022 10:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0276C4167D
+	for <io-uring@archiver.kernel.org>; Thu, 10 Mar 2022 10:32:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235824AbiCJKGa (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 10 Mar 2022 05:06:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
+        id S236388AbiCJKdn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 10 Mar 2022 05:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239862AbiCJKG3 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 10 Mar 2022 05:06:29 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F8213D578;
-        Thu, 10 Mar 2022 02:05:28 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id s25so8464987lfs.10;
-        Thu, 10 Mar 2022 02:05:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g1v6ovUNSf+kFskR5R+v2NInQ6xsMS01QhfDEC1m/98=;
-        b=ns33X3mSvUp/dV4LlGedMNO7aMi7dLjkJEUK4S+oJGMyRCgCRbpIY/bN1lKR7coIXt
-         fgnlmrPnvIUWbzXLZXsahgLPJJhWkeuczEbUHP5ElqKexNzJYP0gAxHjGPJX/CqPQ8QH
-         kpmjVHzhjJ7tMioIgTAfkNZ4h0efJFIsYgBVKYRvA4/s8c3a3BH+AEJgU8qpbf+bbY2g
-         uXSUBVqregysJ4ss/HApTFtigwZZsAH+zVvVgLhTS54BwnE+AcGY/PjPVE3mFH+r28D8
-         p/MNit5koONLvhhlYyCG0wohubRoqL2ukmTOS7AqUs+r4XjBh3AtK8PrI0HUlMBfQFsM
-         zNaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g1v6ovUNSf+kFskR5R+v2NInQ6xsMS01QhfDEC1m/98=;
-        b=6fzY7q3np4SYhAlcXyg4nAaT33aMFOC2EidjgQ73GORPPT3b3xwZdZpjXTznCjuJk8
-         c1rTNfJtMW/xtjHD+NTl2Ox78krv6wi2YwILPqPV/QS6PzyGeJfJ63ydeWmBoBHTcESQ
-         PQ5gEDlOJ+10nk0uo+zPhprVgUoyZEHEqFlWoIvHHwMTaP1mUm6g71vYHxICH+QwUzj4
-         cBu0O3rR2Q45NYNSvOvFwFlAR/6W6zB8KLTNm3R7G5hIS71QxOTYCueOwRViusxmk75T
-         9SMpd0QTJBpSfkLK6TXzGDWiXJz/dt6xyfWpZ3jQvxYCvGHnAsyqFQIzRHWtzI+JjGZK
-         xPdw==
-X-Gm-Message-State: AOAM531UD7kX93AdyvngN6V/FCCwv2ZcsF4f/DyImpS/ik/pAtGqd1jh
-        whYdZSTF32EY3itf6ZlAGk2vih1OTxiQ+r7IKno=
-X-Google-Smtp-Source: ABdhPJwDzqA1hnug0wbCxuMMC9bwFUJgrX7k50AuAyOlBBQCCbHd+EQ98+xL/K6bjR+dxXF673VzxbFS2cGid0d5Jgc=
-X-Received: by 2002:a05:6512:2208:b0:448:5c7a:6dd9 with SMTP id
- h8-20020a056512220800b004485c7a6dd9mr2577551lfu.334.1646906726687; Thu, 10
- Mar 2022 02:05:26 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20220308152651epcas5p1ebd2dc7fa01db43dd587c228a3695696@epcas5p1.samsung.com>
- <20220308152105.309618-1-joshi.k@samsung.com> <20220310082926.GA26614@lst.de>
-In-Reply-To: <20220310082926.GA26614@lst.de>
-From:   Kanchan Joshi <joshiiitr@gmail.com>
-Date:   Thu, 10 Mar 2022 15:35:02 +0530
-Message-ID: <CA+1E3rJ17F0Rz5UKUnW-LPkWDfPHXG5aeq-ocgNxHfGrxYtAuw@mail.gmail.com>
-Subject: Re: [PATCH 00/17] io_uring passthru over nvme
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Kanchan Joshi <joshi.k@samsung.com>, Jens Axboe <axboe@kernel.dk>,
-        Keith Busch <kbusch@kernel.org>,
+        with ESMTP id S241432AbiCJKde (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 10 Mar 2022 05:33:34 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D512410B9
+        for <io-uring@vger.kernel.org>; Thu, 10 Mar 2022 02:32:30 -0800 (PST)
+Received: from localhost.localdomain (unknown [138.197.159.143])
+        by gnuweeb.org (Postfix) with ESMTPSA id 6C3777E2E3;
+        Thu, 10 Mar 2022 10:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1646908350;
+        bh=9c9fB5ZL/A6dacc6FIIfmkx2Uclcb4MSLDA4QQEQJyA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pVcQm/7Cb6w7WRZ7nmiJGJk4fm6faogny64c+w2GZbDXKtzXgzi8WDc1KECAdtydF
+         eNZ8mhHpTQF1bemBVByI5+P4iDfFZGnO/b7dDv5IPPQt2qIBYZEdif0SQMMy8k0FXR
+         FzUncQ7LEJ4QCU+RPDI8RLbhqE7bLsnlsKE2yvVqOS1Iuj3MoDt8O2Xvyy+TsIBxQz
+         dBBY5g92cQcf6FN1cHDZft+6Sf86Zsyg8bIhRYyVuSZxDI1kWDt8F8zFcUaX8gbJ+E
+         vXTMFNTmrOhV+6meXM+WkVjH9+VgOQifDybJ+7tHHmRIh6RPJz5Xmqow3ahWhIs2f6
+         rBB6TjOKGP7iA==
+From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, sbates@raithlin.com,
-        logang@deltatee.com, Pankaj Raghav <pankydev8@gmail.com>,
-        =?UTF-8?Q?Javier_Gonz=C3=A1lez?= <javier@javigon.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gmail.com>,
+        io-uring <io-uring@vger.kernel.org>, gwml <gwml@vger.gnuweeb.org>
+Subject: [PATCH liburing v2 2/4] src/Makefile: Add header files as dependency
+Date:   Thu, 10 Mar 2022 10:32:22 +0000
+Message-Id: <20220310103224.1675123-3-alviro.iskandar@gnuweeb.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220310103224.1675123-1-alviro.iskandar@gnuweeb.org>
+References: <20220310103224.1675123-1-alviro.iskandar@gnuweeb.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Thu, Mar 10, 2022 at 1:59 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> What branch is this against?
-Sorry I missed that in the cover.
-Two options -
-(a) https://git.kernel.dk/cgit/linux-block/log/?h=io_uring-big-sqe
-first patch ("128 byte sqe support") is already there.
-(b) for-next (linux-block), series will fit on top of commit 9e9d83faa
-("io_uring: Remove unneeded test in io_run_task_work_sig")
+When the header files are modified, the compiled objects are not going
+to be recompiled because the header files are not marked as a dependency
+for the objects.
 
-> Do you have a git tree available?
-Not at the moment.
+  - Instruct the compiler to generate dependency files.
 
-@Jens: Please see if it is possible to move patches to your
-io_uring-big-sqe branch (and maybe rename that to big-sqe-pt.v1).
+  - Include those files from src/Makefile. Ensure if any changes are
+    made, files that depend on the changes are recompiled.
 
-Thanks.
+Suggested-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+---
+ src/Makefile | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/src/Makefile b/src/Makefile
+index f19d45e..bb165fa 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -43,19 +43,20 @@ else
+ 	liburing_srcs += syscall.c
+ endif
+ 
++override CPPFLAGS += -MT "$@" -MMD -MP -MF "$@.d"
+ liburing_objs := $(patsubst %.c,%.ol,$(liburing_srcs))
+ liburing_sobjs := $(patsubst %.c,%.os,$(liburing_srcs))
+ 
+-$(liburing_srcs): syscall.h lib.h
+-
+-$(liburing_objs) $(liburing_sobjs): include/liburing/io_uring.h
+-
+ %.os: %.c
+ 	$(QUIET_CC)$(CC) $(CPPFLAGS) $(SO_CFLAGS) -c -o $@ $<
+ 
+ %.ol: %.c
+ 	$(QUIET_CC)$(CC) $(CPPFLAGS) $(L_CFLAGS) -c -o $@ $<
+ 
++# Include compiler generated dependency files.
++-include $(liburing_objs:%=%.d)
++-include $(liburing_sobjs:%=%.d)
++
+ AR ?= ar
+ RANLIB ?= ranlib
+ liburing.a: $(liburing_objs)
+@@ -78,8 +79,6 @@ ifeq ($(ENABLE_SHARED),1)
+ 	ln -sf $(relativelibdir)$(libname) $(libdevdir)/liburing.so
+ endif
+ 
+-$(liburing_objs): include/liburing.h
+-
+ clean:
+ 	@rm -f $(all_targets) $(liburing_objs) $(liburing_sobjs) $(soname).new
+ 	@rm -f *.so* *.a *.o
+-- 
+2.25.1
+
