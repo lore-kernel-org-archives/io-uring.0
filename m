@@ -2,226 +2,185 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8870CC433EF
-	for <io-uring@archiver.kernel.org>; Wed, 16 Mar 2022 07:35:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC12DC433FE
+	for <io-uring@archiver.kernel.org>; Wed, 16 Mar 2022 09:52:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241615AbiCPHgi (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 16 Mar 2022 03:36:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S1355043AbiCPJxg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 16 Mar 2022 05:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234688AbiCPHgh (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Mar 2022 03:36:37 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9493853E32
-        for <io-uring@vger.kernel.org>; Wed, 16 Mar 2022 00:35:22 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220316073520epoutp024288c0a08ed22bee59ebfd99447bb3b6~czDuxs_kI2235222352epoutp021
-        for <io-uring@vger.kernel.org>; Wed, 16 Mar 2022 07:35:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220316073520epoutp024288c0a08ed22bee59ebfd99447bb3b6~czDuxs_kI2235222352epoutp021
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1647416120;
-        bh=0ch16WX5sxYc+WOht+eFe2RkcmpBFB4vfsqCaL2z36M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=at5FIj/VsuPyPzHfOi83uqZ1+1jCSzwcdFhzTzVIVe8gDdycsTzBiaqwTcqM0T2by
-         ZOG5ae/WafP4zKbNxl+cYhRif77u1vQPvV0KKFLJTFugJraSlk4XuCYG6GlBOzaOAn
-         pTVHWbeodhWDl9FLnNNxM7hL24dO1Ft1QwwzJZTA=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220316073519epcas5p2c43131a53bdc2868f6aa1e49d08cb7d5~czDuJqTFf2807628076epcas5p2q;
-        Wed, 16 Mar 2022 07:35:19 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.183]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4KJMW06rT1z4x9QT; Wed, 16 Mar
-        2022 07:35:08 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        53.EC.05590.52391326; Wed, 16 Mar 2022 16:35:01 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220316073230epcas5p47458b509510ee55be5bfa5152fad991b~czBQITy3w2400724007epcas5p4H;
-        Wed, 16 Mar 2022 07:32:30 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220316073230epsmtrp1ac86bafccc6d7619a09cd86cb9e4f0cc~czBQHZRMF1062610626epsmtrp1P;
-        Wed, 16 Mar 2022 07:32:30 +0000 (GMT)
-X-AuditID: b6c32a4b-739ff700000015d6-3b-62319325b78c
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EF.92.03370.D8291326; Wed, 16 Mar 2022 16:32:30 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220316073227epsmtip267db15d1cd03c9e484f7eefb9176d97a~czBN9SbvN2834028340epsmtip2l;
-        Wed, 16 Mar 2022 07:32:27 +0000 (GMT)
-Date:   Wed, 16 Mar 2022 12:57:27 +0530
-From:   Kanchan Joshi <joshi.k@samsung.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     axboe@kernel.dk, kbusch@kernel.org, asml.silence@gmail.com,
-        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, sbates@raithlin.com,
-        logang@deltatee.com, pankydev8@gmail.com, javier@javigon.com,
-        mcgrof@kernel.org, a.manzanares@samsung.com, joshiiitr@gmail.com,
-        anuj20.g@samsung.com
-Subject: Re: [PATCH 05/17] nvme: wire-up support for async-passthru on
- char-device.
-Message-ID: <20220316072727.GA2104@test-zns>
+        with ESMTP id S1344258AbiCPJxe (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Mar 2022 05:53:34 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8AA6579A
+        for <io-uring@vger.kernel.org>; Wed, 16 Mar 2022 02:52:14 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 22FNka4Q007982
+        for <io-uring@vger.kernel.org>; Wed, 16 Mar 2022 02:52:13 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=rwN7J1TrjvPZU4XC4jebgUZ0fGhffKTR8VOhVgHILvQ=;
+ b=m5T71jqLjATEEbBI2eNS3FjXfD9TfdndRHS74fUvMo5AHXbJhD/n7OGNDD24N08IDFEC
+ z2F07cMBIqdmejSHey9HjebIl2mCbjmb2n2en0yh9zpc5+rskl4Q1gOjzzR9HpVQbQk9
+ ZPvfweCl1s2l0Z/3DnEEq9yXTNImFMk7n3Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3etj2ujbgu-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Wed, 16 Mar 2022 02:52:13 -0700
+Received: from twshared11703.03.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Wed, 16 Mar 2022 02:52:11 -0700
+Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
+        id 82EAA5C245BB; Wed, 16 Mar 2022 02:52:07 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>
+CC:     <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH v2] io_uring: make tracing format consistent
+Date:   Wed, 16 Mar 2022 02:52:04 -0700
+Message-ID: <20220316095204.2191498-1-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <20220315085410.GA4132@lst.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTVxzeubctlyaFOwQ50mzAJWAAgXaW7sJgL4neqFmaGbbE4OACd0AK
-        t01vO19jYyoLZeGhiLw7EBwOHDLoGnmYSRELIi+ZIEQZOCCDRUGZi3GBrOWWxf++3/f7vnO+
-        33lgqMeUyAfLYPWMjqUzCZFYYOkN3hkWWCJPlk3VepNlvf7kqeJ1lKxusgCy+WGRiPyxuQ8h
-        n+QOC0jj4ChCjjzuRchz1glAXp8OJb//YcGFbMi1icj7xQuAvDK1ICDX7piE77tTi/cWAdVR
-        +dCFOl37QECNDxmotiajiGpv+JrqmsoRUZb6JSFVaG4C1FrbmyrxYXVMOkOnMjo/hk3RpGaw
-        abHEgUOJexIjlTJ5mDyKfJvwY+ksJpaIO6gK25uRaZ+B8PuCzjTYKRXNcUTEuzE6jUHP+KVr
-        OH0swWhTM7UKbThHZ3EGNi2cZfTRcpnsrUi7MEmdPl3wFNE2Bhy7d3dWmAOuS/OBKwZxBXxR
-        kIfmAzHmgXcB+LjrFsIXzwAc6VgV8MUagI+elLlsWcxnCoV8oxPAlpVWZ7EI4F/d/cChEuCB
-        sDrvO/taGCbCg+FoicFBe+IEXFgeAg49ivcjsGbGhDga2/B4eCaX10vwXXAtj3LQEvx1OFAx
-        L3BgVzwUlvSXow7shQfAGxbbZlSI/4bB+hflgE8XB1fMA86k2+CyzezEPnCp6Fsn5uDLB30o
-        b84DcDKnQsA33oNj3eubgVA8A853/IHw/Buw9HaLk3eDBf/OO3kJvGbawv5w5tyCkMfecK68
-        QegYBuIUbKiS8gd0EYGWGzWCYuBb+cpwla9sx+NoaFw9Jay021FcChs3MB4Gw6udEbVA2AR2
-        MFouK43hIrW7Webo/zeeoslqA5tvPOTANfBodjXcChAMWAHEUMJTcufPiGQPSSp9/ASj0yTq
-        DJkMZwWR9rs6i/p4pWjsn4TVJ8oVUTKFUqlURO1Wyglvye20VtoDT6P1jJphtIxuy4dgrj45
-        iCK72X/4Z+ll1cmJm4mXTotMLnWqbq163OSVFLJHTC22NZYdTwj9bK6wzkgNWIZda0taG3w7
-        1xPcq6br8IlB03aLuD+/9PnS0av+MR9d3lDHvRx5zTOwPjmuK/ud7CsnZq09Naz16bMiTdRg
-        Z0zKjm80x7rP7vNVTob3zKC/7tmlPr/T7fz+5U/d9x3h4i9xtoGVoM+t1R9/EHF3fv9PN1tY
-        23jUP0GquiKF+pbb3P1yzZftY7YKzYaqr3UoWgqnzMn5E78EySdHD3dc7En46sLfXrKAFWas
-        87m+vck3+xNEeCTwUEBpvHE60ASM281S0Yd7k8QH3UN/D9YzAScNVTkFhIBLp+UhqI6j/wP7
-        45vZbAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBIsWRmVeSWpSXmKPExsWy7bCSvG7fJMMkg8YGRovphxUtmib8ZbaY
-        s2obo8Xqu/1sFitXH2WyeNd6jsWi8/QFJovzbw8zWUw6dI3RYu8tbYv5y56yWyxpPc5mcWPC
-        U0aLNTefslh8PjOP1YHf49nVZ4weO2fdZfdoXnCHxePy2VKPTas62Tw2L6n32H2zgc1j2+KX
-        rB59W1YxenzeJBfAFcVlk5Kak1mWWqRvl8CVMaFjOnvBNYWK01+fsjQwtkl2MXJySAiYSGxp
-        6WMFsYUEdjBKNCxkhoiLSzRf+8EOYQtLrPz3HMjmAqp5wijx9f4CsAYWAVWJOR3dTF2MHBxs
-        ApoSFyaXgoRFBJQknr46ywhSzyxwikmiYds7sEHCAqESLa0Q9bwCOhKfOzwg9i5hkth+Sg/E
-        5hUQlDg58wkLiM0sYCYxb/NDZpByZgFpieX/OEDCnALaEpNPzAA7U1RAWeLAtuNMExgFZyHp
-        noWkexZC9wJG5lWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmbGMGRp6W1g3HPqg96hxiZ
-        OBgPMUpwMCuJ8J55oZ8kxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4IYH0xJLU7NTUgtQi
-        mCwTB6dUA9OGKT8Uj2mfXL7s+ZNyoe3q983+bVQ8kFHzMmtLkkxPgfgW6bMRf6asSzSYLqIS
-        8yvnbRabaNC2KrECDdPCQO9vk3Rafj3y/JI8603zvhAjey+f1BXiXa+fJf59aV8U8dswVyBU
-        MIyZzbF6L3/VaZN7Ct9y3uu//JjI09Az8cM3J0/RaskJOvFP2PetneHr9EdY8+b6kJxXzXWP
-        isqMBBOiOmQijuiUqghfut0cn5e0+Yiz0qs5P7eu+vk2oy3o7J1DgVuTrdb41Cle2rh4wlGR
-        r8cF8vfWr2I48ehj1s+fUYzWES+mnlJo32Dlv5jvpcoew9o7/sxnN0RJt/O0uqxwfXbjkfoC
-        KZubWUGci5VYijMSDbWYi4oTAZrfQggrAwAA
-X-CMS-MailID: 20220316073230epcas5p47458b509510ee55be5bfa5152fad991b
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_11b0d6_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220308152702epcas5p1eb1880e024ac8b9531c85a82f31a4e78
-References: <20220308152105.309618-1-joshi.k@samsung.com>
-        <CGME20220308152702epcas5p1eb1880e024ac8b9531c85a82f31a4e78@epcas5p1.samsung.com>
-        <20220308152105.309618-6-joshi.k@samsung.com>
-        <20220311070148.GA17881@lst.de> <20220314162356.GA13902@test-zns>
-        <20220315085410.GA4132@lst.de>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: yqSPYsXhRJ4PwsnF61M5kt6i6Ta9-e3j
+X-Proofpoint-ORIG-GUID: yqSPYsXhRJ4PwsnF61M5kt6i6Ta9-e3j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
+ definitions=2022-03-16_03,2022-03-15_01,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-------7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_11b0d6_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Disposition: inline
+Make the tracing formatting for user_data and flags consistent.
 
-On Tue, Mar 15, 2022 at 09:54:10AM +0100, Christoph Hellwig wrote:
->On Mon, Mar 14, 2022 at 09:53:56PM +0530, Kanchan Joshi wrote:
->>>> +struct nvme_uring_cmd_pdu {
->>>> +	u32 meta_len;
->>>> +	union {
->>>> +		struct bio *bio;
->>>> +		struct request *req;
->>>> +	};
->>>> +	void *meta; /* kernel-resident buffer */
->>>> +	void __user *meta_buffer;
->>>> +} __packed;
->>>
->>> Why is this marked __packed?
->> Did not like doing it, but had to.
->> If not packed, this takes 32 bytes of space. While driver-pdu in struct
->> io_uring_cmd can take max 30 bytes. Packing nvme-pdu brought it down to
->> 28 bytes, which fits and gives 2 bytes back.
->
->What if you move meta_len to the end?  Even if we need the __packed
->that will avoid all the unaligned access to pointers, which on some
->architectures will crash the kernel.
-ah, right. Will move that to the end.
+Having consistent formatting allows one for example to grep for a specifi=
+c
+user_data/flags and be able to trace a single sqe through easily.
 
->> And on moving meta elements outside the driver, my worry is that it
->> reduces scope of uring-cmd infra and makes it nvme passthru specific.
->> At this point uring-cmd is still generic async ioctl/fsctl facility
->> which may find other users (than nvme-passthru) down the line. Organization
->> of fields within "struct io_uring_cmd" is around the rule
->> that a field is kept out (of 28 bytes pdu) only if is accessed by both
->> io_uring and driver.
->
->We have plenty of other interfaces of that kind.  Sockets are one case
->already, and regular read/write with protection information will be
->another one.  So having some core infrastrucure for "secondary data"
->seems very useful.
-So what is the picture that you have in mind for struct io_uring_cmd?
-Moving meta fields out makes it look like this - 
+Change user_data to 0x%llx and flags to 0x%x everywhere. The '0x' is
+useful to disambiguate for example "user_data 100".
 
-@@ -28,7 +28,10 @@ struct io_uring_cmd {
-        u32             cmd_op;
-        u16             cmd_len;
-        u16             unused;
--       u8              pdu[28]; /* available inline for free use */
-+       void __user     *meta_buffer; /* nvme pt specific */
-+       u32             meta_len; /* nvme pt specific */
-+       u8              pdu[16]; /* available inline for free use */
-+
- };
-And corresponding nvme 16 byte pdu - 
- struct nvme_uring_cmd_pdu {
--       u32 meta_len;
-        union {
-                struct bio *bio;
-                struct request *req;
-        };
-        void *meta; /* kernel-resident buffer */
--       void __user *meta_buffer;
- } __packed;
+Additionally remove the '=3D' for flags in io_uring_req_failed, again for=
+ consistency.
 
-I do not understand how this helps. Only the generic space (28 bytes)
-got reduced to 16 bytes.
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
 
->> I see, so there is room for adding some efficiency.
->> Hope it will be ok if I carry this out as a separate effort.
->> Since this is about touching blk_mq_complete_request at its heart, and
->> improving sync-direct-io, this does not seem best-fit and slow this
->> series down.
->
->I really rather to this properly.  Especially as the current effort
->adds new exported interfaces.
+v2: move everything to hex
 
-Seems you are referring to io_uring_cmd_complete_in_task().
+ include/trace/events/io_uring.h | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-We would still need to use/export that even if we somehow manage to move
-task-work trigger from nvme-function to blk_mq_complete_request.
-io_uring's task-work infra is more baked than raw task-work infra.
-It would not be good to repeat all that code elsewhere.
-I tried raw one in the first attempt, and Jens suggested to move to baked
-one. Here is the link that gave birth to this interface -
-https://lore.kernel.org/linux-nvme/6d847f4a-65a5-bc62-1d36-52e222e3d142@kernel.dk/
- 
+diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_ur=
+ing.h
+index 18d4341c581c..cddf5b6fbeb4 100644
+--- a/include/trace/events/io_uring.h
++++ b/include/trace/events/io_uring.h
+@@ -44,7 +44,7 @@ TRACE_EVENT(io_uring_create,
+ 		__entry->flags		=3D flags;
+ 	),
+=20
+-	TP_printk("ring %p, fd %d sq size %d, cq size %d, flags %d",
++	TP_printk("ring %p, fd %d sq size %d, cq size %d, flags 0x%x",
+ 			  __entry->ctx, __entry->fd, __entry->sq_entries,
+ 			  __entry->cq_entries, __entry->flags)
+ );
+@@ -125,7 +125,7 @@ TRACE_EVENT(io_uring_file_get,
+ 		__entry->fd		=3D fd;
+ 	),
+=20
+-	TP_printk("ring %p, req %p, user_data %llu, fd %d",
++	TP_printk("ring %p, req %p, user_data 0x%llx, fd %d",
+ 		__entry->ctx, __entry->req, __entry->user_data, __entry->fd)
+ );
+=20
+@@ -169,7 +169,7 @@ TRACE_EVENT(io_uring_queue_async_work,
+ 		__entry->rw		=3D rw;
+ 	),
+=20
+-	TP_printk("ring %p, request %p, user_data %llu, opcode %d, flags %d, %s=
+ queue, work %p",
++	TP_printk("ring %p, request %p, user_data 0x%llx, opcode %d, flags 0x%x=
+, %s queue, work %p",
+ 		__entry->ctx, __entry->req, __entry->user_data, __entry->opcode,
+ 		__entry->flags, __entry->rw ? "hashed" : "normal", __entry->work)
+ );
+@@ -205,7 +205,7 @@ TRACE_EVENT(io_uring_defer,
+ 		__entry->opcode	=3D opcode;
+ 	),
+=20
+-	TP_printk("ring %p, request %p, user_data %llu, opcode %d",
++	TP_printk("ring %p, request %p, user_data 0x%llx, opcode %d",
+ 		__entry->ctx, __entry->req, __entry->data, __entry->opcode)
+ );
+=20
+@@ -305,7 +305,7 @@ TRACE_EVENT(io_uring_fail_link,
+ 		__entry->link		=3D link;
+ 	),
+=20
+-	TP_printk("ring %p, request %p, user_data %llu, opcode %d, link %p",
++	TP_printk("ring %p, request %p, user_data 0x%llx, opcode %d, link %p",
+ 		__entry->ctx, __entry->req, __entry->user_data, __entry->opcode,
+ 		__entry->link)
+ );
+@@ -342,9 +342,9 @@ TRACE_EVENT(io_uring_complete,
+ 		__entry->cflags		=3D cflags;
+ 	),
+=20
+-	TP_printk("ring %p, req %p, user_data 0x%llx, result %d, cflags %x",
++	TP_printk("ring %p, req %p, user_data 0x%llx, result %d, cflags 0x%x",
+ 		__entry->ctx, __entry->req,
+-		(unsigned long long)__entry->user_data,
++		__entry->user_data,
+ 		__entry->res, __entry->cflags)
+ );
+=20
+@@ -389,7 +389,7 @@ TRACE_EVENT(io_uring_submit_sqe,
+ 		__entry->sq_thread	=3D sq_thread;
+ 	),
+=20
+-	TP_printk("ring %p, req %p, user_data %llu, opcode %d, flags %u, "
++	TP_printk("ring %p, req %p, user_data 0x%llx, opcode %d, flags 0x%x, "
+ 		  "non block %d, sq_thread %d", __entry->ctx, __entry->req,
+ 		  __entry->user_data, __entry->opcode,
+ 		  __entry->flags, __entry->force_nonblock, __entry->sq_thread)
+@@ -433,7 +433,7 @@ TRACE_EVENT(io_uring_poll_arm,
+ 		__entry->events		=3D events;
+ 	),
+=20
+-	TP_printk("ring %p, req %p, user_data %llu, opcode %d, mask 0x%x, event=
+s 0x%x",
++	TP_printk("ring %p, req %p, user_data 0x%llx, opcode %d, mask 0x%x, eve=
+nts 0x%x",
+ 		  __entry->ctx, __entry->req, __entry->user_data, __entry->opcode,
+ 		  __entry->mask, __entry->events)
+ );
+@@ -470,7 +470,7 @@ TRACE_EVENT(io_uring_task_add,
+ 		__entry->mask		=3D mask;
+ 	),
+=20
+-	TP_printk("ring %p, req %p, user_data %llu, opcode %d, mask %x",
++	TP_printk("ring %p, req %p, user_data 0x%llx, opcode %d, mask %x",
+ 		__entry->ctx, __entry->req, __entry->user_data, __entry->opcode,
+ 		__entry->mask)
+ );
+@@ -529,8 +529,8 @@ TRACE_EVENT(io_uring_req_failed,
+ 		__entry->error		=3D error;
+ 	),
+=20
+-	TP_printk("ring %p, req %p, user_data %llu, "
+-		"op %d, flags=3D0x%x, prio=3D%d, off=3D%llu, addr=3D%llu, "
++	TP_printk("ring %p, req %p, user_data 0x%llx, "
++		"op %d, flags 0x%x, prio=3D%d, off=3D%llu, addr=3D%llu, "
+ 		  "len=3D%u, rw_flags=3D0x%x, buf_index=3D%d, "
+ 		  "personality=3D%d, file_index=3D%d, pad=3D0x%llx/%llx, error=3D%d",
+ 		  __entry->ctx, __entry->req, __entry->user_data,
 
->> Deferring by ipi or softirq never occured. Neither for block nor for
->> char. Softirq is obvious since I was not running against scsi (or nvme with
->> single queue). I could not spot whether this is really a overhead, at
->> least for nvme.
->
->This tends to kick in if you have less queues than cpu cores.  Quite
->command with either a high core cound or a not very high end nvme
->controller.
-I will check that.
-But swtiching (irq to task-work) is more generic and not about this series.
-Triggering task-work anyway happens for regular read/write
-completion too (in io_uring)...in the same return path involving
-blk_mq_complete_request. For passthru, we are just triggering this
-somewhat earlier in the completion path. 
+base-commit: f3b6a41eb2bbdf545a42e54d637c34f4b1fdf5b9
+--=20
+2.30.2
 
-------7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_11b0d6_
-Content-Type: text/plain; charset="utf-8"
-
-
-------7Im1L.vKorTl163deO4rxYDAHxkziUWsBhtki-3JrW1s26Hg=_11b0d6_--
