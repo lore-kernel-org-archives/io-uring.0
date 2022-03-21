@@ -2,83 +2,122 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C568C433EF
-	for <io-uring@archiver.kernel.org>; Mon, 21 Mar 2022 12:33:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A20E0C43217
+	for <io-uring@archiver.kernel.org>; Mon, 21 Mar 2022 22:50:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347057AbiCUMfK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 21 Mar 2022 08:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
+        id S229706AbiCUWv2 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 21 Mar 2022 18:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347245AbiCUMfJ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Mar 2022 08:35:09 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F1819C02
-        for <io-uring@vger.kernel.org>; Mon, 21 Mar 2022 05:33:44 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id kx5-20020a17090b228500b001c6ed9db871so3927285pjb.1
-        for <io-uring@vger.kernel.org>; Mon, 21 Mar 2022 05:33:44 -0700 (PDT)
+        with ESMTP id S230274AbiCUWvV (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Mar 2022 18:51:21 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C577659F
+        for <io-uring@vger.kernel.org>; Mon, 21 Mar 2022 15:42:03 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a8so32748438ejc.8
+        for <io-uring@vger.kernel.org>; Mon, 21 Mar 2022 15:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DvpKRhuqGuhwCDsD6Yz3o7Zcv4FeXWHhYH+HXBxdrb4=;
-        b=LlOSTCpKo4f8MBEHPsESb/6Jcpsr+R7Gb/ZWrAwI55SQSnPD/I6GFobi9ZTD0GkLNM
-         U1EBgQEd6VwYNd4xPsJ1QTKUhcoBOQmAyyzVfjIbZFV9BA8PSs9vgP5JWbOEC1WIrDtS
-         4OFaBDomXAlCT17nMGvg478ZCToEtgYgxsH0nZpu6kPUwUWRpJ4QwOaCK+CKU0Ne5oJJ
-         TgvoNrdLZALH1Egt2O5gm3ebYVb8cVrm8TRdJtbNkcDklX8B2ErEewEiNm2K8cKTV7Ca
-         Uwiv74vtvMOIiiPGImY9zK2r1TAiin2qF3IcYPW4yiTGVIG0bzUyyFA0ybAwFI7ISpWo
-         pSFw==
+        bh=K4M+367/HVYYRBGlT23lC/G0BwGA5IHtJW6qOha9pBA=;
+        b=B+4FJupozrN04ysvrBrxhWh9wu3+5TuKVcXXob6r3v0jSibhGsjwzESP4c1zVZRF/z
+         V1p/JhOIC5z3Tubl5k30MsxSPL/nwDo0tN6FVSGYnHal1gcGuWtscCb8XqksYUaTVRrL
+         VaFRgVY4kMixzj3qiEFcpJpzZzZUBrf2bWRD4lStJSDjNNB8/ULfBVb9KmuiO7t7c7C/
+         LHVUWba0OatzzpvqLYMK7A7ZGuRAaWu40gGCCBDWBtqWbQ7aUPkdVX+ZniRax6IKsAk0
+         l9/JhsEA8dhss+walvPnjtq9ucPP3nqGdlVoyw+bJsz3JzAMvl0LKYkHrkiDTb3mDj2J
+         sfdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=DvpKRhuqGuhwCDsD6Yz3o7Zcv4FeXWHhYH+HXBxdrb4=;
-        b=prIpAtTkRR01PBKuqqU22f44L6MOq4Jbi7jiOffrjR704vTA9u9W/2V6YE5m7BoYgs
-         YmvzrNfipRgRdSv2NNpJTcvI3HMC7slN+TuNkcgA0VOzYpogGs5+nyOo2eopi/M6twPD
-         xFkGq2It7C+hHCB+T/LWrlUcR3WWTy+EM4JEuTFCClo0QYHeyC2C8iW/l2/Wc8AHgH4V
-         82y4lp7v/9NhHiJDEPs9EBu3yzkfSFe1JSDpameMpj29cGu+MJZRSfkgbXOHuTBy0y9u
-         9/HjJ2HCekQLh28tnBqJGDOnHNmkri1ZcPl+m2MflT0nbBcily51cz/5M0nJLYt7eVQk
-         B7cw==
-X-Gm-Message-State: AOAM533pwHYBeJ4EA/Rp0YQretUHY7hv/4SjiNYOBo1FWsXg7BDchyd7
-        7rvrHdEX64L8l/2MywLB4QGB2Q==
-X-Google-Smtp-Source: ABdhPJyyp6j33Q6qpZak4OO8boVxaVNEJl2ceBxkPQXnOYV++jX1vXWbBj48UenATF1Iq+621rIQKQ==
-X-Received: by 2002:a17:902:7802:b0:150:baa:bc1a with SMTP id p2-20020a170902780200b001500baabc1amr12730358pll.110.1647866023985;
-        Mon, 21 Mar 2022 05:33:43 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id h16-20020a056a001a5000b004fa343c2d0csm16097049pfv.136.2022.03.21.05.33.43
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=K4M+367/HVYYRBGlT23lC/G0BwGA5IHtJW6qOha9pBA=;
+        b=0ha24KGSjcxqkWVLJKRM/r9xHe3xNZFw9M08zb1pvW2CPBHXSMBKopkl5Tm3I8PZLw
+         phfgxsPQCPexBIBunx7hCJOq21FcBfoUUWyq8ygRQsq2rAttHAcLezhI/90nLgw8Ty7/
+         5+TljCBHvUba5oRqP/J3WNoxlM8Il9YbN+2I+IK+52spAWQC5Erpg0Bi1LqGPI+2+hxW
+         BvnIzBWWUReSSkE/9SCbX+rDnQq187t+lqJsb1ZDwcFxrJbENjsUglNF29A2wFm1fJKV
+         TPJiTJqTae9YQzJ8DcSHgRqxRZ/Q5C3r+ndZDRprnr+CNPBVixgrsFZLDyjkw0IveYFQ
+         9mEQ==
+X-Gm-Message-State: AOAM532HOUYtm+gx2kEybll0aSnZKCT+bB3QPt6PvA6d0eg2eQdGlhXB
+        bTGHgw1z40LZjNZcwlQ28QjOpka3SNez7Q==
+X-Google-Smtp-Source: ABdhPJw3QzWdzf3IGWmrFzS9K0URGUTaHXYcwwvJ8H012oO1M7QgKiD+VYba/9HYizGEwly9boSI0w==
+X-Received: by 2002:a05:6402:4388:b0:419:4457:27a6 with SMTP id o8-20020a056402438800b00419445727a6mr6267298edc.80.1647900239969;
+        Mon, 21 Mar 2022 15:03:59 -0700 (PDT)
+Received: from 127.0.0.1localhost ([85.105.239.232])
+        by smtp.gmail.com with ESMTPSA id qb10-20020a1709077e8a00b006dfedd50ce3sm2779658ejc.143.2022.03.21.15.03.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Mar 2022 05:33:43 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Almog Khaikin <almogkh@gmail.com>, io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com
-In-Reply-To: <20220321090059.46313-1-almogkh@gmail.com>
-References: <20220321090059.46313-1-almogkh@gmail.com>
-Subject: Re: [PATCH v2] io_uring: fix memory ordering when SQPOLL thread goes to sleep
-Message-Id: <164786602316.7312.1156269365194554675.b4-ty@kernel.dk>
-Date:   Mon, 21 Mar 2022 06:33:43 -0600
+        Mon, 21 Mar 2022 15:03:59 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
+Subject: [PATCH 4/6] io_uring: optimise io_free_batch_list
+Date:   Mon, 21 Mar 2022 22:02:22 +0000
+Message-Id: <0fb493f73f2009aea395c570c2932fecaa4e1244.1647897811.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1647897811.git.asml.silence@gmail.com>
+References: <cover.1647897811.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Mon, 21 Mar 2022 11:00:59 +0200, Almog Khaikin wrote:
-> Without a full memory barrier between the store to the flags and the
-> load of the SQ tail the two operations can be reordered and this can
-> lead to a situation where the SQPOLL thread goes to sleep while the
-> application writes to the SQ tail and doesn't see the wakeup flag.
-> This memory barrier pairs with a full memory barrier in the application
-> between its store to the SQ tail and its load of the flags.
-> 
-> [...]
+We do several req->flags checks in the fast path of
+io_free_batch_list(). One explicit check of REQ_F_REFCOUNT, and two
+other hidden in io_queue_next() and io_dismantle_req(). Moreover, there
+is a io_req_put_rsrc_locked() call in between, so there is no hope
+req->flags will be preserved in registers.
 
-Applied, thanks!
+All those flags if not a slow path than definitely a slower path, so
+put them all under a single flags mask check and save several mem
+reloads and ifs.
 
-[1/1] io_uring: fix memory ordering when SQPOLL thread goes to sleep
-      commit: 649bb75d19c93f5459f450191953dff4825fda3e
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ fs/io_uring.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
-Best regards,
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 4539461ee7b3..36bcfcc23193 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -116,6 +116,9 @@
+ 				REQ_F_POLLED | REQ_F_INFLIGHT | REQ_F_CREDS | \
+ 				REQ_F_ASYNC_DATA)
+ 
++#define IO_REQ_CLEAN_SLOW_FLAGS (REQ_F_REFCOUNT | REQ_F_LINK | REQ_F_HARDLINK |\
++				 IO_REQ_CLEAN_FLAGS)
++
+ #define IO_TCTX_REFS_CACHE_NR	(1U << 10)
+ 
+ struct io_uring {
+@@ -2641,15 +2644,20 @@ static void io_free_batch_list(struct io_ring_ctx *ctx,
+ 		struct io_kiocb *req = container_of(node, struct io_kiocb,
+ 						    comp_list);
+ 
+-		if (unlikely(req->flags & REQ_F_REFCOUNT)) {
+-			node = req->comp_list.next;
+-			if (!req_ref_put_and_test(req))
+-				continue;
++		if (unlikely(req->flags & IO_REQ_CLEAN_SLOW_FLAGS)) {
++			if (req->flags & REQ_F_REFCOUNT) {
++				node = req->comp_list.next;
++				if (!req_ref_put_and_test(req))
++					continue;
++			}
++			io_queue_next(req);
++			if (unlikely(req->flags & IO_REQ_CLEAN_FLAGS))
++				io_clean_op(req);
+ 		}
++		if (!(req->flags & REQ_F_FIXED_FILE))
++			io_put_file(req->file);
+ 
+ 		io_req_put_rsrc_locked(req, ctx);
+-		io_queue_next(req);
+-		io_dismantle_req(req);
+ 
+ 		if (req->task != task) {
+ 			if (task)
 -- 
-Jens Axboe
-
+2.35.1
 
