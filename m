@@ -2,110 +2,69 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CBEC433F5
-	for <io-uring@archiver.kernel.org>; Mon, 21 Mar 2022 23:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C8AEC433F5
+	for <io-uring@archiver.kernel.org>; Tue, 22 Mar 2022 00:26:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233443AbiCUXsy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 21 Mar 2022 19:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
+        id S234258AbiCVA1j (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 21 Mar 2022 20:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233463AbiCUXsx (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Mar 2022 19:48:53 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958C31890D9
-        for <io-uring@vger.kernel.org>; Mon, 21 Mar 2022 16:47:26 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id h7so9665994lfl.2
-        for <io-uring@vger.kernel.org>; Mon, 21 Mar 2022 16:47:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WXgWyp4Um3StwShymSK+s9+iMp7Pr8uzLZsD+EflGPM=;
-        b=P45BR3xuiRSoedW8haJjsNx4hmUVitDZGbtShFVyQlOoStCJ0MWeqwYDjCIdCNByBi
-         ax4UawZVvZZ8onSffdFCjnu4lySW6OTnI/luDqVOkks1dWhmHytFf8eVJ532KYOviCFt
-         ylvChZ1iyoqK0MEu81vBEyfvl8rYa7BuVJ/yI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WXgWyp4Um3StwShymSK+s9+iMp7Pr8uzLZsD+EflGPM=;
-        b=cgN6nfltPEkJyXkxI59pMI9OvctOQEImPTseqC5LCjhko2ZC5SfXubJGSM5FCi+qp4
-         PIPDm6lYwBSd9MuHcZHBYZ/1/F9RTNCRG8KMUg03ddnwHAmYlO/xzzGsWKAaA+wVupPG
-         ofpfktsFh0cKPjrYVO7d47gFGS6rAMQA1VRF6lCV+Rtq2jXBo/vy3AG5MG6EK9c4dmoA
-         v6augRFhJh7ob66j/2pmX6KpcXwbs1zn0GgFqSROn0/Dx/2sejweRvMeJALXrUzQD3ju
-         YgbNnp9hy1nYcEV2Ft/LbZzbFolUjwZfjlxh1eLzUmXWQLVxkN05GS0alsgtSOshog1x
-         B9xQ==
-X-Gm-Message-State: AOAM531rceiibmaWENsAl0W8gU2R0UF6IFN6BF71Tiga8VIk0ZMm+axv
-        aHbREBRQwLUGTJFON4LQ+C18s+oPk+FN5zwd99I=
-X-Google-Smtp-Source: ABdhPJzZei/kLTSFD+y6SFtxqmTDWJXLTt0SeKLZGuX5do5vIR0ZLtPRwU5kpDqyiDSWrXPh1GlnWA==
-X-Received: by 2002:a05:6512:3c92:b0:448:5062:268 with SMTP id h18-20020a0565123c9200b0044850620268mr16791704lfv.84.1647906444644;
-        Mon, 21 Mar 2022 16:47:24 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id be17-20020a05651c171100b00247eaff0ff0sm2251374ljb.7.2022.03.21.16.47.23
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Mar 2022 16:47:24 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id w27so27129238lfa.5
-        for <io-uring@vger.kernel.org>; Mon, 21 Mar 2022 16:47:23 -0700 (PDT)
-X-Received: by 2002:ac2:4f92:0:b0:448:7eab:c004 with SMTP id
- z18-20020ac24f92000000b004487eabc004mr16006296lfs.27.1647906443612; Mon, 21
- Mar 2022 16:47:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <1fbbd612-79bd-8a7b-8021-b8d46c3b8ac7@kernel.dk>
-In-Reply-To: <1fbbd612-79bd-8a7b-8021-b8d46c3b8ac7@kernel.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 21 Mar 2022 16:47:07 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgLwrtFeJ-sitq6f162v1st3GPF7x5BOWJFcn_OHyMYpA@mail.gmail.com>
-Message-ID: <CAHk-=wgLwrtFeJ-sitq6f162v1st3GPF7x5BOWJFcn_OHyMYpA@mail.gmail.com>
+        with ESMTP id S234280AbiCVA1g (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Mar 2022 20:27:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4346421A8A2;
+        Mon, 21 Mar 2022 17:26:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93C92615A8;
+        Tue, 22 Mar 2022 00:25:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0490CC340EE;
+        Tue, 22 Mar 2022 00:25:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1647908751;
+        bh=xGSoF6R/cshfFJHkQ8WUXz7d7rBPUYhUTZ0lws2wLCE=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=iat5i9ap6Nsyy00nRdHxdSC0Kysp6Vfq1N3QCJEwJu0GMipo+lmv6Aee0YnwsWKWS
+         SZjMVrvZA+LAHUAT7++b8YTiKXPPCbG4+AICilIcSneUwQ5ptIhtMm5ER2TxjZYNNv
+         GKf9pUwyo9RTtGec7CWgL7XijorEXi+magibn+nDLRMjfY3gA9YLswS8TDD1IAe+0w
+         dqdn2q4MALJ2bErQCI5GLKxrs3nb8zZZKolTUO6nkIicoBUTJrvvomm/S0Z0kMyV/K
+         lxWcMjQ24Bnb8ml5D4zX31C+BKBupTdJeqPI7WWmGGkf6VXD9hp7myTs2AatjJ1TdA
+         q6YlVfsV4h5Jw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E7B4BE7BB0B;
+        Tue, 22 Mar 2022 00:25:50 +0000 (UTC)
 Subject: Re: [GIT PULL] io_uring statx fix for 5.18-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1fbbd612-79bd-8a7b-8021-b8d46c3b8ac7@kernel.dk>
+References: <1fbbd612-79bd-8a7b-8021-b8d46c3b8ac7@kernel.dk>
+X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1fbbd612-79bd-8a7b-8021-b8d46c3b8ac7@kernel.dk>
+X-PR-Tracked-Remote: git://git.kernel.dk/linux-block.git tags/for-5.18/io_uring-statx-2022-03-18
+X-PR-Tracked-Commit-Id: 1b6fe6e0dfecf8c82a64fb87148ad9333fa2f62e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b080cee72ef355669cbc52ff55dc513d37433600
+Message-Id: <164790875094.30750.9054052876159323786.pr-tracker-bot@kernel.org>
+Date:   Tue, 22 Mar 2022 00:25:50 +0000
 To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
         io-uring <io-uring@vger.kernel.org>,
         "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri, Mar 18, 2022 at 2:59 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On top of the main io_uring branch, this pull request is for ensuring
-> that the filename component of statx is stable after submit. That
-> requires a few VFS related changes.
+The pull request you sent on Fri, 18 Mar 2022 15:59:21 -0600:
 
-Ugh, I've pulled this, but I hate how it does that
+> git://git.kernel.dk/linux-block.git tags/for-5.18/io_uring-statx-2022-03-18
 
-    int getname_statx_lookup_flags(int);
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b080cee72ef355669cbc52ff55dc513d37433600
 
-thing with 'int' for both the incoming and outgoing flags.
+Thank you!
 
-And I don't say that just because the existing path lookup functions
-actually use 'unsigned int', and the code strives to do things like
-
-        unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
-
-So 'int' is ugly, but the _really_ ugly part is how we should have a
-separate type for the LOOKUP_xyz flags.
-
-That part isn't new to this change, but this change really highlights
-how lacking in type safety that thing is.
-
-The vfs code has a huge pile of different types of 'flags'. Half of
-them are various variations of mount flags, I feel, with the whole
-MS_xyz -> MNT_xyz thing going on. This is more of that horrid pattern.
-
-At least the mnt code tried to call the variables that keep MNT_xyz
-flags 'mnt_flags'. I'm not sure how consistent the code is about it,
-but there's _some_ attempt at it.
-
-I do wonder if we should at least try to have a special integer type
-for these things that could be checked with sparse (which nobody does)
-or at least used as documentation in the function prototypes to show
-"this returns a flag of type 'lookup_flag_t' rather than just
-'unsigned int' (or worse yet, 'int').
-
-Anyway, I've pulled it, I just wanted to make my reaction to it public
-in the hope that some bored vfs person goes "yeah, we should do that"
-and works on it.
-
-                Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
