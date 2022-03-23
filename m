@@ -2,76 +2,123 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6682CC433F5
-	for <io-uring@archiver.kernel.org>; Wed, 23 Mar 2022 22:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 958C6C4332F
+	for <io-uring@archiver.kernel.org>; Wed, 23 Mar 2022 22:41:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244356AbiCWWnL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 23 Mar 2022 18:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45552 "EHLO
+        id S1345317AbiCWWnN (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 23 Mar 2022 18:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240425AbiCWWnK (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Mar 2022 18:43:10 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584897CB23
-        for <io-uring@vger.kernel.org>; Wed, 23 Mar 2022 15:41:40 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o3-20020a17090a3d4300b001c6bc749227so3307146pjf.1
-        for <io-uring@vger.kernel.org>; Wed, 23 Mar 2022 15:41:40 -0700 (PDT)
+        with ESMTP id S1345311AbiCWWnM (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Mar 2022 18:43:12 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3169024C
+        for <io-uring@vger.kernel.org>; Wed, 23 Mar 2022 15:41:42 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id bx24-20020a17090af49800b001c6872a9e4eso3286647pjb.5
+        for <io-uring@vger.kernel.org>; Wed, 23 Mar 2022 15:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uUhJ05/cb+wi0vSCWraGIhfxIBINvn2YCv3QCXxjOT8=;
-        b=gYYhRY7FXxz208tV1zUubewxO65D0LYotNlMedbNpXAPduiYDF6lYkpSYqj2OUninI
-         qa3NedMNdpHaj0IDhKqLUi8bLu1yzUQ/qCER6DiWrHKSR61YDtFb6RMRWc5n3AlShRsC
-         JTrPFoxzDRKT0agZZnp5WNL/zFy+GiBejrx1hwIt3x9OepFCppskThcpZQmtTyFY6tQa
-         q2m3D9xDqlEAj2lkGiWJX9BAfd4jtU9Nh6s69EcH9O5JXXKya6362u9HFzn5kzZO+QQh
-         25X7xmIzs5r+Wlk4CAFoqUa/e8U3rH3eTpxAXxgAhURSARmmQaS2Rci2qNQ5rZbSiYec
-         bg+g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dJkGec8J6ZKub4X4VYEOP/eRPrNuJ15phOkKzmbFez4=;
+        b=Sm3Wp/iBNPpaxj9WteQF7jsVvp6blyo/CQEoCQPKX0JuRAct0ETSeUmp3RsGiuD6qa
+         sqy97l2gOnMhZjd8uA6uisLdI7APu1n3WxLZS5YIvZsTFIz+rolc8o6Xku72wmfN0KyB
+         hcum9JMqGqcvI+drOPx3lBwEpPH0JtCUvn/t241h8VNWkG6XmOz/CNGw6Ox5oTj86In7
+         zvjYH1SpX7ggx1Hx6GzusLnYQHrqCjEJjAdTnbewntIbc4CXRRvHj2nYK25PY3yvFaEG
+         7oSkb3tHPmz363QXUKoPjE59xMcuuiU1MlYZS/3EZr2qPvKdSDYh5SKbZoGnmonssvxw
+         iEow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uUhJ05/cb+wi0vSCWraGIhfxIBINvn2YCv3QCXxjOT8=;
-        b=KCksQikbt6xvb2Rn+oxIeoQjNf/JEeNES/dLC+tLHbEJ/Zvf9u5imbNHDYztODIhZc
-         ollStHTeiLA3Ay21f0Dj1yvDre+tzQWCH1FWBCz6PX+zhC2N+VTBJ94dFj/vJpEPRBTa
-         FCWL814nIjU8aua++6oiuwes6qFwTRaMfoKW0H9qMzFTLvpYE/F0wN6dfCiD1Q9utfun
-         GH78uvhrueGJnThxhAttZAwZYTQHr3zSA+fXUuQ8rOe10yLW0cbixB+m13dv1EbHcjxK
-         e/GNHF9iCICunSZiK5gJToYcG7pvdvF6Dtp+hUTrzTdpp++5JVTP7FSATpU2wMDs4WwA
-         NarA==
-X-Gm-Message-State: AOAM532cQGQXJcNMHM0LAPeYHyDzr2wMK7HUdbJ5CBjSDy/FL0vGngAb
-        QKaqHIkkgeFllnGnWO7Er8FUBsdh0TCw+lqD
-X-Google-Smtp-Source: ABdhPJyTzcgzjCBo5zwgiGW0L9BCoJL4uIVwvln4g+14rzFOseyodG/nJPcS4vhdhKuuyjAn5AegFg==
-X-Received: by 2002:a17:90a:4890:b0:1bf:654e:e1a0 with SMTP id b16-20020a17090a489000b001bf654ee1a0mr14462054pjh.113.1648075299595;
-        Wed, 23 Mar 2022 15:41:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dJkGec8J6ZKub4X4VYEOP/eRPrNuJ15phOkKzmbFez4=;
+        b=UBdijRfHsm/+TYrg3EoiT/BnqTPMGxFtO/jpp9cbTt1jssEn80KQHTjEFVO1Et7f3Q
+         sWdpEpvB2cFa7NrTfbq5ZMleM7ZdV3f6Y46BHb7ARP2kZrG5QoND8zz5fW4kCNDHZjEN
+         ZhJHshYyDr9s1YN1b1O6z/CPXxEw+Dq7V5zPihhtQM60tssVcJI9t42ePkg3/iizT52q
+         8yTzVMSxZv3IctOjS3Th5VGc8s3MksFFRf/ECGVgFXs63XAfXp32iLBBVR4Xc45lqjvf
+         oSGqFp+0Ja3GuKco0O5d2vlozm3gsztJQ586yossJ2mwA0wJlHmuMFq8KATfW9MbGBS4
+         MYXw==
+X-Gm-Message-State: AOAM533OY/GjyJ315TC7XqWJMh2Nj8OOcTtLe1lnXxJvoo6qZp9BshnI
+        YoJphtwobWeRVZZwKiu8DDNjy77fbJOc99vy
+X-Google-Smtp-Source: ABdhPJwkPShEmSgka5aGwiN29Kk3Ii7HF7JGgTo6VnBpQ0buQRW8S1C2nAOZ0hHgiJkeWZCgKhioGQ==
+X-Received: by 2002:a17:90b:4d0f:b0:1c7:82e9:1024 with SMTP id mw15-20020a17090b4d0f00b001c782e91024mr2352658pjb.42.1648075301536;
+        Wed, 23 Mar 2022 15:41:41 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g5-20020a056a001a0500b004def10341e5sm867839pfv.22.2022.03.23.15.41.38
+        by smtp.gmail.com with ESMTPSA id g5-20020a056a001a0500b004def10341e5sm867839pfv.22.2022.03.23.15.41.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Mar 2022 15:41:39 -0700 (PDT)
+        Wed, 23 Mar 2022 15:41:41 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
-Cc:     constantine.gavrilov@gmail.com
-Subject: [PATCHSET v2 0/2] Fix MSG_WAITALL for IORING_OP_RECV/RECVMSG
-Date:   Wed, 23 Mar 2022 16:41:29 -0600
-Message-Id: <20220323224131.370674-1-axboe@kernel.dk>
+Cc:     constantine.gavrilov@gmail.com, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/2] io_uring: add flag for disabling provided buffer recycling
+Date:   Wed, 23 Mar 2022 16:41:31 -0600
+Message-Id: <20220323224131.370674-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220323224131.370674-1-axboe@kernel.dk>
+References: <20220323224131.370674-1-axboe@kernel.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+If we need to continue doing this IO, then we don't want a potentially
+selected buffer recycled. Add a flag for that.
 
-If we get a partial receive, we don't retry even if MSG_WAITALL is set.
-Ensure that we retry for the remainder in that case.
+Set this for recv/recvmsg if they do partial IO.
 
-The ordering of patches may look a bit odd here, but it's done this way
-to make it easier to handle for the stable backport.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-v2:
-- Only do it for SOCK_STREAM/SOCK_SEQPACKET
-
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index a70de170aea1..88556e654c5a 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -783,6 +783,7 @@ enum {
+ 	REQ_F_SKIP_LINK_CQES_BIT,
+ 	REQ_F_SINGLE_POLL_BIT,
+ 	REQ_F_DOUBLE_POLL_BIT,
++	REQ_F_PARTIAL_IO_BIT,
+ 	/* keep async read/write and isreg together and in order */
+ 	REQ_F_SUPPORT_NOWAIT_BIT,
+ 	REQ_F_ISREG_BIT,
+@@ -845,6 +846,8 @@ enum {
+ 	REQ_F_SINGLE_POLL	= BIT(REQ_F_SINGLE_POLL_BIT),
+ 	/* double poll may active */
+ 	REQ_F_DOUBLE_POLL	= BIT(REQ_F_DOUBLE_POLL_BIT),
++	/* request has already done partial IO */
++	REQ_F_PARTIAL_IO	= BIT(REQ_F_PARTIAL_IO_BIT),
+ };
+ 
+ struct async_poll {
+@@ -1392,6 +1395,9 @@ static void io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
+ 
+ 	if (likely(!(req->flags & REQ_F_BUFFER_SELECTED)))
+ 		return;
++	/* don't recycle if we already did IO to this buffer */
++	if (req->flags & REQ_F_PARTIAL_IO)
++		return;
+ 
+ 	if (issue_flags & IO_URING_F_UNLOCKED)
+ 		mutex_lock(&ctx->uring_lock);
+@@ -5477,6 +5483,7 @@ static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
+ 			ret = -EINTR;
+ 		if (ret > 0 && io_net_retry(sock, flags)) {
+ 			sr->done_io += ret;
++			req->flags |= REQ_F_PARTIAL_IO;
+ 			return io_setup_async_msg(req, kmsg);
+ 		}
+ 		req_set_fail(req);
+@@ -5546,6 +5553,7 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+ 			sr->len -= ret;
+ 			sr->buf += ret;
+ 			sr->done_io += ret;
++			req->flags |= REQ_F_PARTIAL_IO;
+ 			return -EAGAIN;
+ 		}
+ 		req_set_fail(req);
 -- 
-Jens Axboe
-
+2.35.1
 
