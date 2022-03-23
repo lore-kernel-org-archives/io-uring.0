@@ -2,44 +2,44 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAF64C433EF
-	for <io-uring@archiver.kernel.org>; Wed, 23 Mar 2022 15:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FCD9C433F5
+	for <io-uring@archiver.kernel.org>; Wed, 23 Mar 2022 15:45:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245194AbiCWPqg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S243720AbiCWPqg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Wed, 23 Mar 2022 11:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40532 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243720AbiCWPqf (ORCPT
+        with ESMTP id S244437AbiCWPqf (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 23 Mar 2022 11:46:35 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BA649F05
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F383349F14
         for <io-uring@vger.kernel.org>; Wed, 23 Mar 2022 08:45:05 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22N5htxH017155
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 22NBci81002255
         for <io-uring@vger.kernel.org>; Wed, 23 Mar 2022 08:45:05 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=ZJBE8u0mSLycVG+t9V6mCKQWQK21q2GehFRNZ+5RlTc=;
- b=A+SjcR/G/JgWZR6XX1fZS0+RL4cuVEdEtEqIpRV0C3kfmdVc7mRKnphtx/hrej+tRfjT
- 9ZogaOth599J2VYxmZzH0xYxUq774dCN/ERenEP+/PMGh2mOfr8f28fyPy/ih44fhJn1
- qsA5iU0ym1MKHhwcvwUXwCgTLd8JeNF1ntU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3eyc9wu3mv-11
+ bh=5OxMbtjoMFz+sJsY5IU0t9bx8+m33hP5mPOOVF9w3kg=;
+ b=ZK7ob2xr9Jwkg7RHs1wAeEI0k2XpIX9ns5UV6UPNeRIXjegAxWlzvZBqgDcWMnrABxFs
+ ozFb40eJCtBPWj+W14N4VrIPkBhdX3ZihN/SxiMQbEyXc4BiODMWHfNXUB/64DkZGBLb
+ kVyOJLiN6VYONt3VG5+jliZDvnblVF5XuhE= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3f02uvsr5p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Wed, 23 Mar 2022 08:45:05 -0700
-Received: from twshared41237.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+Received: from twshared10432.40.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 23 Mar 2022 08:45:03 -0700
+ 15.1.2308.21; Wed, 23 Mar 2022 08:45:04 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id DDA09CA02525; Wed, 23 Mar 2022 08:44:59 -0700 (PDT)
+        id D752ACA02523; Wed, 23 Mar 2022 08:44:59 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
 CC:     <shr@fb.com>
-Subject: [PATCH v2 3/4] liburing: Add helper functions for fgetxattr and getxattr
-Date:   Wed, 23 Mar 2022 08:44:56 -0700
-Message-ID: <20220323154457.3303391-4-shr@fb.com>
+Subject: [PATCH v2 2/4] liburing: add helper functions for setxattr and fsetxattr
+Date:   Wed, 23 Mar 2022 08:44:55 -0700
+Message-ID: <20220323154457.3303391-3-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220323154457.3303391-1-shr@fb.com>
 References: <20220323154457.3303391-1-shr@fb.com>
@@ -47,8 +47,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: nU-jS2w1qMs24OgBMS8JQBpfHA1VIpPX
-X-Proofpoint-ORIG-GUID: nU-jS2w1qMs24OgBMS8JQBpfHA1VIpPX
+X-Proofpoint-ORIG-GUID: a2z2Ajq05N-6CQrr0l2tu9FZXgeJzEoE
+X-Proofpoint-GUID: a2z2Ajq05N-6CQrr0l2tu9FZXgeJzEoE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
  definitions=2022-03-23_07,2022-03-23_01,2022-02-23_01
@@ -59,56 +59,51 @@ X-Mailing-List: io-uring@vger.kernel.org
 Summary:
 
 This adds the helper functions for:
-- fgetxattr
-- getxattr
+- fsetxattr
+- setxattr
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- src/include/liburing.h | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ src/include/liburing.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
 diff --git a/src/include/liburing.h b/src/include/liburing.h
-index 0b5dfab..105f5dc 100644
+index 949a351..0b5dfab 100644
 --- a/src/include/liburing.h
 +++ b/src/include/liburing.h
-@@ -729,6 +729,17 @@ static inline void io_uring_prep_msg_ring(struct io_=
+@@ -729,6 +729,29 @@ static inline void io_uring_prep_msg_ring(struct io_=
 uring_sqe *sqe, int fd,
  	sqe->rw_flags =3D flags;
  }
 =20
-+static inline void io_uring_prep_getxattr(struct io_uring_sqe *sqe,
++static inline void io_uring_prep_setxattr(struct io_uring_sqe *sqe,
 +					  const char *name,
 +					  const char *value,
 +					  const char *path,
++					  int flags,
 +					  size_t len)
 +{
-+	io_uring_prep_rw(IORING_OP_GETXATTR, sqe, 0, name, len, (__u64) value);
++	io_uring_prep_rw(IORING_OP_SETXATTR, sqe, 0, name, len, (__u64) value);
 +	sqe->addr3 =3D (__u64) path;
-+	sqe->xattr_flags =3D 0;
++	sqe->xattr_flags =3D flags;
 +}
 +
- static inline void io_uring_prep_setxattr(struct io_uring_sqe *sqe,
- 					  const char *name,
- 					  const char *value,
-@@ -741,6 +752,16 @@ static inline void io_uring_prep_setxattr(struct io_=
-uring_sqe *sqe,
- 	sqe->xattr_flags =3D flags;
- }
-=20
-+static inline void io_uring_prep_fgetxattr(struct io_uring_sqe *sqe,
-+		                           int         fd,
++static inline void io_uring_prep_fsetxattr(struct io_uring_sqe *sqe,
++					   int         fd,
 +					   const char *name,
 +					   const char *value,
++					   int         flags,
 +					   size_t      len)
 +{
-+	io_uring_prep_rw(IORING_OP_FGETXATTR, sqe, fd, name, len, (__u64) value=
++	io_uring_prep_rw(IORING_OP_FSETXATTR, sqe, fd, name, len, (__u64) value=
 );
-+	sqe->xattr_flags =3D 0;
++	sqe->xattr_flags =3D flags;
 +}
 +
- static inline void io_uring_prep_fsetxattr(struct io_uring_sqe *sqe,
- 					   int         fd,
- 					   const char *name,
+ /*
+  * Returns number of unconsumed (if SQPOLL) or unsubmitted entries exist=
+ in
+  * the SQ ring
 --=20
 2.30.2
 
