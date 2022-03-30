@@ -2,252 +2,83 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0129CC4332F
-	for <io-uring@archiver.kernel.org>; Tue, 29 Mar 2022 20:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE98C433EF
+	for <io-uring@archiver.kernel.org>; Wed, 30 Mar 2022 08:19:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiC2UQE (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 29 Mar 2022 16:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42170 "EHLO
+        id S229816AbiC3IVJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 30 Mar 2022 04:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbiC2UQC (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 29 Mar 2022 16:16:02 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BCA1E6177
-        for <io-uring@vger.kernel.org>; Tue, 29 Mar 2022 13:14:19 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id k25so22369424iok.8
-        for <io-uring@vger.kernel.org>; Tue, 29 Mar 2022 13:14:19 -0700 (PDT)
+        with ESMTP id S244350AbiC3IU4 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 30 Mar 2022 04:20:56 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FD23121D
+        for <io-uring@vger.kernel.org>; Wed, 30 Mar 2022 01:19:06 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id dr20so39874989ejc.6
+        for <io-uring@vger.kernel.org>; Wed, 30 Mar 2022 01:19:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dgTcW+qLJ31ZJgVr2Vm/EfVLJ5hGsj2eMIJ1EWlHpdc=;
-        b=kRNjxWxeX2hCrvbLqJcnsBsULdXGJ/EZdBmGAuoh6qhhby4iqAT5gvpU9LX8a9Uscj
-         jV5vcAvdeQPLA18Y9VZMWR8IWJtobyL/bPU9WZxCsty5/y9zGsfwF044CeSy/CSwYUVW
-         9Afw7bS8JF3f/mfH8fPX0YB12YFizxPVJ+zAoHMudj74YnI91E39n2QLyQpqKmvSv1fq
-         Jpcgrcdwlv/UIJsoWjW/XQwuM4+e64hO5YUaOE8DOvTA1X0EDoCUvLuqDw4ubnkVn9j8
-         /elc5JxgJPLlphBnjjzJZdk8TieRyPzLsHZ/q92kNCyoWVQCGDT5p+ZHCJ619xb7Dk+r
-         KRvA==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pb8rc4LHPVXRF45q6Y/HA0FDcpsgWdrRhkyzNeOLHxI=;
+        b=hMxR9tr3eiF29WJjn89DiiTlkXVbXxsieJNuInPomBEsdtmFP9bESHFFaToBZJ/rwT
+         pM+NVBYzt0T3xlO4o2/sD++iWhR1FH6zDmIL6hLxsmSi7JAAt72Gce0ZtV+6FPZbs+lG
+         QI5T+b863kT+f6e0VzFBLDxgTjkQAv0x0d+aE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dgTcW+qLJ31ZJgVr2Vm/EfVLJ5hGsj2eMIJ1EWlHpdc=;
-        b=73C5t+eU8EuEL7VRWoi6covnUIUOxE5EgEfaEs7SfR6Kh1Igfnsnwqfnc0/Mab3HMR
-         uaVMV21PiuM7hRGhC9EOFppW7Si5/0FPLQQmdEh8WVrLsoIW8m4ZplaoXDRZ1eNo8R2Q
-         CgC4I9SSL/oDmGmp9l0xDTigANgUYKOen7SjZ4HHFQ2vg6MdBE8iE4F7P+wz8QxgMa06
-         DPDQ6oJT6DKNjloxWleQ5b4o9rz8wMOfBDWKArD5q31/BL5mJzNriV1a18UeHejLW622
-         cKJ6LMpZokw92E0d+T5/FDcdhqUIQbDfxV988e1b2pORXdwwej/cDVPFpVOsI3MZkrtP
-         vYsA==
-X-Gm-Message-State: AOAM531Megl9eYTrXpnZ3cogibEuR6emzlE2sh3cd5nrsN5roCYFeVSg
-        DLmfhXmD9Gfpm0opEdYS6Hu1RpoA/MBDosTv
-X-Google-Smtp-Source: ABdhPJy+EhklF7GA763QaDDH53hgn7ATY9BQ2oiic3Fs341SAqSho9eJzixPI6ciuCttOO9sT6CrJA==
-X-Received: by 2002:a05:6638:2512:b0:317:d305:b00 with SMTP id v18-20020a056638251200b00317d3050b00mr18062545jat.16.1648584858296;
-        Tue, 29 Mar 2022 13:14:18 -0700 (PDT)
-Received: from m1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id v3-20020a5d9483000000b00640d3d4acabsm9606316ioj.44.2022.03.29.13.14.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Mar 2022 13:14:17 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 3/4] io_uring: move read/write file prep state into actual opcode handler
-Date:   Tue, 29 Mar 2022 14:14:12 -0600
-Message-Id: <20220329201413.73871-4-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220329201413.73871-1-axboe@kernel.dk>
-References: <20220329201413.73871-1-axboe@kernel.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pb8rc4LHPVXRF45q6Y/HA0FDcpsgWdrRhkyzNeOLHxI=;
+        b=Z5d6nPWIvafOOLSNDKqTDE72FP1fs2U0coKGqxmbiH0YLo1DzeWoGXlBn80PRpb2Xu
+         q3l1kw1hAozPMXVk3uh9fJ8NCFPtFN0orAjlXdY/oyHpGhT11L4SsIdN3MdXw2Q5/b2B
+         pqxeHVrU+FwDMpAyIf6ZivRyY2mfCmNe8nOpcahSDdFR9C624EC8x0XZjGSP2ojMEeHt
+         2qgUIChJhjATX4X5L1tnPv+8mu1RvIE/XnrRnNdzaUZdrN69kobzbFQmFjo9xv0E+Nnn
+         QMGEikFd/a1faNxvyJZn8fmiSIpmCmHr295mKXZifYkhVD2viea3TvOzoCAjK413r85h
+         SRow==
+X-Gm-Message-State: AOAM533pEH9agA5nf/8jSMFwW8UZoSEIL5qSKzid3Oyphu5c6zxpj0OK
+        sdFCTrNdhUR6iwvF9edlwjK7pHDuF5/xqVoJ86PWdVAGJx8=
+X-Google-Smtp-Source: ABdhPJwM+3OjeVOZ4Zf15dUolvoMFuQLA/OMsKn1zj5rwTWIc7I12GndA3vOgZhoQW9Gq8VEV/4ExobEe4akDci1q5k=
+X-Received: by 2002:a17:906:7948:b0:6da:64ed:178e with SMTP id
+ l8-20020a170906794800b006da64ed178emr39588464ejo.523.1648628345183; Wed, 30
+ Mar 2022 01:19:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAJfpegvVpFbDX5so8EVaHxubZLNQ4bo=myAYopWeRtMs0wa6nA@mail.gmail.com>
+ <8145e724-d960-dd85-531e-16e564a02f05@kernel.dk> <c8872b69-f042-dc35-fa3d-6862f09a5385@kernel.dk>
+ <CAJfpegs1o3HNkpxPa85LmNCoVVk-T2rt3vJXBvRf_M93P+6ouA@mail.gmail.com>
+ <115fc7d1-9b9c-712b-e75d-39b2041df437@kernel.dk> <CAJfpegs=GcTuXcor-pbhaAxDKeS5XRy5rwTGXUcZM0BYYUK2LA@mail.gmail.com>
+ <89322bd1-5e6f-bcc6-7974-ffd22363a165@kernel.dk> <CAJfpegtr+Bo0O=i9uShDJO_=--KAsFmvdzodwH6qF7f+ABeQ5g@mail.gmail.com>
+ <0c5745ab-5d3d-52c1-6a1d-e5e33d4078b5@kernel.dk>
+In-Reply-To: <0c5745ab-5d3d-52c1-6a1d-e5e33d4078b5@kernel.dk>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 30 Mar 2022 10:18:54 +0200
+Message-ID: <CAJfpegtob8ZWU1TDBoUf7SRMQJhEcEo2sPUumzpNd3Mcg+1aog@mail.gmail.com>
+Subject: Re: io_uring_prep_openat_direct() and link/drain
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-In preparation for not necessarily having a file assigned at prep time,
-defer any initialization associated with the file to when the opcode
-handler is run.
+On Tue, 29 Mar 2022 at 22:03, Jens Axboe <axboe@kernel.dk> wrote:
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- fs/io_uring.c | 102 ++++++++++++++++++++++++++------------------------
- 1 file changed, 53 insertions(+), 49 deletions(-)
+> Can you try and repull the branch? I rebased the top two, so reset to
+> v5.17 first and then pull it.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 0b89f35378fa..2bd7b83045bc 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -593,7 +593,8 @@ struct io_rw {
- 	/* NOTE: kiocb has the file as the first member, so don't do it here */
- 	struct kiocb			kiocb;
- 	u64				addr;
--	u64				len;
-+	u32				len;
-+	u32				flags;
- };
- 
- struct io_connect {
-@@ -3177,42 +3178,11 @@ static inline bool io_file_supports_nowait(struct io_kiocb *req)
- 
- static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
--	struct io_ring_ctx *ctx = req->ctx;
- 	struct kiocb *kiocb = &req->rw.kiocb;
--	struct file *file = req->file;
- 	unsigned ioprio;
- 	int ret;
- 
--	if (!io_req_ffs_set(req))
--		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
--
- 	kiocb->ki_pos = READ_ONCE(sqe->off);
--	kiocb->ki_flags = iocb_flags(file);
--	ret = kiocb_set_rw_flags(kiocb, READ_ONCE(sqe->rw_flags));
--	if (unlikely(ret))
--		return ret;
--
--	/*
--	 * If the file is marked O_NONBLOCK, still allow retry for it if it
--	 * supports async. Otherwise it's impossible to use O_NONBLOCK files
--	 * reliably. If not, or it IOCB_NOWAIT is set, don't retry.
--	 */
--	if ((kiocb->ki_flags & IOCB_NOWAIT) ||
--	    ((file->f_flags & O_NONBLOCK) && !io_file_supports_nowait(req)))
--		req->flags |= REQ_F_NOWAIT;
--
--	if (ctx->flags & IORING_SETUP_IOPOLL) {
--		if (!(kiocb->ki_flags & IOCB_DIRECT) || !file->f_op->iopoll)
--			return -EOPNOTSUPP;
--
--		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
--		kiocb->ki_complete = io_complete_rw_iopoll;
--		req->iopoll_completed = 0;
--	} else {
--		if (kiocb->ki_flags & IOCB_HIPRI)
--			return -EINVAL;
--		kiocb->ki_complete = io_complete_rw;
--	}
- 
- 	ioprio = READ_ONCE(sqe->ioprio);
- 	if (ioprio) {
-@@ -3228,6 +3198,7 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	req->imu = NULL;
- 	req->rw.addr = READ_ONCE(sqe->addr);
- 	req->rw.len = READ_ONCE(sqe->len);
-+	req->rw.flags = READ_ONCE(sqe->rw_flags);
- 	req->buf_index = READ_ONCE(sqe->buf_index);
- 	return 0;
- }
-@@ -3731,13 +3702,6 @@ static inline int io_rw_prep_async(struct io_kiocb *req, int rw)
- 	return 0;
- }
- 
--static int io_read_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
--{
--	if (unlikely(!(req->file->f_mode & FMODE_READ)))
--		return -EBADF;
--	return io_prep_rw(req, sqe);
--}
--
- /*
-  * This is our waitqueue callback handler, registered through __folio_lock_async()
-  * when we initially tried to do the IO with the iocb armed our waitqueue.
-@@ -3825,6 +3789,49 @@ static bool need_read_all(struct io_kiocb *req)
- 		S_ISBLK(file_inode(req->file)->i_mode);
- }
- 
-+static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
-+{
-+	struct kiocb *kiocb = &req->rw.kiocb;
-+	struct io_ring_ctx *ctx = req->ctx;
-+	struct file *file = req->file;
-+	int ret;
-+
-+	if (unlikely(!(file->f_mode & mode)))
-+		return -EBADF;
-+
-+	if (!io_req_ffs_set(req))
-+		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
-+
-+	kiocb->ki_flags = iocb_flags(file);
-+	ret = kiocb_set_rw_flags(kiocb, req->rw.flags);
-+	if (unlikely(ret))
-+		return ret;
-+
-+	/*
-+	 * If the file is marked O_NONBLOCK, still allow retry for it if it
-+	 * supports async. Otherwise it's impossible to use O_NONBLOCK files
-+	 * reliably. If not, or it IOCB_NOWAIT is set, don't retry.
-+	 */
-+	if ((kiocb->ki_flags & IOCB_NOWAIT) ||
-+	    ((file->f_flags & O_NONBLOCK) && !io_file_supports_nowait(req)))
-+		req->flags |= REQ_F_NOWAIT;
-+
-+	if (ctx->flags & IORING_SETUP_IOPOLL) {
-+		if (!(kiocb->ki_flags & IOCB_DIRECT) || !file->f_op->iopoll)
-+			return -EOPNOTSUPP;
-+
-+		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
-+		kiocb->ki_complete = io_complete_rw_iopoll;
-+		req->iopoll_completed = 0;
-+	} else {
-+		if (kiocb->ki_flags & IOCB_HIPRI)
-+			return -EINVAL;
-+		kiocb->ki_complete = io_complete_rw;
-+	}
-+
-+	return 0;
-+}
-+
- static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_rw_state __s, *s = &__s;
-@@ -3860,6 +3867,9 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 		iov_iter_restore(&s->iter, &s->iter_state);
- 		iovec = NULL;
- 	}
-+	ret = io_rw_init_file(req, FMODE_READ);
-+	if (unlikely(ret))
-+		goto done;
- 	req->result = iov_iter_count(&s->iter);
- 
- 	if (force_nonblock) {
-@@ -3963,14 +3973,6 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 	return 0;
- }
- 
--static int io_write_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
--{
--	if (unlikely(!(req->file->f_mode & FMODE_WRITE)))
--		return -EBADF;
--	req->rw.kiocb.ki_hint = ki_hint_validate(file_write_hint(req->file));
--	return io_prep_rw(req, sqe);
--}
--
- static int io_write(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_rw_state __s, *s = &__s;
-@@ -3991,6 +3993,9 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
- 		iov_iter_restore(&s->iter, &s->iter_state);
- 		iovec = NULL;
- 	}
-+	ret = io_rw_init_file(req, FMODE_WRITE);
-+	if (unlikely(ret))
-+		goto done;
- 	req->result = iov_iter_count(&s->iter);
- 
- 	if (force_nonblock) {
-@@ -6976,11 +6981,10 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	case IORING_OP_READV:
- 	case IORING_OP_READ_FIXED:
- 	case IORING_OP_READ:
--		return io_read_prep(req, sqe);
- 	case IORING_OP_WRITEV:
- 	case IORING_OP_WRITE_FIXED:
- 	case IORING_OP_WRITE:
--		return io_write_prep(req, sqe);
-+		return io_prep_rw(req, sqe);
- 	case IORING_OP_POLL_ADD:
- 		return io_poll_add_prep(req, sqe);
- 	case IORING_OP_POLL_REMOVE:
--- 
-2.35.1
+This one works in all cases, except if there's a link flag on the
+read.  In that case the read itself will succeed but following
+requests on the link chain will fail with -ECANCELED.
 
+> BTW, I would not recommend using DRAIN, it's very expensive compared to
+> just a link. Particularly, using just a single link between the
+> open+read makes sense, and should be efficient. Don't link between all
+> of them, that's creating a more expensive dependency that doesn't make
+> any sense for your use case either. Should they both work? Of course,
+> and I think they will in the current branch. Merely stating that they
+> make no sense other than as an exercise-the-logic test case.
+
+Understood.   Once all of these cases work, it should be possible to
+compare the performance of parallel vs. serial execution.
+
+Thanks,
+Miklos
