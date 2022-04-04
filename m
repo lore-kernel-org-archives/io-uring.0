@@ -2,130 +2,229 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9810BC433F5
-	for <io-uring@archiver.kernel.org>; Mon,  4 Apr 2022 21:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07A21C433EF
+	for <io-uring@archiver.kernel.org>; Tue,  5 Apr 2022 01:17:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379577AbiDDVT7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 4 Apr 2022 17:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
+        id S229451AbiDEBTC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 4 Apr 2022 21:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379010AbiDDQTD (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 4 Apr 2022 12:19:03 -0400
-Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764D331922
-        for <io-uring@vger.kernel.org>; Mon,  4 Apr 2022 09:17:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-        s=42; h=Cc:To:From:Date:Message-ID;
-        bh=ZFxCCEmkcG7TzB+sNx6jNrK0KOuJctrVY/tctaS7dFM=; b=0Phof6ONLvZUIsXW+7BMNxXTCp
-        7s0DjkGRcxIMYm6IKYTxDOpgL6hPauLOOf/3YoaXx5HO+hiP8knVAUS0k6o2gNm3O1LuQg036REg7
-        63ctwXEUU19HOzYNzOLuf5saJX9QUDjEJcrhDM6BNFuU7DhBadfZGOK5rcDQJWyw9Vchy+m3KGdld
-        PIreQvSJvL4NbdfKfkC/llfGCaQZf8XmL9BhzUMwJQNuQSrzYM94eVth4MVexb4KPIFcxDIq9gwXb
-        +E0gWeqeTFQWuBWF3xxUHK7DapJ4KGVLjX5Y0nSZHfxUVhdWFH1eUDWiJW6UESWXDkP39b9KFIQns
-        Tgz1D8jY+y73tYr5gTsmRge2Sd5XGk3s73KtGnoqFfd35evE7zHQ35R5h0uwTy8h60+sNdIiFFrrY
-        AE5x3NOOVo5pUN3AiIZf85HGNqTw/p+bDH1vAqqZUshU5LHd3LnMeDwJ7k1xU6nshqX+pfAXKjaKj
-        5iNKzgPNPKYJEei7GHzFXCMB;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-        (Exim)
-        id 1nbPO4-005GMs-LK; Mon, 04 Apr 2022 16:17:04 +0000
-Message-ID: <60f34e91-e8bf-a092-6958-388dcbf4e81c@samba.org>
-Date:   Mon, 4 Apr 2022 18:17:04 +0200
+        with ESMTP id S229460AbiDEBTC (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 4 Apr 2022 21:19:02 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D173243176
+        for <io-uring@vger.kernel.org>; Mon,  4 Apr 2022 17:32:04 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id q129so11827948oif.4
+        for <io-uring@vger.kernel.org>; Mon, 04 Apr 2022 17:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=IwUkq5raNlOPSuLRKSySr78Qb1zfYgUHCaNywpiORlE=;
+        b=oCbyoBbY+RoESlEhBQfRdtkoELBDB0gST1sbTllNwa4xMA7mQ7MxCzAX9raVuV6EOs
+         4Dml1PcdP9jC1n56RoSC7ryr73AoK6yDb8YF1U75oEZ2j2WWG1X/98bYHIHeTKHd81Yf
+         dQFyzEMRYOezgHMV2faXaEuf7NDAxVlGHBOK//i16KR+BhCYXBjAYrTPSy3fLpNcQCGi
+         Tg4WQZamVIGWo4IyxMFM2GRlQz6TNf22njMs/4WaCGyyGAHTlVHHOEXaneVpSlIT77ce
+         D+UDjf2GWnjUtz4h05dd/LZXQcBbgCpji/O40d0w7N+fR/gKdWfb+eQrPbZAPlxvSPMO
+         /ahA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=IwUkq5raNlOPSuLRKSySr78Qb1zfYgUHCaNywpiORlE=;
+        b=KDDdOFvY0qEvvPUFo4LWAA7EkoN4sb9Sb9lH8vSgklBiDUQfOFwbrw5ZJibvbnTD+3
+         m1OFuk++r3ydLzzwI6mb7/SXiSal3NUWZhC1QXIevx1QuYDHEslaCL0FhVjJzCoWwKP1
+         iXftNj1vOJna0tE8KWTemGytPbsPy3VjaJeGJ2XM7/Z6RYQaWMpu7rvFvnggy3cqsD2M
+         D86BgXh+DAqiAet7T56KQ+hWRwaQJ7O6xRqHP9FYwlQI7irDUQaz/MjzyeMkbWenQMCb
+         L5zqiG7y7fANLpqFWuNVRJ3Q14gSJC2GvmQRDKySsYXZ9ddZYpwRDyeujAu/zc/KxoPf
+         nMYw==
+X-Gm-Message-State: AOAM5339UJLAprVxy8ZirFnUFcKjzkKuXQ3SSc/EYd/APb7uBIJtpYaE
+        aIEi+I8QzWZMJBxchj/bDShibGlxM3VNxg==
+X-Google-Smtp-Source: ABdhPJyccH9jWG5wxC2+ha20hLsgEsxWU4rhyF1nNC952UwSpTU4/54rsnwK5HNEjru0h8459zLBtA==
+X-Received: by 2002:a17:90a:8e82:b0:1ca:81fb:180d with SMTP id f2-20020a17090a8e8200b001ca81fb180dmr799403pjo.137.1649116598185;
+        Mon, 04 Apr 2022 16:56:38 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id i7-20020a628707000000b004fa6eb33b02sm13157977pfe.49.2022.04.04.16.56.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Apr 2022 16:56:37 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 4/6] io_uring: propagate issue_flags state down to file assignment
+Date:   Mon,  4 Apr 2022 17:56:24 -0600
+Message-Id: <20220404235626.374753-5-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220404235626.374753-1-axboe@kernel.dk>
+References: <20220404235626.374753-1-axboe@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-From:   Stefan Metzmacher <metze@samba.org>
-To:     Jens Axboe <axboe@kernel.dk>, Eric Wong <e@80x24.org>
-Cc:     io-uring@vger.kernel.org,
-        Liu Changcheng <changcheng.liu@aliyun.com>
-References: <20211116224456.244746-1-e@80x24.org>
- <20220121182635.1147333-1-e@80x24.org> <20220403084820.M206428@dcvr>
- <c53378f8-87eb-43a6-afbb-e506c566ad26@kernel.dk>
- <43ac1089-9823-2094-aafa-edfc31f1f6fe@samba.org>
-Subject: Re: [PULL|PATCH v3 0/7] liburing debian packaging fixes
-In-Reply-To: <43ac1089-9823-2094-aafa-edfc31f1f6fe@samba.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Am 04.04.22 um 18:13 schrieb Stefan Metzmacher:
-> 
-> Am 03.04.22 um 16:54 schrieb Jens Axboe:
->> On 4/3/22 2:48 AM, Eric Wong wrote:
->>> Eric Wong <e@80x24.org> wrote:
->>>> The previous patch 8/7 in v2 is squashed into 3/7 in this series.
->>>> Apologies for the delay since v2, many bad things happened :<
->>>>
->>>> The following changes since commit bbcaabf808b53ef11ad9851c6b968140fb430500:
->>>>
->>>>    man/io_uring_enter.2: make it clear that chains terminate at submit (2022-01-19 18:09:40 -0700)
->>>>
->>>> are available in the Git repository at:
->>>>
->>>>    https://yhbt.net/liburing.git deb-v3
->>>>
->>>> for you to fetch changes up to 77b99bb1dbe237eef38eceb313501a9fd247d672:
->>>>
->>>>    make-debs: remove dependency on git (2022-01-21 16:54:42 +0000)
->>>
->>> Hi Jens, have you had a chance to look at this series?  Thanks.
->>> I mostly abandoned hacking for a few months :x
->>
->> I never build distro packages and know very little about it, so would
->> really like Stefan et al to sign off on this. I'm about to cut the next
->> version of liburing, and would indeed be great to have better packaging
->> sorted before that.
->>
->> Does it still apply to the curren tree?
-> 
-> I rebased it on current master.
-> 
-> The last patch with this seems dangerous (from reading the diff):
-> 
-> -git clean -dxf
-> +if git clean -dxf
-> +then
-> +       rm -rf .git
-> 
-> I'd just .git
-> 
-> On ubuntu 22.04 I get this error:
-> 
-> make[1]: Verzeichnis „/tmp/release/Ubuntu/liburing/liburing-2.2“ wird verlassen
-> dh_testdir
-> dh_testroot
-> dh_install -a
-> dh_install: warning: Compatibility levels before 10 are deprecated (level 9 in use)
-> dh_install: warning: Cannot find (any matches for) "lib/*/lib*.so.*" (tried in ., debian/tmp)
-> 
-> dh_install: warning: liburing2 missing files: lib/*/lib*.so.*
-> dh_install: warning: Cannot find (any matches for) "usr/include" (tried in ., debian/tmp)
-> 
-> dh_install: warning: liburing-dev missing files: usr/include
-> dh_install: warning: Cannot find (any matches for) "usr/lib/*/lib*.so" (tried in ., debian/tmp)
-> 
-> dh_install: warning: liburing-dev missing files: usr/lib/*/lib*.so
-> dh_install: warning: Cannot find (any matches for) "usr/lib/*/lib*.a" (tried in ., debian/tmp)
-> 
-> dh_install: warning: liburing-dev missing files: usr/lib/*/lib*.a
-> dh_install: error: missing files, aborting
-> make: *** [debian/rules:74: binary-arch] Fehler 25
-> dpkg-buildpackage: Fehler: Unterprozess debian/rules binary lieferte Exitstatus 2
-> debuild: fatal error at line 1182:
-> dpkg-buildpackage -us -uc -ui failed
+We'll need this in a future patch, when we could be assigning the file
+after the prep stage.
 
-I also found it changes the system path of the build host:
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 48 ++++++++++++++++++++++++++++++------------------
+ 1 file changed, 30 insertions(+), 18 deletions(-)
 
-install -D -m 755 liburing.so.2.2 /lib/x86_64-linux-gnu/liburing.so.2.2
-ln -sf liburing.so.2.2 /lib/x86_64-linux-gnu/liburing.so.2
-ln -sf /lib/x86_64-linux-gnu/liburing.so.2.2 /usr/lib/x86_64-linux-gnu/liburing.so
-
-This should use some $DESTDIR magic...
-
-Maybe the DESTDIR handling is broken in general and the reason
-why I got the above errors...
-
-metze
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 969f65de9972..d9b4b3a71a0f 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -1184,7 +1184,8 @@ static int __io_register_rsrc_update(struct io_ring_ctx *ctx, unsigned type,
+ 				     unsigned nr_args);
+ static void io_clean_op(struct io_kiocb *req);
+ static struct file *io_file_get(struct io_ring_ctx *ctx,
+-				struct io_kiocb *req, int fd, bool fixed);
++				struct io_kiocb *req, int fd, bool fixed,
++				bool locked);
+ static void __io_queue_sqe(struct io_kiocb *req);
+ static void io_rsrc_put_work(struct work_struct *work);
+ 
+@@ -1314,13 +1315,18 @@ static void io_rsrc_refs_refill(struct io_ring_ctx *ctx)
+ }
+ 
+ static inline void io_req_set_rsrc_node(struct io_kiocb *req,
+-					struct io_ring_ctx *ctx)
++					struct io_ring_ctx *ctx, bool locked)
+ {
+ 	if (!req->fixed_rsrc_refs) {
+ 		req->fixed_rsrc_refs = &ctx->rsrc_node->refs;
+-		ctx->rsrc_cached_refs--;
+-		if (unlikely(ctx->rsrc_cached_refs < 0))
+-			io_rsrc_refs_refill(ctx);
++
++		if (locked) {
++			ctx->rsrc_cached_refs--;
++			if (unlikely(ctx->rsrc_cached_refs < 0))
++				io_rsrc_refs_refill(ctx);
++		} else {
++			percpu_ref_get(req->fixed_rsrc_refs);
++		}
+ 	}
+ }
+ 
+@@ -3330,7 +3336,8 @@ static int __io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter
+ 	return 0;
+ }
+ 
+-static int io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter)
++static int io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter,
++			   bool locked)
+ {
+ 	struct io_mapped_ubuf *imu = req->imu;
+ 	u16 index, buf_index = req->buf_index;
+@@ -3340,7 +3347,7 @@ static int io_import_fixed(struct io_kiocb *req, int rw, struct iov_iter *iter)
+ 
+ 		if (unlikely(buf_index >= ctx->nr_user_bufs))
+ 			return -EFAULT;
+-		io_req_set_rsrc_node(req, ctx);
++		io_req_set_rsrc_node(req, ctx, locked);
+ 		index = array_index_nospec(buf_index, ctx->nr_user_bufs);
+ 		imu = READ_ONCE(ctx->user_bufs[index]);
+ 		req->imu = imu;
+@@ -3502,7 +3509,8 @@ static struct iovec *__io_import_iovec(int rw, struct io_kiocb *req,
+ 	ssize_t ret;
+ 
+ 	if (opcode == IORING_OP_READ_FIXED || opcode == IORING_OP_WRITE_FIXED) {
+-		ret = io_import_fixed(req, rw, iter);
++		ret = io_import_fixed(req, rw, iter,
++					!(issue_flags & IO_URING_F_UNLOCKED));
+ 		if (ret)
+ 			return ERR_PTR(ret);
+ 		return NULL;
+@@ -4395,7 +4403,8 @@ static int io_tee(struct io_kiocb *req, unsigned int issue_flags)
+ 		return -EAGAIN;
+ 
+ 	in = io_file_get(req->ctx, req, sp->splice_fd_in,
+-				  (sp->flags & SPLICE_F_FD_IN_FIXED));
++				  (sp->flags & SPLICE_F_FD_IN_FIXED),
++				  !(issue_flags & IO_URING_F_UNLOCKED));
+ 	if (!in) {
+ 		ret = -EBADF;
+ 		goto done;
+@@ -4435,7 +4444,8 @@ static int io_splice(struct io_kiocb *req, unsigned int issue_flags)
+ 		return -EAGAIN;
+ 
+ 	in = io_file_get(req->ctx, req, sp->splice_fd_in,
+-				  (sp->flags & SPLICE_F_FD_IN_FIXED));
++				  (sp->flags & SPLICE_F_FD_IN_FIXED),
++				  !(issue_flags & IO_URING_F_UNLOCKED));
+ 	if (!in) {
+ 		ret = -EBADF;
+ 		goto done;
+@@ -5973,7 +5983,7 @@ static void io_poll_remove_entries(struct io_kiocb *req)
+  * either spurious wakeup or multishot CQE is served. 0 when it's done with
+  * the request, then the mask is stored in req->result.
+  */
+-static int io_poll_check_events(struct io_kiocb *req)
++static int io_poll_check_events(struct io_kiocb *req, bool locked)
+ {
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	struct io_poll_iocb *poll = io_poll_get_single(req);
+@@ -6030,7 +6040,7 @@ static void io_poll_task_func(struct io_kiocb *req, bool *locked)
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	int ret;
+ 
+-	ret = io_poll_check_events(req);
++	ret = io_poll_check_events(req, *locked);
+ 	if (ret > 0)
+ 		return;
+ 
+@@ -6055,7 +6065,7 @@ static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	int ret;
+ 
+-	ret = io_poll_check_events(req);
++	ret = io_poll_check_events(req, *locked);
+ 	if (ret > 0)
+ 		return;
+ 
+@@ -7461,7 +7471,8 @@ static void io_fixed_file_set(struct io_fixed_file *file_slot, struct file *file
+ }
+ 
+ static inline struct file *io_file_get_fixed(struct io_ring_ctx *ctx,
+-					     struct io_kiocb *req, int fd)
++					     struct io_kiocb *req, int fd,
++					     bool locked)
+ {
+ 	struct file *file;
+ 	unsigned long file_ptr;
+@@ -7474,7 +7485,7 @@ static inline struct file *io_file_get_fixed(struct io_ring_ctx *ctx,
+ 	file_ptr &= ~FFS_MASK;
+ 	/* mask in overlapping REQ_F and FFS bits */
+ 	req->flags |= (file_ptr << REQ_F_SUPPORT_NOWAIT_BIT);
+-	io_req_set_rsrc_node(req, ctx);
++	io_req_set_rsrc_node(req, ctx, locked);
+ 	return file;
+ }
+ 
+@@ -7492,10 +7503,11 @@ static struct file *io_file_get_normal(struct io_ring_ctx *ctx,
+ }
+ 
+ static inline struct file *io_file_get(struct io_ring_ctx *ctx,
+-				       struct io_kiocb *req, int fd, bool fixed)
++				       struct io_kiocb *req, int fd, bool fixed,
++				       bool locked)
+ {
+ 	if (fixed)
+-		return io_file_get_fixed(ctx, req, fd);
++		return io_file_get_fixed(ctx, req, fd, locked);
+ 	else
+ 		return io_file_get_normal(ctx, req, fd);
+ }
+@@ -7750,7 +7762,7 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
+ 		}
+ 
+ 		req->file = io_file_get(ctx, req, READ_ONCE(sqe->fd),
+-					(sqe_flags & IOSQE_FIXED_FILE));
++					(sqe_flags & IOSQE_FIXED_FILE), true);
+ 		if (unlikely(!req->file))
+ 			return -EBADF;
+ 	}
+-- 
+2.35.1
 
