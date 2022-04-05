@@ -2,252 +2,98 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DCA3C433EF
-	for <io-uring@archiver.kernel.org>; Tue,  5 Apr 2022 02:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEE60C433FE
+	for <io-uring@archiver.kernel.org>; Tue,  5 Apr 2022 05:58:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiDEC45 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 4 Apr 2022 22:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S229861AbiDEGAm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Apr 2022 02:00:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230475AbiDEC4Q (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 4 Apr 2022 22:56:16 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B51220FD1
-        for <io-uring@vger.kernel.org>; Mon,  4 Apr 2022 19:05:41 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-dacc470e03so12929653fac.5
-        for <io-uring@vger.kernel.org>; Mon, 04 Apr 2022 19:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EoASACADHZW9hyAkhpjT8nEm+Pqkb+q7uqFEp3Yyy4g=;
-        b=wgvppesePXFqcNrIe0MZC1hqaBo8qFbli34GNIExbJ6bl+DJzz5OuPJ+3/Fw4RSPpg
-         iYrmtuipvHXxCVC/VgTZ7Y/qGrSeWj7T25gwHHQ724M26EQrZOwmtuQ60lLMf7Z59Wbf
-         prfeB9euPTKw5bWBCCZs7rheabu9XuKcNMF0SccaJr20UDeODSA7vtsnldSFrUGyRk9o
-         ivExC3KIN0IVqyowzKzIAx5T6mrjvChj0DBME2H974bkjhF6M0vMtheByPHPHvBLlmMC
-         QCg7WZ4hjMSchsxE7hLrAejGj5WBrx5x1eR5FjigTT4AXD8o6ASf0C6pqrBUjjHC4swJ
-         2k2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EoASACADHZW9hyAkhpjT8nEm+Pqkb+q7uqFEp3Yyy4g=;
-        b=S3WsoxL7261HKQLFyyc1IbaQos/nm+L2m9zBNrg1RBLNh8Bgh5tu5d+woijKZ0z+XB
-         q6PLr+6Zo7AFw7owk6Y+2jn1xFlOJHgHWb94xcp9T4QArMDtRBVAyYDNvORAdrlXLxtb
-         BPoKeImyg+LreiiXyYWZJcFiG2c1C06vbv/rLdsnLx/rEB1MF6wBXxmA/Qx4radCpKSr
-         cEbwW7qfQaO7dsNyL+1u7301TJpmyPQ6rIdBvvKYdMvRBkwqAo/ETc4do7Nq9lIgpQ6Z
-         RnhdntRxIcQ1yVATIDmY/gyt/9XbYUfA3W0dq+5J8On0ztWEHcJoscEoK6h6ZqpizYI4
-         s/+w==
-X-Gm-Message-State: AOAM530dvIknzMvyRhrMm5XHPFfmxiJyOZRxb1tBiHbuJzofEDexiLdE
-        eRXWo7S94Wwq2T/hZx4eC0E7oHSgt9dnbg==
-X-Google-Smtp-Source: ABdhPJzToD9wRtFK/uXqTbqi/27R8M++xbxydWgcHSeLIQpDQV794EcehSfpKCxAHG1AyE2aljqrwg==
-X-Received: by 2002:a17:90a:cf94:b0:1ca:9374:97fc with SMTP id i20-20020a17090acf9400b001ca937497fcmr910059pju.162.1649116597298;
-        Mon, 04 Apr 2022 16:56:37 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i7-20020a628707000000b004fa6eb33b02sm13157977pfe.49.2022.04.04.16.56.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Apr 2022 16:56:36 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, stable@vger.kernel.org
-Subject: [PATCH 3/6] io_uring: move read/write file prep state into actual opcode handler
-Date:   Mon,  4 Apr 2022 17:56:23 -0600
-Message-Id: <20220404235626.374753-4-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220404235626.374753-1-axboe@kernel.dk>
-References: <20220404235626.374753-1-axboe@kernel.dk>
+        with ESMTP id S230017AbiDEGAj (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Apr 2022 02:00:39 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414551658C
+        for <io-uring@vger.kernel.org>; Mon,  4 Apr 2022 22:58:39 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 1231868AFE; Tue,  5 Apr 2022 07:58:36 +0200 (CEST)
+Date:   Tue, 5 Apr 2022 07:58:35 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Kanchan Joshi <joshi.k@samsung.com>, axboe@kernel.dk,
+        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        ming.lei@redhat.com, mcgrof@kernel.org, pankydev8@gmail.com,
+        javier@javigon.com, joshiiitr@gmail.com, anuj20.g@samsung.com
+Subject: Re: [RFC 3/5] io_uring: add infra and support for
+ IORING_OP_URING_CMD
+Message-ID: <20220405055835.GC23698@lst.de>
+References: <20220401110310.611869-1-joshi.k@samsung.com> <CGME20220401110834epcas5p4d1e5e8d1beb1a6205d670bbcb932bf77@epcas5p4.samsung.com> <20220401110310.611869-4-joshi.k@samsung.com> <20220404071656.GC444@lst.de> <e039827d-ab7b-1791-d06c-a52ebc949de8@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <e039827d-ab7b-1791-d06c-a52ebc949de8@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-In preparation for not necessarily having a file assigned at prep time,
-defer any initialization associated with the file to when the opcode
-handler is run.
+On Mon, Apr 04, 2022 at 09:20:00AM +0100, Pavel Begunkov wrote:
+>> I'm still not a fund of the double indirect call here.  I don't really
+>> have a good idea yet, but I plan to look into it.
+>
+> I haven't familiarised myself with the series properly, but if it's about
+> driver_cb, we can expose struct io_kiocb and io_req_task_work_add() so
+> the lower layers can implement their own io_task_work.func. Hopefully, it
+> won't be inventively abused...
 
-Cc: stable@vger.kernel.org # v5.15+
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- fs/io_uring.c | 101 ++++++++++++++++++++++++++------------------------
- 1 file changed, 53 insertions(+), 48 deletions(-)
+If we move io_kiocb out avoiding one indirection would be very easy
+indeed.  But I think that just invites abuse.  Note that we also have
+at least one and potentially more indirections in this path.  The
+request rq_end_io handler is a guranteed one, and the IPI or softirq
+for the request indirectin is another one.  So my plan was to look
+into having an io_uring specific hook in the core block code to
+deliver completions directly to the right I/O uring thread.  In the
+best case that should allow us to do a single indirect call for
+the completion instead of 4 and a pointless IPI/softirq.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 0152ef49cf46..969f65de9972 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -592,7 +592,8 @@ struct io_rw {
- 	/* NOTE: kiocb has the file as the first member, so don't do it here */
- 	struct kiocb			kiocb;
- 	u64				addr;
--	u64				len;
-+	u32				len;
-+	u32				flags;
- };
- 
- struct io_connect {
-@@ -3178,42 +3179,11 @@ static inline bool io_file_supports_nowait(struct io_kiocb *req)
- 
- static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
--	struct io_ring_ctx *ctx = req->ctx;
- 	struct kiocb *kiocb = &req->rw.kiocb;
--	struct file *file = req->file;
- 	unsigned ioprio;
- 	int ret;
- 
--	if (!io_req_ffs_set(req))
--		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
--
- 	kiocb->ki_pos = READ_ONCE(sqe->off);
--	kiocb->ki_flags = iocb_flags(file);
--	ret = kiocb_set_rw_flags(kiocb, READ_ONCE(sqe->rw_flags));
--	if (unlikely(ret))
--		return ret;
--
--	/*
--	 * If the file is marked O_NONBLOCK, still allow retry for it if it
--	 * supports async. Otherwise it's impossible to use O_NONBLOCK files
--	 * reliably. If not, or it IOCB_NOWAIT is set, don't retry.
--	 */
--	if ((kiocb->ki_flags & IOCB_NOWAIT) ||
--	    ((file->f_flags & O_NONBLOCK) && !io_file_supports_nowait(req)))
--		req->flags |= REQ_F_NOWAIT;
--
--	if (ctx->flags & IORING_SETUP_IOPOLL) {
--		if (!(kiocb->ki_flags & IOCB_DIRECT) || !file->f_op->iopoll)
--			return -EOPNOTSUPP;
--
--		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
--		kiocb->ki_complete = io_complete_rw_iopoll;
--		req->iopoll_completed = 0;
--	} else {
--		if (kiocb->ki_flags & IOCB_HIPRI)
--			return -EINVAL;
--		kiocb->ki_complete = io_complete_rw;
--	}
- 
- 	ioprio = READ_ONCE(sqe->ioprio);
- 	if (ioprio) {
-@@ -3229,6 +3199,7 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	req->imu = NULL;
- 	req->rw.addr = READ_ONCE(sqe->addr);
- 	req->rw.len = READ_ONCE(sqe->len);
-+	req->rw.flags = READ_ONCE(sqe->rw_flags);
- 	req->buf_index = READ_ONCE(sqe->buf_index);
- 	return 0;
- }
-@@ -3732,13 +3703,6 @@ static inline int io_rw_prep_async(struct io_kiocb *req, int rw)
- 	return 0;
- }
- 
--static int io_read_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
--{
--	if (unlikely(!(req->file->f_mode & FMODE_READ)))
--		return -EBADF;
--	return io_prep_rw(req, sqe);
--}
--
- /*
-  * This is our waitqueue callback handler, registered through __folio_lock_async()
-  * when we initially tried to do the IO with the iocb armed our waitqueue.
-@@ -3826,6 +3790,49 @@ static bool need_read_all(struct io_kiocb *req)
- 		S_ISBLK(file_inode(req->file)->i_mode);
- }
- 
-+static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
-+{
-+	struct kiocb *kiocb = &req->rw.kiocb;
-+	struct io_ring_ctx *ctx = req->ctx;
-+	struct file *file = req->file;
-+	int ret;
-+
-+	if (unlikely(!file || !(file->f_mode & mode)))
-+		return -EBADF;
-+
-+	if (!io_req_ffs_set(req))
-+		req->flags |= io_file_get_flags(file) << REQ_F_SUPPORT_NOWAIT_BIT;
-+
-+	kiocb->ki_flags = iocb_flags(file);
-+	ret = kiocb_set_rw_flags(kiocb, req->rw.flags);
-+	if (unlikely(ret))
-+		return ret;
-+
-+	/*
-+	 * If the file is marked O_NONBLOCK, still allow retry for it if it
-+	 * supports async. Otherwise it's impossible to use O_NONBLOCK files
-+	 * reliably. If not, or it IOCB_NOWAIT is set, don't retry.
-+	 */
-+	if ((kiocb->ki_flags & IOCB_NOWAIT) ||
-+	    ((file->f_flags & O_NONBLOCK) && !io_file_supports_nowait(req)))
-+		req->flags |= REQ_F_NOWAIT;
-+
-+	if (ctx->flags & IORING_SETUP_IOPOLL) {
-+		if (!(kiocb->ki_flags & IOCB_DIRECT) || !file->f_op->iopoll)
-+			return -EOPNOTSUPP;
-+
-+		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
-+		kiocb->ki_complete = io_complete_rw_iopoll;
-+		req->iopoll_completed = 0;
-+	} else {
-+		if (kiocb->ki_flags & IOCB_HIPRI)
-+			return -EINVAL;
-+		kiocb->ki_complete = io_complete_rw;
-+	}
-+
-+	return 0;
-+}
-+
- static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_rw_state __s, *s = &__s;
-@@ -3861,6 +3868,9 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 		iov_iter_restore(&s->iter, &s->iter_state);
- 		iovec = NULL;
- 	}
-+	ret = io_rw_init_file(req, FMODE_READ);
-+	if (unlikely(ret))
-+		return ret;
- 	req->result = iov_iter_count(&s->iter);
- 
- 	if (force_nonblock) {
-@@ -3964,13 +3974,6 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 	return 0;
- }
- 
--static int io_write_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
--{
--	if (unlikely(!(req->file->f_mode & FMODE_WRITE)))
--		return -EBADF;
--	return io_prep_rw(req, sqe);
--}
--
- static int io_write(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_rw_state __s, *s = &__s;
-@@ -3991,6 +3994,9 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
- 		iov_iter_restore(&s->iter, &s->iter_state);
- 		iovec = NULL;
- 	}
-+	ret = io_rw_init_file(req, FMODE_WRITE);
-+	if (unlikely(ret))
-+		return ret;
- 	req->result = iov_iter_count(&s->iter);
- 
- 	if (force_nonblock) {
-@@ -6987,11 +6993,10 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	case IORING_OP_READV:
- 	case IORING_OP_READ_FIXED:
- 	case IORING_OP_READ:
--		return io_read_prep(req, sqe);
- 	case IORING_OP_WRITEV:
- 	case IORING_OP_WRITE_FIXED:
- 	case IORING_OP_WRITE:
--		return io_write_prep(req, sqe);
-+		return io_prep_rw(req, sqe);
- 	case IORING_OP_POLL_ADD:
- 		return io_poll_add_prep(req, sqe);
- 	case IORING_OP_POLL_REMOVE:
--- 
-2.35.1
+>>> +	struct io_kiocb *req = container_of(ioucmd, struct io_kiocb, uring_cmd);
+>>> +
+>>> +	if (ret < 0)
+>>> +		req_set_fail(req);
+>>> +	io_req_complete(req, ret);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(io_uring_cmd_done);
+>>
+>> It seems like all callers of io_req_complete actually call req_set_fail
+>> on failure.  So maybe it would be nice pre-cleanup to handle the
+>> req_set_fail call from ĩo_req_complete?
+>
+> Interpretation of the result is different, e.g. io_tee(), that was the
+> reason it was left in the callers.
 
+Yes, there is about two of them that would then need to be open coded
+using __io_req_complete.
+
+>
+> [...]
+>>> @@ -60,7 +62,10 @@ struct io_uring_sqe {
+>>>   		__s32	splice_fd_in;
+>>>   		__u32	file_index;
+>>>   	};
+>>> -	__u64	__pad2[2];
+>>> +	union {
+>>> +		__u64	__pad2[2];
+>>> +		__u64	cmd;
+>>> +	};
+>>
+>> Can someone explain these changes to me a little more?
+>
+> not required indeed, just
+>
+> -	__u64	__pad2[2];
+> +	__u64	cmd;
+> +	__u64	__pad2;
+
+Do we still want a union for cmd and document it to say what
+opcode it is for?
