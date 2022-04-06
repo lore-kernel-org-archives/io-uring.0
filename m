@@ -2,79 +2,53 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B71BC433EF
-	for <io-uring@archiver.kernel.org>; Wed,  6 Apr 2022 02:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 419FCC433F5
+	for <io-uring@archiver.kernel.org>; Wed,  6 Apr 2022 07:03:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1443843AbiDFCVI (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 5 Apr 2022 22:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
+        id S229513AbiDFHE6 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 6 Apr 2022 03:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457317AbiDEQDF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Apr 2022 12:03:05 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE24BCA3
-        for <io-uring@vger.kernel.org>; Tue,  5 Apr 2022 08:37:41 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id k10so13818619oia.0
-        for <io-uring@vger.kernel.org>; Tue, 05 Apr 2022 08:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lWlq9ObQo4afnrXzQf/uD0TPv521LBO3Zl1osjpId+M=;
-        b=f9t+P/0nnhMmwaImxBnMDduZ729xpNc/xBpvNileyrBxML8g4Moo3kndoU5jpmb2a5
-         4fh5FoXwB7HD6uwV93e9N9r1wH5Jy0DdigdXnGrlFvHn7O/9E/dOvkSflgR1rMwwflFj
-         mD8VWY4BqPEKWEOitvCFG9m9aoNlRuZ1vcwC04WwCwyrwFUAGRQr2YNEJy6tdmzbbkvn
-         QrUKWj8qc6TTnXw8HSOEaEN98XpplACtEKRh/Jf3TR52nfTuqcpr+WLfpiRHDzEvsYKX
-         wtpG0L/MTzDys2y/bE46rldPEvoDPMcHP0skYAdlheG8AgmWPQyhy5/zgWiTQofyT+9v
-         VGwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lWlq9ObQo4afnrXzQf/uD0TPv521LBO3Zl1osjpId+M=;
-        b=o12I8U0IfhJhqLKt4WoAZCpRHi6gD3q5eG5YJbJ9YormgczM/2IlI4eibO7QXvBRP2
-         pbUXDNMdZWaNe85TXwuRg+GoPyXndnl1ZzouvQHdz5asR8FqJ4ENYiS2LGVD+Wj+JhSx
-         gZWDS8ZwKzT18ilwac9wZQWFuB2dkcgrt6KqGEHLFoHhH1PRD2qSj4qpUamySQbQqiy/
-         FS8fTUbmOUD794sWcN+woFttSwdMSc5jXS/KEp/PmjId1QEk3sy+wsQFab7GJs+KIILs
-         527Nl3UDHFgMexxQeZQJNwf8YZ3o0PhZiv1AAYeVnVytus31wiQ3prR5PRXV7T00O/79
-         IGNQ==
-X-Gm-Message-State: AOAM5316Ee3ceNujSzohTAcKccj8AdKGS7HiYjl1uP2rZNuVgAMZ6AKE
-        vCDecEDH2MMPZthyJERCSjmKxrkQOc+dTwypAqs=
-X-Google-Smtp-Source: ABdhPJyOL6K6/rY7/NDmVIcAfJC8BhiebWpoBwDifTDaHUjUpPI1/7KVLBonGcmGfLfXSSX6WKnLdXdduFVvCgpq4us=
-X-Received: by 2002:a05:6808:17a2:b0:2f9:27da:923e with SMTP id
- bg34-20020a05680817a200b002f927da923emr1673063oib.15.1649173061240; Tue, 05
- Apr 2022 08:37:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <CGME20220401110829epcas5p39f3cf4d3f6eb8a5c59794787a2b72b15@epcas5p3.samsung.com>
- <20220401110310.611869-1-joshi.k@samsung.com> <20220404072152.GE444@lst.de>
-In-Reply-To: <20220404072152.GE444@lst.de>
-From:   Kanchan Joshi <joshiiitr@gmail.com>
-Date:   Tue, 5 Apr 2022 21:07:15 +0530
-Message-ID: <CA+1E3rJhw4gL_z8hk7a-4wuZ4a8C-_V8V8dX0c17ivOW2VEt=w@mail.gmail.com>
-Subject: Re: [RFC 0/5] big-cqe based uring-passthru
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Kanchan Joshi <joshi.k@samsung.com>, Jens Axboe <axboe@kernel.dk>,
-        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        with ESMTP id S230201AbiDFGXc (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 6 Apr 2022 02:23:32 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123E81D4C2E
+        for <io-uring@vger.kernel.org>; Tue,  5 Apr 2022 22:23:33 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 3389D68AFE; Wed,  6 Apr 2022 07:23:30 +0200 (CEST)
+Date:   Wed, 6 Apr 2022 07:23:30 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Kanchan Joshi <joshiiitr@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-nvme@lists.infradead.org,
         Pavel Begunkov <asml.silence@gmail.com>,
         Ming Lei <ming.lei@redhat.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Pankaj Raghav <pankydev8@gmail.com>,
-        =?UTF-8?Q?Javier_Gonz=C3=A1lez?= <javier@javigon.com>,
+        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier@javigon.com>,
         Anuj Gupta <anuj20.g@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC 5/5] nvme: wire-up support for async-passthru on
+ char-device.
+Message-ID: <20220406052330.GA10320@lst.de>
+References: <20220401110310.611869-1-joshi.k@samsung.com> <CGME20220401110838epcas5p2c1a2e776923dfe5bf65a3e7946820150@epcas5p2.samsung.com> <20220401110310.611869-6-joshi.k@samsung.com> <20220404072016.GD444@lst.de> <CA+1E3rJ+iWAhUVzVrRDiFTUmp5sNF7wqw_7oVqru2qLCTBQrqQ@mail.gmail.com> <20220405060224.GE23698@lst.de> <CA+1E3rJXrUnmc08Zy3yO=0mGJv1q0CaJez4eUDnTpaJcSh_1FQ@mail.gmail.com> <CA+1E3rK3EzyNVwPEuR3tJfRGvScwwrDhxAc9zs=a5XMc9trpmg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+1E3rK3EzyNVwPEuR3tJfRGvScwwrDhxAc9zs=a5XMc9trpmg@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Mon, Apr 4, 2022 at 12:51 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> I really can't get excited about the pdu thingy.  Here is a patch
-> (on top of the series and the patch sent in reply to patch 4) that
-> does away with it and just adds a oob_user field to struct io_uring_cmd
-> to simplify the handling a fair bit:
+On Wed, Apr 06, 2022 at 10:50:14AM +0530, Kanchan Joshi wrote:
+> > > Also I think we'll want admin command passthrough on /dev/nvmeX as
+> > > well, but I'm fine solving the other items first.
+> 
+> Sure, will add that in the second round. Should be fairly simple as we
+> can reuse io-command work anyway.
 
-Fine. We discussed the tradeoff before, and the concern was
-generic-space reduction for other use-cases.
-But this is kernel-only change, so we can alter this if/when a new
-usecase requires more space.
-It seems fine to move ahead with what you proposed.
+Yes, I don't think it is a priority right now.  And I'm actually glad
+you did this simple version first as that allows us to get the basics
+right first.
