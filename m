@@ -2,73 +2,95 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3ADCBC433EF
-	for <io-uring@archiver.kernel.org>; Wed,  6 Apr 2022 15:01:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 258ECC433F5
+	for <io-uring@archiver.kernel.org>; Wed,  6 Apr 2022 15:01:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235075AbiDFPDk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 6 Apr 2022 11:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S235205AbiDFPDo (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 6 Apr 2022 11:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235522AbiDFPCE (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 6 Apr 2022 11:02:04 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17EB440995
-        for <io-uring@vger.kernel.org>; Wed,  6 Apr 2022 04:46:32 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id qh7so3632689ejb.11
-        for <io-uring@vger.kernel.org>; Wed, 06 Apr 2022 04:46:32 -0700 (PDT)
+        with ESMTP id S235481AbiDFPCA (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 6 Apr 2022 11:02:00 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3ECDBF334
+        for <io-uring@vger.kernel.org>; Wed,  6 Apr 2022 04:46:22 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id k2so2256003edj.9
+        for <io-uring@vger.kernel.org>; Wed, 06 Apr 2022 04:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7EnWsYh+GG5QtxkKN99iIFPvX/U3/6Glev7OQSQj/rs=;
-        b=CcM8Bpg5wQAWXICPR6hGhag5R9m6GUt7VKgANQkRZ2r/WCXDamiUkP5JbmSTqU4bvF
-         8YD5XddJVeuixr2YW2PjT8Pcj6/7dYvGwWYQzjDlMbghYyGwZn2rItJqEGG4N7B0YLb8
-         r6mpBGz9Hp6O/06xgZXTXAN0sGqlImEeTRfRQby7IcrJZwz1eWNmj1kNvxUQ3V+o78VC
-         3oEOh1/9PHgKlPL//cmXXZ4llzbw6NZI3QgJGGoQUEOW00WGylS36EaqT6fGpz8pNCp6
-         Jm/wVW0bkKexnDvR3Fx7vDAVyl/2kzmwfw+3V7eDFdsgRaM756GNOPYtfqsCf6I7dtEb
-         gOAw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=J+/2Fjg9v+C27nvWBCqhNWd2OflMkdZna9b2IQzXbik=;
+        b=kg+Xf3pok9FW9yq63N2Subcjytrz88TicML7GUoToBHg2e1Dl4dmsMXh+pkr4trt/0
+         ASJK7buPmfzC7wXd2eVtvJqEGzY1GR1m/PBixXUwg53BZ6cJ9LMWxA8A60yj677WWUEt
+         vxrbuvkVGiw285LReA2cqUyFrUznpZi4n1UJQXiW7OAajOA4fBv9pXfNY/jF9UJauyhT
+         gN6sckUAfNV1AFfpOFA4v/cwGMjnQIcDxtQ+5HF+OMFDuX+1Xe0RUzKwfxz1IwlvnQXn
+         Ul1GueKTwuE/cXJ+OPwuy5UmToiGhHVpw8rrJua+2VH5uz8wLkc5UkjuXo648mlu/2+H
+         Yx+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=7EnWsYh+GG5QtxkKN99iIFPvX/U3/6Glev7OQSQj/rs=;
-        b=Kyx3zhBFG0OQKVwM9pCqt4Usm4NzPEFEQR2Zwh7aFQ1bsSrPT7IckAZN465Q6wGc9S
-         q7CHMw+ege1GS7joleIDiy1zTgEfeO5s9JRIfUTIDOpSAZzGuSk/UDzFqnKfKHxSJkfz
-         mSkxRuhRaHnrPJu9vGfdmDCh3RSHqpsyWrQKygA0xb9b0Wldwqxd7D6wGWc0+rnI9iHy
-         67r+TRd/qfix+sXe0HWYzBlvQQjU03DwsEX1qVkJo9MOvwjbHKM3pYJQWkL7inUE0+C9
-         +8MgyhX2B5lpYFJGuvCKJ96pAFo2+QWkhtg7nviLv2yxDUWTV5LGuIGLVfsTz75H60Xl
-         5E7w==
-X-Gm-Message-State: AOAM531rKFJ6AB+rJIthBZNUP+JBGFAoWM0ogAnSnQlnKkbExTkK/ZBk
-        osZYxof1/MZjGqV/EFb91NIvtVuI4R8=
-X-Google-Smtp-Source: ABdhPJxEbR9r4Onsj/FRCnOKShAdRyaO+0B8YqOaywjeoNf5utl/U++97fvmN3MHFtJz+CRErze6DA==
-X-Received: by 2002:a17:907:9718:b0:6e0:6faa:3aa with SMTP id jg24-20020a170907971800b006e06faa03aamr7970701ejc.307.1649245529873;
-        Wed, 06 Apr 2022 04:45:29 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=J+/2Fjg9v+C27nvWBCqhNWd2OflMkdZna9b2IQzXbik=;
+        b=G9ItwyE1ifxhExW3g05jAM4geL9GIpLme2RIEA/kiNtbvnKEr2CpUqJrLDW61YRCUp
+         ZOvYn+rZDjLz+Dwo3Hv8WFapq0f0UDbl+NtPoQ6jK5//dL4NpOJfyI68E1be3lTwVT96
+         DAl8E6id6VW2+QtTMFbgYr3tc/KvJo+b3qIw6Em7TmUiqbbJL52EH8M2ctFpLSTDULA8
+         R1A/fZFKrCAm6CUI1y79Vm7BeSmw6dRoaRR8dEkndbAHUzPVd/QWUUrFOBZ2HIzxOyeT
+         y7Ypik1YA9r4/MWHjMgmLFftN8MT5vhl8ZrV2LQLQV1I1ULZAMxBoqa9Ompj9Uvkhlfx
+         jdhA==
+X-Gm-Message-State: AOAM532GKDCM75wbji3d3ivaaoJtr3MQ13KfGvqJpGvsdUCpMApyZH7X
+        ghV7IG5eaZ9vCa2nxauniHSrtYj9fsM=
+X-Google-Smtp-Source: ABdhPJx7xFZQPLYYsp+LxsnuvovsVnA0IqbVC/Qw1Csg2v4SU+iJP+e/ZlT1aGupurRRf3IXky8LDQ==
+X-Received: by 2002:aa7:d0cc:0:b0:41c:b59c:c461 with SMTP id u12-20020aa7d0cc000000b0041cb59cc461mr8307255edo.285.1649245532139;
+        Wed, 06 Apr 2022 04:45:32 -0700 (PDT)
 Received: from 127.0.0.1localhost ([148.252.129.65])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906521000b006d58773e992sm6506022ejm.188.2022.04.06.04.45.29
+        by smtp.gmail.com with ESMTPSA id g16-20020a170906521000b006d58773e992sm6506022ejm.188.2022.04.06.04.45.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 04:45:29 -0700 (PDT)
+        Wed, 06 Apr 2022 04:45:31 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH 0/2] io_uring resource handling fixes
-Date:   Wed,  6 Apr 2022 12:43:56 +0100
-Message-Id: <cover.1649245017.git.asml.silence@gmail.com>
+Subject: [PATCH 2/2] io_uring: don't touch scm_fp_list after queueing skb
+Date:   Wed,  6 Apr 2022 12:43:58 +0100
+Message-Id: <28279689e4f94cf513d416287ee0b2faec5493b8.1649245017.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1649245017.git.asml.silence@gmail.com>
+References: <cover.1649245017.git.asml.silence@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Two small fixes for rsrc infrastructure
+It's safer to not touch scm_fp_list after we queued an skb to which it
+was assigned, there might be races lurking if we screw subtle sync
+guarantees on the io_uring side.
 
-Pavel Begunkov (2):
-  io_uring: nospec index for tags on files update
-  io_uring: don't touch scm_fp_list after queueing skb
+Fixes: 6b06314c47e14 ("io_uring: add file set registration")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ fs/io_uring.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
- fs/io_uring.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 449d4ea419cb..481e12115dbb 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -8831,8 +8831,12 @@ static int __io_sqe_files_scm(struct io_ring_ctx *ctx, int nr, int offset)
+ 		refcount_add(skb->truesize, &sk->sk_wmem_alloc);
+ 		skb_queue_head(&sk->sk_receive_queue, skb);
+ 
+-		for (i = 0; i < nr_files; i++)
+-			fput(fpl->fp[i]);
++		for (i = 0; i < nr; i++) {
++			struct file *file = io_file_from_index(ctx, i + offset);
++
++			if (file)
++				fput(file);
++		}
+ 	} else {
+ 		kfree_skb(skb);
+ 		free_uid(fpl->user);
 -- 
 2.35.1
 
