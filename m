@@ -2,82 +2,152 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B00EBC433F5
-	for <io-uring@archiver.kernel.org>; Wed,  6 Apr 2022 22:41:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5B45C433EF
+	for <io-uring@archiver.kernel.org>; Thu,  7 Apr 2022 12:40:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237237AbiDFWnu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 6 Apr 2022 18:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S245331AbiDGMmx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 7 Apr 2022 08:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237167AbiDFWnj (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 6 Apr 2022 18:43:39 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E2FDE908
-        for <io-uring@vger.kernel.org>; Wed,  6 Apr 2022 15:41:39 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id b15so3805585pfm.5
-        for <io-uring@vger.kernel.org>; Wed, 06 Apr 2022 15:41:39 -0700 (PDT)
+        with ESMTP id S245381AbiDGMmp (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 7 Apr 2022 08:42:45 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE128E0C
+        for <io-uring@vger.kernel.org>; Thu,  7 Apr 2022 05:40:45 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id z1so7682317wrg.4
+        for <io-uring@vger.kernel.org>; Thu, 07 Apr 2022 05:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:in-reply-to:references:subject:message-id:date:mime-version
-         :content-transfer-encoding;
-        bh=R93xP7tO35PFBvfj3CpxpHpHaRdOFepTciyjhwYRnC4=;
-        b=KYT0vGo7C5lugAwEerKSmHvWvz9zruQHKfs+VgqKcZEAxE5NUPhiqVmvTMY4XpyTqA
-         KzAxkhGeNK6grMuzIdMQNB306lMI+bz5gy23aoab+VRfmIXa7gbZJc3cJcXWqPckXgSZ
-         lpVAEmN1SdMZQDvDjBdtb2+L07fjh6Mp0ORhcgzc1oeGVm0DmfE8E9rXZtKDbOPly4R8
-         yV2u1EYK1E8NWck3H95ji77Qg37QXQfDKWPmKH307xT/zEWSCITrH3PyLrJb/0oiIol8
-         93vRVybdLJe04w7VQS0DHXkBTVycSQm3FmvJjnaSgAkGBOzeDjd9IGdYUslHWc1G+KCU
-         HkQA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vOZO7W70b0lNVASaaHoHwDGmNiTzq7pmBWA6lAwShus=;
+        b=dQk9WD14bc615LDFg/XmiuDY8rv3cOgN0TyGkyGFt+WVHnYcln/fx0eg9V0SkiFJf8
+         PDZpb7Cl+XPMd+8kic2yQM1s/4/jxByd7rUG0aXMpuvEqE9eu6K2NpUgA7OthxP6+jDS
+         f34I4wPf7P6kwvRGqzC5k/gRYKb6ObI7pLIq9VWpxKFkujFZspa3kx+TKxjjHkfWWCMv
+         D0k9lE5MMPZH2XJ0UDPImSzKUngtiHNVBqgN8KqwaF5WFEo4R6LwRck/A9IFCSP+pzYo
+         MhSbxGbIeO5a7ZuU+pzhX/Y1op2eweDzxrEe8M/Ep0TTA4JI6cacuCRrwJCT+v3SWzGr
+         Wa9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=R93xP7tO35PFBvfj3CpxpHpHaRdOFepTciyjhwYRnC4=;
-        b=avTNzjyR9u72Ed5+WzEAK192ZKFq5eWlgQw4D1wkaF+5LfExQhgDVExZLkgQlCvgJl
-         MYIeDrqBAPUHq4plK0Hn200GUDtNORH8CY+VQbOtCBC2Q4RFKC5lA5i7AgJ5zMwivKlZ
-         +PUY8S8z+0enyixiTWh8dQQiMR8Y3kQqLVfI5cqiR9X0NjNM9qLXLq4gMibTdQTNYeMF
-         JAoH4AK8sAKzfao8rFGRDx2LjJI/6x01nxuC3xtYHhufrsVuEAUUnpwNULXuoPP0D8FK
-         Ksmdzx2iHgYElopDWBXqViGfXGEE/I/3EPqG3AEDm5jHR1+u4EAZAU8etK5JTxnNyjIU
-         A3cg==
-X-Gm-Message-State: AOAM533KxQ/QhvXcKoAxD7xSq87Aawwpgq1bjnpbFC8xbUGh9k6y2CWH
-        n9Q+6MHMXh4AodzBXTS+RT68AOsIfP8yzQ==
-X-Google-Smtp-Source: ABdhPJzfRS+9GngQs574q7lBxF87wpdbqV9zzBiwjMb37U7klXYkTkxKNvgUtA0iWOpwfnPXcq5EEg==
-X-Received: by 2002:a05:6a00:198c:b0:4fa:c717:9424 with SMTP id d12-20020a056a00198c00b004fac7179424mr10798899pfl.63.1649284898727;
-        Wed, 06 Apr 2022 15:41:38 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id h13-20020a056a00170d00b004fb1450229bsm21948884pfc.16.2022.04.06.15.41.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vOZO7W70b0lNVASaaHoHwDGmNiTzq7pmBWA6lAwShus=;
+        b=RPC3fpqgOh25hNlhqxkuJctKME5oKW9U7No49DBSiF4nxlyiovJsBPb/Bt9K9yXDCM
+         B852D2VlmGHorzp2Iyp2AiX7APx5vEiaXBgvKGLMKZQifLMhl0tcl/0LV933bQbDKYoz
+         hyRRzuCBVyGv8+r+3XizQBd2BVngKXlRQGKyhD6qKWEN2ho08U4FOrDjBlrNAD7gB63V
+         DuxBzwCqUrj5nkDP8kiGWfJHscw/33ijbj0TA3wH9AfELs/nRN9y9BW7Jwa0Vnh77sZL
+         Iqh+5k1j8M44Rc4pYnbcIgCYYhMekNA13mDcHRVhdyAQkEY6NMKkyIXShRGz1Zz1p7XT
+         9lfw==
+X-Gm-Message-State: AOAM532jxJG8gqzDjBLeUAHHvvCfe6tGNgv6bXhN53Yis3mP9n8OV5cZ
+        vVNJk+WKTeRgz7tx03Ffxlpz8Kr+CbQ=
+X-Google-Smtp-Source: ABdhPJwI78qJ9P0vCN/K2m9v5+vU5iXof7L8KM3OJa8M/N4r6a5Np/yQLSc18kWY9dh5DeXJ4T2AIA==
+X-Received: by 2002:a5d:528b:0:b0:203:d928:834c with SMTP id c11-20020a5d528b000000b00203d928834cmr11040637wrv.500.1649335243835;
+        Thu, 07 Apr 2022 05:40:43 -0700 (PDT)
+Received: from 127.0.0.1localhost ([85.255.237.149])
+        by smtp.gmail.com with ESMTPSA id c11-20020a05600c0a4b00b0037c91e085ddsm9354781wmq.40.2022.04.07.05.40.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Apr 2022 15:41:38 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, asml.silence@gmail.com
-In-Reply-To: <9c44ecf6e89d69130a8c4360cce2183ffc5ddd6f.1649277098.git.asml.silence@gmail.com>
-References: <9c44ecf6e89d69130a8c4360cce2183ffc5ddd6f.1649277098.git.asml.silence@gmail.com>
-Subject: Re: [PATCH 1/1] io_uring: don't scm-account for non af_unix sockets
-Message-Id: <164928489789.13740.14903089053110765479.b4-ty@kernel.dk>
-Date:   Wed, 06 Apr 2022 16:41:37 -0600
+        Thu, 07 Apr 2022 05:40:43 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
+Subject: [PATCH 2/5] io_uring: refactor __io_sqe_files_scm
+Date:   Thu,  7 Apr 2022 13:40:02 +0100
+Message-Id: <66b492bc66dc8356d45d64076bb31d677d11a7c9.1649334991.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <cover.1649334991.git.asml.silence@gmail.com>
+References: <cover.1649334991.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Wed, 6 Apr 2022 21:33:56 +0100, Pavel Begunkov wrote:
-> io_uring deals with file reference loops by registering all fixed files
-> in the SCM/GC infrastrucure. However, only a small subset of all file
-> types can keep long-term references to other files and those that don't
-> are not interesting for the garbage collector as they can't be in a
-> reference loop. They neither can be directly recycled by GC nor affect
-> loop searching.
-> 
-> [...]
+__io_sqe_files_scm() is now called only from one place passing a single
+file, so nr argument can be killed and __io_sqe_files_scm() simplified.
 
-Applied, thanks!
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ fs/io_uring.c | 48 +++++++++++++-----------------------------------
+ 1 file changed, 13 insertions(+), 35 deletions(-)
 
-[1/1] io_uring: don't scm-account for non af_unix sockets
-      commit: 181440ea22d834719489d2a33289f2834a333687
-
-Best regards,
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 6212a37eadc7..582f402441ae 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -8597,12 +8597,12 @@ static struct io_sq_data *io_get_sq_data(struct io_uring_params *p,
+  * files because otherwise they can't form a loop and so are not interesting
+  * for GC.
+  */
+-static int __io_sqe_files_scm(struct io_ring_ctx *ctx, int nr, int offset)
++static int __io_sqe_files_scm(struct io_ring_ctx *ctx, int offset)
+ {
++	struct file *file = io_file_from_index(ctx, offset);
+ 	struct sock *sk = ctx->ring_sock->sk;
+ 	struct scm_fp_list *fpl;
+ 	struct sk_buff *skb;
+-	int i, nr_files;
+ 
+ 	fpl = kzalloc(sizeof(*fpl), GFP_KERNEL);
+ 	if (!fpl)
+@@ -8616,39 +8616,17 @@ static int __io_sqe_files_scm(struct io_ring_ctx *ctx, int nr, int offset)
+ 
+ 	skb->sk = sk;
+ 
+-	nr_files = 0;
+ 	fpl->user = get_uid(current_user());
+-	for (i = 0; i < nr; i++) {
+-		struct file *file = io_file_from_index(ctx, i + offset);
+-
+-		if (!file || !io_file_need_scm(file))
+-			continue;
+-
+-		fpl->fp[nr_files] = get_file(file);
+-		unix_inflight(fpl->user, fpl->fp[nr_files]);
+-		nr_files++;
+-	}
+-
+-	if (nr_files) {
+-		fpl->max = SCM_MAX_FD;
+-		fpl->count = nr_files;
+-		UNIXCB(skb).fp = fpl;
+-		skb->destructor = unix_destruct_scm;
+-		refcount_add(skb->truesize, &sk->sk_wmem_alloc);
+-		skb_queue_head(&sk->sk_receive_queue, skb);
+-
+-		for (i = 0; i < nr; i++) {
+-			struct file *file = io_file_from_index(ctx, i + offset);
+-
+-			if (file && io_file_need_scm(file))
+-				fput(file);
+-		}
+-	} else {
+-		kfree_skb(skb);
+-		free_uid(fpl->user);
+-		kfree(fpl);
+-	}
+-
++	fpl->fp[0] = get_file(file);
++	unix_inflight(fpl->user, file);
++
++	fpl->max = SCM_MAX_FD;
++	fpl->count = 1;
++	UNIXCB(skb).fp = fpl;
++	skb->destructor = unix_destruct_scm;
++	refcount_add(skb->truesize, &sk->sk_wmem_alloc);
++	skb_queue_head(&sk->sk_receive_queue, skb);
++	fput(file);
+ 	return 0;
+ }
+ #endif
+@@ -8892,7 +8870,7 @@ static int io_sqe_file_register(struct io_ring_ctx *ctx, struct file *file,
+ 		return 0;
+ 	}
+ 
+-	return __io_sqe_files_scm(ctx, 1, index);
++	return __io_sqe_files_scm(ctx, index);
+ #else
+ 	return 0;
+ #endif
 -- 
-Jens Axboe
-
+2.35.1
 
