@@ -2,76 +2,217 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EDB1C433EF
-	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 21:02:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB401C433F5
+	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 21:03:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiDLVEc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 12 Apr 2022 17:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S231169AbiDLVFt (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 12 Apr 2022 17:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiDLVEb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 17:04:31 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B96C74A5
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:51:57 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id d4so13736215iln.6
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:51:57 -0700 (PDT)
+        with ESMTP id S229436AbiDLVFs (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 17:05:48 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2851A14AC92
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:53:06 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id r7so3366401iln.9
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:53:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language
-         :from:to:references:in-reply-to:content-transfer-encoding;
-        bh=wNFXZNvtZrO4vgUMc2PIOKPvuUiEoHIlqJ6c5ytJTuc=;
-        b=myA1F9+f2vjrjABMrrRh9Tw7a3g6BpkwCtwdLC/At406tw47dq2guHA5AlPzh5wBxj
-         6mjd+tUBlUuFbTJua7gWGo778HzEfNWwML+StNMHUbWxy9abGPUz2ZY5vb4y5JsqVnNN
-         2eSCf47NiT3sTJ1INKPuxEstbxgP4jGvO3dQuCRs/A+pGNxDDAAmvimU9d7TsxWo8H0u
-         MsA+3taxNzGGdq4bBNPOfdZ8psvwUJI/IBQ4oKM1twSUmOwnS9RZTg2z+RCdm/FjaAzt
-         seubmrJCK35YcRSKrcrFZ5fylFhKlO7FxsP/AvFzj1Zd9TgRiM7rl7MYrfWKPXZDKw41
-         XPNg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=USVVp1hK54jHeAqy/lUDZNBBqIJDjeW4jtH5P9usO7U=;
+        b=y6SpbqynDTaeScwaA/pU4EiSBCsWW1ugzYwUe4tqzVe54p7UUY4mhgVu/f+YAD+aXQ
+         auIZkr4d4IaK9QvuvJnbmGI3LhqEgPs3zXgNGB6Ez/I2HEfs/1aBtEm60n0mfFHHpLhM
+         Qr6NBj5R5o+fXOYioZH8ftLvqyBP18neW2Ft36Dd7fmdMjOk4/rzO0uHL8i2zl/QQaH7
+         w48bR8xtnKqv72A8c2BP9hUZE2/ULfJpNcaYWOSJ6ansrjiPfMfVwEWPoqccknekRz8D
+         xC41IkSmvqrxCGybigZReEGn7sDieG5qXnq8UFwFrq0T3NJIWQ4DGV29L6QymKN3ZclO
+         eAsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:from:to:references:in-reply-to
-         :content-transfer-encoding;
-        bh=wNFXZNvtZrO4vgUMc2PIOKPvuUiEoHIlqJ6c5ytJTuc=;
-        b=HhqBuFyHFjnf7hYVWouvMz/2QIlKQQaPdZ7/adC8NDLH9HgWcWUKskBUdOnPblEtw9
-         osxpH7lOwfOEVBcOpTQMDOubnr6m00OjILF2mqxLCCcOtRmcif46ftldV1sXquUcMecP
-         9oBOSx5hU+R1rTIxIEoqwTqnRfMGLwUYcXrRTHMocylN6QETg6ZZfHFi6Aq95MFIYjxY
-         XMY2heeC0pNZLeGqlTeouDR/8S/UvMIISOgnUnB0VVEtqoGrX4PfxetcBltCENuFjrYE
-         KU7sqPCEd1Bg6puX0LQEx5ovWrehOJRt3B5xocGB2ZAS7zt3E7hbWvzi3F1fsV+xrncB
-         elvw==
-X-Gm-Message-State: AOAM5303pdLLUUA+3NILiuVE6/TyeV8CS6IdFb1+1usw7APZT/l+tWvS
-        ovafyWPSAqgC4FrXw8O6MEEmnjBhuXmV5M3j
-X-Google-Smtp-Source: ABdhPJz4ALzXmiZKdQU5EH7K9eSMeLO10tZCOYs+tD+QzfCosujGEd6CJcLyh90uv9eIlUdjM+8OpQ==
-X-Received: by 2002:a63:35c1:0:b0:386:3620:3c80 with SMTP id c184-20020a6335c1000000b0038636203c80mr31823394pga.327.1649795927348;
-        Tue, 12 Apr 2022 13:38:47 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g14-20020a65580e000000b0039ce0873289sm3660752pgr.84.2022.04.12.13.38.46
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Apr 2022 13:38:46 -0700 (PDT)
-Message-ID: <a9e32c3e-3f81-5e8e-8a03-3a1f91988a46@kernel.dk>
-Date:   Tue, 12 Apr 2022 14:38:46 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] io_uring: allow direct descriptors for connect
-Content-Language: en-US
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=USVVp1hK54jHeAqy/lUDZNBBqIJDjeW4jtH5P9usO7U=;
+        b=L8rrroaFHHXC/XlhuDs3jz7y8LmfX5uLWjxovxaZ+iXlhrHfk+pLo6QNyu/CHTYNLg
+         q+9PmtT1qXVtU5OIOdzQPbE3MygCbN+HJh2kj7PB9KxnLVEafDPH9r9oZhxuSVHNiw3y
+         Ag3bie8XyiEjt524OZDAh5FsQ2slfe0E+deZfnQuc0bp3TAsaISp3rtgryU4Ah8rBEoP
+         OrYrK6bffzJqNWTpvt6t+lmqudYXvAGNbfSGoQx/U9U3K9bZmH8YGC/gTBn1+Sh3fkAD
+         TeO1xBm3pVc4EJ6N6qi999oK9VD6NC+F5zqp/i6nUsNZkd3HE5ohTfwGQUfp+dJZSTJ7
+         m96A==
+X-Gm-Message-State: AOAM530WMcxM+E58kyTcA1909mFWaK6u+J6TxuOqB6sI/DerUX7QAAG9
+        oq2m89mHBPwExmm/PECaWEOoVjPAMDyNnY2K
+X-Google-Smtp-Source: ABdhPJxVMmWRPZgak0ACi4mGWFKAVePCuGtLDsT3AYqFZm2YFpl3R8ulupFitXx++nlIu1K+VoPe3Q==
+X-Received: by 2002:a63:5310:0:b0:39c:f338:407e with SMTP id h16-20020a635310000000b0039cf338407emr20694065pgb.600.1649794967758;
+        Tue, 12 Apr 2022 13:22:47 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 2-20020a17090a0f0200b001cb6621403csm359541pjy.24.2022.04.12.13.22.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 13:22:47 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring <io-uring@vger.kernel.org>
-References: <ee10eb48-ee50-7efb-54a7-7cb55bb23c15@kernel.dk>
-In-Reply-To: <ee10eb48-ee50-7efb-54a7-7cb55bb23c15@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     io-uring@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/2] io_uring: add socket(2) support
+Date:   Tue, 12 Apr 2022 14:22:40 -0600
+Message-Id: <20220412202240.234207-3-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220412202240.234207-1-axboe@kernel.dk>
+References: <20220412202240.234207-1-axboe@kernel.dk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 4/12/22 2:27 PM, Jens Axboe wrote:
-> Looks like an oversight that this is currently disabled, but I guess it
-> didn't matter before we had direct descriptor support for socket.
+Supports both regular socket(2) where a normal file descriptor is
+instantiated when called, or direct descriptors.
 
-Disregard, obviously a bug in my test program!
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c                 | 77 +++++++++++++++++++++++++++++++++++
+ include/uapi/linux/io_uring.h |  1 +
+ 2 files changed, 78 insertions(+)
 
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index b83134906a3a..1523a43c4469 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -558,6 +558,16 @@ struct io_accept {
+ 	unsigned long			nofile;
+ };
+ 
++struct io_socket {
++	struct file			*file;
++	int				domain;
++	int				type;
++	int				protocol;
++	int				flags;
++	u32				file_slot;
++	unsigned long			nofile;
++};
++
+ struct io_sync {
+ 	struct file			*file;
+ 	loff_t				len;
+@@ -926,6 +936,7 @@ struct io_kiocb {
+ 		struct io_hardlink	hardlink;
+ 		struct io_msg		msg;
+ 		struct io_xattr		xattr;
++		struct io_socket	sock;
+ 	};
+ 
+ 	u8				opcode;
+@@ -1192,6 +1203,9 @@ static const struct io_op_def io_op_defs[] = {
+ 		.needs_file = 1
+ 	},
+ 	[IORING_OP_GETXATTR] = {},
++	[IORING_OP_SOCKET] = {
++		.audit_skip		= 1,
++	},
+ };
+ 
+ /* requests with any of those set should undergo io_disarm_next() */
+@@ -5968,6 +5982,63 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+ 	return 0;
+ }
+ 
++static int io_socket_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
++{
++	struct io_socket *sock = &req->sock;
++
++	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
++		return -EINVAL;
++	if (sqe->ioprio || sqe->addr || sqe->rw_flags || sqe->buf_index)
++		return -EINVAL;
++
++	sock->domain = READ_ONCE(sqe->fd);
++	sock->type = READ_ONCE(sqe->off);
++	sock->protocol = READ_ONCE(sqe->len);
++	sock->file_slot = READ_ONCE(sqe->file_index);
++	sock->nofile = rlimit(RLIMIT_NOFILE);
++
++	sock->flags = sock->type & ~SOCK_TYPE_MASK;
++	if (sock->file_slot && (sock->flags & SOCK_CLOEXEC))
++		return -EINVAL;
++	if (sock->flags & ~(SOCK_CLOEXEC | SOCK_NONBLOCK))
++		return -EINVAL;
++	return 0;
++}
++
++static int io_socket(struct io_kiocb *req, unsigned int issue_flags)
++{
++	struct io_socket *sock = &req->sock;
++	bool fixed = !!sock->file_slot;
++	struct file *file;
++	int ret, fd;
++
++	if (!fixed) {
++		fd = __get_unused_fd_flags(sock->flags, sock->nofile);
++		if (unlikely(fd < 0))
++			return fd;
++	}
++	file = __sys_socket_file(sock->domain, sock->type, sock->protocol);
++	if (IS_ERR(file)) {
++		if (!fixed)
++			put_unused_fd(fd);
++		ret = PTR_ERR(file);
++		if (ret == -EAGAIN && (issue_flags & IO_URING_F_NONBLOCK))
++			return -EAGAIN;
++		if (ret == -ERESTARTSYS)
++			ret = -EINTR;
++		req_set_fail(req);
++	} else if (!fixed) {
++		fd_install(fd, file);
++		ret = fd;
++	} else {
++		io_sock_nolock_set(file);
++		ret = io_install_fixed_file(req, file, issue_flags,
++					    sock->file_slot - 1);
++	}
++	__io_req_complete(req, issue_flags, ret, 0);
++	return 0;
++}
++
+ static int io_connect_prep_async(struct io_kiocb *req)
+ {
+ 	struct io_async_connect *io = req->async_data;
+@@ -6055,6 +6126,7 @@ IO_NETOP_PREP_ASYNC(sendmsg);
+ IO_NETOP_PREP_ASYNC(recvmsg);
+ IO_NETOP_PREP_ASYNC(connect);
+ IO_NETOP_PREP(accept);
++IO_NETOP_PREP(socket);
+ IO_NETOP_FN(send);
+ IO_NETOP_FN(recv);
+ #endif /* CONFIG_NET */
+@@ -7269,6 +7341,8 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 		return io_fgetxattr_prep(req, sqe);
+ 	case IORING_OP_GETXATTR:
+ 		return io_getxattr_prep(req, sqe);
++	case IORING_OP_SOCKET:
++		return io_socket_prep(req, sqe);
+ 	}
+ 
+ 	printk_once(KERN_WARNING "io_uring: unhandled opcode %d\n",
+@@ -7590,6 +7664,9 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
+ 	case IORING_OP_GETXATTR:
+ 		ret = io_getxattr(req, issue_flags);
+ 		break;
++	case IORING_OP_SOCKET:
++		ret = io_socket(req, issue_flags);
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 696a05aa9618..9e28014b1e10 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -151,6 +151,7 @@ enum {
+ 	IORING_OP_SETXATTR,
+ 	IORING_OP_FGETXATTR,
+ 	IORING_OP_GETXATTR,
++	IORING_OP_SOCKET,
+ 
+ 	/* this goes last, obviously */
+ 	IORING_OP_LAST,
 -- 
-Jens Axboe
+2.35.1
 
