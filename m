@@ -2,134 +2,112 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0321C43217
-	for <io-uring@archiver.kernel.org>; Mon, 11 Apr 2022 23:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 766EAC43219
+	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 00:48:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbiDKXLn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 11 Apr 2022 19:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S244230AbiDLAur (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 11 Apr 2022 20:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbiDKXLm (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Apr 2022 19:11:42 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7870913F5C
-        for <io-uring@vger.kernel.org>; Mon, 11 Apr 2022 16:09:27 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso836182pjf.5
-        for <io-uring@vger.kernel.org>; Mon, 11 Apr 2022 16:09:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DAOYZJC0q2r2aVhS/c1ZWD/XWpJyDZU9mIITzJRRoV4=;
-        b=fuYMjdma0Er5fhdSyyhGhsCJlkfFcGkUgCrnnzOBONQx+Kb52omvICOcgQQGsgaY9n
-         iDqStCzQz9f6kCWMiidtcFK98MOjlBCMt4/QitHiVUv2szTT7ZBK1cJHNQAaX0/+AVBV
-         E9aO+58h+BrEF+sjIQ/JQbQKkdrLVsbaXM2YR6sff5BD+FZteTr2x+jw5bkf7N0uZqR5
-         svyRk/sURWOBwyormLcgyp5X5dinMixwCgHG6cShIjJX2OKuInyp7pxVALTAICm4nQYk
-         L/RRAy20WZSPNYDQ2WUF1r7bg+EtJ3tQogO/t3t/rYBzha586MmCGQKVuraczukzzJbF
-         wudA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DAOYZJC0q2r2aVhS/c1ZWD/XWpJyDZU9mIITzJRRoV4=;
-        b=eOLFX/SjvCAywKwlpjQbdd1+h9MWSSYeIiFiYcDmtGZ/IK+AdLM/SoaZceMRB6gdAV
-         ex3WztaobHkqRG9T3g4RWBQxiUs2ZFq+5Whsb2zfM19s1PYtT+xOwrq3eFQfMla8Bcu0
-         hhD858cpBUHZ+GKSzQNIb5KCHeJaPOG0Onn+gqLePhmEeDCo6TSjmKhror+L4FBfpIDl
-         jskkuccm+dhd+AOiKqKdAZGzqffqHhN4zOjiyY2rx8sFqSdmSppUwDb7sDqsg/jTM0Nt
-         YJcBeXNh2QWX2vWfQOcxC+TQBaBCcdFzptuknZXUyxRTqYT5fUTTTrfArgtuhf0wzIgi
-         uSoQ==
-X-Gm-Message-State: AOAM531MAEBUmul1pYSCsgL9QoQ5UAnj/MLNuld5SdpaMdor8WXMnjTV
-        Qo7jQBFf2mCOvf0ADUwqS1ZpGWZnAFB54g==
-X-Google-Smtp-Source: ABdhPJyTIy8Dc28kesiyG0IUytQKNAE4O4A1GjfuIlzEjj1uOhb24AVxDuB2nHRfwxEui2sIpNkKEw==
-X-Received: by 2002:a17:902:da8f:b0:156:9cc4:1b07 with SMTP id j15-20020a170902da8f00b001569cc41b07mr35099189plx.20.1649718566570;
-        Mon, 11 Apr 2022 16:09:26 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 5-20020a631045000000b0039d942d18f0sm191614pgq.48.2022.04.11.16.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Apr 2022 16:09:26 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 4/4] io_uring: stop using io_wq_work as an fd placeholder
-Date:   Mon, 11 Apr 2022 17:09:15 -0600
-Message-Id: <20220411230915.252477-5-axboe@kernel.dk>
+        with ESMTP id S243801AbiDLAuE (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Apr 2022 20:50:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67192FFFD;
+        Mon, 11 Apr 2022 17:46:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46F7DB819BC;
+        Tue, 12 Apr 2022 00:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F90EC385A9;
+        Tue, 12 Apr 2022 00:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649724405;
+        bh=6GVaGecbRy+VvYR3RKBqZV0ZW75XlfPpHJayGLK9VVw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Wj+arMzpkUiHAdZq4tWyW84tuNhebbOmOJx+/zpYzDTsXIzrE6nJLwFvYgz0RUtFt
+         iOPw6Nm8gIbIkf/AIoruVmiThZqTWkXqi8WhnhIB2qwm+YsY9SaQj5mGNoBbgdYEMt
+         /Z5CIrEqQ/Ipia9nQ/SHd1FV1GCHUwuwOWxxnqi4oKrhNjnezMi1AEpGMBGuQvU7kP
+         UwkwbNKeW6ZeFcs6wpTLQH26jTNBKOG7IJ/a/sP1JMxU/gKY7LKZoJSw2FBSpKHp97
+         7wbr3XRoILVEbjy783B2WBXCWyPXamYVuBT1tuv2qlcqUCAGCc1gVjksb/YVV46yUx
+         SsLE9ruslTC/g==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        io-uring@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.17 47/49] io_uring: use nospec annotation for more indexes
+Date:   Mon, 11 Apr 2022 20:44:05 -0400
+Message-Id: <20220412004411.349427-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220411230915.252477-1-axboe@kernel.dk>
-References: <20220411230915.252477-1-axboe@kernel.dk>
+In-Reply-To: <20220412004411.349427-1-sashal@kernel.org>
+References: <20220412004411.349427-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-There are two reasons why this isn't the best idea:
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-- It's an odd area to grab a bit of storage space, hence it's an odd area
-  to grab storage from.
-- It puts the 3rd io_kiocb cacheline into the hot path, where normal hot
-  path just needs the first two.
+[ Upstream commit 4cdd158be9d09223737df83136a1fb65269d809a ]
 
-Use 'cflags' for joint fd/cflags storage. We only need fd until we
-successfully issue, and we only need cflags once a request is done and is
-completed.
+There are still several places that using pre array_index_nospec()
+indexes, fix them up.
 
-Fixes: 6bf9c47a3989 ("io_uring: defer file assignment")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/b01ef5ee83f72ed35ad525912370b729f5d145f4.1649336342.git.asml.silence@gmail.com
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io-wq.h    |  1 -
- fs/io_uring.c | 12 ++++++++----
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ fs/io_uring.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/fs/io-wq.h b/fs/io-wq.h
-index 04d374e65e54..dbecd27656c7 100644
---- a/fs/io-wq.h
-+++ b/fs/io-wq.h
-@@ -155,7 +155,6 @@ struct io_wq_work_node *wq_stack_extract(struct io_wq_work_node *stack)
- struct io_wq_work {
- 	struct io_wq_work_node list;
- 	unsigned flags;
--	int fd;
- };
- 
- static inline struct io_wq_work *wq_next_work(struct io_wq_work *work)
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 3a97535d0550..38e62b1c6297 100644
+index d203bbb7b965..4ba3ae56835d 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -907,7 +907,11 @@ struct io_kiocb {
+@@ -8606,7 +8606,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
+ 	bool needs_lock = issue_flags & IO_URING_F_UNLOCKED;
+ 	struct io_fixed_file *file_slot;
+ 	struct file *file;
+-	int ret, i;
++	int ret;
  
- 	u64				user_data;
- 	u32				result;
--	u32				cflags;
-+	/* fd initially, then cflags for completion */
-+	union {
-+		u32			cflags;
-+		int			fd;
-+	};
+ 	io_ring_submit_lock(ctx, needs_lock);
+ 	ret = -ENXIO;
+@@ -8619,8 +8619,8 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (ret)
+ 		goto out;
  
- 	struct io_ring_ctx		*ctx;
- 	struct task_struct		*task;
-@@ -7090,9 +7094,9 @@ static bool io_assign_file(struct io_kiocb *req, unsigned int issue_flags)
- 		return true;
+-	i = array_index_nospec(offset, ctx->nr_user_files);
+-	file_slot = io_fixed_file_slot(&ctx->file_table, i);
++	offset = array_index_nospec(offset, ctx->nr_user_files);
++	file_slot = io_fixed_file_slot(&ctx->file_table, offset);
+ 	ret = -EBADF;
+ 	if (!file_slot->file_ptr)
+ 		goto out;
+@@ -8676,8 +8676,7 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
  
- 	if (req->flags & REQ_F_FIXED_FILE)
--		req->file = io_file_get_fixed(req, req->work.fd, issue_flags);
-+		req->file = io_file_get_fixed(req, req->fd, issue_flags);
- 	else
--		req->file = io_file_get_normal(req, req->work.fd);
-+		req->file = io_file_get_normal(req, req->fd);
- 	if (req->file)
- 		return true;
+ 		if (file_slot->file_ptr) {
+ 			file = (struct file *)(file_slot->file_ptr & FFS_MASK);
+-			err = io_queue_rsrc_removal(data, up->offset + done,
+-						    ctx->rsrc_node, file);
++			err = io_queue_rsrc_removal(data, i, ctx->rsrc_node, file);
+ 			if (err)
+ 				break;
+ 			file_slot->file_ptr = 0;
+@@ -9351,7 +9350,7 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
  
-@@ -7630,7 +7634,7 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 	if (io_op_defs[opcode].needs_file) {
- 		struct io_submit_state *state = &ctx->submit_state;
- 
--		req->work.fd = READ_ONCE(sqe->fd);
-+		req->fd = READ_ONCE(sqe->fd);
- 
- 		/*
- 		 * Plug now if we have more than 2 IO left after this, and the
+ 		i = array_index_nospec(offset, ctx->nr_user_bufs);
+ 		if (ctx->user_bufs[i] != ctx->dummy_ubuf) {
+-			err = io_queue_rsrc_removal(ctx->buf_data, offset,
++			err = io_queue_rsrc_removal(ctx->buf_data, i,
+ 						    ctx->rsrc_node, ctx->user_bufs[i]);
+ 			if (unlikely(err)) {
+ 				io_buffer_unmap(ctx, &imu);
 -- 
 2.35.1
 
