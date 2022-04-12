@@ -2,181 +2,76 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92EEFC433EF
-	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 20:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EDB1C433EF
+	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 21:02:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiDLUoQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 12 Apr 2022 16:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S229468AbiDLVEc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 12 Apr 2022 17:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiDLUoP (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 16:44:15 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A1AEB7
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:38:18 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id x20so56755qvl.10
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:38:18 -0700 (PDT)
+        with ESMTP id S229436AbiDLVEb (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 17:04:31 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B96C74A5
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:51:57 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id d4so13736215iln.6
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:51:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EHJU0bX552Ws+jez1ticz4oJcjIwpL/pBsuAb1MhPQw=;
-        b=SnQKPj2om0katQvYFgE7+kuQZfQ2C5lYrcA2+bwHXyeY//eLa5U0dZXfJMqOKMNtHK
-         6450rsOckSMIIzRj3nP8UNqWh9Ada01R++mfnY9lBSczTG3tnmMEqWpShMM65jaNRFUJ
-         48Hcz9R56fVt9KG3YbzE3oganG7pD9oZBaj0zlFo5+ZzadQWDwK+C/T3VIetBH+DUNLE
-         /op7sfmA6pTQEHyAKgYzQnMRqa0xRbJ3ZyPuWdkejVlKxrUvzNmUARWAS2Jmki7eQDP0
-         bRQ2OzX7QIs9G6mPSahz5jOfY1R+6s7DsrdFkHd6yIPV0I9nPefF/aL1Zfms+ZeUtBeJ
-         LAyw==
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:references:in-reply-to:content-transfer-encoding;
+        bh=wNFXZNvtZrO4vgUMc2PIOKPvuUiEoHIlqJ6c5ytJTuc=;
+        b=myA1F9+f2vjrjABMrrRh9Tw7a3g6BpkwCtwdLC/At406tw47dq2guHA5AlPzh5wBxj
+         6mjd+tUBlUuFbTJua7gWGo778HzEfNWwML+StNMHUbWxy9abGPUz2ZY5vb4y5JsqVnNN
+         2eSCf47NiT3sTJ1INKPuxEstbxgP4jGvO3dQuCRs/A+pGNxDDAAmvimU9d7TsxWo8H0u
+         MsA+3taxNzGGdq4bBNPOfdZ8psvwUJI/IBQ4oKM1twSUmOwnS9RZTg2z+RCdm/FjaAzt
+         seubmrJCK35YcRSKrcrFZ5fylFhKlO7FxsP/AvFzj1Zd9TgRiM7rl7MYrfWKPXZDKw41
+         XPNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EHJU0bX552Ws+jez1ticz4oJcjIwpL/pBsuAb1MhPQw=;
-        b=1+wIy6f+K3Cb/55QYv0fTP4o/UIAJzTvFSBLO19K3y8etAURW9MOEGc7HLlgsu0NMJ
-         M5PURdCgxJ4Syw7k9/K5NcE/jZTvHmo9X8bLJE1p5TGiOz5QCR4/NwArUXSnxvCtiKzs
-         tVsV6TmbnMGcwPIo0X2quRzuKwUU5b+qvEx7FX70OKaTsbQxTjk/TdQPvyFwG9yDJzl0
-         l73gUzhfgXKWAJ5B8/oWuBJn74ivoxfp5D50vhv9fr6yAplwZZ3XUVo9vChHjPTSsK8n
-         S1sR4m2kx+cGxjqtz56C+jTvhdTCOVnqH/GoUwW/6bBynk4pukJnhf5DX3SNDWo/7kB+
-         QjoA==
-X-Gm-Message-State: AOAM5325Rr3UUEpr+g8MX8hx8iCco+yDSveolDogYc6beurpRPlHpYgO
-        yacfkQVgkK9E4UHrHuihREy43f3BLqddocuv
-X-Google-Smtp-Source: ABdhPJx1PutKa1NpJ3WKsrvWE5T1tICSKPQcUZPBYDY+AfXpPEIOGMkOq5u+zJ9AlJqSLIVLeG0sjQ==
-X-Received: by 2002:a17:903:32c4:b0:156:8fd2:4aae with SMTP id i4-20020a17090332c400b001568fd24aaemr40670112plr.150.1649795178645;
-        Tue, 12 Apr 2022 13:26:18 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id p12-20020a63ab0c000000b00381f7577a5csm3609084pgf.17.2022.04.12.13.26.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 13:26:18 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, netdev@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 3/4] net: add support for socket no-lock
-Date:   Tue, 12 Apr 2022 14:26:12 -0600
-Message-Id: <20220412202613.234896-4-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412202613.234896-1-axboe@kernel.dk>
-References: <20220412202613.234896-1-axboe@kernel.dk>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=wNFXZNvtZrO4vgUMc2PIOKPvuUiEoHIlqJ6c5ytJTuc=;
+        b=HhqBuFyHFjnf7hYVWouvMz/2QIlKQQaPdZ7/adC8NDLH9HgWcWUKskBUdOnPblEtw9
+         osxpH7lOwfOEVBcOpTQMDOubnr6m00OjILF2mqxLCCcOtRmcif46ftldV1sXquUcMecP
+         9oBOSx5hU+R1rTIxIEoqwTqnRfMGLwUYcXrRTHMocylN6QETg6ZZfHFi6Aq95MFIYjxY
+         XMY2heeC0pNZLeGqlTeouDR/8S/UvMIISOgnUnB0VVEtqoGrX4PfxetcBltCENuFjrYE
+         KU7sqPCEd1Bg6puX0LQEx5ovWrehOJRt3B5xocGB2ZAS7zt3E7hbWvzi3F1fsV+xrncB
+         elvw==
+X-Gm-Message-State: AOAM5303pdLLUUA+3NILiuVE6/TyeV8CS6IdFb1+1usw7APZT/l+tWvS
+        ovafyWPSAqgC4FrXw8O6MEEmnjBhuXmV5M3j
+X-Google-Smtp-Source: ABdhPJz4ALzXmiZKdQU5EH7K9eSMeLO10tZCOYs+tD+QzfCosujGEd6CJcLyh90uv9eIlUdjM+8OpQ==
+X-Received: by 2002:a63:35c1:0:b0:386:3620:3c80 with SMTP id c184-20020a6335c1000000b0038636203c80mr31823394pga.327.1649795927348;
+        Tue, 12 Apr 2022 13:38:47 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id g14-20020a65580e000000b0039ce0873289sm3660752pgr.84.2022.04.12.13.38.46
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 13:38:46 -0700 (PDT)
+Message-ID: <a9e32c3e-3f81-5e8e-8a03-3a1f91988a46@kernel.dk>
+Date:   Tue, 12 Apr 2022 14:38:46 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] io_uring: allow direct descriptors for connect
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring <io-uring@vger.kernel.org>
+References: <ee10eb48-ee50-7efb-54a7-7cb55bb23c15@kernel.dk>
+In-Reply-To: <ee10eb48-ee50-7efb-54a7-7cb55bb23c15@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-If we have a guaranteed single user of a socket, then we can optimize
-the lock/release of it.
+On 4/12/22 2:27 PM, Jens Axboe wrote:
+> Looks like an oversight that this is currently disabled, but I guess it
+> didn't matter before we had direct descriptor support for socket.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- include/net/sock.h | 10 ++++++++--
- net/core/sock.c    | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+), 2 deletions(-)
+Disregard, obviously a bug in my test program!
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 99fcc4d7eed9..aefc94677c94 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1674,7 +1674,7 @@ do {									\
- 
- static inline bool lockdep_sock_is_held(const struct sock *sk)
- {
--	return lockdep_is_held(&sk->sk_lock) ||
-+	return sk->sk_no_lock || lockdep_is_held(&sk->sk_lock) ||
- 	       lockdep_is_held(&sk->sk_lock.slock);
- }
- 
-@@ -1774,18 +1774,20 @@ static inline void unlock_sock_fast(struct sock *sk, bool slow)
- static inline void sock_owned_by_me(const struct sock *sk)
- {
- #ifdef CONFIG_LOCKDEP
--	WARN_ON_ONCE(!lockdep_sock_is_held(sk) && debug_locks);
-+	WARN_ON_ONCE(!sk->sk_no_lock && !lockdep_sock_is_held(sk) && debug_locks);
- #endif
- }
- 
- static inline bool sock_owned_by_user(const struct sock *sk)
- {
- 	sock_owned_by_me(sk);
-+	smp_rmb();
- 	return sk->sk_lock.owned;
- }
- 
- static inline bool sock_owned_by_user_nocheck(const struct sock *sk)
- {
-+	smp_rmb();
- 	return sk->sk_lock.owned;
- }
- 
-@@ -1794,6 +1796,10 @@ static inline void sock_release_ownership(struct sock *sk)
- 	if (sock_owned_by_user_nocheck(sk)) {
- 		sk->sk_lock.owned = 0;
- 
-+		if (sk->sk_no_lock) {
-+			smp_wmb();
-+			return;
-+		}
- 		/* The sk_lock has mutex_unlock() semantics: */
- 		mutex_release(&sk->sk_lock.dep_map, _RET_IP_);
- 	}
-diff --git a/net/core/sock.c b/net/core/sock.c
-index fec892b384a4..d7eea29c5699 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2764,6 +2764,9 @@ void __lock_sock(struct sock *sk)
- {
- 	DEFINE_WAIT(wait);
- 
-+	if (WARN_ON_ONCE(sk->sk_no_lock))
-+		return;
-+
- 	for (;;) {
- 		prepare_to_wait_exclusive(&sk->sk_lock.wq, &wait,
- 					TASK_UNINTERRUPTIBLE);
-@@ -3307,8 +3310,21 @@ void sock_init_data(struct socket *sock, struct sock *sk)
- }
- EXPORT_SYMBOL(sock_init_data);
- 
-+static inline bool lock_sock_nolock(struct sock *sk)
-+{
-+	if (sk->sk_no_lock) {
-+		sk->sk_lock.owned = 1;
-+		smp_wmb();
-+		return true;
-+	}
-+	return false;
-+}
-+
- void lock_sock_nested(struct sock *sk, int subclass)
- {
-+	if (lock_sock_nolock(sk))
-+		return;
-+
- 	/* The sk_lock has mutex_lock() semantics here. */
- 	mutex_acquire(&sk->sk_lock.dep_map, subclass, 0, _RET_IP_);
- 
-@@ -3321,8 +3337,23 @@ void lock_sock_nested(struct sock *sk, int subclass)
- }
- EXPORT_SYMBOL(lock_sock_nested);
- 
-+static inline bool release_sock_nolock(struct sock *sk)
-+{
-+	if (!sk->sk_no_lock)
-+		return false;
-+	if (READ_ONCE(sk->sk_backlog.tail))
-+		return false;
-+	if (sk->sk_prot->release_cb)
-+		sk->sk_prot->release_cb(sk);
-+	sock_release_ownership(sk);
-+	return true;
-+}
-+
- void release_sock(struct sock *sk)
- {
-+	if (release_sock_nolock(sk))
-+		return;
-+
- 	spin_lock_bh(&sk->sk_lock.slock);
- 	if (sk->sk_backlog.tail)
- 		__release_sock(sk);
 -- 
-2.35.1
+Jens Axboe
 
