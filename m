@@ -2,69 +2,89 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 96B8AC4332F
-	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 20:38:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BED6EC433F5
+	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 20:38:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiDLUkC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 12 Apr 2022 16:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
+        id S231174AbiDLUkd (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 12 Apr 2022 16:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiDLUje (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 16:39:34 -0400
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EB672E1C
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:35:21 -0700 (PDT)
-Received: by mail-pf1-f179.google.com with SMTP id s2so67678pfh.6
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:35:21 -0700 (PDT)
+        with ESMTP id S230433AbiDLUkA (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 16:40:00 -0400
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C576C765A6
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:35:42 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id b15so61731pfm.5
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 13:35:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sKPPb7cPnakqop3K+/8izaNbWGNMof5p7iEV5Vm4YJE=;
-        b=kYmUWMNxcC+KqIVlArIbkmQRM98LpBPSJeSyGdeB1Ye4c8cbBdTLCd2Ey0UrainBLw
-         AB3suwXVPPu+i1o0/mq31q6eK90+IN81w8eTVeDwf5r6CHTc1na0EM68MnaXJnlTjJ64
-         NJsylaDD8aX1wT/BhdKImGx2SHOdjNZMk5KFVIo26NRAztXCRmMkhsmnuOqENx5GxNQl
-         Ck824E280Ye2NvWUgVeFW7uY+cWdE4q3nTFgAcfsDIiHNfLDuT29Z7ecYaceL/rxuKCl
-         OIP+OYveG3hJyLMUwOOk4rYsH/CAcl2pYWt6BmhD9S+aH2TA9IwKlPjk+djvcCnXLnEN
-         WP9Q==
+        h=message-id:date:mime-version:user-agent:content-language:to:from
+         :subject:content-transfer-encoding;
+        bh=0Y/977pws4vP8z3KZlbishz7dcAJFpjJRsJxtUL6ugM=;
+        b=IcZO5QoACx9MBtRhQbp29xTKmSF8p3Ls4MeseYC3gojb/+0jvQBO/O4HRUjLolPEbO
+         9mIGC+pV2dcIwexdWxe2Ti+JzHGbErXYUG2HCM7AUde6cfx6tDUQxsHUI7pzbDulH3HN
+         1vN44qdJEDQwa3DUGzf95WqxCD9LDFDnZAwZ8CCWYpdhsf4apCJJjnefFUoDHzj1l/wo
+         VhjF4b0J8HSIueaPJo+/ZQxkT+NuFgT51yDfch9gLcpmR5BrsRgWDu4x2ng+ubTbispI
+         OATvpc9rqxB0vBqe2tuNzNJIKPe7PkmHx0j+l5wDgJVK3a8duLK4F2vNoxrsif+esebV
+         Zu0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sKPPb7cPnakqop3K+/8izaNbWGNMof5p7iEV5Vm4YJE=;
-        b=NLu7+M0YWAQzSNPQA9afcJNw5WlriqGef5/+Bnb/rBzF+rMkBKWRlTFL2YGy+gkKs6
-         Q5GT2sAZWcmXoH4FgZvtWMSrWTKQHATqz0uMjdAGmxcrXZ7lvGKPNYc0FFsvGVezka5R
-         7rvhV8V16mLIB9aIQnHItAoxI/mE0lZLtvptFNpOZm2wV7EuYiYVsO4x/aefl80ysC2m
-         pE+7ujxfkyvqTo2+o4YIg47nVtgumLlPCbEK72yg+qR7VnwJPOFE7yZMt1FwgdLrfDCY
-         TLle9DkBmAgw7iIN3idUUkiFxpMoTwzarmXJMXWEj6nHadKzFCHA3+rN8cKQoWfg2uPd
-         mgdQ==
-X-Gm-Message-State: AOAM531gHTUZGLX1FPZvhTncq9ZaHSIlSAUA9NbcOSnH+EToJkanK0xG
-        7n1uTFLMFLQ/2euhIaFqVUsmshRTILL2TMu4
-X-Google-Smtp-Source: ABdhPJwOBW9ho/sYBs6oClKSrSqGNqsvZpw/RwO8wihEqCCg8sjJSidsifugV6WfDh1w92B2RtIaoA==
-X-Received: by 2002:a63:b0a:0:b0:39d:4d2d:a38c with SMTP id 10-20020a630b0a000000b0039d4d2da38cmr10379688pgl.394.1649794962965;
-        Tue, 12 Apr 2022 13:22:42 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 2-20020a17090a0f0200b001cb6621403csm359541pjy.24.2022.04.12.13.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Apr 2022 13:22:42 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCHSET 0/2] Add io_uring socket(2) support
-Date:   Tue, 12 Apr 2022 14:22:38 -0600
-Message-Id: <20220412202240.234207-1-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:from:subject:content-transfer-encoding;
+        bh=0Y/977pws4vP8z3KZlbishz7dcAJFpjJRsJxtUL6ugM=;
+        b=gtQ+0gNyefOWJ0uld4Yt7aDuiSFlsYCXTrtzWNbGWLqqeBdux5q/FuRCACF2Ek42tE
+         2vN9pXuDyO+xUHnJ9cMzDi8UxvjYheA2z11vnKIUORyXsQiMIItM09OS5tOvWXgL934M
+         9KbflW9MQ6AYSqSXQcQR5nMOhZZh3VOy14vTG3tQtNDWIgfXNDk1SdUN/w8vY5J1mqqK
+         fFyv/phY+od6edrYqBpJQAgeKeD5hOQBCWSt00q4cY8tgO8SES5XfPkNFB1caASTyemD
+         HuYusweKPjIlQpMBTIAEqB3XmU7Zuqbm5MFMIkfdWsASmpXkO9Bdb6e6EKiM+cbO1rRP
+         mbbQ==
+X-Gm-Message-State: AOAM533HEtk3l1meKJYXm26UHW6OFcnovSSQDJkmpczJ5cssFO3e8xEI
+        6AXdWz9Z2Ynj0neinZsHtgCQZbVMJVYiQWqm
+X-Google-Smtp-Source: ABdhPJwfYhFw42ejVKV5CcdM7Iw1ftir1wPDFxZJ2HMN/vHJDV4nshnO3OMp8MxUNSwKmxqglqaWcQ==
+X-Received: by 2002:a63:1b20:0:b0:382:70f9:dc24 with SMTP id b32-20020a631b20000000b0038270f9dc24mr31168139pgb.485.1649795226900;
+        Tue, 12 Apr 2022 13:27:06 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u25-20020aa78399000000b00505f75651e7sm3637468pfm.158.2022.04.12.13.27.06
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 13:27:06 -0700 (PDT)
+Message-ID: <ee10eb48-ee50-7efb-54a7-7cb55bb23c15@kernel.dk>
+Date:   Tue, 12 Apr 2022 14:27:05 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     io-uring <io-uring@vger.kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring: allow direct descriptors for connect
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+Looks like an oversight that this is currently disabled, but I guess it
+didn't matter before we had direct descriptor support for socket.
 
-The main motivator here is to allow creating a socket as a direct
-descriptor, similarly to how we do it for the open/accept support.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+
+---
+
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 17b4dc9f130f..b83134906a3a 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -5982,8 +5982,7 @@ static int io_connect_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 
+ 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
+ 		return -EINVAL;
+-	if (sqe->ioprio || sqe->len || sqe->buf_index || sqe->rw_flags ||
+-	    sqe->splice_fd_in)
++	if (sqe->ioprio || sqe->len || sqe->buf_index || sqe->rw_flags)
+ 		return -EINVAL;
+ 
+ 	conn->addr = u64_to_user_ptr(READ_ONCE(sqe->addr));
 
 -- 
 Jens Axboe
-
 
