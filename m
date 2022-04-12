@@ -2,99 +2,83 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEE1DC433EF
-	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 16:31:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A80C433EF
+	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 16:41:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236329AbiDLQdj (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 12 Apr 2022 12:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37378 "EHLO
+        id S230283AbiDLQoP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 12 Apr 2022 12:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357690AbiDLQd2 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 12:33:28 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933135E16F
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 09:31:04 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23CChTCQ013738
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 09:31:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=baEaCrnLBHjc8dj+cmCnEDyggTYvxeftZ9u5tqzYlTQ=;
- b=WL6IG/v+96ZbexC5BmYEsm9xxAiTaY3eamthvpYVTqKiZsXSI5a2Gi3l8YHyzrhE6DBq
- BjvDqx39p/bCZpr5BpSh6iIL/oEjxT2ZlP/uvFK7ciIMe1eNV4Ay1EinpGHGjNrDd2Gq
- C8g47Au16XQ3NEUuOs4fmDGmn/SHnC7GRJw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fd9njshky-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 09:31:04 -0700
-Received: from twshared6486.05.ash9.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Tue, 12 Apr 2022 09:31:02 -0700
-Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
-        id A736C745606C; Tue, 12 Apr 2022 09:30:48 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     <io-uring@vger.kernel.org>
-CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 3/4] io_uring: verify resv is 0 in ringfd register/unregister
-Date:   Tue, 12 Apr 2022 09:30:41 -0700
-Message-ID: <20220412163042.2788062-4-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220412163042.2788062-1-dylany@fb.com>
-References: <20220412163042.2788062-1-dylany@fb.com>
+        with ESMTP id S1357780AbiDLQoN (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 12:44:13 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA14580DE
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 09:41:55 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id z6-20020a17090a398600b001cb9fca3210so3627051pjb.1
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 09:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=3LCjjulilVCC1fbiBIwkl13y7xhoya92h9KhSw/9YUE=;
+        b=S/8zRV85rHaaFtPdfqa0eHP7b9LjzKV9h8Uuzl6sEcliosCVAllvdwZcM6pIhwUbgF
+         LF0Sa0gk1x/D37eKpWsK1+SS8+eAMWoERU5EGdjPOVJusWHBR7UFl0cN3WGb8VQTfjnR
+         IJ1dPwdyGTorUrQnUyuAPLkWj3mFbn9C3D64NYfaZh17gV3Qu+t80JMcFrWeesnV6ExN
+         XvzGshY44MQZD5b8szsOjrCr1Xp6aNmhS+en+6q+JF65eglSJYiNFQQtgiqYgC6Q9Gt2
+         V27aGK0Lw1F8GkXhU3g6GViA3ISpeIRBjVMntO47Iid97n07SvMDsk82S3QPrR+/x6ly
+         DXQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3LCjjulilVCC1fbiBIwkl13y7xhoya92h9KhSw/9YUE=;
+        b=WzIG6ddgtnRVJVAqo9JO1ATwmD/re37zHZpoJf645HlEzl+YLATzThB+OjjXwrLxA3
+         fl6N66UI7OzgH9i4sH55z+gbkV7JmWd5hnYLnnDKUyjrsQoUop+9xU5MxMYxVyIDspXP
+         JovkrJBBmaqSMxStg8cLZa00xiYIAgO3u+C+b9d8ibPRe7MSJcfnMH9txHK6805Q28Xo
+         8anRKXb1L8y6GljVj+V70x0xj6nqrr+6ePmB5sBgi8onsAJx5YdhORB+kS4iqKRV9YV0
+         wYPJBE87ZOAEOGEk5sXpU7H+H5Svh7QO81ufBneyb2WlFzNh1l9u9nsQ1NERpzcc+qOQ
+         kUSA==
+X-Gm-Message-State: AOAM530Ik+HKK6OGd0ej+jhRICJy+TWJ0Kelgplqo7OvmI6DsYeFweDy
+        3ixBsPUtg9LKohRNMaDInkCynA==
+X-Google-Smtp-Source: ABdhPJzDCIR4Gi5yvfASXWw1zWOATUDnUFW/Ev9WdA9Ad/X7xQN+tduNAHsUmZd+h1Qaqhv6PwIB/w==
+X-Received: by 2002:a17:90b:3b42:b0:1cd:42bb:844a with SMTP id ot2-20020a17090b3b4200b001cd42bb844amr1084614pjb.239.1649781714799;
+        Tue, 12 Apr 2022 09:41:54 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h19-20020a632113000000b0039d9c5be7c8sm2466022pgh.21.2022.04.12.09.41.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Apr 2022 09:41:54 -0700 (PDT)
+Message-ID: <7a6eef8a-d09b-89b2-f261-506ae6dae413@kernel.dk>
+Date:   Tue, 12 Apr 2022 10:41:53 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: wFSsLT0t4tHxKelOAx25EFroDObcyL9x
-X-Proofpoint-GUID: wFSsLT0t4tHxKelOAx25EFroDObcyL9x
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-12_06,2022-04-12_02,2022-02-23_01
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/1] io_uring: fix leaks on IOPOLL and CQE_SKIP
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+References: <c19df8bde9a9ab89425abf7339de3564c96fd858.1649780645.git.asml.silence@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <c19df8bde9a9ab89425abf7339de3564c96fd858.1649780645.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Only allow resv field to be 0 in struct io_uring_rsrc_update user
-arguments.
+On 4/12/22 10:24 AM, Pavel Begunkov wrote:
+> If all completed requests in io_do_iopoll() were marked with
+> REQ_F_CQE_SKIP, we'll not only skip CQE posting but also
+> io_free_batch_list() leaking memory and resources.
+> 
+> Move @nr_events increment before REQ_F_CQE_SKIP check. We'll potentially
+> return the value greater than the real one, but iopolling will deal with
+> it and the userspace will re-iopoll if needed. In anyway, I don't think
+> there are many use cases for REQ_F_CQE_SKIP + IOPOLL.
 
-Fixes: e7a6c00dc77a ("io_uring: add support for registering ring file des=
-criptors")
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- fs/io_uring.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Ah good catch - yes probably not much practical concern, as the lack of
+ordering for file IO means that CQE_SKIP isn't really useful for that
+scenario.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e899192ffb77..a84bfec97d0d 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -10533,6 +10533,11 @@ static int io_ringfd_register(struct io_ring_ctx=
- *ctx, void __user *__arg,
- 			break;
- 		}
-=20
-+		if (reg.resv) {
-+			ret =3D -EINVAL;
-+			break;
-+		}
-+
- 		if (reg.offset =3D=3D -1U) {
- 			start =3D 0;
- 			end =3D IO_RINGFD_REG_MAX;
-@@ -10579,7 +10584,7 @@ static int io_ringfd_unregister(struct io_ring_ct=
-x *ctx, void __user *__arg,
- 			ret =3D -EFAULT;
- 			break;
- 		}
--		if (reg.offset >=3D IO_RINGFD_REG_MAX) {
-+		if (reg.resv || reg.offset >=3D IO_RINGFD_REG_MAX) {
- 			ret =3D -EINVAL;
- 			break;
- 		}
---=20
-2.30.2
+-- 
+Jens Axboe
 
