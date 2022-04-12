@@ -2,91 +2,80 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A4AC433FE
-	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 00:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EF17C433EF
+	for <io-uring@archiver.kernel.org>; Tue, 12 Apr 2022 14:10:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244975AbiDLAyy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 11 Apr 2022 20:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S1355376AbiDLOMy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 12 Apr 2022 10:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244237AbiDLAyY (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Apr 2022 20:54:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DB934BA4;
-        Mon, 11 Apr 2022 17:48:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04682B8198C;
-        Tue, 12 Apr 2022 00:48:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14F21C385AD;
-        Tue, 12 Apr 2022 00:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649724535;
-        bh=UYPUE9Y3Aabbs8//bLRaLLuC72yw9bYNN85tgxuGTDs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ub5qsW04CM1+uqZQ9t5x3jB+XppvPYaQBuc8dJ0D3sM5BM5ZCFD1zCesBwuVCc6Dk
-         MoJJkdfgBj1I9hSo8v7G867f7tmn4O+fYDcCqPVxsKQ3fdbbmp/SyKsAZuuJks0XRx
-         obCwyL+b9w7mDpsqBYkJ3Rhs9IOWES7wJ+ZKp/SpTprvetoQbPsrpWIkIIqm0OEvYt
-         EsfdcBYnDRIjvrIIOh6wPYpY5kg6rTtk67ftAvuaIOtD2cRi7UliE4jhPlWvoJID4T
-         2dRnAE5+/aHqTIFgawuLb0c3xQ7W07gNNAsPVYwUXqEDXs4+CwFHhfVeZn0VU6vqHe
-         Sg6wA0Y3E8XwQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        io-uring@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 38/41] io_uring: zero tag on rsrc removal
-Date:   Mon, 11 Apr 2022 20:46:50 -0400
-Message-Id: <20220412004656.350101-38-sashal@kernel.org>
+        with ESMTP id S1350319AbiDLOMw (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 12 Apr 2022 10:12:52 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1671CFD4
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 07:10:34 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id u3so27933647wrg.3
+        for <io-uring@vger.kernel.org>; Tue, 12 Apr 2022 07:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MLB88jBPzd+UKwTc/nTm9hN5u7OocLRwGb1wbBHBS9A=;
+        b=XFwaMfJq1OdeDsmrrnnilAWjGbjrtS6DfnI0kehJM95NFcyR+Czg6RBsKFc+ellLVK
+         Z5QjO5xN0JN8rZkcEeB49xHxT3YCA5I7F/gdibxfX+DLtRLlSX7NT9TgrGdRypSr1eYP
+         bK6Eqy/254uMtVXOX9RPjq2D03E701LAT8Ltn/CXJYJQo5SqEqbkKxJtKIUOxv8cnS9t
+         Lbe0tf4nQsFbqe3Qy1ZyKH9k0FroaedvyHAxzxTnf0s+S7GMEexz+47vh8wrK+qLP4+m
+         pDWKpTfZ7u61/o1f9Jjfc4nTW7nlEPBN+X73g9VPh6LW2kuRHY6tWhfp9clQnzrSQZ3P
+         t3IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MLB88jBPzd+UKwTc/nTm9hN5u7OocLRwGb1wbBHBS9A=;
+        b=Gkbdty1pZHVCSo7rjbQOoI6uTlsQC+tna1X++2zDE+HkHLhHOJnBUS1oY9m/HjFpDg
+         ipT55O1tYGSwG3uPZeoVyTrGkzIvzwrhaCLBIYa0XQiKUTXEV98sBdmZCYW8jm1pDkvK
+         fgqU/LJTHiXW6pxYWkl0j7k1or+BUivYHZQ6nYVakngmuL48BBGlPMOgCmtdIFdzlYdl
+         /oeRN7itiAilDfBbh1nwdY66Z2xpbgfV6GEMkaUXiUTNI9a70VmQwaLy/08GcAY/8wlg
+         6aCYuYoQApG8NoYMX7Z5OHs/RooSfZDzQTFzOuOCuz1q1vfRA0sr7NSAcLgY+eO/IiBe
+         bMHA==
+X-Gm-Message-State: AOAM530qUWocVMtrYE5YUk7FRucAOwZTVWQBpoLThvVWQ5KgW2FVsFh7
+        DcOyHm7b09S9BH686yxlnX34wNHkMTg=
+X-Google-Smtp-Source: ABdhPJzXZst0Y6djmDzrFESGlXNrmASJd6/x5wjRLJ91DXLtETAcOLtfCJAsByNqAku1ARe10VgjDg==
+X-Received: by 2002:adf:f307:0:b0:207:b0b5:999b with SMTP id i7-20020adff307000000b00207b0b5999bmr1967057wro.694.1649772633063;
+        Tue, 12 Apr 2022 07:10:33 -0700 (PDT)
+Received: from 127.0.0.1localhost ([148.252.129.222])
+        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b0038e75fda4edsm2363703wmb.47.2022.04.12.07.10.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Apr 2022 07:10:32 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
+Subject: [PATCH next 0/9] for-next clean ups and micro optimisation
+Date:   Tue, 12 Apr 2022 15:09:42 +0100
+Message-Id: <cover.1649771823.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220412004656.350101-1-sashal@kernel.org>
-References: <20220412004656.350101-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+nops benchmark: 40.3 -> 41.1 MIOPS, or +2%
 
-[ Upstream commit 8f0a24801bb44aa58496945aabb904c729176772 ]
+Pavel Begunkov (9):
+  io_uring: explicitly keep a CQE in io_kiocb
+  io_uring: memcpy CQE from req
+  io_uring: shrink final link flush
+  io_uring: inline io_flush_cached_reqs
+  io_uring: helper for empty req cache checks
+  io_uring: add helper to return req to cache list
+  io_uring: optimise submission loop invariant
+  io_uring: optimise submission left counting
+  io_uring: optimise io_get_cqe()
 
-Automatically default rsrc tag in io_queue_rsrc_removal(), it's safer
-than leaving it there and relying on the rest of the code to behave and
-not use it.
+ fs/io_uring.c | 288 +++++++++++++++++++++++++++++---------------------
+ 1 file changed, 165 insertions(+), 123 deletions(-)
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/1cf262a50df17478ea25b22494dcc19f3a80301f.1649336342.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/io_uring.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 5fc3a62eae72..d49d83a99c9f 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -8419,13 +8419,15 @@ static int io_sqe_file_register(struct io_ring_ctx *ctx, struct file *file,
- static int io_queue_rsrc_removal(struct io_rsrc_data *data, unsigned idx,
- 				 struct io_rsrc_node *node, void *rsrc)
- {
-+	u64 *tag_slot = io_get_tag_slot(data, idx);
- 	struct io_rsrc_put *prsrc;
- 
- 	prsrc = kzalloc(sizeof(*prsrc), GFP_KERNEL);
- 	if (!prsrc)
- 		return -ENOMEM;
- 
--	prsrc->tag = *io_get_tag_slot(data, idx);
-+	prsrc->tag = *tag_slot;
-+	*tag_slot = 0;
- 	prsrc->rsrc = rsrc;
- 	list_add(&prsrc->list, &node->rsrc_list);
- 	return 0;
 -- 
 2.35.1
 
