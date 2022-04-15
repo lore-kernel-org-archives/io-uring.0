@@ -2,66 +2,126 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 39757C433F5
-	for <io-uring@archiver.kernel.org>; Fri, 15 Apr 2022 04:04:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B244AC433EF
+	for <io-uring@archiver.kernel.org>; Fri, 15 Apr 2022 13:24:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349327AbiDOEGf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 15 Apr 2022 00:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
+        id S234082AbiDON1N (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 15 Apr 2022 09:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349310AbiDOEGe (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 15 Apr 2022 00:06:34 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA96AAC8B
-        for <io-uring@vger.kernel.org>; Thu, 14 Apr 2022 21:04:07 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id x16-20020a6bfe10000000b006409f03e39eso4216736ioh.7
-        for <io-uring@vger.kernel.org>; Thu, 14 Apr 2022 21:04:07 -0700 (PDT)
+        with ESMTP id S229982AbiDON1M (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 15 Apr 2022 09:27:12 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565C6186D3
+        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 06:24:43 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 2so7637085pjw.2
+        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 06:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :content-language:content-transfer-encoding;
+        bh=/0ucfi1fHgao2WEXOWgxYBbPcaoI6nX+P2dzyIICVow=;
+        b=6vmDjKAzRV1wwdtQHqz4/cBNku64uAEECcAhgz06JHEksA0Z0WY9xq7AnnUH/Dg4F2
+         OX99fZNnozbcDeAHN2VdY/axnuqr/DomF4slicOi7tKZ4pPs1rkRfaZzDNDqW4fLl7M9
+         JJQKRu6J5osgIRC21fplPq7wQnBPf1WhKbVAsU6UAKq8nqX3+51OXQ78XokRWy0thVgd
+         js/SryqzKW8vpGtKYm08J1EEgGCoxISplrGeKyFnUsWpPDI5Yd3g/KoPWlh6IcSkrJL6
+         /lty/G/XTidrHjSiubujRYkiM9yP6NcLSGHVk3VPsmFfS0o8GEsnEsU8hDGR9RA/Ic8T
+         wZFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=GOM/u/LjYywzIfgQEbQmUfvSEjGD9tJ5Gw1F0/rgW7U=;
-        b=cgkJ/CGjoCVCKiPXKgM4e6MOQ0mzGww4QiZ3KA6wYT1O+OT4H5j2coycOg0/7Qr7ct
-         5X78GRlg1pHK01FEaag8uIIy5NlPsE+0KZIC32AfPd33EfIy8uA7bq0+AlAkvNcZbytP
-         xGSNvnkbB/0n1yziZt/RFMYm9AuJjcK8/uOoXvMxBFpnd+EkjH/u0lOXvOvr824U+z5O
-         FuuiTex461086OtcwZIC2pTrombPJTe41YMJ0zBPXjU7Edk0v81RvlG8VkpzK7l5iy+j
-         ojgUPYX8MnDhbVO9sbDHQnWDtR+aQzh9OzmfMLr/r1HbLZtZQzNe7Ivp9KhcUVV4jmGM
-         N6yA==
-X-Gm-Message-State: AOAM5301C5l3poLkh0XsDU62wlGZMSgcgb8gORzTBJZEoNIsSWysYd4R
-        5qC2rL8j2UIslt6/FKHXU+NBYeLRjyIlZkC+S26QvL4m/K6X
-X-Google-Smtp-Source: ABdhPJw43wBjC+s6gCr8+BHHrKq5QX38deICyV9LuvBjQTDqr8QEpp3b9kxO6bRNBDo5jzXDiHROM8noDKB/FBRT5WnYRAELj7O0
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:content-language:content-transfer-encoding;
+        bh=/0ucfi1fHgao2WEXOWgxYBbPcaoI6nX+P2dzyIICVow=;
+        b=JVjgOUjuCcYAulqYRf0OTls0ZNobq5INpawFhLcRs/vmxGHRUsiZRlE4XG/PT61g0d
+         Hu7caZ97N8uGZtQ8oEDEBBma6SoW5NCg6gTuDC6fd5t5PufrculhTsN+b+iefUBNiEEX
+         7RtQCmDEFEdS7iSxljvTd1efYGPikGnbnnLJo3qVGFiMbN0aRn7Qc/v24wn43sOhC8Df
+         1PES9UL7TB+UkcU38CMvTOOVqP21Je2NuGz6EF1eLZUyc4ymUj4gcEpcXeJcOKAr6JKG
+         +Wrepfz5rofyhYebCGmLZ9ErSJ/xiQ4OEpsaaZRUIqo23F/OYBS61wPnJoi1djHm19y4
+         dtxQ==
+X-Gm-Message-State: AOAM530fK7Jmp2Ca12UYuPJ0lErC49Xm/qPOablkyFqjxWl2eLL5xldF
+        pN+bzUxwoWgTLtfWH55DeDiYWkDmk18s1g==
+X-Google-Smtp-Source: ABdhPJyj2NZLszPtzzCxm5Hd5Z4NPiQ3kLJfB31K2JOBcvTTwVUIy6t6S7BthfQMSWyrdXeMZm5qNA==
+X-Received: by 2002:a17:902:8ec8:b0:156:847b:a8f8 with SMTP id x8-20020a1709028ec800b00156847ba8f8mr53018530plo.121.1650029082705;
+        Fri, 15 Apr 2022 06:24:42 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id y3-20020a056a00190300b004fa2411bb92sm3143519pfi.93.2022.04.15.06.24.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 06:24:42 -0700 (PDT)
+Message-ID: <948f7d10-526e-206b-6014-2654b5170d56@kernel.dk>
+Date:   Fri, 15 Apr 2022 07:24:41 -0600
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3c5:b0:64c:727d:6e95 with SMTP id
- g5-20020a05660203c500b0064c727d6e95mr2731705iov.118.1649995447343; Thu, 14
- Apr 2022 21:04:07 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 21:04:07 -0700
-In-Reply-To: <c122ba3e-ef7b-0f70-1972-1bae0ddff651@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000851e4705dca980e9@google.com>
-Subject: Re: [syzbot] kernel BUG in commit_creds
-From:   syzbot <syzbot+60c52ca98513a8760a91@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, ebiederm@xmission.com,
-        io-uring@vger.kernel.org, legion@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: [GIT PULL] io_uring fixes for 5.18-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     io-uring <io-uring@vger.kernel.org>
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hello,
+Hi Linus,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+- Ensure we check and -EINVAL any use of reserved or struct padding.
+  Although we generally always do that, it's missed in two spots for
+  resource updates, one for the ring fd registration from this merge
+  window, and one for the extended arg. Make sure we have all of them
+  handled. (Dylan)
 
-Reported-and-tested-by: syzbot+60c52ca98513a8760a91@syzkaller.appspotmail.com
+- A few fixes for the deferred file assignment (me, Pavel)
 
-Tested on:
+- Add a feature flag for the deferred file assignment so apps can tell
+  we handle it correctly (me)
 
-commit:         70152140 io_uring: abort file assignment prior to assi..
-git tree:       git://git.kernel.dk/linux-block io_uring-5.18
-kernel config:  https://syzkaller.appspot.com/x/.config?x=eb177500e563582f
-dashboard link: https://syzkaller.appspot.com/bug?extid=60c52ca98513a8760a91
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+- Fix a small perf regression with the current file position fix in this
+  merge window (me)
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+Please pull!
+
+
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+
+are available in the Git repository at:
+
+  git://git.kernel.dk/linux-block.git tags/io_uring-5.18-2022-04-14
+
+for you to fetch changes up to 701521403cfb228536b3947035c8a6eca40d8e58:
+
+  io_uring: abort file assignment prior to assigning creds (2022-04-14 20:23:40 -0600)
+
+----------------------------------------------------------------
+io_uring-5.18-2022-04-14
+
+----------------------------------------------------------------
+Dylan Yudaken (4):
+      io_uring: move io_uring_rsrc_update2 validation
+      io_uring: verify that resv2 is 0 in io_uring_rsrc_update2
+      io_uring: verify resv is 0 in ringfd register/unregister
+      io_uring: verify pad field is 0 in io_get_ext_arg
+
+Jens Axboe (5):
+      io_uring: flag the fact that linked file assignment is sane
+      io_uring: io_kiocb_update_pos() should not touch file for non -1 offset
+      io_uring: move apoll->events cache
+      io_uring: stop using io_wq_work as an fd placeholder
+      io_uring: abort file assignment prior to assigning creds
+
+Pavel Begunkov (4):
+      io_uring: fix assign file locking issue
+      io_uring: use right issue_flags for splice/tee
+      io_uring: fix poll file assign deadlock
+      io_uring: fix poll error reporting
+
+ fs/io-wq.h                    |  1 -
+ fs/io_uring.c                 | 98 +++++++++++++++++++++++++------------------
+ include/uapi/linux/io_uring.h |  1 +
+ 3 files changed, 59 insertions(+), 41 deletions(-)
+
+-- 
+Jens Axboe
+
