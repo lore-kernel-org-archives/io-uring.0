@@ -2,126 +2,134 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B244AC433EF
-	for <io-uring@archiver.kernel.org>; Fri, 15 Apr 2022 13:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69695C433FE
+	for <io-uring@archiver.kernel.org>; Fri, 15 Apr 2022 13:35:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbiDON1N (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 15 Apr 2022 09:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
+        id S239827AbiDONiH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 15 Apr 2022 09:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiDON1M (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 15 Apr 2022 09:27:12 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565C6186D3
-        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 06:24:43 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 2so7637085pjw.2
-        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 06:24:43 -0700 (PDT)
+        with ESMTP id S1354023AbiDONfy (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 15 Apr 2022 09:35:54 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97CF5EDFC
+        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 06:33:26 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id k14so7328276pga.0
+        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 06:33:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:from:subject:to:cc
-         :content-language:content-transfer-encoding;
-        bh=/0ucfi1fHgao2WEXOWgxYBbPcaoI6nX+P2dzyIICVow=;
-        b=6vmDjKAzRV1wwdtQHqz4/cBNku64uAEECcAhgz06JHEksA0Z0WY9xq7AnnUH/Dg4F2
-         OX99fZNnozbcDeAHN2VdY/axnuqr/DomF4slicOi7tKZ4pPs1rkRfaZzDNDqW4fLl7M9
-         JJQKRu6J5osgIRC21fplPq7wQnBPf1WhKbVAsU6UAKq8nqX3+51OXQ78XokRWy0thVgd
-         js/SryqzKW8vpGtKYm08J1EEgGCoxISplrGeKyFnUsWpPDI5Yd3g/KoPWlh6IcSkrJL6
-         /lty/G/XTidrHjSiubujRYkiM9yP6NcLSGHVk3VPsmFfS0o8GEsnEsU8hDGR9RA/Ic8T
-         wZFQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8ckQmcTiJ5spl0HMC0qkkSy/ZtkGNYsOJd9N4yoJIbo=;
+        b=D+z53gEwsZWNOWyXdQhsRdtcNPv5fIxrNkUKvB6+n86ZIiWQ9E/7S+lUFGbv/yxYbI
+         YWN0XtHZITBydmxFB9Ze3wuH0Yh+twNhZfMzwedbIB1hLFKfiPZeZiAXBqrlepekSg81
+         eRTVsc6e0Ueig45ZIvEnUuBNHySOK9jYzGxrvZ+Q9MJRnKpVu37V2ZmR6CslWScSo4ks
+         4VARX38YQO6QlRva9w6JH7dCBo/8OWQ6o0EIiMMoqvExBB61ihCvOsBFqmIg91lPaSnR
+         nM8MGQJG38pX2vp3afkAkzKxLhwqEC8w7Bk31wBLmARROVgJHHWuzz3tN/U3B5NGIsp/
+         fAbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
-         :subject:to:cc:content-language:content-transfer-encoding;
-        bh=/0ucfi1fHgao2WEXOWgxYBbPcaoI6nX+P2dzyIICVow=;
-        b=JVjgOUjuCcYAulqYRf0OTls0ZNobq5INpawFhLcRs/vmxGHRUsiZRlE4XG/PT61g0d
-         Hu7caZ97N8uGZtQ8oEDEBBma6SoW5NCg6gTuDC6fd5t5PufrculhTsN+b+iefUBNiEEX
-         7RtQCmDEFEdS7iSxljvTd1efYGPikGnbnnLJo3qVGFiMbN0aRn7Qc/v24wn43sOhC8Df
-         1PES9UL7TB+UkcU38CMvTOOVqP21Je2NuGz6EF1eLZUyc4ymUj4gcEpcXeJcOKAr6JKG
-         +Wrepfz5rofyhYebCGmLZ9ErSJ/xiQ4OEpsaaZRUIqo23F/OYBS61wPnJoi1djHm19y4
-         dtxQ==
-X-Gm-Message-State: AOAM530fK7Jmp2Ca12UYuPJ0lErC49Xm/qPOablkyFqjxWl2eLL5xldF
-        pN+bzUxwoWgTLtfWH55DeDiYWkDmk18s1g==
-X-Google-Smtp-Source: ABdhPJyj2NZLszPtzzCxm5Hd5Z4NPiQ3kLJfB31K2JOBcvTTwVUIy6t6S7BthfQMSWyrdXeMZm5qNA==
-X-Received: by 2002:a17:902:8ec8:b0:156:847b:a8f8 with SMTP id x8-20020a1709028ec800b00156847ba8f8mr53018530plo.121.1650029082705;
-        Fri, 15 Apr 2022 06:24:42 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id y3-20020a056a00190300b004fa2411bb92sm3143519pfi.93.2022.04.15.06.24.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 06:24:42 -0700 (PDT)
-Message-ID: <948f7d10-526e-206b-6014-2654b5170d56@kernel.dk>
-Date:   Fri, 15 Apr 2022 07:24:41 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8ckQmcTiJ5spl0HMC0qkkSy/ZtkGNYsOJd9N4yoJIbo=;
+        b=VFBzAcBbFvahxtmapB9IFzYL+4yjVK4fTJ0+PHvVIZRxA5u8a6rwSsyqIwEfcR9rbE
+         6MfrRXvxS0qJksis9qLL6D+6c3pHlJyRh8nUqbyUd34mvyBkfyGFI1lhCyucg9s5UCPi
+         lefYoRiq/6+yh38e0KIkTzpcr7ZokIGHcEm3coTaze+2HVNOPnfOZjk5bprQw8rN6Cpe
+         INR6KecuPak+oPhbD/JU0JuVaFjUUePGkAAK6kDPKjSGoqKfQbcQ9acnyPd3aGui/mnO
+         ypfsrUJqla3V04z1m3aA6X1M1R2kDkveLq0hubNUS3IRyLLYommR3mg9aYUgupDa/nBA
+         Xgag==
+X-Gm-Message-State: AOAM533XUCOXBJQ1LQgQNl6uabxR5bWn1LunQh0WqS6okdyEHHjyh/0U
+        yZcon6FkEPXrQDF1Tm3z3Qa3F/SQUDueeA==
+X-Google-Smtp-Source: ABdhPJymDqR+syaC7RMyltnEwmtpAJevGqsfo9sLAzJpVimea5DEaewIoRGrLVDRZIKHIIp1zAdHwA==
+X-Received: by 2002:a05:6a00:1c63:b0:505:cc7f:a21b with SMTP id s35-20020a056a001c6300b00505cc7fa21bmr8879347pfw.9.1650029605922;
+        Fri, 15 Apr 2022 06:33:25 -0700 (PDT)
+Received: from localhost.localdomain (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id n19-20020a635c53000000b0039dc2ea9876sm4576604pgm.49.2022.04.15.06.33.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 06:33:25 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring fixes for 5.18-rc3
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     io-uring <io-uring@vger.kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 3/5] io_uring: rename io_cancel_data->user_data to just 'data'
+Date:   Fri, 15 Apr 2022 07:33:17 -0600
+Message-Id: <20220415133319.75077-4-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220415133319.75077-1-axboe@kernel.dk>
+References: <20220415133319.75077-1-axboe@kernel.dk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi Linus,
+In preparation for putting other data in there than just the user_data,
+rename it to a data.
 
-- Ensure we check and -EINVAL any use of reserved or struct padding.
-  Although we generally always do that, it's missed in two spots for
-  resource updates, one for the ring fd registration from this merge
-  window, and one for the extended arg. Make sure we have all of them
-  handled. (Dylan)
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-- A few fixes for the deferred file assignment (me, Pavel)
-
-- Add a feature flag for the deferred file assignment so apps can tell
-  we handle it correctly (me)
-
-- Fix a small perf regression with the current file position fix in this
-  merge window (me)
-
-Please pull!
-
-
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
-
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.dk/linux-block.git tags/io_uring-5.18-2022-04-14
-
-for you to fetch changes up to 701521403cfb228536b3947035c8a6eca40d8e58:
-
-  io_uring: abort file assignment prior to assigning creds (2022-04-14 20:23:40 -0600)
-
-----------------------------------------------------------------
-io_uring-5.18-2022-04-14
-
-----------------------------------------------------------------
-Dylan Yudaken (4):
-      io_uring: move io_uring_rsrc_update2 validation
-      io_uring: verify that resv2 is 0 in io_uring_rsrc_update2
-      io_uring: verify resv is 0 in ringfd register/unregister
-      io_uring: verify pad field is 0 in io_get_ext_arg
-
-Jens Axboe (5):
-      io_uring: flag the fact that linked file assignment is sane
-      io_uring: io_kiocb_update_pos() should not touch file for non -1 offset
-      io_uring: move apoll->events cache
-      io_uring: stop using io_wq_work as an fd placeholder
-      io_uring: abort file assignment prior to assigning creds
-
-Pavel Begunkov (4):
-      io_uring: fix assign file locking issue
-      io_uring: use right issue_flags for splice/tee
-      io_uring: fix poll file assign deadlock
-      io_uring: fix poll error reporting
-
- fs/io-wq.h                    |  1 -
- fs/io_uring.c                 | 98 +++++++++++++++++++++++++------------------
- include/uapi/linux/io_uring.h |  1 +
- 3 files changed, 59 insertions(+), 41 deletions(-)
-
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index a45ab678a455..6dcf3ad7ee99 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -6318,13 +6318,13 @@ static bool io_poll_disarm(struct io_kiocb *req)
+ 
+ struct io_cancel_data {
+ 	struct io_ring_ctx *ctx;
+-	u64 user_data;
++	u64 data;
+ };
+ 
+ static int io_poll_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd)
+ 	__must_hold(&ctx->completion_lock)
+ {
+-	struct io_kiocb *req = io_poll_find(ctx, cd->user_data, false);
++	struct io_kiocb *req = io_poll_find(ctx, cd->data, false);
+ 
+ 	if (!req)
+ 		return -ENOENT;
+@@ -6762,7 +6762,7 @@ static bool io_cancel_cb(struct io_wq_work *work, void *data)
+ 	struct io_kiocb *req = container_of(work, struct io_kiocb, work);
+ 	struct io_cancel_data *cd = data;
+ 
+-	return req->ctx == cd->ctx && req->cqe.user_data == cd->user_data;
++	return req->ctx == cd->ctx && req->cqe.user_data == cd->data;
+ }
+ 
+ static int io_async_cancel_one(struct io_uring_task *tctx,
+@@ -6811,7 +6811,7 @@ static int io_try_cancel(struct io_kiocb *req, struct io_cancel_data *cd)
+ 		goto out;
+ 
+ 	spin_lock_irq(&ctx->timeout_lock);
+-	ret = io_timeout_cancel(ctx, cd->user_data);
++	ret = io_timeout_cancel(ctx, cd->data);
+ 	spin_unlock_irq(&ctx->timeout_lock);
+ out:
+ 	spin_unlock(&ctx->completion_lock);
+@@ -6837,8 +6837,8 @@ static int io_async_cancel(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	struct io_cancel_data cd = {
+-		.ctx		= ctx,
+-		.user_data	= req->cancel.addr,
++		.ctx	= ctx,
++		.data	= req->cancel.addr,
+ 	};
+ 	struct io_tctx_node *node;
+ 	int ret;
+@@ -7459,8 +7459,8 @@ static void io_req_task_link_timeout(struct io_kiocb *req, bool *locked)
+ 	if (prev) {
+ 		if (!(req->task->flags & PF_EXITING)) {
+ 			struct io_cancel_data cd = {
+-				.ctx		= req->ctx,
+-				.user_data	= prev->cqe.user_data,
++				.ctx	= req->ctx,
++				.data	= prev->cqe.user_data,
+ 			};
+ 
+ 			ret = io_try_cancel(req, &cd);
 -- 
-Jens Axboe
+2.35.1
 
