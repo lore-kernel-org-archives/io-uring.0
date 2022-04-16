@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4FE0C433EF
-	for <io-uring@archiver.kernel.org>; Sat, 16 Apr 2022 00:26:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C104DC433FE
+	for <io-uring@archiver.kernel.org>; Sat, 16 Apr 2022 00:26:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiDPA2l (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 15 Apr 2022 20:28:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S230147AbiDPA2n (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 15 Apr 2022 20:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiDPA2k (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 15 Apr 2022 20:28:40 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328E4EBB84
-        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 17:26:07 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id u2so9059052pgq.10
-        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 17:26:07 -0700 (PDT)
+        with ESMTP id S230052AbiDPA2m (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 15 Apr 2022 20:28:42 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C366EBB9C
+        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 17:26:09 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id j8so8183424pll.11
+        for <io-uring@vger.kernel.org>; Fri, 15 Apr 2022 17:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Yaj0xFOTSZBpKJGtHJ36pBqmihTYeVxXb03DtNqs/zw=;
-        b=bLqZlX4hWh7PM7NBetDtViIfHXUV5Cz+C7Yw37GzopRqA7iU17bSSASFWFhw4KHgzF
-         5EziSUd5appKMSYqq77awWBtDrQS7NYRvyYFEiwLtR8ostIf/zF3PZmO4jKvIY01JMKd
-         cYvy+99F3bYjB50EEXhoO9JtxHDrmxQh2sodhE3jomVjCjIjvuYBgc2DT9zKM2zGPOgA
-         eiCI7I1OD/yCghNQsW4InAmd7EB08+kN6XgO3UYKRTARkpBje00F04ljlZN4PDX4Caqo
-         rr1MAqmsfEYf0gcdNmoa4FTWKi7IFxs19UHOy/1e90/CzPtJ40X+Em4Hq/3XGThhhRX8
-         Ha6Q==
+        bh=dSXwdpuB52SuLjmFXAXoBCz/Q+io05P8oxRkfvN/SGc=;
+        b=W8u9yJIJ8g6C2q4v7r+EjXzt5ZAHGQzigfV4PgB7hY4NUm0dd378BoCNSVImOCHk4K
+         p2Sr1YEAM3iHEEVktwLqRF/PSOJCHacDGe0Iw9fwGjJRKtfpp+C4lgXOpinWC69TCF6V
+         J0Gc+SKGsr4TIHVPms/V5sfnjlFoyWXQuJmHQKKb/qljr/Fq4Ehafd829Il0eAFlMWYS
+         st0i/ofsVgc10H20JAE047zWEmLVejMO9cPeM0Lt9eIz6yWdMDzKFI7PaPVB4pZWunXO
+         vfLINhYjhCNZJh4SYHsG0IdvHKTIMhooVD3Gcfutz0/gmGBY8RoBMOQ+dXB14t/RjqBl
+         QcdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Yaj0xFOTSZBpKJGtHJ36pBqmihTYeVxXb03DtNqs/zw=;
-        b=wB7Tk8rCZ2QhpjQaSemhdVrCcJyrO5DY+MGyc4ZN5v58dBbsVZWCi9wrkR2R/dEehX
-         mPl1tmojX3SSct3BoTOiwBbVN2MOgWm8Y0f3Qv/dj/jKL0QKpzeSoO6K2eC5O6Cbg5RZ
-         1O9iK1SlcLDu2Jw12ln2jelT6AvDqP9zGOFU65S1bhEdvmblU7aoM/jK4D+7Rv27PvbH
-         klB40jhurZhqqp0G47MWDpdnvMS7apwOKLPoSEVP39IiSFmAVm/nDoe5o0Uu5+Qqfr8J
-         Qtv7AVKWrq2v3Xbc2eGip/nESHLXfnaYOS2HqlwLaTS5tengCfFLKHjc4/jzkEOqxDyF
-         DV2g==
-X-Gm-Message-State: AOAM530XUONGgyxIeNsqcs0U5KIwLsG6Is/kk6ZHwxIbyp65JcBBaQZ4
-        b1+JwhX1PsDJYnk5h3hWATiZx4d2SlLjHQ==
-X-Google-Smtp-Source: ABdhPJxb00cvf2YikzelwKkZpVOPxVDAJV3rkyEO0n+CE5KUNadPJ5v4fZeSV2CW9xq3Iro3RZsccQ==
-X-Received: by 2002:a05:6a00:4211:b0:506:5061:3e38 with SMTP id cd17-20020a056a00421100b0050650613e38mr1340912pfb.74.1650068765954;
-        Fri, 15 Apr 2022 17:26:05 -0700 (PDT)
+        bh=dSXwdpuB52SuLjmFXAXoBCz/Q+io05P8oxRkfvN/SGc=;
+        b=UQxhiC7ByqPtPz5yQk0TimSMqsScSa8sdY4QGSfbSjV/6KB+SqcDFpNwrKWZJlFkXe
+         pTZyipG1zaBDLmrjSo08rktc8QZ5DbXPolOLB0knsDIeKjVTdQOq8ZRK8b5Gd851B3h+
+         sxAmpBtv4mfaS2LgWx5Hn85S1OIXtuAu1wi9MNW0Iffj4Tr/L+DYrzaN3NZeYNCCenA+
+         sA4pwVSx0/AIuWTMjA4a8G9TbG+0CyrR1IZV2h/MHStvoR5MPPPiiO4yAsgSY96QXouB
+         17Pl01faXOo4zzUfB3NQCGDhuXcY8m6rsln7vKyNLwHCryy0p09WSngl0Me5mudoExIo
+         LbuA==
+X-Gm-Message-State: AOAM531/YKtl13EHsVhSaUTEQ8Q04uqBrmfsfXQxEGRic1FjYxxxASll
+        9ab4tgkqxnC/KhHo/nOpVOeVXwxege0wRg==
+X-Google-Smtp-Source: ABdhPJwzVhGNafLAXRlN0xKTOSURUcrj3/AqJgN1MxrsZS4MNOD0A0vPwHrZm5ygqhlD6ZwjWvEMGg==
+X-Received: by 2002:a17:90a:be16:b0:1cd:5aef:69e8 with SMTP id a22-20020a17090abe1600b001cd5aef69e8mr1401405pjs.233.1650068768229;
+        Fri, 15 Apr 2022 17:26:08 -0700 (PDT)
 Received: from localhost.localdomain (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id s20-20020aa78d54000000b004fac74c83b3sm3895375pfe.186.2022.04.15.17.26.04
+        by smtp.gmail.com with ESMTPSA id s20-20020aa78d54000000b004fac74c83b3sm3895375pfe.186.2022.04.15.17.26.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 17:26:05 -0700 (PDT)
+        Fri, 15 Apr 2022 17:26:07 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/4] io_uring: pass in struct io_cancel_data consistently
-Date:   Fri, 15 Apr 2022 18:25:59 -0600
-Message-Id: <20220416002601.360026-3-axboe@kernel.dk>
+Subject: [PATCH 4/4] io_uring: allow IORING_OP_ASYNC_CANCEL with 'fd' key
+Date:   Fri, 15 Apr 2022 18:26:01 -0600
+Message-Id: <20220416002601.360026-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220416002601.360026-1-axboe@kernel.dk>
 References: <20220416002601.360026-1-axboe@kernel.dk>
@@ -62,246 +62,174 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-In preparation for being able to not only key cancel off the user_data,
-pass in the io_cancel_data struct for the various functions that deal
-with request cancelation.
+Currently sqe->addr must contain the user_data of the request being
+canceled. Introduce the IORING_ASYNC_CANCEL_FD flag, which tells the
+kernel that we're keying off the file fd instead for cancelation. This
+allows canceling any request that a) uses a file, and b) was assigned the
+file based on the value being passed in.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/io_uring.c | 76 +++++++++++++++++++++++++++++----------------------
- 1 file changed, 44 insertions(+), 32 deletions(-)
+ fs/io_uring.c                 | 71 ++++++++++++++++++++++++++++++-----
+ include/uapi/linux/io_uring.h |  3 ++
+ 2 files changed, 65 insertions(+), 9 deletions(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 878d30a31606..16f8e1f7dcae 100644
+index 79601a333903..07acf7199fa7 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -971,6 +971,11 @@ struct io_defer_entry {
- 	u32			seq;
+@@ -570,6 +570,7 @@ struct io_cancel {
+ 	struct file			*file;
+ 	u64				addr;
+ 	u32				flags;
++	s32				fd;
  };
  
-+struct io_cancel_data {
-+	struct io_ring_ctx *ctx;
-+	u64 data;
-+};
+ struct io_timeout {
+@@ -975,7 +976,10 @@ struct io_defer_entry {
+ 
+ struct io_cancel_data {
+ 	struct io_ring_ctx *ctx;
+-	u64 data;
++	union {
++		u64 data;
++		struct file *file;
++	};
+ 	u32 flags;
+ 	int seq;
+ };
+@@ -6322,6 +6326,29 @@ static struct io_kiocb *io_poll_find(struct io_ring_ctx *ctx, bool poll_only,
+ 	return NULL;
+ }
+ 
++static struct io_kiocb *io_poll_file_find(struct io_ring_ctx *ctx,
++					  struct io_cancel_data *cd)
++	__must_hold(&ctx->completion_lock)
++{
++	struct io_kiocb *req;
++	int i;
 +
- struct io_op_def {
- 	/* needs req->file assigned */
- 	unsigned		needs_file : 1;
-@@ -6288,16 +6293,16 @@ static __cold bool io_poll_remove_all(struct io_ring_ctx *ctx,
- 	return found;
- }
- 
--static struct io_kiocb *io_poll_find(struct io_ring_ctx *ctx, __u64 sqe_addr,
--				     bool poll_only)
-+static struct io_kiocb *io_poll_find(struct io_ring_ctx *ctx, bool poll_only,
-+				     struct io_cancel_data *cd)
++	for (i = 0; i < (1U << ctx->cancel_hash_bits); i++) {
++		struct hlist_head *list;
++
++		list = &ctx->cancel_hash[i];
++		hlist_for_each_entry(req, list, hash_node) {
++			if (req->file != cd->file)
++				continue;
++			if (cd->seq == req->work.cancel_seq)
++				continue;
++			req->work.cancel_seq = cd->seq;
++			return req;
++		}
++	}
++	return NULL;
++}
++
+ static bool io_poll_disarm(struct io_kiocb *req)
  	__must_hold(&ctx->completion_lock)
  {
- 	struct hlist_head *list;
- 	struct io_kiocb *req;
- 
--	list = &ctx->cancel_hash[hash_long(sqe_addr, ctx->cancel_hash_bits)];
-+	list = &ctx->cancel_hash[hash_long(cd->data, ctx->cancel_hash_bits)];
- 	hlist_for_each_entry(req, list, hash_node) {
--		if (sqe_addr != req->cqe.user_data)
-+		if (cd->data != req->cqe.user_data)
- 			continue;
- 		if (poll_only && req->opcode != IORING_OP_POLL_ADD)
- 			continue;
-@@ -6316,10 +6321,10 @@ static bool io_poll_disarm(struct io_kiocb *req)
- 	return true;
- }
- 
--static int io_poll_cancel(struct io_ring_ctx *ctx, __u64 sqe_addr)
-+static int io_poll_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd)
+@@ -6335,8 +6362,12 @@ static bool io_poll_disarm(struct io_kiocb *req)
+ static int io_poll_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd)
  	__must_hold(&ctx->completion_lock)
  {
--	struct io_kiocb *req = io_poll_find(ctx, sqe_addr, false);
-+	struct io_kiocb *req = io_poll_find(ctx, false, cd);
+-	struct io_kiocb *req = io_poll_find(ctx, false, cd);
++	struct io_kiocb *req;
  
++	if (cd->flags & IORING_ASYNC_CANCEL_FD)
++		req = io_poll_file_find(ctx, cd);
++	else
++		req = io_poll_find(ctx, false, cd);
  	if (!req)
  		return -ENOENT;
-@@ -6411,13 +6416,14 @@ static int io_poll_add(struct io_kiocb *req, unsigned int issue_flags)
+ 	io_poll_cancel_req(req);
+@@ -6785,8 +6816,13 @@ static bool io_cancel_cb(struct io_wq_work *work, void *data)
  
- static int io_poll_update(struct io_kiocb *req, unsigned int issue_flags)
- {
-+	struct io_cancel_data cd = { .data = req->poll_update.old_user_data, };
- 	struct io_ring_ctx *ctx = req->ctx;
- 	struct io_kiocb *preq;
- 	int ret2, ret = 0;
- 	bool locked;
- 
- 	spin_lock(&ctx->completion_lock);
--	preq = io_poll_find(ctx, req->poll_update.old_user_data, true);
-+	preq = io_poll_find(ctx, true, &cd);
- 	if (!preq || !io_poll_disarm(preq)) {
- 		spin_unlock(&ctx->completion_lock);
- 		ret = preq ? -EALREADY : -ENOENT;
-@@ -6477,7 +6483,7 @@ static enum hrtimer_restart io_timeout_fn(struct hrtimer *timer)
- }
- 
- static struct io_kiocb *io_timeout_extract(struct io_ring_ctx *ctx,
--					   __u64 user_data)
-+					   struct io_cancel_data *cd)
- 	__must_hold(&ctx->timeout_lock)
- {
- 	struct io_timeout_data *io;
-@@ -6485,7 +6491,7 @@ static struct io_kiocb *io_timeout_extract(struct io_ring_ctx *ctx,
- 	bool found = false;
- 
- 	list_for_each_entry(req, &ctx->timeout_list, timeout.list) {
--		found = user_data == req->cqe.user_data;
-+		found = cd->data == req->cqe.user_data;
- 		if (found)
- 			break;
- 	}
-@@ -6499,11 +6505,11 @@ static struct io_kiocb *io_timeout_extract(struct io_ring_ctx *ctx,
- 	return req;
- }
- 
--static int io_timeout_cancel(struct io_ring_ctx *ctx, __u64 user_data)
-+static int io_timeout_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd)
- 	__must_hold(&ctx->completion_lock)
- 	__must_hold(&ctx->timeout_lock)
- {
--	struct io_kiocb *req = io_timeout_extract(ctx, user_data);
-+	struct io_kiocb *req = io_timeout_extract(ctx, cd);
- 
- 	if (IS_ERR(req))
- 		return PTR_ERR(req);
-@@ -6556,7 +6562,8 @@ static int io_timeout_update(struct io_ring_ctx *ctx, __u64 user_data,
- 			     struct timespec64 *ts, enum hrtimer_mode mode)
- 	__must_hold(&ctx->timeout_lock)
- {
--	struct io_kiocb *req = io_timeout_extract(ctx, user_data);
-+	struct io_cancel_data cd = { .data = user_data, };
-+	struct io_kiocb *req = io_timeout_extract(ctx, &cd);
- 	struct io_timeout_data *data;
- 
- 	if (IS_ERR(req))
-@@ -6621,9 +6628,11 @@ static int io_timeout_remove(struct io_kiocb *req, unsigned int issue_flags)
- 	int ret;
- 
- 	if (!(req->timeout_rem.flags & IORING_TIMEOUT_UPDATE)) {
-+		struct io_cancel_data cd = { .data = tr->addr, };
-+
- 		spin_lock(&ctx->completion_lock);
- 		spin_lock_irq(&ctx->timeout_lock);
--		ret = io_timeout_cancel(ctx, tr->addr);
-+		ret = io_timeout_cancel(ctx, &cd);
- 		spin_unlock_irq(&ctx->timeout_lock);
- 		spin_unlock(&ctx->completion_lock);
- 	} else {
-@@ -6752,30 +6761,24 @@ static int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
- 	return 0;
- }
- 
--struct io_cancel_data {
--	struct io_ring_ctx *ctx;
--	u64 user_data;
--};
--
- static bool io_cancel_cb(struct io_wq_work *work, void *data)
- {
- 	struct io_kiocb *req = container_of(work, struct io_kiocb, work);
- 	struct io_cancel_data *cd = data;
- 
--	return req->ctx == cd->ctx && req->cqe.user_data == cd->user_data;
-+	return req->ctx == cd->ctx && req->cqe.user_data == cd->data;
- }
- 
--static int io_async_cancel_one(struct io_uring_task *tctx, u64 user_data,
--			       struct io_ring_ctx *ctx)
-+static int io_async_cancel_one(struct io_uring_task *tctx,
-+			       struct io_cancel_data *cd)
- {
--	struct io_cancel_data data = { .ctx = ctx, .user_data = user_data, };
- 	enum io_wq_cancel cancel_ret;
- 	int ret = 0;
- 
- 	if (!tctx || !tctx->io_wq)
- 		return -ENOENT;
- 
--	cancel_ret = io_wq_cancel_cb(tctx->io_wq, io_cancel_cb, &data, false);
-+	cancel_ret = io_wq_cancel_cb(tctx->io_wq, io_cancel_cb, cd, false);
- 	switch (cancel_ret) {
- 	case IO_WQ_CANCEL_OK:
- 		ret = 0;
-@@ -6791,14 +6794,14 @@ static int io_async_cancel_one(struct io_uring_task *tctx, u64 user_data,
- 	return ret;
- }
- 
--static int io_try_cancel_userdata(struct io_kiocb *req, u64 sqe_addr)
-+static int io_try_cancel(struct io_kiocb *req, struct io_cancel_data *cd)
- {
- 	struct io_ring_ctx *ctx = req->ctx;
- 	int ret;
- 
- 	WARN_ON_ONCE(!io_wq_current_is_worker() && req->task != current);
- 
--	ret = io_async_cancel_one(req->task->io_uring, sqe_addr, ctx);
-+	ret = io_async_cancel_one(req->task->io_uring, cd);
- 	/*
- 	 * Fall-through even for -EALREADY, as we may have poll armed
- 	 * that need unarming.
-@@ -6807,12 +6810,12 @@ static int io_try_cancel_userdata(struct io_kiocb *req, u64 sqe_addr)
- 		return 0;
- 
- 	spin_lock(&ctx->completion_lock);
--	ret = io_poll_cancel(ctx, sqe_addr);
-+	ret = io_poll_cancel(ctx, cd);
+ 	if (req->ctx != cd->ctx)
+ 		return false;
+-	if (req->cqe.user_data != cd->data)
+-		return false;
++	if (cd->flags & IORING_ASYNC_CANCEL_FD) {
++		if (req->file != cd->file)
++			return false;
++	} else {
++		if (req->cqe.user_data != cd->data)
++			return false;
++	}
+ 	if (cd->flags & IORING_ASYNC_CANCEL_ALL) {
+ 		if (cd->seq == req->work.cancel_seq)
+ 			return false;
+@@ -6841,9 +6877,11 @@ static int io_try_cancel(struct io_kiocb *req, struct io_cancel_data *cd)
  	if (ret != -ENOENT)
  		goto out;
  
- 	spin_lock_irq(&ctx->timeout_lock);
--	ret = io_timeout_cancel(ctx, sqe_addr);
-+	ret = io_timeout_cancel(ctx, cd);
- 	spin_unlock_irq(&ctx->timeout_lock);
+-	spin_lock_irq(&ctx->timeout_lock);
+-	ret = io_timeout_cancel(ctx, cd);
+-	spin_unlock_irq(&ctx->timeout_lock);
++	if (!(cd->flags & IORING_ASYNC_CANCEL_FD)) {
++		spin_lock_irq(&ctx->timeout_lock);
++		ret = io_timeout_cancel(ctx, cd);
++		spin_unlock_irq(&ctx->timeout_lock);
++	}
  out:
  	spin_unlock(&ctx->completion_lock);
-@@ -6837,11 +6840,14 @@ static int io_async_cancel_prep(struct io_kiocb *req,
- static int io_async_cancel(struct io_kiocb *req, unsigned int issue_flags)
+ 	return ret;
+@@ -6854,15 +6892,17 @@ static int io_async_cancel_prep(struct io_kiocb *req,
  {
- 	struct io_ring_ctx *ctx = req->ctx;
--	u64 sqe_addr = req->cancel.addr;
-+	struct io_cancel_data cd = {
-+		.ctx		= ctx,
-+		.data		= req->cancel.addr,
-+	};
- 	struct io_tctx_node *node;
+ 	if (unlikely(req->ctx->flags & IORING_SETUP_IOPOLL))
+ 		return -EINVAL;
+-	if (unlikely(req->flags & (REQ_F_FIXED_FILE | REQ_F_BUFFER_SELECT)))
++	if (unlikely(req->flags & REQ_F_BUFFER_SELECT))
+ 		return -EINVAL;
+ 	if (sqe->ioprio || sqe->off || sqe->len || sqe->splice_fd_in)
+ 		return -EINVAL;
+ 
+ 	req->cancel.addr = READ_ONCE(sqe->addr);
+ 	req->cancel.flags = READ_ONCE(sqe->cancel_flags);
+-	if (req->cancel.flags & ~IORING_ASYNC_CANCEL_ALL)
++	if (req->cancel.flags & ~(IORING_ASYNC_CANCEL_ALL|IORING_ASYNC_CANCEL_FD))
+ 		return -EINVAL;
++	if (req->cancel.flags & IORING_ASYNC_CANCEL_FD)
++		req->cancel.fd = READ_ONCE(sqe->fd);
+ 
+ 	return 0;
+ }
+@@ -6911,7 +6951,20 @@ static int io_async_cancel(struct io_kiocb *req, unsigned int issue_flags)
+ 	};
  	int ret;
  
--	ret = io_try_cancel_userdata(req, sqe_addr);
-+	ret = io_try_cancel(req, &cd);
- 	if (ret != -ENOENT)
- 		goto done;
- 
-@@ -6851,7 +6857,7 @@ static int io_async_cancel(struct io_kiocb *req, unsigned int issue_flags)
- 	list_for_each_entry(node, &ctx->tctx_list, ctx_node) {
- 		struct io_uring_task *tctx = node->task->io_uring;
- 
--		ret = io_async_cancel_one(tctx, req->cancel.addr, ctx);
-+		ret = io_async_cancel_one(tctx, &cd);
- 		if (ret != -ENOENT)
- 			break;
- 	}
-@@ -7455,8 +7461,14 @@ static void io_req_task_link_timeout(struct io_kiocb *req, bool *locked)
- 	int ret = -ENOENT;
- 
- 	if (prev) {
--		if (!(req->task->flags & PF_EXITING))
--			ret = io_try_cancel_userdata(req, prev->cqe.user_data);
-+		if (!(req->task->flags & PF_EXITING)) {
-+			struct io_cancel_data cd = {
-+				.ctx		= req->ctx,
-+				.data		= prev->cqe.user_data,
-+			};
-+
-+			ret = io_try_cancel(req, &cd);
++	if (cd.flags & IORING_ASYNC_CANCEL_FD) {
++		if (req->flags & REQ_F_FIXED_FILE)
++			req->file = io_file_get_fixed(req, req->cancel.fd, issue_flags);
++		else
++			req->file = io_file_get_normal(req, req->cancel.fd);
++		if (!req->file) {
++			ret = -EBADF;
++			goto done;
 +		}
- 		io_req_complete_post(req, ret ?: -ETIME, 0);
- 		io_put_req(prev);
- 	} else {
++		cd.file = req->file;
++	}
++
+ 	ret = __io_async_cancel(&cd, req, issue_flags);
++done:
+ 	if (ret < 0)
+ 		req_set_fail(req);
+ 	io_req_complete_post(req, ret, 0);
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 476e58a2837f..cc7fe82a1798 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -191,8 +191,11 @@ enum {
+  * ASYNC_CANCEL flags.
+  *
+  * IORING_ASYNC_CANCEL_ALL	Cancel all requests that match the given key
++ * IORING_ASYNC_CANCEL_FD	Key off 'fd' for cancelation rather than the
++ *				request 'user_data'
+  */
+ #define IORING_ASYNC_CANCEL_ALL	(1U << 0)
++#define IORING_ASYNC_CANCEL_FD	(1U << 1)
+ 
+ /*
+  * IO completion data structure (Completion Queue Entry)
 -- 
 2.35.1
 
