@@ -2,53 +2,50 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BF04C433EF
-	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 20:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74BBAC433F5
+	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 20:56:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242007AbiDSU71 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 19 Apr 2022 16:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49526 "EHLO
+        id S242996AbiDSU7b (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 19 Apr 2022 16:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiDSU70 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 16:59:26 -0400
+        with ESMTP id S1344945AbiDSU72 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 16:59:28 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088C141608
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:43 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23JGdvIE011525
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:42 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD7341635
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:44 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23JJOC9R012971
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=+VrprB8briehC8Cavkihxpy7Ci+QY9KDkkKYtmWW9S8=;
- b=Stb15VkqB4aGBEse+2hZIyOL6cBaZ6M6LMtwo12Rg0N6MUfPtCZ7KYLyYHBxQeDH4YVK
- cfnxpy+lLlkofiwn/d4whkcgpUZ6r6MK0viz6+VnkZ1ATZ7qY69eIAjSofFHP5SSksby
- yAUD4dq5nnsmg8H+/X09EEKUUw9I92kn4oY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhjh1pddh-1
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=fPHGeG+neE3I76c0vAUWHgTbfQNQ/CjjhRCrJn38dEY=;
+ b=WA+BWTDXm7zZyDzjRmkY21U2C9Xs0kZ9r9G6jBKfJQdllaNx/kwm/9aTYxNSuUrRy0gi
+ QXNHcqjzqUKjvLMQVSPRxq2t0y2QEXBAG+8l9ts5yITXFl4r0OZy8rvLp44XjMEzUqVO
+ n8RjI3dquuNvz3ttA7gDgKV/C4+7ICem3Kw= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fj36t0mv4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:42 -0700
-Received: from twshared10896.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:43 -0700
+Received: from twshared14141.02.ash7.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 13:56:41 -0700
+ 15.1.2375.24; Tue, 19 Apr 2022 13:56:43 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id EECF3DD45FE1; Tue, 19 Apr 2022 13:56:35 -0700 (PDT)
+        id DF76BDD45FDB; Tue, 19 Apr 2022 13:56:35 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
-CC:     <shr@fb.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v1 03/11] io_uring: change ring size calculation for CQE32
-Date:   Tue, 19 Apr 2022 13:56:16 -0700
-Message-ID: <20220419205624.1546079-4-shr@fb.com>
+CC:     <shr@fb.com>
+Subject: [PATCH v1 00/11] add large CQE support for io-uring
+Date:   Tue, 19 Apr 2022 13:56:13 -0700
+Message-ID: <20220419205624.1546079-1-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419205624.1546079-1-shr@fb.com>
-References: <20220419205624.1546079-1-shr@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 0xMw92qKltHDiSr4lRpTP9hTh-cOpmM3
-X-Proofpoint-ORIG-GUID: 0xMw92qKltHDiSr4lRpTP9hTh-cOpmM3
+X-Proofpoint-GUID: gVYrptisVwT4HXakQRvDiOLWBtxEu7gF
+X-Proofpoint-ORIG-GUID: gVYrptisVwT4HXakQRvDiOLWBtxEu7gF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-19_08,2022-04-15_01,2022-02-23_01
@@ -56,55 +53,87 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This changes the function rings_size to take large CQE's into account.
+This adds the large CQE support for io-uring. Large CQE's are 16 bytes lo=
+nger.
+To support the longer CQE's the allocation part is changed and when the C=
+QE is
+accessed.
 
-Co-developed-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Stefan Roesch <shr@fb.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- fs/io_uring.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+The allocation of the large CQE's is twice as big, so the allocation size=
+ is
+doubled. The ring size calculation needs to take this into account.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index bf2b02518332..9712483d3a17 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -9693,8 +9693,8 @@ static void *io_mem_alloc(size_t size)
- 	return (void *) __get_free_pages(gfp, get_order(size));
- }
-=20
--static unsigned long rings_size(unsigned sq_entries, unsigned cq_entries=
-,
--				size_t *sq_offset)
-+static unsigned long rings_size(struct io_ring_ctx *ctx, unsigned int sq=
-_entries,
-+				unsigned int cq_entries, size_t *sq_offset)
- {
- 	struct io_rings *rings;
- 	size_t off, sq_array_size;
-@@ -9702,6 +9702,10 @@ static unsigned long rings_size(unsigned sq_entrie=
-s, unsigned cq_entries,
- 	off =3D struct_size(rings, cqes, cq_entries);
- 	if (off =3D=3D SIZE_MAX)
- 		return SIZE_MAX;
-+	if (ctx->flags & IORING_SETUP_CQE32) {
-+		if (check_shl_overflow(off, 1, &off))
-+			return SIZE_MAX;
-+	}
-=20
- #ifdef CONFIG_SMP
- 	off =3D ALIGN(off, SMP_CACHE_BYTES);
-@@ -11365,7 +11369,7 @@ static __cold int io_allocate_scq_urings(struct i=
-o_ring_ctx *ctx,
- 	ctx->sq_entries =3D p->sq_entries;
- 	ctx->cq_entries =3D p->cq_entries;
-=20
--	size =3D rings_size(p->sq_entries, p->cq_entries, &sq_array_offset);
-+	size =3D rings_size(ctx, p->sq_entries, p->cq_entries, &sq_array_offset=
-);
- 	if (size =3D=3D SIZE_MAX)
- 		return -EOVERFLOW;
-=20
+All accesses to the large CQE's need to be shifted by 1 to take the bigge=
+r size
+of each CQE into account. The existing index manipulation does not need t=
+o be
+changed and can stay the same.
+
+The setup and the completion processing needs to take the new fields into
+account and initialize them. For the completion processing these fields n=
+eed
+to be passed through.
+
+The flush completion processing needs to fill the additional CQE32 fields=
+.
+
+The code for overflows needs to be adapted accordingly: the allocation ne=
+eds to
+take large CQE's into account. This means that the order of the fields in=
+ the io
+overflow structure needs to be changed and the allocation needs to be enl=
+arged
+for big CQE's.
+In addition the two new fields need to be copied for large CQE's.
+
+The new fields are added to the tracing statements, so the extra1 and ext=
+ra2
+fields are exposed in tracing.
+
+For testing purposes the extra1 and extra2 fields are used by the nop ope=
+ration.
+
+
+Testing:
+
+The exisiting tests have been run with the following configurations and t=
+hey all
+pass:
+
+- Default config
+- Large SQE
+- Large CQE
+- Large SQE and large CQE.
+
+In addition a new test has been added to liburing to verify that extra1 a=
+nd extra2
+are set as expected for the nop operation.
+
+Note:
+To use this patch also the corresponding changes to the client library
+liburing are required. A different patch series is sent out for this.
+
+This is based of the jens/io_uring-big-sqe branch.
+
+
+Stefan Roesch (11):
+  io_uring: support CQE32 in io_uring_cqe
+  io_uring: wire up inline completion path for CQE32
+  io_uring: change ring size calculation for CQE32
+  io_uring: add CQE32 setup processing
+  io_uring: add CQE32 completion processing
+  io_uring: modify io_get_cqe for CQE32
+  io_uring: flush completions for CQE32
+  io_uring: overflow processing for CQE32
+  io_uring: add tracing for additional CQE32 fields
+  io_uring: enable CQE32
+  io_uring: support CQE32 for nop operation
+
+ fs/io_uring.c                   | 209 +++++++++++++++++++++++++++-----
+ include/trace/events/io_uring.h |  18 ++-
+ include/uapi/linux/io_uring.h   |  12 ++
+ 3 files changed, 207 insertions(+), 32 deletions(-)
+
 --=20
 2.30.2
 
