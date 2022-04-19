@@ -2,92 +2,120 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8972AC433EF
-	for <io-uring@archiver.kernel.org>; Mon, 18 Apr 2022 20:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12DD3C433F5
+	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 11:07:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347822AbiDRUzO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 18 Apr 2022 16:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S1346610AbiDSLKY (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 19 Apr 2022 07:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231984AbiDRUzN (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 18 Apr 2022 16:55:13 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7D022BD7
-        for <io-uring@vger.kernel.org>; Mon, 18 Apr 2022 13:52:33 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id p21so15576593ioj.4
-        for <io-uring@vger.kernel.org>; Mon, 18 Apr 2022 13:52:33 -0700 (PDT)
+        with ESMTP id S1350894AbiDSLKX (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 07:10:23 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A5A2AC71
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 04:07:41 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id t11so32077384eju.13
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 04:07:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:in-reply-to:references:subject:message-id:date:mime-version
-         :content-transfer-encoding;
-        bh=5gbMiRklA3mGcPsHpxBegt+JZYUqcdcqnkzOGBInLM0=;
-        b=Zte4T8UDrGhgbuR0ar6WuJ1djBMbDkD4m/c20YDmakvOLUpRvORmFJd82aKYYROhd2
-         MmLJNJDPIt+j3qBsSikvztco+S8A+yAjpFXlFSsFEYOlng1cvtypca4hMnWhdmBngztn
-         R2GB+EzkkMC9yTB7/ym8B8pzznYXz74E232msCMnCn46+yjt8hJzWhFiN0lSSuD8c4fa
-         Z+dcUua2iDRqPj7DrLcshtuiiEKcCzAnYM8gvj2IPL08gdgtWlItnIgfuTTHlcpt/mTQ
-         yLUeN7S/uPByAnCjoSvEeZUwm5pfHSwCylJBQ4xhYP0tdxATzPOge8Xp2NbtMYNRV8Iz
-         H59g==
+        d=scylladb-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:from
+         :subject:organization:content-transfer-encoding;
+        bh=SVzQZcyELwbjO6gcVnQuwsmE988o1HdnwZsLFPjqfmU=;
+        b=qvgYVU7DPdwmfTOZB3EbXI0M57I3Eqtv0rf3HdBU8exuwAYNR2xbMTrRBnYPhxxEC1
+         qJKOl1ruBo/T91gSczzfEQuVjdeI0bxLW73HMQyqufgLSnCqjHuVys1zQ3nG6oOQGBUi
+         uhnleXnIuNFL46irQnzIqxvChYjv2GwxO29RvLRHDQ2659bCJna0FOCtSOn+MjJLdrZ1
+         xaiYWj2IDxoj2Hn5xfL3qcWbZY4pPdSpLsgm4xclotOVKdQ3OOwz12+ONQHvWAAHjDOm
+         YmVXk+DKvFaGf+OVe1ajLkhz3f6gDCNX3d1j46GuJ+R7JmroRv839rTG0RaPxRsqNyfW
+         YzfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=5gbMiRklA3mGcPsHpxBegt+JZYUqcdcqnkzOGBInLM0=;
-        b=RycwIsxwFZD8i3lhnNviaWxT99HfqQ6SxM0vBLqLdgrLqPxOU9xTofKmuIX/Xz2FEL
-         DzgBaLwXqWD9MyDfn2SmuCv3MPCdTY/XmE/NmdtBrKom4M0yMm75sQPG/1S85A1UEq9c
-         oNQC1y34adLYBhUMvxnj39CFk7xUxKlWqNsx8K41Ng3ylQFs8dGSdAnJ1+PXWdtHxvx5
-         +yaMDnE3vOSxWNKJnl/xBK0XugkyfK39cvMWnY8OFzzKu1A97Gia3ezkys9gbyWvEuhu
-         DBAnp2uhDpH8Iv3FNejaMxpEBB17CcwSBtb3z172rcTRn4n/09zGyJnQkhUVRS6f2msX
-         ik9A==
-X-Gm-Message-State: AOAM532DU4hPWLlHym9T6kAz1Aus1DKvE0DPzrlm3rEVnYyvSKby2dqQ
-        WnQEg0zmrURgRMR9tJFo8ldgl6eft6fflA==
-X-Google-Smtp-Source: ABdhPJwzG9XzlOdjfiCpGcWVMBeWNsrAVFH5Ybtu2leh6kkY3mP9TGZ7qNsT/w2XAwOMT5S9/B+uKA==
-X-Received: by 2002:a05:6638:2405:b0:327:d930:bc9c with SMTP id z5-20020a056638240500b00327d930bc9cmr5964303jat.70.1650315153116;
-        Mon, 18 Apr 2022 13:52:33 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id r4-20020a924404000000b002c9dc82ab11sm7909654ila.79.2022.04.18.13.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 13:52:32 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     asml.silence@gmail.com, io-uring@vger.kernel.org
-In-Reply-To: <cover.1650311386.git.asml.silence@gmail.com>
-References: <cover.1650311386.git.asml.silence@gmail.com>
-Subject: Re: [PATCH 0/5] random 5.19 patches
-Message-Id: <165031515242.148626.17261800284582343473.b4-ty@kernel.dk>
-Date:   Mon, 18 Apr 2022 14:52:32 -0600
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:from:subject:organization
+         :content-transfer-encoding;
+        bh=SVzQZcyELwbjO6gcVnQuwsmE988o1HdnwZsLFPjqfmU=;
+        b=VDozUlfoszlS8mK0n3g+J5h00QBD6OmnIz3YRf3ALYiUSxRDNIlrihysrnMecc+FaF
+         Z3vmUKmdaaSSgTysUl+ASIF1vKfkc/ERcMmsDG8rlcUpamfvHtld9RoAAKqbcUu5DlyX
+         zC4R0A7gm4lfqLRDKUMLgxoyJ70Ux/i0KCKWjdZwlAST1jKZ+ZMpnhxO3bGHiaV262Zh
+         KxeAxFZbV5PaCfJR/fs6kImYsL23yL81q4Ju178MsHGpOtmv1n7kUFiOTEOh+l7Bu0Lm
+         gm6Uecamj0l9MwrUYfHPH0oDbesqVb/dMCKhM30Oct7mZL6rSoiH0I99Vl2SRJXBDEnG
+         2AFQ==
+X-Gm-Message-State: AOAM530RsVxdx38/TBVWbhTPjGIB0JdX0UYm2TE7fWsecUHSnG+4YOyZ
+        xqSu7h5Xgz0mdE0H3lF+Fu6zPbOi9T0NlA==
+X-Google-Smtp-Source: ABdhPJww14ZQGbLDYZA2ypaXtduemWBPGQQtfCvc7EkuobJQEaQ0PAq3Ms7sxqaX4CikRgwXrmVJpA==
+X-Received: by 2002:a17:907:1c8f:b0:6e8:f898:63bb with SMTP id nb15-20020a1709071c8f00b006e8f89863bbmr13368609ejc.721.1650366459224;
+        Tue, 19 Apr 2022 04:07:39 -0700 (PDT)
+Received: from [10.0.0.1] (system.cloudius-systems.com. [199.203.229.89])
+        by smtp.gmail.com with ESMTPSA id e9-20020a17090618e900b006e8669f3941sm5499342ejf.209.2022.04.19.04.07.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 04:07:38 -0700 (PDT)
+Message-ID: <9b749c99-0126-f9b2-99f5-5c33433c3a08@scylladb.com>
+Date:   Tue, 19 Apr 2022 14:07:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Content-Language: en-US
+To:     io-uring@vger.kernel.org
+From:   Avi Kivity <avi@scylladb.com>
+Subject: IORING_OP_POLL_ADD slower than linux-aio IOCB_CMD_POLL
+Organization: ScyllaDB
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Mon, 18 Apr 2022 20:51:10 +0100, Pavel Begunkov wrote:
-> Resending some leftovers
-> 
-> Pavel Begunkov (5):
->   io_uring: use right helpers for file assign locking
->   io_uring: refactor io_assign_file error path
->   io_uring: store rsrc node in req instead of refs
->   io_uring: add a helper for putting rsrc nodes
->   io_uring: kill ctx arg from io_req_put_rsrc
-> 
-> [...]
+A simple webserver shows about 5% loss compared to linux-aio.
 
-Applied, thanks!
 
-[1/5] io_uring: use right helpers for file assign locking
-      commit: 602b87b4a9cc56c6054b4524a40ecb5b42e9c722
-[2/5] io_uring: refactor io_assign_file error path
-      commit: 6d51914bcd061b6c25d761470b4bbf1ea4470be9
-[3/5] io_uring: store rsrc node in req instead of refs
-      commit: bf9bab6e6369c4b3f03a97345bd401925d8b315c
-[4/5] io_uring: add a helper for putting rsrc nodes
-      commit: 86ec2e629c84f6d57e1ccfc638b6b475aca699a6
-[5/5] io_uring: kill ctx arg from io_req_put_rsrc
-      commit: 111141d5824e947a9a129393315d8473a9356af4
+I expect the loss is due to an optimization that io_uring lacks - inline 
+completion vs workqueue completion:
 
-Best regards,
--- 
-Jens Axboe
 
+static int aio_poll_wake(struct wait_queue_entry *wait, unsigned mode, 
+int sync,
+                 void *key)
+{
+         struct poll_iocb *req = container_of(wait, struct poll_iocb, wait);
+         struct aio_kiocb *iocb = container_of(req, struct aio_kiocb, poll);
+         __poll_t mask = key_to_poll(key);
+         unsigned long flags;
+
+         /* for instances that support it check for an event match first: */
+         if (mask && !(mask & req->events))
+                 return 0;
+
+         /*
+          * Complete the request inline if possible.  This requires that 
+three
+          * conditions be met:
+          *   1. An event mask must have been passed.  If a plain wakeup 
+was done
+          *      instead, then mask == 0 and we have to call vfs_poll() 
+to get
+          *      the events, so inline completion isn't possible.
+          *   2. The completion work must not have already been scheduled.
+          *   3. ctx_lock must not be busy.  We have to use trylock 
+because we
+          *      already hold the waitqueue lock, so this inverts the normal
+          *      locking order.  Use irqsave/irqrestore because not all
+          *      filesystems (e.g. fuse) call this function with IRQs 
+disabled,
+          *      yet IRQs have to be disabled before ctx_lock is obtained.
+          */
+         if (mask && !req->work_scheduled &&
+spin_trylock_irqsave(&iocb->ki_ctx->ctx_lock, flags)) {
+                 struct kioctx *ctx = iocb->ki_ctx;
+
+                 list_del_init(&req->wait.entry);
+                 list_del(&iocb->ki_list);
+                 iocb->ki_res.res = mangle_poll(mask);
+                 if (iocb->ki_eventfd && !eventfd_signal_allowed()) {
+                         iocb = NULL;
+                         INIT_WORK(&req->work, aio_poll_put_work);
+                         schedule_work(&req->work);
+                 }
+                 spin_unlock_irqrestore(&ctx->ctx_lock, flags);
+                 if (iocb)
+                         iocb_put(iocb);
+         } else {
 
