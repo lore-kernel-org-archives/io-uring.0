@@ -2,44 +2,44 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FE22C433FE
-	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 20:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69DEDC4332F
+	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 20:58:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355486AbiDSVBS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 19 Apr 2022 17:01:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        id S1357872AbiDSVBT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 19 Apr 2022 17:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357867AbiDSVBR (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 17:01:17 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 628EC4132B
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:34 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23JGdlvh021223
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:33 -0700
+        with ESMTP id S1357873AbiDSVBS (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 17:01:18 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A4741FAB
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:33 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23JGdrc3024365
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=kAFnRzlvdrj5aTT2statZcE7VhulC77d3lNV8s9tI8g=;
- b=HXhxTBGclU1qNiyYmDGtCiHdLU7kuQHk1UAdJXBgMO3JSDYplDYzEz7K8qz2zVKo1k4e
- BYPnRjve7o+rIm91WkU80AUo+kHJM8VSBqLfQlpqFBx94jb9Di3DzcI2CgITwdiwjsLs
- fsyz0dffYDjEchBDVwwLIpuhG5XflXqC/uM= 
+ bh=8jpRy6kQLcIknbafc+SAIFA+Mi9hT3ioVifoU7ntq7I=;
+ b=fj/1PvBMb44JkKsoqvoC0+QXf+O8wNEwXg9firV8cvId2YSNF+BwJA6Hyec69PjYaArq
+ gxMnYiBemhw3VF0b7y+5HjK5Hshn1cZpe6+lHBFzi1svLqi35y9cyqrAyxBWwPmQnOCa
+ 1IOTVhWHxfNlgJ2ZsGnGnPLN6UmQGp9xZFs= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3fhn4hwt45-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhn4vnr6p-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:33 -0700
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:32 -0700
 Received: from twshared10896.25.frc3.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 13:58:32 -0700
+ 15.1.2375.24; Tue, 19 Apr 2022 13:58:31 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 6FF45DD46121; Tue, 19 Apr 2022 13:58:26 -0700 (PDT)
+        id 4D6B5DD46116; Tue, 19 Apr 2022 13:58:26 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
 CC:     <shr@fb.com>
-Subject: [PATCH v1 6/6] liburing: Test all configurations with NOP test
-Date:   Tue, 19 Apr 2022 13:58:17 -0700
-Message-ID: <20220419205817.1551377-7-shr@fb.com>
+Subject: [PATCH v1 1/6] liburing: Update io_uring.h with large CQE kernel changes
+Date:   Tue, 19 Apr 2022 13:58:12 -0700
+Message-ID: <20220419205817.1551377-2-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419205817.1551377-1-shr@fb.com>
 References: <20220419205817.1551377-1-shr@fb.com>
@@ -47,157 +47,61 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 2UgxKf-_cSyi3eJdusrJW3www1Sr_vkF
-X-Proofpoint-ORIG-GUID: 2UgxKf-_cSyi3eJdusrJW3www1Sr_vkF
+X-Proofpoint-GUID: FJRC_Q5P7wTu_WVyEtf2QIaiJXSeDArx
+X-Proofpoint-ORIG-GUID: FJRC_Q5P7wTu_WVyEtf2QIaiJXSeDArx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_07,2022-04-15_01,2022-02-23_01
+ definitions=2022-04-19_08,2022-04-15_01,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This runs the NOP test with all four configurations:
-- default SQE and CQE size
-- large SQE size
-- large CQE size
-- large SQE and large CQE size
+This updates the io_uring.h file with the changes in the kernel.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- test/nop.c  | 43 +++++++++++++------------------------------
- test/test.h | 35 +++++++++++++++++++++++++++++++++++
- 2 files changed, 48 insertions(+), 30 deletions(-)
- create mode 100644 test/test.h
+ src/include/liburing/io_uring.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/test/nop.c b/test/nop.c
-index 0d9bb90..7bd0e6c 100644
---- a/test/nop.c
-+++ b/test/nop.c
-@@ -11,6 +11,7 @@
- #include <fcntl.h>
+diff --git a/src/include/liburing/io_uring.h b/src/include/liburing/io_ur=
+ing.h
+index a38a45b..32cb4bf 100644
+--- a/src/include/liburing/io_uring.h
++++ b/src/include/liburing/io_uring.h
+@@ -113,6 +113,7 @@ enum {
+ #define IORING_SETUP_R_DISABLED	(1U << 6)	/* start with ring disabled */
+ #define IORING_SETUP_SUBMIT_ALL	(1U << 7)	/* continue submit on error */
+ #define IORING_SETUP_SQE128	(1U << 8)	/* SQEs are 128b */
++#define IORING_SETUP_CQE32	(1U << 9)	/* CQEs are 32b */
 =20
- #include "liburing.h"
-+#include "test.h"
+ enum {
+ 	IORING_OP_NOP,
+@@ -198,6 +199,12 @@ enum {
+ #define IORING_POLL_UPDATE_EVENTS	(1U << 1)
+ #define IORING_POLL_UPDATE_USER_DATA	(1U << 2)
 =20
- static int seq;
-=20
-@@ -127,12 +128,14 @@ err:
- 	return 1;
- }
-=20
--static int test_p(struct io_uring_params *p)
-+static int test_ring(unsigned flags)
- {
- 	struct io_uring ring;
-+	struct io_uring_params p =3D { };
- 	int ret;
-=20
--	ret =3D io_uring_queue_init_params(8, &ring, p);
-+	p.flags =3D flags;
-+	ret =3D io_uring_queue_init_params(8, &ring, &p);
- 	if (ret) {
- 		fprintf(stderr, "ring setup failed: %d\n", ret);
- 		return 1;
-@@ -150,29 +153,11 @@ static int test_p(struct io_uring_params *p)
- 		goto err;
- 	}
-=20
--	io_uring_queue_exit(&ring);
--	return 0;
- err:
- 	io_uring_queue_exit(&ring);
- 	return ret;
- }
-=20
--static int test_normal_ring(void)
--{
--	struct io_uring_params p =3D { };
--
--	return test_p(&p);
--}
--
--static int test_big_ring(void)
--{
--	struct io_uring_params p =3D { };
--
--	p.flags =3D IORING_SETUP_SQE128;
--	return test_p(&p);
--}
--
--
- int main(int argc, char *argv[])
- {
- 	int ret;
-@@ -180,17 +165,15 @@ int main(int argc, char *argv[])
- 	if (argc > 1)
- 		return 0;
-=20
--	ret =3D test_normal_ring();
--	if (ret) {
--		fprintf(stderr, "Normal ring test failed\n");
--		return ret;
--	}
--
--	ret =3D test_big_ring();
--	if (ret) {
--		fprintf(stderr, "Big ring test failed\n");
--		return ret;
-+	FOR_ALL_TEST_CONFIGS {
-+		fprintf(stderr, "Testing %s config\n", IORING_GET_TEST_CONFIG_DESCRIPT=
-ION());
-+		ret =3D test_ring(IORING_GET_TEST_CONFIG_FLAGS());
-+		if (ret) {
-+			fprintf(stderr, "Normal ring test failed\n");
-+			return ret;
-+		}
- 	}
-=20
-+	fprintf(stderr, "PASS\n");
- 	return 0;
- }
-diff --git a/test/test.h b/test/test.h
-new file mode 100644
-index 0000000..3628163
---- /dev/null
-+++ b/test/test.h
-@@ -0,0 +1,35 @@
-+/* SPDX-License-Identifier: MIT */
-+/*
-+ * Description: Test configs for tests.
-+ */
-+#ifndef LIBURING_TEST_H
-+#define LIBURING_TEST_H
-+
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+typedef struct io_uring_test_config {
-+	unsigned int flags;
-+	const char *description;
-+} io_uring_test_config;
-+
-+io_uring_test_config io_uring_test_configs[] =3D {
-+	{ 0, 						"default" },
-+	{ IORING_SETUP_SQE128, 				"large SQE"},
-+	{ IORING_SETUP_CQE32, 				"large CQE"},
-+	{ IORING_SETUP_SQE128 | IORING_SETUP_CQE32, 	"large SQE/CQE" },
++/* Extra padding for large CQEs. */
++struct io_uring_cqe_extra {
++	__u64	extra1;
++	__u64	extra2;
 +};
 +
-+#define FOR_ALL_TEST_CONFIGS							\
-+	for (int i =3D 0; i < sizeof(io_uring_test_configs) / sizeof(io_uring_t=
-est_configs[0]); i++)
+ /*
+  * IO completion data structure (Completion Queue Entry)
+  */
+@@ -205,6 +212,12 @@ struct io_uring_cqe {
+ 	__u64	user_data;	/* sqe->data submission passed back */
+ 	__s32	res;		/* result code for this event */
+ 	__u32	flags;
 +
-+#define IORING_GET_TEST_CONFIG_FLAGS() (io_uring_test_configs[i].flags)
-+#define IORING_GET_TEST_CONFIG_DESCRIPTION() (io_uring_test_configs[i].d=
-escription)
-+
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+#endif
++	/*
++	 * If the ring is initialized wit IORING_SETUP_CQE32, then this field
++	 * contains 16-bytes of padding, doubling the size fo the CQE.
++	 */
++	struct io_uring_cqe_extra	b[0];
+ };
+=20
+ /*
 --=20
 2.30.2
 
