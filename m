@@ -2,44 +2,44 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAA07C433FE
-	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 20:56:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68E2CC43217
+	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 20:56:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357849AbiDSU7b (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 19 Apr 2022 16:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
+        id S1355022AbiDSU7c (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 19 Apr 2022 16:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346200AbiDSU72 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 16:59:28 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1974B41608
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:45 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23JGdq7q024304
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:44 -0700
+        with ESMTP id S232130AbiDSU7b (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 16:59:31 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045824132B
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:47 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23JGdwNl009232
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=uHOwnhLPxHsRlsXGEKmmVD1W23AZifub6K/fzmZlgb8=;
- b=l5T40C3o1yHWc2NmI7ygwiuir+pzlOSN6v9Z2glsECTghDeTjXbPGbLe75mUQdIkBMrr
- gFGnubWYU9ZKHrcBLlr4IgbMMncdi/blo4xEaP1OE+enF+CZOhwZjoe72Gvcvr6OWs8z
- 3MrHO5ecqrFhad+qBnANGef+OnVj83nsiqE= 
+ bh=iP4NK7PknGzhEUhYWPBnltT7ueTaXI7YqhWtCba+Zq8=;
+ b=YGDw+/OpdHJ8RcQo1TldrHaEbUyJffPoSV57uC6ebQjxeCqtVdCYMmPr+Ude5b7aaajU
+ ty5KuPyejQtLaLfyI8s2AFrAsNlE1CR6bKK04JgGRbcthFsPGcEVJpo2YmINrqbbKYln
+ 2LEf8zj/0WgOfrSkgj5SQG4HEQ/Zx5OHTg4= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhn4vnqs5-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhub744cr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:44 -0700
-Received: from twshared4937.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:56:47 -0700
+Received: from twshared37304.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 13:56:43 -0700
+ 15.1.2375.24; Tue, 19 Apr 2022 13:56:46 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id E2568DD45FDD; Tue, 19 Apr 2022 13:56:35 -0700 (PDT)
+        id 13207DD45FE9; Tue, 19 Apr 2022 13:56:36 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
-CC:     <shr@fb.com>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v1 01/11] io_uring: support CQE32 in io_uring_cqe
-Date:   Tue, 19 Apr 2022 13:56:14 -0700
-Message-ID: <20220419205624.1546079-2-shr@fb.com>
+CC:     <shr@fb.com>
+Subject: [PATCH v1 07/11] io_uring: flush completions for CQE32
+Date:   Tue, 19 Apr 2022 13:56:20 -0700
+Message-ID: <20220419205624.1546079-8-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419205624.1546079-1-shr@fb.com>
 References: <20220419205624.1546079-1-shr@fb.com>
@@ -47,63 +47,45 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: iFyAeNQINABqAWQFWQ3MncpDpRwYoZLR
-X-Proofpoint-ORIG-GUID: iFyAeNQINABqAWQFWQ3MncpDpRwYoZLR
+X-Proofpoint-GUID: Honps1KSGeJrtGzW4QkoHOIsQT4FO5Lh
+X-Proofpoint-ORIG-GUID: Honps1KSGeJrtGzW4QkoHOIsQT4FO5Lh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_08,2022-04-15_01,2022-02-23_01
+ definitions=2022-04-19_07,2022-04-15_01,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the struct io_uring_cqe_extra in the structure io_uring_cqe to
-support large CQE's.
+This flushes the completions according to their CQE type: the same
+processing is done for the default CQE size, but for large CQE's the
+extra1 and extra2 fields are filled in.
 
-Co-developed-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Stefan Roesch <shr@fb.com>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- include/uapi/linux/io_uring.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ fs/io_uring.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.=
-h
-index ee677dbd6a6d..6f9f9b6a9d15 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -111,6 +111,7 @@ enum {
- #define IORING_SETUP_R_DISABLED	(1U << 6)	/* start with ring disabled */
- #define IORING_SETUP_SUBMIT_ALL	(1U << 7)	/* continue submit on error */
- #define IORING_SETUP_SQE128	(1U << 8)	/* SQEs are 128b */
-+#define IORING_SETUP_CQE32	(1U << 9)	/* CQEs are 32b */
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index bd352815b9e7..ff6229b6df16 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -2877,8 +2877,12 @@ static void __io_submit_flush_completions(struct i=
+o_ring_ctx *ctx)
+ 			struct io_kiocb *req =3D container_of(node, struct io_kiocb,
+ 						    comp_list);
 =20
- enum {
- 	IORING_OP_NOP,
-@@ -201,6 +202,11 @@ enum {
- #define IORING_POLL_UPDATE_EVENTS	(1U << 1)
- #define IORING_POLL_UPDATE_USER_DATA	(1U << 2)
+-			if (!(req->flags & REQ_F_CQE_SKIP))
+-				__io_fill_cqe_req_filled(ctx, req);
++			if (!(req->flags & REQ_F_CQE_SKIP)) {
++				if (!(ctx->flags & IORING_SETUP_CQE32))
++					__io_fill_cqe_req_filled(ctx, req);
++				else
++					__io_fill_cqe32_req_filled(ctx, req);
++			}
+ 		}
 =20
-+struct io_uring_cqe_extra {
-+	__u64	extra1;
-+	__u64	extra2;
-+};
-+
- /*
-  * IO completion data structure (Completion Queue Entry)
-  */
-@@ -208,6 +214,12 @@ struct io_uring_cqe {
- 	__u64	user_data;	/* sqe->data submission passed back */
- 	__s32	res;		/* result code for this event */
- 	__u32	flags;
-+
-+	/*
-+	 * If the ring is initialized with IORING_SETUP_CQE32, then this field
-+	 * contains 16-bytes of padding, doubling the size of the CQE.
-+	 */
-+	struct io_uring_cqe_extra	b[0];
- };
-=20
- /*
+ 		io_commit_cqring(ctx);
 --=20
 2.30.2
 
