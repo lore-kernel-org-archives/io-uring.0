@@ -2,50 +2,53 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31C83C433FE
-	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 19:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 063DDC433EF
+	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 19:15:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348639AbiDTTRy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 15:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S245254AbiDTTRz (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 15:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245254AbiDTTRw (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 15:17:52 -0400
+        with ESMTP id S1348424AbiDTTRx (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 15:17:53 -0400
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EECB5F58
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B0926CE
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:04 -0700 (PDT)
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23KILRtU008189
+        by m0001303.ppops.net (8.16.1.2/8.16.1.2) with ESMTP id 23KILRtW008189
         for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:03 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=W1/RoBuGT0olDtCGqJAF4D+uCYei4IGePSU6v67zbvE=;
- b=Z2g9D0TO/Y/DeWiBJ6S5mV4e8x+W3JP5O2bTz7mGaRRTJtRqTfS91UxunvmlJYBCqvpi
- xg5WFIV9POjmryCbSadxjjgdlXI3OOn9Ewq1WgVYiCbZVsh4M1uMqprcK2hQy4KRpIk1
- J16qELR+Sv0tY50ngyF6+HPKwETR/isXVcg= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=tdP3GjTe3SB0xco0bVU4HQuoY1mOpWcTEfikWiHZHSI=;
+ b=SeOOawv6g1I44nVA1CsupieoB00EF7uS9Gz1Ex72Po6tYuvntXIbkwnCAld7zFKNVWDa
+ CKnCH+q3UAtj3gF1aXX3wEiZQ2/a9SZlsMzeVI2543jRPF4WEPfmfbLz76KydcE4VyJ9
+ ZNoUDpRlpjasgXiHZizdc2MSsHOCr5Tf6sw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3fj7k3dfgu-3
+        by m0001303.ppops.net (PPS) with ESMTPS id 3fj7k3dfgu-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:02 -0700
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:03 -0700
 Received: from twshared14141.02.ash7.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Wed, 20 Apr 2022 12:15:01 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 83AE4DE0C404; Wed, 20 Apr 2022 12:14:53 -0700 (PDT)
+        id 9930FDE0C40C; Wed, 20 Apr 2022 12:14:53 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
 CC:     <shr@fb.com>
-Subject: [PATCH v2 00/12] add large CQE support for io-uring
-Date:   Wed, 20 Apr 2022 12:14:39 -0700
-Message-ID: <20220420191451.2904439-1-shr@fb.com>
+Subject: [PATCH v2 04/12] io_uring: add CQE32 setup processing
+Date:   Wed, 20 Apr 2022 12:14:43 -0700
+Message-ID: <20220420191451.2904439-5-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220420191451.2904439-1-shr@fb.com>
+References: <20220420191451.2904439-1-shr@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 2XttdTJ8LGMGuyJp9-TagIfoKwKP79h9
-X-Proofpoint-GUID: 2XttdTJ8LGMGuyJp9-TagIfoKwKP79h9
+X-Proofpoint-ORIG-GUID: ad7ggC-hJvHhrFosp_LM5gSyhYzL0GFZ
+X-Proofpoint-GUID: ad7ggC-hJvHhrFosp_LM5gSyhYzL0GFZ
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-20_05,2022-04-20_01,2022-02-23_01
@@ -53,97 +56,94 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the large CQE support for io-uring. Large CQE's are 16 bytes lo=
-nger.
-To support the longer CQE's the allocation part is changed and when the C=
-QE is
-accessed.
+This adds two new function to setup and fill the CQE32 result structure.
 
-The allocation of the large CQE's is twice as big, so the allocation size=
- is
-doubled. The ring size calculation needs to take this into account.
+Signed-off-by: Stefan Roesch <shr@fb.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 58 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-All accesses to the large CQE's need to be shifted by 1 to take the bigge=
-r size
-of each CQE into account. The existing index manipulation does not need t=
-o be
-changed and can stay the same.
-
-The setup and the completion processing needs to take the new fields into
-account and initialize them. For the completion processing these fields n=
-eed
-to be passed through.
-
-The flush completion processing needs to fill the additional CQE32 fields=
-.
-
-The code for overflows needs to be adapted accordingly: the allocation ne=
-eds to
-take large CQE's into account. This means that the order of the fields in=
- the io
-overflow structure needs to be changed and the allocation needs to be enl=
-arged
-for big CQE's.
-In addition the two new fields need to be copied for large CQE's.
-
-The new fields are added to the tracing statements, so the extra1 and ext=
-ra2
-fields are exposed in tracing. The new fields are also exposed in the /pr=
-oc
-filesystem entry.
-
-For testing purposes the extra1 and extra2 fields are used by the nop ope=
-ration.
-
-
-Testing:
-
-The exisiting tests have been run with the following configurations and t=
-hey all
-pass:
-
-- Default config
-- Large SQE
-- Large CQE
-- Large SQE and large CQE.
-
-In addition a new test has been added to liburing to verify that extra1 a=
-nd extra2
-are set as expected for the nop operation.
-
-Note:
-To use this patch also the corresponding changes to the client library
-liburing are required. A different patch series is sent out for this.
-
-
-Changes:
-  V2: - added support for CQE32 in the /proc filesystem entry output func=
-tion
-      - the definition of the io_uring_cqe_extra field has been changed
-        to avoid warning with the /proc changes.
-
-
-Stefan Roesch (12):
-  io_uring: support CQE32 in io_uring_cqe
-  io_uring: wire up inline completion path for CQE32
-  io_uring: change ring size calculation for CQE32
-  io_uring: add CQE32 setup processing
-  io_uring: add CQE32 completion processing
-  io_uring: modify io_get_cqe for CQE32
-  io_uring: flush completions for CQE32
-  io_uring: overflow processing for CQE32
-  io_uring: add tracing for additional CQE32 fields
-  io_uring: support CQE32 in /proc info
-  io_uring: enable CQE32
-  io_uring: support CQE32 for nop operation
-
- fs/io_uring.c                   | 224 +++++++++++++++++++++++++++-----
- include/trace/events/io_uring.h |  18 ++-
- include/uapi/linux/io_uring.h   |  12 ++
- 3 files changed, 220 insertions(+), 34 deletions(-)
-
-
-base-commit: fd1cf8f1947eb7b009eb79807ec8af0e920fc57b
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 9712483d3a17..abbd2efbe255 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -2175,12 +2175,70 @@ static inline bool __io_fill_cqe_req_filled(struc=
+t io_ring_ctx *ctx,
+ 					req->cqe.res, req->cqe.flags);
+ }
+=20
++static inline bool __io_fill_cqe32_req_filled(struct io_ring_ctx *ctx,
++					      struct io_kiocb *req)
++{
++	struct io_uring_cqe *cqe;
++	u64 extra1 =3D req->extra1;
++	u64 extra2 =3D req->extra2;
++
++	trace_io_uring_complete(req->ctx, req, req->cqe.user_data,
++				req->cqe.res, req->cqe.flags);
++
++	/*
++	 * If we can't get a cq entry, userspace overflowed the
++	 * submission (by quite a lot). Increment the overflow count in
++	 * the ring.
++	 */
++	cqe =3D io_get_cqe(ctx);
++	if (likely(cqe)) {
++		memcpy(cqe, &req->cqe, sizeof(struct io_uring_cqe));
++		cqe->b[0].extra1 =3D extra1;
++		cqe->b[0].extra2 =3D extra2;
++		return true;
++	}
++
++	return io_cqring_event_overflow(ctx, req->cqe.user_data,
++					req->cqe.res, req->cqe.flags, extra1, extra2);
++}
++
+ static inline bool __io_fill_cqe_req(struct io_kiocb *req, s32 res, u32 =
+cflags)
+ {
+ 	trace_io_uring_complete(req->ctx, req, req->cqe.user_data, res, cflags)=
+;
+ 	return __io_fill_cqe(req->ctx, req->cqe.user_data, res, cflags);
+ }
+=20
++static void __io_fill_cqe32_req(struct io_kiocb *req, s32 res, u32 cflag=
+s,
++				u64 extra1, u64 extra2)
++{
++	struct io_ring_ctx *ctx =3D req->ctx;
++	struct io_uring_cqe *cqe;
++
++	if (WARN_ON_ONCE(!(ctx->flags & IORING_SETUP_CQE32)))
++		return;
++	if (req->flags & REQ_F_CQE_SKIP)
++		return;
++
++	trace_io_uring_complete(ctx, req, req->user_data, res, cflags);
++
++	/*
++	 * If we can't get a cq entry, userspace overflowed the
++	 * submission (by quite a lot). Increment the overflow count in
++	 * the ring.
++	 */
++	cqe =3D io_get_cqe(ctx);
++	if (likely(cqe)) {
++		WRITE_ONCE(cqe->user_data, req->cqe.user_data);
++		WRITE_ONCE(cqe->res, res);
++		WRITE_ONCE(cqe->flags, cflags);
++		WRITE_ONCE(cqe->b[0].extra1, extra1);
++		WRITE_ONCE(cqe->b[0].extra2, extra2);
++		return;
++	}
++
++	io_cqring_event_overflow(ctx, req->cqe.user_data, res, cflags);
++}
++
+ static noinline bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user_d=
+ata,
+ 				     s32 res, u32 cflags)
+ {
 --=20
 2.30.2
 
