@@ -2,44 +2,44 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 22405C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CAA72C43217
 	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 19:15:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381676AbiDTTS0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 15:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38472 "EHLO
+        id S1378958AbiDTTS1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 15:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378958AbiDTTSV (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 15:18:21 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE4991D0C1
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:33 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KILPoS001812
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:33 -0700
+        with ESMTP id S1381649AbiDTTSX (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 15:18:23 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C429344C4
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:35 -0700 (PDT)
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KILOBQ018240
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=CmUL7L0wUmPH9ExGou5CbXAYIHkHld5hamewMXNELNo=;
- b=RPWSKbmltNxxdaGrX2BhbvVpGwGMKYNl2xUUy56F5yPeD+7Wzu1TLSE24x7zSfW4OC+4
- 0g6L40dl+sm/zjbXa6zr6hGMQSGAlwHUyQJ+FXKow7w0bpYCfoKBAuS2XooIFPrX/Q/Q
- LJbr/YTnL8GVWuhougkX0V6nwVRsluxjvuc= 
+ bh=n830fI7lXNK5/5Dmb1TecFkrm6YMrnHwPT7hczn5ZvY=;
+ b=YyH9P/3fkdTztF8L3wKVr9Hwrgk74cj3TW93dlxSqXOp6SgFE7Zh0wDbRpJf+aaLwWBs
+ 3ZUTGu1be8AIq1q2gEHW41uCTvPcNFtlL2pOfN4YGKi9Vy8FehU6rZxEfjBz9O3aXutU
+ IM06AnANsiAlSsUCYDzsBMV9puOQQhJEHxk= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhub7as5u-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhkk2cswp-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:33 -0700
-Received: from twshared6486.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:35 -0700
+Received: from twshared8053.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 20 Apr 2022 12:15:32 -0700
+ 15.1.2375.24; Wed, 20 Apr 2022 12:15:34 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 53632DE0C4B3; Wed, 20 Apr 2022 12:15:27 -0700 (PDT)
+        id 6B4C7DE0C4BB; Wed, 20 Apr 2022 12:15:27 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
 CC:     <shr@fb.com>
-Subject: [PATCH v2 1/6] liburing: Update io_uring.h with large CQE kernel changes
-Date:   Wed, 20 Apr 2022 12:15:19 -0700
-Message-ID: <20220420191524.2906409-2-shr@fb.com>
+Subject: [PATCH v2 5/6] liburing: add large CQE tests to nop test
+Date:   Wed, 20 Apr 2022 12:15:23 -0700
+Message-ID: <20220420191524.2906409-6-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220420191524.2906409-1-shr@fb.com>
 References: <20220420191524.2906409-1-shr@fb.com>
@@ -47,8 +47,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 5bDhZTUDCCD3KkWTcYgSUOjZdMGCkaIf
-X-Proofpoint-ORIG-GUID: 5bDhZTUDCCD3KkWTcYgSUOjZdMGCkaIf
+X-Proofpoint-GUID: sUxf7SeZFbUd_4kS3JmuhXUbON5DGIhT
+X-Proofpoint-ORIG-GUID: sUxf7SeZFbUd_4kS3JmuhXUbON5DGIhT
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-20_05,2022-04-20_01,2022-02-23_01
@@ -56,52 +56,93 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This updates the io_uring.h file with the changes in the kernel.
+This adds two test cases for large CQE's:
+- Single NOP test, which checks that the new extra1 and extra2 fields
+  are set.
+- Multiple NOP submission test which also checks for the new fields.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- src/include/liburing/io_uring.h | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ test/nop.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/src/include/liburing/io_uring.h b/src/include/liburing/io_ur=
-ing.h
-index a38a45b..cad0b32 100644
---- a/src/include/liburing/io_uring.h
-+++ b/src/include/liburing/io_uring.h
-@@ -113,6 +113,7 @@ enum {
- #define IORING_SETUP_R_DISABLED	(1U << 6)	/* start with ring disabled */
- #define IORING_SETUP_SUBMIT_ALL	(1U << 7)	/* continue submit on error */
- #define IORING_SETUP_SQE128	(1U << 8)	/* SQEs are 128b */
-+#define IORING_SETUP_CQE32	(1U << 9)	/* CQEs are 32b */
+diff --git a/test/nop.c b/test/nop.c
+index d477a1b..0d9bb90 100644
+--- a/test/nop.c
++++ b/test/nop.c
+@@ -19,6 +19,7 @@ static int test_single_nop(struct io_uring *ring)
+ 	struct io_uring_cqe *cqe;
+ 	struct io_uring_sqe *sqe;
+ 	int ret;
++	bool cqe32 =3D (ring->flags & IORING_SETUP_CQE32);
 =20
- enum {
- 	IORING_OP_NOP,
-@@ -198,6 +199,12 @@ enum {
- #define IORING_POLL_UPDATE_EVENTS	(1U << 1)
- #define IORING_POLL_UPDATE_USER_DATA	(1U << 2)
+ 	sqe =3D io_uring_get_sqe(ring);
+ 	if (!sqe) {
+@@ -27,6 +28,10 @@ static int test_single_nop(struct io_uring *ring)
+ 	}
 =20
-+/* Extra padding for large CQEs. */
-+struct io_uring_cqe_extra {
-+	__u64	extra1;
-+	__u64	extra2;
-+};
+ 	io_uring_prep_nop(sqe);
++	if (cqe32) {
++		sqe->addr =3D 1234;
++		sqe->addr2 =3D 5678;
++	}
+ 	sqe->user_data =3D ++seq;
+=20
+ 	ret =3D io_uring_submit(ring);
+@@ -44,6 +49,17 @@ static int test_single_nop(struct io_uring *ring)
+ 		fprintf(stderr, "Unexpected 0 user_data\n");
+ 		goto err;
+ 	}
++	if (cqe32) {
++		if (cqe->b[0].extra1 !=3D 1234) {
++			fprintf(stderr, "Unexpected extra1\n");
++			goto err;
 +
- /*
-  * IO completion data structure (Completion Queue Entry)
-  */
-@@ -205,6 +212,12 @@ struct io_uring_cqe {
- 	__u64	user_data;	/* sqe->data submission passed back */
- 	__s32	res;		/* result code for this event */
- 	__u32	flags;
-+
-+	/*
-+	 * If the ring is initialized wit IORING_SETUP_CQE32, then this field
-+	 * contains 16-bytes of padding, doubling the size fo the CQE.
-+	 */
-+	struct io_uring_cqe_extra	b[];
- };
++		}
++		if (cqe->b[0].extra2 !=3D 5678) {
++			fprintf(stderr, "Unexpected extra2\n");
++			goto err;
++		}
++	}
+ 	io_uring_cqe_seen(ring, cqe);
+ 	return 0;
+ err:
+@@ -55,6 +71,7 @@ static int test_barrier_nop(struct io_uring *ring)
+ 	struct io_uring_cqe *cqe;
+ 	struct io_uring_sqe *sqe;
+ 	int ret, i;
++	bool cqe32 =3D (ring->flags & IORING_SETUP_CQE32);
 =20
- /*
+ 	for (i =3D 0; i < 8; i++) {
+ 		sqe =3D io_uring_get_sqe(ring);
+@@ -66,6 +83,10 @@ static int test_barrier_nop(struct io_uring *ring)
+ 		io_uring_prep_nop(sqe);
+ 		if (i =3D=3D 4)
+ 			sqe->flags =3D IOSQE_IO_DRAIN;
++		if (cqe32) {
++			sqe->addr =3D 1234;
++			sqe->addr2 =3D 5678;
++		}
+ 		sqe->user_data =3D ++seq;
+ 	}
+=20
+@@ -88,6 +109,16 @@ static int test_barrier_nop(struct io_uring *ring)
+ 			fprintf(stderr, "Unexpected 0 user_data\n");
+ 			goto err;
+ 		}
++		if (cqe32) {
++			if (cqe->b[0].extra1 !=3D 1234) {
++				fprintf(stderr, "Unexpected extra1\n");
++				goto err;
++			}
++			if (cqe->b[0].extra2 !=3D 5678) {
++				fprintf(stderr, "Unexpected extra2\n");
++				goto err;
++			}
++		}
+ 		io_uring_cqe_seen(ring, cqe);
+ 	}
+=20
 --=20
 2.30.2
 
