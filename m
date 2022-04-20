@@ -2,88 +2,168 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9374EC433FE
-	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 15:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA50EC433F5
+	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 19:15:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343516AbiDTPcM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 11:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
+        id S1348589AbiDTTRy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 15:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234586AbiDTPcL (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 11:32:11 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A96A45AD3;
-        Wed, 20 Apr 2022 08:29:25 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-e604f712ecso2282984fac.9;
-        Wed, 20 Apr 2022 08:29:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=61FWMBiIp/oHQjo9zys3+M0sljyptQ7R0Qf5Z5MBknc=;
-        b=qfNMbgXhys2URznuKviywGFhiZ668686N57iwamEyUpsg6K+8Akv9WmUP8JSXHvMeq
-         yR2RgAVUH7lz2laj04BwucqPLvDlwoozfqrU+X65v0XJDcqHLYN1CbhKEqmchJSECnf+
-         bsc+AUzGz3Izx86rlagi0hkmDCCf1rc9h666nI3ifRO8yPETkeaa/AvqYkODLvVPtJMB
-         fhoDHF7Ptx5FQxTxBOasz4txQWj2g8CwXR95cjqxFrpKPAQVQalmKEu3LEumbvWZcQ3E
-         XUtN5b+KljnfaLAJJ4mbWA+msrFfSGYMoSlAicfOMN6CmLxdSOWNyRnYD+D92OiftegJ
-         ilMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=61FWMBiIp/oHQjo9zys3+M0sljyptQ7R0Qf5Z5MBknc=;
-        b=yiVbvRe0c5Pxyvdomzoa7m7IZwmdvFdWBElXN224pTVXijYzDbxXM51nYCfKAD9ky/
-         sUhV/FBTRux0JhCVepL+INrq9in9+RAWvgZRNUL0lU7b9raI7kZ/7QBLbVKMx+3yWPux
-         SGVRkZpczk1J5StIoa4hjqVvJYVymbQ6Sk4QnAMdTT74v9ACP4TGP/iDzE33R2n/ueKp
-         Cj2qDgcTDpD+0tow1+bM/XAqxjc+0AieOb0dDH4N679THwPO7+sH0yjruDld7UfZ3Jhn
-         7Yj0+9CV6M59wbtfS2gZRf4v3FHoTneEBajZq2B459eCzNT5Hnh0T/pXpRWLzA0iG6l+
-         fl6Q==
-X-Gm-Message-State: AOAM531BXMGgRzWX3fHZQwR2jidJpQBE06nGaYMR8VngU8zkU3361r9M
-        kRdSvLrjee0PJUKwkXY2j34HlrFVoAPV48Cb3QI=
-X-Google-Smtp-Source: ABdhPJyJir+zz5lALNTrCHI37Thw0c7JMdw6PttB1W2T0kT7Nu7IbPDTjNIPoeyBZNpGwUGQL9JrhoOXBbLRAf86Kvw=
-X-Received: by 2002:a05:6870:2190:b0:e6:26d2:abe0 with SMTP id
- l16-20020a056870219000b000e626d2abe0mr1750858oae.15.1650468564716; Wed, 20
- Apr 2022 08:29:24 -0700 (PDT)
+        with ESMTP id S1347102AbiDTTRw (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 15:17:52 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA4D5F5D
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:04 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KILM9f006890
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=5F92pawz3h/oEqVycRjp0db+7XvXLwsFL8r1nmzw2JE=;
+ b=c+Csmb1xiKZdJaUUszuVgGFGsUXkW7TNZLEFevLV/GpfL34nyvrKyj+PTEMyiAlkozda
+ HOQ3A/jnW/g4skgWI4pVAzK9KwgD927If6O6L9OQptax1k//m+J7DTsnTa/Uc+/frq+z
+ DOdDb8FTzoN3PEs78+6IbLyFLlfToM2Fyis= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fjnsx19gs-11
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 12:15:03 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 20 Apr 2022 12:15:02 -0700
+Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
+        id 9F33BDE0C40E; Wed, 20 Apr 2022 12:14:53 -0700 (PDT)
+From:   Stefan Roesch <shr@fb.com>
+To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
+CC:     <shr@fb.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH v2 05/12] io_uring: add CQE32 completion processing
+Date:   Wed, 20 Apr 2022 12:14:44 -0700
+Message-ID: <20220420191451.2904439-6-shr@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220420191451.2904439-1-shr@fb.com>
+References: <20220420191451.2904439-1-shr@fb.com>
 MIME-Version: 1.0
-References: <CA+1E3rLGwHFbdbSTJBfWrw6RLErwcT2zPxGmmWbcLUj2y=16Qg@mail.gmail.com>
- <20220324063218.GC12660@lst.de> <20220325133921.GA13818@test-zns>
- <20220330130219.GB1938@lst.de> <CA+1E3r+Z9UyiNjmb-DzOpNrcbCO_nNFYUD5L5xJJCisx_D=wPQ@mail.gmail.com>
- <a44e38d6-54b4-0d17-c274-b7d46f60a0cf@kernel.dk> <CA+1E3r+CSC6jaDBXpxQUDnk8G=RuQaa=DPJ=tt9O9qydH5B9SQ@mail.gmail.com>
- <f3923d64-4f84-143b-cce2-fcf8366da0e6@kernel.dk> <CA+1E3rJHgEan2yiVS882XouHgKNP4Rn6G2LrXyFu-0kgyu27=Q@mail.gmail.com>
- <CGME20220420152003epcas5p3991e6941773690bcb425fd9d817105c3@epcas5p3.samsung.com>
- <586ec702-fcaa-f12c-1752-bf262242a751@kernel.dk> <20220420151454.GA30119@test-zns>
-In-Reply-To: <20220420151454.GA30119@test-zns>
-From:   Kanchan Joshi <joshiiitr@gmail.com>
-Date:   Wed, 20 Apr 2022 20:58:57 +0530
-Message-ID: <CA+1E3rKYapc2_un9F4MNB5Zf7KfRr9=ATqonGnvcuvThLFX2vg@mail.gmail.com>
-Subject: Re: [PATCH 17/17] nvme: enable non-inline passthru commands
-To:     Kanchan Joshi <joshi.k@samsung.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, sbates@raithlin.com,
-        logang@deltatee.com, Pankaj Raghav <pankydev8@gmail.com>,
-        =?UTF-8?Q?Javier_Gonz=C3=A1lez?= <javier@javigon.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: JmYr1f4rWlKkdx8sdiXY9jv2IFLDzmqR
+X-Proofpoint-ORIG-GUID: JmYr1f4rWlKkdx8sdiXY9jv2IFLDzmqR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-20_05,2022-04-20_01,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-> >Just still grab the 16 bytes, we don't care about addr3 for passthrough.
-> >Should be no changes required there.
-> I was thinking of uring-cmd in general, but then also it does not seem
-> to collide with xattr. Got your point.
-> Measure was removing 8b "result" field from passthru-cmd, since 32b CQE
-> makes that part useless, and we are adding new opcode in nvme
-> anyway. Maybe we should still reduce passthu-cmd to 64b (rather than 72),
-> not very sure.
-Correction above: reduce passthru-cmd to 72b (rather than 80b).
+This adds the completion processing for the large CQE's and makes sure
+that the extra1 and extra2 fields are passed through.
 
+Co-developed-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Stefan Roesch <shr@fb.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 55 +++++++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 47 insertions(+), 8 deletions(-)
 
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index abbd2efbe255..c93a9353c88d 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -2247,18 +2247,15 @@ static noinline bool io_fill_cqe_aux(struct io_ri=
+ng_ctx *ctx, u64 user_data,
+ 	return __io_fill_cqe(ctx, user_data, res, cflags);
+ }
+=20
+-static void __io_req_complete_post(struct io_kiocb *req, s32 res,
+-				   u32 cflags)
++static void __io_req_complete_put(struct io_kiocb *req)
+ {
+-	struct io_ring_ctx *ctx =3D req->ctx;
+-
+-	if (!(req->flags & REQ_F_CQE_SKIP))
+-		__io_fill_cqe_req(req, res, cflags);
+ 	/*
+ 	 * If we're the last reference to this request, add to our locked
+ 	 * free_list cache.
+ 	 */
+ 	if (req_ref_put_and_test(req)) {
++		struct io_ring_ctx *ctx =3D req->ctx;
++
+ 		if (req->flags & IO_REQ_LINK_FLAGS) {
+ 			if (req->flags & IO_DISARM_MASK)
+ 				io_disarm_next(req);
+@@ -2281,8 +2278,23 @@ static void __io_req_complete_post(struct io_kiocb=
+ *req, s32 res,
+ 	}
+ }
+=20
+-static void io_req_complete_post(struct io_kiocb *req, s32 res,
+-				 u32 cflags)
++static void __io_req_complete_post(struct io_kiocb *req, s32 res,
++				   u32 cflags)
++{
++	if (!(req->flags & REQ_F_CQE_SKIP))
++		__io_fill_cqe_req(req, res, cflags);
++	__io_req_complete_put(req);
++}
++
++static void __io_req_complete_post32(struct io_kiocb *req, s32 res,
++				   u32 cflags, u64 extra1, u64 extra2)
++{
++	if (!(req->flags & REQ_F_CQE_SKIP))
++		__io_fill_cqe32_req(req, res, cflags, extra1, extra2);
++	__io_req_complete_put(req);
++}
++
++static void io_req_complete_post(struct io_kiocb *req, s32 res, u32 cfla=
+gs)
+ {
+ 	struct io_ring_ctx *ctx =3D req->ctx;
+=20
+@@ -2293,6 +2305,18 @@ static void io_req_complete_post(struct io_kiocb *=
+req, s32 res,
+ 	io_cqring_ev_posted(ctx);
+ }
+=20
++static void io_req_complete_post32(struct io_kiocb *req, s32 res,
++				   u32 cflags, u64 extra1, u64 extra2)
++{
++	struct io_ring_ctx *ctx =3D req->ctx;
++
++	spin_lock(&ctx->completion_lock);
++	__io_req_complete_post32(req, res, cflags, extra1, extra2);
++	io_commit_cqring(ctx);
++	spin_unlock(&ctx->completion_lock);
++	io_cqring_ev_posted(ctx);
++}
++
+ static inline void io_req_complete_state(struct io_kiocb *req, s32 res,
+ 					 u32 cflags)
+ {
+@@ -2310,6 +2334,21 @@ static inline void __io_req_complete(struct io_kio=
+cb *req, unsigned issue_flags,
+ 		io_req_complete_post(req, res, cflags);
+ }
+=20
++static inline void __io_req_complete32(struct io_kiocb *req,
++				       unsigned int issue_flags, s32 res,
++				       u32 cflags, u64 extra1, u64 extra2)
++{
++	if (issue_flags & IO_URING_F_COMPLETE_DEFER) {
++		req->cqe.res =3D res;
++		req->cqe.flags =3D cflags;
++		req->extra1 =3D extra1;
++		req->extra2 =3D extra2;
++		req->flags |=3D REQ_F_COMPLETE_INLINE;
++	} else {
++		io_req_complete_post32(req, res, cflags, extra1, extra2);
++	}
++}
++
+ static inline void io_req_complete(struct io_kiocb *req, s32 res)
+ {
+ 	__io_req_complete(req, 0, res, 0);
+--=20
+2.30.2
 
--- 
-Joshi
