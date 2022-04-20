@@ -2,149 +2,161 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69CE8C43217
-	for <io-uring@archiver.kernel.org>; Tue, 19 Apr 2022 20:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3CE5C433EF
+	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 10:00:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357875AbiDSVBU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 19 Apr 2022 17:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
+        id S1377472AbiDTKDj (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 06:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357870AbiDSVBS (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 19 Apr 2022 17:01:18 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F8641FA7
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:35 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23JGdmlA008539
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=SlaX8PQbpOXceceSt/V8HyxEEK54AqkgMhOz5u9VzoY=;
- b=k8EMuB9T1+liYlWTmxpm8++Qh1gyPNICsb+g5rRvuQLcEcj3fZITFSGAV570t50bOpzq
- UhDtggEpXiYyGJkbSaSmD8BCFlXMOeR2OUdE6Be5hrc7NpUSBT6yQ6l8gi9v2ejGA96K
- 8TBn80E6IEe6ItoHu2K1Q0r+u5xH74cScms= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhub744rs-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 19 Apr 2022 13:58:34 -0700
-Received: from twshared37304.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 13:58:33 -0700
-Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 62629DD4611C; Tue, 19 Apr 2022 13:58:26 -0700 (PDT)
-From:   Stefan Roesch <shr@fb.com>
-To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>
-CC:     <shr@fb.com>
-Subject: [PATCH v1 4/6] liburing: index large CQE's correctly
-Date:   Tue, 19 Apr 2022 13:58:15 -0700
-Message-ID: <20220419205817.1551377-5-shr@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220419205817.1551377-1-shr@fb.com>
-References: <20220419205817.1551377-1-shr@fb.com>
+        with ESMTP id S1377496AbiDTKDZ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 06:03:25 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533563F30E
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:00:33 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id q9-20020a056e02106900b002cbc8d479eeso615013ilj.1
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:00:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=NuMJFaN/tuN5msi//LVAfmhcWDCzrafOzikhw8nF8H8=;
+        b=Smq60BgHqyd+OkIKwjBWvla8IW/4BCh21+rfPRD91otIe/in8d1GuOu2NW1xwWMS0Z
+         9xrtG+Z6WMHj+Fc5NANfqyUOlO4k8vt/k2VaTmU44h5+dKrTZystQ8mvyqDEMFevt5KH
+         3JG1LpDJSkOTl8tH5OOZLh5TseC4JLsYXOj0NKfeqLkubpijrptYy7jlg+vHut8MQYdO
+         15sCXTZuwxl6Jjc5noSrujUK1VF5nIsOWoD6nFlU6mWkGbvyWXbA8SVhwUWPLi70oR8H
+         ENbe01f+/Lr9NHm9lQM1Nm1rZmC1lg6htKLdOZpo7NEsiffw6CFwcd2HCfmrjb14MTAy
+         tIWg==
+X-Gm-Message-State: AOAM532828isfX5QtA1f8xckZOwPIR7wyKEnHwMimbTSVLF8QJzppO6t
+        v2TVf8Q1WIrvJD+vvQ1lEGxBuzu0jITVqpKFokHo9+luNKhV
+X-Google-Smtp-Source: ABdhPJwOvtnWn0yqKUpPHiJDtFrabRFJqwryKPHVhcMyAeURtE5+kBJLIwru1nJz/4alVuUrMf++ohg3rCiAPnCgUwndiPyonkTK
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: WCEthx_AYUhskXzB3Wv4xFm01QLnicI3
-X-Proofpoint-ORIG-GUID: WCEthx_AYUhskXzB3Wv4xFm01QLnicI3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_07,2022-04-15_01,2022-02-23_01
+X-Received: by 2002:a05:6602:2e05:b0:657:28bd:ca2c with SMTP id
+ o5-20020a0566022e0500b0065728bdca2cmr170391iow.210.1650448832554; Wed, 20 Apr
+ 2022 03:00:32 -0700 (PDT)
+Date:   Wed, 20 Apr 2022 03:00:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000626ce805dd13108c@google.com>
+Subject: [syzbot] possible deadlock in io_disarm_next
+From:   syzbot <syzbot+57e67273f92d7f5f1931@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Large CQE's need to take into account that each CQE has double the size.
-When the CQE array is indexed, the offset into the array needs to be
-changed accordingly.
+Hello,
 
-Signed-off-by: Stefan Roesch <shr@fb.com>
+syzbot found the following issue on:
+
+HEAD commit:    634de1db0e9b Add linux-next specific files for 20220419
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10c92db8f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bbd6f9b0a89865b0
+dashboard link: https://syzkaller.appspot.com/bug?extid=57e67273f92d7f5f1931
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10a02f68f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=138e3008f00000
+
+The issue was bisected to:
+
+commit 78bfbdd1a4977df1dded20f9783a6ec174e67ef8
+Author: Pavel Begunkov <asml.silence@gmail.com>
+Date:   Fri Apr 15 21:08:23 2022 +0000
+
+    io_uring: kill io_put_req_deferred()
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13039c0cf00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10839c0cf00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17039c0cf00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+57e67273f92d7f5f1931@syzkaller.appspotmail.com
+Fixes: 78bfbdd1a497 ("io_uring: kill io_put_req_deferred()")
+
+============================================
+WARNING: possible recursive locking detected
+5.18.0-rc3-next-20220419-syzkaller #0 Not tainted
+--------------------------------------------
+syz-executor162/3588 is trying to acquire lock:
+ffff888011a453d8 (&ctx->timeout_lock){....}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:379 [inline]
+ffff888011a453d8 (&ctx->timeout_lock){....}-{2:2}, at: io_disarm_next+0x545/0xaa0 fs/io_uring.c:2452
+
+but task is already holding lock:
+ffff888011a453d8 (&ctx->timeout_lock){....}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:379 [inline]
+ffff888011a453d8 (&ctx->timeout_lock){....}-{2:2}, at: io_kill_timeouts+0x4c/0x227 fs/io_uring.c:10432
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&ctx->timeout_lock);
+  lock(&ctx->timeout_lock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+2 locks held by syz-executor162/3588:
+ #0: ffff888011a45398 (&ctx->completion_lock){+.+.}-{2:2}, at: spin_lock include/linux/spinlock.h:354 [inline]
+ #0: ffff888011a45398 (&ctx->completion_lock){+.+.}-{2:2}, at: io_kill_timeouts+0x38/0x227 fs/io_uring.c:10431
+ #1: ffff888011a453d8 (&ctx->timeout_lock){....}-{2:2}, at: spin_lock_irq include/linux/spinlock.h:379 [inline]
+ #1: ffff888011a453d8 (&ctx->timeout_lock){....}-{2:2}, at: io_kill_timeouts+0x4c/0x227 fs/io_uring.c:10432
+
+stack backtrace:
+CPU: 1 PID: 3588 Comm: syz-executor162 Not tainted 5.18.0-rc3-next-20220419-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+ check_deadlock kernel/locking/lockdep.c:3031 [inline]
+ validate_chain kernel/locking/lockdep.c:3816 [inline]
+ __lock_acquire.cold+0x1f5/0x3b4 kernel/locking/lockdep.c:5053
+ lock_acquire kernel/locking/lockdep.c:5665 [inline]
+ lock_acquire+0x1ab/0x570 kernel/locking/lockdep.c:5630
+ __raw_spin_lock_irq include/linux/spinlock_api_smp.h:119 [inline]
+ _raw_spin_lock_irq+0x32/0x50 kernel/locking/spinlock.c:170
+ spin_lock_irq include/linux/spinlock.h:379 [inline]
+ io_disarm_next+0x545/0xaa0 fs/io_uring.c:2452
+ __io_req_complete_post+0x794/0xd90 fs/io_uring.c:2200
+ io_kill_timeout fs/io_uring.c:1815 [inline]
+ io_kill_timeout+0x210/0x21d fs/io_uring.c:1803
+ io_kill_timeouts+0xe2/0x227 fs/io_uring.c:10435
+ io_ring_ctx_wait_and_kill+0x1eb/0x360 fs/io_uring.c:10462
+ io_uring_release+0x42/0x46 fs/io_uring.c:10483
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:37 [inline]
+ do_exit+0xaff/0x2a00 kernel/exit.c:796
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:926
+ __do_sys_exit_group kernel/exit.c:937 [inline]
+ __se_sys_exit_group kernel/exit.c:935 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:935
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f786cb8ccb9
+Code: Unable to access opcode bytes at RIP 0x7f786cb8cc8f.
+RSP: 002b:00007ffcf6b5b088 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f786cc01350 RCX: 00007f786cb8ccb9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f786cc01350
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+
+
 ---
- src/include/liburing.h | 18 ++++++++++++++++--
- src/queue.c            |  6 +++++-
- 2 files changed, 21 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/src/include/liburing.h b/src/include/liburing.h
-index c01c231..317963c 100644
---- a/src/include/liburing.h
-+++ b/src/include/liburing.h
-@@ -188,6 +188,16 @@ int __io_uring_get_cqe(struct io_uring *ring,
-=20
- #define LIBURING_UDATA_TIMEOUT	((__u64) -1)
-=20
-+/*
-+ * Calculates the step size for CQE iteration.
-+ * 	For standard CQE's its 1, for big CQE's its two.
-+ */
-+#define io_uring_cqe_shift(ring)					\
-+	(!!((ring)->flags & IORING_SETUP_CQE32))
-+
-+#define io_uring_cqe_index(ring,ptr,mask)				\
-+	(((ptr) & (mask)) << io_uring_cqe_shift(ring))
-+
- #define io_uring_for_each_cqe(ring, head, cqe)				\
- 	/*								\
- 	 * io_uring_smp_load_acquire() enforces the order of tail	\
-@@ -195,7 +205,7 @@ int __io_uring_get_cqe(struct io_uring *ring,
- 	 */								\
- 	for (head =3D *(ring)->cq.khead;					\
- 	     (cqe =3D (head !=3D io_uring_smp_load_acquire((ring)->cq.ktail) ? =
-\
--		&(ring)->cq.cqes[head & (*(ring)->cq.kring_mask)] : NULL)); \
-+		&(ring)->cq.cqes[io_uring_cqe_index(ring, head, *(ring)->cq.kring_mask=
-)] : NULL)); \
- 	     head++)							\
-=20
- /*
-@@ -844,6 +854,10 @@ static inline int __io_uring_peek_cqe(struct io_urin=
-g *ring,
- 	int err =3D 0;
- 	unsigned available;
- 	unsigned mask =3D *ring->cq.kring_mask;
-+	int shift =3D 0;
-+
-+	if (ring->flags & IORING_SETUP_CQE32)
-+		shift =3D 1;
-=20
- 	do {
- 		unsigned tail =3D io_uring_smp_load_acquire(ring->cq.ktail);
-@@ -854,7 +868,7 @@ static inline int __io_uring_peek_cqe(struct io_uring=
- *ring,
- 		if (!available)
- 			break;
-=20
--		cqe =3D &ring->cq.cqes[head & mask];
-+		cqe =3D &ring->cq.cqes[(head & mask) << shift];
- 		if (!(ring->features & IORING_FEAT_EXT_ARG) &&
- 				cqe->user_data =3D=3D LIBURING_UDATA_TIMEOUT) {
- 			if (cqe->res < 0)
-diff --git a/src/queue.c b/src/queue.c
-index 2f85756..4ad41fc 100644
---- a/src/queue.c
-+++ b/src/queue.c
-@@ -132,6 +132,10 @@ unsigned io_uring_peek_batch_cqe(struct io_uring *ri=
-ng,
- {
- 	unsigned ready;
- 	bool overflow_checked =3D false;
-+	int shift =3D 0;
-+
-+	if (ring->flags & IORING_SETUP_CQE32)
-+		shift =3D 1;
-=20
- again:
- 	ready =3D io_uring_cq_ready(ring);
-@@ -144,7 +148,7 @@ again:
- 		count =3D count > ready ? ready : count;
- 		last =3D head + count;
- 		for (;head !=3D last; head++, i++)
--			cqes[i] =3D &ring->cq.cqes[head & mask];
-+			cqes[i] =3D &ring->cq.cqes[(head & mask) << shift];
-=20
- 		return count;
- 	}
---=20
-2.30.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
