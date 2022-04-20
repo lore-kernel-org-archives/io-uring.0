@@ -2,234 +2,96 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A035BC433F5
-	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 10:41:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 402BFC433EF
+	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 11:56:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343901AbiDTKob (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 06:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
+        id S1378196AbiDTL7C (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 07:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377808AbiDTKmt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 06:42:49 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC4BDEA7
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so1656555pjf.0
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
+        with ESMTP id S1378385AbiDTL7A (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 07:59:00 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A78427DE
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 04:55:52 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id t25so1938757edt.9
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 04:55:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FxtI5k+4FlY7wsO+RizlTOwYvGHriaYOxdBtSjMIgEI=;
-        b=TEeDycnofZP4GRymi6wdBsMJJvMVjTaD2jemHUW5nsFNYfuPVUkS4CdJ5drHBcZCaZ
-         x7jH+GVxKMFN9xWWm0+j51gNXb86kPWjGy5/ilm4iQsHy8Lze8lhnWJq7gSa2qnat8zq
-         nh7rU4dt8VJnpmOEZ8wYf0kyYbZpvmd0F4qOo5dx55O1PN6tBdlxM31qlZcgtSpZfbt9
-         OJZm8e9+fjWVMoM5fhBfa6J1rfdrS4aUOFq8+LlyohShW3ncdKLvq8cWrO5xFyw5Z8X9
-         UDTgPaPKkBNUAcSf2lMBhpMFzR9ujfFP6kI+hbIVkw8AbKOGjREkh0ysjSgJsCAhjhYG
-         ENNA==
+        d=scylladb-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:organization:in-reply-to:content-transfer-encoding;
+        bh=IQz/9Cztb3dtBD/iYxQFv7GAyM6M/oTQq+RD8iPKxCE=;
+        b=FpqCpA8wArrh/mBd08QxOvzIkoVBqNFoogbKyx2+tyULmQXfOtUOfyOd4SVqvzLbyY
+         UVo3EVJYEeKcUOePcO0tFpO9DCahdznf6wHgQZwscpOzhvG/Tfeq+D6qUxmnDhU+bCkQ
+         9CuJfa+7PYTObpSsVyTLJ3pcKRya0ITGgLcBKygTGNVo0bNDyhowHn74GIdsxSlhRZRE
+         mW4y+AD6OSqvt8CE4+r4Sh9aCDNa5okDAAkal/68yZSh8dZUufk1aXwkbrzy5te0Rn4F
+         yV4N80Ip/Egm3fE9JAiuL0vdpR5j6+erACiYbvC1wSaXD+eBZzAV/tiKLuAGg6JA8dg4
+         WaWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FxtI5k+4FlY7wsO+RizlTOwYvGHriaYOxdBtSjMIgEI=;
-        b=P9ibfT0RgB43KCn5LVvxGbAGSLQgA1TnPDDpvxL0/RPreiTmvTFCR00/dKTgfo09ZE
-         DB6Yg3UQbIpY9UZ1de3Un2hm+lAzN5+7ZjpSlCVshEapxhc7BgaTSXmg297biAj3tn3o
-         bT+hdK13Pd4DjFvHhiwG9Xer2AFA5RoQIL3OYjOsCIeBCQrAK5Rf2RVSixDbHy1LJ13V
-         zevzhIrxOQ8pyMAx0XKWyImQfJP9HGoLvo2psahvw6/fkZ74rDw4A5niFvqlLBjsVa1O
-         Yqf9alayk+te6VxoXHm0j6KIW0uY/ZxJbMg5ZNiBZfatL4AbdIslZakuMm3+YgGsVZoI
-         KKEg==
-X-Gm-Message-State: AOAM532+XNR6QWeh4+hBv7mo1ggb0gbaQgLlk91pq9MNfwH9UVxPMd4L
-        Dc0OmkpoRB2/0YM+GZt2BXPpqZOZ+vAKQQ==
-X-Google-Smtp-Source: ABdhPJyZRGA1G92y6pHfaFDUGv++PkQ/P30Pi0G7mkRBJ0x5JSET032HUvqscAv3Nq5U/0tHFOFarQ==
-X-Received: by 2002:a17:90b:4a85:b0:1d2:aee9:23ce with SMTP id lp5-20020a17090b4a8500b001d2aee923cemr3673611pjb.99.1650451202354;
-        Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
-Received: from HOWEYXU-MB0.tencent.com ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b00398d8b19bbfsm19491670pge.23.2022.04.20.03.40.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
-From:   Hao Xu <haoxu.linux@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH 3/9] io-wq: add infra data structure for fixed workers
-Date:   Wed, 20 Apr 2022 18:39:54 +0800
-Message-Id: <20220420104000.23214-4-haoxu.linux@gmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220420104000.23214-1-haoxu.linux@gmail.com>
-References: <20220420104000.23214-1-haoxu.linux@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=IQz/9Cztb3dtBD/iYxQFv7GAyM6M/oTQq+RD8iPKxCE=;
+        b=ZVXxBuczyjyqkMSuHnQGys6KHYibhC7GPUmZViBuGr1Y2HT/BH7yr4PQg2qawVjsYf
+         FlZOPB1f9yVyFi40KFolzyl99bPKY462AzfcKrNVIjA6SOy3YCuoC84IRSkrI0Ab5UL7
+         wkreHhO2y3WQ3E5aGa6yttbx+cLCxozDWd5Q3DdNFIG2XuG+0UlTa8/xNEoCThimPzE4
+         i8wpvJ6A6Fe3SpTLKTLFuvlgs9ZpjfInrl29UV372cfKJX8A3SryZyne3O8obPYKFYyv
+         O2LJPGOK1hBq/vPjh3euk1UFxsPrWOi6HAoZ/0SRv33mxtS0sHy5lCrBscfBObsS57p5
+         HVBw==
+X-Gm-Message-State: AOAM532afK3hZ7SAdypY4Z559gAEABh4YzFhtd3Tcd2XfUHKfHpxblj8
+        2ghMlqplwtPWQwwZrQ4ZHeo16A==
+X-Google-Smtp-Source: ABdhPJwqiRj27cL5G44dHK3Ul+gxNvcLtt7LGXJMM6y+F5RV5BgXZO67APQzFs+6KScFUCjHOjdLYw==
+X-Received: by 2002:aa7:cc90:0:b0:424:1f9d:eb9e with SMTP id p16-20020aa7cc90000000b004241f9deb9emr2436130edt.109.1650455751171;
+        Wed, 20 Apr 2022 04:55:51 -0700 (PDT)
+Received: from [10.0.0.1] (system.cloudius-systems.com. [199.203.229.89])
+        by smtp.gmail.com with ESMTPSA id d11-20020a056402400b00b00423e5bdd6e3sm4473531eda.84.2022.04.20.04.55.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Apr 2022 04:55:50 -0700 (PDT)
+Message-ID: <1a7f2b1c-1373-7f17-d74a-eb9b546a7ba5@scylladb.com>
+Date:   Wed, 20 Apr 2022 14:55:47 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: IORING_OP_POLL_ADD slower than linux-aio IOCB_CMD_POLL
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+References: <9b749c99-0126-f9b2-99f5-5c33433c3a08@scylladb.com>
+ <9e277a23-84d7-9a90-0d3e-ba09c9437dc4@kernel.dk>
+ <e7ffdf1e-b6a8-0e46-5879-30c25446223d@scylladb.com>
+ <b585d3b4-42b3-b0db-1cef-5d6c8b815bb7@kernel.dk>
+ <e90bfb07-c24f-0e4d-0ac6-bd67176641fb@scylladb.com>
+ <8e816c1b-213b-5812-b48a-a815c0fe2b34@kernel.dk>
+ <16030f8f-67b1-dbc9-0117-47c16bf78c34@kernel.dk>
+ <4008a1db-ee26-92ba-320e-140932e801c1@kernel.dk>
+ <96cdef5a-a818-158d-f109-e96f0038bf14@scylladb.com>
+ <686bb243-268d-1749-e376-873077b8f3a3@kernel.dk>
+From:   Avi Kivity <avi@scylladb.com>
+Organization: ScyllaDB
+In-Reply-To: <686bb243-268d-1749-e376-873077b8f3a3@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Hao Xu <howeyxu@tencent.com>
 
-Add data sttructure and basic initialization for fixed worker.
+On 19/04/2022 22.58, Jens Axboe wrote:
+>
+>> I'll try it tomorrow (also the other patch).
+> Thanks!
+>
 
-Signed-off-by: Hao Xu <howeyxu@tencent.com>
----
- fs/io-wq.c | 98 ++++++++++++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 87 insertions(+), 11 deletions(-)
+With the new kernel, I get
 
-diff --git a/fs/io-wq.c b/fs/io-wq.c
-index e4f5575750f4..451b8fb389d1 100644
---- a/fs/io-wq.c
-+++ b/fs/io-wq.c
-@@ -26,6 +26,7 @@ enum {
- 	IO_WORKER_F_RUNNING	= 2,	/* account as running */
- 	IO_WORKER_F_FREE	= 4,	/* worker on free list */
- 	IO_WORKER_F_BOUND	= 8,	/* is doing bounded work */
-+	IO_WORKER_F_FIXED	= 16,	/* is a fixed worker */
- 	IO_WORKER_F_EXIT	= 32,	/* worker is exiting */
- };
- 
-@@ -37,6 +38,61 @@ enum {
- 	IO_ACCT_STALLED_BIT	= 0,	/* stalled on hash */
- };
- 
-+struct io_wqe_acct {
-+	/*
-+	 * union {
-+	 *	1) for normal worker
-+	 *	struct {
-+	 *		unsigned nr_workers;
-+	 *		unsigned max_workers;
-+	 *		struct io_wq_work_list work_list;
-+	 *	};
-+	 *	2) for fixed worker
-+	 *	struct {
-+	 *		unsigned nr_workers; // not meaningful
-+	 *		unsigned max_workers; // not meaningful
-+	 *		unsigned nr_fixed;
-+	 *		unsigned max_works;
-+	 *		struct io_worker **fixed_workers;
-+	 *	};
-+	 *	3) for fixed worker's private acct
-+	 *	struct {
-+	 *		unsigned nr_works;
-+	 *		unsigned max_works;
-+	 *		struct io_wq_work_list work_list;
-+	 *	};
-+	 *};
-+	 */
-+	union {
-+		unsigned nr_workers;
-+		unsigned nr_works;
-+	};
-+	unsigned max_workers;
-+	unsigned nr_fixed;
-+	unsigned max_works;
-+	union {
-+		struct io_wq_work_list work_list;
-+		struct io_worker **fixed_workers;
-+	};
-+	/*
-+	 * nr_running is not meaningful for fixed worker
-+	 * but still keep the same logic for it for the
-+	 * convinence for now. So do nr_workers and
-+	 * max_workers.
-+	 */
-+	atomic_t nr_running;
-+	/*
-+	 * For 1), it protects the work_list, the other two member nr_workers
-+	 * and max_workers are protected by wqe->lock.
-+	 * For 2), it protects nr_fixed, max_works, fixed_workers
-+	 * For 3), it protects nr_works, max_works and work_list.
-+	 */
-+	raw_spinlock_t lock;
-+	int index;
-+	unsigned long flags;
-+	bool fixed_worker_registered;
-+};
-+
- /*
-  * One for each thread in a wqe pool
-  */
-@@ -62,6 +118,8 @@ struct io_worker {
- 		struct rcu_head rcu;
- 		struct work_struct work;
- 	};
-+	int index;
-+	struct io_wqe_acct acct;
- };
- 
- #if BITS_PER_LONG == 64
-@@ -72,16 +130,6 @@ struct io_worker {
- 
- #define IO_WQ_NR_HASH_BUCKETS	(1u << IO_WQ_HASH_ORDER)
- 
--struct io_wqe_acct {
--	unsigned nr_workers;
--	unsigned max_workers;
--	int index;
--	atomic_t nr_running;
--	raw_spinlock_t lock;
--	struct io_wq_work_list work_list;
--	unsigned long flags;
--};
--
- enum {
- 	IO_WQ_ACCT_BOUND,
- 	IO_WQ_ACCT_UNBOUND,
-@@ -94,6 +142,7 @@ enum {
- struct io_wqe {
- 	raw_spinlock_t lock;
- 	struct io_wqe_acct acct[IO_WQ_ACCT_NR];
-+	struct io_wqe_acct fixed_acct[IO_WQ_ACCT_NR];
- 
- 	int node;
- 
-@@ -1205,6 +1254,31 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
- 			atomic_set(&acct->nr_running, 0);
- 			INIT_WQ_LIST(&acct->work_list);
- 			raw_spin_lock_init(&acct->lock);
-+
-+			acct = &wqe->fixed_acct[i];
-+			acct->index = i;
-+			INIT_WQ_LIST(&acct->work_list);
-+			raw_spin_lock_init(&acct->lock);
-+			/*
-+			 * nr_running for a fixed worker is meaningless
-+			 * for now, init it to 1 to wround around the
-+			 * io_wqe_dec_running logic
-+			 */
-+			atomic_set(&acct->nr_running, 1);
-+			/*
-+			 * max_workers for a fixed worker is meaningless
-+			 * for now, init it so since number of fixed workers
-+			 * should be controlled by users.
-+			 */
-+			acct->max_workers = task_rlimit(current, RLIMIT_NPROC);
-+			raw_spin_lock_init(&acct->lock);
-+			/*
-+			 * For fixed worker, not necessary
-+			 * but do it explicitly for clearity
-+			 */
-+			acct->nr_fixed = 0;
-+			acct->max_works = 0;
-+			acct->fixed_workers = NULL;
- 		}
- 		wqe->wq = wq;
- 		raw_spin_lock_init(&wqe->lock);
-@@ -1287,7 +1361,7 @@ static void io_wq_exit_workers(struct io_wq *wq)
- 
- static void io_wq_destroy(struct io_wq *wq)
- {
--	int node;
-+	int i, node;
- 
- 	cpuhp_state_remove_instance_nocalls(io_wq_online, &wq->cpuhp_node);
- 
-@@ -1299,6 +1373,8 @@ static void io_wq_destroy(struct io_wq *wq)
- 		};
- 		io_wqe_cancel_pending_work(wqe, &match);
- 		free_cpumask_var(wqe->cpu_mask);
-+		for (i = 0; i < IO_WQ_ACCT_NR; i++)
-+			kfree(wqe->fixed_acct[i].fixed_workers);
- 		kfree(wqe);
- 	}
- 	io_wq_put_hash(wq->hash);
--- 
-2.36.0
+
+io_uring_setup(200, {flags=0, sq_thread_cpu=0, sq_thread_idle=0, 
+sq_entries=256, cq_entries=512, 
+features=IORING_FEAT_SINGLE_MMAP|IORING_FEAT_NODROP|IORING_FEAT_SUBMIT_STABLE|IORING_FEAT_RW_CUR_POS|IORING_FEAT_CUR_PERSONALITY|IORING_FEAT_FAST_POLL|IORING_FEAT_POLL_32BITS|IORING_FEAT_SQPOLL_NONFIXED|IORING_FEAT_EXT_ARG|IORING_FEAT_NATIVE_WORKERS|IORING_FEAT_RSRC_TAGS|0x1800, 
+sq_off={head=0, tail=64, ring_mask=256, ring_entries=264, flags=276, 
+dropped=272, array=8512}, cq_off={head=128, tail=192, ring_mask=260, 
+ring_entries=268, overflow=284, cqes=320, flags=280}}) = 7
+mmap(NULL, 9536, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_POPULATE, 7, 0) = 
+-1 EACCES (Permission denied)
+
 
