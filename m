@@ -2,58 +2,58 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53A0AC433F5
-	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 10:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A035BC433F5
+	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 10:41:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352322AbiDTKnB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 06:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40670 "EHLO
+        id S1343901AbiDTKob (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 06:44:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352334AbiDTKnA (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 06:43:00 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EDB3FD92
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:40:14 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id bg24so1558737pjb.1
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:40:14 -0700 (PDT)
+        with ESMTP id S1377808AbiDTKmt (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 06:42:49 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC4BDEA7
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so1656555pjf.0
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fLxSwPVYkHYL6VCJNMUaD3BbYVJVQxVJr7yK6ztZlRU=;
-        b=HjJyM4fO3xdVg5sGSVFLunlJiKfC1uQ3vPm/AGA7DdZftYrnjj4XmRUL8LfrE45qgc
-         +YM3Q1dQePefELHCfGn+MRI97B8Oq1CI1ZIkhEeDaG/rlrnMiSXDdhZFkgiBDcwVs6Tb
-         b/8yW3T9Pvbd2iAaTW2EJg0F6VMbdyxgyAENP5Xup73MKB7c6/hzV6E7Dr4OkodbM0LV
-         /uiD7BroAUEBYWaq6tOPQ6O1bkxSq8Yu2TKLlunrz30+dn6H4MS5GTU10duPUtzp7zM2
-         WYAridtwV0gqY/ocsnlrWN4FxYqiqQpgZjwiMD7J+yL7+55F6uHtsh5NenP32YC2rnqe
-         ZwnQ==
+        bh=FxtI5k+4FlY7wsO+RizlTOwYvGHriaYOxdBtSjMIgEI=;
+        b=TEeDycnofZP4GRymi6wdBsMJJvMVjTaD2jemHUW5nsFNYfuPVUkS4CdJ5drHBcZCaZ
+         x7jH+GVxKMFN9xWWm0+j51gNXb86kPWjGy5/ilm4iQsHy8Lze8lhnWJq7gSa2qnat8zq
+         nh7rU4dt8VJnpmOEZ8wYf0kyYbZpvmd0F4qOo5dx55O1PN6tBdlxM31qlZcgtSpZfbt9
+         OJZm8e9+fjWVMoM5fhBfa6J1rfdrS4aUOFq8+LlyohShW3ncdKLvq8cWrO5xFyw5Z8X9
+         UDTgPaPKkBNUAcSf2lMBhpMFzR9ujfFP6kI+hbIVkw8AbKOGjREkh0ysjSgJsCAhjhYG
+         ENNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fLxSwPVYkHYL6VCJNMUaD3BbYVJVQxVJr7yK6ztZlRU=;
-        b=VaFUEcp+EmHdxIw8Szy8KpHK6DH9++g9VEAcVkRcYuC9kXKbMRIhzIqEaTg9DjOw8s
-         DP5m0IkepezFRrh4Aa/u2gvOj5NuGuu82vFtEMOWEMnsE6nSksuYUX7YuvsjYXJUHhYB
-         b9413Cdp9lUoiZr6V/xFK4YtRxAkLZSytcLyO+1QKBq5OOjrN9BsybmooOtfVNsM27Gz
-         NbbcRZ/NeyRtKVu1FCgUbyLmV01rogTDcdUjroF2CgyG651dUH55VswqL2U5AdRajsQu
-         IV0KafSOcSFZByEY1WVycopvDEO8pXOIydR39jLf2U/lrLKw7za6q9abUt7AkMdS4HzG
-         aHRA==
-X-Gm-Message-State: AOAM532FRdiJ3NeR4J1W7FBTuEZvSnzukaUXPBHUts0wFzxvcsK0cPIx
-        hCtPf6DC4vAGBOjSUinfjQs+Cd4rgeQbHw==
-X-Google-Smtp-Source: ABdhPJxnyLobTVtMq+0YyCy7hXAV0bP4oqvDthZ/XWp3uTTYvciOBSevq0W/hCNBQrtJ6+BYCTxwWQ==
-X-Received: by 2002:a17:90b:1646:b0:1d2:b7e7:366c with SMTP id il6-20020a17090b164600b001d2b7e7366cmr3615754pjb.88.1650451213540;
-        Wed, 20 Apr 2022 03:40:13 -0700 (PDT)
+        bh=FxtI5k+4FlY7wsO+RizlTOwYvGHriaYOxdBtSjMIgEI=;
+        b=P9ibfT0RgB43KCn5LVvxGbAGSLQgA1TnPDDpvxL0/RPreiTmvTFCR00/dKTgfo09ZE
+         DB6Yg3UQbIpY9UZ1de3Un2hm+lAzN5+7ZjpSlCVshEapxhc7BgaTSXmg297biAj3tn3o
+         bT+hdK13Pd4DjFvHhiwG9Xer2AFA5RoQIL3OYjOsCIeBCQrAK5Rf2RVSixDbHy1LJ13V
+         zevzhIrxOQ8pyMAx0XKWyImQfJP9HGoLvo2psahvw6/fkZ74rDw4A5niFvqlLBjsVa1O
+         Yqf9alayk+te6VxoXHm0j6KIW0uY/ZxJbMg5ZNiBZfatL4AbdIslZakuMm3+YgGsVZoI
+         KKEg==
+X-Gm-Message-State: AOAM532+XNR6QWeh4+hBv7mo1ggb0gbaQgLlk91pq9MNfwH9UVxPMd4L
+        Dc0OmkpoRB2/0YM+GZt2BXPpqZOZ+vAKQQ==
+X-Google-Smtp-Source: ABdhPJyZRGA1G92y6pHfaFDUGv++PkQ/P30Pi0G7mkRBJ0x5JSET032HUvqscAv3Nq5U/0tHFOFarQ==
+X-Received: by 2002:a17:90b:4a85:b0:1d2:aee9:23ce with SMTP id lp5-20020a17090b4a8500b001d2aee923cemr3673611pjb.99.1650451202354;
+        Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
 Received: from HOWEYXU-MB0.tencent.com ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b00398d8b19bbfsm19491670pge.23.2022.04.20.03.40.11
+        by smtp.gmail.com with ESMTPSA id y16-20020a63b510000000b00398d8b19bbfsm19491670pge.23.2022.04.20.03.40.00
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 20 Apr 2022 03:40:13 -0700 (PDT)
+        Wed, 20 Apr 2022 03:40:02 -0700 (PDT)
 From:   Hao Xu <haoxu.linux@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH 9/9] io_uring: add register fixed worker interface
-Date:   Wed, 20 Apr 2022 18:40:00 +0800
-Message-Id: <20220420104000.23214-10-haoxu.linux@gmail.com>
+Subject: [PATCH 3/9] io-wq: add infra data structure for fixed workers
+Date:   Wed, 20 Apr 2022 18:39:54 +0800
+Message-Id: <20220420104000.23214-4-haoxu.linux@gmail.com>
 X-Mailer: git-send-email 2.36.0
 In-Reply-To: <20220420104000.23214-1-haoxu.linux@gmail.com>
 References: <20220420104000.23214-1-haoxu.linux@gmail.com>
@@ -65,277 +65,171 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: Hao Xu <howeyxu@tencent.com>
 
-Add an io_uring_register() interface to register fixed workers and
-indicate its work capacity.
-The argument is an array of two elements each is
-    struct {
-    	__s32 nr_workers;
-    	__s32 max_works;
-    }
-(nr_workers, max_works)                        meaning
-
-nr_workers or max_works <  -1                  invalid
-nr_workers or max_works == -1           get the old value back
-nr_workers or max_works >=  0        get the old value and set to the
-                                     new value
+Add data sttructure and basic initialization for fixed worker.
 
 Signed-off-by: Hao Xu <howeyxu@tencent.com>
 ---
- fs/io-wq.c                    | 101 ++++++++++++++++++++++++++++++++++
- fs/io-wq.h                    |   3 +
- fs/io_uring.c                 |  71 ++++++++++++++++++++++++
- include/uapi/linux/io_uring.h |  11 ++++
- 4 files changed, 186 insertions(+)
+ fs/io-wq.c | 98 ++++++++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 87 insertions(+), 11 deletions(-)
 
 diff --git a/fs/io-wq.c b/fs/io-wq.c
-index 807985249f62..3927d0c48a69 100644
+index e4f5575750f4..451b8fb389d1 100644
 --- a/fs/io-wq.c
 +++ b/fs/io-wq.c
-@@ -1668,6 +1668,107 @@ int io_wq_max_workers(struct io_wq *wq, int *new_count)
- 	return 0;
- }
+@@ -26,6 +26,7 @@ enum {
+ 	IO_WORKER_F_RUNNING	= 2,	/* account as running */
+ 	IO_WORKER_F_FREE	= 4,	/* worker on free list */
+ 	IO_WORKER_F_BOUND	= 8,	/* is doing bounded work */
++	IO_WORKER_F_FIXED	= 16,	/* is a fixed worker */
+ 	IO_WORKER_F_EXIT	= 32,	/* worker is exiting */
+ };
  
-+/*
-+ * Set max number of fixed workers and the capacity of private work list,
-+ * returns old value. If new_count is -1, then just return the old value.
-+ */
-+int io_wq_fixed_workers(struct io_wq *wq,
-+			struct io_uring_fixed_worker_arg *new_count)
-+{
-+	struct io_uring_fixed_worker_arg prev[IO_WQ_ACCT_NR];
-+	bool first_node = true;
-+	int i, node;
-+	bool readonly[2] = {
-+		(new_count[0].nr_workers == -1 && new_count[0].max_works == -1),
-+		(new_count[1].nr_workers == -1 && new_count[1].max_works == -1),
-+	};
-+
-+	BUILD_BUG_ON((int) IO_WQ_ACCT_BOUND   != (int) IO_WQ_BOUND);
-+	BUILD_BUG_ON((int) IO_WQ_ACCT_UNBOUND != (int) IO_WQ_UNBOUND);
-+	BUILD_BUG_ON((int) IO_WQ_ACCT_NR      != 2);
-+
-+	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
-+		if (new_count[i].nr_workers > task_rlimit(current, RLIMIT_NPROC))
-+			new_count[i].nr_workers =
-+				task_rlimit(current, RLIMIT_NPROC);
-+	}
-+
-+	rcu_read_lock();
-+	for_each_node(node) {
-+		int j;
-+		struct io_wqe *wqe = wq->wqes[node];
-+
-+		for (i = 0; i < IO_WQ_ACCT_NR; i++) {
-+			struct io_wqe_acct *acct = &wqe->fixed_acct[i];
-+			int *nr_fixed, *max_works;
-+			struct io_worker **fixed_workers;
-+			int nr = new_count[i].nr_workers;
-+
-+			raw_spin_lock(&acct->lock);
-+			nr_fixed = &acct->nr_fixed;
-+			max_works = &acct->max_works;
-+			fixed_workers = acct->fixed_workers;
-+			if (first_node) {
-+				prev[i].nr_workers = *nr_fixed;
-+				prev[i].max_works = *max_works;
-+			}
-+			if (readonly[i]) {
-+				raw_spin_unlock(&acct->lock);
-+				continue;
-+			}
-+			if (*nr_fixed == nr || nr == -1) {
-+				*max_works = new_count[i].max_works;
-+				raw_spin_unlock(&acct->lock);
-+				continue;
-+			}
-+			for (j = 0; j < *nr_fixed; j++) {
-+				struct io_worker *worker = fixed_workers[j];
-+
-+				if (!worker)
-+					continue;
-+				worker->flags |= IO_WORKER_F_EXIT;
-+				/*
-+				 * Mark index to -1 to avoid false deletion
-+				 * in io_fixed_worker_exit()
-+				 */
-+				worker->index = -1;
-+				/*
-+				 * Once a worker is in fixed_workers array
-+				 * it is definitely there before we release
-+				 * the acct->lock below. That's why we don't
-+				 * need to increment the worker->ref here.
-+				 */
-+				wake_up_process(worker->task);
-+			}
-+			kfree(fixed_workers);
-+			acct->fixed_workers = NULL;
-+			*nr_fixed = 0;
-+			*max_works = new_count[i].max_works;
-+			acct->fixed_workers = kzalloc_node(
-+						sizeof(*fixed_workers) * nr,
-+						GFP_KERNEL, wqe->node);
-+			if (!acct->fixed_workers) {
-+				raw_spin_unlock(&acct->lock);
-+				return -ENOMEM;
-+			}
-+			raw_spin_unlock(&acct->lock);
-+			for (j = 0; j < nr; j++)
-+				io_wqe_create_worker(wqe, acct);
-+
-+			acct->fixed_worker_registered = !!nr;
-+		}
-+		first_node = false;
-+	}
-+	rcu_read_unlock();
-+
-+	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
-+		new_count[i].nr_workers = prev[i].nr_workers;
-+		new_count[i].max_works = prev[i].max_works;
-+	}
-+
-+	return 0;
-+}
-+
- static __init int io_wq_init(void)
- {
- 	int ret;
-diff --git a/fs/io-wq.h b/fs/io-wq.h
-index 98befe7b0081..c7a454796a05 100644
---- a/fs/io-wq.h
-+++ b/fs/io-wq.h
-@@ -2,6 +2,7 @@
- #define INTERNAL_IO_WQ_H
+@@ -37,6 +38,61 @@ enum {
+ 	IO_ACCT_STALLED_BIT	= 0,	/* stalled on hash */
+ };
  
- #include <linux/refcount.h>
-+#include <uapi/linux/io_uring.h>
- 
- struct io_wq;
- 
-@@ -201,6 +202,8 @@ void io_wq_hash_work(struct io_wq_work *work, void *val);
- 
- int io_wq_cpu_affinity(struct io_wq *wq, cpumask_var_t mask);
- int io_wq_max_workers(struct io_wq *wq, int *new_count);
-+int io_wq_fixed_workers(struct io_wq *wq,
-+			struct io_uring_fixed_worker_arg *new_count);
- 
- static inline bool io_wq_is_hashed(struct io_wq_work *work)
- {
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 3905b3ec87b8..89d088ed636a 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -11580,6 +11580,71 @@ static __cold int io_register_iowq_max_workers(struct io_ring_ctx *ctx,
- 	return ret;
- }
- 
-+static __cold int io_register_iowq_fixed_workers(struct io_ring_ctx *ctx,
-+						 void __user *arg)
-+	__must_hold(&ctx->uring_lock)
-+{
-+	struct io_uring_task *tctx = NULL;
-+	struct io_sq_data *sqd = NULL;
-+	struct io_uring_fixed_worker_arg new_count[2];
-+	int i, ret;
-+
-+	if (copy_from_user(new_count, arg, sizeof(new_count)))
-+		return -EFAULT;
-+	for (i = 0; i < ARRAY_SIZE(new_count); i++) {
-+		int nr_workers = new_count[i].nr_workers;
-+		int max_works = new_count[i].max_works;
-+
-+		if (nr_workers < -1 || max_works < -1)
-+			return -EINVAL;
-+	}
-+
-+	if (ctx->flags & IORING_SETUP_SQPOLL) {
-+		sqd = ctx->sq_data;
-+		if (sqd) {
-+			/*
-+			 * Observe the correct sqd->lock -> ctx->uring_lock
-+			 * ordering. Fine to drop uring_lock here, we hold
-+			 * a ref to the ctx.
-+			 */
-+			refcount_inc(&sqd->refs);
-+			mutex_unlock(&ctx->uring_lock);
-+			mutex_lock(&sqd->lock);
-+			mutex_lock(&ctx->uring_lock);
-+			if (sqd->thread)
-+				tctx = sqd->thread->io_uring;
-+		}
-+	} else {
-+		tctx = current->io_uring;
-+	}
-+
-+	if (tctx && tctx->io_wq) {
-+		ret = io_wq_fixed_workers(tctx->io_wq, new_count);
-+		if (ret)
-+			goto err;
-+	} else {
-+		memset(new_count, -1, sizeof(new_count));
-+	}
-+
-+	if (sqd) {
-+		mutex_unlock(&sqd->lock);
-+		io_put_sq_data(sqd);
-+	}
-+
-+	if (copy_to_user(arg, new_count, sizeof(new_count)))
-+		return -EFAULT;
-+
-+	/* that's it for SQPOLL, only the SQPOLL task creates requests */
-+	if (sqd)
-+		return 0;
-+
-+err:
-+	if (sqd) {
-+		mutex_unlock(&sqd->lock);
-+		io_put_sq_data(sqd);
-+	}
-+	return ret;
-+}
- static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 			       void __user *arg, unsigned nr_args)
- 	__releases(ctx->uring_lock)
-@@ -11708,6 +11773,12 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 	case IORING_UNREGISTER_RING_FDS:
- 		ret = io_ringfd_unregister(ctx, arg, nr_args);
- 		break;
-+	case IORING_REGISTER_IOWQ_FIXED_WORKERS:
-+		ret = -EINVAL;
-+		if (!arg || nr_args != 2)
-+			break;
-+		ret = io_register_iowq_fixed_workers(ctx, arg);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 1845cf7c80ba..ffce27a4f9a6 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -333,6 +333,12 @@ enum {
- 	IORING_REGISTER_RING_FDS		= 20,
- 	IORING_UNREGISTER_RING_FDS		= 21,
- 
-+	/* set number of fixed workers and number
-+	 * of works in a private work list which
-+	 * belongs to a fixed worker
++struct io_wqe_acct {
++	/*
++	 * union {
++	 *	1) for normal worker
++	 *	struct {
++	 *		unsigned nr_workers;
++	 *		unsigned max_workers;
++	 *		struct io_wq_work_list work_list;
++	 *	};
++	 *	2) for fixed worker
++	 *	struct {
++	 *		unsigned nr_workers; // not meaningful
++	 *		unsigned max_workers; // not meaningful
++	 *		unsigned nr_fixed;
++	 *		unsigned max_works;
++	 *		struct io_worker **fixed_workers;
++	 *	};
++	 *	3) for fixed worker's private acct
++	 *	struct {
++	 *		unsigned nr_works;
++	 *		unsigned max_works;
++	 *		struct io_wq_work_list work_list;
++	 *	};
++	 *};
 +	 */
-+	IORING_REGISTER_IOWQ_FIXED_WORKERS	= 22,
-+
- 	/* this goes last */
- 	IORING_REGISTER_LAST
- };
-@@ -430,4 +436,9 @@ struct io_uring_getevents_arg {
- 	__u64	ts;
- };
- 
-+struct io_uring_fixed_worker_arg {
-+	__s32	nr_workers;
-+	__s32	max_works;
++	union {
++		unsigned nr_workers;
++		unsigned nr_works;
++	};
++	unsigned max_workers;
++	unsigned nr_fixed;
++	unsigned max_works;
++	union {
++		struct io_wq_work_list work_list;
++		struct io_worker **fixed_workers;
++	};
++	/*
++	 * nr_running is not meaningful for fixed worker
++	 * but still keep the same logic for it for the
++	 * convinence for now. So do nr_workers and
++	 * max_workers.
++	 */
++	atomic_t nr_running;
++	/*
++	 * For 1), it protects the work_list, the other two member nr_workers
++	 * and max_workers are protected by wqe->lock.
++	 * For 2), it protects nr_fixed, max_works, fixed_workers
++	 * For 3), it protects nr_works, max_works and work_list.
++	 */
++	raw_spinlock_t lock;
++	int index;
++	unsigned long flags;
++	bool fixed_worker_registered;
 +};
 +
- #endif
+ /*
+  * One for each thread in a wqe pool
+  */
+@@ -62,6 +118,8 @@ struct io_worker {
+ 		struct rcu_head rcu;
+ 		struct work_struct work;
+ 	};
++	int index;
++	struct io_wqe_acct acct;
+ };
+ 
+ #if BITS_PER_LONG == 64
+@@ -72,16 +130,6 @@ struct io_worker {
+ 
+ #define IO_WQ_NR_HASH_BUCKETS	(1u << IO_WQ_HASH_ORDER)
+ 
+-struct io_wqe_acct {
+-	unsigned nr_workers;
+-	unsigned max_workers;
+-	int index;
+-	atomic_t nr_running;
+-	raw_spinlock_t lock;
+-	struct io_wq_work_list work_list;
+-	unsigned long flags;
+-};
+-
+ enum {
+ 	IO_WQ_ACCT_BOUND,
+ 	IO_WQ_ACCT_UNBOUND,
+@@ -94,6 +142,7 @@ enum {
+ struct io_wqe {
+ 	raw_spinlock_t lock;
+ 	struct io_wqe_acct acct[IO_WQ_ACCT_NR];
++	struct io_wqe_acct fixed_acct[IO_WQ_ACCT_NR];
+ 
+ 	int node;
+ 
+@@ -1205,6 +1254,31 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
+ 			atomic_set(&acct->nr_running, 0);
+ 			INIT_WQ_LIST(&acct->work_list);
+ 			raw_spin_lock_init(&acct->lock);
++
++			acct = &wqe->fixed_acct[i];
++			acct->index = i;
++			INIT_WQ_LIST(&acct->work_list);
++			raw_spin_lock_init(&acct->lock);
++			/*
++			 * nr_running for a fixed worker is meaningless
++			 * for now, init it to 1 to wround around the
++			 * io_wqe_dec_running logic
++			 */
++			atomic_set(&acct->nr_running, 1);
++			/*
++			 * max_workers for a fixed worker is meaningless
++			 * for now, init it so since number of fixed workers
++			 * should be controlled by users.
++			 */
++			acct->max_workers = task_rlimit(current, RLIMIT_NPROC);
++			raw_spin_lock_init(&acct->lock);
++			/*
++			 * For fixed worker, not necessary
++			 * but do it explicitly for clearity
++			 */
++			acct->nr_fixed = 0;
++			acct->max_works = 0;
++			acct->fixed_workers = NULL;
+ 		}
+ 		wqe->wq = wq;
+ 		raw_spin_lock_init(&wqe->lock);
+@@ -1287,7 +1361,7 @@ static void io_wq_exit_workers(struct io_wq *wq)
+ 
+ static void io_wq_destroy(struct io_wq *wq)
+ {
+-	int node;
++	int i, node;
+ 
+ 	cpuhp_state_remove_instance_nocalls(io_wq_online, &wq->cpuhp_node);
+ 
+@@ -1299,6 +1373,8 @@ static void io_wq_destroy(struct io_wq *wq)
+ 		};
+ 		io_wqe_cancel_pending_work(wqe, &match);
+ 		free_cpumask_var(wqe->cpu_mask);
++		for (i = 0; i < IO_WQ_ACCT_NR; i++)
++			kfree(wqe->fixed_acct[i].fixed_workers);
+ 		kfree(wqe);
+ 	}
+ 	io_wq_put_hash(wq->hash);
 -- 
 2.36.0
 
