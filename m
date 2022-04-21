@@ -2,104 +2,96 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2406EC433F5
-	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 19:00:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB4B9C433F5
+	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 19:45:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232313AbiDUTC5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 21 Apr 2022 15:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
+        id S1392063AbiDUTr7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 21 Apr 2022 15:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1391685AbiDUTCe (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Apr 2022 15:02:34 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247BF2194
-        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 11:59:44 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id p21so6316799ioj.4
-        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 11:59:44 -0700 (PDT)
+        with ESMTP id S1392062AbiDUTr7 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Apr 2022 15:47:59 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 371C1BC3A
+        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 12:45:08 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id r12so6447393iod.6
+        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 12:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=F+/pYxMIMO+XYDJLn0b7DiBpg4CTsPc86PI/nDnbc5I=;
-        b=ESljfVlp87BYxMWgVdTKaTflNIXcQlB38sW/8rK6QRmhEq7NEMTUEQoPav7Ai8umxV
-         LCf4H2Jgk5pDxnhzBE+lHlyNpuQckWGwl0mUfuWQzSQ2y5uwTT6asdnp4rjjLtPNQF3b
-         HHr49Hj2zD4oBm8Q3YZdxsiocOcGYMARxvoAIaJyxn7ZuRAEYwQN8SI6VK6Kam4Luhx9
-         6ZaXk3owFsjVTmikYdpG4M81ndumU/08GI7RY9RpL/lMnkJDMotiUlVMqzvwY2f4CHN6
-         GzAirf5D29V/U3upT8HycFXLnauYFxg8bep496qxEELt5QtahyBRl4ZCc+NblPVNTjtX
-         yhpA==
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
+         :mime-version:content-transfer-encoding;
+        bh=1tgz+X24f6XnX4f1yXTxoEYQUjnBY33NG2UKa/wMACk=;
+        b=rfKqO1m+RUvn+rJMgR7Xk6wcQBoywjMk4RP/njbPPdsig4lYlb7gHyIDwktnpEBIiC
+         U+GpNV25/elY5gDks9t3mgjdkykIrlpzvzr6SFQYmYbWwVCHfe3u0+tJHnE6gRZwXgVe
+         xWmvaXHPpH4OFMDVHHjqFhZ80+TWUbEihGCReMIxAlloOoVAUWw4pilRllile6vNoguJ
+         zwUkUdBrpPf0OiupMaiDcuKkNMTsTIJnE0nCi8ncYulFEpayJTO9OV5or3gOEk1exOiK
+         JmnEIqhOuTUdr3w9OuKOCyesCopz0Y7RQjX0Kp/sc7w2scwxXE507YgGrmQEXQBlrBqe
+         5nzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=F+/pYxMIMO+XYDJLn0b7DiBpg4CTsPc86PI/nDnbc5I=;
-        b=Qceey5ypjA9s4HDxWLxIeTxb/RSgKT8LQ/Uvjeh+T0jLQsisOJ624Z7e96PYI1/Zqg
-         vTXMo+6Q195fjQo18NA9WD0U8DPZAjutJ74CKE5IShpIFLkEoigRdF0lCbL6RRRSpaHE
-         7jNZ3mZmMK3m3Q2BHiZvc2b6wPfK9I9ZewJRHRs5HB0p4608+d2MRkMR6RzR/ntKeSzi
-         hq1NfRW6nUcuCZc5dT88INL/JpOMkowKKu41+P5OFUI/XVM6AiSLwJ1Io9uYMlWzmDoq
-         PiqWxjHVfShZC0pKxIYG9PLi6lN4qQRv+2FenoXMYNXzTl22EOpx9XpdB6u/Gd+pB08b
-         Yn+Q==
-X-Gm-Message-State: AOAM5336fCdc4YrYC9U+y194Q4YpJsEP22fnnjugsutkLq710ZpuY+n7
-        ZcPetl6v9hhE0LkUFFNbIx6dQg+rHivq6w==
-X-Google-Smtp-Source: ABdhPJxdvBOPieszcqWVUwHrlFEMSRSJh8KuU50AaVmPU6ep9ayxhs++nGDbOjWDcrvoJyjmvHbngg==
-X-Received: by 2002:a6b:7e03:0:b0:654:9a7e:e382 with SMTP id i3-20020a6b7e03000000b006549a7ee382mr544680iom.126.1650567583498;
-        Thu, 21 Apr 2022 11:59:43 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id q7-20020a92d407000000b002cabbe6e295sm12799965ilm.4.2022.04.21.11.59.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Apr 2022 11:59:43 -0700 (PDT)
-Message-ID: <7dfcf6e8-ac16-5ab1-cb71-6ef81849af82@kernel.dk>
-Date:   Thu, 21 Apr 2022 12:59:42 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 00/12] add large CQE support for io-uring
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, kernel-team@fb.com,
-        io-uring@vger.kernel.org
-References: <20220420191451.2904439-1-shr@fb.com>
- <165049508483.559887.15785156729960849643.b4-ty@kernel.dk>
- <5676b135-b159-02c3-21f8-9bf25bd4e2c9@gmail.com>
- <2fa5238c-6617-5053-7661-f2c1a6d70356@fb.com>
- <5008091b-c0c7-548b-bfd4-af33870b8886@gmail.com>
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=1tgz+X24f6XnX4f1yXTxoEYQUjnBY33NG2UKa/wMACk=;
+        b=J+UB05c6Wew1GYdUvw35ZU0eNWQRkSSMRvPa2tPgEB5CIfigNecxK1remVSbl7k5iF
+         +qAST0cn0Nmh+AoO7iIRN46raFpaVURDoVvIV82XhPQPg6A8hrzvd+SkYLF4C3urhT7b
+         jJ6TuOegkiDq2wA5mH5/WXkJ7FjLWwD/g1RmRHKjdPiqvhailCDmk+zkRt6J5e40N0/s
+         gDmI6qkTNYHpk40P/+7SA92PQoKGBopZft/6pzoF3f/kSvjdbhE+U+u/NZDuakaRolJW
+         nmUKCY6ATH4cj5ZzFfuxUSN2LmKwbz2EQurmySM//jnxtEIV4Y+h7FHC7cUzqzi3d0GR
+         PCLA==
+X-Gm-Message-State: AOAM531cKfRl1q+xYV4ZD1oUVY4WI5/75mrZXUX8ivSc3SUUYlBm7jfw
+        Y1IWOm2OSesZPwWyRE9Jc6+slA==
+X-Google-Smtp-Source: ABdhPJxnmjYyEBvl3tBa4XmCQ75rxDL2W5WvAVzWXw/AvNBhlAe7CyRBsApwpMMayd0C/pfomXn15Q==
+X-Received: by 2002:a05:6602:2dcf:b0:656:d2f8:9dee with SMTP id l15-20020a0566022dcf00b00656d2f89deemr576107iow.29.1650570307512;
+        Thu, 21 Apr 2022 12:45:07 -0700 (PDT)
+Received: from [127.0.1.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id z18-20020a05660229d200b0064c719946a8sm15215671ioq.34.2022.04.21.12.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Apr 2022 12:45:06 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <5008091b-c0c7-548b-bfd4-af33870b8886@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     dylany@fb.com, io-uring@vger.kernel.org
+Cc:     asml.silence@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+In-Reply-To: <20220421091345.2115755-1-dylany@fb.com>
+References: <20220421091345.2115755-1-dylany@fb.com>
+Subject: Re: [PATCH 0/6] return an error when cqe is dropped
+Message-Id: <165057030672.167153.10167028049673775527.b4-ty@kernel.dk>
+Date:   Thu, 21 Apr 2022 13:45:06 -0600
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 4/21/22 12:57 PM, Pavel Begunkov wrote:
-> On 4/21/22 19:49, Stefan Roesch wrote:
->> On 4/21/22 11:42 AM, Pavel Begunkov wrote:
->>> On 4/20/22 23:51, Jens Axboe wrote:
->>>> On Wed, 20 Apr 2022 12:14:39 -0700, Stefan Roesch wrote:
->>>>> This adds the large CQE support for io-uring. Large CQE's are 16 bytes longer.
->>>>> To support the longer CQE's the allocation part is changed and when the CQE is
->>>>> accessed.
->>>>>
->>>>> The allocation of the large CQE's is twice as big, so the allocation size is
->>>>> doubled. The ring size calculation needs to take this into account.
->>>
->>> I'm missing something here, do we have a user for it apart
->>> from no-op requests?
->>>
->>
->> Pavel, what started this work is the patch series "io_uring passthru over nvme" from samsung.
->> (https://lore.kernel.org/io-uring/20220308152105.309618-1-joshi.k@samsung.com/)
->>
->> They will use the large SQE and CQE support.
+On Thu, 21 Apr 2022 02:13:39 -0700, Dylan Yudaken wrote:
+> This series addresses a rare but real error condition when a CQE is
+> dropped. Many applications rely on 1 SQE resulting in 1 CQE and may even
+> block waiting for the CQE. In overflow conditions if the GFP_ATOMIC
+> allocation fails, the CQE is dropped and a counter is incremented. However
+> the application is not actively signalled that something bad has
+> happened. We would like to indicate this error condition to the
+> application but in a way that does not rely on the application doing
+> invasive changes such as checking a flag before each wait.
 > 
-> I see, thanks for clarifying. I saw it used in passthrough
-> patches, but it only got me more confused why it's applied
-> aforehand separately from the io_uring-cmd and passthrough
+> [...]
 
-It's just applied to a branch so the passthrough folks have something to
-base on, io_uring-big-sqe. It's not queued for 5.19 or anything like
-that yet.
+Applied, thanks!
 
+[1/6] io_uring: add trace support for CQE overflow
+      commit: f457ab8deb017140aef05be3027a00a18a7d16b7
+[2/6] io_uring: trace cqe overflows
+      commit: 2a847e6faf76810ae68a6e81bd9ac3a7c81534d0
+[3/6] io_uring: rework io_uring_enter to simplify return value
+      commit: db9bb58b391c9e62da68bc139598e8470d892c77
+[4/6] io_uring: use constants for cq_overflow bitfield
+      commit: b293240e2634b2100196d7314aeeb84299ce6d5b
+[5/6] io_uring: return an error when cqe is dropped
+      commit: 34a7ee8a42c8496632465f3f0b444b3a7b908c46
+[6/6] io_uring: allow NOP opcode in IOPOLL mode
+      commit: ebbe59f49556822b9bcc7b0d4d96bae31f522905
+
+Best regards,
 -- 
 Jens Axboe
+
 
