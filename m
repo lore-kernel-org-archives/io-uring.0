@@ -2,104 +2,109 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43615C433F5
-	for <io-uring@archiver.kernel.org>; Wed, 20 Apr 2022 22:51:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8640C433EF
+	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 01:39:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377849AbiDTWyO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 18:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S231248AbiDUBmg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 21:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356355AbiDTWyO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 18:54:14 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4376D2251E
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 15:51:26 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id x191so3048398pgd.4
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 15:51:26 -0700 (PDT)
+        with ESMTP id S1383657AbiDUBma (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 21:42:30 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3638D1573F
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:43 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id n18so3424259plg.5
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:in-reply-to:references:subject:message-id:date:mime-version
-         :content-transfer-encoding;
-        bh=Ut5Hlr9FZUAzXOlea/UmV64wKqZjWe43XM2WiAFcPgc=;
-        b=EK8/iMO2o0VmILnX6rhN/JXl18UWhyMNThiA+9RMnWQrqDDSFGNYbOVFrntnzKj3Ut
-         O240npaeR7/aweWrpo594iogXVpD/MRW2yyIt7JAAC2xg6piaSnzueEBXfDOZVq/qxwd
-         /9tGVID8j0xsieLCeDPBr5deB88goOeAVPZCZtx/QC175qmO8HR1OPfNqssLtWZ7M0IR
-         QbIcM2QImZckalcvID5UjOfh1K5xsDCCfGtmblvdvuKQBNn7hazj/ojQ1hMCj93xIzL9
-         wmHPJpXsuAHK/8mJy2doS5Jc2tUE6YMTQrIx93a0XQ5KvoEH552fVar74swiS+iQPJVx
-         HsMA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sE6MbuGzDdOmszMq7QI+E6tmyTZCupPhHYbF+23tiLc=;
+        b=SGfz/0h/ihfU7lFbzLbQbrADMLuoJ1rH1czYowCBHK4OgSxmC/Ex8zDD6krLus3SYj
+         5lfBVirGc2AF4m/jv3f9rZcv6MA56VoryxBuHyZYjZFsdRArYzCoiEG7+WeQgXGWmlBT
+         cpR1BFBsNSVSgv5jnOq6vVnghjkexHSawGFqiQ7chUNvVK3gQxousncLJ8IOko2mf4xz
+         UaM8M/Aq6SKYaZH0aA8NHCavP5nmK5LN1q9UuljkxDWr/eis00TR4EV8NfJjnEGbQYba
+         lZBsy8ovBACfa01k4H5GZ7vbwTopiRnE8W5+07l/RrSnc2y9fevO38+a/SWIGZP4OHMu
+         ZgKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=Ut5Hlr9FZUAzXOlea/UmV64wKqZjWe43XM2WiAFcPgc=;
-        b=APDKw4WCd5z0rla0FdZRQCSL8HOymG3JyhIJ0vydEj4BDUsUMySZDzPxq9Ad0teiIU
-         Atif0JXhpFnG9PT4DPKX0FDedccqHzaTJfqVEesyQOTLSXuzlOKUc+0Bts38Vz+NFcQ6
-         du+UUmtiZLtnpfyHLRZq8phbLrXXqtfjbxVBXqepLPDt56LAhKnyM1yGpiBa+q7+2/x8
-         RhHXLq+ir77kZeGJTx0tQI0uMr/3pdwP/E11wiDTjkGqLaIIckMJJ/nkeF4IYWh0W/D9
-         JzO4H9oTIyWvzk6Enrvy2NcZV1/j6fo/1pzIXfX680kNEcJl0uSqzPJky1nU9S33Lhu8
-         iV0w==
-X-Gm-Message-State: AOAM532cyZQ70LJ9OSHVRktyqvqbVRYRgMzbH1WqEhZ/ivTm31uvNsWC
-        iW+g+cTyW7SKEcIpYiT8ZNFzJFtD3sWEag==
-X-Google-Smtp-Source: ABdhPJwGt15taETkaEz+l5g53yHnu1HHTgsSRWHBAF5OLyCekCaS3kKtiku21q7uZbhb9kCN59oJjA==
-X-Received: by 2002:a63:5723:0:b0:3aa:3c53:35f0 with SMTP id l35-20020a635723000000b003aa3c5335f0mr8797936pgb.461.1650495085755;
-        Wed, 20 Apr 2022 15:51:25 -0700 (PDT)
-Received: from [127.0.1.1] ([2600:380:4975:46c0:9a40:772a:e789:f8db])
-        by smtp.gmail.com with ESMTPSA id n4-20020a637204000000b00398522203a2sm21362558pgc.80.2022.04.20.15.51.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sE6MbuGzDdOmszMq7QI+E6tmyTZCupPhHYbF+23tiLc=;
+        b=TC5z72Lo6SXtE6R+G9AtWqY6RqPETcVvHErHK2wK+amYqXrDSsnf4UxNpXd3pGqYI4
+         4hjUHav0+HBW8+9XbWuzkCzVw2Tve2+mY0bxVgKyPlIaDcg/JdP1RwL27OjHNrkaTo0v
+         8WjNjiJFeiwZrQqnatZHGlXjEIbgUhuzlCYV/D1BLBlUqQ69GASFRIciW2Wc+PYAuWna
+         Gpz/tZySU6X0Vg0L+79XhEAS4LM+tb3+x2u3T4uBdb+DeU3Kxx0N0UV0XDz6l4nTUNxr
+         zbjctIguqQ44bVQVJ6m2bT2Y7vHeGvVjO7EihyKLGsL6+lfECp12IW8NO34T6p0B7O1i
+         7FpA==
+X-Gm-Message-State: AOAM531EWaUJh0tda6YUxDRlwLMG3hGvhVEi3+oZEQkKaWKYcuWJUcBl
+        l23NPYQBdQHA6s7a32q5Z6jdlelav7lB2ThY
+X-Google-Smtp-Source: ABdhPJykmmJdazCuqWOhqQvog2pbWF4c3MqHogutz0a5rqoWYL//76mKEv+T0jq4RAoWf/DgFIiaLQ==
+X-Received: by 2002:a17:90a:d082:b0:1ca:be58:c692 with SMTP id k2-20020a17090ad08200b001cabe58c692mr7670111pju.238.1650505182483;
+        Wed, 20 Apr 2022 18:39:42 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id x16-20020a17090ab01000b001cd4989ff4bsm460115pjq.18.2022.04.20.18.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 15:51:25 -0700 (PDT)
+        Wed, 20 Apr 2022 18:39:42 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-To:     kernel-team@fb.com, io-uring@vger.kernel.org, shr@fb.com
-In-Reply-To: <20220420191451.2904439-1-shr@fb.com>
-References: <20220420191451.2904439-1-shr@fb.com>
-Subject: Re: [PATCH v2 00/12] add large CQE support for io-uring
-Message-Id: <165049508483.559887.15785156729960849643.b4-ty@kernel.dk>
-Date:   Wed, 20 Apr 2022 16:51:24 -0600
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/2] io_uring: allow re-poll if we made progress
+Date:   Wed, 20 Apr 2022 19:39:37 -0600
+Message-Id: <20220421013937.697501-3-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220421013937.697501-1-axboe@kernel.dk>
+References: <20220421013937.697501-1-axboe@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Wed, 20 Apr 2022 12:14:39 -0700, Stefan Roesch wrote:
-> This adds the large CQE support for io-uring. Large CQE's are 16 bytes longer.
-> To support the longer CQE's the allocation part is changed and when the CQE is
-> accessed.
-> 
-> The allocation of the large CQE's is twice as big, so the allocation size is
-> doubled. The ring size calculation needs to take this into account.
-> 
-> [...]
+We currently check REQ_F_POLLED before arming async poll for a
+notification to retry. If it's set, then we don't allow poll and will
+punt to io-wq instead. This is done to prevent a situation where a buggy
+driver will repeatedly return that there's space/data available yet we
+get -EAGAIN.
 
-Applied, thanks!
+However, if we already transferred data, then it should be safe to rely
+on poll again. Gate the check on whether or not REQ_F_PARTIAL_IO is
+also set.
 
-[01/12] io_uring: support CQE32 in io_uring_cqe
-        commit: be428af6b204c2b366dd8b838bea87d1d4d9f2bd
-[02/12] io_uring: wire up inline completion path for CQE32
-        commit: 8fc4fbc38db6538056498c88f606f958fbb24bfd
-[03/12] io_uring: change ring size calculation for CQE32
-        commit: d09d3b8f2986899ff8f535c91d95c137b03595ec
-[04/12] io_uring: add CQE32 setup processing
-        commit: a81124f0283879a7c5e77c0def9c725e84e79cb1
-[05/12] io_uring: add CQE32 completion processing
-        commit: c7050dfe60c484f9084e57c2b1c88b8ab1f8a06d
-[06/12] io_uring: modify io_get_cqe for CQE32
-        commit: f23855c3511dffa54069c9a0ed513b79bec39938
-[07/12] io_uring: flush completions for CQE32
-        commit: 8a5be11b11449a412ef89c46a05e9bbeeab6652d
-[08/12] io_uring: overflow processing for CQE32
-        commit: 2f1bbef557e9b174361ecd2f7c59b683bbca4464
-[09/12] io_uring: add tracing for additional CQE32 fields
-        commit: b4df41b44f8f358f86533148aa0e56b27bca47d6
-[10/12] io_uring: support CQE32 in /proc info
-        commit: 9d1b8d722dc06b9ab96db6e2bb967187c6185727
-[11/12] io_uring: enable CQE32
-        commit: cae6c1bdf9704dee2d3c7803c36ef73ada19e238
-[12/12] io_uring: support CQE32 for nop operation
-        commit: 460527265a0a6aa5107a7e4e4640f8d4b2088455
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Best regards,
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index f06c6fed540b..6a4460cad9c0 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -6263,7 +6263,9 @@ static int io_arm_poll_handler(struct io_kiocb *req, unsigned issue_flags)
+ 
+ 	if (!def->pollin && !def->pollout)
+ 		return IO_APOLL_ABORTED;
+-	if (!file_can_poll(req->file) || (req->flags & REQ_F_POLLED))
++	if (!file_can_poll(req->file))
++		return IO_APOLL_ABORTED;
++	if ((req->flags & (REQ_F_POLLED|REQ_F_PARTIAL_IO)) == REQ_F_POLLED)
+ 		return IO_APOLL_ABORTED;
+ 
+ 	if (def->pollin) {
+@@ -6278,8 +6280,10 @@ static int io_arm_poll_handler(struct io_kiocb *req, unsigned issue_flags)
+ 	}
+ 	if (def->poll_exclusive)
+ 		mask |= EPOLLEXCLUSIVE;
+-	if (!(issue_flags & IO_URING_F_UNLOCKED) &&
+-	    !list_empty(&ctx->apoll_cache)) {
++	if (req->flags & REQ_F_POLLED) {
++		apoll = req->apoll;
++	} else if (!(issue_flags & IO_URING_F_UNLOCKED) &&
++		   !list_empty(&ctx->apoll_cache)) {
+ 		apoll = list_first_entry(&ctx->apoll_cache, struct async_poll,
+ 						poll.wait.entry);
+ 		list_del_init(&apoll->poll.wait.entry);
 -- 
-Jens Axboe
-
+2.35.1
 
