@@ -2,109 +2,77 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E8640C433EF
-	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 01:39:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AFA2C433F5
+	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 01:39:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbiDUBmg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 21:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
+        id S1383652AbiDUBmh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 20 Apr 2022 21:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383657AbiDUBma (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 21:42:30 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3638D1573F
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:43 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id n18so3424259plg.5
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:43 -0700 (PDT)
+        with ESMTP id S1383654AbiDUBm3 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 21:42:29 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AF51573F
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:41 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c23so3462483plo.0
+        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sE6MbuGzDdOmszMq7QI+E6tmyTZCupPhHYbF+23tiLc=;
-        b=SGfz/0h/ihfU7lFbzLbQbrADMLuoJ1rH1czYowCBHK4OgSxmC/Ex8zDD6krLus3SYj
-         5lfBVirGc2AF4m/jv3f9rZcv6MA56VoryxBuHyZYjZFsdRArYzCoiEG7+WeQgXGWmlBT
-         cpR1BFBsNSVSgv5jnOq6vVnghjkexHSawGFqiQ7chUNvVK3gQxousncLJ8IOko2mf4xz
-         UaM8M/Aq6SKYaZH0aA8NHCavP5nmK5LN1q9UuljkxDWr/eis00TR4EV8NfJjnEGbQYba
-         lZBsy8ovBACfa01k4H5GZ7vbwTopiRnE8W5+07l/RrSnc2y9fevO38+a/SWIGZP4OHMu
-         ZgKQ==
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BTbVNP+QKZCdArpjozBgP7Zt36vem4yyR655aC44kN0=;
+        b=qJepCD9R2ucmsJ79KQMHr2gGTD8LvZbk9oMr3qnCxS7I5MDFe9oTrgdq3ivpl/wZnZ
+         KVER11/x7j55E3UNlgW8kxKrqI4gBIqSFowNOImnn2DM20V8/wyM61KzBstrNoJVgrSy
+         8kqbtn8JnvvYKg8cZuAIAxz9hukIXwFccd5yLfeGPr6DF0RSjh2SFYRU09zepCFNPpqY
+         tYTLikAgnUnX2aj1mq9Gr3iGPToCm/XymFBsqi7BXkrjULHCvjOG90FFiNp8m2dLN/we
+         VsGy1l+AFjXv9hgZNo7oB421fqcXIm70by5sXBs/X5OKG06cDTuEC0AtR3ZSwy67O5hZ
+         qZWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sE6MbuGzDdOmszMq7QI+E6tmyTZCupPhHYbF+23tiLc=;
-        b=TC5z72Lo6SXtE6R+G9AtWqY6RqPETcVvHErHK2wK+amYqXrDSsnf4UxNpXd3pGqYI4
-         4hjUHav0+HBW8+9XbWuzkCzVw2Tve2+mY0bxVgKyPlIaDcg/JdP1RwL27OjHNrkaTo0v
-         8WjNjiJFeiwZrQqnatZHGlXjEIbgUhuzlCYV/D1BLBlUqQ69GASFRIciW2Wc+PYAuWna
-         Gpz/tZySU6X0Vg0L+79XhEAS4LM+tb3+x2u3T4uBdb+DeU3Kxx0N0UV0XDz6l4nTUNxr
-         zbjctIguqQ44bVQVJ6m2bT2Y7vHeGvVjO7EihyKLGsL6+lfECp12IW8NO34T6p0B7O1i
-         7FpA==
-X-Gm-Message-State: AOAM531EWaUJh0tda6YUxDRlwLMG3hGvhVEi3+oZEQkKaWKYcuWJUcBl
-        l23NPYQBdQHA6s7a32q5Z6jdlelav7lB2ThY
-X-Google-Smtp-Source: ABdhPJykmmJdazCuqWOhqQvog2pbWF4c3MqHogutz0a5rqoWYL//76mKEv+T0jq4RAoWf/DgFIiaLQ==
-X-Received: by 2002:a17:90a:d082:b0:1ca:be58:c692 with SMTP id k2-20020a17090ad08200b001cabe58c692mr7670111pju.238.1650505182483;
-        Wed, 20 Apr 2022 18:39:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BTbVNP+QKZCdArpjozBgP7Zt36vem4yyR655aC44kN0=;
+        b=rO6wGVI1FzQWslqHFE3ler3EohIdQ19Ugm7QRTOwq9j73kX/fXXgvLpR5AMvNHeu3n
+         AzGg62NUl7WU8sL4Gi4ire2bJlzkwzojmQQyqFAXG2u73O48epvjqdNWLh4OCreu15BZ
+         9typWdqNgZHcYF1g1gxwto5inGYqHhop26Oion2noVf123EhlCYVhF/JvEI4JHbVwI+g
+         WCEfU1rhzwObNnFlu4awo7H9voSmDITCytFHkbBzsxBvA4S7JccgEWSWj1Htk26pRWfa
+         DHoIg0oYmOOoqUdb6lti44klMDeegdxny51gsD207iC/z9N0ylQ+JxAVGb2GOdhJ/UQf
+         kQ9w==
+X-Gm-Message-State: AOAM530FHiIZBif4RXYvrW8SI9bK0Bhzh6V/tEQZaUzBj2tRZJVtw401
+        tQZoND8vkXsK/WObJ+l0cHbFpcwqvtkS8uJO
+X-Google-Smtp-Source: ABdhPJykm9BV5XYvM/zIlS4LuveRFyaEb1E3iuQxDqSFHLJN3tK718wTrn9sgheRVpPoyofsv4W5lQ==
+X-Received: by 2002:a17:90b:380e:b0:1d3:248:2161 with SMTP id mq14-20020a17090b380e00b001d302482161mr7013029pjb.228.1650505180485;
+        Wed, 20 Apr 2022 18:39:40 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x16-20020a17090ab01000b001cd4989ff4bsm460115pjq.18.2022.04.20.18.39.41
+        by smtp.gmail.com with ESMTPSA id x16-20020a17090ab01000b001cd4989ff4bsm460115pjq.18.2022.04.20.18.39.39
+        for <io-uring@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 18:39:42 -0700 (PDT)
+        Wed, 20 Apr 2022 18:39:40 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/2] io_uring: allow re-poll if we made progress
-Date:   Wed, 20 Apr 2022 19:39:37 -0600
-Message-Id: <20220421013937.697501-3-axboe@kernel.dk>
+Subject: [PATCHSET next 0/2] Allow MSG_WAITALL for send/sendmsg
+Date:   Wed, 20 Apr 2022 19:39:35 -0600
+Message-Id: <20220421013937.697501-1-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220421013937.697501-1-axboe@kernel.dk>
-References: <20220421013937.697501-1-axboe@kernel.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We currently check REQ_F_POLLED before arming async poll for a
-notification to retry. If it's set, then we don't allow poll and will
-punt to io-wq instead. This is done to prevent a situation where a buggy
-driver will repeatedly return that there's space/data available yet we
-get -EAGAIN.
+Hi,
 
-However, if we already transferred data, then it should be safe to rely
-on poll again. Gate the check on whether or not REQ_F_PARTIAL_IO is
-also set.
+Just like we did for recv/recvmsg, allow MSG_WAITALL to mean that we want
+to wait for all the requested data instead of doing a partial completion.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- fs/io_uring.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Patch 2 ensures that we can sanely use apoll multiple times, as long as
+we're making progress on the IO. This is important to avoid punting to
+io-wq if we can avoid it. The gate on already having polled is lifted
+if we did transfer some data, which should avoid the initial worry of
+why that place was in check - repeatedly non-block retrying and getting
+-EAGAIN.
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index f06c6fed540b..6a4460cad9c0 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -6263,7 +6263,9 @@ static int io_arm_poll_handler(struct io_kiocb *req, unsigned issue_flags)
- 
- 	if (!def->pollin && !def->pollout)
- 		return IO_APOLL_ABORTED;
--	if (!file_can_poll(req->file) || (req->flags & REQ_F_POLLED))
-+	if (!file_can_poll(req->file))
-+		return IO_APOLL_ABORTED;
-+	if ((req->flags & (REQ_F_POLLED|REQ_F_PARTIAL_IO)) == REQ_F_POLLED)
- 		return IO_APOLL_ABORTED;
- 
- 	if (def->pollin) {
-@@ -6278,8 +6280,10 @@ static int io_arm_poll_handler(struct io_kiocb *req, unsigned issue_flags)
- 	}
- 	if (def->poll_exclusive)
- 		mask |= EPOLLEXCLUSIVE;
--	if (!(issue_flags & IO_URING_F_UNLOCKED) &&
--	    !list_empty(&ctx->apoll_cache)) {
-+	if (req->flags & REQ_F_POLLED) {
-+		apoll = req->apoll;
-+	} else if (!(issue_flags & IO_URING_F_UNLOCKED) &&
-+		   !list_empty(&ctx->apoll_cache)) {
- 		apoll = list_first_entry(&ctx->apoll_cache, struct async_poll,
- 						poll.wait.entry);
- 		list_del_init(&apoll->poll.wait.entry);
 -- 
-2.35.1
+Jens Axboe
+
 
