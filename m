@@ -2,164 +2,83 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9251C433FE
-	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 01:39:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 207CDC433F5
+	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 07:53:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383653AbiDUBmh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 20 Apr 2022 21:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
+        id S1385855AbiDUH4R (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 21 Apr 2022 03:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383655AbiDUBm3 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 20 Apr 2022 21:42:29 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318E015803
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:42 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so423917pjf.3
-        for <io-uring@vger.kernel.org>; Wed, 20 Apr 2022 18:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wS4trcaEUQWL3t8wO2Pnm8spD5DYBeNtEulm2wwW7zw=;
-        b=wIzvKvWq/P7XzIRsyF21Y1BnWgW1BGo8cK/UQJSyUxF2K+icxBy6uS/VoEOrPgeWZo
-         0JcCtKN2jeoCESgyTqUWpLpKkcrW4fHR0+6YdOvPckciyTNCBrEXVjU2Vl0bff0cwWDc
-         ZCEamNX+Kcum88XdjRAMUHqonswLOyteLFAwS8t8NMCnNYNnrWhJ5PWlIei6ld4EOsmL
-         PS8OpRANsATwsj+2mOZBFpqnNpDTzumQFRGMMM3jcQNrNXYnLt9RtYH8w3BqJLKem07U
-         VHwvZID09hluriM1C1m2Mr//nsoYnobb/w+pya9qKErZsSLkkFYOPQ8qQdKfcAU946Ri
-         LeUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wS4trcaEUQWL3t8wO2Pnm8spD5DYBeNtEulm2wwW7zw=;
-        b=L0lIFqg1Gbl/53LZoTIN28+2aG+SUA09TW4ViE+oOo15imwFk05YY/oAKkMj4QKrkr
-         GXXusStJVJSv3at9oTGi4SgBYdMq9S4NBmMbVja8j/mastxasoJ9iJzKrT0OHBortdeN
-         9P/50z3Dbu0BQtBrzoJrLrFqwY1+yZRtIwFTnBR8q0CxusuQEy4WfeLmIgupt5wuL+Fo
-         mAOeLiKYeWd4hQBxciqJ5FYnjK/62f9nijr507vRRBuH8P9R8yOjQX4FgytRHUz4ByVK
-         hOezJPTQNpzZuJcWF5I5uf6Aug3X24K+b7I9Vjl/kv1mdJ9H2eRtFg2gjJ9kFkXdNF/K
-         Yn+A==
-X-Gm-Message-State: AOAM533WwEqNEOT6pSfbRVwZyk4oSQY3T92xiXdFY3NM6ff/Kcu1sOcX
-        FaoyBr0NSnGP5qRXhXuDsToeUVwVsCDjSM/2
-X-Google-Smtp-Source: ABdhPJyRdyFi+15H5UPk+Y8utNQo/Wbrtd9r40pEsckfNwLmFFjSq47UHtAnCKxdvo8nh21pghgr7w==
-X-Received: by 2002:a17:90a:ec09:b0:1d5:dd77:d050 with SMTP id l9-20020a17090aec0900b001d5dd77d050mr1144131pjy.53.1650505181475;
-        Wed, 20 Apr 2022 18:39:41 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x16-20020a17090ab01000b001cd4989ff4bsm460115pjq.18.2022.04.20.18.39.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Apr 2022 18:39:40 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/2] io_uring: support MSG_WAITALL for IORING_OP_SEND(MSG)
-Date:   Wed, 20 Apr 2022 19:39:36 -0600
-Message-Id: <20220421013937.697501-2-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220421013937.697501-1-axboe@kernel.dk>
-References: <20220421013937.697501-1-axboe@kernel.dk>
+        with ESMTP id S1386253AbiDUH4Q (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Apr 2022 03:56:16 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C6813F78
+        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 00:53:27 -0700 (PDT)
+Received: from integral2.. (unknown [36.72.215.21])
+        by gnuweeb.org (Postfix) with ESMTPSA id F2C8B7E3B2;
+        Thu, 21 Apr 2022 07:53:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1650527606;
+        bh=Mt2VRO253xQa0r8ambVsnyMeAGCxEtdzWWUh9awIb8A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XQ04ABI0E7ebJi6gecpvmfIU3eFH2bRu1YaJoLyGb+ZjFADswWQ5GemrjHT3LhdCj
+         FiNVFJWq2iM25olc0EsgVyFw50BkVIXGlLbcMW5a+wTtIBh9q0Dr+/a3z/XG6XQ99C
+         7qJeigSDGieQtsGGDnCBUrqNVzTxLz6CUhNt7pNr7ZvoT0NqkUhIgfgBy/XNw0St4P
+         OC+foJFyDBLocvKboojcjI4S430+uSJ20Xh2/QdQNM+2TASyuB9Aw3zXyFtWZJj5TG
+         1PTBDeCnOPKLOkLHw4ZZuRDxDyTYBfHUyc2TvJ3ehdlj9OdT4fPtt3HcEgVQpPwElS
+         TAJ7tNYnSy7DA==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: [PATCH liburing] arch/x86/syscall: Remove TODO comment
+Date:   Thu, 21 Apr 2022 14:52:30 +0700
+Message-Id: <20220421075205.98770-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Like commit 7ba89d2af17a for recv/recvmsg, support MSG_WAITALL for the
-send side. If this flag is set and we do a short send, retry for a
-stream of seqpacket socket.
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+nolibc support for x86 32-bit has been added in commit b7d8dd8bbf5b855
+("arch/x86/syscall: Add x86 32-bit native syscall support"). But I
+forgot to remove the comment that says "We can't use CONFIG_NOLIBC for
+x86 (32-bit)".
+
+Remove it.
+
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- fs/io_uring.c | 36 +++++++++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 7 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 7e1d5243bbbc..f06c6fed540b 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -5232,6 +5232,13 @@ static int io_sync_file_range(struct io_kiocb *req, unsigned int issue_flags)
- }
+Hi Jens,
+
+Hopefully, this is the last x86 changes before v2.2 release.
+
+ src/arch/x86/syscall.h | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/src/arch/x86/syscall.h b/src/arch/x86/syscall.h
+index 8cd24dd..43c576b 100644
+--- a/src/arch/x86/syscall.h
++++ b/src/arch/x86/syscall.h
+@@ -144,12 +144,6 @@
  
- #if defined(CONFIG_NET)
-+static bool io_net_retry(struct socket *sock, int flags)
-+{
-+	if (!(flags & MSG_WAITALL))
-+		return false;
-+	return sock->type == SOCK_STREAM || sock->type == SOCK_SEQPACKET;
-+}
-+
- static int io_setup_async_msg(struct io_kiocb *req,
- 			      struct io_async_msghdr *kmsg)
- {
-@@ -5290,12 +5297,14 @@ static int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (req->ctx->compat)
- 		sr->msg_flags |= MSG_CMSG_COMPAT;
- #endif
-+	sr->done_io = 0;
- 	return 0;
- }
+ #else /* #if defined(__x86_64__) */
  
- static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_async_msghdr iomsg, *kmsg;
-+	struct io_sr_msg *sr = &req->sr_msg;
- 	struct socket *sock;
- 	unsigned flags;
- 	int min_ret = 0;
-@@ -5327,12 +5336,21 @@ static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
- 			return io_setup_async_msg(req, kmsg);
- 		if (ret == -ERESTARTSYS)
- 			ret = -EINTR;
-+		if (ret > 0 && io_net_retry(sock, flags)) {
-+			sr->done_io += ret;
-+			req->flags |= REQ_F_PARTIAL_IO;
-+			return io_setup_async_msg(req, kmsg);
-+		}
- 		req_set_fail(req);
- 	}
- 	/* fast path, check for non-NULL to avoid function call */
- 	if (kmsg->free_iov)
- 		kfree(kmsg->free_iov);
- 	req->flags &= ~REQ_F_NEED_CLEANUP;
-+	if (ret >= 0)
-+		ret += sr->done_io;
-+	else if (sr->done_io)
-+		ret = sr->done_io;
- 	__io_req_complete(req, issue_flags, ret, 0);
- 	return 0;
- }
-@@ -5373,8 +5391,19 @@ static int io_send(struct io_kiocb *req, unsigned int issue_flags)
- 			return -EAGAIN;
- 		if (ret == -ERESTARTSYS)
- 			ret = -EINTR;
-+		if (ret > 0 && io_net_retry(sock, flags)) {
-+			sr->len -= ret;
-+			sr->buf += ret;
-+			sr->done_io += ret;
-+			req->flags |= REQ_F_PARTIAL_IO;
-+			return -EAGAIN;
-+		}
- 		req_set_fail(req);
- 	}
-+	if (ret >= 0)
-+		ret += sr->done_io;
-+	else if (sr->done_io)
-+		ret = sr->done_io;
- 	__io_req_complete(req, issue_flags, ret, 0);
- 	return 0;
- }
-@@ -5506,13 +5535,6 @@ static int io_recvmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return 0;
- }
- 
--static bool io_net_retry(struct socket *sock, int flags)
--{
--	if (!(flags & MSG_WAITALL))
--		return false;
--	return sock->type == SOCK_STREAM || sock->type == SOCK_SEQPACKET;
--}
--
- static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_async_msghdr iomsg, *kmsg;
+-/*
+- * For x86 (32-bit), fallback to libc wrapper.
+- * We can't use CONFIG_NOLIBC for x86 (32-bit) at the moment.
+- *
+- * TODO: Add x86 (32-bit) nolibc support.
+- */
+ #ifdef CONFIG_NOLIBC
+ /**
+  * Note for syscall registers usage (x86, 32-bit):
 -- 
-2.35.1
+Ammar Faizi
 
