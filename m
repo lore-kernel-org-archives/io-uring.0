@@ -2,46 +2,50 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A85B9C43217
-	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 09:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21CFEC4321E
+	for <io-uring@archiver.kernel.org>; Thu, 21 Apr 2022 09:17:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1387451AbiDUJT7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 21 Apr 2022 05:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S1387453AbiDUJUA (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 21 Apr 2022 05:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387440AbiDUJTw (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Apr 2022 05:19:52 -0400
+        with ESMTP id S1387450AbiDUJT6 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Apr 2022 05:19:58 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945EC24089
-        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 02:17:03 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23L7M4sY001875
-        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 02:17:02 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A714084
+        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 02:17:09 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23KL3Pme007320
+        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 02:17:08 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=o+BEJzHk53Z2SWPQnNBmJJX4g5pdl6FD6EzyM6ejeDU=;
- b=FCTyzZzxkRgUdu2CKkT1lqxM385q8rqANFfI2jCSJy1xA5kx568x83wPiHoDW2uUdRu8
- e0pNL4XY/uIQIany6u78wOXzqJxoebmgu/aCCiEnIPUR9I0OoDacclvMDyhXPalqb+c4
- iUp2ht/xgy7XqbQc4pshCQZ1y6Sdva/Caf8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fhub7eq3f-2
+ bh=DX6ytzEKTL5duvmKH/e/++KuZNvGuRCr7bx9oCW9eMA=;
+ b=od7P82sRevfiZJOcn5YV5zeOVrsGoTp6XSZMp1F7jpFZ36U7oc4jqbq/UBEgOQV7gsE/
+ qfEzophPeVsnMQxY+zeuAHqk7eLPKY77JMfu7cArYmfWUCGpGTWcczfmSZKvx/SYUpey
+ aj8JQZM7/Tbxv3GeVxnYaVpVN5Mq/en49Ec= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fjsrju40q-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 02:17:02 -0700
-Received: from twshared41237.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Thu, 21 Apr 2022 02:17:08 -0700
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub103.TheFacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 21 Apr 2022 02:17:07 -0700
+Received: from twshared4937.07.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 21 Apr 2022 02:17:01 -0700
+ 15.1.2375.24; Thu, 21 Apr 2022 02:17:06 -0700
 Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
-        id 19B7F7CA7604; Thu, 21 Apr 2022 02:14:02 -0700 (PDT)
+        id EB3EF7CA75FC; Thu, 21 Apr 2022 02:14:01 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     <io-uring@vger.kernel.org>
 CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
         <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 6/6] io_uring: allow NOP opcode in IOPOLL mode
-Date:   Thu, 21 Apr 2022 02:13:45 -0700
-Message-ID: <20220421091345.2115755-7-dylany@fb.com>
+Subject: [PATCH 2/6] io_uring: trace cqe overflows
+Date:   Thu, 21 Apr 2022 02:13:41 -0700
+Message-ID: <20220421091345.2115755-3-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220421091345.2115755-1-dylany@fb.com>
 References: <20220421091345.2115755-1-dylany@fb.com>
@@ -49,8 +53,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: urG3mZncmEshCgUxHwQOox4GE2S8F1XU
-X-Proofpoint-ORIG-GUID: urG3mZncmEshCgUxHwQOox4GE2S8F1XU
+X-Proofpoint-ORIG-GUID: VllGvL6ife8jR31HVOYs5QzkEQYO431P
+X-Proofpoint-GUID: VllGvL6ife8jR31HVOYs5QzkEQYO431P
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-20_06,2022-04-20_01,2022-02-23_01
@@ -58,31 +62,27 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This is useful for tests so that IOPOLL can be tested without requiring
-files. NOP is acceptable in IOPOLL as it always completes immediately.
+Trace cqe overflows in io_uring. Print ocqe before the check, so if it is
+NULL it indicates that it has been dropped.
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- fs/io_uring.c | 5 -----
- 1 file changed, 5 deletions(-)
+ fs/io_uring.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e46dc67c917c..a4e42ba708b4 100644
+index 7e1d5243bbbc..d654faffa486 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -4526,11 +4526,6 @@ static int io_splice(struct io_kiocb *req, unsigne=
-d int issue_flags)
-  */
- static int io_nop(struct io_kiocb *req, unsigned int issue_flags)
- {
--	struct io_ring_ctx *ctx =3D req->ctx;
--
--	if (unlikely(ctx->flags & IORING_SETUP_IOPOLL))
--		return -EINVAL;
--
- 	__io_req_complete(req, issue_flags, 0, 0);
- 	return 0;
- }
+@@ -2107,6 +2107,7 @@ static bool io_cqring_event_overflow(struct io_ring=
+_ctx *ctx, u64 user_data,
+ 	struct io_overflow_cqe *ocqe;
+=20
+ 	ocqe =3D kmalloc(sizeof(*ocqe), GFP_ATOMIC | __GFP_ACCOUNT);
++	trace_io_uring_cqe_overflow(ctx, user_data, res, cflags, ocqe);
+ 	if (!ocqe) {
+ 		/*
+ 		 * If we're in ring overflow flush mode, or in task cancel mode,
 --=20
 2.30.2
 
