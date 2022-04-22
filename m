@@ -2,45 +2,45 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD4B5C4332F
-	for <io-uring@archiver.kernel.org>; Fri, 22 Apr 2022 11:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1730FC4321E
+	for <io-uring@archiver.kernel.org>; Fri, 22 Apr 2022 11:48:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1447156AbiDVLvk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S1447158AbiDVLvk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Fri, 22 Apr 2022 07:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1447160AbiDVLvj (ORCPT
+        with ESMTP id S1447161AbiDVLvj (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Fri, 22 Apr 2022 07:51:39 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BC856419
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89AF34505C
         for <io-uring@vger.kernel.org>; Fri, 22 Apr 2022 04:48:46 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23LNWeBq008636
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23M0bCoL022202
         for <io-uring@vger.kernel.org>; Fri, 22 Apr 2022 04:48:46 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=+CMYUwIy0ADLCyzRaPQCP3M911g2i8eQE9gvJ5GkkcM=;
- b=j8/zFBSpzG31p70c/YViTqougRVcESrWqV5FGy/ib+iaShlpB5o8EW8XX7wSG9OXQOjd
- tpcrP3jk02vi5/rB8G/mtPfbXk2o85vlnGuEyNrSy1XUXMARD+N+xpmnxJ+DgLwf76JI
- 7ZU+my+xz2MGpPEybzWxE+VSSSP4MxClKXo= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fka366j24-1
+ bh=Y97cttDG1kcfx2CU8scC7NBTd5KmpGDwARAh4Y2LmEs=;
+ b=fc5KzfRCYHdUxHT7kara/PNHwl0MNCFCdCJFdnnSho2QATzXqIRG64UZTlbmS3hodEwV
+ 5yPEYvYSlp66l5SGfeR6fcjMFGGXNQgjktfmDQB3U6dYnEiA0RVaGm1mFkE43R0cEh5a
+ lz7GKCdPF9qkqjqoe9GifNWqLvyVHHKNhUw= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fkhyr2q6j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Fri, 22 Apr 2022 04:48:46 -0700
-Received: from twshared41237.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+Received: from twshared6486.05.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Fri, 22 Apr 2022 04:48:45 -0700
 Received: by devbig039.lla1.facebook.com (Postfix, from userid 572232)
-        id 8068A7DC56AF; Fri, 22 Apr 2022 04:48:31 -0700 (PDT)
+        id 975DC7DC56B5; Fri, 22 Apr 2022 04:48:31 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     <io-uring@vger.kernel.org>
 CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>, <Kernel-team@fb.com>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing 1/7] test: handle mmap return failures in pollfree test
-Date:   Fri, 22 Apr 2022 04:48:09 -0700
-Message-ID: <20220422114815.1124921-2-dylany@fb.com>
+Subject: [PATCH liburing 4/7] test: use unique filenames
+Date:   Fri, 22 Apr 2022 04:48:12 -0700
+Message-ID: <20220422114815.1124921-5-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220422114815.1124921-1-dylany@fb.com>
 References: <20220422114815.1124921-1-dylany@fb.com>
@@ -48,8 +48,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Q0zRQjBPhsz4sYwym7RONP6ziEnibRzs
-X-Proofpoint-GUID: Q0zRQjBPhsz4sYwym7RONP6ziEnibRzs
+X-Proofpoint-GUID: M9KA_jUjKI8v2AxTaFfbivQYt3h34OjE
+X-Proofpoint-ORIG-GUID: M9KA_jUjKI8v2AxTaFfbivQYt3h34OjE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-22_03,2022-04-22_01,2022-02-23_01
@@ -57,31 +57,61 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Sometimes these mmap's fail, and it causes SEGFAULTS.
-I assume this was accidentally left off when this was originally landed.
+Allow tests to be run in parallel
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- test/pollfree.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ test/openat2.c       | 6 +++---
+ test/sq-poll-dup.c   | 2 +-
+ test/sq-poll-share.c | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/test/pollfree.c b/test/pollfree.c
-index e2511df..d753ffe 100644
---- a/test/pollfree.c
-+++ b/test/pollfree.c
-@@ -406,10 +406,10 @@ int main(int argc, char *argv[])
-   ret =3D mmap((void *)0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-   if (ret =3D=3D MAP_FAILED)
-     return 0;
--  mmap((void *)0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
-+  ret =3D mmap((void *)0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
-   if (ret =3D=3D MAP_FAILED)
-     return 0;
--  mmap((void *)0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-+  ret =3D mmap((void *)0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
-   if (ret =3D=3D MAP_FAILED)
-     return 0;
-   loop();
+diff --git a/test/openat2.c b/test/openat2.c
+index 379c61e..34c0f85 100644
+--- a/test/openat2.c
++++ b/test/openat2.c
+@@ -246,12 +246,12 @@ int main(int argc, char *argv[])
+ 	}
+=20
+ 	if (argc > 1) {
+-		path =3D "/tmp/.open.close";
++		path =3D "/tmp/.open.at2";
+ 		path_rel =3D argv[1];
+ 		do_unlink =3D 0;
+ 	} else {
+-		path =3D "/tmp/.open.close";
+-		path_rel =3D ".open.close";
++		path =3D "/tmp/.open.at2";
++		path_rel =3D ".open.at2";
+ 		do_unlink =3D 1;
+ 	}
+=20
+diff --git a/test/sq-poll-dup.c b/test/sq-poll-dup.c
+index 0076a31..6a72b82 100644
+--- a/test/sq-poll-dup.c
++++ b/test/sq-poll-dup.c
+@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
+ 	if (argc > 1) {
+ 		fname =3D argv[1];
+ 	} else {
+-		fname =3D ".basic-rw";
++		fname =3D ".basic-rw-poll-dup";
+ 		t_create_file(fname, FILE_SIZE);
+ 	}
+=20
+diff --git a/test/sq-poll-share.c b/test/sq-poll-share.c
+index 2f1c1dd..7bb7626 100644
+--- a/test/sq-poll-share.c
++++ b/test/sq-poll-share.c
+@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
+ 	if (argc > 1) {
+ 		fname =3D argv[1];
+ 	} else {
+-		fname =3D ".basic-rw";
++		fname =3D ".basic-rw-poll-share";
+ 		t_create_file(fname, FILE_SIZE);
+ 	}
+=20
 --=20
 2.30.2
 
