@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B100C433EF
-	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 18:33:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1536C43219
+	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 18:33:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233081AbiDZShB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 26 Apr 2022 14:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S244326AbiDZShD (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 26 Apr 2022 14:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351543AbiDZSg7 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Apr 2022 14:36:59 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B7C483AA
-        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 11:33:51 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id p62so21391153iod.0
-        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 11:33:51 -0700 (PDT)
+        with ESMTP id S1351823AbiDZShB (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Apr 2022 14:37:01 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB9C45507
+        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 11:33:53 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id f4so492360iov.2
+        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 11:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TULgS34lSS9NU+veEe6QiBG7RwS5U5xfn+73j/IGoPo=;
-        b=svb0ncezy0FIZGs0w2+VY5TqBFHSS7P8tkHLlD9TJhBFPbnxuHet7M20grHfv1Asao
-         mnykXtmxLVhA6Z6V0qZdL9QNUEPlbfdgTxwvghnjSV8KiUBRgiWbENZBYIo9mxUd8MPL
-         Raa9wFD9MZWCBAOTmZRGM34wL2GapDGoYSN9gq/hiopr2U/5ed2XM6yTopcFt2hbXnZa
-         1PSdAtXr6Hx6WhY18yWwggA5xU+00hBTzBYg62WqHBHhHWDdnQKjXIPOw+bKKA+VgNt/
-         FypjAyaMF6zezYw0qIMzf9m3Q/VRrxGWgeoaMLknpBfDGQEBkkzniBGHdHQcNlj9av8b
-         j5FQ==
+        bh=4S/OdOCcrSeoB3Vknm6QSl0olntv/bkKXzOrip0JfmQ=;
+        b=AhyEc2Ai8JIikdrujs6m0NBJoaqvVegvqvVhrHyZHcLQcOVjmdAJ0kRVzKWLHwl8Kr
+         hxZryzvqHBl4RgLqoLxAzBZI9lcH7pEudl5j11rWT7PnTkPbp1ZRvRK0f2UKPEtBfX4t
+         DJeqiyjyFjV/udTbUvsHvh/kjxJV8QdfEsiXDSFTf/NnNd1+BhfFiIYSOuUTAgVWIFyJ
+         6m1xaaRcQPn2p5D2E3sqX/yRW6tBomPGPpnIdf+WAJvxbq9ucOFtCBB2VNhcPdqdWbpv
+         VYYOLK8Hrw9c+o9c6xM5GfTdZfLzrz3fB+PluFA/de9vNyw/gEpgrcLRvkg038lmYOMp
+         yDDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TULgS34lSS9NU+veEe6QiBG7RwS5U5xfn+73j/IGoPo=;
-        b=d4lSkvvtbRZdbtYny8oFvteVYdD3ShbEK38Wri+xuGT7j90v72pnrfST6I26CgGzNb
-         44WZM5scn7QBssRkufxYkbqiu4znjfwLvJEsFdXt28DIRYztdYuVOfcXi99kfQfds3AA
-         TPnuDBxkcQKFBc4pewBFlwvMytHD7P4MfR4yasMpylUwYAX/SHkFELqL0GZ5Lg+pZyyG
-         EFJVRZcOeIkpqLm2kGWyQ6WcFQ+8qaSNgUS0h83KNSPNTi23+RqPFaXD5XSUolMmXSMS
-         07wi3eaC3myv97BJnmjuIe/Ynvu7tJ03hqgwrefCZkix5yw0jGp3GqhRvZdaPhRs9W/I
-         bLkg==
-X-Gm-Message-State: AOAM531g9fHBzNXqGAN/nGz7ea5+hGFAhbx/nGvhPTub2o/XvqiBHmPE
-        pqB4tAtu0BqAllXGKA/CynnN8gDQpEqg0A==
-X-Google-Smtp-Source: ABdhPJwNjO42HNOpaaKUikGhaMtVBFoAoTajSIixSNaYYH/QLCgPGedwhXXKd+R6dVxXLabOKlD3jg==
-X-Received: by 2002:a6b:7e03:0:b0:654:9a7e:e382 with SMTP id i3-20020a6b7e03000000b006549a7ee382mr10008357iom.126.1650998030971;
-        Tue, 26 Apr 2022 11:33:50 -0700 (PDT)
+        bh=4S/OdOCcrSeoB3Vknm6QSl0olntv/bkKXzOrip0JfmQ=;
+        b=Z0QJ2AdcycGzy1icXi30gvb8O4foBzHdK6lP3RsFQgbJvI2wEpo2gXz6dtyoe/r6L7
+         w3tUKG8mW1YM3ObhGyiicyvfgbmBAgRuxjU7kaE2Q9hCaENjf3AvMZUE9XjhJvKN2/dg
+         46WM6hTCiMp8dYlQE2Edwerv8hmGawsso7Z0vj/2jye2fPyMtRvDbhYyV1MvO22HiTFH
+         HSS9+Y27eS+vxbBoqvFog1Z0MYDTgibFGwBQ6kf3HfGByvpnRU3XSrFT4Ebe+9U4oN1Q
+         s4OYtYbyJguP9TgWu4S0dAcxdHc69K1bT1iZeaIzubsxSUn2Xf+HWQscYDI7Ym0yB5px
+         mirQ==
+X-Gm-Message-State: AOAM533tOXCpLyZxzO6WXzm28t0HQycAyRtVlyPXSoaHGxn4/6lcW3aS
+        7Gr7+mZ5NfolwKQy2Hf84n9vJp1XRBBdGQ==
+X-Google-Smtp-Source: ABdhPJxjo36kqEtIhbxp9L4aUkHWiYCokAD7PzdSjjnjsZy4qYXXhWXXiYanJtnSkAXx7eQm7EaR0A==
+X-Received: by 2002:a02:93e1:0:b0:326:7a7d:a2b0 with SMTP id z88-20020a0293e1000000b003267a7da2b0mr10189781jah.44.1650998032582;
+        Tue, 26 Apr 2022 11:33:52 -0700 (PDT)
 Received: from m1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id o7-20020a92d387000000b002cbec1ecc60sm8227524ilo.86.2022.04.26.11.33.49
+        by smtp.gmail.com with ESMTPSA id o7-20020a92d387000000b002cbec1ecc60sm8227524ilo.86.2022.04.26.11.33.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 11:33:50 -0700 (PDT)
+        Tue, 26 Apr 2022 11:33:52 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/4] io_uring: add flags2 variable
-Date:   Tue, 26 Apr 2022 12:33:41 -0600
-Message-Id: <20220426183343.150273-3-axboe@kernel.dk>
+Subject: [PATCH 4/4] io_uring: wire up IOSQE2_POLL_FIRST for send/sendmsg and recv/recvmsg
+Date:   Tue, 26 Apr 2022 12:33:43 -0600
+Message-Id: <20220426183343.150273-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220426183343.150273-1-axboe@kernel.dk>
 References: <20220426183343.150273-1-axboe@kernel.dk>
@@ -62,137 +62,58 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Most opcodes don't support using the ioprio field, it's really only
-something that read/write to storage media supports. Overlay a flags2
-variable with ioprio, so we can grow our flags space.
+If REQ_F_POLL_FIRST is set and we haven't polled for this request before,
+go straight to checking poll status before attempting a data transfer.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/io_uring.c                 | 40 ++++++++++++++++++++++++-----------
- include/uapi/linux/io_uring.h |  8 ++++++-
- 2 files changed, 35 insertions(+), 13 deletions(-)
+ fs/io_uring.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 29153958ea78..06afe4db5a9a 100644
+index eb5f77bde98d..3ae18604ed59 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -108,7 +108,10 @@
- 			  IOSQE_IO_HARDLINK | IOSQE_ASYNC)
+@@ -5315,6 +5315,9 @@ static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
+ 		kmsg = &iomsg;
+ 	}
  
- #define SQE_VALID_FLAGS	(SQE_COMMON_FLAGS | IOSQE_BUFFER_SELECT | \
--			IOSQE_IO_DRAIN | IOSQE_CQE_SKIP_SUCCESS)
-+			IOSQE_IO_DRAIN | IOSQE_CQE_SKIP_SUCCESS | \
-+			IOSQE_FLAGS2)
++	if ((req->flags & (REQ_F_POLLED | REQ_F_POLL_FIRST)) == REQ_F_POLL_FIRST)
++		return io_setup_async_msg(req, kmsg);
 +
-+#define SQE_VALID_FLAGS2	0
+ 	flags = req->sr_msg.msg_flags;
+ 	if (issue_flags & IO_URING_F_NONBLOCK)
+ 		flags |= MSG_DONTWAIT;
+@@ -5357,6 +5360,9 @@ static int io_send(struct io_kiocb *req, unsigned int issue_flags)
+ 	int min_ret = 0;
+ 	int ret;
  
- #define IO_REQ_CLEAN_FLAGS (REQ_F_BUFFER_SELECTED | REQ_F_NEED_CLEANUP | \
- 				REQ_F_POLLED | REQ_F_CREDS | REQ_F_ASYNC_DATA)
-@@ -788,9 +791,10 @@ enum {
- 	REQ_F_FORCE_ASYNC_BIT	= IOSQE_ASYNC_BIT,
- 	REQ_F_BUFFER_SELECT_BIT	= IOSQE_BUFFER_SELECT_BIT,
- 	REQ_F_CQE_SKIP_BIT	= IOSQE_CQE_SKIP_SUCCESS_BIT,
-+	REQ_F_FLAGS2_BIT	= IOSQE_FLAGS2_BIT,
- 
--	/* first byte is taken by user flags, shift it to not overlap */
--	REQ_F_FAIL_BIT		= 8,
-+	/* first bits are taken by user flags, shift it to not overlap */
-+	REQ_F_FAIL_BIT		= 9,
- 	REQ_F_INFLIGHT_BIT,
- 	REQ_F_CUR_POS_BIT,
- 	REQ_F_NOWAIT_BIT,
-@@ -831,6 +835,8 @@ enum {
- 	REQ_F_BUFFER_SELECT	= BIT(REQ_F_BUFFER_SELECT_BIT),
- 	/* IOSQE_CQE_SKIP_SUCCESS */
- 	REQ_F_CQE_SKIP		= BIT(REQ_F_CQE_SKIP_BIT),
-+	/* IOSQE_FLAGS2 */
-+	REQ_F_FLAGS2		= BIT(REQ_F_FLAGS2_BIT),
- 
- 	/* fail rest of links */
- 	REQ_F_FAIL		= BIT(REQ_F_FAIL_BIT),
-@@ -3280,15 +3286,16 @@ static int io_prep_rw(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 
- 	kiocb->ki_pos = READ_ONCE(sqe->off);
- 
--	ioprio = READ_ONCE(sqe->ioprio);
--	if (ioprio) {
--		ret = ioprio_check_cap(ioprio);
--		if (ret)
--			return ret;
-+	kiocb->ki_ioprio = get_current_ioprio();
-+	if (!(req->flags & REQ_F_FLAGS2)) {
-+		ioprio = READ_ONCE(sqe->ioprio);
-+		if (ioprio) {
-+			ret = ioprio_check_cap(ioprio);
-+			if (ret)
-+				return ret;
- 
--		kiocb->ki_ioprio = ioprio;
--	} else {
--		kiocb->ki_ioprio = get_current_ioprio();
-+			kiocb->ki_ioprio = ioprio;
-+		}
- 	}
- 
- 	req->imu = NULL;
-@@ -7779,6 +7786,14 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 				return -EOPNOTSUPP;
- 			io_init_req_drain(req);
- 		}
-+		if (sqe_flags & IOSQE_FLAGS2) {
-+			unsigned int sqe_flags2;
++	if ((req->flags & (REQ_F_POLLED | REQ_F_POLL_FIRST)) == REQ_F_POLL_FIRST)
++		return -EAGAIN;
 +
-+			sqe_flags2 = READ_ONCE(sqe->flags2);
-+			if (sqe_flags2 & ~SQE_VALID_FLAGS2)
-+				return -EINVAL;
-+			req->flags |= sqe_flags | (sqe_flags2 << 8U);
-+		}
- 	}
- 	if (unlikely(ctx->restricted || ctx->drain_active || ctx->drain_next)) {
- 		if (ctx->restricted && !io_check_restriction(ctx, req, sqe_flags))
-@@ -7794,7 +7809,8 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 		}
+ 	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+ 		return -ENOTSOCK;
+@@ -5547,6 +5553,9 @@ static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
+ 		kmsg = &iomsg;
  	}
  
--	if (!io_op_defs[opcode].ioprio && sqe->ioprio)
-+	if (!io_op_defs[opcode].ioprio && sqe->ioprio &&
-+	    !(req->flags & REQ_F_FLAGS2))
- 		return -EINVAL;
- 	if (!io_op_defs[opcode].iopoll && (ctx->flags & IORING_SETUP_IOPOLL))
- 		return -EINVAL;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index fad63564678a..622f6e27a444 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -17,7 +17,10 @@
- struct io_uring_sqe {
- 	__u8	opcode;		/* type of operation for this sqe */
- 	__u8	flags;		/* IOSQE_ flags */
--	__u16	ioprio;		/* ioprio for the request */
-+	union {
-+		__u16	ioprio;	/* ioprio for the request */
-+		__u16	flags2;	/* extra flags */
-+	};
- 	__s32	fd;		/* file descriptor to do IO on */
- 	union {
- 		__u64	off;	/* offset into file */
-@@ -71,6 +74,7 @@ enum {
- 	IOSQE_ASYNC_BIT,
- 	IOSQE_BUFFER_SELECT_BIT,
- 	IOSQE_CQE_SKIP_SUCCESS_BIT,
-+	IOSQE_FLAGS2_BIT,
- };
++	if ((req->flags & (REQ_F_POLLED | REQ_F_POLL_FIRST)) == REQ_F_POLL_FIRST)
++		return io_setup_async_msg(req, kmsg);
++
+ 	if (req->flags & REQ_F_BUFFER_SELECT) {
+ 		kbuf = io_recv_buffer_select(req, issue_flags);
+ 		if (IS_ERR(kbuf))
+@@ -5604,6 +5613,9 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+ 	int ret, min_ret = 0;
+ 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
  
- /*
-@@ -90,6 +94,8 @@ enum {
- #define IOSQE_BUFFER_SELECT	(1U << IOSQE_BUFFER_SELECT_BIT)
- /* don't post CQE if request succeeded */
- #define IOSQE_CQE_SKIP_SUCCESS	(1U << IOSQE_CQE_SKIP_SUCCESS_BIT)
-+/* flags2 is valid and set */
-+#define IOSQE_FLAGS2		(1U << IOSQE_FLAGS2_BIT)
- 
- /*
-  * io_uring_setup() flags
++	if ((req->flags & (REQ_F_POLLED | REQ_F_POLL_FIRST)) == REQ_F_POLL_FIRST)
++		return -EAGAIN;
++
+ 	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+ 		return -ENOTSOCK;
 -- 
 2.35.1
 
