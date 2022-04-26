@@ -2,87 +2,98 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2A7AC433EF
-	for <io-uring@archiver.kernel.org>; Mon, 25 Apr 2022 22:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00ABEC433F5
+	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 01:49:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233022AbiDYWuW (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 25 Apr 2022 18:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S230083AbiDZBwT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 25 Apr 2022 21:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiDYWuV (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 25 Apr 2022 18:50:21 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D92113CA0
-        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 15:47:16 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id j17so16193473pfi.9
-        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 15:47:16 -0700 (PDT)
+        with ESMTP id S241436AbiDZBwQ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 25 Apr 2022 21:52:16 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322B212010E
+        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 18:49:11 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d15so14400720plh.2
+        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 18:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=qsn7IgujsIjOg8YIG1JS0NVZ0dElgmLNnO5DgD8nQjk=;
-        b=wQUy+tHLT69mC8g6JnsPx6vDw3MFBMZar0/DdrcfRZoPF4bCfHnqjsdKSodsgv92Ef
-         OauwMIv+kHOKuCFnRawQxg3ttdNz4qRqHD0D1Zoavy7x8rFNYEBpufP0dCNPnCjHMVgd
-         HfC/Z2tM4xhjsi3bDj7HQ+i1699MZtLRLNZioZJ8/sd0BbNvSKsW4vb+s+Or2Ec2fQwG
-         xW7lv0ueLqjoSRibBtUycKRZJYb09JlHIB2Jxs+wf8///Z4qdNwBgnK7eh4mC2LZ1LML
-         YSrXyAzHvoBz4S7BDy9rm64Zgqz3ItvdkBRXpSBifAwqwpXkFHHN52wFHM6Rdz6wgHHm
-         8JEg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zPD3oXUSwzncZySFSn5YaDl6CFJYMTeuwOOKTNcfZLQ=;
+        b=s69QZtRGH9y9iFn9IGmPIHWqYIAND61qWCU1ZDpLnC05Lt8wGP3jJiJbPEIYsaHwE1
+         eYhynL0fnMZjJ0SXJ1Spey9xBTgafgj87oOS/mr7sYqq5trzevd1OAhkmq51zq8Fa/vt
+         JLotS1S+R5HSz5CNqBvq4ccT+yHBngwfdpFx+McsSA33CTapWztlJlqwh1SuTI3A0jKU
+         ZLwzGMXRLYjdAG6di38h6V58jMnQhUaM5N9KopNhlBsrk8GGYezeo7UpDrWta6tW6gFo
+         C4u8ar4hLiLrNerIpLao6CHiqMLMb1rcwSmXdLn/bhL799NBxMpsv2lhn0pPb9wFTj5P
+         m4Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=qsn7IgujsIjOg8YIG1JS0NVZ0dElgmLNnO5DgD8nQjk=;
-        b=7mgzJJ0Z+E9BGc2tAyD5gwSWWJe2UOYQ3+vzmxhIKrjFRFf/BCD/h8jIlG10exY8YA
-         9nlh5A9c5+BZlv83y+UDQ+EfiGox1tYVWqSMpC7I0Zc8KpjGddfwZ23Zm26kEJjtLHou
-         86dQwAVBPM67rdRimUu2LH7iieP0A5KFAlulOXuG294hg8jpJ7K0PWsSwAqE/9rctmTW
-         84Zph2RmSRdaWimFTJj4rJmA4ZyPsbeBL5paVTuOvPJ3uzY5vPG3YrCgKnE0yIE0zxaY
-         cKiIQAth5zhmhArP3fM+gHE+ZYTUAc1vsrA+RPi8JziHbKjOSuSFM4qXMcgJVf9/zUFY
-         ybVQ==
-X-Gm-Message-State: AOAM530H4Hfekm5Wj+pGcAiHlVc7XrCyD4iMvuFr+yl4P10qiC9ZCQTx
-        WGgeEgOOWWUBmggik2UQbvAifm1bXpC5qnOR
-X-Google-Smtp-Source: ABdhPJwdBA9ScfQsOsCFQJoiNq8hyYFv9z50BhHttKjnMsNYQ3lX9OkFCANQYNO1qW0qqzL7/2tGSw==
-X-Received: by 2002:a63:5907:0:b0:382:2f93:5467 with SMTP id n7-20020a635907000000b003822f935467mr16698091pgb.460.1650926835804;
-        Mon, 25 Apr 2022 15:47:15 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i5-20020a62c105000000b0050d46c15da4sm3399361pfg.89.2022.04.25.15.47.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Apr 2022 15:47:14 -0700 (PDT)
-Message-ID: <3fb298f3-c3a9-0240-5bc6-9ea84739e915@kernel.dk>
-Date:   Mon, 25 Apr 2022 16:47:13 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 0/4] io_uring: text representation of opcode in trace
-Content-Language: en-US
-To:     Dylan Yudaken <dylany@fb.com>, io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com, Kernel-team@fb.com
-References: <20220425150740.2826784-1-dylany@fb.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zPD3oXUSwzncZySFSn5YaDl6CFJYMTeuwOOKTNcfZLQ=;
+        b=5Xs9+FpzTdCSL8MGWEeVG/Law7w+GGLZGzcP77cnoA8WrhFDCNLP3CXVwaASBFasvj
+         T1mamqrev6QtmjWeg3ub8K+L47HnmggzFd3a8hTsBFvyZVhINDLTsBJqLvSNGUnRWqEH
+         nD9jQv4QYXDHAiktCDuGe+U6Y9mUc8SxK0bKMNVa+Jlep3mRzQi/p6DUGLQwn2sqAOA3
+         tVGsN1TlDhRORJS3ROYoGwDR21aWFoFNls3b/hWDZvo5uI6TKthOrNHzpJw4P7n93fy/
+         TuONXXNcRT/L/PvGYdEewwESmpTCesgDHzskxPNl3I/i7FfwYuaE0OHvqcMoirhKibNz
+         TjTA==
+X-Gm-Message-State: AOAM530DSVi691scvT6Le5EwE4K1ZyLNwreGYo93nmnJi4TkY5F5Wl2X
+        US7X9xEZjt3Bt8+x+eee2/G2UMHsgOcXM7vY
+X-Google-Smtp-Source: ABdhPJzRJoq51TVFpAYG0Eou/YeiLp9Iusm0eCIyavbAdIs5PF3SWPXOOM72g9Q2lHAdfSQO7hxmow==
+X-Received: by 2002:a17:90b:1e0b:b0:1d2:dabc:9929 with SMTP id pg11-20020a17090b1e0b00b001d2dabc9929mr24266254pjb.39.1650937750178;
+        Mon, 25 Apr 2022 18:49:10 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id i23-20020a056a00225700b0050d38d0f58dsm6076149pfu.213.2022.04.25.18.49.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Apr 2022 18:49:09 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220425150740.2826784-1-dylany@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 3/6] io-wq: use __set_notify_signal() to wake workers
+Date:   Mon, 25 Apr 2022 19:49:01 -0600
+Message-Id: <20220426014904.60384-4-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220426014904.60384-1-axboe@kernel.dk>
+References: <20220426014904.60384-1-axboe@kernel.dk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 4/25/22 9:07 AM, Dylan Yudaken wrote:
-> 
-> This series adds the text representation of opcodes into the trace. This
-> makes it much quicker to understand traces without having to translate
-> opcodes in your head.
-> 
-> Patch 1 adds a type to io_uring opcodes
-> Patch 2 is the translation function.
-> Patch 3 is a small cleanup
-> Patch 4 uses the translator in the trace logic
+The only difference between set_notify_signal() and __set_notify_signal()
+is that the former checks if it needs to deliver an IPI to force a
+reschedule. As the io-wq workers never leave the kernel, and IPI is never
+needed, they simply need a wakeup.
 
-Sorry forgot, one last request - can you make this against the
-for-5.19/io_uring-socket branch? That'll include the opcodes added for
-5.19, otherwise we'll most likely end up in a situation where it'll
-merge cleanly but trigger a warning at build time. Also avoids having to
-fix those up after the fact in any case.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io-wq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/fs/io-wq.c b/fs/io-wq.c
+index 32aeb2c581c5..824623bcf1a5 100644
+--- a/fs/io-wq.c
++++ b/fs/io-wq.c
+@@ -871,7 +871,7 @@ static bool io_wq_for_each_worker(struct io_wqe *wqe,
+ 
+ static bool io_wq_worker_wake(struct io_worker *worker, void *data)
+ {
+-	set_notify_signal(worker->task);
++	__set_notify_signal(worker->task);
+ 	wake_up_process(worker->task);
+ 	return false;
+ }
+@@ -991,7 +991,7 @@ static bool __io_wq_worker_cancel(struct io_worker *worker,
+ {
+ 	if (work && match->fn(work, match->data)) {
+ 		work->flags |= IO_WQ_WORK_CANCEL;
+-		set_notify_signal(worker->task);
++		__set_notify_signal(worker->task);
+ 		return true;
+ 	}
+ 
 -- 
-Jens Axboe
+2.35.1
 
