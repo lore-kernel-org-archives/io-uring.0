@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE0B7C43217
-	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 01:49:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13E66C4321E
+	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 01:49:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241454AbiDZBwT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 25 Apr 2022 21:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41230 "EHLO
+        id S241421AbiDZBwU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 25 Apr 2022 21:52:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241421AbiDZBwQ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 25 Apr 2022 21:52:16 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBA4120104
-        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 18:49:10 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id m14-20020a17090a34ce00b001d5fe250e23so1103965pjf.3
-        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 18:49:10 -0700 (PDT)
+        with ESMTP id S230262AbiDZBwR (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 25 Apr 2022 21:52:17 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78989120106
+        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 18:49:12 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id g3so14192309pgg.3
+        for <io-uring@vger.kernel.org>; Mon, 25 Apr 2022 18:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gBB3rIq31HTt0a91neDmCOiC54dYmIJQc4bKJW/WfqE=;
-        b=zq40o1FjuWETZKF1Jl5ugBtEI0jhOAe4OyqWK8j7WxJ4/gQC7fmMPPVbg7a9qL8rzL
-         KzvtCa6mZiShxeDp2lszZApguDyjMFb2C/M3v5YrZqZ9jWgN4sH8GWoA9oSnpZWrVWpF
-         rMHMnGJDfUIjXNnkKa46htfRb+wvSKxH/zciZd59TOBW5k+IqIe7jEQYmyBtlxsTU6vC
-         dsCTY37LLOZUY2gNQzlGiYnQYt5nXLj+v4eS/E1/ix3vfZRzpF6C3MJ6YVXKSoiSSgw/
-         77f73iMDMYUMcUKtqpw2UF2WxBIIa02LhV+VaXHm6X4sOmDxBAoeqHyGaUm1zAtjCc/M
-         YwEQ==
+        bh=3KVl1tdwRigoZhQXyjpESkHY/nGU1jAsvgwdfBJ1/e0=;
+        b=75LZoyT4lWOfrBwFa81foRrYDiAucvXaDxQ4X34iXqtL6rAlpXlWtUxk1BsqdZZmAy
+         jcui8TgL1JyvYaKl2Qy5pOmzaeuz8UaDEzdYNm7iuaRX4S5guG7YGrGeVndXoRvhnW16
+         tZYpToDkuWU8PRoaS8uN04Td8LOv5s3wKbBebtLEMFvH1XT6dYfnagIdS2Cnojm0fqBz
+         6gaywmxtaWu7Hnd1EFC2NPy5hXU7wzWCK8Em35PmfzZaSW8g3XNai4nL6cBQBL5wv4kR
+         k8hSqYFT7uOzv0w+nDSLjm+bmnlyN7UR5yq5tpdXG+TK48iVwl+sLRmDrCPGv/vaXfVC
+         lHEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gBB3rIq31HTt0a91neDmCOiC54dYmIJQc4bKJW/WfqE=;
-        b=1ppAPzcZLQ8jr27gzu4Cn59konx2m4Z/tX61MxX4hmqHmi2YAjcgMKx7jS5XnDsaCt
-         9A7Km5vv8b1TqWIbDTBzZJMrcL5tO/DKhKdrMCRCFY6YaY4Y0x+l+96cTG16ofLNciTI
-         cXnM3Hi8kuDK9Jr+ClYXYaHMI4+WJ/kVA6VwVCMN1FldaFvWzJT0XywKgETdkpbnQLfh
-         dB02DSegICZBbHe/IDHvU97E0is0GjWB4htAGWUvz9P+L0HZc1wq0NCeyHEhrxhZlfYE
-         WnSUT3RFQ1ojcpZO92p7vpKXqouU+e0kjM6LDIs+Mmiz8p3yQ6835GgFybS7XsTr3hUr
-         UP6A==
-X-Gm-Message-State: AOAM5333/PphzuFewuB7stRZllY4VpLWk1vrfSQ8xwdQv90gttG+Vg4y
-        wj0D3vLQu4wowrjN7IeovqRg3eub0ZqSTP4x
-X-Google-Smtp-Source: ABdhPJzDF/NVY8bcDA3acRoRtKkdzWEL53oYvPFkxLPG8y3S0Ndoji8oVL/sggEQldnwYu15juP8NQ==
-X-Received: by 2002:a17:90a:ac15:b0:1d9:839d:3fac with SMTP id o21-20020a17090aac1500b001d9839d3facmr7068657pjq.195.1650937749254;
-        Mon, 25 Apr 2022 18:49:09 -0700 (PDT)
+        bh=3KVl1tdwRigoZhQXyjpESkHY/nGU1jAsvgwdfBJ1/e0=;
+        b=1QQiLi41mbGVNrDKiPMexCRIdbiI36H3mp11qGJF5G5rb5MAPW7byafAkVmoCd629t
+         PeszBFVBUSUErS4TLBPrH1it8renuCp0Nd5k/ItZV4aOM/Hm/bD36R6lGdQ3TkeK8U5A
+         kUCCbGVhzZbfXk2ut7hW19gLh87VJENyvw0XcaKr2KD9084CHFIsB+jdr26AsXGuzPm/
+         On28Vt5khJ/dODPHVon3huP1y4vjwU/EiTAwSw7hHSO4PrLv7DtbkSzF0yeE9sFh9aRB
+         TdpnGP2c+SMvH9o4bivyiLV3QTLUf29zjcbnwAL78dG35igVuHVW6dKMbDPX1/WMDxjx
+         RNrQ==
+X-Gm-Message-State: AOAM533uOSkRzmIP7fj5uh+rOuHQ1efQmSHhXiu+LX7JZztrqXT4xUjD
+        haQSZx4M5UFqdhL8pahtFua/bWmpl+vbYKqe
+X-Google-Smtp-Source: ABdhPJxI+jhKw5gLlbzmJg9+0xwEm6y0Y/PyW4AEKU1lG02U4mFlh9HR7e367KuzQlj6snPMnOMbnw==
+X-Received: by 2002:a63:ec50:0:b0:39d:2d53:76e7 with SMTP id r16-20020a63ec50000000b0039d2d5376e7mr17311443pgj.338.1650937751571;
+        Mon, 25 Apr 2022 18:49:11 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i23-20020a056a00225700b0050d38d0f58dsm6076149pfu.213.2022.04.25.18.49.08
+        by smtp.gmail.com with ESMTPSA id i23-20020a056a00225700b0050d38d0f58dsm6076149pfu.213.2022.04.25.18.49.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Apr 2022 18:49:08 -0700 (PDT)
+        Mon, 25 Apr 2022 18:49:10 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/6] io_uring: serialize ctx->rings->sq_flags with atomic_or/and
-Date:   Mon, 25 Apr 2022 19:49:00 -0600
-Message-Id: <20220426014904.60384-3-axboe@kernel.dk>
+Subject: [PATCH 4/6] io_uring: set task_work notify method at init time
+Date:   Mon, 25 Apr 2022 19:49:02 -0600
+Message-Id: <20220426014904.60384-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220426014904.60384-1-axboe@kernel.dk>
 References: <20220426014904.60384-1-axboe@kernel.dk>
@@ -62,112 +62,72 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Rather than require ctx->completion_lock for ensuring that we don't
-clobber the flags, use the atomic bitop helpers instead. This removes
-the need to grab the completion_lock, in preparation for needing to set
-or clear sq_flags when we don't know the status of this lock.
+While doing so, switch SQPOLL to TWA_SIGNAL_NO_IPI as well, as that
+just does a task wakeup and then we can remove the special wakeup we
+have in task_work_add.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/io_uring.c | 36 ++++++++++--------------------------
- 1 file changed, 10 insertions(+), 26 deletions(-)
+ fs/io_uring.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index bf95ef9240e5..511b52e4b9fd 100644
+index 511b52e4b9fd..7e9ac5fd3a8c 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -170,7 +170,7 @@ struct io_rings {
- 	 * The application needs a full memory barrier before checking
- 	 * for IORING_SQ_NEED_WAKEUP after updating the sq tail.
- 	 */
--	u32			sq_flags;
-+	atomic_t		sq_flags;
- 	/*
- 	 * Runtime CQ flags
- 	 *
-@@ -2060,8 +2060,7 @@ static bool __io_cqring_overflow_flush(struct io_ring_ctx *ctx, bool force)
- 	all_flushed = list_empty(&ctx->cq_overflow_list);
- 	if (all_flushed) {
- 		clear_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq);
--		WRITE_ONCE(ctx->rings->sq_flags,
--			   ctx->rings->sq_flags & ~IORING_SQ_CQ_OVERFLOW);
-+		atomic_andnot(IORING_SQ_CQ_OVERFLOW, &ctx->rings->sq_flags);
- 	}
+@@ -367,6 +367,7 @@ struct io_ring_ctx {
  
- 	io_commit_cqring(ctx);
-@@ -2155,8 +2154,7 @@ static bool io_cqring_event_overflow(struct io_ring_ctx *ctx, u64 user_data,
- 	}
- 	if (list_empty(&ctx->cq_overflow_list)) {
- 		set_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq);
--		WRITE_ONCE(ctx->rings->sq_flags,
--			   ctx->rings->sq_flags | IORING_SQ_CQ_OVERFLOW);
-+		atomic_or(IORING_SQ_CQ_OVERFLOW, &ctx->rings->sq_flags);
- 
- 	}
- 	ocqe->cqe.user_data = user_data;
-@@ -8477,23 +8475,6 @@ static inline bool io_sqd_events_pending(struct io_sq_data *sqd)
- 	return READ_ONCE(sqd->state);
- }
- 
--static inline void io_ring_set_wakeup_flag(struct io_ring_ctx *ctx)
--{
--	/* Tell userspace we may need a wakeup call */
--	spin_lock(&ctx->completion_lock);
--	WRITE_ONCE(ctx->rings->sq_flags,
--		   ctx->rings->sq_flags | IORING_SQ_NEED_WAKEUP);
--	spin_unlock(&ctx->completion_lock);
--}
--
--static inline void io_ring_clear_wakeup_flag(struct io_ring_ctx *ctx)
--{
--	spin_lock(&ctx->completion_lock);
--	WRITE_ONCE(ctx->rings->sq_flags,
--		   ctx->rings->sq_flags & ~IORING_SQ_NEED_WAKEUP);
--	spin_unlock(&ctx->completion_lock);
--}
--
- static int __io_sq_thread(struct io_ring_ctx *ctx, bool cap_entries)
+ 		struct io_rings		*rings;
+ 		unsigned int		flags;
++		enum task_work_notify_mode	notify_method;
+ 		unsigned int		compat: 1;
+ 		unsigned int		drain_next: 1;
+ 		unsigned int		restricted: 1;
+@@ -2651,8 +2652,8 @@ static void tctx_task_work(struct callback_head *cb)
+ static void io_req_task_work_add(struct io_kiocb *req, bool priority)
  {
- 	unsigned int to_submit;
-@@ -8609,8 +8590,8 @@ static int io_sq_thread(void *data)
- 			bool needs_sched = true;
+ 	struct task_struct *tsk = req->task;
++	struct io_ring_ctx *ctx = req->ctx;
+ 	struct io_uring_task *tctx = tsk->io_uring;
+-	enum task_work_notify_mode notify;
+ 	struct io_wq_work_node *node;
+ 	unsigned long flags;
+ 	bool running;
+@@ -2675,18 +2676,8 @@ static void io_req_task_work_add(struct io_kiocb *req, bool priority)
+ 	if (running)
+ 		return;
  
- 			list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
--				io_ring_set_wakeup_flag(ctx);
--
-+				atomic_or(IORING_SQ_NEED_WAKEUP,
-+						&ctx->rings->sq_flags);
- 				if ((ctx->flags & IORING_SETUP_IOPOLL) &&
- 				    !wq_list_empty(&ctx->iopoll_list)) {
- 					needs_sched = false;
-@@ -8635,7 +8616,8 @@ static int io_sq_thread(void *data)
- 				mutex_lock(&sqd->lock);
- 			}
- 			list_for_each_entry(ctx, &sqd->ctx_list, sqd_list)
--				io_ring_clear_wakeup_flag(ctx);
-+				atomic_andnot(IORING_SQ_NEED_WAKEUP,
-+						&ctx->rings->sq_flags);
- 		}
+-	/*
+-	 * SQPOLL kernel thread doesn't need notification, just a wakeup. For
+-	 * all other cases, use TWA_SIGNAL unconditionally to ensure we're
+-	 * processing task_work. There's no reliable way to tell if TWA_RESUME
+-	 * will do the job.
+-	 */
+-	notify = (req->ctx->flags & IORING_SETUP_SQPOLL) ? TWA_NONE : TWA_SIGNAL;
+-	if (likely(!task_work_add(tsk, &tctx->task_work, notify))) {
+-		if (notify == TWA_NONE)
+-			wake_up_process(tsk);
++	if (likely(!task_work_add(tsk, &tctx->task_work, ctx->notify_method)))
+ 		return;
+-	}
  
- 		finish_wait(&sqd->wait, &wait);
-@@ -8645,7 +8627,7 @@ static int io_sq_thread(void *data)
- 	io_uring_cancel_generic(true, sqd);
- 	sqd->thread = NULL;
- 	list_for_each_entry(ctx, &sqd->ctx_list, sqd_list)
--		io_ring_set_wakeup_flag(ctx);
-+		atomic_or(IORING_SQ_NEED_WAKEUP, &ctx->rings->sq_flags);
- 	io_run_task_work();
- 	mutex_unlock(&sqd->lock);
+ 	spin_lock_irqsave(&tctx->task_lock, flags);
+ 	tctx->task_running = false;
+@@ -11704,6 +11695,14 @@ static __cold int io_uring_create(unsigned entries, struct io_uring_params *p,
+ 	if (!capable(CAP_IPC_LOCK))
+ 		ctx->user = get_uid(current_user());
  
-@@ -12399,6 +12381,8 @@ static int __init io_uring_init(void)
- 	BUILD_BUG_ON(ARRAY_SIZE(io_op_defs) != IORING_OP_LAST);
- 	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(int));
- 
-+	BUILD_BUG_ON(sizeof(atomic_t) != sizeof(u32));
++	/*
++	 * For SQPOLL, we just need a wakeup, always.
++	 */
++	if (ctx->flags & IORING_SETUP_SQPOLL)
++		ctx->notify_method = TWA_SIGNAL_NO_IPI;
++	else
++		ctx->notify_method = TWA_SIGNAL;
 +
- 	req_cachep = KMEM_CACHE(io_kiocb, SLAB_HWCACHE_ALIGN | SLAB_PANIC |
- 				SLAB_ACCOUNT);
- 	return 0;
+ 	/*
+ 	 * This is just grabbed for accounting purposes. When a process exits,
+ 	 * the mm is exited and dropped before the files, hence we need to hang
 -- 
 2.35.1
 
