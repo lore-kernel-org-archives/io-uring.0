@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 956FAC433EF
-	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 17:43:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8274AC433F5
+	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 17:43:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiDZRq7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 26 Apr 2022 13:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S1345925AbiDZRrC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 26 Apr 2022 13:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238343AbiDZRq6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Apr 2022 13:46:58 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20CA1816E7
-        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:43:49 -0700 (PDT)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QGQeK3017060
+        with ESMTP id S240715AbiDZRq7 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Apr 2022 13:46:59 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DB21816A7
+        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:43:50 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QGQX6t011623
         for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:43:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=5kC+EaG8kC1NKMRTCYxqHhGLne8jSvz8PgxcvPIUop4=;
- b=iyirba4hRWIPkhSOLF7SjU7PUizOK0Hd/MOc4d5C4ZWbYlqqd8bOrW6URG7DpEa6Q9DT
- O85UVe0gM1yWHgnzNBwZtCJvzgSL0nIS/8xkcKAOKdo7lpg/T/kznI5jhGAL3xIHhXW0
- 6+a+OQp4XOtRGET0UR6/oP01yhTXbc68Y1c= 
+ bh=RE5Ox9xrEwOzRKnjCVzMX1uqjY05JgL92w/a4ut+Iv0=;
+ b=eaH6Ziv8m7op3mYRIgBG0LUAtnuGjKyWwpRtqTabOnfjQIpovWM3X7y5bJIPuBEozHuZ
+ CeusKCMhhyF6go7qIg8nXCu1tZ5rJmRtmB5P00xf+2nka7kvS7q9X+MvA9lRWxVUZgGd
+ a329XJdxMivuBMy0B1H2LHH1S/UpiCYQ9aI= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fp6a8d4jv-4
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fmeyu3nvy-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:43:49 -0700
-Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 26 Apr 2022 10:43:48 -0700
+ 15.1.2375.24; Tue, 26 Apr 2022 10:43:47 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 815E2E2D4859; Tue, 26 Apr 2022 10:43:40 -0700 (PDT)
+        id 747B2E2D4855; Tue, 26 Apr 2022 10:43:40 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>
-Subject: [RFC PATCH v1 03/18] iomap: add iomap_page_create_gfp to allocate iomap_pages
-Date:   Tue, 26 Apr 2022 10:43:20 -0700
-Message-ID: <20220426174335.4004987-4-shr@fb.com>
+Subject: [RFC PATCH v1 01/18] block: add check for async buffered writes to generic_write_checks
+Date:   Tue, 26 Apr 2022 10:43:18 -0700
+Message-ID: <20220426174335.4004987-2-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220426174335.4004987-1-shr@fb.com>
 References: <20220426174335.4004987-1-shr@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: Jn6GHEVFyJ_acD2zVXmF3xSpuj61hoaw
-X-Proofpoint-ORIG-GUID: Jn6GHEVFyJ_acD2zVXmF3xSpuj61hoaw
+X-Proofpoint-GUID: qaGJKXQA0nEW9YzE2j7Vuymgew9KnNd7
+X-Proofpoint-ORIG-GUID: qaGJKXQA0nEW9YzE2j7Vuymgew9KnNd7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-26_05,2022-04-26_02,2022-02-23_01
@@ -58,79 +58,47 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add the function iomap_page_create_gfp() to be able to specify gfp flags
-and to pass in the number of blocks per folio in the function
-iomap_page_create_gfp().
-
-No intended functional changes in this patch.
+This introduces the flag FMODE_BUF_WASYNC. If devices support async
+buffered writes, this flag can be set. It also modifies the check in
+generic_write_checks to take async buffered writes into consideration.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- fs/iomap/buffered-io.c | 34 ++++++++++++++++++++++++++++------
- 1 file changed, 28 insertions(+), 6 deletions(-)
+ fs/read_write.c    | 3 ++-
+ include/linux/fs.h | 3 +++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-index 8ce8720093b9..85aa32f50db0 100644
---- a/fs/iomap/buffered-io.c
-+++ b/fs/iomap/buffered-io.c
-@@ -43,17 +43,27 @@ static inline struct iomap_page *to_iomap_page(struct=
- folio *folio)
+diff --git a/fs/read_write.c b/fs/read_write.c
+index e643aec2b0ef..f75d75f7bc84 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -1633,7 +1633,8 @@ int generic_write_checks_count(struct kiocb *iocb, =
+loff_t *count)
+ 	if (iocb->ki_flags & IOCB_APPEND)
+ 		iocb->ki_pos =3D i_size_read(inode);
 =20
- static struct bio_set iomap_ioend_bioset;
+-	if ((iocb->ki_flags & IOCB_NOWAIT) && !(iocb->ki_flags & IOCB_DIRECT))
++	if ((iocb->ki_flags & IOCB_NOWAIT) &&
++	    !((iocb->ki_flags & IOCB_DIRECT) || (file->f_mode & FMODE_BUF_WASYN=
+C)))
+ 		return -EINVAL;
 =20
-+/**
-+ * iomap_page_create_gfp : Create and initialize iomap_page for folio.
-+ * @inode     : Pointer to inode
-+ * @folio     : Pointer to folio
-+ * @nr_blocks : Number of blocks in the folio
-+ * @gfp       : gfp allocation flags
-+ *
-+ * This function returns a newly allocated iomap for the folio with the =
-settings
-+ * specified in the gfp parameter.
-+ *
-+ **/
- static struct iomap_page *
--iomap_page_create(struct inode *inode, struct folio *folio)
-+iomap_page_create_gfp(struct inode *inode, struct folio *folio,
-+		unsigned int nr_blocks, gfp_t gfp)
- {
--	struct iomap_page *iop =3D to_iomap_page(folio);
--	unsigned int nr_blocks =3D i_blocks_per_folio(inode, folio);
-+	struct iomap_page *iop;
+ 	return generic_write_check_limits(iocb->ki_filp, iocb->ki_pos, count);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index bbde95387a23..3b479d02e210 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -177,6 +177,9 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff_t=
+ offset,
+ /* File supports async buffered reads */
+ #define FMODE_BUF_RASYNC	((__force fmode_t)0x40000000)
 =20
--	if (iop || nr_blocks <=3D 1)
-+	iop =3D kzalloc(struct_size(iop, uptodate, BITS_TO_LONGS(nr_blocks)), g=
-fp);
-+	if (!iop)
- 		return iop;
-=20
--	iop =3D kzalloc(struct_size(iop, uptodate, BITS_TO_LONGS(nr_blocks)),
--			GFP_NOFS | __GFP_NOFAIL);
- 	spin_lock_init(&iop->uptodate_lock);
- 	if (folio_test_uptodate(folio))
- 		bitmap_fill(iop->uptodate, nr_blocks);
-@@ -61,6 +71,18 @@ iomap_page_create(struct inode *inode, struct folio *f=
-olio)
- 	return iop;
- }
-=20
-+static struct iomap_page *
-+iomap_page_create(struct inode *inode, struct folio *folio)
-+{
-+	struct iomap_page *iop =3D to_iomap_page(folio);
-+	unsigned int nr_blocks =3D i_blocks_per_folio(inode, folio);
++/* File supports async nowait buffered writes */
++#define FMODE_BUF_WASYNC	((__force fmode_t)0x80000000)
 +
-+	if (iop || nr_blocks <=3D 1)
-+		return iop;
-+
-+	return iomap_page_create_gfp(inode, folio, nr_blocks, GFP_NOFS | __GFP_=
-NOFAIL);
-+}
-+
- static void iomap_page_release(struct folio *folio)
- {
- 	struct iomap_page *iop =3D folio_detach_private(folio);
+ /*
+  * Attribute flags.  These should be or-ed together to figure out what
+  * has been changed!
 --=20
 2.30.2
 
