@@ -2,81 +2,135 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B6AEC433F5
-	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 17:04:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 956FAC433EF
+	for <io-uring@archiver.kernel.org>; Tue, 26 Apr 2022 17:43:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348907AbiDZRH6 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 26 Apr 2022 13:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
+        id S229782AbiDZRq7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 26 Apr 2022 13:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244226AbiDZRH4 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Apr 2022 13:07:56 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638701387D0
-        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:04:48 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id f4so24874iov.2
-        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=h3ELnL6Jy2MgUeo6P0f1eaAw2HEt4k9ee++VkwjYAdM=;
-        b=lxuaFNSK0+e+UlKMM9nhmhWXRwG2T/f7v/0AhtjxqKRbWn8G3fnSxup1CV+14qs2ue
-         r7hgI9cUM6ZaGBGGpx0uMfPN4letoWvnc0d1Rf7U+8B7Jz0XFhLmfTUB/09MXg/P6pcu
-         KY3dJkesy7PBcZG+49oZY6VkPfDGidkOvo+R27YzCRLgTu0bFqQpLuofJwsaaZnX/Ayu
-         TOUm5h0LLtiJpy9wx0xkRSoPE/LmlzFKGI0sImaQ6XPswI1wtx8rHBHw1ZZwZ5a/MxED
-         lZVOBMDHrJ7m8Gf4rhsDTIOGczPVLBddKceQum2+U317CGp4iKgzGk59sJ9xgnKlTgTx
-         l9xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=h3ELnL6Jy2MgUeo6P0f1eaAw2HEt4k9ee++VkwjYAdM=;
-        b=CH9XxyZPBtB5JGepQ0uZgVpP1q1x0ICrRxsy3EzyYHQZDF4nzHni2m3/vKTG5vUHPx
-         6f1PA1wsg0eTmFq7qv5kWThZil7765Aj3yDHzjhJHu9mLxJbC0TAZ9SX+iwtWo0OGyF1
-         WB0YJJBIXWuMwRBUkG9T1NidAmdoPUMsp152l2hW3i3uCwdgvqBSKfhWo+ULp6NWsFdR
-         1uch91sYUTNL/BzKxAFgzYu4OSBwx+xBoVcOcXGqO4eJ+d4FU8ZK19fSsxLF3Lu7TyAf
-         IQIX6bz5FzhZ944F9qxzVKack9MBB9c5uFgIHhTdq3bt+Wrzbcthe28SP/Slu9Ll1w+T
-         CuGQ==
-X-Gm-Message-State: AOAM531KExuItaJrlYyApFPYRenWzwEXnpKce/tK8IGIeqSurfJPuWq7
-        E/ACVzhSKuN9BB/tXpfMxoYREAjYJ+UsKg==
-X-Google-Smtp-Source: ABdhPJxBHv7JG6+WKBruLEW2DqleqKyw99D9ib0Mw0aAZE64DDAoTMUP32MaIebudTsQ/c7zu3GX5Q==
-X-Received: by 2002:a02:c801:0:b0:32a:e779:fabc with SMTP id p1-20020a02c801000000b0032ae779fabcmr5706553jao.219.1650992687662;
-        Tue, 26 Apr 2022 10:04:47 -0700 (PDT)
-Received: from [127.0.1.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id a22-20020a5d9816000000b006496d8651cfsm9566507iol.1.2022.04.26.10.04.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Apr 2022 10:04:47 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     almogkh@gmail.com
-Cc:     io-uring@vger.kernel.org
-In-Reply-To: <20220426163403.112692-1-almogkh@gmail.com>
-References: <20220426163403.112692-1-almogkh@gmail.com>
-Subject: Re: [PATCH] io_uring: replace smp_mb() with smp_mb__after_atomic() in io_sq_thread()
-Message-Id: <165099268685.75076.5934147489871751028.b4-ty@kernel.dk>
-Date:   Tue, 26 Apr 2022 11:04:46 -0600
+        with ESMTP id S238343AbiDZRq6 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Apr 2022 13:46:58 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20CA1816E7
+        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:43:49 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23QGQeK3017060
+        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:43:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=5kC+EaG8kC1NKMRTCYxqHhGLne8jSvz8PgxcvPIUop4=;
+ b=iyirba4hRWIPkhSOLF7SjU7PUizOK0Hd/MOc4d5C4ZWbYlqqd8bOrW6URG7DpEa6Q9DT
+ O85UVe0gM1yWHgnzNBwZtCJvzgSL0nIS/8xkcKAOKdo7lpg/T/kznI5jhGAL3xIHhXW0
+ 6+a+OQp4XOtRGET0UR6/oP01yhTXbc68Y1c= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fp6a8d4jv-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Tue, 26 Apr 2022 10:43:49 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 26 Apr 2022 10:43:48 -0700
+Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
+        id 815E2E2D4859; Tue, 26 Apr 2022 10:43:40 -0700 (PDT)
+From:   Stefan Roesch <shr@fb.com>
+To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
+        <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <shr@fb.com>, <david@fromorbit.com>
+Subject: [RFC PATCH v1 03/18] iomap: add iomap_page_create_gfp to allocate iomap_pages
+Date:   Tue, 26 Apr 2022 10:43:20 -0700
+Message-ID: <20220426174335.4004987-4-shr@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220426174335.4004987-1-shr@fb.com>
+References: <20220426174335.4004987-1-shr@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: Jn6GHEVFyJ_acD2zVXmF3xSpuj61hoaw
+X-Proofpoint-ORIG-GUID: Jn6GHEVFyJ_acD2zVXmF3xSpuj61hoaw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-26_05,2022-04-26_02,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Tue, 26 Apr 2022 19:34:03 +0300, Almog Khaikin wrote:
-> The IORING_SQ_NEED_WAKEUP flag is now set using atomic_or() which
-> implies a full barrier on some architectures but it is not required to
-> do so. Use the more appropriate smp_mb__after_atomic() which avoids the
-> extra barrier on those architectures.
-> 
-> 
+Add the function iomap_page_create_gfp() to be able to specify gfp flags
+and to pass in the number of blocks per folio in the function
+iomap_page_create_gfp().
 
-Applied, thanks!
+No intended functional changes in this patch.
 
-[1/1] io_uring: replace smp_mb() with smp_mb__after_atomic() in io_sq_thread()
-      commit: 012b7e911e69791ea518ef3d084c12cb2b8f2914
+Signed-off-by: Stefan Roesch <shr@fb.com>
+---
+ fs/iomap/buffered-io.c | 34 ++++++++++++++++++++++++++++------
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-Best regards,
--- 
-Jens Axboe
-
+diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
+index 8ce8720093b9..85aa32f50db0 100644
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@ -43,17 +43,27 @@ static inline struct iomap_page *to_iomap_page(struct=
+ folio *folio)
+=20
+ static struct bio_set iomap_ioend_bioset;
+=20
++/**
++ * iomap_page_create_gfp : Create and initialize iomap_page for folio.
++ * @inode     : Pointer to inode
++ * @folio     : Pointer to folio
++ * @nr_blocks : Number of blocks in the folio
++ * @gfp       : gfp allocation flags
++ *
++ * This function returns a newly allocated iomap for the folio with the =
+settings
++ * specified in the gfp parameter.
++ *
++ **/
+ static struct iomap_page *
+-iomap_page_create(struct inode *inode, struct folio *folio)
++iomap_page_create_gfp(struct inode *inode, struct folio *folio,
++		unsigned int nr_blocks, gfp_t gfp)
+ {
+-	struct iomap_page *iop =3D to_iomap_page(folio);
+-	unsigned int nr_blocks =3D i_blocks_per_folio(inode, folio);
++	struct iomap_page *iop;
+=20
+-	if (iop || nr_blocks <=3D 1)
++	iop =3D kzalloc(struct_size(iop, uptodate, BITS_TO_LONGS(nr_blocks)), g=
+fp);
++	if (!iop)
+ 		return iop;
+=20
+-	iop =3D kzalloc(struct_size(iop, uptodate, BITS_TO_LONGS(nr_blocks)),
+-			GFP_NOFS | __GFP_NOFAIL);
+ 	spin_lock_init(&iop->uptodate_lock);
+ 	if (folio_test_uptodate(folio))
+ 		bitmap_fill(iop->uptodate, nr_blocks);
+@@ -61,6 +71,18 @@ iomap_page_create(struct inode *inode, struct folio *f=
+olio)
+ 	return iop;
+ }
+=20
++static struct iomap_page *
++iomap_page_create(struct inode *inode, struct folio *folio)
++{
++	struct iomap_page *iop =3D to_iomap_page(folio);
++	unsigned int nr_blocks =3D i_blocks_per_folio(inode, folio);
++
++	if (iop || nr_blocks <=3D 1)
++		return iop;
++
++	return iomap_page_create_gfp(inode, folio, nr_blocks, GFP_NOFS | __GFP_=
+NOFAIL);
++}
++
+ static void iomap_page_release(struct folio *folio)
+ {
+ 	struct iomap_page *iop =3D folio_detach_private(folio);
+--=20
+2.30.2
 
