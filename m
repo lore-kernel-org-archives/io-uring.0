@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1107C433EF
-	for <io-uring@archiver.kernel.org>; Sun,  1 May 2022 20:57:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CDE6C4332F
+	for <io-uring@archiver.kernel.org>; Sun,  1 May 2022 20:57:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354803AbiEAVA2 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 1 May 2022 17:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
+        id S1354820AbiEAVAa (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 1 May 2022 17:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238355AbiEAVA0 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 1 May 2022 17:00:26 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DAF18B01
-        for <io-uring@vger.kernel.org>; Sun,  1 May 2022 13:57:00 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so2798997pjb.1
-        for <io-uring@vger.kernel.org>; Sun, 01 May 2022 13:57:00 -0700 (PDT)
+        with ESMTP id S1354816AbiEAVA2 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 1 May 2022 17:00:28 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6785518B01
+        for <io-uring@vger.kernel.org>; Sun,  1 May 2022 13:57:02 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id v10so10344643pgl.11
+        for <io-uring@vger.kernel.org>; Sun, 01 May 2022 13:57:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=plVeEyL643cRaY9fb0tUq384hiemrGMJBKU66jEDCMU=;
-        b=duk8Z4UdR0Z3AqjMOyIjjcG4jIVcZTxWXaDwhhXrDTGWHoLKyMKKqzQmBb10+Va1kA
-         v4fDpEbIGWcr65r5hNZKlG27Txnw2ujDkJ5fMxK0HHm/B5bAJogYIsK72bH4Tmr/FuG/
-         6jl8aYU8RN30yDLxbXxUrEgDLb5w2OMqA7jvEPk7zYtuCrxAsJjtVg3hf+Mpj8GuIXaW
-         tUfSbWRg1pt3cPxcL5uJkt/zwJopQsq9aPRWFi0BWyvJlK6cmkti9Fs3JxT8H+rSwiXe
-         ZiJGWSTGQu6EWo7cAgkbTXz+XGu7QzlH8U6ytR9s5c2sEIlXkk9DJN5nvICMaeGOOG9o
-         dqaw==
+        bh=LsjuFjAivER5w2OU/cJBZZA82Ov2iE2AmD3V5ZWRSy0=;
+        b=w6YtnsYgX319cAn8DZNaAASsdzIrRXjbrIPbkRDaMIjnG8aVy8iChJdKLIQfs6/mU1
+         evhtoK8++grW2ylOARsWp2RjEytUIiSuD2XiqSjy5IdWUnWfGuo4f93EJf6i5q94Ymgy
+         ZHnEGFC2maX4N3EjKAWKLfh8PqkJNWURFYHFCtI0ZagjnqzqEtz12t6ikPZhTLN6sk2S
+         i2T5WG46OFIsAf2pKpxUy7Ap/we9XTme/+20rffO4zWQpKsUxLTsMBezDembtHBOLuql
+         V5RBwmGIMQkv6IxYiRUiPQmxmsaRkZ+2TWFKEy3Cnh1uz3ELpoNjBIN+pZNkrXDexcJ2
+         iCfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=plVeEyL643cRaY9fb0tUq384hiemrGMJBKU66jEDCMU=;
-        b=lvqxDq+WKWhUqkblJ8B5D4w41KH/CEmzp7yzsPTrY9OgKGcWGibDgjnlR5ihA4Agvc
-         t6Ub0CNXolZQibDXDYK3WviHQ/BU00QHnWHgeTJX+SX+B4h/MG/KAgx3wPQgLvHLuBjt
-         9/03b6QXlrmVoCtKjBBaFcnkK8ldWnMBnTD2NJu2uQbdoKcg/u3zvyZhHIXAyk9oruFQ
-         cnPMtnECSrO+PUr4vy2v8X+DmWJgAa7X0/EQHE5ryhg/Pv3QXkhOnMILPDzsKHD20ZGj
-         qOYnWjrjJtuDMKhKRQaPPMKIQqyCKBgMWBN+R8NyMtpASU+xSps7xGWVYwspgDR6fr5Y
-         0keQ==
-X-Gm-Message-State: AOAM530mGoUuz9/x6mKy5J0gimVWoFQadAkile1zWiygMer7TOH1nJS0
-        wucVeh1fw8sBnaZHMLTFTjU/mG9xxY2beQ==
-X-Google-Smtp-Source: ABdhPJyhGa0AzSPiELpzEF4pJMT4Y8qT8NCmjSpIxTqok8Vp+WsAZMbDYOwKlwzp/rD+XsrDrkcHoQ==
-X-Received: by 2002:a17:90b:388c:b0:1dc:542b:a596 with SMTP id mu12-20020a17090b388c00b001dc542ba596mr3079107pjb.76.1651438619403;
-        Sun, 01 May 2022 13:56:59 -0700 (PDT)
+        bh=LsjuFjAivER5w2OU/cJBZZA82Ov2iE2AmD3V5ZWRSy0=;
+        b=1Oblc9sWFFw/uTuJYLC/sekCwJCSyO4jlVEeeOscHcFZZEqkbdFMhfsMN1cktMhv/g
+         fJPICqUw9ciuPcD0OdUVQtAOIvtmNNLN0rWvzpT/41QmmYOi/UScD9BI51BIx5jZ38Kn
+         zJS7/Ts6L6e6mcR1WAaKIEpVG0t7lQNouWvliwqnaowCv7eAMcmxnmHlFHCOlRO9BtLa
+         oYVgbmrdQXvrGaXfwOLY4qsG4mm2r7MVztKkxMe4pkQkdSuIycGRhaQoAg1ZYJX0hvWW
+         K7RH4yTJRrTJqXEyv1I+IpZOfvj40ZfHdccJADfH/U3uUUdBV4fOFE/hWDNuk3VGJIN8
+         ONIQ==
+X-Gm-Message-State: AOAM533dwmVUMUlMTi2wAz1rq5gRj6QMaVZTnboSBNYuOZlwhMOkpjGW
+        DbyylpY2D89VG/JPg5KEITgDA1iies2wNw==
+X-Google-Smtp-Source: ABdhPJxKrfqfwWyoWWRL3IGoV9C8YPxT9rBCH6Hp7RrrQLMFX23kyxStiiSW9qHRn+s7GnmrTiX+wA==
+X-Received: by 2002:a63:2a02:0:b0:3aa:c641:cd86 with SMTP id q2-20020a632a02000000b003aac641cd86mr7022633pgq.614.1651438621668;
+        Sun, 01 May 2022 13:57:01 -0700 (PDT)
 Received: from localhost.localdomain (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090270c800b0015e8d4eb1e9sm1894013plt.51.2022.05.01.13.56.58
+        by smtp.gmail.com with ESMTPSA id l8-20020a17090270c800b0015e8d4eb1e9sm1894013plt.51.2022.05.01.13.57.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 13:56:58 -0700 (PDT)
+        Sun, 01 May 2022 13:57:01 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     asml.silence@gmail.com, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 03/16] io_uring: make io_buffer_select() return the user address directly
-Date:   Sun,  1 May 2022 14:56:40 -0600
-Message-Id: <20220501205653.15775-4-axboe@kernel.dk>
+Subject: [PATCH 05/16] io_uring: ignore ->buf_index if REQ_F_BUFFER_SELECT isn't set
+Date:   Sun,  1 May 2022 14:56:42 -0600
+Message-Id: <20220501205653.15775-6-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220501205653.15775-1-axboe@kernel.dk>
 References: <20220501205653.15775-1-axboe@kernel.dk>
@@ -62,116 +62,29 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-There's no point in having callers provide a kbuf, we're just returning
-the address anyway.
+There's no point in validity checking buf_index if the request doesn't
+have REQ_F_BUFFER_SELECT set, as we will never use it for that case.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/io_uring.c | 42 ++++++++++++++++++------------------------
- 1 file changed, 18 insertions(+), 24 deletions(-)
+ fs/io_uring.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 38bd5dfb4160..d9c9eb5e4bab 100644
+index fc8755f5ff86..baa1b5426bfc 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -3571,15 +3571,15 @@ static void io_buffer_add_list(struct io_ring_ctx *ctx,
- 	list_add(&bl->list, list);
- }
- 
--static struct io_buffer *io_buffer_select(struct io_kiocb *req, size_t *len,
--					  int bgid, unsigned int issue_flags)
-+static void __user *io_buffer_select(struct io_kiocb *req, size_t *len,
-+				     int bgid, unsigned int issue_flags)
- {
- 	struct io_buffer *kbuf = req->kbuf;
- 	struct io_ring_ctx *ctx = req->ctx;
- 	struct io_buffer_list *bl;
- 
- 	if (req->flags & REQ_F_BUFFER_SELECTED)
--		return kbuf;
-+		return u64_to_user_ptr(kbuf->addr);
- 
- 	io_ring_submit_lock(req->ctx, issue_flags);
- 
-@@ -3591,25 +3591,18 @@ static struct io_buffer *io_buffer_select(struct io_kiocb *req, size_t *len,
- 			*len = kbuf->len;
- 		req->flags |= REQ_F_BUFFER_SELECTED;
- 		req->kbuf = kbuf;
--	} else {
--		kbuf = ERR_PTR(-ENOBUFS);
-+		io_ring_submit_unlock(req->ctx, issue_flags);
-+		return u64_to_user_ptr(kbuf->addr);
+@@ -3686,10 +3686,6 @@ static struct iovec *__io_import_iovec(int rw, struct io_kiocb *req,
+ 		return NULL;
  	}
  
- 	io_ring_submit_unlock(req->ctx, issue_flags);
--	return kbuf;
-+	return ERR_PTR(-ENOBUFS);
- }
- 
- static void __user *io_rw_buffer_select(struct io_kiocb *req, size_t *len,
- 					unsigned int issue_flags)
- {
--	struct io_buffer *kbuf;
--	u16 bgid;
+-	/* buffer index only valid with fixed read/write, or buffer select  */
+-	if (unlikely(req->buf_index && !(req->flags & REQ_F_BUFFER_SELECT)))
+-		return ERR_PTR(-EINVAL);
 -
--	bgid = req->buf_index;
--	kbuf = io_buffer_select(req, len, bgid, issue_flags);
--	if (IS_ERR(kbuf))
--		return kbuf;
--	return u64_to_user_ptr(kbuf->addr);
-+	return io_buffer_select(req, len, req->buf_index, issue_flags);
- }
+ 	buf = u64_to_user_ptr(req->rw.addr);
+ 	sqe_len = req->rw.len;
  
- #ifdef CONFIG_COMPAT
-@@ -5934,7 +5927,6 @@ static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 	struct io_async_msghdr iomsg, *kmsg;
- 	struct io_sr_msg *sr = &req->sr_msg;
- 	struct socket *sock;
--	struct io_buffer *kbuf;
- 	unsigned flags;
- 	int ret, min_ret = 0;
- 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
-@@ -5953,10 +5945,12 @@ static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 	}
- 
- 	if (req->flags & REQ_F_BUFFER_SELECT) {
--		kbuf = io_buffer_select(req, &sr->len, sr->bgid, issue_flags);
--		if (IS_ERR(kbuf))
--			return PTR_ERR(kbuf);
--		kmsg->fast_iov[0].iov_base = u64_to_user_ptr(kbuf->addr);
-+		void __user *buf;
-+
-+		buf = io_buffer_select(req, &sr->len, sr->bgid, issue_flags);
-+		if (IS_ERR(buf))
-+			return PTR_ERR(buf);
-+		kmsg->fast_iov[0].iov_base = buf;
- 		kmsg->fast_iov[0].iov_len = sr->len;
- 		iov_iter_init(&kmsg->msg.msg_iter, READ, kmsg->fast_iov, 1,
- 				sr->len);
-@@ -5998,7 +5992,6 @@ static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 
- static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- {
--	struct io_buffer *kbuf;
- 	struct io_sr_msg *sr = &req->sr_msg;
- 	struct msghdr msg;
- 	void __user *buf = sr->buf;
-@@ -6013,10 +6006,11 @@ static int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 		return -ENOTSOCK;
- 
- 	if (req->flags & REQ_F_BUFFER_SELECT) {
--		kbuf = io_buffer_select(req, &sr->len, sr->bgid, issue_flags);
--		if (IS_ERR(kbuf))
--			return PTR_ERR(kbuf);
--		buf = u64_to_user_ptr(kbuf->addr);
-+		void __user *buf;
-+
-+		buf = io_buffer_select(req, &sr->len, sr->bgid, issue_flags);
-+		if (IS_ERR(buf))
-+			return PTR_ERR(buf);
- 	}
- 
- 	ret = import_single_range(READ, buf, sr->len, &iov, &msg.msg_iter);
 -- 
 2.35.1
 
