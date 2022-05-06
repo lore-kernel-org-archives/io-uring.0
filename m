@@ -2,75 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40C6AC433F5
-	for <io-uring@archiver.kernel.org>; Fri,  6 May 2022 07:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6030EC433F5
+	for <io-uring@archiver.kernel.org>; Fri,  6 May 2022 08:28:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1389613AbiEFHkd (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 6 May 2022 03:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S1389909AbiEFIce (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 6 May 2022 04:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242343AbiEFHkZ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 6 May 2022 03:40:25 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9713D5DA30;
-        Fri,  6 May 2022 00:36:43 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id s14so6645411plk.8;
-        Fri, 06 May 2022 00:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:from:to:cc
-         :references:in-reply-to:content-transfer-encoding;
-        bh=8XPOBsdw+QV6Az/8Hs9ZgR+OImDGXcVVxo2FYZtTPbg=;
-        b=P1S0v3DOHG9KQkfS3JlicspQRp9aEUOEn8BVNeKg163DNevoOxh/ryHXFrKaCGpAgz
-         gqKQEMcEq6BGoen5kEfR3QYZaZRokXTB6gFe+xMBNMmrBsh+G/xvjyOKAlDnIZQpseTz
-         1TB+cu8D2F1qqKMW3pAYgb7TB2TbJ+PbGZ9gIaKqd3lpPlETf9sbKjyomfv/GBhUCKYj
-         UA3bjywGrAefwYdU6du0D0RwjZnXCYEhxXuPJvPq1r9XfEbpaVwGaEanazRmsk+1L2Pv
-         lv6Gian1gowj4o1h6+nKZGVF2aQ32eyV+sQpUDDH6qi5ZG1x/1sjRYvlN9WVHUDtxbnP
-         ghSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :from:to:cc:references:in-reply-to:content-transfer-encoding;
-        bh=8XPOBsdw+QV6Az/8Hs9ZgR+OImDGXcVVxo2FYZtTPbg=;
-        b=H4oc9pYTQ0rIItj7WVV8sy/OoR0AdLhhWJlpcCf+c+C4pek9YvKmqMre2K1LIrCF8L
-         rnfqkYpXE+ZWEJo1zpujeyRGQQdD7526ORPvcaiBAXIo6UxgewUmT/hf/M6Dx0OD7/aS
-         gG8mRtPnzl66iF9jNZ8gJ5duFJnVHP0bhOtfEC4v6ROI8K9fs3Gsu6+D1Bx3L5xAbbdG
-         5A4CpGNaxkJ8E0aArLKylexhqLw4I2x/Z2FvCcEtcNrkUoeHxH2wkWFexixgv6I054ci
-         opVX2lRws2AJu4pQopjlfIgOkkTgURtS2IQ6oBjU7OQkqBhTtPERw5d8FoQteAgJYFl+
-         iYKg==
-X-Gm-Message-State: AOAM532wyt5XWnMZI4s2eokSLGPuBAcPvbII7UfEG/lH+tZ212z4HRmE
-        8BwxbtdCWfKUr5DaT3kxnuOJghgUE5I=
-X-Google-Smtp-Source: ABdhPJzapMuz6f9puPHher7Kzmhy/nGphBj3sdFcklDK0QFq8MPK62npQh8RK6egBYy6eRkQNpq6yQ==
-X-Received: by 2002:a17:902:e481:b0:15c:dc24:64e8 with SMTP id i1-20020a170902e48100b0015cdc2464e8mr2323004ple.35.1651822603054;
-        Fri, 06 May 2022 00:36:43 -0700 (PDT)
-Received: from [192.168.255.10] ([106.53.4.151])
-        by smtp.gmail.com with ESMTPSA id x2-20020aa79a42000000b0050dc7628169sm2710321pfj.67.2022.05.06.00.36.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 May 2022 00:36:42 -0700 (PDT)
-Message-ID: <b4d23f42-36f4-353a-1f44-c12178f0a2b3@gmail.com>
-Date:   Fri, 6 May 2022 15:36:49 +0800
+        with ESMTP id S1386333AbiEFIce (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 6 May 2022 04:32:34 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBC2522D8
+        for <io-uring@vger.kernel.org>; Fri,  6 May 2022 01:28:51 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 73B1A68AFE; Fri,  6 May 2022 10:28:44 +0200 (CEST)
+Date:   Fri, 6 May 2022 10:28:44 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Kanchan Joshi <joshi.k@samsung.com>, io-uring@vger.kernel.org,
+        linux-nvme@lists.infradead.org, asml.silence@gmail.com,
+        ming.lei@redhat.com, mcgrof@kernel.org, shr@fb.com,
+        joshiiitr@gmail.com, anuj20.g@samsung.com, gost.dev@samsung.com
+Subject: Re: [PATCH v4 4/5] nvme: wire-up uring-cmd support for io-passthru
+ on char-device.
+Message-ID: <20220506082844.GA30405@lst.de>
+References: <20220505060616.803816-1-joshi.k@samsung.com> <CGME20220505061150epcas5p2b60880c541a4b2f144c348834c7cbf0b@epcas5p2.samsung.com> <20220505060616.803816-5-joshi.k@samsung.com> <f24d9e5e-34af-9035-ffbc-0a770db0cb20@kernel.dk> <20220505134256.GA13109@lst.de> <f45c89db-0fed-2c88-e314-71dbda74b4a7@kernel.dk> <8ae2c507-ffcc-b693-336d-2d9f907edb76@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.1
-Subject: Re: [PATCH v2 0/5] fast poll multishot mode
-From:   Hao Xu <haoxu.linux@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <20220506070102.26032-1-haoxu.linux@gmail.com>
-In-Reply-To: <20220506070102.26032-1-haoxu.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8ae2c507-ffcc-b693-336d-2d9f907edb76@kernel.dk>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi All,
-I actually had a question about the current poll code, from the code it
-seems when we cancel a poll-like request, it will ignore the existing
-events and just raise a -ECANCELED cqe though I haven't tested it. Is
-this by design or am I missing something?
+On Thu, May 05, 2022 at 11:23:01AM -0600, Jens Axboe wrote:
+> The top three patches here have a proposed solution for the 3 issues
+> that I highlighted:
+> 
+> https://git.kernel.dk/cgit/linux-block/log/?h=for-5.19/io_uring-passthrough
+> 
+> Totally untested... Kanchan, can you take a look and see what you think?
+> They all need folding obviously, I just tried to do them separately.
+> Should also get tested :-)
 
-Regards,
-Hao
+I've also pushed out a tree based on this, which contains my little
+fixups that I'd suggest to be folded.  Totally untested and written
+while jetlagged:
+
+http://git.infradead.org/users/hch/block.git/shortlog/refs/heads/io_uring-passthrough
+
+Note that while I tried to keep all my changes in separate patches, the
+main passthrough patch had conflicts during a rebase, which I had to
+fix up, but I tried to touch as little as possible.
