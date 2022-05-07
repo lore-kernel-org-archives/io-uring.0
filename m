@@ -2,92 +2,67 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B97DC433F5
-	for <io-uring@archiver.kernel.org>; Sat,  7 May 2022 17:45:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5B67C433F5
+	for <io-uring@archiver.kernel.org>; Sat,  7 May 2022 18:11:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235941AbiEGRtU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 7 May 2022 13:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
+        id S1446776AbiEGSPm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 7 May 2022 14:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1446729AbiEGRtS (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 7 May 2022 13:49:18 -0400
-Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AF26263CA
-        for <io-uring@vger.kernel.org>; Sat,  7 May 2022 10:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=APVbN
-        QhOP9OKApoqtEFZDpdTbO1Y7stkIQa0UP0d2dw=; b=idAcTT0sgdSVHi2rx+H4z
-        SrThPoiWfjb08iIZ0OtNvHBZwGD81+Wi5xGivLjPOhdE5ZooZo/M3wOXxTh1i12M
-        ye55aaw4PyBFBREnZp4NYXS47nKJeZFdRp0ADRzc/zie565Bojf+c1rnztG3y8r/
-        NzPhJLthdqz1mB0ulvXVyw=
-Received: from localhost.localdomain (unknown [115.197.24.253])
-        by smtp3 (Coremail) with SMTP id DcmowADX5p4YqXZiJmdFBQ--.6995S4;
-        Sun, 08 May 2022 01:15:05 +0800 (CST)
-From:   Hao Xu <haoxu_linux@126.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH 2/4] io_uring: add REQ_F_APOLL_MULTISHOT for requests
-Date:   Sun,  8 May 2022 01:15:02 +0800
-Message-Id: <20220507171504.151739-3-haoxu_linux@126.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220507171504.151739-1-haoxu_linux@126.com>
-References: <20220507171504.151739-1-haoxu_linux@126.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcmowADX5p4YqXZiJmdFBQ--.6995S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr1xWr4DGw4xXFyUWF4kZwb_yoW8GrWfpr
-        13C3yvkwnxCa4DG3WIyFsxZrW5ZFs8Jw4Dtr429w4FgFsFvw1qk34jy3WDJryrAr4UCrWj
-        vrZFvFnxCFZ8GaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jL6pQUUUUU=
-X-Originating-IP: [115.197.24.253]
-X-CM-SenderInfo: xkdr53xbol03b06rjloofrz/1tbiOxn5V1pEGBBIPgAAss
+        with ESMTP id S1446773AbiEGSPm (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 7 May 2022 14:15:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8D32ED67
+        for <io-uring@vger.kernel.org>; Sat,  7 May 2022 11:11:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ECFB861384
+        for <io-uring@vger.kernel.org>; Sat,  7 May 2022 18:11:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 58ECBC385A6;
+        Sat,  7 May 2022 18:11:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1651947114;
+        bh=gFK3csdGl2V8fOX5arqjCZyKx67LOPc28F0wC1t8gls=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=MqZHM3AbFffowoRfA5V7kF0gRJluhDds889/nhBAwLwwIzyDDwwCdqCe0hVvhqEoB
+         68cQyrBNdlnECDEDNDod08ksrFagQ8inbdFOhthqK6SPfN7se7vILBFycRRET9H4Li
+         kKDPK+ONRtYy99JC/KXZdmSkM98XNUqpawGHv4ydzFtwN9kCA0qRb7+qvO7Mlgx402
+         Xvn4FCp3y7N+8mGi48YbpcyCr2ZCT9IRlp97o2NzpdggyLH61kqZbZsMJNwKwWaxOi
+         kaDttS1jpTaM93HtLNR9lwL2BPzWk8tdzCybt/S/b17c+kk/k4Vkb6cDWIN+I5vuyr
+         6aIRgkT3L6MVw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44374E8DBBF;
+        Sat,  7 May 2022 18:11:54 +0000 (UTC)
+Subject: Re: [GIT PULL] io_uring fix for 5.18-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <f492cd49-43e6-b66d-d7bb-958eb717e569@kernel.dk>
+References: <f492cd49-43e6-b66d-d7bb-958eb717e569@kernel.dk>
+X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
+X-PR-Tracked-Message-Id: <f492cd49-43e6-b66d-d7bb-958eb717e569@kernel.dk>
+X-PR-Tracked-Remote: git://git.kernel.dk/linux-block.git tags/io_uring-5.18-2022-05-06
+X-PR-Tracked-Commit-Id: a196c78b5443fc61af2c0490213b9d125482cbd1
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b366bd7d9613971e666cdbfe7a08c653d329bf15
+Message-Id: <165194711427.12019.376486894132979784.pr-tracker-bot@kernel.org>
+Date:   Sat, 07 May 2022 18:11:54 +0000
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        io-uring <io-uring@vger.kernel.org>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Hao Xu <howeyxu@tencent.com>
+The pull request you sent on Fri, 6 May 2022 20:10:52 -0600:
 
-Add a flag to indicate multishot mode for fast poll. currently only
-accept use it, but there may be more operations leveraging it in the
-future. Also add a mask IO_APOLL_MULTI_POLLED which stands for
-REQ_F_APOLL_MULTI | REQ_F_POLLED, to make the code short and cleaner.
+> git://git.kernel.dk/linux-block.git tags/io_uring-5.18-2022-05-06
 
-Signed-off-by: Hao Xu <howeyxu@tencent.com>
----
- fs/io_uring.c | 5 +++++
- 1 file changed, 5 insertions(+)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b366bd7d9613971e666cdbfe7a08c653d329bf15
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index b6d491c9a25f..c2ee184ac693 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -116,6 +116,8 @@
- #define IO_REQ_CLEAN_SLOW_FLAGS (REQ_F_REFCOUNT | REQ_F_LINK | REQ_F_HARDLINK |\
- 				 IO_REQ_CLEAN_FLAGS)
- 
-+#define IO_APOLL_MULTI_POLLED (REQ_F_APOLL_MULTISHOT | REQ_F_POLLED)
-+
- #define IO_TCTX_REFS_CACHE_NR	(1U << 10)
- 
- struct io_uring {
-@@ -810,6 +812,7 @@ enum {
- 	REQ_F_SINGLE_POLL_BIT,
- 	REQ_F_DOUBLE_POLL_BIT,
- 	REQ_F_PARTIAL_IO_BIT,
-+	REQ_F_APOLL_MULTISHOT_BIT,
- 	/* keep async read/write and isreg together and in order */
- 	REQ_F_SUPPORT_NOWAIT_BIT,
- 	REQ_F_ISREG_BIT,
-@@ -874,6 +877,8 @@ enum {
- 	REQ_F_DOUBLE_POLL	= BIT(REQ_F_DOUBLE_POLL_BIT),
- 	/* request has already done partial IO */
- 	REQ_F_PARTIAL_IO	= BIT(REQ_F_PARTIAL_IO_BIT),
-+	/* fast poll multishot mode */
-+	REQ_F_APOLL_MULTISHOT	= BIT(REQ_F_APOLL_MULTISHOT_BIT),
- };
- 
- struct async_poll {
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
