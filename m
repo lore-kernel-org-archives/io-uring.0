@@ -2,84 +2,98 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 453F2C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61D28C433F5
 	for <io-uring@archiver.kernel.org>; Mon,  9 May 2022 01:25:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiEIB3I (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 8 May 2022 21:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S232064AbiEIB3L (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 8 May 2022 21:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiEHXxF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 8 May 2022 19:53:05 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E71BF4C
-        for <io-uring@vger.kernel.org>; Sun,  8 May 2022 16:49:13 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d22so12323153plr.9
-        for <io-uring@vger.kernel.org>; Sun, 08 May 2022 16:49:13 -0700 (PDT)
+        with ESMTP id S233938AbiEHXxJ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 8 May 2022 19:53:09 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DB6BF4C
+        for <io-uring@vger.kernel.org>; Sun,  8 May 2022 16:49:17 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id e24so11673957pjt.2
+        for <io-uring@vger.kernel.org>; Sun, 08 May 2022 16:49:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+Fupl+SCGDvM2K2OfzeeG6qoDsr1ZXwc03tvoRQKG3I=;
-        b=00SECuPjNfedL5OsSEmSIp/8NKBxEohqcM/aanatEFEBnc2kyPrMuDBtAsQhZA8+JH
-         4C71RWyNoCphoea8zmLAqcvs66BrczidYnEgRBz39tfGCv9ZtPcjmSDIaXf9qQAIR32+
-         RgnrRqfwUvz2A4BU9VDRNwRCB0hn9u4yk0N+bNOPpVTyefY5fu6OEyc+b5YE0OJ68ccL
-         A819tEyCxNjJqbbocIMc9VGS3iwmTAuuFcm+6GYILyiPxczJVLHV0kjP3sSCp9mR2PVC
-         DGUz2NqEL078I053WntV886mHsucOvJOsVeAP7OH2iPf3qpGIj/5Owd5YzyOBgxCpfLL
-         un5Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=8vIJbseLiUT2Wb4QDxebtpxaWDMXF6DqY3saVloRryo=;
+        b=ga67mLACADlOBoSNaDQvERCh7Zqzf+tJpgGtQx72t8g82Uevq0ktWdxiBe2idoHTky
+         6ZzKOFhqCMW/LkyYZpF1MK/Am5ecmjAuwkJZxXor7HGligQjXxaZT+bfiYHgc1SPNvop
+         gLPfNMZxAH9HD/ZmKCLK1QqP8VsoFXClxvlMScfNjKXADCnfDRhUlJOYiSQl9iKmgVWZ
+         hski6j+jndE5aUqyT1tqrFYn/5cztnlLHMtvStA3VtBhG1rsiM+FmT9c/GGEk45V0nU3
+         Jt4wppJXBDI/WEmdyxOtJml8w3GfiAP91/hEO1z3vT7YpT15vMV353sWYM+HOpquqBCz
+         pH0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+Fupl+SCGDvM2K2OfzeeG6qoDsr1ZXwc03tvoRQKG3I=;
-        b=L+9cJkGdX9NDiIWAyEsNSQj5ClINjkJosjhj9qW5ZV6qFqy+grOrpNLLWtAILbTJKv
-         rwQqplYmTykbHmnJO2c3y11AXjL1wuwDYV455OzlLQjLok4pd7dHEMTkYmeIhk+PSzOn
-         Nib0TRtcpFQ6SY5AeQRyQAAIIVrhfhAPRtiglDxEBOVtyA4WyKj9ERiajcnAe7gHZPX3
-         RId8mfXLBghJ2cNkH5LM4v1UtsqNn2h83oplcWLzzRLAWtUpekmnkpwGS8vgE9pLJQ1e
-         Q+fR2iBADWCgnzfK4WKCLlkpPVifcARjC3PZhrCXNW3DFvIkRLvDJN+D4Goi6BS+OCCH
-         GnNQ==
-X-Gm-Message-State: AOAM533AMYzGjtctWAgLh2JFucZLF5NA62wa7K517W8jr+7bTzllsM/0
-        LZL90OB0uyL4Oz0ubCG8b0BCsCGILSVocNcn
-X-Google-Smtp-Source: ABdhPJwlX6JqmS1lbwhdDFq8qgF6k2MbqtypLjdaaWwL2frocoVCIGwzqeZrhnLf75KlckC5S5Uqqw==
-X-Received: by 2002:a17:90b:1d11:b0:1dc:5dd1:b50e with SMTP id on17-20020a17090b1d1100b001dc5dd1b50emr23092729pjb.218.1652053752825;
-        Sun, 08 May 2022 16:49:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=8vIJbseLiUT2Wb4QDxebtpxaWDMXF6DqY3saVloRryo=;
+        b=RsMAAx/la9ss/bjav98n5hWHodGdqV7sLOhRGL4hjzFQkyd01iekFC+jRg2xAww4a7
+         bQ/9K9lL17KgMXwUJ+m4HGHHgx5GWWCZw1/5KSBzsmoIwd/B2Vqv2Nj2MoT4hdjzPkTy
+         bXH0MjzwIDoVxpRkq5rcjh4d0J+lN57+ryYpmEzR4gLvbU6jnWU+1ezP4xspFR3X/kOj
+         Vqqumw+BWMtbm52CSqONbIbkwdOF5QzPyp0adux87QpHckP70wkL/K9NVezzV/tJUe/M
+         J00BgA4/DoUwkE/Z/jytpwoSAht8HZ9K9b+QY6Rby81uaKyZyb83luOI9U5vRamPL9iz
+         LDdQ==
+X-Gm-Message-State: AOAM530hjEoD6Mgld+qbsFKXmlVtXbcVvP/ztABBvG5n1sUOEOjjIxNB
+        S6M9Up1AylN+FRYxI1CauGIrhO1ftXD5679U
+X-Google-Smtp-Source: ABdhPJxd+u+H2usVmdg3w7Hq4kXFe5MKv/7GP5ciOQbnWqLtbROSWKJtRrAlX+cQrgZKihgZJEmqCQ==
+X-Received: by 2002:a17:90a:e641:b0:1da:43b8:95b7 with SMTP id ep1-20020a17090ae64100b001da43b895b7mr15166687pjb.180.1652053756778;
+        Sun, 08 May 2022 16:49:16 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z17-20020a170902ccd100b0015e8d4eb2a2sm5675249ple.236.2022.05.08.16.49.11
+        by smtp.gmail.com with ESMTPSA id z17-20020a170902ccd100b0015e8d4eb2a2sm5675249ple.236.2022.05.08.16.49.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 16:49:12 -0700 (PDT)
+        Sun, 08 May 2022 16:49:16 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com, haoxu.linux@gmail.com
-Subject: [PATCHSET 0/4] Allow allocated direct descriptors
-Date:   Sun,  8 May 2022 17:49:05 -0600
-Message-Id: <20220508234909.224108-1-axboe@kernel.dk>
+Cc:     asml.silence@gmail.com, haoxu.linux@gmail.com,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 4/4] io_uring: allow allocated fixed files for accept
+Date:   Sun,  8 May 2022 17:49:09 -0600
+Message-Id: <20220508234909.224108-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220508234909.224108-1-axboe@kernel.dk>
+References: <20220508234909.224108-1-axboe@kernel.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+If the applications passes in UINT_MAX as the file_slot, then that's a
+hint to allocate a fixed file descriptor rather than have one be passed
+in directly.
 
-Currently using direct descriptors with open or accept requires the
-application to manage the descriptor space, picking which slot to use
-for any given file. However, there are cases where it's useful to just
-get a direct descriptor and not care about which value it is, instead
-just return it like a normal open or accept would.
+This can be useful for having io_uring manage the direct descriptor space,
+and also allows multi-shot support to work with fixed files.
 
-This will also be useful for multishot accept support, where allocated
-direct descriptors are a requirement to make that feature work with
-these kinds of files.
+Normal accept direct requests will complete with 0 for success, and < 0
+in case of error. If io_uring is asked to allocated the direct descriptor,
+then the direct descriptor is returned in case of success.
 
-This adds support for allocating a new fixed descriptor. This is chosen
-by passing in UINT_MAX as the fixed slot, which otherwise has a limit
-of INT_MAX like any file descriptor does.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- fs/io_uring.c | 100 +++++++++++++++++++++++++++++++++++++++++++++++---
-  1 file changed, 94 insertions(+), 6 deletions(-)
-
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 986a6e82bc09..9fc38c749492 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -5802,8 +5802,8 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+ 		fd_install(fd, file);
+ 		ret = fd;
+ 	} else {
+-		ret = io_install_fixed_file(req, file, issue_flags,
+-					    accept->file_slot - 1);
++		ret = io_fixed_file_install(req, issue_flags, file,
++						accept->file_slot);
+ 	}
+ 	__io_req_complete(req, issue_flags, ret, 0);
+ 	return 0;
 -- 
-Jens Axboe
-
+2.35.1
 
