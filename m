@@ -2,135 +2,48 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D96C4332F
-	for <io-uring@archiver.kernel.org>; Mon,  9 May 2022 01:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A1B47C433FE
+	for <io-uring@archiver.kernel.org>; Mon,  9 May 2022 06:09:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiEIB3T (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 8 May 2022 21:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        id S229966AbiEIGLl (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 9 May 2022 02:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiEHXxH (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 8 May 2022 19:53:07 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA88BF4D
-        for <io-uring@vger.kernel.org>; Sun,  8 May 2022 16:49:15 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c11so12327079plg.13
-        for <io-uring@vger.kernel.org>; Sun, 08 May 2022 16:49:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=76e9yu7mj9h8yyptPk4D1Ida9qMWlDUrEpEQV3xm7jI=;
-        b=exBnRazanJVG4HJaoclfefazQDAIi70FerN8lv0pt1yR+24ceV1S5zDh2tObCR/aFM
-         TL2pdG7oUClAtzWVJk6PpTh8ccpxL/h+e5pA3Z2qpOixCC2HIYzxk76nDA5o9t+yzpfb
-         NpZPQhneOFQDSiBSmBar3LR8KTAeAIsLRY3iCk4LtKxfIR7SE7M47mFkcuHSm1NePLzE
-         pKN7lA0MfsgcYhb82iTN+bUCR4TwvK4JERGM+M3KgOoqfIr0IcFHFhtRtlLrSq+hGoGt
-         fZqro8QCYR6qSRUIfQZ5CjENFENJnGoeOntQYgACy7RZf/IboO8jFfypOJCaa+iLzGnJ
-         1BGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=76e9yu7mj9h8yyptPk4D1Ida9qMWlDUrEpEQV3xm7jI=;
-        b=MHJYUILzaGUUtVrdmNnm4QWHTkjNIdyOpdvUnYPzF6Khvo9NOlP4LcGX078cO5g2ft
-         3sM2IuSAaX5GVA90/co+8kwI4weL0yuntbCttwD5rhNk12cRbVQ7HRbfrBQi53N/mHW9
-         jRSb7gIvGhSPrI8kbiCmvaXF4yINMQAkG0Q5aIUy/emyd0EyIsJ2V3BwjflR8SxrrBEr
-         axiYty7mTuCACegA0eQvv/G682tu+gpRmrpNMMIYRzdp1tcnTK5nXaWSBjYHGb/3AzFo
-         7ZIL+Zws8cZdBYT/r5h8WIpdGr0XwRYgP/lcn9lb5vf9E9m+HjcVmNt2ecLE1IE5MWrA
-         AYEw==
-X-Gm-Message-State: AOAM530U8A7wlwRRFB/v7wfJVLY96c4WbIVmqcyaD2g1Ue+tG3IC05m1
-        OZBp7T0Wt4X9XZy1f4LYZMEffO26VeQ8hoOP
-X-Google-Smtp-Source: ABdhPJxBRedehBeJWvKjR9GAK8exdz3mWNRX0GO6MpoejoiXOBnsw+/whrtRRMyUPKm17kab9jsrkQ==
-X-Received: by 2002:a17:902:e8cd:b0:15e:ee3b:7839 with SMTP id v13-20020a170902e8cd00b0015eee3b7839mr12425471plg.92.1652053754953;
-        Sun, 08 May 2022 16:49:14 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z17-20020a170902ccd100b0015e8d4eb2a2sm5675249ple.236.2022.05.08.16.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 May 2022 16:49:14 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com, haoxu.linux@gmail.com,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/4] io_uring: add basic fixed file allocator
-Date:   Sun,  8 May 2022 17:49:07 -0600
-Message-Id: <20220508234909.224108-3-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220508234909.224108-1-axboe@kernel.dk>
-References: <20220508234909.224108-1-axboe@kernel.dk>
+        with ESMTP id S235347AbiEIGEj (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 9 May 2022 02:04:39 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85CE8073E
+        for <io-uring@vger.kernel.org>; Sun,  8 May 2022 23:00:45 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 60DD968AFE; Mon,  9 May 2022 08:00:11 +0200 (CEST)
+Date:   Mon, 9 May 2022 08:00:10 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Kanchan Joshi <joshi.k@samsung.com>, io-uring@vger.kernel.org,
+        linux-nvme@lists.infradead.org, asml.silence@gmail.com,
+        ming.lei@redhat.com, mcgrof@kernel.org, shr@fb.com,
+        joshiiitr@gmail.com, anuj20.g@samsung.com, gost.dev@samsung.com
+Subject: Re: [PATCH v4 4/5] nvme: wire-up uring-cmd support for io-passthru
+ on char-device.
+Message-ID: <20220509060010.GA16939@lst.de>
+References: <f24d9e5e-34af-9035-ffbc-0a770db0cb20@kernel.dk> <20220505134256.GA13109@lst.de> <f45c89db-0fed-2c88-e314-71dbda74b4a7@kernel.dk> <8ae2c507-ffcc-b693-336d-2d9f907edb76@kernel.dk> <20220506082844.GA30405@lst.de> <6b0811df-e2a4-22fc-7615-44e5615ce6a4@kernel.dk> <20220506145058.GA24077@lst.de> <45b5f76b-b186-e0b9-7b24-e048f73942d5@kernel.dk> <20220507050317.GA27706@lst.de> <d315712a-0792-d15f-040d-3a3922700a53@kernel.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d315712a-0792-d15f-040d-3a3922700a53@kernel.dk>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Applications currently always pick where they want fixed files to go.
-In preparation for allowing these types of commands with multishot
-support, add a basic allocator in the fixed file table.
+On Sat, May 07, 2022 at 06:53:30AM -0600, Jens Axboe wrote:
+> How about we just add a comment? We use it in two spots, but one has
+> knowledge of the sqe64 vs sqe128 state, the other one does not. Hence
+> not sure how best to add a helper for this. One also must be a compile
+> time constant. Best I can think of is the below. Not the prettiest, but
+> it does keep it in one spot and with a single comment rather than in two
+> spots.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- fs/io_uring.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
-
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 6eac6629e7d4..6148bd562add 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -258,6 +258,7 @@ struct io_rsrc_put {
- struct io_file_table {
- 	struct io_fixed_file *files;
- 	unsigned long *bitmap;
-+	unsigned int alloc_hint;
- };
- 
- struct io_rsrc_node {
-@@ -4696,6 +4697,31 @@ static int io_openat2_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return __io_openat_prep(req, sqe);
- }
- 
-+static int __maybe_unused io_file_bitmap_get(struct io_ring_ctx *ctx)
-+{
-+	struct io_file_table *table = &ctx->file_table;
-+	unsigned long nr = ctx->nr_user_files;
-+	int ret;
-+
-+	if (table->alloc_hint >= nr)
-+		table->alloc_hint = 0;
-+
-+	do {
-+		ret = find_next_zero_bit(table->bitmap, nr, table->alloc_hint);
-+		if (ret != nr) {
-+			table->alloc_hint = ret + 1;
-+			return ret;
-+		}
-+		if (!table->alloc_hint)
-+			break;
-+
-+		nr = table->alloc_hint;
-+		table->alloc_hint = 0;
-+	} while (1);
-+
-+	return -ENFILE;
-+}
-+
- static int io_openat2(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct open_flags op;
-@@ -8665,11 +8691,14 @@ static inline void io_file_bitmap_set(struct io_file_table *table, int bit)
- {
- 	WARN_ON_ONCE(test_bit(bit, table->bitmap));
- 	__set_bit(bit, table->bitmap);
-+	if (bit == table->alloc_hint)
-+		table->alloc_hint++;
- }
- 
- static inline void io_file_bitmap_clear(struct io_file_table *table, int bit)
- {
- 	__clear_bit(bit, table->bitmap);
-+	table->alloc_hint = bit;
- }
- 
- static void __io_sqe_files_unregister(struct io_ring_ctx *ctx)
--- 
-2.35.1
-
+If you think just a comment is better I can live with that, also the
+proposed macro also looks fine to me.
