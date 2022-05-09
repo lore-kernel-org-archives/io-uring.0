@@ -2,58 +2,58 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70857C433FE
-	for <io-uring@archiver.kernel.org>; Mon,  9 May 2022 15:51:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60CAFC4332F
+	for <io-uring@archiver.kernel.org>; Mon,  9 May 2022 15:51:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238650AbiEIPy4 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 9 May 2022 11:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S238638AbiEIPy5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 9 May 2022 11:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238645AbiEIPyz (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 9 May 2022 11:54:55 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218604E3B7
-        for <io-uring@vger.kernel.org>; Mon,  9 May 2022 08:51:00 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id z12so9573084ilp.8
-        for <io-uring@vger.kernel.org>; Mon, 09 May 2022 08:51:00 -0700 (PDT)
+        with ESMTP id S238658AbiEIPy4 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 9 May 2022 11:54:56 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2B84348C
+        for <io-uring@vger.kernel.org>; Mon,  9 May 2022 08:51:02 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id o5so9559904ils.11
+        for <io-uring@vger.kernel.org>; Mon, 09 May 2022 08:51:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IZxPNfFuGLTrjOo64W6lrRV96iZlzy1JKXgyBGh12F0=;
-        b=slG4Lf4TXeH4Ka7zsxfDf1A45aj9BKe0ltsJkRsSZsxPx3w9VMv5jh03lg5NF7XYjx
-         XSkxVD/jPH/hF+OwVTyjVUdNjoLqlRMcr8quydYUvkEliZxeGfrTfjFW6WtGDv4cgXgP
-         BBksAgjqHuzYrOzMRRgZpM2rGH7nj3jkk1Lt+QRPXWilfvnaUwwT0S86eCd8reRhLNqt
-         lfZxArt+4O6+C6AzTxRWUUzDRPJtjE5Ki8Ooo6EK6ap4kQOxzI65r05p8EIk8njTMTCS
-         oXjqO2ANCgZDoCLzzVE2OMCSjO84UBBTGBzN92F3NqpuEciMgt4NNsDve8cVWToCSFjx
-         sMgg==
+        bh=2vheLx++WCg20E0ZwSLvxlkhx/H+2/Uv2hjKZUPkNf0=;
+        b=FO11NQTfGvGRMNDjKzTHV0DZZlwQIDp/h4LXVTgTmFeWqrG53PvhOa0wSrEYAheJHH
+         TcNKAFTm6LXerVE2+QvRF+n1T40No7LsSxvkJX6TWu/oVOd8NZ/YK3VV+2DIvEPJyx52
+         O3Mnamiz+B7u3YqgSfPXvKPopMUsGrU8I7KAh1EroGMB8ePUo3SG9KUEVoxV/sJYYVoZ
+         y9PgGxKgl3AZJ2bu/N46NzzkZv7W9cx9hfS2hGaGTVpb2llAUXSXgV59G7jPYsNzfJEJ
+         lvzZmm3kHz0cOraTpGG1uY+N89jGeCvlJoL6GFeQT8IVIZUPXC34o6g62KiROtABQpbz
+         XH7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IZxPNfFuGLTrjOo64W6lrRV96iZlzy1JKXgyBGh12F0=;
-        b=V6nL77pg7bBH8ACZCabDokKzUYpT9m6fsVaEPcTfLCwES5iQzGkfk1EpX5X5+xgfaO
-         /Z+AHv9Gj1+zOgVVG2kw1lF1Jveozjy0o8jWmtpMo5DwomwMhVyV5TgDXrVYGFkNVc22
-         2I9rMsaesf3FZpnOtMq729i2C/CaBJjY6JnjJZbKEzPu2izECK30IZ3gobunqNJyEpXH
-         wed1cc7ije5+lauWSk6zaEQn1/OhOHaXby4nfIcvC3CovBljg1l3LBuepFbX4AihFEe1
-         9Y8Kb1GmiGvdHh849PLGUzuMgm4NKUnaxIihw1yOcvfN/O2xV0dceQNDK6/Tsp83kvVJ
-         vnhw==
-X-Gm-Message-State: AOAM532qzGSfUKVD7nf7MU6MdKfmhR0ArXPuMFlyXAvm4pqaC6QijzXa
-        oWzZNGrQ8Y3sXWD+yIK+UD6W1NxC9j8neg==
-X-Google-Smtp-Source: ABdhPJxN6dOXSJYdp6jquAx8DoXSXdQWSHonL0fJj42hY3zMci0LTda4iQeGF3KV4461HSxoi4hsYw==
-X-Received: by 2002:a05:6e02:128e:b0:2cd:aeb3:ab6 with SMTP id y14-20020a056e02128e00b002cdaeb30ab6mr6675684ilq.291.1652111458923;
-        Mon, 09 May 2022 08:50:58 -0700 (PDT)
+        bh=2vheLx++WCg20E0ZwSLvxlkhx/H+2/Uv2hjKZUPkNf0=;
+        b=vXjj5Z+c8xX8rGvKLiZ9BN3ivrM71hoM7g8xApcfsoFHyZPcT8TvASHbINZ9rUcqTW
+         57pxwNyF1cbnEzwx7kIBrjhBBtovi7CJBTjql6g9zlIinL7PvnN9Ug8gDuF/sm/SCdsr
+         OAMlmTYCsTJ5hUOgbKMfhRehAqEYjHMmOJqiZ5Ejqi/svLjvXpG2o2BiaOXArPbVT4n3
+         hBCtK+FlO/yBO03lJF694FfA1jpoWM0bEeeB+KnmbbTqQNRLBeqrYpwAFgKe/Mewhjv8
+         qZe66N8RsH4I6vjzDMxZyQtVYortdYSlKXPIqvt5JOx520CC8G9Mv/7UT6VmRlkJO23P
+         UvfQ==
+X-Gm-Message-State: AOAM532TPWl0znnWPy0HURbEMxXvusWDjbDkOoeTisM5CHElfYCwIZK/
+        SVmReh2bwZO+J5zBuZ0QlJtts7JDGoOOow==
+X-Google-Smtp-Source: ABdhPJy1QmLl/ahc21qUohtPsmTx9JecLGiLamO9W6XWRb4r+8dK3haSVypF/QBn+TC1x8NqMVN7UQ==
+X-Received: by 2002:a05:6e02:20ca:b0:2cf:8c46:3365 with SMTP id 10-20020a056e0220ca00b002cf8c463365mr5075560ilq.73.1652111461514;
+        Mon, 09 May 2022 08:51:01 -0700 (PDT)
 Received: from m1.localdomain ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id a1-20020a056638004100b0032b3a78177esm3696499jap.66.2022.05.09.08.50.58
+        by smtp.gmail.com with ESMTPSA id a1-20020a056638004100b0032b3a78177esm3696499jap.66.2022.05.09.08.51.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 May 2022 08:50:58 -0700 (PDT)
+        Mon, 09 May 2022 08:51:01 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     asml.silence@gmail.com, haoxu.linux@gmail.com,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/6] io_uring: track fixed files with a bitmap
-Date:   Mon,  9 May 2022 09:50:50 -0600
-Message-Id: <20220509155055.72735-2-axboe@kernel.dk>
+Subject: [PATCH 4/6] io_uring: allow allocated fixed files for accept
+Date:   Mon,  9 May 2022 09:50:53 -0600
+Message-Id: <20220509155055.72735-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220509155055.72735-1-axboe@kernel.dk>
 References: <20220509155055.72735-1-axboe@kernel.dk>
@@ -63,127 +63,37 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-In preparation for adding a basic allocator for direct descriptors,
-add helpers that set/clear whether a file slot is used.
+If the application passes in IORING_FILE_INDEX_ALLOC as the file_slot,
+then that's a hint to allocate a fixed file descriptor rather than have
+one be passed in directly.
+
+This can be useful for having io_uring manage the direct descriptor space,
+and also allows multi-shot support to work with fixed files.
+
+Normal accept direct requests will complete with 0 for success, and < 0
+in case of error. If io_uring is asked to allocated the direct descriptor,
+then the direct descriptor is returned in case of success.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- fs/io_uring.c | 33 ++++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+ fs/io_uring.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 22699cb359e9..f8a685cc0363 100644
+index ef999d0e09de..7356e80ffdbb 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -257,6 +257,7 @@ struct io_rsrc_put {
- 
- struct io_file_table {
- 	struct io_fixed_file *files;
-+	unsigned long *bitmap;
- };
- 
- struct io_rsrc_node {
-@@ -7572,6 +7573,7 @@ static inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
- 	/* mask in overlapping REQ_F and FFS bits */
- 	req->flags |= (file_ptr << REQ_F_SUPPORT_NOWAIT_BIT);
- 	io_req_set_rsrc_node(req, ctx, 0);
-+	WARN_ON_ONCE(file && !test_bit(fd, ctx->file_table.bitmap));
- out:
- 	io_ring_submit_unlock(ctx, issue_flags);
- 	return file;
-@@ -8638,13 +8640,35 @@ static bool io_alloc_file_tables(struct io_file_table *table, unsigned nr_files)
- {
- 	table->files = kvcalloc(nr_files, sizeof(table->files[0]),
- 				GFP_KERNEL_ACCOUNT);
--	return !!table->files;
-+	if (unlikely(!table->files))
-+		return false;
-+
-+	table->bitmap = bitmap_zalloc(nr_files, GFP_KERNEL_ACCOUNT);
-+	if (unlikely(!table->bitmap)) {
-+		kvfree(table->files);
-+		return false;
-+	}
-+
-+	return true;
- }
- 
- static void io_free_file_tables(struct io_file_table *table)
- {
- 	kvfree(table->files);
-+	bitmap_free(table->bitmap);
- 	table->files = NULL;
-+	table->bitmap = NULL;
-+}
-+
-+static inline void io_file_bitmap_set(struct io_file_table *table, int bit)
-+{
-+	WARN_ON_ONCE(test_bit(bit, table->bitmap));
-+	__set_bit(bit, table->bitmap);
-+}
-+
-+static inline void io_file_bitmap_clear(struct io_file_table *table, int bit)
-+{
-+	__clear_bit(bit, table->bitmap);
- }
- 
- static void __io_sqe_files_unregister(struct io_ring_ctx *ctx)
-@@ -8659,6 +8683,7 @@ static void __io_sqe_files_unregister(struct io_ring_ctx *ctx)
- 			continue;
- 		if (io_fixed_file_slot(&ctx->file_table, i)->file_ptr & FFS_SCM)
- 			continue;
-+		io_file_bitmap_clear(&ctx->file_table, i);
- 		fput(file);
+@@ -5801,8 +5801,8 @@ static int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+ 		fd_install(fd, file);
+ 		ret = fd;
+ 	} else {
+-		ret = io_install_fixed_file(req, file, issue_flags,
+-					    accept->file_slot - 1);
++		ret = io_fixed_fd_install(req, issue_flags, file,
++						accept->file_slot);
  	}
- #endif
-@@ -9062,6 +9087,7 @@ static int io_sqe_files_register(struct io_ring_ctx *ctx, void __user *arg,
- 		}
- 		file_slot = io_fixed_file_slot(&ctx->file_table, i);
- 		io_fixed_file_set(file_slot, file);
-+		io_file_bitmap_set(&ctx->file_table, i);
- 	}
- 
- 	io_rsrc_node_switch(ctx, NULL);
-@@ -9122,6 +9148,7 @@ static int io_install_fixed_file(struct io_kiocb *req, struct file *file,
- 		if (ret)
- 			goto err;
- 		file_slot->file_ptr = 0;
-+		io_file_bitmap_clear(&ctx->file_table, slot_index);
- 		needs_switch = true;
- 	}
- 
-@@ -9129,6 +9156,7 @@ static int io_install_fixed_file(struct io_kiocb *req, struct file *file,
- 	if (!ret) {
- 		*io_get_tag_slot(ctx->file_data, slot_index) = 0;
- 		io_fixed_file_set(file_slot, file);
-+		io_file_bitmap_set(&ctx->file_table, slot_index);
- 	}
- err:
- 	if (needs_switch)
-@@ -9170,6 +9198,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
- 		goto out;
- 
- 	file_slot->file_ptr = 0;
-+	io_file_bitmap_clear(&ctx->file_table, offset);
- 	io_rsrc_node_switch(ctx, ctx->file_data);
- 	ret = 0;
- out:
-@@ -9219,6 +9248,7 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
- 			if (err)
- 				break;
- 			file_slot->file_ptr = 0;
-+			io_file_bitmap_clear(&ctx->file_table, i);
- 			needs_switch = true;
- 		}
- 		if (fd != -1) {
-@@ -9247,6 +9277,7 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
- 			}
- 			*io_get_tag_slot(data, i) = tag;
- 			io_fixed_file_set(file_slot, file);
-+			io_file_bitmap_set(&ctx->file_table, i);
- 		}
- 	}
- 
+ 	__io_req_complete(req, issue_flags, ret, 0);
+ 	return 0;
 -- 
 2.35.1
 
