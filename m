@@ -2,112 +2,146 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20262C433F5
-	for <io-uring@archiver.kernel.org>; Tue, 17 May 2022 15:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CE2AC433EF
+	for <io-uring@archiver.kernel.org>; Tue, 17 May 2022 18:14:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234850AbiEQPr4 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 17 May 2022 11:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S1346754AbiEQSOG (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 17 May 2022 14:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350840AbiEQPqJ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 17 May 2022 11:46:09 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65FD50B20
-        for <io-uring@vger.kernel.org>; Tue, 17 May 2022 08:44:30 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id b11so8938285ilr.4
-        for <io-uring@vger.kernel.org>; Tue, 17 May 2022 08:44:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=H9k9Sr43MqoxRLdYlWNJSzdgGdipZqOCDZw/qBl8pIw=;
-        b=BT7baiOAImd6aKD65pbOLDn43AgH5KjXPsUq+eDhp0yvoae4f7MoO8hU3i3dEmazh3
-         jwj1XnFNRrPvy/uVq/SErBhexEVOETsY5OBeT/W78VH5MGdhyYHYx4++rTpFyw6S1Ord
-         twTNqColQC+gkqrvn4bLUdgfaHuuZPxq4XDJ4y1i9Jdvsj4+jE3vg64NYJhoXRn5cAJV
-         bRBiwDqIVtibUaIOZaFNYbgFprF+wxlIyHTmCEJl8tomUrOlRwDH6p16pDbEIMimvC12
-         S4iZH+BxHvZtoFg+XRCs52I056lzUD8BHROuvYVM56T+/3VLyjx2IECK+nZpn4009yby
-         F92Q==
+        with ESMTP id S1352127AbiEQSNe (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 17 May 2022 14:13:34 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDEA522E5
+        for <io-uring@vger.kernel.org>; Tue, 17 May 2022 11:13:22 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id s129-20020a6b2c87000000b00657c1a3b52fso12834058ios.21
+        for <io-uring@vger.kernel.org>; Tue, 17 May 2022 11:13:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=H9k9Sr43MqoxRLdYlWNJSzdgGdipZqOCDZw/qBl8pIw=;
-        b=Dc0EcHRK+FLOiIzAu/Ud6e37kxoh3GwdCsF019bHchEuqdLu3zV7CnBgqzE701OwFG
-         wcRvWwBG+k1ShUJJQvJ/xWl+1qUsrtY+xIu1SVPxHZfXBUq3NdCxdKKk5DnEbbIeMCQx
-         8fGy6gY2aTEJtQfFP+5pophYvcwBnNhnlIKEmXavHuYhQXI0e59rtIvVzqTjTo7dOhKC
-         slhgPrhGk7o1tUZBGer+LhIzVf/NYqVAK2ouhuwSeZr53VDwkhv3HUERHmInzaFUxsD0
-         TuiQRocbBUykc4KpY3jBHNSgOlmdpAnmLRuDqI7K1j/DDkexyPvzDhWLGiHOHp4/ONyI
-         KMkA==
-X-Gm-Message-State: AOAM530kJLxf6yKTWz2Mt7VFfqLFEKCYwr5hXu6PmkLVdRGTyTMi9IeZ
-        MDrSq4q1K/E27MVDYLCwJYgZVw==
-X-Google-Smtp-Source: ABdhPJwbE0Dtu7zrDOp7K+RLcx1mKqdGqyIMEiuN1gZYUdScn2ulsODmEGvykcoToUjdkvNtILT3Zw==
-X-Received: by 2002:a92:cbc4:0:b0:2d1:2f29:8b8e with SMTP id s4-20020a92cbc4000000b002d12f298b8emr4016973ilq.307.1652802270076;
-        Tue, 17 May 2022 08:44:30 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id d31-20020a02605f000000b0032b3a781763sm3612286jaf.39.2022.05.17.08.44.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 May 2022 08:44:29 -0700 (PDT)
-Message-ID: <0634b2e1-d93b-e9c8-ee3f-a1b9432a9e24@kernel.dk>
-Date:   Tue, 17 May 2022 09:44:27 -0600
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Ec1+WPY44NjjWQGgm/fKM4RZ1+UwW/dQmTOsqUBCVt4=;
+        b=rtu0CjaKDOzOVySie3uYOeXpo1WyX6xDklwn6reNPdqZtmTqvPOmjiOlm9v6WpOOBd
+         SNV4Bv5hOhbytsHTwCg+rnWzuk/71UAxKh7fLfM0TnegboeQycp1CIvlK3pXmOhlkhp0
+         +pL0ncFP+/0/vW7aW7xh94SQMbNc9kgQ7OK1SzKFvOE0BrmlcDN8yR4IB5VB2NkdlCe3
+         GxCfcXat3AUkGs3a8GgeN9KHWh4ICBehF03XYhsJrtpbMfD6XRK9jug0tSegsrhM3iSJ
+         Yv6LYfH078yhjGJ9OKi4plG6YeYmDPsRt8XzIVfMMoH6LBO7JhgitJMaFJqMoMUWH5sj
+         8OcQ==
+X-Gm-Message-State: AOAM530MtjEDYB9fI/55QOk0fbtjkCrpUG+rI/uQgQfdVcjIyj64lKKO
+        L7IxFuttPGHxYS4LS9oHS6+LH9/OcadRFXj6e50Nplh1mPgz
+X-Google-Smtp-Source: ABdhPJzb4u16T3LJkX1vKIkcnzOsUsEXniqdWgB0HMLgITYwOY48RC2c6eFUXknCPVdIfEOkCJOEJadExzNb2VzW3AdbkFIASFOR
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCHSET v6 0/3] Add support for ring mapped provided buffers
-Content-Language: en-US
-To:     Hao Xu <haoxu.linux@icloud.com>, io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com
-References: <20220516162118.155763-1-axboe@kernel.dk>
- <06535662-787c-d232-aaf5-3f5829ca48a7@icloud.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <06535662-787c-d232-aaf5-3f5829ca48a7@icloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:1b03:b0:2d1:249b:f94e with SMTP id
+ i3-20020a056e021b0300b002d1249bf94emr5486209ilv.219.1652811202010; Tue, 17
+ May 2022 11:13:22 -0700 (PDT)
+Date:   Tue, 17 May 2022 11:13:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000093a60105df3918eb@google.com>
+Subject: [syzbot] BUG: unable to handle kernel NULL pointer dereference in io_do_iopoll
+From:   syzbot <syzbot+1a0a53300ce782f8b3ad@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 5/17/22 8:20 AM, Hao Xu wrote:
-> On 5/17/22 00:21, Jens Axboe wrote:
->> Hi,
->>
->> This series builds to adding support for a different way of doing
->> provided buffers, which is a lot more efficient than the existing scheme
->> for high rate of consumption/provision of buffers. The interesting bits
->> here are patch 3, which also has some performance numbers an an
->> explanation of it.
->>
->> Patch 1 adds NOP support for provided buffers, just so that we can
->> benchmark the last change.
->>
->> Patch 2 just abstracts out the pinning code.
->>
->> Patch 3 adds the actual feature.
->>
->> This passes the full liburing suite, and various test cases I adopted
->> to use ring provided buffers.
->>
->> v6:
->> - Change layout so that 'head' overlaps with reserved field in first
->>    buffer, avoiding the weird split of first page having N-1 buffers and
->>    the rest N (Dylan)
->> - Rebase on current kernel bits
->> - Fix missing ring unlock on out-of-bufs
->> - Fix issue in io_recv()
->>
->> Can also be found in my git repo, for-5.19/io_uring-pbuf branch:
->>
->> https://git.kernel.dk/cgit/linux-block/log/?h=for-5.19/io_uring-pbuf
->>
->> and there's an associated liburing branch too:
->>
->> https://git.kernel.dk/cgit/liburing/log/?h=huge
-> 
-> should be the buf-ring branch I guess
+Hello,
 
-Oops yes indeed.
+syzbot found the following issue on:
+
+HEAD commit:    42226c989789 Linux 5.18-rc7
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=125b807ef00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=902c5209311d387c
+dashboard link: https://syzkaller.appspot.com/bug?extid=1a0a53300ce782f8b3ad
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149eb59ef00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cc57c6f00000
+
+The issue was bisected to:
+
+commit 3f1d52abf098c85b177b8c6f5b310e8347d1bc42
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Tue Mar 29 16:43:56 2022 +0000
+
+    io_uring: defer msg-ring file validity check until command issue
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1504cbaef00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1704cbaef00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1304cbaef00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1a0a53300ce782f8b3ad@syzkaller.appspotmail.com
+Fixes: 3f1d52abf098 ("io_uring: defer msg-ring file validity check until command issue")
+
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor instruction fetch in kernel mode
+#PF: error_code(0x0010) - not-present page
+PGD 0 P4D 0 
+Oops: 0010 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 3596 Comm: syz-executor359 Not tainted 5.18.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000325fb68 EFLAGS: 00010246
+RAX: ffffffff89dad220 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000003 RSI: ffffc9000325fbe0 RDI: ffff8880213388c0
+RBP: ffff888021338901 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff81ec11a0 R11: 0000000000000000 R12: 0000000000000003
+R13: ffffc9000325fbe0 R14: ffff8880213388c0 R15: ffff888021338938
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000000ba8e000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ io_do_iopoll+0x262/0x1080 fs/io_uring.c:2776
+ io_iopoll_try_reap_events+0xba/0x158 fs/io_uring.c:2829
+ io_ring_ctx_wait_and_kill+0x1d9/0x327 fs/io_uring.c:10167
+ io_uring_release+0x42/0x46 fs/io_uring.c:10184
+ __fput+0x277/0x9d0 fs/file_table.c:317
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:37 [inline]
+ do_exit+0xaff/0x2a00 kernel/exit.c:795
+ do_group_exit+0xd2/0x2f0 kernel/exit.c:925
+ __do_sys_exit_group kernel/exit.c:936 [inline]
+ __se_sys_exit_group kernel/exit.c:934 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f115bc1bf19
+Code: Unable to access opcode bytes at RIP 0x7f115bc1beef.
+RSP: 002b:00007ffde3b5abf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f115bc90290 RCX: 00007f115bc1bf19
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f115bc90290
+R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000325fb68 EFLAGS: 00010246
+RAX: ffffffff89dad220 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 0000000000000003 RSI: ffffc9000325fbe0 RDI: ffff8880213388c0
+RBP: ffff888021338901 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff81ec11a0 R11: 0000000000000000 R12: 0000000000000003
+R13: ffffc9000325fbe0 R14: ffff8880213388c0 R15: ffff888021338938
+FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffd6 CR3: 000000000ba8e000 CR4: 0000000000350ef0
 
 
--- 
-Jens Axboe
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
