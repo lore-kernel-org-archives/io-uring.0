@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEA1BC433EF
-	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1F1EC433FE
+	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231570AbiERXiJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S231486AbiERXiJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Wed, 18 May 2022 19:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231563AbiERXiG (ORCPT
+        with ESMTP id S231575AbiERXiG (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 19:38:06 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F8587A38
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:42 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IN6Dt5005638
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:42 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74315939F1
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:44 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IN6AdT017366
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=YjR6bHdDemShrFnRSFoy0SU6vrzP5IeqvXhPCERFUGY=;
- b=Vj84wixRIzTnyHpWspgB0LqWOEa3kEBDkIN2GPDg1axkr+4mlCqzGxYxuTQekvkAuC7f
- uhj6Wa7ItvBct86J1Y/Lab7Iaeq+7Xy0LRtsNKQAXTKwr2aXETCmbbPAhubBEactY4Ke
- A0FmkwAv+xzeq45zTlaehPwhpn28aYQNIrY= 
+ bh=LjQjeu05KJ6rwhAZwVJii+/tlMhhh5HkUUbhHoJms8c=;
+ b=qOgnI2YbIv9/5s9m6mk6DoODtHG46NDgGVf3KaJrf8F2X+rm16Y6aE0mOIWrtI4PYm3o
+ Tx1p4Awqz05hIkpwB1r/ToZl1YT4Iesd70+If1NeiO58HGiwrmVB0GX9eidlQh5xbw+0
+ 7A/uGNqma9LqocbvWyNWD9kyIsoC8dZeitg= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4ey1k1p2-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4ck0m9vj-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:41 -0700
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:44 -0700
 Received: from twshared8307.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.28; Wed, 18 May 2022 16:37:38 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id DD709F3ED863; Wed, 18 May 2022 16:37:12 -0700 (PDT)
+        id C6D65F3ED85D; Wed, 18 May 2022 16:37:12 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>
-Subject: [RFC PATCH v3 09/18] fs: Optimization for concurrent file time updates.
-Date:   Wed, 18 May 2022 16:37:00 -0700
-Message-ID: <20220518233709.1937634-10-shr@fb.com>
+Subject: [RFC PATCH v3 06/18] fs: Split off remove_needs_file_privs() __remove_file_privs()
+Date:   Wed, 18 May 2022 16:36:57 -0700
+Message-ID: <20220518233709.1937634-7-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220518233709.1937634-1-shr@fb.com>
 References: <20220518233709.1937634-1-shr@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 1VTqmOJnENakrvSBxjJlXiwxdBsRXbax
-X-Proofpoint-GUID: 1VTqmOJnENakrvSBxjJlXiwxdBsRXbax
+X-Proofpoint-GUID: iAVReF_yaXPJ5o-69CHHDFnODbxmaree
+X-Proofpoint-ORIG-GUID: iAVReF_yaXPJ5o-69CHHDFnODbxmaree
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
@@ -58,70 +58,133 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This introduces the S_PENDING_TIME flag. If an async buffered write
-needs to update the time, it cannot be processed in the fast path of
-io-uring. When a time update is pending this flag is set for async
-buffered writes. Other concurrent async buffered writes for the same
-file do not need to wait while this time update is pending.
+This splits off the function remove_needs_file_privs() from the function
+__remove_file_privs() from the function file_remove_privs().
 
-This reduces the number of async buffered writes that need to get punted
-to the io-workers in io-uring.
+No intended functional changes in this patch.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- fs/inode.c         | 11 +++++++++--
- include/linux/fs.h |  3 +++
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ fs/inode.c | 75 +++++++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 55 insertions(+), 20 deletions(-)
 
 diff --git a/fs/inode.c b/fs/inode.c
-index 3a5d0fa468ab..5c5021787780 100644
+index 9d9b422504d1..1bb8b7db836f 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -2184,10 +2184,17 @@ int file_modified_async(struct file *file, int fl=
-ags)
- 	ret =3D file_needs_update_time(inode, file, &now);
- 	if (ret <=3D 0)
- 		return ret;
--	if (flags & IOCB_NOWAIT)
-+	if (flags & IOCB_NOWAIT) {
-+		if (IS_PENDING_TIME(inode))
-+			return 0;
+@@ -2010,17 +2010,8 @@ static int __remove_privs(struct user_namespace *m=
+nt_userns,
+ 	return notify_change(mnt_userns, dentry, &newattrs, NULL);
+ }
+=20
+-/*
+- * Remove special file priviledges (suid, capabilities) when file is wri=
+tten
+- * to or truncated.
+- */
+-int file_remove_privs(struct file *file)
++static int file_needs_remove_privs(struct inode *inode, struct dentry *d=
+entry)
+ {
+-	struct dentry *dentry =3D file_dentry(file);
+-	struct inode *inode =3D file_inode(file);
+-	int kill;
+-	int error =3D 0;
+-
+ 	/*
+ 	 * Fast path for nothing security related.
+ 	 * As well for non-regular files, e.g. blkdev inodes.
+@@ -2030,16 +2021,42 @@ int file_remove_privs(struct file *file)
+ 	if (IS_NOSEC(inode) || !S_ISREG(inode->i_mode))
+ 		return 0;
+=20
+-	kill =3D dentry_needs_remove_privs(dentry);
+-	if (kill < 0)
+-		return kill;
+-	if (kill)
+-		error =3D __remove_privs(file_mnt_user_ns(file), dentry, kill);
++	return dentry_needs_remove_privs(dentry);
++}
 +
-+		inode->i_flags |=3D S_PENDING_TIME;
- 		return -EAGAIN;
++static int __file_remove_privs(struct file *file, struct inode *inode,
++			struct dentry *dentry, int kill)
++{
++	int error =3D 0;
++
++	error =3D __remove_privs(file_mnt_user_ns(file), dentry, kill);
+ 	if (!error)
+ 		inode_has_no_xattr(inode);
+=20
+ 	return error;
+ }
++
++/**
++ * file_remove_privs - remove special file privileges (suid, capabilitie=
+s)
++ * @file: file to remove privileges from
++ *
++ * When file is modified by a write or truncation ensure that special
++ * file privileges are removed.
++ *
++ * Return: 0 on success, negative errno on failure.
++ */
++int file_remove_privs(struct file *file)
++{
++	struct dentry *dentry =3D file_dentry(file);
++	struct inode *inode =3D file_inode(file);
++	int kill;
++
++	kill =3D file_needs_remove_privs(inode, dentry);
++	if (kill <=3D 0)
++		return kill;
++
++	return __file_remove_privs(file, inode, dentry, kill);
++}
+ EXPORT_SYMBOL(file_remove_privs);
+=20
+ /**
+@@ -2090,18 +2107,36 @@ int file_update_time(struct file *file)
+ }
+ EXPORT_SYMBOL(file_update_time);
+=20
+-/* Caller must hold the file's inode lock */
++/**
++ * file_modified - handle mandated vfs changes when modifying a file
++ * @file: file that was modified
++ *
++ * When file has been modified ensure that special
++ * file privileges are removed and time settings are updated.
++ *
++ * Context: Caller must hold the file's inode lock.
++ *
++ * Return: 0 on success, negative errno on failure.
++ */
+ int file_modified(struct file *file)
+ {
+-	int err;
++	int ret;
++	struct dentry *dentry =3D file_dentry(file);
++	struct inode *inode =3D file_inode(file);
+=20
+ 	/*
+ 	 * Clear the security bits if the process is not being run by root.
+ 	 * This keeps people from modifying setuid and setgid binaries.
+ 	 */
+-	err =3D file_remove_privs(file);
+-	if (err)
+-		return err;
++	ret =3D file_needs_remove_privs(inode, dentry);
++	if (ret < 0)
++		return ret;
++
++	if (ret > 0) {
++		ret =3D __file_remove_privs(file, inode, dentry, ret);
++		if (ret)
++			return ret;
 +	}
 =20
--	return __file_update_time(inode, file, &now, ret);
-+	ret =3D __file_update_time(inode, file, &now, ret);
-+	inode->i_flags &=3D ~S_PENDING_TIME;
-+	return ret;
- }
- EXPORT_SYMBOL(file_modified_async);
-=20
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 9760283af7dc..5f3aaf61fb4b 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2141,6 +2141,8 @@ struct super_operations {
- #define S_CASEFOLD	(1 << 15) /* Casefolded file */
- #define S_VERITY	(1 << 16) /* Verity file (using fs/verity/) */
- #define S_KERNEL_FILE	(1 << 17) /* File is in use by the kernel (eg. fs/=
-cachefiles) */
-+#define S_PENDING_TIME (1 << 18) /* File update time is pending */
-+
-=20
- /*
-  * Note that nosuid etc flags are inode-specific: setting some file-syst=
-em
-@@ -2183,6 +2185,7 @@ static inline bool sb_rdonly(const struct super_blo=
-ck *sb) { return sb->s_flags
- #define IS_ENCRYPTED(inode)	((inode)->i_flags & S_ENCRYPTED)
- #define IS_CASEFOLDED(inode)	((inode)->i_flags & S_CASEFOLD)
- #define IS_VERITY(inode)	((inode)->i_flags & S_VERITY)
-+#define IS_PENDING_TIME(inode) ((inode)->i_flags & S_PENDING_TIME)
-=20
- #define IS_WHITEOUT(inode)	(S_ISCHR(inode->i_mode) && \
- 				 (inode)->i_rdev =3D=3D WHITEOUT_DEV)
+ 	if (unlikely(file->f_mode & FMODE_NOCMTIME))
+ 		return 0;
 --=20
 2.30.2
 
