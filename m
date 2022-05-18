@@ -2,37 +2,37 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5A0EC433FE
-	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 08:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10E64C433EF
+	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 08:40:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbiERIkb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 18 May 2022 04:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
+        id S233424AbiERIkW (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 18 May 2022 04:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233426AbiERIk3 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 04:40:29 -0400
+        with ESMTP id S233427AbiERIkV (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 04:40:21 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7921078A7
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 01:40:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06786126983
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 01:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=aYeW7fe3tqt7eOZhO6qodf1YLqFtMMH8JlWFnC3q7gs=; b=PAExOTorQo2Vt9Fy4qzCi5Rt/G
-        pDM4nFbNXFUxNksoitZzN17X39tSGIV1fn2vc/DuSU7TboOsc5iA9axdDDloUAZPDu9kmBqZoqC6s
-        iFb9bcn9PLcQ3o06p615GkCMVP6dZK3hB7TbfrVmaLweINxXBWWCMXTsBehznjpFKUG87ZSgrTvKL
-        dpROGVngMlhdHtVg4gxZmEkFKQH1vdMJm/YNg7/ZUrEQIPCsH63x/6HVEp0YeNJM1NqOjjQUsSLz7
-        dInCAf8fcn0LYUZF3IaLgF9oy8UtymN2tKHn8ERQyFfkaxZ5IsfWabPOrILHp7GMsTe3JOkfdfBm6
-        5KEdQS7g==;
+        bh=O3Hwh9FMK/Y+mVRf2nPDA4yKBB8tjOZN8Y7yWPvmkuY=; b=ryFUQfaaLxMx4y9FsJ7dzJtyF3
+        qZkotTPtaiiErrFefMMsrS8arylISg3ZPjW1EaKLMv1RZCyP70CRvVJAmodEy5VskFpYB8f5Od15a
+        NYrkuSdy3+DAe3468ADP1pDo45BXrmXI7AsHY731IYyA/s+ajATLDQyifKjm9jQlhpksoeqT/XdfN
+        8cyrC8tgIkwKnsbzxaO0mxcUrKVI57YtIu1ixnNs0TZGKa8h3UcU9xpm6ZThy8OBpr50rZGbJ8rly
+        27PO2cl3S1N+W1Cwq7NVj8XIJqchB6hsl6sUTsnSr9/z1gy0A0v3hd+mrO0OJWfVj1yeQpz7RN+gH
+        HdybGynQ==;
 Received: from [2001:4bb8:19a:7bdf:8143:492c:c3b:39b6] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nrFEJ-000dWE-AB; Wed, 18 May 2022 08:40:27 +0000
+        id 1nrFEB-000dUY-DN; Wed, 18 May 2022 08:40:19 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     axboe@kernel.dk
 Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org
-Subject: [PATCH 6/6] io_uring: use rcu_dereference in io_close
-Date:   Wed, 18 May 2022 10:40:05 +0200
-Message-Id: <20220518084005.3255380-7-hch@lst.de>
+Subject: [PATCH 3/6] io_uring: drop a spurious inline on a forward declaration
+Date:   Wed, 18 May 2022 10:40:02 +0200
+Message-Id: <20220518084005.3255380-4-hch@lst.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220518084005.3255380-1-hch@lst.de>
 References: <20220518084005.3255380-1-hch@lst.de>
@@ -43,27 +43,27 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Accessing the file table needs a rcu_dereference_protected().
+io_file_get_normal isn't marked inline, so don't claim it as such in the
+forward declaration.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 ---
- fs/io_uring.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ fs/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index c9596d551bd67..2b848a8dfc46c 100644
+index abb7108258f96..fc435f95ef340 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -5984,7 +5984,8 @@ static int io_close(struct io_kiocb *req, unsigned int issue_flags)
- 		spin_unlock(&files->file_lock);
- 		goto err;
- 	}
--	file = fdt->fd[close->fd];
-+	file = rcu_dereference_protected(fdt->fd[close->fd],
-+			lockdep_is_held(&files->file_lock));
- 	if (!file || file->f_op == &io_uring_fops) {
- 		spin_unlock(&files->file_lock);
- 		file = NULL;
+@@ -1354,7 +1354,7 @@ static int __io_register_rsrc_update(struct io_ring_ctx *ctx, unsigned type,
+ static void io_clean_op(struct io_kiocb *req);
+ static inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
+ 					     unsigned issue_flags);
+-static inline struct file *io_file_get_normal(struct io_kiocb *req, int fd);
++static struct file *io_file_get_normal(struct io_kiocb *req, int fd);
+ static void io_drop_inflight_file(struct io_kiocb *req);
+ static bool io_assign_file(struct io_kiocb *req, unsigned int issue_flags);
+ static void io_queue_sqe(struct io_kiocb *req);
 -- 
 2.30.2
 
