@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C96DDC433EF
-	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0344C433F5
+	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbiERXiR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 18 May 2022 19:38:17 -0400
+        id S231539AbiERXiS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 18 May 2022 19:38:18 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231543AbiERXhr (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 19:37:47 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F6D7E1F2
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:40 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IN6BlS005549
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:39 -0700
+        with ESMTP id S231608AbiERXiG (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 19:38:06 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C9869B4A
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:48 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24INLun1022159
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=JmNWcJ9S5BuVrDagcKBT8mAi6jQ8Go8fzpG+AeBXTsU=;
- b=nSwV6TGxyQ1d+z1t1nufrNDKyWZZ7Vk2UQBgZtiC99UTelKAvXo9bnE948IxFDHIruUI
- 0xyzfpeMMRlwHR0oMu0tY6UwWtnfY882azN19J5fEpknCab2F4DWxKQ2QyhKGOnv4MiY
- ezOPvNThFJ84G2fIFdPsIFcwYh3Py7pWl6A= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4ey1k1nu-2
+ bh=UfD+h75jLCqmGcJIFVAad9rZN/r0VFdoC8EFOxTjfII=;
+ b=i58D+I90ENcKWDEIn+39KABa/vBhgbCZ8c1ltuuinljhAvhwZ0ffU5CjGqzEx4x/iDpK
+ /nIRvKZ+hTjP7eUGroFB44Cz5Q9ISafzTsU2CDfoPxWAtyqjk65HtGVMDIl0dAVsWywY
+ T5iOilpf5MaEE4iWI/xtI6kqD0z4fw6Fp38= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3g5acy02u7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:39 -0700
-Received: from twshared6696.05.ash7.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:47 -0700
+Received: from twshared11660.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 18 May 2022 16:37:39 -0700
+ 15.1.2375.28; Wed, 18 May 2022 16:37:46 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 05A86F3ED86B; Wed, 18 May 2022 16:37:13 -0700 (PDT)
+        id 201BEF3ED873; Wed, 18 May 2022 16:37:13 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>
-Subject: [RFC PATCH v3 13/18] mm: Move updates of dirty_exceeded into one place
-Date:   Wed, 18 May 2022 16:37:04 -0700
-Message-ID: <20220518233709.1937634-14-shr@fb.com>
+Subject: [RFC PATCH v3 17/18] io_uring: Add tracepoint for short writes
+Date:   Wed, 18 May 2022 16:37:08 -0700
+Message-ID: <20220518233709.1937634-18-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220518233709.1937634-1-shr@fb.com>
 References: <20220518233709.1937634-1-shr@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6lXpg4xugOAPSdq5IKZpzW5kBWEjrfag
-X-Proofpoint-GUID: 6lXpg4xugOAPSdq5IKZpzW5kBWEjrfag
+X-Proofpoint-ORIG-GUID: bJYMswC0y3iEJVXeBRnD4nY-vOVvvqkW
+X-Proofpoint-GUID: bJYMswC0y3iEJVXeBRnD4nY-vOVvvqkW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
@@ -58,48 +58,68 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+This adds the io_uring_short_write tracepoint to io_uring. A short write
+is issued if not all pages that are required for a write are in the page
+cache and the async buffered writes have to return EAGAIN.
 
-Transition of wb->dirty_exceeded from 0 to 1 happens before we go to
-sleep in balance_dirty_pages() while transition from 1 to 0 happens when
-exiting from balance_dirty_pages(), possibly based on old values. This
-does not make a lot of sense since wb->dirty_exceeded should simply
-reflect whether wb is over dirty limit and so we should ratelimit
-entering to balance_dirty_pages() less. Move the two updates together.
-
-Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- mm/page-writeback.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ fs/io_uring.c                   |  3 +++
+ include/trace/events/io_uring.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index 8e5e003f0093..89dcc7d8395a 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -1720,8 +1720,8 @@ static void balance_dirty_pages(struct bdi_writebac=
-k *wb,
- 				sdtc =3D mdtc;
- 		}
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index f3aaac286509..7435a9c2007f 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4032,6 +4032,9 @@ static int io_write(struct io_kiocb *req, unsigned =
+int issue_flags)
+ 		if (ret2 !=3D req->result && ret2 >=3D 0 && need_complete_io(req)) {
+ 			struct io_async_rw *rw;
 =20
--		if (dirty_exceeded && !wb->dirty_exceeded)
--			wb->dirty_exceeded =3D 1;
-+		if (dirty_exceeded !=3D wb->dirty_exceeded)
-+			wb->dirty_exceeded =3D dirty_exceeded;
++			trace_io_uring_short_write(req->ctx, kiocb->ki_pos - ret2,
++						req->result, ret2);
++
+ 			/* This is a partial write. The file pos has already been
+ 			 * updated, setup the async struct to complete the request
+ 			 * in the worker. Also update bytes_done to account for
+diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_ur=
+ing.h
+index cddf5b6fbeb4..661834361d33 100644
+--- a/include/trace/events/io_uring.h
++++ b/include/trace/events/io_uring.h
+@@ -543,6 +543,31 @@ TRACE_EVENT(io_uring_req_failed,
+ 		  (unsigned long long) __entry->pad2, __entry->error)
+ );
 =20
- 		if (time_is_before_jiffies(READ_ONCE(wb->bw_time_stamp) +
- 					   BANDWIDTH_INTERVAL))
-@@ -1825,9 +1825,6 @@ static void balance_dirty_pages(struct bdi_writebac=
-k *wb,
- 		if (fatal_signal_pending(current))
- 			break;
- 	}
--
--	if (!dirty_exceeded && wb->dirty_exceeded)
--		wb->dirty_exceeded =3D 0;
- }
++TRACE_EVENT(io_uring_short_write,
++
++	TP_PROTO(void *ctx, u64 fpos, u64 wanted, u64 got),
++
++	TP_ARGS(ctx, fpos, wanted, got),
++
++	TP_STRUCT__entry(
++		__field(void *,	ctx)
++		__field(u64,	fpos)
++		__field(u64,	wanted)
++		__field(u64,	got)
++	),
++
++	TP_fast_assign(
++		__entry->ctx	=3D ctx;
++		__entry->fpos	=3D fpos;
++		__entry->wanted	=3D wanted;
++		__entry->got	=3D got;
++	),
++
++	TP_printk("ring %p, fpos %lld, wanted %lld, got %lld",
++			  __entry->ctx, __entry->fpos,
++			  __entry->wanted, __entry->got)
++);
++
+ #endif /* _TRACE_IO_URING_H */
 =20
- static DEFINE_PER_CPU(int, bdp_ratelimits);
+ /* This part must be outside protection */
 --=20
 2.30.2
 
