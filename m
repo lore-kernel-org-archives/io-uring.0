@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B7DDC433F5
-	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD05BC433EF
+	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbiERXiM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 18 May 2022 19:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S231520AbiERXiP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 18 May 2022 19:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiERXiG (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 19:38:06 -0400
+        with ESMTP id S231473AbiERXiH (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 19:38:07 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE578B0A2
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:42 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IN6AdP017366
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:42 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56382BCE85
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:51 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IN6Jic013799
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:51 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=LWT7/rgVKJvUBvBuLFTZOcg1EE8pCJNmk5mdhmfBzd4=;
- b=i6RESA2kBFbZf2YcYKS9NClp2rdwS4z3e5YrkTDrp5aQB3JPLVdlytwpVGLaoojFgIFG
- fOUNWAAU+p9M23iJxh3uuhMsjYlkvF+SRyBlyCNt0jLDi1Sv6Nr8XAD0gZrBAN1rVLay
- VV1wCr4qjitYxB6F7cIAO1jZh82uTcaZ7Ec= 
+ bh=3zHDjbn72NXSBweb9g6a0xThug/NIwNbovojkJVDB2M=;
+ b=di3baeMW3rzcrQoGRLWCiG7GZRUkxeggm5fvoPbuu/EkrYSB1uv+z7CzQgfgLD2qfQbD
+ iD0614dSJ0xYKMPQawmxHAAobxJZO7uXFn4jGgtXTVNa/DDHTQEBgDQlu7i7OBDjXXJa
+ +pl70FPALuSEn1NGYGVEw2kbGyLrmGQv/TQ= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4ck0m9vj-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4dea3tmq-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:41 -0700
-Received: from twshared4937.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:51 -0700
+Received: from twshared8508.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 18 May 2022 16:37:38 -0700
+ 15.1.2375.28; Wed, 18 May 2022 16:37:49 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id E5A10F3ED865; Wed, 18 May 2022 16:37:12 -0700 (PDT)
+        id F1ED2F3ED869; Wed, 18 May 2022 16:37:12 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>
-Subject: [RFC PATCH v3 10/18] xfs: Add async buffered write support
-Date:   Wed, 18 May 2022 16:37:01 -0700
-Message-ID: <20220518233709.1937634-11-shr@fb.com>
+Subject: [RFC PATCH v3 12/18] mm: Move starting of background writeback into the main balancing loop
+Date:   Wed, 18 May 2022 16:37:03 -0700
+Message-ID: <20220518233709.1937634-13-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220518233709.1937634-1-shr@fb.com>
 References: <20220518233709.1937634-1-shr@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 8pmB-yTAsCab-LSHtkSBvvNt_tKmov2D
-X-Proofpoint-ORIG-GUID: 8pmB-yTAsCab-LSHtkSBvvNt_tKmov2D
+X-Proofpoint-ORIG-GUID: fD-LvpLn56FlkIzObo3zLUCnhXBy0V9i
+X-Proofpoint-GUID: fD-LvpLn56FlkIzObo3zLUCnhXBy0V9i
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
@@ -58,122 +58,81 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the async buffered write support to XFS. For async buffered
-write requests, the request will return -EAGAIN if the ilock cannot be
-obtained immediately.
+From: Jan Kara <jack@suse.cz>
 
-This splits off a new helper xfs_ilock_inode from the existing helper
-xfs_ilock_iocb so it can be used for this function. The exising helper
-cannot be used as it hardcoded the inode to be used.
+We start background writeback if we are over background threshold after
+exiting the main loop in balance_dirty_pages(). This may result in
+basing the decision on already stale values (we may have slept for
+significant amount of time) and it is also inconvenient for refactoring
+needed for async dirty throttling. Move the check into the main waiting
+loop.
 
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- fs/xfs/xfs_file.c | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+ mm/page-writeback.c | 31 ++++++++++++++-----------------
+ 1 file changed, 14 insertions(+), 17 deletions(-)
 
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index 793918c83755..ad3175b7d366 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -190,14 +190,13 @@ xfs_file_fsync(
- 	return error;
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index 7e2da284e427..8e5e003f0093 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -1618,6 +1618,19 @@ static void balance_dirty_pages(struct bdi_writeba=
+ck *wb,
+ 			}
+ 		}
+=20
++		/*
++		 * In laptop mode, we wait until hitting the higher threshold
++		 * before starting background writeout, and then write out all
++		 * the way down to the lower threshold.  So slow writers cause
++		 * minimal disk activity.
++		 *
++		 * In normal mode, we start background writeout at the lower
++		 * background_thresh, to keep the amount of dirty memory low.
++		 */
++		if (!laptop_mode && nr_reclaimable > gdtc->bg_thresh &&
++		    !writeback_in_progress(wb))
++			wb_start_background_writeback(wb);
++
+ 		/*
+ 		 * Throttle it only when the background writeback cannot
+ 		 * catch-up. This avoids (excessively) small writeouts
+@@ -1648,6 +1661,7 @@ static void balance_dirty_pages(struct bdi_writebac=
+k *wb,
+ 			break;
+ 		}
+=20
++		/* Start writeback even when in laptop mode */
+ 		if (unlikely(!writeback_in_progress(wb)))
+ 			wb_start_background_writeback(wb);
+=20
+@@ -1814,23 +1828,6 @@ static void balance_dirty_pages(struct bdi_writeba=
+ck *wb,
+=20
+ 	if (!dirty_exceeded && wb->dirty_exceeded)
+ 		wb->dirty_exceeded =3D 0;
+-
+-	if (writeback_in_progress(wb))
+-		return;
+-
+-	/*
+-	 * In laptop mode, we wait until hitting the higher threshold before
+-	 * starting background writeout, and then write out all the way down
+-	 * to the lower threshold.  So slow writers cause minimal disk activity=
+.
+-	 *
+-	 * In normal mode, we start background writeout at the lower
+-	 * background_thresh, to keep the amount of dirty memory low.
+-	 */
+-	if (laptop_mode)
+-		return;
+-
+-	if (nr_reclaimable > gdtc->bg_thresh)
+-		wb_start_background_writeback(wb);
  }
 =20
--static int
--xfs_ilock_iocb(
--	struct kiocb		*iocb,
-+static inline int
-+xfs_ilock_xfs_inode(
-+	struct xfs_inode	*ip,
-+	int			flags,
- 	unsigned int		lock_mode)
- {
--	struct xfs_inode	*ip =3D XFS_I(file_inode(iocb->ki_filp));
--
--	if (iocb->ki_flags & IOCB_NOWAIT) {
-+	if (flags & IOCB_NOWAIT) {
- 		if (!xfs_ilock_nowait(ip, lock_mode))
- 			return -EAGAIN;
- 	} else {
-@@ -222,7 +221,7 @@ xfs_file_dio_read(
-=20
- 	file_accessed(iocb->ki_filp);
-=20
--	ret =3D xfs_ilock_iocb(iocb, XFS_IOLOCK_SHARED);
-+	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, XFS_IOLOCK_SHARED);
- 	if (ret)
- 		return ret;
- 	ret =3D iomap_dio_rw(iocb, to, &xfs_read_iomap_ops, NULL, 0, 0);
-@@ -244,7 +243,7 @@ xfs_file_dax_read(
- 	if (!iov_iter_count(to))
- 		return 0; /* skip atime */
-=20
--	ret =3D xfs_ilock_iocb(iocb, XFS_IOLOCK_SHARED);
-+	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, XFS_IOLOCK_SHARED);
- 	if (ret)
- 		return ret;
- 	ret =3D dax_iomap_rw(iocb, to, &xfs_read_iomap_ops);
-@@ -264,7 +263,7 @@ xfs_file_buffered_read(
-=20
- 	trace_xfs_file_buffered_read(iocb, to);
-=20
--	ret =3D xfs_ilock_iocb(iocb, XFS_IOLOCK_SHARED);
-+	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, XFS_IOLOCK_SHARED);
- 	if (ret)
- 		return ret;
- 	ret =3D generic_file_read_iter(iocb, to);
-@@ -343,7 +342,7 @@ xfs_file_write_checks(
- 	if (*iolock =3D=3D XFS_IOLOCK_SHARED && !IS_NOSEC(inode)) {
- 		xfs_iunlock(ip, *iolock);
- 		*iolock =3D XFS_IOLOCK_EXCL;
--		error =3D xfs_ilock_iocb(iocb, *iolock);
-+		error =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, *iolock);
- 		if (error) {
- 			*iolock =3D 0;
- 			return error;
-@@ -516,7 +515,7 @@ xfs_file_dio_write_aligned(
- 	int			iolock =3D XFS_IOLOCK_SHARED;
- 	ssize_t			ret;
-=20
--	ret =3D xfs_ilock_iocb(iocb, iolock);
-+	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
- 	if (ret)
- 		return ret;
- 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
-@@ -583,7 +582,7 @@ xfs_file_dio_write_unaligned(
- 		flags =3D IOMAP_DIO_FORCE_WAIT;
- 	}
-=20
--	ret =3D xfs_ilock_iocb(iocb, iolock);
-+	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
- 	if (ret)
- 		return ret;
-=20
-@@ -659,7 +658,7 @@ xfs_file_dax_write(
- 	ssize_t			ret, error =3D 0;
- 	loff_t			pos;
-=20
--	ret =3D xfs_ilock_iocb(iocb, iolock);
-+	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
- 	if (ret)
- 		return ret;
- 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
-@@ -702,12 +701,11 @@ xfs_file_buffered_write(
- 	bool			cleared_space =3D false;
- 	int			iolock;
-=20
--	if (iocb->ki_flags & IOCB_NOWAIT)
--		return -EOPNOTSUPP;
--
- write_retry:
- 	iolock =3D XFS_IOLOCK_EXCL;
--	xfs_ilock(ip, iolock);
-+	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
-+	if (ret)
-+		return ret;
-=20
- 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
- 	if (ret)
+ static DEFINE_PER_CPU(int, bdp_ratelimits);
 --=20
 2.30.2
 
