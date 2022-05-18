@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1F1EC433FE
-	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B7DDC433F5
+	for <io-uring@archiver.kernel.org>; Wed, 18 May 2022 23:38:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231486AbiERXiJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 18 May 2022 19:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S231575AbiERXiM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 18 May 2022 19:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbiERXiG (ORCPT
+        with ESMTP id S231565AbiERXiG (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 18 May 2022 19:38:06 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74315939F1
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE578B0A2
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:42 -0700 (PDT)
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IN6AdT017366
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:44 -0700
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24IN6AdP017366
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:42 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=LjQjeu05KJ6rwhAZwVJii+/tlMhhh5HkUUbhHoJms8c=;
- b=qOgnI2YbIv9/5s9m6mk6DoODtHG46NDgGVf3KaJrf8F2X+rm16Y6aE0mOIWrtI4PYm3o
- Tx1p4Awqz05hIkpwB1r/ToZl1YT4Iesd70+If1NeiO58HGiwrmVB0GX9eidlQh5xbw+0
- 7A/uGNqma9LqocbvWyNWD9kyIsoC8dZeitg= 
+ bh=LWT7/rgVKJvUBvBuLFTZOcg1EE8pCJNmk5mdhmfBzd4=;
+ b=i6RESA2kBFbZf2YcYKS9NClp2rdwS4z3e5YrkTDrp5aQB3JPLVdlytwpVGLaoojFgIFG
+ fOUNWAAU+p9M23iJxh3uuhMsjYlkvF+SRyBlyCNt0jLDi1Sv6Nr8XAD0gZrBAN1rVLay
+ VV1wCr4qjitYxB6F7cIAO1jZh82uTcaZ7Ec= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4ck0m9vj-5
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g4ck0m9vj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:44 -0700
-Received: from twshared8307.18.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+        for <io-uring@vger.kernel.org>; Wed, 18 May 2022 16:37:41 -0700
+Received: from twshared4937.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.28; Wed, 18 May 2022 16:37:38 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id C6D65F3ED85D; Wed, 18 May 2022 16:37:12 -0700 (PDT)
+        id E5A10F3ED865; Wed, 18 May 2022 16:37:12 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>
-Subject: [RFC PATCH v3 06/18] fs: Split off remove_needs_file_privs() __remove_file_privs()
-Date:   Wed, 18 May 2022 16:36:57 -0700
-Message-ID: <20220518233709.1937634-7-shr@fb.com>
+Subject: [RFC PATCH v3 10/18] xfs: Add async buffered write support
+Date:   Wed, 18 May 2022 16:37:01 -0700
+Message-ID: <20220518233709.1937634-11-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220518233709.1937634-1-shr@fb.com>
 References: <20220518233709.1937634-1-shr@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: iAVReF_yaXPJ5o-69CHHDFnODbxmaree
-X-Proofpoint-ORIG-GUID: iAVReF_yaXPJ5o-69CHHDFnODbxmaree
+X-Proofpoint-GUID: 8pmB-yTAsCab-LSHtkSBvvNt_tKmov2D
+X-Proofpoint-ORIG-GUID: 8pmB-yTAsCab-LSHtkSBvvNt_tKmov2D
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-18_06,2022-05-17_02,2022-02-23_01
@@ -58,133 +58,122 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This splits off the function remove_needs_file_privs() from the function
-__remove_file_privs() from the function file_remove_privs().
+This adds the async buffered write support to XFS. For async buffered
+write requests, the request will return -EAGAIN if the ilock cannot be
+obtained immediately.
 
-No intended functional changes in this patch.
+This splits off a new helper xfs_ilock_inode from the existing helper
+xfs_ilock_iocb so it can be used for this function. The exising helper
+cannot be used as it hardcoded the inode to be used.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- fs/inode.c | 75 +++++++++++++++++++++++++++++++++++++++---------------
- 1 file changed, 55 insertions(+), 20 deletions(-)
+ fs/xfs/xfs_file.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
-diff --git a/fs/inode.c b/fs/inode.c
-index 9d9b422504d1..1bb8b7db836f 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -2010,17 +2010,8 @@ static int __remove_privs(struct user_namespace *m=
-nt_userns,
- 	return notify_change(mnt_userns, dentry, &newattrs, NULL);
- }
-=20
--/*
-- * Remove special file priviledges (suid, capabilities) when file is wri=
-tten
-- * to or truncated.
-- */
--int file_remove_privs(struct file *file)
-+static int file_needs_remove_privs(struct inode *inode, struct dentry *d=
-entry)
- {
--	struct dentry *dentry =3D file_dentry(file);
--	struct inode *inode =3D file_inode(file);
--	int kill;
--	int error =3D 0;
--
- 	/*
- 	 * Fast path for nothing security related.
- 	 * As well for non-regular files, e.g. blkdev inodes.
-@@ -2030,16 +2021,42 @@ int file_remove_privs(struct file *file)
- 	if (IS_NOSEC(inode) || !S_ISREG(inode->i_mode))
- 		return 0;
-=20
--	kill =3D dentry_needs_remove_privs(dentry);
--	if (kill < 0)
--		return kill;
--	if (kill)
--		error =3D __remove_privs(file_mnt_user_ns(file), dentry, kill);
-+	return dentry_needs_remove_privs(dentry);
-+}
-+
-+static int __file_remove_privs(struct file *file, struct inode *inode,
-+			struct dentry *dentry, int kill)
-+{
-+	int error =3D 0;
-+
-+	error =3D __remove_privs(file_mnt_user_ns(file), dentry, kill);
- 	if (!error)
- 		inode_has_no_xattr(inode);
-=20
+diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
+index 793918c83755..ad3175b7d366 100644
+--- a/fs/xfs/xfs_file.c
++++ b/fs/xfs/xfs_file.c
+@@ -190,14 +190,13 @@ xfs_file_fsync(
  	return error;
  }
-+
-+/**
-+ * file_remove_privs - remove special file privileges (suid, capabilitie=
-s)
-+ * @file: file to remove privileges from
-+ *
-+ * When file is modified by a write or truncation ensure that special
-+ * file privileges are removed.
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
-+int file_remove_privs(struct file *file)
-+{
-+	struct dentry *dentry =3D file_dentry(file);
-+	struct inode *inode =3D file_inode(file);
-+	int kill;
-+
-+	kill =3D file_needs_remove_privs(inode, dentry);
-+	if (kill <=3D 0)
-+		return kill;
-+
-+	return __file_remove_privs(file, inode, dentry, kill);
-+}
- EXPORT_SYMBOL(file_remove_privs);
 =20
- /**
-@@ -2090,18 +2107,36 @@ int file_update_time(struct file *file)
- }
- EXPORT_SYMBOL(file_update_time);
-=20
--/* Caller must hold the file's inode lock */
-+/**
-+ * file_modified - handle mandated vfs changes when modifying a file
-+ * @file: file that was modified
-+ *
-+ * When file has been modified ensure that special
-+ * file privileges are removed and time settings are updated.
-+ *
-+ * Context: Caller must hold the file's inode lock.
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
- int file_modified(struct file *file)
+-static int
+-xfs_ilock_iocb(
+-	struct kiocb		*iocb,
++static inline int
++xfs_ilock_xfs_inode(
++	struct xfs_inode	*ip,
++	int			flags,
+ 	unsigned int		lock_mode)
  {
--	int err;
-+	int ret;
-+	struct dentry *dentry =3D file_dentry(file);
-+	struct inode *inode =3D file_inode(file);
+-	struct xfs_inode	*ip =3D XFS_I(file_inode(iocb->ki_filp));
+-
+-	if (iocb->ki_flags & IOCB_NOWAIT) {
++	if (flags & IOCB_NOWAIT) {
+ 		if (!xfs_ilock_nowait(ip, lock_mode))
+ 			return -EAGAIN;
+ 	} else {
+@@ -222,7 +221,7 @@ xfs_file_dio_read(
 =20
- 	/*
- 	 * Clear the security bits if the process is not being run by root.
- 	 * This keeps people from modifying setuid and setgid binaries.
- 	 */
--	err =3D file_remove_privs(file);
--	if (err)
--		return err;
-+	ret =3D file_needs_remove_privs(inode, dentry);
-+	if (ret < 0)
+ 	file_accessed(iocb->ki_filp);
+=20
+-	ret =3D xfs_ilock_iocb(iocb, XFS_IOLOCK_SHARED);
++	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, XFS_IOLOCK_SHARED);
+ 	if (ret)
+ 		return ret;
+ 	ret =3D iomap_dio_rw(iocb, to, &xfs_read_iomap_ops, NULL, 0, 0);
+@@ -244,7 +243,7 @@ xfs_file_dax_read(
+ 	if (!iov_iter_count(to))
+ 		return 0; /* skip atime */
+=20
+-	ret =3D xfs_ilock_iocb(iocb, XFS_IOLOCK_SHARED);
++	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, XFS_IOLOCK_SHARED);
+ 	if (ret)
+ 		return ret;
+ 	ret =3D dax_iomap_rw(iocb, to, &xfs_read_iomap_ops);
+@@ -264,7 +263,7 @@ xfs_file_buffered_read(
+=20
+ 	trace_xfs_file_buffered_read(iocb, to);
+=20
+-	ret =3D xfs_ilock_iocb(iocb, XFS_IOLOCK_SHARED);
++	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, XFS_IOLOCK_SHARED);
+ 	if (ret)
+ 		return ret;
+ 	ret =3D generic_file_read_iter(iocb, to);
+@@ -343,7 +342,7 @@ xfs_file_write_checks(
+ 	if (*iolock =3D=3D XFS_IOLOCK_SHARED && !IS_NOSEC(inode)) {
+ 		xfs_iunlock(ip, *iolock);
+ 		*iolock =3D XFS_IOLOCK_EXCL;
+-		error =3D xfs_ilock_iocb(iocb, *iolock);
++		error =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, *iolock);
+ 		if (error) {
+ 			*iolock =3D 0;
+ 			return error;
+@@ -516,7 +515,7 @@ xfs_file_dio_write_aligned(
+ 	int			iolock =3D XFS_IOLOCK_SHARED;
+ 	ssize_t			ret;
+=20
+-	ret =3D xfs_ilock_iocb(iocb, iolock);
++	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
+ 	if (ret)
+ 		return ret;
+ 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
+@@ -583,7 +582,7 @@ xfs_file_dio_write_unaligned(
+ 		flags =3D IOMAP_DIO_FORCE_WAIT;
+ 	}
+=20
+-	ret =3D xfs_ilock_iocb(iocb, iolock);
++	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
+ 	if (ret)
+ 		return ret;
+=20
+@@ -659,7 +658,7 @@ xfs_file_dax_write(
+ 	ssize_t			ret, error =3D 0;
+ 	loff_t			pos;
+=20
+-	ret =3D xfs_ilock_iocb(iocb, iolock);
++	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
+ 	if (ret)
+ 		return ret;
+ 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
+@@ -702,12 +701,11 @@ xfs_file_buffered_write(
+ 	bool			cleared_space =3D false;
+ 	int			iolock;
+=20
+-	if (iocb->ki_flags & IOCB_NOWAIT)
+-		return -EOPNOTSUPP;
+-
+ write_retry:
+ 	iolock =3D XFS_IOLOCK_EXCL;
+-	xfs_ilock(ip, iolock);
++	ret =3D xfs_ilock_xfs_inode(ip, iocb->ki_flags, iolock);
++	if (ret)
 +		return ret;
-+
-+	if (ret > 0) {
-+		ret =3D __file_remove_privs(file, inode, dentry, ret);
-+		if (ret)
-+			return ret;
-+	}
 =20
- 	if (unlikely(file->f_mode & FMODE_NOCMTIME))
- 		return 0;
+ 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
+ 	if (ret)
 --=20
 2.30.2
 
