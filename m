@@ -2,61 +2,62 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3913C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D65A9C43217
 	for <io-uring@archiver.kernel.org>; Sun, 22 May 2022 21:26:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242120AbiEVV03 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 22 May 2022 17:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
+        id S1351535AbiEVV0b (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 22 May 2022 17:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351676AbiEVV0M (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 22 May 2022 17:26:12 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CA9B497
-        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:11 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o13-20020a17090a9f8d00b001df3fc52ea7so15799193pjp.3
-        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:11 -0700 (PDT)
+        with ESMTP id S1351771AbiEVV00 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 22 May 2022 17:26:26 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA3513D16
+        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:25 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id g184so12119373pgc.1
+        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :content-language:content-transfer-encoding;
-        bh=klPtpfVebj7qpp/HWa+7GmUKNI89zXY7lQgHDVc8P54=;
-        b=nGROBti2c3acqWuQ4Ke024irl5LO5tU6x7GvvqUNXx+91xtZ1IkQnglmSLbroZfs51
-         j511TWCciTgzFDjla/1KPIB2z07g1oFNLlbEEz3MjtdSCELLmVOi7+FqPhhcWgZkGwR9
-         tJxOLJfzcRLxpWnVScTkKjzfzEvnrss2H0C5/kZ9/uyeeThhoxN+9DA3iEXImNFU4Km0
-         qjSbwK771/4c1/UT4Tyr4qUiED5ayZR7QwWDsQNCTpfCri4ez6EalAVIDuDAQ/0gzx9x
-         T9QHTzTavu9UYpeGLm3ujqvq+c9IMw4hMQeBmNzjLxYyGh0r6bx2SQ24fCrvgOClK6+d
-         TLyA==
+        bh=Jy6s8DEa5jSDvUdj8WBl45STs9nfFZM1IrmIzLolR84=;
+        b=XpzVcCFMPMRPF6AKPrdsazhWF0OuQNGHKGAKsGhp1RoEWhpTOOCLy1N+FU3EXosb8C
+         bf0Y/oefnYB0Wmcb13ng0oWHEwKB83UN6AjBLUl2LYlwOWL6vhGP1yNjh5WHOD3Zhavb
+         8nNtiop9Peq0RjHeRDksRtw8D74TaFEl2wv003O159oPYS/UFyanDBI3Q52i5pjHoSQM
+         +qGCglb1BTjPSr87O7nG6BVclSB0fTUy2fT2xzYDSelRAUaExTVMtDrCJkbqitEh785p
+         pAxidYrhJ3a/ytZUQLor5nLcbw0GhlFUYizgA9lyXYDaBSEr15GVKONvAKauZoqrf42c
+         FhDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:content-language:content-transfer-encoding;
-        bh=klPtpfVebj7qpp/HWa+7GmUKNI89zXY7lQgHDVc8P54=;
-        b=URDVa8i03/Lh/iP3ClzGyuAi0RDEvwaRP0NWfnqUCrChsEhRu8+AuJLw4GjOzsoClx
-         Pd1l+pu3aQs2ZUh7zO3Lh3ymDBBvL6ytCMOOlvnpGLiu5sSFz1CuDzglsXEE4aYzSzaa
-         Zg/5bw6vvCe1bILSVGhJSnfNfKmCbHcim1OarhO9aYHKsrOOd+BxB+DjET9eK5EZ8AcH
-         EMzLup9Xb2XgNCmnZO8GVh0O+rFvKUHpqM0YWqB7PjizFuANcvwZRyuqk35lNHeErRN8
-         lTFZ295zImG/YeP0CaX/eCmvTeBfGf1oPqqcsbpZFaNCv4KGnJ/oRBGw9mHHxG3ak+TD
-         T6cQ==
-X-Gm-Message-State: AOAM531ORKoFydB4s0e3t4I2gmUcI9jfFWyNtTvtrKQUJ760jb4r4USr
-        xL0a53jQyeAHEqLiuF67evKuWQ==
-X-Google-Smtp-Source: ABdhPJwp12w9ELo/9xhzfw/yw1xp4+8Efhj/rRUW5aO2tBkfVkbUXKT/RCQr9qWorgv3mp3spzAbYA==
-X-Received: by 2002:a17:90a:ca97:b0:1df:9b8e:c6f0 with SMTP id y23-20020a17090aca9700b001df9b8ec6f0mr23238805pjt.12.1653254770783;
-        Sun, 22 May 2022 14:26:10 -0700 (PDT)
+        bh=Jy6s8DEa5jSDvUdj8WBl45STs9nfFZM1IrmIzLolR84=;
+        b=NDQlTftPKRVhXLtKByZAvp+3s6Ju9DzRl5nbuwjweGIiF6v09am+wPZbWGV36fOVg1
+         8Tpu0rfhlmlP2HJcqDtWAK5gfKmW1PwFub46Tw5++ZaRR+KQtdXNNmPDHqcfB5Mw/V2S
+         s7k6MEgITzLpma9qjlPaMu1LX+klJCyYKWG2LCnBkzIN9ksqqGg6AlO6FCyAx1KZP/yr
+         mzFtG6fDysQRywNZFT/ZT4rSK7CO5UmPgMWZJqbkmqDpw971TcP1kNVvEkhCM42ZPess
+         oXrsE+9QTtqkB21Es1hjKplYVYlKmropbVQQhj7V4wk7SFe8wUp4FLa9ZPhycnJ8YQEc
+         dipQ==
+X-Gm-Message-State: AOAM532XVirUSidOL4w+1/7UriqV/mxY2L237CxT4kRnGQi7XK/kErCG
+        PxY/L6JhH/GlnB/csffRKL7+qnCOzpVNuA==
+X-Google-Smtp-Source: ABdhPJyhzDQhoqIrbgRSN/mIzZJF3J7wLyI50fM86fOei7NNuw/wBaY2mHUR4JFo1uTBnKhHnSi5hg==
+X-Received: by 2002:a05:6a00:2442:b0:4fd:8b00:d2f with SMTP id d2-20020a056a00244200b004fd8b000d2fmr20545462pfj.39.1653254785023;
+        Sun, 22 May 2022 14:26:25 -0700 (PDT)
 Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id o62-20020a62cd41000000b0051850716942sm5767667pfg.140.2022.05.22.14.26.09
+        by smtp.gmail.com with ESMTPSA id e11-20020a170902cf4b00b0015e8d4eb22csm3525249plg.118.2022.05.22.14.26.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 14:26:10 -0700 (PDT)
-Message-ID: <9a8aa863-58a8-c8cd-7d05-80f095cf217e@kernel.dk>
-Date:   Sun, 22 May 2022 15:26:09 -0600
+        Sun, 22 May 2022 14:26:24 -0700 (PDT)
+Message-ID: <6f712c75-c849-ae89-d763-b2a18da52844@kernel.dk>
+Date:   Sun, 22 May 2022 15:26:23 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
 From:   Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring socket(2) support
+Subject: [GIT PULL] io_uring passthrough support
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     io-uring <io-uring@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
@@ -66,52 +67,118 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 Hi Linus,
 
-On top of the core and xattr branches, this pull request adds support
-for socket(2) for io_uring. This is handy when using direct / registered
-file descriptors with io_uring.
+On top of everything else, this adds support for passthrough for
+io_uring. The initial feature for this is NVMe passthrough support,
+which allows non-filesystem based IO commands and admin commands. To
+support this, io_uring grows support for SQE and CQE members that are
+twice as big, allowing to pass in a full NVMe command without having to
+copy data around. And to complete with more than just a single 32-bit
+value as the output.
 
-Outside of those two patches, a small series from Dylan on top that
-improves the tracing by providing a text representation of the opcode
-rather than needing to decode this by reading the header file every
-time. Sits in this branch as it was the last opcode added (until it
-wasn't...).
+This will cause a merge conflict as well, with the provided buffer
+change from the core branch, and adding CQE32 support for NOP in this
+branch. Resolution:
+
+diff --cc fs/io_uring.c
+index 1015dd49e7e5,c5a476e6c068..395d3a921b53
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@@ -4997,17 -5169,11 +5256,23 @@@ static int io_nop_prep(struct io_kiocb 
+   */
+  static int io_nop(struct io_kiocb *req, unsigned int issue_flags)
+  {
+++	unsigned int cflags;
+ +	void __user *buf;
+ +
+ +	if (req->flags & REQ_F_BUFFER_SELECT) {
+ +		size_t len = 1;
+ +
+ +		buf = io_buffer_select(req, &len, issue_flags);
+ +		if (!buf)
+ +			return -ENOBUFS;
+ +	}
+ +
+- 	__io_req_complete(req, issue_flags, 0, io_put_kbuf(req, issue_flags));
+++	cflags = io_put_kbuf(req, issue_flags);
++ 	if (!(req->ctx->flags & IORING_SETUP_CQE32))
+ -		__io_req_complete(req, issue_flags, 0, 0);
+++		__io_req_complete(req, issue_flags, 0, cflags);
++ 	else
+ -		__io_req_complete32(req, issue_flags, 0, 0, req->nop.extra1,
+ -					req->nop.extra2);
+++		__io_req_complete32(req, issue_flags, 0, cflags,
+++					req->nop.extra1, req->nop.extra2);
+  	return 0;
+  }
+  
 
 Please pull!
 
 
-The following changes since commit 0200ce6a57c5de802f4e438485c14cc9d63d5f4b:
+The following changes since commit 7ccba24d3bc084d891def1a6fea504e4cb327a8c:
 
-  io_uring: fix trace for reduced sqe padding (2022-04-24 18:18:46 -0600)
+  io_uring: don't clear req->kbuf when buffer selection is done (2022-05-09 06:29:06 -0600)
 
 are available in the Git repository at:
 
-  git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-socket-2022-05-22
+  git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-passthrough-2022-05-22
 
-for you to fetch changes up to 033b87d24f7257c45506bd043ad85ed24a9925e2:
+for you to fetch changes up to 3fe07bcd800d6e5e4e4263ca2564d69095c157bf:
 
-  io_uring: use the text representation of ops in trace (2022-04-28 17:06:03 -0600)
-
-----------------------------------------------------------------
-for-5.19/io_uring-socket-2022-05-22
+  io_uring: cleanup handling of the two task_work lists (2022-05-21 09:17:05 -0600)
 
 ----------------------------------------------------------------
-Dylan Yudaken (4):
-      io_uring: add type to op enum
-      io_uring: add io_uring_get_opcode
-      io_uring: rename op -> opcode
-      io_uring: use the text representation of ops in trace
+for-5.19/io_uring-passthrough-2022-05-22
 
-Jens Axboe (2):
-      net: add __sys_socket_file()
-      io_uring: add socket(2) support
+----------------------------------------------------------------
+Anuj Gupta (1):
+      nvme: add vectored-io support for uring-cmd
 
- fs/io_uring.c                   | 177 ++++++++++++++++++++++++++++++++++++++++
- include/linux/io_uring.h        |   5 ++
- include/linux/socket.h          |   1 +
- include/trace/events/io_uring.h |  36 ++++----
- include/uapi/linux/io_uring.h   |   3 +-
- net/socket.c                    |  52 +++++++++---
- 6 files changed, 248 insertions(+), 26 deletions(-)
+Christoph Hellwig (1):
+      nvme: refactor nvme_submit_user_cmd()
+
+Jens Axboe (6):
+      Merge branch 'for-5.19/io_uring' into for-5.19/io_uring-passthrough
+      Merge branch 'for-5.19/io_uring-socket' into for-5.19/io_uring-passthrough
+      io_uring: add support for 128-byte SQEs
+      fs,io_uring: add infrastructure for uring-cmd
+      block: wire-up support for passthrough plugging
+      io_uring: cleanup handling of the two task_work lists
+
+Kanchan Joshi (3):
+      nvme: wire-up uring-cmd support for io-passthru on char-device.
+      nvme: helper for uring-passthrough checks
+      nvme: enable uring-passthrough for admin commands
+
+Ming Lei (1):
+      blk-mq: fix passthrough plugging
+
+Stefan Roesch (12):
+      io_uring: support CQE32 in io_uring_cqe
+      io_uring: store add. return values for CQE32
+      io_uring: change ring size calculation for CQE32
+      io_uring: add CQE32 setup processing
+      io_uring: add CQE32 completion processing
+      io_uring: modify io_get_cqe for CQE32
+      io_uring: flush completions for CQE32
+      io_uring: overflow processing for CQE32
+      io_uring: add tracing for additional CQE32 fields
+      io_uring: support CQE32 in /proc info
+      io_uring: enable CQE32
+      io_uring: support CQE32 for nop operation
+
+ block/blk-mq.c                  | 109 ++++----
+ drivers/nvme/host/core.c        |   2 +
+ drivers/nvme/host/ioctl.c       | 278 +++++++++++++++++++-
+ drivers/nvme/host/multipath.c   |   1 +
+ drivers/nvme/host/nvme.h        |   5 +
+ fs/io_uring.c                   | 444 ++++++++++++++++++++++++++------
+ include/linux/fs.h              |   2 +
+ include/linux/io_uring.h        |  33 +++
+ include/trace/events/io_uring.h |  18 +-
+ include/uapi/linux/io_uring.h   |  24 +-
+ include/uapi/linux/nvme_ioctl.h |  28 ++
+ 11 files changed, 806 insertions(+), 138 deletions(-)
 
 -- 
 Jens Axboe
