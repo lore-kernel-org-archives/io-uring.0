@@ -2,61 +2,61 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E757C433F5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 906FAC433EF
 	for <io-uring@archiver.kernel.org>; Sun, 22 May 2022 21:26:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbiEVV02 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 22 May 2022 17:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39564 "EHLO
+        id S244097AbiEVV0b (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 22 May 2022 17:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351614AbiEVV0G (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 22 May 2022 17:26:06 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568569584
-        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:04 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id h186so12106147pgc.3
-        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:04 -0700 (PDT)
+        with ESMTP id S1351721AbiEVV0R (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 22 May 2022 17:26:17 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F306C1146F
+        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:15 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id c22so12124206pgu.2
+        for <io-uring@vger.kernel.org>; Sun, 22 May 2022 14:26:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=message-id:date:mime-version:user-agent:from:subject:to:cc
          :content-language:content-transfer-encoding;
-        bh=t27NbU/sEvE5Ri3vCjzv2EKdw2O05IpZ7eJRF2bYoK4=;
-        b=RkEA05HftNb+833WE+hkgAgBfYDRUxUfmQevrXLQAVTwdyx099x+9eo6GxUIjiGZS7
-         /mCGbxxosldwH/QywT3xBj12LCaPxcFrb1mukFqd2iJNsSOKOg3WCq6BRCEHz1D2T6dY
-         edJmz0uPynehCT+Kn6WXisEcT9pzHn5xDGCHlCNx1zv9cx2gUfbO9lCKeBWsjbDShCiD
-         QrHBVP0dfQQWw4bw9q3u+yOymWVf/NdiccFJw7kgvkouYQ1jDFaUSgca33KpZzaqc+lN
-         Km9mJGecJr0TFtOqPN7rKzrB+tMRXzu1avMLPKkgzOkHS7Gn8Re7kbYntxO/PrVx3hIi
-         0AyA==
+        bh=BNAm4uZtl2ITDQyex4FwWrTK2V0fmL72ApwyQhtN0kY=;
+        b=1DAMa/AabR3ZVY1ssDP3W9oTu/d5AIu8NMXZ/6EvLAht9rSTmf8UricQdLFteZ2poU
+         YUZwTQ382fJiW9iudNe4opCIhDslx1ZSFNs/xZwQYWnVIDFfwMvj4EE3UU7s3mpWnl2d
+         lfYPyMNcKXrwYM1Oc72TMzusDR/kjlOe+iI78IHIK+tQBhpm/Uj+2kRgr8evwgc9AbEE
+         9NF5j0BW8EV22Q3LQhPPQ6THgvjSX5kdSHHsG2ufSmgbPkxdd/dS4vCAMlJjYa/Yyqht
+         sF1O60rQ50oy7fJzKDLHIU8Zv5lG/YEUcTbg/LR7kNVEKPeKBN3pzAI70hWfeQmJ8JCj
+         awRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:from
          :subject:to:cc:content-language:content-transfer-encoding;
-        bh=t27NbU/sEvE5Ri3vCjzv2EKdw2O05IpZ7eJRF2bYoK4=;
-        b=I4qDHJWfc8ah2SGnCZ+UK13NfqZrb4rgDhrzheUXiEHWvvwVpFuQEi3sGwCQr39UVv
-         hgYoAtXs4n/bVfynkxWb3gpUqTStrRXQL+RkBR8F9hXpv4R85l7HyUi6zpwm0+5lUizY
-         jrz63TlBv+mH3GXzhiylROfPVINAlpBkI7OURZZLjd9qiv4sRiZvpQFlcwqpg7f7ZiVK
-         8opoR3ghURi7ByuZI9cW4Mx5eonKcw2kYba0ljcE2M4WOtFdhTQzD0abgTRPDyNjGegy
-         fkI+sAcIbcULnVts+znr5Fwz2gMUUyP2DxIFbXH9xap+4VK8SBUNeFv6R+NSWTdOrgyw
-         B76g==
-X-Gm-Message-State: AOAM530BTJRzaTA4IYlf03l8BWM+csDUFap6etv+bQbYYT6DamYI3UmU
-        fTNFY4HeECAfO1lGRGOS/ZG0WoYcRldoiw==
-X-Google-Smtp-Source: ABdhPJzQFCH+sLZxxfeHLmxK2BD6Qv+DIbuzmqy2Hfd8NvSxtQHTLt2PtzL71WQP/jFJCUfzXbJ66A==
-X-Received: by 2002:a05:6a00:1a53:b0:510:a045:b92e with SMTP id h19-20020a056a001a5300b00510a045b92emr20451649pfv.64.1653254763797;
-        Sun, 22 May 2022 14:26:03 -0700 (PDT)
+        bh=BNAm4uZtl2ITDQyex4FwWrTK2V0fmL72ApwyQhtN0kY=;
+        b=K0BrxXb3l8iToIVUy80h+ouHYFXOCQj6Xf4Hsr7XVh5oXP74ACP/Tx162dqaPEuEqD
+         O3t3IiNYv80RMK3YGyVwkkNEpX+19iJpTSK7RBNGZlzngZeNz116ilIO08hi3LBt8LGl
+         Svmgvw8HngZXQkaeTuPnzm2ovpx54QN6zoHlxurzqS8sWN0Eg6d+ms+ZbhzIBwGGg5b9
+         i38HNMcIgl/G9Ejqq+beHRRB1iUcUTxFtNG2to+cc7seLbLh7SS3Ey/5FHLnYIZOMvmT
+         FlDgX5GfZo8rAZCGonHtK7dE8dbc/E6Xq9/mtsYmt5+Z8JBx7N9/9FuVoqnmzmR/gXOk
+         mBIg==
+X-Gm-Message-State: AOAM530QjczcRi8R+w/mnoN1W47BlpABwx5yEsM7Jx3t/QkkWpoWm/jG
+        qPhvCULrJW56sae1M7ZhcVKVHg==
+X-Google-Smtp-Source: ABdhPJxHxvJrNIXNeDlUx6M10J0qPezIpoG6cTjT+EqCekbBRI/y05kBTTB9W0cCsEDpVtMSKyfKAw==
+X-Received: by 2002:a65:404c:0:b0:3c6:4018:ffbf with SMTP id h12-20020a65404c000000b003c64018ffbfmr17994479pgp.408.1653254775374;
+        Sun, 22 May 2022 14:26:15 -0700 (PDT)
 Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d10-20020a170902f14a00b00161955fe0d5sm2794219plb.274.2022.05.22.14.26.02
+        by smtp.gmail.com with ESMTPSA id b4-20020a62a104000000b005181409a78esm5678484pff.110.2022.05.22.14.26.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 22 May 2022 14:26:03 -0700 (PDT)
-Message-ID: <d94a4e55-c4f2-73d8-9e2c-e55ae8436622@kernel.dk>
-Date:   Sun, 22 May 2022 15:26:02 -0600
+        Sun, 22 May 2022 14:26:14 -0700 (PDT)
+Message-ID: <6fd7e1ff-7807-442b-3c4a-344e006e0450@kernel.dk>
+Date:   Sun, 22 May 2022 15:26:13 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
  Thunderbird/91.8.1
 From:   Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring xattr support
+Subject: [GIT PULL] io_uring 'more data in socket' support
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     io-uring <io-uring@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+        netdev <netdev@vger.kernel.org>
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
@@ -66,46 +66,73 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 Hi Linus,
 
-On top of the core io_uring changes, this pull request includes support
-for the xattr variants.
+To be able to fully utilize the 'poll first' support in the core
+io_uring branch, it's advantageous knowing if the socket was empty after
+a receive. This pull request adds support for that.
+
+The core networking change conflicted with changes in netdev-next, so
+it's sitting in a separate branch that both Jakub and I pulled in.
+
+Note that this will through a merge conflict due to later changes in the
+core io_uring branch, resolution:
+
+diff --cc fs/io_uring.c
+index d9529275a030,20c5d29e5b6c..1015dd49e7e5
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@@ -6115,6 -5947,8 +6115,7 @@@ static int io_recvmsg(struct io_kiocb *
+  	struct io_async_msghdr iomsg, *kmsg;
+  	struct io_sr_msg *sr = &req->sr_msg;
+  	struct socket *sock;
+ -	struct io_buffer *kbuf;
++ 	unsigned int cflags;
+  	unsigned flags;
+  	int ret, min_ret = 0;
+  	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
+@@@ -6154,7 -5982,10 +6155,8 @@@
+  	if (flags & MSG_WAITALL)
+  		min_ret = iov_iter_count(&kmsg->msg.msg_iter);
+  
++ 	kmsg->msg.msg_get_inq = 1;
+ -
+ -	ret = __sys_recvmsg_sock(sock, &kmsg->msg, req->sr_msg.umsg,
+ -					kmsg->uaddr, flags);
+ +	ret = __sys_recvmsg_sock(sock, &kmsg->msg, sr->umsg, kmsg->uaddr, flags);
+  	if (ret < min_ret) {
+  		if (ret == -EAGAIN && force_nonblock)
+  			return io_setup_async_msg(req, kmsg);
+
 
 Please pull!
 
 
-The following changes since commit 155bc9505dbd6613585abbf0be6466f1c21536c4:
+The following changes since commit 8013d1d3d2e33236dee13a133fba49ad55045e79:
 
-  io_uring: return an error when cqe is dropped (2022-04-24 18:18:18 -0600)
+  Merge tag 'soc-fixes-5.18-3' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc (2022-04-29 15:51:05 -0700)
 
 are available in the Git repository at:
 
-  git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-xattr-2022-05-22
+  git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-net-2022-05-22
 
-for you to fetch changes up to 4ffaa94b9c047fe0e82b1f271554f31f0e2e2867:
+for you to fetch changes up to f548a12efd5ab97e6b1fb332e5634ce44b3d9328:
 
-  io_uring: cleanup error-handling around io_req_complete (2022-04-24 18:29:33 -0600)
-
-----------------------------------------------------------------
-for-5.19/io_uring-xattr-2022-05-22
+  io_uring: return hint on whether more data is available after receive (2022-04-29 21:12:12 -0600)
 
 ----------------------------------------------------------------
-Jens Axboe (1):
-      io_uring: fix trace for reduced sqe padding
+for-5.19/io_uring-net-2022-05-22
 
-Kanchan Joshi (1):
-      io_uring: cleanup error-handling around io_req_complete
+----------------------------------------------------------------
+Jens Axboe (4):
+      tcp: pass back data left in socket after receive
+      Merge branch 'for-5.19/io_uring-socket' into for-5.19/io_uring-net
+      Merge branch 'tcp-pass-back-data-left-in-socket-after-receive' of git://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux into for-5.19/io_uring-net
+      io_uring: return hint on whether more data is available after receive
 
-Stefan Roesch (4):
-      fs: split off setxattr_copy and do_setxattr function from setxattr
-      fs: split off do_getxattr from getxattr
-      io_uring: add fsetxattr and setxattr support
-      io_uring: add fgetxattr and getxattr support
-
- fs/internal.h                   |  29 ++++
- fs/io_uring.c                   | 322 ++++++++++++++++++++++++++++++++++++----
- fs/xattr.c                      | 143 ++++++++++++------
- include/trace/events/io_uring.h |   9 +-
- include/uapi/linux/io_uring.h   |   8 +-
- 5 files changed, 434 insertions(+), 77 deletions(-)
+ fs/io_uring.c                 | 19 +++++++++++++++----
+ include/linux/socket.h        |  6 +++++-
+ include/uapi/linux/io_uring.h |  2 ++
+ net/ipv4/tcp.c                | 16 ++++++++++------
+ 4 files changed, 32 insertions(+), 11 deletions(-)
 
 -- 
 Jens Axboe
