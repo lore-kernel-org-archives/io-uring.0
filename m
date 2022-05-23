@@ -2,65 +2,65 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECC9EC433FE
-	for <io-uring@archiver.kernel.org>; Mon, 23 May 2022 20:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA564C43219
+	for <io-uring@archiver.kernel.org>; Mon, 23 May 2022 20:42:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbiEWUmL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 23 May 2022 16:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
+        id S232425AbiEWUmN (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 23 May 2022 16:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiEWUmE (ORCPT
+        with ESMTP id S233509AbiEWUmE (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Mon, 23 May 2022 16:42:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E82B0427;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C47939C9;
         Mon, 23 May 2022 13:42:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E26F7614D9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBC32614D5;
         Mon, 23 May 2022 20:42:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 532D9C36AE5;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C1EBC34115;
         Mon, 23 May 2022 20:42:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1653338522;
-        bh=4r3vW4bNVHDCRWFySR0n1O9WAYcjGRAZlHlLlGvpZKw=;
+        bh=7zFaWjYC0ctqxmrBjpT72XOD8+KjWpS9jZNIPGjBBIk=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Ov8WBmHOQZ4HTRES8JVuGE4jtUQ3BnpGQHynLqJjC/nIHdDDopZk8lAlAQ/RrPdmD
-         1aPuqabYFsekmsj1LREyqM5ep609Sjj0EaS0SRgxMkRcoQijVQYLc2dRj/85eXdOgY
-         9juXWSV5w1mBPWirfa6IS9wM2IKqr09goW2NCtQaTPQjP164ByRpmBJ90xpsp8P7dc
-         5y2jkhQ8ly2zz75884iWcmgveZkihvN7H7FX0YYaCFP1OtraWNf0gmWreeiPlcHkM3
-         yaKewVQpmiZuzDaHn202mt0sjWZUIZTuFL43qw3awnSU9TM7BDue/nr7ZpSV28dkpj
-         ON03YwvySGH0g==
+        b=avewAxHTjeKKiyuf9oqPcRrESC2Ylpgb+nOLFuM9IEJgG9AhiWrSR1C5juj9vO6Wd
+         YOcRdC20PqqIVDIkdcbqiPF4QQfi0LtsbEk9BhgZoWYNClcW9ddTeJryCAeOw+3zVp
+         HI6N0zPPtC1TzUl2EvCTYkPsyH1i0bCqmAQ4lx44qL5uAfF4U3I/KbmBHwjBK/sXLV
+         9Gc9+5MpGyQxJkAnr7LsxnJJQmodzurDiDoatT12t/fjD8BXObt2j4KjiEh68T/ZTG
+         JkIlVryQTnL73V6LqHKdOKGwG5OaU8XM16wggh/cYFkIeX4+x4am2UbKTo7PP5ccgi
+         6I9Oy4afI5HUQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D36DF03949;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2422BF03938;
         Mon, 23 May 2022 20:42:02 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring socket(2) support
+Subject: Re: [GIT PULL] io_uring xattr support
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <9a8aa863-58a8-c8cd-7d05-80f095cf217e@kernel.dk>
-References: <9a8aa863-58a8-c8cd-7d05-80f095cf217e@kernel.dk>
+In-Reply-To: <d94a4e55-c4f2-73d8-9e2c-e55ae8436622@kernel.dk>
+References: <d94a4e55-c4f2-73d8-9e2c-e55ae8436622@kernel.dk>
 X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <9a8aa863-58a8-c8cd-7d05-80f095cf217e@kernel.dk>
-X-PR-Tracked-Remote: git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-socket-2022-05-22
-X-PR-Tracked-Commit-Id: 033b87d24f7257c45506bd043ad85ed24a9925e2
+X-PR-Tracked-Message-Id: <d94a4e55-c4f2-73d8-9e2c-e55ae8436622@kernel.dk>
+X-PR-Tracked-Remote: git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-xattr-2022-05-22
+X-PR-Tracked-Commit-Id: 4ffaa94b9c047fe0e82b1f271554f31f0e2e2867
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 27738039fcdc6cb63400fe9b820b4027753568b7
-Message-Id: <165333852224.17690.16090082417789995413.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 09beaff75e4c4cee590b0e547c7587ff6cadb5db
+Message-Id: <165333852214.17690.13386045452852413293.pr-tracker-bot@kernel.org>
 Date:   Mon, 23 May 2022 20:42:02 +0000
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         io-uring <io-uring@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The pull request you sent on Sun, 22 May 2022 15:26:09 -0600:
+The pull request you sent on Sun, 22 May 2022 15:26:02 -0600:
 
-> git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-socket-2022-05-22
+> git://git.kernel.dk/linux-block.git tags/for-5.19/io_uring-xattr-2022-05-22
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/27738039fcdc6cb63400fe9b820b4027753568b7
+https://git.kernel.org/torvalds/c/09beaff75e4c4cee590b0e547c7587ff6cadb5db
 
 Thank you!
 
