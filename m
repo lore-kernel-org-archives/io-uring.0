@@ -2,218 +2,126 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28108C433EF
-	for <io-uring@archiver.kernel.org>; Tue, 24 May 2022 06:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C891C433EF
+	for <io-uring@archiver.kernel.org>; Tue, 24 May 2022 21:37:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbiEXG66 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 24 May 2022 02:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
+        id S241914AbiEXVhe (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 24 May 2022 17:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiEXG65 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 24 May 2022 02:58:57 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18F5544C5;
-        Mon, 23 May 2022 23:58:55 -0700 (PDT)
-Received: from kwepemi100010.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4L6lRH2cclzDqPb;
-        Tue, 24 May 2022 14:58:51 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (7.193.23.242) by
- kwepemi100010.china.huawei.com (7.221.188.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 14:58:53 +0800
-Received: from [10.174.177.238] (10.174.177.238) by
- kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 24 May 2022 14:58:53 +0800
-Message-ID: <d4bc3afb-02d5-1793-cffa-e15b2bdb0028@huawei.com>
-Date:   Tue, 24 May 2022 14:58:52 +0800
+        with ESMTP id S241898AbiEXVhd (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 24 May 2022 17:37:33 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0331C7C179
+        for <io-uring@vger.kernel.org>; Tue, 24 May 2022 14:37:33 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id j6so17532162pfe.13
+        for <io-uring@vger.kernel.org>; Tue, 24 May 2022 14:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=lgzn2/RNupZuM19wVXWP3Kb3O3MsoN+ITbAK60/ayrA=;
+        b=PguG1nrHMNp1L2LFUmj1GMgG+cSxNkTJHN9wATHFGJUE8pFUKGEnPG7R38AI/gAEbC
+         h7DFgpgYP+f8VOUOzN5WjjZ3d9i8DKh9PzFZUEjyoHL7TV3q6cOh1H0plyw++Wi+fPOP
+         BY/fC4yHugq93tlVi2Sovu3HQZyQUmw6tFgt6lyHQaaMEZympLAo85/3MzaxoDm0vNVF
+         F1afpc6GJvJPHwMHAqws0c2HzyYIiDDHjXkJHSKHIT57WUo4S9eZPGx8CoKAAksMUNCT
+         uKY4KCeeunE+sXWvWcs3cJDHNLtI9CV5z90Og/1gHlP4AUXJx3zBx/dJA2P6Dxg0O7IA
+         dmVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lgzn2/RNupZuM19wVXWP3Kb3O3MsoN+ITbAK60/ayrA=;
+        b=5xPQ5Xt+DrBzgTnWkTXqXfo85uQZkDQZNEqZIOjcFUjIJcA9lfcRL5iBXogVzaMYFD
+         j4FSG+CSSvYnaBAK95FXWKhOPc/EBny7Y4DyScBNnERvQeh+gXagb1XpUl3D/b3hJfnD
+         y9uMS0zZhR2Xjdr/a1qrBi6OS4gsWTyYLQ1MnyzC3pj9g/L6TnO+TpJCBmDo0SW2mkFq
+         BGSlfxTpWlOq+oFAydE7XmamAx+2g55ztJRA4Ggc+y3PfG7FOWzjBH6/oFthRGmCcMkV
+         FW6ZD3EpgAJNHhdVSTgu6zhZjvXJJyWQSy7cd6GN3Lz6lRkrJLXMAU0Fnyk5mzeFvwMh
+         QTPg==
+X-Gm-Message-State: AOAM533NUmddo9K0D45sqx95dnPuz10h/vopoeW1HvT25sX7WTnvz3YJ
+        1V+abqIyuveyGbK1QHCqwpL6Zp3cv4Xlqg==
+X-Google-Smtp-Source: ABdhPJxAdtAjfW7yYfGn55nhXeGwvZZ6Gb0L4+lI0r1GmdzJnmb+uRg90M2QDZHYgbl58nkaoBZ0tQ==
+X-Received: by 2002:a63:104a:0:b0:3fa:d1ea:54d7 with SMTP id 10-20020a63104a000000b003fad1ea54d7mr1166284pgq.124.1653428252092;
+        Tue, 24 May 2022 14:37:32 -0700 (PDT)
+Received: from localhost.localdomain ([2600:380:4a61:523:72ca:65a5:f684:5e4])
+        by smtp.gmail.com with ESMTPSA id k21-20020a170902761500b0015e8d4eb1easm7834327pll.52.2022.05.24.14.37.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 May 2022 14:37:31 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 1/6] io_uring: make timeout prep handlers consistent with other prep handlers
+Date:   Tue, 24 May 2022 15:37:22 -0600
+Message-Id: <20220524213727.409630-2-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220524213727.409630-1-axboe@kernel.dk>
+References: <20220524213727.409630-1-axboe@kernel.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.0.2
-Subject: Re: [PATCH] io_uring: add a schedule condition in io_submit_sqes
-To:     Jens Axboe <axboe@kernel.dk>, <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <houtao1@huawei.com>, <yi.zhang@huawei.com>,
-        <chengzhihao1@huawei.com>, <linux-kernel@vger.kernel.org>
-References: <20220521143327.3959685-1-guoxuenan@huawei.com>
- <00772002-8df8-3a41-6e6c-20e3854ad3f0@kernel.dk>
- <a2b0340c-7bf7-a00e-6338-aca8ca02a1e2@huawei.com>
- <717768b3-4f3c-a5d8-5ca3-189a49b4c481@kernel.dk>
-From:   Guo Xuenan <guoxuenan@huawei.com>
-In-Reply-To: <717768b3-4f3c-a5d8-5ca3-189a49b4c481@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.238]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600004.china.huawei.com (7.193.23.242)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi Jens,
+All other opcodes take a {req, sqe} set for prep handling, split out
+a timeout prep handler so that timeout and linked timeouts can use
+the same one.
 
-this piece of code is used to reproduce the problem.
-it always successfuly reproduce this bug on my
-arm64 qemu virtual machine.
-```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "liburing.h"
-
-int main(void)
-{
-     int ret, i = 0;
-     struct io_uring uring;
-     struct io_uring_params params;
-     struct io_uring_sqe *sqe;
-     struct io_uring_cqe *cqe;
-     struct __kernel_timespec ts = { .tv_sec = 30, .tv_nsec = 0, };
-
-     memset(&params, 0, sizeof(params));
-     ret = io_uring_queue_init_params(32768, &uring, &params);
-     if (ret < 0) {
-         printf("init err %d\n", errno);
-         return 0;
-     }
-
-     io_uring_register_personality(&uring);
-     while (i++ < 32768) {
-         sqe = io_uring_get_sqe(&uring);
-         io_uring_prep_timeout(sqe, &ts, rand(), 0);
-     }
-     io_uring_submit(&uring);
-     printf("to_submit %d\n", i - 1);
-     io_uring_wait_cqe_nr(&uring, &cqe, i - 1);
-     return 0;
-}
-```
-------------------------------------------------------------------------------------------
-considering the performance issue when we add cond_resched() in "the 
-very fast path"
-you have mentationed, may we add some restriction to avoid extreme 
-situtaions while
-also reduceing the impact on performance.
-I tested the following patch, it did work, there is no soft lockup here.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/io_uring.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e0823f58f795..3c2e019fd124 100644
+index 9f1c682d7caf..c3991034b26a 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -7873,6 +7873,9 @@ static int io_submit_sqes(struct io_ring_ctx *ctx, 
-unsigned int nr)
-                         if (!(ctx->flags & IORING_SETUP_SUBMIT_ALL))
-                                 break;
-                 }
-+               /* to avoid doing too much in one submit round */
-+               if (submitted > IORING_MAX_ENTRIES / 2)
-+                       cond_resched();
-         } while (submitted < nr);
+@@ -7698,8 +7698,9 @@ static int io_timeout_remove(struct io_kiocb *req, unsigned int issue_flags)
+ 	return 0;
+ }
+ 
+-static int io_timeout_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe,
+-			   bool is_timeout_link)
++static int __io_timeout_prep(struct io_kiocb *req,
++			     const struct io_uring_sqe *sqe,
++			     bool is_timeout_link)
+ {
+ 	struct io_timeout_data *data;
+ 	unsigned flags;
+@@ -7754,6 +7755,18 @@ static int io_timeout_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe,
+ 	return 0;
+ }
+ 
++static int io_timeout_prep(struct io_kiocb *req,
++			   const struct io_uring_sqe *sqe)
++{
++	return __io_timeout_prep(req, sqe, false);
++}
++
++static int io_link_timeout_prep(struct io_kiocb *req,
++				const struct io_uring_sqe *sqe)
++{
++	return __io_timeout_prep(req, sqe, true);
++}
++
+ static int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_ring_ctx *ctx = req->ctx;
+@@ -8039,13 +8052,13 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	case IORING_OP_CONNECT:
+ 		return io_connect_prep(req, sqe);
+ 	case IORING_OP_TIMEOUT:
+-		return io_timeout_prep(req, sqe, false);
++		return io_timeout_prep(req, sqe);
+ 	case IORING_OP_TIMEOUT_REMOVE:
+ 		return io_timeout_remove_prep(req, sqe);
+ 	case IORING_OP_ASYNC_CANCEL:
+ 		return io_async_cancel_prep(req, sqe);
+ 	case IORING_OP_LINK_TIMEOUT:
+-		return io_timeout_prep(req, sqe, true);
++		return io_link_timeout_prep(req, sqe);
+ 	case IORING_OP_ACCEPT:
+ 		return io_accept_prep(req, sqe);
+ 	case IORING_OP_FALLOCATE:
+-- 
+2.35.1
 
-         if (unlikely(submitted != nr)) {
-
-Best regards
-Xuenan
-On 2022/5/24 0:27, Jens Axboe wrote:
-> On 5/23/22 8:45 AM, Guo Xuenan wrote:
->> Hi Jens
->>
->> On 2022/5/22 10:42, Jens Axboe wrote:
->>> On 5/21/22 8:33 AM, Guo Xuenan wrote:
->>>> when set up sq ring size with IORING_MAX_ENTRIES, io_submit_sqes may
->>>> looping ~32768 times which may trigger soft lockups. add need_resched
->>>> condition to avoid this bad situation.
->>>>
->>>> set sq ring size 32768 and using io_sq_thread to perform stress test
->>>> as follows:
->>>> watchdog: BUG: soft lockup - CPU#2 stuck for 26s! [iou-sqp-600:601]
->>>> Kernel panic - not syncing: softlockup: hung tasks
->>>> CPU: 2 PID: 601 Comm: iou-sqp-600 Tainted: G L 5.18.0-rc7+ #3
->>>> Hardware name: linux,dummy-virt (DT)
->>>> Call trace:
->>>>    dump_backtrace+0x218/0x228
->>>>    show_stack+0x20/0x68
->>>>    dump_stack_lvl+0x68/0x84
->>>>    dump_stack+0x1c/0x38
->>>>    panic+0x1ec/0x3ec
->>>>    watchdog_timer_fn+0x28c/0x300
->>>>    __hrtimer_run_queues+0x1d8/0x498
->>>>    hrtimer_interrupt+0x238/0x558
->>>>    arch_timer_handler_virt+0x48/0x60
->>>>    handle_percpu_devid_irq+0xdc/0x270
->>>>    generic_handle_domain_irq+0x50/0x70
->>>>    gic_handle_irq+0x8c/0x4bc
->>>>    call_on_irq_stack+0x2c/0x38
->>>>    do_interrupt_handler+0xc4/0xc8
->>>>    el1_interrupt+0x48/0xb0
->>>>    el1h_64_irq_handler+0x18/0x28
->>>>    el1h_64_irq+0x74/0x78
->>>>    console_unlock+0x5d0/0x908
->>>>    vprintk_emit+0x21c/0x470
->>>>    vprintk_default+0x40/0x50
->>>>    vprintk+0xd0/0x128
->>>>    _printk+0xb4/0xe8
->>>>    io_issue_sqe+0x1784/0x2908
->>>>    io_submit_sqes+0x538/0x2880
->>>>    io_sq_thread+0x328/0x7b0
->>>>    ret_from_fork+0x10/0x20
->>>> SMP: stopping secondary CPUs
->>>> Kernel Offset: 0x40f1e8600000 from 0xffff800008000000
->>>> PHYS_OFFSET: 0xfffffa8c80000000
->>>> CPU features: 0x110,0000cf09,00001006
->>>> Memory Limit: none
->>>> ---[ end Kernel panic - not syncing: softlockup: hung tasks ]---
->>>>
->>>> Signed-off-by: Guo Xuenan <guoxuenan@huawei.com>
->>>> ---
->>>>    fs/io_uring.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/fs/io_uring.c b/fs/io_uring.c
->>>> index 92ac50f139cd..d897c6798f00 100644
->>>> --- a/fs/io_uring.c
->>>> +++ b/fs/io_uring.c
->>>> @@ -7864,7 +7864,7 @@ static int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
->>>>                if (!(ctx->flags & IORING_SETUP_SUBMIT_ALL))
->>>>                    break;
->>>>            }
->>>> -    } while (submitted < nr);
->>>> +    } while (submitted < nr && !need_resched());
->>>>          if (unlikely(submitted != nr)) {
->>>>            int ref_used = (submitted == -EAGAIN) ? 0 : submitted;
->>> This is wrong, you'll potentially end up doing random short submits for
->>> non-sqpoll as well.
->> Sorry, Indeed, this is not a good solution. Since, the function
->> io_submit_sqes not only called by io_sq_thread, it also called by
->> syscall io_uring_enter sending large amounts of requests, will also
->> trigger soft lockup.
-> Exactly.
->
->>> sqpoll already supports capping how many it submits in one go, it just
->>> doesn't do it if it's only running one ring. As simple as the below,
->>> with 1024 pulled out of thin air. Would be great if you could experiment
->>> and submit a v2 based on this principle instead. Might still need a
->> yes, Jens, your patch sloved sq-poll-thread problem, but the problem
->> may not completely solved; when using syscall io_uring_enter to
->> subimit large amounts of requests.So in my opinion How about 1) add
->> cond_resched() in the while cycle part of io_submit_sqes ?. OR 2) set
->> macro IORING_MAX_ENTRIES smaller? (i'm curious about the value,why we
->> set it with 32768)
-> I did suspect this isn't specific to SQPOLL at all.
->
-> Might make sense to cap batches of non-sqpoll as well, and for each
-> batch, have a cond_resched() just in case. If you change
-> IORING_MAX_ENTRIES to something smaller, you risk breaking applications
-> that currently (for whatever reason) may have set up an SQ ring of that
-> side. So that is not a viable solution, and honestly wouldn't be a good
-> option even if that weren't the case.
->
-> So the simple solution is just to do it in io_submit_sqes() itself, but
-> would need to be carefully benchmarked to make sure that it doesn't
-> regress anything. It's the very fast path, and for real use cases you'd
-> never run into this problem. Even for a synthetic use case, it sounds
-> highly suspicious that nothing in the call path ends up doing a
-> conditional reschedule. What kind of requests are being submitted when
-> you hit this?
->
