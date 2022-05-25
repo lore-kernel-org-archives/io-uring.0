@@ -2,47 +2,47 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6274C433EF
-	for <io-uring@archiver.kernel.org>; Wed, 25 May 2022 22:37:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E44BCC43219
+	for <io-uring@archiver.kernel.org>; Wed, 25 May 2022 22:37:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234595AbiEYWhA (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 25 May 2022 18:37:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S236404AbiEYWhB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 25 May 2022 18:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345411AbiEYWe7 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 25 May 2022 18:34:59 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A001145B
-        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:34:51 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PGtbb5031490
-        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:34:51 -0700
+        with ESMTP id S1345461AbiEYWfA (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 25 May 2022 18:35:00 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2511E15A3C
+        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:34:54 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 24PGtZxv017198
+        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:34:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=OTUuCmx0gIY/WJKJVYl4xz78ATuAORYpOmPdNw/cmIY=;
- b=pivTYooeZxSKkPiQbYfUxfIcRSmlGk6uCPDoWYooEzOcs7C2Y2XuROh2yEykAOglwcW7
- BiBAuFBm+ftBAeoCkMugAP8uw8ZOAdH6IGSbulOS4GwveqcJPSXac3z1qgbUVqOl+2KA
- Fjm3UdUZnI7TaxiUCJxNs/bC6nh1hlpgJ7Y= 
+ bh=BE5eLO5Z7AZICxMCDTAcJeiKudbeydb7d4UMFp50BLA=;
+ b=I2su/43ctP7xinp5heyI+ieMK5r2Aa9OkURbSwM+dAE8k7Mb3x6fOD61S0gdvEcdg/Bh
+ MuF36VB4cZWS2A+fvxnRbpgPddhdop/wFcEFMIt1mH0n/6BSZptJMARdlk4U5eGA1Fgz
+ xGCt07tFT5Su2+LeYS4VgZF5YfYArBg9UWk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g9bky6g7b-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3g93vs9eb1-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:34:50 -0700
-Received: from twshared6696.05.ash7.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:34:53 -0700
+Received: from twshared4937.07.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 25 May 2022 15:34:49 -0700
+ 15.1.2375.28; Wed, 25 May 2022 15:34:53 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 0B892F9E1B55; Wed, 25 May 2022 15:34:35 -0700 (PDT)
+        id 2AD47F9E1B6C; Wed, 25 May 2022 15:34:35 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
         <hch@infradead.org>
-Subject: [PATCH v5 05/16] iomap: Add async buffered write support
-Date:   Wed, 25 May 2022 15:34:21 -0700
-Message-ID: <20220525223432.205676-6-shr@fb.com>
+Subject: [PATCH v5 10/16] fs: Optimization for concurrent file time updates.
+Date:   Wed, 25 May 2022 15:34:26 -0700
+Message-ID: <20220525223432.205676-11-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220525223432.205676-1-shr@fb.com>
 References: <20220525223432.205676-1-shr@fb.com>
@@ -50,153 +50,79 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: hkVTh3t1HI_oDK7aE04mvPHyRiGJWVGt
-X-Proofpoint-ORIG-GUID: hkVTh3t1HI_oDK7aE04mvPHyRiGJWVGt
+X-Proofpoint-ORIG-GUID: x2czDs4mEVpzS2IlNjgKRp1B0vxx9nie
+X-Proofpoint-GUID: x2czDs4mEVpzS2IlNjgKRp1B0vxx9nie
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-25_07,2022-05-25_02,2022-02-23_01
+ definitions=2022-05-25_06,2022-05-25_02,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds async buffered write support to iomap.
+This introduces the S_PENDING_TIME flag. If an async buffered write
+needs to update the time, it cannot be processed in the fast path of
+io-uring. When a time update is pending this flag is set for async
+buffered writes. Other concurrent async buffered writes for the same
+file do not need to wait while this time update is pending.
 
-This replaces the call to balance_dirty_pages_ratelimited() with the
-call to balance_dirty_pages_ratelimited_flags. This allows to specify if
-the write request is async or not.
-
-In addition this also moves the above function call to the beginning of
-the function. If the function call is at the end of the function and the
-decision is made to throttle writes, then there is no request that
-io-uring can wait on. By moving it to the beginning of the function, the
-write request is not issued, but returns -EAGAIN instead. io-uring will
-punt the request and process it in the io-worker.
-
-By moving the function call to the beginning of the function, the write
-throttling will happen one page later.
+This reduces the number of async buffered writes that need to get punted
+to the io-workers in io-uring.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 ---
- fs/iomap/buffered-io.c | 31 +++++++++++++++++++++++++++----
- 1 file changed, 27 insertions(+), 4 deletions(-)
+ fs/inode.c         | 11 +++++++++--
+ include/linux/fs.h |  3 +++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-index 8ef77f7287aa..204ba708c9af 100644
---- a/fs/iomap/buffered-io.c
-+++ b/fs/iomap/buffered-io.c
-@@ -559,6 +559,7 @@ static int __iomap_write_begin(const struct iomap_ite=
-r *iter, loff_t pos,
- 	loff_t block_size =3D i_blocksize(iter->inode);
- 	loff_t block_start =3D round_down(pos, block_size);
- 	loff_t block_end =3D round_up(pos + len, block_size);
-+	unsigned int nr_blocks =3D i_blocks_per_folio(iter->inode, folio);
- 	size_t from =3D offset_in_folio(folio, pos), to =3D from + len;
- 	size_t poff, plen;
-=20
-@@ -567,6 +568,8 @@ static int __iomap_write_begin(const struct iomap_ite=
-r *iter, loff_t pos,
- 	folio_clear_error(folio);
-=20
- 	iop =3D iomap_page_create(iter->inode, folio, iter->flags);
-+	if ((iter->flags & IOMAP_NOWAIT) && !iop && nr_blocks > 1)
-+		return -EAGAIN;
-=20
- 	do {
- 		iomap_adjust_read_range(iter->inode, folio, &block_start,
-@@ -584,7 +587,12 @@ static int __iomap_write_begin(const struct iomap_it=
-er *iter, loff_t pos,
- 				return -EIO;
- 			folio_zero_segments(folio, poff, from, to, poff + plen);
- 		} else {
--			int status =3D iomap_read_folio_sync(block_start, folio,
-+			int status;
+diff --git a/fs/inode.c b/fs/inode.c
+index 4503bed063e7..7185d860d423 100644
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -2150,10 +2150,17 @@ static int file_modified_flags(struct file *file,=
+ int flags)
+ 	ret =3D inode_needs_update_time(inode, &now);
+ 	if (ret <=3D 0)
+ 		return ret;
+-	if (flags & IOCB_NOWAIT)
++	if (flags & IOCB_NOWAIT) {
++		if (IS_PENDING_TIME(inode))
++			return 0;
 +
-+			if (iter->flags & IOMAP_NOWAIT)
-+				return -EAGAIN;
++		inode_set_flags(inode, S_PENDING_TIME, S_PENDING_TIME);
+ 		return -EAGAIN;
++	}
+=20
+-	return __file_update_time(file, &now, ret);
++	ret =3D __file_update_time(file, &now, ret);
++	inode_set_flags(inode, 0, S_PENDING_TIME);
++	return ret;
+ }
+=20
+ /**
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 2d9b3afcb4a5..5924c90eab1d 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2143,6 +2143,8 @@ struct super_operations {
+ #define S_CASEFOLD	(1 << 15) /* Casefolded file */
+ #define S_VERITY	(1 << 16) /* Verity file (using fs/verity/) */
+ #define S_KERNEL_FILE	(1 << 17) /* File is in use by the kernel (eg. fs/=
+cachefiles) */
++#define S_PENDING_TIME (1 << 18) /* File update time is pending */
 +
-+			status =3D iomap_read_folio_sync(block_start, folio,
- 					poff, plen, srcmap);
- 			if (status)
- 				return status;
-@@ -613,6 +621,9 @@ static int iomap_write_begin(const struct iomap_iter =
-*iter, loff_t pos,
- 	unsigned fgp =3D FGP_LOCK | FGP_WRITE | FGP_CREAT | FGP_STABLE | FGP_NO=
-FS;
- 	int status =3D 0;
 =20
-+	if (iter->flags & IOMAP_NOWAIT)
-+		fgp |=3D FGP_NOWAIT;
-+
- 	BUG_ON(pos + len > iter->iomap.offset + iter->iomap.length);
- 	if (srcmap !=3D &iter->iomap)
- 		BUG_ON(pos + len > srcmap->offset + srcmap->length);
-@@ -750,6 +761,8 @@ static loff_t iomap_write_iter(struct iomap_iter *ite=
-r, struct iov_iter *i)
- 	loff_t pos =3D iter->pos;
- 	ssize_t written =3D 0;
- 	long status =3D 0;
-+	struct address_space *mapping =3D iter->inode->i_mapping;
-+	unsigned int bdp_flags =3D (iter->flags & IOMAP_NOWAIT) ? BDP_ASYNC : 0=
-;
+ /*
+  * Note that nosuid etc flags are inode-specific: setting some file-syst=
+em
+@@ -2185,6 +2187,7 @@ static inline bool sb_rdonly(const struct super_blo=
+ck *sb) { return sb->s_flags
+ #define IS_ENCRYPTED(inode)	((inode)->i_flags & S_ENCRYPTED)
+ #define IS_CASEFOLDED(inode)	((inode)->i_flags & S_CASEFOLD)
+ #define IS_VERITY(inode)	((inode)->i_flags & S_VERITY)
++#define IS_PENDING_TIME(inode) ((inode)->i_flags & S_PENDING_TIME)
 =20
- 	do {
- 		struct folio *folio;
-@@ -762,6 +775,11 @@ static loff_t iomap_write_iter(struct iomap_iter *it=
-er, struct iov_iter *i)
- 		bytes =3D min_t(unsigned long, PAGE_SIZE - offset,
- 						iov_iter_count(i));
- again:
-+		status =3D balance_dirty_pages_ratelimited_flags(mapping,
-+							       bdp_flags);
-+		if (unlikely(status))
-+			break;
-+
- 		if (bytes > length)
- 			bytes =3D length;
-=20
-@@ -770,6 +788,10 @@ static loff_t iomap_write_iter(struct iomap_iter *it=
-er, struct iov_iter *i)
- 		 * Otherwise there's a nasty deadlock on copying from the
- 		 * same page as we're writing to, without it being marked
- 		 * up-to-date.
-+		 *
-+		 * For async buffered writes the assumption is that the user
-+		 * page has already been faulted in. This can be optimized by
-+		 * faulting the user page in the prepare phase of io-uring.
- 		 */
- 		if (unlikely(fault_in_iov_iter_readable(i, bytes) =3D=3D bytes)) {
- 			status =3D -EFAULT;
-@@ -781,7 +803,7 @@ static loff_t iomap_write_iter(struct iomap_iter *ite=
-r, struct iov_iter *i)
- 			break;
-=20
- 		page =3D folio_file_page(folio, pos >> PAGE_SHIFT);
--		if (mapping_writably_mapped(iter->inode->i_mapping))
-+		if (mapping_writably_mapped(mapping))
- 			flush_dcache_page(page);
-=20
- 		copied =3D copy_page_from_iter_atomic(page, offset, bytes, i);
-@@ -806,8 +828,6 @@ static loff_t iomap_write_iter(struct iomap_iter *ite=
-r, struct iov_iter *i)
- 		pos +=3D status;
- 		written +=3D status;
- 		length -=3D status;
--
--		balance_dirty_pages_ratelimited(iter->inode->i_mapping);
- 	} while (iov_iter_count(i) && length);
-=20
- 	return written ? written : status;
-@@ -825,6 +845,9 @@ iomap_file_buffered_write(struct kiocb *iocb, struct =
-iov_iter *i,
- 	};
- 	int ret;
-=20
-+	if (iocb->ki_flags & IOCB_NOWAIT)
-+		iter.flags |=3D IOMAP_NOWAIT;
-+
- 	while ((ret =3D iomap_iter(&iter, ops)) > 0)
- 		iter.processed =3D iomap_write_iter(&iter, i);
- 	if (iter.pos =3D=3D iocb->ki_pos)
+ #define IS_WHITEOUT(inode)	(S_ISCHR(inode->i_mode) && \
+ 				 (inode)->i_rdev =3D=3D WHITEOUT_DEV)
 --=20
 2.30.2
 
