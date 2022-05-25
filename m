@@ -2,90 +2,125 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30595C433EF
-	for <io-uring@archiver.kernel.org>; Wed, 25 May 2022 03:00:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18FEFC433EF
+	for <io-uring@archiver.kernel.org>; Wed, 25 May 2022 06:51:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236246AbiEYDAa (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 24 May 2022 23:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S238874AbiEYGv1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 25 May 2022 02:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232805AbiEYDAa (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 24 May 2022 23:00:30 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C662D1FB
-        for <io-uring@vger.kernel.org>; Tue, 24 May 2022 20:00:28 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id ds11so18525328pjb.0
-        for <io-uring@vger.kernel.org>; Tue, 24 May 2022 20:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=ByI6CYMNsy1pdUuDeEoCMLN+HTWTDI7iUv9pumDBZ2A=;
-        b=jUJT0qUiyfZ9ZnlDABndPEmzb6WnxY6Tt4+fENIIwQ1UX8DfpDLAilPt+JcN0qhvcJ
-         Cj8Pg5tOLGdHB288h5ozzMImL3j3+ZsaAzF1JzModpOXI/fovuwNUHLPleSI3rTfMSmR
-         WcrgDCi+jiPJr9LUTOfUKSkTaV9JeIdB1IbMNsX0TIkQ7ypg3a0CFuh+jkir8XvmtPZQ
-         EWVd63jJj9VJ27Sttaucofc7oULIAnRtBSMXkACGXo/16wUYVIjWQDnJJCkVjcByZKdq
-         HtViwq//U4Ka+NHoq0QZplQgGhK8e7m8MC3IFrhRkvyUJFlqjJqTwKTsMU6LwwSKpB1B
-         qLHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ByI6CYMNsy1pdUuDeEoCMLN+HTWTDI7iUv9pumDBZ2A=;
-        b=M3QHLcNu1FSBZQ009A68j4z/h7yZlfxVlZc2thdqQV0cduc4kq1DXxE6fA7ZMRHwOq
-         x7Y2teBaeJb0A9SvGoKie/sYmEoCVtiDcha85rxb/l73LEzLVjPmpqHez0Uj2ksPWSL4
-         oNA09W23DAXvuhDbDvjO6az51fM9/dU6FRHBnBIr+wQvEc8hfJUiLrkObYh3u9qzobC4
-         LsugRPvbLTMOzmAoCfkjElvcMW6/u0Y2ejPpDRfuftC2XmQJTZB7UT1B2XNH5ofEBBvA
-         v8UeLaz6YXrsV5f5St3sc3dRKSK9Nnm/Jz6MEmDupOY17H3B7YBqYGGNGDPJUdhPU/DZ
-         YjeA==
-X-Gm-Message-State: AOAM532NiGaZBkrrMt3egJZyVFbdtYfwfABoVZAcczVk53h5FS0DevoK
-        eR/rYia23Ng+CbtpHh7Bbh27tLYKqx30zA==
-X-Google-Smtp-Source: ABdhPJyXYmgn5qb5hIlwbqbIFJJTrrPje22YYb//ISjgm0KN5q5T/ou4BLc/PuKxEz54fVDTP25vPg==
-X-Received: by 2002:a17:902:7c0a:b0:15e:f63b:9a14 with SMTP id x10-20020a1709027c0a00b0015ef63b9a14mr30752364pll.35.1653447628070;
-        Tue, 24 May 2022 20:00:28 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g20-20020a625214000000b0050dc76281c4sm10003925pfb.158.2022.05.24.20.00.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 20:00:27 -0700 (PDT)
-Message-ID: <921eb447-d3f8-95d3-4ed7-c087bbcfd44c@kernel.dk>
-Date:   Tue, 24 May 2022 21:00:26 -0600
+        with ESMTP id S233403AbiEYGvZ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 25 May 2022 02:51:25 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE43240A8
+        for <io-uring@vger.kernel.org>; Tue, 24 May 2022 23:51:21 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220525065115epoutp039d6cad25efde522bed793bbe44118b3e~yRnOmXOlS0734807348epoutp03H
+        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 06:51:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220525065115epoutp039d6cad25efde522bed793bbe44118b3e~yRnOmXOlS0734807348epoutp03H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1653461475;
+        bh=ceX8JJzuivffrtSIL7kYWX1aadCxIxXyUXuwVtCAX38=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SDRgCcqHHh/s2sd6OJcgPJBlVxKBVotbQcZoF/ZKzUVF9HDn26qiWSSs91uhBXvVP
+         2YWy0qlhvMT2kBtwOKuHY1kEMKsc+EMvDBjV3nKHFatXAuuQWEYzcaWlYfI+9eYg5E
+         4ddGaCRE7G+xOUnhXEML6ZEgchdtD7kwP/ThHSXQ=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220525065115epcas5p41f5077051a18a032413e25d9f7d0a739~yRnOZ5akm2460724607epcas5p4a;
+        Wed, 25 May 2022 06:51:15 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4L7MD04qdKz4x9QK; Wed, 25 May
+        2022 06:51:12 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        27.FA.10063.CD1DD826; Wed, 25 May 2022 15:51:08 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220525062115epcas5p434519bfbb7da8e2a76a3604e143a57c9~yRNBkbwpu2579125791epcas5p4s;
+        Wed, 25 May 2022 06:21:15 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220525062115epsmtrp18059d7176dc6df7220a83f63437a94bf~yRNBjy_a-1894118941epsmtrp1f;
+        Wed, 25 May 2022 06:21:15 +0000 (GMT)
+X-AuditID: b6c32a49-4cbff7000000274f-95-628dd1dc8ce6
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8C.31.11276.ADACD826; Wed, 25 May 2022 15:21:14 +0900 (KST)
+Received: from test-zns (unknown [107.110.206.5]) by epsmtip2.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220525062114epsmtip27dd91e5d3020c428dd4f5442f82b0bf5~yRNBEB6R51151511515epsmtip2R;
+        Wed, 25 May 2022 06:21:14 +0000 (GMT)
+Date:   Wed, 25 May 2022 11:46:01 +0530
+From:   Kanchan Joshi <joshi.k@samsung.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org
+Subject: Re: [PATCH 1/6] io_uring: make timeout prep handlers consistent
+ with other prep handlers
+Message-ID: <20220525061601.GC4491@test-zns>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: io uring support for character device
-Content-Language: en-US
-To:     Changman Lee <cm224.lee@gmail.com>, io-uring@vger.kernel.org
-References: <CAN863PsXgkvi-NLhyLy-M+iQgaWeXtjM_MBoRc0H0fq2jTfU1w@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAN863PsXgkvi-NLhyLy-M+iQgaWeXtjM_MBoRc0H0fq2jTfU1w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20220524213727.409630-2-axboe@kernel.dk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHKsWRmVeSWpSXmKPExsWy7bCmlu6di71JBrOW8FqsvtvPZvGu9RyL
+        A5PH5bOlHp83yQUwRWXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoq
+        ufgE6Lpl5gBNV1IoS8wpBQoFJBYXK+nb2RTll5akKmTkF5fYKqUWpOQUmBToFSfmFpfmpevl
+        pZZYGRoYGJkCFSZkZ/yZuJCt4DZLxdVfN1kaGPtZuhg5OSQETCSubF7M1sXIxSEksJtRYvPJ
+        ZnYI5xOjxOM3R6Gcb4wS34+dZIVpOTdxLyNEYi+jxNOOaawQzjNGib0XNjOBVLEIqEocOL8D
+        aAkHB5uApsSFyaUgYREBBYme3yvZQGxmARmJyXMus4PYwgLJEj9fz2IDKecV0JHY/CENJMwr
+        IChxcuYTsFM5Bcwk7iw5BHaDqICyxIFtx5lA1koIHGKXuLLrBNQ/LhJn2x5A2cISr45vYYew
+        pSRe9rdB2ckSrdtB9nIA2SUSSxaoQ4TtJS7u+csEEmYWyJDYtiEbIiwrMfXUOiaIi/kken8/
+        YYKI80rsmAdjK0rcm/QUGjziEg9nLIGyPSQ+nV0Bdo2QwFZGiUkvpCYwys9C8tkshG2zwDZY
+        SXR+aGKFCEtLLP/HAWFqSqzfpb+AkXUVo2RqQXFuemqxaYFhXmo5PLKT83M3MYITnpbnDsa7
+        Dz7oHWJk4mA8xCjBwawkwpuzuDdJiDclsbIqtSg/vqg0J7X4EKMpMJomMkuJJucDU25eSbyh
+        iaWBiZmZmYmlsZmhkjivwP/GJCGB9MSS1OzU1ILUIpg+Jg5OqQamzDl9K3JmxWZFp/ed+FXD
+        +8TX6vGPy5ueaSs84jLe1XxpicGr9yJqn4xtfjyb8Fq2dUL1WdeWp+par735WfcsfX1PcssV
+        LRHb2g2WUwJOPRd8+tjjxpxCjrXxfgYZUyfo7754O7q8qfhLib/FdMlDR08WRFidWSX5Sbjr
+        uuUC3aSv73tUvxty3X7c+ZFv6eHT9dwmK29xbTzzyql1T9DaFdI/5iTGvJbZEOH78L/e7tdv
+        Hz97+lXApzBL8/yfFRI3YsO/hpyZFlXre8+87P92xmWuE6u5VTsr9++zP9u/N+ZfwfFLFXKS
+        hUoc1gusvHMyv3yO53GcPL+u2r77/qcd/EVHNzFEc5s5L73SbDOjR4mlOCPRUIu5qDgRAC3Y
+        mQkBBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMLMWRmVeSWpSXmKPExsWy7bCSvO6tU71JBv1PLC1W3+1ns3jXeo7F
+        gcnj8tlSj8+b5AKYorhsUlJzMstSi/TtErgyNjy9xVjQy1Rx+sp71gbG24xdjJwcEgImEucm
+        7gWyuTiEBHYzSqya/ZcNIiEu0XztBzuELSyx8t9zdoiiJ4wSb16tYQZJsAioShw4v4Oli5GD
+        g01AU+LC5FKQsIiAgkTP75Vgc5gFZCQmz7kMNkdYIFmi6/5cNpByXgEdic0f0iBGbmWU+H+g
+        AayGV0BQ4uTMJywQvWYS8zY/ZAapZxaQllj+jwMkzAkUvrPkECuILSqgLHFg23GmCYyCs5B0
+        z0LSPQuhewEj8ypGydSC4tz03GLDAsO81HK94sTc4tK8dL3k/NxNjOBw1dLcwbh91Qe9Q4xM
+        HIyHGCU4mJVEeHMW9yYJ8aYkVlalFuXHF5XmpBYfYpTmYFES573QdTJeSCA9sSQ1OzW1ILUI
+        JsvEwSnVwBTc11e9OEhLk0/VaFPMrBNLzszcbC96J2X2Re3jj/dZfbjfsuTDngvqM+wuPl7M
+        U2PxkvHbodppTQbV7O4RlnYZRxqXn228qx8wV63vxoa7T4QmvTIOrnonzbefXUnt2Z7/mS9U
+        D0+ZLCWXMS1ib+HjT5/i4oplmpo+8a19ksbKL2T1kudI4cucT5GTJxxUtf61zao05JLLKbVC
+        m1sfDtw981BgyZrs5oOzEyUfVpQ4Xmg+4blR8vW3srRO880b7Lm1d1dWHXi483rT7LrZqZ/k
+        LmV2n9/T4FXqKDH59sNPeV2sLQJb/y+Y9tWfhXFK0r2XorsnyUlNep+RMv3WpoVJdf4lLB2l
+        l0+XJEn9b/dVYinOSDTUYi4qTgQAcfUqYMYCAAA=
+X-CMS-MailID: 20220525062115epcas5p434519bfbb7da8e2a76a3604e143a57c9
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+        boundary="----HMHzcl7Kov5y0bbYah5tgDYyhjafTXQAGx6UUfEgMJOMVZI4=_1f6d1_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220524213738epcas5p155cdcaea02c95bb62a22679218a5cd1a
+References: <20220524213727.409630-1-axboe@kernel.dk>
+        <CGME20220524213738epcas5p155cdcaea02c95bb62a22679218a5cd1a@epcas5p1.samsung.com>
+        <20220524213727.409630-2-axboe@kernel.dk>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 5/24/22 6:56 PM, Changman Lee wrote:
-> Hi List,
-> 
-> I'm CM Lee. I'm developing a custom character device managing pcie dma.
-> I've tried to use io uring for the char device which supports readv
-> and writev with synchronous and blocking manner and seek.
-> When I use a io uring with IORING_SETUP_IOPOLL and IORING_SETUP_SQPOLL
-> for reducing syscall overhead, a readv of the char device driver seems
-> to be not called. So I added a_ops->direct_IO when the device is
-> opened with O_DIRECT. But the result was the same.
-> This is my question.
-> Q1: Does io uring support a character device ?
-> Q2: Is it better to reimplement a device driver as block device type ?
+------HMHzcl7Kov5y0bbYah5tgDYyhjafTXQAGx6UUfEgMJOMVZI4=_1f6d1_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-io_uring doesn't care what file type it is, I suspect your problem lies
-elsewhere. Do you have a ->read() defined as well? If you do, the vfs
-will pick that over ->read_iter().
+On Tue, May 24, 2022 at 03:37:22PM -0600, Jens Axboe wrote:
+>All other opcodes take a {req, sqe} set for prep handling, split out
+>a timeout prep handler so that timeout and linked timeouts can use
+>the same one.
 
-If regular read/write works with O_DIRECT and reading from the device in
-general, then io_uring will too.
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
 
--- 
-Jens Axboe
+------HMHzcl7Kov5y0bbYah5tgDYyhjafTXQAGx6UUfEgMJOMVZI4=_1f6d1_
+Content-Type: text/plain; charset="utf-8"
 
+
+------HMHzcl7Kov5y0bbYah5tgDYyhjafTXQAGx6UUfEgMJOMVZI4=_1f6d1_--
