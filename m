@@ -2,125 +2,93 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99B04C433F5
-	for <io-uring@archiver.kernel.org>; Wed, 25 May 2022 22:37:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD9C1C433EF
+	for <io-uring@archiver.kernel.org>; Thu, 26 May 2022 01:49:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239827AbiEYWhH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 25 May 2022 18:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
+        id S236677AbiEZBtQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 25 May 2022 21:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345518AbiEYWfE (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 25 May 2022 18:35:04 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7B3FD14
-        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:35:03 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24PGtcqQ009591
-        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:35:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=xrXV6DDKAu8edht2TcHb7XC2Tqf/DAsX1r3VS5rTvoo=;
- b=nq/FnwgdSIxm3G9FiuG3qyoerWRrW88Z7auP/XV0XDH6CQ1Q4on+mEQUjeHlNPFYE33n
- YfyLfvGQIFSss8nr2vgfVMvzQY7nXodO3hkRAAC4zhf7eKnoQ8UKQHpX4W6rG+Y6X+1K
- iOURdEUMw7fswKxKwPRAHTS577uxgBnQAEY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3g93tx1dqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 15:35:02 -0700
-Received: from twshared4937.07.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 25 May 2022 15:35:01 -0700
-Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 4A19FF9E1B83; Wed, 25 May 2022 15:34:35 -0700 (PDT)
-From:   Stefan Roesch <shr@fb.com>
-To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
-        <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>
-CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
-        <hch@infradead.org>
-Subject: [PATCH v5 15/16] xfs: Add async buffered write support
-Date:   Wed, 25 May 2022 15:34:31 -0700
-Message-ID: <20220525223432.205676-16-shr@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220525223432.205676-1-shr@fb.com>
-References: <20220525223432.205676-1-shr@fb.com>
+        with ESMTP id S235790AbiEZBtO (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 25 May 2022 21:49:14 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7318DDD2
+        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 18:49:13 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-f1d5464c48so662075fac.6
+        for <io-uring@vger.kernel.org>; Wed, 25 May 2022 18:49:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DpFXJWBWMU2S173dU5ZmNlrwItye5+CaS7bedaWyo2c=;
+        b=PAnCv/I+GkBzHlxI9nIgirJwBjXk9Mox2CN6yfpYINh6xweRPIsgOnq8Om+MPvtE/v
+         62WE4LNscyajsRTylf+MQYqkRqaa7wr0ONXiZLKoAjuOSn5zznwfN7OgLGlB4VP3D30A
+         x7u0i/P/NgB2ITVLLCzZH5WCQbo/FhWYpk1rZRHowuwBkD56eJQmLjkHY+FBeWpTWXVA
+         7w1wwpdJ0gwNrlNX92q4oXFlOtHIas1usUEitf61QDMkzXOrHDsEcUP0rw4hmJUn3C76
+         cd4JeUEx2SnX315iIcMUbqMHaIVGFJ5ZFhGIst3UGqaR2gKi7qw/ruOdM2kC1ew0CbVf
+         M0hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DpFXJWBWMU2S173dU5ZmNlrwItye5+CaS7bedaWyo2c=;
+        b=H/TBGj8ZGMiT8MXeFcWcSzEvP1VFZHpXhwG7hnsb83jE8VlFIgjJ6SiYYJ5AuHOntF
+         wpSquUuJk2m3zIJ/FgxVFwpvP6xZwaQIfDHrLb9pnWeji/k+oW8LqYtVeoR5ww+mihms
+         u+c6ViH2sp4C+Y/GJuLSI91ZzB4OAIoKZe0TmkFyVyQwVDHlPkKc6b9kG1NQMV1u/Bpa
+         KlLiGTuVlR6Zbv5vRzRjP4GLWAsOu5DILEbMTr0YUElt8fCDlFX4saQVL4Mzxu/kqsl/
+         4PUMoJnk0lsTe/nfGMdW4h8+OMvXtBoQFTI94IVbMPksIKKJHxyY7oN0dPmJcmcmkwbz
+         80Cg==
+X-Gm-Message-State: AOAM532pjRMxD1SP/c9dRFTEsFPzsMeNRTJhD2W7AI3bXTlMku4GYpGA
+        bCIQoBMGoW88WCCeCXkg5DnnBecdggoYes/VD3g=
+X-Google-Smtp-Source: ABdhPJyssQsyTmeeKTi3G3EF7NIHMJXK1AZl+6w39qdXtZfTgz2SDONWSg6GptLnagOCoMwUgnMSocu7CilvMGwwR/0=
+X-Received: by 2002:a05:6871:295:b0:f2:cd84:9c3e with SMTP id
+ i21-20020a056871029500b000f2cd849c3emr13619oae.284.1653529752570; Wed, 25 May
+ 2022 18:49:12 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAN863PsXgkvi-NLhyLy-M+iQgaWeXtjM_MBoRc0H0fq2jTfU1w@mail.gmail.com>
+ <921eb447-d3f8-95d3-4ed7-c087bbcfd44c@kernel.dk>
+In-Reply-To: <921eb447-d3f8-95d3-4ed7-c087bbcfd44c@kernel.dk>
+From:   Changman Lee <cm224.lee@gmail.com>
+Date:   Thu, 26 May 2022 10:49:01 +0900
+Message-ID: <CAN863Pv6zVTvgZA30VcuSvPZojUCvNCB3We--Na8ZPNQjA_9Jg@mail.gmail.com>
+Subject: Re: io uring support for character device
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: VoaTxnZyAU9sgahQMQmjh-_L8rYU-mNm
-X-Proofpoint-GUID: VoaTxnZyAU9sgahQMQmjh-_L8rYU-mNm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-05-25_06,2022-05-25_02,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the async buffered write support to XFS. For async buffered
-write requests, the request will return -EAGAIN if the ilock cannot be
-obtained immediately.
+I have both ->read() and ->read_iter(). I'll negate a ->read() and
+a_ops->direct_IO() because those were for testing.
+I'll go over my io_uring test code in user space.
+Thanks for your advice.
 
-Signed-off-by: Stefan Roesch <shr@fb.com>
----
- fs/xfs/xfs_file.c  | 9 ++++-----
- fs/xfs/xfs_iomap.c | 5 ++++-
- 2 files changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
-index 50dea07f5e56..e9d615f4c209 100644
---- a/fs/xfs/xfs_file.c
-+++ b/fs/xfs/xfs_file.c
-@@ -409,7 +409,7 @@ xfs_file_write_checks(
- 		spin_unlock(&ip->i_flags_lock);
-=20
- out:
--	return file_modified(file);
-+	return kiocb_modified(iocb);
- }
-=20
- static int
-@@ -701,12 +701,11 @@ xfs_file_buffered_write(
- 	bool			cleared_space =3D false;
- 	int			iolock;
-=20
--	if (iocb->ki_flags & IOCB_NOWAIT)
--		return -EOPNOTSUPP;
--
- write_retry:
- 	iolock =3D XFS_IOLOCK_EXCL;
--	xfs_ilock(ip, iolock);
-+	ret =3D xfs_ilock_iocb(ip, iocb->ki_flags, iolock);
-+	if (ret)
-+		return ret;
-=20
- 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
- 	if (ret)
-diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
-index 3aa60e53a181..af8c50140f0f 100644
---- a/fs/xfs/xfs_iomap.c
-+++ b/fs/xfs/xfs_iomap.c
-@@ -881,6 +881,7 @@ xfs_buffered_write_iomap_begin(
- 	bool			eof =3D false, cow_eof =3D false, shared =3D false;
- 	int			allocfork =3D XFS_DATA_FORK;
- 	int			error =3D 0;
-+	unsigned int		lockmode =3D XFS_ILOCK_EXCL;
-=20
- 	if (xfs_is_shutdown(mp))
- 		return -EIO;
-@@ -892,7 +893,9 @@ xfs_buffered_write_iomap_begin(
-=20
- 	ASSERT(!XFS_IS_REALTIME_INODE(ip));
-=20
--	xfs_ilock(ip, XFS_ILOCK_EXCL);
-+	error =3D xfs_ilock_for_iomap(ip, flags, &lockmode);
-+	if (error)
-+		return error;
-=20
- 	if (XFS_IS_CORRUPT(mp, !xfs_ifork_has_extents(&ip->i_df)) ||
- 	    XFS_TEST_ERROR(false, mp, XFS_ERRTAG_BMAPIFORMAT)) {
---=20
-2.30.2
-
+2022=EB=85=84 5=EC=9B=94 25=EC=9D=BC (=EC=88=98) =EC=98=A4=ED=9B=84 12:00, =
+Jens Axboe <axboe@kernel.dk>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On 5/24/22 6:56 PM, Changman Lee wrote:
+> > Hi List,
+> >
+> > I'm CM Lee. I'm developing a custom character device managing pcie dma.
+> > I've tried to use io uring for the char device which supports readv
+> > and writev with synchronous and blocking manner and seek.
+> > When I use a io uring with IORING_SETUP_IOPOLL and IORING_SETUP_SQPOLL
+> > for reducing syscall overhead, a readv of the char device driver seems
+> > to be not called. So I added a_ops->direct_IO when the device is
+> > opened with O_DIRECT. But the result was the same.
+> > This is my question.
+> > Q1: Does io uring support a character device ?
+> > Q2: Is it better to reimplement a device driver as block device type ?
+>
+> io_uring doesn't care what file type it is, I suspect your problem lies
+> elsewhere. Do you have a ->read() defined as well? If you do, the vfs
+> will pick that over ->read_iter().
+>
+> If regular read/write works with O_DIRECT and reading from the device in
+> general, then io_uring will too.
+>
+> --
+> Jens Axboe
+>
