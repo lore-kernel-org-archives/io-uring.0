@@ -2,47 +2,47 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53031C433F5
-	for <io-uring@archiver.kernel.org>; Thu, 26 May 2022 17:39:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B59AC433FE
+	for <io-uring@archiver.kernel.org>; Thu, 26 May 2022 17:39:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348303AbiEZRjF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 26 May 2022 13:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59712 "EHLO
+        id S232827AbiEZRjJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 26 May 2022 13:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiEZRjB (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 26 May 2022 13:39:01 -0400
+        with ESMTP id S1348324AbiEZRjE (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 26 May 2022 13:39:04 -0400
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD5D994FC
-        for <io-uring@vger.kernel.org>; Thu, 26 May 2022 10:39:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB14996A6
+        for <io-uring@vger.kernel.org>; Thu, 26 May 2022 10:39:03 -0700 (PDT)
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24QFEtYo012155
-        for <io-uring@vger.kernel.org>; Thu, 26 May 2022 10:38:59 -0700
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 24QF3hS7012028
+        for <io-uring@vger.kernel.org>; Thu, 26 May 2022 10:39:03 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=3zHDjbn72NXSBweb9g6a0xThug/NIwNbovojkJVDB2M=;
- b=GhcWDXJrWfGlUqEG4X7STIrU7HImonw6dQp29tThMzzlrl/p1HRMKGbmpwZXUuaiSMPt
- E/OHWeBSHe9X8YAsGoYNDTMwTmPuuCqstvZPHmcON+SvZUIdjOIW9sawzKLsUgC0Y4qq
- OLOvGd1olcNzLVna9n7uszGqa4aIWvk1grI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3g9qtug2fm-1
+ bh=rv7J0LdI0Ppmj5mCGCobLN9xMm7ObF9QxqSwF5hjIfM=;
+ b=ghU6rRBlo3YFvcDWKuXzielvJQp/ssaOZqDvzmAQIrABwjw4WK3SkaIaw9JDpacz6uTd
+ KLC1eOmWRNFoPFIJe15oxYzyhm67EXN0KZV1zoYWWBLqPKUkpqsiF/PD0iytwcKQNqZE
+ bPBDwcsZK41K+360cOxooxXaLZQsuGAoKfs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3g9qtug2fy-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 26 May 2022 10:38:59 -0700
-Received: from twshared5413.23.frc3.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Thu, 26 May 2022 10:39:03 -0700
+Received: from twshared19572.14.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 26 May 2022 10:38:58 -0700
+ 15.1.2375.28; Thu, 26 May 2022 10:39:00 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 61F59FA621CE; Thu, 26 May 2022 10:38:45 -0700 (PDT)
+        id 753FFFA621D4; Thu, 26 May 2022 10:38:45 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
         <hch@infradead.org>
-Subject: [PATCH v6 01/16] mm: Move starting of background writeback into the main balancing loop
-Date:   Thu, 26 May 2022 10:38:25 -0700
-Message-ID: <20220526173840.578265-2-shr@fb.com>
+Subject: [PATCH v6 04/16] iomap: Add flags parameter to iomap_page_create()
+Date:   Thu, 26 May 2022 10:38:28 -0700
+Message-ID: <20220526173840.578265-5-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220526173840.578265-1-shr@fb.com>
 References: <20220526173840.578265-1-shr@fb.com>
@@ -50,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: fhrDqYN5VC_n6DczOpbNwfn1QwzFjzKp
-X-Proofpoint-ORIG-GUID: fhrDqYN5VC_n6DczOpbNwfn1QwzFjzKp
+X-Proofpoint-GUID: kYo3Oqo6nPFLAC4rm11I-Ovy6WcxYm7k
+X-Proofpoint-ORIG-GUID: kYo3Oqo6nPFLAC4rm11I-Ovy6WcxYm7k
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-05-26_09,2022-05-25_02,2022-02-23_01
@@ -59,81 +59,99 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+Add the kiocb flags parameter to the function iomap_page_create().
+Depending on the value of the flags parameter it enables different gfp
+flags.
 
-We start background writeback if we are over background threshold after
-exiting the main loop in balance_dirty_pages(). This may result in
-basing the decision on already stale values (we may have slept for
-significant amount of time) and it is also inconvenient for refactoring
-needed for async dirty throttling. Move the check into the main waiting
-loop.
+No intended functional changes in this patch.
 
-Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Stefan Roesch <shr@fb.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
 ---
- mm/page-writeback.c | 31 ++++++++++++++-----------------
- 1 file changed, 14 insertions(+), 17 deletions(-)
+ fs/iomap/buffered-io.c | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index 7e2da284e427..8e5e003f0093 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -1618,6 +1618,19 @@ static void balance_dirty_pages(struct bdi_writeba=
-ck *wb,
- 			}
- 		}
+diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
+index 8ce8720093b9..d6ddc54e190e 100644
+--- a/fs/iomap/buffered-io.c
++++ b/fs/iomap/buffered-io.c
+@@ -44,16 +44,21 @@ static inline struct iomap_page *to_iomap_page(struct=
+ folio *folio)
+ static struct bio_set iomap_ioend_bioset;
 =20
-+		/*
-+		 * In laptop mode, we wait until hitting the higher threshold
-+		 * before starting background writeout, and then write out all
-+		 * the way down to the lower threshold.  So slow writers cause
-+		 * minimal disk activity.
-+		 *
-+		 * In normal mode, we start background writeout at the lower
-+		 * background_thresh, to keep the amount of dirty memory low.
-+		 */
-+		if (!laptop_mode && nr_reclaimable > gdtc->bg_thresh &&
-+		    !writeback_in_progress(wb))
-+			wb_start_background_writeback(wb);
+ static struct iomap_page *
+-iomap_page_create(struct inode *inode, struct folio *folio)
++iomap_page_create(struct inode *inode, struct folio *folio, unsigned int=
+ flags)
+ {
+ 	struct iomap_page *iop =3D to_iomap_page(folio);
+ 	unsigned int nr_blocks =3D i_blocks_per_folio(inode, folio);
++	gfp_t gfp =3D GFP_NOFS | __GFP_NOFAIL;
+=20
+ 	if (iop || nr_blocks <=3D 1)
+ 		return iop;
+=20
++	if (flags & IOMAP_NOWAIT)
++		gfp =3D GFP_NOWAIT;
 +
- 		/*
- 		 * Throttle it only when the background writeback cannot
- 		 * catch-up. This avoids (excessively) small writeouts
-@@ -1648,6 +1661,7 @@ static void balance_dirty_pages(struct bdi_writebac=
-k *wb,
- 			break;
- 		}
+ 	iop =3D kzalloc(struct_size(iop, uptodate, BITS_TO_LONGS(nr_blocks)),
+-			GFP_NOFS | __GFP_NOFAIL);
++		      gfp);
++
+ 	spin_lock_init(&iop->uptodate_lock);
+ 	if (folio_test_uptodate(folio))
+ 		bitmap_fill(iop->uptodate, nr_blocks);
+@@ -226,7 +231,7 @@ static int iomap_read_inline_data(const struct iomap_=
+iter *iter,
+ 	if (WARN_ON_ONCE(size > iomap->length))
+ 		return -EIO;
+ 	if (offset > 0)
+-		iop =3D iomap_page_create(iter->inode, folio);
++		iop =3D iomap_page_create(iter->inode, folio, iter->flags);
+ 	else
+ 		iop =3D to_iomap_page(folio);
 =20
-+		/* Start writeback even when in laptop mode */
- 		if (unlikely(!writeback_in_progress(wb)))
- 			wb_start_background_writeback(wb);
+@@ -264,7 +269,7 @@ static loff_t iomap_readpage_iter(const struct iomap_=
+iter *iter,
+ 		return iomap_read_inline_data(iter, folio);
 =20
-@@ -1814,23 +1828,6 @@ static void balance_dirty_pages(struct bdi_writeba=
-ck *wb,
+ 	/* zero post-eof blocks as the page may be mapped */
+-	iop =3D iomap_page_create(iter->inode, folio);
++	iop =3D iomap_page_create(iter->inode, folio, iter->flags);
+ 	iomap_adjust_read_range(iter->inode, folio, &pos, length, &poff, &plen)=
+;
+ 	if (plen =3D=3D 0)
+ 		goto done;
+@@ -550,7 +555,7 @@ static int __iomap_write_begin(const struct iomap_ite=
+r *iter, loff_t pos,
+ 		size_t len, struct folio *folio)
+ {
+ 	const struct iomap *srcmap =3D iomap_iter_srcmap(iter);
+-	struct iomap_page *iop =3D iomap_page_create(iter->inode, folio);
++	struct iomap_page *iop;
+ 	loff_t block_size =3D i_blocksize(iter->inode);
+ 	loff_t block_start =3D round_down(pos, block_size);
+ 	loff_t block_end =3D round_up(pos + len, block_size);
+@@ -561,6 +566,8 @@ static int __iomap_write_begin(const struct iomap_ite=
+r *iter, loff_t pos,
+ 		return 0;
+ 	folio_clear_error(folio);
 =20
- 	if (!dirty_exceeded && wb->dirty_exceeded)
- 		wb->dirty_exceeded =3D 0;
--
--	if (writeback_in_progress(wb))
--		return;
--
--	/*
--	 * In laptop mode, we wait until hitting the higher threshold before
--	 * starting background writeout, and then write out all the way down
--	 * to the lower threshold.  So slow writers cause minimal disk activity=
-.
--	 *
--	 * In normal mode, we start background writeout at the lower
--	 * background_thresh, to keep the amount of dirty memory low.
--	 */
--	if (laptop_mode)
--		return;
--
--	if (nr_reclaimable > gdtc->bg_thresh)
--		wb_start_background_writeback(wb);
- }
-=20
- static DEFINE_PER_CPU(int, bdp_ratelimits);
++	iop =3D iomap_page_create(iter->inode, folio, iter->flags);
++
+ 	do {
+ 		iomap_adjust_read_range(iter->inode, folio, &block_start,
+ 				block_end - block_start, &poff, &plen);
+@@ -1332,7 +1339,7 @@ iomap_writepage_map(struct iomap_writepage_ctx *wpc=
+,
+ 		struct writeback_control *wbc, struct inode *inode,
+ 		struct folio *folio, u64 end_pos)
+ {
+-	struct iomap_page *iop =3D iomap_page_create(inode, folio);
++	struct iomap_page *iop =3D iomap_page_create(inode, folio, 0);
+ 	struct iomap_ioend *ioend, *next;
+ 	unsigned len =3D i_blocksize(inode);
+ 	unsigned nblocks =3D i_blocks_per_folio(inode, folio);
 --=20
 2.30.2
 
