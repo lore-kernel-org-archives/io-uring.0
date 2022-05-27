@@ -2,113 +2,113 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEF37C433F5
-	for <io-uring@archiver.kernel.org>; Fri, 27 May 2022 08:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84451C433F5
+	for <io-uring@archiver.kernel.org>; Fri, 27 May 2022 13:50:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbiE0ImL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 27 May 2022 04:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
+        id S1346092AbiE0Nud (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 27 May 2022 09:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348426AbiE0ImL (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 27 May 2022 04:42:11 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8497A2AC64;
-        Fri, 27 May 2022 01:42:09 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D605321AAA;
-        Fri, 27 May 2022 08:42:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1653640927; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K3kR8Rvk9ywh6jthWa6f6W+fh5ln2gc1wOBcFNlUoZo=;
-        b=jGTVN/VJ3aSzzuzLCGlGXqp2VGAkPu00h7wV9ZnWD7SUhij0Sx6zjHEASn2lgODJlpPSGL
-        lev8mFDaDbK6ok1HMGyWePK8KX6SVj4N+YhmBx3qY4RWc/V+0qPCx1PTQYsPUR+wkaELOX
-        9K/jx31qvClXXqCSvgbXcA59TOs/vqI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1653640927;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=K3kR8Rvk9ywh6jthWa6f6W+fh5ln2gc1wOBcFNlUoZo=;
-        b=Pxxqrkvw7XHONluBWcBzyxmvH2RJ91//IYl9VyNDBu1px+Fb3HIb1DWpWHUvAQPYhCP6Fa
-        6NhUNoRZqFwLFwAw==
-Received: from quack3.suse.cz (unknown [10.100.224.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AA8FC2C141;
-        Fri, 27 May 2022 08:42:07 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id F3BFBA0632; Fri, 27 May 2022 10:42:03 +0200 (CEST)
-Date:   Fri, 27 May 2022 10:42:03 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Stefan Roesch <shr@fb.com>, io-uring@vger.kernel.org,
-        kernel-team@fb.com, linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, jack@suse.cz, hch@infradead.org
-Subject: Re: [PATCH v6 05/16] iomap: Add async buffered write support
-Message-ID: <20220527084203.jzufgln7oqfdghvy@quack3.lan>
-References: <20220526173840.578265-1-shr@fb.com>
- <20220526173840.578265-6-shr@fb.com>
- <20220526223705.GJ1098723@dread.disaster.area>
+        with ESMTP id S241191AbiE0Nuc (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 27 May 2022 09:50:32 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7E018358
+        for <io-uring@vger.kernel.org>; Fri, 27 May 2022 06:50:31 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id q3so2875903ilt.9
+        for <io-uring@vger.kernel.org>; Fri, 27 May 2022 06:50:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Q4HlnP4M3KnRD2xQ+3g55EAyPzM5QsgR4RqaiwyAk1A=;
+        b=Zsb9cEvreybbucDkNAONb+JKPAYw0lVzUav+MMbR6lOumdV74bMWuEyUxWDRZ8LYUk
+         S/l/5LAYWqOO88JZlNJlDIrpucEzX39HWnSB771muMIVK4U3FYMhcWL9QMRMsMPXcTvn
+         qhGMbs49nltl0iKMV+9eQp1xBJwLUYzGes3PkzPy2IdCthjIqaM5im5e0GyKVnnKmUAT
+         oGCZDzfDb7CtDx2wZO2ezLCy61nT+G+K67Rz2YnJ44JTWH9zAuJ1DP8cNnHv4mxsFbon
+         t4n64Al/RHZ3rxkZIaPSVfrks5u/juAFmHUhJDOEodEqrB0BbWOJrAW1MLL1c8wysVAU
+         0ewA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Q4HlnP4M3KnRD2xQ+3g55EAyPzM5QsgR4RqaiwyAk1A=;
+        b=DiPvAsogupXNVr57Ef33SAlAJ8iWrB6Nwl+IWROBEUrBVlcPOWqI3oUaZcAqseaiOc
+         BkvTbS3+ABhdT70oBTq+3/2FUa2pDtSxkQsBVn0WBLAffJfEtHtAoaXr6VAiuUjEkq+9
+         ThM2sI+IV+lpHO9MirzGLoErZPxLSsB1TyV7f/nMA03kqigVHaLDpAsef7zi3ngZ5UMV
+         X02Y+atk2Y00T4u9bHq22UFreL1kQHgcstiKtIqVNK8GASsi7WntbF9sxE33yymJEB7Q
+         +iA/ZyniwE2Lqx5iPG+NrlsPp5vGv5n3bokDgRcXtokyKZN+ZoIZYSSZ/V6FBJ5+cwc5
+         OSEQ==
+X-Gm-Message-State: AOAM531MnSLGlWdcXiRDdcJRxII3IJx1Om+FgFw0Q95Hcva3BHX7jvhO
+        cSzAv7pRClRZAMVEs+jlNIxEkA==
+X-Google-Smtp-Source: ABdhPJzflBDP+8KeLHSwwPSvMDerBpNFXjto1MRZdAl991s8Idyks4+WKMogwIQgTljrfXPNPfD/cw==
+X-Received: by 2002:a05:6e02:1a83:b0:2d1:bb9a:bade with SMTP id k3-20020a056e021a8300b002d1bb9abademr11282606ilv.189.1653659430312;
+        Fri, 27 May 2022 06:50:30 -0700 (PDT)
+Received: from [192.168.1.172] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id a4-20020a056e0208a400b002d1a5afa79bsm1281521ilt.86.2022.05.27.06.50.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 May 2022 06:50:29 -0700 (PDT)
+Message-ID: <2085bfef-a91c-8adb-402b-242e8c5d5c55@kernel.dk>
+Date:   Fri, 27 May 2022 07:50:27 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220526223705.GJ1098723@dread.disaster.area>
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [io_uring] 584b0180f0:
+ phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s
+ -10.2% regression
+Content-Language: en-US
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, io-uring@vger.kernel.org,
+        lkp@lists.01.org, lkp@intel.com, ying.huang@intel.com,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com, guobing.chen@intel.com,
+        ming.a.chen@intel.com, frank.du@intel.com, Shuhua.Fan@intel.com,
+        wangyang.guo@intel.com, Wenhuan.Huang@intel.com,
+        jessica.ji@intel.com, shan.kang@intel.com, guangli.li@intel.com,
+        tiejun.li@intel.com, yu.ma@intel.com, dapeng1.mi@intel.com,
+        jiebin.sun@intel.com, gengxin.xie@intel.com, fan.zhao@intel.com
+References: <20220527092432.GE11731@xsang-OptiPlex-9020>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220527092432.GE11731@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri 27-05-22 08:37:05, Dave Chinner wrote:
-> On Thu, May 26, 2022 at 10:38:29AM -0700, Stefan Roesch wrote:
-> > This adds async buffered write support to iomap.
-> > 
-> > This replaces the call to balance_dirty_pages_ratelimited() with the
-> > call to balance_dirty_pages_ratelimited_flags. This allows to specify if
-> > the write request is async or not.
-> > 
-> > In addition this also moves the above function call to the beginning of
-> > the function. If the function call is at the end of the function and the
-> > decision is made to throttle writes, then there is no request that
-> > io-uring can wait on. By moving it to the beginning of the function, the
-> > write request is not issued, but returns -EAGAIN instead. io-uring will
-> > punt the request and process it in the io-worker.
-> > 
-> > By moving the function call to the beginning of the function, the write
-> > throttling will happen one page later.
+On 5/27/22 3:24 AM, kernel test robot wrote:
 > 
-> Won't it happen one page sooner? I.e. on single page writes we'll
-> end up throttling *before* we dirty the page, not *after* we dirty
-> the page. IOWs, we can't wait for the page that we just dirtied to
-> be cleaned to make progress and so this now makes the loop dependent
-> on pages dirtied by other writers being cleaned to guarantee
-> forwards progress?
 > 
-> That seems like a subtle but quite significant change of
-> algorithm...
+> Greeting,
+> 
+> FYI, we noticed a -10.2% regression of phoronix-test-suite.fio.SequentialWrite.IO_uring.Yes.Yes.1MB.DefaultTestDirectory.mb_s due to commit:
+> 
+> 
+> commit: 584b0180f0f4d67d7145950fe68c625f06c88b10 ("io_uring: move read/write file prep state into actual opcode handler")
+> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> in testcase: phoronix-test-suite
+> on test machine: 96 threads 2 sockets Intel(R) Xeon(R) Gold 6252 CPU @ 2.10GHz with 512G memory
+> with following parameters:
+> 
+> 	test: fio-1.14.1
+> 	option_a: Sequential Write
+> 	option_b: IO_uring
+> 	option_c: Yes
+> 	option_d: Yes
+> 	option_e: 1MB
+> 	option_f: Default Test Directory
+> 	cpufreq_governor: performance
+> 	ucode: 0x500320a
+> 
+> test-description: The Phoronix Test Suite is the most comprehensive testing and benchmarking platform available that provides an extensible framework for which new tests can be easily added.
+> test-url: http://www.phoronix-test-suite.com/
 
-So I'm convinced the difference will be pretty much in the noise because of
-how many dirty pages there have to be to even start throttling processes
-but some more arguments are:
+I'm a bit skeptical on this, but I'd like to try and run the test case.
+Since it's just a fio test case, why can't I find it somewhere? Seems
+very convoluted to have to setup lkp-tests just for this. Besides, I
+tried, but it doesn't work on aarch64...
 
-* we ratelimit calls to balance_dirty_pages() based on number of pages
-  dirtied by the current process in balance_dirty_pages_ratelimited()
-
-* balance_dirty_pages() uses number of pages dirtied by the current process
-  to decide about the delay.
-
-So the only situation where I could see this making a difference would be
-if dirty limit is a handful of pages and even there I have hard time to see
-how exactly. So I'm ok with the change and in the case we see it causes
-problems somewhere, we'll think how to fix it based on the exact scenario.
-
-I guess the above two points are the reason why Stefan writes about throttling
-one page later because we count only number of pages dirtied until this
-moment so the page dirtied by this iteration of loop in iomap_write_iter()
-will get reflected only by the call to balance_dirty_pages_ratelimited() in
-the next iteration (or the next call to iomap_write_iter()).
-
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jens Axboe
+
