@@ -2,170 +2,87 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BD31C43217
-	for <io-uring@archiver.kernel.org>; Tue, 31 May 2022 18:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90813C433F5
+	for <io-uring@archiver.kernel.org>; Tue, 31 May 2022 18:58:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347106AbiEaSlv (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 31 May 2022 14:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        id S236812AbiEaS6U (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 31 May 2022 14:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347095AbiEaSlq (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 31 May 2022 14:41:46 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848E9E15
-        for <io-uring@vger.kernel.org>; Tue, 31 May 2022 11:41:40 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id o29-20020a05600c511d00b00397697f172dso1573900wms.0
-        for <io-uring@vger.kernel.org>; Tue, 31 May 2022 11:41:40 -0700 (PDT)
+        with ESMTP id S1344196AbiEaS6T (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 31 May 2022 14:58:19 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295F7562E2
+        for <io-uring@vger.kernel.org>; Tue, 31 May 2022 11:58:17 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id q21so8697782wra.2
+        for <io-uring@vger.kernel.org>; Tue, 31 May 2022 11:58:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XTP4iDeAMMuWaU0byLugZsxmmGz2FMBqZk2mPA87o8Q=;
-        b=p0YDYKj8oZBxmO/xWmHF5WPpVOyfJA/9pKYiDLKO7RewCeqRaFWDAJV2ZrFdEeHThp
-         p4KkXG+5GqWE7Xc3tp4VkSidmYM71M0yddL14rOXcHDOIYyqej6GFQjgSoB1Xk1xWTkG
-         dkSn3hXbDI4d/vF5qI+RiSaSOKtYrtxLNoNYTl71aCHZVlbDN1L9Fx9G8qyuXgO5wUBm
-         cr/QYqDcVFQi/s7B+bjZEhTws0JlGFgC3JpQ1laGjlL+14RLYMojR744BKAOwsYte/9Y
-         ZYyq0LBDoGNjWAb1ZHeVnXmbrtNQXkLpwtfmYAbKvzSeFfr4AOGgQs/aMsz1c1pB3G80
-         t3qg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3jqFKxuM0VdeJ/MyByEyz+wyq2IRR/BBVsyEiN0wEB8=;
+        b=WEETQz6q/FWDtvpNTT4MeaxxeAJrhldu2uL5U/wiI5BGoF0Gn/2MkEqnlWTohkqfNL
+         zUwt7LiMyWJxJS0M5FUEsSiecRclKm84gYN+DeZ+Ef/BbWtLVf+kpvoUai3Kp5phExa8
+         NEJuRtL0p1mu6H4M1zWhFFLRldtWTBvdeX33agqaG5394MPaPY91cQ3/UYn7U4b2Kjr9
+         2ulNax3VDLzItei+PR72dqILLCSQBS8Zn3XeMEwikeWWodb7dCLPPKcqytvor/+I8rj0
+         mpEeMSYVX43ZatslYop6VK2XHssgPqsdwuoRTRCtwAd55TAj4ZWVh6CKxHuJKPkFhs59
+         lmzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XTP4iDeAMMuWaU0byLugZsxmmGz2FMBqZk2mPA87o8Q=;
-        b=E5sImIk3F/WBMjrNV+SixNkDeE9PuoqYJJOzte4vedanyGkIFTKutTluejFMnj9YBc
-         DlmlGeIg1o1mA/IyLSJmHRMSBUTuX/lybGp+WhGUVYhguCZepVL9Ireml2KvzuTt4oYS
-         14Ng9d72VfOcM9Ee3MPGwcZ6Q+8fxbPki5nhpBR1YxMwDZAUHIhJ3p4HKOKxtMODq/DC
-         Ui00vMQInzaoXKlFB+8PWcdb4kgs2tj05PqDpCQ8Wig1htHlhy7RJhX7qx3Dk5Tt5Qfm
-         M2nLYEqtEUpYc1Py49XmLLr16XI7V+wNLtmd44zHW1L/Ot5fYpfOgu7Hg4mhyA8OPiXS
-         7rFg==
-X-Gm-Message-State: AOAM530jHnlrM3GW/CYYy84erUJLpk8SWbwYs+0HenB15DlOEiWmPo4g
-        cmNTkAUsBc3MNxYhitezSBlp+eS4PzmQFuJ5
-X-Google-Smtp-Source: ABdhPJzx6d9KhKDRsVYcHz8vULjo9gLdcOVZTLF/sAl1DSfU3ljxs+Atq3KRXfcrkUi6rhU56lnIlA==
-X-Received: by 2002:a1c:5403:0:b0:397:3437:bbcf with SMTP id i3-20020a1c5403000000b003973437bbcfmr24705133wmb.1.1654022498794;
-        Tue, 31 May 2022 11:41:38 -0700 (PDT)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b497:0:359:2800:e38d:e04f])
-        by smtp.gmail.com with ESMTPSA id o16-20020a05600c059000b00397342bcfb7sm2831877wmd.46.2022.05.31.11.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 May 2022 11:41:38 -0700 (PDT)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     io-uring@vger.kernel.org, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH 3/5] io_uring: add mkdir opcode for current working directory
-Date:   Tue, 31 May 2022 19:41:23 +0100
-Message-Id: <20220531184125.2665210-4-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220531184125.2665210-1-usama.arif@bytedance.com>
-References: <20220531184125.2665210-1-usama.arif@bytedance.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3jqFKxuM0VdeJ/MyByEyz+wyq2IRR/BBVsyEiN0wEB8=;
+        b=HWwp+SiPznbnVMA9wewiVD91Ob0zwUasYQi56ttBJrpU0vrqzV13Y8CHnZ+zboUWXP
+         dxS7f7EEfEonOHsdVrrbtO/67hgcqdn7j8vZQxIxui/ll+aRLMJKvBQlZR330gCOeMJl
+         q818xULMWjOWODnWx3IzHOeIlKynvOkk0XiJkTyLOuDvG0ljY++VPew75ALsmU5/bngt
+         N0Q2o4Hb2K4kI8Z0UMJR16g3NSO6q7mU/zsBPyo/BMHvpKWDu6bOG76eybgAWqd/tEHo
+         LsLcKBRIsdHbe/YmwnEKcCQ/BYZFVHHVrLYJLBuCpYl+HessePb3J+0yFcxcym+2AM7g
+         +LdA==
+X-Gm-Message-State: AOAM5331+mWVzLHsfNDLJI5HvlQf8zk7KNPigngoqm/pR5Yicwry2mei
+        hDX44VMCxuiSo6DhTDuL/Ocqy6pnYdnCWs74
+X-Google-Smtp-Source: ABdhPJzaXozUmfTumRxUq5m+SNRdgDLpeB6YFm8blpCdw8skJx9KTpGM+HSWp+5rOpD7JsvU6/af/A==
+X-Received: by 2002:a05:6000:1542:b0:20f:f4fc:4cd3 with SMTP id 2-20020a056000154200b0020ff4fc4cd3mr29118402wry.299.1654023495617;
+        Tue, 31 May 2022 11:58:15 -0700 (PDT)
+Received: from [10.188.163.71] (cust-east-parth2-46-193-73-98.wb.wifirst.net. [46.193.73.98])
+        by smtp.gmail.com with ESMTPSA id f8-20020a5d64c8000000b0020d07958bb3sm12599259wri.3.2022.05.31.11.58.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 May 2022 11:58:15 -0700 (PDT)
+Message-ID: <da4e94f7-94ce-ad57-ad15-c9117c4fef2d@kernel.dk>
+Date:   Tue, 31 May 2022 12:58:14 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 0/5] io_uring: add opcodes for current working directory
+Content-Language: en-US
+To:     Usama Arif <usama.arif@bytedance.com>, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com
+References: <20220531184125.2665210-1-usama.arif@bytedance.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220531184125.2665210-1-usama.arif@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This provides consistency between io_uring and the respective I/O syscall
-and avoids having the user of liburing specify the cwd in sqe for
-IORING_OP_MKDIRAT.
+On 5/31/22 12:41 PM, Usama Arif wrote:
+> This provides consistency between io_uring and the respective I/O syscall
+> and avoids having the user of liburing specify the cwd in sqe when working
+> with current working directory, for e.g. the user can directly call with
+> IORING_OP_RENAME instead of IORING_OP_RENAMEAT and providing AT_FDCWD in
+> sqe->fd and sqe->len, similar to syscall interface.
+> 
+> This is done for rename, unlink, mkdir, symlink and link in this
+> patch-series.
+> 
+> The tests for these opcodes in liburing are present at
+> https://github.com/uarif1/liburing/tree/cwd_opcodes. If the patches are
+> acceptable, I am happy to create a PR in above for the tests.
 
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- fs/io_uring.c                 | 20 +++++++++++++++-----
- include/uapi/linux/io_uring.h |  1 +
- 2 files changed, 16 insertions(+), 5 deletions(-)
+Can't we just provide prep helpers for them in liburing?
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index d38c5f54f6a4..9c9fa0b3938d 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -1310,6 +1310,7 @@ static const struct io_op_def io_op_defs[] = {
- 	[IORING_OP_RENAMEAT] = {},
- 	[IORING_OP_UNLINK] = {},
- 	[IORING_OP_UNLINKAT] = {},
-+	[IORING_OP_MKDIR] = {},
- 	[IORING_OP_MKDIRAT] = {},
- 	[IORING_OP_SYMLINKAT] = {},
- 	[IORING_OP_LINKAT] = {},
-@@ -1459,6 +1460,8 @@ const char *io_uring_get_opcode(u8 opcode)
- 		return "UNLINK";
- 	case IORING_OP_UNLINKAT:
- 		return "UNLINKAT";
-+	case IORING_OP_MKDIR:
-+		return "MKDIR";
- 	case IORING_OP_MKDIRAT:
- 		return "MKDIRAT";
- 	case IORING_OP_SYMLINKAT:
-@@ -4897,8 +4900,8 @@ static int io_unlink(struct io_kiocb *req, unsigned int issue_flags)
- 	return 0;
- }
- 
--static int io_mkdirat_prep(struct io_kiocb *req,
--			    const struct io_uring_sqe *sqe)
-+static int io_mkdir_prep(struct io_kiocb *req,
-+			    const struct io_uring_sqe *sqe, bool is_cwd)
- {
- 	struct io_mkdir *mkd = &req->mkdir;
- 	const char __user *fname;
-@@ -4908,7 +4911,10 @@ static int io_mkdirat_prep(struct io_kiocb *req,
- 	if (unlikely(req->flags & REQ_F_FIXED_FILE))
- 		return -EBADF;
- 
--	mkd->dfd = READ_ONCE(sqe->fd);
-+	if (is_cwd)
-+		mkd->dfd = AT_FDCWD;
-+	else
-+		mkd->dfd = READ_ONCE(sqe->fd);
- 	mkd->mode = READ_ONCE(sqe->len);
- 
- 	fname = u64_to_user_ptr(READ_ONCE(sqe->addr));
-@@ -4920,7 +4926,7 @@ static int io_mkdirat_prep(struct io_kiocb *req,
- 	return 0;
- }
- 
--static int io_mkdirat(struct io_kiocb *req, unsigned int issue_flags)
-+static int io_mkdir(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_mkdir *mkd = &req->mkdir;
- 	int ret;
-@@ -8097,8 +8103,10 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		return io_unlink_prep(req, sqe, 1);
- 	case IORING_OP_UNLINKAT:
- 		return io_unlink_prep(req, sqe, 0);
-+	case IORING_OP_MKDIR:
-+		return io_mkdir_prep(req, sqe, 1);
- 	case IORING_OP_MKDIRAT:
--		return io_mkdirat_prep(req, sqe);
-+		return io_mkdir_prep(req, sqe, 0);
- 	case IORING_OP_SYMLINKAT:
- 		return io_symlinkat_prep(req, sqe);
- 	case IORING_OP_LINKAT:
-@@ -8255,6 +8263,7 @@ static void io_clean_op(struct io_kiocb *req)
- 		case IORING_OP_UNLINKAT:
- 			putname(req->unlink.filename);
- 			break;
-+		case IORING_OP_MKDIR:
- 		case IORING_OP_MKDIRAT:
- 			putname(req->mkdir.filename);
- 			break;
-@@ -8422,6 +8431,7 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 	case IORING_OP_UNLINKAT:
- 		ret = io_unlink(req, issue_flags);
- 		break;
-+	case IORING_OP_MKDIR:
- 	case IORING_OP_MKDIRAT:
- 		ret = io_mkdirat(req, issue_flags);
- 		break;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 7828b7183d01..58f2e0611152 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -191,6 +191,7 @@ enum io_uring_op {
- 	IORING_OP_URING_CMD,
- 	IORING_OP_RENAME,
- 	IORING_OP_UNLINK,
-+	IORING_OP_MKDIR,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
 -- 
-2.25.1
+Jens Axboe
 
