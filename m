@@ -2,54 +2,54 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6857C433EF
-	for <io-uring@archiver.kernel.org>; Wed,  1 Jun 2022 18:53:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B777AC43334
+	for <io-uring@archiver.kernel.org>; Wed,  1 Jun 2022 19:31:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiFASxU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 1 Jun 2022 14:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S229759AbiFATbQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 1 Jun 2022 15:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiFASxT (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Jun 2022 14:53:19 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5E2149159
-        for <io-uring@vger.kernel.org>; Wed,  1 Jun 2022 11:53:14 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id n10so5616239ejk.5
-        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 11:53:14 -0700 (PDT)
+        with ESMTP id S229708AbiFATbK (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Jun 2022 15:31:10 -0400
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E3817CE62
+        for <io-uring@vger.kernel.org>; Wed,  1 Jun 2022 12:28:47 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id be31so4368482lfb.10
+        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 12:28:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=idL2yQRFOy1hBJ1NSHecJbxG0rxoSuhlYFXzZ6X/QIM=;
-        b=hNYIo0IZSnyCKjBFpFC2T9gjitpRKQVi4I9fJpADdeDspIfTd2nupJGSDU7VQ+Zgij
-         Qn0tNA6U9mWY7NGRGKjYEgUxjqB2u7JvzG0fpOHmmuH16+LBKLwHiIXijjNGOIru9s8U
-         csUPTQwy1QPVAFkRogZVGmc0/VHLLLmBK22rQ=
+        bh=G7ZzUn9B48Q9pcoedcD+QVLsjxYKZ/e29+5MXyJu0UM=;
+        b=WLZ+fNqOQ6MxGuwNMW13Xc0SslBSLkI3YM2Iog839KoGaqq+5XvpCdz7e2VKNw2Fmy
+         ZLYTeLiadNkYnfp9ROZfY2Ntiy0iXdwWT8OoaX4Vbe8eWkAoUfFWGeBmeu/fuw8yvl7c
+         6qxajQCEoUpyi5ZSzaMMbb3JqVrxCxpYzl0iU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=idL2yQRFOy1hBJ1NSHecJbxG0rxoSuhlYFXzZ6X/QIM=;
-        b=wlmLoWqiHsudytuENQ8a31Vn4/33VtUrvR/yEK3Usz1ng9T8ilb/uPrG8yV+SrK6J/
-         wHxco/0PCawo09SvZfwWDdnDtPwBxZtQ5sn4g6ubFodu9rfV6zO7s0S8Z3Ug5dgZ+dLd
-         pNeReSkofEFGbk22drLILchnJ/3fPZEm96h/cxPg2bgt0mDRBoU839CJ6xkUE4BG9pzs
-         4sg9bnI0PlhJMxnSYSE8nxz6ba2r1Ju74frkWtgVv+UEEQyAYEOPaEJzN9VUoXQRro4O
-         oBtQwzokADYG2DnXI0KCDcw/ssDdMAVTloZ+zWNkw5QzXusRvO6NhvcI3ccny6YNpZlA
-         tbrg==
-X-Gm-Message-State: AOAM530mxEAmYXEvCCbYvHfbSRJ6npsdhch6VUst4PWCCAVapyuXauF8
-        jmVsNoYnEYUGB7Z55B8ACMCvCgkV82+1JhYS
-X-Google-Smtp-Source: ABdhPJxjW9XTOiZEllzodqfMq2YyNSt0A+LxN4PXk0K5rta4IHIRevcmrBb8+0mSUsjypovZWEMKnA==
-X-Received: by 2002:a17:907:1c8c:b0:6ff:144d:e7da with SMTP id nb12-20020a1709071c8c00b006ff144de7damr845905ejc.542.1654109592573;
-        Wed, 01 Jun 2022 11:53:12 -0700 (PDT)
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com. [209.85.128.48])
-        by smtp.gmail.com with ESMTPSA id fg16-20020a1709069c5000b006fe8d8c54a7sm986578ejc.87.2022.06.01.11.53.11
+        bh=G7ZzUn9B48Q9pcoedcD+QVLsjxYKZ/e29+5MXyJu0UM=;
+        b=gFUgw9mKF+4YsPqMSOI/sbEOaaz4HKCfA2/PaahTtSHFSsFKRI2cHcUifFd8m2lHZG
+         MErSa1kz72BMJ6MiGc7ZCS/Qz4vBlVUGI0LsF9NMIoExmBP8aAWys9tebEYZcb6DqGLI
+         4Q4AyqvawNJmVE9jjqn4d7/yDeMx4Gh4bVzR0X+qIHxArTKlb8Qs3zYhy5CHtJ0bZynw
+         sd7hG6tfajxd7/j3zdr69/X9+zaXo0eyXufaJvn7xXdbbZcPnffIj+ZHxBNkgY6igG5T
+         DDbmP6i+R2uHTU1pSJUM1TcQYy/6747CvpfHjRcarLOdpJQTZnqVJhMFX8dNlw2YFxGp
+         Pmzg==
+X-Gm-Message-State: AOAM5307ColI1no0Hhd1x4rlKZvhPaqs7J8DQcbcCNNJYPLD2wFc7Kkz
+        3KX05xIe5aP4a7NoMip4cxkwMKUuZCzOfjoM
+X-Google-Smtp-Source: ABdhPJyZ8w2/G+r0EgXKj+svEr9JuMdXmVDQ/IYWQ1hc6NK4uNjrs2ExBI+UjyoZ7jUrCahiczN8yg==
+X-Received: by 2002:a05:6402:524c:b0:42e:320:bfbc with SMTP id t12-20020a056402524c00b0042e0320bfbcmr1401617edd.65.1654111242376;
+        Wed, 01 Jun 2022 12:20:42 -0700 (PDT)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id oq3-20020a170906cc8300b006fe921fcb2dsm998253ejb.49.2022.06.01.12.20.41
         for <io-uring@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jun 2022 11:53:12 -0700 (PDT)
-Received: by mail-wm1-f48.google.com with SMTP id f7-20020a1c3807000000b0039c1a10507fso1592322wma.1
-        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 11:53:11 -0700 (PDT)
-X-Received: by 2002:a7b:cb91:0:b0:397:3225:244 with SMTP id
- m17-20020a7bcb91000000b0039732250244mr29945960wmi.68.1654109591504; Wed, 01
- Jun 2022 11:53:11 -0700 (PDT)
+        Wed, 01 Jun 2022 12:20:41 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id c5-20020a1c3505000000b0038e37907b5bso3624521wma.0
+        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 12:20:41 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f0e:b0:397:6b94:7469 with SMTP id
+ l14-20020a05600c4f0e00b003976b947469mr29967475wmq.145.1654111241328; Wed, 01
+ Jun 2022 12:20:41 -0700 (PDT)
 MIME-Version: 1.0
 References: <b7bbc124-8502-0ee9-d4c8-7c41b4487264@kernel.dk>
  <20220326122838.19d7193f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
@@ -58,12 +58,13 @@ References: <b7bbc124-8502-0ee9-d4c8-7c41b4487264@kernel.dk>
  <20220326143049.671b463c@kernel.org> <78d9a5e2eaad11058f54b1392662099549aa925f.camel@trillion01.com>
  <CAHk-=wiTyisXBgKnVHAGYCNvkmjk=50agS2Uk6nr+n3ssLZg2w@mail.gmail.com>
  <32c3c699-3e3a-d85e-d717-05d1557c17b9@kernel.dk> <CAHk-=wiCjtDY0UW8p5c++u_DGkrzx6k91bpEc9SyEqNYYgxbOw@mail.gmail.com>
- <a59ba475-33fc-b91c-d006-b7d8cc6f964d@kernel.dk>
-In-Reply-To: <a59ba475-33fc-b91c-d006-b7d8cc6f964d@kernel.dk>
+ <a59ba475-33fc-b91c-d006-b7d8cc6f964d@kernel.dk> <CAHk-=wg9jtV5JWxBudYgoL0GkiYPefuRu47d=L+7701kLWoQaA@mail.gmail.com>
+ <ca0248b3-2080-3ea2-6a09-825d084ac005@kernel.dk>
+In-Reply-To: <ca0248b3-2080-3ea2-6a09-825d084ac005@kernel.dk>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 1 Jun 2022 11:52:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg9jtV5JWxBudYgoL0GkiYPefuRu47d=L+7701kLWoQaA@mail.gmail.com>
-Message-ID: <CAHk-=wg9jtV5JWxBudYgoL0GkiYPefuRu47d=L+7701kLWoQaA@mail.gmail.com>
+Date:   Wed, 1 Jun 2022 12:20:24 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgyuXmicd2Jk80Y3-3jwXQgYGid2J1nm58c2yVrRxdjhw@mail.gmail.com>
+Message-ID: <CAHk-=wgyuXmicd2Jk80Y3-3jwXQgYGid2J1nm58c2yVrRxdjhw@mail.gmail.com>
 Subject: Re: [GIT PULL] io_uring updates for 5.18-rc1
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Olivier Langlois <olivier@trillion01.com>,
@@ -74,48 +75,11 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Wed, Jun 1, 2022 at 11:34 AM Jens Axboe <axboe@kernel.dk> wrote:
+On Wed, Jun 1, 2022 at 12:10 PM Jens Axboe <axboe@kernel.dk> wrote:
 >
-> But as a first step, let's just mark it deprecated with a pr_warn() for
-> 5.20 and then plan to kill it off whenever a suitable amount of relases
-> have passed since that addition.
+> I mean only for the IORING_OP_EPOLL_CTL opcode, which is the only epoll
+> connection we have in there.
 
-I'd love to, but it's not actually realistic as things stand now.
-epoll() is used in a *lot* of random libraries. A "pr_warn()" would
-just be senseless noise, I bet.
+Ok, that removal sounds fine to me. Thanks.
 
-No, there's a reason that EPOLL is still there, still 'default y',
-even though I dislike it and think it was a mistake, and we've had
-several nasty bugs related to it over the years.
-
-It really can be a very useful system call, it's just that it really
-doesn't work the way the actual ->poll() interface was designed, and
-it kind of hijacks it in ways that mostly work, but the have subtle
-lifetime issues that you don't see with a regular select/poll because
-those will always tear down the wait queues.
-
-Realistically, the proper fix to epoll is likely to make it explicit,
-and make files and drivers that want to support it have to actually
-opt in. Because a lot of the problems have been due to epoll() looking
-*exactly* like a regular poll/select to a driver or a filesystem, but
-having those very subtle extended requirements.
-
-(And no, the extended requirements aren't generally onerous, and
-regular ->poll() works fine for 99% of all cases. It's just that
-occasionally, special users are then fooled about special contexts).
-
-In other words, it's a bit like our bad old days when "splice()" ended
-up falling back to regular ->read()/->write() implementations with
-set_fs(KERNEL_DS). Yes, that worked fine for 99% of all cases, and we
-did it for years, but it also caused several really nasty issues for
-when the read/write actor did something slightly unusual.
-
-So I may dislike epoll quite intensely, but I don't think we can
-*really* get rid of it. But we might be able to make it a bit more
-controlled.
-
-But so far every time it has caused issues, we've worked around it by
-fixing it up in the particular driver or whatever that ended up being
-triggered by epoll semantics.
-
-                Linus
+             Linus
