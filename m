@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3767BC43334
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87A75CCA479
 	for <io-uring@archiver.kernel.org>; Wed,  1 Jun 2022 21:07:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiFAVHS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 1 Jun 2022 17:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46916 "EHLO
+        id S231133AbiFAVHT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 1 Jun 2022 17:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiFAVHO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Jun 2022 17:07:14 -0400
+        with ESMTP id S231261AbiFAVHT (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Jun 2022 17:07:19 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0824561629
-        for <io-uring@vger.kernel.org>; Wed,  1 Jun 2022 14:07:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CF96C0C6
+        for <io-uring@vger.kernel.org>; Wed,  1 Jun 2022 14:07:17 -0700 (PDT)
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251HgMO2011588
-        for <io-uring@vger.kernel.org>; Wed, 1 Jun 2022 14:07:13 -0700
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251HgMOA011588
+        for <io-uring@vger.kernel.org>; Wed, 1 Jun 2022 14:07:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=iNcYV+f/9Xb9s2DKDhXxqtFLBfqGp5UatKpqDyVtVPI=;
- b=mbRI2JE8wrEfyVfd+5ioDAnsMcaQEKDqUsnZDez9U0g7Dk3LSDz5C6yZ2cE9abl4VxUg
- CeB2AOlCYRPYM4ybmU6OX1c8PBeUQnzh4zdAmiWQicu6TL0Ad5N/LgRj0S19bnjUCUir
- k1wqxVBKVTGUUQT6iCICejr1+gzJuzTkIcc= 
+ bh=/c1tXQ+b6bxtOlEa/BmLZu1viU9avcsa0t6EYp9adkM=;
+ b=ahLuLGnBdh3I8IY+HUwXj7x1wIS/tEzXcJcIi+XHlYbF1CeV04fGbd8QYEKjaZPdf1MG
+ U8H/KOmqVjASX+7i0DTKsqV+9QGJM78ryP/0PEoM1DNiaeYwFzXiMitPPBj70/2Ie9Xf
+ HvcugF6DUtMBfnXXFQW9Kho5cnTjN5ZSVR8= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ge3wk4ub5-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ge3wk4ub5-8
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 14:07:13 -0700
-Received: from twshared24024.25.frc3.facebook.com (2620:10d:c085:108::8) by
+        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 14:07:16 -0700
+Received: from twshared14818.18.frc3.facebook.com (2620:10d:c085:108::8) by
  mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 1 Jun 2022 14:07:11 -0700
+ 15.1.2375.28; Wed, 1 Jun 2022 14:07:13 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id E1DDBFEB23A5; Wed,  1 Jun 2022 14:01:42 -0700 (PDT)
+        id EE9ACFEB23A9; Wed,  1 Jun 2022 14:01:42 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
@@ -41,9 +41,9 @@ To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
         <hch@infradead.org>, <axboe@kernel.dk>,
         Christoph Hellwig <hch@lst.de>
-Subject: [PATCH v7 08/15] fs: add __remove_file_privs() with flags parameter
-Date:   Wed, 1 Jun 2022 14:01:34 -0700
-Message-ID: <20220601210141.3773402-9-shr@fb.com>
+Subject: [PATCH v7 10/15] fs: Add async write file modification handling.
+Date:   Wed, 1 Jun 2022 14:01:36 -0700
+Message-ID: <20220601210141.3773402-11-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220601210141.3773402-1-shr@fb.com>
 References: <20220601210141.3773402-1-shr@fb.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: mVckQa25hJLLKoqThBDJmJKbFXGbuN08
-X-Proofpoint-ORIG-GUID: mVckQa25hJLLKoqThBDJmJKbFXGbuN08
+X-Proofpoint-GUID: tXh92rM2gHNlIwCVU1IbXoSxJVVO2v0t
+X-Proofpoint-ORIG-GUID: tXh92rM2gHNlIwCVU1IbXoSxJVVO2v0t
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-01_08,2022-06-01_01,2022-02-23_01
@@ -60,88 +60,58 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the function __remove_file_privs, which allows the caller to
-pass the kiocb flags parameter.
-
-No intended functional changes in this patch.
+This adds a file_modified_async() function to return -EAGAIN if the
+request either requires to remove privileges or needs to update the file
+modification time. This is required for async buffered writes, so the
+request gets handled in the io worker of io-uring.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- fs/inode.c | 57 +++++++++++++++++++++++++++++++++++-------------------
- 1 file changed, 37 insertions(+), 20 deletions(-)
+ fs/inode.c         | 43 +++++++++++++++++++++++++++++++++++++++++--
+ include/linux/fs.h |  1 +
+ 2 files changed, 42 insertions(+), 2 deletions(-)
 
 diff --git a/fs/inode.c b/fs/inode.c
-index 9d9b422504d1..ac1cf5aa78c8 100644
+index c44573a32c6a..4503bed063e7 100644
 --- a/fs/inode.c
 +++ b/fs/inode.c
-@@ -2010,36 +2010,43 @@ static int __remove_privs(struct user_namespace *=
-mnt_userns,
- 	return notify_change(mnt_userns, dentry, &newattrs, NULL);
- }
-=20
--/*
-- * Remove special file priviledges (suid, capabilities) when file is wri=
-tten
-- * to or truncated.
-- */
--int file_remove_privs(struct file *file)
-+static int __file_remove_privs(struct file *file, unsigned int flags)
- {
- 	struct dentry *dentry =3D file_dentry(file);
- 	struct inode *inode =3D file_inode(file);
-+	int error;
- 	int kill;
--	int error =3D 0;
-=20
--	/*
--	 * Fast path for nothing security related.
--	 * As well for non-regular files, e.g. blkdev inodes.
--	 * For example, blkdev_write_iter() might get here
--	 * trying to remove privs which it is not allowed to.
--	 */
- 	if (IS_NOSEC(inode) || !S_ISREG(inode->i_mode))
- 		return 0;
-=20
- 	kill =3D dentry_needs_remove_privs(dentry);
--	if (kill < 0)
-+	if (kill <=3D 0)
- 		return kill;
--	if (kill)
--		error =3D __remove_privs(file_mnt_user_ns(file), dentry, kill);
-+
-+	if (flags & IOCB_NOWAIT)
-+		return -EAGAIN;
-+
-+	error =3D __remove_privs(file_mnt_user_ns(file), dentry, kill);
- 	if (!error)
- 		inode_has_no_xattr(inode);
-=20
- 	return error;
- }
-+
-+/**
-+ * file_remove_privs - remove special file privileges (suid, capabilitie=
-s)
-+ * @file: file to remove privileges from
-+ *
-+ * When file is modified by a write or truncation ensure that special
-+ * file privileges are removed.
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
-+int file_remove_privs(struct file *file)
-+{
-+	return __file_remove_privs(file, 0);
-+}
- EXPORT_SYMBOL(file_remove_privs);
-=20
- /**
-@@ -2090,18 +2097,28 @@ int file_update_time(struct file *file)
- }
+@@ -2116,17 +2116,21 @@ int file_update_time(struct file *file)
  EXPORT_SYMBOL(file_update_time);
 =20
--/* Caller must hold the file's inode lock */
+ /**
+- * file_modified - handle mandated vfs changes when modifying a file
++ * file_modified_flags - handle mandated vfs changes when modifying a fi=
+le
+  * @file: file that was modified
++ * @flags: kiocb flags
+  *
+  * When file has been modified ensure that special
+  * file privileges are removed and time settings are updated.
+  *
++ * If IOCB_NOWAIT is set, special file privileges will not be removed an=
+d
++ * time settings will not be updated. It will return -EAGAIN.
++ *
+  * Context: Caller must hold the file's inode lock.
+  *
+  * Return: 0 on success, negative errno on failure.
+  */
+-int file_modified(struct file *file)
++static int file_modified_flags(struct file *file, int flags)
+ {
+ 	int ret;
+ 	struct inode *inode =3D file_inode(file);
+@@ -2146,11 +2150,46 @@ int file_modified(struct file *file)
+ 	ret =3D inode_needs_update_time(inode, &now);
+ 	if (ret <=3D 0)
+ 		return ret;
++	if (flags & IOCB_NOWAIT)
++		return -EAGAIN;
+=20
+ 	return __file_update_time(file, &now, ret);
+ }
++
 +/**
 + * file_modified - handle mandated vfs changes when modifying a file
 + * @file: file that was modified
@@ -153,24 +123,44 @@ s)
 + *
 + * Return: 0 on success, negative errno on failure.
 + */
- int file_modified(struct file *file)
++int file_modified(struct file *file)
++{
++	return file_modified_flags(file, 0);
++}
+ EXPORT_SYMBOL(file_modified);
+=20
++/**
++ * kiocb_modified - handle mandated vfs changes when modifying a file
++ * @iocb: iocb that was modified
++ *
++ * When file has been modified ensure that special
++ * file privileges are removed and time settings are updated.
++ *
++ * Context: Caller must hold the file's inode lock.
++ *
++ * Return: 0 on success, negative errno on failure.
++ */
++int kiocb_modified(struct kiocb *iocb)
++{
++	return file_modified_flags(iocb->ki_filp, iocb->ki_flags);
++}
++EXPORT_SYMBOL_GPL(kiocb_modified);
++
+ int inode_needs_sync(struct inode *inode)
  {
--	int err;
-+	int ret;
+ 	if (IS_SYNC(inode))
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index bdf1ce48a458..553e57ec3efa 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2392,6 +2392,7 @@ static inline void file_accessed(struct file *file)
+ }
 =20
- 	/*
- 	 * Clear the security bits if the process is not being run by root.
- 	 * This keeps people from modifying setuid and setgid binaries.
- 	 */
--	err =3D file_remove_privs(file);
--	if (err)
--		return err;
-+	ret =3D __file_remove_privs(file, 0);
-+	if (ret)
-+		return ret;
+ extern int file_modified(struct file *file);
++int kiocb_modified(struct kiocb *iocb);
 =20
- 	if (unlikely(file->f_mode & FMODE_NOCMTIME))
- 		return 0;
+ int sync_inode_metadata(struct inode *inode, int wait);
+=20
 --=20
 2.30.2
 
