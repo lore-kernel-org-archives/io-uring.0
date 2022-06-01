@@ -2,47 +2,48 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5AE57C433EF
-	for <io-uring@archiver.kernel.org>; Wed,  1 Jun 2022 21:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BD3EC433EF
+	for <io-uring@archiver.kernel.org>; Wed,  1 Jun 2022 21:07:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiFAVEs (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 1 Jun 2022 17:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
+        id S231263AbiFAVHP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 1 Jun 2022 17:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbiFAVEf (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Jun 2022 17:04:35 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CEC230949
-        for <io-uring@vger.kernel.org>; Wed,  1 Jun 2022 14:04:33 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251JDHxj026437
-        for <io-uring@vger.kernel.org>; Wed, 1 Jun 2022 14:04:33 -0700
+        with ESMTP id S231261AbiFAVHO (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Jun 2022 17:07:14 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9BB46B7DD
+        for <io-uring@vger.kernel.org>; Wed,  1 Jun 2022 14:07:12 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 251E8EQb020018
+        for <io-uring@vger.kernel.org>; Wed, 1 Jun 2022 14:07:12 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=/DrIfFwryF28jpgKYd8aC2BVP4/JsBupN+LpZHKHGXE=;
- b=SPS4VuOzPAgnOy8HFdjkD/jOGSFDYghVjKrhauRoOaBs29+dgDN2JC4ddTo1b3E0l60p
- Ra5UNoJv/wXy9o5C3fAnczXeb43+AhVleyC7iiNoC8IgDb74Nk/78cm954Ilq6bACGiU
- ed3xN4frCI7avB9k1wf+pI8KdVvioPLlXNY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gdbt6cn0q-6
+ bh=Yt6TEqCrJwA/g0p7FZ8GGE3PH7HsqaIrUF33gFTVMx4=;
+ b=h6jD3sBZFnEGkI/etm+Lugt7k80ZUCeu0gtuZGp8f4QKXCk6kbJPx6hEP8r6h/IMHpOX
+ wzJN+WtbiTYVTCBt6r/LCo3tZ7Q2XWSpeJH73CN9CicjIsp14nZKnqsPWLRaqKUSY8/Y
+ 1jJLjTHIGzAIab7++CunsZfg/LVlVuyXH0M= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ge9m2jydc-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 14:04:32 -0700
-Received: from twshared4937.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Wed, 01 Jun 2022 14:07:11 -0700
+Received: from twshared10560.18.frc3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 1 Jun 2022 14:04:27 -0700
+ 15.1.2375.28; Wed, 1 Jun 2022 14:07:09 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 0FEB2FEB23AF; Wed,  1 Jun 2022 14:01:43 -0700 (PDT)
+        id DBCE5FEB23A3; Wed,  1 Jun 2022 14:01:42 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
-        <hch@infradead.org>, <axboe@kernel.dk>
-Subject: [PATCH v7 13/15] io_uring: Add tracepoint for short writes
-Date:   Wed, 1 Jun 2022 14:01:39 -0700
-Message-ID: <20220601210141.3773402-14-shr@fb.com>
+        <hch@infradead.org>, <axboe@kernel.dk>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH v7 07/15] fs: Add check for async buffered writes to generic_write_checks
+Date:   Wed, 1 Jun 2022 14:01:33 -0700
+Message-ID: <20220601210141.3773402-8-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220601210141.3773402-1-shr@fb.com>
 References: <20220601210141.3773402-1-shr@fb.com>
@@ -50,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: v2juEhMZoeaofrzRXbUKr8td3jrfmhph
-X-Proofpoint-GUID: v2juEhMZoeaofrzRXbUKr8td3jrfmhph
+X-Proofpoint-GUID: c-1JTo88koYPkKEs1qvTfjn5ynbN0LRK
+X-Proofpoint-ORIG-GUID: c-1JTo88koYPkKEs1qvTfjn5ynbN0LRK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-01_08,2022-06-01_01,2022-02-23_01
@@ -59,68 +60,48 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the io_uring_short_write tracepoint to io_uring. A short write
-is issued if not all pages that are required for a write are in the page
-cache and the async buffered writes have to return EAGAIN.
+This introduces the flag FMODE_BUF_WASYNC. If devices support async
+buffered writes, this flag can be set. It also modifies the check in
+generic_write_checks to take async buffered writes into consideration.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- fs/io_uring.c                   |  3 +++
- include/trace/events/io_uring.h | 25 +++++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ fs/read_write.c    | 4 +++-
+ include/linux/fs.h | 3 +++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index c0771e215669..9ab68138f442 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4543,6 +4543,9 @@ static int io_write(struct io_kiocb *req, unsigned =
-int issue_flags)
- 		if (ret2 !=3D req->cqe.res && ret2 >=3D 0 && need_complete_io(req)) {
- 			struct io_async_rw *rw;
+diff --git a/fs/read_write.c b/fs/read_write.c
+index e643aec2b0ef..175d98713b9a 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -1633,7 +1633,9 @@ int generic_write_checks_count(struct kiocb *iocb, =
+loff_t *count)
+ 	if (iocb->ki_flags & IOCB_APPEND)
+ 		iocb->ki_pos =3D i_size_read(inode);
 =20
-+			trace_io_uring_short_write(req->ctx, kiocb->ki_pos - ret2,
-+						req->cqe.res, ret2);
-+
- 			/* This is a partial write. The file pos has already been
- 			 * updated, setup the async struct to complete the request
- 			 * in the worker. Also update bytes_done to account for
-diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_ur=
-ing.h
-index 66fcc5a1a5b1..25df513660cc 100644
---- a/include/trace/events/io_uring.h
-+++ b/include/trace/events/io_uring.h
-@@ -600,6 +600,31 @@ TRACE_EVENT(io_uring_cqe_overflow,
- 		  __entry->cflags, __entry->ocqe)
- );
+-	if ((iocb->ki_flags & IOCB_NOWAIT) && !(iocb->ki_flags & IOCB_DIRECT))
++	if ((iocb->ki_flags & IOCB_NOWAIT) &&
++	    !((iocb->ki_flags & IOCB_DIRECT) ||
++	      (file->f_mode & FMODE_BUF_WASYNC)))
+ 		return -EINVAL;
 =20
-+TRACE_EVENT(io_uring_short_write,
-+
-+	TP_PROTO(void *ctx, u64 fpos, u64 wanted, u64 got),
-+
-+	TP_ARGS(ctx, fpos, wanted, got),
-+
-+	TP_STRUCT__entry(
-+		__field(void *,	ctx)
-+		__field(u64,	fpos)
-+		__field(u64,	wanted)
-+		__field(u64,	got)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->ctx	=3D ctx;
-+		__entry->fpos	=3D fpos;
-+		__entry->wanted	=3D wanted;
-+		__entry->got	=3D got;
-+	),
-+
-+	TP_printk("ring %p, fpos %lld, wanted %lld, got %lld",
-+			  __entry->ctx, __entry->fpos,
-+			  __entry->wanted, __entry->got)
-+);
-+
- #endif /* _TRACE_IO_URING_H */
+ 	return generic_write_check_limits(iocb->ki_filp, iocb->ki_pos, count);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 01403e637271..bdf1ce48a458 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -180,6 +180,9 @@ typedef int (dio_iodone_t)(struct kiocb *iocb, loff_t=
+ offset,
+ /* File supports async buffered reads */
+ #define FMODE_BUF_RASYNC	((__force fmode_t)0x40000000)
 =20
- /* This part must be outside protection */
++/* File supports async nowait buffered writes */
++#define FMODE_BUF_WASYNC	((__force fmode_t)0x80000000)
++
+ /*
+  * Attribute flags.  These should be or-ed together to figure out what
+  * has been changed!
 --=20
 2.30.2
 
