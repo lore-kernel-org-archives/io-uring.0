@@ -2,67 +2,76 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 662F9C43334
-	for <io-uring@archiver.kernel.org>; Fri,  3 Jun 2022 18:50:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B3D30C43334
+	for <io-uring@archiver.kernel.org>; Sun,  5 Jun 2022 14:04:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346145AbiFCSuZ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 3 Jun 2022 14:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S244504AbiFEOEO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 5 Jun 2022 10:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349237AbiFCSuU (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 3 Jun 2022 14:50:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26EC286E4
-        for <io-uring@vger.kernel.org>; Fri,  3 Jun 2022 11:50:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2886CB8214F
-        for <io-uring@vger.kernel.org>; Fri,  3 Jun 2022 18:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D8A74C385A9;
-        Fri,  3 Jun 2022 18:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1654282216;
-        bh=Jw+uGeNBANUuI7VaBkOor+ddwPUmIlBTvba+2hL03nw=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gqScl9yyLTl8I0sAB56DERknZkVl7IkeUv2z3Rb+u/+ipeOprnsVYezfSTiIpra1O
-         EZRBJbjiPwC2BPczn9kn4WU/+hXMDZaLhWsXrT82sWXpQax8nXOkgth0FNWsgEjeQR
-         80D4RX47/b4a4UipJHt75xo/Cd73kAIV6JoFak/bfZnXa1dVGvlFywkTFODYcVn3G+
-         nKUpqR6Olmpff+QLjDDKeK03StSEluSEy9eFqVLnmQK0BY3rje9qKvr172ow0Zv9xW
-         7gdEXszgnk5zoBKFE6/jambmbw23HFeDbjEAyC9dC1bIg0o82ziwywDj0JEadrcyXu
-         NLieGCbmKzTTg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C57C1F0394E;
-        Fri,  3 Jun 2022 18:50:16 +0000 (UTC)
-Subject: Re: [GIT PULL] Followup io_uring changes and fixes
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <bd16e13c-8260-c1c9-88b4-8756e0142f46@kernel.dk>
-References: <bd16e13c-8260-c1c9-88b4-8756e0142f46@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <bd16e13c-8260-c1c9-88b4-8756e0142f46@kernel.dk>
-X-PR-Tracked-Remote: git://git.kernel.dk/linux-block.git tags/io_uring-5.19-2022-06-02
-X-PR-Tracked-Commit-Id: 9cae36a094e7e9d6e5fe8b6dcd4642138b3eb0c7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5ac8bdb9ad47334a9590e29daf7e4149b0a34729
-Message-Id: <165428221680.10974.7840052472336559942.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 Jun 2022 18:50:16 +0000
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        io-uring <io-uring@vger.kernel.org>
+        with ESMTP id S240521AbiFEOEN (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 5 Jun 2022 10:04:13 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7CBD13C
+        for <io-uring@vger.kernel.org>; Sun,  5 Jun 2022 07:04:11 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id c1-20020a928e01000000b002d1b20aa761so10088755ild.6
+        for <io-uring@vger.kernel.org>; Sun, 05 Jun 2022 07:04:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=4D4EPvBGgDbUWnPc5BEACuk6+5YNX+C0cKGERi/DBJ8=;
+        b=kDfHUez49h6J2qTHsX/PtzhAaXq9Z7sntX9cbwqtOFnS1eLgLzYDxQ5gZboXO0LkWf
+         6EtDiGCYXon3yded8JTn6DUssDwREyoDrtf9ZJDvOMm0Ph4dpFX6/W1q6ti75j456c9m
+         rvuRoBG+KEq4DdGGRAJsWUvunnu1jGGav1ix+FvttdlEnrNSL5p9fpficEzhZ7t6yrtj
+         cLTT5pyhRyMZ3OqjrD/9olDAO/SOnRoU2GXxh0fI0F/PQJh5dzZy6vpZ2AsONzH7KPpA
+         Lvd1fuzUxgjEL3L4rjRBN7wCarTwUc6NJ6kAK1RaWw55h0K1ygJ98AFg0ky7zk3Z7/Nj
+         iRhQ==
+X-Gm-Message-State: AOAM5300892kB/cagPKVZc/KQ107Xj7HFDVdED87fEOYlP2DEYZ+eiB2
+        UIwwitcqkjPjB+6ST6uiLFKofIw0EZPamHA94M6BawzM4xAf
+X-Google-Smtp-Source: ABdhPJw5RtAjJ9sH9FoXUF1lunz8h/glEZDtAHgB703YQ4wP1RQFdYHVIOF7ajjSeAi+NBHPw38zIhXd/rAHATUj+4708B4jtkFf
+MIME-Version: 1.0
+X-Received: by 2002:a05:6602:2d13:b0:665:6e8b:7d84 with SMTP id
+ c19-20020a0566022d1300b006656e8b7d84mr8694210iow.133.1654437850502; Sun, 05
+ Jun 2022 07:04:10 -0700 (PDT)
+Date:   Sun, 05 Jun 2022 07:04:10 -0700
+In-Reply-To: <000000000000fd54f805e0351875@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000061dcef05e0b3d4e3@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in filp_close
+From:   syzbot <syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com>
+To:     arve@android.com, asml.silence@gmail.com, axboe@kernel.dk,
+        brauner@kernel.org, gregkh@linuxfoundation.org, hdanton@sina.com,
+        hridya@google.com, io-uring@vger.kernel.org,
+        joel@joelfernandes.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, maco@android.com, surenb@google.com,
+        syzkaller-bugs@googlegroups.com, tkjos@android.com,
+        viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The pull request you sent on Thu, 2 Jun 2022 23:26:12 -0600:
+syzbot has bisected this issue to:
 
-> git://git.kernel.dk/linux-block.git tags/io_uring-5.19-2022-06-02
+commit 6319194ec57b0452dcda4589d24c4e7db299c5bf
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Thu May 12 21:08:03 2022 +0000
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5ac8bdb9ad47334a9590e29daf7e4149b0a34729
+    Unify the primitives for file descriptor closing
 
-Thank you!
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=134cbe4ff00000
+start commit:   952923ddc011 Merge tag 'pull-18-rc1-work.namei' of git://g..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10ccbe4ff00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=174cbe4ff00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3096247591885bfa
+dashboard link: https://syzkaller.appspot.com/bug?extid=47dd250f527cb7bebf24
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=114f7bcdf00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1659a94ff00000
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reported-by: syzbot+47dd250f527cb7bebf24@syzkaller.appspotmail.com
+Fixes: 6319194ec57b ("Unify the primitives for file descriptor closing")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
