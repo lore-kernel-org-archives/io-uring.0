@@ -2,29 +2,29 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A89B3C43334
-	for <io-uring@archiver.kernel.org>; Tue,  7 Jun 2022 08:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E9DDC43334
+	for <io-uring@archiver.kernel.org>; Tue,  7 Jun 2022 08:07:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238027AbiFGIGz (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 7 Jun 2022 04:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S238036AbiFGIHB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 7 Jun 2022 04:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238026AbiFGIGt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Jun 2022 04:06:49 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFCDB82DB;
-        Tue,  7 Jun 2022 01:06:48 -0700 (PDT)
+        with ESMTP id S238042AbiFGIGy (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Jun 2022 04:06:54 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3049BCC141;
+        Tue,  7 Jun 2022 01:06:54 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1654589207;
+        t=1654589212;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=85yunG6FCrDcuT7+AlR9B02vmXCSLoT2S/bCbJh6Eoo=;
-        b=F2AZVzG1VGSPcnSdb/vki/pj0dFYUI9+21bomBczREqoo/DI5hF14cPAKc7MbYG21n5XSw
-        BPFB26WQVzDq5Twilj0JJ4YMbQcUN3KahEB8/0TVq5PuasA7SRuFpRYcPLT9ZGosiGP+JW
-        seCbtSx6tvG+Zg88r5JDOE/wR4bLLcc=
+        bh=O6d18kqa76uQ9DQcaTL4/EHavGPVwU9mmGhKMcUClL4=;
+        b=DSEGDP+E4vMVlhWhQ2oUGgB1EBRPniZCVMalbLMIN857ihdTm4xLTNj4rNUs+VYRdEbAnY
+        OPuwwQL5FFhBBEU0ZriWqnoISi23kKOONof7hfoj3XUeZuFSRmaEEsqOqXcMGra+9qA9vd
+        Pq9JRErpUjNT5rNFAEk8TtQSKBeXsmc=
 From:   Hao Xu <hao.xu@linux.dev>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>,
@@ -34,9 +34,9 @@ Cc:     Jens Axboe <axboe@kernel.dk>,
         Andrew Morton <akpm@linux-foundation.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Subject: [PATCH 4/5] io_uring: support nonblock try for splicing from pipe to pipe
-Date:   Tue,  7 Jun 2022 16:06:18 +0800
-Message-Id: <20220607080619.513187-5-hao.xu@linux.dev>
+Subject: [PATCH 5/5] io_uring: add file_in in io_splice{} to avoid duplicate calculation
+Date:   Tue,  7 Jun 2022 16:06:19 +0800
+Message-Id: <20220607080619.513187-6-hao.xu@linux.dev>
 In-Reply-To: <20220607080619.513187-1-hao.xu@linux.dev>
 References: <20220607080619.513187-1-hao.xu@linux.dev>
 MIME-Version: 1.0
@@ -49,72 +49,87 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: Hao Xu <howeyxu@tencent.com>
 
-splice() in io_uring is running in a slow way since it fully depends on
-io workers. While splicing from pipe to pipe is a simpler case compared
-with file to pipe and pipe to file. Let's make it support nonblock
-first. This way we get a fast path for splicing fom pipe to pipe.
+Add a member file_in in io_splice{} to avoid duplicate calculation of
+input file for splice. This is for the case where we do splice from
+pipe to pipe and get -EAGAIN for the inline submission.
 
 Signed-off-by: Hao Xu <howeyxu@tencent.com>
 ---
- io_uring/splice.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ io_uring/splice.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
 diff --git a/io_uring/splice.c b/io_uring/splice.c
-index b2cd1044c3ee..650c70e3dde1 100644
+index 650c70e3dde1..c97f2971fe7e 100644
 --- a/io_uring/splice.c
 +++ b/io_uring/splice.c
-@@ -88,6 +88,14 @@ int io_splice_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return __io_splice_prep(req, sqe);
+@@ -21,6 +21,7 @@ struct io_splice {
+ 	loff_t				off_in;
+ 	u64				len;
+ 	int				splice_fd_in;
++	struct file			*file_in;
+ 	unsigned int			flags;
+ };
+ 
+@@ -35,6 +36,7 @@ static int __io_splice_prep(struct io_kiocb *req,
+ 	if (unlikely(sp->flags & ~valid_flags))
+ 		return -EINVAL;
+ 	sp->splice_fd_in = READ_ONCE(sqe->splice_fd_in);
++	sp->file_in = NULL;
+ 	return 0;
  }
  
-+bool io_splice_support_nowait(struct file *in, struct file *out)
-+{
-+	if (get_pipe_info(in, true) && get_pipe_info(out, true))
-+		return true;
-+
-+	return false;
-+}
-+
- int io_splice(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_splice *sp = io_kiocb_to_cmd(req);
-@@ -100,9 +108,6 @@ int io_splice(struct io_kiocb *req, unsigned int issue_flags)
+@@ -108,34 +110,37 @@ int io_splice(struct io_kiocb *req, unsigned int issue_flags)
  	if (unlikely(!sp->len))
  		goto done;
  
--	if (issue_flags & IO_URING_F_NONBLOCK)
--		return -EAGAIN;
--
- 	if (sp->flags & SPLICE_F_FD_IN_FIXED)
- 		in = io_file_get_fixed(req, sp->splice_fd_in, issue_flags);
- 	else
-@@ -112,6 +117,16 @@ int io_splice(struct io_kiocb *req, unsigned int issue_flags)
- 		goto done;
+-	if (sp->flags & SPLICE_F_FD_IN_FIXED)
+-		in = io_file_get_fixed(req, sp->splice_fd_in, issue_flags);
+-	else
+-		in = io_file_get_normal(req, sp->splice_fd_in);
+-	if (!in) {
+-		ret = -EBADF;
+-		goto done;
++	if (!sp->file_in) {
++		if (sp->flags & SPLICE_F_FD_IN_FIXED)
++			in = io_file_get_fixed(req, sp->splice_fd_in, issue_flags);
++		else
++			in = io_file_get_normal(req, sp->splice_fd_in);
++
++		if (!in) {
++			ret = -EBADF;
++			goto done;
++		}
++		sp->file_in = in;
++	} else {
++		in = sp->file_in;
  	}
  
-+	if (issue_flags & IO_URING_F_NONBLOCK) {
-+		if (io_splice_support_nowait(in, out)) {
-+			flags |= SPLICE_F_NONBLOCK;
-+		} else {
-+			if (!(sp->flags & SPLICE_F_FD_IN_FIXED))
-+				io_put_file(in);
-+			return -EAGAIN;
-+		}
-+	}
-+
+ 	if (issue_flags & IO_URING_F_NONBLOCK) {
+-		if (io_splice_support_nowait(in, out)) {
++		if (io_splice_support_nowait(in, out))
+ 			flags |= SPLICE_F_NONBLOCK;
+-		} else {
+-			if (!(sp->flags & SPLICE_F_FD_IN_FIXED))
+-				io_put_file(in);
++		else
+ 			return -EAGAIN;
+-		}
+ 	}
+ 
  	poff_in = (sp->off_in == -1) ? NULL : &sp->off_in;
  	poff_out = (sp->off_out == -1) ? NULL : &sp->off_out;
  
-@@ -119,6 +134,9 @@ int io_splice(struct io_kiocb *req, unsigned int issue_flags)
+ 	ret = do_splice(in, poff_in, out, poff_out, sp->len, flags);
++	if (ret == -EAGAIN)
++		return ret;
  
  	if (!(sp->flags & SPLICE_F_FD_IN_FIXED))
  		io_put_file(in);
-+	if (ret == -EAGAIN)
-+		return ret;
-+
+-	if (ret == -EAGAIN)
+-		return ret;
+ 
  done:
  	if (ret != sp->len)
- 		req_set_fail(req);
 -- 
 2.25.1
 
