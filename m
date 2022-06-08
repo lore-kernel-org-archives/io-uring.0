@@ -2,49 +2,47 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12737C3F2D4
-	for <io-uring@archiver.kernel.org>; Wed,  8 Jun 2022 17:27:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B15B2CCA481
+	for <io-uring@archiver.kernel.org>; Wed,  8 Jun 2022 17:27:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbiFHR10 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 8 Jun 2022 13:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
+        id S230124AbiFHR1d (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 8 Jun 2022 13:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbiFHR0L (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 8 Jun 2022 13:26:11 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C69424A5
-        for <io-uring@vger.kernel.org>; Wed,  8 Jun 2022 10:23:53 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 258FPbaT016452
-        for <io-uring@vger.kernel.org>; Wed, 8 Jun 2022 10:23:53 -0700
+        with ESMTP id S232597AbiFHR1E (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 8 Jun 2022 13:27:04 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EA6DC
+        for <io-uring@vger.kernel.org>; Wed,  8 Jun 2022 10:25:02 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 258H6InN008854
+        for <io-uring@vger.kernel.org>; Wed, 8 Jun 2022 10:25:02 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=OxGRfMeRdzuX13wDzkrc1rbWs0f6kgZ2LAt/+Vz+aFQ=;
- b=dxEgnMyge/VCtzxTORn+/gpgUZTwhLwA7WWQ8th82dbU9iUNrXK00LIv1gFhX/TK7jmI
- i2sVenxxHE3pE+OVnUH6cK+eeVTfmEbusSLu9IwPQ93A8VY98ClSEVh8Oap/mszmyuqj
- LkH2ZGiioBmsvHRKndSAk2KrvmX9ECC5EJ8= 
+ bh=dBECpqCYbzZu09VC/8f600yJ9kRuprLL6hMW7ZpMyPY=;
+ b=QTjODgNQvpWUdwYFAppkxKyFGqYJEuYpcHKJV/81iJxSjvbhu2ZCmO7seGA8MMhBVnTP
+ DWj7hpsz92yXOG90PIHNiDRIFStsb2f41X5/g4jVB01FyCGAZATNHup6lbx1RwZ8Vh0r
+ KPc9E49Yxv26EPorT8DoUCmYDAigx17gzrs= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gj13ctxsf-1
+        by m0089730.ppops.net (PPS) with ESMTPS id 3gjyva04hu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 08 Jun 2022 10:23:53 -0700
+        for <io-uring@vger.kernel.org>; Wed, 08 Jun 2022 10:25:02 -0700
 Received: from twshared18317.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 8 Jun 2022 10:23:51 -0700
+ 15.1.2375.28; Wed, 8 Jun 2022 10:25:01 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 99099103BFB5A; Wed,  8 Jun 2022 10:17:43 -0700 (PDT)
+        id A23D8103BFB62; Wed,  8 Jun 2022 10:17:43 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
-        <hch@infradead.org>, <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        "Darrick J . Wong" <djwong@kernel.org>
-Subject: [PATCH v8 04/14] iomap: Add flags parameter to iomap_page_create()
-Date:   Wed, 8 Jun 2022 10:17:31 -0700
-Message-ID: <20220608171741.3875418-5-shr@fb.com>
+        <hch@infradead.org>, <axboe@kernel.dk>
+Subject: [PATCH v8 12/14] io_uring: Add tracepoint for short writes
+Date:   Wed, 8 Jun 2022 10:17:39 -0700
+Message-ID: <20220608171741.3875418-13-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220608171741.3875418-1-shr@fb.com>
 References: <20220608171741.3875418-1-shr@fb.com>
@@ -52,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 4UH9eEUW6rDSWQ5v28zf9pp8VfBXLZzZ
-X-Proofpoint-ORIG-GUID: 4UH9eEUW6rDSWQ5v28zf9pp8VfBXLZzZ
+X-Proofpoint-GUID: rWjqZ9JWs6FRDlIzNXwzoQQIK4Jr0tgU
+X-Proofpoint-ORIG-GUID: rWjqZ9JWs6FRDlIzNXwzoQQIK4Jr0tgU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
  definitions=2022-06-08_05,2022-06-07_02,2022-02-23_01
@@ -61,103 +59,68 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add the kiocb flags parameter to the function iomap_page_create().
-Depending on the value of the flags parameter it enables different gfp
-flags.
-
-No intended functional changes in this patch.
+This adds the io_uring_short_write tracepoint to io_uring. A short write
+is issued if not all pages that are required for a write are in the page
+cache and the async buffered writes have to return EAGAIN.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 ---
- fs/iomap/buffered-io.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+ fs/io_uring.c                   |  3 +++
+ include/trace/events/io_uring.h | 25 +++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
-diff --git a/fs/iomap/buffered-io.c b/fs/iomap/buffered-io.c
-index d2a9f699e17e..705f80cd2d4e 100644
---- a/fs/iomap/buffered-io.c
-+++ b/fs/iomap/buffered-io.c
-@@ -44,16 +44,23 @@ static inline struct iomap_page *to_iomap_page(struct=
- folio *folio)
- static struct bio_set iomap_ioend_bioset;
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index cb5bf672b85e..176a157e4523 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4597,6 +4597,9 @@ static int io_write(struct io_kiocb *req, unsigned =
+int issue_flags)
+ 		if (ret2 !=3D req->cqe.res && ret2 >=3D 0 && need_complete_io(req)) {
+ 			struct io_async_rw *rw;
 =20
- static struct iomap_page *
--iomap_page_create(struct inode *inode, struct folio *folio)
-+iomap_page_create(struct inode *inode, struct folio *folio, unsigned int=
- flags)
- {
- 	struct iomap_page *iop =3D to_iomap_page(folio);
- 	unsigned int nr_blocks =3D i_blocks_per_folio(inode, folio);
-+	gfp_t gfp;
-=20
- 	if (iop || nr_blocks <=3D 1)
- 		return iop;
-=20
-+	if (flags & IOMAP_NOWAIT)
-+		gfp =3D GFP_NOWAIT;
-+	else
-+		gfp =3D GFP_NOFS | __GFP_NOFAIL;
++			trace_io_uring_short_write(req->ctx, kiocb->ki_pos - ret2,
++						req->cqe.res, ret2);
 +
- 	iop =3D kzalloc(struct_size(iop, uptodate, BITS_TO_LONGS(nr_blocks)),
--			GFP_NOFS | __GFP_NOFAIL);
-+		      gfp);
+ 			/* This is a partial write. The file pos has already been
+ 			 * updated, setup the async struct to complete the request
+ 			 * in the worker. Also update bytes_done to account for
+diff --git a/include/trace/events/io_uring.h b/include/trace/events/io_ur=
+ing.h
+index 66fcc5a1a5b1..25df513660cc 100644
+--- a/include/trace/events/io_uring.h
++++ b/include/trace/events/io_uring.h
+@@ -600,6 +600,31 @@ TRACE_EVENT(io_uring_cqe_overflow,
+ 		  __entry->cflags, __entry->ocqe)
+ );
+=20
++TRACE_EVENT(io_uring_short_write,
 +
- 	spin_lock_init(&iop->uptodate_lock);
- 	if (folio_test_uptodate(folio))
- 		bitmap_fill(iop->uptodate, nr_blocks);
-@@ -226,7 +233,7 @@ static int iomap_read_inline_data(const struct iomap_=
-iter *iter,
- 	if (WARN_ON_ONCE(size > iomap->length))
- 		return -EIO;
- 	if (offset > 0)
--		iop =3D iomap_page_create(iter->inode, folio);
-+		iop =3D iomap_page_create(iter->inode, folio, iter->flags);
- 	else
- 		iop =3D to_iomap_page(folio);
-=20
-@@ -264,7 +271,7 @@ static loff_t iomap_readpage_iter(const struct iomap_=
-iter *iter,
- 		return iomap_read_inline_data(iter, folio);
-=20
- 	/* zero post-eof blocks as the page may be mapped */
--	iop =3D iomap_page_create(iter->inode, folio);
-+	iop =3D iomap_page_create(iter->inode, folio, iter->flags);
- 	iomap_adjust_read_range(iter->inode, folio, &pos, length, &poff, &plen)=
-;
- 	if (plen =3D=3D 0)
- 		goto done;
-@@ -547,7 +554,7 @@ static int __iomap_write_begin(const struct iomap_ite=
-r *iter, loff_t pos,
- 		size_t len, struct folio *folio)
- {
- 	const struct iomap *srcmap =3D iomap_iter_srcmap(iter);
--	struct iomap_page *iop =3D iomap_page_create(iter->inode, folio);
-+	struct iomap_page *iop;
- 	loff_t block_size =3D i_blocksize(iter->inode);
- 	loff_t block_start =3D round_down(pos, block_size);
- 	loff_t block_end =3D round_up(pos + len, block_size);
-@@ -558,6 +565,8 @@ static int __iomap_write_begin(const struct iomap_ite=
-r *iter, loff_t pos,
- 		return 0;
- 	folio_clear_error(folio);
-=20
-+	iop =3D iomap_page_create(iter->inode, folio, iter->flags);
++	TP_PROTO(void *ctx, u64 fpos, u64 wanted, u64 got),
 +
- 	do {
- 		iomap_adjust_read_range(iter->inode, folio, &block_start,
- 				block_end - block_start, &poff, &plen);
-@@ -1329,7 +1338,7 @@ iomap_writepage_map(struct iomap_writepage_ctx *wpc=
-,
- 		struct writeback_control *wbc, struct inode *inode,
- 		struct folio *folio, u64 end_pos)
- {
--	struct iomap_page *iop =3D iomap_page_create(inode, folio);
-+	struct iomap_page *iop =3D iomap_page_create(inode, folio, 0);
- 	struct iomap_ioend *ioend, *next;
- 	unsigned len =3D i_blocksize(inode);
- 	unsigned nblocks =3D i_blocks_per_folio(inode, folio);
++	TP_ARGS(ctx, fpos, wanted, got),
++
++	TP_STRUCT__entry(
++		__field(void *,	ctx)
++		__field(u64,	fpos)
++		__field(u64,	wanted)
++		__field(u64,	got)
++	),
++
++	TP_fast_assign(
++		__entry->ctx	=3D ctx;
++		__entry->fpos	=3D fpos;
++		__entry->wanted	=3D wanted;
++		__entry->got	=3D got;
++	),
++
++	TP_printk("ring %p, fpos %lld, wanted %lld, got %lld",
++			  __entry->ctx, __entry->fpos,
++			  __entry->wanted, __entry->got)
++);
++
+ #endif /* _TRACE_IO_URING_H */
+=20
+ /* This part must be outside protection */
 --=20
 2.30.2
 
