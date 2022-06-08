@@ -2,119 +2,98 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD245C43334
-	for <io-uring@archiver.kernel.org>; Wed,  8 Jun 2022 01:21:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E2F1CCA482
+	for <io-uring@archiver.kernel.org>; Wed,  8 Jun 2022 06:43:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiFHBVj (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 7 Jun 2022 21:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
+        id S229950AbiFHGnx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 8 Jun 2022 02:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1575050AbiFGX0h (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Jun 2022 19:26:37 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C53408394;
-        Tue,  7 Jun 2022 14:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1654637915; x=1686173915;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1ePpN/66ifBUrXzD9UOlIVYgsb6yN+4qexSlGr5Seyw=;
-  b=RhLFYNAkUEfnswm2y3glPoipKSF3gjtRZGkORETmRtoxhy9e0q90OWi+
-   tdkc26e4A93qbJbSkHcdNeg/R+dc90QcnO+1dSnfjkaVYzkFPNAXwdDb8
-   KyS1S25Z5NI2xTab0L5S6Oysa3XnXPgD9MlfeHNuK0abWM6Q2EgpAfHCn
-   3e5SR47LWX8UA3fIUiEhw5yCcdxl5TsYRT4N36WibxZZW61AOMw6FzyDv
-   RtiOMqAiDOk8cu/Ac+VVQWt/d6z+7OtE22LxEKAPQDJnS18hYSRPjGOHG
-   qN21Qy9uJEfS3cu0YeiUDPMrN9O7vp+rqSVuCKOXFoOYcrY15jPWqMz6f
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10371"; a="363093372"
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="363093372"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2022 14:38:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,284,1647327600"; 
-   d="scan'208";a="565615057"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2022 14:38:07 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nygtq-000Dyj-A4;
-        Tue, 07 Jun 2022 21:38:06 +0000
-Date:   Wed, 8 Jun 2022 05:38:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hao Xu <hao.xu@linux.dev>, io-uring@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-fsdevel@vger.kernel.org,
+        with ESMTP id S1348968AbiFHF6m (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 8 Jun 2022 01:58:42 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3307D45CB5F
+        for <io-uring@vger.kernel.org>; Tue,  7 Jun 2022 21:31:15 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id w27so25411304edl.7
+        for <io-uring@vger.kernel.org>; Tue, 07 Jun 2022 21:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=lQzGWzSzNym33MQ84Y+l0IYApxkDWXsfpOoAO4fDHlI=;
+        b=pLcIgzoF06q+6p7bNMxbfyeIE4USudtWpeFahTUvEnR7xMfelU2/kdyscp0xEzX39O
+         7F0y8uzCOtb+mZZMSlT27TPASU2K/shDy0TCDGhjgqPupzzLX4mh0tUrI9xkRgoL2L3C
+         XuEGpxyF5MqhnqdknPMsjAPoWxsyQ5KPyOvH4NHOPGZkW3ds/2o61RSNL0Ynqt1Y1VdG
+         Bfd76BmUlSqRAXXVDA2CV/UTWJVjcfAkMB9lNC0Ud/ky7YG1dM1S8jv6FqlwgjECA/IT
+         qdjfu9Wvf2AxBL9OQ+F2eH+lrRAcunRWSRcpGZCba31FBX1TobN8MBKOdQaqyorboDyH
+         unMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=lQzGWzSzNym33MQ84Y+l0IYApxkDWXsfpOoAO4fDHlI=;
+        b=tSzUtQ8IsPDvvGgFlASWBnqelidpBpa5Nox6eNKLTY3StqHDLwvf8FIIogoNmGOBRN
+         nA7O0NeH0ezI/AfC0udvYyq5Q+CSWMPtZOopa6XmjCoYmOeGMi2MQW7Y03nVels3aPHN
+         uJk3M0Du0qejPArpKDl6O44vW/Hm7a8aoDQM7mp0eAYQoz7DH6NlMF5VBaDHIPqlB9Tv
+         BpSjt6F7RiwgDwbiWU8DMn1js2lE6eafnaCOBAv8qyOvhOCuvJKkDUN4sSmho2qO9Hhr
+         dTf8LrdvtqarzvTO04H/p2J9bdLgGLcQ5vgGGFjCBQhTvXPlo91pd229PtCryT6roJgY
+         +3KA==
+X-Gm-Message-State: AOAM530x2SNjbhRA8eMv498b52iNpo2S1m+Jjb8Sva1WmQNogTkqNVCD
+        PhmQ6azCR7rcXpOcWR4cFgGqPg==
+X-Google-Smtp-Source: ABdhPJz8pE9/Vjr7/i5C+fk0/UyWIJaVLXaAMlSya4uBXn9u4OSqYRLr3nLBaRZ5u6D83V8/t2c8dA==
+X-Received: by 2002:a50:fc10:0:b0:42d:cbd2:4477 with SMTP id i16-20020a50fc10000000b0042dcbd24477mr36791934edr.363.1654662673432;
+        Tue, 07 Jun 2022 21:31:13 -0700 (PDT)
+Received: from [192.168.1.99] ([80.208.69.52])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05640207cf00b0042dd60352d1sm11550692edy.35.2022.06.07.21.31.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jun 2022 21:31:12 -0700 (PDT)
+Message-ID: <539fb998-bbc2-b630-6549-ed8fe23fa167@kernel.dk>
+Date:   Tue, 7 Jun 2022 22:31:11 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RFC 0/5] support nonblock submission for splice pipe to pipe
+Content-Language: en-US
+To:     Hao Xu <hao.xu@linux.dev>, Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Subject: Re: [PATCH 4/5] io_uring: support nonblock try for splicing from
- pipe to pipe
-Message-ID: <202206080550.7nXmrsiv-lkp@intel.com>
-References: <20220607080619.513187-5-hao.xu@linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607080619.513187-5-hao.xu@linux.dev>
+References: <20220607080619.513187-1-hao.xu@linux.dev>
+ <d350c35e-1d73-b2c8-5ae4-e6ead92aebba@gmail.com>
+ <68b1a721-217a-f52b-ae41-0faec77edf3f@linux.dev>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <68b1a721-217a-f52b-ae41-0faec77edf3f@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi Hao,
+On 6/7/22 10:19 PM, Hao Xu wrote:
+> On 6/7/22 17:27, Pavel Begunkov wrote:
+>> On 6/7/22 09:06, Hao Xu wrote:
+>>> From: Hao Xu <howeyxu@tencent.com>
+>>>
+>>> splice from pipe to pipe is a trivial case, and we can support nonblock
+>>> try for it easily. splice depends on iowq at all which is slow. Let's
+>>> build a fast submission path for it by supporting nonblock.
+>>
+>> fwiw,
+>>
+>> https://www.spinics.net/lists/kernel/msg3652757.html
+>>
+> 
+> Thanks, Pavel. Seems it has been discussed for a long time but the
+> result remains unclear...For me, I think this patch is necessary for
+> getting a good SPLICE_F_NONBLOCK user experience.
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on d8271bf021438f468dab3cd84fe5279b5bbcead8]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hao-Xu/support-nonblock-submission-for-splice-pipe-to-pipe/20220607-161605
-base:   d8271bf021438f468dab3cd84fe5279b5bbcead8
-config: mips-buildonly-randconfig-r001-20220607 (https://download.01.org/0day-ci/archive/20220608/202206080550.7nXmrsiv-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b92436efcb7813fc481b30f2593a4907568d917a)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/96683840c3f19b77a536a259094d24e0cd93ebc0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hao-Xu/support-nonblock-submission-for-splice-pipe-to-pipe/20220607-161605
-        git checkout 96683840c3f19b77a536a259094d24e0cd93ebc0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> io_uring/splice.c:91:6: warning: no previous prototype for function 'io_splice_support_nowait' [-Wmissing-prototypes]
-   bool io_splice_support_nowait(struct file *in, struct file *out)
-        ^
-   io_uring/splice.c:91:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool io_splice_support_nowait(struct file *in, struct file *out)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/io_splice_support_nowait +91 io_uring/splice.c
-
-    90	
-  > 91	bool io_splice_support_nowait(struct file *in, struct file *out)
-    92	{
-    93		if (get_pipe_info(in, true) && get_pipe_info(out, true))
-    94			return true;
-    95	
-    96		return false;
-    97	}
-    98	
+I'd just take it up again, this is something we do need to get done to
+avoid io-wq offload. Which is important...
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+
