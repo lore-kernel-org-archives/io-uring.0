@@ -2,189 +2,80 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BF2DC433EF
-	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 20:37:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A9BFC433EF
+	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 21:30:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbiFMUhM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
+        id S1349787AbiFMV37 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 13 Jun 2022 17:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232903AbiFMUgs (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 16:36:48 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484C1B874
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:48 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id w17so849791wrg.7
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:48 -0700 (PDT)
+        with ESMTP id S1352890AbiFMV3K (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 17:29:10 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309CB229
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 14:23:11 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so10007846pjm.2
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 14:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:in-reply-to:references:subject:message-id:date
          :mime-version:content-transfer-encoding;
-        bh=aIHi6VLJ6lGbopMxA+h35AmNejPIvaCVJVh26XjqFqA=;
-        b=Yfzy5ohSUHVWQpcc9ZTxU2riNBsZ9BaD+zKDGlMqs2NFnDJ+4vV7L+uQgt4ZOuZkkd
-         Bj8Cw+jqMC4NJy5QU9c+A4o90vVJn8crF3UMGFCkXyViALyNT3Hs3aM0y/yZE4WYBKxU
-         4+Yghu5hpXq+lHl3NyJNR7LUHHA0NFzfntSvZl5HAZ7RSOTQ713Ure52mMoB+w3+vynE
-         7ShmS32/N0J9i7UMz3i4RSgAPrJoLK+eKpdZnaA5xBABDYBf2l1SiTHxn1nXc6g22e3h
-         5BGR/81n3xMuLk6eVhjEPV3nqN7orab1WY4G4tymae7Fatt+1PiLP6/WfnYyf5tFvsIO
-         zTPA==
+        bh=YGhGRx4mHQFNW7MOr+A/NvSpelXxEDEpH9pCf2c4K9Y=;
+        b=e91p9YVuNw2svM7xGlkwIt3gt845c9MHeu9PvaOGs+Vha+DkM1Berot+EIT2OQP/Gf
+         OlhMaXY5Q9PgdGbExDbbALd2dXY3yTet8S7lQCdIrmrWArYMDVwl8VG1hNBvKMLDyWj0
+         R+9pl51Pz8HjVKzxDyVk3TpqH63uoliPxUvMc3+/7dKV7s+v8zXaHLnnPsQ777lyDeMn
+         1qrb5qyHxMjDWi+LI12dbCig/FUBwQso/XqnJLOhL0R1PWn36zal2HRGOjXonFI2T9KF
+         9cpR5zh4cv7ioaGCDF5pYluVrUf2uprNG5mHbSfX90ulRdkiFvCzG+Kw420VsHaZJkt8
+         q+Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aIHi6VLJ6lGbopMxA+h35AmNejPIvaCVJVh26XjqFqA=;
-        b=bgoxwwG6EG9/PLnaI6aOln11X3l3hNzFsxg12QiR2GSIqFkflUf84+mp1lVOYbljJ5
-         1xu1TzoxLMzqGK+I1iADvsDsX1Z7PjvysXzV+SySf2M0ighkC0BDD+sZXJYU/LoGGpOL
-         6RYJn0JfCOiHDm6ja6Nfj3gtFRnKPY2weBYDXtMTKSokq3iKKHvmhMlZnnHieixFo+eY
-         02jzxe8312dt6Bg/CVxlD639/g2HGRuodf/wajRnlpbeBcNNSXxf738tXh81lwdrzoMO
-         putW4a9g/OJRJMK3cDTEvxi0ukl49I2+oPDCuDKmZL66t5uBgi5KvVhjvf7o00JbNw4/
-         mR1A==
-X-Gm-Message-State: AJIora/0C+tUSp6Rx2nL+FyJ0UW3iBv1A7zPNhgclR6Kv+S8Rmv6pBkD
-        aJBrvOyWKn1kTljGFu8KHmM+vf/XgfCb4ICD
-X-Google-Smtp-Source: AGRyM1s+ruvYaWGRkZgtFAapqrgmIdF4HPdonfisi6hlzmaBOE4fF4NUnNZdOgitqcSMSSJNc9zP7Q==
-X-Received: by 2002:a5d:4532:0:b0:210:2c52:bac2 with SMTP id j18-20020a5d4532000000b002102c52bac2mr1196970wra.711.1655148406668;
-        Mon, 13 Jun 2022 12:26:46 -0700 (PDT)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b497:0:f4c0:c139:b453:c8db])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05600c204100b0039aef592ca0sm10163198wmg.35.2022.06.13.12.26.46
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=YGhGRx4mHQFNW7MOr+A/NvSpelXxEDEpH9pCf2c4K9Y=;
+        b=7H+hg0KzQqdpMd5wXRM7SyqHZBtWKMEj4Yc7fUoJSYwlPFF/WpiUGuMF77BKyv8tJU
+         T0h0z9cXz8umEl0sefL1HgEFjCssTuNVekQLFaEJfqAriEdXuPYkJJc82yaAoauZehPm
+         DrEqSMqsP1fSUia8181zk5lx6SiJG4xORbLuz3fbG/Hh1mArqAU1ZfRtohyJ8ZGG/rCz
+         G7HAGINsiFG6WHk/qXC/hrSGO4G40UApEDaC/jvUeMhQ8zLjecQH1Im0xZ65L3fKdfWJ
+         TcR1x851bhxF53pkobFMN98LqrQrr/vveFbxMDP6EsU44CKtQtnZOclSxuSVrtKGIGJb
+         D7ZQ==
+X-Gm-Message-State: AJIora8bL+j0/aYjt8+6AbWGki09xaq+qIsJO0YdZiTmzDP8RLOMfWZQ
+        h/vD/mNEcznrWYs+UWMCJ17LHkMYH64O3L3Y
+X-Google-Smtp-Source: AGRyM1uq89Xc9p9O38GVzZEYANll8SwiM7BSy7dJocj+fokdY79yBSrEkIVy0e6bEzU+vEnTZ0mwDg==
+X-Received: by 2002:a17:902:788b:b0:168:bffe:4049 with SMTP id q11-20020a170902788b00b00168bffe4049mr1062237pll.75.1655155390401;
+        Mon, 13 Jun 2022 14:23:10 -0700 (PDT)
+Received: from [127.0.1.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa793d2000000b0050dc76281e3sm5813828pff.189.2022.06.13.14.23.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 12:26:46 -0700 (PDT)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     io-uring@vger.kernel.org, axboe@kernel.dk,
-        linux-kernel@vger.kernel.org
-Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [RFC 1/3] ipc/msg: split do_msgsnd into functions
-Date:   Mon, 13 Jun 2022 20:26:40 +0100
-Message-Id: <20220613192642.2040118-2-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220613192642.2040118-1-usama.arif@bytedance.com>
-References: <20220613192642.2040118-1-usama.arif@bytedance.com>
+        Mon, 13 Jun 2022 14:23:09 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, hao.xu@linux.dev
+Cc:     asml.silence@gmail.com
+In-Reply-To: <20220613112231.998738-1-hao.xu@linux.dev>
+References: <20220613112231.998738-1-hao.xu@linux.dev>
+Subject: Re: [PATCH] io_uring: remove duplicate cqe skip check
+Message-Id: <165515538964.7320.18065366235915830827.b4-ty@kernel.dk>
+Date:   Mon, 13 Jun 2022 15:23:09 -0600
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-do_msgsnd is split into check_and_load_msgsnd and __do_msgsnd.
-This does not introduce any change in the functions' operation.
-Its only needed for async msgsnd in io_uring which will be added
-in a later patch.
+On Mon, 13 Jun 2022 19:22:31 +0800, Hao Xu wrote:
+> From: Hao Xu <howeyxu@tencent.com>
+> 
+> Remove duplicate cqe skip check in __io_fill_cqe32_req()
+> 
+> 
 
-Functions used for msgsnd and msgrcv are also declared in the
-header file for use in io_uring patches later.
+Applied, thanks!
 
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- include/linux/msg.h | 11 ++++++++++
- ipc/msg.c           | 52 ++++++++++++++++++++++++++++++++++-----------
- 2 files changed, 51 insertions(+), 12 deletions(-)
+[1/1] io_uring: remove duplicate cqe skip check
+      commit: 5703449632a7f565d71ebbf5393b284074939814
 
-diff --git a/include/linux/msg.h b/include/linux/msg.h
-index 9a972a296b95..36e3116fed86 100644
---- a/include/linux/msg.h
-+++ b/include/linux/msg.h
-@@ -15,4 +15,15 @@ struct msg_msg {
- 	/* the actual message follows immediately */
- };
- 
-+long check_and_load_msgsnd(int msqid, long mtype, void __user *mtext,
-+			   struct msg_msg **msg, size_t msgsz);
-+
-+void free_msg(struct msg_msg *msg);
-+
-+long __do_msgsnd(int msqid, long mtype, struct msg_msg **msg,
-+		 size_t msgsz, int msgflg);
-+
-+long ksys_msgrcv(int msqid, struct msgbuf __user *msgp, size_t msgsz,
-+		 long msgtyp, int msgflg);
-+
- #endif /* _LINUX_MSG_H */
-diff --git a/ipc/msg.c b/ipc/msg.c
-index a0d05775af2c..0682204a684e 100644
---- a/ipc/msg.c
-+++ b/ipc/msg.c
-@@ -839,14 +839,11 @@ static inline int pipelined_send(struct msg_queue *msq, struct msg_msg *msg,
- 	return 0;
- }
- 
--static long do_msgsnd(int msqid, long mtype, void __user *mtext,
--		size_t msgsz, int msgflg)
-+long check_and_load_msgsnd(int msqid, long mtype, void __user *mtext,
-+			   struct msg_msg **msg, size_t msgsz)
- {
--	struct msg_queue *msq;
--	struct msg_msg *msg;
--	int err;
- 	struct ipc_namespace *ns;
--	DEFINE_WAKE_Q(wake_q);
-+	struct msg_msg *tmp;
- 
- 	ns = current->nsproxy->ipc_ns;
- 
-@@ -855,12 +852,45 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
- 	if (mtype < 1)
- 		return -EINVAL;
- 
--	msg = load_msg(mtext, msgsz);
-+	tmp = load_msg(mtext, msgsz);
- 	if (IS_ERR(msg))
- 		return PTR_ERR(msg);
- 
--	msg->m_type = mtype;
--	msg->m_ts = msgsz;
-+	tmp->m_type = mtype;
-+	tmp->m_ts = msgsz;
-+
-+	*msg = tmp;
-+	return 0;
-+}
-+
-+static long do_msgsnd(int msqid, long mtype, void __user *mtext,
-+		      size_t msgsz, int msgflg)
-+{
-+	struct msg_msg *msg;
-+	int err;
-+
-+	err = check_and_load_msgsnd(msqid, mtype, mtext, &msg, msgsz);
-+	if (err)
-+		return err;
-+
-+	err = __do_msgsnd(msqid, mtype, &msg, msgsz, msgflg);
-+	if (msg != NULL)
-+		free_msg(msg);
-+
-+	return err;
-+}
-+
-+long __do_msgsnd(int msqid, long mtype, struct msg_msg **_msg,
-+		 size_t msgsz, int msgflg)
-+{
-+	struct msg_queue *msq;
-+	struct msg_msg *msg;
-+	int err;
-+	struct ipc_namespace *ns;
-+	DEFINE_WAKE_Q(wake_q);
-+
-+	msg = *_msg;
-+	ns = current->nsproxy->ipc_ns;
- 
- 	rcu_read_lock();
- 	msq = msq_obtain_object_check(ns, msqid);
-@@ -940,15 +970,13 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
- 	}
- 
- 	err = 0;
--	msg = NULL;
-+	*_msg = NULL;
- 
- out_unlock0:
- 	ipc_unlock_object(&msq->q_perm);
- 	wake_up_q(&wake_q);
- out_unlock1:
- 	rcu_read_unlock();
--	if (msg != NULL)
--		free_msg(msg);
- 	return err;
- }
- 
+Best regards,
 -- 
-2.25.1
+Jens Axboe
+
 
