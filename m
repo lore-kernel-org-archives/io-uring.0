@@ -2,100 +2,67 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EB06C433EF
-	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 10:12:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A326C43334
+	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 12:40:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233425AbiFMKMR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 13 Jun 2022 06:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        id S1347541AbiFMMko (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 13 Jun 2022 08:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbiFMKMQ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 06:12:16 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C325B64
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 03:12:15 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25D0dbn9025898
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 03:12:15 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=7k49VHVzCemj5iULkw4lLhqJCt4ZT/QP9b9yqSYpM+k=;
- b=j/ZKijvWz3b5PKVDvjLnf+tgUkFGphm4Jc8h+2Jm/KUJDBcvqIL4A8vFzZZ7iypMor+c
- 95HFvRGmkculSdKwTcIH3UbRk6EpBnj2akqh5iz3qgPguHoPLRXdjkGZV5UMF5OxT1sZ
- EAHp9E+GZ7xaZkDUgutp0C2mNKLJEe4LbUI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gmtc3y5kt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 03:12:15 -0700
-Received: from twshared25107.07.ash9.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Mon, 13 Jun 2022 03:12:14 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 28E6B1992AE1; Mon, 13 Jun 2022 03:12:04 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH 2/3] io_uring: fix types in provided buffer ring
-Date:   Mon, 13 Jun 2022 03:11:56 -0700
-Message-ID: <20220613101157.3687-3-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220613101157.3687-1-dylany@fb.com>
-References: <20220613101157.3687-1-dylany@fb.com>
+        with ESMTP id S1355235AbiFMMjG (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 08:39:06 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00C25DD01
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 04:08:44 -0700 (PDT)
+Message-ID: <f2fddce1-bc25-183e-6095-bb5a70a57319@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1655118523;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mf6RwUQeNgkeArC+1b+8sq01ixRB3ZvnZtxt9kdLb5E=;
+        b=UMxh6mTptV859adP32Y2n174qKqWpQDWZHODYDCI9x1yaDwstiPgJ+Sfs8rEkeSQsV0GW5
+        pU9W8HSjKlEf4aBT5oL4usVp2C3M4ztAiHCaB7+O4zF7XsvuqXYAGHy2KCp0s0WVPpIjw/
+        F3JFVeQTpsu1Xt6hgXPmtqMMEaVc4jg=
+Date:   Mon, 13 Jun 2022 19:08:34 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 0dCiq4U9K1_gJLEMMCXrz8h6qhl0almr
-X-Proofpoint-ORIG-GUID: 0dCiq4U9K1_gJLEMMCXrz8h6qhl0almr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-13_03,2022-06-13_01,2022-02-23_01
+Subject: Re: [PATCH 0/3] io_uring: fixes for provided buffer ring
+Content-Language: en-US
+To:     Dylan Yudaken <dylany@fb.com>, axboe@kernel.dk,
+        asml.silence@gmail.com, io-uring@vger.kernel.org
+Cc:     Kernel-team@fb.com
+References: <20220613101157.3687-1-dylany@fb.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Hao Xu <hao.xu@linux.dev>
+In-Reply-To: <20220613101157.3687-1-dylany@fb.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The type of head needs to match that of tail in order for rollover and
-comparisons to work correctly.
+On 6/13/22 18:11, Dylan Yudaken wrote:
+> This fixes two problems in the new provided buffer ring feature. One
+> is a simple arithmetic bug (I think this came out from a refactor).
+> The other is due to type differences between head & tail, which causes
+> it to sometimes reuse an old buffer incorrectly.
+> 
+> Patch 1&2 fix bugs
+> Patch 3 limits the size of the ring as it's not
+> possible to address more entries with 16 bit head/tail
 
-Without this change the comparison of tail to head might incorrectly allo=
-w
-io_uring to use a buffer that userspace had not given it.
+Reviewed-by: Hao Xu <howeyxu@tencent.com>
 
-Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buff=
-ers")
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- fs/io_uring.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> I will send test cases for liburing shortly.
+> 
+> One question might be if we should change the type of ring_entries
+> to uint16_t in struct io_uring_buf_reg?
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 9cf9aff51b70..6eea18e8330c 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -298,8 +298,8 @@ struct io_buffer_list {
- 	/* below is for ring provided buffers */
- 	__u16 buf_nr_pages;
- 	__u16 nr_entries;
--	__u32 head;
--	__u32 mask;
-+	__u16 head;
-+	__u16 mask;
- };
-=20
- struct io_buffer {
-@@ -3876,7 +3876,7 @@ static void __user *io_ring_buffer_select(struct io=
-_kiocb *req, size_t *len,
- {
- 	struct io_uring_buf_ring *br =3D bl->buf_ring;
- 	struct io_uring_buf *buf;
--	__u32 head =3D bl->head;
-+	__u16 head =3D bl->head;
-=20
- 	if (unlikely(smp_load_acquire(&br->tail) =3D=3D head)) {
- 		io_ring_submit_unlock(req->ctx, issue_flags);
---=20
-2.30.2
+Why not? 5.19 is just rc2 now. So we can assume there is no users using
+it right now I think?
+
 
