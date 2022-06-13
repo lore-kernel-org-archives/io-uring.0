@@ -2,123 +2,96 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6140BC43334
-	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 18:12:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 829CCC433EF
+	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 20:37:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244364AbiFMSMC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 13 Jun 2022 14:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53876 "EHLO
+        id S237576AbiFMUhI (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:37:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244220AbiFMSLs (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 14:11:48 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3313590CFB
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 07:06:37 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h19so4059121wrc.12
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 07:06:37 -0700 (PDT)
+        with ESMTP id S232975AbiFMUgr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 16:36:47 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA71DAE6E
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:46 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id o16so8357864wra.4
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=vaqCaxOemZmI8Ct53MYRng2ruruYwRhnRuU+w5QGJ40=;
-        b=jna3lZtKPYHLgk8dzoUkUFFBC/s9VcStCUKgdmjlDg7W0zeOFjaSYG9nnnjpUkRt5r
-         Lbco9QurDGOe7/1XexAeOtb41+T5DWfFWiqQJWNYDGluXzFsKtd79Oti+neGN77kMsNL
-         VAnwHxr+nGaoYSgk7xr8wbVMRAOJKHHGGGndwPwfmTw7+DHMMul5rk5t0hT5nigK6iPf
-         0IoJ3UgMWz3RdiRVfwvKT3JUCjwROhnHBrjQvZArh4aOL/CseqGiTgKxviGx8rjnE3CR
-         AvMktUOgsI7y9IXxtvHs0A14Ux6UCmNjT4KR8r2NHg9HylRefyNeAib9Ug94hHOCgQVN
-         H/lQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AhDRbRo9cDvgYzSBZLLaDpgZAz5miOsbty8yCwYW3TE=;
+        b=VX34UvtjbDMYEsrvceJXjlV62/wrz1EtK43uu/MLo2PJ2ym5yyjVOnkLjba3GE9e4o
+         XiVVoVypbpM6c/X8r1AogR5vNGcvc44UUwRBY89lXI5G10LRUPTl/L81yyzSD8jBtsGM
+         kFH6LT9E15cayNt10uAenj/EOZVdf60g1lWjmKYvyH/rrR6/AI+KLDMr+sARC30gk2N0
+         pUmtBEOJAbTPEuGi5QlKKPhKl29V/95v5ho9l9+WVG8adJTTtbz38GcM11xPFIoZ/yrG
+         mwMsxvPlj12B4Ft/Q3vmnfLS84Jby7IW9Lb5vmQj5eQaQKJ/u6FsSBiXtUyRU51qWpCv
+         bnng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=vaqCaxOemZmI8Ct53MYRng2ruruYwRhnRuU+w5QGJ40=;
-        b=jflwp0jlltmxtsg7VwW3dNWIZws2fdN2gcQCAf5QA0WiTtf+4Xk9hK8CBbOMlvT5Iv
-         hL4YPyX/9fQZEt4cBst6OiQY3vSGbaLiZDnnTUGh1k0vHQ27aPUvi6HRjSml0wy/Gcxp
-         JeoYVLl6ihNlfvHoOVp/Aw8ZrJFWGGCtcIxrfi40kSssK1NltTI5kJ4YZikosmjYa2PL
-         DMPMA2j0nG4LxwmfZLAoW3H5aGSkzB2PrmsmpNgE54/rYTfFlNDBAeFPborc1mKIM9C5
-         GYZW3bbdCHqz9xMpbE+7Vy6giI/rMAfnT9UczEOmsEAuwjpsdS5Ms+5iQkZLdgPBrUgl
-         Lu7Q==
-X-Gm-Message-State: AJIora/RNupWav+MqaKc92o/w+pRh/B1GeY2Y1EXBLs87a+3XfUAX538
-        f7/+dpFx2+vFWHPPQBuLFho=
-X-Google-Smtp-Source: AGRyM1tvKrzeGnCIeTKt4UksyhwI5/uymr97VeS2DQu1o6SX74Vv1IFwgzyMqko62/b7DgY0VUnbsg==
-X-Received: by 2002:a5d:6510:0:b0:216:f04d:3c50 with SMTP id x16-20020a5d6510000000b00216f04d3c50mr52792wru.628.1655129195648;
-        Mon, 13 Jun 2022 07:06:35 -0700 (PDT)
-Received: from [192.168.8.198] (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id f14-20020a5d58ee000000b0020fc6590a12sm8819429wrd.41.2022.06.13.07.06.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 07:06:35 -0700 (PDT)
-Message-ID: <e609bd27-9a2e-f367-1ccb-bd93dc3a71e2@gmail.com>
-Date:   Mon, 13 Jun 2022 15:05:44 +0100
+        bh=AhDRbRo9cDvgYzSBZLLaDpgZAz5miOsbty8yCwYW3TE=;
+        b=A9Vkju0RQFYvJej6+et2fHgR2n4YIXTHs5M5q2BXaHpBnqx1GSpnHpKqcrGS409Omx
+         Jvx0hoe7pb/q/FpXG/4DJe4JMxIZCMUuEBeIWqWksxvFbPBndCThyNyqzui9vY3UHulN
+         QEkaxPgHu5pDfsliBq3zUv9mTYz3HC56hbmgBSahGja/4/ZFW4F53V9hKb8fKR1zSSj6
+         hf94RQKkfJ50+E9dP74w5jC6FE/vHNfq6Gw43q/onfLDP++WpAqaWjYzF2HXRCCMRFXI
+         UgE/1oZo/8U7LrsRE8jgXfn+JDkZ1ciCzHSXvyDLv7GCmvWdAWzjX8AoQ4pmBi64zGpY
+         9lug==
+X-Gm-Message-State: AJIora8SMGfSl8dAWa5R8Bsewub9DzRTbWl+A45THbOSTYS3Q+jE3TY1
+        AR7U83AF/Qqqg+KN52/cw51c1PM5cMvTizIi
+X-Google-Smtp-Source: AGRyM1uTnH69/7nPdq9nAGb4NgcZh/SrXiR/Q65hqqZD+7AQlhqn+K9pR1Auyy4hT3TZlclkiUqW5g==
+X-Received: by 2002:adf:fa03:0:b0:210:dcda:ee82 with SMTP id m3-20020adffa03000000b00210dcdaee82mr1247977wrr.139.1655148405254;
+        Mon, 13 Jun 2022 12:26:45 -0700 (PDT)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b497:0:f4c0:c139:b453:c8db])
+        by smtp.gmail.com with ESMTPSA id p1-20020a05600c204100b0039aef592ca0sm10163198wmg.35.2022.06.13.12.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 12:26:44 -0700 (PDT)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     io-uring@vger.kernel.org, axboe@kernel.dk,
+        linux-kernel@vger.kernel.org
+Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [RFC 0/3] io_uring: add support for IORING_OP_MSGSND/IORING_OP_MSGRCV
+Date:   Mon, 13 Jun 2022 20:26:39 +0100
+Message-Id: <20220613192642.2040118-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 0/3] io_uring: fixes for provided buffer ring
-Content-Language: en-US
-To:     Dylan Yudaken <dylany@fb.com>, "axboe@kernel.dk" <axboe@kernel.dk>,
-        "hao.xu@linux.dev" <hao.xu@linux.dev>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
-Cc:     Kernel Team <Kernel-team@fb.com>
-References: <20220613101157.3687-1-dylany@fb.com>
- <f2fddce1-bc25-183e-6095-bb5a70a57319@linux.dev>
- <de5e6f02-dcab-07df-7cc4-7f12885083e6@gmail.com>
- <265e0239ff5b6a8a4a6d91446c774549affb5191.camel@fb.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <265e0239ff5b6a8a4a6d91446c774549affb5191.camel@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 6/13/22 14:16, Dylan Yudaken wrote:
-> On Mon, 2022-06-13 at 13:59 +0100, Pavel Begunkov wrote:
->> On 6/13/22 12:08, Hao Xu wrote:
->>> On 6/13/22 18:11, Dylan Yudaken wrote:
->>>> This fixes two problems in the new provided buffer ring feature.
->>>> One
->>>> is a simple arithmetic bug (I think this came out from a
->>>> refactor).
->>>> The other is due to type differences between head & tail, which
->>>> causes
->>>> it to sometimes reuse an old buffer incorrectly.
->>>>
->>>> Patch 1&2 fix bugs
->>>> Patch 3 limits the size of the ring as it's not
->>>> possible to address more entries with 16 bit head/tail
->>>
->>> Reviewed-by: Hao Xu <howeyxu@tencent.com>
->>>
->>>>
->>>> I will send test cases for liburing shortly.
->>>>
->>>> One question might be if we should change the type of
->>>> ring_entries
->>>> to uint16_t in struct io_uring_buf_reg?
->>>
->>> Why not? 5.19 is just rc2 now. So we can assume there is no users
->>> using
->>> it right now I think?
->>
->> It's fine to change, but might be better if we want to extend it
->> in the future. Do other pbuf bits allow more than 2^16 buffers?
->>
+The first patch just refractors the do_msg function so that its different
+parts can be used in io_uring.
 
-might be better to leave it u32 *
+The last 2 patches add the support for the async msgsnd/msgrcv.
+For msgsnd the pointer to the loaded msgbuf is saved in 
+io_setup_async_msg_msg for the case when the call is punted to async
+context.
+For msgrcv, the pointer to user-defined buffer is already stored in the
+prep function.
 
-> I guess with
-> 
-> +	if (reg.ring_entries >= 65536)
-> +		return -EINVAL;
-> 
-> it doesn't matter either way. we can always use those bits later if we
-> need?
+The correspoding prep helpers and a simple testcase for these in liburing
+are present at https://github.com/uarif1/liburing/commit/17f6685ca398265b54a07ce4246ee344b5390aad.
 
-I think so as well.
+These patches are currently missing compat support.
+If the patches and approach look acceptable to start review,
+I can send the next series with compat support included and also add the
+man pages in the above liburing patch.
 
-I was also wondering whether pbufs can potentially allow >16 bits,
-but taking a quick look IORING_CQE_BUFFER_SHIFT=16, so we only have
-16 bits in cqe::flags for indexes we return.
+Thanks!
+
+Usama Arif (3):
+  ipc/msg: split do_msgsnd into functions
+  io_uring: add support for IORING_OP_MSGSND
+  io_uring: add support for IORING_OP_MSGRCV
+
+ fs/io_uring.c                 | 152 ++++++++++++++++++++++++++++++++++
+ include/linux/msg.h           |  11 +++
+ include/uapi/linux/io_uring.h |   2 +
+ ipc/msg.c                     |  52 +++++++++---
+ 4 files changed, 205 insertions(+), 12 deletions(-)
 
 -- 
-Pavel Begunkov
+2.25.1
+
