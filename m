@@ -2,58 +2,58 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86F21CCA47D
-	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 20:37:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BF2DC433EF
+	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 20:37:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239973AbiFMUhJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 13 Jun 2022 16:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
+        id S231372AbiFMUhM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 13 Jun 2022 16:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234918AbiFMUgs (ORCPT
+        with ESMTP id S232903AbiFMUgs (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 16:36:48 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2E911149
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:49 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id x17so8348272wrg.6
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:49 -0700 (PDT)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484C1B874
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:48 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id w17so849791wrg.7
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 12:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wE12O0cTdrBz8taoM7ZHhVhAlWqDyXCCGx9RSHXJV/U=;
-        b=fm0EXuIkyC6jEOOKkhCr00DT/XT9kUXA0joJjnwSmUUY2uel8xCPq7a5Ao2tnCKauP
-         NHxbbFi6Ddj23GvHNC5KztSeqTeym6WIDNzXWCGA58GRv0h0iRVOJfN5ILlBEOdiRDFD
-         SprBm0fYVtUc0+M7shlCJIoyJR5g4B66RzAh5WsL6p02jd4DPoqJolAzlKFaHi/OhxJR
-         gx2Dg5epq+7uR/094qRwJpaB5OJr7JnbKil9TI8eGwt7sHWQq/KeRPvDsT/whGem74JP
-         YKSVc3yGJ529YAZUIuOnp/8uKNhZy4o91MfwYMu2RcdtRiiMEkpiNuZE9Ts9jQeWwoEi
-         axOg==
+        bh=aIHi6VLJ6lGbopMxA+h35AmNejPIvaCVJVh26XjqFqA=;
+        b=Yfzy5ohSUHVWQpcc9ZTxU2riNBsZ9BaD+zKDGlMqs2NFnDJ+4vV7L+uQgt4ZOuZkkd
+         Bj8Cw+jqMC4NJy5QU9c+A4o90vVJn8crF3UMGFCkXyViALyNT3Hs3aM0y/yZE4WYBKxU
+         4+Yghu5hpXq+lHl3NyJNR7LUHHA0NFzfntSvZl5HAZ7RSOTQ713Ure52mMoB+w3+vynE
+         7ShmS32/N0J9i7UMz3i4RSgAPrJoLK+eKpdZnaA5xBABDYBf2l1SiTHxn1nXc6g22e3h
+         5BGR/81n3xMuLk6eVhjEPV3nqN7orab1WY4G4tymae7Fatt+1PiLP6/WfnYyf5tFvsIO
+         zTPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wE12O0cTdrBz8taoM7ZHhVhAlWqDyXCCGx9RSHXJV/U=;
-        b=XcAME2tvu0P5kdWqgnuuflC+AZVhkj9LNQfq20m1itfgNqvMvYNXH2ik2ZgUAWNcFD
-         J4fIwryaiDPdCh1FFb9BFE4+PHR1sx/l4oPKcahMKpjMUgGBXR0shwGDR6FmZKqa2sEQ
-         xnpLUaFtJNveH2v+vKKipyh1ODsNYtYs2Cb9+siPQjh7O1WmSla0ZnVeb8uNMl5DgEw7
-         aREbfKukBXCufmMXzeUU3JWnZ9XlV+LKnVsGXOQNWApGZWfUCZN2ooOiR26gso0tB615
-         dI6r+6HpHI4HY21XiuFW9nOzNomvOplNfmrcQGqhy9YySOCLxIOLGyHS02A4v8lv5Bag
-         AW8g==
-X-Gm-Message-State: AJIora97L2ZucrZ4zy2I6u53WO8ldrfA+xHDX6JMa2fy131JoTMFSuBr
-        jZJlTRqH0aJy3uYKUQFOkKNr/ND4C0uxAnPo
-X-Google-Smtp-Source: AGRyM1vwmjzMggp49katFQIbDtG9bKpl78HSGM46yYcGA9oWjDGG9jPjHzxucrp4vpDrDKQnycqi3g==
-X-Received: by 2002:adf:e3c3:0:b0:219:e5a8:c112 with SMTP id k3-20020adfe3c3000000b00219e5a8c112mr1266501wrm.397.1655148408400;
-        Mon, 13 Jun 2022 12:26:48 -0700 (PDT)
+        bh=aIHi6VLJ6lGbopMxA+h35AmNejPIvaCVJVh26XjqFqA=;
+        b=bgoxwwG6EG9/PLnaI6aOln11X3l3hNzFsxg12QiR2GSIqFkflUf84+mp1lVOYbljJ5
+         1xu1TzoxLMzqGK+I1iADvsDsX1Z7PjvysXzV+SySf2M0ighkC0BDD+sZXJYU/LoGGpOL
+         6RYJn0JfCOiHDm6ja6Nfj3gtFRnKPY2weBYDXtMTKSokq3iKKHvmhMlZnnHieixFo+eY
+         02jzxe8312dt6Bg/CVxlD639/g2HGRuodf/wajRnlpbeBcNNSXxf738tXh81lwdrzoMO
+         putW4a9g/OJRJMK3cDTEvxi0ukl49I2+oPDCuDKmZL66t5uBgi5KvVhjvf7o00JbNw4/
+         mR1A==
+X-Gm-Message-State: AJIora/0C+tUSp6Rx2nL+FyJ0UW3iBv1A7zPNhgclR6Kv+S8Rmv6pBkD
+        aJBrvOyWKn1kTljGFu8KHmM+vf/XgfCb4ICD
+X-Google-Smtp-Source: AGRyM1s+ruvYaWGRkZgtFAapqrgmIdF4HPdonfisi6hlzmaBOE4fF4NUnNZdOgitqcSMSSJNc9zP7Q==
+X-Received: by 2002:a5d:4532:0:b0:210:2c52:bac2 with SMTP id j18-20020a5d4532000000b002102c52bac2mr1196970wra.711.1655148406668;
+        Mon, 13 Jun 2022 12:26:46 -0700 (PDT)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b497:0:f4c0:c139:b453:c8db])
-        by smtp.gmail.com with ESMTPSA id p1-20020a05600c204100b0039aef592ca0sm10163198wmg.35.2022.06.13.12.26.48
+        by smtp.gmail.com with ESMTPSA id p1-20020a05600c204100b0039aef592ca0sm10163198wmg.35.2022.06.13.12.26.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 12:26:48 -0700 (PDT)
+        Mon, 13 Jun 2022 12:26:46 -0700 (PDT)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     io-uring@vger.kernel.org, axboe@kernel.dk,
         linux-kernel@vger.kernel.org
 Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [RFC 3/3] io_uring: add support for IORING_OP_MSGRCV
-Date:   Mon, 13 Jun 2022 20:26:42 +0100
-Message-Id: <20220613192642.2040118-4-usama.arif@bytedance.com>
+Subject: [RFC 1/3] ipc/msg: split do_msgsnd into functions
+Date:   Mon, 13 Jun 2022 20:26:40 +0100
+Message-Id: <20220613192642.2040118-2-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220613192642.2040118-1-usama.arif@bytedance.com>
 References: <20220613192642.2040118-1-usama.arif@bytedance.com>
@@ -63,113 +63,128 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds support for async msgrcv through io_uring.
+do_msgsnd is split into check_and_load_msgsnd and __do_msgsnd.
+This does not introduce any change in the functions' operation.
+Its only needed for async msgsnd in io_uring which will be added
+in a later patch.
 
-All the information needed after punt to async context
-is already stored in the io_msgrcv_prep call.
+Functions used for msgsnd and msgrcv are also declared in the
+header file for use in io_uring patches later.
 
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
- fs/io_uring.c                 | 45 +++++++++++++++++++++++++++++++++++
- include/uapi/linux/io_uring.h |  1 +
- 2 files changed, 46 insertions(+)
+ include/linux/msg.h | 11 ++++++++++
+ ipc/msg.c           | 52 ++++++++++++++++++++++++++++++++++-----------
+ 2 files changed, 51 insertions(+), 12 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 5949fcadb380..124914d8ee50 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -1217,6 +1217,8 @@ static const struct io_op_def io_op_defs[] = {
- 	[IORING_OP_MSGSND] = {
- 		.async_size		= sizeof(struct io_async_msg_msg),
- 	},
-+	[IORING_OP_MSGRCV] = {
-+	},
- 	[IORING_OP_TIMEOUT] = {
- 		.audit_skip		= 1,
- 		.async_size		= sizeof(struct io_timeout_data),
-@@ -1424,6 +1426,8 @@ const char *io_uring_get_opcode(u8 opcode)
- 		return "RECVMSG";
- 	case IORING_OP_MSGSND:
- 		return "MSGSND";
-+	case IORING_OP_MSGRCV:
-+		return "MSGRCV";
- 	case IORING_OP_TIMEOUT:
- 		return "TIMEOUT";
- 	case IORING_OP_TIMEOUT_REMOVE:
-@@ -6275,6 +6279,42 @@ static int io_msgsnd(struct io_kiocb *req, unsigned int issue_flags)
- 	io_req_complete(req, ret);
- 	return ret;
+diff --git a/include/linux/msg.h b/include/linux/msg.h
+index 9a972a296b95..36e3116fed86 100644
+--- a/include/linux/msg.h
++++ b/include/linux/msg.h
+@@ -15,4 +15,15 @@ struct msg_msg {
+ 	/* the actual message follows immediately */
+ };
+ 
++long check_and_load_msgsnd(int msqid, long mtype, void __user *mtext,
++			   struct msg_msg **msg, size_t msgsz);
++
++void free_msg(struct msg_msg *msg);
++
++long __do_msgsnd(int msqid, long mtype, struct msg_msg **msg,
++		 size_t msgsz, int msgflg);
++
++long ksys_msgrcv(int msqid, struct msgbuf __user *msgp, size_t msgsz,
++		 long msgtyp, int msgflg);
++
+ #endif /* _LINUX_MSG_H */
+diff --git a/ipc/msg.c b/ipc/msg.c
+index a0d05775af2c..0682204a684e 100644
+--- a/ipc/msg.c
++++ b/ipc/msg.c
+@@ -839,14 +839,11 @@ static inline int pipelined_send(struct msg_queue *msq, struct msg_msg *msg,
+ 	return 0;
  }
-+
-+static int io_msgrcv_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+{
-+	struct io_msg_sr *msg_sr = &req->msg_sr;
-+
-+	if (unlikely(sqe->file_index))
-+		return -EINVAL;
-+
-+	msg_sr->msq_id = READ_ONCE(sqe->fd);
-+	msg_sr->msg_p = u64_to_user_ptr(READ_ONCE(sqe->addr));
-+	msg_sr->msg_type = READ_ONCE(sqe->off);
-+	msg_sr->msg_sz = READ_ONCE(sqe->len);
-+	msg_sr->msg_flags = READ_ONCE(sqe->msg_flags);
-+	return 0;
-+}
-+
-+static int io_msgrcv(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	struct io_msg_sr *msg_sr = &req->msg_sr;
-+	int ret;
-+	int flags;
-+	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
-+
-+	if (force_nonblock)
-+		flags = msg_sr->msg_flags | IPC_NOWAIT;
-+
-+	ret = ksys_msgrcv(msg_sr->msq_id, msg_sr->msg_p, msg_sr->msg_sz,
-+			  msg_sr->msg_type, flags);
-+
-+	if (ret == -ENOMSG)
-+		return -EAGAIN;
-+
-+	io_req_complete(req, ret);
-+	return 0;
-+}
-+
- static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
+ 
+-static long do_msgsnd(int msqid, long mtype, void __user *mtext,
+-		size_t msgsz, int msgflg)
++long check_and_load_msgsnd(int msqid, long mtype, void __user *mtext,
++			   struct msg_msg **msg, size_t msgsz)
  {
- 	struct io_async_msghdr iomsg, *kmsg;
-@@ -8289,6 +8329,8 @@ static int io_req_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		return io_uring_cmd_prep(req, sqe);
- 	case IORING_OP_MSGSND:
- 		return io_msgsnd_prep(req, sqe);
-+	case IORING_OP_MSGRCV:
-+		return io_msgrcv_prep(req, sqe);
+-	struct msg_queue *msq;
+-	struct msg_msg *msg;
+-	int err;
+ 	struct ipc_namespace *ns;
+-	DEFINE_WAKE_Q(wake_q);
++	struct msg_msg *tmp;
+ 
+ 	ns = current->nsproxy->ipc_ns;
+ 
+@@ -855,12 +852,45 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
+ 	if (mtype < 1)
+ 		return -EINVAL;
+ 
+-	msg = load_msg(mtext, msgsz);
++	tmp = load_msg(mtext, msgsz);
+ 	if (IS_ERR(msg))
+ 		return PTR_ERR(msg);
+ 
+-	msg->m_type = mtype;
+-	msg->m_ts = msgsz;
++	tmp->m_type = mtype;
++	tmp->m_ts = msgsz;
++
++	*msg = tmp;
++	return 0;
++}
++
++static long do_msgsnd(int msqid, long mtype, void __user *mtext,
++		      size_t msgsz, int msgflg)
++{
++	struct msg_msg *msg;
++	int err;
++
++	err = check_and_load_msgsnd(msqid, mtype, mtext, &msg, msgsz);
++	if (err)
++		return err;
++
++	err = __do_msgsnd(msqid, mtype, &msg, msgsz, msgflg);
++	if (msg != NULL)
++		free_msg(msg);
++
++	return err;
++}
++
++long __do_msgsnd(int msqid, long mtype, struct msg_msg **_msg,
++		 size_t msgsz, int msgflg)
++{
++	struct msg_queue *msq;
++	struct msg_msg *msg;
++	int err;
++	struct ipc_namespace *ns;
++	DEFINE_WAKE_Q(wake_q);
++
++	msg = *_msg;
++	ns = current->nsproxy->ipc_ns;
+ 
+ 	rcu_read_lock();
+ 	msq = msq_obtain_object_check(ns, msqid);
+@@ -940,15 +970,13 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
  	}
  
- 	printk_once(KERN_WARNING "io_uring: unhandled opcode %d\n",
-@@ -8636,6 +8678,9 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 	case IORING_OP_MSGSND:
- 		ret = io_msgsnd(req, issue_flags);
- 		break;
-+	case IORING_OP_MSGRCV:
-+		ret = io_msgrcv(req, issue_flags);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index fa29bd96207d..b5dcaac30d9d 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -191,6 +191,7 @@ enum io_uring_op {
- 	IORING_OP_SOCKET,
- 	IORING_OP_URING_CMD,
- 	IORING_OP_MSGSND,
-+	IORING_OP_MSGRCV,
+ 	err = 0;
+-	msg = NULL;
++	*_msg = NULL;
  
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
+ out_unlock0:
+ 	ipc_unlock_object(&msq->q_perm);
+ 	wake_up_q(&wake_q);
+ out_unlock1:
+ 	rcu_read_unlock();
+-	if (msg != NULL)
+-		free_msg(msg);
+ 	return err;
+ }
+ 
 -- 
 2.25.1
 
