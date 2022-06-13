@@ -2,89 +2,92 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E093AC43334
-	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 15:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35099C43334
+	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 15:39:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242851AbiFMPYx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 13 Jun 2022 11:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
+        id S229993AbiFMPjV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 13 Jun 2022 11:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387221AbiFMPY1 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 11:24:27 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5672113746A
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 05:50:06 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id h18so4211430qvj.11
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 05:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=0C1gSe6v7Ey+4Ln33U0g7oeVNYl0T38ebRXggUUmBYM=;
-        b=3gBjTTkRp7uyXcgDcMARa5ErRKuvVtjJGc/hhJbzWGQLjWuLmluZIQDRHD7uX6JOhp
-         3w0IkJ2G24Y43ClvOWoH4kYwcn5SvtwMYCsX0t5BsXMWSK0UH3CWiAnN4LOfiDHneVYf
-         99qCyuozxo9xlkmy0ZwZWc5aPKXe+ZFSJNdD3KmohfIvsaUpfTD8thdQ8W92hfZv67jf
-         VAoq66r9Ob+OmgtbrSoZt+q3EeM5elrc5z57gymo739WD9FUwBTiN2FXAKZx0xtimDM5
-         T5r4cyWEozY1gkR7z2bCiX01ryMf8CsfFu6N+EwpQohz5ZYeM487W4yDQmXCx7q2AyXl
-         C4Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=0C1gSe6v7Ey+4Ln33U0g7oeVNYl0T38ebRXggUUmBYM=;
-        b=5o3PugeX65XqZ0dssI3/qGzqnz+EZIr2pqeGhGmt8Sg8ZH+GbWxOIDWASDvl4cAHQz
-         HQOJQodC6zcvIt78+BeDbztpiNSZ4eES9ZPRVmdwbQEeGJkajUAD8Vh/IWLrTUk4L/Cy
-         5cd3LcL+aW7vCPA5GFbHr0fE5KRzR0BC+4pPewmxkWAjWy/avOiiNlsW8a/pX83V8aX4
-         ZhWfNuturOXTGb84nkGARlBhkWbtv0utEE5tFIRu4VYNF6gt3zLV2WOxLSNPu9shKa5M
-         GpX65GNxEG5dmUzbInhJAakxa49ZhYgqOVOQQx0cBF0fj9/vpMt78J+Lv2fOlQR0l68c
-         ftpw==
-X-Gm-Message-State: AOAM53368WUx6wVmb/Kza43wy1N+y4OlV0CbWVwllNNghi0aGMurtQQP
-        02mOVwB6JrXTPE9paXIFoFgu0EuUFK4OcXSiel8=
-X-Google-Smtp-Source: ABdhPJySDaf/pbiDKUi3FETakILBaatphdNq6Pj8TmFJlHxjNXU60qGeOPF9QUyKHe8vJ9nk0r3xkg==
-X-Received: by 2002:a05:6214:1ccf:b0:461:b48b:29e4 with SMTP id g15-20020a0562141ccf00b00461b48b29e4mr99131518qvd.5.1655124602654;
-        Mon, 13 Jun 2022 05:50:02 -0700 (PDT)
-Received: from [127.0.1.1] ([8.46.76.77])
-        by smtp.gmail.com with ESMTPSA id c10-20020a05622a024a00b0030509143423sm4933313qtx.69.2022.06.13.05.49.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 05:50:02 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, asml.silence@gmail.com, dylany@fb.com
-Cc:     Kernel-team@fb.com
-In-Reply-To: <20220613101157.3687-1-dylany@fb.com>
-References: <20220613101157.3687-1-dylany@fb.com>
-Subject: Re: [PATCH 0/3] io_uring: fixes for provided buffer ring
-Message-Id: <165512459373.12400.11120014654091283779.b4-ty@kernel.dk>
-Date:   Mon, 13 Jun 2022 06:49:53 -0600
+        with ESMTP id S1350820AbiFMPi5 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 11:38:57 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FE5157EBA
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 06:13:20 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25CMSs1J028958
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 06:13:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=z5VQFbs0Gkbf6fmMARQ8k5mVu8HhtalpgX7rFcQmvss=;
+ b=rg3BWWM2lw3E+fKrC/l5lu7k6FHHHP8EpsZpThw8wWrNXSH3upfUUNwfAcQzTbej3NS3
+ 3GpOZw09DpclVFo1xCY8mc0EU9MUtmp2QwyLzn8z5M+a7NUpyaBec50AZQJPfSG9ArSX
+ CL/+2HSij7kbGjPwjOF3f+e9ix5FEPFy1Qo= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gmq3kgedd-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 06:13:01 -0700
+Received: from twshared25107.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 13 Jun 2022 06:12:58 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 4C99119A7602; Mon, 13 Jun 2022 06:12:56 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH liburing 0/4] Buffer ring API fixes
+Date:   Mon, 13 Jun 2022 06:12:49 -0700
+Message-ID: <20220613131253.974205-1-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 29z_42u7K17NXq-GGKqiKHx-_x1E6j32
+X-Proofpoint-ORIG-GUID: 29z_42u7K17NXq-GGKqiKHx-_x1E6j32
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-13_05,2022-06-13_01,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Mon, 13 Jun 2022 03:11:54 -0700, Dylan Yudaken wrote:
-> This fixes two problems in the new provided buffer ring feature. One
-> is a simple arithmetic bug (I think this came out from a refactor).
-> The other is due to type differences between head & tail, which causes
-> it to sometimes reuse an old buffer incorrectly.
-> 
-> Patch 1&2 fix bugs
-> Patch 3 limits the size of the ring as it's not
-> possible to address more entries with 16 bit head/tail
-> 
-> [...]
+This set makes some changes to the new buf_ring API to help it's
+usability.  Most importantly the _add function needs a mask parameter
+to prevent buffer overflow. I added a _mask helper function to
+calculate this. Even though its trivial it feels better to not force
+the user to think about it.
 
-Applied, thanks!
+Additionally _init is required as otherwise there is no provided way
+to sync the tail with the kernel.
 
-[1/3] io_uring: fix index calculation
-      commit: 97da4a537924d87e2261773f3ac9365abb191fc9
-[2/3] io_uring: fix types in provided buffer ring
-      commit: c6e9fa5c0ab811f4bec36a96337f4b1bb77d142c
-[3/3] io_uring: limit size of provided buffer ring
-      commit: f9437ac0f851cea2374d53594f52fbbefdd977bd
+Lastly I add a test that showed up some issues found in 5.19-rc1.
 
-Best regards,
--- 
-Jens Axboe
+Patch 1 is a small man fix
+Patch 2/3 are the API changes
+Patch 4 is the test.
 
+Dylan Yudaken (4):
+  remove non-existent manpage reference
+  add mask parameter to io_uring_buf_ring_add
+  add io_uring_buf_ring_init
+  buf-ring: add tests that cycle through the provided buffer ring
+
+ man/io_uring_buf_ring_add.3      |   5 ++
+ man/io_uring_buf_ring_init.3     |  30 +++++++
+ man/io_uring_buf_ring_mask.3     |  27 +++++++
+ man/io_uring_register_buf_ring.3 |   6 +-
+ src/include/liburing.h           |  18 ++++-
+ test/buf-ring.c                  | 133 +++++++++++++++++++++++++++++++
+ test/send_recvmsg.c              |   4 +-
+ 7 files changed, 218 insertions(+), 5 deletions(-)
+ create mode 100644 man/io_uring_buf_ring_init.3
+ create mode 100644 man/io_uring_buf_ring_mask.3
+
+
+base-commit: 807c8169e153a3985f1a4deddc302846673ef979
+--=20
+2.30.2
 
