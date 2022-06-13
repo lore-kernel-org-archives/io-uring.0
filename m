@@ -2,225 +2,96 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 550CAC433EF
-	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 15:41:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C2FFC433EF
+	for <io-uring@archiver.kernel.org>; Mon, 13 Jun 2022 17:37:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242560AbiFMPlR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 13 Jun 2022 11:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
+        id S241860AbiFMRhy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 13 Jun 2022 13:37:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351773AbiFMPjJ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 11:39:09 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490A9158947
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 06:13:35 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25CMwPM4011288
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 06:13:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=Cd2OafK1TiUXRh0JQc82sGL8VM0TCs07e6btQkfgPSI=;
- b=AnczQqp00N55wAH0v0efi4X2dKqvZ9cuypHEVRUMRiYxBtD0rCMUy7T+rvbHNsmH9ZZX
- 2I75oZAzIw3EQGgWQ+jVT/NKnIqFBAsT3js5oRO1Hmf/r9rD+g5jp2M1C2wLpPuVJN2T
- 2ZDt+tc5wtTWVz5n3/om/Ib30DSj9ETbI3U= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gmq3kgeeg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 06:13:11 -0700
-Received: from twshared5131.09.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Mon, 13 Jun 2022 06:13:11 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 6FD5619A760A; Mon, 13 Jun 2022 06:12:56 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing 4/4] buf-ring: add tests that cycle through the provided buffer ring
-Date:   Mon, 13 Jun 2022 06:12:53 -0700
-Message-ID: <20220613131253.974205-5-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220613131253.974205-1-dylany@fb.com>
-References: <20220613131253.974205-1-dylany@fb.com>
+        with ESMTP id S241906AbiFMRhF (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 13 Jun 2022 13:37:05 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA412BCE
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 05:59:57 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so3045462wms.3
+        for <io-uring@vger.kernel.org>; Mon, 13 Jun 2022 05:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zjRzt/R5VBlYISRn8Sv8w/unQqbKWqQTZybSiEHQ7qE=;
+        b=XNFCF4dBzGG88s7o1h/YhJMGnVL4sxVlsUW9BgAMeEnz7z2OHCKYN8lrH22R5H5QYs
+         gHKzMATxdDDpkn2yA+TRTT1L77I7qp+SoUlIjaQPUUd/ERrwBo031tRm/gD09T+Vvpih
+         EEupJKMX8SyLlALTmosuSmrKhgZzXUzt6in6GwFFr0g0NRsvi9aTI9Kupy9X64yY9j9E
+         G/GlOnrLAUM6CXF62b5lvR2KPhQrLzplfp0QNA0vDBCNSEsdzsY+eWT9Nc4yBuozk6mm
+         TEGf2oIWiKOHIEdtUxs3pyXuVgce0bCt4sR7yPc7nHbY/aWdu3iAIXfTEoBvGBiBT0kP
+         WYIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zjRzt/R5VBlYISRn8Sv8w/unQqbKWqQTZybSiEHQ7qE=;
+        b=cZL18GBdchXKUdtx5Wgzz6DSlf5lK4TTH7oywooLJGEjZV2L9TzRGRXsK7wUA4rP7F
+         s9HUlol/x3gmhDuBEc415K/JbEp/fi37fY/41O0uSjuiVUseArSwqSFbJUZQ4CNOVVSN
+         AySCMXRw3fKabgPhgXpERepmP95ZDlkw8MSZBnQZvM54U+96Rquan0HOYdTfEhIIaGYc
+         NCAalVijc36MhgLx7SxomqUCWLZB+7exIIIZbmjPsnqFTk2o1U3uBZfV336L9X3U8P24
+         yDyxBJ5G62WU8UqMFy+zkHFwk5DDnRt2+PoV9FwobwAV+r5MlSilYPyqxpJl13RbFM9l
+         4FMg==
+X-Gm-Message-State: AOAM5328VoWZIcO77lkIl0gobdigOQLrlFovszaXcVtIkSYY8mj4Y/ml
+        hJp77uvLysuyUIh44Dumwd740f+r/WxA6g==
+X-Google-Smtp-Source: ABdhPJyphK23t8rFaJi3ytvXISTiaKkX9NDJ38C25IViC75fJCfOtv7BDUG+gRX84/tjXLzZeHDIQw==
+X-Received: by 2002:a05:600c:d0:b0:39c:5927:3fa7 with SMTP id u16-20020a05600c00d000b0039c59273fa7mr14663605wmm.36.1655125195601;
+        Mon, 13 Jun 2022 05:59:55 -0700 (PDT)
+Received: from [192.168.8.198] (188.28.125.106.threembb.co.uk. [188.28.125.106])
+        by smtp.gmail.com with ESMTPSA id c12-20020a5d4ccc000000b00219c46089f6sm8578104wrt.64.2022.06.13.05.59.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 05:59:55 -0700 (PDT)
+Message-ID: <de5e6f02-dcab-07df-7cc4-7f12885083e6@gmail.com>
+Date:   Mon, 13 Jun 2022 13:59:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: HP0bCrY60FNckx01ivLByxB9JW9JvLKr
-X-Proofpoint-ORIG-GUID: HP0bCrY60FNckx01ivLByxB9JW9JvLKr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-13_05,2022-06-13_01,2022-02-23_01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 0/3] io_uring: fixes for provided buffer ring
+Content-Language: en-US
+To:     Hao Xu <hao.xu@linux.dev>, Dylan Yudaken <dylany@fb.com>,
+        axboe@kernel.dk, io-uring@vger.kernel.org
+Cc:     Kernel-team@fb.com
+References: <20220613101157.3687-1-dylany@fb.com>
+ <f2fddce1-bc25-183e-6095-bb5a70a57319@linux.dev>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <f2fddce1-bc25-183e-6095-bb5a70a57319@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add tests that make sure that the buffer ring logic works properly
-without actually using the data in each buffer.
+On 6/13/22 12:08, Hao Xu wrote:
+> On 6/13/22 18:11, Dylan Yudaken wrote:
+>> This fixes two problems in the new provided buffer ring feature. One
+>> is a simple arithmetic bug (I think this came out from a refactor).
+>> The other is due to type differences between head & tail, which causes
+>> it to sometimes reuse an old buffer incorrectly.
+>>
+>> Patch 1&2 fix bugs
+>> Patch 3 limits the size of the ring as it's not
+>> possible to address more entries with 16 bit head/tail
+> 
+> Reviewed-by: Hao Xu <howeyxu@tencent.com>
+> 
+>>
+>> I will send test cases for liburing shortly.
+>>
+>> One question might be if we should change the type of ring_entries
+>> to uint16_t in struct io_uring_buf_reg?
+> 
+> Why not? 5.19 is just rc2 now. So we can assume there is no users using
+> it right now I think?
 
-This exposes some bugs in 5.19-rc1
+It's fine to change, but might be better if we want to extend it
+in the future. Do other pbuf bits allow more than 2^16 buffers?
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- test/buf-ring.c | 133 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 133 insertions(+)
-
-diff --git a/test/buf-ring.c b/test/buf-ring.c
-index 5fd1e53..2fcc360 100644
---- a/test/buf-ring.c
-+++ b/test/buf-ring.c
-@@ -206,9 +206,134 @@ static int test_reg_unreg(int bgid)
- 	return 0;
- }
-=20
-+static int test_one_nop(int bgid, struct io_uring *ring)
-+{
-+	int ret;
-+	struct io_uring_cqe *cqe;
-+	struct io_uring_sqe *sqe;
-+
-+	sqe =3D io_uring_get_sqe(ring);
-+	if (!sqe) {
-+		fprintf(stderr, "get sqe failed\n");
-+		return -1;
-+	}
-+
-+	io_uring_prep_nop(sqe);
-+	sqe->flags |=3D IOSQE_BUFFER_SELECT;
-+	sqe->buf_group =3D bgid;
-+	ret =3D io_uring_submit(ring);
-+	if (ret <=3D 0) {
-+		fprintf(stderr, "sqe submit failed: %d\n", ret);
-+		ret =3D -1;
-+		goto out;
-+	}
-+
-+	ret =3D io_uring_wait_cqe(ring, &cqe);
-+	if (ret < 0) {
-+		fprintf(stderr, "wait completion %d\n", ret);
-+		ret =3D -1;
-+		goto out;
-+	}
-+
-+	if (cqe->res =3D=3D -ENOBUFS) {
-+		ret =3D cqe->res;
-+		goto out;
-+	}
-+
-+	if (cqe->res !=3D 0) {
-+		fprintf(stderr, "nop result %d\n", ret);
-+		ret =3D -1;
-+		goto out;
-+	}
-+
-+	ret =3D cqe->flags >> 16;
-+
-+out:
-+	io_uring_cqe_seen(ring, cqe);
-+	return ret;
-+}
-+
-+static int test_running(int bgid, int entries, int loops)
-+{
-+	struct io_uring_buf_reg reg =3D { };
-+	struct io_uring ring;
-+	void *ptr;
-+	int ret;
-+	int ring_size =3D (entries * sizeof(struct io_uring_buf) + 4095) & (~40=
-95);
-+	int ring_mask =3D io_uring_buf_ring_mask(entries);
-+
-+	int loop, idx;
-+	bool *buffers;
-+	struct io_uring_buf_ring *br;
-+
-+	ret =3D t_create_ring(1, &ring, 0);
-+	if (ret =3D=3D T_SETUP_SKIP)
-+		return 0;
-+	else if (ret !=3D T_SETUP_OK)
-+		return 1;
-+
-+	if (posix_memalign(&ptr, 4096, ring_size))
-+		return 1;
-+
-+	br =3D (struct io_uring_buf_ring *)ptr;
-+	io_uring_buf_ring_init(br);
-+
-+	buffers =3D malloc(sizeof(bool) * entries);
-+	if (!buffers)
-+		return 1;
-+
-+	reg.ring_addr =3D (unsigned long) ptr;
-+	reg.ring_entries =3D entries;
-+	reg.bgid =3D bgid;
-+
-+	ret =3D io_uring_register_buf_ring(&ring, &reg, 0);
-+	if (ret) {
-+		/* by now should have checked if this is supported or not */
-+		fprintf(stderr, "Buffer ring register failed %d\n", ret);
-+		return 1;
-+	}
-+
-+	for (loop =3D 0; loop < loops; loop++) {
-+		memset(buffers, 0, sizeof(bool) * entries);
-+		for (idx =3D 0; idx < entries; idx++)
-+			io_uring_buf_ring_add(br, ptr, 1, idx, ring_mask, idx);
-+		io_uring_buf_ring_advance(br, entries);
-+
-+		for (idx =3D 0; idx < entries; idx++) {
-+			ret =3D test_one_nop(bgid, &ring);
-+			if (ret < 0) {
-+				fprintf(stderr, "bad run %d/%d =3D %d\n", loop, idx, ret);
-+				return ret;
-+			}
-+			if (buffers[ret]) {
-+				fprintf(stderr, "reused buffer %d/%d =3D %d!\n", loop, idx, ret);
-+				return 1;
-+			}
-+			buffers[ret] =3D true;
-+		}
-+		ret =3D test_one_nop(bgid, &ring);
-+		if (ret !=3D -ENOBUFS) {
-+			fprintf(stderr, "expected enobufs run %d =3D %d\n", loop, ret);
-+			return 1;
-+		}
-+
-+	}
-+
-+	ret =3D io_uring_unregister_buf_ring(&ring, bgid);
-+	if (ret) {
-+		fprintf(stderr, "Buffer ring register failed %d\n", ret);
-+		return 1;
-+	}
-+
-+	io_uring_queue_exit(&ring);
-+	free(buffers);
-+	return 0;
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int bgids[] =3D { 1, 127, -1 };
-+	int entries[] =3D {1, 32768, 4096, -1 };
- 	int ret, i;
-=20
- 	if (argc > 1)
-@@ -242,5 +367,13 @@ int main(int argc, char *argv[])
- 		}
- 	}
-=20
-+	for (i =3D 0; !no_buf_ring && entries[i] !=3D -1; i++) {
-+		ret =3D test_running(2, entries[i], 3);
-+		if (ret) {
-+			fprintf(stderr, "test_running(%d) failed\n", entries[i]);
-+			return 1;
-+		}
-+	}
-+
- 	return 0;
- }
---=20
-2.30.2
-
+-- 
+Pavel Begunkov
