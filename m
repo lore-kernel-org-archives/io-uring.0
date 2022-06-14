@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C9FFC43334
-	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 14:38:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8025ACCA47A
+	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 14:38:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243978AbiFNOiA (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 14 Jun 2022 10:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S238564AbiFNOiB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 14 Jun 2022 10:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245372AbiFNOhx (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 10:37:53 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC8BB7F2
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:52 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id w17so4075107wrg.7
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:51 -0700 (PDT)
+        with ESMTP id S243425AbiFNOh4 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 10:37:56 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71892B7F2
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:54 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id r123-20020a1c2b81000000b0039c1439c33cso4910385wmr.5
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Peng1QhMzZQpZunkpzCR1eikF0YslET37BvOxslBf8s=;
-        b=ZAv7y97dnw3gWNiOCLFesZAV8l9UNvFpGsoEn5i3j+IT9YUBzO+dg9smXaf1lNgTC3
-         9BAdtmncq3vyP9HZd9+o0WlpJLYS1o0qDhQPlZ2gWu/1ygi7IeCWspIawGl1eA0X1Jbi
-         CjqxYMZAgWAtv0HuUcDZLLNpWmkzuB4d5wNz6RhemXeHCugg8VIA4uFzS4JiKRyzEO1T
-         V2t1klm/zbVx91BsrrB/5SHtFvkO+185EmLWficCglo8ESimnxPKclqZcKTaBkZ9i2O+
-         GVPXTN60NeeTZlCD2WHnKVcI61V9KV+xa3QKzVsFVuhKOEDAvpOs0ZL3B3EIE7kN7gAt
-         O0cQ==
+        bh=fBuzqx+gzC5/J7sqLEp0sAY1HfeFLOvDJjV1YuH4kBU=;
+        b=SwzGMVM9xEcKeBEuYMvTsD0VVKufNx4b2jRMEwDx1+x9LNRb9naC3n+2yqUljU+lEK
+         j0mQOII0K+n03YYEDH77nbnfAB5S8/P+B3Gokt9D4iwcsdZ7HRRXsd7EhGOiHaNQBWrW
+         n8Rgg0LuwRvXChg64edRBRRFRLeXzvwRco099pNedxD9K9/xdiYuhTXEdHeiZt6hQnrR
+         SzJytPxuLFvPjLjIAsxKviXeaocM7M4+MVKf01ArynNPT4iU5j6K2SVFRM8TUHTExRpu
+         OMomoQE834AEYC+YKYHOaDLkIODyEarBpObK2hu9i1SeLuRkZQQ97X7IPW9c6M40WmHV
+         D7YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Peng1QhMzZQpZunkpzCR1eikF0YslET37BvOxslBf8s=;
-        b=JQcaPFwYF9ErXsYkUaKA3hivk9ZI8Yiwz54oIb5zXAejwv5hzOfHmoYNqTVfdKfpBe
-         IuUAleh//xqLvJwBuak/L8rPgRy1Y9l+i8r/99tjMDfBxTVzjzOSFYEuUKMfKzRIUV4X
-         EYlxbJVbFG2fHH9iH6SEHNYDd9rWsIaB3SIsnpFLO0DDIPGbIH0zb7vCwE+Soy2EVLH/
-         z1lcs7xIaSmso/C+mlFMyG8YiyNeycNVYXf34W86ufF6K5xWCjw2J+n1nq7Ag+FchrRP
-         XQsJlC4qg+uHWMHyzFkGtMs2jJRnrbITZX8T8+ti9BDM534gY9Oct2UegXpRpTX4EP7K
-         GiWQ==
-X-Gm-Message-State: AJIora9ptVed9PyalYZ0veqVoJgFzp+/zFp2Q+kS2Lipg4iYM5y3KHj+
-        1f81Q8vwOhnmVX9aLn/zgct6q9aEKpV5Lw==
-X-Google-Smtp-Source: AGRyM1v6s+5hvouYp0MrS6SpkdOWxTcMmX+fWDWYF6wR2iE/LTSx7T7mHJYJrx0+JUWzsL+PvQvbjw==
-X-Received: by 2002:adf:e28a:0:b0:210:b31:722 with SMTP id v10-20020adfe28a000000b002100b310722mr5244274wri.65.1655217470330;
-        Tue, 14 Jun 2022 07:37:50 -0700 (PDT)
+        bh=fBuzqx+gzC5/J7sqLEp0sAY1HfeFLOvDJjV1YuH4kBU=;
+        b=6wMfM1paCJFl7UaT/UD76Yaxi4ICOCcfd9+aHmi7gMnLHQM+2awpUyCcJCEWPshbD3
+         hPiNnwM3iBOoJlImx12y8CjYWPFuEsvy7kqX1Nny4XAkiV+YF6HIBDbb1ibQcpD1RD3H
+         EH5jH+RH/8fs6ed3IE0uHbT6ipNoXbKbFyzOH2HFmsRzRla6NtN6h4b/BVMIamAyaet3
+         AAjMttlJIrfbje9uf1FioIe/5C0Xy6xoV8B53cNcbKz3wht7mODggwkQWzhOXtw1C6h3
+         a9MAfk+3RUzJxvqNpKRFnM+F6aFx7QM2ch815OjboS4pm2/zHSBaPbKkAzXG3krS4eVZ
+         Ut6A==
+X-Gm-Message-State: AOAM5327mq4qzpdzbTZDssbLV2gg27y/CuCdcPtBDY1fQAEhXXYITvmz
+        6kr5qTsGLUjN3PHm3+w5aXAPGuhxu9FITQ==
+X-Google-Smtp-Source: ABdhPJwfnyxEwbO16KN33XtsjrR/RbW/9b/wWqBWOC+zYPmeSh10DAyzyvFRCbfrw7ECuYGxHmelZw==
+X-Received: by 2002:a1c:cc07:0:b0:39c:7416:6a43 with SMTP id h7-20020a1ccc07000000b0039c74166a43mr4408303wmb.130.1655217472674;
+        Tue, 14 Jun 2022 07:37:52 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id a4-20020adff7c4000000b0021033caa332sm12353064wrq.42.2022.06.14.07.37.49
+        by smtp.gmail.com with ESMTPSA id a4-20020adff7c4000000b0021033caa332sm12353064wrq.42.2022.06.14.07.37.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 07:37:49 -0700 (PDT)
+        Tue, 14 Jun 2022 07:37:52 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next v2 10/25] io_uring: kill REQ_F_COMPLETE_INLINE
-Date:   Tue, 14 Jun 2022 15:37:00 +0100
-Message-Id: <378d3aba69ea2b6a8b14624810a551c2ae011791.1655213915.git.asml.silence@gmail.com>
+Subject: [PATCH for-next v2 12/25] io_uring: don't inline io_put_kbuf
+Date:   Tue, 14 Jun 2022 15:37:02 +0100
+Message-Id: <8abee74fa6f3c6565b69a0facfaffafb3ed4bf8a.1655213915.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1655213915.git.asml.silence@gmail.com>
 References: <cover.1655213915.git.asml.silence@gmail.com>
@@ -62,108 +62,128 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-REQ_F_COMPLETE_INLINE is only needed to delay queueing into the
-completion list to io_queue_sqe() as __io_req_complete() is inlined and
-we don't want to bloat the kernel.
-
-As now we complete in a more centralised fashion in io_issue_sqe() we
-can get rid of the flag and queue to the list directly.
+io_put_kbuf() is huge, don't bloat the kernel with inlining.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c       | 20 ++++++++------------
- io_uring/io_uring.h       |  5 -----
- io_uring/io_uring_types.h |  3 ---
- 3 files changed, 8 insertions(+), 20 deletions(-)
+ io_uring/kbuf.c | 33 +++++++++++++++++++++++++++++++++
+ io_uring/kbuf.h | 38 ++++++--------------------------------
+ 2 files changed, 39 insertions(+), 32 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 1fb93fdcfbab..fcee58c6c35e 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1278,17 +1278,14 @@ static void io_req_complete_post32(struct io_kiocb *req, u64 extra1, u64 extra2)
- 
- inline void __io_req_complete(struct io_kiocb *req, unsigned issue_flags)
- {
--	if (issue_flags & IO_URING_F_COMPLETE_DEFER)
--		io_req_complete_state(req);
--	else
--		io_req_complete_post(req);
-+	io_req_complete_post(req);
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index 9cdbc018fd64..6f2adb481a0d 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -81,6 +81,39 @@ static int io_buffer_add_list(struct io_ring_ctx *ctx,
+ 	return xa_err(xa_store(&ctx->io_bl_xa, bgid, bl, GFP_KERNEL));
  }
  
- void __io_req_complete32(struct io_kiocb *req, unsigned int issue_flags,
- 			 u64 extra1, u64 extra2)
++unsigned int __io_put_kbuf(struct io_kiocb *req, unsigned issue_flags)
++{
++	unsigned int cflags;
++
++	/*
++	 * We can add this buffer back to two lists:
++	 *
++	 * 1) The io_buffers_cache list. This one is protected by the
++	 *    ctx->uring_lock. If we already hold this lock, add back to this
++	 *    list as we can grab it from issue as well.
++	 * 2) The io_buffers_comp list. This one is protected by the
++	 *    ctx->completion_lock.
++	 *
++	 * We migrate buffers from the comp_list to the issue cache list
++	 * when we need one.
++	 */
++	if (req->flags & REQ_F_BUFFER_RING) {
++		/* no buffers to recycle for this case */
++		cflags = __io_put_kbuf_list(req, NULL);
++	} else if (issue_flags & IO_URING_F_UNLOCKED) {
++		struct io_ring_ctx *ctx = req->ctx;
++
++		spin_lock(&ctx->completion_lock);
++		cflags = __io_put_kbuf_list(req, &ctx->io_buffers_comp);
++		spin_unlock(&ctx->completion_lock);
++	} else {
++		lockdep_assert_held(&req->ctx->uring_lock);
++
++		cflags = __io_put_kbuf_list(req, &req->ctx->io_buffers_cache);
++	}
++	return cflags;
++}
++
+ static void __user *io_provided_buffer_select(struct io_kiocb *req, size_t *len,
+ 					      struct io_buffer_list *bl)
  {
- 	if (issue_flags & IO_URING_F_COMPLETE_DEFER) {
--		io_req_complete_state(req);
-+		io_req_add_compl_list(req);
- 		req->extra1 = extra1;
- 		req->extra2 = extra2;
- 	} else {
-@@ -2132,9 +2129,12 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 	if (creds)
- 		revert_creds(creds);
+diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
+index 80b6df2c7535..5da3d4039aed 100644
+--- a/io_uring/kbuf.h
++++ b/io_uring/kbuf.h
+@@ -47,6 +47,8 @@ int io_provide_buffers(struct io_kiocb *req, unsigned int issue_flags);
+ int io_register_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg);
+ int io_unregister_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg);
  
--	if (ret == IOU_OK)
--		__io_req_complete(req, issue_flags);
--	else if (ret != IOU_ISSUE_SKIP_COMPLETE)
-+	if (ret == IOU_OK) {
-+		if (issue_flags & IO_URING_F_COMPLETE_DEFER)
-+			io_req_add_compl_list(req);
-+		else
-+			io_req_complete_post(req);
-+	} else if (ret != IOU_ISSUE_SKIP_COMPLETE)
- 		return ret;
- 
- 	/* If the op doesn't have a file, we're not polling for it */
-@@ -2299,10 +2299,6 @@ static inline void io_queue_sqe(struct io_kiocb *req)
- 
- 	ret = io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
- 
--	if (req->flags & REQ_F_COMPLETE_INLINE) {
--		io_req_add_compl_list(req);
--		return;
--	}
- 	/*
- 	 * We async punt it if the file wasn't marked NOWAIT, or if the file
- 	 * doesn't support non-blocking read/write attempts
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 26b669746d61..2141519e995a 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -193,11 +193,6 @@ static inline bool io_run_task_work(void)
- 	return false;
++unsigned int __io_put_kbuf(struct io_kiocb *req, unsigned issue_flags);
++
+ static inline bool io_do_buffer_select(struct io_kiocb *req)
+ {
+ 	if (!(req->flags & REQ_F_BUFFER_SELECT))
+@@ -70,7 +72,8 @@ static inline void io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
+ 	__io_kbuf_recycle(req, issue_flags);
  }
  
--static inline void io_req_complete_state(struct io_kiocb *req)
--{
--	req->flags |= REQ_F_COMPLETE_INLINE;
--}
+-static unsigned int __io_put_kbuf(struct io_kiocb *req, struct list_head *list)
++static inline unsigned int __io_put_kbuf_list(struct io_kiocb *req,
++					      struct list_head *list)
+ {
+ 	if (req->flags & REQ_F_BUFFER_RING) {
+ 		if (req->buf_list)
+@@ -90,44 +93,15 @@ static inline unsigned int io_put_kbuf_comp(struct io_kiocb *req)
+ 
+ 	if (!(req->flags & (REQ_F_BUFFER_SELECTED|REQ_F_BUFFER_RING)))
+ 		return 0;
+-	return __io_put_kbuf(req, &req->ctx->io_buffers_comp);
++	return __io_put_kbuf_list(req, &req->ctx->io_buffers_comp);
+ }
+ 
+ static inline unsigned int io_put_kbuf(struct io_kiocb *req,
+ 				       unsigned issue_flags)
+ {
+-	unsigned int cflags;
+ 
+ 	if (!(req->flags & (REQ_F_BUFFER_SELECTED|REQ_F_BUFFER_RING)))
+ 		return 0;
 -
- static inline void io_tw_lock(struct io_ring_ctx *ctx, bool *locked)
- {
- 	if (!*locked) {
-diff --git a/io_uring/io_uring_types.h b/io_uring/io_uring_types.h
-index ca8e25992ece..3228872c199b 100644
---- a/io_uring/io_uring_types.h
-+++ b/io_uring/io_uring_types.h
-@@ -299,7 +299,6 @@ enum {
- 	REQ_F_POLLED_BIT,
- 	REQ_F_BUFFER_SELECTED_BIT,
- 	REQ_F_BUFFER_RING_BIT,
--	REQ_F_COMPLETE_INLINE_BIT,
- 	REQ_F_REISSUE_BIT,
- 	REQ_F_CREDS_BIT,
- 	REQ_F_REFCOUNT_BIT,
-@@ -353,8 +352,6 @@ enum {
- 	REQ_F_BUFFER_SELECTED	= BIT(REQ_F_BUFFER_SELECTED_BIT),
- 	/* buffer selected from ring, needs commit */
- 	REQ_F_BUFFER_RING	= BIT(REQ_F_BUFFER_RING_BIT),
--	/* completion is deferred through io_comp_state */
--	REQ_F_COMPLETE_INLINE	= BIT(REQ_F_COMPLETE_INLINE_BIT),
- 	/* caller should reissue async */
- 	REQ_F_REISSUE		= BIT(REQ_F_REISSUE_BIT),
- 	/* supports async reads/writes */
+-	/*
+-	 * We can add this buffer back to two lists:
+-	 *
+-	 * 1) The io_buffers_cache list. This one is protected by the
+-	 *    ctx->uring_lock. If we already hold this lock, add back to this
+-	 *    list as we can grab it from issue as well.
+-	 * 2) The io_buffers_comp list. This one is protected by the
+-	 *    ctx->completion_lock.
+-	 *
+-	 * We migrate buffers from the comp_list to the issue cache list
+-	 * when we need one.
+-	 */
+-	if (req->flags & REQ_F_BUFFER_RING) {
+-		/* no buffers to recycle for this case */
+-		cflags = __io_put_kbuf(req, NULL);
+-	} else if (issue_flags & IO_URING_F_UNLOCKED) {
+-		struct io_ring_ctx *ctx = req->ctx;
+-
+-		spin_lock(&ctx->completion_lock);
+-		cflags = __io_put_kbuf(req, &ctx->io_buffers_comp);
+-		spin_unlock(&ctx->completion_lock);
+-	} else {
+-		lockdep_assert_held(&req->ctx->uring_lock);
+-
+-		cflags = __io_put_kbuf(req, &req->ctx->io_buffers_cache);
+-	}
+-
+-	return cflags;
++	return __io_put_kbuf(req, issue_flags);
+ }
+ #endif
 -- 
 2.36.1
 
