@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE0DFC433EF
-	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 12:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51F9DC43334
+	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 12:34:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242808AbiFNMeg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S233873AbiFNMeg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Tue, 14 Jun 2022 08:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355284AbiFNMeX (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 08:34:23 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BF94BBB1
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 05:31:02 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so4707111wms.3
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 05:31:02 -0700 (PDT)
+        with ESMTP id S244298AbiFNMeM (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 08:34:12 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C3E4BB97
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 05:30:59 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id x17so11078046wrg.6
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 05:30:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zrn7uBYKLng0XHi7RMiiU3T4m2AfPpnQM1wA3OWR3wg=;
-        b=RQ9uiRkk3D2d/Y/TWEyhipyB3ehxQ2F7AQAlyRPIs8S+p1XK9FGVsQW+GyVeBbDNoE
-         0XThRMrJNj6SvYNBR7YlbujC7oaCGo0q30X0Db+3eR1sTS8qkMLMYneGW+j/dAVbUI9S
-         Sgoyo2RPVMHCStYXmxM4r8wDLfX0jrC9C6MGsOYTyoC11klP3LzrPOjlvWnBSrJG4+Aw
-         4f6e8dBgMogvMeFp+hveCdiaAKZI+Q2BQBjDFWW3J41P4pAzESQiCEKhioNddHAsz5Xe
-         HgxcI1/2/dZqAVLQBCXZu2euhrmKU3eE3wRr3+wgAawZJRYYVs5E46GPSWmBBjJ0+g/R
-         6SIQ==
+        bh=n/nGsucu9f3Io3BE8Nz2zIpgpyCeUl8M+4ygHEUZXIc=;
+        b=l9higdNwgRRofLokarXDlvp/3N5y/qtPuH06WpDzWUDGy+sJkl9HhbthUTpUUSkaMI
+         /B9LPjGDphXBIdOdQNehk20Z8MATYCdfKPRTf4/+b1l22mMpFSh6zW3C9vR2UCtLfJxx
+         qF63+fa0yFo3M7sgspwWqqqoLoe/Kb+9Wk4JYzcgPa7yZOYyYZVcSY9CJ2KyIeYMxm5h
+         dwvR8SNNGTN+pa2I92vu6QzDKcIPJgWXPkdZxx8exmsGYZZCSA1zUIBuFQeeL/e6JtQG
+         d4ePRFsPMEIgW/9p9h9CWUYMoZxiHaOHc7lucJvRguNM7DAP78VEWOhIRBpCG0DUEkRh
+         I87w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zrn7uBYKLng0XHi7RMiiU3T4m2AfPpnQM1wA3OWR3wg=;
-        b=gyGzWrSfH978ZN3ewaxVkZ0j56XeILoU/TaeUXeFkcKt4GlWF/bgp8L1eQEKLasXyF
-         mkfHtomVoJLQ14qsii+O+uQ0E/T4q2Yw8r7yUxa7sxhWZSNBiJ5+1oMPqW7GaACof06Z
-         dptlSNLCggxDa8EM6yK/Sw8v0+jUgozazLg227BTLLk9jRXR5uCqo0BPMtJ+zhdzRTSZ
-         owCHinRSXXfqY1KruWO6pLYCpH7HGYYv5LEmDs4b5+abbOFLBGynf+G7UoOqboQAt6I7
-         p0lxJ2R3AdSmeeoQ91C7Vi6hxCkDCdt9VMsUqLOOkB5gMUkbzOjmGriGuihgig/02Hnm
-         hL0g==
-X-Gm-Message-State: AOAM533hXXHmLb86+P9USGbPKdslbMze2aIuf4EdVn03Yo63N0QKiM3P
-        vYCuI2bybc9Sd5WpNCB902koUrJvPB+t0A==
-X-Google-Smtp-Source: ABdhPJxF0R7zhHAezwx4KhdekrUB1Wo/7YUbjq7q12zEC42mFrR2mQvNAIGGAxCjALf/TiQBXzOPNw==
-X-Received: by 2002:a05:600c:3d18:b0:39c:474c:eb with SMTP id bh24-20020a05600c3d1800b0039c474c00ebmr3891085wmb.87.1655209860406;
-        Tue, 14 Jun 2022 05:31:00 -0700 (PDT)
+        bh=n/nGsucu9f3Io3BE8Nz2zIpgpyCeUl8M+4ygHEUZXIc=;
+        b=t0UgF3Y4vP+eRybYJwkZv+HTyKAh+sCKdskeLizDa+sJB6RlFWQPNl7uNcr2YR4b6v
+         LSIv0z0w1osAw6ksgS+j8u1Zmc+4lhoP2dy4StI7ofaseqayjjmV1QByx+/DY/Wmx1Km
+         NocdcepbmFX3e5WE+Ib1izaWXcc8QdnkqKUyHPa5NqwObEHfhAApB77mKDLrZSWfdRmq
+         LclWRehgpa4T0Mt5S/7VMhxu3wR+b0ND21nGtBsiyl+NUSGaenFmO7civJZxeZsSvKud
+         0ac36M8FRZGTb2EhqwauTLtuMHknyTOx2CMTDG0l8ToA1TJL+SsgrpaBpDLuaJI02YPh
+         9KAg==
+X-Gm-Message-State: AJIora/OazvWGdoPblL1Nqxmyljq+3LeqjQA+yiIRITFhIAIM6R+t/p7
+        InjV2WNh71K60nV6gRc844+dM9ZN43izFA==
+X-Google-Smtp-Source: AGRyM1u9ErXwsBlL91PbQaWhZuTkz5uF26xrdrpO+ABRRQK1RICnDv6MSD8Bq79jdLPX+86KOwWnAg==
+X-Received: by 2002:a05:6000:156d:b0:210:3125:6012 with SMTP id 13-20020a056000156d00b0021031256012mr4526682wrz.357.1655209857888;
+        Tue, 14 Jun 2022 05:30:57 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id t7-20020a05600c198700b0039c5fb1f592sm12410651wmq.14.2022.06.14.05.30.59
+        by smtp.gmail.com with ESMTPSA id t7-20020a05600c198700b0039c5fb1f592sm12410651wmq.14.2022.06.14.05.30.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 05:30:59 -0700 (PDT)
+        Tue, 14 Jun 2022 05:30:57 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 20/25] io_uring: use state completion infra for poll reqs
-Date:   Tue, 14 Jun 2022 13:29:58 +0100
-Message-Id: <8ef49e3c8619395fe2d5d7e00e69f0af8d5cc9e2.1655209709.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 18/25] io_uring: limit number hash buckets
+Date:   Tue, 14 Jun 2022 13:29:56 +0100
+Message-Id: <94334f242fa236c77e1f2c32a9b0108931e285a2.1655209709.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1655209709.git.asml.silence@gmail.com>
 References: <cover.1655209709.git.asml.silence@gmail.com>
@@ -62,33 +62,38 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Use io_req_task_complete() for poll request completions, so it can
-utilise state completions and save lots of unnecessary locking.
+Don't allocate to many hash/cancellation buckets, there might be too
+many, clamp it to 8 bits, or 256 * 64B = 16KB. We don't usually have too
+many requests, and 256 buckets should be enough, especially since we
+do hash search only in the cancellation path.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/poll.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ io_uring/io_uring.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index ad25a964d4ed..2688201e872a 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -234,12 +234,8 @@ static void io_poll_task_func(struct io_kiocb *req, bool *locked)
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 4e0f60ffc975..a203943f3d71 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -710,12 +710,12 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
  
- 	io_poll_remove_entries(req);
- 	io_poll_req_delete(req, ctx);
--	spin_lock(&ctx->completion_lock);
--	req->cqe.flags = 0;
--	__io_req_complete_post(req);
--	io_commit_cqring(ctx);
--	spin_unlock(&ctx->completion_lock);
--	io_cqring_ev_posted(ctx);
-+	io_req_set_res(req, req->cqe.res, 0);
-+	io_req_task_complete(req, locked);
- }
- 
- static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+ 	/*
+ 	 * Use 5 bits less than the max cq entries, that should give us around
+-	 * 32 entries per hash list if totally full and uniformly spread.
++	 * 32 entries per hash list if totally full and uniformly spread, but
++	 * don't keep too many buckets to not overconsume memory.
+ 	 */
+-	hash_bits = ilog2(p->cq_entries);
+-	hash_bits -= 5;
+-	if (hash_bits <= 0)
+-		hash_bits = 1;
++	hash_bits = ilog2(p->cq_entries) - 5;
++	hash_bits = clamp(hash_bits, 1, 8);
++
+ 	ctx->cancel_hash_bits = hash_bits;
+ 	ctx->cancel_hash =
+ 		kmalloc((1U << hash_bits) * sizeof(struct io_hash_bucket),
 -- 
 2.36.1
 
