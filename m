@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 395F2C433EF
-	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 14:37:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AB67C43334
+	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 14:37:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235644AbiFNOhr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 14 Jun 2022 10:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S237898AbiFNOhs (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 14 Jun 2022 10:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237898AbiFNOhp (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 10:37:45 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68101147A
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:43 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id x17so11577589wrg.6
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:43 -0700 (PDT)
+        with ESMTP id S237722AbiFNOhr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 10:37:47 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE5217A9D
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:46 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id o37-20020a05600c512500b0039c4ba4c64dso6346536wms.2
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=43ATD8fKnmjyJdZ2R6qxl1QYnz/Icg31elC1cRBKr+w=;
-        b=dWSJcQy861faEAMob54R9WAvsnQs2gN2exzOxO9MfDV5fZ/Q4hoyzssXere454eLQi
-         It3xv6q0Vl0aNw9vhLM38zpvZdoS8zNKawymC44is2WpJnLoNe8r8u92erbikD7EQWaM
-         uldltSzhgrgwkdRonSejQ0L3CMnlWLYj/KxLrCBI6QyDFZg6nL6YQGXh8ydcLTz3xQin
-         P5SSNF5kpr6kCHFvAzLj8T8cSLkE90c1KwEI/OMDupPVMtARaHg1smfIvsitwHOW0G5h
-         fh5tu0F53ewQynV8MIXMTZY6r6Um/PvMo0MMm0Mlb3kWdt/W2a7bSzo2sIl11ATUiD1d
-         dYgQ==
+        bh=XgZAW0m4+0LZD+WHW8dXUET6dvmfsAmhLr96GJWzonE=;
+        b=C+OW6ff8rC8QaFOQt9W94DfNOMVOwIf8JAioNFBdBCJL3vyoiTNMy8d5kfQN0AP4dP
+         ZYfjsxAYp/fgL0u63Mdzb4Tu/Feea67touwH6maVVqAZAq7bf7pKyYn4DSpBbOhkV9Lc
+         jV+cSkF2NGptc4QwlRZij//tsGPvo87B+3AdZ6r4PPmkGSjXyUIxdycLahyByOXS9BLi
+         nwKeIaVSGxXrFqK9wvzIrdNKptYxUDrU3WXnf1AFrTWMxE1pk+2Mg4F9rLFFXLogdljs
+         LirbajDySVGF48wvZvMva/tCqEnzViXjk39c0JQLm3hTExkmJSeKOP5LrCjxglqQhGWJ
+         NP2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=43ATD8fKnmjyJdZ2R6qxl1QYnz/Icg31elC1cRBKr+w=;
-        b=lASKtwL4vV9csIhhAYARouOZmqE+Cvv8XCE1qevjuuvlO0S/LnEWLFxPBzjujjdoHz
-         7s5FuSjYejTabw/SEMqPlLruOqPgow9Me9YPTBVzVD5GljayWuHcfUs0lYTDSIYGirR0
-         o4ZF9BFt4jCyTlfSPhAc+j6SOjpqHAJmyNiwDkqTbt7ql2cSwp0BRkYlYy+lZWlHx8Hl
-         yL7hqkP+reLWga32PnHy9ZTt2A0Xlzi5LLhssZAU//+3Z0T7NQne2lHEgAfDSbwX4p3D
-         WK9C7htYOQvM/7p6bAgnOP2/fxAIFb1pcKgfMUItE0HiO0di1960U3II978VGkVxtY9d
-         fcmw==
-X-Gm-Message-State: AJIora9JgLr2k3m5P76iNXZDssb1u/JnavZvu9hjC1tH6i0+Sp3OR2Hn
-        b1sptIL+47eteCu62lkN5c1Dc6QeZw95SA==
-X-Google-Smtp-Source: AGRyM1vNQNKrvWhUjOitvg2CNSvKDDpY7+NbodWCJh3jGKqGG0zYlC9L+5kG0fEu4kMhS+f6OJat0g==
-X-Received: by 2002:a5d:55ca:0:b0:211:4092:1c27 with SMTP id i10-20020a5d55ca000000b0021140921c27mr5404546wrw.108.1655217462025;
-        Tue, 14 Jun 2022 07:37:42 -0700 (PDT)
+        bh=XgZAW0m4+0LZD+WHW8dXUET6dvmfsAmhLr96GJWzonE=;
+        b=fVc3QYc8v7tPvkUCzeSe/rkiIIwPF4/oYZQaqNbQiTYRmIrokMTJruy4lXpLKUUax2
+         BKRyx7vg5CIZeIQiLqDOYJdpmx11a1znRIIBu/uRHCV4sUxTicv1uzv4r195AWOhKlq/
+         i611E4iwjNI9DgyxRgROeB+CISaZmv8mAgeifml3NMqkF/lCccS9ByyStZlUR2Gt4jVH
+         Y3ILB9mNgrQPw80bQnV8zbXH20EmtiUf8t2RzL9ZSkdh9kwZ4He8q2WcT4nCq8PYSGWz
+         afyagWFU80MwT7lrobYZ1XoqfA3oGnN/EOUP3jzCBKevcR9BugaadpU9ZVF9byPKJpFH
+         vMwg==
+X-Gm-Message-State: AOAM533YXMjRnb6VyF97lhu0HIOdDftS8z0cFkn/cpfysqEQaYsLKV+D
+        H2aYogZgZS5N4dRPOXB7iNk+MOVUv36S9Q==
+X-Google-Smtp-Source: ABdhPJzzKVcfVvLKKIl5DMzNFmCCmHx1KRg/sG1ER/h4eH3lqsZX5MoF/3sw6/gCSMfZWpjOW1snvg==
+X-Received: by 2002:a05:600c:3588:b0:39c:87f1:b31 with SMTP id p8-20020a05600c358800b0039c87f10b31mr4603447wmq.4.1655217464603;
+        Tue, 14 Jun 2022 07:37:44 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id a4-20020adff7c4000000b0021033caa332sm12353064wrq.42.2022.06.14.07.37.40
+        by smtp.gmail.com with ESMTPSA id a4-20020adff7c4000000b0021033caa332sm12353064wrq.42.2022.06.14.07.37.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 07:37:41 -0700 (PDT)
+        Tue, 14 Jun 2022 07:37:44 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next v2 03/25] io_uring: better caching for ctx timeout fields
-Date:   Tue, 14 Jun 2022 15:36:53 +0100
-Message-Id: <51f0bc096197ab07fbc54b975dafbd22a31a634c.1655213915.git.asml.silence@gmail.com>
+Subject: [PATCH for-next v2 05/25] io_uring: move small helpers to headers
+Date:   Tue, 14 Jun 2022 15:36:55 +0100
+Message-Id: <7bef8769a1f74a0af7c45f8c20d2fb2a6abc9f89.1655213915.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1655213915.git.asml.silence@gmail.com>
 References: <cover.1655213915.git.asml.silence@gmail.com>
@@ -62,63 +62,95 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Following timeout fields access patterns, move all of them into a
-separate cache line inside ctx, so they don't intervene with normal
-completion caching, especially since timeout removals and completion
-are separated and the later is done via tw.
-
-It also sheds some bytes from io_ring_ctx, 1216B -> 1152B
+There is a bunch of inline helpers that will be useful not only to the
+core of io_uring, move them to headers.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring_types.h | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ io_uring/io_uring.c | 22 ----------------------
+ io_uring/io_uring.h | 22 ++++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/io_uring/io_uring_types.h b/io_uring/io_uring_types.h
-index 52e91c3df8d5..4f52dcbbda56 100644
---- a/io_uring/io_uring_types.h
-+++ b/io_uring/io_uring_types.h
-@@ -179,8 +179,6 @@ struct io_ring_ctx {
- 		struct xarray		io_bl_xa;
- 		struct list_head	io_buffers_cache;
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 6a94d1682aaf..3fdb368820c9 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -616,14 +616,6 @@ struct sock *io_uring_get_socket(struct file *file)
+ }
+ EXPORT_SYMBOL(io_uring_get_socket);
  
--		struct list_head	timeout_list;
--		struct list_head	ltimeout_list;
- 		struct list_head	cq_overflow_list;
- 		struct list_head	apoll_cache;
- 		struct xarray		personalities;
-@@ -213,15 +211,11 @@ struct io_ring_ctx {
- 		struct io_ev_fd	__rcu	*io_ev_fd;
- 		struct wait_queue_head	cq_wait;
- 		unsigned		cq_extra;
--		atomic_t		cq_timeouts;
--		unsigned		cq_last_tm_flush;
- 	} ____cacheline_aligned_in_smp;
- 
- 	struct {
- 		spinlock_t		completion_lock;
- 
--		spinlock_t		timeout_lock;
+-static inline void io_tw_lock(struct io_ring_ctx *ctx, bool *locked)
+-{
+-	if (!*locked) {
+-		mutex_lock(&ctx->uring_lock);
+-		*locked = true;
+-	}
+-}
 -
- 		/*
- 		 * ->iopoll_list is protected by the ctx->uring_lock for
- 		 * io_uring instances that don't use IORING_SETUP_SQPOLL.
-@@ -253,6 +247,15 @@ struct io_ring_ctx {
- 		struct list_head	io_buffers_pages;
- 	};
+ static inline void io_submit_flush_completions(struct io_ring_ctx *ctx)
+ {
+ 	if (!wq_list_empty(&ctx->submit_state.compl_reqs))
+@@ -879,15 +871,6 @@ static void io_prep_async_link(struct io_kiocb *req)
+ 	}
+ }
  
-+	/* timeouts */
-+	struct {
-+		spinlock_t		timeout_lock;
-+		atomic_t		cq_timeouts;
-+		struct list_head	timeout_list;
-+		struct list_head	ltimeout_list;
-+		unsigned		cq_last_tm_flush;
-+	} ____cacheline_aligned_in_smp;
+-static inline void io_req_add_compl_list(struct io_kiocb *req)
+-{
+-	struct io_submit_state *state = &req->ctx->submit_state;
+-
+-	if (!(req->flags & REQ_F_CQE_SKIP))
+-		state->flush_cqes = true;
+-	wq_list_add_tail(&req->comp_list, &state->compl_reqs);
+-}
+-
+ void io_queue_iowq(struct io_kiocb *req, bool *dont_use)
+ {
+ 	struct io_kiocb *link = io_prep_linked_timeout(req);
+@@ -1293,11 +1276,6 @@ static void io_req_complete_post32(struct io_kiocb *req, u64 extra1, u64 extra2)
+ 	io_cqring_ev_posted(ctx);
+ }
+ 
+-static inline void io_req_complete_state(struct io_kiocb *req)
+-{
+-	req->flags |= REQ_F_COMPLETE_INLINE;
+-}
+-
+ inline void __io_req_complete(struct io_kiocb *req, unsigned issue_flags)
+ {
+ 	if (issue_flags & IO_URING_F_COMPLETE_DEFER)
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 3660df80e589..26b669746d61 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -193,6 +193,28 @@ static inline bool io_run_task_work(void)
+ 	return false;
+ }
+ 
++static inline void io_req_complete_state(struct io_kiocb *req)
++{
++	req->flags |= REQ_F_COMPLETE_INLINE;
++}
 +
- 	/* Keep this last, we don't need it for the fast path */
- 	struct {
- 		#if defined(CONFIG_UNIX)
++static inline void io_tw_lock(struct io_ring_ctx *ctx, bool *locked)
++{
++	if (!*locked) {
++		mutex_lock(&ctx->uring_lock);
++		*locked = true;
++	}
++}
++
++static inline void io_req_add_compl_list(struct io_kiocb *req)
++{
++	struct io_submit_state *state = &req->ctx->submit_state;
++
++	if (!(req->flags & REQ_F_CQE_SKIP))
++		state->flush_cqes = true;
++	wq_list_add_tail(&req->comp_list, &state->compl_reqs);
++}
++
+ int io_run_task_work_sig(void);
+ void io_req_complete_failed(struct io_kiocb *req, s32 res);
+ void __io_req_complete32(struct io_kiocb *req, unsigned int issue_flags,
 -- 
 2.36.1
 
