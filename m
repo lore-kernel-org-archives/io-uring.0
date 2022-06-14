@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B458DCCA47A
-	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 14:38:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A832DC43334
+	for <io-uring@archiver.kernel.org>; Tue, 14 Jun 2022 14:38:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242898AbiFNOiF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 14 Jun 2022 10:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S245242AbiFNOiG (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 14 Jun 2022 10:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242741AbiFNOh4 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 10:37:56 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D19193C5
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:55 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id s1so11559122wra.9
-        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:55 -0700 (PDT)
+        with ESMTP id S237013AbiFNOiC (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Jun 2022 10:38:02 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7201A07B
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:59 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id o8so11589460wro.3
+        for <io-uring@vger.kernel.org>; Tue, 14 Jun 2022 07:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6eJxYgBNpK8cENMseaGM9WlOCNZFZvANvUQtryLvK5Y=;
-        b=K5DTZNouAcLLflzs3R+LX0vttt9U1ZUHVC0hlnvTuYofknZyBI2thYo4wZoGUE/+Aj
-         q13zyWWg3iYPySo5BrX8YKWUVF2F6EK5VHXWbi33HjNqejG/nF7Fqb+ZVeh1JLgvZgq4
-         voqzqAYB4wRU1dyRoXZrbog/M0nxtk6fvx8aZwVkRQ77JpOzRQAQP0NU37AvTzdxWa5F
-         K/DkM+kWt94MwgpwAYgape+/KyyIPnxzfgwpCK2/jn6l4JPIb53uMnf6x44IqLaIvz0/
-         OD67ioKhNSEu2dpaqUX1ghh+tu4keJW3aTkWdYvIrK/sNBSz4X01oYdIEe3q6G7L4uJ2
-         u7Kw==
+        bh=6Mn1I3qJJuXoCLtaTkB3ey7V/NeeqbASVSbKJNj/gRM=;
+        b=F+pm97aEKODJo6Ubmf53UxkCYgv/VcIfdqICviMGdlYJW9qM99sslm2ap4oqqOgGqp
+         yHGARi3a9OGS1mMzO1PZXcMGQbQoEpgMNa+4eV5qz4yykNg4D5o/zChsb/26ck/oDbxa
+         +1cnjnZyeps6eOEYk/xqOX//lSnAud3T147FINkUE+HycmQ4rR82cX5GQpJWNqLIm8lo
+         4f03daRuhnTv4kFvdn5O2GVV8vkKmAcvbnhfMKDDBeAi6mMtR6pMzoWQIEgD7au9nXjF
+         JHkbE8NoYjXw+q7NmS/7dJduqvFWAAQA1wkuIwUkneOBiUTQsRON3y605P7QBpzdglw/
+         aBBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6eJxYgBNpK8cENMseaGM9WlOCNZFZvANvUQtryLvK5Y=;
-        b=4ltucL6+iERdSnGdyqp2UtO1l4XG/T2+HnxwaLwFzM83RD71t9gOSgfIsTI8099KIV
-         aiVeSUje/9A2mt9PaBFSvv3abVP+M9vectzBJRkoGfQfIWGJYFzOLxFeJcuOLnYJZWGz
-         ekXOjJ++TUwIuODGL2VpZUlwp+jAsajq+DzXXo+qCjltt0n5HXNUdwDH/Q7FrxGAf9TU
-         1EIL06vHIbivieid6848EqIbXl55D0BxvOHheJsEcgWlQ+Bsl1+EBXGpUDH5w9n5zzCT
-         2i1j1DL1LyEwZZR7B3ZM9/o7einzuPy+OkqoYGVHVojVKOn37i4C9r4sKF7x0rYca93g
-         xOqg==
-X-Gm-Message-State: AJIora/7lvpNGC81GWkPT124YEBEYTnGVbQzZ1POs+2bNT6goBVBnFdc
-        gxyhFbrhEK8/xcRtT8Ic1uDdVeEsSd5MXg==
-X-Google-Smtp-Source: AGRyM1tML264tJAB1VQTJo8R8A6tqR1itUcGYC0CAgkrmiQVWp7wPXlg4hrtl7AyA9jrZNc9M5ruzg==
-X-Received: by 2002:adf:d1e7:0:b0:215:2126:dede with SMTP id g7-20020adfd1e7000000b002152126dedemr5230940wrd.297.1655217473913;
-        Tue, 14 Jun 2022 07:37:53 -0700 (PDT)
+        bh=6Mn1I3qJJuXoCLtaTkB3ey7V/NeeqbASVSbKJNj/gRM=;
+        b=f8Z02ja9RBJ4Jk/4DeAH+V3diFXi3BPRq3/Pux4faak9Y8kSRGK0HAk6yLTtb4zHqr
+         nY/TasBAhbv5zrYt8CNyjcpTbMBALjiIOd63wijE+bO919c/nl8PKPOTBCY/JXBCG0vk
+         tK9ZR6E621IP2WJFT5Gmr65Wk9sWXJ01ZNmXA6GLrU2mo4hJScA3NF5S7nRo2aH53S8S
+         SBpoS1aGRmHZzn65p3tpBgo/QZuKTdJkk5VgchTBy90n8uFtrQPohVxAec7cQMyjqgif
+         JJnCAW5wCoPc8uAB8lIJ6sFVt3wlzf3z/ujg4L3IOvJut0eVxDQQgwqIO9Dwo/JFrCjq
+         0dRQ==
+X-Gm-Message-State: AJIora8ArKIm/KTihumAFj3CsBK7o6UxzWhc6nZj8qt/Ism6bxMLKJPg
+        XEDqCZ/TjrJeocSBi46lSr0+L/Q7Ik6Mpg==
+X-Google-Smtp-Source: AGRyM1v3rBbAIZKXDHRI2jy97uiuzYTcsASNuSuQnQ9X0rDtPGnBBUz1XxxM0WZk2e4/sLnPKtHa8w==
+X-Received: by 2002:a05:6000:1812:b0:210:2eb1:4606 with SMTP id m18-20020a056000181200b002102eb14606mr5410900wrh.593.1655217478812;
+        Tue, 14 Jun 2022 07:37:58 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id a4-20020adff7c4000000b0021033caa332sm12353064wrq.42.2022.06.14.07.37.53
+        by smtp.gmail.com with ESMTPSA id a4-20020adff7c4000000b0021033caa332sm12353064wrq.42.2022.06.14.07.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 07:37:53 -0700 (PDT)
+        Tue, 14 Jun 2022 07:37:58 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next v2 13/25] io_uring: remove check_cq checking from hot paths
-Date:   Tue, 14 Jun 2022 15:37:03 +0100
-Message-Id: <9ab7e307e77ffeb92ec788694c87beff27d55c05.1655213915.git.asml.silence@gmail.com>
+Subject: [PATCH for-next v2 17/25] io_uring: clean up io_try_cancel
+Date:   Tue, 14 Jun 2022 15:37:07 +0100
+Message-Id: <5b54a27b6b943a63dabde902ddaca7c6c812d036.1655213915.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1655213915.git.asml.silence@gmail.com>
 References: <cover.1655213915.git.asml.silence@gmail.com>
@@ -62,75 +62,33 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-All ctx->check_cq events are slow path, don't test every single flag one
-by one in the hot path, but add a common guarding if.
+Get rid of an unnecessary extra goto in io_try_cancel() and simplify the
+function.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 34 +++++++++++++++++++---------------
- 1 file changed, 19 insertions(+), 15 deletions(-)
+ io_uring/cancel.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 0f6edf82f262..e43eccf173ff 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1807,24 +1807,25 @@ static int io_iopoll_check(struct io_ring_ctx *ctx, long min)
- 	int ret = 0;
- 	unsigned long check_cq;
+diff --git a/io_uring/cancel.c b/io_uring/cancel.c
+index 6f2888388a40..a253e2ad22eb 100644
+--- a/io_uring/cancel.c
++++ b/io_uring/cancel.c
+@@ -95,12 +95,12 @@ int io_try_cancel(struct io_kiocb *req, struct io_cancel_data *cd)
  
-+	check_cq = READ_ONCE(ctx->check_cq);
-+	if (unlikely(check_cq)) {
-+		if (check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
-+			__io_cqring_overflow_flush(ctx, false);
-+		/*
-+		 * Similarly do not spin if we have not informed the user of any
-+		 * dropped CQE.
-+		 */
-+		if (check_cq & BIT(IO_CHECK_CQ_DROPPED_BIT))
-+			return -EBADR;
-+	}
- 	/*
- 	 * Don't enter poll loop if we already have events pending.
- 	 * If we do, we can potentially be spinning for commands that
- 	 * already triggered a CQE (eg in error).
- 	 */
--	check_cq = READ_ONCE(ctx->check_cq);
--	if (check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
--		__io_cqring_overflow_flush(ctx, false);
- 	if (io_cqring_events(ctx))
- 		return 0;
- 
--	/*
--	 * Similarly do not spin if we have not informed the user of any
--	 * dropped CQE.
--	 */
--	if (unlikely(check_cq & BIT(IO_CHECK_CQ_DROPPED_BIT)))
--		return -EBADR;
--
- 	do {
- 		/*
- 		 * If a submit got punted to a workqueue, we can have the
-@@ -2752,12 +2753,15 @@ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
- 	ret = io_run_task_work_sig();
- 	if (ret || io_should_wake(iowq))
- 		return ret;
+ 	ret = io_poll_cancel(ctx, cd);
+ 	if (ret != -ENOENT)
+-		goto out;
++		return ret;
 +
- 	check_cq = READ_ONCE(ctx->check_cq);
--	/* let the caller flush overflows, retry */
--	if (check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
--		return 1;
--	if (unlikely(check_cq & BIT(IO_CHECK_CQ_DROPPED_BIT)))
--		return -EBADR;
-+	if (unlikely(check_cq)) {
-+		/* let the caller flush overflows, retry */
-+		if (check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
-+			return 1;
-+		if (check_cq & BIT(IO_CHECK_CQ_DROPPED_BIT))
-+			return -EBADR;
-+	}
- 	if (!schedule_hrtimeout(&timeout, HRTIMER_MODE_ABS))
- 		return -ETIME;
- 	return 1;
+ 	spin_lock(&ctx->completion_lock);
+ 	if (!(cd->flags & IORING_ASYNC_CANCEL_FD))
+ 		ret = io_timeout_cancel(ctx, cd);
+ 	spin_unlock(&ctx->completion_lock);
+-out:
+ 	return ret;
+ }
+ 
 -- 
 2.36.1
 
