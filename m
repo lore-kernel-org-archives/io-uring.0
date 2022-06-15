@@ -2,87 +2,99 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA41C43334
-	for <io-uring@archiver.kernel.org>; Wed, 15 Jun 2022 16:34:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7301CCA473
+	for <io-uring@archiver.kernel.org>; Wed, 15 Jun 2022 16:34:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356130AbiFOQeb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 15 Jun 2022 12:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38734 "EHLO
+        id S1356571AbiFOQec (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 15 Jun 2022 12:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356290AbiFOQe3 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Jun 2022 12:34:29 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747DD2AE20
-        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 09:34:26 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id z17so6626357wmi.1
-        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 09:34:26 -0700 (PDT)
+        with ESMTP id S1348775AbiFOQeb (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Jun 2022 12:34:31 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A841634677
+        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 09:34:28 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id e5so6632280wma.0
+        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 09:34:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k46oSdWBMRFyrSPcvfSDXhtbQZ+LMkvj3QX/VlFQyEs=;
-        b=m/tkFw9NYuvs3nTcLBTFFvJ6CYz6n/KeGv1VTjOTmR5qjxwJHzYy7YIEfY5c8x56Yi
-         emakDT69EQY56rDoVFb6GBVT7zEoc+mx0nKoA7ZuQ1iGhlxCgZZ6yloWrD6vr2N/smwM
-         SxXKsKZJ/W/AQl62pwzbvx6gMGfcyqkoqDIpgOcygm1g5LKeZRiHqMXsEL2EzUjjUzUr
-         gHU6z8/sTKCoofCqjdoZK/aHoF5qah+39xsQzvBo5/dzUa/WgTcHWnnbOJ1t2oxeRr56
-         Ot7TtwiBYc1LHurmfYkj56pq3ysgEEqWfOrkhRZvlTNkGl2y4aNH8kUeg3WIbPKWnihn
-         qXYw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1Xnp5doseyV/R5Fgg6sqTDUrOugFuNWb6JYgnUVAxHY=;
+        b=P5beFsz52CoABlwAXpZUOTj+mEMHr6jUQg0i438ocRpWNeKodb1bp1ILLXpvd+2Pc+
+         HphMU+lXjsTcXQDJT7tMPkZVznt4WHaQIzTJ4D1X6UNSdEAtTwXWTWZjq1qAqmvGOK5z
+         wmJsFWri7uZ3u8LJLtziqhRvrKTF/CAoKuVqcrUb4z4VLE5OP2b2oFiKmuwc664+0PO2
+         mqQodDrJjQ0HP/BM/n3yXkxlPJNk8mNY5X/IG7O/UUDzLPLK4JIKYlvHSFHhTx0dwUWr
+         DtA2q6dPmehZeDtKwI4BiWY0VqdoxQG+MZ78fCpno3tZpOV6t9ES031bENWRZqB0RHrW
+         XQUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=k46oSdWBMRFyrSPcvfSDXhtbQZ+LMkvj3QX/VlFQyEs=;
-        b=VQ/MJTzFhODTzy0OjQeJtq6F0iDRFx55/7IgITHdoij/EnLbbK5h3YSRQW3+gNLzYi
-         cLKA6GJB+mYr8FByfojrqGIKgYbpH/00sjMQGF9t8oCrUNflHZVyIt5lZ2oZjm3eh4Wj
-         HO0JZDDzkBpKPa6aUv6Tl/aWhZ6GCxyT81tcwdh0CK1RRCpanMb2SHfeznoPutHcOhww
-         Fp5JMHTXCfvr3IIJMVa+JFeZGleP0+rgqMhEUVqwku/8GBgnFU+lRBQkoyo15UgMUKeO
-         QfvK7c3moKEfG2TgaXBJh5x9G+p5xpU99MJCYOgVgn5XF7j0TkN4m0Ayizqs68yHNEP2
-         Q2rg==
-X-Gm-Message-State: AJIora/a73N5FmqWOv+AeWk51hT9h+XF2r9BGo/zIhPUhHywiQ7s2qEq
-        79QYnCCQ2oGYtQJMeLzABa+IJI1Zh44M/A==
-X-Google-Smtp-Source: AGRyM1vMS+xuzlmHO+1/5ZBb1+gbyBbpXTpoKXGMfA7l1FlLsukoRlV2DrW3XAlxvjQTSHM7wPIAYg==
-X-Received: by 2002:a05:600c:29d3:b0:397:4730:ee75 with SMTP id s19-20020a05600c29d300b003974730ee75mr267730wmd.149.1655310864652;
-        Wed, 15 Jun 2022 09:34:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1Xnp5doseyV/R5Fgg6sqTDUrOugFuNWb6JYgnUVAxHY=;
+        b=wEAXQX33IJcyci9g+OlURFmhJmmIcBLVfoFxu/Pb3ckWF1fjLLEmiNdW8meDJG3Iv0
+         a/+fODkqQOs+h3Wm3iTivjJfx3ftiaS0Br6cyld1J7RevVKEnB1BKSmPh4jJGWa8v+M+
+         mmcV74GADFJ7B9JsoPgAt18ks78QotowrUe7ur1LHyFbYkWhduz9iCjpjFFFDVycRz7Y
+         2P/hAgjWitM28WiZVQ09Pt3yAq9cZH7LITsxtohcpWF+JqSemwHxIDDyFMue5qaDJyn1
+         2kNbyFPghFcQhIf8E8hBZs0AgXXMfnt86Svn06C3nKQsMVBlTdOAraiVM7uUhIXkjdBg
+         i/HA==
+X-Gm-Message-State: AJIora/XMGS/OWCZuZclSCEnPCIYjJ4YKbYSB8jm6eM1ALTxmlMozJn1
+        jSX7gehhKJ5eh8lbD/EaFo+k+P5SLgGq1Q==
+X-Google-Smtp-Source: AGRyM1s9K/IiwuFqHODQq4gUI6XyQ+VHgDjJuTyYQ4bmV0NMvuQ9pZ/yy1blVO41l5HrjUbl+LejJA==
+X-Received: by 2002:a05:600c:4e50:b0:39c:8ca8:faff with SMTP id e16-20020a05600c4e5000b0039c8ca8faffmr282411wmq.67.1655310866927;
+        Wed, 15 Jun 2022 09:34:26 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id u2-20020a056000038200b0020ff3a2a925sm17894953wrf.63.2022.06.15.09.34.23
+        by smtp.gmail.com with ESMTPSA id u2-20020a056000038200b0020ff3a2a925sm17894953wrf.63.2022.06.15.09.34.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 09:34:24 -0700 (PDT)
+        Wed, 15 Jun 2022 09:34:26 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 00/10] 5.20 cleanups
-Date:   Wed, 15 Jun 2022 17:33:46 +0100
-Message-Id: <cover.1655310733.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 02/10] io_uring: move defer_list to slow data
+Date:   Wed, 15 Jun 2022 17:33:48 +0100
+Message-Id: <e16379391ca72b490afdd24e8944baab849b4a7b.1655310733.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1655310733.git.asml.silence@gmail.com>
+References: <cover.1655310733.git.asml.silence@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Simple cleanups split off from a larger series.
+draining is slow path, move defer_list to the end where slow data lives
+inside the context.
 
-Pavel Begunkov (10):
-  io_uring: make reg buf init consistent
-  io_uring: move defer_list to slow data
-  io_uring: better caching for ctx timeout fields
-  io_uring: refactor ctx slow data placement
-  io_uring: move small helpers to headers
-  io_uring: explain io_wq_work::cancel_seq placement
-  io_uring: inline ->registered_rings
-  io_uring: never defer-complete multi-apoll
-  io_uring: remove check_cq checking from hot paths
-  io_uring: don't set REQ_F_COMPLETE_INLINE in tw
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ io_uring/io_uring_types.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- io_uring/io-wq.h          |  1 +
- io_uring/io_uring.c       | 55 +++++++++----------------
- io_uring/io_uring.h       | 22 ++++++++++
- io_uring/io_uring_types.h | 87 ++++++++++++++++++++-------------------
- io_uring/rsrc.c           |  9 ++--
- io_uring/tctx.c           |  9 ----
- io_uring/tctx.h           |  3 +-
- 7 files changed, 93 insertions(+), 93 deletions(-)
-
+diff --git a/io_uring/io_uring_types.h b/io_uring/io_uring_types.h
+index 147e1e597530..bff73107f0f3 100644
+--- a/io_uring/io_uring_types.h
++++ b/io_uring/io_uring_types.h
+@@ -160,7 +160,6 @@ struct io_ring_ctx {
+ 		struct io_uring_sqe	*sq_sqes;
+ 		unsigned		cached_sq_head;
+ 		unsigned		sq_entries;
+-		struct list_head	defer_list;
+ 
+ 		/*
+ 		 * Fixed resources fast path, should be accessed only under
+@@ -272,8 +271,12 @@ struct io_ring_ctx {
+ 		struct work_struct		exit_work;
+ 		struct list_head		tctx_list;
+ 		struct completion		ref_comp;
++
++		/* io-wq management, e.g. thread count */
+ 		u32				iowq_limits[2];
+ 		bool				iowq_limits_set;
++
++		struct list_head		defer_list;
+ 	};
+ };
+ 
 -- 
 2.36.1
 
