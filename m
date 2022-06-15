@@ -2,89 +2,95 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0E49CCA47F
-	for <io-uring@archiver.kernel.org>; Wed, 15 Jun 2022 16:34:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C9A4C433EF
+	for <io-uring@archiver.kernel.org>; Wed, 15 Jun 2022 21:24:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356594AbiFOQen (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 15 Jun 2022 12:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
+        id S1349623AbiFOVX7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 15 Jun 2022 17:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356695AbiFOQej (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Jun 2022 12:34:39 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58C137BFE
-        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 09:34:34 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso1428523wml.1
-        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 09:34:34 -0700 (PDT)
+        with ESMTP id S1349580AbiFOVX7 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Jun 2022 17:23:59 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038DD554B8
+        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 14:23:58 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id z14so7554799pjb.4
+        for <io-uring@vger.kernel.org>; Wed, 15 Jun 2022 14:23:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=WRCMIxAC7zXamLszka2v8x0ZOcaQKYObTE2e1CKL58E=;
-        b=KSHjexX/E0H6+oaS3KCHx1+KUqe1carPzWDvJaWvqTlitpwXXNIB3dvMSpyUFqMi4v
-         dLrUy6pEqdES1Ri5VeWt0H3KXIVrMOakFHkTOIr0VU2oLhntzcz+mhYAJNh5kxx+++An
-         UfHuOn6JqVrtq125xfNAdr5LBcLHAIxYneTbEOiKGkqah9Uoi4Y0Uqazvct4mFXnVP2N
-         UBclJOx+2UpGWvfjV7nVZ1uoKUJYHAkazJzuNObtxFvz9xe0WfYlb0A8E0ENlTdVZ+jf
-         y2hZBlQfnj44icVCCYgvu3v7ofGs7v6qWsBKO+yHG5Q3RzHpU1MQtfR0psXKlZIir1Qj
-         2sxA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:in-reply-to:references:subject:message-id:date:mime-version
+         :content-transfer-encoding;
+        bh=yoThJeOXn2CUCw7hvunOwpcNtuH0GBr04LNnNbR5Eyc=;
+        b=Rg1FLv46lVLFZVAp3NQ7/HOSefmTZse4dXbrLDsGj3BhOL47S5G7myUNWg1OOs+R2s
+         CxOKGUl36hV0XGNH2nj6o3OkHf9hmTOtDd9KmSeAocC1KIyXBgdQfaqT6/TM1tO0Ekgo
+         lMdAiqff3v8sihEGHgilKTU8B7zgxt8hIgD9pYRqpW6wcaiIOCTHj9rjTKrwznvkW4U6
+         8RTtCLHQ+nUbhXX6n+UjGbQlTc1qs/R5gJniSbMoyhLPA+9/Q5Hsxg3FwPJDKANaT9NV
+         Cn7vQ20aUnwArGKvmHzLjlBMtb6RY/+bGm4flfHyF6mQqywzqD3HBlplgMVLjOAosF7S
+         kI9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=WRCMIxAC7zXamLszka2v8x0ZOcaQKYObTE2e1CKL58E=;
-        b=TZFBlB9yudaY6RwpznuOgGrd9HT46VbIiUr+qEO6KNSHcezfzQn8TdyyZtqRY7Hkug
-         V7zrdZlknZCVJemMp02nQwMsrSQpcO8vIBmQ/4bXfOAb5rx8vJnBeOE2SEItcawWsufT
-         5JnXPLf5O8Rsb1zSWqygiFfZ1EHuz691IQXHqqN0JCzjHyifcIjS7z5+hMW214+Zs9JA
-         p+nRpvJBmcslrCejDuex9tSlaxxWFdt5Yky+F5p88NaK1sSWXZWi2V7CYe7HHK3UIAVl
-         c31cM79KKdPkfgPhdMAJCmAJDUYThh2T7yv99TAr656SJm44jBQyh4+MMRiJB/Ssg/+9
-         Hjqg==
-X-Gm-Message-State: AJIora96/bG3TLtzqr5mQ1C4pa5CnXfRRf/93Fy2Q/Og1VNS2MHk/WB9
-        /dTXhWkZwz9BDsXaRhW/AvD/AgFiJ31mhw==
-X-Google-Smtp-Source: AGRyM1vHnpGGDgndq/NeNux0Vc/75aMLn8C6vCszMHjvYkHnnfKI5w/v1D1wYcTPx51Mr3AUpW1wGg==
-X-Received: by 2002:a05:600c:a4c:b0:39c:6517:1136 with SMTP id c12-20020a05600c0a4c00b0039c65171136mr335694wmq.12.1655310873252;
-        Wed, 15 Jun 2022 09:34:33 -0700 (PDT)
-Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id u2-20020a056000038200b0020ff3a2a925sm17894953wrf.63.2022.06.15.09.34.32
+        h=x-gm-message-state:from:to:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=yoThJeOXn2CUCw7hvunOwpcNtuH0GBr04LNnNbR5Eyc=;
+        b=NyfX1/bwjOBirHGB310SVUX4LAFe/lHiM/WLF+QuhzJZt0T6HcW6oqqslBhBVTXqaE
+         oj1hYwujOJuA/vM0jBfeDJncod5LIDjOzCaRJxwJ/ChiIkCvUw4GQGtPP4EZMjUc7jBb
+         lhYflFZTvBSjxiTff2ZDkhDjLizeDIquHu34AAkYH7KyATkAxnyteZXXCFHdY1C0HydK
+         pVJovTp/SPAGjMYeSsYnZdepH11XIJLWWM7Js0U6isFZcI3tObVFe3igcd4dLG6OrCrS
+         6kDEGDsYeletGifsjByOUpBsV+/QzS4nS3SSTP9D/8U3TivBcdyVqkuOCVKyzaM+GtY+
+         HdDg==
+X-Gm-Message-State: AJIora9V1Drc2TCP+qqSNQI20VQHV47BCwui95qZKJY/sraFi4X9SKEt
+        QqIY7NQwgE3hJMrxYj5mPjNxTlaBG6Co6w==
+X-Google-Smtp-Source: AGRyM1voTVF/A6Y5S5FqAQNfJ+BSN+J3efnn5d1bStKd3pzxZueSzKmQTnh7KToi85KUpFQraE3PEA==
+X-Received: by 2002:a17:90b:390c:b0:1e2:d499:8899 with SMTP id ob12-20020a17090b390c00b001e2d4998899mr12638488pjb.161.1655328237210;
+        Wed, 15 Jun 2022 14:23:57 -0700 (PDT)
+Received: from [127.0.1.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id jb21-20020a170903259500b0015ed003552fsm58381plb.293.2022.06.15.14.23.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 09:34:32 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 08/10] io_uring: never defer-complete multi-apoll
-Date:   Wed, 15 Jun 2022 17:33:54 +0100
-Message-Id: <a65ed3f5effd9321ee06e6edea294a03be3e15a0.1655310733.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1655310733.git.asml.silence@gmail.com>
-References: <cover.1655310733.git.asml.silence@gmail.com>
+        Wed, 15 Jun 2022 14:23:56 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, asml.silence@gmail.com
+In-Reply-To: <cover.1655287457.git.asml.silence@gmail.com>
+References: <cover.1655287457.git.asml.silence@gmail.com>
+Subject: Re: [PATCH 5.19 0/6] CQE32 fixes
+Message-Id: <165532823636.852896.7626951550140433327.b4-ty@kernel.dk>
+Date:   Wed, 15 Jun 2022 15:23:56 -0600
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Luckily, nnobody completes multi-apoll requests outside the polling
-functions, but don't set IO_URING_F_COMPLETE_DEFER in any case as
-there is nobody who is catching REQ_F_COMPLETE_INLINE, and so will leak
-requests if used.
+On Wed, 15 Jun 2022 11:23:01 +0100, Pavel Begunkov wrote:
+> Several fixes for IORING_SETUP_CQE32
+> 
+> Pavel Begunkov (6):
+>   io_uring: get rid of __io_fill_cqe{32}_req()
+>   io_uring: unite fill_cqe and the 32B version
+>   io_uring: fill extra big cqe fields from req
+>   io_uring: fix ->extra{1,2} misuse
+>   io_uring: inline __io_fill_cqe()
+>   io_uring: make io_fill_cqe_aux to honour CQE32
+> 
+> [...]
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks!
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index dec288b5f5cd..68ce8666bd32 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2054,7 +2054,7 @@ int io_poll_issue(struct io_kiocb *req, bool *locked)
- 	io_tw_lock(req->ctx, locked);
- 	if (unlikely(req->task->flags & PF_EXITING))
- 		return -EFAULT;
--	return io_issue_sqe(req, IO_URING_F_NONBLOCK|IO_URING_F_COMPLETE_DEFER);
-+	return io_issue_sqe(req, IO_URING_F_NONBLOCK);
- }
- 
- struct io_wq_work *io_wq_free_work(struct io_wq_work *work)
+[1/6] io_uring: get rid of __io_fill_cqe{32}_req()
+      (no commit info)
+[2/6] io_uring: unite fill_cqe and the 32B version
+      (no commit info)
+[3/6] io_uring: fill extra big cqe fields from req
+      (no commit info)
+[4/6] io_uring: fix ->extra{1,2} misuse
+      (no commit info)
+[5/6] io_uring: inline __io_fill_cqe()
+      (no commit info)
+[6/6] io_uring: make io_fill_cqe_aux to honour CQE32
+      (no commit info)
+
+Best regards,
 -- 
-2.36.1
+Jens Axboe
+
 
