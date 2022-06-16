@@ -2,137 +2,138 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE2CFC433EF
-	for <io-uring@archiver.kernel.org>; Thu, 16 Jun 2022 20:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B7F8C433EF
+	for <io-uring@archiver.kernel.org>; Thu, 16 Jun 2022 21:25:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378274AbiFPUhQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 16 Jun 2022 16:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S1378660AbiFPVZS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 16 Jun 2022 17:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377916AbiFPUhO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 16 Jun 2022 16:37:14 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B345DA11
-        for <io-uring@vger.kernel.org>; Thu, 16 Jun 2022 13:37:11 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id f7so1707402ilr.5
-        for <io-uring@vger.kernel.org>; Thu, 16 Jun 2022 13:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=u5dKEO6fWLwy94MPcv5oscW/z8Gx/tm0njHp3iApi1w=;
-        b=2fZWvMnEvahk9m30GkmsvO/3zYXopKME2jL8YsMlI7Smp4zLBMVPv+hQPhozavBM8A
-         Gl0wz6b9I8JA9XOk8sLDOeMxXMWhGRR7Fb9yB752PLFGv34W/3e5/eYZgxz19BkeeY+E
-         95JRB112KfTJEj69NwaZ2HdwYBOiuMca3ddeKg87KedmYehA2+x/+nKK0hwAP07Vvm3B
-         lJoTyCiQnYosn/PYz5jTkKHZuR6fVjEqwDeBCF6cFwdh2eQYn4dFneohalFH8v+FmCiI
-         ct6mjDUlSXHs/XDI40ZO1hxqkx2PmsPI1emykfshlF+Zr4XN/zTEHM9ScVLpaJZeEBL9
-         zyUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=u5dKEO6fWLwy94MPcv5oscW/z8Gx/tm0njHp3iApi1w=;
-        b=T3q+gVB4iBKVvY5RqTSZ0s9dKV7tFXOwyTHXeQduLK9N3Ke7FGgea6sF8maMULveob
-         Lji8rMHTI9OipzYmohrpyp+mrCoR3ioHYvAJJrGXvD5Sx2dN70B7KdY0vnIzNCv3tHzq
-         Z0Mb0LWLEjvxYby0W5/IPDbNPlzB9lvqQiuDFntcaY6KtJ8sj/Bz2tLFFm5loCss7V+y
-         gyEFOua5c0sqFWWK3W2kvUttXurS4nf4+8zGs/zI7L+T0HG8AY44+yiR6t4Kt7l1QbW6
-         JbtB6rIFlzgmaiY4M0rne9DDLv1AAYLn2vGQ9kH2CFjIEOm7v1jyMJ09P7A+sfns9Ww8
-         LJRw==
-X-Gm-Message-State: AJIora+t82hGDDiHCfX3XxkB67MVHht/ZZ3wvs5zMUVU1GnIyxVsctXW
-        vhP83qN+1+0lW5Ad+Sx7YD7WMQ==
-X-Google-Smtp-Source: AGRyM1syT2ctM65Koqig9IIbe+be7cM2t2pBFa5Q9NqlfV4ao4UTDpYp3ycfvaQVEzPV6PhumKxxDQ==
-X-Received: by 2002:a05:6e02:180e:b0:2d3:c497:710 with SMTP id a14-20020a056e02180e00b002d3c4970710mr3747661ilv.166.1655411831039;
-        Thu, 16 Jun 2022 13:37:11 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id i26-20020a023b5a000000b0032b3a781781sm1301267jaf.69.2022.06.16.13.37.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jun 2022 13:37:10 -0700 (PDT)
-Message-ID: <a3251a5e-d3cd-0fe2-db49-c81f177d534a@kernel.dk>
-Date:   Thu, 16 Jun 2022 14:37:09 -0600
+        with ESMTP id S229538AbiFPVZS (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 16 Jun 2022 17:25:18 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9921360DAF
+        for <io-uring@vger.kernel.org>; Thu, 16 Jun 2022 14:25:17 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25GKPWeM024960
+        for <io-uring@vger.kernel.org>; Thu, 16 Jun 2022 14:25:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=+IYV+ohWMnP9Z2WqVp2E+CnW9cqqI1fK3UacqUP+NEU=;
+ b=lnXyN5VaZy0jkf97IXIxihXSHAqSNnJcPl4o74ExLjQfPVwLMsID3kE8O5bN7ICiVJ00
+ OYa+gdNnJBWq0vMjeq5l6P3XvmFJsVqpNJL6n5jip9rKv1hQE+npX5l3e7tWVA8PDLHj
+ ZcJJ1KPGAuhlEbGWQJw8i+vpnlLmR9sz+N8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gqt6fpd4m-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Thu, 16 Jun 2022 14:25:16 -0700
+Received: from twshared25107.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 16 Jun 2022 14:25:15 -0700
+Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
+        id 8B053108B7093; Thu, 16 Jun 2022 14:22:23 -0700 (PDT)
+From:   Stefan Roesch <shr@fb.com>
+To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
+        <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
+        <hch@infradead.org>, <axboe@kernel.dk>, <willy@infradead.org>
+Subject: [PATCH v9 01/14] mm: Move starting of background writeback into the main balancing loop
+Date:   Thu, 16 Jun 2022 14:22:08 -0700
+Message-ID: <20220616212221.2024518-2-shr@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220616212221.2024518-1-shr@fb.com>
+References: <20220616212221.2024518-1-shr@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 2/2] io_uring: kbuf: add comments for some tricky code
-Content-Language: en-US
-To:     Hao Xu <hao.xu@linux.dev>, io-uring@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>
-References: <20220614120108.1134773-1-hao.xu@linux.dev>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220614120108.1134773-1-hao.xu@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: UceYNZ3QYzQpdMo27TFjMnT_4bVPFPkm
+X-Proofpoint-ORIG-GUID: UceYNZ3QYzQpdMo27TFjMnT_4bVPFPkm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-16_18,2022-06-16_01,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 6/14/22 6:01 AM, Hao Xu wrote:
-> From: Hao Xu <howeyxu@tencent.com>
-> 
-> Add comments to explain why it is always under uring lock when
-> incrementing head in __io_kbuf_recycle. And rectify one comemnt about
-> kbuf consuming in iowq case.
+From: Jan Kara <jack@suse.cz>
 
-Was there a 1/2 patch in this series? This one has a subject of 2/2...
+We start background writeback if we are over background threshold after
+exiting the main loop in balance_dirty_pages(). This may result in
+basing the decision on already stale values (we may have slept for
+significant amount of time) and it is also inconvenient for refactoring
+needed for async dirty throttling. Move the check into the main waiting
+loop.
 
-> Signed-off-by: Hao Xu <howeyxu@tencent.com>
-> ---
->  io_uring/kbuf.c | 20 ++++++++++++++------
->  1 file changed, 14 insertions(+), 6 deletions(-)
-> 
-> diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-> index 9cdbc018fd64..37f06456bf30 100644
-> --- a/io_uring/kbuf.c
-> +++ b/io_uring/kbuf.c
-> @@ -50,6 +50,13 @@ void __io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
->  	if (req->flags & REQ_F_BUFFER_RING) {
->  		if (req->buf_list) {
->  			if (req->flags & REQ_F_PARTIAL_IO) {
-> +				/*
-> +				 * if we reach here, uring_lock has been
-> +				?* holden. Because in iowq, we already
-> +				?* cleared req->buf_list to NULL when got
-> +				?* the buffer from the ring, which means
-> +				?* we cannot be here in that case.
-> +				 */
+Signed-off-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Stefan Roesch <shr@fb.com>
+---
+ mm/page-writeback.c | 31 ++++++++++++++-----------------
+ 1 file changed, 14 insertions(+), 17 deletions(-)
 
-There's a weird character before the '*' in most lines? I'd rephrase the
-above as:
-
-If we end up here, then the io_uring_lock has been kept held since we
-retrieved the buffer. For the io-wq case, we already cleared
-req->buf_list when the buffer was retrieved, hence it cannot be set
-here for that case.
-
-And make sure it lines up around 80 chars, your lines look very short.
-
-> @@ -128,12 +135,13 @@ static void __user *io_ring_buffer_select(struct io_kiocb *req, size_t *len,
->  	if (issue_flags & IO_URING_F_UNLOCKED) {
->  		/*
->  		 * If we came in unlocked, we have no choice but to consume the
-> -		 * buffer here. This does mean it'll be pinned until the IO
-> -		 * completes. But coming in unlocked means we're in io-wq
-> -		 * context, hence there should be no further retry. For the
-> -		 * locked case, the caller must ensure to call the commit when
-> -		 * the transfer completes (or if we get -EAGAIN and must poll
-> -		 * or retry).
-> +		 * buffer here otherwise nothing ensures the buffer not being
-> +		 * used by others. This does mean it'll be pinned until the IO
-> +		 * completes though coming in unlocked means we're in io-wq
-> +		 * context and there may be further retries in async hybrid mode.
-> +		 * For the locked case, the caller must ensure to call the commit
-> +		 * when the transfer completes (or if we get -EAGAIN and must
-> +		 * poll or retry).
-
-and similarly:
-
-buffer here, otherwise nothing ensures that the buffer won't get used by
-others. This does mean it'll be pinned until the IO completes, coming in
-unlocked means we're being called from io-wq context and there may be
-further retries in async hybrid mode. For the locked case, the caller
-must call commit when the transfer completes (or if we get -EAGAIN and
-must poll of retry).
-
--- 
-Jens Axboe
+diff --git a/mm/page-writeback.c b/mm/page-writeback.c
+index 55c2776ae699..e59c523aed1a 100644
+--- a/mm/page-writeback.c
++++ b/mm/page-writeback.c
+@@ -1627,6 +1627,19 @@ static void balance_dirty_pages(struct bdi_writeba=
+ck *wb,
+ 			}
+ 		}
+=20
++		/*
++		 * In laptop mode, we wait until hitting the higher threshold
++		 * before starting background writeout, and then write out all
++		 * the way down to the lower threshold.  So slow writers cause
++		 * minimal disk activity.
++		 *
++		 * In normal mode, we start background writeout at the lower
++		 * background_thresh, to keep the amount of dirty memory low.
++		 */
++		if (!laptop_mode && nr_reclaimable > gdtc->bg_thresh &&
++		    !writeback_in_progress(wb))
++			wb_start_background_writeback(wb);
++
+ 		/*
+ 		 * Throttle it only when the background writeback cannot
+ 		 * catch-up. This avoids (excessively) small writeouts
+@@ -1657,6 +1670,7 @@ static void balance_dirty_pages(struct bdi_writebac=
+k *wb,
+ 			break;
+ 		}
+=20
++		/* Start writeback even when in laptop mode */
+ 		if (unlikely(!writeback_in_progress(wb)))
+ 			wb_start_background_writeback(wb);
+=20
+@@ -1823,23 +1837,6 @@ static void balance_dirty_pages(struct bdi_writeba=
+ck *wb,
+=20
+ 	if (!dirty_exceeded && wb->dirty_exceeded)
+ 		wb->dirty_exceeded =3D 0;
+-
+-	if (writeback_in_progress(wb))
+-		return;
+-
+-	/*
+-	 * In laptop mode, we wait until hitting the higher threshold before
+-	 * starting background writeout, and then write out all the way down
+-	 * to the lower threshold.  So slow writers cause minimal disk activity=
+.
+-	 *
+-	 * In normal mode, we start background writeout at the lower
+-	 * background_thresh, to keep the amount of dirty memory low.
+-	 */
+-	if (laptop_mode)
+-		return;
+-
+-	if (nr_reclaimable > gdtc->bg_thresh)
+-		wb_start_background_writeback(wb);
+ }
+=20
+ static DEFINE_PER_CPU(int, bdp_ratelimits);
+--=20
+2.30.2
 
