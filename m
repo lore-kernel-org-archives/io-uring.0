@@ -2,122 +2,176 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CF1AC433EF
-	for <io-uring@archiver.kernel.org>; Sat, 18 Jun 2022 12:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A9D9DC43334
+	for <io-uring@archiver.kernel.org>; Sat, 18 Jun 2022 12:47:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234021AbiFRM14 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 18 Jun 2022 08:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S233879AbiFRMr5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 18 Jun 2022 08:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234062AbiFRM1z (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 18 Jun 2022 08:27:55 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33BF518E22
-        for <io-uring@vger.kernel.org>; Sat, 18 Jun 2022 05:27:54 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id z7so9318219edm.13
-        for <io-uring@vger.kernel.org>; Sat, 18 Jun 2022 05:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=CLd76MGzaIkw9CPSETt0MjjC/xAOsNwsnlG8FkvJCiY=;
-        b=Q9lVPZU9iMSPaXYTuwIEhlZFi+9P60px03jQX4qtACEQJioPyqkpeOsjMr618xEbQr
-         hag5YaAqUpqXHCqUCWY57kjuJFW/yK+gnmwEYU+0cwmoeVL+pNzIWBP3cbixFSTR6iPu
-         Cf8Ac3J++aRGP1YGlHASnRfP5t6eXqC80VEmIlKv1k2teZoCjHEprATFaTOLajr3Yuob
-         FghdQM4BstnXctvHFW5t3tk8q9IMO0J1IcayuB89+5LoTOWcvt5xUzUqVhINsaZ1aiA8
-         sDZKs+TC2dPEBBKSHGMbtmroMNMUrXp744ci+1ZOyhf8TXU2FGtyg4iJkDBI0A8Lekl3
-         e5aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=CLd76MGzaIkw9CPSETt0MjjC/xAOsNwsnlG8FkvJCiY=;
-        b=MnfgFRyBhdIPgbo7pJm/gwMGMiD7cyXj3gNep8QHj9oLfH/n1mD1A4R7txkwfYNYnp
-         7QvbN0bvxXhLnuZWS/3RjZPLRj/v/pgU3rrT3RyDg7VTZQHCNquR0nqluM3XehZvJybf
-         pT9WToiVIsyQ1D3jzZPojMyAbyX55BKKrY6xg9sXPjZ36CmiQ1HEBzV7apZl4iuWMhmB
-         BJHcG2hKmcS0StTkR96w6oTdhFeOQSkNUyIASAsWc/FkA9EGQOj17AC454DIXHvPrvXT
-         5jnwlLQybKVl7I1n3SzLM00stYjygw3ExkLNOBpMcQ8XQ6RZOcGtw7+FsQL3uP6NJgEQ
-         L8yw==
-X-Gm-Message-State: AJIora+xZbECA6QdnKf9Xp6VouCMb8ZeTDiM3Pic2WFcAAhqk5Pqrx4g
-        oyOcRivSb1sYPLj0Hf07UU8C4WGiTgj5Eg==
-X-Google-Smtp-Source: AGRyM1s0DHQ8TDwTph45hCdnC/LzFpc0LdkaHOayFyi1kvcPjEfSkbXhICX1chZp85aiK0OXwBnt7g==
-X-Received: by 2002:a05:6402:510d:b0:42d:e266:e02f with SMTP id m13-20020a056402510d00b0042de266e02fmr18202252edd.277.1655555272458;
-        Sat, 18 Jun 2022 05:27:52 -0700 (PDT)
-Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id u23-20020a056402111700b0042dd792b3e8sm5771523edv.50.2022.06.18.05.27.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Jun 2022 05:27:52 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 3/4] io_uring: consistent naming for inline completion
-Date:   Sat, 18 Jun 2022 13:27:26 +0100
-Message-Id: <ce36284d656e44966b3c4ddf148a18c8dd643052.1655553990.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1655553990.git.asml.silence@gmail.com>
-References: <cover.1655553990.git.asml.silence@gmail.com>
+        with ESMTP id S234359AbiFRMr4 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 18 Jun 2022 08:47:56 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6209C14025
+        for <io-uring@vger.kernel.org>; Sat, 18 Jun 2022 05:47:53 -0700 (PDT)
+Message-ID: <db6d5ce5-5445-d095-8000-3000461a37e7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1655556471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gl3oKrOQpgMgZNQXalG8ZB811Iqan9PYLXL6zl2ppgg=;
+        b=xhJLbP3H2B99EqmcvDzU4+DWtIreSGkQ9xYwZIgEeg7TAtNwvC8Vpqlr7c6QpUuvAld6zS
+        leGj7VDWepHg23EfQBgDaYADT1als4TYyuglZoDvQt+WVoeaxDqsIRDULzS7Th5GT2JGgG
+        wi99s2Ul16kQAvzIfJszB5j098bPYC4=
+Date:   Sat, 18 Jun 2022 20:47:29 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 2/2] io_uring: add support for passing fixed file
+ descriptors
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     asml.silence@gmail.com
+References: <20220617134504.368706-1-axboe@kernel.dk>
+ <20220617134504.368706-3-axboe@kernel.dk>
+ <37a2034d-6cc1-ccf7-53d3-a334e54c3779@linux.dev>
+ <0890d4f2-1f9e-9aa3-c98c-9e415f0dc5d7@kernel.dk>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Hao Xu <hao.xu@linux.dev>
+In-Reply-To: <0890d4f2-1f9e-9aa3-c98c-9e415f0dc5d7@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Improve naming of the inline/deferred completion helper so it's
-consistent with it's *_post counterpart. Add some comments and extra
-lockdeps to ensure the locking is done right.
+On 6/18/22 19:34, Jens Axboe wrote:
+> On 6/18/22 5:02 AM, Hao Xu wrote:
+>> On 6/17/22 21:45, Jens Axboe wrote:
+>>> With IORING_OP_MSG_RING, one ring can send a message to another ring.
+>>> Extend that support to also allow sending a fixed file descriptor to
+>>> that ring, enabling one ring to pass a registered descriptor to another
+>>> one.
+>>>
+>>> Arguments are extended to pass in:
+>>>
+>>> sqe->addr3    fixed file slot in source ring
+>>> sqe->file_index    fixed file slot in destination ring
+>>>
+>>> IORING_OP_MSG_RING is extended to take a command argument in sqe->addr.
+>>> If set to zero (or IORING_MSG_DATA), it sends just a message like before.
+>>> If set to IORING_MSG_SEND_FD, a fixed file descriptor is sent according
+>>> to the above arguments.
+>>>
+>>> Undecided:
+>>>      - Should we post a cqe with the send, or require that the sender
+>>>        just link a separate IORING_OP_MSG_RING? This makes error
+>>>        handling easier, as we cannot easily retract the installed
+>>>        file descriptor if the target CQ ring is full. Right now we do
+>>>        fill a CQE. If the request completes with -EOVERFLOW, then the
+>>>        sender must re-send a CQE if the target must get notified.
+>>
+>> Hi Jens,
+>> Since we are have open/accept direct feature, this may be useful. But I
+>> just can't think of a real case that people use two rings and need to do
+>> operations to same fd.
+> 
+> The two cases that people bring up as missing for direct descriptors
+> that you can currently do with a real fd is:
+> 
+> 1) Server needs to be shutdown or restarted, pass file descriptors to
+>     another onei
+> 
+> 2) Backend is split, and one accepts connections, while others then get
+>     the fd passed and handle the actual connection.
+> 
+> Both of those are classic SCM_RIGHTS use cases, and it's not possible to
+> support them with direct descriptors today.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/io_uring.c |  4 ++--
- io_uring/io_uring.h | 10 +++++++++-
- 2 files changed, 11 insertions(+), 3 deletions(-)
+I see, thanks for detail explanation.
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 430e65494989..3a955044f2f7 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1391,7 +1391,7 @@ void io_req_task_complete(struct io_kiocb *req, bool *locked)
- 	}
- 
- 	if (*locked)
--		io_req_add_compl_list(req);
-+		io_req_complete_defer(req);
- 	else
- 		io_req_complete_post(req);
- }
-@@ -1659,7 +1659,7 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 
- 	if (ret == IOU_OK) {
- 		if (issue_flags & IO_URING_F_COMPLETE_DEFER)
--			io_req_add_compl_list(req);
-+			io_req_complete_defer(req);
- 		else
- 			io_req_complete_post(req);
- 	} else if (ret != IOU_ISSUE_SKIP_COMPLETE)
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 5eaa01c4697c..362a42471154 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -168,10 +168,18 @@ static inline void io_tw_lock(struct io_ring_ctx *ctx, bool *locked)
- 	}
- }
- 
--static inline void io_req_add_compl_list(struct io_kiocb *req)
-+/*
-+ * Don't complete immediately but use deferred completion infrastructure.
-+ * Protected by ->uring_lock and can only be used either with
-+ * IO_URING_F_COMPLETE_DEFER or inside a tw handler holding the mutex.
-+ */
-+static inline void io_req_complete_defer(struct io_kiocb *req)
-+	__must_hold(&req->ctx->uring_lock)
- {
- 	struct io_submit_state *state = &req->ctx->submit_state;
- 
-+	lockdep_assert_held(&req->ctx->uring_lock);
-+
- 	if (!(req->flags & REQ_F_CQE_SKIP))
- 		state->flush_cqes = true;
- 	wq_list_add_tail(&req->comp_list, &state->compl_reqs);
--- 
-2.36.1
+> 
+>> Assume there are real cases, then filling a cqe is necessary since users
+>> need to first make sure the desired fd is registered before doing
+>> something to it.
+> 
+> Right, my quesion here was really whether it should be bundled with the
+> IORING_MSG_SEND_FD operation, or whether the issuer of that should also
+> be responsible for then posting a "normal" IORING_OP_MSG_SEND to the
+> target ring to notify it if the fact that an fd has been sent to it.
+> 
+> If the operation is split like the latter, then it makes the error
+> handling a bit easier as we eliminate one failing part of the existing
+> MSG_SEND_FD.
+> 
+> You could then also pass a number of descriptors and then post a single
+> OP_MSG_SEND with some data that tells you which descriptors were passed.
+> 
+> For the basic use case of just passing a single descriptor, what the
+> code currently does is probably the sanest approach - send the fd, post
+> a cqe.
+> 
+>> A downside is users have to take care to do fd delivery especially
+>> when slot resource is in short supply in target_ctx.
+>>
+>>                  ctx                            target_ctx
+>>      msg1(fd1 to target slot x)
+>>
+>>      msg2(fd2 to target slot x)
+>>
+>>                                               get cqe of msg1
+>>                                    do something to fd1 by access slot x
+>>
+>>
+>> the msg2 is issued not at the right time. In short not only ctx needs to
+>> fill a cqe to target_ctx to inform that the file has been registered
+>> but also the target_ctx has to tell ctx that "my slot x is free now
+>> for you to deliver fd". So I guess users are inclined to allocate a
+>> big fixed table and deliver fds to target_ctx in different slots,
+>> Which is ok but anyway a limitation.
+> 
+> I suspect the common use case would be to use the alloc feature, since
+> the sender generally has no way of knowing which slots are free on the
+> target ring.
+
+I mean the sender may not easily know which value to set for
+msg->dst_fd not about the alloc feature.
+
+> 
+>>> +static int io_double_lock_ctx(struct io_ring_ctx *ctx,
+>>> +                  struct io_ring_ctx *octx,
+>>> +                  unsigned int issue_flags)
+>>> +{
+>>> +    /*
+>>> +     * To ensure proper ordering between the two ctxs, we can only
+>>> +     * attempt a trylock on the target. If that fails and we already have
+>>> +     * the source ctx lock, punt to io-wq.
+>>> +     */
+>>> +    if (!(issue_flags & IO_URING_F_UNLOCKED)) {
+>>> +        if (!mutex_trylock(&octx->uring_lock))
+>>> +            return -EAGAIN;
+>>> +        return 0;
+>>> +    }
+>>> +
+>>> +    /* Always grab smallest value ctx first. */
+>>> +    if (ctx < octx) {
+>>> +        mutex_lock(&ctx->uring_lock);
+>>> +        mutex_lock(&octx->uring_lock);
+>>> +    } else if (ctx > octx) {
+>>
+>>
+>> Would a simple else work?
+>> if (a < b) {
+>>    lock(a); lock(b);
+>> } else {
+>>    lock(b);lock(a);
+>> }
+>>
+>> since a doesn't equal b
+> 
+> Yes that'd be fine, I think I added the a == b pre-check a bit later in
+> the process. I'll change this to an else instead.
+> 
 
