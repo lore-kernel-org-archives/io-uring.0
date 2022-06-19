@@ -2,152 +2,75 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 196A7C433EF
-	for <io-uring@archiver.kernel.org>; Sat, 18 Jun 2022 13:27:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D492C43334
+	for <io-uring@archiver.kernel.org>; Sun, 19 Jun 2022 01:59:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiFRN1q (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 18 Jun 2022 09:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S230299AbiFSB7d (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 18 Jun 2022 21:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiFRN1p (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 18 Jun 2022 09:27:45 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E7765E1
-        for <io-uring@vger.kernel.org>; Sat, 18 Jun 2022 06:27:43 -0700 (PDT)
-Message-ID: <eccc3da8-225f-e7fa-f85f-b559658f6273@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1655558862;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dosDyX3Lj15kCqqBFoaCCTrp68lu/IPzPrzVFpeXPuI=;
-        b=CQlpeITGOSJmr5INgKd4dmqWm2CLiHSDFXFDy3Rsr9IbT47ePy8FCDgaBpfe4uF5KtpWuz
-        Vfa59WSZlUb9O2b5RF+xKs9lpnY9alPHebkWEz5qPHuaGCDSS5SJqoEXjTK0Zlyqnrxqwy
-        lg2qiRpIXZ5ml2WBF/A0dfM1XRD7r4Q=
-Date:   Sat, 18 Jun 2022 21:27:28 +0800
-MIME-Version: 1.0
-Subject: Re: [PATCH 2/2] io_uring: add support for passing fixed file
- descriptors
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+        with ESMTP id S229446AbiFSB7c (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 18 Jun 2022 21:59:32 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2517FBCAF
+        for <io-uring@vger.kernel.org>; Sat, 18 Jun 2022 18:59:31 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id p3-20020a17090a428300b001ec865eb4a2so2616449pjg.3
+        for <io-uring@vger.kernel.org>; Sat, 18 Jun 2022 18:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Sa+xNwB1Xnx4vib+uEQTPzySliXR7Z1GMwuehk1Itc=;
+        b=pbx5l343Xpq/kyz7ajR/sJTASLwi8F6g/5dwAKlDDTPZnOtJ+UlhDuaPlcoZ0+3Tuo
+         BIZkWRBzT3k2pW7y1zUmGFrdhKJF5EFlVKx+3iiqtP5twmA2Ty1req6OagZtvurxbWNX
+         lJ1VttEIhQMhSjDW5JTwo/2AS6S36QI4VieptlYzGK6kO8FfAen/3Ggw0eLK4paEYkOW
+         T7FUDj6V008myy44b2/+mIbol3okd1mtXnXnZLW6GId+eFOfxJgQUXIU6+3WJMYPzVBW
+         spCVBmzhzEfZPZLI5fllsdZP352tb14xaR3DxJcgF4CBbPN4Ik9C3MLWuN9fFDGXSL4V
+         MwkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8Sa+xNwB1Xnx4vib+uEQTPzySliXR7Z1GMwuehk1Itc=;
+        b=OEHNFEc5G0O0GDH+OAY/VLXxtY2GYVOJOg6LGky8meBaYOI8qm+U9E/pIlBy8BCZQN
+         Dr8mtFhAr0ZK2VFaV4yjlR3zzpu0YemMBaQD4IIBOmeMZ1Sn6pFEaMMDOLXPb+5/oFkt
+         3Ty/Fsh23knvsI9dfGn9ozCOZO+qajhnnRgwGJhiB7kQaPHYGjEuAarmox+aunE5q917
+         YCq+85zxlx4/UJn+zrcec6cTmVDlYy9L5HQDWmINBGm888q2I8WAIbQBCbRDZBNrVnv0
+         hxyNKLfpuS0IvM9wrKGGzZOwZYEFRdmBrApf/QqJTSgtb7edTZLO1fXIY6vgNcX5hbRY
+         jX/w==
+X-Gm-Message-State: AJIora8Hi/qECo7MRHlgwZX/2Nwrae9GgivFYPQZVlqmUtGrdwDttXDG
+        8ES024kMkAiCP0GCN0olSofVP/5e/pDgag==
+X-Google-Smtp-Source: AGRyM1ufpbOK/RoI4TQOEmQjKtlow6Nx0Tu3AcGlJydWHw2YixUrKlmdUEcW1vVsEnU0AWbBPM39pA==
+X-Received: by 2002:a17:902:e750:b0:166:3058:d0ed with SMTP id p16-20020a170902e75000b001663058d0edmr17283140plf.0.1655603970292;
+        Sat, 18 Jun 2022 18:59:30 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b0016194c1df58sm3526725plb.105.2022.06.18.18.59.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 18 Jun 2022 18:59:29 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org
 Cc:     asml.silence@gmail.com
-References: <20220617134504.368706-1-axboe@kernel.dk>
- <20220617134504.368706-3-axboe@kernel.dk>
- <37a2034d-6cc1-ccf7-53d3-a334e54c3779@linux.dev>
- <0890d4f2-1f9e-9aa3-c98c-9e415f0dc5d7@kernel.dk>
- <db6d5ce5-5445-d095-8000-3000461a37e7@linux.dev>
- <3eb8c4d5-5e55-2918-01ee-091fa635e950@kernel.dk>
- <337a2a6a-1237-0485-2ca5-745ca6d27696@linux.dev>
- <eb9c10c7-683b-5bfe-ddfe-e1899d8506dd@kernel.dk>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Hao Xu <hao.xu@linux.dev>
-In-Reply-To: <eb9c10c7-683b-5bfe-ddfe-e1899d8506dd@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Subject: [PATCHSET v2 for-next 0/2] Add direct descriptor ring passing
+Date:   Sat, 18 Jun 2022 19:59:20 -0600
+Message-Id: <20220619015922.1325241-1-axboe@kernel.dk>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 6/18/22 21:16, Jens Axboe wrote:
-> On 6/18/22 7:09 AM, Hao Xu wrote:
->> On 6/18/22 20:50, Jens Axboe wrote:
->>> On 6/18/22 6:47 AM, Hao Xu wrote:
->>>> On 6/18/22 19:34, Jens Axboe wrote:
->>>>> On 6/18/22 5:02 AM, Hao Xu wrote:
->>>>>> On 6/17/22 21:45, Jens Axboe wrote:
->>>>>>> With IORING_OP_MSG_RING, one ring can send a message to another ring.
->>>>>>> Extend that support to also allow sending a fixed file descriptor to
->>>>>>> that ring, enabling one ring to pass a registered descriptor to another
->>>>>>> one.
->>>>>>>
->>>>>>> Arguments are extended to pass in:
->>>>>>>
->>>>>>> sqe->addr3    fixed file slot in source ring
->>>>>>> sqe->file_index    fixed file slot in destination ring
->>>>>>>
->>>>>>> IORING_OP_MSG_RING is extended to take a command argument in sqe->addr.
->>>>>>> If set to zero (or IORING_MSG_DATA), it sends just a message like before.
->>>>>>> If set to IORING_MSG_SEND_FD, a fixed file descriptor is sent according
->>>>>>> to the above arguments.
->>>>>>>
->>>>>>> Undecided:
->>>>>>>        - Should we post a cqe with the send, or require that the sender
->>>>>>>          just link a separate IORING_OP_MSG_RING? This makes error
->>>>>>>          handling easier, as we cannot easily retract the installed
->>>>>>>          file descriptor if the target CQ ring is full. Right now we do
->>>>>>>          fill a CQE. If the request completes with -EOVERFLOW, then the
->>>>>>>          sender must re-send a CQE if the target must get notified.
->>>>>>
->>>>>> Hi Jens,
->>>>>> Since we are have open/accept direct feature, this may be useful. But I
->>>>>> just can't think of a real case that people use two rings and need to do
->>>>>> operations to same fd.
->>>>>
->>>>> The two cases that people bring up as missing for direct descriptors
->>>>> that you can currently do with a real fd is:
->>>>>
->>>>> 1) Server needs to be shutdown or restarted, pass file descriptors to
->>>>>       another onei
->>>>>
->>>>> 2) Backend is split, and one accepts connections, while others then get
->>>>>       the fd passed and handle the actual connection.
->>>>>
->>>>> Both of those are classic SCM_RIGHTS use cases, and it's not possible to
->>>>> support them with direct descriptors today.
->>>>
->>>> I see, thanks for detail explanation.
->>>
->>> I should put that in the commit message in fact. Will do so.
->>>
->>>>>> Assume there are real cases, then filling a cqe is necessary since users
->>>>>> need to first make sure the desired fd is registered before doing
->>>>>> something to it.
->>>>>
->>>>> Right, my quesion here was really whether it should be bundled with the
->>>>> IORING_MSG_SEND_FD operation, or whether the issuer of that should also
->>>>> be responsible for then posting a "normal" IORING_OP_MSG_SEND to the
->>>>> target ring to notify it if the fact that an fd has been sent to it.
->>>>>
->>>>> If the operation is split like the latter, then it makes the error
->>>>> handling a bit easier as we eliminate one failing part of the existing
->>>>> MSG_SEND_FD.
->>>>>
->>>>> You could then also pass a number of descriptors and then post a single
->>>>> OP_MSG_SEND with some data that tells you which descriptors were passed.
->>
->> [1]
->>
->>>>>
->>>>> For the basic use case of just passing a single descriptor, what the
->>>>> code currently does is probably the sanest approach - send the fd, post
->>>>> a cqe.
->>
->> I think it's fine to keep it like this, since we can achieve [1] by a
->> GROUP_DELIVER flag and set cqe_skip flag for send msg request when it
->> turns out [1] is indeed necessary.
-> 
-> The expected use case is probably CQE_SKIP for using this, as the sender
-> doesn't care about being notified about a successful send. But for the
-> target CQE, we'd then need to either have CQE_SKIP implying that we
-> should skip CQE delivery there too, or we'd need to add an
+Hi,
 
-Yea, that's what I meant, CQE_SKIP for the target_ctx cqe.
+One of the things we currently cannot do with direct descriptors is pass
+it to another application or ring. This adds support for doing so, through
+the IORING_OP_MSG_RING ring-to-ring messaging opcode.
 
-> IORING_OP_MSG_RING flag for that. I think the latter is the cleaner
-> approach, and it would indeed then allow both use cases. If you're
-> sending a bunch of fds and would prefer to notify with a single
-> OP_MSG_RING when they are done, then you'd set that OP_MSG_RING flag
-> that says "don't post a CQE to the target".
-> 
-> Hence my proposal would be to keep the CQE delivery by default as it
-> stands in the patch, and add a flag for controlling whether or not
-> OP_MSG_RING with MSG_SEND posts a CQE to the target ring or not.
-> 
-> Agree?
-> 
+Changes since v1:
+- Add IORING_MSG_RING_CQE_SKIP flag for IORING_OP_MSG_RING
+- Expand commit message in patch 2
 
-Sounds good.
+-- 
+Jens Axboe
+
 
