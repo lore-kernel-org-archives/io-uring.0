@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BC3EC433EF
-	for <io-uring@archiver.kernel.org>; Sun, 19 Jun 2022 11:26:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 415CBC433EF
+	for <io-uring@archiver.kernel.org>; Sun, 19 Jun 2022 11:26:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiFSL0r (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 19 Jun 2022 07:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52222 "EHLO
+        id S236447AbiFSL0t (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 19 Jun 2022 07:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235295AbiFSL0q (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 19 Jun 2022 07:26:46 -0400
+        with ESMTP id S235295AbiFSL0s (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 19 Jun 2022 07:26:48 -0400
 Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDB66153
-        for <io-uring@vger.kernel.org>; Sun, 19 Jun 2022 04:26:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3F16153
+        for <io-uring@vger.kernel.org>; Sun, 19 Jun 2022 04:26:47 -0700 (PDT)
 Received: by mail-wr1-x435.google.com with SMTP id v14so11090061wra.5
-        for <io-uring@vger.kernel.org>; Sun, 19 Jun 2022 04:26:45 -0700 (PDT)
+        for <io-uring@vger.kernel.org>; Sun, 19 Jun 2022 04:26:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/LavPulCuHLlYsXb/c3AGIbqLtOcsN8l0Dc366IHheI=;
-        b=byhn4/9T3b7OKrK5M5uu8rr1ce7LHDRqo1+2kyIh/bRBPvX+rxgCD0rTE2OuP8Q6d4
-         hSpVRMGT+Jgk/g0cXk3SazLaGvIsT6iQm/KWudl8KX2Apdvi3OzPRVWqQAe/8Qs+TAvv
-         rvvLFC8Pwur8Tl6fn9KOO9KLuPsz9LzAsvvxU9Ihj+EW/nYTQp6mo74H8Ka+ZZ0e/ZI0
-         BIPbY+Hq7+XLFqpzMxNTFD3yNubg8v4LkfziS0VCezE91zqtSctsmkNw3cwt1aLjKQvQ
-         qZWibiauvIcZXLd6ekGm/U7oqDelNtk2+4BWNyVIuMx1YdSb+Kpi0nnJ9c9d9r5Rd6Ci
-         /U+Q==
+        bh=MhKVC6/7Nw0gdOt5wcUBQM6VXSKzq7yiIe7eF3ZRLEI=;
+        b=qtLGUQn0kk8f+ySS5tWIHjM8H95BnpYqlp5iquMqHULj67nf+r6t5Yz2Dq+ovcNgIQ
+         W1fAtGcWAkGvYJhorSkmiSIyCiwNPU5vb8HROrDb34tI0t+3F+oZBid62O8UvQf97HCu
+         0nU5u3ReJpsQoWef5RzzXX7Z0wPS+yW3+lKQ0uuChkrulDCdLH+gnLq4AQEQrhufkT8H
+         UqW83mmNM8oM/eze6WRyeQOY44oWTXjMs4oqbltVdA+kuLyIgZgmSWQrOillFNvyQ+f7
+         +1MOn23y0DWjNU8iXka6j7kZ+h5rbM82lQZxAM9nyb0S7EgKWF6ghtAzU8rtN0i120Xc
+         Jk0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/LavPulCuHLlYsXb/c3AGIbqLtOcsN8l0Dc366IHheI=;
-        b=hcrS3y/NhvVI9ApYhyptHb1Y2cXk+unxfaCJfDQWJl5RuRM9KxnZbHpaXVlZCN5m0w
-         AxrZ8GQGsK3zS8yiTz/NYzEJdnGsaNMxNfgYo00sVg7IUK+mVug5qUP/K1lK+69suPcn
-         MD9GnaPuTxW+5CYF4pzaZL4rXnY1hS7gf2/jwIwWa04Bk60nIxokH88tje9Jbsk8plCh
-         d7N7fGnwoPeZpVyFM0EltmliMkKRI5TOumgRUKn6BlcQIoukZvwxskXRWlC69BJZg2hK
-         DLinE4ZBzFgEwIpkkxEHqVpk3ubNkRKqfrjgUblF4MmlY5hdyV9swnV9eThFUEwloKj0
-         jRTA==
-X-Gm-Message-State: AJIora84e/zpg6BhkAYdT/sQi2X0NS3S35tJmc508oYzsek17niJCwEd
-        rV/jkfaChBUnBJTV7RSquFJdKRfvO8UcLg==
-X-Google-Smtp-Source: AGRyM1vcgqkdadFTL9ZtPssy6sEq3o8SG7Ue1MXxf5qquABhqxYvKpVzIr6wi15S+S+GxtS0J31Z2Q==
-X-Received: by 2002:a05:6000:1788:b0:219:e28f:dc98 with SMTP id e8-20020a056000178800b00219e28fdc98mr17747166wrg.144.1655638004291;
-        Sun, 19 Jun 2022 04:26:44 -0700 (PDT)
+        bh=MhKVC6/7Nw0gdOt5wcUBQM6VXSKzq7yiIe7eF3ZRLEI=;
+        b=l0I65g54faWGAZsfVXyDZ4/1mmoQBl+UpFHT5TGYsj/sWIvtEcZTHMlLnhZa0qo5cu
+         4yppmUKGLz5/GIEzF7xFIGjGwtZ4knpSAOL8YAQ4gETYQV2vqPBlAGj7GNZgpL/IVeIy
+         +G0w6EYVS1XJdghaGzqHNRMDToSmQJyAK+vHBN2Z/4ovKe55FhB1EkOgmJq1lKiu3MOC
+         SKbRDgKJq4vQqTO9adKxUVA1KyyBIEiDhY/a7jGleDNY6galBcvWdVx1b4mi6YJhEJnv
+         gd7IdIwN4ZTULApvndoIJQPzQIpDnC+OlCUWyK5w8kXD3PIbpP5jhZCL9z2L989LuHSO
+         cMFA==
+X-Gm-Message-State: AJIora8n2nInDY7rqbG1Y9RF+HCtiYr6i8ApyDjWXbg1Am2bDxm+y284
+        06RxpEyH9BBV26Alwyr8t2sdWh2g3q3F+A==
+X-Google-Smtp-Source: AGRyM1uqceXNczSUWgS0uFA7nDhZbZLl+UWUwBDNtdB4n5mSeeibInLO6ALWflVn+vHxHzILv7JjgQ==
+X-Received: by 2002:a5d:64c7:0:b0:218:4a82:ffa4 with SMTP id f7-20020a5d64c7000000b002184a82ffa4mr18396897wri.592.1655638006357;
+        Sun, 19 Jun 2022 04:26:46 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id y14-20020adfee0e000000b002119c1a03e4sm9921653wrn.31.2022.06.19.04.26.43
+        by smtp.gmail.com with ESMTPSA id y14-20020adfee0e000000b002119c1a03e4sm9921653wrn.31.2022.06.19.04.26.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jun 2022 04:26:43 -0700 (PDT)
+        Sun, 19 Jun 2022 04:26:45 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 3/7] io_uring: move io_eventfd_signal()
-Date:   Sun, 19 Jun 2022 12:26:06 +0100
-Message-Id: <9ebebb3f6f56f5a5448a621e0b6a537720c43334.1655637157.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 5/7] io_uring: remove ->flush_cqes optimisation
+Date:   Sun, 19 Jun 2022 12:26:08 +0100
+Message-Id: <692e81eeddccc096f449a7960365fa7b4a18f8e6.1655637157.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1655637157.git.asml.silence@gmail.com>
 References: <cover.1655637157.git.asml.silence@gmail.com>
@@ -62,69 +62,72 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Move io_eventfd_signal() in the sources without any changes and kill its
-forward declaration.
+It's not clear how widely used IOSQE_CQE_SKIP_SUCCESS is, and how often
+->flush_cqes flag prevents from completion being flushed. Sometimes it's
+high level of concurrency that enables it at least for one CQE, but
+sometimes it doesn't save much because nobody waiting on the CQ.
+
+Remove ->flush_cqes flag and the optimisation, it should benefit the
+normal use case. Note, that there is no spurious eventfd problem with
+that as checks for spuriousness were incorporated into
+io_eventfd_signal().
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+ io_uring/io_uring.c | 23 ++++++++++-------------
+ io_uring/io_uring.h |  2 --
+ 2 files changed, 10 insertions(+), 15 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 9e02c4a950ef..31beb9ccbf12 100644
+index 0875cc649e23..57aef092ef38 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -142,8 +142,6 @@ static void io_queue_sqe(struct io_kiocb *req);
+@@ -1253,22 +1253,19 @@ static void __io_submit_flush_completions(struct io_ring_ctx *ctx)
+ 	struct io_wq_work_node *node, *prev;
+ 	struct io_submit_state *state = &ctx->submit_state;
  
- static void __io_submit_flush_completions(struct io_ring_ctx *ctx);
- 
--static void io_eventfd_signal(struct io_ring_ctx *ctx);
--
- static struct kmem_cache *req_cachep;
- 
- struct sock *io_uring_get_socket(struct file *file)
-@@ -472,20 +470,6 @@ static __cold void io_queue_deferred(struct io_ring_ctx *ctx)
- 	}
- }
- 
--void __io_commit_cqring_flush(struct io_ring_ctx *ctx)
--{
--	if (ctx->off_timeout_used || ctx->drain_active) {
+-	if (state->flush_cqes) {
 -		spin_lock(&ctx->completion_lock);
--		if (ctx->off_timeout_used)
--			io_flush_timeouts(ctx);
--		if (ctx->drain_active)
--			io_queue_deferred(ctx);
--		spin_unlock(&ctx->completion_lock);
--	}
--	if (ctx->has_evfd)
--		io_eventfd_signal(ctx);
--}
+-		wq_list_for_each(node, prev, &state->compl_reqs) {
+-			struct io_kiocb *req = container_of(node, struct io_kiocb,
+-						    comp_list);
 -
- static void io_eventfd_signal(struct io_ring_ctx *ctx)
- {
- 	struct io_ev_fd *ev_fd;
-@@ -513,6 +497,20 @@ static void io_eventfd_signal(struct io_ring_ctx *ctx)
- 	rcu_read_unlock();
+-			if (!(req->flags & REQ_F_CQE_SKIP))
+-				__io_fill_cqe_req(ctx, req);
+-		}
++	spin_lock(&ctx->completion_lock);
++	wq_list_for_each(node, prev, &state->compl_reqs) {
++		struct io_kiocb *req = container_of(node, struct io_kiocb,
++					    comp_list);
+ 
+-		io_commit_cqring(ctx);
+-		spin_unlock(&ctx->completion_lock);
+-		io_cqring_ev_posted(ctx);
+-		state->flush_cqes = false;
++		if (!(req->flags & REQ_F_CQE_SKIP))
++			__io_fill_cqe_req(ctx, req);
+ 	}
+ 
++	io_commit_cqring(ctx);
++	spin_unlock(&ctx->completion_lock);
++	io_cqring_ev_posted(ctx);
++
+ 	io_free_batch_list(ctx, state->compl_reqs.first);
+ 	INIT_WQ_LIST(&state->compl_reqs);
+ }
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 906749fa3415..7feef8c36db7 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -232,8 +232,6 @@ static inline void io_req_complete_defer(struct io_kiocb *req)
+ 
+ 	lockdep_assert_held(&req->ctx->uring_lock);
+ 
+-	if (!(req->flags & REQ_F_CQE_SKIP))
+-		state->flush_cqes = true;
+ 	wq_list_add_tail(&req->comp_list, &state->compl_reqs);
  }
  
-+void __io_commit_cqring_flush(struct io_ring_ctx *ctx)
-+{
-+	if (ctx->off_timeout_used || ctx->drain_active) {
-+		spin_lock(&ctx->completion_lock);
-+		if (ctx->off_timeout_used)
-+			io_flush_timeouts(ctx);
-+		if (ctx->drain_active)
-+			io_queue_deferred(ctx);
-+		spin_unlock(&ctx->completion_lock);
-+	}
-+	if (ctx->has_evfd)
-+		io_eventfd_signal(ctx);
-+}
-+
- /*
-  * This should only get called when at least one event has been posted.
-  * Some applications rely on the eventfd notification count only changing
 -- 
 2.36.1
 
