@@ -2,76 +2,99 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2975C43334
-	for <io-uring@archiver.kernel.org>; Mon, 20 Jun 2022 15:15:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84CA9C433EF
+	for <io-uring@archiver.kernel.org>; Mon, 20 Jun 2022 16:19:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243038AbiFTPPk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 20 Jun 2022 11:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S239722AbiFTQTM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 20 Jun 2022 12:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244794AbiFTPOj (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Jun 2022 11:14:39 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451F926117
-        for <io-uring@vger.kernel.org>; Mon, 20 Jun 2022 08:03:39 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id f16so9089317pjj.1
-        for <io-uring@vger.kernel.org>; Mon, 20 Jun 2022 08:03:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=j1xJJmIcXhdN6E7NJSdJUfD6fFJFgdZPPBIJ2vNsan0=;
-        b=ZxAxJj+CTqNDdssCmBLdZ+SROFpNJcoasz2gUQ9m0usxc2MxmvFOLLXz4md8S1S2nM
-         7hIVZmttgVn+VjEib5C1qHhZc+oTQzu8YQJr71/ZN1o+KZilfTNLNtG2nfNZnlzDsU2m
-         NiV3lvj7aprKpSBZSVO3LJTuqdxdWEpCAe6rF1s/XH+8MgQN0XZ8D4mrP8hmJgpU6zx9
-         OUIGP3ty3SKV64CxO7MWmeUYGQPEYKd8IVrTmNW40Kn29PRt42SBxDn2NUgZ9mUpViZE
-         nxvEDSOfxRkOPN1hStNIbYx4U2dv6u58XtfDyAzBwg/Fn/skK7Si4MrCKD9ZKH6sm2iw
-         cBLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=j1xJJmIcXhdN6E7NJSdJUfD6fFJFgdZPPBIJ2vNsan0=;
-        b=ZPz7/spO8vqC0urZ8B6++WUtdmPH15HPuVEyeeGfNQd6nYDXANdcswN/2TDL3eO+8R
-         DLlWjdyFkz+zPSxkTMOe8vSY+KHRdfiRWkUE8unMrxdSGnzkzF6Ix4yHL/ZbsyQMFOdI
-         qTC4KhwyCS7TRzTMd/66m4uXq/tSEmTEy/XWtzlOaIkjQHv+F9MLCvawE/D62wokXSWt
-         52ctvwSK/FDzFMj0hzS3rJBXXloPPWhrv0aZs5cc+WdpiBL4qNqfwIg836huCF4rPp7l
-         o+p5s9F3zpss0pL2e+iSLSkSZnW/L/V9tq/kPEYpPFUfuv/PsEOI8VrbVe6ypMvANYND
-         7ZHA==
-X-Gm-Message-State: AJIora/oZZHd2zawWJ6OEr5U+7ovUprrRm48dOt8f3GpXBrYJBVGj42X
-        Dt3d2AvaaFmOKOEZUjZU1Hq7lP9YLF7ZXg==
-X-Google-Smtp-Source: AGRyM1upENlFemUxkzCO2ONXkxO4wYyQSs7FFAkU94Yru/s1UPNt45sDHS93Tz12tM0KVRNMf9Ytqw==
-X-Received: by 2002:a17:90b:1d09:b0:1ec:bb51:9396 with SMTP id on9-20020a17090b1d0900b001ecbb519396mr1928498pjb.192.1655737418664;
-        Mon, 20 Jun 2022 08:03:38 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id x16-20020a17090a165000b001e667f932cdsm10555026pje.53.2022.06.20.08.03.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jun 2022 08:03:38 -0700 (PDT)
-Message-ID: <50304d0b-9167-7911-2960-1facd473991a@kernel.dk>
-Date:   Mon, 20 Jun 2022 09:03:37 -0600
+        with ESMTP id S232831AbiFTQTM (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Jun 2022 12:19:12 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF876559
+        for <io-uring@vger.kernel.org>; Mon, 20 Jun 2022 09:19:11 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25KFICqS016585
+        for <io-uring@vger.kernel.org>; Mon, 20 Jun 2022 09:19:10 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=eA6kBmlIW81fx8OZS/XIKy+cY1/iMZ4EptsHxDsG9xQ=;
+ b=p/Cp2f73ldFyAlVdGqJz83U0OndU26HfS54PV8fFW007LG9HYIJDqj1FuqCIp/DCmkTB
+ lkzMc2sKXP/KGEc0bqlA8lfkKVwf5QXyazlAm16ikHM6lD8OKW2BXgOnmdnUuZ5ThjUC
+ AhtlynxbsTukttTqIfzGjgCuK+562x8RYHQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gsc7wsr0f-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Mon, 20 Jun 2022 09:19:10 -0700
+Received: from twshared5640.09.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Mon, 20 Jun 2022 09:19:08 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 824F31EB943C; Mon, 20 Jun 2022 09:19:05 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     <axboe@kernel.dk>, <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH RFC for-next 2/8] io_uring: remove __io_req_task_work_add
+Date:   Mon, 20 Jun 2022 09:18:55 -0700
+Message-ID: <20220620161901.1181971-3-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220620161901.1181971-1-dylany@fb.com>
+References: <20220620161901.1181971-1-dylany@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH for-next 1/1] io_uring: optinise io_uring_task layout
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-References: <282e7d40f93dc928e67c3447a92719b38de8a361.1655735235.git.asml.silence@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <282e7d40f93dc928e67c3447a92719b38de8a361.1655735235.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: g1p2-t1SjnQTl-BzcLmxLPd4U-jR0gvd
+X-Proofpoint-ORIG-GUID: g1p2-t1SjnQTl-BzcLmxLPd4U-jR0gvd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-20_05,2022-06-17_01,2022-02-23_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 6/20/22 8:27 AM, Pavel Begunkov wrote:
-> task_work bits of io_uring_task are split into two cache lines causing
-> extra cache bouncing, place them into a separate cache line. Also move
-> the most used submission path fields closer together, so there are hot.
+this is no longer needed as there is only one caller
 
-Thanks, applied. The current layout is really stupid...
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ io_uring/io_uring.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
--- 
-Jens Axboe
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index cc524d33748d..e1523b62103b 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1040,9 +1040,9 @@ void tctx_task_work(struct callback_head *cb)
+ 		io_uring_drop_tctx_refs(current);
+ }
+=20
+-static void __io_req_task_work_add(struct io_kiocb *req,
+-				   struct io_uring_task *tctx)
++void io_req_task_work_add(struct io_kiocb *req)
+ {
++	struct io_uring_task *tctx =3D req->task->io_uring;
+ 	struct io_ring_ctx *ctx =3D req->ctx;
+ 	struct io_wq_work_node *node;
+ 	unsigned long flags;
+@@ -1080,13 +1080,6 @@ static void __io_req_task_work_add(struct io_kiocb=
+ *req,
+ 	}
+ }
+=20
+-void io_req_task_work_add(struct io_kiocb *req)
+-{
+-	struct io_uring_task *tctx =3D req->task->io_uring;
+-
+-	__io_req_task_work_add(req, tctx);
+-}
+-
+ static void io_req_tw_post(struct io_kiocb *req, bool *locked)
+ {
+ 	io_req_complete_post(req);
+--=20
+2.30.2
 
