@@ -2,83 +2,110 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F0CBCCA47F
-	for <io-uring@archiver.kernel.org>; Mon, 20 Jun 2022 00:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61B61C433EF
+	for <io-uring@archiver.kernel.org>; Mon, 20 Jun 2022 11:52:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238799AbiFTAyY (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 19 Jun 2022 20:54:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54076 "EHLO
+        id S241589AbiFTLwp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 20 Jun 2022 07:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238037AbiFTAyX (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 19 Jun 2022 20:54:23 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7795E6563;
-        Sun, 19 Jun 2022 17:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655686459; x=1687222459;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wBwCFUA6Q64fHaprgGzpO55tKWN6E6OjOh5MnrN96K8=;
-  b=nQHQEvacjc8Wbz7/mrAmFFH9U0T1fmWgNgDyBrtuK0qOHZIihGeVYx8S
-   5RxjIAb4GNRUkOxY5W2SPnnwvdQvHnNKMNIhjxBJsCGI3Ed++tMrwa288
-   bMNkRrHYpXBBfFAC2vZmi6FILg5XSURwTstjFMMRdIM0z3qWN8iRNcDR+
-   nrRz+SgJzZAHFH5p4ICxVojRy59Kqkwjk7haaUOdlUweqsVSnxs8/yC2U
-   FtevTcQ0G+qQ62wSYJm7+WwsgrxYpVb8B93VbQLvhtoy8MHZlDPjnwWuA
-   VEWzIGMeGw37QTFRylYgZD8obHeCVgqsShu4SSAVS5I8HCSSzu2IoXL+3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10380"; a="262810907"
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="262810907"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2022 17:54:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.92,306,1650956400"; 
-   d="scan'208";a="832871961"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Jun 2022 17:54:16 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o35gF-000Riq-FN;
-        Mon, 20 Jun 2022 00:54:15 +0000
-Date:   Mon, 20 Jun 2022 08:53:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stefan Roesch <shr@fb.com>, io-uring@vger.kernel.org,
-        kernel-team@fb.com, linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, shr@fb.com, david@fromorbit.com,
-        jack@suse.cz, hch@infradead.org, axboe@kernel.dk,
-        willy@infradead.org, Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v9 03/14] mm: Add balance_dirty_pages_ratelimited_flags()
- function
-Message-ID: <202206200844.loRI4cvL-lkp@intel.com>
-References: <20220616212221.2024518-4-shr@fb.com>
+        with ESMTP id S235342AbiFTLwp (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Jun 2022 07:52:45 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0108817585
+        for <io-uring@vger.kernel.org>; Mon, 20 Jun 2022 04:52:43 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id h9-20020a17090a648900b001ecb8596e43so901367pjj.5
+        for <io-uring@vger.kernel.org>; Mon, 20 Jun 2022 04:52:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=from:to:in-reply-to:references:subject:message-id:date:mime-version
+         :content-transfer-encoding;
+        bh=m02wMB0prAWJUs80c+SmQba94NqR6F8iqaqImzhVl+g=;
+        b=2WuSby5zdcHuBAoB5tNvNMw1RnJ27dYPihlp2cQUkpMocVn1omzk/UGjdIW0fVk68e
+         0fwCuXgHHCEEcoaDKqpYKhYk3oy5GrbzLnNY9xr7pGCs9vM/iRoMO+X/WxsrlS0Q+PXq
+         hbUOrPWcMAZ+A8Q5mSQoqc5m8r8J8RxhQcFeqVYxnA7cOe0W5Bj80R36dRGk36NiztYw
+         48TdRpGt2Rg56q0Sb7CbGLaga9NS+BQeITtqozPcIkPsoI0b1xZ1PO3vOwZbx/eDABbe
+         bkwfdIUpaEqcXvvEeSLh8kHE+z5I2uRpwyYhIOSJ2x/HwCRkmHVscirC8yudtTzS3t47
+         vWFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:in-reply-to:references:subject
+         :message-id:date:mime-version:content-transfer-encoding;
+        bh=m02wMB0prAWJUs80c+SmQba94NqR6F8iqaqImzhVl+g=;
+        b=Re5nNLwA4/FukzI3v1HwyVKjAeH7A1iRsaKoicgz67qkFLReDRQcS1DMtyfKRy8Q4C
+         jGPwlpHcdIs50vIRJRd8AJedvmC9dQp9i24ATWme/erdJlbETMUA30z4Ub35R6Gp8NMf
+         Jxw3bUYaLBoNknJOP4t+vo3sv/cYvRLovO0CQS6Q/DuWSUsfvcgFz1ywXwD6Gl8ENCBd
+         +ZVVjdQXmUb/zGzCedfbO4W6tbDTb3mO/TWM3pGW9GxfJG510ZJRiv1Ui8qC57lUMhL9
+         c2T+dao33IyJOoYy7NdtSgveNyfqzP0kD4XCri4QL6MhfKf1kSkk7iRGb6DIlC1oBrty
+         hJxA==
+X-Gm-Message-State: AJIora/KFsfWtXedbJNvz3EZadFAr2xaLI/W82GTBlDkHIj4DowDYRD/
+        760k4gdfe5RQ5B3A7EH/yhM1dGlv71YTqg==
+X-Google-Smtp-Source: AGRyM1voMiedNd4xKhVPYaICeiQ9nwNsL+MFjPVuR+yMPAfH30jbJ5CKohgWGz0HysUZDw3FjMp+gQ==
+X-Received: by 2002:a17:90b:350b:b0:1e8:5177:fe7d with SMTP id ls11-20020a17090b350b00b001e85177fe7dmr38000659pjb.142.1655725963214;
+        Mon, 20 Jun 2022 04:52:43 -0700 (PDT)
+Received: from [127.0.1.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id p24-20020a637418000000b0040cdc508087sm636127pgc.19.2022.06.20.04.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jun 2022 04:52:42 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, asml.silence@gmail.com
+In-Reply-To: <cover.1655684496.git.asml.silence@gmail.com>
+References: <cover.1655684496.git.asml.silence@gmail.com>
+Subject: Re: [PATCH for-next 00/10] 5.20 patches
+Message-Id: <165572596253.2011131.4576214447049708379.b4-ty@kernel.dk>
+Date:   Mon, 20 Jun 2022 05:52:42 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220616212221.2024518-4-shr@fb.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi Stefan,
+On Mon, 20 Jun 2022 01:25:51 +0100, Pavel Begunkov wrote:
+> 1/10 fixes multi ring cancellation bugs
+> 2-3 are cleanups
+> 4-6 is a resend of the dropped patches
+> 7-10 are rebased cleanups
+> 
+> Pavel Begunkov (10):
+>   io_uring: fix multi ctx cancellation
+>   io_uring: improve task exit timeout cancellations
+>   io_uring: fix io_poll_remove_all clang warnings
+>   io_uring: hide eventfd assumptions in evenfd paths
+>   io_uring: introduce locking helpers for CQE posting
+>   io_uring: add io_commit_cqring_flush()
+>   io_uring: opcode independent fixed buf import
+>   io_uring: move io_import_fixed()
+>   io_uring: consistent naming for inline completion
+>   io_uring: add an warn_once for poll_find
+> 
+> [...]
 
-I love your patch! Perhaps something to improve:
+Applied, thanks!
 
-[auto build test WARNING on b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3]
+[01/10] io_uring: fix multi ctx cancellation
+        commit: 45987e01342c884ff15f180e1c5f3bfc6d5ee50f
+[02/10] io_uring: improve task exit timeout cancellations
+        commit: 23641c3094a7e57eb3a61544b76586a4e2980c2d
+[03/10] io_uring: fix io_poll_remove_all clang warnings
+        commit: e67910197b4844701d17439ab867ab8a08425ce6
+[04/10] io_uring: hide eventfd assumptions in evenfd paths
+        commit: 8ac9127be60bf7de7efcee71bba0fd08bb3573fd
+[05/10] io_uring: introduce locking helpers for CQE posting
+        commit: d88cbb474bb52fcced34e5ebc47de4521f98713f
+[06/10] io_uring: add io_commit_cqring_flush()
+        commit: fe435d183d95618149aedd19c4ccf141ff74b875
+[07/10] io_uring: opcode independent fixed buf import
+        commit: a708de4e48daf9e667f9e9a983c3a432614202ba
+[08/10] io_uring: move io_import_fixed()
+        commit: d9b631c2d3d437792d1cdb9576f79b809e4b4ada
+[09/10] io_uring: consistent naming for inline completion
+        commit: f7605b87fdcf73a569c71ea74e346f239b48c7d3
+[10/10] io_uring: add an warn_once for poll_find
+        commit: d0093035a00357ff45bc52ed8f2c40c40e1de8c5
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefan-Roesch/io-uring-xfs-support-async-buffered-writes/20220617-060910
-base:   b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-config: i386-randconfig-c021 (https://download.01.org/0day-ci/archive/20220620/202206200844.loRI4cvL-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-cocci warnings: (new ones prefixed by >>)
->> mm/page-writeback.c:1887:5-8: Unneeded variable: "ret". Return "0" on line 1891
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jens Axboe
+
+
