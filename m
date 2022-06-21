@@ -2,134 +2,129 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B65A3C43334
-	for <io-uring@archiver.kernel.org>; Tue, 21 Jun 2022 09:10:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E213BC43334
+	for <io-uring@archiver.kernel.org>; Tue, 21 Jun 2022 12:25:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346590AbiFUJKf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 21 Jun 2022 05:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
+        id S1350008AbiFUMZm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 21 Jun 2022 08:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348472AbiFUJKb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 21 Jun 2022 05:10:31 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451BF9FF8
-        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 02:10:30 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id v1so26026446ejg.13
-        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 02:10:30 -0700 (PDT)
+        with ESMTP id S1350078AbiFUMZj (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 21 Jun 2022 08:25:39 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06BE26110
+        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 05:25:38 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id q9so18695753wrd.8
+        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 05:25:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=66rhTpeiVCVuXrNZ0fvyk2Otyipnp7dr2D8O/HIACXY=;
-        b=Ji0Az+Bqpvob5g4KPz3IBJO9StokKvbgEnnUTSq5wXpUUaVQTCFrWw2oztF2ZqEuhq
-         /W97AJt1h36JnSXQ1xlGX4VgPbGAEHoMVpJrB0hPt6ix6b54PSVThXb/IZDTR0OQcohJ
-         Q6qK3+pMR4ZSsZS2Er3GjeuCyrWSePxNjw84897xkl+pU0PUmzcXvkKc2x5tHVARzstC
-         f4W9XxfHJT4X5iXby0uczlSJLyadZBzWuLDZr0s0acCsRhlwO6gjqrA7BaVICKpMnArP
-         5yvlbZVSEcYsG/KB742kREctvuSf9SP4KhXjJsVn/asfM+gNXQB/MpD8Qs8kJmeHxYQJ
-         lY2w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=piYf61c1MxXynroadp8q+j+sNjCiSes4RSzNriPuopQ=;
+        b=k7Z0wmUO4n+7zAqfQtqgHw59IhJOFdmp8I8ZcbqrBr8rLH6DZ4JhsaBZRgZq0S01dC
+         yyyMYgL+WpHjmNE/Aea+RiTcM0KxC/NNygLfLG/U5d1ETtklHhxtXYtDzRWWJGxBbvGA
+         G3OxmHiSzWc1m5hIit1/S7+Gm1YuepvjQ+hMheY6LRTJjzvYIuC09o+9OpC0Il1zvYJL
+         lcB5gDHWBm+6qU81Zz6rAEG/1NMggCEkk04KQa9GGj2ivHERibclio4LU2VoIwbA1WGc
+         qBC7U8xG0HuFslbf9qfuIue2UmDoM6JuvCXoyTJmsbrkc3P1pCALVSE5eplUOe6UXLq9
+         etHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=66rhTpeiVCVuXrNZ0fvyk2Otyipnp7dr2D8O/HIACXY=;
-        b=SZTH0kBQ7n1yihHnfcI/wNQgjYT/8uC74OqvQmv5qkMLxSTR9SPV8+Ag7X+VRqwBZN
-         +eb5Za+6qQ6/ceP8hNPrXIhVNGO+PuKDVqR3v1Mw4GpdopOQ5LY38D7to98Bfj4UB0IM
-         vBSzGTRvwzm6NtVVxQIIfjU33cjLIKkOa98I3xY7ZnZy0mcAL7TPipdUsxTesHvAI/CU
-         QyQRLoF2BO7MrUM+wlm075YOi1dL4Xejj9BopCmB46Y6BrlLiR8l4K92AZVKq1fpxjMR
-         MqqIy+RrLfu4hJX8ikbp9rE8kTqRYcwxbBnAYoQ/5sDjoPaKefXxZNXzAcS8mOEAd7oK
-         p2PA==
-X-Gm-Message-State: AJIora/btDw1z+p510RulccUUXXhDeb27b8HJpBbGC0ES2K1UEjel1Wy
-        fZBipY2lPktFp7b10+Ve6Do1h6SZAR8EMg==
-X-Google-Smtp-Source: AGRyM1surNjNq7ra3BGj658lNlBiNgqAqr9usD4KDdVUq8i0RNzAtg0khVWeOL0nVsU5oQSEJfV7KA==
-X-Received: by 2002:a17:906:9c96:b0:711:6c3:c9d7 with SMTP id fj22-20020a1709069c9600b0071106c3c9d7mr23472909ejc.60.1655802628561;
-        Tue, 21 Jun 2022 02:10:28 -0700 (PDT)
-Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:d61a])
-        by smtp.gmail.com with ESMTPSA id cq18-20020a056402221200b00435651c4a01sm9194420edb.56.2022.06.21.02.10.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=piYf61c1MxXynroadp8q+j+sNjCiSes4RSzNriPuopQ=;
+        b=A5sFkyo0mXFubwcQUp2Rv3ypu8mrg1ouj1+IJZwtnY+ZRL4DFNGxdsxfUPsojVFWjk
+         EBRj1cRc6ljXWftrVVEDDWBEv21RVf8Eh3iR9aH/rOkATCyIbV2aJLXBbf9MJkNkIJAY
+         Gp3lAVcyA96aJQJEtbWclelxCIee/StxJEHrz2znhKs9MEzXUc1wPir9UmmED0TYh0xe
+         m4ITnXKU/bEaejO4Oi5+2Cy4KZ2dzv3pH1KEi2+WDreQrlVzuWyxOj4kehUraZ8D2fC6
+         Z3B6RuoXMJUNiHCu8JrmOzmyivXzA5SaHiz0pF+xpNo6AHOjzfUQvSyX+vCjlyfPznSU
+         58bA==
+X-Gm-Message-State: AJIora/WGSywtykWmZTGUS70AFXMNzLeDjx5Vls1Q2sG0bC4Lhq7eQNE
+        FvB3q8A+PqQqmbsYhOs2zLhFTIkHU6cJEg==
+X-Google-Smtp-Source: AGRyM1t1YOhGkUlPgkKux+wwKLSo0NCoS/LcoQVW1BnFxpfGE6bzYL2OU1RrHm58LHKl6wE0NUj9fA==
+X-Received: by 2002:a5d:6209:0:b0:21b:9c52:9cf1 with SMTP id y9-20020a5d6209000000b0021b9c529cf1mr433738wru.47.1655814336559;
+        Tue, 21 Jun 2022 05:25:36 -0700 (PDT)
+Received: from 127.0.0.1localhost (82-132-235-103.dab.02.net. [82.132.235.103])
+        by smtp.gmail.com with ESMTPSA id d5-20020a05600c3ac500b0039c457cea21sm17301614wms.34.2022.06.21.05.25.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 02:10:28 -0700 (PDT)
+        Tue, 21 Jun 2022 05:25:35 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 4/4] io_uring: dedup io_run_task_work
-Date:   Tue, 21 Jun 2022 10:09:02 +0100
-Message-Id: <a157a4df5fa217b8bd03c73494f2fd0e24e44fbc.1655802465.git.asml.silence@gmail.com>
+Subject: [PATCH 5.19] io_uring: fix req->apoll_events
+Date:   Tue, 21 Jun 2022 13:25:06 +0100
+Message-Id: <0aef40399ba75b1a4d2c2e85e6e8fd93c02fc6e4.1655814213.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1655802465.git.asml.silence@gmail.com>
-References: <cover.1655802465.git.asml.silence@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We have an identical copy of io_run_task_work() for io-wq called
-io_flush_signals(), deduplicate them.
+apoll_events should be set once in the beginning of poll arming just as
+poll->events and not change after. However, currently io_uring resets it
+on each __io_poll_execute() for no clear reason. There is also a place
+in __io_arm_poll_handler() where we add EPOLLONESHOT to downgrade a
+multishot, but forget to do the same thing with ->apoll_events, which is
+buggy.
 
+Fixes: 81459350d581e ("io_uring: cache req->apoll->events in req->cflags")
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/filetable.h |  2 ++
- io_uring/io-wq.c     | 17 +++--------------
- 2 files changed, 5 insertions(+), 14 deletions(-)
+ fs/io_uring.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/io_uring/filetable.h b/io_uring/filetable.h
-index 6b58aa48bc45..fb5a274c08ff 100644
---- a/io_uring/filetable.h
-+++ b/io_uring/filetable.h
-@@ -2,6 +2,8 @@
- #ifndef IOU_FILE_TABLE_H
- #define IOU_FILE_TABLE_H
- 
-+#include <linux/file.h>
-+
- struct io_ring_ctx;
- struct io_kiocb;
- 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 3e34dfbdf946..77df5b43bf52 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -19,6 +19,7 @@
- 
- #include "io-wq.h"
- #include "slist.h"
-+#include "io_uring.h"
- 
- #define WORKER_IDLE_TIMEOUT	(5 * HZ)
- 
-@@ -519,23 +520,11 @@ static struct io_wq_work *io_get_next_work(struct io_wqe_acct *acct,
- 	return NULL;
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 87c65a358678..ebda9a565fc0 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -6954,7 +6954,8 @@ static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
+ 		io_req_complete_failed(req, ret);
  }
  
--static bool io_flush_signals(void)
--{
--	if (unlikely(test_thread_flag(TIF_NOTIFY_SIGNAL))) {
--		__set_current_state(TASK_RUNNING);
--		clear_notify_signal();
--		if (task_work_pending(current))
--			task_work_run();
--		return true;
--	}
--	return false;
--}
--
- static void io_assign_current_work(struct io_worker *worker,
- 				   struct io_wq_work *work)
+-static void __io_poll_execute(struct io_kiocb *req, int mask, __poll_t events)
++static void __io_poll_execute(struct io_kiocb *req, int mask,
++			      __poll_t __maybe_unused events)
  {
- 	if (work) {
--		io_flush_signals();
-+		io_run_task_work();
- 		cond_resched();
- 	}
+ 	req->cqe.res = mask;
+ 	/*
+@@ -6963,7 +6964,6 @@ static void __io_poll_execute(struct io_kiocb *req, int mask, __poll_t events)
+ 	 * CPU. We want to avoid pulling in req->apoll->events for that
+ 	 * case.
+ 	 */
+-	req->apoll_events = events;
+ 	if (req->opcode == IORING_OP_POLL_ADD)
+ 		req->io_task_work.func = io_poll_task_func;
+ 	else
+@@ -7114,6 +7114,8 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
+ 	io_init_poll_iocb(poll, mask, io_poll_wake);
+ 	poll->file = req->file;
  
-@@ -655,7 +644,7 @@ static int io_wqe_worker(void *data)
- 		last_timeout = false;
- 		__io_worker_idle(wqe, worker);
- 		raw_spin_unlock(&wqe->lock);
--		if (io_flush_signals())
-+		if (io_run_task_work())
- 			continue;
- 		ret = schedule_timeout(WORKER_IDLE_TIMEOUT);
- 		if (signal_pending(current)) {
++	req->apoll_events = poll->events;
++
+ 	ipt->pt._key = mask;
+ 	ipt->req = req;
+ 	ipt->error = 0;
+@@ -7144,8 +7146,10 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
+ 
+ 	if (mask) {
+ 		/* can't multishot if failed, just queue the event we've got */
+-		if (unlikely(ipt->error || !ipt->nr_entries))
++		if (unlikely(ipt->error || !ipt->nr_entries)) {
+ 			poll->events |= EPOLLONESHOT;
++			req->apoll_events |= EPOLLONESHOT;
++		}
+ 		__io_poll_execute(req, mask, poll->events);
+ 		return 0;
+ 	}
+@@ -7392,7 +7396,7 @@ static int io_poll_add_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe
+ 		return -EINVAL;
+ 
+ 	io_req_set_refcount(req);
+-	req->apoll_events = poll->events = io_poll_parse_events(sqe, flags);
++	poll->events = io_poll_parse_events(sqe, flags);
+ 	return 0;
+ }
+ 
 -- 
 2.36.1
 
