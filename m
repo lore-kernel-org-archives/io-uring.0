@@ -2,88 +2,105 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 987BBCCA47E
-	for <io-uring@archiver.kernel.org>; Tue, 21 Jun 2022 23:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACA25C43334
+	for <io-uring@archiver.kernel.org>; Wed, 22 Jun 2022 03:34:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiFUXBR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 21 Jun 2022 19:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S232865AbiFVDeN (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 21 Jun 2022 23:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354570AbiFUXBP (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 21 Jun 2022 19:01:15 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533691E3F1
-        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 16:01:11 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j24so202736wrb.11
-        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 16:01:11 -0700 (PDT)
+        with ESMTP id S232276AbiFVDeM (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 21 Jun 2022 23:34:12 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41D228985
+        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 20:34:10 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p5so9036205pjt.2
+        for <io-uring@vger.kernel.org>; Tue, 21 Jun 2022 20:34:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0bWN01KDsEtX3px5S5dycuW8Av5BE9tOjbj4Zfv5AN8=;
-        b=YeVjH9CPFWBiPpKKP35U4UyXqK5bs/aCplRrCY8Pau0oprbJdQRrazlN1/UiaD0Aef
-         ysBxXyLBG+pnr6TR8tfYjWINONXyNphQPyd4bGYFGiHKGJfU+DToyhlCnFLIy4qK54N1
-         glxukjXpvTUsjb6LZ1ibDnEY8fash3pxNNoMm8h23ud+Bc+MZ3bG7qSpNOp0w1gs+SXJ
-         QJqDzKib4dzqZowZ7vTcsDahnaQiRqTxcF8joACgPMlK8pevyq0adrcyxPMwkrrGODvl
-         4z3eTXNvkupGHZIjVifODxRSzSr/sRW+6KKwc7d3T307lVmicRofHBLlFYK+GYMj2XEH
-         F7ZQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=fssPZHnY3pmx7DCRJn9uEs/dFGqtI3gSoaU+XPcPyYE=;
+        b=JXwKetkmZZhaiUTTvDqqHrsiK8/jybDzxhI4DsPXKPedMYdH/vHB41pqwB4zXwQtla
+         NG2u4PGlIU77M97lxv16nUZ9I1BTQRfXw9VY5wGQbbTDNNNdgf/AbIXplN17drNgvjwC
+         OdeCX3d5XRvUdv9l/h388bR/ewPw7pFgSlK1rFcrUG0b/tQdecQFKcPkhc+1i2GYi9Gd
+         ufyJk2LK5JfoLFAt4LtM5ZLsDdshdn7FHnzg6IkZTS1fwuQBWBq7RzE8ft4g9zVKRSay
+         GGs1vppr91u0tTUwy7vZM/xO6MXzwKuL7bxc2PyG3+Vb41scAmRPeOKrD8lik2RhjOz0
+         K15Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0bWN01KDsEtX3px5S5dycuW8Av5BE9tOjbj4Zfv5AN8=;
-        b=drfyZBOOwvwlVit9K5p4ACp1Js6yRYVlMLTN8Dfj4pqM7OQpDkc0BnRCxIRERC0HoQ
-         zCy1ecZjWDvLl9SPSC7ZmpFa4LucSFPRSWbQ4OCBgty3v/IHIeLjrxgSIQRcLYNWu2nj
-         eSxO+WOcd25q/BTqg3qXKxtZnPUFdrUhOzxhQjKA5rlxuDcEq+3YrHVYATP615QdotnL
-         gh3BFHiwK2D+rF5FSa/ljbMCorfia+RnAld33J4aQuvvGkqBedEm6hRlUnPuM2oOaU03
-         UC386ySOQd+1usm7k7qvQld4UonInj/2PeKuYs+NeLmZlzwI2EmtwadE/7GtXkR03YLf
-         ndgw==
-X-Gm-Message-State: AJIora+jNIspLSDKqkO5o1Gt9h1hXf7J6iBsUQIIIlaBjKz8ArYdV3mc
-        6JmSDSYzhgVA7ptmM0W62RBTvbKeNew7MxEb
-X-Google-Smtp-Source: AGRyM1ssh9izaB49b/HERb/lzllvntfVZSo3Pt5gzGWFudaeLvApG3aS/y8OEO/Tadzq4QIN9T6aag==
-X-Received: by 2002:a05:6000:1542:b0:218:549a:2a8e with SMTP id 2-20020a056000154200b00218549a2a8emr297171wry.314.1655852469598;
-        Tue, 21 Jun 2022 16:01:09 -0700 (PDT)
-Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id q2-20020a05600000c200b0021b8ea5c7bdsm7630462wrx.42.2022.06.21.16.01.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jun 2022 16:01:09 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH 5.19 1/3] io_uring: fail links when poll fails
-Date:   Wed, 22 Jun 2022 00:00:35 +0100
-Message-Id: <a78aad962460f9fdfe4aa4c0b62425c88f9415bc.1655852245.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1655852245.git.asml.silence@gmail.com>
-References: <cover.1655852245.git.asml.silence@gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=fssPZHnY3pmx7DCRJn9uEs/dFGqtI3gSoaU+XPcPyYE=;
+        b=0zi6GSSm+buFvOH+v9kmZWe53xNGm70DaL3uGW5ZSHljYtwYSDfvjF5TzdcfJeojvW
+         b22CPdGS2Aajj6EbgLDKjTRjLYslfyY6PpRm00HOQE3QXKYwkw0yo6SjoY2m+mT10LEX
+         O34+Dxvh5rRhSnO7gz2YW+ucGYf3KTTDCEL3v6zhaeCsa0pXicsj/xxCeA0GqhA/Hiia
+         mG7GwuIHUKkFi91G4GluILbMCTLlwetG4yfHrw0yPzRodwir0ACjH/YN0LFtJQ5Amkcg
+         9KaHlitwKvMUx/9dH5JE6s28bynm3D50JtEl9Hk33IyFwgDPk0bCbd0Ynu2l6riLP2Tq
+         hupA==
+X-Gm-Message-State: AJIora8B50u8HPHzIULA08zxUv2/Q6azSA1zG7l7Cur44yCzqSH8xwCu
+        SoXksKr2b9AhffUBHiBExKzNTzhNfWkiaQ==
+X-Google-Smtp-Source: AGRyM1tt6cw39IWhNRfr3Pjo7gkyqpEBq16unBMkaP1tM+Ul5Jp2t8nnfZCJHf/iUj1K0FAaKLIfgQ==
+X-Received: by 2002:a17:90a:1c09:b0:1ea:91d4:5a7f with SMTP id s9-20020a17090a1c0900b001ea91d45a7fmr47237516pjs.232.1655868850169;
+        Tue, 21 Jun 2022 20:34:10 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id m9-20020a170902768900b00163ffe73300sm11435716pll.137.2022.06.21.20.34.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 Jun 2022 20:34:09 -0700 (PDT)
+Message-ID: <dc244beb-b260-450e-6678-e1e7fe9e057c@kernel.dk>
+Date:   Tue, 21 Jun 2022 21:34:08 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.19 1/3] io_uring: fail links when poll fails
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+References: <cover.1655852245.git.asml.silence@gmail.com>
+ <a78aad962460f9fdfe4aa4c0b62425c88f9415bc.1655852245.git.asml.silence@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <a78aad962460f9fdfe4aa4c0b62425c88f9415bc.1655852245.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Don't forget to cancel all linked requests of poll request when
-__io_arm_poll_handler() failed.
+On 6/21/22 5:00 PM, Pavel Begunkov wrote:
+> Don't forget to cancel all linked requests of poll request when
+> __io_arm_poll_handler() failed.
+> 
+> Fixes: aa43477b04025 ("io_uring: poll rework")
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  fs/io_uring.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/fs/io_uring.c b/fs/io_uring.c
+> index dffa85d4dc7a..d5ea3c6167b5 100644
+> --- a/fs/io_uring.c
+> +++ b/fs/io_uring.c
+> @@ -7405,6 +7405,8 @@ static int io_poll_add(struct io_kiocb *req, unsigned int issue_flags)
+>  	ipt.pt._qproc = io_poll_queue_proc;
+>  
+>  	ret = __io_arm_poll_handler(req, &req->poll, &ipt, poll->events);
+> +	if (!ret && ipt.error)
+> +		req_set_fail(req);
+>  	ret = ret ?: ipt.error;
+>  	if (ret)
+>  		__io_req_complete(req, issue_flags, ret, 0);
 
-Fixes: aa43477b04025 ("io_uring: poll rework")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- fs/io_uring.c | 2 ++
- 1 file changed, 2 insertions(+)
+We could make this:
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index dffa85d4dc7a..d5ea3c6167b5 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -7405,6 +7405,8 @@ static int io_poll_add(struct io_kiocb *req, unsigned int issue_flags)
- 	ipt.pt._qproc = io_poll_queue_proc;
- 
- 	ret = __io_arm_poll_handler(req, &req->poll, &ipt, poll->events);
-+	if (!ret && ipt.error)
-+		req_set_fail(req);
- 	ret = ret ?: ipt.error;
- 	if (ret)
- 		__io_req_complete(req, issue_flags, ret, 0);
+	if (!ret && ipt.error) {
+		req_set_fail(req);
+		ret = ipt.error;
+	}
+
+and kill that ternary, but we could also then go a bit further with the
+completion. So let's just leave that for 5.20.
+
+
 -- 
-2.36.1
+Jens Axboe
 
