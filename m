@@ -2,47 +2,48 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92260C433EF
-	for <io-uring@archiver.kernel.org>; Thu, 23 Jun 2022 19:09:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8484AC433EF
+	for <io-uring@archiver.kernel.org>; Thu, 23 Jun 2022 19:16:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiFWTJb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 23 Jun 2022 15:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S229898AbiFWTP6 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 23 Jun 2022 15:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiFWTJU (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 23 Jun 2022 15:09:20 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7823F12084F
-        for <io-uring@vger.kernel.org>; Thu, 23 Jun 2022 11:14:28 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NHum9a015934
-        for <io-uring@vger.kernel.org>; Thu, 23 Jun 2022 11:14:16 -0700
+        with ESMTP id S229564AbiFWTPo (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 23 Jun 2022 15:15:44 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574A61309C3
+        for <io-uring@vger.kernel.org>; Thu, 23 Jun 2022 11:20:10 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25NHun7g025730
+        for <io-uring@vger.kernel.org>; Thu, 23 Jun 2022 11:20:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=I1DsOb8+/RCOQDjc5VvCIS0HQO+cqihPjCkv7YhigVI=;
- b=HJhJ+j3fM/4d2VJQBb3PcpTtgDac/wYEt/GUs/ZqGQJKWPVG00NHipNuDiLS4zAoYt5I
- nNHzBcdxnt2tKh7dN1+NsaAWxhglbGwc1HJo39oJAt0SSf09M0ai6wgTqbfmu3Jq/AzJ
- 3p7izgvkRDIPXpAsnkyaVbDC1rMFmLAOIgc= 
+ bh=mUyYlJXItg61v1JvQQks15Uucu0ATZYHM7QlCl3c3gQ=;
+ b=VZKdRcr9LZs38Nb/xm+f8yCJQ2LEwgYgKqLoqtcoIKjvPUftIcIpsu2xozwBnKKuy6tZ
+ LVSsYl7JBzzlujPfrA44g2DXGa13rey6uliU1N/LMmpMT3PwXWBOfhSEbmLZyME5DWih
+ Isa6jAM15RB7/8skv0JIJa94uA2B0jrt2bo= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gv51n92hm-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gvn9437aa-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 23 Jun 2022 11:14:15 -0700
+        for <io-uring@vger.kernel.org>; Thu, 23 Jun 2022 11:20:09 -0700
 Received: from twshared18317.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 23 Jun 2022 11:14:08 -0700
+ 15.1.2375.28; Thu, 23 Jun 2022 11:20:07 -0700
 Received: by devvm225.atn0.facebook.com (Postfix, from userid 425415)
-        id 979A510C5DC67; Thu, 23 Jun 2022 10:52:00 -0700 (PDT)
+        id A7D8A10C5DC70; Thu, 23 Jun 2022 10:52:00 -0700 (PDT)
 From:   Stefan Roesch <shr@fb.com>
 To:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         <linux-mm@kvack.org>, <linux-xfs@vger.kernel.org>,
         <linux-fsdevel@vger.kernel.org>
 CC:     <shr@fb.com>, <david@fromorbit.com>, <jack@suse.cz>,
-        <hch@infradead.org>, <axboe@kernel.dk>, <willy@infradead.org>
-Subject: [RESEND PATCH v9 11/14] io_uring: Add support for async buffered writes
-Date:   Thu, 23 Jun 2022 10:51:54 -0700
-Message-ID: <20220623175157.1715274-12-shr@fb.com>
+        <hch@infradead.org>, <axboe@kernel.dk>, <willy@infradead.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [RESEND PATCH v9 14/14] xfs: Add async buffered write support
+Date:   Thu, 23 Jun 2022 10:51:57 -0700
+Message-ID: <20220623175157.1715274-15-shr@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220623175157.1715274-1-shr@fb.com>
 References: <20220623175157.1715274-1-shr@fb.com>
@@ -50,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: JB7T3zbcEsra0AQ221m2LxVEe4rE5X3o
-X-Proofpoint-ORIG-GUID: JB7T3zbcEsra0AQ221m2LxVEe4rE5X3o
+X-Proofpoint-ORIG-GUID: 4FyQxLT2IYg02-6RygMwAA_rJBzQX_7h
+X-Proofpoint-GUID: 4FyQxLT2IYg02-6RygMwAA_rJBzQX_7h
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-06-23_07,2022-06-23_01,2022-06-22_01
@@ -59,81 +60,78 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This enables the async buffered writes for the filesystems that support
-async buffered writes in io-uring. Buffered writes are enabled for
-blocks that are already in the page cache or can be acquired with noio.
+This adds the async buffered write support to XFS. For async buffered
+write requests, the request will return -EAGAIN if the ilock cannot be
+obtained immediately.
 
 Signed-off-by: Stefan Roesch <shr@fb.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- fs/io_uring.c | 29 ++++++++++++++++++++++++-----
- 1 file changed, 24 insertions(+), 5 deletions(-)
+ fs/xfs/xfs_file.c  | 11 +++++------
+ fs/xfs/xfs_iomap.c |  5 ++++-
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 3aab4182fd89..22a0bb8c5fe5 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4311,7 +4311,7 @@ static inline int io_iter_do_read(struct io_kiocb *=
-req, struct iov_iter *iter)
- 		return -EINVAL;
+diff --git a/fs/xfs/xfs_file.c b/fs/xfs/xfs_file.c
+index 5a171c0b244b..8d9b14d2b912 100644
+--- a/fs/xfs/xfs_file.c
++++ b/fs/xfs/xfs_file.c
+@@ -410,7 +410,7 @@ xfs_file_write_checks(
+ 		spin_unlock(&ip->i_flags_lock);
+=20
+ out:
+-	return file_modified(file);
++	return kiocb_modified(iocb);
  }
 =20
--static bool need_read_all(struct io_kiocb *req)
-+static bool need_complete_io(struct io_kiocb *req)
+ static int
+@@ -700,12 +700,11 @@ xfs_file_buffered_write(
+ 	bool			cleared_space =3D false;
+ 	unsigned int		iolock;
+=20
+-	if (iocb->ki_flags & IOCB_NOWAIT)
+-		return -EOPNOTSUPP;
+-
+ write_retry:
+ 	iolock =3D XFS_IOLOCK_EXCL;
+-	xfs_ilock(ip, iolock);
++	ret =3D xfs_ilock_iocb(iocb, iolock);
++	if (ret)
++		return ret;
+=20
+ 	ret =3D xfs_file_write_checks(iocb, from, &iolock);
+ 	if (ret)
+@@ -1165,7 +1164,7 @@ xfs_file_open(
  {
- 	return req->flags & REQ_F_ISREG ||
- 		S_ISBLK(file_inode(req->file)->i_mode);
-@@ -4440,7 +4440,7 @@ static int io_read(struct io_kiocb *req, unsigned i=
-nt issue_flags)
- 	} else if (ret =3D=3D -EIOCBQUEUED) {
- 		goto out_free;
- 	} else if (ret =3D=3D req->cqe.res || ret <=3D 0 || !force_nonblock ||
--		   (req->flags & REQ_F_NOWAIT) || !need_read_all(req)) {
-+		   (req->flags & REQ_F_NOWAIT) || !need_complete_io(req)) {
- 		/* read all, failed, already did sync or don't want to retry */
- 		goto done;
- 	}
-@@ -4536,9 +4536,10 @@ static int io_write(struct io_kiocb *req, unsigned=
- int issue_flags)
- 		if (unlikely(!io_file_supports_nowait(req)))
- 			goto copy_iov;
+ 	if (xfs_is_shutdown(XFS_M(inode->i_sb)))
+ 		return -EIO;
+-	file->f_mode |=3D FMODE_NOWAIT | FMODE_BUF_RASYNC;
++	file->f_mode |=3D FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
+ 	return generic_file_open(inode, file);
+ }
 =20
--		/* file path doesn't support NOWAIT for non-direct_IO */
--		if (force_nonblock && !(kiocb->ki_flags & IOCB_DIRECT) &&
--		    (req->flags & REQ_F_ISREG))
-+		/* File path supports NOWAIT for non-direct_IO only for block devices.=
- */
-+		if (!(kiocb->ki_flags & IOCB_DIRECT) &&
-+			!(kiocb->ki_filp->f_mode & FMODE_BUF_WASYNC) &&
-+			(req->flags & REQ_F_ISREG))
- 			goto copy_iov;
+diff --git a/fs/xfs/xfs_iomap.c b/fs/xfs/xfs_iomap.c
+index bcf7c3694290..5d50fed291b4 100644
+--- a/fs/xfs/xfs_iomap.c
++++ b/fs/xfs/xfs_iomap.c
+@@ -886,6 +886,7 @@ xfs_buffered_write_iomap_begin(
+ 	bool			eof =3D false, cow_eof =3D false, shared =3D false;
+ 	int			allocfork =3D XFS_DATA_FORK;
+ 	int			error =3D 0;
++	unsigned int		lockmode =3D XFS_ILOCK_EXCL;
 =20
- 		kiocb->ki_flags |=3D IOCB_NOWAIT;
-@@ -4592,6 +4593,24 @@ static int io_write(struct io_kiocb *req, unsigned=
- int issue_flags)
- 		/* IOPOLL retry should happen for io-wq threads */
- 		if (ret2 =3D=3D -EAGAIN && (req->ctx->flags & IORING_SETUP_IOPOLL))
- 			goto copy_iov;
-+
-+		if (ret2 !=3D req->cqe.res && ret2 >=3D 0 && need_complete_io(req)) {
-+			struct io_async_rw *rw;
-+
-+			/* This is a partial write. The file pos has already been
-+			 * updated, setup the async struct to complete the request
-+			 * in the worker. Also update bytes_done to account for
-+			 * the bytes already written.
-+			 */
-+			iov_iter_save_state(&s->iter, &s->iter_state);
-+			ret =3D io_setup_async_rw(req, iovec, s, true);
-+
-+			rw =3D req->async_data;
-+			if (rw)
-+				rw->bytes_done +=3D ret2;
-+
-+			return ret ? ret : -EAGAIN;
-+		}
- done:
- 		kiocb_done(req, ret2, issue_flags);
- 	} else {
+ 	if (xfs_is_shutdown(mp))
+ 		return -EIO;
+@@ -897,7 +898,9 @@ xfs_buffered_write_iomap_begin(
+=20
+ 	ASSERT(!XFS_IS_REALTIME_INODE(ip));
+=20
+-	xfs_ilock(ip, XFS_ILOCK_EXCL);
++	error =3D xfs_ilock_for_iomap(ip, flags, &lockmode);
++	if (error)
++		return error;
+=20
+ 	if (XFS_IS_CORRUPT(mp, !xfs_ifork_has_extents(&ip->i_df)) ||
+ 	    XFS_TEST_ERROR(false, mp, XFS_ERRTAG_BMAPIFORMAT)) {
 --=20
 2.30.2
 
