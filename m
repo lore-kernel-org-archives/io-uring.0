@@ -2,86 +2,77 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF3AAC43334
-	for <io-uring@archiver.kernel.org>; Fri, 24 Jun 2022 14:53:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BC51CCA473
+	for <io-uring@archiver.kernel.org>; Fri, 24 Jun 2022 15:27:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbiFXOxY (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 24 Jun 2022 10:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S229888AbiFXP1S (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 24 Jun 2022 11:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233351AbiFXOwy (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 24 Jun 2022 10:52:54 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDEE7FD24
-        for <io-uring@vger.kernel.org>; Fri, 24 Jun 2022 07:48:54 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id a16so1634715ilr.6
-        for <io-uring@vger.kernel.org>; Fri, 24 Jun 2022 07:48:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DWcyz906WJfvMFL2VVjgjsdhhZt0R2JBG5BvPCvlnPE=;
-        b=kAZfa4Gvw0mMhZjLyDIabymc1EmZA6j/Ij9km3tKCr2BFPbswn26/J6hUzgzxK1udT
-         LXghN15N0v7AXCHZjA2DZSNUqDb8GKoz3EPZn168zMo/kyOYC8fhdWqF/to68Cm5uxLi
-         KUmvke0fE3Nb+xs/xxNlvH/wfLHfkCsapDQ8szgjNP6dRJ5TGPFoxdXQ3s+3EWsusHWR
-         9J/fh9bzOC3ORimLqxSc/OtThU3lq68I5z0UVi8MeqqhfTtGrGxDnG19KA2TV9dSV3bW
-         BgGazgp0V8riFQG6oC8SqJWq18ANKzv8SntphwIcsljLarq5zbbOYF/a54oGxURUkgY4
-         Aq7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DWcyz906WJfvMFL2VVjgjsdhhZt0R2JBG5BvPCvlnPE=;
-        b=4YXYRetWNbvRZb9e0+7P8BeOJXVJ2mL5cAjNX5Shp8OBvc56mNFSZCEdBGufQeiSGu
-         lBZr4oMTo4gemM8ele3GqRoAui3SUKdUqjOax1xP50eN08gWYQ/Yhw2HcETxSRAUvN9F
-         YW1mMqFLSQT94MtdsuOBd8kDXYSsWJ5aWstcW+L0KtMcFPEkDC7srvN+eib0zYYzwYJC
-         WI7aUIg9alTFDP54wlV/F4chYiP4TO/Mu6OtAEBT3dAB1E/GyMNNYqdbqPP9hzSkinqS
-         wPdFgM7n5u/yV6PyBhSuWnuohYwC3vn41UlKrwEtsRQ81NJaxf2lJXSl/WjA73tkUG0f
-         7HNg==
-X-Gm-Message-State: AJIora9AoXOwbH+9ORpZhRIrht6QjLrYH5F4kuGcj6iwNmhtGyhrdXIa
-        HjekDFcMuw0Hg8+UyY68RKiPGw==
-X-Google-Smtp-Source: AGRyM1vtQ5lI0ui69eAPGDOvVUnSBy1LS9YB7l1nUJUBdVR6AuykMTvdZaQ+wwkP8ETAWatGVBndKg==
-X-Received: by 2002:a05:6e02:1ba3:b0:2d8:d74b:8ff6 with SMTP id n3-20020a056e021ba300b002d8d74b8ff6mr8714104ili.264.1656082134104;
-        Fri, 24 Jun 2022 07:48:54 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id e25-20020a0566380cd900b00339ee768069sm1137354jak.74.2022.06.24.07.48.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jun 2022 07:48:53 -0700 (PDT)
-Message-ID: <293e593d-2f2a-623e-bf2f-786fce623327@kernel.dk>
-Date:   Fri, 24 Jun 2022 08:48:51 -0600
+        with ESMTP id S232674AbiFXP1R (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 24 Jun 2022 11:27:17 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9075151317;
+        Fri, 24 Jun 2022 08:27:16 -0700 (PDT)
+Received: from [192.168.88.254] (unknown [180.254.122.8])
+        by gnuweeb.org (Postfix) with ESMTPSA id 43B4E7F8F8;
+        Fri, 24 Jun 2022 15:27:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1656084435;
+        bh=dqXxhETwvokQiIm5x80WTIJgvrFxIMsjKY1qs1QtCjY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Oi+vpIn21Bl+oYJQyqia2C8uWeF8Cylu3GekctbMfvwb9ieeoe98/wQiUHUSx6XyS
+         MsmD6OEvKYfakQ7YJzlzVKiDtiopVMsWTN8AuY2mBjcoGvFvVrSz2LvNWpj8hg2flc
+         pvpq9Peu43cpVud9PHqKDNOrnDBXIfDW5wXLaOX5vUrLQnuTddLanJZxEnOfRphVCE
+         ZRf/h6kAGQqWFl295wcVrWPvbCWFn8KFTGXvcCcjyJ4W4nUXnEfNoPfd29LAJMcj46
+         CRFCmx7gOprMllZLPZ+KtOyvBXN1NioyHlYX8muVIhrcRxeX9tWRPKZXdj7gIzWCmG
+         sjuq7+W8V5vBQ==
+Message-ID: <4ce26ef8-b70f-9213-3210-41f32867df63@gnuweeb.org>
+Date:   Fri, 24 Jun 2022 22:27:09 +0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RESEND PATCH v9 07/14] fs: Add check for async buffered writes
- to generic_write_checks
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND PATCH v9 00/14] io-uring/xfs: support async buffered
+ writes
 Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>, Stefan Roesch <shr@fb.com>
-Cc:     io-uring@vger.kernel.org, kernel-team@fb.com, linux-mm@kvack.org,
-        linux-xfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        david@fromorbit.com, jack@suse.cz, willy@infradead.org,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <brauner@kernel.org>
-References: <20220623175157.1715274-1-shr@fb.com>
- <20220623175157.1715274-8-shr@fb.com> <YrVJvA+kOvjYJHqw@infradead.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <YrVJvA+kOvjYJHqw@infradead.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Stefan Roesch <shr@fb.com>, io-uring@vger.kernel.org,
+        kernel-team@fb.com, linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, david@fromorbit.com, jack@suse.cz,
+        willy@infradead.org
+References: <20220623175157.1715274-1-shr@fb.com> <YrTNku0AC80eheSP@magnolia>
+ <YrVINrRNy9cI+dg7@infradead.org>
+ <2189b2ff-e894-a85c-2d1b-5834c22363d5@kernel.dk>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <2189b2ff-e894-a85c-2d1b-5834c22363d5@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 6/23/22 11:21 PM, Christoph Hellwig wrote:
-> FYI, I think a subject like
+On 6/24/22 9:49 PM, Jens Axboe wrote:
+> On 6/23/22 11:14 PM, Christoph Hellwig wrote:
+>> On Thu, Jun 23, 2022 at 01:31:14PM -0700, Darrick J. Wong wrote:
+>>> Hmm, well, vger and lore are still having stomach problems, so even the
+>>> resend didn't result in #5 ending up in my mailbox. :(
+>>
+>> I can see a all here.  Sometimes it helps to just wait a bit.
 > 
-> "fs: add a FMODE_BUF_WASYNC flags for f_mode"
-> 
-> might be a more descriptive.  As the new flag here really is the
-> interesting part, not that we check it.
+> on lore? I'm still seeing some missing. Which is a bit odd, since eg b4
+> can pull the series down just fine.
 
-Agree on that - if others do too, I can just make that edit.
+I'm still seeing some missing on the io-uring lore too:
+
+    https://lore.kernel.org/io-uring/20220623175157.1715274-1-shr@fb.com/ (missing)
+
+But changing the path to `/all/` shows the complete series:
+
+    https://lore.kernel.org/all/20220623175157.1715274-1-shr@fb.com/ (complete)
+
+b4 seems to be fetching from `/all/`.
 
 -- 
-Jens Axboe
-
+Ammar Faizi
