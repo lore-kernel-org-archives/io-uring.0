@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7418C433EF
-	for <io-uring@archiver.kernel.org>; Tue, 28 Jun 2022 15:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16D7FC43334
+	for <io-uring@archiver.kernel.org>; Tue, 28 Jun 2022 15:04:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347736AbiF1PEb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 28 Jun 2022 11:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
+        id S1347731AbiF1PEc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 28 Jun 2022 11:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347731AbiF1PEb (ORCPT
+        with ESMTP id S1347720AbiF1PEb (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Tue, 28 Jun 2022 11:04:31 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF141D301
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD64192A3
         for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:04:30 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SEdeX7030837
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SAE6Vq013125
         for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:04:29 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=3BqJLcy2Q+zp0J5jZXaaXY8eyc8+JBIjWmpMaARdoD0=;
- b=kZIEL5ZJ6C+THkSJjv5HM0rsHdnhBy2wdWc4UB+ohCkwViDOZXkptYnNw8V2yI0/x44M
- ApVaz+2KW/64RCDiTGVsxSSEhE/r9XgzaZgc7hDcLaAJIZ55gfhWQCPpYn2de0B7eAuf
- AhX7rcr0+GVTVZY24iMSS+epcvsf/SNklWc= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h03kf068x-1
+ bh=rJDn4mTH+FztlGFytSbqUBIqiZ4DyJ/3UGqMxMNnJTk=;
+ b=VBBU4xKHhUjwSD/8TJ+GbEwNcRoQZl2SLBKSCZalqgfHvfFYduKpJLmARtQt9nOnYjGT
+ IraYvGs/k40QowfwpxLG0Vz5GR+6knwECOk8mY3NVsZR9Wfj+CYfhVuK/vGuu+9GOAzb
+ gJg2ALCFe9n/b5dhroPjlq7kJ2TmmPKz2zM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gyxx31ytw-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:04:29 -0700
-Received: from twshared18317.08.ash9.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+Received: from twshared17349.03.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.28; Tue, 28 Jun 2022 08:04:26 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id AE98A244BD55; Tue, 28 Jun 2022 08:04:18 -0700 (PDT)
+        id C18C1244BD59; Tue, 28 Jun 2022 08:04:18 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing 1/4] add t_create_socket_pair
-Date:   Tue, 28 Jun 2022 08:04:11 -0700
-Message-ID: <20220628150414.1386435-2-dylany@fb.com>
+Subject: [PATCH liburing 3/4] add recv-multishot test
+Date:   Tue, 28 Jun 2022 08:04:13 -0700
+Message-ID: <20220628150414.1386435-4-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220628150414.1386435-1-dylany@fb.com>
 References: <20220628150414.1386435-1-dylany@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 9zcwKbiL1ogZ3cj14sjn9890IdKhe_OD
-X-Proofpoint-ORIG-GUID: 9zcwKbiL1ogZ3cj14sjn9890IdKhe_OD
+X-Proofpoint-GUID: 028fMTDhAnRImmUgh-gjY-N-CWuMU_d-
+X-Proofpoint-ORIG-GUID: 028fMTDhAnRImmUgh-gjY-N-CWuMU_d-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-06-28_08,2022-06-28_01,2022-06-22_01
@@ -58,147 +58,348 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This is a useful tool for making networking tests, and does not require a
-hard coded port which is useful
+add a test for multishot receive functionality
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- test/helpers.c | 97 ++++++++++++++++++++++++++++++++++++++++++++++++++
- test/helpers.h |  5 +++
- 2 files changed, 102 insertions(+)
+ test/Makefile         |   1 +
+ test/recv-multishot.c | 308 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 309 insertions(+)
+ create mode 100644 test/recv-multishot.c
 
-diff --git a/test/helpers.c b/test/helpers.c
-index 491822e..6fb1157 100644
---- a/test/helpers.c
-+++ b/test/helpers.c
-@@ -10,6 +10,10 @@
- #include <unistd.h>
- #include <sys/types.h>
-=20
+diff --git a/test/Makefile b/test/Makefile
+index e3204a7..73a0001 100644
+--- a/test/Makefile
++++ b/test/Makefile
+@@ -124,6 +124,7 @@ test_srcs :=3D \
+ 	read-write.c \
+ 	recv-msgall.c \
+ 	recv-msgall-stream.c \
++	recv-multishot.c \
+ 	register-restrictions.c \
+ 	rename.c \
+ 	ringbuf-read.c \
+diff --git a/test/recv-multishot.c b/test/recv-multishot.c
+new file mode 100644
+index 0000000..38ec615
+--- /dev/null
++++ b/test/recv-multishot.c
+@@ -0,0 +1,308 @@
++// SPDX-License-Identifier: MIT
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
 +#include <arpa/inet.h>
-+#include <netinet/ip.h>
-+#include <netinet/tcp.h>
++#include <sys/types.h>
++#include <sys/socket.h>
++#include <pthread.h>
 +
- #include "helpers.h"
- #include "liburing.h"
-=20
-@@ -143,3 +147,96 @@ enum t_setup_ret t_register_buffers(struct io_uring =
-*ring,
- 	fprintf(stderr, "buffer register failed: %s\n", strerror(-ret));
- 	return ret;
- }
++#include "liburing.h"
++#include "helpers.h"
 +
-+int t_create_socket_pair(int fd[2], bool stream)
++
++enum early_error_t {
++	ERROR_NONE  =3D 0,
++	ERROR_NOT_ENOUGH_BUFFERS =3D 1,
++	ERROR_EARLY_CLOSE_SENDER =3D 2,
++	ERROR_EARLY_CLOSE_RECEIVER =3D 3,
++};
++
++struct args {
++	bool recvmsg;
++	bool stream;
++	bool wait_each;
++	enum early_error_t early_error;
++};
++
++static int test(struct args *args)
 +{
-+	int ret;
-+	int type =3D stream ? SOCK_STREAM : SOCK_DGRAM;
-+	int val;
-+	struct sockaddr_in serv_addr;
-+	struct sockaddr *paddr;
-+	size_t paddrlen;
++	int const N =3D 8;
++	int const N_BUFFS =3D N * 64;
++	int const min_cqes =3D 2;
++	struct io_uring ring;
++	struct io_uring_cqe *cqe;
++	struct io_uring_sqe *sqe;
++	int fds[2], ret, i, j, total_sent_bytes =3D 0, total_recv_bytes =3D 0;
++	int send_buff[256];
++	int *recv_buffs[N_BUFFS];
++	int *at;
++	struct io_uring_cqe recv_cqe[N_BUFFS];
++	int recv_cqes =3D 0;
++	bool early_error =3D false;
++	bool early_error_started =3D false;
++	struct msghdr msg =3D { };
++	struct __kernel_timespec timeout =3D {
++		.tv_sec =3D 1,
++	};
 +
-+	type |=3D SOCK_CLOEXEC;
-+	fd[0] =3D socket(AF_INET, type, 0);
-+	if (fd[0] < 0)
-+		return errno;
-+	fd[1] =3D socket(AF_INET, type, 0);
-+	if (fd[1] < 0) {
-+		ret =3D errno;
-+		close(fd[0]);
++
++	memset(recv_buffs, 0, sizeof(recv_buffs));
++
++	ret =3D io_uring_queue_init(32, &ring, 0);
++	if (ret) {
++		fprintf(stderr, "queue init failed: %d\n", ret);
 +		return ret;
 +	}
 +
-+	val =3D 1;
-+	if (setsockopt(fd[0], SOL_SOCKET, SO_REUSEADDR, &val, sizeof(val)))
-+		goto errno_cleanup;
-+
-+	memset(&serv_addr, 0, sizeof(serv_addr));
-+	serv_addr.sin_family =3D AF_INET;
-+	serv_addr.sin_port =3D 0;
-+	inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr);
-+
-+	paddr =3D (struct sockaddr *)&serv_addr;
-+	paddrlen =3D sizeof(serv_addr);
-+
-+	if (bind(fd[0], paddr, paddrlen)) {
-+		fprintf(stderr, "bind failed\n");
-+		goto errno_cleanup;
++	ret =3D t_create_socket_pair(fds, args->stream);
++	if (ret) {
++		fprintf(stderr, "t_create_socket_pair failed: %d\n", ret);
++		return ret;
 +	}
 +
-+	if (stream && listen(fd[0], 16)) {
-+		fprintf(stderr, "listen failed\n");
-+		goto errno_cleanup;
-+	}
++	for (i =3D 0; i < ARRAY_SIZE(send_buff); i++)
++		send_buff[i] =3D i;
 +
-+	if (getsockname(fd[0], &serv_addr, (socklen_t *)&paddrlen)) {
-+		fprintf(stderr, "getsockname failed\n");
-+		goto errno_cleanup;
-+	}
-+	inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr);
++	for (i =3D 0; i < ARRAY_SIZE(recv_buffs); i++) {
++		/* prepare some different sized buffers */
++		int buffer_size =3D (i % 2 =3D=3D 0 && args->stream) ? 1 : N * sizeof(=
+int);
 +
-+	if (connect(fd[1], &serv_addr, paddrlen)) {
-+		fprintf(stderr, "connect failed\n");
-+		goto errno_cleanup;
-+	}
++		recv_buffs[i] =3D malloc(sizeof(*at) * buffer_size);
 +
-+	if (!stream) {
-+		/* connect the other udp side */
-+		if (getsockname(fd[1], &serv_addr, (socklen_t *)&paddrlen)) {
-+			fprintf(stderr, "getsockname failed\n");
-+			goto errno_cleanup;
++		if (i > 2 && args->early_error =3D=3D ERROR_NOT_ENOUGH_BUFFERS)
++			continue;
++
++		sqe =3D io_uring_get_sqe(&ring);
++		io_uring_prep_provide_buffers(sqe, recv_buffs[i],
++					buffer_size * sizeof(*recv_buffs[i]), 1, 7, i);
++		if (io_uring_submit_and_wait_timeout(&ring, &cqe, 1, &timeout, NULL) !=
+=3D 0) {
++			fprintf(stderr, "provide buffers failed: %d\n", ret);
++			ret =3D -1;
++			goto cleanup;
 +		}
-+		inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr);
-+
-+		if (connect(fd[0], &serv_addr, paddrlen)) {
-+			fprintf(stderr, "connect failed\n");
-+			goto errno_cleanup;
-+		}
-+		return 0;
++		io_uring_cqe_seen(&ring, cqe);
 +	}
 +
-+	/* for stream case we must accept and cleanup the listen socket */
++	sqe =3D io_uring_get_sqe(&ring);
++	if (args->recvmsg) {
++		memset(&msg, 0, sizeof(msg));
++		msg.msg_namelen =3D sizeof(struct sockaddr_in);
++		io_uring_prep_recvmsg(sqe, fds[0], &msg, 0);
++	} else {
++		io_uring_prep_recv(sqe, fds[0], NULL, 0, 0);
++	}
++	sqe->flags |=3D IOSQE_BUFFER_SELECT;
++	sqe->buf_group =3D 7;
++	sqe->addr2 |=3D IORING_RECV_MULTISHOT;
++	io_uring_sqe_set_data64(sqe, 1234);
++	io_uring_submit(&ring);
 +
-+	ret =3D accept(fd[0], NULL, NULL);
-+	if (ret < 0)
-+		goto errno_cleanup;
++	at =3D &send_buff[0];
++	total_sent_bytes =3D 0;
++	for (i =3D 0; i < N; i++) {
++		int to_send =3D sizeof(*at) * (i+1);
 +
-+	close(fd[0]);
-+	fd[0] =3D ret;
++		total_sent_bytes +=3D to_send;
++		if (send(fds[1], at, to_send, 0) !=3D to_send) {
++			if (early_error_started)
++				break;
++			fprintf(stderr, "send failed %d\n", errno);
++			ret =3D -1;
++			goto cleanup;
++		}
 +
-+	val =3D 1;
-+	if (stream && setsockopt(fd[0], SOL_TCP, TCP_NODELAY, &val, sizeof(val)=
-))
-+		goto errno_cleanup;
-+	val =3D 1;
-+	if (stream && setsockopt(fd[1], SOL_TCP, TCP_NODELAY, &val, sizeof(val)=
-))
-+		goto errno_cleanup;
++		if (i =3D=3D 2) {
++			if (args->early_error =3D=3D ERROR_EARLY_CLOSE_RECEIVER) {
++				/* allow previous sends to complete */
++				usleep(1000);
 +
-+	return 0;
++				sqe =3D io_uring_get_sqe(&ring);
++				io_uring_prep_recv(sqe, fds[0], NULL, 0, 0);
++				io_uring_prep_cancel64(sqe, 1234, 0);
++				sqe->flags |=3D IOSQE_CQE_SKIP_SUCCESS;
++				io_uring_submit(&ring);
++				early_error_started =3D true;
++			}
++			if (args->early_error =3D=3D ERROR_EARLY_CLOSE_SENDER) {
++				early_error_started =3D true;
++				shutdown(fds[1], SHUT_RDWR);
++				close(fds[1]);
++			}
++		}
++		at +=3D (i+1);
 +
-+errno_cleanup:
-+	ret =3D errno;
-+	close(fd[0]);
-+	close(fd[1]);
++		if (args->wait_each) {
++			ret =3D io_uring_wait_cqes(&ring, &cqe, 1, &timeout, NULL);
++			if (ret) {
++				fprintf(stderr, "wait_each failed: %d\n", ret);
++				ret =3D -1;
++				goto cleanup;
++			}
++			while (io_uring_peek_cqe(&ring, &cqe) =3D=3D 0) {
++				recv_cqe[recv_cqes++] =3D *cqe;
++				if (cqe->flags & IORING_CQE_F_MORE) {
++					io_uring_cqe_seen(&ring, cqe);
++				} else {
++					early_error =3D true;
++					io_uring_cqe_seen(&ring, cqe);
++				}
++			}
++			if (early_error)
++				break;
++		}
++	}
++
++	close(fds[1]);
++
++	/* allow sends to finish */
++	usleep(1000);
++
++	if ((args->stream && !early_error) || recv_cqes < min_cqes) {
++		ret =3D io_uring_wait_cqes(&ring, &cqe, 1, &timeout, NULL);
++		if (ret && ret !=3D -ETIME) {
++			fprintf(stderr, "wait final failed: %d\n", ret);
++			ret =3D -1;
++			goto cleanup;
++		}
++	}
++
++	while (io_uring_peek_cqe(&ring, &cqe) =3D=3D 0) {
++		recv_cqe[recv_cqes++] =3D *cqe;
++		io_uring_cqe_seen(&ring, cqe);
++	}
++
++	ret =3D -1;
++	at =3D &send_buff[0];
++	if (recv_cqes < min_cqes) {
++		fprintf(stderr, "not enough cqes: have=3D%d vs %d\n", recv_cqes, min_c=
+qes);
++		goto cleanup;
++	}
++	for (i =3D 0; i < recv_cqes; i++) {
++		bool const is_last =3D i =3D=3D recv_cqes - 1;
++		int *this_recv;
++
++		cqe =3D &recv_cqe[i];
++
++		if (cqe->res <=3D 0 || (args->stream && is_last)) {
++			if (!is_last) {
++				fprintf(stderr, "not last cqe had error %d\n", i);
++				goto cleanup;
++			}
++
++			switch (args->early_error) {
++			case ERROR_NOT_ENOUGH_BUFFERS:
++				if (cqe->res !=3D -ENOBUFS) {
++					fprintf(stderr,
++						"ERROR_NOT_ENOUGH_BUFFERS: res %d\n", cqe->res);
++					goto cleanup;
++				}
++				break;
++			case ERROR_EARLY_CLOSE_RECEIVER:
++				if (cqe->res !=3D -ECANCELED) {
++					fprintf(stderr,
++						"ERROR_EARLY_CLOSE_RECEIVER: res %d\n", cqe->res);
++					goto cleanup;
++				}
++				break;
++			case ERROR_NONE:
++			case ERROR_EARLY_CLOSE_SENDER:
++				if (cqe->res !=3D 0) {
++					fprintf(stderr, "early error: res %d\n", cqe->res);
++					goto cleanup;
++				}
++				break;
++			};
++
++			if (cqe->flags & IORING_CQE_F_BUFFER) {
++				fprintf(stderr, "final BUFFER flag set\n");
++				goto cleanup;
++			}
++
++			if (cqe->flags & IORING_CQE_F_MORE) {
++				fprintf(stderr, "final MORE flag set\n");
++				goto cleanup;
++			}
++
++			continue;
++		}
++
++		total_recv_bytes +=3D cqe->res;
++		if (!(cqe->flags & IORING_CQE_F_BUFFER)) {
++			fprintf(stderr, "BUFFER flag not set\n");
++			goto cleanup;
++		}
++		if (!(cqe->flags & IORING_CQE_F_MORE)) {
++			fprintf(stderr, "MORE flag not set\n");
++			goto cleanup;
++		}
++		if (cqe->res % 4 !=3D 0) {
++			/*
++			 * doesn't seem to happen in practice, would need some
++			 * work to remove this requirement
++			 */
++			fprintf(stderr, "unexpectedly aligned buffer cqe->res=3D%d\n", cqe->r=
+es);
++			goto cleanup;
++		}
++
++		/* check buffer arrived in order (for tcp) */
++		this_recv =3D recv_buffs[cqe->flags >> 16];
++		for (j =3D 0; args->stream && j < cqe->res / 4; j++) {
++			int sent =3D *at++;
++			int recv =3D *this_recv++;
++
++			if (sent !=3D recv) {
++				fprintf(stderr, "recv=3D%d sent=3D%d\n", recv, sent);
++				goto cleanup;
++			}
++		}
++	}
++
++	if (args->early_error =3D=3D ERROR_NONE && total_recv_bytes < total_sen=
+t_bytes) {
++		fprintf(stderr,
++			"missing recv: recv=3D%d sent=3D%d\n", total_recv_bytes, total_sent_b=
+ytes);
++		goto cleanup;
++	}
++
++	/* check the final one */
++	cqe =3D &recv_cqe[recv_cqes-1];
++
++	ret =3D 0;
++cleanup:
++	for (i =3D 0; i < ARRAY_SIZE(recv_buffs); i++)
++		free(recv_buffs[i]);
++	close(fds[0]);
++	close(fds[1]);
++	io_uring_queue_exit(&ring);
++
 +	return ret;
 +}
-diff --git a/test/helpers.h b/test/helpers.h
-index d0beb93..7cef3c1 100644
---- a/test/helpers.h
-+++ b/test/helpers.h
-@@ -52,6 +52,11 @@ void t_create_file_pattern(const char *file, size_t si=
-ze, char pattern);
-  */
- struct iovec *t_create_buffers(size_t buf_num, size_t buf_size);
-=20
-+/*
-+ * Helper for creating connected socket pairs
-+ */
-+int t_create_socket_pair(int fd[2], bool stream);
 +
- /*
-  * Helper for setting up a ring and checking for user privs
-  */
++int main(int argc, char *argv[])
++{
++	int ret;
++	int loop;
++
++	if (argc > 1)
++		return 0;
++
++	for (loop =3D 0; loop < 32; loop++) {
++		struct args a =3D {
++			.early_error =3D loop & 0x03,
++			.stream =3D loop & 0x04,
++			.recvmsg =3D loop & 0x08,
++			.wait_each =3D loop & 0x10,
++		};
++		ret =3D test(&a);
++		if (ret) {
++			fprintf(stderr,
++				"test stream=3D%d recvmsg=3D%d wait_each=3D%d early_error=3D%d faile=
+d\n",
++				a.stream, a.recvmsg, a.wait_each, a.early_error);
++			return ret;
++		}
++	}
++	return 0;
++}
 --=20
 2.30.2
 
