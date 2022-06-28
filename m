@@ -2,82 +2,217 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4F4FC433EF
-	for <io-uring@archiver.kernel.org>; Tue, 28 Jun 2022 19:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F3A02C433EF
+	for <io-uring@archiver.kernel.org>; Tue, 28 Jun 2022 19:10:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234966AbiF1TGq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 28 Jun 2022 15:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S235111AbiF1TKG (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 28 Jun 2022 15:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235003AbiF1TG3 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Jun 2022 15:06:29 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE3419026;
-        Tue, 28 Jun 2022 12:06:28 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id o9so18895784edt.12;
-        Tue, 28 Jun 2022 12:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KX9jc9OA6lP47XCbfqQxmVV0wzSC5gcouuvPJAXYRUg=;
-        b=OeDPzwRN8aS7Z6+5YNW5bt5XPl4FCy4QSVBhHJqxN329d25togrn5Rb1NNwd76i84L
-         B7xuSHHkGYWmcMb72Ql9C1HHMuyDl0oLivOWUjBnjy+MhG5oI4ttDaHp+DrEtDmzLXKM
-         3I9mJ/zzY+Lu79fKWUWJsefzfuhR0co68/X7oNURoG2oFjlDaa5g3WbCDIDlVQ4V8ki8
-         scEY8bTCO98WA+OJNk4HK44hhbSnySavnduolO8CTBdlYa0NtRhGuBujZ/HTf811tvOr
-         ZwuFRLxfM55Qju0O44wFstrGCn6c8YB6ekWCCR063OnSafM8s0ISjE4kalUi/AhBJCMS
-         srHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KX9jc9OA6lP47XCbfqQxmVV0wzSC5gcouuvPJAXYRUg=;
-        b=qy8tOiWJBQjY4bz0BYh9/SoPlXSSFNlptY44CSRNU91lLn5iHmkUNOrQGDcfp0FHFP
-         38taXzFfh7AABq2fzs0SR+tjH11q+dpnMD77GUEL/1H4xzjTRs8tYuai4jBR+c+6C87N
-         iWjfwlTwB9u16aVCg2uFtwYP6etmGuntz/864ruE4FmdbHpx7sJRq62tM1jKfYfgLTd+
-         WvsAScopOoHLArmIL/y0KALgVd3fv99Of4ROk5tLiqy1VG2MoSsXWaO/SOon+0qsAk0p
-         lfkuE+NE44kY3LNE5nynY5GsLr9RHp0Ewdh1HX/LlHE7bAaV/c0BKQgBluEuTvxFEy4n
-         E/sg==
-X-Gm-Message-State: AJIora9aorrHBFHVV5zDTGNJGKYpynY3X/AOxq3nRJO7qGQzzwQaYj8g
-        Z9EKsffHtto7AqeRC9eMXAvlByVyxd7P3g==
-X-Google-Smtp-Source: AGRyM1sSzYaK9iGyQTc/eWqkAAzNRoyNyfBKpAgLFqlWhy6E8+LGYGZqYRdUO6xlkdXZwdgSpDdelw==
-X-Received: by 2002:aa7:c6d9:0:b0:435:706a:4578 with SMTP id b25-20020aa7c6d9000000b00435706a4578mr25592987eds.24.1656443187198;
-        Tue, 28 Jun 2022 12:06:27 -0700 (PDT)
-Received: from [192.168.8.198] (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id p26-20020a1709061b5a00b00727c6da57cesm103090ejg.147.2022.06.28.12.06.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Jun 2022 12:06:26 -0700 (PDT)
-Message-ID: <4963e756-506b-d705-d00e-183ba468d894@gmail.com>
-Date:   Tue, 28 Jun 2022 20:03:37 +0100
+        with ESMTP id S235307AbiF1TKD (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Jun 2022 15:10:03 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACE61A049;
+        Tue, 28 Jun 2022 12:10:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=Cc:From:To:Date:Message-ID;
+        bh=jzYbi/j3D57gaWt0HxtaLJPk+sHrnWlq2sHekUsBRVk=; b=amkpGHn3VPVJJIurV1r/PTlvlZ
+        9oLWmSVsfLs2fzzbXn6RhEkRFYxNxnU4a+mKV+m99vmznOl2FlP1uKSdB54WPE+J89hu2wVjzfQFF
+        KDsnWdDh4xyZRsKYktuk/u1y0uvELHq0MGQ/s72vAboXEHCJCSqCH3Xu3o+PhMO7YzMv6YTDJF7lE
+        +4jl30rJAgmo2LSf7K4QNTmx3lwuXg2d6igBhr+bbon7+luq+gi3XHSnzEL7QSPbyDAv5xGxrn2IP
+        iZI9Z0Rx/M6BrjHVYlmHTA+CsUIaNO0YXb3Qz6FXQ2z+lbtHdEXnqSitvHwBPDbWareUgxqbfIGVQ
+        mkO8VSPl/fbJ5LBVPCHES5LKjcYuPNTb8m7ghpZH5uYwChMcpG1DFhvqVWHSQS5acRaQgZi1+4wIt
+        c5f6Zhj1PAdyGd0sb+EEIQASngM7ZejL+mJBKExTonQhMemhUQZ3nxsr9Q4r/zLNjLJP/uVbFA0pp
+        QFbV3OcPPM58S/gOpv8HIq8A;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1o6Gb0-0029Pu-7l; Tue, 28 Jun 2022 19:09:58 +0000
+Message-ID: <bd2ad505-4d1c-ff13-de87-b4b3d397e159@samba.org>
+Date:   Tue, 28 Jun 2022 21:09:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [RFC net-next v3 00/29] io_uring zerocopy send
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
-References: <cover.1653992701.git.asml.silence@gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <cover.1653992701.git.asml.silence@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>
+From:   Stefan Metzmacher <metze@samba.org>
+Cc:     io-uring <io-uring@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: For 5.20 or 5.19? net: wire up support for
+ file_operations->uring_cmd()
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 6/28/22 19:56, Pavel Begunkov wrote:
-> The third iteration of patches for zerocopy io_uring sends. I fixed
-> all known issues since the previous version and reshuffled io_uring
-> patches, but the net/ code didn't change much. I think it's ready
-> and will send it as a non-RFC soon.
+Hi Jens,
 
-Please ignore, it's a wrong version and shouldn't be RFC
+I'm wondering what happened to you patch passing file_ops->uring_cmd()
+down to socket layers.
 
+It was part of you work in progress branches...
+
+The latest one I found was this:
+https://git.kernel.dk/cgit/linux-block/commit/?h=nvme-passthru-wip.2&id=28b71b85831f5dd303acae12cfdc89e5aaae442b
+
+And this one just having the generic parts were in a separate commit
+https://git.kernel.dk/cgit/linux-block/commit/?h=io_uring-fops.v7&id=c2ba3bd8940ef0b7d1c09adf4bed01acc8171407
+vs.
+https://git.kernel.dk/cgit/linux-block/commit/?h=io_uring-fops.v7&id=542c38da58841097f97f710d1f05055c2f1039f0
+
+I took this:
+https://git.kernel.dk/cgit/linux-block/commit/?h=io_uring-fops.v7&id=c2ba3bd8940ef0b7d1c09adf4bed01acc8171407
+adapted it on top of v5.19-rc4 and removed stuff that was not really needed.
+
+Even if it's not used in tree, it would be good to have uring_cmd hooks in
+struct proto_ops and struct proto, so that out of tree socket implementations
+like my smbdirect driver are able to hook into it.
+
+What do you think?
+
+https://git.samba.org/?p=metze/linux/wip.git;a=commitdiff;h=7541d40a482a9f57d580ac05254c5a5982edff15
+
+ From 7541d40a482a9f57d580ac05254c5a5982edff15 Mon Sep 17 00:00:00 2001
+From: Jens Axboe <axboe@kernel.dk>
+Date: Fri, 18 Dec 2020 15:12:46 -0700
+Subject: [PATCH] net: wire up support for file_operations->uring_cmd()
+
+Pass it through the proto_ops->uring_cmd() handler, so we can plumb it
+through all the way to the proto->uring_cmd() handler later
+as required.
+
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Stefan Metzmacher <metze@samba.org>
+---
+  include/linux/net.h |  4 ++++
+  include/net/sock.h  |  7 +++++++
+  net/core/sock.c     | 12 ++++++++++++
+  net/socket.c        | 13 +++++++++++++
+  4 files changed, 36 insertions(+)
+
+diff --git a/include/linux/net.h b/include/linux/net.h
+index 12093f4db50c..59d37aade979 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -31,6 +31,7 @@ struct pipe_inode_info;
+  struct inode;
+  struct file;
+  struct net;
++struct io_uring_cmd;
+
+  /* Historically, SOCKWQ_ASYNC_NOSPACE & SOCKWQ_ASYNC_WAITDATA were located
+   * in sock->flags, but moved into sk->sk_wq->flags to be RCU protected.
+@@ -178,6 +179,9 @@ struct proto_ops {
+  	int	 	(*compat_ioctl) (struct socket *sock, unsigned int cmd,
+  				      unsigned long arg);
+  #endif
++	int		(*uring_cmd)(struct socket *sock,
++				     struct io_uring_cmd *ioucmd,
++				     unsigned issue_flags);
+  	int		(*gettstamp) (struct socket *sock, void __user *userstamp,
+  				      bool timeval, bool time32);
+  	int		(*listen)    (struct socket *sock, int len);
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 72ca97ccb460..80fd3f45cd09 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -111,6 +111,7 @@ typedef struct {
+  struct sock;
+  struct proto;
+  struct net;
++struct io_uring_cmd;
+
+  typedef __u32 __bitwise __portpair;
+  typedef __u64 __bitwise __addrpair;
+@@ -1181,6 +1182,9 @@ struct proto {
+
+  	int			(*ioctl)(struct sock *sk, int cmd,
+  					 unsigned long arg);
++	int			(*uring_cmd)(struct sock *sk,
++					struct io_uring_cmd *ioucmd,
++					unsigned int issue_flags);
+  	int			(*init)(struct sock *sk);
+  	void			(*destroy)(struct sock *sk);
+  	void			(*shutdown)(struct sock *sk, int how);
+@@ -1886,6 +1890,9 @@ int sock_common_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+  int sock_common_setsockopt(struct socket *sock, int level, int optname,
+  			   sockptr_t optval, unsigned int optlen);
+
++int sock_common_uring_cmd(struct socket *sock, struct io_uring_cmd *ioucmd,
++			  unsigned int issue_flags);
++
+  void sk_common_release(struct sock *sk);
+
+  /*
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 2ff40dd0a7a6..42b3def01a5f 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -3582,6 +3582,18 @@ int sock_common_setsockopt(struct socket *sock, int level, int optname,
+  }
+  EXPORT_SYMBOL(sock_common_setsockopt);
+
++int sock_common_uring_cmd(struct socket *sock, struct io_uring_cmd *ioucmd,
++			  unsigned int issue_flags)
++{
++	struct sock *sk = sock->sk;
++
++	if (!sk->sk_prot->uring_cmd)
++		return -EOPNOTSUPP;
++
++	return sk->sk_prot->uring_cmd(sk, ioucmd, issue_flags);
++}
++EXPORT_SYMBOL(sock_common_uring_cmd);
++
+  void sk_common_release(struct sock *sk)
+  {
+  	if (sk->sk_prot->destroy)
+diff --git a/net/socket.c b/net/socket.c
+index 2bc8773d9dc5..67701c685921 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -87,6 +87,7 @@
+  #include <linux/xattr.h>
+  #include <linux/nospec.h>
+  #include <linux/indirect_call_wrapper.h>
++#include <linux/io_uring.h>
+
+  #include <linux/uaccess.h>
+  #include <asm/unistd.h>
+@@ -115,6 +116,7 @@ unsigned int sysctl_net_busy_poll __read_mostly;
+  static ssize_t sock_read_iter(struct kiocb *iocb, struct iov_iter *to);
+  static ssize_t sock_write_iter(struct kiocb *iocb, struct iov_iter *from);
+  static int sock_mmap(struct file *file, struct vm_area_struct *vma);
++static int sock_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags);
+
+  static int sock_close(struct inode *inode, struct file *file);
+  static __poll_t sock_poll(struct file *file,
+@@ -158,6 +160,7 @@ static const struct file_operations socket_file_ops = {
+  #ifdef CONFIG_COMPAT
+  	.compat_ioctl = compat_sock_ioctl,
+  #endif
++	.uring_cmd =	sock_uring_cmd,
+  	.mmap =		sock_mmap,
+  	.release =	sock_close,
+  	.fasync =	sock_fasync,
+@@ -1289,6 +1292,16 @@ static long sock_ioctl(struct file *file, unsigned cmd, unsigned long arg)
+  	return err;
+  }
+
++static int sock_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
++{
++	struct socket *sock = ioucmd->file->private_data;
++
++	if (!sock->ops->uring_cmd)
++		return -EOPNOTSUPP;
++
++	return sock->ops->uring_cmd(sock, ioucmd, issue_flags);
++}
++
+  /**
+   *	sock_create_lite - creates a socket
+   *	@family: protocol family (AF_INET, ...)
 -- 
-Pavel Begunkov
+2.34.1
+
