@@ -2,54 +2,56 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AF6AC43334
-	for <io-uring@archiver.kernel.org>; Tue, 28 Jun 2022 15:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8CDACCA479
+	for <io-uring@archiver.kernel.org>; Tue, 28 Jun 2022 15:02:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347679AbiF1PCv (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 28 Jun 2022 11:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S1347692AbiF1PCy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 28 Jun 2022 11:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347674AbiF1PCt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Jun 2022 11:02:49 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA21433E89
-        for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:02:47 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SABx70014952
-        for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:02:47 -0700
+        with ESMTP id S1347686AbiF1PCx (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Jun 2022 11:02:53 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48CA33E8C
+        for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:02:52 -0700 (PDT)
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25SELS8B006984
+        for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:02:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=pyAltF8DYKNcGBUwgWnhf6MefK8rwWmpC3KIBrdgbWM=;
- b=gIsKjSgVCHFLr+AU4YJ/Sfi1sw97O2hx1MsCJkcvTAQewoP7DzFpIS+vDKamWQOfSBVK
- NfSPs1iEeWLT5klSTzLAX5ViE20bNK3U9jz2isB08FG9SFH4ZojiBok/iqdM20ffaLPA
- 91nHSxjWeOmPbUrjZ/BdNwOy3ewHEYyyVaE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3gyp234bp8-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=Q0rmH/1tlJvFVDKrfJqrbwktOSP5EyNGr2kAA/EaMHs=;
+ b=J3hUyIENMYVeE/OMKS/mvqaVWcUx4cLSRrtyimUL4g9wOhpgYCe2JOjuMXivCZFLKu1B
+ slj6vTNYMTzvrZVcd2lpvjcaL1YW7Ahc09ViOeieTCB44MTU7z7fH3UnU9y6EDTMnfx1
+ myw8jV7mSq+iZoLjcxmollcsn31gtf0BzgU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h03ax0a8x-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:02:47 -0700
-Received: from twshared25478.08.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Tue, 28 Jun 2022 08:02:52 -0700
+Received: from twshared17349.03.ash7.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 28 Jun 2022 08:02:45 -0700
+ 15.1.2375.28; Tue, 28 Jun 2022 08:02:51 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 7377F244BBC2; Tue, 28 Jun 2022 08:02:37 -0700 (PDT)
+        id C0AD9244BBC9; Tue, 28 Jun 2022 08:02:37 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH for-next 0/8] io_uring: multishot recv
-Date:   Tue, 28 Jun 2022 08:02:20 -0700
-Message-ID: <20220628150228.1379645-1-dylany@fb.com>
+Subject: [PATCH for-next 2/8] io_uring: restore bgid in io_put_kbuf
+Date:   Tue, 28 Jun 2022 08:02:22 -0700
+Message-ID: <20220628150228.1379645-3-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220628150228.1379645-1-dylany@fb.com>
+References: <20220628150228.1379645-1-dylany@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: gI-4HPkrNOD4AkIK542pbUh5FdzPKWDo
-X-Proofpoint-GUID: gI-4HPkrNOD4AkIK542pbUh5FdzPKWDo
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: ZNo6u6eAUdQg4N5BKKbvCOUnD7ajPoi9
+X-Proofpoint-ORIG-GUID: ZNo6u6eAUdQg4N5BKKbvCOUnD7ajPoi9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-06-28_08,2022-06-28_01,2022-06-22_01
@@ -57,48 +59,44 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This series adds support for multishot recv/recvmsg to io_uring.
+Attempt to restore bgid. This is needed when recycling unused buffers as
+the next time around it will want the correct bgid.
 
-The idea is that generally socket applications will be continually
-enqueuing a new recv() when the previous one completes. This can be
-improved on by allowing the application to queue a multishot receive,
-which will post completions as and when data is available. It uses the
-provided buffers feature to receive new data into a pool provided by
-the application.
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ io_uring/kbuf.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-This is more performant in a few ways:
-* Subsequent receives are queued up straight away without requiring the
-  application to finish a processing loop.
-* If there are more data in the socket (sat the provided buffer
-  size is smaller than the socket buffer) then the data is immediately
-  returned, improving batching.
-*  Poll is only armed once and reused, saving CPU cycles
-
-Running a small network benchmark [1] shows improved QPS of ~6-8% over a ra=
-nge of loads.
-
-[1]: https://github.com/DylanZA/netbench/tree/multishot_recv
-
-Dylan Yudaken (8):
-  io_uring: allow 0 length for buffer select
-  io_uring: restore bgid in io_put_kbuf
-  io_uring: allow iov_len =3D 0 for recvmsg and buffer select
-  io_uring: recycle buffers on error
-  io_uring: clean up io_poll_check_events return values
-  io_uring: add IOU_STOP_MULTISHOT return code
-  io_uring: add IORING_RECV_MULTISHOT flag
-  io_uring: multishot recv
-
- include/uapi/linux/io_uring.h |   5 ++
- io_uring/io_uring.h           |   7 ++
- io_uring/kbuf.c               |   4 +-
- io_uring/kbuf.h               |   8 ++-
- io_uring/net.c                | 119 ++++++++++++++++++++++++++++------
- io_uring/poll.c               |  30 ++++++---
- 6 files changed, 140 insertions(+), 33 deletions(-)
-
-
-base-commit: 755441b9029317d981269da0256e0a7e5a7fe2cc
+diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
+index 3d48f1ab5439..c64f02ea1c30 100644
+--- a/io_uring/kbuf.h
++++ b/io_uring/kbuf.h
+@@ -96,16 +96,20 @@ static inline void io_kbuf_recycle(struct io_kiocb *r=
+eq, unsigned issue_flags)
+ static inline unsigned int __io_put_kbuf_list(struct io_kiocb *req,
+ 					      struct list_head *list)
+ {
++	unsigned int ret =3D IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQ=
+E_BUFFER_SHIFT);
+ 	if (req->flags & REQ_F_BUFFER_RING) {
+-		if (req->buf_list)
++		if (req->buf_list) {
++			req->buf_index =3D req->buf_list->bgid;
+ 			req->buf_list->head++;
++		}
+ 		req->flags &=3D ~REQ_F_BUFFER_RING;
+ 	} else {
++		req->buf_index =3D req->kbuf->bgid;
+ 		list_add(&req->kbuf->list, list);
+ 		req->flags &=3D ~REQ_F_BUFFER_SELECTED;
+ 	}
+=20
+-	return IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQE_BUFFER_SHIFT=
+);
++	return ret;
+ }
+=20
+ static inline unsigned int io_put_kbuf_comp(struct io_kiocb *req)
 --=20
 2.30.2
 
