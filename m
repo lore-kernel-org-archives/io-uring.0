@@ -2,106 +2,98 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 282ABC43334
-	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 13:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DAECDC433EF
+	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 13:20:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbiF3NKr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 30 Jun 2022 09:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S234006AbiF3NUu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 30 Jun 2022 09:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiF3NKq (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 09:10:46 -0400
-Received: from gw2.atmark-techno.com (gw2.atmark-techno.com [35.74.137.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3960D27CC3
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 06:10:43 -0700 (PDT)
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-        by gw2.atmark-techno.com (Postfix) with ESMTPS id 9781220D60
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 22:10:42 +0900 (JST)
-Received: by mail-pg1-f199.google.com with SMTP id 196-20020a6300cd000000b0040c9c64e7e4so9691749pga.9
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 06:10:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KXHvFJE+Ra1Ta2VHsFr1xKZy6p8ZRnSJx8lAp3hz1zo=;
-        b=ftDVV0pH8jADYrX3LiY4w4Dndk1vnNvV7iwhYFBFqrvaauI7Nv8UCj9uyqFc/CzfMe
-         R2SK7YBhUvq5Gbt3SycZnGYBRH7XirNKalDmiMb+jzGp7M004wNP70UWEXKnstVrl9r9
-         VLW1RTN6Ox24UZLVkahsJMzWw54Yr9qLW1QocpLcLwV8etm5ocfSU74ybqYZOpCQeT4e
-         ylkO5ePZ0+R9UlW0Rwj4rE4NGxBrsrTlv/UG7CIgYr7cm2N/RzJr1oCyompZ+Ksuk7wv
-         f0WxU7tGzdJc3Og1Gra27rQuVIF3ANc/vErn7NLYje3yLsFP9gdVEZzcCD7k7brVgbm3
-         8S0g==
-X-Gm-Message-State: AJIora/z4zWqpZivNtcYjqCpwN/VwmQIg/r/f3u4JcNILPbffOg1b6VU
-        KkD1hajY7Qt2F2SZ6grXiHsFat5xd/52Xu7iz5lBUyeR6YVjUS9qyuGvAamFZzMJM8YjovDJK52
-        bCKbSAPcbIoJc2Ya+FfK8
-X-Received: by 2002:a65:5a42:0:b0:411:bf36:eeec with SMTP id z2-20020a655a42000000b00411bf36eeecmr617420pgs.522.1656594641704;
-        Thu, 30 Jun 2022 06:10:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tMjKrlMY81Wg5EQjBFVsz+y9WcW1EPe860eX3wq9j49Vm6Pnuflkj6Pk8bucdksCmDfNFfmw==
-X-Received: by 2002:a65:5a42:0:b0:411:bf36:eeec with SMTP id z2-20020a655a42000000b00411bf36eeecmr617405pgs.522.1656594641501;
-        Thu, 30 Jun 2022 06:10:41 -0700 (PDT)
-Received: from pc-zest.atmarktech (162.198.187.35.bc.googleusercontent.com. [35.187.198.162])
-        by smtp.gmail.com with ESMTPSA id i12-20020a17090a64cc00b001eccb13dfb0sm1913575pjm.4.2022.06.30.06.10.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 Jun 2022 06:10:41 -0700 (PDT)
-Received: from martinet by pc-zest.atmarktech with local (Exim 4.95)
-        (envelope-from <martinet@pc-zest>)
-        id 1o6tuG-0007Ng-Ib;
-        Thu, 30 Jun 2022 22:08:28 +0900
-Date:   Thu, 30 Jun 2022 22:08:18 +0900
-From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
-To:     Filipe Manana <fdmanana@kernel.org>
-Cc:     Nikolay Borisov <nborisov@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        io-uring@vger.kernel.org, linux-btrfs@vger.kernel.org
-Subject: Re: read corruption with qemu master io_uring engine / linux master
- / btrfs(?)
-Message-ID: <Yr2gQh5GaVmTEDW2@atmark-techno.com>
-References: <bd342da1-8c98-eb78-59f1-e3cf537181e3@suse.com>
- <dd55e282-1147-08ae-6b9f-cf3ef672fce8@suse.com>
- <YrueYDXqppHZzOsy@atmark-techno.com>
- <Yrvfqh0eqN0J5T6V@atmark-techno.com>
- <20220629153710.GA379981@falcondesktop>
- <YrzxHbWCR6zhIAcx@atmark-techno.com>
- <Yr1XNe9V3UY/MkDz@atmark-techno.com>
- <20220630104536.GA434846@falcondesktop>
- <Yr2ItqlxeII0sReD@atmark-techno.com>
- <20220630125124.GA446657@falcondesktop>
+        with ESMTP id S233592AbiF3NUt (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 09:20:49 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE312D1D0
+        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 06:20:48 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 25U0LY6D009535
+        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 06:20:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=ZfX4dx+zHt+aWKlD2KZYhsibCaLAXeLuK8UfcMVi5VA=;
+ b=UrR0gtorEBKBaIo/GYkV5z1yCKX9H9KizbmtWxktyKsnl4TurcOdUdThksAtnKWoK4M5
+ AdOJVTHkjyunQ7FgdkaUjn4isFURSXr5pRTuieHdVN/0GD5Qflv31wqQWl9Wsf5MadaK
+ L5vnl90yussuvU7GojV6N+yWcIXiUY7LYrg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3h10tfknbj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 06:20:48 -0700
+Received: from twshared22934.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 30 Jun 2022 06:20:47 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id A33BE25B9454; Thu, 30 Jun 2022 06:20:16 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
+        Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH 5.19] io_uring: fix provided buffer import
+Date:   Thu, 30 Jun 2022 06:20:06 -0700
+Message-ID: <20220630132006.2825668-1-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220630125124.GA446657@falcondesktop>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: CZsFFWgg_0yqUtc9GlDHnS_sm8C4brgx
+X-Proofpoint-ORIG-GUID: CZsFFWgg_0yqUtc9GlDHnS_sm8C4brgx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-06-30_09,2022-06-28_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Filipe Manana wrote on Thu, Jun 30, 2022 at 01:51:24PM +0100:
-> > Please ask if there's any infos I could get you.
-> 
-> Ok, maybe it's page fault related or there's something else besides page faults
-> involved.
-> 
-> Can you dump the subvolume tree like this:
-> 
-> btrfs inspect-internal dump-tree -t 5 /dev/sda 2>&1 | xz -9 > dump.xz
-> 
-> Here the 5 is the ID of the default subvolume. If the test file is on
-> a different subvolume, you'll need to replace 5 with the subvolume's ID.
+io_import_iovec uses the s pointer, but this was changed immediately
+after the iovec was re-imported and so it was imported into the wrong
+place.
 
-Sure thing.
+Change the ordering.
 
-It's 2MB compressed:
-https://gaia.codewreck.org/local/tmp/dump-tree.xz
+Fixes: 2be2eb02e2f5 ("io_uring: ensure reads re-import for selected buffe=
+rs")
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ fs/io_uring.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 5ff2cdb425bc..73ae92a62c2c 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4314,6 +4314,9 @@ static int io_read(struct io_kiocb *req, unsigned i=
+nt issue_flags)
+ 		if (unlikely(ret < 0))
+ 			return ret;
+ 	} else {
++		rw =3D req->async_data;
++		s =3D &rw->s;
++
+ 		/*
+ 		 * Safe and required to re-import if we're using provided
+ 		 * buffers, as we dropped the selected one before retry.
+@@ -4324,8 +4327,6 @@ static int io_read(struct io_kiocb *req, unsigned i=
+nt issue_flags)
+ 				return ret;
+ 		}
+=20
+-		rw =3D req->async_data;
+-		s =3D &rw->s;
+ 		/*
+ 		 * We come here from an earlier attempt, restore our state to
+ 		 * match in case it doesn't. It's cheap enough that we don't
+--=20
+2.30.2
 
-> This is just to look at the file extent layout.
-> Also, then tell me what's the inode number of the file (or just its name,
-> and I'll find out its inode number), and an example file offset and read
-> length that triggers a short read, so that I know where to look at.
-
-There's just a single file in that subvolume, inode 257
-
-> And btw, that dump-tree command will dump all file names, directory names
-> and xattr names and values (if they are human readable) - so if privacy is
-> a concern here, just pass --hide-names to the dump-tree command.
-
-(thanks for the warning)
--- 
-Dominique
