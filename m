@@ -2,102 +2,77 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2A22CCA481
-	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 09:14:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27F33C433EF
+	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 09:17:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234156AbiF3JOu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 30 Jun 2022 05:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43524 "EHLO
+        id S234129AbiF3JRT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 30 Jun 2022 05:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234082AbiF3JOZ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 05:14:25 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7603E205DA
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 02:14:24 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25U7VdOU009935
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 02:14:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=SdW4wVZNo3Qp5TN8YXy0QPxjj9g/Gcv3VdgPGQjq61c=;
- b=Qgfmn4ov32UcWuHtbt5Y83qjLJmhz1nd/HsUtH/IqPOU/nAL0e+NSlO6qJF9il7d4B6L
- 7Peaffv7E+iYhQ4xR/nAi7WZjK4CGxdzW1ShuP0OoNb4NFxKet1ymIdJmI6zCPoO+cT1
- O/cS9lIl/aqE88IwHLmvZwP45yR3XL8yNas= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h17gerfs7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 02:14:23 -0700
-Received: from twshared5640.09.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 30 Jun 2022 02:14:22 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 935A62599FD0; Thu, 30 Jun 2022 02:14:08 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <Kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
-        Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH v2 for-next 02/12] io_uring: restore bgid in io_put_kbuf
-Date:   Thu, 30 Jun 2022 02:12:21 -0700
-Message-ID: <20220630091231.1456789-3-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220630091231.1456789-1-dylany@fb.com>
-References: <20220630091231.1456789-1-dylany@fb.com>
+        with ESMTP id S234077AbiF3JQw (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 05:16:52 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFCC42A2E
+        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 02:15:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id g26so37722860ejb.5
+        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 02:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y13LZdDXwyzI5GpgQWiyhrtCQWzhj5Wyt1IPZ7GzgMA=;
+        b=l0M33G+GUlJm99Af0cR1Eqbz/752L4K7s9KGfnGl6bZrYiDNdn6wTNK726asa5/at6
+         HloISILLCbmArlELoFp6PegD+AL0mxBGzDfp/zRc/yuVAsdMioGr5oTRw/2CQvF0c/VR
+         H2VUjmtzrGTUOMDNIYeRijbDZSaugFygkv09KAJ6DRoDrJ9b84u/TFdtY3kpWjioln/z
+         NlJqwy4fxtHyRpPbMGvv+N3gH+rWRaow8VWH0N8xwDPYf8jfvV5itsFrqAWfxTjcmEqT
+         OsQxUcGBQaU/013yDJ1pX1n8+bSztiVebdECuI/ijaLI9/SVyoj3pHyY9BlZtQW2s6F1
+         moew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=y13LZdDXwyzI5GpgQWiyhrtCQWzhj5Wyt1IPZ7GzgMA=;
+        b=d6OPxRKg/AOD/BoC7o+5UEWG5gH61g2xhvzJOI6A9P+XzezoFRIgSzAX5xjMjFj5Ve
+         8blV5l0H8ai3Sme1VOO6X6x9v1PQesrWKnnUbnq8xJWHnTO68ruD5b+kpQCBLvpB5e9/
+         uhxu7RDpeqpVdQSZCqvSMrVvxaEYnkx/RWf16J3vtN6kHHfmqF7iyHvGyhBvrd+TQGMm
+         QaRjEiGwEmS7UB2errVc0sshv5I8nvVMBiFX/2uoCPNEkhjqEqw3HWeC+2FvHUnFmpzQ
+         SZjqzC/2JR+wiwnp3Ri7XCdwKjYyINplfSmZ8D55YawZ+m1fvHsl+sVA29S5RWhrrFDv
+         CgMg==
+X-Gm-Message-State: AJIora9nQyQU3/sQoPqiXqRPC/AglNfEJgK/yuhchnII7QhAOgXVJkb+
+        99tn+m3/DFrPnFp+g/EzWA3i72UyjyHzRQ==
+X-Google-Smtp-Source: AGRyM1v84Mn6N8WaCZNr7lBF+CktqeiSuv5/sVcFW7TCR+pR/TrS5ipq3eJErKTDZYaYYwU+Ji+eCg==
+X-Received: by 2002:a17:907:7ba1:b0:726:4522:d368 with SMTP id ne33-20020a1709077ba100b007264522d368mr7941417ejc.662.1656580542779;
+        Thu, 30 Jun 2022 02:15:42 -0700 (PDT)
+Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:a3ae])
+        by smtp.gmail.com with ESMTPSA id s10-20020a1709060c0a00b0070beb9401d9sm8884925ejf.171.2022.06.30.02.15.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jun 2022 02:15:42 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
+Subject: [PATCH for-next 0/3] ranged file slot alloc
+Date:   Thu, 30 Jun 2022 10:13:36 +0100
+Message-Id: <cover.1656580293.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 7TCW4TkOGjNh6J5uSyhG6FkHzwgjpigC
-X-Proofpoint-GUID: 7TCW4TkOGjNh6J5uSyhG6FkHzwgjpigC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-06-30_05,2022-06-28_01,2022-06-22_01
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Attempt to restore bgid. This is needed when recycling unused buffers as
-the next time around it will want the correct bgid.
+Add helpers and test ranged file slot allocation feature
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- io_uring/kbuf.h | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Pavel Begunkov (3):
+  update io_uring.h with file slot alloc ranges
+  alloc range helpers
+  test range file alloc
 
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index 3d48f1ab5439..d9adedac5e9d 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -96,16 +96,21 @@ static inline void io_kbuf_recycle(struct io_kiocb *r=
-eq, unsigned issue_flags)
- static inline unsigned int __io_put_kbuf_list(struct io_kiocb *req,
- 					      struct list_head *list)
- {
-+	unsigned int ret =3D IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQ=
-E_BUFFER_SHIFT);
-+
- 	if (req->flags & REQ_F_BUFFER_RING) {
--		if (req->buf_list)
-+		if (req->buf_list) {
-+			req->buf_index =3D req->buf_list->bgid;
- 			req->buf_list->head++;
-+		}
- 		req->flags &=3D ~REQ_F_BUFFER_RING;
- 	} else {
-+		req->buf_index =3D req->kbuf->bgid;
- 		list_add(&req->kbuf->list, list);
- 		req->flags &=3D ~REQ_F_BUFFER_SELECTED;
- 	}
-=20
--	return IORING_CQE_F_BUFFER | (req->buf_index << IORING_CQE_BUFFER_SHIFT=
-);
-+	return ret;
- }
-=20
- static inline unsigned int io_put_kbuf_comp(struct io_kiocb *req)
---=20
-2.30.2
+ src/include/liburing.h          |   3 +
+ src/include/liburing/io_uring.h |  10 ++
+ src/register.c                  |  14 +++
+ test/file-register.c            | 171 ++++++++++++++++++++++++++++++++
+ 4 files changed, 198 insertions(+)
+
+-- 
+2.36.1
 
