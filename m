@@ -2,45 +2,45 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAAECC43334
-	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 16:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D9D5CCA480
+	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 16:50:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235913AbiF3QuC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 30 Jun 2022 12:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S235832AbiF3QuD (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 30 Jun 2022 12:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235832AbiF3QuB (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 12:50:01 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155D82FFD3
+        with ESMTP id S235869AbiF3QuC (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 12:50:02 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 773B531374
         for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 09:50:01 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25UGiISm032063
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 25UEqUT0009483
         for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 09:50:00 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=irR6SvpVZVmqNleVY//aMIwUIQ3Atk0PQieAabl6Uxg=;
- b=qMlpcEEA5fLCbgRbBxMffR7ffeyE56p3hkLoBwgyZBYRmejFbJaWvjja7ExjZZRvW8Nw
- G6KCZC8LBrX2b2xFvEW2rd6vifrHwoUuyCR8Dcws2KvyGleGSQxEYD70nfKsrNJbvfsT
- jdGmxarmqhtoSM2KRfBg+VKn6p2ImloOh2E= 
+ bh=kwN9dS1xhM6SCKWqFGDi17BlRioTEFB/ozRN/PThJXM=;
+ b=GGDmYmzdYFHXtdJ/X2my8lRJDSU+ZIVtZNTGjoYlbZdm2Hq1tMjOAkhAQCQoYuxNp9nO
+ KaSP1eXWkTo+FAVODPwbK1nfjJtHk5LwcW9m9s1P34KUdIbLuMV7N+NjdT1or//hUUEb
+ yNb8N/6me7hFBcpngtyrzTwfN85ox9hNIS4= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h12ug4p4w-1
+        by m0001303.ppops.net (PPS) with ESMTPS id 3h10tfn8ev-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 09:50:00 -0700
-Received: from twshared17349.03.ash7.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+Received: from twshared18317.08.ash9.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 30 Jun 2022 09:50:00 -0700
+ 15.1.2375.28; Thu, 30 Jun 2022 09:49:58 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id CCD3825D4CF9; Thu, 30 Jun 2022 09:49:26 -0700 (PDT)
+        id C218125D4D2F; Thu, 30 Jun 2022 09:49:29 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     <io-uring@vger.kernel.org>
 CC:     <axboe@kernel.dk>, <asml.silence@gmail.com>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH v3 liburing 4/7] add IORING_RECV_MULTISHOT docs
-Date:   Thu, 30 Jun 2022 09:49:15 -0700
-Message-ID: <20220630164918.3958710-5-dylany@fb.com>
+Subject: [PATCH v3 liburing 7/7] add accept with overflow test
+Date:   Thu, 30 Jun 2022 09:49:18 -0700
+Message-ID: <20220630164918.3958710-8-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220630164918.3958710-1-dylany@fb.com>
 References: <20220630164918.3958710-1-dylany@fb.com>
@@ -48,8 +48,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: vc8YAIbHGS89CKwyAflKSHB9181G-fS3
-X-Proofpoint-ORIG-GUID: vc8YAIbHGS89CKwyAflKSHB9181G-fS3
+X-Proofpoint-GUID: dM1uYfqVuv__QbBI29OGrM_EHs1HihP4
+X-Proofpoint-ORIG-GUID: dM1uYfqVuv__QbBI29OGrM_EHs1HihP4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-06-30_12,2022-06-28_01,2022-06-22_01
@@ -57,127 +57,242 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-add appropriate docs to io_uring_prep_recvmsg/io_uring_prep_recv man page=
-s
+add test to exercise the overflow codepath for multishot accept.
+this doesn't actually fail previously, but does at least exerceise
+the codepath and ensure that some invariants hold wrt flags and
+IORING_CQE_F_MORE.
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- man/io_uring_prep_recv.3              | 22 ++++++++++++++++++++++
- man/io_uring_prep_recv_multishot.3    |  1 +
- man/io_uring_prep_recvmsg.3           | 20 ++++++++++++++++++++
- man/io_uring_prep_recvmsg_multishot.3 |  1 +
- 4 files changed, 44 insertions(+)
- create mode 120000 man/io_uring_prep_recv_multishot.3
- create mode 120000 man/io_uring_prep_recvmsg_multishot.3
+ test/accept.c | 129 +++++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 101 insertions(+), 28 deletions(-)
 
-diff --git a/man/io_uring_prep_recv.3 b/man/io_uring_prep_recv.3
-index 993e331..bcd3145 100644
---- a/man/io_uring_prep_recv.3
-+++ b/man/io_uring_prep_recv.3
-@@ -14,6 +14,12 @@ io_uring_prep_recv \- prepare a recv request
- .BI "                        void *" buf ","
- .BI "                        size_t " len ","
- .BI "                        int " flags ");"
-+.PP
-+.BI "void io_uring_prep_recv_multishot(struct io_uring_sqe *" sqe ","
-+.BI "                                  int " sockfd ","
-+.BI "                                  void *" buf ","
-+.BI "                                  size_t " len ","
-+.BI "                                  int " flags ");"
- .fi
- .SH DESCRIPTION
- .PP
-@@ -36,6 +42,22 @@ This function prepares an async
- request. See that man page for details on the arguments specified to thi=
-s
- prep helper.
+diff --git a/test/accept.c b/test/accept.c
+index 77e3ebc..0463173 100644
+--- a/test/accept.c
++++ b/test/accept.c
+@@ -24,6 +24,9 @@
+ #include "liburing.h"
 =20
-+The multishot version allows the application to issue a single receive r=
-equest,
-+which repeatedly posts a CQE when data is available. It requires length =
-to be 0
-+, the
-+.B IOSQE_BUFFER_SELECT
-+flag to be set and no
-+.B MSG_WAITALL
-+flag to be set.
-+Therefore each CQE will take a buffer out of a provided buffer pool for =
-receiving.
-+The application should check the flags of each CQE, regardless of it's r=
-esult.
-+If a posted CQE does not have the
-+.B IORING_CQE_F_MORE
-+flag set then the multishot receive will be done and the application sho=
-uld issue a
-+new request.
-+Multishot variants are available since kernel 5.20.
+ #define MAX_FDS 32
++#define NOP_USER_DATA (1LLU << 50)
++#define INITIAL_USER_DATA 1000
 +
-+
- After calling this function, additional io_uring internal modifier flags
- may be set in the SQE
- .I off
-diff --git a/man/io_uring_prep_recv_multishot.3 b/man/io_uring_prep_recv_=
-multishot.3
-new file mode 120000
-index 0000000..71fe277
---- /dev/null
-+++ b/man/io_uring_prep_recv_multishot.3
-@@ -0,0 +1 @@
-+io_uring_prep_recv.3
-\ No newline at end of file
-diff --git a/man/io_uring_prep_recvmsg.3 b/man/io_uring_prep_recvmsg.3
-index 8c49411..24c68ce 100644
---- a/man/io_uring_prep_recvmsg.3
-+++ b/man/io_uring_prep_recvmsg.3
-@@ -15,6 +15,11 @@ io_uring_prep_recvmsg \- prepare a recvmsg request
- .BI "                           int " fd ","
- .BI "                           struct msghdr *" msg ","
- .BI "                           unsigned " flags ");"
-+.PP
-+.BI "void io_uring_prep_recvmsg_multishot(struct io_uring_sqe *" sqe ","
-+.BI "                                     int " fd ","
-+.BI "                                     struct msghdr *" msg ","
-+.BI "                                     unsigned " flags ");"
- .fi
- .SH DESCRIPTION
- .PP
-@@ -37,6 +42,21 @@ This function prepares an async
- request. See that man page for details on the arguments specified to thi=
-s
- prep helper.
+ static int no_accept;
+ static int no_accept_multi;
 =20
-+The multishot version allows the application to issue a single receive r=
-equest,
-+which repeatedly posts a CQE when data is available. It requires length =
-to be 0
-+, the
-+.B IOSQE_BUFFER_SELECT
-+flag to be set and no
-+.B MSG_WAITALL
-+flag to be set.
-+Therefore each CQE will take a buffer out of a provided buffer pool for =
-receiving.
-+The application should check the flags of each CQE, regardless of it's r=
-esult.
-+If a posted CQE does not have the
-+.B IORING_CQE_F_MORE
-+flag set then the multishot receive will be done and the application sho=
-uld issue a
-+new request.
-+Multishot variants are available since kernel 5.20.
+@@ -39,6 +42,7 @@ struct accept_test_args {
+ 	bool queue_accept_before_connect;
+ 	bool multishot;
+ 	int extra_loops;
++	bool overflow;
+ };
+=20
+ static void close_fds(int fds[], int nr)
+@@ -86,6 +90,24 @@ static void queue_recv(struct io_uring *ring, int fd, =
+bool fixed)
+ 		sqe->flags |=3D IOSQE_FIXED_FILE;
+ }
+=20
++static void queue_accept_multishot(struct io_uring *ring, int fd,
++				   int idx, bool fixed)
++{
++	struct io_uring_sqe *sqe =3D io_uring_get_sqe(ring);
++	int ret;
 +
- After calling this function, additional io_uring internal modifier flags
- may be set in the SQE
- .I off
-diff --git a/man/io_uring_prep_recvmsg_multishot.3 b/man/io_uring_prep_re=
-cvmsg_multishot.3
-new file mode 120000
-index 0000000..cd9566f
---- /dev/null
-+++ b/man/io_uring_prep_recvmsg_multishot.3
-@@ -0,0 +1 @@
-+io_uring_prep_recvmsg.3
-\ No newline at end of file
++	if (fixed)
++		io_uring_prep_multishot_accept_direct(sqe, fd,
++						NULL, NULL,
++						0);
++	else
++		io_uring_prep_multishot_accept(sqe, fd, NULL, NULL, 0);
++
++	io_uring_sqe_set_data64(sqe, idx);
++	ret =3D io_uring_submit(ring);
++	assert(ret !=3D -1);
++}
++
+ static void queue_accept_conn(struct io_uring *ring, int fd,
+ 			      struct accept_test_args args)
+ {
+@@ -93,40 +115,51 @@ static void queue_accept_conn(struct io_uring *ring,=
+ int fd,
+ 	int ret;
+ 	int fixed_idx =3D args.fixed ? 0 : -1;
+ 	int count =3D 1 + args.extra_loops;
+-	bool multishot =3D args.multishot;
++
++	if (args.multishot) {
++		queue_accept_multishot(ring, fd, INITIAL_USER_DATA, args.fixed);
++		return;
++	}
+=20
+ 	while (count--) {
+ 		sqe =3D io_uring_get_sqe(ring);
+ 		if (fixed_idx < 0) {
+-			if (!multishot)
+-				io_uring_prep_accept(sqe, fd, NULL, NULL, 0);
+-			else
+-				io_uring_prep_multishot_accept(sqe, fd, NULL,
+-							       NULL, 0);
++			io_uring_prep_accept(sqe, fd, NULL, NULL, 0);
+ 		} else {
+-			if (!multishot)
+-				io_uring_prep_accept_direct(sqe, fd, NULL, NULL,
+-							    0, fixed_idx);
+-			else
+-				io_uring_prep_multishot_accept_direct(sqe, fd,
+-								      NULL, NULL,
+-								      0);
++			io_uring_prep_accept_direct(sqe, fd, NULL, NULL,
++						    0, fixed_idx);
+ 		}
+-
+ 		ret =3D io_uring_submit(ring);
+ 		assert(ret !=3D -1);
+ 	}
+ }
+=20
+-static int accept_conn(struct io_uring *ring, int fixed_idx, bool multis=
+hot)
++static int accept_conn(struct io_uring *ring, int fixed_idx, int *multis=
+hot, int fd)
+ {
+-	struct io_uring_cqe *cqe;
++	struct io_uring_cqe *pcqe;
++	struct io_uring_cqe cqe;
+ 	int ret;
+=20
+-	ret =3D io_uring_wait_cqe(ring, &cqe);
+-	assert(!ret);
+-	ret =3D cqe->res;
+-	io_uring_cqe_seen(ring, cqe);
++	do {
++		ret =3D io_uring_wait_cqe(ring, &pcqe);
++		assert(!ret);
++		cqe =3D *pcqe;
++		io_uring_cqe_seen(ring, pcqe);
++	} while (cqe.user_data =3D=3D NOP_USER_DATA);
++
++	if (*multishot) {
++		if (!(cqe.flags & IORING_CQE_F_MORE)) {
++			(*multishot)++;
++			queue_accept_multishot(ring, fd, *multishot, fixed_idx =3D=3D 0);
++		} else {
++			if (cqe.user_data !=3D *multishot) {
++				fprintf(stderr, "received multishot after told done!\n");
++				return -ECANCELED;
++			}
++		}
++	}
++
++	ret =3D cqe.res;
+=20
+ 	if (fixed_idx >=3D 0) {
+ 		if (ret > 0) {
+@@ -203,6 +236,32 @@ static int set_client_fd(struct sockaddr_in *addr)
+ 	return fd;
+ }
+=20
++static void cause_overflow(struct io_uring *ring)
++{
++	int i, ret;
++
++	for (i =3D 0; i < *ring->cq.kring_entries; i++) {
++		struct io_uring_sqe *sqe =3D io_uring_get_sqe(ring);
++
++		io_uring_prep_nop(sqe);
++		io_uring_sqe_set_data64(sqe, NOP_USER_DATA);
++		ret =3D io_uring_submit(ring);
++		assert(ret !=3D -1);
++	}
++
++}
++
++static void clear_overflow(struct io_uring *ring)
++{
++	struct io_uring_cqe *cqe;
++
++	while (!io_uring_peek_cqe(ring, &cqe)) {
++		if (cqe->user_data !=3D NOP_USER_DATA)
++			break;
++		io_uring_cqe_seen(ring, cqe);
++	}
++}
++
+ static int test_loop(struct io_uring *ring,
+ 		     struct accept_test_args args,
+ 		     int recv_s0,
+@@ -215,15 +274,22 @@ static int test_loop(struct io_uring *ring,
+ 	bool multishot =3D args.multishot;
+ 	uint32_t multishot_mask =3D 0;
+ 	int nr_fds =3D multishot ? MAX_FDS : 1;
++	int multishot_idx =3D multishot ? INITIAL_USER_DATA : 0;
+=20
+-	for (i =3D 0; i < nr_fds; i++)
++	if (args.overflow)
++		cause_overflow(ring);
++
++	for (i =3D 0; i < nr_fds; i++) {
+ 		c_fd[i] =3D set_client_fd(addr);
++		if (args.overflow && i =3D=3D nr_fds / 2)
++			clear_overflow(ring);
++	}
+=20
+ 	if (!args.queue_accept_before_connect)
+ 		queue_accept_conn(ring, recv_s0, args);
+=20
+ 	for (i =3D 0; i < nr_fds; i++) {
+-		s_fd[i] =3D accept_conn(ring, fixed ? 0 : -1, multishot);
++		s_fd[i] =3D accept_conn(ring, fixed ? 0 : -1, &multishot_idx, recv_s0)=
+;
+ 		if (s_fd[i] =3D=3D -EINVAL) {
+ 			if (args.accept_should_error)
+ 				goto out;
+@@ -527,14 +593,15 @@ static int test_accept(int count, bool before)
+ 	return ret;
+ }
+=20
+-static int test_multishot_accept(int count, bool before)
++static int test_multishot_accept(int count, bool before, bool overflow)
+ {
+ 	struct io_uring m_io_uring;
+ 	int ret;
+ 	struct accept_test_args args =3D {
+ 		.queue_accept_before_connect =3D before,
+ 		.multishot =3D true,
+-		.extra_loops =3D count - 1
++		.extra_loops =3D count - 1,
++		.overflow =3D overflow
+ 	};
+=20
+ 	if (no_accept_multi)
+@@ -779,15 +846,21 @@ int main(int argc, char *argv[])
+ 		return ret;
+ 	}
+=20
+-	ret =3D test_multishot_accept(1, false);
++	ret =3D test_multishot_accept(1, true, true);
++	if (ret) {
++		fprintf(stderr, "test_multishot_accept(1, false, true) failed\n");
++		return ret;
++	}
++
++	ret =3D test_multishot_accept(1, false, false);
+ 	if (ret) {
+-		fprintf(stderr, "test_multishot_accept(1, false) failed\n");
++		fprintf(stderr, "test_multishot_accept(1, false, false) failed\n");
+ 		return ret;
+ 	}
+=20
+-	ret =3D test_multishot_accept(1, true);
++	ret =3D test_multishot_accept(1, true, false);
+ 	if (ret) {
+-		fprintf(stderr, "test_multishot_accept(1, true) failed\n");
++		fprintf(stderr, "test_multishot_accept(1, true, false) failed\n");
+ 		return ret;
+ 	}
+=20
 --=20
 2.30.2
 
