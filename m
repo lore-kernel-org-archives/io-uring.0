@@ -2,57 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77B25CCA481
-	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 14:27:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F07AC433EF
+	for <io-uring@archiver.kernel.org>; Thu, 30 Jun 2022 14:27:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235520AbiF3O1u (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S235716AbiF3O1u (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 30 Jun 2022 10:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237219AbiF3O1b (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 10:27:31 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D8C7B35E
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 07:10:58 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id e28so22350191wra.0
-        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 07:10:57 -0700 (PDT)
+        with ESMTP id S237231AbiF3O1c (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Jun 2022 10:27:32 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2017F7BD12
+        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 07:11:00 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id i25so21988594wrc.13
+        for <io-uring@vger.kernel.org>; Thu, 30 Jun 2022 07:10:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iv9sCq1Dh8AT+NVbMp9Aj2CUQWJDfbOKsX2SJqvDIl4=;
-        b=dE9k0pS6IjzW/AVEDtl7LNSTBZuH+yN+gnl3bITkD1RVNHoSUeCgF5FDjwa5RulgQE
-         /ZQoiE+9M05QacQSxF/W7zvMbcXP10EkUROqQ7keafWFTJyCdOOMA85xx0k0TYvn9oF8
-         sccMflHhfMSoxb2IWzqFyAVI0rHYxkMrtIWs4hy3NBxoeEAf2fT8RK06rOus4Qxc/v2U
-         VmqeNNMQViiZA1gYsE4ozyIguAroSW4fSVxqN+RIy9YS22MJ7+EjDEtOxLDCmv74T8vZ
-         OgrVeWylsdzTJ4eN4hdB/TuuHpi7uBwdFrmihsoLatKVm2lqV/zkXGnEhUC6VH9goZA3
-         y/YA==
+        bh=g5eL2S5tzNaGAY7wK7p0NilJ83pONxXsgwXX15Q/gZE=;
+        b=q1T049KxKm9YY9lx1FbkrpRt3OryvlkVmLAJo5WD8U4io+k2+owrQkCmgZTUP6l0qL
+         3IOkAQJ+t4vAN61szcxPuV682zOL+GXYZq8judfwsBeKREth0DR55rQPDe87hGh1LTuA
+         KVu4HN2oFPpM9QurEgLCPIodljahiS1y12tia3qVd3tohqiiPfO8WHDXhamGitHxqEvt
+         plNx/P7iJutBBn/rtVl6zDd7ZM+aW4hI6JYxEyurNX5JiV0KiIp16S7sJtIn1QxdsPW8
+         h0B3fEHPVv0V11B5HRaRPb+nAqanzU9i/w6yBxthhba4m9CoDEWDmKPuFkXckpQXRacO
+         rHow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iv9sCq1Dh8AT+NVbMp9Aj2CUQWJDfbOKsX2SJqvDIl4=;
-        b=SpbYG87oE0ozbIWuwft3iFQmEMfhQ1osTKRHEbe4WxgDL/pAL2gKSNRCNwnHFpSYRe
-         L9kK2qXjGiIN06bb/xp99EgQ1lIA/ve39iWMVfnTC5IuEMEIjpoFIcSmtaYE/a4ODWFH
-         vcWdioCQ6f4kTLMDA+nW/2wm+l0IPCXFa7Tpfl68aTQeNAwY7hoQfoCruPvbqx/5E/J6
-         Lv+0RX1azy5+uy8ROhkKre50cL0twFAX2BUr5AVA/dcTFk+4vXhO9ABHA+lsoo85mB79
-         CZj82e3dmHtCwt+YqLosg5DiIiWXdaadsfJSKaIJIhdrrrZdw3dcsASS5O15FvX/G5DC
-         Lxnw==
-X-Gm-Message-State: AJIora8h/uujNcIbA+hH4y631ahwJRcwObp8dHGXZ1/W0xLN7NVhQkak
-        7mwCdOLdy+Jwm/O+44VugJ0zm9Uk7RIdiQ==
-X-Google-Smtp-Source: AGRyM1u2Ww9dxK7CycMWG+T8SuS+t/QgBZoZyYnuEMZS2Mu6KAmWQh+kBcTJTJeqgjiW7N+oR6QF3g==
-X-Received: by 2002:a05:6000:10c4:b0:21b:8ea4:a27a with SMTP id b4-20020a05600010c400b0021b8ea4a27amr8642291wrx.575.1656598238918;
-        Thu, 30 Jun 2022 07:10:38 -0700 (PDT)
+        bh=g5eL2S5tzNaGAY7wK7p0NilJ83pONxXsgwXX15Q/gZE=;
+        b=IEliM5wMOG+J71Jz959S4sma0ZSZIoQLxtHY67V3bEuzE+hnQ7/OAO7TJpmTB2IuvG
+         znmedAfhjFwfsGItq/lOimOUUWsCJpWMmLOV3erpv0eQR9iArTCGyGTEs4RfUfCZOUaH
+         VvJZdpU5luDPbbSaD/EaVzljG3LDH/B7JfC9qQWoPrEkHfOoYghgqQKNViXQYmF28K6j
+         Yz4oOrOCK4HT2A7eIQITGoUMnt893O8uQl//A8lrQeBYbv/LDV16p0csBsxQRLJyD3be
+         hhWrkqMCxbmA1N4u1iPXdLcwVfA4IwV36y586DfW+hSJwQ3EFg2M3OaBumEispAfeajg
+         nCaw==
+X-Gm-Message-State: AJIora/OIgfX9OwgWB8jBF8lel0l3PhAD33jmFf/2XxRIFtpf6/aSQwl
+        ldB74gW6WttJH3C7x4ReFfy3ogm3iLO6oQ==
+X-Google-Smtp-Source: AGRyM1tptsiNqpamvjxiNGi/d/Sl3W6Idsfbxk6Z3h3GfULIXQN9NZgK2HmO4DVGTVNJmxoxojqm5A==
+X-Received: by 2002:a5d:470c:0:b0:21b:812e:1b70 with SMTP id y12-20020a5d470c000000b0021b812e1b70mr8348868wrq.147.1656598241893;
+        Thu, 30 Jun 2022 07:10:41 -0700 (PDT)
 Received: from 127.0.0.1localhost (82-132-232-9.dab.02.net. [82.132.232.9])
-        by smtp.gmail.com with ESMTPSA id ay29-20020a05600c1e1d00b003a03be171b1sm3741392wmb.43.2022.06.30.07.10.37
+        by smtp.gmail.com with ESMTPSA id ay29-20020a05600c1e1d00b003a03be171b1sm3741392wmb.43.2022.06.30.07.10.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jun 2022 07:10:38 -0700 (PDT)
+        Thu, 30 Jun 2022 07:10:41 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH liburing v2 2/5] alloc range helpers
-Date:   Thu, 30 Jun 2022 15:10:14 +0100
-Message-Id: <fc7d5dec683c2f989f2bf33906b22d820b4d175e.1656597976.git.asml.silence@gmail.com>
+Subject: [PATCH liburing v2 4/5] tests: print file-register errors to stderr
+Date:   Thu, 30 Jun 2022 15:10:16 +0100
+Message-Id: <83964670becc86df23d1db74b6429337c87e3c9f.1656597976.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1656597976.git.asml.silence@gmail.com>
 References: <cover.1656597976.git.asml.silence@gmail.com>
@@ -64,57 +64,143 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- src/include/liburing.h |  3 +++
- src/liburing.map       |  1 +
- src/register.c         | 14 ++++++++++++++
- 3 files changed, 18 insertions(+)
+ test/file-register.c | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/src/include/liburing.h b/src/include/liburing.h
-index bb2fb87..45b4da0 100644
---- a/src/include/liburing.h
-+++ b/src/include/liburing.h
-@@ -186,6 +186,9 @@ int io_uring_unregister_buf_ring(struct io_uring *ring, int bgid);
- int io_uring_register_sync_cancel(struct io_uring *ring,
- 				 struct io_uring_sync_cancel_reg *reg);
+diff --git a/test/file-register.c b/test/file-register.c
+index 6a9cbb1..4004a81 100644
+--- a/test/file-register.c
++++ b/test/file-register.c
+@@ -840,31 +840,31 @@ int main(int argc, char *argv[])
  
-+int io_uring_register_file_alloc_range(struct io_uring *ring,
-+					unsigned off, unsigned len);
-+
- /*
-  * Helper for the peek/wait single cqe functions. Exported because of that,
-  * but probably shouldn't be used directly in an application.
-diff --git a/src/liburing.map b/src/liburing.map
-index a487865..318d3d7 100644
---- a/src/liburing.map
-+++ b/src/liburing.map
-@@ -59,4 +59,5 @@ LIBURING_2.2 {
- LIBURING_2.3 {
- 	global:
- 		io_uring_register_sync_cancel;
-+		io_uring_register_file_alloc_range;
- } LIBURING_2.2;
-diff --git a/src/register.c b/src/register.c
-index f2b1026..ee370d6 100644
---- a/src/register.c
-+++ b/src/register.c
-@@ -352,3 +352,17 @@ int io_uring_register_sync_cancel(struct io_uring *ring,
- 	return ____sys_io_uring_register(ring->ring_fd,
- 					 IORING_REGISTER_SYNC_CANCEL, reg, 1);
- }
-+
-+int io_uring_register_file_alloc_range(struct io_uring *ring,
-+					unsigned off, unsigned len)
-+{
-+	struct io_uring_file_index_range range;
-+
-+	memset(&range, 0, sizeof(range));
-+	range.off = off;
-+	range.len = len;
-+
-+	return ____sys_io_uring_register(ring->ring_fd,
-+					 IORING_REGISTER_FILE_ALLOC_RANGE,
-+					 &range, 0);
-+}
+ 	ret = io_uring_queue_init(8, &ring, 0);
+ 	if (ret) {
+-		printf("ring setup failed\n");
++		fprintf(stderr, "ring setup failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_basic(&ring, 0);
+ 	if (ret) {
+-		printf("test_basic failed\n");
++		fprintf(stderr, "test_basic failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_basic(&ring, 1);
+ 	if (ret) {
+-		printf("test_basic failed\n");
++		fprintf(stderr, "test_basic failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_basic_many(&ring);
+ 	if (ret) {
+-		printf("test_basic_many failed\n");
++		fprintf(stderr, "test_basic_many failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_sparse(&ring);
+ 	if (ret) {
+-		printf("test_sparse failed\n");
++		fprintf(stderr, "test_sparse failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+@@ -873,79 +873,79 @@ int main(int argc, char *argv[])
+ 
+ 	ret = test_additions(&ring);
+ 	if (ret) {
+-		printf("test_additions failed\n");
++		fprintf(stderr, "test_additions failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_removals(&ring);
+ 	if (ret) {
+-		printf("test_removals failed\n");
++		fprintf(stderr, "test_removals failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_replace(&ring);
+ 	if (ret) {
+-		printf("test_replace failed\n");
++		fprintf(stderr, "test_replace failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_replace_all(&ring);
+ 	if (ret) {
+-		printf("test_replace_all failed\n");
++		fprintf(stderr, "test_replace_all failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_grow(&ring);
+ 	if (ret) {
+-		printf("test_grow failed\n");
++		fprintf(stderr, "test_grow failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_shrink(&ring);
+ 	if (ret) {
+-		printf("test_shrink failed\n");
++		fprintf(stderr, "test_shrink failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_zero(&ring);
+ 	if (ret) {
+-		printf("test_zero failed\n");
++		fprintf(stderr, "test_zero failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_huge(&ring);
+ 	if (ret) {
+-		printf("test_huge failed\n");
++		fprintf(stderr, "test_huge failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_skip(&ring);
+ 	if (ret) {
+-		printf("test_skip failed\n");
++		fprintf(stderr, "test_skip failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_sparse_updates();
+ 	if (ret) {
+-		printf("test_sparse_updates failed\n");
++		fprintf(stderr, "test_sparse_updates failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_fixed_removal_ordering();
+ 	if (ret) {
+-		printf("test_fixed_removal_ordering failed\n");
++		fprintf(stderr, "test_fixed_removal_ordering failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_mixed_af_unix();
+ 	if (ret) {
+-		printf("test_mixed_af_unix failed\n");
++		fprintf(stderr, "test_mixed_af_unix failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+ 	ret = test_partial_register_fail();
+ 	if (ret) {
+-		printf("test_partial_register_fail failed\n");
++		fprintf(stderr, "test_partial_register_fail failed\n");
+ 		return T_EXIT_FAIL;
+ 	}
+ 
 -- 
 2.36.1
 
