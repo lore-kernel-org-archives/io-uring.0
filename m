@@ -2,78 +2,125 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2D10C43334
-	for <io-uring@archiver.kernel.org>; Tue,  5 Jul 2022 14:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7931CCA47F
+	for <io-uring@archiver.kernel.org>; Tue,  5 Jul 2022 15:01:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbiGEOjj (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 5 Jul 2022 10:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S229617AbiGEPBw (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Jul 2022 11:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiGEOja (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Jul 2022 10:39:30 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017E2638B
-        for <io-uring@vger.kernel.org>; Tue,  5 Jul 2022 07:39:28 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id z12-20020a17090a7b8c00b001ef84000b8bso6708004pjc.1
-        for <io-uring@vger.kernel.org>; Tue, 05 Jul 2022 07:39:28 -0700 (PDT)
+        with ESMTP id S231801AbiGEPBu (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Jul 2022 11:01:50 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D2B14D09;
+        Tue,  5 Jul 2022 08:01:49 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id b26so17991116wrc.2;
+        Tue, 05 Jul 2022 08:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:in-reply-to:references:subject:message-id:date:mime-version
-         :content-transfer-encoding;
-        bh=6k8uqKlUIuUIeNqOJu1FdYyV4HyvJqSgzw2oaiGqpnU=;
-        b=b8ZoimV+wrQre/MrVIgVYmp9cN9PSx6nsWecMGY0EWj5V1QHQTkweN/D/BG9m+/z0V
-         V4ifBRwVPzECNkIGRSxlpoBT8tQs8UtwbTI4I5XixCh1borMq3o2zYCOWPQTJWo1mF0F
-         9wQZIgLyvr1r4V/vdy0l81l/YZy4DpM6yLzyq2ejK8PHO5wPWrhDceK3rB6LiTQPC5Vz
-         FiH/H2Rk1B1n5goU9QlfYwiFCqLm6uWl/fZC/DNgCMLVUeR7qKBre8DzzjhOp0eAmuhQ
-         cmFW+7rE7/YMbHbv6k1eSMf0J0T1a1CLiCsNyCXxYkE4mU5Lq9o8KM7ucY+csHkb7o7u
-         XHbA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=aRSWPFJdUal4sFDyAFcRSHQQ/M3F+xYGlhF06C7Lf5E=;
+        b=RpkqCmLRhozjhYWzxW++3rhKUll3T+ICVb4zS6YNhNwRZX9MzhleXzAos7D7y6kN7u
+         +UV2vsl1Z5EZERZbQvJyE3VJOnCtjjLRahsHgr9xK7mU80yNVtuUqgOtvtTciPFTajsg
+         TFeMR9IH0vUqButRQDALFTzUA2iDaOG1wkPBMH//PWk6GmfoE3nUaScu8j/smM9roA8l
+         Uo50it4z5qg84LP2UXE5bjUcv9BMTg01ohdcauUK+gYJi9snniD9Q2EEPbGHawE8RlJW
+         RW1v63M00TSsMBchemmJq8dgMBu13Ww0ZjVcTYmaC9LHGy1CtIOnvtIFFDevIKmKd31e
+         xQew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=6k8uqKlUIuUIeNqOJu1FdYyV4HyvJqSgzw2oaiGqpnU=;
-        b=kjH5AdtWtcTFzBTUHrByGYU/maOMEVyq119u5V2SuM25iPnyS4RHYLgdT+LQCXMFFo
-         81XL4TQT3U/JRDz7yBmdtikMTXTzXuj8EUSEY1nItWEcRzzVZxmWOszmQHQwBuzfRKXR
-         +P+EL9zAZaqgaDWE9YiFS4f55zikeM5mW8ectM+6/yrbq8qgfiU44jMmUTARWZ2efYta
-         RwO54BBI9rWaUV2YPoxXnIItR4kmAwNQNShBKiq9FQcZpRMXrkhYlZ/eSHiU+mLJ+FmX
-         8AW2QlY83wHHDUwM64i1WK6jO/t+zAzMSAVc86FRrAB807AmGQQMjRTy2vonvwdGoRAy
-         a/Aw==
-X-Gm-Message-State: AJIora+92ixkbRd5KBEE16Cfi/K+3oi9yquNv5GIHoBasfG6tlIwl2HN
-        mYrFAwUuyPCAz9MRz8vgv/1sb1/L0Qo8iQ==
-X-Google-Smtp-Source: AGRyM1v+muQ8mgSRFrnaWoIzFQ/kk7nh7J/WwumrxFcpAtBwLBkoLMtuk9Q2h3wavL9G9m0VB8LixA==
-X-Received: by 2002:a17:90b:3a90:b0:1ed:27b7:5458 with SMTP id om16-20020a17090b3a9000b001ed27b75458mr42115302pjb.208.1657031968019;
-        Tue, 05 Jul 2022 07:39:28 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s6-20020a17090a948600b001ef8264bc1fsm5804138pjo.14.2022.07.05.07.39.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=aRSWPFJdUal4sFDyAFcRSHQQ/M3F+xYGlhF06C7Lf5E=;
+        b=cdEIXXrGO+ONaswF0Ono9GaOwXr+oAkmTzhEPsvECXG29ojQCD1kifsYkZZgd1I98F
+         IcULMBfO1uXfYLK9Z93NnWPqvTqpXIFt/syoF5xsgzOj6ahT697O6xj+jOd7GwKdReld
+         rciO3BTR5/eDgzjbPHlwPVzd3aBVAZYX7ybIxx3KqKLfmxbg1aLDjxAZiPBvk1w4/2Q7
+         rx0JvSzL4AJOw1cGrnTQdAYJy6+5uYquATWOj4qAC20QH18O4m/QN6EBh0Yty40mpVbW
+         vUoOiMWY+1QCuvZgcc8NvevFzp54Zj9C+954EsG7svG9cqdlxeWJTt4C1T+PGgC6m1y+
+         to8Q==
+X-Gm-Message-State: AJIora9ILoyrXj+q52vpy7up/Iluupdl6Gfg6joclLF52WKnd02PGEU9
+        VXzoksfFmclC3pogVTXUoak99DuU2d/0Bg==
+X-Google-Smtp-Source: AGRyM1u5PixJZ36vQLGgOdknikkAz8OeJE6qGe2mw2AmgLxXZNsqeQE4JXo11kUAjuPPYBIx6csFdw==
+X-Received: by 2002:a5d:4cca:0:b0:21d:6786:fb6e with SMTP id c10-20020a5d4cca000000b0021d6786fb6emr12758028wrt.233.1657033308024;
+        Tue, 05 Jul 2022 08:01:48 -0700 (PDT)
+Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
+        by smtp.gmail.com with ESMTPSA id k27-20020adfd23b000000b0021d728d687asm2518200wrh.36.2022.07.05.08.01.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jul 2022 07:39:27 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     dirk@dmllr.de, io-uring@vger.kernel.org
-In-Reply-To: <20220705132939.7744-1-dirk@dmllr.de>
-References: <20220705132939.7744-1-dirk@dmllr.de>
-Subject: Re: [PATCH] Handle EINTR in tests
-Message-Id: <165703196727.1923464.15505442909574224327.b4-ty@kernel.dk>
-Date:   Tue, 05 Jul 2022 08:39:27 -0600
+        Tue, 05 Jul 2022 08:01:47 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
+        kernel-team@fb.com, Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH net-next v3 01/25] ipv4: avoid partial copy for zc
+Date:   Tue,  5 Jul 2022 16:01:01 +0100
+Message-Id: <b377b00ee6387da881ef6e1cbea1ded8bd8e8676.1656318994.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <cover.1656318994.git.asml.silence@gmail.com>
+References: <cover.1656318994.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Tue, 5 Jul 2022 15:29:39 +0200, Dirk Müller wrote:
-> On an otherwise busy machine the test suite is quite flaky. Restart
-> the syscalls that are aborted with EINTR.
-> 
-> 
+Even when zerocopy transmission is requested and possible,
+__ip_append_data() will still copy a small chunk of data just because it
+allocated some extra linear space (e.g. 148 bytes). It wastes CPU cycles
+on copy and iter manipulations and also misalignes potentially aligned
+data. Avoid such coies. And as a bonus we can allocate smaller skb.
 
-Applied, thanks!
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ net/ipv4/ip_output.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-[1/1] Handle EINTR in tests
-      commit: fa67f6aedcfdaffc14cbf0b631253477b2565ef0
-
-Best regards,
+diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+index 00b4bf26fd93..581d1e233260 100644
+--- a/net/ipv4/ip_output.c
++++ b/net/ipv4/ip_output.c
+@@ -969,7 +969,6 @@ static int __ip_append_data(struct sock *sk,
+ 	struct inet_sock *inet = inet_sk(sk);
+ 	struct ubuf_info *uarg = NULL;
+ 	struct sk_buff *skb;
+-
+ 	struct ip_options *opt = cork->opt;
+ 	int hh_len;
+ 	int exthdrlen;
+@@ -977,6 +976,7 @@ static int __ip_append_data(struct sock *sk,
+ 	int copy;
+ 	int err;
+ 	int offset = 0;
++	bool zc = false;
+ 	unsigned int maxfraglen, fragheaderlen, maxnonfragsize;
+ 	int csummode = CHECKSUM_NONE;
+ 	struct rtable *rt = (struct rtable *)cork->dst;
+@@ -1025,6 +1025,7 @@ static int __ip_append_data(struct sock *sk,
+ 		if (rt->dst.dev->features & NETIF_F_SG &&
+ 		    csummode == CHECKSUM_PARTIAL) {
+ 			paged = true;
++			zc = true;
+ 		} else {
+ 			uarg->zerocopy = 0;
+ 			skb_zcopy_set(skb, uarg, &extra_uref);
+@@ -1091,9 +1092,12 @@ static int __ip_append_data(struct sock *sk,
+ 				 (fraglen + alloc_extra < SKB_MAX_ALLOC ||
+ 				  !(rt->dst.dev->features & NETIF_F_SG)))
+ 				alloclen = fraglen;
+-			else {
++			else if (!zc) {
+ 				alloclen = min_t(int, fraglen, MAX_HEADER);
+ 				pagedlen = fraglen - alloclen;
++			} else {
++				alloclen = fragheaderlen + transhdrlen;
++				pagedlen = datalen - transhdrlen;
+ 			}
+ 
+ 			alloclen += alloc_extra;
 -- 
-Jens Axboe
-
+2.36.1
 
