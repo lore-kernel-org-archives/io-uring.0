@@ -2,51 +2,51 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 822E0C433EF
-	for <io-uring@archiver.kernel.org>; Thu,  7 Jul 2022 11:52:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36310C433EF
+	for <io-uring@archiver.kernel.org>; Thu,  7 Jul 2022 11:52:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235503AbiGGLwV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 7 Jul 2022 07:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
+        id S235482AbiGGLwY (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 7 Jul 2022 07:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235476AbiGGLwE (ORCPT
+        with ESMTP id S235485AbiGGLwE (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Thu, 7 Jul 2022 07:52:04 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19564564C0;
-        Thu,  7 Jul 2022 04:52:01 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id m6-20020a05600c3b0600b003a0489f412cso795450wms.1;
-        Thu, 07 Jul 2022 04:52:01 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9321053D0E;
+        Thu,  7 Jul 2022 04:52:03 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id o16-20020a05600c379000b003a02eaea815so970365wmr.0;
+        Thu, 07 Jul 2022 04:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=530Kj9fyhb4BAaf8FxSCXZ47V34wdCD15bBkxNyM1cg=;
-        b=Xf4aZke/gjdB271cikF+a8GkXtrb/Sa9rjGTmUxWDuPpGwXHnBkR17Nn9l4GWAAAvf
-         yhw6X/L/dDh8xOXl80GBKjiPISyAW6J8Ez+9183rxiBqcFSezxJsFtMSNGR9q7UDfhq5
-         vkCbXEtvCXrXVqc4EA0RHmr4Gp9vMacJ9KcL5BgoYAVWn6Pnqy3bPgCOIQNhSCfspnIU
-         e5WAxf22gSS8xlg/dQHgsA5M/pjSXWZsivseN4AnlP1BCViNg/z5AiUlF3yjc61DQeQu
-         RWGlg19lv/9wLkATHYj6wjhgF4W893Z1WeM2q6F6tOLPNDYvqgqGlb5b1fJVyrhAjgE2
-         WoLQ==
+        bh=yQxFmxJR/QKBAZO6SHp/6U0EjdNvdoVCL417Yd+7Jb4=;
+        b=RisWah9PCUHLBq4dMjq5QVBsK8Iz+29uS6KjkwGuTrkn0VKJ5XLWK/F6AsIVankBnP
+         fufDpm78QfdsFLVpoTZq/p1Z4R5GkW0rm0YKq9ZWI/oNEXSUP66vrZt6ujOJ+6VHBdNs
+         69bCHiCWfPK8ec6lRkH4XqLOW27kdN+20KhzcLATS9swuDYU76eQnk5TdfFbSC9JytA5
+         t5we97nHaCauqzM0oi0qTiZTMgdzmaWE7WdjlCQGY58Lrz4NGd2WjrVJnw3QD9OtJDXN
+         UDNi6U1zZEz3qOJ/ewYhEEXQd/SiJud0vNyj/d/ihm3weXqphQnR9S/Gm8kMplCqMBAB
+         pmAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=530Kj9fyhb4BAaf8FxSCXZ47V34wdCD15bBkxNyM1cg=;
-        b=8C8VsN4uRfrpgzt/w+pSf5j2qB06cjTYC+MWRIvETDKSAhpEFQR8uAXDPCg8vITscm
-         Kw506kmMJtmMyeb75KrxMsz44tIBZrswQyu7I02GOAuwAdtt9AV5slim3muCPXpe74/v
-         BgaBBG81yr151IFV7aW+Pnk0iTqbZZCBnmPCorJNipV9+Uy88fc5V8P+5rJiXu0TErgD
-         o7pHcS/rmBKBpwGGjth+LP6DbsGVP8VNdN3dA5U/QJpbvQRkFZmqm9PA8j2d7iOmPNRR
-         wL3GGj7AzNzODByCIpjyrNae6zil6pAZGv78DJyBqWjfVY0jdVgdvVcWcS7nigrGudXR
-         Z1kQ==
-X-Gm-Message-State: AJIora+Qs9Ue/ceG7yMMCMqTqWRwQ3TxNhWVg025yb7GnYUe+7iyoo/h
-        lN2klfdn3Wg497onGNywIJ74LjN3IfUhAv1J74E=
-X-Google-Smtp-Source: AGRyM1uxnz3sxBaRDQ+35wnzIv5JZeO0SprLs2j7hkwtj6mhvk4MLcZL9rMqeDsQfLfKrG73a/VP3g==
-X-Received: by 2002:a05:600c:1ca9:b0:3a0:43a9:5e1a with SMTP id k41-20020a05600c1ca900b003a043a95e1amr3881477wms.155.1657194719419;
-        Thu, 07 Jul 2022 04:51:59 -0700 (PDT)
+        bh=yQxFmxJR/QKBAZO6SHp/6U0EjdNvdoVCL417Yd+7Jb4=;
+        b=Vd3TPrMnnuk02oB2zhJua/eW6Hzb3yAMUOQg/pn2/t8psz5WlguELvIlJAvwnUnhBL
+         jlAUcV2JMqc44JduCqKsCFljI4ZnEw2utiwD9XEQcDCpRI5DKYsVAujVYAh9Y6+fZyVR
+         roMo/3YKkSiVvAov9Cf6COdxqUBh3eKbQzIPDWGnJUG+bDlsEejxdfUSL1oSp2Ox29X4
+         wZE5CNL+mlRDPxW5+kMiXKDcXnSFbazgwgO797cZNPlZ3qXzI4ed0csttP0j4kMBHBmX
+         IWVg0c4KtokgNMXMG7fN/riSo8UpOtBup9XjkK1l0mhyg2GlziVDOtRp3xzOODqAu44B
+         NL5A==
+X-Gm-Message-State: AJIora+2d2Gy5tlL+AgnpDdBL23cL/B0D/R8qsh0A+G9gzVQqPsvzDyv
+        GY/0g4PVQ7ywHuZkN5vgSR7IOHpOkDu6VhTNgPE=
+X-Google-Smtp-Source: AGRyM1uFZBZwYfqwuJaynzQASf+eB7WTisVOSTpfAo+Iyo2A7s0AXRlzOJ0S4Bq6ab9/aXWP71FIqg==
+X-Received: by 2002:a7b:c01a:0:b0:3a1:7ab1:e5dc with SMTP id c26-20020a7bc01a000000b003a17ab1e5dcmr4009494wmb.128.1657194721701;
+        Thu, 07 Jul 2022 04:52:01 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id u2-20020a5d5142000000b0021b966abc19sm37982131wrt.19.2022.07.07.04.51.58
+        by smtp.gmail.com with ESMTPSA id u2-20020a5d5142000000b0021b966abc19sm37982131wrt.19.2022.07.07.04.52.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 04:51:59 -0700 (PDT)
+        Thu, 07 Jul 2022 04:52:01 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -56,9 +56,9 @@ Cc:     "David S . Miller" <davem@davemloft.net>,
         Willem de Bruijn <willemb@google.com>,
         Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
         kernel-team@fb.com, Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH net-next v4 11/27] tcp: support externally provided ubufs
-Date:   Thu,  7 Jul 2022 12:49:42 +0100
-Message-Id: <7ee05f644e3b3626b693973738364bcb23cf905d.1657194434.git.asml.silence@gmail.com>
+Subject: [PATCH net-next v4 13/27] io_uring: export io_put_task()
+Date:   Thu,  7 Jul 2022 12:49:44 +0100
+Message-Id: <ea0045a5e1b97834c2b943f0f38b1fb9303b66b6.1657194434.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657194434.git.asml.silence@gmail.com>
 References: <cover.1657194434.git.asml.silence@gmail.com>
@@ -68,68 +68,151 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Teach ipv4/udp how to use external ubuf_info provided in msghdr and
-also prepare it for managed frags by sprinkling
-skb_zcopy_downgrade_managed() when it could mix managed and not managed
-frags.
+Make io_put_task() available to non-core parts of io_uring, we'll need
+it for notification infrastructure.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- net/ipv4/tcp.c | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ include/linux/io_uring_types.h | 25 +++++++++++++++++++++++++
+ io_uring/io_uring.c            | 11 +----------
+ io_uring/io_uring.h            | 10 ++++++++++
+ io_uring/tctx.h                | 26 --------------------------
+ 4 files changed, 36 insertions(+), 36 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 390eb3dc53bd..a81f694af5e9 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1223,17 +1223,23 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 26ef11e978d4..d876a0367081 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -4,6 +4,7 @@
+ #include <linux/blkdev.h>
+ #include <linux/task_work.h>
+ #include <linux/bitmap.h>
++#include <linux/llist.h>
+ #include <uapi/linux/io_uring.h>
  
- 	flags = msg->msg_flags;
+ struct io_wq_work_node {
+@@ -43,6 +44,30 @@ struct io_hash_table {
+ 	unsigned		hash_bits;
+ };
  
--	if (flags & MSG_ZEROCOPY && size && sock_flag(sk, SOCK_ZEROCOPY)) {
-+	if ((flags & MSG_ZEROCOPY) && size) {
- 		skb = tcp_write_queue_tail(sk);
--		uarg = msg_zerocopy_realloc(sk, size, skb_zcopy(skb));
--		if (!uarg) {
--			err = -ENOBUFS;
--			goto out_err;
--		}
++/*
++ * Arbitrary limit, can be raised if need be
++ */
++#define IO_RINGFD_REG_MAX 16
++
++struct io_uring_task {
++	/* submission side */
++	int				cached_refs;
++	const struct io_ring_ctx 	*last;
++	struct io_wq			*io_wq;
++	struct file			*registered_rings[IO_RINGFD_REG_MAX];
++
++	struct xarray			xa;
++	struct wait_queue_head		wait;
++	atomic_t			in_idle;
++	atomic_t			inflight_tracked;
++	struct percpu_counter		inflight;
++
++	struct { /* task_work */
++		struct llist_head	task_list;
++		struct callback_head	task_work;
++	} ____cacheline_aligned_in_smp;
++};
++
+ struct io_uring {
+ 	u32 head ____cacheline_aligned_in_smp;
+ 	u32 tail ____cacheline_aligned_in_smp;
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index caf979cd4327..bb644b1b575a 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -602,7 +602,7 @@ static bool io_cqring_overflow_flush(struct io_ring_ctx *ctx)
+ 	return ret;
+ }
  
--		zc = sk->sk_route_caps & NETIF_F_SG;
--		if (!zc)
--			uarg->zerocopy = 0;
-+		if (msg->msg_ubuf) {
-+			uarg = msg->msg_ubuf;
-+			net_zcopy_get(uarg);
-+			zc = sk->sk_route_caps & NETIF_F_SG;
-+		} else if (sock_flag(sk, SOCK_ZEROCOPY)) {
-+			uarg = msg_zerocopy_realloc(sk, size, skb_zcopy(skb));
-+			if (!uarg) {
-+				err = -ENOBUFS;
-+				goto out_err;
-+			}
-+			zc = sk->sk_route_caps & NETIF_F_SG;
-+			if (!zc)
-+				uarg->zerocopy = 0;
-+		}
- 	}
+-static void __io_put_task(struct task_struct *task, int nr)
++void __io_put_task(struct task_struct *task, int nr)
+ {
+ 	struct io_uring_task *tctx = task->io_uring;
  
- 	if (unlikely(flags & MSG_FASTOPEN || inet_sk(sk)->defer_connect) &&
-@@ -1356,9 +1362,11 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+@@ -612,15 +612,6 @@ static void __io_put_task(struct task_struct *task, int nr)
+ 	put_task_struct_many(task, nr);
+ }
  
- 			copy = min_t(int, copy, pfrag->size - pfrag->offset);
- 
--			if (tcp_downgrade_zcopy_pure(sk, skb))
--				goto wait_for_space;
+-/* must to be called somewhat shortly after putting a request */
+-static inline void io_put_task(struct task_struct *task, int nr)
+-{
+-	if (likely(task == current))
+-		task->io_uring->cached_refs += nr;
+-	else
+-		__io_put_task(task, nr);
+-}
 -
-+			if (unlikely(skb_zcopy_pure(skb) || skb_zcopy_managed(skb))) {
-+				if (tcp_downgrade_zcopy_pure(sk, skb))
-+					goto wait_for_space;
-+				skb_zcopy_downgrade_managed(skb);
-+			}
- 			copy = tcp_wmem_schedule(sk, copy);
- 			if (!copy)
- 				goto wait_for_space;
+ static void io_task_refs_refill(struct io_uring_task *tctx)
+ {
+ 	unsigned int refill = -tctx->cached_refs + IO_TCTX_REFS_CACHE_NR;
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 868f45d55543..2379d9e70c10 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -66,6 +66,7 @@ void io_wq_submit_work(struct io_wq_work *work);
+ 
+ void io_free_req(struct io_kiocb *req);
+ void io_queue_next(struct io_kiocb *req);
++void __io_put_task(struct task_struct *task, int nr);
+ 
+ bool io_match_task_safe(struct io_kiocb *head, struct task_struct *task,
+ 			bool cancel_all);
+@@ -253,4 +254,13 @@ static inline void io_commit_cqring_flush(struct io_ring_ctx *ctx)
+ 		__io_commit_cqring_flush(ctx);
+ }
+ 
++/* must to be called somewhat shortly after putting a request */
++static inline void io_put_task(struct task_struct *task, int nr)
++{
++	if (likely(task == current))
++		task->io_uring->cached_refs += nr;
++	else
++		__io_put_task(task, nr);
++}
++
+ #endif
+diff --git a/io_uring/tctx.h b/io_uring/tctx.h
+index 8a33ff6e5d91..25974beed4d6 100644
+--- a/io_uring/tctx.h
++++ b/io_uring/tctx.h
+@@ -1,31 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-#include <linux/llist.h>
+-
+-/*
+- * Arbitrary limit, can be raised if need be
+- */
+-#define IO_RINGFD_REG_MAX 16
+-
+-struct io_uring_task {
+-	/* submission side */
+-	int				cached_refs;
+-	const struct io_ring_ctx 	*last;
+-	struct io_wq			*io_wq;
+-	struct file			*registered_rings[IO_RINGFD_REG_MAX];
+-
+-	struct xarray			xa;
+-	struct wait_queue_head		wait;
+-	atomic_t			in_idle;
+-	atomic_t			inflight_tracked;
+-	struct percpu_counter		inflight;
+-
+-	struct { /* task_work */
+-		struct llist_head	task_list;
+-		struct callback_head	task_work;
+-	} ____cacheline_aligned_in_smp;
+-};
+-
+ struct io_tctx_node {
+ 	struct list_head	ctx_node;
+ 	struct task_struct	*task;
 -- 
 2.36.1
 
