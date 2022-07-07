@@ -2,51 +2,51 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C3C4CCA482
-	for <io-uring@archiver.kernel.org>; Thu,  7 Jul 2022 11:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BDDC43334
+	for <io-uring@archiver.kernel.org>; Thu,  7 Jul 2022 11:52:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235492AbiGGLwH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 7 Jul 2022 07:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S235346AbiGGLwJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 7 Jul 2022 07:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235391AbiGGLwD (ORCPT
+        with ESMTP id S235390AbiGGLwD (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Thu, 7 Jul 2022 07:52:03 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0389153D33;
-        Thu,  7 Jul 2022 04:51:59 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id d16so19626743wrv.10;
-        Thu, 07 Jul 2022 04:51:58 -0700 (PDT)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E001253D2C;
+        Thu,  7 Jul 2022 04:51:57 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id f2so20573581wrr.6;
+        Thu, 07 Jul 2022 04:51:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=++tIUpQtGSkeKjCS0jHLC0PODcc+eo2SODOf2a2LF1M=;
-        b=A53V5STeaTnol4pMhOzEPuKv2y4iLeid1sqRq9e6jYzGWfsZiwJtnmmGunpPNAPt0b
-         b9EC5W1t8FKIqAPiP+d8XwpQi/YZANO+ub6l9RcBUc2nC57FR1GNIEj0Lj/2deNwT6wJ
-         frGuC/DjVxbLgLhaL96tlf8vCdxb6UjG1tBKDIhKY/YqBmK4PfAz1XSUJaEf0DiSbBh8
-         NPvQ6zY3wRMlXENkhiqBFD6cbAnvnTRm6YynGZ/8z1tt9s+16clnAgjNmxWFB5+bhJE+
-         IVUqcAM93zbHmGY5DmmjrMHCkLq44q6r/OY0qMrgQBC3I3DX0w0MQUugQ2pZVXViGjus
-         0IOA==
+        bh=38y10vFv9/dzfeTS95yhvVY4RWynqtjJymBn4qotNoc=;
+        b=cC51W+cZKEiMnrVGBLB0kFFWKPZFRmY+7e4J+MuRyiVShB3JHlXRoSwxggZXRqnybp
+         +qoYnDfJRKQoSkpUUntaebh32yzd9VrAyA/DVuMd8dgcC034wD06zEiRvqvzRpdP00S3
+         IZOisFgjCs8rks8JUSWyNqowv+WUbxGGynTeQUOMikvKrOYMVnOIJ9ayz6T2ccJyLJ68
+         WiAes3MaXgFhXzuRwujmv6hhX/hFfHxjt+Xj72FQ2bjcGGflUhuCgTF1cRW+qkS1/MJX
+         MrH3vfwi29sMGMWHPHzfzUs556ODGqva0C9sEHbQcG91CTeQDlYxlYdIRT1RG8RSj+YQ
+         4oTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=++tIUpQtGSkeKjCS0jHLC0PODcc+eo2SODOf2a2LF1M=;
-        b=PEpQPEFcUQp4c/wZvYYWBxB2w1IGhXbisFSyZY2KovgfU/GME0tjPNmiabkHxMZw+B
-         p9D+akHxgLK+N4JAInuj4LR9Uke3Qf/YT789UENcwt/65KfaqIkGYoKNf/r9/8ZCyOZo
-         99KTCqsfM3QDzmo0yMZ8qHErYcDNKGNKqCZyBnQdax4OSwJwPZLqGglZaiU/VASxZ+0C
-         bqZFWtiZZpDsGufe1yotXYTNtiEPYMSVl55miihB/lboYzKYudMs0BRQDnr3+yZmamRQ
-         v7RUB4rqMwCz3KdxuF4MutuJfoxhGEef24/Et9xmnzWxAqiJZrlsHl0hZYcoeI5ETE+e
-         DrhA==
-X-Gm-Message-State: AJIora9yWDC4GmhR+Q8Pej1INgmwJD51WGo/5s6vPoRSZu1oK+PuNo9B
-        P/Nsirg9S5gLnOSZaZzChu1Rf2vSWV0KSnfUz/c=
-X-Google-Smtp-Source: AGRyM1vCf9z1ZEc+5Tas7+SnDucHB8uJjo8JUvx3cZcEQ7zLw6Adl7taSXYxtdIyIbaz1p+seuKcKw==
-X-Received: by 2002:adf:dd87:0:b0:21d:6ec4:26b0 with SMTP id x7-20020adfdd87000000b0021d6ec426b0mr15484890wrl.182.1657194718343;
-        Thu, 07 Jul 2022 04:51:58 -0700 (PDT)
+        bh=38y10vFv9/dzfeTS95yhvVY4RWynqtjJymBn4qotNoc=;
+        b=HL0uc80I8IGyUNWg0xmti3YlmuW/3gcEr+OBKD3emE2YHnRcaWnhtq3DbpDF1uhmZ7
+         HDCgqmo/kopcYUtDC3DuXePL3aCFCO93xl/gQwfMqhC1P3K02pEUS7MlHXpwtPhQ8qMf
+         NEK07JMbbnVIEPi4vT6HPrPYk7fsiGfiN/iOtdoti3cJYQMQfWWE3O7kvC9v/vVrqIVD
+         uHbE1dyxsPZiavt1lAv7LbeH2vvidMUGS1HtdvQVUyxSDoGmYCOBZJqIAwufV2syatrI
+         cIH4+zZcXQPIE92E1KRIyPUQAVIimVlWX9Qm/tAFryt63pF3RAGB4stN7sG9FdG9HI0t
+         /MVw==
+X-Gm-Message-State: AJIora8CAcS/VH+g8Xi51fIYxc30OfouyT66VOWHl4rvoZ2SomU132O9
+        lokU4eOy0uG6o4PDiffITeZsJsxZaJKqAPl7ccU=
+X-Google-Smtp-Source: AGRyM1vRn+ca2TImFjbeECRSRwiJaUDhfShVRS1O4cCXWgIrrdl/8rTXI9U4IesXPwgYCt9OpkyX7A==
+X-Received: by 2002:adf:e786:0:b0:21d:6ec1:ee5c with SMTP id n6-20020adfe786000000b0021d6ec1ee5cmr15305282wrm.285.1657194716136;
+        Thu, 07 Jul 2022 04:51:56 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id u2-20020a5d5142000000b0021b966abc19sm37982131wrt.19.2022.07.07.04.51.57
+        by smtp.gmail.com with ESMTPSA id u2-20020a5d5142000000b0021b966abc19sm37982131wrt.19.2022.07.07.04.51.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 04:51:57 -0700 (PDT)
+        Thu, 07 Jul 2022 04:51:55 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -56,9 +56,9 @@ Cc:     "David S . Miller" <davem@davemloft.net>,
         Willem de Bruijn <willemb@google.com>,
         Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
         kernel-team@fb.com, Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH net-next v4 10/27] ipv6/udp: support externally provided ubufs
-Date:   Thu,  7 Jul 2022 12:49:41 +0100
-Message-Id: <6d56b7c5ddf8add5b2a887dbd734c060e29ca6b2.1657194434.git.asml.silence@gmail.com>
+Subject: [PATCH net-next v4 08/27] net: introduce __skb_fill_page_desc_noacc
+Date:   Thu,  7 Jul 2022 12:49:39 +0100
+Message-Id: <48fb9ca4f207a31b69ef47a92f6c0c28d390af33.1657194434.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657194434.git.asml.silence@gmail.com>
 References: <cover.1657194434.git.asml.silence@gmail.com>
@@ -68,84 +68,62 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Teach ipv6/udp how to use external ubuf_info provided in msghdr and
-also prepare it for managed frags by sprinkling
-skb_zcopy_downgrade_managed() when it could mix managed and not managed
-frags.
+Managed pages contain pinned userspace pages and controlled by upper
+layers, there is no need in tracking skb->pfmemalloc for them. Introduce
+a helper for filling frags but ignoring page tracking, it'll be needed
+later.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- net/ipv6/ip6_output.c | 44 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 31 insertions(+), 13 deletions(-)
+ include/linux/skbuff.h | 28 +++++++++++++++++-----------
+ 1 file changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index fc74ce3ed8cc..897ca4f9b791 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1542,18 +1542,35 @@ static int __ip6_append_data(struct sock *sk,
- 	    rt->dst.dev->features & (NETIF_F_IPV6_CSUM | NETIF_F_HW_CSUM))
- 		csummode = CHECKSUM_PARTIAL;
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 07004593d7ca..1111adefd906 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2550,6 +2550,22 @@ static inline unsigned int skb_pagelen(const struct sk_buff *skb)
+ 	return skb_headlen(skb) + __skb_pagelen(skb);
+ }
  
--	if (flags & MSG_ZEROCOPY && length && sock_flag(sk, SOCK_ZEROCOPY)) {
--		uarg = msg_zerocopy_realloc(sk, length, skb_zcopy(skb));
--		if (!uarg)
--			return -ENOBUFS;
--		extra_uref = !skb_zcopy(skb);	/* only ref on new uarg */
--		if (rt->dst.dev->features & NETIF_F_SG &&
--		    csummode == CHECKSUM_PARTIAL) {
--			paged = true;
--			zc = true;
--		} else {
--			uarg->zerocopy = 0;
--			skb_zcopy_set(skb, uarg, &extra_uref);
-+	if ((flags & MSG_ZEROCOPY) && length) {
-+		struct msghdr *msg = from;
++static inline void __skb_fill_page_desc_noacc(struct skb_shared_info *shinfo,
++					      int i, struct page *page,
++					      int off, int size)
++{
++	skb_frag_t *frag = &shinfo->frags[i];
 +
-+		if (getfrag == ip_generic_getfrag && msg->msg_ubuf) {
-+			if (skb_zcopy(skb) && msg->msg_ubuf != skb_zcopy(skb))
-+				return -EINVAL;
++	/*
++	 * Propagate page pfmemalloc to the skb if we can. The problem is
++	 * that not all callers have unique ownership of the page but rely
++	 * on page_is_pfmemalloc doing the right thing(tm).
++	 */
++	frag->bv_page		  = page;
++	frag->bv_offset		  = off;
++	skb_frag_size_set(frag, size);
++}
 +
-+			/* Leave uarg NULL if can't zerocopy, callers should
-+			 * be able to handle it.
-+			 */
-+			if ((rt->dst.dev->features & NETIF_F_SG) &&
-+			    csummode == CHECKSUM_PARTIAL) {
-+				paged = true;
-+				zc = true;
-+				uarg = msg->msg_ubuf;
-+			}
-+		} else if (sock_flag(sk, SOCK_ZEROCOPY)) {
-+			uarg = msg_zerocopy_realloc(sk, length, skb_zcopy(skb));
-+			if (!uarg)
-+				return -ENOBUFS;
-+			extra_uref = !skb_zcopy(skb);	/* only ref on new uarg */
-+			if (rt->dst.dev->features & NETIF_F_SG &&
-+			    csummode == CHECKSUM_PARTIAL) {
-+				paged = true;
-+				zc = true;
-+			} else {
-+				uarg->zerocopy = 0;
-+				skb_zcopy_set(skb, uarg, &extra_uref);
-+			}
- 		}
- 	}
- 
-@@ -1747,13 +1764,14 @@ static int __ip6_append_data(struct sock *sk,
- 				err = -EFAULT;
- 				goto error;
- 			}
--		} else if (!uarg || !uarg->zerocopy) {
-+		} else if (!zc) {
- 			int i = skb_shinfo(skb)->nr_frags;
- 
- 			err = -ENOMEM;
- 			if (!sk_page_frag_refill(sk, pfrag))
- 				goto error;
- 
-+			skb_zcopy_downgrade_managed(skb);
- 			if (!skb_can_coalesce(skb, i, pfrag->page,
- 					      pfrag->offset)) {
- 				err = -EMSGSIZE;
+ /**
+  * __skb_fill_page_desc - initialise a paged fragment in an skb
+  * @skb: buffer containing fragment to be initialised
+@@ -2566,17 +2582,7 @@ static inline unsigned int skb_pagelen(const struct sk_buff *skb)
+ static inline void __skb_fill_page_desc(struct sk_buff *skb, int i,
+ 					struct page *page, int off, int size)
+ {
+-	skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+-
+-	/*
+-	 * Propagate page pfmemalloc to the skb if we can. The problem is
+-	 * that not all callers have unique ownership of the page but rely
+-	 * on page_is_pfmemalloc doing the right thing(tm).
+-	 */
+-	frag->bv_page		  = page;
+-	frag->bv_offset		  = off;
+-	skb_frag_size_set(frag, size);
+-
++	__skb_fill_page_desc_noacc(skb_shinfo(skb), i, page, off, size);
+ 	page = compound_head(page);
+ 	if (page_is_pfmemalloc(page))
+ 		skb->pfmemalloc	= true;
 -- 
 2.36.1
 
