@@ -2,51 +2,51 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1187FCCA480
-	for <io-uring@archiver.kernel.org>; Thu,  7 Jul 2022 11:52:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5692C43334
+	for <io-uring@archiver.kernel.org>; Thu,  7 Jul 2022 11:52:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235218AbiGGLwE (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 7 Jul 2022 07:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S235231AbiGGLwF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 7 Jul 2022 07:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235297AbiGGLv4 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 7 Jul 2022 07:51:56 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7354F4507D;
-        Thu,  7 Jul 2022 04:51:54 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l68so10472623wml.3;
-        Thu, 07 Jul 2022 04:51:54 -0700 (PDT)
+        with ESMTP id S235453AbiGGLwD (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 7 Jul 2022 07:52:03 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E8C53D34;
+        Thu,  7 Jul 2022 04:51:59 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id v14so25969780wra.5;
+        Thu, 07 Jul 2022 04:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9kzjVmEHp0xWSH6Tr3m/YVyGiLjtMkCIxQTqGUOMCmQ=;
-        b=kjucAiROc06+6tyOEb4nnt9d67DZpGghK0fN6luEXyXIxpiBQGj/+sSZyIUGAY73bH
-         6zY21G8rpAaPLZlyVTnH5he6cCFoI2bo/fNFN3qkOzOGEkndq3VAea1ZlkMJbDtgqgfq
-         m9iyv97G8YpXMxHqflK41NskttI1PudpozTO+o/m9VbGNcWIISL1TQu0XzubQ/sZV+He
-         ry4YWe/fxSMA3BrvGPD7rV/11NtwuMC5ALQaQehWduDmYya5tst1ZgCpJy9gpa6lT5SF
-         vmwhd1pfSy67byLo67LBhTdG2IzcuXFJhGl7Ccdg7insjgMzxk6ZQjjx2qVNVrB4/fMt
-         QrsQ==
+        bh=ZTUZLAGD0xg3XR59NurEq6qMM4sEJfudbtjDr6igBMU=;
+        b=ZbaM22Itbey8Qmo0qJC2eAgd5W0HEUHyRE0WU4J02X+R5zQNCzeE1SVXfLz8VAmTaH
+         2rD9xSog+LzLTPzMKc5QxEVP7y1HdtWlhPrjhj5nYIOfdXKMKPc/mmjttMy0Pp3+TVVb
+         sL3qfvDF2zLuid2DZU87vS3xb7fHXOAmXeqeqAuBrR6UsXa1z5gFqAAC8K/AtUyUuJ9I
+         UFa8n9MPxWxYp5PYUcWlcBt4IQxWk63q5pGJqESOWn1OJhJkUfYPilzVixuMmAbFw/85
+         QV116M+knsxqG4Jii6abFksP1ohbd2sggwzdFBcH8He4O7bIfe4LM+55J9lwXjKvbWex
+         EmRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9kzjVmEHp0xWSH6Tr3m/YVyGiLjtMkCIxQTqGUOMCmQ=;
-        b=1cZfPpdIkHr1kjN+tKcWFe7UerSXg2cocchTlRmS4iuvipyPcL9eK+LdqI2y7SK2nH
-         D+v6rUsUTYd4cgEmyN6R1bzv65P2zPNEfqng3ryGYV7UG7vsPLyqxy31LHgQ3nKTMVl+
-         ksK49L+S/PALorrnVkR2t7hQTg+5xPLOA5sKY/bv8jwVjGJrwNiVAc4dnubHMWo9rI5r
-         Exu8kBY503VDKCk4SazIx2ZN6299uo1Rj001/tshvvn16im6JmENll0apfE/Jw3T7cDg
-         pXHVRhPE+/b6EydCmJqD1N7GWbZ+dXWCu84YPb42NsYr2YOXr7IAibE7Ct2X3LXNzERY
-         qIcw==
-X-Gm-Message-State: AJIora/lFS45lsgK6zIff5WWKHz5Zzv2Myx9G1Ilj09YF9dYIDpeLSk0
-        l1+qIBTnVp9fa5nFJx1E/oYlM9Tjst7aeKwcTLA=
-X-Google-Smtp-Source: AGRyM1ttWJHRhPymQcdP4SpvE8yHJStZN/mxeyktm3r0+NL+ImAbRHLdSF20kBZAG1USwqjr8olA8Q==
-X-Received: by 2002:a1c:7306:0:b0:3a1:8ed1:6198 with SMTP id d6-20020a1c7306000000b003a18ed16198mr4082858wmb.122.1657194712694;
-        Thu, 07 Jul 2022 04:51:52 -0700 (PDT)
+        bh=ZTUZLAGD0xg3XR59NurEq6qMM4sEJfudbtjDr6igBMU=;
+        b=mc9f5zVU9bICs+VF+mT8WMKwvyZeXQ9lTocHO8viRPsP+SxZSYwVd92DEl7/oyh+nM
+         0zgxnEHEy+UNqMKEQJywzD9G65Lql3hJXTBnHr3aPv0kF6AZKekf4HVBGeSvHTOzId4P
+         F0fWrx0ja+K3oo3dR3aacxoLjCh+NjZR2tXAtSKCRzt6jHt4mXbn9zfU8i7Mr5y2ZPAP
+         gEHNLKWybSYkyUEXOjKPzlE5Wb/+L/6uDEWXfDdrUxUel9qh1oY+1JjA/EWAdBcoexb/
+         xJ85wAeNNaX64/olJbbJo2t/xI1UJfPzgSG/IaawCZuKgz3bdx3n3Ymnv+AgT0HR7rsj
+         PhGQ==
+X-Gm-Message-State: AJIora/qARRnLk++OK17ZUu7Y70mTZihYjcqnjb9FJawLHPLCPFPXw4Y
+        /qZdMgyRo4K+aR8jdtBgCLrvYHqWQlYZXODS9E0=
+X-Google-Smtp-Source: AGRyM1tIqtvYjP7ZoJQ2q5+WCvqda5YiQWyK5C2RTxsJkCp3EAIBnVSCnRJqpJersAhf/CmaeMeoyg==
+X-Received: by 2002:adf:e405:0:b0:21d:86b6:a286 with SMTP id g5-20020adfe405000000b0021d86b6a286mr2609936wrm.29.1657194717264;
+        Thu, 07 Jul 2022 04:51:57 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.125.106.threembb.co.uk. [188.28.125.106])
-        by smtp.gmail.com with ESMTPSA id u2-20020a5d5142000000b0021b966abc19sm37982131wrt.19.2022.07.07.04.51.51
+        by smtp.gmail.com with ESMTPSA id u2-20020a5d5142000000b0021b966abc19sm37982131wrt.19.2022.07.07.04.51.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Jul 2022 04:51:52 -0700 (PDT)
+        Thu, 07 Jul 2022 04:51:56 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
@@ -56,9 +56,9 @@ Cc:     "David S . Miller" <davem@davemloft.net>,
         Willem de Bruijn <willemb@google.com>,
         Jens Axboe <axboe@kernel.dk>, David Ahern <dsahern@kernel.org>,
         kernel-team@fb.com, Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH net-next v4 05/27] skbuff: carry external ubuf_info in msghdr
-Date:   Thu,  7 Jul 2022 12:49:36 +0100
-Message-Id: <2c3ce22ec6939856cef4329d8c95e4c8dfb355d8.1657194434.git.asml.silence@gmail.com>
+Subject: [PATCH net-next v4 09/27] ipv4/udp: support externally provided ubufs
+Date:   Thu,  7 Jul 2022 12:49:40 +0100
+Message-Id: <4b97ab89f424a2e84f6a0a58d6e7baeacbcb6e6b.1657194434.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <cover.1657194434.git.asml.silence@gmail.com>
 References: <cover.1657194434.git.asml.silence@gmail.com>
@@ -68,68 +68,84 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Make possible for network in-kernel callers like io_uring to pass in a
-custom ubuf_info by setting it in a new field of struct msghdr.
+Teach ipv4/udp how to use external ubuf_info provided in msghdr and
+also prepare it for managed frags by sprinkling
+skb_zcopy_downgrade_managed() when it could mix managed and not managed
+frags.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- include/linux/socket.h | 1 +
- net/compat.c           | 1 +
- net/socket.c           | 3 +++
- 3 files changed, 5 insertions(+)
+ net/ipv4/ip_output.c | 44 +++++++++++++++++++++++++++++++-------------
+ 1 file changed, 31 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index 17311ad9f9af..7bac9fc1cee0 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -69,6 +69,7 @@ struct msghdr {
- 	unsigned int	msg_flags;	/* flags on received message */
- 	__kernel_size_t	msg_controllen;	/* ancillary data buffer length */
- 	struct kiocb	*msg_iocb;	/* ptr to iocb for async requests */
-+	struct ubuf_info *msg_ubuf;
- };
+diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+index 581d1e233260..df7f9dfbe8be 100644
+--- a/net/ipv4/ip_output.c
++++ b/net/ipv4/ip_output.c
+@@ -1017,18 +1017,35 @@ static int __ip_append_data(struct sock *sk,
+ 	    (!exthdrlen || (rt->dst.dev->features & NETIF_F_HW_ESP_TX_CSUM)))
+ 		csummode = CHECKSUM_PARTIAL;
  
- struct user_msghdr {
-diff --git a/net/compat.c b/net/compat.c
-index 210fc3b4d0d8..6cd2e7683dd0 100644
---- a/net/compat.c
-+++ b/net/compat.c
-@@ -80,6 +80,7 @@ int __get_compat_msghdr(struct msghdr *kmsg,
- 		return -EMSGSIZE;
+-	if (flags & MSG_ZEROCOPY && length && sock_flag(sk, SOCK_ZEROCOPY)) {
+-		uarg = msg_zerocopy_realloc(sk, length, skb_zcopy(skb));
+-		if (!uarg)
+-			return -ENOBUFS;
+-		extra_uref = !skb_zcopy(skb);	/* only ref on new uarg */
+-		if (rt->dst.dev->features & NETIF_F_SG &&
+-		    csummode == CHECKSUM_PARTIAL) {
+-			paged = true;
+-			zc = true;
+-		} else {
+-			uarg->zerocopy = 0;
+-			skb_zcopy_set(skb, uarg, &extra_uref);
++	if ((flags & MSG_ZEROCOPY) && length) {
++		struct msghdr *msg = from;
++
++		if (getfrag == ip_generic_getfrag && msg->msg_ubuf) {
++			if (skb_zcopy(skb) && msg->msg_ubuf != skb_zcopy(skb))
++				return -EINVAL;
++
++			/* Leave uarg NULL if can't zerocopy, callers should
++			 * be able to handle it.
++			 */
++			if ((rt->dst.dev->features & NETIF_F_SG) &&
++			    csummode == CHECKSUM_PARTIAL) {
++				paged = true;
++				zc = true;
++				uarg = msg->msg_ubuf;
++			}
++		} else if (sock_flag(sk, SOCK_ZEROCOPY)) {
++			uarg = msg_zerocopy_realloc(sk, length, skb_zcopy(skb));
++			if (!uarg)
++				return -ENOBUFS;
++			extra_uref = !skb_zcopy(skb);	/* only ref on new uarg */
++			if (rt->dst.dev->features & NETIF_F_SG &&
++			    csummode == CHECKSUM_PARTIAL) {
++				paged = true;
++				zc = true;
++			} else {
++				uarg->zerocopy = 0;
++				skb_zcopy_set(skb, uarg, &extra_uref);
++			}
+ 		}
+ 	}
  
- 	kmsg->msg_iocb = NULL;
-+	kmsg->msg_ubuf = NULL;
- 	*ptr = msg.msg_iov;
- 	*len = msg.msg_iovlen;
- 	return 0;
-diff --git a/net/socket.c b/net/socket.c
-index 2bc8773d9dc5..ed061609265e 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -2106,6 +2106,7 @@ int __sys_sendto(int fd, void __user *buff, size_t len, unsigned int flags,
- 	msg.msg_control = NULL;
- 	msg.msg_controllen = 0;
- 	msg.msg_namelen = 0;
-+	msg.msg_ubuf = NULL;
- 	if (addr) {
- 		err = move_addr_to_kernel(addr, addr_len, &address);
- 		if (err < 0)
-@@ -2171,6 +2172,7 @@ int __sys_recvfrom(int fd, void __user *ubuf, size_t size, unsigned int flags,
- 	msg.msg_namelen = 0;
- 	msg.msg_iocb = NULL;
- 	msg.msg_flags = 0;
-+	msg.msg_ubuf = NULL;
- 	if (sock->file->f_flags & O_NONBLOCK)
- 		flags |= MSG_DONTWAIT;
- 	err = sock_recvmsg(sock, &msg, flags);
-@@ -2409,6 +2411,7 @@ int __copy_msghdr_from_user(struct msghdr *kmsg,
- 		return -EMSGSIZE;
+@@ -1192,13 +1209,14 @@ static int __ip_append_data(struct sock *sk,
+ 				err = -EFAULT;
+ 				goto error;
+ 			}
+-		} else if (!uarg || !uarg->zerocopy) {
++		} else if (!zc) {
+ 			int i = skb_shinfo(skb)->nr_frags;
  
- 	kmsg->msg_iocb = NULL;
-+	kmsg->msg_ubuf = NULL;
- 	*uiov = msg.msg_iov;
- 	*nsegs = msg.msg_iovlen;
- 	return 0;
+ 			err = -ENOMEM;
+ 			if (!sk_page_frag_refill(sk, pfrag))
+ 				goto error;
+ 
++			skb_zcopy_downgrade_managed(skb);
+ 			if (!skb_can_coalesce(skb, i, pfrag->page,
+ 					      pfrag->offset)) {
+ 				err = -EMSGSIZE;
 -- 
 2.36.1
 
