@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36B30C433EF
-	for <io-uring@archiver.kernel.org>; Fri,  8 Jul 2022 18:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2454EC43334
+	for <io-uring@archiver.kernel.org>; Fri,  8 Jul 2022 18:19:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238280AbiGHSS7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 8 Jul 2022 14:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S238810AbiGHSTA (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 8 Jul 2022 14:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239135AbiGHSSx (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 8 Jul 2022 14:18:53 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8425E82396
-        for <io-uring@vger.kernel.org>; Fri,  8 Jul 2022 11:18:52 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 268HAXR2025070
+        with ESMTP id S238535AbiGHSSy (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 8 Jul 2022 14:18:54 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA114823B0
+        for <io-uring@vger.kernel.org>; Fri,  8 Jul 2022 11:18:53 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 268HAatO027372
         for <io-uring@vger.kernel.org>; Fri, 8 Jul 2022 11:18:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=KdCc4KrhWrRWer2ak8qf+eJb+HmLvN8qCo6zNNUoH/s=;
- b=PaBj+fHoL5kPN6aqLxjEyyVH6JKD5uuvBFEG8G0Eb64IXVmaGWmveDWDPClMVoYIQ+CU
- 6kRdDfeyMRflKiS4vAx8wgLyWZ5bEa9+PNL5wppKbfZfEz/FQcmuQruZMB5/8ioTTfdb
- WgFo4qtLeQS0kph9wvMre0BCKnzwDVTVGow= 
+ bh=lgcixcPTzwnEb+MWYgxBSwdUAkCiiDjL6xo5mS4d2w4=;
+ b=fRtfEihPBbKOVWpjil52uDyJVPZhPMl5x8J8xS251lF1xUDXy/Ygy+LriXOl2DoeUKNs
+ uRE62feq0RSJvhvG5EVKRjtvMSdwL0Vjq4EPNKCLfFEOfP53yI4rsJ+tNnDoI+HemUL7
+ ZNQS7H7XhfNtyDuEry6oOxWh+wyX71On94A= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h5y1dj772-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h6eg1ky5r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Fri, 08 Jul 2022 11:18:52 -0700
-Received: from twshared14577.08.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+Received: from twshared25478.08.ash9.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Fri, 8 Jul 2022 11:18:50 -0700
+ 15.1.2375.28; Fri, 8 Jul 2022 11:18:51 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id AEF432B9EC23; Fri,  8 Jul 2022 11:18:41 -0700 (PDT)
+        id 49AD12B9EC58; Fri,  8 Jul 2022 11:18:43 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH for-next 2/4] io_uring: support 0 length iov in buffer select in compat
-Date:   Fri, 8 Jul 2022 11:18:36 -0700
-Message-ID: <20220708181838.1495428-3-dylany@fb.com>
+Subject: [PATCH for-next 4/4] io_uring: move netmsg recycling into io_uring cleanup
+Date:   Fri, 8 Jul 2022 11:18:38 -0700
+Message-ID: <20220708181838.1495428-5-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220708181838.1495428-1-dylany@fb.com>
 References: <20220708181838.1495428-1-dylany@fb.com>
@@ -49,62 +49,107 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: IjgDvSYdn3QhhUGBnWGV6EG6oiYWB4bZ
-X-Proofpoint-ORIG-GUID: IjgDvSYdn3QhhUGBnWGV6EG6oiYWB4bZ
+X-Proofpoint-ORIG-GUID: GZ3rZkJv6jImhti-lLFuOFA-kZ1mbTyI
+X-Proofpoint-GUID: GZ3rZkJv6jImhti-lLFuOFA-kZ1mbTyI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-07-08_15,2022-07-08_01,2022-06-22_01
+ definitions=2022-07-08_14,2022-07-08_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Match up work done in "io_uring: allow iov_len =3D 0 for recvmsg and buff=
-er
-select", but for compat code path.
+Specifically will be useful for multishot as the lifetime of a request is
+a bit more complicated, but generally makes things a bit neater.
 
-Fixes: a68caad69ce5 ("io_uring: allow iov_len =3D 0 for recvmsg and buffe=
-r select")
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- io_uring/net.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ io_uring/net.c   | 10 ++++------
+ io_uring/net.h   |  1 +
+ io_uring/opdef.c |  2 ++
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/io_uring/net.c b/io_uring/net.c
-index 188edbed1eb7..997c17512694 100644
+index 997c17512694..c1cbafe96c63 100644
 --- a/io_uring/net.c
 +++ b/io_uring/net.c
-@@ -384,16 +384,21 @@ static int __io_compat_recvmsg_copy_hdr(struct io_k=
-iocb *req,
- 	if (req->flags & REQ_F_BUFFER_SELECT) {
- 		compat_ssize_t clen;
+@@ -98,18 +98,18 @@ static bool io_net_retry(struct socket *sock, int fla=
+gs)
+ 	return sock->type =3D=3D SOCK_STREAM || sock->type =3D=3D SOCK_SEQPACKE=
+T;
+ }
 =20
--		if (len > 1)
--			return -EINVAL;
--		if (!access_ok(uiov, sizeof(*uiov)))
--			return -EFAULT;
--		if (__get_user(clen, &uiov->iov_len))
--			return -EFAULT;
--		if (clen < 0)
-+		if (len =3D=3D 0) {
-+			sr->len =3D 0;
-+			iomsg->free_iov =3D NULL;
-+		} else if (len > 1) {
- 			return -EINVAL;
--		sr->len =3D clen;
--		iomsg->free_iov =3D NULL;
-+		} else {
-+			if (!access_ok(uiov, sizeof(*uiov)))
-+				return -EFAULT;
-+			if (__get_user(clen, &uiov->iov_len))
-+				return -EFAULT;
-+			if (clen < 0)
-+				return -EINVAL;
-+			sr->len =3D clen;
-+			iomsg->free_iov =3D NULL;
-+		}
- 	} else {
- 		iomsg->free_iov =3D iomsg->fast_iov;
- 		ret =3D __import_iovec(READ, (struct iovec __user *)uiov, len,
+-static void io_netmsg_recycle(struct io_kiocb *req, unsigned int issue_f=
+lags)
++bool io_netmsg_recycle(struct io_kiocb *req)
+ {
+ 	struct io_async_msghdr *hdr =3D req->async_data;
+=20
+-	if (!hdr || issue_flags & IO_URING_F_UNLOCKED)
+-		return;
+-
+ 	if (io_alloc_cache_store(&req->ctx->netmsg_cache)) {
+ 		hlist_add_head(&hdr->cache_list, &req->ctx->netmsg_cache.list);
+ 		req->async_data =3D NULL;
+ 		req->flags &=3D ~REQ_F_ASYNC_DATA;
++		return true;
+ 	}
++
++	return false;
+ }
+=20
+ static struct io_async_msghdr *io_recvmsg_alloc_async(struct io_kiocb *r=
+eq,
+@@ -261,7 +261,6 @@ int io_sendmsg(struct io_kiocb *req, unsigned int iss=
+ue_flags)
+ 	if (kmsg->free_iov)
+ 		kfree(kmsg->free_iov);
+ 	req->flags &=3D ~REQ_F_NEED_CLEANUP;
+-	io_netmsg_recycle(req, issue_flags);
+ 	if (ret >=3D 0)
+ 		ret +=3D sr->done_io;
+ 	else if (sr->done_io)
+@@ -583,7 +582,6 @@ int io_recvmsg(struct io_kiocb *req, unsigned int iss=
+ue_flags)
+ 	/* fast path, check for non-NULL to avoid function call */
+ 	if (kmsg->free_iov)
+ 		kfree(kmsg->free_iov);
+-	io_netmsg_recycle(req, issue_flags);
+ 	req->flags &=3D ~REQ_F_NEED_CLEANUP;
+ 	if (ret > 0)
+ 		ret +=3D sr->done_io;
+diff --git a/io_uring/net.h b/io_uring/net.h
+index 576efb602c7f..c5a897e61f10 100644
+--- a/io_uring/net.h
++++ b/io_uring/net.h
+@@ -44,6 +44,7 @@ int io_connect_prep_async(struct io_kiocb *req);
+ int io_connect_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe=
+);
+ int io_connect(struct io_kiocb *req, unsigned int issue_flags);
+=20
++bool io_netmsg_recycle(struct io_kiocb *req);
+ void io_flush_netmsg_cache(struct io_ring_ctx *ctx);
+ #else
+ static inline void io_flush_netmsg_cache(struct io_ring_ctx *ctx)
+diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+index a7b84b43e6c2..b525e37f397a 100644
+--- a/io_uring/opdef.c
++++ b/io_uring/opdef.c
+@@ -153,6 +153,7 @@ const struct io_op_def io_op_defs[] =3D {
+ 		.issue			=3D io_sendmsg,
+ 		.prep_async		=3D io_sendmsg_prep_async,
+ 		.cleanup		=3D io_sendmsg_recvmsg_cleanup,
++		.recycle_async		=3D io_netmsg_recycle,
+ #else
+ 		.prep			=3D io_eopnotsupp_prep,
+ #endif
+@@ -170,6 +171,7 @@ const struct io_op_def io_op_defs[] =3D {
+ 		.issue			=3D io_recvmsg,
+ 		.prep_async		=3D io_recvmsg_prep_async,
+ 		.cleanup		=3D io_sendmsg_recvmsg_cleanup,
++		.recycle_async		=3D io_netmsg_recycle,
+ #else
+ 		.prep			=3D io_eopnotsupp_prep,
+ #endif
 --=20
 2.30.2
 
