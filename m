@@ -2,84 +2,97 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD593C43334
-	for <io-uring@archiver.kernel.org>; Wed, 13 Jul 2022 20:25:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B275C43334
+	for <io-uring@archiver.kernel.org>; Wed, 13 Jul 2022 23:38:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236837AbiGMUZb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 13 Jul 2022 16:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
+        id S229680AbiGMXib (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 13 Jul 2022 19:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236836AbiGMUZa (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 13 Jul 2022 16:25:30 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950EB27B16
-        for <io-uring@vger.kernel.org>; Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id y14-20020a17090a644e00b001ef775f7118so5634378pjm.2
-        for <io-uring@vger.kernel.org>; Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KNxdzYJ31Vhyt7oycuRbMlgHEjW6wotI0WNAdQq4UMw=;
-        b=t8kPJVCKtimxDlTtyzRgs6JNvOaLECNuXxarQU5OqBNA+ziab/DxNvRTorr+G98Cl5
-         2n5ZybUVwcbsU+P2E2FnhFqF/mDjUjQRVf+6EFKX70Vbyzk6vKllj0cfGMjRaaH7wV46
-         OJqqnL5CnvYZ/tMqCZLuH5USn/gtG52kAARi3QGK/WoJbpmkwcRGlqfg+bv7QswLkwWF
-         sqTDGUA8vN6GDwxQrdyDse3TUfWV6rQR1erg83hXbDszgJFa74wrL8rWeUtIlOlOn2rW
-         idSQYSMMEmA6NKhXQnU+1DLRu0Ph3fLJmWMrp5S4wqtLYYQgpiVlQDtmbrMJhScjh0kg
-         U6CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KNxdzYJ31Vhyt7oycuRbMlgHEjW6wotI0WNAdQq4UMw=;
-        b=oHM59jH+3+Ejan/2WqtkgRREvqTrmIzAAqND6/SzU/LE+rP9fHoJ2b/z23w4FbjEd1
-         Pt9WIPkLqOjrLEcIcyTPdysWfjeKzlZOc0uWXk3C8PHXFFi3NF7W5J6ccGCh6/mwFgFz
-         NKWzUd3j+FkBjw5YofSkhTDRWIgF99mzFSfMmxSJaXhxUxCws1zfMOsg8lpXvS9rD6sB
-         o9xfl5+jk/9fZczn1T3plREgrQhjtUsbV0oXJnHNgjWY1jckuCcCx7LCroAS6wm6OOXz
-         06JunKIK+Ye/PJqpRkEAXClJ2l/A89F5nJ3mNgcsZUFoRvDfjZcQecLOiiJ1+r5RqDW0
-         IqYA==
-X-Gm-Message-State: AJIora+l8D9UxxaX6JXd0qjWdIjPn+d3ct7silZBO4hOy8EdiQQdbe0f
-        0aS9ENcueMMb6QAbY6ah9mcLmfZJtdDjwA==
-X-Google-Smtp-Source: AGRyM1uMWJM21AdMA4hg31Ti1BfbhNdmhNhNqXCJYSv6TufmkF9YayM6wEk9gfkZAYCsy7kM3FFnog==
-X-Received: by 2002:a17:90b:240b:b0:1ef:8a68:1596 with SMTP id nr11-20020a17090b240b00b001ef8a681596mr5542909pjb.234.1657743927006;
-        Wed, 13 Jul 2022 13:25:27 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id a15-20020a170902710f00b0016bedcced2fsm9332014pll.35.2022.07.13.13.25.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Jul 2022 13:25:26 -0700 (PDT)
-Message-ID: <6e5d590b-448d-ea75-f29d-877a2cd6413b@kernel.dk>
-Date:   Wed, 13 Jul 2022 14:25:25 -0600
+        with ESMTP id S229624AbiGMXia (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 13 Jul 2022 19:38:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EF024C62C;
+        Wed, 13 Jul 2022 16:38:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A20FCB8220B;
+        Wed, 13 Jul 2022 23:38:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83A3C3411E;
+        Wed, 13 Jul 2022 23:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1657755506;
+        bh=sGMnc7ZlfnsYBnaBql7SMpnhQXnrXLXhnd3x7TOfCGw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=tybh7T9F/yucZzbqEG/YK8RSvc9LnMRr+IQ1Mh3ANPfvogKy0tr5uRabcvI7NTv9G
+         ftk7gMBC3jdyZ5ENbP5J26o7EADL7EF3S0v7ctx3brNpX4KzjolpEApeuEoFdIExAk
+         M04xHoaR7g5MyzIMQ40SJoI3O8JxgNefjUuFstt/SyGZBqYnomhtIe/ozI3u6H8lgg
+         6tLFTfdzxAfhO0QEnxwIu6lfZfVkiHBB3kbtV4fYeuJzvb3drS1dSTwANWYnI2ddo+
+         JY+f8QrzTle5y57cJkPQpkna0fMFL5vsZhTi05UkvLhVLyhfHTQXrtukOoGGMHjYge
+         Njr2PX88kfGwQ==
+Message-ID: <e28b6ac9-c191-c36c-3769-4a43d49a86c2@kernel.org>
+Date:   Wed, 13 Jul 2022 16:38:24 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V5 0/2] ublk: add io_uring based userspace block driver
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.11.0
+Subject: Re: [PATCH net-next v4 11/27] tcp: support externally provided ubufs
 Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-References: <20220713140711.97356-1-ming.lei@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220713140711.97356-1-ming.lei@redhat.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
+References: <cover.1657194434.git.asml.silence@gmail.com>
+ <7ee05f644e3b3626b693973738364bcb23cf905d.1657194434.git.asml.silence@gmail.com>
+ <62e1daba-fb20-bf20-5c4d-c31770e5420e@kernel.org>
+ <45cd36ee-ef99-fb67-df8d-218603facfd7@gmail.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <45cd36ee-ef99-fb67-df8d-218603facfd7@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 7/13/22 8:07 AM, Ming Lei wrote:
-> Hello Guys,
+On 7/8/22 7:03 AM, Pavel Begunkov wrote:
+>>> @@ -1356,9 +1362,11 @@ int tcp_sendmsg_locked(struct sock *sk, struct
+>>> msghdr *msg, size_t size)
+>>>                 copy = min_t(int, copy, pfrag->size - pfrag->offset);
+>>>   -            if (tcp_downgrade_zcopy_pure(sk, skb))
+>>> -                goto wait_for_space;
+>>> -
+>>> +            if (unlikely(skb_zcopy_pure(skb) ||
+>>> skb_zcopy_managed(skb))) {
+>>> +                if (tcp_downgrade_zcopy_pure(sk, skb))
+>>> +                    goto wait_for_space;
+>>> +                skb_zcopy_downgrade_managed(skb);
+>>> +            }
+>>>               copy = tcp_wmem_schedule(sk, copy);
+>>>               if (!copy)
+>>>                   goto wait_for_space;
+>>
+>> You dropped the msg->msg_ubuf checks on jump labels. Removing the one
+>> you had at 'out_nopush' I agree with based on my tests (i.e, it is not
+>> needed).
 > 
-> ublk driver is one kernel driver for implementing generic userspace block
-> device/driver, which delivers io request from ublk block device(/dev/ublkbN) into
-> ublk server[1] which is the userspace part of ublk for communicating
-> with ublk driver and handling specific io logic by its target module.
+> It was an optimisation, which I dropped for simplicity. Will be sending it
+> and couple more afterwards.
+> 
+> 
+>> The one at 'out_err' seems like it is needed - but it has been a few
+>> weeks since I debugged that case. I believe the error path I was hitting
+>> was sk_stream_wait_memory with MSG_DONTWAIT flag set meaning timeout is
+>> 0 and it jumps there with EPIPE.
+> 
+> Currently, it's consistent with MSG_ZEROCOPY ubuf_info, we grab a ubuf_info
+> reference at the beginning (msg_zerocopy_realloc() for MSG_ZEROCOPY and
+> net_zcopy_get() for msg_ubuf), and then release it at the end
+> with net_zcopy_put() or net_zcopy_put_abort().
+> 
 
-Ming, is this ready to get merged in an experimental state?
+my fault; I somehow dropped a line in the port to the 5.13 kernel.
 
--- 
-Jens Axboe
 
