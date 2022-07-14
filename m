@@ -2,37 +2,42 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD7B3C43334
-	for <io-uring@archiver.kernel.org>; Thu, 14 Jul 2022 11:03:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1572C433EF
+	for <io-uring@archiver.kernel.org>; Thu, 14 Jul 2022 11:03:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiGNLDO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S238572AbiGNLDO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 14 Jul 2022 07:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237823AbiGNLDN (ORCPT
+        with ESMTP id S237934AbiGNLDN (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Thu, 14 Jul 2022 07:03:13 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A3F5720E
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884505720F
         for <io-uring@vger.kernel.org>; Thu, 14 Jul 2022 04:03:12 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E6xBH7003506
-        for <io-uring@vger.kernel.org>; Thu, 14 Jul 2022 04:03:11 -0700
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26E6x6So010068
+        for <io-uring@vger.kernel.org>; Thu, 14 Jul 2022 04:03:12 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=facebook; bh=8RKmEMumnUvZdCtvdU09M/kYrREzaq06s/h2ae1JAdA=;
- b=NP1/fbWlNHPhyU945AL0PCdB3PFn3ZS5wEdDcZWMU1fT9gvfQRW1k450Zc4hLU+zzLEy
- w3ntrbvLzPuqUsabf8yByXNb54WviI1FDqPo6h9QGWvw9m18s6WQTHKbysOfVeLikNuW
- rXZRHIlV3LbCdq+6AYzGESksg/hCQkS4ICw= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h9h5ca7ht-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=U9SRcZE4yufVxMG2uTQVaSIqlEvTuj1i2uWDAr9BhmI=;
+ b=JaRQf2QPNBm0w143M89RevhFfz145pWEqxoBkUIBhfVUPUyhy/G/eRjw6PEY/cINASH9
+ XNiyinMcF1MMo6AI34tnvLNJzhsDnSIpImv4EFn49hl7+7i6dWEeiy9gVhog26U1/YPa
+ 4Nl3bWH0Vk3RdyfKT2bWViB3KxJuq41J1D8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3h9h5fj9g9-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 14 Jul 2022 04:03:11 -0700
-Received: from twshared18317.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Thu, 14 Jul 2022 04:03:12 -0700
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub104.TheFacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 14 Jul 2022 04:03:10 -0700
+Received: from twshared25107.07.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 14 Jul 2022 04:03:09 -0700
+ 15.1.2375.28; Thu, 14 Jul 2022 04:03:10 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id E85862FCA611; Thu, 14 Jul 2022 04:03:01 -0700 (PDT)
+        id D8F032FCA618; Thu, 14 Jul 2022 04:03:02 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>, <davem@davemloft.net>,
@@ -40,17 +45,18 @@ To:     Jens Axboe <axboe@kernel.dk>,
         <io-uring@vger.kernel.org>
 CC:     <netdev@vger.kernel.org>, <Kernel-team@fb.com>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH v3 for-next 0/3] io_uring: multishot recvmsg
-Date:   Thu, 14 Jul 2022 04:02:55 -0700
-Message-ID: <20220714110258.1336200-1-dylany@fb.com>
+Subject: [PATCH v3 for-next 2/3] net: copy from user before calling __get_compat_msghdr
+Date:   Thu, 14 Jul 2022 04:02:57 -0700
+Message-ID: <20220714110258.1336200-3-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220714110258.1336200-1-dylany@fb.com>
+References: <20220714110258.1336200-1-dylany@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: oH9751Jlw-0vOlgciK7vmnyFZsfRPFZv
-X-Proofpoint-ORIG-GUID: oH9751Jlw-0vOlgciK7vmnyFZsfRPFZv
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-GUID: aRKYVZLLXZBCgYPJr9Shefv2QWVwpUKi
+X-Proofpoint-ORIG-GUID: aRKYVZLLXZBCgYPJr9Shefv2QWVwpUKi
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-14_08,2022-07-14_01,2022-06-22_01
@@ -58,65 +64,176 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This series adds multishot support to recvmsg in io_uring.
+this is in preparation for multishot receive from io_uring, where it need=
+s
+to have access to the original struct user_msghdr.
 
-The idea is that you submit a single multishot recvmsg and then receive
-completions as and when data arrives. For recvmsg each completion also has
-control data, and this is necessarily included in the same buffer as the
-payload.
+functionally this should be a no-op.
 
-In order to do this a new structure is used: io_uring_recvmsg_out. This
-specifies the length written of the name, control and payload. As well as
-including the flags.
-The layout of the buffer is <header><name><control><payload> where the
-lengths are those specified in the original msghdr used to issue the recvms=
-g.
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ include/net/compat.h |  5 ++---
+ io_uring/net.c       | 17 +++++++++--------
+ net/compat.c         | 39 +++++++++++++++++----------------------
+ 3 files changed, 28 insertions(+), 33 deletions(-)
 
-I suspect this API will be the most contentious part of this series and wou=
-ld
-appreciate any comments on it.
-
-For completeness I considered having the original struct msghdr as the head=
-er,
-but size wise it is much bigger (72 bytes including an iovec vs 16 bytes he=
-re).
-Testing also showed a 1% slowdown in terms of QPS.
-
-Using a mini network tester [1] shows 14% QPS improvment using this API, ho=
-wever
-this is likely to go down to ~8% with the latest allocation cache added by =
-Jens.
-
-[1]: https://github.com/DylanZA/netbench/tree/main
-
-Patches 1,2 change the copy_msghdr code to take a user_msghdr as input
-Patch 3 is the multishot feature
-
-v3:
- * apply formatting comments
- * refactor io_recvmsg_prep_multishot to reduce casts
- * move some overflow logic into recvmsg_prep as only need to call it once
-
-v2:
- * Rebase without netbuf recycling provided by io_uring
- * Fix payload field output with MSG_TRUNC set to match recvmsg(2)
-
-Dylan Yudaken (3):
-  net: copy from user before calling __copy_msghdr
-  net: copy from user before calling __get_compat_msghdr
-  io_uring: support multishot in recvmsg
-
- include/linux/socket.h        |   7 +-
- include/net/compat.h          |   5 +-
- include/uapi/linux/io_uring.h |   7 ++
- io_uring/net.c                | 216 ++++++++++++++++++++++++++++------
- io_uring/net.h                |   6 +
- net/compat.c                  |  39 +++---
- net/socket.c                  |  37 +++---
- 7 files changed, 232 insertions(+), 85 deletions(-)
-
-
-base-commit: 20898aeac6b82d8eb6247754494584b2f6cafd53
+diff --git a/include/net/compat.h b/include/net/compat.h
+index 595fee069b82..84c163f40f38 100644
+--- a/include/net/compat.h
++++ b/include/net/compat.h
+@@ -46,9 +46,8 @@ struct compat_rtentry {
+ 	unsigned short  rt_irtt;        /* Initial RTT                  */
+ };
+=20
+-int __get_compat_msghdr(struct msghdr *kmsg, struct compat_msghdr __user=
+ *umsg,
+-			struct sockaddr __user **save_addr, compat_uptr_t *ptr,
+-			compat_size_t *len);
++int __get_compat_msghdr(struct msghdr *kmsg, struct compat_msghdr *msg,
++			struct sockaddr __user **save_addr);
+ int get_compat_msghdr(struct msghdr *, struct compat_msghdr __user *,
+ 		      struct sockaddr __user **, struct iovec **);
+ int put_cmsg_compat(struct msghdr*, int, int, int, void *);
+diff --git a/io_uring/net.c b/io_uring/net.c
+index da7667ed3610..5bc3440a8290 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -369,24 +369,25 @@ static int __io_compat_recvmsg_copy_hdr(struct io_k=
+iocb *req,
+ 					struct io_async_msghdr *iomsg)
+ {
+ 	struct io_sr_msg *sr =3D io_kiocb_to_cmd(req);
++	struct compat_msghdr msg;
+ 	struct compat_iovec __user *uiov;
+-	compat_uptr_t ptr;
+-	compat_size_t len;
+ 	int ret;
+=20
+-	ret =3D __get_compat_msghdr(&iomsg->msg, sr->umsg_compat, &iomsg->uaddr=
+,
+-				  &ptr, &len);
++	if (copy_from_user(&msg, sr->umsg_compat, sizeof(msg)))
++		return -EFAULT;
++
++	ret =3D __get_compat_msghdr(&iomsg->msg, sr->umsg_compat, &iomsg->uaddr=
+);
+ 	if (ret)
+ 		return ret;
+=20
+-	uiov =3D compat_ptr(ptr);
++	uiov =3D compat_ptr(msg.msg_iov);
+ 	if (req->flags & REQ_F_BUFFER_SELECT) {
+ 		compat_ssize_t clen;
+=20
+-		if (len =3D=3D 0) {
++		if (msg.msg_iovlen =3D=3D 0) {
+ 			sr->len =3D 0;
+ 			iomsg->free_iov =3D NULL;
+-		} else if (len > 1) {
++		} else if (msg.msg_iovlen > 1) {
+ 			return -EINVAL;
+ 		} else {
+ 			if (!access_ok(uiov, sizeof(*uiov)))
+@@ -400,7 +401,7 @@ static int __io_compat_recvmsg_copy_hdr(struct io_kio=
+cb *req,
+ 		}
+ 	} else {
+ 		iomsg->free_iov =3D iomsg->fast_iov;
+-		ret =3D __import_iovec(READ, (struct iovec __user *)uiov, len,
++		ret =3D __import_iovec(READ, (struct iovec __user *)uiov, msg.msg_iovl=
+en,
+ 				   UIO_FASTIOV, &iomsg->free_iov,
+ 				   &iomsg->msg.msg_iter, true);
+ 		if (ret < 0)
+diff --git a/net/compat.c b/net/compat.c
+index 210fc3b4d0d8..513aa9a3fc64 100644
+--- a/net/compat.c
++++ b/net/compat.c
+@@ -34,20 +34,15 @@
+ #include <net/compat.h>
+=20
+ int __get_compat_msghdr(struct msghdr *kmsg,
+-			struct compat_msghdr __user *umsg,
+-			struct sockaddr __user **save_addr,
+-			compat_uptr_t *ptr, compat_size_t *len)
++			struct compat_msghdr *msg,
++			struct sockaddr __user **save_addr)
+ {
+-	struct compat_msghdr msg;
+ 	ssize_t err;
+=20
+-	if (copy_from_user(&msg, umsg, sizeof(*umsg)))
+-		return -EFAULT;
+-
+-	kmsg->msg_flags =3D msg.msg_flags;
+-	kmsg->msg_namelen =3D msg.msg_namelen;
++	kmsg->msg_flags =3D msg->msg_flags;
++	kmsg->msg_namelen =3D msg->msg_namelen;
+=20
+-	if (!msg.msg_name)
++	if (!msg->msg_name)
+ 		kmsg->msg_namelen =3D 0;
+=20
+ 	if (kmsg->msg_namelen < 0)
+@@ -57,15 +52,15 @@ int __get_compat_msghdr(struct msghdr *kmsg,
+ 		kmsg->msg_namelen =3D sizeof(struct sockaddr_storage);
+=20
+ 	kmsg->msg_control_is_user =3D true;
+-	kmsg->msg_control_user =3D compat_ptr(msg.msg_control);
+-	kmsg->msg_controllen =3D msg.msg_controllen;
++	kmsg->msg_control_user =3D compat_ptr(msg->msg_control);
++	kmsg->msg_controllen =3D msg->msg_controllen;
+=20
+ 	if (save_addr)
+-		*save_addr =3D compat_ptr(msg.msg_name);
++		*save_addr =3D compat_ptr(msg->msg_name);
+=20
+-	if (msg.msg_name && kmsg->msg_namelen) {
++	if (msg->msg_name && kmsg->msg_namelen) {
+ 		if (!save_addr) {
+-			err =3D move_addr_to_kernel(compat_ptr(msg.msg_name),
++			err =3D move_addr_to_kernel(compat_ptr(msg->msg_name),
+ 						  kmsg->msg_namelen,
+ 						  kmsg->msg_name);
+ 			if (err < 0)
+@@ -76,12 +71,10 @@ int __get_compat_msghdr(struct msghdr *kmsg,
+ 		kmsg->msg_namelen =3D 0;
+ 	}
+=20
+-	if (msg.msg_iovlen > UIO_MAXIOV)
++	if (msg->msg_iovlen > UIO_MAXIOV)
+ 		return -EMSGSIZE;
+=20
+ 	kmsg->msg_iocb =3D NULL;
+-	*ptr =3D msg.msg_iov;
+-	*len =3D msg.msg_iovlen;
+ 	return 0;
+ }
+=20
+@@ -90,15 +83,17 @@ int get_compat_msghdr(struct msghdr *kmsg,
+ 		      struct sockaddr __user **save_addr,
+ 		      struct iovec **iov)
+ {
+-	compat_uptr_t ptr;
+-	compat_size_t len;
++	struct compat_msghdr msg;
+ 	ssize_t err;
+=20
+-	err =3D __get_compat_msghdr(kmsg, umsg, save_addr, &ptr, &len);
++	if (copy_from_user(&msg, umsg, sizeof(*umsg)))
++		return -EFAULT;
++
++	err =3D __get_compat_msghdr(kmsg, umsg, save_addr);
+ 	if (err)
+ 		return err;
+=20
+-	err =3D import_iovec(save_addr ? READ : WRITE, compat_ptr(ptr), len,
++	err =3D import_iovec(save_addr ? READ : WRITE, compat_ptr(msg.msg_iov),=
+ msg.msg_iovlen,
+ 			   UIO_FASTIOV, iov, &kmsg->msg_iter);
+ 	return err < 0 ? err : 0;
+ }
 --=20
 2.30.2
 
