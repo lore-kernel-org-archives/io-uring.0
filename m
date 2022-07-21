@@ -2,54 +2,55 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DFE5C433EF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CD64CCA487
 	for <io-uring@archiver.kernel.org>; Thu, 21 Jul 2022 16:04:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbiGUQEQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S229499AbiGUQEQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 21 Jul 2022 12:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiGUQEP (ORCPT
+        with ESMTP id S229526AbiGUQEP (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Thu, 21 Jul 2022 12:04:15 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A5C58876
-        for <io-uring@vger.kernel.org>; Thu, 21 Jul 2022 09:04:14 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LF1San005785
-        for <io-uring@vger.kernel.org>; Thu, 21 Jul 2022 09:04:14 -0700
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CBA87371
+        for <io-uring@vger.kernel.org>; Thu, 21 Jul 2022 09:04:15 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26LFQw9e013835
+        for <io-uring@vger.kernel.org>; Thu, 21 Jul 2022 09:04:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=hB7hrsIwKUiiM+hcXpPwrwCuXz+erNPf3fgsJU38bOw=;
- b=PAvuCHdZRe8YnI0IT/m//ZSk5tBJ1BcqGnYgCSY/HuEqa9BpEFziQR7tLF6hVGghTOWm
- l/hrCyBeBsHUHyyc2ZkdfXY1G9dcTNOLxFsFBzCk6kI4ZP/X3hZ3Lu17Mam35LlPLM8j
- Ds9qc9prVbZUdw4kYFI0Z/Of/Yd9VYNMJW8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hes8vd6jx-2
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=IGz1+8poNxSCZAF6S/dKjyZYOpvPM9g7VqAbQvH939c=;
+ b=cW5vo4yeVr0VYtKv/p7Aq3Xmilz1QNq4luiD3iJqFHlaDBlhwdgBkBVjoOgxebz6Zu3G
+ DpsFg04mOgPCm90C0GSh2z0yIpXcSUOnuBsyfMmo9uVV+dPW4JQOnwRyHgDoCoapv6Xf
+ w3sTZQqwA/BsvSRaoNnip2WulZMwVjd/6+A= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hehn2rjk1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 21 Jul 2022 09:04:14 -0700
-Received: from twshared7556.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Thu, 21 Jul 2022 09:04:15 -0700
+Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
+ snc-exhub102.TheFacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 21 Jul 2022 09:04:14 -0700
+Received: from twshared39111.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 21 Jul 2022 09:04:12 -0700
+ 15.1.2375.28; Thu, 21 Jul 2022 09:04:14 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id DF48735A05E2; Thu, 21 Jul 2022 09:04:08 -0700 (PDT)
+        id 3AC0735A05D3; Thu, 21 Jul 2022 09:04:07 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     <axboe@kernel.dk>, <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <Kernel-team@fb.com>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing 2/2] test: have poll-mshot-update run with both big and small cqe
-Date:   Thu, 21 Jul 2022 09:04:06 -0700
-Message-ID: <20220721160406.1700508-3-dylany@fb.com>
+Subject: [PATCH liburing 0/2] test: fix poll-mshot-update tests
+Date:   Thu, 21 Jul 2022 09:04:04 -0700
+Message-ID: <20220721160406.1700508-1-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220721160406.1700508-1-dylany@fb.com>
-References: <20220721160406.1700508-1-dylany@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: j7j0rR3eJkJygzUdeHVx72QwOIcPa9-r
-X-Proofpoint-ORIG-GUID: j7j0rR3eJkJygzUdeHVx72QwOIcPa9-r
+X-Proofpoint-GUID: irckvRxihVg_t3Wkg07aDTmq1PAwv2fC
+X-Proofpoint-ORIG-GUID: irckvRxihVg_t3Wkg07aDTmq1PAwv2fC
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-21_22,2022-07-20_01,2022-06-22_01
@@ -57,139 +58,21 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Run the test twice, with and without overflow to make sure more codepaths
-are tested.
+This test did not look at the IORING_CQE_F_MORE flag, and so could start =
+failing.
+Update it to do this in patch 1, and then patch 2 runs the test with more=
+/less
+overflows to test these codepaths
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- test/poll-mshot-update.c | 90 +++++++++++++++++++++++++---------------
- 1 file changed, 57 insertions(+), 33 deletions(-)
+Dylan Yudaken (2):
+  fixup poll-mshot-update
+  test: have poll-mshot-update run with both big and small cqe
 
-diff --git a/test/poll-mshot-update.c b/test/poll-mshot-update.c
-index e01befcfa7eb..eeb725437cc8 100644
---- a/test/poll-mshot-update.c
-+++ b/test/poll-mshot-update.c
-@@ -213,52 +213,23 @@ static int arm_polls(struct io_uring *ring)
- 	return 0;
- }
-=20
--int main(int argc, char *argv[])
-+static int run(int cqe)
- {
- 	struct io_uring ring;
- 	struct io_uring_params params =3D { };
--	struct rlimit rlim;
- 	pthread_t thread;
- 	int i, j, ret;
-=20
--	if (argc > 1)
--		return 0;
--
--	ret =3D has_poll_update();
--	if (ret < 0) {
--		fprintf(stderr, "poll update check failed %i\n", ret);
--		return -1;
--	} else if (!ret) {
--		fprintf(stderr, "no poll update, skip\n");
--		return 0;
--	}
--
--	if (getrlimit(RLIMIT_NOFILE, &rlim) < 0) {
--		perror("getrlimit");
--		goto err_noring;
--	}
--
--	if (rlim.rlim_cur < (2 * NFILES + 5)) {
--		rlim.rlim_cur =3D (2 * NFILES + 5);
--		rlim.rlim_max =3D rlim.rlim_cur;
--		if (setrlimit(RLIMIT_NOFILE, &rlim) < 0) {
--			if (errno =3D=3D EPERM)
--				goto err_nofail;
--			perror("setrlimit");
--			goto err_noring;
--		}
--	}
--
- 	for (i =3D 0; i < NFILES; i++) {
- 		if (pipe(p[i].fd) < 0) {
- 			perror("pipe");
--			goto err_noring;
-+			return 1;
- 		}
- 		fcntl(p[i].fd[0], F_SETFL, O_NONBLOCK);
- 	}
-=20
- 	params.flags =3D IORING_SETUP_CQSIZE;
--	params.cq_entries =3D 4096;
-+	params.cq_entries =3D cqe;
- 	ret =3D io_uring_queue_init_params(RING_SIZE, &ring, &params);
- 	if (ret) {
- 		if (ret =3D=3D -EINVAL) {
-@@ -286,10 +257,63 @@ int main(int argc, char *argv[])
- 	}
-=20
- 	io_uring_queue_exit(&ring);
-+	for (i =3D 0; i < NFILES; i++) {
-+		close(p[i].fd[0]);
-+		close(p[i].fd[1]);
-+	}
- 	return 0;
- err:
- 	io_uring_queue_exit(&ring);
--err_noring:
-+	return 1;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct rlimit rlim;
-+	int ret;
-+
-+	if (argc > 1)
-+		return 0;
-+
-+	ret =3D has_poll_update();
-+	if (ret < 0) {
-+		fprintf(stderr, "poll update check failed %i\n", ret);
-+		return -1;
-+	} else if (!ret) {
-+		fprintf(stderr, "no poll update, skip\n");
-+		return 0;
-+	}
-+
-+	if (getrlimit(RLIMIT_NOFILE, &rlim) < 0) {
-+		perror("getrlimit");
-+		goto err;
-+	}
-+
-+	if (rlim.rlim_cur < (2 * NFILES + 5)) {
-+		rlim.rlim_cur =3D (2 * NFILES + 5);
-+		rlim.rlim_max =3D rlim.rlim_cur;
-+		if (setrlimit(RLIMIT_NOFILE, &rlim) < 0) {
-+			if (errno =3D=3D EPERM)
-+				goto err_nofail;
-+			perror("setrlimit");
-+			goto err;
-+		}
-+	}
-+
-+	ret =3D run(1024);
-+	if (ret) {
-+		fprintf(stderr, "run(1024) failed\n");
-+		goto err;
-+	}
-+
-+	ret =3D run(8192);
-+	if (ret) {
-+		fprintf(stderr, "run(8192) failed\n");
-+		goto err;
-+	}
-+
-+	return 0;
-+err:
- 	fprintf(stderr, "poll-many failed\n");
- 	return 1;
- err_nofail:
+ test/poll-mshot-update.c | 116 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 83 insertions(+), 33 deletions(-)
+
+
+base-commit: 4e6eec8bdea906fe5341c97aef96986d605004e9
 --=20
 2.30.2
 
