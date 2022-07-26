@@ -2,45 +2,45 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41B52C43334
-	for <io-uring@archiver.kernel.org>; Tue, 26 Jul 2022 12:15:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB057C43334
+	for <io-uring@archiver.kernel.org>; Tue, 26 Jul 2022 12:15:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiGZMPS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 26 Jul 2022 08:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
+        id S238632AbiGZMP2 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 26 Jul 2022 08:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233224AbiGZMPR (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Jul 2022 08:15:17 -0400
+        with ESMTP id S233224AbiGZMP2 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Jul 2022 08:15:28 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD1FAE70
-        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 05:15:15 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q0rR8e010368
-        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 05:15:15 -0700
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E86D2AC53
+        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 05:15:27 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 26Q0osRx003807
+        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 05:15:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=fvuLvGOXfPpDawfY17s+47uVGXBsXbTXyOIpofQR6Tc=;
- b=PdgXfs48EWXKZUg78cReGEbgL3D+7i23C1FkGa9TH0IOWTPkvgTSR4EDrSOQfrJN31e7
- oTiLkOmqD9siiFlZBsOlX25WkB9CLHDC51IHFyAHUrUOSVri+SLf3P/e+6+uWKhTRc64
- sDRSoad7AHrFz9KDIytgQBTIfNlld84E5ck= 
+ bh=IvHtzsYmeoD7dYs/XROGai/v/J8+kLFHqiY2yDVoe6A=;
+ b=knpD8wyBBrS6ISboCRbQ33seCSxkQj+HsTyFISSD6HkAQLX2i8YziKa3ilAmvAZq4e0s
+ mGgzmTYPA1d5HhJOIdllkXh8yUy+1bohE2HSXg3RCUYVwoO3rJTx5KJi30Q4jS9ayq40
+ Nrb+lj12vdLsceipF2P8IDiC/d5ZDC1dC4U= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hhxbwny4s-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hj1usm8y9-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 05:15:15 -0700
-Received: from twshared25107.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 05:15:26 -0700
+Received: from twshared33626.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 26 Jul 2022 05:15:12 -0700
+ 15.1.2375.28; Tue, 26 Jul 2022 05:15:24 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 0C97B397A78C; Tue, 26 Jul 2022 05:15:08 -0700 (PDT)
+        id 175F1397A790; Tue, 26 Jul 2022 05:15:08 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     <axboe@kernel.dk>, <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <Kernel-team@fb.com>,
         Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing 1/5] more consistent multishot recvmsg API parameter names
-Date:   Tue, 26 Jul 2022 05:14:58 -0700
-Message-ID: <20220726121502.1958288-2-dylany@fb.com>
+Subject: [PATCH liburing 3/5] change io_uring_recvmsg_payload_length return type
+Date:   Tue, 26 Jul 2022 05:15:00 -0700
+Message-ID: <20220726121502.1958288-4-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220726121502.1958288-1-dylany@fb.com>
 References: <20220726121502.1958288-1-dylany@fb.com>
@@ -48,8 +48,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: lTpCwPUyisxLPMV0ruqqj7_zy-z0MLWk
-X-Proofpoint-ORIG-GUID: lTpCwPUyisxLPMV0ruqqj7_zy-z0MLWk
+X-Proofpoint-GUID: fAhIhW7pVBFrpz4txVGupiTj5RbvK6ul
+X-Proofpoint-ORIG-GUID: fAhIhW7pVBFrpz4txVGupiTj5RbvK6ul
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-07-26_04,2022-07-26_01,2022-06-22_01
@@ -57,87 +57,39 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Make the parameters more consistent with for example cmsg(3), and with
-itself (in the form of buf_len).
+Payloads can not be bigger than UINT_MAX, so no need to force a bigger
+type on the caller.
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- src/include/liburing.h | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ src/include/liburing.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/include/liburing.h b/src/include/liburing.h
-index cffdabd71144..d3cbdb037b32 100644
+index 9e7f06f390be..06f4a50bacb1 100644
 --- a/src/include/liburing.h
 +++ b/src/include/liburing.h
-@@ -734,9 +734,9 @@ static inline void io_uring_prep_recv_multishot(struc=
-t io_uring_sqe *sqe,
+@@ -788,7 +788,7 @@ static inline void *io_uring_recvmsg_payload(struct i=
+o_uring_recvmsg_out *o,
+ 			msgh->msg_namelen + msgh->msg_controllen);
  }
 =20
- static inline struct io_uring_recvmsg_out *
--io_uring_recvmsg_validate(void *buf, int buf_len, struct msghdr *m)
-+io_uring_recvmsg_validate(void *buf, int buf_len, struct msghdr *msgh)
- {
--	int header =3D m->msg_controllen + m->msg_namelen +
-+	int header =3D msgh->msg_controllen + msgh->msg_namelen +
- 				sizeof(struct io_uring_recvmsg_out);
-=20
- 	if (buf_len < header)
-@@ -751,42 +751,42 @@ static inline void *io_uring_recvmsg_name(struct io=
-_uring_recvmsg_out *o)
-=20
- static inline struct cmsghdr *
- io_uring_recvmsg_cmsg_firsthdr(struct io_uring_recvmsg_out *o,
--			       struct msghdr *m)
-+			       struct msghdr *msgh)
- {
- 	if (o->controllen < sizeof(struct cmsghdr))
- 		return NULL;
-=20
- 	return (struct cmsghdr *)((unsigned char *) io_uring_recvmsg_name(o) +
--			m->msg_namelen);
-+			msgh->msg_namelen);
- }
-=20
- static inline void *io_uring_recvmsg_payload(struct io_uring_recvmsg_out=
- *o,
--					     struct msghdr *m)
-+					     struct msghdr *msgh)
- {
- 	return (void *)((unsigned char *)io_uring_recvmsg_name(o) +
--			m->msg_namelen + m->msg_controllen);
-+			msgh->msg_namelen + msgh->msg_controllen);
- }
-=20
- static inline size_t
+-static inline size_t
++static inline unsigned int
  io_uring_recvmsg_payload_length(struct io_uring_recvmsg_out *o,
--				int buf_length, struct msghdr *m)
-+				int buf_len, struct msghdr *msgh)
+ 				int buf_len, struct msghdr *msgh)
  {
- 	unsigned long payload_start, payload_end;
+@@ -796,7 +796,7 @@ io_uring_recvmsg_payload_length(struct io_uring_recvm=
+sg_out *o,
 =20
--	payload_start =3D (unsigned long) io_uring_recvmsg_payload(o, m);
--	payload_end =3D (unsigned long) o + buf_length;
-+	payload_start =3D (unsigned long) io_uring_recvmsg_payload(o, msgh);
-+	payload_end =3D (unsigned long) o + buf_len;
- 	return payload_end - payload_start;
+ 	payload_start =3D (unsigned long) io_uring_recvmsg_payload(o, msgh);
+ 	payload_end =3D (unsigned long) o + buf_len;
+-	return payload_end - payload_start;
++	return (unsigned int) (payload_end - payload_start);
  }
 =20
- static inline struct cmsghdr *
--io_uring_recvmsg_cmsg_nexthdr(struct io_uring_recvmsg_out *o, struct msg=
-hdr *m,
-+io_uring_recvmsg_cmsg_nexthdr(struct io_uring_recvmsg_out *o, struct msg=
-hdr *msgh,
- 			      struct cmsghdr *cmsg)
- {
- 	unsigned char *end;
-=20
- 	if (cmsg->cmsg_len < sizeof(struct cmsghdr))
- 		return NULL;
--	end =3D (unsigned char *) io_uring_recvmsg_cmsg_firsthdr(o, m) +
-+	end =3D (unsigned char *) io_uring_recvmsg_cmsg_firsthdr(o, msgh) +
- 		o->controllen;
- 	cmsg =3D (struct cmsghdr *)((unsigned char *) cmsg +
- 			CMSG_ALIGN(cmsg->cmsg_len));
+ static inline void io_uring_prep_openat2(struct io_uring_sqe *sqe, int d=
+fd,
 --=20
 2.30.2
 
