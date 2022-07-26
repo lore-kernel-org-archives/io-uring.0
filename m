@@ -2,73 +2,71 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB812C43334
-	for <io-uring@archiver.kernel.org>; Tue, 26 Jul 2022 09:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40BCEC43334
+	for <io-uring@archiver.kernel.org>; Tue, 26 Jul 2022 11:19:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbiGZJto (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 26 Jul 2022 05:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
+        id S232707AbiGZLTX (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 26 Jul 2022 07:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238332AbiGZJtm (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Jul 2022 05:49:42 -0400
+        with ESMTP id S229759AbiGZLTX (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 26 Jul 2022 07:19:23 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C3331DD7
-        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 02:49:41 -0700 (PDT)
-Received: from integral2.. (unknown [125.160.106.238])
-        by gnuweeb.org (Postfix) with ESMTPSA id 9B8D580631;
-        Tue, 26 Jul 2022 09:49:39 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A7430F49
+        for <io-uring@vger.kernel.org>; Tue, 26 Jul 2022 04:19:20 -0700 (PDT)
+Received: from localhost.localdomain (unknown [138.197.159.143])
+        by gnuweeb.org (Postfix) with ESMTPSA id B95A57E328;
+        Tue, 26 Jul 2022 11:19:19 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1658828981;
-        bh=h+UyL3Y0CwV/mlfP72kZqjb7K7ZRYibA0lhtAU8GBnU=;
+        s=default; t=1658834360;
+        bh=k/V5rIfa9ylnDktf7+NicTFP9w4TxSG4KpRr5gBkXeY=;
         h=From:To:Cc:Subject:Date:From;
-        b=MrwUbPaBaxT1HR9XYnSh6TFfQhW3DnPRbsm1pLZxJYcyBISnEUpTuXPWkgU30zo3p
-         VGmMCvrS+/jZJAznYOpBCzQHaUTDm7CLubIGs1jMBh83DAcBJkKnrR0IH2ZtHfTC0w
-         CbVzTDlUnxw9DGe5nIuBdsKNt/LcPeqHEozCueExrjWuZbvFWwwcbi42/owc1HVSMF
-         qAk8cMs3dTgpcVNUKuYw7+ukopdQ9bbPcraXvO7c3mlG4VQuoNdPKuKbbcHxvrA+5s
-         HrBiQxk4FoRMe1Ch5J7iA1CkiKgtXoCLusuhY5eZFXOzDg8i2FcJgc2M/2NPfUsEg/
-         XfKd5IsPXBpZg==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+        b=bz0D3whobmJcCLVtTz6EmWuzEJg0HhsOO0DVz+Js5wMgn51WjqOQFDWMbNggGZPoL
+         qZlQwfMH4nIqAswlelpgXg/EP9NZoP2QwTOj5qkZkyq2oieM8vMF9HcCYDhgQoOyMU
+         hVlaEHww8vSeSubdyZ4D+tcxty31cc/CI9yADGoSVOnHw3cpDPFMMy31zxCNgpNAuB
+         jgzz5Eieshh8rnFzkq2UtQ+FOwrF2iHfvteF8g7InuZDbQOm3saqy47PaxYFm4I3SD
+         CKCnNjERtLZOJT/JHxzx2n6PJbY45ikz4B6+s01DERDXCrZaMpOPp25vvXdDe2yeo0
+         Q9yaqg0IzcjRA==
+From:   Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+Cc:     Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         io-uring Mailing List <io-uring@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@gnuweeb.org>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Subject: [PATCH liburing] .gitignore: Add poll-bench and send-zerocopy examples
-Date:   Tue, 26 Jul 2022 16:49:08 +0700
-Message-Id: <20220726094908.226477-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [PATCH liburing] arch/syscall: Use __NR_mmap2 existence for preprocessor condition
+Date:   Tue, 26 Jul 2022 11:18:51 +0000
+Message-Id: <20220726111851.3608291-1-alviro.iskandar@gnuweeb.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Previous commits add poll-bench and send-zerocopy examples but forgot
-to add the compiled files to .gitignore. Add them to .gitignore to
-make "git status" clean after build.
+Now __NR_mmap2 is only used for i386. But it is also needed for other
+archs like ARM and RISCV32. Decide to use it based on the __NR_mmap2
+definition as it's not defined on other archs. Currently, this has no
+effect because other archs use the generic mmap definition from libc.
 
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 ---
- .gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+ src/arch/syscall-defs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.gitignore b/.gitignore
-index b5acffd..4b63a91 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -15,6 +15,8 @@
- /examples/io_uring-test
- /examples/link-cp
- /examples/ucontext-cp
-+/examples/poll-bench
-+/examples/send-zerocopy
+diff --git a/src/arch/syscall-defs.h b/src/arch/syscall-defs.h
+index 9ddac45..374aa0d 100644
+--- a/src/arch/syscall-defs.h
++++ b/src/arch/syscall-defs.h
+@@ -27,7 +27,7 @@ static inline void *__sys_mmap(void *addr, size_t length, int prot, int flags,
+ {
+ 	int nr;
  
- /test/*.t
- /test/*.dmesg
-
-base-commit: 30a20795d7e4f300c606c6a2aa0a4c9492882d1d
+-#if defined(__i386__)
++#if defined(__NR_mmap2)
+ 	nr = __NR_mmap2;
+ 	offset >>= 12;
+ #else
 -- 
-Ammar Faizi
+Alviro Iskandar Setiawan
 
