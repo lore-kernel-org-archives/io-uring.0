@@ -2,89 +2,264 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80817C04A68
-	for <io-uring@archiver.kernel.org>; Wed, 27 Jul 2022 15:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53C63C19F2B
+	for <io-uring@archiver.kernel.org>; Wed, 27 Jul 2022 15:34:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbiG0PeW (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 27 Jul 2022 11:34:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S232127AbiG0PeX (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 27 Jul 2022 11:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiG0PeW (ORCPT
+        with ESMTP id S233553AbiG0PeW (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 27 Jul 2022 11:34:22 -0400
-X-Greylist: delayed 401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 Jul 2022 08:34:19 PDT
 Received: from euporie.uberspace.de (euporie.uberspace.de [185.26.156.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5809E237D9
-        for <io-uring@vger.kernel.org>; Wed, 27 Jul 2022 08:34:19 -0700 (PDT)
-Received: (qmail 14935 invoked by uid 989); 27 Jul 2022 15:27:36 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456EC1F61F
+        for <io-uring@vger.kernel.org>; Wed, 27 Jul 2022 08:34:21 -0700 (PDT)
+Received: (qmail 15032 invoked by uid 989); 27 Jul 2022 15:27:38 -0000
 Authentication-Results: euporie.uberspace.de;
         auth=pass (plain)
 From:   Florian Fischer <florian.fischer@muhq.space>
 To:     io-uring@vger.kernel.org
 Cc:     Florian Schmaus <flow@cs.fau.de>,
         Florian Fischer <florian.fischer@muhq.space>
-Subject: [PATCH liburing] add additional meson build system support
-Date:   Wed, 27 Jul 2022 17:27:14 +0200
-Message-Id: <20220727152723.3320169-1-florian.fischer@muhq.space>
+Subject: [PATCH liburing 2/9] meson: update meson build files for liburing 2.3
+Date:   Wed, 27 Jul 2022 17:27:16 +0200
+Message-Id: <20220727152723.3320169-3-florian.fischer@muhq.space>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220727152723.3320169-1-florian.fischer@muhq.space>
+References: <20220727152723.3320169-1-florian.fischer@muhq.space>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Bar: /
-X-Rspamd-Report: MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) BAYES_HAM(-0.71453)
-X-Rspamd-Score: 0.185469
+X-Rspamd-Bar: ------
+X-Rspamd-Report: MIME_GOOD(-0.1) REPLY(-4) MID_CONTAINS_FROM(1) BAYES_HAM(-2.996886)
+X-Rspamd-Score: -6.096886
 Received: from unknown (HELO unkown) (::1)
-        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 27 Jul 2022 17:27:36 +0200
+        by euporie.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 27 Jul 2022 17:27:38 +0200
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This patch series add an additional build system to liburing based
-on the initial meson code proposed by Peter Eszlari <peter.eszlari@gmail.com>.
-Since the initial proposal [1] in Februar 2021 I took up the meson code and
-improved, maintained and made it available in the meson wrapdb [2].
+* meson has builtin methods to check if the used compiler supports certain
+  types and their expected members. Therefore we don't need to check if code
+  using those types compiles. This makes the build file more readable.
+  Suggested-By: Nils Tonnätt <nils.tonnaett@posteo.de>
 
-Meson is a modern, fast and simple build system. Adoption started mainly in the
-desktop space (Gnome, X11, Mesa) to replace autotools, but since then,
-some low level projects (systemd, qemu) have switched to it too.
+* do not use -Wpedantic like the custom build system
 
-Using meson as build system has multiple advantages over the current custom
-configure plus Makefile implementation:
+* check if ucontext functions are available. See: b5f2347
 
-* Out-of-source builds
-* Seamlessly consumable by other projects using meson
-* Meson generates the compile_commands.json database used i.e., by clangd
-* Packagers can use a standardized and well known build system
+* add explicit run_command check kwarg
+  The default will change in future meson versions causing possible
+  unexpected behavior.
+  And the awk command should not fail in the first place.
 
- .github/workflows/build.yml      |  45 ++++++++-
- .gitignore                       |   2 +
- examples/meson.build             |  19 ++++
- man/meson.build                  | 116 ++++++++++++++++++++++
- meson.build                      | 119 ++++++++++++++++++++++
- meson_options.txt                |  14 +++
- src/include/liburing/compat.h.in |   7 ++
- src/include/liburing/meson.build |  51 ++++++++++
- src/include/meson.build          |   3 +
- src/meson.build                  |  28 ++++++
- test/meson.build                 | 219 +++++++++++++++++++++++++++++++++++++++++
- 11 files changed, 619 insertions(+), 4 deletions(-)
+* set -DLIBURING_INTERNAL introduced in 8be8af4a
 
-The patch set requires at least meson version 0.53 satisfied by most distributions.
+* include linux/openat2.h for struct open_how. See: 326ed975
 
-It has a working github bot integration equivalent to the current build system.
+* check if glibc provides struct statx. See: 44b12f5
 
-Myself and multiple other github users (Yury Zhuravlev @stalkberg, Tim-Philipp
-Müller @tp-m) [3] proposed to maintain the meson code once included.
-For support regarding the meson code I am available via email or the mailing list.
+* use -O3 as default. See: 7d1cce2
 
-[1]: https://github.com/axboe/liburing/pull/297
-[2]: https://github.com/mesonbuild/wrapdb/commit/b800267fa9b1e05b03faf968c6ce6a882b6a2494
-[3]: https://github.com/axboe/liburing/pull/622
+* update project CFLAGS. Remove -fomit-frame-pointer (de21479) and
+  add -fno-stack-protector (2de9832).
+  Reported-by: Eli Schwartz <eschwartz@archlinux.org>
 
-Link: https://github.com/axboe/liburing/pull/622
 Signed-off-by: Florian Fischer <florian.fischer@muhq.space>
 ---
+ meson.build                      | 81 ++++++++++++--------------------
+ src/include/liburing/meson.build |  7 ++-
+ src/meson.build                  |  1 +
+ test/meson.build                 |  2 +-
+ 4 files changed, 37 insertions(+), 54 deletions(-)
 
-This patch series cleanly applies to the current liburing master (1842b2a)
-and includes all tests, examples and manpages available up to 1842b2a.
-
+diff --git a/meson.build b/meson.build
+index cb7dd9e..7c91b97 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1,103 +1,80 @@
+ project('liburing', ['c','cpp'],
+-        version: run_command('awk', '/Version:/ { print $2 }', 'liburing.spec').stdout().strip(),
++        version: run_command('awk', '/Version:/ { print $2 }', 'liburing.spec', check: true).stdout().strip(),
+         license: ['MIT', 'LGPL-2.1-only', 'GPL-2.0-only WITH Linux-syscall-note'],
+         meson_version: '>=0.53.0',
+         default_options: ['default_library=both',
+                           'buildtype=debugoptimized',
+                           'c_std=c11',
+                           'cpp_std=c++11',
+-                          'warning_level=3'])
++                          'optimization=3',
++                          'warning_level=2'])
+ 
+ add_project_arguments('-D_GNU_SOURCE',
+                       '-D__SANE_USERSPACE_TYPES__',
+                       '-include', meson.current_build_dir() + '/config-host.h',
+                       '-Wno-unused-parameter',
+                       '-Wno-sign-compare',
+-                      '-fomit-frame-pointer',
+                       language: ['c', 'cpp'])
+ 
+ thread_dep = dependency('threads')
+ 
+ cc = meson.get_compiler('c')
+ 
+-code = '''#include <linux/fs.h>
+-int main(int argc, char **argv)
+-{
+-  __kernel_rwf_t x;
+-  x = 0;
+-  return x;
+-}
+-'''
+-has__kernel_rwf_t = cc.compiles(code, name : '__kernel_rwf_t')
++has__kernel_rwf_t = cc.has_type('__kernel_rwf_t', prefix: '#include <linux/fs.h>')
+ 
+-code = '''#include <linux/time.h>
+-#include <linux/time_types.h>
+-int main(int argc, char **argv)
+-{
+-  struct __kernel_timespec ts;
+-  ts.tv_sec = 0;
+-  ts.tv_nsec = 1;
+-  return 0;
+-}
+-'''
+-has__kernel_timespec = cc.compiles(code, name : '__kernel_timespec')
++has__kernel_timespec = cc.has_members('struct __kernel_timespec',
++                                      'tv_sec',
++                                      'tv_nsec',
++                                      prefix: '#include <linux/time.h>')
++
++has_open_how = cc.has_members('struct open_how',
++                                      'flags',
++                                      'mode',
++                                      'resolve',
++                                      prefix: '#include <linux/openat2.h>')
+ 
+ code = '''#include <sys/types.h>
+ #include <sys/stat.h>
++#include <unistd.h>
+ #include <fcntl.h>
+ #include <string.h>
++#include <linux/stat.h>
+ int main(int argc, char **argv)
+ {
+-  struct open_how how;
+-  how.flags = 0;
+-  how.mode = 0;
+-  how.resolve = 0;
+-  return 0;
++  struct statx x;
++
++  return memset(&x, 0, sizeof(x)) != NULL;
+ }
+ '''
+-has_open_how = cc.compiles(code, name: 'open_how')
++has_statx = cc.compiles(code, name: 'statx')
+ 
+-code = '''#include <sys/types.h>
+-#include <sys/stat.h>
++code= '''#include <sys/types.h>
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <string.h>
+ #include <linux/stat.h>
+-int main(int argc, char **argv)
++main(int argc, char **argv)
+ {
+   struct statx x;
+ 
+   return memset(&x, 0, sizeof(x)) != NULL;
+ }
+ '''
+-has_statx = cc.compiles(code, name: 'statx')
+-
+-cpp = meson.get_compiler('cpp')
++glibc_statx = cc.compiles(code, name: 'glibc_statx')
+ 
+-code = '''#include <iostream>
+-int main(int argc, char **argv)
+-{
+-  std::cout << "Test";
+-  return 0;
+-}
+-'''
+-has_cxx = cpp.compiles(code, name: 'C++')
++# Since the project is configured to use C++
++# meson fails if no C++ compiler is available.
++has_cxx = true
+ 
+-code = '''#include <ucontext.h>
+-int main(int argc, char **argv)
+-{
+-  ucontext_t ctx;
+-  getcontext(&ctx);
+-  return 0;
+-}
+-'''
+-has_ucontext = cc.compiles(code, name : 'ucontext')
++has_ucontext = (cc.has_type('ucontext_t', prefix: '#include <ucontext.h>')
++  and cc.has_function('makecontext', prefix: '#include <ucontext.h>'))
+ 
+ conf_data = configuration_data()
+ conf_data.set('CONFIG_HAVE_KERNEL_RWF_T', has__kernel_rwf_t)
+ conf_data.set('CONFIG_HAVE_KERNEL_TIMESPEC', has__kernel_timespec)
+ conf_data.set('CONFIG_HAVE_OPEN_HOW', has_open_how)
+ conf_data.set('CONFIG_HAVE_STATX', has_statx)
++conf_data.set('CONFIG_HAVE_GLIBC_STATX', glibc_statx)
+ conf_data.set('CONFIG_HAVE_CXX', has_cxx)
+ conf_data.set('CONFIG_HAVE_UCONTEXT', has_ucontext)
+ configure_file(output: 'config-host.h',
+diff --git a/src/include/liburing/meson.build b/src/include/liburing/meson.build
+index f60cbc7..ed5c65b 100644
+--- a/src/include/liburing/meson.build
++++ b/src/include/liburing/meson.build
+@@ -19,7 +19,7 @@ struct __kernel_timespec {
+ endif
+ 
+ if has_open_how
+-    open_how_compat = ''
++    open_how_compat = '#include <linux/openat2.h>'
+ else
+     open_how_compat = '''#include <inttypes.h>
+ 
+@@ -35,6 +35,11 @@ conf_data = configuration_data()
+ conf_data.set('__kernel_rwf_t_compat', __kernel_rwf_t_compat)
+ conf_data.set('__kernel_timespec_compat', __kernel_timespec_compat)
+ conf_data.set('open_how_compat', open_how_compat)
++
++if not glibc_statx and has_statx
++  conf_data.set('no_glibc_statx', '#include <stat/stat.h>')
++endif
++
+ configure_file(input: 'compat.h.in',
+                output: 'compat.h',
+                configuration: conf_data,
+diff --git a/src/meson.build b/src/meson.build
+index b3aa751..fad0fca 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -8,6 +8,7 @@ liburing = library('uring',
+                    'setup.c',
+                    'syscall.c',
+                    include_directories: inc,
++                   c_args: ['-DLIBURING_INTERNAL', '-fno-stack-protector'],
+                    link_args: '-Wl,--version-script=' + meson.current_source_dir() + '/liburing.map',
+                    link_depends: 'liburing.map',
+                    version: meson.project_version(),
+diff --git a/test/meson.build b/test/meson.build
+index 888b74d..60b50c2 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -97,7 +97,7 @@ all_tests = [['232c93d07b74-test', 'c', thread_dep],
+              ['unlink', 'c', []],
+              ['wakeup-hang', 'c', thread_dep]]
+ 
+-if has_statx
++if has_statx or glibc_statx
+     all_tests += [['statx', 'c', []]]
+ endif
+ 
+-- 
+2.37.1
 
