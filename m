@@ -2,80 +2,67 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8856C00140
-	for <io-uring@archiver.kernel.org>; Tue,  2 Aug 2022 21:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AE12C00140
+	for <io-uring@archiver.kernel.org>; Tue,  2 Aug 2022 21:30:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232816AbiHBVEu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 2 Aug 2022 17:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S234529AbiHBVaR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 2 Aug 2022 17:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiHBVEt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 2 Aug 2022 17:04:49 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C3645077
-        for <io-uring@vger.kernel.org>; Tue,  2 Aug 2022 14:04:48 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id a9so10869942lfm.12
-        for <io-uring@vger.kernel.org>; Tue, 02 Aug 2022 14:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:from
-         :subject:content-transfer-encoding;
-        bh=EkO0kSpv9+M7mVPJG/gMBmNsn3eCCfkHdIcNSDIHrIk=;
-        b=c4tNd8V28BKlMzOiCkvWPsmFCntVNIowc+lK1eJLdHAMvTPtLI9r89NpRF9WFIhnlD
-         +GboysU5dvk7VWjPOZGFnnbsjF7MlavsqqhiCIyVwT4Le7SjXJxsPkNDWMZvr7f/tOMv
-         JIefclUu88E/Va31NEEy9aFERJ4FafGiVE8up0JSD8YaB+eafYgV0byRwwgWzqQhBxit
-         OJu9KiRB1YD9IwEJJ3grWjcV5orks86iWmT4Jm6gXzR5jSYO9kYyy0DMwdOmjBI/jF8e
-         pRk8/PCB4lOnYwsQe9se919X7+Uj3wa2gUdHI4nTeCbtZvS6BGZogIyY4ErpYSyWhit1
-         K5zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:from:subject:content-transfer-encoding;
-        bh=EkO0kSpv9+M7mVPJG/gMBmNsn3eCCfkHdIcNSDIHrIk=;
-        b=YEeQsk83m8OxWtEojqotPMsD3qLNQ0frITzWw2IPQtU6ZZPwoWSJWxBabKFMIpUIWU
-         RQywjGRcLADfVujAAdYImq2vjUGGrXVZl8+PMxPDMwpVfF1YUXO6NIZ1k0UhQlvkKdbI
-         dWnoWmQlUq4dFaKdBKH++IRKOFxaw86WOcahpmmKY8KA/GKErE6uZ3kTgMr3bY2n30uE
-         T/BvXZ/LApxosgZuOqUBL/LtIm/TdaEaIzHt8ng4i7CqcQaqQUsrvFJIX6HPYt9gY7If
-         RcCsi6vorPpFRdp45seu1yNSEoNszfccRc2StDpvw/MBv96CT60A9MhFCHcDH89Bxt3R
-         4Avg==
-X-Gm-Message-State: AJIora+cibp3ce2vCnCFsPaMvocNLc3sQRtvYgq/sqtQy1GbOf44VoBU
-        68HTu2gQMG0+0drCLRqe3hgVGoB9tw==
-X-Google-Smtp-Source: AGRyM1s7y6rbhmUw0ovQQxOh+BLEhTxvO74zLX/+lpz/izJfprjOqAzWawMNJlC94FebmpkDvTBuMQ==
-X-Received: by 2002:a05:6512:b2a:b0:48a:2aaf:2ad3 with SMTP id w42-20020a0565120b2a00b0048a2aaf2ad3mr9001261lfu.552.1659474286931;
-        Tue, 02 Aug 2022 14:04:46 -0700 (PDT)
-Received: from [192.168.1.140] ([94.103.226.3])
-        by smtp.gmail.com with ESMTPSA id w2-20020a05651c118200b0025e01ee7229sm961185ljo.54.2022.08.02.14.04.46
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Aug 2022 14:04:46 -0700 (PDT)
-Message-ID: <b9c90ccb-c269-7c78-8111-1641af29b0eb@gmail.com>
-Date:   Wed, 3 Aug 2022 00:04:45 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     io-uring@vger.kernel.org
-From:   Artyom Pavlov <newpavlov@gmail.com>
-Subject: Adding read_exact and write_all OPs?
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        with ESMTP id S234168AbiHBVaR (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 2 Aug 2022 17:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF862E6
+        for <io-uring@vger.kernel.org>; Tue,  2 Aug 2022 14:30:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 109E861547
+        for <io-uring@vger.kernel.org>; Tue,  2 Aug 2022 21:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D4E7CC43146;
+        Tue,  2 Aug 2022 21:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1659475814;
+        bh=18XanIdGEcQ2pd/eArwKAYBdt2b5k98RAkDKJg+SH10=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Ceo7WxkqEpIqHRXLuH6OdBPpD9Y2GWzaZC+GLNNVTLbBowdFYzeigFkyoXc7N6DIe
+         LmO09xCKUTvkhx3Hq3FgoY4roRwe59TeZbtetMycdUQ79KmciagInUXy2z5wW4yFor
+         /cXnuNmlJJ/h2Eb3agpugupJogzLoLcjJILadFDQk+XkJi5IKsctRyc+DuVit032+W
+         tTeSW1MibjkVnYap9544eD7r6p1Yf07iOicvcruTj0JQINcnxnV2UnyX/dK5x6gYBR
+         yN0r+ThR6ynqUgA77SW+GpJQmlf9XWLhGNfOM4J0hLjSOYOXphWAkkPjpgJLu8Cg5V
+         ANeczieBHnR8A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C202DC43140;
+        Tue,  2 Aug 2022 21:30:14 +0000 (UTC)
+Subject: Re: [GIT PULL] io_uring updates for 5.20-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <0d0db348-ef5f-e293-5837-321e7e57ad72@kernel.dk>
+References: <0d0db348-ef5f-e293-5837-321e7e57ad72@kernel.dk>
+X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
+X-PR-Tracked-Message-Id: <0d0db348-ef5f-e293-5837-321e7e57ad72@kernel.dk>
+X-PR-Tracked-Remote: git://git.kernel.dk/linux-block.git tags/for-5.20/io_uring-2022-07-29
+X-PR-Tracked-Commit-Id: f6b543fd03d347e8bf245cee4f2d54eb6ffd8fcb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: ea6813be07dcdc072aa9ad18099115a74cecb5e1
+Message-Id: <165947581479.30731.3349750420836376071.pr-tracker-bot@kernel.org>
+Date:   Tue, 02 Aug 2022 21:30:14 +0000
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        io-uring <io-uring@vger.kernel.org>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Greetings!
+The pull request you sent on Sun, 31 Jul 2022 09:03:23 -0600:
 
-In application code it's quite common to write/read a whole buffer and 
-only then continue task execution. The traditional approach is to wrap 
-read/write sycall/OP in loop, which is often done as part of a language 
-std. In synchronous context it makes sense because it allows to process 
-things like EINTR. But in asynchronous (event-driven) context I think it 
-makes a bit less sense.
+> git://git.kernel.dk/linux-block.git tags/for-5.20/io_uring-2022-07-29
 
-What do you think about potential addition of OPs like read_exact and 
-write_all, i.e. OPs which on successful CQE guarantee that an input 
-buffer was processed completely? They would allow to simplify user code 
-and in some cases to significantly reduce ring traffic.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/ea6813be07dcdc072aa9ad18099115a74cecb5e1
 
-Best regards,
-Artyom Pavlov.
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
