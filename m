@@ -2,51 +2,51 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 765CBC00140
-	for <io-uring@archiver.kernel.org>; Wed, 10 Aug 2022 15:52:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0C384C00140
+	for <io-uring@archiver.kernel.org>; Wed, 10 Aug 2022 15:52:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbiHJPwZ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 10 Aug 2022 11:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43032 "EHLO
+        id S232316AbiHJPw1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 10 Aug 2022 11:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbiHJPwJ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 10 Aug 2022 11:52:09 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81D765541;
-        Wed, 10 Aug 2022 08:51:52 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id c187-20020a1c35c4000000b003a30d88fe8eso1227700wma.2;
-        Wed, 10 Aug 2022 08:51:52 -0700 (PDT)
+        with ESMTP id S232330AbiHJPv4 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 10 Aug 2022 11:51:56 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7F65A889;
+        Wed, 10 Aug 2022 08:51:48 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id z16so18166031wrh.12;
+        Wed, 10 Aug 2022 08:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=KeuLRkJHac7T18EvJz7V2qjxDYwlB1JNeLqOJx59kSU=;
-        b=NwaYFZmlXQkYLPFX3ZTPko8HcLgEHLwlrcyFvHq9hm7vQV2IwxrttH0/p8/BnnmZQl
-         BTO0b3I01yD4gVwVuca1h/jbv+Cfysmr/pwkJd2AgCZmA4nNJaqDDMtHbPuEcJweTVo2
-         579S6P3KHIkfq4qhjgykgSQx3GEN7jkMGKOWCq1fqwahARcWVFoKAElwF2/ur8B6ClIo
-         4VUYL64JbAwxyO16ryqLgQ35TM4VOjpGgJE30dWaAoTd8zwN9ejtzD9yLFz3cxaGQo9r
-         I+xFxR/ul8X0T8pEmed+ACyAEzgpzPI6KoqWeaF80317jz0w1JJi3GWEirlZLAj1Zjjz
-         DcIw==
+        bh=h9HHmdtmbDaBgAkYhJr0MaG2LsaIMYK3/tGmura3Q/c=;
+        b=RkQDnrNrgozMvW1slfCx3exnfLZSPNL0SE3J0CmXcn4NPQmzKH1nUhVoCi4rJ/bGhQ
+         qWkiTJzALDavZu1xxA3ht8UtZU4n6tL4iHm1Zx/Em0r6K4Qe5KsTNb1lHxoLPs9CxUrL
+         ZNGihmk1LOvOohQDQ1AY3Ulw8RiLhtDxqyohg/rvq0SO7NQvrO7saW7gPAaH7++iBvJP
+         Jl1azWCXpOvZRwom0TDdfqiZB33KjKODuKkdpzGyNypg8/uceMD9cO1ihA+jI9r5ZcC3
+         TYYoAUSpD/Fkw5BOO1iG7WSOK8lPFUPa6a5TlPYgWBB6P/+e3jyrNxZORTfBjtmz0zUS
+         rYzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=KeuLRkJHac7T18EvJz7V2qjxDYwlB1JNeLqOJx59kSU=;
-        b=RZ8EOPfH4zHrwmQxojqmbzpzfAX88SLw2BiN77K8tAA0hFNufyQsKeQHIt8NHAefZB
-         8U9nhdE+zB/lVRky3cASaN+fF2+PYfJOaOCJzEZ7G8MhBHX+vVPC/qrFg4sP5FumvUwQ
-         +3tyDHiBfWVlzId+XeUlBtgnEQHXe9xD6aEjIzJcGSJVeGfGrdoltei9wRB7Y0Nnjx/f
-         itK+XycLz9yp2tW9DoXq0tk8wQ9CqJWsl8IEVM4EZ+QdS5YG655EhqdQBDiudKV9iBHq
-         E0RSRzphbWSCV/Tc9F9pwZH1pYbuBlwN7nYk8flxk5DM/A9cVITM5sxWZ68DUort9mmR
-         uzhQ==
-X-Gm-Message-State: ACgBeo3hAES7nOXwi4NiBTWzmqN7h7vBETrXLSBrS60UjJI1+OiIK5KV
-        /BCIvYY+2SoEZkSviKhmjVobRdZr4i4=
-X-Google-Smtp-Source: AA6agR6Ld0dgt8VkL4NPznZl6LE5uIBV6RhDIhjeXAmILYOIjoMjQERHnQMZ5pvfGHOhFOpmDqlmgQ==
-X-Received: by 2002:a7b:c852:0:b0:3a5:407a:76df with SMTP id c18-20020a7bc852000000b003a5407a76dfmr2851591wml.101.1660146710481;
-        Wed, 10 Aug 2022 08:51:50 -0700 (PDT)
+        bh=h9HHmdtmbDaBgAkYhJr0MaG2LsaIMYK3/tGmura3Q/c=;
+        b=0LfNvTPH2qZ+KX9ACd8KRmyHu9J1ET1iWSsVtX1cN61HxUyjR9FbT5JSOkpa1bPx2S
+         sxCPDRDRDlQ4GGmJlrsXs+rbQTmjkqNDx40vzRJWxxt0+U1d5ZM3anwNdN73QdW3vQXR
+         /nJS+y5M90Vw9bgkkLhL4T/KqOHvHrdlyqg/3x7l12O73dJ8mJj7w2TvLQOxOv3HFb5K
+         mQ9Han2qcLIC39zUZP5yuMvUvYRJANsZvKT3kfmR5PcV3EIPERASNER8bR9jDJtcGqEf
+         agid8xSFJHCyTZeQnYhEH32LOiEaSRrS0AJzxMspbVInrC3luObq0+0wJDnVV4NwXkLJ
+         HjZQ==
+X-Gm-Message-State: ACgBeo0BANQt2Qbz9Ye2kVCVr/kJlX1xk75O+ccuY2UjekERRsrqBDKA
+        ig4nRVo23PzU0PDWahba4+LyHuL69N8=
+X-Google-Smtp-Source: AA6agR6ZNn9gZ3GD3qgxjdOVbL8JXumKhuxwUdsZoAGuCONXxJ2F64wM4uAcQJPM/4Jm+GN1m/z5nQ==
+X-Received: by 2002:a5d:634d:0:b0:220:5ff7:3969 with SMTP id b13-20020a5d634d000000b002205ff73969mr16857681wrw.709.1660146706405;
+        Wed, 10 Aug 2022 08:51:46 -0700 (PDT)
 Received: from 127.0.0.1localhost (188.28.126.24.threembb.co.uk. [188.28.126.24])
-        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b003a342933727sm3004519wmb.3.2022.08.10.08.51.49
+        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b003a342933727sm3004519wmb.3.2022.08.10.08.51.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 08:51:50 -0700 (PDT)
+        Wed, 10 Aug 2022 08:51:46 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org, netdev@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>,
@@ -58,9 +58,9 @@ Cc:     Jens Axboe <axboe@kernel.dk>,
         "Michael S . Tsirkin" <mst@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
         Pavel Begunkov <asml.silence@gmail.com>
-Subject: [RFC net-next io_uring 10/11] io_uring/notif: mark notifs with UARGFL_CALLER_PINNED
-Date:   Wed, 10 Aug 2022 16:49:18 +0100
-Message-Id: <19cad183acc3a44b17b76c1719ad30c80aeff1ef.1660124059.git.asml.silence@gmail.com>
+Subject: [RFC net-next io_uring 07/11] net/tcp: optimise tcp ubuf refcounting
+Date:   Wed, 10 Aug 2022 16:49:15 +0100
+Message-Id: <9a42187cdc9ce034fd23179c7b31d7cc6a54bd45.1660124059.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.37.0
 In-Reply-To: <cover.1660124059.git.asml.silence@gmail.com>
 References: <cover.1660124059.git.asml.silence@gmail.com>
@@ -70,28 +70,69 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We always keep references to active notifications and drop them only
-when we flush, so they're always pinned during sock_sendmsg() and we can
-add UARGFL_CALLER_PINNED.
+Add UARGFL_CALLER_PINNED letting protocols know that the caller holds a
+reference to the ubuf_info and so it doesn't need additional refcounting
+for purposes of keeping it alive. With that TCP can save a refcount
+put/get pair per send when used with ->msg_ubuf.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/notif.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/skbuff.h | 7 +++++++
+ net/ipv4/tcp.c         | 9 ++++++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/io_uring/notif.c b/io_uring/notif.c
-index 5661681b3b44..dd346ea67580 100644
---- a/io_uring/notif.c
-+++ b/io_uring/notif.c
-@@ -66,7 +66,7 @@ struct io_kiocb *io_alloc_notif(struct io_ring_ctx *ctx,
- 	nd = io_notif_to_data(notif);
- 	nd->account_pages = 0;
- 	nd->uarg.skb_flags = SKBFL_ZEROCOPY_FRAG | SKBFL_DONT_ORPHAN;
--	nd->uarg.flags = 0;
-+	nd->uarg.flags = UARGFL_CALLER_PINNED;
- 	nd->uarg.callback = io_uring_tx_zerocopy_callback;
- 	/* master ref owned by io_notif_slot, will be dropped on flush */
- 	refcount_set(&nd->uarg.refcnt, 1);
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 2b2e0020030b..45fe7f0648d0 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -522,6 +522,13 @@ enum {
+ #define SKBFL_ALL_ZEROCOPY	(SKBFL_ZEROCOPY_FRAG | SKBFL_PURE_ZEROCOPY | \
+ 				 SKBFL_DONT_ORPHAN | SKBFL_MANAGED_FRAG_REFS)
+ 
++enum {
++	/* The caller holds a reference during the submission so the ubuf won't
++	 * be freed until we return.
++	 */
++	UARGFL_CALLER_PINNED = BIT(0),
++};
++
+ /*
+  * The callback notifies userspace to release buffers when skb DMA is done in
+  * lower device, the skb last reference should be 0 when calling this.
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 3152da8f4763..4925107de57d 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -1229,7 +1229,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+ 
+ 		if (msg->msg_ubuf) {
+ 			uarg = msg->msg_ubuf;
+-			net_zcopy_get(uarg);
++			if (!(uarg->flags & UARGFL_CALLER_PINNED))
++				net_zcopy_get(uarg);
+ 			zc = sk->sk_route_caps & NETIF_F_SG;
+ 		} else if (sock_flag(sk, SOCK_ZEROCOPY)) {
+ 			uarg = msg_zerocopy_realloc(sk, size, skb_zcopy(skb));
+@@ -1455,7 +1456,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+ 		tcp_push(sk, flags, mss_now, tp->nonagle, size_goal);
+ 	}
+ out_nopush:
+-	net_zcopy_put(uarg);
++	if (uarg && !(uarg->flags & UARGFL_CALLER_PINNED))
++		net_zcopy_put(uarg);
+ 	return copied + copied_syn;
+ 
+ do_error:
+@@ -1464,7 +1466,8 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
+ 	if (copied + copied_syn)
+ 		goto out;
+ out_err:
+-	net_zcopy_put_abort(uarg, true);
++	if (uarg && !(uarg->flags & UARGFL_CALLER_PINNED))
++		net_zcopy_put_abort(uarg, true);
+ 	err = sk_stream_error(sk, flags, err);
+ 	/* make sure we wake any epoll edge trigger waiter */
+ 	if (unlikely(tcp_rtx_and_write_queues_empty(sk) && err == -EAGAIN)) {
 -- 
 2.37.0
 
