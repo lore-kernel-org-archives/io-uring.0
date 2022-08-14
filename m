@@ -2,67 +2,94 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8EFCC19F2D
-	for <io-uring@archiver.kernel.org>; Sat, 13 Aug 2022 21:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C211C25B06
+	for <io-uring@archiver.kernel.org>; Sun, 14 Aug 2022 09:31:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239706AbiHMVsh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 13 Aug 2022 17:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S229607AbiHNJb1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 14 Aug 2022 05:31:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240161AbiHMVsZ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 13 Aug 2022 17:48:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC28252B5
-        for <io-uring@vger.kernel.org>; Sat, 13 Aug 2022 14:48:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F15DB80ACF
-        for <io-uring@vger.kernel.org>; Sat, 13 Aug 2022 21:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D10A9C433C1;
-        Sat, 13 Aug 2022 21:48:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660427293;
-        bh=O64tZKkEgJQY+nrgFjCzwqlk5VH4OVWqJEYzGXVO/Hg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=cGbTNonc6+/5NtFYFhSdWJs+NkG73gAAThPZTYwOeDcCuAMFBTJB1CVBSW0V5pzHN
-         mEkRkUtvjZnvNoyoqz8a6+Y0tS2s68Ek3yvw2pe5bt59UjVNLiAOGcEL1ryZAqtxZQ
-         mkRpXQgveUwYIUhXRPenUXRVXRIWGAWJugSXNaMvCZhI9yD0mawk2w3oMBFBQV/Zls
-         DaBdtC5q/R6d/qxdc/xmjqON95IoJ3qbvaKBLneK8fGZuVXg1SpMtc0svdTvHAZI1M
-         58SyAOdKgqFgu3Hx55cZpSAAn9f0AhmXG/3Ul96MzJkf6MejjUKDxDMmLRC2VHaigc
-         qyxlNEYkwIcjQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BFFA9C43141;
-        Sat, 13 Aug 2022 21:48:13 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring fixes for 6.0-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <6e669626-3920-47c0-8a9b-a94c229f1120@kernel.dk>
-References: <6e669626-3920-47c0-8a9b-a94c229f1120@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <6e669626-3920-47c0-8a9b-a94c229f1120@kernel.dk>
-X-PR-Tracked-Remote: git://git.kernel.dk/linux-block.git tags/io_uring-6.0-2022-08-10
-X-PR-Tracked-Commit-Id: d1f6222c4978817712e0f2825ce9e830763f0695
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3ed159c984079baedff740505d609badb8538e0d
-Message-Id: <166042729378.29926.1278736036077561949.pr-tracker-bot@kernel.org>
-Date:   Sat, 13 Aug 2022 21:48:13 +0000
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        io-uring <io-uring@vger.kernel.org>
+        with ESMTP id S229484AbiHNJb0 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 14 Aug 2022 05:31:26 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1ADCE0
+        for <io-uring@vger.kernel.org>; Sun, 14 Aug 2022 02:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=nbWqST+XP2a7+u9AWI2dutjI764cPEu2zgT1SGkvhZE=; b=MkYS7sMf2V5IFRuwIYZ42DFHzs
+        neaCwRGY84hG7aYxEhzWO/+0P0zuME8+C/WMa5Nu0nScuGTPZkfn32LtMu1e6njgWOUOsGnX4MNJH
+        bvVIZdMF2VX7QDQqKjLvpQyvW1KO0xBFuPbTWLFB3VI7Bm09RHPnarl9hBU0cFB6MfuSRHw5+iikK
+        I4i2A0fvPRlWyeOOaYnJ7rjRkiIPcJizw54C8kILKm1PBQ9bp8Ka81c68gHR4JWMQTfeK/gagsyQN
+        bSwxB5AYJKa5xzvcDoWawWLmFJyfg46c+F+txJCTnf3eSp1SuDmJFgVhGcY+rStWpVAI6ZxMllD+4
+        nI5OEqFNjNz1TeYTOvJmJ6GqC7gONIcb/x4gfC9mZWekjUBPC9YDJXL926B50nkGiOJlxgBeVB4Vp
+        57Q8uZsYU7V4lgCsyzXSVfXS3QVzLfRoRgU66uZdoIU19HmPy0MeRUXRy38tqCy/87gg50KjRptzi
+        Zkqs4EcuVCtRCweu39jyJs6T;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1oN9xq-0005oS-Jn; Sun, 14 Aug 2022 09:31:22 +0000
+Message-ID: <064b4920-5441-1ae2-b492-cb75f7796d8d@samba.org>
+Date:   Sun, 14 Aug 2022 11:31:22 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/1] io_uring/net: send retry for zerocopy
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+References: <b876a4838597d9bba4f3215db60d72c33c448ad0.1659622472.git.asml.silence@gmail.com>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <b876a4838597d9bba4f3215db60d72c33c448ad0.1659622472.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The pull request you sent on Wed, 10 Aug 2022 19:01:18 -0600:
+Hi Pavel,
 
-> git://git.kernel.dk/linux-block.git tags/io_uring-6.0-2022-08-10
+> io_uring handles short sends/recvs for stream sockets when MSG_WAITALL
+> is set, however new zerocopy send is inconsistent in this regard, which
+> might be confusing. Handle short sends.
+> 
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>   io_uring/net.c | 20 +++++++++++++++++---
+>   1 file changed, 17 insertions(+), 3 deletions(-)
+> 
+> diff --git a/io_uring/net.c b/io_uring/net.c
+> index 32fc3da04e41..f9f080b3cc1e 100644
+> --- a/io_uring/net.c
+> +++ b/io_uring/net.c
+> @@ -70,6 +70,7 @@ struct io_sendzc {
+>   	unsigned			flags;
+>   	unsigned			addr_len;
+>   	void __user			*addr;
+> +	size_t				done_io;
+>   };
+>   
+>   #define IO_APOLL_MULTI_POLLED (REQ_F_APOLL_MULTISHOT | REQ_F_POLLED)
+> @@ -878,6 +879,7 @@ int io_sendzc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>   
+>   	zc->addr = u64_to_user_ptr(READ_ONCE(sqe->addr2));
+>   	zc->addr_len = READ_ONCE(sqe->addr_len);
+> +	zc->done_io = 0;
+>   
+>   #ifdef CONFIG_COMPAT
+>   	if (req->ctx->compat)
+> @@ -1012,11 +1014,23 @@ int io_sendzc(struct io_kiocb *req, unsigned int issue_flags)
+>   	if (unlikely(ret < min_ret)) {
+>   		if (ret == -EAGAIN && (issue_flags & IO_URING_F_NONBLOCK))
+>   			return -EAGAIN;
+> -		return ret == -ERESTARTSYS ? -EINTR : ret;
+> +		if (ret > 0 && io_net_retry(sock, msg.msg_flags)) {
+> +			zc->len -= ret;
+> +			zc->buf += ret;
+> +			zc->done_io += ret;
+> +			req->flags |= REQ_F_PARTIAL_IO;
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3ed159c984079baedff740505d609badb8538e0d
+Don't we need a prep_async function and/or something like
+io_setup_async_msg() here to handle address?
 
-Thank you!
+metze
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
