@@ -2,134 +2,186 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D418C3F6B0
-	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 13:27:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88D5FC3F6B0
+	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 13:31:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231773AbiHON1X (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 15 Aug 2022 09:27:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S231827AbiHONbR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 15 Aug 2022 09:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241432AbiHON1N (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 15 Aug 2022 09:27:13 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7351F2E5
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:27:12 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FBP3sa009850
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:27:11 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=n9aYHKG0/2vtdVEZMM8BPKXtI8isVI9dEvQ2rPvmlHk=;
- b=HOc56Aq1co0McM63gOU0MCL7E1IMi2iwY5FEzB3KqVIMbKtmeYICUj6FcxPp16VCT7O8
- aoiDA+uK2mMN3nlqlytQKKj/5g2PzB0zzwMA18bvvSolfMMaXuYibYoGltIuCSbu3ufr
- m/ifwAVycsZi7B50n1M5s2NZETSVvYaEKKk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hyn83rj2b-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:27:11 -0700
-Received: from twshared7556.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 15 Aug 2022 06:27:10 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 59E0649B730A; Mon, 15 Aug 2022 06:09:55 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        <io-uring@vger.kernel.org>
-CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing 08/11] add docs for overflow lost errors
-Date:   Mon, 15 Aug 2022 06:09:44 -0700
-Message-ID: <20220815130947.1002152-9-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220815130947.1002152-1-dylany@fb.com>
-References: <20220815130947.1002152-1-dylany@fb.com>
+        with ESMTP id S242386AbiHONas (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 15 Aug 2022 09:30:48 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32D22AE1;
+        Mon, 15 Aug 2022 06:30:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=DAW+JK1+w1rGYbURTQaZFFMQesVsw3aBfPZ2wMQaKes=; b=ODdYUQieyy0DoIcwkoTEtfqKYj
+        NJ/fz6cROM+tzkrjHHQZZTHJLspZ7evNSbyrdQeFLbH2Qg1GCa/eY9zsuly1kkM5CHxyH5xsrbmu6
+        4/KEbC8mt9s8iyz03EmFAqVbi5dO+qktd1CSAeA6GKr9TY76PMzczfGE4Kt9REbYcwvDLNaPEphsN
+        86oWhZE72Wh8SSotSjuuRUBv2UebIPvqVfw3qh6jesJzCjUe1gUsc8jmpub1Vwad8wkTRmkUeK1HR
+        QozCeEDoti1+2thSikBQ9q1WpUDzBg1OMX3H5Yv+9JniQOQ5cuRMtw/qVwnsxRSqOUWnZMKLI0PJj
+        Ls94l8IO/pB6k1LqC/j+0aIRV68WuKfJvON5dXIq+D0yHXXQSxJRmzA8mDhwTRTsTp6NC/IUyJDHJ
+        glkG6jHyR1toTE2nBHyoIM66vXqzzPkz9OOKrWPE+/gKNPtapWxc4flfR/j1T81ybzbGHYcjsqhs4
+        /zOjIyHnkyzAWWp/z1z/eIwo;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1oNaAr-000Gbd-1g; Mon, 15 Aug 2022 13:30:33 +0000
+Message-ID: <f8ec9b9e-80b5-a24f-eb12-4069b7b90bea@samba.org>
+Date:   Mon, 15 Aug 2022 15:30:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 1hTevEsqKFV-6N0TAZBQWSEbUoxEPv0t
-X-Proofpoint-GUID: 1hTevEsqKFV-6N0TAZBQWSEbUoxEPv0t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
+References: <cover.1653992701.git.asml.silence@gmail.com>
+ <228d4841af5eeb9a4b73955136559f18cb7e43a0.1653992701.git.asml.silence@gmail.com>
+ <cccec667-d762-9bfd-f5a5-1c9fb46df5af@samba.org>
+ <56631a36-fec8-9c41-712b-195ad7e4cb9f@gmail.com>
+ <4eb0adae-660a-3582-df27-d6c254b97adb@samba.org>
+ <db7bbfcd-fdd0-ed8e-3d8e-78d76f278af8@gmail.com>
+ <246ef163-5711-01d6-feac-396fc176e14e@samba.org>
+ <9edd5970-504c-b088-d2b1-3a2b7ad9b345@gmail.com>
+From:   Stefan Metzmacher <metze@samba.org>
+Subject: Re: [RFC net-next v3 23/29] io_uring: allow to pass addr into sendzc
+In-Reply-To: <9edd5970-504c-b088-d2b1-3a2b7ad9b345@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add man docs for return values indicating a CQE was lost.
+Hi Pavel,
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- man/io_uring_enter.2 | 11 +++++++++++
- man/io_uring_setup.2 | 11 +++++++++--
- 2 files changed, 20 insertions(+), 2 deletions(-)
+>>> Thanks for giving a thought about the API, are you trying
+>>> to use it in samba?
+>>
+>> Yes, but I'd need SENDMSGZC and then I'd like to test,
+>> which variant gives the best performance. It also depends
+>> on the configured samba vfs module stack.
+> 
+> I can send you a branch this week if you would be
+> willing to try it out as I'll be sending the "msg" variant
+> only for 5.21
 
-diff --git a/man/io_uring_enter.2 b/man/io_uring_enter.2
-index 9ad6349b2c4a..688e57984f00 100644
---- a/man/io_uring_enter.2
-+++ b/man/io_uring_enter.2
-@@ -1326,6 +1326,17 @@ is a valid file descriptor, but the io_uring ring =
-is not in the right state
- .BR io_uring_register (2)
- for details on how to enable the ring.
- .TP
-+.B EBADR
-+At least one CQE was dropped even with the
-+.B IORING_FEAT_NODROP
-+feature, and there are no otherwise available CQEs. This clears the erro=
-r state
-+and so with no other changes the next call to
-+.BR io_uring_setup (2)
-+will not have this error. This error should be extremely rare and indica=
-tes the
-+machine is running critically low on memory and. It may be reasonable fo=
-r the
-+application to terminate running unless it is able to safely handle any =
-CQE
-+being lost.
-+.TP
- .B EBUSY
- If the
- .B IORING_FEAT_NODROP
-diff --git a/man/io_uring_setup.2 b/man/io_uring_setup.2
-index 0f57d8f06a35..9a543d68dd02 100644
---- a/man/io_uring_setup.2
-+++ b/man/io_uring_setup.2
-@@ -279,7 +279,7 @@ call. The SQEs must still be allocated separately. Th=
-is brings the necessary
- calls down from three to two. Available since kernel 5.4.
- .TP
- .B IORING_FEAT_NODROP
--If this flag is set, io_uring supports never dropping completion events.
-+If this flag is set, io_uring supports almost never dropping completion =
-events.
- If a completion event occurs and the CQ ring is full, the kernel stores
- the event internally until such a time that the CQ ring has room for mor=
-e
- entries. If this overflow condition is entered, attempting to submit mor=
-e
-@@ -287,7 +287,14 @@ IO will fail with the
- .B -EBUSY
- error value, if it can't flush the overflown events to the CQ ring. If t=
-his
- happens, the application must reap events from the CQ ring and attempt t=
-he
--submit again. Available since kernel 5.5.
-+submit again. If the kernel has no free memory to store the event intern=
-ally
-+it will be visible by an increase in the overflow value on the cqring.
-+Available since kernel 5.5. Additionally
-+.BR io_uring_enter (2)
-+will return
-+.B -EBADR
-+the next time it would otherwise sleep waiting for completions (since ke=
-rnel 5.19).
-+
- .TP
- .B IORING_FEAT_SUBMIT_STABLE
- If this flag is set, applications can be certain that any data for
---=20
-2.30.2
+I'm not sure I'll have time to do runtime testing,
+but it would be great to have a look at the code and give some comments
+based on that.
+
+>> I think it should be:
+>>
+>>                    if (up->arg)
+>>                            slot->tag = up->arg;
+>>                    if (!slot->notif)
+>>                            continue;
+>>                    io_notif_slot_flush_submit(slot, issue_flags);
+>>
+>> or even:
+>>
+>>                    slot->tag = up->arg;
+>>                    if (!slot->notif)
+>>                            continue;
+>>                    io_notif_slot_flush_submit(slot, issue_flags);
+>>
+>> otherwise IORING_RSRC_UPDATE_NOTIF would not be able to reset the tag,
+>> if notif was never created or already be flushed.
+> 
+> Ah, you want to update it for later. The idea was to affect only
+> those notifiers that are flushed by this update.
+> ...
+
+notif->cqe.user_data = slot->tag; happens in io_alloc_notif(),
+so the slot->tag = up->arg; here is always for the next IO_SENDZC.
+
+With IORING_RSRC_UPDATE_NOTIF linked to a IORING_OP_SENDZC(with IORING_RECVSEND_NOTIF_FLUSH)
+I basically try to reset slot->tag to the same (or related) user_data as the SENDZC itself.
+
+So that each SENDZC generates two CQEs with the same user_data belonging
+to the same userspace buffer.
+
+
+> I had a similar chat with Dylan last week. I'd rather not rob SQE of
+> additional u64 as there is only addr3 left and then we're fully packed,
+> but there is another option we were thinking about based on OVERRIDE_TAG
+> feature I scrapped from the final version of zerocopy patches.
+> 
+> Long story short, the idea is to copy req->cqe.user_data of a
+> send(+flush) request into the notification CQE, so you'll get 2 CQEs
+> with identical user_data but they can be distinguished by looking at
+> cqe->flags.
+> 
+> What do you think? Would it work for you?
+
+I guess that would work.
+
+>>>> I'm also wondering what will happen if a notif will be referenced by the net layer
+>>>> but the io_uring instance is already closed, wouldn't
+>>>> io_uring_tx_zerocopy_callback() or __io_notif_complete_tw() crash
+>>>> because notif->ctx is a stale pointer, of notif itself is already gone...
+>>>
+>>> io_uring will flush all slots and wait for all notifications
+>>> to fire, i.e. io_uring_tx_zerocopy_callback(), so it's not a
+>>> problem.
+>>
+>> I can't follow :-(
+>>
+>> What I see is that io_notif_unregister():
+>>
+>>                  nd = io_notif_to_data(notif);
+>>                  slot->notif = NULL;
+>>                  if (!refcount_dec_and_test(&nd->uarg.refcnt))
+>>                          continue;
+>>
+>> So if the net layer still has a reference we just go on.
+>>
+>> Only a wild guess, is it something of:
+>>
+>> io_alloc_notif():
+>>          ...
+>>          notif->task = current;
+>>          io_get_task_refs(1);
+>>          notif->rsrc_node = NULL;
+>>          io_req_set_rsrc_node(notif, ctx, 0);
+>>          ...
+>>
+>> and
+>>
+>> __io_req_complete_put():
+>>                  ...
+>>                  io_req_put_rsrc(req);
+>>                  /*
+>>                   * Selected buffer deallocation in io_clean_op() assumes that
+>>                   * we don't hold ->completion_lock. Clean them here to avoid
+>>                   * deadlocks.
+>>                   */
+>>                  io_put_kbuf_comp(req);
+>>                  io_dismantle_req(req);
+>>                  io_put_task(req->task, 1);
+>>                  ...
+>>
+>> that causes io_ring_exit_work() to wait for it.> It would be great if you or someone else could explain this in detail
+>> and maybe adding some comments into the code.
+> 
+> Almost, the mechanism is absolutely the same as with requests,
+> and notifiers are actually requests for internal purposes.
+> 
+> In __io_alloc_req_refill() we grab ctx->refs, which are waited
+> for in io_ring_exit_work(). We usually put requests into a cache,
+> so when a request is complete we don't put the ref and therefore
+> in io_ring_exit_work() we also have a call to io_req_caches_free(),
+> which puts ctx->refs.
+
+Ok, thanks.
+
+Would a close() on the ring fd block? I guess not, but the exit_work may block, correct?
+So a process would be a zombie until net released all references?
+
+metze
 
