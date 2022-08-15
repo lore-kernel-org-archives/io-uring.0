@@ -2,87 +2,105 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D98EFC00140
-	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 12:44:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECE60C00140
+	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 13:09:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242284AbiHOMoJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 15 Aug 2022 08:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S242691AbiHONJ0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 15 Aug 2022 09:09:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242180AbiHOMoI (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 15 Aug 2022 08:44:08 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11184DEF4
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 05:44:07 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id p12-20020a7bcc8c000000b003a5360f218fso7756522wma.3
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 05:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=ERqPKONVQJ131A8xPa0b9ax3YX2g6jPp6AbgfsU/eyY=;
-        b=nkTlWqvuNIqozjLQZaSgd3mmaAJlO0mHdxuQ3UhQHbf4JUrTnC95bKJ00e4RYzQ+OH
-         yUilKHnDni+r+BQcaG3dLYgboujH5ObDlTyluLv0fkW17lYsDtTQd61pUN5UkSUG3Ma4
-         caOK0n+vUL5J/i04psX+uQID/0QJo+MCIxmZ4QWUZGxHg4IMl4HbyFYJUCZl5U+uItXM
-         8r6RCAO2vZxkv2WWDfeHzX7nExhNLYf7yQSRb3cPUZArtOsE2WK8BTJlTIYmWQFMY+V7
-         u3XtIWuzw7QNOR0tZVpcEptLh4ZGGIdyTwkMNlLD3THGVtjVxiYUVDw4tY0UXMlhnU2L
-         7NJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=ERqPKONVQJ131A8xPa0b9ax3YX2g6jPp6AbgfsU/eyY=;
-        b=kBJsLvNvjryTU4WScBIFS2U/xJsWIMJ0T+JFAfjVpoLA8cQ0SuK19TwqK6n5QoD99N
-         RreZVrUxlm5Vl87LWVhr0JJBT8Z/w5zG8NkdC0vWzRWfbgNp2+VUpn+U6YWqR0Zxxqhf
-         unQVRH85a81QcZZDp5bsLKS6E0GCucfvz4QuciJqmHpunhG8nD74dG+I8fLU7yt12ZXQ
-         J/qkIKvi9DV1A083uf57F0VgfxpcvOclOZY79lOFKtFmqoM206+hphbWBNBsI3j15TNO
-         v/HVeUW5PcK0CC4lTBH+ttuaA+SYmdWMBkz7yD9NI2nS2s4tMCVGzeT4sFXNAB+lsIIq
-         VH7w==
-X-Gm-Message-State: ACgBeo0nKkFSMRc//uGIrQPaI+lGS6MSx4tWxdvBZu2Voeu7I7CiDLq0
-        7QKtDsZPwau/p+Q6+swvIXX8chYWDX4=
-X-Google-Smtp-Source: AA6agR6k2ZCGQDP8Q0berMuW6o38LUI+xXDtzMmyTTzKijrSAqvGnlnglR1kv43N3Ps3klt3a4q3WA==
-X-Received: by 2002:a05:600c:210b:b0:3a5:bb92:d22d with SMTP id u11-20020a05600c210b00b003a5bb92d22dmr10007477wml.99.1660567445234;
-        Mon, 15 Aug 2022 05:44:05 -0700 (PDT)
-Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:5fc6])
-        by smtp.gmail.com with ESMTPSA id f13-20020a05600c154d00b003a54fffa809sm10296109wmg.17.2022.08.15.05.44.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 05:44:04 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-5.20 3/3] io_uring/notif: raise limit on notification slots
-Date:   Mon, 15 Aug 2022 13:42:02 +0100
-Message-Id: <eb78a0a5f2fa5941f8e845cdae5fb399bf7ba0be.1660566179.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.37.0
-In-Reply-To: <cover.1660566179.git.asml.silence@gmail.com>
-References: <cover.1660566179.git.asml.silence@gmail.com>
+        with ESMTP id S242692AbiHONJY (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 15 Aug 2022 09:09:24 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937621BEAF
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:09:19 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FD37eo030819
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:09:19 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=lgtn1V59FCaESuHF6mKbLUrQP5lax4PFUHgHWEQelYA=;
+ b=Nd69FeQ3ilM6QTKbzEI03iES/RbHUM7697sL5Gk2879iKCvYrTLYgxTCTEV8nLucDYIl
+ gxtig8Kfev0jM431EZV9m8h2tn8Y8r3VYmRhU8XDK619FGGakzhhHIymikNe7c9zGcAJ
+ H5CELqcZ7dFGTk5RqNPCAQ9uYujHraQdzP8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hx9nqt0t9-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:09:19 -0700
+Received: from twshared25684.07.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 15 Aug 2022 06:09:17 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 4C26449B6CB3; Mon, 15 Aug 2022 06:09:15 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH for-next 4/7] io_uring: do not always run task work at the start of io_uring_enter
+Date:   Mon, 15 Aug 2022 06:09:08 -0700
+Message-ID: <20220815130911.988014-5-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220815130911.988014-1-dylany@fb.com>
+References: <20220815130911.988014-1-dylany@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: tW6Io5tBpSt5kThTPztzWehZQfnSL2vf
+X-Proofpoint-ORIG-GUID: tW6Io5tBpSt5kThTPztzWehZQfnSL2vf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-1024 notification slots is rather an arbitrary value, raise it up,
-everything is accounted to memcg.
+It is normally better to wait for task work until after submissions. This
+will allow greater batching if either work arrives in the meanwhile, or i=
+f
+the submissions cause task work to be queued up.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+For SQPOLL this also no longer runs task work, but this is handled inside
+the SQPOLL loop anyway.
+
+For IOPOLL io_iopoll_check will run task work anyway
+
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- io_uring/notif.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ io_uring/io_uring.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/notif.h b/io_uring/notif.h
-index 65f0b42f2555..80f6445e0c2b 100644
---- a/io_uring/notif.h
-+++ b/io_uring/notif.h
-@@ -8,7 +8,7 @@
- #include "rsrc.h"
- 
- #define IO_NOTIF_SPLICE_BATCH	32
--#define IORING_MAX_NOTIF_SLOTS (1U << 10)
-+#define IORING_MAX_NOTIF_SLOTS	(1U << 15)
- 
- struct io_notif_data {
- 	struct file		*file;
--- 
-2.37.0
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 8cc4b28b1725..3b08369c3c60 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2990,8 +2990,6 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u=
+32, to_submit,
+ 	struct fd f;
+ 	long ret;
+=20
+-	io_run_task_work();
+-
+ 	if (unlikely(flags & ~(IORING_ENTER_GETEVENTS | IORING_ENTER_SQ_WAKEUP =
+|
+ 			       IORING_ENTER_SQ_WAIT | IORING_ENTER_EXT_ARG |
+ 			       IORING_ENTER_REGISTERED_RING)))
+@@ -3060,7 +3058,11 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, =
+u32, to_submit,
+ 		if ((flags & IORING_ENTER_GETEVENTS) && ctx->syscall_iopoll)
+ 			goto iopoll_locked;
+ 		mutex_unlock(&ctx->uring_lock);
++		io_run_task_work();
++	} else {
++		io_run_task_work();
+ 	}
++
+ 	if (flags & IORING_ENTER_GETEVENTS) {
+ 		int ret2;
+ 		if (ctx->syscall_iopoll) {
+--=20
+2.30.2
 
