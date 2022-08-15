@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED5BFC00140
-	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 13:12:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22427C25B0E
+	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 13:12:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242683AbiHONMU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 15 Aug 2022 09:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S242690AbiHONMV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 15 Aug 2022 09:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242685AbiHONMS (ORCPT
+        with ESMTP id S242689AbiHONMS (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Mon, 15 Aug 2022 09:12:18 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7AC17057
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBD113F5A
         for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:12:16 -0700 (PDT)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27F9QUo2026724
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:12:15 -0700
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FA52a9026664
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:12:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=91dHoMzh5UndC2wHuZYuVqMRFnFIjaZ+zV7d4uf9Nwo=;
- b=XaBPEEoCKmdS7Gb9O+oi0lvNZojcAIMXddg78Cxc3cktiRQxpD+8fAglZEPAQH7hMwoo
- UULMY4hsGD69BsbDCUUTjizQyjtu+BbtHmchDLtO8X5QRXasfQe+FTjx1Cj37Mva8G6p
- 4LI3c0G9OWJtb4Qqe02ZablD0eXVFRxdyMQ= 
+ bh=sJD4jmck0aFShuqJ30TLfae/Y5pb1luGEgmNGitvW6Q=;
+ b=YdA41pN/iHBcA7wOYsMpy8FG+Wsm03ZMMvmPpxKW+jrG5ZezL/bavvpXHKJMBjQcrfDf
+ RxDnkyoeNHwH9pC6syG9u09+bbbJUrQBftsgBppd1lmGEb01jdtmZW367CAx8xPkUP/z
+ XmN0omqiIbUu2UD4ICHZ+o2P8oLPNplRJGU= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hykfy0wq4-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hym2x0rtm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:12:15 -0700
-Received: from twshared25684.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:12:16 -0700
+Received: from twshared1866.09.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Mon, 15 Aug 2022 06:12:14 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id EA70E49B6CBB; Mon, 15 Aug 2022 06:09:15 -0700 (PDT)
+        id 8576D49B6CAD; Mon, 15 Aug 2022 06:09:14 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH for-next 6/7] io_uring: move io_eventfd_put
-Date:   Mon, 15 Aug 2022 06:09:10 -0700
-Message-ID: <20220815130911.988014-7-dylany@fb.com>
+Subject: [PATCH for-next 2/7] io_uring: remove unnecessary variable
+Date:   Mon, 15 Aug 2022 06:09:06 -0700
+Message-ID: <20220815130911.988014-3-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220815130911.988014-1-dylany@fb.com>
 References: <20220815130911.988014-1-dylany@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: fbY_3vQ7LzZgbNsxOX_-52gZi411nAbj
-X-Proofpoint-ORIG-GUID: fbY_3vQ7LzZgbNsxOX_-52gZi411nAbj
+X-Proofpoint-ORIG-GUID: VKttmdIt3ugOPoc8vyF004bcf3EhcUna
+X-Proofpoint-GUID: VKttmdIt3ugOPoc8vyF004bcf3EhcUna
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
@@ -58,50 +58,31 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Non functional change: move this function above io_eventfd_signal so it
-can be used from there
+'running' is set once and read once, so can easily just remove it
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- io_uring/io_uring.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ io_uring/io_uring.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 35edeed1bcc1..70fa075c6887 100644
+index ab3e3d9e9fcd..1d33b2422f2c 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -478,6 +478,14 @@ static __cold void io_queue_deferred(struct io_ring_=
-ctx *ctx)
- 	}
- }
-=20
-+static void io_eventfd_put(struct rcu_head *rcu)
-+{
-+	struct io_ev_fd *ev_fd =3D container_of(rcu, struct io_ev_fd, rcu);
-+
-+	eventfd_ctx_put(ev_fd->cq_ev_fd);
-+	kfree(ev_fd);
-+}
-+
- static void io_eventfd_signal(struct io_ring_ctx *ctx)
- {
- 	struct io_ev_fd *ev_fd;
-@@ -2452,14 +2460,6 @@ static int io_eventfd_register(struct io_ring_ctx =
-*ctx, void __user *arg,
- 	return 0;
- }
-=20
--static void io_eventfd_put(struct rcu_head *rcu)
--{
--	struct io_ev_fd *ev_fd =3D container_of(rcu, struct io_ev_fd, rcu);
+@@ -1052,12 +1052,9 @@ void io_req_task_work_add(struct io_kiocb *req)
+ 	struct io_uring_task *tctx =3D req->task->io_uring;
+ 	struct io_ring_ctx *ctx =3D req->ctx;
+ 	struct llist_node *node;
+-	bool running;
 -
--	eventfd_ctx_put(ev_fd->cq_ev_fd);
--	kfree(ev_fd);
--}
--
- static int io_eventfd_unregister(struct io_ring_ctx *ctx)
- {
- 	struct io_ev_fd *ev_fd;
+-	running =3D !llist_add(&req->io_task_work.node, &tctx->task_list);
+=20
+ 	/* task_work already pending, we're done */
+-	if (running)
++	if (!llist_add(&req->io_task_work.node, &tctx->task_list))
+ 		return;
+=20
+ 	if (ctx->flags & IORING_SETUP_TASKRUN_FLAG)
 --=20
 2.30.2
 
