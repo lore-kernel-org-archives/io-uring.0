@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37ECBC25B06
-	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 13:15:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB9BAC3F6B0
+	for <io-uring@archiver.kernel.org>; Mon, 15 Aug 2022 13:15:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242825AbiHONP0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 15 Aug 2022 09:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S242823AbiHONPZ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 15 Aug 2022 09:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242883AbiHONPS (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 15 Aug 2022 09:15:18 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9AD2CDF
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:15:16 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 27F06IBP022377
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:15:16 -0700
+        with ESMTP id S242825AbiHONPQ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 15 Aug 2022 09:15:16 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C99AA
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:15:14 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27F9Oucg021310
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:15:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=qxZ49o3eXGa+CNiG3aLSh2b5crgZniaKWUpAWQj9/DY=;
- b=Sf+eysaXSscyNKVco3ULzWW8r78puLVxvOXped99IXF0cecgnsce5pBcftLgFmaBi7Cl
- bKGTeEioxpImqdsJ8WVm2pL9D68pmass7KdARqTq/pYcC9kY7ciX7ULISSjuKa82HxeJ
- 5G7DYlk0yY/b6z2Rc5yAxyTJeYxAKdzL4zM= 
+ bh=geNmTpnjsOWYMRBUJxVvCYS4XuDc2QzfNx/AmkFBHp8=;
+ b=N5TpzS3jfUEEcj/LoviAbBCzxTK1Nu6/rBD2He2rBg2C8S1HvfzDecfk1ufbZT+w/+e8
+ GtLJTDgUFB2sw8Fzgo3XYCYHDqf4VjpnaCqqN8VI5VymQ1KNwHSFlQ8b1pQ/uE0Z/fVN
+ FQfGOiCD1gNNjbvgby2HHWzmA4iGezXMKNk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3hx7f8tk5c-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3hykfy0x67-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:15:15 -0700
-Received: from twshared8442.02.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Mon, 15 Aug 2022 06:15:14 -0700
+Received: from twshared6324.05.ash7.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 15 Aug 2022 06:15:14 -0700
+ 15.1.2375.31; Mon, 15 Aug 2022 06:15:13 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id F050049B72D3; Mon, 15 Aug 2022 06:09:54 -0700 (PDT)
+        id 4C0CA49B7303; Mon, 15 Aug 2022 06:09:55 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing 01/11] Copy defer task run definition from kernel
-Date:   Mon, 15 Aug 2022 06:09:37 -0700
-Message-ID: <20220815130947.1002152-2-dylany@fb.com>
+Subject: [PATCH liburing 07/11] update io_uring_enter.2 docs for IORING_FEAT_NODROP
+Date:   Mon, 15 Aug 2022 06:09:43 -0700
+Message-ID: <20220815130947.1002152-8-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220815130947.1002152-1-dylany@fb.com>
 References: <20220815130947.1002152-1-dylany@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: B1oFOTax6z-AweK8atqOvl7-xmwLOzCK
-X-Proofpoint-ORIG-GUID: B1oFOTax6z-AweK8atqOvl7-xmwLOzCK
+X-Proofpoint-GUID: omJB7LsFtjthKxVPmtNfBdsBtDoMS6XX
+X-Proofpoint-ORIG-GUID: omJB7LsFtjthKxVPmtNfBdsBtDoMS6XX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
@@ -58,32 +58,45 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Copy the flag from upstream
+The EBUSY docs are out of date, so update them for the IORING_FEAT_NODROP
+feature flag
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- src/include/liburing/io_uring.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+ man/io_uring_enter.2 | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/src/include/liburing/io_uring.h b/src/include/liburing/io_ur=
-ing.h
-index c923f5c07699..b80bb0c09681 100644
---- a/src/include/liburing/io_uring.h
-+++ b/src/include/liburing/io_uring.h
-@@ -156,6 +156,13 @@ enum {
-  */
- #define IORING_SETUP_SINGLE_ISSUER	(1U << 12)
-=20
-+/*
-+ * Defer running task work to get events.
-+ * Rather than running bits of task work whenever the task transitions
-+ * try to do it just before it is needed.
-+ */
-+#define IORING_SETUP_DEFER_TASKRUN	(1U << 13)
+diff --git a/man/io_uring_enter.2 b/man/io_uring_enter.2
+index 6e3ffa0f5ba8..9ad6349b2c4a 100644
+--- a/man/io_uring_enter.2
++++ b/man/io_uring_enter.2
+@@ -1327,7 +1327,18 @@ is a valid file descriptor, but the io_uring ring =
+is not in the right state
+ for details on how to enable the ring.
+ .TP
+ .B EBUSY
+-The application is attempting to overcommit the number of requests it ca=
+n have
++If the
++.B IORING_FEAT_NODROP
++feature flag is set, then
++.B EBUSY
++will be returned if there were overflow entries,
++.B IORING_ENTER_GETEVENTS
++flag is set and not all of the overflow entries were able to be flushed =
+to
++the CQ ring.
 +
- enum io_uring_op {
- 	IORING_OP_NOP,
- 	IORING_OP_READV,
++Without
++.B IORING_FEAT_NODROP
++the application is attempting to overcommit the number of requests it ca=
+n have
+ pending. The application should wait for some completions and try again.=
+ May
+ occur if the application tries to queue more requests than we have room =
+for in
+ the CQ ring, or if the application attempts to wait for more events with=
+out
 --=20
 2.30.2
 
