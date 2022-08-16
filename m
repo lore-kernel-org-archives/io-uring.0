@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E78AC28B2B
-	for <io-uring@archiver.kernel.org>; Tue, 16 Aug 2022 15:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6335CC25B0E
+	for <io-uring@archiver.kernel.org>; Tue, 16 Aug 2022 15:39:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbiHPPjH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 16 Aug 2022 11:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
+        id S236175AbiHPPjK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 16 Aug 2022 11:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiHPPiU (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 16 Aug 2022 11:38:20 -0400
+        with ESMTP id S236166AbiHPPiV (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 16 Aug 2022 11:38:21 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94DF30F60
-        for <io-uring@vger.kernel.org>; Tue, 16 Aug 2022 08:37:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D784610C
+        for <io-uring@vger.kernel.org>; Tue, 16 Aug 2022 08:37:54 -0700 (PDT)
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G32USa026735
-        for <io-uring@vger.kernel.org>; Tue, 16 Aug 2022 08:37:53 -0700
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27G32lVL027347
+        for <io-uring@vger.kernel.org>; Tue, 16 Aug 2022 08:37:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Kf1Z+BI3ZmxvICC0Rhc32z630FaFxOx/Y8uJd6+KQmc=;
- b=RaUhzSRbDlshJgoi3TdDLtAQ8TjWQ6v+fTdNF/P/6Jr4TVKGoTaksBLf1OtFmS9iabtb
- s5W/mELPuq7YWJQP5MVddaO6+Fe5pi+CvNXIY7f+RnnQcbyinFSdsk4bldMf245OAWew
- X6ArnzGEMcH9GMWZpHkl69MQGEiKKH8PgNo= 
+ bh=NYkgeWhc4loqejV4OaN5qzP3Q6+Q/djrUZ4arEpsTro=;
+ b=fR3ZzWiRRjhLKtLpaazlHzMvAAzM1t6YgR+AK5DHLORf0H3R+UcW5uop8Fj33qPIp2kk
+ pBGywlSu7JoI/OeckTM0sXGB7OHULIgvlY7PoTltEA9h5OTXZQSSDh6qnW0/jNP5cql+
+ G/8h8GHOecEiA/1Va40P+cVmY95jKDGBiGo= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j02ym3ppd-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j02ym3ppg-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 16 Aug 2022 08:37:53 -0700
-Received: from twshared1866.09.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Tue, 16 Aug 2022 08:37:54 -0700
+Received: from twshared14074.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 16 Aug 2022 08:37:52 -0700
+ 15.1.2375.31; Tue, 16 Aug 2022 08:37:53 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id EC18B4AAA7C8; Tue, 16 Aug 2022 08:37:38 -0700 (PDT)
+        id DE44C4AAA7C4; Tue, 16 Aug 2022 08:37:38 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH for-next v2 5/6] io_uring: move io_eventfd_put
-Date:   Tue, 16 Aug 2022 08:37:27 -0700
-Message-ID: <20220816153728.2160601-6-dylany@fb.com>
+Subject: [PATCH for-next v2 3/6] io_uring: do not run task work at the start of io_uring_enter
+Date:   Tue, 16 Aug 2022 08:37:25 -0700
+Message-ID: <20220816153728.2160601-4-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220816153728.2160601-1-dylany@fb.com>
 References: <20220816153728.2160601-1-dylany@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: yI78k5md9p0VROt7NmQ6i-ftZIO3v6Qx
-X-Proofpoint-ORIG-GUID: yI78k5md9p0VROt7NmQ6i-ftZIO3v6Qx
+X-Proofpoint-GUID: Z9_jpaoCzDTjaPYY71XM3yfz4U6WJqC2
+X-Proofpoint-ORIG-GUID: Z9_jpaoCzDTjaPYY71XM3yfz4U6WJqC2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-16_08,2022-08-16_02,2022-06-22_01
@@ -58,50 +58,39 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Non functional change: move this function above io_eventfd_signal so it
-can be used from there
+This is not needed, and it is normally better to wait for task work until
+after submissions. This will allow greater batching if either work arrive=
+s
+in the meanwhile, or if the submissions cause task work to be queued up.
 
+For SQPOLL this also no longer runs task work, but this is handled inside
+the SQPOLL loop anyway.
+
+For IOPOLL io_iopoll_check will run task work anyway
+
+And otherwise io_cqring_wait will run task work
+
+Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- io_uring/io_uring.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ io_uring/io_uring.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 6b16da0be712..2eb9ad9edef3 100644
+index 19d5d1ab5793..53696dd90626 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -478,6 +478,14 @@ static __cold void io_queue_deferred(struct io_ring_=
-ctx *ctx)
- 	}
- }
+@@ -2990,8 +2990,6 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u=
+32, to_submit,
+ 	struct fd f;
+ 	long ret;
 =20
-+static void io_eventfd_put(struct rcu_head *rcu)
-+{
-+	struct io_ev_fd *ev_fd =3D container_of(rcu, struct io_ev_fd, rcu);
-+
-+	eventfd_ctx_put(ev_fd->cq_ev_fd);
-+	kfree(ev_fd);
-+}
-+
- static void io_eventfd_signal(struct io_ring_ctx *ctx)
- {
- 	struct io_ev_fd *ev_fd;
-@@ -2438,14 +2446,6 @@ static int io_eventfd_register(struct io_ring_ctx =
-*ctx, void __user *arg,
- 	return 0;
- }
-=20
--static void io_eventfd_put(struct rcu_head *rcu)
--{
--	struct io_ev_fd *ev_fd =3D container_of(rcu, struct io_ev_fd, rcu);
+-	io_run_task_work();
 -
--	eventfd_ctx_put(ev_fd->cq_ev_fd);
--	kfree(ev_fd);
--}
--
- static int io_eventfd_unregister(struct io_ring_ctx *ctx)
- {
- 	struct io_ev_fd *ev_fd;
+ 	if (unlikely(flags & ~(IORING_ENTER_GETEVENTS | IORING_ENTER_SQ_WAKEUP =
+|
+ 			       IORING_ENTER_SQ_WAIT | IORING_ENTER_EXT_ARG |
+ 			       IORING_ENTER_REGISTERED_RING)))
 --=20
 2.30.2
 
