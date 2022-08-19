@@ -2,55 +2,52 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43FE1C32771
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5714C3F6B0
 	for <io-uring@archiver.kernel.org>; Fri, 19 Aug 2022 12:20:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348774AbiHSMUh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S1347929AbiHSMUh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Fri, 19 Aug 2022 08:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347929AbiHSMUg (ORCPT
+        with ESMTP id S1348329AbiHSMUg (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Fri, 19 Aug 2022 08:20:36 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E79FF227
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A594100F28
         for <io-uring@vger.kernel.org>; Fri, 19 Aug 2022 05:20:35 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27J9GqED025284
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27JARC6m006347
         for <io-uring@vger.kernel.org>; Fri, 19 Aug 2022 05:20:34 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=07wjHAPFXMReUQK4g7uilmsdQuSczGFG6GubYuzzT6g=;
- b=fCrHn3A0DVXs7Lkx+O1Su7OSSScen9bi/VEVz7CIAhuGMTBzdgH+bzRRiZdGZlKkMBVI
- Sw64b3c7h7bI9jTUAsH/VCwaK9F39ItflxY/+y0CZz6IwwEvWlygokEjWsKv+uJ4mpYO
- apZbq8lbYqQLHViIA6XYcsYHL5zqJh7PsnM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j27ra9760-14
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=CsrLWM7y1KdsIsop+YsRECG7/CmMqtPy7EzzIB4j1+A=;
+ b=KMmw2drnaL2xjG56y4ikwIAvthehZhkv4pi6Cz3KxtnX89PRhWIeRPiAdeJnKJr550FZ
+ mUJlHFATgoQPU4Ov5fJHhlMJ6b7El2fBEfp6czmmqn5ZCHTUT2hvzRjNGUvM2HBgajl4
+ e4zHOoE6xbeHK7pUJgXtI7Z/CFCWVmybtYs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j1jqgrmph-17
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Fri, 19 Aug 2022 05:20:34 -0700
-Received: from twshared8442.02.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+Received: from twshared14074.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 19 Aug 2022 05:20:32 -0700
+ 15.1.2375.31; Fri, 19 Aug 2022 05:20:33 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id AF5734CEF048; Fri, 19 Aug 2022 05:20:25 -0700 (PDT)
+        id 79D494CEF042; Fri, 19 Aug 2022 05:20:25 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH for-next v3 2/7] io_uring: introduce io_has_work
-Date:   Fri, 19 Aug 2022 05:19:41 -0700
-Message-ID: <20220819121946.676065-3-dylany@fb.com>
+Subject: [PATCH for-next v3 0/7] io_uring: defer task work to when it is needed
+Date:   Fri, 19 Aug 2022 05:19:39 -0700
+Message-ID: <20220819121946.676065-1-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220819121946.676065-1-dylany@fb.com>
-References: <20220819121946.676065-1-dylany@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: tETYRlCbYDk3wh0AZDn8XJALn0WHPmwD
-X-Proofpoint-GUID: tETYRlCbYDk3wh0AZDn8XJALn0WHPmwD
+X-Proofpoint-ORIG-GUID: JqMa5XzmAwCyXqQ19YqrdADsyKv_eFv4
+X-Proofpoint-GUID: JqMa5XzmAwCyXqQ19YqrdADsyKv_eFv4
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-19_06,2022-08-18_01,2022-06-22_01
@@ -58,61 +55,62 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This will be used later to know if the ring has outstanding work. Right
-now just if there is overflow CQEs to copy to the main CQE ring, but late=
-r
-will include deferred tasks
+We have seen workloads which suffer due to the way task work is currently
+scheduled. This scheduling can cause non-trivial tasks to run interruptin=
+g
+useful work on the workload. For example in network servers, a large asyn=
+c
+recv may run, calling memcpy on a large packet, interrupting a send. Whic=
+h
+would add latency.
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- io_uring/io_uring.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+This series adds an option to defer async work until user space calls
+io_uring_enter with the GETEVENTS flag. This allows the workload to choos=
+e
+when to schedule async work and have finer control (at the expense of
+complexity of managing this) of scheduling.
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 0c9fe0f1c174..19d5d1ab5793 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2144,6 +2144,11 @@ struct io_wait_queue {
- 	unsigned nr_timeouts;
- };
+Patches 1,2 are prep patches
+Patch 3 changes io_uring_enter to not pre-run task work
+Patch 4/5/6 adds the new flag and functionality
+Patch 7 adds tracing for the local task work running
+
+Changes since v2:
+ - add a patch to trace local task work run
+ - return -EEXIST if calling from the wrong task
+ - properly handle shutting down due to an exec
+ - remove 'all' parameter from io_run_task_work_ctx
 =20
-+static inline bool io_has_work(struct io_ring_ctx *ctx)
-+{
-+	return test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq);
-+}
-+
- static inline bool io_should_wake(struct io_wait_queue *iowq)
- {
- 	struct io_ring_ctx *ctx =3D iowq->ctx;
-@@ -2162,13 +2167,13 @@ static int io_wake_function(struct wait_queue_ent=
-ry *curr, unsigned int mode,
- {
- 	struct io_wait_queue *iowq =3D container_of(curr, struct io_wait_queue,
- 							wq);
-+	struct io_ring_ctx *ctx =3D iowq->ctx;
-=20
- 	/*
- 	 * Cannot safely flush overflowed CQEs from here, ensure we wake up
- 	 * the task, and the next invocation will do it.
- 	 */
--	if (io_should_wake(iowq) ||
--	    test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &iowq->ctx->check_cq))
-+	if (io_should_wake(iowq) || io_has_work(ctx))
- 		return autoremove_wake_function(curr, mode, wake_flags, key);
- 	return -1;
- }
-@@ -2504,8 +2509,8 @@ static __poll_t io_uring_poll(struct file *file, po=
-ll_table *wait)
- 	 * Users may get EPOLLIN meanwhile seeing nothing in cqring, this
- 	 * pushs them to do the flush.
- 	 */
--	if (io_cqring_events(ctx) ||
--	    test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq))
-+
-+	if (io_cqring_events(ctx) || io_has_work(ctx))
- 		mask |=3D EPOLLIN | EPOLLRDNORM;
-=20
- 	return mask;
+Changes since v1:
+ - Removed the first patch (using ctx variable) which was broken
+ - Require IORING_SETUP_SINGLE_ISSUER and make sure waiter task
+   is the same as the submitter task
+ - Just don't run task work at the start of io_uring_enter (Pavel's
+   suggestion)
+ - Remove io_move_task_work_from_local
+ - Fix locking bugs
+
+Dylan Yudaken (7):
+  io_uring: remove unnecessary variable
+  io_uring: introduce io_has_work
+  io_uring: do not run task work at the start of io_uring_enter
+  io_uring: add IORING_SETUP_DEFER_TASKRUN
+  io_uring: move io_eventfd_put
+  io_uring: signal registered eventfd to process deferred task work
+  io_uring: trace local task work run
+
+ include/linux/io_uring_types.h  |   3 +
+ include/trace/events/io_uring.h |  29 ++++
+ include/uapi/linux/io_uring.h   |   7 +
+ io_uring/cancel.c               |   2 +-
+ io_uring/io_uring.c             | 264 ++++++++++++++++++++++++++------
+ io_uring/io_uring.h             |  29 +++-
+ io_uring/rsrc.c                 |   2 +-
+ 7 files changed, 285 insertions(+), 51 deletions(-)
+
+
+base-commit: 5993000dc6b31b927403cee65fbc5f9f070fa3e4
+prerequisite-patch-id: cb1d024945aa728d09a131156140a33d30bc268b
 --=20
 2.30.2
 
