@@ -2,106 +2,170 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C0B5C28B2B
-	for <io-uring@archiver.kernel.org>; Fri, 19 Aug 2022 17:50:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CF96C28D13
+	for <io-uring@archiver.kernel.org>; Sat, 20 Aug 2022 03:17:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351482AbiHSRu5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 19 Aug 2022 13:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S243991AbiHTDRO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 19 Aug 2022 23:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354884AbiHSRuV (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 19 Aug 2022 13:50:21 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A31422BC6
-        for <io-uring@vger.kernel.org>; Fri, 19 Aug 2022 10:22:49 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id j20so2621187ila.6
-        for <io-uring@vger.kernel.org>; Fri, 19 Aug 2022 10:22:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc;
-        bh=Q4YiqrxthsU7OPq35C3KfsKMYPEeCPj58JyzMgasSEI=;
-        b=UbzBRpnbM0RLRFChXfAHYdIjv05Cas8lTpf09NP9rDoKv+RFzs8yGe4jjiKMQ/A613
-         +8QRziTBiR0rfoosjvIDjjvg35mneEktxRyUO9pDzwwqN/Kmsrf+maUv1M5ddByI61Bx
-         cYEJ2p+LWms4hTGIb8In3VnvH1TUv6sRMJBbBvBLGkVOb94NdsUhK1btdNJHtXy9pY55
-         Aara4SukXz810L73RE06VlziI0/8TMK9WBXHk5+2KEZR4UxEof6cn9Qb5W46VgVPMFzC
-         U2fRvZ0gG1eWOyYcHfKAnoW3Rk9SBPC5im7atxexccQwtLqTv8N2WOum5bjI5mt1rQbu
-         hGoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc;
-        bh=Q4YiqrxthsU7OPq35C3KfsKMYPEeCPj58JyzMgasSEI=;
-        b=XSdPvXpqAECJgQiqTBCBgtMdl0nLd9y1WPiJuZgEH3C8U6BT/aEAwP9wea1cer5Dcf
-         oCni1Hjn8ybSqK8Qa+kBEsdqa8N5jS5Z/YNc2Pa92CXmjTLtkjgi9YmlHpF3WqsZHiXY
-         0KfyjOP6EsulwVWMUURER1kroin1ii36DRiqsf30RCgZirEc+hLOncdlbS7uez5XCNhX
-         acKm1xq1W0wEFFief3mRiw3iF+IGwn8cZ5HGhhxpeyP/omqYxcjZjjTEgKYgRLxZrmC+
-         6ljUKikbM9KPQhnOLp/QDq17ITTAFWZI27EoNjQzV+5APxEwqJAtME246rdhQHGVfOFQ
-         ok8w==
-X-Gm-Message-State: ACgBeo0KwNKPHdbBxvZtLH1QRlaoc6qsfgayw4yfSkJLKHPkuDnPJ/Qm
-        6s0iI7Y3c1+rsc/q0JVLIxwwQxevvP/CUA==
-X-Google-Smtp-Source: AA6agR4Gqecv+urLYyAHkYQEufFGh/2ZFaCwrnc5nFaS4vIrpDlu+O+F9qXmFUHBo0mRPItCCf1Hsg==
-X-Received: by 2002:a92:d70e:0:b0:2e8:8ac8:4f3a with SMTP id m14-20020a92d70e000000b002e88ac84f3amr4211298iln.158.1660929768934;
-        Fri, 19 Aug 2022 10:22:48 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id j131-20020a026389000000b00342b327d709sm1966082jac.71.2022.08.19.10.22.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Aug 2022 10:22:48 -0700 (PDT)
-Message-ID: <33577155-3f44-b9b7-e5df-97ae8c0163da@kernel.dk>
-Date:   Fri, 19 Aug 2022 11:22:47 -0600
+        with ESMTP id S233564AbiHTDRM (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 19 Aug 2022 23:17:12 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B28EA887
+        for <io-uring@vger.kernel.org>; Fri, 19 Aug 2022 20:17:09 -0700 (PDT)
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220820031708epoutp029bf8b03e0f71032d21d1985ff6dcd671~M70GzpxWh2827628276epoutp021
+        for <io-uring@vger.kernel.org>; Sat, 20 Aug 2022 03:17:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220820031708epoutp029bf8b03e0f71032d21d1985ff6dcd671~M70GzpxWh2827628276epoutp021
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1660965428;
+        bh=luIncdN4Xs0/S1pPktHEcbVCfvwuJAGRaiPlDpqB9Rw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=g0JlCQL1Gvtl1Rb4UgjosPRCm6oChBy7EPne4U67p1MV4iFiYZkktBpHcSODy/Or2
+         MIe+w69xU/rOWb0+Zv96fRwB+BeXhfIYLr71qz5Z/Fl1/O6ybFNZMGW9dBNGD1rsI+
+         050025C1dhiypH0muphV0Lku8yQX1YaBC3lWSTEA=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220820031707epcas5p1288fc8fde2342ece5e5582cebd57a4fd~M70GU37Pf0245602456epcas5p1B;
+        Sat, 20 Aug 2022 03:17:07 +0000 (GMT)
+Received: from epsmges5p2new.samsung.com (unknown [182.195.38.183]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4M8kLn1tH6z4x9Pp; Sat, 20 Aug
+        2022 03:17:05 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3A.75.09494.13250036; Sat, 20 Aug 2022 12:17:05 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20220820031704epcas5p36bf7895aa5e5f8d43384c6de355a70bc~M70DplPqD1841318413epcas5p3I;
+        Sat, 20 Aug 2022 03:17:04 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220820031704epsmtrp24667b060f651df782d8b9563e264c33b~M70DorJJY0249702497epsmtrp2M;
+        Sat, 20 Aug 2022 03:17:04 +0000 (GMT)
+X-AuditID: b6c32a4a-201ff70000012516-98-63005231faad
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        03.12.08802.03250036; Sat, 20 Aug 2022 12:17:04 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.110.206.5]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220820031703epsmtip13fce5cd82c118468e6b34361096d3549~M70CN-qLp1949119491epsmtip1W;
+        Sat, 20 Aug 2022 03:17:03 +0000 (GMT)
+From:   Kanchan Joshi <joshi.k@samsung.com>
+To:     axboe@kernel.dk, hch@lst.de, kbusch@kernel.org
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, ming.lei@redhat.com,
+        gost.dev@samsung.com, Anuj Gupta <anuj20.g@samsung.com>,
+        Kanchan Joshi <joshi.k@samsung.com>
+Subject: [PATCH for-next v2 1/4] io_uring: introduce
+ io_uring_cmd_import_fixed
+Date:   Sat, 20 Aug 2022 08:36:17 +0530
+Message-Id: <20220820030620.59003-2-joshi.k@samsung.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220820030620.59003-1-joshi.k@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring fixes for 6.0-rc2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     io-uring <io-uring@vger.kernel.org>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBJsWRmVeSWpSXmKPExsWy7bCmhq5hEEOyQVMnl0XThL/MFqvv9rNZ
+        3Dywk8li5eqjTBbvWs+xWBz9/5bNYtKha4wWe29pW8xf9pTd4tDkZiYHLo/LZ0s9Nq3qZPPY
+        vKTeY/fNBjaP9/uusnn0bVnF6PF5k1wAe1S2TUZqYkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGh
+        rqGlhbmSQl5ibqqtkotPgK5bZg7QcUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OISW6XUgpSc
+        ApMCveLE3OLSvHS9vNQSK0MDAyNToMKE7IwnryILzvNXtK7tYGpgnMTbxcjBISFgItHy2LqL
+        kYtDSGA3o8T84z3MEM4nRolVn/6zQjifGSVePWxm6WLkBOvYurWXHSKxi1HifsceNriq55t+
+        sYLMZRPQlLgwuRSkQUTASGL/p5Ngk5gFLjBKnGz6ygySEBYIkDgzfQEjiM0ioCpx4exPVhCb
+        V8BC4veEA+wQ2+QlZl76DmZzClhKNC3/zQhRIyhxcuYTsIuYgWqat84Gu1tCoJVDYsfi94wQ
+        zS4SjYcXMEPYwhKvjm+BGiol8fndXjYIO1ni0sxzTBB2icTjPQehbHuJ1lP9zCDPMAM9s36X
+        PsQuPone30+YIGHHK9HRJgRRrShxb9JTVghbXOLhjCVQtofEhgmvoeHTwyjxuHMi2wRG+VlI
+        XpiF5IVZCNsWMDKvYpRMLSjOTU8tNi0wyksth8drcn7uJkZwEtXy2sH48MEHvUOMTByMhxgl
+        OJiVRHhv3PmTJMSbklhZlVqUH19UmpNafIjRFBjGE5mlRJPzgWk8ryTe0MTSwMTMzMzE0tjM
+        UEmc1+vqpiQhgfTEktTs1NSC1CKYPiYOTqkGJm6X/W58JY7tssz7Pzx8u1xdOnX1iU9b+A9I
+        fd93Wlmo/ntjvVBNIu+OjX8FNgVvKJxipbT/d8GfmmPnvmT92TorN3TTpdnHlr1+zfRF/72d
+        48qST87bmi+sU5804VOxLccf0bXSfhHm3c7zHmQceOBc+lGmT1zAauPUDS9X2upvn65Q6zMn
+        vWia9jGBXrdibqNmvsiDzcfKnol25W3/zp4/Key4+PH6ezP5BI43xTYufBXyprv2xYzYB8wf
+        wvX0NlXLeXKYycQ8sE/59CUtu6L6g+TLt9Lu2wM619Zt3aeXGxhgc0wmqm1VqI56hp3VCbvd
+        m5iLjoa0sO77br9WSq58eRfvDVutE315x/LNlFiKMxINtZiLihMBzhCIyisEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFLMWRmVeSWpSXmKPExsWy7bCSnK5BEEOyQds/ZYumCX+ZLVbf7Wez
+        uHlgJ5PFytVHmSzetZ5jsTj6/y2bxaRD1xgt9t7Stpi/7Cm7xaHJzUwOXB6Xz5Z6bFrVyeax
+        eUm9x+6bDWwe7/ddZfPo27KK0ePzJrkA9igum5TUnMyy1CJ9uwSujCevIgvO81e0ru1gamCc
+        xNvFyMkhIWAisXVrLzuILSSwg1Hi6hlZiLi4RPO1H+wQtrDEyn/PgWwuoJqPjBJNHe9Zuxg5
+        ONgENCUuTC4FqRERMJNYengNC4jNLHCDUWLbhHwQW1jAT+LX+71sIDaLgKrEhbM/WUFsXgEL
+        id8TDkDNl5eYeek7mM0pYCnRtPw3I8Q9FhLPZ79gg6gXlDg58wnUfHmJ5q2zmScwCsxCkpqF
+        JLWAkWkVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZw8Gtp7WDcs+qD3iFGJg7GQ4wS
+        HMxKIrw37vxJEuJNSaysSi3Kjy8qzUktPsQozcGiJM57oetkvJBAemJJanZqakFqEUyWiYNT
+        qoEpoSxvps+qc4Z8Zea/3EPW73l7JknP4s9Ns7OF1lxFj1acXNC9/rLFAeY9vban+dmLwwob
+        39z8J17xRipX0mPmc8tjl+pnqTBe4OmtCWJZuUj1e+RugU+nqo9mO/07dWp61JZ3b3ZuSC3V
+        LFX5qTFDmHOfROo8hrL9Srdm3PsZsvHDPY3TL006Ft5pXXhOkfP4tbvNU58LHtynyLWiX/Ph
+        Lq/AiUEVjJkugQ3aXvLL932seRW06Grm518z1LM3/ljD2xwnfPXtPotl7V+6XzI+W7mJd4XU
+        40KnhxaWHwq084/W7lN4lLLsiHXSd7mj038InfnIXjk3zEPed3WG51lzf8vWtpg98lUagY2W
+        TZ+MlFiKMxINtZiLihMBigT5PO0CAAA=
+X-CMS-MailID: 20220820031704epcas5p36bf7895aa5e5f8d43384c6de355a70bc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220820031704epcas5p36bf7895aa5e5f8d43384c6de355a70bc
+References: <20220820030620.59003-1-joshi.k@samsung.com>
+        <CGME20220820031704epcas5p36bf7895aa5e5f8d43384c6de355a70bc@epcas5p3.samsung.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi Linus,
+From: Anuj Gupta <anuj20.g@samsung.com>
 
-A few fixes for regressions in this cycle:
+This is a new helper that callers can use to obtain a bvec iterator for
+the previously mapped buffer. This is preparatory work to enable
+fixed-buffer support for io_uring_cmd.
 
-- Two instances of using the wrong "has async data" helper (Pavel)
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
+---
+ include/linux/io_uring.h |  7 +++++++
+ io_uring/uring_cmd.c     | 10 ++++++++++
+ 2 files changed, 17 insertions(+)
 
-- Fixup zero-copy address import (Pavel)
-
-- Bump zero-copy notification slot limit (Pavel)
-
-Please pull!
-
-
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.dk/linux-block.git tags/io_uring-6.0-2022-08-19
-
-for you to fetch changes up to 3f743e9bbb8fe20f4c477e4bf6341c4187a4a264:
-
-  io_uring/net: use right helpers for async_data (2022-08-18 07:27:20 -0600)
-
-----------------------------------------------------------------
-io_uring-6.0-2022-08-19
-
-----------------------------------------------------------------
-Pavel Begunkov (4):
-      io_uring/net: use right helpers for async recycle
-      io_uring/net: improve zc addr import error handling
-      io_uring/notif: raise limit on notification slots
-      io_uring/net: use right helpers for async_data
-
- io_uring/net.c   | 22 +++++++++++-----------
- io_uring/notif.h |  2 +-
- 2 files changed, 12 insertions(+), 12 deletions(-)
-
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 58676c0a398f..60aba10468fc 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -32,6 +32,8 @@ struct io_uring_cmd {
+ };
+ 
+ #if defined(CONFIG_IO_URING)
++int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
++		struct iov_iter *iter, void *ioucmd)
+ void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret, ssize_t res2);
+ void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+ 			void (*task_work_cb)(struct io_uring_cmd *));
+@@ -59,6 +61,11 @@ static inline void io_uring_free(struct task_struct *tsk)
+ 		__io_uring_free(tsk);
+ }
+ #else
++int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
++		struct iov_iter *iter, void *ioucmd)
++{
++	return -1;
++}
+ static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+ 		ssize_t ret2)
+ {
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 8900856fa588..ff65cc8ab6cc 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -121,3 +121,13 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	return IOU_ISSUE_SKIP_COMPLETE;
+ }
++
++int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len,
++		int rw, struct iov_iter *iter, void *ioucmd)
++{
++	struct io_kiocb *req = container_of(ioucmd, struct io_kiocb, uring_cmd);
++	struct io_mapped_ubuf *imu = req->imu;
++
++	return io_import_fixed(rw, iter, imu, ubuf, len);
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
 -- 
-Jens Axboe
+2.25.1
+
