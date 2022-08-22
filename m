@@ -2,235 +2,171 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A64EC32772
-	for <io-uring@archiver.kernel.org>; Mon, 22 Aug 2022 11:43:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12DC9C28D13
+	for <io-uring@archiver.kernel.org>; Mon, 22 Aug 2022 11:54:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbiHVLnk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 22 Aug 2022 07:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
+        id S234246AbiHVLyN (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 22 Aug 2022 07:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234680AbiHVLni (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 22 Aug 2022 07:43:38 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4979CE07
-        for <io-uring@vger.kernel.org>; Mon, 22 Aug 2022 04:43:31 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220822114327epoutp013a6df254191c3fc3e68678df36b008e5~NqAwHSv070778507785epoutp016
-        for <io-uring@vger.kernel.org>; Mon, 22 Aug 2022 11:43:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220822114327epoutp013a6df254191c3fc3e68678df36b008e5~NqAwHSv070778507785epoutp016
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1661168607;
-        bh=mHKVy64fvQwEHttDwVFpew5lOtV9Pkp4/InewqY+Zcg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=itDUjCIa1v9zYjiIwBCJOzLzu5a4kL5w0mMTKV/iwijOXiHf2Iy3exvf0BYt4ml7r
-         pWIMTSMANBNHpmKoAxVrs43sWaF1234Duk/KMNUO8nXDRdp6vjENg/2m5G1BatTr56
-         uT5DaEEuxSjsDpIJHomhvb+XYKX/6OTCDTirpQCY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220822114326epcas5p4ddc3c41ea0067ffb772f3ee7dff54b5c~NqAvMHphA3098530985epcas5p4G;
-        Mon, 22 Aug 2022 11:43:26 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.178]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4MB9V42Cw0z4x9Pp; Mon, 22 Aug
-        2022 11:43:24 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4E.67.18001.CDB63036; Mon, 22 Aug 2022 20:43:24 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220822114323epcas5p13ce13ff2e9cd58d26994ad9d49937443~NqAtETRUz1976919769epcas5p1R;
-        Mon, 22 Aug 2022 11:43:23 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220822114323epsmtrp260703c0cfe8ed9e831498e6ac4f6973c~NqAtDedWC2395923959epsmtrp2L;
-        Mon, 22 Aug 2022 11:43:23 +0000 (GMT)
-X-AuditID: b6c32a4a-2c3ff70000004651-33-63036bdc26d6
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2E.45.18644.BDB63036; Mon, 22 Aug 2022 20:43:23 +0900 (KST)
-Received: from test-zns (unknown [107.110.206.5]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220822114322epsmtip1acbf72566f7156d21a19c87232dbfd66~NqAraPOe01007410074epsmtip1S;
-        Mon, 22 Aug 2022 11:43:21 +0000 (GMT)
-Date:   Mon, 22 Aug 2022 17:03:41 +0530
-From:   Kanchan Joshi <joshi.k@samsung.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
-        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, ming.lei@redhat.com,
-        gost.dev@samsung.com, Anuj Gupta <anuj20.g@samsung.com>
-Subject: Re: [PATCH for-next 2/4] io_uring: introduce fixed buffer support
- for io_uring_cmd
-Message-ID: <20220822113341.GA31599@test-zns>
+        with ESMTP id S234350AbiHVLx7 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 22 Aug 2022 07:53:59 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B84A1EC69
+        for <io-uring@vger.kernel.org>; Mon, 22 Aug 2022 04:53:45 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id k9so12912565wri.0
+        for <io-uring@vger.kernel.org>; Mon, 22 Aug 2022 04:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=mDWV17WTrbRiFGQAzMvBm+wSuCm/m0ADxHNgtnL4HO8=;
+        b=DUtg7QbH4E5GnP0o0tqyevDy96uGpUrVt12pVnZeuW4Jhn6vY8D+7UHW1lHgC4PPm6
+         WyJyGtYRmV4La6S1mDiPd53ZkbCaeAlgt9n93b5ycKHIBFqpTrp+0dtEE+B5VTHZtKNJ
+         UCF/sGyOQhGmYbxO9WAmFvhb+gB9ItE2fHDk6K4u4k3/MoqTqh41he6b2Nn/XRjmG480
+         mIKlrGmxFAeEZ/QU2sHYqPBOz9CbtlMDi9+lkalwtzMFH3S98r9/8l/YnrETzqbH9lY/
+         LFw9VC1w50AqxSPaqGXhMB0Z1e86zYCA7Zu8ZX3tQiWYuACNXLhc96W9BCnhUwCkfHKc
+         5+9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=mDWV17WTrbRiFGQAzMvBm+wSuCm/m0ADxHNgtnL4HO8=;
+        b=1qzxWM5eh8SIBYscw48PazxyH+UAJIvvHMs1QqAEDDbBGOXthhps3U0MZPzmGfgjED
+         q8s4sT3fYYVvKkxL/jN4Zi8XmN9+a9sUxqhOYY4KGabyZ99yDB9WHVvuzoRKoFDEtaUJ
+         qTImS0zrzxm5MiPKzLSyl11BKWMaLX+MrplLTuHOY3dLML7M60Ws5QeuBGL4X1eezLf+
+         n379N4W7PRPRqi/aYdyHX4nb2WeSar6v4PJG3LsWhlLJ/LnojZHVS8NLXV1WfPO7R6q5
+         ZCb4/abanYlW5EdnWOrz2njMxjg63pFZB9odp/WxAouoOzaBVPhQp5LWfyqwtnTdKGe3
+         EzOg==
+X-Gm-Message-State: ACgBeo2NH3rG50++1Y1cWI4G6UhqaafF0DnIAEj7W708avSK3iQZgwhw
+        mqVmbHsNKQEwrbplVNgzn+E=
+X-Google-Smtp-Source: AA6agR4okDfsSYr2dEkB5y4+Wf4BrKBQolBHyn9IurDFCkI+WTmkXBRTTlRbaopsVnRolydxFe4uMg==
+X-Received: by 2002:a5d:5228:0:b0:225:5858:b7d3 with SMTP id i8-20020a5d5228000000b002255858b7d3mr3263254wra.591.1661169223575;
+        Mon, 22 Aug 2022 04:53:43 -0700 (PDT)
+Received: from [192.168.8.198] (188.28.126.24.threembb.co.uk. [188.28.126.24])
+        by smtp.gmail.com with ESMTPSA id c7-20020adffb07000000b0021d6924b777sm11491725wrr.115.2022.08.22.04.53.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Aug 2022 04:53:43 -0700 (PDT)
+Message-ID: <9711adcc-6de7-d891-e52d-448594f459e9@gmail.com>
+Date:   Mon, 22 Aug 2022 12:49:39 +0100
 MIME-Version: 1.0
-In-Reply-To: <3294f1e9-1946-2fbf-d5cd-fcdff9288f72@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJJsWRmVeSWpSXmKPExsWy7bCmhu6dbOZkg45VfBZNE/4yW8xZtY3R
-        YvXdfjaLmwd2MlmsXH2UyeJd6zkWi0mHrjFa7L2lbTF/2VN2i0OTm5kcuDx2zrrL7nH5bKnH
-        plWdbB6bl9R77L7ZwObxft9VNo++LasYPT5vkgvgiMq2yUhNTEktUkjNS85PycxLt1XyDo53
-        jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXLzAG6UEmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xi
-        q5RakJJTYFKgV5yYW1yal66Xl1piZWhgYGQKVJiQnXGy7wtTwX7lijmd15gaGDfJdjFyckgI
-        mEjsOXCLpYuRi0NIYDejxKummcwQzidGiUddF5ggnM+MEjeOvmWDaXlz7hxUYhejRFvHU0YI
-        5xmjxMEfS1hBqlgEVCVO914GGszBwSagKXFhcilIWERAW+L19UPsIDazwF1GiS1/tEBsYYFY
-        ifezWplAynkFdCU+bFEDCfMKCEqcnPmEBcTmFLCVePCxG8wWFVCWOLDtONgNEgJrOSSOXZjJ
-        AnGci8TzeVuhDhWWeHV8CzuELSXx+d1eqHiyxKWZIA+A2CUSj/cchLLtJVpP9TND3JYh8ffr
-        DkYIm0+i9/cTsNskBHglOtqEIMoVJe5NesoKYYtLPJyxBMr2ADq/ARo+Hxgltq9vZ5nAKDcL
-        yT+zkKyAsK0kOj80sc4CWsEsIC2x/B8HhKkpsX6X/gJG1lWMkqkFxbnpqcWmBUZ5qeXwOE7O
-        z93ECE6zWl47GB8++KB3iJGJg/EQowQHs5IIb/VFhmQh3pTEyqrUovz4otKc1OJDjKbA2JnI
-        LCWanA9M9Hkl8YYmlgYmZmZmJpbGZoZK4rxTtBmThQTSE0tSs1NTC1KLYPqYODilGpiC/csY
-        ore2ndDJ+Rmiza6pF/+8c/rBV88WfiqznnQnymRi9QSP4p+1q+IuXFRmZNueZG22xrn/kvqL
-        Fl0b70nXd+g216n9uX28+NrP4Gd/rRRWrz74Z3e7htGhxuzkJYpfXsScj78x+YvPAc7OWb+6
-        4nK1OFcdPLX1Z/cdNo21z25Hq1xcpvHwbMC6WXrzZCpEcsLOf6xUyBC3j3t75VetWAjT1j+h
-        b95dEc7Zqt+8/tWBw29akxdsaLrW5X9XQkjkMutxjbsXp35q/PY5fod5SnuBGrNdhbijeO33
-        Lcd6N584Me/D5aDipXZVMVO7Uy9sExa6fCPoTfHJF+EzlKu3ljR0pF7sclLZ+3fxA305JZbi
-        jERDLeai4kQAt+YiQzwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrBLMWRmVeSWpSXmKPExsWy7bCSnO7tbOZkg/bTRhZNE/4yW8xZtY3R
-        YvXdfjaLmwd2MlmsXH2UyeJd6zkWi0mHrjFa7L2lbTF/2VN2i0OTm5kcuDx2zrrL7nH5bKnH
-        plWdbB6bl9R77L7ZwObxft9VNo++LasYPT5vkgvgiOKySUnNySxLLdK3S+DKeDxjBmPBR4WK
-        eXs/sDYw/pPqYuTkkBAwkXhz7hxTFyMXh5DADkaJF70TWCES4hLN136wQ9jCEiv/PWeHKHrC
-        KLFz2k82kASLgKrE6d7LLF2MHBxsApoSFyaXgoRFBLQlXl8/BFbPLHCXUeLmw/tMIAlhgViJ
-        97NamUDqeQV0JT5sUYOY+YFR4svO38wgNbwCghInZz5hAbGZBcwk5m1+yAxSzywgLbH8HwdI
-        mFPAVuLBx26wElEBZYkD244zTWAUnIWkexaS7lkI3QsYmVcxSqYWFOem5xYbFhjlpZbrFSfm
-        Fpfmpesl5+duYgRHjpbWDsY9qz7oHWJk4mA8xCjBwawkwlt9kSFZiDclsbIqtSg/vqg0J7X4
-        EKM0B4uSOO+FrpPxQgLpiSWp2ampBalFMFkmDk6pBqY07SXs8bETz/zeJuh/cZ8QW8TC3peP
-        5nMvfLLkbf00iUVfblisrF+W+czi84uLG0W29GQfFY95MsfniX+l9fPIFZNXyl1KdKtd4rfr
-        bXCG+gW9z3c9jXdxvBJe7bk8LYxbes8jZ99TP94wxHtcvn9qv6flfMfX237f89F8MNtCdNfs
-        7uiykLXJrXM353L8j7WSdN3i3nN/527+yzbP9hx8sU/+2ovK61ZvynmzZ/ox1d47mvxq5dKt
-        S1pk03ZeLmuu0F4nr/oubqm0QNv76aefzpK+XBV7beOF2oOrdr07eFRX5IFFUz1H246s/++c
-        F19habCYMNHGxEdN/5BXYNKXk8pCVxadmakuoKW759FHUyWW4oxEQy3mouJEAIEzWcoLAwAA
-X-CMS-MailID: 20220822114323epcas5p13ce13ff2e9cd58d26994ad9d49937443
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-        boundary="----_GKj2UxOoZMooFpgW.UaNJF5RnPKrhbpXXK.PgNceyCDa.V5=_9979a_"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220819104038epcas5p265c9385cfd9189d20ebfffeaa4d5efae
-References: <20220819103021.240340-1-joshi.k@samsung.com>
-        <CGME20220819104038epcas5p265c9385cfd9189d20ebfffeaa4d5efae@epcas5p2.samsung.com>
-        <20220819103021.240340-3-joshi.k@samsung.com>
-        <3294f1e9-1946-2fbf-d5cd-fcdff9288f72@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC 2/2] io_uring/net: allow to override notification tag
+Content-Language: en-US
+To:     Stefan Metzmacher <metze@samba.org>, io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, Dylan Yudaken <dylany@fb.com>
+References: <cover.1660635140.git.asml.silence@gmail.com>
+ <6aa0c662a3fec17a1ade512e7bbb519aa49e6e4d.1660635140.git.asml.silence@gmail.com>
+ <bf3d5a0f-c337-f6f3-8bf4-b8665f92acaa@samba.org>
+ <9b998187-b985-2938-1494-0bc8c189a3b6@gmail.com>
+ <5fc449bd-9625-4ff0-5f1b-a9fbea721716@samba.org>
+ <a5fc6451-94a8-edbf-d9f7-a05eb49b0113@gmail.com>
+ <697172bd-24fa-966c-e76d-f52812f9a4b0@samba.org>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <697172bd-24fa-966c-e76d-f52812f9a4b0@samba.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-------_GKj2UxOoZMooFpgW.UaNJF5RnPKrhbpXXK.PgNceyCDa.V5=_9979a_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Disposition: inline
-
-On Mon, Aug 22, 2022 at 11:58:24AM +0100, Pavel Begunkov wrote:
->On 8/19/22 11:30, Kanchan Joshi wrote:
->>From: Anuj Gupta <anuj20.g@samsung.com>
+On 8/19/22 13:36, Stefan Metzmacher wrote:
+[...]
+>>>>> What do you think? It would remove the whole notif slot complexity
+>>>>> from caller using IORING_RECVSEND_NOTIF_FLUSH for every request anyway.
+>>>>
+>>>> The downside is that requests then should be pretty large or it'll
+>>>> lose in performance. Surely not a problem for 8MB per request but
+>>>> even 4KB won't suffice. And users may want to put in smaller chunks
+>>>> on the wire instead of waiting for mode data to let tcp handle
+>>>> pacing and potentially improve latencies by sending earlier.
+>>>
+>>> If this is optional applications can decide what fits better.
+>>>
+>>>> On the other hand that one notification per request idea mentioned
+>>>> before can extended to 1-2 CQEs per request, which is interestingly
+>>>> the approach zc send discussions started with.
+>>>
+>>> In order to make use of any of this I need any way
+>>> to get 2 CQEs with user_data being the same or related.
 >>
->>Add IORING_OP_URING_CMD_FIXED opcode that enables sending io_uring
->>command with previously registered buffers. User-space passes the buffer
->>index in sqe->buf_index, same as done in read/write variants that uses
->>fixed buffers.
+>> The idea described above will post 2 CQEs (mostly) per request
+>> as you want with an optional way to have only 1 CQE. My current
+>> sentiment is to kill all the slot business, leave this 1-2 CQE
+>> per request and see if there are users for whom it won't be
+>> enough. It's anyway just a slight deviation from what I wanted
+>> to push as a complimentary interface.
+> 
+> Ah, ok, removing the slot stuff again would be fine for me...
+> 
+>>> The only benefit for with slots is being able to avoid or
+>>> batch additional CQEs, correct? Or is there more to it?
 >>
->>Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
->>Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
->>---
->>  include/linux/io_uring.h      |  5 ++++-
->>  include/uapi/linux/io_uring.h |  1 +
->>  io_uring/opdef.c              | 10 ++++++++++
->>  io_uring/rw.c                 |  3 ++-
->>  io_uring/uring_cmd.c          | 18 +++++++++++++++++-
->>  5 files changed, 34 insertions(+), 3 deletions(-)
+>> CQE batching is a lesser problem, I'm more concerned of how
+>> it sticks with the network. In short, it'll hugely underperform
+>> with TCP if requests are not large enough.
 >>
->>diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
->>index 60aba10468fc..40961d7c3827 100644
->>--- a/include/linux/io_uring.h
->>+++ b/include/linux/io_uring.h
->>@@ -5,6 +5,8 @@
->>  #include <linux/sched.h>
->>  #include <linux/xarray.h>
->>+#include<uapi/linux/io_uring.h>
->>+
->>  enum io_uring_cmd_flags {
->>  	IO_URING_F_COMPLETE_DEFER	= 1,
->>  	IO_URING_F_UNLOCKED		= 2,
->>@@ -15,6 +17,7 @@ enum io_uring_cmd_flags {
->>  	IO_URING_F_SQE128		= 4,
->>  	IO_URING_F_CQE32		= 8,
->>  	IO_URING_F_IOPOLL		= 16,
->>+	IO_URING_F_FIXEDBUFS		= 32,
->>  };
->>  struct io_uring_cmd {
->>@@ -33,7 +36,7 @@ struct io_uring_cmd {
->>  #if defined(CONFIG_IO_URING)
->>  int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
->>-		struct iov_iter *iter, void *ioucmd)
->>+		struct iov_iter *iter, void *ioucmd);
->
->Please try to compile the first patch separately
+>> A simple bench with some hacks, localhost, TCP, run by
+>>
+>> ./msg_zerocopy -6 -r tcp -s <size> &
+>> ./io_uring_zerocopy_tx -6 -D "::1" -s <size> -m <0,2> tcp
+>>
+>>
+>> non-zerocopy:
+>> 4000B:  tx=8711880 (MB=33233), tx/s=1742376 (MB/s=6646)
+>> 16000B: tx=3196528 (MB=48775), tx/s=639305 (MB/s=9755)
+>> 60000B: tx=1036536 (MB=59311), tx/s=207307 (MB/s=11862)
+>>
+>> zerocopy:
+>> 4000B:  tx=3003488 (MB=11457), tx/s=600697 (MB/s=2291)
+>> 16000B: tx=2940296 (MB=44865), tx/s=588059 (MB/s=8973)
+>> 60000B: tx=2621792 (MB=150020), tx/s=524358 (MB/s=30004)
+> 
+> So with something between 16k and 60k we reach the point where
+> ZC starts to be faster, correct?
 
-Indeed, this should have been part of that patch. Thanks.
+For this setup -- yes, should be somewhat around 16-20K,
+don't remember numbers for real hw, but I saw similar
+tendencies.
 
->>  void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret, ssize_t res2);
->>  void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
->>  			void (*task_work_cb)(struct io_uring_cmd *));
->>diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
->>index 1463cfecb56b..80ea35d1ed5c 100644
->>--- a/include/uapi/linux/io_uring.h
->>+++ b/include/uapi/linux/io_uring.h
->>@@ -203,6 +203,7 @@ enum io_uring_op {
->>  	IORING_OP_SOCKET,
->>  	IORING_OP_URING_CMD,
->>  	IORING_OP_SENDZC_NOTIF,
->>+	IORING_OP_URING_CMD_FIXED,
->
->I don't think it should be another opcode, is there any
->control flags we can fit it in?
+> Did you remove the loopback restriction as described in
+> Documentation/networking/msg_zerocopy.rst ?
 
-using sqe->rw_flags could be another way.
-But I think that may create bit of disharmony in user-space.
-Current choice (IORING_OP_URING_CMD_FIXED) is along the same lines as
-IORING_OP_READ/WRITE_FIXED. User-space uses new opcode, and sends the
-buffer by filling sqe->buf_index. 
-So must we take a different way?
+right, it wouldn't outperform even with large payload otherwise
 
->>  	/* this goes last, obviously */
->>  	IORING_OP_LAST,
->>diff --git a/io_uring/opdef.c b/io_uring/opdef.c
->>index 9a0df19306fe..7d5731b84c92 100644
->>--- a/io_uring/opdef.c
->>+++ b/io_uring/opdef.c
->>@@ -472,6 +472,16 @@ const struct io_op_def io_op_defs[] = {
->>  		.issue			= io_uring_cmd,
->>  		.prep_async		= io_uring_cmd_prep_async,
->>  	},
->>+	[IORING_OP_URING_CMD_FIXED] = {
->>+		.needs_file		= 1,
->>+		.plug			= 1,
->>+		.name			= "URING_CMD_FIXED",
->>+		.iopoll			= 1,
->>+		.async_size		= uring_cmd_pdu_size(1),
->>+		.prep			= io_uring_cmd_prep,
->>+		.issue			= io_uring_cmd,
->>+		.prep_async		= io_uring_cmd_prep_async,
->>+	},
->>  	[IORING_OP_SENDZC_NOTIF] = {
->>  		.name			= "SENDZC_NOTIF",
->>  		.needs_file		= 1,
->>diff --git a/io_uring/rw.c b/io_uring/rw.c
->>index 1a4fb8a44b9a..3c7b94bffa62 100644
->>--- a/io_uring/rw.c
->>+++ b/io_uring/rw.c
->>@@ -1005,7 +1005,8 @@ int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin)
->>  		if (READ_ONCE(req->iopoll_completed))
->>  			break;
->>-		if (req->opcode == IORING_OP_URING_CMD) {
->>+		if (req->opcode == IORING_OP_URING_CMD ||
->>+				req->opcode == IORING_OP_URING_CMD_FIXED) {
->
->I don't see the changed chunk upstream
+> Are the results similar when using ./msg_zerocopy -6 tcp -s <size>
+> as client?
 
-Right, it is on top of iopoll support (plus one more series mentioned in
-covered letter). Here is the link - 
-https://lore.kernel.org/linux-block/20220807183607.352351-1-joshi.k@samsung.com/
-It would be great if you could review that.
+Shouldn't be, it also batches multiple requests to a single
+(internal) notification and also exposes it to the userspace
+differently.
 
-------_GKj2UxOoZMooFpgW.UaNJF5RnPKrhbpXXK.PgNceyCDa.V5=_9979a_
-Content-Type: text/plain; charset="utf-8"
+> And the reason is some page pinning overhead from iov_iter_get_pages2()
+> in __zerocopy_sg_from_iter()?
 
+No, I was using registered buffers here, so instead of
+iov_iter_get_pages2() business zerocopy was doing
+io_uring/net.c:io_sg_from_iter(). And in any case overhead on pinning
+wouldn't drastically change it.
 
-------_GKj2UxOoZMooFpgW.UaNJF5RnPKrhbpXXK.PgNceyCDa.V5=_9979a_--
+>> Reusing notifications with slots will change the picture.
+>> And it this has nothing to do with io_uring overhead like
+>> CQE posting and so on.
+> 
+> Hmm I don't understand how the number of notif structures
+> would have any impact? Is it related to io_sg_from_iter()?
+
+It comes from TCP stack force changing an skbuff every time
+it meets a new ubuf_info (i.e. a notification handle for
+simplicity), there is a slight bump on skb allocation overhead
+but the main problem is seemingly comes from tcp_push and so,
+feeding it down the stack. I don't think there is any fundamental
+reason for why it should be working so much slower but might
+be problematic from engineering perspective. I'll ask a bit
+around or maybe look myself if find time for that.
+
+-- 
+Pavel Begunkov
