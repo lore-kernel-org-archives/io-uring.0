@@ -2,56 +2,56 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28395C64991
-	for <io-uring@archiver.kernel.org>; Tue, 30 Aug 2022 21:53:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A598C65C0D
+	for <io-uring@archiver.kernel.org>; Tue, 30 Aug 2022 21:53:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbiH3Vxq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 30 Aug 2022 17:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S231964AbiH3Vxr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 30 Aug 2022 17:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiH3VxI (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 30 Aug 2022 17:53:08 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1274590C54
-        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:50:34 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id i194-20020a253bcb000000b00676d86fc5d7so709737yba.9
-        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:50:34 -0700 (PDT)
+        with ESMTP id S231648AbiH3Vwr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 30 Aug 2022 17:52:47 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A0B94139
+        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:50:28 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-340862314d9so173452597b3.3
+        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:50:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=q8clZUHCVXNR9yzPtPwGAp/8c18i/nqvvNYb9V5EY+0=;
-        b=nwraOOA8rbsDfrvp5gBz8rYLe0NDJnSuxfKXWTc3i5fQmEeQNcPETe8KaY9Mt9/+1r
-         ov+Vf6KkAdui0Rmw1+5xSKYNrSBv2kWObfOZUmmiPaKz9kQgQUwPGyNfu/DYb4bPK42K
-         36D96qfHlnHXTqqxaW28I0UFsAs+LSQcoibyPA3rdTyOgd8YqbSgEUdft4zOlN2gaNbw
-         dVh3tFK6UzGRc+MjeMOQD3ATSE//iPHaMa+xktBjpyqEQSekSHvIyA0BP3Rq7kUAJkb0
-         tRcC/6q0Z5Rvm1vf/73MAHgozRrLOYJlaS49+Ebjg2YexCVtD/Vs4zwcF2pG9WHANRAT
-         ZYUQ==
+        bh=PJDqdE16VQFkhBtAZQdE7ryguEFDkMx7mMptHwdJxIQ=;
+        b=Ij75nFrUrPvJu2bumKHw5qB/wQ6gVxiA7JiR459fjyWwf8bAM7esU+z26b2Gs2wm+2
+         GJco7Z59pIbk7lAYzIUjBLlbgij5WieJsWdNVz1juJkVh+sa9UWATRgrEBqBGRWkiIgS
+         e9fE2xkYV7tYVniZBisXLNcLv1T2Qe2o0c8hnbKmgjEZ4CuxPiv3aHRBgJXL1TW2FAU/
+         xTP0HeMc1J5XCTMzbl6MriSnvFIhWbWVUtAJ/9V96DnOp2vk9Hc7k6iFLgNru+svATI5
+         qjP0FOpFl9sx7TmiI9c+PBZgc2FqjExNp+v4DIbowFGQu7f8+ZLj1VsmDoNwIg4tHpwc
+         B9Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=q8clZUHCVXNR9yzPtPwGAp/8c18i/nqvvNYb9V5EY+0=;
-        b=FX6Pf1RGf4iOT/+k4eMQ1GTNDnw9V68Hs37D/Exw01GuorIci3EXe/2fHwPLC74Qi8
-         M+2iZcKEeVCPQLZXc0/heyVWuXD1XpKye0+6jP8BXFSjMtpE22SJeOVz8AGxLVsctsY+
-         LDETQHdqRf4xVZafE6zfnFu6pmGtyXWJaDrKQyA/R2vZ5wj1FYJ8VeNnb40wtlrJ8+2N
-         9j+i9kS9KCiZTThRtKg7taKVG07LdbkxPUnqR6M8cirLhjjOXHkSevKx1l/SCahFd0qA
-         tXEXC4f+h1P44GFnAUbSxr/X9toX1i4wrez3WWkS4ocsSTmrHPQ2yV6m6gp2Cl3eNFu2
-         UOtA==
-X-Gm-Message-State: ACgBeo1PdKx+FZmmQzg4TvfJ9FWgndAW0Ux+9V4Mu5oo/MmEU57rF8wy
-        nO9lE54/iG3u0fsg4zURBycGvLG635k=
-X-Google-Smtp-Source: AA6agR6QQvnvy8mDyUDzzIm8p3bCu8QCjthbfoOD2oTtJsYiGZpiHSGB1TzI0H74pXNHM3rxRxKb4sF+hq0=
+        bh=PJDqdE16VQFkhBtAZQdE7ryguEFDkMx7mMptHwdJxIQ=;
+        b=k2GpLo77wOFAmx2GK+UTV47AZJ3SeSpJT7w40jU4mGQRZVPD+5UKHZFg5nfCAt1kys
+         AcnYzFWC5qLzCxvVUpJkccgCA4ZxCRMRINwVOZGWnfKa5m28W3cbowiKj6SubCuTmSTZ
+         VqjatD8ytUvEm4jBnivYByqJ2vIhtrpdXnbGLra8rG78IZT7EY4z8N5eC0JYNQGa43UI
+         TTwrk1RAiT1q9+NVuUr3O9ZTIQiNlMqCjZlJloAcA1GMmT/cuMByRvR4xXKBaMvF1fzS
+         hcet88mUTXO4WvMlSb6W6UzDDedBA4do/UXm3fpBpH7i5tkJO3pusnmLLz9IqwC8WAZx
+         oRmg==
+X-Gm-Message-State: ACgBeo20mnCo9F3xunlZNN80V9QQ7k/iDNv6lobMhwvkAwZoh5ftjrVR
+        8ZUZFyfwa4ewUaOuGIUXGpvUK5fuZmc=
+X-Google-Smtp-Source: AA6agR6avTM18XP2y4CdHSCV3FE6n/efM5TdzJAiOApCx+OJvVOl1HBVpl97MaszhlrgGlpdRen0jumUZ8U=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a5b:2ce:0:b0:67a:6054:9eb0 with SMTP id
- h14-20020a5b02ce000000b0067a60549eb0mr13092972ybp.15.1661896232608; Tue, 30
- Aug 2022 14:50:32 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:49:15 -0700
+ (user=surenb job=sendgmr) by 2002:a81:54c4:0:b0:329:d0e1:cfcf with SMTP id
+ i187-20020a8154c4000000b00329d0e1cfcfmr15741208ywb.451.1661896227243; Tue, 30
+ Aug 2022 14:50:27 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:49:13 -0700
 In-Reply-To: <20220830214919.53220-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-27-surenb@google.com>
-Subject: [RFC PATCH 26/30] bcache: Convert to lib/time_stats
+Message-ID: <20220830214919.53220-25-surenb@google.com>
+Subject: [RFC PATCH 24/30] wait: Clean up waitqueue_entry initialization
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -73,7 +73,7 @@ Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
         io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
         linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Coly Li <colyli@suse.de>
+        Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
@@ -81,383 +81,163 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-This patch converts bcache to the new generic time_stats code
-lib/time_stats.c. The new code is from bcachefs, and has some changes
-from the version in bcache:
+Cleanup for code tagging latency tracking:
 
- - we now use ktime_get_ns(), not local_clock(). When the code was
-   originally written multi processor systems that lacked synchronized
-   TSCs were still common, and so local_clock() was much cheaper than
-   sched_clock() (though not necessarily fully accurate, due to TSC
-   drift). ktime_get_ns() should be cheap enough on all common hardware
-   now, and more standard/correct.
+Add an initializer, WAIT_FUNC_INITIALIZER(), to be used by initializers
+for structs that include wait_queue_entries.
 
- - time_stats are now exported in a single file in sysfs, which means we
-   can improve the statistics we keep track of without changing all
-   users. This also means we don't have to manually specify which units
-   (ms, us, ns) a given time_stats should be printed in; that's handled
-   dynamically.
-
- - There's a lazily-allocated percpu buffer, which now needs to be freed
-   with time_stats_exit().
+Also, change init_wait(), init_wait_entry etc.  to be a wrapper around
+the new __init_waitqueue_entry(); more de-duplication prep work.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: Coly Li <colyli@suse.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- drivers/md/bcache/Kconfig  |  1 +
- drivers/md/bcache/bcache.h |  1 +
- drivers/md/bcache/bset.c   |  8 +++---
- drivers/md/bcache/bset.h   |  1 +
- drivers/md/bcache/btree.c  | 12 ++++----
- drivers/md/bcache/super.c  |  3 ++
- drivers/md/bcache/sysfs.c  | 43 ++++++++++++++++++++--------
- drivers/md/bcache/util.c   | 30 --------------------
- drivers/md/bcache/util.h   | 57 --------------------------------------
- 9 files changed, 47 insertions(+), 109 deletions(-)
+ include/linux/sbitmap.h  |  6 +----
+ include/linux/wait.h     | 52 +++++++++++++++++++---------------------
+ include/linux/wait_bit.h |  7 +-----
+ kernel/sched/wait.c      |  9 -------
+ 4 files changed, 27 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/md/bcache/Kconfig b/drivers/md/bcache/Kconfig
-index 529c9d04e9a4..8d165052e508 100644
---- a/drivers/md/bcache/Kconfig
-+++ b/drivers/md/bcache/Kconfig
-@@ -4,6 +4,7 @@ config BCACHE
- 	tristate "Block device as cache"
- 	select BLOCK_HOLDER_DEPRECATED if SYSFS
- 	select CRC64
-+	select TIME_STATS
- 	help
- 	Allows a block device to be used as cache for other devices; uses
- 	a btree for indexing and the layout is optimized for SSDs.
-diff --git a/drivers/md/bcache/bcache.h b/drivers/md/bcache/bcache.h
-index 2acda9cea0f9..5100010a3897 100644
---- a/drivers/md/bcache/bcache.h
-+++ b/drivers/md/bcache/bcache.h
-@@ -185,6 +185,7 @@
- #include <linux/rbtree.h>
- #include <linux/rwsem.h>
- #include <linux/refcount.h>
-+#include <linux/time_stats.h>
- #include <linux/types.h>
- #include <linux/workqueue.h>
- #include <linux/kthread.h>
-diff --git a/drivers/md/bcache/bset.c b/drivers/md/bcache/bset.c
-index 94d38e8a59b3..727e9b7aead4 100644
---- a/drivers/md/bcache/bset.c
-+++ b/drivers/md/bcache/bset.c
-@@ -1251,7 +1251,7 @@ static void __btree_sort(struct btree_keys *b, struct btree_iter *iter,
- 		order = state->page_order;
+diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+index 8f5a86e210b9..f696c29d9ab3 100644
+--- a/include/linux/sbitmap.h
++++ b/include/linux/sbitmap.h
+@@ -596,11 +596,7 @@ struct sbq_wait {
+ #define DEFINE_SBQ_WAIT(name)							\
+ 	struct sbq_wait name = {						\
+ 		.sbq = NULL,							\
+-		.wait = {							\
+-			.private	= current,				\
+-			.func		= autoremove_wake_function,		\
+-			.entry		= LIST_HEAD_INIT((name).wait.entry),	\
+-		}								\
++		.wait = WAIT_FUNC_INITIALIZER((name).wait, autoremove_wake_function),\
  	}
  
--	start_time = local_clock();
-+	start_time = ktime_get_ns();
+ /*
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 58cfbf81447c..91ced6a118bc 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -79,21 +79,38 @@ extern void __init_waitqueue_head(struct wait_queue_head *wq_head, const char *n
+ # define DECLARE_WAIT_QUEUE_HEAD_ONSTACK(name) DECLARE_WAIT_QUEUE_HEAD(name)
+ #endif
  
- 	btree_mergesort(b, out, iter, fixup, false);
- 	b->nsets = start;
-@@ -1286,7 +1286,7 @@ static void __btree_sort(struct btree_keys *b, struct btree_iter *iter,
- 	bch_bset_build_written_tree(b);
- 
- 	if (!start)
--		bch_time_stats_update(&state->time, start_time);
-+		time_stats_update(&state->time, start_time);
- }
- 
- void bch_btree_sort_partial(struct btree_keys *b, unsigned int start,
-@@ -1322,14 +1322,14 @@ void bch_btree_sort_and_fix_extents(struct btree_keys *b,
- void bch_btree_sort_into(struct btree_keys *b, struct btree_keys *new,
- 			 struct bset_sort_state *state)
- {
--	uint64_t start_time = local_clock();
-+	uint64_t start_time = ktime_get_ns();
- 	struct btree_iter iter;
- 
- 	bch_btree_iter_init(b, &iter, NULL);
- 
- 	btree_mergesort(b, new->set->data, &iter, false, true);
- 
--	bch_time_stats_update(&state->time, start_time);
-+	time_stats_update(&state->time, start_time);
- 
- 	new->set->size = 0; // XXX: why?
- }
-diff --git a/drivers/md/bcache/bset.h b/drivers/md/bcache/bset.h
-index d795c84246b0..13e524ad7783 100644
---- a/drivers/md/bcache/bset.h
-+++ b/drivers/md/bcache/bset.h
-@@ -3,6 +3,7 @@
- #define _BCACHE_BSET_H
- 
- #include <linux/kernel.h>
-+#include <linux/time_stats.h>
- #include <linux/types.h>
- 
- #include "bcache_ondisk.h"
-diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-index 147c493a989a..abf543bc7551 100644
---- a/drivers/md/bcache/btree.c
-+++ b/drivers/md/bcache/btree.c
-@@ -242,7 +242,7 @@ static void btree_node_read_endio(struct bio *bio)
- 
- static void bch_btree_node_read(struct btree *b)
- {
--	uint64_t start_time = local_clock();
-+	uint64_t start_time = ktime_get_ns();
- 	struct closure cl;
- 	struct bio *bio;
- 
-@@ -270,7 +270,7 @@ static void bch_btree_node_read(struct btree *b)
- 		goto err;
- 
- 	bch_btree_node_read_done(b);
--	bch_time_stats_update(&b->c->btree_read_time, start_time);
-+	time_stats_update(&b->c->btree_read_time, start_time);
- 
- 	return;
- err:
-@@ -1789,7 +1789,7 @@ static void bch_btree_gc(struct cache_set *c)
- 	struct gc_stat stats;
- 	struct closure writes;
- 	struct btree_op op;
--	uint64_t start_time = local_clock();
-+	uint64_t start_time = ktime_get_ns();
- 
- 	trace_bcache_gc_start(c);
- 
-@@ -1815,7 +1815,7 @@ static void bch_btree_gc(struct cache_set *c)
- 	bch_btree_gc_finish(c);
- 	wake_up_allocators(c);
- 
--	bch_time_stats_update(&c->btree_gc_time, start_time);
-+	time_stats_update(&c->btree_gc_time, start_time);
- 
- 	stats.key_bytes *= sizeof(uint64_t);
- 	stats.data	<<= 9;
-@@ -2191,7 +2191,7 @@ static int btree_split(struct btree *b, struct btree_op *op,
- {
- 	bool split;
- 	struct btree *n1, *n2 = NULL, *n3 = NULL;
--	uint64_t start_time = local_clock();
-+	uint64_t start_time = ktime_get_ns();
- 	struct closure cl;
- 	struct keylist parent_keys;
- 
-@@ -2297,7 +2297,7 @@ static int btree_split(struct btree *b, struct btree_op *op,
- 	btree_node_free(b);
- 	rw_unlock(true, n1);
- 
--	bch_time_stats_update(&b->c->btree_split_time, start_time);
-+	time_stats_update(&b->c->btree_split_time, start_time);
- 
- 	return 0;
- err_free2:
-diff --git a/drivers/md/bcache/super.c b/drivers/md/bcache/super.c
-index ba3909bb6bea..26c8fa93b55d 100644
---- a/drivers/md/bcache/super.c
-+++ b/drivers/md/bcache/super.c
-@@ -1691,6 +1691,9 @@ static void cache_set_free(struct closure *cl)
- 		kobject_put(&ca->kobj);
- 	}
- 
-+	time_stats_exit(&c->btree_gc_time);
-+	time_stats_exit(&c->btree_split_time);
-+	time_stats_exit(&c->sort.time);
- 
- 	if (c->moving_gc_wq)
- 		destroy_workqueue(c->moving_gc_wq);
-diff --git a/drivers/md/bcache/sysfs.c b/drivers/md/bcache/sysfs.c
-index c6f677059214..01eec5877cd7 100644
---- a/drivers/md/bcache/sysfs.c
-+++ b/drivers/md/bcache/sysfs.c
-@@ -16,6 +16,7 @@
- #include <linux/blkdev.h>
- #include <linux/sort.h>
- #include <linux/sched/clock.h>
-+#include <linux/seq_buf.h>
- 
- extern bool bcache_is_reboot;
- 
-@@ -79,10 +80,10 @@ read_attribute(active_journal_entries);
- read_attribute(backing_dev_name);
- read_attribute(backing_dev_uuid);
- 
--sysfs_time_stats_attribute(btree_gc,	sec, ms);
--sysfs_time_stats_attribute(btree_split, sec, us);
--sysfs_time_stats_attribute(btree_sort,	ms,  us);
--sysfs_time_stats_attribute(btree_read,	ms,  us);
-+read_attribute(btree_gc_time);
-+read_attribute(btree_split_time);
-+read_attribute(btree_sort_time);
-+read_attribute(btree_read_time);
- 
- read_attribute(btree_nodes);
- read_attribute(btree_used_percent);
-@@ -731,6 +732,9 @@ static unsigned int bch_average_key_size(struct cache_set *c)
- SHOW(__bch_cache_set)
- {
- 	struct cache_set *c = container_of(kobj, struct cache_set, kobj);
-+	struct seq_buf s;
-+
-+	seq_buf_init(&s, buf, PAGE_SIZE);
- 
- 	sysfs_print(synchronous,		CACHE_SYNC(&c->cache->sb));
- 	sysfs_print(journal_delay_ms,		c->journal_delay_ms);
-@@ -743,10 +747,25 @@ SHOW(__bch_cache_set)
- 	sysfs_print(btree_cache_max_chain,	bch_cache_max_chain(c));
- 	sysfs_print(cache_available_percent,	100 - c->gc_stats.in_use);
- 
--	sysfs_print_time_stats(&c->btree_gc_time,	btree_gc, sec, ms);
--	sysfs_print_time_stats(&c->btree_split_time,	btree_split, sec, us);
--	sysfs_print_time_stats(&c->sort.time,		btree_sort, ms, us);
--	sysfs_print_time_stats(&c->btree_read_time,	btree_read, ms, us);
-+	if (attr == &sysfs_btree_gc_time) {
-+		time_stats_to_text(&s, &c->btree_gc_time);
-+		return s.len;
-+	}
-+
-+	if (attr == &sysfs_btree_split_time) {
-+		time_stats_to_text(&s, &c->btree_split_time);
-+		return s.len;
-+	}
-+
-+	if (attr == &sysfs_btree_sort_time) {
-+		time_stats_to_text(&s, &c->sort.time);
-+		return s.len;
-+	}
-+
-+	if (attr == &sysfs_btree_read_time) {
-+		time_stats_to_text(&s, &c->btree_read_time);
-+		return s.len;
-+	}
- 
- 	sysfs_print(btree_used_percent,	bch_btree_used(c));
- 	sysfs_print(btree_nodes,	c->gc_stats.nodes);
-@@ -988,10 +1007,10 @@ KTYPE(bch_cache_set);
- static struct attribute *bch_cache_set_internal_attrs[] = {
- 	&sysfs_active_journal_entries,
- 
--	sysfs_time_stats_attribute_list(btree_gc, sec, ms)
--	sysfs_time_stats_attribute_list(btree_split, sec, us)
--	sysfs_time_stats_attribute_list(btree_sort, ms, us)
--	sysfs_time_stats_attribute_list(btree_read, ms, us)
-+	&sysfs_btree_gc_time,
-+	&sysfs_btree_split_time,
-+	&sysfs_btree_sort_time,
-+	&sysfs_btree_read_time,
- 
- 	&sysfs_btree_nodes,
- 	&sysfs_btree_used_percent,
-diff --git a/drivers/md/bcache/util.c b/drivers/md/bcache/util.c
-index ae380bc3992e..95282bf0f9a7 100644
---- a/drivers/md/bcache/util.c
-+++ b/drivers/md/bcache/util.c
-@@ -160,36 +160,6 @@ int bch_parse_uuid(const char *s, char *uuid)
- 	return i;
- }
- 
--void bch_time_stats_update(struct time_stats *stats, uint64_t start_time)
+-static inline void init_waitqueue_entry(struct wait_queue_entry *wq_entry, struct task_struct *p)
 -{
--	uint64_t now, duration, last;
+-	wq_entry->flags		= 0;
+-	wq_entry->private	= p;
+-	wq_entry->func		= default_wake_function;
++#define WAIT_FUNC_INITIALIZER(name, function) {					\
++	.private	= current,						\
++	.func		= function,						\
++	.entry		= LIST_HEAD_INIT((name).entry),				\
+ }
+ 
++#define DEFINE_WAIT_FUNC(name, function)					\
++	struct wait_queue_entry name = WAIT_FUNC_INITIALIZER(name, function)
++
++#define DEFINE_WAIT(name) DEFINE_WAIT_FUNC(name, autoremove_wake_function)
++
+ static inline void
+-init_waitqueue_func_entry(struct wait_queue_entry *wq_entry, wait_queue_func_t func)
++__init_waitqueue_entry(struct wait_queue_entry *wq_entry, unsigned int flags,
++		       void *private, wait_queue_func_t func)
+ {
+-	wq_entry->flags		= 0;
+-	wq_entry->private	= NULL;
++	wq_entry->flags		= flags;
++	wq_entry->private	= private;
+ 	wq_entry->func		= func;
++	INIT_LIST_HEAD(&wq_entry->entry);
+ }
+ 
++#define init_waitqueue_func_entry(_wq_entry, _func)			\
++	__init_waitqueue_entry(_wq_entry, 0, NULL, _func)
++
++#define init_waitqueue_entry(_wq_entry, _task)				\
++	__init_waitqueue_entry(_wq_entry, 0, _task, default_wake_function)
++
++#define init_wait_entry(_wq_entry, _flags)				\
++	__init_waitqueue_entry(_wq_entry, _flags, current, autoremove_wake_function)
++
++#define init_wait(wait)		init_wait_entry(wait, 0)
++
+ /**
+  * waitqueue_active -- locklessly test for waiters on the queue
+  * @wq_head: the waitqueue to test for waiters
+@@ -283,8 +300,6 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
+ 	(!__builtin_constant_p(state) ||					\
+ 		state == TASK_INTERRUPTIBLE || state == TASK_KILLABLE)		\
+ 
+-extern void init_wait_entry(struct wait_queue_entry *wq_entry, int flags);
 -
--	spin_lock(&stats->lock);
--
--	now		= local_clock();
--	duration	= time_after64(now, start_time)
--		? now - start_time : 0;
--	last		= time_after64(now, stats->last)
--		? now - stats->last : 0;
--
--	stats->max_duration = max(stats->max_duration, duration);
--
--	if (stats->last) {
--		ewma_add(stats->average_duration, duration, 8, 8);
--
--		if (stats->average_frequency)
--			ewma_add(stats->average_frequency, last, 8, 8);
--		else
--			stats->average_frequency  = last << 8;
--	} else {
--		stats->average_duration  = duration << 8;
+ /*
+  * The below macro ___wait_event() has an explicit shadow of the __ret
+  * variable when used from the wait_event_*() macros.
+@@ -1170,23 +1185,6 @@ long wait_woken(struct wait_queue_entry *wq_entry, unsigned mode, long timeout);
+ int woken_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key);
+ int autoremove_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key);
+ 
+-#define DEFINE_WAIT_FUNC(name, function)					\
+-	struct wait_queue_entry name = {					\
+-		.private	= current,					\
+-		.func		= function,					\
+-		.entry		= LIST_HEAD_INIT((name).entry),			\
 -	}
 -
--	stats->last = now ?: 1;
+-#define DEFINE_WAIT(name) DEFINE_WAIT_FUNC(name, autoremove_wake_function)
 -
--	spin_unlock(&stats->lock);
--}
+-#define init_wait(wait)								\
+-	do {									\
+-		(wait)->private = current;					\
+-		(wait)->func = autoremove_wake_function;			\
+-		INIT_LIST_HEAD(&(wait)->entry);					\
+-		(wait)->flags = 0;						\
+-	} while (0)
 -
- /**
-  * bch_next_delay() - update ratelimiting statistics and calculate next delay
-  * @d: the struct bch_ratelimit to update
-diff --git a/drivers/md/bcache/util.h b/drivers/md/bcache/util.h
-index 6f3cb7c92130..1e1bdbae9593 100644
---- a/drivers/md/bcache/util.h
-+++ b/drivers/md/bcache/util.h
-@@ -345,68 +345,11 @@ ssize_t bch_hprint(char *buf, int64_t v);
- bool bch_is_zero(const char *p, size_t n);
- int bch_parse_uuid(const char *s, char *uuid);
+ typedef int (*task_call_f)(struct task_struct *p, void *arg);
+ extern int task_call_func(struct task_struct *p, task_call_f func, void *arg);
  
--struct time_stats {
--	spinlock_t	lock;
--	/*
--	 * all fields are in nanoseconds, averages are ewmas stored left shifted
--	 * by 8
--	 */
--	uint64_t	max_duration;
--	uint64_t	average_duration;
--	uint64_t	average_frequency;
--	uint64_t	last;
--};
--
--void bch_time_stats_update(struct time_stats *stats, uint64_t time);
--
- static inline unsigned int local_clock_us(void)
- {
- 	return local_clock() >> 10;
+diff --git a/include/linux/wait_bit.h b/include/linux/wait_bit.h
+index 7725b7579b78..267ca0fe9fd9 100644
+--- a/include/linux/wait_bit.h
++++ b/include/linux/wait_bit.h
+@@ -38,12 +38,7 @@ int wake_bit_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync
+ #define DEFINE_WAIT_BIT(name, word, bit)					\
+ 	struct wait_bit_queue_entry name = {					\
+ 		.key = __WAIT_BIT_KEY_INITIALIZER(word, bit),			\
+-		.wq_entry = {							\
+-			.private	= current,				\
+-			.func		= wake_bit_function,			\
+-			.entry		=					\
+-				LIST_HEAD_INIT((name).wq_entry.entry),		\
+-		},								\
++		.wq_entry = WAIT_FUNC_INITIALIZER((name).wq_entry, wake_bit_function),\
+ 	}
+ 
+ extern int bit_wait(struct wait_bit_key *key, int mode);
+diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+index 9860bb9a847c..b9922346077d 100644
+--- a/kernel/sched/wait.c
++++ b/kernel/sched/wait.c
+@@ -289,15 +289,6 @@ prepare_to_wait_exclusive(struct wait_queue_head *wq_head, struct wait_queue_ent
  }
+ EXPORT_SYMBOL(prepare_to_wait_exclusive);
  
--#define NSEC_PER_ns			1L
--#define NSEC_PER_us			NSEC_PER_USEC
--#define NSEC_PER_ms			NSEC_PER_MSEC
--#define NSEC_PER_sec			NSEC_PER_SEC
+-void init_wait_entry(struct wait_queue_entry *wq_entry, int flags)
+-{
+-	wq_entry->flags = flags;
+-	wq_entry->private = current;
+-	wq_entry->func = autoremove_wake_function;
+-	INIT_LIST_HEAD(&wq_entry->entry);
+-}
+-EXPORT_SYMBOL(init_wait_entry);
 -
--#define __print_time_stat(stats, name, stat, units)			\
--	sysfs_print(name ## _ ## stat ## _ ## units,			\
--		    div_u64((stats)->stat >> 8, NSEC_PER_ ## units))
--
--#define sysfs_print_time_stats(stats, name,				\
--			       frequency_units,				\
--			       duration_units)				\
--do {									\
--	__print_time_stat(stats, name,					\
--			  average_frequency,	frequency_units);	\
--	__print_time_stat(stats, name,					\
--			  average_duration,	duration_units);	\
--	sysfs_print(name ## _ ##max_duration ## _ ## duration_units,	\
--			div_u64((stats)->max_duration,			\
--				NSEC_PER_ ## duration_units));		\
--									\
--	sysfs_print(name ## _last_ ## frequency_units, (stats)->last	\
--		    ? div_s64(local_clock() - (stats)->last,		\
--			      NSEC_PER_ ## frequency_units)		\
--		    : -1LL);						\
--} while (0)
--
--#define sysfs_time_stats_attribute(name,				\
--				   frequency_units,			\
--				   duration_units)			\
--read_attribute(name ## _average_frequency_ ## frequency_units);		\
--read_attribute(name ## _average_duration_ ## duration_units);		\
--read_attribute(name ## _max_duration_ ## duration_units);		\
--read_attribute(name ## _last_ ## frequency_units)
--
--#define sysfs_time_stats_attribute_list(name,				\
--					frequency_units,		\
--					duration_units)			\
--&sysfs_ ## name ## _average_frequency_ ## frequency_units,		\
--&sysfs_ ## name ## _average_duration_ ## duration_units,		\
--&sysfs_ ## name ## _max_duration_ ## duration_units,			\
--&sysfs_ ## name ## _last_ ## frequency_units,
--
- #define ewma_add(ewma, val, weight, factor)				\
- ({									\
- 	(ewma) *= (weight) - 1;						\
+ long prepare_to_wait_event(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state)
+ {
+ 	unsigned long flags;
 -- 
 2.37.2.672.g94769d06f0-goog
 
