@@ -2,56 +2,56 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A00F7ECAAD5
-	for <io-uring@archiver.kernel.org>; Tue, 30 Aug 2022 21:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 60999ECAAA1
+	for <io-uring@archiver.kernel.org>; Tue, 30 Aug 2022 21:50:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231876AbiH3Vue (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 30 Aug 2022 17:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S231894AbiH3Vug (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 30 Aug 2022 17:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231793AbiH3VuA (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 30 Aug 2022 17:50:00 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA61901AD
-        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:49:38 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33d9f6f4656so190937337b3.21
-        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:49:38 -0700 (PDT)
+        with ESMTP id S231895AbiH3VuQ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 30 Aug 2022 17:50:16 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B3391097
+        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:49:42 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-335420c7bfeso188916837b3.16
+        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 14:49:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=kcUwO49ZlU6bl/Tm+t4qMFM3AvAt3rlv3WDq12yXCn8=;
-        b=IB5sn3g8G5XCtC4vvUkMJf3Z0NCybbDF4PfUg7xY8jaPrHiWi7tBKXZi3iw7JzW/hg
-         R1rg3QKwvg2o4P0UJORvK/vnl+yrRARG5QS+tHVqZj7Wlke8B5UL2GccofvWmM5QTLmm
-         X07Mo57+bKLwACVIf4YGvfOrnuhdmQMRu0jBSFOkXWJ/DCc2JiFJS2dKowFDk3y0y1lo
-         ++gDXN1YD0J2obdelJxD0Ca+lRDY4iXl62HepJKu5B9nBoEEZMQwIAzfpufGcQaLvs6J
-         LfNF8Ip/phVmlaMWNU5bNvIxjy7nc6YboQjzsEA9CsIOA+UQlQ9lwqxZiOCG8LXjXtLj
-         HTKA==
+        bh=v/Q5RZvHm0ms6516zJ+eaQEhTJBhgieG8iYB8LZreqU=;
+        b=dSiwJ3rjpD9k+D3ejPNjLVoeg6kQsBAXkS5tHCQ4weDhFLA/IwvZ3Q8/4xxcyoMJ6e
+         isFuqbINTHNxbJqZ7EEbgu9o53Xs56RjzRvuvf4eTeoYNkY9SG5lERFqePgEz5jBEIRg
+         QvId775FjFECHp0OGiyatkPffLAyhQT41MfBQyoy2O41OqYeYbXsV3zL5yP1EhqhzEDG
+         Ak4e/fA+4cROH7t1gmYSTnptvwHELHiW/qlFXek1xTxDu9n3XVI1sWuwSvdDGMPhmsh6
+         FLJrfKaSpeVUrcOZuw1Sf/dHnHK+0uqWtXMcZsMOZh3YPgQfnsV4y3UN2W3I7st9KiwO
+         9X+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=kcUwO49ZlU6bl/Tm+t4qMFM3AvAt3rlv3WDq12yXCn8=;
-        b=s5L7Zgwgj/lrQ0lehIfZdjo5Au6VPE1nUMva7L4p1X+bdI3MUHynPQQ/i3P4rYXN0Y
-         othJ47R5lUwY6HYj/xE3VqFyQ5hkDC4k6GQe/y+uECv3dpTxIaO6xMyhneq3tPq4Fp9f
-         U38cvkX6sOVrLC3Io+NsG3q2T2uHjVRH4W6Z0qdW546W9cebekt5VGM7uUibZPqCU0Hf
-         zbKSSDJlES8K2/FJBgh66Kr+md/V8Bl7TQhYYqrQLeImD7o9r1AASqVLaaJ/S0r1eKBK
-         LUiFo5U9P/mg6x0C/wlQOariUyRZDKzamjomJmO7++QO2bRKpnaVmfdV69YYl6Ii+Ftd
-         U9TQ==
-X-Gm-Message-State: ACgBeo1+jSx0JDzWmSPioTPFZiuHnbieoRZe1eDKgqGctHFyW39C5hfV
-        KfhVn5EyxGvzcJhWvw9iD+duIf9DRDM=
-X-Google-Smtp-Source: AA6agR6vbeCOP++6z+390hwytf4tDzdTpspO7jE9UZOGKy2Zs51apVk0rDEGDjb4QkAG6+ILkunHIACE8Y4=
+        bh=v/Q5RZvHm0ms6516zJ+eaQEhTJBhgieG8iYB8LZreqU=;
+        b=f8FpcA9dpb5YJNup/k03d2+rE8p+hq9lD1fmw+2pspg6XpLMe//VgGlrwp2fF4J2Am
+         y6065K4se5l04IbGkkItJ3gzbkXZlt94oVBXbobIY1ZnHgXqUpKYbmyPuNzDccD7sK3r
+         haVIiQFmdZ7hB+1TQ14w5kR5PZ6Q71ja7bf16vwFIKxHVVH55aB6GrK0mJJ9BG6bmMk7
+         7TQKiiVxlXoyzuFrbso2J9iCJ+wTyvjBO6syF1qAD61pW7729wJotzouT91wxLLC5kt5
+         KA9tKM08TNK847jzXa6gG/nHWvC6kWX843uqdUFpqUUcjj2OkywO5/gEy5OHoCK5tMVB
+         4znA==
+X-Gm-Message-State: ACgBeo2nr/k8qwAkQS1B0x4lQYW4Yamr23EafA8iFb0WWMyNzruXD11P
+        EpNJU9pAZYgxGTQlnWkaooUCI57OCAk=
+X-Google-Smtp-Source: AA6agR5yxP3HtYw1/nnJdlitQAiJ4+t1NlijduSUdtY4FE0+dYeCh7gN+ZXU56IyxNeDRenvKE9hkSpDyvU=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a5b:18d:0:b0:695:a9d7:44b5 with SMTP id
- r13-20020a5b018d000000b00695a9d744b5mr13051126ybl.549.1661896177035; Tue, 30
- Aug 2022 14:49:37 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:48:54 -0700
+ (user=surenb job=sendgmr) by 2002:a25:2586:0:b0:695:9529:c9a6 with SMTP id
+ l128-20020a252586000000b006959529c9a6mr13158054ybl.591.1661896181976; Tue, 30
+ Aug 2022 14:49:41 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:48:56 -0700
 In-Reply-To: <20220830214919.53220-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-6-surenb@google.com>
-Subject: [RFC PATCH 05/30] lib: code tagging framework
+Message-ID: <20220830214919.53220-8-surenb@google.com>
+Subject: [RFC PATCH 07/30] lib: add support for allocation tagging
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -78,332 +78,364 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add basic infrastructure to support code tagging which stores tag common
-information consisting of the module name, function, file name and line
-number. Provide functions to register a new code tag type and navigate
-between code tags.
+Introduce CONFIG_ALLOC_TAGGING which provides definitions to easily
+instrument allocators. It also registers an "alloc_tags" codetag type
+with defbugfs interface to output allocation tags information.
 
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 Co-developed-by: Kent Overstreet <kent.overstreet@linux.dev>
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/codetag.h |  71 ++++++++++++++
- lib/Kconfig.debug       |   4 +
- lib/Makefile            |   1 +
- lib/codetag.c           | 199 ++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 275 insertions(+)
- create mode 100644 include/linux/codetag.h
- create mode 100644 lib/codetag.c
+ include/asm-generic/codetag.lds.h |  14 +++
+ include/asm-generic/vmlinux.lds.h |   3 +
+ include/linux/alloc_tag.h         |  66 +++++++++++++
+ lib/Kconfig.debug                 |   5 +
+ lib/Makefile                      |   2 +
+ lib/alloc_tag.c                   | 158 ++++++++++++++++++++++++++++++
+ scripts/module.lds.S              |   7 ++
+ 7 files changed, 255 insertions(+)
+ create mode 100644 include/asm-generic/codetag.lds.h
+ create mode 100644 include/linux/alloc_tag.h
+ create mode 100644 lib/alloc_tag.c
 
-diff --git a/include/linux/codetag.h b/include/linux/codetag.h
+diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
 new file mode 100644
-index 000000000000..a9d7adecc2a5
+index 000000000000..64f536b80380
 --- /dev/null
-+++ b/include/linux/codetag.h
-@@ -0,0 +1,71 @@
++++ b/include/asm-generic/codetag.lds.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++#ifndef __ASM_GENERIC_CODETAG_LDS_H
++#define __ASM_GENERIC_CODETAG_LDS_H
++
++#define SECTION_WITH_BOUNDARIES(_name)	\
++	. = ALIGN(8);			\
++	__start_##_name = .;		\
++	KEEP(*(_name))			\
++	__stop_##_name = .;
++
++#define CODETAG_SECTIONS()		\
++	SECTION_WITH_BOUNDARIES(alloc_tags)
++
++#endif /* __ASM_GENERIC_CODETAG_LDS_H */
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index 7515a465ec03..c2dc2a59ab2e 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -50,6 +50,8 @@
+  *               [__nosave_begin, __nosave_end] for the nosave data
+  */
+ 
++#include <asm-generic/codetag.lds.h>
++
+ #ifndef LOAD_OFFSET
+ #define LOAD_OFFSET 0
+ #endif
+@@ -348,6 +350,7 @@
+ 	__start___dyndbg = .;						\
+ 	KEEP(*(__dyndbg))						\
+ 	__stop___dyndbg = .;						\
++	CODETAG_SECTIONS()						\
+ 	LIKELY_PROFILE()		       				\
+ 	BRANCH_PROFILE()						\
+ 	TRACE_PRINTKS()							\
+diff --git a/include/linux/alloc_tag.h b/include/linux/alloc_tag.h
+new file mode 100644
+index 000000000000..b3f589afb1c9
+--- /dev/null
++++ b/include/linux/alloc_tag.h
+@@ -0,0 +1,66 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * code tagging framework
++ * allocation tagging
 + */
-+#ifndef _LINUX_CODETAG_H
-+#define _LINUX_CODETAG_H
++#ifndef _LINUX_ALLOC_TAG_H
++#define _LINUX_ALLOC_TAG_H
 +
-+#include <linux/types.h>
-+
-+struct codetag_iterator;
-+struct codetag_type;
-+struct seq_buf;
-+struct module;
++#include <linux/bug.h>
++#include <linux/codetag.h>
++#include <linux/container_of.h>
++#include <linux/lazy-percpu-counter.h>
 +
 +/*
 + * An instance of this structure is created in a special ELF section at every
-+ * code location being tagged.  At runtime, the special section is treated as
-+ * an array of these.
++ * allocation callsite. At runtime, the special section is treated as
++ * an array of these. Embedded codetag utilizes codetag framework.
 + */
-+struct codetag {
-+	unsigned int flags; /* used in later patches */
-+	unsigned int lineno;
-+	const char *modname;
-+	const char *function;
-+	const char *filename;
++struct alloc_tag {
++	struct codetag			ct;
++	unsigned long			last_wrap;
++	struct raw_lazy_percpu_counter	call_count;
++	struct raw_lazy_percpu_counter	bytes_allocated;
 +} __aligned(8);
 +
-+union codetag_ref {
-+	struct codetag *ct;
-+};
-+
-+struct codetag_range {
-+	struct codetag *start;
-+	struct codetag *stop;
-+};
-+
-+struct codetag_module {
-+	struct module *mod;
-+	struct codetag_range range;
-+};
-+
-+struct codetag_type_desc {
-+	const char *section;
-+	size_t tag_size;
-+};
-+
-+struct codetag_iterator {
-+	struct codetag_type *cttype;
-+	struct codetag_module *cmod;
-+	unsigned long mod_id;
-+	struct codetag *ct;
-+};
-+
-+#define CODE_TAG_INIT {					\
-+	.modname	= KBUILD_MODNAME,		\
-+	.function	= __func__,			\
-+	.filename	= __FILE__,			\
-+	.lineno		= __LINE__,			\
-+	.flags		= 0,				\
++static inline struct alloc_tag *ct_to_alloc_tag(struct codetag *ct)
++{
++	return container_of(ct, struct alloc_tag, ct);
 +}
 +
-+void codetag_lock_module_list(struct codetag_type *cttype, bool lock);
-+struct codetag_iterator codetag_get_ct_iter(struct codetag_type *cttype);
-+struct codetag *codetag_next_ct(struct codetag_iterator *iter);
++#define DEFINE_ALLOC_TAG(_alloc_tag)					\
++	static struct alloc_tag _alloc_tag __used __aligned(8)		\
++	__section("alloc_tags") = { .ct = CODE_TAG_INIT }
 +
-+void codetag_to_text(struct seq_buf *out, struct codetag *ct);
++#define alloc_tag_counter_read(counter)					\
++	__lazy_percpu_counter_read(counter)
 +
-+struct codetag_type *
-+codetag_register_type(const struct codetag_type_desc *desc);
++static inline void __alloc_tag_sub(union codetag_ref *ref, size_t bytes)
++{
++	struct alloc_tag *tag = ct_to_alloc_tag(ref->ct);
 +
-+#endif /* _LINUX_CODETAG_H */
++	__lazy_percpu_counter_add(&tag->call_count, &tag->last_wrap, -1);
++	__lazy_percpu_counter_add(&tag->bytes_allocated, &tag->last_wrap, -bytes);
++	ref->ct = NULL;
++}
++
++#define alloc_tag_sub(_ref, _bytes)					\
++do {									\
++	if ((_ref) && (_ref)->ct)					\
++		__alloc_tag_sub(_ref, _bytes);				\
++} while (0)
++
++static inline void __alloc_tag_add(struct alloc_tag *tag, union codetag_ref *ref, size_t bytes)
++{
++	ref->ct = &tag->ct;
++	__lazy_percpu_counter_add(&tag->call_count, &tag->last_wrap, 1);
++	__lazy_percpu_counter_add(&tag->bytes_allocated, &tag->last_wrap, bytes);
++}
++
++#define alloc_tag_add(_ref, _bytes)					\
++do {									\
++	DEFINE_ALLOC_TAG(_alloc_tag);					\
++	if (_ref && !WARN_ONCE(_ref->ct, "alloc_tag was not cleared"))	\
++		__alloc_tag_add(&_alloc_tag, _ref, _bytes);		\
++} while (0)
++
++#endif /* _LINUX_ALLOC_TAG_H */
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index bcbe60d6c80c..22bc1eff7f8f 100644
+index 22bc1eff7f8f..795bf6993f8a 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -969,6 +969,10 @@ config DEBUG_STACKOVERFLOW
+@@ -973,6 +973,11 @@ config CODE_TAGGING
+ 	bool
+ 	select KALLSYMS
  
- 	  If in doubt, say "N".
- 
-+config CODE_TAGGING
++config ALLOC_TAGGING
 +	bool
-+	select KALLSYMS
++	select CODE_TAGGING
++	select LAZY_PERCPU_COUNTER
 +
  source "lib/Kconfig.kasan"
  source "lib/Kconfig.kfence"
  
 diff --git a/lib/Makefile b/lib/Makefile
-index cc7762748708..574d7716e640 100644
+index 574d7716e640..dc00533fc5c8 100644
 --- a/lib/Makefile
 +++ b/lib/Makefile
-@@ -227,6 +227,7 @@ obj-$(CONFIG_OF_RECONFIG_NOTIFIER_ERROR_INJECT) += \
- 	of-reconfig-notifier-error-inject.o
+@@ -228,6 +228,8 @@ obj-$(CONFIG_OF_RECONFIG_NOTIFIER_ERROR_INJECT) += \
  obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
  
-+obj-$(CONFIG_CODE_TAGGING) += codetag.o
+ obj-$(CONFIG_CODE_TAGGING) += codetag.o
++obj-$(CONFIG_ALLOC_TAGGING) += alloc_tag.o
++
  lib-$(CONFIG_GENERIC_BUG) += bug.o
  
  obj-$(CONFIG_HAVE_ARCH_TRACEHOOK) += syscall.o
-diff --git a/lib/codetag.c b/lib/codetag.c
+diff --git a/lib/alloc_tag.c b/lib/alloc_tag.c
 new file mode 100644
-index 000000000000..7708f8388e55
+index 000000000000..082fbde184ef
 --- /dev/null
-+++ b/lib/codetag.c
-@@ -0,0 +1,199 @@
++++ b/lib/alloc_tag.c
+@@ -0,0 +1,158 @@
 +// SPDX-License-Identifier: GPL-2.0-only
-+#include <linux/codetag.h>
-+#include <linux/idr.h>
-+#include <linux/kallsyms.h>
++#include <linux/alloc_tag.h>
++#include <linux/debugfs.h>
++#include <linux/fs.h>
++#include <linux/gfp.h>
 +#include <linux/module.h>
 +#include <linux/seq_buf.h>
-+#include <linux/slab.h>
++#include <linux/uaccess.h>
 +
-+struct codetag_type {
-+	struct list_head link;
-+	unsigned int count;
-+	struct idr mod_idr;
-+	struct rw_semaphore mod_lock; /* protects mod_idr */
-+	struct codetag_type_desc desc;
++#ifdef CONFIG_DEBUG_FS
++
++struct alloc_tag_file_iterator {
++	struct codetag_iterator ct_iter;
++	struct seq_buf		buf;
++	char			rawbuf[4096];
 +};
 +
-+static DEFINE_MUTEX(codetag_lock);
-+static LIST_HEAD(codetag_types);
++struct user_buf {
++	char __user		*buf;	/* destination user buffer */
++	size_t			size;	/* size of requested read */
++	ssize_t			ret;	/* bytes read so far */
++};
 +
-+void codetag_lock_module_list(struct codetag_type *cttype, bool lock)
++static int flush_ubuf(struct user_buf *dst, struct seq_buf *src)
 +{
-+	if (lock)
-+		down_read(&cttype->mod_lock);
-+	else
-+		up_read(&cttype->mod_lock);
-+}
++	if (src->len) {
++		size_t bytes = min_t(size_t, src->len, dst->size);
++		int err = copy_to_user(dst->buf, src->buffer, bytes);
 +
-+struct codetag_iterator codetag_get_ct_iter(struct codetag_type *cttype)
-+{
-+	struct codetag_iterator iter = {
-+		.cttype = cttype,
-+		.cmod = NULL,
-+		.mod_id = 0,
-+		.ct = NULL,
-+	};
++		if (err)
++			return err;
 +
-+	return iter;
-+}
-+
-+static inline struct codetag *get_first_module_ct(struct codetag_module *cmod)
-+{
-+	return cmod->range.start < cmod->range.stop ? cmod->range.start : NULL;
-+}
-+
-+static inline
-+struct codetag *get_next_module_ct(struct codetag_iterator *iter)
-+{
-+	struct codetag *res = (struct codetag *)
-+			((char *)iter->ct + iter->cttype->desc.tag_size);
-+
-+	return res < iter->cmod->range.stop ? res : NULL;
-+}
-+
-+struct codetag *codetag_next_ct(struct codetag_iterator *iter)
-+{
-+	struct codetag_type *cttype = iter->cttype;
-+	struct codetag_module *cmod;
-+	struct codetag *ct;
-+
-+	lockdep_assert_held(&cttype->mod_lock);
-+
-+	if (unlikely(idr_is_empty(&cttype->mod_idr)))
-+		return NULL;
-+
-+	ct = NULL;
-+	while (true) {
-+		cmod = idr_find(&cttype->mod_idr, iter->mod_id);
-+
-+		/* If module was removed move to the next one */
-+		if (!cmod)
-+			cmod = idr_get_next_ul(&cttype->mod_idr,
-+					       &iter->mod_id);
-+
-+		/* Exit if no more modules */
-+		if (!cmod)
-+			break;
-+
-+		if (cmod != iter->cmod) {
-+			iter->cmod = cmod;
-+			ct = get_first_module_ct(cmod);
-+		} else
-+			ct = get_next_module_ct(iter);
-+
-+		if (ct)
-+			break;
-+
-+		iter->mod_id++;
-+	}
-+
-+	iter->ct = ct;
-+	return ct;
-+}
-+
-+void codetag_to_text(struct seq_buf *out, struct codetag *ct)
-+{
-+	seq_buf_printf(out, "%s:%u module:%s func:%s",
-+		       ct->filename, ct->lineno,
-+		       ct->modname, ct->function);
-+}
-+
-+static inline size_t range_size(const struct codetag_type *cttype,
-+				const struct codetag_range *range)
-+{
-+	return ((char *)range->stop - (char *)range->start) /
-+			cttype->desc.tag_size;
-+}
-+
-+static void *get_symbol(struct module *mod, const char *prefix, const char *name)
-+{
-+	char buf[64];
-+	int res;
-+
-+	res = snprintf(buf, sizeof(buf), "%s%s", prefix, name);
-+	if (WARN_ON(res < 1 || res > sizeof(buf)))
-+		return NULL;
-+
-+	return mod ?
-+		(void *)find_kallsyms_symbol_value(mod, buf) :
-+		(void *)kallsyms_lookup_name(buf);
-+}
-+
-+static struct codetag_range get_section_range(struct module *mod,
-+					      const char *section)
-+{
-+	return (struct codetag_range) {
-+		get_symbol(mod, "__start_", section),
-+		get_symbol(mod, "__stop_", section),
-+	};
-+}
-+
-+static int codetag_module_init(struct codetag_type *cttype, struct module *mod)
-+{
-+	struct codetag_range range;
-+	struct codetag_module *cmod;
-+	int err;
-+
-+	range = get_section_range(mod, cttype->desc.section);
-+	if (!range.start || !range.stop) {
-+		pr_warn("Failed to load code tags of type %s from the module %s\n",
-+			cttype->desc.section,
-+			mod ? mod->name : "(built-in)");
-+		return -EINVAL;
-+	}
-+
-+	/* Ignore empty ranges */
-+	if (range.start == range.stop)
-+		return 0;
-+
-+	BUG_ON(range.start > range.stop);
-+
-+	cmod = kmalloc(sizeof(*cmod), GFP_KERNEL);
-+	if (unlikely(!cmod))
-+		return -ENOMEM;
-+
-+	cmod->mod = mod;
-+	cmod->range = range;
-+
-+	down_write(&cttype->mod_lock);
-+	err = idr_alloc(&cttype->mod_idr, cmod, 0, 0, GFP_KERNEL);
-+	if (err >= 0)
-+		cttype->count += range_size(cttype, &range);
-+	up_write(&cttype->mod_lock);
-+
-+	if (err < 0) {
-+		kfree(cmod);
-+		return err;
++		dst->ret	+= bytes;
++		dst->buf	+= bytes;
++		dst->size	-= bytes;
++		src->len	-= bytes;
++		memmove(src->buffer, src->buffer + bytes, src->len);
 +	}
 +
 +	return 0;
 +}
 +
-+struct codetag_type *
-+codetag_register_type(const struct codetag_type_desc *desc)
++static int alloc_tag_file_open(struct inode *inode, struct file *file)
++{
++	struct codetag_type *cttype = inode->i_private;
++	struct alloc_tag_file_iterator *iter;
++
++	iter = kzalloc(sizeof(*iter), GFP_KERNEL);
++	if (!iter)
++		return -ENOMEM;
++
++	codetag_lock_module_list(cttype, true);
++	iter->ct_iter = codetag_get_ct_iter(cttype);
++	codetag_lock_module_list(cttype, false);
++	seq_buf_init(&iter->buf, iter->rawbuf, sizeof(iter->rawbuf));
++	file->private_data = iter;
++
++	return 0;
++}
++
++static int alloc_tag_file_release(struct inode *inode, struct file *file)
++{
++	struct alloc_tag_file_iterator *iter = file->private_data;
++
++	kfree(iter);
++	return 0;
++}
++
++static void alloc_tag_to_text(struct seq_buf *out, struct codetag *ct)
++{
++	struct alloc_tag *tag = ct_to_alloc_tag(ct);
++	char buf[10];
++
++	string_get_size(alloc_tag_counter_read(&tag->bytes_allocated), 1,
++			STRING_UNITS_2, buf, sizeof(buf));
++
++	seq_buf_printf(out, "%8s %8lld ", buf, alloc_tag_counter_read(&tag->call_count));
++	codetag_to_text(out, ct);
++	seq_buf_putc(out, '\n');
++}
++
++static ssize_t alloc_tag_file_read(struct file *file, char __user *ubuf,
++				   size_t size, loff_t *ppos)
++{
++	struct alloc_tag_file_iterator *iter = file->private_data;
++	struct user_buf	buf = { .buf = ubuf, .size = size };
++	struct codetag *ct;
++	int err = 0;
++
++	codetag_lock_module_list(iter->ct_iter.cttype, true);
++	while (1) {
++		err = flush_ubuf(&buf, &iter->buf);
++		if (err || !buf.size)
++			break;
++
++		ct = codetag_next_ct(&iter->ct_iter);
++		if (!ct)
++			break;
++
++		alloc_tag_to_text(&iter->buf, ct);
++	}
++	codetag_lock_module_list(iter->ct_iter.cttype, false);
++
++	return err ? : buf.ret;
++}
++
++static const struct file_operations alloc_tag_file_ops = {
++	.owner	= THIS_MODULE,
++	.open	= alloc_tag_file_open,
++	.release = alloc_tag_file_release,
++	.read	= alloc_tag_file_read,
++};
++
++static int dbgfs_init(struct codetag_type *cttype)
++{
++	struct dentry *file;
++
++	file = debugfs_create_file("alloc_tags", 0444, NULL, cttype,
++				   &alloc_tag_file_ops);
++
++	return IS_ERR(file) ? PTR_ERR(file) : 0;
++}
++
++#else /* CONFIG_DEBUG_FS */
++
++static int dbgfs_init(struct codetag_type *) { return 0; }
++
++#endif /* CONFIG_DEBUG_FS */
++
++static void alloc_tag_module_unload(struct codetag_type *cttype, struct codetag_module *cmod)
++{
++	struct codetag_iterator iter = codetag_get_ct_iter(cttype);
++	struct codetag *ct;
++
++	for (ct = codetag_next_ct(&iter); ct; ct = codetag_next_ct(&iter)) {
++		struct alloc_tag *tag = ct_to_alloc_tag(ct);
++
++		__lazy_percpu_counter_exit(&tag->call_count);
++		__lazy_percpu_counter_exit(&tag->bytes_allocated);
++	}
++}
++
++static int __init alloc_tag_init(void)
 +{
 +	struct codetag_type *cttype;
-+	int err;
++	const struct codetag_type_desc desc = {
++		.section	= "alloc_tags",
++		.tag_size	= sizeof(struct alloc_tag),
++		.module_unload	= alloc_tag_module_unload,
++	};
 +
-+	BUG_ON(desc->tag_size <= 0);
++	cttype = codetag_register_type(&desc);
++	if (IS_ERR_OR_NULL(cttype))
++		return PTR_ERR(cttype);
 +
-+	cttype = kzalloc(sizeof(*cttype), GFP_KERNEL);
-+	if (unlikely(!cttype))
-+		return ERR_PTR(-ENOMEM);
-+
-+	cttype->desc = *desc;
-+	idr_init(&cttype->mod_idr);
-+	init_rwsem(&cttype->mod_lock);
-+
-+	err = codetag_module_init(cttype, NULL);
-+	if (unlikely(err)) {
-+		kfree(cttype);
-+		return ERR_PTR(err);
-+	}
-+
-+	mutex_lock(&codetag_lock);
-+	list_add_tail(&cttype->link, &codetag_types);
-+	mutex_unlock(&codetag_lock);
-+
-+	return cttype;
++	return dbgfs_init(cttype);
 +}
++module_init(alloc_tag_init);
+diff --git a/scripts/module.lds.S b/scripts/module.lds.S
+index 3a3aa2354ed8..e73a8781f239 100644
+--- a/scripts/module.lds.S
++++ b/scripts/module.lds.S
+@@ -12,6 +12,8 @@
+ # define SANITIZER_DISCARDS
+ #endif
+ 
++#include <asm-generic/codetag.lds.h>
++
+ SECTIONS {
+ 	/DISCARD/ : {
+ 		*(.discard)
+@@ -47,6 +49,7 @@ SECTIONS {
+ 	.data : {
+ 		*(.data .data.[0-9a-zA-Z_]*)
+ 		*(.data..L*)
++		CODETAG_SECTIONS()
+ 	}
+ 
+ 	.rodata : {
+@@ -62,6 +65,10 @@ SECTIONS {
+ 		*(.text.__cfi_check)
+ 		*(.text .text.[0-9a-zA-Z_]* .text..L.cfi*)
+ 	}
++#else
++	.data : {
++		CODETAG_SECTIONS()
++	}
+ #endif
+ }
+ 
 -- 
 2.37.2.672.g94769d06f0-goog
 
