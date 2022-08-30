@@ -2,263 +2,95 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B9D79ECAAA1
-	for <io-uring@archiver.kernel.org>; Tue, 30 Aug 2022 10:34:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BDB65ECAAA1
+	for <io-uring@archiver.kernel.org>; Tue, 30 Aug 2022 12:50:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiH3Kec (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 30 Aug 2022 06:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
+        id S229947AbiH3Muh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 30 Aug 2022 08:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiH3Kec (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 30 Aug 2022 06:34:32 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A84AAB401
-        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 03:34:30 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z41so6182258ede.0
-        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 03:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=fNF+6qwNXkiCyeozdTqogTdfUeuMj5ibcku7B7EbFnc=;
-        b=GL3UUqWAOXGRYMN8B1wzXggfgMg5F/RF3xA93fukt6WQCH0Zo1H7In/ktPNOGdJsg+
-         OVw/aOXsygxtKTaHbj6M3g04dhZbU17JyaYPe6gF/pIpkE0cyhLZ2fuW1dbsMePLyInY
-         EmP93dPrbo06YjN9G6IGJwGR1uUGfPYZZ4zDgkyCwm4utfw1m5gfxSYRKrHup7cQF8XG
-         XU5A1In2UiUDPHJqk4DWjbs1mpY0xRhayvd98AQfPgbyPhOXl5M3CdChYLfaDAQuySOf
-         Krbch8K5Sz/l8KjLW+ofLsvkG1YA0xpU0HKRIT3UGsZtf8h6r3m9721xbxMEGZfsavE9
-         ju7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=fNF+6qwNXkiCyeozdTqogTdfUeuMj5ibcku7B7EbFnc=;
-        b=UzMaIcW6eC7SvmHHKZQ7qqi+93io7d1hNP2EL9Pq1saLkVvJ6N6am9ECVr0tWI3wDG
-         jvYN53CN8D6PopvCmNNReJOu9nRVmHzxYe0arD98Xo/xlTzd5eaomKGc2HWjO5arBr9z
-         q/xbIzOnP9HigB4lVVzeSu6jP7N7TlxNEwYuuy+WFUnkJTNM9/FhKUMrOwRySp7C6Ldk
-         Mcy8q71baalOuVsVra7Dn28MU0zOB5e1Q+wPrN+dY59YJVmxAS/CQEzsAB5qT9tB8x75
-         ff9VMi8Uw3MtR7OS4jsBVb4BBEzBrDxDzHpY2ZN4Z/Pnm3Gzzu9nuBbcXjghL70vAHDq
-         FWpg==
-X-Gm-Message-State: ACgBeo1kEdEbK8UEgPF74QEMAOUYLg6IsNyWDbRL6BPd5Uu5/IwgeEU/
-        en5sFMZOM2thsslWRhXoduuDndu3d42NwA==
-X-Google-Smtp-Source: AA6agR6pJ0AH3occZcR1IALrxclWsEDBdI9EevJ9bjAErXtlYPLKgpD1FUPy6qx9+/abkRk5+WSD8A==
-X-Received: by 2002:a05:6402:5106:b0:440:3693:e67b with SMTP id m6-20020a056402510600b004403693e67bmr20197870edd.226.1661855668865;
-        Tue, 30 Aug 2022 03:34:28 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::202f? ([2620:10d:c092:600::2:4b91])
-        by smtp.gmail.com with ESMTPSA id z16-20020aa7c650000000b0044790836307sm7057332edr.85.2022.08.30.03.34.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 03:34:28 -0700 (PDT)
-Message-ID: <04513a70-58b1-9e97-a379-77078a55bdd9@gmail.com>
-Date:   Tue, 30 Aug 2022 11:29:37 +0100
+        with ESMTP id S229976AbiH3Mug (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 30 Aug 2022 08:50:36 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26B2A3D39
+        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 05:50:35 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U7a7Mi009001
+        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 05:50:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=G2A4kzMWmMHwVR1gIxGsEfytt8rlUmw0cK1988HKQqU=;
+ b=mLrjKsjENqHo6PG9QVEXeJfUy6T8C3APDVyvBscOBYybcs5PDgLfhdM8YEt0PkJiWNFe
+ 9a61QhBf85H/h4H9VPOlqUX6CjZvydVR9jHx6vNcFVUPyqHli5nfcWd2gg08hAWi4hDR
+ X2f6wOA8GlU56+h3Fe8zm8Ba6eIcEbPhin4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j9e9ysbg1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Tue, 30 Aug 2022 05:50:34 -0700
+Received: from twshared8288.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 30 Aug 2022 05:50:33 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id EA5C655BF50E; Tue, 30 Aug 2022 05:50:30 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        <io-uring@vger.kernel.org>
+CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH for-next v4 3/7] io_uring: do not run task work at the start of io_uring_enter
+Date:   Tue, 30 Aug 2022 05:50:09 -0700
+Message-ID: <20220830125013.570060-4-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220830125013.570060-1-dylany@fb.com>
+References: <20220830125013.570060-1-dylany@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH for-next v3 4/7] io_uring: add IORING_SETUP_DEFER_TASKRUN
-Content-Language: en-US
-To:     Dylan Yudaken <dylany@fb.com>, "axboe@kernel.dk" <axboe@kernel.dk>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
-Cc:     Kernel Team <Kernel-team@fb.com>
-References: <20220819121946.676065-1-dylany@fb.com>
- <20220819121946.676065-5-dylany@fb.com>
- <d3ad2512-ab06-1a56-6394-0dc4a62f0028@gmail.com>
- <4b5d0d7f259b799de4cdc869a34827f1b74d43f9.camel@fb.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <4b5d0d7f259b799de4cdc869a34827f1b74d43f9.camel@fb.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 794CRfYyXisXU6acie3XT3OWcnqCeKPl
+X-Proofpoint-GUID: 794CRfYyXisXU6acie3XT3OWcnqCeKPl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-30_07,2022-08-30_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 8/30/22 10:54, Dylan Yudaken wrote:
-> On Mon, 2022-08-22 at 12:34 +0100, Pavel Begunkov wrote:
-[...]
->>> +
->>> +       node = io_llist_cmpxchg(&ctx->work_llist, &fake, NULL);
->>> +       if (node != &fake) {
->>> +               current_final = &fake;
->>> +               node = io_llist_xchg(&ctx->work_llist, &fake);
->>> +               goto again;
->>> +       }
->>> +
->>> +       if (locked) {
->>> +               io_submit_flush_completions(ctx);
->>> +               mutex_unlock(&ctx->uring_lock);
->>> +       }
->>> +       return ret;
->>> +}
->>
->> I was thinking about:
->>
->> int io_run_local_work(struct io_ring_ctx *ctx, bool *locked)
->> {
->>          locked = try_lock();
->> }
->>
->> bool locked = false;
->> io_run_local_work(ctx, *locked);
->> if (locked)
->>          unlock();
->>
->> // or just as below when already holding it
->> bool locked = true;
->> io_run_local_work(ctx, *locked);
->>
->> Which would replace
->>
->> if (DEFER) {
->>          // we're assuming that it'll unlock
->>          io_run_local_work(true);
->> } else {
->>          unlock();
->> }
->>
->> with
->>
->> if (DEFER) {
->>          bool locked = true;
->>          io_run_local_work(&locked);
->> }
->> unlock();
->>
->> But anyway, it can be mulled later.
-> 
-> I think there is an easier way to clean it up if we allow an extra
-> unlock/lock in io_uring_enter (see below). Will do that in v4
+This is not needed, and it is normally better to wait for task work until
+after submissions. This will allow greater batching if either work arrive=
+s
+in the meanwhile, or if the submissions cause task work to be queued up.
 
-fwiw, I'm fine with the current code, the rest can
-be cleaned up later if you'd prefer so.
+For SQPOLL this also no longer runs task work, but this is handled inside
+the SQPOLL loop anyway.
 
-[...]
->>> @@ -3057,10 +3160,20 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned
->>> int, fd, u32, to_submit,
->>>                  }
->>>                  if ((flags & IORING_ENTER_GETEVENTS) && ctx-
->>>> syscall_iopoll)
->>>                          goto iopoll_locked;
->>> +               if ((flags & IORING_ENTER_GETEVENTS) &&
->>> +                       (ctx->flags & IORING_SETUP_DEFER_TASKRUN))
->>> {
->>> +                       int ret2 = io_run_local_work(ctx, true);
->>> +
->>> +                       if (unlikely(ret2 < 0))
->>> +                               goto out;
->>
->> It's an optimisation and we don't have to handle errors here,
->> let's ignore them and make it looking a bit better.
-> 
-> I'm not convinced about that - as then there is no way the application
-> will know it is trying to complete events on the wrong thread. Work
-> will just silently pile up instead.
+For IOPOLL io_iopoll_check will run task work anyway
 
-by optimisation I mean exactly this chunk right after submsission.
-If it's a wrong thread this will be ignored, then control flow will
-fall into cq_wait and then fail there returning an error. So, the
-userspace should get an error in the end but the handling would be
-consolidated in cq_wait.
+And otherwise io_cqring_wait will run task work
 
-> That being said - with the changes below I can just get rid of this
-> code I think.
-> 
->>
->>> +                       goto getevents_ran_local;
->>> +               }
->>>                  mutex_unlock(&ctx->uring_lock);
->>>          }
->>> +
->>>          if (flags & IORING_ENTER_GETEVENTS) {
->>>                  int ret2;
->>> +
->>>                  if (ctx->syscall_iopoll) {
->>>                          /*
->>>                           * We disallow the app entering
->>> submit/complete with
->>> @@ -3081,6 +3194,12 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned
->>> int, fd, u32, to_submit,
->>>                          const sigset_t __user *sig;
->>>                          struct __kernel_timespec __user *ts;
->>>    
->>> +                       if (ctx->flags &
->>> IORING_SETUP_DEFER_TASKRUN) {
->>
->> I think it should be in io_cqring_wait(), which calls it anyway
->> in the beginning. Instead of
->>
->>          do {
->>                  io_cqring_overflow_flush(ctx);
->>                  if (io_cqring_events(ctx) >= min_events)
->>                          return 0;
->>                  if (!io_run_task_work())
->>                          break;
->>          } while (1);
->>
->> Let's have
->>
->>          do {
->>                  ret = io_run_task_work_ctx();
->>                  // handle ret
->>                  io_cqring_overflow_flush(ctx);
->>                  if (io_cqring_events(ctx) >= min_events)
->>                          return 0;
->>          } while (1);
-> 
-> I think that is ok.
-> The downside is that it adds an extra lock/unlock of the ctx in some
-> cases. I assume that will be neglegible?
+Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ io_uring/io_uring.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Not sure there will be any extra locking. IIRC, it was about replacing
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 7998dc23360f..329d5b9d448e 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2991,8 +2991,6 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u=
+32, to_submit,
+ 	struct fd f;
+ 	long ret;
+=20
+-	io_run_task_work();
+-
+ 	if (unlikely(flags & ~(IORING_ENTER_GETEVENTS | IORING_ENTER_SQ_WAKEUP =
+|
+ 			       IORING_ENTER_SQ_WAIT | IORING_ENTER_EXT_ARG |
+ 			       IORING_ENTER_REGISTERED_RING)))
+--=20
+2.30.2
 
-// io_uring_enter() -> GETEVENTS path
-run_tw();
-// io_cqring_wait()
-while (cqes_ready() < needed)
-	run_tw();
-
-With:
-
-// io_uring_enter()
-do {
-	run_tw();
-} while(cqes_ready() < needed);
-
-
->>> +                               ret2 = io_run_local_work(ctx,
->>> false);
->>> +                               if (unlikely(ret2 < 0))
->>> +                                       goto getevents_out;
->>> +                       }
->>> +getevents_ran_local:
->>>                          ret2 = io_get_ext_arg(flags, argp, &argsz,
->>> &ts, &sig);
->>>                          if (likely(!ret2)) {
->>>                                  min_complete = min(min_complete,
->>> @@ -3090,6 +3209,7 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int,
->>> fd, u32, to_submit,
->>>                          }
->>>                  }
->>>    
->>> +getevents_out:
->>>                  if (!ret) {
->>>                          ret = ret2;
->>>    
->>> @@ -3289,17 +3409,29 @@ static __cold int io_uring_create(unsigned
->>> entries, struct io_uring_params *p,
->>>          if (ctx->flags & IORING_SETUP_SQPOLL) {
->>>                  /* IPI related flags don't make sense with SQPOLL
->>> */
->>>                  if (ctx->flags & (IORING_SETUP_COOP_TASKRUN |
->>> -                                 IORING_SETUP_TASKRUN_FLAG))
->>> +                                 IORING_SETUP_TASKRUN_FLAG |
->>> +                                 IORING_SETUP_DEFER_TASKRUN))
->>
->> Sounds like we should also fail if SQPOLL is set, especially with
->> the task check on the waiting side.
->>
-> 
-> That is what this code is doing I think? Did I miss something?
-
-Ok, great then
-
--- 
-Pavel Begunkov
