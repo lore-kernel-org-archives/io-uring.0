@@ -2,117 +2,97 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A9E6C6FA85
-	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 22:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14FE6C6FA82
+	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 23:26:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235144AbiIAW7h (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 1 Sep 2022 18:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
+        id S234933AbiIAX05 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 1 Sep 2022 19:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbiIAW7f (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 18:59:35 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469957A752
-        for <io-uring@vger.kernel.org>; Thu,  1 Sep 2022 15:59:35 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281MnoKo005336
-        for <io-uring@vger.kernel.org>; Thu, 1 Sep 2022 15:59:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=rw0k7DZmYMzQBjK5YB9+d7ZEbsfOy10Ymshr2skiNpE=;
- b=LcWhyHgF4AGV09ky4ce0xq4TuS2z1+c00VB3X9JBdXrDtQZvWvGBuoSlnj9weZ68Wh1E
- hmseKVC6cfMPaJsVVkZWeXEKVvxaBklE9rRMHDU4q3/cE/3NxwWxhR5SyUJckkUZdw2/
- QXoQFIeg4mxFQx8Oto63Sc0qEgK5WHDIQqY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jat6s55s4-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 01 Sep 2022 15:59:34 -0700
-Received: from twshared22593.02.prn5.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 15:59:31 -0700
-Received: by dev1180.prn1.facebook.com (Postfix, from userid 425415)
-        id 4D98A19149CD; Thu,  1 Sep 2022 15:59:13 -0700 (PDT)
-From:   Stefan Roesch <shr@fb.com>
-To:     <kernel-team@fb.com>, <io-uring@vger.kernel.org>,
-        <linux-btrfs@vger.kernel.org>
-CC:     <shr@fb.com>, <axboe@kernel.dk>, <josef@toxicpanda.com>
-Subject: [PATCH v1 07/10] btrfs: make lock_and_cleanup_extent_if_need nowait compatible
-Date:   Thu, 1 Sep 2022 15:58:46 -0700
-Message-ID: <20220901225849.42898-8-shr@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220901225849.42898-1-shr@fb.com>
-References: <20220901225849.42898-1-shr@fb.com>
+        with ESMTP id S233034AbiIAX04 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 19:26:56 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FC758B7E;
+        Thu,  1 Sep 2022 16:26:53 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 19:26:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662074812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ziQwyv6CBY5n7ARW4qu86GPnvQN6geI/tFyfrLXQmYY=;
+        b=J6csj5dyhB9n57JXIj/oDTNnfDhtPgzehwGStIMJ1Zca26/ME4gYxeDh8PpO+R5AM1uQtx
+        AuGPCBQOLiOURlLPfz0PHN++Qv8oJrHnFRvUJhS53h6Xh9/SgubQ1HLN0ij2EQ6piWu6qx
+        RwYFCEhuRCegC1FPS7XpHSMhorTcjrw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Joe Perches <joe@perches.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 28/30] Improved symbolic error names
+Message-ID: <20220901232645.4dogffr26oisd7p5@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+ <20220830214919.53220-29-surenb@google.com>
+ <c3a6e2d86724efd3ac4b94ca1975e23ddb26cc6f.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: kKYC3U1pVnOEiHSE452B14iAtRxVeK1e
-X-Proofpoint-ORIG-GUID: kKYC3U1pVnOEiHSE452B14iAtRxVeK1e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3a6e2d86724efd3ac4b94ca1975e23ddb26cc6f.camel@perches.com>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the nowait parameter to lock_and_cleanup_extent_if_need(). If
-the nowait parameter is specified we try to lock the extent in nowait
-mode.
+On Thu, Sep 01, 2022 at 04:19:35PM -0700, Joe Perches wrote:
+> On Tue, 2022-08-30 at 14:49 -0700, Suren Baghdasaryan wrote:
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > 
+> > This patch adds per-error-site error codes, with error strings that
+> > include their file and line number.
+> > 
+> > To use, change code that returns an error, e.g.
+> >     return -ENOMEM;
+> > to
+> >     return -ERR(ENOMEM);
+> > 
+> > Then, errname() will return a string that includes the file and line
+> > number of the ERR() call, for example
+> >     printk("Got error %s!\n", errname(err));
+> > will result in
+> >     Got error ENOMEM at foo.c:1234
+> 
+> Why? Something wrong with just using %pe ?
+> 
+> 	printk("Got error %pe at %s:%d!\n", ERR_PTR(err), __FILE__, __LINE__);
+> 
+> Likely __FILE__ and __LINE__ aren't particularly useful.
 
-Signed-off-by: Stefan Roesch <shr@fb.com>
----
- fs/btrfs/file.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+That doesn't do what this patchset does. If it only did that, it wouldn't make
+much sense, would it? :)
 
-diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
-index d529f61ac5b9..ef9175efbf99 100644
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@ -1440,7 +1440,7 @@ static noinline int
- lock_and_cleanup_extent_if_need(struct btrfs_inode *inode, struct page *=
-*pages,
- 				size_t num_pages, loff_t pos,
- 				size_t write_bytes,
--				u64 *lockstart, u64 *lockend,
-+				u64 *lockstart, u64 *lockend, bool nowait,
- 				struct extent_state **cached_state)
- {
- 	struct btrfs_fs_info *fs_info =3D inode->root->fs_info;
-@@ -1455,8 +1455,20 @@ lock_and_cleanup_extent_if_need(struct btrfs_inode=
- *inode, struct page **pages,
- 	if (start_pos < inode->vfs_inode.i_size) {
- 		struct btrfs_ordered_extent *ordered;
-=20
--		lock_extent_bits(&inode->io_tree, start_pos, last_pos,
-+		if (nowait) {
-+			if (!try_lock_extent(&inode->io_tree, start_pos, last_pos)) {
-+				for (i =3D 0; i < num_pages; i++) {
-+					unlock_page(pages[i]);
-+					put_page(pages[i]);
-+				}
-+
-+				return -EWOULDBLOCK;
-+			}
-+		} else {
-+			lock_extent_bits(&inode->io_tree, start_pos, last_pos,
- 				cached_state);
-+		}
-+
- 		ordered =3D btrfs_lookup_ordered_range(inode, start_pos,
- 						     last_pos - start_pos + 1);
- 		if (ordered &&
-@@ -1755,7 +1767,7 @@ static noinline ssize_t btrfs_buffered_write(struct=
- kiocb *iocb,
- 		extents_locked =3D lock_and_cleanup_extent_if_need(
- 				BTRFS_I(inode), pages,
- 				num_pages, pos, write_bytes, &lockstart,
--				&lockend, &cached_state);
-+				&lockend, false, &cached_state);
- 		if (extents_locked < 0) {
- 			if (extents_locked =3D=3D -EAGAIN)
- 				goto again;
---=20
-2.30.2
+With this patchset,
+     printk("Got error %pe!\n", ptr);
 
+prints out a file and line number, but it's _not_ the file/line number of the
+printk statement - it's the file/line number where the error originated!
+
+:)
