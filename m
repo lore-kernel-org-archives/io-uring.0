@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E36DAECAAD5
-	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 09:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66AFDECAAD1
+	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 09:33:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbiIAJdU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 1 Sep 2022 05:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
+        id S230101AbiIAJd1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 1 Sep 2022 05:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233947AbiIAJdS (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 05:33:18 -0400
+        with ESMTP id S233076AbiIAJd0 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 05:33:26 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C672133F22
-        for <io-uring@vger.kernel.org>; Thu,  1 Sep 2022 02:33:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4B01314DE
+        for <io-uring@vger.kernel.org>; Thu,  1 Sep 2022 02:33:24 -0700 (PDT)
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2819Wfcx002750
-        for <io-uring@vger.kernel.org>; Thu, 1 Sep 2022 02:33:16 -0700
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2819Wfd1002750
+        for <io-uring@vger.kernel.org>; Thu, 1 Sep 2022 02:33:24 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=m62++QvGAP5QwAjoFNb2kAM9wf7HOkGZQ/S9Zn7QLXQ=;
- b=IgWSqXgZDB1ruHgZ3zFBkevm/gnT0uFqneSVLNaJJ//7yAtY8NpKviV7Lx1tsCx9+zWw
- 2P2DAzDmP/Kc1wtWmC5kNbBlpoiEt7NWQ9YW32DF6glJ+iOeAXV3izO33ZBjfenclHHI
- BF6FNb5EkgQ3X2gZFLsYrjOP3jLYicwQt2Y= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jat6s003c-3
+ bh=EK9NhxtaoyAmN4a9SiaR96Y291lR6GH5HqekGq5np2o=;
+ b=D9WgXD4tDVZWePMlhM1CpIsbCBe0grlwYP2cDeNc44E0fM8wbYZc9q/L054aHcpdGxIz
+ PTjqUvIDnrJ9Ba9rMQ2sBJTGSk+n4k1VchhSu/q1IhRWfgPOX0YCc1LBG+CgcaWwoYiI
+ 4E1RJ73POndUEWTS2B/BEq6d5XQbuFzNQjg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jat6s0040-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 01 Sep 2022 02:33:16 -0700
-Received: from twshared11415.03.ash7.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Thu, 01 Sep 2022 02:33:23 -0700
+Received: from twshared0646.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 02:33:14 -0700
+ 15.1.2375.31; Thu, 1 Sep 2022 02:33:22 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id A66AF57693F4; Thu,  1 Sep 2022 02:33:06 -0700 (PDT)
+        id C0DCE57693FC; Thu,  1 Sep 2022 02:33:06 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing v2 03/12] add io_uring_submit_and_get_events and io_uring_get_events
-Date:   Thu, 1 Sep 2022 02:32:54 -0700
-Message-ID: <20220901093303.1974274-4-dylany@fb.com>
+Subject: [PATCH liburing v2 07/12] update io_uring_enter.2 docs for IORING_FEAT_NODROP
+Date:   Thu, 1 Sep 2022 02:32:58 -0700
+Message-ID: <20220901093303.1974274-8-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220901093303.1974274-1-dylany@fb.com>
 References: <20220901093303.1974274-1-dylany@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: amwacZ_Ezfvn6FgtIERnn-s1utL2CENY
-X-Proofpoint-ORIG-GUID: amwacZ_Ezfvn6FgtIERnn-s1utL2CENY
+X-Proofpoint-GUID: PvN-Nl86LZdMquk6qwvXLow3P0LnZ_B2
+X-Proofpoint-ORIG-GUID: PvN-Nl86LZdMquk6qwvXLow3P0LnZ_B2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-09-01_06,2022-08-31_03,2022-06-22_01
@@ -58,105 +58,45 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-With deferred task running, we would like to be able to combine submit
-with get events (regardless of if there are CQE's available), or if there
-is nothing to submit then simply do an enter with IORING_ENTER_GETEVENTS
-set, in order to process any available work.
-
-Expose these APIs
+The EBUSY docs are out of date, so update them for the IORING_FEAT_NODROP
+feature flag
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- src/include/liburing.h |  2 ++
- src/queue.c            | 26 ++++++++++++++++++--------
- 2 files changed, 20 insertions(+), 8 deletions(-)
+ man/io_uring_enter.2 | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/src/include/liburing.h b/src/include/liburing.h
-index 6e868472b77a..3c5097b255de 100644
---- a/src/include/liburing.h
-+++ b/src/include/liburing.h
-@@ -202,6 +202,8 @@ int io_uring_register_file_alloc_range(struct io_urin=
-g *ring,
- int io_uring_register_notifications(struct io_uring *ring, unsigned nr,
- 				    struct io_uring_notification_slot *slots);
- int io_uring_unregister_notifications(struct io_uring *ring);
-+int io_uring_get_events(struct io_uring *ring);
-+int io_uring_submit_and_get_events(struct io_uring *ring);
-=20
- /*
-  * io_uring syscalls.
-diff --git a/src/queue.c b/src/queue.c
-index a670a8ecd20d..b012a3dd950b 100644
---- a/src/queue.c
-+++ b/src/queue.c
-@@ -130,6 +130,15 @@ int __io_uring_get_cqe(struct io_uring *ring, struct=
- io_uring_cqe **cqe_ptr,
- 	return _io_uring_get_cqe(ring, cqe_ptr, &data);
- }
-=20
-+int io_uring_get_events(struct io_uring *ring)
-+{
-+	int flags =3D IORING_ENTER_GETEVENTS;
+diff --git a/man/io_uring_enter.2 b/man/io_uring_enter.2
+index 1a9311e20357..4d8d488b5c1f 100644
+--- a/man/io_uring_enter.2
++++ b/man/io_uring_enter.2
+@@ -1330,7 +1330,18 @@ is a valid file descriptor, but the io_uring ring =
+is not in the right state
+ for details on how to enable the ring.
+ .TP
+ .B EBUSY
+-The application is attempting to overcommit the number of requests it ca=
+n have
++If the
++.B IORING_FEAT_NODROP
++feature flag is set, then
++.B EBUSY
++will be returned if there were overflow entries,
++.B IORING_ENTER_GETEVENTS
++flag is set and not all of the overflow entries were able to be flushed =
+to
++the CQ ring.
 +
-+	if (ring->int_flags & INT_FLAG_REG_RING)
-+		flags |=3D IORING_ENTER_REGISTERED_RING;
-+	return __sys_io_uring_enter(ring->enter_ring_fd, 0, 0, flags, NULL);
-+}
-+
- /*
-  * Fill in an array of IO completions up to count, if any are available.
-  * Returns the amount of IO completions filled.
-@@ -164,11 +173,7 @@ again:
- 		return 0;
-=20
- 	if (cq_ring_needs_flush(ring)) {
--		int flags =3D IORING_ENTER_GETEVENTS;
--
--		if (ring->int_flags & INT_FLAG_REG_RING)
--			flags |=3D IORING_ENTER_REGISTERED_RING;
--		__sys_io_uring_enter(ring->enter_ring_fd, 0, 0, flags, NULL);
-+		io_uring_get_events(ring);
- 		overflow_checked =3D true;
- 		goto again;
- 	}
-@@ -340,9 +345,9 @@ int io_uring_wait_cqe_timeout(struct io_uring *ring,
-  * Returns number of sqes submitted
-  */
- static int __io_uring_submit(struct io_uring *ring, unsigned submitted,
--			     unsigned wait_nr)
-+			     unsigned wait_nr, bool getevents)
- {
--	bool cq_needs_enter =3D wait_nr || cq_ring_needs_enter(ring);
-+	bool cq_needs_enter =3D getevents || wait_nr || cq_ring_needs_enter(rin=
-g);
- 	unsigned flags;
- 	int ret;
-=20
-@@ -363,7 +368,7 @@ static int __io_uring_submit(struct io_uring *ring, u=
-nsigned submitted,
-=20
- static int __io_uring_submit_and_wait(struct io_uring *ring, unsigned wa=
-it_nr)
- {
--	return __io_uring_submit(ring, __io_uring_flush_sq(ring), wait_nr);
-+	return __io_uring_submit(ring, __io_uring_flush_sq(ring), wait_nr, fals=
-e);
- }
-=20
- /*
-@@ -386,6 +391,11 @@ int io_uring_submit_and_wait(struct io_uring *ring, =
-unsigned wait_nr)
- 	return __io_uring_submit_and_wait(ring, wait_nr);
- }
-=20
-+int io_uring_submit_and_get_events(struct io_uring *ring)
-+{
-+	return __io_uring_submit(ring, __io_uring_flush_sq(ring), 0, true);
-+}
-+
- #ifdef LIBURING_INTERNAL
- struct io_uring_sqe *io_uring_get_sqe(struct io_uring *ring)
- {
++Without
++.B IORING_FEAT_NODROP
++the application is attempting to overcommit the number of requests it ca=
+n have
+ pending. The application should wait for some completions and try again.=
+ May
+ occur if the application tries to queue more requests than we have room =
+for in
+ the CQ ring, or if the application attempts to wait for more events with=
+out
 --=20
 2.30.2
 
