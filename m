@@ -2,46 +2,46 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D048EECAAD1
-	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 09:33:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C393C54EE9
+	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 09:33:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbiIAJdT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 1 Sep 2022 05:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
+        id S233918AbiIAJdV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 1 Sep 2022 05:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbiIAJdS (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 05:33:18 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28D6133F1C
+        with ESMTP id S233751AbiIAJdR (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 05:33:17 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62533133F0A
         for <io-uring@vger.kernel.org>; Thu,  1 Sep 2022 02:33:16 -0700 (PDT)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2812ajMT006574
-        for <io-uring@vger.kernel.org>; Thu, 1 Sep 2022 02:33:16 -0700
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2819Wfcv002750
+        for <io-uring@vger.kernel.org>; Thu, 1 Sep 2022 02:33:15 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=TZ/ztmfb95jBi9x+10/fLYr4ENWRQmwIfguHotM8e7Y=;
- b=jfpTKx3+LpRIqTYzkR8Xnm+d7rZfHSnTsky3NKJnEfp3aRFboXWxDiVPVQxfpLZL+nOZ
- 3n6D0x3wOaMBxwujLGmKNdGKeybLwxBfXYkpE/cQvUlqwSJc/mFPthnVAptq4arJXEou
- 8LbPA02rJ0zwn/a9QZKE8MHGc+iBwmGRheE= 
+ bh=/dwzYe7skYYa7PtXqGvN3HFbnRJ0KJOIyWyVDMKn8H8=;
+ b=B5ft57vzW5Byt6UZP522hQ/sMDQW87vkh1KsrYGy+9HLXCul9lz/oN8mH12iC5ICC1Aq
+ ZbjG5NANtELpm8pMa2U4cuwkZYOhnlycAppW9jYo/4MS1L0e2aYZM+DneZstv/gOLmK5
+ FvnMA9tZL4gOrHC2RhinEoI7dg5DEOcNvrc= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3jam3v9jym-3
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jat6s003c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Thu, 01 Sep 2022 02:33:16 -0700
-Received: from twshared11415.03.ash7.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Thu, 01 Sep 2022 02:33:15 -0700
+Received: from twshared11415.03.ash7.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 02:33:14 -0700
+ 15.1.2375.31; Thu, 1 Sep 2022 02:33:13 -0700
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id ACFED57693F6; Thu,  1 Sep 2022 02:33:06 -0700 (PDT)
+        id A04D957693F2; Thu,  1 Sep 2022 02:33:06 -0700 (PDT)
 From:   Dylan Yudaken <dylany@fb.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         <io-uring@vger.kernel.org>
 CC:     <Kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH liburing v2 04/12] add a t_probe_defer_taskrun helper function for tests
-Date:   Thu, 1 Sep 2022 02:32:55 -0700
-Message-ID: <20220901093303.1974274-5-dylany@fb.com>
+Subject: [PATCH liburing v2 02/12] Add documentation for IORING_SETUP_DEFER_TASKRUN flag
+Date:   Thu, 1 Sep 2022 02:32:53 -0700
+Message-ID: <20220901093303.1974274-3-dylany@fb.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220901093303.1974274-1-dylany@fb.com>
 References: <20220901093303.1974274-1-dylany@fb.com>
@@ -49,8 +49,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: t0xhKAy54BU1DGrYwKRrpGXYCMDmoMn-
-X-Proofpoint-ORIG-GUID: t0xhKAy54BU1DGrYwKRrpGXYCMDmoMn-
+X-Proofpoint-GUID: an1GHmA0vd3PoR9XO4i4T9pkXKor6WpP
+X-Proofpoint-ORIG-GUID: an1GHmA0vd3PoR9XO4i4T9pkXKor6WpP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-09-01_06,2022-08-31_03,2022-06-22_01
@@ -58,69 +58,49 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Help tests to determine if they can use IORING_SETUP_DEFER_TASKRUN
+Add man page entry to io_uring_setup.2 for the new flag
 
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
 ---
- test/helpers.c | 17 +++++++++++++++--
- test/helpers.h |  2 ++
- 2 files changed, 17 insertions(+), 2 deletions(-)
+ man/io_uring_setup.2 | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/test/helpers.c b/test/helpers.c
-index 014653313f41..80b75f4fed99 100644
---- a/test/helpers.c
-+++ b/test/helpers.c
-@@ -57,7 +57,7 @@ static void __t_create_file(const char *file, size_t si=
-ze, char pattern)
- {
- 	ssize_t ret;
- 	char *buf;
--	int fd;=20
-+	int fd;
-=20
- 	buf =3D t_malloc(size);
- 	memset(buf, pattern, size);
-@@ -94,7 +94,7 @@ struct iovec *t_create_buffers(size_t buf_num, size_t b=
-uf_size)
- 	vecs =3D t_malloc(buf_num * sizeof(struct iovec));
- 	for (i =3D 0; i < buf_num; i++) {
- 		t_posix_memalign(&vecs[i].iov_base, buf_size, buf_size);
--		vecs[i].iov_len =3D buf_size;=20
-+		vecs[i].iov_len =3D buf_size;
- 	}
- 	return vecs;
- }
-@@ -235,3 +235,16 @@ errno_cleanup:
- 	close(fd[1]);
- 	return ret;
- }
-+
-+bool t_probe_defer_taskrun(void)
-+{
-+	struct io_uring ring;
-+	int ret;
-+
-+	ret =3D io_uring_queue_init(1, &ring, IORING_SETUP_SINGLE_ISSUER |
-+					    IORING_SETUP_DEFER_TASKRUN);
-+	if (ret < 0)
-+		return false;
-+	io_uring_queue_exit(&ring);
-+	return true;
-+}
-diff --git a/test/helpers.h b/test/helpers.h
-index 6d5726c9deb6..efce4b344f87 100644
---- a/test/helpers.h
-+++ b/test/helpers.h
-@@ -75,6 +75,8 @@ enum t_setup_ret t_register_buffers(struct io_uring *ri=
-ng,
- 				    const struct iovec *iovecs,
- 				    unsigned nr_iovecs);
-=20
-+bool t_probe_defer_taskrun(void);
-+
- #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-=20
- #ifdef __cplusplus
+diff --git a/man/io_uring_setup.2 b/man/io_uring_setup.2
+index 32a9e2ee89b5..01eb70d95292 100644
+--- a/man/io_uring_setup.2
++++ b/man/io_uring_setup.2
+@@ -257,6 +257,25 @@ how many userspace tasks do
+ .I
+ io_uring_enter(2).
+ Available since 5.20.
++.TP
++.B IORING_SETUP_DEFER_TASKRUN
++By default, io_uring will process all outstanding work at the end of any=
+ system
++call or thread interrupt. This can delay the application from making oth=
+er progress.
++Setting this flag will hint to io_uring that it should defer work until =
+an
++.BR io_uring_enter(2)
++call with the=20
++.B IORING_ENTER_GETEVENTS
++flag set. This allows the application to request work to run just before=
+ it wants to
++process completions.
++This flag requires the
++.BR IORING_SETUP_SINGLE_ISSUER
++flag to be set, and also enforces that the call to
++.BR io_uring_enter(2)
++is called from the same thread that submitted requests.
++Note that if this flag is set then it is the application's responsibilit=
+y to periodically
++trigger work (for example via any of the CQE waiting functions) or else =
+completions may
++not be delivered.
++Available since 6.1.
+ .PP
+ If no flags are specified, the io_uring instance is setup for
+ interrupt driven I/O.  I/O may be submitted using
 --=20
 2.30.2
 
