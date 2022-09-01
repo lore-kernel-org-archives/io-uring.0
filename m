@@ -2,58 +2,58 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92178C64991
-	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 10:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 395F0C0502C
+	for <io-uring@archiver.kernel.org>; Thu,  1 Sep 2022 10:58:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234294AbiIAK6u (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 1 Sep 2022 06:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S234322AbiIAK6v (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 1 Sep 2022 06:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbiIAK6i (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 06:58:38 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4AEC120B
-        for <io-uring@vger.kernel.org>; Thu,  1 Sep 2022 03:58:36 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id nc14so28928004ejc.4
-        for <io-uring@vger.kernel.org>; Thu, 01 Sep 2022 03:58:36 -0700 (PDT)
+        with ESMTP id S234312AbiIAK6k (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 1 Sep 2022 06:58:40 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF5412AF5
+        for <io-uring@vger.kernel.org>; Thu,  1 Sep 2022 03:58:39 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id cu2so33941427ejb.0
+        for <io-uring@vger.kernel.org>; Thu, 01 Sep 2022 03:58:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Ptdaov+t0lsQRnbggPHhuGUW/hDLOu5jgVe0NOTacCo=;
-        b=WI7YySC7luA38iaSTNWfDOYWNv9eMOvHROTNpdRUC06epbA/Rg3whEFlvjjFXMozAK
-         wsrgtGMP0raFSvl2HIr+AmxwG00AGIpr/Bqn5QODkfkLwZnkK7AJ9ejXoiQKbR8z/Xvg
-         xpcL4Y3iYv8nct+liksJsQBQnF4172HOtJAICdE9a83V0RX9x446zV6Sx72TOEw/VXvV
-         JtHaKeYLQx6mRplgLtmcR2jW3g19fGDyiyC+ThVG1ePS1VZULjcsyjwtakhljsnWMT+w
-         G6SvDWabeG/wdlcxLxG36iEFUV6FwyOIvUq6vGbAE+XtyLXVhFv+MdkfRAk/iX1s52mI
-         gGOA==
+        bh=Zb5ypFcKc6aO+28jhXvvQMpsztKeVNc6T7YSBFw79eI=;
+        b=opOP+4aQyOw3f9EbhfV1rx6g/VKhcyomUoOIAJhaRd4fVtNfsCTGawWvLdfVKUV7kb
+         MBMvRk3YR9+16mogqT4ZZDlSL4S8mYJkk5gqAS7q2Iyrt5vYObGWAs4rUHib88CCGwIW
+         hxlmAQ6zYDNXFQlmA/NoM9OBebbPx93/M1k78truEdtWDPo9UJ+FlkXCukwQrfkPOuW8
+         lXxBBuxEHmTT+v/ItDt6C7A39Us5KTG+UxYdJSa9LXlKxuncSBipWIfjqFR46/YIMYWf
+         apPRlxAIo4AXmMlE57JWq35DwM/LkEA9gTXGt9xfa3AWKDJMqxzBvX+6U/vGhysvKyS6
+         XTxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Ptdaov+t0lsQRnbggPHhuGUW/hDLOu5jgVe0NOTacCo=;
-        b=XyLJg/PVihI8qCBAQXIR54mXuAT6AmuEocI6WaxpIkAZlj2ycIREcGMEBCJzSSHbSH
-         LfohDr4iI1lfOlcNK8k4eaDudQwapZqO22ENrVdmFhD+LX2Ty2KGPLV+J3uHPNY32WlJ
-         3aEJu6nE8XJHDWIvWo7C4yF39cn+aTQReWzKYhWM/XkXk6vUvePTS/lYxnnRrC8duaVt
-         vXUeGP//JdonkaxZz7ktiqqRBlNOSf1/k7JYxIwokLs9jmo7AE1LeKIL0xEuYG+no6F6
-         ONdkG3bz0qugq8YA1rlHO3BCB+XkIDvCwDY/x7aFn3BbHtjQ26DtyDdohImh953Nlg5r
-         60YA==
-X-Gm-Message-State: ACgBeo1BiVCG/1bF8nlUaJjeqEhpMME6+Zu6lz3YsoGOIMSmjnAIpjRz
-        AFoJCpBj/ctPAA9DBOHRePSjeZQNj8k=
-X-Google-Smtp-Source: AA6agR7bwOILshPwc6zkPHJfZYSvtXBe50hZcMkKTFDeLVm9df1WxP+89uOiT5wACKzVQlkB0adYeg==
-X-Received: by 2002:a17:907:9693:b0:73d:cc84:deb with SMTP id hd19-20020a170907969300b0073dcc840debmr23162076ejc.552.1662029914438;
-        Thu, 01 Sep 2022 03:58:34 -0700 (PDT)
+        bh=Zb5ypFcKc6aO+28jhXvvQMpsztKeVNc6T7YSBFw79eI=;
+        b=73GKg8TMrWU7ETbEujSnkVHvJzDJePj1x8Rk1bWCfSv+dy6ocAXywrhsmFUHTpQumD
+         p0vkjnRLnERJKF4PX6sIqiPrOXTaiJ02Ws80lNTrtd486n34YFQvCe3aEvfznZAYsa0u
+         JDO/CVe8NFsKyj+BOlvOjwOa3mCJ28ZSGvfZc8uLSgvi/jAV1GlyUCmRoZ1fvNejHqlt
+         6TDqWmcUCg7SiyfrbQYTsWFtGVcISMm5EFM/z5I6JEo6qVLXhJFIYqik8imLO0vitis/
+         KYezR0cvuKjH2qRj/MNlXEwXAcqh4bMIxrkiIn0dP+WLltUqCgyUK5ZkL156xma9VuBU
+         GI4Q==
+X-Gm-Message-State: ACgBeo0FX2uPOVGj7Y3JBPXitRBQxtKtu/m5NY9UTeimb2JZnXDDkUT5
+        0Tdsx4Rbm6tEPlCsqzEMZXFnhjL9XwM=
+X-Google-Smtp-Source: AA6agR5rXOW3jb6hb/9gHv6VrP4Fn5Lnd04alCsqWqzb0e02iiUdkU9hSYaX2ia1L0lNPDJFzMxAsg==
+X-Received: by 2002:a17:907:2722:b0:731:2aeb:7942 with SMTP id d2-20020a170907272200b007312aeb7942mr23389941ejl.734.1662029917169;
+        Thu, 01 Sep 2022 03:58:37 -0700 (PDT)
 Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:e81f])
-        by smtp.gmail.com with ESMTPSA id z14-20020a1709060ace00b0073d6d6e698bsm8277762ejf.187.2022.09.01.03.58.33
+        by smtp.gmail.com with ESMTPSA id z14-20020a1709060ace00b0073d6d6e698bsm8277762ejf.187.2022.09.01.03.58.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 03:58:34 -0700 (PDT)
+        Thu, 01 Sep 2022 03:58:36 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [RFC 3/6] Revert "io_uring: rename IORING_OP_FILES_UPDATE"
-Date:   Thu,  1 Sep 2022 11:54:02 +0100
-Message-Id: <89edc3905350f91e1b6e26d9dbf42ee44fd451a2.1662027856.git.asml.silence@gmail.com>
+Subject: [RFC 6/6] selftests/net: return back io_uring zc send tests
+Date:   Thu,  1 Sep 2022 11:54:05 +0100
+Message-Id: <c8e5018c516093bdad0b6e19f2f9847dea17e4d2.1662027856.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <cover.1662027856.git.asml.silence@gmail.com>
 References: <cover.1662027856.git.asml.silence@gmail.com>
@@ -63,148 +63,272 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This reverts commit 4379d5f15b3fd4224c37841029178aa8082a242e.
-
-We removed notification flushing, also cleanup uapi preparation changes
-to not pollute it.
+Enable io_uring zerocopy send tests back and fix them up to follow the
+new inteface.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- include/uapi/linux/io_uring.h | 12 +-----------
- io_uring/opdef.c              |  9 ++++-----
- io_uring/rsrc.c               | 17 ++---------------
- io_uring/rsrc.h               |  4 ++--
- 4 files changed, 9 insertions(+), 33 deletions(-)
+ .../selftests/net/io_uring_zerocopy_tx.c      | 110 ++++++------------
+ .../selftests/net/io_uring_zerocopy_tx.sh     |  10 +-
+ 2 files changed, 41 insertions(+), 79 deletions(-)
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 18ae5caf1773..111b651366bd 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -178,8 +178,7 @@ enum io_uring_op {
- 	IORING_OP_FALLOCATE,
- 	IORING_OP_OPENAT,
- 	IORING_OP_CLOSE,
--	IORING_OP_RSRC_UPDATE,
--	IORING_OP_FILES_UPDATE = IORING_OP_RSRC_UPDATE,
-+	IORING_OP_FILES_UPDATE,
- 	IORING_OP_STATX,
- 	IORING_OP_READ,
- 	IORING_OP_WRITE,
-@@ -228,7 +227,6 @@ enum io_uring_op {
- #define IORING_TIMEOUT_ETIME_SUCCESS	(1U << 5)
- #define IORING_TIMEOUT_CLOCK_MASK	(IORING_TIMEOUT_BOOTTIME | IORING_TIMEOUT_REALTIME)
- #define IORING_TIMEOUT_UPDATE_MASK	(IORING_TIMEOUT_UPDATE | IORING_LINK_TIMEOUT_UPDATE)
--
- /*
-  * sqe->splice_flags
-  * extends splice(2) flags
-@@ -295,14 +293,6 @@ enum io_uring_op {
-  */
- #define IORING_ACCEPT_MULTISHOT	(1U << 0)
+diff --git a/tools/testing/selftests/net/io_uring_zerocopy_tx.c b/tools/testing/selftests/net/io_uring_zerocopy_tx.c
+index 7446ef364e9f..8ce48aca8321 100644
+--- a/tools/testing/selftests/net/io_uring_zerocopy_tx.c
++++ b/tools/testing/selftests/net/io_uring_zerocopy_tx.c
+@@ -36,8 +36,6 @@
+ #include <sys/un.h>
+ #include <sys/wait.h>
  
+-#if 0
 -
--/*
-- * IORING_OP_RSRC_UPDATE flags
-- */
--enum {
--	IORING_RSRC_UPDATE_FILES,
--};
--
- /*
-  * IORING_OP_MSG_RING command types, stored in sqe->addr
-  */
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 41410126c1c6..10b301ccf5cd 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -246,13 +246,12 @@ const struct io_op_def io_op_defs[] = {
- 		.prep			= io_close_prep,
- 		.issue			= io_close,
- 	},
--	[IORING_OP_RSRC_UPDATE] = {
-+	[IORING_OP_FILES_UPDATE] = {
- 		.audit_skip		= 1,
- 		.iopoll			= 1,
--		.name			= "RSRC_UPDATE",
--		.prep			= io_rsrc_update_prep,
--		.issue			= io_rsrc_update,
--		.ioprio			= 1,
-+		.name			= "FILES_UPDATE",
-+		.prep			= io_files_update_prep,
-+		.issue			= io_files_update,
- 	},
- 	[IORING_OP_STATX] = {
- 		.audit_skip		= 1,
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 048f7483fe8a..cf3272113214 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -21,7 +21,6 @@ struct io_rsrc_update {
- 	u64				arg;
- 	u32				nr_args;
- 	u32				offset;
--	int				type;
+ #define NOTIF_TAG 0xfffffffULL
+ #define NONZC_TAG 0
+ #define ZC_TAG 1
+@@ -49,7 +47,6 @@ enum {
+ 	MODE_MIXED	= 3,
  };
  
- static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
-@@ -654,7 +653,7 @@ __cold int io_register_rsrc(struct io_ring_ctx *ctx, void __user *arg,
- 	return -EINVAL;
+-static bool cfg_flush		= false;
+ static bool cfg_cork		= false;
+ static int  cfg_mode		= MODE_ZC_FIXED;
+ static int  cfg_nr_reqs		= 8;
+@@ -168,21 +165,6 @@ static int io_uring_register_buffers(struct io_uring *ring,
+ 	return (ret < 0) ? -errno : ret;
  }
  
--int io_rsrc_update_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+int io_files_update_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct io_rsrc_update *up = io_kiocb_to_cmd(req, struct io_rsrc_update);
- 
-@@ -668,7 +667,6 @@ int io_rsrc_update_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (!up->nr_args)
- 		return -EINVAL;
- 	up->arg = READ_ONCE(sqe->addr);
--	up->type = READ_ONCE(sqe->ioprio);
- 	return 0;
- }
- 
-@@ -711,7 +709,7 @@ static int io_files_update_with_index_alloc(struct io_kiocb *req,
- 	return ret;
- }
- 
--static int io_files_update(struct io_kiocb *req, unsigned int issue_flags)
-+int io_files_update(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_rsrc_update *up = io_kiocb_to_cmd(req, struct io_rsrc_update);
- 	struct io_ring_ctx *ctx = req->ctx;
-@@ -740,17 +738,6 @@ static int io_files_update(struct io_kiocb *req, unsigned int issue_flags)
- 	return IOU_OK;
- }
- 
--int io_rsrc_update(struct io_kiocb *req, unsigned int issue_flags)
+-static int io_uring_register_notifications(struct io_uring *ring,
+-					   unsigned nr,
+-					   struct io_uring_notification_slot *slots)
 -{
--	struct io_rsrc_update *up = io_kiocb_to_cmd(req, struct io_rsrc_update);
+-	int ret;
+-	struct io_uring_notification_register r = {
+-		.nr_slots = nr,
+-		.data = (unsigned long)slots,
+-	};
 -
--	switch (up->type) {
--	case IORING_RSRC_UPDATE_FILES:
--		return io_files_update(req, issue_flags);
--	}
--	return -EINVAL;
+-	ret = syscall(__NR_io_uring_register, ring->ring_fd,
+-		      IORING_REGISTER_NOTIFIERS, &r, sizeof(r));
+-	return (ret < 0) ? -errno : ret;
 -}
 -
- int io_queue_rsrc_removal(struct io_rsrc_data *data, unsigned idx,
- 			  struct io_rsrc_node *node, void *rsrc)
+ static int io_uring_mmap(int fd, struct io_uring_params *p,
+ 			 struct io_uring_sq *sq, struct io_uring_cq *cq)
  {
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index f3a9a177941f..9bce15665444 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -167,8 +167,8 @@ static inline u64 *io_get_tag_slot(struct io_rsrc_data *data, unsigned int idx)
- 	return &data->tags[table_idx][off];
+@@ -299,11 +281,10 @@ static inline void io_uring_prep_send(struct io_uring_sqe *sqe, int sockfd,
+ 
+ static inline void io_uring_prep_sendzc(struct io_uring_sqe *sqe, int sockfd,
+ 				        const void *buf, size_t len, int flags,
+-				        unsigned slot_idx, unsigned zc_flags)
++				        unsigned zc_flags)
+ {
+ 	io_uring_prep_send(sqe, sockfd, buf, len, flags);
+-	sqe->opcode = (__u8) IORING_OP_SENDZC_NOTIF;
+-	sqe->notification_idx = slot_idx;
++	sqe->opcode = (__u8) IORING_OP_SEND_ZC;
+ 	sqe->ioprio = zc_flags;
  }
  
--int io_rsrc_update(struct io_kiocb *req, unsigned int issue_flags);
--int io_rsrc_update_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
-+int io_files_update(struct io_kiocb *req, unsigned int issue_flags);
-+int io_files_update_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
+@@ -376,7 +357,6 @@ static int do_setup_tx(int domain, int type, int protocol)
  
- int __io_account_mem(struct user_struct *user, unsigned long nr_pages);
+ static void do_tx(int domain, int type, int protocol)
+ {
+-	struct io_uring_notification_slot b[1] = {{.tag = NOTIF_TAG}};
+ 	struct io_uring_sqe *sqe;
+ 	struct io_uring_cqe *cqe;
+ 	unsigned long packets = 0, bytes = 0;
+@@ -392,10 +372,6 @@ static void do_tx(int domain, int type, int protocol)
+ 	if (ret)
+ 		error(1, ret, "io_uring: queue init");
+ 
+-	ret = io_uring_register_notifications(&ring, 1, b);
+-	if (ret)
+-		error(1, ret, "io_uring: tx ctx registration");
+-
+ 	iov.iov_base = payload;
+ 	iov.iov_len = cfg_payload_len;
+ 
+@@ -411,9 +387,8 @@ static void do_tx(int domain, int type, int protocol)
+ 		for (i = 0; i < cfg_nr_reqs; i++) {
+ 			unsigned zc_flags = 0;
+ 			unsigned buf_idx = 0;
+-			unsigned slot_idx = 0;
+ 			unsigned mode = cfg_mode;
+-			unsigned msg_flags = 0;
++			unsigned msg_flags = MSG_WAITALL;
+ 
+ 			if (cfg_mode == MODE_MIXED)
+ 				mode = rand() % 3;
+@@ -425,13 +400,10 @@ static void do_tx(int domain, int type, int protocol)
+ 						   cfg_payload_len, msg_flags);
+ 				sqe->user_data = NONZC_TAG;
+ 			} else {
+-				if (cfg_flush) {
+-					zc_flags |= IORING_RECVSEND_NOTIF_FLUSH;
+-					compl_cqes++;
+-				}
++				compl_cqes++;
+ 				io_uring_prep_sendzc(sqe, fd, payload,
+ 						     cfg_payload_len,
+-						     msg_flags, slot_idx, zc_flags);
++						     msg_flags, zc_flags);
+ 				if (mode == MODE_ZC_FIXED) {
+ 					sqe->ioprio |= IORING_RECVSEND_FIXED_BUF;
+ 					sqe->buf_index = buf_idx;
+@@ -444,51 +416,57 @@ static void do_tx(int domain, int type, int protocol)
+ 		if (ret != cfg_nr_reqs)
+ 			error(1, ret, "submit");
+ 
++		if (cfg_cork)
++			do_setsockopt(fd, IPPROTO_UDP, UDP_CORK, 0);
+ 		for (i = 0; i < cfg_nr_reqs; i++) {
+ 			ret = io_uring_wait_cqe(&ring, &cqe);
+ 			if (ret)
+ 				error(1, ret, "wait cqe");
+ 
+-			if (cqe->user_data == NOTIF_TAG) {
++			if (cqe->user_data != NONZC_TAG &&
++			    cqe->user_data != ZC_TAG)
++				error(1, -EINVAL, "invalid cqe->user_data");
++
++			if (cqe->flags & IORING_CQE_F_NOTIF) {
++				if (cqe->flags & IORING_CQE_F_MORE)
++					error(1, -EINVAL, "invalid notif flags");
+ 				compl_cqes--;
+ 				i--;
+-			} else if (cqe->user_data != NONZC_TAG &&
+-				   cqe->user_data != ZC_TAG) {
+-				error(1, cqe->res, "invalid user_data");
+-			} else if (cqe->res <= 0 && cqe->res != -EAGAIN) {
++			} else if (cqe->res <= 0) {
++				if (cqe->flags & IORING_CQE_F_MORE)
++					error(1, cqe->res, "more with a failed send");
+ 				error(1, cqe->res, "send failed");
+ 			} else {
+-				if (cqe->res > 0) {
+-					packets++;
+-					bytes += cqe->res;
+-				}
+-				/* failed requests don't flush */
+-				if (cfg_flush &&
+-				    cqe->res <= 0 &&
+-				    cqe->user_data == ZC_TAG)
+-					compl_cqes--;
++				if (cqe->user_data == ZC_TAG &&
++				    !(cqe->flags & IORING_CQE_F_MORE))
++					error(1, cqe->res, "missing more flag");
++				packets++;
++				bytes += cqe->res;
+ 			}
+ 			io_uring_cqe_seen(&ring);
+ 		}
+-		if (cfg_cork)
+-			do_setsockopt(fd, IPPROTO_UDP, UDP_CORK, 0);
+ 	} while (gettimeofday_ms() < tstop);
+ 
+-	if (close(fd))
+-		error(1, errno, "close");
+-
+-	fprintf(stderr, "tx=%lu (MB=%lu), tx/s=%lu (MB/s=%lu)\n",
+-			packets, bytes >> 20,
+-			packets / (cfg_runtime_ms / 1000),
+-			(bytes >> 20) / (cfg_runtime_ms / 1000));
+-
+ 	while (compl_cqes) {
+ 		ret = io_uring_wait_cqe(&ring, &cqe);
+ 		if (ret)
+ 			error(1, ret, "wait cqe");
++		if (cqe->flags & IORING_CQE_F_MORE)
++			error(1, -EINVAL, "invalid notif flags");
++		if (!(cqe->flags & IORING_CQE_F_NOTIF))
++			error(1, -EINVAL, "missing notif flag");
++
+ 		io_uring_cqe_seen(&ring);
+ 		compl_cqes--;
+ 	}
++
++	fprintf(stderr, "tx=%lu (MB=%lu), tx/s=%lu (MB/s=%lu)\n",
++			packets, bytes >> 20,
++			packets / (cfg_runtime_ms / 1000),
++			(bytes >> 20) / (cfg_runtime_ms / 1000));
++
++	if (close(fd))
++		error(1, errno, "close");
+ }
+ 
+ static void do_test(int domain, int type, int protocol)
+@@ -502,8 +480,8 @@ static void do_test(int domain, int type, int protocol)
+ 
+ static void usage(const char *filepath)
+ {
+-	error(1, 0, "Usage: %s [-f] [-n<N>] [-z0] [-s<payload size>] "
+-		    "(-4|-6) [-t<time s>] -D<dst_ip> udp", filepath);
++	error(1, 0, "Usage: %s (-4|-6) (udp|tcp) -D<dst_ip> [-s<payload size>] "
++		    "[-t<time s>] [-n<batch>] [-p<port>] [-m<mode>]", filepath);
+ }
+ 
+ static void parse_opts(int argc, char **argv)
+@@ -521,7 +499,7 @@ static void parse_opts(int argc, char **argv)
+ 		usage(argv[0]);
+ 	cfg_payload_len = max_payload_len;
+ 
+-	while ((c = getopt(argc, argv, "46D:p:s:t:n:fc:m:")) != -1) {
++	while ((c = getopt(argc, argv, "46D:p:s:t:n:c:m:")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			if (cfg_family != PF_UNSPEC)
+@@ -550,9 +528,6 @@ static void parse_opts(int argc, char **argv)
+ 		case 'n':
+ 			cfg_nr_reqs = strtoul(optarg, NULL, 0);
+ 			break;
+-		case 'f':
+-			cfg_flush = 1;
+-			break;
+ 		case 'c':
+ 			cfg_cork = strtol(optarg, NULL, 0);
+ 			break;
+@@ -585,8 +560,6 @@ static void parse_opts(int argc, char **argv)
+ 
+ 	if (cfg_payload_len > max_payload_len)
+ 		error(1, 0, "-s: payload exceeds max (%d)", max_payload_len);
+-	if (cfg_mode == MODE_NONZC && cfg_flush)
+-		error(1, 0, "-f: only zerocopy modes support notifications");
+ 	if (optind != argc - 1)
+ 		usage(argv[0]);
+ }
+@@ -605,10 +578,3 @@ int main(int argc, char **argv)
+ 		error(1, 0, "unknown cfg_test %s", cfg_test);
+ 	return 0;
+ }
+-
+-#else
+-int main(int argc, char **argv)
+-{
+-	return 0;
+-}
+-#endif
+diff --git a/tools/testing/selftests/net/io_uring_zerocopy_tx.sh b/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+index 6a65e4437640..32aa6e9dacc2 100755
+--- a/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
++++ b/tools/testing/selftests/net/io_uring_zerocopy_tx.sh
+@@ -25,15 +25,11 @@ readonly path_sysctl_mem="net.core.optmem_max"
+ # No arguments: automated test
+ if [[ "$#" -eq "0" ]]; then
+ 	IPs=( "4" "6" )
+-	protocols=( "tcp" "udp" )
+ 
+ 	for IP in "${IPs[@]}"; do
+-		for proto in "${protocols[@]}"; do
+-			for mode in $(seq 1 3); do
+-				$0 "$IP" "$proto" -m "$mode" -t 1 -n 32
+-				$0 "$IP" "$proto" -m "$mode" -t 1 -n 32 -f
+-				$0 "$IP" "$proto" -m "$mode" -t 1 -n 32 -c -f
+-			done
++		for mode in $(seq 1 3); do
++			$0 "$IP" udp -m "$mode" -t 1 -n 32
++			$0 "$IP" tcp -m "$mode" -t 1 -n 32
+ 		done
+ 	done
  
 -- 
 2.37.2
