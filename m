@@ -2,181 +2,108 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78A4DECAAD5
-	for <io-uring@archiver.kernel.org>; Fri,  2 Sep 2022 16:00:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DA43C001B5
+	for <io-uring@archiver.kernel.org>; Fri,  2 Sep 2022 16:12:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237506AbiIBQAf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 2 Sep 2022 12:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S236551AbiIBQMT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 2 Sep 2022 12:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237826AbiIBQAM (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 2 Sep 2022 12:00:12 -0400
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B234B4B5;
-        Fri,  2 Sep 2022 08:05:34 -0700 (PDT)
-Received: by mail-oo1-xc34.google.com with SMTP id u3-20020a4ab5c3000000b0044b125e5d9eso405978ooo.12;
-        Fri, 02 Sep 2022 08:05:34 -0700 (PDT)
+        with ESMTP id S236957AbiIBQLz (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 2 Sep 2022 12:11:55 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92E9290
+        for <io-uring@vger.kernel.org>; Fri,  2 Sep 2022 09:06:36 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id i77so1978567ioa.7
+        for <io-uring@vger.kernel.org>; Fri, 02 Sep 2022 09:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date;
-        bh=m9v7oop8rTcU1E99FRL05uZUidYjHyiKvJlObLLnlsI=;
-        b=oP/20gdMpaQ73qqaervtXrorePCXOnhfzYuW0DjvrKnRJbzzJsfrvXF/DaHDq1ElXt
-         F3dL3jSk3pm7GqR1RIfUXkp+c41WV1EoIl1e5QZnU7Xx0BtZzjcgTxQ+1IkzPM04+ykk
-         cTib3QxLAIyt1FY5oSLap0TUSqxTkwvlJP8TBaU8ssGuZnb+tLo2UgQRe1PL6nkMjpIb
-         QFarm/AJYJN4FiISHPMWkcW7PLfn8L24QlEqpdAOVncrvTU/wnbocxv9YWkSXLieRyen
-         YxUsZ65kOJG5C3Jptk6+zOUiqUHqAZE8ZTx/SaKagHWcsdippB6zwtnuX2jKIEbX4IoA
-         yO8g==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=YsNxMOf5LM72+d4kt2FeHAVCME8bs9+iFL3iEoAYK5k=;
+        b=ggqTvGon1pNPipkqQEIhdDLTqBntf3tFv+VuIQXJgl7JDFNjadhaghMctdXZIliIu6
+         foiBAFIQP3qP70R0mWYerMn5rrO2x/SxfGeiiyNpaw4HZSL096UXeaEzdricSX8HzZwV
+         3VeyZywkyJHGfRrh9LP50qyr/GkfGkCfxQqvvLIGTgUmD8RM+kIW+qOSsMT9Bthn1A8G
+         HHvH/7XyqDoIZXi1FfQjELfOIEGbalnYO4D+XszjwBPuH56PgLFzY0yeiDBUgQzAVTA1
+         Jll8nIiAFYdPvJZHNeldlmPT6Odb/HFLUGb47kyi3X3ePPNyAjGZhL7sCMnTVdWlV7JP
+         Ae5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=m9v7oop8rTcU1E99FRL05uZUidYjHyiKvJlObLLnlsI=;
-        b=41AuSZC6jJvXGH/Fscy4RTN+rlM2A0aXW0Z1OBAAZLCKnQcQcH3U51PRBL+vE2I5ot
-         rla+Yzl1e8gZ+CD9btJtwewFCWjAC3LMRATNDp2s/Fv08/fUCR0fDjL8IVOgdbyjKkig
-         K7c//u0qYnDpgM7aRdufNPg0CF/buHj09jC9CeJ3O2nXUmliJ/SJ+aqXdmCkGhJ/0zxv
-         IkCJw4Z8oX2ag+R9KD5dYsohc263f7GLMuCAt8MUFuOzSDxjHSuNe/KaRFxxNxpsAPsR
-         SDU7V9S9q+0M16RkvOdrIA71U+/DOfakL8ppbZWkS3NCpvliWd0MQ39wWNm+1SLQnnbc
-         DQEQ==
-X-Gm-Message-State: ACgBeo2K9JGYQySXQTQdwnVqrhxrgOoWhCahgFtiCJPJBDVVjzvLIKPp
-        mHiA0NmWcP1P+9tf111E7Fuv/nSHlLV4LyUj+dw=
-X-Google-Smtp-Source: AA6agR7exQncoh9YeOpPhGSlB5sD9iV0VfLz8fguIbl/BQTHKwpQzgtYBQfzkCwqlHq8KkVbdLme2k1YAJ0wipkgJ8s=
-X-Received: by 2002:a4a:5d44:0:b0:44e:2b42:316c with SMTP id
- w65-20020a4a5d44000000b0044e2b42316cmr4498715ooa.15.1662131133463; Fri, 02
- Sep 2022 08:05:33 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=YsNxMOf5LM72+d4kt2FeHAVCME8bs9+iFL3iEoAYK5k=;
+        b=Ou0p+Ec/oxQx6sD6ZuskWOvTaDdg9oQRu+NqMRUcTnNB1QSyzXjVre4CSdp4DeWNUJ
+         q/+kwTIVxP/ho/cs3SRzqQHnVZZQlcXDOkPK2o92oc0w1wuGGcm0tKtXNXoNL8ULRfst
+         UPJ9gNpUouWM7yBhCS7yfF2C9U9dAK/aKjWCJ1BTh5PQ5qU4mfeFwhQogU1YG0YHEA53
+         /U43rnQagWH50RBJjUyf5HAcXLxxmtJ/qzmZUMrhaMAQCYV5oIit7IqoTO4g0lPIy7ry
+         YIPbJalyGKGm1lq9KEwibJNmTHDmkZ0a3bxJQL47Fw1o5yMxvOQpvfRq51VqWNrnWAZk
+         Lucw==
+X-Gm-Message-State: ACgBeo2p0b3EwtGa/NFMmh+dh0fjD6V4Ry/+CyurtldQxPn6OQ5kzPAv
+        gcdVXk7WZEQCcIWJg/wtGdfX4g==
+X-Google-Smtp-Source: AA6agR63XMol65orTkQhB3R5iR+tt0q5or/SxI8iXd1vEyi1Tkhf4V+06eu1o6xVK4XJu8RrNi2ZRg==
+X-Received: by 2002:a5e:8414:0:b0:689:e3c:308a with SMTP id h20-20020a5e8414000000b006890e3c308amr17471363ioj.29.1662134795841;
+        Fri, 02 Sep 2022 09:06:35 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id u11-20020a92da8b000000b002ead7a3b185sm966699iln.13.2022.09.02.09.06.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Sep 2022 09:06:35 -0700 (PDT)
+Message-ID: <f1e8a7fa-a1f8-c60a-c365-b2164421f98d@kernel.dk>
+Date:   Fri, 2 Sep 2022 10:06:33 -0600
 MIME-Version: 1.0
-References: <20220901225849.42898-1-shr@fb.com> <20220901225849.42898-2-shr@fb.com>
- <CAL3q7H7Xm+HkUXE6zeT+0fH+9Hi9XhE7gXH7mYcGeAoYR5D2XQ@mail.gmail.com> <d42ec471-b67f-6504-72bf-8bbc761ac3e7@kernel.dk>
-In-Reply-To: <d42ec471-b67f-6504-72bf-8bbc761ac3e7@kernel.dk>
-Reply-To: fdmanana@gmail.com
-From:   Filipe Manana <fdmanana@gmail.com>
-Date:   Fri, 2 Sep 2022 16:04:57 +0100
-Message-ID: <CAL3q7H6GLm+hbcJP5Mc0mjyFcWX-8wGD9LVJeYUE6HmgoZK1Vg@mail.gmail.com>
-Subject: Re: [PATCH v1 01/10] btrfs: implement a nowait option for tree searches
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Stefan Roesch <shr@fb.com>, kernel-team@fb.com,
-        io-uring@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        josef@toxicpanda.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH for-next v3 0/4] fixed-buffer for uring-cmd/passthrough
+Content-Language: en-US
+To:     Kanchan Joshi <joshi.k@samsung.com>, hch@lst.de, kbusch@kernel.org,
+        asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, gost.dev@samsung.com
+References: <CGME20220902152701epcas5p1d4aca8eebc90fb96ac7ed5a8270816cf@epcas5p1.samsung.com>
+ <20220902151657.10766-1-joshi.k@samsung.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220902151657.10766-1-joshi.k@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri, Sep 2, 2022 at 3:57 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 9/2/22 8:48 AM, Filipe Manana wrote:
-> > On Fri, Sep 2, 2022 at 12:01 AM Stefan Roesch <shr@fb.com> wrote:
-> >>
-> >> From: Josef Bacik <josef@toxicpanda.com>
-> >>
-> >> For NOWAIT IOCB's we'll need a way to tell search to not wait on locks
-> >> or anything.  Accomplish this by adding a path->nowait flag that will
-> >> use trylocks and skip reading of metadata, returning -EWOULDBLOCK in
-> >> either of these cases.  For now we only need this for reads, so only t=
-he
-> >> read side is handled.  Add an ASSERT() to catch anybody trying to use
-> >> this for writes so they know they'll have to implement the write side.
-> >>
-> >> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> >> Signed-off-by: Stefan Roesch <shr@fb.com>
-> >> ---
-> >>  fs/btrfs/ctree.c   | 39 ++++++++++++++++++++++++++++++++++++---
-> >>  fs/btrfs/ctree.h   |  1 +
-> >>  fs/btrfs/locking.c | 23 +++++++++++++++++++++++
-> >>  fs/btrfs/locking.h |  1 +
-> >>  4 files changed, 61 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
-> >> index ebfa35fe1c38..052c768b2297 100644
-> >> --- a/fs/btrfs/ctree.c
-> >> +++ b/fs/btrfs/ctree.c
-> >> @@ -1447,6 +1447,11 @@ read_block_for_search(struct btrfs_root *root, =
-struct btrfs_path *p,
-> >>                         return 0;
-> >>                 }
-> >>
-> >> +               if (p->nowait) {
-> >> +                       free_extent_buffer(tmp);
-> >> +                       return -EWOULDBLOCK;
-> >> +               }
-> >> +
-> >>                 if (unlock_up)
-> >>                         btrfs_unlock_up_safe(p, level + 1);
-> >>
-> >> @@ -1467,6 +1472,8 @@ read_block_for_search(struct btrfs_root *root, s=
-truct btrfs_path *p,
-> >>                         ret =3D -EAGAIN;
-> >>
-> >>                 goto out;
-> >> +       } else if (p->nowait) {
-> >> +               return -EWOULDBLOCK;
-> >>         }
-> >>
-> >>         if (unlock_up) {
-> >> @@ -1634,7 +1641,13 @@ static struct extent_buffer *btrfs_search_slot_=
-get_root(struct btrfs_root *root,
-> >>                  * We don't know the level of the root node until we a=
-ctually
-> >>                  * have it read locked
-> >>                  */
-> >> -               b =3D btrfs_read_lock_root_node(root);
-> >> +               if (p->nowait) {
-> >> +                       b =3D btrfs_try_read_lock_root_node(root);
-> >> +                       if (IS_ERR(b))
-> >> +                               return b;
-> >> +               } else {
-> >> +                       b =3D btrfs_read_lock_root_node(root);
-> >> +               }
-> >>                 level =3D btrfs_header_level(b);
-> >>                 if (level > write_lock_level)
-> >>                         goto out;
-> >> @@ -1910,6 +1923,13 @@ int btrfs_search_slot(struct btrfs_trans_handle=
- *trans, struct btrfs_root *root,
-> >>         WARN_ON(p->nodes[0] !=3D NULL);
-> >>         BUG_ON(!cow && ins_len);
-> >>
-> >> +       /*
-> >> +        * For now only allow nowait for read only operations.  There'=
-s no
-> >> +        * strict reason why we can't, we just only need it for reads =
-so I'm
-> >> +        * only implementing it for reads right now.
-> >> +        */
-> >> +       ASSERT(!p->nowait || !cow);
-> >> +
-> >>         if (ins_len < 0) {
-> >>                 lowest_unlock =3D 2;
-> >>
-> >> @@ -1936,7 +1956,12 @@ int btrfs_search_slot(struct btrfs_trans_handle=
- *trans, struct btrfs_root *root,
-> >>
-> >>         if (p->need_commit_sem) {
-> >>                 ASSERT(p->search_commit_root);
-> >> -               down_read(&fs_info->commit_root_sem);
-> >> +               if (p->nowait) {
-> >> +                       if (!down_read_trylock(&fs_info->commit_root_s=
-em))
-> >> +                               return -EAGAIN;
-> >
-> > Why EAGAIN here and everywhere else EWOULDBLOCK? See below.
->
-> Is EWOULDBLOCK ever different from EAGAIN? But it should be used
-> consistently, EAGAIN would be the return of choice for that.
+On 9/2/22 9:16 AM, Kanchan Joshi wrote:
+> Hi,
+> 
+> Currently uring-cmd lacks the ability to leverage the pre-registered
+> buffers. This series adds the support in uring-cmd, and plumbs
+> nvme passthrough to work with it.
+> 
+> Using registered-buffers showed peak-perf hike from 1.85M to 2.17M IOPS
+> in my setup.
+> 
+> Without fixedbufs
+> *****************
+> # taskset -c 0 t/io_uring -b512 -d128 -c32 -s32 -p0 -F1 -B0 -O0 -n1 -u1 /dev/ng0n1
+> submitter=0, tid=5256, file=/dev/ng0n1, node=-1
+> polled=0, fixedbufs=0/0, register_files=1, buffered=1, QD=128
+> Engine=io_uring, sq_ring=128, cq_ring=128
+> IOPS=1.85M, BW=904MiB/s, IOS/call=32/31
+> IOPS=1.85M, BW=903MiB/s, IOS/call=32/32
+> IOPS=1.85M, BW=902MiB/s, IOS/call=32/32
+> ^CExiting on signal
+> Maximum IOPS=1.85M
 
-Oh right, EWOULDBLOCK is defined as EAGAIN, same values.
-It would be best to use the same everywhere, avoiding confusion...
+With the poll support queued up, I ran this one as well. tldr is:
 
->
-> --
-> Jens Axboe
+bdev (non pt)	122M IOPS
+irq driven	51-52M IOPS
+polled		71M IOPS
+polled+fixed	78M IOPS
+
+Looking at profiles, it looks like the bio is still being allocated
+and freed and not dipping into the alloc cache, which is using a
+substantial amount of CPU. I'll poke a bit and see what's going on...
+
+-- 
+Jens Axboe
 
 
-
---=20
-Filipe David Manana,
-
-=E2=80=9CWhether you think you can, or you think you can't =E2=80=94 you're=
- right.=E2=80=9D
