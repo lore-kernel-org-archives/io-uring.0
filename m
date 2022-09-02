@@ -2,163 +2,187 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0989AC001B5
-	for <io-uring@archiver.kernel.org>; Fri,  2 Sep 2022 15:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55794ECAAD5
+	for <io-uring@archiver.kernel.org>; Fri,  2 Sep 2022 15:41:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbiIBPYm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 2 Sep 2022 11:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46224 "EHLO
+        id S237135AbiIBPlG (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 2 Sep 2022 11:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236822AbiIBPYT (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 2 Sep 2022 11:24:19 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE3E17860B
-        for <io-uring@vger.kernel.org>; Fri,  2 Sep 2022 07:57:33 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id v15so1262839iln.6
-        for <io-uring@vger.kernel.org>; Fri, 02 Sep 2022 07:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=/bAWXX/7J+H5d6R7FI3fLen6Yfws6WpUi6HxyLc66uM=;
-        b=7kovIplH/o5Cx577vNwne34TTjRkgIydxYNjssJPG9zjoAjHVOhbZfvkFPCFo2p6b6
-         n2Wk7IJWRSdoOMvmAesoN1GWeUqffShkPTGu2si1nuUHywyx+0KqJFM349zafvu0yv9f
-         JyK8bfxUJ6gHOE6UYcDCqb3KStjq1QXRulPgwih97m4WIf8ugxr8YSu56zmi30jkTdlp
-         Wfquca+BcdMPtnRbjulpzeKWiTaBiEoNm/qXOtuArHT6YOWFHPBihY6kgZkv5xhD6Fna
-         LADjUhUTNHzbhTuZm6EjLaXwY/q4RSbGlktBmcwOZn8VUlM2+ugwWWLHlsprlarZXjWU
-         Si7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=/bAWXX/7J+H5d6R7FI3fLen6Yfws6WpUi6HxyLc66uM=;
-        b=mFKW8PDH99CEkTQaPvXYZFo4LGsG8zOPBpvneJzRzLJA7shLTS84HBxMZE2UP8pkZj
-         dBuuRwmLllsDk3bdA7XIzjKIQrlAqt0g7TsYVmWF4j9wcMj0Ty2qckyvjmJFcCGRhC8m
-         u0C1ogKwy5a0y2fszOXOCn7tIpBgRClR0clla+gmfO46djvtYTo6hgc3t7DwGI3eoRzU
-         HitdipdcZiTIGFiEzWa4IURwfdPjneL7Ha37rB+M/epJh6MNYLFPHbAlRgSTtjh3wsFq
-         o9y7Ij+CT3FyDCpsMfCfTVpFpUjaFiBXF103snb5pBzY++Im7WSWkD3KBCgknwyC0YSO
-         SoLg==
-X-Gm-Message-State: ACgBeo0PIM7K0qeSOtEKSZ5B5srFMCIkdhavNRF0B41JA4zpsK91MS5R
-        02rhVKkqNUhYjwnWhySzvx5fDQ==
-X-Google-Smtp-Source: AA6agR4GGI2x59eUmF2Gvit+G1nEJL05jF1JEhDKdlMsAsZc+Z+MORQPdNBEv9LPz5WZz3WyN30F3A==
-X-Received: by 2002:a05:6e02:214b:b0:2ec:f24f:5272 with SMTP id d11-20020a056e02214b00b002ecf24f5272mr4137723ilv.169.1662130650414;
-        Fri, 02 Sep 2022 07:57:30 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id m3-20020a0566022e8300b0068226bcb7aasm918685iow.38.2022.09.02.07.57.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Sep 2022 07:57:29 -0700 (PDT)
-Message-ID: <d42ec471-b67f-6504-72bf-8bbc761ac3e7@kernel.dk>
-Date:   Fri, 2 Sep 2022 08:57:27 -0600
+        with ESMTP id S236955AbiIBPki (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 2 Sep 2022 11:40:38 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBCB79ED8
+        for <io-uring@vger.kernel.org>; Fri,  2 Sep 2022 08:27:15 -0700 (PDT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220902152710epoutp02881e6882bf4cc677c26c29c0df5dd796~RFKOSIMVS1948519485epoutp025
+        for <io-uring@vger.kernel.org>; Fri,  2 Sep 2022 15:27:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220902152710epoutp02881e6882bf4cc677c26c29c0df5dd796~RFKOSIMVS1948519485epoutp025
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1662132430;
+        bh=A9eeh4RBJYaAco8jXNywjr3avubLO7fkkdnIseGNno0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vKNYzuyoa2kIzfmmsYa6+/whVTa9bEfb9nayWEqU3SPb9EBWGDNZ8XnOCd48P3GNV
+         jU1jlCCpq0a4p0JjgXQpf3r/FpvbHqP+dEIlatwqOywZ9GCofxAnYLGW1+E4LaVoSx
+         YCQvSwR1WouuLPTLs936jAV04VIhkmuAKoI/GX8I=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20220902152709epcas5p45ab565a5f3ec4ae2332904a0d94f8a14~RFKNtBsIV1431014310epcas5p4R;
+        Fri,  2 Sep 2022 15:27:09 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4MK1x71x7lz4x9Pp; Fri,  2 Sep
+        2022 15:27:07 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1F.AE.54060.BC022136; Sat,  3 Sep 2022 00:27:07 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20220902152706epcas5p11f1a11710a6ba985f4679a5cfe131bf8~RFKKdBa4z2163521635epcas5p1d;
+        Fri,  2 Sep 2022 15:27:06 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20220902152706epsmtrp20fbe6a87fdee07c0b120417cc49d97e5~RFKKb672S0776407764epsmtrp2c;
+        Fri,  2 Sep 2022 15:27:06 +0000 (GMT)
+X-AuditID: b6c32a4b-e33fb7000000d32c-40-631220cb0c2c
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        D5.BE.18644.9C022136; Sat,  3 Sep 2022 00:27:06 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.110.206.5]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220902152704epsmtip243a97ccab43acdb3d30aae73a246015e~RFKI58CXx1851718517epsmtip2O;
+        Fri,  2 Sep 2022 15:27:04 +0000 (GMT)
+From:   Kanchan Joshi <joshi.k@samsung.com>
+To:     axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
+        asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, gost.dev@samsung.com,
+        Anuj Gupta <anuj20.g@samsung.com>,
+        Kanchan Joshi <joshi.k@samsung.com>
+Subject: [PATCH for-next v3 1/4] io_uring: introduce
+ io_uring_cmd_import_fixed
+Date:   Fri,  2 Sep 2022 20:46:54 +0530
+Message-Id: <20220902151657.10766-2-joshi.k@samsung.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220902151657.10766-1-joshi.k@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v1 01/10] btrfs: implement a nowait option for tree
- searches
-Content-Language: en-US
-To:     fdmanana@gmail.com, Stefan Roesch <shr@fb.com>
-Cc:     kernel-team@fb.com, io-uring@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, josef@toxicpanda.com
-References: <20220901225849.42898-1-shr@fb.com>
- <20220901225849.42898-2-shr@fb.com>
- <CAL3q7H7Xm+HkUXE6zeT+0fH+9Hi9XhE7gXH7mYcGeAoYR5D2XQ@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAL3q7H7Xm+HkUXE6zeT+0fH+9Hi9XhE7gXH7mYcGeAoYR5D2XQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJJsWRmVeSWpSXmKPExsWy7bCmlu5pBaFkgy9bOC2aJvxltpizahuj
+        xeq7/WwWNw/sZLJYufook8W71nMsFkf/v2WzmHToGqPF3lvaFvOXPWV34PLYOesuu8fls6Ue
+        m1Z1snlsXlLvsftmA5tH35ZVjB6fN8kFsEdl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY
+        6hpaWpgrKeQl5qbaKrn4BOi6ZeYAHaekUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJ
+        KTAp0CtOzC0uzUvXy0stsTI0MDAyBSpMyM7omjKHpWC1UMXWoz0sDYxr+bsYOTkkBEwkOs+t
+        Ze1i5OIQEtjNKLHiy2smCOcTo8SRf80sEM5nRomdbxuZYFrW3XwFVbWLUWLtowPMcFXrJx1i
+        72Lk4GAT0JS4MLkUpEFEwEvi/u33YDuYQXa8vdHIDpIQFgiQWHPmFSuIzSKgKvHsUgcLiM0r
+        YCGx+8g1Roht8hIzL30Hq+cUsJR4evUNK0SNoMTJmU/A6pmBapq3zgY7QkKgl0Piy6PjzBDN
+        LhK3H5yFOltY4tXxLewQtpTE53d72SDsZIlLM89B1ZRIPN5zEMq2l2g91c8M8gwz0DPrd+lD
+        7OKT6P39hAkkLCHAK9HRJgRRrShxb9JTVghbXOLhjCWsECUeEu/fZUOCp4dRYuvSfvYJjPKz
+        kHwwC8kHsxCWLWBkXsUomVpQnJueWmxaYJyXWg6P2OT83E2M4DSq5b2D8dGDD3qHGJk4GA8x
+        SnAwK4nwTj0skCzEm5JYWZValB9fVJqTWnyI0RQYxBOZpUST84GJPK8k3tDE0sDEzMzMxNLY
+        zFBJnHeKNmOykEB6YklqdmpqQWoRTB8TB6dUA9MxLX51ZX1W3j+pSR/zV57Pmb7A7KiN3BXb
+        JEERgVMmqRwF1Y5fDlhJnGedpP/rT/8yy/qTimsZNtxlPfBO59UrzoSbRwMsBN1UV52db/d0
+        stw5k0pP87RF1eIXfdVPfvlW02/CbPLV6fHNN/qWzG3y1km8dTNzrH76JKeXn9jmcFs+roZ1
+        plrJkeDIlOxdW/6XWS77LFEk/v7Lcdlag8wbHmXHl2yK6Q/Qnr/q0fKPLOfYlr/I+tbJrrjR
+        6K/KzMfzLI+seDDn/5mKotiK4Po3HtJzegozFbR+r4kovuLAoDspL68/8rWistrDZxczVe5F
+        /jgi/emb7RxuNS7rEgOxLbErDrzua9rw/epDNyWW4oxEQy3mouJEAKEJ4PssBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLLMWRmVeSWpSXmKPExsWy7bCSvO4pBaFkg6NvmCyaJvxltpizahuj
+        xeq7/WwWNw/sZLJYufook8W71nMsFkf/v2WzmHToGqPF3lvaFvOXPWV34PLYOesuu8fls6Ue
+        m1Z1snlsXlLvsftmA5tH35ZVjB6fN8kFsEdx2aSk5mSWpRbp2yVwZXRNmcNSsFqoYuvRHpYG
+        xrX8XYycHBICJhLrbr5i6mLk4hAS2MEoceXnUiaIhLhE87Uf7BC2sMTKf8/ZIYo+Mkp8ef2X
+        uYuRg4NNQFPiwuRSkBoRgQCJg42XwWqYBQ4ySlx+9oQFJCEs4CexbeJeRhCbRUBV4tmlDrA4
+        r4CFxO4j1xghFshLzLz0HWwZp4ClxNOrb1hBbCGgmh2TdrJB1AtKnJwJMZMZqL5562zmCYwC
+        s5CkZiFJLWBkWsUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERwDWlo7GPes+qB3iJGJ
+        g/EQowQHs5II79TDAslCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2C
+        yTJxcEo1MNmw2X7dx+Cq49v9XHvntXuOq7vmXgnr3PC9P94/wTnr7lum438XMnlNS5kUrNzv
+        eLXu4jRX+fXyXm8vrr7Ses3KuGvqwbxJW/tCQnhUzpUd4PtxRqY0myfkqvEyPfOVR86JbRfy
+        znnjmHzt8u1T2X8+fT107KPVIq8Auen/o4Xn7TmWqyIR/HT1Ee5YnXN/Tx35KsUeHbp7Zuzz
+        YPPoR4V5u7dr+j8ROyYirH22d9I+BZeZl/tXbrn5cQLf7GzHzcX31PvYGHqTRE5+dOHMfiwT
+        aaDzR6+zhiHv/4Kqr+1rvH7xHY06NPdUXH/z9tD3U/0v/D1zWSk5O0nscJb12SVtmukf7XVU
+        u//UrBO4eFyJpTgj0VCLuag4EQCF6oxX8AIAAA==
+X-CMS-MailID: 20220902152706epcas5p11f1a11710a6ba985f4679a5cfe131bf8
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220902152706epcas5p11f1a11710a6ba985f4679a5cfe131bf8
+References: <20220902151657.10766-1-joshi.k@samsung.com>
+        <CGME20220902152706epcas5p11f1a11710a6ba985f4679a5cfe131bf8@epcas5p1.samsung.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 9/2/22 8:48 AM, Filipe Manana wrote:
-> On Fri, Sep 2, 2022 at 12:01 AM Stefan Roesch <shr@fb.com> wrote:
->>
->> From: Josef Bacik <josef@toxicpanda.com>
->>
->> For NOWAIT IOCB's we'll need a way to tell search to not wait on locks
->> or anything.  Accomplish this by adding a path->nowait flag that will
->> use trylocks and skip reading of metadata, returning -EWOULDBLOCK in
->> either of these cases.  For now we only need this for reads, so only the
->> read side is handled.  Add an ASSERT() to catch anybody trying to use
->> this for writes so they know they'll have to implement the write side.
->>
->> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
->> Signed-off-by: Stefan Roesch <shr@fb.com>
->> ---
->>  fs/btrfs/ctree.c   | 39 ++++++++++++++++++++++++++++++++++++---
->>  fs/btrfs/ctree.h   |  1 +
->>  fs/btrfs/locking.c | 23 +++++++++++++++++++++++
->>  fs/btrfs/locking.h |  1 +
->>  4 files changed, 61 insertions(+), 3 deletions(-)
->>
->> diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
->> index ebfa35fe1c38..052c768b2297 100644
->> --- a/fs/btrfs/ctree.c
->> +++ b/fs/btrfs/ctree.c
->> @@ -1447,6 +1447,11 @@ read_block_for_search(struct btrfs_root *root, struct btrfs_path *p,
->>                         return 0;
->>                 }
->>
->> +               if (p->nowait) {
->> +                       free_extent_buffer(tmp);
->> +                       return -EWOULDBLOCK;
->> +               }
->> +
->>                 if (unlock_up)
->>                         btrfs_unlock_up_safe(p, level + 1);
->>
->> @@ -1467,6 +1472,8 @@ read_block_for_search(struct btrfs_root *root, struct btrfs_path *p,
->>                         ret = -EAGAIN;
->>
->>                 goto out;
->> +       } else if (p->nowait) {
->> +               return -EWOULDBLOCK;
->>         }
->>
->>         if (unlock_up) {
->> @@ -1634,7 +1641,13 @@ static struct extent_buffer *btrfs_search_slot_get_root(struct btrfs_root *root,
->>                  * We don't know the level of the root node until we actually
->>                  * have it read locked
->>                  */
->> -               b = btrfs_read_lock_root_node(root);
->> +               if (p->nowait) {
->> +                       b = btrfs_try_read_lock_root_node(root);
->> +                       if (IS_ERR(b))
->> +                               return b;
->> +               } else {
->> +                       b = btrfs_read_lock_root_node(root);
->> +               }
->>                 level = btrfs_header_level(b);
->>                 if (level > write_lock_level)
->>                         goto out;
->> @@ -1910,6 +1923,13 @@ int btrfs_search_slot(struct btrfs_trans_handle *trans, struct btrfs_root *root,
->>         WARN_ON(p->nodes[0] != NULL);
->>         BUG_ON(!cow && ins_len);
->>
->> +       /*
->> +        * For now only allow nowait for read only operations.  There's no
->> +        * strict reason why we can't, we just only need it for reads so I'm
->> +        * only implementing it for reads right now.
->> +        */
->> +       ASSERT(!p->nowait || !cow);
->> +
->>         if (ins_len < 0) {
->>                 lowest_unlock = 2;
->>
->> @@ -1936,7 +1956,12 @@ int btrfs_search_slot(struct btrfs_trans_handle *trans, struct btrfs_root *root,
->>
->>         if (p->need_commit_sem) {
->>                 ASSERT(p->search_commit_root);
->> -               down_read(&fs_info->commit_root_sem);
->> +               if (p->nowait) {
->> +                       if (!down_read_trylock(&fs_info->commit_root_sem))
->> +                               return -EAGAIN;
-> 
-> Why EAGAIN here and everywhere else EWOULDBLOCK? See below.
+From: Anuj Gupta <anuj20.g@samsung.com>
 
-Is EWOULDBLOCK ever different from EAGAIN? But it should be used
-consistently, EAGAIN would be the return of choice for that.
+This is a new helper that callers can use to obtain a bvec iterator for
+the previously mapped buffer. This is preparatory work to enable
+fixed-buffer support for io_uring_cmd.
 
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
+---
+ include/linux/io_uring.h |  8 ++++++++
+ io_uring/uring_cmd.c     | 11 +++++++++++
+ 2 files changed, 19 insertions(+)
+
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 58676c0a398f..dba6fb47aa6c 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -4,6 +4,7 @@
+ 
+ #include <linux/sched.h>
+ #include <linux/xarray.h>
++#include <uapi/linux/io_uring.h>
+ 
+ enum io_uring_cmd_flags {
+ 	IO_URING_F_COMPLETE_DEFER	= 1,
+@@ -32,6 +33,8 @@ struct io_uring_cmd {
+ };
+ 
+ #if defined(CONFIG_IO_URING)
++int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
++		struct iov_iter *iter, void *ioucmd);
+ void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret, ssize_t res2);
+ void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+ 			void (*task_work_cb)(struct io_uring_cmd *));
+@@ -59,6 +62,11 @@ static inline void io_uring_free(struct task_struct *tsk)
+ 		__io_uring_free(tsk);
+ }
+ #else
++int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
++		struct iov_iter *iter, void *ioucmd)
++{
++	return -1;
++}
+ static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+ 		ssize_t ret2)
+ {
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 6f99dbd5d550..8cddd18ad10b 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -7,6 +7,7 @@
+ #include <uapi/linux/io_uring.h>
+ 
+ #include "io_uring.h"
++#include "rsrc.h"
+ #include "uring_cmd.h"
+ 
+ static void io_uring_cmd_work(struct io_kiocb *req, bool *locked)
+@@ -124,3 +125,13 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	return IOU_ISSUE_SKIP_COMPLETE;
+ }
++
++int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len,
++		int rw, struct iov_iter *iter, void *ioucmd)
++{
++	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
++	struct io_mapped_ubuf *imu = req->imu;
++
++	return io_import_fixed(rw, iter, imu, ubuf, len);
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
 -- 
-Jens Axboe
+2.25.1
+
