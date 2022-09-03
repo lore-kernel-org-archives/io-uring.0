@@ -2,58 +2,58 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A7BCC54EE9
-	for <io-uring@archiver.kernel.org>; Sat,  3 Sep 2022 16:52:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 40C09ECAAD4
+	for <io-uring@archiver.kernel.org>; Sat,  3 Sep 2022 16:52:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230488AbiICQwl (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 3 Sep 2022 12:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S230333AbiICQwn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 3 Sep 2022 12:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiICQwk (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 3 Sep 2022 12:52:40 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C481525C47
-        for <io-uring@vger.kernel.org>; Sat,  3 Sep 2022 09:52:39 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o2-20020a17090a9f8200b0020025a22208so1151358pjp.2
-        for <io-uring@vger.kernel.org>; Sat, 03 Sep 2022 09:52:39 -0700 (PDT)
+        with ESMTP id S230348AbiICQwm (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 3 Sep 2022 12:52:42 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EA125C47
+        for <io-uring@vger.kernel.org>; Sat,  3 Sep 2022 09:52:41 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso8411386pjk.0
+        for <io-uring@vger.kernel.org>; Sat, 03 Sep 2022 09:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=NDfU2jexhTtidmvUsAHPOMw5Ob+mQ0ASulhdL6098FQ=;
-        b=WNFyzMKkV4hx8AGpo2rFi0g2YdWpfE2kBN9yHuanu3w3xQYASmLlrMTHKC6kQJ1qQ3
-         /QeSymQll227q0JcnolcqEf7vxvrNzngpQGzsz+VPgDPV5KLnbpfkVpecFLXuKL+xugR
-         wzkKsqtWIIq9P5/NzR3eTNNP5ZxUUiW894Z2SV/UDpDG4/XtTW7D6CPimPX5NGAZvKE3
-         hVUZ8fYphlwJGIFJtIeyM4Woi+Bms49KPhdBOTfot74AQaGWRxxeMAe7+hpQwwf9HGFh
-         utkUuH3TKfjlbEgB4XQNlAcXBUwBpymmySrgbSXOCo/i0Q6LcWTXbWuI2e5mC1hGw9qP
-         qo5Q==
+        bh=epndrfcBIAu7oOwtOoo29Z1hPOOMo+qcgkQJ015903E=;
+        b=YdeCDwghJYEn5E+PFT2ZuD2Hb7dGU82UDM5mW8fibAvG+YzaJwA7JMJOuHbXpc79se
+         yFqlYjPIJfQ3ULtsGrNz91KaTknHntCLMM0Ex9L8lN9gE1Sr0Mlnu5RJBO54XHkuSVr+
+         kqaXKJ20ElFCfqy1CkkSqmxjzq8jLfZhS11S1e4W2aTqPaUxYML8wIADcFbndTngvd2j
+         3HWnabWmGN9AXJSqbSqQRA7R19bHkmuyz7776hv+o/1e5IFkN6NgsSruwIEDGLyPczO1
+         iHREzqf89aGycLGV+lsEWU6K0tzFzHQcsp996QT6Jxb4pDb9t/FQPoMjOtsIm7TyGqx+
+         lapg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=NDfU2jexhTtidmvUsAHPOMw5Ob+mQ0ASulhdL6098FQ=;
-        b=edJBBjzl4u6BoAU9vZcgGyOkXvhxTt0MSAPa3MVw9wjtOapoRfWR9FqImgsviPR3KI
-         0NUdcM+tJ0GiJuvr+C4SwR1982uZOXbjQ/x1wTY0hBg28X/vu0iKEhdGgsGVthTPwcja
-         03lTJppdBDXoVgBscmZ8UKvOrwWFcxktXOzZxQF7JLPLaOZ23vsfT+olkRnRwAMLro9H
-         p+RmzUyI/JUBnU+GupStFbWhj2l5lRgTFw3lBLF6+e2qfvJs46VrWCOA7CuU5P+4vutk
-         LcSibE8Gw9zzkXKXDTxTLOXt1tHBFlKyGyCc5i1PE6RCNO/JbY5nHmF/gAOxbCVbYDMu
-         hn+g==
-X-Gm-Message-State: ACgBeo3cZEf41Zy8/WgdWSAfGb80c1/haP7aG5Z8w2zkYLIbeGqyEeM7
-        rKQDUF8eDLl4aCerQiPRmxtvT6o0BL8AZw==
-X-Google-Smtp-Source: AA6agR7DYBmTZ1nKloJjqSB/DuNbz1khC5IT1JjHo0Kw+drNN63bY2OO8j2P8b7PYV09RXQe+DyymA==
-X-Received: by 2002:a17:902:aa87:b0:172:689f:106b with SMTP id d7-20020a170902aa8700b00172689f106bmr41056895plr.127.1662223958892;
-        Sat, 03 Sep 2022 09:52:38 -0700 (PDT)
+        bh=epndrfcBIAu7oOwtOoo29Z1hPOOMo+qcgkQJ015903E=;
+        b=F9GnNy4nGVPwhMNr6log3W5W05gz1V54ai7diSFUcbmIMDk2eZ2Lua/KzzbgJttPy2
+         N/f3urH1QrwJ1ogBT/4rAe1SxjWIvL7zxKZFV/bL2NDrcpxLJxMJvv8lp8WuYLIUpzU/
+         0MCVwI25gti2u6+jaT0xOmFIA1195tdRctezLBRNY+qU5qyhBVKGmEJnLuHBHh/kG5w8
+         9/Q/26opI8nT2fMrInCDIwNLZ4w6+vltEPlEGZQtemhsRl0x9UDbM2+XtJ1hv8jRzI8l
+         /kiAbCj1lQAyBkvToA81s180fEe90odcQoNC2xYrOkVnHWYEgu2P3L5LVzOpE/YS0Hq2
+         o9fQ==
+X-Gm-Message-State: ACgBeo2QgpfKz6V8Xs6FrpWK3ol2MgnsSlkwRRfG9aQT+VfwOETkDTrZ
+        hr/aUKBl0bqHltRQqaPEcWEAe512PQP2Ew==
+X-Google-Smtp-Source: AA6agR6upUwzCSiGU0ShI+eXDkq21FlEVmpvF4kxWTQISGHcJ85ur1yoJI6JPAwBxMSSfsfkXgRGdw==
+X-Received: by 2002:a17:902:d4c8:b0:174:a871:152d with SMTP id o8-20020a170902d4c800b00174a871152dmr31182003plg.4.1662223960849;
+        Sat, 03 Sep 2022 09:52:40 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id w185-20020a6262c2000000b005289a50e4c2sm4187296pfb.23.2022.09.03.09.52.37
+        by smtp.gmail.com with ESMTPSA id w185-20020a6262c2000000b005289a50e4c2sm4187296pfb.23.2022.09.03.09.52.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Sep 2022 09:52:38 -0700 (PDT)
+        Sat, 03 Sep 2022 09:52:40 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     joshi.k@samsung.com, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/4] io_uring: cleanly separate request types for iopoll
-Date:   Sat,  3 Sep 2022 10:52:31 -0600
-Message-Id: <20220903165234.210547-2-axboe@kernel.dk>
+Subject: [PATCH 3/4] io_uring: ensure iopoll runs local task work as well
+Date:   Sat,  3 Sep 2022 10:52:33 -0600
+Message-Id: <20220903165234.210547-4-axboe@kernel.dk>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220903165234.210547-1-axboe@kernel.dk>
 References: <20220903165234.210547-1-axboe@kernel.dk>
@@ -63,49 +63,85 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-After the addition of iopoll support for passthrough, there's a bit of
-a mixup here. Clean it up and get rid of the casting for the passthrough
-command type.
+Combine the two checks we have for task_work running and whether or not
+we need to shuffle the mutex into one, so we unify how task_work is run
+in the iopoll loop. This helps ensure that local task_work is run when
+needed, and also optimizes that path to avoid a mutex shuffle if it's
+not needed.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/rw.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ io_uring/io_uring.c | 39 ++++++++++++++++++++-------------------
+ io_uring/io_uring.h |  6 ++++++
+ 2 files changed, 26 insertions(+), 19 deletions(-)
 
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 9698a789b3d5..966c923bc0be 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -994,7 +994,7 @@ int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin)
- 
- 	wq_list_for_each(pos, start, &ctx->iopoll_list) {
- 		struct io_kiocb *req = container_of(pos, struct io_kiocb, comp_list);
--		struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
-+		struct file *file = req->file;
- 		int ret;
- 
- 		/*
-@@ -1006,12 +1006,15 @@ int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin)
- 			break;
- 
- 		if (req->opcode == IORING_OP_URING_CMD) {
--			struct io_uring_cmd *ioucmd = (struct io_uring_cmd *)rw;
-+			struct io_uring_cmd *ioucmd;
- 
--			ret = req->file->f_op->uring_cmd_iopoll(ioucmd);
--		} else
--			ret = rw->kiocb.ki_filp->f_op->iopoll(&rw->kiocb, &iob,
--							poll_flags);
-+			ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
-+			ret = file->f_op->uring_cmd_iopoll(ioucmd);
-+		} else {
-+			struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index f841f0e126bc..118db2264189 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1428,25 +1428,26 @@ static int io_iopoll_check(struct io_ring_ctx *ctx, long min)
+ 		 * forever, while the workqueue is stuck trying to acquire the
+ 		 * very same mutex.
+ 		 */
+-		if (wq_list_empty(&ctx->iopoll_list)) {
+-			u32 tail = ctx->cached_cq_tail;
+-
+-			mutex_unlock(&ctx->uring_lock);
+-			ret = io_run_task_work_ctx(ctx);
+-			mutex_lock(&ctx->uring_lock);
+-			if (ret < 0)
+-				break;
+-
+-			/* some requests don't go through iopoll_list */
+-			if (tail != ctx->cached_cq_tail ||
+-			    wq_list_empty(&ctx->iopoll_list))
+-				break;
+-		}
+-
+-		if (task_work_pending(current)) {
+-			mutex_unlock(&ctx->uring_lock);
+-			io_run_task_work();
+-			mutex_lock(&ctx->uring_lock);
++		if (wq_list_empty(&ctx->iopoll_list) ||
++		    io_task_work_pending(ctx)) {
++			if (!llist_empty(&ctx->work_llist))
++				__io_run_local_work(ctx, true);
++			if (task_work_pending(current) ||
++			    wq_list_empty(&ctx->iopoll_list)) {
++				u32 tail = ctx->cached_cq_tail;
 +
-+			ret = file->f_op->iopoll(&rw->kiocb, &iob, poll_flags);
-+		}
- 		if (unlikely(ret < 0))
- 			return ret;
- 		else if (ret)
++				mutex_unlock(&ctx->uring_lock);
++				ret = io_run_task_work();
++				mutex_lock(&ctx->uring_lock);
++
++				if (ret < 0)
++					break;
++
++				/* some requests don't go through iopoll_list */
++				if (tail != ctx->cached_cq_tail ||
++				    wq_list_empty(&ctx->iopoll_list))
++					break;
++			}
+ 		}
+ 		ret = io_do_iopoll(ctx, !min);
+ 		if (ret < 0)
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 0f90d1dfa42b..9d89425292b7 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -236,6 +236,12 @@ static inline int io_run_task_work(void)
+ 	return 0;
+ }
+ 
++static inline bool io_task_work_pending(struct io_ring_ctx *ctx)
++{
++	return test_thread_flag(TIF_NOTIFY_SIGNAL) ||
++		!wq_list_empty(&ctx->work_llist);
++}
++
+ static inline int io_run_task_work_ctx(struct io_ring_ctx *ctx)
+ {
+ 	int ret = 0;
 -- 
 2.35.1
 
