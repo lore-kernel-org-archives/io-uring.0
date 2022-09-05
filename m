@@ -2,106 +2,191 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 87FDFECAAD3
-	for <io-uring@archiver.kernel.org>; Mon,  5 Sep 2022 17:55:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86C97C6FA83
+	for <io-uring@archiver.kernel.org>; Mon,  5 Sep 2022 18:03:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiIERzg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 5 Sep 2022 13:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
+        id S230084AbiIESDu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 5 Sep 2022 14:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232222AbiIERxo (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 5 Sep 2022 13:53:44 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436256052A
-        for <io-uring@vger.kernel.org>; Mon,  5 Sep 2022 10:53:43 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p1-20020a17090a2d8100b0020040a3f75eso4267751pjd.4
-        for <io-uring@vger.kernel.org>; Mon, 05 Sep 2022 10:53:43 -0700 (PDT)
+        with ESMTP id S230314AbiIESDt (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 5 Sep 2022 14:03:49 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB8D40557
+        for <io-uring@vger.kernel.org>; Mon,  5 Sep 2022 11:03:47 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id m16so1927544ilg.3
+        for <io-uring@vger.kernel.org>; Mon, 05 Sep 2022 11:03:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=zeGc0vwJDgBIJyeNrQDrz976x5n1fo0aH2VcrMu6kPU=;
-        b=3TzLFPJsgQVoyzIEgelyj96PTJ9RA2qoPFKMvnvgNEGKK3Xg7EfO0JMiwAXt32iElf
-         vfYSQMKS+7btTv0zYBL+JqK4B164T+u6A4q65qijRqZyjFwAkIJp873GODXmEqUbmCCl
-         a4PU+gLa9IJVBoluV1WyE8I2Zq7+YUslviqLsKLMihwruNHwSorxpHp+7VzMqUYi3TBx
-         YFyW7ALBsYtKGUQT/cNuSBySGtF5RFshRyz4JQlfcDDqnfeOdKj2rIW3G6/Iq+Iicinq
-         dqOHLOCjuAfw7X/gYLQhSZJIUxQsokZNds8p706H8863+sWLzEVugxnU1gj8eVaU8mZ3
-         4+sA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=T67TRgbvL4Ai6kaNg3fck6vcoHVKT+0s4pwJ/NSZTGA=;
+        b=cPF8g7Tq5Xr7vWwWPXlAIGbvK841YSQ7JL9eISWcCc1GmuozWN4LmUfAHYFGsC3plp
+         xbkMUOOnQhpFxa0XIBosBwjnD4RAr2Kl5FqcTcUiqI63BnVfEWkAAfAMPK2+2D9jC4rI
+         SBcZs3gwdK8qGIp1MV9X/fGPGkKuR5qRQqaUNUEfXT08Tya/qRlmc89AlTJ5Ml7Xorrw
+         xo1/RpLc8BQEQ206qriFaMJIssLZDxhxOljYpigcvkdlTlPx06einaUW7/uPd1dNz5in
+         HXBRJcn7nXiV8BlMPqUAxSW6U9l+lE6gj/Oi85wJcyYJwIvqaZZYLOTvZP+kHnJ13k+5
+         7W5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zeGc0vwJDgBIJyeNrQDrz976x5n1fo0aH2VcrMu6kPU=;
-        b=uTr60EqxMwAsegwgptjj+e+Fio0xK5IyYLpemtxIXZM3eC9EJgQSpKZIFozNgWb/NG
-         NBDiY3VIcrBydvdEGVZPcgcez5MYxxuSgKuv3KYfYdenzkmQmUn5wKsHwo5y+ySTOnno
-         6gtwFeEUAHNT4Mhf5oom3rxkVORwE9lvvcj6w34/a37Zpig1qqKkjUKRF3awkJfKctlg
-         ssWPhqia4hjP8N404PC8E4So/knGJBi6Mu6eH2i8yvi1MLDDjUUHRPhh600XEybEZ+X7
-         DG/eVQL7Rmg6pxlKOODacfZad/HHlvniWFY9Ev3OZG+BE/sqwV8XkyGPmLc96V5M+X+n
-         XYlA==
-X-Gm-Message-State: ACgBeo2RSpja3gU2yxYAVWYcQ76U6fwfQPJDgLXKD01XyodyCoidMQM5
-        clGpL3GBzCkwe37O2c8j0rwnPw==
-X-Google-Smtp-Source: AA6agR7DiMNf6wfT4ZoG5rsHUmL/ehmUhw+ETrtpWSzJRoiOawk/VgiGVH9Vb1lT8IaVGei10sbUSg==
-X-Received: by 2002:a17:902:e848:b0:176:c746:1f69 with SMTP id t8-20020a170902e84800b00176c7461f69mr1501581plg.125.1662400422716;
-        Mon, 05 Sep 2022 10:53:42 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id u67-20020a626046000000b00537e1b30793sm8331899pfb.11.2022.09.05.10.53.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Sep 2022 10:53:42 -0700 (PDT)
-Message-ID: <5a0f98a5-8710-0719-91e6-e75af1818b1b@kernel.dk>
-Date:   Mon, 5 Sep 2022 11:53:41 -0600
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=T67TRgbvL4Ai6kaNg3fck6vcoHVKT+0s4pwJ/NSZTGA=;
+        b=nQxRLRgARqZrUabeg3Zy4J2Xtxx1pzcga+CMxzq6Pw3Ys35boMmd4If5/J6SIbo4LY
+         OTY+c8oAl/UgPQtumoGQCBye52J06XkYWj2nZx2BQ377LE0YtnQ67HU6HoBawlM5BgCK
+         g6LfTjolj2CPwew35BiPXZXQeCIOSgtQtZw7s6vN9QSc6cF0TQSq+uPhDM8q9NYkJXyS
+         fOT3qnNs31NQRGVvrOlxsUDvqJMjbEAYL4f26p18C4r/5U0wWY5uQBIJn/tO0N+Gu6PK
+         Pb2W0/IB2jO2kNabWZA4/BSbLpXXA9d0t1V2v+f5XG7+JMcLpznCfhHt3KChQm+3lh/D
+         Jglg==
+X-Gm-Message-State: ACgBeo2eyohLw8KUqD1Tn5clRSiWJSaKymmEU9iZwURRIgeXnUgA/wWx
+        C8+SP2mGQlX+iOT0Bh8foaENRqxMMFt5Q3pgW5DWPg==
+X-Google-Smtp-Source: AA6agR4B7x+HXZFIStbcPiXGjinnhf/x5VSF8+h0pcx1isIR3eJmYhiMXqo5jfQScJCtZZmLuVhzCMYw0KB/RJ8mvlI=
+X-Received: by 2002:a05:6e02:1ba8:b0:2eb:7d50:5fb8 with SMTP id
+ n8-20020a056e021ba800b002eb7d505fb8mr14014798ili.296.1662401026346; Mon, 05
+ Sep 2022 11:03:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH for-next v4 1/4] io_uring: introduce
- io_uring_cmd_import_fixed
-Content-Language: en-US
-To:     Kanchan Joshi <joshi.k@samsung.com>, hch@lst.de, kbusch@kernel.org,
-        asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        Anuj Gupta <anuj20.g@samsung.com>
-References: <20220905134833.6387-1-joshi.k@samsung.com>
- <CGME20220905135846epcas5p4fde0fc96442adc3cf11319375ba2596b@epcas5p4.samsung.com>
- <20220905134833.6387-2-joshi.k@samsung.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220905134833.6387-2-joshi.k@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <YxBc1xuGbB36f8zC@dhcp22.suse.cz> <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+ <YxEE1vOwRPdzKxoq@dhcp22.suse.cz> <CAJuCfpFrRwXXQ=wAvZ-oUNKXUJ=uUA=fiDrkhRu5VGXcM+=cuA@mail.gmail.com>
+ <YxWvbMYLkPoJrQyr@dhcp22.suse.cz>
+In-Reply-To: <YxWvbMYLkPoJrQyr@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 5 Sep 2022 11:03:35 -0700
+Message-ID: <CAJuCfpHJsfe172YUQbOqkkpNEEF7B6pJZuWnMa2BsdZwwEGKmA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 9/5/22 7:48 AM, Kanchan Joshi wrote:
-> @@ -124,3 +125,13 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
->  
->  	return IOU_ISSUE_SKIP_COMPLETE;
->  }
-> +
-> +int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len,
-> +		int rw, struct iov_iter *iter, void *ioucmd)
-> +{
-> +	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
-> +	struct io_mapped_ubuf *imu = req->imu;
-> +
-> +	return io_import_fixed(rw, iter, imu, ubuf, len);
-> +}
-> +EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+On Mon, Sep 5, 2022 at 1:12 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Sun 04-09-22 18:32:58, Suren Baghdasaryan wrote:
+> > On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
+> [...]
+> > > Yes, tracking back the call trace would be really needed. The question
+> > > is whether this is really prohibitively expensive. How much overhead are
+> > > we talking about? There is no free lunch here, really.  You either have
+> > > the overhead during runtime when the feature is used or on the source
+> > > code level for all the future development (with a maze of macros and
+> > > wrappers).
+> >
+> > As promised, I profiled a simple code that repeatedly makes 10
+> > allocations/frees in a loop and measured overheads of code tagging,
+> > call stack capturing and tracing+BPF for page and slab allocations.
+> > Summary:
+> >
+> > Page allocations (overheads are compared to get_free_pages() duration):
+> > 6.8% Codetag counter manipulations (__lazy_percpu_counter_add + __alloc_tag_add)
+> > 8.8% lookup_page_ext
+> > 1237% call stack capture
+> > 139% tracepoint with attached empty BPF program
+>
+> Yes, I am not surprised that the call stack capturing is really
+> expensive comparing to the allocator fast path (which is really highly
+> optimized and I suspect that with 10 allocation/free loop you mostly get
+> your memory from the pcp lists). Is this overhead still _that_ visible
+> for somehow less microoptimized workloads which have to take slow paths
+> as well?
 
-Oh, and since we're probably respinning this one anyway, I'd do:
+Correct, it's a comparison with the allocation fast path, so in a
+sense represents the worst case scenario. However at the same time the
+measurements are fair because they measure the overheads against the
+same meaningful baseline, therefore can be used for comparison.
 
-int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
-			      struct iov_iter *iter, void *ioucmd)
-{
-	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
+>
+> Also what kind of stack unwinder is configured (I guess ORC)? This is
+> not my area but from what I remember the unwinder overhead varies
+> between ORC and FP.
 
-	return io_import_fixed(rw, iter, req->imu, ubuf, len);
-}
-EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+I used whatever is default and didn't try other mechanisms. Don't
+think the difference would be orders of magnitude better though.
 
-to both fix the indentation and get rid of the 'imu' variable that isn't
-really necessary.
+>
+> And just to make it clear. I do realize that an overhead from the stack
+> unwinding is unavoidable. And code tagging would logically have lower
+> overhead as it performs much less work. But the main point is whether
+> our existing stack unwiding approach is really prohibitively expensive
+> to be used for debugging purposes on production systems. I might
+> misremember but I recall people having bigger concerns with page_owner
+> memory footprint than the actual stack unwinder overhead.
 
--- 
-Jens Axboe
+That's one of those questions which are very difficult to answer (if
+even possible) because that would depend on the use scenario. If the
+workload allocates frequently then adding the overhead will likely
+affect it, otherwise might not be even noticeable. In general, in
+pre-production testing we try to minimize the difference in
+performance and memory profiles between the software we are testing
+and the production one. From that point of view, the smaller the
+overhead, the better. I know it's kinda obvious but unfortunately I
+have no better answer to that question.
+
+For the memory overhead, in my early internal proposal with assumption
+of 10000 instrumented allocation call sites, I've made some
+calculations for an 8GB 8-core system (quite typical for Android) and
+ended up with the following:
+
+                                    per-cpu counters      atomic counters
+page_ext references     16MB                      16MB
+slab object references   10.5MB                   10.5MB
+alloc_tags                      900KB                    312KB
+Total memory overhead 27.4MB                  26.8MB
+
+so, about 0.34% of the total memory. Our implementation has changed
+since then and the number might not be completely correct but it
+should be in the ballpark.
+I just checked the number of instrumented calls that we currently have
+in the 6.0-rc3 built with defconfig and it's 165 page allocation and
+2684 slab allocation sites. I readily accept that we are probably
+missing some allocations and additional modules can also contribute to
+these numbers but my guess it's still less than 10000 that I used in
+my calculations.
+I don't claim that 0.34% overhead is low enough to be always
+acceptable, just posting the numbers to provide some reference points.
+
+> --
+> Michal Hocko
+> SUSE Labs
