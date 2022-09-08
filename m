@@ -2,58 +2,58 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10FABC54EE9
-	for <io-uring@archiver.kernel.org>; Thu,  8 Sep 2022 12:22:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 12073C6FA82
+	for <io-uring@archiver.kernel.org>; Thu,  8 Sep 2022 12:22:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbiIHMWv (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 8 Sep 2022 08:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45658 "EHLO
+        id S231719AbiIHMWx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 8 Sep 2022 08:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231719AbiIHMWs (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 8 Sep 2022 08:22:48 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0151E12C4B4
-        for <io-uring@vger.kernel.org>; Thu,  8 Sep 2022 05:22:40 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id gh9so15725883ejc.8
-        for <io-uring@vger.kernel.org>; Thu, 08 Sep 2022 05:22:40 -0700 (PDT)
+        with ESMTP id S231730AbiIHMWt (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 8 Sep 2022 08:22:49 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8C91316D1
+        for <io-uring@vger.kernel.org>; Thu,  8 Sep 2022 05:22:42 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bj12so37540570ejb.13
+        for <io-uring@vger.kernel.org>; Thu, 08 Sep 2022 05:22:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=QtGYKdepH6VIklXqjHVUhOxm0sOXFXaUexJ5gRR/+aQ=;
-        b=XTJDQBy0Qar2pFhyrf8mlZV/Q8940Ge0M5sfmws6PD+lHuwA9Y4Mprc130InGMk3Pc
-         S3FI6+LvS9Z++Z5rCzoajlBHkbd1f08S51tMm9tpWlHE95eF4q0zVHZsf5RvjFBSCuib
-         X/GQTCWaghieoDc2JIkBa1E8d5lMJWBrX/v5XiSOPsb0YCo11NC5qd+hMTjZV4z2AQPq
-         ClLjfTjb/y/a4fhw28Dt/gMHa+qLnj/6lg7yn+4DnwBfIYZZ+XV7fk61x9OCCh2+k8X6
-         fFGoWplSTBrpbQDFmZgWBXO8RsTWuFW5gKdzroktUFNVH4fq572sevfmDEErZ6wiWbSu
-         nm+g==
+        bh=GB9BOyQODze5Kg82+IrDJOynNmHrAMiNDdnDkl3bHr4=;
+        b=p2D+IMj+zJC+TIIteOvukNaHtUlcnpiBGbQceD0tkpCv957T5QX3roOucKQmeCrRi1
+         ViyL/DOF+uCIK94CiahKVHH3vlGglhGrrAXqWvJxdV3VKzcudWvNOhgoHDIABqeyHl9a
+         p5JnL5ft2N3oYcTr3EgzXSvpKgkSyrw6IEqGuqQEeTe1UAB6o+BkmH8A6bb5xFXMZxKx
+         Glm/UpERZ+Z7SGbMLuJFnlcbLAz/TGfdOo/J4EYJQrsDo0br8TVq/5S/swQUP5DPoEvZ
+         MlaBwGAaPox2CHgb+pLyv8oOTeAaBc3SDf3X9JkDwMI1fF21h8beFVNTcBuh3UiORcxA
+         4hmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=QtGYKdepH6VIklXqjHVUhOxm0sOXFXaUexJ5gRR/+aQ=;
-        b=bzchoNnXIZLDYCEP9b256tx8WX/1Kxs0tZCpeKfFF9Dto5J5/+UG09nJTHe1eJUd1C
-         QuGbJS2LnEp66D7LKfkw2Kh4e1aA+A7WDIFXoIe8JGwIu95VKiiOz9SDAN/hMxqjCy+W
-         brAn7KH2egbm73Ef7ClPy74g2TWhxlKwOc2emnYB8WGRICzd35B6Q/KH+Muov7Uf4I4/
-         P/a/TFifzPOz1cE1okK1M+xLznnCYNsfEuq0+4/AEO8ZyfZngoIxxXvJdDpQspigpIOg
-         7NUOK46EYWk3tebT6OD76h46hwLtHc9G32066tkRAgIIvD99mXwuExd1RkLUDrNrw+Pb
-         ATfQ==
-X-Gm-Message-State: ACgBeo0j6XsOpW4G39P3uHx46CkWMsRQ3DC9wyH/bIxsNA/s/aMBLs0S
-        841FHzLDnBCDaUsPCm7mGxs+lnYXP2Y=
-X-Google-Smtp-Source: AA6agR7LWmK/IPgDPLQLGYSC3VCRyXVMiFcBfRV5ZR09Uvsd+NU8m6O4ufNEPMQkPWZi8Zln466zMQ==
-X-Received: by 2002:a17:907:7241:b0:779:2fc:9a40 with SMTP id ds1-20020a170907724100b0077902fc9a40mr101662ejc.173.1662639758775;
-        Thu, 08 Sep 2022 05:22:38 -0700 (PDT)
+        bh=GB9BOyQODze5Kg82+IrDJOynNmHrAMiNDdnDkl3bHr4=;
+        b=CNxAruZZe/DXnp0G/9O0LyuN91OOiijtzlyicZzQ9UHnyhVXfdI3DmqhDzrWhgJbSz
+         nH511n9zVOoKYAf77zDZTnoPfhds+PI5/FnYzPptTOX3yl8BMlRajqX6uYZm8lNSLXKs
+         Bg72YJOE3t3RX7mC6z/JL7UhNsX7F8d93MQqkAsTKYeMFXFEewrRE3P8YgdL+NuACM3E
+         zEnoxM32WCnH/Pe7BOxOd3ToUdAfwcDcpm/+uTnTE+EwrAEvT3kyz6wPahqyWYxxCJz1
+         5M6NfHxHMvfDPWDmJc0AkvbWDjGESWeNjezQZttayGla/que8UPEHNGLTttCCniEomm7
+         tEXA==
+X-Gm-Message-State: ACgBeo0z+Um+XeSGKJ7TU9FS723I7YfeRAFgxaS3N4cmHcYa2IEZzEp0
+        ycHLljSZnABtl3EZS0IsjxE3toLMTkM=
+X-Google-Smtp-Source: AA6agR7JsWOagimuwgu/sCtQWUdXfcX/TlKE/hVlOPHNit6kqIybirqhzDG1AqpzwZIpm8FuijlCAA==
+X-Received: by 2002:a17:907:7242:b0:741:7cd6:57d5 with SMTP id ds2-20020a170907724200b007417cd657d5mr5802799ejc.419.1662639760559;
+        Thu, 08 Sep 2022 05:22:40 -0700 (PDT)
 Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:cfb9])
-        by smtp.gmail.com with ESMTPSA id p9-20020a17090653c900b0074a82932e3bsm1191791ejo.77.2022.09.08.05.22.38
+        by smtp.gmail.com with ESMTPSA id p9-20020a17090653c900b0074a82932e3bsm1191791ejo.77.2022.09.08.05.22.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Sep 2022 05:22:38 -0700 (PDT)
+        Thu, 08 Sep 2022 05:22:40 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH 5/8] io_uring/net: io_async_msghdr caches for sendzc
-Date:   Thu,  8 Sep 2022 13:20:31 +0100
-Message-Id: <42fa615b6e0be25f47a685c35d7b5e4f1b03d348.1662639236.git.asml.silence@gmail.com>
+Subject: [PATCH 7/8] io_uring/net: refactor io_sr_msg types
+Date:   Thu,  8 Sep 2022 13:20:33 +0100
+Message-Id: <42c2639d6385b8b2181342d2af3a42d3b1c5bcd2.1662639236.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <cover.1662639236.git.asml.silence@gmail.com>
 References: <cover.1662639236.git.asml.silence@gmail.com>
@@ -63,43 +63,49 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We already keep io_async_msghdr caches for normal send/recv requests,
-use them also for zerocopy send.
+In preparation for using struct io_sr_msg for zerocopy sends, clean up
+types. First, flags can be u16 as it's provided by the userspace in u16
+ioprio, as well as addr_len. This saves us 4 bytes. Also use unsigned
+for size and done_io, both are as well limited to u32.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/net.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ io_uring/net.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/io_uring/net.c b/io_uring/net.c
-index fa54a35191d7..ff1fed00876f 100644
+index 4dbdb59968c3..97778cd1306c 100644
 --- a/io_uring/net.c
 +++ b/io_uring/net.c
-@@ -196,10 +196,9 @@ int io_sendzc_prep_async(struct io_kiocb *req)
+@@ -55,21 +55,21 @@ struct io_sr_msg {
+ 		struct user_msghdr __user	*umsg;
+ 		void __user			*buf;
+ 	};
++	unsigned			len;
++	unsigned			done_io;
+ 	unsigned			msg_flags;
+-	unsigned			flags;
+-	size_t				len;
+-	size_t				done_io;
++	u16				flags;
+ };
  
- 	if (!zc->addr || req_has_async_data(req))
- 		return 0;
--	if (io_alloc_async_data(req))
-+	io = io_msg_alloc_async_prep(req);
-+	if (!io)
- 		return -ENOMEM;
--
--	io = req->async_data;
- 	ret = move_addr_to_kernel(zc->addr, zc->addr_len, &io->addr);
- 	return ret;
- }
-@@ -212,9 +211,9 @@ static int io_setup_async_addr(struct io_kiocb *req,
+ struct io_sendzc {
+ 	struct file			*file;
+ 	void __user			*buf;
+-	size_t				len;
++	unsigned			len;
++	unsigned			done_io;
+ 	unsigned			msg_flags;
+-	unsigned			flags;
+-	unsigned			addr_len;
++	u16				flags;
++	u16				addr_len;
+ 	void __user			*addr;
+-	size_t				done_io;
+ 	struct io_kiocb 		*notif;
+ };
  
- 	if (!addr || req_has_async_data(req))
- 		return -EAGAIN;
--	if (io_alloc_async_data(req))
-+	io = io_msg_alloc_async(req, issue_flags);
-+	if (!io)
- 		return -ENOMEM;
--	io = req->async_data;
- 	memcpy(&io->addr, addr, sizeof(io->addr));
- 	return -EAGAIN;
- }
 -- 
 2.37.2
 
