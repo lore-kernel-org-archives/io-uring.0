@@ -2,260 +2,206 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 312F0C38145
-	for <io-uring@archiver.kernel.org>; Thu,  8 Sep 2022 18:46:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF8CDC54EE9
+	for <io-uring@archiver.kernel.org>; Thu,  8 Sep 2022 18:48:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232129AbiIHSqM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 8 Sep 2022 14:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
+        id S231787AbiIHSsk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 8 Sep 2022 14:48:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbiIHSqF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 8 Sep 2022 14:46:05 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5508F63F2A
-        for <io-uring@vger.kernel.org>; Thu,  8 Sep 2022 11:45:44 -0700 (PDT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20220908184542epoutp03aabd867e6759cef588cf614ee4a4d88d~S9vR4VUAM0315103151epoutp03w
-        for <io-uring@vger.kernel.org>; Thu,  8 Sep 2022 18:45:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20220908184542epoutp03aabd867e6759cef588cf614ee4a4d88d~S9vR4VUAM0315103151epoutp03w
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1662662742;
-        bh=hepCkLsLawcUW6NPOu6/Vf5Idoa6NAsOreUa0e5m0PY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=izY10vJLDcmuzuO/Nrq06fndgOn0FQMREEHeHpoi5oXmHXnhgpf/a1iLn/2rqaSof
-         bOXI8IIf1D8fP+VKBLVxg4UwDISAGyzDIANdN7df6YiQ9RkoW53r8hqi82O3NnxLcE
-         EqYS8GBCKe/j1Jq36XFAVsauHy8qFa8hEhQel4yk=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
-        20220908184541epcas5p4d6a036bb587c01f62c7838f760f0941e~S9vRVyDm90530505305epcas5p4w;
-        Thu,  8 Sep 2022 18:45:41 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4MNp3R1sWqz4x9Pq; Thu,  8 Sep
-        2022 18:45:39 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        EA.49.54060.3583A136; Fri,  9 Sep 2022 03:45:39 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20220908184538epcas5p378c450bfe07d296a9abc843efe75dfc9~S9vOnjjUs0406904069epcas5p3V;
-        Thu,  8 Sep 2022 18:45:38 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220908184538epsmtrp1161fc4a31213ad0a138f4d6dbcc5eea9~S9vOmrjHa3080730807epsmtrp1g;
-        Thu,  8 Sep 2022 18:45:38 +0000 (GMT)
-X-AuditID: b6c32a4b-be1ff7000000d32c-d9-631a3853ebb6
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        95.DD.14392.2583A136; Fri,  9 Sep 2022 03:45:38 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.110.206.5]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220908184537epsmtip220246c38dd98a5fed693dc42c22ba7cb~S9vNNIcW12337123371epsmtip2E;
-        Thu,  8 Sep 2022 18:45:37 +0000 (GMT)
-From:   Kanchan Joshi <joshi.k@samsung.com>
-To:     axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
-        asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        Kanchan Joshi <joshi.k@samsung.com>,
-        Anuj Gupta <anuj20.g@samsung.com>
-Subject: [PATCH for-next v6 4/5] block: add helper to map bvec iterator for
- passthrough
-Date:   Fri,  9 Sep 2022 00:05:10 +0530
-Message-Id: <20220908183511.2253-5-joshi.k@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220908183511.2253-1-joshi.k@samsung.com>
+        with ESMTP id S232122AbiIHSsj (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 8 Sep 2022 14:48:39 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5407C1E0;
+        Thu,  8 Sep 2022 11:48:38 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288IJ8SR016940;
+        Thu, 8 Sep 2022 11:48:35 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : mime-version :
+ content-type : content-transfer-encoding; s=facebook;
+ bh=pnxkAlMtLgST1O3GMgGeo1QhSfD/VbW6DOaAdYQ3AoI=;
+ b=GYHmG1OYjsSynBnPCeKL4G4fCg+lAfdiyBM0gMGKoudWXvBWYw03JJ1JA13Dr1gXpC1d
+ YivVHKBUmRIBOV7FzHNJIoLo7wK/5Dhpgcbcgu6KcbXd7J6cM4suxVDpfL6I/W8Sx2x2
+ 59smzA2Nj2v+WoAx+2ir9fxo1LLFbShJfOY= 
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jfb17ckbu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Sep 2022 11:48:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YxmQBYdzqlMSQhAfXBEOsCGrQPalvnXdOGGaN+GpklAejEIgpil1ZaLpM0+kgQDedo2O7x0Nr9OX6H+3c1CbqZLDRJpCMiCbJGJGbI+GrffY/h+WHpO/3+I1i7RM/FStX9qSY5vxK22KZkVErWbo8hN7InFJ1loXtY4p2lMZgkJ+sFSphzyitlQdA7feoR7dOtF+7x+zmvs77J+IfFicNVYPFjpfhLw7Cl+rKekJfFuJfYqUNDMAwXy4WsSpBHRdV4NqPR0M9JT2LHP7Mn4DJNeb837sppagX45OEy0Aiky2ic7z5VCZjv7aObsqGuWD/TxO4IwDP3KiC/XDzf7zJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=14ISxjT+Uk9TU+XfoIvRG9Uw/j0mlhLDsoqZCmD7zO0=;
+ b=GY5Gr1nN+/Oa5mO3R/82sTXSmgdUYjxIo5/ORyh/29OpmuukaBJSMNzkMUGC/Au6jSgtRuob1JBgcroKzGze7Xc/RzbUx6EIYMMwaH4RkLEvf0vS8d0A/xTY/RC9lfABY6WzGMTuqfsCqeqNoCzv9N02bbDDrvWPBE9cJbyQ4hRR4kR1LTLv1wTRPUzn7yljRtC5SWIHs6vM6ulb1Mf2EAbsKHrGzXPX94mqAYrLzknzSdfBgc1sSjbTM1uKwIRhT0euNZw42MOW0UkiqtN74/CLLTPqjisXcvHEwzqMPomttJOVBOStCikeEzWQMCff2wwCuFDrt1ZVya5h6xa47Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from DM6PR15MB2316.namprd15.prod.outlook.com (2603:10b6:5:8d::10) by
+ DM5PR15MB1785.namprd15.prod.outlook.com (2603:10b6:4:4d::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5612.19; Thu, 8 Sep 2022 18:48:32 +0000
+Received: from DM6PR15MB2316.namprd15.prod.outlook.com
+ ([fe80::c052:c6b9:41f8:e5ae]) by DM6PR15MB2316.namprd15.prod.outlook.com
+ ([fe80::c052:c6b9:41f8:e5ae%3]) with mapi id 15.20.5612.014; Thu, 8 Sep 2022
+ 18:48:32 +0000
+Message-ID: <adbc05a6-2f53-c2bd-9a09-934c0948286d@fb.com>
+Date:   Thu, 8 Sep 2022 11:48:30 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH v2 10/12] btrfs: make balance_dirty_pages nowait
+ compatible
+Content-Language: en-US
+To:     Filipe Manana <fdmanana@kernel.org>
+Cc:     kernel-team@fb.com, io-uring@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, axboe@kernel.dk, josef@toxicpanda.com
+References: <20220908002616.3189675-1-shr@fb.com>
+ <20220908002616.3189675-11-shr@fb.com>
+ <CAL3q7H7Zh0VzPG_F2cM5e37QzpOEkRNaCjPrzicKtm=muidR9A@mail.gmail.com>
+From:   Stefan Roesch <shr@fb.com>
+In-Reply-To: <CAL3q7H7Zh0VzPG_F2cM5e37QzpOEkRNaCjPrzicKtm=muidR9A@mail.gmail.com>
+X-ClientProxiedBy: SJ0PR05CA0057.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::32) To DM6PR15MB2316.namprd15.prod.outlook.com
+ (2603:10b6:5:8d::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOJsWRmVeSWpSXmKPExsWy7bCmpm6whVSywbn5HBZNE/4yW8xZtY3R
-        YvXdfjaLmwd2MlmsXH2UyeJd6zkWi6P/37JZTDp0jdFi7y1ti/nLnrI7cHnsnHWX3ePy2VKP
-        Tas62Tw2L6n32H2zgc2jb8sqRo/Pm+QC2KOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwM
-        dQ0tLcyVFPISc1NtlVx8AnTdMnOAjlNSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTk
-        FJgU6BUn5haX5qXr5aWWWBkaGBiZAhUmZGdMXDOTreCaUsX6fdtYGxgfSXcxcnJICJhIXLz8
-        m62LkYtDSGA3o8Tq4++ZQRJCAp8YJdZcqO5i5ACyvzFKTIqHqZ/+vh+qfi+jxL/me+wQzmdG
-        id3z/7KBNLAJaEpcmFwK0iAi4CVx//Z7VpAaZrAFf9+ygiSEBSIl1u/+yghiswioSlw7eJwF
-        xOYVMJdoWNrODrFNXmLmpe9gNqeAhcTFLw/ZIGoEJU7OfAJWzwxU07x1NjPIAgmBVg6J/pW3
-        WSCaXSSeH7sCZQtLvDq+BWqolMTL/jYoO1ni0sxzTBB2icTjPQehbHuJ1lP9zCDPMAM9s36X
-        PsQuPone30+YQMISArwSHW1CENWKEvcmPWWFsMUlHs5YAmV7SGzf/xoaWN2MEmsv97BPYJSf
-        heSFWUhemIWwbQEj8ypGydSC4tz01GLTAuO81HJ4tCbn525iBKdQLe8djI8efNA7xMjEwXiI
-        UYKDWUmEV3StRLIQb0piZVVqUX58UWlOavEhRlNgGE9klhJNzgcm8bySeEMTSwMTMzMzE0tj
-        M0Mlcd4p2ozJQgLpiSWp2ampBalFMH1MHJxSDUy9AhI75Bw4NKovqF9hunTIKJdB4Ooz28Vq
-        jDcOPHhQKatjELC4LaErRPn4yx+L6iPNf0wJXBhkZ7Nmucl3jleFjjVC1x4fK59RKMJ2d5nX
-        dcWiJbs1r+xMNEoonrfP+rgzt7PQ7ZoEhoWqWxsv2XJNZVITDV666FliyozN3emOc3ZfCDl0
-        cZXEStUfZxdMjE94fMbGWdDJ+Frq7b8RxTzi6537nCu66x593/coa8p1rSJWsUUnv3YseKl1
-        dr/v3Qoe7po9OtUdCj3/vCTdZ59ZGb3VofoM77FtNgvi1R1uWV06EpX5osdGJbnoZp1etFzo
-        UuMd1go/VjZuSeCdNifAoa1C9JtKwOJnBpJG1UosxRmJhlrMRcWJAHi9itMqBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDLMWRmVeSWpSXmKPExsWy7bCSvG6QhVSywZOZOhZNE/4yW8xZtY3R
-        YvXdfjaLmwd2MlmsXH2UyeJd6zkWi6P/37JZTDp0jdFi7y1ti/nLnrI7cHnsnHWX3ePy2VKP
-        Tas62Tw2L6n32H2zgc2jb8sqRo/Pm+QC2KO4bFJSczLLUov07RK4MiaumclWcE2pYv2+bawN
-        jI+kuxg5OSQETCSmv+9nA7GFBHYzSpyYyw0RF5dovvaDHcIWllj57zmQzQVU85FR4uWro4xd
-        jBwcbAKaEhcml4LUiAgESBxsvAxWwyxwkFHifNM3FpCEsEC4xM87f8BsFgFViWsHj4PZvALm
-        Eg1L26EWyEvMvPQdzOYUsJC4+OUh1EHmEtf+TGeGqBeUODnzCVgvM1B989bZzBMYBWYhSc1C
-        klrAyLSKUTK1oDg3PbfYsMAwL7Vcrzgxt7g0L10vOT93EyM4ArQ0dzBuX/VB7xAjEwfjIUYJ
-        DmYlEV7RtRLJQrwpiZVVqUX58UWlOanFhxilOViUxHkvdJ2MFxJITyxJzU5NLUgtgskycXBK
-        NTAd2KBd5mGRdNVlRtD0i3N3Pe3ZvMPjsALbbUsmpmsPU1wdYr++c1FnsI9/fGHpjadN5ks3
-        HrB+23JFS6HArnWH2v3Evomda6S/WWqaekikym4/MyHdOlX+/rFFeufflenHzHvFkWP2Tkpk
-        V/HEXo35398JFvldCpwz51R1idZJ6dwP5t2tu438PKyEOhMsig34OU9MCN/Ss1n33U3r6d8L
-        V/1Ysuk+f1OixPqeJ+nvp2of82DNuvZZwiz+Ufrtpm+MlzLSeKbv3Tb/5y3Z0052f+qZQvnU
-        3Ys1VqZLydze/ey84e3pB2a+49kqN21XkCnD/al1H/VOXZw1ZdKynS9i2f9d2qivoJTS5fhF
-        d+9pJZbijERDLeai4kQAvxxbh+8CAAA=
-X-CMS-MailID: 20220908184538epcas5p378c450bfe07d296a9abc843efe75dfc9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220908184538epcas5p378c450bfe07d296a9abc843efe75dfc9
-References: <20220908183511.2253-1-joshi.k@samsung.com>
-        <CGME20220908184538epcas5p378c450bfe07d296a9abc843efe75dfc9@epcas5p3.samsung.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR15MB2316:EE_|DM5PR15MB1785:EE_
+X-MS-Office365-Filtering-Correlation-Id: a1990a1f-c847-4315-5bfb-08da91caba53
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Q1kelGvMnNuUN4boCAy3ZGTC/m5Mu9YMt+5c07zeUUEGwZtp3I8lPwcZKdFkd4AWHJfsxPJyNtMDydTQVAi3MK+8uNGYaMcaOJlcoRJSYT4iNrjKVjvMJOn3qy0SbISiAMK8qYZ1DeEMAJmtN1aQZosuP21jkzKUDwJ+Vtk9jIhEWLZjYL5CUK+fQfncUPlWHeHwVsTHy7nlm+KoAokhc4uvI6b/vZk8mZE/BZf6ZF6uOG2z/0aHWgkzwGTUsST+dlosjCXSuvdOEnqdFpZ6DQ8ylWHP72W+005JaUBYjbJIxUafpXcvDiTPh4j+ySoC6fikDNYYM1wya4zf8FsP8EDZVjhYU+d0tDpbtKpvcdCvphvxCTnA+4KMxMwBDpKSFuZgQo5wIHc1bbn9bO8QI0dI0sAfu5ueUkRsHtoHt+uXaUk+A9I67LBK2IvxgMNNhV6xMEuIjaaGnCEgOgWM/5GDVaAwzjJbThgJ23MXHxMeuQUhQ72fSNKZJhDeGeEK6jMMbFVxu3speqbJ7KZYHXNVeZrDvkJZpmPI+6Yc7G19rXZloSWHhTw6Nxn560bxif/EBPB7v6iM6PsG7XdvtsXI+pHha7jQnM+5rweWQc64KSKLawiuS2S/VljlX42nAQR5TKQMUGd7IcYv2KHRkwn7zl4Qq6dO1Tvhd4frG+XwZOH7p4D04z6cxiRzl331s9q3q6g/pP1MCvnhQOtGVUJ0ueZty11bQaIP6afh91lkkzUcD+IF88Gxy08N9YN0eRaDHETlCXujTuduXDUiQzRypRa5E1cmCm9LFApiiwLodJoTi0NPFy4U+LEXmxVt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB2316.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(136003)(396003)(366004)(346002)(66556008)(2906002)(31686004)(5660300002)(8936002)(6506007)(38100700002)(6512007)(53546011)(41300700001)(4326008)(66946007)(66476007)(8676002)(36756003)(31696002)(86362001)(6486002)(6916009)(316002)(186003)(478600001)(2616005)(83380400001)(14143004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Tm4zNE9BRnoyVnhoUFpjU3E4TTRlUFc3SVV3ZHQ1cUU1L09tN2YrZm5oMzhu?=
+ =?utf-8?B?Slg0VURrQkE5QVNUTWU0aXNKSWxiK3ZyVlBQZ2NYcS9wWHlFTXByRFhuQjlT?=
+ =?utf-8?B?eFNVQ2M0b3hBeVJaTnlybVY0Zjk0WFQ1aE42WjE5TTBETjVtUGZvb21XeGhI?=
+ =?utf-8?B?L0swcmxYb2tWYXNRSTJzVWlGQU5pQlFLSnBzcW1laVVFV2RNZWZPVVViYThv?=
+ =?utf-8?B?bWhmYzh3QmpIdzhuMEtvMDZocUg2ZTF4S2tEMXFiRmpxZUNDMWtWZkJLRTBC?=
+ =?utf-8?B?WlVjbHcvQmZlRlc4UXZ2NldyVytDVnU4dFlhanZjZ3dsbFRwbm10Zk5XVFlj?=
+ =?utf-8?B?dG5nMm9LaENRZzh0Nk9uaWxNVE9lNTRMNHFCa2FLQ2VXa1VYbnR1NDZqdDdE?=
+ =?utf-8?B?K0ZhK1h5UElQbGJxTFU0U2VXb2hZdklxK1ZvUGR5UThlVGhMNXd4dzh1U09E?=
+ =?utf-8?B?WFBPZG1reUo0ZWl2MzI1bnRLZDkzUGZvK2tMZk4wT2lXWFF3YjFDR0ZMYTlI?=
+ =?utf-8?B?SVp4bkl4czVsVnFGenMyUS9xejhjV0NKVXNZTnV4N09vSW8yZHQzSzNpekNP?=
+ =?utf-8?B?ZUlCNng3bWg4Wnl2aXhqVkpwczBLWVBuSkhpQXJMeU94L1dteXZsS0Y5OU5s?=
+ =?utf-8?B?L09TYnRLZTN4VE5OYzJwVFJNbmRIYm8zeEIrTmJkTnJQcWZKQ3pMSHlmYkFl?=
+ =?utf-8?B?YytDSWd1aXdiWGw2c0NFbm1zY2hDeDRLMFhRakxkc1YyRU5oTUdRRjIzUEVI?=
+ =?utf-8?B?MU93Q0psQS9CSDc3WUxXYjdlaUxoMHZ4UlpnbEpMZ3Jjb204aFI3NkVYNm5Z?=
+ =?utf-8?B?b2JkcEFramNuZmxHRXV0S0JTYjRnRldNb0tSb29oYmVhbklaQXpFa1lRNTZz?=
+ =?utf-8?B?YWV2Sy93SEh0ZkRBc1Q5dWNsc0xXUXhNejNxVzU4a05mM3ozUmpwMGxZNkh4?=
+ =?utf-8?B?a2FZK1d0S1NVdE5GeTVkL3VUL05MQUdEME5oYnZRQyt6RnZnVTZRdVJSL3Iz?=
+ =?utf-8?B?ZjBzck5wM3F4dCt4WGU3NmFNdjdMdklON013OS81enFuVXY0TlNsWHBXSTNx?=
+ =?utf-8?B?TFRoZE12VlhVcCtvNStzMHdRN2NwSlRhekZmV2JzTE5FYkYyVXBkbTdDaVRU?=
+ =?utf-8?B?dTQ0TVFIdFd1YVhEWHhwaUwxa1JPQjB3eE9lSVM0eEVSQ3o0RDFWOFhVOEZh?=
+ =?utf-8?B?czBwUmE3R3d0TWVhY0FFUWgxVkR6b2RPVDBFNkxCSnMxdGlsY2srdGRPNjF5?=
+ =?utf-8?B?YkpqeDcrcE1LclFTVVY2alhuVjlYOUt5MXZMdkorVGRvbzNucWZEbnN6NUU0?=
+ =?utf-8?B?eWxleUttSzZoMEI0RmR1N0I3VTVxa3U0ZTdVdy9xaTFrSmJhL0hONmdjSUJi?=
+ =?utf-8?B?RWdtVzIwYUNCTTRyaGd2bUVvNHFSS2VmbnVhM0RkZXlNZlp5Qk95bm1LZ2Ux?=
+ =?utf-8?B?QUs0OXVTa3JlcEpKY2VHM09HR1lrM2hheEMwTGd5YWlrdWczNHNMV2xtRStN?=
+ =?utf-8?B?STVlQ2IzK2VjRk1NM2NBOGkzTnBZYkQ0TUFPeTNPNVlUek9vUkUrUjdCVVNN?=
+ =?utf-8?B?MHZFcko5WWxuU3dueWVVZjRyN1c2ak1lZFVFVWU2MU15SHY1eEFGOVNLUGxX?=
+ =?utf-8?B?TERtNlBDQWRQMFlkUWVEamViR056TUNRUzUvd05EVW1oTjRuR2Z3WXd1M0FD?=
+ =?utf-8?B?d3hFdXNYcDRDNUU2bHB6VE8wWEtyMU1XM29YbzY1TjFTNC8wblhRanlFNGdK?=
+ =?utf-8?B?LzN0OG1jYjhRbXR3M1ZLZ050dS9tTXdDYUszK1dsZ1NKNWlmMlFPdERxSzNE?=
+ =?utf-8?B?dUFHRlJxaEd4TkpQNk9VT1MxRVdJK3BjM0FhbmVrcXcvcE1TYzhqQXl0cysy?=
+ =?utf-8?B?TmNycWJYa3JaVWp4L2p5QUZ0UW5tNE51aDdRU0R1VnZsNFVHamlmd2tUM2tw?=
+ =?utf-8?B?ZXk3YWlKdE1lcW41NG0yeVRpRGJBVGNVNHkvMkhqTHZKL0M2c1NKaU9qTzRV?=
+ =?utf-8?B?MHFYNUlXVlZSbjFlaTNnNzk2dzh5MDlkckJQTWx3Q1k0Mi9oRnl3MjZLOEQ1?=
+ =?utf-8?B?STJFbGhTakJJVXI1cjB4czNIcVh0bFR2bll0SXA5ZGtPSmwrOHI5R2FzTE5F?=
+ =?utf-8?B?OE1WS1l6M0dqMGxSZDFpcWhkUTFXNUdPQmVEZ04wN3IyWHh3aENYSXRrVUY3?=
+ =?utf-8?B?b0E9PQ==?=
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1990a1f-c847-4315-5bfb-08da91caba53
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB2316.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 18:48:32.3355
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oI0Fz/Vluayteh9OnOToOVX2WuiWMA2CB8a4PuAqeCCEFQAM92qwILHoAhmmV091
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR15MB1785
+X-Proofpoint-ORIG-GUID: F2NLha-8IYoJP73w5zFBYQqi8CdGLfn8
+X-Proofpoint-GUID: F2NLha-8IYoJP73w5zFBYQqi8CdGLfn8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add blk_rq_map_user_bvec which maps the bvec iterator into a bio and
-places that into the request. This helper will be used in nvme for
-uring-passthrough with fixed-buffer.
-While at it, create another helper bio_map_get to reduce the code
-duplication.
 
-Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
-Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
----
- block/blk-map.c        | 87 +++++++++++++++++++++++++++++++++++++-----
- include/linux/blk-mq.h |  1 +
- 2 files changed, 78 insertions(+), 10 deletions(-)
 
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 7693f8e3c454..5dcfa112f240 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -241,17 +241,10 @@ static void bio_map_put(struct bio *bio)
- 	}
- }
- 
--static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
-+static struct bio *bio_map_get(struct request *rq, unsigned int nr_vecs,
- 		gfp_t gfp_mask)
- {
--	unsigned int max_sectors = queue_max_hw_sectors(rq->q);
--	unsigned int nr_vecs = iov_iter_npages(iter, BIO_MAX_VECS);
- 	struct bio *bio;
--	int ret;
--	int j;
--
--	if (!iov_iter_count(iter))
--		return -EINVAL;
- 
- 	if (rq->cmd_flags & REQ_POLLED) {
- 		blk_opf_t opf = rq->cmd_flags | REQ_ALLOC_CACHE;
-@@ -259,13 +252,31 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 		bio = bio_alloc_bioset(NULL, nr_vecs, opf, gfp_mask,
- 					&fs_bio_set);
- 		if (!bio)
--			return -ENOMEM;
-+			return NULL;
- 	} else {
- 		bio = bio_kmalloc(nr_vecs, gfp_mask);
- 		if (!bio)
--			return -ENOMEM;
-+			return NULL;
- 		bio_init(bio, NULL, bio->bi_inline_vecs, nr_vecs, req_op(rq));
- 	}
-+	return bio;
-+}
-+
-+static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
-+		gfp_t gfp_mask)
-+{
-+	unsigned int max_sectors = queue_max_hw_sectors(rq->q);
-+	unsigned int nr_vecs = iov_iter_npages(iter, BIO_MAX_VECS);
-+	struct bio *bio;
-+	int ret;
-+	int j;
-+
-+	if (!iov_iter_count(iter))
-+		return -EINVAL;
-+
-+	bio = bio_map_get(rq, nr_vecs, gfp_mask);
-+	if (bio == NULL)
-+		return -ENOMEM;
- 
- 	while (iov_iter_count(iter)) {
- 		struct page **pages, *stack_pages[UIO_FASTIOV];
-@@ -611,6 +622,62 @@ int blk_rq_map_user(struct request_queue *q, struct request *rq,
- }
- EXPORT_SYMBOL(blk_rq_map_user);
- 
-+/* Prepare bio for passthrough IO given an existing bvec iter */
-+int blk_rq_map_user_bvec(struct request *rq, struct iov_iter *iter)
-+{
-+	struct request_queue *q = rq->q;
-+	size_t nr_iter, nr_segs, i;
-+	struct bio *bio;
-+	struct bio_vec *bv, *bvecs, *bvprvp = NULL;
-+	struct queue_limits *lim = &q->limits;
-+	unsigned int nsegs = 0, bytes = 0;
-+
-+	nr_iter = iov_iter_count(iter);
-+	nr_segs = iter->nr_segs;
-+
-+	if (!nr_iter || (nr_iter >> SECTOR_SHIFT) > queue_max_hw_sectors(q))
-+		return -EINVAL;
-+	if (nr_segs > queue_max_segments(q))
-+		return -EINVAL;
-+
-+	/* no iovecs to alloc, as we already have a BVEC iterator */
-+	bio = bio_map_get(rq, 0, GFP_KERNEL);
-+	if (bio == NULL)
-+		return -ENOMEM;
-+
-+	bio_iov_bvec_set(bio, iter);
-+	blk_rq_bio_prep(rq, bio, nr_segs);
-+
-+	/* loop to perform a bunch of sanity checks */
-+	bvecs = (struct bio_vec *)iter->bvec;
-+	for (i = 0; i < nr_segs; i++) {
-+		bv = &bvecs[i];
-+		/*
-+		 * If the queue doesn't support SG gaps and adding this
-+		 * offset would create a gap, disallow it.
-+		 */
-+		if (bvprvp && bvec_gap_to_prev(lim, bvprvp, bv->bv_offset))
-+			goto out_err;
-+
-+		/* check full condition */
-+		if (nsegs >= nr_segs || bytes > UINT_MAX - bv->bv_len)
-+			goto out_err;
-+
-+		if (bytes + bv->bv_len <= nr_iter &&
-+				bv->bv_offset + bv->bv_len <= PAGE_SIZE) {
-+			nsegs++;
-+			bytes += bv->bv_len;
-+		} else
-+			goto out_err;
-+		bvprvp = bv;
-+	}
-+	return 0;
-+out_err:
-+	bio_map_put(bio);
-+	return -EINVAL;
-+}
-+EXPORT_SYMBOL_GPL(blk_rq_map_user_bvec);
-+
- /**
-  * blk_rq_unmap_user - unmap a request with user data
-  * @bio:	       start of bio list
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index b43c81d91892..83bef362f0f9 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -970,6 +970,7 @@ struct rq_map_data {
- 	bool from_user;
- };
- 
-+int blk_rq_map_user_bvec(struct request *rq, struct iov_iter *iter);
- int blk_rq_map_user(struct request_queue *, struct request *,
- 		struct rq_map_data *, void __user *, unsigned long, gfp_t);
- int blk_rq_map_user_iov(struct request_queue *, struct request *,
--- 
-2.25.1
+On 9/8/22 3:16 AM, Filipe Manana wrote:
+> >=20
+> On Thu, Sep 8, 2022 at 1:26 AM Stefan Roesch <shr@fb.com> wrote:
+>>
+>> This replaces the call to function balance_dirty_pages_ratelimited() in
+>> the function btrfs_buffered_write() with a call to
+>> balance_dirty_pages_ratelimited_flags().
+>>
+>> It also moves the function after the again label. This can cause the
+>> function to be called a bit later, but this should have no impact in the
+>> real world.
+>>
+>> Signed-off-by: Stefan Roesch <shr@fb.com>
+>> ---
+>>  fs/btrfs/file.c | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
+>> index 6e191e353b22..fd42ba9de7a7 100644
+>> --- a/fs/btrfs/file.c
+>> +++ b/fs/btrfs/file.c
+>> @@ -1654,6 +1654,7 @@ static noinline ssize_t btrfs_buffered_write(struc=
+t kiocb *iocb,
+>>         loff_t old_isize =3D i_size_read(inode);
+>>         unsigned int ilock_flags =3D 0;
+>>         bool nowait =3D iocb->ki_flags & IOCB_NOWAIT;
+>> +       unsigned int bdp_flags =3D nowait ? BDP_ASYNC : 0;
+>>
+>>         if (nowait)
+>>                 ilock_flags |=3D BTRFS_ILOCK_TRY;
+>> @@ -1756,6 +1757,10 @@ static noinline ssize_t btrfs_buffered_write(stru=
+ct kiocb *iocb,
+>>
+>>                 release_bytes =3D reserve_bytes;
+>>  again:
+>> +               ret =3D balance_dirty_pages_ratelimited_flags(inode->i_m=
+apping, bdp_flags);
+>> +               if (unlikely(ret))
+>=20
+> We normally only use likely or unlikely in contextes where we observe
+> that it makes a significant difference.
+> What's the motivation here, have you verified that in this case it has
+> a significant impact?
+>=20
 
+I removed it.
+
+> Thanks.
+>=20
+>> +                       break;
+>> +
+>>                 /*
+>>                  * This is going to setup the pages array with the numbe=
+r of
+>>                  * pages we want, so we don't really need to worry about=
+ the
+>> @@ -1860,8 +1865,6 @@ static noinline ssize_t btrfs_buffered_write(struc=
+t kiocb *iocb,
+>>
+>>                 cond_resched();
+>>
+>> -               balance_dirty_pages_ratelimited(inode->i_mapping);
+>> -
+>>                 pos +=3D copied;
+>>                 num_written +=3D copied;
+>>         }
+>> --
+>> 2.30.2
+>>
