@@ -2,241 +2,158 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D98AFC38145
-	for <io-uring@archiver.kernel.org>; Thu,  8 Sep 2022 18:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0F94C38145
+	for <io-uring@archiver.kernel.org>; Thu,  8 Sep 2022 18:45:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbiIHSpZ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 8 Sep 2022 14:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51898 "EHLO
+        id S232313AbiIHSpl (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 8 Sep 2022 14:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232362AbiIHSpQ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 8 Sep 2022 14:45:16 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0DD558EF;
-        Thu,  8 Sep 2022 11:45:07 -0700 (PDT)
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 288IJA8x019422;
-        Thu, 8 Sep 2022 11:45:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : mime-version :
- content-type : content-transfer-encoding; s=facebook;
- bh=Erlyp9m2QnCtoI8u0/2dlW7vmdEQp2DFzhCJEWh3Dd0=;
- b=CRZeRtFD+GwVQ/beJVG0waRTgj1TY3e9M8wEoStTkMO0EUcs1jKAUblgMttZ9E849POf
- 90MeNaO2dBH/eV6ZxePdxlB9LSzyYjEJqsWwXbShHlxU5TsVTrKpwnBV18Yg8YR1zUfq
- X2fYf2Vlbth5y0h1G3jFdXYIqbqHIT6eqfY= 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2171.outbound.protection.outlook.com [104.47.57.171])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jeeecp1tj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Sep 2022 11:45:03 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k33eTtbOzWFKYwtiOrK1TRfIZkMCmm8hGTA3J3jddm02p8273fJq+r6Bt9zbEOywxc7sTwUdyWyHDR1e+j4JKukTNJF9AagVcpgpVP5n73gawp5oguXmiXSdZhdUEfKd02XNjZ3ilZ+bLdaNHu4ItP6cleT28yIC7iAOcocEM8cty7SffdFqFaigk2cZSAi7RVAwZSJ6vfO5zbb3DkRjcTF27utd/SG9+ZHEyOY7aUZeKePhmSoCUtfSVal2HLJA7kuNqqlh27t2S5Rs8PkyrrIl2t/BwC0ju/wh9IUbBisJB2kIvh7lql9zRyc50QHSh3fjBbBwKEfuRxceiM6AkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i2GqwED6kdhRAYGG6KG1NZVadJ/iUrG8aWUWrxoS0B8=;
- b=cUHd3d2zFZNwqfV3qJvLayp2A2dC0SiWS4gBG8P5BlOVJAm7lsqJ6h34JaWmqBrGarelfRTLEvPJy7EmteGnni0dbebKQx1AefWWpI3C/biYT0oPdKCRRkycEWEvYSJ8EAF57Hqu9uEb6tB7WpbEMKcKJjE7cy8+8d6sdL9t5c8M6DJl+YQLWDNcMHNbiYfAjoc2NfybZsDOarYMUfRWzuClb1JQz8NiYsZR8y/Xxudnl4yd3II6/Az+46BFV/Dvy2NWXsCuxN4S4hz0xQSSp4ur6FLWFMmma/00dc+fyvkL8w93H0zQUNC0WZHoFNS94Ql+6wydjfRXJzDFDauEwA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from DM6PR15MB2316.namprd15.prod.outlook.com (2603:10b6:5:8d::10) by
- SA0PR15MB4013.namprd15.prod.outlook.com (2603:10b6:806:8b::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5588.15; Thu, 8 Sep 2022 18:45:01 +0000
-Received: from DM6PR15MB2316.namprd15.prod.outlook.com
- ([fe80::c052:c6b9:41f8:e5ae]) by DM6PR15MB2316.namprd15.prod.outlook.com
- ([fe80::c052:c6b9:41f8:e5ae%3]) with mapi id 15.20.5612.014; Thu, 8 Sep 2022
- 18:45:00 +0000
-Message-ID: <6c00b36c-9bb5-8186-d4c2-16c92b44df48@fb.com>
-Date:   Thu, 8 Sep 2022 11:44:57 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH v2 09/12] btrfs: btrfs: plumb NOWAIT through the write
- path
-Content-Language: en-US
-To:     Filipe Manana <fdmanana@kernel.org>
-Cc:     kernel-team@fb.com, io-uring@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, axboe@kernel.dk, josef@toxicpanda.com
-References: <20220908002616.3189675-1-shr@fb.com>
- <20220908002616.3189675-10-shr@fb.com>
- <CAL3q7H5Pij0A5G9vEFHKrgUSQuhUA8U6Eh9oAhKRcjeex19U=Q@mail.gmail.com>
-From:   Stefan Roesch <shr@fb.com>
-In-Reply-To: <CAL3q7H5Pij0A5G9vEFHKrgUSQuhUA8U6Eh9oAhKRcjeex19U=Q@mail.gmail.com>
-X-ClientProxiedBy: BY3PR03CA0027.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::32) To DM6PR15MB2316.namprd15.prod.outlook.com
- (2603:10b6:5:8d::10)
+        with ESMTP id S232319AbiIHSpk (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 8 Sep 2022 14:45:40 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C54760CA
+        for <io-uring@vger.kernel.org>; Thu,  8 Sep 2022 11:45:32 -0700 (PDT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220908184529epoutp04dfde1a841b951801fdda8710923ede51~S9vGJbx9-0954109541epoutp04a
+        for <io-uring@vger.kernel.org>; Thu,  8 Sep 2022 18:45:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220908184529epoutp04dfde1a841b951801fdda8710923ede51~S9vGJbx9-0954109541epoutp04a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1662662729;
+        bh=etID3tAPfm1+JvOZ3BYza6dohn9MxI+tzX18nZ3boSI=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=UawL5kRSgxYlX3FpR4GpKogkWVXyb+Sc/SyZ27cXvmZnTH3KaO3eZO/k2mdjQdbYj
+         5PQmDliRrAPVDIc+/CRoMI1+Z5YhWqqE9UR6BFr9yOQW6AW/7NJ1JFyhaH9TUhgXHV
+         4GEzJBWWOBPxaIQkIefn46PXMdbHpdKA5wp2ihos=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20220908184528epcas5p17ef96cc743cd7d71770211b5a6599b09~S9vE4WCel0840908409epcas5p1r;
+        Thu,  8 Sep 2022 18:45:28 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.181]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4MNp3968tBz4x9Pp; Thu,  8 Sep
+        2022 18:45:25 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        94.FE.59633.5483A136; Fri,  9 Sep 2022 03:45:25 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220908184525epcas5p4cec88afa56beb0e5222e23c2344dbc8a~S9vCCXzVF0530505305epcas5p4Y;
+        Thu,  8 Sep 2022 18:45:25 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220908184525epsmtrp11b511f9c926f6f2c22c31b76253a0350~S9vCBnaVe2970229702epsmtrp1e;
+        Thu,  8 Sep 2022 18:45:25 +0000 (GMT)
+X-AuditID: b6c32a49-dfdff7000000e8f1-2b-631a3845e924
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        22.DD.14392.5483A136; Fri,  9 Sep 2022 03:45:25 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.110.206.5]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20220908184523epsmtip2921bf26f848457db6323b6fe0aa52e80~S9vAuXv492343623436epsmtip2v;
+        Thu,  8 Sep 2022 18:45:23 +0000 (GMT)
+From:   Kanchan Joshi <joshi.k@samsung.com>
+To:     axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
+        asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, gost.dev@samsung.com,
+        Kanchan Joshi <joshi.k@samsung.com>
+Subject: [PATCH for-next v6 0/5] fixed-buffer for uring-cmd/passthru
+Date:   Fri,  9 Sep 2022 00:05:06 +0530
+Message-Id: <20220908183511.2253-1-joshi.k@samsung.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR15MB2316:EE_|SA0PR15MB4013:EE_
-X-MS-Office365-Filtering-Correlation-Id: 47b9d150-b162-4514-734b-08da91ca3c4c
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8P71kt+MXJxi/rheRgaGCVLNqevS8V+QPWFLKM3i7UTFfIIe8XldDm+HsYEA8DYl6OvDsRVARCba3IZj89PGONBEKaIw80pm5Qyc88kvKc/SjzzVUxc6MgU5rOoZKpCEtvdBQiu+SRyBGMFME624Cm6m6NrchgjGQKOMMNNKNuevcIogjEgOgAMl+Y0s7eoLKI8CYn88YHopEJIscXnkXp83PKfXgcO1SGqehWU5MGGVUCGEw8qcxWqgvYOaA7duKEF6Ex5Fihq3VgEA4XawMp8PhH3K5axJddv0y3lszlzl7C5QrQlG6UUgfOHZK5gkqfni2TEbv6dTc1Qq5fsZN76y4xLXgY6GxgGgUMXHtdHISHbwzifya79lHBD14rOZNNeKJyrJILMOvPctCo2myD/69tbHEmT9ppxs+/9HSahz2XOhjgLJ7q4IKC+O+4ATRzUXyNu0QNDr+ZuePD0vGhVaFF8kayTrTpLMu5KAYvQobfNlajM/xjIEkYxyx41DUeejuRPCLEgIB3XXQexzN4M5cQk1YzcJTOu/SzymHjEKNiMFLB/ZYfXHOoKT9EPuqLYAlt3ZlDgrdsQpf36nZpFze0LIR9cPpcLa5V13Mj0UO6WIoCd+zTWMBNM6k+vX9efR3g25PGOggDuF65joxSwYGBqaTs3ewrN5XANR7grY/KhXGC3Td1va1j5ddIVeTZS+h+4kJ1J4Nuq5EnMLidhxvmqz/bnJIQMRwAPVf1Hq/Av6F2LUHb+gQ3+73lsGmgaUc5MuReZBOmLP6CMXrIhrp3b1/NriwYwlq48F/sc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR15MB2316.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(366004)(346002)(39860400002)(136003)(396003)(36756003)(53546011)(6916009)(4326008)(66476007)(38100700002)(66556008)(8676002)(66946007)(316002)(5660300002)(2906002)(186003)(83380400001)(2616005)(8936002)(41300700001)(6512007)(6486002)(6666004)(6506007)(31686004)(478600001)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WE4xYXIzVStnTCs3RzF2ZFlrVWNSUVA4OEFHeUUrVjBQUFd4Tjl3SWp1WmZ2?=
- =?utf-8?B?dEFYZjg2cndCd1VsUXVhVGpyOTFhTlMyYmcwc1BkTHFVRWFzWHJMbURyNmdU?=
- =?utf-8?B?V2NScFllWEhVYmlqSldJUDVwV2t2OVM3Z1NxUkFkRTdxSk9LeTZlSGlsQUhD?=
- =?utf-8?B?UW9JWStVTHEwUXlaQ0lLUXhubFpsVUsraG5wYlZUUnA1ZTF2TVNWcitLZGFU?=
- =?utf-8?B?Y3Z2c3dBcEgwQXZwdk1aRytuN0RqZlFWaTVLV0FuWWRDNlBYL2xjTC8vM2dV?=
- =?utf-8?B?WUVVakNRZGQ1cFlnRnRtNC9nNDdVaEZGTng1R3pXMnFrNDg2Zk94S2haZ0Qy?=
- =?utf-8?B?bFhIQ2YxVEx2OUtkOXlNYXkzenlVdlNpMFYwaDRoMW9DbW1RRzA0RU9ES1Ew?=
- =?utf-8?B?ZmJzSHhzRjFYTTVFbzVvRUg3WTV4TTk2aFp2Ui9GcE1Sb0RsT0tNenVRY0Vn?=
- =?utf-8?B?VDlBTWxtWjN2MW5lMTdIVGJQZ2xxOW5YTmlidEExK3MwUGx1Y3J0SUNLUVhK?=
- =?utf-8?B?a0FnMDducXBEMHdrU3Q5SmcxYlptLzdGUjZ2WktpdmlicjJ3RUVuM2VxeURv?=
- =?utf-8?B?SFU4NHFVK1hxTmxkU29jOWVubUNiS3NDRlhHNUNFdC9CQXpsNGpPRUlmZXVE?=
- =?utf-8?B?VHBXQ3ptVk9SSEQyN2lSem5NNFpKTVN1Q3Z2RHVhR1RjTmdTTDdQWkpEMERH?=
- =?utf-8?B?b0w5T1ZzR3dLT2JZb3JvMk1ST3NNb0N2c0Z3aXRZSm5IaXhQK3M3QTgzSkVJ?=
- =?utf-8?B?d1NQVlp6VkZvYmw2cXlqYm5HYTdJaVJhUXlXamJKejQrMHlVMUhiNTRmRFBW?=
- =?utf-8?B?OXovaHJpZ2EvYVhsUzJUQ0FoelBwR3FJRDRXdnhKWjFFYlp0bElKMDUzRzFw?=
- =?utf-8?B?bzdJS00ydVZvU0hxeEh2NTBJYTRaMURGTm9Bclc1WXNpc3hCM2UvbC9YNjhv?=
- =?utf-8?B?ejRDSGw5a3dyYkk0UGlpSzFZai92eUdpWFVjci9MQUhCNGFYUURzakdJMEU0?=
- =?utf-8?B?UldqRTA4ems2Y25KTWcvZW9CUFo3ME1HKy9vTEQ2YnZnTWdKMVU4Wlk4V3dj?=
- =?utf-8?B?ZkFBZDB4Mk50b21RNFJERnBlTXpBQXF2b28rdUZTODZwNUJWNENPS1N6SDVM?=
- =?utf-8?B?T1MvRlJSOGRLeklyUWVYdTV2MDQ3Uk4ram5QQTF2aU9kTGJtYjBOSGpXSXZG?=
- =?utf-8?B?Tm9raVU1MU51NUovQnlTK1NSRHpBejBzNlJMc0lyNDVhcWJRQXJiYzFEb3dE?=
- =?utf-8?B?ZTBiZ3VkZUh6cmNtRE42V2FHTktYa216QjE1WkNFNjBDQlpnaFNvZlo2MVVi?=
- =?utf-8?B?bTNTTEtGejZTWHdVRFRsU2ZZNUFOU1cvYWtrUFNoNXFQK3I1dTJxMEI0NDc1?=
- =?utf-8?B?REZMQWR6VDZmK0U4STlRRm5zYnRFcnI5TDB0anBLVzRNRTRjaDlhMUFUK0t0?=
- =?utf-8?B?dWtFM01wckl4RWlTZForVUE4RUN1VEJXRCtyQ2JablMrQUNhaGpFajNuLzl3?=
- =?utf-8?B?bmdwSGRpQkVmblI2UDBVRWtEYTFCZXRJdGo2U3VGbEtQLzRSOXZEY0ZHbEo2?=
- =?utf-8?B?RVYrT0g0R2thWklrbUI1S3d4a2FKbkQraTdYM3c5RVF4cHJRS2N1ajdrMWJr?=
- =?utf-8?B?blRSMGdmdWUyZG11NlQyeFB2UnhhcStxUnNvOS9IMVllWnNmUjh2MzlhQW9T?=
- =?utf-8?B?S3dFT2RubGlFQXVQNDB4cDFaSlhUKzFheWpHNk1ZdEZiMzMwWU1YanB0UkEz?=
- =?utf-8?B?L0gyNmZia25PQ0dyb3BNUlhXRmtIVmpqdUhIVjZ3OVdDSEJMN0V5UFZmTURq?=
- =?utf-8?B?aGQvVDlOOUNBTHpueGJFRlVhcGF5YWtLMXJQNEplTVdTZkFhNUxTeVg0QklR?=
- =?utf-8?B?SS8vU3hNdU5zWG4vM3ZSRUlLeTNvRDh0bm8veVd1VlBCUXo4TmF6Q2NFazFv?=
- =?utf-8?B?UUl6T0E4NUdDUWVwb0Z6RzMvYUpTVkh6aC9ySThiOG12ODNzajkzMTQvMG5W?=
- =?utf-8?B?c1B5YUppS1lhVWFqd3kyQzRSOUk0elZ3UCtiZWxydUliR2tUUkM4ZEFMM2Qw?=
- =?utf-8?B?Skh4QVlnRVlMbjF4MExhUjA3UXZQUmpEU0V5TkJiUkFFUW9OdTh4b2cwTDh1?=
- =?utf-8?B?WHBDMmh1UkhFbHFJRE05T0lEKzNteFVuR2o3YklmbXRiRW1TWEdHQnhuQTFz?=
- =?utf-8?B?Q0E9PQ==?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47b9d150-b162-4514-734b-08da91ca3c4c
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR15MB2316.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2022 18:45:00.8973
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Mkr/lzJvZKTouGt8EB2d+lYjbX4Z+Zqhltu4K7y/3PMFbMuIvnNKYj6vBqGZEceh
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB4013
-X-Proofpoint-ORIG-GUID: 8QfqQ5zxYnBjwyqT_XahRi5LsjWrzycD
-X-Proofpoint-GUID: 8QfqQ5zxYnBjwyqT_XahRi5LsjWrzycD
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-08_10,2022-09-08_01,2022-06-22_01
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmk+LIzCtJLcpLzFFi42LZdlhTS9fVQirZ4OIEfYs5q7YxWqy+289m
+        cfPATiaLlauPMlm8az3HYnH0/1s2i0mHrjFa7L2lbTF/2VN2B06PnbPusntcPlvqsWlVJ5vH
+        5iX1HrtvNrB59G1ZxejxeZNcAHtUtk1GamJKapFCal5yfkpmXrqtkndwvHO8qZmBoa6hpYW5
+        kkJeYm6qrZKLT4CuW2YO0F1KCmWJOaVAoYDE4mIlfTubovzSklSFjPziElul1IKUnAKTAr3i
+        xNzi0rx0vbzUEitDAwMjU6DChOyMsw8eMBZ84KnY+X4RcwNjL1cXIyeHhICJxPoTjWxdjFwc
+        QgK7GSXezpnJDuF8YpRY8uAHaxcjB5DzjVGirxqm4dCu5YwgtpDAXkaJ9j2+EPWfGSX2HbvA
+        DFLPJqApcWFyKUiNiICXxP3b71lBapgFZjBKrO54zQ5SIyzgItH/NBCkhkVAVeL5ta/sIDav
+        gLnE/vUrWSB2yUvMvPQdKi4ocXLmE7A4M1C8eetsZoial+wS3zf5Q9guEqfPvGOHsIUlXh3f
+        AmVLSbzsb4OykyUuzTzHBGGXSDzecxDKtpdoPdUPdj4z0Pnrd+lDrOKT6P39hAkkLCHAK9HR
+        JgRRrShxb9JTVghbXOLhjCVQtofEywVfmSChEytx7OdxpgmMcrOQPDALyQOzEJYtYGRexSiZ
+        WlCcm55abFpgmJdaDo/H5PzcTYzg1KjluYPx7oMPeocYmTgYDzFKcDArifCKrpVIFuJNSays
+        Si3Kjy8qzUktPsRoCgzVicxSosn5wOScVxJvaGJpYGJmZmZiaWxmqCTOO0WbMVlIID2xJDU7
+        NbUgtQimj4mDU6qByeX96c48t5d1S7IT1rh+XSLfo1KUHnFLrVWdoefuFNYLLY67yiK+Fk2f
+        xvdTbdfbb48e7RO8ZZHmmlHr80X6W1X9bN/q9fc38Eqvz1vXdlj2jR1HaqzMel6fJmPR04/F
+        Z4mLphvaxk5yLq2w7JisJFSorr419m+DpseXaaZnuT+UJO6/+UstZPMdtfcX/u++VPT90EUj
+        w5PV97pj5Xuv7wnb5e1msiiGTZ7j9cF9CYaTL3UEnJ4359y0zas9TqmqKur8zL+0j6vowKVN
+        em68iRX7uxTK5/smxfn/X3D47uvXW+V/7t+9wenXX8/vdSs+O00vO3lb6ujBaK/T/UzdoZHm
+        lQZa5Qkqf7qFCn81K7EUZyQaajEXFScCAKQ2h7gWBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPLMWRmVeSWpSXmKPExsWy7bCSvK6rhVSywd3zPBZzVm1jtFh9t5/N
+        4uaBnUwWK1cfZbJ413qOxeLo/7dsFpMOXWO02HtL22L+sqfsDpweO2fdZfe4fLbUY9OqTjaP
+        zUvqPXbfbGDz6NuyitHj8ya5APYoLpuU1JzMstQifbsEroyzDx4wFnzgqdj5fhFzA2MvVxcj
+        J4eEgInEoV3LGbsYuTiEBHYzSqxdf48ZIiEu0XztBzuELSyx8t9zdoiij4wS7c9Os3QxcnCw
+        CWhKXJhcClIjIhAgcbDxMlgNs8AcRonLl/ewg9QIC7hI9D8NBKlhEVCVeH7tK9hMXgFzif3r
+        V7JAzJeXmHnpO1RcUOLkzCdgcWagePPW2cwTGPlmIUnNQpJawMi0ilEytaA4Nz232LDAMC+1
+        XK84Mbe4NC9dLzk/dxMjOIy1NHcwbl/1Qe8QIxMH4yFGCQ5mJRFe0bUSyUK8KYmVValF+fFF
+        pTmpxYcYpTlYlMR5L3SdjBcSSE8sSc1OTS1ILYLJMnFwSjUwbUlturF+swf3ut3SAu6eW1U7
+        t6nlrjp4t/xrMaMy7++2p5UrF4ps2BGy2E3fYc3Oc2tifpmcTvN2W97VItrjM0HJadWMH972
+        Z0/ZudR4JeiYWuh5Ngfaqp3zeLhFvm2qFEdwhrO5fBrPh9kv1JU8kv5MzmZwux1xaqlXz1TJ
+        wtTNNk6ballmKl2pzpD5nqKoOeu17dTaONXPKRw+S/6k3lo6PW3ijp+WtbeNb82Uz/i08Ncq
+        4y+PTpm/j8vP5zdd9MZxbqxxrJpkc23f54ZzvMsfrruprZP03lfTfltg/9tljV3PtI9mLApW
+        knnUvFd0QsN53v032KtexDxayPigQJW/cY+V0pliqdKzn4uVWIozEg21mIuKEwHN/4Ts0gIA
+        AA==
+X-CMS-MailID: 20220908184525epcas5p4cec88afa56beb0e5222e23c2344dbc8a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220908184525epcas5p4cec88afa56beb0e5222e23c2344dbc8a
+References: <CGME20220908184525epcas5p4cec88afa56beb0e5222e23c2344dbc8a@epcas5p4.samsung.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+Currently uring-cmd lacks the ability to leverage the pre-registered
+buffers. This series adds that support in uring-cmd, and plumbs
+nvme passthrough to work with it.
+
+Using registered-buffers showed IOPS hike from 1.9M to 2.2M in my tests.
+
+Patch 1, 3, 4 = prep
+Patch 2 = expand io_uring command to use registered-buffers
+Patch 5 = expand nvme passthrough to use registered-buffers
+
+Changes since v5:
+- Patch 4: newly addd, to split a nvme function into two
+- Patch 3: folded cleanups in bio_map_user_iov (Chaitanya, Pankaj)
+- Rebase to latest for-next
+
+Changes since v4:
+- Patch 1, 2: folded all review comments of Jens
+
+Changes since v3:
+- uring_cmd_flags, change from u16 to u32 (Jens)
+- patch 3, add another helper to reduce code-duplication (Jens)
+
+Changes since v2:
+- Kill the new opcode, add a flag instead (Pavel)
+- Fix standalone build issue with patch 1 (Pavel)
+
+Changes since v1:
+- Fix a naming issue for an exported helper
 
 
-On 9/8/22 3:16 AM, Filipe Manana wrote:
-> >=20
-> On Thu, Sep 8, 2022 at 1:26 AM Stefan Roesch <shr@fb.com> wrote:
->>
->> We have everywhere setup for nowait, plumb NOWAIT through the write path.
->=20
-> Note, there's a double "btrfs: " prefix in the subject line.
->=20
+Anuj Gupta (2):
+  io_uring: add io_uring_cmd_import_fixed
+  io_uring: introduce fixed buffer support for io_uring_cmd
 
-Fixed, thanks for catching it.
+Kanchan Joshi (3):
+  nvme: refactor nvme_alloc_user_request
+  block: add helper to map bvec iterator for passthrough
+  nvme: wire up fixed buffer support for nvme passthrough
 
->>
->> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
->> Signed-off-by: Stefan Roesch <shr@fb.com>
->> ---
->>  fs/btrfs/file.c | 19 +++++++++++++------
->>  1 file changed, 13 insertions(+), 6 deletions(-)
->>
->> diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
->> index 4e1745e585cb..6e191e353b22 100644
->> --- a/fs/btrfs/file.c
->> +++ b/fs/btrfs/file.c
->> @@ -1653,8 +1653,9 @@ static noinline ssize_t btrfs_buffered_write(struc=
-t kiocb *iocb,
->>         bool force_page_uptodate =3D false;
->>         loff_t old_isize =3D i_size_read(inode);
->>         unsigned int ilock_flags =3D 0;
->> +       bool nowait =3D iocb->ki_flags & IOCB_NOWAIT;
->=20
-> Can be made const.
->=20
+ block/blk-map.c               |  87 ++++++++++++++++++++---
+ drivers/nvme/host/ioctl.c     | 126 +++++++++++++++++++++-------------
+ include/linux/blk-mq.h        |   1 +
+ include/linux/io_uring.h      |  10 ++-
+ include/uapi/linux/io_uring.h |   9 +++
+ io_uring/uring_cmd.c          |  26 ++++++-
+ 6 files changed, 199 insertions(+), 60 deletions(-)
 
-In the next version of the patch series it will be const.
+-- 
+2.25.1
 
-> Thanks.
->=20
->>
->> -       if (iocb->ki_flags & IOCB_NOWAIT)
->> +       if (nowait)
->>                 ilock_flags |=3D BTRFS_ILOCK_TRY;
->>
->>         ret =3D btrfs_inode_lock(inode, ilock_flags);
->> @@ -1710,17 +1711,22 @@ static noinline ssize_t btrfs_buffered_write(str=
-uct kiocb *iocb,
->>                 extent_changeset_release(data_reserved);
->>                 ret =3D btrfs_check_data_free_space(BTRFS_I(inode),
->>                                                   &data_reserved, pos,
->> -                                                 write_bytes, false);
->> +                                                 write_bytes, nowait);
->>                 if (ret < 0) {
->>                         int tmp;
->>
->> +                       if (nowait && (ret =3D=3D -ENOSPC || ret =3D=3D =
--EAGAIN)) {
->> +                               ret =3D -EAGAIN;
->> +                               break;
->> +                       }
->> +
->>                         /*
->>                          * If we don't have to COW at the offset, reserve
->>                          * metadata only. write_bytes may get smaller th=
-an
->>                          * requested here.
->>                          */
->>                         tmp =3D btrfs_check_nocow_lock(BTRFS_I(inode), p=
-os,
->> -                                                    &write_bytes, false=
-);
->> +                                                    &write_bytes, nowai=
-t);
->>                         if (tmp < 0)
->>                                 ret =3D tmp;
->>                         if (tmp > 0)
->> @@ -1737,7 +1743,7 @@ static noinline ssize_t btrfs_buffered_write(struc=
-t kiocb *iocb,
->>                 WARN_ON(reserve_bytes =3D=3D 0);
->>                 ret =3D btrfs_delalloc_reserve_metadata(BTRFS_I(inode),
->>                                                       reserve_bytes,
->> -                                                     reserve_bytes, fal=
-se);
->> +                                                     reserve_bytes, now=
-ait);
->>                 if (ret) {
->>                         if (!only_release_metadata)
->>                                 btrfs_free_reserved_data_space(BTRFS_I(i=
-node),
->> @@ -1767,10 +1773,11 @@ static noinline ssize_t btrfs_buffered_write(str=
-uct kiocb *iocb,
->>                 extents_locked =3D lock_and_cleanup_extent_if_need(
->>                                 BTRFS_I(inode), pages,
->>                                 num_pages, pos, write_bytes, &lockstart,
->> -                               &lockend, false, &cached_state);
->> +                               &lockend, nowait, &cached_state);
->>                 if (extents_locked < 0) {
->> -                       if (extents_locked =3D=3D -EAGAIN)
->> +                       if (!nowait && extents_locked =3D=3D -EAGAIN)
->>                                 goto again;
->> +
->>                         btrfs_delalloc_release_extents(BTRFS_I(inode),
->>                                                        reserve_bytes);
->>                         ret =3D extents_locked;
->> --
->> 2.30.2
->>
