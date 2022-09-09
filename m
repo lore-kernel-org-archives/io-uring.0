@@ -2,38 +2,39 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D91B0ECAAA1
-	for <io-uring@archiver.kernel.org>; Fri,  9 Sep 2022 06:35:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F30D6ECAAA1
+	for <io-uring@archiver.kernel.org>; Fri,  9 Sep 2022 06:35:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiIIGfZ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 9 Sep 2022 02:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S230481AbiIIGf1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 9 Sep 2022 02:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiIIGfX (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 9 Sep 2022 02:35:23 -0400
+        with ESMTP id S231189AbiIIGfZ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 9 Sep 2022 02:35:25 -0400
 Received: from mta-01.yadro.com (mta-02.yadro.com [89.207.88.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAD9481C4;
-        Thu,  8 Sep 2022 23:35:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BAE21098C3;
+        Thu,  8 Sep 2022 23:35:23 -0700 (PDT)
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 6DACE566F1;
-        Fri,  9 Sep 2022 06:35:19 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 88991566F3;
+        Fri,  9 Sep 2022 06:35:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from
-        :received:received:received:received; s=mta-01; t=1662705318; x=
-        1664519719; bh=103tqh1X9vgRK9R4xZs/S2qKAynHwmjKGuc+Y20yVGQ=; b=b
-        Xc3G+SDj7E8K7zIlZWkkeDzzxLaplulitWx5Bq8HX+EJB2o2FovT4zM9m65avDqP
-        BDuZpN0RsSztI893cVedQCLA2GQwgd3ReVtePO7JdJFnYxBXY127SMkKcqBqKjon
-        ksqaipGXDXJ4mu4S8Nzh40EDgwVaoE+40btRujA9ic=
+        :references:in-reply-to:x-mailer:message-id:date:date:subject
+        :subject:from:from:received:received:received:received; s=
+        mta-01; t=1662705320; x=1664519721; bh=gMxdHuGYRwTuopHTFooGl2Pgd
+        /f9+WV3Q6zWRfpmhjk=; b=Eq/1eVXnI/rNpNgAXFAaWuGKgbnavEoj4vMSh0eu8
+        b6Ur4vs+aU0y/OTc9yMq3y+C6BzubGPKLbLHeV83URnh/0uvsVK1MSzQAhvbUunk
+        uvN2MV0Y3wNPDk966Mr5ZZAIjd8v06tsZofhsa1f8YBJ4iOSasVFVtIe+1nmYc9J
+        Jc=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7aR_vaqlQme6; Fri,  9 Sep 2022 09:35:18 +0300 (MSK)
+        with ESMTP id R5jfk0mInNUd; Fri,  9 Sep 2022 09:35:20 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (T-EXCH-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 4C83B566CB;
-        Fri,  9 Sep 2022 09:35:16 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 4CE0F566EF;
+        Fri,  9 Sep 2022 09:35:18 +0300 (MSK)
 Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
  T-EXCH-02.corp.yadro.com (172.17.10.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id
@@ -41,7 +42,7 @@ Received: from T-EXCH-09.corp.yadro.com (172.17.11.59) by
 Received: from altair.lan (172.17.190.47) by T-EXCH-09.corp.yadro.com
  (172.17.11.59) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1118.9; Fri, 9 Sep 2022
- 09:35:12 +0300
+ 09:35:14 +0300
 From:   "Alexander V. Buev" <a.buev@yadro.com>
 To:     <linux-block@vger.kernel.org>
 CC:     <io-uring@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
@@ -51,10 +52,12 @@ CC:     <io-uring@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
         Chaitanya Kulkarni <chaitanyak@nvidia.com>,
         Mikhail Malygin <m.malygin@yadro.com>, <linux@yadro.com>,
         "Alexander V. Buev" <a.buev@yadro.com>
-Subject: [PATCH v3 0/3] implement direct IO with integrity
-Date:   Fri, 9 Sep 2022 09:32:54 +0300
-Message-ID: <20220909063257.1072450-1-a.buev@yadro.com>
+Subject: [PATCH v3 3/3] block: fops: handle IOCB_USE_PI in direct IO
+Date:   Fri, 9 Sep 2022 09:32:57 +0300
+Message-ID: <20220909063257.1072450-4-a.buev@yadro.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220909063257.1072450-1-a.buev@yadro.com>
+References: <20220909063257.1072450-1-a.buev@yadro.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -65,40 +68,155 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This series of patches makes possible to do direct block IO
-with integrity payload using io uring kernel interface.
-Userspace app can utilize new READV_PI/WRITEV_PI operation with a new
-fields in sqe struct (pi_addr/pi_len) to provide iovec's with
-integrity data.
+Check that the size of PI data correspond to device integrity profile
+and data size.
+Add PI data to device BIO.
 
-Changes since v2:
- - separate code from fast path
- - keep rw_pi struct size <= 64 byte
- - using kiocb->private pointer to pass
-   PI data iterator to block direct IO layer   
- - improved bio_integrity_add_iovec function 
+Signed-off-by: Alexander V. Buev <a.buev@yadro.com>
+---
+ block/fops.c | 80 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 80 insertions(+)
 
-Alexander V. Buev (3):
-  block: bio-integrity: add PI iovec to bio
-  block: io-uring: add READV_PI/WRITEV_PI operations
-  block: fops: handle IOCB_USE_PI in direct IO
-
- block/bio-integrity.c         | 163 +++++++++
- block/fops.c                  |  80 +++++
- include/linux/bio.h           |   8 +
- include/linux/fs.h            |   1 +
- include/uapi/linux/io_uring.h |   6 +
- include/uapi/linux/uio.h      |   3 +-
- io_uring/Makefile             |   3 +-
- io_uring/io_uring.c           |   2 +
- io_uring/opdef.c              |  27 ++
- io_uring/rw.h                 |   4 +
- io_uring/rw_pi.c              | 619 ++++++++++++++++++++++++++++++++++
- io_uring/rw_pi.h              |  34 ++
- 12 files changed, 948 insertions(+), 2 deletions(-)
- create mode 100644 io_uring/rw_pi.c
- create mode 100644 io_uring/rw_pi.h
-
+diff --git a/block/fops.c b/block/fops.c
+index b90742595317..d89fa7d99635 100644
+--- a/block/fops.c
++++ b/block/fops.c
+@@ -16,6 +16,7 @@
+ #include <linux/suspend.h>
+ #include <linux/fs.h>
+ #include <linux/module.h>
++#include <linux/blk-integrity.h>
+ #include "blk.h"
+ 
+ static inline struct inode *bdev_file_inode(struct file *file)
+@@ -51,6 +52,19 @@ static bool blkdev_dio_unaligned(struct block_device *bdev, loff_t pos,
+ 
+ #define DIO_INLINE_BIO_VECS 4
+ 
++static int __bio_integrity_add_iovec(struct bio *bio, struct iov_iter *pi_iter)
++{
++	struct blk_integrity *bi = bdev_get_integrity(bio->bi_bdev);
++	unsigned int pi_len = bio_integrity_bytes(bi, bio->bi_iter.bi_size >> SECTOR_SHIFT);
++	size_t iter_count = pi_iter->count-pi_len;
++	int ret;
++
++	iov_iter_truncate(pi_iter, pi_len);
++	ret = bio_integrity_add_iovec(bio, pi_iter);
++	iov_iter_reexpand(pi_iter, iter_count);
++	return ret;
++}
++
+ static ssize_t __blkdev_direct_IO_simple(struct kiocb *iocb,
+ 		struct iov_iter *iter, unsigned int nr_pages)
+ {
+@@ -94,6 +108,15 @@ static ssize_t __blkdev_direct_IO_simple(struct kiocb *iocb,
+ 	if (iocb->ki_flags & IOCB_NOWAIT)
+ 		bio.bi_opf |= REQ_NOWAIT;
+ 
++	if (iocb->ki_flags & IOCB_USE_PI) {
++		ret = __bio_integrity_add_iovec(&bio, (struct iov_iter *)iocb->private);
++		WRITE_ONCE(iocb->private, NULL);
++		if (ret) {
++			bio_release_pages(&bio, should_dirty);
++			goto out;
++		}
++	}
++
+ 	submit_bio_wait(&bio);
+ 
+ 	bio_release_pages(&bio, should_dirty);
+@@ -178,6 +201,7 @@ static ssize_t __blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter,
+ 	blk_opf_t opf = is_read ? REQ_OP_READ : dio_bio_write_op(iocb);
+ 	loff_t pos = iocb->ki_pos;
+ 	int ret = 0;
++	struct iov_iter *pi_iter = 0;
+ 
+ 	if (blkdev_dio_unaligned(bdev, pos, iter))
+ 		return -EINVAL;
+@@ -235,6 +259,19 @@ static ssize_t __blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter,
+ 		pos += bio->bi_iter.bi_size;
+ 
+ 		nr_pages = bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS);
++
++		if (iocb->ki_flags & IOCB_USE_PI) {
++			if (!pi_iter)
++				pi_iter = (struct iov_iter *)iocb->private;
++			ret = __bio_integrity_add_iovec(bio, pi_iter);
++			WRITE_ONCE(iocb->private, NULL);
++			if (unlikely(ret)) {
++				bio->bi_status = BLK_STS_IOERR;
++				bio_endio(bio);
++				break;
++			}
++		}
++
+ 		if (!nr_pages) {
+ 			submit_bio(bio);
+ 			break;
+@@ -343,6 +380,16 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
+ 		task_io_account_write(bio->bi_iter.bi_size);
+ 	}
+ 
++	if (iocb->ki_flags & IOCB_USE_PI) {
++		ret = __bio_integrity_add_iovec(bio, (struct iov_iter *)iocb->private);
++		WRITE_ONCE(iocb->private, NULL);
++		if (ret) {
++			bio->bi_status = BLK_STS_IOERR;
++			bio_endio(bio);
++			return -EIOCBQUEUED;
++		}
++	}
++
+ 	if (iocb->ki_flags & IOCB_HIPRI) {
+ 		bio->bi_opf |= REQ_POLLED | REQ_NOWAIT;
+ 		submit_bio(bio);
+@@ -355,6 +402,31 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
+ 	return -EIOCBQUEUED;
+ }
+ 
++static inline int
++blkdev_check_pi(struct block_device *bdev, size_t data_size, size_t pi_size)
++{
++	struct blk_integrity *bi = bdev_get_integrity(bdev);
++	unsigned int intervals;
++
++	if (unlikely(!(bi && bi->tuple_size &&
++			bi->flags & BLK_INTEGRITY_DEVICE_CAPABLE))) {
++		pr_err("Device %d:%d is not integrity capable",
++			MAJOR(bdev->bd_dev), MINOR(bdev->bd_dev));
++		return -EINVAL;
++	}
++
++	intervals = bio_integrity_intervals(bi, data_size >> SECTOR_SHIFT);
++	if (unlikely(intervals * bi->tuple_size > pi_size)) {
++		pr_err("Device %d:%d integrity & data size mismatch",
++			MAJOR(bdev->bd_dev), MINOR(bdev->bd_dev));
++		pr_err("data=%zu integrity=%zu intervals=%u tuple=%u",
++			data_size, pi_size,
++			intervals, bi->tuple_size);
++		return -EINVAL;
++	}
++	return 0;
++}
++
+ static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+ {
+ 	unsigned int nr_pages;
+@@ -362,6 +434,14 @@ static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+ 	if (!iov_iter_count(iter))
+ 		return 0;
+ 
++	if (iocb->ki_flags & IOCB_USE_PI) {
++		struct block_device *bdev = iocb->ki_filp->private_data;
++		struct iov_iter *pi_iter = iocb->private;
++
++		if (blkdev_check_pi(bdev, iter->count, pi_iter->count))
++			return -EINVAL;
++	}
++
+ 	nr_pages = bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS + 1);
+ 	if (likely(nr_pages <= BIO_MAX_VECS)) {
+ 		if (is_sync_kiocb(iocb))
 -- 
 2.30.2
 
