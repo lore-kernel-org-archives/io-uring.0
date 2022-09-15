@@ -2,86 +2,67 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 434EEC54EE9
-	for <io-uring@archiver.kernel.org>; Tue, 13 Sep 2022 21:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F1B3ECAAA1
+	for <io-uring@archiver.kernel.org>; Thu, 15 Sep 2022 05:49:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229502AbiIMVIH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 13 Sep 2022 17:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
+        id S229480AbiIOFtV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 15 Sep 2022 01:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiIMVIG (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 13 Sep 2022 17:08:06 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05D669F4C
-        for <io-uring@vger.kernel.org>; Tue, 13 Sep 2022 14:08:05 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id ay36so700473wmb.0
-        for <io-uring@vger.kernel.org>; Tue, 13 Sep 2022 14:08:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date;
-        bh=KQ08ovo8cE2Cv1PTDXttRfjzaZjAKihe6Dg0kiDovOA=;
-        b=aHqn0FHX9oo4y08omSuZovGZFwyCbIeoGW7tiOEb2USEW8jiiGo6ae46gani0m5HMu
-         WwIuDUwVTrNg12sf7XReMAxhjNxkPLTGukxoqr2zRDUU4tUhGAZQbMacXe9u9e2CTg6D
-         PDxeaL2XX2ROxwsFBySW0sfts7LSccsuZ2dhCBxGmeBlGxqN+WmhmHkqCN4Y6/dhRGrv
-         w2R+mFlD89UKWuc2L82bbIZFcN0ulYeKCJCGMOwcKV1ipOIlpZu2AsdgfQN1f3WrxB0l
-         5auBPR6FLaKIfyaxqbZJzMwN2LkeOZBelRW5SrXoG3YZgPmOam5RYtrye1fS82mGfVG1
-         lshg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=KQ08ovo8cE2Cv1PTDXttRfjzaZjAKihe6Dg0kiDovOA=;
-        b=wvsT3lDRuZouzSUODua+DJQsD6FzR4RZBQo7hIg3fDxMsrgZ7OSAw50xMPAx023S2f
-         QtmrCbyK7WPyk//1RoVzY/P+13MwEwQFVMiQF14xCk8G793F5cb9HXsjdmW6ZFBid/9o
-         8tJuFZKE66sLh0rpa/4sff8W8EyguUrO7UkJUtUtEtrGjX6RUQWA1uIsOU1rsuMSOXR0
-         x5PJ8jD5ThbRFyeYztVSxvMkgkLvUqxkvANMqua2nam1pLQ0GyC+vHVtHJKdXNdG32r2
-         noLdRK+FhOjXAotjIkZbPwzz5kLwp1Rj+wktSN2tqEEXRoGd1EdmPEaKqST5qDqjPpua
-         GDpQ==
-X-Gm-Message-State: ACgBeo1oAVbEZirOdxldKP34poRQ9Pa5bsY4RvzcWhdOCyduGaykQ3+U
-        mqqCA28X0lv+WDxUtchenshKbVzed6/LNxmE
-X-Google-Smtp-Source: AA6agR7td6AyMAmbtsMgm0hU6//DSjUrwx6r9FRn+QEq5hJ8kvDeWVTZbB4eeNzN9hNu51mNtx602w==
-X-Received: by 2002:a05:600c:2f88:b0:3a5:4014:4b47 with SMTP id t8-20020a05600c2f8800b003a540144b47mr831467wmn.96.1663103284103;
-        Tue, 13 Sep 2022 14:08:04 -0700 (PDT)
-Received: from [127.0.0.1] ([185.122.133.20])
-        by smtp.gmail.com with ESMTPSA id bo23-20020a056000069700b0022a3517d3besm12854497wrb.5.2022.09.13.14.08.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Sep 2022 14:08:03 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-block@vger.kernel.org, kernel-team@fb.com,
-        Stefan Roesch <shr@fb.com>
-Cc:     io-uring@vger.kernel.org
-In-Reply-To: <20220912165325.2858746-1-shr@fb.com>
-References: <20220912165325.2858746-1-shr@fb.com>
-Subject: Re: [PATCH v1] block: blk_queue_enter() / __bio_queue_enter() must return -EAGAIN for nowait
-Message-Id: <166310328309.12918.13628547136691339777.b4-ty@kernel.dk>
-Date:   Tue, 13 Sep 2022 15:08:03 -0600
+        with ESMTP id S229459AbiIOFtU (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 15 Sep 2022 01:49:20 -0400
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F6F8E4EB;
+        Wed, 14 Sep 2022 22:49:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VPrPP64_1663220952;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VPrPP64_1663220952)
+          by smtp.aliyun-inc.com;
+          Thu, 15 Sep 2022 13:49:15 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] io_uring: rw: Fix an unsigned comparison which can never be negative
+Date:   Thu, 15 Sep 2022 13:49:09 +0800
+Message-Id: <20220915054909.81394-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-95855
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Mon, 12 Sep 2022 09:53:25 -0700, Stefan Roesch wrote:
-> Today blk_queue_enter() and __bio_queue_enter() return -EBUSY for the
-> nowait code path. This is not correct: they should return -EAGAIN
-> instead.
-> 
-> This problem was detected by fio. The following command exposed the
-> above problem:
-> 
-> [...]
+The parameter 'res' is defined as unsigned type, so the following if
+statement is invalid, we can modify the type of res to long.
+if (res < 0)
+  	res = io->bytes_done;
+else
+  	res += io->bytes_done;
 
-Applied, thanks!
+io_uring/rw.c:265 io_fixup_rw_res() warn: unsigned 'res' is never less than zero.
 
-[1/1] block: blk_queue_enter() / __bio_queue_enter() must return -EAGAIN for nowait
-      commit: 56f99b8d06ef1ed1c9730948f9f05ac2b930a20b
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2184
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ io_uring/rw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index b777c35378b9..08d88481153c 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -256,7 +256,7 @@ static bool __io_complete_rw_common(struct io_kiocb *req, long res)
+ 	return false;
+ }
+ 
+-static inline unsigned io_fixup_rw_res(struct io_kiocb *req, unsigned res)
++static inline unsigned io_fixup_rw_res(struct io_kiocb *req, long res)
+ {
+ 	struct io_async_rw *io = req->async_data;
+ 
 -- 
-Jens Axboe
-
+2.20.1.7.g153144c
 
