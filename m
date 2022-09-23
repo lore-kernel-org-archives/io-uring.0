@@ -2,124 +2,149 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23FBDC6FA8B
-	for <io-uring@archiver.kernel.org>; Fri, 23 Sep 2022 14:27:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E10EECAAD8
+	for <io-uring@archiver.kernel.org>; Fri, 23 Sep 2022 14:32:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbiIWO1l (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 23 Sep 2022 10:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S230074AbiIWOcT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 23 Sep 2022 10:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbiIWO1W (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 23 Sep 2022 10:27:22 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7431132FFE
-        for <io-uring@vger.kernel.org>; Fri, 23 Sep 2022 07:27:18 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r7so297128wrm.2
-        for <io-uring@vger.kernel.org>; Fri, 23 Sep 2022 07:27:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=xjESXrNdWtDo2qoYrjLvJvmJwWv2yGkYQTgeaR04QnQ=;
-        b=MJMUlVygM7mKSdbuVCJNiJdrjeIqEJx9xfkuLlXpMpQwYfKbqO3p22XY0D/Fj0PqJs
-         DFGkZyC6GCc5weYWy7r/FQCUQ+JDQasfGLrxFhlLOv4h0MnRkvkbvim0w1pzvxzF3teb
-         8mLAuabJ36Po3riGgvEjnQq4dU+g2+6V1c5QxndjYH/5unBrLy8KsLzIIoGmzoTM+Xh3
-         nNdhcWCfIpt8EsH8r6IcCCHIajZj9e2NOoTZb+DRlXbDBD5BV7UXlttE91H0/CFF+yrF
-         mh6Y0iO6fuXulsuxM/jiOGSwTtVOu87s2MvURL+DOnSeVSKDLQD83gv5D2IwDzyiTn9e
-         fWbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=xjESXrNdWtDo2qoYrjLvJvmJwWv2yGkYQTgeaR04QnQ=;
-        b=k0msrOpNGm61HGdvMTEah5m6zZ7RHWJcWc8lszF9eEzUpMsZ99tcOob5N2HON5f9K5
-         BUvrKR2Qh1WKPVXk3VWDAYGzOyxo3aw6nKpqja+vf3Slf4Phk2y1ShAcRIqK+nT46v8g
-         ddr3L+kfI625UihZUX5efyDxd6udCkWNxvimitRgAslrPMpTbtE2dGgq8LnqJMSMm1hp
-         jr+2q7Itqa7n9QAgSnIGnPIyH7Qac9QlC8JVHJN313gDJwwlFJkKMEDV0UhArGFd/GBo
-         kVk6kuGSzZ68GVltP7p0iBTwcQNVgXeFBdME4o2U2ftjXihjL9H5kzzgA3QyP1BsSqTH
-         PInQ==
-X-Gm-Message-State: ACrzQf3qNm7UEk6+WkfKqRFs2LtEiZ1eouLBIQ+Ue74ZgzSsYRe71IVa
-        me/Gx+cpKcVM1cdFTd5c9Y9UT5iyOEo=
-X-Google-Smtp-Source: AMsMyM4DP2Xjr80eo87BTU2bubRY4FwTS+vc5X/PHMAJdXUSgKGTViJWTRFqQLxqX6i+rf49+pBlPw==
-X-Received: by 2002:a05:6000:1849:b0:228:c87d:2578 with SMTP id c9-20020a056000184900b00228c87d2578mr5426645wri.274.1663943236808;
-        Fri, 23 Sep 2022 07:27:16 -0700 (PDT)
-Received: from [192.168.8.198] (188.28.201.74.threembb.co.uk. [188.28.201.74])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c19cf00b003a2f2bb72d5sm3343918wmq.45.2022.09.23.07.27.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Sep 2022 07:27:16 -0700 (PDT)
-Message-ID: <56c084c9-8920-dfa6-74d7-9b0ff8423b67@gmail.com>
-Date:   Fri, 23 Sep 2022 15:26:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
+        with ESMTP id S232234AbiIWOcI (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 23 Sep 2022 10:32:08 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997371406CC
+        for <io-uring@vger.kernel.org>; Fri, 23 Sep 2022 07:32:07 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28NAkkwQ000611
+        for <io-uring@vger.kernel.org>; Fri, 23 Sep 2022 07:32:06 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=rODqFlO+rQuNxGlJPiIEOBakQxS/XTjXp2EzonIP7Og=;
+ b=q9mhQ1/aAIDIQWeI+wAsT74bsPilFVPXpf/YZgRxvBVjcIYncZHO0Nq6/Z9J6PgLnz8n
+ Ys2ExH3xGlLFw9bK2xusZIksb7aHKaasGJcC/fQ30lvibbA29QgmzUr10OjMmmN6aFj0
+ F5QxEpt7SjnNIkmzb9BJxsoXEA+xrUXRAt4= 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jr18hstsp-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <io-uring@vger.kernel.org>; Fri, 23 Sep 2022 07:32:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FOG9fV1cyE+9WJxwaP4Dl6cSjxjkYYBLlQ8GcrnyGUt07AjIy31W9fyNyjXgU0+lRFOOylU9A5frYN4XsOPIjaL3q01aTnC41CYsCDuZL8WgdlmJdcZK+QnkHS59JPser0/nFSzUxJQxtyITurH2wFgdXdl/1Yt19trAe+NHMsHp8Lk4pGyxQ1c+46RHGL1g1J8OZWdMFF+weAShQMBvfhhSzTTSXaj/EtNzw6/l8ZvzTCzDZBBxz575KCwci3obmkRY0cqI+Wp5wuCnvPniCUt0e1/eXOKoFVlIshJpruzSkhmcH/EXmCsyAOyP0fUJ5QCtsJy/Gs4dBq1vHQdKxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rODqFlO+rQuNxGlJPiIEOBakQxS/XTjXp2EzonIP7Og=;
+ b=QJwd6xhF3ef+vPi3bX5xZ2cwDSzzKdao34uBd7hmADr3b5yMXClZlwaG6o4Da22rsUuSJNiUsbDKdotvKdsmEajpko9oIcc8fFyy+N/EHyWe8NdVUKKe3jtWR9RBpxOarDSfu0WhL39ZgxQ5a1an6H4rHSLW/oVrl8wHuT0jWXNwX5l51Dxa/k4rbbaR3UXPo4QntDwijd5nc1PdQ4yX8I5QX+g4bVkYTlFlmQRM7fXJeOxD2dQ7byckUGKihCPHDCblXL7xRsf3IsvdJDn1HgbCJawWjFVovKrxkcmCy8UYsf7zu1mdP9mbZ0sMx+0I8KrEWlh7lGTa3g4W0Ui31A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB4854.namprd15.prod.outlook.com (2603:10b6:806:1e1::19)
+ by SA1PR15MB4484.namprd15.prod.outlook.com (2603:10b6:806:197::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.20; Fri, 23 Sep
+ 2022 14:32:03 +0000
+Received: from SA1PR15MB4854.namprd15.prod.outlook.com
+ ([fe80::411e:21ef:d04f:9c68]) by SA1PR15MB4854.namprd15.prod.outlook.com
+ ([fe80::411e:21ef:d04f:9c68%8]) with mapi id 15.20.5654.020; Fri, 23 Sep 2022
+ 14:32:03 +0000
+From:   Dylan Yudaken <dylany@fb.com>
+To:     "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>
 Subject: Re: [PATCH for-next] io_uring: fix CQE reordering
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc:     Dylan Yudaken <dylany@fb.com>
+Thread-Topic: [PATCH for-next] io_uring: fix CQE reordering
+Thread-Index: AQHYz1Q0t7Zeqn+K6EGNYfMgTSMJ1K3tE9OA
+Date:   Fri, 23 Sep 2022 14:32:02 +0000
+Message-ID: <2815cf233c3171204823eda9a18f7c67894b7db9.camel@fb.com>
 References: <ec3bc55687b0768bbe20fb62d7d06cfced7d7e70.1663892031.git.asml.silence@gmail.com>
- <30718187-8558-4b32-b8d1-5c1f4f322d4f@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <30718187-8558-4b32-b8d1-5c1f4f322d4f@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <ec3bc55687b0768bbe20fb62d7d06cfced7d7e70.1663892031.git.asml.silence@gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB4854:EE_|SA1PR15MB4484:EE_
+x-ms-office365-filtering-correlation-id: 879a769e-2753-4070-2975-08da9d7061db
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: buc8LO+t1pXGdoVlVaQRO2WSPNayuv44BlBR+2P7oGh1eXY0HYkjSdlDoux9g+JHadYmGDrMLBEDPbpr78AKafQV7OVzcFyOLYIOKAwrd5edFhE9Alb/DJ4gSrRWAtqTeGRKXWGj8Q3vrU75AofgTce9WurCUwoIO8DulpjPDGgaqt9YKrnLBllL97ponfu/LwvYWmRcVnFFqrLihRQlNLOWwnceAOkiH3RTa04EGEye/ygJbsmEXW1H+T2eqfglB2IIpo4GutitcLuaItVNh/hPGPb/UpHfJi0KCAOe1qbIH9VAJzW2eHQWv4KRo8tp1Uun8eV5wM0WNm18o27YMv1SSHsiDFZKX1tnDEXvG06uyCVlWURGGvW4K83xZ8mG0UbKauUqcJ8nNotYyA0Y2j+UJNMc6I40cn0/PRGi8gaxaAP7DjcmBCpyP/ihow0WKfQTIF6tbId5BviU1rtc+Xz/ahnbl83D2ysJqDRrHJK/9yOaObVopGVoSFPtbPVIoSC7PfJy0xWFE2HxTnp0tULUiWGTsKfZ/jyWCYRpbx0am+yiY5NRGNswCpaWFlzgacEXq35ALlXG4v77dZ6ApWbWgSlXIp8uch1JBFdSwDk4WpvIunysGN8n2fe5hHmd40Vjyu8pUxv95IMkxa1bGfNjfSzWVW33JEY+8pHUFXA1YwnETVXd/GwpsVG/BUWXssVNzT1WN1ujkjKbe2yCKQXo2lvzsj3Xdqbjw5TI5JvfpmpXhP/T/w+3B4vXd9j1bUUWoeFD+TSC3+KL1qbRlQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB4854.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199015)(91956017)(2616005)(110136005)(71200400001)(8676002)(4326008)(186003)(41300700001)(38070700005)(76116006)(66556008)(86362001)(64756008)(66446008)(66476007)(36756003)(4744005)(66946007)(38100700002)(6506007)(5660300002)(478600001)(122000001)(6486002)(8936002)(83380400001)(316002)(6512007)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UndNRWF2cG1IV0JQWW52Qy8vdlM4di9XSCszV2RTaGdjdm95SVdDaytrMXVu?=
+ =?utf-8?B?WmZBRTBwMUMvR0YzQUp4elBROCsrQlg3KzU5SHEyUEVRMysxQ2cxZXRoVStx?=
+ =?utf-8?B?Rm1kVVRBemowSGI3STdZSnAxbWpXcGMvWnRMWXhiYzFkQkNlS0xuUnJHbW9F?=
+ =?utf-8?B?RElVM1lYZ3FHdXFVSVhUK3dkaEdRZEIxbUc3Tm93ZG13TFZFWDNpN0pjTis1?=
+ =?utf-8?B?T3lwak1RYmdYZ043Mzd0TEZKVVczUERjZ2lobEkyWEZtR25XK3FuZGJIU3JF?=
+ =?utf-8?B?cDQ2WEV0aWIxa2gybS9SVzdtWWgvcUFOclRkakxPbW1CQWtsR0FvdDhnRjlF?=
+ =?utf-8?B?dFJ1a0doVm9DYmtQWm1vdnQ1WTRIR25Lak9RYjA2Qi9pdDU5NENVNGFVWnN4?=
+ =?utf-8?B?dFBadk9nZWRMdEkwdWQvMkNhTjA4ZXBzVDY3NUkzMFZBVUNrRVZwVExONHNR?=
+ =?utf-8?B?SUN0MFlwbFJhaE9VMU5vMlFSU1dFYk1qK3dTQ2dQaXp0elU4Tm45MXdxUHk3?=
+ =?utf-8?B?T2tTcUNsbG05ZWlwd0F4QjdGWkp5VGtVTlhSU1M2VlZ2Yk90QUZ4SkpvRWpR?=
+ =?utf-8?B?ak1BYmhMUC9xVklOaStNYnN1aFlJTFdzUnViU2g2YW1GZzJiYWR2cmY4RUF4?=
+ =?utf-8?B?bXBHRGRyUElUMHkvNHBUOTNMM0VMR0NEY0R6NStydE51YitHT3dGcmFlSjU0?=
+ =?utf-8?B?TUxPaU1XS1kxdGJ1MDZ5M0dpSkVIU0FVYXZDaW1zU0V5QVhmWkVmanRHNk5S?=
+ =?utf-8?B?TkR0YUR3bDJ0TUlSRlMzZ1VRRVpkT0Q2M2Q1cEQ1VlcrNzdjay9kd092dXN1?=
+ =?utf-8?B?M29Ud015ZjNmZElSQmxEVzJobnhwcXRrK1Q4bjRYMEdhdlQ1ajBWaXdjaWFl?=
+ =?utf-8?B?Qk9KNDVoZlRhUWhmbjFBa3dVTnBEV3Uva0VIdUgxU2x5Y25JSDhDbC9ocXhx?=
+ =?utf-8?B?MWZReitqSXI0TGJkYmVyVFNFRTVUVEFtY1dxSWYxSUxIL1lwcFZleEZOek05?=
+ =?utf-8?B?REgveTFONEtpS1BMYWpscG8vdkpvdjhtY2NjZ3VPNUR4V2JyTjRJNVMvWTFO?=
+ =?utf-8?B?cnhaWDg3MnY2V1dKQkg3RldodjJRWWJYbkx0SS9rZHlsRVdmTTlPcDdNL3Np?=
+ =?utf-8?B?ajhOSUx1OE5RWXg0R2NGTEk4d2lRdEd4amhmb1RaNU5wbFA1djVRQmlUN0xJ?=
+ =?utf-8?B?S00yS1E2ejVvNURFQjVjakhKZE5Ib01NL2tIR1lMbkErN09BVHZ2aDNscmFG?=
+ =?utf-8?B?RWV0dDZzOW52eUUwS0Q5ZUNDQkd5WXZ0ejNHZEQvS2M3b1lvM2NnWVhOeHVC?=
+ =?utf-8?B?a1gvUittdE1xMTJZSE1WUmZPVnVJbkZHVjBaWWVHZ3pacUVZbGs0OHdobjEz?=
+ =?utf-8?B?QldRTFNiMFlGa3VvTmhuZ3RGUTNvMytUaVVkUE5ldUFHL0laeGl6RUV6NTlV?=
+ =?utf-8?B?VjRyTmJhaGk0VEIzamFleVQ2QmR0aURSRWFrRkFDRFp2TDVtNjJCZ1NNTjk3?=
+ =?utf-8?B?Y0s3TmdKT1dNdndYOGRvbEpqaFNoS3l1Zi9PWFJGSzUvRFVMUFRDNXlwcHdJ?=
+ =?utf-8?B?ZlFrSkR6ZUUvN0libVdORFMyM0IxQU1wYkdzV1BmbXVESk1KZ2N0SlNMYmpk?=
+ =?utf-8?B?OEtWcytXUnhaVGVlR2t3Q3VpZm1lQWZGdG8vcVhERk16R3hQZHRCL09sWWd2?=
+ =?utf-8?B?UEkvMGd6WEdSUW1OTkRjL2xaN2o2OTNlYjRlRUNld1Zrb0pxODJDWk9ZcFZK?=
+ =?utf-8?B?cTdzVFJ2ZGhJdElhS25WVjNJRlV6aGw5SElyNjk0R1lOWTFvdXZybGNGUzVk?=
+ =?utf-8?B?Wm5VNW9VYk80U2pKQnhCTzFBdDVqaldjODNEaWljdlRsZXdpS1c5Y3R6MmUr?=
+ =?utf-8?B?OVJtdHhUK0kydUMvdXVRTGVLalNwbjd2UjV1eSs5V2xZamo1VFlGUFNaK0hO?=
+ =?utf-8?B?UGxTOWpaTjFIZ2FtOHZlemxYem5iTkxma3lNcEs5MElxQ0RpcDBETEY5eHBx?=
+ =?utf-8?B?RWt1U05Da09xUTZvL01qWWFnOGtPWWZwT3BRM3RRQWpYRnE1bUdrVjhWMko3?=
+ =?utf-8?B?ajc5aFFLektucmdDbUdqZ0pGNVdMdUpXOC9vMG1RRDVVY0NtRFI4Zk1ScCsv?=
+ =?utf-8?B?Wk5NQXIwcGhPbTgxeG1qSXVleVAvb1FuTDhmTTl1YjRsMVRzZUtkbitNTmY2?=
+ =?utf-8?B?emc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A68231716F756648BAF97FE247318217@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB4854.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 879a769e-2753-4070-2975-08da9d7061db
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2022 14:32:02.9841
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: W6vbhy78WOfuxDHp+Ngj64a3korbYOzBCV16OYvYnmR0Cbhmf2RPuUj52Zdo5gc7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR15MB4484
+X-Proofpoint-ORIG-GUID: BB_ndPdJ6prbik_KKY2iN_uKUsZ2Wnu9
+X-Proofpoint-GUID: BB_ndPdJ6prbik_KKY2iN_uKUsZ2Wnu9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-23_04,2022-09-22_02,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 9/23/22 15:19, Jens Axboe wrote:
-> On 9/23/22 7:53 AM, Pavel Begunkov wrote:
->> Overflowing CQEs may result in reordeing, which is buggy in case of
->> links, F_MORE and so.
->>
->> Reported-by: Dylan Yudaken <dylany@fb.com>
->> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->> ---
->>   io_uring/io_uring.c | 12 ++++++++++--
->>   io_uring/io_uring.h | 12 +++++++++---
->>   2 files changed, 19 insertions(+), 5 deletions(-)
->>
->> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
->> index f359e24b46c3..62d1f55fde55 100644
->> --- a/io_uring/io_uring.c
->> +++ b/io_uring/io_uring.c
->> @@ -609,7 +609,7 @@ static bool __io_cqring_overflow_flush(struct io_ring_ctx *ctx, bool force)
->>   
->>   	io_cq_lock(ctx);
->>   	while (!list_empty(&ctx->cq_overflow_list)) {
->> -		struct io_uring_cqe *cqe = io_get_cqe(ctx);
->> +		struct io_uring_cqe *cqe = io_get_cqe_overflow(ctx, true);
->>   		struct io_overflow_cqe *ocqe;
->>   
->>   		if (!cqe && !force)
->> @@ -736,12 +736,19 @@ bool io_req_cqe_overflow(struct io_kiocb *req)
->>    * control dependency is enough as we're using WRITE_ONCE to
->>    * fill the cq entry
->>    */
->> -struct io_uring_cqe *__io_get_cqe(struct io_ring_ctx *ctx)
->> +struct io_uring_cqe *__io_get_cqe(struct io_ring_ctx *ctx, bool overflow)
->>   {
->>   	struct io_rings *rings = ctx->rings;
->>   	unsigned int off = ctx->cached_cq_tail & (ctx->cq_entries - 1);
->>   	unsigned int free, queued, len;
->>   
->> +	/*
->> +	 * Posting into the CQ when there are pending overflowed CQEs may break
->> +	 * ordering guarantees, which will affect links, F_MORE users and more.
->> +	 * Force overflow the completion.
->> +	 */
->> +	if (!overflow && (ctx->check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT)))
->> +		return NULL;
-> 
-> Rather than pass this bool around for the hot path, why not add a helper
-> for the case where 'overflow' isn't known? That can leave the regular
-> io_get_cqe() avoiding this altogether.
-
-Was choosing from two ugly-ish solutions, but io_get_cqe() should be
-inline and shouldn't really matter, but that's only the case in theory
-though. If someone cleans up the CQE32 part and puts it into a separate
-non-inline function, it'll be actually inlined.
-
--- 
-Pavel Begunkov
+T24gRnJpLCAyMDIyLTA5LTIzIGF0IDE0OjUzICswMTAwLCBQYXZlbCBCZWd1bmtvdiB3cm90ZToN
+Cj4gT3ZlcmZsb3dpbmcgQ1FFcyBtYXkgcmVzdWx0IGluIHJlb3JkZWluZywgd2hpY2ggaXMgYnVn
+Z3kgaW4gY2FzZSBvZg0KPiBsaW5rcywgRl9NT1JFIGFuZCBzby4NCj4gDQoNCk1heWJlIHRoZSBj
+b21taXQgbWVzc2FnZSBnb3QgY3V0IG9mZj8NCg0KDQpJIHRoaW5rIHRoaXMgaXMgcHJvYmFibHkg
+b2ssIHRoZSBkb3duc2lkZSBiZWluZyB0aGF0IENRRSdzIHdpdGggbm8NCm9yZGVyaW5nIGNvbnN0
+cmFpbnRzIHdpbGwgaGF2ZSBvcmRlcmluZyBmb3JjZWQgb24gdGhlbS7CoEFuIGFsdGVybmF0aXZl
+DQp3b3VsZCBiZSBmb3IgZWFjaCBjYXNlIChlZyBsaW5rZWQsIHplcm9jb3B5LCBtdWx0aXNob3Qp
+IHRvIGVpdGhlciBwYXVzZQ0Kb3IgZm9yY2UgQ1FFJ3MgdG8gYmUgb3ZlcmZsb3cgb25lcy4gVGhp
+cyB3b3VsZG50IHNsb3cgZG93biB0aGUgb3RoZXINCmNvZGVwYXRocy4gSSBkb24ndCBoYXZlIGFu
+IGlkZWEgZm9yIGhvdyBkaWZmaWN1bHQgdGhpcyBtaWdodCBiZS4NCg0KQnkgdGhlIHdheSwgaWYg
+eW91IGRvIGdvIHdpdGggdGhpcyBhcHByb2FjaCB0aGVuIEkgYmVsaWV2ZSB5b3UgY2FuDQpyZXZl
+cnQgdGhlc2UgcGF0Y2hlczoNCmEyZGE2NzYzNzZmZSAoImlvX3VyaW5nOiBmaXggbXVsdGlzaG90
+IHBvbGwgb24gb3ZlcmZsb3ciKQ0KY2JkMjU3NDg1NDVjICgiaW9fdXJpbmc6IGZpeCBtdWx0aXNo
+b3QgYWNjZXB0IG9yZGVyaW5nIikNCg0KYW5kIGRvIHNvbWV0aGluZyBzaW1pbGFyIGZvciBtdWx0
+aXNob3QgcmVjZWl2ZS4NCg0KDQpEeWxhbg0K
