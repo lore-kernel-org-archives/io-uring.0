@@ -2,110 +2,84 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE6ACC32771
-	for <io-uring@archiver.kernel.org>; Mon, 26 Sep 2022 17:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 419C8C6FA82
+	for <io-uring@archiver.kernel.org>; Mon, 26 Sep 2022 17:48:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiIZRmg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 26 Sep 2022 13:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
+        id S231253AbiIZRsN (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 26 Sep 2022 13:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiIZRmP (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 13:42:15 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA0E1CB0E
-        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 10:09:41 -0700 (PDT)
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28QApgMZ031085
-        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 10:09:40 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=vLUCidGyBbc0aglagMzLHklot9FF2ixj2NRn9pzX/t8=;
- b=iImqhsF3FzWHg1MJQmaYM4F/Xu00lJY821fzOkSoEikc8tMsv0pPVIcKugCsQIw/gqg5
- zmlOjIL2h/Bfb/qYtWL2RXMmp84XAN52i8qebqraB4UaOTespZH23La35V68MjnOovMe
- K4Lp4FwD69YIuSW8LJRrUVrquWzWqu8V9GY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3jsyqumdux-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 10:09:40 -0700
-Received: from snc-exhub201.TheFacebook.com (2620:10d:c085:21d::7) by
- snc-exhub101.TheFacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 10:09:39 -0700
-Received: from twshared8247.08.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 26 Sep 2022 10:09:38 -0700
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id C66116B0A92B; Mon, 26 Sep 2022 10:09:27 -0700 (PDT)
-From:   Dylan Yudaken <dylany@fb.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
-Subject: [PATCH v2 1/3] io_uring: register single issuer task at creation
-Date:   Mon, 26 Sep 2022 10:09:25 -0700
-Message-ID: <20220926170927.3309091-2-dylany@fb.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220926170927.3309091-1-dylany@fb.com>
-References: <20220926170927.3309091-1-dylany@fb.com>
+        with ESMTP id S231225AbiIZRrv (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 13:47:51 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF7913D16
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 10:18:53 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id h194so5795756iof.4
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 10:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=SBNDj5502h57IDXl6FPkcvdwxfI7lqUcfi/UyHv3Ggk=;
+        b=5Hr0FN2rvhIGD2yLM53TEBcHUKNKxSbXdN9xRpCLGWXieVa22OlXxj8zosFbs3quwJ
+         vCrDrImqSiKmCNnGxqkQBiBnmfT6P4qsRfeujtQtCo48G3U3am3pLMqpNaTNBrxlW3fJ
+         LpJdU/f+i76/xaH12KPojzdElCdjJ7eAEwVwOjcBekcleJrYg856jBg2ds4/KKF0Jtxx
+         TCFPWJTUcDGnmkm6VA8ILPQq4aTZSSl0xBS2c57aVhDWFq0L4HmHrmt4ZFN3QzYCdU09
+         hEKnYeUEy7StrIcE8bI58yjQYTd6WHNyveZu2PNR1OLxRyWZU2elvauQMrO1C/mb80XG
+         3Eng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=SBNDj5502h57IDXl6FPkcvdwxfI7lqUcfi/UyHv3Ggk=;
+        b=El0gNqWQnrNLhPMnvvOk+1FIDWYpfY4g/7ZAtxah1+QuqrDKRTxwcQ7ZfKrFbRfFOO
+         nmsxtu2YzlVALgKduth/m4npcWSVT1hD65H9IgH+PHLPbOUCeExLJ+46H5WVu+UyaP2P
+         eooMPfckzO3DOR7RQQxLe9kinTlQqnMd/U/soA7ry5Le7EDjK7JpeTv/js5aBCGHlX5N
+         7BR60xiD2QFMlkHqU9QERe5Xwq9WE77oJMj2ai4K7s1FsTnKsjqced/mXqpsl99srZf0
+         xM0MqDHMwDWUyEoy2c0p3bFIDvlNzBOtjSAI338U/oqFUkniiaJGXw/DKdqbnyaFkpwq
+         zozQ==
+X-Gm-Message-State: ACrzQf2NXb9P2ygEu0/HDf6g9KErLmxpIc2RYxYtr47CPpSpv7XsHDX7
+        88oXFMjNEVcFc//jWK9j9w9UfA==
+X-Google-Smtp-Source: AMsMyM6ixmNifzDMC/xdHbCnQo/lvoLsTJ2LfeLmoseogVIt9sIOnEYSMjC0/8J20xyTOeneGDwwyg==
+X-Received: by 2002:a05:6638:144f:b0:35a:68a4:b3cb with SMTP id l15-20020a056638144f00b0035a68a4b3cbmr12375012jad.251.1664212732569;
+        Mon, 26 Sep 2022 10:18:52 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id t11-20020a056602140b00b00689007ec164sm7527902iov.48.2022.09.26.10.18.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Sep 2022 10:18:52 -0700 (PDT)
+Message-ID: <ae593f43-4972-8f96-b99e-2208b21b8051@kernel.dk>
+Date:   Mon, 26 Sep 2022 11:18:51 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 018pEluIFA2-iOaOv_UNwjq4h8F6HHx5
-X-Proofpoint-GUID: 018pEluIFA2-iOaOv_UNwjq4h8F6HHx5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-09-26_09,2022-09-22_02,2022-06-22_01
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH liburing 0/2] 6.0 updates
+Content-Language: en-US
+To:     Dylan Yudaken <dylany@fb.com>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, kernel-team@fb.com
+References: <20220926151412.2515493-1-dylany@fb.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220926151412.2515493-1-dylany@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Instead of picking the task from the first submitter task, rather use the
-creator task or in the case of disabled (IORING_SETUP_R_DISABLED) the
-enabling task.
+On 9/26/22 9:14 AM, Dylan Yudaken wrote:
+> Two liburing updates for 6.0:
+> 
+> Patch 1 updates to account for the single issuer ring being assigned at
+> ring creation time.
+> 
+> Patch 2 updates man pages from 5.20 -> 6.0
 
-This approach allows a lot of simplification of the logic here. This
-removes init logic from the submission path, which can always be a bit
-confusing, but also removes the need for locking to write (or read) the
-submitter_task.
+I'll wait for a v2 of this one as well, as at least the documentation will
+need updating for v2 of the kernel side.
 
-Users that want to move a ring before submitting can create the ring
-disabled and then enable it on the submitting task.
+-- 
+Jens Axboe
 
-Signed-off-by: Dylan Yudaken <dylany@fb.com>
----
- io_uring/io_uring.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 2965b354efc8..242d896c00f3 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3357,6 +3357,10 @@ static __cold int io_uring_create(unsigned entries=
-, struct io_uring_params *p,
- 		goto err;
- 	}
-=20
-+	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER
-+	    && !(ctx->flags & IORING_SETUP_R_DISABLED))
-+		ctx->submitter_task =3D get_task_struct(current);
-+
- 	file =3D io_uring_get_file(ctx);
- 	if (IS_ERR(file)) {
- 		ret =3D PTR_ERR(file);
-@@ -3548,6 +3552,9 @@ static int io_register_enable_rings(struct io_ring_=
-ctx *ctx)
- 	if (!(ctx->flags & IORING_SETUP_R_DISABLED))
- 		return -EBADFD;
-=20
-+	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER && !ctx->submitter_task)
-+		ctx->submitter_task =3D get_task_struct(current);
-+
- 	if (ctx->restrictions.registered)
- 		ctx->restricted =3D 1;
-=20
---=20
-2.30.2
 
