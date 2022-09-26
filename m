@@ -2,79 +2,95 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DF60C07E9D
-	for <io-uring@archiver.kernel.org>; Mon, 26 Sep 2022 15:12:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 541F1C07E9D
+	for <io-uring@archiver.kernel.org>; Mon, 26 Sep 2022 15:17:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235799AbiIZPMs (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 26 Sep 2022 11:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56882 "EHLO
+        id S236085AbiIZPRk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 26 Sep 2022 11:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235861AbiIZPMR (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 11:12:17 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530CD66110;
-        Mon, 26 Sep 2022 06:51:03 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id cc5so10338234wrb.6;
-        Mon, 26 Sep 2022 06:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=2cRdMsGPAB+qaapM85CUGvse7MWNDqaXFtk6mDGsNwk=;
-        b=RUNnDTt0sLmJ6pb7/xz5KzCM2L/F6rGIiJpTlZxBaJryX2CKLtE8+q4TXmf962YkWp
-         +JbEdWl8lrI0FpxyWucwKWNpT4fA+JKrUjHzx7cyC1KKQInCXwFZAuJC57tUuGqPR5Yl
-         EViqroNDb4+iUaBH5etIfmI0q0tsMYhzlkNTUOvJzaGGjktImniuT7DZYXbGKaBQX4u8
-         Nk8fWrCNXO9aRrAbrtzxABvVufd5z9KZ0GIu7no4N8l2yurRtgt6uJ9cOYPEOD018+zs
-         V0PZonD8ARBe1hEgYZG+vK9aA5lWeGogW5ZHnQWtr5B8romLtJIvaoSpXZtAorve5GoP
-         iwnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=2cRdMsGPAB+qaapM85CUGvse7MWNDqaXFtk6mDGsNwk=;
-        b=r9rwCLYuBNrDnniU/bh0qXMoGPbGnUXpdzPXEozpgsb8PH4nPtDl1Br39JObNOW/HB
-         JlfrxSsf8L/wehITlii9N4FcEwstDltgZ1gyiPJkYOXkuMmPgrCRcLvWZiYxR3JXWZnz
-         5/AS5Dq8djh/jpYrMIZcwv+eIuDbNb2PxRUojzTjL0lCi6No7gIiC+SS6nCTdyFnFSYA
-         0WucJD6b1TKbbQFm7ahKbAGjXhUew4eLa9BQTSLUjocukNt5wLmKmF2z9R+kHUZPB8PS
-         xMcF44L3lCRdEvXbCVzxCCP16BtxyPhPI0PIYsYhjlg6ggi+pyVoSEaR8Fr5IoH0jW6S
-         ywfw==
-X-Gm-Message-State: ACrzQf3bIiZBZXs6rOQf1DuEvLAhcpLXqfFNo5tTFuSJ+cfjZKaTBElu
-        OTCK5wbbNbi0OYlAKXQYBzDXT9JCbEg=
-X-Google-Smtp-Source: AMsMyM7NuNmw6IHUUelKQei8N5V/FL7N1DQ6rcS+BjLDl355r43vBfRvTKHCGWb9uFbUpc1ODIiZkg==
-X-Received: by 2002:a5d:4e88:0:b0:228:c8ed:2af8 with SMTP id e8-20020a5d4e88000000b00228c8ed2af8mr13927076wru.412.1664200262293;
-        Mon, 26 Sep 2022 06:51:02 -0700 (PDT)
-Received: from [192.168.8.100] (188.28.209.34.threembb.co.uk. [188.28.209.34])
-        by smtp.gmail.com with ESMTPSA id n39-20020a05600c3ba700b003a540fef440sm12042359wms.1.2022.09.26.06.51.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Sep 2022 06:51:01 -0700 (PDT)
-Message-ID: <ee12470f-4fca-a036-1195-d68a3ca1f3f9@gmail.com>
-Date:   Mon, 26 Sep 2022 14:49:54 +0100
+        with ESMTP id S235911AbiIZPQs (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 11:16:48 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781A427D
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 07:03:25 -0700 (PDT)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 28Q9OiHT020937
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 07:03:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=k8e9XhReGPOptOw1DYeKjrBV9CjaPrV9yHOCxxhlJFU=;
+ b=lppCbCxFHVAzTHD+1WMAbeJS6i673QDtY5cBg4uEkuamPn+oy8k1FiyHHKfb38NmwmYU
+ OOUITycrHWoqRVSxUOWqh8+I1CXUmhno49cHUpAs3vAPRwr4PDZb/Zi3Qiiuu1lMBsoi
+ zenam7B5yS2RQyFZ1FnlwJCX79g5nanUrzc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3jswjuk8w9-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 07:03:24 -0700
+Received: from twshared2996.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 07:03:23 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 7E8636AEBEF6; Mon, 26 Sep 2022 07:03:17 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>, Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH 1/3] io_uring: register single issuer task at creation
+Date:   Mon, 26 Sep 2022 07:03:02 -0700
+Message-ID: <20220926140304.1973990-2-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220926140304.1973990-1-dylany@fb.com>
+References: <20220926140304.1973990-1-dylany@fb.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [syzbot] KASAN: invalid-free in io_clean_op
-Content-Language: en-US
-To:     syzbot <syzbot+edfd15cd4246a3fc615a@syzkaller.appspotmail.com>,
-        axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000082de205e98465e4@google.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <000000000000082de205e98465e4@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: LDlQn4xe-rT73bCpyjp-ywZHcAnT6GpK
+X-Proofpoint-ORIG-GUID: LDlQn4xe-rT73bCpyjp-ywZHcAnT6GpK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 9/25/22 19:15, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> KASAN: invalid-free in io_clean_op
+Instead of picking the task from the first submitter task, rather use the
+creator task.
+The downside of this is that users are unable to move tasks before
+submitting.
 
-#syz test: https://github.com/isilence/linux.git io_uring/net-free-iov-bug
+However this simplifies the logic here. For example CQEs are able to be
+posted by io_uring_register, which could also be from a separate
+task. This could be confusing as this does not count as a submit, and so
+would not be the registered task.
 
--- 
-Pavel Begunkov
+Additionally this removes init logic from the submission path, which can
+always be a bit confusing.
+
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ io_uring/io_uring.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 2965b354efc8..3f40defd721d 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -3357,6 +3357,9 @@ static __cold int io_uring_create(unsigned entries,=
+ struct io_uring_params *p,
+ 		goto err;
+ 	}
+=20
++	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER)
++		ctx->submitter_task =3D get_task_struct(current);
++
+ 	file =3D io_uring_get_file(ctx);
+ 	if (IS_ERR(file)) {
+ 		ret =3D PTR_ERR(file);
+--=20
+2.30.2
+
