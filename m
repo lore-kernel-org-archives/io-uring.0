@@ -2,47 +2,97 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A62CC32771
-	for <io-uring@archiver.kernel.org>; Mon, 26 Sep 2022 16:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 033E1C32771
+	for <io-uring@archiver.kernel.org>; Mon, 26 Sep 2022 16:25:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbiIZQGv (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 26 Sep 2022 12:06:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S236346AbiIZQZb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 26 Sep 2022 12:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiIZQGE (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 12:06:04 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8127110E;
-        Mon, 26 Sep 2022 07:54:05 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 914A868AFE; Mon, 26 Sep 2022 16:54:01 +0200 (CEST)
-Date:   Mon, 26 Sep 2022 16:54:01 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Kanchan Joshi <joshi.k@samsung.com>
-Cc:     axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
-        io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, gost.dev@samsung.com,
-        Anuj Gupta <anuj20.g@samsung.com>
-Subject: Re: [PATCH for-next v9 6/7] block: introduce helper to map bvec
- iterator
-Message-ID: <20220926145401.GA20939@lst.de>
-References: <20220925202304.28097-1-joshi.k@samsung.com> <CGME20220925203336epcas5p39e910479f992d7d9e233210e0647a6bf@epcas5p3.samsung.com> <20220925202304.28097-7-joshi.k@samsung.com>
+        with ESMTP id S234858AbiIZQZE (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 12:25:04 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F359815729
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 08:14:23 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 28QD7aqG013837
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 08:14:23 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=1e9vWCAVJyP0v5XEjApMCq1DhjsimJ8I74uggNCiJHk=;
+ b=K3assWhcBQMtDuNWj+iiS026j69UTEua2PUyAd+AueVVsMylaWALCaJtamwK239cawS0
+ uz84QLq2aMqbiIzAa5b1ROiLLiWnQzO7GZEg2BZGIoUI4iF4XMVQmVmVtpS3Xkn9CqDH
+ 1YNwT14Akg4oDAi/Avun0FyM01PulVy3Xcs= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3jswd7uvnr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 08:14:23 -0700
+Received: from twshared14494.08.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 26 Sep 2022 08:14:22 -0700
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 1930F6AF7F50; Mon, 26 Sep 2022 08:14:18 -0700 (PDT)
+From:   Dylan Yudaken <dylany@fb.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
+        Dylan Yudaken <dylany@fb.com>
+Subject: [PATCH liburing 2/2] update documentation to reflect no 5.20 kernel
+Date:   Mon, 26 Sep 2022 08:14:12 -0700
+Message-ID: <20220926151412.2515493-3-dylany@fb.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220926151412.2515493-1-dylany@fb.com>
+References: <20220926151412.2515493-1-dylany@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220925202304.28097-7-joshi.k@samsung.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: OmFRMqoSgMp6XWLp97CoSrk_WM-1Vz7B
+X-Proofpoint-GUID: OmFRMqoSgMp6XWLp97CoSrk_WM-1Vz7B
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-26_08,2022-09-22_02,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 01:53:03AM +0530, Kanchan Joshi wrote:
-> Add blk_rq_map_user_bvec which maps the pages from bvec iterator into a
-> bio, and places the bio into the request. This helper will be used by
-> nvme for uring-passthrough path with pre-mapped buffers.
+The documentation referenced the wrong kernel version.
 
-I still don't think this should be separate per the ongoing discussion.
+Signed-off-by: Dylan Yudaken <dylany@fb.com>
+---
+ man/io_uring_prep_recv.3    | 2 +-
+ man/io_uring_prep_recvmsg.3 | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It would also be nice if we had a chance to finish the discussion
-without seeing a reposted series before we've made much progress on
-it.
+diff --git a/man/io_uring_prep_recv.3 b/man/io_uring_prep_recv.3
+index 60a77fc241b5..b3862369affa 100644
+--- a/man/io_uring_prep_recv.3
++++ b/man/io_uring_prep_recv.3
+@@ -55,7 +55,7 @@ If a posted CQE does not have the
+ .B IORING_CQE_F_MORE
+ flag set then the multishot receive will be done and the application sho=
+uld issue a
+ new request.
+-Multishot variants are available since kernel 5.20.
++Multishot variants are available since kernel 6.0.
+=20
+=20
+ After calling this function, additional io_uring internal modifier flags
+diff --git a/man/io_uring_prep_recvmsg.3 b/man/io_uring_prep_recvmsg.3
+index 07096ee4826c..65f324dfef9b 100644
+--- a/man/io_uring_prep_recvmsg.3
++++ b/man/io_uring_prep_recvmsg.3
+@@ -65,7 +65,7 @@ submitted with the request. See
+ .B io_uring_recvmsg_out (3)
+ for more information on accessing the data.
+=20
+-Multishot variants are available since kernel 5.20.
++Multishot variants are available since kernel 6.0.
+=20
+ After calling this function, additional io_uring internal modifier flags
+ may be set in the SQE
+--=20
+2.30.2
+
