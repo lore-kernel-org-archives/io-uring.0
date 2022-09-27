@@ -2,90 +2,82 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB488C07E9D
-	for <io-uring@archiver.kernel.org>; Tue, 27 Sep 2022 00:14:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AA40C32771
+	for <io-uring@archiver.kernel.org>; Tue, 27 Sep 2022 00:43:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiI0AOk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 26 Sep 2022 20:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S229571AbiI0AnU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 26 Sep 2022 20:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiI0AOj (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 20:14:39 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C2412AFF
-        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 17:14:36 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bk15so4816252wrb.13
-        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 17:14:36 -0700 (PDT)
+        with ESMTP id S229555AbiI0AnT (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 26 Sep 2022 20:43:19 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9E7A1A72
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 17:43:18 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id c24so7726921plo.3
+        for <io-uring@vger.kernel.org>; Mon, 26 Sep 2022 17:43:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=fBrnHn/bzSCaOML05ZUAlbmm6hmaDOm8trEbduJJr94=;
-        b=TjzHRN0vcvsFnNlT29dLPId2su4cj2c3JqgOVko1rjIslBDyXpCNACXoBCRtWW69vI
-         jo3Ms4BJKcd9ZlIoJSC+oYYXeBQV/QV+vpNVgVoQNUU4J9HZN1LVAVDShJrqxEeYNiAg
-         QGHla8fsnA6iiRjwcU1O9nBU9JXuZy2uGzHXg7kYCcGeWfgXygxSH7BblQRFinjWKRTT
-         xTWIz8altnZ401CvF1aROYxV9S9LnSWXwZMfQZhij3O7977LI2wCcBsleG/JVXzE3oN+
-         osaB6lkF8vOaAg/AXbHb74xFt9YfuYshvSGLnlF1p06RMLQ2WDPzcOABiffRs8G4yDNA
-         sR0Q==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date;
+        bh=FaJyKk+R0q52iF8mEGrRWRG4smFwTQuUpqQX3bc+UYU=;
+        b=DZbkf7xiFDIa6SY5NiYcAh84094KL9e9+nv8FcL8RX3+/Uxte3isWZC7p/qez6hxTI
+         32MpfTdXZxXsufC5blI5+rI6nOwex2TvYQkukoZXox6axJT+pTB8IrS4rfq4GqoGb3pM
+         g/0AgCMC3G2Zu1Jn877XEP1a9P6RxKL5Z9xsnqNqE/nwJQJjTSCx0+8xnyXqt2EIwR7c
+         oN7ULwY87eCMCqz1Pshx6P3iojB8gQOGsp3mZ/Z8Olq9VcBRWbtH9G8mXxUcBXt1idcx
+         CN577aZkyNgACeGLy99BjNBcmHCvIl4G2zCyKMZDSIc1rtY671DksdIbNWMLUJ4q0WGY
+         UblA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=fBrnHn/bzSCaOML05ZUAlbmm6hmaDOm8trEbduJJr94=;
-        b=2Hjcm3FuIzqagEXhXjpJbHetsavuTB5o4AfOiS3yVUi9DaWUcH+xIh8ZLF8a3D3KkE
-         8UiXTzcFsEJ1h2aixbyTdQgqCZODhVBS7qZ+C+g5/CK40nYm7CjiWUC0GXhOSZsf4PUF
-         b5CbBDTJqIL6/7Bx20eco/pHVRAqgPy4frF3mfZwGvimWk9j0RWJ/w+OBEC2/5g0kxV+
-         /AtRKlE73R+FSnEAEPCk8L1csWbhqwSOVQ3sSS/LHOFNrV0HlFbWeQUatP4YphwPjyQy
-         3+WXDPQeaLaUrDxsEGTTT6vgkcXIpXetX9t+aXgpuEQdv9dHgNKbxndenb+L/SMa6drz
-         KFGQ==
-X-Gm-Message-State: ACrzQf1GoR562H09buA4uCy5K64pRtseoqPEDB/8sA+S7kAGM8ndN2ay
-        Z0N9xjFHqtx5KEIuG6X5z0CHemy1pFg=
-X-Google-Smtp-Source: AMsMyM7U7P8DP3/UkAY6wwtnsSR6c4HcA+5HarJiUZ56ETUhpbc4tXGxJo1JfDfXt9gN1ixBSIURaw==
-X-Received: by 2002:adf:e4cc:0:b0:22a:d755:aaf7 with SMTP id v12-20020adfe4cc000000b0022ad755aaf7mr15088999wrm.692.1664237674362;
-        Mon, 26 Sep 2022 17:14:34 -0700 (PDT)
-Received: from 127.0.0.1localhost (94.196.228.157.threembb.co.uk. [94.196.228.157])
-        by smtp.gmail.com with ESMTPSA id r4-20020a05600c320400b003b4de550e34sm53514wmp.40.2022.09.26.17.14.33
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=FaJyKk+R0q52iF8mEGrRWRG4smFwTQuUpqQX3bc+UYU=;
+        b=3l/6tQXFbNLttsWDuIc/H1oM0S6j9wad/OPuHr63oVC2liH70f7VHoBU8vjir//pOT
+         Wx8W4NJhm5OHfAb5VFDyfEhUE0bYp129a/SUi4xvvwPkcZMcGiWnAoqgvzUfBk+zzT3M
+         a0zz0J/WIa26d91DUFjDvqxCFTzyzP87qfMwBMWdt+QD1+WR+DDjBTurIGf+szbpNbA7
+         VXcar4EJc0TN8cv5+NXZ7slyC3LT13Ap51CTWysdps0tHtY6ZFYs7I6MYpXeuAnT0F/g
+         oNiuu9sCbxpClfTzpxT2Xygj6/qP5gtO6ci4ZKhSLdAmcLm3HtvLiLn6SnvfaKf6pPV0
+         vbjw==
+X-Gm-Message-State: ACrzQf00DOmy/dLR1erbxGqB38+A59ltpbHpjsZH1Tan9RurtkjkNb7O
+        ozZuk0aTcZaArpgBne+2af4JXlEcdRoqWg==
+X-Google-Smtp-Source: AMsMyM57y1wH1aH8VQGiQ42EtJlQBOaTt34PVVoYspxQhi5SgMCxKABcPSx8D6ykromEGibB3Kn+Qg==
+X-Received: by 2002:a17:90b:4f4b:b0:200:876b:c1c8 with SMTP id pj11-20020a17090b4f4b00b00200876bc1c8mr1599491pjb.32.1664239398292;
+        Mon, 26 Sep 2022 17:43:18 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id q30-20020a17090a4fa100b001fb47692333sm67617pjh.23.2022.09.26.17.43.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Sep 2022 17:14:33 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 1/1] io_uring: limit registration w/ SINGLE_ISSUER
-Date:   Tue, 27 Sep 2022 01:13:30 +0100
-Message-Id: <f52a6a9c8a8990d4a831f73c0571e7406aac2bba.1664237592.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Mon, 26 Sep 2022 17:43:17 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+In-Reply-To: <f52a6a9c8a8990d4a831f73c0571e7406aac2bba.1664237592.git.asml.silence@gmail.com>
+References: <f52a6a9c8a8990d4a831f73c0571e7406aac2bba.1664237592.git.asml.silence@gmail.com>
+Subject: Re: [PATCH for-next 1/1] io_uring: limit registration w/ SINGLE_ISSUER
+Message-Id: <166423939756.14387.1453058566232360884.b4-ty@kernel.dk>
+Date:   Mon, 26 Sep 2022 18:43:17 -0600
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-IORING_SETUP_SINGLE_ISSUER restricts what tasks can submit requests.
-Extend it to registration as well, so non-owning task can't do
-registrations. It's not necessary at the moment but might be useful in
-the future.
+On Tue, 27 Sep 2022 01:13:30 +0100, Pavel Begunkov wrote:
+> IORING_SETUP_SINGLE_ISSUER restricts what tasks can submit requests.
+> Extend it to registration as well, so non-owning task can't do
+> registrations. It's not necessary at the moment but might be useful in
+> the future.
+> 
+> 
 
-Cc: <stable@vger.kernel.org> # 6.0
-Fixes: 97bbdc06a444 ("io_uring: add IORING_SETUP_SINGLE_ISSUER")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/io_uring.c | 3 +++
- 1 file changed, 3 insertions(+)
+Applied, thanks!
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 73ac6948debb..3f6eb3cf07ac 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3890,6 +3890,9 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 	if (WARN_ON_ONCE(percpu_ref_is_dying(&ctx->refs)))
- 		return -ENXIO;
- 
-+	if (ctx->submitter_task && ctx->submitter_task != current)
-+		return -EEXIST;
-+
- 	if (ctx->restricted) {
- 		if (opcode >= IORING_REGISTER_LAST)
- 			return -EINVAL;
+[1/1] io_uring: limit registration w/ SINGLE_ISSUER
+      commit: 567a9ba00f144a1d2ec291e5188043c2db8c2b77
+
+Best regards,
 -- 
-2.37.2
+Jens Axboe
+
 
