@@ -2,75 +2,86 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D4F1C433F5
-	for <io-uring@archiver.kernel.org>; Fri,  7 Oct 2022 18:36:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB1DBC433FE
+	for <io-uring@archiver.kernel.org>; Fri,  7 Oct 2022 21:17:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbiJGSgF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 7 Oct 2022 14:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36692 "EHLO
+        id S229573AbiJGVR2 convert rfc822-to-8bit (ORCPT
+        <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 7 Oct 2022 17:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiJGSf6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 7 Oct 2022 14:35:58 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C4798371
-        for <io-uring@vger.kernel.org>; Fri,  7 Oct 2022 11:35:54 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id v134so6452212oie.10
-        for <io-uring@vger.kernel.org>; Fri, 07 Oct 2022 11:35:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Doig6u36W71bCUbBJSEX2qJZRxm5i2XAjO7LTGG98M=;
-        b=aGV+JG4WUIiB/u+p6zpDlnkyt+tF8TaDRXHoX6d6aGgf3+Qxdvf/mydjChfa5oMJl9
-         GErL/VKOBvoKU4esLvheCXIj1Zw4yNBbfFkEmKwRjGmPXSOIhhjMj2EqYBTs44zo64s8
-         F2iMCWuIr9haDTi8/Ob1cx5EAVPOGfY1V70GQhhpYZ3N8iujgQnTuFmeZQuMmxeBAweS
-         m81jx0W2WaGLAm+5bd0z9XYvdoi4z5bkk8soaOncZgm1dRdOBhjqIqNhLa2k8jf1XtcK
-         eLkid1+rfAM3nGJAuktNR8Sv3X2R/axfYopFtQUGnLHI9kQKRM0TDyIu1rYm8zUI528f
-         LdiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8Doig6u36W71bCUbBJSEX2qJZRxm5i2XAjO7LTGG98M=;
-        b=QfxMUBwkAy/uP8/twMzNag83rfXvYfxEIbTT97hAp3PZpz3QdoI2QEiM9bXiFXvoGu
-         Yybk0dhHn8fXtV/yFnb1TDv5OOa/6+fGChFOtN7g5aQpgXIxsg5MVIm2GpMOuP6XippZ
-         EO6yLizJKO8v1PMkH55HOXpzFR+lz181X8SeNEWw3iKrI32KZq/+rXdZs/YtQbAZ/f3X
-         xd7iHnEukSNGPUPahGza4IG9O+LwGpH+RRxM0NMs9Vx3/cccqCEDnFvzZ3Fna+vyxiYx
-         jakbV5yX4GPsLHuOSR4Hp7pBkTirPlqGl3yLKBT5MEyjLEhRbI4OiTs4MQR97qkTSn7c
-         4T1A==
-X-Gm-Message-State: ACrzQf0WvELyqjoKr2NStHVqwDOV+X4BUeNmsQUZl3sq5VmW8QAyPnHd
-        5dNQuni2uFiER55G4nIlBsMsKL8AX2BjoK2PdE+N
-X-Google-Smtp-Source: AMsMyM79OmTDRVoGxJy5aNurXZSK3SAzhBWdqTGJDJKLJJYgdoSHGPvMEnVf9iTmAZwRwF+d7ZzJxp6lY9YDXkXLKXs=
-X-Received: by 2002:a05:6808:218d:b0:354:b8c:f47f with SMTP id
- be13-20020a056808218d00b003540b8cf47fmr3376875oib.172.1665167754282; Fri, 07
- Oct 2022 11:35:54 -0700 (PDT)
+        with ESMTP id S229517AbiJGVR2 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 7 Oct 2022 17:17:28 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223312A40E
+        for <io-uring@vger.kernel.org>; Fri,  7 Oct 2022 14:17:16 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 297KDnos003038
+        for <io-uring@vger.kernel.org>; Fri, 7 Oct 2022 14:17:15 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k2ty5gd3u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Fri, 07 Oct 2022 14:17:15 -0700
+Received: from twshared0933.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 7 Oct 2022 14:17:14 -0700
+Received: by devvm2494.atn0.facebook.com (Postfix, from userid 172786)
+        id 4B98F21DAFD98; Fri,  7 Oct 2022 14:17:13 -0700 (PDT)
+From:   Jonathan Lemon <jonathan.lemon@gmail.com>
+To:     <io-uring@vger.kernel.org>
+Subject: [RFC v1 1/9] io_uring: add zctap ifq definition
+Date:   Fri, 7 Oct 2022 14:17:05 -0700
+Message-ID: <20221007211713.170714-2-jonathan.lemon@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221007211713.170714-1-jonathan.lemon@gmail.com>
+References: <20221007211713.170714-1-jonathan.lemon@gmail.com>
 MIME-Version: 1.0
-References: <cf6cbd11-e0a6-3d5f-bf93-ddc393e39fdd@kernel.dk>
-In-Reply-To: <cf6cbd11-e0a6-3d5f-bf93-ddc393e39fdd@kernel.dk>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 7 Oct 2022 14:35:46 -0400
-Message-ID: <CAHC9VhQYYw4fScp9KSD=RjtKvXj6B1aia6SWnkfeM=U5ekp1Ag@mail.gmail.com>
-Subject: Re: [PATCH] io_uring/opdef: remove 'audit_skip' from SENDMSG_ZC
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring <io-uring@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: jMoJY2rUacZYXCLue-3KK5xMkTxvbJkG
+X-Proofpoint-GUID: jMoJY2rUacZYXCLue-3KK5xMkTxvbJkG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri, Oct 7, 2022 at 2:28 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> The msg variants of sending aren't audited separately, so we should not
-> be setting audit_skip for the zerocopy sendmsg variant either.
->
-> Fixes: 493108d95f14 ("io_uring/net: zerocopy sendmsg")
-> Reported-by: Paul Moore <paul@paul-moore.com>
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Add structure definition for io_zctap_ifq for use by lower level
+networking hooks.
 
-Thanks Jens.
+Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+---
+ include/linux/io_uring_types.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Reviewed-by: Paul Moore <paul@paul-moore.com>
-
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 677a25d44d7f..680fbf1f34e7 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -323,6 +323,7 @@ struct io_ring_ctx {
+ 	struct io_mapped_ubuf		*dummy_ubuf;
+ 	struct io_rsrc_data		*file_data;
+ 	struct io_rsrc_data		*buf_data;
++	struct xarray			zctap_ifq_xa;
+ 
+ 	struct delayed_work		rsrc_put_work;
+ 	struct llist_head		rsrc_put_llist;
+@@ -578,4 +579,12 @@ struct io_overflow_cqe {
+ 	struct io_uring_cqe cqe;
+ };
+ 
++struct io_zctap_ifq {
++	struct net_device	*dev;
++	struct io_ring_ctx	*ctx;
++	u16			queue_id;
++	u16			id;
++	u16			fill_bgid;
++};
++
+ #endif
 -- 
-paul-moore.com
+2.30.2
+
