@@ -2,68 +2,67 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BAEDC433F5
-	for <io-uring@archiver.kernel.org>; Fri,  7 Oct 2022 17:00:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA05FC433F5
+	for <io-uring@archiver.kernel.org>; Fri,  7 Oct 2022 17:35:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiJGRAa (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 7 Oct 2022 13:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S229729AbiJGRfL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 7 Oct 2022 13:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiJGRAO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 7 Oct 2022 13:00:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A910E61122;
-        Fri,  7 Oct 2022 10:00:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDECD61534;
-        Fri,  7 Oct 2022 17:00:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 62938C4347C;
-        Fri,  7 Oct 2022 17:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665162011;
-        bh=owkagnxI42ebTssGLXbwlxRCdBKPF+ieRWZYKekRLg0=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=F4dvPofocKt7GtsTxPWjrkwlYTN0XLNmzVVzBrT0iaMH+imMO2m2KkABkFQDcHUPs
-         qkmVSTqBZdmiw5Ax6lzmA6laMrTz+QBq5Sz1egOBncocWK4QMXvNLYEs2SLR+ghLk/
-         9xml1i9oErgSxyvHGh67/TcwMNLE7xZUlHVjiNjWjaX8FaSjgTYZpvNUO4+mAGPYjV
-         OCOQiBX+unjY3EhR9ybklyqWwKwWEA8/GbzA+Q1UW6kzqwko9IndsQJs2MbPJzBQJ8
-         VEXcjxP2deai1f6AleGULrK1zzICEvL6aX+Lpqvw1GrQRkHfrCbZKG5q5XfxOE+dEV
-         djeBVoJFpBkyA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4A12CE2A05D;
-        Fri,  7 Oct 2022 17:00:11 +0000 (UTC)
-Subject: Re: [GIT PULL] Passthrough updates for 6.1-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <dcefcabc-db87-f285-ddce-ad8db26feb2e@kernel.dk>
-References: <dcefcabc-db87-f285-ddce-ad8db26feb2e@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <dcefcabc-db87-f285-ddce-ad8db26feb2e@kernel.dk>
-X-PR-Tracked-Remote: git://git.kernel.dk/linux.git tags/for-6.1/passthrough-2022-10-03
-X-PR-Tracked-Commit-Id: 23fd22e55b767be9c31fda57205afb2023cd6aad
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0e0abad2a71bcd7ba0f30e7975f5b4199ade4e60
-Message-Id: <166516201129.22254.11733817102806284633.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Oct 2022 17:00:11 +0000
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        io-uring <io-uring@vger.kernel.org>
+        with ESMTP id S229505AbiJGRfK (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 7 Oct 2022 13:35:10 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8395742E78
+        for <io-uring@vger.kernel.org>; Fri,  7 Oct 2022 10:35:09 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id g130so6249135oia.13
+        for <io-uring@vger.kernel.org>; Fri, 07 Oct 2022 10:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dk6tQJdYrdVnt5J0XTqD1Ykt5Zifw0rjbpHHEmz3lLs=;
+        b=GMO4QHCYRB7uW89yNSgBKu6So0atvk7I30X3cih57CLaErtXYhsr8vnxtQWwL55U0T
+         u94Axl9dsJMl0J6xnuCJaCsc50hud9rOR4EWTE4kguwkaFySGG9XyrrUE/LP5e2aLBhW
+         XcR6E/8yzPbF8LSsulYQJFXrGiAPIHNT1BmzVkOBzj8AJp33/0blQPBamAw4RNwELvbR
+         bOpyrb4ga/h/VtXBpTFBFwQdLFw5jvoL6GmX69coKW8W+DTVNH3aa0y+S8UJ3iN3cIHZ
+         Xlp0cOjSFVkx+fmhwO5CnzYAl/TaeZmGdWATulskMeLyO8b55VWIWlFYq33pTsCq2lMo
+         pgvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dk6tQJdYrdVnt5J0XTqD1Ykt5Zifw0rjbpHHEmz3lLs=;
+        b=to78Cl7GydyU/OcAVv6MiUGwFNkLLEg4j/ogsbsAxixVPbJVhX4LaAExquXNi9VNHr
+         DRseq5D2QZfRMFl5x7e4m75KLLqG4leIUDztzOu37UkKIM0m8JOMmG6mlUUSCcrVvexh
+         wQBVJoVu86UfgegGr5UD/A/YYnMjzQdCihGE6BYbhBF4OZ5SlssObIWrZtr0PiVI8oPr
+         zLCabgUB8vxRwcymuqtKSPDhEu+oPnU7tN+lIXZ34YZORystvJNQV8ve0HJrPsJtnXdc
+         t4NeoqIa0BZrm1cUc+dqTrc/4eo9K0e2FnDy7+AA7BCL7/TZjXwmeNEjXExUayQvaoCv
+         bhNQ==
+X-Gm-Message-State: ACrzQf38MHBm1BgAdNzlLd6xuxaBK1LDqoa+r27BIHCkbAfNEAf5Muvz
+        34eeifZL5ubVrK3VgYr/K0m5g7ZREcjIZ7lmAzxy
+X-Google-Smtp-Source: AMsMyM6HOob3OhYe+iDodY/fdaWV2GZRIkRuW67saGDP2dd9w/7MHUwV1/LY76uwHOehBToBbFtWYduOjNB4W270Dzw=
+X-Received: by 2002:a05:6808:144b:b0:350:a06a:f8cb with SMTP id
+ x11-20020a056808144b00b00350a06af8cbmr8293565oiv.51.1665164108830; Fri, 07
+ Oct 2022 10:35:08 -0700 (PDT)
+MIME-Version: 1.0
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 7 Oct 2022 13:34:58 -0400
+Message-ID: <CAHC9VhSzQtFkksJ5zBnhOYCpvDGNjjn7SKoC4MmopepWzb+Hfg@mail.gmail.com>
+Subject: IORING_OP_SENDMSG_ZC should enable auditing just like IORING_OP_SENDMSG
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org, linux-audit@redhat.com,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The pull request you sent on Mon, 3 Oct 2022 13:40:17 -0600:
-
-> git://git.kernel.dk/linux.git tags/for-6.1/passthrough-2022-10-03
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0e0abad2a71bcd7ba0f30e7975f5b4199ade4e60
-
-Thank you!
+Commit 493108d95f14 ("io_uring/net: zerocopy sendmsg") added a new
+zerocopy sendmsg command to io_uring, but it enabled the
+io_op_def:audit_skip flag, causing the operation to bypass auditing.
+As far as I can see, the SENDMSG_ZC operation should be subject to
+auditing just as SENDMSG.
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+paul-moore.com
