@@ -2,37 +2,37 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F2F0C4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA89EC43217
 	for <io-uring@archiver.kernel.org>; Fri,  7 Oct 2022 21:17:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiJGVR3 convert rfc822-to-8bit (ORCPT
+        id S229817AbiJGVRa convert rfc822-to-8bit (ORCPT
         <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 7 Oct 2022 17:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
+        Fri, 7 Oct 2022 17:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiJGVR2 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 7 Oct 2022 17:17:28 -0400
+        with ESMTP id S229672AbiJGVR3 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 7 Oct 2022 17:17:29 -0400
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906502B60B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41CC32A8A
         for <io-uring@vger.kernel.org>; Fri,  7 Oct 2022 14:17:17 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 297I3rgq026075
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 297I5hrp027849
         for <io-uring@vger.kernel.org>; Fri, 7 Oct 2022 14:17:17 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k2807yh8e-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k2hshchb4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Fri, 07 Oct 2022 14:17:17 -0700
-Received: from twshared3028.05.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+Received: from twshared3028.05.ash9.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Fri, 7 Oct 2022 14:17:16 -0700
 Received: by devvm2494.atn0.facebook.com (Postfix, from userid 172786)
-        id 594C721DAFD9C; Fri,  7 Oct 2022 14:17:13 -0700 (PDT)
+        id 8977221DAFDA8; Fri,  7 Oct 2022 14:17:13 -0700 (PDT)
 From:   Jonathan Lemon <jonathan.lemon@gmail.com>
 To:     <io-uring@vger.kernel.org>
-Subject: [RFC v1 3/9] io_uring: add register ifq opcode
-Date:   Fri, 7 Oct 2022 14:17:07 -0700
-Message-ID: <20221007211713.170714-4-jonathan.lemon@gmail.com>
+Subject: [RFC v1 9/9] io_uring: add OP_RECV_ZC command.
+Date:   Fri, 7 Oct 2022 14:17:13 -0700
+Message-ID: <20221007211713.170714-10-jonathan.lemon@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221007211713.170714-1-jonathan.lemon@gmail.com>
 References: <20221007211713.170714-1-jonathan.lemon@gmail.com>
@@ -40,8 +40,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: GV2cLDcAdRU-xvFMTpwmVhI2jRqmzQPh
-X-Proofpoint-GUID: GV2cLDcAdRU-xvFMTpwmVhI2jRqmzQPh
+X-Proofpoint-ORIG-GUID: 7g-0Z_DVOEdsEw4ppzH8TtXizIBvRwGj
+X-Proofpoint-GUID: 7g-0Z_DVOEdsEw4ppzH8TtXizIBvRwGj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
  definitions=2022-10-07_04,2022-10-07_01,2022-06-22_01
@@ -49,279 +49,601 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add initial support for support for hooking in zero-copy interface
-queues to io_uring.  This command requests a user-managed queue
-from the specified network device.
+This is still a WIP.  The current code (temporarily) uses addr3
+as a hack in order to leverage code in io_recvmsg_prep.
 
-This only includes the register opcode, unregistration is currently
-done implicitly when the ring is removed.
+The recvzc opcode uses a metadata buffer either supplied directly
+with buf/len, or indirectly from the buffer group.  The expectation
+is that this buffer is then filled with an array of io_uring_zctap_iov
+structures, which point to the data in user-memory.
+
+    addr3 = (readlen << 32) | (copy_bgid << 16) | ctx->ifq_id;
+
+The amount of returned data is limited by the number of iovs that
+the metadata area can hold, and also the readlen parameter.
+
+As a fallback (and for testing purposes), if the skb data is not
+present in user memory (perhaps due to system misconfiguration), then
+a seprate buffer is obtained from the copy_bgid and the data is
+copied into user-memory.
 
 Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
 ---
- include/uapi/linux/io_uring.h |  14 ++++
- io_uring/Makefile             |   3 +-
- io_uring/io_uring.c           |  10 +++
- io_uring/zctap.c              | 146 ++++++++++++++++++++++++++++++++++
- io_uring/zctap.h              |  11 +++
- 5 files changed, 183 insertions(+), 1 deletion(-)
- create mode 100644 io_uring/zctap.c
- create mode 100644 io_uring/zctap.h
+ include/uapi/linux/io_uring.h |   1 +
+ io_uring/net.c                | 123 ++++++++++++
+ io_uring/opdef.c              |  14 ++
+ io_uring/zctap.c              | 354 ++++++++++++++++++++++++++++++++++
+ io_uring/zctap.h              |   5 +
+ 5 files changed, 497 insertions(+)
 
 diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 6b83177fd41d..bc5108d65c0a 100644
+index 145d55280919..3c31a966687e 100644
 --- a/include/uapi/linux/io_uring.h
 +++ b/include/uapi/linux/io_uring.h
-@@ -473,6 +473,9 @@ enum {
- 	/* register a range of fixed file slots for automatic slot allocation */
- 	IORING_REGISTER_FILE_ALLOC_RANGE	= 25,
+@@ -207,6 +207,7 @@ enum io_uring_op {
+ 	IORING_OP_URING_CMD,
+ 	IORING_OP_SEND_ZC,
+ 	IORING_OP_PROVIDE_IFQ_REGION,
++	IORING_OP_RECV_ZC,
  
-+	/* register a network ifq for zerocopy RX */
-+	IORING_REGISTER_IFQ			= 26,
-+
- 	/* this goes last */
- 	IORING_REGISTER_LAST
- };
-@@ -649,6 +652,17 @@ struct io_uring_recvmsg_out {
- 	__u32 flags;
- };
- 
-+/*
-+ * Argument for IORING_REGISTER_IFQ
-+ */
-+struct io_uring_ifq_req {
-+	__u32	ifindex;
-+	__u16	queue_id;
-+	__u16	ifq_id;
-+	__u16	fill_bgid;
-+	__u16	__pad[3];
-+};
-+
- #ifdef __cplusplus
- }
- #endif
-diff --git a/io_uring/Makefile b/io_uring/Makefile
-index 8cc8e5387a75..9d87e2e45ef9 100644
---- a/io_uring/Makefile
-+++ b/io_uring/Makefile
-@@ -7,5 +7,6 @@ obj-$(CONFIG_IO_URING)		+= io_uring.o xattr.o nop.o fs.o splice.o \
- 					openclose.o uring_cmd.o epoll.o \
- 					statx.o net.o msg_ring.o timeout.o \
- 					sqpoll.o fdinfo.o tctx.o poll.o \
--					cancel.o kbuf.o rsrc.o rw.o opdef.o notif.o
-+					cancel.o kbuf.o rsrc.o rw.o opdef.o \
-+					notif.o zctap.o
- obj-$(CONFIG_IO_WQ)		+= io-wq.o
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index b9640ad5069f..8dd988b33af0 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -91,6 +91,7 @@
- #include "cancel.h"
+ 	/* this goes last, obviously */
+ 	IORING_OP_LAST,
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 60e392f7f2dc..89c57ad83a79 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -16,6 +16,7 @@
  #include "net.h"
  #include "notif.h"
+ #include "rsrc.h"
 +#include "zctap.h"
  
- #include "timeout.h"
- #include "poll.h"
-@@ -321,6 +322,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
- 	INIT_WQ_LIST(&ctx->locked_free_list);
- 	INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
- 	INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
-+	xa_init(&ctx->zctap_ifq_xa);
- 	return ctx;
- err:
- 	kfree(ctx->dummy_ubuf);
-@@ -2639,6 +2641,8 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
- 		__io_cqring_overflow_flush(ctx, true);
- 	xa_for_each(&ctx->personalities, index, creds)
- 		io_unregister_personality(ctx, index);
-+	xa_for_each(&ctx->zctap_ifq_xa, index, creds)
-+		io_unregister_zctap_ifq(ctx, index);
- 	if (ctx->rings)
- 		io_poll_remove_all(ctx, NULL, true);
- 	mutex_unlock(&ctx->uring_lock);
-@@ -3839,6 +3843,12 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 			break;
- 		ret = io_register_file_alloc_range(ctx, arg);
- 		break;
-+	case IORING_REGISTER_IFQ:
-+		ret = -EINVAL;
-+		if (!arg || nr_args != 1)
-+			break;
-+		ret = io_register_ifq(ctx, arg);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
-diff --git a/io_uring/zctap.c b/io_uring/zctap.c
-new file mode 100644
-index 000000000000..41feb76b7a35
---- /dev/null
-+++ b/io_uring/zctap.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/kernel.h>
-+#include <linux/errno.h>
-+#include <linux/fs.h>
-+#include <linux/file.h>
-+#include <linux/mm.h>
-+#include <linux/io_uring.h>
-+#include <linux/netdevice.h>
+ #if defined(CONFIG_NET)
+ struct io_shutdown {
+@@ -73,6 +74,14 @@ struct io_sendzc {
+ 	struct io_kiocb 		*notif;
+ };
+ 
++struct io_recvzc {
++	struct io_sr_msg		sr;
++	struct io_zctap_ifq		*ifq;
++	u32				datalen;
++	u16				ifq_id;
++	u16				copy_bgid;
++};
 +
-+#include <uapi/linux/io_uring.h>
-+
-+#include "io_uring.h"
-+#include "zctap.h"
-+
-+static DEFINE_XARRAY_ALLOC1(io_zctap_ifq_xa);
-+
-+typedef int (*bpf_op_t)(struct net_device *dev, struct netdev_bpf *bpf);
-+
-+static int __io_queue_mgmt(struct net_device *dev, struct io_zctap_ifq *ifq,
-+			   u16 *queue_id)
+ #define IO_APOLL_MULTI_POLLED (REQ_F_APOLL_MULTISHOT | REQ_F_POLLED)
+ 
+ int io_shutdown_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+@@ -879,6 +888,120 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+ 	return ret;
+ }
+ 
++int io_recvzc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
 +{
-+	struct netdev_bpf cmd;
-+	bpf_op_t ndo_bpf;
-+	int err;
++	struct io_recvzc *zc = io_kiocb_to_cmd(req, struct io_recvzc);
++	u64 recvzc_cmd;
++	u16 ifq_id;
 +
-+	ndo_bpf = dev->netdev_ops->ndo_bpf;
-+	if (!ndo_bpf)
++	/* XXX hack so we can temporarily use io_recvmsg_prep */
++	recvzc_cmd = READ_ONCE(sqe->addr3);
++
++	ifq_id = recvzc_cmd & 0xffff;
++	zc->copy_bgid = (recvzc_cmd >> 16) & 0xffff;
++	zc->datalen = recvzc_cmd >> 32;
++
++	zc->ifq = xa_load(&req->ctx->zctap_ifq_xa, ifq_id);
++	if (!zc->ifq)
++		return -EINVAL;
++	if (zc->ifq->ctx != req->ctx)
 +		return -EINVAL;
 +
-+	cmd.command = XDP_SETUP_ZCTAP;
-+	cmd.zct.ifq = ifq;
-+	cmd.zct.queue_id = *queue_id;
-+
-+	err = ndo_bpf(dev, &cmd);
-+	if (!err)
-+		*queue_id = cmd.zct.queue_id;
-+
-+	return err;
++	return io_recvmsg_prep(req, sqe);
 +}
 +
-+static int io_open_zctap_ifq(struct io_zctap_ifq *ifq, u16 *queue_id)
++int io_recvzc(struct io_kiocb *req, unsigned int issue_flags)
 +{
-+	return __io_queue_mgmt(ifq->dev, ifq, queue_id);
-+}
++	struct io_recvzc *zc = io_kiocb_to_cmd(req, struct io_recvzc);
++	struct msghdr msg;
++	struct socket *sock;
++	struct iovec iov;
++	unsigned int cflags;
++	unsigned flags;
++	int ret, min_ret = 0;
++	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
++	size_t len = zc->sr.len;
 +
-+static int io_close_zctap_ifq(struct io_zctap_ifq *ifq, u16 queue_id)
-+{
-+	return __io_queue_mgmt(ifq->dev, NULL, &queue_id);
-+}
++	if (!(req->flags & REQ_F_POLLED) &&
++	    (zc->sr.flags & IORING_RECVSEND_POLL_FIRST))
++		return -EAGAIN;
 +
-+static struct io_zctap_ifq *io_zctap_ifq_alloc(void)
-+{
-+	struct io_zctap_ifq *ifq;
++	sock = sock_from_file(req->file);
++	if (unlikely(!sock))
++		return -ENOTSOCK;
 +
-+	ifq = kzalloc(sizeof(*ifq), GFP_KERNEL);
-+	if (!ifq)
-+		return NULL;
++retry_multishot:
++	if (io_do_buffer_select(req)) {
++		void __user *buf;
 +
-+	ifq->queue_id = -1;
-+	return ifq;
-+}
-+
-+static void io_zctap_ifq_free(struct io_zctap_ifq *ifq)
-+{
-+	if (ifq->queue_id != -1)
-+		io_close_zctap_ifq(ifq, ifq->queue_id);
-+	if (ifq->dev)
-+		dev_put(ifq->dev);
-+	if (ifq->id)
-+		xa_erase(&io_zctap_ifq_xa, ifq->id);
-+	kfree(ifq);
-+}
-+
-+int io_register_ifq(struct io_ring_ctx *ctx,
-+		    struct io_uring_ifq_req __user *arg)
-+{
-+	struct io_uring_ifq_req req;
-+	struct io_zctap_ifq *ifq;
-+	int id, err;
-+
-+	if (copy_from_user(&req, arg, sizeof(req)))
-+		return -EFAULT;
-+
-+	ifq = io_zctap_ifq_alloc();
-+	if (!ifq)
-+		return -ENOMEM;
-+	ifq->ctx = ctx;
-+	ifq->fill_bgid = req.fill_bgid;
-+
-+	err = -ENODEV;
-+	ifq->dev = dev_get_by_index(&init_net, req.ifindex);
-+	if (!ifq->dev)
-+		goto out;
-+
-+	err = io_open_zctap_ifq(ifq, &req.queue_id);
-+	if (err)
-+		goto out;
-+	ifq->queue_id = req.queue_id;
-+
-+	/* aka idr */
-+	err = xa_alloc(&io_zctap_ifq_xa, &id, ifq,
-+		       XA_LIMIT(1, PAGE_SIZE - 1), GFP_KERNEL);
-+	if (err)
-+		goto out;
-+	ifq->id = id;
-+	req.ifq_id = id;
-+
-+	err = xa_err(xa_store(&ctx->zctap_ifq_xa, id, ifq, GFP_KERNEL));
-+	if (err)
-+		goto out;
-+
-+	if (copy_to_user(arg, &req, sizeof(req))) {
-+		xa_erase(&ctx->zctap_ifq_xa, id);
-+		err = -EFAULT;
-+		goto out;
++		buf = io_buffer_select(req, &len, issue_flags);
++		if (!buf)
++			return -ENOBUFS;
++		zc->sr.buf = buf;
 +	}
 +
-+	return 0;
++	ret = import_single_range(READ, zc->sr.buf, len, &iov, &msg.msg_iter);
++	if (unlikely(ret))
++		goto out_free;
 +
-+out:
-+	io_zctap_ifq_free(ifq);
-+	return err;
++	msg.msg_name = NULL;
++	msg.msg_namelen = 0;
++	msg.msg_control = NULL;
++	msg.msg_get_inq = 1;
++	msg.msg_flags = 0;
++	msg.msg_controllen = 0;
++	msg.msg_iocb = NULL;
++	msg.msg_ubuf = NULL;
++
++	flags = zc->sr.msg_flags;
++	if (force_nonblock)
++		flags |= MSG_DONTWAIT;
++	if (flags & MSG_WAITALL)
++		min_ret = iov_iter_count(&msg.msg_iter);
++
++	ret = io_zctap_recv(zc->ifq, sock, &msg, flags, zc->datalen,
++			    zc->copy_bgid);
++	if (ret < min_ret) {
++		if (ret == -EAGAIN && force_nonblock) {
++			if ((req->flags & IO_APOLL_MULTI_POLLED) == IO_APOLL_MULTI_POLLED) {
++				io_kbuf_recycle(req, issue_flags);
++				return IOU_ISSUE_SKIP_COMPLETE;
++			}
++
++			return -EAGAIN;
++		}
++		if (ret == -ERESTARTSYS)
++			ret = -EINTR;
++		if (ret > 0 && io_net_retry(sock, flags)) {
++			zc->sr.len -= ret;
++			zc->sr.buf += ret;
++			zc->sr.done_io += ret;
++			req->flags |= REQ_F_PARTIAL_IO;
++			return -EAGAIN;
++		}
++		req_set_fail(req);
++	} else if ((flags & MSG_WAITALL) && (msg.msg_flags & (MSG_TRUNC | MSG_CTRUNC))) {
++out_free:
++		req_set_fail(req);
++	}
++
++	if (ret > 0)
++		ret += zc->sr.done_io;
++	else if (zc->sr.done_io)
++		ret = zc->sr.done_io;
++	else
++		io_kbuf_recycle(req, issue_flags);
++
++	cflags = io_put_kbuf(req, issue_flags);
++	if (msg.msg_inq)
++		cflags |= IORING_CQE_F_SOCK_NONEMPTY;
++
++	if (!io_recv_finish(req, &ret, cflags, ret <= 0))
++		goto retry_multishot;
++
++	return ret;
 +}
 +
-+int io_unregister_zctap_ifq(struct io_ring_ctx *ctx, unsigned long index)
+ void io_sendzc_cleanup(struct io_kiocb *req)
+ {
+ 	struct io_sendzc *zc = io_kiocb_to_cmd(req, struct io_sendzc);
+diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+index bf28c43117c3..f3782e7b707b 100644
+--- a/io_uring/opdef.c
++++ b/io_uring/opdef.c
+@@ -497,6 +497,20 @@ const struct io_op_def io_op_defs[] = {
+ 		.prep			= io_provide_ifq_region_prep,
+ 		.issue			= io_provide_ifq_region,
+ 	},
++	[IORING_OP_RECV_ZC] = {
++		.name			= "RECV_ZC",
++		.needs_file		= 1,
++		.unbound_nonreg_file	= 1,
++		.pollin			= 1,
++		.buffer_select		= 1,
++		.ioprio			= 1,
++#if defined(CONFIG_NET)
++		.prep			= io_recvzc_prep,
++		.issue			= io_recvzc,
++#else
++		.prep			= io_eopnotsupp_prep,
++#endif
++	},
+ };
+ 
+ const char *io_uring_get_opcode(u8 opcode)
+diff --git a/io_uring/zctap.c b/io_uring/zctap.c
+index 8bebe7c36c82..1d334ac55c0b 100644
+--- a/io_uring/zctap.c
++++ b/io_uring/zctap.c
+@@ -7,6 +7,7 @@
+ #include <linux/io_uring.h>
+ #include <linux/netdevice.h>
+ #include <linux/nospec.h>
++#include <net/tcp.h>
+ 
+ #include <uapi/linux/io_uring.h>
+ 
+@@ -393,3 +394,356 @@ bool io_zctap_ifq_put_page(struct io_zctap_ifq *ifq, struct page *page)
+ 
+ 	return true;
+ }
++
++static inline bool
++zctap_skb_ours(struct sk_buff *skb)
 +{
++	return skb->pp_recycle;
++}
++
++struct zctap_read_desc {
++	struct iov_iter *iter;
++	struct ifq_region *ifr;
++	u32 iov_space;
++	u32 iov_limit;
++	u32 recv_limit;
++
++	struct io_kiocb req;
++	u8 *buf;
++	size_t offset;
++	size_t buflen;
++
 +	struct io_zctap_ifq *ifq;
++	u16 ifq_id;
++	u16 copy_bgid;			/* XXX move to register ifq? */
++};
 +
-+	ifq = xa_erase(&ctx->zctap_ifq_xa, index);
-+	if (!ifq)
-+		return -EINVAL;
++static int __zctap_get_user_buffer(struct zctap_read_desc *ztr, int len)
++{
++	if (!ztr->buflen) {
++		ztr->req = (struct io_kiocb) {
++			.ctx = ztr->ifq->ctx,
++			.buf_index = ztr->copy_bgid,
++		};
 +
-+	io_zctap_ifq_free(ifq);
-+	return 0;
++		ztr->buf = (u8 *)io_zctap_buffer(&ztr->req, &ztr->buflen);
++		ztr->offset = 0;
++	}
++	return len > ztr->buflen ? ztr->buflen : len;
 +}
 +
-+int io_unregister_ifq(struct io_ring_ctx *ctx,
-+		      struct io_uring_ifq_req __user *arg)
++static int zctap_copy_data(struct zctap_read_desc *ztr, int len, u8 *kaddr)
 +{
-+	struct io_uring_ifq_req req;
++	struct io_uring_zctap_iov zov;
++	u32 space;
++	int err;
 +
-+	if (copy_from_user(&req, arg, sizeof(req)))
++	space = ztr->iov_space + sizeof(zov);
++	if (space > ztr->iov_limit)
++		return 0;
++
++	len = __zctap_get_user_buffer(ztr, len);
++	if (!len)
++		return -ENOBUFS;
++
++	err = copy_to_user(ztr->buf + ztr->offset, kaddr, len);
++	if (err)
 +		return -EFAULT;
 +
-+	return io_unregister_zctap_ifq(ctx, req.ifq_id);
++	zov = (struct io_uring_zctap_iov) {
++		.off = ztr->offset,
++		.len = len,
++		.bgid = ztr->copy_bgid,
++		.bid = ztr->req.buf_index,
++		.ifq_id = ztr->ifq_id,
++	};
++
++	if (copy_to_iter(&zov, sizeof(zov), ztr->iter) != sizeof(zov))
++		return -EFAULT;
++
++	ztr->offset += len;
++	ztr->buflen -= len;
++
++	ztr->iov_space = space;
++
++	return len;
++}
++
++static int zctap_copy_frag(struct zctap_read_desc *ztr, struct page *page,
++			   int off, int len, int id,
++			   struct io_uring_zctap_iov *zov)
++{
++	u8 *kaddr;
++	int err;
++
++	len = __zctap_get_user_buffer(ztr, len);
++	if (!len)
++		return -ENOBUFS;
++
++	if (id == 0) {
++		kaddr = kmap(page) + off;
++		err = copy_to_user(ztr->buf + ztr->offset, kaddr, len);
++		kunmap(page);
++	} else {
++		kaddr = page_address(page) + off;
++		err = copy_to_user(ztr->buf + ztr->offset, kaddr, len);
++	}
++
++	if (err)
++		return -EFAULT;
++
++	*zov = (struct io_uring_zctap_iov) {
++		.off = ztr->offset,
++		.len = len,
++		.bgid = ztr->copy_bgid,
++		.bid = ztr->req.buf_index,
++		.ifq_id = ztr->ifq_id,
++	};
++
++	ztr->offset += len;
++	ztr->buflen -= len;
++
++	return len;
++}
++
++static int zctap_recv_frag(struct zctap_read_desc *ztr,
++			   const skb_frag_t *frag, int off, int len)
++{
++	struct io_uring_zctap_iov zov;
++	struct page *page;
++	int id, pgid;
++	u32 space;
++
++	space = ztr->iov_space + sizeof(zov);
++	if (space > ztr->iov_limit)
++		return 0;
++
++	page = skb_frag_page(frag);
++	id = zctap_page_ifq_id(page);
++	off += skb_frag_off(frag);
++
++	if (likely(id == ztr->ifq_id)) {
++		pgid = zctap_page_id(page);
++		io_add_page_uref(ztr->ifr, pgid);
++		zov = (struct io_uring_zctap_iov) {
++			.off = off,
++			.len = len,
++			.bgid = zctap_page_region_id(page),
++			.bid = pgid,
++			.ifq_id = id,
++		};
++	} else {
++		len = zctap_copy_frag(ztr, page, off, len, id, &zov);
++		if (len <= 0)
++			return len;
++	}
++
++	if (copy_to_iter(&zov, sizeof(zov), ztr->iter) != sizeof(zov))
++		return -EFAULT;
++
++	ztr->iov_space = space;
++
++	return len;
++}
++
++/* Our version of __skb_datagram_iter  -- should work for UDP also. */
++static int
++zctap_recv_skb(read_descriptor_t *desc, struct sk_buff *skb,
++	       unsigned int offset, size_t len)
++{
++	struct zctap_read_desc *ztr = desc->arg.data;
++	unsigned start, start_off;
++	struct sk_buff *frag_iter;
++	int i, copy, end, ret = 0;
++
++	if (ztr->iov_space >= ztr->iov_limit) {
++		desc->count = 0;
++		return 0;
++	}
++	if (len > ztr->recv_limit)
++		len = ztr->recv_limit;
++
++	start = skb_headlen(skb);
++	start_off = offset;
++
++	if (offset < start) {
++		copy = start - offset;
++		if (copy > len)
++			copy = len;
++
++		/* copy out linear data */
++		ret = zctap_copy_data(ztr, copy, skb->data + offset);
++		if (ret < 0)
++			goto out;
++		offset += ret;
++		len -= ret;
++		if (len == 0 || ret != copy)
++			goto out;
++	}
++
++	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
++		const skb_frag_t *frag;
++
++		WARN_ON(start > offset + len);
++
++		frag = &skb_shinfo(skb)->frags[i];
++		end = start + skb_frag_size(frag);
++
++		if (offset < end) {
++			copy = end - offset;
++			if (copy > len)
++				copy = len;
++
++			ret = zctap_recv_frag(ztr, frag, offset - start, copy);
++			if (ret < 0)
++				goto out;
++
++			offset += ret;
++			len -= ret;
++			if (len == 0 || ret != copy)
++				goto out;
++		}
++		start = end;
++	}
++
++	skb_walk_frags(skb, frag_iter) {
++		WARN_ON(start > offset + len);
++
++		end = start + frag_iter->len;
++		if (offset < end) {
++			int off;
++
++			copy = end - offset;
++			if (copy > len)
++				copy = len;
++
++			off = offset - start;
++			ret = zctap_recv_skb(desc, frag_iter, off, copy);
++			if (ret < 0)
++				goto out;
++
++			offset += ret;
++			len -= ret;
++			if (len == 0 || ret != copy)
++				goto out;
++		}
++		start = end;
++	}
++
++out:
++	if (offset == start_off)
++		return ret;
++	return offset - start_off;
++}
++
++static int __io_zctap_tcp_read(struct sock *sk, struct zctap_read_desc *zrd)
++{
++	read_descriptor_t rd_desc = {
++		.arg.data = zrd,
++		.count = 1,
++	};
++
++	return tcp_read_sock(sk, &rd_desc, zctap_recv_skb);
++}
++
++static int io_zctap_tcp_recvmsg(struct sock *sk, struct zctap_read_desc *zrd,
++				int flags, int *addr_len)
++{
++	size_t used;
++	long timeo;
++	int ret;
++
++	ret = used = 0;
++
++	lock_sock(sk);
++
++	timeo = sock_rcvtimeo(sk, flags & MSG_DONTWAIT);
++	while (zrd->recv_limit) {
++		ret = __io_zctap_tcp_read(sk, zrd);
++		if (ret < 0)
++			break;
++		if (!ret) {
++			if (used)
++				break;
++			if (sock_flag(sk, SOCK_DONE))
++				break;
++			if (sk->sk_err) {
++				ret = sock_error(sk);
++				break;
++			}
++			if (sk->sk_shutdown & RCV_SHUTDOWN)
++				break;
++			if (sk->sk_state == TCP_CLOSE) {
++				ret = -ENOTCONN;
++				break;
++			}
++			if (!timeo) {
++				ret = -EAGAIN;
++				break;
++			}
++			if (!skb_queue_empty(&sk->sk_receive_queue))
++				break;
++			sk_wait_data(sk, &timeo, NULL);
++			if (signal_pending(current)) {
++				ret = sock_intr_errno(timeo);
++				break;
++			}
++			continue;
++		}
++		zrd->recv_limit -= ret;
++		used += ret;
++
++		if (!timeo)
++			break;
++		release_sock(sk);
++		lock_sock(sk);
++
++		if (sk->sk_err || sk->sk_state == TCP_CLOSE ||
++		    (sk->sk_shutdown & RCV_SHUTDOWN) ||
++		    signal_pending(current))
++			break;
++	}
++
++	release_sock(sk);
++
++	/* XXX, handle timestamping */
++
++	if (used)
++		return used;
++
++	return ret;
++}
++
++int io_zctap_recv(struct io_zctap_ifq *ifq, struct socket *sock,
++		  struct msghdr *msg, int flags, u32 datalen, u16 copy_bgid)
++{
++	struct sock *sk = sock->sk;
++	struct zctap_read_desc zrd = {
++		.iov_limit = msg_data_left(msg),
++		.recv_limit = datalen,
++		.iter = &msg->msg_iter,
++		.ifq = ifq,
++		.ifq_id = ifq->id,
++		.copy_bgid = copy_bgid,
++		.ifr = ifq->region,
++	};
++	const struct proto *prot;
++	int addr_len = 0;
++	int ret;
++
++	if (flags & MSG_ERRQUEUE)
++		return -EOPNOTSUPP;
++
++	prot = READ_ONCE(sk->sk_prot);
++	if (prot->recvmsg != tcp_recvmsg)
++		return -EPROTONOSUPPORT;
++
++	sock_rps_record_flow(sk);
++
++	ret = io_zctap_tcp_recvmsg(sk, &zrd, flags, &addr_len);
++	if (ret >= 0) {
++		msg->msg_namelen = addr_len;
++		ret = zrd.iov_space;
++	}
++	return ret;
 +}
 diff --git a/io_uring/zctap.h b/io_uring/zctap.h
-new file mode 100644
-index 000000000000..bda15d218fe3
---- /dev/null
+index 709c803220f4..2c3e23a6a07a 100644
+--- a/io_uring/zctap.h
 +++ b/io_uring/zctap.h
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifndef IOU_ZCTAP_H
-+#define IOU_ZCTAP_H
+@@ -12,4 +12,9 @@ int io_provide_ifq_region_prep(struct io_kiocb *req,
+                                const struct io_uring_sqe *sqe);
+ int io_provide_ifq_region(struct io_kiocb *req, unsigned int issue_flags);
+ 
++int io_recvzc(struct io_kiocb *req, unsigned int issue_flags);
++int io_recvzc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
++int io_zctap_recv(struct io_zctap_ifq *ifq, struct socket *sock,
++		  struct msghdr *msg, int flags, u32 datalen, u16 copy_bgid);
 +
-+int io_register_ifq(struct io_ring_ctx *ctx,
-+		    struct io_uring_ifq_req __user *arg);
-+int io_unregister_ifq(struct io_ring_ctx *ctx,
-+		      struct io_uring_ifq_req __user *arg);
-+int io_unregister_zctap_ifq(struct io_ring_ctx *ctx, unsigned long index);
-+
-+#endif
+ #endif
 -- 
 2.30.2
 
