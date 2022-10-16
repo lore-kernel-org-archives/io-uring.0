@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11135C43219
-	for <io-uring@archiver.kernel.org>; Sun, 16 Oct 2022 20:33:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEB4BC4332F
+	for <io-uring@archiver.kernel.org>; Sun, 16 Oct 2022 20:33:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiJPUdI (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 16 Oct 2022 16:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S229622AbiJPUdK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 16 Oct 2022 16:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiJPUdH (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 16 Oct 2022 16:33:07 -0400
+        with ESMTP id S229577AbiJPUdJ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 16 Oct 2022 16:33:09 -0400
 Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8553057D
-        for <io-uring@vger.kernel.org>; Sun, 16 Oct 2022 13:33:06 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a26so20862736ejc.4
-        for <io-uring@vger.kernel.org>; Sun, 16 Oct 2022 13:33:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3003B3057D
+        for <io-uring@vger.kernel.org>; Sun, 16 Oct 2022 13:33:08 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id b2so20856216eja.6
+        for <io-uring@vger.kernel.org>; Sun, 16 Oct 2022 13:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZjPK20Gpm06cfu/aaNkEBhOYqkMQWlW3+Fjwk493YA0=;
-        b=IZtW6RZRokKotnndtoGqITMYU1czP/veWNGRhbk2d5t1HKW8Z7vu/KBU5UM6UhXmLV
-         PaxPc8kujcfYXdHMlFG3m0Nc8Wgh5HSqtlX/Lu66ePiwYe+B4Rtj4GDEEWihz5576slr
-         BcNqHsT/bsyOl91/7qTonqTvAOzmSUUZv+zuSmSPy+mqpyVzBsml47nQwyYJ1a/Ccyoo
-         Xnfmghmv00QpojkK5aKs7QGbD4YUqa4EC/KGQ5gAeJibmtz3FzNBEeka4paj3bC7BtOM
-         6S2N39VB+JVqmlqIEXTr+MpTW6+CafFwe96a30GvVpsQyjUuX0+tE+1kZjcQAOmCMZrc
-         1Aeg==
+        bh=tUHvLcKLFL36tYPs8CH/YI7G5vNcC4S7LNovyR3sUgc=;
+        b=ovv705iLe0E+UXCWEah8EIgQ2/ufU/yy4BhLzRIe2SVT1vBd/il4wPPJlbuYOo49MR
+         aCx9hSn45FXuc54eJj9oVNIStE+9D/hUtVbEc7PmxnVeTARgGdyfSPUVdgWpN4uLNnvz
+         2RdQzQ8qAb41h8INVG2KnxJkUX3u8xYxVQ8lzxTpjsAAprXLahMHzDncOWqe8l/i8d+a
+         6kbFE7gurVgwnIDaB5PJckvfEjZIYEHHSx3ZuKpb0VEROaEqrBsaT4VcR4WU8xsdMVIP
+         rX1pdCOIACVNny4kZtVA+4kK4AFxXfokfL6GooMIdJHp7j/0mm9A0m9f2fQwUhRZWubZ
+         owMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZjPK20Gpm06cfu/aaNkEBhOYqkMQWlW3+Fjwk493YA0=;
-        b=daXi/VMfFyUZ4/5CGm1uVOi2c+E8H6pXo/wFJynchfJhKnR0z0nt1PQhklt9QuyqdH
-         sQkWLXdj2TqheJ9mCbixSyBQemMs758gVlvDUa9zon7My9EldpFq2AHEgmSglovfV2JE
-         A47/nfQqw+uo2fLMqlNBhtSkvPN5WTG+TU58alUnpory+iJJ+60X4lVH1kWD1Xncu3bF
-         fK5/XPaiMMVoyz/l4qV0hm4g7OpS/mZq3ybQyjiUi/ANehAy9DwA8YElUmQlqSvWoh0r
-         djMBQdzjARKrLegLMEMAKCtsQ880juOofrX0eygJqnbrcC2TzWI5quoo6efZx77a5LYe
-         UrAg==
-X-Gm-Message-State: ACrzQf0+exf0X0Xj6JNXV+KpnFhHv1hln8VL1yVrDM5iHxrv5B61iMre
-        QlrJ8xpbw3sD0tC024wNgy33EZp4/3Y=
-X-Google-Smtp-Source: AMsMyM5OYnPGbwv2+n0FMmU9dazc7UG5KwOtjr77EZije99ZoPDCyC80u6NZV65Zl7292ivF0g2Shw==
-X-Received: by 2002:a17:907:7635:b0:78d:c5e9:3e57 with SMTP id jy21-20020a170907763500b0078dc5e93e57mr6257074ejc.204.1665952384318;
-        Sun, 16 Oct 2022 13:33:04 -0700 (PDT)
+        bh=tUHvLcKLFL36tYPs8CH/YI7G5vNcC4S7LNovyR3sUgc=;
+        b=WN4rghDmmp8SnzBvKtkHFy5LdOY1yFfhrzciL2DtHw2zehaA9TSFmGyQyfYqqHEtd+
+         W8lMtJAj7ClOirv56pHwcHwS6Yxdj8kPAfKzN+H0dtBFUoyTJ+zGTduxCz1X0KhCWWwh
+         D3BMsb/4nL9EqLjJhlZQk2wMgEr+xu0RdFalORGNp//tIqbpPXfzoz0z6EwjbBWz8LcN
+         gGEvKOmB7cw2+/F7hK4gjTIWAeX5CZ1oQuUdViCCg9zW0jMmveCJo5HNJLqn7xOmdQdk
+         85Mm/xh65kzaL+i9Tc6B3hNnZ/GpFH9nEy5274QW+VcQphqdOfchLpJ1zDkPs5ZxqcI/
+         MDRQ==
+X-Gm-Message-State: ACrzQf0+4AISWj5saJR2PSWrYktsRDgKcwij+CbrHKAUUe2fsz80dDjV
+        lcSniO349J9vaGaWVLOdkVF3l1sVjJE=
+X-Google-Smtp-Source: AMsMyM4AJoTfU0xZCQG6xrkIZphYHuHMHT7WAKWQIK5KLL65H0rRwh3+p2U3HT4dLPp1Yio61OhUrg==
+X-Received: by 2002:a17:907:162a:b0:78e:2859:76be with SMTP id hb42-20020a170907162a00b0078e285976bemr6152436ejc.768.1665952386449;
+        Sun, 16 Oct 2022 13:33:06 -0700 (PDT)
 Received: from 127.0.0.1localhost (94.196.234.149.threembb.co.uk. [94.196.234.149])
-        by smtp.gmail.com with ESMTPSA id y11-20020a1709060a8b00b00788c622fa2csm5069345ejf.135.2022.10.16.13.33.03
+        by smtp.gmail.com with ESMTPSA id y11-20020a1709060a8b00b00788c622fa2csm5069345ejf.135.2022.10.16.13.33.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 13:33:03 -0700 (PDT)
+        Sun, 16 Oct 2022 13:33:06 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH 2/4] io_uring: kill hot path fixed file bitmap debug checks
-Date:   Sun, 16 Oct 2022 21:30:49 +0100
-Message-Id: <cf77f2ded68d2e5b2bc7355784d969837d48e023.1665891182.git.asml.silence@gmail.com>
+Subject: [PATCH 4/4] io_uring: don't iopoll from io_ring_ctx_wait_and_kill()
+Date:   Sun, 16 Oct 2022 21:30:51 +0100
+Message-Id: <7c03cc91455c4a1af49c6b9cbda4e57ea467aa11.1665891182.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1665891182.git.asml.silence@gmail.com>
 References: <cover.1665891182.git.asml.silence@gmail.com>
@@ -64,39 +64,42 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We test file_table.bitmap in io_file_get_fixed() to check invariants,
-don't do it, it's expensive and was showing up in profiles.
+We should not be completing requests from a task context that already
+undergone io_uring cancellations, i.e. __io_uring_cancel(), as there are
+some assumptions, e.g. aroundd cached task refs draining. Remove
+iopolling from io_ring_ctx_wait_and_kill() as it can be called later
+after PF_EXITING is set with the last task_work run.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/filetable.h | 1 +
- io_uring/io_uring.c  | 1 -
- 2 files changed, 1 insertion(+), 1 deletion(-)
+ io_uring/io_uring.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/io_uring/filetable.h b/io_uring/filetable.h
-index 19d2aed66c72..351111ff8882 100644
---- a/io_uring/filetable.h
-+++ b/io_uring/filetable.h
-@@ -25,6 +25,7 @@ unsigned int io_file_get_flags(struct file *file);
- 
- static inline void io_file_bitmap_clear(struct io_file_table *table, int bit)
- {
-+	WARN_ON_ONCE(!test_bit(bit, table->bitmap));
- 	__clear_bit(bit, table->bitmap);
- 	table->alloc_hint = bit;
- }
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 18aa39709fae..6e50f548de1a 100644
+index 62be51fbf39c..6cc16e39b27f 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -1858,7 +1858,6 @@ inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
- 	/* mask in overlapping REQ_F and FFS bits */
- 	req->flags |= (file_ptr << REQ_F_SUPPORT_NOWAIT_BIT);
- 	io_req_set_rsrc_node(req, ctx, 0);
--	WARN_ON_ONCE(file && !test_bit(fd, ctx->file_table.bitmap));
- out:
- 	io_ring_submit_unlock(ctx, issue_flags);
- 	return file;
+@@ -2804,15 +2804,12 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
+ 		io_poll_remove_all(ctx, NULL, true);
+ 	mutex_unlock(&ctx->uring_lock);
+ 
+-	/* failed during ring init, it couldn't have issued any requests */
+-	if (ctx->rings) {
++	/*
++	 * If we failed setting up the ctx, we might not have any rings
++	 * and therefore did not submit any requests
++	 */
++	if (ctx->rings)
+ 		io_kill_timeouts(ctx, NULL, true);
+-		/* if we failed setting up the ctx, we might not have any rings */
+-		io_iopoll_try_reap_events(ctx);
+-		/* drop cached put refs after potentially doing completions */
+-		if (current->io_uring)
+-			io_uring_drop_tctx_refs(current);
+-	}
+ 
+ 	INIT_WORK(&ctx->exit_work, io_ring_exit_work);
+ 	/*
 -- 
 2.38.0
 
