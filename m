@@ -2,61 +2,61 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5D50C4167D
-	for <io-uring@archiver.kernel.org>; Tue, 18 Oct 2022 19:52:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E025C43219
+	for <io-uring@archiver.kernel.org>; Tue, 18 Oct 2022 19:52:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiJRTwl (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 18 Oct 2022 15:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51422 "EHLO
+        id S229774AbiJRTwm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 18 Oct 2022 15:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiJRTwk (ORCPT
+        with ESMTP id S229864AbiJRTwk (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Tue, 18 Oct 2022 15:52:40 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565ED876B5;
-        Tue, 18 Oct 2022 12:52:29 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id a67so22060917edf.12;
-        Tue, 18 Oct 2022 12:52:29 -0700 (PDT)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934E185ABC;
+        Tue, 18 Oct 2022 12:52:30 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id d26so34897700ejc.8;
+        Tue, 18 Oct 2022 12:52:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lFeaHcw3WNcJNFaRay0No0wm3D4s1Mkz5fJGwkqsY20=;
-        b=IMsZVcTie6W3CPtJzjN94pHSJC7XL+ENcaX4GcL0mtRZO8MtB/L1yhDZPpaVpBmUYK
-         bs8KSCL+9M7/KhxBu9kwXv0EVYqh0iCdwdXLW9Ye0em6U8KaCMyiRmJQwJMlkA6ZLtFO
-         +8sfPDSDC6kLilqDoyEHDQpnSoIZnDUK3Ctb35lhI6NamtWM10UnUukWx8A9zecNKMCu
-         Q/NcC55LR1UvKSpzU+SF0fFZ0cCjPUTXADVinblmu5Ha4okPjQlhic/ZVnHZcc4YjTZO
-         Q1bXlXtNVTWbDg+KVPFNW6ue6x0kajLHT9TDmRmUeQBBCmymCS2UU5Uq4r62CFLGgVT/
-         Rp9w==
+        bh=OEXvp1IreEp3SXV31DiUhQRIjvrLdojheHeDjSM1+mQ=;
+        b=abLxG+/ldgxPagEwF9tCeQMuX/Sr0ari2v1LSWCKV7wRCeCTavT4vCjimyaqVnuvuE
+         s9yHzyLcX+1aZvlmgl53O8AaqbepqqC84VuZagLgvYjxj2nSwGgfcmCgga/xfcc1yRVS
+         YKAdqIf5ZDK7VgNxWJKl1MSTSRUnYNNPOs+RRplyPXyHIi02Nk2Idz+s631Lt+NhH0/5
+         qRuMoDqYbuFSuMXUNqu+dBLhMOL2er65Wl8fQXFJqRhnYzRZBcz60yqBdnkCkSyqf+MC
+         svfstqhORWDNg41Uzqb0gjxQ3lVVMn9DFS8aNyFMJn4eqDv0QHCgr8auIvWxAkzxIjFm
+         q2jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lFeaHcw3WNcJNFaRay0No0wm3D4s1Mkz5fJGwkqsY20=;
-        b=78X7igW5b8BtM7vkgQz5rLuZk8pmnC/THLZ1D0HhhmA7owzceKqBen2JvZ7RZ1Fpwg
-         hMcPOAgEnE90eBnjYjc6FdZUSRgRr9HRZpPLy2T4NCIN0dRNiLJphCV0cS5P7T3yTG8O
-         /qqbKimZzsau9bme0ow4z1Tn4u79bc37+7zpf27mGGqba38+/Ji6et2VPxjbf0shb/9G
-         HADrM5vZxVmgO+aIkVd49yHRw8pflAUJw1obays7UCbHruFDDzqPruWvSN4L7zg9pVCJ
-         WEnyf4x8RM+IDmVdTC/Lb3Jg2a/+VbosTr6sf4FiR07zeHl+LNuPkDmu4aCJ5K430rvR
-         c/8A==
-X-Gm-Message-State: ACrzQf37n5Lg53+Tyq6I9Gh0rhRKaRRLvlMFxPWYJYQBx/fDU1qUCZme
-        r5LLw9cQjo4Xar7be/z1RYZjU68ApaE=
-X-Google-Smtp-Source: AMsMyM7Om/5baYXatwtjMC2RIaTufoS8gp9s/C1nCrq9n/XhR7fzEmVLzLiwsm85yNB/ocCqEWQDjg==
-X-Received: by 2002:a05:6402:1c1c:b0:45c:35b2:2a98 with SMTP id ck28-20020a0564021c1c00b0045c35b22a98mr4220710edb.182.1666122725252;
-        Tue, 18 Oct 2022 12:52:05 -0700 (PDT)
+        bh=OEXvp1IreEp3SXV31DiUhQRIjvrLdojheHeDjSM1+mQ=;
+        b=bw0GoEY51WqystaQVYSMUkeTK10yIv0eL0dfTPHrTz6Uy5bOw68IF0llD5I+i3rkKs
+         Na+25ubFVmrPpk/wzrrSo1sjYm7QbC8sT4+aS9P/ShEB+777H00XQy+Naar5gSAOSDTU
+         MaC2bAD/RvXxtAV6QjuNJQHw7ETKNGaQQNJjVWHhpX8YVPErvd2GBGNBUYLshPTR74/y
+         o5tMlIwqFyxoAcZ8JW9ml5ArLM8MSkLt3cSzw5oCxAIqjwRhq0ofGeLQNbFYJdSwbGSo
+         havG1sAdnzkx5R9l+2qgkxTyMWkOLiwUoJHniP+VmIx1+a8xgMtBXhGuIsK4NAyu9JOk
+         iZbQ==
+X-Gm-Message-State: ACrzQf0HHJQSKlKomBVSmU78DICdQ6OXC+ftZeEJXQKJK9qw3fmTwevV
+        M1aB7OMPv0jaqd2lnddShqI=
+X-Google-Smtp-Source: AMsMyM6GRe01/gzUNqYl0qBi83MJXbgcRA7kWwqcS6QpySglmmTLqgbs8KPzXOENcnWaNdqiTyWLNg==
+X-Received: by 2002:a17:907:3186:b0:777:3fe7:4659 with SMTP id xe6-20020a170907318600b007773fe74659mr3747536ejb.336.1666122729204;
+        Tue, 18 Oct 2022 12:52:09 -0700 (PDT)
 Received: from 127.0.0.1localhost (94.197.72.2.threembb.co.uk. [94.197.72.2])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b0072a881b21d8sm7945858ejg.119.2022.10.18.12.52.04
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b0072a881b21d8sm7945858ejg.119.2022.10.18.12.52.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Oct 2022 12:52:04 -0700 (PDT)
+        Tue, 18 Oct 2022 12:52:08 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org
 Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         Pavel Begunkov <asml.silence@gmail.com>
-Subject: [RFC for-next v2 1/4] bio: safeguard REQ_ALLOC_CACHE bio put
-Date:   Tue, 18 Oct 2022 20:50:55 +0100
-Message-Id: <558d78313476c4e9c233902efa0092644c3d420a.1666122465.git.asml.silence@gmail.com>
+Subject: [RFC for-next v2 4/4] io_uring/rw: enable bio caches for IRQ rw
+Date:   Tue, 18 Oct 2022 20:50:58 +0100
+Message-Id: <f43faaa420b95066bdc7679aee411cb4edd160d4.1666122465.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1666122465.git.asml.silence@gmail.com>
 References: <cover.1666122465.git.asml.silence@gmail.com>
@@ -66,29 +66,35 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-bio_put() with REQ_ALLOC_CACHE assumes that it's executed not from
-an irq context. Let's add a warning if the invariant is not respected,
-especially since there is a couple of places removing REQ_POLLED by hand
-without also clearing REQ_ALLOC_CACHE.
+Now we can use IOCB_ALLOC_CACHE not only for iopoll'ed reads/write but
+also for normal IRQ driven I/O.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- block/bio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ io_uring/rw.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/block/bio.c b/block/bio.c
-index 7cb7d2ff139b..5b4594daa259 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -741,7 +741,7 @@ void bio_put(struct bio *bio)
- 			return;
- 	}
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 100de2626e47..ff609b762742 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -667,6 +667,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
+ 	ret = kiocb_set_rw_flags(kiocb, rw->flags);
+ 	if (unlikely(ret))
+ 		return ret;
++	kiocb->ki_flags |= IOCB_ALLOC_CACHE;
  
--	if (bio->bi_opf & REQ_ALLOC_CACHE) {
-+	if ((bio->bi_opf & REQ_ALLOC_CACHE) && !WARN_ON_ONCE(in_interrupt())) {
- 		struct bio_alloc_cache *cache;
+ 	/*
+ 	 * If the file is marked O_NONBLOCK, still allow retry for it if it
+@@ -682,7 +683,7 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
+ 			return -EOPNOTSUPP;
  
- 		bio_uninit(bio);
+ 		kiocb->private = NULL;
+-		kiocb->ki_flags |= IOCB_HIPRI | IOCB_ALLOC_CACHE;
++		kiocb->ki_flags |= IOCB_HIPRI;
+ 		kiocb->ki_complete = io_complete_rw_iopoll;
+ 		req->iopoll_completed = 0;
+ 	} else {
 -- 
 2.38.0
 
