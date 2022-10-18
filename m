@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 072A2C433FE
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ED2FBC4167B
 	for <io-uring@archiver.kernel.org>; Tue, 18 Oct 2022 19:16:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiJRTQN convert rfc822-to-8bit (ORCPT
+        id S229572AbiJRTQP convert rfc822-to-8bit (ORCPT
         <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 18 Oct 2022 15:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53584 "EHLO
+        Tue, 18 Oct 2022 15:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJRTQL (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 18 Oct 2022 15:16:11 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FEE058158
-        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:10 -0700 (PDT)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IFF8CP014549
-        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:09 -0700
+        with ESMTP id S229784AbiJRTQN (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 18 Oct 2022 15:16:13 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD8F58158
+        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:12 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 29IDZFYp005675
+        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:11 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k9ky5gh55-1
+        by m0089730.ppops.net (PPS) with ESMTPS id 3k92jvu7ux-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:09 -0700
+        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:11 -0700
 Received: from twshared9384.24.frc3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Tue, 18 Oct 2022 12:16:08 -0700
 Received: by devvm2494.atn0.facebook.com (Postfix, from userid 172786)
-        id 4BF41227F050F; Tue, 18 Oct 2022 12:16:02 -0700 (PDT)
+        id 48B9A227F050B; Tue, 18 Oct 2022 12:16:02 -0700 (PDT)
 From:   Jonathan Lemon <jonathan.lemon@gmail.com>
 To:     <io-uring@vger.kernel.org>
 CC:     <kernel-team@meta.com>
-Subject: [RFC PATCH v2 05/13] io_uring: create page freelist for the ifq region
-Date:   Tue, 18 Oct 2022 12:15:54 -0700
-Message-ID: <20221018191602.2112515-6-jonathan.lemon@gmail.com>
+Subject: [RFC PATCH v2 02/13] netdevice: add SETUP_ZCTAP to the netdev_bpf structure
+Date:   Tue, 18 Oct 2022 12:15:51 -0700
+Message-ID: <20221018191602.2112515-3-jonathan.lemon@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221018191602.2112515-1-jonathan.lemon@gmail.com>
 References: <20221018191602.2112515-1-jonathan.lemon@gmail.com>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: drkKCkEDu5CjumzBGTge4MGWDOF962KP
-X-Proofpoint-GUID: drkKCkEDu5CjumzBGTge4MGWDOF962KP
+X-Proofpoint-ORIG-GUID: hI24-ZTWedOh5VJfQBp5MLy4k8mR8uaY
+X-Proofpoint-GUID: hI24-ZTWedOh5VJfQBp5MLy4k8mR8uaY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-18_07,2022-10-18_01,2022-06-22_01
@@ -50,104 +50,40 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Create a freelist where the driver can obtain pages for the packet
-backing store.  Use the page's page_private field to record lookup
-information.
+This command requests the networking device setup or teardown
+a new interface queue, backed by a region of user supplied memory.
+
+The queue will be managed by io-uring.
 
 Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
 ---
- io_uring/zctap.c | 61 ++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 56 insertions(+), 5 deletions(-)
+ include/linux/netdevice.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/io_uring/zctap.c b/io_uring/zctap.c
-index f8a5702f93f4..af2e871b1b62 100644
---- a/io_uring/zctap.c
-+++ b/io_uring/zctap.c
-@@ -27,18 +27,68 @@ struct ifq_region {
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index a36edb0ec199..8e308eaecaed 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -980,6 +980,7 @@ enum bpf_netdev_command {
+ 	BPF_OFFLOAD_MAP_ALLOC,
+ 	BPF_OFFLOAD_MAP_FREE,
+ 	XDP_SETUP_XSK_POOL,
++	XDP_SETUP_ZCTAP,
+ };
  
- typedef int (*bpf_op_t)(struct net_device *dev, struct netdev_bpf *bpf);
+ struct bpf_prog_offload_ops;
+@@ -1018,6 +1019,11 @@ struct netdev_bpf {
+ 			struct xsk_buff_pool *pool;
+ 			u16 queue_id;
+ 		} xsk;
++		/* XDP_SETUP_ZCTAP */
++		struct {
++			struct io_zctap_ifq *ifq;
++			u16 queue_id;
++		} zct;
+ 	};
+ };
  
-+static void zctap_set_page_info(struct page *page, u64 info)
-+{
-+	set_page_private(page, info);
-+}
-+
-+static u64 zctap_mk_page_info(u16 region_id, u16 pgid)
-+{
-+	return (u64)0xface << 48 | (u64)region_id << 16 | (u64)pgid;
-+}
-+
- static void io_remove_ifq_region(struct ifq_region *ifr)
- {
-+	struct io_mapped_ubuf *imu;
-+	struct page *page;
-+	int i;
-+
-+	imu = ifr->imu;
-+	for (i = 0; i < ifr->nr_pages; i++) {
-+		page = imu->bvec[i].bv_page;
-+
-+		ClearPagePrivate(page);
-+		set_page_private(page, 0);
-+	}
-+
- 	kvfree(ifr);
- }
- 
-+static int io_zctap_map_region(struct ifq_region *ifr)
-+{
-+	struct io_mapped_ubuf *imu;
-+	struct page *page;
-+	u64 info;
-+	int i;
-+
-+	imu = ifr->imu;
-+	for (i = 0; i < ifr->nr_pages; i++) {
-+		page = imu->bvec[i].bv_page;
-+		if (PagePrivate(page))
-+			goto out;
-+		SetPagePrivate(page);
-+		info = zctap_mk_page_info(ifr->id, i);
-+		zctap_set_page_info(page, info);
-+		ifr->freelist[i] = page;
-+	}
-+	return 0;
-+
-+out:
-+	while (i--) {
-+		page = imu->bvec[i].bv_page;
-+		ClearPagePrivate(page);
-+		set_page_private(page, 0);
-+	}
-+	return -EEXIST;
-+}
-+
- int io_provide_ifq_region(struct io_zctap_ifq *ifq, u16 id)
- {
- 	struct io_ring_ctx *ctx = ifq->ctx;
- 	struct io_mapped_ubuf *imu;
- 	struct ifq_region *ifr;
--	int i, nr_pages;
--	struct page *page;
-+	int nr_pages;
-+	int err;
- 
- 	/* XXX for now, only allow one region per ifq. */
- 	if (ifq->region)
-@@ -63,9 +113,10 @@ int io_provide_ifq_region(struct io_zctap_ifq *ifq, u16 id)
- 	ifr->count = nr_pages;
- 	ifr->id = id;
- 
--	for (i = 0; i < nr_pages; i++) {
--		page = imu->bvec[i].bv_page;
--		ifr->freelist[i] = page;
-+	err = io_zctap_map_region(ifr);
-+	if (err) {
-+		kvfree(ifr);
-+		return err;
- 	}
- 
- 	ifq->region = ifr;
 -- 
 2.30.2
 
