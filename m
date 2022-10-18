@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 548E9C433FE
-	for <io-uring@archiver.kernel.org>; Tue, 18 Oct 2022 19:16:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63600C4332F
+	for <io-uring@archiver.kernel.org>; Tue, 18 Oct 2022 19:16:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiJRTQV convert rfc822-to-8bit (ORCPT
+        id S229932AbiJRTQW convert rfc822-to-8bit (ORCPT
         <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 18 Oct 2022 15:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        Tue, 18 Oct 2022 15:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbiJRTQV (ORCPT
+        with ESMTP id S229865AbiJRTQV (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Tue, 18 Oct 2022 15:16:21 -0400
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F555E640
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3A65FF7A
         for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:17 -0700 (PDT)
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 29IE0NVH004402
-        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:15 -0700
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29IHUTU2005878
+        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:16 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3k9abe6w7k-2
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3k9tpedhhj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:15 -0700
+        for <io-uring@vger.kernel.org>; Tue, 18 Oct 2022 12:16:16 -0700
 Received: from twshared9269.07.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Tue, 18 Oct 2022 12:16:14 -0700
 Received: by devvm2494.atn0.facebook.com (Postfix, from userid 172786)
-        id 59CDC227F0515; Tue, 18 Oct 2022 12:16:02 -0700 (PDT)
+        id 753A0227F052F; Tue, 18 Oct 2022 12:16:02 -0700 (PDT)
 From:   Jonathan Lemon <jonathan.lemon@gmail.com>
 To:     <io-uring@vger.kernel.org>
 CC:     <kernel-team@meta.com>
-Subject: [RFC PATCH v2 07/13] io_uring: Allocate the zctap buffers for the device
-Date:   Tue, 18 Oct 2022 12:15:56 -0700
-Message-ID: <20221018191602.2112515-8-jonathan.lemon@gmail.com>
+Subject: [RFC PATCH v2 11/13] io_uring: Define the zctap iov[] returned to the user.
+Date:   Tue, 18 Oct 2022 12:16:00 -0700
+Message-ID: <20221018191602.2112515-12-jonathan.lemon@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221018191602.2112515-1-jonathan.lemon@gmail.com>
 References: <20221018191602.2112515-1-jonathan.lemon@gmail.com>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: uBTF1Xbv6cilX-q1CPMV570uIVF_H_2V
-X-Proofpoint-ORIG-GUID: uBTF1Xbv6cilX-q1CPMV570uIVF_H_2V
+X-Proofpoint-ORIG-GUID: zpyF1UvBcmju2_llljHGXuyVOwximc3Y
+X-Proofpoint-GUID: zpyF1UvBcmju2_llljHGXuyVOwximc3Y
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-10-18_07,2022-10-18_01,2022-06-22_01
@@ -50,127 +50,41 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The idea is to register a memory region with the device, and
-later specify the desired packet buffer size.  The code currently
-assumes a page size.
+When performing a ZC receive, instead of returning data directly
+to the user, an iov[] structure is returned referencing the data
+in user space.
 
-Create the desired number of zctap buffers and DMA map them
-to the target device, recording the dma address for later use.
+The application locates the base address of the data by performing
+address computations on bgid:bid.  The off/len applies to the base
+address, resulting in the data segment.
+
+The bgid:bid identifying the buffer should later be placed in the
+ifq's fill ring, which returns the buffer back to the kernel.
 
 Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
 ---
- io_uring/zctap.c | 55 +++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 47 insertions(+), 8 deletions(-)
+ include/uapi/linux/io_uring.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/io_uring/zctap.c b/io_uring/zctap.c
-index 46ba0d011250..a924e59513a4 100644
---- a/io_uring/zctap.c
-+++ b/io_uring/zctap.c
-@@ -22,7 +22,9 @@ struct ifq_region {
- 	int			count;
- 	int			nr_pages;
- 	u16			id;
--	struct page		*freelist[];
-+
-+	struct io_zctap_buf	*buf;
-+	struct io_zctap_buf	*freelist[];
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index d406d21e8c38..c50c63053f13 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -681,6 +681,14 @@ struct io_uring_ifq_req {
+ 	__u16	__pad[2];
  };
  
- typedef int (*bpf_op_t)(struct net_device *dev, struct netdev_bpf *bpf);
-@@ -62,35 +64,65 @@ static void io_remove_ifq_region(struct ifq_region *ifr)
- 		set_page_private(page, 0);
- 	}
- 
-+	kvfree(ifr->buf);
- 	kvfree(ifr);
++struct io_uring_zctap_iov {
++	__u32	off;
++	__u32	len;
++	__u16	bgid;
++	__u16	bid;
++	__u16	resv[2];
++};
++
+ #ifdef __cplusplus
  }
- 
--static int io_zctap_map_region(struct ifq_region *ifr)
-+static inline struct device *
-+netdev2device(struct net_device *dev)
-+{
-+	return dev->dev.parent;			/* from SET_NETDEV_DEV() */
-+}
-+
-+static int io_zctap_map_region(struct ifq_region *ifr, struct device *device)
- {
- 	struct io_mapped_ubuf *imu;
-+	struct io_zctap_buf *buf;
- 	struct page *page;
-+	dma_addr_t addr;
-+	int i, err;
- 	u64 info;
--	int i;
- 
- 	imu = ifr->imu;
- 	for (i = 0; i < ifr->nr_pages; i++) {
- 		page = imu->bvec[i].bv_page;
--		if (PagePrivate(page))
-+
-+		if (PagePrivate(page)) {
-+			err = -EEXIST;
- 			goto out;
-+		}
-+
- 		SetPagePrivate(page);
- 		info = zctap_mk_page_info(ifr->id, i);
- 		zctap_set_page_info(page, info);
--		ifr->freelist[i] = page;
-+
-+		buf = &ifr->buf[i];
-+		addr = dma_map_page_attrs(device, page, 0, PAGE_SIZE,
-+					  DMA_BIDIRECTIONAL,
-+					  DMA_ATTR_SKIP_CPU_SYNC);
-+		if (dma_mapping_error(device, addr)) {
-+			err = -ENOMEM;
-+			goto out;
-+		}
-+		buf->dma = addr;
-+		buf->page = page;
-+		atomic_set(&buf->refcount, 0);
-+
-+		ifr->freelist[i] = buf;
- 	}
- 	return 0;
- 
- out:
- 	while (i--) {
- 		page = imu->bvec[i].bv_page;
--		ClearPagePrivate(page);
- 		set_page_private(page, 0);
-+		ClearPagePrivate(page);
-+		buf = &ifr->buf[i];
-+		dma_unmap_page_attrs(device, buf->dma, PAGE_SIZE,
-+				     DMA_BIDIRECTIONAL,
-+				     DMA_ATTR_SKIP_CPU_SYNC);
- 	}
--	return -EEXIST;
-+	return err;
- }
- 
- int io_provide_ifq_region(struct io_zctap_ifq *ifq, u16 id)
-@@ -119,13 +151,20 @@ int io_provide_ifq_region(struct io_zctap_ifq *ifq, u16 id)
- 	if (!ifr)
- 		return -ENOMEM;
- 
-+	ifr->buf = kvmalloc_array(nr_pages, sizeof(*ifr->buf), GFP_KERNEL);
-+	if (!ifr->buf) {
-+		kvfree(ifr);
-+		return -ENOMEM;
-+	}
-+
- 	ifr->nr_pages = nr_pages;
- 	ifr->imu = imu;
- 	ifr->count = nr_pages;
- 	ifr->id = id;
- 
--	err = io_zctap_map_region(ifr);
-+	err = io_zctap_map_region(ifr, netdev2device(ifq->dev));
- 	if (err) {
-+		kvfree(ifr->buf);
- 		kvfree(ifr);
- 		return err;
- 	}
+ #endif
 -- 
 2.30.2
 
