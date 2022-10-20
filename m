@@ -2,139 +2,90 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2ACF4C4332F
-	for <io-uring@archiver.kernel.org>; Thu, 20 Oct 2022 12:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DF6ECC4332F
+	for <io-uring@archiver.kernel.org>; Thu, 20 Oct 2022 12:50:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbiJTMuJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 20 Oct 2022 08:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56998 "EHLO
+        id S230262AbiJTMul (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 20 Oct 2022 08:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiJTMuF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 20 Oct 2022 08:50:05 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A5AA59A5;
-        Thu, 20 Oct 2022 05:50:03 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id bv10so34180704wrb.4;
-        Thu, 20 Oct 2022 05:50:03 -0700 (PDT)
+        with ESMTP id S230259AbiJTMuk (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 20 Oct 2022 08:50:40 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F4418952E
+        for <io-uring@vger.kernel.org>; Thu, 20 Oct 2022 05:50:39 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id u6so2698079plq.12
+        for <io-uring@vger.kernel.org>; Thu, 20 Oct 2022 05:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aJYEkwkUk+rdScG5sDf+MTUme3atMrdD7pys6ZbE0sk=;
-        b=ZpgPF8gsB/RYH+8vrAKwvFmKUuAwuP8fjZG04ZBT8tiT+zWlB1/nDiUZGx5ia0Y4D9
-         zCE/qNQOOolhSo8uPEzvoUsgYe4ltoNaYjKKts//kxuAob4/9rBNYB0ohgAMK3RIAeej
-         xGnY8C5GfYpmq1lHgrGy7Bg2UlOri5j2k/yABBEqrBVSgpGIu7JyDU9UIxmfKdhOfCxZ
-         NWjgn3x1TClUQuOy31YILu8ZRa4SeiNN9+n+7bNKvObbM4PbJWeDLZVfXWohQPAtu8T3
-         RBuT7BCZddw9ZIyUyo7lhEA067AWPsLxABcDp0avHzeoxcb3w3VeJ6381fa17TRpivz5
-         uisw==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3T6X+tt7V+91kobXX12t6/xBrHgsUusEkXMw0L2QMKo=;
+        b=V1e+eumcTbSiXyjph0yA3r/AC6Jy3E7VdU0fC5UdvN3Jjv5eHkX+KRzb3g/5Snd3ZB
+         TO3UwH0dGpPsF3IU1lCS+drZ84tqXau9dHvtNPhV2RLawCrjLIQ8PR4P5KZqR87/eJqb
+         SE0VT26rx6WgMpUXzQiyNswQClOxqQojw78L07iPRMxPxe3bOhmP16OZQ6rbU0gwzOxU
+         KnGQSw+KJJBW8s1zOep5CjR4Fmsir+FCzi9T8L9Okp56p7CnC33SIIoZB1zuZMOvWIPD
+         RMXguy9y9Ej7zdSAjXnm6we46Y+87YtUPtndgbrZl3Bjtl/wMhRUbj0BQhxgNuJ6Dgcp
+         Y9Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aJYEkwkUk+rdScG5sDf+MTUme3atMrdD7pys6ZbE0sk=;
-        b=AHNoiJGrubjrBRzvRt7bS38I4FCmcFtNDQvvNGc34a3uASjFkPlaRS9ioXhB7xfMyl
-         QUzCyhoUW9n9KrOoyvBjOYvQnb2x4vZDzqtQoDTXbvn6xwp6uWHEFGCvqqPvNwSaSMQr
-         GAFGmVUtkcP7HAXhDbkut72EXmjvQxkMMIizRUzCLNhFaHyzG8vY5UQ1y3J4j0PNScbI
-         AFlj6GWhuXuwML28eNmnJoZMR874oJ9Gh8Y+nIuCrT+lNR0VzsOnHuxZhG0uak4y3xeb
-         uu4Q549lD3tXCgMG52HW3empwjLAo4Cc32bZvbbMY0sDp8g2LdeS/O29C3lqu20JtyGD
-         OcNg==
-X-Gm-Message-State: ACrzQf3kl2MJBrO1iH5DW/HNhK4QVTDMjay10j38r3ApeyCjr6Zjum7b
-        1lO15P1uz4gTBMWNAYDc/sErguoX8Gc=
-X-Google-Smtp-Source: AMsMyM7Na04f4Lg0ByjVUtFgFHBlIczX1VXS15YEL362trJjoNeXoiuZAC0MuPZgBZ55lywkTSo4aQ==
-X-Received: by 2002:a5d:4451:0:b0:236:58:b88f with SMTP id x17-20020a5d4451000000b002360058b88fmr1807130wrr.181.1666270201633;
-        Thu, 20 Oct 2022 05:50:01 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:310::22ef? ([2620:10d:c092:600::2:93dd])
-        by smtp.gmail.com with ESMTPSA id q2-20020adff502000000b0022cc0a2cbecsm16758469wro.15.2022.10.20.05.50.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 05:50:01 -0700 (PDT)
-Message-ID: <d2eb10cb-3cce-429c-7a72-7153b5442377@gmail.com>
-Date:   Thu, 20 Oct 2022 13:48:37 +0100
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3T6X+tt7V+91kobXX12t6/xBrHgsUusEkXMw0L2QMKo=;
+        b=8BCPrFUAoCMW3LjMXTPf2TL+HjDpq8FPiKuX1pgB9jMtWmlRBQDZfra2uWqqx0l+mq
+         pHSkH/eS6MG5XLrMuDaPArIEkZ3Ce7tPlWPhOVV8UYcog2RFWSoe0uuyuQGZ4QNqiayp
+         8GeliQ+8a4PE22IhsYgWf76tZ5oPZ1lwRH0w0+8ePeh5ejnFZVhOHoeFXqb6rTirqLM+
+         QRZpE9aIRdWlggtkPimKNnAymogW7QdP+cSl0md5EY+XgHRmrOOTxMMs6XDuASUxD8G5
+         N8AN+Adr/FP28+3eJ8jvtmL/GseWqB6Z4KiIXG0p2qyc7PVIMH96weZWTp9FzzwHXz0v
+         SCKw==
+X-Gm-Message-State: ACrzQf2VHk/exleknpX4a7y0brdndcjVUkwI6lY3hrND/j8apvvIlymz
+        2tYAX6JgnM0xBeUO5oL+Cz/JBw==
+X-Google-Smtp-Source: AMsMyM4TRzgWshHzykwjj+0oSUfvvDKlhXsmbl0EEBW/4qsIASSjpO/zYNZVz/MgLoZQ1OlX/n7zyA==
+X-Received: by 2002:a17:90b:2243:b0:20b:42a:4c0d with SMTP id hk3-20020a17090b224300b0020b042a4c0dmr49870333pjb.123.1666270238215;
+        Thu, 20 Oct 2022 05:50:38 -0700 (PDT)
+Received: from [127.0.0.1] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170902cec800b0017f7b6e970esm12885047plg.146.2022.10.20.05.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Oct 2022 05:50:37 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     linux-block@vger.kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+In-Reply-To: <cover.1666122465.git.asml.silence@gmail.com>
+References: <cover.1666122465.git.asml.silence@gmail.com>
+Subject: Re: (subset) [RFC for-next v2 0/4] enable pcpu bio caching for IRQ I/O
+Message-Id: <166627023722.161997.8160242378689353670.b4-ty@kernel.dk>
+Date:   Thu, 20 Oct 2022 05:50:37 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH for-6.1 1/2] io_uring/net: fail zc send for unsupported
- protocols
-Content-Language: en-US
-To:     Stefan Metzmacher <metze@samba.org>, io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, netdev@vger.kernel.org
-References: <cover.1666229889.git.asml.silence@gmail.com>
- <ee7c163db8cea65b208d327610a6a96f936c1c6f.1666229889.git.asml.silence@gmail.com>
- <f60d98e7-c798-b4a9-f305-4adc16341eca@samba.org>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <f60d98e7-c798-b4a9-f305-4adc16341eca@samba.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 10/20/22 10:13, Stefan Metzmacher wrote:
-> Hi Pavel,
+On Tue, 18 Oct 2022 20:50:54 +0100, Pavel Begunkov wrote:
+> This series implements bio pcpu caching for normal / IRQ-driven I/O
+> extending REQ_ALLOC_CACHE currently limited to iopoll. The allocation side
+> still only works from non-irq context, which is the reason it's not enabled
+> by default, but turning it on for other users (e.g. filesystems) is
+> as a matter of passing a flag.
 > 
->> If a protocol doesn't support zerocopy it will silently fall back to
->> copying. This type of behaviour has always been a source of troubles
->> so it's better to fail such requests instead. For now explicitly
->> whitelist supported protocols in io_uring, which should be turned later
->> into a socket flag.
->>
->> Cc: <stable@vger.kernel.org> # 6.0
->> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->> ---
->>   io_uring/net.c | 9 +++++++++
->>   1 file changed, 9 insertions(+)
->>
->> diff --git a/io_uring/net.c b/io_uring/net.c
->> index 8c7226b5bf41..28127f1de1f0 100644
->> --- a/io_uring/net.c
->> +++ b/io_uring/net.c
->> @@ -120,6 +120,13 @@ static void io_netmsg_recycle(struct io_kiocb *req, unsigned int issue_flags)
->>       }
->>   }
->> +static inline bool io_sock_support_zc(struct socket *sock)
->> +{
->> +    return likely(sock->sk && sk_fullsock(sock->sk) &&
->> +             (sock->sk->sk_protocol == IPPROTO_TCP ||
->> +              sock->sk->sk_protocol == IPPROTO_UDP));
->> +}
+> t/io_uring with an Optane SSD setup showed +7% for batches of 32 requests
+> and +4.3% for batches of 8.
 > 
-> Can we please make this more generic (at least for 6.1, which is likely be an lts release)
-> 
-> It means my out of tree smbdirect driver would not be able to provide SENDMSG_ZC.
-> 
-> Currently sk_setsockopt has this logic:
-> 
->          case SO_ZEROCOPY:
->                  if (sk->sk_family == PF_INET || sk->sk_family == PF_INET6) {
->                          if (!(sk_is_tcp(sk) ||
->                                (sk->sk_type == SOCK_DGRAM &&
->                                 sk->sk_protocol == IPPROTO_UDP)))
->                                  ret = -EOPNOTSUPP;
->                  } else if (sk->sk_family != PF_RDS) {
->                          ret = -EOPNOTSUPP;
->                  }
->                  if (!ret) {
->                          if (val < 0 || val > 1)
->                                  ret = -EINVAL;
->                          else
->                                  sock_valbool_flag(sk, SOCK_ZEROCOPY, valbool);
->                  }
->                  break;
-> 
-> Maybe the socket creation code could set
-> unsigned char skc_so_zerocopy_supported:1;
-> and/or
-> unsigned char skc_zerocopy_msg_ubuf_supported:1;
-> 
-> In order to avoid the manual complex tests.
-> 
-> What do you think?
+> [...]
 
-Ok, wanted to do it rather later but let me to try fiddle with it.
+Applied, thanks!
 
-btw, what's happening with smbdirect? Do you plan upstream it one day
-and it's just maturing out of tree?
+[1/4] bio: safeguard REQ_ALLOC_CACHE bio put
+      commit: d4347d50407daea6237872281ece64c4bdf1ec99
 
+Best regards,
 -- 
-Pavel Begunkov
+Jens Axboe
+
+
