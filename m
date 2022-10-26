@@ -2,62 +2,62 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A2A2C433FE
-	for <io-uring@archiver.kernel.org>; Wed, 26 Oct 2022 23:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 211AAFA373D
+	for <io-uring@archiver.kernel.org>; Wed, 26 Oct 2022 23:28:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiJZX2c (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 26 Oct 2022 19:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
+        id S233766AbiJZX2e (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 26 Oct 2022 19:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234508AbiJZX16 (ORCPT
+        with ESMTP id S229456AbiJZX16 (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 26 Oct 2022 19:27:58 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041C25A3DA;
-        Wed, 26 Oct 2022 16:27:32 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id bp11so28494140wrb.9;
-        Wed, 26 Oct 2022 16:27:32 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5925FC25;
+        Wed, 26 Oct 2022 16:27:31 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id b20-20020a05600c4e1400b003cc28585e2fso2885782wmq.1;
+        Wed, 26 Oct 2022 16:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fecvoE3GO3AEiM1jj/RAiMwmH/hP4TRAww18UbwirDs=;
-        b=k6GcJ40EahQegR5VzpYdakh/t3MYmiw5Q0nyoVR3La3kE8hHFfClOYlbJtkuif5+FH
-         N+beJsbpOPO01+Z92fw5EQpfHbajV6BXYlFsejUh8XHGarO8slnsEAXmHRtv+/BI7Mtl
-         8mYGE3ppdfdobBJ5orRYKH7fKTAi65sJmaGRpdEvj38dPrdKFX+zpFuxO41BLZtafAu/
-         py1L4GjunQmLB3cLC/q/i7l8SOD+x6MjsPNJQcaOKM++StQk5a3+YIF/6qnyBLGozKEk
-         cLFxLUvG9ab+w5VYVCvLYhJeU8h5CcC25Vs2FFhb1ruNU0Gv7ZEUyf1TXWPxKfGP6oU6
-         bAYQ==
+        bh=5sjP64Qj3I5bM+4YXFPnF6jS8rNRlxRMcMkh4ovNirg=;
+        b=hOW4gFulPjHAP04yJhIeyWaiuhS24jqmREX7c+IgE54LM2NKovz1FWlIqBhp01kQP1
+         /S5eAyOVFQdE/ldiqdofL/W1Q3amz0NIb9YaZV14guxtSCAwF0DBhMEVEPUITmc7WxOe
+         5MIpx3clK/qA/3lxYJjNHyM30IL3J2BhRAIewe+Iooe8c86LEXw13JetnFL9gHUbPSCn
+         GCKe2fO4832tjBa+CD9xCK7f3z20IWsmuFvrt/6kq0A2U7WD1zNNag0hKDIFULCvsXYy
+         rQviCY8w3JtRCQBCaIfM6Ikob6bkhiEjIwCq+hTpNoscSYTVJnf/FXCok7OLxVoSBAwZ
+         CB4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fecvoE3GO3AEiM1jj/RAiMwmH/hP4TRAww18UbwirDs=;
-        b=kxKolwb5g5BDgvJq27CbcS8LhOJxv8Zmd4Lp+/rSgmfgm/bLaXeo2KI+OT0NuFjrlt
-         6m1SfUJeceNyq8D4aWLk+LM0Kc8patuj/NybQKt2TmMlcUiEkg6V5a0SSh9aZOmv/K+A
-         pCX1YU1+TvCQT87+AztNMpdiEVW8ifi1xKP04ex92xfbGoygzsX/wTPXM0/zDTHsL4sF
-         r30c/LGA7+QTkoKC94ytdrXZPKJJR1S9rDJREJIVG9cShB8zR5J3ya8sSd4QBCoIcfSU
-         o5ACCrUOn8If9hOh5Fc2lylo0kBpHw7J/m6GuW4x7rXChgUro6u8Z5YleVNXphjRK3bA
-         Dy1A==
-X-Gm-Message-State: ACrzQf3lJWqQGJmFpJUYxAospRLIeIbPf+2yiBQzGNoaqm1hbZIIV+l+
-        N+17kjzu29AyITx4T5kjsiHzjeybJX1qiA==
-X-Google-Smtp-Source: AMsMyM6uKIqQLJPtQgzCdzQ8X4e6hA0DO3wkqZfAOeXGaBTc2rqEZDJAjGBqGIMwvDkfXo9Xx8KvOg==
-X-Received: by 2002:adf:d1c4:0:b0:230:7771:f618 with SMTP id b4-20020adfd1c4000000b002307771f618mr28596922wrd.203.1666826852185;
-        Wed, 26 Oct 2022 16:27:32 -0700 (PDT)
+        bh=5sjP64Qj3I5bM+4YXFPnF6jS8rNRlxRMcMkh4ovNirg=;
+        b=X4SRcwjulpDWzL1Ywj+e8YcYEI+gvVLnmHtafSgV7nwp9fa9nfZxvuwnhdEtUTzI56
+         X67MJLtUgyAaKDL1BRVbKinGj3S7R7K4eQOUuzW1a06vgz+LCdD/LIazBKvie7RrXPv0
+         pwc88kXCh4oXyP0+Rylvp1/uUtKCxPWkctIyTjKnaOu0INpFwCPBfZUKt/NqF/3huf8m
+         5VudJRzaQB62Pogs3DtVBCE9Ndz74P4SHz7H8lhF0rC/chNMs5EUQgZ2/fOiWAP1+UGP
+         VJr+Yf5J2+1VLwstcYn0scWRY+xFLLzu7+9N7wasRO8V6sWcpKdSAqXjAB0Y+EaYiaFr
+         3c1A==
+X-Gm-Message-State: ACrzQf2JfR5bMgmlCKsy75Rf/u2vYqu+sUuQ52MpzN+yYyL9tEughAlo
+        dY7J03qoVPeaAxYs3GF4q/sE+6FFYfIrGA==
+X-Google-Smtp-Source: AMsMyM7sl2k4Z0mb2kqpOuPapuoryWhoK6WgF3TBhFHomHJnLiD10D/KOZa1konHqlOHkltrX9liyw==
+X-Received: by 2002:a05:600c:3acd:b0:3ce:3f62:a8d1 with SMTP id d13-20020a05600c3acd00b003ce3f62a8d1mr3896899wms.78.1666826849603;
+        Wed, 26 Oct 2022 16:27:29 -0700 (PDT)
 Received: from 127.0.0.1localhost (213-205-70-130.net.novis.pt. [213.205.70.130])
-        by smtp.gmail.com with ESMTPSA id y4-20020adfd084000000b002368424f89esm4897526wrh.67.2022.10.26.16.27.31
+        by smtp.gmail.com with ESMTPSA id y4-20020adfd084000000b002368424f89esm4897526wrh.67.2022.10.26.16.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 16:27:31 -0700 (PDT)
+        Wed, 26 Oct 2022 16:27:29 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     Jakub Kicinski <kuba@kernel.org>,
         "David S . Miller" <davem@davemloft.net>, io-uring@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
-        asml.silence@gmail.com, Stefan Metzmacher <metze@samba.org>
-Subject: [PATCH net 4/4] net: also flag accepted sockets supporting msghdr originated zerocopy
-Date:   Thu, 27 Oct 2022 00:25:59 +0100
-Message-Id: <d8869997f50c23e8446b4c35e3800ebe4bc8e92f.1666825799.git.asml.silence@gmail.com>
+        asml.silence@gmail.com
+Subject: [PATCH net 2/4] net: remove SOCK_SUPPORT_ZC from sockmap
+Date:   Thu, 27 Oct 2022 00:25:57 +0100
+Message-Id: <0d46741e883fd596d6d24a1445177bf0ba842f5f.1666825799.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1666825799.git.asml.silence@gmail.com>
 References: <cover.1666825799.git.asml.silence@gmail.com>
@@ -67,38 +67,115 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Stefan Metzmacher <metze@samba.org>
+sockmap replaces ->sk_prot with its own callbacks, we should remove
+SOCK_SUPPORT_ZC as the new proto doesn't support msghdr::ubuf_info.
 
-Without this only the client initiated tcp sockets have SOCK_SUPPORT_ZC.
-The listening socket on the server also has it, but the accepted
-connections didn't, which meant IORING_OP_SEND[MSG]_ZC will always
-fails with -EOPNOTSUPP.
-
-Fixes: e993ffe3da4b ("net: flag sockets supporting msghdr originated zerocopy")
 Cc: <stable@vger.kernel.org> # 6.0
-CC: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-CC: Jens Axboe <axboe@kernel.dk>
-Link: https://lore.kernel.org/io-uring/20221024141503.22b4e251@kernel.org/T/#m38aa19b0b825758fb97860a38ad13122051f9dda
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: e993ffe3da4bc ("net: flag sockets supporting msghdr originated zerocopy")
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- net/ipv4/af_inet.c | 2 ++
- 1 file changed, 2 insertions(+)
+ include/net/sock.h  | 7 +++++++
+ net/ipv4/tcp_bpf.c  | 4 ++--
+ net/ipv4/udp_bpf.c  | 4 ++--
+ net/unix/unix_bpf.c | 8 ++++----
+ 4 files changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-index 3dd02396517d..4728087c42a5 100644
---- a/net/ipv4/af_inet.c
-+++ b/net/ipv4/af_inet.c
-@@ -754,6 +754,8 @@ int inet_accept(struct socket *sock, struct socket *newsock, int flags,
- 		  (TCPF_ESTABLISHED | TCPF_SYN_RECV |
- 		  TCPF_CLOSE_WAIT | TCPF_CLOSE)));
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 22f8bab583dd..5db02546941c 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -1889,6 +1889,13 @@ void sock_kfree_s(struct sock *sk, void *mem, int size);
+ void sock_kzfree_s(struct sock *sk, void *mem, int size);
+ void sk_send_sigurg(struct sock *sk);
  
-+	if (test_bit(SOCK_SUPPORT_ZC, &sock->flags))
-+		set_bit(SOCK_SUPPORT_ZC, &newsock->flags);
- 	sock_graft(sk2, newsock);
++static inline void sock_replace_proto(struct sock *sk, struct proto *proto)
++{
++	if (sk->sk_socket)
++		clear_bit(SOCK_SUPPORT_ZC, &sk->sk_socket->flags);
++	WRITE_ONCE(sk->sk_prot, proto);
++}
++
+ struct sockcm_cookie {
+ 	u64 transmit_time;
+ 	u32 mark;
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index a1626afe87a1..c501c329b1db 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -607,7 +607,7 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
+ 		} else {
+ 			sk->sk_write_space = psock->saved_write_space;
+ 			/* Pairs with lockless read in sk_clone_lock() */
+-			WRITE_ONCE(sk->sk_prot, psock->sk_proto);
++			sock_replace_proto(sk, psock->sk_proto);
+ 		}
+ 		return 0;
+ 	}
+@@ -620,7 +620,7 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
+ 	}
  
- 	newsock->state = SS_CONNECTED;
+ 	/* Pairs with lockless read in sk_clone_lock() */
+-	WRITE_ONCE(sk->sk_prot, &tcp_bpf_prots[family][config]);
++	sock_replace_proto(sk, &tcp_bpf_prots[family][config]);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(tcp_bpf_update_proto);
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+index ff15918b7bdc..e5dc91d0e079 100644
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@ -141,14 +141,14 @@ int udp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
+ 
+ 	if (restore) {
+ 		sk->sk_write_space = psock->saved_write_space;
+-		WRITE_ONCE(sk->sk_prot, psock->sk_proto);
++		sock_replace_proto(sk, psock->sk_proto);
+ 		return 0;
+ 	}
+ 
+ 	if (sk->sk_family == AF_INET6)
+ 		udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
+ 
+-	WRITE_ONCE(sk->sk_prot, &udp_bpf_prots[family]);
++	sock_replace_proto(sk, &udp_bpf_prots[family]);
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(udp_bpf_update_proto);
+diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
+index 7cf14c6b1725..e9bf15513961 100644
+--- a/net/unix/unix_bpf.c
++++ b/net/unix/unix_bpf.c
+@@ -145,12 +145,12 @@ int unix_dgram_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool re
+ 
+ 	if (restore) {
+ 		sk->sk_write_space = psock->saved_write_space;
+-		WRITE_ONCE(sk->sk_prot, psock->sk_proto);
++		sock_replace_proto(sk, psock->sk_proto);
+ 		return 0;
+ 	}
+ 
+ 	unix_dgram_bpf_check_needs_rebuild(psock->sk_proto);
+-	WRITE_ONCE(sk->sk_prot, &unix_dgram_bpf_prot);
++	sock_replace_proto(sk, &unix_dgram_bpf_prot);
+ 	return 0;
+ }
+ 
+@@ -158,12 +158,12 @@ int unix_stream_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool r
+ {
+ 	if (restore) {
+ 		sk->sk_write_space = psock->saved_write_space;
+-		WRITE_ONCE(sk->sk_prot, psock->sk_proto);
++		sock_replace_proto(sk, psock->sk_proto);
+ 		return 0;
+ 	}
+ 
+ 	unix_stream_bpf_check_needs_rebuild(psock->sk_proto);
+-	WRITE_ONCE(sk->sk_prot, &unix_stream_bpf_prot);
++	sock_replace_proto(sk, &unix_stream_bpf_prot);
+ 	return 0;
+ }
+ 
 -- 
 2.38.0
 
