@@ -2,97 +2,114 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 11D22C38A2D
-	for <io-uring@archiver.kernel.org>; Wed, 26 Oct 2022 23:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A707C38A2D
+	for <io-uring@archiver.kernel.org>; Thu, 27 Oct 2022 08:06:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiJZX2f (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 26 Oct 2022 19:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        id S234704AbiJ0IGQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 27 Oct 2022 04:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234280AbiJZX16 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 26 Oct 2022 19:27:58 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A169457567;
-        Wed, 26 Oct 2022 16:27:32 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so2873474wmq.4;
-        Wed, 26 Oct 2022 16:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uxR0N06XcTkbcfsZ9QY/sp1sj7zmWgcYGVut7P5rowU=;
-        b=MdBbHT3vFV8LjHhqH7/jJnROkFXKA6sVq2Qj15Yg39e/zHMl0IwhhuI3wT2Shc0afA
-         hs5sUnFUHlyoYluE2gZ2DWPbwuCUMhK6alpKfAa9vZY3OGhXUFbDFpzapAb0QLCAvhmK
-         VZ6Laa+9EnLEMXk5GPQj34+UR/AF4sKZNiGTa0HQuawdIRiSFZxLLBTwEz4o4NgaY+Og
-         3/pNA6hVEQAoj5Kv502vQqT+NaLEPukOLm4ti+HUaQoLozl3C8qOpUOZQmLaSZw8TRyt
-         in+kGc8n1gfatWzDCg228MGjdqflo8PFPtQywENYzxJIqCEsxFo8H3MbhoIv6ebMdaGv
-         sqTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uxR0N06XcTkbcfsZ9QY/sp1sj7zmWgcYGVut7P5rowU=;
-        b=q4sLYnk2080qj6MQ7re27noycS3TOe7kWf0qTav+f61WHHH8eAMzGDNmD7p7IvR0Ir
-         QbmHBp8ITttzV/Fk2Ih4Y7uXU34bVIP8LS0uKrL3W1d35FwUQlkW8jlTI4hOfEJkcnv4
-         MnVPBNcyb0yjdDvFR38bC+eVFpy7o/cUlmc5i8AzNTwJ5RiE8m4/vHx3uIjm08dqqb3D
-         TIF+blcVPcEH9o+qu/7IGv3p6POLPP5LWYL/Hj/OkGNC2562RG1L03CGO7kLKZ4Edf+G
-         CV6vzgzYVhGqKoJuJ0cxlT3Dpd5d8gIBYS0MX4Jnuj3y71P0xoaTAvmhvcJogbTlwqb+
-         xDpQ==
-X-Gm-Message-State: ACrzQf1YvKmvQ4+b0dNu0rv1hvXiLcQIVfKe9+Sqb2LM4EoIRiHZzoKB
-        QRevhEMKlTk/XQGyVVQPtgYXUbmqAP4FSA==
-X-Google-Smtp-Source: AMsMyM6zsvZ8+smBAzBcYkhxQ/XshQ2TAiODQdW3lKjh40VaonuagFLtMucOaa0cOs1HnIkI7Pp9Rw==
-X-Received: by 2002:a05:600c:3781:b0:3b4:63c8:554b with SMTP id o1-20020a05600c378100b003b463c8554bmr3952382wmr.25.1666826850970;
-        Wed, 26 Oct 2022 16:27:30 -0700 (PDT)
-Received: from 127.0.0.1localhost (213-205-70-130.net.novis.pt. [213.205.70.130])
-        by smtp.gmail.com with ESMTPSA id y4-20020adfd084000000b002368424f89esm4897526wrh.67.2022.10.26.16.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 16:27:30 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>, io-uring@vger.kernel.org,
-        John Fastabend <john.fastabend@gmail.com>,
-        asml.silence@gmail.com
-Subject: [PATCH net 3/4] net/ulp: remove SOCK_SUPPORT_ZC from tls sockets
-Date:   Thu, 27 Oct 2022 00:25:58 +0100
-Message-Id: <604fa24e63524f9e0f5098df7e1a578debf471bf.1666825799.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <cover.1666825799.git.asml.silence@gmail.com>
-References: <cover.1666825799.git.asml.silence@gmail.com>
+        with ESMTP id S234863AbiJ0IGE (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 27 Oct 2022 04:06:04 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588DFA46F
+        for <io-uring@vger.kernel.org>; Thu, 27 Oct 2022 01:05:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=m64w1HcU9dsDgFQU/Xkj10uzhFy/KO82gKYfDQPiwvs=; b=tfJ4YDUL0erT3ZxjeMe93HTbPR
+        BTeo8KOM65wxAIoQ0tfx47V1imE8Mws0UWXP3SeYXqT22aIRCJMsLs7zUdScqSmPI4rndbnX/ltzA
+        Rks5tcHIzlVQ0/tQae5YohXne/VhDP4ZyebNNicord2tFLa871LroW/SpnwYpflEsJk7gIxKxMTQg
+        rKe0/35ZoyGrM0QOgehxalD0m649fzJd4xaWmfcVhDGay+/QlxcJ6GAnZwtufSoCDzuXgRK0sYP0t
+        MRdT0pq7gzPKlREQCUVrX816Wqs+hjGLSIQmcFlSSIIpPqxBWmapKz3uEffoUXf96ZQRXqccIT+zM
+        xzVAJtU5HQC7B3RBh+iPUBdpPau6mjBkVnhwQtr9Ex5DKpyO0+lWvK9E3YZ4imL3tXhzDUlSzikfG
+        AY+k6CAcSxrOMiPDfymidUbadgJm7HrvLwHsN8C3qH9o+n0lfiuzoJd6X5QOrii0HyO5LTqlxScLu
+        VlwVR+BDQ3687xvr80ZS49Jg;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1onxti-006054-4h; Thu, 27 Oct 2022 08:05:54 +0000
+Message-ID: <2a9e4484-4025-2806-89c3-51c590cfd176@samba.org>
+Date:   Thu, 27 Oct 2022 10:05:53 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: Problems replacing epoll with io_uring in tevent
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring <io-uring@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Samba Technical <samba-technical@lists.samba.org>
+References: <c01f72ac-b2f1-0b1c-6757-26769ee071e2@samba.org>
+ <949fdb8e-bd12-03dc-05c6-c972f26ec0ec@samba.org>
+ <270f3b9a-8fa6-68bf-7c57-277f107167c9@kernel.dk>
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <270f3b9a-8fa6-68bf-7c57-277f107167c9@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Remove SOCK_SUPPORT_ZC when we're setting ulp as it might not support
-msghdr::ubuf_info, e.g. like TLS replacing ->sk_prot with a new set of
-handlers.
+Hi Jens,
 
-Cc: <stable@vger.kernel.org> # 6.0
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Fixes: e993ffe3da4bc ("net: flag sockets supporting msghdr originated zerocopy")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- net/ipv4/tcp_ulp.c | 3 +++
- 1 file changed, 3 insertions(+)
+> No problem - have you been able to test the current repo in general? I want to
+> cut a 2.3 release shortly, but since that particular change impacts any kind of
+> cqe waiting, would be nice to have a bit more confidence in it.
 
-diff --git a/net/ipv4/tcp_ulp.c b/net/ipv4/tcp_ulp.c
-index 7c27aa629af1..9ae50b1bd844 100644
---- a/net/ipv4/tcp_ulp.c
-+++ b/net/ipv4/tcp_ulp.c
-@@ -136,6 +136,9 @@ static int __tcp_set_ulp(struct sock *sk, const struct tcp_ulp_ops *ulp_ops)
- 	if (icsk->icsk_ulp_ops)
- 		goto out_err;
- 
-+	if (sk->sk_socket)
-+		clear_bit(SOCK_SUPPORT_ZC, &sk->sk_socket->flags);
-+
- 	err = ulp_ops->init(sk);
- 	if (err)
- 		goto out_err;
--- 
-2.38.0
+At least the timing bug is still fixed (as with my change).
 
+>> I'm currently trying to prototype for an IORING_POLL_CANCEL_ON_CLOSE
+>> flag that can be passed to POLL_ADD. With that we'll register
+>> the request in &req->file->f_uring_poll (similar to the file->f_ep list for epoll)
+>> Then we only get a real reference to the file during the call to
+>> vfs_poll() otherwise we drop the fget/fput reference and rely on
+>> an io_uring_poll_release_file() (similar to eventpoll_release_file())
+>> to cancel our registered poll request.
+> 
+> Yes, this is a bit tricky as we hold the file ref across the operation. I'd
+> be interested in seeing your approach to this, and also how it would
+> interact with registered files...
+
+Here's my current patch:
+https://git.samba.org/?p=metze/linux/wip.git;a=commitdiff;h=b9cccfac515739fc279c6eec87ce655a96f94685
+It compiles, but I haven't tested it yet. And I'm not sure if the locking is done correctly...
+
+>>>      c) A simple pipe based performance test shows the following numbers:
+>>>         - 'poll':               Got 232387.31 pipe events/sec
+>>>         - 'epoll':              Got 251125.25 pipe events/sec
+>>>         - 'samba_io_uring_ev':  Got 210998.77 pipe events/sec
+>>>         So the io_uring backend is even slower than the 'poll' backend.
+>>>         I guess the reason is the constant re-submission of IORING_OP_POLL_ADD.
+>>
+>> Added some feature autodetection today and I'm now using
+>> IORING_SETUP_COOP_TASKRUN, IORING_SETUP_TASKRUN_FLAG,
+>> IORING_SETUP_SINGLE_ISSUER and IORING_SETUP_DEFER_TASKRUN if supported
+>> by the kernel.
+>>
+>> On a 6.1 kernel this improved the performance a lot, it's now faster
+>> than the epoll backend.
+>>
+>> The key flag is IORING_SETUP_DEFER_TASKRUN. On a different system than above
+>> I'm getting the following numbers:
+>> - epoll:                                    Got 114450.16 pipe events/sec
+>> - poll:                                     Got 105872.52 pipe events/sec
+>> - samba_io_uring_ev-without-defer_taskrun': Got  95564.22 pipe events/sec
+>> - samba_io_uring_ev-with-defer_taskrun':    Got 122853.85 pipe events/sec
+> 
+> Any chance you can do a run with just IORING_SETUP_COOP_TASKRUN set? I'm
+> curious how big of an impact the IPI elimination is, where it slots in
+> compared to the defer taskrun and the default settings.
+
+There's no real difference between these:
+
+- no flag
+- IORING_SETUP_COOP_TASKRUN|IORING_SETUP_TASKRUN_FLAG
+- IORING_SETUP_SINGLE_ISSUER
+- IORING_SETUP_COOP_TASKRUN|IORING_SETUP_TASKRUN_FLAG|IORING_SETUP_SINGLE_ISSUER
+
+
+only these make it fast:
+- IORING_SETUP_SINGLE_ISSUER|IORING_SETUP_DEFER_TASKRUN
+- IORING_SETUP_COOP_TASKRUN|IORING_SETUP_TASKRUN_FLAG|IORING_SETUP_SINGLE_ISSUER|IORING_SETUP_DEFER_TASKRUN
+
+metze
