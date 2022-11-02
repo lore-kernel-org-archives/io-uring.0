@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7F5AEC4332F
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C424FC4321E
 	for <io-uring@archiver.kernel.org>; Wed,  2 Nov 2022 23:40:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiKBXkX convert rfc822-to-8bit (ORCPT
+        id S229548AbiKBXkX convert rfc822-to-8bit (ORCPT
         <rfc822;io-uring@archiver.kernel.org>);
         Wed, 2 Nov 2022 19:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiKBXjz (ORCPT
+        with ESMTP id S229823AbiKBXjz (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 2 Nov 2022 19:39:55 -0400
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A742AD4
-        for <io-uring@vger.kernel.org>; Wed,  2 Nov 2022 16:32:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8C510FF4
+        for <io-uring@vger.kernel.org>; Wed,  2 Nov 2022 16:32:54 -0700 (PDT)
 Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2NVqTF014603
-        for <io-uring@vger.kernel.org>; Wed, 2 Nov 2022 16:32:58 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kkva13p5k-2
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2NVrGA014653
+        for <io-uring@vger.kernel.org>; Wed, 2 Nov 2022 16:32:54 -0700
+Received: from maileast.thefacebook.com ([163.114.130.3])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kkva13p55-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 02 Nov 2022 16:32:58 -0700
-Received: from twshared9088.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Wed, 02 Nov 2022 16:32:53 -0700
+Received: from twshared6758.06.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 16:32:57 -0700
+ 15.1.2375.31; Wed, 2 Nov 2022 16:32:53 -0700
 Received: by devvm2494.atn0.facebook.com (Postfix, from userid 172786)
-        id A3DD6235B6184; Wed,  2 Nov 2022 16:32:44 -0700 (PDT)
+        id 8DE35235B617C; Wed,  2 Nov 2022 16:32:44 -0700 (PDT)
 From:   Jonathan Lemon <jonathan.lemon@gmail.com>
 To:     <io-uring@vger.kernel.org>
 CC:     <kernel-team@meta.com>
-Subject: [RFC PATCH v3 09/15] skbuff: Introduce SKBFL_FIXED_FRAG and skb_fixed()
-Date:   Wed, 2 Nov 2022 16:32:38 -0700
-Message-ID: <20221102233244.4022405-10-jonathan.lemon@gmail.com>
+Subject: [RFC PATCH v3 06/15] io_uring: Provide driver API for zctap packet buffers.
+Date:   Wed, 2 Nov 2022 16:32:35 -0700
+Message-ID: <20221102233244.4022405-7-jonathan.lemon@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221102233244.4022405-1-jonathan.lemon@gmail.com>
 References: <20221102233244.4022405-1-jonathan.lemon@gmail.com>
@@ -41,8 +41,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: x0Qu9nkIjVmc7hDPnyKrmJc6mRp-F3oC
-X-Proofpoint-ORIG-GUID: x0Qu9nkIjVmc7hDPnyKrmJc6mRp-F3oC
+X-Proofpoint-GUID: Kz0Zi0r2Ve64qdBix8d7dC8ks6tUw-Sz
+X-Proofpoint-ORIG-GUID: Kz0Zi0r2Ve64qdBix8d7dC8ks6tUw-Sz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
@@ -50,56 +50,124 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-When a skb marked as zerocopy goes up the network stack, during
-RX, it calls skb_orphan_frags_rx.  This is designed to catch TX
-zerocopy data being redirected back up the stack, not new zerocopy
-fragments coming up from the driver.
+Introduce 'struct io_zctap_buf', representing a buffer used by
+the network drivers, and the get/put functions which are used
+by the network driver to obtain the buffers.
 
-Currently, since the skb is marked as zerocopy, skb_copy_ubufs()
-is called, defeating the point of zerocopy-RX.
-
-Have the driver mark the fragments as fixed, so they are not copied.
+The code for these will be fleshed out in the next patch.
 
 Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
 ---
- include/linux/skbuff.h | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ include/linux/io_uring.h | 47 ++++++++++++++++++++++++++++++++++++++++
+ io_uring/zctap.c         | 23 ++++++++++++++++++++
+ 2 files changed, 70 insertions(+)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 59c9fd55699d..5d57e2c37529 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -516,6 +516,9 @@ enum {
- 	 * use frags only up until ubuf_info is released
- 	 */
- 	SKBFL_MANAGED_FRAG_REFS = BIT(4),
-+
-+	/* don't move or copy the fragment */
-+	SKBFL_FIXED_FRAG = BIT(5),
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 43bc8a2edccf..97c1a2e37077 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -32,6 +32,13 @@ struct io_uring_cmd {
+ 	u8		pdu[32]; /* available inline for free use */
  };
  
- #define SKBFL_ZEROCOPY_FRAG	(SKBFL_ZEROCOPY_ENABLE | SKBFL_SHARED_FRAG)
-@@ -1653,6 +1656,11 @@ static inline bool skb_zcopy_managed(const struct sk_buff *skb)
- 	return skb_shinfo(skb)->flags & SKBFL_MANAGED_FRAG_REFS;
- }
++struct io_zctap_buf {
++	dma_addr_t	dma;
++	struct page	*page;
++	atomic_t	refcount;
++	u8		_pad[4];
++};
++
+ #if defined(CONFIG_IO_URING)
+ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter, void *ioucmd);
+@@ -44,6 +51,21 @@ void __io_uring_free(struct task_struct *tsk);
+ void io_uring_unreg_ringfd(void);
+ const char *io_uring_get_opcode(u8 opcode);
  
-+static inline bool skb_fixed(const struct sk_buff *skb)
++struct io_zctap_ifq;
++struct io_zctap_buf *io_zctap_get_buf(struct io_zctap_ifq *ifq, int refc);
++void io_zctap_put_buf(struct io_zctap_ifq *ifq, struct io_zctap_buf *buf);
++void io_zctap_put_buf_refs(struct io_zctap_ifq *ifq, struct io_zctap_buf *buf,
++			   unsigned count);
++bool io_zctap_put_page(struct io_zctap_ifq *ifq, struct page *page);
++
++static inline dma_addr_t io_zctap_buf_dma(struct io_zctap_buf *buf)
 +{
-+	return skb_shinfo(skb)->flags & SKBFL_FIXED_FRAG;
++	return buf->dma;
++}
++static inline struct page *io_zctap_buf_page(struct io_zctap_buf *buf)
++{
++	return buf->page;
++}
+ static inline void io_uring_files_cancel(void)
+ {
+ 	if (current->io_uring) {
+@@ -92,6 +114,31 @@ static inline const char *io_uring_get_opcode(u8 opcode)
+ {
+ 	return "";
+ }
++static inline dma_addr_t io_zctap_buf_dma(struct io_zctap_buf *buf)
++{
++	return 0;
++}
++static inline struct page *io_zctap_buf_page(struct io_zctap_buf *buf)
++{
++	return NULL;
++}
++static inline struct io_zctap_buf *io_zctap_get_buf(struct io_zctap_ifq *ifq,
++						    int refc)
++{
++	return NULL;
++}
++void io_zctap_put_buf(struct io_zctap_ifq *ifq, struct io_zctap_buf *buf)
++{
++}
++void io_zctap_put_buf_refs(struct io_zctap_ifq *ifq, struct io_zctap_buf *buf,
++			   unsigned count)
++{
++}
++bool io_zctap_put_page(struct io_zctap_ifq *ifq, struct page *page)
++{
++	return false;
 +}
 +
- static inline bool skb_pure_zcopy_same(const struct sk_buff *skb1,
- 				       const struct sk_buff *skb2)
- {
-@@ -3089,7 +3097,7 @@ static inline int skb_orphan_frags(struct sk_buff *skb, gfp_t gfp_mask)
- /* Frags must be orphaned, even if refcounted, if skb might loop to rx path */
- static inline int skb_orphan_frags_rx(struct sk_buff *skb, gfp_t gfp_mask)
- {
--	if (likely(!skb_zcopy(skb)))
-+	if (likely(!skb_zcopy(skb) || skb_fixed(skb)))
- 		return 0;
- 	return skb_copy_ubufs(skb, gfp_mask);
+ #endif
+ 
+ #endif
+diff --git a/io_uring/zctap.c b/io_uring/zctap.c
+index f0d200f84ff5..c088655ade22 100644
+--- a/io_uring/zctap.c
++++ b/io_uring/zctap.c
+@@ -37,6 +37,29 @@ static u64 zctap_mk_page_info(u16 region_id, u16 pgid)
+ 	return (u64)0xface << 48 | (u64)region_id << 16 | (u64)pgid;
  }
+ 
++struct io_zctap_buf *io_zctap_get_buf(struct io_zctap_ifq *ifq, int refc)
++{
++	return NULL;
++}
++EXPORT_SYMBOL(io_zctap_get_buf);
++
++void io_zctap_put_buf(struct io_zctap_ifq *ifq, struct io_zctap_buf *buf)
++{
++}
++EXPORT_SYMBOL(io_zctap_put_buf);
++
++void io_zctap_put_buf_refs(struct io_zctap_ifq *ifq, struct io_zctap_buf *buf,
++			   unsigned count)
++{
++}
++EXPORT_SYMBOL(io_zctap_put_buf_refs);
++
++bool io_zctap_put_page(struct io_zctap_ifq *ifq, struct page *page)
++{
++	return false;
++}
++EXPORT_SYMBOL(io_zctap_put_page);
++
+ static void io_remove_ifq_region(struct ifq_region *ifr)
+ {
+ 	struct io_mapped_ubuf *imu;
 -- 
 2.30.2
 
