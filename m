@@ -2,125 +2,85 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6397C4332F
-	for <io-uring@archiver.kernel.org>; Thu,  3 Nov 2022 20:40:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 510EDC433FE
+	for <io-uring@archiver.kernel.org>; Thu,  3 Nov 2022 21:55:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiKCUkk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 3 Nov 2022 16:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        id S231226AbiKCVze (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 3 Nov 2022 17:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiKCUki (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 3 Nov 2022 16:40:38 -0400
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FC82099A
-        for <io-uring@vger.kernel.org>; Thu,  3 Nov 2022 13:40:37 -0700 (PDT)
-Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 567B7C4F6B7; Thu,  3 Nov 2022 13:40:23 -0700 (PDT)
-From:   Stefan Roesch <shr@devkernel.io>
-To:     kernel-team@fb.com
-Cc:     shr@devkernel.io, axboe@kernel.dk, olivier@trillion01.com,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org
-Subject: [RFC PATCH v1 2/3] liburing: add documentation for new napi busy polling
-Date:   Thu,  3 Nov 2022 13:40:16 -0700
-Message-Id: <20221103204017.670757-3-shr@devkernel.io>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221103204017.670757-1-shr@devkernel.io>
-References: <20221103204017.670757-1-shr@devkernel.io>
+        with ESMTP id S230047AbiKCVzb (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 3 Nov 2022 17:55:31 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176D0220F4;
+        Thu,  3 Nov 2022 14:55:31 -0700 (PDT)
+Received: from [10.7.7.5] (unknown [182.253.183.90])
+        by gnuweeb.org (Postfix) with ESMTPSA id 11A7280632;
+        Thu,  3 Nov 2022 21:55:27 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1667512530;
+        bh=z4l09QT9BO60bLRVaCjoFY1Zg9uimCVNZFX3iak+llw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eXas09cf4A+KJGqPdh0dc7lZVusH2IXypHQ5dmp7e6gXdnr1IaeYqRZTD2mfAu48Z
+         X6257Xu7QYPIJHs+beuAPDoRld73o+sI/CpsPAnRRo18SI9/aSiSmLine1NwddPpmG
+         17uK4d+TWBnqXvVEA4n2dZzY2/tCna7cddx94l0j1hIHSf767wZ/YBoz/dtJnxWDRO
+         4H48vk3Dw85v14dEpplQ/sutzChHNPr7moJB4y9R0Kqe4ffeOVal5zn7TLXW/aQqHq
+         lGjr45tjNEZPdE3/6SKPbh6u/ZIxdgR3ONPjHFgyZ73Z1QGOaI4N5tTua2CCx6QJy4
+         iige3pYUm1RGw==
+Message-ID: <478e464b-0dbf-82fb-ce86-8a796019584b@gnuweeb.org>
+Date:   Fri, 4 Nov 2022 04:55:24 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [RFC PATCH v1 1/3] liburing: add api to set napi busy poll
+ timeout
+Content-Language: en-US
+To:     Stefan Roesch <shr@devkernel.io>,
+        Facebook Kernel Team <kernel-team@fb.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Olivier Langlois <olivier@trillion01.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev Mailing List <netdev@vger.kernel.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>
+References: <20221103204017.670757-1-shr@devkernel.io>
+ <20221103204017.670757-2-shr@devkernel.io>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <20221103204017.670757-2-shr@devkernel.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds two man pages for the two new functions:
-- io_uring_register_busy_poll_timeout
-- io_uring_unregister_busy_poll_timeout
+On 11/4/22 3:40 AM, Stefan Roesch wrote:
+> This adds the two functions to register and unregister the napi busy
+> poll timeout:
+> - io_uring_register_busy_poll_timeout
+> - io_uring_unregister_busy_poll_timeout
+> 
+> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+> ---
+>   src/include/liburing.h          |  3 +++
+>   src/include/liburing/io_uring.h |  4 ++++
+>   src/register.c                  | 12 ++++++++++++
+>   3 files changed, 19 insertions(+)
+> 
+> diff --git a/src/include/liburing.h b/src/include/liburing.h
+> index 12a703f..ef2510e 100644
+> --- a/src/include/liburing.h
+> +++ b/src/include/liburing.h
+> @@ -235,6 +235,9 @@ int io_uring_register_sync_cancel(struct io_uring *ring,
+>   int io_uring_register_file_alloc_range(struct io_uring *ring,
+>   					unsigned off, unsigned len);
+>   
+> +int io_uring_register_busy_poll_timeout(struct io_uring *ring, unsigned int to);
+> +int io_uring_unregister_busy_poll_timeout(struct io_uring *ring);
+> +
 
-Signed-off-by: Stefan Roesch <shr@devkernel.io>
----
- man/io_uring_register_napi.3   | 35 ++++++++++++++++++++++++++++++++++
- man/io_uring_unregister_napi.3 | 26 +++++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100644 man/io_uring_register_napi.3
- create mode 100644 man/io_uring_unregister_napi.3
+If you export a non inline function, you should also update the liburing.map
+file.
 
-diff --git a/man/io_uring_register_napi.3 b/man/io_uring_register_napi.3
-new file mode 100644
-index 0000000..2063b5c
---- /dev/null
-+++ b/man/io_uring_register_napi.3
-@@ -0,0 +1,35 @@
-+.\" Copyright (C) 2022 Stefan Roesch <shr@devkernel.io>
-+.\"
-+.\" SPDX-License-Identifier: LGPL-2.0-or-later
-+.\"
-+.TH io_uring_register_busy_poll_timeout 3 "November 1, 2022" "liburing-2=
-.3" "liburing Manual"
-+.SH NAME
-+io_uring_register_busy_poll_timeout \- register NAPI busy poll timeout
-+.SH SYNOPSIS
-+.nf
-+.B #include <liburing.h>
-+.PP
-+.BI "int io_uring_register_busy_poll_timeout(struct io_uring *" ring ","
-+.BI "                                        unsigned int " timeout)
-+.PP
-+.fi
-+.SH DESCRIPTION
-+.PP
-+The
-+.BR io_uring_register_busy_poll_timeout (3)
-+function registers the NAPI busy poll
-+.I timeout
-+for subsequent operations.
-+
-+Registering a NAPI busy poll timeout is a requirement to be able to use
-+NAPI busy polling. The other way to enable NAPI busy polling is to set t=
-he
-+proc setting /proc/sys/net/core/busy_poll.
-+
-+NAPI busy poll can reduce the network roundtrip time.
-+
-+
-+.SH RETURN VALUE
-+On success
-+.BR io_uring_register_busy_poll_timeout (3)
-+return 0. On failure they return
-+.BR -errno .
-diff --git a/man/io_uring_unregister_napi.3 b/man/io_uring_unregister_nap=
-i.3
-new file mode 100644
-index 0000000..f294ab3
---- /dev/null
-+++ b/man/io_uring_unregister_napi.3
-@@ -0,0 +1,26 @@
-+.\" Copyright (C) 2022 Stefan Roesch <shr@devkernel.io>
-+.\"
-+.\" SPDX-License-Identifier: LGPL-2.0-or-later
-+.\"
-+.TH io_uring_unregister_busy_poll_timeout 3 "November 1, 2022" "liburing=
--2.3" "liburing Manual"
-+.SH NAME
-+io_uring_unregister_busy_poll_timeout \- register NAPI busy poll timeout
-+.SH SYNOPSIS
-+.nf
-+.B #include <liburing.h>
-+.PP
-+.BI "int io_uring_register_busy_poll_timeout(struct io_uring *" ring ")
-+.PP
-+.fi
-+.SH DESCRIPTION
-+.PP
-+The
-+.BR io_uring_unregister_busy_poll_timeout (3)
-+function unregisters the NAPI busy poll
-+for subsequent operations.
-+
-+.SH RETURN VALUE
-+On success
-+.BR io_uring_unregister_busy_poll_timeout (3)
-+return 0. On failure they return
-+.BR -errno .
---=20
-2.30.2
+-- 
+Ammar Faizi
 
