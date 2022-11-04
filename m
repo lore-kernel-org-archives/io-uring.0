@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A88C5C43219
-	for <io-uring@archiver.kernel.org>; Fri,  4 Nov 2022 11:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C38BC4321E
+	for <io-uring@archiver.kernel.org>; Fri,  4 Nov 2022 11:03:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbiKDLDS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 4 Nov 2022 07:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S230157AbiKDLDT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 4 Nov 2022 07:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbiKDLCg (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 4 Nov 2022 07:02:36 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7799F2C65C
-        for <io-uring@vger.kernel.org>; Fri,  4 Nov 2022 04:02:35 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id bj12so12221902ejb.13
-        for <io-uring@vger.kernel.org>; Fri, 04 Nov 2022 04:02:35 -0700 (PDT)
+        with ESMTP id S229900AbiKDLCi (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 4 Nov 2022 07:02:38 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A562CDC1
+        for <io-uring@vger.kernel.org>; Fri,  4 Nov 2022 04:02:36 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id k2so12342182ejr.2
+        for <io-uring@vger.kernel.org>; Fri, 04 Nov 2022 04:02:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E10mPC6PQtfwv3JsRzakhMmHgVlpBD6yxwSuPka/SgY=;
-        b=WCm2gVxjlK91l8Loecf7bj7l1NHvUAtiHfMxLeferarKSRGNwJ15jZfGzDlQykyzDh
-         qZdQotRIvK7uEGuZIXWWrwV93rKqi9wHMlg3wGgPllc1dgeX/IuGFknLwpggLmSZuKTR
-         XtSv4yVw6FPXH42w3+sWhAMXdaGCFq6EcJQslfNHGQQzKN3ixNxU5HB4WaGFWhnbbSDz
-         u1VDe3QKJdEhzj4Lrm9RtBS6Td7UPghB+ItAZHd0CDsP+e1gvP6Y05x+M6W9YbUXXFOv
-         bFksJzgARrFnsRMaX8yiYLXi3pPRNRmnFzj68PnUeXyRmS29hS7wpx5lrLpWUBZsTQjI
-         G4UQ==
+        bh=HrKFQ51HZlKuVt9GY4ZNgwEwhz5/8UDovxxA86AN5mc=;
+        b=bU6JVE+EJbIOlsetxvV/1/i53fyeXnSn2uaE7yigQBdUE1g3bfxTY32cVom/xAL2Uq
+         kfawbUBgoz3sFLBa150ccBZEy2sSXmXPW7t6gsQKLd3rEiTtwAt+wdLm0Ii1nfVxW5S4
+         YfJdTgakQTESKzaCl9McmEVGrqQuowXHO6okNdsVtLTlLVJV9XdyqbyzmAD7z11Mfu+N
+         EhG98OpHmn4+dEMzsaHnKeQAMGvXkvkFZN/r/DEwVZ5blJ36L7FqCpu7N6jjUNYVO4/U
+         3/nYbK4crR2qjtqm1RjNLXUFLboQA5llxA01iHddkSCGzKnyhhYIsef6oo4THbSt4gLE
+         SLNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E10mPC6PQtfwv3JsRzakhMmHgVlpBD6yxwSuPka/SgY=;
-        b=ZvmRmfoi1uoXEqWtrSDicy57V4mQgYmihdBFLur9wAslSAqC1SG8/wmzVM2WxvFYq/
-         LfSzmZfx8y6ONqm0tZOJvvFHSkCNEtjabKS54EA0TvzWKUOHM+uoN3/f7UsJQUCKmz8l
-         bR7sdjtjea5xcuYjZb2vyTZPbWij7+4VGLkRYQdAZxpf0YfC1Wdcv3025fMq6tLTm28y
-         7U68dznrS756hQfVVInA3cF4s7FCGpvrCeGw57ZfU//JmPG9938gUXuC0cHWuoM50DPp
-         qelICTXgXWyFchc/GQ2yi1CG8FYfHJm7tkpobj3BN4POmQk2xOjJlWsfFGoIKwWOO9Iz
-         Nebw==
-X-Gm-Message-State: ACrzQf0QMYAt1lbMwREBgoW/pjFdiLyYXwTl/j8bj0aqOtgUbz3X4iK2
-        QN3Jvm89tqBQnrlSmrlD7DUt9w+KQNo=
-X-Google-Smtp-Source: AMsMyM4l2Sl2+vbkKweXRHbCSO+umHaBn2k1f0TcmdB+ntissPP4U0t6twimvquVryfKpoEKpDStbQ==
-X-Received: by 2002:a17:907:7f92:b0:78d:ed9c:d86f with SMTP id qk18-20020a1709077f9200b0078ded9cd86fmr33254367ejc.251.1667559753684;
-        Fri, 04 Nov 2022 04:02:33 -0700 (PDT)
+        bh=HrKFQ51HZlKuVt9GY4ZNgwEwhz5/8UDovxxA86AN5mc=;
+        b=UwJhU4gl2MBIU9eIzhLo+b2g0mGTBNM5z9LnEE4BALCtyvLxD8CwcKSawbdNKfHaNx
+         YnrGZyvI3lhbshV8DtEqY6R/vFoeeaOtduhtEpjIYIhvDjSZUV22blQ5ozh9hyOOwxOp
+         zEsfBRPIUWTFYXUTZuGo+dnMn4S35pQB5c9iKMfADFZuVwFJnens2db++jLE0HNvb0Dl
+         kekzOy+F39M/yZxaTtmOzLBqt8jCa/c4eU89BM1zORGVkhn0BXugQI4tu3wV4kyPeRe/
+         X2BxF0/q1LtwViuDX/tYlhj7QmHD8Ing1+0ukH7Lbh2uELgMmw8rRD8+NwRHIqqgd/62
+         j59w==
+X-Gm-Message-State: ACrzQf2pKyU5YaF9H5Lpx+sNZ2ewCHNypcPyzbPeOEHUZx2p0gSWQaHV
+        ZpwXNlB745+LFhamEZJLthzDBKuOxuQ=
+X-Google-Smtp-Source: AMsMyM5qUXix6wJGqGU8twKx6WZY+Ne/sPotEsNTyUizqy3mk5EaypB+bWssg8enjnEn/35g+XnM1g==
+X-Received: by 2002:a17:907:25c5:b0:783:f5df:900e with SMTP id ae5-20020a17090725c500b00783f5df900emr31926173ejc.491.1667559750918;
+        Fri, 04 Nov 2022 04:02:30 -0700 (PDT)
 Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:4173])
-        by smtp.gmail.com with ESMTPSA id u25-20020aa7db99000000b00458947539desm1757768edt.78.2022.11.04.04.02.32
+        by smtp.gmail.com with ESMTPSA id u25-20020aa7db99000000b00458947539desm1757768edt.78.2022.11.04.04.02.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 04:02:33 -0700 (PDT)
+        Fri, 04 Nov 2022 04:02:30 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 6/7] io_uring: move zc reporting from the hot path
-Date:   Fri,  4 Nov 2022 10:59:45 +0000
-Message-Id: <40de4a6409042478e1f35adc4912e23226cb1b5c.1667557923.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 3/7] io_uring/net: preset notif tw handler
+Date:   Fri,  4 Nov 2022 10:59:42 +0000
+Message-Id: <7acdbea5e20eadd844513320cd454af14ba50f64.1667557923.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <cover.1667557923.git.asml.silence@gmail.com>
 References: <cover.1667557923.git.asml.silence@gmail.com>
@@ -64,149 +64,49 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add custom tw and notif callbacks on top of usual bits also handling zc
-reporting. That moves it from the hot path.
+We're going to have multiple notification tw functions. In preparation
+for future changes default the tw callback in advance so later we can
+replace it with other versions.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/net.c   | 22 ++++++++++++++--------
- io_uring/notif.c | 31 +++++++++++++++++++++++++++----
- io_uring/notif.h |  1 +
- 3 files changed, 42 insertions(+), 12 deletions(-)
+ io_uring/notif.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 0a8cdc5ae7af..556a48bcdbe4 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -925,6 +925,9 @@ void io_send_zc_cleanup(struct io_kiocb *req)
- 	}
- }
- 
-+#define IO_ZC_FLAGS_COMMON (IORING_RECVSEND_POLL_FIRST | IORING_RECVSEND_FIXED_BUF)
-+#define IO_ZC_FLAGS_VALID  (IO_ZC_FLAGS_COMMON | IORING_SEND_ZC_REPORT_USAGE)
-+
- int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct io_sr_msg *zc = io_kiocb_to_cmd(req, struct io_sr_msg);
-@@ -937,11 +940,6 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (req->flags & REQ_F_CQE_SKIP)
- 		return -EINVAL;
- 
--	zc->flags = READ_ONCE(sqe->ioprio);
--	if (zc->flags & ~(IORING_RECVSEND_POLL_FIRST |
--			  IORING_RECVSEND_FIXED_BUF |
--			  IORING_SEND_ZC_REPORT_USAGE))
--		return -EINVAL;
- 	notif = zc->notif = io_alloc_notif(ctx);
- 	if (!notif)
- 		return -ENOMEM;
-@@ -949,6 +947,17 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	notif->cqe.res = 0;
- 	notif->cqe.flags = IORING_CQE_F_NOTIF;
- 	req->flags |= REQ_F_NEED_CLEANUP;
-+
-+	zc->flags = READ_ONCE(sqe->ioprio);
-+	if (unlikely(zc->flags & ~IO_ZC_FLAGS_COMMON)) {
-+		if (zc->flags & ~IO_ZC_FLAGS_VALID)
-+			return -EINVAL;
-+		if (zc->flags & IORING_SEND_ZC_REPORT_USAGE) {
-+			io_notif_set_extended(notif);
-+			io_notif_to_data(notif)->zc_report = true;
-+		}
-+	}
-+
- 	if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
- 		unsigned idx = READ_ONCE(sqe->buf_index);
- 
-@@ -958,9 +967,6 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		req->imu = READ_ONCE(ctx->user_bufs[idx]);
- 		io_req_set_rsrc_node(notif, ctx, 0);
- 	}
--	if (zc->flags & IORING_SEND_ZC_REPORT_USAGE) {
--		io_notif_to_data(notif)->zc_report = true;
--	}
- 
- 	if (req->opcode == IORING_OP_SEND_ZC) {
- 		if (READ_ONCE(sqe->__pad3[0]))
 diff --git a/io_uring/notif.c b/io_uring/notif.c
-index c287adf24e66..9864bde3e2ef 100644
+index 59dafc42b8e0..6afb58b94297 100644
 --- a/io_uring/notif.c
 +++ b/io_uring/notif.c
-@@ -18,11 +18,17 @@ static void __io_notif_complete_tw(struct io_kiocb *notif, bool *locked)
- 		__io_unaccount_mem(ctx->user, nd->account_pages);
- 		nd->account_pages = 0;
- 	}
-+	io_req_task_complete(notif, locked);
-+}
-+
-+static void io_notif_complete_tw_ext(struct io_kiocb *notif, bool *locked)
-+{
-+	struct io_notif_data *nd = io_notif_to_data(notif);
- 
- 	if (nd->zc_report && (nd->zc_copied || !nd->zc_used))
- 		notif->cqe.res |= IORING_NOTIF_USAGE_ZC_COPIED;
- 
--	io_req_task_complete(notif, locked);
-+	__io_notif_complete_tw(notif, locked);
- }
- 
- static void io_tx_ubuf_callback(struct sk_buff *skb, struct ubuf_info *uarg,
-@@ -31,15 +37,33 @@ static void io_tx_ubuf_callback(struct sk_buff *skb, struct ubuf_info *uarg,
- 	struct io_notif_data *nd = container_of(uarg, struct io_notif_data, uarg);
- 	struct io_kiocb *notif = cmd_to_io_kiocb(nd);
- 
-+	if (refcount_dec_and_test(&uarg->refcnt))
-+		io_req_task_work_add(notif);
-+}
-+
-+static void io_tx_ubuf_callback_ext(struct sk_buff *skb, struct ubuf_info *uarg,
-+			     bool success)
-+{
-+	struct io_notif_data *nd = container_of(uarg, struct io_notif_data, uarg);
-+
- 	if (nd->zc_report) {
- 		if (success && !nd->zc_used && skb)
- 			WRITE_ONCE(nd->zc_used, true);
- 		else if (!success && !nd->zc_copied)
+@@ -39,10 +39,8 @@ static void io_uring_tx_zerocopy_callback(struct sk_buff *skb,
  			WRITE_ONCE(nd->zc_copied, true);
  	}
-+	io_tx_ubuf_callback(skb, uarg, success);
-+}
  
--	if (refcount_dec_and_test(&uarg->refcnt))
--		io_req_task_work_add(notif);
-+void io_notif_set_extended(struct io_kiocb *notif)
-+{
-+	struct io_notif_data *nd = io_notif_to_data(notif);
-+
-+	nd->zc_report = false;
-+	nd->zc_used = false;
-+	nd->zc_copied = false;
-+	notif->io_task_work.func = io_notif_complete_tw_ext;
-+	io_notif_to_data(notif)->uarg.callback = io_tx_ubuf_callback_ext;
+-	if (refcount_dec_and_test(&uarg->refcnt)) {
+-		notif->io_task_work.func = __io_notif_complete_tw;
++	if (refcount_dec_and_test(&uarg->refcnt))
+ 		io_req_task_work_add(notif);
+-	}
  }
  
  struct io_kiocb *io_alloc_notif(struct io_ring_ctx *ctx)
-@@ -63,7 +87,6 @@ struct io_kiocb *io_alloc_notif(struct io_ring_ctx *ctx)
+@@ -60,6 +58,7 @@ struct io_kiocb *io_alloc_notif(struct io_ring_ctx *ctx)
+ 	notif->task = current;
+ 	io_get_task_refs(1);
+ 	notif->rsrc_node = NULL;
++	notif->io_task_work.func = __io_notif_complete_tw;
+ 
+ 	nd = io_notif_to_data(notif);
  	nd->account_pages = 0;
- 	nd->uarg.flags = SKBFL_ZEROCOPY_FRAG | SKBFL_DONT_ORPHAN;
- 	nd->uarg.callback = io_tx_ubuf_callback;
--	nd->zc_report = nd->zc_used = nd->zc_copied = false;
- 	refcount_set(&nd->uarg.refcnt, 1);
- 	return notif;
+@@ -76,8 +75,6 @@ void io_notif_flush(struct io_kiocb *notif)
+ 	struct io_notif_data *nd = io_notif_to_data(notif);
+ 
+ 	/* drop slot's master ref */
+-	if (refcount_dec_and_test(&nd->uarg.refcnt)) {
+-		notif->io_task_work.func = __io_notif_complete_tw;
++	if (refcount_dec_and_test(&nd->uarg.refcnt))
+ 		io_req_task_work_add(notif);
+-	}
  }
-diff --git a/io_uring/notif.h b/io_uring/notif.h
-index 7f00176020d3..c88c800cd89d 100644
---- a/io_uring/notif.h
-+++ b/io_uring/notif.h
-@@ -19,6 +19,7 @@ struct io_notif_data {
- };
- 
- struct io_kiocb *io_alloc_notif(struct io_ring_ctx *ctx);
-+void io_notif_set_extended(struct io_kiocb *notif);
- 
- static inline struct io_notif_data *io_notif_to_data(struct io_kiocb *notif)
- {
 -- 
 2.38.0
 
