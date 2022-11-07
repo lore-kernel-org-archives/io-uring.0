@@ -2,101 +2,81 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF6DAC4332F
-	for <io-uring@archiver.kernel.org>; Mon,  7 Nov 2022 12:53:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8719AC433FE
+	for <io-uring@archiver.kernel.org>; Mon,  7 Nov 2022 13:04:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbiKGMxE (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 7 Nov 2022 07:53:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        id S231858AbiKGNEJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 7 Nov 2022 08:04:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiKGMxC (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Nov 2022 07:53:02 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C7D1C131
-        for <io-uring@vger.kernel.org>; Mon,  7 Nov 2022 04:53:01 -0800 (PST)
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A75wKAe013036
-        for <io-uring@vger.kernel.org>; Mon, 7 Nov 2022 04:53:00 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=dI01kHpT6Bh8dsXyPB9VqjlwwDSWMFy9A1u+I4SG6ss=;
- b=MKc4OFTwPQBfkyTTVwKtc7lx8zLmHRhaxsfIPhKtuet5l4I0iUZaqta3iAk96BjQmXDB
- Fkat6WPlaL71Ygs7W3Q/Flw+JvzM8xr6kju48KWQpTG8jQjDMeFWl8Q+Aoytt4agXTQl
- DuPq76tDQfhITgWV4fuv8wyhclueef56XB+LK/c/5xwXSli6XdiVvtU51Kx+8cTziXvR
- d6Xwu5grayfHyknjCBzooGm53GUUV+5YNSxcymIwoTA+7DUIz/W1Hga6+owFTc66a48o
- +QCrGh0yy4aH/HbUPLoX9QrksR+rs/dpQoh2WV6IAM/9V6YFdrlM95HfEPmVruKmzu5l iw== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3knnbynjc4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 07 Nov 2022 04:53:00 -0800
-Received: from twshared5287.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 04:53:00 -0800
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 3C4B790D69E5; Mon,  7 Nov 2022 04:52:45 -0800 (PST)
-From:   Dylan Yudaken <dylany@meta.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
-        Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next 1/4] io_uring: revert "io_uring fix multishot accept ordering"
-Date:   Mon, 7 Nov 2022 04:52:33 -0800
-Message-ID: <20221107125236.260132-2-dylany@meta.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221107125236.260132-1-dylany@meta.com>
-References: <20221107125236.260132-1-dylany@meta.com>
+        with ESMTP id S231623AbiKGNEH (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Nov 2022 08:04:07 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F86F1C426
+        for <io-uring@vger.kernel.org>; Mon,  7 Nov 2022 05:04:06 -0800 (PST)
+Received: from [10.7.7.5] (unknown [182.253.88.229])
+        by gnuweeb.org (Postfix) with ESMTPSA id 1DA0D81405;
+        Mon,  7 Nov 2022 13:04:03 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1667826245;
+        bh=Kns+7QHi56eQYOVt0BQqcHRnAYNU5Ml5Apy+lnFqv10=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=sjsbdGd4tIdnLfE6feqmbAAsuvNrJ35pHCEQaoqKIRRG49qeQApqi2vN0PtBD601H
+         sDLWqf5WOohgpgfIsQhY6TA0Y7LKj6Vm2KNbSN4Fcd2JIlEWP2mrREmq5zgbDKuOPP
+         zJgTE66VX35DdtAeaxR95YTv5zTzIVudjwoaKcHajn6udpPBy0Xc4BkAK1XjWdRGeK
+         cgAeRFKYhCxTSpnvwzdzr13fewpt0h2YB7ckvwzY51yRzd8iIiDnEwdo4AGcpm+goW
+         tvQpF4fuglEnWHFp7SEgonTv3olU5IjLQl0gB18TDBBIYbgNSOk86cWZkEYs+X3GLn
+         LgGqUNl7MytxA==
+Message-ID: <e6406e00-6b3f-02a4-7dab-f7e5cd07b82d@gnuweeb.org>
+Date:   Mon, 7 Nov 2022 20:04:01 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: nCqOuxIrMqNcun9tVOdwu4Z8sWL9CbTY
-X-Proofpoint-GUID: nCqOuxIrMqNcun9tVOdwu4Z8sWL9CbTY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_05,2022-11-07_01,2022-06-22_01
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+To:     Dylan Yudaken <dylany@meta.com>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring Mailing List <io-uring@vger.kernel.org>,
+        Facebook Kernel Team <kernel-team@fb.com>
+References: <20221107123515.4117456-1-dylany@meta.com>
+Content-Language: en-US
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH liburing] test that unregister_files processes task work
+In-Reply-To: <20221107123515.4117456-1-dylany@meta.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This is no longer needed after commit aa1df3a360a0 ("io_uring: fix CQE
-reordering"), since all reordering is now taken care of.
+On 11/7/22 7:35 PM, Dylan Yudaken wrote:
+> +static int test_defer_taskrun(void)
+> +{
+> +	struct io_uring_sqe *sqe;
+> +	struct io_uring ring;
+> +	int ret, fds[2];
+> +	char buff = 'x';
+> +
+> +	ret = io_uring_queue_init(8, &ring,
+> +				  IORING_SETUP_DEFER_TASKRUN | IORING_SETUP_SINGLE_ISSUER);
+> +	if (ret)
+> +		return T_EXIT_SKIP;
 
-This reverts commit cbd25748545c ("io_uring: fix multishot accept
-ordering").
+You return T_EXIT_SKIP from test_defer_taskrun(). But the
+call site is:
 
-Signed-off-by: Dylan Yudaken <dylany@meta.com>
----
- io_uring/net.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+> +	if (t_probe_defer_taskrun()) {
+> +		ret = test_defer_taskrun();
+> +		if (ret) {
+> +			fprintf(stderr, "test_defer failed\n");
+> +			return T_EXIT_FAIL;
+> +		}
+> +	}
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 9a07e79cc0e6..0d77ddcce0af 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -1325,14 +1325,11 @@ int io_accept(struct io_kiocb *req, unsigned int =
-issue_flags)
- 		return IOU_OK;
- 	}
-=20
--	if (ret >=3D 0 &&
--	    io_post_aux_cqe(ctx, req->cqe.user_data, ret, IORING_CQE_F_MORE, fa=
-lse))
-+	if (ret < 0)
-+		return ret;
-+	if (io_post_aux_cqe(ctx, req->cqe.user_data, ret, IORING_CQE_F_MORE, tr=
-ue))
- 		goto retry;
--
--	io_req_set_res(req, ret, 0);
--	if (req->flags & REQ_F_POLLED)
--		return IOU_STOP_MULTISHOT;
--	return IOU_OK;
-+	return -ECANCELED;
- }
-=20
- int io_socket_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
---=20
-2.30.2
+T_EXIT_SKIP is 77. So the block inside the "if" is taken.
+End result you get T_EXIT_FAIL.
+
+T_EXIT_SKIP in your code doesn't really mean skip.
+
+-- 
+Ammar Faizi
 
