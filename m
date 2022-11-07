@@ -2,48 +2,47 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E123DC43217
-	for <io-uring@archiver.kernel.org>; Mon,  7 Nov 2022 18:00:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73DF4C43217
+	for <io-uring@archiver.kernel.org>; Mon,  7 Nov 2022 18:00:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbiKGSAH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 7 Nov 2022 13:00:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        id S232796AbiKGSAN (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 7 Nov 2022 13:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232376AbiKGR7p (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Nov 2022 12:59:45 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B5B2A962
-        for <io-uring@vger.kernel.org>; Mon,  7 Nov 2022 09:56:22 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7Glixq007970
-        for <io-uring@vger.kernel.org>; Mon, 7 Nov 2022 09:56:21 -0800
+        with ESMTP id S231946AbiKGR7r (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Nov 2022 12:59:47 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D1A2A95C
+        for <io-uring@vger.kernel.org>; Mon,  7 Nov 2022 09:56:24 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2A7GlmMo030717
+        for <io-uring@vger.kernel.org>; Mon, 7 Nov 2022 09:56:23 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=IrY4FfXRGP3pHaS7CSwjdJr9fKO0nPIkNCwM9wSvb68=;
- b=mWEUF2nkXD3j+I+tgK86OdnSPMhwn1i9moNNp1lJzMS4nR2EaWLCnns6NiNVX4NGKeRj
- CIOxnufDsrElrXJeksU/asCbU+JUVxHmdM8otUvvYKZF2FnW+96rZ2sfkEHawKheQ4iD
- BOH5UocvIa6ojjG8kayoefJwp+yxMr1oWopl1wttJ0b0EFSq8BBBQb/m4FlMeMjrBvLc
- GUgnCg2mC0B1lUEbne08RiZEG6/nYkVwTCevTc6PI5SHx7W5TDdNJ/e8PQx4i5e9Jf0h
- jm5IeiRH4IGDpYIwWLDCA1KMIpcsIG3t30LGpq/lKuCh3ULlqyTGuP07AR9ESfKohzwA dw== 
+ bh=fviXk0LNnrl5sy4e4CtOb1CjSHn6NFyFT8uwVNkAmF0=;
+ b=ah09K/zJJOQVmAgrVycHLsq3Z79Wib27q9M2d7FBm702V9fbhplzmkV9VLrZXIbbre6V
+ LjVLGeyEYwEqE9xIME9w8TJGHfW2+Ror0Uh1aBQp2Ahy+iLKtnodUBMRQnoeRDo+iwbE
+ yzG47IdjpZe5iWudeCQmBphNrt3dWHKgN3MQynQ7e0w/kTaytFEoAc7dRkub/5ULiMoa
+ FKBlmw0RS2n/6E1pyaxJLCuEsu+jzQMY4BmgUyn7XZTl3WtOqpf0XBydN/2+nFwvoKZD
+ 0bqSTcIo8R1iDEZUlLfsEUYENOZwzoQ48Vrahht74CFLKv70qdI+v4GxvglUiJr0AV0f pQ== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3knmxss1mw-6
+        by m0001303.ppops.net (PPS) with ESMTPS id 3knkgvh5t5-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 07 Nov 2022 09:56:21 -0800
-Received: from twshared27579.05.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Mon, 07 Nov 2022 09:56:23 -0800
+Received: from twshared2001.03.ash8.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 09:56:19 -0800
+ 15.1.2375.31; Mon, 7 Nov 2022 09:56:21 -0800
 Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-        id B1BA2ADF1C9E; Mon,  7 Nov 2022 09:56:11 -0800 (PST)
+        id 6682DADF1C99; Mon,  7 Nov 2022 09:56:11 -0800 (PST)
 From:   Keith Busch <kbusch@meta.com>
 To:     <viro@zeniv.linux.org.uk>, <axboe@kernel.dk>,
         <io-uring@vger.kernel.org>
-CC:     <asml.silence@gmail.com>, <linux-fsdevel@vger.kernel.org>,
-        Keith Busch <kbusch@kernel.org>
-Subject: [PATCH 4/4] iov_iter: move iter_ubuf check inside restore WARN
-Date:   Mon, 7 Nov 2022 09:56:10 -0800
-Message-ID: <20221107175610.349807-5-kbusch@meta.com>
+CC:     <asml.silence@gmail.com>, <linux-fsdevel@vger.kernel.org>
+Subject: [PATCH 1/4] iov: add import_ubuf()
+Date:   Mon, 7 Nov 2022 09:56:07 -0800
+Message-ID: <20221107175610.349807-2-kbusch@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221107175610.349807-1-kbusch@meta.com>
 References: <20221107175610.349807-1-kbusch@meta.com>
@@ -51,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: tJxP4RLspSsIRo3CN3DkKTpRCuOD2VUk
-X-Proofpoint-GUID: tJxP4RLspSsIRo3CN3DkKTpRCuOD2VUk
+X-Proofpoint-ORIG-GUID: JoFbtjfejfaIFLvvvG3t344apvbVXaD3
+X-Proofpoint-GUID: JoFbtjfejfaIFLvvvG3t344apvbVXaD3
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-07_08,2022-11-07_02,2022-06-22_01
@@ -60,33 +59,56 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Keith Busch <kbusch@kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
 
-io_uring is using iter_ubuf types for single vector requests. We expect
-state restore may happen for this type now, and it is already handled
-correctly, so move the check inside the warning to suppress it.
+Like import_single_range(), but for ITER_UBUF.
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- lib/iov_iter.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/uio.h |  1 +
+ lib/iov_iter.c      | 11 +++++++++++
+ 2 files changed, 12 insertions(+)
 
+diff --git a/include/linux/uio.h b/include/linux/uio.h
+index 2e3134b14ffd..27575495c006 100644
+--- a/include/linux/uio.h
++++ b/include/linux/uio.h
+@@ -337,6 +337,7 @@ ssize_t __import_iovec(int type, const struct iovec _=
+_user *uvec,
+ 		 struct iov_iter *i, bool compat);
+ int import_single_range(int type, void __user *buf, size_t len,
+ 		 struct iovec *iov, struct iov_iter *i);
++int import_ubuf(int type, void __user *buf, size_t len, struct iov_iter =
+*i);
+=20
+ static inline void iov_iter_ubuf(struct iov_iter *i, unsigned int direct=
+ion,
+ 			void __user *buf, size_t count)
 diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 07adf18e5e40..aa192a386bd7 100644
+index c3ca28ca68a6..07adf18e5e40 100644
 --- a/lib/iov_iter.c
 +++ b/lib/iov_iter.c
-@@ -1880,8 +1880,8 @@ int import_ubuf(int rw, void __user *buf, size_t le=
-n, struct iov_iter *i)
-  */
- void iov_iter_restore(struct iov_iter *i, struct iov_iter_state *state)
- {
--	if (WARN_ON_ONCE(!iov_iter_is_bvec(i) && !iter_is_iovec(i)) &&
--			 !iov_iter_is_kvec(i) && !iter_is_ubuf(i))
-+	if (WARN_ON_ONCE(!iov_iter_is_bvec(i) && !iter_is_iovec(i) &&
-+			 !iter_is_ubuf(i)) && !iov_iter_is_kvec(i))
- 		return;
- 	i->iov_offset =3D state->iov_offset;
- 	i->count =3D state->count;
+@@ -1855,6 +1855,17 @@ int import_single_range(int rw, void __user *buf, =
+size_t len,
+ }
+ EXPORT_SYMBOL(import_single_range);
+=20
++int import_ubuf(int rw, void __user *buf, size_t len, struct iov_iter *i=
+)
++{
++	if (len > MAX_RW_COUNT)
++		len =3D MAX_RW_COUNT;
++	if (unlikely(!access_ok(buf, len)))
++		return -EFAULT;
++
++	iov_iter_ubuf(i, rw, buf, len);
++	return 0;
++}
++
+ /**
+  * iov_iter_restore() - Restore a &struct iov_iter to the same state as =
+when
+  *     iov_iter_save_state() was called.
 --=20
 2.30.2
 
