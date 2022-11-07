@@ -2,204 +2,97 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E4B37C43217
-	for <io-uring@archiver.kernel.org>; Mon,  7 Nov 2022 12:45:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38EE1C4332F
+	for <io-uring@archiver.kernel.org>; Mon,  7 Nov 2022 12:52:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232363AbiKGMpc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 7 Nov 2022 07:45:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S231421AbiKGMw5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 7 Nov 2022 07:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232327AbiKGMp3 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Nov 2022 07:45:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4430D1AF30
-        for <io-uring@vger.kernel.org>; Mon,  7 Nov 2022 04:44:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667825074;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2hqgA/TRgZw1DzPVWmvs/bi2bDcerUKILSHp4k/Qv2I=;
-        b=L2R7cTGvdJTMdEw4HziMLkFAxviTg0Os6F5twbcu/H/hBqCUqNG9/GhrqlEtQ0D6U5lEQy
-        qdGCI66JXihtiRbnFzzDLekclBaS7vTUWLglpVFNmYeSdxMDgXqMGbTNZPR/SNyijUCF9H
-        r9POiCSxaoFL9PWYY2oo5QFMD5pXICk=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-35-O9CUjeaMOui_kXPQ29eh8A-1; Mon, 07 Nov 2022 07:44:33 -0500
-X-MC-Unique: O9CUjeaMOui_kXPQ29eh8A-1
-Received: by mail-pg1-f197.google.com with SMTP id e128-20020a636986000000b0047075a1c725so1584931pgc.19
-        for <io-uring@vger.kernel.org>; Mon, 07 Nov 2022 04:44:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2hqgA/TRgZw1DzPVWmvs/bi2bDcerUKILSHp4k/Qv2I=;
-        b=p1/du4CJQg6ihgMZgMOEMCXL5GepSdaRYlYaLI4Sf3T2/iMgx0MwjLJkQEAFNTVl8a
-         nJ0fpbvwx7cRhJNDkwX/gd/z88+mV1FnuDHvA5nnAsEcYBGgPuPLJufusdbty9ACgmHw
-         okXXjiKdE6oVtPwtGu6Jnj56sb/A4k3oLI6/GqisLjx1zx/tuCJrSc4arSmnej2qjBsT
-         5OrGntxFmkReEBVDKiqgxCYeRFo8mr0dw2DtAKF5Yq2LTB5OfLcvYVoFgrgvA1bSydU4
-         P5IwBX1AWcB52ml9VauyFWVqisTx9wn7MW8GPdXTGZU2lVpvGx5xC7yiUyWwU2j6D6Vi
-         /r9g==
-X-Gm-Message-State: ACrzQf3Ed3w9snlikk770CHf039AMtnPFOfL8rIvrUB/Q4sjdGDOQ1Vy
-        N/pQACB18ambhr5x4h4R8BEEaal1RyUgOXs/0YqKzVKfCxqUzltqVGB4MEo4BgLL9eqUIOh6qfP
-        DJGyK/fa2+dLLcyfNg1c=
-X-Received: by 2002:a05:6a00:21cc:b0:56c:ba99:795d with SMTP id t12-20020a056a0021cc00b0056cba99795dmr50314879pfj.84.1667825072140;
-        Mon, 07 Nov 2022 04:44:32 -0800 (PST)
-X-Google-Smtp-Source: AMsMyM6Z8VizXTILvpkDYYRHc1gOLDg0bA5X+HhAJoGWKY3jU2FfCdpEd9AI46CqQAZaCoZ5DX+GxA==
-X-Received: by 2002:a05:6a00:21cc:b0:56c:ba99:795d with SMTP id t12-20020a056a0021cc00b0056cba99795dmr50314862pfj.84.1667825071873;
-        Mon, 07 Nov 2022 04:44:31 -0800 (PST)
-Received: from [10.72.12.88] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id pv7-20020a17090b3c8700b00213c7cf21c0sm4240009pjb.5.2022.11.07.04.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Nov 2022 04:44:31 -0800 (PST)
-Subject: Re: [RFC PATCH] fs/lock: increase the filp's reference for
- Posix-style locks
-To:     Jeff Layton <jlayton@kernel.org>, viro@zeniv.linux.org.uk,
-        chuck.lever@oracle.com
-Cc:     axboe@kernel.dk, asml.silence@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        io-uring@vger.kernel.org, ceph-devel@vger.kernel.org,
-        mchangir@redhat.com, idryomov@gmail.com, lhenriques@suse.de,
-        gfarnum@redhat.com
-References: <20221107095232.36828-1-xiubli@redhat.com>
- <2f1fe2fe57f39ab420c7855584ae7b6bb85a7692.camel@kernel.org>
- <c5a2cf05-8e30-1fac-3c48-d4b508ea9009@redhat.com>
- <88511dabbfb0cfad748100f59f2ce4025db29dc0.camel@kernel.org>
-From:   Xiubo Li <xiubli@redhat.com>
-Message-ID: <b1333f15-fb3d-5698-1852-47a55546bdb8@redhat.com>
-Date:   Mon, 7 Nov 2022 20:44:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        with ESMTP id S231375AbiKGMw4 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 7 Nov 2022 07:52:56 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2C3B4A9
+        for <io-uring@vger.kernel.org>; Mon,  7 Nov 2022 04:52:55 -0800 (PST)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.5/8.17.1.5) with ESMTP id 2A7AhtmW008247
+        for <io-uring@vger.kernel.org>; Mon, 7 Nov 2022 04:52:54 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=FUeqoODRlOr1v5SfWTCyNFQ9US62qxvJYbuCNILGR0o=;
+ b=WXwteOlr6a+7eUYFvLtBjo4iMxgc+TJWygV24C+MjxUxuZCD+eTMkZ4dr6lVVy6ZvJlx
+ apn5ZOGjQBq9KkRS/lFpOuYEpbUTerKWLVI8sbp8Z3boioH427DpkhprXDr/d8EycdF8
+ iU/7q7x4uZa+KCAKzdTZAq0opnH1AVBFGCpXX9poPTrC2/NE+/mbE7roSenJL71CsNe4
+ 5EV7cg8t2WXq1yl4zuliIRUbD9fbgZka7e8X7CpLiiRgl5AXP7KmCmol/VMF50VStp6W
+ EFC8kDBggTol+NUS4DVnvAJWOFDi0yrTVeKoCDOZn8VbuspdyDZokj3F/rccESNGgfDB hQ== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3knkb7xb56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Mon, 07 Nov 2022 04:52:54 -0800
+Received: from twshared2001.03.ash8.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 7 Nov 2022 04:52:53 -0800
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 4E8ED90D69EC; Mon,  7 Nov 2022 04:52:45 -0800 (PST)
+From:   Dylan Yudaken <dylany@meta.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
+        Dylan Yudaken <dylany@meta.com>
+Subject: [PATCH for-next 3/4] io_uring: allow multishot recv CQEs to overflow
+Date:   Mon, 7 Nov 2022 04:52:35 -0800
+Message-ID: <20221107125236.260132-4-dylany@meta.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221107125236.260132-1-dylany@meta.com>
+References: <20221107125236.260132-1-dylany@meta.com>
 MIME-Version: 1.0
-In-Reply-To: <88511dabbfb0cfad748100f59f2ce4025db29dc0.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: TGuD-ZsFf30cG8ezE_QorJuf-3Muxtui
+X-Proofpoint-ORIG-GUID: TGuD-ZsFf30cG8ezE_QorJuf-3Muxtui
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_05,2022-11-07_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+With commit aa1df3a360a0 ("io_uring: fix CQE reordering"), there are
+stronger guarantees for overflow ordering. Specifically ensuring that
+userspace will not receive out of order receive CQEs. Therefore this is
+not needed any more for recv/recvmsg.
 
-On 07/11/2022 20:29, Jeff Layton wrote:
-> On Mon, 2022-11-07 at 20:03 +0800, Xiubo Li wrote:
->> On 07/11/2022 18:33, Jeff Layton wrote:
->>> On Mon, 2022-11-07 at 17:52 +0800, xiubli@redhat.com wrote:
-[...]
->>>> diff --git a/io_uring/openclose.c b/io_uring/openclose.c
->>>> index 67178e4bb282..5a12cdf7f8d0 100644
->>>> --- a/io_uring/openclose.c
->>>> +++ b/io_uring/openclose.c
->>>> @@ -212,6 +212,7 @@ int io_close_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>>    int io_close(struct io_kiocb *req, unsigned int issue_flags)
->>>>    {
->>>>    	struct files_struct *files = current->files;
->>>> +	fl_owner_t owner = file_lock_make_thread_owner(files);
->>>>    	struct io_close *close = io_kiocb_to_cmd(req, struct io_close);
->>>>    	struct fdtable *fdt;
->>>>    	struct file *file;
->>>> @@ -247,7 +248,7 @@ int io_close(struct io_kiocb *req, unsigned int issue_flags)
->>>>    		goto err;
->>>>    
->>>>    	/* No ->flush() or already async, safely close from here */
->>>> -	ret = filp_close(file, current->files);
->>>> +	ret = filp_close(file, owner);
->>>>    err:
->>>>    	if (ret < 0)
->>>>    		req_set_fail(req);
->>> I think this is the wrong approach to fixing this. It also looks like
->>> you could hit a similar problem with OFD locks and this patch wouldn't
->>> address that issue.
->> For the OFD locks they will set the 'file' struct as the owner just as
->> the flock does, it should be okay and I don't think it has this issue if
->> my understanding is correct here.
->>
-> They set the the owner to "file", but they don't hold a reference to it.
-> With OFD locks, the file is what holds references to the lock, not the
-> reverse.
+Signed-off-by: Dylan Yudaken <dylany@meta.com>
+---
+ io_uring/net.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Yeah, right. But for both OFD and flock they shouldn't hit this issue, 
-because it when removing all the locks having the same owner, which is 
-the 'file', passed by filp_close(filp), the 'file' reference counter 
-must be larger than 0. Because the filp_close() is still using it.
-
-This is why using the thread id as the owner is a special case for 
-Posix-style lock.
-
->
->>> The real bug seems to be that ceph_fl_release_lock dereferences fl_file,
->>> at a point when it shouldn't rely on that being valid. Most filesystems
->>> stash some info in fl->fl_u if they need to do bookkeeping after
->>> releasing a lock. Perhaps ceph should be doing something similar?
->> This is the 'filp' memory in filp_close(filp, ...):
->>
->> crash> file.f_path.dentry,f_inode 0xffff952d7ab46200
->>     f_path.dentry = 0xffff9521b121cb40
->>     f_inode = 0xffff951f3ea33550,
->>
->> We can see the 'f_inode' is pointing to the correct inode memory.
->>
->>
->>
->> While later in 'ceph_fl_release_lock()':
->>
->> 41 static void ceph_fl_release_lock(struct file_lock *fl)
->> 42 {
->> 43     struct ceph_file_info *fi = fl->fl_file->private_data;
->> 44     struct inode *inode = file_inode(fl->fl_file);
->> 45     struct ceph_inode_info *ci = ceph_inode(inode);
->> 46     atomic_dec(&fi->num_locks);
->> 47     if (atomic_dec_and_test(&ci->i_filelock_ref)) {
->> 48         /* clear error when all locks are released */
->> 49         spin_lock(&ci->i_ceph_lock);
->> 50         ci->i_ceph_flags &= ~CEPH_I_ERROR_FILELOCK;
->> 51         spin_unlock(&ci->i_ceph_lock);
->> 52     }
->> 53 }
->>
-> You only need the inode for most of this. The exception is
-> fi->num_locks, so you may need to test for that in a different way.
->
->> It crashed in Line#47 and the 'fl->fl_file' memory is:
->>
->> crash> file.f_path.dentry,f_inode 0xffff952d4ebd8a00
->>     f_path.dentry = 0x0
->>     f_inode = 0x0,
->>
->> Please NOTE: the 'filp' and 'fl->fl_file' are two different 'file struct'.
->>
-> Yep, I understand the bug. I just don't like the proposed fix. :)
-
-Yeah, I also think this approach is ugly :-)
-
->> Can we fix this by using 'fl->fl_u' here ?
->>
-> Probably. You could take and hold an inode reference in there, and maybe
-> add a function that looks at whether there are any locks held against a
-> particular file, rather than trying to count locks in ceph_file_info.
-
-Okay, this sounds good.
-
-Let me try this tomorrow.
-
->> I was also thinking I could just call the 'get_file(file)' in
->> ceph_lock() and then in ceph_fl_release_lock() release the reference
->> counter. How about this ?
->>
-> That may work too, though again, I'd be worried about cyclical
-> dependencies, particularly with OFD locks. If the lock holds a reference
-> to the file, then can the file's refcount ever go to zero if the lock is
-> never explicitly released? I think not.
->
-> You may also need to consider flock locks too, since they have similar
-> ownership semantics to OFD locks.
-
-I will send a V2 later.
-
-Thanks Jeff!
-
-- Xiubo
-
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 0d77ddcce0af..4b79b61f5597 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -603,15 +603,11 @@ static inline bool io_recv_finish(struct io_kiocb *=
+req, int *ret,
+=20
+ 	if (!mshot_finished) {
+ 		if (io_post_aux_cqe(req->ctx, req->cqe.user_data, *ret,
+-				    cflags | IORING_CQE_F_MORE, false)) {
++				    cflags | IORING_CQE_F_MORE, true)) {
+ 			io_recv_prep_retry(req);
+ 			return false;
+ 		}
+-		/*
+-		 * Otherwise stop multishot but use the current result.
+-		 * Probably will end up going into overflow, but this means
+-		 * we cannot trust the ordering anymore
+-		 */
++		/* Otherwise stop multishot but use the current result. */
+ 	}
+=20
+ 	io_req_set_res(req, *ret, cflags);
+--=20
+2.30.2
 
