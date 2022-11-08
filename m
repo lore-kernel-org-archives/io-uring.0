@@ -2,83 +2,154 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 596AAC433FE
-	for <io-uring@archiver.kernel.org>; Tue,  8 Nov 2022 14:13:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68A3EC4332F
+	for <io-uring@archiver.kernel.org>; Tue,  8 Nov 2022 15:30:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235287AbiKHONr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Nov 2022 09:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52132 "EHLO
+        id S234118AbiKHPae (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Nov 2022 10:30:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235296AbiKHONq (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Nov 2022 09:13:46 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE9213F2F
-        for <io-uring@vger.kernel.org>; Tue,  8 Nov 2022 06:13:45 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id q9so13913527pfg.5
-        for <io-uring@vger.kernel.org>; Tue, 08 Nov 2022 06:13:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SrTEk6LDLCIYS7emXZW0HctyZXKHLz66hfnEY7yyW0A=;
-        b=uWv3rMzR4lvsgn9j3Lha5krn20PitjAxwCUAgSStWoE7C1mVn5sWhSof+44G1ugLkP
-         pALdxF31nfHiBjBJmY0xkko0mQvVVcjRgjC/8r2qKlziPex0vwR1RPzC6KHWCUVTGfWK
-         uGBAcbT1mSkHIleVQ4IVdmURsVKRftGHqdHwgB7xKNnlNNDayLhTON1b/pFu99rm5oC5
-         SgN6X5WJmW2L+mZygRZL4vCFXy2PBczzo/NKTT/oZnQpiVcMKk0CTY/IVtQSKJIOJzzU
-         YUXxwOceXgfYKsguOLoH+nSU0Ushi9b7F0u/tlAGaWwKi27BSLWnv2ql9TA3ogJZfgR1
-         strw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SrTEk6LDLCIYS7emXZW0HctyZXKHLz66hfnEY7yyW0A=;
-        b=K2MeyUOLnQlyh+kwhZ6LrDAPyz++MbCSiJsSEuW/RbAQtX7DkDPas47y4xSumDUkQY
-         ZdvTUUfrpvEx7i4mMOoZ3vkxKFdDC28z+mQutkmtZLcGvsIQKaSXoazfZkDasKNyoB/a
-         WFccEJ+8TRBIRX7JN2EdT6veCUZzeX2bSMg/4sG6mt8wr+C09eaGZIMgCMk8HU9+a0mE
-         cGDwAVSXJuK6KDtBXjStb/e5yk0U/KZqfu1IWssS4buVtGSwyPJXDZMzAwcIiW1E6A4U
-         2zZPaHhOhYgs8HOTwT5xZq6RNQjGR44h++HilumYiYWkv8Nk7Pq0Uu70tFUasTmMlEXM
-         cVrQ==
-X-Gm-Message-State: ACrzQf0i+TmxVrTOKAZYQ5rcnwBn6ykBaSa/TfF7Irk5KP/D/QfwTRTg
-        cKkl4LKFF06EoDQj0pYMW8MBT9jfnSHa+YDs
-X-Google-Smtp-Source: AMsMyM6TK1K/9Be/J8su+ph0A/YsC50WWWcGeWNBD/YWbnvADY72hJMxFa/HSd3YfiWGTqVomJl5Kg==
-X-Received: by 2002:a63:8ac2:0:b0:46f:b278:183b with SMTP id y185-20020a638ac2000000b0046fb278183bmr41464813pgd.6.1667916824982;
-        Tue, 08 Nov 2022 06:13:44 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170902b18d00b00186da904da0sm7009630plr.154.2022.11.08.06.13.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Nov 2022 06:13:44 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Dylan Yudaken <dylany@meta.com>,
+        with ESMTP id S231740AbiKHPaa (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Nov 2022 10:30:30 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACD3DE87
+        for <io-uring@vger.kernel.org>; Tue,  8 Nov 2022 07:30:24 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A86jPa9019822
+        for <io-uring@vger.kernel.org>; Tue, 8 Nov 2022 07:30:24 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=FxFmoB7+/MIXW+M0JoKQjQ2m4rLd0qta5uWqX8l921E=;
+ b=Vk5r+/oGdfilnNXdItH9FTueiuK2SklbC9cPWH16mxq7dZ/4IaFd9sEidL+NcBXhtF0G
+ CWteWpo7rG/6qnusgnBwjZIo6arhSpEJKnWlly9f2wSxNhjacjZLehaGEtKFuYBMkjoN
+ Rh6b9TrQq6QGxDuZ51NafBg8MHHd5uE+DkSzra9jLQHZYn2GnoQSwvl98mv8aG5dqTSw
+ q4t1sV4hn3UWLp+tNTVEH+3+Lj1lzu2XIkaelq4z3PvCMPWYKHVDGDHdjMXxX7Y000Qp
+ CdItGgRaJtiCeelTLfyh+T6sfDXxGtD84DmkpU8qqBUTFkvw2y/vWNnRgE4KyPwHoSMD Yg== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kqj3nkgk6-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Tue, 08 Nov 2022 07:30:23 -0800
+Received: from twshared5287.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 8 Nov 2022 07:30:22 -0800
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id C504191E4B4F; Tue,  8 Nov 2022 07:30:17 -0800 (PST)
+From:   Dylan Yudaken <dylany@meta.com>
+To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org
-In-Reply-To: <20221108124207.751615-1-dylany@meta.com>
-References: <20221108124207.751615-1-dylany@meta.com>
-Subject: Re: [PATCH liburing v4] test that unregister_files processes task work
-Message-Id: <166791682383.41236.13099308010589502791.b4-ty@kernel.dk>
-Date:   Tue, 08 Nov 2022 07:13:43 -0700
+CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
+        Dylan Yudaken <dylany@meta.com>
+Subject: [PATCH] io_uring: calculate CQEs from the user visible value
+Date:   Tue, 8 Nov 2022 07:30:16 -0800
+Message-ID: <20221108153016.1854297-1-dylany@meta.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: yeydwle9CevjWIVOsQCRCftiZYgso02q
+X-Proofpoint-GUID: yeydwle9CevjWIVOsQCRCftiZYgso02q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-07_11,2022-11-08_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Tue, 8 Nov 2022 04:42:07 -0800, Dylan Yudaken wrote:
-> Ensure that unregister_files processes task work from defer_taskrun even
-> when not explicitly flushed.
-> 
-> 
+io_cqring_wait (and it's wake function io_has_work) used cached_cq_tail i=
+n
+order to calculate the number of CQEs. cached_cq_tail is set strictly
+before the user visible rings->cq.tail
 
-Applied, thanks!
+However as far as userspace is concerned,  if io_uring_enter(2) is called
+with a minimum number of events, they will verify by checking
+rings->cq.tail.
 
-[1/1] test that unregister_files processes task work
-      commit: 78463f30a5f3235c8cce82cbf1b8ff437f6536cd
+It is therefore possible for io_uring_enter(2) to return early with fewer
+events visible to the user.
 
-Best regards,
--- 
-Jens Axboe
+Instead make the wait functions read from the user visible value, so ther=
+e
+will be no discrepency.
 
+This is triggered eventually by the following reproducer:
+
+struct io_uring_sqe *sqe;
+struct io_uring_cqe *cqe;
+unsigned int cqe_ready;
+struct io_uring ring;
+int ret, i;
+
+ret =3D io_uring_queue_init(N, &ring, 0);
+assert(!ret);
+while(true) {
+	for (i =3D 0; i < N; i++) {
+		sqe =3D io_uring_get_sqe(&ring);
+		io_uring_prep_nop(sqe);
+		sqe->flags |=3D IOSQE_ASYNC;
+	}
+	ret =3D io_uring_submit(&ring);
+	assert(ret =3D=3D N);
+
+	do {
+		ret =3D io_uring_wait_cqes(&ring, &cqe, N, NULL, NULL);
+	} while(ret =3D=3D -EINTR);
+	cqe_ready =3D io_uring_cq_ready(&ring);
+	assert(!ret);
+	assert(cqe_ready =3D=3D N);
+	io_uring_cq_advance(&ring, N);
+}
+
+Fixes: ad3eb2c89fb2 ("io_uring: split overflow state into SQ and CQ side"=
+)
+Signed-off-by: Dylan Yudaken <dylany@meta.com>
+---
+ io_uring/io_uring.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index ac8c488e3077..4a1e482747cc 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -176,6 +176,11 @@ static inline unsigned int __io_cqring_events(struct=
+ io_ring_ctx *ctx)
+ 	return ctx->cached_cq_tail - READ_ONCE(ctx->rings->cq.head);
+ }
+=20
++static inline unsigned int __io_cqring_events_user(struct io_ring_ctx *c=
+tx)
++{
++	return READ_ONCE(ctx->rings->cq.tail) - READ_ONCE(ctx->rings->cq.head);
++}
++
+ static bool io_match_linked(struct io_kiocb *head)
+ {
+ 	struct io_kiocb *req;
+@@ -2315,7 +2320,7 @@ static inline bool io_has_work(struct io_ring_ctx *=
+ctx)
+ static inline bool io_should_wake(struct io_wait_queue *iowq)
+ {
+ 	struct io_ring_ctx *ctx =3D iowq->ctx;
+-	int dist =3D ctx->cached_cq_tail - (int) iowq->cq_tail;
++	int dist =3D READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
+=20
+ 	/*
+ 	 * Wake up if we have enough events, or if a timeout occurred since we
+@@ -2399,7 +2404,8 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, =
+int min_events,
+ 			return ret;
+ 		io_cqring_overflow_flush(ctx);
+=20
+-		if (io_cqring_events(ctx) >=3D min_events)
++		/* if user messes with these they will just get an early return */
++		if (__io_cqring_events_user(ctx) >=3D min_events)
+ 			return 0;
+ 	} while (ret > 0);
+=20
+
+base-commit: f0c4d9fc9cc9462659728d168387191387e903cc
+--=20
+2.30.2
 
