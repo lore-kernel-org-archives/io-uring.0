@@ -2,92 +2,66 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49477C433FE
-	for <io-uring@archiver.kernel.org>; Tue,  8 Nov 2022 07:15:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 18421C433FE
+	for <io-uring@archiver.kernel.org>; Tue,  8 Nov 2022 07:43:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbiKHHPD (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Nov 2022 02:15:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56952 "EHLO
+        id S233753AbiKHHn6 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Nov 2022 02:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiKHHPC (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Nov 2022 02:15:02 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3030712634;
-        Mon,  7 Nov 2022 23:15:01 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.88.158])
-        by gnuweeb.org (Postfix) with ESMTPSA id 8868E804D1;
-        Tue,  8 Nov 2022 07:14:58 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1667891700;
-        bh=XCWz6ScmoIObKuRId785vIH8+G9yaE9O8IRbUT0edwM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=tG0wKmr24hD/A6Kf5NjxnSW7rbmUBchYFUbCOPBd9KLArSbAwyPYRUvQraBT2Vck3
-         qCiLqe/0pPJrTsN0uF6LepmfHai4T9HbFAXp2y4ZZrJ3CIAT7vU24nsmhaMWilXgoe
-         yqKR3vz9nlse7/umllcDwu5xqEsPyp6JhXMwj1HYADTj4ETak/D+A2rdpyNVx2FAvk
-         Ys1XE299CZWOJufcTW6ZEk6H5eAWo7fMicmOVRKWJcE0rBErqgLSeZO3RBQ/F6bFxC
-         eujTl9vDch31McNdq2uCpX9oxR7RjCC/mAtPnjVbWt97KKZEZHIPF6GVRWJVM/DD5J
-         kqbg4aNIwMn+Q==
-Message-ID: <b507be5c-1669-57ee-d16e-964e326309f9@gnuweeb.org>
-Date:   Tue, 8 Nov 2022 14:14:56 +0700
+        with ESMTP id S233805AbiKHHnf (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Nov 2022 02:43:35 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5F5286C2;
+        Mon,  7 Nov 2022 23:42:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=iNVXZRDHkYD8+0UZ8oa2Zsbknb/YrKzGV1SBk9BjN5E=; b=4lf+THRQvsw0X8PVy3UXbuUfHx
+        4RS8rnVD56hI0Plh246E2OqrTAiXt4q+1vDircwLluVrNELDHqgx81rHWugb9VlkCAZqxkQVxSRxG
+        hLPFb1jZPvMg9EhQnTq41iudat9WDd4N/7yhv6pSHd050Md6CzdCTj6ZVmxIq+Ic5hL5PZjGV/pCC
+        iWzyruvewaS8QbKgtNESN8pUboaViJsIeNKZfXLaz87l1B4jcssDTmibMLT4kGLVphoVwGchRIOax
+        vx0deRdMvLwAM2aZvBUhsoRRiOexab7y85vQvasQngu0DwVSbbSB0+/SzsgWZ97ndsL3e0xqf+jDG
+        0OpCoTLA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1osJFq-003THN-Mn; Tue, 08 Nov 2022 07:42:42 +0000
+Date:   Mon, 7 Nov 2022 23:42:42 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+Subject: Re: [RFC PATCH 1/4] io_uring/splice: support do_splice_direct
+Message-ID: <Y2oIcpXINyU2MDL3@infradead.org>
+References: <20221103085004.1029763-1-ming.lei@redhat.com>
+ <20221103085004.1029763-2-ming.lei@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH v2 1/4] liburing: add api to set napi busy poll
- timeout
-Content-Language: en-US
-To:     Stefan Roesch <shr@devkernel.io>,
-        Facebook Kernel Team <kernel-team@fb.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Olivier Langlois <olivier@trillion01.com>,
-        netdev Mailing List <netdev@vger.kernel.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20221107175357.2733763-1-shr@devkernel.io>
- <20221107175357.2733763-2-shr@devkernel.io>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20221107175357.2733763-2-shr@devkernel.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103085004.1029763-2-ming.lei@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 11/8/22 12:53 AM, Stefan Roesch wrote:
-> diff --git a/src/liburing.map b/src/liburing.map
-> index 06c64f8..793766e 100644
-> --- a/src/liburing.map
-> +++ b/src/liburing.map
-> @@ -60,6 +60,8 @@ LIBURING_2.3 {
->   	global:
->   		io_uring_register_sync_cancel;
->   		io_uring_register_file_alloc_range;
-> +		io_uring_register_busy_poll_timeout;
-> +		io_uring_unregister_busy_poll_timeout;
->   		io_uring_enter;
->   		io_uring_enter2;
->   		io_uring_setup;
-> @@ -67,3 +69,9 @@ LIBURING_2.3 {
->   		io_uring_get_events;
->   		io_uring_submit_and_get_events;
->   } LIBURING_2.2;
+On Thu, Nov 03, 2022 at 04:50:01PM +0800, Ming Lei wrote:
+> do_splice_direct() has at least two advantages:
+> 
+> 1) the extra pipe isn't required from user viewpoint, so userspace
+> code can be simplified, meantime easy to relax current pipe
+> limit since curret->splice_pipe is used for direct splice
+> 
+> 2) in some situation, it isn't good to expose file data via
+> ->splice_read() to userspace, such as the coming ublk driver's
+> zero copy support, request pages will be spliced to pipe for
+> supporting zero copy, and if it is READ, userspace may read
+> data of kernel pages, and direct splice can avoid this kind
+> of info leaks
 
-I don't understand this part. You add:
-
-     io_uring_register_busy_poll_timeout
-     io_uring_unregister_busy_poll_timeout
-
-in the LIBURING_2.3 section.
-
-What are they? I don't find their declaration and definition.
-
-How do they differ from:
-
-     io_uring_napi_register_busy_poll_timeout
-     io_uring_napi_unregister_busy_poll_timeout
-
-that you add in the LIBURING_2.4 section?
-
--- 
-Ammar Faizi
-
+Please make this a separate opcode instead of overloading the splice
+op with a flag that causes very different behavior and isn't supported
+for the regular splice syscall.
