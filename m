@@ -2,104 +2,63 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16BECC4332F
-	for <io-uring@archiver.kernel.org>; Tue,  8 Nov 2022 05:05:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C72DC4332F
+	for <io-uring@archiver.kernel.org>; Tue,  8 Nov 2022 06:54:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiKHFFt convert rfc822-to-8bit (ORCPT
-        <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Nov 2022 00:05:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39056 "EHLO
+        id S233352AbiKHGyM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Nov 2022 01:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233173AbiKHFFn (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Nov 2022 00:05:43 -0500
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5DA14D3C
-        for <io-uring@vger.kernel.org>; Mon,  7 Nov 2022 21:05:40 -0800 (PST)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A7LKnx3022573
-        for <io-uring@vger.kernel.org>; Mon, 7 Nov 2022 21:05:39 -0800
-Received: from maileast.thefacebook.com ([163.114.130.8])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kq6kk4yf4-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 07 Nov 2022 21:05:39 -0800
-Received: from twshared2001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 7 Nov 2022 21:05:37 -0800
-Received: by devvm2494.atn0.facebook.com (Postfix, from userid 172786)
-        id 1B69E23B26019; Mon,  7 Nov 2022 21:05:22 -0800 (PST)
-From:   Jonathan Lemon <jonathan.lemon@gmail.com>
-To:     <io-uring@vger.kernel.org>
-CC:     <kernel-team@meta.com>
-Subject: [PATCH v1 09/15] skbuff: Introduce SKBFL_FIXED_FRAG and skb_fixed()
-Date:   Mon, 7 Nov 2022 21:05:15 -0800
-Message-ID: <20221108050521.3198458-10-jonathan.lemon@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221108050521.3198458-1-jonathan.lemon@gmail.com>
-References: <20221108050521.3198458-1-jonathan.lemon@gmail.com>
+        with ESMTP id S229478AbiKHGyM (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Nov 2022 01:54:12 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ACD31F639;
+        Mon,  7 Nov 2022 22:54:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VOakFTCaKuLEv2D82OsubD8D3LPFiH3ckd5BU32nB6c=; b=zQYXaJOW6FGyL9jF7Lhii2muZj
+        TeEqbO6rv/5PGxbx49t18GEjv3piBdOQDek931YO+oLwtD6q1Z1G9+8cRntrKgteUYTJXjsdqTlaX
+        9SIaWNE+Ugr0mmvcWtfDPTLTht/oyqbbX3mCY66ozEPg5D4mHJXh3iCLobh00HFEOeWABjbr1GhCW
+        18teDAk+mv+XHHjawk1EDAILFyW2G/tW5b3AFDBYhbB+f4Wq/C6HBBkfXblTJUWyx9DwrZVqYqS5N
+        po7N+aR3GbeUswvMsPzfSFd6vOi2C9XuddOhN/GqbueiyoVGNkrukfXq1Spx1SdLNftCYtDhJH0Qu
+        moljlSFg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1osIUo-003IJZ-Bs; Tue, 08 Nov 2022 06:54:06 +0000
+Date:   Mon, 7 Nov 2022 22:54:06 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Keith Busch <kbusch@meta.com>
+Cc:     viro@zeniv.linux.org.uk, axboe@kernel.dk, io-uring@vger.kernel.org,
+        asml.silence@gmail.com, linux-fsdevel@vger.kernel.org,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH 0/4] io_uring: use ITER_UBUF
+Message-ID: <Y2n9DteukhGuvdGe@infradead.org>
+References: <20221107175610.349807-1-kbusch@meta.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: UvF-xj7GgEVAyCYNJT8Q5MFOjcsmjPxi
-X-Proofpoint-GUID: UvF-xj7GgEVAyCYNJT8Q5MFOjcsmjPxi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-07_11,2022-11-07_02,2022-06-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107175610.349807-1-kbusch@meta.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-When a skb marked as zerocopy goes up the network stack, during
-RX, it calls skb_orphan_frags_rx.  This is designed to catch TX
-zerocopy data being redirected back up the stack, not new zerocopy
-fragments coming up from the driver.
+On Mon, Nov 07, 2022 at 09:56:06AM -0800, Keith Busch wrote:
+>   1. io_uring will always prefer using the _iter versions of read/write
+>      callbacks if file_operations implement both, where as the generic
+>      syscalls will use .read/.write (if implemented) for non-vectored IO.
 
-Currently, since the skb is marked as zerocopy, skb_copy_ubufs()
-is called, defeating the point of zerocopy-RX.
+There are very few file operations that have both, and for those
+the difference matters, e.g. the strange vectors semantics for the
+sound code.  I would strongly suggest to mirror what the normal
+read/write path does here.
 
-Have the driver mark the fragments as fixed, so they are not copied.
+>   2. io_uring will use the ITER_UBUF representation for single vector
+>      readv/writev, but the generic syscalls currently uses ITER_IOVEC for
+>      these.
 
-Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
----
- include/linux/skbuff.h | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 59c9fd55699d..5d57e2c37529 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -516,6 +516,9 @@ enum {
- 	 * use frags only up until ubuf_info is released
- 	 */
- 	SKBFL_MANAGED_FRAG_REFS = BIT(4),
-+
-+	/* don't move or copy the fragment */
-+	SKBFL_FIXED_FRAG = BIT(5),
- };
- 
- #define SKBFL_ZEROCOPY_FRAG	(SKBFL_ZEROCOPY_ENABLE | SKBFL_SHARED_FRAG)
-@@ -1653,6 +1656,11 @@ static inline bool skb_zcopy_managed(const struct sk_buff *skb)
- 	return skb_shinfo(skb)->flags & SKBFL_MANAGED_FRAG_REFS;
- }
- 
-+static inline bool skb_fixed(const struct sk_buff *skb)
-+{
-+	return skb_shinfo(skb)->flags & SKBFL_FIXED_FRAG;
-+}
-+
- static inline bool skb_pure_zcopy_same(const struct sk_buff *skb1,
- 				       const struct sk_buff *skb2)
- {
-@@ -3089,7 +3097,7 @@ static inline int skb_orphan_frags(struct sk_buff *skb, gfp_t gfp_mask)
- /* Frags must be orphaned, even if refcounted, if skb might loop to rx path */
- static inline int skb_orphan_frags_rx(struct sk_buff *skb, gfp_t gfp_mask)
- {
--	if (likely(!skb_zcopy(skb)))
-+	if (likely(!skb_zcopy(skb) || skb_fixed(skb)))
- 		return 0;
- 	return skb_copy_ubufs(skb, gfp_mask);
- }
--- 
-2.30.2
-
+Same here.  It might be woth to use ITER_UBUF for single vector
+readv/writev, but this should be the same for all interfaces.  I'd
+suggest to drop this for now and do a separate series with careful
+review from Al for this.
