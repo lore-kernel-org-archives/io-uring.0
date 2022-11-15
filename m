@@ -2,182 +2,103 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1B4CC433FE
-	for <io-uring@archiver.kernel.org>; Tue, 15 Nov 2022 07:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8DCAC43219
+	for <io-uring@archiver.kernel.org>; Tue, 15 Nov 2022 07:09:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbiKOHJz (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 15 Nov 2022 02:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37870 "EHLO
+        id S232617AbiKOHJ4 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 15 Nov 2022 02:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232601AbiKOHJw (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 15 Nov 2022 02:09:52 -0500
+        with ESMTP id S231602AbiKOHJx (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 15 Nov 2022 02:09:53 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522E41FFA2
-        for <io-uring@vger.kernel.org>; Mon, 14 Nov 2022 23:09:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535951FFAD
+        for <io-uring@vger.kernel.org>; Mon, 14 Nov 2022 23:09:45 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id 24A3D15F1109; Mon, 14 Nov 2022 23:09:35 -0800 (PST)
+        id 1C8B815F1105; Mon, 14 Nov 2022 23:09:35 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     kernel-team@fb.com
 Cc:     shr@devkernel.io, axboe@kernel.dk, olivier@trillion01.com,
         netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
         ammarfaizi2@gnuweeb.org
-Subject: [RFC PATCH v3 2/4] liburing: add documentation for new napi busy polling
-Date:   Mon, 14 Nov 2022 23:09:31 -0800
-Message-Id: <20221115070933.1792142-3-shr@devkernel.io>
+Subject: [RFC PATCH v3 0/4] liburing: add api for napi busy poll timeout 
+Date:   Mon, 14 Nov 2022 23:09:29 -0800
+Message-Id: <20221115070933.1792142-1-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221115070933.1792142-1-shr@devkernel.io>
-References: <20221115070933.1792142-1-shr@devkernel.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds two man pages for the two new functions:
-- io_uring_register_napi_busy_poll_timeout
-- io_uring_unregister_napi_busy_poll_timeout
+This adds three new api's to set/clear the napi busy poll timeout and to =
+set
+the napi prefer busy poll setting. The three new functions are called:
+- io_uring_napi_register_busy_poll_timeout,
+- io_uring_napi_unregister_busy_poll_timeout,
+- io_uring_register_napi_prefer_busy_poll.
+
+The patch series also contains the documentation for the three new functi=
+ons
+and two example programs. The client program is called napi-busy-poll-cli=
+ent
+and the server program napi-busy-poll-server. The client measures the
+roundtrip times of requests.
+
+There is also a kernel patch "io-uring: support napi busy poll" to enable
+this feature on the kernel side.
+
+Changes:
+- V3:
+  - Updated liburing.map file
+  - Moved example programs from the test directory to the example directo=
+ry.
+    The two example programs don't fit well in the test category and need=
+ to
+    be run from separate hosts.
+  - Added the io_uring_register_napi_prefer_busy_poll API.
+  - Added the call to io_uring_register_napi_prefer_busy_poll to the exam=
+ple
+    programs
+  - Updated the documentation
+- V2:
+  - Updated the liburing.map file for the two new functions.
+    (added a 2.4 section)
+  - Added a description of the new feature to the changelog file
+  - Fixed the indentation of the longopts structure
+  - Used defined exit constants
+  - Fixed encodeUserData to support 32 bit builds
+
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
----
- ...io_uring_register_napi_busy_poll_timeout.3 | 35 +++++++++++++++++++
- man/io_uring_register_napi_prefer_busy_poll.3 | 35 +++++++++++++++++++
- ..._uring_unregister_napi_busy_poll_timeout.3 | 26 ++++++++++++++
- 3 files changed, 96 insertions(+)
+
+Stefan Roesch (4):
+  liburing: add api to set napi busy poll settings
+  liburing: add documentation for new napi busy polling
+  liburing: add test programs for napi busy poll
+  liburing: update changelog with new feature
+
+ .gitignore                                    |   2 +
+ CHANGELOG                                     |   3 +
+ examples/Makefile                             |   2 +
+ examples/napi-busy-poll-client.c              | 432 ++++++++++++++++++
+ examples/napi-busy-poll-server.c              | 380 +++++++++++++++
+ ...io_uring_register_napi_busy_poll_timeout.3 |  35 ++
+ man/io_uring_register_napi_prefer_busy_poll.3 |  35 ++
+ ..._uring_unregister_napi_busy_poll_timeout.3 |  26 ++
+ src/include/liburing.h                        |   6 +
+ src/include/liburing/io_uring.h               |   4 +
+ src/liburing.map                              |   7 +
+ src/register.c                                |  23 +
+ 12 files changed, 955 insertions(+)
+ create mode 100644 examples/napi-busy-poll-client.c
+ create mode 100644 examples/napi-busy-poll-server.c
  create mode 100644 man/io_uring_register_napi_busy_poll_timeout.3
  create mode 100644 man/io_uring_register_napi_prefer_busy_poll.3
  create mode 100644 man/io_uring_unregister_napi_busy_poll_timeout.3
 
-diff --git a/man/io_uring_register_napi_busy_poll_timeout.3 b/man/io_urin=
-g_register_napi_busy_poll_timeout.3
-new file mode 100644
-index 0000000..3acce60
---- /dev/null
-+++ b/man/io_uring_register_napi_busy_poll_timeout.3
-@@ -0,0 +1,35 @@
-+.\" Copyright (C) 2022 Stefan Roesch <shr@devkernel.io>
-+.\"
-+.\" SPDX-License-Identifier: LGPL-2.0-or-later
-+.\"
-+.TH io_uring_register_napi_busy_poll_timeout 3 "November 10, 2022" "libu=
-ring-2.4" "liburing Manual"
-+.SH NAME
-+io_uring_register_napi_busy_poll_timeout \- register NAPI busy poll time=
-out
-+.SH SYNOPSIS
-+.nf
-+.B #include <liburing.h>
-+.PP
-+.BI "int io_uring_register_napi_busy_poll_timeout(struct io_uring *" rin=
-g ","
-+.BI "                                             unsigned int " timeout=
-)
-+.PP
-+.fi
-+.SH DESCRIPTION
-+.PP
-+The
-+.BR io_uring_register_napi_busy_poll_timeout (3)
-+function registers the NAPI busy poll
-+.I timeout
-+for subsequent operations.
-+
-+Registering a NAPI busy poll timeout is a requirement to be able to use
-+NAPI busy polling. The other way to enable NAPI busy polling is to set t=
-he
-+proc setting /proc/sys/net/core/busy_poll.
-+
-+NAPI busy poll can reduce the network roundtrip time.
-+
-+
-+.SH RETURN VALUE
-+On success
-+.BR io_uring_register_napi_busy_poll_timeout (3)
-+return 0. On failure they return
-+.BR -errno .
-diff --git a/man/io_uring_register_napi_prefer_busy_poll.3 b/man/io_uring=
-_register_napi_prefer_busy_poll.3
-new file mode 100644
-index 0000000..713840e
---- /dev/null
-+++ b/man/io_uring_register_napi_prefer_busy_poll.3
-@@ -0,0 +1,35 @@
-+.\" Copyright (C) 2022 Stefan Roesch <shr@devkernel.io>
-+.\"
-+.\" SPDX-License-Identifier: LGPL-2.0-or-later
-+.\"
-+.TH io_uring_register_napi_prefer_busy_poll 3 "November 11, 2022" "libur=
-ing-2.4" "liburing Manual"
-+.SH NAME
-+io_uring_register_napi_prefer_busy_poll \- register NAPI prefer busy pol=
-l setting
-+.SH SYNOPSIS
-+.nf
-+.B #include <liburing.h>
-+.PP
-+.BI "int io_uring_register_napi_prefer_busy_poll(struct io_uring *" ring=
- ","
-+.BI "                                            bool " prefer_busy_poll=
-)
-+.PP
-+.fi
-+.SH DESCRIPTION
-+.PP
-+The
-+.BR io_uring_register_napi_prefer_busy_poll (3)
-+function registers the NAPI
-+.I prefer_busy_poll
-+for subsequent operations.
-+
-+Registering a NAPI prefer busy poll seeting sets the mode when calling t=
-he
-+function napi_busy_loop and corresponds to the SO_PREFER_BUSY_POLL socke=
-t
-+option.
-+
-+NAPI prefer busy poll can help in reducng the network roundtrip time.
-+
-+
-+.SH RETURN VALUE
-+On success
-+.BR io_uring_register_napi_prefer_busy_poll (3)
-+return 0. On failure they return
-+.BR -errno .
-diff --git a/man/io_uring_unregister_napi_busy_poll_timeout.3 b/man/io_ur=
-ing_unregister_napi_busy_poll_timeout.3
-new file mode 100644
-index 0000000..666e006
---- /dev/null
-+++ b/man/io_uring_unregister_napi_busy_poll_timeout.3
-@@ -0,0 +1,26 @@
-+.\" Copyright (C) 2022 Stefan Roesch <shr@devkernel.io>
-+.\"
-+.\" SPDX-License-Identifier: LGPL-2.0-or-later
-+.\"
-+.TH io_uring_unregister_napi_busy_poll_timeout 3 "November 10, 2022" "li=
-buring-2.4" "liburing Manual"
-+.SH NAME
-+io_uring_unregister_napi_busy_poll_timeout \- unregister NAPI busy poll =
-timeout
-+.SH SYNOPSIS
-+.nf
-+.B #include <liburing.h>
-+.PP
-+.BI "int io_uring_unregister_napi_busy_poll_timeout(struct io_uring *" r=
-ing ")
-+.PP
-+.fi
-+.SH DESCRIPTION
-+.PP
-+The
-+.BR io_uring_unregister_napi_busy_poll_timeout (3)
-+function unregisters the NAPI busy poll
-+for subsequent operations.
-+
-+.SH RETURN VALUE
-+On success
-+.BR io_uring_unregister_napi_busy_poll_timeout (3)
-+return 0. On failure they return
-+.BR -errno .
+
+base-commit: 8fc22e3b3348c0a6384ec926e0b19b6707622e58
 --=20
 2.30.2
 
