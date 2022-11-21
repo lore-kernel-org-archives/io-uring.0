@@ -2,58 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC50EC433FE
-	for <io-uring@archiver.kernel.org>; Mon, 21 Nov 2022 10:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E56E2C433FE
+	for <io-uring@archiver.kernel.org>; Mon, 21 Nov 2022 10:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbiKUKNQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 21 Nov 2022 05:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
+        id S229599AbiKUKaM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 21 Nov 2022 05:30:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231252AbiKUKNH (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Nov 2022 05:13:07 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B7D12D1D
-        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:13:06 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AKJpiPE021694
-        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:13:06 -0800
+        with ESMTP id S229779AbiKUKaL (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Nov 2022 05:30:11 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52494B0439
+        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:30:10 -0800 (PST)
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2AKMcOjg009034
+        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:30:09 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=lFA7gxh8JLEUjTCsdy5/lYT3GGleQZs5DE6/1DvT8dc=;
- b=AdZSetHqyy3HFihGOhMsElpztQDPD6JQAGuT8YzCzA3M8LZznvA2oVY++j4965YBRKph
- FkiqGKyzWrvhpoN6Qkjb4/5876i2EMDah9T5URBd9UZfvmshwuccm0eEXoOOtuHiVaIN
- N7Osf+5k3lTs1QaW6L5y8P0G+VqsZZrjCECt/XptutveyKXc1MBvyTccGc/5C31VMWID
- MgyDrB4y+hBAOxP4p+bukKqHTa9phXekw/EJMQcTDk3BUINGaZVEBWVoLftGQX3QjGST
- V/hfEPRYH+qShwgvNKu6L7J6nEwphlwAagDrAyDCCJ4KYXtC4VrDWtXRJnIN9D5Um5c5 hA== 
-Received: from maileast.thefacebook.com ([163.114.130.3])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kxw4xuh2k-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=5sUvSezzyVnUch2+Aj1tHqEtCms1S8nBX2WWVDfbM50=;
+ b=Bkks/xSrwGeJbHNOs6lqXcDDDpFBRsTHyf/YMkusRlakm4+kK3Xlhc/FjFUdGCOWoRUn
+ pu/Iupnyslerxaun1TZuYQcPfGYFsWx3RsCD40VM4UaHJBNGRhlspYlgA+v5avwpGiz7
+ swY7kznryjqC6xfjlZGezQgaMKs9GzAhpBHXv8RhGjWxAFGZczrYilofKbyT21OtE9o7
+ uIHeD6IyzjQpdmDdxoByyyapFX0HW1FroaW8WvlZZc6x4p9QaTAfuduHYZNBV3+2ISQh
+ z/EliYXpmSU2IrcnLPNlV6KsUZai4T5pO/7+tcMTDYqHMEphXj9qJl0iYQajdYDLdIuj Ew== 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net (PPS) with ESMTPS id 3kxuq0c45s-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:13:06 -0800
-Received: from twshared3131.02.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:30:09 -0800
+Received: from twshared2003.08.ash9.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 02:13:04 -0800
+ 15.1.2375.31; Mon, 21 Nov 2022 02:30:07 -0800
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 985829E66F82; Mon, 21 Nov 2022 02:03:56 -0800 (PST)
+        id A8EA19E66F86; Mon, 21 Nov 2022 02:03:56 -0800 (PST)
 From:   Dylan Yudaken <dylany@meta.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next 08/10] io_uring: allow defer completion for aux posted cqes
-Date:   Mon, 21 Nov 2022 02:03:51 -0800
-Message-ID: <20221121100353.371865-9-dylany@meta.com>
+Subject: [PATCH for-next 10/10] io_uring: allow multishot polled reqs to defer completion
+Date:   Mon, 21 Nov 2022 02:03:53 -0800
+Message-ID: <20221121100353.371865-11-dylany@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221121100353.371865-1-dylany@meta.com>
 References: <20221121100353.371865-1-dylany@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: ugKVrQB18DUmtejcS6IngGVnYkv3C0oP
-X-Proofpoint-ORIG-GUID: ugKVrQB18DUmtejcS6IngGVnYkv3C0oP
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: Rw5DwMxuApp38tK-6Y1b4wMIPKsjjnsU
+X-Proofpoint-GUID: Rw5DwMxuApp38tK-6Y1b4wMIPKsjjnsU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-21_06,2022-11-18_01,2022-06-22_01
@@ -61,134 +60,30 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Multishot ops cannot use the compl_reqs list as the request must stay in
-the poll list, but that means they need to run each completion without
-benefiting from batching.
-
-Here introduce batching infrastructure for only small (ie 16 byte)
-CQEs. This restriction is ok because there are no use cases posting 32
-byte CQEs.
-
-In the ring keep a batch of up to 16 posted results, and flush in the same
-way as compl_reqs.
-
-16 was chosen through experimentation on a microbenchmark ([1]), as well
-as trying not to increase the size of the ring too much. This increases
-the size to 1472 bytes from 1216.
-
-[1]: https://github.com/DylanZA/liburing/commit/9ac66b36bcf4477bfafeff1c5f1=
-07896b7ae31cf
-Run with $ make -j && ./benchmark/reg.b -s 1 -t 2000 -r 10
-Gives results:
-baseline	8309 k/s
-8		18807 k/s
-16		19338 k/s
-32		20134 k/s
+Until now there was no reason for multishot polled requests to defer
+completions as there was no functional difference. However now this will
+actually defer the completions, for a performance win.
 
 Signed-off-by: Dylan Yudaken <dylany@meta.com>
 ---
- include/linux/io_uring_types.h |  2 ++
- io_uring/io_uring.c            | 49 +++++++++++++++++++++++++++++++---
- 2 files changed, 48 insertions(+), 3 deletions(-)
+ io_uring/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index f5b687a787a3..accdfecee953 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -174,7 +174,9 @@ struct io_submit_state {
- 	bool			plug_started;
- 	bool			need_plug;
- 	unsigned short		submit_nr;
-+	unsigned int		cqes_count;
- 	struct blk_plug		plug;
-+	struct io_uring_cqe	cqes[16];
- };
-=20
- struct io_ev_fd {
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 715ded749110..c797f9a75dfe 100644
+index 5c240d01278a..2e12bddcfb2c 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -167,7 +167,8 @@ EXPORT_SYMBOL(io_uring_get_socket);
-=20
- static inline void io_submit_flush_completions(struct io_ring_ctx *ctx)
- {
--	if (!wq_list_empty(&ctx->submit_state.compl_reqs))
-+	if (!wq_list_empty(&ctx->submit_state.compl_reqs) ||
-+	    ctx->submit_state.cqes_count)
- 		__io_submit_flush_completions(ctx);
+@@ -1821,7 +1821,7 @@ int io_poll_issue(struct io_kiocb *req, bool *locke=
+d)
+ 	io_tw_lock(req->ctx, locked);
+ 	if (unlikely(req->task->flags & PF_EXITING))
+ 		return -EFAULT;
+-	return io_issue_sqe(req, IO_URING_F_NONBLOCK);
++	return io_issue_sqe(req, IO_URING_F_NONBLOCK | IO_URING_F_COMPLETE_DEFE=
+R);
  }
 =20
-@@ -807,6 +808,43 @@ bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user=
-_data, s32 res, u32 cflags
- 	return io_cqring_event_overflow(ctx, user_data, res, cflags, 0, 0);
- }
-=20
-+static bool __io_fill_cqe_small(struct io_ring_ctx *ctx,
-+				 struct io_uring_cqe *cqe)
-+{
-+	struct io_uring_cqe *cqe_out;
-+
-+	cqe_out =3D io_get_cqe(ctx);
-+	if (unlikely(!cqe_out)) {
-+		return io_cqring_event_overflow(ctx, cqe->user_data,
-+						cqe->res, cqe->flags,
-+						0, 0);
-+	}
-+
-+	trace_io_uring_complete(ctx, NULL, cqe->user_data,
-+				cqe->res, cqe->flags,
-+				0, 0);
-+
-+	memcpy(cqe_out, cqe, sizeof(*cqe_out));
-+
-+	if (ctx->flags & IORING_SETUP_CQE32) {
-+		WRITE_ONCE(cqe_out->big_cqe[0], 0);
-+		WRITE_ONCE(cqe_out->big_cqe[1], 0);
-+	}
-+	return true;
-+}
-+
-+static void __io_flush_post_cqes(struct io_ring_ctx *ctx)
-+	__must_hold(&ctx->uring_lock)
-+{
-+	struct io_submit_state *state =3D &ctx->submit_state;
-+	unsigned int i;
-+
-+	lockdep_assert_held(&ctx->uring_lock);
-+	for (i =3D 0; i < state->cqes_count; i++)
-+		__io_fill_cqe_small(ctx, state->cqes + i);
-+	state->cqes_count =3D 0;
-+}
-+
- bool io_post_aux_cqe(struct io_ring_ctx *ctx,
- 		     u64 user_data, s32 res, u32 cflags)
- {
-@@ -1352,6 +1390,9 @@ static void __io_submit_flush_completions(struct io_r=
-ing_ctx *ctx)
- 	struct io_submit_state *state =3D &ctx->submit_state;
-=20
- 	io_cq_lock(ctx);
-+	/* post must come first to preserve CQE ordering */
-+	if (state->cqes_count)
-+		__io_flush_post_cqes(ctx);
- 	wq_list_for_each(node, prev, &state->compl_reqs) {
- 		struct io_kiocb *req =3D container_of(node, struct io_kiocb,
- 					    comp_list);
-@@ -1361,8 +1402,10 @@ static void __io_submit_flush_completions(struct io_=
-ring_ctx *ctx)
- 	}
- 	__io_cq_unlock_post(ctx);
-=20
--	io_free_batch_list(ctx, state->compl_reqs.first);
--	INIT_WQ_LIST(&state->compl_reqs);
-+	if (!wq_list_empty(&ctx->submit_state.compl_reqs)) {
-+		io_free_batch_list(ctx, state->compl_reqs.first);
-+		INIT_WQ_LIST(&state->compl_reqs);
-+	}
- }
-=20
- /*
+ struct io_wq_work *io_wq_free_work(struct io_wq_work *work)
 --=20
 2.30.2
 
