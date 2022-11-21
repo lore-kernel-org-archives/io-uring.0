@@ -2,48 +2,48 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5936CC433FE
-	for <io-uring@archiver.kernel.org>; Mon, 21 Nov 2022 10:42:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28DA4C4321E
+	for <io-uring@archiver.kernel.org>; Mon, 21 Nov 2022 10:48:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiKUKmN (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 21 Nov 2022 05:42:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S229840AbiKUKso (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 21 Nov 2022 05:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiKUKmM (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Nov 2022 05:42:12 -0500
+        with ESMTP id S229893AbiKUKsO (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 21 Nov 2022 05:48:14 -0500
 Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37DEE0E6
-        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:42:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC072B842
+        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:48:13 -0800 (PST)
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AKNK3o6031066
-        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:42:10 -0800
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AKMvgXl009589
+        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:48:12 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=qSmCXqBquJPBd/4bCImrTAvqiQHok6YchcnHrDYQvYI=;
- b=LWIQr6TtLeoid+UH3bc6e6P+5EVRVv4FDHHB59ReXXCj9UuOUrFBmNSkDT5EK9ekMYNi
- kK3vIyXtC8gl+rIUJcMzerM6xbg65LSzopsh8i7CIeCuOQI56YNtuaMGyqWEe7l15FKW
- 8IQrDQzGWycC6DosYJqW2nOQpXLJ85QYCRK56bvQN7I4GjVDToCfiIXXUjgbtdznjjoF
- cfC0najcIXjUqfmmYUjeS0HYUL6sb2yWo2VwMt1pLaSvG7hnKsScGPkijwTjuZGcGBwg
- K0E+zPd4VQR2KPEEX4FHqg6no2S7p+XS5495pw/nan3nUxRha4eUSIO4C95tPqG9DAXX Mw== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kxwj43p6f-2
+ bh=N47RFG6rqxzhK9mIsH6lCWq+xQ4nDOqdeytRX15d14s=;
+ b=YkJ4KadjdI/OXHVp3VCZx8zW6X0QM4cLlDTzvaq/Nac17Po1WMxKCwcU4YtQDFNvEnRM
+ 0Km/nXUgZX4QFmzV2dhqj1ZiMuJs2oLhbE1N+/cydDXpBYYUjJzE4QUgEjp7O42WGiCH
+ CGjlL8SNn5rtNa/c1DV71Dnm3xIMsmlGQ3De4ysonyRQycUoHfx1f0YO1Tsq4c4/xHFC
+ RYn4FaZg3nO68olwHhNly6oym9JFm32XxKcCnNAxTkBadVDLL5dLMO3xbp3uBxn3FSQM
+ qvLdL50Qg7WJPylh8Hu9aFOMvOlIoLjxJ2+k98al0mXPk+ebC5aWdpbyNlXVc8XloOJ1 2g== 
+Received: from maileast.thefacebook.com ([163.114.130.8])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3kxwj43q7v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:42:09 -0800
-Received: from twshared9088.05.ash9.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Mon, 21 Nov 2022 02:48:12 -0800
+Received: from twshared9088.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 21 Nov 2022 02:42:08 -0800
+ 15.1.2375.31; Mon, 21 Nov 2022 02:48:11 -0800
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 1ACED9E66F6B; Mon, 21 Nov 2022 02:03:54 -0800 (PST)
+        id 301279E66F74; Mon, 21 Nov 2022 02:03:56 -0800 (PST)
 From:   Dylan Yudaken <dylany@meta.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next 02/10] io_uring: __io_req_complete should defer if available
-Date:   Mon, 21 Nov 2022 02:03:45 -0800
-Message-ID: <20221121100353.371865-3-dylany@meta.com>
+Subject: [PATCH for-next 05/10] io_uring: timeout should use io_req_task_complete
+Date:   Mon, 21 Nov 2022 02:03:48 -0800
+Message-ID: <20221121100353.371865-6-dylany@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221121100353.371865-1-dylany@meta.com>
 References: <20221121100353.371865-1-dylany@meta.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: m6jFbUheQYypzU8c2Ym-9MuCjoJEekSZ
-X-Proofpoint-ORIG-GUID: m6jFbUheQYypzU8c2Ym-9MuCjoJEekSZ
+X-Proofpoint-GUID: 7J6JfRFT6jhzcP7PV59UiD1Cri5hL8jl
+X-Proofpoint-ORIG-GUID: 7J6JfRFT6jhzcP7PV59UiD1Cri5hL8jl
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-21_06,2022-11-18_01,2022-06-22_01
@@ -60,30 +60,32 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-For consistency always defer completion if specified in the issue flags.
+Allow timeouts to defer completions if the ring is locked
 
 Signed-off-by: Dylan Yudaken <dylany@meta.com>
 ---
- io_uring/io_uring.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ io_uring/timeout.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index f15aca039db6..208afb944b0c 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -862,7 +862,10 @@ void io_req_complete_post(struct io_kiocb *req)
-=20
- inline void __io_req_complete(struct io_kiocb *req, unsigned issue_flags=
-)
- {
--	io_req_complete_post(req);
-+	if (issue_flags & IO_URING_F_COMPLETE_DEFER)
-+		io_req_complete_defer(req);
-+	else
-+		io_req_complete_post(req);
+diff --git a/io_uring/timeout.c b/io_uring/timeout.c
+index e8a8c2099480..26b61e62aa9a 100644
+--- a/io_uring/timeout.c
++++ b/io_uring/timeout.c
+@@ -282,12 +282,11 @@ static void io_req_task_link_timeout(struct io_kioc=
+b *req, bool *locked)
+ 			ret =3D io_try_cancel(req->task->io_uring, &cd, issue_flags);
+ 		}
+ 		io_req_set_res(req, ret ?: -ETIME, 0);
+-		io_req_complete_post(req);
+ 		io_put_req(prev);
+ 	} else {
+ 		io_req_set_res(req, -ETIME, 0);
+-		io_req_complete_post(req);
+ 	}
++	io_req_task_complete(req, locked);
  }
 =20
- void io_req_complete_failed(struct io_kiocb *req, s32 res)
+ static enum hrtimer_restart io_link_timeout_fn(struct hrtimer *timer)
 --=20
 2.30.2
 
