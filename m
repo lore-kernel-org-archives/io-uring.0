@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4B947C4708A
-	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0E16FC3A59F
+	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:35:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbiKWLfM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 23 Nov 2022 06:35:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
+        id S237343AbiKWLfO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 23 Nov 2022 06:35:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237290AbiKWLfG (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:35:06 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480C511DA29
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:35:05 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso2805451wmb.0
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:35:05 -0800 (PST)
+        with ESMTP id S237328AbiKWLfH (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:35:07 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA54511DA39
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:35:06 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id v1so28901794wrt.11
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:35:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ltvh2Gi7o+LSCX0EJRNMZ1KcgcZ4TbP6TUTFtEMBCLE=;
-        b=A6eoK7csYMx/DqzAwvDZaPBM5FYD2k2oeQYUxcc21bAWYITAOlQbB27u8XiEXxWXtR
-         OO8GSeBIBzSisvfozV9LEnxzbqKvS+aS/mGe5OTM1bn3Z6UrgjPiwJN6fIr3taLnMFEI
-         cG2sXC+Js5ILd3AK5sOHuLyUQv9ycENNl44l9otDiZCqLnl0cKimmmllb7cLsO2JnkHW
-         k3cRV3qokKi3KxvNCKLKyCy0mwD14+6vhw5/d9GZMvcJopPQ7vB2i4IZjcMerFaQOKgG
-         U+qcZLSY+JIsBYhAm4002kWaylkdsUzmOlR1sm1ySUMo9AVOhwkNzHjMYWXqrdIHgNUA
-         FQCg==
+        bh=Y2QNLJ4mI8t02sLnWQNBMUUxoLK3U5B8jMH3lwt4n7E=;
+        b=CEckmgPu6l+Jm0qGjxTpnktWEEcltPKgEoqQ+IOEcqbAnBg4EC/dWdrM/mo8KEzy5q
+         Wc2vDAPFEdICRQmNMANIQodgQQYcSLnwJC3h82iJiuu28UIAjTEEQTDR6AUaND44565X
+         2CcuPsBkZnhQttr5q1o6dbAS8VU7cqkfy3YgVV6ohI9JrAXrOeLTbZDxYq+CWYFZvMwT
+         lq1obhccybh15k8cDrY5RVtvzcpLEuCFYfT1R4edVnR6FSwn+jUHh+/1dFGOC3D2qfjW
+         eacqNpgUjXipGyXevdJeMVSJkCVj03xM4KzBT2/YV/B5KOZd/5ucxQujswBwOL3oJjt4
+         FCsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ltvh2Gi7o+LSCX0EJRNMZ1KcgcZ4TbP6TUTFtEMBCLE=;
-        b=N1I4WdJusSUMw/tbVnncwp2rYocjOu+v9UMIS1Ql7bi1xq3ZyyHf3uQDjPeHbVbciq
-         K0ztBoy/TaerbKanywWh5rpbxtwHKcfYGyLXm97q1NcZrYr7xEXlO8v5vkFrarhcfE8G
-         zMMCjnufMnrBYHtJaFA1XmGJaP5NHnkSHT8dUVKXiulP8Kt07mPEnHKkgJb8XWVMvOGx
-         SiMpfh5OI4MFyVOe3Sb+By1ahNT8B6pBUTR6e4za69X46AhL/hg7sOxMvZfh0zv9J0Ce
-         8gazwOGGe9zRI7j8GjO+o5m7jwPrlPURktXSRWEOOUD7C9l1ycUT1gQEWohjmNIBild7
-         Fleg==
-X-Gm-Message-State: ANoB5pnDqdXUIVZ/U2DhWbELugWMe9HYnZ8R592+eFbxucKj2xX+x6P+
-        MP8gm8JBgORtUIo4aHfsvzTHmeZr+qs=
-X-Google-Smtp-Source: AA0mqf7FOgOuwZqamGIC9oQo9LMbnP/Rr7Gg2UR/f8uHbn0fevP01VdJkzLw0/2mxCnCH3+eNHmXYQ==
-X-Received: by 2002:a05:600c:3514:b0:3cf:a985:7692 with SMTP id h20-20020a05600c351400b003cfa9857692mr13238933wmq.104.1669203303657;
-        Wed, 23 Nov 2022 03:35:03 -0800 (PST)
+        bh=Y2QNLJ4mI8t02sLnWQNBMUUxoLK3U5B8jMH3lwt4n7E=;
+        b=b3VTN/GrujeiDySVztlUFrninFlvVCf+709c9oNtYg6+9VAiLkXrvf2V8KuLTveyUv
+         0kgF8l7Cc3mh4MuC4KirR/6szxL4dBj8jxmOBEWfCtPzceMhm03CYZzwvJfmjpDUkAox
+         gXAf9z7+D/t6UicGsOvgBnlL1YRkoU5+3otzPbJKrU0CBnZrlifinBMs1Pe5LXxYCseJ
+         p3XGLubBMD/Y1uFbfB8Wi7Xht9Ubbj3geZlfIyfq75+0ua8VGXRel6fCxENRqB8pTFsJ
+         zWQbaRd49HPJXaUvW35xHk1myaf7+CPHLp3gZxLwXsaSfs5KHgZQa0HP3COluxYjLxVz
+         G6sQ==
+X-Gm-Message-State: ANoB5pmPUEjdBMYrsZLezMDH2+xqdFalIAKPWtYzHoJHnW8Om492FlpL
+        gYflH9AJ4t9A01u+gfnhKzuKHuE+4Nc=
+X-Google-Smtp-Source: AA0mqf53qiz+xgRHFGqvcAAChvpHXUktJOKvcCL8fbKt6N1CJ5Ecazwsfjt9iwGdOe0W9nSs7maR0w==
+X-Received: by 2002:adf:dc86:0:b0:236:754e:f8b4 with SMTP id r6-20020adfdc86000000b00236754ef8b4mr16801670wrj.478.1669203305213;
+        Wed, 23 Nov 2022 03:35:05 -0800 (PST)
 Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:e1b])
-        by smtp.gmail.com with ESMTPSA id g9-20020a05600c4ec900b003cfd58409desm2262064wmq.13.2022.11.23.03.35.02
+        by smtp.gmail.com with ESMTPSA id g9-20020a05600c4ec900b003cfd58409desm2262064wmq.13.2022.11.23.03.35.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Nov 2022 03:35:03 -0800 (PST)
+        Wed, 23 Nov 2022 03:35:04 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 3/7] io_uring: use io_req_task_complete() in timeout
-Date:   Wed, 23 Nov 2022 11:33:38 +0000
-Message-Id: <bda1710b58c07bf06107421c2a65c529ea9cdcac.1669203009.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 5/7] io_uring: inline __io_req_complete_put()
+Date:   Wed, 23 Nov 2022 11:33:40 +0000
+Message-Id: <1923a4dfe80fa877f859a22ed3df2d5fc8ecf02b.1669203009.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1669203009.git.asml.silence@gmail.com>
 References: <cover.1669203009.git.asml.silence@gmail.com>
@@ -64,30 +64,56 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Use a more generic io_req_task_complete() in timeout completion
-task_work instead of io_req_complete_post().
+Inline __io_req_complete_put() into io_req_complete_post(), there are no
+other users.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/timeout.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ io_uring/io_uring.c | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
-diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index e8a8c2099480..a819818df7b3 100644
---- a/io_uring/timeout.c
-+++ b/io_uring/timeout.c
-@@ -282,11 +282,11 @@ static void io_req_task_link_timeout(struct io_kiocb *req, bool *locked)
- 			ret = io_try_cancel(req->task->io_uring, &cd, issue_flags);
- 		}
- 		io_req_set_res(req, ret ?: -ETIME, 0);
--		io_req_complete_post(req);
-+		io_req_task_complete(req, locked);
- 		io_put_req(prev);
- 	} else {
- 		io_req_set_res(req, -ETIME, 0);
--		io_req_complete_post(req);
-+		io_req_task_complete(req, locked);
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 81e7e51816fb..bd9b286eb031 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -813,15 +813,19 @@ bool io_post_aux_cqe(struct io_ring_ctx *ctx,
+ 	return filled;
+ }
+ 
+-static void __io_req_complete_put(struct io_kiocb *req)
++void io_req_complete_post(struct io_kiocb *req)
+ {
++	struct io_ring_ctx *ctx = req->ctx;
++
++	io_cq_lock(ctx);
++	if (!(req->flags & REQ_F_CQE_SKIP))
++		__io_fill_cqe_req(ctx, req);
++
+ 	/*
+ 	 * If we're the last reference to this request, add to our locked
+ 	 * free_list cache.
+ 	 */
+ 	if (req_ref_put_and_test(req)) {
+-		struct io_ring_ctx *ctx = req->ctx;
+-
+ 		if (req->flags & IO_REQ_LINK_FLAGS) {
+ 			if (req->flags & IO_DISARM_MASK)
+ 				io_disarm_next(req);
+@@ -842,16 +846,6 @@ static void __io_req_complete_put(struct io_kiocb *req)
+ 		wq_list_add_head(&req->comp_list, &ctx->locked_free_list);
+ 		ctx->locked_free_nr++;
  	}
+-}
+-
+-void io_req_complete_post(struct io_kiocb *req)
+-{
+-	struct io_ring_ctx *ctx = req->ctx;
+-
+-	io_cq_lock(ctx);
+-	if (!(req->flags & REQ_F_CQE_SKIP))
+-		__io_fill_cqe_req(ctx, req);
+-	__io_req_complete_put(req);
+ 	io_cq_unlock_post(ctx);
  }
  
 -- 
