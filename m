@@ -2,58 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA1C0C4332F
-	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BC18C46467
+	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237674AbiKWLHq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 23 Nov 2022 06:07:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        id S237678AbiKWLHr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 23 Nov 2022 06:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237749AbiKWLHI (ORCPT
+        with ESMTP id S237748AbiKWLHI (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:07:08 -0500
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE03B7A
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6285F9F
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:55 -0800 (PST)
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2ANB5YK9007011
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANB4GCA001713
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:54 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=AdN0224fAZ77xd7LmyPfs1YCRBOz2SV+0/LexFe/noo=;
- b=SPEXEkeNZWZpriCIKj5FSneorTsbTodm8J4l1D5vJUQIBC83FHRvU0T2oCZv31jHAENk
- 2rInh9PDeWsYXpJkL1x6+8THUOsaVvEV75KVAnIw6Wx/+v0c+m5y5olHgf/IUKk9iZN2
- QMFAARUzGocQUohFWymoklvWjwiIGtWtN9HJ/kUSMTP3wjIlidEtw20x/qFmBgsTn3bS
- BCMqQ0j0J8dON+8tyE3P3opOsG3DdMDLjXN99aq9eamZMM2fdrXAV0UpFMZAv0AwaLhH
- oZRH/c7EUNaijbMNvri1D7nrbOWzHJQxZ5toUwlJtWfgIfUc33saadx17ajA6ijrKW9E 1w== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net (PPS) with ESMTPS id 3m1c7ra43e-2
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=bLNGZhlpyHKXbaemEZ2JEZ10+s6g9IYZV+VGqpv0h5Y=;
+ b=muB/CnN0rNhdfWlIvkMyM1Oam9JhaMK65D+2gksTJBeIib+KRelqvoytO1CViKEShR66
+ Zer+F6trRETd94J5ieUAhkVlqjDtlktqjMPVB2o0Ud/YnYcfE63x99vgM9LnV2cIeTv8
+ 3XAk6PBPp2GUYSxNEruJiFOuYpHfsm5iiVlP2lceceXGcosYV/C58F5s/giCCLzndrn8
+ OC3tyJ432bz9MWcdnvzcg8TZUqdZQALme3Gj/3wcELLn5OhJm0Q7RysNtr8ySF/5HOe6
+ JnL7LBWA4MBz/f62upIt3PyzM/wtZK4wHdLIZkvMch73IEQsoZAFUXb2D9Y5Bku8CJ/w AQ== 
+Received: from maileast.thefacebook.com ([163.114.130.3])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m0javkw9g-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:54 -0800
-Received: from twshared0705.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+Received: from twshared2003.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 03:06:53 -0800
+ 15.1.2375.31; Wed, 23 Nov 2022 03:06:52 -0800
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 8E91FA0804D6; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
+        id BF395A0804DB; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
 From:   Dylan Yudaken <dylany@meta.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next v2 08/13] io_uring: allow defer completion for aux posted cqes
-Date:   Wed, 23 Nov 2022 03:06:09 -0800
-Message-ID: <20221123110614.3297343-9-dylany@meta.com>
+Subject: [PATCH for-next v2 10/13] io_uring: make io_fill_cqe_aux static
+Date:   Wed, 23 Nov 2022 03:06:11 -0800
+Message-ID: <20221123110614.3297343-11-dylany@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221123110614.3297343-1-dylany@meta.com>
 References: <20221123110614.3297343-1-dylany@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 77YBq-kpC80KKXjCzYKsd0BC_bXuTTZh
-X-Proofpoint-ORIG-GUID: 77YBq-kpC80KKXjCzYKsd0BC_bXuTTZh
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: loFo_cCB6iNEiqg6-DHTgco1cwyeV9fh
+X-Proofpoint-GUID: loFo_cCB6iNEiqg6-DHTgco1cwyeV9fh
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-23_06,2022-11-23_01,2022-06-22_01
@@ -61,113 +60,49 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Multishot ops cannot use the compl_reqs list as the request must stay in
-the poll list, but that means they need to run each completion without
-benefiting from batching.
+This is only used in io_uring.c
 
-Here introduce batching infrastructure for only small (ie 16 byte)
-CQEs. This restriction is ok because there are no use cases posting 32
-byte CQEs.
-
-In the ring keep a batch of up to 16 posted results, and flush in the same
-way as compl_reqs.
-
-16 was chosen through experimentation on a microbenchmark ([1]), as well
-as trying not to increase the size of the ring too much. This increases
-the size to 1472 bytes from 1216.
-
-[1]: https://github.com/DylanZA/liburing/commit/9ac66b36bcf4477bfafeff1c5f1=
-07896b7ae31cf
-Run with $ make -j && ./benchmark/reg.b -s 1 -t 2000 -r 10
-Gives results:
-baseline	8309 k/s
-8		18807 k/s
-16		19338 k/s
-32		20134 k/s
-
-Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Dylan Yudaken <dylany@meta.com>
 ---
- include/linux/io_uring_types.h |  2 ++
- io_uring/io_uring.c            | 27 ++++++++++++++++++++++++---
- 2 files changed, 26 insertions(+), 3 deletions(-)
+ io_uring/io_uring.c | 4 ++--
+ io_uring/io_uring.h | 2 --
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index f5b687a787a3..accdfecee953 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -174,7 +174,9 @@ struct io_submit_state {
- 	bool			plug_started;
- 	bool			need_plug;
- 	unsigned short		submit_nr;
-+	unsigned int		cqes_count;
- 	struct blk_plug		plug;
-+	struct io_uring_cqe	cqes[16];
- };
-=20
- struct io_ev_fd {
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 43db84fe001d..39f80d68d31c 100644
+index 37b195d85f32..42c7383ead91 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -167,7 +167,8 @@ EXPORT_SYMBOL(io_uring_get_socket);
+@@ -770,8 +770,8 @@ struct io_uring_cqe *__io_get_cqe(struct io_ring_ctx =
+*ctx, bool overflow)
+ 	return &rings->cqes[off];
+ }
 =20
- static inline void io_submit_flush_completions(struct io_ring_ctx *ctx)
+-bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+2 cflags,
+-		     bool allow_overflow)
++static bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user_data, s32 =
+res, u32 cflags,
++			    bool allow_overflow)
  {
--	if (!wq_list_empty(&ctx->submit_state.compl_reqs))
-+	if (!wq_list_empty(&ctx->submit_state.compl_reqs) ||
-+	    ctx->submit_state.cqes_count)
- 		__io_submit_flush_completions(ctx);
- }
+ 	struct io_uring_cqe *cqe;
 =20
-@@ -802,6 +803,21 @@ bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user=
-_data, s32 res, u32 cflags
- 	return false;
- }
-=20
-+static void __io_flush_post_cqes(struct io_ring_ctx *ctx)
-+	__must_hold(&ctx->uring_lock)
-+{
-+	struct io_submit_state *state =3D &ctx->submit_state;
-+	unsigned int i;
-+
-+	lockdep_assert_held(&ctx->uring_lock);
-+	for (i =3D 0; i < state->cqes_count; i++) {
-+		struct io_uring_cqe *cqe =3D &state->cqes[i];
-+
-+		io_fill_cqe_aux(ctx, cqe->user_data, cqe->res, cqe->flags, true);
-+	}
-+	state->cqes_count =3D 0;
-+}
-+
- bool io_post_aux_cqe(struct io_ring_ctx *ctx,
- 		     u64 user_data, s32 res, u32 cflags,
- 		     bool allow_overflow)
-@@ -1348,6 +1364,9 @@ static void __io_submit_flush_completions(struct io_r=
-ing_ctx *ctx)
- 	struct io_submit_state *state =3D &ctx->submit_state;
-=20
- 	io_cq_lock(ctx);
-+	/* post must come first to preserve CQE ordering */
-+	if (state->cqes_count)
-+		__io_flush_post_cqes(ctx);
- 	wq_list_for_each(node, prev, &state->compl_reqs) {
- 		struct io_kiocb *req =3D container_of(node, struct io_kiocb,
- 					    comp_list);
-@@ -1357,8 +1376,10 @@ static void __io_submit_flush_completions(struct io_=
-ring_ctx *ctx)
- 	}
- 	io_cq_unlock_post(ctx);
-=20
--	io_free_batch_list(ctx, state->compl_reqs.first);
--	INIT_WQ_LIST(&state->compl_reqs);
-+	if (!wq_list_empty(&ctx->submit_state.compl_reqs)) {
-+		io_free_batch_list(ctx, state->compl_reqs.first);
-+		INIT_WQ_LIST(&state->compl_reqs);
-+	}
- }
-=20
- /*
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index e075c4fb70c9..4519d91008de 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -34,8 +34,6 @@ void io_req_defer_failed(struct io_kiocb *req, s32 res)=
+;
+ void __io_req_complete(struct io_kiocb *req, unsigned issue_flags);
+ bool io_post_aux_cqe(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+2 cflags,
+ 		     bool allow_overflow);
+-bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+2 cflags,
+-		     bool allow_overflow);
+ bool io_aux_cqe(struct io_ring_ctx *ctx, bool defer, u64 user_data, s32 =
+res, u32 cflags,
+ 		bool allow_overflow);
+ void __io_commit_cqring_flush(struct io_ring_ctx *ctx);
 --=20
 2.30.2
 
