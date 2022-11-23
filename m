@@ -2,48 +2,48 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BA5DC4332F
-	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3435EC43219
+	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237415AbiKWLHb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 23 Nov 2022 06:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S237420AbiKWLHd (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 23 Nov 2022 06:07:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237680AbiKWLG6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:06:58 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A802156EF3
+        with ESMTP id S237685AbiKWLHA (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:07:00 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561AEF597
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:42 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANB4PXp007756
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANB5AJa011730
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:42 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=xrpdzGsOSo95/SQ7TUl7Ka4Y4KT5Qjp35Cxs0HYJzks=;
- b=frfT+yJOmmO3XGeBCnr0KAZgGqnXtFZl9h2WYsNW8QAJZ52G8p5WfbWsieDFVq0x5hYR
- oixAm/VjIM0yEyZVb9XHZeu5qVIW5XFw3mig4nnklsfO3UAadgoZQhtUHxyeeyKcCjr1
- VH8uEOD4NDye+TWHKBnibfHeosoOeXBmvNblXebESlXjzTMtuNp1MLJrL4Fu2yWa7uUX
- 9S/w+Jf/EHtcZk3cLELTar6Sb+tivmakfu7xt9WxtWKyZ0Yt/8qYBPjMo9/YaucAPCuL
- A6dKkvy9Nakl9FNlFvsC9OJgeqeS+0f7ywo4pSqOjjrWUeuC5D/lar3ZIiu8myrC58lN uA== 
-Received: from maileast.thefacebook.com ([163.114.130.8])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m17esbjnq-1
+ bh=tT9SXXgL4qAiH0CLnlUBy9F9WnDDxv+tpt2rXyxWWtY=;
+ b=bCts4UVhLfCOUGOFD8dpZDNkS5PcedwkeCPTeiWXx5nQiWqopEtOg4Z7IkqVNOo5vP7Y
+ gtz6LqZad0/UdzamGgMD+cjsGGVNdDjn99L2oBRAY7G81PGO49/dXwWfI8t8xE53mKqt
+ xEsIcZQmv0ZSOw50dqPtcHkIqvMwtVc6d3dbToFmLmINV9TthuX+VvvNj02P3C+H6ux/
+ 1240xcwwlAwWNFeLHNkSk1JuVhU9zxTVkHqx1tR3xspeTvsusBPl/ZGXqpC94xKrl+oE
+ +4cBpcHqfWOFATVBTj/3WZOXgZO7z1h5Kes31wKQZfFgjHG+HbTY9sx3fbYZK/ydQx/5 9w== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m0m19unf1-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:42 -0800
 Received: from twshared0705.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Wed, 23 Nov 2022 03:06:40 -0800
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 81F2BA0804BA; Wed, 23 Nov 2022 03:06:26 -0800 (PST)
+        id 88050A0804D4; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
 From:   Dylan Yudaken <dylany@meta.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next v2 02/13] io_uring: __io_req_complete should defer if available
-Date:   Wed, 23 Nov 2022 03:06:03 -0800
-Message-ID: <20221123110614.3297343-3-dylany@meta.com>
+Subject: [PATCH for-next v2 07/13] io_uring: make io_req_complete_post static
+Date:   Wed, 23 Nov 2022 03:06:08 -0800
+Message-ID: <20221123110614.3297343-8-dylany@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221123110614.3297343-1-dylany@meta.com>
 References: <20221123110614.3297343-1-dylany@meta.com>
@@ -51,39 +51,53 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: ChHLSGDhSq5mK2ou5QAxPDtQjnXG1B4X
-X-Proofpoint-ORIG-GUID: ChHLSGDhSq5mK2ou5QAxPDtQjnXG1B4X
+X-Proofpoint-ORIG-GUID: oNDQgSNfRKOnL7-vGmRGpwhc3Ti0SVTt
+X-Proofpoint-GUID: oNDQgSNfRKOnL7-vGmRGpwhc3Ti0SVTt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-23_06,2022-11-23_01,2022-06-22_01
+ definitions=2022-11-23_05,2022-11-23_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-For consistency always defer completion if specified in the issue flags.
+This is only called from two functions in io_uring.c so remove the header
+export.
 
 Signed-off-by: Dylan Yudaken <dylany@meta.com>
 ---
- io_uring/io_uring.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ io_uring/io_uring.c | 2 +-
+ io_uring/io_uring.h | 1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index e40d7b3404eb..0741a728fb6a 100644
+index 912f6fefc665..43db84fe001d 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -858,7 +858,10 @@ void io_req_complete_post(struct io_kiocb *req)
-=20
- inline void __io_req_complete(struct io_kiocb *req, unsigned issue_flags=
-)
- {
--	io_req_complete_post(req);
-+	if (issue_flags & IO_URING_F_COMPLETE_DEFER)
-+		io_req_complete_defer(req);
-+	else
-+		io_req_complete_post(req);
+@@ -845,7 +845,7 @@ static void __io_req_complete_put(struct io_kiocb *re=
+q)
+ 	}
  }
 =20
- void io_req_complete_failed(struct io_kiocb *req, s32 res)
+-void io_req_complete_post(struct io_kiocb *req)
++static void io_req_complete_post(struct io_kiocb *req)
+ {
+ 	struct io_ring_ctx *ctx =3D req->ctx;
+=20
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index ffab0d2d33c0..3c3a93493239 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -32,7 +32,6 @@ int __io_run_local_work(struct io_ring_ctx *ctx, bool *=
+locked);
+ int io_run_local_work(struct io_ring_ctx *ctx);
+ void io_req_defer_failed(struct io_kiocb *req, s32 res);
+ void __io_req_complete(struct io_kiocb *req, unsigned issue_flags);
+-void io_req_complete_post(struct io_kiocb *req);
+ bool io_post_aux_cqe(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+2 cflags,
+ 		     bool allow_overflow);
+ bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+2 cflags,
 --=20
 2.30.2
 
