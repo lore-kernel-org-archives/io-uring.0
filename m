@@ -2,48 +2,48 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56D68C433FE
-	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15108C43219
+	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237642AbiKWLHo (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 23 Nov 2022 06:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S237669AbiKWLHp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 23 Nov 2022 06:07:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237744AbiKWLHI (ORCPT
+        with ESMTP id S237746AbiKWLHI (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:07:08 -0500
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A9A1B13
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D251B2DF6
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:54 -0800 (PST)
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2ANB59K9009094
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:53 -0800
+        by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 2ANB59KA009094
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:54 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=Z/qs6/5RRxSeziWegAEgCbtVCatuTGgy+6L8E6H9i1Y=;
- b=eQIvvN2JNVVW1soG4pqRjwxJ/9gvicN46oRtRiU/IMaR60dZHfgjOrtMxjYiok1kwcWy
- IwdIKu/u540Pr8A3Mbogd75graQQJhYNMHpOCTkWpGdYFBAQZK29K4/2krNzH5gcA1Bj
- 5b5q3AQy/h/pCww6qt+PuazrR5t2jPXxCwz8/I3FKDRt9UrrjtQUwoq5qA/rDiFUpRfp
- haQOE6uqbzRmyNK/XEwCTuqGKn6RfM3nCA2ni2D/R9ZG2hC1Dwh7VsFYhuCqdIeyWjhl
- WPDvBa/rieaAaNARTB0yH824lhUy0GrHmmO4DWK0qvwHo2hAhGqV2sTjust/V4qvCIBm 4A== 
+ bh=mCk5YgmYT77ygWxC1yw8ZOTOMT0u0chAtLdcatMD1o0=;
+ b=g6UOGEasdbhDygdAxZyVbIabF+JKQyFcmXD6FOX/FoMg5RRI4fdT7SA6y9QEYZiwfSNt
+ 6ybJz64PBr2S7BASdCbjSAWmB7Ti3uNaERdT4h6kFzaJPEhbj+XzoohfIlsFjbaSP58Q
+ F2hD3gC5ibK1VeYq5azEcqzfg22XXLJVk12DJ2cA47PEQU6z01D19Z4p4As7/4oer2mP
+ svZJMfKuY0VlrS15Fh4as454uYCdQhq4kPpEZvtemvi1A42Ap+UnisU+DCgDaXrytA+r
+ gmyano7g0oWRfKH2wFBx82zTtDUM1ofxTtcNGC+6qOJTEKDueWeWZ+Qw2gvBu8GKDA9g sQ== 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net (PPS) with ESMTPS id 3m0kkdut8r-2
+        by m0001303.ppops.net (PPS) with ESMTPS id 3m0kkdut8r-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:53 -0800
-Received: from twshared2003.08.ash9.facebook.com (2620:10d:c0a8:1b::d) by
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:54 -0800
+Received: from twshared0705.02.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 03:06:52 -0800
+ 15.1.2375.31; Wed, 23 Nov 2022 03:06:53 -0800
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id A93C3A0804D9; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
+        id 15EC2A0804DF; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
 From:   Dylan Yudaken <dylany@meta.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next v2 09/13] io_uring: add io_aux_cqe which allows deferred completion
-Date:   Wed, 23 Nov 2022 03:06:10 -0800
-Message-ID: <20221123110614.3297343-10-dylany@meta.com>
+Subject: [PATCH for-next v2 12/13] io_uring: remove overflow param from io_post_aux_cqe
+Date:   Wed, 23 Nov 2022 03:06:13 -0800
+Message-ID: <20221123110614.3297343-13-dylany@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221123110614.3297343-1-dylany@meta.com>
 References: <20221123110614.3297343-1-dylany@meta.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 7g3ZnYyspYyvOIjw2yis4l5CDBysdkhi
-X-Proofpoint-GUID: 7g3ZnYyspYyvOIjw2yis4l5CDBysdkhi
+X-Proofpoint-ORIG-GUID: OIWLvfWLm3mGira4uL-JAKKXBn-cw0E-
+X-Proofpoint-GUID: OIWLvfWLm3mGira4uL-JAKKXBn-cw0E-
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-23_06,2022-11-23_01,2022-06-22_01
@@ -60,137 +60,120 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Use the just introduced deferred post cqe completion state when possible
-in io_aux_cqe. If not possible fallback to io_post_aux_cqe.
+The only call sites which would not allow overflow are also call sites
+which would use the io_aux_cqe as they care about ordering.
 
-This introduces a complication because of allow_overflow. For deferred
-completions we cannot know without locking the completion_lock if it will
-overflow (and even if we locked it, another post could sneak in and cause
-this cqe to be in overflow).
-However since overflow protection is mostly a best effort defence in dept=
-h
-to prevent infinite loops of CQEs for poll, just checking the overflow bi=
-t
-is going to be good enough and will result in at most 16 (array size of
-deferred cqes) overflows.
+So remove this parameter from io_post_aux_cqe.
 
-Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Dylan Yudaken <dylany@meta.com>
 ---
- io_uring/io_uring.c | 34 ++++++++++++++++++++++++++++++++++
- io_uring/io_uring.h |  2 ++
- io_uring/net.c      |  7 ++++---
- io_uring/poll.c     |  4 ++--
- 4 files changed, 42 insertions(+), 5 deletions(-)
+ io_uring/io_uring.c | 12 ++++++++----
+ io_uring/io_uring.h |  3 +--
+ io_uring/msg_ring.c |  4 ++--
+ io_uring/rsrc.c     |  4 ++--
+ 4 files changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 39f80d68d31c..37b195d85f32 100644
+index 6e1139a11fbf..87ea497590b5 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -830,6 +830,40 @@ bool io_post_aux_cqe(struct io_ring_ctx *ctx,
+@@ -820,9 +820,8 @@ static void __io_flush_post_cqes(struct io_ring_ctx *=
+ctx)
+ 	state->cqes_count =3D 0;
+ }
+=20
+-bool io_post_aux_cqe(struct io_ring_ctx *ctx,
+-		     u64 user_data, s32 res, u32 cflags,
+-		     bool allow_overflow)
++static bool __io_post_aux_cqe(struct io_ring_ctx *ctx, u64 user_data, s3=
+2 res, u32 cflags,
++			      bool allow_overflow)
+ {
+ 	bool filled;
+=20
+@@ -832,6 +831,11 @@ bool io_post_aux_cqe(struct io_ring_ctx *ctx,
  	return filled;
  }
 =20
-+bool io_aux_cqe(struct io_ring_ctx *ctx, bool defer, u64 user_data, s32 =
-res, u32 cflags,
-+		bool allow_overflow)
++bool io_post_aux_cqe(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+2 cflags)
 +{
-+	struct io_uring_cqe *cqe;
-+	unsigned int length;
-+
-+	if (!defer)
-+		return io_post_aux_cqe(ctx, user_data, res, cflags, allow_overflow);
-+
-+	length =3D ARRAY_SIZE(ctx->submit_state.cqes);
-+
-+	lockdep_assert_held(&ctx->uring_lock);
-+
-+	if (ctx->submit_state.cqes_count =3D=3D length) {
-+		io_cq_lock(ctx);
-+		__io_flush_post_cqes(ctx);
-+		/* no need to flush - flush is deferred */
-+		spin_unlock(&ctx->completion_lock);
-+	}
-+
-+	/* For defered completions this is not as strict as it is otherwise,
-+	 * however it's main job is to prevent unbounded posted completions,
-+	 * and in that it works just as well.
-+	 */
-+	if (!allow_overflow && test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_c=
-q))
-+		return false;
-+
-+	cqe  =3D ctx->submit_state.cqes + ctx->submit_state.cqes_count++;
-+	cqe->user_data =3D user_data;
-+	cqe->res =3D res;
-+	cqe->flags =3D cflags;
-+	return true;
++	return __io_post_aux_cqe(ctx, user_data, res, cflags, true);
 +}
 +
- static void __io_req_complete_put(struct io_kiocb *req)
+ bool io_aux_cqe(struct io_ring_ctx *ctx, bool defer, u64 user_data, s32 =
+res, u32 cflags,
+ 		bool allow_overflow)
  {
- 	/*
+@@ -839,7 +843,7 @@ bool io_aux_cqe(struct io_ring_ctx *ctx, bool defer, =
+u64 user_data, s32 res, u32
+ 	unsigned int length;
+=20
+ 	if (!defer)
+-		return io_post_aux_cqe(ctx, user_data, res, cflags, allow_overflow);
++		return __io_post_aux_cqe(ctx, user_data, res, cflags, allow_overflow);
+=20
+ 	length =3D ARRAY_SIZE(ctx->submit_state.cqes);
+=20
 diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 3c3a93493239..e075c4fb70c9 100644
+index 4519d91008de..d61dd9c5030a 100644
 --- a/io_uring/io_uring.h
 +++ b/io_uring/io_uring.h
-@@ -36,6 +36,8 @@ bool io_post_aux_cqe(struct io_ring_ctx *ctx, u64 user_=
-data, s32 res, u32 cflags
- 		     bool allow_overflow);
- bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+@@ -32,8 +32,7 @@ int __io_run_local_work(struct io_ring_ctx *ctx, bool *=
+locked);
+ int io_run_local_work(struct io_ring_ctx *ctx);
+ void io_req_defer_failed(struct io_kiocb *req, s32 res);
+ void __io_req_complete(struct io_kiocb *req, unsigned issue_flags);
+-bool io_post_aux_cqe(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
 2 cflags,
- 		     bool allow_overflow);
-+bool io_aux_cqe(struct io_ring_ctx *ctx, bool defer, u64 user_data, s32 =
+-		     bool allow_overflow);
++bool io_post_aux_cqe(struct io_ring_ctx *ctx, u64 user_data, s32 res, u3=
+2 cflags);
+ bool io_aux_cqe(struct io_ring_ctx *ctx, bool defer, u64 user_data, s32 =
 res, u32 cflags,
-+		bool allow_overflow);
+ 		bool allow_overflow);
  void __io_commit_cqring_flush(struct io_ring_ctx *ctx);
+diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
+index 90d2fc6fd80e..afb543aab9f6 100644
+--- a/io_uring/msg_ring.c
++++ b/io_uring/msg_ring.c
+@@ -31,7 +31,7 @@ static int io_msg_ring_data(struct io_kiocb *req)
+ 	if (msg->src_fd || msg->dst_fd || msg->flags)
+ 		return -EINVAL;
 =20
- struct page **io_pin_pages(unsigned long ubuf, unsigned long len, int *n=
-pages);
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 0de6f78ad978..90342dcb6b1d 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -601,8 +601,8 @@ static inline bool io_recv_finish(struct io_kiocb *re=
-q, int *ret,
- 	}
+-	if (io_post_aux_cqe(target_ctx, msg->user_data, msg->len, 0, true))
++	if (io_post_aux_cqe(target_ctx, msg->user_data, msg->len, 0))
+ 		return 0;
 =20
- 	if (!mshot_finished) {
--		if (io_post_aux_cqe(req->ctx, req->cqe.user_data, *ret,
--				    cflags | IORING_CQE_F_MORE, true)) {
-+		if (io_aux_cqe(req->ctx, issue_flags & IO_URING_F_COMPLETE_DEFER,
-+			       req->cqe.user_data, *ret, cflags | IORING_CQE_F_MORE, true)) {
- 			io_recv_prep_retry(req);
- 			return false;
- 		}
-@@ -1320,7 +1320,8 @@ int io_accept(struct io_kiocb *req, unsigned int is=
-sue_flags)
-=20
- 	if (ret < 0)
- 		return ret;
--	if (io_post_aux_cqe(ctx, req->cqe.user_data, ret, IORING_CQE_F_MORE, tr=
-ue))
-+	if (io_aux_cqe(ctx, issue_flags & IO_URING_F_COMPLETE_DEFER,
-+		       req->cqe.user_data, ret, IORING_CQE_F_MORE, true))
- 		goto retry;
-=20
- 	return -ECANCELED;
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 4bd43e6f5b72..922c1a366c41 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -252,8 +252,8 @@ static int io_poll_check_events(struct io_kiocb *req,=
- bool *locked)
- 			__poll_t mask =3D mangle_poll(req->cqe.res &
- 						    req->apoll_events);
-=20
--			if (!io_post_aux_cqe(ctx, req->cqe.user_data,
--					     mask, IORING_CQE_F_MORE, false)) {
-+			if (!io_aux_cqe(ctx, *locked, req->cqe.user_data,
-+					mask, IORING_CQE_F_MORE, false)) {
- 				io_req_set_res(req, mask, 0);
- 				return IOU_POLL_REMOVE_POLL_USE_RES;
+ 	return -EOVERFLOW;
+@@ -116,7 +116,7 @@ static int io_msg_send_fd(struct io_kiocb *req, unsig=
+ned int issue_flags)
+ 	 * completes with -EOVERFLOW, then the sender must ensure that a
+ 	 * later IORING_OP_MSG_RING delivers the message.
+ 	 */
+-	if (!io_post_aux_cqe(target_ctx, msg->user_data, msg->len, 0, true))
++	if (!io_post_aux_cqe(target_ctx, msg->user_data, msg->len, 0))
+ 		ret =3D -EOVERFLOW;
+ out_unlock:
+ 	io_double_unlock_ctx(ctx, target_ctx, issue_flags);
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 187f1c83e779..133608200769 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -170,10 +170,10 @@ static void __io_rsrc_put_work(struct io_rsrc_node =
+*ref_node)
+ 		if (prsrc->tag) {
+ 			if (ctx->flags & IORING_SETUP_IOPOLL) {
+ 				mutex_lock(&ctx->uring_lock);
+-				io_post_aux_cqe(ctx, prsrc->tag, 0, 0, true);
++				io_post_aux_cqe(ctx, prsrc->tag, 0, 0);
+ 				mutex_unlock(&ctx->uring_lock);
+ 			} else {
+-				io_post_aux_cqe(ctx, prsrc->tag, 0, 0, true);
++				io_post_aux_cqe(ctx, prsrc->tag, 0, 0);
  			}
+ 		}
+=20
 --=20
 2.30.2
 
