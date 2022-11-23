@@ -2,56 +2,57 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 847D9C433FE
-	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0240CC4332F
+	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236457AbiKWLHQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 23 Nov 2022 06:07:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S237272AbiKWLHa (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 23 Nov 2022 06:07:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237592AbiKWLGz (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:06:55 -0500
+        with ESMTP id S237673AbiKWLG4 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:06:56 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC4E638B
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:38 -0800 (PST)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANB6NIO029885
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:38 -0800
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E305A449
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:40 -0800 (PST)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANB6532016526
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:40 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=s2048-2021-q4;
- bh=ANqCwDP0VQgf/k+B+gikdWWP3y3TelykF2FHHc0L21g=;
- b=N4edcWsF3Xw0OF/gnD+nlS5a26AQyYdhA8nsMiv5hVb7VqTUyXHPvFeDvPLP97V6Q4Zm
- 0jg2whuBE4AjXC7D6QaVOEfPPkdHuoAUNeI/hYxh47V1G9RVOAE2aJdrxCJu4G4Env5c
- d83JevPLcAEIwTrMN7jN0+VRsSO8dFH67kkUznFLylC/k5iN9cC1OPLYlJS7OtEzBlIy
- 8ubLiOZ9NO8EmJZSvtuWxt3XldHVafnY7fRcThVf78XJR9mYeKxfrjqifHaTp9MMhqhQ
- kXTtHBDGZT9fDkC0Tcn5/IF4slOqtazvLpoAXsTClVJ1kiCj2tl0wvxRFAGa52E17/Kq fQ== 
-Received: from maileast.thefacebook.com ([163.114.130.3])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m0y4uqtyk-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=N47RFG6rqxzhK9mIsH6lCWq+xQ4nDOqdeytRX15d14s=;
+ b=CGizRgCg+hu9i+OFn8iVpRQGwwWQEivfCwv5Ufs0IhG3UJp6KRe9a1ykm0LjPXdqxOlf
+ X7OcE3sOmGdfemayTE2Kd7LTJgVHhE+X7aqN0MKsYFk3jmxTSfEn7BVCCPIl1ZrfNvMs
+ qTtHSOrhZ/DVuk4Ina6OKSjlUs7F8ouBMLDDR6BiHMwU2z91PwfrtMihtneTZ2Yx+FtA
+ dVnQe0pSOKfWQyolgl0V+hhC5maraVs2q5UFQWm4xq+OryD5G4my5tBY8+D/xsOa8FFB
+ EyEVJyKUvwqPCrzjFASXUc1TEd2HfX++5UZJwt83zHbksqewBBauFZ7qpcV+d6GfTwn7 pw== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m1cg3hy35-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:38 -0800
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:39 -0800
 Received: from twshared8047.05.ash9.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.31; Wed, 23 Nov 2022 03:06:36 -0800
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 7C036A0804B6; Wed, 23 Nov 2022 03:06:26 -0800 (PST)
+        id 76D3BA0804D0; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
 From:   Dylan Yudaken <dylany@meta.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next v2 00/13] io_uring: batch multishot completions
-Date:   Wed, 23 Nov 2022 03:06:01 -0800
-Message-ID: <20221123110614.3297343-1-dylany@meta.com>
+Subject: [PATCH for-next v2 05/13] io_uring: timeout should use io_req_task_complete
+Date:   Wed, 23 Nov 2022 03:06:06 -0800
+Message-ID: <20221123110614.3297343-6-dylany@meta.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221123110614.3297343-1-dylany@meta.com>
+References: <20221123110614.3297343-1-dylany@meta.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: jqzeNA70TP1SFBbpBPvszLJi2VXLOdjH
-X-Proofpoint-ORIG-GUID: jqzeNA70TP1SFBbpBPvszLJi2VXLOdjH
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
+X-Proofpoint-ORIG-GUID: H5dLzbt71QmYMcQ_hBHcojO8pwF-YQKx
+X-Proofpoint-GUID: H5dLzbt71QmYMcQ_hBHcojO8pwF-YQKx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-23_06,2022-11-23_01,2022-06-22_01
@@ -59,69 +60,32 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Multishot completions currently all go through io_post_aux_cqe which will
-do a lock/unlock pair of the completion spinlock, and also possibly signal
-an eventfd if registered. This can slow down applications that use these
-features.
+Allow timeouts to defer completions if the ring is locked
 
-This series allows the posted completions to be batched using the same
-IO_URING_F_COMPLETE_DEFER as exists for non multishot completions. A
-critical property of this is that all multishot completions must be
-flushed to the CQ ring before the non-multishot completion (say an error)
-or else ordering will break. This implies that if some completions were
-deferred, then the rest must also be to keep that ordering. In order to do
-this the first few patches move all the completion code into a simpler
-path that defers completions when possible.
+Signed-off-by: Dylan Yudaken <dylany@meta.com>
+---
+ io_uring/timeout.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-The batching is done by keeping an array of 16 CQEs, and adding to it
-rather than posting immediately. If it fills up the posting happens then.
-
-A microbenchmark was run ([1]) to test this and showed a 2.3x rps
-improvment (8.3 M/s vs 19.3 M/s).
-
-Patches 1-7 clean up the completion paths
-Patch 8 introduces the cqe array
-Patch 9 allows io_post_aux_cqe to use the cqe array to defer completions
-Patches 10-12 are small cleanups
-Patch 13 enables defered completions for multishot polled requests
-
-v2:
- - Rebase. This includes having to deal with the allow_overflow flag
- - split io_post_aux_cqe up
- - remove msg_ring changes (as not needed)
- - add the patch 10-12 cleanups
-
-[1]: https://github.com/DylanZA/liburing/commit/9ac66b36bcf4477bfafeff1c5f1=
-07896b7ae31cf
-Run with $ make -j && ./benchmark/reg.b -s 1 -t 2000 -r 10
-
-Dylan Yudaken (13):
-  io_uring: merge io_req_tw_post and io_req_task_complete
-  io_uring: __io_req_complete should defer if available
-  io_uring: split io_req_complete_failed into post/defer
-  io_uring: lock on remove in io_apoll_task_func
-  io_uring: timeout should use io_req_task_complete
-  io_uring: simplify io_issue_sqe
-  io_uring: make io_req_complete_post static
-  io_uring: allow defer completion for aux posted cqes
-  io_uring: add io_aux_cqe which allows deferred completion
-  io_uring: make io_fill_cqe_aux static
-  io_uring: add lockdep assertion in io_fill_cqe_aux
-  io_uring: remove overflow param from io_post_aux_cqe
-  io_uring: allow multishot polled reqs to defer completion
-
- include/linux/io_uring_types.h |   2 +
- io_uring/io_uring.c            | 141 ++++++++++++++++++++++++---------
- io_uring/io_uring.h            |  10 +--
- io_uring/msg_ring.c            |   4 +-
- io_uring/net.c                 |   7 +-
- io_uring/poll.c                |   9 ++-
- io_uring/rsrc.c                |   4 +-
- io_uring/timeout.c             |   3 +-
- 8 files changed, 125 insertions(+), 55 deletions(-)
-
-
-base-commit: 449157d5268d68f9ce9445df70776f312af35117
+diff --git a/io_uring/timeout.c b/io_uring/timeout.c
+index e8a8c2099480..26b61e62aa9a 100644
+--- a/io_uring/timeout.c
++++ b/io_uring/timeout.c
+@@ -282,12 +282,11 @@ static void io_req_task_link_timeout(struct io_kioc=
+b *req, bool *locked)
+ 			ret =3D io_try_cancel(req->task->io_uring, &cd, issue_flags);
+ 		}
+ 		io_req_set_res(req, ret ?: -ETIME, 0);
+-		io_req_complete_post(req);
+ 		io_put_req(prev);
+ 	} else {
+ 		io_req_set_res(req, -ETIME, 0);
+-		io_req_complete_post(req);
+ 	}
++	io_req_task_complete(req, locked);
+ }
+=20
+ static enum hrtimer_restart io_link_timeout_fn(struct hrtimer *timer)
 --=20
 2.30.2
 
