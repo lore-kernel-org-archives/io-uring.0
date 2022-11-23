@@ -2,48 +2,48 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89138C433FE
-	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95F65C4332F
+	for <io-uring@archiver.kernel.org>; Wed, 23 Nov 2022 11:07:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237567AbiKWLHl (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 23 Nov 2022 06:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40014 "EHLO
+        id S237637AbiKWLHn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 23 Nov 2022 06:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237732AbiKWLHH (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:07:07 -0500
+        with ESMTP id S237739AbiKWLHI (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 23 Nov 2022 06:07:08 -0500
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD2F20B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61594F51
         for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:50 -0800 (PST)
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANB4GP9001733
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:49 -0800
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ANB4GC9001713
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:50 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=SPE3OypV1PIZXo3fdcwq8SDYDd8wDO+IXZtK61ofzVA=;
- b=IuWwxo8Jj3Bo6nB+eOU6/OwoTIExkGgNUiPWrIk1Vhuw+04rolMEqjnioLMmxkWPRQzM
- l9StjHzgF2CCxG7F7LQ9B7uePn2k2cnMxWoYvskwQMVMBcF+eMzZkcbx/CEeGWQ4uhDS
- lGBSe7OG1By85gNzFEzHYlgB385jpCrLa3HUZAtmuztfa5EOh33UCCZYsv+CyfXHMcU2
- em1n7zGHtBsMbgDhydHO9PKk48ISa+//l2yEHXkA6Wu02t2NDjMwVkgu3dM3rgtFTnrK
- JvJp3p0WHaSlBdikHb1VLA+zKET3ND+G9AKEdfCR4yAddPUFYlgbK0hIcAIfsMAq3bGS kQ== 
+ bh=2sN06wr+1KcWtoE/vbRTMxGMhpyxRaDQtzzs4SI6w2E=;
+ b=Y/tLe9EC15fLJzoLwa93IuXsSn0Q23rfIrfIxYBo1F1iQ0RtOnpvuAWiA+FPXdaGJxZX
+ wO/q7rNkAmzjkaWvIa79B16BjfhSn5jJdiya1m9ZTFB+Fx4EBI9847c7rUMyMzBPpW+I
+ ix8pRKi1LP1Zd3WEranh+25m+NoRys9ZaoiN/v9g8KvOk+gb6ELnHZs1KfTHOdNgbSMz
+ glFEQ+wQjzOOopSAvKUAT5eXODoGlqzV6b807ot+SI0qWI8vdE0t7cNJedjh1bY55tUD
+ XhlU07UdJdOYEpYe40bOMeqCfD682J6bNGaKY8329sSmjz3HVk5dazlRF7BvsQARJFeK FQ== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m0javkw99-1
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3m0javkw9b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:49 -0800
-Received: from twshared10308.07.ash9.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <io-uring@vger.kernel.org>; Wed, 23 Nov 2022 03:06:50 -0800
+Received: from twshared10308.07.ash9.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 23 Nov 2022 03:06:48 -0800
+ 15.1.2375.31; Wed, 23 Nov 2022 03:06:49 -0800
 Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id 81F2FA0804D2; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
+        id ECAFCA0804DD; Wed, 23 Nov 2022 03:06:27 -0800 (PST)
 From:   Dylan Yudaken <dylany@meta.com>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH for-next v2 06/13] io_uring: simplify io_issue_sqe
-Date:   Wed, 23 Nov 2022 03:06:07 -0800
-Message-ID: <20221123110614.3297343-7-dylany@meta.com>
+Subject: [PATCH for-next v2 11/13] io_uring: add lockdep assertion in io_fill_cqe_aux
+Date:   Wed, 23 Nov 2022 03:06:12 -0800
+Message-ID: <20221123110614.3297343-12-dylany@meta.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20221123110614.3297343-1-dylany@meta.com>
 References: <20221123110614.3297343-1-dylany@meta.com>
@@ -51,8 +51,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: mlhsMtwr7LFLUAiYBQyaRsokI8ilF6nj
-X-Proofpoint-GUID: mlhsMtwr7LFLUAiYBQyaRsokI8ilF6nj
+X-Proofpoint-ORIG-GUID: KP_DF3J6lA2Qs8nHPeqJ97v92V51cxw_
+X-Proofpoint-GUID: KP_DF3J6lA2Qs8nHPeqJ97v92V51cxw_
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-23_06,2022-11-23_01,2022-06-22_01
@@ -60,34 +60,27 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-io_issue_sqe can reuse __io_req_complete for completion logic
+Add an assertion for the completion lock to io_fill_cqe_aux
 
 Signed-off-by: Dylan Yudaken <dylany@meta.com>
 ---
- io_uring/io_uring.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ io_uring/io_uring.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5a620001df2e..912f6fefc665 100644
+index 42c7383ead91..6e1139a11fbf 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -1738,12 +1738,9 @@ static int io_issue_sqe(struct io_kiocb *req, unsi=
-gned int issue_flags)
- 	if (creds)
- 		revert_creds(creds);
+@@ -775,6 +775,8 @@ static bool io_fill_cqe_aux(struct io_ring_ctx *ctx, =
+u64 user_data, s32 res, u32
+ {
+ 	struct io_uring_cqe *cqe;
 =20
--	if (ret =3D=3D IOU_OK) {
--		if (issue_flags & IO_URING_F_COMPLETE_DEFER)
--			io_req_complete_defer(req);
--		else
--			io_req_complete_post(req);
--	} else if (ret !=3D IOU_ISSUE_SKIP_COMPLETE)
-+	if (ret =3D=3D IOU_OK)
-+		__io_req_complete(req, issue_flags);
-+	else if (ret !=3D IOU_ISSUE_SKIP_COMPLETE)
- 		return ret;
++	lockdep_assert_held(&ctx->completion_lock);
++
+ 	ctx->cq_extra++;
 =20
- 	/* If the op doesn't have a file, we're not polling for it */
+ 	/*
 --=20
 2.30.2
 
