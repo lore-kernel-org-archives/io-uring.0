@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EC99C352A1
-	for <io-uring@archiver.kernel.org>; Wed, 30 Nov 2022 15:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48909C46467
+	for <io-uring@archiver.kernel.org>; Wed, 30 Nov 2022 15:23:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiK3PXa (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 30 Nov 2022 10:23:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48260 "EHLO
+        id S229883AbiK3PXb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 30 Nov 2022 10:23:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiK3PX2 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 30 Nov 2022 10:23:28 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E9B769E6
-        for <io-uring@vger.kernel.org>; Wed, 30 Nov 2022 07:23:26 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h11so20345281wrw.13
-        for <io-uring@vger.kernel.org>; Wed, 30 Nov 2022 07:23:26 -0800 (PST)
+        with ESMTP id S229890AbiK3PX3 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 30 Nov 2022 10:23:29 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40117721C
+        for <io-uring@vger.kernel.org>; Wed, 30 Nov 2022 07:23:27 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id y16so7873030wrm.2
+        for <io-uring@vger.kernel.org>; Wed, 30 Nov 2022 07:23:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zLXpILH9PcccMmd6KkcbcpMJ63pfhz2reMG+GunS118=;
-        b=Sx5AMy3L8jxqD5t1jZt+qxpaWUUji45LC5pgWQTC7q9xi0IR+kefFApl4Uakl9PwBJ
-         0JsP4DjrEFQn9SYzP9oILju1lJvoxAs94Huo91QqKuWDuiSqxKElxyuyiUPtXknUIntn
-         U04aImEuKHc35sM+GhS/mmYuZrz5yDlkv9/gMW+ImJN2tE1jf3QZtS0gL4vNOVYxjKgq
-         ztgyqgxZFTzrhoNbld/rparfz/S/jwXBaI6Y1uQgpNWLgAyvom6LPEcj+XvXQqqu/zhr
-         Z9D3c7+oWLOi8N5grng8LvILFFEyHyxPoXZvcf69JuFoXnbgJlwLc0VPvICyINpEq6F6
-         3VwQ==
+        bh=ApsC/V76AtmxJR1f/OYmi6DVMVs28z9+ywbUb2PrgXo=;
+        b=d8hTzTUUinEhuT7VLFyqOCUWC/9EerJ5vFt768HF26WXNJ/q2GQSx0OrUC5ZSH2BlS
+         mWWKakLsRCu54BzqTUnhpcNGuHRP9W7vEEllFoeshM00rFiksZ0wmbc/Q5SKY86xFNMr
+         6PcI4vIEckQ0nEKt+1Ymda1CaTQdO5WvVkvFDtf+9Qcy886uc64+YHnLXYJXwtbPFNmP
+         V1TrIOjbvFRzR+mIMwr7IkygbFGdyBQFC8vqYP/y2taooS6Xk5IRQ59tGXiRcr/9EpHj
+         KGvRYLf4dvsVvTC3Vu2NsyBlh7XRvu87nCETR2ySsQVerlSbAy3Ak0L6LZjiwPz5FgjQ
+         AY3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zLXpILH9PcccMmd6KkcbcpMJ63pfhz2reMG+GunS118=;
-        b=D9bMgPeWb09rhEOaRyrBn6E8xKFzb9xjsqsbCXkHrh+6Pf/rkG0UBilIpVrzzYZMw8
-         6GN9u+uEl1L4QsHGf+JZJ/o6/iQ0hcvBjnxuFAr/yHVTkKEwMqKtoEPSku3jW35fl3SR
-         I3RSW1xCUGPbZwhcFSto6TIyQ2VV17ej+GqnAABjgy8x1HNs+AlqBPXR7s2oEVdcn8js
-         oBRvuCekzRyi5sbw0U60vwK0JoS17q8PBJkY4Jdso0w61cL760d+cHkcxOGEpLOz9LmY
-         JQtGfPPoP6KjY6WeD8eHE9nKFosKIIYK2c2k5mxR/U54c4o0e000Fr2e792AFzcYDvQJ
-         HYzw==
-X-Gm-Message-State: ANoB5pk6/i83B3pmIaNlu2mJOSHrnBlJdYjM/raN8upGc8F1HL8VBJkY
-        K4Kbaq5B4aUI6C9TjhpY7yCrvjMogHI=
-X-Google-Smtp-Source: AA0mqf7B0HYPbJlgTTU8SbCgxD6taAwV92D36eseT5V+Z4RfKiHghX+2Fkh4Vsh2bLD3g9LQIKAqaw==
-X-Received: by 2002:a5d:464c:0:b0:242:2ac1:375 with SMTP id j12-20020a5d464c000000b002422ac10375mr2388381wrs.432.1669821804950;
-        Wed, 30 Nov 2022 07:23:24 -0800 (PST)
+        bh=ApsC/V76AtmxJR1f/OYmi6DVMVs28z9+ywbUb2PrgXo=;
+        b=mKlCwLFupgW3kTwq6++OkcCbUJ66qgbovhivsOMEBzafLPfZ3vS2qJTU1NTrym2cZN
+         H2ttY/7Co58Y1isiaz+Pe0G5IKzHjGItGzc48qKOfSI1bewJwwo8J97EruyOZR3QJ1Xw
+         0M5IplvDjEoI6Q7xb5Iyl/Vyfd5nvrn5uUPdg3XhpGUP4iQHjfQqtzpUnwZGpNwScaf5
+         fTbpuTQ7jGQxPWb/BgVbPIa/5QeWC15vCqSsEOBMra4A0hKnG7O9IJOtocOFSuFOS2U2
+         bbe6MH+uQqNDkrt+V9qsCyPuqGPGNsvqzxwIe7YyuX3qke4QXR8jGPZAqjeKrfjQsymb
+         MACw==
+X-Gm-Message-State: ANoB5pnwAAq1tZLT9VmVasGuk6E1QzUOsogkW3+t9ILt1vwfO7VObGsd
+        rBMxFKFQKi3JtcpwH2Fa4pvwn1/6W2c=
+X-Google-Smtp-Source: AA0mqf5MrKHEmra6ouulUajNwyzTyIq2kvAmxTvoNxPhkzNqVQZoL0s+x3bzsQ4iCvxtWvCyvl709w==
+X-Received: by 2002:adf:ed89:0:b0:242:2115:3fc8 with SMTP id c9-20020adfed89000000b0024221153fc8mr5833829wro.78.1669821806364;
+        Wed, 30 Nov 2022 07:23:26 -0800 (PST)
 Received: from 127.0.0.1localhost.com ([2620:10d:c092:600::2:97d])
-        by smtp.gmail.com with ESMTPSA id v14-20020a05600c444e00b003a1980d55c4sm6381844wmn.47.2022.11.30.07.23.24
+        by smtp.gmail.com with ESMTPSA id v14-20020a05600c444e00b003a1980d55c4sm6381844wmn.47.2022.11.30.07.23.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Nov 2022 07:23:24 -0800 (PST)
+        Wed, 30 Nov 2022 07:23:26 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 5/9] io_uring: combine poll tw handlers
-Date:   Wed, 30 Nov 2022 15:21:55 +0000
-Message-Id: <482e59edb9fc81bd275fdbf486837330fb27120a.1669821213.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 7/9] io_uring: improve rsrc quiesce refs checks
+Date:   Wed, 30 Nov 2022 15:21:57 +0000
+Message-Id: <d21283e9f88a77612c746ed526d86fe3bfb58a70.1669821213.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1669821213.git.asml.silence@gmail.com>
 References: <cover.1669821213.git.asml.silence@gmail.com>
@@ -64,89 +64,43 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Merge apoll and regular poll tw handlers, it will help with inlining.
+Do a little bit of refactoring of io_rsrc_ref_quiesce(), flat the data
+refs checks and so get rid of a conditional weird unlock-else-break
+construct.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/poll.c | 54 +++++++++++++++++++------------------------------
- 1 file changed, 21 insertions(+), 33 deletions(-)
+ io_uring/rsrc.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 8f16d2a48ff8..ee7da6150ec4 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -321,50 +321,38 @@ static void io_poll_task_func(struct io_kiocb *req, bool *locked)
- 	ret = io_poll_check_events(req, locked);
- 	if (ret == IOU_POLL_NO_ACTION)
- 		return;
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 133608200769..b36d32534165 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -330,17 +330,14 @@ __cold static int io_rsrc_ref_quiesce(struct io_rsrc_data *data,
+ 		ret = wait_for_completion_interruptible(&data->done);
+ 		if (!ret) {
+ 			mutex_lock(&ctx->uring_lock);
+-			if (atomic_read(&data->refs) > 0) {
+-				/*
+-				 * it has been revived by another thread while
+-				 * we were unlocked
+-				 */
+-				mutex_unlock(&ctx->uring_lock);
+-			} else {
++			if (atomic_read(&data->refs) <= 0)
+ 				break;
+-			}
++			/*
++			 * it has been revived by another thread while
++			 * we were unlocked
++			 */
++			mutex_unlock(&ctx->uring_lock);
+ 		}
 -
--	if (ret == IOU_POLL_DONE) {
--		struct io_poll *poll = io_kiocb_to_cmd(req, struct io_poll);
--		req->cqe.res = mangle_poll(req->cqe.res & poll->events);
--	} else if (ret != IOU_POLL_REMOVE_POLL_USE_RES) {
--		req->cqe.res = ret;
--		req_set_fail(req);
--	}
--
- 	io_poll_remove_entries(req);
- 	io_poll_tw_hash_eject(req, locked);
- 
--	io_req_set_res(req, req->cqe.res, 0);
--	io_req_task_complete(req, locked);
--}
-+	if (req->opcode == IORING_OP_POLL_ADD) {
-+		if (ret == IOU_POLL_DONE) {
-+			struct io_poll *poll;
- 
--static void io_apoll_task_func(struct io_kiocb *req, bool *locked)
--{
--	int ret;
--
--	ret = io_poll_check_events(req, locked);
--	if (ret == IOU_POLL_NO_ACTION)
--		return;
--
--	io_tw_lock(req->ctx, locked);
--	io_poll_remove_entries(req);
--	io_poll_tw_hash_eject(req, locked);
-+			poll = io_kiocb_to_cmd(req, struct io_poll);
-+			req->cqe.res = mangle_poll(req->cqe.res & poll->events);
-+		} else if (ret != IOU_POLL_REMOVE_POLL_USE_RES) {
-+			req->cqe.res = ret;
-+			req_set_fail(req);
-+		}
- 
--	if (ret == IOU_POLL_REMOVE_POLL_USE_RES)
-+		io_req_set_res(req, req->cqe.res, 0);
- 		io_req_task_complete(req, locked);
--	else if (ret == IOU_POLL_DONE)
--		io_req_task_submit(req, locked);
--	else
--		io_req_defer_failed(req, ret);
-+	} else {
-+		io_tw_lock(req->ctx, locked);
-+
-+		if (ret == IOU_POLL_REMOVE_POLL_USE_RES)
-+			io_req_task_complete(req, locked);
-+		else if (ret == IOU_POLL_DONE)
-+			io_req_task_submit(req, locked);
-+		else
-+			io_req_defer_failed(req, ret);
-+	}
- }
- 
- static void __io_poll_execute(struct io_kiocb *req, int mask)
- {
- 	io_req_set_res(req, mask, 0);
--
--	if (req->opcode == IORING_OP_POLL_ADD)
--		req->io_task_work.func = io_poll_task_func;
--	else
--		req->io_task_work.func = io_apoll_task_func;
-+	req->io_task_work.func = io_poll_task_func;
- 
- 	trace_io_uring_task_add(req, mask);
- 	io_req_task_work_add(req);
+ reinit:
+ 		atomic_inc(&data->refs);
+ 		/* wait for all works potentially completing data->done */
 -- 
 2.38.1
 
