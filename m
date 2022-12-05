@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECA0FC47089
-	for <io-uring@archiver.kernel.org>; Mon,  5 Dec 2022 02:45:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6239AC4708E
+	for <io-uring@archiver.kernel.org>; Mon,  5 Dec 2022 02:45:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbiLECpn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 4 Dec 2022 21:45:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
+        id S230402AbiLECpo (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 4 Dec 2022 21:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiLECpl (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 4 Dec 2022 21:45:41 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99008FADD
-        for <io-uring@vger.kernel.org>; Sun,  4 Dec 2022 18:45:40 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id h7so10611291wrs.6
-        for <io-uring@vger.kernel.org>; Sun, 04 Dec 2022 18:45:40 -0800 (PST)
+        with ESMTP id S231139AbiLECpn (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 4 Dec 2022 21:45:43 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8D8FAD0
+        for <io-uring@vger.kernel.org>; Sun,  4 Dec 2022 18:45:42 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id w15so16617945wrl.9
+        for <io-uring@vger.kernel.org>; Sun, 04 Dec 2022 18:45:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PVLl5MtlPDSyk/qlXtfhxF35haHp/uds22QS3HFvxRc=;
-        b=WjUeR/hNPShOaUOXLRC3VFXbDiGBvSfxKHW4xU5d5ILDhgVWi9vdJsENU85B8ioE/L
-         nbbMkILUpYMmZm14wKTwweq9DlBC51xm9IKI12Xi79Y9ps2YICwDe3LH8tsId4wLaffX
-         MPTNBiYanGN0TLsK9SfUW/FXDH7XHsnTAn/U1rOnBsvonMSsPDysPDTAVV/C2/TgT7FJ
-         tsIoXnIKciI5frzVj1cKVXoIvHNVmwHzjNfTnsW8rZftWpRR+DzSCNtG2OLz/Mct29XA
-         kRq3bnfPxuVAD2+ponEmA8gniAfiWJ/HSnIl0VtYmL9WAxgOsCiYNAf4rUzP4ZEMYZvB
-         8i4Q==
+        bh=BzK/zrdj76nrH7tgY872zfma02vZfGuAP6Fn/6zdEXI=;
+        b=oOmj4JTziR/PMj48t6VbE0a0DdU09MevOPpA/h+1YcXecYmBtvaJClw9ZcawEsQ31P
+         NgsnSPBA8eLVf8rNEYXHF0yHkAg0mENKk6R9CscvNtFuGmJipMlgET+awwCbcGli6y3V
+         AX2j0e/n0SlA88QN3/v1ZucQOmRbvXAVtT5pjNp8vwelHcxRLKHHL43D8rPkfsB1ma5O
+         Fc2ucV9qeIBpalUQEUHSfHxSi+9a4zls/01GO2rFTZ2ovxwrbISfgzRaLJn1nCsZMw3O
+         SdYXaJkikwD8/eRKTLLbs3B0PkBB8H9+0y0J+7mMZqVsGAltuxETghSN8WGsdo8rRrem
+         OebA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PVLl5MtlPDSyk/qlXtfhxF35haHp/uds22QS3HFvxRc=;
-        b=rbPM2VljyEksz2KYXBRZ4BYv/dvLW8KSTPxi6XF9pncslhYetYHs+X8HBlGN45xS/L
-         Ff5Ng1N/0DKWgf15CFwUE1jDXlaNFBoiJvjiMl9c6O9D21OSSmae3zMBVoiCN612faQs
-         9THfb+7AuLr8oNOk41DrPsA2e4reZd/3rYhtwFpMPCrWXbcFobRDR8trIpCyZGLc6Z7C
-         IXQ9LfQcyzhwEWRm8rBd/yS+K+Ct+szun0GUkvSGqF+oBX6vEa1LD62BPLEaO8naUllm
-         NvzrZrFg95eo3q1l2kJDmqJTrsJLQFAvfgg9td3wdOJP+fcJk0WEYtifyyqQtV0Jjro8
-         8pFg==
-X-Gm-Message-State: ANoB5plSKI8hgAcjbbPF3DVG6ZY87mSnjuJp2YPju6H5E//bYP9CXoIn
-        EpPA9Ngz4c6i/2QLTD7pkpIXX8R8FDE=
-X-Google-Smtp-Source: AA0mqf7WSbVW8VFJRB0pnBHgacUGBAwK3Nopmvzj29ThSTDFUB4haQ13kqAMzYeC1HdK/YiV1ddPvA==
-X-Received: by 2002:adf:eec5:0:b0:242:1352:2b62 with SMTP id a5-20020adfeec5000000b0024213522b62mr22565318wrp.370.1670208338832;
-        Sun, 04 Dec 2022 18:45:38 -0800 (PST)
+        bh=BzK/zrdj76nrH7tgY872zfma02vZfGuAP6Fn/6zdEXI=;
+        b=kPVDwG323ha6n4Bga5m9TyYbmH/wHabu8Qmp3SCzVxB78AZmPE1pTFtDUkHnKfPWji
+         4i+XG5HlTOHZ3ULNN3Lctuya5hKP3CFABh7Lr6DVt6wh46wqxche5WOhys33BBKr/0BN
+         vmjcRLOYP082zVzmPYbopzV+pjC918i5vJRR8lHNVnWfaBJJvTI67BM0xy71E2wpjtGK
+         x2phE1Wukm2nUhaNfCW8R4P1ffo/GIpxhxPOsQ+jAGM7VHRLR+LAEpAbmFqFyYv4Uph8
+         stThv9b3cRVH9PLUAlhNpsF3Iijx08frE5TAJsp6wo/oTZHvdHsSqDyWSt/hBKUuNCKw
+         fqRg==
+X-Gm-Message-State: ANoB5pmbtFFR997cEDXtZO0eYjuRqufl8B2cJdl7swkDVnI3fHfAI1cJ
+        p8txCGMG1Hww7JNFdu8wh3yh6jIh5zA=
+X-Google-Smtp-Source: AA0mqf4J9yL3VZ6+7xTsrrZSA1cYiV1LeVnp1hK7FAYm7eztuIW7J+PplUEI7Mcq0yhoBJhSwSwEtA==
+X-Received: by 2002:a05:6000:1702:b0:241:ffc4:dd1c with SMTP id n2-20020a056000170200b00241ffc4dd1cmr31285372wrc.538.1670208340464;
+        Sun, 04 Dec 2022 18:45:40 -0800 (PST)
 Received: from 127.0.0.1localhost (94.196.241.58.threembb.co.uk. [94.196.241.58])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600c41d100b003cf71b1f66csm15281532wmh.0.2022.12.04.18.45.38
+        by smtp.gmail.com with ESMTPSA id t17-20020a05600c41d100b003cf71b1f66csm15281532wmh.0.2022.12.04.18.45.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Dec 2022 18:45:38 -0800 (PST)
+        Sun, 04 Dec 2022 18:45:40 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 2/7] io_uring: don't check overflow flush failures
-Date:   Mon,  5 Dec 2022 02:44:26 +0000
-Message-Id: <e64f98e7468525a2e475243cc8c0e67b2ecb9127.1670207706.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 4/7] io_uring: force multishot CQEs into task context
+Date:   Mon,  5 Dec 2022 02:44:28 +0000
+Message-Id: <d3e0ff65a89b0605f1c9fdbaae39b8d55d5f0725.1670207706.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1670207706.git.asml.silence@gmail.com>
 References: <cover.1670207706.git.asml.silence@gmail.com>
@@ -64,86 +64,70 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The only way to fail overflowed CQEs flush is for CQ to be fully packed.
-There is one place checking for flush failures, i.e. io_cqring_wait(),
-but we limit the number to be waited for by the CQ size, so getting a
-failure automatically means that we're done with waiting.
-
-Don't check for failures, rarely but they might spuriously fail CQ
-waiting with -EBUSY.
+Multishot are posting CQEs outside of the normal request completion
+path, which is usually done from within a task work handler. However, it
+might be not the case when it's yet to be polled but has been punted to
+io-wq. Make it abide ->task_complete and push it to the polling path
+when executed by io-wq.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 24 ++++++------------------
- 1 file changed, 6 insertions(+), 18 deletions(-)
+ io_uring/net.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 4721ff6cafaa..7239776a9d4b 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -629,13 +629,12 @@ static void io_cqring_overflow_kill(struct io_ring_ctx *ctx)
- }
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 90342dcb6b1d..f276f6dd5b09 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -67,6 +67,19 @@ struct io_sr_msg {
+ 	struct io_kiocb 		*notif;
+ };
  
- /* Returns true if there are no backlogged entries after the flush */
--static bool __io_cqring_overflow_flush(struct io_ring_ctx *ctx)
-+static void __io_cqring_overflow_flush(struct io_ring_ctx *ctx)
++static inline bool io_check_multishot(struct io_kiocb *req,
++				      unsigned int issue_flags)
++{
++	/*
++	 * When ->locked_cq is set we only allow to post CQEs from the original
++	 * task context. Usual request completions will be handled in other
++	 * generic paths but multipoll may decide to post extra cqes.
++	 */
++	return !(issue_flags & IO_URING_F_IOWQ) ||
++		!(issue_flags & IO_URING_F_MULTISHOT) ||
++		!req->ctx->task_complete;
++}
++
+ int io_shutdown_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
  {
--	bool all_flushed;
- 	size_t cqe_size = sizeof(struct io_uring_cqe);
+ 	struct io_shutdown *shutdown = io_kiocb_to_cmd(req, struct io_shutdown);
+@@ -730,6 +743,9 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
+ 	    (sr->flags & IORING_RECVSEND_POLL_FIRST))
+ 		return io_setup_async_msg(req, kmsg, issue_flags);
  
- 	if (__io_cqring_events(ctx) == ctx->cq_entries)
--		return false;
-+		return;
++	if (!io_check_multishot(req, issue_flags))
++		return io_setup_async_msg(req, kmsg, issue_flags);
++
+ retry_multishot:
+ 	if (io_do_buffer_select(req)) {
+ 		void __user *buf;
+@@ -829,6 +845,9 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+ 	    (sr->flags & IORING_RECVSEND_POLL_FIRST))
+ 		return -EAGAIN;
  
- 	if (ctx->flags & IORING_SETUP_CQE32)
- 		cqe_size <<= 1;
-@@ -654,30 +653,23 @@ static bool __io_cqring_overflow_flush(struct io_ring_ctx *ctx)
- 		kfree(ocqe);
- 	}
++	if (!io_check_multishot(req, issue_flags))
++		return -EAGAIN;
++
+ 	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+ 		return -ENOTSOCK;
+@@ -1280,6 +1299,8 @@ int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+ 	struct file *file;
+ 	int ret, fd;
  
--	all_flushed = list_empty(&ctx->cq_overflow_list);
--	if (all_flushed) {
-+	if (list_empty(&ctx->cq_overflow_list)) {
- 		clear_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq);
- 		atomic_andnot(IORING_SQ_CQ_OVERFLOW, &ctx->rings->sq_flags);
- 	}
--
- 	io_cq_unlock_post(ctx);
--	return all_flushed;
- }
- 
--static bool io_cqring_overflow_flush(struct io_ring_ctx *ctx)
-+static void io_cqring_overflow_flush(struct io_ring_ctx *ctx)
- {
--	bool ret = true;
--
- 	if (test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq)) {
- 		/* iopoll syncs against uring_lock, not completion_lock */
- 		if (ctx->flags & IORING_SETUP_IOPOLL)
- 			mutex_lock(&ctx->uring_lock);
--		ret = __io_cqring_overflow_flush(ctx);
-+		__io_cqring_overflow_flush(ctx);
- 		if (ctx->flags & IORING_SETUP_IOPOLL)
- 			mutex_unlock(&ctx->uring_lock);
- 	}
--
--	return ret;
- }
- 
- void __io_put_task(struct task_struct *task, int nr)
-@@ -2505,11 +2497,7 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
- 
- 	trace_io_uring_cqring_wait(ctx, min_events);
- 	do {
--		/* if we can't even flush overflow, don't wait for more */
--		if (!io_cqring_overflow_flush(ctx)) {
--			ret = -EBUSY;
--			break;
--		}
-+		io_cqring_overflow_flush(ctx);
- 		prepare_to_wait_exclusive(&ctx->cq_wait, &iowq.wq,
- 						TASK_INTERRUPTIBLE);
- 		ret = io_cqring_wait_schedule(ctx, &iowq, timeout);
++	if (!io_check_multishot(req, issue_flags))
++		return -EAGAIN;
+ retry:
+ 	if (!fixed) {
+ 		fd = __get_unused_fd_flags(accept->flags, accept->nofile);
 -- 
 2.38.1
 
