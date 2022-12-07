@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6FCCC352A1
-	for <io-uring@archiver.kernel.org>; Wed,  7 Dec 2022 03:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27F44C4708D
+	for <io-uring@archiver.kernel.org>; Wed,  7 Dec 2022 03:54:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiLGDyp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 6 Dec 2022 22:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S229838AbiLGDyr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 6 Dec 2022 22:54:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiLGDym (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 6 Dec 2022 22:54:42 -0500
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909A152170
-        for <io-uring@vger.kernel.org>; Tue,  6 Dec 2022 19:54:41 -0800 (PST)
-Received: by mail-ej1-x62b.google.com with SMTP id b2so11029618eja.7
-        for <io-uring@vger.kernel.org>; Tue, 06 Dec 2022 19:54:41 -0800 (PST)
+        with ESMTP id S229828AbiLGDyn (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 6 Dec 2022 22:54:43 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBDD52165
+        for <io-uring@vger.kernel.org>; Tue,  6 Dec 2022 19:54:42 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id e13so23144168edj.7
+        for <io-uring@vger.kernel.org>; Tue, 06 Dec 2022 19:54:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1dAS4NoPFKX7V/NJNTiJJVwYipVppvXjw+VoTzli/nA=;
-        b=logkz+rQdHGzgGba8RsimyabzGJ4VfPvKMFC+rDc4KuotpES7UCVRKWVgmwrbzOphI
-         STfH2QaEL7yUx924Lali1K+tT6WPoO5paw4wmXPa5To8YvrT+Irk8aFOw3vEPy1rEq77
-         AtfwJIannntZkwbDHWFtozPdU62BMiaxOtOvOHXPUZv52Z+SAzYmbycd6KcaT4v4+Y0O
-         RNzqKHuCisqyGF2oHiZ54Wq+ufkmQgJ8d9uPQWKaTeF/Hiri6gmBXudtmIwBu51cH187
-         jnwoWe7dL4Mqy74runmVo0dZj/ao5poLMINkahjfIgPiuGgdLxySied8LqZ7jVOdnNzy
-         Bb1g==
+        bh=W6AZVOd5+CvwsZBv9HzpXB3puSLMulw5+42cLdFvuTo=;
+        b=jn55tq4vWKouaacc90kTGTerojt/VHK6Yn/SSxrikk9RjqR0EP1r8sItbvfX/JFkNv
+         MdEuFnSTZQIgwW6vgSz3xUK9elYg4PEYrdiTNmvBegVmfFvxerrCkkaVjlIZ0FLJNadp
+         MMdm/Vws06YPesFe+igfuEobKbu/ng1fj+uRl88j9juhijS6U+9MfV1fSVCgHiDHTY2K
+         SuTPQKjHvooel1Z8asBoqZa3iHmAXpNsyUCTAGneRQ7NKngqXcPzqZzo38I8vu9vE07/
+         c4KfPozAwU+Epy4scbSJQ7i3n5kYzoJulHMd2RYgkmX7H28qcoyz3gP7PgPjH9dFstzQ
+         l2JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1dAS4NoPFKX7V/NJNTiJJVwYipVppvXjw+VoTzli/nA=;
-        b=R9ha+0ZlmzRmHdq4pJw7kUvNCg8FZj+vqX/rIvDlLcp8VMsZjJEm/dYCwN+QrbDc7V
-         dEHsdQ8TyKqRrUR1c8k7UtCXDjvKB4tzbZQpUW3AaHWw8C2VWOWiZ0LYtuKVIs7tcxoj
-         FLA12mKmfSHCdKG+R6V76jzIW/d7QkVkuuDV8QSXMydfUsFtcrxe06pjRAkcfLNhQpee
-         g7nB0AREinydE160RLtTTQgjqgAO31FfxmDLLuGbZwhkg+TmlzsgBEGxlhPvbRat6c2a
-         ED2cHFb9JPU64oKczBS8LCspZbjVKBooi9pRoju3eTuehLnGfDjsZkPqnSijYDBQ23s4
-         o4eg==
-X-Gm-Message-State: ANoB5plM7LDaKjeJFYFiMkT/G9OvYO5ICY8ydcxZpuLRfuNob1SrGpGB
-        OguOOjQbx4h/7cRhtpyChhCg0WP64Fo=
-X-Google-Smtp-Source: AA0mqf6eE4NKoXSX9/6GjHtGFti2+Vv5ig137VcgOoCZUWGZvZNLqZ/SoOpzTZQzIJZZutSPHmZuRA==
-X-Received: by 2002:a17:906:404:b0:781:f54c:1947 with SMTP id d4-20020a170906040400b00781f54c1947mr64030473eja.69.1670385279982;
-        Tue, 06 Dec 2022 19:54:39 -0800 (PST)
+        bh=W6AZVOd5+CvwsZBv9HzpXB3puSLMulw5+42cLdFvuTo=;
+        b=sYd6tUKnppf6pSe5gn5YvniDk++OCwHiZZnk5hAnScLkwepsP4J/IoMV1mQNpTWUgl
+         ftN7/omitqYrW0l8IGcPDsNWS/i9bHQP2fFg8UHRS/xzF9L32JAbkd4JfiZ2EeB+bCLd
+         wYxIZc+j5+VvhCPDXeczvE+dK6agsP5ikqFzXxVz8JaoPjGPHX2RHBapU4R+asiTJqyG
+         SrILAQbTX32bmVIw4oNLKl3yEuQC4fzGzE30cvlBzOQXRJT5DemnqlHm1axsuzzJZJTb
+         CTvBCl0z4UucOmtxmrTiPA6lGs0E8ydrBgylujG79aYRwEBuQomYqDpaJJ91/vkaWHz8
+         qmdQ==
+X-Gm-Message-State: ANoB5plJW+Ozx33PfBZ4B11gbW3+PN9OGQQHm+zm5mrewc68rDH0kTfI
+        BCfzjhKEHa7cF5R2T7kyvAyYgiTARUo=
+X-Google-Smtp-Source: AA0mqf71qryQdtW4v2qxqvSJDjg/nEnBHw9Bt5iUdgU3BtQ8jkrHxec9P3eugCWeNLnaXbgmcfqIGQ==
+X-Received: by 2002:a05:6402:5406:b0:467:4b3d:f2ed with SMTP id ev6-20020a056402540600b004674b3df2edmr63311147edb.101.1670385282137;
+        Tue, 06 Dec 2022 19:54:42 -0800 (PST)
 Received: from 127.0.0.1localhost (94.196.241.58.threembb.co.uk. [94.196.241.58])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170906210900b0073de0506745sm7938939ejt.197.2022.12.06.19.54.39
+        by smtp.gmail.com with ESMTPSA id 9-20020a170906210900b0073de0506745sm7938939ejt.197.2022.12.06.19.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 19:54:39 -0800 (PST)
+        Tue, 06 Dec 2022 19:54:41 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next v2 09/12] io_uring: get rid of double locking
-Date:   Wed,  7 Dec 2022 03:53:34 +0000
-Message-Id: <a80ecc2bc99c3b3f2cf20015d618b7c51419a797.1670384893.git.asml.silence@gmail.com>
+Subject: [PATCH for-next v2 11/12] io_uring: do msg_ring in target task via tw
+Date:   Wed,  7 Dec 2022 03:53:36 +0000
+Message-Id: <4d76c7b28ed5d71b520de4482fbb7f660f21cd80.1670384893.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1670384893.git.asml.silence@gmail.com>
 References: <cover.1670384893.git.asml.silence@gmail.com>
@@ -64,191 +64,121 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We don't need to take both uring_locks at once, msg_ring can be split in
-two parts, first getting a file from the filetable of the first ring and
-then installing it into the second one.
+While executing in a context of one io_uring instance msg_ring
+manipulates another ring. We're trying to keep CQEs posting contained in
+the context of the ring-owner task, use task_work to send the request to
+the target ring's task when we're modifying its CQ or trying to install
+a file. Note, we can't safely use io_uring task_work infra and have to
+use task_work directly.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/msg_ring.c | 85 ++++++++++++++++++++++++++-------------------
- io_uring/msg_ring.h |  1 +
- io_uring/opdef.c    |  1 +
- 3 files changed, 51 insertions(+), 36 deletions(-)
+ io_uring/msg_ring.c | 56 ++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 53 insertions(+), 3 deletions(-)
 
 diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
-index c7d6586164ca..387c45a58654 100644
+index 525063ac3dab..24e6cc477515 100644
 --- a/io_uring/msg_ring.c
 +++ b/io_uring/msg_ring.c
-@@ -15,6 +15,7 @@
- 
+@@ -16,6 +16,7 @@
  struct io_msg {
  	struct file			*file;
-+	struct file			*src_file;
+ 	struct file			*src_file;
++	struct callback_head		tw;
  	u64 user_data;
  	u32 len;
  	u32 cmd;
-@@ -23,6 +24,17 @@ struct io_msg {
- 	u32 flags;
- };
+@@ -35,6 +36,23 @@ void io_msg_ring_cleanup(struct io_kiocb *req)
+ 	msg->src_file = NULL;
+ }
  
-+void io_msg_ring_cleanup(struct io_kiocb *req)
++static void io_msg_tw_complete(struct callback_head *head)
 +{
-+	struct io_msg *msg = io_kiocb_to_cmd(req, struct io_msg);
++	struct io_msg *msg = container_of(head, struct io_msg, tw);
++	struct io_kiocb *req = cmd_to_io_kiocb(msg);
++	struct io_ring_ctx *target_ctx = req->file->private_data;
++	int ret = 0;
 +
-+	if (WARN_ON_ONCE(!msg->src_file))
-+		return;
++	if (current->flags & PF_EXITING)
++		ret = -EOWNERDEAD;
++	else if (!io_post_aux_cqe(target_ctx, msg->user_data, msg->len, 0))
++		ret = -EOVERFLOW;
 +
-+	fput(msg->src_file);
-+	msg->src_file = NULL;
++	if (ret < 0)
++		req_set_fail(req);
++	io_req_queue_tw_complete(req, ret);
 +}
 +
  static int io_msg_ring_data(struct io_kiocb *req)
  {
  	struct io_ring_ctx *target_ctx = req->file->private_data;
-@@ -37,17 +49,13 @@ static int io_msg_ring_data(struct io_kiocb *req)
- 	return -EOVERFLOW;
- }
- 
--static void io_double_unlock_ctx(struct io_ring_ctx *ctx,
--				 struct io_ring_ctx *octx,
-+static void io_double_unlock_ctx(struct io_ring_ctx *octx,
- 				 unsigned int issue_flags)
- {
--	if (issue_flags & IO_URING_F_UNLOCKED)
--		mutex_unlock(&ctx->uring_lock);
- 	mutex_unlock(&octx->uring_lock);
- }
- 
--static int io_double_lock_ctx(struct io_ring_ctx *ctx,
--			      struct io_ring_ctx *octx,
-+static int io_double_lock_ctx(struct io_ring_ctx *octx,
- 			      unsigned int issue_flags)
- {
- 	/*
-@@ -60,17 +68,28 @@ static int io_double_lock_ctx(struct io_ring_ctx *ctx,
- 			return -EAGAIN;
- 		return 0;
- 	}
-+	mutex_lock(&octx->uring_lock);
-+	return 0;
-+}
- 
--	/* Always grab smallest value ctx first. We know ctx != octx. */
--	if (ctx < octx) {
--		mutex_lock(&ctx->uring_lock);
--		mutex_lock(&octx->uring_lock);
--	} else {
--		mutex_lock(&octx->uring_lock);
--		mutex_lock(&ctx->uring_lock);
-+static struct file *io_msg_grab_file(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	struct io_msg *msg = io_kiocb_to_cmd(req, struct io_msg);
-+	struct io_ring_ctx *ctx = req->ctx;
-+	struct file *file = NULL;
-+	unsigned long file_ptr;
-+	int idx = msg->src_fd;
-+
-+	io_ring_submit_lock(ctx, issue_flags);
-+	if (likely(idx < ctx->nr_user_files)) {
-+		idx = array_index_nospec(idx, ctx->nr_user_files);
-+		file_ptr = io_fixed_file_slot(&ctx->file_table, idx)->file_ptr;
-+		file = (struct file *) (file_ptr & FFS_MASK);
-+		if (file)
-+			get_file(file);
- 	}
--
--	return 0;
-+	io_ring_submit_unlock(ctx, issue_flags);
-+	return file;
- }
- 
- static int io_msg_send_fd(struct io_kiocb *req, unsigned int issue_flags)
-@@ -78,34 +97,27 @@ static int io_msg_send_fd(struct io_kiocb *req, unsigned int issue_flags)
- 	struct io_ring_ctx *target_ctx = req->file->private_data;
- 	struct io_msg *msg = io_kiocb_to_cmd(req, struct io_msg);
- 	struct io_ring_ctx *ctx = req->ctx;
--	unsigned long file_ptr;
--	struct file *src_file;
-+	struct file *src_file = msg->src_file;
- 	int ret;
- 
- 	if (target_ctx == ctx)
+@@ -43,6 +61,15 @@ static int io_msg_ring_data(struct io_kiocb *req)
+ 	if (msg->src_fd || msg->dst_fd || msg->flags)
  		return -EINVAL;
-+	if (!src_file) {
-+		src_file = io_msg_grab_file(req, issue_flags);
-+		if (!src_file)
-+			return -EBADF;
-+		msg->src_file = src_file;
-+		req->flags |= REQ_F_NEED_CLEANUP;
+ 
++	if (target_ctx->task_complete && current != target_ctx->submitter_task) {
++		init_task_work(&msg->tw, io_msg_tw_complete);
++		if (task_work_add(target_ctx->submitter_task, &msg->tw,
++				  TWA_SIGNAL))
++			return -EOWNERDEAD;
++
++		return IOU_ISSUE_SKIP_COMPLETE;
 +	}
++
+ 	if (io_post_aux_cqe(target_ctx, msg->user_data, msg->len, 0))
+ 		return 0;
  
--	ret = io_double_lock_ctx(ctx, target_ctx, issue_flags);
--	if (unlikely(ret))
--		return ret;
--
--	ret = -EBADF;
--	if (unlikely(msg->src_fd >= ctx->nr_user_files))
--		goto out_unlock;
--
--	msg->src_fd = array_index_nospec(msg->src_fd, ctx->nr_user_files);
--	file_ptr = io_fixed_file_slot(&ctx->file_table, msg->src_fd)->file_ptr;
--	if (!file_ptr)
--		goto out_unlock;
--
--	src_file = (struct file *) (file_ptr & FFS_MASK);
--	get_file(src_file);
-+	if (unlikely(io_double_lock_ctx(target_ctx, issue_flags)))
-+		return -EAGAIN;
- 
- 	ret = __io_fixed_fd_install(target_ctx, src_file, msg->dst_fd);
--	if (ret < 0) {
--		fput(src_file);
-+	if (ret < 0)
- 		goto out_unlock;
--	}
-+	msg->src_file = NULL;
-+	req->flags &= ~REQ_F_NEED_CLEANUP;
- 
- 	if (msg->flags & IORING_MSG_RING_CQE_SKIP)
- 		goto out_unlock;
-@@ -119,7 +131,7 @@ static int io_msg_send_fd(struct io_kiocb *req, unsigned int issue_flags)
- 	if (!io_post_aux_cqe(target_ctx, msg->user_data, msg->len, 0))
- 		ret = -EOVERFLOW;
- out_unlock:
--	io_double_unlock_ctx(ctx, target_ctx, issue_flags);
-+	io_double_unlock_ctx(target_ctx, issue_flags);
+@@ -124,6 +151,19 @@ static int io_msg_install_complete(struct io_kiocb *req, unsigned int issue_flag
  	return ret;
  }
  
-@@ -130,6 +142,7 @@ int io_msg_ring_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (unlikely(sqe->buf_index || sqe->personality))
- 		return -EINVAL;
++static void io_msg_tw_fd_complete(struct callback_head *head)
++{
++	struct io_msg *msg = container_of(head, struct io_msg, tw);
++	struct io_kiocb *req = cmd_to_io_kiocb(msg);
++	int ret = -EOWNERDEAD;
++
++	if (!(current->flags & PF_EXITING))
++		ret = io_msg_install_complete(req, IO_URING_F_UNLOCKED);
++	if (ret < 0)
++		req_set_fail(req);
++	io_req_queue_tw_complete(req, ret);
++}
++
+ static int io_msg_send_fd(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_ring_ctx *target_ctx = req->file->private_data;
+@@ -140,6 +180,15 @@ static int io_msg_send_fd(struct io_kiocb *req, unsigned int issue_flags)
+ 		msg->src_file = src_file;
+ 		req->flags |= REQ_F_NEED_CLEANUP;
+ 	}
++
++	if (target_ctx->task_complete && current != target_ctx->submitter_task) {
++		init_task_work(&msg->tw, io_msg_tw_fd_complete);
++		if (task_work_add(target_ctx->submitter_task, &msg->tw,
++				  TWA_SIGNAL))
++			return -EOWNERDEAD;
++
++		return IOU_ISSUE_SKIP_COMPLETE;
++	}
+ 	return io_msg_install_complete(req, issue_flags);
+ }
  
-+	msg->src_file = NULL;
- 	msg->user_data = READ_ONCE(sqe->off);
- 	msg->len = READ_ONCE(sqe->len);
- 	msg->cmd = READ_ONCE(sqe->addr);
-diff --git a/io_uring/msg_ring.h b/io_uring/msg_ring.h
-index fb9601f202d0..3987ee6c0e5f 100644
---- a/io_uring/msg_ring.h
-+++ b/io_uring/msg_ring.h
-@@ -2,3 +2,4 @@
+@@ -185,10 +234,11 @@ int io_msg_ring(struct io_kiocb *req, unsigned int issue_flags)
+ 	}
  
- int io_msg_ring_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_msg_ring(struct io_kiocb *req, unsigned int issue_flags);
-+void io_msg_ring_cleanup(struct io_kiocb *req);
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 04dd2c983fce..3aa0d65c50e3 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -445,6 +445,7 @@ const struct io_op_def io_op_defs[] = {
- 		.name			= "MSG_RING",
- 		.prep			= io_msg_ring_prep,
- 		.issue			= io_msg_ring,
-+		.cleanup		= io_msg_ring_cleanup,
- 	},
- 	[IORING_OP_FSETXATTR] = {
- 		.needs_file = 1,
+ done:
+-	if (ret == -EAGAIN)
+-		return -EAGAIN;
+-	if (ret < 0)
++	if (ret < 0) {
++		if (ret == -EAGAIN || ret == IOU_ISSUE_SKIP_COMPLETE)
++			return ret;
+ 		req_set_fail(req);
++	}
+ 	io_req_set_res(req, ret, 0);
+ 	return IOU_OK;
+ }
 -- 
 2.38.1
 
