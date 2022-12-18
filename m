@@ -2,93 +2,120 @@ Return-Path: <io-uring-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 252D8C46467
-	for <io-uring@archiver.kernel.org>; Sat, 17 Dec 2022 20:49:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A36EC4332F
+	for <io-uring@archiver.kernel.org>; Sun, 18 Dec 2022 03:37:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiLQUs7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 17 Dec 2022 15:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S230089AbiLRDhu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 17 Dec 2022 22:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiLQUs5 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 17 Dec 2022 15:48:57 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CC9BE31
-        for <io-uring@vger.kernel.org>; Sat, 17 Dec 2022 12:48:46 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id n3so3867533pfq.10
-        for <io-uring@vger.kernel.org>; Sat, 17 Dec 2022 12:48:46 -0800 (PST)
+        with ESMTP id S230083AbiLRDht (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 17 Dec 2022 22:37:49 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07AAA63A0
+        for <io-uring@vger.kernel.org>; Sat, 17 Dec 2022 19:37:48 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id t2so6005648ply.2
+        for <io-uring@vger.kernel.org>; Sat, 17 Dec 2022 19:37:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gh4t/ycmHZfX06rOPtzSBBl7/QL2eq7+Ab7eP+nK1Ag=;
-        b=eQ/Kg5fPt3APsBvHeMDc17Amcn29vRArSuDTbiPonlrNRAGfh1h9b1iK/Gns5mFOzf
-         tTamXb5qbf0bH8xRBdxvYsZVkRnPifHBLT0Y5rAzVkw4wbezpGDqlzdni3s84bjRvluo
-         0dUSDRiQbadQVj6oCfmhP4Wp1zcpXwc8fYgH2Q4Zy5iowkbDkmcOsyfg9Pef2RaXhA+w
-         YKvAqG8Y3f8p5sUVpZwoDxZcszicV1geSc0mMkoFnlk+BJHfM6XOZW6aRQLT5OUBwyjE
-         iZ/fHZao0/uSWmnJMj1k5qOiPhTkAVbhD0xK0sqOC235lxZVzPAhnFazmUPvVWl29FZF
-         LQbg==
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JPmdFVBSoUDHdzKu3vEBt3ct1YMR2xZ0PuL8XRBEkvk=;
+        b=kaUNtbIGT0anW2ai69S0A6Y1oqKMf0ju4YuCzl6ZWxEr70QLF/XALj6ZSqv9+JZ7fZ
+         0FX6v7+26ZRu5+KrEnwh44ZqUpebmjic43uW19NE+onCPr6iIyZ1fbCaBxheetW3tRQL
+         ByzIlQBUhnt9fdZvYd6cyB5EIymcfJOiJ83Elrxo+RfuUC9ukTr5N+JGhsHvUc4OELHH
+         N7G1M+XY37lQ2HuHuXmzf/wUJSDYT0H4HdTxBMtxo4G6ZqkPXjKdRBVDVkMWH2E+Ofmn
+         ZKBBsVHk82MGpu7RVwqptEpZ0D1qp+u3+1WsWZw4en5yWX3fHtSCx0oUuTlo6G2iPR4W
+         mt0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gh4t/ycmHZfX06rOPtzSBBl7/QL2eq7+Ab7eP+nK1Ag=;
-        b=R7SJW/rlx8lnyvO/3tXyf38gNs7YbZ9gl2e5/wHJr1caM/hpKln7gR+BKz5od93WLi
-         I/WGnKP97HwDlG53LUB1zHa/BnD1DK7p3AFa0uk7IlEfgZQ72X2U7L6CTnvSODMvz0aT
-         B0301siHM2qKGT6/ArNK2xId6OhZv4AIg0iQ0frOG7cY/Kp5LEej743Pl9O8FYn5B0qJ
-         EZroY7haWGDbd3gZbd+RzHvUhdypLQpaVeKF35oX1Sj2J0dX3+CCozp2Dk+AjnAZEssJ
-         N0oCyDytvwIQR+cm9IKIbhtChDX80GtnBDXR5cJhsCdfK8NdkHDt1NEYWFXR4uNsV9dP
-         7u7Q==
-X-Gm-Message-State: ANoB5pl7Lb+eOidevGeYVIbSEQUDG8bEmKe6b00mwdMtW61y3talXdjZ
-        Y0GZFKufg6fSEstlJyox6qGTujoQvn6pQM/waTI=
-X-Google-Smtp-Source: AA0mqf6yCeUahfm828mBpPgxHZ5ixW6su+6eBlxnLc56cTn9GtE5OqzUEjJYh/IsqXsQUohCinr8OA==
-X-Received: by 2002:a05:6a00:1c96:b0:578:451c:84a9 with SMTP id y22-20020a056a001c9600b00578451c84a9mr6647074pfw.2.1671310125820;
-        Sat, 17 Dec 2022 12:48:45 -0800 (PST)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i62-20020a62c141000000b0057737e403d9sm3528761pfg.209.2022.12.17.12.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Dec 2022 12:48:45 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     dylany@meta.com, asml.silence@gmail.com,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/2] io_uring: don't use TIF_NOTIFY_SIGNAL to test for availability of task_work
-Date:   Sat, 17 Dec 2022 13:48:39 -0700
-Message-Id: <20221217204840.45213-2-axboe@kernel.dk>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221217204840.45213-1-axboe@kernel.dk>
-References: <20221217204840.45213-1-axboe@kernel.dk>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPmdFVBSoUDHdzKu3vEBt3ct1YMR2xZ0PuL8XRBEkvk=;
+        b=PI1JeqsiVN7hiC1VYINVoGOVwEMQmUm4LGlY3lMrgwc856D3gQOB+5fJeiXKdmJkBs
+         xQuzf13DkYU/ev1hZcRJlHFwDqoQg7DcV1zfdHG2PCj+jWCg6180k2Juq25c09T8NQdH
+         Dj+82StOE+xOfIO9AVv9VJdeT3Aa7S7HTX1rnf9FQzB0b/6eOvwk1sOxqhXT3ABh6qS4
+         JHu2kaSuwiPenis3eDmUZRLG3+vAXHzTODLN7F73ARy1Bm031z6OcsG6lWjECeXIvKKJ
+         j+aZgPq/+4IntXKk/6E7y20tL2eP9Pn1Mx+fpBt6Yd37sxzeeKkJqZ7w13Nr5jUAYa8U
+         cwIA==
+X-Gm-Message-State: ANoB5pna42bA/JKtvqrfN7ZjQ2nZ6FFVcdAtl0xIC1TWDA3B9/rstxi7
+        Qpfh+weUEICRQGGvGhqlWwEkSZwmv76K3JxxXlo=
+X-Google-Smtp-Source: AA0mqf50gmOVvf+xYzPfiklaoYgbTu0lSAAmzosax6Z98Zs7O1WtfeMKHMdYdt4Ul4AJjkLFWxznWw==
+X-Received: by 2002:a17:902:bb83:b0:18f:5749:cae9 with SMTP id m3-20020a170902bb8300b0018f5749cae9mr6233534pls.2.1671334666796;
+        Sat, 17 Dec 2022 19:37:46 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ij23-20020a170902ab5700b00186b1bfbe79sm4267123plb.66.2022.12.17.19.37.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 17 Dec 2022 19:37:46 -0800 (PST)
+Message-ID: <6188336d-78c6-3e1a-5967-24b2afbaaf25@kernel.dk>
+Date:   Sat, 17 Dec 2022 20:37:45 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: [PATCH v2 2/2] io_uring: include task_work run after scheduling in
+ wait for events
+To:     io-uring@vger.kernel.org
+Cc:     dylany@meta.com, asml.silence@gmail.com
+References: <20221217204840.45213-1-axboe@kernel.dk>
+ <20221217204840.45213-3-axboe@kernel.dk>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20221217204840.45213-3-axboe@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Use task_work_pending() as a better test for whether we have task_work
-or not, TIF_NOTIFY_SIGNAL is only valid if the any of the task_work
-items had been queued with TWA_SIGNAL as the notification mechanism.
-Hence task_work_pending() is a more reliable check.
+It's quite possible that we got woken up because task_work was queued,
+and we need to process this task_work to generate the events waited for.
+If we return to the wait loop without running task_work, we'll end up
+adding the task to the waitqueue again, only to call
+io_cqring_wait_schedule() again which will run the task_work. This is
+less efficient than it could be, as it requires adding to the cq_wait
+queue again. It also triggers the wakeup path for completions as
+cq_wait is now non-empty with the task itself, and it'll require another
+lock grab and deletion to remove ourselves from the waitqueue.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/io_uring.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index c117e029c8dc..e9f0d41ebb99 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -266,8 +266,7 @@ static inline int io_run_task_work(void)
- 
- static inline bool io_task_work_pending(struct io_ring_ctx *ctx)
- {
--	return test_thread_flag(TIF_NOTIFY_SIGNAL) ||
--		!wq_list_empty(&ctx->work_llist);
-+	return task_work_pending(current) || !wq_list_empty(&ctx->work_llist);
+---
+
+v2: tweak return value so we don't potentially return early from
+    waiting on events, if we had nothing to do post returning from
+    schedule.
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 16a323a9ff70..ff2bbac1a10f 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2481,7 +2481,14 @@ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+ 	}
+ 	if (!schedule_hrtimeout(&timeout, HRTIMER_MODE_ABS))
+ 		return -ETIME;
+-	return 1;
++
++	/*
++	 * Run task_work after scheduling. If we got woken because of
++	 * task_work being processed, run it now rather than let the caller
++	 * do another wait loop.
++	 */
++	ret = io_run_task_work_sig(ctx);
++	return ret < 0 ? ret : 1;
  }
  
- static inline int io_run_task_work_ctx(struct io_ring_ctx *ctx)
+ /*
+@@ -2546,6 +2553,8 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+ 		prepare_to_wait_exclusive(&ctx->cq_wait, &iowq.wq,
+ 						TASK_INTERRUPTIBLE);
+ 		ret = io_cqring_wait_schedule(ctx, &iowq, timeout);
++		if (__io_cqring_events_user(ctx) >= min_events)
++			break;
+ 		cond_resched();
+ 	} while (ret > 0);
+
 -- 
-2.35.1
+Jens Axboe
 
