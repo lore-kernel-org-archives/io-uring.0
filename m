@@ -2,109 +2,96 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47B16C4332F
-	for <io-uring@archiver.kernel.org>; Fri, 23 Dec 2022 13:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF6B2C4332F
+	for <io-uring@archiver.kernel.org>; Tue, 27 Dec 2022 10:26:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236067AbiLWNm5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 23 Dec 2022 08:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S229619AbiL0K0T (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 27 Dec 2022 05:26:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiLWNm4 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 23 Dec 2022 08:42:56 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224FF379FB
-        for <io-uring@vger.kernel.org>; Fri, 23 Dec 2022 05:42:55 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id r18so3333048pgr.12
-        for <io-uring@vger.kernel.org>; Fri, 23 Dec 2022 05:42:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jqH11oxwcAtHp0fSh0+KV/J9fhDRJbn1QFrRLAIa+lg=;
-        b=V8kTSCGWVM/FmG2kjN0bUh6UZ4jQSyYtOmHrtNVwpzZHewkg/H3aMCgQTbQfYu1rD2
-         /lc7/syrP/gXsaPPqkndy2o09iFIJKI00jdGK/h0ecA0ArzN/jI9hK18/mWxiCW4aP6b
-         t94YsPzIs0z4BX2XcUCRr6mfvALfsS6MxkocdOxZM/cN0ln4NCVQjLh8E0OR7sFml93F
-         aSe6Yll9J7qgTqncG4CFUc10FyyJccwNiQBHkNpXCNVEqEk4z5Ta+C2aEfX+gEm4fVBr
-         jy/Dai23wmsnYVEXD8iC2Zf/6g4JWrRD1y6Ug737gCkZXxAxnaOZXNBEvOxru2i/huTa
-         /Nrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jqH11oxwcAtHp0fSh0+KV/J9fhDRJbn1QFrRLAIa+lg=;
-        b=OcO7mFk5mHXgxM7EbEYrPnBEtL7VfTXTs7MZboa2rNbMqxXaH44NvscaVJc62DYjFX
-         IuLIVKa8bSpKqUvqQ0s7k7qAu3Bq59AlqFRl90gFg6eShiJSpfYQRDA3Ye3nWBEUg6yP
-         mgH1eJQOKsJzppxE4DLhwURTD5FWXifVJhX3Rqu40Cn22yqnqnul2slGDyI9gY5gwBZy
-         FiBbEUAvGJahTVy1+nMo3Cobot/eDuDGsPZnmwku0/OdNYj0cfDQbPdyXYoEKMaImJKj
-         rz3m9C/orwZgSC6sUCwJydqad9sZrphvpYpyDOZHy7y3VqGfhHH2DrKCcWzuK/WHw1+T
-         Am0w==
-X-Gm-Message-State: AFqh2ko6J2AZ8fyUzZ4VvnCBZttW0HJG4Ta5lELBGKJ/4Pyqx4v4noa1
-        zoJLFufqYD2oGFw8Kmgt9EMb/lzNhn+4V8VK
-X-Google-Smtp-Source: AMrXdXsfp1Nx3aclaTccj9jGWsibzpb4KjL7TIW57G0mDBsm0YrNtxXqvkJhXsr0aEy9QSyD2H5DTQ==
-X-Received: by 2002:a05:6a00:781:b0:57f:d5d1:41d0 with SMTP id g1-20020a056a00078100b0057fd5d141d0mr2412091pfu.3.1671802974163;
-        Fri, 23 Dec 2022 05:42:54 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id f186-20020a6251c3000000b0056c3a0dc65fsm2578702pfb.71.2022.12.23.05.42.52
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Dec 2022 05:42:52 -0800 (PST)
-Message-ID: <42da41ad-fe5d-561d-57f2-d747382e3ce6@kernel.dk>
-Date:   Fri, 23 Dec 2022 06:42:51 -0700
+        with ESMTP id S231461AbiL0KZ6 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 27 Dec 2022 05:25:58 -0500
+X-Greylist: delayed 1148 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 27 Dec 2022 02:25:15 PST
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED540A459
+        for <io-uring@vger.kernel.org>; Tue, 27 Dec 2022 02:25:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=MXvoBodU7OzQI8mpNoakyjVd/kHwKN1N+9v2gAsf+uc=; b=RJZu56YBIO3+3pUl/aebCYdqYF
+        3A8GvE3DFjA7IvNLzRFgUZ7gzuFmq/ocfHQyx+nWskWiBqAxEJMe4XFykIeYG8F0EsTAjcpQx8PLi
+        3+g5MyTuG/lzs5wZktlJKHo5zrnCuAAGTvPJTPr/f5h1AePIilTx5NJaeYpWcaQwLLhVPB0qYIzLY
+        73Stzt2ioA7x3XjIj3VS0EQc9CQWsXmoZDpIBVfqCKo3/7DfhG7LIQiuw+Q4U0JX75U8AzlM8B7jG
+        lPDWkG4rllfnAZRZnqE9ALK2jjDoYNoHaA/yHaLAh7bbSUBm8W+0JNfMigoF8jP9TROYipAvOAhv8
+        4IZsz2q/QtPS1GzShwitcLvlG2/ogfsqD+JNRCYcabIT6h8JZQN0woVZ0sKxaERZFcCJa3ZCXYpsu
+        alQGZ94Aw2GQLTTwF7Wo029qMMbsvuBn1+zjZkPQymYTJcLGB/Olx+iC9jW6BCehSoKPzUWvynIaG
+        8sQ388H9CQ0thooJ0eaLY2im;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1pA6qS-005d3t-UF; Tue, 27 Dec 2022 10:06:05 +0000
+Message-ID: <e9d31456-c819-4c4f-b6d5-43507e7e0494@samba.org>
+Date:   Tue, 27 Dec 2022 11:06:03 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US
-To:     io-uring <io-uring@vger.kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring: check for valid register opcode earlier
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/1] uapi:io_uring.h: allow linux/time_types.h to be
+ skipped
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, Ammar Faizi <ammarfaizi2@gnuweeb.org>
+References: <cover.1668630247.git.metze@samba.org>
+ <7071a0a1d751221538b20b63f9160094fc7e06f4.1668630247.git.metze@samba.org>
+Content-Language: en-US, de-DE
+From:   Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <7071a0a1d751221538b20b63f9160094fc7e06f4.1668630247.git.metze@samba.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We only check the register opcode value inside the restricted ring
-section, move it into the main io_uring_register() function instead
-and check it up front.
+Hi Jens,
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+any chance to get this merged?
 
----
+metze
 
-Should not really matter in practice, but doing backports of changes
-meant I hit test/sync-cancel.t waiting until interrupted on an older
-kernel. The reason is it arms a poll request and then cancels, but
-because we only check for validity later, we end up attempting to
-quiesce the ring (as the opcode is unknown). This won't work on that
-test case, as it knowingly arms a request for cancelation that doesn't
-trigger on its own.
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index ac5d39eeb3d1..58ac13b69dc8 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -4020,8 +4020,6 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 		return -EEXIST;
- 
- 	if (ctx->restricted) {
--		if (opcode >= IORING_REGISTER_LAST)
--			return -EINVAL;
- 		opcode = array_index_nospec(opcode, IORING_REGISTER_LAST);
- 		if (!test_bit(opcode, ctx->restrictions.register_op))
- 			return -EACCES;
-@@ -4177,6 +4175,9 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
- 	long ret = -EBADF;
- 	struct fd f;
- 
-+	if (opcode >= IORING_REGISTER_LAST)
-+		return -EINVAL;
-+
- 	f = fdget(fd);
- 	if (!f.file)
- 		return -EBADF;
-
--- 
-Jens Axboe
+Am 16.11.22 um 21:25 schrieb Stefan Metzmacher:
+> include/uapi/linux/io_uring.h is synced 1:1 into
+> liburing:src/include/liburing/io_uring.h.
+> 
+> liburing has a configure check to detect the need for
+> linux/time_types.h. It can opt-out by defining
+> UAPI_LINUX_IO_URING_H_SKIP_LINUX_TIME_TYPES_H
+> 
+> Fixes: 78a861b94959 ("io_uring: add sync cancelation API through io_uring_register()")
+> Link: https://github.com/axboe/liburing/issues/708
+> Link: https://github.com/axboe/liburing/pull/709
+> Link: https://lore.kernel.org/io-uring/20221115212614.1308132-1-ammar.faizi@intel.com/T/#m9f5dd571cd4f6a5dee84452dbbca3b92ba7a4091
+> CC: Jens Axboe <axboe@kernel.dk>
+> Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+> Signed-off-by: Stefan Metzmacher <metze@samba.org>
+> ---
+>   include/uapi/linux/io_uring.h | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+> index 551e75908f33..082020257f19 100644
+> --- a/include/uapi/linux/io_uring.h
+> +++ b/include/uapi/linux/io_uring.h
+> @@ -10,7 +10,15 @@
+>   
+>   #include <linux/fs.h>
+>   #include <linux/types.h>
+> +/*
+> + * this file is shared with liburing and that has to autodetect
+> + * if linux/time_types.h is available or not, it can
+> + * define UAPI_LINUX_IO_URING_H_SKIP_LINUX_TIME_TYPES_H
+> + * if linux/time_types.h is not available
+> + */
+> +#ifndef UAPI_LINUX_IO_URING_H_SKIP_LINUX_TIME_TYPES_H
+>   #include <linux/time_types.h>
+> +#endif
+>   
+>   #ifdef __cplusplus
+>   extern "C" {
 
