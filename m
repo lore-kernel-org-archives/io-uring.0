@@ -2,40 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F04CC3DA7A
-	for <io-uring@archiver.kernel.org>; Mon,  2 Jan 2023 16:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC91EC3DA7A
+	for <io-uring@archiver.kernel.org>; Mon,  2 Jan 2023 16:10:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236472AbjABQJv (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 2 Jan 2023 11:09:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S232972AbjABQKR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 2 Jan 2023 11:10:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236448AbjABQJt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 2 Jan 2023 11:09:49 -0500
+        with ESMTP id S236540AbjABQJ7 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 2 Jan 2023 11:09:59 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0028EAE72
-        for <io-uring@vger.kernel.org>; Mon,  2 Jan 2023 08:09:04 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6063215
+        for <io-uring@vger.kernel.org>; Mon,  2 Jan 2023 08:09:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1672675744;
+        s=mimecast20190719; t=1672675752;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=QOMPjn0dUYaEDmDsmFebFjuVPC7wNzFHjtW1BGxF+HA=;
-        b=MLDb9UYh3B9YsOCV5Sxht+FKmyeOcv9dqRycd/n1nd7u7KlJ5vOWy20d3uKAv/WIcY7hTq
-        LFTXaYVqan6+o/sSl9D5kpBrCk08SVYAHyKB9xOG4qpnhyVp764ZZJhHvBH0N6a/NKwi8p
-        qcbPUTFGWI2DVWyu2IxvaodZQC+mDdM=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sh73hBCrQns8aoevVV+OOnfi6R1HtUp1NLv5DeAjtKc=;
+        b=WgybEYmh49GhZOS/zL+rI1LaVc2MXgfvdPFK7yKVQNx0fxV/z5G7MadflcnSppqdix5sRk
+        YZRmjfXqrT0OYCdSQR3LkReQwcMC65K07ZXY590GV+zFusSAolY/627G+tX6/7Hu8ybcOJ
+        7Uhdr0CpRlLI7USr9xq7XYIwuVODstg=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-513-HJLq6KMLO_-iX_0gFzvgfQ-1; Mon, 02 Jan 2023 11:09:01 -0500
-X-MC-Unique: HJLq6KMLO_-iX_0gFzvgfQ-1
+ us-mta-517-h6RgIbbbPnKtMqdUN9kSDg-1; Mon, 02 Jan 2023 11:09:09 -0500
+X-MC-Unique: h6RgIbbbPnKtMqdUN9kSDg-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FD8318A6460;
-        Mon,  2 Jan 2023 16:09:00 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48408811E6E;
+        Mon,  2 Jan 2023 16:09:08 +0000 (UTC)
 Received: from t480s.redhat.com (unknown [10.39.193.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CF57C51E5;
-        Mon,  2 Jan 2023 16:08:57 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3D18D35455;
+        Mon,  2 Jan 2023 16:09:06 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
@@ -45,9 +46,11 @@ Cc:     linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Nicolas Pitre <nico@fluxnic.net>, Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
-Subject: [PATCH mm-unstable v1 0/3] mm/nommu: don't use VM_MAYSHARE for MAP_PRIVATE mappings
-Date:   Mon,  2 Jan 2023 17:08:53 +0100
-Message-Id: <20230102160856.500584-1-david@redhat.com>
+Subject: [PATCH mm-unstable v1 3/3] drivers/misc/open-dice: don't touch VM_MAYSHARE
+Date:   Mon,  2 Jan 2023 17:08:56 +0100
+Message-Id: <20230102160856.500584-4-david@redhat.com>
+In-Reply-To: <20230102160856.500584-1-david@redhat.com>
+References: <20230102160856.500584-1-david@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
@@ -55,50 +58,50 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Trying to reduce the confusion around VM_SHARED and VM_MAYSHARE first
-requires !CONFIG_MMU to stop using VM_MAYSHARE for MAP_PRIVATE mappings.
-CONFIG_MMU only sets VM_MAYSHARE for MAP_SHARED mappings.
+A MAP_SHARED mapping always has VM_MAYSHARE set, and writable
+(VM_MAYWRITE) MAP_SHARED mappings have VM_SHARED set as well. To
+identify a MAP_SHARED mapping, it's sufficient to look at VM_MAYSHARE.
 
-This paves the way for further VM_MAYSHARE and VM_SHARED cleanups: for
-example, renaming VM_MAYSHARED to VM_MAP_SHARED to make it cleaner what
-is actually means.
+We cannot have VM_MAYSHARE|VM_WRITE mappings without having VM_SHARED
+set. Consequently, current code will never actually end up clearing
+VM_MAYSHARE and that code is confusing, because nobody is supposed to
+mess with VM_MAYWRITE.
 
-Let's first get the weird case out of the way and not use VM_MAYSHARE in
-MAP_PRIVATE mappings, using a new VM_MAYOVERLAY flag instead.
+Let's clean it up and restructure the code. No functional change intended.
 
-I am not a NOMMU expert, but my basic testing with risc64-nommu with
-buildroot under QEMU revealed no surprises.
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Arnd Bergmann <arnd@arndb.de>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Nicolas Pitre <nico@fluxnic.net>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ drivers/misc/open-dice.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-RFC -> v1:
-* Rebased, retested
-* "drivers/misc/open-dice: don't touch VM_MAYSHARE"
- -> Added; as VM_MAYSHARE semantics are now clearer, it makes sense to
-    include this change in this series.
-
-David Hildenbrand (3):
-  mm/nommu: factor out check for NOMMU shared mappings into
-    is_nommu_shared_mapping()
-  mm/nommu: don't use VM_MAYSHARE for MAP_PRIVATE mappings
-  drivers/misc/open-dice: don't touch VM_MAYSHARE
-
- drivers/char/mem.c       |  2 +-
- drivers/misc/open-dice.c | 14 ++++-----
- fs/cramfs/inode.c        |  2 +-
- fs/proc/task_nommu.c     |  2 +-
- fs/ramfs/file-nommu.c    |  2 +-
- fs/romfs/mmap-nommu.c    |  2 +-
- include/linux/mm.h       | 20 +++++++++++++
- io_uring/io_uring.c      |  2 +-
- mm/nommu.c               | 62 +++++++++++++++++++++++-----------------
- 9 files changed, 68 insertions(+), 40 deletions(-)
-
+diff --git a/drivers/misc/open-dice.c b/drivers/misc/open-dice.c
+index c61be3404c6f..9dda47b3fd70 100644
+--- a/drivers/misc/open-dice.c
++++ b/drivers/misc/open-dice.c
+@@ -90,15 +90,13 @@ static int open_dice_mmap(struct file *filp, struct vm_area_struct *vma)
+ {
+ 	struct open_dice_drvdata *drvdata = to_open_dice_drvdata(filp);
+ 
+-	/* Do not allow userspace to modify the underlying data. */
+-	if ((vma->vm_flags & VM_WRITE) && (vma->vm_flags & VM_SHARED))
+-		return -EPERM;
+-
+-	/* Ensure userspace cannot acquire VM_WRITE + VM_SHARED later. */
+-	if (vma->vm_flags & VM_WRITE)
+-		vma->vm_flags &= ~VM_MAYSHARE;
+-	else if (vma->vm_flags & VM_SHARED)
++	if (vma->vm_flags & VM_MAYSHARE) {
++		/* Do not allow userspace to modify the underlying data. */
++		if (vma->vm_flags & VM_WRITE)
++			return -EPERM;
++		/* Ensure userspace cannot acquire VM_WRITE later. */
+ 		vma->vm_flags &= ~VM_MAYWRITE;
++	}
+ 
+ 	/* Create write-combine mapping so all clients observe a wipe. */
+ 	vma->vm_page_prot = pgprot_writecombine(vma->vm_page_prot);
 -- 
 2.39.0
 
