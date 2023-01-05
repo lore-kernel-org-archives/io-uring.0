@@ -2,87 +2,125 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8357CC53210
-	for <io-uring@archiver.kernel.org>; Thu,  5 Jan 2023 11:23:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A116BC53210
+	for <io-uring@archiver.kernel.org>; Thu,  5 Jan 2023 11:23:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232319AbjAELXk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S231244AbjAELXk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 5 Jan 2023 06:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbjAELXc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 5 Jan 2023 06:23:32 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CAE559CF
-        for <io-uring@vger.kernel.org>; Thu,  5 Jan 2023 03:23:30 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so1053497wmk.4
-        for <io-uring@vger.kernel.org>; Thu, 05 Jan 2023 03:23:30 -0800 (PST)
+        with ESMTP id S233166AbjAELXd (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 5 Jan 2023 06:23:33 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED384E424
+        for <io-uring@vger.kernel.org>; Thu,  5 Jan 2023 03:23:31 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id z8-20020a05600c220800b003d33b0bda11so2276250wml.0
+        for <io-uring@vger.kernel.org>; Thu, 05 Jan 2023 03:23:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RnLeKlrGDU56Ei5ffb3SVEyPQtQDN3I3l1VVzmAdBIM=;
-        b=j89qbQS1IAXOeeOxYmQ5PbOjVHweMoV9rwSwFZXtrayJa7oMhMB0MYD3N+AIvUJW9a
-         JYg35xOUOni+uz/spJBHSRRbM9Z9z+SNa0JKB5c7zau6Vj4A42jjznELS+DXxJKh9WB5
-         lpmI2P9WKfyH83cQ1Jlg7yYv3RywWCV5pONN8M06+hvcstWXjqZA9ctjzkM0D1DXmndf
-         iOP7oJaSB3xWmTSJEbNYh2HgraqyJTV0bg3DUq8p5n0Pck2XkAKaTlg08WLESlSXIzIn
-         0QlSE0OdPLMFjZ/ItiUfR4W5mHvG46KPhE59DTDS5dQhIWHvvHt0Hg07kEEgBzlyiZ3c
-         g4KA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J32+a9orWjFm5kxfSVe7cvbZ2vnqIbSs9t/hFzOVmzg=;
+        b=N4dpfa+ZpXQjakMpg5q3eicTBzPjtPsr22v3eNEqiheUaKkbgQPa5o6/PGd2X4kWar
+         teLbS4f2KEUtrzWAz3MpEcc7d6Z2ERIo1I2r/lD/z0jgESPcDSytJ0lckSJyiWdpZToW
+         OySJ44DE9RL82Vd/IYIaBZv+y+HurSBrqZLYidcMilpalpNtm6oyd7c8Uetg/72/ZWWZ
+         PggqBHinvQLFEyY32kY0knPEhn8p0BB6Iug0vu9dYdKActFwJDNHEmvrVItbjaldofet
+         +ICX2Mcr1t/gutOnPLcVY/2ZnpdNtXhqLwBo8CBCaWLbENtNfJgCnGb0G8yBjvw0V/Bl
+         2mDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RnLeKlrGDU56Ei5ffb3SVEyPQtQDN3I3l1VVzmAdBIM=;
-        b=6VQzpNyxQKKDr0hgwqq7/gxx+NBrxa7D4f9gaipDAD39NYmPuWNJVZjb7vANo5Ngxr
-         eAFIRK13z+mBo6t3l2e4o8okUTYl0YwqnWGHnzuPN0p1gQWKmUF4e9JdsZQLGaa4hhMA
-         SzJzc+G4Nq6pnH4sHXtvloa2e6OVURXG2qwCRoEGjgHr/lXrYoj0iSaoYUPRorbclVr+
-         o3qoPN5a/mRjNIEzKKnMoOqdxBYoKj1mJxjMbxuTTDZcaIVwxgCXBXMGsDhkAO5SzsKt
-         8ikGZhemIDORabCFz0XIoPbeJdPAkaSrpxkSkDnrU+eThPzUvja3kw6jxPBHgd57GJJc
-         PYRg==
-X-Gm-Message-State: AFqh2kqlZItMFfqJgOuctUkKhsDT2RF6s3PS37wTpTg5s9liygR4gBm2
-        wYYUHl4bZisjz4WPcMKnYeddZJ1UgRc=
-X-Google-Smtp-Source: AMrXdXtE+12YcXDG662vGmblRFk8Y0355hORG4VohL91PB/feCB6u5PnewDI02lK7AE3izqce+4UZQ==
-X-Received: by 2002:a05:600c:1d89:b0:3d3:58cb:f6a6 with SMTP id p9-20020a05600c1d8900b003d358cbf6a6mr35850532wms.41.1672917808597;
-        Thu, 05 Jan 2023 03:23:28 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J32+a9orWjFm5kxfSVe7cvbZ2vnqIbSs9t/hFzOVmzg=;
+        b=K/nGKYs2H3h0IzcadyxJ2F55mR5e5u4DSa7TiIRSIM9L+QMQmHx1WMS7sV6t/Uk5fb
+         39N329ZjrIdfqohQJziaDVMU0ImOV4o/p6Tw3kUyv6IWucarMkKIEF/CJykblT1sQ0lu
+         MWfA4AmJdlxXldLVdmKMY5DTLz8dp3QI0oZVm9OcMAWPK+v7eLSU7i2Xf8QHOcw3zZ0o
+         taDSPrOQ3B4trUt7QwKsgYsdqcQGiVb0ngCis+qhs0fpXP63WSXAr2JXx2WZqxEBIJf6
+         3utOXymxlBL0XwZLiXNCuUDSytXEsQKi5xoFy/UnQ5SfKySyDrqJQHWbk2FcGzUo+3i+
+         ezGw==
+X-Gm-Message-State: AFqh2kqyH0YZQCyM7wTutK54pyFkdM8btGsD7/THAiQc4DNPWyJOX8rL
+        /VzzLS2ZaaoYqpC3BcU9FujcDrwHFX8=
+X-Google-Smtp-Source: AMrXdXtxdrRda0VoqvpjUYhqzkYdcaBHr9wBjwfkuQk0c+Vt4NJ9HtA79XOdsWo7klgLs60E69AIrg==
+X-Received: by 2002:a05:600c:358f:b0:3d9:7847:96e2 with SMTP id p15-20020a05600c358f00b003d9784796e2mr26818044wmq.2.1672917810116;
+        Thu, 05 Jan 2023 03:23:30 -0800 (PST)
 Received: from 127.com ([2620:10d:c092:600::2:5c5f])
-        by smtp.gmail.com with ESMTPSA id u13-20020a05600c19cd00b003c6f1732f65sm2220688wmq.38.2023.01.05.03.23.28
+        by smtp.gmail.com with ESMTPSA id u13-20020a05600c19cd00b003c6f1732f65sm2220688wmq.38.2023.01.05.03.23.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 03:23:28 -0800 (PST)
+        Thu, 05 Jan 2023 03:23:29 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCHSET REBASE 00/10] cq wait refactoring rebase
-Date:   Thu,  5 Jan 2023 11:22:19 +0000
-Message-Id: <cover.1672916894.git.asml.silence@gmail.com>
+Subject: [PATCHSET REBASE 03/10] io_uring: kill io_run_task_work_ctx
+Date:   Thu,  5 Jan 2023 11:22:22 +0000
+Message-Id: <40953c65f7c88fb00cdc4d870ca5d5319fb3d7ea.1672916894.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <cover.1672916894.git.asml.silence@gmail.com>
+References: <cover.1672916894.git.asml.silence@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Rebase of 6.3, i.e. recent CQ waiting refactoring series on top of
-just sent 6.2 patch ("io_uring: fix CQ waiting timeout handling").
+There is only one user of io_run_task_work_ctx(), inline it.
 
-Apart from that there are 2 more patches on top, 9/10 squeezes
-an extra 1% of perf for one of my tests.
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/io_uring.c |  6 +++++-
+ io_uring/io_uring.h | 20 --------------------
+ 2 files changed, 5 insertions(+), 21 deletions(-)
 
-Pavel Begunkov (10):
-  io_uring: rearrange defer list checks
-  io_uring: don't iterate cq wait fast path
-  io_uring: kill io_run_task_work_ctx
-  io_uring: move defer tw task checks
-  io_uring: parse check_cq out of wq waiting
-  io_uring: mimimise io_cqring_wait_schedule
-  io_uring: simplify io_has_work
-  io_uring: set TASK_RUNNING right after schedule
-  io_uring: optimise non-timeout waiting
-  io_uring: keep timeout in io_wait_queue
-
- io_uring/io_uring.c | 137 +++++++++++++++++++++++---------------------
- io_uring/io_uring.h |  25 ++------
- 2 files changed, 77 insertions(+), 85 deletions(-)
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index ec800a8bed28..bf6f9777d165 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2452,7 +2452,11 @@ static int io_wake_function(struct wait_queue_entry *curr, unsigned int mode,
+ 
+ int io_run_task_work_sig(struct io_ring_ctx *ctx)
+ {
+-	if (io_run_task_work_ctx(ctx) > 0)
++	if (!llist_empty(&ctx->work_llist)) {
++		if (io_run_local_work(ctx) > 0)
++			return 1;
++	}
++	if (io_run_task_work() > 0)
+ 		return 1;
+ 	if (task_sigpending(current))
+ 		return -EINTR;
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 46c0f765a77a..8a5c3affd724 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -269,26 +269,6 @@ static inline bool io_task_work_pending(struct io_ring_ctx *ctx)
+ 	return task_work_pending(current) || !wq_list_empty(&ctx->work_llist);
+ }
+ 
+-static inline int io_run_task_work_ctx(struct io_ring_ctx *ctx)
+-{
+-	int ret = 0;
+-	int ret2;
+-
+-	if (!llist_empty(&ctx->work_llist))
+-		ret = io_run_local_work(ctx);
+-
+-	/* want to run this after in case more is added */
+-	ret2 = io_run_task_work();
+-
+-	/* Try propagate error in favour of if tasks were run,
+-	 * but still make sure to run them if requested
+-	 */
+-	if (ret >= 0)
+-		ret += ret2;
+-
+-	return ret;
+-}
+-
+ static inline int io_run_local_work_locked(struct io_ring_ctx *ctx)
+ {
+ 	bool locked;
 -- 
 2.38.1
 
