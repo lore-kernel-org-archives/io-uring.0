@@ -2,32 +2,32 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46C90C4708D
-	for <io-uring@archiver.kernel.org>; Fri,  6 Jan 2023 15:43:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC283C4708D
+	for <io-uring@archiver.kernel.org>; Fri,  6 Jan 2023 15:52:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjAFPnU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 6 Jan 2023 10:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S232218AbjAFPwX (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 6 Jan 2023 10:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjAFPnT (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 6 Jan 2023 10:43:19 -0500
+        with ESMTP id S234720AbjAFPwU (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 6 Jan 2023 10:52:20 -0500
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54273D5FA
-        for <io-uring@vger.kernel.org>; Fri,  6 Jan 2023 07:43:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7705911A27
+        for <io-uring@vger.kernel.org>; Fri,  6 Jan 2023 07:52:19 -0800 (PST)
 Received: from localhost.localdomain (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id 32A2D7E3C7;
-        Fri,  6 Jan 2023 15:43:15 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id A65F97E51F;
+        Fri,  6 Jan 2023 15:52:16 +0000 (UTC)
 X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673019798;
-        bh=FANsrJvFg39qFeGYuVJwpL+yRHSuzVVlTCWLyaOaKiw=;
+        s=default; t=1673020339;
+        bh=QaFA/PFZVrWHpLbUPPChboMLcuyCxW3JGVxmlBUo5uU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o8jxLOqUtK6vdoVZNgILWm0z/2KBtRt38ddzKVh35tqoG/nhm+wLm+LEQ0UTCYh1w
-         dxIVCYZ4kSrcaEVgpbK03jdDJhbGK8OLoiEs277cGoyudBSSJIivIvU2IkBil8fowT
-         nAByu1lT4J9zss5LuaMJMSxt5SD2iKK7CSOTkWS0aA3Qjns7WmhnLQKIRTo0+v0FxH
-         FKQ4NLC3cp5o8J9ZuSA1qKMr4pUwGywROcIakwjEwvciAlO7u7SYAP80Qx/m/2Zo6j
-         wJy8zWD4Jr7egTPQFIDf8a1f+LwP9Xm9SERuj6Jg/cDZS3iZnEV1Wkny2jfnBZ9b8A
-         yBhvrKTT/TUQg==
+        b=BQHhEyhaeaxincCwJeezghgRhnDKuk1E8d1Ui1A9XfQHiJRqINfTBXCMbfE3A2+9J
+         BGduiMmwKCGMMcEtAvxBmWVjqbZYEBUhOnqUwbK295CGFcPzXmQCg+DDpji4aRw/wU
+         84xu45DCESifJ81CW5fRuRsEKAORpMZveXzP4tuAiGpsmwQp64Xj9X8Zemf5VcF1mF
+         GiflpNiDVZvzI3z5nEQsxCCnbxJe2uYZ3JkF39D4DTLbix0RnDKcV31OBDjQj+Tbdl
+         I2V9bQabHy1viS12uc4FVv81cjB4GclovYecSS8m+iQJ5ZrWXH7NT4J6ZOcJx5BKLH
+         xngZarPV+AP1Q==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -37,12 +37,12 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
         GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         io-uring Mailing List <io-uring@vger.kernel.org>
-Subject: [PATCH liburing v1 2/2] register: Simplify `io_uring_register_file_alloc_range()` function
-Date:   Fri,  6 Jan 2023 22:42:59 +0700
-Message-Id: <20230106154259.556542-3-ammar.faizi@intel.com>
+Subject: [RFC PATCH liburing v1 1/2] github: Remove nolibc build on the GitHub CI bot
+Date:   Fri,  6 Jan 2023 22:52:01 +0700
+Message-Id: <20230106155202.558533-2-ammar.faizi@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230106154259.556542-1-ammar.faizi@intel.com>
-References: <20230106154259.556542-1-ammar.faizi@intel.com>
+In-Reply-To: <20230106155202.558533-1-ammar.faizi@intel.com>
+References: <20230106155202.558533-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -51,90 +51,34 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Use a struct initializer instead of memset(). It simplifies the C code
-plus effectively reduces the code size.
-
-Extra bonus on x86-64. It reduces the stack allocation because it
-doesn't need to allocate stack for the local variable @range. It can
-just use 128 bytes of redzone below the `%rsp` (redzone is only
-available in a leaf function).
-
-Before this patch:
-
-```
-  0000000000003910 <io_uring_register_file_alloc_range>:
-    3910:  push   %rbp
-    3911:  push   %r15
-    3913:  push   %r14
-    3915:  push   %rbx
-    3916:  sub    $0x18,%rsp
-    391a:  mov    %edx,%r14d
-    391d:  mov    %esi,%ebp
-    391f:  mov    %rdi,%rbx
-    3922:  lea    0x8(%rsp),%r15
-    3927:  mov    $0x10,%edx
-    392c:  mov    %r15,%rdi
-    392f:  xor    %esi,%esi
-    3931:  call   3a00 <__uring_memset>
-    3936:  mov    %ebp,0x8(%rsp)
-    393a:  mov    %r14d,0xc(%rsp)
-    393f:  mov    0xc4(%rbx),%edi
-    3945:  mov    $0x1ab,%eax
-    394a:  mov    $0x19,%esi
-    394f:  mov    %r15,%rdx
-    3952:  xor    %r10d,%r10d
-    3955:  syscall
-    3957:  add    $0x18,%rsp
-    395b:  pop    %rbx
-    395c:  pop    %r14
-    395e:  pop    %r15
-    3960:  pop    %rbp
-    3961:  ret
-    3962:  cs nopw 0x0(%rax,%rax,1)
-    396c:  nopl   0x0(%rax)
-```
-
-After this patch:
-
-```
-  0000000000003910 <io_uring_register_file_alloc_range>:
-    3910:  mov    %esi,-0x10(%rsp) # set range.off
-    3914:  mov    %edx,-0xc(%rsp)  # set range.len
-    3918:  movq   $0x0,-0x8(%rsp)  # zero the resv
-    3921:  mov    0xc4(%rdi),%edi
-    3927:  lea    -0x10(%rsp),%rdx
-    392c:  mov    $0x1ab,%eax
-    3931:  mov    $0x19,%esi
-    3936:  xor    %r10d,%r10d
-    3939:  syscall
-    393b:  ret
-```
+This is a preparation patch to deprecate `--nolibc` configure option.
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- src/register.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ .github/workflows/build.yml | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/src/register.c b/src/register.c
-index 5fdc6e5..ac4c9e3 100644
---- a/src/register.c
-+++ b/src/register.c
-@@ -333,11 +333,10 @@ int io_uring_register_sync_cancel(struct io_uring *ring,
- int io_uring_register_file_alloc_range(struct io_uring *ring,
- 					unsigned off, unsigned len)
- {
--	struct io_uring_file_index_range range;
--
--	memset(&range, 0, sizeof(range));
--	range.off = off;
--	range.len = len;
-+	struct io_uring_file_index_range range = {
-+		.off = off,
-+		.len = len
-+	};
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index c2aa3e6..f18f069 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -117,16 +117,6 @@ jobs:
+         ./configure --cc=${{matrix.cc}} --cxx=${{matrix.cxx}};
+         make -j$(nproc) V=1 CPPFLAGS="-Werror" CFLAGS="$FLAGS" CXXFLAGS="$FLAGS";
  
- 	return __sys_io_uring_register(ring->ring_fd,
- 				       IORING_REGISTER_FILE_ALLOC_RANGE, &range,
+-    - name: Build nolibc
+-      run: |
+-        if [[ "${{matrix.arch}}" == "x86_64" || "${{matrix.arch}}" == "i686" || "${{matrix.arch}}" == "aarch64" ]]; then \
+-            make clean; \
+-            ./configure --cc=${{matrix.cc}} --cxx=${{matrix.cxx}} --nolibc; \
+-            make -j$(nproc) V=1 CPPFLAGS="-Werror" CFLAGS="$FLAGS" CXXFLAGS="$FLAGS"; \
+-        else \
+-            echo "Skipping nolibc build, this arch doesn't support building liburing without libc"; \
+-        fi;
+-
+     - name: Test install command
+       run: |
+         sudo make install;
 -- 
 Ammar Faizi
 
