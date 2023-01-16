@@ -2,94 +2,92 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CB97C46467
-	for <io-uring@archiver.kernel.org>; Mon, 16 Jan 2023 17:10:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDF9DC54EBE
+	for <io-uring@archiver.kernel.org>; Mon, 16 Jan 2023 18:04:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234329AbjAPRKR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 16 Jan 2023 12:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S232539AbjAPSEK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 16 Jan 2023 13:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234300AbjAPRJb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 16 Jan 2023 12:09:31 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7782CFD8
-        for <io-uring@vger.kernel.org>; Mon, 16 Jan 2023 08:50:02 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h16so28049536wrz.12
-        for <io-uring@vger.kernel.org>; Mon, 16 Jan 2023 08:50:02 -0800 (PST)
+        with ESMTP id S233634AbjAPSDX (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 16 Jan 2023 13:03:23 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0DD23C7D
+        for <io-uring@vger.kernel.org>; Mon, 16 Jan 2023 09:49:10 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id jn22so30992748plb.13
+        for <io-uring@vger.kernel.org>; Mon, 16 Jan 2023 09:49:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1T3jBXVzgA/G4SO0KjENeLs4stjTxYEUqvYDC5sW2Hk=;
-        b=eY0W7g0S78Uz9jv7mRveVrmKSGy2GX1iN6ABYxdAuEl9m7+UIYGB6aQQ4Vc+hG9t0S
-         bpa7uSKzpthBaeWIibnhY84KO/Pm3s0045Y7aAkZ1WrOd13bGCMU2LstVRSd9CDazXdk
-         tH6k1AE7Vov/dcMs1AaRq8KWkw4+BBp8hgJAqEx7eMbusjW0NOhW8DD6+cvYqOZEExBq
-         hIkXdy6HVG9Zpc/SZV/sURN4r/dN6FqSbc5zYvlG862q2EBSoHM5QPqnptJQNp+7Uqmx
-         LEfw3FSlhJwHNeBHeYM2ghKuFK2vz7YfbSun3loPKfO9shYExncmFvzAnWr8euuF6X8S
-         h8ZA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1CW2eqf4rBWIDmQmL4T+Y6CdEl25BIvFezsN0Y2yLjw=;
+        b=mHuYC16mklvM/gcnAh7w0ZiCqveVomnFRx000mj+ic4nN8MlqUAnPMpr9HCrjn2KEK
+         uaVl2JSfLzzGDf1zau4em+oCYgiMQp3QCc/IRgIiPHgKbO29AzoYhP8VPChCoYmC6l9w
+         TCG10I3DIxgzgo2POXgK6ZcjjPhq/qJJmqMaULOIE6p4g+Aoi9J/CEvbTwlLUjVZWnqE
+         H/ZgMaYlZCmJTPdxt2syVdZXqv0KOFhLyOdee/i//7ANN4hg38dRrMTsZj84JtG/+MPw
+         ZMhvsi80FidLX8Jcs/O7ZP7NU5PUQgAyY5vAa7SFWPgx04Z37nGrYGOdh2pkJgol/pyO
+         76cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1T3jBXVzgA/G4SO0KjENeLs4stjTxYEUqvYDC5sW2Hk=;
-        b=GziCNk4IbrO1oacA4OLvkQBxtWgfsoAVQeakcjoSdhbZ5ixNCfMKWqwjlprCY0/qBh
-         DqpJDCguYZd4ZuxjpKt3nLIlFHckK1SlcRJqWCAtfJGLP+xDRp3HC3FblSvt1r92uJrt
-         kUi6NKyEsciXa4618lFT1OvUQO+hHDOygdoL8AcD2Pf0ClfEEdQAwHH/DF6RHQRupEhJ
-         c4Ux5RINbWei8i7V/TWqiyth2bQkXpt3gMAburrB+xwb39h80HEc3q5+wiDxElwTvHOh
-         xdcrAmjqUnSAVL7XQ2mAig7gci9TaHxJO4vLRdskA2VB6GfBn3YF1wE/R0EnrWfWi7lR
-         g0Jw==
-X-Gm-Message-State: AFqh2kpputBxMNQ6GL9NAtVL9s7hRYo6pa+bAFY0QGH/n3a2EH4ExlN1
-        qtxS6cVp5P4CSukHriYb/+PR6SWSI4Y=
-X-Google-Smtp-Source: AMrXdXt6xute1sGHKSufEBJ4M7G78ZLEvceOYsVc2gTjouudBlLthMpxI417xi7hcbWrrgQZ2OC9dg==
-X-Received: by 2002:a05:6000:71d:b0:2bb:f4bf:e758 with SMTP id bs29-20020a056000071d00b002bbf4bfe758mr137731wrb.48.1673887800404;
-        Mon, 16 Jan 2023 08:50:00 -0800 (PST)
-Received: from 127.0.0.1localhost (92.41.33.8.threembb.co.uk. [92.41.33.8])
-        by smtp.gmail.com with ESMTPSA id o7-20020a5d62c7000000b002bbeda3809csm20872372wrv.11.2023.01.16.08.49.59
+        bh=1CW2eqf4rBWIDmQmL4T+Y6CdEl25BIvFezsN0Y2yLjw=;
+        b=jTsvBlxkuDt6J20gM2zi/Eh71E8Uy5bmQwh2eC5xeTdizzuB/ruMP+6XWFgI0+Elv4
+         EDHHPOYVknlV+yYWKLhDX2wzJ/D+4CgZ3MlfJzwIPtBrTqZq8sDpz89TvHkxYvDMqt2L
+         5aKGUJoO8SLgc41H9PPUOkeDdAmtktPJHsW4sxphQpNCaXfhHjH1JRy0gAUBb0xEEp7M
+         E3oJivnPQvfeqGO7JykpG/2k7lyE3ZOYl1hRhsPH3vbjjK/OwysoOSiM+5NaVWuLqP1j
+         W2PNjVf5h9Q9DgRsdZR3bIfX6I/noqOhrwAGxNW347jigZlOehQ88OmbXQim7/znQvCd
+         Rg4g==
+X-Gm-Message-State: AFqh2kqG5ZN1DzyFlO0JCt7ojoSRy9DRgACNZCaBG/MeBCsfrWo9sa1A
+        l1wZusxrEjo2TdmzA1UuGwdfmp0XOPJ6dNxJ
+X-Google-Smtp-Source: AMrXdXsANBZEHonW8CDu+KMmt+dPw5rRcqHKZSogYbPELaxeNfgOGykMnuvmp5ebnv6v4dCKDeYOhg==
+X-Received: by 2002:a17:90b:886:b0:221:705a:7e96 with SMTP id bj6-20020a17090b088600b00221705a7e96mr43039pjb.2.1673891350200;
+        Mon, 16 Jan 2023 09:49:10 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id js8-20020a17090b148800b002191e769546sm17215427pjb.4.2023.01.16.09.49.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:50:00 -0800 (PST)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 1/5] io_uring: return back links tw run optimisation
-Date:   Mon, 16 Jan 2023 16:48:57 +0000
-Message-Id: <6328acdbb5e60efc762b18003382de077e6e1367.1673887636.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1673887636.git.asml.silence@gmail.com>
-References: <cover.1673887636.git.asml.silence@gmail.com>
+        Mon, 16 Jan 2023 09:49:09 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <cover.1673886955.git.asml.silence@gmail.com>
+References: <cover.1673886955.git.asml.silence@gmail.com>
+Subject: Re: [PATCH liburing 0/3] test lazy poll wq activation
+Message-Id: <167389134940.273183.15291346388908180958.b4-ty@kernel.dk>
+Date:   Mon, 16 Jan 2023 10:49:09 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12-dev-78c63
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-io_submit_flush_completions() may queue new requests for tw execution,
-especially true for linked requests. Recheck the tw list for emptiness
-after flushing completions.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/io_uring.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On Mon, 16 Jan 2023 16:46:06 +0000, Pavel Begunkov wrote:
+> Some tests around DEFER_TASKRUN and lazy poll activation, with
+> 3/3 specifically testing the feature with disabled.
+> 
+> Pavel Begunkov (3):
+>   tests: refactor poll-many.c
+>   tests: test DEFER_TASKRUN in poll-many
+>   tests: lazy pollwq activation for disabled rings
+> 
+> [...]
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 718f56baecbd..5570422dc2fb 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1344,8 +1344,11 @@ static int __io_run_local_work(struct io_ring_ctx *ctx, bool *locked)
- 
- 	if (!llist_empty(&ctx->work_llist))
- 		goto again;
--	if (*locked)
-+	if (*locked) {
- 		io_submit_flush_completions(ctx);
-+		if (!llist_empty(&ctx->work_llist))
-+			goto again;
-+	}
- 	trace_io_uring_local_work_run(ctx, ret, loops);
- 	return ret;
- }
+Applied, thanks!
+
+[1/3] tests: refactor poll-many.c
+      commit: cfd00c3bfe18452a06792b7269a59d269f62d637
+[2/3] tests: test DEFER_TASKRUN in poll-many
+      commit: a2ab37070b9453e43a94b88878ec3a4d780a4ba6
+[3/3] tests: lazy pollwq activation for disabled rings
+      commit: 849f5ba89b0d1ccf9d825160bf8560ad9901c48b
+
+Best regards,
 -- 
-2.38.1
+Jens Axboe
+
+
 
