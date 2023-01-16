@@ -2,65 +2,90 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 941FAC46467
-	for <io-uring@archiver.kernel.org>; Mon, 16 Jan 2023 14:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7429C63797
+	for <io-uring@archiver.kernel.org>; Mon, 16 Jan 2023 15:00:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbjAPOwm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 16 Jan 2023 09:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S232953AbjAPPAi (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 16 Jan 2023 10:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjAPOwN (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 16 Jan 2023 09:52:13 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729972BF1A
-        for <io-uring@vger.kernel.org>; Mon, 16 Jan 2023 06:38:01 -0800 (PST)
-Received: from [10.7.7.5] (unknown [182.253.183.184])
-        by gnuweeb.org (Postfix) with ESMTPSA id F04CE8186E;
-        Mon, 16 Jan 2023 14:37:58 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1673879881;
-        bh=fa54TgKMNV1QHij0hwa+w4aFEYLDwJ6EwJJiyWY1dNA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HwF/lxMQQmVIjkUZMmzeFZ6iY9hXde2KQuzpwz/KTPw5QWAlCiqDml7NMdn9/dHZD
-         ev4YtmxQcIFU40a7tt8t8Qvk5i9xY4LP/6LrZYi+U0ge4ItgWVsK5Olsg5Gqw9hCvx
-         4Dsg8f55+eWPtD4hleVg9kmS6CbbolQ2Yt33DYU+eT1g5fCvUBv7c4psTgesVrPpTE
-         JIJGcjskPLSMYvp/x59xVnlMsFBWKGF2vJTFSU2Tb9nn4Uf4qNpN9lloKEvdIUnh4s
-         M0sa5wwNAPsvuzhGf+iRqVdfPeJqznuyqmiHbP2LQz36+VCu/UBiwKvdg/+yPUrLcm
-         hwOrRkr/ef7ng==
-Message-ID: <4f920a48-db1f-e8ce-e594-cdcf6899421d@gnuweeb.org>
-Date:   Mon, 16 Jan 2023 21:37:56 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH liburing v2 0/2] Explain about FFI support and how to
- build liburing
+        with ESMTP id S232745AbjAPO7Z (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 16 Jan 2023 09:59:25 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BA422DF7;
+        Mon, 16 Jan 2023 06:49:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A6DE60FD7;
+        Mon, 16 Jan 2023 14:49:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6924DC433EF;
+        Mon, 16 Jan 2023 14:49:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1673880585;
+        bh=pdrPQuiDmmHjQzGsq5CHxSZmPxA94iY0FlqhGnDMkMg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pLE1itkAnZJ6raVfPf71HgORB5bnzRcVqhxTUbFmwIXShDqSXBGlKa9NUznOZylpc
+         3sGn3zLCVnrUCxi6rMNn9KTLkbH6JDquzjD+vrKn36Id0FoliZoy/Jlp/KRuFGmZgW
+         G+M2JOER0LImB0dLCo5wNk/hHnTnd9BvJJ7i9y0E=
+Date:   Mon, 16 Jan 2023 15:49:43 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Christian Mazakas <christian.mazakas@gmail.com>,
-        Gilang Fachrezy <gilang4321@gmail.com>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        VNLX Kernel Department <kernel@vnlx.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-References: <20230116142822.717320-1-ammar.faizi@intel.com>
-Content-Language: en-US
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <20230116142822.717320-1-ammar.faizi@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        io-uring@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        "Sergey V." <truesmb@gmail.com>
+Subject: Re: [regression] =?iso-8859-1?Q?Bug=A02169?=
+ =?iso-8859-1?Q?32_-_io=5Furing_with_libvir?= =?iso-8859-1?Q?t?= cause kernel
+ NULL pointer dereference since 6.1.5
+Message-ID: <Y8VkB6Q2xqeut5N8@kroah.com>
+References: <74347fe1-ac68-2661-500d-b87fab6994f7@leemhuis.info>
+ <c5632908-1b0f-af1f-4754-bf1d0027a6dc@kernel.dk>
+ <a862915b-66f3-9ad8-77d4-4b9ce7044037@kernel.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a862915b-66f3-9ad8-77d4-4b9ce7044037@kernel.dk>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 1/16/23 9:28 PM, Ammar Faizi wrote:
-> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On Mon, Jan 16, 2023 at 07:13:40AM -0700, Jens Axboe wrote:
+> On 1/16/23 6:42 AM, Jens Axboe wrote:
+> > On 1/16/23 6:17?AM, Linux kernel regression tracking (Thorsten Leemhuis) wrote:
+> >> Hi, this is your Linux kernel regression tracker.
+> >>
+> >> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> >> kernel developer don't keep an eye on it, I decided to forward it by
+> >> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216932 :
+> > 
+> > Looks like:
+> > 
+> > commit 6d47e0f6a535701134d950db65eb8fe1edf0b575
+> > Author: Jens Axboe <axboe@kernel.dk>
+> > Date:   Wed Jan 4 08:52:06 2023 -0700
+> > 
+> >     block: don't allow splitting of a REQ_NOWAIT bio
+> > 
+> > got picked up by stable, but not the required prep patch:
+> > 
+> > 
+> > commit 613b14884b8595e20b9fac4126bf627313827fbe
+> > Author: Jens Axboe <axboe@kernel.dk>
+> > Date:   Wed Jan 4 08:51:19 2023 -0700
+> > 
+> >     block: handle bio_split_to_limits() NULL return
+> > 
+> > Greg/team, can you pick the latter too? It'll pick cleanly for
+> > 6.1-stable, not sure how far back the other patch has gone yet.
 > 
-> v
-> v
+> Looked back, and 5.15 has it too, but the cherry-pick won't work
+> on that kernel.
+> 
+> Here's one for 5.15-stable that I verified crashes before this one,
+> and works with it. Haven't done an allmodconfig yet...
 
-Sorry, wrong cover letter, missed it when sending. But the patchset
-diff and changelog are all good.
+All now queued up, thanks!
 
--- 
-Ammar Faizi
-
+greg k-h
