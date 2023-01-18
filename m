@@ -2,90 +2,128 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8E38C32793
-	for <io-uring@archiver.kernel.org>; Wed, 18 Jan 2023 15:02:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31BDCC678D4
+	for <io-uring@archiver.kernel.org>; Wed, 18 Jan 2023 16:01:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbjARPCF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 18 Jan 2023 10:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
+        id S230149AbjARQBc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 18 Jan 2023 11:01:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjARPBi (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 18 Jan 2023 10:01:38 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341746A57
-        for <io-uring@vger.kernel.org>; Wed, 18 Jan 2023 06:57:11 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id j1so8256441iob.6
-        for <io-uring@vger.kernel.org>; Wed, 18 Jan 2023 06:57:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ub1olwoCkB/tkNbcG1M9BPQHo+bSSvBkfTAu5QGk9b0=;
-        b=i4hc7tPiKWZDNp4wQo4OVXPd7w8hyV5o2Wa2kBQinyATlOOvcaQ2i4A8npkcLSWpzv
-         Ez1Ac08rO64w60rUEBZ8/Myt+NA97T8+IAfWLcbxxxuhrvqGcyVU1YQbXc0fdfrDoLXH
-         JnUEolA3DiAFSgOOPjtw+u7Kw5qmf8lk+fYvL0vTcdinBrXnEgekGRDKuQ9RBP8RMqx1
-         4zOsOfgQtf485Y4sdiA9yPbIawe7Vm5wgW32V3jWoQg+mp2KeyzZw5qRKu1/oxl+Kir2
-         bo8BwgaCAYE7OMvmdKv6MD8xR87dZ6Jq9VDMpunFi+9g1est+JSPltKpj8nXjfnDNbyT
-         B/ng==
+        with ESMTP id S231256AbjARP7y (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 18 Jan 2023 10:59:54 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C9054B07;
+        Wed, 18 Jan 2023 07:56:42 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id ud5so84375683ejc.4;
+        Wed, 18 Jan 2023 07:56:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ub1olwoCkB/tkNbcG1M9BPQHo+bSSvBkfTAu5QGk9b0=;
-        b=a5k47tLlp2I1EJgQJJR45pJL+Hy97cvBn2PVZiNVeb0PFYYGe46ANMszrNVC4eFKSI
-         /53jX6xycV8qPRCn/6/nbwkgpAC2eKo44Fc4fCxjiTTh9doOVtBYyIBY9aVtKejvcBGi
-         ZnlB52xmPdzXqZHSlrIU43HPmnzP4gpbGl6Fmf0gh5v2ax0fDFto1134nb/1RyQw7awk
-         GdQoAJIATUgCQA9hKjH8mboN+gPfuPRN9L/ruBsEcukR76U1SndzIBu2cT8oMUALmZaw
-         g3wixV9KBstm52kX44sKsjcaQrZsdZp22TSFiY9nR5c8po700tWP4GbZRl1KiSWYxwHI
-         7WsQ==
-X-Gm-Message-State: AFqh2kpgE+v4yk1v0ZzYDPlO+PYq4ZqBVqAbEYJfaZExbH4GHXM0vvl7
-        GErWfAGAKPG4zqSy0JRlliPuN8FBY+5nR1/7
-X-Google-Smtp-Source: AMrXdXseOQ3gSa/HhYTWzTN0pPeB+ni/totlPwPNTPLJ50/VpCkD1KqDFni+ZX+PGdG1aMipsah4GQ==
-X-Received: by 2002:a6b:7a4c:0:b0:704:eeae:67c7 with SMTP id k12-20020a6b7a4c000000b00704eeae67c7mr591684iop.2.1674053829762;
-        Wed, 18 Jan 2023 06:57:09 -0800 (PST)
-Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id g11-20020a02a08b000000b0038a3b8aaf11sm8769049jah.37.2023.01.18.06.57.08
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kpirYHngnT4pnfeId8PwGYCJd6AYwIUHThaVH7Hubp4=;
+        b=7T8YUUT4iRiPOjpbmsSSqfUMovJ41quEMrCAEwyFYNoZWH9nF4Ql3dD3b4vFhpB6Yw
+         vrnct3W+QU9Cucdx34rP8VdsfiWwjJs0+oVNIDSPVVhXBPDjpB+HxEkPDx1FPOqL6iSG
+         mulwwYFhXDYqZauKSb5UpvGCvL9bqqwmrd9b0pebgEJtPlE5W0FnFFQR9zPqFOgmq0Mi
+         1DgxRGWiFuktg3X6sD0HAWELM9hCIvP3mWI49PsjE6QrePLYweIHBERIyef/VCjJtXLV
+         z77ZXZtHSgySwCaOVnrqoMe6HXVNDzVruAumUxCCuZKHO/yPwe7yHiBTwfsonhf4NweK
+         d2ZA==
+X-Gm-Message-State: AFqh2kqChRMN0ZK8rcJ45UUJwaAAW7vSQMb410493XEYxXYHYqgn4qWA
+        yOIS0dk73Zqz4T/8wmTagio=
+X-Google-Smtp-Source: AMrXdXtr40LzqXP8+RQaUuAxxO44Xk05rql9rcrJEQ3/EUo+edYvelcfQ5ygO11ZQgMVz99c2FljdA==
+X-Received: by 2002:a17:907:c388:b0:86e:65c8:6fe3 with SMTP id tm8-20020a170907c38800b0086e65c86fe3mr8253919ejc.7.1674057401112;
+        Wed, 18 Jan 2023 07:56:41 -0800 (PST)
+Received: from localhost (fwdproxy-cln-120.fbsv.net. [2a03:2880:31ff:78::face:b00c])
+        by smtp.gmail.com with ESMTPSA id gw21-20020a170906f15500b0086dc9e05685sm5621406ejb.222.2023.01.18.07.56.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 06:57:08 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Gabriel Krisman Bertazi <krisman@suse.de>
-Cc:     io-uring@vger.kernel.org
-In-Reply-To: <20230118144806.18352-1-krisman@suse.de>
-References: <20230118144806.18352-1-krisman@suse.de>
-Subject: Re: [PATCH liburing] test/helpers: fix socket length type
-Message-Id: <167405382855.134458.8843645998540843384.b4-ty@kernel.dk>
-Date:   Wed, 18 Jan 2023 07:57:08 -0700
+        Wed, 18 Jan 2023 07:56:40 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org
+Cc:     kasan-dev@googlegroups.com, leitao@debian.org, leit@fb.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring: Enable KASAN for request cache
+Date:   Wed, 18 Jan 2023 07:56:30 -0800
+Message-Id: <20230118155630.2762921-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12-dev-78c63
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+Every io_uring request is represented by struct io_kiocb, which is
+cached locally by io_uring (not SLAB/SLUB) in the list called
+submit_state.freelist. This patch simply enabled KASAN for this free
+list.
 
-On Wed, 18 Jan 2023 11:48:06 -0300, Gabriel Krisman Bertazi wrote:
-> t_create_socket_pair uses size_t for paddrlen, which is uint64 on 64-bit
-> architecture, while the network syscalls expect uint32.  The implicit
-> cast is always safe for little-endian here due to the structure format,
-> its small size and the fact it was previously zeroed - so the test
-> succeeds.
-> 
-> Still, on BE machines, our CI caught a few tests crashing on
-> connect(). For instance:
-> 
-> [...]
+This list is initially created by KMEM_CACHE, but later, managed by
+io_uring. This patch basically poisons the objects that are not used
+(i.e., they are the free list), and unpoisons it when the object is
+allocated/removed from the list.
 
-Applied, thanks!
+Touching these poisoned objects while in the freelist will cause a KASAN
+warning.
 
-[1/1] test/helpers: fix socket length type
-      commit: b5caa618565c0c6d0053f7b1bae2423cd317660c
+Suggested-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ io_uring/io_uring.c |  3 ++-
+ io_uring/io_uring.h | 11 ++++++++---
+ 2 files changed, 10 insertions(+), 4 deletions(-)
 
-Best regards,
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 2ac1cd8d23ea..8cc0f12034d1 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -151,7 +151,7 @@ static void io_move_task_work_from_local(struct io_ring_ctx *ctx);
+ static void __io_submit_flush_completions(struct io_ring_ctx *ctx);
+ static __cold void io_fallback_tw(struct io_uring_task *tctx);
+ 
+-static struct kmem_cache *req_cachep;
++struct kmem_cache *req_cachep;
+ 
+ struct sock *io_uring_get_socket(struct file *file)
+ {
+@@ -230,6 +230,7 @@ static inline void req_fail_link_node(struct io_kiocb *req, int res)
+ static inline void io_req_add_to_cache(struct io_kiocb *req, struct io_ring_ctx *ctx)
+ {
+ 	wq_stack_add_head(&req->comp_list, &ctx->submit_state.free_list);
++	kasan_poison_object_data(req_cachep, req);
+ }
+ 
+ static __cold void io_ring_ctx_ref_free(struct percpu_ref *ref)
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index ab4b2a1c3b7e..0ccf62a19b65 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -3,6 +3,7 @@
+ 
+ #include <linux/errno.h>
+ #include <linux/lockdep.h>
++#include <linux/kasan.h>
+ #include <linux/io_uring_types.h>
+ #include <uapi/linux/eventpoll.h>
+ #include "io-wq.h"
+@@ -379,12 +380,16 @@ static inline bool io_alloc_req_refill(struct io_ring_ctx *ctx)
+ 	return true;
+ }
+ 
++extern struct kmem_cache *req_cachep;
++
+ static inline struct io_kiocb *io_alloc_req(struct io_ring_ctx *ctx)
+ {
+-	struct io_wq_work_node *node;
++	struct io_kiocb *req;
+ 
+-	node = wq_stack_extract(&ctx->submit_state.free_list);
+-	return container_of(node, struct io_kiocb, comp_list);
++	req = container_of(ctx->submit_state.free_list.next, struct io_kiocb, comp_list);
++	kasan_unpoison_object_data(req_cachep, req);
++	wq_stack_extract(&ctx->submit_state.free_list);
++	return req;
+ }
+ 
+ static inline bool io_allowed_run_tw(struct io_ring_ctx *ctx)
 -- 
-Jens Axboe
-
-
+2.30.2
 
