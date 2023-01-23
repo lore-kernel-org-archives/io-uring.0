@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 845A0C05027
-	for <io-uring@archiver.kernel.org>; Mon, 23 Jan 2023 14:42:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D534C54EB4
+	for <io-uring@archiver.kernel.org>; Mon, 23 Jan 2023 14:42:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjAWOmM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 23 Jan 2023 09:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49464 "EHLO
+        id S230220AbjAWOmO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 23 Jan 2023 09:42:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjAWOmM (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 23 Jan 2023 09:42:12 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB39518A8F
-        for <io-uring@vger.kernel.org>; Mon, 23 Jan 2023 06:42:10 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h16so11004225wrz.12
-        for <io-uring@vger.kernel.org>; Mon, 23 Jan 2023 06:42:10 -0800 (PST)
+        with ESMTP id S231131AbjAWOmN (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 23 Jan 2023 09:42:13 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92649126FD
+        for <io-uring@vger.kernel.org>; Mon, 23 Jan 2023 06:42:12 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id bk16so11003863wrb.11
+        for <io-uring@vger.kernel.org>; Mon, 23 Jan 2023 06:42:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zz8mte92pKCxIeKLVprZKS17+HTmr83atw+WYLy32Vc=;
-        b=Vj1M8TO8amcgkWABvF/oy7xptxFL/Gusqo6sLqo1bAvRHrv0imIWciRhFLjdyOiLJQ
-         O4w+7vPstf+5Owpdx6QOL4XtCTlFvHForJW26lZxp+bU9gJ1RCdaPebsLf+QWmU2oydi
-         ZKkTRvh8gQ2821S7YZs+MTa26K/OIcr9FZoGzOxQthtkhjF460T4l8I0QF5QkItubyY2
-         llmGgQIAtdFmMm+/Bv1FUFwZ4IEMUBSRDx7yIxU1+IiGcjxzwCA0Ha+xnmbFwU0vDivu
-         rD0+zWwnBkW9cLoivAqQPOPGJYEhYe4f1Bvj1F7avvP/LdqSBkqFvjjdRSJ+ILXMmKm8
-         P6yg==
+        bh=MMvHvBXJ6HVq2ctrCftC5eJz76/irYGFUMsWT9/tXuI=;
+        b=JkaLi9aKj86qLQhn09LsiJr+DqcdfGFZUaeoHxI5OYHoPzZ5l4IEKm4QIO0b67n99b
+         gRal2gRnKgfgAkZseplIZvU+ec5LmGIBue/vzTErNWnEAOG1i9OUT7WyCAYxysZdk1sk
+         axdvVVKQF8NK1W5TBEnsF8qSEosAKv1uzgx+7Apol6/6MY5wHLsdg3rSgR1Xk4Ph41If
+         UyWKujActklFC8FkIdSvgf1rHUgjuh5UfoNciiOOOSNtdGfNux/7XjTJM0kW4t/hK+kr
+         3hdx+qwOwVj9j35nTszAPZWuWuV7Cej67y05Hzwbi/RjpLByd9rbhHiivWjf4ORJh44A
+         W/vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zz8mte92pKCxIeKLVprZKS17+HTmr83atw+WYLy32Vc=;
-        b=Qr4UTba6wstL8affXRhHvzy8EgQasfD4rDri9smh6CJRYwt+KqIOJFrkewRFCEWqAu
-         KoeCHPOPBfHT37Yk5xwT3Rr8JMKfI+Yl8K8nVE1apixb2YLUXF6iiOoLliwMc0lw7C62
-         TnXENray4yH7GxWFPGAHT24tjJrXH8+adNYH1Kic2fTdQIr/uZzJzN+/e8zA1NC3aM4o
-         53Vr3NZRF03k5mI+5DGWeqtHeq6WQVGm3Xr7X/7CSAoTBv6ZtKTDNikO/V5H6r6hxrN2
-         cPP/aFz4oAmJqG70efkTgCa3StvoNrB98c/DqPSb68Gk2fKixgpLtyK5vMieL7mvyX+7
-         WP0g==
-X-Gm-Message-State: AFqh2koA1bGoTm9WLwE+LXPaswU5k2RcWEeU6E5hve/A4P1kV0GKQS3Q
-        zgLfWIz/YqoCYx/VPfVOvN4p2kR1rTA=
-X-Google-Smtp-Source: AMrXdXsjodMupCNr8n5cE+7o42mWBW1XaAfpb0NgcnER5hy+ldjKyij10BQgs8oYiBty4RJFVxeyHQ==
-X-Received: by 2002:a5d:67d2:0:b0:2be:50a7:cfa9 with SMTP id n18-20020a5d67d2000000b002be50a7cfa9mr11576694wrw.63.1674484929331;
-        Mon, 23 Jan 2023 06:42:09 -0800 (PST)
+        bh=MMvHvBXJ6HVq2ctrCftC5eJz76/irYGFUMsWT9/tXuI=;
+        b=E6BpLkWxKtkbQmRw+krST8TXiA3jG5wAnPO92rf5KfKQtKrASqHGZw/EUYTIobF6oj
+         0oma2gRV1ky6h7PvYjEt2JS+WMZbZ1trOA/NJQpWQmIRnbKvnLrsPt9avRGu8HNYDySf
+         Er8F+Nh2B8X6M76mhsoXcD5FQpAx/2SHPNYbRaeccLT0DpD0DkvfqJ4XCQE/2UColqWu
+         rMkpYHni302A8P/YflxKBxM9LMXB9iR8PeIg8kCZUr99A8vhpdd6EupETFeKB5mawc61
+         h/xhPj/RHfZ23SBrqCDdzdannFuICdpi8SthjKMR2NQ2aZxlomtW7yv9EaX4ZOqX1NBY
+         VYBg==
+X-Gm-Message-State: AFqh2kpvof8xl82b2/svwr+6WoR/lrn7ocWA75+bAtkaMSOtO8IxVlrb
+        9X3g/M8ikyx+Gjni0WNy0Pt2NFd84sY=
+X-Google-Smtp-Source: AMrXdXvqvrdSnu1XAVQvB7A+n2qVlNe5bS/jq4naoqsIQQyFJTTP2VUDfpcpzwsvkdk4FV0lq+Q7iw==
+X-Received: by 2002:a5d:6648:0:b0:2bc:805a:3e77 with SMTP id f8-20020a5d6648000000b002bc805a3e77mr17591222wrw.15.1674484930894;
+        Mon, 23 Jan 2023 06:42:10 -0800 (PST)
 Received: from 127.0.0.1localhost (188.30.84.186.threembb.co.uk. [188.30.84.186])
-        by smtp.gmail.com with ESMTPSA id d24-20020adfa358000000b00236883f2f5csm3250534wrb.94.2023.01.23.06.42.08
+        by smtp.gmail.com with ESMTPSA id d24-20020adfa358000000b00236883f2f5csm3250534wrb.94.2023.01.23.06.42.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 06:42:09 -0800 (PST)
+        Mon, 23 Jan 2023 06:42:10 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH for-next 1/7] io_uring: use user visible tail in io_uring_poll()
-Date:   Mon, 23 Jan 2023 14:37:13 +0000
-Message-Id: <228ffcbf30ba98856f66ffdb9a6a60ead1dd96c0.1674484266.git.asml.silence@gmail.com>
+Subject: [PATCH for-next 3/7] io_uring: improve io_get_sqe
+Date:   Mon, 23 Jan 2023 14:37:15 +0000
+Message-Id: <9cceb11329240ea097dffef6bf0a675bca14cf42.1674484266.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1674484266.git.asml.silence@gmail.com>
 References: <cover.1674484266.git.asml.silence@gmail.com>
@@ -64,28 +64,56 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We return POLLIN from io_uring_poll() depending on whether there are
-CQEs for the userspace, and so we should use the user visible tail
-pointer instead of a transient cached value.
+Return an SQE from io_get_sqe() as a parameter and use the return value
+to determine if it failed or not. This lets the compiler to compile out
+the sqe NULL check when we know that the return SQE is valid.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ io_uring/io_uring.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index aef30d265a13..c42c1124ad5c 100644
+index 118b2fe254ba..6af11a60dc8a 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -2888,7 +2888,7 @@ static __poll_t io_uring_poll(struct file *file, poll_table *wait)
- 	 * pushes them to do the flush.
- 	 */
+@@ -2370,7 +2370,7 @@ static void io_commit_sqring(struct io_ring_ctx *ctx)
+  * used, it's important that those reads are done through READ_ONCE() to
+  * prevent a re-load down the line.
+  */
+-static const struct io_uring_sqe *io_get_sqe(struct io_ring_ctx *ctx)
++static const bool io_get_sqe(struct io_ring_ctx *ctx, const struct io_uring_sqe **sqe)
+ {
+ 	unsigned head, mask = ctx->sq_entries - 1;
+ 	unsigned sq_idx = ctx->cached_sq_head++ & mask;
+@@ -2388,14 +2388,15 @@ static const struct io_uring_sqe *io_get_sqe(struct io_ring_ctx *ctx)
+ 		/* double index for 128-byte SQEs, twice as long */
+ 		if (ctx->flags & IORING_SETUP_SQE128)
+ 			head <<= 1;
+-		return &ctx->sq_sqes[head];
++		*sqe = &ctx->sq_sqes[head];
++		return true;
+ 	}
  
--	if (io_cqring_events(ctx) || io_has_work(ctx))
-+	if (__io_cqring_events_user(ctx) || io_has_work(ctx))
- 		mask |= EPOLLIN | EPOLLRDNORM;
+ 	/* drop invalid entries */
+ 	ctx->cq_extra--;
+ 	WRITE_ONCE(ctx->rings->sq_dropped,
+ 		   READ_ONCE(ctx->rings->sq_dropped) + 1);
+-	return NULL;
++	return false;
+ }
  
- 	return mask;
+ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+@@ -2419,8 +2420,7 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+ 		if (unlikely(!io_alloc_req_refill(ctx)))
+ 			break;
+ 		req = io_alloc_req(ctx);
+-		sqe = io_get_sqe(ctx);
+-		if (unlikely(!sqe)) {
++		if (unlikely(!io_get_sqe(ctx, &sqe))) {
+ 			io_req_add_to_cache(req, ctx);
+ 			break;
+ 		}
 -- 
 2.38.1
 
