@@ -2,133 +2,91 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3FF2C38142
-	for <io-uring@archiver.kernel.org>; Fri, 27 Jan 2023 11:11:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3D37C61DA3
+	for <io-uring@archiver.kernel.org>; Fri, 27 Jan 2023 13:46:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbjA0LL7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 27 Jan 2023 06:11:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S232085AbjA0NqL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 27 Jan 2023 08:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232741AbjA0LL6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Jan 2023 06:11:58 -0500
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DCA5AB41
-        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 03:11:57 -0800 (PST)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30R8D3Xx024286
-        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 03:11:57 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=j+T2de/rQ1tKJORsJG3n8q8AhcOofqpPkUtnpca9BnU=;
- b=a99+vAedfQxWwnulTigbS0KStJWcaEie1TzIHgjH87J4LCVLmnLO7IfJYaoyfB/YmR0h
- LjYS1+JI3j41MlHjzJkgo3fDeg5jY8QbKGwnyOFsVD0alBeB5D1N5iD+zTOYD101QIOk
- wj3SLVS95n49+ngN5/a9Xof6w9MWkX0vsDBV7+birAWHj5wB2zpNBc0AyX80O+Pp3WH0
- cP462KN4v8KRoFHyo0ua9CDv0X2pEw+KDgOJoI5SkV6ZyE09HjgdrncdGqMxLNWz4Aq0
- 2DeDbeFv1g5giL4T0VbP16MAskv5kDTjACNZ5txnHS88vdx1VMKH/a2WLZw4GYz7cEyP yg== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nc35x2mca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 03:11:57 -0800
-Received: from twshared9608.03.ash7.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Fri, 27 Jan 2023 03:11:54 -0800
-Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
-        id EFC57EA01684; Fri, 27 Jan 2023 03:11:44 -0800 (PST)
-From:   Dylan Yudaken <dylany@meta.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>
-CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
+        with ESMTP id S231590AbjA0NqK (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Jan 2023 08:46:10 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8996B65EF7
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 05:46:04 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id r18so3227872pgr.12
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 05:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YTaxy2TnPiRYJ0TKsln4Bi8WHW10ryilnxtI3oqi5QY=;
+        b=zwHRs1Ei802Vb9no/UBDk4nyvDIsa8z0aiIsZLwZ9pympF/lz5acogC3JN2nWyu/9U
+         3S9tGvXoCsrlnZMfsC3UjsG4smKdI8+4wRRJoZdf7nr9l8mE30vlEkkZALb2lxQfoFHz
+         0TMrLz5QDSXemYRJxwuLzcNrtq45oCapUrNYuWXaOXl39N81BttTTRmGLf3ucP3XlwFb
+         3XPiYPrW+zt3UnbPF7DTRTt4PFTe2vInB44hNlpA7/yEn2OAnrTRH0SlUox+gOEZ8QSe
+         Jt3TmEXFmucyDv6iaRqbkTnqO04KqTJlwaVPTEDf4lGiKKvge9YqIuA0CwnFYHSI3hja
+         Slgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YTaxy2TnPiRYJ0TKsln4Bi8WHW10ryilnxtI3oqi5QY=;
+        b=HeYH4E/bs7qJu8e8WvmiI3bptOuSinN6quCDah8oDhCgSbqScd8R2r+pQBbjkBa86+
+         nnmCve8JJ8ONd9G8UoiGCb4mUYTcOT+fKDsZ49D0kcW2ktNQ2eBfcCusBDWgtWZ+nF9/
+         v0lok3HixfUoUAzgXQLjFHYZQl43JBF4T5sPAKv9gCSaMi4h4fxAB+cCqOMLcsycY8W/
+         HAddYN4bXDv8VBmFaJH5pXDohDEW0mMUzbUKj80u6t+CIotLZ7EQGrp7zKU55jrHIPNh
+         a6StjvUknYFRMOHo9hJcXq+tsTk6+LYA7TesSOGAvLPAm7+R+IAXs6jBM6Fb1t/gSRL4
+         E8AA==
+X-Gm-Message-State: AFqh2krd4RIxBT8Rv/gKmcccsKqwBX6QjQptX/itaFXvNsDUOYE5PQY1
+        lqmvNDvbaeNifE1EGAcxXuU5+Q==
+X-Google-Smtp-Source: AMrXdXu/rw9R+blC7zGSLJiHnv/+xU+Pp5JXlaMt4HY9oYtf6XrqmtOQVOw2pRTXl+awfZfDtJ0VuA==
+X-Received: by 2002:a62:e919:0:b0:58d:be61:7d9e with SMTP id j25-20020a62e919000000b0058dbe617d9emr8848731pfh.0.1674827163722;
+        Fri, 27 Jan 2023 05:46:03 -0800 (PST)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id b25-20020a056a0002d900b0058bbe1240easm2602912pft.190.2023.01.27.05.46.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Jan 2023 05:46:02 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
         Dylan Yudaken <dylany@meta.com>
-Subject: [PATCH liburing 1/2] add a test using drain with IORING_SETUP_DEFER_TASKRUN
-Date:   Fri, 27 Jan 2023 03:11:32 -0800
-Message-ID: <20230127111133.2551653-2-dylany@meta.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230127111133.2551653-1-dylany@meta.com>
-References: <20230127111133.2551653-1-dylany@meta.com>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, stable@vger.kernel.org
+In-Reply-To: <20230127105911.2420061-1-dylany@meta.com>
+References: <20230127105911.2420061-1-dylany@meta.com>
+Subject: Re: [PATCH] io_uring: always prep_async for drain requests
+Message-Id: <167482716231.273660.4883362917562226118.b4-ty@kernel.dk>
+Date:   Fri, 27 Jan 2023 06:46:02 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: xT-hKq117UZaXbuTD7WKXs4JEVCc0W-Q
-X-Proofpoint-GUID: xT-hKq117UZaXbuTD7WKXs4JEVCc0W-Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
- definitions=2023-01-27_06,2023-01-27_01,2022-06-22_01
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.0
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This exposes a bug in the kernels handling of drain on an empty ring.
 
-Signed-off-by: Dylan Yudaken <dylany@meta.com>
----
- test/defer-taskrun.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+On Fri, 27 Jan 2023 02:59:11 -0800, Dylan Yudaken wrote:
+> Drain requests all go through io_drain_req, which has a quick exit in case
+> there is nothing pending (ie the drain is not useful). In that case it can
+> run the issue the request immediately.
+> 
+> However for safety it queues it through task work.
+> The problem is that in this case the request is run asynchronously, but
+> the async work has not been prepared through io_req_prep_async.
+> 
+> [...]
 
-diff --git a/test/defer-taskrun.c b/test/defer-taskrun.c
-index 624285ec9582..a013cfdf02d9 100644
---- a/test/defer-taskrun.c
-+++ b/test/defer-taskrun.c
-@@ -283,6 +283,45 @@ static int test_ring_shutdown(void)
- 	return 0;
- }
-=20
-+static int test_drain(void)
-+{
-+	struct io_uring ring;
-+	int ret, i, fd[2];
-+	struct io_uring_sqe *sqe;
-+	struct io_uring_cqe *cqe;
-+	struct iovec iovecs[128];
-+	char buff[ARRAY_SIZE(iovecs)];
-+
-+	ret =3D io_uring_queue_init(8, &ring, IORING_SETUP_SINGLE_ISSUER |
-+					    IORING_SETUP_DEFER_TASKRUN |
-+					    IORING_SETUP_TASKRUN_FLAG);
-+	CHECK(!ret);
-+
-+	for (i =3D 0; i < ARRAY_SIZE(iovecs); i++) {
-+		iovecs[i].iov_base =3D &buff[i];
-+		iovecs[i].iov_len =3D 1;
-+	}
-+
-+	ret =3D t_create_socket_pair(fd, true);
-+	CHECK(!ret);
-+
-+	sqe =3D io_uring_get_sqe(&ring);
-+	io_uring_prep_writev(sqe, fd[1], &iovecs[0], ARRAY_SIZE(iovecs), 0);
-+	sqe->flags |=3D IOSQE_IO_DRAIN;
-+	io_uring_submit(&ring);
-+
-+	for (i =3D 0; i < ARRAY_SIZE(iovecs); i++)
-+		iovecs[i].iov_base =3D NULL;
-+
-+	CHECK(io_uring_wait_cqe(&ring, &cqe) =3D=3D 0);
-+	CHECK(cqe->res =3D=3D 128);
-+
-+	close(fd[0]);
-+	close(fd[1]);
-+	io_uring_queue_exit(&ring);
-+	return 0;
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int ret;
-@@ -332,5 +371,11 @@ int main(int argc, char *argv[])
- 		return T_EXIT_FAIL;
- 	}
-=20
-+	ret =3D test_drain();
-+	if (ret) {
-+		fprintf(stderr, "test_drain failed\n");
-+		return T_EXIT_FAIL;
-+	}
-+
- 	return T_EXIT_PASS;
- }
---=20
-2.30.2
+Applied, thanks!
+
+[1/1] io_uring: always prep_async for drain requests
+      commit: ef5c600adb1d985513d2b612cc90403a148ff287
+
+Best regards,
+-- 
+Jens Axboe
+
+
 
