@@ -2,112 +2,154 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D145C54EAA
-	for <io-uring@archiver.kernel.org>; Thu, 26 Jan 2023 18:35:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C72AC54EAA
+	for <io-uring@archiver.kernel.org>; Fri, 27 Jan 2023 10:59:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjAZSfL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 26 Jan 2023 13:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S232509AbjA0K7m (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 27 Jan 2023 05:59:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjAZSfL (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 26 Jan 2023 13:35:11 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BB2470B3
-        for <io-uring@vger.kernel.org>; Thu, 26 Jan 2023 10:35:08 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id i1so1136277ilu.8
-        for <io-uring@vger.kernel.org>; Thu, 26 Jan 2023 10:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NVoChKAkzts7dgGnV/tbJ1qaKX0TQjLm2fB+YU+Y5HU=;
-        b=DJG5dahUknQalNvuXmjvquTwRb7+wND9jVEVG3eq/iAS2EZC+uNc3Djr76SbQ+cT42
-         VpkHhccHhWE3/IultPYMqq3R6iYGewvUN0+mdveKulV3UfTxE6HPVSR++SuJhNM5WPJx
-         jKz9aQufcH2Y0I4UjSk3Bdk8ElzTl+1Dy9C323tvXPydHOB5oQICKQheUDgLIWvD6CTE
-         5B6GMSGYlDNAAhcqWnYn/ZhADcXdpQe0Re7G62b+QkmW5FQ/D/pzoOroN+HYvrdGA4UL
-         j8i2RbOuxpFIek2HK0IecMjgRH/wuIYeYibvJbWmBwC0Tti/4qLPFZl5BhH/rwJWz/nI
-         5teA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NVoChKAkzts7dgGnV/tbJ1qaKX0TQjLm2fB+YU+Y5HU=;
-        b=ck3sstdUsgU0qYCul+YHSm5Qma5MON2vOn9kE/EnWCCHzfpaDsIdwFB4rOZik3sQ0Y
-         ntz+nuj81LDGB13VgoNOkjzJkhra0bwBDcncKi8AtwI+VmSQ0b90mzxu1glPh+T6zcb4
-         TMR1DWE6oyIyAA6UYx0p217qmBnWdWBi+41SdSl+GNGXUbqWXyknJGaMIIcfTjxThiQs
-         L7QVSt1q9G1oSNAIrROp/ZBOJyGa6THzzG70dJ9Q9iQBdX2VHpXhDJZlMz5VIb44wIqe
-         OZAKEvs0GjEweyUadhOIMAph6K9zU0gWXWM6ZkbMccuCVEKx97YvQWlYHeNyL2001+wi
-         J7Tg==
-X-Gm-Message-State: AO0yUKWrnHHiK6oI/91Z3sfB7N5PqoCugpNQFxmivxirx+MhHY5nh3b8
-        EOHJVlAGxbKYwtV9RWf1RGMbbQ==
-X-Google-Smtp-Source: AK7set8EIWtRkNu5Auglt1Vk3LjfCsZPbg0U2A954m5RV37qEwGXvA2MeHz/UOzkRxQHkpJta2HZSA==
-X-Received: by 2002:a92:6810:0:b0:310:9adc:e1bb with SMTP id d16-20020a926810000000b003109adce1bbmr1367545ilc.0.1674758107631;
-        Thu, 26 Jan 2023 10:35:07 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id v17-20020a92c811000000b0030258f9670bsm544585iln.13.2023.01.26.10.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Jan 2023 10:35:06 -0800 (PST)
-Message-ID: <75e32a84-3a0d-d53f-af1b-b54c1036656c@kernel.dk>
-Date:   Thu, 26 Jan 2023 11:35:05 -0700
+        with ESMTP id S232642AbjA0K7k (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Jan 2023 05:59:40 -0500
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278F918AA8
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 02:59:38 -0800 (PST)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 30RApEf7010934
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 02:59:37 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=SFHN2U2WIAI6nW3KlEx2htg7L7yaTcuHQiYYjVO6IS0=;
+ b=KoiwDmB9/VUV+ch0S3JWRGjP86nd3iBEYTTPxXYXUnMUjf/auEww73baELTU8X2gnkvL
+ TDPao7jatyvM5J6slVL3h3K1MWDe9HDsSkXWpEpoIWJXGUfGsggWCZGjDH0VQgcZ8QR4
+ Z0KmJLUWede963RP6rNILgXHojj9CHehW4Z4OHmT+dfxp3qHuAg87Ss1q3glJT5iwB0P
+ PKRClnUJE6PAesWM6tGmNMFgnenV1KaVNbjgCJO0jW2D6XYD9cWauBPLcLfc+OXA4NJ0
+ r/NpoAO+iJ1QUDF7arNalxk0clNhnoYJnAruMdGGW0Mvclu3GwFkGt/PE9qs/QrSXJIg Sg== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3nbw49x82k-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 02:59:37 -0800
+Received: from twshared5320.05.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 27 Jan 2023 02:59:29 -0800
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 5BC63E9FEC07; Fri, 27 Jan 2023 02:59:15 -0800 (PST)
+From:   Dylan Yudaken <dylany@meta.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>, Dylan Yudaken <dylany@meta.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] io_uring: always prep_async for drain requests
+Date:   Fri, 27 Jan 2023 02:59:11 -0800
+Message-ID: <20230127105911.2420061-1-dylany@meta.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: Phoronix pts fio io_uring test regression report on upstream v6.1
- and v5.15
-Content-Language: en-US
-To:     Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
-Cc:     "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230119213655.2528828-1-saeed.mirzamohammadi@oracle.com>
- <af6f6d3d-b6ea-be46-d907-73fa4aea7b80@kernel.dk>
- <DM5PR10MB14190335EEB0AEF2B48DF6BAF1CE9@DM5PR10MB1419.namprd10.prod.outlook.com>
- <0f7cd96e-7f89-4833-c0af-f90b2c5cf67d@kernel.dk>
- <BCEB787A-38B7-4301-A3CE-A780F3AAB45D@oracle.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <BCEB787A-38B7-4301-A3CE-A780F3AAB45D@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: 3vSLMe3hF_25AHPqMmY8jvdZ5S_Vkrw4
+X-Proofpoint-GUID: 3vSLMe3hF_25AHPqMmY8jvdZ5S_Vkrw4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_06,2023-01-27_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 1/26/23 11:04 AM, Saeed Mirzamohammadi wrote:
-> Hi Jens,
-> 
->> On Jan 25, 2023, at 4:28 PM, Jens Axboe <axboe@kernel.dk> wrote:
->> 
->> On 1/25/23 5:22?PM, Saeed Mirzamohammadi wrote:
->>> Hi Jens,
->>> 
->>> I applied your patch (with a minor conflict in xfs_file_open() since FMODE_BUF_WASYNC isn't in v5.15) and did the same series of tests on the v5.15 kernel. All the io_uring benchmarks regressed 20-45% after it. I haven't tested on v6.1 yet.
->> 
->> It should basically make the behavior the same as before once you apply
->> the patch, so please pass on the patch that you applied for 5.15 so we
->> can take a closer look.
-> 
-> Attached the patch.
+Drain requests all go through io_drain_req, which has a quick exit in cas=
+e
+there is nothing pending (ie the drain is not useful). In that case it ca=
+n
+run the issue the request immediately.
 
-I tested the upstream variant, and it does what it's supposed to and
-gets parallel writes on O_DIRECT. Unpatched, any dio write results in:
+However for safety it queues it through task work.
+The problem is that in this case the request is run asynchronously, but
+the async work has not been prepared through io_req_prep_async.
 
-             fio-566     [000] .....   131.071108: io_uring_queue_async_work: ring 00000000706cb6c0, request 00000000b21691c4, user_data 0xaaab0e8e4c00, opcode WRITE, flags 0xe0040000, hashed queue, work 000000002c5aeb79
+This has not been a problem up to now, as the task work always would run
+before returning to userspace, and so the user would not have a chance to
+race with it.
 
-and after the patch:
+However - with IORING_SETUP_DEFER_TASKRUN - this is no longer the case an=
+d
+the work might be defered, giving userspace a chance to change data being
+referred to in the request.
 
-             fio-376     [000] .....    24.590994: io_uring_queue_async_work: ring 000000007bdb650a, request 000000006b5350e0, user_data 0xaaab1b3e3c00, opcode WRITE, flags 0xe0040000, normal queue, work 00000000e3e81955
+Instead _always_ prep_async for drain requests, which is simpler anyway
+and removes this issue.
 
-where the hashed queued is serialized based on the inode, and the normal
-queue is not (eg they run in parallel).
+Cc: stable@vger.kernel.org
+Fixes: c0e0d6ba25f1 ("io_uring: add IORING_SETUP_DEFER_TASKRUN")
+Signed-off-by: Dylan Yudaken <dylany@meta.com>
+---
 
-As mentioned, the fio job being used isn't representative of anything
-that should actually be run, the async flag really only exists for
-experimentation. Do you have a real workload that is seeing a regression?
-If yes, does that real workload change performance with the patch?
+Hi,
 
--- 
-Jens Axboe
+Worth pointing out in discussion with Pavel that we considered just
+removing the fast path in io_drain_req. That felt like more of an invasiv=
+e
+change as it can add an extra kmalloc + io_prep_async_link(), but perhaps
+you feel that is a better approach.
 
+I'll send out a liburing test shortly.
+
+Dylan
+
+
+ io_uring/io_uring.c | 18 ++++++++----------
+ 1 file changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 0a4efada9b3c..db623b3185c8 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1765,17 +1765,12 @@ static __cold void io_drain_req(struct io_kiocb *=
+req)
+ 	}
+ 	spin_unlock(&ctx->completion_lock);
+=20
+-	ret =3D io_req_prep_async(req);
+-	if (ret) {
+-fail:
+-		io_req_defer_failed(req, ret);
+-		return;
+-	}
+ 	io_prep_async_link(req);
+ 	de =3D kmalloc(sizeof(*de), GFP_KERNEL);
+ 	if (!de) {
+ 		ret =3D -ENOMEM;
+-		goto fail;
++		io_req_defer_failed(req, ret);
++		return;
+ 	}
+=20
+ 	spin_lock(&ctx->completion_lock);
+@@ -2048,13 +2043,16 @@ static void io_queue_sqe_fallback(struct io_kiocb=
+ *req)
+ 		req->flags &=3D ~REQ_F_HARDLINK;
+ 		req->flags |=3D REQ_F_LINK;
+ 		io_req_defer_failed(req, req->cqe.res);
+-	} else if (unlikely(req->ctx->drain_active)) {
+-		io_drain_req(req);
+ 	} else {
+ 		int ret =3D io_req_prep_async(req);
+=20
+-		if (unlikely(ret))
++		if (unlikely(ret)) {
+ 			io_req_defer_failed(req, ret);
++			return;
++		}
++
++		if (unlikely(req->ctx->drain_active))
++			io_drain_req(req);
+ 		else
+ 			io_queue_iowq(req, NULL);
+ 	}
+
+base-commit: b00c51ef8f72ced0965d021a291b98ff822c5337
+--=20
+2.30.2
 
