@@ -2,91 +2,118 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 501F5C38142
-	for <io-uring@archiver.kernel.org>; Fri, 27 Jan 2023 13:46:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A4B8C38142
+	for <io-uring@archiver.kernel.org>; Fri, 27 Jan 2023 13:52:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbjA0NqM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 27 Jan 2023 08:46:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56924 "EHLO
+        id S231643AbjA0Nwu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 27 Jan 2023 08:52:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjA0NqK (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Jan 2023 08:46:10 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E2C77DC1
-        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 05:46:05 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id e10so3226951pgc.9
-        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 05:46:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BZ5QMSBTsX5JA82kC9uG3xUNcFe/RgJ5FnAFfHvCMlc=;
-        b=SqTio/WuTNbZHvyMILJ42IqZ330NltUw/cBJ+R8ytSUTo5stPpuc5xJVrEqpV9XUyc
-         1lUiOGbQJXpkJBt+Au3FQ/K8ci09loQcRT8jScT5WMRABJBT6JxLoFjMJKnfMkyJBJ8A
-         b5rRLI19e1jiIwD3lHCAhyZ25fM5VJ7/vTkZaDs2s+iCGnuPiepwjogaODYqr7NHgC/l
-         5xuVVHb4ef+RKIlG4+n0rt7sBj7yg8X6ZGwnl2xwNb6JDbpMSXckrWQ3lrIaXZ4CnOSm
-         2z7iU6iF36Xe3Fuec2UsUj96TbViw+hQtudX18HzhB8+4uP2ZPYD4/De+QBqEpODZhP6
-         XpXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BZ5QMSBTsX5JA82kC9uG3xUNcFe/RgJ5FnAFfHvCMlc=;
-        b=QN6UP+Sf2gnvuhIN5qsZM3zAd8V42QCCgGVDZdGCXjtkPMN4yICijfgfa1rYyCbFQ5
-         LkLSaKb0gUYxFN5u2tHOjGJvVsbfcBkAkonuC//gVtdcmCqN+U7fI7gxvxP7aCjAkMEH
-         ZoU6jjBmd/XMRA/jOn2hHojxjx4HbmLKKA9PyF1LpUAwjp+9fLj9av+A0xxzh5OlHWR2
-         B9YgxqDfJzAYq7gZkASDz0SjNu09HMrKIa/PLa3qyboDP+G8o5/mxfpj5c9L5J1zfQqE
-         CkYbsqwy5kBcO8ZOhg7XB5NOVyMK4kk+Z4SEAtRlHKF2AO8oZh/O10jzN1Qsw1DEDQMf
-         Rrvw==
-X-Gm-Message-State: AO0yUKWGoKalSn5WN3ef6m8xJ+Jc7lSr4SILUW1jZ4inYyhkP5J88kBB
-        didj/VUwqdYk9QWZEzlPTiRO5A==
-X-Google-Smtp-Source: AK7set98AbTj6Z8aab1sh+RdUeSX1Fs3jDhNWiujEC0micctZsXBVFyHAk5CS01aY3+kJGEvTx++jg==
-X-Received: by 2002:aa7:97a3:0:b0:590:761e:6dc9 with SMTP id d3-20020aa797a3000000b00590761e6dc9mr1609868pfq.1.1674827165079;
-        Fri, 27 Jan 2023 05:46:05 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id b25-20020a056a0002d900b0058bbe1240easm2602912pft.190.2023.01.27.05.46.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 05:46:04 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Pavel Begunkov <asml.silence@gmail.com>,
+        with ESMTP id S233005AbjA0Nwr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Jan 2023 08:52:47 -0500
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62BE07E6E9
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 05:52:44 -0800 (PST)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30RAoTLS006839
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 05:52:43 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=zlkQ2rMCiHuZj7H/1REeNm44K/IpbET0dO8l4PUeygQ=;
+ b=UKeVe4uiicZlJ94dyuWTqEdYmyjU3yCyVyRhugN4ptCDjxwnPR3LzP4PNM8XiIUfbT7R
+ DRjzivk+6p+X5AWnF8ni9ojSttgjf+HtQY0LDiFNGrzLMruX6uXPfpyZzmsp8JMQyu6G
+ GBETjU0tDETTLyGTs5zLVYzSCTEDZZk39KLfTfhaPL8XCZuO/oJ0bvfn/xjpelEIs9if
+ W24czVcapTm1LDkQbagxoXUv9AnGNPxcdtycsumWtkfBLrW+G0DNhNW3pFUMTO3E2GcB
+ s8ritakiPatT6/DF8p4tXb7SOGAl+w+RT7ngE95/XGsL3xSG86KxTsTPTxiyTka+SQhS kw== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3nbb804x1m-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 05:52:43 -0800
+Received: from twshared5320.05.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 27 Jan 2023 05:52:40 -0800
+Received: by devbig038.lla2.facebook.com (Postfix, from userid 572232)
+        id 12482EA28124; Fri, 27 Jan 2023 05:52:35 -0800 (PST)
+From:   Dylan Yudaken <dylany@meta.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+CC:     <io-uring@vger.kernel.org>, <kernel-team@fb.com>,
         Dylan Yudaken <dylany@meta.com>
-Cc:     io-uring@vger.kernel.org, kernel-team@fb.com
-In-Reply-To: <20230127111133.2551653-1-dylany@meta.com>
-References: <20230127111133.2551653-1-dylany@meta.com>
-Subject: Re: [PATCH liburing 0/2] liburing: patches for drain bug
-Message-Id: <167482716378.273660.1586438495902646606.b4-ty@kernel.dk>
-Date:   Fri, 27 Jan 2023 06:46:03 -0700
+Subject: [PATCH for-next 4/4] io_uring: always go async for unsupported open flags
+Date:   Fri, 27 Jan 2023 05:52:27 -0800
+Message-ID: <20230127135227.3646353-5-dylany@meta.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230127135227.3646353-1-dylany@meta.com>
+References: <20230127135227.3646353-1-dylany@meta.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: vOaL0SSKbL1XtLZT5vNxdiJKWDwBdoiW
+X-Proofpoint-GUID: vOaL0SSKbL1XtLZT5vNxdiJKWDwBdoiW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-27_08,2023-01-27_01,2022-06-22_01
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+No point in issuing -> return -EAGAIN -> go async, when it can be done up=
+front.
 
-On Fri, 27 Jan 2023 03:11:31 -0800, Dylan Yudaken wrote:
-> Two patches for the drain bug I just sent a patch for.  Patch 1 definitely
-> fails, but patch 2 I am sending just in case as it exercises some more
-> code paths.
-> 
-> Dylan Yudaken (2): add a test using drain with IORING_SETUP_DEFER_TASKRUN
->   run link_drain test with defer_taskrun too
-> 
-> [...]
+Signed-off-by: Dylan Yudaken <dylany@meta.com>
+---
+ io_uring/openclose.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-Applied, thanks!
-
-[1/2] add a test using drain with IORING_SETUP_DEFER_TASKRUN
-      (no commit info)
-[2/2] run link_drain test with defer_taskrun too
-      (no commit info)
-
-Best regards,
--- 
-Jens Axboe
-
-
+diff --git a/io_uring/openclose.c b/io_uring/openclose.c
+index 67178e4bb282..a1b98c81a52d 100644
+--- a/io_uring/openclose.c
++++ b/io_uring/openclose.c
+@@ -31,6 +31,15 @@ struct io_close {
+ 	u32				file_slot;
+ };
+=20
++static bool io_openat_force_async(struct io_open *open)
++{
++	/*
++	 * Don't bother trying for O_TRUNC, O_CREAT, or O_TMPFILE open,
++	 * it'll always -EAGAIN
++	 */
++	return open->how.flags & (O_TRUNC | O_CREAT | O_TMPFILE);
++}
++
+ static int __io_openat_prep(struct io_kiocb *req, const struct io_uring_=
+sqe *sqe)
+ {
+ 	struct io_open *open =3D io_kiocb_to_cmd(req, struct io_open);
+@@ -61,6 +70,8 @@ static int __io_openat_prep(struct io_kiocb *req, const=
+ struct io_uring_sqe *sqe
+=20
+ 	open->nofile =3D rlimit(RLIMIT_NOFILE);
+ 	req->flags |=3D REQ_F_NEED_CLEANUP;
++	if (io_openat_force_async(open))
++		req->flags |=3D REQ_F_FORCE_ASYNC;
+ 	return 0;
+ }
+=20
+@@ -108,12 +119,7 @@ int io_openat2(struct io_kiocb *req, unsigned int is=
+sue_flags)
+ 	nonblock_set =3D op.open_flag & O_NONBLOCK;
+ 	resolve_nonblock =3D open->how.resolve & RESOLVE_CACHED;
+ 	if (issue_flags & IO_URING_F_NONBLOCK) {
+-		/*
+-		 * Don't bother trying for O_TRUNC, O_CREAT, or O_TMPFILE open,
+-		 * it'll always -EAGAIN
+-		 */
+-		if (open->how.flags & (O_TRUNC | O_CREAT | O_TMPFILE))
+-			return -EAGAIN;
++		WARN_ON_ONCE(io_openat_force_async(open));
+ 		op.lookup_flags |=3D LOOKUP_CACHED;
+ 		op.open_flag |=3D O_NONBLOCK;
+ 	}
+--=20
+2.30.2
 
