@@ -2,71 +2,101 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66E63C38142
-	for <io-uring@archiver.kernel.org>; Fri, 27 Jan 2023 16:53:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59639C636BD
+	for <io-uring@archiver.kernel.org>; Fri, 27 Jan 2023 16:53:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233472AbjA0Qxx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 27 Jan 2023 11:53:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48368 "EHLO
+        id S233442AbjA0Qxz (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 27 Jan 2023 11:53:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbjA0Qxw (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Jan 2023 11:53:52 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B39B1C5AA
-        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 08:53:37 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id r71so2146616iod.2
-        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 08:53:37 -0800 (PST)
+        with ESMTP id S233699AbjA0Qxx (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Jan 2023 11:53:53 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39D01C5B1
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 08:53:39 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id j1so2137763iob.6
+        for <io-uring@vger.kernel.org>; Fri, 27 Jan 2023 08:53:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOH7xqvB/4Xfz5+u+39zFVrarxAxFEjWqbZdqWpGThA=;
-        b=BUJhTiNSuGT0F1K3I6YeRH3BDovwxFdAmFAq43qmsz0AW5VuAgkDwPJ+AZB98M14Ut
-         1PTy3w0iXa1uJiChKkhyDlhlkHxua/JSRHYAmlev5R4c9m9ytgHWb18XVoxqvhkq8aJB
-         7aeloj1G4iJ93cLx+bxE8EAz5cmL47NmLMAJLTjp4gc+zfg1K0ys7YkgeK3YbgMrGxns
-         +XokxiPTZVgA5nvbIAC813ZHHLRO3VebsumA3dBCUFsWgcfMEQwE5JvhXxX4Z46hWA8G
-         hNgWgBmWREGlbUDPMEA74sfbYaGM1QT01VUXSR4N/Ao3Jbo82sCyudE41ZsJJUvWIaA0
-         tdJw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wbQ8rp5TPLHCAmrogV9J/Dd7MJFZT/87PZY4pmOXopA=;
+        b=uIF9G4gERIlCYFJn0uWQs+ckFCTi7jddP6+99kRaCoRNxsKoNGPYZx6nGz3RNmXU0i
+         j4rKVYdF2zdyLuNsLh0VqcayQT/c7Y8aIWQX/s+pRM68ZF6Wt43NV0Ay+UWO+IqOdyj/
+         LL6IoHGgaMlDhhzfsV9NTTpy8gi8ORgV+sGn9Q5xUUqxUrOzKvrhsMNiKEIX7m5ljW1m
+         H0GcuDDsrAkzRyieqTCc3OnmRQC9vRn6mB9fkObNir/KYkDpITMCHIaZCszNdF+rWFCd
+         coXusWlEi95Lnj6GC7CFMk2zdOWVnqCtZjNXjRJUztV49lw8z8+DiYxtDSGkX0vcMgp9
+         R1sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eOH7xqvB/4Xfz5+u+39zFVrarxAxFEjWqbZdqWpGThA=;
-        b=mJeB0wsc3kQWrJQSch7FJG1P3xFS8R5rNCivhuXvM1ynUo6fqZYVrQuw0LNjZAcoTx
-         VJCJqLJ2Qq9unz3iZnRo5pWbpXg9+YusDyxjAxED2DexQ4iFJ560UjqRxZJehyyD3CAq
-         ITw32ecAZM8s0oGqQj+IxQpyYFovXQPlDB4KhwytcELkZKQmGnO/cjKelEAqgOqh8w7/
-         MLRlGHNGPkXP1zMEsT9PdYoYma/jXPeVR9BufZoURFL/POo8HaNa7LDWiwHBuZd4Bxf8
-         WUtnZdNXfvgDSnG551+XEc8nuJlkUyWpmQ1FxKoIRRPQ0f17CnQiqXh/zb6AK3zwqa+8
-         ZKhQ==
-X-Gm-Message-State: AFqh2kpnEsIG27CBy4muyUCe4s738F3I8NACJX8vpLIeeh8e3q1DkoEW
-        V9+sAezF2Kgk5dX43CnIpWTN6KiTPkQXTY7Y
-X-Google-Smtp-Source: AMrXdXvLkc0+6slGKaUR0Un7aLVoB2HQHzXqNfvNU2AORcwWQKS9/BbyFvCm+5wL6ahYtpnE5eXnYA==
-X-Received: by 2002:a6b:8fcd:0:b0:704:d16d:4a59 with SMTP id r196-20020a6b8fcd000000b00704d16d4a59mr6164040iod.2.1674838415904;
-        Fri, 27 Jan 2023 08:53:35 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wbQ8rp5TPLHCAmrogV9J/Dd7MJFZT/87PZY4pmOXopA=;
+        b=mtIgr3hVVcLOl+9MQv12xKGVjPWwEmMsvzRZWvw6fe6u+X0M0yixcRznXfCJn5NTev
+         Yi0LgWLPHHu6OCmibx4bq8/ZDDniXZKlK+79zhG3Bp+Es8QgQYWqRJKThRcjKl0T8T48
+         0A5Du28b8LVM+klUP8bNnHRNBzWBKuv5NLJVw+h6Wp/wdHW7wevMtYVLxkeaFHO3JJ4P
+         6eSHWTy96i4tBayu9YHqLTi6nEoJnpjF/+hyGJoT7WeXuAxqUjsX6V6DXTmzVoF7vBZ2
+         lnA7Sas+c31Y2krfEx35ySCIBZNE1V/0Xql+xfB0BQnrN55Th1wcUCZjz3tiPLE4WyNt
+         F2bg==
+X-Gm-Message-State: AO0yUKUxSo8rbsO6r0xc2aCwuDBwkG7H0qJutvi6JWAOZJcoJRow+ooN
+        K48oKtgjwYIL2ILhw4KI68xx62K/CrfjROdS
+X-Google-Smtp-Source: AK7set/YMdF0UEqcYKZ2WsCpmIrexjDoUs3gtql3d9nzMWVnDDEng/aOg106LjNScAQAU9eMR0WHHg==
+X-Received: by 2002:a6b:b796:0:b0:713:9f31:9c02 with SMTP id h144-20020a6bb796000000b007139f319c02mr231887iof.2.1674838418867;
+        Fri, 27 Jan 2023 08:53:38 -0800 (PST)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id u4-20020a02cb84000000b0039db6cffcbasm1620587jap.71.2023.01.27.08.53.34
-        for <io-uring@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id u4-20020a02cb84000000b0039db6cffcbasm1620587jap.71.2023.01.27.08.53.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jan 2023 08:53:35 -0800 (PST)
+        Fri, 27 Jan 2023 08:53:38 -0800 (PST)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
-Subject: [PATCH for-next 0/2] Fixes for CONFIG_PREEMPT_NONE
-Date:   Fri, 27 Jan 2023 09:53:30 -0700
-Message-Id: <20230127165332.71970-1-axboe@kernel.dk>
+Cc:     Jens Axboe <axboe@kernel.dk>, stable@vger.kernel.org
+Subject: [PATCH 2/2] io_uring: add reschedule point to handle_tw_list()
+Date:   Fri, 27 Jan 2023 09:53:32 -0700
+Message-Id: <20230127165332.71970-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230127165332.71970-1-axboe@kernel.dk>
+References: <20230127165332.71970-1-axboe@kernel.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+If CONFIG_PREEMPT_NONE is set and the task_work chains are long, we
+could be running into issues blocking others for too long. Add a
+reschedule check in handle_tw_list(), and flush the ctx if we need to
+reschedule.
 
-Just a few minor fixes for CONFIG_PREEMPT_NONE, where we a) either need
-to reschedule (IOPOLL), or b) should reschedule if we're looping for a
-potentially long time.
+Cc: stable@vger.kernel.org # 5.10+
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/io_uring.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index bb8a532b051e..bc8845de2829 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1179,10 +1179,16 @@ static unsigned int handle_tw_list(struct llist_node *node,
+ 			/* if not contended, grab and improve batching */
+ 			*locked = mutex_trylock(&(*ctx)->uring_lock);
+ 			percpu_ref_get(&(*ctx)->refs);
+-		}
++		} else if (!*locked)
++			*locked = mutex_trylock(&(*ctx)->uring_lock);
+ 		req->io_task_work.func(req, locked);
+ 		node = next;
+ 		count++;
++		if (unlikely(need_resched())) {
++			ctx_flush_and_put(*ctx, locked);
++			*ctx = NULL;
++			cond_resched();
++		}
+ 	}
+ 
+ 	return count;
 -- 
-Jens Axboe
-
+2.39.0
 
