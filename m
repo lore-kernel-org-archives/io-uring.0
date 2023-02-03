@@ -2,31 +2,31 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4DACC64ED9
-	for <io-uring@archiver.kernel.org>; Fri,  3 Feb 2023 15:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C8A1C64EC6
+	for <io-uring@archiver.kernel.org>; Fri,  3 Feb 2023 15:08:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234037AbjBCPIP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 3 Feb 2023 10:08:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
+        id S234004AbjBCPIW (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 3 Feb 2023 10:08:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbjBCPHx (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 3 Feb 2023 10:07:53 -0500
+        with ESMTP id S234008AbjBCPIL (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 3 Feb 2023 10:08:11 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9742AA56CC;
-        Fri,  3 Feb 2023 07:07:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14471EFF9;
+        Fri,  3 Feb 2023 07:08:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=ozMZvF4F/akQ9A5h2X8GtqkaNdRpJcsfIZKKgUgmw0I=; b=NsY1QrICJKTA+CSUtrWle0mKa2
-        J8/RIQxPFQRt+FyzQ5NfhJil6+wd+Vb1D0lANR0aVtsgTqodWoWyn5bYXnbq9k7gnNvwyDWOjhkeR
-        vnNOu6CYMAtSzcM2d7xE/VJ+c/Lqtyh0gd6yJ7/d9sjsVhHj/kXrmNHvsVdBtyYWbb7W/dpLiT/IM
-        B0pXXzhjJtTPTahY8zyMrMcj80kL3+TPUMaY5LXlHXlNwy5kPByoRdWKg2ObicNbgL+lI6oGB5aiz
-        BDRVVq4nqS8SAUegJvU4rV6rHUE0xE+U5comPu5ldTD2+F2GUfxaZmug0p3m34pElQJqYWaNcG9FT
-        T62fXDrw==;
+        bh=dnA485lnPdqu9fRBS2qkCU3tICV+bOtSo2Jj04+TH0Y=; b=Fr2nVID34QDUltwq0bImkCeDcO
+        /+q6hVRTezRnWD5cp1Mt8wSzR/8lRaNN26QLIzpNwWbueekXAbFKEYoVgwcbDX2xmbETrpybVdFvq
+        qckHbNtD9VLXkwDO8SNcKq8lvYBhiXJr2ALEUy5RbTaChn5QTA/Z6DCFTv4Zkq6K9v7KJu1VCB6Re
+        CVRtkwXX337WesOCBDtZMPzjTxDB7Z/AObQg8qfemm5wGp90YF61h2quDouspw0vBMUrHG46AIt9u
+        jHsBTrclwFPo+jFVAuFu3TRmQnJP2IFco6pruc0D1NUcJz8lug0gER+d9PHihFfSuj858y9ENZCW3
+        YwwUYTxg==;
 Received: from [2001:4bb8:19a:272a:910:bb67:7287:f956] (helo=localhost)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pNxej-002at9-3V; Fri, 03 Feb 2023 15:07:13 +0000
+        id 1pNxex-002b3m-Rl; Fri, 03 Feb 2023 15:07:28 +0000
 From:   Christoph Hellwig <hch@lst.de>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     Ilya Dryomov <idryomov@gmail.com>,
@@ -59,9 +59,9 @@ Cc:     Ilya Dryomov <idryomov@gmail.com>,
         linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
         devel@lists.orangefs.org, io-uring@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 11/23] afs: use bvec_set_folio to initialize a bvec
-Date:   Fri,  3 Feb 2023 16:06:22 +0100
-Message-Id: <20230203150634.3199647-12-hch@lst.de>
+Subject: [PATCH 15/23] nfs: use bvec_set_page to initialize bvecs
+Date:   Fri,  3 Feb 2023 16:06:26 +0100
+Message-Id: <20230203150634.3199647-16-hch@lst.de>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230203150634.3199647-1-hch@lst.de>
 References: <20230203150634.3199647-1-hch@lst.de>
@@ -72,40 +72,56 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Use the bvec_set_folio helper to initialize a bvec.
+Use the bvec_set_page helper to initialize bvecs.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
-Acked-by: David Howells <dhowells@redhat.com>
+Acked-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 ---
- fs/afs/write.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ fs/nfs/fscache.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/fs/afs/write.c b/fs/afs/write.c
-index 19df10d63323d8..2d17891b618e6e 100644
---- a/fs/afs/write.c
-+++ b/fs/afs/write.c
-@@ -992,7 +992,7 @@ int afs_launder_folio(struct folio *folio)
- {
- 	struct afs_vnode *vnode = AFS_FS_I(folio_inode(folio));
+diff --git a/fs/nfs/fscache.c b/fs/nfs/fscache.c
+index e731c00a9fcbc3..ea5f2976dfaba4 100644
+--- a/fs/nfs/fscache.c
++++ b/fs/nfs/fscache.c
+@@ -245,14 +245,12 @@ static int fscache_fallback_read_page(struct inode *inode, struct page *page)
+ 	struct netfs_cache_resources cres;
+ 	struct fscache_cookie *cookie = nfs_i_fscache(inode);
  	struct iov_iter iter;
--	struct bio_vec bv[1];
-+	struct bio_vec bv;
- 	unsigned long priv;
- 	unsigned int f, t;
- 	int ret = 0;
-@@ -1008,10 +1008,8 @@ int afs_launder_folio(struct folio *folio)
- 			t = afs_folio_dirty_to(folio, priv);
- 		}
+-	struct bio_vec bvec[1];
++	struct bio_vec bvec;
+ 	int ret;
  
--		bv[0].bv_page = &folio->page;
--		bv[0].bv_offset = f;
--		bv[0].bv_len = t - f;
--		iov_iter_bvec(&iter, ITER_SOURCE, bv, 1, bv[0].bv_len);
-+		bvec_set_folio(&bv, folio, t - f, f);
-+		iov_iter_bvec(&iter, ITER_SOURCE, &bv, 1, bv.bv_len);
+ 	memset(&cres, 0, sizeof(cres));
+-	bvec[0].bv_page		= page;
+-	bvec[0].bv_offset	= 0;
+-	bvec[0].bv_len		= PAGE_SIZE;
+-	iov_iter_bvec(&iter, ITER_DEST, bvec, ARRAY_SIZE(bvec), PAGE_SIZE);
++	bvec_set_page(&bvec, page, PAGE_SIZE, 0);
++	iov_iter_bvec(&iter, ITER_DEST, &bvec, 1, PAGE_SIZE);
  
- 		trace_afs_folio_dirty(vnode, tracepoint_string("launder"), folio);
- 		ret = afs_store_data(vnode, &iter, folio_pos(folio) + f, true);
+ 	ret = fscache_begin_read_operation(&cres, cookie);
+ 	if (ret < 0)
+@@ -273,16 +271,14 @@ static int fscache_fallback_write_page(struct inode *inode, struct page *page,
+ 	struct netfs_cache_resources cres;
+ 	struct fscache_cookie *cookie = nfs_i_fscache(inode);
+ 	struct iov_iter iter;
+-	struct bio_vec bvec[1];
++	struct bio_vec bvec;
+ 	loff_t start = page_offset(page);
+ 	size_t len = PAGE_SIZE;
+ 	int ret;
+ 
+ 	memset(&cres, 0, sizeof(cres));
+-	bvec[0].bv_page		= page;
+-	bvec[0].bv_offset	= 0;
+-	bvec[0].bv_len		= PAGE_SIZE;
+-	iov_iter_bvec(&iter, ITER_SOURCE, bvec, ARRAY_SIZE(bvec), PAGE_SIZE);
++	bvec_set_page(&bvec, page, PAGE_SIZE, 0);
++	iov_iter_bvec(&iter, ITER_SOURCE, &bvec, 1, PAGE_SIZE);
+ 
+ 	ret = fscache_begin_write_operation(&cres, cookie);
+ 	if (ret < 0)
 -- 
 2.39.0
 
