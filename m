@@ -2,57 +2,131 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B259C61DA4
-	for <io-uring@archiver.kernel.org>; Sun,  5 Feb 2023 01:20:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 90479C636CD
+	for <io-uring@archiver.kernel.org>; Sun,  5 Feb 2023 18:51:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjBEBUE (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 4 Feb 2023 20:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
+        id S229437AbjBESvp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 5 Feb 2023 13:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjBEBUE (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 4 Feb 2023 20:20:04 -0500
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54E626CDE
-        for <io-uring@vger.kernel.org>; Sat,  4 Feb 2023 17:19:34 -0800 (PST)
-Received: from biznet-home.integral.gnuweeb.org (unknown [182.253.183.234])
-        by gnuweeb.org (Postfix) with ESMTPSA id AA3E381F44;
-        Sun,  5 Feb 2023 01:18:32 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1675559914;
-        bh=l/DJfoi8K+d2hbKh98qoULkwilwP4zhB8Rv99ZYrr4c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m3IM5MoZZ5R+thzapfDNyYktRJP0LcXBiijR3OnVZ6mxNVAbgCx5TqIHgF+uEKrMK
-         zlp+h5raSuVuORKFh5B2ZnLRUPLMuryiYgC+SwC5Zm9Ho4Wt6hZYurH5PmGugXZGDE
-         6YBI2h5EmUmBnnNnP3d0WkNUynrf3QDsDbAO1ET+nDsTUmX+IZWhnqXy1wYihvzIXu
-         1vLRwOcOeW1PnXl2Cbdi0onqqgKJIVlCNY65fMsMrxllJpoi42VpZcrMhdu0Bz+WB1
-         dbveZm+6kE6YyX1vZ5f03XA0VipOMKRdZaKGKR4gLX/euUPL5far4LgEurd5zAVnC8
-         1NinRrnFGgQ0w==
-Date:   Sun, 5 Feb 2023 08:18:29 +0700
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Stefan Roesch <shr@devkernel.io>
-Cc:     Facebook Kernel Team <kernel-team@fb.com>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH v7 4/4] liburing: update changelog with new feature
-Message-ID: <Y98D5QxKyl2r6Uhc@biznet-home.integral.gnuweeb.org>
-References: <20230205002424.102422-1-shr@devkernel.io>
- <20230205002424.102422-5-shr@devkernel.io>
+        with ESMTP id S229460AbjBESvo (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 5 Feb 2023 13:51:44 -0500
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102391C31F
+        for <io-uring@vger.kernel.org>; Sun,  5 Feb 2023 10:51:41 -0800 (PST)
+Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
+        id 5AAAC658CF46; Sun,  5 Feb 2023 10:51:28 -0800 (PST)
+From:   Stefan Roesch <shr@devkernel.io>
+To:     io-uring@vger.kernel.org, kernel-team@fb.com
+Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org
+Subject: [PATCH v8 2/4] liburing: add documentation for new napi busy polling
+Date:   Sun,  5 Feb 2023 10:51:20 -0800
+Message-Id: <20230205185122.2096480-3-shr@devkernel.io>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230205185122.2096480-1-shr@devkernel.io>
+References: <20230205185122.2096480-1-shr@devkernel.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205002424.102422-5-shr@devkernel.io>
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Sat, Feb 04, 2023 at 04:24:24PM -0800, Stefan Roesch wrote:
-> Add a new entry to the changelog file for the napi busy poll feature.
-> 
-> Signed-off-by: Stefan Roesch <shr@devkernel.io>
+This adds two man pages for the two new functions:
+- io_uring_register_nap
+- io_uring_unregister_napi
 
-Acked-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Signed-off-by: Stefan Roesch <shr@devkernel.io>
+Reviewed-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+---
+ man/io_uring_register_napi.3   | 40 ++++++++++++++++++++++++++++++++++
+ man/io_uring_unregister_napi.3 | 27 +++++++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+ create mode 100644 man/io_uring_register_napi.3
+ create mode 100644 man/io_uring_unregister_napi.3
 
--- 
-Ammar Faizi
+diff --git a/man/io_uring_register_napi.3 b/man/io_uring_register_napi.3
+new file mode 100644
+index 0000000..6ce8cff
+--- /dev/null
++++ b/man/io_uring_register_napi.3
+@@ -0,0 +1,40 @@
++.\" Copyright (C) 2022 Stefan Roesch <shr@devkernel.io>
++.\"
++.\" SPDX-License-Identifier: LGPL-2.0-or-later
++.\"
++.TH io_uring_register_napi 3 "November 16, 2022" "liburing-2.4" "liburin=
+g Manual"
++.SH NAME
++io_uring_register_napi \- register NAPI busy poll settings
++.SH SYNOPSIS
++.nf
++.B #include <liburing.h>
++.PP
++.BI "int io_uring_register_napi(struct io_uring *" ring ","
++.BI "                           struct io_uring_napi *" napi)
++.PP
++.fi
++.SH DESCRIPTION
++.PP
++The
++.BR io_uring_register_napi (3)
++function registers the NAPI settings for subsequent operations. The NAPI
++settings are specified in the structure that is passed in the
++.I napi
++parameter. The structure consists of the napi timeout
++.I busy_poll_to
++(napi busy poll timeout in us) and
++.IR prefer_busy_poll .
++
++Registering a NAPI settings sets the mode when calling the function
++napi_busy_loop and corresponds to the SO_PREFER_BUSY_POLL socket
++option.
++
++NAPI busy poll can reduce the network roundtrip time.
++
++
++.SH RETURN VALUE
++On success
++.BR io_uring_register_napi (3)
++return 0. On failure they return
++.BR -errno .
++It also updates the napi structure with the current values.
+diff --git a/man/io_uring_unregister_napi.3 b/man/io_uring_unregister_nap=
+i.3
+new file mode 100644
+index 0000000..f7087ef
+--- /dev/null
++++ b/man/io_uring_unregister_napi.3
+@@ -0,0 +1,27 @@
++.\" Copyright (C) 2022 Stefan Roesch <shr@devkernel.io>
++.\"
++.\" SPDX-License-Identifier: LGPL-2.0-or-later
++.\"
++.TH io_uring_unregister_napi 3 "November 16, 2022" "liburing-2.4" "libur=
+ing Manual"
++.SH NAME
++io_uring_unregister_napi \- unregister NAPI busy poll settings
++.SH SYNOPSIS
++.nf
++.B #include <liburing.h>
++.PP
++.BI "int io_uring_unregister_napi(struct io_uring *" ring ","
++.BI "                             struct io_uring_napi *" napi)
++.PP
++.fi
++.SH DESCRIPTION
++.PP
++The
++.BR io_uring_unregister_napi (3)
++function unregisters the NAPI busy poll settings for subsequent operatio=
+ns.
++
++.SH RETURN VALUE
++On success
++.BR io_uring_unregister_napi (3)
++return 0. On failure they return
++.BR -errno .
++It also updates the napi structure with the current values.
+--=20
+2.30.2
 
