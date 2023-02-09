@@ -2,126 +2,182 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 297E0C64EC5
-	for <io-uring@archiver.kernel.org>; Thu,  9 Feb 2023 23:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BCE2C05027
+	for <io-uring@archiver.kernel.org>; Thu,  9 Feb 2023 23:02:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjBIXC1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 9 Feb 2023 18:02:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55724 "EHLO
+        id S230414AbjBIXC0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 9 Feb 2023 18:02:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjBIXCY (ORCPT
+        with ESMTP id S230388AbjBIXCY (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Thu, 9 Feb 2023 18:02:24 -0500
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E305EBE3
-        for <io-uring@vger.kernel.org>; Thu,  9 Feb 2023 15:02:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C655EBF5
+        for <io-uring@vger.kernel.org>; Thu,  9 Feb 2023 15:02:24 -0800 (PST)
 Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id A6EB06AB676D; Thu,  9 Feb 2023 15:02:01 -0800 (PST)
+        id C06186AB6779; Thu,  9 Feb 2023 15:02:01 -0800 (PST)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     io-uring@vger.kernel.org, kernel-team@fb.com
-Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org
-Subject: [PATCH v8 0/7] io_uring: add napi busy polling support 
-Date:   Thu,  9 Feb 2023 15:01:37 -0800
-Message-Id: <20230209230144.465620-1-shr@devkernel.io>
+Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH v8 6/7] io_uring: add api to set / get napi configuration.
+Date:   Thu,  9 Feb 2023 15:01:43 -0800
+Message-Id: <20230209230144.465620-7-shr@devkernel.io>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230209230144.465620-1-shr@devkernel.io>
+References: <20230209230144.465620-1-shr@devkernel.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the napi busy polling support in io_uring.c. It adds a new
-napi_list to the io_ring_ctx structure. This list contains the list of
-napi_id's that are currently enabled for busy polling. This list is
-used to determine which napi id's enabled busy polling. For faster
-access it also adds a hash table.
+This adds an api to register the busy poll timeout from liburing. To be
+able to use this functionality, the corresponding liburing patch is neede=
+d.
 
-When a new napi id is added, the hash table is used to locate if
-the napi id has already been added. When processing the busy poll
-loop the list is used to process the individual elements.
+Signed-off-by: Stefan Roesch <shr@devkernel.io>
+Acked-by: Jakub Kicinski <kuba@kernel.org>
+---
+ include/uapi/linux/io_uring.h | 11 +++++++++++
+ io_uring/io_uring.c           |  9 +++++++++
+ io_uring/napi.c               | 35 +++++++++++++++++++++++++++++++++++
+ io_uring/napi.h               | 13 +++++++++++++
+ 4 files changed, 68 insertions(+)
 
-io-uring allows specifying two parameters:
-- busy poll timeout and
-- prefer busy poll to call of io_napi_busy_loop()
-This sets the above parameters for the ring. The settings are passed
-with a new structure io_uring_napi.
-
-There is also a corresponding liburing patch series, which enables this
-feature. The name of the series is "liburing: add add api for napi busy
-poll timeout". It also contains two programs to test the this.
-
-Testing has shown that the round-trip times are reduced to 38us from
-55us by enabling napi busy polling with a busy poll timeout of 100us.
-More detailled results are part of the commit message of the first
-patch.
-
-Changes:
-- V8:
-  - added new file napi.c and add napi functions to this file
-  - added NAPI_LIST_HEAD function so no ifdef is necessary
-  - added io_napi_init and io_napi_free function
-  - added io_napi_setup_busy loop helper function
-  - added io_napi_adjust_busy_loop helper function
-  - added io_napi_end_busy_loop helper function
-  - added io_napi_sqpoll_busy_poll helper function
-  - some of the definitions in napi.h are macros to avoid ifdef
-    definitions in io_uring.c, poll.c and sqpoll.c
-  - changed signature of io_napi_add function
-  - changed size of hashtable to 16. The number of entries is limited
-    by the number of nic queues.
-  - Removed ternary in io_napi_blocking_busy_loop
-  - Rewrote io_napi_blocking_busy_loop to make it more readable
-  - Split off 3 more patches
-- V7:
-  - allow unregister with NULL value for arg parameter
-  - return -EOPNOTSUPP if CONFIG_NET_RX_BUSY_POLL is not enabled
-- V6:
-  - Add a hash table on top of the list for faster access during the
-    add operation. The linked list and the hash table use the same
-    data structure
-- V5:
-  - Refreshed to 6.1-rc6
-  - Use copy_from_user instead of memdup/kfree
-  - Removed the moving of napi_busy_poll_to
-  - Return -EINVAL if any of the reserved or padded fields are not 0.
-- V4:
-  - Pass structure for napi config, instead of individual parameters
-- V3:
-  - Refreshed to 6.1-rc5
-  - Added a new io-uring api for the prefer napi busy poll api and wire
-    it to io_napi_busy_loop().
-  - Removed the unregister (implemented as register)
-  - Added more performance results to the first commit message.
-- V2:
-  - Add missing defines if CONFIG_NET_RX_BUSY_POLL is not defined
-  - Changes signature of function io_napi_add_list to static inline
-    if CONFIG_NET_RX_BUSY_POLL is not defined
-  - define some functions as static
-
-
-Stefan Roesch (7):
-  io-uring: move io_wait_queue definition to header file
-  io-uring: add napi fields to io_ring_ctx
-  io-uring: add busy poll timeout, prefer busy poll to io_wait_queue
-  io-uring: add napi busy poll support
-  io-uring: add sqpoll support for napi busy poll
-  io_uring: add api to set / get napi configuration.
-  io_uring: add api to set / get napi configuration.
-
- include/linux/io_uring_types.h |  10 +
- include/uapi/linux/io_uring.h  |  12 ++
- io_uring/Makefile              |   1 +
- io_uring/io_uring.c            |  42 ++--
- io_uring/io_uring.h            |  26 +++
- io_uring/napi.c                | 345 +++++++++++++++++++++++++++++++++
- io_uring/napi.h                |  64 ++++++
- io_uring/poll.c                |   2 +
- io_uring/sqpoll.c              |   4 +
- 9 files changed, 485 insertions(+), 21 deletions(-)
- create mode 100644 io_uring/napi.c
- create mode 100644 io_uring/napi.h
-
-
-base-commit: 2f2bb1ffc9983e227424d0787289da5483b0c74f
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.=
+h
+index 636a4c2c1294..fe25ae92744d 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -518,6 +518,10 @@ enum {
+ 	/* register a range of fixed file slots for automatic slot allocation *=
+/
+ 	IORING_REGISTER_FILE_ALLOC_RANGE	=3D 25,
+=20
++	/* set/clear busy poll settings */
++	IORING_REGISTER_NAPI			=3D 26,
++	IORING_UNREGISTER_NAPI			=3D 27,
++
+ 	/* this goes last */
+ 	IORING_REGISTER_LAST
+ };
+@@ -640,6 +644,13 @@ struct io_uring_buf_reg {
+ 	__u64	resv[3];
+ };
+=20
++/* argument for IORING_(UN)REGISTER_NAPI */
++struct io_uring_napi {
++	__u32	busy_poll_to;
++	__u32	pad;
++	__u64	resv;
++};
++
+ /*
+  * io_uring_restriction->opcode values
+  */
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 7074379a9bd0..be501e1024bc 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -4283,6 +4283,15 @@ static int __io_uring_register(struct io_ring_ctx =
+*ctx, unsigned opcode,
+ 			break;
+ 		ret =3D io_register_file_alloc_range(ctx, arg);
+ 		break;
++	case IORING_REGISTER_NAPI:
++		ret =3D -EINVAL;
++		if (!arg)
++			break;
++		ret =3D io_register_napi(ctx, arg);
++		break;
++	case IORING_UNREGISTER_NAPI:
++		ret =3D io_unregister_napi(ctx, arg);
++		break;
+ 	default:
+ 		ret =3D -EINVAL;
+ 		break;
+diff --git a/io_uring/napi.c b/io_uring/napi.c
+index 038957b46a0e..34513b284234 100644
+--- a/io_uring/napi.c
++++ b/io_uring/napi.c
+@@ -199,6 +199,41 @@ void io_napi_free(struct io_ring_ctx *ctx)
+ 	spin_unlock(&ctx->napi_lock);
+ }
+=20
++int io_register_napi(struct io_ring_ctx *ctx, void __user *arg)
++{
++	const struct io_uring_napi curr =3D {
++		.busy_poll_to =3D ctx->napi_busy_poll_to,
++	};
++	struct io_uring_napi napi;
++
++	if (copy_from_user(&napi, arg, sizeof(napi)))
++		return -EFAULT;
++	if (napi.pad || napi.resv)
++		return -EINVAL;
++
++	WRITE_ONCE(ctx->napi_busy_poll_to, napi.busy_poll_to);
++
++	if (copy_to_user(arg, &curr, sizeof(curr)))
++		return -EFAULT;
++
++	return 0;
++}
++
++int io_unregister_napi(struct io_ring_ctx *ctx, void __user *arg)
++{
++	const struct io_uring_napi curr =3D {
++		.busy_poll_to =3D ctx->napi_busy_poll_to,
++	};
++
++	if (arg) {
++		if (copy_to_user(arg, &curr, sizeof(curr)))
++			return -EFAULT;
++	}
++
++	WRITE_ONCE(ctx->napi_busy_poll_to, 0);
++	return 0;
++}
++
+ /*
+  * io_napi_add() - Add napi id to the busy poll list
+  * @req: pointer to io_kiocb request
+diff --git a/io_uring/napi.h b/io_uring/napi.h
+index 23a6df32805f..a5abe433c3e7 100644
+--- a/io_uring/napi.h
++++ b/io_uring/napi.h
+@@ -14,6 +14,9 @@
+ void io_napi_init(struct io_ring_ctx *ctx);
+ void io_napi_free(struct io_ring_ctx *ctx);
+=20
++int io_register_napi(struct io_ring_ctx *ctx, void __user *arg);
++int io_unregister_napi(struct io_ring_ctx *ctx, void __user *arg);
++
+ void io_napi_add(struct io_kiocb *req);
+=20
+ void io_napi_setup_busy_loop(struct io_ring_ctx *ctx, struct io_wait_que=
+ue *iowq,
+@@ -37,6 +40,16 @@ static inline void io_napi_free(struct io_ring_ctx *ct=
+x)
+ {
+ }
+=20
++static inline int io_register_napi(struct io_ring_ctx *ctx, void __user =
+*arg)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int io_unregister_napi(struct io_ring_ctx *ctx, void __use=
+r *arg)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline void io_napi_add(struct io_kiocb *req)
+ {
+ }
 --=20
 2.30.2
 
