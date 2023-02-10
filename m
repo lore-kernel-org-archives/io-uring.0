@@ -2,551 +2,330 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FC09C64EC4
-	for <io-uring@archiver.kernel.org>; Thu,  9 Feb 2023 23:02:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4129DC61DA4
+	for <io-uring@archiver.kernel.org>; Fri, 10 Feb 2023 00:00:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjBIXC3 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 9 Feb 2023 18:02:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55730 "EHLO
+        id S229920AbjBJAAr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 9 Feb 2023 19:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjBIXC0 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 9 Feb 2023 18:02:26 -0500
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EAB5EBD2
-        for <io-uring@vger.kernel.org>; Thu,  9 Feb 2023 15:02:17 -0800 (PST)
-Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
-        id B75346AB6775; Thu,  9 Feb 2023 15:02:01 -0800 (PST)
-From:   Stefan Roesch <shr@devkernel.io>
-To:     io-uring@vger.kernel.org, kernel-team@fb.com
-Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org,
-        Olivier Langlois <olivier@trillion01.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v8 4/7] io-uring: add napi busy poll support
-Date:   Thu,  9 Feb 2023 15:01:41 -0800
-Message-Id: <20230209230144.465620-5-shr@devkernel.io>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230209230144.465620-1-shr@devkernel.io>
-References: <20230209230144.465620-1-shr@devkernel.io>
+        with ESMTP id S229752AbjBJAAr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 9 Feb 2023 19:00:47 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F562552A8
+        for <io-uring@vger.kernel.org>; Thu,  9 Feb 2023 16:00:45 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id rm7-20020a17090b3ec700b0022c05558d22so3899775pjb.5
+        for <io-uring@vger.kernel.org>; Thu, 09 Feb 2023 16:00:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1675987245;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r4xrYX7k8pNOMCdO+PbUbwhGj864sVL1aN/XP73HU+I=;
+        b=Tw+BTKsUr0EQW5odh5ywkfSYV3+kKNCQWtZEkzxxhMG1nskJ3XkMn/3BuqpM2/kxnF
+         4i4SVE9xOrBqLhExva+1lvO4VXf9kwARzpQxQMKINUTpdiyFQf340v3B2oQ3K6l+cxlh
+         7li0VtwcriwPNP/ZldlMD5fBBOcrHl6CrTwRwMlIzIwxhieRCkKKSdYcmacWlzpLRx2M
+         EAqb+YBnX1d28ktFszTwo4uEglzaGz58UJ27o4u2PsOaP41VAYL8aKQQnlJtvkPVdxUe
+         7/mbYE8iF8Jyp3w31u0xLcYQ7K3cwyBZACkPPb1gE5wXulbTx4/6NP0L6CC2BGi8LicC
+         E0kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1675987245;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r4xrYX7k8pNOMCdO+PbUbwhGj864sVL1aN/XP73HU+I=;
+        b=6IXQCQjrl+R1BWM+Fg2HrlJ/5HPfsdKQ4Nes1RODd+m5/3cNnjCwvH/A+wPDr7GGQX
+         xbgvV3PxdkMugzO882pmG1APRU9OmAE4WeTDbDaBFZfntmTyyeZ1jqrdN0f6SlY56X8W
+         zjtbCJY4zcYEhf2Gv9p1D1dEU6EoqF2uvm5u0m4hniOfvT5kIkAepQbzKTnUKyQPSoI7
+         PjiHlXcGZQfPumiBO8TANwgQfb/MjeuUTeJsGAGqDSiX4aeK9PH6Aw/NMKPQ9/mskHRx
+         mUdvydTL3uS5NR1N3o8/PG9Tr0lN9IkJgy1h5I8Uaio5Sg1c7n32TEO0K6YBCH7MPWKx
+         Ahmw==
+X-Gm-Message-State: AO0yUKUAuB9Zan31+UGjpIMxFQSSEsZoXwhMpB7P5K8d35YfbChiJ7OW
+        3NToZ/RDnXVHUsbBJekzWwIG3iTtxJHZoQVK
+X-Google-Smtp-Source: AK7set/7wiQJ8hX/bQr52Gwe/bMoFIKJ5ET+pyu/vsvrYnHpEyO8YGl/EVvbndeyTLhcW9NTDsPcVg==
+X-Received: by 2002:a17:90a:be08:b0:22c:4b10:39de with SMTP id a8-20020a17090abe0800b0022c4b1039demr4998474pjs.3.1675987244860;
+        Thu, 09 Feb 2023 16:00:44 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d14-20020a17090a6a4e00b00230745a7744sm3924900pjm.52.2023.02.09.16.00.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Feb 2023 16:00:44 -0800 (PST)
+Message-ID: <ad80b5d1-111d-2f83-f4e8-f75cdc1462a6@kernel.dk>
+Date:   Thu, 9 Feb 2023 17:00:43 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v8 4/7] io-uring: add napi busy poll support
+Content-Language: en-US
+To:     Stefan Roesch <shr@devkernel.io>, io-uring@vger.kernel.org,
+        kernel-team@fb.com
+Cc:     ammarfaizi2@gnuweeb.org, Olivier Langlois <olivier@trillion01.com>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20230209230144.465620-1-shr@devkernel.io>
+ <20230209230144.465620-5-shr@devkernel.io>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230209230144.465620-5-shr@devkernel.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the napi busy polling support in io_uring.c. It adds a new
-napi_list to the io_ring_ctx structure. This list contains the list of
-napi_id's that are currently enabled for busy polling. The list is
-synchronized by the new napi_lock spin lock. The current default napi
-busy polling time is stored in napi_busy_poll_to. If napi busy polling
-is not enabled, the value is 0.
+I'd fold 2+3 into this patch again, having them standalone don't really
+make a lot of sense without this patch.
 
-In addition there is also a hash table. The hash table store the napi
-id ond the pointer to the above list nodes. The hash table is used to
-speed up the lookup to the list elements.
+This looks a lot better and gets rid of the ifdef infestation! Minor
+comments below, mostly just because I think we should fold those 3
+patches anyway.
 
-The NAPI_TIMEOUT is stored as a timeout to make sure that the time a
-napi entry is stored in the napi list is limited.
+> diff --git a/io_uring/napi.c b/io_uring/napi.c
+> new file mode 100644
+> index 000000000000..c9e2afae382d
+> --- /dev/null
+> +++ b/io_uring/napi.c
+> @@ -0,0 +1,281 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include "io_uring.h"
+> +#include "napi.h"
+> +
+> +#ifdef CONFIG_NET_RX_BUSY_POLL
+> +
+> +/* Timeout for cleanout of stale entries. */
+> +#define NAPI_TIMEOUT		(60 * SEC_CONVERSION)
+> +
+> +struct io_napi_ht_entry {
+> +	unsigned int		napi_id;
+> +	struct list_head	list;
+> +
+> +	/* Covered by napi lock spinlock.  */
+> +	unsigned long		timeout;
+> +	struct hlist_node	node;
+> +};
+> +
+> +static inline bool io_napi_busy_loop_on(struct io_ring_ctx *ctx)
+> +{
+> +	return READ_ONCE(ctx->napi_busy_poll_to);
+> +}
 
-The busy poll timeout is also stored as part of the io_wait_queue. This
-is necessary as for sq polling the poll interval needs to be adjusted
-and the napi callback allows only to pass in one value.
+I'd probably get rid of this helper, to be honest.
 
-This has been tested with two simple programs from the liburing library
-repository: the napi client and the napi server program. The client
-sends a request, which has a timestamp in its payload and the server
-replies with the same payload. The client calculates the roundtrip time
-and stores it to calcualte the results.
+> +static bool io_napi_busy_loop(struct list_head *napi_list, bool prefer_busy_poll)
+> +{
+> +	struct io_napi_ht_entry *e;
+> +	struct io_napi_ht_entry *n;
+> +
+> +	list_for_each_entry_safe(e, n, napi_list, list) {
+> +		napi_busy_loop(e->napi_id, NULL, NULL, prefer_busy_poll,
+> +			       BUSY_POLL_BUDGET);
+> +	}
 
-The client is running on host1 and the server is running on host 2 (in
-the same rack). The measured times below are roundtrip times. They are
-average times over 5 runs each. Each run measures 1 million roundtrips.
+Looks like 8 spaces before that BUSY_POLL_BUDGET, should be a tab?
 
-                   no rx coal          rx coal: frames=3D88,usecs=3D33
-Default              57us                    56us
+> +static void io_napi_blocking_busy_loop(struct list_head *napi_list,
+> +				       struct io_wait_queue *iowq)
+> +{
+> +	unsigned long start_time = 0;
+> +
+> +	if (!list_is_singular(napi_list))
+> +		start_time = busy_loop_current_time();
+> +
+> +	while (!list_is_singular(napi_list) &&
+> +		io_napi_busy_loop(napi_list, iowq->napi_prefer_busy_poll) &&
+> +		!io_napi_busy_loop_should_end(iowq, start_time)) {
+> +		;
+> +	}
+> +
+> +	if (list_is_singular(napi_list)) {
+> +		struct io_napi_ht_entry *ne = list_first_entry(napi_list,
+> +						 struct io_napi_ht_entry, list);
+> +
+> +		napi_busy_loop(ne->napi_id, io_napi_busy_loop_should_end, iowq,
+> +			       iowq->napi_prefer_busy_poll, BUSY_POLL_BUDGET);
+> +	}
+> +}
 
-client_poll=3D100us    47us                    46us
+This does look a LOT better! I do think a helper for the first while
+would make sense, and then have a comment in that helper on what this is
+doing exactly.
 
-server_poll=3D100us    51us                    46us
+static void io_napi_multi_busy_loop(napi_list, iowq)
+{
+	unsigned long start_time = busy_loop_current_time();
 
-client_poll=3D100us+   40us                    40us
-server_poll=3D100us
+	do {
+		if (list_is_singular(napi_list))
+			break;
+		if (!io_napi_busy_loop(napi_list, iowq->napi_prefer_busy_poll))
+			break;
+	} while (!io_napi_busy_loop_should_end(iowq, start_time));
+}
 
-client_poll=3D100us+   41us                    39us
-server_poll=3D100us+
-prefer napi busy poll on client
+static void io_napi_blocking_busy_loop(struct list_head *napi_list,
+				       struct io_wait_queue *iowq)
+{
+	if (!list_is_singular(napi_list))
+		io_napi_multi_busy_loop(napi_list, iowq);
+	if (list_is_singular(napi_list)) {
+		struct io_napi_ht_entry *ne;
 
-client_poll=3D100us+   41us                    39us
-server_poll=3D100us+
-prefer napi busy poll on server
+		ne = list_first_entry(napi_list, struct io_napi_ht_entry, list);
+		napi_busy_loop(ne->napi_id, io_napi_busy_loop_should_end, iowq,
+			       iowq->napi_prefer_busy_poll, BUSY_POLL_BUDGET);
+	}
+}
 
-client_poll=3D100us+   41us                    39us
-server_poll=3D100us+
-prefer napi busy poll on client + server
+I think that is still much easier to read rather than all of these
+combined statements. What do you think?
 
-Signed-off-by: Stefan Roesch <shr@devkernel.io>
-Suggested-by: Olivier Langlois <olivier@trillion01.com>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
----
- io_uring/Makefile   |   1 +
- io_uring/io_uring.c |  12 ++
- io_uring/napi.c     | 281 ++++++++++++++++++++++++++++++++++++++++++++
- io_uring/napi.h     |  49 ++++++++
- io_uring/poll.c     |   2 +
- 5 files changed, 345 insertions(+)
- create mode 100644 io_uring/napi.c
- create mode 100644 io_uring/napi.h
+> +static void io_napi_merge_lists(struct io_ring_ctx *ctx, struct list_head *napi_list)
+> +{
+> +	spin_lock(&ctx->napi_lock);
+> +	list_splice(napi_list, &ctx->napi_list);
+> +	io_napi_remove_stale(ctx);
+> +	spin_unlock(&ctx->napi_lock);
+> +}
 
-diff --git a/io_uring/Makefile b/io_uring/Makefile
-index 8cc8e5387a75..2efe7c5f07ba 100644
---- a/io_uring/Makefile
-+++ b/io_uring/Makefile
-@@ -9,3 +9,4 @@ obj-$(CONFIG_IO_URING)		+=3D io_uring.o xattr.o nop.o fs.=
-o splice.o \
- 					sqpoll.o fdinfo.o tctx.o poll.o \
- 					cancel.o kbuf.o rsrc.o rw.o opdef.o notif.o
- obj-$(CONFIG_IO_WQ)		+=3D io-wq.o
-+obj-$(CONFIG_NET_RX_BUSY_POLL) +=3D napi.o
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5d6aa783fb97..7074379a9bd0 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -90,6 +90,7 @@
- #include "rsrc.h"
- #include "cancel.h"
- #include "net.h"
-+#include "napi.h"
- #include "notif.h"
-=20
- #include "timeout.h"
-@@ -335,6 +336,8 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(s=
-truct io_uring_params *p)
- 	INIT_WQ_LIST(&ctx->locked_free_list);
- 	INIT_DELAYED_WORK(&ctx->fallback_work, io_fallback_req_func);
- 	INIT_WQ_LIST(&ctx->submit_state.compl_reqs);
-+	io_napi_init(ctx);
-+
- 	return ctx;
- err:
- 	kfree(ctx->dummy_ubuf);
-@@ -2534,6 +2537,7 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, =
-int min_events,
- 	struct io_wait_queue iowq;
- 	struct io_rings *rings =3D ctx->rings;
- 	int ret;
-+	NAPI_LIST_HEAD(local_napi_list);
-=20
- 	if (!io_allowed_run_tw(ctx))
- 		return -EEXIST;
-@@ -2566,15 +2570,22 @@ static int io_cqring_wait(struct io_ring_ctx *ctx=
-, int min_events,
- 	iowq.cq_tail =3D READ_ONCE(ctx->rings->cq.head) + min_events;
- 	iowq.timeout =3D KTIME_MAX;
-=20
-+	io_napi_setup_busy_loop(ctx, &iowq, &local_napi_list);
- 	if (uts) {
- 		struct timespec64 ts;
-=20
- 		if (get_timespec64(&ts, uts))
- 			return -EFAULT;
-+
-+		io_napi_adjust_busy_loop_timeout(ctx, &iowq, &local_napi_list, &ts);
- 		iowq.timeout =3D ktime_add_ns(timespec64_to_ktime(ts), ktime_get_ns())=
-;
-+	} else {
-+		io_napi_adjust_busy_loop_timeout(ctx, &iowq, &local_napi_list, NULL);
- 	}
-=20
- 	trace_io_uring_cqring_wait(ctx, min_events);
-+	io_napi_end_busy_loop(ctx, &iowq, &local_napi_list);
-+
- 	do {
- 		unsigned long check_cq;
-=20
-@@ -2806,6 +2817,7 @@ static __cold void io_ring_ctx_free(struct io_ring_=
-ctx *ctx)
- 	io_req_caches_free(ctx);
- 	if (ctx->hash_map)
- 		io_wq_put_hash(ctx->hash_map);
-+	io_napi_free(ctx);
- 	kfree(ctx->cancel_table.hbs);
- 	kfree(ctx->cancel_table_locked.hbs);
- 	kfree(ctx->dummy_ubuf);
-diff --git a/io_uring/napi.c b/io_uring/napi.c
-new file mode 100644
-index 000000000000..c9e2afae382d
---- /dev/null
-+++ b/io_uring/napi.c
-@@ -0,0 +1,281 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "io_uring.h"
-+#include "napi.h"
-+
-+#ifdef CONFIG_NET_RX_BUSY_POLL
-+
-+/* Timeout for cleanout of stale entries. */
-+#define NAPI_TIMEOUT		(60 * SEC_CONVERSION)
-+
-+struct io_napi_ht_entry {
-+	unsigned int		napi_id;
-+	struct list_head	list;
-+
-+	/* Covered by napi lock spinlock.  */
-+	unsigned long		timeout;
-+	struct hlist_node	node;
-+};
-+
-+static inline bool io_napi_busy_loop_on(struct io_ring_ctx *ctx)
-+{
-+	return READ_ONCE(ctx->napi_busy_poll_to);
-+}
-+
-+static inline void __io_napi_add(struct io_ring_ctx *ctx, struct file *f=
-ile)
-+{
-+	unsigned int napi_id;
-+	struct socket *sock;
-+	struct sock *sk;
-+	struct io_napi_ht_entry *he;
-+
-+	if (!io_napi_busy_loop_on(ctx))
-+		return;
-+
-+	sock =3D sock_from_file(file);
-+	if (!sock)
-+		return;
-+
-+	sk =3D sock->sk;
-+	if (!sk)
-+		return;
-+
-+	napi_id =3D READ_ONCE(sk->sk_napi_id);
-+
-+	/* Non-NAPI IDs can be rejected. */
-+	if (napi_id < MIN_NAPI_ID)
-+		return;
-+
-+	spin_lock(&ctx->napi_lock);
-+	hash_for_each_possible(ctx->napi_ht, he, node, napi_id) {
-+		if (he->napi_id =3D=3D napi_id) {
-+			he->timeout =3D jiffies + NAPI_TIMEOUT;
-+			goto out;
-+		}
-+	}
-+
-+	he =3D kmalloc(sizeof(*he), GFP_NOWAIT);
-+	if (!he)
-+		goto out;
-+
-+	he->napi_id =3D napi_id;
-+	he->timeout =3D jiffies + NAPI_TIMEOUT;
-+	hash_add(ctx->napi_ht, &he->node, napi_id);
-+
-+	list_add_tail(&he->list, &ctx->napi_list);
-+
-+out:
-+	spin_unlock(&ctx->napi_lock);
-+}
-+
-+static void __io_napi_adjust_busy_loop_timeout(unsigned int poll_to,
-+					     struct timespec64 *ts,
-+					     unsigned int *new_poll_to)
-+{
-+	struct timespec64 pollto =3D ns_to_timespec64(1000 * (s64)poll_to);
-+
-+	if (timespec64_compare(ts, &pollto) > 0) {
-+		*ts =3D timespec64_sub(*ts, pollto);
-+		*new_poll_to =3D poll_to;
-+	} else {
-+		u64 to =3D timespec64_to_ns(ts);
-+
-+		do_div(to, 1000);
-+		*new_poll_to =3D to;
-+		ts->tv_sec =3D 0;
-+		ts->tv_nsec =3D 0;
-+	}
-+}
-+
-+static inline bool io_napi_busy_loop_timeout(unsigned long start_time,
-+					     unsigned long bp_usec)
-+{
-+	if (bp_usec) {
-+		unsigned long end_time =3D start_time + bp_usec;
-+		unsigned long now =3D busy_loop_current_time();
-+
-+		return time_after(now, end_time);
-+	}
-+
-+	return true;
-+}
-+
-+static bool io_napi_busy_loop_should_end(void *p, unsigned long start_ti=
-me)
-+{
-+	struct io_wait_queue *iowq =3D p;
-+
-+	return signal_pending(current) ||
-+	       io_should_wake(iowq) ||
-+	       io_napi_busy_loop_timeout(start_time, iowq->napi_busy_poll_to);
-+}
-+
-+static bool io_napi_busy_loop(struct list_head *napi_list, bool prefer_b=
-usy_poll)
-+{
-+	struct io_napi_ht_entry *e;
-+	struct io_napi_ht_entry *n;
-+
-+	list_for_each_entry_safe(e, n, napi_list, list) {
-+		napi_busy_loop(e->napi_id, NULL, NULL, prefer_busy_poll,
-+			       BUSY_POLL_BUDGET);
-+	}
-+
-+	return !list_empty(napi_list);
-+}
-+
-+static void io_napi_blocking_busy_loop(struct list_head *napi_list,
-+				       struct io_wait_queue *iowq)
-+{
-+	unsigned long start_time =3D 0;
-+
-+	if (!list_is_singular(napi_list))
-+		start_time =3D busy_loop_current_time();
-+
-+	while (!list_is_singular(napi_list) &&
-+		io_napi_busy_loop(napi_list, iowq->napi_prefer_busy_poll) &&
-+		!io_napi_busy_loop_should_end(iowq, start_time)) {
-+		;
-+	}
-+
-+	if (list_is_singular(napi_list)) {
-+		struct io_napi_ht_entry *ne =3D list_first_entry(napi_list,
-+						 struct io_napi_ht_entry, list);
-+
-+		napi_busy_loop(ne->napi_id, io_napi_busy_loop_should_end, iowq,
-+			       iowq->napi_prefer_busy_poll, BUSY_POLL_BUDGET);
-+	}
-+}
-+
-+static void io_napi_remove_stale(struct io_ring_ctx *ctx)
-+{
-+	unsigned int i;
-+	struct io_napi_ht_entry *he;
-+
-+	hash_for_each(ctx->napi_ht, i, he, node) {
-+		if (time_after(jiffies, he->timeout)) {
-+			list_del(&he->list);
-+			hash_del(&he->node);
-+		}
-+	}
-+
-+}
-+
-+static void io_napi_merge_lists(struct io_ring_ctx *ctx, struct list_hea=
-d *napi_list)
-+{
-+	spin_lock(&ctx->napi_lock);
-+	list_splice(napi_list, &ctx->napi_list);
-+	io_napi_remove_stale(ctx);
-+	spin_unlock(&ctx->napi_lock);
-+}
-+
-+/*
-+ * io_napi_init() - Init napi settings
-+ * @ctx: pointer to io-uring context structure
-+ *
-+ * Init napi settings in the io-uring context.
-+ */
-+void io_napi_init(struct io_ring_ctx *ctx)
-+{
-+	INIT_LIST_HEAD(&ctx->napi_list);
-+	spin_lock_init(&ctx->napi_lock);
-+	ctx->napi_prefer_busy_poll =3D false;
-+	ctx->napi_busy_poll_to =3D READ_ONCE(sysctl_net_busy_poll);
-+}
-+
-+/*
-+ * io_napi_free() - Deallocate napi
-+ * @ctx: pointer to io-uring context structure
-+ *
-+ * Free the napi list and the hash table in the io-uring context.
-+ */
-+void io_napi_free(struct io_ring_ctx *ctx)
-+{
-+	unsigned int i;
-+	struct io_napi_ht_entry *he;
-+	LIST_HEAD(napi_list);
-+
-+	spin_lock(&ctx->napi_lock);
-+	hash_for_each(ctx->napi_ht, i, he, node)
-+		hash_del(&he->node);
-+	spin_unlock(&ctx->napi_lock);
-+}
-+
-+/*
-+ * io_napi_add() - Add napi id to the busy poll list
-+ * @req: pointer to io_kiocb request
-+ *
-+ * Add the napi id of the socket to the napi busy poll list and hash tab=
-le.
-+ */
-+void io_napi_add(struct io_kiocb *req)
-+{
-+	struct io_ring_ctx *ctx =3D req->ctx;
-+
-+	if (!io_napi_busy_loop_on(ctx))
-+		return;
-+
-+	__io_napi_add(ctx, req->file);
-+}
-+
-+/*
-+ * io_napi_adjust_busy_loop_timeout() - Add napi id to the busy poll lis=
-t
-+ * @ctx: pointer to io-uring context structure
-+ * @iowq: pointer to io wait queue
-+ * @napi_list: pointer to head of napi list
-+ * @ts: pointer to timespec or NULL
-+ *
-+ * Adjust the busy loop timeout according to timespec and busy poll time=
-out.
-+ */
-+void io_napi_adjust_busy_loop_timeout(struct io_ring_ctx *ctx,
-+				struct io_wait_queue *iowq,
-+				struct list_head *napi_list,
-+				struct timespec64 *ts)
-+{
-+	if (!list_empty(napi_list)) {
-+		if (ts)
-+			__io_napi_adjust_busy_loop_timeout(
-+				READ_ONCE(ctx->napi_busy_poll_to),
-+				ts, &iowq->napi_busy_poll_to);
-+		else
-+			iowq->napi_busy_poll_to =3D READ_ONCE(ctx->napi_busy_poll_to);
-+	}
-+}
-+
-+/*
-+ * io_napi_setup_busy_loop() - setup the busy poll loop
-+ * @ctx: pointer to io-uring context structure
-+ * @iowq: pointer to io wait queue
-+ * @napi_list: pointer to head of napi list
-+ *
-+ * Capture busy poll timeout and prefer busy poll seeting Splice of the =
-napi list.
-+ */
-+void io_napi_setup_busy_loop(struct io_ring_ctx *ctx, struct io_wait_que=
-ue *iowq,
-+			struct list_head *napi_list)
-+{
-+	iowq->napi_busy_poll_to =3D 0;
-+	iowq->napi_prefer_busy_poll =3D READ_ONCE(ctx->napi_prefer_busy_poll);
-+
-+	if (!(ctx->flags & IORING_SETUP_SQPOLL)) {
-+		spin_lock(&ctx->napi_lock);
-+		list_splice_init(&ctx->napi_list, napi_list);
-+		spin_unlock(&ctx->napi_lock);
-+	}
-+}
-+
-+/*
-+ * io_napi_end_busy_loop() - execute busy poll loop
-+ * @ctx: pointer to io-uring context structure
-+ * @iowq: pointer to io wait queue
-+ * @napi_list: pointer to head of napi list
-+ *
-+ * Execute the busy poll loop and merge the spliced off list.
-+ */
-+void io_napi_end_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue=
- *iowq,
-+			struct list_head *napi_list)
-+{
-+	if (iowq->napi_busy_poll_to)
-+		io_napi_blocking_busy_loop(napi_list, iowq);
-+
-+	if (!list_empty(napi_list))
-+		io_napi_merge_lists(ctx, napi_list);
-+}
-+
-+#endif
-diff --git a/io_uring/napi.h b/io_uring/napi.h
-new file mode 100644
-index 000000000000..0672592cfb79
---- /dev/null
-+++ b/io_uring/napi.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef IOU_NAPI_H
-+#define IOU_NAPI_H
-+
-+#include <linux/kernel.h>
-+#include <linux/io_uring.h>
-+#include <net/busy_poll.h>
-+
-+#ifdef CONFIG_NET_RX_BUSY_POLL
-+
-+#define NAPI_LIST_HEAD(l) LIST_HEAD(l)
-+
-+void io_napi_init(struct io_ring_ctx *ctx);
-+void io_napi_free(struct io_ring_ctx *ctx);
-+
-+void io_napi_add(struct io_kiocb *req);
-+
-+void io_napi_setup_busy_loop(struct io_ring_ctx *ctx, struct io_wait_que=
-ue *iowq,
-+			struct list_head *napi_list);
-+void io_napi_adjust_busy_loop_timeout(struct io_ring_ctx *ctx,
-+			struct io_wait_queue *iowq, struct list_head *napi_list,
-+			struct timespec64 *ts);
-+void io_napi_end_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue=
- *iowq,
-+			struct list_head *napi_list);
-+
-+#else
-+
-+#define NAPI_LIST_HEAD(l)
-+
-+static inline void io_napi_init(struct io_ring_ctx *ctx)
-+{
-+}
-+
-+static inline void io_napi_free(struct io_ring_ctx *ctx)
-+{
-+}
-+
-+static inline void io_napi_add(struct io_kiocb *req)
-+{
-+}
-+
-+#define io_napi_setup_busy_loop(ctx, iowq, napi_list) do {} while (0)
-+#define io_napi_adjust_busy_loop_timeout(ctx, iowq, napi_list, ts) do {}=
- while (0)
-+#define io_napi_end_busy_loop(ctx, iowq, napi_list) do {} while (0)
-+
-+#endif
-+
-+#endif
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 8339a92b4510..ab08299eb341 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -15,6 +15,7 @@
-=20
- #include "io_uring.h"
- #include "refs.h"
-+#include "napi.h"
- #include "opdef.h"
- #include "kbuf.h"
- #include "poll.h"
-@@ -629,6 +630,7 @@ static int __io_arm_poll_handler(struct io_kiocb *req=
-,
- 		__io_poll_execute(req, mask);
- 		return 0;
- 	}
-+	io_napi_add(req);
-=20
- 	if (ipt->owning) {
- 		/*
---=20
-2.30.2
+First line too long, split it into two. Did you look into the locking
+side like I mentioned in the previous review?
+
+> +/*
+> + * io_napi_adjust_busy_loop_timeout() - Add napi id to the busy poll list
+> + * @ctx: pointer to io-uring context structure
+> + * @iowq: pointer to io wait queue
+> + * @napi_list: pointer to head of napi list
+> + * @ts: pointer to timespec or NULL
+> + *
+> + * Adjust the busy loop timeout according to timespec and busy poll timeout.
+> + */
+> +void io_napi_adjust_busy_loop_timeout(struct io_ring_ctx *ctx,
+> +				struct io_wait_queue *iowq,
+> +				struct list_head *napi_list,
+> +				struct timespec64 *ts)
+> +{
+> +	if (!list_empty(napi_list)) {
+> +		if (ts)
+> +			__io_napi_adjust_busy_loop_timeout(
+> +				READ_ONCE(ctx->napi_busy_poll_to),
+> +				ts, &iowq->napi_busy_poll_to);
+> +		else
+> +			iowq->napi_busy_poll_to = READ_ONCE(ctx->napi_busy_poll_to);
+> +	}
+> +}
+
+I'd make this:
+
+void io_napi_adjust_timeout(struct io_ring_ctx *ctx, struct io_wait_queue *iowq,
+			    struct list_head *napi_list, struct timespec64 *ts)
+{
+	if (list_empty(napi_list))
+		return;
+
+	__io_napi_adjust_timeout(ctx, iowq, napi_list, ts);
+}
+
+and put it in the header. That leaves the fast path mostly untouched,
+rather than forcing a function call here.
+
+Also note the alignment of the variables in the function header, this
+applies in a bunch of spots. And just drop the busy_loop thing from the
+naming where it isn't strictly needed, lots of these function names are
+really long.
+
+
+> +/*
+> + * io_napi_setup_busy_loop() - setup the busy poll loop
+> + * @ctx: pointer to io-uring context structure
+> + * @iowq: pointer to io wait queue
+> + * @napi_list: pointer to head of napi list
+> + *
+> + * Capture busy poll timeout and prefer busy poll seeting Splice of the napi list.
+> + */
+> +void io_napi_setup_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue *iowq,
+> +			struct list_head *napi_list)
+> +{
+> +	iowq->napi_busy_poll_to = 0;
+> +	iowq->napi_prefer_busy_poll = READ_ONCE(ctx->napi_prefer_busy_poll);
+> +
+> +	if (!(ctx->flags & IORING_SETUP_SQPOLL)) {
+> +		spin_lock(&ctx->napi_lock);
+> +		list_splice_init(&ctx->napi_list, napi_list);
+> +		spin_unlock(&ctx->napi_lock);
+> +	}
+> +}
+
+Might need a comment here on why SQPOLL needs something extra?
+
+> +/*
+> + * io_napi_end_busy_loop() - execute busy poll loop
+> + * @ctx: pointer to io-uring context structure
+> + * @iowq: pointer to io wait queue
+> + * @napi_list: pointer to head of napi list
+> + *
+> + * Execute the busy poll loop and merge the spliced off list.
+> + */
+> +void io_napi_end_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue *iowq,
+> +			struct list_head *napi_list)
+> +{
+> +	if (iowq->napi_busy_poll_to)
+> +		io_napi_blocking_busy_loop(napi_list, iowq);
+> +
+> +	if (!list_empty(napi_list))
+> +		io_napi_merge_lists(ctx, napi_list);
+> +}
+
+This should go above the users in this file. Maybe others are like that
+too, didn't check.
+
+> +++ b/io_uring/napi.h
+> @@ -0,0 +1,49 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef IOU_NAPI_H
+> +#define IOU_NAPI_H
+> +
+> +#include <linux/kernel.h>
+> +#include <linux/io_uring.h>
+> +#include <net/busy_poll.h>
+> +
+> +#ifdef CONFIG_NET_RX_BUSY_POLL
+> +
+> +#define NAPI_LIST_HEAD(l) LIST_HEAD(l)
+> +
+> +void io_napi_init(struct io_ring_ctx *ctx);
+> +void io_napi_free(struct io_ring_ctx *ctx);
+> +
+> +void io_napi_add(struct io_kiocb *req);
+> +
+> +void io_napi_setup_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue *iowq,
+> +			struct list_head *napi_list);
+> +void io_napi_adjust_busy_loop_timeout(struct io_ring_ctx *ctx,
+> +			struct io_wait_queue *iowq, struct list_head *napi_list,
+> +			struct timespec64 *ts);
+> +void io_napi_end_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue *iowq,
+> +			struct list_head *napi_list);
+> +
+> +#else
+> +
+> +#define NAPI_LIST_HEAD(l)
+> +
+> +static inline void io_napi_init(struct io_ring_ctx *ctx)
+> +{
+> +}
+> +
+> +static inline void io_napi_free(struct io_ring_ctx *ctx)
+> +{
+> +}
+> +
+> +static inline void io_napi_add(struct io_kiocb *req)
+> +{
+> +}
+> +
+> +#define io_napi_setup_busy_loop(ctx, iowq, napi_list) do {} while (0)
+> +#define io_napi_adjust_busy_loop_timeout(ctx, iowq, napi_list, ts) do {} while (0)
+> +#define io_napi_end_busy_loop(ctx, iowq, napi_list) do {} while (0)
+
+This looks way better!
+
+-- 
+Jens Axboe
 
