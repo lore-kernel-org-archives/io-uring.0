@@ -2,105 +2,122 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C50CDC636D7
-	for <io-uring@archiver.kernel.org>; Wed, 15 Feb 2023 17:44:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7D1C636CC
+	for <io-uring@archiver.kernel.org>; Wed, 15 Feb 2023 17:45:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjBORoy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 15 Feb 2023 12:44:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
+        id S229878AbjBORp0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 15 Feb 2023 12:45:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjBORoq (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Feb 2023 12:44:46 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462533C2A1
-        for <io-uring@vger.kernel.org>; Wed, 15 Feb 2023 09:44:40 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id 18so1718231ilg.3
-        for <io-uring@vger.kernel.org>; Wed, 15 Feb 2023 09:44:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GtgH/fLyPn1TKILRL3koJ5mg56zLiB975mZQLiqUguI=;
-        b=mH8VJE1p5+OhCEWSUv3z+9o98q/PbvjH6Q7VJBvRQtGPp0fJFiADRN3wtIcGQsytPx
-         YAv+5YiAJqrGOCBT7JerEi2/zGvFFgCXNLdUeNxiincWgh5lvXdsyIMzWEyqNj79E+Bw
-         Z6t16iJfKEeevG518I76lDBrHhuWvGFWnI8rzcOAV6U11RxkzhL4AdHm/+u+XKw4QzdL
-         t6JkSEZwDsnA14Z3fQUzayGpLQpemlYngA/iEzt5TFpNPAesTF4AILx2NVFwPaOYHvt8
-         AKqnwklheYtPAbgDijxFHgAYpi4K4uQf9JC/P+C9ukmPFC1Si3JN1A8vJXPfuGmz4khY
-         065Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GtgH/fLyPn1TKILRL3koJ5mg56zLiB975mZQLiqUguI=;
-        b=dPDhunlEo1u+MeItozjkcnw20YYD4NcJg8Tu3rMirk/UPmKWZLufjbt7pIfvJOms0W
-         OePESW4mUBfPiCcXTnI5/VxBXYPDs95avbYHJCt6eRNJjrDfVro6o1Bat324j3KIsP8I
-         nWbStyzEVyUdLJ0XPLcjxJSgETe4uMqJ0P5btpLSAiyxmbmx8K2q9LlxzRJwT58X5QhV
-         HMQYIPRYJFBLpzm/9LB2Eif+uo0Yz1LHQmnvt7DuwzQYk1E9j9O8Xv2j1LjnIbCPEMf4
-         f3UYnfhob+RgkpxfsUoLj8yeoNqFz7npc8mPNlmugrtPBRsbKuFCVY7dhuUqGu7PE08h
-         8x7Q==
-X-Gm-Message-State: AO0yUKUVh2Dtg/dT1Ydc2LaGObyzp9cwfA0GZ/sm4tGPNfe8U0ErZjZJ
-        nx7UpTJ8ICcFdqO3zlvJgmNcUg==
-X-Google-Smtp-Source: AK7set9hOQmrEaC37Zt0I/dqH2TOSnuOZs1BBefVHH7Zgdgts8DI8ksvYJPVhcdrIxTxKNr2T7hn3Q==
-X-Received: by 2002:a05:6e02:1d0b:b0:315:29e8:6ef3 with SMTP id i11-20020a056e021d0b00b0031529e86ef3mr2608502ila.2.1676483079424;
-        Wed, 15 Feb 2023 09:44:39 -0800 (PST)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id y6-20020a056e02174600b00310a5b8504asm5807571ill.36.2023.02.15.09.44.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 09:44:39 -0800 (PST)
-Message-ID: <03895f24-3540-dae9-1cdd-e3f6d901dec6@kernel.dk>
-Date:   Wed, 15 Feb 2023 10:44:38 -0700
+        with ESMTP id S229834AbjBORpX (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Feb 2023 12:45:23 -0500
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB163C785
+        for <io-uring@vger.kernel.org>; Wed, 15 Feb 2023 09:45:14 -0800 (PST)
+Received: by dev0134.prn3.facebook.com (Postfix, from userid 425415)
+        id 24C2671625B0; Wed, 15 Feb 2023 09:45:01 -0800 (PST)
+From:   Stefan Roesch <shr@devkernel.io>
+To:     io-uring@vger.kernel.org, kernel-team@fb.com
+Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org
+Subject: [PATCH v9 1/5] io-uring: move io_wait_queue definition to header file
+Date:   Wed, 15 Feb 2023 09:44:48 -0800
+Message-Id: <20230215174452.3373598-2-shr@devkernel.io>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230215174452.3373598-1-shr@devkernel.io>
+References: <20230215174452.3373598-1-shr@devkernel.io>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCHv2] io_uring: Support calling io_uring_register with a
- registered ring fd
-Content-Language: en-US
-To:     Josh Triplett <josh@joshtriplett.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <f2396369e638284586b069dbddffb8c992afba95.1676419314.git.josh@joshtriplett.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 2/14/23 5:42 PM, Josh Triplett wrote:
-> Add a new flag IORING_REGISTER_USE_REGISTERED_RING (set via the high bit
-> of the opcode) to treat the fd as a registered index rather than a file
-> descriptor.
-> 
-> This makes it possible for a library to open an io_uring, register the
-> ring fd, close the ring fd, and subsequently use the ring entirely via
-> registered index.
+This moves the definition of the io_wait_queue structure to the header
+file so it can be also used from other files.
 
-This looks pretty straight forward to me, only real question I had
-was whether using the top bit of the register opcode for this is the
-best choice. But I can't think of better ways to do it, and the space
-is definitely big enough to do that, so looks fine to me.
+Signed-off-by: Stefan Roesch <shr@devkernel.io>
+---
+ io_uring/io_uring.c | 21 ---------------------
+ io_uring/io_uring.h | 22 ++++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 21 deletions(-)
 
-One more comment below:
-
-> +	if (use_registered_ring) {
-> +		/*
-> +		 * Ring fd has been registered via IORING_REGISTER_RING_FDS, we
-> +		 * need only dereference our task private array to find it.
-> +		 */
-> +		struct io_uring_task *tctx = current->io_uring;
-
-I need to double check if it's guaranteed we always have current->io_uring
-assigned here. If the ring is registered we certainly will have it, but
-what if someone calls io_uring_register(2) without having a ring setup
-upfront?
-
-IOW, I think we need a NULL check here and failing the request at that
-point.
-
--- 
-Jens Axboe
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 0e42160a3051..5d6aa783fb97 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2468,33 +2468,12 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsig=
+ned int nr)
+ 	return ret;
+ }
+=20
+-struct io_wait_queue {
+-	struct wait_queue_entry wq;
+-	struct io_ring_ctx *ctx;
+-	unsigned cq_tail;
+-	unsigned nr_timeouts;
+-	ktime_t timeout;
+-};
+-
+ static inline bool io_has_work(struct io_ring_ctx *ctx)
+ {
+ 	return test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq) ||
+ 	       !llist_empty(&ctx->work_llist);
+ }
+=20
+-static inline bool io_should_wake(struct io_wait_queue *iowq)
+-{
+-	struct io_ring_ctx *ctx =3D iowq->ctx;
+-	int dist =3D READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
+-
+-	/*
+-	 * Wake up if we have enough events, or if a timeout occurred since we
+-	 * started waiting. For timeouts, we always want to return to userspace=
+,
+-	 * regardless of event count.
+-	 */
+-	return dist >=3D 0 || atomic_read(&ctx->cq_timeouts) !=3D iowq->nr_time=
+outs;
+-}
+-
+ static int io_wake_function(struct wait_queue_entry *curr, unsigned int =
+mode,
+ 			    int wake_flags, void *key)
+ {
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 2711865f1e19..021f9af37c74 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -27,6 +27,28 @@ enum {
+ 	IOU_STOP_MULTISHOT	=3D -ECANCELED,
+ };
+=20
++struct io_wait_queue {
++	struct wait_queue_entry wq;
++	struct io_ring_ctx *ctx;
++	unsigned cq_tail;
++	unsigned nr_timeouts;
++	ktime_t timeout;
++
++};
++
++static inline bool io_should_wake(struct io_wait_queue *iowq)
++{
++	struct io_ring_ctx *ctx =3D iowq->ctx;
++	int dist =3D READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
++
++	/*
++	 * Wake up if we have enough events, or if a timeout occurred since we
++	 * started waiting. For timeouts, we always want to return to userspace=
+,
++	 * regardless of event count.
++	 */
++	return dist >=3D 0 || atomic_read(&ctx->cq_timeouts) !=3D iowq->nr_time=
+outs;
++}
++
+ struct io_uring_cqe *__io_get_cqe(struct io_ring_ctx *ctx, bool overflow=
+);
+ bool io_req_cqe_overflow(struct io_kiocb *req);
+ int io_run_task_work_sig(struct io_ring_ctx *ctx);
+--=20
+2.30.2
 
