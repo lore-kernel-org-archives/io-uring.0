@@ -2,77 +2,67 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 488CDC636CC
-	for <io-uring@archiver.kernel.org>; Mon, 20 Feb 2023 14:53:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8873DC636D6
+	for <io-uring@archiver.kernel.org>; Mon, 20 Feb 2023 23:00:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjBTOxi (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 20 Feb 2023 09:53:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
+        id S232795AbjBTXA0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 20 Feb 2023 18:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231796AbjBTOxi (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Feb 2023 09:53:38 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FD51A969
-        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 06:53:37 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S232875AbjBTXAX (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Feb 2023 18:00:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09859227AA
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 15:00:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F3FDD2276E;
-        Mon, 20 Feb 2023 14:53:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1676904815; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RV4zCY/uDa/fcCxapSxwiIdxpBXq5NXlfb6tBD/rNZ4=;
-        b=ymPfmTu35Zz1LGb20ADCnTuo3ZREf6/OLg6AVuqvwRjuFtKSrI6FxQdUD5Q2RehSf4uQH/
-        VudKtTlktf3g/QDTiBuuI4x9WpK/gei8gkK5A3G1OwjYRTTgWcg6HIPamJ0t8NB9ARIeHx
-        fd/BtHhd9F96Cp66Xv9YK2oNqJ+OxVc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1676904815;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RV4zCY/uDa/fcCxapSxwiIdxpBXq5NXlfb6tBD/rNZ4=;
-        b=vaRVnsLjAkdmndL4wGt/UGHzqNI1qslE+as3jkdPmQlmJ0U5WdqeRyhMyGIWOI8hy1GhoW
-        X/m8Wf9ZybIbexCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84949134BA;
-        Mon, 20 Feb 2023 14:53:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BNKuE2+J82OUQQAAMHmgww
-        (envelope-from <krisman@suse.de>); Mon, 20 Feb 2023 14:53:35 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH for-next 1/1] io_uring/rsrc: fix a comment in
- io_import_fixed()
-References: <5b5f79958456caa6dc532f6205f75f224b232c81.1676902343.git.asml.silence@gmail.com>
-Date:   Mon, 20 Feb 2023 11:53:33 -0300
-In-Reply-To: <5b5f79958456caa6dc532f6205f75f224b232c81.1676902343.git.asml.silence@gmail.com>
-        (Pavel Begunkov's message of "Mon, 20 Feb 2023 14:13:52 +0000")
-Message-ID: <87ttzgcrrm.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0A7D60F59
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 23:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE360C433A8;
+        Mon, 20 Feb 2023 23:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1676934018;
+        bh=0wY5VXLaR/6dIZeyRkbcV3FCalfxreMaMymmsS4iBmc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=JVTgWAW5yBDRulKAISQ0dOY3VtVaYeD3PIzn9bN4TdmnEMNLa4aUMuOpxfPnN7I0R
+         O4eJXXGJd9CJamXYJTouXndefn7FbLA4vUF1WfP5dAFuMVEakLtMzp96OpyDJ8QhCc
+         yBucTbx8yuZ6GOWtRMZLuCjUv1efxMJabpVx4uEu1LdkcgyqqPHwxSaBLZx/WV1cKq
+         Lc1SPX2SYhDUpCTyo7EVZC0YtFOjukIQHd+TUpIWROixJkHCLD3XQVouLiH/0VI7Br
+         AyJepAEBtym1AF1wpuStQ0qmyhsBg/BRELAGux1GYvCa3sMqEyym32jjiaOx+fD/SN
+         bOGBcwGe4061A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 98F0DC43161;
+        Mon, 20 Feb 2023 23:00:18 +0000 (UTC)
+Subject: Re: [GIT PULL for-6.3] Switch io_uring to ITER_UBUF
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <7ec9c3d0-1028-4d58-8ef1-0cce3083696c@kernel.dk>
+References: <7ec9c3d0-1028-4d58-8ef1-0cce3083696c@kernel.dk>
+X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
+X-PR-Tracked-Message-Id: <7ec9c3d0-1028-4d58-8ef1-0cce3083696c@kernel.dk>
+X-PR-Tracked-Remote: git://git.kernel.dk/linux.git tags/for-6.3/iter-ubuf-2023-02-16
+X-PR-Tracked-Commit-Id: d46aa786fa53cbc92593089374e49c94fd9063ae
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: c1ef5003079531b5aae12467a350379496752334
+Message-Id: <167693401862.6080.4100971499432581904.pr-tracker-bot@kernel.org>
+Date:   Mon, 20 Feb 2023 23:00:18 +0000
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        io-uring <io-uring@vger.kernel.org>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Pavel Begunkov <asml.silence@gmail.com> writes:
+The pull request you sent on Thu, 16 Feb 2023 19:54:20 -0700:
 
-> io_import_fixed() supports offsets, but "may not" means the opposite.
-> Replace it with "might not" so the comments rather speaks about
-> possible cases.
->
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> git://git.kernel.dk/linux.git tags/for-6.3/iter-ubuf-2023-02-16
 
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/c1ef5003079531b5aae12467a350379496752334
 
+Thank you!
 
 -- 
-Gabriel Krisman Bertazi
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
