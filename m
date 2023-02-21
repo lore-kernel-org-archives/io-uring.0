@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8196EC677F1
-	for <io-uring@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA079C64EC4
+	for <io-uring@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbjBUBHK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S232971AbjBUBHK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Mon, 20 Feb 2023 20:07:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232970AbjBUBHJ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Feb 2023 20:07:09 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7ED23109
-        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:07 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j3so155781wms.2
-        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:07 -0800 (PST)
+        with ESMTP id S232965AbjBUBHI (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Feb 2023 20:07:08 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C4B22030
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:04 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id p3-20020a05600c358300b003e206711347so2026477wmq.0
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qwv89hARzKNGP8KHrbG8R/UPgKVlvHM9AJKeoW7+km0=;
-        b=VfQUdh8jPNVx/8iW1ETqenJgd0BTfHCltz8lodPcM8Vra5qN5PmweB0z3at3OBOdDJ
-         0rrfVvakWQU7rJ17Tj2ZEWhkDbfXzEO86IuzoskjO0hHemdy/LfPJipoc+e7bNZfR/u3
-         eXDtTMVwqC1zNe1/bfuKft2d8peVLwyA7f98QttNgufqXxmXzkab6IVPp33n9uQkDlsX
-         P/gk43nFS7zB0JS+0VvuJZ8wAWMgxb0yWD+FHoH9G48J1dpD4vY4vi+CPmlu1sSqw/LD
-         Nb3ovQQNceMcd4/Xo/VcGEvAMuFprS2RqACN+G7RWXF6aCtiMN3jv5TNzyc0NuELO83L
-         LL9A==
+        bh=OMVNMVd8aSkCu82AxH2WGVGFz2ZJ4OqZ2LItsoW1tpA=;
+        b=NvnFUSnHOiyDJ9pYIONsKlbo+1DA/p755XNrAnRQ8jgMp9lWU3vZdM2Y9R5cRHDsxD
+         3IOv7n0GGXCouqFGbt/LTDp3x6QpP2ipUQnGf3w3s3tIDGBreaDEf0kuFYefXveHiO79
+         UZSDQ/pXvqOnxFZORt3irdgdwlxCxCo0R/xk4Rl0CJikhLmOXH85n9CiYRkGTpYxKVNW
+         X2hJNE3Z56KJCNTRqaXAGgi9zeYEaIKL5+RCF8u8zZ4mKfIP/Ak3hgbXPOBllLrfiBTY
+         2F0bF/GotmubyS4x8lzNosPVFqSch7NEv7W4Nz4zmYqgQ4myuBMkW5lrG+ShOaVl8Sh/
+         FxCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Qwv89hARzKNGP8KHrbG8R/UPgKVlvHM9AJKeoW7+km0=;
-        b=7DBDgjYT1TxS7m5p1d+3VVUq7NnfirFJ0ifbLH0j3bghPuhcoW1yxJnApLBwaaijZF
-         RJJ26OLOu7zQWm+KiQXIGEbGHUSG50qtA3k4i82BSlVoTJmU3/PO9JpXT5UQXFIX+WEG
-         NtOd7pLFo2AQ9lk7HCkLISHmhkigso7FVUKMX1K9EGMnqzA4gO+f7e9C/0E08G2GYUEG
-         glDaM8qolfZpucw+Lhx+MdzV6EVtMn0o8PJb4uK97KMeRo4IQaZ//LtELlfGij8hS6en
-         F4CYLokPWmpDBR59njRybZ4wG+7fELqd5jxHrJmNBIWn1gX/hCczSPFRQL0//dAxpFcn
-         /WPQ==
-X-Gm-Message-State: AO0yUKV3JMRVEAJBx9YP8LnMU9gSOdxgM9Az0ple/EMXQ4txYqSwYyf9
-        XBsTj0p2fVz1wE+fV52SLzHwPbQjqk8=
-X-Google-Smtp-Source: AK7set/xEvsTmxlS6Sf7nlrT9IGwAZxxRhYXh/bIJZgsNDnfKmEnpJnMoPMe1hMyB8J+jDLY1Wlo3A==
-X-Received: by 2002:a05:600c:3095:b0:3dc:555c:dd30 with SMTP id g21-20020a05600c309500b003dc555cdd30mr7170697wmn.27.1676941625713;
-        Mon, 20 Feb 2023 17:07:05 -0800 (PST)
+        bh=OMVNMVd8aSkCu82AxH2WGVGFz2ZJ4OqZ2LItsoW1tpA=;
+        b=DobD53Lgc9Ighhy65d6Mb2PMsDm+/wQlY0P7+LKkWrEdPb9vR8soBw0MOEiaveIJy2
+         lwJh31qLC1DQVsqysNTNrCwm5g9rkK/mrctijZQxFGjglA+Zyv3EQykUYYakpXuGz3t0
+         9n4NSDW9xOH7o/HprHnao2NX2uKx5Hy8aPUMmkZgviCJ/bCKkFa+lAWyha8llGPcvD2F
+         B1eLcdABb8rlZT/p4v9aUbrOjxmoR6iB2U6z5G1sl4Qq72On0eWHhnu7R8cxDoPKh8Wa
+         cHIJpErMmKdN8tY907uQZwNwi9NuMRlyOnRViZepla2RLETfR6eYxGd8wTH3k9YB7xRw
+         ZEiA==
+X-Gm-Message-State: AO0yUKWHpQ4ZO1CbFACTZuVAtvI36Pd6cMfKSJU4EtPcJWZOEKVo4te+
+        2kQQQITr2nY0J+5zt4sNfUdXPsin99Q=
+X-Google-Smtp-Source: AK7set+NMsgXGBUmZY6XDJZnb3T7nmOovtOun9naV9Fx4lRsHFjaIouN2FLdVGxY5rHkAHOLXYx33g==
+X-Received: by 2002:a05:600c:3b11:b0:3e2:669:757 with SMTP id m17-20020a05600c3b1100b003e206690757mr1739705wms.10.1676941622730;
+        Mon, 20 Feb 2023 17:07:02 -0800 (PST)
 Received: from 127.0.0.1localhost (94.196.95.64.threembb.co.uk. [94.196.95.64])
-        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003dfee43863fsm2092469wmi.26.2023.02.20.17.07.05
+        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003dfee43863fsm2092469wmi.26.2023.02.20.17.07.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 17:07:05 -0800 (PST)
+        Mon, 20 Feb 2023 17:07:02 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH liburing 7/7] tests/send: sends with offsets
-Date:   Tue, 21 Feb 2023 01:05:58 +0000
-Message-Id: <df6ee2e8912b3709f410a84fa2b58683d69a936d.1676941370.git.asml.silence@gmail.com>
+Subject: [PATCH liburing 3/7] send: test send with hugetlb
+Date:   Tue, 21 Feb 2023 01:05:54 +0000
+Message-Id: <c89fe57dea283ab376eb97a2dbc073c36720a880.1676941370.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1676941370.git.asml.silence@gmail.com>
 References: <cover.1676941370.git.asml.silence@gmail.com>
@@ -64,34 +64,87 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Apart from arbitrary shifting buffers before registration so they're
-not page aligned, also add offsets to send requests.
-
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- test/send-zerocopy.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ test/send-zerocopy.c | 31 +++++++++++++++++++++++++------
+ 1 file changed, 25 insertions(+), 6 deletions(-)
 
 diff --git a/test/send-zerocopy.c b/test/send-zerocopy.c
-index 8ddec39..57894aa 100644
+index e663be7..f1277fa 100644
 --- a/test/send-zerocopy.c
 +++ b/test/send-zerocopy.c
-@@ -833,6 +833,15 @@ int main(int argc, char *argv[])
+@@ -33,6 +33,8 @@
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
++#include <sys/mman.h>
++#include <linux/mman.h>
+ 
+ #include "liburing.h"
+ #include "helpers.h"
+@@ -56,6 +58,9 @@ enum {
+ 	BUF_T_SMALL,
+ 	BUF_T_NONALIGNED,
+ 	BUF_T_LARGE,
++	BUF_T_HUGETLB,
++
++	__BUF_NR,
+ };
+ 
+ /* 32MB, should be enough to trigger a short send */
+@@ -63,7 +68,7 @@ enum {
+ 
+ static size_t page_sz;
+ static char *tx_buffer, *rx_buffer;
+-static struct iovec buffers_iov[4];
++static struct iovec buffers_iov[__BUF_NR];
+ static bool has_sendmsg;
+ 
+ static bool check_cq_empty(struct io_uring *ring)
+@@ -748,6 +753,11 @@ int main(int argc, char *argv[])
  		return T_EXIT_FAIL;
  	}
  
-+	if (buffers_iov[BUF_T_HUGETLB].iov_base) {
-+		buffers_iov[BUF_T_HUGETLB].iov_base += 13;
-+		buffers_iov[BUF_T_HUGETLB].iov_len -= 26;
-+	}
-+	if (buffers_iov[BUF_T_LARGE].iov_base) {
-+		buffers_iov[BUF_T_LARGE].iov_base += 13;
-+		buffers_iov[BUF_T_LARGE].iov_len -= 26;
++	srand((unsigned)time(NULL));
++	for (i = 0; i < len; i++)
++		tx_buffer[i] = i;
++	memset(rx_buffer, 0, len);
++
+ 	buffers_iov[BUF_T_NORMAL].iov_base = tx_buffer + page_sz;
+ 	buffers_iov[BUF_T_NORMAL].iov_len = page_sz;
+ 	buffers_iov[BUF_T_SMALL].iov_base = tx_buffer;
+@@ -755,17 +765,26 @@ int main(int argc, char *argv[])
+ 	buffers_iov[BUF_T_NONALIGNED].iov_base = tx_buffer + BUFFER_OFFSET;
+ 	buffers_iov[BUF_T_NONALIGNED].iov_len = 2 * page_sz - BUFFER_OFFSET - 13;
+ 
++	if (len == LARGE_BUF_SIZE) {
++		void *huge_page;
++		int off = page_sz + 27;
++
++		len = 1U << 22;
++		huge_page = mmap(NULL, len, PROT_READ|PROT_WRITE,
++				 MAP_PRIVATE | MAP_HUGETLB | MAP_HUGE_2MB | MAP_ANONYMOUS,
++				 -1, 0);
++		if (huge_page != MAP_FAILED) {
++			buffers_iov[BUF_T_HUGETLB].iov_base = huge_page + off;
++			buffers_iov[BUF_T_HUGETLB].iov_len = len - off;
++		}
 +	}
 +
- 	ret = test_inet_send(&ring);
+ 	ret = io_uring_queue_init(32, &ring, 0);
  	if (ret) {
- 		fprintf(stderr, "test_inet_send() failed\n");
+ 		fprintf(stderr, "queue init failed: %d\n", ret);
+ 		return T_EXIT_FAIL;
+ 	}
+ 
+-	srand((unsigned)time(NULL));
+-	for (i = 0; i < len; i++)
+-		tx_buffer[i] = i;
+-	memset(rx_buffer, 0, len);
+-
+ 	ret = test_basic_send(&ring, sp[0], sp[1]);
+ 	if (ret == T_EXIT_SKIP)
+ 		return ret;
 -- 
 2.39.1
 
