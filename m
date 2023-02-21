@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFE08C64EC4
-	for <io-uring@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92675C61DA3
+	for <io-uring@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjBUBHG (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 20 Feb 2023 20:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S232966AbjBUBHI (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 20 Feb 2023 20:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbjBUBHF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Feb 2023 20:07:05 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE05021969
-        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:02 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id o14so2424291wms.1
-        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:02 -0800 (PST)
+        with ESMTP id S232686AbjBUBHI (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 20 Feb 2023 20:07:08 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31510212AF
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:05 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id j2-20020a05600c1c0200b003e1e754657aso2332985wms.2
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rhrr1oicBaGJb+5NjdEr++Wc9UTuIi4g2aMijxtMqn8=;
-        b=kFPpIxOdFTc+FVitCgobA3fEv+Th38Yu+vK2R7Ex76ikWweop+M2BtC359dp5uQD9Y
-         2hKG7tGGS2Xe4jK4/NmJsyPyaz4l8QfmiGQYvDOnqBoUNVmw7A4C/Eyex2QyOaP69HVL
-         81NNI1hJtVZDa2UZHOwGUDPZ7gxHVirOrG42O07qqcduJBzWpZ/Wr95BZ7+UIxQbUqFU
-         VWv1Rm3wYrDbFl2eAUWMzlFwXhTI53MvE/p4jyDF34hMbDEJ9HXseJWObMHpGOIy2Cpe
-         zAAU6Av45Qo31P18SQh3DjqgnWKKct0K1rh9MPrYUYxi5SaOsBiCKEP+zOJCIFwyNc9Y
-         BevA==
+        bh=PxtyHXpUeeZ5x2CT7DOcmWvZuW372J15FIqrjokY6vs=;
+        b=ZaV52/bCUvSo3QL3gvBvH4t2sV3RW0gD4hlqix5bvf9Qd3QDdUhaGsPgmWQQpVOPfU
+         lwz7GtxIv9fAGRUZMzdpyu/EDmsrss/29NQ8ElcgBJ7JoA2+RMWNl98L8LTjy/HXr9nX
+         XPXXmsGYJBcS8iYX98VwdeVcL3S9dbkFaKzbpZw4B4r+ZK/bDcpj20G23uQnZJMxE7Y4
+         1SCxNnQmc6RCpdZBcNETGtBCbmaae8+JtmRkC/wrQkSe+gx2JcZegtOmhN+K0saFD2um
+         M6Wmz/OAYmqky2xset4Rx2Anpd2Z3I0W+k5p0o/9isIu3ZfYQOv8wkkN0lNFVn0lseVT
+         b4nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Rhrr1oicBaGJb+5NjdEr++Wc9UTuIi4g2aMijxtMqn8=;
-        b=Zcns53rLIv8D5tf/JomL10R2BYUK0FwkS2LyE4hjag/EUyTo+i+m2sYlUDWdKCbfrU
-         Dab1ywFjhoJjCqloUuQpeM5NigJmMCGO/OBE0yLORxr4ni1YHGyhgx2cysxOfxMaXksB
-         nB/FHSUiDKWRN0Mw5HhfWJ53IpmRPW9hcT288Akyqrl5V3aZi8SVMb+kz25/dP7j8b8w
-         HpvqlAMvLA65blPgglSn0PgLpVn+ig6zL8xMKY3cqVAuWnW3MQamaEpW6fuGI/vqtzS2
-         +rZeGC6Fi1R1WP7CwLRtUSBYAFCOa1NZEL4pD4kiw+TLXRqP/8VRc1dvcg4xyFFO6kZ6
-         fZvw==
-X-Gm-Message-State: AO0yUKVc/77D7AR17dPUJUyr9vgM43e/lF7cgRewcmJXHAGqyTg6W2jq
-        Jj6AIoMmpHGmQsfkJcImnL0d21BzPgM=
-X-Google-Smtp-Source: AK7set8uggAldBCb+TDqlsp0IgIdsbyJPqgMweKDDHFoWPZ9AD89WoadNksXEGUJr86mYJQGlwCFoQ==
-X-Received: by 2002:a05:600c:3088:b0:3df:ed95:d757 with SMTP id g8-20020a05600c308800b003dfed95d757mr7752811wmn.34.1676941621152;
-        Mon, 20 Feb 2023 17:07:01 -0800 (PST)
+        bh=PxtyHXpUeeZ5x2CT7DOcmWvZuW372J15FIqrjokY6vs=;
+        b=NLaw8ek4BkL6J+U6g4vzl7mI5/re7pYPq0CoPjvClngEtrnp38p8YWUwBvAaQWqXkB
+         fWS1E2qfci4Lcu+gMYgyWvd0wcLp8XBMM7RZLKwkJB5lAtWFeCGm1pz+fGQNDNURtrPg
+         I0tBERJzAxWgL/ZC/m6Lv7g71pMjJU3F1fQbpe+4goIAR4Vwx+LIgphC4Akfg5sTk8CF
+         eW4mR6+uHL0hUg1fr86YGqUqZV3nU4tL+gm+OeDAU1p+TMyrKh69UODwHvOO4AHVcEN/
+         fhX+5XIX6BML7KENBiHug/WZn9qEeV6AJ0KPgQB1OA9Imwgm42bCxJSKAqL3TS6erJaN
+         M2Fg==
+X-Gm-Message-State: AO0yUKXxtiHNAMlSWUHFILxgSF4cPgErYp65j4MwMRpWROLquaNSdDUQ
+        eFWsZY0nscWxQTINnB1+Q64tqx/x84M=
+X-Google-Smtp-Source: AK7set8MQguAD0f/c2sFUdzTKYTPBALvXxgXZyp0jG5yCcR/U9oscp7HPLaLKZHcKRwdgCAkcStJ+g==
+X-Received: by 2002:a05:600c:2e84:b0:3e0:fda8:7e26 with SMTP id p4-20020a05600c2e8400b003e0fda87e26mr1630777wmn.33.1676941623422;
+        Mon, 20 Feb 2023 17:07:03 -0800 (PST)
 Received: from 127.0.0.1localhost (94.196.95.64.threembb.co.uk. [94.196.95.64])
-        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003dfee43863fsm2092469wmi.26.2023.02.20.17.07.00
+        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003dfee43863fsm2092469wmi.26.2023.02.20.17.07.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 17:07:00 -0800 (PST)
+        Mon, 20 Feb 2023 17:07:03 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH liburing 1/7] tests/send: don't use a constant for page size
-Date:   Tue, 21 Feb 2023 01:05:52 +0000
-Message-Id: <e5807646ba3ad5a315630fc3dbc363fa6c8c4e0a.1676941370.git.asml.silence@gmail.com>
+Subject: [PATCH liburing 4/7] examples/zc: add a hugetlb option
+Date:   Tue, 21 Feb 2023 01:05:55 +0000
+Message-Id: <5173d9761815d23800c1b32e95e9f6ebfe10433b.1676941370.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1676941370.git.asml.silence@gmail.com>
 References: <cover.1676941370.git.asml.silence@gmail.com>
@@ -64,80 +64,90 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+Benchmark hugetlb sends
+
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- test/send-zerocopy.c | 29 ++++++++++++++++++++---------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+ examples/send-zerocopy.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/test/send-zerocopy.c b/test/send-zerocopy.c
-index 86a31cd..2e30e49 100644
---- a/test/send-zerocopy.c
-+++ b/test/send-zerocopy.c
-@@ -58,6 +58,10 @@ enum {
- 	BUF_T_LARGE,
- };
+diff --git a/examples/send-zerocopy.c b/examples/send-zerocopy.c
+index 6092af9..3a80d3d 100644
+--- a/examples/send-zerocopy.c
++++ b/examples/send-zerocopy.c
+@@ -35,6 +35,8 @@
+ #include <sys/time.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
++#include <sys/mman.h>
++#include <linux/mman.h>
  
-+/* 32MB, should be enough to trigger a short send */
-+#define LARGE_BUF_SIZE		(1U << 25)
-+
-+static size_t page_sz;
- static char *tx_buffer, *rx_buffer;
- static struct iovec buffers_iov[4];
- static bool has_sendmsg;
-@@ -706,6 +710,8 @@ int main(int argc, char *argv[])
- 	if (argc > 1)
- 		return T_EXIT_SKIP;
+ #include "liburing.h"
  
-+	page_sz = sysconf(_SC_PAGESIZE);
-+
- 	/* create TCP IPv6 pair */
- 	ret = create_socketpair_ip(&addr, &sp[0], &sp[1], true, true, false, true);
- 	if (ret) {
-@@ -713,30 +719,35 @@ int main(int argc, char *argv[])
- 		return T_EXIT_FAIL;
+@@ -46,6 +48,7 @@ static bool cfg_fixed_files = 1;
+ static bool cfg_zc = 1;
+ static int  cfg_nr_reqs = 8;
+ static bool cfg_fixed_buf = 1;
++static bool cfg_hugetlb = 0;
+ 
+ static int  cfg_family		= PF_UNSPEC;
+ static int  cfg_payload_len;
+@@ -55,7 +58,8 @@ static int  cfg_runtime_ms	= 4200;
+ static socklen_t cfg_alen;
+ static struct sockaddr_storage cfg_dst_addr;
+ 
+-static char payload[IP_MAXPACKET] __attribute__((aligned(4096)));
++static char payload_buf[IP_MAXPACKET] __attribute__((aligned(4096)));
++static char *payload;
+ 
+ /*
+  * Implementation of error(3), prints an error message and exits.
+@@ -277,7 +281,7 @@ static void usage(const char *filepath)
+ 
+ static void parse_opts(int argc, char **argv)
+ {
+-	const int max_payload_len = sizeof(payload) -
++	const int max_payload_len = IP_MAXPACKET -
+ 				    sizeof(struct ipv6hdr) -
+ 				    sizeof(struct tcphdr) -
+ 				    40 /* max tcp options */;
+@@ -289,7 +293,7 @@ static void parse_opts(int argc, char **argv)
+ 
+ 	cfg_payload_len = max_payload_len;
+ 
+-	while ((c = getopt(argc, argv, "46D:p:s:t:n:z:b:k")) != -1) {
++	while ((c = getopt(argc, argv, "46D:p:s:t:n:z:b:l:")) != -1) {
+ 		switch (c) {
+ 		case '4':
+ 			if (cfg_family != PF_UNSPEC)
+@@ -324,6 +328,9 @@ static void parse_opts(int argc, char **argv)
+ 		case 'b':
+ 			cfg_fixed_buf = strtoul(optarg, NULL, 0);
+ 			break;
++		case 'l':
++			cfg_hugetlb = strtoul(optarg, NULL, 0);
++			break;
+ 		}
  	}
  
--	len = 1U << 25; /* 32MB, should be enough to trigger a short send */
--	tx_buffer = aligned_alloc(4096, len);
--	rx_buffer = aligned_alloc(4096, len);
-+	len = LARGE_BUF_SIZE;
-+	tx_buffer = aligned_alloc(page_sz, len);
-+	rx_buffer = aligned_alloc(page_sz, len);
- 	if (tx_buffer && rx_buffer) {
- 		buffers_iov[BUF_T_LARGE].iov_base = tx_buffer;
- 		buffers_iov[BUF_T_LARGE].iov_len = len;
- 	} else {
-+		if (tx_buffer)
-+			free(tx_buffer);
-+		if (rx_buffer)
-+			free(rx_buffer);
+@@ -344,6 +351,17 @@ int main(int argc, char **argv)
+ 
+ 	parse_opts(argc, argv);
+ 
++	payload = payload_buf;
++	if (cfg_hugetlb) {
++		payload = mmap(NULL, 2*1024*1024, PROT_READ | PROT_WRITE,
++				MAP_PRIVATE | MAP_HUGETLB | MAP_HUGE_2MB | MAP_ANONYMOUS,
++				-1, 0);
++		if (payload == MAP_FAILED) {
++			fprintf(stderr, "hugetlb alloc failed\n");
++			return 1;
++		}
++	}
 +
- 		printf("skip large buffer tests, can't alloc\n");
- 
--		len = 8192;
--		tx_buffer = aligned_alloc(4096, len);
--		rx_buffer = aligned_alloc(4096, len);
-+		len = 2 * page_sz;
-+		tx_buffer = aligned_alloc(page_sz, len);
-+		rx_buffer = aligned_alloc(page_sz, len);
- 	}
- 	if (!tx_buffer || !rx_buffer) {
- 		fprintf(stderr, "can't allocate buffers\n");
- 		return T_EXIT_FAIL;
- 	}
- 
--	buffers_iov[BUF_T_NORMAL].iov_base = tx_buffer + 4096;
--	buffers_iov[BUF_T_NORMAL].iov_len = 4096;
-+	buffers_iov[BUF_T_NORMAL].iov_base = tx_buffer + page_sz;
-+	buffers_iov[BUF_T_NORMAL].iov_len = page_sz;
- 	buffers_iov[BUF_T_SMALL].iov_base = tx_buffer;
- 	buffers_iov[BUF_T_SMALL].iov_len = 137;
- 	buffers_iov[BUF_T_NONALIGNED].iov_base = tx_buffer + BUFFER_OFFSET;
--	buffers_iov[BUF_T_NONALIGNED].iov_len = 8192 - BUFFER_OFFSET - 13;
-+	buffers_iov[BUF_T_NONALIGNED].iov_len = 2 * page_sz - BUFFER_OFFSET - 13;
- 
- 	ret = io_uring_queue_init(32, &ring, 0);
- 	if (ret) {
+ 	cfg_test = argv[argc - 1];
+ 	if (!strcmp(cfg_test, "tcp"))
+ 		do_test(cfg_family, SOCK_STREAM, 0);
 -- 
 2.39.1
 
