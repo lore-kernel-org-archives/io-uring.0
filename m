@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92675C61DA3
-	for <io-uring@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FAC8C636D6
+	for <io-uring@archiver.kernel.org>; Tue, 21 Feb 2023 01:07:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbjBUBHI (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 20 Feb 2023 20:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
+        id S232686AbjBUBHJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 20 Feb 2023 20:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjBUBHI (ORCPT
+        with ESMTP id S232650AbjBUBHI (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Mon, 20 Feb 2023 20:07:08 -0500
 Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31510212AF
-        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:05 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j2-20020a05600c1c0200b003e1e754657aso2332985wms.2
-        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B2321A0E
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:03 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id p3-20020a05600c358300b003e206711347so2026458wmq.0
+        for <io-uring@vger.kernel.org>; Mon, 20 Feb 2023 17:07:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PxtyHXpUeeZ5x2CT7DOcmWvZuW372J15FIqrjokY6vs=;
-        b=ZaV52/bCUvSo3QL3gvBvH4t2sV3RW0gD4hlqix5bvf9Qd3QDdUhaGsPgmWQQpVOPfU
-         lwz7GtxIv9fAGRUZMzdpyu/EDmsrss/29NQ8ElcgBJ7JoA2+RMWNl98L8LTjy/HXr9nX
-         XPXXmsGYJBcS8iYX98VwdeVcL3S9dbkFaKzbpZw4B4r+ZK/bDcpj20G23uQnZJMxE7Y4
-         1SCxNnQmc6RCpdZBcNETGtBCbmaae8+JtmRkC/wrQkSe+gx2JcZegtOmhN+K0saFD2um
-         M6Wmz/OAYmqky2xset4Rx2Anpd2Z3I0W+k5p0o/9isIu3ZfYQOv8wkkN0lNFVn0lseVT
-         b4nQ==
+        bh=pDVStzJ29cUMYfFVfAm67LRJPivRqwrBt7LnrDp5v3k=;
+        b=l7eOQLP+NUN61QDOLnENuuk5TJ/lzFRa7hEsPLwUkMK8SJh1C1BDh62KYwXSLFJ4ZA
+         4xFDXnZ243p6jiksbAkKmqvQI2OTFaIe6uItTuP9x2XcailXWbfpwg+632svLCcy84yA
+         htAmIOj14RMuerGNWgwJ62jRFCGh1A7ZgUAEuuBkpv4XuGxTGXKoiYnjaOK/y4HwbuAD
+         BWsjeSAvX8/LFlXn4UsdNwS9vAgOZAuMmrDuov6pcy59lbFYeZFwmVcfIWFpx8Fe3OrN
+         UFnGXChGifmt5pEjAQri635j98j6rpaOm3slbLfD72JfVY6cp5Q/KfJIo1WuD87lWJFb
+         ZqIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PxtyHXpUeeZ5x2CT7DOcmWvZuW372J15FIqrjokY6vs=;
-        b=NLaw8ek4BkL6J+U6g4vzl7mI5/re7pYPq0CoPjvClngEtrnp38p8YWUwBvAaQWqXkB
-         fWS1E2qfci4Lcu+gMYgyWvd0wcLp8XBMM7RZLKwkJB5lAtWFeCGm1pz+fGQNDNURtrPg
-         I0tBERJzAxWgL/ZC/m6Lv7g71pMjJU3F1fQbpe+4goIAR4Vwx+LIgphC4Akfg5sTk8CF
-         eW4mR6+uHL0hUg1fr86YGqUqZV3nU4tL+gm+OeDAU1p+TMyrKh69UODwHvOO4AHVcEN/
-         fhX+5XIX6BML7KENBiHug/WZn9qEeV6AJ0KPgQB1OA9Imwgm42bCxJSKAqL3TS6erJaN
-         M2Fg==
-X-Gm-Message-State: AO0yUKXxtiHNAMlSWUHFILxgSF4cPgErYp65j4MwMRpWROLquaNSdDUQ
-        eFWsZY0nscWxQTINnB1+Q64tqx/x84M=
-X-Google-Smtp-Source: AK7set8MQguAD0f/c2sFUdzTKYTPBALvXxgXZyp0jG5yCcR/U9oscp7HPLaLKZHcKRwdgCAkcStJ+g==
-X-Received: by 2002:a05:600c:2e84:b0:3e0:fda8:7e26 with SMTP id p4-20020a05600c2e8400b003e0fda87e26mr1630777wmn.33.1676941623422;
-        Mon, 20 Feb 2023 17:07:03 -0800 (PST)
+        bh=pDVStzJ29cUMYfFVfAm67LRJPivRqwrBt7LnrDp5v3k=;
+        b=vVKWlgyI+slVi/3Ikyj2UmatM4PP50iQa7TAutQcV8qeOj0B48R5eCDvueZHxoHVmD
+         lv4+vUXMRUy59FObjvly+q3GMTyUKaOyiklmkEyMQOPiYwDkEU19GzyMjXJ4BPqnarrl
+         7ZnnD4DlNsoceFzfhCkmETP3q7vfu1FzMzhUR+PA6uI7FpYsG31cCP8vF97igJOweEQR
+         lYQcnPS/Lhq650ChEt3DMYTMxMCojDh/11C2qTp5x4sjCB33AihLqrLMVfXNi8gmZtHm
+         Wi/nAu/2hATQChUIjcPKT85OmMIfVHs4NqjEtx5gjiTJT6FGNbJqws0PkkYpb1YFnk5L
+         pEhw==
+X-Gm-Message-State: AO0yUKU1jtNaooYR2AWQuNInR8MfzLUBeCRf+cMNaUoM2onyphdJTLdV
+        bvV81II3JQGshE4QLY/HX1lRXmmXOXo=
+X-Google-Smtp-Source: AK7set/eafs8FdCfBInBou/ji8RFUpJt6l7XNROEhhbwLLvBDfLJCgINTKRJOBMPuAErWFGY94Nnqw==
+X-Received: by 2002:a05:600c:1609:b0:3e2:1592:ccf5 with SMTP id m9-20020a05600c160900b003e21592ccf5mr11349612wmn.8.1676941621855;
+        Mon, 20 Feb 2023 17:07:01 -0800 (PST)
 Received: from 127.0.0.1localhost (94.196.95.64.threembb.co.uk. [94.196.95.64])
-        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003dfee43863fsm2092469wmi.26.2023.02.20.17.07.02
+        by smtp.gmail.com with ESMTPSA id k17-20020a7bc411000000b003dfee43863fsm2092469wmi.26.2023.02.20.17.07.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Feb 2023 17:07:03 -0800 (PST)
+        Mon, 20 Feb 2023 17:07:01 -0800 (PST)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH liburing 4/7] examples/zc: add a hugetlb option
-Date:   Tue, 21 Feb 2023 01:05:55 +0000
-Message-Id: <5173d9761815d23800c1b32e95e9f6ebfe10433b.1676941370.git.asml.silence@gmail.com>
+Subject: [PATCH liburing 2/7] send: improve buffer iteration
+Date:   Tue, 21 Feb 2023 01:05:53 +0000
+Message-Id: <d2d1c90856ce4f511eed5c7ffd7d829215f67f3a.1676941370.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1676941370.git.asml.silence@gmail.com>
 References: <cover.1676941370.git.asml.silence@gmail.com>
@@ -64,90 +64,92 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Benchmark hugetlb sends
-
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- examples/send-zerocopy.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
+ test/send-zerocopy.c | 42 ++++++++++++++++++++++++------------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
 
-diff --git a/examples/send-zerocopy.c b/examples/send-zerocopy.c
-index 6092af9..3a80d3d 100644
---- a/examples/send-zerocopy.c
-+++ b/examples/send-zerocopy.c
-@@ -35,6 +35,8 @@
- #include <sys/time.h>
- #include <sys/types.h>
- #include <sys/wait.h>
-+#include <sys/mman.h>
-+#include <linux/mman.h>
+diff --git a/test/send-zerocopy.c b/test/send-zerocopy.c
+index 2e30e49..e663be7 100644
+--- a/test/send-zerocopy.c
++++ b/test/send-zerocopy.c
+@@ -484,6 +484,7 @@ static int test_inet_send(struct io_uring *ring)
+ 	struct sockaddr_storage addr;
+ 	int sock_client = -1, sock_server = -1;
+ 	int ret, j, i;
++	int buf_index;
  
- #include "liburing.h"
- 
-@@ -46,6 +48,7 @@ static bool cfg_fixed_files = 1;
- static bool cfg_zc = 1;
- static int  cfg_nr_reqs = 8;
- static bool cfg_fixed_buf = 1;
-+static bool cfg_hugetlb = 0;
- 
- static int  cfg_family		= PF_UNSPEC;
- static int  cfg_payload_len;
-@@ -55,7 +58,8 @@ static int  cfg_runtime_ms	= 4200;
- static socklen_t cfg_alen;
- static struct sockaddr_storage cfg_dst_addr;
- 
--static char payload[IP_MAXPACKET] __attribute__((aligned(4096)));
-+static char payload_buf[IP_MAXPACKET] __attribute__((aligned(4096)));
-+static char *payload;
- 
- /*
-  * Implementation of error(3), prints an error message and exits.
-@@ -277,7 +281,7 @@ static void usage(const char *filepath)
- 
- static void parse_opts(int argc, char **argv)
- {
--	const int max_payload_len = sizeof(payload) -
-+	const int max_payload_len = IP_MAXPACKET -
- 				    sizeof(struct ipv6hdr) -
- 				    sizeof(struct tcphdr) -
- 				    40 /* max tcp options */;
-@@ -289,7 +293,7 @@ static void parse_opts(int argc, char **argv)
- 
- 	cfg_payload_len = max_payload_len;
- 
--	while ((c = getopt(argc, argv, "46D:p:s:t:n:z:b:k")) != -1) {
-+	while ((c = getopt(argc, argv, "46D:p:s:t:n:z:b:l:")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -324,6 +328,9 @@ static void parse_opts(int argc, char **argv)
- 		case 'b':
- 			cfg_fixed_buf = strtoul(optarg, NULL, 0);
- 			break;
-+		case 'l':
-+			cfg_hugetlb = strtoul(optarg, NULL, 0);
-+			break;
+ 	for (j = 0; j < 32; j++) {
+ 		bool ipv6 = j & 1;
+@@ -510,20 +511,19 @@ static int test_inet_send(struct io_uring *ring)
+ 			sock_server = tmp_sock;
  		}
- 	}
  
-@@ -344,6 +351,17 @@ int main(int argc, char **argv)
+-		for (i = 0; i < 4096; i++) {
++		for (i = 0; i < 1024; i++) {
+ 			bool regbuf;
  
- 	parse_opts(argc, argv);
+-			conf.buf_index = i & 3;
++			conf.use_sendmsg = i & 1;
++			conf.poll_first = i & 2;
+ 			conf.fixed_buf = i & 4;
+ 			conf.addr = (i & 8) ? &addr : NULL;
+ 			conf.cork = i & 16;
+ 			conf.mix_register = i & 32;
+ 			conf.force_async = i & 64;
+-			conf.use_sendmsg = i & 128;
+-			conf.zc = i & 256;
+-			conf.iovec = i & 512;
+-			conf.long_iovec = i & 1024;
+-			conf.poll_first = i & 2048;
++			conf.zc = i & 128;
++			conf.iovec = i & 256;
++			conf.long_iovec = i & 512;
+ 			conf.tcp = tcp;
+ 			regbuf = conf.mix_register || conf.fixed_buf;
  
-+	payload = payload_buf;
-+	if (cfg_hugetlb) {
-+		payload = mmap(NULL, 2*1024*1024, PROT_READ | PROT_WRITE,
-+				MAP_PRIVATE | MAP_HUGETLB | MAP_HUGE_2MB | MAP_ANONYMOUS,
-+				-1, 0);
-+		if (payload == MAP_FAILED) {
-+			fprintf(stderr, "hugetlb alloc failed\n");
-+			return 1;
-+		}
-+	}
+@@ -539,10 +539,6 @@ static int test_inet_send(struct io_uring *ring)
+ 				if (conf.addr && !has_sendmsg)
+ 					continue;
+ 			}
+-			if (conf.buf_index == BUF_T_LARGE && !tcp)
+-				continue;
+-			if (!buffers_iov[conf.buf_index].iov_base)
+-				continue;
+ 			if (tcp && (conf.cork || conf.addr))
+ 				continue;
+ 			if (conf.mix_register && (!conf.cork || conf.fixed_buf))
+@@ -554,13 +550,23 @@ static int test_inet_send(struct io_uring *ring)
+ 			if (msg_zc_set && !conf.zc)
+ 				continue;
+ 
+-			ret = do_test_inet_send(ring, sock_client, sock_server, &conf);
+-			if (ret) {
+-				fprintf(stderr, "send failed fixed buf %i, conn %i, addr %i, "
+-					"cork %i\n",
+-					conf.fixed_buf, client_connect, !!conf.addr,
+-					conf.cork);
+-				return 1;
++			for (buf_index = 0; buf_index < ARRAY_SIZE(buffers_iov); buf_index++) {
++				size_t len = buffers_iov[buf_index].iov_len;
 +
- 	cfg_test = argv[argc - 1];
- 	if (!strcmp(cfg_test, "tcp"))
- 		do_test(cfg_family, SOCK_STREAM, 0);
++				if (!buffers_iov[buf_index].iov_base)
++					continue;
++				if (!tcp && len > 4 * page_sz)
++					continue;
++
++				conf.buf_index = buf_index;
++				ret = do_test_inet_send(ring, sock_client, sock_server, &conf);
++				if (ret) {
++					fprintf(stderr, "send failed fixed buf %i, "
++							"conn %i, addr %i, cork %i\n",
++						conf.fixed_buf, client_connect,
++						!!conf.addr, conf.cork);
++					return 1;
++				}
+ 			}
+ 		}
+ 
 -- 
 2.39.1
 
