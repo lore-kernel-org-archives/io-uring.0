@@ -2,94 +2,85 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D7EBC61DA4
-	for <io-uring@archiver.kernel.org>; Wed, 22 Feb 2023 17:48:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1EBC64EC7
+	for <io-uring@archiver.kernel.org>; Wed, 22 Feb 2023 18:00:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjBVRsd (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 22 Feb 2023 12:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58812 "EHLO
+        id S232093AbjBVSAl (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 22 Feb 2023 13:00:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbjBVRsc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 22 Feb 2023 12:48:32 -0500
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE661E1D7
-        for <io-uring@vger.kernel.org>; Wed, 22 Feb 2023 09:48:31 -0800 (PST)
-Received: by mail-io1-xd35.google.com with SMTP id 76so3859583iou.9
-        for <io-uring@vger.kernel.org>; Wed, 22 Feb 2023 09:48:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1677088111;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MimG2CC7XI+xnSukS469ABX7/F4IMdTNNw9CfOi9O/Y=;
-        b=0tmeqmX8+Wg5duoe+V4dUFkiq3S+jxhY4ftJOaEHzGhztyRfum83E5MwabaFYNraKJ
-         TEFdLdtVmtvj1WdJX6+35hJH+hY6js2CMlpNvBnzHhM6lYmCGF97PPl/v0dMk63394oZ
-         LTDAHBkmcZj8iNe8HlhfO6sP7ZBUdkXZkc0LjL5D3/ltIqkFsex7mdAW25bNdcJdVpm5
-         3DAqYKyEU+ZFBSLHlhGfzf0vv67iY3QPLtvEh/JhQ6IfwZVtEP5BlGJY9Qr6zjj9gV2W
-         bBQQ5l14kii+bcGvOVRtN/Pi7sq32RcyWltVffdguxKzk6P7kNl7gRS8jaxHHL/r/rDU
-         zJHA==
+        with ESMTP id S232085AbjBVSAl (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 22 Feb 2023 13:00:41 -0500
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBC738B6D;
+        Wed, 22 Feb 2023 10:00:39 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id p3-20020a05600c358300b003e206711347so5947726wmq.0;
+        Wed, 22 Feb 2023 10:00:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677088111;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MimG2CC7XI+xnSukS469ABX7/F4IMdTNNw9CfOi9O/Y=;
-        b=EHGoYQjXxLNQkuEP+ggHH+Rntg+cFqRZCQGa7PwjmU57OSvpzJpp9GZhKu4Ze4V0+Z
-         I7/VVrJ4kq9VSIddAVsCEc2FR0xMDZM8cdBKOdW7GAMobEwjDSyqePcQza8ML06k4OIH
-         +A6l4yPgBFXmHI7sM3eE3xbDkZT0Fc2ktjwqZBlVkPN8hbwU/IROlKBN5Bv51U8vFqMJ
-         CbfeaYKc8hSmCZKWIIwsQ2EYmiFpPJm9AjIZX3++DsNJqic9Uc3Qykh05mrBLFTnaE3d
-         PEfobTK7idDCWBNulvoag5u4vZC8YXhNQdSyhgBX7ghchjM+wCpEwCtmI3KknFNGgsFa
-         AKhQ==
-X-Gm-Message-State: AO0yUKXdhm9PSvn5p/2eXSQPqziymJjFV+ytv6ZXPqXrNgIWpoC66Qu2
-        WifLLjZzV8Dx4k1uHu2BIEE/IwwSGgYVNnwF
-X-Google-Smtp-Source: AK7set/e1YM/12VxyvRllTM9Khpqhg6/GmIeUcMUXgcNxYgKMR5t7TjblPLA8FnTUGI9DwIekhWwvg==
-X-Received: by 2002:a6b:8d52:0:b0:72c:f57a:a37b with SMTP id p79-20020a6b8d52000000b0072cf57aa37bmr4419126iod.2.1677088110861;
-        Wed, 22 Feb 2023 09:48:30 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id x8-20020a02ac88000000b003e44371702fsm508426jan.67.2023.02.22.09.48.29
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pB8V6SnbhQl8mQXpiuOZR/SGgLZPL4Xx8Q+WzhCE+9Y=;
+        b=62nkeBQNBJIhOnLZ73PuGXym3ZqBL1uZSfVavGBfrlM7Vp6TSEQQpfuVNW7r685ix4
+         QJzSbDvLsboOtflz3h1Xie3kYGi8rcnr/A4EfSteHGABVTJrYvXJMVtqQ+C4qhhmIz+M
+         bDk+4ZGbE033tM3+u6gvi06bfJjTinZvKcV/514T07xmRWm9+t0DSH/tG6oUS5GtRhEy
+         jEZ+R/uFz7zGhlciU+gEI/Tph7qNs1zND4+HbAQmenxXOfKPd5SqDB+Nfb0JxdmpRgqP
+         VjTItWIhYHPzg2AXdL2fGp+MTJLluVT4HMzdV/YTUk0jEeMogR3+RrhorbocuAROv9tM
+         KDSw==
+X-Gm-Message-State: AO0yUKWW0F/Zd5RDyQDdm5b6KFxrsNSKqum4Mk+LZBsZyxf/ognfciPY
+        u3RfK/lW7eZmSLKwmZqAwH7QEpJP3EoHkfYu
+X-Google-Smtp-Source: AK7set/kUKG7xWon2SULW4XbykLQc6xn/fjiAevh+UNSvLafp16zSFrsMXHGM48heVondcim8RjMOA==
+X-Received: by 2002:a05:600c:3c8e:b0:3db:1f68:28f with SMTP id bg14-20020a05600c3c8e00b003db1f68028fmr7097858wmb.24.1677088838291;
+        Wed, 22 Feb 2023 10:00:38 -0800 (PST)
+Received: from localhost (fwdproxy-cln-033.fbsv.net. [2a03:2880:31ff:21::face:b00c])
+        by smtp.gmail.com with ESMTPSA id p13-20020a1c544d000000b003e208cec49bsm2554050wmi.3.2023.02.22.10.00.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Feb 2023 09:48:30 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-In-Reply-To: <cover.1677041932.git.asml.silence@gmail.com>
-References: <cover.1677041932.git.asml.silence@gmail.com>
-Subject: Re: (subset) [PATCH for-next 0/4] io_uring: registered huge buffer
- optimisations
-Message-Id: <167708810999.98463.17204153980405354169.b4-ty@kernel.dk>
-Date:   Wed, 22 Feb 2023 10:48:29 -0700
+        Wed, 22 Feb 2023 10:00:37 -0800 (PST)
+From:   Breno Leitao <leitao@debian.org>
+To:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gustavold@meta.com, leit@meta.com,
+        kasan-dev@googlegroups.com, Breno Leitao <leit@fb.com>
+Subject: [PATCH v2 0/2] io_uring: Add KASAN support for alloc caches
+Date:   Wed, 22 Feb 2023 10:00:33 -0800
+Message-Id: <20230222180035.3226075-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-ada30
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+From: Breno Leitao <leit@fb.com>
 
-On Wed, 22 Feb 2023 14:36:47 +0000, Pavel Begunkov wrote:
-> Improve support for registered buffers consisting of huge pages by
-> keeping them as a single element bvec instead of chunking them into
-> 4K pages. It improves performance quite a bit cutting CPU cycles on
-> dma-mapping and promoting a more efficient use of hardware.
-> 
-> With a custom fio/t/io_uring 64K reads benchmark with multiple Optanes
-> I've got 671 -> 736 KIOPS improvement (~10%).
-> 
-> [...]
+This patchset enables KASAN for alloc cache buffers. These buffers are
+used by apoll and netmsg code path. These buffers will now be poisoned
+when not used, so, if randomly touched, a KASAN warning will pop up.
 
-Applied, thanks!
+This patchset moves the alloc_cache from using double linked list to single
+linked list, so, we do not need to touch the poisoned node when adding
+or deleting a sibling node.
 
-[1/4] io_uring/rsrc: disallow multi-source reg buffers
-      commit: edd478269640b360c6f301f2baa04abdda563ef3
-[3/4] io_uring/rsrc: optimise single entry advance
-      commit: b000ae0ec2d709046ac1a3c5722fea417f8a067e
-[4/4] io_uring/rsrc: optimise registered huge pages
-      commit: 57bebf807e2abcf87d96b9de1266104ee2d8fc2f
+Changes from v1 to v2:
+   * Get rid of an extra "struct io_wq_work_node" variable in
+     io_alloc_cache_get() (suggested by Pavel Begunkov)
+   * Removing assignement during "if" checks (suggested by Pavel Begunkov
+     and Jens Axboe)
+   * Do not use network structs if CONFIG_NET is disabled (as reported
+     by kernel test robot)
 
-Best regards,
+Breno Leitao (2):
+  io_uring: Move from hlist to io_wq_work_node
+  io_uring: Add KASAN support for alloc_caches
+
+ include/linux/io_uring_types.h |  2 +-
+ io_uring/alloc_cache.h         | 35 +++++++++++++++++++---------------
+ io_uring/io_uring.c            | 14 ++++++++++++--
+ io_uring/net.c                 |  2 +-
+ io_uring/net.h                 |  4 ----
+ io_uring/poll.c                |  2 +-
+ 6 files changed, 35 insertions(+), 24 deletions(-)
+
 -- 
-Jens Axboe
-
-
+2.30.2
 
