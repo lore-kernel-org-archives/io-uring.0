@@ -2,92 +2,202 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D8364C61DA3
-	for <io-uring@archiver.kernel.org>; Tue, 21 Feb 2023 23:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A3EC61DA4
+	for <io-uring@archiver.kernel.org>; Wed, 22 Feb 2023 13:26:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjBUXyX (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 21 Feb 2023 18:54:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
+        id S229836AbjBVN0N (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 22 Feb 2023 08:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjBUXyW (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 21 Feb 2023 18:54:22 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E99022780
-        for <io-uring@vger.kernel.org>; Tue, 21 Feb 2023 15:53:53 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id bh1so6888479plb.11
-        for <io-uring@vger.kernel.org>; Tue, 21 Feb 2023 15:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HEXjybMjDo4AHQ34Ueszqup9k/yKbxkg1qfk1m5R0ZE=;
-        b=rvTtsJ8XsmBJcjdS8IDwz/ZbLtpkNnsYJ1zafYCdvQ7jU3B+G5wSX/q1U/42zP3Spm
-         nfiq9MS6PGB6ohcZP9bfR7GC4u3VT3K7cJaqSA0Vn816SmCH/JXhz8SJmp+dH3l2IDoY
-         TIHzT58wN+zOAMN25VtOYs9RFXF6F1e5L0op84eI68CpPHR/Ge8ABK/mZ5WkYI/SOmHO
-         S4OQJdOT6ze6DmhQ2rCnGUG5hC/8LzEYji/tf0d45ZA0FwxfrUD5zfKXtJ5WiiYPS+FZ
-         TioeOFjHCPMqBLN5jfsKb0f0QwS61Fhm64nHpp5ormjcZbznAwsdUn7T0BObBflMRYLF
-         V2zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HEXjybMjDo4AHQ34Ueszqup9k/yKbxkg1qfk1m5R0ZE=;
-        b=CpD2G+GKx3GblSLaFbHKh7E4DR++C92uR3b3X8THXKVDkxxXPMh0F2wFlNhpyECUrz
-         YH7kMubrbiYg3MHfw/BSxNHTBfG7VaMeNDuVwv8bXqtGWUQwtTcsvaLbs1VagwWEAm1A
-         ya+cuaYLPq+8q+vBarPdScxhVo2MhHrAZ6cIwrb95k1Kf0aYxmENrRS7V59/glsJH8yy
-         vOSeFB14QUDVF2OWGc8pLrWUn2xUEHKmnKjlIm2qV0qsBOS5mK0BKOpMNgZLZAv8d7+f
-         0qaFLr/8+nesulcriDAMG65OfLItf88xGcXYk75ZQ6jMbHUVTZObAzWnXAID3u3D4jJa
-         GOhA==
-X-Gm-Message-State: AO0yUKW/yB17xTW9Pt911kU1u6a3Y9mHPiGR0Ygfg/YfrsWktmFulJxi
-        pS7nZl+jIaJAk7gxL9S2AVatLnY7R6bjo4Kt
-X-Google-Smtp-Source: AK7set/T8MwrPRALxKN3YfGPwYAnNZN5efM/qjRCG3W2M8o7zPFH1cnfxv/naJ/bkjRqcbrgU+kbQw==
-X-Received: by 2002:a17:903:2291:b0:19a:8202:2dad with SMTP id b17-20020a170903229100b0019a82022dadmr7107391plh.2.1677023632953;
-        Tue, 21 Feb 2023 15:53:52 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b001990028c0c9sm647885plb.68.2023.02.21.15.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Feb 2023 15:53:52 -0800 (PST)
-Message-ID: <15f4a519-cc2b-1cad-571a-a36e67d6101f@kernel.dk>
-Date:   Tue, 21 Feb 2023 16:53:27 -0700
+        with ESMTP id S229672AbjBVN0M (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 22 Feb 2023 08:26:12 -0500
+Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45C03B3DE;
+        Wed, 22 Feb 2023 05:25:42 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R221e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VcH77gm_1677072335;
+Received: from localhost(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0VcH77gm_1677072335)
+          by smtp.aliyun-inc.com;
+          Wed, 22 Feb 2023 21:25:35 +0800
+From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+To:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     ming.lei@redhat.com, axboe@kernel.dk, asml.silence@gmail.com,
+        ZiyangZhang@linux.alibaba.com
+Subject: [RFC v2 1/4] bpf: add UBLK program type
+Date:   Wed, 22 Feb 2023 21:25:31 +0800
+Message-Id: <20230222132534.114574-2-xiaoguang.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230222132534.114574-1-xiaoguang.wang@linux.alibaba.com>
+References: <20230222132534.114574-1-xiaoguang.wang@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 1/2] io_uring: Move from hlist to io_wq_work_node
-Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org
-Cc:     leit@meta.com, linux-kernel@vger.kernel.org, gustavold@meta.com
-References: <20230221135721.3230763-1-leitao@debian.org>
- <782b4b43-790c-6e89-ea74-aac1fd4ff1e2@gmail.com>
- <b04b7d5d-582f-1b45-efa3-6e951dfc3cbf@debian.org>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <b04b7d5d-582f-1b45-efa3-6e951dfc3cbf@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 2/21/23 11:38?AM, Breno Leitao wrote:
-> Sure. I will remove the assignents in "if" part and maybe replicate what
-> we have
-> in io_alloc_cache_get(). Something as:
->        if (cache->list.next) {
->                node = cache->list.next;
-> 
-> Thanks for the review!
+Normally, userspace block device implementations need to copy data between
+kernel block layer's io requests and userspace block device's userspace
+daemon. For example, ublk and tcmu both have similar logic, but this
+operation will consume cpu resources obviously, especially for large io.
 
-Pavel is right in that we generally discourage assignments in if
-statements etc. For the above, the usual approach would be:
+There are methods trying to reduce these cpu overheads, then userspace
+block device's io performance will be improved further. These methods
+contain: 1) use special hardware to do memory copy, but seems not all
+architectures have these special hardware; 2) software methods, such as
+mmap kernel block layer's io requests's data to userspace daemon [1],
+but it has page table's map/unmap, tlb flush overhead, security issue,
+etc, and it maybe only friendly to large io.
 
-node = cache->list.next;
-if (node) {
-	...
-}
+To solve this problem, I'd propose a new method, which will combine the
+respective advantages of io_uring and ebpf. Add a new program type
+BPF_PROG_TYPE_UBLK for ublk, userspace block device daemon process will
+register ebpf progs, which will use bpf helper offered by ublk bpf prog
+type to submit io requests on behalf of daemon process in kernel, note
+io requests will use kernel block layer io reqeusts's pages to do io,
+then the memory copy overhead will be gone.
 
+[1] https://lore.kernel.org/all/20220318095531.15479-1-xiaoguang.wang@linux.alibaba.com/
+
+Signed-off-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+---
+ drivers/block/ublk_drv.c       | 23 +++++++++++++++++++++++
+ include/linux/bpf_types.h      |  2 ++
+ include/uapi/linux/bpf.h       |  1 +
+ kernel/bpf/syscall.c           |  1 +
+ kernel/bpf/verifier.c          |  9 +++++++--
+ tools/include/uapi/linux/bpf.h |  1 +
+ tools/lib/bpf/libbpf.c         |  1 +
+ 7 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 6368b56eacf1..b628e9eaefa6 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -43,6 +43,8 @@
+ #include <asm/page.h>
+ #include <linux/task_work.h>
+ #include <uapi/linux/ublk_cmd.h>
++#include <linux/filter.h>
++#include <linux/bpf.h>
+ 
+ #define UBLK_MINORS		(1U << MINORBITS)
+ 
+@@ -187,6 +189,27 @@ static DEFINE_MUTEX(ublk_ctl_mutex);
+ 
+ static struct miscdevice ublk_misc;
+ 
++static const struct bpf_func_proto *
++ublk_bpf_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	return bpf_base_func_proto(func_id);
++}
++
++static bool ublk_bpf_is_valid_access(int off, int size,
++			enum bpf_access_type type,
++			const struct bpf_prog *prog,
++			struct bpf_insn_access_aux *info)
++{
++	return false;
++}
++
++const struct bpf_prog_ops bpf_ublk_prog_ops = {};
++
++const struct bpf_verifier_ops bpf_ublk_verifier_ops = {
++	.get_func_proto		= ublk_bpf_func_proto,
++	.is_valid_access	= ublk_bpf_is_valid_access,
++};
++
+ static void ublk_dev_param_basic_apply(struct ublk_device *ub)
+ {
+ 	struct request_queue *q = ub->ub_disk->queue;
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index d4ee3ccd3753..4ef0bc0251b7 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -79,6 +79,8 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_LSM, lsm,
+ #endif
+ BPF_PROG_TYPE(BPF_PROG_TYPE_SYSCALL, bpf_syscall,
+ 	      void *, void *)
++BPF_PROG_TYPE(BPF_PROG_TYPE_UBLK, bpf_ublk,
++	      void *, void *)
+ 
+ BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops)
+ BPF_MAP_TYPE(BPF_MAP_TYPE_PERCPU_ARRAY, percpu_array_map_ops)
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 464ca3f01fe7..515b7b995b3a 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -986,6 +986,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_LSM,
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
++	BPF_PROG_TYPE_UBLK,
+ };
+ 
+ enum bpf_attach_type {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ecca9366c7a6..eb1752243f4f 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2432,6 +2432,7 @@ static bool is_net_admin_prog_type(enum bpf_prog_type prog_type)
+ 	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+ 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
+ 	case BPF_PROG_TYPE_SOCK_OPS:
++	case BPF_PROG_TYPE_UBLK:
+ 	case BPF_PROG_TYPE_EXT: /* extends any prog */
+ 		return true;
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7ee218827259..1e5bc89aea36 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12235,6 +12235,10 @@ static int check_return_code(struct bpf_verifier_env *env)
+ 		}
+ 		break;
+ 
++	case BPF_PROG_TYPE_UBLK:
++		range = tnum_const(0);
++		break;
++
+ 	case BPF_PROG_TYPE_EXT:
+ 		/* freplace program can return anything as its return value
+ 		 * depends on the to-be-replaced kernel func or bpf program.
+@@ -16770,8 +16774,9 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	}
+ 
+ 	if (prog->aux->sleepable && prog->type != BPF_PROG_TYPE_TRACING &&
+-	    prog->type != BPF_PROG_TYPE_LSM && prog->type != BPF_PROG_TYPE_KPROBE) {
+-		verbose(env, "Only fentry/fexit/fmod_ret, lsm, and kprobe/uprobe programs can be sleepable\n");
++	    prog->type != BPF_PROG_TYPE_LSM && prog->type != BPF_PROG_TYPE_KPROBE &&
++	    prog->type != BPF_PROG_TYPE_UBLK) {
++		verbose(env, "Only fentry/fexit/fmod_ret, lsm, and kprobe/uprobe, ublk programs can be sleepable\n");
+ 		return -EINVAL;
+ 	}
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 464ca3f01fe7..515b7b995b3a 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -986,6 +986,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_LSM,
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
++	BPF_PROG_TYPE_UBLK,
+ };
+ 
+ enum bpf_attach_type {
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 2a82f49ce16f..891ae1830ac7 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8606,6 +8606,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("cgroup/dev",		CGROUP_DEVICE, BPF_CGROUP_DEVICE, SEC_ATTACHABLE_OPT),
+ 	SEC_DEF("struct_ops+",		STRUCT_OPS, 0, SEC_NONE),
+ 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE),
++	SEC_DEF("ublk.s/",		UBLK, 0, SEC_SLEEPABLE),
+ };
+ 
+ static size_t custom_sec_def_cnt;
 -- 
-Jens Axboe
+2.31.1
 
