@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 53AC6C7EE45
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA1C4C7EE3A
 	for <io-uring@archiver.kernel.org>; Wed,  1 Mar 2023 14:09:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjCAOJV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S229961AbjCAOJV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Wed, 1 Mar 2023 09:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCAOJO (ORCPT
+        with ESMTP id S229956AbjCAOJO (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 1 Mar 2023 09:09:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503E123673
-        for <io-uring@vger.kernel.org>; Wed,  1 Mar 2023 06:08:14 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B447C2DE43
+        for <io-uring@vger.kernel.org>; Wed,  1 Mar 2023 06:08:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677679693;
+        s=mimecast20190719; t=1677679706;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Vhpj5XHtWAuet7CTecEivCEMI579/oqA0+hHiaLE9Qw=;
-        b=UMHszW4Ho9eHpJzyboJweET5olD7OlcJ244Eyeb5Ht4uLOzmpyu25XS13WjDcYUguXHhwM
-        SWMz38tNR2NwsYhXWbZIzRWTp7xTCQ8oS9ifxQOuTKEUMBeAmsCO4I8mManey7Ntuwc8sH
-        r32qi2Y9o9v621hd++IeA7UJbATFka8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=YhpzQlaHIrcPWh0ozP8XZ7+aBtM5xeXxoPc3fRNzGPY=;
+        b=MagwIYPlDUghTDlYeN2UIgE7m4mWopv0h6kV5k6oi57JCaIehSF71QsAOfaxSNK1wOIPw2
+        BYQz6sxn9dZ6Dr9NvR+/WX3SNiY5Wi6iyfNXydtXd/8LlHHBW2fAf1SwJ/t4afGJVKoMIo
+        Bcl9zfuKNAtY36NSIBrJR/ynMohVO70=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-0fP1R0LHOai5xC-gLFinCA-1; Wed, 01 Mar 2023 09:08:11 -0500
-X-MC-Unique: 0fP1R0LHOai5xC-gLFinCA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-471-WBFGjnlaOVmES13dKljw6Q-1; Wed, 01 Mar 2023 09:08:23 -0500
+X-MC-Unique: WBFGjnlaOVmES13dKljw6Q-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5AA63C0F240;
-        Wed,  1 Mar 2023 14:07:06 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 76CEF95E165;
+        Wed,  1 Mar 2023 14:06:58 +0000 (UTC)
 Received: from localhost (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B9D32026D68;
-        Wed,  1 Mar 2023 14:07:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B65C0492C14;
+        Wed,  1 Mar 2023 14:06:57 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
 Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
@@ -44,71 +44,122 @@ Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
         Bernd Schubert <bschubert@ddn.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [RFC PATCH 11/12] block: ublk_drv: add common exit handling
-Date:   Wed,  1 Mar 2023 22:06:10 +0800
-Message-Id: <20230301140611.163055-12-ming.lei@redhat.com>
+Subject: [RFC PATCH 09/12] io_uring: support OP_SEND_ZC/OP_RECV for fused slave request
+Date:   Wed,  1 Mar 2023 22:06:08 +0800
+Message-Id: <20230301140611.163055-10-ming.lei@redhat.com>
 In-Reply-To: <20230301140611.163055-1-ming.lei@redhat.com>
 References: <20230301140611.163055-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Simplify exit handling a bit, and prepare for supporting fused command.
+Start to allow fused slave request to support OP_SEND_ZC/OP_RECV, and
+the buffer can be retrieved from master request.
+
+Once the slave request is completed, the master buffer will be returned
+back.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ io_uring/net.c   | 23 +++++++++++++++++++++--
+ io_uring/opdef.c |  3 +++
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 2497b91b48ba..b9e38ebabca7 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -655,14 +655,15 @@ static void ublk_complete_rq(struct request *req)
- 	struct ublk_queue *ubq = req->mq_hctx->driver_data;
- 	struct ublk_io *io = &ubq->ios[req->tag];
- 	unsigned int unmapped_bytes;
-+	int res = BLK_STS_OK;
+diff --git a/io_uring/net.c b/io_uring/net.c
+index cbd4b725f58c..be5ae5ca823d 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -16,6 +16,7 @@
+ #include "net.h"
+ #include "notif.h"
+ #include "rsrc.h"
++#include "fused_cmd.h"
  
- 	/* failed read IO if nothing is read */
- 	if (!io->res && req_op(req) == REQ_OP_READ)
- 		io->res = -EIO;
+ #if defined(CONFIG_NET)
+ struct io_shutdown {
+@@ -378,7 +379,11 @@ int io_send(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (unlikely(!sock))
+ 		return -ENOTSOCK;
  
- 	if (io->res < 0) {
--		blk_mq_end_request(req, errno_to_blk_status(io->res));
--		return;
-+		res = errno_to_blk_status(io->res);
-+		goto exit;
+-	ret = import_ubuf(ITER_SOURCE, sr->buf, sr->len, &msg.msg_iter);
++	if (!(req->flags & REQ_F_FUSED_SLAVE))
++		ret = import_ubuf(ITER_SOURCE, sr->buf, sr->len, &msg.msg_iter);
++	else
++		ret = io_import_kbuf_for_slave((u64)sr->buf, sr->len,
++				ITER_SOURCE, &msg.msg_iter, req);
+ 	if (unlikely(ret))
+ 		return ret;
+ 
+@@ -869,7 +874,11 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+ 		sr->buf = buf;
  	}
  
- 	/*
-@@ -671,10 +672,8 @@ static void ublk_complete_rq(struct request *req)
- 	 *
- 	 * Both the two needn't unmap.
- 	 */
--	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE) {
--		blk_mq_end_request(req, BLK_STS_OK);
--		return;
--	}
-+	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE)
-+		goto exit;
+-	ret = import_ubuf(ITER_DEST, sr->buf, len, &msg.msg_iter);
++	if (!(req->flags & REQ_F_FUSED_SLAVE))
++		ret = import_ubuf(ITER_DEST, sr->buf, len, &msg.msg_iter);
++	else
++		ret = io_import_kbuf_for_slave((u64)sr->buf, sr->len, ITER_DEST,
++				&msg.msg_iter, req);
+ 	if (unlikely(ret))
+ 		goto out_free;
  
- 	/* for READ request, writing data in iod->addr to rq buffers */
- 	unmapped_bytes = ublk_unmap_io(ubq, req, io);
-@@ -691,6 +690,10 @@ static void ublk_complete_rq(struct request *req)
- 		blk_mq_requeue_request(req, true);
- 	else
- 		__blk_mq_end_request(req, BLK_STS_OK);
+@@ -983,6 +992,9 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
+ 		unsigned idx = READ_ONCE(sqe->buf_index);
+ 
++		if (req->flags & REQ_F_FUSED_SLAVE)
++			return -EINVAL;
 +
-+	return;
-+exit:
-+	blk_mq_end_request(req, res);
- }
- 
- /*
+ 		if (unlikely(idx >= ctx->nr_user_bufs))
+ 			return -EFAULT;
+ 		idx = array_index_nospec(idx, ctx->nr_user_bufs);
+@@ -1119,8 +1131,15 @@ int io_send_zc(struct io_kiocb *req, unsigned int issue_flags)
+ 		if (unlikely(ret))
+ 			return ret;
+ 		msg.sg_from_iter = io_sg_from_iter;
++	} else if (req->flags & REQ_F_FUSED_SLAVE) {
++		ret = io_import_kbuf_for_slave((u64)zc->buf, zc->len,
++				ITER_SOURCE, &msg.msg_iter, req);
++		if (unlikely(ret))
++			return ret;
++		msg.sg_from_iter = io_sg_from_iter;
+ 	} else {
+ 		io_notif_set_extended(zc->notif);
++
+ 		ret = import_ubuf(ITER_SOURCE, zc->buf, zc->len, &msg.msg_iter);
+ 		if (unlikely(ret))
+ 			return ret;
+diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+index f044629e5475..0a9d39a9db16 100644
+--- a/io_uring/opdef.c
++++ b/io_uring/opdef.c
+@@ -271,6 +271,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.audit_skip		= 1,
+ 		.ioprio			= 1,
+ 		.manual_alloc		= 1,
++		.fused_slave		= 1,
+ #if defined(CONFIG_NET)
+ 		.prep			= io_sendmsg_prep,
+ 		.issue			= io_send,
+@@ -285,6 +286,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.buffer_select		= 1,
+ 		.audit_skip		= 1,
+ 		.ioprio			= 1,
++		.fused_slave		= 1,
+ #if defined(CONFIG_NET)
+ 		.prep			= io_recvmsg_prep,
+ 		.issue			= io_recv,
+@@ -411,6 +413,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.audit_skip		= 1,
+ 		.ioprio			= 1,
+ 		.manual_alloc		= 1,
++		.fused_slave		= 1,
+ #if defined(CONFIG_NET)
+ 		.prep			= io_send_zc_prep,
+ 		.issue			= io_send_zc,
 -- 
 2.31.1
 
