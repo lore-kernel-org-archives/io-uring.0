@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F0AFC64ED6
-	for <io-uring@archiver.kernel.org>; Wed,  1 Mar 2023 14:09:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 206C5C7EE32
+	for <io-uring@archiver.kernel.org>; Wed,  1 Mar 2023 14:09:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCAOJQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 1 Mar 2023 09:09:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S229951AbjCAOJS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 1 Mar 2023 09:09:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjCAOJM (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Mar 2023 09:09:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26C32BF0C
-        for <io-uring@vger.kernel.org>; Wed,  1 Mar 2023 06:08:24 -0800 (PST)
+        with ESMTP id S229944AbjCAOJO (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 1 Mar 2023 09:09:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA65B1A4B2
+        for <io-uring@vger.kernel.org>; Wed,  1 Mar 2023 06:08:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677679704;
+        s=mimecast20190719; t=1677679683;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XBW5uND8g4lHs9X+v3T5jlhH8yD3vk2lYh4eamapBtY=;
-        b=c5Xki+Ha1xuKYm5OursS0mTWvMivZnr7gZb34DyCUTeaXLJt4JVT7FDf/OvYfSqJfoe6Ay
-        6c31xHOKogiXoKLhy0AlV/54V9rj3htyffwMII5ReB0hJSo4L9qebFgyFNQwHYXzEyymwF
-        HojkP8+SsXe2G+z76gVQqnHbG6IEzis=
+        bh=fgL0MAAgWmqfO+9t+5jpWAVNrZVmdtUVYegvFw8KI4g=;
+        b=NxQocpqX85tbABeJ6nkQNI2xvgrRxyXH8zeQZtR3f/dkChEFFc0EtyA8r6st6TvEgp4WbH
+        trftZLalsqjmRTI38Lz80gUzMwNNfR/4RQ2aXjomIRytVa7jkfzLjbmNzFfp1Shi+E6mMK
+        X8bjWqBhxQVjxfaZ6bd+fQmyJasB6TM=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-75-6x8nZmzYNPCFpoK8hLlXrw-1; Wed, 01 Mar 2023 09:08:20 -0500
-X-MC-Unique: 6x8nZmzYNPCFpoK8hLlXrw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+ us-mta-180-EElNq6KeN4CQA32vZtj2Dw-1; Wed, 01 Mar 2023 09:07:59 -0500
+X-MC-Unique: EElNq6KeN4CQA32vZtj2Dw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2351419705BD;
-        Wed,  1 Mar 2023 14:06:55 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B372B84AC99;
+        Wed,  1 Mar 2023 14:06:27 +0000 (UTC)
 Received: from localhost (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3367B492B00;
-        Wed,  1 Mar 2023 14:06:53 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F113E1121318;
+        Wed,  1 Mar 2023 14:06:26 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
 Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
@@ -44,100 +44,52 @@ Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
         Bernd Schubert <bschubert@ddn.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [RFC PATCH 08/12] io_uring: support OP_READ/OP_WRITE for fused slave request
-Date:   Wed,  1 Mar 2023 22:06:07 +0800
-Message-Id: <20230301140611.163055-9-ming.lei@redhat.com>
+Subject: [RFC PATCH 01/12] io_uring: increase io_kiocb->flags into 64bit
+Date:   Wed,  1 Mar 2023 22:06:00 +0800
+Message-Id: <20230301140611.163055-2-ming.lei@redhat.com>
 In-Reply-To: <20230301140611.163055-1-ming.lei@redhat.com>
 References: <20230301140611.163055-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Start to allow fused slave request to support OP_READ/OP_WRITE, and
-the buffer can be retrieved from master request.
-
-Once the slave request is completed, the master buffer will be returned
-back.
+The 32bit io_kiocb->flags has been used up, so extend it to 64bit.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- io_uring/opdef.c |  2 ++
- io_uring/rw.c    | 20 ++++++++++++++++++++
- 2 files changed, 22 insertions(+)
+ include/linux/io_uring_types.h | 2 +-
+ io_uring/io_uring.c            | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 63b90e8e65f8..f044629e5475 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -235,6 +235,7 @@ const struct io_issue_def io_issue_defs[] = {
- 		.ioprio			= 1,
- 		.iopoll			= 1,
- 		.iopoll_queue		= 1,
-+		.fused_slave		= 1,
- 		.prep			= io_prep_rw,
- 		.issue			= io_read,
- 	},
-@@ -248,6 +249,7 @@ const struct io_issue_def io_issue_defs[] = {
- 		.ioprio			= 1,
- 		.iopoll			= 1,
- 		.iopoll_queue		= 1,
-+		.fused_slave		= 1,
- 		.prep			= io_prep_rw,
- 		.issue			= io_write,
- 	},
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 4c233910e200..36d31a943317 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -19,6 +19,7 @@
- #include "kbuf.h"
- #include "rsrc.h"
- #include "rw.h"
-+#include "fused_cmd.h"
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 0efe4d784358..87342649d2c3 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -530,7 +530,7 @@ struct io_kiocb {
+ 	 * and after selection it points to the buffer ID itself.
+ 	 */
+ 	u16				buf_index;
+-	unsigned int			flags;
++	u64				flags;
  
- struct io_rw {
- 	/* NOTE: kiocb has the file as the first member, so don't do it here */
-@@ -371,6 +372,17 @@ static struct iovec *__io_import_iovec(int ddir, struct io_kiocb *req,
- 	size_t sqe_len;
- 	ssize_t ret;
+ 	struct io_cqe			cqe;
  
-+	/*
-+	 * SLAVE OP passes buffer offset from sqe->addr actually, since
-+	 * the fused cmd kbuf's mapped start address is zero.
-+	 */
-+	if (req->flags & REQ_F_FUSED_SLAVE) {
-+		ret = io_import_kbuf_for_slave(rw->addr, rw->len, ddir, iter, req);
-+		if (ret)
-+			return ERR_PTR(ret);
-+		return NULL;
-+	}
-+
- 	if (opcode == IORING_OP_READ_FIXED || opcode == IORING_OP_WRITE_FIXED) {
- 		ret = io_import_fixed(ddir, iter, req->imu, rw->addr, rw->len);
- 		if (ret)
-@@ -428,11 +440,19 @@ static inline loff_t *io_kiocb_ppos(struct kiocb *kiocb)
-  */
- static ssize_t loop_rw_iter(int ddir, struct io_rw *rw, struct iov_iter *iter)
- {
-+	struct io_kiocb *req = cmd_to_io_kiocb(rw);
- 	struct kiocb *kiocb = &rw->kiocb;
- 	struct file *file = kiocb->ki_filp;
- 	ssize_t ret = 0;
- 	loff_t *ppos;
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 1df68da89f99..09cc5eaec4ab 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -4418,7 +4418,7 @@ static int __init io_uring_init(void)
+ 	BUILD_BUG_ON(SQE_COMMON_FLAGS >= (1 << 8));
+ 	BUILD_BUG_ON((SQE_VALID_FLAGS | SQE_COMMON_FLAGS) != SQE_VALID_FLAGS);
  
-+	/*
-+	 * Fused slave req hasn't user buffer, so ->read/->write can't
-+	 * be supported
-+	 */
-+	if (req->flags & REQ_F_FUSED_SLAVE)
-+		return -EOPNOTSUPP;
-+
- 	/*
- 	 * Don't support polled IO through this interface, and we can't
- 	 * support non-blocking either. For the latter, this just causes
+-	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(int));
++	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(u64));
+ 
+ 	BUILD_BUG_ON(sizeof(atomic_t) != sizeof(u32));
+ 
 -- 
 2.31.1
 
