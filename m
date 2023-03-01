@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 206C5C7EE32
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2449C7EE36
 	for <io-uring@archiver.kernel.org>; Wed,  1 Mar 2023 14:09:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjCAOJS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 1 Mar 2023 09:09:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        id S229498AbjCAOJT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 1 Mar 2023 09:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbjCAOJO (ORCPT
+        with ESMTP id S229943AbjCAOJO (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 1 Mar 2023 09:09:14 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA65B1A4B2
-        for <io-uring@vger.kernel.org>; Wed,  1 Mar 2023 06:08:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255DB10FA
+        for <io-uring@vger.kernel.org>; Wed,  1 Mar 2023 06:07:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677679683;
+        s=mimecast20190719; t=1677679671;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fgL0MAAgWmqfO+9t+5jpWAVNrZVmdtUVYegvFw8KI4g=;
-        b=NxQocpqX85tbABeJ6nkQNI2xvgrRxyXH8zeQZtR3f/dkChEFFc0EtyA8r6st6TvEgp4WbH
-        trftZLalsqjmRTI38Lz80gUzMwNNfR/4RQ2aXjomIRytVa7jkfzLjbmNzFfp1Shi+E6mMK
-        X8bjWqBhxQVjxfaZ6bd+fQmyJasB6TM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=OzamTCwD4+DR1k1p7nSy56cupU+GGp9PQzgKrFYNBp0=;
+        b=VGbMOvP9lgILX4bM/8D2VOd3pQszu2Lq3KndarQJB3HVQf+kZ8r2bAQVnbKqStADrwNvE2
+        AAZYhc24I/86Zj5T30ibASwGVBRIApVat/ekNK9kYfTFCfMBBBNDWWsY6v3IC1JhiNKHb4
+        43Xu6GXtcjVQf9DjQQlAxXmYs0V57LI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-180-EElNq6KeN4CQA32vZtj2Dw-1; Wed, 01 Mar 2023 09:07:59 -0500
-X-MC-Unique: EElNq6KeN4CQA32vZtj2Dw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+ us-mta-136-zewfF-lsMr23jqbmv2aCgg-1; Wed, 01 Mar 2023 09:07:46 -0500
+X-MC-Unique: zewfF-lsMr23jqbmv2aCgg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B372B84AC99;
-        Wed,  1 Mar 2023 14:06:27 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 765273C16EA3;
+        Wed,  1 Mar 2023 14:06:46 +0000 (UTC)
 Received: from localhost (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F113E1121318;
-        Wed,  1 Mar 2023 14:06:26 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AA9B8140EBF4;
+        Wed,  1 Mar 2023 14:06:45 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
 Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
@@ -44,52 +44,135 @@ Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
         Bernd Schubert <bschubert@ddn.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [RFC PATCH 01/12] io_uring: increase io_kiocb->flags into 64bit
-Date:   Wed,  1 Mar 2023 22:06:00 +0800
-Message-Id: <20230301140611.163055-2-ming.lei@redhat.com>
+Subject: [RFC PATCH 06/12] io_uring: add IO_URING_F_FUSED and prepare for supporting OP_FUSED_CMD
+Date:   Wed,  1 Mar 2023 22:06:05 +0800
+Message-Id: <20230301140611.163055-7-ming.lei@redhat.com>
 In-Reply-To: <20230301140611.163055-1-ming.lei@redhat.com>
 References: <20230301140611.163055-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The 32bit io_kiocb->flags has been used up, so extend it to 64bit.
+Add flag IO_URING_F_FUSED and prepare for supporting IO_URING_OP_FUSED_CMD,
+which is still one type of IO_URING_OP_URING_CMD, so it is reasonable
+to reuse ->uring_cmd() for handling IO_URING_F_FUSED_CMD.
+
+And just IO_URING_F_FUSED_CMD will carry one 64byte SQE as payload which
+will be handled by one slave request. The master uring command will
+provide kernel buffer to the slave request via 'struct io_mapped_buf'.
+
+Mark all existed drivers to not support IO_URING_F_FUSED_CMD, given it
+depends if driver is capable of handling the slave request.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- include/linux/io_uring_types.h | 2 +-
- io_uring/io_uring.c            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/block/ublk_drv.c  | 6 ++++++
+ drivers/char/mem.c        | 4 ++++
+ drivers/nvme/host/ioctl.c | 9 +++++++++
+ include/linux/io_uring.h  | 7 +++++++
+ 4 files changed, 26 insertions(+)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 0efe4d784358..87342649d2c3 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -530,7 +530,7 @@ struct io_kiocb {
- 	 * and after selection it points to the buffer ID itself.
- 	 */
- 	u16				buf_index;
--	unsigned int			flags;
-+	u64				flags;
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index b9c759cef00e..c89ede1c9b22 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -1274,6 +1274,9 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 	if (!(issue_flags & IO_URING_F_SQE128))
+ 		goto out;
  
- 	struct io_cqe			cqe;
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
+ 		goto out;
  
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 1df68da89f99..09cc5eaec4ab 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -4418,7 +4418,7 @@ static int __init io_uring_init(void)
- 	BUILD_BUG_ON(SQE_COMMON_FLAGS >= (1 << 8));
- 	BUILD_BUG_ON((SQE_VALID_FLAGS | SQE_COMMON_FLAGS) != SQE_VALID_FLAGS);
+@@ -2172,6 +2175,9 @@ static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
+ 	struct ublk_device *ub = NULL;
+ 	int ret = -EINVAL;
  
--	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(int));
-+	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(u64));
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	if (issue_flags & IO_URING_F_NONBLOCK)
+ 		return -EAGAIN;
  
- 	BUILD_BUG_ON(sizeof(atomic_t) != sizeof(u32));
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index ffb101d349f0..134ba6665194 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -30,6 +30,7 @@
+ #include <linux/uio.h>
+ #include <linux/uaccess.h>
+ #include <linux/security.h>
++#include <linux/io_uring.h>
  
+ #ifdef CONFIG_IA64
+ # include <linux/efi.h>
+@@ -482,6 +483,9 @@ static ssize_t splice_write_null(struct pipe_inode_info *pipe, struct file *out,
+ 
+ static int uring_cmd_null(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
+ {
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index 723e7d5b778f..44a171bcaa90 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -773,6 +773,9 @@ int nvme_ns_chr_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
+ 	struct nvme_ns *ns = container_of(file_inode(ioucmd->file)->i_cdev,
+ 			struct nvme_ns, cdev);
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	return nvme_ns_uring_cmd(ns, ioucmd, issue_flags);
+ }
+ 
+@@ -878,6 +881,9 @@ int nvme_ns_head_chr_uring_cmd(struct io_uring_cmd *ioucmd,
+ 	struct nvme_ns *ns = nvme_find_path(head);
+ 	int ret = -EINVAL;
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	if (ns)
+ 		ret = nvme_ns_uring_cmd(ns, ioucmd, issue_flags);
+ 	srcu_read_unlock(&head->srcu, srcu_idx);
+@@ -915,6 +921,9 @@ int nvme_dev_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
+ 	struct nvme_ctrl *ctrl = ioucmd->file->private_data;
+ 	int ret;
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	/* IOPOLL not supported yet */
+ 	if (issue_flags & IO_URING_F_IOPOLL)
+ 		return -EOPNOTSUPP;
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 88205ea566d3..2ccf91146c13 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -21,6 +21,13 @@ enum io_uring_cmd_flags {
+ 	IO_URING_F_SQE128		= (1 << 8),
+ 	IO_URING_F_CQE32		= (1 << 9),
+ 	IO_URING_F_IOPOLL		= (1 << 10),
++
++	/* for FUSED_CMD only */
++	IO_URING_F_FUSED_WRITE		= (1 << 11), /* slave writes to buffer */
++	IO_URING_F_FUSED_READ		= (1 << 12), /* slave reads from buffer */
++	/* driver incapable of FUSED_CMD should fail cmd when seeing F_FUSED */
++	IO_URING_F_FUSED		= IO_URING_F_FUSED_WRITE |
++		IO_URING_F_FUSED_READ,
+ };
+ 
+ struct io_uring_cmd {
 -- 
 2.31.1
 
