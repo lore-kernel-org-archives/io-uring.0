@@ -2,96 +2,47 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAFB9C61DA4
-	for <io-uring@archiver.kernel.org>; Mon,  6 Mar 2023 08:39:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E2BC61DA4
+	for <io-uring@archiver.kernel.org>; Mon,  6 Mar 2023 13:04:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjCFIjL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 6 Mar 2023 03:39:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
+        id S230437AbjCFNEK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 6 Mar 2023 08:04:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFIjK (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 6 Mar 2023 03:39:10 -0500
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F23F1CF41
-        for <io-uring@vger.kernel.org>; Mon,  6 Mar 2023 00:39:08 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VdDPTSs_1678091945;
-Received: from 30.82.254.66(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0VdDPTSs_1678091945)
-          by smtp.aliyun-inc.com;
-          Mon, 06 Mar 2023 16:39:06 +0800
-Message-ID: <cd73d991-8c0b-847a-5d3d-42f21ec7b073@linux.alibaba.com>
-Date:   Mon, 6 Mar 2023 16:39:04 +0800
+        with ESMTP id S230428AbjCFNEG (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 6 Mar 2023 08:04:06 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3104729E0D;
+        Mon,  6 Mar 2023 05:03:49 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id EB2CB68B05; Mon,  6 Mar 2023 14:03:44 +0100 (CET)
+Date:   Mon, 6 Mar 2023 14:03:44 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Stefan Roesch <shr@meta.com>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Stefan Roesch <shr@fb.com>, io-uring@vger.kernel.org,
+        kernel-team@fb.com, linux-mm@kvack.org, linux-xfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, david@fromorbit.com, jack@suse.cz,
+        hch@infradead.org, axboe@kernel.dk, Christoph Hellwig <hch@lst.de>
+Subject: Re: [RESEND PATCH v9 04/14] iomap: Add flags parameter to
+ iomap_page_create()
+Message-ID: <20230306130344.GA14467@lst.de>
+References: <20220623175157.1715274-1-shr@fb.com> <20220623175157.1715274-5-shr@fb.com> <ZAF8vk6Jns/40bc0@casper.infradead.org> <ZAIl7JfPXivtN8qm@magnolia> <0d43e015-057f-2379-a0fb-d55539b803eb@meta.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [RFC v2 2/3] io_uring: add fixed poll support
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com
-References: <20211028122850.13025-1-xiaoguang.wang@linux.alibaba.com>
- <20211028122850.13025-2-xiaoguang.wang@linux.alibaba.com>
- <0ca484de-0af1-b506-5ded-fa125bee1bcb@kernel.dk>
-Content-Language: en-US
-From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-In-Reply-To: <0ca484de-0af1-b506-5ded-fa125bee1bcb@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d43e015-057f-2379-a0fb-d55539b803eb@meta.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-hi,
+On Fri, Mar 03, 2023 at 09:29:30AM -0800, Stefan Roesch wrote:
+> If IOMAP_NOWAIT is set, and the allocation fails, we should return
+> -EAGAIN, so the write request is retried in the slow path.
 
-> On 10/28/21 6:28?AM, Xiaoguang Wang wrote:
->> Recently I spend time to research io_uring's fast-poll and multi-shot's
->> performance using network echo-server model. Previously I always thought
->> fast-poll is better than multi-shot and will give better performance,
->> but indeed multi-shot is almost always better than fast-poll in real
->> test, which is very interesting. I use ebpf to have some measurements,
->> it shows that whether fast-poll is excellent or not depends entirely on
->> that the first nowait try in io_issue_sqe() succeeds or fails. Take
->> io_recv operation as example(recv buffer is 16 bytes):
->>   1) the first nowait succeeds, a simple io_recv() is enough.
->> In my test machine, successful io_recv() consumes 1110ns averagely.
->>
->>   2) the first nowait fails, then we'll have some expensive work, which
->> contains failed io_revc(), apoll allocations, vfs_poll(), miscellaneous
->> initializations anc check in __io_arm_poll_handler() and a final
->> successful io_recv(). Among then:
->>     failed io_revc() consumes 620ns averagely.
->>     vfs_poll() consumes 550ns averagely.
->> I don't measure other overhead yet, but we can see if the first nowait
->> try fails, we'll need at least 2290ns(620 + 550 + 1110) to complete it.
->> In my echo server tests, 40% of first nowait io_recv() operations fails.
->>
->> From above measurements, it can explain why mulit-shot is better than
->> multi-shot, mulit-shot can ensure the first nowait try succeed.
->>
->> Based on above measurements, I try to improve fast-poll a bit:
->> Introduce fix poll support, currently it only works in file registered
->> mode. With this feature, we can get rid of various repeated operations
->> in io_arm_poll_handler(), contains apoll allocations, and miscellaneous
->> initializations anc check.
-> I was toying with an idea on how to do persistent poll support,
-> basically moving the wait_queue_entry out of io_poll and hence detaching
-> it from the io_kiocb. That would allow a per-file (and type) poll entry
-> to remain persistent in the kernel rather than needing to do this
-> expensive work repeatedly. Pavel kindly reminded me of your work, which
-> unfortunately I had totally forgotten.
->
-> Did you end up taking this further? My idea was to make it work
-> independently of fixed files, but I also don't want to reinvent the
-> wheel if you ended up with something like this.
-I haven't continued to work on this work since last patch set and
-currently I don't have time for myself to continue working on this
-job, sorry. It'll be great if we can add similar fixed poll for fast-poll
-feature, or if we can eliminate the possible failed first no-wait submit
-overhead. Recently, aone of our clients also wants to use asio(with
-io_uring enabled), seems that asio(use io_uring fast-poll) does not
-perform better than asio(epoll), I need to figure that out firstly.
+Yes.  Another vote for doing the ERR_PTR.
 
-asio: https://github.com/chriskohlhoff/asio.git
-
-
-Regards,
-Xiaoguang Wang
->
-
+willy, are you going to look into that yourself or are you waiting for
+someone to take care of it?
