@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6C5AC6FD1A
-	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 14:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0ACC1C678D5
+	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 14:23:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjCGOWT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 7 Mar 2023 09:22:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41666 "EHLO
+        id S231304AbjCGOW6 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 7 Mar 2023 09:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjCGOVx (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 09:21:53 -0500
+        with ESMTP id S231514AbjCGOWU (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 09:22:20 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11FE8C50A
-        for <io-uring@vger.kernel.org>; Tue,  7 Mar 2023 06:16:50 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A528E83D7
+        for <io-uring@vger.kernel.org>; Tue,  7 Mar 2023 06:17:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678198548;
+        s=mimecast20190719; t=1678198566;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mMsNgQWQgB6DB71lSdY+b0QQaIZnvxIxMO/B+UZ8jwc=;
-        b=flyPtbdA+PVr50c1Q67y2LU55DDgc7+FEcgsJBJAiy9iws/k0uXf8iB1Y+vhGKdH0+TNmP
-        ogbNo+GwFGH4q46WzN0odhs2nB6bw+g1wKJfJ0NSpON/l6xspxTeah4njqXlEe/4PNNnQu
-        5CxJVCaSo5pLk4zi7+Gs7ssnYansFAs=
+        bh=/NBwVYnHSaZrYp0gKoT57Tl/vQn9azd4FuuYHvk1QnI=;
+        b=UigyT633F3W18Zr+algCohnr4PlUfQIUKLGW5Q+wfAdSspGXmG2Bu/dndStjP5wUR2ePEo
+        kGn9K5iweuaiblb5z+c+kOxn/5K0Zwk8uIZMUwSSC09Qsi3dPzSV3nOxHokxrao8HBsvx1
+        ApxnScYUxMr8cnzyqfZ5STddLTV9Vdk=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-fx7QMbn4NM2lWKqc-E5k9A-1; Tue, 07 Mar 2023 09:15:46 -0500
-X-MC-Unique: fx7QMbn4NM2lWKqc-E5k9A-1
+ us-mta-564-0b6g09CRMgG8Ofc3pyTNSA-1; Tue, 07 Mar 2023 09:16:03 -0500
+X-MC-Unique: 0b6g09CRMgG8Ofc3pyTNSA-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B07A43C0E44B;
-        Tue,  7 Mar 2023 14:15:45 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9718838173CB;
+        Tue,  7 Mar 2023 14:16:01 +0000 (UTC)
 Received: from localhost (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id ED11E2026D4B;
-        Tue,  7 Mar 2023 14:15:44 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C2D132026D4B;
+        Tue,  7 Mar 2023 14:16:00 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
 Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
@@ -44,9 +44,9 @@ Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
         Bernd Schubert <bschubert@ddn.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V2 04/17] io_uring: support OP_READ/OP_WRITE for fused slave request
-Date:   Tue,  7 Mar 2023 22:15:07 +0800
-Message-Id: <20230307141520.793891-5-ming.lei@redhat.com>
+Subject: [PATCH V2 07/17] block: ublk_drv: add common exit handling
+Date:   Tue,  7 Mar 2023 22:15:10 +0800
+Message-Id: <20230307141520.793891-8-ming.lei@redhat.com>
 In-Reply-To: <20230307141520.793891-1-ming.lei@redhat.com>
 References: <20230307141520.793891-1-ming.lei@redhat.com>
 MIME-Version: 1.0
@@ -56,88 +56,60 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Start to allow fused slave request to support OP_READ/OP_WRITE, and
-the buffer can be retrieved from master request.
+Simplify exit handling a bit, and prepare for supporting fused command.
 
-Once the slave request is completed, the master buffer will be returned
-back.
-
+Reviewed-by: Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- io_uring/opdef.c |  2 ++
- io_uring/rw.c    | 20 ++++++++++++++++++++
- 2 files changed, 22 insertions(+)
+ drivers/block/ublk_drv.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 63b90e8e65f8..f044629e5475 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -235,6 +235,7 @@ const struct io_issue_def io_issue_defs[] = {
- 		.ioprio			= 1,
- 		.iopoll			= 1,
- 		.iopoll_queue		= 1,
-+		.fused_slave		= 1,
- 		.prep			= io_prep_rw,
- 		.issue			= io_read,
- 	},
-@@ -248,6 +249,7 @@ const struct io_issue_def io_issue_defs[] = {
- 		.ioprio			= 1,
- 		.iopoll			= 1,
- 		.iopoll_queue		= 1,
-+		.fused_slave		= 1,
- 		.prep			= io_prep_rw,
- 		.issue			= io_write,
- 	},
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 4c233910e200..36d31a943317 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -19,6 +19,7 @@
- #include "kbuf.h"
- #include "rsrc.h"
- #include "rw.h"
-+#include "fused_cmd.h"
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 2778c14a8407..c03728c13eea 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -655,14 +655,15 @@ static void ublk_complete_rq(struct request *req)
+ 	struct ublk_queue *ubq = req->mq_hctx->driver_data;
+ 	struct ublk_io *io = &ubq->ios[req->tag];
+ 	unsigned int unmapped_bytes;
++	int res = BLK_STS_OK;
  
- struct io_rw {
- 	/* NOTE: kiocb has the file as the first member, so don't do it here */
-@@ -371,6 +372,17 @@ static struct iovec *__io_import_iovec(int ddir, struct io_kiocb *req,
- 	size_t sqe_len;
- 	ssize_t ret;
+ 	/* failed read IO if nothing is read */
+ 	if (!io->res && req_op(req) == REQ_OP_READ)
+ 		io->res = -EIO;
  
-+	/*
-+	 * SLAVE OP passes buffer offset from sqe->addr actually, since
-+	 * the fused cmd kbuf's mapped start address is zero.
-+	 */
-+	if (req->flags & REQ_F_FUSED_SLAVE) {
-+		ret = io_import_kbuf_for_slave(rw->addr, rw->len, ddir, iter, req);
-+		if (ret)
-+			return ERR_PTR(ret);
-+		return NULL;
-+	}
-+
- 	if (opcode == IORING_OP_READ_FIXED || opcode == IORING_OP_WRITE_FIXED) {
- 		ret = io_import_fixed(ddir, iter, req->imu, rw->addr, rw->len);
- 		if (ret)
-@@ -428,11 +440,19 @@ static inline loff_t *io_kiocb_ppos(struct kiocb *kiocb)
-  */
- static ssize_t loop_rw_iter(int ddir, struct io_rw *rw, struct iov_iter *iter)
- {
-+	struct io_kiocb *req = cmd_to_io_kiocb(rw);
- 	struct kiocb *kiocb = &rw->kiocb;
- 	struct file *file = kiocb->ki_filp;
- 	ssize_t ret = 0;
- 	loff_t *ppos;
+ 	if (io->res < 0) {
+-		blk_mq_end_request(req, errno_to_blk_status(io->res));
+-		return;
++		res = errno_to_blk_status(io->res);
++		goto exit;
+ 	}
  
-+	/*
-+	 * Fused slave req hasn't user buffer, so ->read/->write can't
-+	 * be supported
-+	 */
-+	if (req->flags & REQ_F_FUSED_SLAVE)
-+		return -EOPNOTSUPP;
-+
  	/*
- 	 * Don't support polled IO through this interface, and we can't
- 	 * support non-blocking either. For the latter, this just causes
+@@ -671,10 +672,8 @@ static void ublk_complete_rq(struct request *req)
+ 	 *
+ 	 * Both the two needn't unmap.
+ 	 */
+-	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE) {
+-		blk_mq_end_request(req, BLK_STS_OK);
+-		return;
+-	}
++	if (req_op(req) != REQ_OP_READ && req_op(req) != REQ_OP_WRITE)
++		goto exit;
+ 
+ 	/* for READ request, writing data in iod->addr to rq buffers */
+ 	unmapped_bytes = ublk_unmap_io(ubq, req, io);
+@@ -691,6 +690,10 @@ static void ublk_complete_rq(struct request *req)
+ 		blk_mq_requeue_request(req, true);
+ 	else
+ 		__blk_mq_end_request(req, BLK_STS_OK);
++
++	return;
++exit:
++	blk_mq_end_request(req, res);
+ }
+ 
+ /*
 -- 
 2.39.2
 
