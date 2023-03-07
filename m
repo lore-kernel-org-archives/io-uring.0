@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E769C678D4
-	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 14:23:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F4DBC678D4
+	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 14:23:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjCGOXD (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 7 Mar 2023 09:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41678 "EHLO
+        id S231331AbjCGOXO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 7 Mar 2023 09:23:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231254AbjCGOWY (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 09:22:24 -0500
+        with ESMTP id S231142AbjCGOWj (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 09:22:39 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920A08C525
-        for <io-uring@vger.kernel.org>; Tue,  7 Mar 2023 06:17:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3685C3028B
+        for <io-uring@vger.kernel.org>; Tue,  7 Mar 2023 06:17:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678198571;
+        s=mimecast20190719; t=1678198560;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=t4v5u4I2dfXmVCnl1+VYKxEX2LM+SV9Vt0+RxgXtI8Q=;
-        b=UWqs9kphFy/e5AWuqV2/jQhC9nKENT1q65uoAe011ADgxhonHkx+ndu9ehOWFI9XxPPK6x
-        M1YWIdK9C0aFhAs+gmwVgCmDtq/qQDKAaCyZHkkw8MsscePqBo/fugyqaLvnXh/s5B4zCU
-        V3JfYZ/xA/l7E+RkwdU5SZvOm4DnTVs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=P26ujjVK6+cVEWytyY3vOQfQzYjDdlY3n3B9f9x4iO4=;
+        b=Nte95Z48xuMMit6Ixbc9ErAuQCU04SPtgjGCLXQMkCz6sbo75UTx0K30wZJpJfBbFT0Lms
+        E+WZ3nExGwdWV7jWem5cmLwTu3yzblmsHpqFV6S2pZG2+ZN0nzLKkEcbVGxIq1xCBrp3lL
+        WTw5IetMDE5IwHHa+2pcjoMEaUDB0JQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-381-MhnN1RNgMNu-krGUnAurYA-1; Tue, 07 Mar 2023 09:16:08 -0500
-X-MC-Unique: MhnN1RNgMNu-krGUnAurYA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+ us-mta-9-RbvNbJXBMpOmXH05u58B6Q-1; Tue, 07 Mar 2023 09:15:58 -0500
+X-MC-Unique: RbvNbJXBMpOmXH05u58B6Q-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1613E1802D58;
-        Tue,  7 Mar 2023 14:16:05 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 570351C06EC0;
+        Tue,  7 Mar 2023 14:15:58 +0000 (UTC)
 Received: from localhost (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 57C5A2166B2A;
-        Tue,  7 Mar 2023 14:16:04 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8DB332026D4B;
+        Tue,  7 Mar 2023 14:15:57 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
 Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
@@ -44,59 +44,54 @@ Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
         Bernd Schubert <bschubert@ddn.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V2 08/17] block: ublk_drv: don't consider flush request in map/unmap io
-Date:   Tue,  7 Mar 2023 22:15:11 +0800
-Message-Id: <20230307141520.793891-9-ming.lei@redhat.com>
+Subject: [PATCH V2 06/17] block: ublk_drv: mark device as LIVE before adding disk
+Date:   Tue,  7 Mar 2023 22:15:09 +0800
+Message-Id: <20230307141520.793891-7-ming.lei@redhat.com>
 In-Reply-To: <20230307141520.793891-1-ming.lei@redhat.com>
 References: <20230307141520.793891-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-There isn't data in request of REQ_OP_FLUSH always, so don't consider
-it in both ublk_map_io() and ublk_unmap_io().
+IO can be started before add_disk() returns, such as reading parititon table,
+then the monitor work should work for making forward progress.
 
+So mark device as LIVE before adding disk, meantime change to
+DEAD if add_disk() fails.
+
+Reviewed-by: Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c | 10 +++-------
- 1 file changed, 3 insertions(+), 7 deletions(-)
+ drivers/block/ublk_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index c03728c13eea..624ee4ca20e5 100644
+index 088d9efffe6b..2778c14a8407 100644
 --- a/drivers/block/ublk_drv.c
 +++ b/drivers/block/ublk_drv.c
-@@ -529,15 +529,13 @@ static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
- 		struct ublk_io *io)
- {
- 	const unsigned int rq_bytes = blk_rq_bytes(req);
-+
- 	/*
- 	 * no zero copy, we delay copy WRITE request data into ublksrv
- 	 * context and the big benefit is that pinning pages in current
- 	 * context is pretty fast, see ublk_pin_user_pages
- 	 */
--	if (req_op(req) != REQ_OP_WRITE && req_op(req) != REQ_OP_FLUSH)
--		return rq_bytes;
--
--	if (ublk_rq_has_data(req)) {
-+	if (ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE) {
- 		struct ublk_map_data data = {
- 			.ubq	=	ubq,
- 			.rq	=	req,
-@@ -772,9 +770,7 @@ static inline void __ublk_rq_task_work(struct request *req)
- 		return;
- 	}
+@@ -1605,17 +1605,18 @@ static int ublk_ctrl_start_dev(struct ublk_device *ub, struct io_uring_cmd *cmd)
+ 		set_bit(GD_SUPPRESS_PART_SCAN, &disk->state);
  
--	if (ublk_need_get_data(ubq) &&
--			(req_op(req) == REQ_OP_WRITE ||
--			req_op(req) == REQ_OP_FLUSH)) {
-+	if (ublk_need_get_data(ubq) && (req_op(req) == REQ_OP_WRITE)) {
+ 	get_device(&ub->cdev_dev);
++	ub->dev_info.state = UBLK_S_DEV_LIVE;
+ 	ret = add_disk(disk);
+ 	if (ret) {
  		/*
- 		 * We have not handled UBLK_IO_NEED_GET_DATA command yet,
- 		 * so immepdately pass UBLK_IO_RES_NEED_GET_DATA to ublksrv
+ 		 * Has to drop the reference since ->free_disk won't be
+ 		 * called in case of add_disk failure.
+ 		 */
++		ub->dev_info.state = UBLK_S_DEV_DEAD;
+ 		ublk_put_device(ub);
+ 		goto out_put_disk;
+ 	}
+ 	set_bit(UB_STATE_USED, &ub->state);
+-	ub->dev_info.state = UBLK_S_DEV_LIVE;
+ out_put_disk:
+ 	if (ret)
+ 		put_disk(disk);
 -- 
 2.39.2
 
