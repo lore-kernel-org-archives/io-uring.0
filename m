@@ -2,47 +2,177 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0E2BC61DA4
-	for <io-uring@archiver.kernel.org>; Mon,  6 Mar 2023 13:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82930C678D5
+	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 14:22:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbjCFNEK (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 6 Mar 2023 08:04:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S231403AbjCGOWM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 7 Mar 2023 09:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjCFNEG (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 6 Mar 2023 08:04:06 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3104729E0D;
-        Mon,  6 Mar 2023 05:03:49 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id EB2CB68B05; Mon,  6 Mar 2023 14:03:44 +0100 (CET)
-Date:   Mon, 6 Mar 2023 14:03:44 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Stefan Roesch <shr@meta.com>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Stefan Roesch <shr@fb.com>, io-uring@vger.kernel.org,
-        kernel-team@fb.com, linux-mm@kvack.org, linux-xfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, david@fromorbit.com, jack@suse.cz,
-        hch@infradead.org, axboe@kernel.dk, Christoph Hellwig <hch@lst.de>
-Subject: Re: [RESEND PATCH v9 04/14] iomap: Add flags parameter to
- iomap_page_create()
-Message-ID: <20230306130344.GA14467@lst.de>
-References: <20220623175157.1715274-1-shr@fb.com> <20220623175157.1715274-5-shr@fb.com> <ZAF8vk6Jns/40bc0@casper.infradead.org> <ZAIl7JfPXivtN8qm@magnolia> <0d43e015-057f-2379-a0fb-d55539b803eb@meta.com>
+        with ESMTP id S231472AbjCGOVr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 09:21:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6B88C80C
+        for <io-uring@vger.kernel.org>; Tue,  7 Mar 2023 06:16:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678198538;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/gv5iBghgfjGMwQIblGY0Ee8w9OWfXa/KQ07CaskV0k=;
+        b=dKXw/3zc8lgpMFTBlT2TAF94P8PVNnlVpJInUBCN3zIaOQiN2jFqANBv7gNSc/1cn2ljW8
+        B8rQQCOxdOcb11GbzkpdMxSIycjmyN/uXAc48lWamczHCO99O1BQbGUw/dUapV3wIZ511j
+        HrEIrIlGNWuUC1BPr/BaKouY9Y3wQfo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-503-XSC25OLtMEO-Q8lwj0T0xw-1; Tue, 07 Mar 2023 09:15:35 -0500
+X-MC-Unique: XSC25OLtMEO-Q8lwj0T0xw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EF38D38173C9;
+        Tue,  7 Mar 2023 14:15:34 +0000 (UTC)
+Received: from localhost (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 275AB400DFA1;
+        Tue,  7 Mar 2023 14:15:33 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     linux-block@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        Bernd Schubert <bschubert@ddn.com>,
+        Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH V2 01/17] io_uring: add IO_URING_F_FUSED and prepare for supporting OP_FUSED_CMD
+Date:   Tue,  7 Mar 2023 22:15:04 +0800
+Message-Id: <20230307141520.793891-2-ming.lei@redhat.com>
+In-Reply-To: <20230307141520.793891-1-ming.lei@redhat.com>
+References: <20230307141520.793891-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d43e015-057f-2379-a0fb-d55539b803eb@meta.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 09:29:30AM -0800, Stefan Roesch wrote:
-> If IOMAP_NOWAIT is set, and the allocation fails, we should return
-> -EAGAIN, so the write request is retried in the slow path.
+Add flag IO_URING_F_FUSED and prepare for supporting IO_URING_OP_FUSED_CMD,
+which is still one type of IO_URING_OP_URING_CMD, so it is reasonable
+to reuse ->uring_cmd() for handling IO_URING_F_FUSED_CMD.
 
-Yes.  Another vote for doing the ERR_PTR.
+Just IO_URING_F_FUSED_CMD will carry one 64byte SQE as payload which
+is handled by one slave request. The master uring command will
+provide kernel buffer to the slave request.
 
-willy, are you going to look into that yourself or are you waiting for
-someone to take care of it?
+Mark all existed drivers to not support IO_URING_F_FUSED_CMD, given it
+depends if driver is capable of handling the slave request.
+
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+---
+ drivers/block/ublk_drv.c  | 6 ++++++
+ drivers/char/mem.c        | 4 ++++
+ drivers/nvme/host/ioctl.c | 9 +++++++++
+ include/linux/io_uring.h  | 7 +++++++
+ 4 files changed, 26 insertions(+)
+
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index d1d1c8d606c8..088d9efffe6b 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -1271,6 +1271,9 @@ static int ublk_ch_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 			__func__, cmd->cmd_op, ub_cmd->q_id, tag,
+ 			ub_cmd->result);
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	if (ub_cmd->q_id >= ub->dev_info.nr_hw_queues)
+ 		goto out;
+ 
+@@ -2169,6 +2172,9 @@ static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
+ 	struct ublk_device *ub = NULL;
+ 	int ret = -EINVAL;
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	if (issue_flags & IO_URING_F_NONBLOCK)
+ 		return -EAGAIN;
+ 
+diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+index ffb101d349f0..134ba6665194 100644
+--- a/drivers/char/mem.c
++++ b/drivers/char/mem.c
+@@ -30,6 +30,7 @@
+ #include <linux/uio.h>
+ #include <linux/uaccess.h>
+ #include <linux/security.h>
++#include <linux/io_uring.h>
+ 
+ #ifdef CONFIG_IA64
+ # include <linux/efi.h>
+@@ -482,6 +483,9 @@ static ssize_t splice_write_null(struct pipe_inode_info *pipe, struct file *out,
+ 
+ static int uring_cmd_null(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
+ {
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index 723e7d5b778f..44a171bcaa90 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -773,6 +773,9 @@ int nvme_ns_chr_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
+ 	struct nvme_ns *ns = container_of(file_inode(ioucmd->file)->i_cdev,
+ 			struct nvme_ns, cdev);
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	return nvme_ns_uring_cmd(ns, ioucmd, issue_flags);
+ }
+ 
+@@ -878,6 +881,9 @@ int nvme_ns_head_chr_uring_cmd(struct io_uring_cmd *ioucmd,
+ 	struct nvme_ns *ns = nvme_find_path(head);
+ 	int ret = -EINVAL;
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	if (ns)
+ 		ret = nvme_ns_uring_cmd(ns, ioucmd, issue_flags);
+ 	srcu_read_unlock(&head->srcu, srcu_idx);
+@@ -915,6 +921,9 @@ int nvme_dev_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
+ 	struct nvme_ctrl *ctrl = ioucmd->file->private_data;
+ 	int ret;
+ 
++	if (issue_flags & IO_URING_F_FUSED)
++		return -EOPNOTSUPP;
++
+ 	/* IOPOLL not supported yet */
+ 	if (issue_flags & IO_URING_F_IOPOLL)
+ 		return -EOPNOTSUPP;
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 934e5dd4ccc0..0676c5b4b5fe 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -20,6 +20,13 @@ enum io_uring_cmd_flags {
+ 	IO_URING_F_SQE128		= (1 << 8),
+ 	IO_URING_F_CQE32		= (1 << 9),
+ 	IO_URING_F_IOPOLL		= (1 << 10),
++
++	/* for FUSED_CMD only */
++	IO_URING_F_FUSED_WRITE		= (1 << 11), /* slave writes to buffer */
++	IO_URING_F_FUSED_READ		= (1 << 12), /* slave reads from buffer */
++	/* driver incapable of FUSED_CMD should fail cmd when seeing F_FUSED */
++	IO_URING_F_FUSED		= IO_URING_F_FUSED_WRITE |
++		IO_URING_F_FUSED_READ,
+ };
+ 
+ struct io_uring_cmd {
+-- 
+2.39.2
+
