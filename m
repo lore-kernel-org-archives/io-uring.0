@@ -2,107 +2,99 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4819FC678D5
-	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 17:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32786C678D5
+	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 17:50:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjCGRZq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 7 Mar 2023 12:25:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S232249AbjCGRul (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 7 Mar 2023 12:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbjCGRZV (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 12:25:21 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B9D97FFB
-        for <io-uring@vger.kernel.org>; Tue,  7 Mar 2023 09:20:24 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so17296935pjh.0
-        for <io-uring@vger.kernel.org>; Tue, 07 Mar 2023 09:20:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678209624;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QGzn8Jh8ZKEAR+XabpvsJcqmOPwNEpOpb9eL39TjD2s=;
-        b=1eyM8I2j7WCg36Foo4+Sc4CeRGDLUDGUnMpyF0UHm72mQxc9kfH5fw6ttfD/K+QHd9
-         h3eWq0JPdOhMjwMXDPsIbow0slc2h5ls9s1vUuFSIYTjxvxZyRccZrT3E1ShYIlNDFB6
-         g3Fghio8gD0sp07Pc/8uU6Z/ieb0E9t8rO35xhbkzpF6NlEqcvgLx1GTP+FUAtloSqA2
-         QtCz9pvFzkX17VUJhs9AhXIWA/nO3FxZmX6Kkf36Tct4+tPQDxb8z2YynfrOR9qBNaGb
-         l0FTaW0myw0bMaxU0sXWOGq4RyGUkF25IPN04mrn8Dds2qV0wdODxinb9v1PcC9+YL+/
-         Yd5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678209624;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QGzn8Jh8ZKEAR+XabpvsJcqmOPwNEpOpb9eL39TjD2s=;
-        b=m21OZO9zajvjj1ZdrnAaOWgHs1VaPBf5EtTgZ0G3d1L8je/K9gHB9k1Hd4Ap53UIt6
-         vgRkSNYxEzEn/EvlY+GTGw8Ze7mfZgi7QU5l/gg0ja4e2ROdsUDcy/TPC0AYXoE464sp
-         dSYb5GkJqeIVzhfB56g4AVsPNmoz3pftqgKZn1q5hKvW5ZP6Z7wT06x2RmKSaZCzTW86
-         6fGG/Req6dSY655lk+ViRscDOyX+LRof3PDMQXiXo3PR5UEcs5FdmoTP+gehjEOWmqqF
-         mpuywfLINBMTdWY4ddmMpAb44/+jxx7GFBBj3IqZWcyy+KAvnOTwMzGJFm+LXbiG/u/+
-         aHUw==
-X-Gm-Message-State: AO0yUKXj1Wl0BU2TCI8+cqyxjlCUwK6EVBpD4SMOMIVQp3lckHt8qqAf
-        T0wsOKrDqDn7g2HgV9ZDdXg9pT22v3T0G8/LJHw=
-X-Google-Smtp-Source: AK7set+yJzNNfb3gCkbf0SKS9XnejUmfExgD0rV7zoPrtcvqqHLIbcOfeAPkLbbCmPVNcx079Pp+yQ==
-X-Received: by 2002:a17:902:ecc7:b0:19e:b5d3:1710 with SMTP id a7-20020a170902ecc700b0019eb5d31710mr9904245plh.2.1678209623665;
-        Tue, 07 Mar 2023 09:20:23 -0800 (PST)
-Received: from localhost.localdomain ([50.233.106.125])
-        by smtp.gmail.com with ESMTPSA id c17-20020a170903235100b0019e76a99cdbsm8651390plh.243.2023.03.07.09.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 09:20:23 -0800 (PST)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-ext4@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/2] io_uring: avoid hashing O_DIRECT writes if the filesystem doesn't need it
-Date:   Tue,  7 Mar 2023 10:20:15 -0700
-Message-Id: <20230307172015.54911-3-axboe@kernel.dk>
+        with ESMTP id S232252AbjCGRuR (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 12:50:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9893D9CFFD;
+        Tue,  7 Mar 2023 09:45:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E3DAB819BF;
+        Tue,  7 Mar 2023 17:45:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FF0C433EF;
+        Tue,  7 Mar 2023 17:45:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678211107;
+        bh=a30CykW6YykybRzJUgVbj82sbmewX3xLsAzMmIApp0s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Lnq6eexuC/1lYjbrbFBGgU5ET9slJNY1aVY0jqSFvtpw9sZaI4078N+G5m0o2icxM
+         QoxxB6CXwEgJcPb98RvC5SJJf6J5AUH2yq1KbG7pguZ6WcHJlmDPw7zwFhiJ1h3+Fk
+         xiHDipz0uYWszdbTvqCDxWJfU84A2v4A/MPXjLYg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        io-uring@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: [PATCH 6.2 0754/1001] io_uring: Replace 0-length array with flexible array
+Date:   Tue,  7 Mar 2023 17:58:46 +0100
+Message-Id: <20230307170054.429075050@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307172015.54911-1-axboe@kernel.dk>
-References: <20230307172015.54911-1-axboe@kernel.dk>
+In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
+References: <20230307170022.094103862@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-io_uring hashes writes to a given file/inode so that it can serialize
-them. This is useful if the file system needs exclusive access to the
-file to perform the write, as otherwise we end up with a ton of io-wq
-threads trying to lock the inode at the same time. This can cause
-excessive system time.
+From: Kees Cook <keescook@chromium.org>
 
-But if the file system has flagged that it supports parallel O_DIRECT
-writes, then there's no need to serialize the writes. Check for that
-through FMODE_DIO_PARALLEL_WRITE and don't hash it if we don't need to.
+commit 36632d062975a9ff4410c90dd6d37922b68d0920 upstream.
 
-In a basic test of 8 threads writing to a file on XFS on a gen2 Optane,
-with each thread writing in 4k chunks, it improves performance from
-~1350K IOPS (or ~5290MiB/sec) to ~1410K IOPS (or ~5500MiB/sec).
+Zero-length arrays are deprecated[1]. Replace struct io_uring_buf_ring's
+"bufs" with a flexible array member. (How is the size of this array
+verified?) Detected with GCC 13, using -fstrict-flex-arrays=3:
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+In function 'io_ring_buffer_select',
+    inlined from 'io_buffer_select' at io_uring/kbuf.c:183:10:
+io_uring/kbuf.c:141:23: warning: array subscript 255 is outside the bounds of an interior zero-length array 'struct io_uring_buf[0]' [-Wzero-length-bounds]
+  141 |                 buf = &br->bufs[head];
+      |                       ^~~~~~~~~~~~~~~
+In file included from include/linux/io_uring.h:7,
+                 from io_uring/kbuf.c:10:
+include/uapi/linux/io_uring.h: In function 'io_buffer_select':
+include/uapi/linux/io_uring.h:628:41: note: while referencing 'bufs'
+  628 |                 struct io_uring_buf     bufs[0];
+      |                                         ^~~~
+
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
+
+Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buffers")
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: stable@vger.kernel.org
+Cc: io-uring@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Link: https://lore.kernel.org/r/20230105190507.gonna.131-kees@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- io_uring/io_uring.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ include/uapi/linux/io_uring.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index fd9ba840c4a2..93cc1ff5e9cd 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -429,7 +429,13 @@ static void io_prep_async_work(struct io_kiocb *req)
- 	}
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -625,7 +625,7 @@ struct io_uring_buf_ring {
+ 			__u16	resv3;
+ 			__u16	tail;
+ 		};
+-		struct io_uring_buf	bufs[0];
++		__DECLARE_FLEX_ARRAY(struct io_uring_buf, bufs);
+ 	};
+ };
  
- 	if (req->flags & REQ_F_ISREG) {
--		if (def->hash_reg_file || (ctx->flags & IORING_SETUP_IOPOLL))
-+		bool should_hash = def->hash_reg_file;
-+
-+		/* don't serialize this request if the fs doesn't need it */
-+		if (should_hash && (req->file->f_flags & O_DIRECT) &&
-+		    (req->file->f_mode & FMODE_DIO_PARALLEL_WRITE))
-+			should_hash = false;
-+		if (should_hash || (ctx->flags & IORING_SETUP_IOPOLL))
- 			io_wq_hash_work(&req->work, file_inode(req->file));
- 	} else if (!req->file || !S_ISBLK(file_inode(req->file)->i_mode)) {
- 		if (def->unbound_nonreg_file)
--- 
-2.39.2
+
 
