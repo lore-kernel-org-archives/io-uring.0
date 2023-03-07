@@ -2,99 +2,70 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57A79C678D4
-	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 18:42:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ECA97C678D5
+	for <io-uring@archiver.kernel.org>; Tue,  7 Mar 2023 20:39:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbjCGSmB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 7 Mar 2023 13:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57436 "EHLO
+        id S229668AbjCGUjF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 7 Mar 2023 15:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjCGSli (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 13:41:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06D6EC2237;
-        Tue,  7 Mar 2023 10:32:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 034D0B819FC;
-        Tue,  7 Mar 2023 18:31:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607BEC433EF;
-        Tue,  7 Mar 2023 18:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678213905;
-        bh=LPvGUOx4vbuVPSChpeYRsdIAvq8Y0LaeGGQd+K6MXfY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A5nqBJiPfzsf4eLK9PK5LgeIk3gFaM7iDGFKCRoMDMH6LWJ2n7GQLXjh5fSAE175s
-         VN9rV9fhG7Ie8Zfc4Xp3ezmZUgPZkdcNz/dn7QqxaNcmTU79yFp9tzUT5FS1F1zYbi
-         V7R3Ygtg1pjV9hB/FH9nORYJ/amBRAb9chC2PqhU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        io-uring@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [PATCH 6.1 657/885] io_uring: Replace 0-length array with flexible array
-Date:   Tue,  7 Mar 2023 17:59:51 +0100
-Message-Id: <20230307170030.702826839@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
-References: <20230307170001.594919529@linuxfoundation.org>
-User-Agent: quilt/0.67
+        with ESMTP id S229577AbjCGUjE (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 7 Mar 2023 15:39:04 -0500
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C13D92F3B;
+        Tue,  7 Mar 2023 12:39:03 -0800 (PST)
+Received: from localhost.localdomain (unknown [182.253.183.169])
+        by gnuweeb.org (Postfix) with ESMTPSA id 34B667E3B6;
+        Tue,  7 Mar 2023 20:39:00 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1678221543;
+        bh=HuOXsRa6OOAdvmzzWqWh41PN9s754FgA8d/ossCWLuc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=N9+GPfhV6BAnvN4mKn9EliZXLR5LiGiD4stsTL1seNVhVMpyXw2H0gKTnKtjhofKY
+         csKTEZAc6kVAJrUULYW+BfiwvCOb180UgtOOpKIlVtYOiudUu/oJrSw0fmdDExGNvg
+         bLnLKu5dMCK2CbOlGRcu5gT2AZWycglE6UVVe5J4KblN2Ue2nBtUlUFWOn+BaLGizt
+         1yffJm5Vhf+N7X0HF98I1B3nHQJz1Im9FTzwjZ8RDEuexwaQ8WzSmCze2pEqOnT+0c
+         LVg2bFYmuhQYO2wVobZ0SZHsDHLe/aIc9RfB7T77LSmSfWu7AYFgv06sJ7iVAE4tvG
+         tHJ9kC/jsHb9w==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: [PATCH liburing v1 0/3] Small fixes and CI update
+Date:   Wed,  8 Mar 2023 03:38:27 +0700
+Message-Id: <20230307203830.612939-1-ammarfaizi2@gnuweeb.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+Just a boring patchset.
 
-commit 36632d062975a9ff4410c90dd6d37922b68d0920 upstream.
+- Address the recent io_uring-udp bug report on GitHub.
+- No more sign-compare warnings on the GitHub build bot.
+- Kill trailing whitespaces (manpage).
 
-Zero-length arrays are deprecated[1]. Replace struct io_uring_buf_ring's
-"bufs" with a flexible array member. (How is the size of this array
-verified?) Detected with GCC 13, using -fstrict-flex-arrays=3:
-
-In function 'io_ring_buffer_select',
-    inlined from 'io_buffer_select' at io_uring/kbuf.c:183:10:
-io_uring/kbuf.c:141:23: warning: array subscript 255 is outside the bounds of an interior zero-length array 'struct io_uring_buf[0]' [-Wzero-length-bounds]
-  141 |                 buf = &br->bufs[head];
-      |                       ^~~~~~~~~~~~~~~
-In file included from include/linux/io_uring.h:7,
-                 from io_uring/kbuf.c:10:
-include/uapi/linux/io_uring.h: In function 'io_buffer_select':
-include/uapi/linux/io_uring.h:628:41: note: while referencing 'bufs'
-  628 |                 struct io_uring_buf     bufs[0];
-      |                                         ^~~~
-
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#zero-length-and-one-element-arrays
-
-Fixes: c7fb19428d67 ("io_uring: add support for ring mapped supplied buffers")
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: stable@vger.kernel.org
-Cc: io-uring@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-Link: https://lore.kernel.org/r/20230105190507.gonna.131-kees@kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- include/uapi/linux/io_uring.h |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -617,7 +617,7 @@ struct io_uring_buf_ring {
- 			__u16	resv3;
- 			__u16	tail;
- 		};
--		struct io_uring_buf	bufs[0];
-+		__DECLARE_FLEX_ARRAY(struct io_uring_buf, bufs);
- 	};
- };
- 
+Ammar Faizi (3):
+  io_uring-udp: Fix the wrong `inet_ntop()` argument
+  github: Append `-Wno-sign-compare` to the GitHub build bot CFLAGS
+  man/io_uring_register_{buffers,files}: Kill trailing whitespaces
 
+ .github/workflows/build.yml     |  2 +-
+ examples/io_uring-udp.c         |  2 +-
+ man/io_uring_register_buffers.3 | 10 +++++-----
+ man/io_uring_register_files.3   | 22 +++++++++++-----------
+ 4 files changed, 18 insertions(+), 18 deletions(-)
+
+
+base-commit: 0dd82f0c63d468c5b3d9510af642968ce6e8ee21
+-- 
+Ammar Faizi
 
