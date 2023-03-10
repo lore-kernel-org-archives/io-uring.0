@@ -2,67 +2,142 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84342C64EC4
-	for <io-uring@archiver.kernel.org>; Fri, 10 Mar 2023 17:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99017C6FD19
+	for <io-uring@archiver.kernel.org>; Fri, 10 Mar 2023 19:05:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjCJRBg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 10 Mar 2023 12:01:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S230328AbjCJTFj (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 10 Mar 2023 14:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjCJRBR (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 10 Mar 2023 12:01:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1E013DC2
-        for <io-uring@vger.kernel.org>; Fri, 10 Mar 2023 08:59:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6026261C3C
-        for <io-uring@vger.kernel.org>; Fri, 10 Mar 2023 16:58:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C5F30C433D2;
-        Fri, 10 Mar 2023 16:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678467492;
-        bh=mp1GNOjYSUNrkcsMpjsxzSs86ieX+UmA8t8R4XyFEAk=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=lcplu6lHjBYX5TGAb2J+Wb9WMp4xA+hlbDvtU+dGV0nD52LpWNUxV3CstsYJszU8p
-         vz/hkXcW3ofzcNdGig5Bv0aeKZQomOgvCZHnYOjU38xCgNPks2QlyrHmoL5zXxwpxe
-         YmimjuP0+Ag89RRgrOQmgga2XlWYcDldSolizl5zcDVUn0hdmZV3qpWyA/P40cpKsI
-         heFlfdYDatNL1NT6snAVEW/omK08R6dMc/bS9NDz9f9YbYqWg6xG5boitY52cNYwq+
-         1GtDcU6b75JmeVxNog9Ner/u4GIEh9UzNzNaly3302Wyf04wM3Pqd/rDXJEiJIHBql
-         6xZMrzGjQdZwg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B45B1E61B66;
-        Fri, 10 Mar 2023 16:58:12 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring fixes for 6.3-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <7ec0e271-c49c-aea9-fc29-da52febfb913@kernel.dk>
-References: <7ec0e271-c49c-aea9-fc29-da52febfb913@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <7ec0e271-c49c-aea9-fc29-da52febfb913@kernel.dk>
-X-PR-Tracked-Remote: git://git.kernel.dk/linux.git tags/io_uring-6.3-2023-03-09
-X-PR-Tracked-Commit-Id: fa780334a8c392d959ae05eb19f2410b3a1e6cb0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f331c5de7960d69fc767d2dc08f5f5859ce70061
-Message-Id: <167846749273.19444.8232380535028147.pr-tracker-bot@kernel.org>
-Date:   Fri, 10 Mar 2023 16:58:12 +0000
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        io-uring <io-uring@vger.kernel.org>
+        with ESMTP id S229977AbjCJTFi (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 10 Mar 2023 14:05:38 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DA212FD1E;
+        Fri, 10 Mar 2023 11:05:37 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so4159318wmq.1;
+        Fri, 10 Mar 2023 11:05:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678475136;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LENrqz+1N3GX0KeCDS4dbntNBP6dq4DsXm7GGOPy77w=;
+        b=M6sMTq/QsvZMh5dtewF+sgirxavwYBHmBHmzA1zMNhVlmGagWLpbOJ0EqRrZQZaOlW
+         /kpTq6eKD75IUg+9IDRCoFAGXg4jXR3eiIh3GNBRP7RkYDYweHXnpd1J0xAKZSCOyRxH
+         AWFALIbzqmKuQS70i5R7LDYGqQlGyAgcrOWkPaLgCIYEi5CH/u6N3q4VMcwSbmvucNTG
+         xLEs97UHKkgkl8cJTxFScn9glKoTA98R2FFjo8ZIBTgL5uFqOqpl3JpWG8SVqlkOvqum
+         ZmoembzKlVNXK8UGxOw4/SdflLLkWuXunAnGKAPHircs/gO3GkF9op5U1zbF3CWFPASc
+         dDxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678475136;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LENrqz+1N3GX0KeCDS4dbntNBP6dq4DsXm7GGOPy77w=;
+        b=xadrgGmUJndkf/0SoWVYJQDpVogrX5qthIUh+SPiwpWmlxETdxA7UXgffqPYfICvou
+         eXYSX3rDl4Kpmc667FYvtZTCOdY+7O1wlmpZ2TZjhpFoexp3Gs3SgPRCO5n5gOP+BT6Q
+         B6NeJqNI+CpFw60YyE+0YRoER/onsXvp2Pf21dsveOEUH3e7fCvOCHcNt2GgJwI6ED01
+         mVizEJk8Z8wJ2AEwQDk4x6Mte0o43fs0DFgMubtc7rAfxjlvnfg/LrNglFToPtmcqMQa
+         q9vq4SFjq3neeFTNL4IuuOqt4U985y54RJwMwZGMyFNVUUxizLbHB58QANMNnoqsE/0q
+         YRxw==
+X-Gm-Message-State: AO0yUKUFwlpwmy2vPsswM18kDzLDZsiJcpHwffIdrqFP1DX2XBjUIsgh
+        KqSjGU1pCcKCRb4v8negJmWnIZ/oP+Y=
+X-Google-Smtp-Source: AK7set8fShzvm6BLhxSTfyUzhDCYJyC8aE6+fOBvX8EP/ADRsR+bHj9HMyFmEuzFw3Y1CAh33KZdLw==
+X-Received: by 2002:a05:600c:458f:b0:3eb:38e6:f650 with SMTP id r15-20020a05600c458f00b003eb38e6f650mr3657837wmo.41.1678475135806;
+        Fri, 10 Mar 2023 11:05:35 -0800 (PST)
+Received: from 127.0.0.1localhost (188.30.129.33.threembb.co.uk. [188.30.129.33])
+        by smtp.gmail.com with ESMTPSA id z19-20020a1c4c13000000b003e20cf0408esm647882wmf.40.2023.03.10.11.05.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 11:05:35 -0800 (PST)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: [RFC 1/2] io_uring: add tw add flags
+Date:   Fri, 10 Mar 2023 19:04:15 +0000
+Message-Id: <57980319636088be6f984faacb8f255af65ce888.1678474375.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <cover.1678474375.git.asml.silence@gmail.com>
+References: <cover.1678474375.git.asml.silence@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The pull request you sent on Thu, 9 Mar 2023 17:15:17 -0700:
+We pass 'allow_local' into io_req_task_work_add() but will need more
+flags. Replace it with a flags bit field and name this allow_local
+flag.
 
-> git://git.kernel.dk/linux.git tags/io_uring-6.3-2023-03-09
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ io_uring/io_uring.c | 7 ++++---
+ io_uring/io_uring.h | 9 +++++++--
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f331c5de7960d69fc767d2dc08f5f5859ce70061
-
-Thank you!
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 7625597b5227..42ada470845f 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1308,12 +1308,13 @@ static void io_req_local_work_add(struct io_kiocb *req)
+ 	percpu_ref_put(&ctx->refs);
+ }
+ 
+-void __io_req_task_work_add(struct io_kiocb *req, bool allow_local)
++void __io_req_task_work_add(struct io_kiocb *req, unsigned flags)
+ {
+ 	struct io_uring_task *tctx = req->task->io_uring;
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 
+-	if (allow_local && ctx->flags & IORING_SETUP_DEFER_TASKRUN) {
++	if (!(flags & IOU_F_TWQ_FORCE_NORMAL) &&
++	    (ctx->flags & IORING_SETUP_DEFER_TASKRUN)) {
+ 		io_req_local_work_add(req);
+ 		return;
+ 	}
+@@ -1341,7 +1342,7 @@ static void __cold io_move_task_work_from_local(struct io_ring_ctx *ctx)
+ 						    io_task_work.node);
+ 
+ 		node = node->next;
+-		__io_req_task_work_add(req, false);
++		__io_req_task_work_add(req, IOU_F_TWQ_FORCE_NORMAL);
+ 	}
+ }
+ 
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 2711865f1e19..cd2e702f206c 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -15,6 +15,11 @@
+ #include <trace/events/io_uring.h>
+ #endif
+ 
++enum {
++	/* don't use deferred task_work */
++	IOU_F_TWQ_FORCE_NORMAL			= 1,
++};
++
+ enum {
+ 	IOU_OK			= 0,
+ 	IOU_ISSUE_SKIP_COMPLETE	= -EIOCBQUEUED,
+@@ -48,7 +53,7 @@ static inline bool io_req_ffs_set(struct io_kiocb *req)
+ 	return req->flags & REQ_F_FIXED_FILE;
+ }
+ 
+-void __io_req_task_work_add(struct io_kiocb *req, bool allow_local);
++void __io_req_task_work_add(struct io_kiocb *req, unsigned flags);
+ bool io_is_uring_fops(struct file *file);
+ bool io_alloc_async_data(struct io_kiocb *req);
+ void io_req_task_queue(struct io_kiocb *req);
+@@ -93,7 +98,7 @@ bool io_match_task_safe(struct io_kiocb *head, struct task_struct *task,
+ 
+ static inline void io_req_task_work_add(struct io_kiocb *req)
+ {
+-	__io_req_task_work_add(req, true);
++	__io_req_task_work_add(req, 0);
+ }
+ 
+ #define io_for_each_link(pos, head) \
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.1
+
