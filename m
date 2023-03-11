@@ -2,80 +2,71 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9596C6FD1C
-	for <io-uring@archiver.kernel.org>; Sat, 11 Mar 2023 14:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA160C6FD1C
+	for <io-uring@archiver.kernel.org>; Sat, 11 Mar 2023 15:15:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjCKO6n (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 11 Mar 2023 09:58:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
+        id S230323AbjCKPP2 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 11 Mar 2023 10:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjCKO6n (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 11 Mar 2023 09:58:43 -0500
-X-Greylist: delayed 1799 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Mar 2023 06:58:35 PST
-Received: from lounge.grep.be (lounge.grep.be [IPv6:2a01:4f8:200:91e8::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA57A28EAF;
-        Sat, 11 Mar 2023 06:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=uter.be;
-        s=2021.lounge; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=IdBdhMyytPprLhvmwH0QAEbMk/enH69jbhBiFJLO9mk=; b=XTiCvEZdkANORiKCfWUpe73rsn
-        gw7fYcWdv8IxzjFo+s37bK3h7TOvhlg42S+W6B73XyRzi6pj4mEC+Y3tjxlp7hRUXDP8UuZeGTir/
-        Pm9EWNd0iOMJPoMqucVY8S1gUsZdmJx7HCyWnbmQ7V2jAbtLyFujhJjIKcA7TcKf3AzO/V7304DSS
-        /ytaQ3DISxrSh2qu+LLmgumwHcPwqfGdPDIaJYdpbQtRzLHJJDqXu3Yl54T1MD4bq3Wk+U7WvDYN4
-        hIstpsdkkDzCAeHR9ahahfc6FXFAEMRe44sxs47LT2n9NzIAVzxA3IcxUkfO+9SV9qEVWSSojBa+J
-        CTBJG3Iw==;
-Received: from [102.39.141.34] (helo=pc220518)
-        by lounge.grep.be with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <w@uter.be>)
-        id 1pazAk-005byT-D3; Sat, 11 Mar 2023 14:22:06 +0100
-Received: from wouter by pc220518 with local (Exim 4.96)
-        (envelope-from <w@uter.be>)
-        id 1pazAd-0014wX-0u;
-        Sat, 11 Mar 2023 15:21:59 +0200
-Date:   Sat, 11 Mar 2023 15:21:59 +0200
-From:   Wouter Verhelst <w@uter.be>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nbd@other.debian.org
-Subject: Re: ublk-nbd: ublk-nbd is avaialbe
-Message-ID: <ZAyAdwWdw0I034IZ@pc220518.home.grep.be>
-References: <Y8lSYBU9q5fjs7jS@T590>
+        with ESMTP id S230337AbjCKPP1 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 11 Mar 2023 10:15:27 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1D2EBFBC
+        for <io-uring@vger.kernel.org>; Sat, 11 Mar 2023 07:15:26 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id g21-20020a6be615000000b0074cb292f57dso3962824ioh.17
+        for <io-uring@vger.kernel.org>; Sat, 11 Mar 2023 07:15:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678547725;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6P10G5iUaSESkeHIuwzpZYyTiHSBK9Tr6QOwEjj60lg=;
+        b=VlFagxnwxLbthp4wH+ZROYgueD5okiEE6RQPmBD7xofKz9Tbvajqvo0vKQ5g1c9t78
+         fqK4qD6ub7SUn9mzaamFvF+aPn9QHG0zzJ9TprwuwoFoBxT7ovnkqOQFoJLXyQROJXH3
+         6FvuDfjBRn7rJWZ5Uj9QFPGcrp19cqXQJH3qXDWJMlBS7RaC+7QvdMuU77N7HnvJEnjr
+         eB3kzr8zEip1LT8U8hjZpJA/7ABl85w5VUwvnAP+LElWP0D6ZFCZIFvU9gyCR116D+Of
+         /OuxKm0mRmU/MoY2/zcq7USYwcE649V3XUezeGhVo/R1u16CVqPRnePUxpd5OSelSN2a
+         NMBw==
+X-Gm-Message-State: AO0yUKWsTlakObhNIHW4At0rTsmsCG0AgBqOUc0RjTvzBXc2oWLY1sOL
+        1yVHBcsrIzFfmelOMr/DTGW6pg+QBvYI3p+jisq/1UxqyHrQ
+X-Google-Smtp-Source: AK7set+PSWjoQX2+68dRj/Pny+y3li1xYjAsCmhN3Z0xdH3vqct4gUrytkcd8XlfS0r535494+alL7EUx64Sxi5G36UKFF1faKva
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y8lSYBU9q5fjs7jS@T590>
-X-Speed: Gates' Law: Every 18 months, the speed of software halves.
-Organization: none
+X-Received: by 2002:a02:620f:0:b0:3c9:562:1366 with SMTP id
+ d15-20020a02620f000000b003c905621366mr14732712jac.3.1678547725605; Sat, 11
+ Mar 2023 07:15:25 -0800 (PST)
+Date:   Sat, 11 Mar 2023 07:15:25 -0800
+In-Reply-To: <0000000000009bff3c05f1ce87f1@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ec64a805f6a158c3@google.com>
+Subject: Re: [syzbot] [io-uring?] KASAN: use-after-free Read in io_wqe_worker (2)
+From:   syzbot <syzbot+ad53b671c30ddaba634d@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, hayeswang@realtek.com,
+        io-uring@vger.kernel.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+syzbot suspects this issue was fixed by commit:
 
-On Thu, Jan 19, 2023 at 10:23:28PM +0800, Ming Lei wrote:
-> The handshake implementation is borrowed from nbd project[2], so
-> basically ublk-nbd just adds new code for implementing transmission
-> phase, and it can be thought as moving linux block nbd driver into
-> userspace.
-[...]
-> Any comments are welcome!
+commit 02767440e1dda9861a11ca1dbe0f19a760b1d5c2
+Author: Hayes Wang <hayeswang@realtek.com>
+Date:   Thu Jan 19 07:40:43 2023 +0000
 
-I see you copied nbd-client.c and modified it, but removed all the
-author information from it (including mine).
+    r8152: reduce the control transfer of rtl8152_get_version()
 
-Please don't do that. nbd-client is not public domain, it is GPLv2,
-which means you need to keep copyright statements around somewhere. You
-can move them into an AUTHORS file or some such if you prefer, but you
-can't just remove them blindly.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13284762c80000
+start commit:   9b43a525db12 Merge tag 'nfs-for-6.2-2' of git://git.linux-..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ff5cf657dd0e7643
+dashboard link: https://syzkaller.appspot.com/bug?extid=ad53b671c30ddaba634d
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160480ba480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14cddc6a480000
 
-Thanks.
+If the result looks correct, please mark the issue as fixed by replying with:
 
--- 
-     w@uter.{be,co.za}
-wouter@{grep.be,fosdem.org,debian.org}
+#syz fix: r8152: reduce the control transfer of rtl8152_get_version()
 
-I will have a Tin-Actinium-Potassium mixture, thanks.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
