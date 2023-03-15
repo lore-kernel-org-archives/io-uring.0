@@ -2,88 +2,95 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8CCCC7618B
-	for <io-uring@archiver.kernel.org>; Wed, 15 Mar 2023 15:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27E38C61DA4
+	for <io-uring@archiver.kernel.org>; Wed, 15 Mar 2023 15:18:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232115AbjCOPQP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 15 Mar 2023 11:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S232069AbjCOPS1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 15 Mar 2023 11:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjCOPQO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Mar 2023 11:16:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABD0194
-        for <io-uring@vger.kernel.org>; Wed, 15 Mar 2023 08:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678893330;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=klsAdmpDB4z+ZchaS+AcWKxr35ntc4Y09NNAkUv1geU=;
-        b=ivObFB3Pev2I4Roh4BHl+VcUSlrh5aryKE7ipsRwYHDXivxQnpmN7CAQDcPwwdTkIygYNg
-        Ff6RYnaYgL7LaErcAps9IZNp6PiC427U3Jrfx2BdgkwNb9wyqSGLMmnd1A34+jTezC/ept
-        cDx3SVqhskAcnjw35uv13lBLKuHOzJA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-247-HXATkYe3NYWFqMWqQT-8VQ-1; Wed, 15 Mar 2023 11:15:26 -0400
-X-MC-Unique: HXATkYe3NYWFqMWqQT-8VQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D78488905A;
-        Wed, 15 Mar 2023 15:15:26 +0000 (UTC)
-Received: from localhost (unknown [10.39.194.57])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CFCEA2166B26;
-        Wed, 15 Mar 2023 15:15:25 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 11:15:24 -0400
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+        with ESMTP id S232130AbjCOPSZ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 15 Mar 2023 11:18:25 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926EAA26D
+        for <io-uring@vger.kernel.org>; Wed, 15 Mar 2023 08:18:24 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id y12so6308259ilq.4
+        for <io-uring@vger.kernel.org>; Wed, 15 Mar 2023 08:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678893504;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u7XncQ9/sIoMiOOEGX+PprU8+JUGDG7Lt2ET/LQl0Nc=;
+        b=tcmygfkVvHJ9SzrtivAdapon0DVzVM/QCeSQx/MbeOyUH4g/3NmEvo08z7g9H+BGO+
+         z8AL+mx35ogsrpMySGJB8VfCySQrg/8YAC6tGBCK/OGpMDG6CA5f664AxIMb5mF1QUCq
+         11HbBfP4DpNZ40O5DOVCpkJXLQkDu7WOcDRDs4fDKJFFKwRx3EYzq83x07R1yASHnIiO
+         XppWmAI/6zg+RS91NwUPuwLkn9kTEf5gLvYOH/lclAlNqO7H/ikszQzp7kBT4M3Z2OW/
+         Vf00FhTxx4yEPJxekUkE+SkJyz2enN/bEMtV0EiTEVYhplOy84ycrlikJXPOEmH5tM1K
+         E6LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678893504;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u7XncQ9/sIoMiOOEGX+PprU8+JUGDG7Lt2ET/LQl0Nc=;
+        b=GGlRkju7tbj94SCaUTgXDR1PD7oMuT1u42dCUBIC9Rcw/68qkG+8aCmAGRY3z4vrK2
+         YdDzIq8/WYfa0ZUuaGpV7zApX3vPOS1kryFJ/XIEc5XF7srPMvfTGv3TTP7h8ce3Zy3o
+         eIId6iYkTPNR17dXEIx3uRG5/CL51wtr6dDxIKkZePEOMEbnP657dKFVD0hIG/YCqIrU
+         LHdIpGnnHO/JHZiwxfhS979N26DTlLhCfeO9D91FefS0ZfpvjSNklPFZQ76XpL8Hh2Bk
+         LxZxkcYQmcik0hE2j2vgeNL1Q4sBgIn8Hamm+5vX8AsEzd1yLAOHGl+0+EE700DhbaMl
+         8vLw==
+X-Gm-Message-State: AO0yUKWGRri4tYSFBohDmSDbP56lotxkmgghgs8TaqrSmLEdIq5/4K9c
+        eq1ttdHIwYSNHMysja8H+mw2sQ==
+X-Google-Smtp-Source: AK7set9sFpTEy2f6zuAyOXjezk2McNh3h8eU9r3sPCx5IIkRdcvFUC0d7JW9a6tM/A9ROfdHA6VxQA==
+X-Received: by 2002:a92:874a:0:b0:317:9d16:e6c7 with SMTP id d10-20020a92874a000000b003179d16e6c7mr10952501ilm.3.1678893503878;
+        Wed, 15 Mar 2023 08:18:23 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id u11-20020a02cb8b000000b004061ba59f18sm475427jap.120.2023.03.15.08.18.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 08:18:23 -0700 (PDT)
+Message-ID: <a9ccda55-418b-4a32-616e-82893d2eacc1@kernel.dk>
+Date:   Wed, 15 Mar 2023 09:18:22 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
 Subject: Re: Resizing io_uring SQ/CQ?
-Message-ID: <20230315151524.GA14895@fedora>
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     io-uring@vger.kernel.org
 References: <20230309134808.GA374376@fedora>
  <ZAqKDen5HtSGSXzd@ovpn-8-16.pek2.redhat.com>
  <2f928d56-a2ff-39ef-f7ae-b6cc1da4fc42@kernel.dk>
- <20230310134400.GB464073@fedora>
- <ZAtJPG3NDCbhAvZ7@ovpn-8-16.pek2.redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="8urKSKf1qwMBvKHj"
-Content-Disposition: inline
-In-Reply-To: <ZAtJPG3NDCbhAvZ7@ovpn-8-16.pek2.redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+ <20230310134400.GB464073@fedora> <ZAtJPG3NDCbhAvZ7@ovpn-8-16.pek2.redhat.com>
+ <20230310165628.GA491749@fedora>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230310165628.GA491749@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+On 3/10/23 9:56 AM, Stefan Hajnoczi wrote:
+> On Fri, Mar 10, 2023 at 11:14:04PM +0800, Ming Lei wrote:
+> 
+> Hi Ming,
+> Another question about this:
+> 
+> Does the io worker thread pool have limits so that eventually work
+> queues up and new work is not able to execute until in-flight work
+> completes?
 
---8urKSKf1qwMBvKHj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It's effectively limited by how many processes you are allowed to
+create. If you exceed that limit, then yes you would have work
+sitting behind other work, and that new work won't get to run
+before _something_ completes.
 
-Hi Ming and Jens,
-It would be great if you have time to clarify whether deadlocks can
-occur or not. If you have any questions about the scenario I was
-describing, please let me know.
+But no ring sizing will save that, you've effectively exhausted
+any resources in the system, at least for you.
 
-Thanks,
-Stefan
+-- 
+Jens Axboe
 
---8urKSKf1qwMBvKHj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmQR4QsACgkQnKSrs4Gr
-c8hjzwgAn+SZPIZn2y9FjP6ERKdX4s0YjhHbRilqhYEyv0tll174du5Dj2CQTp9W
-JZQhZ06SnBd/qrMMvLDOEaWsY+w82I4ocsuxP2aPjFnGzYOOehWBzz7437aaukFj
-z85x6hgQtU5AeyJBVk16LgIvDaTv75mWz2x1pqM9CDrt/soICx5hH5LAj6KUoUH5
-mz/q7yf6hPTRQFSV9ffH/nBY2lwloDDjIP1XjXbt5mlGDlFgvBOig5KY02eAiYta
-VMEPijSgWYrW20t/fQvDpVGr2KMtPgMGD9Q1aKSZYCimYh3y03/Zf8a8cqlwiMMn
-v2KenhCTqYCSosdUO1B2CwJP6zDE7g==
-=010Q
------END PGP SIGNATURE-----
-
---8urKSKf1qwMBvKHj--
 
