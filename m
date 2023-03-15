@@ -2,66 +2,77 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3C63C6FD1F
-	for <io-uring@archiver.kernel.org>; Wed, 15 Mar 2023 01:41:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A78F3C6FD1F
+	for <io-uring@archiver.kernel.org>; Wed, 15 Mar 2023 01:56:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjCOBls (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 14 Mar 2023 21:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
+        id S229765AbjCOB4o (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 14 Mar 2023 21:56:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCOBls (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Mar 2023 21:41:48 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF2C37B7C;
-        Tue, 14 Mar 2023 18:41:47 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id E44761A00A95;
-        Wed, 15 Mar 2023 09:41:45 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cWTD41PXQbL2; Wed, 15 Mar 2023 09:41:44 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zeming@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 4E30C1A0091B;
-        Wed, 15 Mar 2023 09:41:44 +0800 (CST)
-From:   Li zeming <zeming@nfschina.com>
-To:     axboe@kernel.dk, asml.silence@gmail.com
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li zeming <zeming@nfschina.com>
-Subject: [PATCH] io_uring: rsrc: Optimize return value variable 'ret'
-Date:   Fri, 17 Mar 2023 02:13:03 +0800
-Message-Id: <20230316181303.6583-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
+        with ESMTP id S229616AbjCOB4o (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 14 Mar 2023 21:56:44 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BE453D8F
+        for <io-uring@vger.kernel.org>; Tue, 14 Mar 2023 18:56:43 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so350066pjz.1
+        for <io-uring@vger.kernel.org>; Tue, 14 Mar 2023 18:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678845402; x=1681437402;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i5IH03pQZjwk7lRVaB0AtmwortHKqQqoh+2hh3e3YH4=;
+        b=ySTInQCS6j25INrSTRESAw5vZUdUaY4O87QkAel2y9D9rWytLhPR8chlcsKzTzhXfT
+         woc/EJKJB383heVDRflus+/uuNoBD2CTcEfFbJB5y42XWF0WE6LL67DRgsEE8f1dLVCF
+         61E+pnEHTgjLPStbtBYdn7TmTQV24EFmDYSgLXF5JjLq3RGUeqbppoHcO/4YFo/E6+HO
+         yybgW4L04X/nfwE111japN0vkyxwLX3wgU6ToE/zKjP1zOqp8GeRq8LMQPb1yrLBB7hQ
+         grzMWmDqIul0c2k+fnDlHwjeBdH116MRZ8ytzY1P0jZGCOCHq977hCIJFsdZTQaDwZRp
+         B4Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678845402; x=1681437402;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i5IH03pQZjwk7lRVaB0AtmwortHKqQqoh+2hh3e3YH4=;
+        b=qeoflxsrRAixNByTA49yKxemePXcnYfQggWE2NxwCJb9ewvZ82xFtKQ2I4l/BOXx5x
+         pPVuBjH2436s4kEdakVSj7XWCri9GrnRLgh7uDG+vcqzUWdiDN3NY8IPhbWQD0fcSAmQ
+         uiNhGYI2qGEpYZVlsP1Mk3dIDw5eVfVJN7/Tzcfgk5N8+7mI0fjuokkWGAATU4dQf16b
+         Cpw+z6hK5H0J7keb6zVhc/CNdP4m95SfMt0TWsc8628EOif78zm7YOppI2n+AcGAVi7K
+         DgSy5JCd+0qZ9f5tJejVHuSjdopBNHdi6n2kE0O4pMu+xj+Y0um5SuM1dWXHtb7PW2Pq
+         pZWw==
+X-Gm-Message-State: AO0yUKV3m2XhBbxHVcrioLHm7M24vmo5RNuA0tSf61QOAb5Cq7qNn5US
+        qq6N1HmkJh9cW5feuB8utAFE7A==
+X-Google-Smtp-Source: AK7set+cVL5tyx6fOgkY3foB4lrF0Z22+CBQkavE9m6h4Zwg7gjTLHGtoBdkukMcYv+wezMc8gD8TA==
+X-Received: by 2002:a17:903:2c1:b0:1a0:7663:731b with SMTP id s1-20020a17090302c100b001a07663731bmr1184444plk.5.1678845402661;
+        Tue, 14 Mar 2023 18:56:42 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id le8-20020a170902fb0800b0019f3e339fb4sm2365408plb.187.2023.03.14.18.56.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 18:56:42 -0700 (PDT)
+Message-ID: <516dc8a8-ea4e-2294-3776-31a2625910b5@kernel.dk>
+Date:   Tue, 14 Mar 2023 19:56:41 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] io_uring: rsrc: Optimize return value variable 'ret'
+Content-Language: en-US
+To:     Li zeming <zeming@nfschina.com>, asml.silence@gmail.com
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230316181303.6583-1-zeming@nfschina.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230316181303.6583-1-zeming@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The function returns here and returns ret directly. It may look better.
+On 3/16/23 12:13 PM, Li zeming wrote:
+> The function returns here and returns ret directly. It may look better.
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- io_uring/rsrc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I think it'd be better to just initialize 'ret' to 0 instead.
 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 056f40946ff6..55dc2c505f8a 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -415,11 +415,11 @@ __cold static int io_rsrc_data_alloc(struct io_ring_ctx *ctx,
- 
- 	data = kzalloc(sizeof(*data), GFP_KERNEL);
- 	if (!data)
--		return -ENOMEM;
-+		return ret;
- 	data->tags = (u64 **)io_alloc_page_table(nr * sizeof(data->tags[0][0]));
- 	if (!data->tags) {
- 		kfree(data);
--		return -ENOMEM;
-+		return ret;
- 	}
- 
- 	data->nr = nr;
 -- 
-2.18.2
+Jens Axboe
+
 
