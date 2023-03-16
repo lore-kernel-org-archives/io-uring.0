@@ -2,128 +2,303 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC830C6FD1F
-	for <io-uring@archiver.kernel.org>; Thu, 16 Mar 2023 10:18:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 143FFC6FD1F
+	for <io-uring@archiver.kernel.org>; Thu, 16 Mar 2023 12:12:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjCPKSZ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 16 Mar 2023 06:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S229647AbjCPMMc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 16 Mar 2023 08:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjCPKSY (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 16 Mar 2023 06:18:24 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08F826851;
-        Thu, 16 Mar 2023 03:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1678961896; i=deller@gmx.de;
-        bh=SBXPKDzuZZfFGMrYb3LjDl1gDF+p48WKKOIO5JV2inQ=;
-        h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
-        b=drTKG8Y6nqNsTXcHxQiVL60HROzUKsbMQfQf2pbh0R7CKAqRqEOePWpQqTC1QnzmX
-         40JNzbSdCMdCAsKMDerHPZAAYOuW5o6FeThg4qjOKF2NAwvMb1/BNBiQMTsbAlHYiO
-         3yVfs60TqHBtOVGWQJ+ornrFkBAFFkkkuU3CWaOnVieKttPBau1bqBN4muSaEi0emZ
-         XJtk9WA4BI1oRS215jV+xxdy+QZ+uj/mNpJxEdCc7WcTmbQf1lfX6hjQwmjC2U6hfX
-         Fux6TbH3f3mCQqfD49i8kJo98tiBnW83F9D/uS34mu8buzMowJp+yPXuHDu740+Jt4
-         669SkT9jOI57g==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.149.95]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MqaxO-1qGC6K1X0q-00maBw; Thu, 16
- Mar 2023 11:18:16 +0100
-Message-ID: <619c16b8-1844-0287-40ee-7efaeea36b09@gmx.de>
-Date:   Thu, 16 Mar 2023 11:18:15 +0100
+        with ESMTP id S229693AbjCPMMb (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 16 Mar 2023 08:12:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E81E7DFB9;
+        Thu, 16 Mar 2023 05:12:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFBCE2F4;
+        Thu, 16 Mar 2023 05:13:12 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.54.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 205CF3F885;
+        Thu, 16 Mar 2023 05:12:27 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 12:12:22 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-next 4/4] io_uring/rsrc: optimise registered huge
+ pages
+Message-ID: <ZBMHphP4qaaKqJqL@FVFF77S0Q05N>
+References: <cover.1677041932.git.asml.silence@gmail.com>
+ <757a0c399774f23df5dbfe2e0cc79f7ea432b04c.1677041932.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHSET 0/5] User mapped provided buffer rings
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-parisc <linux-parisc@vger.kernel.org>
-References: <20230314171641.10542-1-axboe@kernel.dk>
- <0eeed691-9ea1-9516-c403-5ba22554f8e7@gmx.de>
- <3dcf3e0c-d393-cb95-86ab-00b4d8cf3c75@gmx.de>
- <88b273f6-a747-7d2e-7981-3d224fdac7be@kernel.dk>
- <41a23244-a77a-01c4-46de-76b85a6f4d63@kernel.dk>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <41a23244-a77a-01c4-46de-76b85a6f4d63@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:kNtsjd4d1PkWkuUidycw18kPmgmHsvFcD31lWM/ondOXAKohZjQ
- LgJDgdnyGFSYaVYC0kPmH7eJH+2v0WghrOaA8d4kJtMiEg1TfeTPEutLm4gsVgRkOWafbs1
- iC/gNIjbS+A/VATZl/AnApalyvxzzQAh1vj4NuecZAIkR9wbPKjI4A9HZ8q/xFL8HO9UfSf
- 5Niyeg3hu7fgXJR6kgo7Q==
-UI-OutboundReport: notjunk:1;M01:P0:wPJRajn5y00=;S9IKB2qyeQVWYuGi9H8e3Rql0sf
- oKz3AWelpXkArRDzVRNxYiwmVLz1HMojjl4c52XMnJn1LIdrBcv02T2312LnMA16obaoe8TOM
- EfClLswesIFA2txaErmhnp0rDLHSZxhCMCLzWmG8eOmpxDJacbiB0OOqEMiD9L/ezB8vQhmU2
- 1Iz2P+iPH9YuktJTVF7d7bs0Q7Zl92XC0+4qSWfycIWXIV2u7g3RSTo35C1aIbUP4QhGAyLd9
- 7yvxbMNK95H9nPbYtd2nBqee46DWGeIqJ1H9M6xArEpUa/Erxb5tSxUIiZ3LkzvlR0u8YDNjW
- 96QePY+sidSMCuQ2U/pbDuEeyim2tQ+ZySk4VwmEWeIcpVt/99j0bWkMhD81Wql6OqfBBTKcf
- DPhd6takSvJRw6PE78QrXHzGajNRlkZwf5X7vh0K4Jm9zBEVrPGfrtS/wBQbiciUq7YGA4BsU
- BbfKeDQbrPH1LLBN997xqFJkhY5ycOO/a3yTF3HWBqpL86+Shk6sREHDPsgAY8DwBH703nW0c
- KGOJOX3VVqaEEksdL2R52K/TL/lOPTLgGUJqzL0f/3jCsXzR7swBacXQFp74bt9EUByQ/X0vf
- AA4QQv0wm/IVSOMZyFeevwzM1GQdq+bRjzHTyrqRaVLmwbMAMmaup1LjxWQahKG9HpiE4Gl5R
- Fmhhv1sWy7sYived88ghHHJazDnIGMCDLzmeY+L10PVEXJYO9j3188inXPzhblZHxzeNOpiln
- sC88Yvx9fefXaVSjmR6PlPiFNq42wLj3YNBBjoeKijMmFkKeHqvvGB1Un0ELXTE1NiWwP52TM
- CZq/ksB2Lohw48wmGOUx6ZUB+FHlQMn30AaCuL3QVp/pgkQzOhcB9mkiWlKKF17608Fqem9mM
- ErnKoLlYBBVkEvtKVXxG5xkDqi7+JYjUp8EZi3UfmiF11VzQs0Li0mqQD61nTY/TbCUCB+gQf
- tzLl8fKdtPO/s1cujP6ev8AdVZ0=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <757a0c399774f23df5dbfe2e0cc79f7ea432b04c.1677041932.git.asml.silence@gmail.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 3/15/23 22:18, Jens Axboe wrote:
-> On 3/15/23 2:38=E2=80=AFPM, Jens Axboe wrote:
->> On 3/15/23 2:07?PM, Helge Deller wrote:
->>> On 3/15/23 21:03, Helge Deller wrote:
->>>> Hi Jens,
->>>>
->>>> Thanks for doing those fixes!
->>>>
->>>> On 3/14/23 18:16, Jens Axboe wrote:
->>>>> One issue that became apparent when running io_uring code on parisc =
-is
->>>>> that for data shared between the application and the kernel, we must
->>>>> ensure that it's placed correctly to avoid aliasing issues that rend=
-er
->>>>> it useless.
->>>>>
->>>>> The first patch in this series is from Helge, and ensures that the
->>>>> SQ/CQ rings are mapped appropriately. This makes io_uring actually w=
-ork
->>>>> there.
->>>>>
->>>>> Patches 2..4 are prep patches for patch 5, which adds a variant of
->>>>> ring mapped provided buffers that have the kernel allocate the memor=
-y
->>>>> for them and the application mmap() it. This brings these mapped
->>>>> buffers in line with how the SQ/CQ rings are managed too.
->>>>>
->>>>> I'm not fully sure if this ONLY impacts archs that set SHM_COLOUR,
->>>>> of which there is only parisc, or if SHMLBA setting archs (of which
->>>>> there are others) are impact to any degree as well...
->>>>
->>>> It would be interesting to find out. I'd assume that other arches,
->>>> e.g. sparc, might have similiar issues.
->>>> Have you tested your patches on other arches as well?
->>>
->>> By the way, I've now tested this series on current git head on an
->>> older parisc box (with PA8700 / PCX-W2 CPU).
->>>
->>> Results of liburing testsuite:
->>> Tests timed out (1): <send-zerocopy.t> - (may not be a failure)
->>> Tests failed (5): <buf-ring.t> <file-verify.t> <poll-race-mshot.t> <ri=
-ngbuf-read.t> <send_recvmsg.t>
->
-> If you update your liburing git copy, switch to the ring-buf-alloc branc=
-h,
-> then all of the above should work:
->
-> axboe@c8000 ~/g/liburing (ring-buf-alloc)> test/buf-ring.t
-> axboe@c8000 ~/g/liburing (ring-buf-alloc)> test/send_recvmsg.t
-> axboe@c8000 ~/g/liburing (ring-buf-alloc)> test/ringbuf-read.t
-> axboe@c8000 ~/g/liburing (ring-buf-alloc)> test/poll-race-mshot.t
-> axboe@c8000 ~/g/liburing (ring-buf-alloc)> git describe
-> liburing-2.3-245-g8534193
+Hi,
 
-Yes, verified. All tests in that branch pass now.
+Since v6.3-rc1, when fuzzing arm64 with Syzkaller, I see a bunch of bad page
+state splats with either "nonzero pincount" or "nonzero compound_pincount", and
+bisecting led me to this patch / commit:
 
-Thanks!
-Helge
+  57bebf807e2abcf8 ("io_uring/rsrc: optimise registered huge pages")
+
+The splats look like:
+
+| BUG: Bad page state in process kworker/u8:0  pfn:5c001
+| page:00000000bfda61c8 refcount:0 mapcount:0 mapping:0000000000000000 index:0x20001 pfn:0x5c001
+| head:0000000011409842 order:9 entire_mapcount:0 nr_pages_mapped:0 pincount:1
+| anon flags: 0x3fffc00000b0004(uptodate|head|mappedtodisk|swapbacked|node=0|zone=0|lastcpupid=0xffff)
+| raw: 03fffc0000000000 fffffc0000700001 ffffffff00700903 0000000100000000
+| raw: 0000000000000200 0000000000000000 00000000ffffffff 0000000000000000
+| head: 03fffc00000b0004 dead000000000100 dead000000000122 ffff00000a809dc1
+| head: 0000000000020000 0000000000000000 00000000ffffffff 0000000000000000
+| page dumped because: nonzero pincount
+| CPU: 3 PID: 9 Comm: kworker/u8:0 Not tainted 6.3.0-rc2-00001-gc6811bf0cd87 #1
+| Hardware name: linux,dummy-virt (DT)
+| Workqueue: events_unbound io_ring_exit_work
+| Call trace:
+|  dump_backtrace+0x13c/0x208
+|  show_stack+0x34/0x58
+|  dump_stack_lvl+0x150/0x1a8
+|  dump_stack+0x20/0x30
+|  bad_page+0xec/0x238
+|  free_tail_pages_check+0x280/0x350
+|  free_pcp_prepare+0x60c/0x830
+|  free_unref_page+0x50/0x498
+|  free_compound_page+0xcc/0x100
+|  free_transhuge_page+0x1f0/0x2b8
+|  destroy_large_folio+0x80/0xc8
+|  __folio_put+0xc4/0xf8
+|  gup_put_folio+0xd0/0x250
+|  unpin_user_page+0xcc/0x128
+|  io_buffer_unmap+0xec/0x2c0
+|  __io_sqe_buffers_unregister+0xa4/0x1e0
+|  io_ring_exit_work+0x68c/0x1188
+|  process_one_work+0x91c/0x1a58
+|  worker_thread+0x48c/0xe30
+|  kthread+0x278/0x2f0
+|  ret_from_fork+0x10/0x20
+
+Syzkaller gave me a reliable C reproducer, which I used to bisect (note:
+DEBUG_VM needs to be selected):
+
+| // autogenerated by syzkaller (https://github.com/google/syzkaller)
+| 
+| #define _GNU_SOURCE 
+| 
+| #include <endian.h>
+| #include <stdint.h>
+| #include <stdio.h>
+| #include <stdlib.h>
+| #include <string.h>
+| #include <sys/mman.h>
+| #include <sys/syscall.h>
+| #include <sys/types.h>
+| #include <unistd.h>
+| 
+| #ifndef __NR_io_uring_register
+| #define __NR_io_uring_register 427
+| #endif
+| #ifndef __NR_io_uring_setup
+| #define __NR_io_uring_setup 425
+| #endif
+| #ifndef __NR_mmap
+| #define __NR_mmap 222
+| #endif
+| 
+| #define SIZEOF_IO_URING_SQE 64
+| #define SIZEOF_IO_URING_CQE 16
+| #define SQ_HEAD_OFFSET 0
+| #define SQ_TAIL_OFFSET 64
+| #define SQ_RING_MASK_OFFSET 256
+| #define SQ_RING_ENTRIES_OFFSET 264
+| #define SQ_FLAGS_OFFSET 276
+| #define SQ_DROPPED_OFFSET 272
+| #define CQ_HEAD_OFFSET 128
+| #define CQ_TAIL_OFFSET 192
+| #define CQ_RING_MASK_OFFSET 260
+| #define CQ_RING_ENTRIES_OFFSET 268
+| #define CQ_RING_OVERFLOW_OFFSET 284
+| #define CQ_FLAGS_OFFSET 280
+| #define CQ_CQES_OFFSET 320
+| 
+| struct io_sqring_offsets {
+| 	uint32_t head;
+| 	uint32_t tail;
+| 	uint32_t ring_mask;
+| 	uint32_t ring_entries;
+| 	uint32_t flags;
+| 	uint32_t dropped;
+| 	uint32_t array;
+| 	uint32_t resv1;
+| 	uint64_t resv2;
+| };
+| 
+| struct io_cqring_offsets {
+| 	uint32_t head;
+| 	uint32_t tail;
+| 	uint32_t ring_mask;
+| 	uint32_t ring_entries;
+| 	uint32_t overflow;
+| 	uint32_t cqes;
+| 	uint64_t resv[2];
+| };
+| 
+| struct io_uring_params {
+| 	uint32_t sq_entries;
+| 	uint32_t cq_entries;
+| 	uint32_t flags;
+| 	uint32_t sq_thread_cpu;
+| 	uint32_t sq_thread_idle;
+| 	uint32_t features;
+| 	uint32_t resv[4];
+| 	struct io_sqring_offsets sq_off;
+| 	struct io_cqring_offsets cq_off;
+| };
+| 
+| #define IORING_OFF_SQ_RING 0
+| #define IORING_OFF_SQES 0x10000000ULL
+| 
+| static long syz_io_uring_setup(volatile long a0, volatile long a1, volatile long a2, volatile long a3, volatile long a4, volatile long a5)
+| {
+| 	uint32_t entries = (uint32_t)a0;
+| 	struct io_uring_params* setup_params = (struct io_uring_params*)a1;
+| 	void* vma1 = (void*)a2;
+| 	void* vma2 = (void*)a3;
+| 	void** ring_ptr_out = (void**)a4;
+| 	void** sqes_ptr_out = (void**)a5;
+| 	uint32_t fd_io_uring = syscall(__NR_io_uring_setup, entries, setup_params);
+| 	uint32_t sq_ring_sz = setup_params->sq_off.array + setup_params->sq_entries * sizeof(uint32_t);
+| 	uint32_t cq_ring_sz = setup_params->cq_off.cqes + setup_params->cq_entries * SIZEOF_IO_URING_CQE;
+| 	uint32_t ring_sz = sq_ring_sz > cq_ring_sz ? sq_ring_sz : cq_ring_sz;
+| 	*ring_ptr_out = mmap(vma1, ring_sz, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_POPULATE | MAP_FIXED, fd_io_uring, IORING_OFF_SQ_RING);
+| 	uint32_t sqes_sz = setup_params->sq_entries * SIZEOF_IO_URING_SQE;
+| 	*sqes_ptr_out = mmap(vma2, sqes_sz, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_POPULATE | MAP_FIXED, fd_io_uring, IORING_OFF_SQES);
+| 	return fd_io_uring;
+| }
+| 
+| uint64_t r[1] = {0xffffffffffffffff};
+| 
+| int main(void)
+| {
+| 		syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+| 	syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
+| 	syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+| 				intptr_t res = 0;
+| *(uint32_t*)0x20000684 = 0;
+| *(uint32_t*)0x20000688 = 0;
+| *(uint32_t*)0x2000068c = 0;
+| *(uint32_t*)0x20000690 = 0;
+| *(uint32_t*)0x20000698 = -1;
+| memset((void*)0x2000069c, 0, 12);
+| 	res = -1;
+| res = syz_io_uring_setup(0x2fd6, 0x20000680, 0x20ffd000, 0x20ffc000, 0x20000700, 0x20000740);
+| 	if (res != -1)
+| 		r[0] = res;
+| *(uint64_t*)0x20002840 = 0;
+| *(uint64_t*)0x20002848 = 0;
+| *(uint64_t*)0x20002850 = 0x20000840;
+| *(uint64_t*)0x20002858 = 0x1000;
+| 	syscall(__NR_io_uring_register, r[0], 0ul, 0x20002840ul, 2ul);
+| 	return 0;
+| }
+
+Thanks,
+Mark.
+
+On Wed, Feb 22, 2023 at 02:36:51PM +0000, Pavel Begunkov wrote:
+> When registering huge pages, internally io_uring will split them into
+> many PAGE_SIZE bvec entries. That's bad for performance as drivers need
+> to eventually dma-map the data and will do it individually for each bvec
+> entry. Coalesce huge pages into one large bvec.
+> 
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  io_uring/rsrc.c | 38 ++++++++++++++++++++++++++++++++------
+>  1 file changed, 32 insertions(+), 6 deletions(-)
+> 
+> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+> index ebbd2cea7582..aab1bc6883e9 100644
+> --- a/io_uring/rsrc.c
+> +++ b/io_uring/rsrc.c
+> @@ -1210,6 +1210,7 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  	unsigned long off;
+>  	size_t size;
+>  	int ret, nr_pages, i;
+> +	struct folio *folio;
+>  
+>  	*pimu = ctx->dummy_ubuf;
+>  	if (!iov->iov_base)
+> @@ -1224,6 +1225,21 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  		goto done;
+>  	}
+>  
+> +	/* If it's a huge page, try to coalesce them into a single bvec entry */
+> +	if (nr_pages > 1) {
+> +		folio = page_folio(pages[0]);
+> +		for (i = 1; i < nr_pages; i++) {
+> +			if (page_folio(pages[i]) != folio) {
+> +				folio = NULL;
+> +				break;
+> +			}
+> +		}
+> +		if (folio) {
+> +			folio_put_refs(folio, nr_pages - 1);
+> +			nr_pages = 1;
+> +		}
+> +	}
+> +
+>  	imu = kvmalloc(struct_size(imu, bvec, nr_pages), GFP_KERNEL);
+>  	if (!imu)
+>  		goto done;
+> @@ -1236,6 +1252,17 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  
+>  	off = (unsigned long) iov->iov_base & ~PAGE_MASK;
+>  	size = iov->iov_len;
+> +	/* store original address for later verification */
+> +	imu->ubuf = (unsigned long) iov->iov_base;
+> +	imu->ubuf_end = imu->ubuf + iov->iov_len;
+> +	imu->nr_bvecs = nr_pages;
+> +	*pimu = imu;
+> +	ret = 0;
+> +
+> +	if (folio) {
+> +		bvec_set_page(&imu->bvec[0], pages[0], size, off);
+> +		goto done;
+> +	}
+>  	for (i = 0; i < nr_pages; i++) {
+>  		size_t vec_len;
+>  
+> @@ -1244,12 +1271,6 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  		off = 0;
+>  		size -= vec_len;
+>  	}
+> -	/* store original address for later verification */
+> -	imu->ubuf = (unsigned long) iov->iov_base;
+> -	imu->ubuf_end = imu->ubuf + iov->iov_len;
+> -	imu->nr_bvecs = nr_pages;
+> -	*pimu = imu;
+> -	ret = 0;
+>  done:
+>  	if (ret)
+>  		kvfree(imu);
+> @@ -1364,6 +1385,11 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+>  		const struct bio_vec *bvec = imu->bvec;
+>  
+>  		if (offset <= bvec->bv_len) {
+> +			/*
+> +			 * Note, huge pages buffers consists of one large
+> +			 * bvec entry and should always go this way. The other
+> +			 * branch doesn't expect non PAGE_SIZE'd chunks.
+> +			 */
+>  			iter->bvec = bvec;
+>  			iter->nr_segs = bvec->bv_len;
+>  			iter->count -= offset;
+> -- 
+> 2.39.1
+> 
+> 
