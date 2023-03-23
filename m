@@ -2,387 +2,136 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A596FC6FD20
-	for <io-uring@archiver.kernel.org>; Wed, 22 Mar 2023 01:17:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 682B7C6FD1D
+	for <io-uring@archiver.kernel.org>; Thu, 23 Mar 2023 13:27:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjCVBRq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 21 Mar 2023 21:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
+        id S231436AbjCWN1M (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 23 Mar 2023 09:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjCVBRp (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 21 Mar 2023 21:17:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEDF580EF
-        for <io-uring@vger.kernel.org>; Tue, 21 Mar 2023 18:17:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D73F820761;
-        Wed, 22 Mar 2023 01:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1679447797; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+        with ESMTP id S229600AbjCWN1L (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 23 Mar 2023 09:27:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA6B86AF
+        for <io-uring@vger.kernel.org>; Thu, 23 Mar 2023 06:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679577987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=f78x1Gjkv6LxjJ0Cn8TfPVeCOrzW3ehHE38mMAb7ieU=;
-        b=tphYB6oT+5NM+W4+aN6mng1CG18iyRj16arGnQNd6/gLiDLzR9p7NyA+XJPqvAtyNsM2Q/
-        at8vL9KozP3azCBnXvHz7ERlA+JjGcuDD578rh7ajD76qf4oZlOm/GVAYsu2bDXmnvxU+A
-        SO8RsVZgyG2P9sKgYJFRsFQScbh3NGQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1679447797;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f78x1Gjkv6LxjJ0Cn8TfPVeCOrzW3ehHE38mMAb7ieU=;
-        b=biNM35LAvYkT9WxX74AGUIONTlHKUjnUcHPPX2YkFXs5+r6P1H8KIIGqZXaZrYGs8sx99k
-        aWtK88Xc56spc9BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=ShWK//M258t/efyGB3M9/gDO5J6ICtboPZa+1gy9j3c=;
+        b=Etj26xgPt8QMcENeyXLea2SsPjACmJ4J976komDBNxyE4lCjM6DPGJN8ECfmZKhGqW0jcA
+        iDyU9xrtnwGGaVAUSMj0yA2a+lfGz+Zhl3EEhcadCihHGqUchpsk2vSnQx/FJSmoIyx8Zi
+        wvQg/It7ZU3M+xwr5oTB3EyhAxBbKUA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-546-i4M5T5pDMJ2BI5zRWHkiTw-1; Thu, 23 Mar 2023 09:26:24 -0400
+X-MC-Unique: i4M5T5pDMJ2BI5zRWHkiTw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 61C6F13451;
-        Wed, 22 Mar 2023 01:16:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nEq3CvVWGmRAfQAAMHmgww
-        (envelope-from <krisman@suse.de>); Wed, 22 Mar 2023 01:16:37 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     axboe@kernel.dk
-Cc:     io-uring@vger.kernel.org, Gabriel Krisman Bertazi <krisman@suse.de>
-Subject: [PATCH 1/2] io-wq: Move wq accounting to io_wq
-Date:   Tue, 21 Mar 2023 22:16:27 -0300
-Message-Id: <20230322011628.23359-2-krisman@suse.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230322011628.23359-1-krisman@suse.de>
-References: <20230322011628.23359-1-krisman@suse.de>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B5E9485530D;
+        Thu, 23 Mar 2023 13:26:23 +0000 (UTC)
+Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6DA8140CF8F2;
+        Thu, 23 Mar 2023 13:26:17 +0000 (UTC)
+Date:   Thu, 23 Mar 2023 21:26:12 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Bernd Schubert <bschubert@ddn.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Dharmendra Singh <dsingh@ddn.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        "fuse-devel@lists.sourceforge.net" <fuse-devel@lists.sourceforge.net>,
+        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 06/13] fuse: Add an interval ring stop worker/monitor
+Message-ID: <ZBxTdCj60+s1aZqA@ovpn-8-16.pek2.redhat.com>
+References: <20230321011047.3425786-1-bschubert@ddn.com>
+ <20230321011047.3425786-7-bschubert@ddn.com>
+ <CAJfpegs6z6pvepUx=3zfAYqisumri=2N-_A-nsYHQd62AQRahA@mail.gmail.com>
+ <28a74cb4-57fe-0b21-8663-0668bf55d283@ddn.com>
+ <CAJfpeguvCNUEbcy6VQzVJeNOsnNqfDS=LyRaGvSiDTGerB+iuw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpeguvCNUEbcy6VQzVJeNOsnNqfDS=LyRaGvSiDTGerB+iuw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Since we now have a single io_wqe per io_wq instead of per-node, and in
-preparation to its removal, move the accounting into the parent
-structure.
+On Thu, Mar 23, 2023 at 01:35:24PM +0100, Miklos Szeredi wrote:
+> On Thu, 23 Mar 2023 at 12:04, Bernd Schubert <bschubert@ddn.com> wrote:
+> >
+> > Thanks for looking at these patches!
+> >
+> > I'm adding in Ming Lei, as I had taken several ideas from ublkm I guess
+> > I also should also explain in the commit messages and code why it is
+> > done that way.
+> >
+> > On 3/23/23 11:27, Miklos Szeredi wrote:
+> > > On Tue, 21 Mar 2023 at 02:11, Bernd Schubert <bschubert@ddn.com> wrote:
+> > >>
+> > >> This adds a delayed work queue that runs in intervals
+> > >> to check and to stop the ring if needed. Fuse connection
+> > >> abort now waits for this worker to complete.
+> > >
+> > > This seems like a hack.   Can you explain what the problem is?
+> > >
+> > > The first thing I notice is that you store a reference to the task
+> > > that initiated the ring creation.  This already looks fishy, as the
+> > > ring could well survive the task (thread) that created it, no?
+> >
+> > You mean the currently ongoing work, where the daemon can be restarted?
+> > Daemon restart will need some work with ring communication, I will take
+> > care of that once we have agreed on an approach. [Also added in Alexsandre].
+> >
+> > fuse_uring_stop_mon() checks if the daemon process is exiting and and
+> > looks at fc->ring.daemon->flags & PF_EXITING - this is what the process
+> > reference is for.
+> 
+> Okay, so you are saying that the lifetime of the ring is bound to the
+> lifetime of the thread that created it?
+> 
+> Why is that?
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
----
- io_uring/io-wq.c | 78 +++++++++++++++++++++++++-----------------------
- 1 file changed, 40 insertions(+), 38 deletions(-)
+Cc Jens and io_uring list
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 44d522c5d36f..da7c6e00b690 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -74,7 +74,7 @@ struct io_worker {
- 
- #define IO_WQ_NR_HASH_BUCKETS	(1u << IO_WQ_HASH_ORDER)
- 
--struct io_wqe_acct {
-+struct io_wq_acct {
- 	unsigned nr_workers;
- 	unsigned max_workers;
- 	int index;
-@@ -95,7 +95,6 @@ enum {
-  */
- struct io_wqe {
- 	raw_spinlock_t lock;
--	struct io_wqe_acct acct[IO_WQ_ACCT_NR];
- 
- 	struct hlist_nulls_head free_list;
- 	struct list_head all_list;
-@@ -126,6 +125,8 @@ struct io_wq {
- 
- 	struct task_struct *task;
- 
-+	struct io_wq_acct acct[IO_WQ_ACCT_NR];
-+
- 	struct io_wqe wqe;
- };
- 
-@@ -142,7 +143,7 @@ struct io_cb_cancel_data {
- static bool create_io_worker(struct io_wq *wq, struct io_wqe *wqe, int index);
- static void io_wqe_dec_running(struct io_worker *worker);
- static bool io_acct_cancel_pending_work(struct io_wqe *wqe,
--					struct io_wqe_acct *acct,
-+					struct io_wq_acct *acct,
- 					struct io_cb_cancel_data *match);
- static void create_worker_cb(struct callback_head *cb);
- static void io_wq_cancel_tw_create(struct io_wq *wq);
-@@ -158,20 +159,20 @@ static void io_worker_release(struct io_worker *worker)
- 		complete(&worker->ref_done);
- }
- 
--static inline struct io_wqe_acct *io_get_acct(struct io_wqe *wqe, bool bound)
-+static inline struct io_wq_acct *io_get_acct(struct io_wq *wq, bool bound)
- {
--	return &wqe->acct[bound ? IO_WQ_ACCT_BOUND : IO_WQ_ACCT_UNBOUND];
-+	return &wq->acct[bound ? IO_WQ_ACCT_BOUND : IO_WQ_ACCT_UNBOUND];
- }
- 
--static inline struct io_wqe_acct *io_work_get_acct(struct io_wqe *wqe,
--						   struct io_wq_work *work)
-+static inline struct io_wq_acct *io_work_get_acct(struct io_wq *wq,
-+						  struct io_wq_work *work)
- {
--	return io_get_acct(wqe, !(work->flags & IO_WQ_WORK_UNBOUND));
-+	return io_get_acct(wq, !(work->flags & IO_WQ_WORK_UNBOUND));
- }
- 
--static inline struct io_wqe_acct *io_wqe_get_acct(struct io_worker *worker)
-+static inline struct io_wq_acct *io_wq_get_acct(struct io_worker *worker)
- {
--	return io_get_acct(worker->wqe, worker->flags & IO_WORKER_F_BOUND);
-+	return io_get_acct(worker->wqe->wq, worker->flags & IO_WORKER_F_BOUND);
- }
- 
- static void io_worker_ref_put(struct io_wq *wq)
-@@ -182,7 +183,7 @@ static void io_worker_ref_put(struct io_wq *wq)
- 
- static void io_worker_cancel_cb(struct io_worker *worker)
- {
--	struct io_wqe_acct *acct = io_wqe_get_acct(worker);
-+	struct io_wq_acct *acct = io_wq_get_acct(worker);
- 	struct io_wqe *wqe = worker->wqe;
- 	struct io_wq *wq = wqe->wq;
- 
-@@ -238,7 +239,7 @@ static void io_worker_exit(struct io_worker *worker)
- 	do_exit(0);
- }
- 
--static inline bool io_acct_run_queue(struct io_wqe_acct *acct)
-+static inline bool io_acct_run_queue(struct io_wq_acct *acct)
- {
- 	bool ret = false;
- 
-@@ -256,7 +257,7 @@ static inline bool io_acct_run_queue(struct io_wqe_acct *acct)
-  * caller must create one.
-  */
- static bool io_wqe_activate_free_worker(struct io_wqe *wqe,
--					struct io_wqe_acct *acct)
-+					struct io_wq_acct *acct)
- 	__must_hold(RCU)
- {
- 	struct hlist_nulls_node *n;
-@@ -270,7 +271,7 @@ static bool io_wqe_activate_free_worker(struct io_wqe *wqe,
- 	hlist_nulls_for_each_entry_rcu(worker, n, &wqe->free_list, nulls_node) {
- 		if (!io_worker_get(worker))
- 			continue;
--		if (io_wqe_get_acct(worker) != acct) {
-+		if (io_wq_get_acct(worker) != acct) {
- 			io_worker_release(worker);
- 			continue;
- 		}
-@@ -288,7 +289,7 @@ static bool io_wqe_activate_free_worker(struct io_wqe *wqe,
-  * We need a worker. If we find a free one, we're good. If not, and we're
-  * below the max number of workers, create one.
-  */
--static bool io_wqe_create_worker(struct io_wqe *wqe, struct io_wqe_acct *acct)
-+static bool io_wqe_create_worker(struct io_wqe *wqe, struct io_wq_acct *acct)
- {
- 	/*
- 	 * Most likely an attempt to queue unbounded work on an io_wq that
-@@ -311,7 +312,7 @@ static bool io_wqe_create_worker(struct io_wqe *wqe, struct io_wqe_acct *acct)
- 
- static void io_wqe_inc_running(struct io_worker *worker)
- {
--	struct io_wqe_acct *acct = io_wqe_get_acct(worker);
-+	struct io_wq_acct *acct = io_wq_get_acct(worker);
- 
- 	atomic_inc(&acct->nr_running);
- }
-@@ -321,13 +322,13 @@ static void create_worker_cb(struct callback_head *cb)
- 	struct io_worker *worker;
- 	struct io_wq *wq;
- 	struct io_wqe *wqe;
--	struct io_wqe_acct *acct;
-+	struct io_wq_acct *acct;
- 	bool do_create = false;
- 
- 	worker = container_of(cb, struct io_worker, create_work);
- 	wqe = worker->wqe;
- 	wq = wqe->wq;
--	acct = &wqe->acct[worker->create_index];
-+	acct = &wq->acct[worker->create_index];
- 	raw_spin_lock(&wqe->lock);
- 	if (acct->nr_workers < acct->max_workers) {
- 		acct->nr_workers++;
-@@ -345,7 +346,7 @@ static void create_worker_cb(struct callback_head *cb)
- }
- 
- static bool io_queue_worker_create(struct io_worker *worker,
--				   struct io_wqe_acct *acct,
-+				   struct io_wq_acct *acct,
- 				   task_work_func_t func)
- {
- 	struct io_wqe *wqe = worker->wqe;
-@@ -393,7 +394,7 @@ static bool io_queue_worker_create(struct io_worker *worker,
- 
- static void io_wqe_dec_running(struct io_worker *worker)
- {
--	struct io_wqe_acct *acct = io_wqe_get_acct(worker);
-+	struct io_wq_acct *acct = io_wq_get_acct(worker);
- 	struct io_wqe *wqe = worker->wqe;
- 
- 	if (!(worker->flags & IO_WORKER_F_UP))
-@@ -462,7 +463,7 @@ static bool io_wait_on_hash(struct io_wqe *wqe, unsigned int hash)
- 	return ret;
- }
- 
--static struct io_wq_work *io_get_next_work(struct io_wqe_acct *acct,
-+static struct io_wq_work *io_get_next_work(struct io_wq_acct *acct,
- 					   struct io_worker *worker)
- 	__must_hold(acct->lock)
- {
-@@ -537,7 +538,7 @@ static void io_wqe_enqueue(struct io_wqe *wqe, struct io_wq_work *work);
- 
- static void io_worker_handle_work(struct io_worker *worker)
- {
--	struct io_wqe_acct *acct = io_wqe_get_acct(worker);
-+	struct io_wq_acct *acct = io_wq_get_acct(worker);
- 	struct io_wqe *wqe = worker->wqe;
- 	struct io_wq *wq = wqe->wq;
- 	bool do_kill = test_bit(IO_WQ_BIT_EXIT, &wq->state);
-@@ -612,7 +613,7 @@ static void io_worker_handle_work(struct io_worker *worker)
- static int io_wqe_worker(void *data)
- {
- 	struct io_worker *worker = data;
--	struct io_wqe_acct *acct = io_wqe_get_acct(worker);
-+	struct io_wq_acct *acct = io_wq_get_acct(worker);
- 	struct io_wqe *wqe = worker->wqe;
- 	struct io_wq *wq = wqe->wq;
- 	bool exit_mask = false, last_timeout = false;
-@@ -759,7 +760,7 @@ static void create_worker_cont(struct callback_head *cb)
- 		io_worker_release(worker);
- 		return;
- 	} else if (!io_should_retry_thread(PTR_ERR(tsk))) {
--		struct io_wqe_acct *acct = io_wqe_get_acct(worker);
-+		struct io_wq_acct *acct = io_wq_get_acct(worker);
- 
- 		atomic_dec(&acct->nr_running);
- 		raw_spin_lock(&wqe->lock);
-@@ -789,7 +790,7 @@ static void create_worker_cont(struct callback_head *cb)
- static void io_workqueue_create(struct work_struct *work)
- {
- 	struct io_worker *worker = container_of(work, struct io_worker, work);
--	struct io_wqe_acct *acct = io_wqe_get_acct(worker);
-+	struct io_wq_acct *acct = io_wq_get_acct(worker);
- 
- 	if (!io_queue_worker_create(worker, acct, create_worker_cont))
- 		kfree(worker);
-@@ -797,7 +798,7 @@ static void io_workqueue_create(struct work_struct *work)
- 
- static bool create_io_worker(struct io_wq *wq, struct io_wqe *wqe, int index)
- {
--	struct io_wqe_acct *acct = &wqe->acct[index];
-+	struct io_wq_acct *acct = &wq->acct[index];
- 	struct io_worker *worker;
- 	struct task_struct *tsk;
- 
-@@ -881,7 +882,7 @@ static void io_run_cancel(struct io_wq_work *work, struct io_wqe *wqe)
- 
- static void io_wqe_insert_work(struct io_wqe *wqe, struct io_wq_work *work)
- {
--	struct io_wqe_acct *acct = io_work_get_acct(wqe, work);
-+	struct io_wq_acct *acct = io_work_get_acct(wqe->wq, work);
- 	unsigned int hash;
- 	struct io_wq_work *tail;
- 
-@@ -907,7 +908,7 @@ static bool io_wq_work_match_item(struct io_wq_work *work, void *data)
- 
- static void io_wqe_enqueue(struct io_wqe *wqe, struct io_wq_work *work)
- {
--	struct io_wqe_acct *acct = io_work_get_acct(wqe, work);
-+	struct io_wq_acct *acct = io_work_get_acct(wqe->wq, work);
- 	struct io_cb_cancel_data match;
- 	unsigned work_flags = work->flags;
- 	bool do_create;
-@@ -1011,7 +1012,7 @@ static inline void io_wqe_remove_pending(struct io_wqe *wqe,
- 					 struct io_wq_work *work,
- 					 struct io_wq_work_node *prev)
- {
--	struct io_wqe_acct *acct = io_work_get_acct(wqe, work);
-+	struct io_wq_acct *acct = io_work_get_acct(wqe->wq, work);
- 	unsigned int hash = io_get_work_hash(work);
- 	struct io_wq_work *prev_work = NULL;
- 
-@@ -1027,7 +1028,7 @@ static inline void io_wqe_remove_pending(struct io_wqe *wqe,
- }
- 
- static bool io_acct_cancel_pending_work(struct io_wqe *wqe,
--					struct io_wqe_acct *acct,
-+					struct io_wq_acct *acct,
- 					struct io_cb_cancel_data *match)
- {
- 	struct io_wq_work_node *node, *prev;
-@@ -1051,12 +1052,12 @@ static bool io_acct_cancel_pending_work(struct io_wqe *wqe,
- }
- 
- static void io_wqe_cancel_pending_work(struct io_wqe *wqe,
--				       struct io_cb_cancel_data *match)
-+				      struct io_cb_cancel_data *match)
- {
- 	int i;
- retry:
- 	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
--		struct io_wqe_acct *acct = io_get_acct(wqe, i == 0);
-+		struct io_wq_acct *acct = io_get_acct(wqe->wq, i == 0);
- 
- 		if (io_acct_cancel_pending_work(wqe, acct, match)) {
- 			if (match->cancel_all)
-@@ -1118,13 +1119,14 @@ static int io_wqe_hash_wake(struct wait_queue_entry *wait, unsigned mode,
- 			    int sync, void *key)
- {
- 	struct io_wqe *wqe = container_of(wait, struct io_wqe, wait);
-+	struct io_wq *wq = wqe->wq;
- 	int i;
- 
- 	list_del_init(&wait->entry);
- 
- 	rcu_read_lock();
- 	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
--		struct io_wqe_acct *acct = &wqe->acct[i];
-+		struct io_wq_acct *acct = &wq->acct[i];
- 
- 		if (test_and_clear_bit(IO_ACCT_STALLED_BIT, &acct->flags))
- 			io_wqe_activate_free_worker(wqe, acct);
-@@ -1162,13 +1164,13 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
- 	if (!alloc_cpumask_var(&wqe->cpu_mask, GFP_KERNEL))
- 		goto err;
- 	cpumask_copy(wqe->cpu_mask, cpu_possible_mask);
--	wqe->acct[IO_WQ_ACCT_BOUND].max_workers = bounded;
--	wqe->acct[IO_WQ_ACCT_UNBOUND].max_workers =
-+	wq->acct[IO_WQ_ACCT_BOUND].max_workers = bounded;
-+	wq->acct[IO_WQ_ACCT_UNBOUND].max_workers =
- 				task_rlimit(current, RLIMIT_NPROC);
- 	INIT_LIST_HEAD(&wqe->wait.entry);
- 	wqe->wait.func = io_wqe_hash_wake;
- 	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
--		struct io_wqe_acct *acct = &wqe->acct[i];
-+		struct io_wq_acct *acct = &wq->acct[i];
- 
- 		acct->index = i;
- 		atomic_set(&acct->nr_running, 0);
-@@ -1335,7 +1337,7 @@ int io_wq_cpu_affinity(struct io_wq *wq, cpumask_var_t mask)
- int io_wq_max_workers(struct io_wq *wq, int *new_count)
- {
- 	struct io_wqe *wqe = &wq->wqe;
--	struct io_wqe_acct *acct;
-+	struct io_wq_acct *acct;
- 	int prev[IO_WQ_ACCT_NR];
- 	int i;
- 
-@@ -1355,7 +1357,7 @@ int io_wq_max_workers(struct io_wq *wq, int *new_count)
- 
- 	raw_spin_lock(&wqe->lock);
- 	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
--		acct = &wqe->acct[i];
-+		acct = &wq->acct[i];
- 		prev[i] = max_t(int, acct->max_workers, prev[i]);
- 		if (new_count[i])
- 			acct->max_workers = new_count[i];
--- 
-2.35.3
+For ublk:
+
+1) it is MQ device, it is natural to map queue into pthread/uring
+
+2) io_uring context is invisible to driver, we don't know when it is destructed,
+so bind io_uring context with queue/pthread, because we have to complete all
+uring commands before io_uring context exits. uring cmd usage for ublk/fuse should
+be special and unique, and it is like poll request, and sent to device beforehand,
+and it is completed only if driver has incoming thing which needs userspace to handle,
+but ublk/fuse may never have anyting which needs userpace to look.
+
+If io_uring can provides API for registering exit callback, things could be easier
+for ublk/fuse. However, we still need to know the exact io_uring context associated
+with our commands, so either more io_uring implementation details exposed to driver,
+or proper APIs provided.
+
+> 
+> I'ts much more common to bind a lifetime of an object to that of an
+> open file.  io_uring_setup() will do that for example.
+> 
+> It's much easier to hook into the destruction of an open file, than
+> into the destruction of a process (as you've observed). And the way
+> you do it is even more confusing as the ring is destroyed not when the
+> process is destroyed, but when a specific thread is destroyed, making
+> this a thread specific behavior that is probably best avoided.
+> 
+> So the obvious solution would be to destroy the ring(s) in
+> fuse_dev_release().  Why wouldn't that work?
+
+io uring is used for submitting multiple files, so its lifetime can't be bound
+to file, also io_uring is invisible to driver if here the ring(s) means io_uring.
+
+
+thanks,
+Ming
 
