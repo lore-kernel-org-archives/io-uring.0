@@ -2,134 +2,125 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 041B3C6FD1C
-	for <io-uring@archiver.kernel.org>; Fri, 24 Mar 2023 22:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3627FC76195
+	for <io-uring@archiver.kernel.org>; Fri, 24 Mar 2023 23:06:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjCXWmn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 24 Mar 2023 18:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S231417AbjCXXGM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 24 Mar 2023 19:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjCXWmm (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 24 Mar 2023 18:42:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9807E199D6
-        for <io-uring@vger.kernel.org>; Fri, 24 Mar 2023 15:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679697714;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AhMgDN/hJJA5BWda0Bw9R5FtPni7WAd5oqP98RV1O98=;
-        b=AAHdZXIEIWguE+7zxZYS019XG7f5hIzOAfdzFnSPzBPrcdYO2RGU/D1JJBJkhJ8eQelWIS
-        T1AdxQmTpD6puLV0/L5e3LIEBAhPpsCznGBmouJOUlfcy/5v1F5Z25FfPY5hkdDSwWAZUF
-        zjCHOSAItuADXUGiLk48OP3TL7vOQHk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-93-aSfzXghwOJuYKQIeo8JKoQ-1; Fri, 24 Mar 2023 18:41:50 -0400
-X-MC-Unique: aSfzXghwOJuYKQIeo8JKoQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9A2C23801F58;
-        Fri, 24 Mar 2023 22:41:50 +0000 (UTC)
-Received: from ovpn-8-20.pek2.redhat.com (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9E4032A68;
-        Fri, 24 Mar 2023 22:41:47 +0000 (UTC)
-Date:   Sat, 25 Mar 2023 06:41:41 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     io-uring <io-uring@vger.kernel.org>, ming.lei@redhat.com
+        with ESMTP id S229522AbjCXXGL (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 24 Mar 2023 19:06:11 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4191C31B
+        for <io-uring@vger.kernel.org>; Fri, 24 Mar 2023 16:06:02 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso6490712pjc.1
+        for <io-uring@vger.kernel.org>; Fri, 24 Mar 2023 16:06:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679699162; x=1682291162;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0R2Qo/DevL3S7I07sZXxzUcEeTRDJWKIO1fp4rnwmMc=;
+        b=xGEScFLFKDrqmP64ablG0Mu1PzbxP/P9VePi2vdNTpr4ldLpdwx3BWB6786hJMLOlY
+         SYMdFyeHfJSQcXA5nztoZ3LafsZUBIjDkSkSi/YzDKaCkK//slEFf3VTvqOLJwBRYAzV
+         BEX+dnmRu9pUBAPwihNdHpBXwAtbNIjB4gRa/6fhs2BlroYWZ1nZN0uYBx2bsQIy53TQ
+         Ipno8v5ZQlcl0Td8Gdw1E6TSZgUqgju9NgK1fERp3TE0vO9c2MQZbZIYue7t98ARv4Zz
+         Ow+2QITe4xKSdyoNv9GohHEsLz790670STsOZfR8MBWomZnNaM9oI5dQIi2Q7w8GgyOi
+         ZV5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679699162; x=1682291162;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0R2Qo/DevL3S7I07sZXxzUcEeTRDJWKIO1fp4rnwmMc=;
+        b=bXIDKqebGAV0wm2iZgRILnVv1/L6uvVYpEQuHekiFKi8DmdM5Xm/HRCF4AKRbIDKlC
+         BkA8HKa9TkYrcLeBgU7+0gavrqhfpjrSkmmIRbCt6hCauC6Z9xVKB5EGrqGa8AYG4QRT
+         aAplHfygHX45p2gqwtANDbtMwuMASmJ0Yqzwf8R8xJJn5O2jyDGo2EYfPw4l63EgSMWt
+         LTcEFcn+zRk9tkilFTkRZOcTldbgxjp7vnGLWiWJ29l7OgAaEa2C+1jwBV4ihm7sZE+z
+         C0CP54GyeNRaKOKmbJ+Na/HszFTR5TK2D42dJl/HDE2RfH29tZepgR8GgeLm66j5QF55
+         XJjQ==
+X-Gm-Message-State: AO0yUKXlCEJoxxKKGpDcloTfP0uXTgWQZIH/g2VKiCwM6iq9KrY9i42/
+        ePsGNpND/rUgq4EU2fYAZ2D0EwvX1te6x9HLOgZ0fg==
+X-Google-Smtp-Source: AK7set+aox7CHNUq1XODPth3ZPY674jFuwufbcjAt3NPnlOMXKCJZgsc3iV7JOPyAPoWVZ2iux3ZYQ==
+X-Received: by 2002:a05:6a20:748c:b0:cd:fc47:dd73 with SMTP id p12-20020a056a20748c00b000cdfc47dd73mr4856089pzd.2.1679699161647;
+        Fri, 24 Mar 2023 16:06:01 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id f62-20020a17090a704400b00234afca2498sm380080pjk.28.2023.03.24.16.06.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Mar 2023 16:06:01 -0700 (PDT)
+Message-ID: <9c3473b7-8063-4d14-1f8b-7a0e67979cf4@kernel.dk>
+Date:   Fri, 24 Mar 2023 17:06:00 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
 Subject: Re: [PATCH] io_uring/rw: transform single vector readv/writev into
  ubuf
-Message-ID: <ZB4nJStBSrPR9SYk@ovpn-8-20.pek2.redhat.com>
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     io-uring <io-uring@vger.kernel.org>
 References: <43cb1fb7-b30b-8df1-bba6-e50797d680c6@kernel.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43cb1fb7-b30b-8df1-bba6-e50797d680c6@kernel.dk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+ <ZB4nJStBSrPR9SYk@ovpn-8-20.pek2.redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ZB4nJStBSrPR9SYk@ovpn-8-20.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri, Mar 24, 2023 at 08:35:38AM -0600, Jens Axboe wrote:
-> It's very common to have applications that use vectored reads or writes,
-> even if they only pass in a single segment. Obviously they should be
-> using read/write at that point, but...
+On 3/24/23 4:41?PM, Ming Lei wrote:
+> On Fri, Mar 24, 2023 at 08:35:38AM -0600, Jens Axboe wrote:
+>> It's very common to have applications that use vectored reads or writes,
+>> even if they only pass in a single segment. Obviously they should be
+>> using read/write at that point, but...
+> 
+> Yeah, it is like fixing application issue in kernel side, :-)
 
-Yeah, it is like fixing application issue in kernel side, :-)
+It totally is, the same thing happens all of the time for readv as well.
+No amount of informing or documenting will ever fix that...
 
-> 
-> Vectored IO comes with the downside of needing to retain iovec state,
-> and hence they require and allocation and state copy if they end up
-> getting deferred. Additionally, they also require extra cleanup when
-> completed as the memory as the allocated state memory has to be freed.
-> 
-> Automatically transform single segment IORING_OP_{READV,WRITEV} into
-> IORING_OP_{READ,WRITE}, and hence into an ITER_UBUF. Outside of being
-> more efficient if needing deferral, ITER_UBUF is also more efficient
-> for normal processing compared to ITER_IOVEC, as they don't require
-> iteration. The latter is apparent when running peak testing, where
-> using IORING_OP_READV to randomly read 24 drives previously scored:
-> 
-> IOPS=72.54M, BW=35.42GiB/s, IOS/call=32/31
-> IOPS=73.35M, BW=35.81GiB/s, IOS/call=32/31
-> IOPS=72.71M, BW=35.50GiB/s, IOS/call=32/31
-> IOPS=73.29M, BW=35.78GiB/s, IOS/call=32/32
-> IOPS=73.45M, BW=35.86GiB/s, IOS/call=32/32
-> IOPS=73.19M, BW=35.74GiB/s, IOS/call=31/32
-> IOPS=72.89M, BW=35.59GiB/s, IOS/call=32/31
-> IOPS=73.07M, BW=35.68GiB/s, IOS/call=32/32
-> 
-> and after the change we get:
-> 
-> IOPS=77.31M, BW=37.75GiB/s, IOS/call=32/31
-> IOPS=77.32M, BW=37.75GiB/s, IOS/call=32/32
-> IOPS=77.45M, BW=37.81GiB/s, IOS/call=31/31
-> IOPS=77.47M, BW=37.83GiB/s, IOS/call=32/32
-> IOPS=77.14M, BW=37.67GiB/s, IOS/call=32/32
-> IOPS=77.14M, BW=37.66GiB/s, IOS/call=31/31
-> IOPS=77.37M, BW=37.78GiB/s, IOS/call=32/32
-> IOPS=77.25M, BW=37.72GiB/s, IOS/call=32/32
-> 
-> which is a nice win as well.
-> 
-> Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> 
-> ---
-> 
-> diff --git a/io_uring/rw.c b/io_uring/rw.c
-> index 4c233910e200..5c998754cb17 100644
-> --- a/io_uring/rw.c
-> +++ b/io_uring/rw.c
-> @@ -402,7 +402,22 @@ static struct iovec *__io_import_iovec(int ddir, struct io_kiocb *req,
->  			      req->ctx->compat);
->  	if (unlikely(ret < 0))
->  		return ERR_PTR(ret);
-> -	return iovec;
-> +	if (iter->nr_segs != 1)
-> +		return iovec;
-> +	/*
-> +	 * Convert to non-vectored request if we have a single segment. If we
-> +	 * need to defer the request, then we no longer have to allocate and
-> +	 * maintain a struct io_async_rw. Additionally, we won't have cleanup
-> +	 * to do at completion time
-> +	 */
-> +	rw->addr = (unsigned long) iter->iov[0].iov_base;
-> +	rw->len = iter->iov[0].iov_len;
-> +	iov_iter_ubuf(iter, ddir, iter->iov[0].iov_base, rw->len);
-> +	/* readv -> read distance is the same as writev -> write */
-> +	BUILD_BUG_ON((IORING_OP_READ - IORING_OP_READV) !=
-> +			(IORING_OP_WRITE - IORING_OP_WRITEV));
-> +	req->opcode += (IORING_OP_READ - IORING_OP_READV);
+Also see:
 
-It is a bit fragile to change ->opcode, which may need matched callbacks for
-the two OPs, also cause inconsistent opcode in traces.
+https://lore.kernel.org/linux-fsdevel/20230324204443.45950-1-axboe@kernel.dk/
 
-I am wondering why not play the magic in io_prep_rw() from beginning?
+with which I think I'll change this one to just be:
 
+	if (iter->iter_type == ITER_UBUF) {
+		rw->addr = iter->ubuf;
+		rw->len = iter->count;
+	/* readv -> read distance is the same as writev -> write */
+	BUILD_BUG_ON((IORING_OP_READ - IORING_OP_READV) !=
+			(IORING_OP_WRITE - IORING_OP_WRITEV));
+		req->opcode += (IORING_OP_READ - IORING_OP_READV);
+	}
 
-Thanks,
-Ming
+instead.
+
+We could also just skip it completely and just have liburing do the
+right thing if io_uring_prep_readv/writev is called with nr_segs == 1.
+Just turn it into a READ/WRITE at that point. If we do that, and with
+the above generic change, it's probably Good Enough. If you use
+READV/WRITEV and you're using the raw interface, then you're on your
+own.
+
+>> +	rw->addr = (unsigned long) iter->iov[0].iov_base;
+>> +	rw->len = iter->iov[0].iov_len;
+>> +	iov_iter_ubuf(iter, ddir, iter->iov[0].iov_base, rw->len);
+>> +	/* readv -> read distance is the same as writev -> write */
+>> +	BUILD_BUG_ON((IORING_OP_READ - IORING_OP_READV) !=
+>> +			(IORING_OP_WRITE - IORING_OP_WRITEV));
+>> +	req->opcode += (IORING_OP_READ - IORING_OP_READV);
+> 
+> It is a bit fragile to change ->opcode, which may need matched
+> callbacks for the two OPs, also cause inconsistent opcode in traces.
+> 
+> I am wondering why not play the magic in io_prep_rw() from beginning?
+
+It has to be done when importing the vec, we cannot really do it in
+prep... Well we could, but that'd be adding a bunch more code and
+duplicating part of the vec import.
+
+-- 
+Jens Axboe
 
