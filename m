@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4492C6FD1C
-	for <io-uring@archiver.kernel.org>; Fri, 24 Mar 2023 14:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FF27C77B60
+	for <io-uring@archiver.kernel.org>; Fri, 24 Mar 2023 14:00:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbjCXOAU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S231950AbjCXOAU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Fri, 24 Mar 2023 10:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbjCXOAF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 24 Mar 2023 10:00:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2601F1B30F
-        for <io-uring@vger.kernel.org>; Fri, 24 Mar 2023 06:59:01 -0700 (PDT)
+        with ESMTP id S232041AbjCXOAG (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 24 Mar 2023 10:00:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606E41ADC4
+        for <io-uring@vger.kernel.org>; Fri, 24 Mar 2023 06:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679666340;
+        s=mimecast20190719; t=1679666326;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=48AKVP9yTkY1ambTnk0VYH59I7XP/ONXFtXKzcPT0nk=;
-        b=GVX8EB/gkxYTzRli00L4O9gUli/7GKMH49AW2T8vvNjiZheBPhcglODgd6XeemY7JA4JX7
-        3b3Xfqb6UXazaYXorvDxqOfaritJx6JYGskTObvZC81wfYxrTt+3O/88aFAnqKrqOiubF/
-        nTIwRZcbiL4YUfJdFvfX/x5bHfdwgTA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5yLNYQmV+u2VRfFCW1SdaEMv1D/RkRV8OgRAz/vRVGU=;
+        b=NXqKzaKztPS2c6wdTX5OC5ljUUh/KHvwhEwGsgcaRy3MVHuwE47I2ev+7L+n3Ns4GQBaLf
+        EQM9NKMYDKUTLrCbpemIf8MtfOhULiIHrUDDbV+NKsx/GmW5nLkWXaV2J3m+V3QbdcvuH+
+        2YSwfzOtL2GuPUDlXzXCWHE5KYzLX1A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-197-CNqsnyGUN0CmZTTtEOvAmA-1; Fri, 24 Mar 2023 09:58:57 -0400
-X-MC-Unique: CNqsnyGUN0CmZTTtEOvAmA-1
+ us-mta-396-OR_HhzrAOzW_mW1BOzVbcg-1; Fri, 24 Mar 2023 09:58:43 -0400
+X-MC-Unique: OR_HhzrAOzW_mW1BOzVbcg-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FF27802C15;
-        Fri, 24 Mar 2023 13:58:56 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8BF851C0A593;
+        Fri, 24 Mar 2023 13:58:42 +0000 (UTC)
 Received: from localhost (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B60331121314;
-        Fri, 24 Mar 2023 13:58:55 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BAD331121318;
+        Fri, 24 Mar 2023 13:58:41 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-block@vger.kernel.org
@@ -47,9 +47,9 @@ Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Pavel Begunkov <asml.silence@gmail.com>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V4 10/17] block: ublk_drv: clean up several helpers
-Date:   Fri, 24 Mar 2023 21:58:01 +0800
-Message-Id: <20230324135808.855245-11-ming.lei@redhat.com>
+Subject: [PATCH V4 06/17] block: ublk_drv: mark device as LIVE before adding disk
+Date:   Fri, 24 Mar 2023 21:57:57 +0800
+Message-Id: <20230324135808.855245-7-ming.lei@redhat.com>
 In-Reply-To: <20230324135808.855245-1-ming.lei@redhat.com>
 References: <20230324135808.855245-1-ming.lei@redhat.com>
 MIME-Version: 1.0
@@ -59,64 +59,42 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Convert the following pattern in several helpers
-	if (Z)
-		return true
-	return false
-into:
-	return Z;
+IO can be started before add_disk() returns, such as reading parititon table,
+then the monitor work should work for making forward progress.
+
+So mark device as LIVE before adding disk, meantime change to
+DEAD if add_disk() fails.
 
 Reviewed-by: Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/block/ublk_drv.c | 18 +++++-------------
- 1 file changed, 5 insertions(+), 13 deletions(-)
+ drivers/block/ublk_drv.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 43c0b1247924..c35922f9a066 100644
+index d1d1c8d606c8..fb5a557afde8 100644
 --- a/drivers/block/ublk_drv.c
 +++ b/drivers/block/ublk_drv.c
-@@ -298,9 +298,7 @@ static inline bool ublk_can_use_task_work(const struct ublk_queue *ubq)
+@@ -1602,17 +1602,18 @@ static int ublk_ctrl_start_dev(struct ublk_device *ub, struct io_uring_cmd *cmd)
+ 		set_bit(GD_SUPPRESS_PART_SCAN, &disk->state);
  
- static inline bool ublk_need_get_data(const struct ublk_queue *ubq)
- {
--	if (ubq->flags & UBLK_F_NEED_GET_DATA)
--		return true;
--	return false;
-+	return ubq->flags & UBLK_F_NEED_GET_DATA;
- }
- 
- static struct ublk_device *ublk_get_device(struct ublk_device *ub)
-@@ -349,25 +347,19 @@ static inline int ublk_queue_cmd_buf_size(struct ublk_device *ub, int q_id)
- static inline bool ublk_queue_can_use_recovery_reissue(
- 		struct ublk_queue *ubq)
- {
--	if ((ubq->flags & UBLK_F_USER_RECOVERY) &&
--			(ubq->flags & UBLK_F_USER_RECOVERY_REISSUE))
--		return true;
--	return false;
-+	return (ubq->flags & UBLK_F_USER_RECOVERY) &&
-+			(ubq->flags & UBLK_F_USER_RECOVERY_REISSUE);
- }
- 
- static inline bool ublk_queue_can_use_recovery(
- 		struct ublk_queue *ubq)
- {
--	if (ubq->flags & UBLK_F_USER_RECOVERY)
--		return true;
--	return false;
-+	return ubq->flags & UBLK_F_USER_RECOVERY;
- }
- 
- static inline bool ublk_can_use_recovery(struct ublk_device *ub)
- {
--	if (ub->dev_info.flags & UBLK_F_USER_RECOVERY)
--		return true;
--	return false;
-+	return ub->dev_info.flags & UBLK_F_USER_RECOVERY;
- }
- 
- static void ublk_free_disk(struct gendisk *disk)
+ 	get_device(&ub->cdev_dev);
++	ub->dev_info.state = UBLK_S_DEV_LIVE;
+ 	ret = add_disk(disk);
+ 	if (ret) {
+ 		/*
+ 		 * Has to drop the reference since ->free_disk won't be
+ 		 * called in case of add_disk failure.
+ 		 */
++		ub->dev_info.state = UBLK_S_DEV_DEAD;
+ 		ublk_put_device(ub);
+ 		goto out_put_disk;
+ 	}
+ 	set_bit(UB_STATE_USED, &ub->state);
+-	ub->dev_info.state = UBLK_S_DEV_LIVE;
+ out_put_disk:
+ 	if (ret)
+ 		put_disk(disk);
 -- 
 2.39.2
 
