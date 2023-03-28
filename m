@@ -2,45 +2,52 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A75EC761AF
-	for <io-uring@archiver.kernel.org>; Tue, 28 Mar 2023 15:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09D3EC76196
+	for <io-uring@archiver.kernel.org>; Tue, 28 Mar 2023 17:34:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233990AbjC1P3E (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 28 Mar 2023 11:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
+        id S229622AbjC1ReW (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 28 Mar 2023 13:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234005AbjC1P2d (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Mar 2023 11:28:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E4AEB6E
-        for <io-uring@vger.kernel.org>; Tue, 28 Mar 2023 08:26:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680017175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cTxPpka+LhrPaNriA70AKnPyZgOXWneoLBopgtDoZwU=;
-        b=PiBmOXWD/9qKG90EpSQ9FO5821tz8JkwD8KaOqPHHWABoNcvxqIKKuuI/POWsvJXpuK8YB
-        fTH6g+CIT13CMfbiVl0NXnd7wQLxhLolXFM3I7/I8KjwxIsDhTGgex92k3t9Hk0OQX1CTs
-        voGl25naVb5MwW8E3+ey8Q1mANY9t3Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-240-PUrBr7alNgOUiXBQAgnAyQ-1; Tue, 28 Mar 2023 11:11:57 -0400
-X-MC-Unique: PUrBr7alNgOUiXBQAgnAyQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E7052823806;
-        Tue, 28 Mar 2023 15:11:49 +0000 (UTC)
-Received: from localhost (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9EB1D4020C83;
-        Tue, 28 Mar 2023 15:11:48 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
+        with ESMTP id S229452AbjC1ReV (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Mar 2023 13:34:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33386BBA8;
+        Tue, 28 Mar 2023 10:34:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1680024860; x=1711560860;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WTNJQqR6j0Fv4yewPZZeEkwpR+jxknlg6+8TkBHSQ54=;
+  b=Y9gvdJXg1IKOTv7EqWiOjWp3U6JuuVIPGxQNuwRvC+2n2VEenfxxrBQ0
+   Rp6M3XJo7wMvIXfSW+eIkuYNVevE9bf88bcd22KleknmVK5de+yTfe7Ip
+   BbrSj49YNDktmp9KKDGGEaUkPszsYSUwjVetbQRRS+N6LcN/lBmLgTMXO
+   c4qGPpV44J9vxnDTh32+OnUQKVttYt4MPTSe2K9ayovHFU81UYXauSQrz
+   j3AdJTwXHdjNvAEmuCsDFaGBs9VYbMDXvoOTfkc24ZGqmh5n6ZuRxC46C
+   fOCy+dTPp3AQFay//2jrndvUJrGZWQh4OBIAIDbMG1ZBi/lpZxVhYqteq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="342228785"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="342228785"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2023 10:34:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10663"; a="677452177"
+X-IronPort-AV: E=Sophos;i="5.98,297,1673942400"; 
+   d="scan'208";a="677452177"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 28 Mar 2023 10:34:15 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1phDD4-000IlR-1M;
+        Tue, 28 Mar 2023 17:34:14 +0000
+Date:   Wed, 29 Mar 2023 01:33:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        io-uring@vger.kernel.org, linux-block@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
         Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
         Bernd Schubert <bschubert@ddn.com>,
@@ -48,90 +55,124 @@ Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V5 13/16] block: ublk_drv: support to copy any part of request pages
-Date:   Tue, 28 Mar 2023 23:09:55 +0800
-Message-Id: <20230328150958.1253547-14-ming.lei@redhat.com>
-In-Reply-To: <20230328150958.1253547-1-ming.lei@redhat.com>
-References: <20230328150958.1253547-1-ming.lei@redhat.com>
+Subject: Re: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
+Message-ID: <202303290112.oiF4LrMI-lkp@intel.com>
+References: <20230328150958.1253547-3-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230328150958.1253547-3-ming.lei@redhat.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add 'offset' to 'struct ublk_map_data', so that ublk_copy_user_pages()
-can be used to copy any sub-buffer(linear mapped) of the request.
+Hi Ming,
 
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- drivers/block/ublk_drv.c | 31 ++++++++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 7 deletions(-)
+I love your patch! Perhaps something to improve:
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 0dc8eb04b9a5..32304942ab87 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -511,19 +511,36 @@ static void ublk_copy_io_pages(struct ublk_io_iter *data,
- 	}
- }
- 
-+static bool ublk_advance_io_iter(const struct request *req,
-+		struct ublk_io_iter *iter, unsigned int offset)
-+{
-+	struct bio *bio = req->bio;
-+
-+	for_each_bio(bio) {
-+		if (bio->bi_iter.bi_size > offset) {
-+			iter->bio = bio;
-+			iter->iter = bio->bi_iter;
-+			bio_advance_iter(iter->bio, &iter->iter, offset);
-+			return true;
-+		}
-+		offset -= bio->bi_iter.bi_size;
-+	}
-+	return false;
-+}
-+
- /*
-  * Copy data between request pages and io_iter, and 'offset'
-  * is the start point of linear offset of request.
-  */
- static size_t ublk_copy_user_pages(const struct request *req,
--		struct iov_iter *uiter, int dir)
-+		unsigned offset, struct iov_iter *uiter, int dir)
- {
--	struct ublk_io_iter iter = {
--		.bio	= req->bio,
--		.iter	= req->bio->bi_iter,
--	};
-+	struct ublk_io_iter iter;
- 	size_t done = 0;
- 
-+	if (!ublk_advance_io_iter(req, &iter, offset))
-+		return 0;
-+
- 	while (iov_iter_count(uiter) && iter.bio) {
- 		unsigned nr_pages;
- 		size_t len, off;
-@@ -576,7 +593,7 @@ static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
- 		import_single_range(dir, u64_to_user_ptr(io->addr), rq_bytes,
- 				&iov, &iter);
- 
--		return ublk_copy_user_pages(req, &iter, dir);
-+		return ublk_copy_user_pages(req, 0, &iter, dir);
- 	}
- 	return rq_bytes;
- }
-@@ -596,7 +613,7 @@ static int ublk_unmap_io(const struct ublk_queue *ubq,
- 
- 		import_single_range(dir, u64_to_user_ptr(io->addr), io->res,
- 				&iov, &iter);
--		return ublk_copy_user_pages(req, &iter, dir);
-+		return ublk_copy_user_pages(req, 0, &iter, dir);
- 	}
- 	return rq_bytes;
- }
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on linus/master v6.3-rc4 next-20230328]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20230328150958.1253547-3-ming.lei%40redhat.com
+patch subject: [PATCH V5 02/16] io_uring: add IORING_OP_FUSED_CMD
+config: x86_64-randconfig-a011-20230327 (https://download.01.org/0day-ci/archive/20230329/202303290112.oiF4LrMI-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1cdd7d77287ea8d97834b37825e63a727e860f6c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ming-Lei/io_uring-increase-io_kiocb-flags-into-64bit/20230328-232554
+        git checkout 1cdd7d77287ea8d97834b37825e63a727e860f6c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303290112.oiF4LrMI-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/nvme/host/ioctl.c:8:
+>> include/linux/io_uring.h:112:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
+                                                                            ^
+   include/linux/io_uring.h:113:57: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+                   unsigned issue_flags, const struct io_uring_bvec_buf *,
+                                                                         ^
+   include/linux/io_uring.h:114:15: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+                   unsigned int,
+                               ^
+   3 warnings generated.
+
+
+vim +112 include/linux/io_uring.h
+
+    93	
+    94	static inline void io_uring_files_cancel(void)
+    95	{
+    96		if (current->io_uring) {
+    97			io_uring_unreg_ringfd();
+    98			__io_uring_cancel(false);
+    99		}
+   100	}
+   101	static inline void io_uring_task_cancel(void)
+   102	{
+   103		if (current->io_uring)
+   104			__io_uring_cancel(true);
+   105	}
+   106	static inline void io_uring_free(struct task_struct *tsk)
+   107	{
+   108		if (tsk->io_uring)
+   109			__io_uring_free(tsk);
+   110	}
+   111	#else
+ > 112	static inline void io_fused_cmd_start_secondary_req(struct io_uring_cmd *,
+   113			unsigned issue_flags, const struct io_uring_bvec_buf *,
+   114			unsigned int,
+   115			void (*complete_tw_cb)(struct io_uring_cmd *, unsigned))
+   116	{
+   117	}
+   118	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+   119				      struct iov_iter *iter, void *ioucmd)
+   120	{
+   121		return -EOPNOTSUPP;
+   122	}
+   123	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+   124			ssize_t ret2, unsigned issue_flags)
+   125	{
+   126	}
+   127	static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+   128				void (*task_work_cb)(struct io_uring_cmd *, unsigned))
+   129	{
+   130	}
+   131	static inline struct sock *io_uring_get_socket(struct file *file)
+   132	{
+   133		return NULL;
+   134	}
+   135	static inline void io_uring_task_cancel(void)
+   136	{
+   137	}
+   138	static inline void io_uring_files_cancel(void)
+   139	{
+   140	}
+   141	static inline void io_uring_free(struct task_struct *tsk)
+   142	{
+   143	}
+   144	static inline const char *io_uring_get_opcode(u8 opcode)
+   145	{
+   146		return "";
+   147	}
+   148	#endif
+   149	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
