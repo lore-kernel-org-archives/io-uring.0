@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7DFB8C77B61
-	for <io-uring@archiver.kernel.org>; Tue, 28 Mar 2023 15:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 661CFC761AF
+	for <io-uring@archiver.kernel.org>; Tue, 28 Mar 2023 15:14:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbjC1POL (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 28 Mar 2023 11:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S233253AbjC1POP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 28 Mar 2023 11:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbjC1PNk (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Mar 2023 11:13:40 -0400
+        with ESMTP id S233252AbjC1PNn (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 28 Mar 2023 11:13:43 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B99710412
-        for <io-uring@vger.kernel.org>; Tue, 28 Mar 2023 08:12:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730661041C
+        for <io-uring@vger.kernel.org>; Tue, 28 Mar 2023 08:12:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680016258;
+        s=mimecast20190719; t=1680016265;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EO1Gc+65gs0ahiLFrwFbt1R8FOKbz4SZ+dA6YGYHpZ8=;
-        b=MugkxNNEzJrYA20RnSRJ3cxNCnbXFHHVa+t7GKgici+YpfDQmcDlxj8gAkjRSbHvtzMQDL
-        yZsKIifpH4HfvhowiB1Mql8bY9V+QBrsF7zguJUB0J0EozTGY8YuzatbMU4u4RW7t1todK
-        hMo7ohoZ4toxpYvvKuvwlh7pagfkn1g=
+        bh=siKKh0x5p/UqrBQe9QYa+cxMAYrLZPJZiVZtx1DzXec=;
+        b=Yl5FdRpJp7RFWDKyfDFsAPK0F5bnCA7FwbVoN1lxGqUm8CpdNfhfoAY1x7uEyFTPEKdhQH
+        F2DiweAWSTtWmru4/AWrrQIgDg1kJql0vYBrhf3kQ4R0y7lF/nPAf4/p6JoJl1Y8UQv982
+        MKAAU+B7MLoBUv65rWYxuEv38fuKb0s=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-37-r3840IcWO6iGys5QDdW3vA-1; Tue, 28 Mar 2023 11:10:53 -0400
-X-MC-Unique: r3840IcWO6iGys5QDdW3vA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+ us-mta-381-TbRalWqROt-cqgLg3YGivw-1; Tue, 28 Mar 2023 11:11:00 -0400
+X-MC-Unique: TbRalWqROt-cqgLg3YGivw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B37AC38149B1;
-        Tue, 28 Mar 2023 15:10:50 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E82993C17124;
+        Tue, 28 Mar 2023 15:10:58 +0000 (UTC)
 Received: from localhost (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B1FC7140EBF4;
-        Tue, 28 Mar 2023 15:10:49 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0416C1121330;
+        Tue, 28 Mar 2023 15:10:57 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-block@vger.kernel.org
@@ -48,152 +48,208 @@ Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V5 01/16] io_uring: increase io_kiocb->flags into 64bit
-Date:   Tue, 28 Mar 2023 23:09:43 +0800
-Message-Id: <20230328150958.1253547-2-ming.lei@redhat.com>
+Subject: [PATCH V5 03/16] io_uring: support normal SQE for fused command
+Date:   Tue, 28 Mar 2023 23:09:45 +0800
+Message-Id: <20230328150958.1253547-4-ming.lei@redhat.com>
 In-Reply-To: <20230328150958.1253547-1-ming.lei@redhat.com>
 References: <20230328150958.1253547-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The 32bit io_kiocb->flags has been used up, so extend it to 64bit.
+So far, the secondary sqe is saved in the 2nd 64 byte of primary sqe, which
+requires that SQE128 has to be enabled. Relax this limit by allowing to
+fetch secondary SQE from SQ directly.
+
+IORING_URING_CMD_FUSED_SPLIT_SQE has to be set for this usage, and
+userspace has to put secondary SQE following the primary sqe.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- include/linux/io_uring_types.h | 65 +++++++++++++++++-----------------
- io_uring/io_uring.c            |  2 +-
- 2 files changed, 34 insertions(+), 33 deletions(-)
+ include/uapi/linux/io_uring.h |  8 ++++++-
+ io_uring/fused_cmd.c          | 42 ++++++++++++++++++++++++++++-------
+ io_uring/io_uring.c           | 23 +++++++++++++------
+ io_uring/io_uring.h           |  2 ++
+ 4 files changed, 59 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 561fa421c453..dd8ef886730b 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -414,68 +414,68 @@ enum {
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 98b7f21623f9..b379677dff9d 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -235,9 +235,15 @@ enum io_uring_op {
+  * sqe->uring_cmd_flags
+  * IORING_URING_CMD_FIXED	use registered buffer; pass this flag
+  *				along with setting sqe->buf_index.
++ *
++ * IORING_URING_CMD_FUSED_SPLIT_SQE fused command only, secondary sqe is
++ * 				    provided from another new sqe; without
++ * 				    setting the flag, secondary sqe is from
++ * 				    2nd 64byte of this sqe, so SQE128 has
++ * 				    to be enabled
+  */
+ #define IORING_URING_CMD_FIXED	(1U << 0)
+-
++#define IORING_URING_CMD_FUSED_SPLIT_SQE	(1U << 1)
  
- enum {
- 	/* ctx owns file */
--	REQ_F_FIXED_FILE	= BIT(REQ_F_FIXED_FILE_BIT),
-+	REQ_F_FIXED_FILE	= BIT_ULL(REQ_F_FIXED_FILE_BIT),
- 	/* drain existing IO first */
--	REQ_F_IO_DRAIN		= BIT(REQ_F_IO_DRAIN_BIT),
-+	REQ_F_IO_DRAIN		= BIT_ULL(REQ_F_IO_DRAIN_BIT),
- 	/* linked sqes */
--	REQ_F_LINK		= BIT(REQ_F_LINK_BIT),
-+	REQ_F_LINK		= BIT_ULL(REQ_F_LINK_BIT),
- 	/* doesn't sever on completion < 0 */
--	REQ_F_HARDLINK		= BIT(REQ_F_HARDLINK_BIT),
-+	REQ_F_HARDLINK		= BIT_ULL(REQ_F_HARDLINK_BIT),
- 	/* IOSQE_ASYNC */
--	REQ_F_FORCE_ASYNC	= BIT(REQ_F_FORCE_ASYNC_BIT),
-+	REQ_F_FORCE_ASYNC	= BIT_ULL(REQ_F_FORCE_ASYNC_BIT),
- 	/* IOSQE_BUFFER_SELECT */
--	REQ_F_BUFFER_SELECT	= BIT(REQ_F_BUFFER_SELECT_BIT),
-+	REQ_F_BUFFER_SELECT	= BIT_ULL(REQ_F_BUFFER_SELECT_BIT),
- 	/* IOSQE_CQE_SKIP_SUCCESS */
--	REQ_F_CQE_SKIP		= BIT(REQ_F_CQE_SKIP_BIT),
-+	REQ_F_CQE_SKIP		= BIT_ULL(REQ_F_CQE_SKIP_BIT),
+ /*
+  * sqe->fsync_flags
+diff --git a/io_uring/fused_cmd.c b/io_uring/fused_cmd.c
+index 7af3ddb182c1..25577cbb0e9c 100644
+--- a/io_uring/fused_cmd.c
++++ b/io_uring/fused_cmd.c
+@@ -43,18 +43,34 @@ static inline void io_fused_cmd_update_link_flags(struct io_kiocb *req,
+ 		req->flags |= REQ_F_LINK;
+ }
  
- 	/* fail rest of links */
--	REQ_F_FAIL		= BIT(REQ_F_FAIL_BIT),
-+	REQ_F_FAIL		= BIT_ULL(REQ_F_FAIL_BIT),
- 	/* on inflight list, should be cancelled and waited on exit reliably */
--	REQ_F_INFLIGHT		= BIT(REQ_F_INFLIGHT_BIT),
-+	REQ_F_INFLIGHT		= BIT_ULL(REQ_F_INFLIGHT_BIT),
- 	/* read/write uses file position */
--	REQ_F_CUR_POS		= BIT(REQ_F_CUR_POS_BIT),
-+	REQ_F_CUR_POS		= BIT_ULL(REQ_F_CUR_POS_BIT),
- 	/* must not punt to workers */
--	REQ_F_NOWAIT		= BIT(REQ_F_NOWAIT_BIT),
-+	REQ_F_NOWAIT		= BIT_ULL(REQ_F_NOWAIT_BIT),
- 	/* has or had linked timeout */
--	REQ_F_LINK_TIMEOUT	= BIT(REQ_F_LINK_TIMEOUT_BIT),
-+	REQ_F_LINK_TIMEOUT	= BIT_ULL(REQ_F_LINK_TIMEOUT_BIT),
- 	/* needs cleanup */
--	REQ_F_NEED_CLEANUP	= BIT(REQ_F_NEED_CLEANUP_BIT),
-+	REQ_F_NEED_CLEANUP	= BIT_ULL(REQ_F_NEED_CLEANUP_BIT),
- 	/* already went through poll handler */
--	REQ_F_POLLED		= BIT(REQ_F_POLLED_BIT),
-+	REQ_F_POLLED		= BIT_ULL(REQ_F_POLLED_BIT),
- 	/* buffer already selected */
--	REQ_F_BUFFER_SELECTED	= BIT(REQ_F_BUFFER_SELECTED_BIT),
-+	REQ_F_BUFFER_SELECTED	= BIT_ULL(REQ_F_BUFFER_SELECTED_BIT),
- 	/* buffer selected from ring, needs commit */
--	REQ_F_BUFFER_RING	= BIT(REQ_F_BUFFER_RING_BIT),
-+	REQ_F_BUFFER_RING	= BIT_ULL(REQ_F_BUFFER_RING_BIT),
- 	/* caller should reissue async */
--	REQ_F_REISSUE		= BIT(REQ_F_REISSUE_BIT),
-+	REQ_F_REISSUE		= BIT_ULL(REQ_F_REISSUE_BIT),
- 	/* supports async reads/writes */
--	REQ_F_SUPPORT_NOWAIT	= BIT(REQ_F_SUPPORT_NOWAIT_BIT),
-+	REQ_F_SUPPORT_NOWAIT	= BIT_ULL(REQ_F_SUPPORT_NOWAIT_BIT),
- 	/* regular file */
--	REQ_F_ISREG		= BIT(REQ_F_ISREG_BIT),
-+	REQ_F_ISREG		= BIT_ULL(REQ_F_ISREG_BIT),
- 	/* has creds assigned */
--	REQ_F_CREDS		= BIT(REQ_F_CREDS_BIT),
-+	REQ_F_CREDS		= BIT_ULL(REQ_F_CREDS_BIT),
- 	/* skip refcounting if not set */
--	REQ_F_REFCOUNT		= BIT(REQ_F_REFCOUNT_BIT),
-+	REQ_F_REFCOUNT		= BIT_ULL(REQ_F_REFCOUNT_BIT),
- 	/* there is a linked timeout that has to be armed */
--	REQ_F_ARM_LTIMEOUT	= BIT(REQ_F_ARM_LTIMEOUT_BIT),
-+	REQ_F_ARM_LTIMEOUT	= BIT_ULL(REQ_F_ARM_LTIMEOUT_BIT),
- 	/* ->async_data allocated */
--	REQ_F_ASYNC_DATA	= BIT(REQ_F_ASYNC_DATA_BIT),
-+	REQ_F_ASYNC_DATA	= BIT_ULL(REQ_F_ASYNC_DATA_BIT),
- 	/* don't post CQEs while failing linked requests */
--	REQ_F_SKIP_LINK_CQES	= BIT(REQ_F_SKIP_LINK_CQES_BIT),
-+	REQ_F_SKIP_LINK_CQES	= BIT_ULL(REQ_F_SKIP_LINK_CQES_BIT),
- 	/* single poll may be active */
--	REQ_F_SINGLE_POLL	= BIT(REQ_F_SINGLE_POLL_BIT),
-+	REQ_F_SINGLE_POLL	= BIT_ULL(REQ_F_SINGLE_POLL_BIT),
- 	/* double poll may active */
--	REQ_F_DOUBLE_POLL	= BIT(REQ_F_DOUBLE_POLL_BIT),
-+	REQ_F_DOUBLE_POLL	= BIT_ULL(REQ_F_DOUBLE_POLL_BIT),
- 	/* request has already done partial IO */
--	REQ_F_PARTIAL_IO	= BIT(REQ_F_PARTIAL_IO_BIT),
-+	REQ_F_PARTIAL_IO	= BIT_ULL(REQ_F_PARTIAL_IO_BIT),
- 	/* fast poll multishot mode */
--	REQ_F_APOLL_MULTISHOT	= BIT(REQ_F_APOLL_MULTISHOT_BIT),
-+	REQ_F_APOLL_MULTISHOT	= BIT_ULL(REQ_F_APOLL_MULTISHOT_BIT),
- 	/* ->extra1 and ->extra2 are initialised */
--	REQ_F_CQE32_INIT	= BIT(REQ_F_CQE32_INIT_BIT),
-+	REQ_F_CQE32_INIT	= BIT_ULL(REQ_F_CQE32_INIT_BIT),
- 	/* recvmsg special flag, clear EPOLLIN */
--	REQ_F_CLEAR_POLLIN	= BIT(REQ_F_CLEAR_POLLIN_BIT),
-+	REQ_F_CLEAR_POLLIN	= BIT_ULL(REQ_F_CLEAR_POLLIN_BIT),
- 	/* hashed into ->cancel_hash_locked, protected by ->uring_lock */
--	REQ_F_HASH_LOCKED	= BIT(REQ_F_HASH_LOCKED_BIT),
-+	REQ_F_HASH_LOCKED	= BIT_ULL(REQ_F_HASH_LOCKED_BIT),
- };
++static const struct io_uring_sqe *fused_cmd_get_secondary_sqe(
++		struct io_ring_ctx *ctx, const struct io_uring_sqe *primary,
++		bool split_sqe)
++{
++	if (unlikely(!(ctx->flags & IORING_SETUP_SQE128) && !split_sqe))
++		return NULL;
++
++	if (split_sqe) {
++		const struct io_uring_sqe *sqe;
++
++		if (unlikely(!io_get_secondary_sqe(ctx, &sqe)))
++			return NULL;
++		return sqe;
++	}
++
++	return primary + 1;
++}
++
+ int io_fused_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	__must_hold(&req->ctx->uring_lock)
+ {
+ 	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
+-	const struct io_uring_sqe *secondary_sqe = sqe + 1;
++	const struct io_uring_sqe *secondary_sqe;
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	struct io_kiocb *secondary;
+ 	u8 secondary_op;
+ 	int ret;
+-
+-	if (unlikely(!(ctx->flags & IORING_SETUP_SQE128)))
+-		return -EINVAL;
++	bool split_sqe;
  
- typedef void (*io_req_tw_func_t)(struct io_kiocb *req, struct io_tw_state *ts);
-@@ -536,7 +536,8 @@ struct io_kiocb {
- 	 * and after selection it points to the buffer ID itself.
- 	 */
- 	u16				buf_index;
--	unsigned int			flags;
-+	u32				__pad;
-+	u64				flags;
+ 	if (unlikely(sqe->__pad1))
+ 		return -EINVAL;
+@@ -67,7 +83,12 @@ int io_fused_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 		return -EINVAL;
  
- 	struct io_cqe			cqe;
+ 	ioucmd->flags = READ_ONCE(sqe->uring_cmd_flags);
+-	if (unlikely(ioucmd->flags))
++	if (unlikely(ioucmd->flags & ~IORING_URING_CMD_FUSED_SPLIT_SQE))
++		return -EINVAL;
++
++	split_sqe = ioucmd->flags & IORING_URING_CMD_FUSED_SPLIT_SQE;
++	secondary_sqe = fused_cmd_get_secondary_sqe(ctx, sqe, split_sqe);
++	if (unlikely(!secondary_sqe))
+ 		return -EINVAL;
+ 
+ 	secondary_op = READ_ONCE(secondary_sqe->opcode);
+@@ -78,8 +99,12 @@ int io_fused_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	ioucmd->cmd_op = READ_ONCE(sqe->cmd_op);
+ 	req->fused_cmd_kbuf = NULL;
+ 
+-	/* take one extra reference for the secondary request */
+-	io_get_task_refs(1);
++	/*
++	 * Take one extra reference for the secondary request built from
++	 * builtin SQE since io_uring core code doesn't grab it for us
++	 */
++	if (!split_sqe)
++		io_get_task_refs(1);
+ 
+ 	ret = -ENOMEM;
+ 	if (unlikely(!io_alloc_req(ctx, &secondary)))
+@@ -103,7 +128,8 @@ int io_fused_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ fail_free_req:
+ 	io_free_req(secondary);
+ fail:
+-	current->io_uring->cached_refs += 1;
++	if (!split_sqe)
++		current->io_uring->cached_refs += 1;
+ 	return ret;
+ }
  
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 536940675c67..693558c4b10b 100644
+index ddbc9b9e51d3..9d9bc5b06ca2 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -4486,7 +4486,7 @@ static int __init io_uring_init(void)
- 	BUILD_BUG_ON(SQE_COMMON_FLAGS >= (1 << 8));
- 	BUILD_BUG_ON((SQE_VALID_FLAGS | SQE_COMMON_FLAGS) != SQE_VALID_FLAGS);
+@@ -2414,7 +2414,8 @@ static void io_commit_sqring(struct io_ring_ctx *ctx)
+  * used, it's important that those reads are done through READ_ONCE() to
+  * prevent a re-load down the line.
+  */
+-static bool io_get_sqe(struct io_ring_ctx *ctx, const struct io_uring_sqe **sqe)
++static inline bool io_get_sqe(struct io_ring_ctx *ctx,
++		const struct io_uring_sqe **sqe)
+ {
+ 	unsigned head, mask = ctx->sq_entries - 1;
+ 	unsigned sq_idx = ctx->cached_sq_head++ & mask;
+@@ -2443,19 +2444,26 @@ static bool io_get_sqe(struct io_ring_ctx *ctx, const struct io_uring_sqe **sqe)
+ 	return false;
+ }
  
--	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(int));
-+	BUILD_BUG_ON(__REQ_F_LAST_BIT > 8 * sizeof(u64));
++bool io_get_secondary_sqe(struct io_ring_ctx *ctx,
++		const struct io_uring_sqe **sqe)
++{
++	return io_get_sqe(ctx, sqe);
++}
++
+ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+ 	__must_hold(&ctx->uring_lock)
+ {
+ 	unsigned int entries = io_sqring_entries(ctx);
+-	unsigned int left;
++	unsigned old_head = ctx->cached_sq_head;
++	unsigned int left = 0;
+ 	int ret;
  
- 	BUILD_BUG_ON(sizeof(atomic_t) != sizeof(u32));
+ 	if (unlikely(!entries))
+ 		return 0;
+ 	/* make sure SQ entry isn't read before tail */
+-	ret = left = min3(nr, ctx->sq_entries, entries);
+-	io_get_task_refs(left);
+-	io_submit_state_start(&ctx->submit_state, left);
++	ret = min3(nr, ctx->sq_entries, entries);
++	io_get_task_refs(ret);
++	io_submit_state_start(&ctx->submit_state, ret);
+ 
+ 	do {
+ 		const struct io_uring_sqe *sqe;
+@@ -2474,11 +2482,12 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+ 		 */
+ 		if (unlikely(io_submit_sqe(ctx, req, sqe)) &&
+ 		    !(ctx->flags & IORING_SETUP_SUBMIT_ALL)) {
+-			left--;
++			left = 1;
+ 			break;
+ 		}
+-	} while (--left);
++	} while ((ctx->cached_sq_head - old_head) < ret);
+ 
++	left = ret - (ctx->cached_sq_head - old_head) - left;
+ 	if (unlikely(left)) {
+ 		ret -= left;
+ 		/* try again if it submitted nothing and can't allocate a req */
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index dd193c612348..8ede804b3caf 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -78,6 +78,8 @@ bool __io_alloc_req_refill(struct io_ring_ctx *ctx);
+ bool io_match_task_safe(struct io_kiocb *head, struct task_struct *task,
+ 			bool cancel_all);
+ 
++bool io_get_secondary_sqe(struct io_ring_ctx *ctx,
++		const struct io_uring_sqe **sqe);
+ int io_init_secondary_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
+ 		const struct io_uring_sqe *sqe);
  
 -- 
 2.39.2
