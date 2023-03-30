@@ -2,41 +2,41 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1903C761A6
-	for <io-uring@archiver.kernel.org>; Thu, 30 Mar 2023 11:39:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80249C77B6D
+	for <io-uring@archiver.kernel.org>; Thu, 30 Mar 2023 11:39:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjC3Lja (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 30 Mar 2023 07:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
+        id S231717AbjC3Ljc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 30 Mar 2023 07:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjC3LjF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Mar 2023 07:39:05 -0400
+        with ESMTP id S231735AbjC3LjI (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 30 Mar 2023 07:39:08 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950979EEA
-        for <io-uring@vger.kernel.org>; Thu, 30 Mar 2023 04:37:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA379A24B
+        for <io-uring@vger.kernel.org>; Thu, 30 Mar 2023 04:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1680176235;
+        s=mimecast20190719; t=1680176247;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VFZ4HTDXQ9j9mvF7AZrrlFzXBT77MGX93ZTMUgSaoQU=;
-        b=Sf938ObsnVvDcUkpicL6eWfttAGXp6Z+ykYxNXIWhOf8xW6mXiQSfGlrj+JwHEe/mq082q
-        t16JekFoSGaztBo28q3Vv/WnQe3meMNkaDW7PUEO10OMBuRAH1xw3bcuhDNxWycF6q56Vq
-        SKkCsU1g9Lv8CjqEJ3kIdOOuri5E5so=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=litTAfSrcuMc4HupIpacq5wCRTNFJAvtr6mPltpyGGw=;
+        b=HBEcF3yzM6kI3L/mS8foS2fE1MFCNPVCMFr17P+zaSAxvb62hGnRopdf3fQ5eNrDNxVYXS
+        J5RtSQyZ2gh6h3G1en3fSE6pDBWZuvuJQfXhe6sO557ggPHrIzbO7JruylVABMMPisPmu+
+        a8F2GYM7BQcJdlFqrPLYVQNMPTHHM7U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-137-5dSRH69cN2WxjCzoc7DlOA-1; Thu, 30 Mar 2023 07:37:11 -0400
-X-MC-Unique: 5dSRH69cN2WxjCzoc7DlOA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+ us-mta-553-Z5OlN6ElNumhZQ3Ooc8j3g-1; Thu, 30 Mar 2023 07:37:22 -0400
+X-MC-Unique: Z5OlN6ElNumhZQ3Ooc8j3g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 532C3101A552;
-        Thu, 30 Mar 2023 11:37:10 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 948F628237CE;
+        Thu, 30 Mar 2023 11:37:21 +0000 (UTC)
 Received: from localhost (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5BB562166B33;
-        Thu, 30 Mar 2023 11:37:08 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AB2CF4042AC0;
+        Thu, 30 Mar 2023 11:37:20 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-block@vger.kernel.org
@@ -48,139 +48,89 @@ Cc:     linux-kernel@vger.kernel.org, Miklos Szeredi <mszeredi@redhat.com>,
         Stefan Hajnoczi <stefanha@redhat.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V6 06/17] io_uring: support OP_SEND_ZC/OP_RECV for fused secondary request
-Date:   Thu, 30 Mar 2023 19:36:19 +0800
-Message-Id: <20230330113630.1388860-7-ming.lei@redhat.com>
+Subject: [PATCH V6 09/17] block: ublk_drv: add two helpers to clean up map/unmap request
+Date:   Thu, 30 Mar 2023 19:36:22 +0800
+Message-Id: <20230330113630.1388860-10-ming.lei@redhat.com>
 In-Reply-To: <20230330113630.1388860-1-ming.lei@redhat.com>
 References: <20230330113630.1388860-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Start to allow fused secondary request to support OP_SEND_ZC/OP_RECV, and
-the buffer can be retrieved from primary request.
+Add two helpers for checking if map/unmap is needed, since we may have
+passthrough request which needs map or unmap in future, such as for
+supporting report zones.
 
-Once secondary request is completed, the primary command will be done and
-the associated buffer is returned back.
+Meantime don't mark ublk_copy_user_pages as inline since this function
+is a bit fat now.
 
+Reviewed-by: Ziyang Zhang <ZiyangZhang@linux.alibaba.com>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- io_uring/net.c   | 30 ++++++++++++++++++++++++++++--
- io_uring/opdef.c |  6 ++++++
- 2 files changed, 34 insertions(+), 2 deletions(-)
+ drivers/block/ublk_drv.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 4040cf093318..f0fce1db7596 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -16,6 +16,7 @@
- #include "net.h"
- #include "notif.h"
- #include "rsrc.h"
-+#include "fused_cmd.h"
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index c73b2dba25ce..f87597a7d679 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -488,8 +488,7 @@ static inline unsigned ublk_copy_io_pages(struct ublk_io_iter *data,
+ 	return done;
+ }
  
- #if defined(CONFIG_NET)
- struct io_shutdown {
-@@ -69,6 +70,13 @@ struct io_sr_msg {
- 	struct io_kiocb 		*notif;
- };
- 
-+#define user_ptr_to_u64(x) (		\
-+{					\
-+	typecheck(void __user *, (x));		\
-+	(u64)(unsigned long)(x);	\
-+}					\
-+)
-+
- static inline bool io_check_multishot(struct io_kiocb *req,
- 				      unsigned int issue_flags)
+-static inline int ublk_copy_user_pages(struct ublk_map_data *data,
+-		bool to_vm)
++static int ublk_copy_user_pages(struct ublk_map_data *data, bool to_vm)
  {
-@@ -379,7 +387,11 @@ int io_send(struct io_kiocb *req, unsigned int issue_flags)
- 	if (unlikely(!sock))
- 		return -ENOTSOCK;
+ 	const unsigned int gup_flags = to_vm ? FOLL_WRITE : 0;
+ 	const unsigned long start_vm = data->io->addr;
+@@ -525,6 +524,16 @@ static inline int ublk_copy_user_pages(struct ublk_map_data *data,
+ 	return done;
+ }
  
--	ret = import_ubuf(ITER_SOURCE, sr->buf, sr->len, &msg.msg_iter);
-+	if (!io_req_use_fused_buf(req))
-+		ret = import_ubuf(ITER_SOURCE, sr->buf, sr->len, &msg.msg_iter);
-+	else
-+		ret = io_import_buf_from_fused(user_ptr_to_u64(sr->buf),
-+				sr->len, ITER_SOURCE, &msg.msg_iter, req);
- 	if (unlikely(ret))
- 		return ret;
++static inline bool ublk_need_map_req(const struct request *req)
++{
++	return ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE;
++}
++
++static inline bool ublk_need_unmap_req(const struct request *req)
++{
++	return ublk_rq_has_data(req) && req_op(req) == REQ_OP_READ;
++}
++
+ static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
+ 		struct ublk_io *io)
+ {
+@@ -535,7 +544,7 @@ static int ublk_map_io(const struct ublk_queue *ubq, const struct request *req,
+ 	 * context and the big benefit is that pinning pages in current
+ 	 * context is pretty fast, see ublk_pin_user_pages
+ 	 */
+-	if (ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE) {
++	if (ublk_need_map_req(req)) {
+ 		struct ublk_map_data data = {
+ 			.ubq	=	ubq,
+ 			.rq	=	req,
+@@ -556,7 +565,7 @@ static int ublk_unmap_io(const struct ublk_queue *ubq,
+ {
+ 	const unsigned int rq_bytes = blk_rq_bytes(req);
  
-@@ -870,7 +882,11 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 		sr->buf = buf;
+-	if (req_op(req) == REQ_OP_READ && ublk_rq_has_data(req)) {
++	if (ublk_need_unmap_req(req)) {
+ 		struct ublk_map_data data = {
+ 			.ubq	=	ubq,
+ 			.rq	=	req,
+@@ -772,7 +781,7 @@ static inline void __ublk_rq_task_work(struct request *req,
+ 		return;
  	}
  
--	ret = import_ubuf(ITER_DEST, sr->buf, len, &msg.msg_iter);
-+	if (!io_req_use_fused_buf(req))
-+		ret = import_ubuf(ITER_DEST, sr->buf, len, &msg.msg_iter);
-+	else
-+		ret = io_import_buf_from_fused(user_ptr_to_u64(sr->buf),
-+				sr->len, ITER_DEST, &msg.msg_iter, req);
- 	if (unlikely(ret))
- 		goto out_free;
- 
-@@ -984,6 +1000,9 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (zc->flags & IORING_RECVSEND_FIXED_BUF) {
- 		unsigned idx = READ_ONCE(sqe->buf_index);
- 
-+		if (io_req_use_fused_buf(req))
-+			return -EINVAL;
-+
- 		if (unlikely(idx >= ctx->nr_user_bufs))
- 			return -EFAULT;
- 		idx = array_index_nospec(idx, ctx->nr_user_bufs);
-@@ -1120,8 +1139,15 @@ int io_send_zc(struct io_kiocb *req, unsigned int issue_flags)
- 		if (unlikely(ret))
- 			return ret;
- 		msg.sg_from_iter = io_sg_from_iter;
-+	} else if (io_req_use_fused_buf(req)) {
-+		ret = io_import_buf_from_fused(user_ptr_to_u64(zc->buf),
-+				zc->len, ITER_SOURCE, &msg.msg_iter, req);
-+		if (unlikely(ret))
-+			return ret;
-+		msg.sg_from_iter = io_sg_from_iter;
- 	} else {
- 		io_notif_set_extended(zc->notif);
-+
- 		ret = import_ubuf(ITER_SOURCE, zc->buf, zc->len, &msg.msg_iter);
- 		if (unlikely(ret))
- 			return ret;
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index d81c9afd65ed..c31badf4fe45 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -273,6 +273,8 @@ const struct io_issue_def io_issue_defs[] = {
- 		.audit_skip		= 1,
- 		.ioprio			= 1,
- 		.manual_alloc		= 1,
-+		.fused_secondary	= 1,
-+		.buf_dir		= READ,
- #if defined(CONFIG_NET)
- 		.prep			= io_sendmsg_prep,
- 		.issue			= io_send,
-@@ -287,6 +289,8 @@ const struct io_issue_def io_issue_defs[] = {
- 		.buffer_select		= 1,
- 		.audit_skip		= 1,
- 		.ioprio			= 1,
-+		.fused_secondary	= 1,
-+		.buf_dir		= WRITE,
- #if defined(CONFIG_NET)
- 		.prep			= io_recvmsg_prep,
- 		.issue			= io_recv,
-@@ -413,6 +417,8 @@ const struct io_issue_def io_issue_defs[] = {
- 		.audit_skip		= 1,
- 		.ioprio			= 1,
- 		.manual_alloc		= 1,
-+		.fused_secondary	= 1,
-+		.buf_dir		= READ,
- #if defined(CONFIG_NET)
- 		.prep			= io_send_zc_prep,
- 		.issue			= io_send_zc,
+-	if (ublk_need_get_data(ubq) && (req_op(req) == REQ_OP_WRITE)) {
++	if (ublk_need_get_data(ubq) && ublk_need_map_req(req)) {
+ 		/*
+ 		 * We have not handled UBLK_IO_NEED_GET_DATA command yet,
+ 		 * so immepdately pass UBLK_IO_RES_NEED_GET_DATA to ublksrv
 -- 
 2.39.2
 
