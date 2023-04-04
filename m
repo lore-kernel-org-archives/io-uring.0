@@ -2,60 +2,60 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 90140C77B62
-	for <io-uring@archiver.kernel.org>; Tue,  4 Apr 2023 12:41:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E03F4C6FD1D
+	for <io-uring@archiver.kernel.org>; Tue,  4 Apr 2023 12:41:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234875AbjDDMlH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S234198AbjDDMlH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Tue, 4 Apr 2023 08:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbjDDMlA (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 4 Apr 2023 08:41:00 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A0ADC;
+        with ESMTP id S234944AbjDDMlB (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 4 Apr 2023 08:41:01 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA941BC7;
         Tue,  4 Apr 2023 05:40:58 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id h8so130056381ede.8;
+Received: by mail-ed1-x52f.google.com with SMTP id cn12so130060658edb.4;
         Tue, 04 Apr 2023 05:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680612056;
+        d=gmail.com; s=20210112; t=1680612058;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/Cxnc6JJ4qGOse8EhEinOqNQd7wwXuaUvmBXkiroock=;
-        b=gFUqc+zKGga9k0qzAdqlH1gM+8CtYlpy+pGMckAxAwFPuqueTJ86Ciw5ZRqgLgqU2l
-         sJAQXjA8vS2mlG1UyQYjtuA91TI9s8OPE95zwTJ7jy7x/B17xFADrqup42Q7+jCN1YRJ
-         FDBKPxaFtwNPt9/Llb8vouwQD8tchPYs7zK0dommYY3w8fRPjeA2NhDQ7wgoNGpZnqn+
-         dF33eg4jfLs+Avp61orMDDdRwPyVx0htnPED3iN3Zxl4bU3MVsGBpZ1lvQRA2o5ao+Ly
-         RcsGJIFsxP8iBp+I/TLQj2mja4v3csBKd+0JdQImLefKd0NdT6bo3xFGJMv+YGqoE5O/
-         tHjg==
+        bh=1CwMuzyH2dEdSI/CO0b8pg+tuSUqIX+/sHQt7TiN5ZM=;
+        b=X/J1llEltWTp4lG2E3lTY7RTuXuKmHYGHhZGxSbzgjJt2spsoc45a6S/UqZmy9U95v
+         3AJyxDDnt6hnM3wGswTBwN1w1rruCJajzH0hS0det28+p4PqaXO8No707bkfYlIH4gT4
+         Ex2bhCgpaA6oAvTi8s4cYa4nscj59hZrpo1b3ng1sk6YDj3US4/VIvvsp4VvCSLg+Ujx
+         h9EEbua/G4akmIB9ncr08dx49v8Qc70b1mVxMeD3YoySqg/Uc5IN/XwrJFru7RQb+Ybl
+         izyZWc77RLGkl1EcLvSEk2Bp2iPDemOm0BTIkg8dWFmwopEODxnBjKwkbHz2tviJFjob
+         IU8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680612056;
+        d=1e100.net; s=20210112; t=1680612058;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/Cxnc6JJ4qGOse8EhEinOqNQd7wwXuaUvmBXkiroock=;
-        b=TIP5tfsgWtcPYzmQog6VZESsX7ckn0xKEj5wilmvaOpR47p+A9I9UgP8Mrw/h2u0Wg
-         2riOq4jVrGQq/X3rEHDr417+zfCevCcZ047TmVYHjTeQRk18hMLqnXGz+S9B50x4Lwze
-         754Ze+My6LWnzmdUYSHcUAfnINjB9KF8eWLCF4Ndpixwedg2MjTDw2kXJujf/okBPB8R
-         40uTMOYsw23L773p1T9twlenkXQUaWN3CyHtzDpHSzlXbCXf7BBwhK8kfbZyROa4k9fa
-         LGk9NF0I4GZ3BQcf3i/hJZQtFW54GsCa7tIjk7Z7XCnN9n+jOSgj1XH3havYqhBHx0JO
-         9XoQ==
-X-Gm-Message-State: AAQBX9fjHuGdYy0MkDfEG01s/nxb1V1AVJAnlXUNrYvWgh+Zw5+bbxA9
-        xre0LO21O7K8tDlengKhl9qG0/hAal4=
-X-Google-Smtp-Source: AKy350YYzm+GVFL3vQsbfEu6LFsQ68PoEQzGtfDtqcBT4Jn3OdQUuwCP6/jYVzozfXOqP2JwDswLyQ==
-X-Received: by 2002:a17:906:3012:b0:92f:ccf3:f0ce with SMTP id 18-20020a170906301200b0092fccf3f0cemr2131169ejz.45.1680612056699;
-        Tue, 04 Apr 2023 05:40:56 -0700 (PDT)
+        bh=1CwMuzyH2dEdSI/CO0b8pg+tuSUqIX+/sHQt7TiN5ZM=;
+        b=RORmEIuMWGFX33I16cb6QNsDJXHrR13ShHDaBgvBSPTZw50EamLC490Rc0GncfE4wv
+         7s4LmboPKH1ClcLrVM6NFGw1pveRK+udra3LEMXle55Xi3IatgYBgYFjqsFWDg3IdmCT
+         c91zEkMf2ZPHoujLaLBrZ88qOc39yYzJ+Q9j0rKBqGhyd50Bi+CS6RkzPPKX5ldIyLMx
+         I2cva+YBgZBnyA1SRsVpVKpJpDkW7eeN4/JMfK7FvVtaOl53GMbs8irKCnbEbs9Q53h7
+         Fxnvt/DuLQEeYghNBggxIEjaqnIiagmN67d96jFxms9BoRDMsPPu4gBblLICiYncnx60
+         K5aA==
+X-Gm-Message-State: AAQBX9eWMsB/9a17Mz/cGOp3xStxoDBFImnJ9V/r1fGIbbgE6OqWg8j8
+        AEjTDpEc+ADikCg72l+KVgJeBR4VWYw=
+X-Google-Smtp-Source: AKy350a8IAMbejy0JcLdVVhKR7yjVPSmMspTAxjLXFflw+wYwvMDI7z6y7yHHO3nQN94bCFvevvEjw==
+X-Received: by 2002:a17:907:8c10:b0:8f0:143d:ee34 with SMTP id ta16-20020a1709078c1000b008f0143dee34mr2624104ejc.1.1680612057944;
+        Tue, 04 Apr 2023 05:40:57 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::2:2b22])
-        by smtp.gmail.com with ESMTPSA id g8-20020a170906394800b008cafeec917dsm5978851eje.101.2023.04.04.05.40.56
+        by smtp.gmail.com with ESMTPSA id g8-20020a170906394800b008cafeec917dsm5978851eje.101.2023.04.04.05.40.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Apr 2023 05:40:56 -0700 (PDT)
+        Tue, 04 Apr 2023 05:40:57 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/13] io_uring/rsrc: add lockdep sanity checks
-Date:   Tue,  4 Apr 2023 13:39:55 +0100
-Message-Id: <b50d5f156ac41450029796738c1dfd22a521df7a.1680576071.git.asml.silence@gmail.com>
+Subject: [PATCH v2 13/13] io_uring/rsrc: add custom limit for node caching
+Date:   Tue,  4 Apr 2023 13:39:57 +0100
+Message-Id: <d0cd538b944dac0bf878e276fc0199f21e6bccea.1680576071.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <cover.1680576071.git.asml.silence@gmail.com>
 References: <cover.1680576071.git.asml.silence@gmail.com>
@@ -65,76 +65,90 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We should hold ->uring_lock while putting nodes with io_put_rsrc_node(),
-add a lockdep check for that.
+The number of entries in the rsrc node cache is limited to 512, which
+still seems unnecessarily large. Add per cache thresholds and set to
+to 32 for the rsrc node cache.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 4 ++--
- io_uring/rsrc.c     | 2 +-
- io_uring/rsrc.h     | 6 ++++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ include/linux/io_uring_types.h | 1 +
+ io_uring/alloc_cache.h         | 6 ++++--
+ io_uring/io_uring.c            | 9 ++++++---
+ io_uring/rsrc.h                | 2 ++
+ 4 files changed, 13 insertions(+), 5 deletions(-)
 
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 5d772e36e7fc..4a6ce03a4903 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -190,6 +190,7 @@ struct io_ev_fd {
+ struct io_alloc_cache {
+ 	struct io_wq_work_node	list;
+ 	unsigned int		nr_cached;
++	unsigned int		max_cached;
+ 	size_t			elem_size;
+ };
+ 
+diff --git a/io_uring/alloc_cache.h b/io_uring/alloc_cache.h
+index 2fbecaa3a1ba..851a527afb5e 100644
+--- a/io_uring/alloc_cache.h
++++ b/io_uring/alloc_cache.h
+@@ -13,7 +13,7 @@ struct io_cache_entry {
+ static inline bool io_alloc_cache_put(struct io_alloc_cache *cache,
+ 				      struct io_cache_entry *entry)
+ {
+-	if (cache->nr_cached < IO_ALLOC_CACHE_MAX) {
++	if (cache->nr_cached < cache->max_cached) {
+ 		cache->nr_cached++;
+ 		wq_stack_add_head(&entry->node, &cache->list);
+ 		/* KASAN poisons object */
+@@ -38,10 +38,12 @@ static inline struct io_cache_entry *io_alloc_cache_get(struct io_alloc_cache *c
+ 	return NULL;
+ }
+ 
+-static inline void io_alloc_cache_init(struct io_alloc_cache *cache, size_t size)
++static inline void io_alloc_cache_init(struct io_alloc_cache *cache,
++				       unsigned max_nr, size_t size)
+ {
+ 	cache->list.next = NULL;
+ 	cache->nr_cached = 0;
++	cache->max_cached = max_nr;
+ 	cache->elem_size = size;
+ }
+ 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 419d6f42935f..da36fa1eeac9 100644
+index da36fa1eeac9..ae90d2753e0d 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -1002,7 +1002,7 @@ static void __io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
- 
- 	if (rsrc_node) {
- 		io_ring_submit_lock(ctx, issue_flags);
--		io_put_rsrc_node(rsrc_node);
-+		io_put_rsrc_node(ctx, rsrc_node);
- 		io_ring_submit_unlock(ctx, issue_flags);
- 	}
- }
-@@ -1123,7 +1123,7 @@ static __cold void io_free_req_tw(struct io_kiocb *req, struct io_tw_state *ts)
- 
- 	if (req->rsrc_node) {
- 		io_tw_lock(ctx, ts);
--		io_put_rsrc_node(req->rsrc_node);
-+		io_put_rsrc_node(ctx, req->rsrc_node);
- 	}
- 	io_dismantle_req(req);
- 	io_put_task_remote(req->task, 1);
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index cbf563fcb053..95edc5f73204 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -236,7 +236,7 @@ void io_rsrc_node_switch(struct io_ring_ctx *ctx,
- 
- 		atomic_inc(&data_to_kill->refs);
- 		/* put master ref */
--		io_put_rsrc_node(rsrc_node);
-+		io_put_rsrc_node(ctx, rsrc_node);
- 		ctx->rsrc_node = NULL;
- 	}
- 
+@@ -310,9 +310,12 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	INIT_LIST_HEAD(&ctx->sqd_list);
+ 	INIT_LIST_HEAD(&ctx->cq_overflow_list);
+ 	INIT_LIST_HEAD(&ctx->io_buffers_cache);
+-	io_alloc_cache_init(&ctx->rsrc_node_cache, sizeof(struct io_rsrc_node));
+-	io_alloc_cache_init(&ctx->apoll_cache, sizeof(struct async_poll));
+-	io_alloc_cache_init(&ctx->netmsg_cache, sizeof(struct io_async_msghdr));
++	io_alloc_cache_init(&ctx->rsrc_node_cache, IO_NODE_ALLOC_CACHE_MAX,
++			    sizeof(struct io_rsrc_node));
++	io_alloc_cache_init(&ctx->apoll_cache, IO_ALLOC_CACHE_MAX,
++			    sizeof(struct async_poll));
++	io_alloc_cache_init(&ctx->netmsg_cache, IO_ALLOC_CACHE_MAX,
++			    sizeof(struct io_async_msghdr));
+ 	init_completion(&ctx->ref_comp);
+ 	xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
+ 	mutex_init(&ctx->uring_lock);
 diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index 3b9f4c57c47c..cf24c3fd701f 100644
+index 7ab9b2b2e757..8729f2fee256 100644
 --- a/io_uring/rsrc.h
 +++ b/io_uring/rsrc.h
-@@ -119,8 +119,10 @@ int io_register_rsrc_update(struct io_ring_ctx *ctx, void __user *arg,
- int io_register_rsrc(struct io_ring_ctx *ctx, void __user *arg,
- 			unsigned int size, unsigned int type);
+@@ -6,6 +6,8 @@
  
--static inline void io_put_rsrc_node(struct io_rsrc_node *node)
-+static inline void io_put_rsrc_node(struct io_ring_ctx *ctx, struct io_rsrc_node *node)
- {
-+	lockdep_assert_held(&ctx->uring_lock);
+ #include "alloc_cache.h"
+ 
++#define IO_NODE_ALLOC_CACHE_MAX 32
 +
- 	if (node && !--node->refs)
- 		io_rsrc_node_ref_zero(node);
- }
-@@ -128,7 +130,7 @@ static inline void io_put_rsrc_node(struct io_rsrc_node *node)
- static inline void io_req_put_rsrc_locked(struct io_kiocb *req,
- 					  struct io_ring_ctx *ctx)
- {
--	io_put_rsrc_node(req->rsrc_node);
-+	io_put_rsrc_node(ctx, req->rsrc_node);
- }
- 
- static inline void io_charge_rsrc_node(struct io_ring_ctx *ctx,
+ #define IO_RSRC_TAG_TABLE_SHIFT	(PAGE_SHIFT - 3)
+ #define IO_RSRC_TAG_TABLE_MAX	(1U << IO_RSRC_TAG_TABLE_SHIFT)
+ #define IO_RSRC_TAG_TABLE_MASK	(IO_RSRC_TAG_TABLE_MAX - 1)
 -- 
 2.39.1
 
