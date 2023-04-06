@@ -2,111 +2,142 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C439C761A6
-	for <io-uring@archiver.kernel.org>; Thu,  6 Apr 2023 13:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20970C76196
+	for <io-uring@archiver.kernel.org>; Thu,  6 Apr 2023 13:21:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238297AbjDFNVC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S238212AbjDFNVC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 6 Apr 2023 09:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48614 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238083AbjDFNU5 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 6 Apr 2023 09:20:57 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B03B9ED7;
-        Thu,  6 Apr 2023 06:20:25 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-930e691e34eso108810266b.0;
-        Thu, 06 Apr 2023 06:20:25 -0700 (PDT)
+        with ESMTP id S238263AbjDFNU6 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 6 Apr 2023 09:20:58 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB68493EA;
+        Thu,  6 Apr 2023 06:20:26 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-4fa3ca4090fso1302502a12.3;
+        Thu, 06 Apr 2023 06:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680787223;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQnJmNTlCd7Gp0yJXnxtAGpYcfqiysBD6ZHlqPg+cT4=;
-        b=exUjrwimKbVYwFi6ACeSjkaV6qQ0gaUUI8LUhOFpD+Fb5H79XdpADBGsggkysr/VXo
-         iXvsPS5AcVPyuo5XVVrrxQ/o/8KDDdI5QOvl/1XaSoXUwfUj6e61S3Q6ARJwj8t0ST0k
-         k5IJSr+EHMZLlCUvcQqfaq+7jw6g2MTvb7F8eyNyS/bdzcZdoeDm10ul1c26HlVBB1QN
-         3t77rSdaPl6WEnFpIvrMYlqcUI6hipLKS9uRVO0LYuDlXbuFYkc8h1mct4i++Tt4hgna
-         0Enchjt+/IfTdro4Chbr1yIVFlwjf6Vfk4Zs41uzwfIKyAHyuAA4X6ARs4+fYZhzy5Md
-         lPMw==
+        d=gmail.com; s=20210112; t=1680787225;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xie9XCgTu7FI1l5nk9+NmrYSBfE45KwR9N84Pl/XEno=;
+        b=pFyiffwvrKrL+a8mRQ0WHHlDdErDsDHxBH2WvrPhqvMx4xeIDEy54bMPIGaNhTh5sl
+         9HcBDYDAR7zFEIf1JVYoPBKsshPGnGDKFPe4zo6sLUV87yOuYvs0H22N05EZAxZBcHaY
+         lkfpTaKYz6RIG0YbDSWq8f9gDlm78HPT9gyj6D/mhy20A17rqbF/YSHhVI1x4u1bHdce
+         RoaPBPMVo7Z+IGtZaqXrwhJhubtmSIYbFDSCLIUmNL+bL/szHyjdbw3GRGlKxE3sqH1H
+         5OEF9g6pONaI6J2C5rKCQRWdJphEazXBrXzmFtTWLA6Ac6+NGHWZ8YA8cU2tXmiyxn6L
+         C+zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787223;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bQnJmNTlCd7Gp0yJXnxtAGpYcfqiysBD6ZHlqPg+cT4=;
-        b=Yu6hi3QkzhgSr5bgmSfpX+QNeEV+0schqx6JzJuYdzrgYdHbbpSH1t1phBYBm+UWQ5
-         tgBlq0R6st+JVIjkaQQjgDVSrY16noWnwRNKRGJiHUQTLYNcX2fXcPPRB12ElX8E6Ad0
-         bfZwoZGcmhycw3WETrGmL6Q2nOz8qDtKkfHW7h+vCxcCeZGSmaWtbSoQCRlTKpx8Izwv
-         m8fVVw9JdfBEFf5I8ZPVREw2x3WFJNZ0cq5ocXRHXn9KCfsYg7frMDicuGB49tMWQyKZ
-         FCgbrB/rTSPOjcBgKy+Mv8zOGZIe3P+WSEh7ke+K2MyoiLAqPyFo0+b3Zcwzw6jcv1jR
-         bXMQ==
-X-Gm-Message-State: AAQBX9d6rexyqpHwEdSGAi0dx7VNaagZqU1ukkYLVQm75RmuvFQg1b2M
-        v5hxt4lifjlvHvVn+MU8xcC4CsvB5z8=
-X-Google-Smtp-Source: AKy350bC1hRKUyPZk0eOxbe/zfttU2uPmCwEl0NtIsX5lngU3LCHeUYyD67PQZpDrl/TmYi7AXm1HQ==
-X-Received: by 2002:a05:6402:6d9:b0:502:22fe:ef3c with SMTP id n25-20020a05640206d900b0050222feef3cmr4678466edy.41.1680787223198;
-        Thu, 06 Apr 2023 06:20:23 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1680787225;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xie9XCgTu7FI1l5nk9+NmrYSBfE45KwR9N84Pl/XEno=;
+        b=13dh6d/CKxHeTXbSyf6M0eezAc31HoK0tF8e27sGM3JidOQJlOqScYCGtflZSZcuqy
+         c4vt6YS8BgEUjWm4g0pXrY1atX6MGM4mUPkRpf/QAlbjdTOCCDHgw4LUVwsWHTpNzbFJ
+         sTrz2fYBF4zqRDDi7XtSjIQhuzbu2jNSEpnwc/Pcaxo+cPCDlJPgr6bTQ4m0jOajdOFn
+         +PxKTEovKahlTNhqm3tI3vnmX1DsXOuAqj1KKXhTNeHbnj83Q6NuYazznUPgM03+ix50
+         5jd+U2hpQTLHArvcOCK90GXiIrHCQwmrh8q8WNDCAyP3Yti5nDvovU0kO8OhJpK2Aj8+
+         EDpg==
+X-Gm-Message-State: AAQBX9foQpqnd4MTBiMXljOnUPTjOIo7vy7LMFtVb30nRLV3fCNK7Cr2
+        mWgUSCaercFg5nPKgOl9StYSNzAlqwc=
+X-Google-Smtp-Source: AKy350Z5bkIsq104YEcLm+j7qXTvqy1TDkoQzweZbfy3Qy8NrmTDp8LKjx5PGJ53BxqjJN1vsqpmPQ==
+X-Received: by 2002:aa7:d152:0:b0:502:2265:8417 with SMTP id r18-20020aa7d152000000b0050222658417mr5065901edo.17.1680787225176;
+        Thu, 06 Apr 2023 06:20:25 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::2:a638])
-        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b0050470aa444fsm312732edb.51.2023.04.06.06.20.22
+        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b0050470aa444fsm312732edb.51.2023.04.06.06.20.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 06:20:23 -0700 (PDT)
+        Thu, 06 Apr 2023 06:20:24 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/8] optimise resheduling due to deferred tw
-Date:   Thu,  6 Apr 2023 14:20:06 +0100
-Message-Id: <cover.1680782016.git.asml.silence@gmail.com>
+Subject: [PATCH v2 4/8] io_uring: add tw add flags
+Date:   Thu,  6 Apr 2023 14:20:10 +0100
+Message-Id: <4c0f01e7ef4e6feebfb199093cc995af7a19befa.1680782017.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <cover.1680782016.git.asml.silence@gmail.com>
+References: <cover.1680782016.git.asml.silence@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-io_uring extensively uses task_work, but when a task is waiting
-every new queued task_work batch will try to wake it up and so
-cause lots of scheduling activity. This series optimises it,
-specifically applied for rw completions and send-zc notifications
-for now, and will helpful for further optimisations.
+We pass 'allow_local' into io_req_task_work_add() but will need more
+flags. Replace it with a flags bit field and name this allow_local
+flag.
 
-Quick testing shows similar to v1 results, numbers from v1:
-For my zc net test once in a while waiting for a portion of buffers
-I've got 10x descrease in the number of context switches and 2x
-improvement in CPU util (17% vs 8%). In profiles, io_cqring_work()
-got down from 40-50% of CPU to ~13%.
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ io_uring/io_uring.c | 7 ++++---
+ io_uring/io_uring.h | 9 +++++++--
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
-There is also an improvement on the softirq side for io_uring
-notifications as io_req_local_work_add() doesn't trigger wake_up()
-as often. System wide profiles show reduction of cycles taken
-by io_req_local_work_add() from 3% -> 0.5%, which is mostly not
-reflected in the numbers above as it was firing off of a different
-CPU.
-
-v2: Remove atomics decrements by the queueing side and instead carry
-    all the info in requests. It's definitely simpler and removes extra
-    atomics, the downside is touching the previous request, which might
-    be not cached.
-
-    Add a couple of patches from backlog optimising and cleaning
-    io_req_local_work_add().
-
-Pavel Begunkov (8):
-  io_uring: move pinning out of io_req_local_work_add
-  io_uring: optimie local tw add ctx pinning
-  io_uring: refactor __io_cq_unlock_post_flush()
-  io_uring: add tw add flags
-  io_uring: inline llist_add()
-  io_uring: reduce scheduling due to tw
-  io_uring: refactor __io_cq_unlock_post_flush()
-  io_uring: optimise io_req_local_work_add
-
- include/linux/io_uring_types.h |   3 +-
- io_uring/io_uring.c            | 131 ++++++++++++++++++++++-----------
- io_uring/io_uring.h            |  29 +++++---
- io_uring/notif.c               |   2 +-
- io_uring/notif.h               |   2 +-
- io_uring/rw.c                  |   2 +-
- 6 files changed, 110 insertions(+), 59 deletions(-)
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index d4ac62de2113..6f175fe682e4 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1324,12 +1324,13 @@ static void io_req_local_work_add(struct io_kiocb *req)
+ 		wake_up_state(ctx->submitter_task, TASK_INTERRUPTIBLE);
+ }
+ 
+-void __io_req_task_work_add(struct io_kiocb *req, bool allow_local)
++void __io_req_task_work_add(struct io_kiocb *req, unsigned flags)
+ {
+ 	struct io_uring_task *tctx = req->task->io_uring;
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 
+-	if (allow_local && ctx->flags & IORING_SETUP_DEFER_TASKRUN) {
++	if (!(flags & IOU_F_TWQ_FORCE_NORMAL) &&
++	    (ctx->flags & IORING_SETUP_DEFER_TASKRUN)) {
+ 		rcu_read_lock();
+ 		io_req_local_work_add(req);
+ 		rcu_read_unlock();
+@@ -1359,7 +1360,7 @@ static void __cold io_move_task_work_from_local(struct io_ring_ctx *ctx)
+ 						    io_task_work.node);
+ 
+ 		node = node->next;
+-		__io_req_task_work_add(req, false);
++		__io_req_task_work_add(req, IOU_F_TWQ_FORCE_NORMAL);
+ 	}
+ }
+ 
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 24d8196bbca3..cb4309a2acdc 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -15,6 +15,11 @@
+ #include <trace/events/io_uring.h>
+ #endif
+ 
++enum {
++	/* don't use deferred task_work */
++	IOU_F_TWQ_FORCE_NORMAL			= 1,
++};
++
+ enum {
+ 	IOU_OK			= 0,
+ 	IOU_ISSUE_SKIP_COMPLETE	= -EIOCBQUEUED,
+@@ -48,7 +53,7 @@ static inline bool io_req_ffs_set(struct io_kiocb *req)
+ 	return req->flags & REQ_F_FIXED_FILE;
+ }
+ 
+-void __io_req_task_work_add(struct io_kiocb *req, bool allow_local);
++void __io_req_task_work_add(struct io_kiocb *req, unsigned flags);
+ bool io_is_uring_fops(struct file *file);
+ bool io_alloc_async_data(struct io_kiocb *req);
+ void io_req_task_queue(struct io_kiocb *req);
+@@ -93,7 +98,7 @@ bool io_match_task_safe(struct io_kiocb *head, struct task_struct *task,
+ 
+ static inline void io_req_task_work_add(struct io_kiocb *req)
+ {
+-	__io_req_task_work_add(req, true);
++	__io_req_task_work_add(req, 0);
+ }
+ 
+ #define io_for_each_link(pos, head) \
 -- 
 2.40.0
 
