@@ -2,60 +2,60 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 665E0C761A6
-	for <io-uring@archiver.kernel.org>; Thu,  6 Apr 2023 13:21:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15CF0C76196
+	for <io-uring@archiver.kernel.org>; Thu,  6 Apr 2023 13:21:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238274AbjDFNVE (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 6 Apr 2023 09:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
+        id S238352AbjDFNVF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 6 Apr 2023 09:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238194AbjDFNU6 (ORCPT
+        with ESMTP id S238262AbjDFNU6 (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Thu, 6 Apr 2023 09:20:58 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7DEA247;
-        Thu,  6 Apr 2023 06:20:26 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5002e950e23so1106603a12.1;
-        Thu, 06 Apr 2023 06:20:26 -0700 (PDT)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A659ECC;
+        Thu,  6 Apr 2023 06:20:27 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-92fcb45a2cdso132000466b.0;
+        Thu, 06 Apr 2023 06:20:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680787225;
+        d=gmail.com; s=20210112; t=1680787226;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0P/A55sLOHJRbU1KHHDwi5FVeFyN2Okmbek6N7Le9GE=;
-        b=XZtiB11LYu2Mbw9kRBm4PjXbKhMDnbKNQ+XdPxc/hE283xc2gRRqWXZIut13AASAdQ
-         cL4/ezsKzXHNp5Il6f9ukuXn8JBY38gKaZTzAqTcDNNdUzkTa8Vbs+ijkQLzH8ylebkh
-         O6AC8TmYcLxzBUtBn+X0Uq6VpTJaF7mZUru7Fopghshko6cFWW5pxgZ9OMY3UtF2rEPk
-         dG0c6e/V2yv8pAxLlJwLTFsX1HRFlb2dls8CyXXmhFV3pOWlwzXbjpXeUuN6+H4SwXzg
-         AnKpJEYWcSrWOzg6Xb+j4jkfLeuO5XvPc+FAV8qCjlWS4JoZ1UYkK9+b6ZDgBB5O9iJm
-         tWlQ==
+        bh=kd+SeWCUjtszJlrB0nyw1/x5gRJWByJn0vCgXmRmawk=;
+        b=n8UKppUQgIobKFVZb2sLFFpuYMPwI0XY962g8cv91Wn6fYVRlcLjFgqyKpUxv2UsCS
+         ho1g8mhE/jXxRK8YpYHOzqXKQJ2S4Lgf/kFStzG9aEN64+RQM/PyNtmeerS0IwZlqZ2K
+         bjoqkwIs0zH/popw2+JLnf7e76tbfmr+CTpTnwsshKb8rMjPqc8lilicXYbRTx4Ei/wl
+         oRME80Q5I4eqA3gbPrbR3Y+2FC0jrXAwh/u0aaHlaQImTxrHvTXvkC9Tt1746b4YwdCQ
+         +xPXK5y3jDY0lQDrwItBocsQs5dwtJJkOQKCknXE1yFedND8PGv9i1QUJEs4cjzrmiaA
+         KNLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787225;
+        d=1e100.net; s=20210112; t=1680787226;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0P/A55sLOHJRbU1KHHDwi5FVeFyN2Okmbek6N7Le9GE=;
-        b=dVKaOsscGWSjRh895vg3vuW6WBqU9jJV1AjrliHnONyvLXs7YGsnkoCbeStKLz7LwF
-         nw1Vp9gZgOCfjl+y/EVMF/DI9rrHgdaSOkGrJVx5sa3ciqJr6BuDqiumD+leZS4H1Cdx
-         Ltu9dqweWXx5X9STsazSRRTByv7YeQUtomPcM4wNXYvqnDZRksJ5iIftIyD/fX45w0uz
-         Rrfs/rzqXAQ9WMdrEd6FGjd8jG1GX4eMrSqIh0UCoWzzC6r/MKeLJmSoma4joKNXF3TZ
-         4pWL0/LqptOKRP2/yd60aZAz6QRsWp8xGUXvsDhlMuSdf3Dg6b9opXrMQoiKDVOrO0yW
-         eg3w==
-X-Gm-Message-State: AAQBX9c9pxyxySF1dYzP8Qqh7AymW8RNU7u/6bpZEZ6JM3o7qebqeSM1
-        h3o9733rQWBahCyh8fGehfhOFXMBOO0=
-X-Google-Smtp-Source: AKy350ZHdcxGcANxNJDAWob5UDwkyXqr+5PXsWTs2s8LktRqsw0ZpXxz31AGaXNLZMCoGlJ1SOVzdg==
-X-Received: by 2002:aa7:ccce:0:b0:502:3376:7872 with SMTP id y14-20020aa7ccce000000b0050233767872mr5748603edt.35.1680787224697;
-        Thu, 06 Apr 2023 06:20:24 -0700 (PDT)
+        bh=kd+SeWCUjtszJlrB0nyw1/x5gRJWByJn0vCgXmRmawk=;
+        b=mNwQ82VGdccgDj+nmH3TabQv/sz3J8nhfAbltoD68sZwmnsViImbVvhAUi1qAsSncE
+         YxdUJdAWN0EThetqExcu9gqmjcrguAKGG2MKqXnHgr4ku4mClvrdkVHukjD0X0X5Jch7
+         leXD6PMVOhkqnns7dNdHk2d6eZbJedyEKBqJjIBJIGcyP35UEmUIfgbC0HGlcyLcajKr
+         ig/XesfZfzoWAJpvjRBwIf8OGm8T8cBaG1CZ7fS95PAKgXq+P1ZkPKuu0BLY6NwY8ND3
+         W03vZqyBfncMvR45QIlTgw6nCQLi/75OeIbrVLzx5GMb47teyiFcovgnHMyTk2ZsAxK3
+         fwoQ==
+X-Gm-Message-State: AAQBX9fAIEm3hXD4zPKlPbOEguemxod6R5yvNUsvrOEGSXnUWnDv/BPT
+        AdULgmPrKWBaEdMh8huieNlptcw+b0k=
+X-Google-Smtp-Source: AKy350bhE2mjaejsTWWBSMuODW5lajEQKrz5rVRvVXQS1/jWUfuXzOtJk3PO9fhznIcDpZlww7t3yg==
+X-Received: by 2002:aa7:c2c6:0:b0:4fd:5a28:2eff with SMTP id m6-20020aa7c2c6000000b004fd5a282effmr4709789edp.26.1680787225836;
+        Thu, 06 Apr 2023 06:20:25 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::2:a638])
-        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b0050470aa444fsm312732edb.51.2023.04.06.06.20.24
+        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b0050470aa444fsm312732edb.51.2023.04.06.06.20.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Apr 2023 06:20:24 -0700 (PDT)
+        Thu, 06 Apr 2023 06:20:25 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/8] io_uring: refactor __io_cq_unlock_post_flush()
-Date:   Thu,  6 Apr 2023 14:20:09 +0100
-Message-Id: <662ee5d898168ac206be06038525e97b64072a46.1680782017.git.asml.silence@gmail.com>
+Subject: [PATCH v2 5/8] io_uring: inline llist_add()
+Date:   Thu,  6 Apr 2023 14:20:11 +0100
+Message-Id: <f0165493af7b379943c792114b972f331e7d7d10.1680782017.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <cover.1680782016.git.asml.silence@gmail.com>
 References: <cover.1680782016.git.asml.silence@gmail.com>
@@ -65,66 +65,35 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Instead of smp_mb() + __io_cqring_wake() in __io_cq_unlock_post_flush()
-use equivalent io_cqring_wake(). With that we can clean it up further
-and remove __io_cqring_wake().
+We'll need to grab some information from the previous request in the tw
+list, inline llist_add(), it'll be used in the following patch.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c |  6 ++----
- io_uring/io_uring.h | 11 ++---------
- 2 files changed, 4 insertions(+), 13 deletions(-)
+ io_uring/io_uring.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index fb7215b543cd..d4ac62de2113 100644
+index 6f175fe682e4..786ecfa01c54 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -640,10 +640,8 @@ static inline void __io_cq_unlock_post_flush(struct io_ring_ctx *ctx)
- 	 * it will re-check the wakeup conditions once we return we can safely
- 	 * skip waking it up.
- 	 */
--	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN)) {
--		smp_mb();
--		__io_cqring_wake(ctx);
--	}
-+	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN))
-+		io_cqring_wake(ctx);
- }
- 
- void io_cq_unlock_post(struct io_ring_ctx *ctx)
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 193b2db39fe8..24d8196bbca3 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -228,8 +228,7 @@ static inline void io_poll_wq_wake(struct io_ring_ctx *ctx)
- 				poll_to_key(EPOLL_URING_WAKE | EPOLLIN));
- }
- 
--/* requires smb_mb() prior, see wq_has_sleeper() */
--static inline void __io_cqring_wake(struct io_ring_ctx *ctx)
-+static inline void io_cqring_wake(struct io_ring_ctx *ctx)
+@@ -1303,8 +1303,15 @@ static __cold void io_fallback_tw(struct io_uring_task *tctx)
+ static void io_req_local_work_add(struct io_kiocb *req)
  {
- 	/*
- 	 * Trigger waitqueue handler on all waiters on our waitqueue. This
-@@ -241,17 +240,11 @@ static inline void __io_cqring_wake(struct io_ring_ctx *ctx)
- 	 * waitqueue handlers, we know we have a dependency between eventfd or
- 	 * epoll and should terminate multishot poll at that point.
- 	 */
--	if (waitqueue_active(&ctx->cq_wait))
-+	if (wq_has_sleeper(&ctx->cq_wait))
- 		__wake_up(&ctx->cq_wait, TASK_NORMAL, 0,
- 				poll_to_key(EPOLL_URING_WAKE | EPOLLIN));
- }
+ 	struct io_ring_ctx *ctx = req->ctx;
++	struct llist_node *first;
  
--static inline void io_cqring_wake(struct io_ring_ctx *ctx)
--{
--	smp_mb();
--	__io_cqring_wake(ctx);
--}
--
- static inline bool io_sqring_full(struct io_ring_ctx *ctx)
- {
- 	struct io_rings *r = ctx->rings;
+-	if (!llist_add(&req->io_task_work.node, &ctx->work_llist))
++	first = READ_ONCE(ctx->work_llist.first);
++	do {
++		req->io_task_work.node.next = first;
++	} while (!try_cmpxchg(&ctx->work_llist.first, &first,
++			      &req->io_task_work.node));
++
++	if (first)
+ 		return;
+ 
+ 	/* needed for the following wake up */
 -- 
 2.40.0
 
