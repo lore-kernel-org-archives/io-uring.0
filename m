@@ -2,60 +2,60 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20970C76196
-	for <io-uring@archiver.kernel.org>; Thu,  6 Apr 2023 13:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 141AEC77B71
+	for <io-uring@archiver.kernel.org>; Thu,  6 Apr 2023 13:21:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238212AbjDFNVC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 6 Apr 2023 09:21:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
+        id S238029AbjDFNVD (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 6 Apr 2023 09:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238263AbjDFNU6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 6 Apr 2023 09:20:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB68493EA;
+        with ESMTP id S238141AbjDFNU5 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 6 Apr 2023 09:20:57 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619E9A246;
         Thu,  6 Apr 2023 06:20:26 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-4fa3ca4090fso1302502a12.3;
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50299ceefa4so1300953a12.2;
         Thu, 06 Apr 2023 06:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1680787225;
+        d=gmail.com; s=20210112; t=1680787224;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xie9XCgTu7FI1l5nk9+NmrYSBfE45KwR9N84Pl/XEno=;
-        b=pFyiffwvrKrL+a8mRQ0WHHlDdErDsDHxBH2WvrPhqvMx4xeIDEy54bMPIGaNhTh5sl
-         9HcBDYDAR7zFEIf1JVYoPBKsshPGnGDKFPe4zo6sLUV87yOuYvs0H22N05EZAxZBcHaY
-         lkfpTaKYz6RIG0YbDSWq8f9gDlm78HPT9gyj6D/mhy20A17rqbF/YSHhVI1x4u1bHdce
-         RoaPBPMVo7Z+IGtZaqXrwhJhubtmSIYbFDSCLIUmNL+bL/szHyjdbw3GRGlKxE3sqH1H
-         5OEF9g6pONaI6J2C5rKCQRWdJphEazXBrXzmFtTWLA6Ac6+NGHWZ8YA8cU2tXmiyxn6L
-         C+zw==
+        bh=OFPFrQtthgmu2R5B+cqkgAt4SXW7neAKcH/973v1o60=;
+        b=jDHpciR8zlv2xmb3+NF0BJkS/+wymZqezlIUfWqud0zV2V+oRkaFEMPNULVUHUNnNT
+         0Nj2KAh3ZJPzkgQQXQxB3owvsxSTEBJ4+RC5oWBRbDieJstz/KAWzFTJ2CB/eL9xEumO
+         H20k5ZIoNSSmEBoLRPPcc37wkfXpi5Ikhm78V7ORHSoq6CbpNhkwIggCqTsW+DxI7IFt
+         c+tCwUpoOorU/BR2AO9S3zm+YJMITMR6DSDkz3uE4FEShzsyOCfzsLE3qZHB+VBhBqt9
+         ym4Sa2CKWpsiNmtcRiDkM9NUjNsEEZl9Aa3BsG+fMcrPE/jI4JEX9pu8BghKfdj/Pbzq
+         zUSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1680787225;
+        d=1e100.net; s=20210112; t=1680787224;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Xie9XCgTu7FI1l5nk9+NmrYSBfE45KwR9N84Pl/XEno=;
-        b=13dh6d/CKxHeTXbSyf6M0eezAc31HoK0tF8e27sGM3JidOQJlOqScYCGtflZSZcuqy
-         c4vt6YS8BgEUjWm4g0pXrY1atX6MGM4mUPkRpf/QAlbjdTOCCDHgw4LUVwsWHTpNzbFJ
-         sTrz2fYBF4zqRDDi7XtSjIQhuzbu2jNSEpnwc/Pcaxo+cPCDlJPgr6bTQ4m0jOajdOFn
-         +PxKTEovKahlTNhqm3tI3vnmX1DsXOuAqj1KKXhTNeHbnj83Q6NuYazznUPgM03+ix50
-         5jd+U2hpQTLHArvcOCK90GXiIrHCQwmrh8q8WNDCAyP3Yti5nDvovU0kO8OhJpK2Aj8+
-         EDpg==
-X-Gm-Message-State: AAQBX9foQpqnd4MTBiMXljOnUPTjOIo7vy7LMFtVb30nRLV3fCNK7Cr2
-        mWgUSCaercFg5nPKgOl9StYSNzAlqwc=
-X-Google-Smtp-Source: AKy350Z5bkIsq104YEcLm+j7qXTvqy1TDkoQzweZbfy3Qy8NrmTDp8LKjx5PGJ53BxqjJN1vsqpmPQ==
-X-Received: by 2002:aa7:d152:0:b0:502:2265:8417 with SMTP id r18-20020aa7d152000000b0050222658417mr5065901edo.17.1680787225176;
-        Thu, 06 Apr 2023 06:20:25 -0700 (PDT)
-Received: from 127.com ([2620:10d:c092:600::2:a638])
-        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b0050470aa444fsm312732edb.51.2023.04.06.06.20.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        bh=OFPFrQtthgmu2R5B+cqkgAt4SXW7neAKcH/973v1o60=;
+        b=sAIk8A35l1TgOI+q9mAnYW3xz31+3bTZ+5wJKkq4dpAkznNzT1JCsHiyB1pQAgzNQz
+         IUuKBeVV8JLTWk6QCqrOGtpfmE3jrXhp2UfuxoEu83oBV92Fm3FzRkFNFEBsld0eCrrt
+         U3m+KN9K29biBCzphO9SmqnHGrdGKh6MUvZMCHrPZuGN5TjwAKqoiqHDHEvjnLMz8qkL
+         Pr9wr9C7+PHSGBflXPQ61sk8lyrw/Iv7A5XWg1hHR8n4xthKo+8X/CFIhcYvItFTWdCQ
+         4YGwoxa1+wppD5fo9UBlCgFVuD2HZRSBWgfZJ+AV3kBUUlGybfUBqbqGd7hpMZKZrdXx
+         eDzQ==
+X-Gm-Message-State: AAQBX9dbuKheAfJBvyMIqtyJKG5ZS0kDdx9jA9olXOhfUFalPMYZKRpz
+        imDVwWCc5jJkVUu636eDVESDY5g6EeA=
+X-Google-Smtp-Source: AKy350bY+R7WtlKIXO+D9HY+v7ORLddUWtatGabkl2J9KHqXzp6m/oSg+uZnS30TIjZI/rikaS7M/w==
+X-Received: by 2002:aa7:ce15:0:b0:502:2148:2980 with SMTP id d21-20020aa7ce15000000b0050221482980mr5078208edv.30.1680787224359;
         Thu, 06 Apr 2023 06:20:24 -0700 (PDT)
+Received: from 127.com ([2620:10d:c092:600::2:a638])
+        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b0050470aa444fsm312732edb.51.2023.04.06.06.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Apr 2023 06:20:23 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/8] io_uring: add tw add flags
-Date:   Thu,  6 Apr 2023 14:20:10 +0100
-Message-Id: <4c0f01e7ef4e6feebfb199093cc995af7a19befa.1680782017.git.asml.silence@gmail.com>
+Subject: [PATCH v2 2/8] io_uring: optimie local tw add ctx pinning
+Date:   Thu,  6 Apr 2023 14:20:08 +0100
+Message-Id: <cbdfcb6b232627f30e9e50ef91f13c4f05910247.1680782017.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <cover.1680782016.git.asml.silence@gmail.com>
 References: <cover.1680782016.git.asml.silence@gmail.com>
@@ -65,79 +65,43 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-We pass 'allow_local' into io_req_task_work_add() but will need more
-flags. Replace it with a flags bit field and name this allow_local
-flag.
+We currently pin the ctx for io_req_local_work_add() with
+percpu_ref_get/put, which imply two rcu_read_lock/unlock pairs and some
+extra overhead on top in the fast path. Replace it with a pure rcu read
+and let io_ring_exit_work() synchronise against it.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 7 ++++---
- io_uring/io_uring.h | 9 +++++++--
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ io_uring/io_uring.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index d4ac62de2113..6f175fe682e4 100644
+index 29a0516ee5ce..fb7215b543cd 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -1324,12 +1324,13 @@ static void io_req_local_work_add(struct io_kiocb *req)
- 		wake_up_state(ctx->submitter_task, TASK_INTERRUPTIBLE);
- }
- 
--void __io_req_task_work_add(struct io_kiocb *req, bool allow_local)
-+void __io_req_task_work_add(struct io_kiocb *req, unsigned flags)
- {
- 	struct io_uring_task *tctx = req->task->io_uring;
+@@ -1332,9 +1332,9 @@ void __io_req_task_work_add(struct io_kiocb *req, bool allow_local)
  	struct io_ring_ctx *ctx = req->ctx;
  
--	if (allow_local && ctx->flags & IORING_SETUP_DEFER_TASKRUN) {
-+	if (!(flags & IOU_F_TWQ_FORCE_NORMAL) &&
-+	    (ctx->flags & IORING_SETUP_DEFER_TASKRUN)) {
- 		rcu_read_lock();
+ 	if (allow_local && ctx->flags & IORING_SETUP_DEFER_TASKRUN) {
+-		percpu_ref_get(&ctx->refs);
++		rcu_read_lock();
  		io_req_local_work_add(req);
- 		rcu_read_unlock();
-@@ -1359,7 +1360,7 @@ static void __cold io_move_task_work_from_local(struct io_ring_ctx *ctx)
- 						    io_task_work.node);
- 
- 		node = node->next;
--		__io_req_task_work_add(req, false);
-+		__io_req_task_work_add(req, IOU_F_TWQ_FORCE_NORMAL);
+-		percpu_ref_put(&ctx->refs);
++		rcu_read_unlock();
+ 		return;
  	}
- }
  
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 24d8196bbca3..cb4309a2acdc 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -15,6 +15,11 @@
- #include <trace/events/io_uring.h>
- #endif
+@@ -3052,6 +3052,10 @@ static __cold void io_ring_exit_work(struct work_struct *work)
+ 	spin_lock(&ctx->completion_lock);
+ 	spin_unlock(&ctx->completion_lock);
  
-+enum {
-+	/* don't use deferred task_work */
-+	IOU_F_TWQ_FORCE_NORMAL			= 1,
-+};
++	/* pairs with RCU read section in io_req_local_work_add() */
++	if (ctx->flags & IORING_SETUP_DEFER_TASKRUN)
++		synchronize_rcu();
 +
- enum {
- 	IOU_OK			= 0,
- 	IOU_ISSUE_SKIP_COMPLETE	= -EIOCBQUEUED,
-@@ -48,7 +53,7 @@ static inline bool io_req_ffs_set(struct io_kiocb *req)
- 	return req->flags & REQ_F_FIXED_FILE;
+ 	io_ring_ctx_free(ctx);
  }
  
--void __io_req_task_work_add(struct io_kiocb *req, bool allow_local);
-+void __io_req_task_work_add(struct io_kiocb *req, unsigned flags);
- bool io_is_uring_fops(struct file *file);
- bool io_alloc_async_data(struct io_kiocb *req);
- void io_req_task_queue(struct io_kiocb *req);
-@@ -93,7 +98,7 @@ bool io_match_task_safe(struct io_kiocb *head, struct task_struct *task,
- 
- static inline void io_req_task_work_add(struct io_kiocb *req)
- {
--	__io_req_task_work_add(req, true);
-+	__io_req_task_work_add(req, 0);
- }
- 
- #define io_for_each_link(pos, head) \
 -- 
 2.40.0
 
