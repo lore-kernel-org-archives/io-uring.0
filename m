@@ -2,58 +2,68 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6827CC77B61
-	for <io-uring@archiver.kernel.org>; Sun, 16 Apr 2023 04:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD595C77B61
+	for <io-uring@archiver.kernel.org>; Sun, 16 Apr 2023 05:54:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjDPEiJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 16 Apr 2023 00:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S229876AbjDPFyz (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 16 Apr 2023 01:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjDPEiI (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 16 Apr 2023 00:38:08 -0400
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC4C10E6
-        for <io-uring@vger.kernel.org>; Sat, 15 Apr 2023 21:38:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xiaoguang.wang@linux.alibaba.com;NM=1;PH=DS;RN=2;SR=0;TI=SMTPD_---0Vg8tl84_1681619882;
-Received: from localhost(mailfrom:xiaoguang.wang@linux.alibaba.com fp:SMTPD_---0Vg8tl84_1681619882)
-          by smtp.aliyun-inc.com;
-          Sun, 16 Apr 2023 12:38:03 +0800
-From:   Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-To:     io-uring@vger.kernel.org
-Cc:     axboe@kernel.dk
-Subject: [PATCH] t/io_uring: fix max_blocks calculation in pt mode again
-Date:   Sun, 16 Apr 2023 12:38:02 +0800
-Message-Id: <20230416043802.46269-1-xiaoguang.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S229593AbjDPFyy (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 16 Apr 2023 01:54:54 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E26D2D52;
+        Sat, 15 Apr 2023 22:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=TBtcpsXHeVpbPsSte8uqDCd7VMaCKEQiVcvyKRXX7Mg=; b=j5v+Vx78d62tZwWrCr9W+wLTGy
+        ixFBl82hsUDRTvJYcHKmSVUrCIZXu4pJnyZpGCAs+aGltHNkeQjmqsI28wEXJIgjcDRkNPZsiCzLN
+        LnXDLXTDebBnKZiioBEQFGH91J6VmcwjrxW/MxOeWHjZmnXT0zZbtgjJNVBUmEspvJl2lW1hCVTUp
+        bPigqFbqljbFRaIob6Vlv5z2V64V4Qi2SulnmMxlKZhAJouRSidC6BLVTJRbuHKtWwcsecBwkaqhx
+        97UuwsuzGG8b2w4rPlA/F9IQDZttleOaGKh+YoGncGeVIarSxQNrFnATN3gNEws+Ry2vmCf7IvXKC
+        zSz3s3Zg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pnvLd-00DBwW-26;
+        Sun, 16 Apr 2023 05:54:49 +0000
+Date:   Sat, 15 Apr 2023 22:54:49 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Bernd Schubert <bschubert@ddn.com>, axboe@kernel.dk,
+        io-uring@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        dsingh@ddn.com
+Subject: Re: [PATCH 1/2] fs: add FMODE_DIO_PARALLEL_WRITE flag
+Message-ID: <ZDuNqQgpHUw+gi9G@infradead.org>
+References: <20230307172015.54911-2-axboe@kernel.dk>
+ <20230412134057.381941-1-bschubert@ddn.com>
+ <CAJfpegt_ZCVodOhQCzF9OqKnCr65mKax0Gu4OTN8M51zP+8TcA@mail.gmail.com>
+ <ZDjggMCGautPUDpW@infradead.org>
+ <20230414153612.GB360881@frogsfrogsfrogs>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414153612.GB360881@frogsfrogsfrogs>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-max_blocks indeed should be counted in the block size of bs, not
-nvme's logical block size, otherwise we'll get "LBA Out of Range"
-error while bs is greater than nvme's logical block size.
+On Fri, Apr 14, 2023 at 08:36:12AM -0700, Darrick J. Wong wrote:
+> IIUC uring wants to avoid the situation where someone sends 300 writes
+> to the same file, all of which end up in background workers, and all of
+> which then contend on exclusive i_rwsem.  Hence it has some hashing
+> scheme that executes io requests serially if they hash to the same value
+> (which iirc is the inode number?) to prevent resource waste.
+> 
+> This flag turns off that hashing behavior on the assumption that each of
+> those 300 writes won't serialize on the other 299 writes, hence it's ok
+> to start up 300 workers.
+> 
+> (apologies for precoffee garbled response)
 
-Fixes: e2a4a77e483e ("t/io_uring: fix max_blocks calculation in nvme passthrough mode")
-Signed-off-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
----
- t/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/t/io_uring.c b/t/io_uring.c
-index f9f4b840..9f014c4b 100644
---- a/t/io_uring.c
-+++ b/t/io_uring.c
-@@ -704,7 +704,7 @@ static int get_file_size(struct file *f)
- 					bs, lbs);
- 			return -1;
- 		}
--		f->max_blocks = nlba;
-+		f->max_blocks = nlba * lbs / bs;
- 		f->max_size = nlba;
- 		f->lba_shift = ilog2(lbs);
- 		return 0;
--- 
-2.37.1
-
+It might be useful if someone (Jens?) could clearly document the
+assumptions for this flag.
