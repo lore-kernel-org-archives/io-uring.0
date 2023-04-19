@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD92C77B7A
-	for <io-uring@archiver.kernel.org>; Wed, 19 Apr 2023 16:26:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05277C77B73
+	for <io-uring@archiver.kernel.org>; Wed, 19 Apr 2023 16:26:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbjDSQZ7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 19 Apr 2023 12:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
+        id S233545AbjDSQ0A (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 19 Apr 2023 12:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbjDSQZ6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 19 Apr 2023 12:25:58 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7043B10C1
-        for <io-uring@vger.kernel.org>; Wed, 19 Apr 2023 09:25:57 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5180ad24653so544481a12.1
-        for <io-uring@vger.kernel.org>; Wed, 19 Apr 2023 09:25:57 -0700 (PDT)
+        with ESMTP id S233527AbjDSQ0A (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 19 Apr 2023 12:26:00 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC5C3C15
+        for <io-uring@vger.kernel.org>; Wed, 19 Apr 2023 09:25:59 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-63b9f00640eso15047b3a.0
+        for <io-uring@vger.kernel.org>; Wed, 19 Apr 2023 09:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681921556; x=1684513556;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1681921559; x=1684513559;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yig2yzZEbAOAAe0JyonvM0JghOyicJfE8C/+0HCK1lk=;
-        b=pZyd1zs6OIeD2mBOVJYWN+9NOY/TboYsxnPt528S8qnuyK5/24lNehJ2Kd8Mwxo2HE
-         9Fz+G8G85Pj9cgI1bDRaJ5Ki0TL0+FxfWt5QfPWQ+OObGnz4qXM13XYy6BzMjFgXJ4Dd
-         SoIQJRWtuhWkCJo8OsGvKXlPI5OEC/WojTz9BKQUZTu+I+DmNKXtdF6kuiS4WCTG27bp
-         z/JfIxtedOtoc4yfTiKuP/N1fMbagko8uYbcvXwK15K8BEJHVZRapkBYJTqWY/ltz9EM
-         1n4odr0GdcgSu8o5MZQ3Rz96lyuFVwqJp62oOw67oYCYZTsjOYtXE3mql7rc0K61HJ8J
-         nzcA==
+        bh=QNBNMSl1jOPYogsKOmmzMd0l9YXo4Oz/6dQdAI0cTVA=;
+        b=xwCOf3X4PlfnWhWSaAtpYQ2FhzyfRy7QNDiwtG7uFYejQ4r6TA/1X3kOmMWLkswwvE
+         Vk/HaoaFgvZrSsxxIOH8OVOoqoV7UbS+cfGqCkIt1f5TPN8rzaovlVSwA+QLhlt/aLIe
+         bfI0nesHoTb9UJSwb1Ln+KoeExoajaRBhCoapEZX6tJ8RmCnbriYBmFdM0BT7z8IDXNM
+         FHxhtoCGEDXrs01p6pYxeDpsrKfg8KfDds5HSkCNV94zkm4IWyIKjaxtYs9ZaDreKop4
+         WlGZkziX9fUjpnKdc6Vfw3VH57J0g2/WkCERiPSmTtb7Qoghybt9NsJ3FwEKvPRxcQIm
+         632Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1681921556; x=1684513556;
+        d=1e100.net; s=20221208; t=1681921559; x=1684513559;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yig2yzZEbAOAAe0JyonvM0JghOyicJfE8C/+0HCK1lk=;
-        b=jQC0zAWp52XyxKumgC0MtghKvksttzF7HZpSbt0bD8zQQqMRm5Hl4oAv+DnJ3AETqf
-         O7cHCT7Zd6w8JPZHdC+0Q5hXqlTYjAWtLHdddGP29WzPjBOk8haPLRM2srKvnH7yGzj6
-         TIoSWwvWmM7jfvZSLhaYvVnC+9nraS3j5UhYrDgqltkEu+nkn6D4aUKSsbWqvCE/v0E0
-         NdpblJ/7tA8AvXKJjYZE8lQH4ohI9oJage2R/ijJlYJHQLN0mZ7zriicEA87J1Al2Bu5
-         +WEN6SrxLmUxeGwyMKjU81xwiA/Pwf0YMgTDQADkOQGPQoea+zc1E5U/W2/mZvGiGiZY
-         9Log==
-X-Gm-Message-State: AAQBX9eX/8Nda78oMWFin+Bt0E6W5NZGt6G3wznHjJajVb/RVSrvBZOr
-        39awphMrFgT8KjbygfpUlbfLLmHI21TpOIrVN4M=
-X-Google-Smtp-Source: AKy350YktWJI1dlbWt35YwMyLT0dB5jy6klCfgpPd8wD1kJOgf7RZkODuIv4rFqR0f8WAsxFqywIKA==
-X-Received: by 2002:a05:6a21:32a2:b0:e9:843:18f3 with SMTP id yt34-20020a056a2132a200b000e9084318f3mr20706791pzb.5.1681921556600;
-        Wed, 19 Apr 2023 09:25:56 -0700 (PDT)
+        bh=QNBNMSl1jOPYogsKOmmzMd0l9YXo4Oz/6dQdAI0cTVA=;
+        b=h5aAkAarEs5q2N9k0IRQx2M12ZnHsoIK0925vQbujCr4TZxRru45+zog+ulIY8dXdl
+         nOchJD5meRmTyj2FuiS0yj2RXc0o2m/WiyoqmDyF7irvtFxcsPbP5EB4u3Oc/OfQscoG
+         4Ck01Fd/urxvGDU4fOIyHeb7pb2rqMJ1oj9o8fEQZ8SCSQJLHD8cuQOJcvO2YXpKaMB3
+         vT4PRQYExJ3tgrZec/X3GJte4v2n1vIXbNoMLCw8wffuQ1Z5y3iSFJJIaKY0vs0zS4q0
+         OLjFiqPSvQpo0cf6C8BcWACQ+I+EIrzuI5xRpr73azN4+NClOOM/SIAnG7E/ValBxOcl
+         8A0w==
+X-Gm-Message-State: AAQBX9ejpi6Qf5TgwAyISVh+eL1jvpFe6DPwmHw5qrzHa+zaeWCcfTP7
+        qvP4L7eoT16C0wk24HXSqgMpFxWML62/KDLOPnI=
+X-Google-Smtp-Source: AKy350apdSgkk2XYXjP9RgnTE35elIKF4K+nqx/4fCOwWDqPKNzyTF6eVMcJtLTUYe0XM0WYmAM0hA==
+X-Received: by 2002:a05:6a00:26d2:b0:63b:5257:6837 with SMTP id p18-20020a056a0026d200b0063b52576837mr20011980pfw.1.1681921558771;
+        Wed, 19 Apr 2023 09:25:58 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id k19-20020aa790d3000000b0063d2cd02d69sm4531334pfk.54.2023.04.19.09.25.55
+        by smtp.gmail.com with ESMTPSA id k19-20020aa790d3000000b0063d2cd02d69sm4531334pfk.54.2023.04.19.09.25.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Apr 2023 09:25:56 -0700 (PDT)
+        Wed, 19 Apr 2023 09:25:58 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     luhongfei@vivo.com, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/6] io_uring: move poll_refs up a cacheline to fill a hole
-Date:   Wed, 19 Apr 2023 10:25:48 -0600
-Message-Id: <20230419162552.576489-3-axboe@kernel.dk>
+Subject: [PATCH 4/6] Revert "io_uring: always go async for unsupported fadvise flags"
+Date:   Wed, 19 Apr 2023 10:25:50 -0600
+Message-Id: <20230419162552.576489-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230419162552.576489-1-axboe@kernel.dk>
 References: <20230419162552.576489-1-axboe@kernel.dk>
@@ -64,40 +64,66 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-After bumping the flags to 64-bits, we now have two holes in io_kiocb.
-The best candidate for moving is poll_refs, as not to split the task_work
-related items.
+This reverts commit c31cc60fddd11134031e7f9eb76812353cfaac84.
+
+In preparation for handling this a bit differently, revert this
+cleanup.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- include/linux/io_uring_types.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ io_uring/advise.c | 25 ++++++++++---------------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 84f436cc6509..4dd54d2173e1 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -535,6 +535,9 @@ struct io_kiocb {
- 	 * and after selection it points to the buffer ID itself.
- 	 */
- 	u16				buf_index;
-+
-+	atomic_t			poll_refs;
-+
- 	u64				flags;
+diff --git a/io_uring/advise.c b/io_uring/advise.c
+index 7085804c513c..cf600579bffe 100644
+--- a/io_uring/advise.c
++++ b/io_uring/advise.c
+@@ -62,18 +62,6 @@ int io_madvise(struct io_kiocb *req, unsigned int issue_flags)
+ #endif
+ }
  
- 	struct io_cqe			cqe;
-@@ -565,9 +568,8 @@ struct io_kiocb {
- 		__poll_t apoll_events;
- 	};
- 	atomic_t			refs;
--	atomic_t			poll_refs;
--	struct io_task_work		io_task_work;
- 	unsigned			nr_tw;
-+	struct io_task_work		io_task_work;
- 	/* for polled requests, i.e. IORING_OP_POLL_ADD and async armed poll */
- 	union {
- 		struct hlist_node	hash_node;
+-static bool io_fadvise_force_async(struct io_fadvise *fa)
+-{
+-	switch (fa->advice) {
+-	case POSIX_FADV_NORMAL:
+-	case POSIX_FADV_RANDOM:
+-	case POSIX_FADV_SEQUENTIAL:
+-		return false;
+-	default:
+-		return true;
+-	}
+-}
+-
+ int io_fadvise_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ {
+ 	struct io_fadvise *fa = io_kiocb_to_cmd(req, struct io_fadvise);
+@@ -84,8 +72,6 @@ int io_fadvise_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	fa->offset = READ_ONCE(sqe->off);
+ 	fa->len = READ_ONCE(sqe->len);
+ 	fa->advice = READ_ONCE(sqe->fadvise_advice);
+-	if (io_fadvise_force_async(fa))
+-		req->flags |= REQ_F_FORCE_ASYNC;
+ 	return 0;
+ }
+ 
+@@ -94,7 +80,16 @@ int io_fadvise(struct io_kiocb *req, unsigned int issue_flags)
+ 	struct io_fadvise *fa = io_kiocb_to_cmd(req, struct io_fadvise);
+ 	int ret;
+ 
+-	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK && io_fadvise_force_async(fa));
++	if (issue_flags & IO_URING_F_NONBLOCK) {
++		switch (fa->advice) {
++		case POSIX_FADV_NORMAL:
++		case POSIX_FADV_RANDOM:
++		case POSIX_FADV_SEQUENTIAL:
++			break;
++		default:
++			return -EAGAIN;
++		}
++	}
+ 
+ 	ret = vfs_fadvise(req->file, fa->offset, fa->len, fa->advice);
+ 	if (ret < 0)
 -- 
 2.39.2
 
