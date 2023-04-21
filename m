@@ -2,110 +2,73 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93CF1C7618E
-	for <io-uring@archiver.kernel.org>; Fri, 21 Apr 2023 12:34:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8410FC7618E
+	for <io-uring@archiver.kernel.org>; Fri, 21 Apr 2023 15:11:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjDUMeO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 21 Apr 2023 08:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S231226AbjDUPLo (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 21 Apr 2023 11:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjDUMeO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 21 Apr 2023 08:34:14 -0400
-X-Greylist: delayed 203 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 21 Apr 2023 05:34:12 PDT
-Received: from out203-205-251-84.mail.qq.com (unknown [203.205.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666391AE;
-        Fri, 21 Apr 2023 05:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1682080450;
-        bh=E5ogk5vGgouYtZylPwN/B6rVm8IFTTc1usoLg+OEchk=;
-        h=From:To:Cc:Subject:Date;
-        b=p+PSrKxtxClZK+y6YlMT46HV8RUuouo/kBdbdDZfph68+lKCcc+8iyVnCw8YIuLqL
-         eg6Yy3t8KJgXUbTPi/mFhlhvTFc2vf3hnDdlZiih3VwK+hg8WLXyZ2FI12ove4TBY4
-         s6RFHYNAKjoqUaw3B/v/mKPoJclNDe5XBmxt67C0=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id 6A93EC29; Fri, 21 Apr 2023 20:26:41 +0800
-X-QQ-mid: xmsmtpt1682080001tyjygpl3a
-Message-ID: <tencent_7654045EAF47B511E90DE4848CB2342E7509@qq.com>
-X-QQ-XMAILINFO: Mee1Vp/QiDAWXMQ6xzehAwpwdutSjxTnc1irddOHDbiCsu/oUI2GYLkOoNwLet
-         i7HyvtvvuTcleQgwXv4AnQzPlLQxl14muN4BkkjsRw6OF1HZJUWTGB6IyT6dDOhQaAzzUCWUh5SB
-         oYLAgZtiQABcu7XR/O/Sq40hOPiGeBUstVIuvEHX9VzsRWZ9jrvG8V8TO8NSsml28tQOVehylz+j
-         qVyfUge0kfb+7KZzxHnVn6JdzjpW5Fvpq8C8cIqJYQVTpQtSf43HuAlrdMEL/OpBjTrUVXWjoDG1
-         AfjFf7tTGZbZic3A6PxL2dSCSm94lDI2DP5zb8ooox64SbdCgA5vMEmnRseZEy5NrbkWhJ+VTAnx
-         e1NNjFyhMRgObLpv45m97RKqXqgXU95n0QxdaXzGCQ/jrLJvG1rMSIoAd3HQSVlAHV9Xqd0+Tp2a
-         msaiPfIBsfcOptxQk8pz/ZP2/BjaRmq5IIjhuoyEkIH+el+lP1mtEeVdLrpCmh3mSxAODEynHMvT
-         RLYsDNMHiGSepaDhtHKRzYz6a2aUJtO7SZMB/hzMsBZt+hbx3sAGyUdrjwWOQTIEecjZFxOdM2nt
-         EgcN905INWq/gCmb9/lNYHGdpn5t/VA3C5S1c3Hb1+/tQRgivPW6/Hv5HLi03kM3VvXD/ikxokZm
-         wyGZw4PfQ8UHlgHRdb58jwZOMOwi9xTzi8uOU+VvuMTbEDGCT9lNgHr/k8TGA1Vqz7BsJz33KaYe
-         a0DuIOBPp7lBdLgc9yeYi3QL6PiOEZzUCl9Sj8jhY3n5x2JPf7Y7QE2PrWvJXDI9qI3JF7SGZcoo
-         M1i6N1UGoj+4+hrfmeP+9gS5Ai4oJ7peq/mW05y5bmFm0HdVLC1FBYX6UZpQP0ZRAl7h4VdZhn06
-         qnk8SgCWE2In/lH/DyOzXC/QRzQOCVjT4o0KhEyJxB659GJN2schXfFD3mVp8rb5z+4XXxNr/l0m
-         91mfS0pI31ggS/3IwzTen/poBuA6X9/iuH+mHaDGhvwKczn2ZnmRdSHB65rkP51ak7aCEWe0HMB9
-         h23D81Qw==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     axboe@kernel.dk
-Cc:     Rong Tao <rongtao@cestc.cn>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org (open list:IO_URING),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] tools/io_uring/io_uring-cp: Fix two compile warings
-Date:   Fri, 21 Apr 2023 20:26:35 +0800
-X-OQ-MSGID: <20230421122635.242293-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.1
+        with ESMTP id S230472AbjDUPLo (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 21 Apr 2023 11:11:44 -0400
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD9125A9;
+        Fri, 21 Apr 2023 08:11:35 -0700 (PDT)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-3f178da219bso18928115e9.1;
+        Fri, 21 Apr 2023 08:11:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682089894; x=1684681894;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o/1bU+3yxMOBZJYn8hiebgLUc19mnJbyR5cgTJ3rOoE=;
+        b=JqQ0U0B62sc1MttFb74RoR1NEOA/uQT/JGtPmDFOhqZaA4BiEmvBpUn0uWZhxC60q+
+         HGbSL5T33VFVfuoQlKhbEER6d0cadcxi7ZZ6sT79sl8a8BwPBLevsFk5dmwPwbvJIJJ7
+         R3Y5vGXbBzsA/EmgvP2YUF6M8x+navM/pu0XvCBWywU8ww1CSzQ7SOxGAgC+ySvvqkTR
+         2F+XcmSqAh8FxGV7d4Bw667xL0gLjw0u4lL/PAe7R+bMVV/9M/uMQ2ewiHp3MDLtG9ag
+         FgIZ14+aG14ctdlsrHYmMtda5U5+Dwr/acJW3QRMw5i6d8Tw5bov/BLzhU5gHzSk2/EC
+         duwA==
+X-Gm-Message-State: AAQBX9dMcTZazM21+BMI2+FTi4xTWUaWrbG80layV2s8lcFjz6SGpuJV
+        nIR61M3qiKAEl87qH7xUChw=
+X-Google-Smtp-Source: AKy350YDSzZrIvT5JL0AAWk8219k6NeLFDVD+qfQEpr4w7Xa0eQOblolNTj8eRXWplZdeZgdYRBmEg==
+X-Received: by 2002:a1c:c906:0:b0:3f1:6ec5:3105 with SMTP id f6-20020a1cc906000000b003f16ec53105mr2233609wmb.20.1682089893877;
+        Fri, 21 Apr 2023 08:11:33 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-011.fbsv.net. [2a03:2880:31ff:b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id c21-20020a7bc855000000b003f17300c7dcsm4990006wml.48.2023.04.21.08.11.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Apr 2023 08:11:33 -0700 (PDT)
+Date:   Fri, 21 Apr 2023 08:11:31 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+        asml.silence@gmail.com, axboe@kernel.dk, leit@fb.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        sagi@grimberg.me, kbusch@kernel.org, ming.lei@redhat.com
+Subject: Re: [PATCH 1/2] io_uring: Pass whole sqe to commands
+Message-ID: <ZEKno++WWPauufw0@gmail.com>
+References: <20230419102930.2979231-1-leitao@debian.org>
+ <20230419102930.2979231-2-leitao@debian.org>
+ <20230420045712.GA4239@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230420045712.GA4239@lst.de>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+On Thu, Apr 20, 2023 at 06:57:12AM +0200, Christoph Hellwig wrote:
+> On Wed, Apr 19, 2023 at 03:29:29AM -0700, Breno Leitao wrote:
+> >  	struct nvme_uring_cmd_pdu *pdu = nvme_uring_cmd_pdu(ioucmd);
+> > -	const struct nvme_uring_cmd *cmd = ioucmd->cmd;
+> > +	const struct nvme_uring_cmd *cmd = (struct nvme_uring_cmd *)ioucmd->sqe->cmd;
+> 
+> Please don't add the pointless cast.  And in general avoid the overly
+> long lines.
 
-Resolve compilation warnings:
+If I don't add this cast, the compiler complains with the follow error:
 
-    $ make
-    ...
-    cc -Wall -Wextra -g -D_GNU_SOURCE -o io_uring-cp io_uring-cp.c \
-        setup.o syscall.o queue.o
-    io_uring-cp.c: In function ‘copy_file’:
-    io_uring-cp.c:158:31: warning: comparison of integer expressions of
-    different signedness: ‘int’ and ‘long unsigned int’ [-Wsign-compare]
-    158 |                 if (had_reads != reads) {
-        |                               ^~
-    io_uring-cp.c:201:45: warning: comparison of integer expressions of
-    different signedness: ‘__s32’ {aka ‘int’} and ‘size_t’ {aka ‘long
-    unsigned int’} [-Wsign-compare]
-    201 |                    } else if (cqe->res != data->iov.iov_len) {
-        |                                        ^~
-
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/io_uring/io_uring-cp.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/io_uring/io_uring-cp.c b/tools/io_uring/io_uring-cp.c
-index d9bd6f5f8f46..8a0ecaf78bda 100644
---- a/tools/io_uring/io_uring-cp.c
-+++ b/tools/io_uring/io_uring-cp.c
-@@ -131,7 +131,8 @@ static int copy_file(struct io_uring *ring, off_t insize)
- 	writes = reads = offset = 0;
- 
- 	while (insize || write_left) {
--		int had_reads, got_comp;
-+		unsigned long had_reads;
-+		int got_comp;
- 
- 		/*
- 		 * Queue up as many reads as we can
-@@ -198,7 +199,7 @@ static int copy_file(struct io_uring *ring, off_t insize)
- 				fprintf(stderr, "cqe failed: %s\n",
- 						strerror(-cqe->res));
- 				return 1;
--			} else if (cqe->res != data->iov.iov_len) {
-+			} else if ((size_t)cqe->res != data->iov.iov_len) {
- 				/* Short read/write, adjust and requeue */
- 				data->iov.iov_base += cqe->res;
- 				data->iov.iov_len -= cqe->res;
--- 
-2.39.1
-
+	drivers/nvme/host/ioctl.c: In function ‘nvme_uring_cmd_io’:
+	drivers/nvme/host/ioctl.c:555:37: error: initialization of ‘const struct nvme_uring_cmd *’ from incompatible pointer type ‘const __u8 *’ {aka ‘const unsigned char *’} [-Werror=incompatible-pointer-types]
+	  const struct nvme_uring_cmd *cmd = ioucmd->sqe->cmd;
