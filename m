@@ -2,141 +2,171 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1E04C7618E
-	for <io-uring@archiver.kernel.org>; Sat, 22 Apr 2023 02:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C08D1C6FD18
+	for <io-uring@archiver.kernel.org>; Sat, 22 Apr 2023 08:40:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjDVCNu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 21 Apr 2023 22:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S229683AbjDVIky (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 22 Apr 2023 04:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjDVCNt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 21 Apr 2023 22:13:49 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F6F1FFD
-        for <io-uring@vger.kernel.org>; Fri, 21 Apr 2023 19:13:48 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-63f167e4be1so391861b3a.1
-        for <io-uring@vger.kernel.org>; Fri, 21 Apr 2023 19:13:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1682129628; x=1684721628;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PYtFCmZv2O4roT2wxMg0u8pCdTWXFIQFlx7TWJwEdK4=;
-        b=uxyFPyl/UzLCc2iIYAtE3+I3v8O9noMN0qpCimkPhAfL45OVZvDTpAJl0vZr9m/3gh
-         Gg0IdcQsdwIYE9V1zngypPqNHXXRUhp92+f6OIobt8t6UnjVxknjFbjvSFUidk2COyq1
-         cJCWJNenZd1tWB0APmhqReEiD3N7433FVuePU8yh5ETwWAqAJw7L+r451ODSd3poUkPa
-         g1RpYg9un8dJV4xTT1LYjvwOXkLgQpzBWoQislsbiHKuOm5wM2QqbzSAUgSKmRj9gd3/
-         fsJq1Vpl2RPMUaRA2blzQfKDQliS+fceJdXq5WsvUTlno04cDn45rGkWlJXOP9S532HV
-         3nfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1682129628; x=1684721628;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PYtFCmZv2O4roT2wxMg0u8pCdTWXFIQFlx7TWJwEdK4=;
-        b=jMXWYWS+iJIeX23eoMgwvvkJ7zrMkwUyuBzQMp5jXbALdxeTwrE5sA3Is/deZlEVy9
-         L3z4kPwirf201sro8VlLBmWLHRYRS3zpGWsHh5s73YzM8vcCTh04gap6hdTjkcJUdYue
-         APquBqrRQpxJKB+uKr/hfwveclDCg+RbVJUvDT0kR6UnSC06+2780nzNr2qUqinz8ouB
-         L7LHjBE/XFbhRO2M5GEJ+q4ceVT+KoVtuBjJzppbtub56eg3Q9h7+O47NriQj3856E+T
-         UpQIEyZzfjQDrClAh9tFWx3ZEaZHb3WWHEBEJmV3WJY/gRP8anLjfdM47RqJtJ9XO3ZQ
-         zHLw==
-X-Gm-Message-State: AAQBX9fBbMPFOOcYvZ8987KmEpkjjGHX1GIkK4PnLCyHtOn89iJOV0H5
-        wf8hX9OuZDSD33S7k50sWYyGzjS7LhYwAspQMjo=
-X-Google-Smtp-Source: AKy350Yr1uRNK2wgaH9SSUn1c9sMVubiNjGMGTkui+2fOeya6I5c4kI3479udRlcAnCSiYQSiawA4g==
-X-Received: by 2002:a05:6a00:1496:b0:63a:fb57:63c5 with SMTP id v22-20020a056a00149600b0063afb5763c5mr7409613pfu.3.1682129627519;
-        Fri, 21 Apr 2023 19:13:47 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id c11-20020a056a00248b00b00634a96493f7sm3575703pfv.128.2023.04.21.19.13.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Apr 2023 19:13:47 -0700 (PDT)
-Message-ID: <749cda6f-9e64-f89b-9d1d-e1943d7b339a@kernel.dk>
-Date:   Fri, 21 Apr 2023 20:13:46 -0600
+        with ESMTP id S229556AbjDVIkx (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 22 Apr 2023 04:40:53 -0400
+Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9934419A8;
+        Sat, 22 Apr 2023 01:40:49 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id CB667C01A; Sat, 22 Apr 2023 10:40:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1682152847; bh=RA6UWL31G5rZTzHkX1AYBBgu9w7TFJ4fnvpZQaj5+Mg=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=JmbiAsZSL/seMxU/J7XKeeofqV9+ITvc76e6ns1Zep0ZpfmPlEUbq456d+FRRK9ma
+         yZ1w0QeMcGCpTM3z5yK+x/3vJ8V9zU6j3vOBaFae/NNsk7ZtfZcspWLBbTI+Cm2+v8
+         jVFWL45gQhnDBB9aK0fOI0iJD5ZYXf6iDJiTFdeo+ViNTz3K13JgkeaZ96x1otjKyH
+         YK+jL2yvRDP/wMhcVfwHi/I48nXg1zCmMUa1WG4SK357UaxyOcEPuzbwG35i5OZwh6
+         JFRBbmlVKZPZg0xNqMArYFOH6B4LHoaYovl5zwpXpcN9i1ApRzaC6v7rN5qm2yaz+P
+         QquFIFMEyS/8g==
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id CEDF1C009;
+        Sat, 22 Apr 2023 10:40:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1682152847; bh=RA6UWL31G5rZTzHkX1AYBBgu9w7TFJ4fnvpZQaj5+Mg=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+        b=JmbiAsZSL/seMxU/J7XKeeofqV9+ITvc76e6ns1Zep0ZpfmPlEUbq456d+FRRK9ma
+         yZ1w0QeMcGCpTM3z5yK+x/3vJ8V9zU6j3vOBaFae/NNsk7ZtfZcspWLBbTI+Cm2+v8
+         jVFWL45gQhnDBB9aK0fOI0iJD5ZYXf6iDJiTFdeo+ViNTz3K13JgkeaZ96x1otjKyH
+         YK+jL2yvRDP/wMhcVfwHi/I48nXg1zCmMUa1WG4SK357UaxyOcEPuzbwG35i5OZwh6
+         JFRBbmlVKZPZg0xNqMArYFOH6B4LHoaYovl5zwpXpcN9i1ApRzaC6v7rN5qm2yaz+P
+         QquFIFMEyS/8g==
+Received: from [127.0.0.2] (localhost [::1])
+        by odin.codewreck.org (OpenSMTPD) with ESMTP id e1be628b;
+        Sat, 22 Apr 2023 08:40:36 +0000 (UTC)
+From:   Dominique Martinet <asmadeus@codewreck.org>
+Date:   Sat, 22 Apr 2023 17:40:18 +0900
+Subject: [PATCH RFC 1/2] fs: split off vfs_getdents function of getdents64
+ syscall
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: SQPOLL / uring_cmd_iopoll
-Content-Language: en-US
-To:     Bernd Schubert <bschubert@ddn.com>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <cbfa6c3f-11bd-84f7-bdb0-4342f8fd38f3@ddn.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cbfa6c3f-11bd-84f7-bdb0-4342f8fd38f3@ddn.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20230422-uring-getdents-v1-1-14c1db36e98c@codewreck.org>
+References: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
+In-Reply-To: <20230422-uring-getdents-v1-0-14c1db36e98c@codewreck.org>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Stefan Roesch <shr@fb.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>
+X-Mailer: b4 0.13-dev-f371f
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2445;
+ i=asmadeus@codewreck.org; h=from:subject:message-id;
+ bh=Gh7fdCatlZczIf9VabQSU+kiFAoMRFxRCv7HGXEYR3E=;
+ b=owEBbQKS/ZANAwAIAatOm+xqmOZwAcsmYgBkQ52ENkniSXAAbmVN2Twl1R208JYpAVJA4z6+I
+ RdAmroz4/OJAjMEAAEIAB0WIQT8g9txgG5a3TOhiE6rTpvsapjmcAUCZEOdhAAKCRCrTpvsapjm
+ cLzeD/9lgmYuQM4qeN4s0UrUXOrMe7OnPWZtJN6Af/HJ+FnYYVKvV0rEWeMo8VUQi2cm44U4x4z
+ WqduiImPchIbbQ1FjGl5Yaxhbltxs8dmCs1AyOr4VHOOL/g7x1YzlSQthMMZLyZSeRQ8dr4WwSf
+ ww84tmrn81jkvYlo18GUznvmuwBqjLjnY+Gu5P0c9lUyNe5/6kHnG0lr3CPuACHxfkFvNxR69qK
+ zFjM4F+SBkgfKrEPjkca9JsCIYCQB2DxXnrmtKwZScLa8H4eRWia29CbxZrg1DmOJV/dq+bU/R3
+ 0ykcgIwLn8E7+inTSwibLCig6Qwx8N2MuufEewPsmorEV/31+3xY/9VyYSmDEpmzt2XcoOktfCD
+ JI4910CsUD5A3/lLIDOO7LhOoVbsls1kG6OZbUNs4hKanaizpt+nvnwFu61b6hRCP5PcIG9Gwxz
+ xNsKKFMLN2L33NSk007QOm/vIXU/Wa7OH9AoQyu2sM+q3E+Yj1XDA3kggQxkvnqGbYNZK+u/UGy
+ XNQbYm1lNAUpMH0V51BwNWAFoBSAVBKjHGV1sNdWArcABECR1sVZFE4TLHvssJB51TX7hTuUAkE
+ e0OoRkM08czBtve0WlFjoK1R7gr5CrFHVkGJHN9OQzmMYJd7UYIIBm5+S7931algbAQRGQgWG33
+ OCyjKCPoRvNX0xA==
+X-Developer-Key: i=asmadeus@codewreck.org; a=openpgp;
+ fpr=B894379F662089525B3FB1B9333F1F391BBBB00A
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 4/21/23 4:09?PM, Bernd Schubert wrote:
-> Hello,
-> 
-> I was wondering if I could set up SQPOLL for fuse/IORING_OP_URING_CMD 
-> and what would be the latency win. Now I get a bit confused what the 
-> f_op->uring_cmd_iopoll() function is supposed to do.
+This splits off the vfs_getdents function from the getdents64 system
+call.
+This will allow io_uring to call the vfs_getdents function.
 
-Certainly, you can use SQPOLL with anything. Whether or not it'd be a
-win depends a lot on what you're doing, rate of IO, etc.
+Co-authored-by: Stefan Roesch <shr@fb.com>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+---
+ fs/internal.h |  8 ++++++++
+ fs/readdir.c  | 33 +++++++++++++++++++++++++--------
+ 2 files changed, 33 insertions(+), 8 deletions(-)
 
-IOPOLL and SQPOLL are two different things. SQPOLL has a kernel side
-submission thread that polls for new SQ entries and submits them when it
-sees them. IOPOLL is a method for avoiding sleeping on waiting on CQ
-entries, where it will instead poll the target for completion instead.
-That's where ->uring_cmd_iopoll() comes in, that's the hook for polling
-for uring commands. For normal fs path read/write requests,
-->uring_iopoll() is the hook that performs the same kind of action.
-
-> Is it just there to check if SQEs are can be completed as CQE? In rw.c 
-
-Not sure I follow what you're trying to convey here, maybe you can
-expand on that? And maybe some of the confusion here is because of
-mixing up SQPOLL and IOPOLL?
-
-> io_do_iopoll() it looks like this. I don't follow all code paths in 
-> __io_sq_thread yet, but it looks a like it already checks if the ring 
-> has new entries
-> 
-> to_submit = io_sqring_entries(ctx);
-> ...
-> ret = io_submit_sqes(ctx, to_submit);
-> 
->    --> it will eventually call into ->uring_cmd() ?
-
-The SQPOLL thread will pull off new SQEs, and those will then at some
-point hit ->issue() which is an opcode dependent method for issuing the
-actual request. Once it's been issued, if the ring is IOPOLL, then
-io_iopoll_req_issued() will get called which adds the request to an
-internal poll list. When someone does io_uring_enter(2) to wait for
-events on a ring with IOPOLL, it will iterate that list and call
-->uring_cmd_iopoll() for uring_cmd requests, and ->uring_iopoll() for
-"normal" requests.
-
-If the ring is using SQPOLL|IOPOLL, then the SQPOLL thread is also the
-one that does the polling. See __io_sq_thread() -> io_do_iopoll().
-
-> And then io_do_iopoll ->  file->f_op->uring_cmd_iopoll is supposed to 
-> check for available cq entries and will submit these? I.e. I just return 
-> 1 if when the request is ready? And also ensure that 
-> req->iopoll_completed is set?
-
-The callback polls for a completion on the target side, which will mark
-is as ->iopoll_completed = true. That still leaves them on the iopoll
-list, and io_do_iopoll() will spot that and post CQEs for them.
-
-> I'm also not sure what I should do with struct io_comp_batch * - I don't 
-> have struct request *req_list anywhere in my fuse-uring changes, seems 
-> to be blk-mq specific? So I should just ignore that parameter?
-
-Hard to say since the above is a bit confusing and I haven't seen your
-code, but you can always start off just passing NULL. That's fine and
-just doesn't do any completion batching. The latter may or may not be
-useful for your case, but in any case, it's fine to pass NULL.
-
-> Btw, this might be useful for ublk as well?
-
-Not sure what "this" is :-)
+diff --git a/fs/internal.h b/fs/internal.h
+index dc4eb91a577a..92eeaf3837d1 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -264,3 +264,11 @@ int setattr_should_drop_sgid(struct mnt_idmap *idmap,
+ struct mnt_idmap *alloc_mnt_idmap(struct user_namespace *mnt_userns);
+ struct mnt_idmap *mnt_idmap_get(struct mnt_idmap *idmap);
+ void mnt_idmap_put(struct mnt_idmap *idmap);
++
++/*
++ * fs/readdir.c
++ */
++struct linux_dirent64;
++
++int vfs_getdents(struct file *file, struct linux_dirent64 __user *dirent,
++		 unsigned int count);
+diff --git a/fs/readdir.c b/fs/readdir.c
+index 9c53edb60c03..1d541a6f2d55 100644
+--- a/fs/readdir.c
++++ b/fs/readdir.c
+@@ -351,10 +351,16 @@ static bool filldir64(struct dir_context *ctx, const char *name, int namlen,
+ 	return false;
+ }
+ 
+-SYSCALL_DEFINE3(getdents64, unsigned int, fd,
+-		struct linux_dirent64 __user *, dirent, unsigned int, count)
++
++/**
++ * vfs_getdents - getdents without fdget
++ * @file    : pointer to file struct of directory
++ * @dirent  : pointer to user directory structure
++ * @count   : size of buffer
++ */
++int vfs_getdents(struct file *file, struct linux_dirent64 __user *dirent,
++		 unsigned int count)
+ {
+-	struct fd f;
+ 	struct getdents_callback64 buf = {
+ 		.ctx.actor = filldir64,
+ 		.count = count,
+@@ -362,11 +368,7 @@ SYSCALL_DEFINE3(getdents64, unsigned int, fd,
+ 	};
+ 	int error;
+ 
+-	f = fdget_pos(fd);
+-	if (!f.file)
+-		return -EBADF;
+-
+-	error = iterate_dir(f.file, &buf.ctx);
++	error = iterate_dir(file, &buf.ctx);
+ 	if (error >= 0)
+ 		error = buf.error;
+ 	if (buf.prev_reclen) {
+@@ -379,6 +381,21 @@ SYSCALL_DEFINE3(getdents64, unsigned int, fd,
+ 		else
+ 			error = count - buf.count;
+ 	}
++	return error;
++}
++
++SYSCALL_DEFINE3(getdents64, unsigned int, fd,
++		struct linux_dirent64 __user *, dirent, unsigned int, count)
++{
++	struct fd f;
++	int error;
++
++	f = fdget_pos(fd);
++	if (!f.file)
++		return -EBADF;
++
++	error = vfs_getdents(f.file, dirent, count);
++
+ 	fdput_pos(f);
+ 	return error;
+ }
 
 -- 
-Jens Axboe
+2.39.2
 
