@@ -2,951 +2,122 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80701C77B7C
-	for <io-uring@archiver.kernel.org>; Tue, 25 Apr 2023 18:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07BF5C6FD18
+	for <io-uring@archiver.kernel.org>; Tue, 25 Apr 2023 18:39:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234499AbjDYSVV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 25 Apr 2023 14:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S234454AbjDYSjp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 25 Apr 2023 14:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234378AbjDYSVU (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 25 Apr 2023 14:21:20 -0400
+        with ESMTP id S234253AbjDYSjo (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 25 Apr 2023 14:39:44 -0400
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB4C8A5F
-        for <io-uring@vger.kernel.org>; Tue, 25 Apr 2023 11:21:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CD4146CC
+        for <io-uring@vger.kernel.org>; Tue, 25 Apr 2023 11:39:43 -0700 (PDT)
 Received: by devbig1114.prn1.facebook.com (Postfix, from userid 425415)
-        id 45AFC442EFD9; Tue, 25 Apr 2023 11:21:05 -0700 (PDT)
+        id 3793B442E9BE; Tue, 25 Apr 2023 11:18:51 -0700 (PDT)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     io-uring@vger.kernel.org, kernel-team@fb.com
 Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org
-Subject: [PATCH v9 3/4] liburing: add example programs for napi busy poll
-Date:   Tue, 25 Apr 2023 11:20:53 -0700
-Message-Id: <20230425182054.2826621-4-shr@devkernel.io>
+Subject: [PATCH v10 1/5] io-uring: move io_wait_queue definition to header file
+Date:   Tue, 25 Apr 2023 11:18:41 -0700
+Message-Id: <20230425181845.2813854-2-shr@devkernel.io>
 X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230425182054.2826621-1-shr@devkernel.io>
-References: <20230425182054.2826621-1-shr@devkernel.io>
+In-Reply-To: <20230425181845.2813854-1-shr@devkernel.io>
+References: <20230425181845.2813854-1-shr@devkernel.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds two example programs to test the napi busy poll functionality.
-It consists of a client program and a server program. To get a napi id,
-the client and the server program need to be run on different hosts.
-
-To test the napi busy poll timeout, the -t needs to be specified. A
-reasonable value for the busy poll timeout is 100. By specifying the
-busy poll timeout on the server and the client the best results are
-accomplished.
+This moves the definition of the io_wait_queue structure to the header
+file so it can be also used from other files.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
-Acked-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- .gitignore                       |   2 +
- examples/Makefile                |   2 +
- examples/napi-busy-poll-client.c | 451 +++++++++++++++++++++++++++++++
- examples/napi-busy-poll-server.c | 386 ++++++++++++++++++++++++++
- 4 files changed, 841 insertions(+)
- create mode 100644 examples/napi-busy-poll-client.c
- create mode 100644 examples/napi-busy-poll-server.c
+ io_uring/io_uring.c | 21 ---------------------
+ io_uring/io_uring.h | 22 ++++++++++++++++++++++
+ 2 files changed, 22 insertions(+), 21 deletions(-)
 
-diff --git a/.gitignore b/.gitignore
-index bfb2224..1c3623d 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -19,6 +19,8 @@
- /examples/io_uring-test
- /examples/io_uring-udp
- /examples/link-cp
-+/examples/napi-busy-poll-client
-+/examples/napi-busy-poll-server
- /examples/ucontext-cp
- /examples/poll-bench
- /examples/send-zerocopy
-diff --git a/examples/Makefile b/examples/Makefile
-index 715ac4c..6e3d1f8 100644
---- a/examples/Makefile
-+++ b/examples/Makefile
-@@ -19,6 +19,8 @@ example_srcs :=3D \
- 	io_uring-test.c \
- 	io_uring-udp.c \
- 	link-cp.c \
-+	napi-busy-poll-client.c \
-+	napi-busy-poll-server.c \
- 	poll-bench.c \
- 	send-zerocopy.c \
- 	rsrc-update-bench.c
-diff --git a/examples/napi-busy-poll-client.c b/examples/napi-busy-poll-c=
-lient.c
-new file mode 100644
-index 0000000..fda1da7
---- /dev/null
-+++ b/examples/napi-busy-poll-client.c
-@@ -0,0 +1,451 @@
-+#include <ctype.h>
-+#include <errno.h>
-+#include <float.h>
-+#include <getopt.h>
-+#include <liburing.h>
-+#include <math.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include <arpa/inet.h>
-+#include <netdb.h>
-+#include <netinet/in.h>
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 3d43df8f1e4e..efbd6c9c56e5 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2516,33 +2516,12 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsig=
+ned int nr)
+ 	return ret;
+ }
+=20
+-struct io_wait_queue {
+-	struct wait_queue_entry wq;
+-	struct io_ring_ctx *ctx;
+-	unsigned cq_tail;
+-	unsigned nr_timeouts;
+-	ktime_t timeout;
+-};
+-
+ static inline bool io_has_work(struct io_ring_ctx *ctx)
+ {
+ 	return test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq) ||
+ 	       !llist_empty(&ctx->work_llist);
+ }
+=20
+-static inline bool io_should_wake(struct io_wait_queue *iowq)
+-{
+-	struct io_ring_ctx *ctx =3D iowq->ctx;
+-	int dist =3D READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
+-
+-	/*
+-	 * Wake up if we have enough events, or if a timeout occurred since we
+-	 * started waiting. For timeouts, we always want to return to userspace=
+,
+-	 * regardless of event count.
+-	 */
+-	return dist >=3D 0 || atomic_read(&ctx->cq_timeouts) !=3D iowq->nr_time=
+outs;
+-}
+-
+ static int io_wake_function(struct wait_queue_entry *curr, unsigned int =
+mode,
+ 			    int wake_flags, void *key)
+ {
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 25515d69d205..5f04bd47562a 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -41,6 +41,28 @@ enum {
+ 	IOU_STOP_MULTISHOT	=3D -ECANCELED,
+ };
+=20
++struct io_wait_queue {
++	struct wait_queue_entry wq;
++	struct io_ring_ctx *ctx;
++	unsigned cq_tail;
++	unsigned nr_timeouts;
++	ktime_t timeout;
 +
-+#define MAXBUFLEN 100
-+#define PORTNOLEN 10
-+#define ADDRLEN   80
-+#define RINGSIZE  1024
-+
-+#define printable(ch) (isprint((unsigned char)ch) ? ch : '#')
-+
-+enum {
-+	IOURING_RECV,
-+	IOURING_SEND,
-+	IOURING_RECVMSG,
-+	IOURING_SENDMSG
 +};
 +
-+struct ctx
++static inline bool io_should_wake(struct io_wait_queue *iowq)
 +{
-+	struct io_uring ring;
-+	struct sockaddr_in6 saddr;
++	struct io_ring_ctx *ctx =3D iowq->ctx;
++	int dist =3D READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
 +
-+	int sockfd;
-+	int buffer_len;
-+	int num_pings;
-+	bool napi_check;
-+
-+	union {
-+		char buffer[MAXBUFLEN];
-+		struct timespec ts;
-+	};
-+
-+	int rtt_index;
-+	double *rtt;
-+};
-+
-+struct options
-+{
-+	int  num_pings;
-+	__u32  timeout;
-+
-+	bool sq_poll;
-+	bool busy_loop;
-+	bool prefer_busy_poll;
-+
-+	char port[PORTNOLEN];
-+	char addr[ADDRLEN];
-+};
-+
-+static struct option longopts[] =3D
-+{
-+	{"address"  , 1, NULL, 'a'},
-+	{"busy"     , 0, NULL, 'b'},
-+	{"help"     , 0, NULL, 'h'},
-+	{"num_pings", 1, NULL, 'n'},
-+	{"port"     , 1, NULL, 'p'},
-+	{"prefer"   , 1, NULL, 'u'},
-+	{"sqpoll"   , 0, NULL, 's'},
-+	{"timeout"  , 1, NULL, 't'},
-+	{NULL       , 0, NULL,  0 }
-+};
-+
-+static void printUsage(const char *name)
-+{
-+	fprintf(stderr,
-+	"Usage: %s [-l|--listen] [-a|--address ip_address] [-p|--port port-no] =
-[-s|--sqpoll]"
-+	" [-b|--busy] [-n|--num pings] [-t|--timeout busy-poll-timeout] [-u||--=
-prefer] [-h|--help]\n"
-+	"--address\n"
-+	"-a        : remote or local ipv6 address\n"
-+	"--busy\n"
-+	"-b        : busy poll io_uring instead of blocking.\n"
-+	"--num_pings\n"
-+	"-n        : number of pings\n"
-+	"--port\n"
-+	"-p        : port\n"
-+	"--sqpoll\n"
-+	"-s        : Configure io_uring to use SQPOLL thread\n"
-+	"--timeout\n"
-+	"-t        : Configure NAPI busy poll timeout"
-+	"--prefer\n"
-+	"-u        : prefer NAPI busy poll\n"
-+	"--help\n"
-+	"-h        : Display this usage message\n\n",
-+	name);
++	/*
++	 * Wake up if we have enough events, or if a timeout occurred since we
++	 * started waiting. For timeouts, we always want to return to userspace=
+,
++	 * regardless of event count.
++	 */
++	return dist >=3D 0 || atomic_read(&ctx->cq_timeouts) !=3D iowq->nr_time=
+outs;
 +}
 +
-+static void printError(const char *msg, int opt)
-+{
-+	if (msg && opt)
-+		fprintf(stderr, "%s (-%c)\n", msg, printable(opt));
-+}
-+
-+static void setProcessScheduler(void)
-+{
-+	struct sched_param param;
-+
-+	param.sched_priority =3D sched_get_priority_max(SCHED_FIFO);
-+	if (sched_setscheduler(0, SCHED_FIFO, &param) < 0)
-+		fprintf(stderr, "sched_setscheduler() failed: (%d) %s\n",
-+			errno, strerror(errno));
-+}
-+
-+static double diffTimespec(const struct timespec *time1, const struct ti=
-mespec *time0)
-+{
-+	return (time1->tv_sec - time0->tv_sec)
-+		+ (time1->tv_nsec - time0->tv_nsec) / 1000000000.0;
-+}
-+
-+static uint64_t encodeUserData(char type, int fd)
-+{
-+	return (uint32_t)fd | ((uint64_t)type << 56);
-+}
-+
-+static void decodeUserData(uint64_t data, char *type, int *fd)
-+{
-+	*type =3D data >> 56;
-+	*fd   =3D data & 0xffffffffU;
-+}
-+
-+static const char *opTypeToStr(char type)
-+{
-+	const char *res;
-+
-+	switch (type) {
-+	case IOURING_RECV:
-+		res =3D "IOURING_RECV";
-+		break;
-+	case IOURING_SEND:
-+		res =3D "IOURING_SEND";
-+		break;
-+	case IOURING_RECVMSG:
-+		res =3D "IOURING_RECVMSG";
-+		break;
-+	case IOURING_SENDMSG:
-+		res =3D "IOURING_SENDMSG";
-+		break;
-+	default:
-+		res =3D "Unknown";
-+	}
-+
-+	return res;
-+}
-+
-+static void reportNapi(struct ctx *ctx)
-+{
-+	unsigned int napi_id =3D 0;
-+	socklen_t len =3D sizeof(napi_id);
-+
-+	getsockopt(ctx->sockfd, SOL_SOCKET, SO_INCOMING_NAPI_ID, &napi_id, &len=
+ struct io_uring_cqe *__io_get_cqe(struct io_ring_ctx *ctx, bool overflow=
 );
-+	if (napi_id)
-+		printf(" napi id: %d\n", napi_id);
-+	else
-+		printf(" unassigned napi id\n");
-+
-+	ctx->napi_check =3D true;
-+}
-+
-+static void sendPing(struct ctx *ctx)
-+{
-+	struct io_uring_sqe *sqe =3D io_uring_get_sqe(&ctx->ring);
-+
-+	clock_gettime(CLOCK_REALTIME, (struct timespec *)ctx->buffer);
-+
-+	io_uring_prep_send(sqe, ctx->sockfd, ctx->buffer, sizeof(struct timespe=
-c), 0);
-+	sqe->user_data =3D encodeUserData(IOURING_SEND, ctx->sockfd);
-+}
-+
-+static void receivePing(struct ctx *ctx)
-+{
-+	struct io_uring_sqe *sqe =3D io_uring_get_sqe(&ctx->ring);
-+
-+	io_uring_prep_recv(sqe, ctx->sockfd, ctx->buffer, MAXBUFLEN, 0);
-+	sqe->user_data =3D encodeUserData(IOURING_RECV, ctx->sockfd);
-+}
-+
-+static void recordRTT(struct ctx *ctx)
-+{
-+	struct timespec startTs =3D ctx->ts;
-+
-+	// Send next ping.
-+	sendPing(ctx);
-+
-+	// Store round-trip time.
-+	ctx->rtt[ctx->rtt_index] =3D diffTimespec(&ctx->ts, &startTs);
-+	ctx->rtt_index++;
-+}
-+
-+static void printStats(struct ctx *ctx)
-+{
-+	double minRTT    =3D DBL_MAX;
-+	double maxRTT    =3D 0.0;
-+	double avgRTT    =3D 0.0;
-+	double stddevRTT =3D 0.0;
-+
-+	// Calculate min, max, avg.
-+	for (int i =3D 0; i < ctx->rtt_index; i++) {
-+		if (ctx->rtt[i] < minRTT)
-+			minRTT =3D ctx->rtt[i];
-+		if (ctx->rtt[i] > maxRTT)
-+			maxRTT =3D ctx->rtt[i];
-+
-+		avgRTT +=3D ctx->rtt[i];
-+	}
-+	avgRTT /=3D ctx->rtt_index;
-+
-+	// Calculate stddev.
-+	for (int i =3D 0; i < ctx->rtt_index; i++)
-+		stddevRTT +=3D fabs(ctx->rtt[i] - avgRTT);
-+	stddevRTT /=3D ctx->rtt_index;
-+
-+	fprintf(stdout, " rtt(us) min/avg/max/mdev =3D %.3f/%.3f/%.3f/%.3f\n",
-+		minRTT * 1000000, avgRTT * 1000000, maxRTT * 1000000, stddevRTT * 1000=
-000);
-+}
-+
-+static int completion(struct ctx *ctx, struct io_uring_cqe *cqe)
-+{
-+	char type;
-+	int  fd;
-+	int  res =3D cqe->res;
-+
-+	decodeUserData(cqe->user_data, &type, &fd);
-+	if (res < 0) {
-+		fprintf(stderr, "unexpected %s failure: (%d) %s\n",
-+			opTypeToStr(type), -res, strerror(-res));
-+		return -1;
-+	}
-+
-+	switch (type) {
-+	case IOURING_SEND:
-+		receivePing(ctx);
-+		break;
-+	case IOURING_RECV:
-+		if (res !=3D sizeof(struct timespec)) {
-+			fprintf(stderr, "unexpected ping reply len: %d\n", res);
-+			abort();
-+		}
-+
-+		if (!ctx->napi_check) {
-+			reportNapi(ctx);
-+			sendPing(ctx);
-+		} else {
-+			recordRTT(ctx);
-+		}
-+
-+		--ctx->num_pings;
-+		break;
-+
-+	default:
-+		fprintf(stderr, "unexpected %s completion\n",
-+			opTypeToStr(type));
-+		return -1;
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct ctx       ctx;
-+	struct options   opt;
-+	struct __kernel_timespec *tsPtr;
-+	struct __kernel_timespec ts;
-+	struct io_uring_params params;
-+	struct io_uring_napi napi;
-+	int flag;
-+
-+	memset(&opt, 0, sizeof(struct options));
-+
-+	// Process flags.
-+	while ((flag =3D getopt_long(argc, argv, ":hsbua:n:p:t:", longopts, NUL=
-L)) !=3D -1) {
-+		switch (flag) {
-+		case 'a':
-+			strcpy(opt.addr, optarg);
-+			break;
-+		case 'b':
-+			opt.busy_loop =3D true;
-+			break;
-+		case 'h':
-+			printUsage(argv[0]);
-+			exit(0);
-+			break;
-+		case 'n':
-+			opt.num_pings =3D atoi(optarg) + 1;
-+			break;
-+		case 'p':
-+			strcpy(opt.port, optarg);
-+			break;
-+		case 's':
-+			opt.sq_poll =3D true;
-+			break;
-+		case 't':
-+			opt.timeout =3D atoi(optarg);
-+			break;
-+		case 'u':
-+			opt.prefer_busy_poll =3D true;
-+			break;
-+		case ':':
-+			printError("Missing argument", optopt);
-+			printUsage(argv[0]);
-+			exit(-1);
-+			break;
-+		case '?':
-+			printError("Unrecognized option", optopt);
-+			printUsage(argv[0]);
-+			exit(-1);
-+			break;
-+
-+		default:
-+			fprintf(stderr, "Fatal: Unexpected case in CmdLineProcessor switch()\=
-n");
-+			exit(-1);
-+			break;
-+		}
-+	}
-+
-+	if (strlen(opt.addr) =3D=3D 0) {
-+		fprintf(stderr, "address option is mandatory\n");
-+		printUsage(argv[0]);
-+		exit(1);
-+	}
-+
-+	ctx.saddr.sin6_port   =3D htons(atoi(opt.port));
-+	ctx.saddr.sin6_family =3D AF_INET6;
-+
-+	if (inet_pton(AF_INET6, opt.addr, &ctx.saddr.sin6_addr) <=3D 0) {
-+		fprintf(stderr, "inet_pton error for %s\n", optarg);
-+		printUsage(argv[0]);
-+		exit(1);
-+	}
-+
-+	// Connect to server.
-+	fprintf(stdout, "Connecting to %s... (port=3D%s) to send %d pings\n", o=
-pt.addr, opt.port, opt.num_pings - 1);
-+
-+	if ((ctx.sockfd =3D socket(AF_INET6, SOCK_DGRAM, 0)) < 0) {
-+		fprintf(stderr, "socket() failed: (%d) %s\n", errno, strerror(errno));
-+		exit(1);
-+	}
-+
-+	if (connect(ctx.sockfd, (struct sockaddr *)&ctx.saddr, sizeof(struct so=
-ckaddr_in6)) < 0) {
-+		fprintf(stderr, "connect() failed: (%d) %s\n", errno, strerror(errno))=
-;
-+		exit(1);
-+	}
-+
-+	// Setup ring.
-+	memset(&params, 0, sizeof(params));
-+	memset(&ts, 0, sizeof(ts));
-+	memset(&napi, 0, sizeof(napi));
-+
-+	if (opt.sq_poll) {
-+		params.flags =3D IORING_SETUP_SQPOLL;
-+		params.sq_thread_idle =3D 50;
-+	}
-+
-+	if (io_uring_queue_init_params(RINGSIZE, &ctx.ring, &params) < 0) {
-+		fprintf(stderr, "io_uring_queue_init_params() failed: (%d) %s\n",
-+			errno, strerror(errno));
-+		exit(1);
-+	}
-+
-+	if (opt.timeout || opt.prefer_busy_poll) {
-+		napi.prefer_busy_poll =3D opt.prefer_busy_poll;
-+		napi.busy_poll_to =3D opt.timeout;
-+
-+		io_uring_register_napi(&ctx.ring, &napi);
-+	}
-+
-+	if (opt.busy_loop)
-+		tsPtr =3D &ts;
-+	else
-+		tsPtr =3D NULL;
-+
-+	// Use realtime scheduler.
-+	setProcessScheduler();
-+
-+	// Copy payload.
-+	clock_gettime(CLOCK_REALTIME, &ctx.ts);
-+
-+	// Setup context.
-+	ctx.napi_check =3D false;
-+	ctx.buffer_len =3D sizeof(struct timespec);
-+	ctx.num_pings  =3D opt.num_pings;
-+
-+	ctx.rtt_index =3D 0;
-+	ctx.rtt =3D (double *)malloc(sizeof(double) * opt.num_pings);
-+	if (!ctx.rtt) {
-+		fprintf(stderr, "Cannot allocate results array\n");
-+		exit(1);
-+	}
-+
-+	// Send initial message to get napi id.
-+	sendPing(&ctx);
-+
-+	while (ctx.num_pings !=3D 0) {
-+		int res;
-+		unsigned num_completed =3D 0;
-+		unsigned head;
-+		struct io_uring_cqe *cqe;
-+
-+		do {
-+			res =3D io_uring_submit_and_wait_timeout(&ctx.ring, &cqe, 1, tsPtr, N=
-ULL);
-+		}
-+		while (res < 0 && errno =3D=3D ETIME);
-+
-+		io_uring_for_each_cqe(&ctx.ring, head, cqe) {
-+			++num_completed;
-+			if (completion(&ctx, cqe))
-+				goto out;
-+		}
-+
-+		if (num_completed)
-+			io_uring_cq_advance(&ctx.ring, num_completed);
-+	}
-+
-+	printStats(&ctx);
-+
-+out:
-+	// Clean up.
-+	if (opt.timeout || opt.prefer_busy_poll) {
-+		io_uring_unregister_napi(&ctx.ring, &napi);
-+		if (opt.timeout          !=3D napi.busy_poll_to ||
-+		    opt.prefer_busy_poll !=3D napi.prefer_busy_poll) {
-+			fprintf(stderr, "Expected busy poll to =3D %d, got %d\n",
-+				opt.timeout, napi.busy_poll_to);
-+			fprintf(stderr, "Expected prefer busy poll =3D %d, got %d\n",
-+				opt.prefer_busy_poll, napi.prefer_busy_poll);
-+		}
-+	} else {
-+		io_uring_unregister_napi(&ctx.ring, NULL);
-+	}
-+	io_uring_queue_exit(&ctx.ring);
-+
-+	free(ctx.rtt);
-+	close(ctx.sockfd);
-+
-+	return 0;
-+}
-diff --git a/examples/napi-busy-poll-server.c b/examples/napi-busy-poll-s=
-erver.c
-new file mode 100644
-index 0000000..d3c919f
---- /dev/null
-+++ b/examples/napi-busy-poll-server.c
-@@ -0,0 +1,386 @@
-+#include <ctype.h>
-+#include <errno.h>
-+#include <getopt.h>
-+#include <liburing.h>
-+#include <math.h>
-+#include <sched.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/types.h>
-+#include <sys/socket.h>
-+#include <time.h>
-+#include <unistd.h>
-+#include <arpa/inet.h>
-+#include <netdb.h>
-+#include <netinet/in.h>
-+
-+#define MAXBUFLEN 100
-+#define PORTNOLEN 10
-+#define ADDRLEN   80
-+#define RINGSIZE  1024
-+
-+#define printable(ch) (isprint((unsigned char)ch) ? ch : '#')
-+
-+enum {
-+	IOURING_RECV,
-+	IOURING_SEND,
-+	IOURING_RECVMSG,
-+	IOURING_SENDMSG
-+};
-+
-+struct ctx
-+{
-+	struct io_uring     ring;
-+	struct sockaddr_in6 saddr;
-+	struct iovec        iov;
-+	struct msghdr       msg;
-+
-+	int sockfd;
-+	int buffer_len;
-+	int num_pings;
-+	bool napi_check;
-+
-+	union {
-+		char buffer[MAXBUFLEN];
-+		struct timespec ts;
-+	};
-+};
-+
-+struct options
-+{
-+	int  num_pings;
-+	__u32 timeout;
-+
-+	bool listen;
-+	bool sq_poll;
-+	bool busy_loop;
-+	bool prefer_busy_poll;
-+
-+	char port[PORTNOLEN];
-+	char addr[ADDRLEN];
-+};
-+
-+static struct option longopts[] =3D
-+{
-+	{"address"  , 1, NULL, 'a'},
-+	{"busy"     , 0, NULL, 'b'},
-+	{"help"     , 0, NULL, 'h'},
-+	{"listen"   , 0, NULL, 'l'},
-+	{"num_pings", 1, NULL, 'n'},
-+	{"port"     , 1, NULL, 'p'},
-+	{"prefer"   , 1, NULL, 'u'},
-+	{"sqpoll"   , 0, NULL, 's'},
-+	{"timeout"  , 1, NULL, 't'},
-+	{NULL       , 0, NULL,  0 }
-+};
-+
-+static void printUsage(const char *name)
-+{
-+	fprintf(stderr,
-+	"Usage: %s [-l|--listen] [-a|--address ip_address] [-p|--port port-no] =
-[-s|--sqpoll]"
-+	" [-b|--busy] [-n|--num pings] [-t|--timeout busy-poll-timeout] [-u|--p=
-refer] [-h|--help]\n"
-+	" --listen\n"
-+	"-l        : Server mode\n"
-+	"--address\n"
-+	"-a        : remote or local ipv6 address\n"
-+	"--busy\n"
-+	"-b        : busy poll io_uring instead of blocking.\n"
-+	"--num_pings\n"
-+	"-n        : number of pings\n"
-+	"--port\n"
-+	"-p        : port\n"
-+	"--sqpoll\n"
-+	"-s        : Configure io_uring to use SQPOLL thread\n"
-+	"--timeout\n"
-+	"-t        : Configure NAPI busy poll timeout"
-+	"--prefer\n"
-+	"-u        : prefer NAPI busy poll\n"
-+	"--help\n"
-+	"-h        : Display this usage message\n\n",
-+	name);
-+}
-+
-+static void printError(const char *msg, int opt)
-+{
-+	if (msg && opt)
-+		fprintf(stderr, "%s (-%c)\n", msg, printable(opt));
-+}
-+
-+static void setProcessScheduler(void)
-+{
-+	struct sched_param param;
-+
-+	param.sched_priority =3D sched_get_priority_max(SCHED_FIFO);
-+	if (sched_setscheduler(0, SCHED_FIFO, &param) < 0)
-+		fprintf(stderr, "sched_setscheduler() failed: (%d) %s\n",
-+			errno, strerror(errno));
-+}
-+
-+static uint64_t encodeUserData(char type, int fd)
-+{
-+	return (uint32_t)fd | ((__u64)type << 56);
-+}
-+
-+static void decodeUserData(uint64_t data, char *type, int *fd)
-+{
-+	*type =3D data >> 56;
-+	*fd   =3D data & 0xffffffffU;
-+}
-+
-+static const char *opTypeToStr(char type)
-+{
-+	const char *res;
-+
-+	switch (type) {
-+	case IOURING_RECV:
-+		res =3D "IOURING_RECV";
-+		break;
-+	case IOURING_SEND:
-+		res =3D "IOURING_SEND";
-+		break;
-+	case IOURING_RECVMSG:
-+		res =3D "IOURING_RECVMSG";
-+		break;
-+	case IOURING_SENDMSG:
-+		res =3D "IOURING_SENDMSG";
-+		break;
-+	default:
-+		res =3D "Unknown";
-+	}
-+
-+	return res;
-+}
-+
-+static void reportNapi(struct ctx *ctx)
-+{
-+	unsigned int napi_id =3D 0;
-+	socklen_t len =3D sizeof(napi_id);
-+
-+	getsockopt(ctx->sockfd, SOL_SOCKET, SO_INCOMING_NAPI_ID, &napi_id, &len=
-);
-+	if (napi_id)
-+		printf(" napi id: %d\n", napi_id);
-+	else
-+		printf(" unassigned napi id\n");
-+
-+	ctx->napi_check =3D true;
-+}
-+
-+static void sendPing(struct ctx *ctx)
-+{
-+
-+	struct io_uring_sqe *sqe =3D io_uring_get_sqe(&ctx->ring);
-+
-+	io_uring_prep_sendmsg(sqe, ctx->sockfd, &ctx->msg, 0);
-+	sqe->user_data =3D encodeUserData(IOURING_SENDMSG, ctx->sockfd);
-+}
-+
-+static void receivePing(struct ctx *ctx)
-+{
-+	bzero(&ctx->msg, sizeof(struct msghdr));
-+	ctx->msg.msg_name    =3D &ctx->saddr;
-+	ctx->msg.msg_namelen =3D sizeof(struct sockaddr_in6);
-+	ctx->iov.iov_base    =3D ctx->buffer;
-+	ctx->iov.iov_len     =3D MAXBUFLEN;
-+	ctx->msg.msg_iov     =3D &ctx->iov;
-+	ctx->msg.msg_iovlen  =3D 1;
-+
-+	struct io_uring_sqe *sqe =3D io_uring_get_sqe(&ctx->ring);
-+	io_uring_prep_recvmsg(sqe, ctx->sockfd, &ctx->msg, 0);
-+	sqe->user_data =3D encodeUserData(IOURING_RECVMSG, ctx->sockfd);
-+}
-+
-+static void completion(struct ctx *ctx, struct io_uring_cqe *cqe)
-+{
-+	char type;
-+	int  fd;
-+	int  res =3D cqe->res;
-+
-+	decodeUserData(cqe->user_data, &type, &fd);
-+	if (res < 0) {
-+		fprintf(stderr, "unexpected %s failure: (%d) %s\n",
-+			opTypeToStr(type), -res, strerror(-res));
-+		abort();
-+	}
-+
-+	switch (type) {
-+	case IOURING_SENDMSG:
-+		receivePing(ctx);
-+		--ctx->num_pings;
-+		break;
-+	case IOURING_RECVMSG:
-+		ctx->iov.iov_len =3D res;
-+		sendPing(ctx);
-+		if (!ctx->napi_check)
-+			reportNapi(ctx);
-+		break;
-+	default:
-+		fprintf(stderr, "unexpected %s completion\n",
-+			opTypeToStr(type));
-+		abort();
-+		break;
-+	}
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int flag;
-+	struct ctx       ctx;
-+	struct options   opt;
-+	struct __kernel_timespec *tsPtr;
-+	struct __kernel_timespec ts;
-+	struct io_uring_params params;
-+	struct io_uring_napi napi;
-+
-+	memset(&opt, 0, sizeof(struct options));
-+
-+	// Process flags.
-+	while ((flag =3D getopt_long(argc, argv, ":lhsbua:n:p:t:", longopts, NU=
-LL)) !=3D -1) {
-+		switch (flag) {
-+		case 'a':
-+			strcpy(opt.addr, optarg);
-+			break;
-+		case 'b':
-+			opt.busy_loop =3D true;
-+			break;
-+		case 'h':
-+			printUsage(argv[0]);
-+			exit(0);
-+			break;
-+		case 'l':
-+			opt.listen =3D true;
-+			break;
-+		case 'n':
-+			opt.num_pings =3D atoi(optarg) + 1;
-+			break;
-+		case 'p':
-+			strcpy(opt.port, optarg);
-+			break;
-+		case 's':
-+			opt.sq_poll =3D true;
-+			break;
-+		case 't':
-+			opt.timeout =3D atoi(optarg);
-+			break;
-+		case 'u':
-+			opt.prefer_busy_poll =3D true;
-+			break;
-+		case ':':
-+			printError("Missing argument", optopt);
-+			printUsage(argv[0]);
-+			exit(-1);
-+			break;
-+		case '?':
-+			printError("Unrecognized option", optopt);
-+			printUsage(argv[0]);
-+			exit(-1);
-+			break;
-+
-+		default:
-+			fprintf(stderr, "Fatal: Unexpected case in CmdLineProcessor switch()\=
-n");
-+			exit(-1);
-+			break;
-+		}
-+	}
-+
-+	if (strlen(opt.addr) =3D=3D 0) {
-+		fprintf(stderr, "address option is mandatory\n");
-+		printUsage(argv[0]);
-+		exit(1);
-+	}
-+
-+	ctx.saddr.sin6_port   =3D htons(atoi(opt.port));
-+	ctx.saddr.sin6_family =3D AF_INET6;
-+
-+	if (inet_pton(AF_INET6, opt.addr, &ctx.saddr.sin6_addr) <=3D 0) {
-+		fprintf(stderr, "inet_pton error for %s\n", optarg);
-+		printUsage(argv[0]);
-+		exit(1);
-+	}
-+
-+	// Connect to server.
-+	fprintf(stdout, "Listening %s : %s...\n", opt.addr, opt.port);
-+
-+	if ((ctx.sockfd =3D socket(AF_INET6, SOCK_DGRAM, 0)) < 0) {
-+		fprintf(stderr, "socket() failed: (%d) %s\n", errno, strerror(errno));
-+		exit(1);
-+	}
-+
-+	if (bind(ctx.sockfd, (struct sockaddr *)&ctx.saddr, sizeof(struct socka=
-ddr_in6)) < 0) {
-+		fprintf(stderr, "bind() failed: (%d) %s\n", errno, strerror(errno));
-+		exit(1);
-+	}
-+
-+	// Setup ring.
-+	memset(&params, 0, sizeof(params));
-+	memset(&ts, 0, sizeof(ts));
-+	memset(&napi, 0, sizeof(napi));
-+
-+	if (opt.sq_poll) {
-+		params.flags =3D IORING_SETUP_SQPOLL;
-+		params.sq_thread_idle =3D 50;
-+	}
-+
-+	if (io_uring_queue_init_params(RINGSIZE, &ctx.ring, &params) < 0) {
-+		fprintf(stderr, "io_uring_queue_init_params() failed: (%d) %s\n",
-+			errno, strerror(errno));
-+		exit(1);
-+	}
-+
-+	if (opt.timeout || opt.prefer_busy_poll) {
-+		napi.prefer_busy_poll =3D opt.prefer_busy_poll;
-+		napi.busy_poll_to =3D opt.timeout;
-+
-+		io_uring_register_napi(&ctx.ring, &napi);
-+	}
-+
-+	if (opt.busy_loop)
-+		tsPtr =3D &ts;
-+	else
-+		tsPtr =3D NULL;
-+
-+
-+	// Use realtime scheduler.
-+	setProcessScheduler();
-+
-+	// Copy payload.
-+	clock_gettime(CLOCK_REALTIME, &ctx.ts);
-+
-+	// Setup context.
-+	ctx.napi_check =3D false;
-+	ctx.buffer_len =3D sizeof(struct timespec);
-+	ctx.num_pings  =3D opt.num_pings;
-+
-+	// Receive initial message to get napi id.
-+	receivePing(&ctx);
-+
-+	while (ctx.num_pings !=3D 0) {
-+		int res;
-+		unsigned int num_completed =3D 0;
-+		unsigned int head;
-+		struct io_uring_cqe *cqe;
-+
-+		do {
-+			res =3D io_uring_submit_and_wait_timeout(&ctx.ring, &cqe, 1, tsPtr, N=
-ULL);
-+		}
-+		while (res < 0 && errno =3D=3D ETIME);
-+
-+		io_uring_for_each_cqe(&ctx.ring, head, cqe) {
-+			++num_completed;
-+			completion(&ctx, cqe);
-+		}
-+
-+		if (num_completed) {
-+			io_uring_cq_advance(&ctx.ring, num_completed);
-+		}
-+	}
-+
-+	// Clean up.
-+	if (opt.timeout || opt.prefer_busy_poll)
-+		io_uring_unregister_napi(&ctx.ring, &napi);
-+
-+	io_uring_queue_exit(&ctx.ring);
-+	close(ctx.sockfd);
-+
-+	return 0;
-+}
+ bool io_req_cqe_overflow(struct io_kiocb *req);
+ int io_run_task_work_sig(struct io_ring_ctx *ctx);
 --=20
 2.39.1
 
