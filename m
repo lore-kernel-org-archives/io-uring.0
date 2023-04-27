@@ -2,117 +2,83 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 309E7C77B73
-	for <io-uring@archiver.kernel.org>; Thu, 27 Apr 2023 15:03:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4340AC77B61
+	for <io-uring@archiver.kernel.org>; Thu, 27 Apr 2023 17:19:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243577AbjD0PDp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 27 Apr 2023 11:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
+        id S244338AbjD0RTx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 27 Apr 2023 13:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243520AbjD0PDo (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 27 Apr 2023 11:03:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1956E1992;
-        Thu, 27 Apr 2023 08:03:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8FB663921;
-        Thu, 27 Apr 2023 15:03:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03CAC433D2;
-        Thu, 27 Apr 2023 15:03:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682607822;
-        bh=xcd6XEBmruik18HKPh5fM0OLhLHBkJHfnUPr0koBNIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rpqEvN1aXAHVdk71XXuC7NOzyMTs8Ls/CX3qrzIJmt5vJ04KOyTBa41CNXojTvNeD
-         exd61xkVd+E4g6l51CkQ5f3oDQCRPoznKPh82CCKxju8QEQIOrYsh4GiwODfqPJ2B1
-         Iod3XcgwjURdZhIDO92ZCge6UCWlcBVspgxuQmP/Sw9UuIzsHvFx+4CeDhs6XqeKQG
-         JFHHY56UKsoC6gppnerhI4QjQWBkeHgQMdRaOutIRBlxAq+CIH140+f/NfQ2RvsQ8g
-         JHUugzptbmH1tiYfrmmyNtCMriq2oVgRior4fyjs06NrpsLcudE8ONujcAOmyWXvVL
-         3IRHPiNI1FGuQ==
-Date:   Thu, 27 Apr 2023 09:03:39 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-Cc:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Subject: Re: another nvme pssthrough design based on nvme hardware queue file
- abstraction
-Message-ID: <ZEqOy6oFp7tc06dH@kbusch-mbp.dhcp.thefacebook.com>
-References: <24179a47-ab37-fa32-d177-1086668fbd3d@linux.alibaba.com>
- <ZEkxUG4AUcBQKfdr@kbusch-mbp.dhcp.thefacebook.com>
- <3e04dbdc-335a-8cc1-f1e2-72e395700da6@linux.alibaba.com>
+        with ESMTP id S244058AbjD0RTw (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 27 Apr 2023 13:19:52 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5262319A2
+        for <io-uring@vger.kernel.org>; Thu, 27 Apr 2023 10:19:51 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-32b4607696aso133433065ab.1
+        for <io-uring@vger.kernel.org>; Thu, 27 Apr 2023 10:19:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1682615990; x=1685207990;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LK6pOS+jXfVf9cbQQ3licPnrOHrtoTgqZa/zDQdBlfc=;
+        b=SYeA2CkXK4dMy0HBYB/6Id3y5iyRzS/SOA+rEyhztpRagkhsEZSBMdBTrbPiDU8kUb
+         cBiTJXBo2FUIINmA6ISMyRMWF8vprfzDMHNDN5oDsQTGXOEOxwfGn5xg0OAmmOQnkvde
+         d5KgFPOCFSl7vxw+ysSARW2fwoqrfmAbXVSnC/caLlSvztRV8HFJqFe0ph3DICDZyWYs
+         oqx9sE2D69wSTs+hmnCLi6+LbNTTeSE0TrT/M7I+wQuMn6rXolFFL1CNh40Pn4Bn4/G0
+         HVFiUGh9xIN47b0E7gkZLc5dcI83ZyL4NQN9uxRhrTOY2CI6iniSJP9JFgB0P4Iwxn38
+         HIKw==
+X-Gm-Message-State: AC+VfDyLHa5RuhPCgOBvUAJOHphqP/f6YtOjn6BK6qonWEcMuE3irf9K
+        +25sXWKmzkn9hK3vKYKEA/sP/CSI0b2AfqSTsGfeAvKMDkkJ
+X-Google-Smtp-Source: ACHHUZ4xrOCAFLQyzd+j5xR5JY8MHEygtuIWw5Hq/Ldp1vk9Ji1q2hIX1FH0gdzVAdHjpSgY45Mk0n+g0XBrD53/l070mruvOxAM
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3e04dbdc-335a-8cc1-f1e2-72e395700da6@linux.alibaba.com>
+X-Received: by 2002:a05:6e02:4c1:b0:32b:13ad:3e4f with SMTP id
+ f1-20020a056e0204c100b0032b13ad3e4fmr1684031ils.5.1682615990663; Thu, 27 Apr
+ 2023 10:19:50 -0700 (PDT)
+Date:   Thu, 27 Apr 2023 10:19:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006ac1fb05fa54903e@google.com>
+Subject: [syzbot] Monthly io-uring report (Apr 2023)
+From:   syzbot <syzbot+listc8beb21580bd24573228@syzkaller.appspotmail.com>
+To:     axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Thu, Apr 27, 2023 at 08:17:30PM +0800, Xiaoguang Wang wrote:
-> > On Wed, Apr 26, 2023 at 09:19:57PM +0800, Xiaoguang Wang wrote:
-> >> hi all,
-> >>
-> >> Recently we start to test nvme passthrough feature, which is based on io_uring. Originally we
-> >> thought its performance would be much better than normal polled nvme test, but test results
-> >> show that it's not:
-> >> $ sudo taskset -c 1 /home/feiman.wxg/fio/t/io_uring -b512 -d128 -c32 -s32 -p1 -F1 -B1 -O0 -n1  -u1 /dev/ng1n1
-> >> IOPS=891.49K, BW=435MiB/s, IOS/call=32/31
-> >> IOPS=891.07K, BW=435MiB/s, IOS/call=31/31
-> >>
-> >> $ sudo taskset -c 1 /home/feiman.wxg/fio/t/io_uring -b512 -d128 -c32 -s32 -p1 -F1 -B1 -O1 -n1 /dev/nvme1n1
-> >> IOPS=807.81K, BW=394MiB/s, IOS/call=32/31
-> >> IOPS=808.13K, BW=394MiB/s, IOS/call=32/32
-> >>
-> >> about 10% iops improvement, I'm not saying its not good, just had thought it should
-> >> perform much better.
-> > What did you think it should be? What is the maximum 512b read IOPs your device
-> > is capable of producing?
-> From the naming of this feature, I thought it would bypass blocker thoroughly, hence
-> would gain much higher performance, for myself, if this feature can improves 25% higher
-> or more, that would be much more attractive, and users would like to try it. Again, I'm
-> not saying this feature is not good, just thought it would perform much better for small io.
+Hello io-uring maintainers/developers,
 
-It does bypass the block layer. The driver just uses library functions provided
-by the block layer for things it doesn't want to duplicate. Reimplementing that
-functionality in driver isn't going to improve anything.
+This is a 31-day syzbot report for the io-uring subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/io-uring
 
-> >> In our kernel config, no active ﻿q->stats->callbacks, but still has this overhead.
-> >>
-> >> 2. 0.97%  io_uring  [kernel.vmlinux]  [k] bio_associate_blkg_from_css
-> >>     0.85%  io_uring  [kernel.vmlinux]  [k] bio_associate_blkg
-> >>     0.74%  io_uring  [kernel.vmlinux]  [k] blkg_lookup_create
-> >> For nvme passthrough feature, it tries to dispatch nvme commands to nvme
-> >> controller directly, so should get rid of these overheads.
-> >>
-> >> 3. 3.19%  io_uring  [kernel.vmlinux]  [k] __rcu_read_unlock
-> >>     2.65%  io_uring  [kernel.vmlinux]  [k] __rcu_read_lock
-> >> Frequent rcu_read_lock/unlcok overheads, not sure whether we can improve a bit.
-> >>
-> >> 4. 7.90%  io_uring  [nvme]            [k] nvme_poll
-> >>     3.59%  io_uring  [nvme_core]       [k] nvme_ns_chr_uring_cmd_iopoll
-> >>     2.63%  io_uring  [kernel.vmlinux]  [k] blk_mq_poll_classic
-> >>     1.88%  io_uring  [nvme]            [k] nvme_poll_cq
-> >>     1.74%  io_uring  [kernel.vmlinux]  [k] bio_poll
-> >>     1.89%  io_uring  [kernel.vmlinux]  [k] xas_load
-> >>     0.86%  io_uring  [kernel.vmlinux]  [k] xas_start
-> >>     0.80%  io_uring  [kernel.vmlinux]  [k] xas_start
-> >> Seems that the block poll operation call chain is somewhat deep, also
-> > It's not really that deep, though the xarray lookups are unfortunate.
-> >
-> > And if you were to remove block layer, it looks like you'd end up just shifting
-> > the CPU utilization to a different polling function without increasing IOPs.
-> > Your hardware doesn't look fast enough for this software overhead to be a
-> > concern.
-> No, I may not agree with you here, sorry. Real products(not like t/io_uring tools,
-> which just polls block layer when ios are issued) will have many other work
-> to run, such as network work. If we can cut the nvme passthrough overhead more,
-> saved cpu will use to do other useful work.
+During the period, 0 new issues were detected and 0 were fixed.
+In total, 18 issues are still open and 88 have been fixed so far.
 
-You initiated this thread with supposed underwhelming IOPs improvements from
-the io engine, but now you've shifted your criteria.
+Some of the still happening issues:
 
-You can always turn off the kernel's stats and cgroups if you don't find them
-useful.
+Ref Crashes Repro Title
+<1> 3549    Yes   WARNING in io_ring_exit_work
+                  https://syzkaller.appspot.com/bug?extid=00e15cda746c5bc70e24
+<2> 3291    Yes   general protection fault in try_to_wake_up (2)
+                  https://syzkaller.appspot.com/bug?extid=b4a81dc8727e513f364d
+<3> 783     Yes   INFO: task hung in io_ring_exit_work
+                  https://syzkaller.appspot.com/bug?extid=93f72b3885406bb09e0d
+<4> 582     Yes   KMSAN: uninit-value in io_req_cqe_overflow
+                  https://syzkaller.appspot.com/bug?extid=12dde80bf174ac8ae285
+<5> 75      Yes   INFO: task hung in io_wq_put_and_exit (3)
+                  https://syzkaller.appspot.com/bug?extid=adb05ed2853417be49ce
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
