@@ -2,236 +2,154 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C2D05C77B7E
-	for <io-uring@archiver.kernel.org>; Sat, 29 Apr 2023 09:42:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04CAEC77B7E
+	for <io-uring@archiver.kernel.org>; Sat, 29 Apr 2023 09:42:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjD2Jmr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 29 Apr 2023 05:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
+        id S230497AbjD2Jmu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 29 Apr 2023 05:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbjD2Jmq (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 29 Apr 2023 05:42:46 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA90E54
-        for <io-uring@vger.kernel.org>; Sat, 29 Apr 2023 02:42:44 -0700 (PDT)
+        with ESMTP id S230519AbjD2Jmt (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 29 Apr 2023 05:42:49 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1FA1BDA
+        for <io-uring@vger.kernel.org>; Sat, 29 Apr 2023 02:42:47 -0700 (PDT)
 Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230429094242epoutp0317b5bc5f57d2b03e9eb5ddca77aff11a~aXosU05Ou2943429434epoutp03p
-        for <io-uring@vger.kernel.org>; Sat, 29 Apr 2023 09:42:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230429094242epoutp0317b5bc5f57d2b03e9eb5ddca77aff11a~aXosU05Ou2943429434epoutp03p
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230429094246epoutp02c70e00cd42263cf0fdac4ae04fc5bc4d~aXov3aMJo2139121391epoutp02d
+        for <io-uring@vger.kernel.org>; Sat, 29 Apr 2023 09:42:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230429094246epoutp02c70e00cd42263cf0fdac4ae04fc5bc4d~aXov3aMJo2139121391epoutp02d
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1682761362;
-        bh=SAKoOZSg9Ryf3M1Ys01fDubKQ5exxqRHHmS46vJCi0k=;
+        s=mail20170921; t=1682761366;
+        bh=cGKDfl/XthfWKk15QDiG1O0uY0pyS8zVFh/2tUDjwjY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FjF9tSTnW4E6oKa2nPcNA0zAkEl/I5VTWviKH+mYQ2pBjJ3+gIGYJWD8ZmBqYeb9H
-         Ih12C44A47xC7+wmscGOav/imZMEZWJ0W8OFxupo27IuxNbyTIf+jVAB9GCP+6sTCO
-         taxXXrQ5Vp9vSakVdmmesxvKbxmSqHRDkAufOdx8=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20230429094240epcas5p37d11b6192fc960914c687d756af34a61~aXorLFqJG0334203342epcas5p3B;
-        Sat, 29 Apr 2023 09:42:40 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.174]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4Q7kzM5wN4z4x9Pt; Sat, 29 Apr
-        2023 09:42:39 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+        b=CooSrNQQLUGXRa84Lz00nAf3iTLu431vKL52KxL+WBYW9DkpVXtXO57FVry/CTfRH
+         QDC5hTurcj0ci71s03AKidKqvAwoHZ8PnUWUWrZl75vK9gNFEWV7Td5un00PJNULx5
+         j3RsMH3zSmMKXzMc5UXR+QAMDzn4H9gUS0f/r+8Q=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20230429094245epcas5p18b332f08089ce47aef7cf4c022276bb1~aXovUNIjP2857728577epcas5p1f;
+        Sat, 29 Apr 2023 09:42:45 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4Q7kzR4r5Cz4x9Pp; Sat, 29 Apr
+        2023 09:42:43 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
         epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        46.50.55646.F86EC446; Sat, 29 Apr 2023 18:42:39 +0900 (KST)
+        58.50.55646.396EC446; Sat, 29 Apr 2023 18:42:43 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20230429094238epcas5p4efa3dc785fa54ab974852c7f90113025~aXopHYaOv1633616336epcas5p4q;
-        Sat, 29 Apr 2023 09:42:38 +0000 (GMT)
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230429094243epcas5p13be3ca62dc2b03299d09cafaf11923c1~aXotIHsik1041010410epcas5p1k;
+        Sat, 29 Apr 2023 09:42:43 +0000 (GMT)
 Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230429094238epsmtrp10dfd833b65a0679e8f1cbabc11094929~aXopGo8QR0376803768epsmtrp1p;
-        Sat, 29 Apr 2023 09:42:38 +0000 (GMT)
-X-AuditID: b6c32a4b-b71fa7000001d95e-d5-644ce68fc5b0
+        20230429094243epsmtrp1f27744d43c11881159e6c70a6bf698ea~aXotHXscF0376803768epsmtrp1q;
+        Sat, 29 Apr 2023 09:42:43 +0000 (GMT)
+X-AuditID: b6c32a4b-913ff7000001d95e-dc-644ce6930268
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C4.38.27706.E86EC446; Sat, 29 Apr 2023 18:42:38 +0900 (KST)
+        46.38.27706.296EC446; Sat, 29 Apr 2023 18:42:42 +0900 (KST)
 Received: from localhost.localdomain (unknown [107.99.41.245]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230429094236epsmtip2c319e9777540e1cfa3f2fc1b390ad953~aXonEwqLw0191301913epsmtip2_;
-        Sat, 29 Apr 2023 09:42:36 +0000 (GMT)
+        20230429094240epsmtip29cd999aa5565b7db1f8bef0f06413366~aXorL5mwJ0703907039epsmtip2R;
+        Sat, 29 Apr 2023 09:42:40 +0000 (GMT)
 From:   Kanchan Joshi <joshi.k@samsung.com>
 To:     axboe@kernel.dk, hch@lst.de, sagi@grimberg.me, kbusch@kernel.org
 Cc:     io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
         linux-block@vger.kernel.org, gost.dev@samsung.com,
         anuj1072538@gmail.com, xiaoguang.wang@linux.alibaba.com,
+        Anuj Gupta <anuj20.g@samsung.com>,
         Kanchan Joshi <joshi.k@samsung.com>
-Subject: [RFC PATCH 01/12] nvme: refactor nvme_alloc_io_tag_set
-Date:   Sat, 29 Apr 2023 15:09:14 +0530
-Message-Id: <20230429093925.133327-2-joshi.k@samsung.com>
+Subject: [RFC PATCH 03/12] fs, block: interface to register/unregister the
+ raw-queue
+Date:   Sat, 29 Apr 2023 15:09:16 +0530
+Message-Id: <20230429093925.133327-4-joshi.k@samsung.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230429093925.133327-1-joshi.k@samsung.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmpm7/M58Ug9YzOhYfv/5msVh9t5/N
-        4uaBnUwWK1cfZbJ413qOxeLo/7dsFpMOXWO02HtL22L+sqfsFutev2ex2PT3JJMDt8fOWXfZ
-        Pc7f28jicflsqcemVZ1sHjsfWnpsXlLvsftmA5tH35ZVjB6fN8kFcEZl22SkJqakFimk5iXn
-        p2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAnaqkUJaYUwoUCkgsLlbSt7Mp
-        yi8tSVXIyC8usVVKLUjJKTAp0CtOzC0uzUvXy0stsTI0MDAyBSpMyM7oeTKTsaBFrWLWtqls
-        DYzdCl2MnBwSAiYSN7dtYuxi5OIQEtjNKPF913M2COcTo8SK5mcsEM43Rom/C1qYYVqWbvrF
-        BJHYyyhx49tvVgjnM6NE/9Ut7F2MHBxsApoSFyaXgjSICLhINK2dCjaWWeAio0TPp0MsIAlh
-        AXuJBVfPs4HYLAKqEg0nX4Jt4BWwlJj4+hwTxDZ5iZmXvrOD2JwCVhLfZ+yGqhGUODnzCdgc
-        ZqCa5q2zoa6byyHRekYMwnaR+H7mGTuELSzx6vgWKFtK4mV/G5SdLHFpJsyuEonHew5C2fYS
-        raf6mUF+YQb6Zf0ufYhVfBK9v58wgYQlBHglOtqEIKoVJe5NesoKYYtLPJyxBMr2kHh0tAEa
-        PL3A4D2ymW0Co/wsJB/MQvLBLIRtCxiZVzFKphYU56anFpsWGOellsMjNjk/dxMjOMVqee9g
-        fPTgg94hRiYOxkOMEhzMSiK8vJXuKUK8KYmVValF+fFFpTmpxYcYTYFBPJFZSjQ5H5jk80ri
-        DU0sDUzMzMxMLI3NDJXEedVtTyYLCaQnlqRmp6YWpBbB9DFxcEo1MKV2ipx4fnMmV8jlY/xb
-        PjVZBW78ZXjh5tSUzmwTATF53tkp225MYZf67iyhv8TvX256xIG5y93kr4u+2ns7wzBxiXp0
-        q2fD+frr3NuOm9n+dpxpYf+ZP+xnskXythkPPd5KJU/4/3BV953ZuexbLRvkXDmUPCUv5RQ1
-        sYf8Pdd66PECh6P/V8aV/9ozxaFqZbLnijWZ11d+lKk++e95tLy7zubs2D/p83Key21aN2NS
-        wdpf6bPE/jotTtAym872Rf3C8oTG6ccWKmg6fVPbpPypP0Zuje+z2bofWu6Y8Aif5Gndtu6C
-        UvPkdF0dgRmnDLuW7qlRnj73gv2fVc7vVxfFGtjnmz6STotvsHI1nq/EUpyRaKjFXFScCADd
-        5orHOgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJLMWRmVeSWpSXmKPExsWy7bCSvG7fM58Ug56dKhYfv/5msVh9t5/N
-        4uaBnUwWK1cfZbJ413qOxeLo/7dsFpMOXWO02HtL22L+sqfsFutev2ex2PT3JJMDt8fOWXfZ
-        Pc7f28jicflsqcemVZ1sHjsfWnpsXlLvsftmA5tH35ZVjB6fN8kFcEZx2aSk5mSWpRbp2yVw
-        ZfQ8mclY0KJWMWvbVLYGxm6FLkZODgkBE4mlm34xgdhCArsZJb4t8YeIi0s0X/vBDmELS6z8
-        9xzI5gKq+cgoMWXvC+YuRg4ONgFNiQuTS0FqRAS8JNrfzmIDqWEWuMkosW/3XrBmYQF7iQVX
-        z7OB2CwCqhINJ18yg9i8ApYSE1+fY4JYIC8x89J3sHpOASuJ7zN2g80XAqppXBAPUS4ocXLm
-        ExYQmxmovHnrbOYJjAKzkKRmIUktYGRaxSiZWlCcm55bbFhgmJdarlecmFtcmpeul5yfu4kR
-        HBtamjsYt6/6oHeIkYmD8RCjBAezkggvb6V7ihBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n
-        44UE0hNLUrNTUwtSi2CyTBycUg1Mp7NU2qP4VbI/rD7waLLWnKeyGrZx594qx06fHvHT3Wn9
-        i6lv5wXMDTgafCdohrwl060HCYd2pN3VORD78Y9mmKP0hOfaTz6rh+z2EHr558eZZay5qpz9
-        s5JY3wZ75Oz3mZje+WJmyZPvByQ73HXeHz/mOtOF/22C9b4kZ//rr19fnTl3QYLlSY4rR7/p
-        mcddDT7C/fBG15kGX45tDyc/cfhrHuc4zbiNS5CnvS7QaL5Bonp38EbRM44utnHO/7UPPzDk
-        VlIo1N7jm/u9tSTx44sIxns9oudzdgW67VDrkb+sX7J+Xr1Qr8Signd3wk/1OS29ptZ5Jqa1
-        bwObwd6LtcvPLbx9y5jX6WS4greyEktxRqKhFnNRcSIAmcAyTvwCAAA=
-X-CMS-MailID: 20230429094238epcas5p4efa3dc785fa54ab974852c7f90113025
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNJsWRmVeSWpSXmKPExsWy7bCmuu7kZz4pBi8vKll8/PqbxaJpwl9m
+        i9V3+9ksbh7YyWSxcvVRJot3redYLI7+f8tmMenQNUaLvbe0LeYve8puse71exaLTX9PMjnw
+        eOycdZfd4/y9jSwel8+Wemxa1cnmsfOhpcfmJfUeu282sHn0bVnF6PF5k1wAZ1S2TUZqYkpq
+        kUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QvUoKZYk5pUChgMTi
+        YiV9O5ui/NKSVIWM/OISW6XUgpScApMCveLE3OLSvHS9vNQSK0MDAyNToMKE7Iwf+1uZC5Zw
+        VSxdq9bAeJaji5GTQ0LARGLynalMXYxcHEICuxklPvzZwQLhfGKUePFqDVTmG6PE8nmbGWFa
+        ei9+ZYNI7GWU+H1xGjuE85lR4vXJ3cxdjBwcbAKaEhcml4I0iAi4SDStnQrWwAwyqWn3XBaQ
+        hLBAmMSMx6vBprIIqErsW/+UHcTmFbCU+LW6kwlim7zEzEvfweKcAlYS32eAzAepEZQ4OfMJ
+        2BxmoJrmrbOZQRZICCzkkFh6eQtUs4vE7zOz2SBsYYlXx7ewQ9hSEi/726DsZIlLM89B1ZdI
+        PN5zEMq2l2g91Q/2DDPQM+t36UPs4pPo/f2ECSQsIcAr0dEmBFGtKHFv0lNWCFtc4uGMJawQ
+        JR4SR18mQ4Knl1Hi3cUW9gmM8rOQfDALyQezEJYtYGRexSiZWlCcm55abFpgnJdaDo/X5Pzc
+        TYzgVKvlvYPx0YMPeocYmTgYDzFKcDArifDyVrqnCPGmJFZWpRblxxeV5qQWH2I0BQbxRGYp
+        0eR8YLLPK4k3NLE0MDEzMzOxNDYzVBLnVbc9mSwkkJ5YkpqdmlqQWgTTx8TBKdXAtPzmbwfu
+        pWWHn86Z8LesS/mbpyVXwdHHKZ41AZxhxU6u0devXT95Iqjp759yK9lw5Y3LZD7mCQWtSrO8
+        U7FHmNt8/2eDzC9fn/EuXswxL5J7odfsl+an74n1PBSsnDv5TO2re8Ezz5SkTGLy7Jg9xbdk
+        j+u69bNvbIr5/toxLXzed+arU+dNXs1X6CBVqTltms4emzyRHi/JiiJzVcVzmRpvmk5cc/5y
+        2Ffsoph/SbS3tv/+y+Uzxa+XiC/M9sj45mDEkME9/W9Cx8tfzsdnbfacNOsGZ6IRm1DbhrCj
+        u69yvd2tOpf/6IF5Mh3pRyrs+rMUIk4W8P3/sfFZePi5vnINi4XbJfjNRB49f+RyXImlOCPR
+        UIu5qDgRAHcRTy4+BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHLMWRmVeSWpSXmKPExsWy7bCSvO6kZz4pBt1rrS0+fv3NYtE04S+z
+        xeq7/WwWNw/sZLJYufook8W71nMsFkf/v2WzmHToGqPF3lvaFvOXPWW3WPf6PYvFpr8nmRx4
+        PHbOusvucf7eRhaPy2dLPTat6mTz2PnQ0mPzknqP3Tcb2Dz6tqxi9Pi8SS6AM4rLJiU1J7Ms
+        tUjfLoEr48f+VuaCJVwVS9eqNTCe5ehi5OSQEDCR6L34la2LkYtDSGA3o0Tviv1MEAlxieZr
+        P9ghbGGJlf+es0MUfWSU2PFtMpDDwcEmoClxYXIpSI2IgJdE+9tZYIOYBf4xSrz/ehlskLBA
+        iMS5eY/ABrEIqErsW/8UzOYVsJT4tboTapm8xMxL38HinAJWEt9n7GYGmS8EVNO4IB6iXFDi
+        5MwnLCA2M1B589bZzBMYBWYhSc1CklrAyLSKUTK1oDg3PbfYsMAwL7Vcrzgxt7g0L10vOT93
+        EyM4SrQ0dzBuX/VB7xAjEwfjIUYJDmYlEV7eSvcUId6UxMqq1KL8+KLSnNTiQ4zSHCxK4rwX
+        uk7GCwmkJ5akZqemFqQWwWSZODilGpgsk26+f5zl2zxDcVqxv4VBiNmPwnWyjg79L2d7BDlX
+        Lryfwnf/EL/ZvmynaTd6Ot8JVn/7e1lSWqj072H2Vc66z5N35kzmnPUp9Gxap+VdFo5Dmzfs
+        7X3iJKzFITGhY4VH7/x/9heko/afmV7ZqLbtT+jO73H2h9SmbRGcrDZrcZhu9yXxaGfLEqVt
+        3sXlXN97hQxzBUOXFuttaJi0WPnFkxipCdvDuNxPak1MOiPhvv/O3JwJOo9ulZ3NYp92uq7v
+        7NkV/GVGCf3xFXYX1xstXNa9LkH/s6KIm7F/6JkwVZE3Gsn+E4+q/dm75lZl4Oa52naXyt9c
+        nXp97sqk9KSA7/d5w+JvZVef2m0i26bEUpyRaKjFXFScCACTtju/AQMAAA==
+X-CMS-MailID: 20230429094243epcas5p13be3ca62dc2b03299d09cafaf11923c1
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230429094238epcas5p4efa3dc785fa54ab974852c7f90113025
+X-CMS-RootMailID: 20230429094243epcas5p13be3ca62dc2b03299d09cafaf11923c1
 References: <20230429093925.133327-1-joshi.k@samsung.com>
-        <CGME20230429094238epcas5p4efa3dc785fa54ab974852c7f90113025@epcas5p4.samsung.com>
+        <CGME20230429094243epcas5p13be3ca62dc2b03299d09cafaf11923c1@epcas5p1.samsung.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Allow this function to take nr_hw_queues as a parameter. And change all
-the callers. This is in preparation to introduce queues which do not
-have to be registered with block-layer.
+From: Anuj Gupta <anuj20.g@samsung.com>
 
+Introduce register/unregister callbacks to fops and mq_ops, so that
+callers can attach/detach to raw-queues.
+
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
 Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
 ---
- drivers/nvme/host/core.c   | 5 +++--
- drivers/nvme/host/fc.c     | 3 ++-
- drivers/nvme/host/nvme.h   | 2 +-
- drivers/nvme/host/pci.c    | 3 ++-
- drivers/nvme/host/rdma.c   | 2 +-
- drivers/nvme/host/tcp.c    | 3 ++-
- drivers/nvme/target/loop.c | 3 ++-
- 7 files changed, 13 insertions(+), 8 deletions(-)
+ include/linux/blk-mq.h | 2 ++
+ include/linux/fs.h     | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 1bfd52eae2ee..ba476c48d566 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4962,7 +4962,7 @@ EXPORT_SYMBOL_GPL(nvme_remove_admin_tag_set);
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 06caacd77ed6..7d6790be4847 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -657,6 +657,8 @@ struct blk_mq_ops {
+ 	 * information about a request.
+ 	 */
+ 	void (*show_rq)(struct seq_file *m, struct request *rq);
++	int (*register_queue)(void *data);
++	int (*unregister_queue)(void *data, int qid);
+ #endif
+ };
  
- int nvme_alloc_io_tag_set(struct nvme_ctrl *ctrl, struct blk_mq_tag_set *set,
- 		const struct blk_mq_ops *ops, unsigned int nr_maps,
--		unsigned int cmd_size)
-+		unsigned int cmd_size, unsigned int nr_hw_queues)
- {
- 	int ret;
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 475d88640d3d..79acccc5e7d4 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1798,6 +1798,8 @@ struct file_operations {
+ 	int (*uring_cmd)(struct io_uring_cmd *ioucmd, unsigned int issue_flags);
+ 	int (*uring_cmd_iopoll)(struct io_uring_cmd *, struct io_comp_batch *,
+ 				unsigned int poll_flags);
++	int (*register_queue)(struct file *f);
++	int (*unregister_queue)(struct file *f, int qid);
+ } __randomize_layout;
  
-@@ -4983,9 +4983,10 @@ int nvme_alloc_io_tag_set(struct nvme_ctrl *ctrl, struct blk_mq_tag_set *set,
- 		set->flags |= BLK_MQ_F_BLOCKING;
- 	set->cmd_size = cmd_size,
- 	set->driver_data = ctrl;
--	set->nr_hw_queues = ctrl->queue_count - 1;
-+	set->nr_hw_queues = nr_hw_queues - 1;
- 	set->timeout = NVME_IO_TIMEOUT;
- 	set->nr_maps = nr_maps;
-+
- 	ret = blk_mq_alloc_tag_set(set);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
-index 456ee42a6133..c7dd084c1999 100644
---- a/drivers/nvme/host/fc.c
-+++ b/drivers/nvme/host/fc.c
-@@ -2918,7 +2918,8 @@ nvme_fc_create_io_queues(struct nvme_fc_ctrl *ctrl)
- 	ret = nvme_alloc_io_tag_set(&ctrl->ctrl, &ctrl->tag_set,
- 			&nvme_fc_mq_ops, 1,
- 			struct_size((struct nvme_fcp_op_w_sgl *)NULL, priv,
--				    ctrl->lport->ops->fcprqst_priv_sz));
-+				    ctrl->lport->ops->fcprqst_priv_sz),
-+				    ctrl->ctrl.queue_count);
- 	if (ret)
- 		return ret;
- 
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index bf46f122e9e1..73992dc9dec7 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -748,7 +748,7 @@ int nvme_alloc_admin_tag_set(struct nvme_ctrl *ctrl, struct blk_mq_tag_set *set,
- void nvme_remove_admin_tag_set(struct nvme_ctrl *ctrl);
- int nvme_alloc_io_tag_set(struct nvme_ctrl *ctrl, struct blk_mq_tag_set *set,
- 		const struct blk_mq_ops *ops, unsigned int nr_maps,
--		unsigned int cmd_size);
-+		unsigned int cmd_size, unsigned int nr_hw_queues);
- void nvme_remove_io_tag_set(struct nvme_ctrl *ctrl);
- 
- void nvme_remove_namespaces(struct nvme_ctrl *ctrl);
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 7f25c0fe3a0b..3a38ee6ee129 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3033,7 +3033,8 @@ static int nvme_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 
- 	if (dev->online_queues > 1) {
- 		nvme_alloc_io_tag_set(&dev->ctrl, &dev->tagset, &nvme_mq_ops,
--				nvme_pci_nr_maps(dev), sizeof(struct nvme_iod));
-+				nvme_pci_nr_maps(dev), sizeof(struct nvme_iod),
-+				dev->ctrl.queue_count);
- 		nvme_dbbuf_set(dev);
- 	}
- 
-diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
-index 0eb79696fb73..2e2e131edc62 100644
---- a/drivers/nvme/host/rdma.c
-+++ b/drivers/nvme/host/rdma.c
-@@ -795,7 +795,7 @@ static int nvme_rdma_alloc_tag_set(struct nvme_ctrl *ctrl)
- 	return nvme_alloc_io_tag_set(ctrl, &to_rdma_ctrl(ctrl)->tag_set,
- 			&nvme_rdma_mq_ops,
- 			ctrl->opts->nr_poll_queues ? HCTX_MAX_TYPES : 2,
--			cmd_size);
-+			cmd_size, ctrl->queue_count);
- }
- 
- static void nvme_rdma_destroy_admin_queue(struct nvme_rdma_ctrl *ctrl)
-diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-index bf0230442d57..50efbd724284 100644
---- a/drivers/nvme/host/tcp.c
-+++ b/drivers/nvme/host/tcp.c
-@@ -1893,7 +1893,8 @@ static int nvme_tcp_configure_io_queues(struct nvme_ctrl *ctrl, bool new)
- 		ret = nvme_alloc_io_tag_set(ctrl, &to_tcp_ctrl(ctrl)->tag_set,
- 				&nvme_tcp_mq_ops,
- 				ctrl->opts->nr_poll_queues ? HCTX_MAX_TYPES : 2,
--				sizeof(struct nvme_tcp_request));
-+				sizeof(struct nvme_tcp_request),
-+				ctrl->queue_count);
- 		if (ret)
- 			goto out_free_io_queues;
- 	}
-diff --git a/drivers/nvme/target/loop.c b/drivers/nvme/target/loop.c
-index f2d24b2d992f..f02419b537f7 100644
---- a/drivers/nvme/target/loop.c
-+++ b/drivers/nvme/target/loop.c
-@@ -496,7 +496,8 @@ static int nvme_loop_create_io_queues(struct nvme_loop_ctrl *ctrl)
- 	ret = nvme_alloc_io_tag_set(&ctrl->ctrl, &ctrl->tag_set,
- 			&nvme_loop_mq_ops, 1,
- 			sizeof(struct nvme_loop_iod) +
--			NVME_INLINE_SG_CNT * sizeof(struct scatterlist));
-+			NVME_INLINE_SG_CNT * sizeof(struct scatterlist),
-+			ctrl->ctrl.queue_count);
- 	if (ret)
- 		goto out_destroy_queues;
- 
+ struct inode_operations {
 -- 
 2.25.1
 
