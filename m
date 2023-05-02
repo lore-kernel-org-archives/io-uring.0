@@ -2,109 +2,106 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A57EAC77B73
-	for <io-uring@archiver.kernel.org>; Tue,  2 May 2023 15:21:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D277C77B7E
+	for <io-uring@archiver.kernel.org>; Tue,  2 May 2023 16:54:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbjEBPVo (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 2 May 2023 11:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38428 "EHLO
+        id S233923AbjEBQyM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 2 May 2023 12:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbjEBPV0 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 2 May 2023 11:21:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B11D212E
-        for <io-uring@vger.kernel.org>; Tue,  2 May 2023 08:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683040825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Za7NFd4AI/q6+jaM9pggaMzbvwNlSjLc3P58MOyPj84=;
-        b=Rjiouzu4YKQ2BhTZFiQdZZPBazWjvTLXLnz4PqYD2Szz6MTozaEVOtwISuLNwX0dqIwvJS
-        YzNKu8osq7qUrw+KVV1H3A4EvzDHsWXFmHqqO0yQB9Uvywv+qtZL8Lu2g+qVo3FwA0HCVx
-        luuPfvpzmGbXxiBgoWxgBIodpCBdVbQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-136-DAgpydCuPSWIuYkEPnhedQ-1; Tue, 02 May 2023 11:20:20 -0400
-X-MC-Unique: DAgpydCuPSWIuYkEPnhedQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 55BDF29AB3E7;
-        Tue,  2 May 2023 15:20:20 +0000 (UTC)
-Received: from ovpn-8-16.pek2.redhat.com (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D2030492C13;
-        Tue,  2 May 2023 15:20:17 +0000 (UTC)
-Date:   Tue, 2 May 2023 23:20:12 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, ming.lei@redhat.com
-Subject: Re: [RFC 7/7] io_uring,fs: introduce IORING_OP_GET_BUF
-Message-ID: <ZFEqLGEERVMvFq+C@ovpn-8-16.pek2.redhat.com>
-References: <cover.1682701588.git.asml.silence@gmail.com>
- <fc43826d510dc75de83d81161ca03e2688515686.1682701588.git.asml.silence@gmail.com>
- <ZFEk2rQv2//KRBeK@ovpn-8-16.pek2.redhat.com>
+        with ESMTP id S234100AbjEBQyI (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 2 May 2023 12:54:08 -0400
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65BF273A
+        for <io-uring@vger.kernel.org>; Tue,  2 May 2023 09:53:59 -0700 (PDT)
+Received: by devbig1114.prn1.facebook.com (Postfix, from userid 425415)
+        id 3F6994CF6CC9; Tue,  2 May 2023 09:53:47 -0700 (PDT)
+From:   Stefan Roesch <shr@devkernel.io>
+To:     io-uring@vger.kernel.org, kernel-team@fb.com
+Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH v12 5/5] io_uring: add prefer busy poll to register and unregister napi api
+Date:   Tue,  2 May 2023 09:53:32 -0700
+Message-Id: <20230502165332.2075091-6-shr@devkernel.io>
+X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230502165332.2075091-1-shr@devkernel.io>
+References: <20230502165332.2075091-1-shr@devkernel.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFEk2rQv2//KRBeK@ovpn-8-16.pek2.redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Tue, May 02, 2023 at 10:57:30PM +0800, Ming Lei wrote:
-> On Sun, Apr 30, 2023 at 10:35:29AM +0100, Pavel Begunkov wrote:
-> > There are several problems with splice requests, aka IORING_OP_SPLICE:
-> > 1) They are always executed by a worker thread, which is a slow path,
-> >    as we don't have any reliable way to execute it NOWAIT.
-> > 2) It can't easily poll for data, as there are 2 files it operates on.
-> >    It would either need to track what file to poll or poll both of them,
-> >    in both cases it'll be a mess and add lot of overhead.
-> > 3) It has to have pipes in the middle, which adds overhead and is not
-> >    great from the uapi design perspective when it goes for io_uring
-> >    requests.
-> > 4) We want to operate with spliced data as with a normal buffer, i.e.
-> >    write / send / etc. data as normally while it's zerocopy.
-> > 
-> > It can partially be solved, but the root cause is a suboptimal for
-> > io_uring design of IORING_OP_SPLICE. Introduce a new request type
-> > called IORING_OP_GET_BUF, inspired by splice(2) as well as other
-> > proposals like fused requests. The main idea is to use io_uring's
-> > registered buffers as the middle man instead of pipes. Once a buffer
-> > is fetched / spliced from a file using a new fops callback
-> > ->iou_get_buf, it's installed as a registered buffers and can be used
-> > by all operations supporting the feature.
-> > 
-> > Once the userspace releases the buffer, io_uring will wait for all
-> > requests using the buffer to complete and then use a file provided
-> > callback ->release() to return the buffer back. It operates on the
-> 
-> In the commit of "io_uring: add an example for buf-get op", I don't see
-> any code to release the buffer, can you explain it in details about how
-> to release the buffer in userspace? And add it in your example?
-> 
-> Here I guess the ->release() is called in the following code path:
-> 
-> io_buffer_unmap
->     io_rsrc_buf_put
->         io_rsrc_put_work
->             io_rsrc_node_ref_zero
->                 io_put_rsrc_node
-> 
-> If it is true, what is counter-pair code for io_put_rsrc_node()?
+This adds the napi prefer busy poll setting to the register and
+unregister napi api. When napi is unregistered and arg is specified,
+both napi settings: busy poll timeout and the prefer busy poll setting
+are copied into the user structure.
 
-It is io_req_set_rsrc_node() called from io_prep_rw() and
-io_send_zc_prep().
+Signed-off-by: Stefan Roesch <shr@devkernel.io>
+Acked-by: Jakub Kicinski <kuba@kernel.org>
+---
+ include/uapi/linux/io_uring.h |  3 ++-
+ io_uring/napi.c               | 10 +++++++---
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-So only fs IO and net zc supports it, however the fixed buffer
-is used in ->prep(), that means this way can't work when the
-rw/net_send_zc OP follows IORING_OP_GET_BUF by IO_LINK.
-
-This way is one big defect because IOSQE_IO_LINK does simplify
-application a lot.
-
-Thanks,
-Ming
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.=
+h
+index 278c1a9de78c..16d17d6ab7f7 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -656,7 +656,8 @@ struct io_uring_buf_reg {
+ /* argument for IORING_(UN)REGISTER_NAPI */
+ struct io_uring_napi {
+ 	__u32	busy_poll_to;
+-	__u32	pad;
++	__u8	prefer_busy_poll;
++	__u8	pad[3];
+ 	__u64	resv;
+ };
+=20
+diff --git a/io_uring/napi.c b/io_uring/napi.c
+index fa531949fc6f..8b5df89fbb2c 100644
+--- a/io_uring/napi.c
++++ b/io_uring/napi.c
+@@ -222,16 +222,18 @@ void io_napi_free(struct io_ring_ctx *ctx)
+ int io_register_napi(struct io_ring_ctx *ctx, void __user *arg)
+ {
+ 	const struct io_uring_napi curr =3D {
+-		.busy_poll_to =3D ctx->napi_busy_poll_to,
++		.busy_poll_to 	  =3D ctx->napi_busy_poll_to,
++		.prefer_busy_poll =3D ctx->napi_prefer_busy_poll
+ 	};
+ 	struct io_uring_napi napi;
+=20
+ 	if (copy_from_user(&napi, arg, sizeof(napi)))
+ 		return -EFAULT;
+-	if (napi.pad || napi.resv)
++	if (napi.pad[0] || napi.pad[1] || napi.pad[2] || napi.resv)
+ 		return -EINVAL;
+=20
+ 	WRITE_ONCE(ctx->napi_busy_poll_to, napi.busy_poll_to);
++	WRITE_ONCE(ctx->napi_prefer_busy_poll, !!napi.prefer_busy_poll);
+=20
+ 	if (copy_to_user(arg, &curr, sizeof(curr)))
+ 		return -EFAULT;
+@@ -250,13 +252,15 @@ int io_register_napi(struct io_ring_ctx *ctx, void =
+__user *arg)
+ int io_unregister_napi(struct io_ring_ctx *ctx, void __user *arg)
+ {
+ 	const struct io_uring_napi curr =3D {
+-		.busy_poll_to =3D ctx->napi_busy_poll_to,
++		.busy_poll_to 	  =3D ctx->napi_busy_poll_to,
++		.prefer_busy_poll =3D ctx->napi_prefer_busy_poll
+ 	};
+=20
+ 	if (arg && copy_to_user(arg, &curr, sizeof(curr)))
+ 		return -EFAULT;
+=20
+ 	WRITE_ONCE(ctx->napi_busy_poll_to, 0);
++	WRITE_ONCE(ctx->napi_prefer_busy_poll, false);
+ 	return 0;
+ }
+=20
+--=20
+2.39.1
 
