@@ -2,26 +2,27 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDBE2C77B73
-	for <io-uring@archiver.kernel.org>; Tue,  2 May 2023 16:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 80723C7EE22
+	for <io-uring@archiver.kernel.org>; Tue,  2 May 2023 16:54:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbjEBQyO (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 2 May 2023 12:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S234383AbjEBQyQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 2 May 2023 12:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234401AbjEBQyJ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 2 May 2023 12:54:09 -0400
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330E730EA
-        for <io-uring@vger.kernel.org>; Tue,  2 May 2023 09:54:01 -0700 (PDT)
+        with ESMTP id S234388AbjEBQyM (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 2 May 2023 12:54:12 -0400
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B295735A5
+        for <io-uring@vger.kernel.org>; Tue,  2 May 2023 09:54:03 -0700 (PDT)
 Received: by devbig1114.prn1.facebook.com (Postfix, from userid 425415)
-        id 14B4B4CF6CBE; Tue,  2 May 2023 09:53:47 -0700 (PDT)
+        id 313114CF6CC6; Tue,  2 May 2023 09:53:47 -0700 (PDT)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     io-uring@vger.kernel.org, kernel-team@fb.com
-Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org
-Subject: [PATCH v12 1/5] io-uring: move io_wait_queue definition to header file
-Date:   Tue,  2 May 2023 09:53:28 -0700
-Message-Id: <20230502165332.2075091-2-shr@devkernel.io>
+Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH v12 4/5] io_uring: add register/unregister napi function
+Date:   Tue,  2 May 2023 09:53:31 -0700
+Message-Id: <20230502165332.2075091-5-shr@devkernel.io>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230502165332.2075091-1-shr@devkernel.io>
 References: <20230502165332.2075091-1-shr@devkernel.io>
@@ -31,93 +32,166 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This moves the definition of the io_wait_queue structure to the header
-file so it can be also used from other files.
+This adds an api to register and unregister the napi for io-uring. If
+the arg value is specified when unregistering, the current napi setting
+for the busy poll timeout is copied into the user structure. If this is
+not required, NULL can be passed as the arg value.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
+Acked-by: Jakub Kicinski <kuba@kernel.org>
 ---
- io_uring/io_uring.c | 21 ---------------------
- io_uring/io_uring.h | 22 ++++++++++++++++++++++
- 2 files changed, 22 insertions(+), 21 deletions(-)
+ include/uapi/linux/io_uring.h | 11 ++++++++
+ io_uring/io_uring.c           |  9 +++++++
+ io_uring/napi.c               | 48 +++++++++++++++++++++++++++++++++++
+ io_uring/napi.h               | 13 ++++++++++
+ 4 files changed, 81 insertions(+)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 3d43df8f1e4e..efbd6c9c56e5 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2516,33 +2516,12 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsig=
-ned int nr)
- 	return ret;
- }
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.=
+h
+index 0716cb17e436..278c1a9de78c 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -523,6 +523,10 @@ enum {
+ 	/* register a range of fixed file slots for automatic slot allocation *=
+/
+ 	IORING_REGISTER_FILE_ALLOC_RANGE	=3D 25,
 =20
--struct io_wait_queue {
--	struct wait_queue_entry wq;
--	struct io_ring_ctx *ctx;
--	unsigned cq_tail;
--	unsigned nr_timeouts;
--	ktime_t timeout;
--};
--
- static inline bool io_has_work(struct io_ring_ctx *ctx)
- {
- 	return test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq) ||
- 	       !llist_empty(&ctx->work_llist);
- }
++	/* set/clear busy poll settings */
++	IORING_REGISTER_NAPI			=3D 26,
++	IORING_UNREGISTER_NAPI			=3D 27,
++
+ 	/* this goes last */
+ 	IORING_REGISTER_LAST,
 =20
--static inline bool io_should_wake(struct io_wait_queue *iowq)
--{
--	struct io_ring_ctx *ctx =3D iowq->ctx;
--	int dist =3D READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
--
--	/*
--	 * Wake up if we have enough events, or if a timeout occurred since we
--	 * started waiting. For timeouts, we always want to return to userspace=
-,
--	 * regardless of event count.
--	 */
--	return dist >=3D 0 || atomic_read(&ctx->cq_timeouts) !=3D iowq->nr_time=
-outs;
--}
--
- static int io_wake_function(struct wait_queue_entry *curr, unsigned int =
-mode,
- 			    int wake_flags, void *key)
- {
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 25515d69d205..5f04bd47562a 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -41,6 +41,28 @@ enum {
- 	IOU_STOP_MULTISHOT	=3D -ECANCELED,
+@@ -649,6 +653,13 @@ struct io_uring_buf_reg {
+ 	__u64	resv[3];
  };
 =20
-+struct io_wait_queue {
-+	struct wait_queue_entry wq;
-+	struct io_ring_ctx *ctx;
-+	unsigned cq_tail;
-+	unsigned nr_timeouts;
-+	ktime_t timeout;
-+
++/* argument for IORING_(UN)REGISTER_NAPI */
++struct io_uring_napi {
++	__u32	busy_poll_to;
++	__u32	pad;
++	__u64	resv;
 +};
 +
-+static inline bool io_should_wake(struct io_wait_queue *iowq)
+ /*
+  * io_uring_restriction->opcode values
+  */
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index f06175b36b41..66e4591fbe2b 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -4405,6 +4405,15 @@ static int __io_uring_register(struct io_ring_ctx =
+*ctx, unsigned opcode,
+ 			break;
+ 		ret =3D io_register_file_alloc_range(ctx, arg);
+ 		break;
++	case IORING_REGISTER_NAPI:
++		ret =3D -EINVAL;
++		if (!arg)
++			break;
++		ret =3D io_register_napi(ctx, arg);
++		break;
++	case IORING_UNREGISTER_NAPI:
++		ret =3D io_unregister_napi(ctx, arg);
++		break;
+ 	default:
+ 		ret =3D -EINVAL;
+ 		break;
+diff --git a/io_uring/napi.c b/io_uring/napi.c
+index 491d028e8146..fa531949fc6f 100644
+--- a/io_uring/napi.c
++++ b/io_uring/napi.c
+@@ -212,6 +212,54 @@ void io_napi_free(struct io_ring_ctx *ctx)
+ 	spin_unlock(&ctx->napi_lock);
+ }
+=20
++/*
++ * io_napi_register() - Register napi with io-uring
++ * @ctx: pointer to io-uring context structure
++ * @arg: pointer to io_uring_napi structure
++ *
++ * Register napi in the io-uring context.
++ */
++int io_register_napi(struct io_ring_ctx *ctx, void __user *arg)
 +{
-+	struct io_ring_ctx *ctx =3D iowq->ctx;
-+	int dist =3D READ_ONCE(ctx->rings->cq.tail) - (int) iowq->cq_tail;
++	const struct io_uring_napi curr =3D {
++		.busy_poll_to =3D ctx->napi_busy_poll_to,
++	};
++	struct io_uring_napi napi;
 +
-+	/*
-+	 * Wake up if we have enough events, or if a timeout occurred since we
-+	 * started waiting. For timeouts, we always want to return to userspace=
-,
-+	 * regardless of event count.
-+	 */
-+	return dist >=3D 0 || atomic_read(&ctx->cq_timeouts) !=3D iowq->nr_time=
-outs;
++	if (copy_from_user(&napi, arg, sizeof(napi)))
++		return -EFAULT;
++	if (napi.pad || napi.resv)
++		return -EINVAL;
++
++	WRITE_ONCE(ctx->napi_busy_poll_to, napi.busy_poll_to);
++
++	if (copy_to_user(arg, &curr, sizeof(curr)))
++		return -EFAULT;
++
++	return 0;
 +}
 +
- struct io_uring_cqe *__io_get_cqe(struct io_ring_ctx *ctx, bool overflow=
-);
- bool io_req_cqe_overflow(struct io_kiocb *req);
- int io_run_task_work_sig(struct io_ring_ctx *ctx);
++/*
++ * io_napi_unregister() - Unregister napi with io-uring
++ * @ctx: pointer to io-uring context structure
++ * @arg: pointer to io_uring_napi structure
++ *
++ * Unregister napi. If arg has been specified copy the busy poll timeout=
+ and
++ * prefer busy poll setting to the passed in structure.
++ */
++int io_unregister_napi(struct io_ring_ctx *ctx, void __user *arg)
++{
++	const struct io_uring_napi curr =3D {
++		.busy_poll_to =3D ctx->napi_busy_poll_to,
++	};
++
++	if (arg && copy_to_user(arg, &curr, sizeof(curr)))
++		return -EFAULT;
++
++	WRITE_ONCE(ctx->napi_busy_poll_to, 0);
++	return 0;
++}
++
+ /*
+  * __io_napi_adjust_timeout() - Add napi id to the busy poll list
+  * @ctx: pointer to io-uring context structure
+diff --git a/io_uring/napi.h b/io_uring/napi.h
+index 0484dfd9a396..b5e93b3777c0 100644
+--- a/io_uring/napi.h
++++ b/io_uring/napi.h
+@@ -12,6 +12,9 @@
+ void io_napi_init(struct io_ring_ctx *ctx);
+ void io_napi_free(struct io_ring_ctx *ctx);
+=20
++int io_register_napi(struct io_ring_ctx *ctx, void __user *arg);
++int io_unregister_napi(struct io_ring_ctx *ctx, void __user *arg);
++
+ void __io_napi_add(struct io_ring_ctx *ctx, struct file *file);
+=20
+ void __io_napi_adjust_timeout(struct io_ring_ctx *ctx,
+@@ -67,6 +70,16 @@ static inline void io_napi_free(struct io_ring_ctx *ct=
+x)
+ {
+ }
+=20
++static inline int io_register_napi(struct io_ring_ctx *ctx, void __user =
+*arg)
++{
++	return -EOPNOTSUPP;
++}
++
++static inline int io_unregister_napi(struct io_ring_ctx *ctx, void __use=
+r *arg)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline bool io_napi(struct io_ring_ctx *ctx)
+ {
+ 	return false;
 --=20
 2.39.1
 
