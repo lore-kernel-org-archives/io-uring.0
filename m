@@ -2,84 +2,77 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E616AC77B78
-	for <io-uring@archiver.kernel.org>; Thu,  4 May 2023 17:54:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F512C77B7C
+	for <io-uring@archiver.kernel.org>; Thu,  4 May 2023 19:27:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjEDRy0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 4 May 2023 13:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S229463AbjEDT1h (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 4 May 2023 15:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEDRyZ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 4 May 2023 13:54:25 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2E6E72
-        for <io-uring@vger.kernel.org>; Thu,  4 May 2023 10:54:24 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-32ea67ffec0so75835ab.0
-        for <io-uring@vger.kernel.org>; Thu, 04 May 2023 10:54:24 -0700 (PDT)
+        with ESMTP id S229514AbjEDT1g (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 4 May 2023 15:27:36 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BC37AB4
+        for <io-uring@vger.kernel.org>; Thu,  4 May 2023 12:27:33 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-763970c9a9eso2279239f.1
+        for <io-uring@vger.kernel.org>; Thu, 04 May 2023 12:27:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683222863; x=1685814863;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zqOzZ62E2Qjo++r0s7JK7yU4Z1ely6sqVTI0j9/wojY=;
-        b=TJIBlHGhzmsm+jECCtT+pRaxYCCUWGx2EufOK614sxzJm66vDLdyvkyy1/RWzqG9IS
-         y2DHKHt0QcixGi13AJ2vhFTL8br7FLSHukt9A9TOmYQOCaxWUWiorhicqEiMuFpvXLpZ
-         hjoCgP3eKtAbFBhaSAcvAfHHOBXWyP3onV2f7saP3EK6R2n5YkDpkM9xuApvDFfJIylK
-         gZDBxG4Vbnh1r2FELguKEDjmucXQpFMAVSurjcMgsLXlymElTAPHGHBtZGO8rANyRhu/
-         Iv4GZONuPZjLB2YFbqoqbg6L3zsvwOPI4JK/UnrCZoyuVO6H0XbVph7rM1vMui5aDfIK
-         ZtBg==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683228453; x=1685820453;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FLj2Iv8mcMb8PQZbE5/bOGODHpBaLUqjhieHeG2zWaw=;
+        b=e8YZhsVB1dJuc2Z27t7pe3NDZPDnB5Jxy43gxwxpuaPglSbnIXxdTwr/iTMyRoS98R
+         f0NQDmFEIFTkTNV84B0D9jA/F6mGL107VNgP63bqOHSXQeeF5AB4bAieAgTmngkJMBqj
+         Iorhc2e9aN3Fi1dDYKW/6U8oaKFXCkO7OePu3qKFOSi7KEMy0fdKpyVOG7WY5Ip7b6Fv
+         vkUEvPF23ootvN5rehIDlhIahAQvCYXDLn2QPNQDS7p3Dq3rBQLkAxu3JhoayUcxGwVa
+         QQOzXxj47h8PZnNQO+4wGuVTUoYqyCgh0GWRXCiDC+XR5zgRNmgSkZuTIDl/FEJP3Cd/
+         TCbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683222863; x=1685814863;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zqOzZ62E2Qjo++r0s7JK7yU4Z1ely6sqVTI0j9/wojY=;
-        b=JnaYDcKyE6k+dXHFuU2tmNbzTKjhkJDgAKnlT+O4DosZcQ/GTFjgIyoBYgG635Xx4p
-         USyimoeHUAuZ2qN6TRovJTvuXckl4pRH301FX54H09SPGDCzLehNZTavLMp2hz7X6IHh
-         5RBtBKS3iJpqtdh93IfsRbLe28l6uUCBhyuedWexjITDl367S6DLWYZco+TkEkvFJyae
-         GXwqu9zg2jOYpn1KIjdEuouWZ8X0/HVPM4F6+1jIfclX+mDNWRgxA4La02B2p/48WIUS
-         e+DOonCzvw2+HcVGQb/HvNTBqgVzjmr7DKApVsOLyUSkyQrLeS7ivEzOGNfO+nX6ILI3
-         3SeQ==
-X-Gm-Message-State: AC+VfDxjqSIN8ml8C4fLW2v6smAGEHbcUosGH9+Ru/0Akk0gDEbiRbz6
-        a4wruOj6quIvLrr8ARKBSSx5F8CrK6x4p8gupG8=
-X-Google-Smtp-Source: ACHHUZ7GC+Mqmkl3jY4sZHxf3IUbQsPq6G7P8+5aUPISN8aDhXJVJKsBXlgA0WTz5lvrc8uFvIgm8g==
-X-Received: by 2002:a05:6e02:1be4:b0:32a:a8d7:f099 with SMTP id y4-20020a056e021be400b0032aa8d7f099mr13258992ilv.3.1683222863508;
-        Thu, 04 May 2023 10:54:23 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id a192-20020a0216c9000000b0040fa63bfbf1sm10627398jaa.117.2023.05.04.10.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 May 2023 10:54:22 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, Haiyue Wang <haiyue.wang@intel.com>
-In-Reply-To: <20230504053835.118208-1-haiyue.wang@intel.com>
-References: <20230504053835.118208-1-haiyue.wang@intel.com>
-Subject: Re: [PATCH liburing v1] .gitignore: Add
- `examples/rsrc-update-bench`
-Message-Id: <168322286200.1397172.4251072122192015033.b4-ty@kernel.dk>
-Date:   Thu, 04 May 2023 11:54:22 -0600
+        d=1e100.net; s=20221208; t=1683228453; x=1685820453;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FLj2Iv8mcMb8PQZbE5/bOGODHpBaLUqjhieHeG2zWaw=;
+        b=lgIEdq77FcUfHdMLgC1npy4H21bfG5oIqjb1C9WLkaEY8mW4kAt3RWMeF+RQ0M+HF6
+         BtsDodSoyjdVNtZYXmTkNKatjMwrkYgqCOusOvkC0c9bbzFHYo1WLxwB1doofChLgq2H
+         kxUD3wRTKDNFRfLfWVYXqg/UgOsdvKqUfhNhFKvITLBX0N+iBEwSbSBPTBmykN8lP054
+         ZenZWOn3QWdngVoqq86MalWzyTO8Mi3OlPIBA/AI8cuZ136ZM1Cf2muo3j6e+3JpLnra
+         pazwnDpS2Jgls0cqUHC/khmstGr1hPoupJY90GV6ciR6lhaSUFmXZRQvhTUEslYUVcuC
+         H8Qg==
+X-Gm-Message-State: AC+VfDyabwOlgaJT60DFFth74J58xJjxOo+AwpmsRjA/lsiJ5vBR3XlL
+        Zv3iK2jGs8cKbXEolOf6zXV6z8u0S7hyABdIx9s=
+X-Google-Smtp-Source: ACHHUZ7sKALwzJ1fuJb3CgBfxQoPXPTRX+zzn8uXOvwFmt/rzClFu4i8JasB/j/UDnboNp00GGYMXw==
+X-Received: by 2002:a6b:3e57:0:b0:763:542a:f26e with SMTP id l84-20020a6b3e57000000b00763542af26emr5630010ioa.1.1683228453121;
+        Thu, 04 May 2023 12:27:33 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id eq18-20020a0566384e3200b00411b2414eb5sm51582jab.94.2023.05.04.12.27.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 May 2023 12:27:32 -0700 (PDT)
+Message-ID: <6171ec94-150c-e277-d495-aaa3e1d694f7@kernel.dk>
+Date:   Thu, 4 May 2023 13:27:31 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: io_uring is a regression over 16 year old aio/io_submit, 2+
+ decades of Microsoft NT, and *BSD circa 1997-2001
+Content-Language: en-US
+To:     Reece <me@reece.sx>, io-uring@vger.kernel.org
+References: <23940f55-9905-4e4b-48dc-31d309c9e363@reece.sx>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <23940f55-9905-4e4b-48dc-31d309c9e363@reece.sx>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-00303
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+On 5/4/23 1:20?PM, Reece wrote a pile of garbage.
 
-On Thu, 04 May 2023 13:38:35 +0800, Haiyue Wang wrote:
-> The commit c0940508607f ("examples: add rsrc update benchmark") didn't
-> add the built example binary into `.gitignore` file.
-> 
-> 
+If you have constructive criticism, the list is open to discuss it.
+Sending trolly garbage anonymously is, however, neither welcome nor a
+productive approach.
 
-Applied, thanks!
-
-[1/1] .gitignore: Add `examples/rsrc-update-bench`
-      commit: 9b56e492fca8465a45676c598509e8ae0a5dc56e
-
-Best regards,
 -- 
 Jens Axboe
-
-
 
