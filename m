@@ -2,91 +2,128 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD69CC77B75
-	for <io-uring@archiver.kernel.org>; Tue,  9 May 2023 16:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7CD8C7EE23
+	for <io-uring@archiver.kernel.org>; Wed, 10 May 2023 00:49:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232747AbjEIQ4C (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 9 May 2023 12:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
+        id S235263AbjEJAtE (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 9 May 2023 20:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbjEIQz5 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 9 May 2023 12:55:57 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B405592
-        for <io-uring@vger.kernel.org>; Tue,  9 May 2023 09:55:37 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-3357ea1681fso493815ab.1
-        for <io-uring@vger.kernel.org>; Tue, 09 May 2023 09:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683651336; x=1686243336;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M99v2oSk5Zw/R5pw6TMXoO8HTOcL3iX6x+QANsvXHn0=;
-        b=nw42TFhjvS20Sm1KQRHjcqztVks5L+rL5PfFA4DM+VLRlkicZy/SMjm/+P35agvpJ6
-         0fy9drliNrmfdxiK3ZETRU0VyppcgqItDAZnUWtT4ocuouF9HzIzERLOg1Rj4povaH5z
-         b4TeGFHBVg9+tpZO3wG5XzPLEQ2eHrzPXAkl3P8jszyq6OATNNUf5bzKfJUo+Z1ve6Mn
-         S6BqPUuM2UIKRW/Q2eUAboxUMrVObPGRAeOq7i6mzOODsH4CWgk7pWnvmNkzitcT6NAP
-         HEdu6jB8crZpEEfwWYe5ifjMoNGd2vb/nPO530kpFXkllsmRdRjgn/IIwwImULoBVo4y
-         gs4Q==
+        with ESMTP id S234919AbjEJAtD (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 9 May 2023 20:49:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5566240CE
+        for <io-uring@vger.kernel.org>; Tue,  9 May 2023 17:48:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683679692;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=DpVMeblzWLLNSO+KpVvlFMBDTVbc6pLPgEIf+DHTaPE=;
+        b=RfvVmmDhshd72mPWBmxIW9T5nW0DPlgGS3Fyj+VPIM7ClbjAUCwtwkKHmks6pyhE0cybQS
+        oSD3uXSRSBRAH2vjSOfM0eRHRb93+yRBc/Mk57nUeKqsfirSvcmh39gHG+UEznM9IZOy2w
+        02cYkdOj1+tgWyjAmvdKku6jir3lemY=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-465-rJzN6n8JMCCqp7K_PweCsg-1; Tue, 09 May 2023 20:48:11 -0400
+X-MC-Unique: rJzN6n8JMCCqp7K_PweCsg-1
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-24e2be731feso3588064a91.1
+        for <io-uring@vger.kernel.org>; Tue, 09 May 2023 17:48:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683651336; x=1686243336;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M99v2oSk5Zw/R5pw6TMXoO8HTOcL3iX6x+QANsvXHn0=;
-        b=FzlpvcYAQ6F+MdHuBGdGVuOk7VY23QCxv8bKkfku3ZD+5ggEA8Xix1zAb7BZ6Fkb0h
-         KDwGkpTHRowrv1VFRCGkePkqEDK+vJtkEfeja0WAXhWivBoOYyUiMMsFOZU+6snpxua+
-         Bw3x+XC5VlujjvyxPuZVOvUTXYuYQmovb9gwUT0WKEe2nr0xOU6Ip4xWowznJG6Zpn1C
-         bvEDJCaeRtZUQ3fsCLHBM/7ZU0lpZTgcjCiwGRw4Ys5fJmuYPygVMtSo58UUxedy+mBR
-         w/x7J22hTAW8Gaqm25Fks4DRXk9hE2WPL7ROiX7jdzs0OYVcR1TV+CPoiiwyPmpQ30P1
-         tyaQ==
-X-Gm-Message-State: AC+VfDzsHAsSPiSNPFqw94fddt2zy0pNBfIfdudGZJ+b1y1As04u7CWm
-        HV8fXkk1eHxlH5Si9tVDUSHtUQ==
-X-Google-Smtp-Source: ACHHUZ45ERK48eSf4fRmxV6a4A56X4dx/bmDEP2oJ4KQZazCYhPAVEsq1amsvvs3C6mbOkKpuT8JLw==
-X-Received: by 2002:a05:6e02:1d05:b0:331:1129:b8a9 with SMTP id i5-20020a056e021d0500b003311129b8a9mr7806137ila.1.1683651336617;
-        Tue, 09 May 2023 09:55:36 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id y19-20020a056638229300b004166c24e30dsm2148946jas.32.2023.05.09.09.55.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 09:55:35 -0700 (PDT)
-Message-ID: <f3c4fce2-657c-2743-6d05-9af29b35fcbe@kernel.dk>
-Date:   Tue, 9 May 2023 10:55:34 -0600
+        d=1e100.net; s=20221208; t=1683679690; x=1686271690;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DpVMeblzWLLNSO+KpVvlFMBDTVbc6pLPgEIf+DHTaPE=;
+        b=SocnRbDYX3lsVGebWUx5VFsqZpAsPCjMZrCxhXHMLp6wukiOusPs6IIOySPHOx7JL6
+         pekrXL2hrQ0PGCJoURVKYCZtQguPcjRbIf7szWMrkUdftTp9UM4nE1onJ/XOGUjxXnoo
+         7NiUWJTwFuzAtb6iQEPEO8cMQFV0xvGSO49M2knGFdlTmWBwhCoU0I5RBoB21XoPbOTZ
+         Pg4mkTnkfKyjESuA+lorzbIqiTzAekd+0SNWuf+zfKZQPgwbh2/9pg4CA2Ugl7yz4KfZ
+         8XV/rOspgAM/W1+JCPZKNJe2BfV+jWI5AFEe3udmbAVRcIlV2FIjxdqib3ggmV12F2OD
+         sIMA==
+X-Gm-Message-State: AC+VfDwJ29DduYmfdYokRhdf2avnfBTBzwoX52N4wbuRSoCdUBjYyWor
+        3msgDniB0ydQsPRvBZuDNWl+o8svuW+on0SYUDCRnoDIUBJsXR4Y54lmaUsZ/6gnfljPf36gET9
+        WNlRikDjYsnXB1nYCIbcNlwCbOHdHaejRZh0=
+X-Received: by 2002:a17:90a:a681:b0:23f:582d:f45f with SMTP id d1-20020a17090aa68100b0023f582df45fmr15486710pjq.1.1683679689838;
+        Tue, 09 May 2023 17:48:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ561Owgx5sEPjjOJq4ynZWpS6299R2MFKmfzOgmFOfGCK72En1Y6azFAWthRxybFxkzHwPBXKBTya4dSePxr3Y=
+X-Received: by 2002:a17:90a:a681:b0:23f:582d:f45f with SMTP id
+ d1-20020a17090aa68100b0023f582df45fmr15486694pjq.1.1683679689490; Tue, 09 May
+ 2023 17:48:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [GIT PULL] Final io_uring updates for 6.4-rc1
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        io-uring <io-uring@vger.kernel.org>, linux-kernel@vger.kernel.org
-References: <9b2e791d-aeba-a2c7-1877-797ff5c680a3@kernel.dk>
- <20230508031852.GA4029098@google.com>
- <fb84f054-517c-77d4-eb11-d3df61f53701@kernel.dk>
- <CAGXv+5GpeJ8hWt2Sc6L+4GB-ghA4vESobEaFGpo1_ZyPhOvW0g@mail.gmail.com>
- <6d6a494b-3c1a-2bf6-79e3-0ccc81166a67@kernel.dk>
- <CAHk-=wjspoBCSrwL2s=qof3GFnZ4BmMzFbCcEx3VpVP81zXwrg@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wjspoBCSrwL2s=qof3GFnZ4BmMzFbCcEx3VpVP81zXwrg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Guangwu Zhang <guazhang@redhat.com>
+Date:   Wed, 10 May 2023 08:49:15 +0800
+Message-ID: <CAGS2=YosaYaUTEMU3uaf+y=8MqSrhL7sYsJn8EwbaM=76p_4Qg@mail.gmail.com>
+Subject: [bug report] BUG: kernel NULL pointer dereference, address: 0000000000000048
+To:     linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+        Jeff Moyer <jmoyer@redhat.com>, Ming Lei <ming.lei@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 5/9/23 10:52?AM, Linus Torvalds wrote:
-> On Tue, May 9, 2023 at 6:59?AM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> Oops yes, thanks for noticing. I'll correct that and add your tested-by.
-> 
-> .. this build problem isn't caught by Guenter's build testing, but can
-> we please make sure that it's fixed in my tree by -rc2?
-> 
-> It would be lovely to have a release that doesn't end up having silly
-> build problems pending for too long. Even if they might be unusual
-> configs.
+Hi,
 
-It's in my tree, it'll go your way before -rc2 for sure.
+We found this kernel NULL pointer issue with latest
+linux-block/for-next, please check it.
 
--- 
-Jens Axboe
+Kernel repo: https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git
+
+
+[  112.483804] BUG: kernel NULL pointer dereference, address: 0000000000000048
+[  112.490809] #PF: supervisor read access in kernel mode
+[  112.495976] #PF: error_code(0x0000) - not-present page
+[  112.501141] PGD 800000044d20c067 P4D 800000044d20c067 PUD 4734d5067 PMD 0
+[  112.508057] Oops: 0000 [#1] PREEMPT SMP PTI
+[  112.512265] CPU: 24 PID: 7767 Comm: user-data Kdump: loaded Not
+tainted 6.4.0-rc1+ #1
+[  112.520141] Hardware name: HPE ProLiant DL380 Gen10/ProLiant DL380
+Gen10, BIOS U30 06/20/2018
+[  112.528713] RIP: 0010:bfq_bio_bfqg+0x8/0x80
+[  112.532925] Code: 6b 70 48 89 43 60 5b 5d c3 cc cc cc cc 0f 1f 44
+00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00
+41 54 53 <48> 8b 46 48 48 89 fb 48 89 f7 48 85 c0 74 26 48 63 15 72 40
+6b 01
+[  112.551805] RSP: 0018:ffffaed687ef3b30 EFLAGS: 00010096
+[  112.557058] RAX: ffff9a90f2600000 RBX: ffff9a90f2600000 RCX: 0000000000000001
+[  112.564232] RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffff9a90f2600000
+[  112.571408] RBP: ffff9a90c508d500 R08: ffff9a90e2b8a688 R09: ffff9a90e2b8a688
+[  112.578581] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+[  112.585756] R13: ffff9a90c508d500 R14: 0000000000000000 R15: 0000000000000000
+[  112.592930] FS:  00007fe41b0f0880(0000) GS:ffff9a94afc00000(0000)
+knlGS:0000000000000000
+[  112.601065] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  112.606842] CR2: 0000000000000048 CR3: 000000046346e005 CR4: 00000000007706e0
+[  112.614016] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  112.621189] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  112.628362] PKRU: 55555554
+[  112.631082] Call Trace:
+[  112.633539]  <TASK>
+[  112.635650]  bfq_bic_update_cgroup+0x2c/0x240
+[  112.640033]  bfq_init_rq+0xdd/0x670
+[  112.643545]  ? blk_rq_map_user_iov+0xc5/0x2f0
+[  112.647931]  bfq_insert_request.isra.0+0x5d/0x250
+[  112.652663]  bfq_insert_requests+0x59/0x80
+[  112.656782]  blk_mq_flush_plug_list+0x172/0x570
+[  112.661342]  blk_add_rq_to_plug+0x45/0x150
+[  112.665462]  nvme_uring_cmd_io+0x242/0x390 [nvme_core]
+[  112.670652]  io_uring_cmd+0x95/0x120
+[  112.674250]  io_issue_sqe+0x199/0x3d0
+[  112.677932]  io_submit_sqes+0x119/0x3d0
+[  112.681788]  __do_sys_io_uring_enter+0x2c2/0x470
+[  112.686433]  do_syscall_64+0x59/0x90
+[  112.690031]  ? exc_page_fault+0x65/0x150
+[  112.693977]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[  112.699057] RIP: 0033:0x7fe41ae3ee5d
+[  112.702651] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e
+fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24
+08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 93 af 1b 00 f7 d8 64 89
+01 48
+[  112.721530] RSP: 002b:00007ffc6fdebc28 EFLAGS: 00000206 ORIG_RAX:
+00000000000001aa
+[  112.729143] RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fe41ae3ee5d
+[  112.736317] RDX: 0000000000000001 RSI: 0000000000000080 RDI: 0000000000000005
+[  112.743492] RBP: 00007ffc6fdec730 R08: 0000000000000000 R09: 0000000000000080
+[  112.750666] R10: 0000000000000001 R11: 0000000000000206 R12: 00007ffc6fdec848
+[  112.757841] R13: 0000000000401346 R14: 0000000000403de8 R15: 00007fe41b32c000
+[  112.765019]  </TASK>
 
