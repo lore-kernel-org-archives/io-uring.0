@@ -2,27 +2,27 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C85DC7EE2A
-	for <io-uring@archiver.kernel.org>; Mon,  5 Jun 2023 21:20:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25F29C7EE32
+	for <io-uring@archiver.kernel.org>; Mon,  5 Jun 2023 21:20:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjFEVUi (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 5 Jun 2023 17:20:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S229698AbjFEVUk (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 5 Jun 2023 17:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231268AbjFEVUh (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 5 Jun 2023 17:20:37 -0400
+        with ESMTP id S231268AbjFEVUi (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 5 Jun 2023 17:20:38 -0400
 Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE6FF3
-        for <io-uring@vger.kernel.org>; Mon,  5 Jun 2023 14:20:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD866F3
+        for <io-uring@vger.kernel.org>; Mon,  5 Jun 2023 14:20:37 -0700 (PDT)
 Received: by devbig1114.prn1.facebook.com (Postfix, from userid 425415)
-        id 5F58B69921B2; Mon,  5 Jun 2023 14:20:22 -0700 (PDT)
+        id EFDBE6992199; Mon,  5 Jun 2023 14:20:21 -0700 (PDT)
 From:   Stefan Roesch <shr@devkernel.io>
 To:     io-uring@vger.kernel.org, kernel-team@fb.com
 Cc:     shr@devkernel.io, axboe@kernel.dk, ammarfaizi2@gnuweeb.org,
         netdev@vger.kernel.org, kuba@kernel.org, olivier@trillion01.com
-Subject: [PATCH v14 6/8] io-uring: add sqpoll support for napi busy poll
-Date:   Mon,  5 Jun 2023 14:20:07 -0700
-Message-Id: <20230605212009.1992313-7-shr@devkernel.io>
+Subject: [PATCH v14 2/8] net: introduce napi_busy_loop_rcu()
+Date:   Mon,  5 Jun 2023 14:20:03 -0700
+Message-Id: <20230605212009.1992313-3-shr@devkernel.io>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230605212009.1992313-1-shr@devkernel.io>
 References: <20230605212009.1992313-1-shr@devkernel.io>
@@ -32,100 +32,80 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This adds the sqpoll support to the io-uring napi.
+This introduces the napi_busy_loop_rcu() function. If the caller of
+napi_busy_loop() function is also taking the rcu read lock, it is possibl=
+e
+that napi_busy_loop() is releasing the read lock if it invokes schedule.
+However the caller is expecting that the rcu read lock is not released
+until the function completes. This new function avoids that problem. It
+expects that the caller MUST hold the rcu_read_lock while calling this
+function.
 
 Signed-off-by: Stefan Roesch <shr@devkernel.io>
-Suggested-by: Olivier Langlois <olivier@trillion01.com>
 ---
- io_uring/napi.c   | 24 ++++++++++++++++++++++++
- io_uring/napi.h   |  6 +++++-
- io_uring/sqpoll.c |  4 ++++
- 3 files changed, 33 insertions(+), 1 deletion(-)
+ include/net/busy_poll.h |  4 ++++
+ net/core/dev.c          | 31 +++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/io_uring/napi.c b/io_uring/napi.c
-index 1112cc39153c..3e578df36cc5 100644
---- a/io_uring/napi.c
-+++ b/io_uring/napi.c
-@@ -252,4 +252,28 @@ void __io_napi_busy_loop(struct io_ring_ctx *ctx, st=
-ruct io_wait_queue *iowq)
- 		io_napi_blocking_busy_loop(ctx, iowq);
- }
+diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+index f90f0021f5f2..622623f5740e 100644
+--- a/include/net/busy_poll.h
++++ b/include/net/busy_poll.h
+@@ -47,6 +47,10 @@ void napi_busy_loop(unsigned int napi_id,
+ 		    bool (*loop_end)(void *, unsigned long),
+ 		    void *loop_end_arg, bool prefer_busy_poll, u16 budget);
 =20
++void napi_busy_loop_rcu(unsigned int napi_id,
++			bool (*loop_end)(void *, unsigned long),
++			void *loop_end_arg, bool prefer_busy_poll, u16 budget);
++
+ #else /* CONFIG_NET_RX_BUSY_POLL */
+ static inline unsigned long net_busy_loop_on(void)
+ {
+diff --git a/net/core/dev.c b/net/core/dev.c
+index f4677aa20f84..fcd4a6a70646 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -6213,6 +6213,37 @@ static inline void __napi_busy_poll(struct napi_bu=
+sy_poll_ctx *ctx,
+ 				LINUX_MIB_BUSYPOLLRXPACKETS, work);
+ 	local_bh_enable();
+ }
++
 +/*
-+ * io_napi_sqpoll_busy_poll() - busy poll loop for sqpoll
-+ * @ctx: pointer to io-uring context structure
-+ *
-+ * Splice of the napi list and execute the napi busy poll loop.
++ * Warning: can exit without calling need_resched().
 + */
-+int io_napi_sqpoll_busy_poll(struct io_ring_ctx *ctx)
++void napi_busy_loop_rcu(unsigned int napi_id,
++		    bool (*loop_end)(void *, unsigned long),
++		    void *loop_end_arg, bool prefer_busy_poll, u16 budget)
 +{
-+	LIST_HEAD(napi_list);
-+	bool is_stale =3D false;
++	unsigned long start_time =3D loop_end ? busy_loop_current_time() : 0;
++	struct napi_busy_poll_ctx ctx =3D {};
 +
-+	if (!READ_ONCE(ctx->napi_busy_poll_to))
-+		return 0;
-+	if (list_empty_careful(&ctx->napi_list))
-+		return 0;
++	ctx.napi =3D napi_by_id(napi_id);
++	if (!ctx.napi)
++		return;
 +
-+	rcu_read_lock();
-+	is_stale =3D __io_napi_do_busy_loop(ctx, NULL);
-+	rcu_read_unlock();
++	preempt_disable();
++	for (;;) {
++		__napi_busy_poll(&ctx, prefer_busy_poll, budget);
 +
-+	io_napi_remove_stale(ctx, is_stale);
-+	return 1;
++		if (!loop_end || loop_end(loop_end_arg, start_time))
++			break;
++		if (unlikely(need_resched()))
++			break;
++
++		cpu_relax();
++	}
++	if (ctx.napi_poll)
++		busy_poll_stop(ctx.napi, ctx.have_poll_lock, prefer_busy_poll, budget)=
+;
++	preempt_enable();
 +}
 +
- #endif
-diff --git a/io_uring/napi.h b/io_uring/napi.h
-index be8aa8ee32d9..b6d6243fc7fe 100644
---- a/io_uring/napi.h
-+++ b/io_uring/napi.h
-@@ -17,6 +17,7 @@ void __io_napi_add(struct io_ring_ctx *ctx, struct sock=
-et *sock);
- void __io_napi_adjust_timeout(struct io_ring_ctx *ctx,
- 		struct io_wait_queue *iowq, struct timespec64 *ts);
- void __io_napi_busy_loop(struct io_ring_ctx *ctx, struct io_wait_queue *=
-iowq);
-+int io_napi_sqpoll_busy_poll(struct io_ring_ctx *ctx);
-=20
- static inline bool io_napi(struct io_ring_ctx *ctx)
- {
-@@ -83,7 +84,10 @@ static inline void io_napi_busy_loop(struct io_ring_ct=
-x *ctx,
- 				     struct io_wait_queue *iowq)
- {
- }
--
-+static inline int io_napi_sqpoll_busy_poll(struct io_ring_ctx *ctx)
-+{
-+	return 0;
-+}
- #endif /* CONFIG_NET_RX_BUSY_POLL */
-=20
- #endif
-diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
-index 9db4bc1f521a..0c8d53ef134a 100644
---- a/io_uring/sqpoll.c
-+++ b/io_uring/sqpoll.c
-@@ -15,6 +15,7 @@
- #include <uapi/linux/io_uring.h>
-=20
- #include "io_uring.h"
-+#include "napi.h"
- #include "sqpoll.h"
-=20
- #define IORING_SQPOLL_CAP_ENTRIES_VALUE 8
-@@ -193,6 +194,9 @@ static int __io_sq_thread(struct io_ring_ctx *ctx, bo=
-ol cap_entries)
- 			ret =3D io_submit_sqes(ctx, to_submit);
- 		mutex_unlock(&ctx->uring_lock);
-=20
-+		if (io_napi(ctx))
-+			ret +=3D io_napi_sqpoll_busy_poll(ctx);
-+
- 		if (to_submit && wq_has_sleeper(&ctx->sqo_sq_wait))
- 			wake_up(&ctx->sqo_sq_wait);
- 		if (creds)
+ void napi_busy_loop(unsigned int napi_id,
+ 		    bool (*loop_end)(void *, unsigned long),
+ 		    void *loop_end_arg, bool prefer_busy_poll, u16 budget)
 --=20
 2.39.1
 
