@@ -2,99 +2,125 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07CBCC7EE29
-	for <io-uring@archiver.kernel.org>; Fri,  9 Jun 2023 17:22:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2D1DC7EE29
+	for <io-uring@archiver.kernel.org>; Fri,  9 Jun 2023 18:31:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjFIRW1 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 9 Jun 2023 13:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S230230AbjFISbf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 9 Jun 2023 14:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjFIRWQ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 9 Jun 2023 13:22:16 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D1518D
-        for <io-uring@vger.kernel.org>; Fri,  9 Jun 2023 10:22:14 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-77ad566f7fbso17114439f.1
-        for <io-uring@vger.kernel.org>; Fri, 09 Jun 2023 10:22:14 -0700 (PDT)
+        with ESMTP id S230283AbjFISbd (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 9 Jun 2023 14:31:33 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D55A3A85
+        for <io-uring@vger.kernel.org>; Fri,  9 Jun 2023 11:31:32 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-777a9ca9112so20758039f.1
+        for <io-uring@vger.kernel.org>; Fri, 09 Jun 2023 11:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686331333; x=1688923333;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686335491; x=1688927491;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VYIeMkwmKuB9JmHvSC42RlCVaNg15x4QTditd5jnaZM=;
-        b=SjjmE2qX/PKmGUHgWYZ3jmJMd1t4FxBaxUB3LOJWoU4VNMWmDCBz0V/vqfHgFvD65z
-         cwpdn2OEhjHzeTICwQ7O9BBZEIQJNbnS2YQrHxVcuyMpvZiNcJrQa1c/hWBmWyJuMpKi
-         idrI19bt6esHoW/Xj2WtAsZMh9eNGoL1Y/JJ0lW03PUB6vdxTMlnxOjTgyv6EDPK6+Er
-         CmzU58kHFDeyow+6IeG0DPZoLN0laiV7mWrkdUrec93kQ3Uz6vqPhrIfGU7vMPJOSLy1
-         /GmFsxH/s3O2ZDWNctqOQsCX2WhuYRR1U2UWQpPXlET7mDnUWnsHRYn255qrKhJMv608
-         LlCg==
+        bh=MRcYjvsoYs3sziamhSQYD0QqxzzMy87FZ6PyQbKgmQo=;
+        b=PPXRvFdEMz9gAaG477US1WVBni/WF+iO3rgx8ynnUAkmxSlFiazRex2lYED0U6V2VZ
+         OAY9FRt/kRdCLgKUB9STG/5Yp6A4AtFmx1vAn1iH5iWxpsoxwzpqm6FLi86SCyajMrKl
+         5N1mtPsyyiOqkTPgt+oO1iKKX4+whFFWOh+KXpG1ytrd0DwdVXujekReoKXmK7SjrtZ8
+         m7R6q+uRxootQwZ+Bbsf0ShjVoGY7TNU2LJVEezKtPOE+cX1zjTmdF6jA/dV1li4Kcd/
+         8aeNE3k8bkv9SALiJe5cWx6z+Qb5IPAWG17yJKhcbg+Mk8ZbK6ToRi+EYk6xPL7WHJpD
+         iGCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686331333; x=1688923333;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VYIeMkwmKuB9JmHvSC42RlCVaNg15x4QTditd5jnaZM=;
-        b=QLpIrfDUOs9ouCNjcVuyndgdRhpV2RLsmUv2dbEDsz9uwgnZsU4O9hT4N2HIvICq3w
-         5eJ/RKKzBS9ICzk1gtnebaxg6B+qkVP01Jnq2gXWSlmfnjb478UwmCr4Yetb59jpg6JN
-         C27rfNTokLbMOGdhXF4OnRuTIrvaxatrqrZin2YIrCfOPjWQer0wNLIMR/PVhVz3c5dB
-         nZsk0GbyO0PV8JPVdfFILEYtdrKykp9cH7Zq3sQlrzbb2blT3o3UL5wb2fJbhlgRwIsi
-         hV4C+G8uopNLrZQO4s4H9BX7cP0kP0W89LaAyaDhs8MZHiF1DV6UFuBe50EvIuh/ssC9
-         fOfw==
-X-Gm-Message-State: AC+VfDy61VKvQ9+0KIhvx88CVLNENZnAaC6bZ7rq5iRTncwO2Rw4NSKD
-        mUkTomJ7iafvHjp/tMuSnG0JnzGHuX85oB2ThGw=
-X-Google-Smtp-Source: ACHHUZ5Wc4yeKI7/Td2jd0OQXIcwnRDb3oDZO+C6F92c9mDDzfusbXv0auvF/i8o3EQP1h91Txf+hQ==
-X-Received: by 2002:a05:6e02:1a2c:b0:338:4b36:5097 with SMTP id g12-20020a056e021a2c00b003384b365097mr1688518ile.1.1686331333422;
-        Fri, 09 Jun 2023 10:22:13 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id q20-20020a02c8d4000000b0040fa0f43777sm1048216jao.161.2023.06.09.10.22.12
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jun 2023 10:22:12 -0700 (PDT)
-Message-ID: <e81bde59-6674-ad10-d0d2-7a4f2b87c19d@kernel.dk>
-Date:   Fri, 9 Jun 2023 11:22:12 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     io-uring <io-uring@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1686335491; x=1688927491;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MRcYjvsoYs3sziamhSQYD0QqxzzMy87FZ6PyQbKgmQo=;
+        b=PdbZ9qDialOPTTs9JJxrktll/EurFzKSsX/ZMlezrdcaLKlQ6/5WUsaq73/dTB+yHA
+         GzqyR+lDL/cszKkwqrk02UtE1BeaSHVLXhl0d8LPrh9A8CWU3DOsI3hKNXUCGb4+sURu
+         RA77Fnqgzh6YDNYD+v9kaWkMxGQWEnA+zRnv+THnbCsQyIR+Drlf6o1D7H6P9GcNUeIX
+         1C5xMRlHOWcJp0mc/loyrDR+2XLCsdyKG+TXPFn+5yTzxcqMnnqVe01+/oFWBNr1VK0w
+         +EE+Bj+umUp8zYoHpx1xw+Q5tlqJZvF3+kDyGAnWb6zLp3Lqybiq4TlN4eWhYMPG8jm+
+         h8hA==
+X-Gm-Message-State: AC+VfDyOK7ujcNltYgcNsFIpwL1UqN1dKAeOUTkzFUlMFWulssqjn2u6
+        2iyx6gnWZpd0VEHMnJ3pOscO0mavfE1nQDzZT34=
+X-Google-Smtp-Source: ACHHUZ7/hrN0SacC93P/3OrV7yYM63SNkWf8vOrKzVIQpNF43WVeUkM/v3cw1HpVWgeJxKbKdl6whw==
+X-Received: by 2002:a6b:b308:0:b0:777:a5a8:b6f8 with SMTP id c8-20020a6bb308000000b00777a5a8b6f8mr1799718iof.0.1686335490998;
+        Fri, 09 Jun 2023 11:31:30 -0700 (PDT)
+Received: from localhost.localdomain ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id j4-20020a02a684000000b0040fb2ba7357sm1103124jam.4.2023.06.09.11.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 11:31:30 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-Subject: liburing 2.4 released
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     io-uring@vger.kernel.org
+Cc:     andres@anarazel.de, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 1/6] futex: abstract out futex_op_to_flags() helper
+Date:   Fri,  9 Jun 2023 12:31:20 -0600
+Message-Id: <20230609183125.673140-2-axboe@kernel.dk>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230609183125.673140-1-axboe@kernel.dk>
+References: <20230609183125.673140-1-axboe@kernel.dk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+Rather than needing to duplicate this for the io_uring hook of futexes,
+abstract out a helper.
 
-Happy to announce that the 2.4 release has been tagged and pushed. Time
-to get those distros updated!
+No functional changes intended in this patch.
 
-The main changes in this release are:
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ kernel/futex/futex.h    | 15 +++++++++++++++
+ kernel/futex/syscalls.c | 11 ++---------
+ 2 files changed, 17 insertions(+), 9 deletions(-)
 
-- Add io_uring_{major,minor,check}_version() functions.
-- Add IO_URING_{MAJOR,MINOR,CHECK}_VERSION() macros.
-- FFI support (for non-C/C++ languages integration).
-- Add io_uring_prep_msg_ring_cqe_flags() function.
-- Deprecate --nolibc configure option.
-- CONFIG_NOLIBC is always enabled on x86-64, x86, and aarch64.
-- Add support for IORING_REGISTER_USE_REGISTERED_RING and use if available.
-- Add io_uring_close_ring_fd() function.
-- Add io_uring_prep_msg_ring_fd_alloc function.
-- Add io_uring_free_buf_ring() and io_uring_setup_buf_ring() functions.
-- Ensure that io_uring_prep_accept_direct(), io_uring_prep_openat_direct(),
-  io_uring_prep_openat2_direct(), io_uring_prep_msg_ring_fd(), and
-  io_uring_prep_socket_direct() factor in being called with
-  IORING_FILE_INDEX_ALLOC for allocating a direct descriptor.
-- Add io_uring_prep_sendto() function.
-
-and it contains all the helpers you'd need for the 6.4 kernel (when that
-gets released). As usual, any liburing release will work with any kernel
-version.
-
-Thanks to everyone that contributed to this release - either directly
-with code contributions, or through testing and reporting issues.
-
+diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
+index b5379c0e6d6d..d2949fca37d1 100644
+--- a/kernel/futex/futex.h
++++ b/kernel/futex/futex.h
+@@ -291,4 +291,19 @@ extern int futex_unlock_pi(u32 __user *uaddr, unsigned int flags);
+ 
+ extern int futex_lock_pi(u32 __user *uaddr, unsigned int flags, ktime_t *time, int trylock);
+ 
++static inline bool futex_op_to_flags(int op, int cmd, unsigned int *flags)
++{
++	if (!(op & FUTEX_PRIVATE_FLAG))
++		*flags |= FLAGS_SHARED;
++
++	if (op & FUTEX_CLOCK_REALTIME) {
++		*flags |= FLAGS_CLOCKRT;
++		if (cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI &&
++		    cmd != FUTEX_LOCK_PI2)
++			return false;
++	}
++
++	return true;
++}
++
+ #endif /* _FUTEX_H */
+diff --git a/kernel/futex/syscalls.c b/kernel/futex/syscalls.c
+index a8074079b09e..75ca8c41cc94 100644
+--- a/kernel/futex/syscalls.c
++++ b/kernel/futex/syscalls.c
+@@ -88,15 +88,8 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
+ 	int cmd = op & FUTEX_CMD_MASK;
+ 	unsigned int flags = 0;
+ 
+-	if (!(op & FUTEX_PRIVATE_FLAG))
+-		flags |= FLAGS_SHARED;
+-
+-	if (op & FUTEX_CLOCK_REALTIME) {
+-		flags |= FLAGS_CLOCKRT;
+-		if (cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI &&
+-		    cmd != FUTEX_LOCK_PI2)
+-			return -ENOSYS;
+-	}
++	if (!futex_op_to_flags(op, cmd, &flags))
++		return -ENOSYS;
+ 
+ 	switch (cmd) {
+ 	case FUTEX_WAIT:
 -- 
-Jens Axboe
+2.39.2
 
