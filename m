@@ -2,39 +2,38 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D431AC7EE29
-	for <io-uring@archiver.kernel.org>; Fri,  9 Jun 2023 12:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69767C7EE43
+	for <io-uring@archiver.kernel.org>; Fri,  9 Jun 2023 12:29:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239626AbjFIM3b (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 9 Jun 2023 08:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        id S240381AbjFIM3d (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 9 Jun 2023 08:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238515AbjFIM3b (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 9 Jun 2023 08:29:31 -0400
-X-Greylist: delayed 491 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Jun 2023 05:28:52 PDT
-Received: from out-21.mta0.migadu.com (out-21.mta0.migadu.com [IPv6:2001:41d0:1004:224b::15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6463AA9
-        for <io-uring@vger.kernel.org>; Fri,  9 Jun 2023 05:28:52 -0700 (PDT)
+        with ESMTP id S231731AbjFIM3c (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 9 Jun 2023 08:29:32 -0400
+Received: from out-28.mta0.migadu.com (out-28.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753943AAE
+        for <io-uring@vger.kernel.org>; Fri,  9 Jun 2023 05:28:53 -0700 (PDT)
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686313257;
+        t=1686313244;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JbJwvURb/ngoXMSoDDhj8OOS8eskuwHDmLEoYpaKtzY=;
-        b=nl0yV3eF9RH4oDKrzbNmYPK+4odpxcdtUcoRPooL+gMdNsBqA5ltAnUBZ+3Xjs0vOKlrZl
-        zjzVsvwvSq3hfyr1f8bnafVW5yiG617MaqLFUBiHIb4wCqGW/ZBO5PMWY8Ny3t0Gu11PPW
-        V+6HWW8DiO6n+Ykg57wJzb+JGw/FOFY=
+        bh=lhlblQ2RrpBpwre9osp84qt/3/ewTJ5oMF21HYvR9Hs=;
+        b=PG7m+3mk7k9WkLMmkTo5aVGlW2dDZtz1au1E4n90cZ/jY+iuFotB5lWXFXf0RIwyR5BoqF
+        4DycA43tlUQUlhry9QTVnLXvdQzo78x3bR6xW5tWi5evcEHfxky1XIYVZWmhVPErXZx+2n
+        tvkWyRPmXla7Ndju6kl4J3+Eu3eSbbA=
 From:   Hao Xu <hao.xu@linux.dev>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>,
         Wanpeng Li <wanpengli@tencent.com>,
         linux-fsdevel@vger.kernel.org
-Subject: [PATCH 06/11] io-wq: return io_worker after successful inline worker creation
-Date:   Fri,  9 Jun 2023 20:20:26 +0800
-Message-Id: <20230609122031.183730-7-hao.xu@linux.dev>
+Subject: [PATCH 02/11] io-wq: add a new worker flag to indicate worker exit
+Date:   Fri,  9 Jun 2023 20:20:22 +0800
+Message-Id: <20230609122031.183730-3-hao.xu@linux.dev>
 In-Reply-To: <20230609122031.183730-1-hao.xu@linux.dev>
 References: <20230609122031.183730-1-hao.xu@linux.dev>
 MIME-Version: 1.0
@@ -46,90 +45,60 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: Hao Xu <howeyxu@tencent.com>
 
-After creating a io worker inline successfully, return the io_worker
-structure. This is used by fixed worker.
+Add a new worker flag IO_WORKER_F_EXIT to indicate a worker is going to
+exit. This is important for fixed workers.
 
 Signed-off-by: Hao Xu <howeyxu@tencent.com>
 ---
- io_uring/io-wq.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ io_uring/io-wq.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 048856eef4d4..4338e5b23b07 100644
+index b70eebec2845..1717f1465613 100644
 --- a/io_uring/io-wq.c
 +++ b/io_uring/io-wq.c
-@@ -137,7 +137,7 @@ struct io_cb_cancel_data {
- 	bool cancel_all;
+@@ -29,6 +29,7 @@ enum {
+ 	IO_WORKER_F_RUNNING	= 2,	/* account as running */
+ 	IO_WORKER_F_FREE	= 4,	/* worker on free list */
+ 	IO_WORKER_F_BOUND	= 8,	/* is doing bounded work */
++	IO_WORKER_F_EXIT	= 16,	/* worker is exiting */
  };
  
--static bool create_io_worker(struct io_wq *wq, int index, bool fixed);
-+static struct io_worker *create_io_worker(struct io_wq *wq, int index, bool fixed);
- static void io_wq_dec_running(struct io_worker *worker);
- static bool io_acct_cancel_pending_work(struct io_wq *wq,
- 					struct io_wq_acct *acct,
-@@ -284,8 +284,8 @@ static bool io_wq_activate_free_worker(struct io_wq *wq,
-  * We need a worker. If we find a free one, we're good. If not, and we're
-  * below the max number of workers, create one.
-  */
--static bool io_wq_create_worker(struct io_wq *wq, struct io_wq_acct *acct,
--				bool fixed)
-+static struct io_worker *io_wq_create_worker(struct io_wq *wq,
-+					     struct io_wq_acct *acct, bool fixed)
- {
- 	/*
- 	 * Most likely an attempt to queue unbounded work on an io_wq that
-@@ -297,7 +297,7 @@ static bool io_wq_create_worker(struct io_wq *wq, struct io_wq_acct *acct,
- 	raw_spin_lock(&wq->lock);
- 	if (acct->nr_workers >= acct->max_workers) {
- 		raw_spin_unlock(&wq->lock);
--		return true;
-+		return NULL;
- 	}
- 	acct->nr_workers++;
- 	raw_spin_unlock(&wq->lock);
-@@ -809,11 +809,11 @@ static void io_workqueue_create(struct work_struct *work)
- 		kfree(worker);
+ enum {
+@@ -592,6 +593,11 @@ static void io_worker_handle_work(struct io_worker *worker)
+ 	} while (1);
  }
  
--static bool create_io_worker(struct io_wq *wq, int index, bool fixed)
-+static struct io_worker *create_io_worker(struct io_wq *wq, int index, bool fixed)
++static bool is_worker_exiting(struct io_worker *worker)
++{
++	return worker->flags & IO_WORKER_F_EXIT;
++}
++
+ static int io_wq_worker(void *data)
  {
- 	struct io_wq_acct *acct = &wq->acct[index];
- 	struct io_worker *worker;
--	struct task_struct *tsk;
-+	struct task_struct *tsk = NULL;
+ 	struct io_worker *worker = data;
+@@ -609,7 +615,7 @@ static int io_wq_worker(void *data)
+ 		long ret;
  
- 	__set_current_state(TASK_RUNNING);
+ 		set_current_state(TASK_INTERRUPTIBLE);
+-		while (io_acct_run_queue(acct))
++		while (!is_worker_exiting(worker) && io_acct_run_queue(acct))
+ 			io_worker_handle_work(worker);
  
-@@ -825,7 +825,7 @@ static bool create_io_worker(struct io_wq *wq, int index, bool fixed)
- 		acct->nr_workers--;
+ 		raw_spin_lock(&wq->lock);
+@@ -628,6 +634,12 @@ static int io_wq_worker(void *data)
  		raw_spin_unlock(&wq->lock);
- 		io_worker_ref_put(wq);
--		return false;
-+		return tsk ? (struct io_worker *)tsk : ERR_PTR(-ENOMEM);
- 	}
- 
- 	refcount_set(&worker->ref, 1);
-@@ -841,8 +841,8 @@ static bool create_io_worker(struct io_wq *wq, int index, bool fixed)
- 
- 	tsk = create_io_thread(io_wq_worker, worker, NUMA_NO_NODE);
- 	if (!IS_ERR(tsk)) {
--		if (!fixed)
--			io_init_new_worker(wq, worker, tsk);
-+		io_init_new_worker(wq, worker, tsk);
-+		return worker;
- 	} else if (fixed || !io_should_retry_thread(PTR_ERR(tsk))) {
- 		kfree(worker);
- 		goto fail;
-@@ -851,7 +851,7 @@ static bool create_io_worker(struct io_wq *wq, int index, bool fixed)
- 		schedule_work(&worker->work);
- 	}
- 
--	return true;
-+	return (struct io_worker *)tsk;
- }
- 
- /*
+ 		if (io_run_task_work())
+ 			continue;
++		if (is_worker_exiting(worker)) {
++			raw_spin_lock(&wq->lock);
++			acct->nr_workers--;
++			raw_spin_unlock(&wq->lock);
++			break;
++		}
+ 		ret = schedule_timeout(WORKER_IDLE_TIMEOUT);
+ 		if (signal_pending(current)) {
+ 			struct ksignal ksig;
 -- 
 2.25.1
 
