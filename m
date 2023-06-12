@@ -2,107 +2,193 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62520C88CB2
-	for <io-uring@archiver.kernel.org>; Mon, 12 Jun 2023 18:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65649C7EE2E
+	for <io-uring@archiver.kernel.org>; Mon, 12 Jun 2023 19:04:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234031AbjFLSMM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 12 Jun 2023 14:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S237684AbjFLTED (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 12 Jun 2023 15:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236949AbjFLSML (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 12 Jun 2023 14:12:11 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC32610FE
-        for <io-uring@vger.kernel.org>; Mon, 12 Jun 2023 11:12:04 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-77ad566f7fbso45603739f.1
-        for <io-uring@vger.kernel.org>; Mon, 12 Jun 2023 11:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686593523; x=1689185523;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ArfEG/zwX+Qu50yqWsLLeIAObXJ440FdnIJFkcDTwak=;
-        b=MLP11eaKUEnWnr3tT1G+bXrAxvIdMysvDLDleTr5mkuPZ36uaDGL2Je1SVO4kE04V3
-         soI6QyDs6AeFA3069KRUJLtHcH2vjFA6dUvVAsChzuEhgInftIf5lu2bg8EepdHvJjKA
-         Om6d0ekCWiPoud0ZKBplUDnOtgoBYHDfR0zB5FFYL95yaHDuCJEn9C3LuVUudjuheDp/
-         sJLBRsIED9B5UNHCMsKzPlZi9uZ/b/YrNFLea5gAsJWnda61ZV5DkQyQ4ub1btYKGT4u
-         yx9GI8Ps0gzwM7IporZ1U+utTG6kQDy8VsyaFxbLSUZyWR/VpaNTHzcjNvX3kfXb/zHJ
-         P7oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686593523; x=1689185523;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ArfEG/zwX+Qu50yqWsLLeIAObXJ440FdnIJFkcDTwak=;
-        b=dcrdJ99htW4whW0C7CSaKMhT/auBsWLSgFiqpMDU791RFpKQQhOsA+y8H6B2ddVYU2
-         6C2mxkulIeDUTI04VqE49gkhGEJRXIjObfXzoIFY43y4n6u31uJfeir/y0DaHXDPXdZe
-         eL2/a5B8TVasvO3MdQcxmh3X1HSR+g0VRFRN0xv9c/2eqYRXknMtzPPlN2lUbmkTV1e2
-         8OJd7FdYr5N1zKPxgolnd49UlfzVaaDu0PbABVtlQ7ZKMG5pzH7cMsa9ABt0Ap7T+sMY
-         9vgCbp5DFZTvWrYDNVQ3nT5BRaHWPmHzB+cUEcF4r1ve8Rj1dUWJU4rxRhPQ+F3toweZ
-         laFw==
-X-Gm-Message-State: AC+VfDytYV0qycCMnsGXMftUcsY45xX4baUWwTgCbGFdwB7XhK/Vxrxu
-        KN2D4SdC0gU0ENFwg9G3vXwnXII1rtZownjwoBw=
-X-Google-Smtp-Source: ACHHUZ6ynp4ZRI2CJT+g4J7cX44RSKygn3bUSTJEdhwij4+cpgkRDSrDA9Oya0lzjLcgBwQ0SgVx3g==
-X-Received: by 2002:a6b:5810:0:b0:777:b7c8:ad32 with SMTP id m16-20020a6b5810000000b00777b7c8ad32mr6714667iob.0.1686593523175;
-        Mon, 12 Jun 2023 11:12:03 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id z3-20020a5ec903000000b0077ac811b20dsm3352116iol.38.2023.06.12.11.11.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 11:11:58 -0700 (PDT)
-Message-ID: <2392dcb4-71f4-1109-614b-4e2083c0941e@kernel.dk>
-Date:   Mon, 12 Jun 2023 12:11:57 -0600
+        with ESMTP id S237654AbjFLTD7 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 12 Jun 2023 15:03:59 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0414AD
+        for <io-uring@vger.kernel.org>; Mon, 12 Jun 2023 12:03:57 -0700 (PDT)
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35CG99Ab020659
+        for <io-uring@vger.kernel.org>; Mon, 12 Jun 2023 12:03:57 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=AnQZk+f60ziKqHwJmcKaOoi0i87epwPwExTQ/NdgR44=;
+ b=PssIqNYazUc8DZkkmexKG9ro8be45fY+Oh3YRmZF3PsTSJMNBisrdwGcKzAtkxDTBcj8
+ LxP4RRc9pZi909UfU9XyqFOM+i21s+KBtezDn832A19Jh/j5h6Pd7W4/TRaH/bYuYMGb
+ Leg8Lc03hOsgUEmCspTkM86tLVZLx7OKR9iaUfHi9QnMi0Lx/RxD5F2JknesPErBKXxU
+ omd0iZ7FFR9iiy34LR0wlf/MmovVQtW4r1VbSAiEigarRbTgxsbPliVODdj7S4oqgb+Q
+ N+tb7vNGuBDOTGVFWSRTAmx9aMZSw9V3PFTKdl82Gj2K7H/RMQ8jR/Zoflj5O/IQU4AO sg== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r5xhxmaaa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Mon, 12 Jun 2023 12:03:57 -0700
+Received: from twshared6352.02.ash9.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 12 Jun 2023 12:03:56 -0700
+Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
+        id 62CD819FA77A4; Mon, 12 Jun 2023 12:03:44 -0700 (PDT)
+From:   Keith Busch <kbusch@meta.com>
+To:     <linux-block@vger.kernel.org>, <io-uring@vger.kernel.org>,
+        <linux-nvme@lists.infradead.org>, <hch@lst.de>, <axboe@kernel.dk>
+CC:     <sagi@grimberg.me>, <joshi.k@samsung.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: [PATCHv3 1/2] block: add request polling helper
+Date:   Mon, 12 Jun 2023 12:03:42 -0700
+Message-ID: <20230612190343.2087040-2-kbusch@meta.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230612190343.2087040-1-kbusch@meta.com>
+References: <20230612190343.2087040-1-kbusch@meta.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     io-uring <io-uring@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Zorro Lang <zlang@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring/io-wq: don't clear PF_IO_WORKER on exit
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: iksMUP5wDrHNbXSqS_1o6Jcv2iASPjCF
+X-Proofpoint-ORIG-GUID: iksMUP5wDrHNbXSqS_1o6Jcv2iASPjCF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-12_14,2023-06-12_02,2023-05-22_02
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-A recent commit gated the core dumping task exit logic on current->flags
-remaining consistent in terms of PF_{IO,USER}_WORKER at task exit time.
-This exposed a problem with the io-wq handling of that, which explicitly
-clears PF_IO_WORKER before calling do_exit().
+From: Keith Busch <kbusch@kernel.org>
 
-The reasons for this manual clear of PF_IO_WORKER is historical, where
-io-wq used to potentially trigger a sleep on exit. As the io-wq thread
-is exiting, it should not participate any further accounting. But these
-days we don't need to rely on current->flags anymore, so we can safely
-remove the PF_IO_WORKER clearing.
+Provide a direct request polling will for drivers. The interface does
+not require a bio, and can skip the overhead associated with polling
+those. The biggest gain from skipping the relatively expensive xarray
+lookup unnecessary when you already have the request.
 
-Reported-by: Zorro Lang <zlang@redhat.com>
-Reported-by: Dave Chinner <david@fromorbit.com>
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Link: https://lore.kernel.org/all/ZIZSPyzReZkGBEFy@dread.disaster.area/
-Fixes: f9010dbdce91 ("fork, vhost: Use CLONE_THREAD to fix freezer/ps regression")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+With this, the simple rq/qc conversion functions have only one caller
+each, so open code this and remove the helpers.
 
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
+ block/blk-mq.c         | 48 ++++++++++++++++++++++++++++--------------
+ include/linux/blk-mq.h |  2 ++
+ 2 files changed, 34 insertions(+), 16 deletions(-)
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index b2715988791e..fe38eb0cbc82 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -221,9 +221,6 @@ static void io_worker_exit(struct io_worker *worker)
- 	raw_spin_unlock(&wq->lock);
- 	io_wq_dec_running(worker);
- 	worker->flags = 0;
--	preempt_disable();
--	current->flags &= ~PF_IO_WORKER;
--	preempt_enable();
- 
- 	kfree_rcu(worker, rcu);
- 	io_worker_ref_put(wq);
-
--- 
-Jens Axboe
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 1749f5890606b..b82b5b3324108 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -49,17 +49,8 @@ static void blk_mq_request_bypass_insert(struct reques=
+t *rq,
+ 		blk_insert_t flags);
+ static void blk_mq_try_issue_list_directly(struct blk_mq_hw_ctx *hctx,
+ 		struct list_head *list);
+-
+-static inline struct blk_mq_hw_ctx *blk_qc_to_hctx(struct request_queue =
+*q,
+-		blk_qc_t qc)
+-{
+-	return xa_load(&q->hctx_table, qc);
+-}
+-
+-static inline blk_qc_t blk_rq_to_qc(struct request *rq)
+-{
+-	return rq->mq_hctx->queue_num;
+-}
++static int blk_hctx_poll(struct request_queue *q, struct blk_mq_hw_ctx *=
+hctx,
++			 struct io_comp_batch *iob, unsigned int flags);
+=20
+ /*
+  * Check if any of the ctx, dispatch list or elevator
+@@ -1247,7 +1238,7 @@ void blk_mq_start_request(struct request *rq)
+ 		q->integrity.profile->prepare_fn(rq);
+ #endif
+ 	if (rq->bio && rq->bio->bi_opf & REQ_POLLED)
+-	        WRITE_ONCE(rq->bio->bi_cookie, blk_rq_to_qc(rq));
++	        WRITE_ONCE(rq->bio->bi_cookie, rq->mq_hctx->queue_num);
+ }
+ EXPORT_SYMBOL(blk_mq_start_request);
+=20
+@@ -1349,7 +1340,7 @@ EXPORT_SYMBOL_GPL(blk_rq_is_poll);
+ static void blk_rq_poll_completion(struct request *rq, struct completion=
+ *wait)
+ {
+ 	do {
+-		blk_mq_poll(rq->q, blk_rq_to_qc(rq), NULL, 0);
++		blk_hctx_poll(rq->q, rq->mq_hctx, NULL, 0);
+ 		cond_resched();
+ 	} while (!completion_done(wait));
+ }
+@@ -4735,10 +4726,9 @@ void blk_mq_update_nr_hw_queues(struct blk_mq_tag_=
+set *set, int nr_hw_queues)
+ }
+ EXPORT_SYMBOL_GPL(blk_mq_update_nr_hw_queues);
+=20
+-int blk_mq_poll(struct request_queue *q, blk_qc_t cookie, struct io_comp=
+_batch *iob,
+-		unsigned int flags)
++static int blk_hctx_poll(struct request_queue *q, struct blk_mq_hw_ctx *=
+hctx,
++			 struct io_comp_batch *iob, unsigned int flags)
+ {
+-	struct blk_mq_hw_ctx *hctx =3D blk_qc_to_hctx(q, cookie);
+ 	long state =3D get_current_state();
+ 	int ret;
+=20
+@@ -4763,6 +4753,32 @@ int blk_mq_poll(struct request_queue *q, blk_qc_t =
+cookie, struct io_comp_batch *
+ 	return 0;
+ }
+=20
++int blk_mq_poll(struct request_queue *q, blk_qc_t cookie,
++		struct io_comp_batch *iob, unsigned int flags)
++{
++	struct blk_mq_hw_ctx *hctx =3D xa_load(&q->hctx_table, cookie);
++
++	return blk_hctx_poll(q, hctx, iob, flags);
++}
++
++int blk_rq_poll(struct request *rq, struct io_comp_batch *iob,
++		unsigned int poll_flags)
++{
++	struct request_queue *q =3D rq->q;
++	int ret;
++
++	if (!blk_rq_is_poll(rq))
++		return 0;
++	if (!percpu_ref_tryget(&q->q_usage_counter))
++		return 0;
++
++	ret =3D blk_hctx_poll(q, rq->mq_hctx, iob, poll_flags);
++	blk_queue_exit(q);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(blk_rq_poll);
++
+ unsigned int blk_mq_rq_cpu(struct request *rq)
+ {
+ 	return rq->mq_ctx->cpu;
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 59b52ec155b1b..9f4d285b52b93 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -715,6 +715,8 @@ int blk_mq_alloc_sq_tag_set(struct blk_mq_tag_set *se=
+t,
+ void blk_mq_free_tag_set(struct blk_mq_tag_set *set);
+=20
+ void blk_mq_free_request(struct request *rq);
++int blk_rq_poll(struct request *rq, struct io_comp_batch *iob,
++		unsigned int poll_flags);
+=20
+ bool blk_mq_queue_inflight(struct request_queue *q);
+=20
+--=20
+2.34.1
 
