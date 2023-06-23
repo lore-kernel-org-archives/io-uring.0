@@ -2,67 +2,85 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6042EB64D7
-	for <io-uring@archiver.kernel.org>; Fri, 23 Jun 2023 06:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF188EB64DD
+	for <io-uring@archiver.kernel.org>; Fri, 23 Jun 2023 11:24:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjFWGjH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 23 Jun 2023 02:39:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47780 "EHLO
+        id S230474AbjFWLYj (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 23 Jun 2023 07:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjFWGjG (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 23 Jun 2023 02:39:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD1919AB;
-        Thu, 22 Jun 2023 23:39:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4D30617E8;
-        Fri, 23 Jun 2023 06:39:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98172C433C0;
-        Fri, 23 Jun 2023 06:39:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687502345;
-        bh=iFBluZgbfn+sdQvZyC2wQEmmUJLtS9xT48/IO3SiJqE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ayRLooXwXW5LNUgFHZ2K51VbAoLQcGHUS+/Ce179Z37xQgxhXxLXimzO5+wKqj2Ze
-         gyoMICh1ojlhEqxFrWPFIdfckbNFVLcLHJnaj2xzxMVvTTYb6JkCF71VBCu8YkvQbZ
-         DXF9Ve37afETElX8dvHDIhXkYE68xTHV2qv8sVfs=
-Date:   Fri, 23 Jun 2023 08:39:02 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v3] io_uring: Add io_uring command support for sockets
-Message-ID: <2023062351-tastiness-half-034f@gregkh>
-References: <20230622215915.2565207-1-leitao@debian.org>
+        with ESMTP id S229501AbjFWLYj (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 23 Jun 2023 07:24:39 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377B51739
+        for <io-uring@vger.kernel.org>; Fri, 23 Jun 2023 04:24:38 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-98862e7e3e6so58212666b.0
+        for <io-uring@vger.kernel.org>; Fri, 23 Jun 2023 04:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687519476; x=1690111476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jztTkx8nrJc8gpz3HDPr543pqJbofjQgf+UEBY3+Ojo=;
+        b=Qgdix4KLdOV3r4nGZJ6nQOykveQRY4r/KLhWMXpLx/pEoIetiDt5m+7fKnynNCxQzr
+         JVDvyLhQjIAkMO5bnL3cXK+xhAdIPWXvmkJOR30hhKxxSDKfkynIzmK5nhzaD0qIjgJ/
+         kBrmgNji7N+ZMtkoP4i4qX/NrP2v1Rx2YwI1HK/1qI82MolxqJJI7uws5AiZhaA9TbPY
+         y4xnhu3XDzE5sFlXQKF14z574TmbcYNevgfGwmXaDi3T4QBkli0Np8ZJBPveIlTU7Mu3
+         Mgik7a3FPkt09sTe6vwKziMypSPY5pEEfJmX0B5mPuvdS+A3aCO6L36vb/Qpsuygc7kB
+         SRkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687519476; x=1690111476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jztTkx8nrJc8gpz3HDPr543pqJbofjQgf+UEBY3+Ojo=;
+        b=Nft+XO3wi/3Q/58dV4Pbl0U8fEnc8wFe4NL2oF2VRBUUjUY1BRcL1yylEIw+aOUygG
+         V4gCwywaFiLsBGZc4DiSrDZcNuEUr9DPJ3QoTKB6ulUhqVIejtTr1yMTuRQRXs34SZDc
+         2rPIABdxTEu4AVDEdhTIX7szRv1Npo21L+jE/f5mpPmyCn79VvyWcBa1DB6mbfEM4Aae
+         9uw0LXEY19gnpSqobUruTm+RchrKTh3V5YRYMRfHVjpVfdBEUg56d+GS7dhC2mWaVZLM
+         zuxrVa5cN6gSCM4fL5aTvyVXmjgTnsUObmXQMzxcRw5kerkXnN8Xkyl8P4pNiHK6IvNI
+         7WWg==
+X-Gm-Message-State: AC+VfDxg/G8PU0Gu6Deykzg5J58RkmNWzQUmHeVeI6rQah/5zvBVbv/l
+        3GlBgL1jZpJrAHCKnNo6aUCReAMPZOM=
+X-Google-Smtp-Source: ACHHUZ6CjBxtAE9aHn598Rkr+9ouJiw0F0xIcgQLIrmWcNC7MzluxIPq7VDFL6lpucxTbqi3Y4Mtdg==
+X-Received: by 2002:a17:907:25ca:b0:988:8280:2b60 with SMTP id ae10-20020a17090725ca00b0098882802b60mr11594580ejc.67.1687519476297;
+        Fri, 23 Jun 2023 04:24:36 -0700 (PDT)
+Received: from 127.com ([2620:10d:c092:600::2:7d95])
+        by smtp.gmail.com with ESMTPSA id h10-20020a1709067cca00b00969f44bbef3sm5959769ejp.11.2023.06.23.04.24.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 04:24:36 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
+Subject: [PATCH 00/11] clean up req free and CQ locking
+Date:   Fri, 23 Jun 2023 12:23:20 +0100
+Message-Id: <cover.1687518903.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622215915.2565207-1-leitao@debian.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 02:59:14PM -0700, Breno Leitao wrote:
-> --- a/io_uring/uring_cmd.c
-> +++ b/io_uring/uring_cmd.c
-> @@ -7,6 +7,7 @@
->  #include <linux/nospec.h>
->  
->  #include <uapi/linux/io_uring.h>
-> +#include <uapi/asm-generic/ioctls.h>
+Patches 1-5 are cleaning how we free requests.
+Patches 7-11 brush CQ / ->completion_lock locking 
 
-Is this still needed?
+Pavel Begunkov (11):
+  io_uring: open code io_put_req_find_next
+  io_uring: remove io_free_req_tw
+  io_uring: inline io_dismantle_req()
+  io_uring: move io_clean_op()
+  io_uring: don't batch task put on reqs free
+  io_uring: remove IOU_F_TWQ_FORCE_NORMAL
+  io_uring: kill io_cq_unlock()
+  io_uring: fix acquire/release annotations
+  io_uring: inline __io_cq_unlock
+  io_uring: make io_cq_unlock_post static
+  io_uring: merge conditional unlock flush helpers
 
-thanks,
+ io_uring/io_uring.c | 223 ++++++++++++++++----------------------------
+ io_uring/io_uring.h |   7 +-
+ 2 files changed, 80 insertions(+), 150 deletions(-)
 
-greg k-h
+-- 
+2.40.0
+
