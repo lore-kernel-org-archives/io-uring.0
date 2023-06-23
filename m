@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6222AC001B0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78429C001B1
 	for <io-uring@archiver.kernel.org>; Fri, 23 Jun 2023 11:24:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjFWLYm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 23 Jun 2023 07:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58536 "EHLO
+        id S231358AbjFWLYn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 23 Jun 2023 07:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbjFWLYk (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 23 Jun 2023 07:24:40 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524432139
-        for <io-uring@vger.kernel.org>; Fri, 23 Jun 2023 04:24:39 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51bde6a8c20so548112a12.0
-        for <io-uring@vger.kernel.org>; Fri, 23 Jun 2023 04:24:39 -0700 (PDT)
+        with ESMTP id S229902AbjFWLYl (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 23 Jun 2023 07:24:41 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D38199D
+        for <io-uring@vger.kernel.org>; Fri, 23 Jun 2023 04:24:40 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98cd280cf94so55251566b.1
+        for <io-uring@vger.kernel.org>; Fri, 23 Jun 2023 04:24:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687519477; x=1690111477;
+        d=gmail.com; s=20221208; t=1687519478; x=1690111478;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MucC/umbtesljG3Fj1Nw4ax1NtgiGvOG45XGet5fe6Q=;
-        b=YdNyYymG4yxn2S+DQeZxhE3IvhNLdmRNsYB3+LDRheESKslSk+COgR2Ywt0dHMpIts
-         qePUxGfpx5khIjZ4ugnVbGUHOPl9fN4VtDENQdEBoCA909tigRrd4n4Mu1sPLgFcQsgS
-         8zVKBKg61EB9ebo4xyeNlA1h7F9J8qC1mZO7SL0j88xEHRWESws0o3uee/x1OoiptKqf
-         p1bHlVI+M6/DRUjN+u9ywNoyKdD40TIlnSsxUe4fN209xE0I6OyT2grXSLIpJjU/RHjU
-         /GrEhdqGlTMybKWKKvUbgd9HYlKvlevPs9EqixDHM6FfEWNS04pd54xjjVU86ZZqqBBa
-         +QTw==
+        bh=+Urqbe8d5meDgYTnTRdNWXyukQbW5jl8lzicwvsbbj8=;
+        b=BlFLKrNfu9YuetzcJ6pYXL0/P5086YczEzPViXFSCda153kbwVni6ryb3dXOuwtCa0
+         4Ur3ptLboIv8OKxjQOKFyneYCfAgbcG7T5JixKr0lFTdZMJr0KVEsI9yhpnCRimDeF0R
+         HCiIHp1vzrseJKhPhgsGg52HaEHS/7hudlJK1hkJFWURvw5dO6h1Z7vlmPEwXRpgoQHZ
+         SA/14Vvbc1XMkFPBUCmEGOxxPT8YSW3VDcizQVRNDgysuqWKBspK2KSmgBJUGIpN2vpS
+         o4u+Q9vbsIRbPG/KT/P8UTOUTqnVMy0Hcqdau2WPEWy92ha0nBJEbtclPsQFF/zezTLB
+         BCDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687519477; x=1690111477;
+        d=1e100.net; s=20221208; t=1687519478; x=1690111478;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MucC/umbtesljG3Fj1Nw4ax1NtgiGvOG45XGet5fe6Q=;
-        b=RBUTL4uSRxxUMBhB3A42f/4Mf/Jl0WtuisAOJX6Y85IwQk+SedQj9Ja2zDUbaGherQ
-         94bC61jNp/F8cPooRnbszxaPwASvwT2ZTyzR5js+v8HtNGYmPZz/0n6/dRV4l98FZbyn
-         JEBYa4bEQZryE6EHc6813scl9RDtuxj7kqE4KhUmxnmgOE7cK/7h0x6ILraP7IntZvKt
-         +Ri5isyeDR6bvgVkYChlW8c6ap9pyjOJsMDDAUyOdfrn5/fjPFrO19BykQIcCwx+PoyM
-         9pe94RLBWSM6IcvYKpXUIMoJVBlHTETQTc6BO6M6ecxWw1hc7ZLXgljwE/wSdmq2fp5u
-         oXoA==
-X-Gm-Message-State: AC+VfDyBlQ9BcgJYeN69WwJ3I3Ickeg/+n3DkJQCc5WivDMd4EF9Nzb+
-        x8ZWnPyPoWE6lXGFw80fCQrvhnC2ZJE=
-X-Google-Smtp-Source: ACHHUZ6YiqUywxIAwlPPeglLki1SAIlPwE56wWdjuLiAdKz0CeVIIfsHo1Ih0gKPjt5gY75PKVcmrw==
-X-Received: by 2002:a17:907:7f0f:b0:989:1f66:e452 with SMTP id qf15-20020a1709077f0f00b009891f66e452mr9205346ejc.2.1687519477495;
-        Fri, 23 Jun 2023 04:24:37 -0700 (PDT)
+        bh=+Urqbe8d5meDgYTnTRdNWXyukQbW5jl8lzicwvsbbj8=;
+        b=I8r1/rkmu/jEWgIJ6OZnOEW3MsP1xjewR8/WBqKobA7/K4KW8XQGat0QUvXyq3s8BY
+         WveiOD82fgyce50HzAkXNWCFMfbiiKYMZIzbpJSLgynJdG6UbWfM58QtATpJocGz8CQ3
+         2Q42sdEvP4WU1SO3CkV5IYrINaIvCEWZQ9pz4Y4SIoQyFKUJ1o4UsTNj+Nx7DasltfMJ
+         MXrCR3gbc9ii8RagIMlbOw3oj95cO/aZLmM8xPIkB1vswZJYvtML4fJHp6WOTCrukPHb
+         qclI6Shr5iASF1qoHzQrsVR9ehpM9E8a+H3ptEtz7La3A9xzOJxve2A9ug6EfgOMHWnc
+         nDjQ==
+X-Gm-Message-State: AC+VfDzlVNFfqWpVjSb3vtPwPIpx4q8FSK6EDAnqc8ZVmPzC12x7Z2H2
+        F79WGTOw/UBnNCwl+3sWxdFHkWQxPAc=
+X-Google-Smtp-Source: ACHHUZ4cVgt35XsgJNsGPKbc/lCn7nv+dHmx5nq27y4lmJ7XQrVwQT02pTpjp3bRFIDt/UeILkS10A==
+X-Received: by 2002:a17:906:64db:b0:98d:5ae2:f1c with SMTP id p27-20020a17090664db00b0098d5ae20f1cmr2174893ejn.34.1687519478377;
+        Fri, 23 Jun 2023 04:24:38 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::2:7d95])
-        by smtp.gmail.com with ESMTPSA id h10-20020a1709067cca00b00969f44bbef3sm5959769ejp.11.2023.06.23.04.24.36
+        by smtp.gmail.com with ESMTPSA id h10-20020a1709067cca00b00969f44bbef3sm5959769ejp.11.2023.06.23.04.24.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 04:24:36 -0700 (PDT)
+        Fri, 23 Jun 2023 04:24:38 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH 02/11] io_uring: remove io_free_req_tw
-Date:   Fri, 23 Jun 2023 12:23:22 +0100
-Message-Id: <434a2be8f33d474ad888ce1c17fe5ea7bbcb2a55.1687518903.git.asml.silence@gmail.com>
+Subject: [PATCH 04/11] io_uring: move io_clean_op()
+Date:   Fri, 23 Jun 2023 12:23:24 +0100
+Message-Id: <1b7163b2ba7c3a8322d972c79c1b0a9301b3057e.1687518903.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <cover.1687518903.git.asml.silence@gmail.com>
 References: <cover.1687518903.git.asml.silence@gmail.com>
@@ -64,60 +64,107 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Request completion is a very hot path in general, but there are 3 places
-that can be doing it: io_free_batch_list(), io_req_complete_post() and
-io_free_req_tw().
-
-io_free_req_tw() is used rather marginally and we don't care about it.
-Killing it can help to clean up and optimise the left two, do that by
-replacing it with io_req_task_complete().
-
-There are two things to consider:
-1) io_free_req() is called when all refs are put, so we need to reinit
-   references. The easiest way to do that is to clear REQ_F_REFCOUNT.
-2) We also don't need a cqe from it, so silence it with REQ_F_CQE_SKIP.
+Move io_clean_op() up in the source file and remove the forward
+declaration, as the function doesn't have tricky dependencies
+anymore.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
+ io_uring/io_uring.c | 67 ++++++++++++++++++++++-----------------------
+ 1 file changed, 33 insertions(+), 34 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index b488a03ba009..43805d2621f5 100644
+index 50fe345bdced..4d8613996644 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -1121,26 +1121,13 @@ static inline void io_dismantle_req(struct io_kiocb *req)
- 		io_put_file(req->file);
+@@ -146,7 +146,6 @@ static bool io_uring_try_cancel_requests(struct io_ring_ctx *ctx,
+ 					 struct task_struct *task,
+ 					 bool cancel_all);
+ 
+-static void io_clean_op(struct io_kiocb *req);
+ static void io_queue_sqe(struct io_kiocb *req);
+ static void io_move_task_work_from_local(struct io_ring_ctx *ctx);
+ static void __io_submit_flush_completions(struct io_ring_ctx *ctx);
+@@ -367,6 +366,39 @@ static bool req_need_defer(struct io_kiocb *req, u32 seq)
+ 	return false;
  }
  
--static __cold void io_free_req_tw(struct io_kiocb *req, struct io_tw_state *ts)
++static void io_clean_op(struct io_kiocb *req)
++{
++	if (req->flags & REQ_F_BUFFER_SELECTED) {
++		spin_lock(&req->ctx->completion_lock);
++		io_put_kbuf_comp(req);
++		spin_unlock(&req->ctx->completion_lock);
++	}
++
++	if (req->flags & REQ_F_NEED_CLEANUP) {
++		const struct io_cold_def *def = &io_cold_defs[req->opcode];
++
++		if (def->cleanup)
++			def->cleanup(req);
++	}
++	if ((req->flags & REQ_F_POLLED) && req->apoll) {
++		kfree(req->apoll->double_poll);
++		kfree(req->apoll);
++		req->apoll = NULL;
++	}
++	if (req->flags & REQ_F_INFLIGHT) {
++		struct io_uring_task *tctx = req->task->io_uring;
++
++		atomic_dec(&tctx->inflight_tracked);
++	}
++	if (req->flags & REQ_F_CREDS)
++		put_cred(req->creds);
++	if (req->flags & REQ_F_ASYNC_DATA) {
++		kfree(req->async_data);
++		req->async_data = NULL;
++	}
++	req->flags &= ~IO_REQ_CLEAN_FLAGS;
++}
++
+ static inline void io_req_track_inflight(struct io_kiocb *req)
+ {
+ 	if (!(req->flags & REQ_F_INFLIGHT)) {
+@@ -1823,39 +1855,6 @@ static __cold void io_drain_req(struct io_kiocb *req)
+ 	spin_unlock(&ctx->completion_lock);
+ }
+ 
+-static void io_clean_op(struct io_kiocb *req)
 -{
--	struct io_ring_ctx *ctx = req->ctx;
--
--	if (req->rsrc_node) {
--		io_tw_lock(ctx, ts);
--		io_put_rsrc_node(ctx, req->rsrc_node);
+-	if (req->flags & REQ_F_BUFFER_SELECTED) {
+-		spin_lock(&req->ctx->completion_lock);
+-		io_put_kbuf_comp(req);
+-		spin_unlock(&req->ctx->completion_lock);
 -	}
--	io_dismantle_req(req);
--	io_put_task_remote(req->task, 1);
 -
--	spin_lock(&ctx->completion_lock);
--	wq_list_add_head(&req->comp_list, &ctx->locked_free_list);
--	ctx->locked_free_nr++;
--	spin_unlock(&ctx->completion_lock);
+-	if (req->flags & REQ_F_NEED_CLEANUP) {
+-		const struct io_cold_def *def = &io_cold_defs[req->opcode];
+-
+-		if (def->cleanup)
+-			def->cleanup(req);
+-	}
+-	if ((req->flags & REQ_F_POLLED) && req->apoll) {
+-		kfree(req->apoll->double_poll);
+-		kfree(req->apoll);
+-		req->apoll = NULL;
+-	}
+-	if (req->flags & REQ_F_INFLIGHT) {
+-		struct io_uring_task *tctx = req->task->io_uring;
+-
+-		atomic_dec(&tctx->inflight_tracked);
+-	}
+-	if (req->flags & REQ_F_CREDS)
+-		put_cred(req->creds);
+-	if (req->flags & REQ_F_ASYNC_DATA) {
+-		kfree(req->async_data);
+-		req->async_data = NULL;
+-	}
+-	req->flags &= ~IO_REQ_CLEAN_FLAGS;
 -}
 -
- __cold void io_free_req(struct io_kiocb *req)
+ static bool io_assign_file(struct io_kiocb *req, const struct io_issue_def *def,
+ 			   unsigned int issue_flags)
  {
--	req->io_task_work.func = io_free_req_tw;
-+	/* refs were already put, restore them for io_req_task_complete() */
-+	req->flags &= ~REQ_F_REFCOUNT;
-+	/* we only want to free it, don't post CQEs */
-+	req->flags |= REQ_F_CQE_SKIP;
-+	req->io_task_work.func = io_req_task_complete;
- 	io_req_task_work_add(req);
- }
- 
 -- 
 2.40.0
 
