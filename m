@@ -2,109 +2,146 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99E5DEB64DA
-	for <io-uring@archiver.kernel.org>; Wed, 28 Jun 2023 16:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CBE9AEB64D7
+	for <io-uring@archiver.kernel.org>; Wed, 28 Jun 2023 17:10:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjF1QAT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 28 Jun 2023 12:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S231609AbjF1RKD (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 28 Jun 2023 13:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbjF1QAN (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 28 Jun 2023 12:00:13 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5499D1737
-        for <io-uring@vger.kernel.org>; Wed, 28 Jun 2023 09:00:12 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-440db8e60c8so1865970137.0
-        for <io-uring@vger.kernel.org>; Wed, 28 Jun 2023 09:00:12 -0700 (PDT)
+        with ESMTP id S232053AbjF1RKC (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 28 Jun 2023 13:10:02 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC841BE6
+        for <io-uring@vger.kernel.org>; Wed, 28 Jun 2023 10:10:01 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-7835bbeb6a0so2191139f.0
+        for <io-uring@vger.kernel.org>; Wed, 28 Jun 2023 10:10:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687968011; x=1690560011;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GPpb/2tnOaLvPcmNVC1FnQTKYAdbc3TLfcGD1phxugk=;
-        b=RM6YXUlfektq2rACsksmLN0SLB0ejuekQ0cyrqoilALSH+BUs94SmOewnpgIehcjxe
-         QhmTftymAmG5Pu1NN2z9GuPb9+KLM54AlZb9kiNTdlP7KByTT2jsaMTy/AVAp+r+0Dgt
-         7rt1IPGbXDhzGCh+wmiE8VKIeNhBuGBgaX680=
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687972200; x=1690564200;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qGeotf15uqrwCXJBzrcEcErfPDo2q6OqBuDdMyzUqqU=;
+        b=OlK3Y3gL4TmaSJXJiYsfgn5Oycv8ozxCoMYapKaCsjbF2McSJ2cxGH7hs6wU6xo2ED
+         B0IAc6HdtrUvTK8hI1Rp8j9vLHhGYz1vSTZJp1QJOTSyCdzThmy8Q1DtcrHAsFBDn7Xm
+         4SwboPBp86V957eYLONvDp1lRY5P6KF0ajptRc6R2Tk9Bd/SOxVKvira4nWjgj5SSlJS
+         HACOAjrHODoET/Y9rPFb7MMyxvSt6WjXjkIaNuVuze9QZOZ3F3oiVJMG6s3hpEE0Gada
+         6LTR6y2GFdUa6DpBGa1azlnYhvYrIqMjS20e/a5CnekjjyKhD6RVGWhoyRLs1XlWOIVs
+         PQrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687968011; x=1690560011;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GPpb/2tnOaLvPcmNVC1FnQTKYAdbc3TLfcGD1phxugk=;
-        b=SIqgKTrNKFfi1dDz+cMILq5deYVypiz4V9tzNKJnJdttsV4aF5IGbVWBZ3zZDBwZmt
-         kCzoaJDocEZa024GIYMlVxmVIhNaA9zpK2byi4FAcQsT2ZSLKnAWLv3/d5qaXBd53nqy
-         /aDdX+OAPLGu2a5Dcd7nIuK43icPWa/DSG95hhkMAnk+dd7J70PUHnNnIMbsaqHsJo2U
-         aWCOa7IhMMBZerfFMDBbJsCKkP3k6R8qWxsDzXHbuR+lH2Vettx8+RpOxThVbiqwHV1Y
-         pKCF4pxSeUrgjll33az76M/zCrazEvis3IyxfHIS5qLeTBMIg/GUtFpS+QaJ7R5k5TzI
-         R3SA==
-X-Gm-Message-State: AC+VfDy2DIVfs++rQfwkA6sW0fNT8UQ9UBVqF5k2xX6u1N/9WTgFpSgp
-        M/axfHecDbmrqXZpp673ALtR1WaG/MrYng7QIyWRNg==
-X-Google-Smtp-Source: ACHHUZ7srQlp7DIkDBVl1VNgP4nOj2nvihouiFdOS7wrMCmh/+lAFnbavY7RjBrRnZEqnwuRgvYMyg==
-X-Received: by 2002:a05:6102:367a:b0:440:b1f3:b476 with SMTP id bg26-20020a056102367a00b00440b1f3b476mr15912838vsb.17.1687968011530;
-        Wed, 28 Jun 2023 09:00:11 -0700 (PDT)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id f5-20020a67e085000000b00440aaaf18efsm1978595vsl.19.2023.06.28.09.00.11
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 09:00:11 -0700 (PDT)
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-791a0651fa3so1807606241.0
-        for <io-uring@vger.kernel.org>; Wed, 28 Jun 2023 09:00:11 -0700 (PDT)
-X-Received: by 2002:a67:f998:0:b0:443:6ad6:7915 with SMTP id
- b24-20020a67f998000000b004436ad67915mr5063977vsq.27.1687968010482; Wed, 28
- Jun 2023 09:00:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687972200; x=1690564200;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qGeotf15uqrwCXJBzrcEcErfPDo2q6OqBuDdMyzUqqU=;
+        b=c1476olSoDRgS0BxLIET2ycwSEB8FyVNagWksPsJDLwbDI0Wf+LtXsUbNBwuJl1uWq
+         JaDRGOBEM6T2vEhQLfS/Fxp8SSi3brMKzFegIRTxXvNd/g9NDljkYE67L3NQIUApFmm6
+         NL/iCknRr1bNxT0xQMKJ9ENZZXz1GmzzQiFIzMDc/Nbrw9zealtsHu9ZWXf0cp+u8Hh1
+         krz5v8w8oaBBc5ZiBf/DGPmxnwxdQgSSfcE9yCuj+MNM4VVjzHtI7tVTMJ0i7ddRCgxc
+         u9sc7NRVA2HYH/yzFTZH07zIumXMlRquCtuCYMvFlX5A70Xi1aGEciMG2LBSTWv7onT1
+         +6iQ==
+X-Gm-Message-State: AC+VfDwfLJ6OjNzqA++5lZOvNzdnl1BI3SNLfjKr3q5CV3VZvI7HQgY8
+        xUz+dN6FnBfzknO2AxGmyajKtwvRtwu2093OhNI=
+X-Google-Smtp-Source: ACHHUZ606jneCQVzLuuVPX/79tWADZCVUunqHlyBja/OCkyYzNFegIYJLYjSUMbcAGICC2bOyN5f2w==
+X-Received: by 2002:a05:6602:1648:b0:780:c6bb:ad8d with SMTP id y8-20020a056602164800b00780c6bbad8dmr583517iow.0.1687972199982;
+        Wed, 28 Jun 2023 10:09:59 -0700 (PDT)
+Received: from localhost.localdomain ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id t11-20020a02c48b000000b0042aecf02051sm708342jam.51.2023.06.28.10.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 10:09:59 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 3/3] io_uring: flush offloaded and delayed task_work on exit
+Date:   Wed, 28 Jun 2023 11:09:53 -0600
+Message-Id: <20230628170953.952923-4-axboe@kernel.dk>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230628170953.952923-1-axboe@kernel.dk>
+References: <20230628170953.952923-1-axboe@kernel.dk>
 MIME-Version: 1.0
-References: <20230627120058.2214509-1-matteorizzo@google.com>
- <20230627120058.2214509-2-matteorizzo@google.com> <e8924389-985a-42ad-9daf-eca2bf12fa57@acm.org>
- <CAHKB1wJANtT27WM6hrhDy_x9H9Lsn4qRjPDmXdKosoL93TJRYg@mail.gmail.com>
- <CANiDSCvjCoj3Q3phbmdhdG-veHNRrfD-gBu=FuZkmrgJ2uxiJg@mail.gmail.com> <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
-In-Reply-To: <CAHKB1w+UyOnC_rOBABVhmzG+XeePaWYgPJWxX9NUeqnAi9WcgA@mail.gmail.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 28 Jun 2023 17:59:59 +0200
-X-Gmail-Original-Message-ID: <CANiDSCtu1OvoRe0ReqBVctzd8euZDt-h7dyx+xACWzdQeHkxBA@mail.gmail.com>
-Message-ID: <CANiDSCtu1OvoRe0ReqBVctzd8euZDt-h7dyx+xACWzdQeHkxBA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Add a new sysctl to disable io_uring system-wide
-To:     Matteo Rizzo <matteorizzo@google.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
-        jordyzomer@google.com, evn@google.com, poprdi@google.com,
-        corbet@lwn.net, axboe@kernel.dk, asml.silence@gmail.com,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        rostedt@goodmis.org, dave.hansen@linux.intel.com,
-        chenhuacai@kernel.org, steve@sk2.org, gpiccoli@igalia.com,
-        ldufour@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-HI Matteo
+io_uring offloads task_work for cancelation purposes when the task is
+exiting. This is conceptually fine, but we should be nicer and actually
+wait for that work to complete before returning.
 
-On Wed, 28 Jun 2023 at 17:12, Matteo Rizzo <matteorizzo@google.com> wrote:
->
-> On Wed, 28 Jun 2023 at 13:44, Ricardo Ribalda <ribalda@chromium.org> wrote:
-> >
-> > Have you considered that the new sysctl is "sticky like kexec_load_disabled.
-> > When the user disables it there is no way to turn it back on until the
-> > system is rebooted.
->
-> Are you suggesting making this sysctl sticky? Are there any examples of how to
-> implement a sticky sysctl that can take more than 2 values in case we want to
-> add an intermediate level that still allows privileged processes to use
-> io_uring? Also, what would be the use case? Preventing privileged processes
-> from re-enabling io_uring?
+Add an argument to io_fallback_tw() telling it to flush the deferred
+work when it's all queued up, and have it flush a ctx behind whenever
+the ctx changes.
 
-Yes, if this sysctl is accepted, I think it would make sense to make it sticky.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/io_uring.c | 22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-For more than one value take a look to  kexec_load_limit_reboot and
-kexec_load_limit_panic
-
-Thanks!
-
->
-> Thanks!
-> --
-> Matteo
-
-
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index f84d258ea348..e8096d502a7c 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1237,18 +1237,32 @@ static inline struct llist_node *io_llist_cmpxchg(struct llist_head *head,
+ 	return cmpxchg(&head->first, old, new);
+ }
+ 
+-static __cold void io_fallback_tw(struct io_uring_task *tctx)
++static __cold void io_fallback_tw(struct io_uring_task *tctx, bool sync)
+ {
+ 	struct llist_node *node = llist_del_all(&tctx->task_list);
++	struct io_ring_ctx *last_ctx = NULL;
+ 	struct io_kiocb *req;
+ 
+ 	while (node) {
+ 		req = container_of(node, struct io_kiocb, io_task_work.node);
+ 		node = node->next;
++		if (sync && last_ctx != req->ctx) {
++			if (last_ctx) {
++				flush_delayed_work(&last_ctx->fallback_work);
++				percpu_ref_put(&last_ctx->refs);
++			}
++			last_ctx = req->ctx;
++			percpu_ref_get(&last_ctx->refs);
++		}
+ 		if (llist_add(&req->io_task_work.node,
+ 			      &req->ctx->fallback_llist))
+ 			schedule_delayed_work(&req->ctx->fallback_work, 1);
+ 	}
++
++	if (last_ctx) {
++		flush_delayed_work(&last_ctx->fallback_work);
++		percpu_ref_put(&last_ctx->refs);
++	}
+ }
+ 
+ void tctx_task_work(struct callback_head *cb)
+@@ -1263,7 +1277,7 @@ void tctx_task_work(struct callback_head *cb)
+ 	unsigned int count = 0;
+ 
+ 	if (unlikely(current->flags & PF_EXITING)) {
+-		io_fallback_tw(tctx);
++		io_fallback_tw(tctx, true);
+ 		return;
+ 	}
+ 
+@@ -1358,7 +1372,7 @@ static void io_req_normal_work_add(struct io_kiocb *req)
+ 	if (likely(!task_work_add(req->task, &tctx->task_work, ctx->notify_method)))
+ 		return;
+ 
+-	io_fallback_tw(tctx);
++	io_fallback_tw(tctx, false);
+ }
+ 
+ void __io_req_task_work_add(struct io_kiocb *req, unsigned flags)
+@@ -3108,6 +3122,8 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
+ 	if (ctx->rings)
+ 		io_kill_timeouts(ctx, NULL, true);
+ 
++	flush_delayed_work(&ctx->fallback_work);
++
+ 	INIT_WORK(&ctx->exit_work, io_ring_exit_work);
+ 	/*
+ 	 * Use system_unbound_wq to avoid spawning tons of event kworkers
 -- 
-Ricardo Ribalda
+2.40.1
+
