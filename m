@@ -2,52 +2,52 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FF53EB64DD
-	for <io-uring@archiver.kernel.org>; Sun,  2 Jul 2023 19:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD059EB64DD
+	for <io-uring@archiver.kernel.org>; Sun,  2 Jul 2023 19:43:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjGBTlX (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 2 Jul 2023 15:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
+        id S231455AbjGBTnM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 2 Jul 2023 15:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231639AbjGBTlB (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 2 Jul 2023 15:41:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BDA1BD2;
-        Sun,  2 Jul 2023 12:40:33 -0700 (PDT)
+        with ESMTP id S231377AbjGBTmu (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 2 Jul 2023 15:42:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968111BFA;
+        Sun,  2 Jul 2023 12:41:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 865BA60C8D;
-        Sun,  2 Jul 2023 19:40:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4573AC433C9;
-        Sun,  2 Jul 2023 19:40:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD5C860D30;
+        Sun,  2 Jul 2023 19:41:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A8D5C433CA;
+        Sun,  2 Jul 2023 19:41:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688326832;
-        bh=pmq9JZD8yIqmj0mM5w5/RCcJ+BTdxiwpEgcufDWTT6Y=;
+        s=k20201202; t=1688326882;
+        bh=YY8aSyiAnXjWZDAe2RJDMiwQaVSTAnL1mmuRePb29F0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BQki/MMrdl//CtUgjlb6u6dGjrcIwNJRZOXWdT0JOzXghHb5V085i8EoJBGA97xTb
-         xkRXtAqKnsRGTpcQy69FyRpWp3JivubxbVHgYTZdbKLvncbD/6e2P572GLV4gJrrYr
-         /RRanFv+B48At0kOqMzdokksF0oam4KPx8EHFNuo7Sw1AvELMRp6uBOA92FedAjcDx
-         NOOt/W0MU07O0ldMuwc75eYTcT8I0LVJIzi2WKqhhDyqj+QZg98+dbdhVA1x7mvtq6
-         aDJQYQ57wfBGgy/kqjAFMkMzpfJWlUeyfmY0K5b2qZP1c/RWhQZK/A4T2iAs9HLMqu
-         Tnnv84lN4kZ1w==
+        b=as+HKF5wWhlqzYRaV23jSABmgbbdumhP0yfsQYrUkKuDXTRjWD1zsUyrLhmdEia9i
+         7fhbCio94WLHyZzen8qycXZwrZalihKWfhNkIEYJYKWxFJr44XIW3MefDe7cKRkCnC
+         FthjuK+BZ3278IdrfD3Gz8M2oJrbZK1QnlEezog4LYOYdAzrTovDDCiJWNIC8c8ZRl
+         uPNr+8RV0MCmlSq4GYHwKIbOJo1c232/Hiyk/SSVZuiV9w3NsABNo6ZiMN6y1L1ghi
+         xOS/CD3QH9VNIldpw+7ZLn3k5lJhbNmnAv1jCBbhqT4Z3NY+ZVkOK6k/bizWug69PN
+         xLaA44GreKWQg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Pavel Begunkov <asml.silence@gmail.com>,
         syzbot+cb265db2f3f3468ef436@syzkaller.appspotmail.com,
         Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
         io-uring@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 03/15] io_uring: annotate offset timeout races
-Date:   Sun,  2 Jul 2023 15:40:08 -0400
-Message-Id: <20230702194020.1776895-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 02/12] io_uring: annotate offset timeout races
+Date:   Sun,  2 Jul 2023 15:41:07 -0400
+Message-Id: <20230702194118.1777794-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230702194020.1776895-1-sashal@kernel.org>
-References: <20230702194020.1776895-1-sashal@kernel.org>
+In-Reply-To: <20230702194118.1777794-1-sashal@kernel.org>
+References: <20230702194118.1777794-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.1
+X-stable-base: Linux 6.1.37
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
@@ -72,10 +72,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index fc950177e2e1d..350eb830b4855 100644
+index 4c6a5666541cf..b0cf05ebcbcc3 100644
 --- a/io_uring/timeout.c
 +++ b/io_uring/timeout.c
-@@ -594,7 +594,7 @@ int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
+@@ -545,7 +545,7 @@ int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
  		goto add;
  	}
  
