@@ -2,160 +2,164 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF85DEB64DA
-	for <io-uring@archiver.kernel.org>; Wed, 12 Jul 2023 16:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88522EB64DA
+	for <io-uring@archiver.kernel.org>; Wed, 12 Jul 2023 16:21:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjGLQVn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 12 Jul 2023 12:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S233182AbjGLQVp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 12 Jul 2023 12:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231791AbjGLQV3 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 12 Jul 2023 12:21:29 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127C12715
-        for <io-uring@vger.kernel.org>; Wed, 12 Jul 2023 09:20:24 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-78706966220so32743239f.1
-        for <io-uring@vger.kernel.org>; Wed, 12 Jul 2023 09:20:24 -0700 (PDT)
+        with ESMTP id S230344AbjGLQVc (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 12 Jul 2023 12:21:32 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06DA92D49
+        for <io-uring@vger.kernel.org>; Wed, 12 Jul 2023 09:20:28 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-780c89d1998so65375339f.1
+        for <io-uring@vger.kernel.org>; Wed, 12 Jul 2023 09:20:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689178822; x=1691770822;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GB+TVOcEAGohMo/9qjG0tcL6VxFJuBiixHc0IQwbD98=;
-        b=JqNSJM5QCDkw+R1ww+DDY6XYeGWUbAsCxQxhbbvdBaY2g7Yo9mq1Utaza/2CKVSM8B
-         yDUYnnK6aVmrxP9r7gx+AZAaNJ1K4hxf2piEFU+6mlK1+eDms+kicmruEfTrHp0ik2Tt
-         Vm+ktb+O8l708FmhVBKRZMaPK84pe3A7EU5PKUaNKk1VKGdOjQpM1eH+d+KC1BnPFvt6
-         LUxcTf90msPzRfcZqu0dh/LdCvPF+veHMiBnP5SgE1py/1HsKWqogpgveuIjiLxf1NZq
-         M15munixc7UyORn1PlwYnauNOx1mIl1XABPGBcoCcjS+zit6CSyO2n9iVqMNJ3wR1riJ
-         bYfA==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689178825; x=1689783625;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RY5+GbYjkQ8F3AhNYX1zBu/AgfgWHjnN3p/L+7LXa1c=;
+        b=tMY9eVMmmz14rAjujFwmQ7tYA7VhYA+ljVfRFj0f7oDFx2oXil3dyZoEITmL66l3ca
+         B3uHHjN+lHI1xbcNSDywy3rbl0V1sDNze98IEVWF7nfpr0IwKdHab/epFZmefbqxyyOC
+         EJkiSvROtPvLi57TDwILXVQJ45JX+80MKq1kQmyir9VReA2fXVERKLFTQCyZcAZW5TNL
+         CTwAOANTAS1M3Dp+67LNFhUIPMa86maSCBpgl0OTed8pNeoubsdkgrT2Bj2HZ5+sIan9
+         fx9oA/RGMoaAWiVDXthG/XEMXTQy0I9CeOsADG9bGnvCjqe8dV+v49YfUoADHbe2+1Um
+         e6hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689178822; x=1691770822;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GB+TVOcEAGohMo/9qjG0tcL6VxFJuBiixHc0IQwbD98=;
-        b=TmNdP4W1o0tnIe37Jc8NLFUYJTNVQa1fQwt4wJikMTmcATeFhbuG4W0f6XvhZ3KTcU
-         5m199o02vyI4EPQXJnAX/pLZ5Z8EvRSy3Ks8nzWTE2nBbsjZzZnBnJcS55iP+94Z7SQz
-         dyDWCE/RzVlQ1UJ/VsVkrBRGKPgQd9aCGGgYTggkFxp/yBfzgz8Jk/0ah6jKA52D8UmH
-         tJSIDtCjxGgFW9prZJx0s66evqfLGu24ebYExEHNN83u97ZawsbcSX5IBEbqzTU/x7rC
-         v0D3WlUZKhzsGSuFPhUK3iyVRgKrnKVo4aYRUu0OlvOjhr1I5QXt0OUX5LN9WiU6kzU9
-         fdNA==
-X-Gm-Message-State: ABy/qLY8FxqrBBxcdDZcV5F1dzhWBvB12FSnFVSgE3OVnaxNh9AieXXN
-        smnviUVHKJmmed7A279L1iXeTnOqm5HMtJcprGE=
-X-Google-Smtp-Source: APBJJlHtuORB22XquZ9IWPiPN1Pbeftomu0zTo5Kw9NMbEPkmyQCmhyPA1/w87Jx09AggSZc60s2vQ==
-X-Received: by 2002:a6b:1489:0:b0:780:cde6:3e22 with SMTP id 131-20020a6b1489000000b00780cde63e22mr18243438iou.0.1689178822177;
-        Wed, 12 Jul 2023 09:20:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689178825; x=1689783625;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RY5+GbYjkQ8F3AhNYX1zBu/AgfgWHjnN3p/L+7LXa1c=;
+        b=dHhcOCqxkF0sLx9pZCLUP+uQR1Ss6lCx4BcT5/HJFtFxzJhvUhNrREGuBeN+sJd9GB
+         1g7aVkHCBryY39uHm8xjPqN3GIpV+5XqtPd2smD4dCAn8OpLgZ0GvQtSch2lDZMsnMx8
+         qVUolLJJPE6vj8PPXoyJEgHLXTpWzJOMtMuC3P6BbQOdA9POJfydg8JNW81ytFjksYi+
+         m5Vre+dReWnAS3wSJQsG1Ewff2iS9CIetjlro5gEsiChHLI8rQ9b9+11bu6ijrm134SE
+         khTdixcgelAQuQCinHCKRo+cdDdxlTBP1jRgarRGE9SUn0mUSU7DpCAPOGkn7sb5Ol1v
+         dzgQ==
+X-Gm-Message-State: ABy/qLYb/28qv4q0iN+j2RfJ29BJp4z8xdosn3pIHVZTo9DStoP9pn0V
+        QiX0fGNIasObjo5kS/6xbdzFhdLhch0IP7ZI4M8=
+X-Google-Smtp-Source: APBJJlH0YcxQzskAZgxY8LV2IoicfMMUMCI5mn4XoDC2tqZ8SyguVPAsdbUTEPFEr82tWRgbD8IT0A==
+X-Received: by 2002:a05:6602:3993:b0:780:c6bb:ad8d with SMTP id bw19-20020a056602399300b00780c6bbad8dmr20527261iob.0.1689178825676;
+        Wed, 12 Jul 2023 09:20:25 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id x24-20020a029718000000b0042aec33bc26sm1328775jai.18.2023.07.12.09.20.21
+        by smtp.gmail.com with ESMTPSA id x24-20020a029718000000b0042aec33bc26sm1328775jai.18.2023.07.12.09.20.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 09:20:21 -0700 (PDT)
+        Wed, 12 Jul 2023 09:20:24 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, peterz@infradead.org,
-        andres@anarazel.de
-Subject: [PATCHSET v2 0/8] Add io_uring futex/futexv support
-Date:   Wed, 12 Jul 2023 10:20:09 -0600
-Message-Id: <20230712162017.391843-1-axboe@kernel.dk>
+        andres@anarazel.de, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/8] futex: factor out the futex wake handling
+Date:   Wed, 12 Jul 2023 10:20:11 -0600
+Message-Id: <20230712162017.391843-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230712162017.391843-1-axboe@kernel.dk>
+References: <20230712162017.391843-1-axboe@kernel.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+In preparation for having another waker that isn't futex_wake_mark(),
+add a wake handler in futex_q. No extra data is associated with the
+handler outside of struct futex_q itself. futex_wake_mark() is defined as
+the standard wakeup helper, now set through futex_q_init like other
+defaults.
 
-This patchset adds support for first futex wake and wait, and then
-futexv. Patches 1..3 are just prep patches, patch 4 adds the wait
-and wake support for io_uring, and then patches 5..7 are again prep
-patches to end up with futexv support in patch 8.
+Normal sync futex waiting relies on wake_q holding tasks that should
+be woken up. This is what futex_wake_mark() does, it'll unqueue the
+futex and add the associated task to the wake queue. For async usage of
+futex waiting, rather than having tasks sleeping on the futex, we'll
+need to deal with a futex wake differently. For the planned io_uring
+case, that means posting a completion event for the task in question.
+Having a definable wake handler can help support that use case.
 
-For both wait/wake/waitv, we support the bitset variant, as the
-"normal" variants can be easily implemented on top of that.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ kernel/futex/futex.h    | 4 ++++
+ kernel/futex/requeue.c  | 3 ++-
+ kernel/futex/waitwake.c | 6 +++---
+ 3 files changed, 9 insertions(+), 4 deletions(-)
 
-PI and requeue are not supported through io_uring, just the above
-mentioned parts. This may change in the future, but in the spirit
-of keeping this small (and based on what people have been asking for),
-this is what we currently have.
-
-When I did these patches, I forgot that Pavel had previously posted a
-futex variant for io_uring. The major thing that had been holding me
-back from people asking about futexes and io_uring, is that I wanted
-to do this what I consider the right way - no usage of io-wq or thread
-offload, an actually async implementation that is efficient to use
-and don't rely on a blocking thread for futex wait/waitv. This is what
-this patchset attempts to do, while being minimally invasive on the
-futex side. I believe the diffstat reflects that.
-
-As far as I can recall, the first request for futex support with
-io_uring came from Andres Freund, working on postgres. His aio rework
-of postgres was one of the early adopters of io_uring, and futex
-support was a natural extension for that. This is relevant from both
-a usability point of view, as well as for effiency and performance.
-In Andres's words, for the former:
-
-"Futex wait support in io_uring makes it a lot easier to avoid deadlocks
-in concurrent programs that have their own buffer pool: Obviously pages in
-the application buffer pool have to be locked during IO. If the initiator
-of IO A needs to wait for a held lock B, the holder of lock B might wait
-for the IO A to complete.  The ability to wait for a lock and IO
-completions at the same time provides an efficient way to avoid such
-deadlocks."
-
-and in terms of effiency, even without unlocking the full potential yet,
-Andres says:
-
-"Futex wake support in io_uring is useful because it allows for more
-efficient directed wakeups.  For some "locks" postgres has queues
-implemented in userspace, with wakeup logic that cannot easily be
-implemented with FUTEX_WAKE_BITSET on a single "futex word" (imagine
-waiting for journal flushes to have completed up to a certain point). Thus
-a "lock release" sometimes need to wake up many processes in a row.  A
-quick-and-dirty conversion to doing these wakeups via io_uring lead to a
-3% throughput increase, with 12% fewer context switches, albeit in a
-fairly extreme workload."
-
-Some basic io_uring futex support and test cases are available in the
-liburing 'futex' branch:
-
-https://git.kernel.dk/cgit/liburing/log/?h=futex
-
-testing all of the variants. I originally wrote this code about a
-month ago and Andres has been using it with postgres, and I'm not
-aware of any bugs in it. That's not to say it's perfect, obviously,
-and I welcome some feedback so we can move this forward and hash out
-any potential issues.
-
- include/linux/io_uring_types.h |   3 +
- include/uapi/linux/io_uring.h  |   4 +
- io_uring/Makefile              |   4 +-
- io_uring/cancel.c              |   5 +
- io_uring/cancel.h              |   4 +
- io_uring/futex.c               | 376 +++++++++++++++++++++++++++++++++
- io_uring/futex.h               |  36 ++++
- io_uring/io_uring.c            |   5 +
- io_uring/opdef.c               |  35 ++-
- kernel/futex/futex.h           |  33 +++
- kernel/futex/requeue.c         |   3 +-
- kernel/futex/syscalls.c        |  27 ++-
- kernel/futex/waitwake.c        |  49 +++--
- 13 files changed, 548 insertions(+), 36 deletions(-)
-
-You can also find the code here:
-
-https://git.kernel.dk/cgit/linux/log/?h=io_uring-futex
-
-V2:
-- Abstract out __futex_wake_mark() helper. Use it both in the
-  futex and io_uring code. This also fixes a missing WARN_ON
-  on the io_uring side.
-- Have futex_op_to_flags() unconditionally clear flags to
-  zero rather than do that in both callers.
-- Remove comment on needing to open-code futex_queue(),
-  and associated hunk doing that. This was a leftover
-  from an earlier version.
-- Expand the commit message logs in various patches.
-
+diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
+index b8f454792304..54b7de21ef00 100644
+--- a/kernel/futex/futex.h
++++ b/kernel/futex/futex.h
+@@ -69,6 +69,9 @@ struct futex_pi_state {
+ 	union futex_key key;
+ } __randomize_layout;
+ 
++struct futex_q;
++typedef void (futex_wake_fn)(struct wake_q_head *wake_q, struct futex_q *q);
++
+ /**
+  * struct futex_q - The hashed futex queue entry, one per waiting task
+  * @list:		priority-sorted list of tasks waiting on this futex
+@@ -98,6 +101,7 @@ struct futex_q {
+ 
+ 	struct task_struct *task;
+ 	spinlock_t *lock_ptr;
++	futex_wake_fn *wake;
+ 	union futex_key key;
+ 	struct futex_pi_state *pi_state;
+ 	struct rt_mutex_waiter *rt_waiter;
+diff --git a/kernel/futex/requeue.c b/kernel/futex/requeue.c
+index cba8b1a6a4cc..e892bc6c41d8 100644
+--- a/kernel/futex/requeue.c
++++ b/kernel/futex/requeue.c
+@@ -58,6 +58,7 @@ enum {
+ 
+ const struct futex_q futex_q_init = {
+ 	/* list gets initialized in futex_queue()*/
++	.wake		= futex_wake_mark,
+ 	.key		= FUTEX_KEY_INIT,
+ 	.bitset		= FUTEX_BITSET_MATCH_ANY,
+ 	.requeue_state	= ATOMIC_INIT(Q_REQUEUE_PI_NONE),
+@@ -591,7 +592,7 @@ int futex_requeue(u32 __user *uaddr1, unsigned int flags, u32 __user *uaddr2,
+ 		/* Plain futexes just wake or requeue and are done */
+ 		if (!requeue_pi) {
+ 			if (++task_count <= nr_wake)
+-				futex_wake_mark(&wake_q, this);
++				this->wake(&wake_q, this);
+ 			else
+ 				requeue_futex(this, hb1, hb2, &key2);
+ 			continue;
+diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
+index ba01b9408203..3471af87cb7d 100644
+--- a/kernel/futex/waitwake.c
++++ b/kernel/futex/waitwake.c
+@@ -174,7 +174,7 @@ int futex_wake(u32 __user *uaddr, unsigned int flags, int nr_wake, u32 bitset)
+ 			if (!(this->bitset & bitset))
+ 				continue;
+ 
+-			futex_wake_mark(&wake_q, this);
++			this->wake(&wake_q, this);
+ 			if (++ret >= nr_wake)
+ 				break;
+ 		}
+@@ -289,7 +289,7 @@ int futex_wake_op(u32 __user *uaddr1, unsigned int flags, u32 __user *uaddr2,
+ 				ret = -EINVAL;
+ 				goto out_unlock;
+ 			}
+-			futex_wake_mark(&wake_q, this);
++			this->wake(&wake_q, this);
+ 			if (++ret >= nr_wake)
+ 				break;
+ 		}
+@@ -303,7 +303,7 @@ int futex_wake_op(u32 __user *uaddr1, unsigned int flags, u32 __user *uaddr2,
+ 					ret = -EINVAL;
+ 					goto out_unlock;
+ 				}
+-				futex_wake_mark(&wake_q, this);
++				this->wake(&wake_q, this);
+ 				if (++op_ret >= nr_wake2)
+ 					break;
+ 			}
 -- 
-Jens Axboe
-
+2.40.1
 
