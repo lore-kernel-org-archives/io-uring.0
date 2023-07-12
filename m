@@ -2,36 +2,36 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43902EB64DC
-	for <io-uring@archiver.kernel.org>; Wed, 12 Jul 2023 03:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1BF9EB64DC
+	for <io-uring@archiver.kernel.org>; Wed, 12 Jul 2023 03:19:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjGLDMg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 11 Jul 2023 23:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S230163AbjGLDTP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 11 Jul 2023 23:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjGLDMd (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 11 Jul 2023 23:12:33 -0400
-Received: from out-51.mta0.migadu.com (out-51.mta0.migadu.com [IPv6:2001:41d0:1004:224b::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626B710E3
-        for <io-uring@vger.kernel.org>; Tue, 11 Jul 2023 20:12:32 -0700 (PDT)
-Message-ID: <2e2afc83-ac1d-ab52-79c5-cb7c537cfcd9@linux.dev>
+        with ESMTP id S229536AbjGLDTO (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 11 Jul 2023 23:19:14 -0400
+Received: from out-41.mta0.migadu.com (out-41.mta0.migadu.com [91.218.175.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC1A133
+        for <io-uring@vger.kernel.org>; Tue, 11 Jul 2023 20:19:13 -0700 (PDT)
+Message-ID: <27a718a5-f769-0b4d-ee59-7a4cb5b6c7ae@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1689131550;
+        t=1689131952;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZLrNEUYM50f2mtC0bFeVJy+/kJ1y6MmF0pi4RVU6gNo=;
-        b=K7TTDt29BV35qWoI2LUYGU9VqXNVmACuwUQ5VDr0LP3QPC2Gvr479NW1JnkwPumkMAv2Qy
-        R2KiY+ZhQygHFziStt160BpjhJ+XBhCMcxR5TGBXDac2NhnBXOzbMQb8FXHQs96kyoDqJ+
-        dc1TqKTouM/pAw0hr27kZ2KUZfRy1wQ=
-Date:   Wed, 12 Jul 2023 11:12:20 +0800
+        bh=dIkiaq2uLiM5bxojEf+Ng11I346EHe3gbxPIFNkD3u8=;
+        b=mbP31bvM6Wu+9dXSHfUmJ7uvnMh3S4suFcoq3Izo2SAtDOdebsDTLuxlBJ1YIj8CjSYZpk
+        h5tdd82gphH2SvNL5VTKrjqgs3JtRL6Wq43mBXzibtQvte8Rgn+ErM4bQ4jWN1GiBHNflb
+        xOm7B75r0zgKp6F8Mab2f5cqzyLHUek=
+Date:   Wed, 12 Jul 2023 11:19:05 +0800
 MIME-Version: 1.0
 Subject: Re: [PATCH v3 0/3] io_uring getdents
 Content-Language: en-US
-To:     Dominique Martinet <asmadeus@codewreck.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Dave Chinner <david@fromorbit.com>, io-uring@vger.kernel.org,
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Dominique Martinet <asmadeus@codewreck.org>,
         Pavel Begunkov <asml.silence@gmail.com>,
         Christian Brauner <brauner@kernel.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -39,11 +39,9 @@ Cc:     Dave Chinner <david@fromorbit.com>, io-uring@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>
 References: <20230711114027.59945-1-hao.xu@linux.dev>
  <ZK3qKrlOiLxS/ZEK@dread.disaster.area>
- <5264f776-a5fd-4878-1b4c-7fe9f9a61b51@kernel.dk>
- <ZK35dZN7pYg0VuF0@codewreck.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From:   Hao Xu <hao.xu@linux.dev>
-In-Reply-To: <ZK35dZN7pYg0VuF0@codewreck.org>
+In-Reply-To: <ZK3qKrlOiLxS/ZEK@dread.disaster.area>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -51,41 +49,54 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 7/12/23 08:53, Dominique Martinet wrote:
-> Jens Axboe wrote on Tue, Jul 11, 2023 at 05:51:46PM -0600:
->>> So what filesystem actually uses this new NOWAIT functionality?
->>> Unless I'm blind (quite possibly) I don't see any filesystem
->>> implementation of this functionality in the patch series.
-> 
-> I had implemented this for kernfs and libfs (so sysfs, debugfs, possibly
-> tmpfs/proc?) in v2
-> 
-> The patch as of v2's mail has a bug, but my branch has it fixed as of
-> https://github.com/martinetd/linux/commits/io_uring_getdents
-
-I see, I'll try this, those in v2 causes issues when I boot my VM with them.
-
-> 
-> (I guess these aren't "real" enough though)
-> 
->>> I know I posted a prototype for XFS to use it, and I expected that
->>> it would become part of this patch series to avoid the "we don't add
->>> unused code to the kernel" problem. i.e. the authors would take the
->>> XFS prototype, make it work, add support into for the new io_uring
->>> operation to fsstress in fstests and then use that to stress test
->>> the new infrastructure before it gets merged....
->>>
->>> But I don't see any of this?
+On 7/12/23 07:47, Dave Chinner wrote:
+> On Tue, Jul 11, 2023 at 07:40:24PM +0800, Hao Xu wrote:
+>> From: Hao Xu <howeyxu@tencent.com>
 >>
->> That would indeed be great if we could get NOWAIT, that might finally
->> convince me that it's worth plumbing up! Do you have a link to that
->> prototype? That seems like what should be the base for this, and be an
->> inspiration for other file systems to get efficient getdents via this
->> (rather than io-wq punt, which I'm not a huge fan of...).
+>> This series introduce getdents64 to io_uring, the code logic is similar
+>> with the snychronized version's. It first try nowait issue, and offload
+>> it to io-wq threads if the first try fails.
+>>
+>>
+>> v2->v3:
+>>   - removed the kernfs patches
+>>   - add f_pos_lock logic
+>>   - remove the "reduce last EOF getdents try" optimization since
+>>     Dominique reports that doesn't make difference
+>>   - remove the rewind logic, I think the right way is to introduce lseek
+>>     to io_uring not to patch this logic to getdents.
+>>   - add Singed-off-by of Stefan Roesch for patch 1 since checkpatch
+>>     complained that Co-developed-by someone should be accompanied with
+>>     Signed-off-by same person, I can remove them if Stefan thinks that's
+>>     not proper.
+>>
+>>
+>> Dominique Martinet (1):
+>>    fs: split off vfs_getdents function of getdents64 syscall
+>>
+>> Hao Xu (2):
+>>    vfs_getdents/struct dir_context: add flags field
+>>    io_uring: add support for getdents
 > 
-> the xfs poc was in this mail:
-> https://lore.kernel.org/all/20230501071603.GE2155823@dread.disaster.area/
+> So what filesystem actually uses this new NOWAIT functionality?
+> Unless I'm blind (quite possibly) I don't see any filesystem
+> implementation of this functionality in the patch series.
 > 
-> I never spent time debugging it, but it should definitely be workable
+> I know I posted a prototype for XFS to use it, and I expected that
+> it would become part of this patch series to avoid the "we don't add
+> unused code to the kernel" problem. i.e. the authors would take the
+> XFS prototype, make it work, add support into for the new io_uring
+> operation to fsstress in fstests and then use that to stress test
+> the new infrastructure before it gets merged....
 > 
+> But I don't see any of this?
+> 
+> -Dave.
 
+Hi Dave,
+You are right, currently no real filesystem supports that from my 
+investigation, I saw the xfs prototype, I'd like to make it work first.
+That may cause some time.
+
+Thanks,
+Hao
