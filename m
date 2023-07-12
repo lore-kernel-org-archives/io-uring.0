@@ -2,131 +2,257 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D97EEB64DA
-	for <io-uring@archiver.kernel.org>; Wed, 12 Jul 2023 16:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D8DEEB64DD
+	for <io-uring@archiver.kernel.org>; Wed, 12 Jul 2023 16:25:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbjGLQWR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 12 Jul 2023 12:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S233513AbjGLQZT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 12 Jul 2023 12:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbjGLQVk (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 12 Jul 2023 12:21:40 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AD830C3
-        for <io-uring@vger.kernel.org>; Wed, 12 Jul 2023 09:20:45 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-682a5465e9eso1185204b3a.1
-        for <io-uring@vger.kernel.org>; Wed, 12 Jul 2023 09:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689178845; x=1691770845;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/9IAdtt3/8DuY/QVZDICwnJG5hoGWNTwXHfpUVZziX4=;
-        b=EM+PCGQWHPEVzL/Jc93Q5nC/tU063wfXE0e/0WH0Azz+MQ8bmp/vwQhO8z5thcxBS/
-         ALTHKAPnHqLlU68wt2akeyFfBAU7SpDe6fJtnjleudk0djnb/RCiifn93hVHVDo06UE3
-         lXBkJjmCF94KWc+TMT5Hcm16xDWp/POmxLJbMy81WBSJEiNVGN/GEVNd6Dz6LjjxpSmU
-         CBQ5D2AIml3CfkDh3MzOzHxwZ/sE/Gu/Vvw73Dg58bNTx75oe8m61jqJ6SQz1JXHz9Im
-         T0NbV/6u3YknwV7F/AxDvsTUluf0diDhAuQXWTSG4gL98OFv6ECMX0IWq3IS5UKU1Puk
-         BGgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689178845; x=1691770845;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/9IAdtt3/8DuY/QVZDICwnJG5hoGWNTwXHfpUVZziX4=;
-        b=UVRVdkkFWwfNGpmUK5iqcLvuzzo8S0tzZI5bCBj7s/npGHj3C1U76I6dkk82u3/UDD
-         ZxS4RIPiu1xur9DK4KoCVMnCfDEYHG7WQeWw8ZFw+OHTatbaiCNhFee+rdHFioopbLuy
-         tA838Z1g6OhsUgG/TVlE0F8OhuS0CqcKtE/Gw8x8p7KDLmcZXkUSCvQHVm4UmBFp+wjm
-         IecpXHyNYMp7MaWHCB22PtWcS9Tr67O8WP1Amf185V8WlVPrmQztChSE24xqNlb142TD
-         ncH+hCXkGdI9AVUuqdt8cxIx2KgcgFpqKMEL4j0dvrW/4r57i4n1Vw5x7kf0ysFK42hq
-         J4QQ==
-X-Gm-Message-State: ABy/qLZKGoxP9Sy7y2evPS7JQ6RijKV85HRSwlH8wx5MZB+k1/N80Us3
-        sMctXrQJ14AEmuijDq0sdBSq4x2UCCcGRQfEie4=
-X-Google-Smtp-Source: APBJJlEtOypA1RFF8/aajtMhumzTpVGIjNpPO69tWC224DdJYo4Sumfefx+Y7aU9ZQQPwkdTtOVHyw==
-X-Received: by 2002:a05:6602:1490:b0:787:16ec:2699 with SMTP id a16-20020a056602149000b0078716ec2699mr11094280iow.2.1689178824145;
-        Wed, 12 Jul 2023 09:20:24 -0700 (PDT)
-Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id x24-20020a029718000000b0042aec33bc26sm1328775jai.18.2023.07.12.09.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 09:20:22 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, peterz@infradead.org,
-        andres@anarazel.de, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/8] futex: abstract out futex_op_to_flags() helper
-Date:   Wed, 12 Jul 2023 10:20:10 -0600
-Message-Id: <20230712162017.391843-2-axboe@kernel.dk>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230712162017.391843-1-axboe@kernel.dk>
-References: <20230712162017.391843-1-axboe@kernel.dk>
+        with ESMTP id S233263AbjGLQZA (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 12 Jul 2023 12:25:00 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA161BD6;
+        Wed, 12 Jul 2023 09:24:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1689179055; x=1689783855; i=deller@gmx.de;
+ bh=LNgVsqTps5zVhzXdi1K2riJTjlblK3FNLr1XpLga/Fk=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+ b=OyNUpA8UJl+6JrAjYnnmWhUZYBTSkEZgHrSxnGTQXM6doYXlLnI0bGoXa2dEASLR00emOAL
+ 4yJuBmD/5v5uz97bMctnvjmaRXm8bzP0pfrzYXo93+JPZpSDIgoV+IoXnEXgvZvNrwaci6p1S
+ 2Icqz/9Zk9di0YqJxaqdGDanB+ILkzm7lEwr3luTwJy3B+A1Eu/vJJ34MDast6aV7oaVTTEzr
+ ZTLfhsiEDOv+eLQ6M8f+PAltU87gKSXg46r3u45ab+HE32S2jx7meMzFMMPsEumX6VocYz/Ng
+ LqmNbB6n5+8AuKntsgjZ8X2EOVv4G9P1v5pQDOK5Pu10w4hPsrJA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([94.134.144.114]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mg6Zq-1pkpW518EY-00heg1; Wed, 12
+ Jul 2023 18:24:15 +0200
+Date:   Wed, 12 Jul 2023 18:24:13 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     matoro <matoro_mailinglist_kernel@matoro.tk>
+Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        Linux Ia64 <linux-ia64@vger.kernel.org>,
+        glaubitz@physik.fu-berlin.de, Sam James <sam@gentoo.org>
+Subject: Re: [PATCH 1/5] io_uring: Adjust mapping wrt architecture aliasing
+ requirements
+Message-ID: <ZK7TrdVXc0O6HMpQ@ls3530>
+References: <20230314171641.10542-1-axboe@kernel.dk>
+ <20230314171641.10542-2-axboe@kernel.dk>
+ <1d5f8f99f39e2769b9c76fbc24e2cf50@matoro.tk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d5f8f99f39e2769b9c76fbc24e2cf50@matoro.tk>
+X-Provags-ID: V03:K1:g+GuwCUxidisN/5OR52tKAYke0p1Fqn8eriHq5fDUVsRbjIgWhU
+ Gbu5YAoISLO6am29Owu6acAlWPxG8LcmTu0H7ieBjBDNWnnXAEq42ZFO5Q2YC5ivzHfBLgc
+ EowLQkDYK0XSAwGHjoQbvAHBX7YgNSpeOG5Dn+mx9xw3kfIlXq/o8g/4LxefqMvCsGl3Ddk
+ uOeZy61am8O1vegSQtSSA==
+UI-OutboundReport: notjunk:1;M01:P0:0PHNx0ZWVJE=;BmdDmaqmxplwHugWQskXFZyJl4w
+ dUnwPnveOuceXCZQS+VQzGfLIlaCrdim1LKLmxupxtYTrI8bYjMfYawNFv9a9NsZWk+3qbbPI
+ kIfY8f7ZXpyNeNiwHVtUN4wNHsVKPjRwI2rEyRlSJ6P54/xYQvmS2yFraHLHg/e6X0M6E57VC
+ CRNcdlcj831BX9ybBWGaaYbEgj5dm2ANGS5yR2Sp1hVSqXESRTksNCF71v6qyCIHTxFjsHln9
+ E4tXPJh+Bxk717PDLdSbFXeOUUrkBmFsM2IQ0cGOjyKs3Y8xr+gxZDrStxdBHwxomz1dbXm1K
+ YxRs8IraBGDKIOP23jFaxruvP2Y/0mIx02d626mxV5Hx5npLXJR0tLyvDXW7qz82/vIVEsGvL
+ BeHcy1PCccyDf+kwrEAPG/gCCK/LP4jk9uwO6jf+VSnW5fAaTQHl8sAH4xSORUEPghTytemqR
+ X5GnOV+dKKlVCVGY1umlO6jluIkBhJhHfxbtYDl2dkk6Zvv5kKiatGuHBNrZSwdo4p9JiXDeo
+ xotMVD3PKIMcIfMZRTwX2tOVTp9U1Jm2xwOnZ60tM/9m9fim0umDsyQ/lfSdaVoW0A54ddWNU
+ pVevAsAtovDrVDTkJSJ/y1U2eHcQxX/BPT6bhGraeZOKa4RjDvj/x2ggJnODQoYhHKfVXupC8
+ p3Zz/Hs8fzXwjizug5Dud6MmvypyFCJU+48aFKCdDR0pGfia9/PbtFGhn5nKB3OIdJKGJEppp
+ BxMpuy/333UJylArJulFCmv2OP6bu1lXZc8JdK/o9o+YlfFuopYfRlrErWNA6QaRAM/Z4KcRb
+ idtmCdps0w59x1pezgUCLmV8KrEstxwJPtv1Tvy4TDeROJMv8slDwLd489N6XP+DUU4pfep0Z
+ 0ThWSV/l2akAAo8DSZNi9nw1ULxN4QyAhzL58Yq9ICiPS+hBqMvt5W9V97VFfNBq7Q8t05uMS
+ fYM63K9ugA/tt9qIkbfqrLU+XOo=
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Rather than needing to duplicate this for the io_uring hook of futexes,
-abstract out a helper.
+Hi Matoro,
 
-No functional changes intended in this patch.
+* matoro <matoro_mailinglist_kernel@matoro.tk>:
+> On 2023-03-14 13:16, Jens Axboe wrote:
+> > From: Helge Deller <deller@gmx.de>
+> >
+> > Some architectures have memory cache aliasing requirements (e.g. paris=
+c)
+> > if memory is shared between userspace and kernel. This patch fixes the
+> > kernel to return an aliased address when asked by userspace via mmap()=
+.
+> >
+> > Signed-off-by: Helge Deller <deller@gmx.de>
+> > Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> > ---
+> >  io_uring/io_uring.c | 51 ++++++++++++++++++++++++++++++++++++++++++++=
++
+> >  1 file changed, 51 insertions(+)
+> >
+> > diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> > index 722624b6d0dc..3adecebbac71 100644
+> > --- a/io_uring/io_uring.c
+> > +++ b/io_uring/io_uring.c
+> > @@ -72,6 +72,7 @@
+> >  #include <linux/io_uring.h>
+> >  #include <linux/audit.h>
+> >  #include <linux/security.h>
+> > +#include <asm/shmparam.h>
+> >
+> >  #define CREATE_TRACE_POINTS
+> >  #include <trace/events/io_uring.h>
+> > @@ -3317,6 +3318,54 @@ static __cold int io_uring_mmap(struct file
+> > *file, struct vm_area_struct *vma)
+> >  	return remap_pfn_range(vma, vma->vm_start, pfn, sz,
+> > vma->vm_page_prot);
+> >  }
+> >
+> > +static unsigned long io_uring_mmu_get_unmapped_area(struct file *filp=
+,
+> > +			unsigned long addr, unsigned long len,
+> > +			unsigned long pgoff, unsigned long flags)
+> > +{
+> > +	const unsigned long mmap_end =3D arch_get_mmap_end(addr, len, flags)=
+;
+> > +	struct vm_unmapped_area_info info;
+> > +	void *ptr;
+> > +
+> > +	/*
+> > +	 * Do not allow to map to user-provided address to avoid breaking th=
+e
+> > +	 * aliasing rules. Userspace is not able to guess the offset address
+> > of
+> > +	 * kernel kmalloc()ed memory area.
+> > +	 */
+> > +	if (addr)
+> > +		return -EINVAL;
+> > +
+> > +	ptr =3D io_uring_validate_mmap_request(filp, pgoff, len);
+> > +	if (IS_ERR(ptr))
+> > +		return -ENOMEM;
+> > +
+> > +	info.flags =3D VM_UNMAPPED_AREA_TOPDOWN;
+> > +	info.length =3D len;
+> > +	info.low_limit =3D max(PAGE_SIZE, mmap_min_addr);
+> > +	info.high_limit =3D arch_get_mmap_base(addr, current->mm->mmap_base)=
+;
+> > +#ifdef SHM_COLOUR
+> > +	info.align_mask =3D PAGE_MASK & (SHM_COLOUR - 1UL);
+> > +#else
+> > +	info.align_mask =3D PAGE_MASK & (SHMLBA - 1UL);
+> > +#endif
+> > +	info.align_offset =3D (unsigned long) ptr;
+> > +
+> > +	/*
+> > +	 * A failed mmap() very likely causes application failure,
+> > +	 * so fall back to the bottom-up function here. This scenario
+> > +	 * can happen with large stack limits and large mmap()
+> > +	 * allocations.
+> > +	 */
+> > +	addr =3D vm_unmapped_area(&info);
+> > +	if (offset_in_page(addr)) {
+> > +		info.flags =3D 0;
+> > +		info.low_limit =3D TASK_UNMAPPED_BASE;
+> > +		info.high_limit =3D mmap_end;
+> > +		addr =3D vm_unmapped_area(&info);
+> > +	}
+> > +
+> > +	return addr;
+> > +}
+> > +
+> >  #else /* !CONFIG_MMU */
+> >
+> >  static int io_uring_mmap(struct file *file, struct vm_area_struct *vm=
+a)
+> > @@ -3529,6 +3578,8 @@ static const struct file_operations io_uring_fop=
+s
+> > =3D {
+> >  #ifndef CONFIG_MMU
+> >  	.get_unmapped_area =3D io_uring_nommu_get_unmapped_area,
+> >  	.mmap_capabilities =3D io_uring_nommu_mmap_capabilities,
+> > +#else
+> > +	.get_unmapped_area =3D io_uring_mmu_get_unmapped_area,
+> >  #endif
+> >  	.poll		=3D io_uring_poll,
+> >  #ifdef CONFIG_PROC_FS
+>
+> Hi Jens, Helge - I've bisected a regression with io_uring on ia64 to thi=
+s
+> patch in 6.4.  Unfortunately this breaks userspace programs using io_uri=
+ng,
+> the easiest one to test is cmake with an io_uring enabled libuv (i.e., l=
+ibuv
+> >=3D 1.45.0) which will hang.
+>
+> I am aware that ia64 is in a vulnerable place right now which I why I am
+> keeping this spread limited.  Since this clearly involves
+> architecture-specific changes for parisc,
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- kernel/futex/futex.h    | 17 +++++++++++++++++
- kernel/futex/syscalls.c | 13 +++----------
- 2 files changed, 20 insertions(+), 10 deletions(-)
+it isn't so much architecture-specific... (just one ifdef)
 
-diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
-index b5379c0e6d6d..b8f454792304 100644
---- a/kernel/futex/futex.h
-+++ b/kernel/futex/futex.h
-@@ -291,4 +291,21 @@ extern int futex_unlock_pi(u32 __user *uaddr, unsigned int flags);
- 
- extern int futex_lock_pi(u32 __user *uaddr, unsigned int flags, ktime_t *time, int trylock);
- 
-+static inline bool futex_op_to_flags(int op, int cmd, unsigned int *flags)
-+{
-+	*flags = 0;
-+
-+	if (!(op & FUTEX_PRIVATE_FLAG))
-+		*flags |= FLAGS_SHARED;
-+
-+	if (op & FUTEX_CLOCK_REALTIME) {
-+		*flags |= FLAGS_CLOCKRT;
-+		if (cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI &&
-+		    cmd != FUTEX_LOCK_PI2)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- #endif /* _FUTEX_H */
-diff --git a/kernel/futex/syscalls.c b/kernel/futex/syscalls.c
-index a8074079b09e..0b63d5bcdc77 100644
---- a/kernel/futex/syscalls.c
-+++ b/kernel/futex/syscalls.c
-@@ -86,17 +86,10 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
- 		u32 __user *uaddr2, u32 val2, u32 val3)
- {
- 	int cmd = op & FUTEX_CMD_MASK;
--	unsigned int flags = 0;
-+	unsigned int flags;
- 
--	if (!(op & FUTEX_PRIVATE_FLAG))
--		flags |= FLAGS_SHARED;
--
--	if (op & FUTEX_CLOCK_REALTIME) {
--		flags |= FLAGS_CLOCKRT;
--		if (cmd != FUTEX_WAIT_BITSET && cmd != FUTEX_WAIT_REQUEUE_PI &&
--		    cmd != FUTEX_LOCK_PI2)
--			return -ENOSYS;
--	}
-+	if (!futex_op_to_flags(op, cmd, &flags))
-+		return -ENOSYS;
- 
- 	switch (cmd) {
- 	case FUTEX_WAIT:
--- 
-2.40.1
+> is there any chance of looking at
+> what is required to do the same for ia64?  I looked at
+> 0ef36bd2b37815719e31a72d2beecc28ca8ecd26 ("parisc: change value of SHMLB=
+A
+> from 0x00400000 to PAGE_SIZE") and tried to replicate the SHMLBA ->
+> SHM_COLOUR change, but it made no difference.
+>
+> If hardware is necessary for testing, I can provide it, including remote=
+ BMC
+> access for restarts/kernel debugging.  Any takers?
 
+I won't have time to test myself, but maybe you could test?
+
+Basically we should try to find out why io_uring_mmu_get_unmapped_area()
+doesn't return valid addresses, while arch_get_unmapped_area()
+[in arch/ia64/kernel/sys_ia64.c] does.
+
+You could apply this patch first:
+It introduces a memory leak (as it requests memory twice), but maybe we
+get an idea?
+The ia64 arch_get_unmapped_area() searches for memory from bottom
+(flags=3D0), while io_uring function tries top-down first. Maybe that's
+the problem. And I don't understand the offset_in_page() check right
+now.
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 3bca7a79efda..93b1964d2bbb 100644
+=2D-- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -3431,13 +3431,17 @@ static unsigned long io_uring_mmu_get_unmapped_are=
+a(struct file *filp,
+ 	 * can happen with large stack limits and large mmap()
+ 	 * allocations.
+ 	 */
++/* compare to arch_get_unmapped_area() in arch/ia64/kernel/sys_ia64.c */
+ 	addr =3D vm_unmapped_area(&info);
+-	if (offset_in_page(addr)) {
++printk("io_uring_mmu_get_unmapped_area() address 1 is: %px\n", addr);
++	addr =3D NULL;
++	if (!addr) {
+ 		info.flags =3D 0;
+ 		info.low_limit =3D TASK_UNMAPPED_BASE;
+ 		info.high_limit =3D mmap_end;
+ 		addr =3D vm_unmapped_area(&info);
+ 	}
++printk("io_uring_mmu_get_unmapped_area() returns address %px\n", addr);
+
+ 	return addr;
+ }
+
+
+Another option is to disable the call to io_uring_nommu_get_unmapped_area(=
+))
+with the next patch. Maybe you could add printks() to ia64's arch_get_unma=
+pped_area()
+and check what it returns there?
+
+@@ -3654,6 +3658,8 @@ static const struct file_operations io_uring_fops =
+=3D {
+ #ifndef CONFIG_MMU
+ 	.get_unmapped_area =3D io_uring_nommu_get_unmapped_area,
+ 	.mmap_capabilities =3D io_uring_nommu_mmap_capabilities,
++#elif 0    /* IS_ENABLED(CONFIG_IA64) */
++	.get_unmapped_area =3D NULL,
+ #else
+ 	.get_unmapped_area =3D io_uring_mmu_get_unmapped_area,
+ #endif
+
+Helge
