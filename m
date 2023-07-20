@@ -2,123 +2,116 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 49F05C001DC
-	for <io-uring@archiver.kernel.org>; Thu, 20 Jul 2023 18:13:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F0BFC04A6A
+	for <io-uring@archiver.kernel.org>; Thu, 20 Jul 2023 18:13:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbjGTSNS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 20 Jul 2023 14:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53012 "EHLO
+        id S230056AbjGTSNT (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 20 Jul 2023 14:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjGTSNR (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 20 Jul 2023 14:13:17 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C98D270B
-        for <io-uring@vger.kernel.org>; Thu, 20 Jul 2023 11:13:15 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-346434c7793so1615435ab.0
-        for <io-uring@vger.kernel.org>; Thu, 20 Jul 2023 11:13:15 -0700 (PDT)
+        with ESMTP id S229898AbjGTSNT (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 20 Jul 2023 14:13:19 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A2E92
+        for <io-uring@vger.kernel.org>; Thu, 20 Jul 2023 11:13:18 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-785d3a53ed6so13863139f.1
+        for <io-uring@vger.kernel.org>; Thu, 20 Jul 2023 11:13:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689876794; x=1690481594;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wDnuldrPQY1sBo1NQ+JA5EJ1TsjdpKNztmHiGvW2IJ0=;
-        b=nqsWGuYOvEleFPb9LfMYLqcsfmSsYDEycZrspwlsOLwhLysC3smM/dQX3dBJzDKGDP
-         Nc73q2QcIcRpcUBlC6QLEh1eVjLTfr8TsPNkDfT4GCyvH2dSEpR3ApF9SvDRiiwFEWTx
-         VhRadKrGcLyYkn3FFyYZqbX9Wu2EbGCbkceGmuYPUuykNf0R5JoXoiy/QafqRZkaJQUl
-         VgdEd/9eE4PshM6tx1E8OxhiAMLVW2bYjiMCHNswaSfGYxLW4qYureVFjJXzRgbUxRnt
-         cj6yoyA0gXVq9HUBwxraY/h+FYJZTx0p532AxPzRR9o+7eJiS0HcTwq6r4trQildRGdd
-         aiDg==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1689876797; x=1690481597;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=imYhKP5v89lbPeTtC2wFGbz9kkgQjFqYE28HmmHERmw=;
+        b=GrebEaRZHzYbDBDN/hmIpElSBatOqma0fWwnvNuied5zdXHf3S2dMzyUVfN3HdsjOT
+         Qszjbxczbi7MewAEfrn+CLSFDleXg6brNEGAeqS9bXrHhWAloF4dFe0IZHeEFwHb0nNE
+         auYYzqJkR4Gp+3yBQkCeRS+G/eSCS1cTH/1XyHGsVhFqzBFEXw4FzJgcYpAHStkNC5cl
+         griSBiK5VjLUtfMP0/yk1Y47qdiAffkCq4Fp945EVpPQfnVFIP7ShDV3/5UAj72dlrD+
+         olR1qIegksSBF77fDrVQj/oYhFIeRzHWUg4t4Aob2HfUX7zxABpgY9qgDAeLUk7U88An
+         DS7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689876794; x=1690481594;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wDnuldrPQY1sBo1NQ+JA5EJ1TsjdpKNztmHiGvW2IJ0=;
-        b=VsLq0AM+CUDaR0o6O2MEVjfqHhl/vubUndUTc/J6pPPavvnw9Q7O8H/Q8FDv1pVomu
-         K/aOXtbxTfRDdWPH3wVXKfToWsoryisC+K31r8u4bsVsBuvVpuRVM1wX1RLd3Y2MGsfp
-         mpjHy5vuv0c0ZvZeV9Sbvv4IuwoyCkr2T8oA0Vjq5L9TR25sg5LIILoMHHsBh7CNU6jh
-         PwTPa5OfpzaW86V3Yp9GNOMVRkWDEWH5pH+a/8Hl6apom03uOqD21k5apQZb52G1Ctk6
-         Wxp/KVbpP3TUj2I9WWMPyMSvm6OWTGqbauChGdKYhtrqS7dNDaaNaJKGc3Bb3L5te3Ea
-         tCBg==
-X-Gm-Message-State: ABy/qLa31aMOuAadn0yNUfV0uGvEOgCGvFeRtyZKw8ApafrHcDaSc+lD
-        K4F26PUtroEmjmhOx0jnro8Re1HWp0uOogqN6CY=
-X-Google-Smtp-Source: APBJJlGXGIaYG1XmNDAHF5zrdyJUzVPvSP9fE2oGyc3i33eCC6JQJOfO5kkuRmBuSH74Q4cxbRzLNA==
-X-Received: by 2002:a92:d985:0:b0:345:ad39:ff3 with SMTP id r5-20020a92d985000000b00345ad390ff3mr3407484iln.3.1689876794452;
-        Thu, 20 Jul 2023 11:13:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689876797; x=1690481597;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=imYhKP5v89lbPeTtC2wFGbz9kkgQjFqYE28HmmHERmw=;
+        b=TSKtltulLMJKR2SS9brcmp/qzW79tI9BLDJJnYW+Otr6CjAnQRpuqzRaRVPIMICbTD
+         Oht3Z5keQ8D++eqQwI7PaMtG3hRmHKFcbe7eB+lwrr4KEQzfKwn16AXvZrqQXfroa9VO
+         anpK+oh7PJg0vb1zEl5fhnIQKcxPBcj/QoUax082QZ8Cy/GquX+sYXzzNpDWGnLeY9z1
+         xP2Sdey+//bxrKxo6XodTySR2C44X4iTWjPFdB4SWtXWf4T8Ov5+mv/KYumo4qqiJnVw
+         yiksSYDkWt8jvitCiLqDYej0fJBlhSDC28/1pws12n7+AF1th39y4qwG/rfKC9uMAjE7
+         ddkQ==
+X-Gm-Message-State: ABy/qLYxiihcIo1CBJ/+3lFQodf+3NRoHRRq57cT/CYKDLmQkw7htPOs
+        mju7eXM0WMvmVCnCYyGoBybQMpDH58TofiKouZo=
+X-Google-Smtp-Source: APBJJlEZ9N8QzhpudFyRYfXhPH7GjbxneV6i6nTiweh3A/yxGmb9RNjs4YJ7JIBjRusSqCTQ0Et8pQ==
+X-Received: by 2002:a92:d902:0:b0:345:a3d0:f0d4 with SMTP id s2-20020a92d902000000b00345a3d0f0d4mr3508495iln.3.1689876797148;
+        Thu, 20 Jul 2023 11:13:17 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id v6-20020a92c6c6000000b003457e1daba8sm419171ilm.8.2023.07.20.11.13.13
+        by smtp.gmail.com with ESMTPSA id v6-20020a92c6c6000000b003457e1daba8sm419171ilm.8.2023.07.20.11.13.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 11:13:13 -0700 (PDT)
+        Thu, 20 Jul 2023 11:13:16 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org, linux-xfs@vger.kernel.org
-Cc:     hch@lst.de, andres@anarazel.de, david@fromorbit.com
-Subject: [PATCHSET v4 0/8] Improve async iomap DIO performance
-Date:   Thu, 20 Jul 2023 12:13:02 -0600
-Message-Id: <20230720181310.71589-1-axboe@kernel.dk>
+Cc:     hch@lst.de, andres@anarazel.de, david@fromorbit.com,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/8] iomap: add IOMAP_DIO_INLINE_COMP
+Date:   Thu, 20 Jul 2023 12:13:04 -0600
+Message-Id: <20230720181310.71589-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230720181310.71589-1-axboe@kernel.dk>
+References: <20230720181310.71589-1-axboe@kernel.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+Rather than gate whether or not we need to punt a dio completion to a
+workqueue on whether the IO is a write or not, add an explicit flag for
+it. For now we treat them the same, reads always set the flags and async
+writes do not.
 
-iomap always punts async dio write completions to a workqueue, which has
-a cost in terms of efficiency (now you need an unrelated worker to
-process it) and latency (now you're bouncing a completion through an
-async worker, which is a classic slowdown scenario).
+No functional changes in this patch.
 
-Even for writes that should, in theory, be able to complete inline,
-if we race with truncate or need to invalidate pages post completion,
-we cannot sanely be in IRQ context as the locking types don't allow
-for that.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/iomap/direct-io.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-io_uring handles IRQ completions via task_work, and for writes that
-don't need to do extra IO at completion time, we can safely complete
-them inline from that. This patchset adds IOCB_DEFER, which an IO
-issuer can set to inform the completion side that any extra work that
-needs doing for that completion can be punted to a safe task context.
-
-The iomap dio completion will happen in hard/soft irq context, and we
-need a saner context to process these completions. IOCB_DIO_DEFER is
-added, which can be set in a struct kiocb->ki_flags by the issuer. If
-the completion side of the iocb handling understands this flag, it can
-choose to set a kiocb->dio_complete() handler and just call ki_complete
-from IRQ context. The issuer must then ensure that this callback is
-processed from a task. io_uring punts IRQ completions to task_work
-already, so it's trivial wire it up to run more of the completion before
-posting a CQE. This is good for up to a 37% improvement in
-throughput/latency for low queue depth IO, patch 5 has the details.
-
-If we need to do real work at completion time, iomap will clear the
-IOMAP_DIO_DEFER_COMP flag.
-
-This work came about when Andres tested low queue depth dio writes
-for postgres and compared it to doing sync dio writes, showing that the
-async processing slows us down a lot.
-
-Dave, would appreciate your input on if the logic is right now in
-terms of when we can inline complete when DEFER is set!
-
- fs/iomap/direct-io.c | 154 +++++++++++++++++++++++++++++++++----------
- include/linux/fs.h   |  34 +++++++++-
- io_uring/rw.c        |  27 +++++++-
- 3 files changed, 176 insertions(+), 39 deletions(-)
-
-Can also be found in a git branch here:
-
-https://git.kernel.dk/cgit/linux/log/?h=xfs-async-dio.4
-
-Since v3:
-- Add two patches for polled IO. One that completes inline if it's set
-  at completion time, and one that cleans up the iocb->private handling
-  and adds comments as to why they are only relevant on polled IO.
-- Rename IOMAP_DIO_WRITE_FUA to IOMAP_DIO_STABLE_WRITE in conjunction
-  with treating fua && vwc the same as !vwc.
-- Address review comments from Christoph
-- Add comments and expand commit messages, where appropriate.
-
+diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+index 0ce60e80c901..c654612b24e5 100644
+--- a/fs/iomap/direct-io.c
++++ b/fs/iomap/direct-io.c
+@@ -20,6 +20,7 @@
+  * Private flags for iomap_dio, must not overlap with the public ones in
+  * iomap.h:
+  */
++#define IOMAP_DIO_INLINE_COMP	(1 << 27)
+ #define IOMAP_DIO_WRITE_FUA	(1 << 28)
+ #define IOMAP_DIO_NEED_SYNC	(1 << 29)
+ #define IOMAP_DIO_WRITE		(1 << 30)
+@@ -171,8 +172,10 @@ void iomap_dio_bio_end_io(struct bio *bio)
+ 		goto release_bio;
+ 	}
+ 
+-	/* Read completion can always complete inline. */
+-	if (!(dio->flags & IOMAP_DIO_WRITE)) {
++	/*
++	 * Flagged with IOMAP_DIO_INLINE_COMP, we can complete it inline
++	 */
++	if (dio->flags & IOMAP_DIO_INLINE_COMP) {
+ 		WRITE_ONCE(iocb->private, NULL);
+ 		iomap_dio_complete_work(&dio->aio.work);
+ 		goto release_bio;
+@@ -527,6 +530,9 @@ __iomap_dio_rw(struct kiocb *iocb, struct iov_iter *iter,
+ 		iomi.flags |= IOMAP_NOWAIT;
+ 
+ 	if (iov_iter_rw(iter) == READ) {
++		/* reads can always complete inline */
++		dio->flags |= IOMAP_DIO_INLINE_COMP;
++
+ 		if (iomi.pos >= dio->i_size)
+ 			goto out_free_dio;
+ 
 -- 
-Jens Axboe
-
+2.40.1
 
