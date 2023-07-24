@@ -2,49 +2,49 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79236C001DF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA97FC41513
 	for <io-uring@archiver.kernel.org>; Mon, 24 Jul 2023 14:24:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjGXOYI (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 24 Jul 2023 10:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
+        id S230381AbjGXOYJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 24 Jul 2023 10:24:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjGXOYH (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 24 Jul 2023 10:24:07 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570F010D3;
-        Mon, 24 Jul 2023 07:23:57 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5222c5d71b8so1553196a12.2;
-        Mon, 24 Jul 2023 07:23:57 -0700 (PDT)
+        with ESMTP id S229937AbjGXOYF (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 24 Jul 2023 10:24:05 -0400
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D959AE63;
+        Mon, 24 Jul 2023 07:23:54 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4fdea55743eso3230709e87.2;
+        Mon, 24 Jul 2023 07:23:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690208636; x=1690813436;
+        d=1e100.net; s=20221208; t=1690208633; x=1690813433;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=InNH0JvJZ59G15aPVaduy0ZgdUUB/VBaXGV72FTdLX8=;
-        b=PYUlNukPVxUwY1QQYwf/qlDPShjGJ+4xeD7y6lWy0BUSgUhPS0PhCLGOe0LqI0kLeC
-         owuJ2sG/PXQm3HOmWtIZEgzjy/mgukxjY7WYc2+0XSb+ygRzKZnxstdQIZkzhSknBmjD
-         u+B6fFRvyZWf04u36cvx9zp46mHZT6gihvnCaVkd6Rir+8AOp0+I3nUS3AagGw544grG
-         qyeQZtKrS3Tt9fjrl42HJB4+EAfXP9GaNrMgvhSzZfcuwPxPo/IrGxtS55wWlQ0zBJzo
-         apw+OP0dWOqNm6A2zakXpLDIwK5p8SLPFCS3y9SL3EAyv9bz4tmOIgyy+KXUE30wkGk3
-         hheA==
-X-Gm-Message-State: ABy/qLaf+FiOaf63W0JvyEAP+sBqaJRejKjfH1PwNWlk0tLTrikO+fH6
-        MJg6GtxHpWIJ1A/sSOGv0hE=
-X-Google-Smtp-Source: APBJJlEff2FaAz2S0e77QKwTEYOPwndwXpEpzYjsHXHr3fMOor5smynpFKEb247h6fN47lwf5jjxiA==
-X-Received: by 2002:aa7:c2ca:0:b0:51e:677:603f with SMTP id m10-20020aa7c2ca000000b0051e0677603fmr8335834edp.38.1690208635735;
-        Mon, 24 Jul 2023 07:23:55 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-120.fbsv.net. [2a03:2880:31ff:78::face:b00c])
-        by smtp.gmail.com with ESMTPSA id a23-20020aa7cf17000000b005221f0b75b7sm3118092edy.27.2023.07.24.07.23.55
+        bh=uNsYJZWwOrHCH/sJVncer8wWx/Kh/edw84SCouspcyA=;
+        b=e/xBohH/50oRB6zrqoVZWgRo172FH873dB9JgE5Nk7U7KEdHAL6FXr9Rw26k/QJWeO
+         hjVCJTfNP7AkUKw2cC4JEJevlWa2VK0/IyJm9gnc9sa6KUAHvQ5bjgrPh2xYaAzSZuyM
+         0uJIVREtHdi/5Z5W5oUAyDhPHfOFHc4Mixod2eeXZrh1F33NdDYvEI77ZVxIqjhiThXe
+         XPO5KUc6WOk96Ya396c+S4crlwv2HBmP8xLVkgJ4VA9aGpXrZffhDVJCKkGPkga3oJJO
+         gciSroK0SPuiupcKe6bmrzql0rdjfhpH1Th2+3ukTapKYy2qd+NSt7xw+CDI0HgZMVya
+         ZMUA==
+X-Gm-Message-State: ABy/qLbiKk6wOxEwrj8fCgeHr615fFVwBveqS74CUDvma8b6TjIAkXRJ
+        dhzwqS2wa+BM3Gb2CvzfPNA=
+X-Google-Smtp-Source: APBJJlFobzJA49V7cwHizW7uFZQNLEpem4kXaOWLNY5A888apHAKbRYlYNS9/vSwePZA5UXZ6aCE6w==
+X-Received: by 2002:a05:6512:4002:b0:4fb:89cd:9616 with SMTP id br2-20020a056512400200b004fb89cd9616mr6091098lfb.0.1690208632870;
+        Mon, 24 Jul 2023 07:23:52 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-006.fbsv.net. [2a03:2880:31ff:6::face:b00c])
+        by smtp.gmail.com with ESMTPSA id ba28-20020a0564021adc00b0051e2670d599sm6313052edb.4.2023.07.24.07.23.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 07:23:55 -0700 (PDT)
+        Mon, 24 Jul 2023 07:23:52 -0700 (PDT)
 From:   Breno Leitao <leitao@debian.org>
 To:     asml.silence@gmail.com, axboe@kernel.dk
 Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
         davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
         pabeni@redhat.com, linux-kernel@vger.kernel.org, leit@meta.com
-Subject: [PATCH 4/4] io_uring/cmd: Extend support beyond SOL_SOCKET
-Date:   Mon, 24 Jul 2023 07:22:37 -0700
-Message-Id: <20230724142237.358769-5-leitao@debian.org>
+Subject: [PATCH 2/4] io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
+Date:   Mon, 24 Jul 2023 07:22:35 -0700
+Message-Id: <20230724142237.358769-3-leitao@debian.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230724142237.358769-1-leitao@debian.org>
 References: <20230724142237.358769-1-leitao@debian.org>
@@ -54,43 +54,128 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add generic support for SOCKET_URING_OP_SETSOCKOPT, expanding the
-current case, that just execute if level is SOL_SOCKET.
+Add support for getsockopt command (SOCKET_URING_OP_GETSOCKOPT), where
+level is SOL_SOCKET. This is leveraging the sockptr_t infrastructure,
+where a sockptr_t is either userspace or kernel space, and handled as
+such.
 
-This implementation basically calls sock->ops->setsockopt() with a
-kernel allocated optval;
+Function io_uring_cmd_getsockopt() is inspired by __sys_getsockopt().
 
-Since the callback for ops->setsockopt() is already using sockptr_t,
-then the callbacks are leveraged to be called directly, similarly to
-__sys_setsockopt().
+Differently from the getsockopt(2), the optlen field is not a userspace
+pointers. In getsockopt(2), userspace provides optlen pointer, which is
+overwritten by the kernel.  In this implementation, userspace passes a
+u32, and the new value is returned in cqe->res. I.e., optlen is not a
+pointer.
+
+Important to say that userspace needs to keep the pointer alive until
+the CQE is completed.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- io_uring/uring_cmd.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ include/uapi/linux/io_uring.h |  7 ++++++
+ io_uring/uring_cmd.c          | 43 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
 
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 9fc7195f25df..8152151080db 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -43,6 +43,10 @@ struct io_uring_sqe {
+ 	union {
+ 		__u64	addr;	/* pointer to buffer or iovecs */
+ 		__u64	splice_off_in;
++		struct {
++			__u32	level;
++			__u32	optname;
++		};
+ 	};
+ 	__u32	len;		/* buffer size or number of iovecs */
+ 	union {
+@@ -79,6 +83,7 @@ struct io_uring_sqe {
+ 	union {
+ 		__s32	splice_fd_in;
+ 		__u32	file_index;
++		__u32	optlen;
+ 		struct {
+ 			__u16	addr_len;
+ 			__u16	__pad3[1];
+@@ -89,6 +94,7 @@ struct io_uring_sqe {
+ 			__u64	addr3;
+ 			__u64	__pad2[1];
+ 		};
++		__u64	optval;
+ 		/*
+ 		 * If the ring is initialized with IORING_SETUP_SQE128, then
+ 		 * this field is used for 80 bytes of arbitrary command data
+@@ -729,6 +735,7 @@ struct io_uring_recvmsg_out {
+ enum {
+ 	SOCKET_URING_OP_SIOCINQ		= 0,
+ 	SOCKET_URING_OP_SIOCOUTQ,
++	SOCKET_URING_OP_GETSOCKOPT,
+ };
+ 
+ #ifdef __cplusplus
 diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index d63a3b0f93a3..ff438826e63f 100644
+index 8e7a03c1b20e..16c857cbf3b0 100644
 --- a/io_uring/uring_cmd.c
 +++ b/io_uring/uring_cmd.c
-@@ -229,11 +229,14 @@ static inline int io_uring_cmd_setsockopt(struct socket *sock,
- 	if (err)
- 		goto fail;
+@@ -166,6 +166,47 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ }
+ EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
  
--	err = -EOPNOTSUPP;
--	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock)) {
-+	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock))
- 		err = sock_setsockopt(sock, level, optname,
- 				      KERNEL_SOCKPTR(koptval), optlen);
--	}
-+	else if (unlikely(!sock->ops->setsockopt))
-+		err = -EOPNOTSUPP;
++static inline int io_uring_cmd_getsockopt(struct socket *sock,
++					  struct io_uring_cmd *cmd)
++{
++	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
++	int optname = READ_ONCE(cmd->sqe->optname);
++	int optlen = READ_ONCE(cmd->sqe->optlen);
++	int level = READ_ONCE(cmd->sqe->level);
++	void *koptval;
++	int err;
++
++	err = security_socket_getsockopt(sock, level, optname);
++	if (err)
++		return err;
++
++	koptval = kmalloc(optlen, GFP_KERNEL);
++	if (!koptval)
++		return -ENOMEM;
++
++	err = copy_from_user(koptval, optval, optlen);
++	if (err)
++		goto fail;
++
++	err = -EOPNOTSUPP;
++	if (level == SOL_SOCKET) {
++		err = sk_getsockopt(sock->sk, level, optname,
++				    KERNEL_SOCKPTR(koptval),
++				    KERNEL_SOCKPTR(&optlen));
++		if (err)
++			goto fail;
++	}
++
++	err = copy_to_user(optval, koptval, optlen);
++
++fail:
++	kfree(koptval);
++	if (err)
++		return err;
 +	else
-+		err = sock->ops->setsockopt(sock, level, optname,
-+					    KERNEL_SOCKPTR(koptval), optlen);
- 
- fail:
- 	kfree(koptval);
++		return optlen;
++}
++
+ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ {
+ 	struct socket *sock = cmd->file->private_data;
+@@ -187,6 +228,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 		if (ret)
+ 			return ret;
+ 		return arg;
++	case SOCKET_URING_OP_GETSOCKOPT:
++		return io_uring_cmd_getsockopt(sock, cmd);
+ 	default:
+ 		return -EOPNOTSUPP;
+ 	}
 -- 
 2.34.1
 
