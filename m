@@ -2,126 +2,145 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16C80C04A6A
-	for <io-uring@archiver.kernel.org>; Tue, 25 Jul 2023 11:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 85D06C001DE
+	for <io-uring@archiver.kernel.org>; Tue, 25 Jul 2023 13:00:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233803AbjGYL0S (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 25 Jul 2023 07:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S232611AbjGYNAV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 25 Jul 2023 09:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234489AbjGYL0R (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 25 Jul 2023 07:26:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598B5187;
-        Tue, 25 Jul 2023 04:26:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S230220AbjGYNAV (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 25 Jul 2023 09:00:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB764BC;
+        Tue, 25 Jul 2023 06:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=53xlXtpDSjlczCoW5U6CiigD+NmPoPvWUZDjgYgo0rI=; b=IZCPIjLQeaj5KC/MZ1qOs+S0M9
+        RVQFO1YxvUSfa79pCfcRTEUwU6+rG2DSxFnx86qhtr6hyGLJK2ZsHvXULwShKv0DmSb+wRYCQmYlK
+        WPR1Mh61XXOxBZZW6hhLyBJjsHpr6Ji5oUErN6eTp8xdlkqLJmmZBoam9opohG4o9jb5eCK7HTmdK
+        YhjKU7HfyH4sckY7cTo7WPEzIQRpP/WPTp/aiAUK92og6nU9xQ5ORNkEnK5YwoWO1PaFHwEix4Qhr
+        2tlD+JKOvQPpkRq/U2oWOKJdtRiSxtPNdMj+cxL9aUxpTcBOh9O+XcfeUoxaeWIXFOSIBblWmqFeO
+        rvs8kfLg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qOHeC-00497C-1v;
+        Tue, 25 Jul 2023 13:00:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC3376168F;
-        Tue, 25 Jul 2023 11:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078F8C433C7;
-        Tue, 25 Jul 2023 11:26:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690284375;
-        bh=iO9QVdD47x8v4TjKLcrILY8ClzTFgslHn+QJsF9+AQE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ePRn+xDKpZ9LIOTspr3nd60dPfWx5T/qUVUge2AbTzUGguUtAtx7O6Un5oIx94TdK
-         TpvOMwQ4THMVm9fXCEBD+U6RLPo1R6lLyzfzWtyqcmP//ts8EjwDgdOnPG1fdjDRbJ
-         gpW0LfOmq0MwMgGXdcoewYK8ZL73itWbjPfEwA0s=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andres Freund <andres@anarazel.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.10 333/509] io_uring: Use io_schedule* in cqring wait
-Date:   Tue, 25 Jul 2023 12:44:32 +0200
-Message-ID: <20230725104608.950442148@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230725104553.588743331@linuxfoundation.org>
-References: <20230725104553.588743331@linuxfoundation.org>
-User-Agent: quilt/0.67
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0DA3D30036B;
+        Tue, 25 Jul 2023 15:00:15 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C41DA27D9B9A1; Tue, 25 Jul 2023 15:00:15 +0200 (CEST)
+Date:   Tue, 25 Jul 2023 15:00:15 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andres@anarazel.de
+Subject: Re: [PATCH 06/10] io_uring: add support for futex wake and wait
+Message-ID: <20230725130015.GI3765278@hirez.programming.kicks-ass.net>
+References: <20230720221858.135240-1-axboe@kernel.dk>
+ <20230720221858.135240-7-axboe@kernel.dk>
+ <20230721113031.GG3630545@hirez.programming.kicks-ass.net>
+ <20230721113718.GA3638458@hirez.programming.kicks-ass.net>
+ <d95bfb98-8d76-f0fd-6283-efc01d0cc015@kernel.dk>
+ <94b8fcc4-12b5-8d8c-3eb3-fe1e73a25456@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94b8fcc4-12b5-8d8c-3eb3-fe1e73a25456@kernel.dk>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Andres Freund <andres@anarazel.de>
+On Fri, Jul 21, 2023 at 09:29:14AM -0600, Jens Axboe wrote:
 
-Commit 8a796565cec3601071cbbd27d6304e202019d014 upstream.
+> FWIW, here's the io_uring incremental after that rebase. Update the
+> liburing futex branch as well, updating the prep helpers to take 64 bit
+> values for mask/val and also add the flags argument that was missing as
+> well. Only other addition was adding those 4 new patches instead of the
+> old 3 ones, and adding single patch that just moves FUTEX2_MASK to
+> futex.h.
+> 
+> All checks out fine, tests pass and it works.
+> 
+> 
+> diff --git a/io_uring/futex.c b/io_uring/futex.c
+> index 93df54dffaa0..4c9f2c841b98 100644
+> --- a/io_uring/futex.c
+> +++ b/io_uring/futex.c
+> @@ -18,11 +18,11 @@ struct io_futex {
+>  		u32 __user			*uaddr;
+>  		struct futex_waitv __user	*uwaitv;
+>  	};
+> +	unsigned long	futex_val;
+> +	unsigned long	futex_mask;
+>  	unsigned long	futexv_owned;
+> +	u32		futex_flags;
+> +	unsigned int	futex_nr;
+>  };
+>  
+>  struct io_futex_data {
+> @@ -171,15 +171,28 @@ bool io_futex_remove_all(struct io_ring_ctx *ctx, struct task_struct *task,
+>  int io_futex_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>  {
+>  	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
+> +	u32 flags;
+>  
+> +	if (unlikely(sqe->fd || sqe->buf_index || sqe->file_index))
+>  		return -EINVAL;
+>  
+>  	iof->uaddr = u64_to_user_ptr(READ_ONCE(sqe->addr));
+> +	iof->futex_val = READ_ONCE(sqe->addr2);
+> +	iof->futex_mask = READ_ONCE(sqe->addr3);
+> +	iof->futex_nr = READ_ONCE(sqe->len);
+> +	if (iof->futex_nr && req->opcode != IORING_OP_FUTEX_WAITV)
+> +		return -EINVAL;
+> +
 
-I observed poor performance of io_uring compared to synchronous IO. That
-turns out to be caused by deeper CPU idle states entered with io_uring,
-due to io_uring using plain schedule(), whereas synchronous IO uses
-io_schedule().
+Hmm, would something like:
 
-The losses due to this are substantial. On my cascade lake workstation,
-t/io_uring from the fio repository e.g. yields regressions between 20%
-and 40% with the following command:
-./t/io_uring -r 5 -X0 -d 1 -s 1 -c 1 -p 0 -S$use_sync -R 0 /mnt/t2/fio/write.0.0
+	if (req->opcode == IORING_OP_FUTEX_WAITV) {
+		if (iof->futex_val && iof->futex_mask)
+			return -EINVAL;
 
-This is repeatable with different filesystems, using raw block devices
-and using different block devices.
+		/* sys_futex_waitv() doesn't take @flags as of yet */
+		if (iof->futex_flags)
+			return -EINVAL;
 
-Use io_schedule_prepare() / io_schedule_finish() in
-io_cqring_wait_schedule() to address the difference.
+		if (!iof->futex_nr)
+			return -EINVAL;
 
-After that using io_uring is on par or surpassing synchronous IO (using
-registered files etc makes it reliably win, but arguably is a less fair
-comparison).
+	} else {
+		/* sys_futex_{wake,wait}() don't take @nr */
+		if (iof->futex_nr)
+			return -EINVAL;
 
-There are other calls to schedule() in io_uring/, but none immediately
-jump out to be similarly situated, so I did not touch them. Similarly,
-it's possible that mutex_lock_io() should be used, but it's not clear if
-there are cases where that matters.
+		/* both take @flags and @mask */
+		flags = READ_ONCE(sqe->futex_flags);
+		if (flags & ~FUTEX2_MASK)
+			return -EINVAL;
 
-Cc: stable@vger.kernel.org # 5.10+
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Andres Freund <andres@anarazel.de>
-Link: https://lore.kernel.org/r/20230707162007.194068-1-andres@anarazel.de
-[axboe: minor style fixup]
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- io_uring/io_uring.c |   14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+		iof->futex_flags = futex2_to_flags(flags);
+		if (!futex_flags_valid(iof->futex_flags))
+			return -EINVAL;
 
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -7625,7 +7625,7 @@ static inline int io_cqring_wait_schedul
- 					  struct io_wait_queue *iowq,
- 					  ktime_t *timeout)
- {
--	int ret;
-+	int token, ret;
- 
- 	/* make sure we run task_work before checking for signals */
- 	ret = io_run_task_work_sig();
-@@ -7635,9 +7635,17 @@ static inline int io_cqring_wait_schedul
- 	if (test_bit(0, &ctx->check_cq_overflow))
- 		return 1;
- 
-+	/*
-+	 * Use io_schedule_prepare/finish, so cpufreq can take into account
-+	 * that the task is waiting for IO - turns out to be important for low
-+	 * QD IO.
-+	 */
-+	token = io_schedule_prepare();
-+	ret = 1;
- 	if (!schedule_hrtimeout(timeout, HRTIMER_MODE_ABS))
--		return -ETIME;
--	return 1;
-+		ret = -ETIME;
-+	io_schedule_finish(token);
-+	return ret;
- }
- 
- /*
+		if (!futex_validate_input(iof->futex_flags, iof->futex_mask))
+			return -EINVAL;
 
+		/* sys_futex_wait() takes @val */
+		if (req->iocode == IORING_OP_FUTEX_WAIT) {
+			if (!futex_validate_input(iof->futex_flags, iof->futex_val))
+				return -EINVAL;
+		} else {
+			if (iof->futex_val)
+				return -EINVAL;
+		}
+	}
+
+work? The waitv thing is significantly different from the other two.
 
