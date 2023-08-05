@@ -2,45 +2,48 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59D4CC001DB
-	for <io-uring@archiver.kernel.org>; Sat,  5 Aug 2023 22:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B569FC001DB
+	for <io-uring@archiver.kernel.org>; Sat,  5 Aug 2023 22:54:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjHEWtB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 5 Aug 2023 18:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
+        id S229549AbjHEWyp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sat, 5 Aug 2023 18:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjHEWs7 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 5 Aug 2023 18:48:59 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914AD19B5;
-        Sat,  5 Aug 2023 15:48:58 -0700 (PDT)
+        with ESMTP id S229441AbjHEWyo (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sat, 5 Aug 2023 18:54:44 -0400
+X-Greylist: delayed 351 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Aug 2023 15:54:43 PDT
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050:0:465::103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CA519B5
+        for <io-uring@vger.kernel.org>; Sat,  5 Aug 2023 15:54:43 -0700 (PDT)
 Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4RJHnM24c3z9sXg;
-        Sun,  6 Aug 2023 00:48:55 +0200 (CEST)
+        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4RJHnC3JB0z9sZj;
+        Sun,  6 Aug 2023 00:48:47 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-        t=1691275735;
+        t=1691275727;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gTrtNNENm22a5owwWX6fpH4Q0oDQAef+vTZzTwxbU1c=;
-        b=C6iyo5xuH4J6DGdV5Wj/y8uix7OOeA27r7ua4t2iV+7C6dZA8n5Ldj6aFLCYDQfgHTGcQh
-        kmBvrUCDvougnR6fgcy2cxKzNVgCBma+Zw9YZMIn+EiJPH2ADKmrCAN1qWVWCYPLusDsP6
-        B4QDsE6njXYpWhexLFd2tCCHqG4Z34ioEGajXFPcpBvQqewxkqcV9S/26DFLtGk3128C7E
-        J4tw0VX1+UzMU4eOgChKBLunnrmBknICUOtnYqJQbfwp7TIt2jHi7EiTqmzGHHNacWJgaL
-        HCjncVCUHuWulXxj2fkMksi0X8TmZ2eb9YmRvdH9vTFsuFPRSgceYVPPqCmSUw==
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Zs3M/G44ypGLQBrS+6QpeGQyQMHY0My7xyCyNV5W7UY=;
+        b=OK8G3j2tqbi0xW+hYczXouurJh/7+yh1lAy+hUoiYh/a362dI4iHFebLy56nohqqax4s3B
+        hdAJ1wTzBf8B1O65AtKeW9jFupsDqNXNxBbq5rlgI5QNLC62nGqqpAU/gMc0NP4UJxaR6C
+        kPrObKgTeRoZ+ICh1WMceu3on0zEiEkRqm/J859mOhVlPn06gJ9wTI4fZCZzQfiNqFQ/oJ
+        ASoP8boEovce1emNvItAZP3xUvVArWzqNeTDHnnY8iBwxyTgScMzMoHIcVg05he6bWHs/f
+        2tPKrPdywUs7Jrmsr82JT9taqK+HGBzvky340DKCaTDD9KAqP9hk7vBcIuyTYg==
 From:   Aleksa Sarai <cyphar@cyphar.com>
-Date:   Sun, 06 Aug 2023 08:48:09 +1000
-Subject: [PATCH v2 2/2] io_uring: correct check for O_TMPFILE
+Subject: [PATCH v2 0/2] open: make RESOLVE_CACHED correctly test for
+ O_TMPFILE
+Date:   Sun, 06 Aug 2023 08:48:07 +1000
+Message-Id: <20230806-resolve_cached-o_tmpfile-v2-0-058bff24fb16@cyphar.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230806-resolve_cached-o_tmpfile-v2-2-058bff24fb16@cyphar.com>
-References: <20230806-resolve_cached-o_tmpfile-v2-0-058bff24fb16@cyphar.com>
-In-Reply-To: <20230806-resolve_cached-o_tmpfile-v2-0-058bff24fb16@cyphar.com>
+X-B4-Tracking: v=1; b=H4sIAKfRzmQC/42NQQ6DIBREr2L+ujSCLVJXvUdjDOK3/ESFgCE1x
+ ruXeoIu32TmzQ4RA2GEptghYKJIbskgLgUYq5c3MhoygyhFVapSsoDRTQk7o43Fgblunf1IE7J
+ HrUwvKtUPUkGe+4AjfU71q81sKa4ubOdT4r/0D2nijLO611zm4k3e8Wk2b3W4GjdDexzHF2sgy
+ UXBAAAA
 To:     Alexander Viro <viro@zeniv.linux.org.uk>,
         Christian Brauner <brauner@kernel.org>,
         Jens Axboe <axboe@kernel.dk>,
@@ -48,46 +51,48 @@ To:     Alexander Viro <viro@zeniv.linux.org.uk>,
 Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         io-uring@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
         stable@vger.kernel.org
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1068; i=cyphar@cyphar.com;
- h=from:subject:message-id; bh=/9+yxvKGEmdLwvOcpr7FLQ4otf1WYZ3hs0L34KRntms=;
- b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMaScu3jy1qz3bXtf7e40zt7d8OH4hXe7nFZkBQgbVGuLX
- f/EbzeptaOUhUGMi0FWTJFlm59n6Kb5i68kf1rJBjOHlQlkCAMXpwBMxPQUI8PFv0cnPOSYuMPY
- 5cbsM7N/PNl8xn/ZdfbKSWyRRtc5DmWsZ/ifLyMbYaIQtfnvivM3siPmsVs11Ee3qW2UPb75t7x
- d6zc+AA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1214; i=cyphar@cyphar.com;
+ h=from:subject:message-id; bh=iu0CMEKoz0Ewqe8aOMvuXAQy1aWcE4V3njCd+ME8HFo=;
+ b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMaScu3jCQPDPKxvTW8zKfW/nKh57c/r5wtTjrZXtm2ezn
+ N6teeHvso5SFgYxLgZZMUWWbX6eoZvmL76S/GklG8wcViaQIQxcnAIwkX+7Gf4ZPc6Kf7e53XrP
+ 0aPn351rntwsf8VuZeySBFmD5fN4ghM+MzK8WGm3uGN97IWvGm3PjsWuqauNnMpqvOj2BaWudbm
+ J8TfZAA==
 X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
  fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-O_TMPFILE is actually __O_TMPFILE|O_DIRECTORY. This means that the old
-check for whether RESOLVE_CACHED can be used would incorrectly think
-that O_DIRECTORY could not be used with RESOLVE_CACHED.
+There were a few places that were incorrectly testing for whether an
+open(2) operation was O_TMPFILE by doing (flags & O_TMPFILE). As
+O_TMPFILE is defined as __O_TMPFILE|O_DIRECTORY, this would cause the
+code to assume that O_DIRECTORY is equivalent to O_TMPFILE.
 
-Cc: stable@vger.kernel.org # v5.12+
-Fixes: 3a81fd02045c ("io_uring: enable LOOKUP_CACHED path resolution for filename lookups")
+The only places where this happened were in RESOLVE_CACHED and
+io_uring's checking related to RESOLVE_CACHED, so the only bug this
+really fixes is that now O_DIRECTORY will no longer cause RESOLVE_CACHED
+to always fail with -EAGAIN (and io_uring will thus be faster when doing
+O_DIRECTORY opens).
+
 Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
 ---
+Changes in v2:
+- fix io_uring's io_openat_force_async as well.
+- v1: <https://lore.kernel.org/r/20230806-resolve_cached-o_tmpfile-v1-1-7ba16308465e@cyphar.com>
+
+---
+Aleksa Sarai (2):
+      open: make RESOLVE_CACHED correctly test for O_TMPFILE
+      io_uring: correct check for O_TMPFILE
+
+ fs/open.c            | 2 +-
  io_uring/openclose.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+---
+base-commit: bf5ad7af0516cb47121dae1b1c160e4385615274
+change-id: 20230806-resolve_cached-o_tmpfile-978cb238bd68
 
-diff --git a/io_uring/openclose.c b/io_uring/openclose.c
-index 10ca57f5bd24..a029c230119f 100644
---- a/io_uring/openclose.c
-+++ b/io_uring/openclose.c
-@@ -35,9 +35,9 @@ static bool io_openat_force_async(struct io_open *open)
- {
- 	/*
- 	 * Don't bother trying for O_TRUNC, O_CREAT, or O_TMPFILE open,
--	 * it'll always -EAGAIN
-+	 * it'll always -EAGAIN.
- 	 */
--	return open->how.flags & (O_TRUNC | O_CREAT | O_TMPFILE);
-+	return open->how.flags & (O_TRUNC | O_CREAT | __O_TMPFILE);
- }
- 
- static int __io_openat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-
+Best regards,
 -- 
-2.41.0
+Aleksa Sarai <cyphar@cyphar.com>
 
