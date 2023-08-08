@@ -2,105 +2,107 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CF5EC04FE1
-	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 17:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C46EDC04A6A
+	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 17:33:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbjHHRCb (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Aug 2023 13:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
+        id S231591AbjHHRdr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Aug 2023 13:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbjHHRBi (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 13:01:38 -0400
-Received: from out-90.mta1.migadu.com (out-90.mta1.migadu.com [IPv6:2001:41d0:203:375::5a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F750618F
-        for <io-uring@vger.kernel.org>; Tue,  8 Aug 2023 09:01:06 -0700 (PDT)
-Message-ID: <aa13ae23-6774-47e5-2ec1-df318b3ec631@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1691471914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=t1hLwhbgMiB46VRsdK6ZPDpF2fD9phVWFMSg/BLZBAs=;
-        b=kulgTEcepp/+Y11Ckr3dDvaa8kfPhiPuZWdvf33hlsJtIZ7PkTLpLE9KByVnYSC3vwXgrP
-        T6SihFJ/MFuxS9stHNXf/cZZz8Uk2a94JLPN5cBA/Z4zcDQtP9pFBLUxfGqTFGo4KGNi3Z
-        3nyMLPIbxv3A+0UDPjmjr7bkTwvoL3c=
-Date:   Tue, 8 Aug 2023 13:18:27 +0800
-MIME-Version: 1.0
-Subject: Re: [PATCH 3/5] io_uring: add support for getdents
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Hao Xu <hao.xu@linux.dev>
-To:     Jens Axboe <axboe@kernel.dk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Dave Chinner <david@fromorbit.com>, io-uring@vger.kernel.org,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
-        linux-fsdevel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>
-References: <20230718132112.461218-1-hao.xu@linux.dev>
- <20230718132112.461218-4-hao.xu@linux.dev>
- <20230726-leinen-basisarbeit-13ae322690ff@brauner>
- <e9ddc8cc-f567-46bc-8f82-cf5ff8ff6c95@linux.dev>
- <20230727-salbe-kurvigen-31b410c07bb9@brauner>
- <ZMcPUX0lYC2nscAm@dread.disaster.area>
- <20230731-gezeugt-tierwelt-f3d6a900c262@brauner>
- <20230731152623.GC11336@frogsfrogsfrogs>
- <22630618-40fc-5668-078d-6cefcb2e4962@kernel.dk>
- <588ede3c-3de0-5469-735e-8c9fe4d52b6a@linux.dev>
-In-Reply-To: <588ede3c-3de0-5469-735e-8c9fe4d52b6a@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+        with ESMTP id S232263AbjHHRcs (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 13:32:48 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0FFF9A0;
+        Tue,  8 Aug 2023 09:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+        :Date:subject:date:message-id:reply-to;
+        bh=oVjNdEpzZx0zgptzt6k7F+8X6mMIVOg3jSHvHicMgSs=; b=Lfi5oGJt92TrKiMkSKnj86OinS
+        +2NhXXYIWmzJSO0UeZ3PNgNuIpJ5+9NRa7eG0PCO/lJdQfwxUt2xx/vRhWH14aJR7Zi3DsVcGlYSg
+        4Re5W0tus87tNrarUoWozS2cyEX5CieZtJZ5HI5r4xZ229FkXIVmiG58p2T40oTpV57Q=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:35240 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qTPKm-0007qt-G1; Tue, 08 Aug 2023 12:13:25 -0400
+Date:   Tue, 8 Aug 2023 12:13:23 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        io-uring@vger.kernel.org
+Message-Id: <20230808121323.bc144c719eba5979e161aac6@hugovil.com>
+In-Reply-To: <20230808134049.1407498-2-leitao@debian.org>
+References: <20230808134049.1407498-1-leitao@debian.org>
+        <20230808134049.1407498-2-leitao@debian.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
+Subject: Re: [PATCH v2 1/8] net: expose sock_use_custom_sol_socket
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 8/8/23 12:34, Hao Xu wrote:
-> On 8/1/23 08:28, Jens Axboe wrote:
->> On 7/31/23 9:26?AM, Darrick J. Wong wrote:
->>> I've watched quite a bit of NOWAIT whackamole going on over the past 
->>> few
->>> years (i_rwsem, the ILOCK, the IO layer, memory allocations...).  IIRC
->>> these filesystem ios all have to run in process context, right?  If so,
->>> why don't we capture the NOWAIT state in a PF flag?  We already do that
->>> for NOFS/NOIO memory allocations to make sure that /all/ reclaim
->>> attempts cannot recurse into the fs/io stacks.
->>
->> I would greatly prefer passing down the context rather than capitulating
->> and adding a task_struct flag for this. I think it _kind of_ makes sense
->> for things like allocations, as you cannot easily track that all the way
->> down, but it's a really ugly solution. It certainly creates more churn
->> passing it down, but it also reveals the parts that need to check it.
->> WHen new code is added, it's much more likely you'll spot the fact that
->> there's passed in context. For allocation, you end up in the allocator
->> anyway, which can augment the gfp mask with whatever is set in the task.
->> The same is not true for locking and other bits, as they don't return a
->> value to begin with. When we know they are sane, we can flag the fs as
->> supporting it (like we've done for async buffered reads, for example).
->>
->> It's also not an absolute thing, like memory allocations are. It's
->> perfectly fine to grab a mutex under NOWAIT issue. What you should not
->
-> Hi Jens,
-> To make sure, I'd like to ask, for memory allocation, GFP_NOIO semantics
-> is all we need in NOWAIT issue, GFP_NOWAIT is not necessary, do I
-> understand it right?
->
-> Thanks,
-> Hao
+On Tue,  8 Aug 2023 06:40:41 -0700
+Breno Leitao <leitao@debian.org> wrote:
+
+> Exposing function sock_use_custom_sol_socket(), so it could be used by
+> io_uring subsystem.
+> 
+> This function will be used in the function io_uring_cmd_setsockopt() in
+> the coming patch, so, let's move it to the socket.h header file.
+
+Hi,
+this description doesn't seem to match the code change below...
+
+Hugo Villeneuve.
 
 
-Trying to find a lock in mem allocation process that GFP_NOIO holds it while
-
-other normal GFP_* like GFP_KERNEL also holds it and does IO.
-
-Failed to find one such lock.  So I guess though GFP_NOIO may cause sleep
-
-but won't wait on IO.
-
-
-
-
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  include/linux/net.h | 5 +++++
+>  net/socket.c        | 5 -----
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/net.h b/include/linux/net.h
+> index 41c608c1b02c..14a956e4530e 100644
+> --- a/include/linux/net.h
+> +++ b/include/linux/net.h
+> @@ -355,4 +355,9 @@ u32 kernel_sock_ip_overhead(struct sock *sk);
+>  #define MODULE_ALIAS_NET_PF_PROTO_NAME(pf, proto, name) \
+>  	MODULE_ALIAS("net-pf-" __stringify(pf) "-proto-" __stringify(proto) \
+>  		     name)
+> +
+> +static inline bool sock_use_custom_sol_socket(const struct socket *sock)
+> +{
+> +	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+> +}
+>  #endif	/* _LINUX_NET_H */
+> diff --git a/net/socket.c b/net/socket.c
+> index 1dc23f5298ba..8df54352af83 100644
+> --- a/net/socket.c
+> +++ b/net/socket.c
+> @@ -2216,11 +2216,6 @@ SYSCALL_DEFINE4(recv, int, fd, void __user *, ubuf, size_t, size,
+>  	return __sys_recvfrom(fd, ubuf, size, flags, NULL, NULL);
+>  }
+>  
+> -static bool sock_use_custom_sol_socket(const struct socket *sock)
+> -{
+> -	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+> -}
+> -
+>  /*
+>   *	Set a socket option. Because we don't know the option lengths we have
+>   *	to pass the user mode parameter for the protocols to sort out.
+> -- 
+> 2.34.1
+> 
