@@ -2,137 +2,108 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 730B5C001DB
-	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 21:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB54EC001E0
+	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 21:41:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236192AbjHHVSf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Aug 2023 17:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
+        id S229830AbjHHVlJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Aug 2023 17:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236311AbjHHVSS (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 17:18:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC45B420F
-        for <io-uring@vger.kernel.org>; Tue,  8 Aug 2023 13:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691525228;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=URef7vegGsa2wnoaw1VuQcviklx9DOBuGXAqweG7Q+o=;
-        b=M1csy2lwdC6owHLWeMbl9hLnbnNsQK581cK3Ap8scuCjHk2jvHqBYgfYb50fpOTdTJP7cJ
-        1YXm6V0gyrKkmk/SvySw6ThiuKEo6nw3HWGyNFJSwQ4trnSeuIWIsTPgkwZA63eGIc1w1/
-        WCcmtbdOCxGPnEisTOo4GcaV4V9oUL4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-480-sl0LyO7YNBeAhvxsMKKR6A-1; Tue, 08 Aug 2023 16:07:05 -0400
-X-MC-Unique: sl0LyO7YNBeAhvxsMKKR6A-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0CB8F101A528;
-        Tue,  8 Aug 2023 20:07:04 +0000 (UTC)
-Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A040F2026D4B;
-        Tue,  8 Aug 2023 20:07:03 +0000 (UTC)
-From:   Jeff Moyer <jmoyer@redhat.com>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Hugo Villeneuve <hugo@hugovil.com>, sdf@google.com,
-        axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] net: expose sock_use_custom_sol_socket
-References: <20230808134049.1407498-1-leitao@debian.org>
-        <20230808134049.1407498-2-leitao@debian.org>
-        <20230808121323.bc144c719eba5979e161aac6@hugovil.com>
-        <ZNJ5f1hR3cre0IPd@gmail.com>
-X-PGP-KeyID: 1F78E1B4
-X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
-Date:   Tue, 08 Aug 2023 16:12:51 -0400
-In-Reply-To: <ZNJ5f1hR3cre0IPd@gmail.com> (Breno Leitao's message of "Tue, 8
-        Aug 2023 10:21:03 -0700")
-Message-ID: <x495y5p47jw.fsf@segfault.boston.devel.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        with ESMTP id S229663AbjHHVlJ (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 17:41:09 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48AD10C
+        for <io-uring@vger.kernel.org>; Tue,  8 Aug 2023 14:41:07 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bba9539a23so12595965ad.1
+        for <io-uring@vger.kernel.org>; Tue, 08 Aug 2023 14:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1691530867; x=1692135667;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mmMquhVxfqQkr8FeSl+UScb8me8odKvzqPydznJKbHA=;
+        b=hSwJfFFQarpgCbUOJ8QP4kWkSz2TMZ8+bcSDjw5pL7eKOY8XZd297ECoAjV5ahEs5v
+         XSib/SP1pktC+M/PKGlUFlLzvlnxEjxQi/cll/QdtWbeoSFTVc4b51e7skzkRevpg9PA
+         Dk1TLj0Od2U9TH6tFmQzBA1YJ4U+WV8KVrHOI+OpWeGmfg0EezQLAaB3u5dJVjLsWl2s
+         JF3Ku8tIsDG0TYiLiCzHMiq7Bk0uPgaFHYZXT/J6snPmotNoYjXSmeTDBqAMEvMGtrTE
+         gPQVTZQtWUMrRuC2LVMrOvQsjDFf6vEvEfTudu0NCemIg8fkgCtvevysfYY20Bd0w/Ij
+         M73g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691530867; x=1692135667;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mmMquhVxfqQkr8FeSl+UScb8me8odKvzqPydznJKbHA=;
+        b=LTOqKplGFZ0rTegS87xEBh7O4bd4cxOCC2526awxZ3Eu3wSWKemOLVO6g0U8uUMSEO
+         2uIfT61fYhIum7SR66V0E5ZzZC0/MMsLUK0TmsR9zKo/4NtJI880U8cEdqOoWmJSa0EC
+         fzflVJHGTK0SSi4HRLxdC7j/2iyx0WlVAZ+eTOofMRVfD91t3hakUXYLxB4Dr4APVJMv
+         NYCmxVtAdCuZ+puo9lUkRkG6DHlZmxa82SBuzJlEBcKnSmC8OGeShHo1Q3Zb3bavyjqe
+         /4Q/wtGwd1IhYeuDXDsK2/ObnG7MrRZtmYzchhsIpqkMi/oSFGvDCy/8S0JWWXSLLMz9
+         unOg==
+X-Gm-Message-State: AOJu0YzYMHv8IsJcy8g6/0LAXyxF+thexFumhS6LfKjzSIi+EIHqzVHS
+        CQSObg1KKo1AtwoKtNPedn0XzQ==
+X-Google-Smtp-Source: AGHT+IHGq8TQrQg8Nfhn9A+oBWGtt5BlIB/JcFN8y/DVUn7XRh/zPzIP3r5uek0AhBfIV2cv9vnJ0w==
+X-Received: by 2002:a17:902:e884:b0:1bc:496c:8edb with SMTP id w4-20020a170902e88400b001bc496c8edbmr1085461plg.0.1691530867301;
+        Tue, 08 Aug 2023 14:41:07 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id p21-20020a1709028a9500b001bb0b1a93dfsm9452461plo.126.2023.08.08.14.41.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Aug 2023 14:41:06 -0700 (PDT)
+Message-ID: <65911cc1-5b3f-ff5f-fe07-2f5c7a9c3533@kernel.dk>
+Date:   Tue, 8 Aug 2023 15:41:05 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.1
+Subject: Re: FYI, fsnotify contention with aio and io_uring.
+Content-Language: en-US
+To:     Jeff Moyer <jmoyer@redhat.com>, Pierre Labat <plabat@micron.com>
+Cc:     "'io-uring@vger.kernel.org'" <io-uring@vger.kernel.org>
+References: <SJ0PR08MB6494F5A32B7C60A5AD8B33C2AB09A@SJ0PR08MB6494.namprd08.prod.outlook.com>
+ <x49pm3y4nq5.fsf@segfault.boston.devel.redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <x49pm3y4nq5.fsf@segfault.boston.devel.redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Breno Leitao <leitao@debian.org> writes:
-
-> Hello  Hugo,
->
-> On Tue, Aug 08, 2023 at 12:13:23PM -0400, Hugo Villeneuve wrote:
->> On Tue,  8 Aug 2023 06:40:41 -0700
->> Breno Leitao <leitao@debian.org> wrote:
->> 
->> > Exposing function sock_use_custom_sol_socket(), so it could be used by
->> > io_uring subsystem.
->> > 
->> > This function will be used in the function io_uring_cmd_setsockopt() in
->> > the coming patch, so, let's move it to the socket.h header file.
->> 
+On 8/7/23 2:11?PM, Jeff Moyer wrote:
+> Hi, Pierre,
+> 
+> Pierre Labat <plabat@micron.com> writes:
+> 
 >> Hi,
->> this description doesn't seem to match the code change below...
->
-> I re-read the patch comment and it seems to match what the code does,
-> so, probably this description only makes sense to me (?).
->
-> That said, hat have you understood from reading the description above?
+>>
+>> This is FYI, may be you already knows about that, but in case you don't....
+>>
+>> I was pushing the limit of the number of nvme read IOPS, the FIO + the
+>> Linux OS can handle. For that, I have something special under the
+>> Linux nvme driver. As a consequence I am not limited by whatever the
+>> NVME SSD max IOPS or IO latency would be.
+>>
+>> As I cranked the number of system cores and FIO jobs doing direct 4k
+>> random read on /dev/nvme0n1, I hit a wall. The IOPS scaling slows
+>> (less than linear) and around 15 FIO jobs on 15 core threads, the
+>> overall IOPS, in fact, goes down as I add more FIO jobs. For example
+>> on a system with 24 cores/48 threads, when I goes beyond 15 FIO jobs,
+>> the overall IOPS starts to go down.
+>>
+>> This happens the same for io_uring and aio. Was using kernel version 6.3.9. Using one namespace (/dev/nvme0n1).
+> 
+> [snip]
+> 
+>> As you can see 76% of the cpu on the box is sucked up by
+>> lockref_get_not_zero() and lockref_put_return().  Looking at the code,
+>> there is contention when IO_uring call fsnotify_access().
+> 
+> Is there a FAN_MODIFY fsnotify watch set on /dev?  If so, it might be a
+> good idea to find out what set it and why.
 
-The comment states the function prototype is moving to socket.h, but the
-patch puts it in net.h.
+This would be my guess too, some distros do seem to do that. The
+notification bits scale horribly, nobody should use it for anything high
+performance...
 
-Cheers,
-Jeff
-
->
-> Thanks for the review,
->
->> > ---
->> >  include/linux/net.h | 5 +++++
->> >  net/socket.c        | 5 -----
->> >  2 files changed, 5 insertions(+), 5 deletions(-)
->> > 
->> > diff --git a/include/linux/net.h b/include/linux/net.h
->> > index 41c608c1b02c..14a956e4530e 100644
->> > --- a/include/linux/net.h
->> > +++ b/include/linux/net.h
->> > @@ -355,4 +355,9 @@ u32 kernel_sock_ip_overhead(struct sock *sk);
->> >  #define MODULE_ALIAS_NET_PF_PROTO_NAME(pf, proto, name) \
->> >  	MODULE_ALIAS("net-pf-" __stringify(pf) "-proto-" __stringify(proto) \
->> >  		     name)
->> > +
->> > +static inline bool sock_use_custom_sol_socket(const struct socket *sock)
->> > +{
->> > +	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
->> > +}
->> >  #endif	/* _LINUX_NET_H */
->> > diff --git a/net/socket.c b/net/socket.c
->> > index 1dc23f5298ba..8df54352af83 100644
->> > --- a/net/socket.c
->> > +++ b/net/socket.c
->> > @@ -2216,11 +2216,6 @@ SYSCALL_DEFINE4(recv, int, fd, void __user *, ubuf, size_t, size,
->> >  	return __sys_recvfrom(fd, ubuf, size, flags, NULL, NULL);
->> >  }
->> >  
->> > -static bool sock_use_custom_sol_socket(const struct socket *sock)
->> > -{
->> > -	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
->> > -}
->> > -
->> >  /*
->> >   *	Set a socket option. Because we don't know the option lengths we have
->> >   *	to pass the user mode parameter for the protocols to sort out.
->> > -- 
->> > 2.34.1
->> > 
+-- 
+Jens Axboe
 
