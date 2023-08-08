@@ -2,85 +2,120 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92A0DC001B0
-	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 18:35:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EF2EC001B0
+	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 18:43:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbjHHSfF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Aug 2023 14:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S231990AbjHHSnm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Aug 2023 14:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbjHHSer (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 14:34:47 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B129C1565
-        for <io-uring@vger.kernel.org>; Tue,  8 Aug 2023 10:58:26 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-7748ca56133so40893139f.0
-        for <io-uring@vger.kernel.org>; Tue, 08 Aug 2023 10:58:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1691517505; x=1692122305;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/w2FPj8hkvrmGq+O6G7luRrBsz4G0SLRfxtnrA+OHNs=;
-        b=AasbcmtdOEfGbOfZ09mB201dvfBtriGDq4msxnGW4Mq1fROkFPNzIkrRZQA8tBTlF8
-         G7wzwkHVdyvWQJFlOOTqXpOaP2Iyg6/Nvz/eZ1k2ngk8a9lW4DmkxfunmcdkRZS/oexV
-         b/h1SBWfJiJiQ/NcIWsCDJdJXMYjCLL4I+86qRg2s7F+gx+sUKnn7AmvDKeM+L4MS9Rs
-         lLQktIGhjIPf1lsQoi0HKnx89jGAVFmT0I1HEOCoVm41FsTXPQ8bsza8q+jqbd+HtENI
-         ZZ1tbPQBe/fo8oXpT0+ZfVlBKEAhwc9sacclW8QisYlfNMjgkTBkpSsWRlY+BVmqVmNu
-         E6kg==
+        with ESMTP id S232133AbjHHSnX (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 14:43:23 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AEB47E2;
+        Tue,  8 Aug 2023 09:37:48 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-99bc9e3cbf1so7259366b.0;
+        Tue, 08 Aug 2023 09:37:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691517505; x=1692122305;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1691512580; x=1692117380;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/w2FPj8hkvrmGq+O6G7luRrBsz4G0SLRfxtnrA+OHNs=;
-        b=OloT1XfBpM4dY9Oxuo3KX4zVBN9F9+t0NRfk+mogoV7GJCTPf41oVRAeNwRrK3JEip
-         J5edCXD+W44E4lR9GbEnW4gmVhPuWMonzK/DmzMqagMX6YVbnXh64h6rd6wCvYPmmYeR
-         1zc+3Qy4fSwQsuois295kdjsD7HTu/x8HIhl1AmQxgfrBGP+2soiPFGmvNcpyzIxE6wA
-         ZYPmG0PO6EFoshgeQCixucOJS4/bKf0t6dIq9oYxge8b6gaVjmBnmYApLQSR1Dek9n7q
-         p1mV/8nAMROWiWqv3+bsreDnJg5OKiQ+ql2qeyuGsnExNE9wBEzR7PxapbiFm05oXgQe
-         7Hmw==
-X-Gm-Message-State: AOJu0Yy3U8J+ti2RDn/5ckP5XZ09s12hJ0fD70Zt7pd2Yi8gNv0XE3py
-        hxiO43Ub8NE+FDST6QOzjmMVVnbqNV9zacnzRJY=
-X-Google-Smtp-Source: AGHT+IFaAMpm916Z8cinreZ3s5N71EYem8U+ytSE7rBXU7rhSbeUrVWkhgosQEUhHfvNMFk1jwE8rA==
-X-Received: by 2002:a92:d94b:0:b0:349:385e:287e with SMTP id l11-20020a92d94b000000b00349385e287emr500745ilq.1.1691517505329;
-        Tue, 08 Aug 2023 10:58:25 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id gc1-20020a056638670100b0042b16c005e9sm3359849jab.124.2023.08.08.10.58.24
+        bh=DkmTv84pMJXYa4K1dNGjk/Yamo7BduW6q6khqHXBPa8=;
+        b=Dd8Vgwj0UHNXYwynWoCRfMASq4JLeZpNRyD/tDC9/ATD1zoHWUD7ZBnS7KIY4WDcfK
+         ft9+HC6Im3yySuN5IA5x2mBmsJHnSVZ1PXbqb+ovN4ly171nyV0dASxLtRo3/nlwXxDo
+         aLK1oV5PIlsIJs2UrdsvJjI7JFwh3NrDn54tIZ3w0s3CkR0cC0e71kaoBOGXWS8pJA0W
+         nEmzli7l0wxxb4cN1N2BC61xsSM+p2tbs2xTwZyKuS7hTuFdRVGBsWeUl3I7NzhFcLoR
+         ZEoZ8LhZxB+pGH0RTFuHz9iTIkCjkS5MgAOof+PL6lB2JUE8uTccbwHO/zc5G23VX2UL
+         RJVg==
+X-Gm-Message-State: AOJu0Yx4C50amqYS9gt0/ZdikrVwIQtBhmV0KIH8JFMRFOWB81RRqczP
+        dTuNCJmSONEKBPOItM+Xhm94RIj+iFA=
+X-Google-Smtp-Source: AGHT+IFCb2xDaXaWa86RAvY8VGrjOIB1tiZauK4N/+kpq0thYV6NlgElKwksutrFFgGq6zVtrt/YmA==
+X-Received: by 2002:a17:906:53ce:b0:99c:7300:94b8 with SMTP id p14-20020a17090653ce00b0099c730094b8mr10749291ejo.10.1691502074057;
+        Tue, 08 Aug 2023 06:41:14 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-116.fbsv.net. [2a03:2880:31ff:74::face:b00c])
+        by smtp.gmail.com with ESMTPSA id qh17-20020a170906ecb100b0099cc1ffd8f5sm4484910ejb.53.2023.08.08.06.41.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 10:58:24 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     asml.silence@gmail.com, Yue Haibing <yuehaibing@huawei.com>
-Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230808151058.4572-1-yuehaibing@huawei.com>
-References: <20230808151058.4572-1-yuehaibing@huawei.com>
-Subject: Re: [PATCH -next] io_uring/rsrc: Remove unused declaration
- io_rsrc_put_tw()
-Message-Id: <169151750416.133230.11031331146725665272.b4-ty@kernel.dk>
-Date:   Tue, 08 Aug 2023 11:58:24 -0600
+        Tue, 08 Aug 2023 06:41:13 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
+        pabeni@redhat.com
+Subject: [PATCH v2 8/8] io_uring/cmd: BPF hook for setsockopt cmd
+Date:   Tue,  8 Aug 2023 06:40:48 -0700
+Message-Id: <20230808134049.1407498-9-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
+References: <20230808134049.1407498-1-leitao@debian.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-034f2
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
+Add support for BPF hooks for io_uring setsockopts command.
 
-On Tue, 08 Aug 2023 23:10:58 +0800, Yue Haibing wrote:
-> Commit 36b9818a5a84 ("io_uring/rsrc: don't offload node free")
-> removed the implementation but leave declaration.
-> 
-> 
+This implementation follows a similar approach to what
+__sys_setsockopt() does, but, operates only on kernel memory instead of
+user memory (which is also possible, but not preferred since the kernel
+memory is already available)
 
-Applied, thanks!
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ io_uring/uring_cmd.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
 
-[1/1] io_uring/rsrc: Remove unused declaration io_rsrc_put_tw()
-      commit: 968c584cd8cc0da186befca5fc994988be61aab7
-
-Best regards,
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 3693e5779229..b7b27e4dbddd 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -205,23 +205,42 @@ static inline int io_uring_cmd_setsockopt(struct socket *sock,
+ {
+ 	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
+ 	int optname = READ_ONCE(cmd->sqe->optname);
++	sockptr_t optval_s = USER_SOCKPTR(optval);
+ 	int optlen = READ_ONCE(cmd->sqe->optlen);
+ 	int level = READ_ONCE(cmd->sqe->level);
++	char *kernel_optval = NULL;
+ 	int err;
+ 
+ 	err = security_socket_setsockopt(sock, level, optname);
+ 	if (err)
+ 		return err;
+ 
++	if (!in_compat_syscall()) {
++		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level,
++						     &optname,
++						     USER_SOCKPTR(optval),
++						     &optlen,
++						     &kernel_optval);
++		if (err < 0)
++			return err;
++		if (err > 0)
++			return 0;
++
++		/* Replace optval by the one returned by BPF */
++		if (kernel_optval)
++			optval_s = KERNEL_SOCKPTR(kernel_optval);
++	}
++
+ 	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock))
+ 		err = sock_setsockopt(sock, level, optname,
+-				      USER_SOCKPTR(optval), optlen);
++				      optval_s, optlen);
+ 	else if (unlikely(!sock->ops->setsockopt))
+ 		err = -EOPNOTSUPP;
+ 	else
+ 		err = sock->ops->setsockopt(sock, level, optname,
+-					    USER_SOCKPTR(koptval), optlen);
++					    optval_s, optlen);
+ 
++	kfree(kernel_optval);
+ 	return err;
+ }
+ 
 -- 
-Jens Axboe
-
-
+2.34.1
 
