@@ -2,63 +2,100 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1EE0C04A6A
-	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 16:24:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48549C04FE2
+	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 16:33:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjHHQYM (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Aug 2023 12:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
+        id S232798AbjHHQdV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Aug 2023 12:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjHHQWt (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 12:22:49 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C3CA25F;
-        Tue,  8 Aug 2023 08:49:31 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RKxPl1T8JztRbL;
-        Tue,  8 Aug 2023 23:07:39 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
- 2023 23:11:07 +0800
-From:   Yue Haibing <yuehaibing@huawei.com>
-To:     <axboe@kernel.dk>, <asml.silence@gmail.com>
-CC:     <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yuehaibing@huawei.com>
-Subject: [PATCH -next] io_uring/rsrc: Remove unused declaration io_rsrc_put_tw()
-Date:   Tue, 8 Aug 2023 23:10:58 +0800
-Message-ID: <20230808151058.4572-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        with ESMTP id S233076AbjHHQcL (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 12:32:11 -0400
+Received: from out-99.mta1.migadu.com (out-99.mta1.migadu.com [IPv6:2001:41d0:203:375::63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A573531013
+        for <io-uring@vger.kernel.org>; Tue,  8 Aug 2023 08:51:56 -0700 (PDT)
+Message-ID: <588ede3c-3de0-5469-735e-8c9fe4d52b6a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1691469264;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LnHMX10bH6+mrf/dzTR81KlSjnm22TOl66PKR/tiy0Q=;
+        b=nH5luNlLih8wuBeN5jkwDvqcSsBXrJhkU5ThzE1kc7gNo6M81QPNk+4ah62SFjwxeP/3qG
+        6qbpsuhXxL7PveukVbwqqTi4cOtDrCBbz0ScuBIcQb1j5Oo56LVXdL5b48loDnTFetSkVj
+        q0jURjOYP1350zbhjEzLMF6ceEu8TX4=
+Date:   Tue, 8 Aug 2023 12:34:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
+Subject: Re: [PATCH 3/5] io_uring: add support for getdents
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Cc:     Dave Chinner <david@fromorbit.com>, io-uring@vger.kernel.org,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
+        linux-fsdevel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>
+References: <20230718132112.461218-1-hao.xu@linux.dev>
+ <20230718132112.461218-4-hao.xu@linux.dev>
+ <20230726-leinen-basisarbeit-13ae322690ff@brauner>
+ <e9ddc8cc-f567-46bc-8f82-cf5ff8ff6c95@linux.dev>
+ <20230727-salbe-kurvigen-31b410c07bb9@brauner>
+ <ZMcPUX0lYC2nscAm@dread.disaster.area>
+ <20230731-gezeugt-tierwelt-f3d6a900c262@brauner>
+ <20230731152623.GC11336@frogsfrogsfrogs>
+ <22630618-40fc-5668-078d-6cefcb2e4962@kernel.dk>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Hao Xu <hao.xu@linux.dev>
+In-Reply-To: <22630618-40fc-5668-078d-6cefcb2e4962@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Commit 36b9818a5a84 ("io_uring/rsrc: don't offload node free")
-removed the implementation but leave declaration.
+On 8/1/23 08:28, Jens Axboe wrote:
+> On 7/31/23 9:26?AM, Darrick J. Wong wrote:
+>> I've watched quite a bit of NOWAIT whackamole going on over the past few
+>> years (i_rwsem, the ILOCK, the IO layer, memory allocations...).  IIRC
+>> these filesystem ios all have to run in process context, right?  If so,
+>> why don't we capture the NOWAIT state in a PF flag?  We already do that
+>> for NOFS/NOIO memory allocations to make sure that /all/ reclaim
+>> attempts cannot recurse into the fs/io stacks.
+> 
+> I would greatly prefer passing down the context rather than capitulating
+> and adding a task_struct flag for this. I think it _kind of_ makes sense
+> for things like allocations, as you cannot easily track that all the way
+> down, but it's a really ugly solution. It certainly creates more churn
+> passing it down, but it also reveals the parts that need to check it.
+> WHen new code is added, it's much more likely you'll spot the fact that
+> there's passed in context. For allocation, you end up in the allocator
+> anyway, which can augment the gfp mask with whatever is set in the task.
+> The same is not true for locking and other bits, as they don't return a
+> value to begin with. When we know they are sane, we can flag the fs as
+> supporting it (like we've done for async buffered reads, for example).
+> 
+> It's also not an absolute thing, like memory allocations are. It's
+> perfectly fine to grab a mutex under NOWAIT issue. What you should not
 
-Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
----
- io_uring/rsrc.h | 1 -
- 1 file changed, 1 deletion(-)
+Hi Jens,
+To make sure, I'd like to ask, for memory allocation, GFP_NOIO semantics
+is all we need in NOWAIT issue, GFP_NOWAIT is not necessary, do I
+understand it right?
 
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index 0a8a95e9b99e..8afa9ec66a55 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -57,7 +57,6 @@ struct io_mapped_ubuf {
- 	struct bio_vec	bvec[];
- };
- 
--void io_rsrc_put_tw(struct callback_head *cb);
- void io_rsrc_node_ref_zero(struct io_rsrc_node *node);
- void io_rsrc_node_destroy(struct io_ring_ctx *ctx, struct io_rsrc_node *ref_node);
- struct io_rsrc_node *io_rsrc_node_alloc(struct io_ring_ctx *ctx);
--- 
-2.34.1
+Thanks,
+Hao
+
+> do is grab a mutex that someone else can grab while waiting on IO. This
+> kind of extra context is only available in the code in question, not
+> generically for eg mutex locking.
+> 
+> I'm not a huge fan of the "let's add a bool nowait". Most/all use cases
+> pass down state anyway, putting it in a suitable type struct seems much
+> cleaner to me than the out-of-band approach of just adding a
+> current->please_nowait.
+> 
 
