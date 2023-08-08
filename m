@@ -2,128 +2,125 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5984DC41513
-	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 19:46:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F0EC41513
+	for <io-uring@archiver.kernel.org>; Tue,  8 Aug 2023 20:27:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234081AbjHHTqU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 8 Aug 2023 15:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
+        id S229720AbjHHU1y (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 8 Aug 2023 16:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236545AbjHHTp6 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 15:45:58 -0400
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B78116AFF;
-        Tue,  8 Aug 2023 09:49:33 -0700 (PDT)
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b9d3dacb33so95357021fa.1;
-        Tue, 08 Aug 2023 09:49:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691513371; x=1692118171;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o+9mxu8b+EhzS+5yoGnjlhzry4jkjQ5Q19ANuPNesrY=;
-        b=l+J8ftwOUHMt2R84TGYZQ0G1AyQ5zfkFhgjdQq3p9CwjDoGfVT0ysWkD4m4cTgcsrz
-         VnSiC+kxrEl2uMHN/bL/TWpw3x/mq6elkVx75+/P3kKsTIglIOftRjuzOuvoaACqXp5r
-         ymAK9h6w30XQZ1yTTXBX14Rsgdaq0/Tnz3ManZ2HMz/vrr9bX9l3o4rk6dp7jIHxFxK0
-         81K3x0pf3DSIIlzuWGkGhAedjyFcksBQFrZWjqx6gZIEINC08DeLtTyLKyvCNAy6YSiQ
-         Wy5ry/WBQUcvIamvkyq2r9r86dOB12CigvoxmhcZt1udmO7m48wgpDKTtKoZb+qTtnL/
-         OQ2w==
-X-Gm-Message-State: AOJu0YzXUznEAgznzLGg5rUubd3OEPwCcoK9CwyNaiwAWf5suWi4nRWW
-        836OXhYYY1oNvNd2OR8qzhldv0OOJBs=
-X-Google-Smtp-Source: AGHT+IFaiSD6la9EEN/hiA8ab/8s4dP7Ut5NjsQn3lAyBLxiI8Mq1SO2WnI7EtR5m+sRlgD67JjEaA==
-X-Received: by 2002:aa7:dc07:0:b0:522:37f1:5fd0 with SMTP id b7-20020aa7dc07000000b0052237f15fd0mr11327506edu.5.1691502066712;
-        Tue, 08 Aug 2023 06:41:06 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-018.fbsv.net. [2a03:2880:31ff:12::face:b00c])
-        by smtp.gmail.com with ESMTPSA id p8-20020a05640210c800b005231e1780aasm6116955edu.91.2023.08.08.06.41.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 06:41:06 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
-        pabeni@redhat.com
-Subject: [PATCH v2 3/8] io_uring/cmd: Introduce SOCKET_URING_OP_SETSOCKOPT
-Date:   Tue,  8 Aug 2023 06:40:43 -0700
-Message-Id: <20230808134049.1407498-4-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230808134049.1407498-1-leitao@debian.org>
+        with ESMTP id S233210AbjHHU1h (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 8 Aug 2023 16:27:37 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E41ACB76;
+        Tue,  8 Aug 2023 10:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+        :Date:subject:date:message-id:reply-to;
+        bh=8iItz4fAqc9eHWlkPTlOj5+qnfmys/TzLvwC/yA08jQ=; b=EMf5xQwVyzUnLtsBrpCxqvTU0F
+        5Cvjq4BE1nyD8fihHctOb9LNCkiIVbbjd08EoEK1TXKDdnFDKsn9oAz1HBEp4coKLnxcnYtJ+Wfp0
+        TXIAc6Va1L6Da8baMlf++ElczSmxomYyZDnTD64lVhCabao/gxZ50trd64IPE1ovX1GU=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:37588 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qTQnA-0001gq-K0; Tue, 08 Aug 2023 13:46:49 -0400
+Date:   Tue, 8 Aug 2023 13:46:47 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        io-uring@vger.kernel.org
+Message-Id: <20230808134647.3e0e702f54ef5e5b4378ff98@hugovil.com>
+In-Reply-To: <ZNJ5f1hR3cre0IPd@gmail.com>
 References: <20230808134049.1407498-1-leitao@debian.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        <20230808134049.1407498-2-leitao@debian.org>
+        <20230808121323.bc144c719eba5979e161aac6@hugovil.com>
+        <ZNJ5f1hR3cre0IPd@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
+Subject: Re: [PATCH v2 1/8] net: expose sock_use_custom_sol_socket
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add initial support for SOCKET_URING_OP_SETSOCKOPT. This new command is
-similar to setsockopt. This initial implementation just cares about
-SOL_SOCKET level for now. The next patch implements the generic case.
+On Tue, 8 Aug 2023 10:21:03 -0700
+Breno Leitao <leitao@debian.org> wrote:
 
-Function io_uring_cmd_setsockopt() is inspired by the function
-__sys_setsockopt().
+> Hello  Hugo,
+> 
+> On Tue, Aug 08, 2023 at 12:13:23PM -0400, Hugo Villeneuve wrote:
+> > On Tue,  8 Aug 2023 06:40:41 -0700
+> > Breno Leitao <leitao@debian.org> wrote:
+> > 
+> > > Exposing function sock_use_custom_sol_socket(), so it could be used by
+> > > io_uring subsystem.
+> > > 
+> > > This function will be used in the function io_uring_cmd_setsockopt() in
+> > > the coming patch, so, let's move it to the socket.h header file.
+> > 
+> > Hi,
+> > this description doesn't seem to match the code change below...
+> 
+> I re-read the patch comment and it seems to match what the code does,
+> so, probably this description only makes sense to me (?).
+> 
+> That said, hat have you understood from reading the description above?
+> socket.h
+> Thanks for the review,
 
-Important to say that userspace needs to keep the pointer's memory alive
-until the operation is completed.
+Hi Breno,
+your comments says "move it to the socket.h header file" but it seems
+to be moved to the net.h header file?
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- include/uapi/linux/io_uring.h |  1 +
- io_uring/uring_cmd.c          | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
+Hugo Villeneuve
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 8152151080db..3fe82df06abf 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -736,6 +736,7 @@ enum {
- 	SOCKET_URING_OP_SIOCINQ		= 0,
- 	SOCKET_URING_OP_SIOCOUTQ,
- 	SOCKET_URING_OP_GETSOCKOPT,
-+	SOCKET_URING_OP_SETSOCKOPT,
- };
- 
- #ifdef __cplusplus
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 582931879482..5404b788ca14 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -192,6 +192,27 @@ static inline int io_uring_cmd_getsockopt(struct socket *sock,
- 	return -EOPNOTSUPP;
- }
- 
-+static inline int io_uring_cmd_setsockopt(struct socket *sock,
-+					  struct io_uring_cmd *cmd)
-+{
-+	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
-+	int optname = READ_ONCE(cmd->sqe->optname);
-+	int optlen = READ_ONCE(cmd->sqe->optlen);
-+	int level = READ_ONCE(cmd->sqe->level);
-+	int err;
-+
-+	err = security_socket_setsockopt(sock, level, optname);
-+	if (err)
-+		return err;
-+
-+	err = -EOPNOTSUPP;
-+	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock))
-+		err = sock_setsockopt(sock, level, optname,
-+				      USER_SOCKPTR(optval), optlen);
-+
-+	return err;
-+}
-+
- int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- {
- 	struct socket *sock = cmd->file->private_data;
-@@ -215,6 +236,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 		return arg;
- 	case SOCKET_URING_OP_GETSOCKOPT:
- 		return io_uring_cmd_getsockopt(sock, cmd);
-+	case SOCKET_URING_OP_SETSOCKOPT:
-+		return io_uring_cmd_setsockopt(sock, cmd);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
--- 
-2.34.1
 
+> > > ---
+> > >  include/linux/net.h | 5 +++++
+> > >  net/socket.c        | 5 -----
+> > >  2 files changed, 5 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/include/linux/net.h b/include/linux/net.h
+> > > index 41c608c1b02c..14a956e4530e 100644
+> > > --- a/include/linux/net.h
+> > > +++ b/include/linux/net.h
+> > > @@ -355,4 +355,9 @@ u32 kernel_sock_ip_overhead(struct sock *sk);
+> > >  #define MODULE_ALIAS_NET_PF_PROTO_NAME(pf, proto, name) \
+> > >  	MODULE_ALIAS("net-pf-" __stringify(pf) "-proto-" __stringify(proto) \
+> > >  		     name)
+> > > +
+> > > +static inline bool sock_use_custom_sol_socket(const struct socket *sock)
+> > > +{
+> > > +	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+> > > +}
+> > >  #endif	/* _LINUX_NET_H */
+> > > diff --git a/net/socket.c b/net/socket.c
+> > > index 1dc23f5298ba..8df54352af83 100644
+> > > --- a/net/socket.c
+> > > +++ b/net/socket.c
+> > > @@ -2216,11 +2216,6 @@ SYSCALL_DEFINE4(recv, int, fd, void __user *, ubuf, size_t, size,
+> > >  	return __sys_recvfrom(fd, ubuf, size, flags, NULL, NULL);
+> > >  }
+> > >  
+> > > -static bool sock_use_custom_sol_socket(const struct socket *sock)
+> > > -{
+> > > -	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
+> > > -}
+> > > -
+> > >  /*
+> > >   *	Set a socket option. Because we don't know the option lengths we have
+> > >   *	to pass the user mode parameter for the protocols to sort out.
+> > > -- 
+> > > 2.34.1
+> > > 
