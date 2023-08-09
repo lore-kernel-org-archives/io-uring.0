@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 42D7BC001B0
-	for <io-uring@archiver.kernel.org>; Wed,  9 Aug 2023 19:43:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB0EC001E0
+	for <io-uring@archiver.kernel.org>; Wed,  9 Aug 2023 19:43:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjHITnQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S230283AbjHITnQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Wed, 9 Aug 2023 15:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231377AbjHITnP (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Aug 2023 15:43:15 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C5F10FE
-        for <io-uring@vger.kernel.org>; Wed,  9 Aug 2023 12:43:14 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bc4dc65aa7so403545ad.0
-        for <io-uring@vger.kernel.org>; Wed, 09 Aug 2023 12:43:14 -0700 (PDT)
+        with ESMTP id S231251AbjHITnN (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Aug 2023 15:43:13 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C232A10F3
+        for <io-uring@vger.kernel.org>; Wed,  9 Aug 2023 12:43:12 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6873f64a290so23863b3a.0
+        for <io-uring@vger.kernel.org>; Wed, 09 Aug 2023 12:43:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1691610193; x=1692214993;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1691610192; x=1692214992;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KOs86fuyNp8imIS7vN17G0ksXsvzBl6U0d5kE/G4TKU=;
-        b=AT81NWIfINjuKPvd3d2fcxKGVjUn+vX4dYqr+PA/ElISgtcHlqRDFMdbCJPcw2pG1j
-         8KgHd4AbQBMAq1sGlCjLfeIff3HezF4xCmPzrnu/R+nojqQJ0OvAJ6G7qwUEpmavxgqH
-         GKMthBCdPt0I7zGmXIzQ27MkxTm5lISFxr8FNvgYk6/MPRMe6g3VavAE4W07k26z+Puk
-         o4PkMnoKSilDBoIlQz/I91oGVA6CJbeSX17pIzDfldEwimgIfHZPsUj3leNpJSAYVwT2
-         WM+7yBSqu0cW/nwvCEOAUo1zQuQwP82/AgsYuQIRrP8TKdq19czpa2VdbBvMA/hGc6/d
-         xD6g==
+        bh=IVHXPxLmxfd5CWTOTrBfmptnMeO3orQcJQg34vrpu6k=;
+        b=BuW8gzX2IVPME+eQoZrjHuxemw2dByucIImWWi4Y3OLhj8sePv4NAZUuFPXz9eCaWE
+         +rz8y04w77xwCj9vF9yCh7D5i7OlRg/xyBxSPUU4y13mnwVH0ST1Sfj8leMQZmXPaH3y
+         QboEvRQW+11++rtmgqMgF3Xaz6wjJZkafdAXp/V+yY8Mpxay2Ta2HwFDsJHw2wrKQLqA
+         b0RMU1tfkS448sXWfzxN72hDeH1MQ+sen0IuHNi3KW3cQP5NzthR/MfpwLFlPK8XZUG+
+         +ZFXSFsG+ext42TH59q5PYQGbFCHCMrE9sJ2GaMYC2w7jfR6nQmerI8FnVN4JJH+lGKC
+         x+WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691610193; x=1692214993;
+        d=1e100.net; s=20221208; t=1691610192; x=1692214992;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KOs86fuyNp8imIS7vN17G0ksXsvzBl6U0d5kE/G4TKU=;
-        b=XUeK/755zfd5H5bxYPoZcDnxPVwhfEJHJhR0cKQ/wkeDLMyOH/fbJI+wjrtfTgppZK
-         SM8XgJ3XBN/IqEvImKKDTwr/zySDHJM3QCmop9Ndh3SaDot3RqrdoA7E98N+wfrKNyBD
-         c7NcVo4a1YBzN+3piSKETd/WUou+/LPeN9OiyagwSeD4+kvi2Ctkq7Ph57KFT6XHgTNY
-         74/NvPjc7A+rAb5oNGo8e/kH5Jx8BNvYcEPMUSeWYI9w6zqJRvPANzgVpDpIx5Lrd/06
-         3igLVSM2HaRudjOL0T2YfvR7UK3hZivHCGGbjbnLWJbuJLoQYLMvFQEGhU4rDCJXraGv
-         t31A==
-X-Gm-Message-State: AOJu0YyVsCMI/7h/X47e1fwmrh0hbfnuAINCVIMugF2vqH5N4MzYLBpu
-        d8OawLiqZXu8Ey4DwszBmteoOVSpeIjRu2a5Hx4=
-X-Google-Smtp-Source: AGHT+IFwaEtO0uUhbrSpcAHYQDa6Wwq8OLDbcJBNLBJE+6A3/QGzo2GNF7HhGF2LdxoN+MECQTmtew==
-X-Received: by 2002:a17:903:41cf:b0:1b8:ac61:ffcd with SMTP id u15-20020a17090341cf00b001b8ac61ffcdmr82671ple.3.1691610193612;
-        Wed, 09 Aug 2023 12:43:13 -0700 (PDT)
+        bh=IVHXPxLmxfd5CWTOTrBfmptnMeO3orQcJQg34vrpu6k=;
+        b=aXG+v1ioNEBL4RuQrXNmqz91eIDvAZohAne+2RNBGEqn6NR8trHdtP30bCIRTLhmKU
+         CkCRYDil/zxhm99eGv3DXKAgvT7NblEypse75u2s8fKkCLHlL/DSo9r4HIg36i/XBQFb
+         qb24LCtk0Z42uOEP7S1k/Ismgn7jW5tMXTNjPDsm5Hq5L/6tIHNRgndmAjWcOANPRDcn
+         VW1Lwh8CAs7gEiHAoYikVzT+OcVwh+ccsNfACgmbB0RGBjGN4XReaSrygNm7y8futZ95
+         n0xqyUOf8dRKJn6Syj4dOFUYkH4VGcPlWddJOshukXF1Ovh9wY2abDnfRFYOmRnBpUAu
+         +h1Q==
+X-Gm-Message-State: AOJu0YwxwCqrMnsMZiAdB/9zEDgjgbuK+IcD/9u7UHJMmsJxvhsQWv6W
+        GE7gv8LyDpFbHQyPQaAW1dlY3Q4D1v7/ojuTmiE=
+X-Google-Smtp-Source: AGHT+IH5S02ZwEgRA6kg7g+bXpoVaHnAlRHNbHivQ0GffdbvDPd7jnKL3Bsp0ocH/Z+YFCAvdjoRTw==
+X-Received: by 2002:a17:902:c952:b0:1b8:aded:524c with SMTP id i18-20020a170902c95200b001b8aded524cmr126993pla.1.1691610191800;
+        Wed, 09 Aug 2023 12:43:11 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id l19-20020a170902eb1300b001b8953365aesm11588919plb.22.2023.08.09.12.43.12
+        by smtp.gmail.com with ESMTPSA id l19-20020a170902eb1300b001b8953365aesm11588919plb.22.2023.08.09.12.43.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 12:43:13 -0700 (PDT)
+        Wed, 09 Aug 2023 12:43:11 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 3/3] io_uring/io-wq: don't gate worker wake up success on wake_up_process()
-Date:   Wed,  9 Aug 2023 13:43:06 -0600
-Message-Id: <20230809194306.170979-4-axboe@kernel.dk>
+Subject: [PATCH 1/3] io_uring/io-wq: don't grab wq->lock for worker activation
+Date:   Wed,  9 Aug 2023 13:43:04 -0600
+Message-Id: <20230809194306.170979-2-axboe@kernel.dk>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230809194306.170979-1-axboe@kernel.dk>
 References: <20230809194306.170979-1-axboe@kernel.dk>
@@ -64,44 +64,33 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-All we really care about is finding a free worker. If said worker is
-already running, it's either starting new work already or it's just
-finishing up existing work. For the latter, we'll be finding this work
-item next anyway, and for the former, if the worker does go to sleep,
-it'll create a new worker anyway as we have pending items.
-
-This reduces try_to_wake_up() overhead considerably:
-
-23.16%    -10.46%  [kernel.kallsyms]      [k] try_to_wake_up
+The worker free list is RCU protected, and checks for workers going away
+when iterating it. There's no need to hold the wq->lock around the
+lookup.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io-wq.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ io_uring/io-wq.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 18a049fc53ef..2da0b1ba6a56 100644
+index 399e9a15c38d..3e7025b9e0dd 100644
 --- a/io_uring/io-wq.c
 +++ b/io_uring/io-wq.c
-@@ -276,11 +276,14 @@ static bool io_wq_activate_free_worker(struct io_wq *wq,
- 			io_worker_release(worker);
- 			continue;
- 		}
--		if (wake_up_process(worker->task)) {
--			io_worker_release(worker);
--			return true;
--		}
-+		/*
-+		 * If the worker is already running, it's either already
-+		 * starting work or finishing work. In either case, if it does
-+		 * to go sleep, we'll kick off a new task for this work anyway.
-+		 */
-+		wake_up_process(worker->task);
- 		io_worker_release(worker);
-+		return true;
- 	}
+@@ -909,13 +909,10 @@ void io_wq_enqueue(struct io_wq *wq, struct io_wq_work *work)
+ 	clear_bit(IO_ACCT_STALLED_BIT, &acct->flags);
+ 	raw_spin_unlock(&acct->lock);
  
- 	return false;
+-	raw_spin_lock(&wq->lock);
+ 	rcu_read_lock();
+ 	do_create = !io_wq_activate_free_worker(wq, acct);
+ 	rcu_read_unlock();
+ 
+-	raw_spin_unlock(&wq->lock);
+-
+ 	if (do_create && ((work_flags & IO_WQ_WORK_CONCURRENT) ||
+ 	    !atomic_read(&acct->nr_running))) {
+ 		bool did_create;
 -- 
 2.40.1
 
