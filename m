@@ -2,95 +2,114 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EAB0EC001E0
-	for <io-uring@archiver.kernel.org>; Wed,  9 Aug 2023 19:43:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04D0AC001B0
+	for <io-uring@archiver.kernel.org>; Wed,  9 Aug 2023 22:08:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbjHITnQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 9 Aug 2023 15:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S229436AbjHIWIS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 9 Aug 2023 18:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjHITnN (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Aug 2023 15:43:13 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C232A10F3
-        for <io-uring@vger.kernel.org>; Wed,  9 Aug 2023 12:43:12 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6873f64a290so23863b3a.0
-        for <io-uring@vger.kernel.org>; Wed, 09 Aug 2023 12:43:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1691610192; x=1692214992;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IVHXPxLmxfd5CWTOTrBfmptnMeO3orQcJQg34vrpu6k=;
-        b=BuW8gzX2IVPME+eQoZrjHuxemw2dByucIImWWi4Y3OLhj8sePv4NAZUuFPXz9eCaWE
-         +rz8y04w77xwCj9vF9yCh7D5i7OlRg/xyBxSPUU4y13mnwVH0ST1Sfj8leMQZmXPaH3y
-         QboEvRQW+11++rtmgqMgF3Xaz6wjJZkafdAXp/V+yY8Mpxay2Ta2HwFDsJHw2wrKQLqA
-         b0RMU1tfkS448sXWfzxN72hDeH1MQ+sen0IuHNi3KW3cQP5NzthR/MfpwLFlPK8XZUG+
-         +ZFXSFsG+ext42TH59q5PYQGbFCHCMrE9sJ2GaMYC2w7jfR6nQmerI8FnVN4JJH+lGKC
-         x+WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691610192; x=1692214992;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IVHXPxLmxfd5CWTOTrBfmptnMeO3orQcJQg34vrpu6k=;
-        b=aXG+v1ioNEBL4RuQrXNmqz91eIDvAZohAne+2RNBGEqn6NR8trHdtP30bCIRTLhmKU
-         CkCRYDil/zxhm99eGv3DXKAgvT7NblEypse75u2s8fKkCLHlL/DSo9r4HIg36i/XBQFb
-         qb24LCtk0Z42uOEP7S1k/Ismgn7jW5tMXTNjPDsm5Hq5L/6tIHNRgndmAjWcOANPRDcn
-         VW1Lwh8CAs7gEiHAoYikVzT+OcVwh+ccsNfACgmbB0RGBjGN4XReaSrygNm7y8futZ95
-         n0xqyUOf8dRKJn6Syj4dOFUYkH4VGcPlWddJOshukXF1Ovh9wY2abDnfRFYOmRnBpUAu
-         +h1Q==
-X-Gm-Message-State: AOJu0YwxwCqrMnsMZiAdB/9zEDgjgbuK+IcD/9u7UHJMmsJxvhsQWv6W
-        GE7gv8LyDpFbHQyPQaAW1dlY3Q4D1v7/ojuTmiE=
-X-Google-Smtp-Source: AGHT+IH5S02ZwEgRA6kg7g+bXpoVaHnAlRHNbHivQ0GffdbvDPd7jnKL3Bsp0ocH/Z+YFCAvdjoRTw==
-X-Received: by 2002:a17:902:c952:b0:1b8:aded:524c with SMTP id i18-20020a170902c95200b001b8aded524cmr126993pla.1.1691610191800;
-        Wed, 09 Aug 2023 12:43:11 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id l19-20020a170902eb1300b001b8953365aesm11588919plb.22.2023.08.09.12.43.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 12:43:11 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/3] io_uring/io-wq: don't grab wq->lock for worker activation
-Date:   Wed,  9 Aug 2023 13:43:04 -0600
-Message-Id: <20230809194306.170979-2-axboe@kernel.dk>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230809194306.170979-1-axboe@kernel.dk>
-References: <20230809194306.170979-1-axboe@kernel.dk>
+        with ESMTP id S229782AbjHIWIS (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 9 Aug 2023 18:08:18 -0400
+X-Greylist: delayed 330 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Aug 2023 15:08:17 PDT
+Received: from out-110.mta1.migadu.com (out-110.mta1.migadu.com [95.215.58.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F33D10C0
+        for <io-uring@vger.kernel.org>; Wed,  9 Aug 2023 15:08:17 -0700 (PDT)
+Message-ID: <afd0c815-e32f-6b57-a72b-4bcd46b78136@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1691618564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=qMJv6ufpqtknR1yGk38bAZzuEUJ6prfve1gllA06oPM=;
+        b=T2KggH/EwPTITIwBwhHFSVHu4zjoW1l0wILdp1Zu6fK4jEvQccACra3z4KxIbDv3+Ow2Dh
+        IMKV7G5YVbJvmBBCsVFiIRdzD/qGLH8oB/+x/i2fVsfKZ4fMzFbR2BJM7b2vU0Tb/iDjZM
+        dyAfTOoZhxSCpuHuipwPY+XSm1MKepk=
+Date:   Wed, 9 Aug 2023 15:02:31 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 8/8] io_uring/cmd: BPF hook for setsockopt cmd
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
+        pabeni@redhat.com, sdf@google.com, axboe@kernel.dk,
+        asml.silence@gmail.com, willemdebruijn.kernel@gmail.com
+References: <20230808134049.1407498-1-leitao@debian.org>
+ <20230808134049.1407498-9-leitao@debian.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230808134049.1407498-9-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-The worker free list is RCU protected, and checks for workers going away
-when iterating it. There's no need to hold the wq->lock around the
-lookup.
+On 8/8/23 6:40 AM, Breno Leitao wrote:
+> Add support for BPF hooks for io_uring setsockopts command.
+> 
+> This implementation follows a similar approach to what
+> __sys_setsockopt() does, but, operates only on kernel memory instead of
+> user memory (which is also possible, but not preferred since the kernel
+> memory is already available)
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>   io_uring/uring_cmd.c | 23 +++++++++++++++++++++--
+>   1 file changed, 21 insertions(+), 2 deletions(-)
+> 
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 3693e5779229..b7b27e4dbddd 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -205,23 +205,42 @@ static inline int io_uring_cmd_setsockopt(struct socket *sock,
+>   {
+>   	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
+>   	int optname = READ_ONCE(cmd->sqe->optname);
+> +	sockptr_t optval_s = USER_SOCKPTR(optval);
+>   	int optlen = READ_ONCE(cmd->sqe->optlen);
+>   	int level = READ_ONCE(cmd->sqe->level);
+> +	char *kernel_optval = NULL;
+>   	int err;
+>   
+>   	err = security_socket_setsockopt(sock, level, optname);
+>   	if (err)
+>   		return err;
+>   
+> +	if (!in_compat_syscall()) {
+> +		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level,
+> +						     &optname,
+> +						     USER_SOCKPTR(optval),
+> +						     &optlen,
+> +						     &kernel_optval);
+> +		if (err < 0)
+> +			return err;
+> +		if (err > 0)
+> +			return 0;
+> +
+> +		/* Replace optval by the one returned by BPF */
+> +		if (kernel_optval)
+> +			optval_s = KERNEL_SOCKPTR(kernel_optval);
+> +	}
+> +
+>   	if (level == SOL_SOCKET && !sock_use_custom_sol_socket(sock))
+>   		err = sock_setsockopt(sock, level, optname,
+> -				      USER_SOCKPTR(optval), optlen);
+> +				      optval_s, optlen);
+>   	else if (unlikely(!sock->ops->setsockopt))
+>   		err = -EOPNOTSUPP;
+>   	else
+>   		err = sock->ops->setsockopt(sock, level, optname,
+> -					    USER_SOCKPTR(koptval), optlen);
+> +					    optval_s, optlen);
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/io-wq.c | 3 ---
- 1 file changed, 3 deletions(-)
+The bpf side changes make sense. Thanks.
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 399e9a15c38d..3e7025b9e0dd 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -909,13 +909,10 @@ void io_wq_enqueue(struct io_wq *wq, struct io_wq_work *work)
- 	clear_bit(IO_ACCT_STALLED_BIT, &acct->flags);
- 	raw_spin_unlock(&acct->lock);
- 
--	raw_spin_lock(&wq->lock);
- 	rcu_read_lock();
- 	do_create = !io_wq_activate_free_worker(wq, acct);
- 	rcu_read_unlock();
- 
--	raw_spin_unlock(&wq->lock);
--
- 	if (do_create && ((work_flags & IO_WQ_WORK_CONCURRENT) ||
- 	    !atomic_read(&acct->nr_running))) {
- 		bool did_create;
--- 
-2.40.1
+With all the bpf pieces in place, __sys_{get,set}sockopt() is looking very 
+similar to io_uring_cmd_{get,set}sockopt(). There are small differences like one 
+takes fd and another already has a sock ptr, and io_uring_cmd_getsockopt() is 
+SOL_SOCKET only. In general, can they be refactored somehow such that future 
+changes don't have to be made in multiple places?
 
