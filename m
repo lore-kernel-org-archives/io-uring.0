@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7899C41513
-	for <io-uring@archiver.kernel.org>; Fri, 11 Aug 2023 12:55:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 919A1C001DB
+	for <io-uring@archiver.kernel.org>; Fri, 11 Aug 2023 12:55:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjHKMzP (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 11 Aug 2023 08:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
+        id S233952AbjHKMzQ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 11 Aug 2023 08:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233952AbjHKMzO (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 11 Aug 2023 08:55:14 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04A126A0
-        for <io-uring@vger.kernel.org>; Fri, 11 Aug 2023 05:55:13 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99bdcade7fbso268288766b.1
-        for <io-uring@vger.kernel.org>; Fri, 11 Aug 2023 05:55:13 -0700 (PDT)
+        with ESMTP id S235248AbjHKMzP (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 11 Aug 2023 08:55:15 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A1C115
+        for <io-uring@vger.kernel.org>; Fri, 11 Aug 2023 05:55:15 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b962c226ceso31223191fa.3
+        for <io-uring@vger.kernel.org>; Fri, 11 Aug 2023 05:55:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691758512; x=1692363312;
+        d=gmail.com; s=20221208; t=1691758513; x=1692363313;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=93K4NPI31nusFtmR4h3522J9OQwMlEfdCozpShx5wv0=;
-        b=VVKyMkrRHSYe1wYEvaxFOyn6lpv9HT3enjhuKVnvXkQZzpoGa+kf/pO555m0d6JIRu
-         k0lV9w/VpuVZ3FcA0kWbk3WVv/gcaLtnfSKVG5kaaJVdwu4ygpphDRSth51Ct1jtwMLy
-         VHHBE7F7jAxZuf6sHmEeRxZ16yv6vKGJELeCoC2jmpizxP3AAVwQjLGzZ5QuOvcgSeSA
-         CCMhUWsXfw1DMB10mTB7uYJjYjjM0Elflfqq32JrPzdzuBhv/xUnyoa86fzFEbc9L7GV
-         /etLbYXoM2p3ZEhJAAHDAouSszSXlk+RqvGkEoCQOsXtC3Ndg6n9su0ZojRS3cl/YVvI
-         +ftQ==
+        bh=jEqAyf8Y7JpC7PfPYXoIYZ/kuhGCFcsqdd0va/xWKGo=;
+        b=HZMEQ+EKsFOUJNxzC+oivr0YjH219E1R9AIr8FKq8ofypyJCpdW28vGa9iO7vZA3gh
+         yq5OUSoR62Bt2UWuvtp5MtyPIYgY9rkVI4nuSy6KSKKuSBPk1gA5DN0xHsLBxlR6I190
+         xC0w4JRqhvknD1lcAODIN6ZE7Zy+dvITCRMq0wgeXsulSK/XGbKU7/kPOML5Cs4tLMG8
+         SBycxIOENu9MQT9s12ufjTw9cD7dlh6cfjgiJms5ZK3icJoBkeQYHimDxpgi5OIvXNCT
+         8cPNvaFKzuhiHuDaNF7MntCsaSYmNE+2LCU6zc0avkCiuRka7VNToJaeXU+3/8SXwMKE
+         ksOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691758512; x=1692363312;
+        d=1e100.net; s=20221208; t=1691758513; x=1692363313;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=93K4NPI31nusFtmR4h3522J9OQwMlEfdCozpShx5wv0=;
-        b=eb8pHPSI9jhocx1aYmQuadR32wz8zmjuBVOwZUcb6vXmkvm/BWLw5nO+c1OOGUAvNn
-         4XUqMnEgkHLy7NB0bFi3e77AFx0nO6HpsOIkTYhdtVzFkxolRvd9L1yG8IxdJtU7scIt
-         gNUxBO+HBkE/J+fJkV4k1/diKa8Zjpx9MbayyKOeK5/+DMm8AnK4Ghu2cds8ocXvvo6e
-         AoVaUPzvFTEHMHxBs0Max/3ZezS+pvcH1y3/sOK7tpj/cBWY7B+kTlY8qKYKXMWybdG0
-         tMvR8mR1VxvhaV/yKPKsWUHsPF+s4H90YvLr7B758dXr24Oc1+XjhkF00JC6y2A4KZVK
-         U/+w==
-X-Gm-Message-State: AOJu0Yz/rL8u2wc5whqDRgd4qCkDX0KnGlhQkQZg/JZ9QAY0ln0J2q3J
-        4USD8qbLXjHjCko3SAZA/ykB/gVa2Po=
-X-Google-Smtp-Source: AGHT+IFcA0t4lPMJM6ctIuBsNBsyX4bxgp+Q027iqZEPVqGyVMhQkS99+nyMdU2ypH/MKtJRp1rK/A==
-X-Received: by 2002:a17:906:3112:b0:99c:ca27:c447 with SMTP id 18-20020a170906311200b0099cca27c447mr1493421ejx.43.1691758512027;
+        bh=jEqAyf8Y7JpC7PfPYXoIYZ/kuhGCFcsqdd0va/xWKGo=;
+        b=j0kGNxmlY7EC+hnIkikGuZz5bzYst6Ig3VqtNCkmvXGpG9IcafZKxW6Oszgub68qll
+         ePZ+Cm5WSjzHsY2Df21XuQgKqMcuLLucUXz0DjwqDF7M+xAgE+lgx6Z9QIwqU+S+huNy
+         vbSoMNMTW8iSTOk4s9xLNBjYvZGvuWfJ+HUpPD5W64mUzgrwfQhrZrzFXlXvkWDwq1qf
+         niqgZWUxo4hHpgMLyBX6mLSv9dVDV+gj/12cMLwFozw4a1yxQX/LlNLWTmByg3PjKJY1
+         8L5EdLIDEF3AWAYB2TaPL7YMeKvgdRDeCczmN4dY1BZ8GK7RtNk4d+JZUEurn//A6xa+
+         pJwA==
+X-Gm-Message-State: AOJu0Yy5ttLs8vcvPkp6rtn7l3HQ2oWeeZKG1Te4v/qHjiORQfXLSJ64
+        TincZGLMOU60P+MM1hmLh1M5T4EzUik=
+X-Google-Smtp-Source: AGHT+IE5iZj29cY2rtCzaDO1udS3/Ur9Af7ssVsNyJmQSD/heauKKoCS3AP+IKTa6O680bXoTqS+TQ==
+X-Received: by 2002:a05:651c:1028:b0:2b9:44c5:ac15 with SMTP id w8-20020a05651c102800b002b944c5ac15mr1599889ljm.41.1691758512959;
         Fri, 11 Aug 2023 05:55:12 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::2:a57e])
-        by smtp.gmail.com with ESMTPSA id kk9-20020a170907766900b0099cc36c4681sm2206943ejc.157.2023.08.11.05.55.11
+        by smtp.gmail.com with ESMTPSA id kk9-20020a170907766900b0099cc36c4681sm2206943ejc.157.2023.08.11.05.55.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 05:55:11 -0700 (PDT)
+        Fri, 11 Aug 2023 05:55:12 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH 2/7] io_uring/net: don't overflow multishot recv
-Date:   Fri, 11 Aug 2023 13:53:42 +0100
-Message-ID: <0b295634e8f1b71aa764c984608c22d85f88f75c.1691757663.git.asml.silence@gmail.com>
+Subject: [PATCH 4/7] io_uring: remove return from io_req_cqe_overflow()
+Date:   Fri, 11 Aug 2023 13:53:44 +0100
+Message-ID: <8f2029ad0c22f73451664172d834372608ee0a77.1691757663.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <cover.1691757663.git.asml.silence@gmail.com>
 References: <cover.1691757663.git.asml.silence@gmail.com>
@@ -64,29 +64,51 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Don't allow overflowing multishot recv CQEs, it might get out of
-hand, hurt performanece, and in the worst case scenario OOM the task.
+Nobody checks io_req_cqe_overflow()'s return, make it return void.
 
-Cc: stable@vger.kernel.org
-Fixes: b3fdea6ecb55c ("io_uring: multishot recv")
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/net.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ io_uring/io_uring.c | 8 ++++----
+ io_uring/io_uring.h | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 1599493544a5..8c419c01a5db 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -642,7 +642,7 @@ static inline bool io_recv_finish(struct io_kiocb *req, int *ret,
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index e969b4ca1c47..7595658a5073 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -813,15 +813,15 @@ static bool io_cqring_event_overflow(struct io_ring_ctx *ctx, u64 user_data,
+ 	return true;
+ }
  
- 	if (!mshot_finished) {
- 		if (io_aux_cqe(req, issue_flags & IO_URING_F_COMPLETE_DEFER,
--			       *ret, cflags | IORING_CQE_F_MORE, true)) {
-+			       *ret, cflags | IORING_CQE_F_MORE, false)) {
- 			io_recv_prep_retry(req);
- 			/* Known not-empty or unknown state, retry */
- 			if (cflags & IORING_CQE_F_SOCK_NONEMPTY ||
+-bool io_req_cqe_overflow(struct io_kiocb *req)
++void io_req_cqe_overflow(struct io_kiocb *req)
+ {
+ 	if (!(req->flags & REQ_F_CQE32_INIT)) {
+ 		req->extra1 = 0;
+ 		req->extra2 = 0;
+ 	}
+-	return io_cqring_event_overflow(req->ctx, req->cqe.user_data,
+-					req->cqe.res, req->cqe.flags,
+-					req->extra1, req->extra2);
++	io_cqring_event_overflow(req->ctx, req->cqe.user_data,
++				req->cqe.res, req->cqe.flags,
++				req->extra1, req->extra2);
+ }
+ 
+ /*
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 3aa208fbe905..3dc0b6fb0ef7 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -39,7 +39,7 @@ enum {
+ };
+ 
+ struct io_uring_cqe *__io_get_cqe(struct io_ring_ctx *ctx, bool overflow);
+-bool io_req_cqe_overflow(struct io_kiocb *req);
++void io_req_cqe_overflow(struct io_kiocb *req);
+ int io_run_task_work_sig(struct io_ring_ctx *ctx);
+ void io_req_defer_failed(struct io_kiocb *req, s32 res);
+ void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags);
 -- 
 2.41.0
 
