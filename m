@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81F0BC04A6A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A524FC001DB
 	for <io-uring@archiver.kernel.org>; Tue, 15 Aug 2023 03:32:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234460AbjHODcU (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 14 Aug 2023 23:32:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S234457AbjHODcX (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 14 Aug 2023 23:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbjHOD3n (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 23:29:43 -0400
+        with ESMTP id S234458AbjHOD3p (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 23:29:45 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB5B1FEB
-        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 20:26:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7D41FED
+        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 20:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=uE1o3xYTfNoT/OXe1q8MbroOJ3TtLR0fpcc8smSdFiQ=; b=vFZnTKXSmWpfKeIh2BcvGDa7T3
-        HsNqT/kyBENsHsnvkcr+2U5F4CV6/WHN4UBv9jaDxFO7aaTEbBqJnkXv8nLS9xR/wQf1L2jpaS3/8
-        bz6mdqZ6LwPyTRb8PyuYWf/EOkpnsd3AFC0iaq9T9t23WbjukvSDJACX/xrjl3CnP1sgIfzl7hkVe
-        J4deXtWhnatjTXkkMLTrxZg5ZHHanaI8y9PNwt142O/LmcypHAHfrDRH2ADYu2OErqmm6Md1++gXP
-        bL13ExJQlZs1MWyz5PcNN3ggmfVNs4fw56j+MynJKpFh/3wte4odcC3GpWQBdFrbHhlXGH75gK6mH
-        pCwRfLaw==;
+        bh=f59aeb0mmdHQJI1C4RwzY3Ldg6y1fWJH+3t+QmXVWA0=; b=JGbswiDJ34dDq4gaBq7kG58sIS
+        ZFsx9XleJZknvuEtpNq42FfDPlnHuX6TJKg+qKrB9bPr27v53sWti/JJY3r4PKJ0bZg6XW2eRIQ+Q
+        Mdz3lE5/xT1YzPMl2rGLC45LWCh7CMhhqc4XE/Z0tkyAwARxFW4BlJJetWxK1o7XDA96tY9wgNqlt
+        fJC3fFpbLEm4XMYOsXG3w5i+3DeaIX45zQbQvlUVXb0qInhNW50xMQkZz72aFiy+C1WcUi+rJ9wvN
+        uWB4pyQ8mCy6Y5iofpd7VKM0IPNOwIYAaszCRZFEp3heABqH4/zWVq/nij67Ybt462ftX48Hf5zIX
+        RlDlHxrw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qVkhm-005qaT-8c; Tue, 15 Aug 2023 03:26:50 +0000
+        id 1qVkhm-005qaf-Rr; Tue, 15 Aug 2023 03:26:50 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 2/9] mm: Call the hugetlb destructor directly
-Date:   Tue, 15 Aug 2023 04:26:38 +0100
-Message-Id: <20230815032645.1393700-3-willy@infradead.org>
+Subject: [PATCH 8/9] mm: Rearrange page flags
+Date:   Tue, 15 Aug 2023 04:26:44 +0100
+Message-Id: <20230815032645.1393700-9-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230815032645.1393700-1-willy@infradead.org>
 References: <20230815032645.1393700-1-willy@infradead.org>
@@ -43,192 +43,76 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Indirect calls are expensive, thanks to Spectre.  Convert this one to
-a direct call, and pass a folio instead of the head page to save a few
-more instructions.
+Move PG_writeback into bottom byte so that it can use PG_waiters in a
+later patch.  Move PG_head into bottom byte as well to match with where
+'order' is moving next.  PG_active and PG_workingset move into the second
+byte to make room for them.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/hugetlb.h |  3 ++-
- include/linux/mm.h      |  6 +-----
- mm/hugetlb.c            | 26 ++++++++++++--------------
- mm/page_alloc.c         |  8 +++++---
- 4 files changed, 20 insertions(+), 23 deletions(-)
+ include/linux/page-flags.h | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 0a393bc02f25..9555859537a3 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -26,6 +26,8 @@ typedef struct { unsigned long pd; } hugepd_t;
- #define __hugepd(x) ((hugepd_t) { (x) })
- #endif
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index aabf50dc71a3..6a0dd94b2460 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -99,13 +99,15 @@
+  */
+ enum pageflags {
+ 	PG_locked,		/* Page is locked. Don't touch. */
++	PG_writeback,		/* Page is under writeback */
+ 	PG_referenced,
+ 	PG_uptodate,
+ 	PG_dirty,
+ 	PG_lru,
++	PG_head,		/* Must be in bit 6 */
++	PG_waiters,		/* Page has waiters, check its waitqueue. Must be bit #7 and in the same byte as "PG_locked" */
+ 	PG_active,
+ 	PG_workingset,
+-	PG_waiters,		/* Page has waiters, check its waitqueue. Must be bit #7 and in the same byte as "PG_locked" */
+ 	PG_error,
+ 	PG_slab,
+ 	PG_owner_priv_1,	/* Owner use. If pagecache, fs may use*/
+@@ -113,8 +115,6 @@ enum pageflags {
+ 	PG_reserved,
+ 	PG_private,		/* If pagecache, has fs-private data */
+ 	PG_private_2,		/* If pagecache, has fs aux data */
+-	PG_writeback,		/* Page is under writeback */
+-	PG_head,		/* A head page */
+ 	PG_mappedtodisk,	/* Has blocks allocated on-disk */
+ 	PG_reclaim,		/* To be reclaimed asap */
+ 	PG_swapbacked,		/* Page is backed by RAM/swap */
+@@ -171,21 +171,19 @@ enum pageflags {
+ 	/* Remapped by swiotlb-xen. */
+ 	PG_xen_remapped = PG_owner_priv_1,
  
-+void free_huge_page(struct folio *folio);
-+
- #ifdef CONFIG_HUGETLB_PAGE
- 
- #include <linux/mempolicy.h>
-@@ -165,7 +167,6 @@ int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
- 				bool *migratable_cleared);
- void folio_putback_active_hugetlb(struct folio *folio);
- void move_hugetlb_state(struct folio *old_folio, struct folio *new_folio, int reason);
--void free_huge_page(struct page *page);
- void hugetlb_fix_reserve_counts(struct inode *inode);
- extern struct mutex *hugetlb_fault_mutex_table;
- u32 hugetlb_fault_mutex_hash(struct address_space *mapping, pgoff_t idx);
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 19493d6a2bb8..7fb529dbff31 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1278,13 +1278,9 @@ typedef void compound_page_dtor(struct page *);
- enum compound_dtor_id {
- 	NULL_COMPOUND_DTOR,
- 	COMPOUND_PAGE_DTOR,
--#ifdef CONFIG_HUGETLB_PAGE
- 	HUGETLB_PAGE_DTOR,
--#endif
--#ifdef CONFIG_TRANSPARENT_HUGEPAGE
- 	TRANSHUGE_PAGE_DTOR,
--#endif
--	NR_COMPOUND_DTORS,
-+	NR_COMPOUND_DTORS
- };
- 
- static inline void folio_set_compound_dtor(struct folio *folio,
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e327a5a7602c..bc340f5dbbd4 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -1875,13 +1875,12 @@ struct hstate *size_to_hstate(unsigned long size)
- 	return NULL;
- }
- 
--void free_huge_page(struct page *page)
-+void free_huge_page(struct folio *folio)
- {
+-#ifdef CONFIG_MEMORY_FAILURE
  	/*
- 	 * Can't pass hstate in here because it is called from the
- 	 * compound page destructor.
+-	 * Compound pages. Stored in first tail page's flags.
+-	 * Indicates that at least one subpage is hwpoisoned in the
+-	 * THP.
++	 * Flags only valid for compound pages.  Stored in first tail page's
++	 * flags word.
  	 */
--	struct folio *folio = page_folio(page);
- 	struct hstate *h = folio_hstate(folio);
- 	int nid = folio_nid(folio);
- 	struct hugepage_subpool *spool = hugetlb_folio_subpool(folio);
-@@ -1936,7 +1935,7 @@ void free_huge_page(struct page *page)
- 		spin_unlock_irqrestore(&hugetlb_lock, flags);
- 		update_and_free_hugetlb_folio(h, folio, true);
- 	} else {
--		arch_clear_hugepage_flags(page);
-+		arch_clear_hugepage_flags(&folio->page);
- 		enqueue_hugetlb_folio(h, folio);
- 		spin_unlock_irqrestore(&hugetlb_lock, flags);
- 	}
-@@ -2246,7 +2245,7 @@ static int alloc_pool_huge_page(struct hstate *h, nodemask_t *nodes_allowed,
- 		folio = alloc_fresh_hugetlb_folio(h, gfp_mask, node,
- 					nodes_allowed, node_alloc_noretry);
- 		if (folio) {
--			free_huge_page(&folio->page); /* free it into the hugepage allocator */
-+			free_huge_page(folio); /* free it into the hugepage allocator */
- 			return 1;
- 		}
- 	}
-@@ -2435,7 +2434,7 @@ static struct folio *alloc_surplus_hugetlb_folio(struct hstate *h,
- 	if (h->surplus_huge_pages >= h->nr_overcommit_huge_pages) {
- 		folio_set_hugetlb_temporary(folio);
- 		spin_unlock_irq(&hugetlb_lock);
--		free_huge_page(&folio->page);
-+		free_huge_page(folio);
- 		return NULL;
- 	}
- 
-@@ -2547,8 +2546,7 @@ static int gather_surplus_pages(struct hstate *h, long delta)
- 	__must_hold(&hugetlb_lock)
- {
- 	LIST_HEAD(surplus_list);
--	struct folio *folio;
--	struct page *page, *tmp;
-+	struct folio *folio, *tmp;
- 	int ret;
- 	long i;
- 	long needed, allocated;
-@@ -2608,11 +2606,11 @@ static int gather_surplus_pages(struct hstate *h, long delta)
- 	ret = 0;
- 
- 	/* Free the needed pages to the hugetlb pool */
--	list_for_each_entry_safe(page, tmp, &surplus_list, lru) {
-+	list_for_each_entry_safe(folio, tmp, &surplus_list, lru) {
- 		if ((--needed) < 0)
- 			break;
- 		/* Add the page to the hugetlb allocator */
--		enqueue_hugetlb_folio(h, page_folio(page));
-+		enqueue_hugetlb_folio(h, folio);
- 	}
- free:
- 	spin_unlock_irq(&hugetlb_lock);
-@@ -2621,8 +2619,8 @@ static int gather_surplus_pages(struct hstate *h, long delta)
- 	 * Free unnecessary surplus pages to the buddy allocator.
- 	 * Pages have no ref count, call free_huge_page directly.
- 	 */
--	list_for_each_entry_safe(page, tmp, &surplus_list, lru)
--		free_huge_page(page);
-+	list_for_each_entry_safe(folio, tmp, &surplus_list, lru)
-+		free_huge_page(folio);
- 	spin_lock_irq(&hugetlb_lock);
- 
- 	return ret;
-@@ -3232,7 +3230,7 @@ static void __init gather_bootmem_prealloc(void)
- 		if (prep_compound_gigantic_folio(folio, huge_page_order(h))) {
- 			WARN_ON(folio_test_reserved(folio));
- 			prep_new_hugetlb_folio(h, folio, folio_nid(folio));
--			free_huge_page(page); /* add to the hugepage allocator */
-+			free_huge_page(folio); /* add to the hugepage allocator */
- 		} else {
- 			/* VERY unlikely inflated ref count on a tail page */
- 			free_gigantic_folio(folio, huge_page_order(h));
-@@ -3264,7 +3262,7 @@ static void __init hugetlb_hstate_alloc_pages_onenode(struct hstate *h, int nid)
- 					&node_states[N_MEMORY], NULL);
- 			if (!folio)
- 				break;
--			free_huge_page(&folio->page); /* free it into the hugepage allocator */
-+			free_huge_page(folio); /* free it into the hugepage allocator */
- 		}
- 		cond_resched();
- 	}
-@@ -3658,7 +3656,7 @@ static int demote_free_hugetlb_folio(struct hstate *h, struct folio *folio)
- 			prep_compound_page(subpage, target_hstate->order);
- 		folio_change_private(inner_folio, NULL);
- 		prep_new_hugetlb_folio(target_hstate, inner_folio, nid);
--		free_huge_page(subpage);
-+		free_huge_page(inner_folio);
- 	}
- 	mutex_unlock(&target_hstate->resize_lock);
- 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 8fe9ff917850..1f67d4968590 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -287,9 +287,6 @@ const char * const migratetype_names[MIGRATE_TYPES] = {
- static compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
- 	[NULL_COMPOUND_DTOR] = NULL,
- 	[COMPOUND_PAGE_DTOR] = free_compound_page,
--#ifdef CONFIG_HUGETLB_PAGE
--	[HUGETLB_PAGE_DTOR] = free_huge_page,
+-	PG_has_hwpoisoned = PG_error,
 -#endif
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
- 	[TRANSHUGE_PAGE_DTOR] = free_transhuge_page,
- #endif
-@@ -622,6 +619,11 @@ void destroy_large_folio(struct folio *folio)
- {
- 	enum compound_dtor_id dtor = folio->_folio_dtor;
+-
+-	/* Is a hugetlb page.  Stored in first tail page. */
+-	PG_hugetlb = PG_writeback,
  
-+	if (folio_test_hugetlb(folio)) {
-+		free_huge_page(folio);
-+		return;
-+	}
+-	/* Has a deferred list (may be empty).  First tail page. */
++	/* At least one page is hwpoisoned in the folio.  */
++	PG_has_hwpoisoned = PG_error,
++	/* Belongs to hugetlb */
++	PG_hugetlb = PG_active,
++	/* Has a deferred list (does not indicate whether it is active) */
+ 	PG_deferred_list = PG_reclaim,
+ 
 +
- 	VM_BUG_ON_FOLIO(dtor >= NR_COMPOUND_DTORS, folio);
- 	compound_page_dtors[dtor](&folio->page);
- }
+ 	/* non-lru isolated movable page */
+ 	PG_isolated = PG_reclaim,
+ 
 -- 
 2.40.1
 
