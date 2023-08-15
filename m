@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BE71C001DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DDDFC04E69
 	for <io-uring@archiver.kernel.org>; Tue, 15 Aug 2023 03:32:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234229AbjHODbr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 14 Aug 2023 23:31:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
+        id S234313AbjHODbt (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 14 Aug 2023 23:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234355AbjHOD3m (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 23:29:42 -0400
+        with ESMTP id S234446AbjHOD3n (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 23:29:43 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D945119B3
-        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 20:26:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1991FEC
+        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 20:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=6nmvblvWXlPo+vgOoHsa5fU8BOXGI6xh6C5MkcfJnu8=; b=uE35NeTccLrzc2mwOmGSkD+XiV
-        ESkGD0Ap1IZcCKQLYz2mTohMvFcEgsxpgxjLqQijm+MiUs6O6t7Dz++YKZkO3zCN7DTLYymhVBzlX
-        la2f/xf12C6Qt9sP+kQfLCltasZurSSVUNT1xG5G5F2UoOvFnT+r6oLLZWJLecXHqObYfP/Kvof4C
-        3zs5KJ8MNCBF5v71mHMxn6VsbQ6yXBdnz0qlhhTTrszc51EGcix058lyUYtVmuJbPpafczORHF1Eq
-        wqVEcqU6W7SzXOix8V82PlEbXhBLU2HLDZfMotkCC4B/GPpb3cRUm35GNx2nkcu+xrfJ3KO68dPB9
-        s2EKOwhA==;
+        bh=9TGxu02Zdrue3buZphZr1o0ZlYN5TBIdyw14ApHva+w=; b=XGGquuzkKlPlaPg5Kj620RMtNL
+        wJlRYlv2SOYquRt/UO44pwc0Kxd+sofv+wwr+9IY2kWMhuMuQjkOOnOs3mIHfU1zlzJDNWC/U7k9g
+        gFLBcqCXKvz/SN3ggNZWOFB+FcA13nj6oogxs6K7R97+MWgJixPSB3EpF4PyGnu6RPZHEyAeKk6/7
+        Qg4Pcq+yJE+xsb3RLlA4qQrL0SS6kFwjlqx+xj8bFps/NhfGtdnUx9cOAxrbQM/s02adcHyoS+v6i
+        vQ7PmanJpRAdAVFHN/x8eHflCkJLeBZETAceSujqZDGcsDaa4tFMSkdUf6GChrorsPCS4bDn8pBQm
+        gFYqTYuw==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qVkhm-005qaV-Bq; Tue, 15 Aug 2023 03:26:50 +0000
+        id 1qVkhm-005qaZ-I5; Tue, 15 Aug 2023 03:26:50 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 3/9] mm: Call free_transhuge_folio() directly from destroy_large_folio()
-Date:   Tue, 15 Aug 2023 04:26:39 +0100
-Message-Id: <20230815032645.1393700-4-willy@infradead.org>
+Subject: [PATCH 5/9] mm: Remove free_compound_page()
+Date:   Tue, 15 Aug 2023 04:26:41 +0100
+Message-Id: <20230815032645.1393700-6-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230815032645.1393700-1-willy@infradead.org>
 References: <20230815032645.1393700-1-willy@infradead.org>
@@ -43,79 +43,40 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Indirect calls are expensive, thanks to Spectre.  Convert this one to
-a direct call, and pass a folio instead of the head page for type safety.
+Inline it into its one caller.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/huge_mm.h | 2 +-
- mm/huge_memory.c        | 5 ++---
- mm/page_alloc.c         | 8 +++++---
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ mm/page_alloc.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-index 20284387b841..24aee49a581a 100644
---- a/include/linux/huge_mm.h
-+++ b/include/linux/huge_mm.h
-@@ -144,7 +144,7 @@ unsigned long thp_get_unmapped_area(struct file *filp, unsigned long addr,
- 		unsigned long len, unsigned long pgoff, unsigned long flags);
- 
- void prep_transhuge_page(struct page *page);
--void free_transhuge_page(struct page *page);
-+void free_transhuge_folio(struct folio *folio);
- 
- bool can_split_folio(struct folio *folio, int *pextra_pins);
- int split_huge_page_to_list(struct page *page, struct list_head *list);
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 8480728fa220..516fe3c26ef3 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2779,9 +2779,8 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
- 	return ret;
- }
- 
--void free_transhuge_page(struct page *page)
-+void free_transhuge_folio(struct folio *folio)
- {
--	struct folio *folio = (struct folio *)page;
- 	struct deferred_split *ds_queue = get_deferred_split_queue(folio);
- 	unsigned long flags;
- 
-@@ -2798,7 +2797,7 @@ void free_transhuge_page(struct page *page)
- 		}
- 		spin_unlock_irqrestore(&ds_queue->split_queue_lock, flags);
- 	}
--	free_compound_page(page);
-+	free_compound_page(&folio->page);
- }
- 
- void deferred_split_folio(struct folio *folio)
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 1f67d4968590..feb2e95cf021 100644
+index 804982faba4e..21af71aea6eb 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -287,9 +287,6 @@ const char * const migratetype_names[MIGRATE_TYPES] = {
- static compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
- 	[NULL_COMPOUND_DTOR] = NULL,
- 	[COMPOUND_PAGE_DTOR] = free_compound_page,
--#ifdef CONFIG_TRANSPARENT_HUGEPAGE
--	[TRANSHUGE_PAGE_DTOR] = free_transhuge_page,
--#endif
- };
+@@ -589,12 +589,6 @@ static inline void free_the_page(struct page *page, unsigned int order)
+  * This usage means that zero-order pages may not be compound.
+  */
  
- int min_free_kbytes = 1024;
-@@ -624,6 +621,11 @@ void destroy_large_folio(struct folio *folio)
- 		return;
- 	}
+-static void free_compound_page(struct folio *folio)
+-{
+-	mem_cgroup_uncharge(folio);
+-	free_the_page(&folio->page, folio_order(folio));
+-}
+-
+ void prep_compound_page(struct page *page, unsigned int order)
+ {
+ 	int i;
+@@ -618,7 +612,8 @@ void destroy_large_folio(struct folio *folio)
  
-+	if (folio_test_transhuge(folio) && dtor == TRANSHUGE_PAGE_DTOR) {
-+		free_transhuge_folio(folio);
-+		return;
-+	}
-+
- 	VM_BUG_ON_FOLIO(dtor >= NR_COMPOUND_DTORS, folio);
- 	compound_page_dtors[dtor](&folio->page);
+ 	if (folio_test_transhuge(folio) && dtor == TRANSHUGE_PAGE_DTOR)
+ 		free_transhuge_folio(folio);
+-	free_compound_page(folio);
++	mem_cgroup_uncharge(folio);
++	free_the_page(&folio->page, folio_order(folio));
  }
+ 
+ static inline void set_buddy_order(struct page *page, unsigned int order)
 -- 
 2.40.1
 
