@@ -2,114 +2,120 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F2A7C001E0
-	for <io-uring@archiver.kernel.org>; Tue, 15 Aug 2023 01:52:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BE71C001DB
+	for <io-uring@archiver.kernel.org>; Tue, 15 Aug 2023 03:32:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbjHOBvx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 14 Aug 2023 21:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
+        id S234229AbjHODbr (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 14 Aug 2023 23:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbjHOBvu (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 21:51:50 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA3B4BE
-        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 18:51:48 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6874a386ec7so984164b3a.1
-        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 18:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1692064308; x=1692669108;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gjJh1H6n4HDecJO/e4d6N0EBFkimFhhLQvDqvGPNpQQ=;
-        b=LLXTK5hD/cetcRfc0dOsWHwgmrWHc72x9/RLAd16QZjkeX4oOo8TS+pw7iSWaDkQJu
-         KOMKooP69Y/2WiI38vhm6o1bM1mGB6HXo/O9uSSCw46Dfy9kjMUcW4Cr0gMWbtwP/L73
-         O/Ju3kaDs2E/dd1a5SvTdqZBVH4HNqP2TnEVNCBgvEQdyEj0EuHP2RuNF6ETsSKWo311
-         9qNzLiUKXcCraYt5qd3/tmdqc9iuv2FdWizO2WZuz7184oIQZT/9Ws/d6aQv9WPbj0xS
-         LABSRhkRlevzyXRiiZCVpdzrTqgEdtr49PvNgHk0HRgR0ONjNr93V5qisFDcfz33w0Rz
-         CDJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692064308; x=1692669108;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjJh1H6n4HDecJO/e4d6N0EBFkimFhhLQvDqvGPNpQQ=;
-        b=awOW+JqSJoGGTuJoS+jIgHcqtjbB/KDx3MtlwRaJ0Bw6BcF/wdlk7kvEr7Tg3+ViDn
-         GLVVOlfihfb2Rv1OeARnQ1Sk1uvm/gxXKlIkxvYUjFJlu2rBKcQURVKFzk5pLFhi8+O3
-         Pbbjs0TIwaT/YJH4potklgpDBS+AD1YZPrcRf4TQfS/46IeR9DQ372Ae7CKRAX9QDetM
-         Ek0fnUPc+ckOfOaHpIZrAALQl0ASTK0ze3FmUuLNJdLGBw+nQeHTGm7zSJTOnG4lmBAi
-         iPy6f8KnmzLhEDSnzRt4mM5/ClWcz/SNBmk08lub+a2pAUvduYMyQmCBNylmIKXXBgLZ
-         3wLg==
-X-Gm-Message-State: AOJu0YxCE02n0iFWn43YE7OJao+Y1WlMfLF9jGL7FUp3FO/BIxIKi80F
-        WZotHnYm+xsMXtuMrcOYo8pQRA==
-X-Google-Smtp-Source: AGHT+IG4ucQC4hM9rpUVd+0XSHyHpYDeNAJaZPYaZazhXrh/yZcCvSw9jKvL2m+bXRt4Z4gD+FwQvA==
-X-Received: by 2002:a17:902:e54f:b0:1b3:d8ac:8db3 with SMTP id n15-20020a170902e54f00b001b3d8ac8db3mr13288794plf.6.1692064308278;
-        Mon, 14 Aug 2023 18:51:48 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id m11-20020a170902768b00b001bb750189desm10102601pll.255.2023.08.14.18.51.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 18:51:47 -0700 (PDT)
-Message-ID: <5a7738df-9a4c-47d1-beea-b2b50d5cef19@kernel.dk>
-Date:   Mon, 14 Aug 2023 19:51:46 -0600
+        with ESMTP id S234355AbjHOD3m (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 23:29:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D945119B3
+        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 20:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=6nmvblvWXlPo+vgOoHsa5fU8BOXGI6xh6C5MkcfJnu8=; b=uE35NeTccLrzc2mwOmGSkD+XiV
+        ESkGD0Ap1IZcCKQLYz2mTohMvFcEgsxpgxjLqQijm+MiUs6O6t7Dz++YKZkO3zCN7DTLYymhVBzlX
+        la2f/xf12C6Qt9sP+kQfLCltasZurSSVUNT1xG5G5F2UoOvFnT+r6oLLZWJLecXHqObYfP/Kvof4C
+        3zs5KJ8MNCBF5v71mHMxn6VsbQ6yXBdnz0qlhhTTrszc51EGcix058lyUYtVmuJbPpafczORHF1Eq
+        wqVEcqU6W7SzXOix8V82PlEbXhBLU2HLDZfMotkCC4B/GPpb3cRUm35GNx2nkcu+xrfJ3KO68dPB9
+        s2EKOwhA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qVkhm-005qaV-Bq; Tue, 15 Aug 2023 03:26:50 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH 3/9] mm: Call free_transhuge_folio() directly from destroy_large_folio()
+Date:   Tue, 15 Aug 2023 04:26:39 +0100
+Message-Id: <20230815032645.1393700-4-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230815032645.1393700-1-willy@infradead.org>
+References: <20230815032645.1393700-1-willy@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHSET v4] Add io_uring futex/futexv support
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     peterz@infradead.org, andres@anarazel.de
-References: <20230728164235.1318118-1-axboe@kernel.dk> <87jzugnjzy.ffs@tglx>
- <e136823c-b5c9-b6b3-a0e2-7e9cfda2b2d8@kernel.dk> <875y5rmyqi.ffs@tglx>
- <9153c0bf-405b-7c16-d26c-12608a02ee29@kernel.dk> <87y1idgo3j.ffs@tglx>
- <bda49491-4d7f-485f-b929-87a4bec6efaa@kernel.dk> <87v8dhgmhc.ffs@tglx>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <87v8dhgmhc.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 8/14/23 6:47 PM, Thomas Gleixner wrote:
-> On Mon, Aug 14 2023 at 18:18, Jens Axboe wrote:
->> On 8/14/23 6:12 PM, Thomas Gleixner wrote:
-> 
->>>> We're now resorting to name calling? Sorry, but I think that's pretty
->>>> low and not very professional.
->>>
->>> I'm not resorting to that. If you got offended by the meme which
->>> happened to elapse into my reply, then I can definitely understand
->>> that. That was not my intention at all. But you might think about why
->>> that meme exists in the first place.
->>
->> It's been there since day 1 because a) the spelling is close, and b)
->> some people are just childish. Same reason kids in the 3rd grade come up
->> with nicknames for each others. And that's fine, but most people grow
->> out of that, and it certainly has no place in what is supposedly a
->> professional setting.
-> 
-> Sure. Repeat that as often you want. I already made clear in my reply
-> that this was unintentional, no?
+Indirect calls are expensive, thanks to Spectre.  Convert this one to
+a direct call, and pass a folio instead of the head page for type safety.
 
-Wasn't clear to me, and your repeated undertones don't help either.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ include/linux/huge_mm.h | 2 +-
+ mm/huge_memory.c        | 5 ++---
+ mm/page_alloc.c         | 8 +++++---
+ 3 files changed, 8 insertions(+), 7 deletions(-)
 
-> Though the fact that this "rush the feature" ends up in my security
-> inbox more than justified has absolutely nothing to do with my
-> potentially childish and non-professionl attitude, right?
-
-I've already made it clear that nothing is being rushed, yet you keep
-harping on that. It was in my reply, again, though you gracefully
-ignored that, again.
-
-Have we had security issues? For sure, and more than I would've liked.
-By far most of that is for old kernels, not the current code base. We've
-made good progress getting that migrated back, and it's always top of
-the mind when developing new features. If you think I don't take this
-seriously, then you are ignorant, and suggesting otherwise is slander.
-And since it's apparently a big problem in your inbox, you will have
-undoubtedly also seen that we've always been handling these well and
-expediently.
-
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index 20284387b841..24aee49a581a 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -144,7 +144,7 @@ unsigned long thp_get_unmapped_area(struct file *filp, unsigned long addr,
+ 		unsigned long len, unsigned long pgoff, unsigned long flags);
+ 
+ void prep_transhuge_page(struct page *page);
+-void free_transhuge_page(struct page *page);
++void free_transhuge_folio(struct folio *folio);
+ 
+ bool can_split_folio(struct folio *folio, int *pextra_pins);
+ int split_huge_page_to_list(struct page *page, struct list_head *list);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 8480728fa220..516fe3c26ef3 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2779,9 +2779,8 @@ int split_huge_page_to_list(struct page *page, struct list_head *list)
+ 	return ret;
+ }
+ 
+-void free_transhuge_page(struct page *page)
++void free_transhuge_folio(struct folio *folio)
+ {
+-	struct folio *folio = (struct folio *)page;
+ 	struct deferred_split *ds_queue = get_deferred_split_queue(folio);
+ 	unsigned long flags;
+ 
+@@ -2798,7 +2797,7 @@ void free_transhuge_page(struct page *page)
+ 		}
+ 		spin_unlock_irqrestore(&ds_queue->split_queue_lock, flags);
+ 	}
+-	free_compound_page(page);
++	free_compound_page(&folio->page);
+ }
+ 
+ void deferred_split_folio(struct folio *folio)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 1f67d4968590..feb2e95cf021 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -287,9 +287,6 @@ const char * const migratetype_names[MIGRATE_TYPES] = {
+ static compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
+ 	[NULL_COMPOUND_DTOR] = NULL,
+ 	[COMPOUND_PAGE_DTOR] = free_compound_page,
+-#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+-	[TRANSHUGE_PAGE_DTOR] = free_transhuge_page,
+-#endif
+ };
+ 
+ int min_free_kbytes = 1024;
+@@ -624,6 +621,11 @@ void destroy_large_folio(struct folio *folio)
+ 		return;
+ 	}
+ 
++	if (folio_test_transhuge(folio) && dtor == TRANSHUGE_PAGE_DTOR) {
++		free_transhuge_folio(folio);
++		return;
++	}
++
+ 	VM_BUG_ON_FOLIO(dtor >= NR_COMPOUND_DTORS, folio);
+ 	compound_page_dtors[dtor](&folio->page);
+ }
 -- 
-Jens Axboe
+2.40.1
 
