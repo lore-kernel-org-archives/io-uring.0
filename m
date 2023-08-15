@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45C68C05052
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69C2AC07E8B
 	for <io-uring@archiver.kernel.org>; Tue, 15 Aug 2023 17:34:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238911AbjHORdh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 15 Aug 2023 13:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S238908AbjHORdg (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 15 Aug 2023 13:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238929AbjHORdX (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 15 Aug 2023 13:33:23 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7A210EC
-        for <io-uring@vger.kernel.org>; Tue, 15 Aug 2023 10:33:22 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99d6d5054bcso1075506366b.1
-        for <io-uring@vger.kernel.org>; Tue, 15 Aug 2023 10:33:22 -0700 (PDT)
+        with ESMTP id S238926AbjHORdW (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 15 Aug 2023 13:33:22 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BC01BDD
+        for <io-uring@vger.kernel.org>; Tue, 15 Aug 2023 10:33:21 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-99d6d5054bcso1075501966b.1
+        for <io-uring@vger.kernel.org>; Tue, 15 Aug 2023 10:33:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692120801; x=1692725601;
+        d=gmail.com; s=20221208; t=1692120800; x=1692725600;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m7df/JEGcQenNIMU2iBP11PVrs8ARCZ4IRK79yJbYn8=;
-        b=OntxgMfOab9T8cCKnXI6DNZ+JS2nHJLrw8qdT6tomvOxWciklAmZMbvjkRxr9fzAFs
-         y+JX9E3bc2qagb74TGT2pnTOAuTuIIo7lz0Wfno96teyWrzz5cedm6XXFeW0l26tZUhY
-         M3j4FUYE1/B5OTVR0L8EmapMs5di7CCbJy9ihMlJg6akq9gq90jj6zz8PE/H+SIV7vVb
-         eQT9f0muhy8NA4QWAlGPZiniUB9JaTETZepcL7HScfXjlHM2lgf5hLDZ7tchCiNPpLwf
-         ywVZZaL7WtvI6N4PbS4/sFCNEjuIZKqYZSu+mZjGI5ByNxaAHX9rAWwHUlN8XPjMOPyh
-         G7Gw==
+        bh=RiLtehMN9WT6sO8RFHE9JdGWLEysvvJYWKRAtymGPlA=;
+        b=o/YFJuAYY9V81CQ/5UVni8MUEQ7yeMXeCSihqeEwRdd9R/5ykqBwuu40YVHELDCk0g
+         nR2CqrcqAi0p6Wao/MnBkkkcWDHSUTmPhJZGbp/5EaEOtuEPcwIoNazJcdzzvxtAGCtv
+         4twox8HdsIyF5kgtZ+/3GF8DPcTxfFg0PJVmtPqf3isMyiaRSuAXouJO9Olv93q2+rpJ
+         Wcv+ePyNDRETP9wh6kUwNjb7axWbT83jdB8URFRhQezdbLgv5sA/L/oLPBHJOb+x0jO2
+         V5FG0CYA7DaekU2VVQL1VmNi9RRYlPXs+CT6OkkA8oBHo23RWfnoTkReGcaAvbfcra4H
+         +/iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692120801; x=1692725601;
+        d=1e100.net; s=20221208; t=1692120800; x=1692725600;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m7df/JEGcQenNIMU2iBP11PVrs8ARCZ4IRK79yJbYn8=;
-        b=A8BYoKJhX7q/QYykupsSWR8iTjfP0m+vuMCTlyOop8vwpKAM7zDZg6Lj7QcK/kFrqM
-         u8xZ57k52UGaIHcAsWXWR+2m2ZKUho0FpTgSbVkyZ867WDih9RKcBW30bcTXhtb9ZTdc
-         89R/bzKwzePyQt3dOjEKSG4/prZu8vxkW1pkGac2PPwfFJ2FoZEHvesbnfPV9DrpCzWU
-         IV8XZrPpc3S+K/M0ctRryi39ZivH/mzlk8HsAXgI1JEd+cATqsLePkzHhOyF1gkthEND
-         V7BsTTNnb2XlWkLgPFXF+KgWxoUa+H4ZUS/GmdWcF+RLfRkwAmk9EuaUX53XwUJVBeoO
-         1DOA==
-X-Gm-Message-State: AOJu0YwIVLOJzIN/M9kDNCxF1IR1eGdTRQvSSNN82Kt+HsH3FDVmZZio
-        aSqgjdKLHy7Snvlq5EVoD+kbst03qn4=
-X-Google-Smtp-Source: AGHT+IG+WjlTYocLVvigMd90N5ap6Qa6sJK3aTaWc6YGS+Z4ZCE5ZlTFAIKsrmCngV+mp2J9RTTF2g==
-X-Received: by 2002:a17:907:6e0d:b0:988:8efc:54fa with SMTP id sd13-20020a1709076e0d00b009888efc54famr2594795ejc.37.1692120801118;
-        Tue, 15 Aug 2023 10:33:21 -0700 (PDT)
+        bh=RiLtehMN9WT6sO8RFHE9JdGWLEysvvJYWKRAtymGPlA=;
+        b=VoxCjymwSgENeNavZibsQTDU8dvbR1JrxhvHtxd+uuf0AP1/HW9nhndqQUZY3jetMF
+         bkdy+UR+OLhMJqifJlhbp+zKuILdmK92sqie1m1f80ieht0CBIEBG5S9GUiqmx8UG5/B
+         oyW6ayDchU6+I5coBnEA9mwKyCUivgx9i8sIGaBimAdspjECyo/c4+cZYxstFqTSWAft
+         HeqmLYljjOHu2dW6cP2YZcwasDR7G/Vf6H7POsTTOC33PsAhIOrNdo76BqIWzCNV5aso
+         qhbok5BCbv41Nrozrfk9zDB/uqhjPMI04QCJsYkwG75Tl+JJtmL5WDgPQ2kaxMre7Dh5
+         ayLw==
+X-Gm-Message-State: AOJu0YzUa6kL9DDzNgdHQ/ygKwIETxuA4QPDIvPaVlPCo79emV4/wNjM
+        4V9N2F2qq+ArFvmAVK2uVn4Xltdg63M=
+X-Google-Smtp-Source: AGHT+IELz+jhyAzyNS7Y6zhqu8ogX+db2t0VUDByHfdRYuV+havxdiiWVlhPUZyJzz9gEWBwf23DMA==
+X-Received: by 2002:a17:907:928e:b0:99c:572:c0e4 with SMTP id bw14-20020a170907928e00b0099c0572c0e4mr2668642ejc.7.1692120799713;
+        Tue, 15 Aug 2023 10:33:19 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::2:6d35])
-        by smtp.gmail.com with ESMTPSA id kk9-20020a170907766900b0099cc36c4681sm7269878ejc.157.2023.08.15.10.33.20
+        by smtp.gmail.com with ESMTPSA id kk9-20020a170907766900b0099cc36c4681sm7269878ejc.157.2023.08.15.10.33.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 10:33:20 -0700 (PDT)
+        Tue, 15 Aug 2023 10:33:19 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH 10/16] io_uring: static_key for !IORING_SETUP_NO_SQARRAY
-Date:   Tue, 15 Aug 2023 18:31:39 +0100
-Message-ID: <9c166012c57091af1c23fdc33594e7197c43d66e.1692119257.git.asml.silence@gmail.com>
+Subject: [PATCH 08/16] io_uring: compact SQ/CQ heads/tails
+Date:   Tue, 15 Aug 2023 18:31:37 +0100
+Message-ID: <5e3fade0f17f0357684536d77bc75e0028f2b62e.1692119257.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <cover.1692119257.git.asml.silence@gmail.com>
 References: <cover.1692119257.git.asml.silence@gmail.com>
@@ -64,66 +64,34 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-At some point IORING_SETUP_NO_SQARRAY should become the default, so add
-a static_key to optimise out the chunk of io_get_sqe() dealing with
-sq_arrays.
+Queues heads and tails cache line aligned. That makes sq, cq taking 4
+lines or 5 lines if we include the rest of struct io_rings (e.g.
+sq_flags is frequently accessed).
+
+Since modern io_uring is mostly single threaded, it doesn't make much
+send to sread them as such, it wastes space and puts additional pressure
+on caches. Put them all into a single line.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ include/linux/io_uring_types.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index ac6d1687ba6c..c39606740c73 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -72,6 +72,7 @@
- #include <linux/io_uring.h>
- #include <linux/audit.h>
- #include <linux/security.h>
-+#include <linux/jump_label.h>
- #include <asm/shmparam.h>
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index c0c03d8059df..608a8e80e881 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -69,8 +69,8 @@ struct io_uring_task {
+ };
  
- #define CREATE_TRACE_POINTS
-@@ -148,6 +149,8 @@ static bool io_uring_try_cancel_requests(struct io_ring_ctx *ctx,
+ struct io_uring {
+-	u32 head ____cacheline_aligned_in_smp;
+-	u32 tail ____cacheline_aligned_in_smp;
++	u32 head;
++	u32 tail;
+ };
  
- static void io_queue_sqe(struct io_kiocb *req);
- 
-+static __read_mostly DEFINE_STATIC_KEY_FALSE(io_key_has_sqarray);
-+
- struct kmem_cache *req_cachep;
- 
- struct sock *io_uring_get_socket(struct file *file)
-@@ -2342,7 +2345,8 @@ static bool io_get_sqe(struct io_ring_ctx *ctx, const struct io_uring_sqe **sqe)
- 	unsigned mask = ctx->sq_entries - 1;
- 	unsigned head = ctx->cached_sq_head++ & mask;
- 
--	if (!(ctx->flags & IORING_SETUP_NO_SQARRAY)) {
-+	if (static_branch_unlikely(&io_key_has_sqarray) &&
-+	    (!(ctx->flags & IORING_SETUP_NO_SQARRAY))) {
- 		head = READ_ONCE(ctx->sq_array[head]);
- 		if (unlikely(head >= ctx->sq_entries)) {
- 			/* drop invalid entries */
-@@ -2871,6 +2875,9 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
- #endif
- 	WARN_ON_ONCE(!list_empty(&ctx->ltimeout_list));
- 
-+	if (!(ctx->flags & IORING_SETUP_NO_SQARRAY))
-+		static_branch_dec(&io_key_has_sqarray);
-+
- 	io_alloc_cache_free(&ctx->rsrc_node_cache, io_rsrc_node_cache_free);
- 	if (ctx->mm_account) {
- 		mmdrop(ctx->mm_account);
-@@ -3844,6 +3851,9 @@ static __cold int io_uring_create(unsigned entries, struct io_uring_params *p,
- 	if (!ctx)
- 		return -ENOMEM;
- 
-+	if (!(ctx->flags & IORING_SETUP_NO_SQARRAY))
-+		static_branch_inc(&io_key_has_sqarray);
-+
- 	if ((ctx->flags & IORING_SETUP_DEFER_TASKRUN) &&
- 	    !(ctx->flags & IORING_SETUP_IOPOLL) &&
- 	    !(ctx->flags & IORING_SETUP_SQPOLL))
+ /*
 -- 
 2.41.0
 
