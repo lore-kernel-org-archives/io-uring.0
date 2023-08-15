@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B94C6C04FDF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C933BC04E69
 	for <io-uring@archiver.kernel.org>; Tue, 15 Aug 2023 03:32:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234458AbjHODc0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 14 Aug 2023 23:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
+        id S234461AbjHODc3 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 14 Aug 2023 23:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234461AbjHOD3r (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 23:29:47 -0400
+        with ESMTP id S234308AbjHOD3s (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 14 Aug 2023 23:29:48 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D502B1FF2
-        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 20:27:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF961FF6
+        for <io-uring@vger.kernel.org>; Mon, 14 Aug 2023 20:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=3R6E9lJA1fDVHLkeYLU6dejaQkhuWTMTotkeI2cZgmY=; b=r8z4nRTXrUlGt13XLtw/J29M57
-        5iYsOyQKNe8VJqfMxhGgwmnIe/R287HhpT++UwKivgqqDadScL+cz1sFbsrfBDQx1g3458ci4PhgF
-        AyqC1KGX1VAcEIXgdJddQfARtBt/P3ebW/WGT3S0ssSHOfR1GKjklwZbK3EtyoQLS+kR0WEOzfCWF
-        EEGSEJHJkpURJptXSmoen5k0UFL3E5ZM63L/CZDu1Q7cuogfE2xBXKgx/t89+2l2tkmPEjnl6abqq
-        xwcxNnoVELc6pqnj+swY5/8Tyr64hTvra/bMZy/pb6i6ZklQVPzlMXgJfbUarjRUjB98cD/EFFfm9
-        NDrl8r2g==;
+        bh=9AFjGPtcNZvRdattiMeM+NhO363S0DBsMAr8j6pNUgk=; b=jaNFDNXx63oA6YktKdyny5R+FA
+        RVh5LmTlc1op/Sst8fvW70x9QNRDwuwJOHdIIjJZWUf6guT7CgC+x3iC4VTc0Z5C7ZeV8vywxhRn2
+        iQv7KMpfL46Nk/RHw5syw8gNRhvNS9JKOkvCC4s91EKuD+3TD2PM7Lck/sH50znrz4zhJ66K/6xqW
+        frQp6MmSz5oZtlGIHcjgVJoS3tN28ZkHgwNnW2HzRzSYdibignJU8xbNbAUpTqqzvPL/2uF4lwhl+
+        HhW8C6yHRX3CyVf75d3s/k2AEl+VW5wqASKAdQSwMdsKUrccMFJq47rXEAyQWAHYMWzz3V5pr2xvE
+        93mcRMSg==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qVkhm-005qah-Vy; Tue, 15 Aug 2023 03:26:51 +0000
+        id 1qVkhm-005qad-Or; Tue, 15 Aug 2023 03:26:50 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH 9/9] mm: Free up a word in the first tail page
-Date:   Tue, 15 Aug 2023 04:26:45 +0100
-Message-Id: <20230815032645.1393700-10-willy@infradead.org>
+Subject: [PATCH 7/9] mm: Add deferred_list page flag
+Date:   Tue, 15 Aug 2023 04:26:43 +0100
+Message-Id: <20230815032645.1393700-8-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230815032645.1393700-1-willy@infradead.org>
 References: <20230815032645.1393700-1-willy@infradead.org>
@@ -43,131 +43,182 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Store the folio order in the low byte of the flags word in the first
-tail page.  This frees up the word that was being used to store the
-order and dtor bytes previously.
+Stored in the first tail page's flags, this flag replaces the destructor.
+That removes the last of the destructors, so remove all references to
+folio_dtor and compound_dtor.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- include/linux/mm.h       | 10 +++++-----
- include/linux/mm_types.h |  3 +--
- kernel/crash_core.c      |  1 -
- mm/internal.h            |  2 +-
- mm/page_alloc.c          |  4 +++-
- 5 files changed, 10 insertions(+), 10 deletions(-)
+ Documentation/admin-guide/kdump/vmcoreinfo.rst |  4 ++--
+ include/linux/mm.h                             | 14 --------------
+ include/linux/mm_types.h                       |  2 --
+ include/linux/page-flags.h                     |  6 ++++++
+ kernel/crash_core.c                            |  1 -
+ mm/huge_memory.c                               |  4 ++--
+ mm/internal.h                                  |  1 -
+ mm/page_alloc.c                                |  7 +------
+ 8 files changed, 11 insertions(+), 28 deletions(-)
 
+diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+index baa1c355741d..3bd38ac0e7de 100644
+--- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
++++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+@@ -141,8 +141,8 @@ nodemask_t
+ The size of a nodemask_t type. Used to compute the number of online
+ nodes.
+ 
+-(page, flags|_refcount|mapping|lru|_mapcount|private|compound_dtor|compound_order|compound_head)
+--------------------------------------------------------------------------------------------------
++(page, flags|_refcount|mapping|lru|_mapcount|private|compound_order|compound_head)
++----------------------------------------------------------------------------------
+ 
+ User-space tools compute their values based on the offset of these
+ variables. The variables are used when excluding unnecessary pages.
 diff --git a/include/linux/mm.h b/include/linux/mm.h
-index cf0ae8c51d7f..85568e2b2556 100644
+index c8c8b1fd64d3..cf0ae8c51d7f 100644
 --- a/include/linux/mm.h
 +++ b/include/linux/mm.h
-@@ -1028,7 +1028,7 @@ struct inode;
-  * compound_order() can be called without holding a reference, which means
-  * that niceties like page_folio() don't work.  These callers should be
-  * prepared to handle wild return values.  For example, PG_head may be
-- * set before _folio_order is initialised, or this may be a tail page.
-+ * set before the order is initialised, or this may be a tail page.
-  * See compaction.c for some good examples.
-  */
- static inline unsigned int compound_order(struct page *page)
-@@ -1037,7 +1037,7 @@ static inline unsigned int compound_order(struct page *page)
+@@ -1267,20 +1267,6 @@ void folio_copy(struct folio *dst, struct folio *src);
  
- 	if (!test_bit(PG_head, &folio->flags))
- 		return 0;
--	return folio->_folio_order;
-+	return folio->_flags_1 & 0xff;
- }
+ unsigned long nr_free_buffer_pages(void);
  
- /**
-@@ -1053,7 +1053,7 @@ static inline unsigned int folio_order(struct folio *folio)
- {
- 	if (!folio_test_large(folio))
- 		return 0;
--	return folio->_folio_order;
-+	return folio->_flags_1 & 0xff;
- }
+-/* Compound pages may have a special destructor */
+-enum compound_dtor_id {
+-	COMPOUND_PAGE_DTOR,
+-	TRANSHUGE_PAGE_DTOR,
+-	NR_COMPOUND_DTORS
+-};
+-
+-static inline void folio_set_compound_dtor(struct folio *folio,
+-		enum compound_dtor_id compound_dtor)
+-{
+-	VM_BUG_ON_FOLIO(compound_dtor >= NR_COMPOUND_DTORS, folio);
+-	folio->_folio_dtor = compound_dtor;
+-}
+-
+ void destroy_large_folio(struct folio *folio);
  
- #include <linux/huge_mm.h>
-@@ -2025,7 +2025,7 @@ static inline long folio_nr_pages(struct folio *folio)
- #ifdef CONFIG_64BIT
- 	return folio->_folio_nr_pages;
- #else
--	return 1L << folio->_folio_order;
-+	return 1L << (folio->_flags_1 & 0xff);
- #endif
- }
- 
-@@ -2043,7 +2043,7 @@ static inline unsigned long compound_nr(struct page *page)
- #ifdef CONFIG_64BIT
- 	return folio->_folio_nr_pages;
- #else
--	return 1L << folio->_folio_order;
-+	return 1L << (folio->_flags_1 & 0xff);
- #endif
- }
- 
+ /* Returns the number of bytes in this potentially compound page. */
 diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index d45a2b8041e0..659c7b84726c 100644
+index da538ff68953..d45a2b8041e0 100644
 --- a/include/linux/mm_types.h
 +++ b/include/linux/mm_types.h
 @@ -282,7 +282,6 @@ static inline struct page *encoded_page_ptr(struct encoded_page *page)
   * @_refcount: Do not access this member directly.  Use folio_ref_count()
   *    to find how many references there are to this folio.
   * @memcg_data: Memory Control Group data.
-- * @_folio_order: Do not use directly, call folio_order().
+- * @_folio_dtor: Which destructor to use for this folio.
+  * @_folio_order: Do not use directly, call folio_order().
   * @_entire_mapcount: Do not use directly, call folio_entire_mapcount().
   * @_nr_pages_mapped: Do not use directly, call folio_mapcount().
-  * @_pincount: Do not use directly, call folio_maybe_dma_pinned().
-@@ -334,8 +333,8 @@ struct folio {
- 		struct {
+@@ -336,7 +335,6 @@ struct folio {
  			unsigned long _flags_1;
  			unsigned long _head_1;
-+			unsigned long _folio_avail;
  	/* public: */
--			unsigned char _folio_order;
+-			unsigned char _folio_dtor;
+ 			unsigned char _folio_order;
  			atomic_t _entire_mapcount;
  			atomic_t _nr_pages_mapped;
- 			atomic_t _pincount;
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index 01d98695e79f..aabf50dc71a3 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -183,6 +183,9 @@ enum pageflags {
+ 	/* Is a hugetlb page.  Stored in first tail page. */
+ 	PG_hugetlb = PG_writeback,
+ 
++	/* Has a deferred list (may be empty).  First tail page. */
++	PG_deferred_list = PG_reclaim,
++
+ 	/* non-lru isolated movable page */
+ 	PG_isolated = PG_reclaim,
+ 
+@@ -809,6 +812,9 @@ static inline void ClearPageCompound(struct page *page)
+ 	BUG_ON(!PageHead(page));
+ 	ClearPageHead(page);
+ }
++PAGEFLAG(DeferredList, deferred_list, PF_SECOND)
++#else
++TESTPAGEFLAG_FALSE(DeferredList, deferred_list)
+ #endif
+ 
+ #define PG_head_mask ((1UL << PG_head))
 diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 934dd86e19f5..693445e1f7f6 100644
+index dd5f87047d06..934dd86e19f5 100644
 --- a/kernel/crash_core.c
 +++ b/kernel/crash_core.c
 @@ -455,7 +455,6 @@ static int __init crash_save_vmcoreinfo_init(void)
  	VMCOREINFO_OFFSET(page, lru);
  	VMCOREINFO_OFFSET(page, _mapcount);
  	VMCOREINFO_OFFSET(page, private);
--	VMCOREINFO_OFFSET(folio, _folio_order);
+-	VMCOREINFO_OFFSET(folio, _folio_dtor);
+ 	VMCOREINFO_OFFSET(folio, _folio_order);
  	VMCOREINFO_OFFSET(page, compound_head);
  	VMCOREINFO_OFFSET(pglist_data, node_zones);
- 	VMCOREINFO_OFFSET(pglist_data, nr_zones);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 99e36ad540c4..3b5db99eb7ac 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -583,7 +583,7 @@ void prep_transhuge_page(struct page *page)
+ 
+ 	VM_BUG_ON_FOLIO(folio_order(folio) < 2, folio);
+ 	INIT_LIST_HEAD(&folio->_deferred_list);
+-	folio_set_compound_dtor(folio, TRANSHUGE_PAGE_DTOR);
++	folio_set_deferred_list(folio);
+ }
+ 
+ static inline bool is_transparent_hugepage(struct page *page)
+@@ -595,7 +595,7 @@ static inline bool is_transparent_hugepage(struct page *page)
+ 
+ 	folio = page_folio(page);
+ 	return is_huge_zero_page(&folio->page) ||
+-	       folio->_folio_dtor == TRANSHUGE_PAGE_DTOR;
++		folio_test_deferred_list(folio);
+ }
+ 
+ static unsigned long __thp_get_unmapped_area(struct file *filp,
 diff --git a/mm/internal.h b/mm/internal.h
-index e3d11119b04e..c415260c1f06 100644
+index 5a03bc4782a2..e3d11119b04e 100644
 --- a/mm/internal.h
 +++ b/mm/internal.h
-@@ -407,7 +407,7 @@ static inline void folio_set_order(struct folio *folio, unsigned int order)
- 	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
- 		return;
+@@ -417,7 +417,6 @@ static inline void prep_compound_head(struct page *page, unsigned int order)
+ {
+ 	struct folio *folio = (struct folio *)page;
  
--	folio->_folio_order = order;
-+	folio->_flags_1 = (folio->_flags_1 & ~0xffUL) | order;
- #ifdef CONFIG_64BIT
- 	folio->_folio_nr_pages = 1U << order;
- #endif
+-	folio_set_compound_dtor(folio, COMPOUND_PAGE_DTOR);
+ 	folio_set_order(folio, order);
+ 	atomic_set(&folio->_entire_mapcount, -1);
+ 	atomic_set(&folio->_nr_pages_mapped, 0);
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 9fe9209605a5..0e0e0d18a81b 100644
+index 21af71aea6eb..9fe9209605a5 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -1115,8 +1115,10 @@ static __always_inline bool free_pages_prepare(struct page *page,
+@@ -582,9 +582,6 @@ static inline void free_the_page(struct page *page, unsigned int order)
+  * The remaining PAGE_SIZE pages are called "tail pages". PageTail() is encoded
+  * in bit 0 of page->compound_head. The rest of bits is pointer to head page.
+  *
+- * The first tail page's ->compound_dtor describes how to destroy the
+- * compound page.
+- *
+  * The first tail page's ->compound_order holds the order of allocation.
+  * This usage means that zero-order pages may not be compound.
+  */
+@@ -603,14 +600,12 @@ void prep_compound_page(struct page *page, unsigned int order)
  
- 		VM_BUG_ON_PAGE(compound && compound_order(page) != order, page);
+ void destroy_large_folio(struct folio *folio)
+ {
+-	enum compound_dtor_id dtor = folio->_folio_dtor;
+-
+ 	if (folio_test_hugetlb(folio)) {
+ 		free_huge_page(folio);
+ 		return;
+ 	}
  
--		if (compound)
-+		if (compound) {
- 			ClearPageHasHWPoisoned(page);
-+			page[1].flags &= ~0xffUL;
-+		}
- 		for (i = 1; i < (1 << order); i++) {
- 			if (compound)
- 				bad += free_tail_page_prepare(page, page + i);
+-	if (folio_test_transhuge(folio) && dtor == TRANSHUGE_PAGE_DTOR)
++	if (folio_test_deferred_list(folio))
+ 		free_transhuge_folio(folio);
+ 	mem_cgroup_uncharge(folio);
+ 	free_the_page(&folio->page, folio_order(folio));
 -- 
 2.40.1
 
