@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9002AC04FDF
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6EA29C001E0
 	for <io-uring@archiver.kernel.org>; Wed, 16 Aug 2023 15:13:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344037AbjHPPMa (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 16 Aug 2023 11:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S233190AbjHPPM3 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 16 Aug 2023 11:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344069AbjHPPMO (ORCPT
+        with ESMTP id S1344065AbjHPPMO (ORCPT
         <rfc822;io-uring@vger.kernel.org>); Wed, 16 Aug 2023 11:12:14 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39CCE26AA
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B161268D
         for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 08:12:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=0vtiyxjxIiaXbIAeymWG2xctwrMSMhwhXh76m1ko6N4=; b=WlknXyZuozWr/mDoG17T9epOii
-        ow7iLBULSWgdtKs8v7Xqw+ORWhqJ0TVudIUNaiSUnJv0Le1gaUH4UbGA/egB13UsHJWAd+q3A4+qj
-        vfScYM+JAWQKn32132LyvsY+nJnvK3H1IHLzxrxPnQFXx9hdfiq0wvorG0K4efZcBmD4gLVaxkrrV
-        zzsjJi1rNKgkFoUi8NdO8FL4R5fp2WVf/vS9zNlRplQqX7HRVNMIZ1mzOGXJluJrSfatef2H99k9w
-        nkW0bJujqUFiIrBZW2OBrJRLcN1d7FxXyOeGPDoIbUjp/anNBCDqdizH/GuVm0VUlVzQ4a943byHm
-        oj9MbNvg==;
+        bh=uUh5RzdeUjxu8QH/NZha9zu8/cTsRUc2q74yTYqB5GQ=; b=JPOMDJLWRR9qz7iWGg+vxMn6xJ
+        YypX9IaF7FCfgzt54snUSOb0G0mYNTkZxZR1mHEDpsnoro/ulTpsXRYroXgEVz45EudlB/HYvkkL9
+        cYcalW2OLpHrCKILPx8d82zqIUSPE+eG3iJIqRIjWtzbYcfznWX5/XfJJLABj8G5jertDB7o/D7Al
+        nyqt61Lqj5g06bI8l/Idf5H3U0lwPR9QvWC2uOhPxtcRfdADLPTVqa6JB72h5mXNKbAfA71gNR0QP
+        y2Ab2a+In1ZiDl6nYWWoWo/A9hQt7mq6b/mnzVNetlu1+K0IdP28y8hTprxQFfm8VeESjFHju3T4y
+        zktds10A==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qWIBv-00FL96-2R; Wed, 16 Aug 2023 15:12:11 +0000
+        id 1qWIBu-00FL8r-QS; Wed, 16 Aug 2023 15:12:10 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH v2 13/13] mm: Convert split_huge_pages_pid() to use a folio
-Date:   Wed, 16 Aug 2023 16:12:01 +0100
-Message-Id: <20230816151201.3655946-14-willy@infradead.org>
+Subject: [PATCH v2 11/13] mm: Remove folio_test_transhuge()
+Date:   Wed, 16 Aug 2023 16:11:59 +0100
+Message-Id: <20230816151201.3655946-12-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230816151201.3655946-1-willy@infradead.org>
 References: <20230816151201.3655946-1-willy@infradead.org>
@@ -43,72 +43,46 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Replaces five calls to compound_head with one.
+This function is misleading; people think it means "Is this a THP",
+when all it actually does is check whether this is a large folio.
+Remove it; the one remaining user should have been checking to see
+whether the folio is PMD sized or not.
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- mm/huge_memory.c | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
+ include/linux/page-flags.h | 5 -----
+ mm/memcontrol.c            | 2 +-
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index c721f7ec5b6a..4ffc78edaf26 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -584,14 +584,11 @@ void folio_prep_large_rmappable(struct folio *folio)
- 	folio_set_large_rmappable(folio);
+diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+index 5b466e619f71..e3ca17e95bbf 100644
+--- a/include/linux/page-flags.h
++++ b/include/linux/page-flags.h
+@@ -853,11 +853,6 @@ static inline int PageTransHuge(struct page *page)
+ 	return PageHead(page);
  }
  
--static inline bool is_transparent_hugepage(struct page *page)
-+static inline bool is_transparent_hugepage(struct folio *folio)
- {
--	struct folio *folio;
+-static inline bool folio_test_transhuge(struct folio *folio)
+-{
+-	return folio_test_head(folio);
+-}
 -
--	if (!PageCompound(page))
-+	if (!folio_test_large(folio))
- 		return false;
- 
--	folio = page_folio(page);
- 	return is_huge_zero_page(&folio->page) ||
- 		folio_test_large_rmappable(folio);
- }
-@@ -3015,6 +3012,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 	for (addr = vaddr_start; addr < vaddr_end; addr += PAGE_SIZE) {
- 		struct vm_area_struct *vma = vma_lookup(mm, addr);
- 		struct page *page;
-+		struct folio *folio;
- 
- 		if (!vma)
- 			break;
-@@ -3031,22 +3029,23 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 		if (IS_ERR_OR_NULL(page))
- 			continue;
- 
--		if (!is_transparent_hugepage(page))
-+		folio = page_folio(page);
-+		if (!is_transparent_hugepage(folio))
- 			goto next;
- 
- 		total++;
--		if (!can_split_folio(page_folio(page), NULL))
-+		if (!can_split_folio(folio, NULL))
- 			goto next;
- 
--		if (!trylock_page(page))
-+		if (!folio_trylock(folio))
- 			goto next;
- 
--		if (!split_huge_page(page))
-+		if (!split_folio(folio))
- 			split++;
- 
--		unlock_page(page);
-+		folio_unlock(folio);
- next:
--		put_page(page);
-+		folio_put(folio);
- 		cond_resched();
- 	}
- 	mmap_read_unlock(mm);
+ /*
+  * PageTransCompound returns true for both transparent huge pages
+  * and hugetlbfs pages, so it should only be called when it's known
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 35d7e66ab032..67bda1ceedbe 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5765,7 +5765,7 @@ static int mem_cgroup_move_account(struct page *page,
+ 		if (folio_mapped(folio)) {
+ 			__mod_lruvec_state(from_vec, NR_ANON_MAPPED, -nr_pages);
+ 			__mod_lruvec_state(to_vec, NR_ANON_MAPPED, nr_pages);
+-			if (folio_test_transhuge(folio)) {
++			if (folio_test_pmd_mappable(folio)) {
+ 				__mod_lruvec_state(from_vec, NR_ANON_THPS,
+ 						   -nr_pages);
+ 				__mod_lruvec_state(to_vec, NR_ANON_THPS,
 -- 
 2.40.1
 
