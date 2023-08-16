@@ -2,114 +2,103 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF7C9C001B0
-	for <io-uring@archiver.kernel.org>; Wed, 16 Aug 2023 14:49:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2B29FC04A6A
+	for <io-uring@archiver.kernel.org>; Wed, 16 Aug 2023 15:13:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343558AbjHPOt0 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 16 Aug 2023 10:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S1344036AbjHPPM3 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 16 Aug 2023 11:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245477AbjHPOtQ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Aug 2023 10:49:16 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3229C269F
-        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 07:49:15 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6874a386ec7so1277544b3a.1
-        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 07:49:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1692197354; x=1692802154;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bB7XWSnRRk5uRFy5Bhr/rMcZ+NwcVc4eZMs4l+L6BC4=;
-        b=YrSmXVUZyUbo5/DHpr/E/N6JKUMRNyWAlNcQKxpIO421IUV5dtRDUpmKeQEyjad3kl
-         LVoatROUhIqQtFSZstzi6qxwoQpM5aMp5sWMhkkeOekdSIuNh/JMKt74XvTB2eHAy2pw
-         ojrt9yVSwSO65vG3IWKMcQOetkmIyUKspirukH4yyFeflXEX/8mkBfOKORXncW5M0Oaw
-         FDeK9Q42/IJDJaSquU/1oO9ysT0cLRI1pglMJ6MpvaYFXXPU9TmfKngTk1plVyyKIgaS
-         qNmWw1ADfOsc24piOnyPh6inDUHCfDwbla+Jz2MYVpZpLRddzFRqQSPKguCyloQMwvB3
-         oPGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692197354; x=1692802154;
-        h=content-transfer-encoding:in-reply-to:references:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bB7XWSnRRk5uRFy5Bhr/rMcZ+NwcVc4eZMs4l+L6BC4=;
-        b=U3OS/udjxXfTtThWuibpbQzikHh4SWlDk0fS3/bkXy0IHE5V3WSY72yNZZ6+5v2iOr
-         XOXRuT1hRW8jKM8md8dPVZziyEjD2+LIqirmKlTRQIIJ/P6pKdHSW8NXLMLfr05+xai2
-         24XuFdsrL7uSIMeGaxp2N/rDP4r2F210DwVhfODahTSuYumoWfubAvW1MLgstdX1w6R9
-         aa7iuTRX+/pmPrSU5zQ3+pEizet0YtQyBJagjPk3DAur+Rb3L8mHaTTrq1mve3vB2fw4
-         9pNay3i5DK7O+l/ggMdmn08koy0ak23GKDT4UhISuPNy6MI+4Y+Gl0UueEv+WKJTXYRg
-         IAqQ==
-X-Gm-Message-State: AOJu0YwX9eU7nw1/u/eMXSJD3QzFkJJx2ayaSVBdYItZL8QHuICtdFy1
-        0QU8/acIDtBWXkWqj23E1q+9RKbjNBABp6nSIvE=
-X-Google-Smtp-Source: AGHT+IGt+WgkuYD3me2WG5lk5UQqztjdQYUhOqr4S22DrzYSklwqN63sdxu5wSD7u9F1rOSiaU4XFQ==
-X-Received: by 2002:a05:6a21:6d9e:b0:140:ca4c:740d with SMTP id wl30-20020a056a216d9e00b00140ca4c740dmr3232747pzb.4.1692197354559;
-        Wed, 16 Aug 2023 07:49:14 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id n12-20020aa7904c000000b00688214cff65sm7617093pfo.44.2023.08.16.07.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 07:49:13 -0700 (PDT)
-Message-ID: <804a4c7b-f5ca-4f02-8dc7-893bbefd798b@kernel.dk>
-Date:   Wed, 16 Aug 2023 08:49:12 -0600
+        with ESMTP id S234340AbjHPPMO (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Aug 2023 11:12:14 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5E5D1FCE
+        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 08:12:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=7hrNLrvBiputkK0Ez5NemxjwUyUDBXLdxg6jqp/GSn4=; b=THK3UzQTMK0YVS/5sddRPJdEQz
+        yzCRsqAftx1rcqtnfHPKVKCb1IJCJpqBMVJHvItV3dqPitxX1z+gd850NiqENXc15t6SrL9STeJyS
+        7qaBCI3YB4eRNvWq56ASqo6kwwLjxAW9mBqFHN1H7dDhzNBWWr5haIdfIpftOZ2kejf0J32b24CDs
+        TrXd0Jf5/37br0+ab4qgGHO87F/Pi3HqL8HzX35v9piXwQlTUJGdsmDyNXuaM+yogo6vFd0LHS2Pn
+        f/LBd40mpafoHB5cBIy4ag6iyrH6s8te6miyvm+SFaVIeJICVRp1iJsEuYR4obHQNsAfRwhpYg6J8
+        73YEidLw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qWIBu-00FL8R-17; Wed, 16 Aug 2023 15:12:10 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v2 02/13] mm: Call free_huge_page() directly
+Date:   Wed, 16 Aug 2023 16:11:50 +0100
+Message-Id: <20230816151201.3655946-3-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230816151201.3655946-1-willy@infradead.org>
+References: <20230816151201.3655946-1-willy@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Possible io_uring related race leads to btrfs data csum mismatch
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Qu Wenruo <quwenruo.btrfs@gmx.com>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        io-uring@vger.kernel.org
-References: <95600f18-5fd1-41c8-b31b-14e7f851e8bc@gmx.com>
- <51945229-5b35-4191-a3f3-16cf4b3ffce6@kernel.dk>
-In-Reply-To: <51945229-5b35-4191-a3f3-16cf4b3ffce6@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 8/16/23 8:33 AM, Jens Axboe wrote:
->> However I didn't see any io_uring related callback inside btrfs code,
->> any advice on the io_uring part would be appreciated.
-> 
-> io_uring doesn't do anything special here, it uses the normal page cache
-> read/write parts for buffered IO. But you may get extra parallellism
-> with io_uring here. For example, with the buffered write that this most
-> likely is, libaio would be exactly the same as a pwrite(2) on the file.
-> If this would've blocked, io_uring would offload this to a helper
-> thread. Depending on the workload, you could have multiple of those in
-> progress at the same time.
+Indirect calls are expensive, thanks to Spectre.  Call free_huge_page()
+directly if the folio belongs to hugetlb.
 
-I poked a bit at fsstress, and it's a bit odd imho. For example, any aio
-read/write seems to hardcode O_DIRECT. The io_uring side will be
-buffered. Not sure why there are those differences and why buffered/dio
-isn't a variable. But this does mean that these are certainly buffered
-writes with io_uring.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ include/linux/hugetlb.h | 3 ++-
+ mm/page_alloc.c         | 8 +++++---
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-Are any of the writes overlapping? You could have a situation where
-writeA and writeB overlap, and writeA will get punted to io-wq for
-execution and writeB will complete inline. In other words, writeA is
-issued, writeB is issued. writeA goes to io-wq, writeB now completes
-inline, and now writeA is done and completed. It may be exposing issues
-in btrfs. You can try the below patch, which should serialize all the
-writes to a given file. If this makes a difference for you, then I'd
-strongly suspect that the issue is deeper than the delivery mechanism of
-the write.
-
-diff --git a/ltp/fsstress.c b/ltp/fsstress.c
-index 6641a525fe5d..034cbba27c6e 100644
---- a/ltp/fsstress.c
-+++ b/ltp/fsstress.c
-@@ -2317,6 +2317,7 @@ do_uring_rw(opnum_t opno, long r, int flags)
- 		off %= maxfsize;
- 		memset(buf, nameseq & 0xff, len);
- 		io_uring_prep_writev(sqe, fd, &iovec, 1, off);
-+		sqe->flags |= IOSQE_ASYNC;
- 	} else {
- 		off = (off64_t)(lr % stb.st_size);
- 		io_uring_prep_readv(sqe, fd, &iovec, 1, off);
-
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 0a393bc02f25..5a1dfaffbd80 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -26,6 +26,8 @@ typedef struct { unsigned long pd; } hugepd_t;
+ #define __hugepd(x) ((hugepd_t) { (x) })
+ #endif
+ 
++void free_huge_page(struct page *page);
++
+ #ifdef CONFIG_HUGETLB_PAGE
+ 
+ #include <linux/mempolicy.h>
+@@ -165,7 +167,6 @@ int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
+ 				bool *migratable_cleared);
+ void folio_putback_active_hugetlb(struct folio *folio);
+ void move_hugetlb_state(struct folio *old_folio, struct folio *new_folio, int reason);
+-void free_huge_page(struct page *page);
+ void hugetlb_fix_reserve_counts(struct inode *inode);
+ extern struct mutex *hugetlb_fault_mutex_table;
+ u32 hugetlb_fault_mutex_hash(struct address_space *mapping, pgoff_t idx);
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 8fe9ff917850..548c8016190b 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -287,9 +287,6 @@ const char * const migratetype_names[MIGRATE_TYPES] = {
+ static compound_page_dtor * const compound_page_dtors[NR_COMPOUND_DTORS] = {
+ 	[NULL_COMPOUND_DTOR] = NULL,
+ 	[COMPOUND_PAGE_DTOR] = free_compound_page,
+-#ifdef CONFIG_HUGETLB_PAGE
+-	[HUGETLB_PAGE_DTOR] = free_huge_page,
+-#endif
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ 	[TRANSHUGE_PAGE_DTOR] = free_transhuge_page,
+ #endif
+@@ -622,6 +619,11 @@ void destroy_large_folio(struct folio *folio)
+ {
+ 	enum compound_dtor_id dtor = folio->_folio_dtor;
+ 
++	if (folio_test_hugetlb(folio)) {
++		free_huge_page(&folio->page);
++		return;
++	}
++
+ 	VM_BUG_ON_FOLIO(dtor >= NR_COMPOUND_DTORS, folio);
+ 	compound_page_dtors[dtor](&folio->page);
+ }
 -- 
-Jens Axboe
+2.40.1
 
