@@ -2,38 +2,38 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F718C001E0
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D9731C04A6A
 	for <io-uring@archiver.kernel.org>; Wed, 16 Aug 2023 15:13:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240774AbjHPPNC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 16 Aug 2023 11:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35576 "EHLO
+        id S234003AbjHPPNB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 16 Aug 2023 11:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344041AbjHPPMc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Aug 2023 11:12:32 -0400
+        with ESMTP id S234340AbjHPPMa (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Aug 2023 11:12:30 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DDE211E
-        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 08:12:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85BB1FCE
+        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 08:12:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
         References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
         Content-Type:Content-ID:Content-Description;
-        bh=jXAd6te3eevEbVqabkMpBNzRJH0aU7U0+nA6iByh2bk=; b=V4d1z6UWihqSb/dNTj9KkjPJjC
-        or7aj4YOKjDW9jwii8ErZHlhHochwR/HSrYKVXI3b1zrI8iUnkC0u+Yr9/rMo1Qi7PhoSTyiOAnt4
-        yQgVLhmctuEGzQOEWtSrAtXo4ShPRDQL8SgC8P1r/xp1L2ePmGScEChQM2z2aQdairZLStValuMTd
-        Vq0e9Is6O6Duw44HTFIkGHuGTk4im0XJqTI4P8OzNbR6JXuJ/tBfZGw4CUDf4b+XiuaVyyF3LArSy
-        znBt2uuXD0y8iQotfzRJPM8f37dXfsx6V34jcQuQ85JZKPCyVEa2vSiWOwzrbXxcXY3ZS9p+vS7Fy
-        XSd7dsjw==;
+        bh=OqHtlaBwPOyYVd0BxuxqJHAwBK92pIIYqbMfco12ie4=; b=MYS2+QQ+X+fK4cGw3tU2wA2sSl
+        MjekAsM3RnYqbnq8S1LtlyrLH4UL8MVTTuK23DRXIG6iQmyAkDDzKxZ5wK85oubGzcJts7DRZeUc4
+        Xu0Z//4Im2awNk/ExV2MJjM/NlSvo5zxOeiRqbkSMo8A2qEpkhftSpoemyd9GQMFw3QK1Tu8hbj/U
+        Xjy+51WMZI19LNCx/ahY8MOGBcFhMu0wQnzWWM3zW5KOnzcW4JFSSfeRXyPmTFUla6DjF6jWh59E+
+        5N8G/u3ZZ4GNZni7vCgFRdeF57he5ZZhXdW+cr8JZUUXSO92jT83PMe1aLz4msy0Ub3awvjg9kR4W
+        +3oWGX0w==;
 Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qWIBt-00FL8P-Uf; Wed, 16 Aug 2023 15:12:09 +0000
+        id 1qWIBu-00FL8X-9l; Wed, 16 Aug 2023 15:12:10 +0000
 From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-mm@kvack.org, David Hildenbrand <david@redhat.com>
-Subject: [PATCH v2 01/13] io_uring: Stop calling free_compound_page()
-Date:   Wed, 16 Aug 2023 16:11:49 +0100
-Message-Id: <20230816151201.3655946-2-willy@infradead.org>
+        linux-mm@kvack.org
+Subject: [PATCH v2 05/13] mm; Convert prep_transhuge_page() to folio_prep_large_rmappable()
+Date:   Wed, 16 Aug 2023 16:11:53 +0100
+Message-Id: <20230816151201.3655946-6-willy@infradead.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230816151201.3655946-1-willy@infradead.org>
 References: <20230816151201.3655946-1-willy@infradead.org>
@@ -43,55 +43,131 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-folio_put() is the standard way to write this, and it's not appreciably
-slower.  This is an enabling patch for removing free_compound_page()
-entirely.
+Match folio_undo_large_rmappable(), and move the casting from page to
+folio into the callers (which they were largely doing anyway).
 
 Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Reviewed-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 6 +-----
- io_uring/kbuf.c     | 6 +-----
- 2 files changed, 2 insertions(+), 10 deletions(-)
+ include/linux/huge_mm.h |  4 ++--
+ mm/huge_memory.c        |  4 +---
+ mm/khugepaged.c         |  2 +-
+ mm/mempolicy.c          | 15 ++++++++-------
+ mm/page_alloc.c         |  7 ++++---
+ 5 files changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index dcf5fc7d2820..a5b9b5de7aff 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2664,14 +2664,10 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index f351c3f9d58b..6d812b8856c8 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -143,7 +143,7 @@ bool hugepage_vma_check(struct vm_area_struct *vma, unsigned long vm_flags,
+ unsigned long thp_get_unmapped_area(struct file *filp, unsigned long addr,
+ 		unsigned long len, unsigned long pgoff, unsigned long flags);
  
- static void io_mem_free(void *ptr)
- {
--	struct page *page;
--
- 	if (!ptr)
- 		return;
- 
--	page = virt_to_head_page(ptr);
--	if (put_page_testzero(page))
--		free_compound_page(page);
-+	folio_put(virt_to_folio(ptr));
+-void prep_transhuge_page(struct page *page);
++void folio_prep_large_rmappable(struct folio *folio);
+ bool can_split_folio(struct folio *folio, int *pextra_pins);
+ int split_huge_page_to_list(struct page *page, struct list_head *list);
+ static inline int split_huge_page(struct page *page)
+@@ -283,7 +283,7 @@ static inline bool hugepage_vma_check(struct vm_area_struct *vma,
+ 	return false;
  }
  
- static void io_pages_free(struct page ***pages, int npages)
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 2f0181521c98..556f4df25b0f 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -218,11 +218,7 @@ static int __io_remove_buffers(struct io_ring_ctx *ctx,
- 	if (bl->is_mapped) {
- 		i = bl->buf_ring->tail - bl->head;
- 		if (bl->is_mmap) {
--			struct page *page;
+-static inline void prep_transhuge_page(struct page *page) {}
++static inline void folio_prep_large_rmappable(struct folio *folio) {}
+ 
+ #define transparent_hugepage_flags 0UL
+ 
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 9598bbe6c792..04664e6918c1 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -577,10 +577,8 @@ struct deferred_split *get_deferred_split_queue(struct folio *folio)
+ }
+ #endif
+ 
+-void prep_transhuge_page(struct page *page)
++void folio_prep_large_rmappable(struct folio *folio)
+ {
+-	struct folio *folio = (struct folio *)page;
 -
--			page = virt_to_head_page(bl->buf_ring);
--			if (put_page_testzero(page))
--				free_compound_page(page);
-+			folio_put(virt_to_folio(bl->buf_ring));
- 			bl->buf_ring = NULL;
- 			bl->is_mmap = 0;
- 		} else if (bl->buf_nr_pages) {
+ 	VM_BUG_ON_FOLIO(folio_order(folio) < 2, folio);
+ 	INIT_LIST_HEAD(&folio->_deferred_list);
+ 	folio_set_compound_dtor(folio, TRANSHUGE_PAGE_DTOR);
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index bb76a5d454de..a8e0eca2cd1e 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -896,7 +896,7 @@ static bool hpage_collapse_alloc_page(struct page **hpage, gfp_t gfp, int node,
+ 		return false;
+ 	}
+ 
+-	prep_transhuge_page(*hpage);
++	folio_prep_large_rmappable((struct folio *)*hpage);
+ 	count_vm_event(THP_COLLAPSE_ALLOC);
+ 	return true;
+ }
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index c53f8beeb507..4afbb67ccf27 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -2189,9 +2189,9 @@ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
+ 		mpol_cond_put(pol);
+ 		gfp |= __GFP_COMP;
+ 		page = alloc_page_interleave(gfp, order, nid);
+-		if (page && order > 1)
+-			prep_transhuge_page(page);
+ 		folio = (struct folio *)page;
++		if (folio && order > 1)
++			folio_prep_large_rmappable(folio);
+ 		goto out;
+ 	}
+ 
+@@ -2202,9 +2202,9 @@ struct folio *vma_alloc_folio(gfp_t gfp, int order, struct vm_area_struct *vma,
+ 		gfp |= __GFP_COMP;
+ 		page = alloc_pages_preferred_many(gfp, order, node, pol);
+ 		mpol_cond_put(pol);
+-		if (page && order > 1)
+-			prep_transhuge_page(page);
+ 		folio = (struct folio *)page;
++		if (folio && order > 1)
++			folio_prep_large_rmappable(folio);
+ 		goto out;
+ 	}
+ 
+@@ -2300,10 +2300,11 @@ EXPORT_SYMBOL(alloc_pages);
+ struct folio *folio_alloc(gfp_t gfp, unsigned order)
+ {
+ 	struct page *page = alloc_pages(gfp | __GFP_COMP, order);
++	struct folio *folio = (struct folio *)page;
+ 
+-	if (page && order > 1)
+-		prep_transhuge_page(page);
+-	return (struct folio *)page;
++	if (folio && order > 1)
++		folio_prep_large_rmappable(folio);
++	return folio;
+ }
+ EXPORT_SYMBOL(folio_alloc);
+ 
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0dbc2ecdefa5..5ee4dc9318b7 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -4548,10 +4548,11 @@ struct folio *__folio_alloc(gfp_t gfp, unsigned int order, int preferred_nid,
+ {
+ 	struct page *page = __alloc_pages(gfp | __GFP_COMP, order,
+ 			preferred_nid, nodemask);
++	struct folio *folio = (struct folio *)page;
+ 
+-	if (page && order > 1)
+-		prep_transhuge_page(page);
+-	return (struct folio *)page;
++	if (folio && order > 1)
++		folio_prep_large_rmappable(folio);
++	return folio;
+ }
+ EXPORT_SYMBOL(__folio_alloc);
+ 
 -- 
 2.40.1
 
