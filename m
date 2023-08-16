@@ -2,230 +2,118 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3276EC04FE1
-	for <io-uring@archiver.kernel.org>; Wed, 16 Aug 2023 15:13:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C634C04E69
+	for <io-uring@archiver.kernel.org>; Wed, 16 Aug 2023 15:23:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344050AbjHPPNC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 16 Aug 2023 11:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35618 "EHLO
+        id S1344179AbjHPPXS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 16 Aug 2023 11:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344063AbjHPPMj (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Aug 2023 11:12:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BEE26AD
-        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 08:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=D7lpiBJxqamGLQ0V34zZ/ZLZ7rblS7AEFq4ixwWOreE=; b=crMLMxItw7rkFzvfYZVu83t4Te
-        EErKxqDP16qUFf7uP9ThpSWzMpAk73QwaRBYqKAXYTQubX+5E3Sq2BMgKnF5RmcaiK6AX/xdY4LnZ
-        xhLstz+32jcyPbBvNfwGSMgYOoYgsp0Osg6KdXs104oIA7LE6v7moPESIr3nqyhbMuXuHg0H2Xqnb
-        uZzVb3/HVf0X7almE/N+OpgBN0q7fg8Zioh2duj05S2KTPSXb6WBGqCJ6gQcki0N8BGZkrGkhSH5l
-        xnHhek7TNhRZ4yyWFDvgx1pdvC9RW1pGuxmvt5f76xeefIKe9ICQ58dns/blN4zNxh9kxjOzdppYJ
-        77YGfSDA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qWIBu-00FL8e-Hi; Wed, 16 Aug 2023 15:12:10 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v2 08/13] mm: Add large_rmappable page flag
-Date:   Wed, 16 Aug 2023 16:11:56 +0100
-Message-Id: <20230816151201.3655946-9-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230816151201.3655946-1-willy@infradead.org>
-References: <20230816151201.3655946-1-willy@infradead.org>
+        with ESMTP id S1344103AbjHPPWs (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 16 Aug 2023 11:22:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB10F7
+        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 08:22:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692199322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BBcZ0qgYuUHjYQeZqoRe/0dlHfm+do76R6cqmuSlLyc=;
+        b=R9bPAhqUEdJsnP9ckdM8aPdlZK4Favkd4R0koFHIcWNfYzHZ1ZI0DbqBMstt/NkEnzr79+
+        PVFMqWMgWImzKelB/In7Hgrul3wx6dFJ8xfeXhPdeuGMskEA/331fxEYFa/8d6hZHv0whK
+        EmRnnYkH+RG9P5P+1r/0Bf8PvCS8gDA=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-627-B6zUwfEROFGW22noVp-P8Q-1; Wed, 16 Aug 2023 11:22:01 -0400
+X-MC-Unique: B6zUwfEROFGW22noVp-P8Q-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2ba83b74a49so39139841fa.2
+        for <io-uring@vger.kernel.org>; Wed, 16 Aug 2023 08:22:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692199319; x=1692804119;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BBcZ0qgYuUHjYQeZqoRe/0dlHfm+do76R6cqmuSlLyc=;
+        b=ElJQW7gA3V+RPJOlg1iyRyAoOq/0mTHT51dPzvR+xYKth8ZXGMKWI8dYSmTDlGUF50
+         Y0hZJvU5qm6wIScFX2/xgNUVEchYYrOw6FI+s2RVxj1e0XePsMY08Ol+HiMy5ZzzngLV
+         3KtI6A0iRyXWZVm/6PUMioo3k12Q5ObwbtPft1qgTZndhkEV5LBV7Mja03cVBFvfBWW5
+         LWEmJ4yWuqULuvpVynqJRO4ZUIJEpdMSN9Pl3D4eZ1Q6ZkdYdpU4SGxq3EU04mTuybf8
+         XAiI1hJj0ADPdNzpJXzhBVO3iJE6xZAKiI57nBRCb3WHq6KWIZNWBKi3iQtbveU7dvsN
+         ZJQg==
+X-Gm-Message-State: AOJu0YxZXYh+pECSUayHBEd3yO+NO54z7K2dLziY8AORvBvmN+gTi1G8
+        l1avqKa3bJoWDmU8xxB0OdQad2/2LsrTKFDI7T4d6EJ+/ftOKneMokeav5QBLj86HHYuq1dBCMP
+        Bn+H9mF8vC6uXNgVb8zI=
+X-Received: by 2002:a2e:9f57:0:b0:2b6:b6c4:6e79 with SMTP id v23-20020a2e9f57000000b002b6b6c46e79mr1894187ljk.1.1692199319641;
+        Wed, 16 Aug 2023 08:21:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHO95sA0EX/EvVXLOUxUM/6sQI+dxzUPqDmInX4WwAbLVC3zYS6VwjAcA6rs4uMEoWtv6Sb2A==
+X-Received: by 2002:a2e:9f57:0:b0:2b6:b6c4:6e79 with SMTP id v23-20020a2e9f57000000b002b6b6c46e79mr1894166ljk.1.1692199319162;
+        Wed, 16 Aug 2023 08:21:59 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c74b:8b00:5520:fa3c:c527:592f? (p200300cbc74b8b005520fa3cc527592f.dip0.t-ipconnect.de. [2003:cb:c74b:8b00:5520:fa3c:c527:592f])
+        by smtp.gmail.com with ESMTPSA id u16-20020a5d4690000000b00313de682eb3sm21547979wrq.65.2023.08.16.08.21.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Aug 2023 08:21:58 -0700 (PDT)
+Message-ID: <46e3dfa6-9fea-df51-cff7-e1b916e77a31@redhat.com>
+Date:   Wed, 16 Aug 2023 17:21:57 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 12/13] mm: Add tail private fields to struct folio
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20230816151201.3655946-1-willy@infradead.org>
+ <20230816151201.3655946-13-willy@infradead.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230816151201.3655946-13-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Stored in the first tail page's flags, this flag replaces the destructor.
-That removes the last of the destructors, so remove all references to
-folio_dtor and compound_dtor.
+On 16.08.23 17:12, Matthew Wilcox (Oracle) wrote:
+> Because THP_SWAP uses page->private for each page, we must not use
+> the space which overlaps that field for anything which would conflict
+> with that.  We avoid the conflict on 32-bit systems by disallowing
+> THP_SWAP on 32-bit.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>   include/linux/mm_types.h | 14 +++++++++++++-
+>   1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 659c7b84726c..3880b3f2e321 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -340,8 +340,11 @@ struct folio {
+>   			atomic_t _pincount;
+>   #ifdef CONFIG_64BIT
+>   			unsigned int _folio_nr_pages;
+> -#endif
+> +			/* 4 byte gap here */
+>   	/* private: the union with struct page is transitional */
+> +			/* Fix THP_SWAP to not use tail->private */
+> +			unsigned long _private_1;
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
----
- Documentation/admin-guide/kdump/vmcoreinfo.rst |  4 ++--
- include/linux/mm.h                             | 13 -------------
- include/linux/mm_types.h                       |  2 --
- include/linux/page-flags.h                     |  7 ++++++-
- kernel/crash_core.c                            |  1 -
- mm/huge_memory.c                               |  4 ++--
- mm/internal.h                                  |  1 -
- mm/page_alloc.c                                |  7 +------
- 8 files changed, 11 insertions(+), 28 deletions(-)
+If you could give
 
-diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-index baa1c355741d..3bd38ac0e7de 100644
---- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
-+++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-@@ -141,8 +141,8 @@ nodemask_t
- The size of a nodemask_t type. Used to compute the number of online
- nodes.
- 
--(page, flags|_refcount|mapping|lru|_mapcount|private|compound_dtor|compound_order|compound_head)
---------------------------------------------------------------------------------------------------
-+(page, flags|_refcount|mapping|lru|_mapcount|private|compound_order|compound_head)
-+----------------------------------------------------------------------------------
- 
- User-space tools compute their values based on the offset of these
- variables. The variables are used when excluding unnecessary pages.
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 642f5fe5860e..cf0ae8c51d7f 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1267,19 +1267,6 @@ void folio_copy(struct folio *dst, struct folio *src);
- 
- unsigned long nr_free_buffer_pages(void);
- 
--enum compound_dtor_id {
--	COMPOUND_PAGE_DTOR,
--	TRANSHUGE_PAGE_DTOR,
--	NR_COMPOUND_DTORS,
--};
--
--static inline void folio_set_compound_dtor(struct folio *folio,
--		enum compound_dtor_id compound_dtor)
--{
--	VM_BUG_ON_FOLIO(compound_dtor >= NR_COMPOUND_DTORS, folio);
--	folio->_folio_dtor = compound_dtor;
--}
--
- void destroy_large_folio(struct folio *folio);
- 
- /* Returns the number of bytes in this potentially compound page. */
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index da538ff68953..d45a2b8041e0 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -282,7 +282,6 @@ static inline struct page *encoded_page_ptr(struct encoded_page *page)
-  * @_refcount: Do not access this member directly.  Use folio_ref_count()
-  *    to find how many references there are to this folio.
-  * @memcg_data: Memory Control Group data.
-- * @_folio_dtor: Which destructor to use for this folio.
-  * @_folio_order: Do not use directly, call folio_order().
-  * @_entire_mapcount: Do not use directly, call folio_entire_mapcount().
-  * @_nr_pages_mapped: Do not use directly, call folio_mapcount().
-@@ -336,7 +335,6 @@ struct folio {
- 			unsigned long _flags_1;
- 			unsigned long _head_1;
- 	/* public: */
--			unsigned char _folio_dtor;
- 			unsigned char _folio_order;
- 			atomic_t _entire_mapcount;
- 			atomic_t _nr_pages_mapped;
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index aeecf0cf1456..732d13c708e7 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -190,6 +190,7 @@ enum pageflags {
- 	/* At least one page in this folio has the hwpoison flag set */
- 	PG_has_hwpoisoned = PG_error,
- 	PG_hugetlb = PG_active,
-+	PG_large_rmappable = PG_workingset, /* anon or file-backed */
- };
- 
- #define PAGEFLAGS_MASK		((1UL << NR_PAGEFLAGS) - 1)
-@@ -806,6 +807,9 @@ static inline void ClearPageCompound(struct page *page)
- 	BUG_ON(!PageHead(page));
- 	ClearPageHead(page);
- }
-+PAGEFLAG(LargeRmappable, large_rmappable, PF_SECOND)
-+#else
-+TESTPAGEFLAG_FALSE(LargeRmappable, large_rmappable)
- #endif
- 
- #define PG_head_mask ((1UL << PG_head))
-@@ -1061,7 +1065,8 @@ static __always_inline void __ClearPageAnonExclusive(struct page *page)
-  * the CHECK_AT_FREE flags above, so need to be cleared.
-  */
- #define PAGE_FLAGS_SECOND						\
--	(1UL << PG_has_hwpoisoned	| 1UL << PG_hugetlb)
-+	(1UL << PG_has_hwpoisoned	| 1UL << PG_hugetlb |		\
-+	 1UL << PG_large_rmappable)
- 
- #define PAGE_FLAGS_PRIVATE				\
- 	(1UL << PG_private | 1UL << PG_private_2)
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index dd5f87047d06..934dd86e19f5 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -455,7 +455,6 @@ static int __init crash_save_vmcoreinfo_init(void)
- 	VMCOREINFO_OFFSET(page, lru);
- 	VMCOREINFO_OFFSET(page, _mapcount);
- 	VMCOREINFO_OFFSET(page, private);
--	VMCOREINFO_OFFSET(folio, _folio_dtor);
- 	VMCOREINFO_OFFSET(folio, _folio_order);
- 	VMCOREINFO_OFFSET(page, compound_head);
- 	VMCOREINFO_OFFSET(pglist_data, node_zones);
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 04664e6918c1..c721f7ec5b6a 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -581,7 +581,7 @@ void folio_prep_large_rmappable(struct folio *folio)
- {
- 	VM_BUG_ON_FOLIO(folio_order(folio) < 2, folio);
- 	INIT_LIST_HEAD(&folio->_deferred_list);
--	folio_set_compound_dtor(folio, TRANSHUGE_PAGE_DTOR);
-+	folio_set_large_rmappable(folio);
- }
- 
- static inline bool is_transparent_hugepage(struct page *page)
-@@ -593,7 +593,7 @@ static inline bool is_transparent_hugepage(struct page *page)
- 
- 	folio = page_folio(page);
- 	return is_huge_zero_page(&folio->page) ||
--	       folio->_folio_dtor == TRANSHUGE_PAGE_DTOR;
-+		folio_test_large_rmappable(folio);
- }
- 
- static unsigned long __thp_get_unmapped_area(struct file *filp,
-diff --git a/mm/internal.h b/mm/internal.h
-index 1e98c867f0de..9dc7629ffbc9 100644
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@ -419,7 +419,6 @@ static inline void prep_compound_head(struct page *page, unsigned int order)
- {
- 	struct folio *folio = (struct folio *)page;
- 
--	folio_set_compound_dtor(folio, COMPOUND_PAGE_DTOR);
- 	folio_set_order(folio, order);
- 	atomic_set(&folio->_entire_mapcount, -1);
- 	atomic_set(&folio->_nr_pages_mapped, 0);
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index f8e276de4fd5..81b1c7e3a28b 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -582,9 +582,6 @@ static inline void free_the_page(struct page *page, unsigned int order)
-  * The remaining PAGE_SIZE pages are called "tail pages". PageTail() is encoded
-  * in bit 0 of page->compound_head. The rest of bits is pointer to head page.
-  *
-- * The first tail page's ->compound_dtor describes how to destroy the
-- * compound page.
-- *
-  * The first tail page's ->compound_order holds the order of allocation.
-  * This usage means that zero-order pages may not be compound.
-  */
-@@ -603,14 +600,12 @@ void prep_compound_page(struct page *page, unsigned int order)
- 
- void destroy_large_folio(struct folio *folio)
- {
--	enum compound_dtor_id dtor = folio->_folio_dtor;
--
- 	if (folio_test_hugetlb(folio)) {
- 		free_huge_folio(folio);
- 		return;
- 	}
- 
--	if (folio_test_transhuge(folio) && dtor == TRANSHUGE_PAGE_DTOR)
-+	if (folio_test_large_rmappable(folio))
- 		folio_undo_large_rmappable(folio);
- 
- 	mem_cgroup_uncharge(folio);
+https://lkml.kernel.org/r/b887e764-ffa3-55ee-3c44-69cb15f8a115@redhat.com
+
+a quick glimpse to see if anything important jumps at you, that would be 
+great.
+
+That really should be fixed.
+
 -- 
-2.40.1
+Cheers,
+
+David / dhildenb
 
