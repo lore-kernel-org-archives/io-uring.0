@@ -2,199 +2,116 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 798CDEE49B5
-	for <io-uring@archiver.kernel.org>; Thu, 24 Aug 2023 22:56:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 524EAC3DA6F
+	for <io-uring@archiver.kernel.org>; Thu, 24 Aug 2023 23:17:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243975AbjHXWzp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 24 Aug 2023 18:55:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S240911AbjHXXRV (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 24 Aug 2023 19:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244040AbjHXWzg (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Aug 2023 18:55:36 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4061FDF
-        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:27 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9a2a4a5472dso110125166b.1
-        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:27 -0700 (PDT)
+        with ESMTP id S244065AbjHXXQy (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Aug 2023 19:16:54 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 429F11FC9
+        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 16:16:42 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-26d144db2b4so48875a91.1
+        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 16:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692917726; x=1693522526;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YciofNNRWO0hDofU9tD/NJE19dwmkWDsnusL9jDimeY=;
-        b=cKkXfWWv7Ecm+WNKx6aR2JBoXXIaqW/0aabtghpTyR7JTnZXSDM4s4z6445bFk1GK5
-         GuCBP2KhoXzlqaknyu0fhRbDsoSbf0n2LbvRWcIiFgxR0sHN9iQUUgt3TiGU3wj7Qsmr
-         C+9OIDlFlmofcuUDXegUPPfPzWwE5doeuAm8cc8Vq7q1Ga1Jgb8LEsASloToTQHclots
-         Hjxk/4U8UVt6e6I/VxEstgVyvR7Ow5OFOyK6LbDESFmJHyVMd9zwWWXsgx9dP01y53Mt
-         b9W1CWSoCxywgs18s7HMmUsYKMM7d8wsZSzWotgOjvQShSLm7+ztvbeEmFByobxdTqI1
-         9TOw==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1692919001; x=1693523801;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=liomoFKxr72M3yn2mrB/eGgXDB/ZSi+V0FGD2Jycn7I=;
+        b=JXtpFlKTC1iALOnKMaJtK1HgcLv+xzlMhnfjYBNnTnmkvzx/Q84YV48fSLKpzvAm37
+         vfA8lVUti8MRqj6Rz6OY5anOuzU1gAlAYBIUDop4QeQPdYR+3SsFMa/p7o7tt2Z0nbxz
+         Kq985dhdtC9BOHjZULx99dZL8pUzJFSrTnQNF7Egs///X/WEiwbbpkO9lhi9FyY5mLew
+         9Di4HoJXMnpilpnOsGjwrEom/EgV3zXkF+vfEbn7f/zBkP6rixRkLMh7ywxQ859+u9rA
+         xbaW5CVPBmBv7nl7839YUeg3ODVY6J6fHjej18yFWosAX9TQ+AjIKv/7LCl828U1T56O
+         /r9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692917726; x=1693522526;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1692919001; x=1693523801;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YciofNNRWO0hDofU9tD/NJE19dwmkWDsnusL9jDimeY=;
-        b=djUi+glBZHmzmI6Awbuneakxxam72hl2FB6HLeqab8h8feS6Cg0M+yjUpJt7N9ENdm
-         HNNXUWntCxuSrq65oFmJW323UTLHCxcivr/vq35QLXAxADS9ott/nTWDAmRn3/vsUGOW
-         KhK3WUFusRDXMQ1X3b0yGnPIRD7qHSdh4ryHs0Cv8LOF8yidOpPuH9pMSQTTd3aUayXp
-         m9vRV9SiOTXECCW0tpWeDFqI5GJJcHxzvNh7zDS5XWBtToEAK++b6RWLbp8PYFx0RJih
-         N8Ktza/oyQNxhgKlGy1oQrLh4L7Nhp1mEFyR6cAnb2Iuz/9ehEPOJZJbtQ0I0OcjlCrG
-         RLAQ==
-X-Gm-Message-State: AOJu0Ywso6J48tJCCVGyByjqz49t0PM9dbKfXFvaahB3IhebVPSGIP+o
-        0y7FY6EvsutgHJtUz+ZFfXZYu0Q3RLg=
-X-Google-Smtp-Source: AGHT+IFCT6Mns4bDEm4FqcvDSE6yhPqweI01StpmmidW6TBXe4jeQQP+mfV5W427wbRBhmaifxCwUw==
-X-Received: by 2002:a17:906:748c:b0:9a1:f415:7c23 with SMTP id e12-20020a170906748c00b009a1f4157c23mr5413245ejl.26.1692917726064;
-        Thu, 24 Aug 2023 15:55:26 -0700 (PDT)
-Received: from 127.0.0.1localhost ([148.252.140.69])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170906144400b00992f81122e1sm173469ejc.21.2023.08.24.15.55.25
+        bh=liomoFKxr72M3yn2mrB/eGgXDB/ZSi+V0FGD2Jycn7I=;
+        b=k29WMg4QOzFOP4uJkr7ISZYANJiYaoUypxcOSp/PsujUP9czqRq375w+ZkDPV/ilOc
+         6iPdhiL7GNIUOC9DyCgYvy2gx3+Xau4eeDhVSMsooshbwgrmiWH0yDhS6rrxKxGfdA/J
+         aPFtXc+E7SGUoHZGBfZqbN/YGXqDrIe8DyF7YJCLaCg4BXl3lJ4koRcu6fx2kO+pW3+n
+         IMi+8WBLvUMKvmlHM+GKVRW1vMP60ggdkPxzbAhY4jy/1FW7suADLXPpWiKploEgm3GV
+         lb1NmI7qtwI9H9wlAHwj8GA3g2bQWZYadJsiG7qKBkfkz7CGkI11wYI/DDJyX80CRGpg
+         8Xfg==
+X-Gm-Message-State: AOJu0YyAjqcYih2UhJZoGIjXuZWXcazLZwbdOWZMi8TZ227XevDWLTLo
+        A/L/zmBec9je7jDXeC5x/E0xYZ4LZY6zx/4DUMA=
+X-Google-Smtp-Source: AGHT+IGLV2Zwtdj/O3T0JmoPk/i2Uamc2VVWSpqQ/RqNt75Bii9K663wVjIsNSXJAkbQZ+jODgwm9w==
+X-Received: by 2002:a17:90a:7524:b0:26b:27f6:9027 with SMTP id q33-20020a17090a752400b0026b27f69027mr15360906pjk.1.1692919001324;
+        Thu, 24 Aug 2023 16:16:41 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h12-20020a17090adb8c00b00267b38f5e13sm255657pjv.2.2023.08.24.16.16.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 15:55:25 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH v2 10/15] io_uring: add option to remove SQ indirection
-Date:   Thu, 24 Aug 2023 23:53:32 +0100
-Message-ID: <0ffa3268a5ef61d326201ff43a233315c96312e0.1692916914.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Thu, 24 Aug 2023 16:16:40 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
 In-Reply-To: <cover.1692916914.git.asml.silence@gmail.com>
 References: <cover.1692916914.git.asml.silence@gmail.com>
+Subject: Re: [PATCH v2 00/15] caching and SQ/CQ optimisations
+Message-Id: <169291900002.174878.9330956471857542766.b4-ty@kernel.dk>
+Date:   Thu, 24 Aug 2023 17:16:40 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Not many aware, but io_uring submission queue has two levels. The first
-level usually appears as sq_array and stores indexes into the actual SQ.
 
-To my knowledge, no one has ever seriously used it, nor liburing exposes
-it to users. Add IORING_SETUP_NO_SQARRAY, when set we don't bother
-creating and using the sq_array and SQ heads/tails will be pointing
-directly into the SQ. Improves memory footprint, in term of both
-allocations as well as cache usage, and also should make io_get_sqe()
-less branchy in the end.
+On Thu, 24 Aug 2023 23:53:22 +0100, Pavel Begunkov wrote:
+> Patch 1-5 optimise io_fill_cqe_req
+> 
+> Patch 6-7 combine iopoll and normal completion paths
+> 
+> Patch 8 inlines io_fill_cqe_req.
+> 
+> Patch 9 should improve CPU caching of SQ/CQ pointers
+> 
+> [...]
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- include/uapi/linux/io_uring.h |  5 ++++
- io_uring/io_uring.c           | 52 +++++++++++++++++++++--------------
- 2 files changed, 37 insertions(+), 20 deletions(-)
+Applied, thanks!
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 9fc7195f25df..8e61f8b7c2ce 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -185,6 +185,11 @@ enum {
-  */
- #define IORING_SETUP_REGISTERED_FD_ONLY	(1U << 15)
- 
-+/*
-+ * Removes indirection through the SQ index array.
-+ */
-+#define IORING_SETUP_NO_SQARRAY		(1U << 16)
-+
- enum io_uring_op {
- 	IORING_OP_NOP,
- 	IORING_OP_READV,
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index e8321903e3f3..a6eea3938802 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2339,8 +2339,21 @@ static void io_commit_sqring(struct io_ring_ctx *ctx)
-  */
- static bool io_get_sqe(struct io_ring_ctx *ctx, const struct io_uring_sqe **sqe)
- {
--	unsigned head, mask = ctx->sq_entries - 1;
--	unsigned sq_idx = ctx->cached_sq_head++ & mask;
-+	unsigned mask = ctx->sq_entries - 1;
-+	unsigned head = ctx->cached_sq_head++ & mask;
-+
-+	if (!(ctx->flags & IORING_SETUP_NO_SQARRAY)) {
-+		head = READ_ONCE(ctx->sq_array[head]);
-+		if (unlikely(head >= ctx->sq_entries)) {
-+			/* drop invalid entries */
-+			spin_lock(&ctx->completion_lock);
-+			ctx->cq_extra--;
-+			spin_unlock(&ctx->completion_lock);
-+			WRITE_ONCE(ctx->rings->sq_dropped,
-+				   READ_ONCE(ctx->rings->sq_dropped) + 1);
-+			return false;
-+		}
-+	}
- 
- 	/*
- 	 * The cached sq head (or cq tail) serves two purposes:
-@@ -2350,22 +2363,12 @@ static bool io_get_sqe(struct io_ring_ctx *ctx, const struct io_uring_sqe **sqe)
- 	 * 2) allows the kernel side to track the head on its own, even
- 	 *    though the application is the one updating it.
- 	 */
--	head = READ_ONCE(ctx->sq_array[sq_idx]);
--	if (likely(head < ctx->sq_entries)) {
--		/* double index for 128-byte SQEs, twice as long */
--		if (ctx->flags & IORING_SETUP_SQE128)
--			head <<= 1;
--		*sqe = &ctx->sq_sqes[head];
--		return true;
--	}
- 
--	/* drop invalid entries */
--	spin_lock(&ctx->completion_lock);
--	ctx->cq_extra--;
--	spin_unlock(&ctx->completion_lock);
--	WRITE_ONCE(ctx->rings->sq_dropped,
--		   READ_ONCE(ctx->rings->sq_dropped) + 1);
--	return false;
-+	/* double index for 128-byte SQEs, twice as long */
-+	if (ctx->flags & IORING_SETUP_SQE128)
-+		head <<= 1;
-+	*sqe = &ctx->sq_sqes[head];
-+	return true;
- }
- 
- int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
-@@ -2734,6 +2737,12 @@ static unsigned long rings_size(struct io_ring_ctx *ctx, unsigned int sq_entries
- 		return SIZE_MAX;
- #endif
- 
-+	if (ctx->flags & IORING_SETUP_NO_SQARRAY) {
-+		if (sq_offset)
-+			*sq_offset = SIZE_MAX;
-+		return off;
-+	}
-+
- 	if (sq_offset)
- 		*sq_offset = off;
- 
-@@ -3710,7 +3719,8 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
- 		return PTR_ERR(rings);
- 
- 	ctx->rings = rings;
--	ctx->sq_array = (u32 *)((char *)rings + sq_array_offset);
-+	if (!(ctx->flags & IORING_SETUP_NO_SQARRAY))
-+		ctx->sq_array = (u32 *)((char *)rings + sq_array_offset);
- 	rings->sq_ring_mask = p->sq_entries - 1;
- 	rings->cq_ring_mask = p->cq_entries - 1;
- 	rings->sq_ring_entries = p->sq_entries;
-@@ -3921,7 +3931,8 @@ static __cold int io_uring_create(unsigned entries, struct io_uring_params *p,
- 	p->sq_off.ring_entries = offsetof(struct io_rings, sq_ring_entries);
- 	p->sq_off.flags = offsetof(struct io_rings, sq_flags);
- 	p->sq_off.dropped = offsetof(struct io_rings, sq_dropped);
--	p->sq_off.array = (char *)ctx->sq_array - (char *)ctx->rings;
-+	if (!(ctx->flags & IORING_SETUP_NO_SQARRAY))
-+		p->sq_off.array = (char *)ctx->sq_array - (char *)ctx->rings;
- 	p->sq_off.resv1 = 0;
- 	if (!(ctx->flags & IORING_SETUP_NO_MMAP))
- 		p->sq_off.user_addr = 0;
-@@ -4010,7 +4021,8 @@ static long io_uring_setup(u32 entries, struct io_uring_params __user *params)
- 			IORING_SETUP_COOP_TASKRUN | IORING_SETUP_TASKRUN_FLAG |
- 			IORING_SETUP_SQE128 | IORING_SETUP_CQE32 |
- 			IORING_SETUP_SINGLE_ISSUER | IORING_SETUP_DEFER_TASKRUN |
--			IORING_SETUP_NO_MMAP | IORING_SETUP_REGISTERED_FD_ONLY))
-+			IORING_SETUP_NO_MMAP | IORING_SETUP_REGISTERED_FD_ONLY |
-+			IORING_SETUP_NO_SQARRAY))
- 		return -EINVAL;
- 
- 	return io_uring_create(entries, &p, params);
+[01/15] io_uring: improve cqe !tracing hot path
+        commit: a0727c738309a06ef5579c1742f8f0def63aa883
+[02/15] io_uring: cqe init hardening
+        commit: 31d3ba924fd86add6d14f9085fdd2f4ec0879631
+[03/15] io_uring: simplify big_cqe handling
+        commit: b24c5d752962fa0970cd7e3d74b1cd0e843358de
+[04/15] io_uring: refactor __io_get_cqe()
+        commit: 20d6b633870495fda1d92d283ebf890d80f68ecd
+[05/15] io_uring: optimise extra io_get_cqe null check
+        commit: 59fbc409e71649f558fb4578cdbfac67acb824dc
+[06/15] io_uring: reorder cqring_flush and wakeups
+        commit: 54927baf6c195fb512ac38b26a041ca44edb2e29
+[07/15] io_uring: merge iopoll and normal completion paths
+        commit: ec26c225f06f5993f8891fa6c79fab3c92981181
+[08/15] io_uring: force inline io_fill_cqe_req
+        commit: 093a650b757210bc856ca7f5349fb5a4bb9d4bd6
+[09/15] io_uring: compact SQ/CQ heads/tails
+        commit: e5598d6ae62626d261b046a2f19347c38681ff51
+[10/15] io_uring: add option to remove SQ indirection
+        commit: 2af89abda7d9c2aeb573677e2c498ddb09f8058a
+[11/15] io_uring: move non aligned field to the end
+        commit: d7f06fea5d6be78403d42c9637f67bc883870094
+[12/15] io_uring: banish non-hot data to end of io_ring_ctx
+        commit: 18df385f42f0b3310ed2e4a3e39264bf5e784692
+[13/15] io_uring: separate task_work/waiting cache line
+        commit: c9def23dde5238184777340ad811e4903f216a2d
+[14/15] io_uring: move multishot cqe cache in ctx
+        commit: 0aa7aa5f766933d4f91b22d9658cd688e1f15dab
+[15/15] io_uring: move iopoll ctx fields around
+        commit: 644c4a7a721fb90356cdd42219c9928a3c386230
+
+Best regards,
 -- 
-2.41.0
+Jens Axboe
+
+
 
