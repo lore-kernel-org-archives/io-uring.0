@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF666EE49A6
-	for <io-uring@archiver.kernel.org>; Thu, 24 Aug 2023 22:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11D63EE49B0
+	for <io-uring@archiver.kernel.org>; Thu, 24 Aug 2023 22:56:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243951AbjHXWzn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 24 Aug 2023 18:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S243974AbjHXWzp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 24 Aug 2023 18:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244019AbjHXWzb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Aug 2023 18:55:31 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1BE1FDE
-        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:22 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-99c136ee106so32795366b.1
-        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:22 -0700 (PDT)
+        with ESMTP id S244041AbjHXWzg (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Aug 2023 18:55:36 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA0C19A0
+        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:28 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9a2a4a5472dso110126566b.1
+        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692917720; x=1693522520;
+        d=gmail.com; s=20221208; t=1692917727; x=1693522527;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1G/AFWb5iyL48Qc9HzbF86s/wLNrCJOiAeFSM8nteRg=;
-        b=DE0tfFnKkSWmAzFBZznvuhWTz2UgV06UcLKMpMRcLOIVopjcz3MXyL9DqlFByol85M
-         RsDvdZZRge1qKqG20DehxcDZscooQzHQ6kiQ50gIjIng+Z+XEKh5GntkxRqr30/4dVFt
-         FSbOtX6yHc9Bl3uOLuHDPFlqKDONV5aCaj69+3EvramxgKzbMJ+12/gA4Fo+YhqcNX9X
-         UMFwU50XHBrd6wpV/7FoeWr6lV8+QHmry7mNeXT/w5q7rWgzCKhCvSsb2CFRawjECmiL
-         iAdAf0f6z6nXJo4wptHXZz6MO0AQSJt8dsQXaWpKMmNtjaCLx355PozJlqngHp3MCsS2
-         wF+g==
+        bh=QfCDFTGPqPDquTSsf5QwXyrmIi5jQ5+Y+5MLL1cbVZg=;
+        b=cRpzkHh4gekBnwGHCVv733wH7otA3KbEzC2tyRMzjnLOo8bzbrAElSFPZw9+YDZiB3
+         lJsTTYM1TGT2IY3DmiCDtoV0alwZEayhXBHL4McFnEnZwlSHyFv1L7FlCPcIfxyLuqhh
+         0p7c8AJ8fChKcNcKeaVhYJcQaQlNsrwf67cawm5S6/N7/ukJRLu1sQkU9/Fr/4542DDm
+         7gKhQnGG6/bPqS1gs3WsvVmXPMMUyhJVPqFoyElUmP3YIEwt2785HSU+LJkpJz/7LTJQ
+         XS+KP3zefm5W/oMESPa7vE/Zr+SrwcL4Q1iPXpM4yjTOcYtw+OCttrcSIrQxcz9Mu2pV
+         b/1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692917720; x=1693522520;
+        d=1e100.net; s=20221208; t=1692917727; x=1693522527;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1G/AFWb5iyL48Qc9HzbF86s/wLNrCJOiAeFSM8nteRg=;
-        b=EHlNab1Zm8EBcBhMCuaolbDAbYopTxugESlIvDUdm07pAUo7Dl1Zcu2z1ieJVn6fbf
-         +kCWv6Y0/jgetsP0EY0nU2iUkRak9UyEn1IfiM36Qp9WntFy1vIc4SVi8yfvOOfoBMWL
-         Jtc9Yi0GY4KwtSf3tZ75QhKH6uwz7slTaIcFYqVgZSC8IZnrZDSd6IUi9WuZdONFw1nk
-         tYuI/2LNgQmX3grtffvE6y5gSme+2e+SxjI8Owfxwy0jasB2LX3rMIOgWa1puB2QCj9x
-         dUU3QfN+TOf/pXClACUKhU8NRuHCOwnSuTcryV9XUa4nLANpLBzrPTiSzLVFc1XlRtZ5
-         Ax4w==
-X-Gm-Message-State: AOJu0YwY8yJI/nv4Ci/pDkyTnS3Zryyuypq4sDmrHbSjlbi9L1CY7G8k
-        l4AwWxvCLFJ+K0OZqa6aTM/Z6JMPkkg=
-X-Google-Smtp-Source: AGHT+IF9jUv0l9seJq+bCEq8PmDkvGQsZ5stZ62x46MhR29Wh+cRoKsIcI68BlnOwu+oo+5fednBig==
-X-Received: by 2002:a17:906:7699:b0:9a2:1e03:1573 with SMTP id o25-20020a170906769900b009a21e031573mr2187838ejm.65.1692917720332;
-        Thu, 24 Aug 2023 15:55:20 -0700 (PDT)
+        bh=QfCDFTGPqPDquTSsf5QwXyrmIi5jQ5+Y+5MLL1cbVZg=;
+        b=eJ+UpfcNoOSIuFrxfZFVKQ0yRLHLHHOX7BZQ/W/nDPIiVJeunjrQ9Y5TPOKsmtzkWJ
+         hBDS4PHBJiuuosJ4biaILYpvM9tDxcd8wOIz86rM5OI7irCzL8ASDU4zEEx9s0hK3MFL
+         IweODwwWVTVPkDlIydin/wg3taFB0SaH7Wj11X8Whtcl80YZ/rhzntuhcU1Hm3VaIW68
+         w5rCWdYnYEh8moxWrxsmZeJiJl+toUW0TpLe3hL6gEoMumpEB6UfFfWeIaxG0tKXlJDA
+         9gLKwuNcsss4LCRwImGPt4ptcujW6MRqjCERudGYMhLM1Danl/6+2FMM93mFxBKLyLNI
+         Vihg==
+X-Gm-Message-State: AOJu0YwWSqOVyernRUA068v/pKwunCHi+6RGtQiTPPBohvXbVh7V3hdD
+        yEnCRZJm57baMLvnVaAHoHR+LKTEvik=
+X-Google-Smtp-Source: AGHT+IHnF6ehN/QYO4okmI57KzHIK4QRxOX4Gv4bdBLLzdOV/dynBpU7YmMD7WlI4CRx+rg2rJsL2g==
+X-Received: by 2002:a17:907:948e:b0:9a2:28e2:c347 with SMTP id dm14-20020a170907948e00b009a228e2c347mr1678646ejc.34.1692917726906;
+        Thu, 24 Aug 2023 15:55:26 -0700 (PDT)
 Received: from 127.0.0.1localhost ([148.252.140.69])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170906144400b00992f81122e1sm173469ejc.21.2023.08.24.15.55.19
+        by smtp.gmail.com with ESMTPSA id q4-20020a170906144400b00992f81122e1sm173469ejc.21.2023.08.24.15.55.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 15:55:20 -0700 (PDT)
+        Thu, 24 Aug 2023 15:55:26 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH v2 03/15] io_uring: simplify big_cqe handling
-Date:   Thu, 24 Aug 2023 23:53:25 +0100
-Message-ID: <447aa1b2968978c99e655ba88db536e903df0fe9.1692916914.git.asml.silence@gmail.com>
+Subject: [PATCH v2 11/15] io_uring: move non aligned field to the end
+Date:   Thu, 24 Aug 2023 23:53:33 +0100
+Message-ID: <518e95d7888e9d481b2c5968dcf3f23db9ea47a5.1692916914.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <cover.1692916914.git.asml.silence@gmail.com>
 References: <cover.1692916914.git.asml.silence@gmail.com>
@@ -64,139 +64,68 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Don't keep big_cqe bits of req in a union with hash_node, find a
-separate space for it. It's bit safer, but also if we keep it always
-initialised, we can get rid of ugly REQ_F_CQE32_INIT handling.
+Move not cache aligned fields down in io_ring_ctx, should change
+anything, but makes further refactoring easier.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- include/linux/io_uring_types.h | 16 ++++++----------
- io_uring/io_uring.c            |  8 +++-----
- io_uring/io_uring.h            | 15 +++------------
- io_uring/uring_cmd.c           |  5 ++---
- 4 files changed, 14 insertions(+), 30 deletions(-)
+ include/linux/io_uring_types.h | 36 +++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
 diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index f04ce513fadb..9795eda529f7 100644
+index 608a8e80e881..ad87d6074fb2 100644
 --- a/include/linux/io_uring_types.h
 +++ b/include/linux/io_uring_types.h
-@@ -409,7 +409,6 @@ enum {
- 	REQ_F_SINGLE_POLL_BIT,
- 	REQ_F_DOUBLE_POLL_BIT,
- 	REQ_F_PARTIAL_IO_BIT,
--	REQ_F_CQE32_INIT_BIT,
- 	REQ_F_APOLL_MULTISHOT_BIT,
- 	REQ_F_CLEAR_POLLIN_BIT,
- 	REQ_F_HASH_LOCKED_BIT,
-@@ -479,8 +478,6 @@ enum {
- 	REQ_F_PARTIAL_IO	= BIT(REQ_F_PARTIAL_IO_BIT),
- 	/* fast poll multishot mode */
- 	REQ_F_APOLL_MULTISHOT	= BIT(REQ_F_APOLL_MULTISHOT_BIT),
--	/* ->extra1 and ->extra2 are initialised */
--	REQ_F_CQE32_INIT	= BIT(REQ_F_CQE32_INIT_BIT),
- 	/* recvmsg special flag, clear EPOLLIN */
- 	REQ_F_CLEAR_POLLIN	= BIT(REQ_F_CLEAR_POLLIN_BIT),
- 	/* hashed into ->cancel_hash_locked, protected by ->uring_lock */
-@@ -579,13 +576,7 @@ struct io_kiocb {
- 	struct io_task_work		io_task_work;
- 	unsigned			nr_tw;
- 	/* for polled requests, i.e. IORING_OP_POLL_ADD and async armed poll */
--	union {
--		struct hlist_node	hash_node;
--		struct {
--			u64		extra1;
--			u64		extra2;
--		};
--	};
-+	struct hlist_node		hash_node;
- 	/* internal polling, see IORING_FEAT_FAST_POLL */
- 	struct async_poll		*apoll;
- 	/* opcode allocated if it needs to store data for async defer */
-@@ -595,6 +586,11 @@ struct io_kiocb {
- 	/* custom credentials, valid IFF REQ_F_CREDS is set */
- 	const struct cred		*creds;
- 	struct io_wq_work		work;
+@@ -270,24 +270,6 @@ struct io_ring_ctx {
+ 		struct io_alloc_cache	netmsg_cache;
+ 	} ____cacheline_aligned_in_smp;
+ 
+-	/* IRQ completion list, under ->completion_lock */
+-	struct io_wq_work_list	locked_free_list;
+-	unsigned int		locked_free_nr;
+-
+-	const struct cred	*sq_creds;	/* cred used for __io_sq_thread() */
+-	struct io_sq_data	*sq_data;	/* if using sq thread polling */
+-
+-	struct wait_queue_head	sqo_sq_wait;
+-	struct list_head	sqd_list;
+-
+-	unsigned long		check_cq;
+-
+-	unsigned int		file_alloc_start;
+-	unsigned int		file_alloc_end;
+-
+-	struct xarray		personalities;
+-	u32			pers_next;
+-
+ 	struct {
+ 		/*
+ 		 * We cache a range of free CQEs we can use, once exhausted it
+@@ -332,6 +314,24 @@ struct io_ring_ctx {
+ 		unsigned		cq_last_tm_flush;
+ 	} ____cacheline_aligned_in_smp;
+ 
++	/* IRQ completion list, under ->completion_lock */
++	struct io_wq_work_list	locked_free_list;
++	unsigned int		locked_free_nr;
 +
-+	struct {
-+		u64			extra1;
-+		u64			extra2;
-+	} big_cqe;
- };
- 
- struct io_overflow_cqe {
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 3e0fe1ebbc10..0aeb33256a6d 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -807,13 +807,10 @@ static bool io_cqring_event_overflow(struct io_ring_ctx *ctx, u64 user_data,
- 
- void io_req_cqe_overflow(struct io_kiocb *req)
- {
--	if (!(req->flags & REQ_F_CQE32_INIT)) {
--		req->extra1 = 0;
--		req->extra2 = 0;
--	}
- 	io_cqring_event_overflow(req->ctx, req->cqe.user_data,
- 				req->cqe.res, req->cqe.flags,
--				req->extra1, req->extra2);
-+				req->big_cqe.extra1, req->big_cqe.extra2);
-+	memset(&req->big_cqe, 0, sizeof(req->big_cqe));
- }
- 
- /*
-@@ -1057,6 +1054,7 @@ static void io_preinit_req(struct io_kiocb *req, struct io_ring_ctx *ctx)
- 	req->async_data = NULL;
- 	/* not necessary, but safer to zero */
- 	memset(&req->cqe, 0, sizeof(req->cqe));
-+	memset(&req->big_cqe, 0, sizeof(req->big_cqe));
- }
- 
- static void io_flush_cached_locked_reqs(struct io_ring_ctx *ctx,
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 465598223386..9b5dfb6ef484 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -148,21 +148,12 @@ static inline bool io_fill_cqe_req(struct io_ring_ctx *ctx, struct io_kiocb *req
- 	if (trace_io_uring_complete_enabled())
- 		trace_io_uring_complete(req->ctx, req, req->cqe.user_data,
- 					req->cqe.res, req->cqe.flags,
--					(req->flags & REQ_F_CQE32_INIT) ? req->extra1 : 0,
--					(req->flags & REQ_F_CQE32_INIT) ? req->extra2 : 0);
-+					req->big_cqe.extra1, req->big_cqe.extra2);
- 
- 	memcpy(cqe, &req->cqe, sizeof(*cqe));
--
- 	if (ctx->flags & IORING_SETUP_CQE32) {
--		u64 extra1 = 0, extra2 = 0;
--
--		if (req->flags & REQ_F_CQE32_INIT) {
--			extra1 = req->extra1;
--			extra2 = req->extra2;
--		}
--
--		WRITE_ONCE(cqe->big_cqe[0], extra1);
--		WRITE_ONCE(cqe->big_cqe[1], extra2);
-+		memcpy(cqe->big_cqe, &req->big_cqe, sizeof(*cqe));
-+		memset(&req->big_cqe, 0, sizeof(req->big_cqe));
- 	}
- 	return true;
- }
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 8e7a03c1b20e..537795fddc87 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -43,9 +43,8 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_do_in_task_lazy);
- static inline void io_req_set_cqe32_extra(struct io_kiocb *req,
- 					  u64 extra1, u64 extra2)
- {
--	req->extra1 = extra1;
--	req->extra2 = extra2;
--	req->flags |= REQ_F_CQE32_INIT;
-+	req->big_cqe.extra1 = extra1;
-+	req->big_cqe.extra2 = extra2;
- }
- 
- /*
++	const struct cred	*sq_creds;	/* cred used for __io_sq_thread() */
++	struct io_sq_data	*sq_data;	/* if using sq thread polling */
++
++	struct wait_queue_head	sqo_sq_wait;
++	struct list_head	sqd_list;
++
++	unsigned long		check_cq;
++
++	unsigned int		file_alloc_start;
++	unsigned int		file_alloc_end;
++
++	struct xarray		personalities;
++	u32			pers_next;
++
+ 	/* Keep this last, we don't need it for the fast path */
+ 	struct wait_queue_head		poll_wq;
+ 	struct io_restriction		restrictions;
 -- 
 2.41.0
 
