@@ -2,59 +2,59 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A5F8EE49B6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A4DBEE49B3
 	for <io-uring@archiver.kernel.org>; Thu, 24 Aug 2023 22:56:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243976AbjHXWzq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S243977AbjHXWzq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 24 Aug 2023 18:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244037AbjHXWzf (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Aug 2023 18:55:35 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128F11FD0
-        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:27 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9936b3d0286so37412166b.0
-        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:26 -0700 (PDT)
+        with ESMTP id S244052AbjHXWzi (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 24 Aug 2023 18:55:38 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 110251FC3
+        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:32 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2bcd7a207f7so4223861fa.3
+        for <io-uring@vger.kernel.org>; Thu, 24 Aug 2023 15:55:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692917725; x=1693522525;
+        d=gmail.com; s=20221208; t=1692917730; x=1693522530;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LRwqn+8y3sMpl97JXgW1Kcuei5VeXjUdmpcF0r4gMS0=;
-        b=DXyyYBC1SzcFWlLWIMc3z5yrf2YD+w6N5PB0/6pdMK2bAFSDSEzcDYS73L0MFyF9Zf
-         MIWQuoFocHzrjT3DMJ9itefeYA657qBPDC6+zuPDQjEcw0Wv74xjfzy8Repge4yChXhp
-         RQyfpD1L9bDlN7zg/vHMzMvM/gxCCx0s31Yuu8Cv9Z7R+UlhjG0q2pL0dWVofIDBZrTG
-         YvjhxqlHNoWqOqAXJeCuPH9xlHm7GdmWCn7svctIwZyuZEBjMa4dcUi6HfsiG/RgdPif
-         76R/vxUwYGdBj0PnqIbnh/zQYnypaFBo/IQmOuef58rFTr1r7fP2a6Lt4NfbUzaT/qlK
-         yEew==
+        bh=rJ//xnNby4d5jNgpCMvTnltm5MwCd4efW3wW1j315lY=;
+        b=bVsm1vQVokQCMJ1TZ6GHf4zvfglESqR+K3uKqiU/fX5MkFGwJ8jd+ash5jNH2HV1Vj
+         mu9fyUQMOkg9TJyPpY9HFD/BGLYHZPp+z8dBn0aRQuuZrA2lannIchM0pT1hdKbhusfY
+         LAfzhy6z+uyPgLcO7kDJOBuR53ojzM3Oc9Bw60fUmibyuXvFpPpX2s5onWYaTlaF9aNy
+         rx3vTnzA5GW4fYAAApFv/Z2kwCTsMqt4PyH15tUXbjSAxW7MD85BBDTPRLaPrQJOdBKM
+         aMwkrnaeJUzJc2U3HQBqkcGLGtmgzimoBV43OtIcKDKwpdXKpJ0Usb4PUs2DXWVTYqPp
+         WNuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692917725; x=1693522525;
+        d=1e100.net; s=20221208; t=1692917730; x=1693522530;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LRwqn+8y3sMpl97JXgW1Kcuei5VeXjUdmpcF0r4gMS0=;
-        b=jfWfdikrXkFuHo9nRXiiwWUcZvhYNISBkVoxelu0k1SxUfxrLaK54s7DB/pkkYdFvF
-         wKDOuLrWz62nlMtPWbgeMNejVbqHKrfl5PZB5BfQHQya8QUNTV3n2EC4Sbnp25oo50XX
-         LXa5DNFG9Ll8YpiAIpIe9qJAlUeNe1XFsb9BRFEROo1r+jR9lsi6aprxMh32qLXiKWyK
-         pXPSs/bR1frhXIfuVxWSqG8+YpbbqWtXT2Hi9vPNexLp/EUePlcWsP5bcoLWUnV0On32
-         Ja4RUHeEyfaFpDv78Y4P27MXwHT2QsiKJ0+lqscxTNUgMs6283HjB9sZnTlk30P4IGf0
-         Wfag==
-X-Gm-Message-State: AOJu0YyJ1CewVOiqnWlDkJahzifyuN10wmCHpL3Kc+x5RO8g/al72G0V
-        58VaIH97L8JESWESwZSdV0EcPAQ9Rok=
-X-Google-Smtp-Source: AGHT+IH+fbo+C1jxd5nu0ioFzFSHzY4NOlGa83eY2ZTy2xfozVwU2qwxVCn9GpiT97THswGXibmpUw==
-X-Received: by 2002:a17:906:7493:b0:9a1:ca55:b668 with SMTP id e19-20020a170906749300b009a1ca55b668mr6703370ejl.59.1692917725362;
-        Thu, 24 Aug 2023 15:55:25 -0700 (PDT)
+        bh=rJ//xnNby4d5jNgpCMvTnltm5MwCd4efW3wW1j315lY=;
+        b=Bsc+2iIjZBBZg7Z1FskYBE9Td5TsrGdygAjRn7EB945aeTnws7cTwRmg8jlsqDs6LC
+         FgAUbxye0oVZQTStLkRcxN8jBkEihbWXQkBGlGSstyDbFHH/oFrPnQtU9wJTuOb8WgR8
+         PbSDmUVhIy8s7a7bAhWxhjh11Jze5/tVtDUxlBao17WQDhhkwZIjuAIGqURp2Pa73qwy
+         lGbeeAV8FwEcgtheE2Fudx/bJbCIqGEpErMZkG7/1CSeAhvoOpNUXcHUhoXPUoCtvNxZ
+         KiZ1iVj8nNUHNSYz7VfYezfCsTjjCIMrNg1A2P8EpmOyUnKfRqA6jwcxygxqs4WaWmYE
+         3zUg==
+X-Gm-Message-State: AOJu0YyhhZz1mz0RRDePocO7KDrNTS4hdLBD03nWhU3dYVCbEIPXK2my
+        uvSe2bunBjDexOjqC5ndwMaLC+Qhi+8=
+X-Google-Smtp-Source: AGHT+IG1GzITnRPVOSEM5gsTsfoSpU1KTYAwBnsRKseXZI84MjU5hhaivS8TlcEF10J1p7AyQGrnnw==
+X-Received: by 2002:a2e:9b58:0:b0:2bc:c1d9:6848 with SMTP id o24-20020a2e9b58000000b002bcc1d96848mr9442048ljj.44.1692917730114;
+        Thu, 24 Aug 2023 15:55:30 -0700 (PDT)
 Received: from 127.0.0.1localhost ([148.252.140.69])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170906144400b00992f81122e1sm173469ejc.21.2023.08.24.15.55.24
+        by smtp.gmail.com with ESMTPSA id q4-20020a170906144400b00992f81122e1sm173469ejc.21.2023.08.24.15.55.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 15:55:25 -0700 (PDT)
+        Thu, 24 Aug 2023 15:55:29 -0700 (PDT)
 From:   Pavel Begunkov <asml.silence@gmail.com>
 To:     io-uring@vger.kernel.org
 Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH v2 09/15] io_uring: compact SQ/CQ heads/tails
-Date:   Thu, 24 Aug 2023 23:53:31 +0100
-Message-ID: <9c8deddf9a7ed32069235a530d1e117fb460bc4c.1692916914.git.asml.silence@gmail.com>
+Subject: [PATCH v2 15/15] io_uring: move iopoll ctx fields around
+Date:   Thu, 24 Aug 2023 23:53:37 +0100
+Message-ID: <5b03cf7e6652e350e6e70a917eec72ba9f33b97b.1692916914.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <cover.1692916914.git.asml.silence@gmail.com>
 References: <cover.1692916914.git.asml.silence@gmail.com>
@@ -64,34 +64,65 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Queues heads and tails cache line aligned. That makes sq, cq taking 4
-lines or 5 lines if we include the rest of struct io_rings (e.g.
-sq_flags is frequently accessed).
-
-Since modern io_uring is mostly single threaded, it doesn't make much
-send to spread them as such, it wastes space and puts additional pressure
-on caches. Put them all into a single line.
+Move poll_multi_queue and iopoll_list to the submission cache line, it
+doesn't make much sense to keep them separately, and is better place
+for it in general.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- include/linux/io_uring_types.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/io_uring_types.h | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
 diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index c0c03d8059df..608a8e80e881 100644
+index 01bdbc223edd..13d19b9be9f4 100644
 --- a/include/linux/io_uring_types.h
 +++ b/include/linux/io_uring_types.h
-@@ -69,8 +69,8 @@ struct io_uring_task {
- };
+@@ -256,6 +256,15 @@ struct io_ring_ctx {
+ 		struct io_hash_table	cancel_table_locked;
+ 		struct io_alloc_cache	apoll_cache;
+ 		struct io_alloc_cache	netmsg_cache;
++
++		/*
++		 * ->iopoll_list is protected by the ctx->uring_lock for
++		 * io_uring instances that don't use IORING_SETUP_SQPOLL.
++		 * For SQPOLL, only the single threaded io_sq_thread() will
++		 * manipulate the list, hence no extra locking is needed there.
++		 */
++		struct io_wq_work_list	iopoll_list;
++		bool			poll_multi_queue;
+ 	} ____cacheline_aligned_in_smp;
  
- struct io_uring {
--	u32 head ____cacheline_aligned_in_smp;
--	u32 tail ____cacheline_aligned_in_smp;
-+	u32 head;
-+	u32 tail;
- };
+ 	struct {
+@@ -284,20 +293,6 @@ struct io_ring_ctx {
+ 		struct wait_queue_head	cq_wait;
+ 	} ____cacheline_aligned_in_smp;
  
- /*
+-	struct {
+-		spinlock_t		completion_lock;
+-
+-		bool			poll_multi_queue;
+-
+-		/*
+-		 * ->iopoll_list is protected by the ctx->uring_lock for
+-		 * io_uring instances that don't use IORING_SETUP_SQPOLL.
+-		 * For SQPOLL, only the single threaded io_sq_thread() will
+-		 * manipulate the list, hence no extra locking is needed there.
+-		 */
+-		struct io_wq_work_list	iopoll_list;
+-	} ____cacheline_aligned_in_smp;
+-
+ 	/* timeouts */
+ 	struct {
+ 		spinlock_t		timeout_lock;
+@@ -308,6 +303,8 @@ struct io_ring_ctx {
+ 
+ 	struct io_uring_cqe	completion_cqes[16];
+ 
++	spinlock_t		completion_lock;
++
+ 	/* IRQ completion list, under ->completion_lock */
+ 	struct io_wq_work_list	locked_free_list;
+ 	unsigned int		locked_free_nr;
 -- 
 2.41.0
 
