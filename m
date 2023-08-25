@@ -2,61 +2,61 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6AA9DC83F06
-	for <io-uring@archiver.kernel.org>; Fri, 25 Aug 2023 22:57:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A829C83F07
+	for <io-uring@archiver.kernel.org>; Fri, 25 Aug 2023 22:57:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjHYW4p (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S229545AbjHYW4p (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Fri, 25 Aug 2023 18:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjHYW4M (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 18:56:12 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B48BE77
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:10 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-56a8794b5adso827536a12.2
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:10 -0700 (PDT)
+        with ESMTP id S229709AbjHYW4O (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 18:56:14 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9891D199F
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:12 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-7923483bb68so50172539f.3
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20221208.gappssmtp.com; s=20221208; t=1693004170; x=1693608970;
+        d=davidwei-uk.20221208.gappssmtp.com; s=20221208; t=1693004172; x=1693608972;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AlVAPC67Ckz18v0seyoQ+Y1mhb5JS+9AeH2Kfw2VkZk=;
-        b=weIq1P1fYX9XojAfp1XdSHglagfDrMCXAL9e8Z8laIReXa/R92270FmVh18N1iUp6/
-         FN7fir9nSK4oibtMxKgy6hl4FqGxuZFZvDGTku/6FklpHkSuv6WkvSeoC12yAZmeiYZS
-         0AWLeFYL0UWTUw2WpMzzV9RUglpaaKYZtTkaXG3GTqhiEaS+fwl8X0fLS7eTCsPcyfaK
-         2flfQvQg7+XEXe62cUgfO+JyhMQzczvaXt2pezh7J2TRvBcMdVqzOk0juuQsYvbrt6Ly
-         Uz35XLXtjZ9iKxJQ0pw7hHZeTg4gXfhYtC6DpGoDE9kAFJ8/Lo12HMvTNChIst2uGwB/
-         fFRQ==
+        bh=f+GIQ4i5ByNuKwYrRpt0EIU7cHtWJOixaax1XVLnBrM=;
+        b=AmaWnMsV+9KbMhRjYIdPNb0DB4vWadGknaAYTmIQ9/rpIyh3VFL4DovERIjRF36Zj0
+         5bC9U7ePzbYpIlBNzpKndR8SH2E0FuqutABzNzdGcovFRzmjSRtPspOEyxCM0aePCIs7
+         Sug+9bBKgXWZqFXXqZpDSzXc9veS42drqyv2vLG2xm0wUdfhra3zN3XLFkrDeFczKHgU
+         rTlNEzaOFp6ko7jZi6C99p1SMsDmQJV2zSgNIBJcTjWlThL0jkdtxmwJvU9lMkKm9UVT
+         zqnCZFd5QHu+/LIdhmrnFQW8OKTa3nWpFjNsFEDZudH01x3UF2705+WF5bkX3hoDbWok
+         HXBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693004170; x=1693608970;
+        d=1e100.net; s=20221208; t=1693004172; x=1693608972;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AlVAPC67Ckz18v0seyoQ+Y1mhb5JS+9AeH2Kfw2VkZk=;
-        b=hNc8s6yH1Z+oI4BJDUIS9eDkza4qlEHSnewtbcT70TXh5D1uxXTHJ0SwKdWwJkElfR
-         GCU8ndhmQVGgDyfPtm4OpxOE80OBDam1f555ap76XbZEOLG9yjxL+BI9R5zwKkOHBf9c
-         5+eXFyieQeoP+UCEUHoyrBdDNrp6m8MaM2O6ngV0Iynk41+wh30mi4Lhf7PNbTMZJDBC
-         Ha7+ZMDnwQOvCBZe+O6ysvR4GCzF9bmkhhWYtMnoiajc1nbotfL0/r0eBKGayFEkHzz3
-         5pVzhvRym7DJZyIeOvLXo+GXwAyI0QknGXCPIAXzgoWZAn2WP8RtVEx/QqpGsIgVQ5EB
-         F/QA==
-X-Gm-Message-State: AOJu0YyWHbv4KX+ugA/8Cu1sfXLCfb3jhFTRFozN0ukWq/BkL1gn4nKx
-        1SBsk127qI72oFpqrDrjotXbcPf95R/dN69vSyYddA==
-X-Google-Smtp-Source: AGHT+IH/b8FrSUCGu7+W2iSm7lSjsbfYci0VTWbjyeyOfnY4oAfbqNMxdindWhBPKvMajYFpEI6q9Q==
-X-Received: by 2002:a17:903:234e:b0:1bd:aeb3:9504 with SMTP id c14-20020a170903234e00b001bdaeb39504mr23697764plh.15.1693004169997;
-        Fri, 25 Aug 2023 15:56:09 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-120.fbsv.net. [2a03:2880:ff:78::face:b00c])
-        by smtp.gmail.com with ESMTPSA id t11-20020a1709027fcb00b001bb9b87ac95sm2317688plb.103.2023.08.25.15.56.09
+        bh=f+GIQ4i5ByNuKwYrRpt0EIU7cHtWJOixaax1XVLnBrM=;
+        b=eMkIo1nQAWUoaNLMuH0GH7J3hoEq659wcs4launBNWdmvFInvQh+M03HpaVpEycq0r
+         eYBfBl6vMEMZB+6QuDGjfWsINjt9esv3lyao0DhP0wvlOqAZN/wJgL5h13EHqifbf94v
+         KiLR4uNB1nJgk2Ng2IHsxq+j0rI6QZY28NkWjmFh2DfJVpkp6sgK/X16Ur/Dl3fL6YPM
+         aszhGWkzSuCw2gQB8nGA30ikOad9rPrwhlmKlSRnQL9xH+n0JrxPgwcoWq0T0x8n4RfJ
+         otRcIM5zeh98SSaWNwhc+z4R/mg/NmPg5/pcWwMEsinFynKiMfMu2ajFw0T4bxWSRLN0
+         xTvw==
+X-Gm-Message-State: AOJu0YwFtBhf5VQUxa+Vz90YUJsey9/uCy/IOyQyME6rGIYDH8Jvf0bS
+        9dsa/CvtBQotXJgrUiBYeXEC/iiVZRIoqekJqSHB/w==
+X-Google-Smtp-Source: AGHT+IGpvWAfrK0facOjoagwGnhgqQZXTMb61hsDP0pg8x+84G76jg4Mw1+nYgaNb2asY883nIRN+A==
+X-Received: by 2002:a05:6e02:1568:b0:34b:ae46:803d with SMTP id k8-20020a056e02156800b0034bae46803dmr11857949ilu.4.1693004171964;
+        Fri, 25 Aug 2023 15:56:11 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-011.fbsv.net. [2a03:2880:ff:b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id bt27-20020a63291b000000b0056b920051b3sm2212333pgb.7.2023.08.25.15.56.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 15:56:09 -0700 (PDT)
+        Fri, 25 Aug 2023 15:56:11 -0700 (PDT)
 From:   David Wei <dw@davidwei.uk>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 Cc:     io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 07/11] skbuff: add SKBFL_FIXED_FRAG and skb_fixed()
-Date:   Fri, 25 Aug 2023 15:55:46 -0700
-Message-Id: <20230825225550.957014-8-dw@davidwei.uk>
+Subject: [PATCH 09/11] io_uring: delay ZC pool destruction
+Date:   Fri, 25 Aug 2023 15:55:48 -0700
+Message-Id: <20230825225550.957014-10-dw@davidwei.uk>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20230825225550.957014-1-dw@davidwei.uk>
 References: <20230825225550.957014-1-dw@davidwei.uk>
@@ -68,58 +68,113 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: David Wei <davidhwei@meta.com>
 
-When an skb that is marked as zero copy goes up the network stack during
-RX, skb_orphan_frags_rx is called which then calls skb_copy_ubufs and
-defeat the purpose of ZC.
+At a point in time, a ZC buf may be in:
 
-This is because currently zero copy is only for TX and this behaviour is
-designed to prevent TX zero copy data being redirected up the network
-stack rather than new zero copy RX data coming from the driver.
+* RX queue
+* Socket
+* One of the ifq ringbufs
+* Userspace
 
-This patch adds a new flag SKBFL_FIXED_FRAG and checks for this in
-skb_orphan_frags, not calling skb_copy_ubufs if it is set.
+The ZC pool region and the pool itself cannot be destroyed until all
+bufs have been returned.
+
+This patch changes the ZC pool destruction to be delayed work, waiting
+for up to 10 seconds for bufs to be returned before unconditionally
+destroying the pool.
 
 Signed-off-by: David Wei <davidhwei@meta.com>
 Co-developed-by: Jonathan Lemon <jonathan.lemon@gmail.com>
 ---
- include/linux/skbuff.h | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ io_uring/zc_rx.c | 50 ++++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 44 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 8cff3d817131..d7ef998df4a5 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -518,6 +518,9 @@ enum {
- 	 * use frags only up until ubuf_info is released
- 	 */
- 	SKBFL_MANAGED_FRAG_REFS = BIT(4),
-+
-+	/* don't move or copy the fragment */
-+	SKBFL_FIXED_FRAG = BIT(5),
- };
+diff --git a/io_uring/zc_rx.c b/io_uring/zc_rx.c
+index b8dd699e2777..70e39f851e47 100644
+--- a/io_uring/zc_rx.c
++++ b/io_uring/zc_rx.c
+@@ -28,6 +28,10 @@ struct io_zc_rx_pool {
+ 	u32			cache_count;
+ 	u32			cache[POOL_CACHE_SIZE];
  
- #define SKBFL_ZEROCOPY_FRAG	(SKBFL_ZEROCOPY_ENABLE | SKBFL_SHARED_FRAG)
-@@ -1674,6 +1677,11 @@ static inline bool skb_zcopy_managed(const struct sk_buff *skb)
- 	return skb_shinfo(skb)->flags & SKBFL_MANAGED_FRAG_REFS;
++	/* delayed destruction */
++	unsigned long		delay_end;
++	struct delayed_work	destroy_work;
++
+ 	/* freelist */
+ 	spinlock_t		freelist_lock;
+ 	u32			free_count;
+@@ -222,20 +226,56 @@ int io_zc_rx_create_pool(struct io_ring_ctx *ctx,
+ 	return ret;
  }
  
-+static inline bool skb_fixed(const struct sk_buff *skb)
+-static void io_zc_rx_destroy_pool(struct io_zc_rx_pool *pool)
++static void io_zc_rx_destroy_ifq(struct io_zc_rx_ifq *ifq)
 +{
-+	return skb_shinfo(skb)->flags & SKBFL_FIXED_FRAG;
++	if (ifq->dev)
++		dev_put(ifq->dev);
++	io_free_rbuf_ring(ifq);
++	kfree(ifq);
 +}
 +
- static inline bool skb_pure_zcopy_same(const struct sk_buff *skb1,
- 				       const struct sk_buff *skb2)
++static void io_zc_rx_destroy_pool_work(struct work_struct *work)
  {
-@@ -3135,7 +3143,7 @@ static inline int skb_orphan_frags(struct sk_buff *skb, gfp_t gfp_mask)
- /* Frags must be orphaned, even if refcounted, if skb might loop to rx path */
- static inline int skb_orphan_frags_rx(struct sk_buff *skb, gfp_t gfp_mask)
- {
--	if (likely(!skb_zcopy(skb)))
-+	if (likely(!skb_zcopy(skb) || skb_fixed(skb)))
- 		return 0;
- 	return skb_copy_ubufs(skb, gfp_mask);
++	struct io_zc_rx_pool *pool = container_of(
++			to_delayed_work(work), struct io_zc_rx_pool, destroy_work);
+ 	struct device *dev = netdev2dev(pool->ifq->dev);
+ 	struct io_zc_rx_buf *buf;
++	int i, refc, count;
+ 
+-	for (int i = 0; i < pool->nr_pages; i++) {
++	for (i = 0; i < pool->nr_pages; i++) {
+ 		buf = &pool->bufs[i];
++		refc = atomic_read(&buf->refcount) & IO_ZC_RX_KREF_MASK;
++		if (refc) {
++			if (time_before(jiffies, pool->delay_end)) {
++				schedule_delayed_work(&pool->destroy_work, HZ);
++				return;
++			}
++			count++;
++		}
++	}
++
++	if (count)
++		pr_debug("freeing pool with %d/%d outstanding pages\n",
++			 count, pool->nr_pages);
+ 
++
++	for (i = 0; i < pool->nr_pages; i++) {
++		buf = &pool->bufs[i];
+ 		io_zc_rx_unmap_buf(dev, buf);
+ 	}
++
++	io_zc_rx_destroy_ifq(pool->ifq);
+ 	kvfree(pool->bufs);
+ 	kvfree(pool);
  }
+ 
++static void io_zc_rx_destroy_pool(struct io_zc_rx_pool *pool)
++{
++	pool->delay_end = jiffies + HZ * 10;
++	INIT_DELAYED_WORK(&pool->destroy_work, io_zc_rx_destroy_pool_work);
++	schedule_delayed_work(&pool->destroy_work, 0);
++}
++
+ static struct io_zc_rx_ifq *io_zc_rx_ifq_alloc(struct io_ring_ctx *ctx)
+ {
+ 	struct io_zc_rx_ifq *ifq;
+@@ -256,10 +296,8 @@ static void io_zc_rx_ifq_free(struct io_zc_rx_ifq *ifq)
+ 		io_close_zc_rxq(ifq);
+ 	if (ifq->pool)
+ 		io_zc_rx_destroy_pool(ifq->pool);
+-	if (ifq->dev)
+-		dev_put(ifq->dev);
+-	io_free_rbuf_ring(ifq);
+-	kfree(ifq);
++	else
++		io_zc_rx_destroy_ifq(ifq);
+ }
+ 
+ int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
 -- 
 2.39.3
 
