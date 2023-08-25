@@ -2,64 +2,61 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 683E0C83F09
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57547C83F04
 	for <io-uring@archiver.kernel.org>; Fri, 25 Aug 2023 22:56:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjHYW4P (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 25 Aug 2023 18:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52878 "EHLO
+        id S229654AbjHYW4N (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 25 Aug 2023 18:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjHYW4J (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 18:56:09 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2460C199F
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:07 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-68bed2c786eso1122420b3a.0
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:07 -0700 (PDT)
+        with ESMTP id S229864AbjHYW4F (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 18:56:05 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E04CE77
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:02 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1bf48546ccfso10232995ad.2
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20221208.gappssmtp.com; s=20221208; t=1693004166; x=1693608966;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FqXYs9JKDR7EAnDxjSwatlgPrNqTmHker8ZbKfpU3gE=;
-        b=lCB7WHCdd4R8tUMIan6Ga/7Tavbv7fVn1todwxKYAhR1vItB53MdQqCh/W4uSusrSO
-         5bpTdYigvd0ZHXqG1qEey0Ugyu1KfUV7bUgtiwGVkLwkEJlm1VigWs2V5VOCNr00vV8O
-         YuAtThVQUQ6SbnLhqL9QA1ny7USGQh5VYxdZDkuY9lC23UYQQP+giGDGVz4YyGAw0alG
-         n0cpoe5cE0StEoHrYRl6+/veouqxBymScvxOQLYp4RuiuIQDxQMXIhR0bxz5uqckFTdT
-         Z3uqQvvSiFLsT1ANQXIOR/QUf4JeefqzSfVn+kmLhsy1d/pPJT5SZiu/d9Zs92hubCnc
-         f1Cg==
+        d=davidwei-uk.20221208.gappssmtp.com; s=20221208; t=1693004162; x=1693608962;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ln8V9k0rRAhr6XrGjbtxwTzjhCtFBJCGaH+v0PgMKkI=;
+        b=gYBvcissV08k68uzUB2Xh3MQU/BLzSPnlmtqyugkeD+xxbPH3Fnd1UMMF+h5k7xswc
+         6dwDT2OO1NNBhUNv/g5ZixWuHz/I4Ly4sqQcvGXPLbEPHfq9WLLgViLpcxp2QhM8q3R9
+         TFtqffsBqT0Wsg24AQ+Y3wBbxOYL9um7s9d+ds0A3wo6EFZAMgD7hU730nTYsNnX6Ijx
+         /5EtkL2TK60AeYqI9cVLAREv6Q8PQ8Jr/JjLDMDGFV0idCx+tVTwTUbnYLADGju/8Jrr
+         T0zrQnZ5uWkl/hX6BTT97zgQBwHj+Nt7cVE8zuVgaFelJkJN6UFOgSKQP5myaYapHHaY
+         cSqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693004166; x=1693608966;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FqXYs9JKDR7EAnDxjSwatlgPrNqTmHker8ZbKfpU3gE=;
-        b=fmJYv6DrZuORVY0trsNVPLzeZfu8ONLufA1XGGIe+UVncsG4nqKuNBhw5pDXN9vFgw
-         W9NeC254Ph3jXTfO5QEPYDCm95yQ0+tWAjGCdfBMbPcM3JPGF7MchFXNrBcQAt3JSjeA
-         5pt8AouSei6Cc5wa1CCtI8ricY3s62mpRxOHGUna9yzBvO/cwXr4ic9XV1IamlIh300a
-         5xzxXnUblJhANgZ/98swmXecyv05M/oIar1IRenQHQy+eFgVb5YKZL7FyyqAimzRC0q8
-         z/N9DKTuCPpodXmxaD+7VvO4+igbfNRjYNRuwcd7UBmopX99qWysOg0tEgaW1EFca7c9
-         v5fQ==
-X-Gm-Message-State: AOJu0YxER/+gac4jav6ptKxSJB3wu4r1Fr6riStjE/oKBnMH8m+5manW
-        kDZuoHEvQtcaUcDd+ZVWx+Bx/w==
-X-Google-Smtp-Source: AGHT+IHOSHg7RUcjMRGkFWFBAFNCL23Z1xQhUasW1n2o0nbzBF7hONfyB+bQ2oc1CkWLbShPJy7/1g==
-X-Received: by 2002:a05:6a21:71c1:b0:137:3eba:b7fb with SMTP id ay1-20020a056a2171c100b001373ebab7fbmr18585655pzc.2.1693004166374;
-        Fri, 25 Aug 2023 15:56:06 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-003.fbsv.net. [2a03:2880:ff:3::face:b00c])
-        by smtp.gmail.com with ESMTPSA id g25-20020aa78759000000b006732786b5f1sm2069993pfo.213.2023.08.25.15.56.05
+        d=1e100.net; s=20221208; t=1693004162; x=1693608962;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ln8V9k0rRAhr6XrGjbtxwTzjhCtFBJCGaH+v0PgMKkI=;
+        b=TA51Ys6T1rBVpOAyGX+k2/Pf265Qvhlt7jaUvWskC6hPhGn+8gnAFrEEBK4ftPciFH
+         JFdg8J18VhO5tV9Ib63TynWs85V5EaFXVtA+Wg6by8HrtoDs3aHeKr04QrSf9fYyETix
+         gHWe9Ev7P3ln6PfK83Foq1q68oGQIHr9K9QqH1q0aUJCkeRtYjPLFYi3BsSwX7hEo+Xr
+         HIEmcD6nRawYn6lUWLqs/SiwehnhLEtvxB9PZKugi5mwsJTo5aytox8Z65kGE34ZnavU
+         ULWTD7Ui0BC4cxfCCRuEeuJ6cz5CaHH1xmWDOV3S9U+FqtMwILBG4/igHe5L7jHoODk5
+         RZuQ==
+X-Gm-Message-State: AOJu0YxQvr7Hu+pHds3laHJNnx0OUCLA3MmhpqhsHZ78QwDFhArFuU5n
+        1yMhaKVmagRQqpSfcZrpq12brA==
+X-Google-Smtp-Source: AGHT+IHTb+olHTOvQ11MGsmTvUmrIwnWqJEuIzKguIom5ByihYwi2CdfxNJ1RiQYSnqQ/uRKjn+dXw==
+X-Received: by 2002:a17:902:da82:b0:1b0:3a74:7fc4 with SMTP id j2-20020a170902da8200b001b03a747fc4mr19242532plx.24.1693004161658;
+        Fri, 25 Aug 2023 15:56:01 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-010.fbsv.net. [2a03:2880:ff:a::face:b00c])
+        by smtp.gmail.com with ESMTPSA id o15-20020a170902d4cf00b001bf095dfb76sm2276461plg.237.2023.08.25.15.56.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 15:56:06 -0700 (PDT)
+        Fri, 25 Aug 2023 15:56:01 -0700 (PDT)
 From:   David Wei <dw@davidwei.uk>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 Cc:     io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 04/11] io_uring: setup ZC for an RX queue when registering an ifq
-Date:   Fri, 25 Aug 2023 15:55:43 -0700
-Message-Id: <20230825225550.957014-5-dw@davidwei.uk>
+Subject: [RFC PATCH 00/11] Zero copy network RX using io_uring
+Date:   Fri, 25 Aug 2023 15:55:39 -0700
+Message-Id: <20230825225550.957014-1-dw@davidwei.uk>
 X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230825225550.957014-1-dw@davidwei.uk>
-References: <20230825225550.957014-1-dw@davidwei.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -68,165 +65,85 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: David Wei <davidhwei@meta.com>
 
-This patch sets up ZC for an RX queue in a net device when an ifq is
-registered with io_uring. The RX queue is specified in the registration
-struct. The XDP command added in the previous patch is used to enable or
-disable ZC RX.
+This patchset is a proposal that adds zero copy network RX to io_uring.
+With it, userspace can register a region of host memory for receiving
+data directly from a NIC using DMA, without needing a kernel to user
+copy.
 
-For now since there is only one ifq, its destruction is implicit during
-io_uring cleanup.
+Software support is added to the Broadcom BNXT driver. Hardware support
+for receive flow steering and header splitting is required.
 
-Signed-off-by: David Wei <davidhwei@meta.com>
-Co-developed-by: Jonathan Lemon <jonathan.lemon@gmail.com>
----
- io_uring/io_uring.c |  1 +
- io_uring/zc_rx.c    | 62 +++++++++++++++++++++++++++++++++++++++++++--
- io_uring/zc_rx.h    |  1 +
- 3 files changed, 62 insertions(+), 2 deletions(-)
+On the userspace side, a sample server is added in this branch of
+liburing:
+https://github.com/spikeh/liburing/tree/zcrx2
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 0b6c5508b1ca..f2ec0a454307 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3098,6 +3098,7 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
- 	percpu_ref_kill(&ctx->refs);
- 	xa_for_each(&ctx->personalities, index, creds)
- 		io_unregister_personality(ctx, index);
-+	io_unregister_zc_rx_ifq(ctx);
- 	if (ctx->rings)
- 		io_poll_remove_all(ctx, NULL, true);
- 	mutex_unlock(&ctx->uring_lock);
-diff --git a/io_uring/zc_rx.c b/io_uring/zc_rx.c
-index 6c57c9b06e05..8cc66731af5b 100644
---- a/io_uring/zc_rx.c
-+++ b/io_uring/zc_rx.c
-@@ -3,6 +3,7 @@
- #include <linux/errno.h>
- #include <linux/mm.h>
- #include <linux/io_uring.h>
-+#include <linux/netdevice.h>
- 
- #include <uapi/linux/io_uring.h>
- 
-@@ -10,6 +11,35 @@
- #include "kbuf.h"
- #include "zc_rx.h"
- 
-+typedef int (*bpf_op_t)(struct net_device *dev, struct netdev_bpf *bpf);
-+
-+static int __io_queue_mgmt(struct net_device *dev, struct io_zc_rx_ifq *ifq,
-+			   u16 queue_id)
-+{
-+	struct netdev_bpf cmd;
-+	bpf_op_t ndo_bpf;
-+
-+	ndo_bpf = dev->netdev_ops->ndo_bpf;
-+	if (!ndo_bpf)
-+		return -EINVAL;
-+
-+	cmd.command = XDP_SETUP_ZC_RX;
-+	cmd.zc_rx.ifq = ifq;
-+	cmd.zc_rx.queue_id = queue_id;
-+
-+	return ndo_bpf(dev, &cmd);
-+}
-+
-+static int io_open_zc_rxq(struct io_zc_rx_ifq *ifq)
-+{
-+	return __io_queue_mgmt(ifq->dev, ifq, ifq->if_rxq_id);
-+}
-+
-+static int io_close_zc_rxq(struct io_zc_rx_ifq *ifq)
-+{
-+	return __io_queue_mgmt(ifq->dev, NULL, ifq->if_rxq_id);
-+}
-+
- static struct io_zc_rx_ifq *io_zc_rx_ifq_alloc(struct io_ring_ctx *ctx)
- {
- 	struct io_zc_rx_ifq *ifq;
-@@ -19,12 +49,17 @@ static struct io_zc_rx_ifq *io_zc_rx_ifq_alloc(struct io_ring_ctx *ctx)
- 		return NULL;
- 
- 	ifq->ctx = ctx;
-+	ifq->if_rxq_id = -1;
- 
- 	return ifq;
- }
- 
- static void io_zc_rx_ifq_free(struct io_zc_rx_ifq *ifq)
- {
-+	if (ifq->if_rxq_id != -1)
-+		io_close_zc_rxq(ifq);
-+	if (ifq->dev)
-+		dev_put(ifq->dev);
- 	io_free_rbuf_ring(ifq);
- 	kfree(ifq);
- }
-@@ -41,17 +76,22 @@ int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
- 		return -EFAULT;
- 	if (ctx->ifq)
- 		return -EBUSY;
-+	if (reg.if_rxq_id == -1)
-+		return -EINVAL;
- 
- 	ifq = io_zc_rx_ifq_alloc(ctx);
- 	if (!ifq)
- 		return -ENOMEM;
- 
--	/* TODO: initialise network interface */
--
- 	ret = io_allocate_rbuf_ring(ifq, &reg);
- 	if (ret)
- 		goto err;
- 
-+	ret = -ENODEV;
-+	ifq->dev = dev_get_by_index(&init_net, reg.if_idx);
-+	if (!ifq->dev)
-+		goto err;
-+
- 	/* TODO: map zc region and initialise zc pool */
- 
- 	ifq->rq_entries = reg.rq_entries;
-@@ -59,6 +99,10 @@ int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
- 	ifq->if_rxq_id = reg.if_rxq_id;
- 	ctx->ifq = ifq;
- 
-+	ret = io_open_zc_rxq(ifq);
-+	if (ret)
-+		goto err;
-+
- 	ring_sz = sizeof(struct io_rbuf_ring);
- 	rqes_sz = sizeof(struct io_uring_rbuf_rqe) * ifq->rq_entries;
- 	cqes_sz = sizeof(struct io_uring_rbuf_cqe) * ifq->cq_entries;
-@@ -80,3 +124,17 @@ int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
- 	io_zc_rx_ifq_free(ifq);
- 	return ret;
- }
-+
-+int io_unregister_zc_rx_ifq(struct io_ring_ctx *ctx)
-+{
-+	struct io_zc_rx_ifq *ifq;
-+
-+	ifq = ctx->ifq;
-+	if (!ifq)
-+		return -EINVAL;
-+
-+	ctx->ifq = NULL;
-+	io_zc_rx_ifq_free(ifq);
-+
-+	return 0;
-+}
-diff --git a/io_uring/zc_rx.h b/io_uring/zc_rx.h
-index 4363734f3d98..340ececa9f9c 100644
---- a/io_uring/zc_rx.h
-+++ b/io_uring/zc_rx.h
-@@ -17,5 +17,6 @@ struct io_zc_rx_ifq {
- 
- int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
- 			  struct io_uring_zc_rx_ifq_reg __user *arg);
-+int io_unregister_zc_rx_ifq(struct io_ring_ctx *ctx);
- 
- #endif
+Build liburing as normal, and run examples/zcrx. Then, set flow steering
+rules using ethtool. A sample shell script is included in
+examples/zcrx_flow.sh, but you need to change the source IP. Finally,
+connect a client using e.g. netcat and send data.
+
+This patchset + userspace code was tested on an Intel Xeon Platinum
+8321HC CPU and Broadcom BCM57504 NIC.
+
+Early benchmarks using this prototype, with iperf3 as a load generator,
+showed a ~50% reduction in overall system memory bandwidth as measured
+using perf counters. Note that DDIO must be disabled on Intel systems.
+
+Mina et al. from Google and Kuba are collaborating on a similar proposal
+to ZC from NIC to devmem. There are many shared functionality in netdev
+that we can collaborate on e.g.:
+* Page pool memory provider backend and resource registration
+* Page pool refcounted iov/buf representation and lifecycle
+* Setting receive flow steering
+
+As mentioned earlier, this is an early prototype. It is brittle, some
+functionality is missing and there's little optimisation. We're looking
+for feedback on the overall approach and points of collaboration in
+netdev.
+* No copy fallback, if payload ends up in linear part of skb then the
+  code will not work
+* No way to pin an RX queue to a specific CPU
+* Only one ifq, one pool region, on RX queue...
+
+This patchset is based on the work by Jonathan Lemon
+<jonathan.lemon@gmail.com>:
+https://lore.kernel.org/io-uring/20221108050521.3198458-1-jonathan.lemon@gmail.com/
+
+David Wei (11):
+  io_uring: add interface queue
+  io_uring: add mmap support for shared ifq ringbuffers
+  netdev: add XDP_SETUP_ZC_RX command
+  io_uring: setup ZC for an RX queue when registering an ifq
+  io_uring: add ZC buf and pool
+  io_uring: add ZC pool API
+  skbuff: add SKBFL_FIXED_FRAG and skb_fixed()
+  io_uring: allocate a uarg for freeing zero copy skbs
+  io_uring: delay ZC pool destruction
+  netdev/bnxt: add data pool and use it in BNXT driver
+  io_uring: add io_recvzc request
+
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  59 +-
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h     |   4 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |   3 +
+ include/linux/io_uring.h                      |  31 +
+ include/linux/io_uring_types.h                |   6 +
+ include/linux/netdevice.h                     |  11 +
+ include/linux/skbuff.h                        |  10 +-
+ include/net/data_pool.h                       |  96 +++
+ include/uapi/linux/io_uring.h                 |  53 ++
+ io_uring/Makefile                             |   3 +-
+ io_uring/io_uring.c                           |  13 +
+ io_uring/kbuf.c                               |  30 +
+ io_uring/kbuf.h                               |   5 +
+ io_uring/net.c                                |  83 +-
+ io_uring/opdef.c                              |  16 +
+ io_uring/zc_rx.c                              | 723 ++++++++++++++++++
+ io_uring/zc_rx.h                              |  42 +
+ 17 files changed, 1168 insertions(+), 20 deletions(-)
+ create mode 100644 include/net/data_pool.h
+ create mode 100644 io_uring/zc_rx.c
+ create mode 100644 io_uring/zc_rx.h
+
 -- 
 2.39.3
 
