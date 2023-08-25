@@ -2,140 +2,395 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5E41C83F0F
-	for <io-uring@archiver.kernel.org>; Fri, 25 Aug 2023 22:54:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4413EC83F06
+	for <io-uring@archiver.kernel.org>; Fri, 25 Aug 2023 22:56:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjHYWyG (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 25 Aug 2023 18:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S229643AbjHYW4M (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 25 Aug 2023 18:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231225AbjHYWxs (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 18:53:48 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979962724
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:53:32 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-68c0d4cc3a4so714033b3a.1
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:53:32 -0700 (PDT)
+        with ESMTP id S229887AbjHYW4F (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 18:56:05 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A517199F
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:03 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-68bec3a1c0fso1219697b3a.1
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 15:56:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1693004012; x=1693608812;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pUz0mvDJOC9uQjgg5Uba361PK/6ticcfnjAOo3qTtYA=;
-        b=F6apRE+SrZTqCeuN1zLMRosK5ge3rhNKZnpOWKEqEdWDSsGDK7EQGyDQsb6/5NjMZA
-         3YMPbcTJ/D3BMiY5oD/xtnLm9pzhShZ6+Y7oDMWnO0DfFEZbieWLXokCpFNjeT5nfH1C
-         s22NB1Wf7ErFiXowqbOOitIpN8YQ6wn+7f9hHAh/AXrGUdDwlOs/O2qrqcuv4RSpXcnU
-         GbrxFepvZAk5VQgoyCmH+APqoM+wo3KvR0eb+zB1BsLvnPOQaJNrJEZsuvoY9FN/6wnP
-         PBrjyNBdKOdo0Hj7mZUOQ9904vJZldE2dQql827LKN+udL2AKxU33q1Q1ADVqqMaFs/v
-         qugw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693004012; x=1693608812;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=davidwei-uk.20221208.gappssmtp.com; s=20221208; t=1693004163; x=1693608963;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pUz0mvDJOC9uQjgg5Uba361PK/6ticcfnjAOo3qTtYA=;
-        b=lmP4IdUpt2Pqkqq089QRikLh06njNr/r0NUTlLikQcjsUVuU2c44RfqczP79y5ZOXQ
-         cen410sGJ07bdNCic+zit4YD/ZiT94cEReq8aznrGyaOoFftT7sqeXuRgs+uZ1NVBTAl
-         oLyWoyc6gH+5cH6Bw1oDn6MMVQuZS25iwNuywS2UyoytqSDq2ajE0yw3SKzEISNipB1U
-         n++1fN7xvgpaEw5TOaWSVDRkgGMFuOenXLQtMPKe5WCSyvK+9p4JkD3xy07RnD4KJltv
-         b9fsGqxUJ41eVkh+mJMvwrbiCLz54vNxE8s7Lo+755u0T1dVgNczo/0gOcnfcYrOeXhx
-         Yx6g==
-X-Gm-Message-State: AOJu0YxrFix8u/6/kK0szvEXqFtZsAK5mY6YBKD2woVCs7zRqZL8RfQs
-        FFzsdR5QpQ9L3UkooJI/qlxJkQ==
-X-Google-Smtp-Source: AGHT+IF7qLruqklxY40yAH4SKvsJCnFBTQ8pg1x9p8DXB9ryPTSvbA4aGhPPBTQdBXYgxxyeFGZdhA==
-X-Received: by 2002:a05:6a20:7354:b0:13d:5b8e:db83 with SMTP id v20-20020a056a20735400b0013d5b8edb83mr20399311pzc.9.1693004012072;
-        Fri, 25 Aug 2023 15:53:32 -0700 (PDT)
-Received: from dread.disaster.area (pa49-195-66-88.pa.nsw.optusnet.com.au. [49.195.66.88])
-        by smtp.gmail.com with ESMTPSA id u15-20020a62ed0f000000b006887be16675sm2060364pfh.205.2023.08.25.15.53.31
+        bh=jTvowOQwcZhVRqOJ6qg2E7pufXaeMTOsQWNawAhB/rk=;
+        b=qRETiYB6Gnj+agcJyc7iUP5owlf58Ley2EasX/BNq+/0RSRIwQ5G2MwYfvL5lRHhEC
+         +E6oknVoOQQkCVPv7oKyUtjYSRhJgUM9K3kozLarTNw4IsSFUU5CCrPufMj6NwcHb1ys
+         sKJE+L9UlyaYoE3JW3Xdzb+oqCYH74v0jpcs9/11krjZ2cY0Cv8KLNj9STPerqlireC7
+         m/OwdNc0Hvucq6F/H2v95sCpbI8uop+Odmr2zp55yn4DRzwtw4AIgj0QU9OAjpbuhVE0
+         DbYnir4xYk8XucEQ/8i+EAINyMSv01JJL51VFM8jcl/1d7pk/JV7hE/4JxwEFB8JRS/K
+         8qag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693004163; x=1693608963;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jTvowOQwcZhVRqOJ6qg2E7pufXaeMTOsQWNawAhB/rk=;
+        b=Xt5p01cNq34Vx/NoB14u46pcPB1ZzdMde3eQ8GWExYf6NDnHE9V0VUlWFxUSzsbSnT
+         Y2hJa6xwvYmDK24+CuJIUzOItjLe6myiuNAClg2M+6XV58Jo7kV0iaYZcgsgtMekEflB
+         WM5eQfK8t1AwawKuA23SQEvtw/Cgo2wuwTNjgkGHJsiYB+v0NhheScHTVEZs0ZpIkH6W
+         e2dhr/fzUi39m0S8E3ByCYSIbhzNt/fv6GeAgHemLmENfxWkoGaNEnNIFmat/jr5E96T
+         kmhWfi9nmgfjODyPFYS2EfmxgZyJWX+xSw01u1nPoKpa3SCf6qyUUEHG5KH1Bli/azQ9
+         yNuQ==
+X-Gm-Message-State: AOJu0YyMfhcovIdf9RnHewgTiBOYb7OWnUSFjMciyoGUxi3lx9ejDE/G
+        zym/rXmPFLmmeZkubipNXp21zg==
+X-Google-Smtp-Source: AGHT+IEb6WthqB3EcxbwUAv3Sz8RT2HICYRL+UXajWVZd8tgn/unk6lFmCnAQKwapcgYMndeFVgH9w==
+X-Received: by 2002:a05:6a00:22cb:b0:68b:c423:fb20 with SMTP id f11-20020a056a0022cb00b0068bc423fb20mr10285809pfj.30.1693004162926;
+        Fri, 25 Aug 2023 15:56:02 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-011.fbsv.net. [2a03:2880:ff:b::face:b00c])
+        by smtp.gmail.com with ESMTPSA id e21-20020aa78255000000b0066f37665a63sm2068002pfn.73.2023.08.25.15.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 15:53:31 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qZfgG-006WDY-1c;
-        Sat, 26 Aug 2023 08:53:28 +1000
-Date:   Sat, 26 Aug 2023 08:53:28 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Hao Xu <hao.xu@linux.dev>
-Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-cachefs@redhat.com,
-        ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, codalist@coda.cs.cmu.edu,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        devel@lists.orangefs.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mtd@lists.infradead.org,
-        Wanpeng Li <wanpengli@tencent.com>
-Subject: Re: [PATCH RFC v5 00/29] io_uring getdents
-Message-ID: <ZOkw6KkdP1UWPNBW@dread.disaster.area>
-References: <20230825135431.1317785-1-hao.xu@linux.dev>
+        Fri, 25 Aug 2023 15:56:02 -0700 (PDT)
+From:   David Wei <dw@davidwei.uk>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, Mina Almasry <almasrymina@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 01/11] io_uring: add interface queue
+Date:   Fri, 25 Aug 2023 15:55:40 -0700
+Message-Id: <20230825225550.957014-2-dw@davidwei.uk>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20230825225550.957014-1-dw@davidwei.uk>
+References: <20230825225550.957014-1-dw@davidwei.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230825135431.1317785-1-hao.xu@linux.dev>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri, Aug 25, 2023 at 09:54:02PM +0800, Hao Xu wrote:
-> From: Hao Xu <howeyxu@tencent.com>
-> 
-> This series introduce getdents64 to io_uring, the code logic is similar
-> with the snychronized version's. It first try nowait issue, and offload
-> it to io-wq threads if the first try fails.
-> 
-> Patch1 and Patch2 are some preparation
-> Patch3 supports nowait for xfs getdents code
-> Patch4-11 are vfs change, include adding helpers and trylock for locks
-> Patch12-29 supports nowait for involved xfs journal stuff
-> note, Patch24 and 27 are actually two questions, might be removed later.
-> an xfs test may come later.
+From: David Wei <davidhwei@meta.com>
 
-You need to drop all the XFS journal stuff. It's fundamentally
-broken as it stands, and we cannot support non-blocking
-transactional changes without first putting a massive investment in
-transaction and intent chain rollback to allow correctly undoing
-partially complete modifications.
+This patch introduces a new object in io_uring called an interface queue
+(ifq) which contains:
 
-Regardless, non-blocking transactions are completely unnecessary for
-a non-blocking readdir implementation. readdir should only be
-touching atime, and with relatime it should only occur once every 24
-hours per inode. If that's a problem, then we have noatime mount
-options. Hence I just don't see any point in worrying about having a
-timestamp update block occasionally...
+* A pool region allocated by userspace and registered w/ io_uring where
+  RX data is written to.
+* A net device and one specific RX queue in it that will be configured
+  for ZC RX.
+* A pair of shared ringbuffers w/ userspace, dubbed registered buf
+  (rbuf) rings. Each entry contains a pool region id and an offset + len
+  within that region. The kernel writes entries into the completion ring
+  to tell userspace where RX data is relative to the start of a region.
+  Userspace writes entries into the refill ring to tell the kernel when
+  it is done with the data.
 
-I also don't really don't see why you need to fiddle with xfs buffer
-cache semantics - it already has the functionality "nowait" buffer
-reads require (i.e.  XBF_INCORE|XBF_TRYLOCK).
+For now, each io_uring instance has a single ifq, and each ifq has a
+single pool region associated with one RX queue.
 
-However, the readahead IO that the xfs readdir code issues cannot
-use your defined NOWAIT semantics - it must be able to allocate
-memory and issue IO. Readahead already avoids blocking on memory
-allocation and blocking on IO via the XBF_READ_AHEAD flag. This sets
-__GFP_NORETRY for buffer allocation and REQ_RAHEAD for IO. Hence
-readahead only needs the existing XBF_TRYLOCK flag to be set to be
-compatible with the required NOWAIT semantics....
+Add a new opcode to io_uring_register that sets up an ifq. Size and
+offsets of shared ringbuffers are returned to userspace for it to mmap.
+The implementation will be added in a later patch.
 
-As for the NOIO memory allocation restrictions io_uring requires,
-that should be enforced at the io_uring layer before calling into
-the VFS using memalloc_noio_save/restore.  At that point no memory
-allocation will trigger IO and none of the code running under NOWAIT
-conditions even needs to be aware that io_uring has a GFP_NOIO
-restriction on memory allocation....
+Signed-off-by: David Wei <davidhwei@meta.com>
+---
+ include/linux/io_uring_types.h |  6 ++++
+ include/uapi/linux/io_uring.h  | 50 ++++++++++++++++++++++++++
+ io_uring/Makefile              |  3 +-
+ io_uring/io_uring.c            |  7 ++++
+ io_uring/kbuf.c                | 30 ++++++++++++++++
+ io_uring/kbuf.h                |  5 +++
+ io_uring/zc_rx.c               | 65 ++++++++++++++++++++++++++++++++++
+ io_uring/zc_rx.h               | 21 +++++++++++
+ 8 files changed, 186 insertions(+), 1 deletion(-)
+ create mode 100644 io_uring/zc_rx.c
+ create mode 100644 io_uring/zc_rx.h
 
-Please go back to the simple "do non-blocking buffer IO"
-implementation we started with and don't try to solve every little
-blocking problem that might exist in the VFS and filesystems...
-
--Dave
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 1b2a20a42413..8f6068da185c 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -151,6 +151,10 @@ struct io_rings {
+ 	struct io_uring_cqe	cqes[] ____cacheline_aligned_in_smp;
+ };
+ 
++struct io_rbuf_ring {
++	struct io_uring		rq, cq;
++};
++
+ struct io_restriction {
+ 	DECLARE_BITMAP(register_op, IORING_REGISTER_LAST);
+ 	DECLARE_BITMAP(sqe_op, IORING_OP_LAST);
+@@ -330,6 +334,8 @@ struct io_ring_ctx {
+ 	struct io_rsrc_data		*file_data;
+ 	struct io_rsrc_data		*buf_data;
+ 
++	struct io_zc_rx_ifq		*ifq;
++
+ 	/* protected by ->uring_lock */
+ 	struct list_head		rsrc_ref_list;
+ 	struct io_alloc_cache		rsrc_node_cache;
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 0716cb17e436..8f2a1061629b 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -523,6 +523,9 @@ enum {
+ 	/* register a range of fixed file slots for automatic slot allocation */
+ 	IORING_REGISTER_FILE_ALLOC_RANGE	= 25,
+ 
++	/* register a network interface queue for zerocopy */
++	IORING_REGISTER_ZC_RX_IFQ		= 26,
++
+ 	/* this goes last */
+ 	IORING_REGISTER_LAST,
+ 
+@@ -703,6 +706,53 @@ struct io_uring_recvmsg_out {
+ 	__u32 flags;
+ };
+ 
++struct io_uring_rbuf_rqe {
++	__u32	off;
++	__u32	len;
++	__u16	region;
++	__u8	__pad[6];
++};
++
++struct io_uring_rbuf_cqe {
++	__u32	off;
++	__u32	len;
++	__u16	region;
++	__u8	flags;
++	__u8	__pad[3];
++};
++
++struct io_rbuf_rqring_offsets {
++	__u32	head;
++	__u32	tail;
++	__u32	rqes;
++	__u8	__pad[4];
++};
++
++struct io_rbuf_cqring_offsets {
++	__u32	head;
++	__u32	tail;
++	__u32	cqes;
++	__u8	__pad[4];
++};
++
++/*
++ * Argument for IORING_REGISTER_ZC_RX_IFQ
++ */
++struct io_uring_zc_rx_ifq_reg {
++	__u32	if_idx;
++	/* hw rx descriptor ring id */
++	__u32	if_rxq_id;
++	__u32	region_id;
++	__u32	rq_entries;
++	__u32	cq_entries;
++	__u32	flags;
++	__u16	cpu;
++
++	__u32	mmap_sz;
++	struct io_rbuf_rqring_offsets rq_off;
++	struct io_rbuf_cqring_offsets cq_off;
++};
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/io_uring/Makefile b/io_uring/Makefile
+index 8cc8e5387a75..7818b015a1f2 100644
+--- a/io_uring/Makefile
++++ b/io_uring/Makefile
+@@ -7,5 +7,6 @@ obj-$(CONFIG_IO_URING)		+= io_uring.o xattr.o nop.o fs.o splice.o \
+ 					openclose.o uring_cmd.o epoll.o \
+ 					statx.o net.o msg_ring.o timeout.o \
+ 					sqpoll.o fdinfo.o tctx.o poll.o \
+-					cancel.o kbuf.o rsrc.o rw.o opdef.o notif.o
++					cancel.o kbuf.o rsrc.o rw.o opdef.o \
++					notif.o zc_rx.o
+ obj-$(CONFIG_IO_WQ)		+= io-wq.o
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 3bca7a79efda..7705d18dceff 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -92,6 +92,7 @@
+ #include "cancel.h"
+ #include "net.h"
+ #include "notif.h"
++#include "zc_rx.h"
+ 
+ #include "timeout.h"
+ #include "poll.h"
+@@ -4418,6 +4419,12 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
+ 			break;
+ 		ret = io_register_file_alloc_range(ctx, arg);
+ 		break;
++	case IORING_REGISTER_ZC_RX_IFQ:
++		ret = -EINVAL;
++		if (!arg || nr_args != 1)
++			break;
++		ret = io_register_zc_rx_ifq(ctx, arg);
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index 2f0181521c98..d7499e7b34bd 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -634,3 +634,33 @@ void *io_pbuf_get_address(struct io_ring_ctx *ctx, unsigned long bgid)
+ 
+ 	return bl->buf_ring;
+ }
++
++int io_allocate_rbuf_ring(struct io_zc_rx_ifq *ifq,
++			  struct io_uring_zc_rx_ifq_reg *reg)
++{
++	gfp_t gfp = GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_NOWARN | __GFP_COMP;
++	size_t off, size, rq_size, cq_size;
++	void *ptr;
++
++	off = sizeof(struct io_rbuf_ring);
++	rq_size = reg->rq_entries * sizeof(struct io_uring_rbuf_rqe);
++	cq_size = reg->cq_entries * sizeof(struct io_uring_rbuf_cqe);
++	size = off + rq_size + cq_size;
++	ptr = (void *) __get_free_pages(gfp, get_order(size));
++	if (!ptr)
++		return -ENOMEM;
++	ifq->ring = (struct io_rbuf_ring *)ptr;
++	ifq->rqes = (struct io_uring_rbuf_rqe *)((char *)ptr + off);
++	ifq->cqes = (struct io_uring_rbuf_cqe *)((char *)ifq->rqes + rq_size);
++
++	return 0;
++}
++
++void io_free_rbuf_ring(struct io_zc_rx_ifq *ifq)
++{
++	struct page *page;
++
++	page = virt_to_head_page(ifq->ring);
++	if (put_page_testzero(page))
++		free_compound_page(page);
++}
+diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
+index d14345ef61fc..6c8afda93646 100644
+--- a/io_uring/kbuf.h
++++ b/io_uring/kbuf.h
+@@ -4,6 +4,8 @@
+ 
+ #include <uapi/linux/io_uring.h>
+ 
++#include "zc_rx.h"
++
+ struct io_buffer_list {
+ 	/*
+ 	 * If ->buf_nr_pages is set, then buf_pages/buf_ring are used. If not,
+@@ -57,6 +59,9 @@ void io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags);
+ 
+ void *io_pbuf_get_address(struct io_ring_ctx *ctx, unsigned long bgid);
+ 
++int io_allocate_rbuf_ring(struct io_zc_rx_ifq *ifq, struct io_uring_zc_rx_ifq_reg *reg);
++void io_free_rbuf_ring(struct io_zc_rx_ifq *ifq);
++
+ static inline void io_kbuf_recycle_ring(struct io_kiocb *req)
+ {
+ 	/*
+diff --git a/io_uring/zc_rx.c b/io_uring/zc_rx.c
+new file mode 100644
+index 000000000000..63bc6cd7d205
+--- /dev/null
++++ b/io_uring/zc_rx.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/kernel.h>
++#include <linux/errno.h>
++#include <linux/mm.h>
++#include <linux/io_uring.h>
++
++#include <uapi/linux/io_uring.h>
++
++#include "io_uring.h"
++#include "kbuf.h"
++#include "zc_rx.h"
++
++static struct io_zc_rx_ifq *io_zc_rx_ifq_alloc(struct io_ring_ctx *ctx)
++{
++	struct io_zc_rx_ifq *ifq;
++
++	ifq = kzalloc(sizeof(*ifq), GFP_KERNEL);
++	if (!ifq)
++		return NULL;
++
++	ifq->ctx = ctx;
++
++	return ifq;
++}
++
++static void io_zc_rx_ifq_free(struct io_zc_rx_ifq *ifq)
++{
++	io_free_rbuf_ring(ifq);
++	kfree(ifq);
++}
++
++int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
++			  struct io_uring_zc_rx_ifq_reg __user *arg)
++{
++	struct io_uring_zc_rx_ifq_reg reg;
++	struct io_zc_rx_ifq *ifq;
++	int ret;
++
++	if (copy_from_user(&reg, arg, sizeof(reg)))
++		return -EFAULT;
++	if (ctx->ifq)
++		return -EBUSY;
++
++	ifq = io_zc_rx_ifq_alloc(ctx);
++	if (!ifq)
++		return -ENOMEM;
++
++	/* TODO: initialise network interface */
++
++	ret = io_allocate_rbuf_ring(ifq, &reg);
++	if (ret)
++		goto err;
++
++	/* TODO: map zc region and initialise zc pool */
++
++	ifq->rq_entries = reg.rq_entries;
++	ifq->cq_entries = reg.cq_entries;
++	ifq->if_rxq_id = reg.if_rxq_id;
++	ctx->ifq = ifq;
++
++	return 0;
++err:
++	io_zc_rx_ifq_free(ifq);
++	return ret;
++}
+diff --git a/io_uring/zc_rx.h b/io_uring/zc_rx.h
+new file mode 100644
+index 000000000000..4363734f3d98
+--- /dev/null
++++ b/io_uring/zc_rx.h
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++#ifndef IOU_ZC_RX_H
++#define IOU_ZC_RX_H
++
++struct io_zc_rx_ifq {
++	struct io_ring_ctx	*ctx;
++	struct net_device	*dev;
++	struct io_rbuf_ring	*ring;
++	struct io_uring_rbuf_rqe *rqes;
++	struct io_uring_rbuf_cqe *cqes;
++	u32			rq_entries, cq_entries;
++	void			*pool;
++
++	/* hw rx descriptor ring id */
++	u32			if_rxq_id;
++};
++
++int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
++			  struct io_uring_zc_rx_ifq_reg __user *arg);
++
++#endif
 -- 
-Dave Chinner
-david@fromorbit.com
+2.39.3
+
