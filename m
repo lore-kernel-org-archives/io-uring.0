@@ -2,72 +2,160 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 912D3EE49A5
-	for <io-uring@archiver.kernel.org>; Fri, 25 Aug 2023 09:12:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A497EE49A3
+	for <io-uring@archiver.kernel.org>; Fri, 25 Aug 2023 13:55:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235280AbjHYJLx (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 25 Aug 2023 05:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S243716AbjHYNz3 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 25 Aug 2023 09:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244150AbjHYJLa (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 05:11:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C3A1BD9
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 02:10:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1692954638;
+        with ESMTP id S245329AbjHYNzW (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 09:55:22 -0400
+Received: from out-251.mta1.migadu.com (out-251.mta1.migadu.com [IPv6:2001:41d0:203:375::fb])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4A9213B
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 06:55:19 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1692971717;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=a+pGH+z7QUdI0m+ykxwJUuvoAK3X6BtRIZS4sAYva04=;
-        b=Tyx6rYkpTyKhmh8c6/0twqJo/Vx8XGVxjLA82v12sKFKgCrZNT9J/QpjHYc7LJwSkhwyVF
-        vIbX6OR/B4034K56BngtsmuqOlNSlynFySuz3ivWQrwqtezizcJ4vGOAzfsrh+ra1fbmzJ
-        2+BUw+uB4iGl8QzEHB/OFzwPDhPpsgY=
-Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-eVymPfdkMtKD4-Kl57CkSQ-1; Fri, 25 Aug 2023 05:10:33 -0400
-X-MC-Unique: eVymPfdkMtKD4-Kl57CkSQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB54228040D4;
-        Fri, 25 Aug 2023 09:10:30 +0000 (UTC)
-Received: from localhost (unknown [10.72.120.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B6B202026D76;
-        Fri, 25 Aug 2023 09:10:29 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 0/2] io_uring: fix IO hang in io wq exit
-Date:   Fri, 25 Aug 2023 17:09:57 +0800
-Message-Id: <20230825090959.1866771-1-ming.lei@redhat.com>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M7eywqhb1fMAXTeyjh6BJsPONBLehGvo8wJ7nQSmBJs=;
+        b=sf0c3BaV5zKRH4Bb8TUwfPopplZAFyQJxSB3uPd/Bru862GHE/6uLEqra/FCbrZoDX4RQi
+        CIrt1XneKgBJ/A8gWA/etx0kgRlpMUcGJTfa14yTcf5Kv3L0Wt8Br8rgcIz1PY9X6AeQ+Q
+        Vrx6zJaXOEDBrQhrS+G7Zr51TGkx4FM=
+From:   Hao Xu <hao.xu@linux.dev>
+To:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Cc:     Dominique Martinet <asmadeus@codewreck.org>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
+        Dave Chinner <david@fromorbit.com>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-cachefs@redhat.com,
+        ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, codalist@coda.cs.cmu.edu,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        devel@lists.orangefs.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-mtd@lists.infradead.org,
+        Wanpeng Li <wanpengli@tencent.com>
+Subject: [PATCH 01/29] fs: split off vfs_getdents function of getdents64 syscall
+Date:   Fri, 25 Aug 2023 21:54:03 +0800
+Message-Id: <20230825135431.1317785-2-hao.xu@linux.dev>
+In-Reply-To: <20230825135431.1317785-1-hao.xu@linux.dev>
+References: <20230825135431.1317785-1-hao.xu@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hello,
+From: Dominique Martinet <asmadeus@codewreck.org>
 
-The 1st patch add one helper, and the 2nd one fixes IO hang issue[1]
-reported by David Howells.
+This splits off the vfs_getdents function from the getdents64 system
+call.
+This will allow io_uring to call the vfs_getdents function.
 
-[1] https://lore.kernel.org/linux-block/3893581.1691785261@warthog.procyon.org.uk/
+Co-developed-by: Stefan Roesch <shr@fb.com>
+Signed-off-by: Stefan Roesch <shr@fb.com>
+Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+Signed-off-by: Hao Xu <howeyxu@tencent.com>
+---
+ fs/internal.h |  8 ++++++++
+ fs/readdir.c  | 34 ++++++++++++++++++++++++++--------
+ 2 files changed, 34 insertions(+), 8 deletions(-)
 
-Ming Lei (2):
-  io_uring: add one helper for reaping iopoll events
-  io_uring: reap iopoll events before exiting io wq
-
- io_uring/io_uring.c | 27 +++++++++++++-------
- io_uring/io_uring.h |  1 +
- io_uring/tctx.c     | 60 +++++++++++++++++++++++++++++++++++++++------
- 3 files changed, 71 insertions(+), 17 deletions(-)
-
+diff --git a/fs/internal.h b/fs/internal.h
+index f7a3dc111026..b1f66e52d61b 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -304,3 +304,11 @@ ssize_t __kernel_write_iter(struct file *file, struct iov_iter *from, loff_t *po
+ struct mnt_idmap *alloc_mnt_idmap(struct user_namespace *mnt_userns);
+ struct mnt_idmap *mnt_idmap_get(struct mnt_idmap *idmap);
+ void mnt_idmap_put(struct mnt_idmap *idmap);
++
++/*
++ * fs/readdir.c
++ */
++struct linux_dirent64;
++
++int vfs_getdents(struct file *file, struct linux_dirent64 __user *dirent,
++		 unsigned int count);
+diff --git a/fs/readdir.c b/fs/readdir.c
+index b264ce60114d..9592259b7e7f 100644
+--- a/fs/readdir.c
++++ b/fs/readdir.c
+@@ -21,6 +21,7 @@
+ #include <linux/unistd.h>
+ #include <linux/compat.h>
+ #include <linux/uaccess.h>
++#include "internal.h"
+ 
+ #include <asm/unaligned.h>
+ 
+@@ -351,10 +352,16 @@ static bool filldir64(struct dir_context *ctx, const char *name, int namlen,
+ 	return false;
+ }
+ 
+-SYSCALL_DEFINE3(getdents64, unsigned int, fd,
+-		struct linux_dirent64 __user *, dirent, unsigned int, count)
++
++/**
++ * vfs_getdents - getdents without fdget
++ * @file    : pointer to file struct of directory
++ * @dirent  : pointer to user directory structure
++ * @count   : size of buffer
++ */
++int vfs_getdents(struct file *file, struct linux_dirent64 __user *dirent,
++		 unsigned int count)
+ {
+-	struct fd f;
+ 	struct getdents_callback64 buf = {
+ 		.ctx.actor = filldir64,
+ 		.count = count,
+@@ -362,11 +369,7 @@ SYSCALL_DEFINE3(getdents64, unsigned int, fd,
+ 	};
+ 	int error;
+ 
+-	f = fdget_pos(fd);
+-	if (!f.file)
+-		return -EBADF;
+-
+-	error = iterate_dir(f.file, &buf.ctx);
++	error = iterate_dir(file, &buf.ctx);
+ 	if (error >= 0)
+ 		error = buf.error;
+ 	if (buf.prev_reclen) {
+@@ -379,6 +382,21 @@ SYSCALL_DEFINE3(getdents64, unsigned int, fd,
+ 		else
+ 			error = count - buf.count;
+ 	}
++	return error;
++}
++
++SYSCALL_DEFINE3(getdents64, unsigned int, fd,
++		struct linux_dirent64 __user *, dirent, unsigned int, count)
++{
++	struct fd f;
++	int error;
++
++	f = fdget_pos(fd);
++	if (!f.file)
++		return -EBADF;
++
++	error = vfs_getdents(f.file, dirent, count);
++
+ 	fdput_pos(f);
+ 	return error;
+ }
 -- 
-2.40.1
+2.25.1
 
