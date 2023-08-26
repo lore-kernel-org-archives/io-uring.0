@@ -2,62 +2,62 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D09C5C83F13
-	for <io-uring@archiver.kernel.org>; Sat, 26 Aug 2023 01:22:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D5A1C83F17
+	for <io-uring@archiver.kernel.org>; Sat, 26 Aug 2023 01:22:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjHZBWB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 25 Aug 2023 21:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
+        id S231623AbjHZBWH (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 25 Aug 2023 21:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbjHZBVc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 21:21:32 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8989F1FF7
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 18:21:29 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-68a3cae6d94so1345516b3a.0
-        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 18:21:29 -0700 (PDT)
+        with ESMTP id S231625AbjHZBVk (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 25 Aug 2023 21:21:40 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B62E2683
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 18:21:33 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1bdca7cc28dso12650035ad.1
+        for <io-uring@vger.kernel.org>; Fri, 25 Aug 2023 18:21:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20221208.gappssmtp.com; s=20221208; t=1693012889; x=1693617689;
+        d=davidwei-uk.20221208.gappssmtp.com; s=20221208; t=1693012893; x=1693617693;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jTvowOQwcZhVRqOJ6qg2E7pufXaeMTOsQWNawAhB/rk=;
-        b=XfuAJuT79h5NyJw39ganBXsa5agxrBGs0wyAV+RS/JeNOLYr8CMs25iknUyVJZVMrg
-         7+vKbE9v0Cl35occPgX8AWH1vLz045pOwOKlyX+iGsI9RlAfTmORFKQyYrw4xpGujRGQ
-         RUDwqYSgeJ41XsFbtoLV8MCwAcnSVGg5OKRxsJqM1iP6C/qtNyWPDtW6t4TejyaN2Y0r
-         YV4Fl8/mkMlMC+PVPuk8FpUlrP90LvoEVIaWMADbMwL/e14DfrIKoTcfcuRU+qaKq8YJ
-         hl5Tm6lKWPomhlQmh48r73/6D9DQ0bVQ/JrVbNsUE/CdPDZ4GtyMtZGfislv+oUFxWki
-         0jrw==
+        bh=2ynVwsxmMrwAG9Nkn/12Q+RcMuGojnsZ7syWTa5mUqI=;
+        b=sScyon73ZfPCd5COdaruZOMvd2yb5cFxfqTJEizlywXPasyRc/ri4S1DQPkJuu0D8T
+         GD962rQa5CRpcWX9jw9WHhaG6cqUyYUB03zL7b0+tFne0fRR5x9EdIwB2VSN4YK19H2J
+         fz6oH+aikAZgxH5f98/zi+7OHCdMMxUrEttcLgm9qm/EHwTh+azC0TFpvKH7/eXcIS8Q
+         FYVrhRk6mw0RVycbkbeDtV+hmxMy//DPPfBfWKldWaD/Fd/5OwQQXjlx3GQBjAsoUXbV
+         E8s1qAK8WJsR1dKjVMh/cYzPqtjFgcNDLfu11t+KllXtjmXce/0xiHehQZiGVAJfpa9F
+         1sfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693012889; x=1693617689;
+        d=1e100.net; s=20221208; t=1693012893; x=1693617693;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jTvowOQwcZhVRqOJ6qg2E7pufXaeMTOsQWNawAhB/rk=;
-        b=Uufe6mEBwzOXd3e1rB5o7J5DWBs3EOEY+MfDrg8DcOwj+rPJvWBbf9t+6Ulwbu/9Kh
-         3khJYG7nZKonrrUpB4/fKJxnpUY+GnDBrgiXpTwdNnShPDkWOpLiGWs5zXNIUJ+tr9G1
-         WtgeBLFClgKBBANn0wd7JNYA1/JkB6wsVpC2lCMTdOdoxge4CEtk0fzdR9o7QTRBidGw
-         Z9rAKfpMGg5029zbmGuwHsoPUql6R033k1nyhIKc2gphprYlgvmqxgSq704gLF7RXYip
-         1w6kL8WvENY5jp39bi6ZtJgwN6os5DcNKQMzKOkIrPRjsne97+ZjIQXpNOJJSgqeQMWQ
-         tRXg==
-X-Gm-Message-State: AOJu0YxeY6rSvkDPZP3GLyUZmNSyeYGvtEG5uAtkN77lHpjgLJkE2cf8
-        t6Avv/FwqJ3hdmewc6MsDYVALg==
-X-Google-Smtp-Source: AGHT+IFTB2A5HZwCqMLlVHugoKvndKU4apXJZTLN434a7lAmfH+cifph6KopWX41QlM8pe0p0gJx6g==
-X-Received: by 2002:a05:6a21:3393:b0:131:a21:9f96 with SMTP id yy19-20020a056a21339300b001310a219f96mr27272685pzb.6.1693012889022;
-        Fri, 25 Aug 2023 18:21:29 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-119.fbsv.net. [2a03:2880:ff:77::face:b00c])
-        by smtp.gmail.com with ESMTPSA id w5-20020a170902a70500b001ae0152d280sm2387110plq.193.2023.08.25.18.21.28
+        bh=2ynVwsxmMrwAG9Nkn/12Q+RcMuGojnsZ7syWTa5mUqI=;
+        b=Xvf46iJYerYo3q8dW4c/Rr2s7yYDl0iGeb65YTrBw8/PnxFXF9QDkf4cZcZJbwKRYM
+         67zpy36x1A0/IDfl7DxxmJRjaL8uyoTWJ3YilDLwUP3r8+vCR5j0ilBQIwimIHc4GY1T
+         vxq92+M7b5E8QJAUwd/MrZB8Vk0GtVVtKH4GblFXlObG2TonJuDNWm2fNMQFIcRqEXC+
+         ggoJyv23pixd2ODFx9KdeEVKiWBEPMmJ2GUP+UoWzRcs8WmDq8q5hWjphvqXg5o0Gp9t
+         M1fGRIc6AEjs1r30//CoIab+xKnEYdubNEMuNd0eQHrvH67J9NkI0O6D71EIhvJnKqKv
+         PX4Q==
+X-Gm-Message-State: AOJu0YycohUjXKIj1SX7rArLEkbT24FW2blkYUoO8psX/s/uRCpIGt7J
+        k4JTgQqFzJzMRX6g072PLp2IjRzbuNVBtVfLC5gPEg==
+X-Google-Smtp-Source: AGHT+IHrObKFTZupRASNWAVoKD8zWxjg7OzV1ODlDgotGdGYZbjP47UkUmFk/MbtBg+KLZptfmBD5g==
+X-Received: by 2002:a17:902:e5cd:b0:1b0:f8:9b2d with SMTP id u13-20020a170902e5cd00b001b000f89b2dmr23494952plf.29.1693012892911;
+        Fri, 25 Aug 2023 18:21:32 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-004.fbsv.net. [2a03:2880:ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id e4-20020a170902744400b001b03b7f8adfsm2410764plt.246.2023.08.25.18.21.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Aug 2023 18:21:28 -0700 (PDT)
+        Fri, 25 Aug 2023 18:21:32 -0700 (PDT)
 From:   David Wei <dw@davidwei.uk>
 To:     Jens Axboe <axboe@kernel.dk>,
         Pavel Begunkov <asml.silence@gmail.com>
 Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
         Mina Almasry <almasrymina@google.com>,
         Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 01/11] io_uring: add interface queue
-Date:   Fri, 25 Aug 2023 18:19:44 -0700
-Message-Id: <20230826011954.1801099-2-dw@davidwei.uk>
+Subject: [PATCH 05/11] io_uring: add ZC buf and pool
+Date:   Fri, 25 Aug 2023 18:19:48 -0700
+Message-Id: <20230826011954.1801099-6-dw@davidwei.uk>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20230826011954.1801099-1-dw@davidwei.uk>
 References: <20230826011954.1801099-1-dw@davidwei.uk>
@@ -69,329 +69,278 @@ X-Mailing-List: io-uring@vger.kernel.org
 
 From: David Wei <davidhwei@meta.com>
 
-This patch introduces a new object in io_uring called an interface queue
-(ifq) which contains:
+This patch adds two objects:
 
-* A pool region allocated by userspace and registered w/ io_uring where
-  RX data is written to.
-* A net device and one specific RX queue in it that will be configured
-  for ZC RX.
-* A pair of shared ringbuffers w/ userspace, dubbed registered buf
-  (rbuf) rings. Each entry contains a pool region id and an offset + len
-  within that region. The kernel writes entries into the completion ring
-  to tell userspace where RX data is relative to the start of a region.
-  Userspace writes entries into the refill ring to tell the kernel when
-  it is done with the data.
+* Zero copy buffer representation, holding a page, its mapped dma_addr,
+  and a refcount for lifetime management.
+* Zero copy pool, spiritually similar to page pool, that holds ZC bufs
+  and hands them out to net devices.
 
-For now, each io_uring instance has a single ifq, and each ifq has a
-single pool region associated with one RX queue.
+The ZC pool is tiered with currently two tiers: a fast lockless cache
+that should only be accessed from the NAPI context of a single RX queue,
+and a freelist. When a ZC pool region is first mapped, it is added to
+the freelist.
 
-Add a new opcode to io_uring_register that sets up an ifq. Size and
-offsets of shared ringbuffers are returned to userspace for it to mmap.
-The implementation will be added in a later patch.
+During normal operation, bufs are moved from the freelist into the cache
+in POOL_CACHE_SIZE blocks before being given out.
+
+Pool regions are registered w/ io_uring using the registered buffer API,
+with a 1:1 mapping between region and nr_iovec in
+io_uring_register_buffers. This does the heavy lifting of pinning and
+chunking into bvecs into a struct io_mapped_ubuf for us.
+
+For now as there is only one pool region per ifq, there is no separate
+API for adding/removing regions yet and it is mapped implicitly during
+ifq registration.
 
 Signed-off-by: David Wei <davidhwei@meta.com>
+Co-developed-by: Jonathan Lemon <jonathan.lemon@gmail.com>
 ---
- include/linux/io_uring_types.h |  6 ++++
- include/uapi/linux/io_uring.h  | 50 ++++++++++++++++++++++++++
- io_uring/Makefile              |  3 +-
- io_uring/io_uring.c            |  7 ++++
- io_uring/kbuf.c                | 30 ++++++++++++++++
- io_uring/kbuf.h                |  5 +++
- io_uring/zc_rx.c               | 65 ++++++++++++++++++++++++++++++++++
- io_uring/zc_rx.h               | 21 +++++++++++
- 8 files changed, 186 insertions(+), 1 deletion(-)
- create mode 100644 io_uring/zc_rx.c
- create mode 100644 io_uring/zc_rx.h
+ include/linux/io_uring.h |   6 ++
+ io_uring/zc_rx.c         | 173 ++++++++++++++++++++++++++++++++++++++-
+ io_uring/zc_rx.h         |   1 +
+ 3 files changed, 179 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 1b2a20a42413..8f6068da185c 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -151,6 +151,10 @@ struct io_rings {
- 	struct io_uring_cqe	cqes[] ____cacheline_aligned_in_smp;
- };
- 
-+struct io_rbuf_ring {
-+	struct io_uring		rq, cq;
-+};
-+
- struct io_restriction {
- 	DECLARE_BITMAP(register_op, IORING_REGISTER_LAST);
- 	DECLARE_BITMAP(sqe_op, IORING_OP_LAST);
-@@ -330,6 +334,8 @@ struct io_ring_ctx {
- 	struct io_rsrc_data		*file_data;
- 	struct io_rsrc_data		*buf_data;
- 
-+	struct io_zc_rx_ifq		*ifq;
-+
- 	/* protected by ->uring_lock */
- 	struct list_head		rsrc_ref_list;
- 	struct io_alloc_cache		rsrc_node_cache;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 0716cb17e436..8f2a1061629b 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -523,6 +523,9 @@ enum {
- 	/* register a range of fixed file slots for automatic slot allocation */
- 	IORING_REGISTER_FILE_ALLOC_RANGE	= 25,
- 
-+	/* register a network interface queue for zerocopy */
-+	IORING_REGISTER_ZC_RX_IFQ		= 26,
-+
- 	/* this goes last */
- 	IORING_REGISTER_LAST,
- 
-@@ -703,6 +706,53 @@ struct io_uring_recvmsg_out {
- 	__u32 flags;
- };
- 
-+struct io_uring_rbuf_rqe {
-+	__u32	off;
-+	__u32	len;
-+	__u16	region;
-+	__u8	__pad[6];
-+};
-+
-+struct io_uring_rbuf_cqe {
-+	__u32	off;
-+	__u32	len;
-+	__u16	region;
-+	__u8	flags;
-+	__u8	__pad[3];
-+};
-+
-+struct io_rbuf_rqring_offsets {
-+	__u32	head;
-+	__u32	tail;
-+	__u32	rqes;
-+	__u8	__pad[4];
-+};
-+
-+struct io_rbuf_cqring_offsets {
-+	__u32	head;
-+	__u32	tail;
-+	__u32	cqes;
-+	__u8	__pad[4];
-+};
-+
-+/*
-+ * Argument for IORING_REGISTER_ZC_RX_IFQ
-+ */
-+struct io_uring_zc_rx_ifq_reg {
-+	__u32	if_idx;
-+	/* hw rx descriptor ring id */
-+	__u32	if_rxq_id;
-+	__u32	region_id;
-+	__u32	rq_entries;
-+	__u32	cq_entries;
-+	__u32	flags;
-+	__u16	cpu;
-+
-+	__u32	mmap_sz;
-+	struct io_rbuf_rqring_offsets rq_off;
-+	struct io_rbuf_cqring_offsets cq_off;
-+};
-+
- #ifdef __cplusplus
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 7fe31b2cd02f..cf1993befa6a 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -41,6 +41,12 @@ static inline const void *io_uring_sqe_cmd(const struct io_uring_sqe *sqe)
+ 	return sqe->cmd;
  }
- #endif
-diff --git a/io_uring/Makefile b/io_uring/Makefile
-index 8cc8e5387a75..7818b015a1f2 100644
---- a/io_uring/Makefile
-+++ b/io_uring/Makefile
-@@ -7,5 +7,6 @@ obj-$(CONFIG_IO_URING)		+= io_uring.o xattr.o nop.o fs.o splice.o \
- 					openclose.o uring_cmd.o epoll.o \
- 					statx.o net.o msg_ring.o timeout.o \
- 					sqpoll.o fdinfo.o tctx.o poll.o \
--					cancel.o kbuf.o rsrc.o rw.o opdef.o notif.o
-+					cancel.o kbuf.o rsrc.o rw.o opdef.o \
-+					notif.o zc_rx.o
- obj-$(CONFIG_IO_WQ)		+= io-wq.o
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 3bca7a79efda..7705d18dceff 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -92,6 +92,7 @@
- #include "cancel.h"
- #include "net.h"
- #include "notif.h"
-+#include "zc_rx.h"
  
- #include "timeout.h"
- #include "poll.h"
-@@ -4418,6 +4419,12 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
- 			break;
- 		ret = io_register_file_alloc_range(ctx, arg);
- 		break;
-+	case IORING_REGISTER_ZC_RX_IFQ:
-+		ret = -EINVAL;
-+		if (!arg || nr_args != 1)
-+			break;
-+		ret = io_register_zc_rx_ifq(ctx, arg);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 		break;
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 2f0181521c98..d7499e7b34bd 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -634,3 +634,33 @@ void *io_pbuf_get_address(struct io_ring_ctx *ctx, unsigned long bgid)
- 
- 	return bl->buf_ring;
- }
++struct io_zc_rx_buf {
++	dma_addr_t	dma;
++	struct page	*page;
++	atomic_t	refcount;
++};
 +
-+int io_allocate_rbuf_ring(struct io_zc_rx_ifq *ifq,
-+			  struct io_uring_zc_rx_ifq_reg *reg)
-+{
-+	gfp_t gfp = GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_NOWARN | __GFP_COMP;
-+	size_t off, size, rq_size, cq_size;
-+	void *ptr;
-+
-+	off = sizeof(struct io_rbuf_ring);
-+	rq_size = reg->rq_entries * sizeof(struct io_uring_rbuf_rqe);
-+	cq_size = reg->cq_entries * sizeof(struct io_uring_rbuf_cqe);
-+	size = off + rq_size + cq_size;
-+	ptr = (void *) __get_free_pages(gfp, get_order(size));
-+	if (!ptr)
-+		return -ENOMEM;
-+	ifq->ring = (struct io_rbuf_ring *)ptr;
-+	ifq->rqes = (struct io_uring_rbuf_rqe *)((char *)ptr + off);
-+	ifq->cqes = (struct io_uring_rbuf_cqe *)((char *)ifq->rqes + rq_size);
-+
-+	return 0;
-+}
-+
-+void io_free_rbuf_ring(struct io_zc_rx_ifq *ifq)
-+{
-+	struct page *page;
-+
-+	page = virt_to_head_page(ifq->ring);
-+	if (put_page_testzero(page))
-+		free_compound_page(page);
-+}
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index d14345ef61fc..6c8afda93646 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -4,6 +4,8 @@
+ #if defined(CONFIG_IO_URING)
+ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter, void *ioucmd);
+diff --git a/io_uring/zc_rx.c b/io_uring/zc_rx.c
+index 8cc66731af5b..317127d0d4e7 100644
+--- a/io_uring/zc_rx.c
++++ b/io_uring/zc_rx.c
+@@ -4,13 +4,43 @@
+ #include <linux/mm.h>
+ #include <linux/io_uring.h>
+ #include <linux/netdevice.h>
++#include <linux/nospec.h>
  
  #include <uapi/linux/io_uring.h>
  
-+#include "zc_rx.h"
-+
- struct io_buffer_list {
- 	/*
- 	 * If ->buf_nr_pages is set, then buf_pages/buf_ring are used. If not,
-@@ -57,6 +59,9 @@ void io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags);
+ #include "io_uring.h"
+ #include "kbuf.h"
++#include "rsrc.h"
+ #include "zc_rx.h"
  
- void *io_pbuf_get_address(struct io_ring_ctx *ctx, unsigned long bgid);
- 
-+int io_allocate_rbuf_ring(struct io_zc_rx_ifq *ifq, struct io_uring_zc_rx_ifq_reg *reg);
-+void io_free_rbuf_ring(struct io_zc_rx_ifq *ifq);
++#define POOL_CACHE_SIZE	128
 +
- static inline void io_kbuf_recycle_ring(struct io_kiocb *req)
- {
- 	/*
-diff --git a/io_uring/zc_rx.c b/io_uring/zc_rx.c
-new file mode 100644
-index 000000000000..63bc6cd7d205
---- /dev/null
-+++ b/io_uring/zc_rx.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/kernel.h>
-+#include <linux/errno.h>
-+#include <linux/mm.h>
-+#include <linux/io_uring.h>
++struct io_zc_rx_pool {
++	struct io_zc_rx_ifq  	*ifq;
++	struct io_zc_rx_buf	*bufs;
++	u16			pool_id;
++	u32			nr_pages;
 +
-+#include <uapi/linux/io_uring.h>
++	/* fast cache */
++	u32			cache_count;
++	u32			cache[POOL_CACHE_SIZE];
 +
-+#include "io_uring.h"
-+#include "kbuf.h"
-+#include "zc_rx.h"
++	/* freelist */
++	spinlock_t		freelist_lock;
++	u32			free_count;
++	u32			freelist[];
++};
 +
-+static struct io_zc_rx_ifq *io_zc_rx_ifq_alloc(struct io_ring_ctx *ctx)
++static struct device *netdev2dev(struct net_device *dev)
 +{
-+	struct io_zc_rx_ifq *ifq;
-+
-+	ifq = kzalloc(sizeof(*ifq), GFP_KERNEL);
-+	if (!ifq)
-+		return NULL;
-+
-+	ifq->ctx = ctx;
-+
-+	return ifq;
++	return dev->dev.parent;
 +}
 +
-+static void io_zc_rx_ifq_free(struct io_zc_rx_ifq *ifq)
++static u64 mk_page_info(u16 pool_id, u32 pgid)
 +{
-+	io_free_rbuf_ring(ifq);
-+	kfree(ifq);
++	return (u64)0xface << 48 | (u64)pool_id << 32 | (u64)pgid;
 +}
 +
-+int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
-+			  struct io_uring_zc_rx_ifq_reg __user *arg)
+ typedef int (*bpf_op_t)(struct net_device *dev, struct netdev_bpf *bpf);
+ 
+ static int __io_queue_mgmt(struct net_device *dev, struct io_zc_rx_ifq *ifq,
+@@ -40,6 +70,143 @@ static int io_close_zc_rxq(struct io_zc_rx_ifq *ifq)
+ 	return __io_queue_mgmt(ifq->dev, NULL, ifq->if_rxq_id);
+ }
+ 
++static int io_zc_rx_map_buf(struct device *dev, struct page *page, u16 pool_id,
++			    u32 pgid, struct io_zc_rx_buf *buf)
 +{
-+	struct io_uring_zc_rx_ifq_reg reg;
-+	struct io_zc_rx_ifq *ifq;
-+	int ret;
++	dma_addr_t addr;
 +
-+	if (copy_from_user(&reg, arg, sizeof(reg)))
-+		return -EFAULT;
-+	if (ctx->ifq)
-+		return -EBUSY;
++	SetPagePrivate(page);
++	set_page_private(page, mk_page_info(pool_id, pgid));
 +
-+	ifq = io_zc_rx_ifq_alloc(ctx);
-+	if (!ifq)
++	addr = dma_map_page_attrs(dev, page, 0, PAGE_SIZE,
++				  DMA_BIDIRECTIONAL,
++				  DMA_ATTR_SKIP_CPU_SYNC);
++	if (dma_mapping_error(dev, addr)) {
++		set_page_private(page, 0);
++		ClearPagePrivate(page);
 +		return -ENOMEM;
++	}
 +
-+	/* TODO: initialise network interface */
++	buf->dma = addr;
++	buf->page = page;
++	atomic_set(&buf->refcount, 0);
++	get_page(page);
 +
-+	ret = io_allocate_rbuf_ring(ifq, &reg);
-+	if (ret)
-+		goto err;
++	return 0;
++}
 +
-+	/* TODO: map zc region and initialise zc pool */
++static void io_zc_rx_unmap_buf(struct device *dev, struct io_zc_rx_buf *buf)
++{
++	struct page *page;
 +
-+	ifq->rq_entries = reg.rq_entries;
-+	ifq->cq_entries = reg.cq_entries;
-+	ifq->if_rxq_id = reg.if_rxq_id;
-+	ctx->ifq = ifq;
++	page = buf->page;
++	set_page_private(page, 0);
++	ClearPagePrivate(page);
++	dma_unmap_page_attrs(dev, buf->dma, PAGE_SIZE,
++			     DMA_BIDIRECTIONAL,
++			     DMA_ATTR_SKIP_CPU_SYNC);
++	put_page(page);
++}
++
++static int io_zc_rx_map_pool(struct io_zc_rx_pool *pool,
++			     struct io_mapped_ubuf *imu,
++			     struct device *dev)
++{
++	struct io_zc_rx_buf *buf;
++	struct page *page;
++	int i, ret;
++
++	for (i = 0; i < imu->nr_bvecs; i++) {
++		page = imu->bvec[i].bv_page;
++		if (PagePrivate(page)) {
++			ret = -EEXIST;
++			goto err;
++		}
++
++		buf = &pool->bufs[i];
++		ret = io_zc_rx_map_buf(dev, page, pool->pool_id, i, buf);
++		if (ret)
++			goto err;
++
++		pool->freelist[i] = i;
++	}
 +
 +	return 0;
 +err:
-+	io_zc_rx_ifq_free(ifq);
++	while (i--) {
++		buf = &pool->bufs[i];
++		io_zc_rx_unmap_buf(dev, buf);
++	}
++
 +	return ret;
 +}
++
++int io_zc_rx_create_pool(struct io_ring_ctx *ctx,
++			 struct io_zc_rx_ifq *ifq,
++			 u16 id)
++{
++	struct device *dev = netdev2dev(ifq->dev);
++	struct io_mapped_ubuf *imu;
++	struct io_zc_rx_pool *pool;
++	int nr_pages;
++	int ret;
++
++	if (ifq->pool)
++		return -EFAULT;
++
++	if (unlikely(id >= ctx->nr_user_bufs))
++		return -EFAULT;
++	id = array_index_nospec(id, ctx->nr_user_bufs);
++	imu = ctx->user_bufs[id];
++	if (imu->ubuf & ~PAGE_MASK || imu->ubuf_end & ~PAGE_MASK)
++		return -EFAULT;
++
++	ret = -ENOMEM;
++	nr_pages = imu->nr_bvecs;
++	pool = kvmalloc(struct_size(pool, freelist, nr_pages), GFP_KERNEL);
++	if (!pool)
++		goto err;
++
++	pool->bufs = kvmalloc_array(nr_pages, sizeof(*pool->bufs), GFP_KERNEL);
++	if (!pool->bufs)
++		goto err_buf;
++
++	ret = io_zc_rx_map_pool(pool, imu, dev);
++	if (ret)
++		goto err_map;
++
++	pool->ifq = ifq;
++	pool->pool_id = id;
++	pool->nr_pages = nr_pages;
++	pool->cache_count = 0;
++	spin_lock_init(&pool->freelist_lock);
++	pool->free_count = nr_pages;
++	ifq->pool = pool;
++
++	return 0;
++
++err_map:
++	kvfree(pool->bufs);
++err_buf:
++	kvfree(pool);
++err:
++	return ret;
++}
++
++static void io_zc_rx_destroy_pool(struct io_zc_rx_pool *pool)
++{
++	struct device *dev = netdev2dev(pool->ifq->dev);
++	struct io_zc_rx_buf *buf;
++
++	for (int i = 0; i < pool->nr_pages; i++) {
++		buf = &pool->bufs[i];
++
++		io_zc_rx_unmap_buf(dev, buf);
++	}
++	kvfree(pool->bufs);
++	kvfree(pool);
++}
++
+ static struct io_zc_rx_ifq *io_zc_rx_ifq_alloc(struct io_ring_ctx *ctx)
+ {
+ 	struct io_zc_rx_ifq *ifq;
+@@ -58,6 +225,8 @@ static void io_zc_rx_ifq_free(struct io_zc_rx_ifq *ifq)
+ {
+ 	if (ifq->if_rxq_id != -1)
+ 		io_close_zc_rxq(ifq);
++	if (ifq->pool)
++		io_zc_rx_destroy_pool(ifq->pool);
+ 	if (ifq->dev)
+ 		dev_put(ifq->dev);
+ 	io_free_rbuf_ring(ifq);
+@@ -92,7 +261,9 @@ int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
+ 	if (!ifq->dev)
+ 		goto err;
+ 
+-	/* TODO: map zc region and initialise zc pool */
++	ret = io_zc_rx_create_pool(ctx, ifq, reg.region_id);
++	if (ret)
++		goto err;
+ 
+ 	ifq->rq_entries = reg.rq_entries;
+ 	ifq->cq_entries = reg.cq_entries;
 diff --git a/io_uring/zc_rx.h b/io_uring/zc_rx.h
-new file mode 100644
-index 000000000000..4363734f3d98
---- /dev/null
+index 340ececa9f9c..3cd0e730115d 100644
+--- a/io_uring/zc_rx.h
 +++ b/io_uring/zc_rx.h
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifndef IOU_ZC_RX_H
-+#define IOU_ZC_RX_H
-+
-+struct io_zc_rx_ifq {
-+	struct io_ring_ctx	*ctx;
-+	struct net_device	*dev;
-+	struct io_rbuf_ring	*ring;
-+	struct io_uring_rbuf_rqe *rqes;
-+	struct io_uring_rbuf_cqe *cqes;
-+	u32			rq_entries, cq_entries;
-+	void			*pool;
-+
-+	/* hw rx descriptor ring id */
-+	u32			if_rxq_id;
-+};
-+
-+int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
-+			  struct io_uring_zc_rx_ifq_reg __user *arg);
-+
-+#endif
+@@ -18,5 +18,6 @@ struct io_zc_rx_ifq {
+ int io_register_zc_rx_ifq(struct io_ring_ctx *ctx,
+ 			  struct io_uring_zc_rx_ifq_reg __user *arg);
+ int io_unregister_zc_rx_ifq(struct io_ring_ctx *ctx);
++int io_zc_rx_pool_create(struct io_zc_rx_ifq *ifq, u16 id);
+ 
+ #endif
 -- 
 2.39.3
 
