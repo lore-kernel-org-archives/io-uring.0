@@ -2,87 +2,91 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A5E8CA0FF8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 659C5CA0FFD
 	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:34:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243798AbjIEQen (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
+        id S244808AbjIEQer (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354794AbjIEOYf (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 10:24:35 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BFA197
-        for <io-uring@vger.kernel.org>; Tue,  5 Sep 2023 07:24:31 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-4935f87ca26so135460e0c.3
-        for <io-uring@vger.kernel.org>; Tue, 05 Sep 2023 07:24:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693923870; x=1694528670; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rtg0JV+CO28r/3TvA7CtNqhGLbhNAM/8Tnh4hPoGQnU=;
-        b=cIqGumjZaNP51NtJny7H9KFfgslTyyGhR7EUsN9RApU76ixIAcs5j7OaZqR56bxSPI
-         N5MamOmm4vbjRo4LJtYhPmYHajNAQD2XKiUs+xnvC/lIzzduxwjJ6L5QNCopZtoJows8
-         J7lgSNT51xUrzJkB4L4lZc85wfWDIAx2PCFAkBwfYY81vFejhbqra7j8fBZ1PI0YV6iR
-         B5g/PhdTfvMn6OxPTDMtuuCQ7IBpHIIJnIDETUVBnzb/pwx8gPT4YHgPiZNChvFUoSMg
-         RUt+Yxn2CV/XUxXO1unRLjVW0089KKiQnigzI6AKCMXkqrzBNRujVQKcYxF64Ez8wD0N
-         f6VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693923870; x=1694528670;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rtg0JV+CO28r/3TvA7CtNqhGLbhNAM/8Tnh4hPoGQnU=;
-        b=Qu0Dxy/vuZWkor4NR3JgMQO9m/Hibm1b06QrsZg6lJCIzlW2K1Zn8YO1AK2P5ZL6v6
-         KLtQ6c26S5JIyZyx1/rvtQWPl1u1ol42R+AfCFbTUj3RU2PxKjlS9+kYE1nt09BcFcrV
-         Hb7OY93r/zryT1I1xcLOhYdW2/HrPorcHMGOxvg4Qst19dpaxGQNcKfJxG91/2SSihSn
-         0oe8JdOsKbCgNc4B1Is4Zd+AnoiChHLVgCMNOhsMSRjn8p3kyy/zF0qe2JaH3Uzpy98o
-         /l7HtiBVaVsAfHEn5vSLXtUftpaT7bcP7lF4K98Xu94vbovB1PoxatHf5acB2G4IjI9W
-         Dd2A==
-X-Gm-Message-State: AOJu0Yw2hkc3X172zxYC1+ID/GNYAYCDwP+4IPiHDUnvJtzhEXy3JZBz
-        TDwRYvuRzPhqjhqhbIwimYKCl92lMBQX0Mm6p0G++JWINXFy4cwsc20=
-X-Google-Smtp-Source: AGHT+IEWoDhzho+yngW0aCmJ/4l2W7ac9+woo+yuM0ML8a0qrzG+hU+odrwxXpclmNhFqwuK8T1fNq4QgGni4tFlVOA=
-X-Received: by 2002:a1f:dfc2:0:b0:48d:3434:fe1a with SMTP id
- w185-20020a1fdfc2000000b0048d3434fe1amr11957524vkg.3.1693923870055; Tue, 05
- Sep 2023 07:24:30 -0700 (PDT)
+        with ESMTP id S1354537AbjIEMZC (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 08:25:02 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650911A8;
+        Tue,  5 Sep 2023 05:24:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 25A0E219F8;
+        Tue,  5 Sep 2023 12:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1693916698; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y+TAx88oFB04zxtoLdsW/MXynwxPjQoRFvKwN54GWMg=;
+        b=LRYOH3LSFhDzKKM4DUzc+kdHqXIyM/vtRKortnk8B8zJmC1aexzJ2+eT6gRElpNRDZNfst
+        DyGtFNvQr6R6tVo1/IaVw9bdB30839uFy0RejToseG/6up6DpaDQqny7cP3ZDsRanvxi0t
+        VZWI53CYa/vTrJx6zjiIFewzzYnYSo0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1693916698;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y+TAx88oFB04zxtoLdsW/MXynwxPjQoRFvKwN54GWMg=;
+        b=XhEKCOXH9DQMmv1df2jH6uZaO4bpBzLAea6Wewzyko1Hefv5pdX+kO2qmB2MQJLdZZlpuP
+        aIA+BSwTRzugwAAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E526313911;
+        Tue,  5 Sep 2023 12:24:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 3Gq1Mhke92RZEwAAMHmgww
+        (envelope-from <krisman@suse.de>); Tue, 05 Sep 2023 12:24:57 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
+        pabeni@redhat.com
+Subject: Re: [PATCH v4 09/10] io_uring/cmd: Introduce
+ SOCKET_URING_OP_SETSOCKOPT
+In-Reply-To: <20230904162504.1356068-10-leitao@debian.org> (Breno Leitao's
+        message of "Mon, 4 Sep 2023 09:25:02 -0700")
+Organization: SUSE
+References: <20230904162504.1356068-1-leitao@debian.org>
+        <20230904162504.1356068-10-leitao@debian.org>
+Date:   Tue, 05 Sep 2023 08:24:56 -0400
+Message-ID: <875y4obyef.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-References: <x49y1i42j1z.fsf@segfault.boston.devel.redhat.com>
-In-Reply-To: <x49y1i42j1z.fsf@segfault.boston.devel.redhat.com>
-From:   Matteo Rizzo <matteorizzo@google.com>
-Date:   Tue, 5 Sep 2023 16:24:17 +0200
-Message-ID: <CAHKB1wKh3-9icDXK9_qorJr4DZ61Bt7mZznFT75R99a8LeMi_w@mail.gmail.com>
-Subject: Re: [PATCH v5] io_uring: add a sysctl to disable io_uring system-wide
-To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        corbet@lwn.net, akpm@linux-foundation.org, keescook@chromium.org,
-        ribalda@chromium.org, rostedt@goodmis.org, jannh@google.com,
-        chenhuacai@kernel.org, gpiccoli@igalia.com, ldufour@linux.ibm.com,
-        evn@google.com, poprdi@google.com, jordyzomer@google.com,
-        krisman@suse.de, andres@anarazel.de, Jeff Moyer <jmoyer@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi all,
+Breno Leitao <leitao@debian.org> writes:
 
-Is there still anything that needs to be changed in this patch? As far as
-I can tell all the remaining feedback has been addressed.
+> Add initial support for SOCKET_URING_OP_SETSOCKOPT. This new command is
+> similar to setsockopt. This implementation leverages the function
+> do_sock_setsockopt(), which is shared with the setsockopt() system call
+> path.
+>
+> Important to say that userspace needs to keep the pointer's memory alive
+> until the operation is completed. I.e, the memory could not be
+> deallocated before the CQE is returned to userspace.
+>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
---
-Matteo
+Likewise, much cleaner!  Feel free to add:
 
-On Mon, 21 Aug 2023 at 23:10, Jeff Moyer <jmoyer@redhat.com> wrote:
->
-> From: Matteo Rizzo <matteorizzo@google.com>
->
-> Introduce a new sysctl (io_uring_disabled) which can be either 0, 1, or
-> 2. When 0 (the default), all processes are allowed to create io_uring
-> instances, which is the current behavior.  When 1, io_uring creation is
-> disabled (io_uring_setup() will fail with -EPERM) for unprivileged
-> processes not in the kernel.io_uring_group group.  When 2, calls to
-> io_uring_setup() fail with -EPERM regardless of privilege.
->
-> Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
-> [JEM: modified to add io_uring_group]
-> Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+
+Thanks,
+
+-- 
+Gabriel Krisman Bertazi
