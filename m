@@ -2,132 +2,97 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AD75CA1000
-	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:34:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2878CA0FF8
+	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:34:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344691AbjIEQeu (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55836 "EHLO
+        id S1344964AbjIEQey convert rfc822-to-8bit (ORCPT
+        <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354548AbjIEMc0 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 08:32:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D760E1A8;
-        Tue,  5 Sep 2023 05:32:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 97B7821A15;
-        Tue,  5 Sep 2023 12:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1693917136; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ySKOzKRhLxYxgmPuW7PEIWS3Ad71H0naGt3Q1rkzjYI=;
-        b=G4zJ9JpngSyrlT33LqTuRu8lChiXlisPFWLxKCx0LuE3ZaSG1+WZ80ei5NQDpbHDavMuwl
-        13tet6G/HEHMJ9q5XfsAqnhjwudoQVD/+6n0Jh8uqR49VSiCGMZGYyRhkTAsM6XeqwDHGI
-        Ilm+UscvCHyf/7PIw2nODZzD/tfVIT0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1693917136;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ySKOzKRhLxYxgmPuW7PEIWS3Ad71H0naGt3Q1rkzjYI=;
-        b=hSPcw9xTytibfGmI51steO9u0QUN6n8erX8fcX1vU/XeH7rDFC+ObiF+83vkmnqQ4zfVt/
-        ke2tcLcf3FOKvoAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6060513911;
-        Tue,  5 Sep 2023 12:32:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +dHJEdAf92RsFwAAMHmgww
-        (envelope-from <krisman@suse.de>); Tue, 05 Sep 2023 12:32:16 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
-        pabeni@redhat.com
-Subject: Re: [PATCH v4 07/10] io_uring/cmd: return -EOPNOTSUPP if net is
- disabled
-In-Reply-To: <20230904162504.1356068-8-leitao@debian.org> (Breno Leitao's
-        message of "Mon, 4 Sep 2023 09:25:00 -0700")
-Organization: SUSE
+        with ESMTP id S1354096AbjIEJgr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 05:36:47 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A041AE
+        for <io-uring@vger.kernel.org>; Tue,  5 Sep 2023 02:36:41 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mtapsc-5-RE-OIzy8PuGpYbXqCyuTRw-1; Tue, 05 Sep 2023 10:36:38 +0100
+X-MC-Unique: RE-OIzy8PuGpYbXqCyuTRw-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 5 Sep
+ 2023 10:36:34 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Tue, 5 Sep 2023 10:36:34 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Breno Leitao' <leitao@debian.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "krisman@suse.de" <krisman@suse.de>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "KP Singh" <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "Alexander Mikhalitsyn" <alexander@mihalicyn.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        "David Howells" <dhowells@redhat.com>,
+        Jason Xing <kernelxing@tencent.com>,
+        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Subject: RE: [PATCH v4 04/10] net/socket: Break down __sys_getsockopt
+Thread-Topic: [PATCH v4 04/10] net/socket: Break down __sys_getsockopt
+Thread-Index: AQHZ30xphJKGpfy/Z06Weh22EiUUErAL+aYg
+Date:   Tue, 5 Sep 2023 09:36:34 +0000
+Message-ID: <b9d56ef784ad436c8cb60c4c9fd2d786@AcuMS.aculab.com>
 References: <20230904162504.1356068-1-leitao@debian.org>
-        <20230904162504.1356068-8-leitao@debian.org>
-Date:   Tue, 05 Sep 2023 08:32:15 -0400
-Message-ID: <871qfcby28.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+ <20230904162504.1356068-5-leitao@debian.org>
+In-Reply-To: <20230904162504.1356068-5-leitao@debian.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Breno Leitao <leitao@debian.org> writes:
+From: Breno Leitao
+> Sent: 04 September 2023 17:25
+> 
+> Split __sys_getsockopt() into two functions by removing the core
+> logic into a sub-function (do_sock_getsockopt()). This will avoid
+> code duplication when doing the same operation in other callers, for
+> instance.
 
-> Protect io_uring_cmd_sock() to be called if CONFIG_NET is not set. If
-> network is not enabled, but io_uring is, then we want to return
-> -EOPNOTSUPP for any possible socket operation.
->
-> This is helpful because io_uring_cmd_sock() can now call functions that
-> only exits if CONFIG_NET is enabled without having #ifdef CONFIG_NET
-> inside the function itself.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  io_uring/uring_cmd.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-> index 60f843a357e0..6a91e1af7d05 100644
-> --- a/io_uring/uring_cmd.c
-> +++ b/io_uring/uring_cmd.c
-> @@ -167,6 +167,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
->  }
->  EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
->  
-> +#if defined(CONFIG_NET)
->  int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->  {
->  	struct socket *sock = cmd->file->private_data;
-> @@ -192,4 +193,11 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->  		return -EOPNOTSUPP;
->  	}
->  }
-> +#else
-> +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +#endif
-> +
->  EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
+Although a lot more work, I think (others may disagree) that
+the internal getsockopt() functions should be changed to take
+the length as a parameter and return the positive value
+to write back.
 
-It doesn't make much sense to export the symbol on the !CONFIG_NET case.
-Usually, you'd make it a 'static inline' in the header file (even though
-it won't be ever inlined in this case):
+	David
 
-in include/linux/io_uring.h:
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-#if defined(CONFIG_NET)
-int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags);
-#else
-static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
-{
-	return -EOPNOTSUPP;
-}
-#endif
-
-But this is a minor detail. I'd say to consider doing it if you end up doing
-another spin of the patchset.  Other than that, looks good to me.
-
-Thanks,
-
--- 
-Gabriel Krisman Bertazi
