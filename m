@@ -2,141 +2,86 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C327C83F2C
-	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4BAC83F3E
+	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:35:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351623AbjIEQfB (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S1353851AbjIEQfC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354269AbjIEK3h (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 06:29:37 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CF4DB;
-        Tue,  5 Sep 2023 03:29:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693909773; x=1725445773;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bn7q6Tcu2HMXKbL23eq+DAUGqdWll8RQjB5RohTItbQ=;
-  b=DBwRdMJHpj03uJQj0+iTo1UjRzTehrF2TdXkkZwBgCmNPq7QQlAOwjnK
-   96+1HlG1roViquYLVDSl7anWSlvThXk2812zJuoaaDgE5rtk5GkAU7FV9
-   xZYPcGbG5xDc5kbOycAbDAp71dR+qE3Xk/q3bqMwnvYJly13Vj8wluko1
-   +feOadG4zR2ICWaYwiRmJd50fq/NE8F+p8IwVJvZACZWEO3ZetgrTSNHL
-   nXb7cU42Vy0njPI66ur5tlI1WJ/BJVsgC2szOP12amG6asV3SvBD5vKM+
-   rX7TYwgB/7KJKjt246fxo9ErtP9gVD81z7J2kNN1liSRVq+1mjNkHgvOr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="356254681"
-X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="356254681"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 03:29:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="734605190"
-X-IronPort-AV: E=Sophos;i="6.02,229,1688454000"; 
-   d="scan'208";a="734605190"
-Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 03:29:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qdTJC-006efP-1u;
-        Tue, 05 Sep 2023 13:29:22 +0300
-Date:   Tue, 5 Sep 2023 13:29:22 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
-        krisman@suse.de, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        io-uring@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH v4 04/10] net/socket: Break down __sys_getsockopt
-Message-ID: <ZPcDAk81DAqevy43@smile.fi.intel.com>
-References: <20230904162504.1356068-1-leitao@debian.org>
- <20230904162504.1356068-5-leitao@debian.org>
+        with ESMTP id S1354819AbjIEOoE (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 10:44:04 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027F219B
+        for <io-uring@vger.kernel.org>; Tue,  5 Sep 2023 07:44:00 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-760dff4b701so35776139f.0
+        for <io-uring@vger.kernel.org>; Tue, 05 Sep 2023 07:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1693925040; x=1694529840; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uDutPGiBG6Po2dvkxSBUfS+rF+sofgODeMl6ZDUIXuY=;
+        b=PKBCuFlftW2zUpE1hg25k20DOb4QmZZG1DbNoBi0L7Vt/KaeJJEvzp+Yivx5EnxMc1
+         4LRXV+pq+KBkYy6yF4P+5X8Mqf90BOtjUodDdl95HgtwzO8I3xbfm3hny+XznMI8wx1s
+         DgX0d/aRaWeftYz653xG5cE//6zodBdEJrmhsUM8rxNjiewYqOGx0Wwna4xMwFugLvbw
+         Tr+cri+sI544kt1/EHEBH77yFEcs6Ea+iOK/qy+X1J3RFh51896S+QZR7av0ou9ch/Dw
+         39/mvVWhf8e33M2Umb+uax/mSrDtHa9v3e9qV10xLYPfv6K7tjGZRmtJE7YxT8T/3GKq
+         1RKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693925040; x=1694529840;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uDutPGiBG6Po2dvkxSBUfS+rF+sofgODeMl6ZDUIXuY=;
+        b=PgSfN1shvBqLAEJ+I7XTepbtCnUKdF95L5HpWJXfUMBYIj8gh8Byj8hPJ5KJkkKr94
+         auOADVgWX0YhaxaMR+UXRBJvF97/SqfUCACdgrHCLWJGh/QxE++EaPWjccNnrVzkeiM+
+         mxUiP2S8tiB1GhZGNFPkVQ3/s4+/DezsSAdPraeDPKQlrP9uDEoJSpOq5MLwx54wS51F
+         B554cnZVkHwn921xy2hP6q1uAP7xgG65RrtwCcGcRdf+0vw/0yJ2GOwdrmQuZzq/luZu
+         87j6I37KTgkN/RpOvgY2+XnlsVynVj2W7clqTqG2Nxp5fi0ISu4FTJe2nUSwr1VmnnJ5
+         Ns9w==
+X-Gm-Message-State: AOJu0YxNZk1daDEtDXs8gLG0KefiVN73ZV4tV5W2PAcFvLu/UH2JwsMN
+        kRDZX+1Bj9YQnMVj9VBIWQr4cw==
+X-Google-Smtp-Source: AGHT+IHJndDQG9aAVEP8VOwCX4dTzbOMcwnbnj+Ha6Hf1f7Ztt5hjbzUXDKhMeEhthYGOu22jdCxLg==
+X-Received: by 2002:a05:6602:73a:b0:794:da1e:b249 with SMTP id g26-20020a056602073a00b00794da1eb249mr12614585iox.1.1693925040086;
+        Tue, 05 Sep 2023 07:44:00 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 24-20020a0566380a5800b0042b05c1b702sm4117731jap.12.2023.09.05.07.43.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Sep 2023 07:43:59 -0700 (PDT)
+Message-ID: <706c8b32-e530-4768-8d77-7df52c310506@kernel.dk>
+Date:   Tue, 5 Sep 2023 08:43:58 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230904162504.1356068-5-leitao@debian.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] io_uring: add a sysctl to disable io_uring system-wide
+To:     Matteo Rizzo <matteorizzo@google.com>, io-uring@vger.kernel.org,
+        asml.silence@gmail.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, keescook@chromium.org,
+        ribalda@chromium.org, rostedt@goodmis.org, jannh@google.com,
+        chenhuacai@kernel.org, gpiccoli@igalia.com, ldufour@linux.ibm.com,
+        evn@google.com, poprdi@google.com, jordyzomer@google.com,
+        krisman@suse.de, andres@anarazel.de, Jeff Moyer <jmoyer@redhat.com>
+References: <x49y1i42j1z.fsf@segfault.boston.devel.redhat.com>
+ <CAHKB1wKh3-9icDXK9_qorJr4DZ61Bt7mZznFT75R99a8LeMi_w@mail.gmail.com>
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHKB1wKh3-9icDXK9_qorJr4DZ61Bt7mZznFT75R99a8LeMi_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Mon, Sep 04, 2023 at 09:24:57AM -0700, Breno Leitao wrote:
-> Split __sys_getsockopt() into two functions by removing the core
-> logic into a sub-function (do_sock_getsockopt()). This will avoid
-> code duplication when doing the same operation in other callers, for
-> instance.
+On 9/5/23 8:24 AM, Matteo Rizzo wrote:
+> Hi all,
 > 
-> do_sock_getsockopt() will be called by io_uring getsockopt() command
-> operation in the following patch.
-> 
-> The same was done for the setsockopt pair.
+> Is there still anything that needs to be changed in this patch? As far as
+> I can tell all the remaining feedback has been addressed.
 
-...
-
-> +	ops = READ_ONCE(sock->ops);
-> +	if (level == SOL_SOCKET) {
-> +		err = sk_getsockopt(sock->sk, level, optname, optval, optlen);
-> +	} else if (unlikely(!ops->getsockopt)) {
-> +		err = -EOPNOTSUPP;
-> +	} else {
-> +		if (WARN_ONCE(optval.is_kernel || optlen.is_kernel,
-> +			      "Invalid argument type"))
-> +			return -EOPNOTSUPP;
-> +
-> +		err = ops->getsockopt(sock, level, optname, optval.user,
-> +				      optlen.user);
-> +	}
-
-Can be written as
-
-	} else if (WARN_ONCE(optval.is_kernel || optlen.is_kernel,
-			     "Invalid argument type"))
-		return -EOPNOTSUPP;
-	} else {
-		err = ops->getsockopt(sock, level, optname, optval.user,
-				      optlen.user);
-	}
-
-With that done, the {} are not needed anymore.
-
-> +	if (!compat) {
-
-	if (compat)
-		return err;
-
-> +		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
-
-> +		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
-> +						     optval, optlen, max_optlen,
-> +						     err);
-
-	return ... ?
-
-> +	}
-> +
-> +	return err;
-> +}
+I think we can apply it now. Needs hand applying as it no longer
+applies, but pretty trivial.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Jens Axboe
 
