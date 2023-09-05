@@ -2,98 +2,95 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0A16C83F2C
-	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:34:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0125CA0FFB
+	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:34:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344822AbjIEQev (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S1350069AbjIEQe7 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354536AbjIEMYb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 08:24:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA841A8;
-        Tue,  5 Sep 2023 05:24:28 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E70811FD8E;
-        Tue,  5 Sep 2023 12:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1693916666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+7M4X3ltwI/VM1laJUfqoL6rnCUoo+tPTHyGF9EcSb4=;
-        b=BSh4tK42t37/hjB81tIVJaoFbkEnB6TT/FK0HXE+uFX6Bw5xI1/G+94VWY4bjgEVS1GsLN
-        9CesqlourNuHjoPH/ZzJwE87JSVCVcWft8zO/5qxhY2n1FjhWR88pJW0EVVp2oB5TwVjuI
-        9J3ZjN23vadJmaQ7RXmH+8Uzr0YfeUk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1693916666;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+7M4X3ltwI/VM1laJUfqoL6rnCUoo+tPTHyGF9EcSb4=;
-        b=Pvu8ACuOSzN6VLftdOMZeeF6kb0rzpSRVD0zDfew662reQ86XWGhE0rRmAViHV6je5hvcE
-        7iBXBna3vnmbFNAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B027213911;
-        Tue,  5 Sep 2023 12:24:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id YS15Jfod92QpEwAAMHmgww
-        (envelope-from <krisman@suse.de>); Tue, 05 Sep 2023 12:24:26 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
-        pabeni@redhat.com
-Subject: Re: [PATCH v4 08/10] io_uring/cmd: Introduce
- SOCKET_URING_OP_GETSOCKOPT
-In-Reply-To: <20230904162504.1356068-9-leitao@debian.org> (Breno Leitao's
-        message of "Mon, 4 Sep 2023 09:25:01 -0700")
-Organization: SUSE
-References: <20230904162504.1356068-1-leitao@debian.org>
-        <20230904162504.1356068-9-leitao@debian.org>
-Date:   Tue, 05 Sep 2023 08:24:25 -0400
-Message-ID: <87a5u0byfa.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        with ESMTP id S1354820AbjIEOoR (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 10:44:17 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B086F199
+        for <io-uring@vger.kernel.org>; Tue,  5 Sep 2023 07:44:14 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-34bbc394fa0so1990365ab.1
+        for <io-uring@vger.kernel.org>; Tue, 05 Sep 2023 07:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1693925054; x=1694529854; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j09CxfP7Q9c0us68Fz35zVFIrzbKcMJUU91bdn4MiJs=;
+        b=z7aFB/p1HB1Caf4HGAmTGuPhtaCkYeGHQGLcUI4w4ijNNaAtyh2K+AQoGHBEc+nHYt
+         psLdFhryQmQazRwEcsNWM+PqORloAJfYhjX9R7mynk0FHiACggNLq9VGDz11jCyINkwy
+         j45uOvMG4IhMMc45BaxEvI1uUs8XD1XFL5RYdAy/5MQbWFOj11vE+fuiExx6x7VdaIV/
+         Ju7ivMcOXThNhIriiL7DxTcLUIkFEMp9IZZwh4jNFi3gTkdVjSkbNIzdhnhHozBuPNCG
+         n/y2lbnStTj6zSE/QIwo7qxudrUqOovbRy4Rc+veHziZ3dnSr9VQeI0hZ8qF1nrOQgs7
+         b6BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693925054; x=1694529854;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j09CxfP7Q9c0us68Fz35zVFIrzbKcMJUU91bdn4MiJs=;
+        b=CTTxHjzW55AUcW3jK+HMGnhmCMDUG7Ql81cjeY2ex8+8txpTrp5ZS9sR7OTzTVoVXm
+         e/zumuhgs6K/eC2iaFgaMlNPwQvxUnI7K6l/mzuRYIomvXhae1JYiZYasyHpScxw3Zlw
+         9Qsrh39wZ8FZGviV+ebeTKZzqrC0brXENT4nF9OozLH3gkdlefQW8jaWp3w6t0yDsNCu
+         KfYWj+iZHxQ6ocibG6+TBbp9IvsLVOdttsom8kUJ/8hicX57iAwRhy2ez2NhB/Jdlcjr
+         5RdNxfaoGzCFDaEZ5jWlvxi13cMymhuhYxUIBwPCmNw0upc29ZHdhkxMZfFzTswU/Z3b
+         7CwQ==
+X-Gm-Message-State: AOJu0YzEMpv+/C4Rc0KHFxRo+XK1pdVfzalwjFVXiKHDkM0t91PP1vX2
+        yLoUtfd9/uU/i7mFoHYirJbquQ==
+X-Google-Smtp-Source: AGHT+IEqR7NZpLw0o7Jy5Fy6ggwR2P/wQtoDxjAfsShcmCERKsOPbno+7dCzN+xZIM5O4CBXw7WwSA==
+X-Received: by 2002:a92:d785:0:b0:34d:18b:aeca with SMTP id d5-20020a92d785000000b0034d018baecamr13282187iln.3.1693925054096;
+        Tue, 05 Sep 2023 07:44:14 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id m10-20020a92caca000000b003426356a35asm4188519ilq.0.2023.09.05.07.44.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 07:44:13 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     matteorizzo@google.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        asml.silence@gmail.com, Jeff Moyer <jmoyer@redhat.com>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, keescook@chromium.org,
+        ribalda@chromium.org, rostedt@goodmis.org, jannh@google.com,
+        chenhuacai@kernel.org, gpiccoli@igalia.com, ldufour@linux.ibm.com,
+        evn@google.com, poprdi@google.com, jordyzomer@google.com,
+        krisman@suse.de, andres@anarazel.de
+In-Reply-To: <x49y1i42j1z.fsf@segfault.boston.devel.redhat.com>
+References: <x49y1i42j1z.fsf@segfault.boston.devel.redhat.com>
+Subject: Re: [PATCH v5] io_uring: add a sysctl to disable io_uring
+ system-wide
+Message-Id: <169392505265.592530.1699660694804027481.b4-ty@kernel.dk>
+Date:   Tue, 05 Sep 2023 08:44:12 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-034f2
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Breno Leitao <leitao@debian.org> writes:
 
-> Add support for getsockopt command (SOCKET_URING_OP_GETSOCKOPT), where
-> level is SOL_SOCKET. This is leveraging the sockptr_t infrastructure,
-> where a sockptr_t is either userspace or kernel space, and handled as
-> such.
->
-> Differently from the getsockopt(2), the optlen field is not a userspace
-> pointers. In getsockopt(2), userspace provides optlen pointer, which is
-> overwritten by the kernel.  In this implementation, userspace passes a
-> u32, and the new value is returned in cqe->res. I.e., optlen is not a
-> pointer.
->
-> Important to say that userspace needs to keep the pointer alive until
-> the CQE is completed.
->
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+On Mon, 21 Aug 2023 17:15:52 -0400, Jeff Moyer wrote:
+> Introduce a new sysctl (io_uring_disabled) which can be either 0, 1, or
+> 2. When 0 (the default), all processes are allowed to create io_uring
+> instances, which is the current behavior.  When 1, io_uring creation is
+> disabled (io_uring_setup() will fail with -EPERM) for unprivileged
+> processes not in the kernel.io_uring_group group.  When 2, calls to
+> io_uring_setup() fail with -EPERM regardless of privilege.
+> 
+> [...]
 
-IMO, this looks much cleaner with most of the bpf and socket logic under
-net/.
+Applied, thanks!
 
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+[1/1] io_uring: add a sysctl to disable io_uring system-wide
+      commit: 76d3ccecfa186af3120e206d62f03db1a94a535f
 
-Thanks!
-
-
+Best regards,
 -- 
-Gabriel Krisman Bertazi
+Jens Axboe
+
+
+
