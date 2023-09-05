@@ -2,331 +2,87 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB95EC83F3F
-	for <io-uring@archiver.kernel.org>; Mon,  4 Sep 2023 16:26:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A5E8CA0FF8
+	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:34:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352856AbjIDQ02 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 4 Sep 2023 12:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S243798AbjIEQen (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240655AbjIDQ01 (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 4 Sep 2023 12:26:27 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2EDCC5;
-        Mon,  4 Sep 2023 09:25:56 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-99bed101b70so251809466b.3;
-        Mon, 04 Sep 2023 09:25:56 -0700 (PDT)
+        with ESMTP id S1354794AbjIEOYf (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 10:24:35 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BFA197
+        for <io-uring@vger.kernel.org>; Tue,  5 Sep 2023 07:24:31 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-4935f87ca26so135460e0c.3
+        for <io-uring@vger.kernel.org>; Tue, 05 Sep 2023 07:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693923870; x=1694528670; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rtg0JV+CO28r/3TvA7CtNqhGLbhNAM/8Tnh4hPoGQnU=;
+        b=cIqGumjZaNP51NtJny7H9KFfgslTyyGhR7EUsN9RApU76ixIAcs5j7OaZqR56bxSPI
+         N5MamOmm4vbjRo4LJtYhPmYHajNAQD2XKiUs+xnvC/lIzzduxwjJ6L5QNCopZtoJows8
+         J7lgSNT51xUrzJkB4L4lZc85wfWDIAx2PCFAkBwfYY81vFejhbqra7j8fBZ1PI0YV6iR
+         B5g/PhdTfvMn6OxPTDMtuuCQ7IBpHIIJnIDETUVBnzb/pwx8gPT4YHgPiZNChvFUoSMg
+         RUt+Yxn2CV/XUxXO1unRLjVW0089KKiQnigzI6AKCMXkqrzBNRujVQKcYxF64Ez8wD0N
+         f6VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693844746; x=1694449546;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/injwFwPCEHXUwspfhEaGXaHWVZoMocD4z29NwXIPbw=;
-        b=P05PDJzAjiJ1cWWc6lqRJ40L33pvvs7hR6H4OGrK63zBZQdiBcQ1fraI+yi2SKPOyM
-         579gMA6+7lcS4aMfQTU5G+LzBezTU+ZdqH44WIf9C8EEG2VTijDxpWKvLi1Px+gk6cmJ
-         uBc3lYRCdSajPH+BhaORDJqDL+ap9WNRVSRBZkg0Xk/eaKUrJxQQvbuvj7mojMc8KCgC
-         9MjIXa6lHXnvGEkYWXwazgQwkQRhxYb2NXLECmKRMJSjU3MFEa7PDM6jM1czs0CsB4C0
-         LvqlcC/oa3sJ7y9G5n8rI5avUlyqns/4On0qehm5wRAW3dxF917buDQaDF+EJVjROf/3
-         53ww==
-X-Gm-Message-State: AOJu0YwA4pTJrBeZJ7X2u8REc5ZpLRICSZbHFzse1q+i/VyptFfHUqHp
-        2a6XnWYTrIVZ1dsNo3nEw88Mq+m5Hf3tyg==
-X-Google-Smtp-Source: AGHT+IE0M/etACOA3TJqXPFfT/nGxjhKhbwgCaaa0LEpaA3e4QJIoBD/G/DbeQfgGkp/N8WZFLjhZA==
-X-Received: by 2002:a17:906:18c:b0:9a1:cdf1:ba3 with SMTP id 12-20020a170906018c00b009a1cdf10ba3mr9618375ejb.27.1693844745972;
-        Mon, 04 Sep 2023 09:25:45 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-005.fbsv.net. [2a03:2880:31ff:5::face:b00c])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170906938b00b0098de7d28c34sm6382983ejx.193.2023.09.04.09.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Sep 2023 09:25:45 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
-        krisman@suse.de, Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
-        pabeni@redhat.com,
-        =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>,
-        Wang Yufen <wangyufen@huawei.com>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v4 10/10] selftests/bpf/sockopt: Add io_uring support
-Date:   Mon,  4 Sep 2023 09:25:03 -0700
-Message-Id: <20230904162504.1356068-11-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230904162504.1356068-1-leitao@debian.org>
-References: <20230904162504.1356068-1-leitao@debian.org>
+        d=1e100.net; s=20221208; t=1693923870; x=1694528670;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rtg0JV+CO28r/3TvA7CtNqhGLbhNAM/8Tnh4hPoGQnU=;
+        b=Qu0Dxy/vuZWkor4NR3JgMQO9m/Hibm1b06QrsZg6lJCIzlW2K1Zn8YO1AK2P5ZL6v6
+         KLtQ6c26S5JIyZyx1/rvtQWPl1u1ol42R+AfCFbTUj3RU2PxKjlS9+kYE1nt09BcFcrV
+         Hb7OY93r/zryT1I1xcLOhYdW2/HrPorcHMGOxvg4Qst19dpaxGQNcKfJxG91/2SSihSn
+         0oe8JdOsKbCgNc4B1Is4Zd+AnoiChHLVgCMNOhsMSRjn8p3kyy/zF0qe2JaH3Uzpy98o
+         /l7HtiBVaVsAfHEn5vSLXtUftpaT7bcP7lF4K98Xu94vbovB1PoxatHf5acB2G4IjI9W
+         Dd2A==
+X-Gm-Message-State: AOJu0Yw2hkc3X172zxYC1+ID/GNYAYCDwP+4IPiHDUnvJtzhEXy3JZBz
+        TDwRYvuRzPhqjhqhbIwimYKCl92lMBQX0Mm6p0G++JWINXFy4cwsc20=
+X-Google-Smtp-Source: AGHT+IEWoDhzho+yngW0aCmJ/4l2W7ac9+woo+yuM0ML8a0qrzG+hU+odrwxXpclmNhFqwuK8T1fNq4QgGni4tFlVOA=
+X-Received: by 2002:a1f:dfc2:0:b0:48d:3434:fe1a with SMTP id
+ w185-20020a1fdfc2000000b0048d3434fe1amr11957524vkg.3.1693923870055; Tue, 05
+ Sep 2023 07:24:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <x49y1i42j1z.fsf@segfault.boston.devel.redhat.com>
+In-Reply-To: <x49y1i42j1z.fsf@segfault.boston.devel.redhat.com>
+From:   Matteo Rizzo <matteorizzo@google.com>
+Date:   Tue, 5 Sep 2023 16:24:17 +0200
+Message-ID: <CAHKB1wKh3-9icDXK9_qorJr4DZ61Bt7mZznFT75R99a8LeMi_w@mail.gmail.com>
+Subject: Re: [PATCH v5] io_uring: add a sysctl to disable io_uring system-wide
+To:     io-uring@vger.kernel.org, axboe@kernel.dk, asml.silence@gmail.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, keescook@chromium.org,
+        ribalda@chromium.org, rostedt@goodmis.org, jannh@google.com,
+        chenhuacai@kernel.org, gpiccoli@igalia.com, ldufour@linux.ibm.com,
+        evn@google.com, poprdi@google.com, jordyzomer@google.com,
+        krisman@suse.de, andres@anarazel.de, Jeff Moyer <jmoyer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Expand the sockopt test to use also check for io_uring {g,s}etsockopt
-commands operations.
+Hi all,
 
-This patch starts by marking each test if they support io_uring support
-or not.
+Is there still anything that needs to be changed in this patch? As far as
+I can tell all the remaining feedback has been addressed.
 
-Right now, io_uring cmd getsockopt() has a limitation of only
-accepting level == SOL_SOCKET, otherwise it returns -EOPNOTSUPP. Since
-there aren't any test exercising getsockopt(level == SOL_SOCKET), this
-patch changes two tests to use level == SOL_SOCKET, they are
-"getsockopt: support smaller ctx->optlen" and "getsockopt: read
-ctx->optlen".
-There is no limitation for the setsockopt() part.
+--
+Matteo
 
-Later, each test runs using regular {g,s}etsockopt systemcalls, and, if
-liburing is supported, execute the same test (again), but calling
-liburing {g,s}setsockopt commands.
-
-This patch also changes the level of two tests to use SOL_SOCKET for the
-following two tests. This is going to help to exercise the io_uring
-subsystem:
- * getsockopt: read ctx->optlen
- * getsockopt: support smaller ctx->optlen
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- .../selftests/bpf/prog_tests/sockopt.c        | 113 +++++++++++++++++-
- 1 file changed, 107 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-index 9e6a5e3ed4de..9b1f7f0b1f7e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <io_uring/mini_liburing.h>
- #include "cgroup_helpers.h"
- 
- static char bpf_log_buf[4096];
-@@ -38,6 +39,7 @@ static struct sockopt_test {
- 	socklen_t			get_optlen_ret;
- 
- 	enum sockopt_test_error		error;
-+	bool				io_uring_support;
- } tests[] = {
- 
- 	/* ==================== getsockopt ====================  */
-@@ -251,7 +253,9 @@ static struct sockopt_test {
- 		.attach_type = BPF_CGROUP_GETSOCKOPT,
- 		.expected_attach_type = BPF_CGROUP_GETSOCKOPT,
- 
-+		.get_level = SOL_SOCKET,
- 		.get_optlen = 64,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: deny bigger ctx->optlen",
-@@ -276,6 +280,7 @@ static struct sockopt_test {
- 		.get_optlen = 64,
- 
- 		.error = EFAULT_GETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: ignore >PAGE_SIZE optlen",
-@@ -318,6 +323,7 @@ static struct sockopt_test {
- 		.get_optval = {}, /* the changes are ignored */
- 		.get_optlen = PAGE_SIZE + 1,
- 		.error = EOPNOTSUPP_GETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: support smaller ctx->optlen",
-@@ -337,8 +343,10 @@ static struct sockopt_test {
- 		.attach_type = BPF_CGROUP_GETSOCKOPT,
- 		.expected_attach_type = BPF_CGROUP_GETSOCKOPT,
- 
-+		.get_level = SOL_SOCKET,
- 		.get_optlen = 64,
- 		.get_optlen_ret = 32,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: deny writing to ctx->optval",
-@@ -518,6 +526,7 @@ static struct sockopt_test {
- 		.set_level = 123,
- 
- 		.set_optlen = 1,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: allow changing ctx->level",
-@@ -572,6 +581,7 @@ static struct sockopt_test {
- 		.set_optname = 123,
- 
- 		.set_optlen = 1,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: allow changing ctx->optname",
-@@ -624,6 +634,7 @@ static struct sockopt_test {
- 		.expected_attach_type = BPF_CGROUP_SETSOCKOPT,
- 
- 		.set_optlen = 64,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: ctx->optlen == -1 is ok",
-@@ -640,6 +651,7 @@ static struct sockopt_test {
- 		.expected_attach_type = BPF_CGROUP_SETSOCKOPT,
- 
- 		.set_optlen = 64,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: deny ctx->optlen < 0 (except -1)",
-@@ -658,6 +670,7 @@ static struct sockopt_test {
- 		.set_optlen = 4,
- 
- 		.error = EFAULT_SETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: deny ctx->optlen > input optlen",
-@@ -675,6 +688,7 @@ static struct sockopt_test {
- 		.set_optlen = 64,
- 
- 		.error = EFAULT_SETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: ignore >PAGE_SIZE optlen",
-@@ -940,7 +954,89 @@ static int load_prog(const struct bpf_insn *insns,
- 	return fd;
- }
- 
--static int run_test(int cgroup_fd, struct sockopt_test *test)
-+/* Core function that handles io_uring ring initialization,
-+ * sending SQE with sockopt command and waiting for the CQE.
-+ */
-+static int uring_sockopt(int op, int fd, int level, int optname,
-+			 const void *optval, socklen_t optlen)
-+{
-+	struct io_uring_cqe *cqe;
-+	struct io_uring_sqe *sqe;
-+	struct io_uring ring;
-+	int err;
-+
-+	err = io_uring_queue_init(1, &ring, 0);
-+	if (!ASSERT_OK(err, "Failed to initialize io_uring ring"))
-+		return err;
-+
-+	sqe = io_uring_get_sqe(&ring);
-+	if (!ASSERT_NEQ(sqe, NULL, "Failed to get an SQE")) {
-+		err = -1;
-+		goto fail;
-+	}
-+
-+	io_uring_prep_cmd(sqe, op, fd, level, optname, optval, optlen);
-+
-+	err = io_uring_submit(&ring);
-+	if (!ASSERT_EQ(err, 1, "Failed to submit SQE"))
-+		goto fail;
-+
-+	err = io_uring_wait_cqe(&ring, &cqe);
-+	if (!ASSERT_OK(err, "Failed to wait for CQE"))
-+		goto fail;
-+
-+	err = cqe->res;
-+
-+fail:
-+	io_uring_queue_exit(&ring);
-+
-+	return err;
-+}
-+
-+static int uring_setsockopt(int fd, int level, int optname, const void *optval,
-+			    socklen_t optlen)
-+{
-+	return uring_sockopt(SOCKET_URING_OP_SETSOCKOPT, fd, level, optname,
-+			     optval, optlen);
-+}
-+
-+static int uring_getsockopt(int fd, int level, int optname, void *optval,
-+			    socklen_t *optlen)
-+{
-+	int ret = uring_sockopt(SOCKET_URING_OP_GETSOCKOPT, fd, level, optname,
-+				optval, *optlen);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Populate optlen back to be compatible with systemcall interface,
-+	 * and simplify the test.
-+	 */
-+	*optlen = ret;
-+
-+	return 0;
-+}
-+
-+/* Execute the setsocktopt operation */
-+static int call_setsockopt(bool use_io_uring, int fd, int level, int optname,
-+			   const void *optval, socklen_t optlen)
-+{
-+	if (use_io_uring)
-+		return uring_setsockopt(fd, level, optname, optval, optlen);
-+
-+	return setsockopt(fd, level, optname, optval, optlen);
-+}
-+
-+/* Execute the getsocktopt operation */
-+static int call_getsockopt(bool use_io_uring, int fd, int level, int optname,
-+			   void *optval, socklen_t *optlen)
-+{
-+	if (use_io_uring)
-+		return uring_getsockopt(fd, level, optname, optval, optlen);
-+
-+	return getsockopt(fd, level, optname, optval, optlen);
-+}
-+
-+static int run_test(int cgroup_fd, struct sockopt_test *test, bool use_io_uring)
- {
- 	int sock_fd, err, prog_fd;
- 	void *optval = NULL;
-@@ -980,8 +1076,9 @@ static int run_test(int cgroup_fd, struct sockopt_test *test)
- 			test->set_optlen = num_pages * sysconf(_SC_PAGESIZE) + remainder;
- 		}
- 
--		err = setsockopt(sock_fd, test->set_level, test->set_optname,
--				 test->set_optval, test->set_optlen);
-+		err = call_setsockopt(use_io_uring, sock_fd, test->set_level,
-+				      test->set_optname, test->set_optval,
-+				      test->set_optlen);
- 		if (err) {
- 			if (errno == EPERM && test->error == EPERM_SETSOCKOPT)
- 				goto close_sock_fd;
-@@ -1008,8 +1105,8 @@ static int run_test(int cgroup_fd, struct sockopt_test *test)
- 		socklen_t expected_get_optlen = test->get_optlen_ret ?:
- 			test->get_optlen;
- 
--		err = getsockopt(sock_fd, test->get_level, test->get_optname,
--				 optval, &optlen);
-+		err = call_getsockopt(use_io_uring, sock_fd, test->get_level,
-+				      test->get_optname, optval, &optlen);
- 		if (err) {
- 			if (errno == EOPNOTSUPP && test->error == EOPNOTSUPP_GETSOCKOPT)
- 				goto free_optval;
-@@ -1063,7 +1160,11 @@ void test_sockopt(void)
- 		if (!test__start_subtest(tests[i].descr))
- 			continue;
- 
--		ASSERT_OK(run_test(cgroup_fd, &tests[i]), tests[i].descr);
-+		ASSERT_OK(run_test(cgroup_fd, &tests[i], false),
-+			  tests[i].descr);
-+		if (tests[i].io_uring_support)
-+			ASSERT_OK(run_test(cgroup_fd, &tests[i], true),
-+				  tests[i].descr);
- 	}
- 
- 	close(cgroup_fd);
--- 
-2.34.1
-
+On Mon, 21 Aug 2023 at 23:10, Jeff Moyer <jmoyer@redhat.com> wrote:
+>
+> From: Matteo Rizzo <matteorizzo@google.com>
+>
+> Introduce a new sysctl (io_uring_disabled) which can be either 0, 1, or
+> 2. When 0 (the default), all processes are allowed to create io_uring
+> instances, which is the current behavior.  When 1, io_uring creation is
+> disabled (io_uring_setup() will fail with -EPERM) for unprivileged
+> processes not in the kernel.io_uring_group group.  When 2, calls to
+> io_uring_setup() fail with -EPERM regardless of privilege.
+>
+> Signed-off-by: Matteo Rizzo <matteorizzo@google.com>
+> [JEM: modified to add io_uring_group]
+> Signed-off-by: Jeff Moyer <jmoyer@redhat.com>
