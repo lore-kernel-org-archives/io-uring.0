@@ -2,97 +2,98 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2878CA0FF8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0A16C83F2C
 	for <io-uring@archiver.kernel.org>; Tue,  5 Sep 2023 16:34:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344964AbjIEQey convert rfc822-to-8bit (ORCPT
-        <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 5 Sep 2023 12:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S1344822AbjIEQev (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 5 Sep 2023 12:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354096AbjIEJgr (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 05:36:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A041AE
-        for <io-uring@vger.kernel.org>; Tue,  5 Sep 2023 02:36:41 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mtapsc-5-RE-OIzy8PuGpYbXqCyuTRw-1; Tue, 05 Sep 2023 10:36:38 +0100
-X-MC-Unique: RE-OIzy8PuGpYbXqCyuTRw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 5 Sep
- 2023 10:36:34 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Tue, 5 Sep 2023 10:36:34 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Breno Leitao' <leitao@debian.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "krisman@suse.de" <krisman@suse.de>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "KP Singh" <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        "Alexander Mikhalitsyn" <alexander@mihalicyn.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        "David Howells" <dhowells@redhat.com>,
-        Jason Xing <kernelxing@tencent.com>,
-        "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Subject: RE: [PATCH v4 04/10] net/socket: Break down __sys_getsockopt
-Thread-Topic: [PATCH v4 04/10] net/socket: Break down __sys_getsockopt
-Thread-Index: AQHZ30xphJKGpfy/Z06Weh22EiUUErAL+aYg
-Date:   Tue, 5 Sep 2023 09:36:34 +0000
-Message-ID: <b9d56ef784ad436c8cb60c4c9fd2d786@AcuMS.aculab.com>
+        with ESMTP id S1354536AbjIEMYb (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 5 Sep 2023 08:24:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA841A8;
+        Tue,  5 Sep 2023 05:24:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E70811FD8E;
+        Tue,  5 Sep 2023 12:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1693916666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+7M4X3ltwI/VM1laJUfqoL6rnCUoo+tPTHyGF9EcSb4=;
+        b=BSh4tK42t37/hjB81tIVJaoFbkEnB6TT/FK0HXE+uFX6Bw5xI1/G+94VWY4bjgEVS1GsLN
+        9CesqlourNuHjoPH/ZzJwE87JSVCVcWft8zO/5qxhY2n1FjhWR88pJW0EVVp2oB5TwVjuI
+        9J3ZjN23vadJmaQ7RXmH+8Uzr0YfeUk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1693916666;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+7M4X3ltwI/VM1laJUfqoL6rnCUoo+tPTHyGF9EcSb4=;
+        b=Pvu8ACuOSzN6VLftdOMZeeF6kb0rzpSRVD0zDfew662reQ86XWGhE0rRmAViHV6je5hvcE
+        7iBXBna3vnmbFNAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B027213911;
+        Tue,  5 Sep 2023 12:24:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YS15Jfod92QpEwAAMHmgww
+        (envelope-from <krisman@suse.de>); Tue, 05 Sep 2023 12:24:26 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
+        pabeni@redhat.com
+Subject: Re: [PATCH v4 08/10] io_uring/cmd: Introduce
+ SOCKET_URING_OP_GETSOCKOPT
+In-Reply-To: <20230904162504.1356068-9-leitao@debian.org> (Breno Leitao's
+        message of "Mon, 4 Sep 2023 09:25:01 -0700")
+Organization: SUSE
 References: <20230904162504.1356068-1-leitao@debian.org>
- <20230904162504.1356068-5-leitao@debian.org>
-In-Reply-To: <20230904162504.1356068-5-leitao@debian.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        <20230904162504.1356068-9-leitao@debian.org>
+Date:   Tue, 05 Sep 2023 08:24:25 -0400
+Message-ID: <87a5u0byfa.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-From: Breno Leitao
-> Sent: 04 September 2023 17:25
-> 
-> Split __sys_getsockopt() into two functions by removing the core
-> logic into a sub-function (do_sock_getsockopt()). This will avoid
-> code duplication when doing the same operation in other callers, for
-> instance.
+Breno Leitao <leitao@debian.org> writes:
 
-Although a lot more work, I think (others may disagree) that
-the internal getsockopt() functions should be changed to take
-the length as a parameter and return the positive value
-to write back.
+> Add support for getsockopt command (SOCKET_URING_OP_GETSOCKOPT), where
+> level is SOL_SOCKET. This is leveraging the sockptr_t infrastructure,
+> where a sockptr_t is either userspace or kernel space, and handled as
+> such.
+>
+> Differently from the getsockopt(2), the optlen field is not a userspace
+> pointers. In getsockopt(2), userspace provides optlen pointer, which is
+> overwritten by the kernel.  In this implementation, userspace passes a
+> u32, and the new value is returned in cqe->res. I.e., optlen is not a
+> pointer.
+>
+> Important to say that userspace needs to keep the pointer alive until
+> the CQE is completed.
+>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-	David
+IMO, this looks much cleaner with most of the bpf and socket logic under
+net/.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
+Thanks!
+
+
+-- 
+Gabriel Krisman Bertazi
