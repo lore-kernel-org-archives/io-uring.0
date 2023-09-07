@@ -2,98 +2,109 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 382C1EC873E
-	for <io-uring@archiver.kernel.org>; Thu,  7 Sep 2023 15:47:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 367A0EC873E
+	for <io-uring@archiver.kernel.org>; Thu,  7 Sep 2023 16:59:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235484AbjIGPrY (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 7 Sep 2023 11:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
+        id S236814AbjIGQ7C (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 7 Sep 2023 12:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245492AbjIGPgj (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 7 Sep 2023 11:36:39 -0400
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FED210E
-        for <io-uring@vger.kernel.org>; Thu,  7 Sep 2023 08:36:15 -0700 (PDT)
-Received: by mail-oo1-xc36.google.com with SMTP id 006d021491bc7-573128cd77dso169878eaf.0
-        for <io-uring@vger.kernel.org>; Thu, 07 Sep 2023 08:36:15 -0700 (PDT)
+        with ESMTP id S245073AbjIGQ7B (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 7 Sep 2023 12:59:01 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769E5E46
+        for <io-uring@vger.kernel.org>; Thu,  7 Sep 2023 09:58:27 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2bcc187e0b5so21141641fa.1
+        for <io-uring@vger.kernel.org>; Thu, 07 Sep 2023 09:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1694100972; x=1694705772; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mmqr09NFOdAcxT8GnRxHCgyTgj/fxtGD41pLptP2Au0=;
-        b=irlzL6FTIbmbJgRq5Igt9l5zk1JQ3Njqkz6ExRoNCX2C2g7F3yOoYUy4acd/NkjXui
-         IRCyx0ofS6KoNY7G7PJ32FGr9v17NWFSxEtw9JIkO35BRbpHi9YNZsy6XwWJEzdVw2KZ
-         ZVn4uoS0ZqcPqvu38GXL9dxk7oi/A14p8jzm09WCje/Dn/84+7Io5z+gV9zWBHC4lgo9
-         BcoTjL0X9MUxoGbmbbxAu0soNixklKoBz6lB6a5kltFtof0VJUrn1u9lPjvdd5gh3ekw
-         TTDoXmvH9AOcsQ2yf/9AuxxglQENo/xPRa4XxFDhrajbuM98JhVDbpwCgbO36/Vc04cI
-         bjqg==
+        d=gmail.com; s=20221208; t=1694105841; x=1694710641; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HkUs4bQ1E8KB48LLONDQtfwRnAGik6JPV6A26/jKNqY=;
+        b=QgiC9/g+s61gWBOwiUegN3iLqZ9Hre7snJXt9Ei9DwA98FwizVrZod9NAnEqQhovQz
+         FgsshU3g5imQUeCnvjqWKCBzM9CEmW3AYjpuBj27TdsKLFYyqGBDMj1mz4EZqFQttyNf
+         f/KT3a1vRUkvELgq3hdGoCuqFyp+1LgYsujHw6n+ZkkPjY0Lrr1y8B06vRzP69KYHm4r
+         SMHwf7D5z9A9K9xcLoTG0sVImMzUTdoFuvTsXEn3m8Q6YC7v75V3WWJDusBWY3Fg126d
+         cv8HVJnoxOMY6Xb53NFk1vxwG7Wrmk97wmPtlXFZgoG+D7BhBCSJ3UhxV5jD9SGdVYjY
+         3qDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694100972; x=1694705772;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mmqr09NFOdAcxT8GnRxHCgyTgj/fxtGD41pLptP2Au0=;
-        b=kFIf6piynLSgyPuF0gJAwEjttGMVosXbbyy6AyYTmSmZ7ECKV5471gUy9VTJVXgqfC
-         qQxUno483JK3ZT0SFGjkdT9xmDONwpYfN4QZNgk2P+LwRffBnqUv7VgeCTV/mYDY3umv
-         W21bwuhibJ7jiBUzv+5rEQ24mq8ynvt0CD078nIfmUrT29M52CXKuwKYS2N5uMEbfCME
-         o/diB+BeQvZwSMsf7Jb7RzO5HyPcFfllFkYenm4jHTZc5ydrv2jus//ConMQVIHasfuQ
-         7g9x257n2UmXTkMfZ3H23wO97UKRlHQ4M0kzgqXDpmSx48GImdrviXkoksVRrnxs+cmM
-         MHCQ==
-X-Gm-Message-State: AOJu0YxNfEfy18GnJrrrXTmLHekZIVRKneANXQQ/UXWLAIxo5Tj0nske
-        /WzQDM9g3qmQSeLkAVPK0bgK+LJDgr0NffWaFWUp+w==
-X-Google-Smtp-Source: AGHT+IFAx31pDL9OS0UaQ1QM7P0+U8uqVOMnNbmVkRkKwNCPJEI10DFOozUuRPTBz0NCwjQiG7qxHg==
-X-Received: by 2002:a05:6358:51db:b0:13a:cf1d:4a0d with SMTP id 27-20020a05635851db00b0013acf1d4a0dmr14633190rwl.0.1694100972613;
-        Thu, 07 Sep 2023 08:36:12 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c0a8:11c9::11ab? ([2620:10d:c091:400::5:d08f])
-        by smtp.gmail.com with ESMTPSA id l9-20020a0c9789000000b0064c9f754794sm6517636qvd.86.2023.09.07.08.36.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Sep 2023 08:36:11 -0700 (PDT)
-Message-ID: <f6be40a3-38de-41ed-a545-d9063379f8e2@kernel.dk>
-Date:   Thu, 7 Sep 2023 09:36:10 -0600
+        d=1e100.net; s=20230601; t=1694105841; x=1694710641;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HkUs4bQ1E8KB48LLONDQtfwRnAGik6JPV6A26/jKNqY=;
+        b=nbZToe6qEUAAxWF4asxFU1TZCn9GtZjzMgQ4kdAyECo/z/WoYLl7KwbDwB+pRryR4r
+         Xhdo7lIjar8BJIxLhB5LfOZIkNAwPa5SqGhHwihrE5G/2z7RI4b9jZ8p3dkQQGN8F4dK
+         IyVxjRW+TrZQPjpSicHNbPrSpwuGBblatD5x4DAIGxkmXARFDQI8siuH3nF30JtuPfpQ
+         cVP1AagmmsUkh6I1TIoGFX0Vm+q61sZQ2XfKAFqqIBRakTI3JQNiY3edmxFbr76wFar1
+         ASPJK3I3iymste4kLbbcg4SIysqBtKgMlM/mZIxCvrHE0NVMpBVjncnEfXKjXp2T+zx3
+         dj5g==
+X-Gm-Message-State: AOJu0YxEX3k4Lsdy4Fr+0/6z9H2g7VU7J3n4UnNbYNm6lFCxY9CjvFaO
+        3fAMopyTjzxYd9Y3ywFTeoq9V/wTn54=
+X-Google-Smtp-Source: AGHT+IGmH7p2LBA2oJDPrCEkq7/BtszlGP65Sf1ghdvfgVDXBbHtkGRDy0w/m1A5DF5q3u45er8JxA==
+X-Received: by 2002:a19:650f:0:b0:4fd:d08c:fa3e with SMTP id z15-20020a19650f000000b004fdd08cfa3emr4512294lfb.42.1694091035467;
+        Thu, 07 Sep 2023 05:50:35 -0700 (PDT)
+Received: from 127.0.0.1localhost ([148.252.141.16])
+        by smtp.gmail.com with ESMTPSA id p11-20020a056402074b00b005231e1780aasm9612279edy.91.2023.09.07.05.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Sep 2023 05:50:34 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
+Subject: [PATCH 2/2] io_uring: fix unprotected iopoll overflow
+Date:   Thu,  7 Sep 2023 13:50:08 +0100
+Message-ID: <ae1902f240b9f73c10136354bafe6cd562bb76d8.1694054436.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <cover.1694054436.git.asml.silence@gmail.com>
+References: <cover.1694054436.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] io_uring: fix IO hang in io_wq_put_and_exit from
- do_exit()
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        Ming Lei <ming.lei@redhat.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Chengming Zhou <zhouchengming@bytedance.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <20230901134916.2415386-1-ming.lei@redhat.com>
- <169358121201.335729.4270950770834703042.b4-ty@kernel.dk>
-In-Reply-To: <169358121201.335729.4270950770834703042.b4-ty@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 9/1/23 9:13 AM, Jens Axboe wrote:
-> 
-> On Fri, 01 Sep 2023 21:49:16 +0800, Ming Lei wrote:
->> io_wq_put_and_exit() is called from do_exit(), but all FIXED_FILE requests
->> in io_wq aren't canceled in io_uring_cancel_generic() called from do_exit().
->> Meantime io_wq IO code path may share resource with normal iopoll code
->> path.
->>
->> So if any HIPRI request is submittd via io_wq, this request may not get resouce
->> for moving on, given iopoll isn't possible in io_wq_put_and_exit().
->>
->> [...]
-> 
-> Applied, thanks!
-> 
-> [1/1] io_uring: fix IO hang in io_wq_put_and_exit from do_exit()
->       commit: b484a40dc1f16edb58e5430105a021e1916e6f27
+[   71.490669] WARNING: CPU: 3 PID: 17070 at io_uring/io_uring.c:769
+io_cqring_event_overflow+0x47b/0x6b0
+[   71.498381] Call Trace:
+[   71.498590]  <TASK>
+[   71.501858]  io_req_cqe_overflow+0x105/0x1e0
+[   71.502194]  __io_submit_flush_completions+0x9f9/0x1090
+[   71.503537]  io_submit_sqes+0xebd/0x1f00
+[   71.503879]  __do_sys_io_uring_enter+0x8c5/0x2380
+[   71.507360]  do_syscall_64+0x39/0x80
 
-This causes a regression with the test/thread-exit.t test case, as it's
-canceling requests from other tasks as well. I will drop this patch for
-now.
+We decoupled CQ locking from ->task_complete but haven't fixed up places
+forcing locking for CQ overflows.
 
+Fixes: ec26c225f06f5 ("io_uring: merge iopoll and normal completion paths")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ io_uring/io_uring.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 4674203c1cac..6cce8948bddf 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -883,7 +883,7 @@ static void __io_flush_post_cqes(struct io_ring_ctx *ctx)
+ 		struct io_uring_cqe *cqe = &ctx->completion_cqes[i];
+ 
+ 		if (!io_fill_cqe_aux(ctx, cqe->user_data, cqe->res, cqe->flags)) {
+-			if (ctx->task_complete) {
++			if (ctx->lockless_cq) {
+ 				spin_lock(&ctx->completion_lock);
+ 				io_cqring_event_overflow(ctx, cqe->user_data,
+ 							cqe->res, cqe->flags, 0, 0);
+@@ -1541,7 +1541,7 @@ void __io_submit_flush_completions(struct io_ring_ctx *ctx)
+ 
+ 		if (!(req->flags & REQ_F_CQE_SKIP) &&
+ 		    unlikely(!io_fill_cqe_req(ctx, req))) {
+-			if (ctx->task_complete) {
++			if (ctx->lockless_cq) {
+ 				spin_lock(&ctx->completion_lock);
+ 				io_req_cqe_overflow(req);
+ 				spin_unlock(&ctx->completion_lock);
 -- 
-Jens Axboe
-
+2.41.0
 
