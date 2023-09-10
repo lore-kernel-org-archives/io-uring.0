@@ -2,112 +2,159 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F86EE3EC0
-	for <io-uring@archiver.kernel.org>; Sat,  9 Sep 2023 16:25:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9769AEEB592
+	for <io-uring@archiver.kernel.org>; Sun, 10 Sep 2023 22:01:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234585AbjIIQZi (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sat, 9 Sep 2023 12:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
+        id S231738AbjIJWBf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Sun, 10 Sep 2023 18:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343601AbjIIPLj (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sat, 9 Sep 2023 11:11:39 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C3E1AA
-        for <io-uring@vger.kernel.org>; Sat,  9 Sep 2023 08:11:35 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-27197b0b733so601257a91.1
-        for <io-uring@vger.kernel.org>; Sat, 09 Sep 2023 08:11:34 -0700 (PDT)
+        with ESMTP id S231502AbjIJWBe (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Sun, 10 Sep 2023 18:01:34 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144A6180
+        for <io-uring@vger.kernel.org>; Sun, 10 Sep 2023 15:01:29 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-68a440a8a20so3655669b3a.3
+        for <io-uring@vger.kernel.org>; Sun, 10 Sep 2023 15:01:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1694272294; x=1694877094; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FR4mT7BpnQdHvbo4nJB7tN7p8TAHwH3cLmazs6aPmRY=;
-        b=K8y37S5UWFsHK/IJcGT6538xALY5nUM5uRehhpr8XIYGvW1Ln9MjWk6SEeJ8acB1J9
-         iYDL8bMgGvCnOkZzlRF+5D5VOmNzfG/bdvrt5jjnJMPOYH4oNAa98xN+RFDDnGiOaEUl
-         G9oZ0+Ru3u0QZTIAc1HpUK9tX45fh8KY0FgouSDGK0GM3r7N1SEAMfLeCdMvK8FttwsI
-         oZdpy0txlqgtExzh1t4RG2cQB4dFGn5JJC3fEYgYDrxoP0+i4Qssgad0t7c9OJtpehu+
-         S2V/LtgXV3NjbQ5MZ4e6p9/vIKB7i+Zl+bEaMuKWc+bU6aCUxSDuhza5DaMcVNeowj2w
-         RdMw==
+        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1694383288; x=1694988088; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EyybjuBSw2AsBAibBPVqGccWs6P0JtTeGBB0Kwx90Dw=;
+        b=b1Q+Djrc6DRgK0lSMIXf6OVmm1S98Rb1dJdV/4AjeMobXYoqxa/k4Xb7XAYcmCuvbB
+         T8pFPhiJHk/Ig8CcU4is+jZGfReesXQjqK7ULjc+VZz110Uqhy1NjrWTu4Ej2kgb1UEn
+         ZHgnS7dDfuM0nrDuRkgBy+D/YOBtPecXxWCyUh6h/0/NlsJyyOwKHQwSKYYxfVY7xjkS
+         7I+QxdaDiDVRMV8qekGuV48jZlbOlbc6skR8a29kp5hS8zsrhWfeCv9XIJ/gwMURSkPX
+         Ncgzq9d3+KaDgvRq3XsvmeqBjcqt9Lc7ewxeY00IZtUnccPI4WIduUYqP2aDlo+H2VFl
+         7yRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694272294; x=1694877094;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FR4mT7BpnQdHvbo4nJB7tN7p8TAHwH3cLmazs6aPmRY=;
-        b=Klek3rhJyLaHa2eCiZz3iKJBlfNmz44cZwDrjlqAg+PKM7B401dabzRELSWxvY3Ija
-         fidmx9vaqEIFdxfWkNkUPOSwb0ng5viV8r4V6kp3v4uLPIcBVVnWr20H8LS/Vd1vTFcT
-         AAaMD+4GqpgjrkNTWb78g9+3vhjsJcsUWGFl22SeXSplMwltwcYbsgeS+uWmRRXI28N8
-         UMlMRMBFTL8GctmDjds8s/A7YJBWsh4nJtwYNjX1qEgnDYcI3Jt9mwPAsTV4OF8HkpaA
-         3yWOm2ZO8u6OyrKKWg2u8l1gVH7BD+2O0EyBVF4mkexSEPir7fhsvnuRgHjcOzWUUMuQ
-         OiPw==
-X-Gm-Message-State: AOJu0YxVWxkugXZ3N+fV5p+MGWr23k11L8BfcaeNH7eS8xb3MGm6J0KS
-        h7TX0b9SuuiyT7O2JvJY8LZk+iBUr7CV3WfnyeqqMQ==
-X-Google-Smtp-Source: AGHT+IEetE5imo0CtKdmhK3iz+SEcOuUNbyEMBqZEcAJidGPHnc1cKIxlJx+AQXl4xfSoakrkGKoYg==
-X-Received: by 2002:a17:90a:3ec4:b0:26d:414d:a98a with SMTP id k62-20020a17090a3ec400b0026d414da98amr5254874pjc.1.1694272294081;
-        Sat, 09 Sep 2023 08:11:34 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id f15-20020a170902ff0f00b001bdb0483e65sm3371450plj.265.2023.09.09.08.11.31
+        d=1e100.net; s=20230601; t=1694383288; x=1694988088;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EyybjuBSw2AsBAibBPVqGccWs6P0JtTeGBB0Kwx90Dw=;
+        b=PkHKBR5XaMotopgfj/gs7dn1BKkyeRCU39jlD9w/Tv3iYvK2bf9FIHdlGspzzLPOCP
+         AWJR5rs1axHfm28YRXpus9NftisgFcxiJrLpihTYFLiXKEbIdPwUHwNztLqrJ4Qekdnh
+         +d3hJ7k0L5knAq+oW8JLVSsBBgRd4woFxAo8iXU13fwjSb7sPOwXA+6DThCyp0Q+LHQP
+         vUeUxGiClyNBKz5peVIzx1g4NPbOFXOmkhBaQTX0KQbGaiT4MYevbiFW+qAZyguU/+RT
+         xTgbbuws0m2bIf67SCHE6gw9h+E/Am5ahrpLOvMsevS+70fXlRJGaAknSa7Emi9qfU1p
+         HSlw==
+X-Gm-Message-State: AOJu0Yz6qCJ04u1leY5VWg5MiTylKCGgEAiKh0Xy2XeHLyPKq9Xqpf4F
+        VglcjeN1rMJX6AhI2weonR+QbQ==
+X-Google-Smtp-Source: AGHT+IHSYFPf3w2qdTZr9bikkzuSsvPYQjYYZyW+Zfc616rQWXs3Eeo2BzwinmhhOfJVOtnHj1lBTA==
+X-Received: by 2002:a05:6a00:1a0c:b0:68c:57c7:1eb0 with SMTP id g12-20020a056a001a0c00b0068c57c71eb0mr9371853pfv.11.1694383287795;
+        Sun, 10 Sep 2023 15:01:27 -0700 (PDT)
+Received: from dread.disaster.area (pa49-195-66-88.pa.nsw.optusnet.com.au. [49.195.66.88])
+        by smtp.gmail.com with ESMTPSA id u10-20020a62ed0a000000b0068a3dd6c1dasm4403641pfh.142.2023.09.10.15.01.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Sep 2023 08:11:32 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     brauner@kernel.org, arnd@arndb.de, asml.silence@gmail.com
-Subject: [PATCHSET v4 0/5] Add io_uring support for waitid
-Date:   Sat,  9 Sep 2023 09:11:19 -0600
-Message-Id: <20230909151124.1229695-1-axboe@kernel.dk>
-X-Mailer: git-send-email 2.40.1
+        Sun, 10 Sep 2023 15:01:27 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qfSUe-00DWBA-0u;
+        Mon, 11 Sep 2023 08:01:24 +1000
+Date:   Mon, 11 Sep 2023 08:01:24 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Hao Xu <hao.xu@linux.dev>, Matthew Wilcox <willy@infradead.org>,
+        io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-cachefs@redhat.com,
+        ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-unionfs@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, codalist@coda.cs.cmu.edu,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
+        devel@lists.orangefs.org, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-mtd@lists.infradead.org,
+        Wanpeng Li <wanpengli@tencent.com>
+Subject: Re: [PATCH 07/11] vfs: add nowait parameter for file_accessed()
+Message-ID: <ZP48tAg2iS0UzKQf@dread.disaster.area>
+References: <20230827132835.1373581-1-hao.xu@linux.dev>
+ <20230827132835.1373581-8-hao.xu@linux.dev>
+ <ZOvA5DJDZN0FRymp@casper.infradead.org>
+ <c728bf3f-d9db-4865-8473-058b26c11c06@linux.dev>
+ <ZO3cI+DkotHQo3md@casper.infradead.org>
+ <642de4e6-801d-fcad-a7ce-bfc6dec3b6e5@linux.dev>
+ <ZPUJHAKzxvXiEDYA@dread.disaster.area>
+ <6489b8cb-7d54-1e29-f192-a3449ed87fa1@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6489b8cb-7d54-1e29-f192-a3449ed87fa1@gmail.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+On Fri, Sep 08, 2023 at 01:29:55AM +0100, Pavel Begunkov wrote:
+> On 9/3/23 23:30, Dave Chinner wrote:
+> > On Wed, Aug 30, 2023 at 02:11:31PM +0800, Hao Xu wrote:
+> > > On 8/29/23 19:53, Matthew Wilcox wrote:
+> > > > On Tue, Aug 29, 2023 at 03:46:13PM +0800, Hao Xu wrote:
+> > > > > On 8/28/23 05:32, Matthew Wilcox wrote:
+> > > > > > On Sun, Aug 27, 2023 at 09:28:31PM +0800, Hao Xu wrote:
+> > > > > > > From: Hao Xu <howeyxu@tencent.com>
+> > > > > > > 
+> > > > > > > Add a boolean parameter for file_accessed() to support nowait semantics.
+> > > > > > > Currently it is true only with io_uring as its initial caller.
+> > > > > > 
+> > > > > > So why do we need to do this as part of this series?  Apparently it
+> > > > > > hasn't caused any problems for filemap_read().
+> > > > > > 
+> > > > > 
+> > > > > We need this parameter to indicate if nowait semantics should be enforced in
+> > > > > touch_atime(), There are locks and maybe IOs in it.
+> > > > 
+> > > > That's not my point.  We currently call file_accessed() and
+> > > > touch_atime() for nowait reads and nowait writes.  You haven't done
+> > > > anything to fix those.
+> > > > 
+> > > > I suspect you can trim this patchset down significantly by avoiding
+> > > > fixing the file_accessed() problem.  And then come back with a later
+> > > > patchset that fixes it for all nowait i/o.  Or do a separate prep series
+> > > 
+> > > I'm ok to do that.
+> > > 
+> > > > first that fixes it for the existing nowait users, and then a second
+> > > > series to do all the directory stuff.
+> > > > 
+> > > > I'd do the first thing.  Just ignore the problem.  Directory atime
+> > > > updates cause I/O so rarely that you can afford to ignore it.  Almost
+> > > > everyone uses relatime or nodiratime.
+> > > 
+> > > Hi Matthew,
+> > > The previous discussion shows this does cause issues in real
+> > > producations: https://lore.kernel.org/io-uring/2785f009-2ebb-028d-8250-d5f3a30510f0@gmail.com/#:~:text=fwiw%2C%20we%27ve%20just%20recently%20had%20similar%20problems%20with%20io_uring%20read/write
+> > > 
+> > 
+> > Then separate it out into it's own patch set so we can have a
+> > discussion on the merits of requiring using noatime, relatime or
+> > lazytime for really latency sensitive IO applications. Changing code
+> > is not always the right solution...
+> 
+> Separation sounds reasonable, but it can hardly be said that only
+> latency sensitive apps would care about >1s nowait/async submission
+> delays. Presumably, btrfs can improve on that, but it still looks
+> like it's perfectly legit for filesystems do heavy stuff in
+> timestamping like waiting for IO. Right?
 
-This adds support for IORING_OP_WAITID, which is an async variant of
-the waitid(2) syscall. Rather than have a parent need to block waiting
-on a child task state change, it can now simply get an async notication
-when the requested state change has occured.
+Yes, it is, no-one is denying that. And some filesystems are worse
+than others, but none of that means it has to be fixed so getdents
+can be converted to NOWAIT semantics.
 
-Patches 1..4 are purely prep patches, and should not have functional
-changes. They split out parts of do_wait() into __do_wait(), so that
-the prepare-to-wait and sleep parts are contained within do_wait().
+ie. this patchset is about the getdents NOWAIT machinery, and
+fiddling around with timestamps has much, much wider scope than just
+NOWAIT getdents machinery. We'll have this discussion about NOWAIT
+timestamp updates when a RFC is proposed to address the wider
+problem of how timestamp updates should behave in NOWAIT context.
 
-Patch 5 adds io_uring support.
-
-I wrote a few basic tests for this, which can be found in the
-'waitid' branch of liburing:
-
-https://git.kernel.dk/cgit/liburing/log/?h=waitid
-
-Also spun a custom kernel for someone to test it, and no issues reported
-so far.
-
-The code can also be found here:
-
-https://git.kernel.dk/cgit/linux/log/?h=io_uring-waitid
-
- include/linux/io_uring_types.h |   2 +
- include/uapi/linux/io_uring.h  |   2 +
- io_uring/Makefile              |   3 +-
- io_uring/cancel.c              |   5 +
- io_uring/io_uring.c            |   3 +
- io_uring/opdef.c               |  10 +-
- io_uring/waitid.c              | 372 +++++++++++++++++++++++++++++++++
- io_uring/waitid.h              |  15 ++
- kernel/exit.c                  | 131 ++++++------
- kernel/exit.h                  |  30 +++
- 10 files changed, 512 insertions(+), 61 deletions(-)
-
-Changes since v3:
-- Rebase on current tree
-- Move it before the futex changes. Note that if you're testing this,
-  this means that the opcode values have changed. The liburing repo
-  has been rebased as a result as well, you'll want to update that too.
-  liburing also has update test cases.
-- Fix races between cancelation and wakeup trigger. This follows a
-  scheme similar to the internal poll io_uring handling
-
+-Dave.
 -- 
-Jens Axboe
-
-
+Dave Chinner
+david@fromorbit.com
