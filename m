@@ -2,80 +2,113 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A507FCA0EC8
-	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC80DCA0ECF
+	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:12:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241669AbjIKWKF (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 11 Sep 2023 18:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
+        id S242012AbjIKWKS (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 11 Sep 2023 18:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244543AbjIKUkb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 16:40:31 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F1F1A7
-        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 13:40:26 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-68e3c6aa339so878563b3a.1
-        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 13:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1694464825; x=1695069625; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NM/rYxfi60wOxmBRLrySZoZz5h9oz3/bbgbtBuEWIcE=;
-        b=WSYmwC2WzXh5ADXyQbL4DocdexUTOppr4kpasHmIrpCa26zArQTHR0/gBLY4yR8Zrv
-         Y10wfPTOv2c2LzQSb3VezzCgtSD27ewLQ2oTnQtLojg0ZOFoTZc1Rt2r2y4H+xIecUGB
-         aEt8A4dEbpJTlpMms0eoCnuXtn/+FgMsCwq8Ryce/rwP74FPGitD4ohIOhRhG2mnn2eZ
-         yUcrGL6DdIe+ZWJQDF86JYOXJzg5EgIU1LOcZ+My6GXC0s1GckQQO468Z7rGxt7Fit61
-         lljIlq4p3472A4R1qD49a0iFc4BDsHHFUyCIyVASgR4G6j+NnbJmMLGu0CAihpExa6SG
-         TsMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694464825; x=1695069625;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NM/rYxfi60wOxmBRLrySZoZz5h9oz3/bbgbtBuEWIcE=;
-        b=ORZ+8bY8BHZT8LY93VBic4BcS8Qfu6ogOEpsJ3BcZXCIpuVJHc2x/j/id5uA3NyAHW
-         7QIofUZYh/P7CAdxL4mLRqOBQWuTjJVRRZV53fJzWuoVhLVm/jh7IBUYNDhrEDtssr2g
-         Ie7mYr3pJpSVOmUIRFe/MRRtuo6vkFTdZW9xVaMrt4zeJ9J4E6t/5n8tQMWHuEtJ880T
-         eU5cpFCNIfPN8k0LxRzrL6YbnwW4PJkenyrttRaAd1gjB+NFtB+61aQ1Ubw5BC1LTzQM
-         JTNeLmmoQwCqPHs1DWIlHesPdC15V9NPHc4EQpV2blwPI2KgHtqHJyTWXxWt3Hx5CpBx
-         F+Iw==
-X-Gm-Message-State: AOJu0YxuGQGu8YsTPst40oOlwJXVLK1Bdm5SkAWvd30uSax+feGlYQCq
-        BTPR/DJj2tEV9pnI0pphac7RUaUr7d4YDPkHN3+/3g==
-X-Google-Smtp-Source: AGHT+IFseReyAc2r6ZU3E1AUp7ItA0e0fUU05APHq9UaNTTRVat0DYYHfTra+3kmwNDWJ+gJiktYXA==
-X-Received: by 2002:a05:6a00:2b86:b0:68c:7089:cb8 with SMTP id dv6-20020a056a002b8600b0068c70890cb8mr10648912pfb.2.1694464825445;
-        Mon, 11 Sep 2023 13:40:25 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ef22-20020a056a002c9600b0068fe5a5a566sm100544pfb.142.2023.09.11.13.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 13:40:24 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com
-Subject: [PATCHSET 0/3] Add support for multishot reads
-Date:   Mon, 11 Sep 2023 14:40:18 -0600
-Message-Id: <20230911204021.1479172-1-axboe@kernel.dk>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S242487AbjIKPmb (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 11:42:31 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBC8127;
+        Mon, 11 Sep 2023 08:42:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 952BA1F38D;
+        Mon, 11 Sep 2023 15:42:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1694446944; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3xXDQka3gqHzTmbM91PUqKCNwVv5hIrQkTXz5vFWWz8=;
+        b=orN+6SbhdVggei5E57EsUfJsiLKTfW08RYjOOVA2l8f5lm4UfC3hRJ+PgTzyTzumbZxOVf
+        hw2/anP2YoMQmfbw/oEoIkjQAjkKyUlv1CCqvhF94l0asZBV7znF7pojvRbfmPrbNwvkMB
+        yCzM3NajV41At+jdrDQo6tcy1auUN6Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1694446944;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3xXDQka3gqHzTmbM91PUqKCNwVv5hIrQkTXz5vFWWz8=;
+        b=I5E+uNod2iDLygEjzr91eL5+LUNmI9G2s0LFeHtadKJI35gQJJK8PtD4iudTJn+PMwDkrg
+        VR7P/MbAY4Au9YBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5DF3E13780;
+        Mon, 11 Sep 2023 15:42:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dO12EWA1/2Q9cQAAMHmgww
+        (envelope-from <krisman@suse.de>); Mon, 11 Sep 2023 15:42:24 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com, kuba@kernel.org,
+        martin.lau@linux.dev, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        io-uring@vger.kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH v5 3/8] io_uring/cmd: Pass compat mode in issue_flags
+In-Reply-To: <20230911103407.1393149-4-leitao@debian.org> (Breno Leitao's
+        message of "Mon, 11 Sep 2023 03:34:02 -0700")
+Organization: SUSE
+References: <20230911103407.1393149-1-leitao@debian.org>
+        <20230911103407.1393149-4-leitao@debian.org>
+Date:   Mon, 11 Sep 2023 11:42:23 -0400
+Message-ID: <87v8cg90o0.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+Breno Leitao <leitao@debian.org> writes:
 
-We support multishot for other request types, generally in the shape of
-a flag for the request. Doing a flag based approach with reads isn't
-straightforward, as the read/write flags are in the RWF_ space. Instead,
-add a separate opcode for this, IORING_OP_READ_MULTISHOT.
+> Create a new flag to track if the operation is running compat mode.
+> This basically check the context->compat and pass it to the issue_flags,
+> so, it could be queried later in the callbacks.
+>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-This can only be used provided buffers, like other multishot request
-types that read/receive data.
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-It can also only be used for pollable file types, like a tun device or
-pipes, for example. File types that are always readable (or seekable),
-like regular files, cannot be used with multishot reads.
+
+> ---
+>  include/linux/io_uring.h | 1 +
+>  io_uring/uring_cmd.c     | 2 ++
+>  2 files changed, 3 insertions(+)
+>
+> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+> index 106cdc55ff3b..bc53b35966ed 100644
+> --- a/include/linux/io_uring.h
+> +++ b/include/linux/io_uring.h
+> @@ -20,6 +20,7 @@ enum io_uring_cmd_flags {
+>  	IO_URING_F_SQE128		= (1 << 8),
+>  	IO_URING_F_CQE32		= (1 << 9),
+>  	IO_URING_F_IOPOLL		= (1 << 10),
+> +	IO_URING_F_COMPAT		= (1 << 11),
+>  };
+>  
+>  struct io_uring_cmd {
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 537795fddc87..60f843a357e0 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -128,6 +128,8 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+>  		issue_flags |= IO_URING_F_SQE128;
+>  	if (ctx->flags & IORING_SETUP_CQE32)
+>  		issue_flags |= IO_URING_F_CQE32;
+> +	if (ctx->compat)
+> +		issue_flags |= IO_URING_F_COMPAT;
+>  	if (ctx->flags & IORING_SETUP_IOPOLL) {
+>  		if (!file->f_op->uring_cmd_iopoll)
+>  			return -EOPNOTSUPP;
 
 -- 
-Jens Axboe
-
-
+Gabriel Krisman Bertazi
