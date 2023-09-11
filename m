@@ -2,140 +2,106 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA10CA0EC6
-	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:12:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB5E9CA0ECB
+	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:15:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242556AbjIKWKd (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 11 Sep 2023 18:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S1358416AbjIKWKp (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 11 Sep 2023 18:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236416AbjIKKeq (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 06:34:46 -0400
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBAB120;
-        Mon, 11 Sep 2023 03:34:42 -0700 (PDT)
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-9aa2468bdb4so140522166b.0;
-        Mon, 11 Sep 2023 03:34:42 -0700 (PDT)
+        with ESMTP id S243064AbjIKQq7 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 12:46:59 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315DEE3;
+        Mon, 11 Sep 2023 09:46:54 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-52e297c7c39so5868206a12.2;
+        Mon, 11 Sep 2023 09:46:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694428480; x=1695033280;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v7j1QmeYuygIkE0CEX687y6FT8cxPJYvkR7OuyNEGnA=;
-        b=xTIjGoaS9x7SyoPH/RZK0YXmnAXJP/Us65YhiUGYToDDzBPrYXAkzQUo7GyENrLJVZ
-         Kax5zZKSN0Sw9s6VpgXQKpzamwzuBb2nlglNgusvBTVY+1umdTZ5ktmFj4iGmFQCehO4
-         iXNkpJ5TUt8dlboNxSu8lkoovFyE1ANW0ddU8Pgm9yf+7SYygNC4I+0zKy4uYlJ+JuAk
-         e8833AhuUx2lROhG6SB+c1iCGvgUwsHjDfNCkdpEASLbp2CU8SPy5uUvnkjhB2UqIUqT
-         qNyCbcd2lpbnzXvYxPJ8aWJ6qzhWz3E262/OwXBC18GEP4J/Uxcc/Qw4YneQjNA9yz4G
-         Jk9g==
-X-Gm-Message-State: AOJu0YzoXlRNrOV4NOy7osr63KBaDl1porO1+WA4trSYQK8he2vXTDZ4
-        BNbUIKBcyT6pJJVfsXxWdRc=
-X-Google-Smtp-Source: AGHT+IFAFUQkUnUVJBxRblUhkO6iA2j5fqxMkm4dviZ752xsU5s8G6ckrf+vOXr2K+4laWtPH4ogvQ==
-X-Received: by 2002:a17:906:3111:b0:9a1:e941:6f49 with SMTP id 17-20020a170906311100b009a1e9416f49mr7703599ejx.44.1694428480677;
-        Mon, 11 Sep 2023 03:34:40 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-002.fbsv.net. [2a03:2880:31ff:2::face:b00c])
-        by smtp.gmail.com with ESMTPSA id op5-20020a170906bce500b0098de7d28c34sm5169672ejb.193.2023.09.11.03.34.40
+        d=1e100.net; s=20230601; t=1694450812; x=1695055612;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fz0qgG1xAQKjyAXZ1F3HGmELYa8PYKoGe3IryD6lsZo=;
+        b=s5RVSmQLJqz8+OiqDIN1LxVChoA5KOHTVWvtEZPg2RyF+bBuNP94pnUquLrSWAaDJk
+         fZvZ7jA7mYsaSAYDA/2tdV/xzrICaOJLlBGGCs0gamcpdPgZybrGYotZppsL7A/jpTlh
+         yMdm53+MeZBKx2Tk8KRKkLQyhm8lNPuKqI5HsmByi2RLXFnppWdF8nqhJkcNlQZaTpiD
+         U3PGWTZAl5fhzwebX9ycxBThtvkzAmwRbv5nvCEyeMDNfAnO+smSntP6y3q/RdNyuwgu
+         szpp+vMx2E2dPBxaMgctmL8LbgngyS23uYpxAA59nkave2vR7cvypaTpJbZLQxFQetHK
+         ZXgA==
+X-Gm-Message-State: AOJu0Yzlg7DgwwyP5whvYAqsZnowsF4Rp7C8hw3OmPk/hwgAM2l3wcWw
+        ylBp9qBby5JnmD2LcMB6iCk=
+X-Google-Smtp-Source: AGHT+IGbKXR5utsZSAcjo25hC+LWL6BmnRTWGZSSZF/5ZDH7OKutTBo9ihUXtpcWszGOcfOQii6Fxg==
+X-Received: by 2002:aa7:c1d5:0:b0:522:2f8c:8953 with SMTP id d21-20020aa7c1d5000000b005222f8c8953mr7573057edp.39.1694450812406;
+        Mon, 11 Sep 2023 09:46:52 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-017.fbsv.net. [2a03:2880:31ff:11::face:b00c])
+        by smtp.gmail.com with ESMTPSA id i23-20020a0564020f1700b0052f8c67a399sm538287eda.37.2023.09.11.09.46.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 03:34:40 -0700 (PDT)
+        Mon, 11 Sep 2023 09:46:51 -0700 (PDT)
+Date:   Mon, 11 Sep 2023 09:46:50 -0700
 From:   Breno Leitao <leitao@debian.org>
-To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
         willemdebruijn.kernel@gmail.com, kuba@kernel.org,
-        martin.lau@linux.dev, krisman@suse.de
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org, pabeni@redhat.com
-Subject: [PATCH v5 6/8] io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
-Date:   Mon, 11 Sep 2023 03:34:05 -0700
-Message-Id: <20230911103407.1393149-7-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230911103407.1393149-1-leitao@debian.org>
+        martin.lau@linux.dev, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        io-uring@vger.kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH v5 5/8] io_uring/cmd: return -EOPNOTSUPP if net is
+ disabled
+Message-ID: <ZP9EeunfcbWos80w@gmail.com>
 References: <20230911103407.1393149-1-leitao@debian.org>
+ <20230911103407.1393149-6-leitao@debian.org>
+ <87ledc904p.fsf@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ledc904p.fsf@suse.de>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Add support for getsockopt command (SOCKET_URING_OP_GETSOCKOPT), where
-level is SOL_SOCKET. This is similar to the getsockopt(2) system
-call, and both parameters are pointers to userspace.
+On Mon, Sep 11, 2023 at 11:53:58AM -0400, Gabriel Krisman Bertazi wrote:
+> Breno Leitao <leitao@debian.org> writes:
+> 
+> > Protect io_uring_cmd_sock() to be called if CONFIG_NET is not set. If
+> > network is not enabled, but io_uring is, then we want to return
+> > -EOPNOTSUPP for any possible socket operation.
+> >
+> > This is helpful because io_uring_cmd_sock() can now call functions that
+> > only exits if CONFIG_NET is enabled without having #ifdef CONFIG_NET
+> > inside the function itself.
+> >
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> >  io_uring/uring_cmd.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> > index 60f843a357e0..a7d6a7d112b7 100644
+> > --- a/io_uring/uring_cmd.c
+> > +++ b/io_uring/uring_cmd.c
+> > @@ -167,6 +167,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+> >  }
+> >  EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+> >  
+> > +#if defined(CONFIG_NET)
+> >  int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> >  {
+> >  	struct socket *sock = cmd->file->private_data;
+> > @@ -193,3 +194,10 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> >  	}
+> >  }
+> >  EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
+> > +#else
+> > +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> > +{
+> > +	return -EOPNOTSUPP;
+> > +}
+> > +#endif
+> > +
+> 
+> Is net/socket.c even built without CONFIG_NET? if not, you don't even need
+> the alternative EOPNOTSUPP implementation.
 
-Important to say that userspace needs to keep the pointer alive until
-the CQE is completed.
+It seems so. net/socket.o is part of obj-y:
 
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- include/uapi/linux/io_uring.h |  9 +++++++++
- io_uring/uring_cmd.c          | 15 +++++++++++++++
- 2 files changed, 24 insertions(+)
-
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 8e61f8b7c2ce..1c789ee6462d 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -43,6 +43,10 @@ struct io_uring_sqe {
- 	union {
- 		__u64	addr;	/* pointer to buffer or iovecs */
- 		__u64	splice_off_in;
-+		struct {
-+			__u32	level;
-+			__u32	optname;
-+		};
- 	};
- 	__u32	len;		/* buffer size or number of iovecs */
- 	union {
-@@ -89,6 +93,10 @@ struct io_uring_sqe {
- 			__u64	addr3;
- 			__u64	__pad2[1];
- 		};
-+		struct {
-+			__u64	optval;
-+			__u64	optlen;
-+		};
- 		/*
- 		 * If the ring is initialized with IORING_SETUP_SQE128, then
- 		 * this field is used for 80 bytes of arbitrary command data
-@@ -734,6 +742,7 @@ struct io_uring_recvmsg_out {
- enum {
- 	SOCKET_URING_OP_SIOCINQ		= 0,
- 	SOCKET_URING_OP_SIOCOUTQ,
-+	SOCKET_URING_OP_GETSOCKOPT,
- };
- 
- #ifdef __cplusplus
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index a7d6a7d112b7..2806330a021f 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -167,6 +167,19 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
- }
- EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
- 
-+static inline int io_uring_cmd_getsockopt(struct socket *sock,
-+					  struct io_uring_cmd *cmd,
-+					  unsigned int issue_flags)
-+{
-+	void __user *optval = u64_to_user_ptr(READ_ONCE(cmd->sqe->optval));
-+	int __user *optlen = u64_to_user_ptr(READ_ONCE(cmd->sqe->optlen));
-+	bool compat = !!(issue_flags & IO_URING_F_COMPAT);
-+	int optname = READ_ONCE(cmd->sqe->optname);
-+	int level = READ_ONCE(cmd->sqe->level);
-+
-+	return do_sock_getsockopt(sock, compat, level, optname, optval, optlen);
-+}
-+
- #if defined(CONFIG_NET)
- int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- {
-@@ -189,6 +202,8 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 		if (ret)
- 			return ret;
- 		return arg;
-+	case SOCKET_URING_OP_GETSOCKOPT:
-+		return io_uring_cmd_getsockopt(sock, cmd, issue_flags);
- 	default:
- 		return -EOPNOTSUPP;
- 	}
--- 
-2.34.1
-
+https://github.com/torvalds/linux/blob/master/net/Makefile#L9
