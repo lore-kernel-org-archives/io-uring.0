@@ -2,159 +2,113 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D4715CA0EC8
-	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:11:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 431B7CA0EC3
+	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:12:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241695AbjIKWKG (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 11 Sep 2023 18:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S237987AbjIKWKJ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 11 Sep 2023 18:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236406AbjIKKeb (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 06:34:31 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C94120;
-        Mon, 11 Sep 2023 03:34:26 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-99bcfe28909so533695066b.3;
-        Mon, 11 Sep 2023 03:34:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694428465; x=1695033265;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T63D+iseOM6feL2ViRPYbx+xbxxkgrRy6waBaJFXQkc=;
-        b=F5hyEGX3FBvG4wSuDLNanCDzwWIu0uUOZNxdN8JjGHbsgxO+rQbRomrOMtGbMHLwNI
-         yVZFUx5Iwmpj7NrGlcKxqx8y9p6hkzV3kq7cu/mRAYanHjzeA8fp6cm46QsGYYBtGPUq
-         q1nf3BHWvTqEv1lGtQ17Nrectxa78Dl9rOh7YpjEtCpkwFulDc+G/0qAC1rWDSc0i3cA
-         E8nTWR+zp/F8xB4uCzus3if/osegoqdcm9hHgG37+V5Sm0z7C4OiEI+cCu1OOU4TMLlw
-         1Gq9oMCZIIRDbp2Em97YMNVknjnoFHcCvfdJUIBettRV4AwvuP164z2jrl4+7CZ+GWwV
-         4mYw==
-X-Gm-Message-State: AOJu0Yxrr8yNPVW4FYX3w/nXB/7u70i8BLfK19sHfpBZYDWRG6FCM8C6
-        hPzoepT+foj+2xAjX5pTuMA=
-X-Google-Smtp-Source: AGHT+IEG7pX01Le5VoJCsHW9UPN7FfkBOSLPgQg8x79CdKdfegtdb4J1yhEIzbsu4e6W3g33fphzlA==
-X-Received: by 2002:a17:906:1cf:b0:9a1:c991:a521 with SMTP id 15-20020a17090601cf00b009a1c991a521mr8145455ejj.4.1694428465179;
-        Mon, 11 Sep 2023 03:34:25 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-012.fbsv.net. [2a03:2880:31ff:c::face:b00c])
-        by smtp.gmail.com with ESMTPSA id b9-20020a170906490900b00992f2befcbcsm5131977ejq.180.2023.09.11.03.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 03:34:24 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        with ESMTP id S242599AbjIKPyF (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 11:54:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221B4193;
+        Mon, 11 Sep 2023 08:54:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D02C021858;
+        Mon, 11 Sep 2023 15:53:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1694447639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w1hU2rySzchPvfa0Wrv+/KzNAllK1m5RVyNxjuW0p78=;
+        b=P/ihoVSGa95xiemo3MTPD96SZx5qps7CdKbeHaotHJ6dKb/WrX1hQ8UmJu5t30xLUrQkdf
+        ZaMsiNXgVEyNOHEQYTMGlkEz/CaYvaoXL2hK56fFN8mlphFYmgk8/f+oxK8saKV1VYUsju
+        E0zpK/64S1G4tobdIazXal9MXF+1ar8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1694447639;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w1hU2rySzchPvfa0Wrv+/KzNAllK1m5RVyNxjuW0p78=;
+        b=hz1uI0y1MedAGwyeWiiY5Eh+W+SEWc3LQ//38EsqFtkHMtSJe2vSwvuhfRefgC/GZIaKTR
+        D4LHrr/4TDlgi8Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9920013780;
+        Mon, 11 Sep 2023 15:53:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kmfoHxc4/2S/dwAAMHmgww
+        (envelope-from <krisman@suse.de>); Mon, 11 Sep 2023 15:53:59 +0000
+From:   Gabriel Krisman Bertazi <krisman@suse.de>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
         willemdebruijn.kernel@gmail.com, kuba@kernel.org,
-        martin.lau@linux.dev, krisman@suse.de,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Subject: [PATCH v5 1/8] net/socket: Break down __sys_setsockopt
-Date:   Mon, 11 Sep 2023 03:34:00 -0700
-Message-Id: <20230911103407.1393149-2-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230911103407.1393149-1-leitao@debian.org>
+        martin.lau@linux.dev, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        io-uring@vger.kernel.org, pabeni@redhat.com
+Subject: Re: [PATCH v5 5/8] io_uring/cmd: return -EOPNOTSUPP if net is disabled
+In-Reply-To: <20230911103407.1393149-6-leitao@debian.org> (Breno Leitao's
+        message of "Mon, 11 Sep 2023 03:34:04 -0700")
+Organization: SUSE
 References: <20230911103407.1393149-1-leitao@debian.org>
+        <20230911103407.1393149-6-leitao@debian.org>
+Date:   Mon, 11 Sep 2023 11:53:58 -0400
+Message-ID: <87ledc904p.fsf@suse.de>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Split __sys_setsockopt() into two functions by removing the core
-logic into a sub-function (do_sock_setsockopt()). This will avoid
-code duplication when doing the same operation in other callers, for
-instance.
+Breno Leitao <leitao@debian.org> writes:
 
-do_sock_setsockopt() will be called by io_uring setsockopt() command
-operation in the following patch.
+> Protect io_uring_cmd_sock() to be called if CONFIG_NET is not set. If
+> network is not enabled, but io_uring is, then we want to return
+> -EOPNOTSUPP for any possible socket operation.
+>
+> This is helpful because io_uring_cmd_sock() can now call functions that
+> only exits if CONFIG_NET is enabled without having #ifdef CONFIG_NET
+> inside the function itself.
+>
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  io_uring/uring_cmd.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 60f843a357e0..a7d6a7d112b7 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -167,6 +167,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>  }
+>  EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+>  
+> +#if defined(CONFIG_NET)
+>  int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+>  {
+>  	struct socket *sock = cmd->file->private_data;
+> @@ -193,3 +194,10 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
+> +#else
+> +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +#endif
+> +
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
----
- include/net/sock.h |  2 ++
- net/socket.c       | 38 +++++++++++++++++++++++++-------------
- 2 files changed, 27 insertions(+), 13 deletions(-)
+Is net/socket.c even built without CONFIG_NET? if not, you don't even need
+the alternative EOPNOTSUPP implementation.
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 11d503417591..aa8fb54ad0af 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1861,6 +1861,8 @@ int sk_setsockopt(struct sock *sk, int level, int optname,
- 		  sockptr_t optval, unsigned int optlen);
- int sock_setsockopt(struct socket *sock, int level, int op,
- 		    sockptr_t optval, unsigned int optlen);
-+int do_sock_setsockopt(struct socket *sock, bool compat, int level,
-+		       int optname, char __user *user_optval, int optlen);
- 
- int sk_getsockopt(struct sock *sk, int level, int optname,
- 		  sockptr_t optval, sockptr_t optlen);
-diff --git a/net/socket.c b/net/socket.c
-index 77f28328e387..360332e098d4 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -2261,31 +2261,22 @@ static bool sock_use_custom_sol_socket(const struct socket *sock)
- 	return test_bit(SOCK_CUSTOM_SOCKOPT, &sock->flags);
- }
- 
--/*
-- *	Set a socket option. Because we don't know the option lengths we have
-- *	to pass the user mode parameter for the protocols to sort out.
-- */
--int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
--		int optlen)
-+int do_sock_setsockopt(struct socket *sock, bool compat, int level,
-+		       int optname, char __user *user_optval, int optlen)
- {
- 	sockptr_t optval = USER_SOCKPTR(user_optval);
- 	const struct proto_ops *ops;
- 	char *kernel_optval = NULL;
--	int err, fput_needed;
--	struct socket *sock;
-+	int err;
- 
- 	if (optlen < 0)
- 		return -EINVAL;
- 
--	sock = sockfd_lookup_light(fd, &err, &fput_needed);
--	if (!sock)
--		return err;
--
- 	err = security_socket_setsockopt(sock, level, optname);
- 	if (err)
- 		goto out_put;
- 
--	if (!in_compat_syscall())
-+	if (!compat)
- 		err = BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock->sk, &level, &optname,
- 						     user_optval, &optlen,
- 						     &kernel_optval);
-@@ -2308,6 +2299,27 @@ int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
- 					    optlen);
- 	kfree(kernel_optval);
- out_put:
-+	return err;
-+}
-+EXPORT_SYMBOL(do_sock_setsockopt);
-+
-+/* Set a socket option. Because we don't know the option lengths we have
-+ * to pass the user mode parameter for the protocols to sort out.
-+ */
-+int __sys_setsockopt(int fd, int level, int optname, char __user *user_optval,
-+		     int optlen)
-+{
-+	bool compat = in_compat_syscall();
-+	int err, fput_needed;
-+	struct socket *sock;
-+
-+	sock = sockfd_lookup_light(fd, &err, &fput_needed);
-+	if (!sock)
-+		return err;
-+
-+	err = do_sock_setsockopt(sock, compat, level, optname, user_optval,
-+				 optlen);
-+
- 	fput_light(sock->file, fput_needed);
- 	return err;
- }
 -- 
-2.34.1
-
+Gabriel Krisman Bertazi
