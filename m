@@ -2,142 +2,144 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F707CA0ED8
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B28B9CA0ED9
 	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:11:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241018AbjIKWKC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 11 Sep 2023 18:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
+        id S240902AbjIKWJ5 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 11 Sep 2023 18:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244545AbjIKUkd (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 16:40:33 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A148127
-        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 13:40:29 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-68e2ff0b5c4so489542b3a.0
-        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 13:40:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1694464828; x=1695069628; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WnGBrfZZuySU2APTyOcddYlt8Geg3fQwoMh64sBxPCY=;
-        b=d3En+Isos11fb/iqh201dqZwfOYvNgN87FivMeUbWdfS7tbMDyOhRIP8Muxi20Y3KF
-         ZWyyYiHTjCu+tZhvxBGytZQeaT8HehMAuzUkQJbmEf3W7Lj8Hp9EhSG4wA0O6Yo7kJp9
-         iowICh1/0/Za02E6azgbjt1heThLFGL9VYBiHD8Vc/kiKaTvPfDvPUQ2tTulGm4hS8mf
-         i0oyG/DoeuAK2PtiXKtjJGfp8qnOym0Ww0HWChBdCpO1yU26VavVKP2szQ9hSzT2OMmI
-         oKGP+vsoRq3M3vB+tUv2t1dK5eofnGWIfZ/6+ljKEp2gzrjHED2u3XZnhPdf/LeFgR9Y
-         /TtA==
+        with ESMTP id S236408AbjIKKeb (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 06:34:31 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BEEE5F;
+        Mon, 11 Sep 2023 03:34:25 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso543476766b.1;
+        Mon, 11 Sep 2023 03:34:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694464828; x=1695069628;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WnGBrfZZuySU2APTyOcddYlt8Geg3fQwoMh64sBxPCY=;
-        b=EL3m87jAjwGhxxUn3ZgVYU45OQCc8vdw+KLkxHjjvt+9fsNjUhhVHngP+YuN95ACvs
-         ADLZ7wL1qu+EWkpQyI6zs6kD06M2m9DdAKH+voHbUwWlLjTmEk+hWE16I+l9xZqVUZmV
-         l/3FVg6Wau435n4XUAim0rHYMw/PN6ZbHjnEULN9s3IdiWOjVWP0FYp9UZTMKR4pBdNZ
-         rz8HVHXIQlAdxQUBfOS/KW6w6KuHmfMXDByaw0ekR9LxnZ4Laq7nTrl+Fs3pgax/Pb5I
-         dKyK8+5BD1y3BzvKgI47E+IE0iyoGBIcasruG5bJSqRKsjdtkU3WUrJ4oRqDYZo/H6R4
-         OcUw==
-X-Gm-Message-State: AOJu0YxKVcDvVYwu32MOGUB4YY6FHe0oapgmN2cewdZhSjBpXuWtgk5+
-        XwJGZOw/1qB9aovmA8fwcKBAaIHV32Y9CtU47dxGzQ==
-X-Google-Smtp-Source: AGHT+IEGGazBX2ZumWzVAVAq0lb1AGNPM7LvwRAwP44xqCplc4eGXd3OIYqfviy4LI6WNWVaNdjfkw==
-X-Received: by 2002:a05:6a00:4ac3:b0:68f:c8b3:3077 with SMTP id ds3-20020a056a004ac300b0068fc8b33077mr3535020pfb.1.1694464828284;
-        Mon, 11 Sep 2023 13:40:28 -0700 (PDT)
-Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ef22-20020a056a002c9600b0068fe5a5a566sm100544pfb.142.2023.09.11.13.40.26
+        d=1e100.net; s=20230601; t=1694428464; x=1695033264;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RuxWzi0SpMhBfa5qiwgBKVDj1sBIBDVRjmMU4662HK8=;
+        b=SQbuzEmyic9K5mXSE3/2mx4IMzJF/HmbjQ/3zXMKqoMtscI8hQhEX7xDDA8Gf1twUv
+         jNTsUEvJg/DRp9t71tWrRzg2JMTNcYwmXnXFU3omTjtwdmvwwsM4BTy72rcw4LHJ8t7F
+         ZIYkq/yIDJ2q2Cw4bD4dwJnhzioeXgxw/mja6uu6d8Z2g52krVVdVMxzR4LI6mD13y1m
+         yrk5IoSoBfZnQq4YXCRLdYbAga5S41BqlLkO4m+UqyT5koKpKJh9BVZ3pCW7XZbDZH1u
+         ZOT9Qc3wbUvXKXVsO9cdDi/ZwxeqY2Q70Ph/KoUFbOto3d9s61V7mn0e8ki32Ywn3O7d
+         MekA==
+X-Gm-Message-State: AOJu0YymrcdeaOUHwzFMzyj6hPdFY8+qzA9Vbgdv7g9lpXdYfpTTYKJy
+        DCZFSWG+kRIODj2RHGcQId4=
+X-Google-Smtp-Source: AGHT+IFHynsKgWq4NgUjq4OKLyUzMvXPVvvjbbjYd6PD4qMpJEvDfhgLeYH8m3839btK71/4rp846Q==
+X-Received: by 2002:a17:906:8b:b0:9a2:1ce5:1243 with SMTP id 11-20020a170906008b00b009a21ce51243mr8687836ejc.60.1694428463664;
+        Mon, 11 Sep 2023 03:34:23 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-019.fbsv.net. [2a03:2880:31ff:13::face:b00c])
+        by smtp.gmail.com with ESMTPSA id hb5-20020a170906b88500b009828e26e519sm5079289ejb.122.2023.09.11.03.34.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Sep 2023 13:40:27 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     io-uring@vger.kernel.org
-Cc:     asml.silence@gmail.com, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/3] io_uring/rw: mark readv/writev as vectored in the opcode definition
-Date:   Mon, 11 Sep 2023 14:40:20 -0600
-Message-Id: <20230911204021.1479172-3-axboe@kernel.dk>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230911204021.1479172-1-axboe@kernel.dk>
-References: <20230911204021.1479172-1-axboe@kernel.dk>
+        Mon, 11 Sep 2023 03:34:23 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com, kuba@kernel.org,
+        martin.lau@linux.dev, krisman@suse.de
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org, pabeni@redhat.com
+Subject: [PATCH v5 0/8] io_uring: Initial support for {s,g}etsockopt commands
+Date:   Mon, 11 Sep 2023 03:33:59 -0700
+Message-Id: <20230911103407.1393149-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-This is cleaner than gating on the opcode type, particularly as more
-read/write type opcodes may be added.
+This patchset adds support for getsockopt (SOCKET_URING_OP_GETSOCKOPT)
+and setsockopt (SOCKET_URING_OP_SETSOCKOPT) in io_uring commands.
+SOCKET_URING_OP_SETSOCKOPT and SOCKET_URING_OP_GETSOCKOPT implement generic
+case, covering all levels and optnames (a change from the previous
+version, where getsockopt was limited to level=SOL_SOCKET).
 
-Then we can use that for the data import, and for __io_read() on
-whether or not we need to copy state.
+In order to keep the implementation (and tests) simple, some refactors
+were done prior to the changes, as follows:
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/opdef.c |  2 ++
- io_uring/opdef.h |  2 ++
- io_uring/rw.c    | 10 ++++++----
- 3 files changed, 10 insertions(+), 4 deletions(-)
+Patch 1-2:  Remove the core {s,g}etsockopt() core function from
+__sys_{g,s}etsockopt, so, the code could be reused by other callers,
+such as io_uring.
 
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 1d26ef10fc16..bfb7c53389c0 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -65,6 +65,7 @@ const struct io_issue_def io_issue_defs[] = {
- 		.ioprio			= 1,
- 		.iopoll			= 1,
- 		.iopoll_queue		= 1,
-+		.vectored		= 1,
- 		.prep			= io_prep_rw,
- 		.issue			= io_read,
- 	},
-@@ -78,6 +79,7 @@ const struct io_issue_def io_issue_defs[] = {
- 		.ioprio			= 1,
- 		.iopoll			= 1,
- 		.iopoll_queue		= 1,
-+		.vectored		= 1,
- 		.prep			= io_prep_rw,
- 		.issue			= io_write,
- 	},
-diff --git a/io_uring/opdef.h b/io_uring/opdef.h
-index c22c8696e749..9e5435ec27d0 100644
---- a/io_uring/opdef.h
-+++ b/io_uring/opdef.h
-@@ -29,6 +29,8 @@ struct io_issue_def {
- 	unsigned		iopoll_queue : 1;
- 	/* opcode specific path will handle ->async_data allocation if needed */
- 	unsigned		manual_alloc : 1;
-+	/* vectored opcode, set if 1) vectored, and 2) handler needs to know */
-+	unsigned		vectored : 1;
- 
- 	int (*issue)(struct io_kiocb *, unsigned int);
- 	int (*prep)(struct io_kiocb *, const struct io_uring_sqe *);
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 402e8bf002d6..c3bf38419230 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -388,8 +388,7 @@ static struct iovec *__io_import_iovec(int ddir, struct io_kiocb *req,
- 	buf = u64_to_user_ptr(rw->addr);
- 	sqe_len = rw->len;
- 
--	if (opcode == IORING_OP_READ || opcode == IORING_OP_WRITE ||
--	    (req->flags & REQ_F_BUFFER_SELECT)) {
-+	if (!io_issue_defs[opcode].vectored || req->flags & REQ_F_BUFFER_SELECT) {
- 		if (io_do_buffer_select(req)) {
- 			buf = io_buffer_select(req, &sqe_len, issue_flags);
- 			if (!buf)
-@@ -776,8 +775,11 @@ static int __io_read(struct io_kiocb *req, unsigned int issue_flags)
- 
- 	if (ret == -EAGAIN || (req->flags & REQ_F_REISSUE)) {
- 		req->flags &= ~REQ_F_REISSUE;
--		/* if we can poll, just do that */
--		if (req->opcode == IORING_OP_READ && file_can_poll(req->file))
-+		/*
-+		 * If we can poll, just do that. For a vectored read, we'll
-+		 * need to copy state first.
-+		 */
-+		if (file_can_poll(req->file) && !io_issue_defs[req->opcode].vectored)
- 			return -EAGAIN;
- 		/* IOPOLL retry should happen for io-wq threads */
- 		if (!force_nonblock && !(req->ctx->flags & IORING_SETUP_IOPOLL))
+Patch 3: Pass compat mode to the file/socket callbacks
+
+Patch 4: Move io_uring helpers from io_uring_zerocopy_tx to a generic
+io_uring headers. This simplify the test case (last patch)
+
+Patch 5: Protect io_uring_cmd_sock() to not be called if CONFIG_NET is
+disabled.
+
+Important to say that userspace pointers need to be alive until the
+operation is completed, as in the systemcall.
+
+These changes were tested with a new test[1] in liburing, LTP sockopt*
+tests, as also with bpf/progs/sockopt test case, which is now adapted to
+run using both system calls and io_uring commands.
+
+[1] Link: https://github.com/leitao/liburing/blob/getsock/test/socket-getsetsock-cmd.c
+
+RFC -> V1:
+	* Copy user memory at io_uring subsystem, and call proto_ops
+	  callbacks using kernel memory
+	* Implement all the cases for SOCKET_URING_OP_SETSOCKOPT
+
+V1 -> V2
+	* Implemented the BPF part
+	* Using user pointers from optval to avoid kmalloc in io_uring part.
+
+V2 -> V3:
+	* Break down __sys_setsockopt and reuse the core code, avoiding
+	  duplicated code. This removed the requirement to expose
+	  sock_use_custom_sol_socket().
+	* Added io_uring test to selftests/bpf/sockopt.
+	* Fixed compat argument, by passing it to the issue_flags.
+
+V3 -> V4:
+	* Rebase on top of commit 1ded5e5a5931b ("net: annotate data-races around sock->ops")
+	* Also broke down __sys_setsockopt() to reuse the core function
+	  from io_uring.
+	* Create a new patch to return -EOPNOTSUPP if CONFIG_NET is
+	  disabled
+	* Added two SOL_SOCKET tests in bpf/prog_tests/sockopt.
+
+V4 -> V5:
+	* Do not use sockptr anymore, by changing the optlen getsock argument
+	  to be a user pointer (instead of a kernel pointer). This change also drop
+	  the limitation on getsockopt from previous versions, and now all
+	  levels are supported.
+	* Simplified the BPF sockopt test, since there is no more limitation on
+	  the io_uring commands.
+	* No more changes in the BPF subsystem.
+	* Moved the optlen field in the SQE struct. It is now a pointer instead
+	  of u32.
+
+Breno Leitao (8):
+  net/socket: Break down __sys_setsockopt
+  net/socket: Break down __sys_getsockopt
+  io_uring/cmd: Pass compat mode in issue_flags
+  selftests/net: Extract uring helpers to be reusable
+  io_uring/cmd: return -EOPNOTSUPP if net is disabled
+  io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT
+  io_uring/cmd: Introduce SOCKET_URING_OP_SETSOCKOPT
+  selftests/bpf/sockopt: Add io_uring support
+
+ include/linux/io_uring.h                      |   1 +
+ include/net/sock.h                            |   5 +
+ include/uapi/linux/io_uring.h                 |  10 +
+ io_uring/uring_cmd.c                          |  41 +++
+ net/socket.c                                  |  89 ++++--
+ tools/include/io_uring/mini_liburing.h        | 292 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/sockopt.c        |  95 +++++-
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/io_uring_zerocopy_tx.c      | 268 +---------------
+ 9 files changed, 497 insertions(+), 305 deletions(-)
+ create mode 100644 tools/include/io_uring/mini_liburing.h
+
 -- 
-2.40.1
+2.34.1
 
