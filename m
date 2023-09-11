@@ -2,159 +2,142 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9769AEEB592
-	for <io-uring@archiver.kernel.org>; Sun, 10 Sep 2023 22:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6F707CA0ED8
+	for <io-uring@archiver.kernel.org>; Mon, 11 Sep 2023 22:11:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjIJWBf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Sun, 10 Sep 2023 18:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
+        id S241018AbjIKWKC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 11 Sep 2023 18:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbjIJWBe (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Sun, 10 Sep 2023 18:01:34 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144A6180
-        for <io-uring@vger.kernel.org>; Sun, 10 Sep 2023 15:01:29 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-68a440a8a20so3655669b3a.3
-        for <io-uring@vger.kernel.org>; Sun, 10 Sep 2023 15:01:29 -0700 (PDT)
+        with ESMTP id S244545AbjIKUkd (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 16:40:33 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A148127
+        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 13:40:29 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-68e2ff0b5c4so489542b3a.0
+        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 13:40:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1694383288; x=1694988088; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EyybjuBSw2AsBAibBPVqGccWs6P0JtTeGBB0Kwx90Dw=;
-        b=b1Q+Djrc6DRgK0lSMIXf6OVmm1S98Rb1dJdV/4AjeMobXYoqxa/k4Xb7XAYcmCuvbB
-         T8pFPhiJHk/Ig8CcU4is+jZGfReesXQjqK7ULjc+VZz110Uqhy1NjrWTu4Ej2kgb1UEn
-         ZHgnS7dDfuM0nrDuRkgBy+D/YOBtPecXxWCyUh6h/0/NlsJyyOwKHQwSKYYxfVY7xjkS
-         7I+QxdaDiDVRMV8qekGuV48jZlbOlbc6skR8a29kp5hS8zsrhWfeCv9XIJ/gwMURSkPX
-         Ncgzq9d3+KaDgvRq3XsvmeqBjcqt9Lc7ewxeY00IZtUnccPI4WIduUYqP2aDlo+H2VFl
-         7yRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694383288; x=1694988088;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1694464828; x=1695069628; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EyybjuBSw2AsBAibBPVqGccWs6P0JtTeGBB0Kwx90Dw=;
-        b=PkHKBR5XaMotopgfj/gs7dn1BKkyeRCU39jlD9w/Tv3iYvK2bf9FIHdlGspzzLPOCP
-         AWJR5rs1axHfm28YRXpus9NftisgFcxiJrLpihTYFLiXKEbIdPwUHwNztLqrJ4Qekdnh
-         +d3hJ7k0L5knAq+oW8JLVSsBBgRd4woFxAo8iXU13fwjSb7sPOwXA+6DThCyp0Q+LHQP
-         vUeUxGiClyNBKz5peVIzx1g4NPbOFXOmkhBaQTX0KQbGaiT4MYevbiFW+qAZyguU/+RT
-         xTgbbuws0m2bIf67SCHE6gw9h+E/Am5ahrpLOvMsevS+70fXlRJGaAknSa7Emi9qfU1p
-         HSlw==
-X-Gm-Message-State: AOJu0Yz6qCJ04u1leY5VWg5MiTylKCGgEAiKh0Xy2XeHLyPKq9Xqpf4F
-        VglcjeN1rMJX6AhI2weonR+QbQ==
-X-Google-Smtp-Source: AGHT+IHSYFPf3w2qdTZr9bikkzuSsvPYQjYYZyW+Zfc616rQWXs3Eeo2BzwinmhhOfJVOtnHj1lBTA==
-X-Received: by 2002:a05:6a00:1a0c:b0:68c:57c7:1eb0 with SMTP id g12-20020a056a001a0c00b0068c57c71eb0mr9371853pfv.11.1694383287795;
-        Sun, 10 Sep 2023 15:01:27 -0700 (PDT)
-Received: from dread.disaster.area (pa49-195-66-88.pa.nsw.optusnet.com.au. [49.195.66.88])
-        by smtp.gmail.com with ESMTPSA id u10-20020a62ed0a000000b0068a3dd6c1dasm4403641pfh.142.2023.09.10.15.01.27
+        bh=WnGBrfZZuySU2APTyOcddYlt8Geg3fQwoMh64sBxPCY=;
+        b=d3En+Isos11fb/iqh201dqZwfOYvNgN87FivMeUbWdfS7tbMDyOhRIP8Muxi20Y3KF
+         ZWyyYiHTjCu+tZhvxBGytZQeaT8HehMAuzUkQJbmEf3W7Lj8Hp9EhSG4wA0O6Yo7kJp9
+         iowICh1/0/Za02E6azgbjt1heThLFGL9VYBiHD8Vc/kiKaTvPfDvPUQ2tTulGm4hS8mf
+         i0oyG/DoeuAK2PtiXKtjJGfp8qnOym0Ww0HWChBdCpO1yU26VavVKP2szQ9hSzT2OMmI
+         oKGP+vsoRq3M3vB+tUv2t1dK5eofnGWIfZ/6+ljKEp2gzrjHED2u3XZnhPdf/LeFgR9Y
+         /TtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694464828; x=1695069628;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WnGBrfZZuySU2APTyOcddYlt8Geg3fQwoMh64sBxPCY=;
+        b=EL3m87jAjwGhxxUn3ZgVYU45OQCc8vdw+KLkxHjjvt+9fsNjUhhVHngP+YuN95ACvs
+         ADLZ7wL1qu+EWkpQyI6zs6kD06M2m9DdAKH+voHbUwWlLjTmEk+hWE16I+l9xZqVUZmV
+         l/3FVg6Wau435n4XUAim0rHYMw/PN6ZbHjnEULN9s3IdiWOjVWP0FYp9UZTMKR4pBdNZ
+         rz8HVHXIQlAdxQUBfOS/KW6w6KuHmfMXDByaw0ekR9LxnZ4Laq7nTrl+Fs3pgax/Pb5I
+         dKyK8+5BD1y3BzvKgI47E+IE0iyoGBIcasruG5bJSqRKsjdtkU3WUrJ4oRqDYZo/H6R4
+         OcUw==
+X-Gm-Message-State: AOJu0YxKVcDvVYwu32MOGUB4YY6FHe0oapgmN2cewdZhSjBpXuWtgk5+
+        XwJGZOw/1qB9aovmA8fwcKBAaIHV32Y9CtU47dxGzQ==
+X-Google-Smtp-Source: AGHT+IEGGazBX2ZumWzVAVAq0lb1AGNPM7LvwRAwP44xqCplc4eGXd3OIYqfviy4LI6WNWVaNdjfkw==
+X-Received: by 2002:a05:6a00:4ac3:b0:68f:c8b3:3077 with SMTP id ds3-20020a056a004ac300b0068fc8b33077mr3535020pfb.1.1694464828284;
+        Mon, 11 Sep 2023 13:40:28 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ef22-20020a056a002c9600b0068fe5a5a566sm100544pfb.142.2023.09.11.13.40.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Sep 2023 15:01:27 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qfSUe-00DWBA-0u;
-        Mon, 11 Sep 2023 08:01:24 +1000
-Date:   Mon, 11 Sep 2023 08:01:24 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     Hao Xu <hao.xu@linux.dev>, Matthew Wilcox <willy@infradead.org>,
-        io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Stefan Roesch <shr@fb.com>, Clay Harris <bugs@claycon.org>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-cachefs@redhat.com,
-        ecryptfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-unionfs@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, codalist@coda.cs.cmu.edu,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-mm@kvack.org, linux-nilfs@vger.kernel.org,
-        devel@lists.orangefs.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mtd@lists.infradead.org,
-        Wanpeng Li <wanpengli@tencent.com>
-Subject: Re: [PATCH 07/11] vfs: add nowait parameter for file_accessed()
-Message-ID: <ZP48tAg2iS0UzKQf@dread.disaster.area>
-References: <20230827132835.1373581-1-hao.xu@linux.dev>
- <20230827132835.1373581-8-hao.xu@linux.dev>
- <ZOvA5DJDZN0FRymp@casper.infradead.org>
- <c728bf3f-d9db-4865-8473-058b26c11c06@linux.dev>
- <ZO3cI+DkotHQo3md@casper.infradead.org>
- <642de4e6-801d-fcad-a7ce-bfc6dec3b6e5@linux.dev>
- <ZPUJHAKzxvXiEDYA@dread.disaster.area>
- <6489b8cb-7d54-1e29-f192-a3449ed87fa1@gmail.com>
+        Mon, 11 Sep 2023 13:40:27 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org
+Cc:     asml.silence@gmail.com, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/3] io_uring/rw: mark readv/writev as vectored in the opcode definition
+Date:   Mon, 11 Sep 2023 14:40:20 -0600
+Message-Id: <20230911204021.1479172-3-axboe@kernel.dk>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230911204021.1479172-1-axboe@kernel.dk>
+References: <20230911204021.1479172-1-axboe@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6489b8cb-7d54-1e29-f192-a3449ed87fa1@gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On Fri, Sep 08, 2023 at 01:29:55AM +0100, Pavel Begunkov wrote:
-> On 9/3/23 23:30, Dave Chinner wrote:
-> > On Wed, Aug 30, 2023 at 02:11:31PM +0800, Hao Xu wrote:
-> > > On 8/29/23 19:53, Matthew Wilcox wrote:
-> > > > On Tue, Aug 29, 2023 at 03:46:13PM +0800, Hao Xu wrote:
-> > > > > On 8/28/23 05:32, Matthew Wilcox wrote:
-> > > > > > On Sun, Aug 27, 2023 at 09:28:31PM +0800, Hao Xu wrote:
-> > > > > > > From: Hao Xu <howeyxu@tencent.com>
-> > > > > > > 
-> > > > > > > Add a boolean parameter for file_accessed() to support nowait semantics.
-> > > > > > > Currently it is true only with io_uring as its initial caller.
-> > > > > > 
-> > > > > > So why do we need to do this as part of this series?  Apparently it
-> > > > > > hasn't caused any problems for filemap_read().
-> > > > > > 
-> > > > > 
-> > > > > We need this parameter to indicate if nowait semantics should be enforced in
-> > > > > touch_atime(), There are locks and maybe IOs in it.
-> > > > 
-> > > > That's not my point.  We currently call file_accessed() and
-> > > > touch_atime() for nowait reads and nowait writes.  You haven't done
-> > > > anything to fix those.
-> > > > 
-> > > > I suspect you can trim this patchset down significantly by avoiding
-> > > > fixing the file_accessed() problem.  And then come back with a later
-> > > > patchset that fixes it for all nowait i/o.  Or do a separate prep series
-> > > 
-> > > I'm ok to do that.
-> > > 
-> > > > first that fixes it for the existing nowait users, and then a second
-> > > > series to do all the directory stuff.
-> > > > 
-> > > > I'd do the first thing.  Just ignore the problem.  Directory atime
-> > > > updates cause I/O so rarely that you can afford to ignore it.  Almost
-> > > > everyone uses relatime or nodiratime.
-> > > 
-> > > Hi Matthew,
-> > > The previous discussion shows this does cause issues in real
-> > > producations: https://lore.kernel.org/io-uring/2785f009-2ebb-028d-8250-d5f3a30510f0@gmail.com/#:~:text=fwiw%2C%20we%27ve%20just%20recently%20had%20similar%20problems%20with%20io_uring%20read/write
-> > > 
-> > 
-> > Then separate it out into it's own patch set so we can have a
-> > discussion on the merits of requiring using noatime, relatime or
-> > lazytime for really latency sensitive IO applications. Changing code
-> > is not always the right solution...
-> 
-> Separation sounds reasonable, but it can hardly be said that only
-> latency sensitive apps would care about >1s nowait/async submission
-> delays. Presumably, btrfs can improve on that, but it still looks
-> like it's perfectly legit for filesystems do heavy stuff in
-> timestamping like waiting for IO. Right?
+This is cleaner than gating on the opcode type, particularly as more
+read/write type opcodes may be added.
 
-Yes, it is, no-one is denying that. And some filesystems are worse
-than others, but none of that means it has to be fixed so getdents
-can be converted to NOWAIT semantics.
+Then we can use that for the data import, and for __io_read() on
+whether or not we need to copy state.
 
-ie. this patchset is about the getdents NOWAIT machinery, and
-fiddling around with timestamps has much, much wider scope than just
-NOWAIT getdents machinery. We'll have this discussion about NOWAIT
-timestamp updates when a RFC is proposed to address the wider
-problem of how timestamp updates should behave in NOWAIT context.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/opdef.c |  2 ++
+ io_uring/opdef.h |  2 ++
+ io_uring/rw.c    | 10 ++++++----
+ 3 files changed, 10 insertions(+), 4 deletions(-)
 
--Dave.
+diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+index 1d26ef10fc16..bfb7c53389c0 100644
+--- a/io_uring/opdef.c
++++ b/io_uring/opdef.c
+@@ -65,6 +65,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.ioprio			= 1,
+ 		.iopoll			= 1,
+ 		.iopoll_queue		= 1,
++		.vectored		= 1,
+ 		.prep			= io_prep_rw,
+ 		.issue			= io_read,
+ 	},
+@@ -78,6 +79,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.ioprio			= 1,
+ 		.iopoll			= 1,
+ 		.iopoll_queue		= 1,
++		.vectored		= 1,
+ 		.prep			= io_prep_rw,
+ 		.issue			= io_write,
+ 	},
+diff --git a/io_uring/opdef.h b/io_uring/opdef.h
+index c22c8696e749..9e5435ec27d0 100644
+--- a/io_uring/opdef.h
++++ b/io_uring/opdef.h
+@@ -29,6 +29,8 @@ struct io_issue_def {
+ 	unsigned		iopoll_queue : 1;
+ 	/* opcode specific path will handle ->async_data allocation if needed */
+ 	unsigned		manual_alloc : 1;
++	/* vectored opcode, set if 1) vectored, and 2) handler needs to know */
++	unsigned		vectored : 1;
+ 
+ 	int (*issue)(struct io_kiocb *, unsigned int);
+ 	int (*prep)(struct io_kiocb *, const struct io_uring_sqe *);
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 402e8bf002d6..c3bf38419230 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -388,8 +388,7 @@ static struct iovec *__io_import_iovec(int ddir, struct io_kiocb *req,
+ 	buf = u64_to_user_ptr(rw->addr);
+ 	sqe_len = rw->len;
+ 
+-	if (opcode == IORING_OP_READ || opcode == IORING_OP_WRITE ||
+-	    (req->flags & REQ_F_BUFFER_SELECT)) {
++	if (!io_issue_defs[opcode].vectored || req->flags & REQ_F_BUFFER_SELECT) {
+ 		if (io_do_buffer_select(req)) {
+ 			buf = io_buffer_select(req, &sqe_len, issue_flags);
+ 			if (!buf)
+@@ -776,8 +775,11 @@ static int __io_read(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	if (ret == -EAGAIN || (req->flags & REQ_F_REISSUE)) {
+ 		req->flags &= ~REQ_F_REISSUE;
+-		/* if we can poll, just do that */
+-		if (req->opcode == IORING_OP_READ && file_can_poll(req->file))
++		/*
++		 * If we can poll, just do that. For a vectored read, we'll
++		 * need to copy state first.
++		 */
++		if (file_can_poll(req->file) && !io_issue_defs[req->opcode].vectored)
+ 			return -EAGAIN;
+ 		/* IOPOLL retry should happen for io-wq threads */
+ 		if (!force_nonblock && !(req->ctx->flags & IORING_SETUP_IOPOLL))
 -- 
-Dave Chinner
-david@fromorbit.com
+2.40.1
+
