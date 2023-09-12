@@ -2,131 +2,79 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADE08CA0EC6
-	for <io-uring@archiver.kernel.org>; Tue, 12 Sep 2023 00:27:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4664CA0EC3
+	for <io-uring@archiver.kernel.org>; Tue, 12 Sep 2023 00:58:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbjILA1F (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 11 Sep 2023 20:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
+        id S232158AbjILA6I (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 11 Sep 2023 20:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjILA1E (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 20:27:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AB618B8B4;
-        Mon, 11 Sep 2023 17:21:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B6F732185A;
-        Tue, 12 Sep 2023 00:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1694478004; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=miCkGFoxKxVBRFGfrRVmp7107zCZ87ZsGupuJ8/qi4I=;
-        b=y+XJ5licnv6p4VsbMaYCCmjo88xpeuPolvb06IFTBaohmZvi/sfa6ct/tsx/rT903MwHja
-        feieLTBbRrr7hs0PQAhssAyrPqBBQWX4zmAHc8gS4JuL7um1lHz3M+ZofnVQg4X0c7oJa6
-        zntywi97zFwmCzO4Bh5EOVScVd7Yopo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1694478004;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=miCkGFoxKxVBRFGfrRVmp7107zCZ87ZsGupuJ8/qi4I=;
-        b=gWiZ8WawDBD37dgffca3X5PwhwfGLc4J5xDCDY4r5blSjYZHqemjX9l8+4vwn4kc0fSi9z
-        aQgqVsD/spaBrZAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7F699139DB;
-        Tue, 12 Sep 2023 00:20:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 3zaDGbSu/2StUQAAMHmgww
-        (envelope-from <krisman@suse.de>); Tue, 12 Sep 2023 00:20:04 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com, kuba@kernel.org,
-        martin.lau@linux.dev, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        io-uring@vger.kernel.org, pabeni@redhat.com
-Subject: Re: [PATCH v5 5/8] io_uring/cmd: return -EOPNOTSUPP if net is disabled
-In-Reply-To: <ZP9EeunfcbWos80w@gmail.com> (Breno Leitao's message of "Mon, 11
-        Sep 2023 09:46:50 -0700")
-Organization: SUSE
-References: <20230911103407.1393149-1-leitao@debian.org>
-        <20230911103407.1393149-6-leitao@debian.org> <87ledc904p.fsf@suse.de>
-        <ZP9EeunfcbWos80w@gmail.com>
-Date:   Mon, 11 Sep 2023 20:20:03 -0400
-Message-ID: <87jzsw5jkc.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        with ESMTP id S232167AbjILA6F (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 11 Sep 2023 20:58:05 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDDDEF8AE
+        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 17:47:58 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51f64817809so608707a12.1
+        for <io-uring@vger.kernel.org>; Mon, 11 Sep 2023 17:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1694479627; x=1695084427; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DuopisHJZKQqwB5NJ4dSu1h8GOGuQTlpEbF43aR1iLc=;
+        b=BwSPILouucsNPqHIO3YVH9xj9YQQN7GznkHRWm9V7QTcrk5dY2HD8jvB5AyiCSXdRU
+         T2rKJpoDqGFQMuX7/TuRI2kezjRtDGN4TXyU/9htChOQkBbhfhkchWv8VjaM/X50YM3r
+         +q3PaR39+nK/ZSUD30fqHiN2nY+tGRTC4BAKN0F8HXHcIWCfZqgU5ntHm89tztZIi15+
+         UqQZS1PKZ7XpOb+v0PNq/qu2P4OE1dPa/Ya0sPx0Uld8jEbiLBtrrm80p95vrJ8Jp9cV
+         CJUnaK5aveoWrNEiSbu1tmxDh++PBJdADozZK+ixshqy8PCLEzeVkjCsoBu4eDFcmtCR
+         3q9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694479627; x=1695084427;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DuopisHJZKQqwB5NJ4dSu1h8GOGuQTlpEbF43aR1iLc=;
+        b=YQaYZ2OKHQmp57Q48x1caV7MhjSF63tkRXMG8zduGIC8YZwzwdw23vfefPum52KgY8
+         O+BwoKa/XM4CntUlaNhYoJqhZeaknb1FbZSZl7SPdac4eWVSHTL3Lq9+uIw0LYgJw/aV
+         TUd8s5KZE8PZTNsEOkUz6fvZPF4oo6FKgfri0kfYV0JsiliEB7qTqxZeCeFo6EZeaFom
+         7RJgtfS4Xnt7q/VPjCCD91ewxJjh3Pp8s1AZsK+lK+Vx3sesC6CC+IokA3xNYqnQ4WVc
+         6rHQO5CPLnBg8WlwQMc3KNt0gxiaBdmX/9my/wFwx0YOdK7LzeLlNhqS5OOQcf5LRO7f
+         NEFQ==
+X-Gm-Message-State: AOJu0Yw7d2wzsYidpMiGaZ3NO2X5hRmlabri/eAkBLscTe+d5nL/glmb
+        bS/nmfhH5Q208TbNVxUWXkxr3Q==
+X-Google-Smtp-Source: AGHT+IHmltOv6ZYrnVIU89Me5Rodw6kBEU5R8kdu79GsxV41AsVYd+aL+DTblbe0iNxy7j5L+pKC1w==
+X-Received: by 2002:a05:6a20:4320:b0:137:4fd0:e2e6 with SMTP id h32-20020a056a20432000b001374fd0e2e6mr14509461pzk.6.1694479626962;
+        Mon, 11 Sep 2023 17:47:06 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id cl8-20020a056a0032c800b0068fb783d0c6sm3408405pfb.141.2023.09.11.17.47.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Sep 2023 17:47:06 -0700 (PDT)
+Message-ID: <da6be548-5d11-4eda-acdd-403475a0f76f@kernel.dk>
+Date:   Mon, 11 Sep 2023 18:47:05 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] io_uring/rw: add support for IORING_OP_READ_MULTISHOT
+Content-Language: en-US
+To:     Gabriel Krisman Bertazi <krisman@suse.de>
+Cc:     io-uring@vger.kernel.org, asml.silence@gmail.com
+References: <20230911204021.1479172-1-axboe@kernel.dk>
+ <20230911204021.1479172-4-axboe@kernel.dk> <875y4g5ipd.fsf@suse.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <875y4g5ipd.fsf@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Breno Leitao <leitao@debian.org> writes:
+On 9/11/23 6:38 PM, Gabriel Krisman Bertazi wrote:
+> (Also, things seems to be misbehaving on my MUA archive and Lore didn't
+> get my own message yet, so I'm not replying directly to it)
 
-> On Mon, Sep 11, 2023 at 11:53:58AM -0400, Gabriel Krisman Bertazi wrote:
->> Breno Leitao <leitao@debian.org> writes:
->> 
->> > Protect io_uring_cmd_sock() to be called if CONFIG_NET is not set. If
->> > network is not enabled, but io_uring is, then we want to return
->> > -EOPNOTSUPP for any possible socket operation.
->> >
->> > This is helpful because io_uring_cmd_sock() can now call functions that
->> > only exits if CONFIG_NET is enabled without having #ifdef CONFIG_NET
->> > inside the function itself.
->> >
->> > Signed-off-by: Breno Leitao <leitao@debian.org>
->> > ---
->> >  io_uring/uring_cmd.c | 8 ++++++++
->> >  1 file changed, 8 insertions(+)
->> >
->> > diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
->> > index 60f843a357e0..a7d6a7d112b7 100644
->> > --- a/io_uring/uring_cmd.c
->> > +++ b/io_uring/uring_cmd.c
->> > @@ -167,6 +167,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
->> >  }
->> >  EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
->> >  
->> > +#if defined(CONFIG_NET)
->> >  int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->> >  {
->> >  	struct socket *sock = cmd->file->private_data;
->> > @@ -193,3 +194,10 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->> >  	}
->> >  }
->> >  EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
->> > +#else
->> > +int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
->> > +{
->> > +	return -EOPNOTSUPP;
->> > +}
->> > +#endif
->> > +
->> 
->> Is net/socket.c even built without CONFIG_NET? if not, you don't even need
->> the alternative EOPNOTSUPP implementation.
->
-> It seems so. net/socket.o is part of obj-y:
->
-> https://github.com/torvalds/linux/blob/master/net/Makefile#L9
-
-Yes. But also:
-
-[0:cartola linux]$ grep 'net/' Kbuild
-obj-$(CONFIG_NET)       += net/
-
-I doubled checked and it should build fine without it.  Technically, you
-also want to also guard the declaration in the header file, IMO, even if
-it compiles fine.  Also, there is an extra blank line warning when applying
-the patch but, surprisingly, checkpatch.pl seems to miss it.
+I'm having all sorts of delays too, both last week and this week...
+Pretty unfortunate for probably the most core of kernel development
+infrastructure.
 
 -- 
-Gabriel Krisman Bertazi
+Jens Axboe
+
