@@ -2,143 +2,95 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 296B4CD3424
-	for <io-uring@archiver.kernel.org>; Mon, 18 Sep 2023 04:13:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0A46CD13D2
+	for <io-uring@archiver.kernel.org>; Mon, 18 Sep 2023 12:55:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239486AbjIRENc (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 18 Sep 2023 00:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
+        id S241294AbjIRMyq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 18 Sep 2023 08:54:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239521AbjIRENF (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 18 Sep 2023 00:13:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C5912A
-        for <io-uring@vger.kernel.org>; Sun, 17 Sep 2023 21:11:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695010307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9YlbJwv7tXUgE/3jOxnqej4cCUaduO2XvxGilksrAig=;
-        b=EFyPy+lFHdjLSWtn9GK5rUqVz5Ebp/TFPE01nqd+bGpXgq7BV+/8MbO97PE4/6hlA30YtB
-        Ud8TxQQAFdSil/LuQuObFLU9xL5i1WCfJi7TbY97y1EBS2adcE33YYhCTfCLZn/a4B89ZX
-        yMSruJWOxMiD+VDVcCTzNZhAKU1zoFA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-418-22Vb2Q6dMM2L7W6lowtD_g-1; Mon, 18 Sep 2023 00:11:45 -0400
-X-MC-Unique: 22Vb2Q6dMM2L7W6lowtD_g-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E03F3185A790;
-        Mon, 18 Sep 2023 04:11:44 +0000 (UTC)
-Received: from localhost (unknown [10.72.120.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F118B40C6EA8;
-        Mon, 18 Sep 2023 04:11:43 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        io-uring@vger.kernel.org
-Cc:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 06/10] ublk: make sure that uring cmd aiming at same queue won't cross io_uring contexts
-Date:   Mon, 18 Sep 2023 12:11:02 +0800
-Message-Id: <20230918041106.2134250-7-ming.lei@redhat.com>
-In-Reply-To: <20230918041106.2134250-1-ming.lei@redhat.com>
-References: <20230918041106.2134250-1-ming.lei@redhat.com>
+        with ESMTP id S241617AbjIRMyl (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 18 Sep 2023 08:54:41 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15278A8
+        for <io-uring@vger.kernel.org>; Mon, 18 Sep 2023 05:54:36 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5783e07fdcbso110726a12.0
+        for <io-uring@vger.kernel.org>; Mon, 18 Sep 2023 05:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695041675; x=1695646475; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FWGPTo1ZvfuUjNg1XUW38hl8yK4OGYjL6QNtvfdy6vg=;
+        b=YLxMPmWWk1Gtnm/5DsxfQBnyzPFzHFukCGG+t2lvWjvrXsXAWYAptxnJbfCT6yzQ3x
+         rnWg/5rMS2ZFBaVVxoMm48YmjmDEgCf7aEM+JQEPrMo3hmde95RPJDWKrQVpOf0xgQQn
+         gjJ858d+UaM+oiZQF3SECJh/bjtX0sS32iowltcVXgCBMN+4my83IxEKZc+KFba/pwRR
+         UdKIOS3arAv3wPrwzmhoLGxJkZXEuanNl2Ya5jUZaNW0KV+eleT7RZgS5Y9Pd1Cfc69A
+         ze6A9isc6rA2Y7lwEI0MHNiXBJwj9/Bxp+/oIlj/h4Y6XCwzUBR0L/hWfZflvI1nnHil
+         m9Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695041675; x=1695646475;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FWGPTo1ZvfuUjNg1XUW38hl8yK4OGYjL6QNtvfdy6vg=;
+        b=TIP9zxg/J8s6FX7Tj5hLtg5Fa+kGAlAUn5MTE3rw9OZq/ojdhHoMXgDUXrNK+Mjdtd
+         ezUZ0oq+Yg5mBXQG8ujAA/zhmanNYWR4VMlcLZ/LytzFOWWTj12yIERq8dLv9grXKXX4
+         kH+QhjrgFqy5FEnaOfEmySgSnH4HvaLd/B4t7Ja+IAWWulcTRqh7CvzTDCVpaT3qnT5i
+         6AictRW6zYOmgvZSVtbXFKm0Yfj2Z8sffyI06J6W9L52x/qV0Cag58AcLhpAYbO0rA4g
+         VMH5vA8fXk4OB3lcqd0NCifLVe+LkemBZSyFydbuhDUsidfFjYRCDa3YaQS7eQqbGcgX
+         ocuw==
+X-Gm-Message-State: AOJu0Yxixe/d2cxwRTsofHXcE+Gl5R53af7s4VvH2qctWF+9+7QDvGVF
+        xYjqtmuVTbbj92LtnFHmCmNfQg==
+X-Google-Smtp-Source: AGHT+IGX7VvdwZmie4r1BP3W4CjS0WgfXtv2/ZI/UiSSocpoMYtDD+uTqQYoGeAnqTd9g1h7xJzbzA==
+X-Received: by 2002:a05:6a20:394c:b0:15a:2c0b:6c81 with SMTP id r12-20020a056a20394c00b0015a2c0b6c81mr9915610pzg.3.1695041675493;
+        Mon, 18 Sep 2023 05:54:35 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e23-20020a62ee17000000b006889081281bsm7005760pfi.138.2023.09.18.05.54.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Sep 2023 05:54:34 -0700 (PDT)
+Message-ID: <fae0bbc9-efdd-4b56-a5c8-53428facbe5b@kernel.dk>
+Date:   Mon, 18 Sep 2023 06:54:33 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/10] io_uring/ublk: exit notifier support
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
+        io-uring@vger.kernel.org
+Cc:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>
+References: <20230918041106.2134250-1-ming.lei@redhat.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230918041106.2134250-1-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Make sure that all commands aiming at same ublk queue are from same io_uring
-context. This way is one very reasonable requirement, and not see any
-reason userspace may send uring cmd to same queue by multiple io_uring
-contexts.
+On 9/17/23 10:10 PM, Ming Lei wrote:
+> Hello,
+> 
+> In do_exit(), io_uring needs to wait pending requests.
+> 
+> ublk is one uring_cmd driver, and its usage is a bit special by submitting
+> command for waiting incoming block IO request in advance, so if there
+> isn't any IO request coming, the command can't be completed. So far ublk
+> driver has to bind its queue with one ublk daemon server, meantime
+> starts one monitor work to check if this daemon is live periodically.
+> This way requires ublk queue to be bound one single daemon pthread, and
+> not flexible, meantime the monitor work is run in 3rd context, and the
+> implementation is a bit tricky.
+> 
+> The 1st 3 patches adds io_uring task exit notifier, and the other
+> patches converts ublk into this exit notifier, and the implementation
+> becomes more robust & readable, meantime it becomes easier to relax
+> the ublk queue/daemon limit in future, such as not require to bind
+> ublk queue with single daemon.
 
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- drivers/block/ublk_drv.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+The normal approach for this is to ensure that each request is
+cancelable, which we need for other things too (like actual cancel
+support). Why can't we just do the same for ublk?
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 46d499d96ca3..52dd53662ffb 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -131,6 +131,7 @@ struct ublk_queue {
- 	unsigned long flags;
- 	struct task_struct	*ubq_daemon;
- 	char *io_cmd_buf;
-+	unsigned int ctx_id;
- 
- 	struct llist_head	io_cmds;
- 
-@@ -1410,6 +1411,11 @@ static void ublk_commit_completion(struct ublk_device *ub,
- 		ublk_put_req_ref(ubq, req);
- }
- 
-+static inline bool ublk_ctx_id_is_valid(unsigned int ctx_id)
-+{
-+	return ctx_id != IO_URING_INVALID_CTX_ID;
-+}
-+
- /*
-  * When ->ubq_daemon is exiting, either new request is ended immediately,
-  * or any queued io command is drained, so it is safe to abort queue
-@@ -1609,11 +1615,13 @@ static void ublk_stop_dev(struct ublk_device *ub)
- }
- 
- /* device can only be started after all IOs are ready */
--static void ublk_mark_io_ready(struct ublk_device *ub, struct ublk_queue *ubq)
-+static void ublk_mark_io_ready(struct ublk_device *ub, struct ublk_queue *ubq,
-+		unsigned int ctx_id)
- {
- 	mutex_lock(&ub->mutex);
- 	ubq->nr_io_ready++;
- 	if (ublk_queue_ready(ubq)) {
-+		ubq->ctx_id = ctx_id;
- 		ubq->ubq_daemon = current;
- 		get_task_struct(ubq->ubq_daemon);
- 		ub->nr_queues_ready++;
-@@ -1682,6 +1690,9 @@ static int __ublk_ch_uring_cmd(struct io_uring_cmd *cmd,
- 	if (ubq->ubq_daemon && ubq->ubq_daemon != current)
- 		goto out;
- 
-+	if (ublk_ctx_id_is_valid(ubq->ctx_id) && cmd->ctx_id != ubq->ctx_id)
-+		goto out;
-+
- 	if (tag >= ubq->q_depth)
- 		goto out;
- 
-@@ -1734,7 +1745,7 @@ static int __ublk_ch_uring_cmd(struct io_uring_cmd *cmd,
- 		}
- 
- 		ublk_fill_io_cmd(io, cmd, ub_cmd->addr);
--		ublk_mark_io_ready(ub, ubq);
-+		ublk_mark_io_ready(ub, ubq, cmd->ctx_id);
- 		break;
- 	case UBLK_IO_COMMIT_AND_FETCH_REQ:
- 		req = blk_mq_tag_to_rq(ub->tag_set.tags[ub_cmd->q_id], tag);
-@@ -1989,6 +2000,7 @@ static int ublk_init_queue(struct ublk_device *ub, int q_id)
- 
- 	ubq->io_cmd_buf = ptr;
- 	ubq->dev = ub;
-+	ubq->ctx_id = IO_URING_INVALID_CTX_ID;
- 	return 0;
- }
- 
-@@ -2593,6 +2605,8 @@ static void ublk_queue_reinit(struct ublk_device *ub, struct ublk_queue *ubq)
- 	ubq->ubq_daemon = NULL;
- 	ubq->timeout = false;
- 
-+	ubq->ctx_id = IO_URING_INVALID_CTX_ID;
-+
- 	for (i = 0; i < ubq->q_depth; i++) {
- 		struct ublk_io *io = &ubq->ios[i];
- 
 -- 
-2.40.1
+Jens Axboe
 
