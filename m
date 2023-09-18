@@ -2,96 +2,89 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAB86CD13D3
-	for <io-uring@archiver.kernel.org>; Mon, 18 Sep 2023 04:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42CD5CD13D1
+	for <io-uring@archiver.kernel.org>; Mon, 18 Sep 2023 04:13:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjIREMZ (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Mon, 18 Sep 2023 00:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
+        id S239462AbjIREN2 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Mon, 18 Sep 2023 00:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238654AbjIREMR (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Mon, 18 Sep 2023 00:12:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED36811A
-        for <io-uring@vger.kernel.org>; Sun, 17 Sep 2023 21:11:31 -0700 (PDT)
+        with ESMTP id S239221AbjIREM6 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Mon, 18 Sep 2023 00:12:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C582121
+        for <io-uring@vger.kernel.org>; Sun, 17 Sep 2023 21:11:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695010291;
+        s=mimecast20190719; t=1695010300;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cPWT02s2CM706fOFGqrBFd6kGdqjwMylb/OMZksDA8s=;
-        b=g8mIEmbv1yPTEQ4hAx5LNGgMQyst/XBTpvTGQ0AzdyeycHqB0hhDcttvQ3Yzz0mahLfBOc
-        GjTcrjiLX5r6KiiInFE2yxyoGdPNhJHDOuscHkfSTfYa4B+kvUWHVx5IoTok42HemLQ+bp
-        CfQkWIQPewgOkCuTxfd7V0RgU62qDbk=
+        bh=Ek6c8oKP7WrCCE1Di4TBl2jO8h2lwVhBOJLN+tp+jLk=;
+        b=JNstWIoCi8dQ3DBdbO+ioMgshhXDxaN7lM6glEXtQTXkvNoeEd7a+cHHlJTXNtPKP87812
+        GkhVYBP9lDTxn/YwbHOy4etBSIQOlU+UVTr7A6Q5us4diCBrIHDldrM/kTvi0Gqu494lHa
+        ejQ+RecFoop4yXvmPVDviVJC0n2o6E0=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-97-TtqFWRStO_mLqTTwQlvOXg-1; Mon, 18 Sep 2023 00:11:27 -0400
-X-MC-Unique: TtqFWRStO_mLqTTwQlvOXg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+ us-mta-528-0tFN9_eMNoWyqQusowO1og-1; Mon, 18 Sep 2023 00:11:36 -0400
+X-MC-Unique: 0tFN9_eMNoWyqQusowO1og-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 687E0801779;
-        Mon, 18 Sep 2023 04:11:27 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FF38945922;
+        Mon, 18 Sep 2023 04:11:36 +0000 (UTC)
 Received: from localhost (unknown [10.72.120.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 89D5640C2064;
-        Mon, 18 Sep 2023 04:11:25 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 963F02026D4B;
+        Mon, 18 Sep 2023 04:11:35 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
         io-uring@vger.kernel.org
 Cc:     ZiyangZhang <ZiyangZhang@linux.alibaba.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 02/10] io_uring: pass io_uring_ctx->id to uring_cmd
-Date:   Mon, 18 Sep 2023 12:10:58 +0800
-Message-Id: <20230918041106.2134250-3-ming.lei@redhat.com>
+Subject: [PATCH 04/10] ublk: don't get ublk device reference in ublk_abort_queue()
+Date:   Mon, 18 Sep 2023 12:11:00 +0800
+Message-Id: <20230918041106.2134250-5-ming.lei@redhat.com>
 In-Reply-To: <20230918041106.2134250-1-ming.lei@redhat.com>
 References: <20230918041106.2134250-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Pass io_uring_ctx-id to uring_cmd driver, and prepare for supporting
-io_uring ctx or task exit notifier.
+ublk_abort_queue() is called in ublk_daemon_monitor_work(), in which
+it is guaranteed that ublk device is live, so no need to get the device
+reference.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- include/linux/io_uring.h | 6 +++++-
- io_uring/uring_cmd.c     | 1 +
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ drivers/block/ublk_drv.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-index ec9714e36477..c395807bd7cf 100644
---- a/include/linux/io_uring.h
-+++ b/include/linux/io_uring.h
-@@ -33,7 +33,11 @@ struct io_uring_cmd {
- 	};
- 	u32		cmd_op;
- 	u32		flags;
--	u8		pdu[32]; /* available inline for free use */
-+	union {
-+		/* driver needs to save ctx_id */
-+		u32		ctx_id;
-+		u8		pdu[32]; /* available inline for free use */
-+	};
- };
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 630ddfe6657b..9b3c0b3dd36e 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -1419,9 +1419,6 @@ static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
+ {
+ 	int i;
  
- static inline const void *io_uring_sqe_cmd(const struct io_uring_sqe *sqe)
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 537795fddc87..c54c627fb6b9 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -105,6 +105,7 @@ int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		req->imu = ctx->user_bufs[index];
- 		io_req_set_rsrc_node(req, ctx, 0);
+-	if (!ublk_get_device(ub))
+-		return;
+-
+ 	for (i = 0; i < ubq->q_depth; i++) {
+ 		struct ublk_io *io = &ubq->ios[i];
+ 
+@@ -1437,7 +1434,6 @@ static void ublk_abort_queue(struct ublk_device *ub, struct ublk_queue *ubq)
+ 				__ublk_fail_req(ubq, io, rq);
+ 		}
  	}
-+	ioucmd->ctx_id = req->ctx->id;
- 	ioucmd->sqe = sqe;
- 	ioucmd->cmd_op = READ_ONCE(sqe->cmd_op);
- 	return 0;
+-	ublk_put_device(ub);
+ }
+ 
+ static void ublk_daemon_monitor_work(struct work_struct *work)
 -- 
 2.40.1
 
