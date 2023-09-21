@@ -2,143 +2,104 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59F10E7D0A4
-	for <io-uring@archiver.kernel.org>; Thu, 21 Sep 2023 18:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF5FEE7D0A7
+	for <io-uring@archiver.kernel.org>; Thu, 21 Sep 2023 19:53:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjIUSqn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 21 Sep 2023 14:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
+        id S229962AbjIUTxY (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 21 Sep 2023 15:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjIUSqm (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Sep 2023 14:46:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22912EE808;
-        Thu, 21 Sep 2023 11:46:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CCDB8218FC;
-        Thu, 21 Sep 2023 18:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1695321992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UOeRcNA6z4fQ4wZ/y9y2/tuq46PWNNqvjziVWS+zisg=;
-        b=lEU121qIwPtgg66osXBkWjt2yg6FMzT36F9Mfvs3PYqSqhA73YAkBLD34q9mzmfn4GAV3j
-        Zxrz+WsfZ/nDx3DngL+2m+hS4INh64Mn4mRCTHMhAZ+lGiKbVfOqH6pn/x8RmmfSegXq15
-        k+MXQRLAoq/HfPF4+Z1Oc6TllDiATtY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1695321992;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UOeRcNA6z4fQ4wZ/y9y2/tuq46PWNNqvjziVWS+zisg=;
-        b=oWeTtrg04IMG8eMriDRFA0OJbQKmvGgNl7nPxJAkn8bAgsztvSLT2m4DKOZ8hNVobFfm3Z
-        wSbz0kXQacoephAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9734E13513;
-        Thu, 21 Sep 2023 18:46:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id l88gH4iPDGW0XQAAMHmgww
-        (envelope-from <krisman@suse.de>); Thu, 21 Sep 2023 18:46:32 +0000
-From:   Gabriel Krisman Bertazi <krisman@suse.de>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: Re: [PATCH] io_uring: cancelable uring_cmd
-In-Reply-To: <20230921042434.2500190-1-ming.lei@redhat.com> (Ming Lei's
-        message of "Thu, 21 Sep 2023 12:24:34 +0800")
-References: <20230921042434.2500190-1-ming.lei@redhat.com>
-Date:   Thu, 21 Sep 2023 14:46:31 -0400
-Message-ID: <878r8znz3s.fsf@suse.de>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        with ESMTP id S230323AbjIUTxH (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Sep 2023 15:53:07 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07214D7DB0
+        for <io-uring@vger.kernel.org>; Thu, 21 Sep 2023 11:29:16 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-760dff4b701so17914539f.0
+        for <io-uring@vger.kernel.org>; Thu, 21 Sep 2023 11:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695320955; x=1695925755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wwcbO19kHoooGXVXpd3ZWHbtBSLBsnmpj+7juMc3wkU=;
+        b=3PZrgb1nRUzH+q34WXjmHZtiDYbauRH6ZureE/sLaQKEcv8oVAXwj1eWrHEhRvjm1h
+         9d+JC16iwfuIoilg/Yr118CqhDgJ3UPADorZJFI2Wgc4ggtUzRxFBvfaLh4pFBAPz7DD
+         y6cOLDNAtnFpbpjtuArdh5ZZwukRny0qkl+xlZODxqowZHqYb1FvYNzKDgYfQ/NrqVUM
+         y7x7RJ9d1UM62rcDjPYri4+4azKb3znmMxJDNlLMe6pkHe0EKksZRODiCJiBEwRCZKfx
+         /X9rNKLAFdx1sqZOhUnmlJVBCkleJzXdSmOHiKHacWG/Z2yXt2gSJjz3XE318ySbMDxD
+         jxtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695320955; x=1695925755;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wwcbO19kHoooGXVXpd3ZWHbtBSLBsnmpj+7juMc3wkU=;
+        b=U6YVgsaZsvuKHH5qIYHS5MenMeGu2FVbak3hgBZEXJB6GhJt/eTeFFq60UWzSuzyD2
+         u7PXCOH9Gk2a0XhfGyi4F6H3x2CsZpQX1fFHDBs2Zx0KoK7rEqUoBkVipvX6AtYGDQaD
+         PCjF0aZS1dG05Z14+Sb+HIqoGIBk4roEuO9rrFJIjEOL5A3yKAH/P7CXWB297ID0qsc6
+         JxhsjArIRrY1+YlEy9IsauatS4sUfJHyaD1Jm/RuxV/GnKxLSwqOQzcMy9gdq6kc1gHr
+         IQ58yFZy/0uyX7IM2EyAYiitmye+aBn1kikymIG6k6QdWA9g7qpohdU4RdTO5nVC5yhE
+         o3Hg==
+X-Gm-Message-State: AOJu0YyxAnU1dT18ERmWM0h5qWMryvJGqhe91SFKvsQRXK10cqFGKcyf
+        g5X0DahwXnMXjwCbjaa1okMQeSgRToQudYoVrgu51g==
+X-Google-Smtp-Source: AGHT+IGHwyaEomy/zYb0m5iH1+xev/kGc2neOyBfwfCE6efVjwCyU3nluV/6eZCqeHaJ1+RHGRHC6A==
+X-Received: by 2002:a05:6602:2c0a:b0:790:958e:a667 with SMTP id w10-20020a0566022c0a00b00790958ea667mr8177590iov.2.1695320954925;
+        Thu, 21 Sep 2023 11:29:14 -0700 (PDT)
+Received: from localhost.localdomain ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id o25-20020a02c6b9000000b0042b227eb1ddsm500441jan.55.2023.09.21.11.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 11:29:13 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     peterz@infradead.org, andres@anarazel.de, tglx@linutronix.de,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 1/8] futex: move FUTEX2_VALID_MASK to futex.h
+Date:   Thu, 21 Sep 2023 12:29:01 -0600
+Message-Id: <20230921182908.160080-2-axboe@kernel.dk>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230921182908.160080-1-axboe@kernel.dk>
+References: <20230921182908.160080-1-axboe@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Ming Lei <ming.lei@redhat.com> writes:
+We need this for validating the futex2 flags outside of the normal
+futex syscalls.
 
-> uring_cmd may never complete, such as ublk, in which uring cmd isn't
-> completed until one new block request is coming from ublk block device.
->
-> Add cancelable uring_cmd to provide mechanism to driver to cancel
-> pending commands in its own way.
->
-> Add API of io_uring_cmd_mark_cancelable() for driver to mark one
-> command as cancelable, then io_uring will cancel this command in
-> io_uring_cancel_generic(). Driver callback is provided for canceling
-> command in driver's way, meantime driver gets notified with exiting of
-> io_uring task or context.
->
-> Suggested-by: Jens Axboe <axboe@kernel.dk>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->
-> ublk patches:
->
-> 	https://github.com/ming1/linux/commits/uring_exit_and_ublk
->
->  include/linux/io_uring.h       | 22 +++++++++++++++++-
->  include/linux/io_uring_types.h |  6 +++++
->  include/uapi/linux/io_uring.h  |  7 ++++--
->  io_uring/io_uring.c            | 30 ++++++++++++++++++++++++
->  io_uring/uring_cmd.c           | 42 ++++++++++++++++++++++++++++++++++
->  5 files changed, 104 insertions(+), 3 deletions(-)
->
-> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-> index 106cdc55ff3b..5b98308a154f 100644
-> --- a/include/linux/io_uring.h
-> +++ b/include/linux/io_uring.h
-> @@ -22,6 +22,9 @@ enum io_uring_cmd_flags {
->  	IO_URING_F_IOPOLL		= (1 << 10),
->  };
->  
-> +typedef void (uring_cmd_cancel_fn)(struct io_uring_cmd *,
-> +		unsigned int issue_flags, struct task_struct *task);
-> +
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ kernel/futex/futex.h    | 2 ++
+ kernel/futex/syscalls.c | 2 --
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Hi Ming,
-
-I wonder if uring_cmd_cancel shouldn't just be a new file operation, pairing
-with f_op->uring_cmd.  it would, of course, also mean don't need to pass
-it here occupying the pdu or explicitly registering it. iiuc, would also
-allow you to drop the flag and just assume it is cancelable if the operation
-exists, further simplifying the code.
-
-> +static bool io_uring_try_cancel_uring_cmd(struct io_ring_ctx *ctx,
-> +					  struct task_struct *task,
-> +					  bool cancel_all)
-> +{
-> +	struct hlist_node *tmp;
-> +	struct io_kiocb *req;
-> +	bool ret = false;
-> +
-> +	mutex_lock(&ctx->uring_lock);
-> +	hlist_for_each_entry_safe(req, tmp, &ctx->cancelable_uring_cmd,
-> +			hash_node) {
-> +		struct io_uring_cmd *cmd = io_kiocb_to_cmd(req,
-> +				struct io_uring_cmd);
-> +
-> +		if (!cancel_all && req->task != task)
-> +			continue;
-> +
-> +		/* safe to call ->cancel_fn() since cmd isn't done yet */
-> +		if (cmd->flags & IORING_URING_CMD_CANCELABLE) {
-> +			cmd->cancel_fn(cmd, 0, task);
-
-I find it weird to pass task here.  Also, it seems you use it only to
-sanity check it is the same as ubq->ubq_daemon.  Can you just recover it
-from cmd_to_io_kiocb(cmd)->task? it should be guaranteed to be the same
-as task by the check immediately before.
-
-Thanks,
-
+diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
+index a06030a1a27b..a173a9d501e1 100644
+--- a/kernel/futex/futex.h
++++ b/kernel/futex/futex.h
+@@ -52,6 +52,8 @@ static inline unsigned int futex_to_flags(unsigned int op)
+ 	return flags;
+ }
+ 
++#define FUTEX2_VALID_MASK (FUTEX2_SIZE_MASK | FUTEX2_PRIVATE)
++
+ /* FUTEX2_ to FLAGS_ */
+ static inline unsigned int futex2_to_flags(unsigned int flags2)
+ {
+diff --git a/kernel/futex/syscalls.c b/kernel/futex/syscalls.c
+index 8200d86d30e1..2b5cafdfdc50 100644
+--- a/kernel/futex/syscalls.c
++++ b/kernel/futex/syscalls.c
+@@ -179,8 +179,6 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
+ 	return do_futex(uaddr, op, val, tp, uaddr2, (unsigned long)utime, val3);
+ }
+ 
+-#define FUTEX2_VALID_MASK (FUTEX2_SIZE_MASK | FUTEX2_PRIVATE)
+-
+ /**
+  * futex_parse_waitv - Parse a waitv array from userspace
+  * @futexv:	Kernel side list of waiters to be filled
 -- 
-Gabriel Krisman Bertazi
+2.40.1
+
