@@ -2,60 +2,60 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD22AE7D0A6
-	for <io-uring@archiver.kernel.org>; Thu, 21 Sep 2023 18:37:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DF52E7D0A5
+	for <io-uring@archiver.kernel.org>; Thu, 21 Sep 2023 18:37:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjIUSho (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        id S230359AbjIUSho (ORCPT <rfc822;io-uring@archiver.kernel.org>);
         Thu, 21 Sep 2023 14:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjIUShR (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Sep 2023 14:37:17 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9EED7DBA
-        for <io-uring@vger.kernel.org>; Thu, 21 Sep 2023 11:29:18 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-79f96830e4dso3975739f.1
-        for <io-uring@vger.kernel.org>; Thu, 21 Sep 2023 11:29:18 -0700 (PDT)
+        with ESMTP id S229745AbjIUSh0 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 21 Sep 2023 14:37:26 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5523D8686
+        for <io-uring@vger.kernel.org>; Thu, 21 Sep 2023 11:29:22 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-34e1757fe8fso1016945ab.0
+        for <io-uring@vger.kernel.org>; Thu, 21 Sep 2023 11:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695320957; x=1695925757; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695320962; x=1695925762; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aeITMYfcld3mteb+NSEcBXXoBeyRBDS9X8Wlurs1dfY=;
-        b=elkX0bbQnyNGl1I50jhGbi+pWcQeuY5xLC5VLpCo+FVlOp7UwN6P0Qjig8a5k6gTkQ
-         IL7gyU0LgEPpo9Y/PpIaiUVN0MVHLzLecVmUCsHkN14IwxkjxIkhNo9w2VQxBKO2Gpyr
-         T3n2Z7dN+Z75R5u4IwI8PyaftN/9UYXl9GqRtbYkA4PM7NrFR1UmBTFreO0O11jsr1a4
-         DbXsv1worfom++ih99/XxocYLChcdRN0DHTxZPIdcbChypfX1OaaNmOSAeXQr2AkEGZZ
-         H8ULrGx+Y3Ie51DabPn9XxVnN6c6uFlFfjOXjZgyG9q3PPDHxGudBcFECoeA6MCZe4Eq
-         jFCg==
+        bh=8/OGVEqmKZ+YrEmaYsT23Mong0SvETBYb//Qn3SwQyE=;
+        b=ouP89gePGLkXltybMGwkkustlfFAplUbJ4vP8U3TPcA3954wsu06QRtfnzwyvbYSYs
+         QTVHkUdd32WVcNpJRncn7PZABjuOL6kSBVZA5/n2nwrpfc7UspeBjKI2sCPmEM3Kt5zW
+         wHrwgAgk5ePJk4X5bYIyrevgGO5xLjj+P3TuE6Qn0T6aZvpAevB2QEv5ucKh70Y5YtCh
+         /pwmK27WAxolaya57PNG4z/YSDrVzW8q3s7bm6oHwrL/c2etyw+ELu4SDQrAtVbwrzqd
+         XjerkcEb5mbjB9u9WLAcyoW3KquEhxUKzGQ3PT9ROfv2DZiDl01XgicGqolS6PWTRO1d
+         XnWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695320957; x=1695925757;
+        d=1e100.net; s=20230601; t=1695320962; x=1695925762;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aeITMYfcld3mteb+NSEcBXXoBeyRBDS9X8Wlurs1dfY=;
-        b=ag37ZVE7GxFR1PqwOZ5zrzE5YLJrQzE0WMp08Zlcy1QsW98y1K6bfFy7NAhK2yVD8b
-         xTPAs2rRQDaaWLUAdMsUkoSikISWtWHQPG/owWdW7oMzIjz9cfk8+4OJCzHXJY7EJahy
-         kUXxNNn3gI1j0VLuQqC6KK6zVVMT8Qg5CUnb1F8QSXEDNbEWaYDLje75Os+mahnaDYy8
-         KWpSD7fPt0d+rgW+UqOEwZ7UeN+Xl/oKQKNnG6HF4jm98Gq3ulJIPcfOyvIXmrReYprp
-         pFb/zBO8Nux3KK4/It37vSU7AQFz7gGL3bpJw85QhK4Dt+A1CvrgCwhGnweQ3UAcfEOd
-         MwuQ==
-X-Gm-Message-State: AOJu0YxPtnAcsW40OdP5NvpenFhFD9L+XERvgf3BiZf3+VWvYTmjoxnN
-        nsSMtbUjEEWN2BQdJvEzy2fiQeUIXfLpptuSJ8uWZg==
-X-Google-Smtp-Source: AGHT+IEMeR7eiw0nzdlaXpVdshFLf4QAnYLaYjf6wZVS+llAK8oxoAXqFB8JQnoxkaPkNldByScrSw==
-X-Received: by 2002:a92:d903:0:b0:350:f353:4017 with SMTP id s3-20020a92d903000000b00350f3534017mr6601502iln.0.1695320957710;
-        Thu, 21 Sep 2023 11:29:17 -0700 (PDT)
+        bh=8/OGVEqmKZ+YrEmaYsT23Mong0SvETBYb//Qn3SwQyE=;
+        b=EUXCBcfH3quxwkUgC5hxRXArn6Pxanjh2nDMER3/8UU1jwAu+huxWH6bWJR0/Ay3M5
+         +I+g+E2MY6BG4Yo97vmrXFS5KTN6mGnU+P/Bb6wGQjpQxdDeP+CT7L3df9oXgXaiNycm
+         YEeBMsdPgQRo9zfH5YElrC0zaUbZNujKjUEF66tkben9AVl1w0iwoNHKm3JKtoGlOYHU
+         ung5cx00B6R75ARyO+YKl3IEftr7tghdAMK58xXOdj1X1dEIheTnRno3tDNseVBLzJPp
+         92c/3iqoH3ROOw8Anhua0fSG6rbKF8wnK6A8N7HoMNZ6Qf1yp4Nx3fl8j5VrQCtn/H1s
+         68kw==
+X-Gm-Message-State: AOJu0YwFlyIoWsqSxzaTAds/DS6zUcOV2h9EkVOSUHx7d5dTWdXH6mxG
+        4UQl954UYBoVnVlyMV2PWyVPQ8GsZ7hSg9CnwbyBFA==
+X-Google-Smtp-Source: AGHT+IH0d1Lv9v5XvuHBRWZ4j3Pa5hUPuJ0lr8dkl2Yd+m6TonTxY7UwEf5Qp3o95XPyf+oRWhbkLA==
+X-Received: by 2002:a92:c52d:0:b0:34f:7ba2:50e8 with SMTP id m13-20020a92c52d000000b0034f7ba250e8mr6203745ili.2.1695320961817;
+        Thu, 21 Sep 2023 11:29:21 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id o25-20020a02c6b9000000b0042b227eb1ddsm500441jan.55.2023.09.21.11.29.16
+        by smtp.gmail.com with ESMTPSA id o25-20020a02c6b9000000b0042b227eb1ddsm500441jan.55.2023.09.21.11.29.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 11:29:16 -0700 (PDT)
+        Thu, 21 Sep 2023 11:29:21 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     peterz@infradead.org, andres@anarazel.de, tglx@linutronix.de,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 3/8] futex: abstract out a __futex_wake_mark() helper
-Date:   Thu, 21 Sep 2023 12:29:03 -0600
-Message-Id: <20230921182908.160080-4-axboe@kernel.dk>
+Subject: [PATCH 6/8] futex: make futex_parse_waitv() available as a helper
+Date:   Thu, 21 Sep 2023 12:29:06 -0600
+Message-Id: <20230921182908.160080-7-axboe@kernel.dk>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230921182908.160080-1-axboe@kernel.dk>
 References: <20230921182908.160080-1-axboe@kernel.dk>
@@ -65,83 +65,83 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Move the unqueue and lock_ptr clear into a helper that futex_wake_mark()
-calls. Add it to the public functions as well, in preparation for using
-it outside the core futex code.
+To make it more generically useful, augment it with allowing the caller
+to pass in the wake handler and wake data. Convert the futex_waitv()
+syscall, passing in the default handlers.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- kernel/futex/futex.h    |  1 +
- kernel/futex/waitwake.c | 33 ++++++++++++++++++++++-----------
- 2 files changed, 23 insertions(+), 11 deletions(-)
+ kernel/futex/futex.h    |  5 +++++
+ kernel/futex/syscalls.c | 16 +++++++++++-----
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
-index 547f509b2c87..33835b81e0c3 100644
+index 76f6c2e0f539..6b6a6b3da103 100644
 --- a/kernel/futex/futex.h
 +++ b/kernel/futex/futex.h
-@@ -219,6 +219,7 @@ extern int futex_wait_setup(u32 __user *uaddr, u32 val, unsigned int flags,
- 			    struct futex_q *q, struct futex_hash_bucket **hb);
- extern void futex_wait_queue(struct futex_hash_bucket *hb, struct futex_q *q,
- 				   struct hrtimer_sleeper *timeout);
-+extern bool __futex_wake_mark(struct futex_q *q);
- extern void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q);
+@@ -361,6 +361,11 @@ struct futex_vector {
+ 	struct futex_q q;
+ };
  
- extern int fault_in_user_writeable(u32 __user *uaddr);
-diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
-index 35c6a637a4bb..6fcf5f723719 100644
---- a/kernel/futex/waitwake.c
-+++ b/kernel/futex/waitwake.c
-@@ -106,20 +106,11 @@
-  * double_lock_hb() and double_unlock_hb(), respectively.
++extern int futex_parse_waitv(struct futex_vector *futexv,
++			     struct futex_waitv __user *uwaitv,
++			     unsigned int nr_futexes, futex_wake_fn *wake,
++			     void *wake_data);
++
+ extern int futex_wait_multiple(struct futex_vector *vs, unsigned int count,
+ 			       struct hrtimer_sleeper *to);
+ 
+diff --git a/kernel/futex/syscalls.c b/kernel/futex/syscalls.c
+index 2b5cafdfdc50..4b6da9116aa6 100644
+--- a/kernel/futex/syscalls.c
++++ b/kernel/futex/syscalls.c
+@@ -184,12 +184,15 @@ SYSCALL_DEFINE6(futex, u32 __user *, uaddr, int, op, u32, val,
+  * @futexv:	Kernel side list of waiters to be filled
+  * @uwaitv:     Userspace list to be parsed
+  * @nr_futexes: Length of futexv
++ * @wake:	Wake to call when futex is woken
++ * @wake_data:	Data for the wake handler
+  *
+  * Return: Error code on failure, 0 on success
   */
- 
--/*
-- * The hash bucket lock must be held when this is called.
-- * Afterwards, the futex_q must not be accessed. Callers
-- * must ensure to later call wake_up_q() for the actual
-- * wakeups to occur.
-- */
--void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
-+bool __futex_wake_mark(struct futex_q *q)
+-static int futex_parse_waitv(struct futex_vector *futexv,
+-			     struct futex_waitv __user *uwaitv,
+-			     unsigned int nr_futexes)
++int futex_parse_waitv(struct futex_vector *futexv,
++		      struct futex_waitv __user *uwaitv,
++		      unsigned int nr_futexes, futex_wake_fn *wake,
++		      void *wake_data)
  {
--	struct task_struct *p = q->task;
--
- 	if (WARN(q->pi_state || q->rt_waiter, "refusing to wake PI futex\n"))
--		return;
-+		return false;
+ 	struct futex_waitv aux;
+ 	unsigned int i;
+@@ -214,6 +217,8 @@ static int futex_parse_waitv(struct futex_vector *futexv,
+ 		futexv[i].w.val = aux.val;
+ 		futexv[i].w.uaddr = aux.uaddr;
+ 		futexv[i].q = futex_q_init;
++		futexv[i].q.wake = wake;
++		futexv[i].q.wake_data = wake_data;
+ 	}
  
--	get_task_struct(p);
- 	__futex_unqueue(q);
- 	/*
- 	 * The waiting task can free the futex_q as soon as q->lock_ptr = NULL
-@@ -130,6 +121,26 @@ void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
- 	 */
- 	smp_store_release(&q->lock_ptr, NULL);
+ 	return 0;
+@@ -306,7 +311,8 @@ SYSCALL_DEFINE5(futex_waitv, struct futex_waitv __user *, waiters,
+ 		goto destroy_timer;
+ 	}
  
-+	return true;
-+}
-+
-+/*
-+ * The hash bucket lock must be held when this is called.
-+ * Afterwards, the futex_q must not be accessed. Callers
-+ * must ensure to later call wake_up_q() for the actual
-+ * wakeups to occur.
-+ */
-+void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
-+{
-+	struct task_struct *p = q->task;
-+
-+	get_task_struct(p);
-+
-+	if (!__futex_wake_mark(q)) {
-+		put_task_struct(p);
-+		return;
-+	}
-+
- 	/*
- 	 * Queue the task for later wakeup for after we've released
- 	 * the hb->lock.
+-	ret = futex_parse_waitv(futexv, waiters, nr_futexes);
++	ret = futex_parse_waitv(futexv, waiters, nr_futexes, futex_wake_mark,
++				NULL);
+ 	if (!ret)
+ 		ret = futex_wait_multiple(futexv, nr_futexes, timeout ? &to : NULL);
+ 
+@@ -421,7 +427,7 @@ SYSCALL_DEFINE4(futex_requeue,
+ 	if (!waiters)
+ 		return -EINVAL;
+ 
+-	ret = futex_parse_waitv(futexes, waiters, 2);
++	ret = futex_parse_waitv(futexes, waiters, 2, futex_wake_mark, NULL);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.40.1
 
