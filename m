@@ -2,133 +2,82 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85068E732CA
-	for <io-uring@archiver.kernel.org>; Thu, 28 Sep 2023 12:44:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1846E732D0
+	for <io-uring@archiver.kernel.org>; Thu, 28 Sep 2023 13:43:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbjI1Moe (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 28 Sep 2023 08:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48580 "EHLO
+        id S232235AbjI1Nnn (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 28 Sep 2023 09:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232509AbjI1Moc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 28 Sep 2023 08:44:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D6419D
-        for <io-uring@vger.kernel.org>; Thu, 28 Sep 2023 05:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695905025;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DfLlvPH45HtA+ABsFEkKa0PbHb5o88ZJzs3bc5tDHII=;
-        b=PDYpuq2UbXV6OAteHqc8Vs56NMNI4WYAh2L4eJb6v/OolQgsXZ59ha7ysOCciGXgW2Li8G
-        0tDJrxpbrL6LpGxcDVwpJL3Bi+aVQ5BpYhR6QecMud0ago+6ePQL7tZjI/dGPEIaUT3pMU
-        qDkeNW70Az2Tq3YzUcp6pgeKKK0jKc0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-399-NZS41LVtMWivMpwHQNdnpw-1; Thu, 28 Sep 2023 08:43:40 -0400
-X-MC-Unique: NZS41LVtMWivMpwHQNdnpw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7B5F3811E7B;
-        Thu, 28 Sep 2023 12:43:39 +0000 (UTC)
-Received: from localhost (unknown [10.72.120.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A6B8B40C2070;
-        Thu, 28 Sep 2023 12:43:38 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+        with ESMTP id S232132AbjI1Nnm (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 28 Sep 2023 09:43:42 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E75196
+        for <io-uring@vger.kernel.org>; Thu, 28 Sep 2023 06:43:40 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5221bd8f62eso3091368a12.1
+        for <io-uring@vger.kernel.org>; Thu, 28 Sep 2023 06:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695908619; x=1696513419; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2V6UMsz3keE8Oc0msyB57V0fmGycw/8zbKI2stLuJgg=;
+        b=sStF/aG6Ih8bRLwenR4sAKiFJAMDgRTnvkYiSRp9RuNC2C1vUXYvHeWiUqBmZ3PKkU
+         PeXchaMBjR+BSzCm1lFFFs7UuJauTOMGauKWerUfh7pNu9chGg5v64DH9R+/pB6A2coe
+         YTg+up83Yj1IJ4b8p+PORJmxnQmYoVHZJaDlMaaW78tRXKm4Y3avNHrlC1t18xpLCtp7
+         znMTpdzzE4FYRjy01YR7nhizfVjI8Jv2mBSvSDD0QewaMartdiAeMv2AGOZzbPLq+YZp
+         xkB/9S6xcZiHKXDFUV1rTaivY4JMtHKtAXXRZCtqtykDn6J2bFs2GzI/75dlZV2p3FwQ
+         BT1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695908619; x=1696513419;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2V6UMsz3keE8Oc0msyB57V0fmGycw/8zbKI2stLuJgg=;
+        b=XwNTReAhP42mPaZlltTbH0Nl3IWlXwaCVV8ThuGuK4qAqU4rzLHrKWQHf+mdMjvjKY
+         eFm5Ep6e+KnHjaHLdYRVdFwRNMP4YjcCkdHF46XLuu/Qskl3GFuJ1fPRz1cYQc6GszoU
+         kNH6xZyVAePWePSLY/0zmIN529FjC+uyGT63Hy0tbWumB/QYtFxaBAYqsE6hha3cq3Z+
+         bFbim4APNWLASv9dsIUTLoDNX3AqL2KlVdZtzzF6uih9YVlz4JAs2HVRiyYTa9su242O
+         KiyjDWWHOjDDC0kDdigzaaatc/cubQvEuIImMWEqZLx3YIH/20Lp0LJtvXIAsY4mOwcn
+         eeCg==
+X-Gm-Message-State: AOJu0Yy8IpdDBdq63inJM0TBPsoVubCWUXLweMY0FUQzIR5bOPfIeGoy
+        WusFmugol8h72oXUGNcrnXcTAg==
+X-Google-Smtp-Source: AGHT+IEe0HVRjv7+vBRClK2A8/+5EMfjUlX3w0JUU3/0ND5kAuorq6ON/gHKKymaLh6pZnnn7oYP1g==
+X-Received: by 2002:a05:6402:5243:b0:51d:cfeb:fc3b with SMTP id t3-20020a056402524300b0051dcfebfc3bmr1094319edd.1.1695908619132;
+        Thu, 28 Sep 2023 06:43:39 -0700 (PDT)
+Received: from [172.20.13.88] ([45.147.210.162])
+        by smtp.gmail.com with ESMTPSA id q19-20020a056402041300b005330e1e7da0sm9587296edv.92.2023.09.28.06.43.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Sep 2023 06:43:38 -0700 (PDT)
+Message-ID: <d4d952cb-b045-46b6-ba45-e78cd257dd6e@kernel.dk>
+Date:   Thu, 28 Sep 2023 07:43:36 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V5 0/2] io_uring: cancelable uring_cmd
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>, io-uring@vger.kernel.org,
         linux-block@vger.kernel.org
 Cc:     Gabriel Krisman Bertazi <krisman@suse.de>,
-        Anuj Gupta <anuj20.g@samsung.com>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V5 1/2] io_uring: retain top 8bits of uring_cmd flags for kernel internal use
-Date:   Thu, 28 Sep 2023 20:43:24 +0800
-Message-ID: <20230928124327.135679-2-ming.lei@redhat.com>
-In-Reply-To: <20230928124327.135679-1-ming.lei@redhat.com>
+        Anuj Gupta <anuj20.g@samsung.com>
 References: <20230928124327.135679-1-ming.lei@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230928124327.135679-1-ming.lei@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Retain top 8bits of uring_cmd flags for kernel internal use, so that we
-can move IORING_URING_CMD_POLLED out of uapi header.
+On 9/28/23 6:43 AM, Ming Lei wrote:
+> Hello,
+> 
+> Patch 1 retains top 8bits of  uring_cmd flags for kernel internal use.
+> 
+> Patch 2 implements cancelable uring_cmd.
 
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
-Reviewed-by: Anuj Gupta <anuj20.g@samsung.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- include/linux/io_uring.h      | 3 +++
- include/uapi/linux/io_uring.h | 5 ++---
- io_uring/io_uring.c           | 3 +++
- io_uring/uring_cmd.c          | 2 +-
- 4 files changed, 9 insertions(+), 4 deletions(-)
+Applied, thanks. Had to hand apply as it doesn't apply to
+for-6.7/io_uring due to the waitid addition, but trivial stuff.
 
-diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-index 106cdc55ff3b..ae08d6f66e62 100644
---- a/include/linux/io_uring.h
-+++ b/include/linux/io_uring.h
-@@ -22,6 +22,9 @@ enum io_uring_cmd_flags {
- 	IO_URING_F_IOPOLL		= (1 << 10),
- };
- 
-+/* only top 8 bits of sqe->uring_cmd_flags for kernel internal use */
-+#define IORING_URING_CMD_POLLED		(1U << 31)
-+
- struct io_uring_cmd {
- 	struct file	*file;
- 	const struct io_uring_sqe *sqe;
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 8e61f8b7c2ce..de77ad08b123 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -246,13 +246,12 @@ enum io_uring_op {
- };
- 
- /*
-- * sqe->uring_cmd_flags
-+ * sqe->uring_cmd_flags		top 8bits aren't available for userspace
-  * IORING_URING_CMD_FIXED	use registered buffer; pass this flag
-  *				along with setting sqe->buf_index.
-- * IORING_URING_CMD_POLLED	driver use only
-  */
- #define IORING_URING_CMD_FIXED	(1U << 0)
--#define IORING_URING_CMD_POLLED	(1U << 31)
-+#define IORING_URING_CMD_MASK	IORING_URING_CMD_FIXED
- 
- 
- /*
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 783ed0fff71b..9aedb7202403 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -4666,6 +4666,9 @@ static int __init io_uring_init(void)
- 
- 	BUILD_BUG_ON(sizeof(atomic_t) != sizeof(u32));
- 
-+	/* top 8bits are for internal use */
-+	BUILD_BUG_ON((IORING_URING_CMD_MASK & 0xff000000) != 0);
-+
- 	io_uring_optable_init();
- 
- 	/*
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 537795fddc87..a0b0ec5473bf 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -91,7 +91,7 @@ int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		return -EINVAL;
- 
- 	ioucmd->flags = READ_ONCE(sqe->uring_cmd_flags);
--	if (ioucmd->flags & ~IORING_URING_CMD_FIXED)
-+	if (ioucmd->flags & ~IORING_URING_CMD_MASK)
- 		return -EINVAL;
- 
- 	if (ioucmd->flags & IORING_URING_CMD_FIXED) {
 -- 
-2.41.0
+Jens Axboe
 
