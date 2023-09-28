@@ -2,60 +2,60 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCB1FE732FF
-	for <io-uring@archiver.kernel.org>; Thu, 28 Sep 2023 17:25:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B9364CE7AFC
+	for <io-uring@archiver.kernel.org>; Thu, 28 Sep 2023 17:25:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjI1RZf (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Thu, 28 Sep 2023 13:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S231986AbjI1RZh (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Thu, 28 Sep 2023 13:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbjI1RZc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Thu, 28 Sep 2023 13:25:32 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DEBCD5
-        for <io-uring@vger.kernel.org>; Thu, 28 Sep 2023 10:25:29 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9ae65c0e46fso342068966b.0
-        for <io-uring@vger.kernel.org>; Thu, 28 Sep 2023 10:25:29 -0700 (PDT)
+        with ESMTP id S231987AbjI1RZf (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Thu, 28 Sep 2023 13:25:35 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293ACCEF
+        for <io-uring@vger.kernel.org>; Thu, 28 Sep 2023 10:25:33 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9b27f99a356so225172866b.0
+        for <io-uring@vger.kernel.org>; Thu, 28 Sep 2023 10:25:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695921927; x=1696526727; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1695921930; x=1696526730; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aeITMYfcld3mteb+NSEcBXXoBeyRBDS9X8Wlurs1dfY=;
-        b=lXvTQyEa5u24mMaMoOxgC5v9uj1pFbc/ALXz0mBlCmD1vl709tS7CSZqztxkkEOjR3
-         tpaPy0SlcULi7K+OUMEYz8rRxlu8By+7nGeh6U7wpPFtm1YroLWkOllJHr9Op4Nj02s9
-         Uy2MInb/UQGdE5m5cr8HnJCO5tS9OYe3J4FYpaFSvgujWoIfJc6HiWfbP0yxVvi72zFu
-         I3y8AnwA9ifUtYLDFVzlFTe6776N0/DyKSwC9NMwTKDJuy9TpqMqnDn+nAL9uiv4hne5
-         OYBidcg3yu2ywgO+iCIo14jrvs3OIARlLBF2VwJ9h2rHQpF5+amCjnBoHGDtw3GjrGCM
-         15VA==
+        bh=v/TGT+v2onwhR3DWI/C2XC90jEj/DLLYrXKmnR2IfXs=;
+        b=chyq2RM7TRkMav4kl6LfB1ZA12RrnS94Jl+ADgBTqgzkD5nViYFBMNoWTo4ueBForF
+         lzmlvsruUlaqklO8yLHrznKdhJMy2EBRos31/CMC++Zh0/i/cHFjNxJaZ03bxRfuU2yy
+         zyxNmJ7HQy1+5/hu0r0Y77IiVN1n7SLdx2VcI8qEMTgRcFlW7P/8UK8IK5HTs5JuQLSE
+         U4yRErpwg5506oVIvt4+v/fWS3TdAytsAD0yrlT3UC04hxiJInYJ1z39DuoI7r+YRebr
+         aU9+DFuNOYzkoE85VRhrWlFdqn4bJGjHyjVbGDTeywWVOShPaNDz/dmHhVKVgOorqeDT
+         +maQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695921927; x=1696526727;
+        d=1e100.net; s=20230601; t=1695921930; x=1696526730;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aeITMYfcld3mteb+NSEcBXXoBeyRBDS9X8Wlurs1dfY=;
-        b=vhH2TbiN48cKoNZ71PH8ifNoH+DpxKWab0bd4TDgvsXVsJ4FnSzK2V7xiR+Y+Lq++D
-         SCIRnRh0Cxn+MMBaWEiOKgwHxGi/z8QKsiYsHt+VjT54DI7hHi9kX86MFx/OHayUtt7a
-         SNI4x/Dn0iv4almGynrAz1+hFIWhLNOwjMR58TxUtn295G+Pvp+4ZOPWQ/9ZnZ7xhl7w
-         J3dKrQOIgonyiEopFOU42Xl3fre/Q8+t5NvQFM7WkGefruUkvATQY86f/8cE6Y2m4WX3
-         yhJ24anZchH9n4PcNMxms8IA2A86LZa3jkAQ+pXQ/LgqX5s04hrIs6hot5CWr+1XMKI5
-         lGLA==
-X-Gm-Message-State: AOJu0YwYqisrF5IFRqFsi4fD5WuJYHwwdi9Vv4/RSjPKsM2Ui9TDMUp5
-        z9J8f+EyoJ+6nsXULDEj5RNadh38wM8cPhzp/chYatHv
-X-Google-Smtp-Source: AGHT+IHJ2uM1YZlSZZijhxVhmTA+uIkKbBWR7+AMbCLOEfLXFUo8yZlvHfK1N05feFpjuEOISMg6zA==
-X-Received: by 2002:a17:906:104e:b0:9b2:bf2d:6b66 with SMTP id j14-20020a170906104e00b009b2bf2d6b66mr1576384ejj.7.1695921927081;
-        Thu, 28 Sep 2023 10:25:27 -0700 (PDT)
+        bh=v/TGT+v2onwhR3DWI/C2XC90jEj/DLLYrXKmnR2IfXs=;
+        b=N1SWXieT+oHh3pjOluQbyhaAwyWML+raOghNplQXhYpR37HSHXASz4ed3/gZFCAJah
+         SQf+DzyGWOeX3wiM7iHy3JNfmTNYxjcgj/CGCtJHTyW3M1OcOomIBt8De7tTWOFAew69
+         g+hXzqBt1ejXhyLzOqax9DJtKOU48hH9x5pYwWQ300Ibsph+82L9h1kly4VqAKfzwT+r
+         dAZuofRRWGS0/uojqEbnZVqpbpgRrwKmbukpr47+dFWafEjHdoS7gANqtdv0zuE14B5U
+         gMTZSCjEfP8jNdNtkVkI+H1I0JaOJQvc9ZMjYXIw5rOnZv/PoxdXPqXfYhwUgG9ARlnh
+         WeKg==
+X-Gm-Message-State: AOJu0YzLQ/KYw+k9Hh9ljz1QKRf85pXqfzwkmOqFQerrLrLwJafpooqG
+        kH3xMcWNKhdl2F1YDgR7qCEEBPYEdpP8FE2mUWLwfqcf
+X-Google-Smtp-Source: AGHT+IH0euAGYjrCZbgJ8RFIhz/xz08t6fWykn21eNHckLKUHkkweKDGKXgPC/XNOmxmryeAGfBWbA==
+X-Received: by 2002:a17:906:5185:b0:9ae:50de:1aaf with SMTP id y5-20020a170906518500b009ae50de1aafmr1750879ejk.4.1695921930540;
+        Thu, 28 Sep 2023 10:25:30 -0700 (PDT)
 Received: from localhost.localdomain ([45.147.210.162])
-        by smtp.gmail.com with ESMTPSA id j17-20020a170906279100b0099329b3ab67sm11151788ejc.71.2023.09.28.10.25.25
+        by smtp.gmail.com with ESMTPSA id j17-20020a170906279100b0099329b3ab67sm11151788ejc.71.2023.09.28.10.25.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Sep 2023 10:25:26 -0700 (PDT)
+        Thu, 28 Sep 2023 10:25:29 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
 To:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     peterz@infradead.org, andres@anarazel.de, tglx@linutronix.de,
         Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 3/8] futex: abstract out a __futex_wake_mark() helper
-Date:   Thu, 28 Sep 2023 11:25:12 -0600
-Message-Id: <20230928172517.961093-4-axboe@kernel.dk>
+Subject: [PATCH 5/8] futex: add wake_data to struct futex_q
+Date:   Thu, 28 Sep 2023 11:25:14 -0600
+Message-Id: <20230928172517.961093-6-axboe@kernel.dk>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230928172517.961093-1-axboe@kernel.dk>
 References: <20230928172517.961093-1-axboe@kernel.dk>
@@ -65,83 +65,35 @@ Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Move the unqueue and lock_ptr clear into a helper that futex_wake_mark()
-calls. Add it to the public functions as well, in preparation for using
-it outside the core futex code.
+With handling multiple futex_q for waitv, we cannot easily go from the
+futex_q to data related to that request or queue. Add a wake_data
+argument that belongs to the wake handler assigned.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- kernel/futex/futex.h    |  1 +
- kernel/futex/waitwake.c | 33 ++++++++++++++++++++++-----------
- 2 files changed, 23 insertions(+), 11 deletions(-)
+ kernel/futex/futex.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
-index 547f509b2c87..33835b81e0c3 100644
+index 33835b81e0c3..76f6c2e0f539 100644
 --- a/kernel/futex/futex.h
 +++ b/kernel/futex/futex.h
-@@ -219,6 +219,7 @@ extern int futex_wait_setup(u32 __user *uaddr, u32 val, unsigned int flags,
- 			    struct futex_q *q, struct futex_hash_bucket **hb);
- extern void futex_wait_queue(struct futex_hash_bucket *hb, struct futex_q *q,
- 				   struct hrtimer_sleeper *timeout);
-+extern bool __futex_wake_mark(struct futex_q *q);
- extern void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q);
- 
- extern int fault_in_user_writeable(u32 __user *uaddr);
-diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
-index 35c6a637a4bb..6fcf5f723719 100644
---- a/kernel/futex/waitwake.c
-+++ b/kernel/futex/waitwake.c
-@@ -106,20 +106,11 @@
-  * double_lock_hb() and double_unlock_hb(), respectively.
-  */
- 
--/*
-- * The hash bucket lock must be held when this is called.
-- * Afterwards, the futex_q must not be accessed. Callers
-- * must ensure to later call wake_up_q() for the actual
-- * wakeups to occur.
-- */
--void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
-+bool __futex_wake_mark(struct futex_q *q)
- {
--	struct task_struct *p = q->task;
--
- 	if (WARN(q->pi_state || q->rt_waiter, "refusing to wake PI futex\n"))
--		return;
-+		return false;
- 
--	get_task_struct(p);
- 	__futex_unqueue(q);
- 	/*
- 	 * The waiting task can free the futex_q as soon as q->lock_ptr = NULL
-@@ -130,6 +121,26 @@ void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
- 	 */
- 	smp_store_release(&q->lock_ptr, NULL);
- 
-+	return true;
-+}
-+
-+/*
-+ * The hash bucket lock must be held when this is called.
-+ * Afterwards, the futex_q must not be accessed. Callers
-+ * must ensure to later call wake_up_q() for the actual
-+ * wakeups to occur.
-+ */
-+void futex_wake_mark(struct wake_q_head *wake_q, struct futex_q *q)
-+{
-+	struct task_struct *p = q->task;
-+
-+	get_task_struct(p);
-+
-+	if (!__futex_wake_mark(q)) {
-+		put_task_struct(p);
-+		return;
-+	}
-+
- 	/*
- 	 * Queue the task for later wakeup for after we've released
- 	 * the hb->lock.
+@@ -148,6 +148,7 @@ typedef void (futex_wake_fn)(struct wake_q_head *wake_q, struct futex_q *q);
+  * @task:		the task waiting on the futex
+  * @lock_ptr:		the hash bucket lock
+  * @wake:		the wake handler for this queue
++ * @wake_data:		data associated with the wake handler
+  * @key:		the key the futex is hashed on
+  * @pi_state:		optional priority inheritance state
+  * @rt_waiter:		rt_waiter storage for use with requeue_pi
+@@ -173,6 +174,7 @@ struct futex_q {
+ 	struct task_struct *task;
+ 	spinlock_t *lock_ptr;
+ 	futex_wake_fn *wake;
++	void *wake_data;
+ 	union futex_key key;
+ 	struct futex_pi_state *pi_state;
+ 	struct rt_mutex_waiter *rt_waiter;
 -- 
 2.40.1
 
