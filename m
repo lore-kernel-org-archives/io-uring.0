@@ -2,134 +2,374 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36279E71D20
-	for <io-uring@archiver.kernel.org>; Fri, 29 Sep 2023 12:19:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 367DDE71D3F
+	for <io-uring@archiver.kernel.org>; Fri, 29 Sep 2023 14:05:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbjI2MTd (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Fri, 29 Sep 2023 08:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
+        id S231429AbjI2OFC (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 29 Sep 2023 10:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjI2MTc (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Fri, 29 Sep 2023 08:19:32 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B61CDB
-        for <io-uring@vger.kernel.org>; Fri, 29 Sep 2023 05:19:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9ad8a822508so1893572266b.0
-        for <io-uring@vger.kernel.org>; Fri, 29 Sep 2023 05:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695989968; x=1696594768; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6uKeGxO4ufV4P7wCwhce7Ud8UMY3xuDbgrMxlBH9ZuY=;
-        b=EyoTTJsPMI2DRDeHQzs7h00q6N/pbo4DpPPF20CblfwiPI915KOKjxathA2optzgHk
-         cMDyOFaPo4RaypOVFE1ROcYFieHNXFuLFyaDL+X4fP6ymXtV1I1EF6fJCKVeLh06KJah
-         +OwlFycPSIUh7mXkn5Ew72yagC1w9XyH482c1d40vdyAVHvI0WkdMMjbRaDchQn6GeNf
-         IdUyK51HkZpnJAjbqHGoXyq7ZkEPoSOy4XZmOqx61MJWya1knXhBtrv/o8meEasFf2Op
-         SyOpMgMPKuRBFiB9UVXzPKANtLOK/9SjFWU9WvG0hr9J2XmJtwUIgPbBtnc1k4QnlboA
-         3Qeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695989968; x=1696594768;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6uKeGxO4ufV4P7wCwhce7Ud8UMY3xuDbgrMxlBH9ZuY=;
-        b=FVM1XVxiBhfIvtgjErE5JP4+6xc+/qtbstRHSq+dfcixvEtLiQKIAS3auq4KcdgVda
-         /A/IZ43CIlL/Qcv4eou81f0djf+URJcUf8kpYR4nXHT0FlBPLPEttjlPGSq9T5a77HlN
-         My+BMq1BqNpDW5io+Btn3RPD6KVqS/dLLMly8h0+pHAqRybJ7SNRfTKPMA9Um6llwTPk
-         VW7P4Ig6sJxYr03UPfcfhAgKSGLvgY0L/fh7/B/176y69J7stkQon6Jb9uCrKHhDVP43
-         vlmJ7BFemnhnkDZWlV1UuWhJ3cnvco028xyUa8T+iHFDnIrlpuw+eM+S4BMn1bTHDdUT
-         ot6A==
-X-Gm-Message-State: AOJu0YwxjN3SfYTEM7pfMPs+JPaoJu3o028Qyh7XXbepLx8XeePgPIQo
-        XqcXFX+DRZwKNzSjPU3enM1V3M1kIhPH7g==
-X-Google-Smtp-Source: AGHT+IE3TR7BBrAr3DFmdtVfobjragTWsFkdvWpop8vtAAHuy2SxqVN9Qt3FuUqhXvceeHuWdixv1w==
-X-Received: by 2002:a17:906:76d4:b0:9a5:ca42:f3a9 with SMTP id q20-20020a17090676d400b009a5ca42f3a9mr3570584ejn.2.1695989968140;
-        Fri, 29 Sep 2023 05:19:28 -0700 (PDT)
-Received: from 127.0.0.1localhost (82-132-229-128.dab.02.net. [82.132.229.128])
-        by smtp.gmail.com with ESMTPSA id jx10-20020a170906ca4a00b009ad87d1be17sm12211878ejb.22.2023.09.29.05.19.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 05:19:27 -0700 (PDT)
-From:   Pavel Begunkov <asml.silence@gmail.com>
-To:     io-uring@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>, asml.silence@gmail.com
-Subject: [PATCH liburing 1/2] setup: add IORING_SETUP_NO_SQARRAY support
-Date:   Fri, 29 Sep 2023 13:09:40 +0100
-Message-ID: <2badb194856fad38ef1a9049e4cf121a9516b7f9.1695988793.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <cover.1695988793.git.asml.silence@gmail.com>
-References: <cover.1695988793.git.asml.silence@gmail.com>
+        with ESMTP id S232911AbjI2OFB (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 29 Sep 2023 10:05:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1671A8;
+        Fri, 29 Sep 2023 07:04:59 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0B4951F390;
+        Fri, 29 Sep 2023 14:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1695996298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nMbeaIYXvbq/ZWZAZSKM3DOZf7GxOAPwhSfkSzXE8t8=;
+        b=JtV8swiw0D1i8aVrxYf/Vqs+nAVJG5IGGNSCNoj849C7XMRkDpMgi7UbHCea47YqK83hqC
+        uwRzTnbG3MhGKqyzA4jfUOsz5bTS/npeJgxHPMmOu6bnQqUqEDKwKgtXx5MyxS+KODdRBO
+        M4wZNdmVpd2ijJBpKMpINq2OyY1ar/Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1695996298;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nMbeaIYXvbq/ZWZAZSKM3DOZf7GxOAPwhSfkSzXE8t8=;
+        b=MiUZ4m76XxBMnES0KJBJyhWvce8iLz7BsEBlUqp0SHIlIO9nLnADpV2uBsTKq7xLMkbzxH
+        PurlohJZ3sr03fAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84F781390A;
+        Fri, 29 Sep 2023 14:04:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KplxHYnZFmXqEQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Fri, 29 Sep 2023 14:04:57 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 14ef5f16;
+        Fri, 29 Sep 2023 14:04:56 +0000 (UTC)
+From:   Luis Henriques <lhenriques@suse.de>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        io-uring@vger.kernel.org, Luis Henriques <lhenriques@suse.de>
+Subject: [RFC PATCH] fs: add AT_EMPTY_PATH support to unlinkat()
+Date:   Fri, 29 Sep 2023 15:04:56 +0100
+Message-Id: <20230929140456.23767-1-lhenriques@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-IORING_SETUP_NO_SQARRAY removes sq_array from the kernel, and hence when
-set liburing should not try to mmap and initialise it.
+The linkat() syscall has support for the AT_EMPTY_PATH linux-specific flag
+for a long time.  This flag allows callers to use an empty string in the
+'oldpath' parameter, and to create the link to the file descriptor instead.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+This patch modifies the unlinkat() syscall to use a similar semantic for
+this flag, i.e. to allow for an empty string to indicate that we want to
+unlink the file descriptor inode.
+
+Signed-off-by: Luis Henriques <lhenriques@suse.de>
 ---
- src/include/liburing/io_uring.h |  5 +++++
- src/setup.c                     | 14 +++++++++-----
- 2 files changed, 14 insertions(+), 5 deletions(-)
+Hi!
 
-diff --git a/src/include/liburing/io_uring.h b/src/include/liburing/io_uring.h
-index 10a6ef0..793d64f 100644
---- a/src/include/liburing/io_uring.h
-+++ b/src/include/liburing/io_uring.h
-@@ -185,6 +185,11 @@ enum {
+I'm sending an early RFC of this patch specially because I'm not sure how
+useful it is, and if support for this flag is really welcome.
+
+The code is already a bit messy, and adding support for this extra flag
+makes it even worse.  Maybe it could be refactored; suggestions are
+welcome.
+
+Also, this patch is only lightly tested -- it doesn't seem to break
+anything, but I'll need to test it some more.  But as I said, I wanted to
+get some feedback to make sure this patch is worth the trouble.
+
+To be honest, this patch wasn't my idea: I remember seeing someone
+somewhere suggesting or asking this flag to be added.  But it was long
+time ago, I've written down the idea but I forgot keep a reference to the
+source.  So, I hope the patch _may_ be useful to someone and that it's
+purpose isn't just to make these two syscalls more symmetric (which is a
+honourable goal in itself, if you ask my opinion! :-) ).
+
+Cheers,
+--
+Luís
+
+ fs/coredump.c |   2 +-
+ fs/init.c     |   4 +-
+ fs/internal.h |   4 +-
+ fs/namei.c    | 112 +++++++++++++++++++++++++++++++-------------------
+ io_uring/fs.c |   4 +-
+ 5 files changed, 76 insertions(+), 50 deletions(-)
+
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 9d235fa14ab9..3e0b291fd60f 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -672,7 +672,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 			 * If it doesn't exist, that's fine. If there's some
+ 			 * other problem, we'll catch it at the filp_open().
+ 			 */
+-			do_unlinkat(AT_FDCWD, getname_kernel(cn.corename));
++			do_unlinkat(AT_FDCWD, getname_kernel(cn.corename), 0);
+ 		}
+ 
+ 		/*
+diff --git a/fs/init.c b/fs/init.c
+index 9684406a8416..03ce144b4a63 100644
+--- a/fs/init.c
++++ b/fs/init.c
+@@ -217,7 +217,7 @@ int __init init_symlink(const char *oldname, const char *newname)
+ 
+ int __init init_unlink(const char *pathname)
+ {
+-	return do_unlinkat(AT_FDCWD, getname_kernel(pathname));
++	return do_unlinkat(AT_FDCWD, getname_kernel(pathname), 0);
+ }
+ 
+ int __init init_mkdir(const char *pathname, umode_t mode)
+@@ -241,7 +241,7 @@ int __init init_mkdir(const char *pathname, umode_t mode)
+ 
+ int __init init_rmdir(const char *pathname)
+ {
+-	return do_rmdir(AT_FDCWD, getname_kernel(pathname));
++	return do_rmdir(AT_FDCWD, getname_kernel(pathname), 0);
+ }
+ 
+ int __init init_utimes(char *filename, struct timespec64 *ts)
+diff --git a/fs/internal.h b/fs/internal.h
+index d64ae03998cc..77018a31812b 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -53,8 +53,8 @@ extern int finish_clean_context(struct fs_context *fc);
   */
- #define IORING_SETUP_REGISTERED_FD_ONLY	(1U << 15)
+ extern int filename_lookup(int dfd, struct filename *name, unsigned flags,
+ 			   struct path *path, struct path *root);
+-int do_rmdir(int dfd, struct filename *name);
+-int do_unlinkat(int dfd, struct filename *name);
++int do_rmdir(int dfd, struct filename *name, int flags);
++int do_unlinkat(int dfd, struct filename *name, int flags);
+ int may_linkat(struct mnt_idmap *idmap, const struct path *link);
+ int do_renameat2(int olddfd, struct filename *oldname, int newdfd,
+ 		 struct filename *newname, unsigned int flags);
+diff --git a/fs/namei.c b/fs/namei.c
+index 156a570d7831..4327fffd8330 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -4218,37 +4218,50 @@ int vfs_rmdir(struct mnt_idmap *idmap, struct inode *dir,
+ }
+ EXPORT_SYMBOL(vfs_rmdir);
  
-+/*
-+ * Removes indirection through the SQ index array.
-+ */
-+#define IORING_SETUP_NO_SQARRAY		(1U << 16)
+-int do_rmdir(int dfd, struct filename *name)
++int do_rmdir(int dfd, struct filename *name, int flags)
+ {
+ 	int error;
+-	struct dentry *dentry;
++	struct dentry *dentry, *parent;
+ 	struct path path;
+ 	struct qstr last;
+ 	int type;
+ 	unsigned int lookup_flags = 0;
+-retry:
+-	error = filename_parentat(dfd, name, lookup_flags, &path, &last, &type);
+-	if (error)
+-		goto exit1;
++	bool empty_path = (flags & AT_EMPTY_PATH);
+ 
+-	switch (type) {
+-	case LAST_DOTDOT:
+-		error = -ENOTEMPTY;
+-		goto exit2;
+-	case LAST_DOT:
+-		error = -EINVAL;
+-		goto exit2;
+-	case LAST_ROOT:
+-		error = -EBUSY;
+-		goto exit2;
++retry:
++	if (empty_path) {
++		error = filename_lookup(dfd, name, 0, &path, NULL);
++		if (error)
++			goto exit1;
++		parent = path.dentry->d_parent;
++		dentry = path.dentry;
++	} else {
++		error = filename_parentat(dfd, name, lookup_flags, &path, &last,
++					  &type);
++		if (error)
++			goto exit1;
 +
- enum io_uring_op {
- 	IORING_OP_NOP,
- 	IORING_OP_READV,
-diff --git a/src/setup.c b/src/setup.c
-index 2dcb5aa..a0e8296 100644
---- a/src/setup.c
-+++ b/src/setup.c
-@@ -76,7 +76,8 @@ static void io_uring_setup_ring_pointers(struct io_uring_params *p,
- 	sq->kring_entries = sq->ring_ptr + p->sq_off.ring_entries;
- 	sq->kflags = sq->ring_ptr + p->sq_off.flags;
- 	sq->kdropped = sq->ring_ptr + p->sq_off.dropped;
--	sq->array = sq->ring_ptr + p->sq_off.array;
-+	if (!(p->flags & IORING_SETUP_NO_SQARRAY))
-+		sq->array = sq->ring_ptr + p->sq_off.array;
++		switch (type) {
++		case LAST_DOTDOT:
++			error = -ENOTEMPTY;
++			goto exit2;
++		case LAST_DOT:
++			error = -EINVAL;
++			goto exit2;
++		case LAST_ROOT:
++			error = -EBUSY;
++			goto exit2;
++		}
++		parent = path.dentry;
+ 	}
  
- 	cq->khead = cq->ring_ptr + p->cq_off.head;
- 	cq->ktail = cq->ring_ptr + p->cq_off.tail;
-@@ -220,7 +221,8 @@ static int io_uring_alloc_huge(unsigned entries, struct io_uring_params *p,
- 	ring_mem = cq_entries * sizeof(struct io_uring_cqe);
- 	if (p->flags & IORING_SETUP_CQE32)
- 		ring_mem *= 2;
--	ring_mem += sq_entries * sizeof(unsigned);
-+	if (!(p->flags & IORING_SETUP_NO_SQARRAY))
-+		ring_mem += sq_entries * sizeof(unsigned);
- 	mem_used = sqes_mem + ring_mem;
- 	mem_used = (mem_used + page_size - 1) & ~(page_size - 1);
+ 	error = mnt_want_write(path.mnt);
+ 	if (error)
+ 		goto exit2;
  
-@@ -335,11 +337,13 @@ static int __io_uring_queue_init_params(unsigned entries, struct io_uring *ring,
- 	/*
- 	 * Directly map SQ slots to SQEs
- 	 */
--	sq_array = ring->sq.array;
- 	sq_entries = ring->sq.ring_entries;
--	for (index = 0; index < sq_entries; index++)
--		sq_array[index] = index;
+-	inode_lock_nested(path.dentry->d_inode, I_MUTEX_PARENT);
+-	dentry = lookup_one_qstr_excl(&last, path.dentry, lookup_flags);
++	inode_lock_nested(parent->d_inode, I_MUTEX_PARENT);
++	if (!empty_path)
++		dentry = lookup_one_qstr_excl(&last, path.dentry, lookup_flags);
+ 	error = PTR_ERR(dentry);
+ 	if (IS_ERR(dentry))
+ 		goto exit3;
+@@ -4259,11 +4272,12 @@ int do_rmdir(int dfd, struct filename *name)
+ 	error = security_path_rmdir(&path, dentry);
+ 	if (error)
+ 		goto exit4;
+-	error = vfs_rmdir(mnt_idmap(path.mnt), path.dentry->d_inode, dentry);
++	error = vfs_rmdir(mnt_idmap(path.mnt), parent->d_inode, dentry);
+ exit4:
+-	dput(dentry);
++	if (!empty_path)
++		dput(dentry);
+ exit3:
+-	inode_unlock(path.dentry->d_inode);
++	inode_unlock(parent->d_inode);
+ 	mnt_drop_write(path.mnt);
+ exit2:
+ 	path_put(&path);
+@@ -4278,7 +4292,7 @@ int do_rmdir(int dfd, struct filename *name)
  
-+	if (!(p->flags & IORING_SETUP_NO_SQARRAY)) {
-+		sq_array = ring->sq.array;
-+		for (index = 0; index < sq_entries; index++)
-+			sq_array[index] = index;
+ SYSCALL_DEFINE1(rmdir, const char __user *, pathname)
+ {
+-	return do_rmdir(AT_FDCWD, getname(pathname));
++	return do_rmdir(AT_FDCWD, getname(pathname), 0);
+ }
+ 
+ /**
+@@ -4357,48 +4371,60 @@ EXPORT_SYMBOL(vfs_unlink);
+  * writeout happening, and we don't want to prevent access to the directory
+  * while waiting on the I/O.
+  */
+-int do_unlinkat(int dfd, struct filename *name)
++int do_unlinkat(int dfd, struct filename *name, int flags)
+ {
+ 	int error;
+-	struct dentry *dentry;
++	struct dentry *dentry, *parent;
+ 	struct path path;
+ 	struct qstr last;
+ 	int type;
+ 	struct inode *inode = NULL;
+ 	struct inode *delegated_inode = NULL;
+ 	unsigned int lookup_flags = 0;
+-retry:
+-	error = filename_parentat(dfd, name, lookup_flags, &path, &last, &type);
+-	if (error)
+-		goto exit1;
++	bool empty_path = (flags & AT_EMPTY_PATH);
+ 
+-	error = -EISDIR;
+-	if (type != LAST_NORM)
+-		goto exit2;
++retry:
++	if (empty_path) {
++		error = filename_lookup(dfd, name, 0, &path, NULL);
++		if (error)
++			goto exit1;
++		parent = path.dentry->d_parent;
++		dentry = path.dentry;
++	} else {
++		error = filename_parentat(dfd, name, lookup_flags, &path, &last, &type);
++		if (error)
++			goto exit1;
++		error = -EISDIR;
++		if (type != LAST_NORM)
++			goto exit2;
++		parent = path.dentry;
 +	}
- 	ring->features = p->features;
- 	ring->flags = p->flags;
- 	ring->enter_ring_fd = fd;
--- 
-2.41.0
-
+ 
+ 	error = mnt_want_write(path.mnt);
+ 	if (error)
+ 		goto exit2;
+ retry_deleg:
+-	inode_lock_nested(path.dentry->d_inode, I_MUTEX_PARENT);
+-	dentry = lookup_one_qstr_excl(&last, path.dentry, lookup_flags);
++	inode_lock_nested(parent->d_inode, I_MUTEX_PARENT);
++	if (!empty_path)
++		dentry = lookup_one_qstr_excl(&last, parent, lookup_flags);
+ 	error = PTR_ERR(dentry);
+ 	if (!IS_ERR(dentry)) {
+ 
+ 		/* Why not before? Because we want correct error value */
+-		if (last.name[last.len] || d_is_negative(dentry))
++		if ((!empty_path && last.name[last.len]) || d_is_negative(dentry))
+ 			goto slashes;
+ 		inode = dentry->d_inode;
+ 		ihold(inode);
+ 		error = security_path_unlink(&path, dentry);
+ 		if (error)
+ 			goto exit3;
+-		error = vfs_unlink(mnt_idmap(path.mnt), path.dentry->d_inode,
++		error = vfs_unlink(mnt_idmap(path.mnt), parent->d_inode,
+ 				   dentry, &delegated_inode);
+ exit3:
+-		dput(dentry);
++		if (!empty_path)
++			dput(dentry);
+ 	}
+-	inode_unlock(path.dentry->d_inode);
++	inode_unlock(parent->d_inode);
+ 	if (inode)
+ 		iput(inode);	/* truncate the inode here */
+ 	inode = NULL;
+@@ -4429,19 +4455,19 @@ int do_unlinkat(int dfd, struct filename *name)
+ 	goto exit3;
+ }
+ 
+-SYSCALL_DEFINE3(unlinkat, int, dfd, const char __user *, pathname, int, flag)
++SYSCALL_DEFINE3(unlinkat, int, dfd, const char __user *, pathname, int, flags)
+ {
+-	if ((flag & ~AT_REMOVEDIR) != 0)
++	if ((flags & ~(AT_REMOVEDIR | AT_EMPTY_PATH)) != 0)
+ 		return -EINVAL;
+ 
+-	if (flag & AT_REMOVEDIR)
+-		return do_rmdir(dfd, getname(pathname));
+-	return do_unlinkat(dfd, getname(pathname));
++	if (flags & AT_REMOVEDIR)
++		return do_rmdir(dfd, getname_uflags(pathname, flags), flags);
++	return do_unlinkat(dfd, getname_uflags(pathname, flags), flags);
+ }
+ 
+ SYSCALL_DEFINE1(unlink, const char __user *, pathname)
+ {
+-	return do_unlinkat(AT_FDCWD, getname(pathname));
++	return do_unlinkat(AT_FDCWD, getname(pathname), 0);
+ }
+ 
+ /**
+diff --git a/io_uring/fs.c b/io_uring/fs.c
+index f6a69a549fd4..c62e53367072 100644
+--- a/io_uring/fs.c
++++ b/io_uring/fs.c
+@@ -135,9 +135,9 @@ int io_unlinkat(struct io_kiocb *req, unsigned int issue_flags)
+ 	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
+ 
+ 	if (un->flags & AT_REMOVEDIR)
+-		ret = do_rmdir(un->dfd, un->filename);
++		ret = do_rmdir(un->dfd, un->filename, 0);
+ 	else
+-		ret = do_unlinkat(un->dfd, un->filename);
++		ret = do_unlinkat(un->dfd, un->filename, 0);
+ 
+ 	req->flags &= ~REQ_F_NEED_CLEANUP;
+ 	io_req_set_res(req, ret, 0);
