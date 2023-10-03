@@ -2,115 +2,110 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB659E7AD75
-	for <io-uring@archiver.kernel.org>; Tue,  3 Oct 2023 16:02:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5786E7AD77
+	for <io-uring@archiver.kernel.org>; Tue,  3 Oct 2023 16:25:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240262AbjJCQCm (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Tue, 3 Oct 2023 12:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S240371AbjJCQZ2 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Tue, 3 Oct 2023 12:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239189AbjJCQCl (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Tue, 3 Oct 2023 12:02:41 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F95AA7
-        for <io-uring@vger.kernel.org>; Tue,  3 Oct 2023 09:02:38 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-351265d0d67so1291405ab.0
-        for <io-uring@vger.kernel.org>; Tue, 03 Oct 2023 09:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1696348957; x=1696953757; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RGVHSWA8WBzexndhf7CtPYjmGQKCJH3W0EMnIrurk+k=;
-        b=0TfOoUgh9h3aV0tW/b7MUP4OciwkW8PLxe9s1sBkHjT/XwweWbY8L72+5vpCPFmD40
-         2jRh2Iq1OmQEdfJy7SFet3PebWMqc6tXXGT7SOuuRXTsiquS5ikdTQBEtfGS7cIJe5cP
-         68W5KlnWtYRj1MkGSV7Dps+Lmx7X3Al+RgiCCgbdZFTCiaQq270ZwFvagG/BaH7LrnB0
-         t8pysaus3JWkTOLK63ErMvgK7McIS0F/og5fMkIW7m8sRIBzcG51SBO/H3l9+oG6MZzI
-         cC0eD5JkJWYRUN8HRUi8CbVznBA61Kptmu2y7TDp+wZ45ZrEJkHbfED7JH5QHob48HKB
-         Zo9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696348957; x=1696953757;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RGVHSWA8WBzexndhf7CtPYjmGQKCJH3W0EMnIrurk+k=;
-        b=trHrazL6S8nu6/NJkqDBOdUrTkp/SpRbm5d29i26MfjwLDTcnKwoccx07i3kA634mN
-         M0B1LvXu+jm4ay18bBu22a0z9LZOvdtwJZG1z/4euDX9FgcEkvChPZ4hl41Hd7TmkCPX
-         JTiklx8OhTV85V0F7VE9khEySXRa16GM7pNdG9cwtNA4yg1gUirOQfOWm7zwOyCVSXiw
-         tijwZFceJYsdcRhhGbE5Kp9gZahugFn/8opefvVROFO2hD1cd98HDRD5rV69A71sJeJH
-         4s2nWjvQf0sId8TCtgYr1E9GHJaGGE4GFoxLzkeYilyt1AvcLDZ3r+sAw/K01hGXP+d4
-         m0Qw==
-X-Gm-Message-State: AOJu0YzCclW6WKQCgahvzkIWZvuP8h3NWEnNV02imbzbNnc8+pWpzFQv
-        EUwp6Dl6gkK84WXHm5zbX9wY97edgJBztRm/3WU=
-X-Google-Smtp-Source: AGHT+IH0KpxqrLgQQXVFZBVKbtmzTSL2voT1jW+ajwp6udZllg8n++8m0ob2Gvj74QuFweVYYLtcCQ==
-X-Received: by 2002:a92:d44a:0:b0:34f:a4f0:4fc4 with SMTP id r10-20020a92d44a000000b0034fa4f04fc4mr13874518ilm.2.1696348956760;
-        Tue, 03 Oct 2023 09:02:36 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id fn12-20020a056638640c00b00439e3c9f958sm421928jab.129.2023.10.03.09.02.35
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Oct 2023 09:02:35 -0700 (PDT)
-Message-ID: <4c9eddf5-75d8-44cf-9365-a0dd3d0b4c05@kernel.dk>
-Date:   Tue, 3 Oct 2023 10:02:35 -0600
+        with ESMTP id S240393AbjJCQZ1 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Tue, 3 Oct 2023 12:25:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C042AE4
+        for <io-uring@vger.kernel.org>; Tue,  3 Oct 2023 09:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1696350277;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4DzOwwrGl+rWC4Xvdqgvja1SHqj8VZmooGCS0fYik8Q=;
+        b=M8SW/zVrzy5gnHedMkfPA5XiYarkvydyJ/CCKvXP+MZ5LQLBqOYllixnf7x2r3gUXqIdd1
+        dVELpTQYCwvFLMlRgNPil3Ef54cIW9tmQuVsaoMIQAJAN/Tx6bTk13cykItmi8lsMt4JLa
+        7tPFoC+fxk5XRz4RJ7NtDJA+htMaLHc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-610-QxZWxcVFNxaRc4Ypbpjc5w-1; Tue, 03 Oct 2023 12:24:18 -0400
+X-MC-Unique: QxZWxcVFNxaRc4Ypbpjc5w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 402A1811E7B;
+        Tue,  3 Oct 2023 16:24:18 +0000 (UTC)
+Received: from segfault.boston.devel.redhat.com (segfault.boston.devel.redhat.com [10.19.60.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2643140C6EA8;
+        Tue,  3 Oct 2023 16:24:18 +0000 (UTC)
+From:   Jeff Moyer <jmoyer@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring <io-uring@vger.kernel.org>
+Subject: Re: [PATCH] io_uring: don't allow IORING_SETUP_NO_MMAP rings on highmem pages
+References: <4c9eddf5-75d8-44cf-9365-a0dd3d0b4c05@kernel.dk>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date:   Tue, 03 Oct 2023 12:30:02 -0400
+In-Reply-To: <4c9eddf5-75d8-44cf-9365-a0dd3d0b4c05@kernel.dk> (Jens Axboe's
+        message of "Tue, 3 Oct 2023 10:02:35 -0600")
+Message-ID: <x49edibpt2t.fsf@segfault.boston.devel.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To:     io-uring <io-uring@vger.kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring: don't allow IORING_SETUP_NO_MMAP rings on highmem
- pages
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On at least arm32, but presumably any arch with highmem, if the
-application passes in memory that resides in highmem for the rings,
-then we should fail that ring creation. We fail it with -EINVAL, which
-is what kernels that don't support IORING_SETUP_NO_MMAP will do as well.
+Hi, Jens,
 
-Cc: stable@vger.kernel.org
-Fixes: 03d89a2de25b ("io_uring: support for user allocated memory for rings/sqes")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Jens Axboe <axboe@kernel.dk> writes:
 
----
+> On at least arm32, but presumably any arch with highmem, if the
+> application passes in memory that resides in highmem for the rings,
+> then we should fail that ring creation. We fail it with -EINVAL, which
+> is what kernels that don't support IORING_SETUP_NO_MMAP will do as well.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 03d89a2de25b ("io_uring: support for user allocated memory for rings/sqes")
+> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>
+> ---
+>
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index 783ed0fff71b..d839a80a6751 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -2686,7 +2686,7 @@ static void *__io_uaddr_map(struct page ***pages, unsigned short *npages,
+>  {
+>  	struct page **page_array;
+>  	unsigned int nr_pages;
+> -	int ret;
+> +	int ret, i;
+>  
+>  	*npages = 0;
+>  
+> @@ -2716,6 +2716,20 @@ static void *__io_uaddr_map(struct page ***pages, unsigned short *npages,
+>  	 */
+>  	if (page_array[0] != page_array[ret - 1])
+>  		goto err;
+> +
+> +	/*
+> +	 * Can't support mapping user allocated ring memory on 32-bit archs
+> +	 * where it could potentially reside in highmem. Just fail those with
+> +	 * -EINVAL, just like we did on kernels that didn't support this
+> +	 * feature.
+> +	 */
+> +	for (i = 0; i < nr_pages; i++) {
+> +		if (PageHighMem(page_array[i])) {
+> +			ret = -EINVAL;
+> +			goto err;
+> +		}
+> +	}
+> +
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 783ed0fff71b..d839a80a6751 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2686,7 +2686,7 @@ static void *__io_uaddr_map(struct page ***pages, unsigned short *npages,
- {
- 	struct page **page_array;
- 	unsigned int nr_pages;
--	int ret;
-+	int ret, i;
- 
- 	*npages = 0;
- 
-@@ -2716,6 +2716,20 @@ static void *__io_uaddr_map(struct page ***pages, unsigned short *npages,
- 	 */
- 	if (page_array[0] != page_array[ret - 1])
- 		goto err;
-+
-+	/*
-+	 * Can't support mapping user allocated ring memory on 32-bit archs
-+	 * where it could potentially reside in highmem. Just fail those with
-+	 * -EINVAL, just like we did on kernels that didn't support this
-+	 * feature.
-+	 */
-+	for (i = 0; i < nr_pages; i++) {
-+		if (PageHighMem(page_array[i])) {
-+			ret = -EINVAL;
-+			goto err;
-+		}
-+	}
-+
- 	*pages = page_array;
- 	*npages = nr_pages;
- 	return page_to_virt(page_array[0]);
+What do you think about throwing a printk_once in there that explains
+the problem?  I'm worried that this will fail somewhat randomly, and it
+may not be apparent to the user why.  We should also add documentation,
+of course, and encourage developers to add fallbacks for this case.
 
--- 
-Jens Axboe
+-Jeff
 
