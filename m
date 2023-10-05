@@ -2,83 +2,127 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F7E9E936ED
-	for <io-uring@archiver.kernel.org>; Thu,  5 Oct 2023 00:05:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CE58E936F0
+	for <io-uring@archiver.kernel.org>; Thu,  5 Oct 2023 00:05:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244174AbjJEAFq (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 4 Oct 2023 20:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
+        id S244177AbjJEAFs (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 4 Oct 2023 20:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244099AbjJEAFp (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 4 Oct 2023 20:05:45 -0400
+        with ESMTP id S244181AbjJEAFr (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 4 Oct 2023 20:05:47 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB0AD8
-        for <io-uring@vger.kernel.org>; Wed,  4 Oct 2023 17:05:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B3E90
+        for <io-uring@vger.kernel.org>; Wed,  4 Oct 2023 17:05:44 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BEE282184B;
-        Thu,  5 Oct 2023 00:05:39 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BF5232184D;
+        Thu,  5 Oct 2023 00:05:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1696464339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=+94kmpWi75IQuJo6TEJXMmOSHiZ1LAuh8zeHZ0Z796Q=;
-        b=S0+8Tp2ls/pYguPBWT/fxBaNxOsNOXNqDb2EnB+UX/VA6cNjv29REz8+4GcYbOe6nh6WQM
-        uwdrFA7FEWcklnfjRzGJXTqJ1A+qjjiUnN/W6N1+LoISEuLEuWEetiQhteSaD7wt22XJfq
-        I/RyL8L0HsiX7p9KQB5/jbxBE/TpZ5E=
+        t=1696464342; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ty502RkSJFPG3ucRyk91UT+7ZBN/d0lPIC6t0Cm+qwM=;
+        b=xlaQzam9CvcTAAEH7onIC7YL2551FwTGq+GlXeCi+FJmwHOOsKLz7PfqmxWq8JS2pARiPl
+        7iroLCw+nG11Qzc4cVFfGGaxNgDhAPhx6NYbtfGtyYRwAmt7UANkzCpJ4Jn6NGhOzs0huK
+        4DBtwD9lOun79+excv1/js5jocXLsQ4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1696464339;
+        s=susede2_ed25519; t=1696464342;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=+94kmpWi75IQuJo6TEJXMmOSHiZ1LAuh8zeHZ0Z796Q=;
-        b=qkq3fPf995ilHoO61HCHtlBr1Kgz0GqESAm28k9Ekuja8wKCoVdkmhMQQNoHMvbx+5Mwxo
-        EFamimeTvR+IlOBA==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ty502RkSJFPG3ucRyk91UT+7ZBN/d0lPIC6t0Cm+qwM=;
+        b=jjhHPEhnVzcFNFN860+mlGTKwl7TGUgTQteQesreq79EZEkekw9TE631yd4wUDgHVvyKrS
+        kY5bNuZuaShcrwDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 89AE11331E;
-        Thu,  5 Oct 2023 00:05:39 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8AFAF1331E;
+        Thu,  5 Oct 2023 00:05:42 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id j2wNHNP9HWV8DQAAMHmgww
-        (envelope-from <krisman@suse.de>); Thu, 05 Oct 2023 00:05:39 +0000
+        id k76OHNb9HWWFDQAAMHmgww
+        (envelope-from <krisman@suse.de>); Thu, 05 Oct 2023 00:05:42 +0000
 From:   Gabriel Krisman Bertazi <krisman@suse.de>
 To:     axboe@kernel.dk
 Cc:     io-uring@vger.kernel.org, jmoyer@redhat.com,
         Gabriel Krisman Bertazi <krisman@suse.de>
-Subject: [PATCH 0/3] trivial fixes and a cleanup of provided buffers
-Date:   Wed,  4 Oct 2023 20:05:28 -0400
-Message-ID: <20231005000531.30800-1-krisman@suse.de>
+Subject: [PATCH 2/3] io_uring: Allow the full buffer id space for provided buffers
+Date:   Wed,  4 Oct 2023 20:05:30 -0400
+Message-ID: <20231005000531.30800-3-krisman@suse.de>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231005000531.30800-1-krisman@suse.de>
+References: <20231005000531.30800-1-krisman@suse.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Jens,
+nbufs tracks the number of buffers and not the last bgid. In 16-bit, we
+have 2^16 valid buffers, but the check mistakenly rejects the last
+bid. Let's fix it to make the interface consistent with the
+documentation.
 
-I'm resubmitting the slab conversion for provided buffers with the
-suggestions from Jeff (thanks!) for your consideration, and appended 2
-minor fixes related to kbuf in the patchset. Since the patchset grew
-from 1 to 3 patches, i pretended it is not a v2 and restart the
-counting from 1.
+Fixes: ddf0322db79c ("io_uring: add IORING_OP_PROVIDE_BUFFERS")
+Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
+---
+ io_uring/kbuf.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-thanks,
-
-Gabriel Krisman Bertazi (3):
-  io_uring: Fix check of BID wrapping in provided buffers
-  io_uring: Allow the full buffer id space for provided buffers
-  io_uring: Use slab for struct io_buffer objects
-
- include/linux/io_uring_types.h |  2 --
- io_uring/io_uring.c            |  4 ++-
- io_uring/io_uring.h            |  1 +
- io_uring/kbuf.c                | 58 +++++++++++++++++++---------------
- 4 files changed, 37 insertions(+), 28 deletions(-)
-
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index 52dba81c3f50..12a357348733 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -19,12 +19,15 @@
+ 
+ #define BGID_ARRAY	64
+ 
++/* BIDs are addressed by a 16-bit field in a CQE */
++#define MAX_BIDS_PER_BGID (1 << 16)
++
+ struct io_provide_buf {
+ 	struct file			*file;
+ 	__u64				addr;
+ 	__u32				len;
+ 	__u32				bgid;
+-	__u16				nbufs;
++	__u32				nbufs;
+ 	__u16				bid;
+ };
+ 
+@@ -289,7 +292,7 @@ int io_remove_buffers_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 		return -EINVAL;
+ 
+ 	tmp = READ_ONCE(sqe->fd);
+-	if (!tmp || tmp > USHRT_MAX)
++	if (!tmp || tmp > MAX_BIDS_PER_BGID)
+ 		return -EINVAL;
+ 
+ 	memset(p, 0, sizeof(*p));
+@@ -332,7 +335,7 @@ int io_provide_buffers_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe
+ 		return -EINVAL;
+ 
+ 	tmp = READ_ONCE(sqe->fd);
+-	if (!tmp || tmp > USHRT_MAX)
++	if (!tmp || tmp > MAX_BIDS_PER_BGID)
+ 		return -E2BIG;
+ 	p->nbufs = tmp;
+ 	p->addr = READ_ONCE(sqe->addr);
+@@ -352,7 +355,7 @@ int io_provide_buffers_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe
+ 	tmp = READ_ONCE(sqe->off);
+ 	if (tmp > USHRT_MAX)
+ 		return -E2BIG;
+-	if (tmp + p->nbufs > USHRT_MAX)
++	if (tmp + p->nbufs > MAX_BIDS_PER_BGID)
+ 		return -EINVAL;
+ 	p->bid = tmp;
+ 	return 0;
 -- 
 2.42.0
 
