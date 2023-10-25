@@ -2,179 +2,116 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93948C07545
-	for <io-uring@archiver.kernel.org>; Wed, 25 Oct 2023 14:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 099CFC25B72
+	for <io-uring@archiver.kernel.org>; Wed, 25 Oct 2023 14:39:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233628AbjJYOMR (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 25 Oct 2023 10:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S234992AbjJYOj4 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 25 Oct 2023 10:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235079AbjJYOMQ (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 25 Oct 2023 10:12:16 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6237189
-        for <io-uring@vger.kernel.org>; Wed, 25 Oct 2023 07:12:12 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-7a6643ba679so40554339f.1
-        for <io-uring@vger.kernel.org>; Wed, 25 Oct 2023 07:12:12 -0700 (PDT)
+        with ESMTP id S1344790AbjJYOEA (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 25 Oct 2023 10:04:00 -0400
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DB8189
+        for <io-uring@vger.kernel.org>; Wed, 25 Oct 2023 07:03:57 -0700 (PDT)
+Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-7a6643ba679so40446139f.1
+        for <io-uring@vger.kernel.org>; Wed, 25 Oct 2023 07:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1698243132; x=1698847932; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C+mW7kMSuK3NzW1jiI5GCJyWXx0fI+ce4Y2QfsD3XRY=;
-        b=nlSODgFbo1p5BzL1PHGIBUMskZf6maO27H+CUooRUhjY33V15xVoXRAAhPujShTFIo
-         YWt3hwp2RGV3mU2WaRtaGEnU3r7uSvAevPEKyxICFzqWRMmdeJxK5H93QzFMV6tPKvnd
-         LBlMFps7i6QG58n4GkswhwhFJyCq+ohMe/fu//H6297+WZxZgLpqBANI6yrovR0fdCyk
-         ey+cVeBURP6jSNxZNjR2HgGaBajJ1EliXnARnj/eJ+E6OZKD2pEf6MvowsZIqC82iKzi
-         WG2jnauOlF6e0++hJlEI+hpWn7dL4Ou3Zbu7PT4RTWQEj/a+Niw4/2yXUnU8hphO8xvk
-         26qA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1698242636; x=1698847436; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xmmBJe4qx/Z0FecJmP2HKoWoGSGv5MNLqFmWTEvkhKI=;
+        b=a/8qgnaEyPA2+d8L9scDYh0UYOxTJMS3BK0vc5+KINadxbd8jQdWq6+LEwx98nOVly
+         QYPXB7WikXnW7AijKNEUhH3X3mNTwxws0+hr9itZeAWfE7zkEv+j0sQaEQyDGjTfPI5m
+         Z63kUysNIdyjWSZS7XeBfu+j3muxPa0v1WQoll8aqn8y9vFZVyrvshAYBcKoxkC03yT9
+         Jsl+Syxfw0fyhDGofGoSgoVI/H2VyOu0CF4ILccExRaYfztxPUiyBg3E20syJ87UiipT
+         ubsIRvA5ZZO5cfEixyMI9Idhv53GILJcjwqxvJauCzg0yB9iWlMK+e/gRdweVnuXGgAv
+         jqOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698243132; x=1698847932;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C+mW7kMSuK3NzW1jiI5GCJyWXx0fI+ce4Y2QfsD3XRY=;
-        b=CKTMslSLA4SQL9zFJflPaMNgLxMWSvzODg/FF70fFg4bz6Py4ZARrel6FRdrYaPMsB
-         9HJKLWq6NEwlOTRFE7dSPBe4HJrjLFujmhU6SQeslivWdwMSV+3W8xEfw5cB/S/Fkcd5
-         GqpnKbub+7kkrhnvbaRSombtA5ezcU4zgSLnoE0ztcc4baVPRYw8GxtPcO3l7a7cifou
-         Chz0j70eYm4SUWatCtXBvYfOT5jaV8QSOVyk5IOHSMCi0HsI7Xm43cwuFQ4bLOeOtevZ
-         T66oZ+qpu9pmsp9Mevq1K5z7YyncLJAdGSOFmEnpNK3u2xOWY14Jvtw7VoYqAjIWIU/0
-         Os0w==
-X-Gm-Message-State: AOJu0YyfACj6l9NiFVw4ktwL4D7jw8DLHP4naEeeb+PBimQdq9T+McQ6
-        ulZA59D2qUCLJLB0N3xBO/6ENA==
-X-Google-Smtp-Source: AGHT+IFChEatE+Fny22th1+AGzrOabn3wHmYs+Rhxa0zTSdwxCaOLOVJSN0mxltsEevwJG0E0S995g==
-X-Received: by 2002:a05:6602:120b:b0:79a:c487:2711 with SMTP id y11-20020a056602120b00b0079ac4872711mr16247020iot.0.1698243131888;
-        Wed, 25 Oct 2023 07:12:11 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698242636; x=1698847436;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xmmBJe4qx/Z0FecJmP2HKoWoGSGv5MNLqFmWTEvkhKI=;
+        b=Rh3SdhFLb+6x4OMxzSn3+YcP9jHQ77xLazrBzdjgYclLH2F8FLkf3Y2tjExit9vJCG
+         DWOTmmSO2WLUgwN9IxcbQTfI/HVKJNzNcyffJjMRbK1XHDURUflcuWTDYvEauJxJXye+
+         4PiG65ceKafFDRCdjvs7o0z1gMN1C9tJS41GZFqQIgp29Ojspk4mRAGlXuJG7M/DeCsN
+         ZuE3f9WkFkrGiav3xoJpx+2Lvi2Ec4BlrhWYbia/e9RoZ1ALvRM2n760WVF9GiDKjsi6
+         boXEPDwC/qFdZkbrKNG6d/BXTjqtDzgTQEoyozjBSbLZfUxOsENQGQxfQG5VjJ7iV32e
+         8qqw==
+X-Gm-Message-State: AOJu0YwQSpEiQ7nesrQ3xU9zLyJQ9Uf2SFFUdhmry3Z92LH0VbGYL5QC
+        42KxFqfftsEaDpn0gMZj8xnXFQ5FuQBac4hDW9SmZA==
+X-Google-Smtp-Source: AGHT+IFYmFywKXAzWWhg4qfxKE9/pCPls+VDtDPHa5McGJtGQk0XUmWH7jSIpHWbdFzkwKTT1x9JWg==
+X-Received: by 2002:a05:6e02:ec1:b0:357:a986:18ee with SMTP id i1-20020a056e020ec100b00357a98618eemr12760905ilk.1.1698242635601;
+        Wed, 25 Oct 2023 07:03:55 -0700 (PDT)
 Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056638118a00b0042b1c02d17csm3452821jas.2.2023.10.25.07.12.11
+        by smtp.gmail.com with ESMTPSA id y13-20020a92090d000000b0034fccc27c11sm3735496ilg.76.2023.10.25.07.03.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 07:12:11 -0700 (PDT)
-Message-ID: <9c39b20e-2cbd-4715-be04-2d93759ca269@kernel.dk>
-Date:   Wed, 25 Oct 2023 08:12:10 -0600
+        Wed, 25 Oct 2023 07:03:55 -0700 (PDT)
+Message-ID: <48d0ea0b-af74-4a2e-9961-0286466050a9@kernel.dk>
+Date:   Wed, 25 Oct 2023 08:03:54 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/fdinfo: park SQ thread while retrieving cpu/pid
 Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Gabriel Krisman Bertazi <krisman@suse.de>
-Cc:     io-uring <io-uring@vger.kernel.org>
-References: <64f28d0f-b2b9-4ff4-8e2f-efdf1c63d3d4@kernel.dk>
- <65368e95.170a0220.4fb79.0929SMTPIN_ADDED_BROKEN@mx.google.com>
- <23557993-424d-42a8-b832-2e59f164a577@kernel.dk>
- <103b6f05-831c-e875-478a-7e9f8187575e@gmail.com>
- <de2c75e1-8f0a-4dfe-81f2-fa2637096c6d@kernel.dk>
- <0a2d4d82-b54b-7643-4cbe-455fe3ea87df@gmail.com>
+To:     io-uring <io-uring@vger.kernel.org>
+Cc:     Andres Freund <andres@anarazel.de>,
+        Dave Chinner <david@fromorbit.com>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>
 From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <0a2d4d82-b54b-7643-4cbe-455fe3ea87df@gmail.com>
+Subject: [PATCH] io_uring/rw: disable IOCB_DIO_CALLER_COMP
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-On 10/25/23 8:09 AM, Pavel Begunkov wrote:
-> On 10/25/23 14:44, Jens Axboe wrote:
->> On 10/25/23 6:09 AM, Pavel Begunkov wrote:
->>> On 10/23/23 16:27, Jens Axboe wrote:
->>>> On 10/23/23 9:17 AM, Gabriel Krisman Bertazi wrote:
->>>>> Jens Axboe <axboe@kernel.dk> writes:
->>>>>
->>>>>> We could race with SQ thread exit, and if we do, we'll hit a NULL pointer
->>>>>> dereference. Park the SQPOLL thread while getting the task cpu and pid for
->>>>>> fdinfo, this ensures we have a stable view of it.
->>>>>>
->>>>>> Cc: stable@vger.kernel.org
->>>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=218032
->>>>>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
->>>>>>
->>>>>> ---
->>>>>>
->>>>>> diff --git a/io_uring/fdinfo.c b/io_uring/fdinfo.c
->>>>>> index c53678875416..cd2a0c6b97c4 100644
->>>>>> --- a/io_uring/fdinfo.c
->>>>>> +++ b/io_uring/fdinfo.c
->>>>>> @@ -53,7 +53,6 @@ static __cold int io_uring_show_cred(struct seq_file *m, unsigned int id,
->>>>>>    __cold void io_uring_show_fdinfo(struct seq_file *m, struct file *f)
->>>>>>    {
->>>>>>        struct io_ring_ctx *ctx = f->private_data;
->>>>>> -    struct io_sq_data *sq = NULL;
->>>>>>        struct io_overflow_cqe *ocqe;
->>>>>>        struct io_rings *r = ctx->rings;
->>>>>>        unsigned int sq_mask = ctx->sq_entries - 1, cq_mask = ctx->cq_entries - 1;
->>>>>> @@ -64,6 +63,7 @@ __cold void io_uring_show_fdinfo(struct seq_file *m, struct file *f)
->>>>>>        unsigned int cq_shift = 0;
->>>>>>        unsigned int sq_shift = 0;
->>>>>>        unsigned int sq_entries, cq_entries;
->>>>>> +    int sq_pid = -1, sq_cpu = -1;
->>>>>>        bool has_lock;
->>>>>>        unsigned int i;
->>>>>>    @@ -143,13 +143,18 @@ __cold void io_uring_show_fdinfo(struct seq_file *m, struct file *f)
->>>>>>        has_lock = mutex_trylock(&ctx->uring_lock);
->>>>>>          if (has_lock && (ctx->flags & IORING_SETUP_SQPOLL)) {
->>>>>> -        sq = ctx->sq_data;
->>>>>> -        if (!sq->thread)
->>>>>> -            sq = NULL;
->>>>>> +        struct io_sq_data *sq = ctx->sq_data;
->>>>>> +
->>>>>> +        io_sq_thread_park(sq);
->>>>>> +        if (sq->thread) {
->>>>>> +            sq_pid = task_pid_nr(sq->thread);
->>>>>> +            sq_cpu = task_cpu(sq->thread);
->>>>>> +        }
->>>>>> +        io_sq_thread_unpark(sq);
->>>>>
->>>>> Jens,
->>>>>
->>>>> io_sq_thread_park will try to wake the sqpoll, which is, at least,
->>>>> unnecessary. But I'm thinking we don't want to expose the ability to
->>>>> schedule the sqpoll from procfs, which can be done by any unrelated
->>>>> process.
->>>>>
->>>>> To solve the bug, it should be enough to synchronize directly on
->>>>> sqd->lock, preventing sq->thread from going away inside the if leg.
->>>>> Granted, it is might take longer if the sqpoll is busy, but reading
->>>>> fdinfo is not supposed to be fast.  Alternatively, don't call
->>>>> wake_process in this case?
->>>>
->>>> I did think about that but just went with the exported API. But you are
->>>> right, it's a bit annoying that it'd also wake the thread, in case it
->>>
->>> Waking it up is not a problem but without parking sq thread won't drop
->>> the lock until it's time to sleep, which might be pretty long leaving
->>> the /proc read stuck on the lock uninterruptibly.
->>>
->>> Aside from parking vs lock, there is a lock inversion now:
->>>
->>> proc read                   | SQPOLL
->>>                              |
->>> try_lock(ring) // success   |
->>>                              | woken up
->>>                              | lock(sqd); // success
->>> lock(sqd); // stuck         |
->>>                              | try to submit requests
->>>                              | -- lock(ring); // stuck
->>
->> Yeah good point, forgot we nest these opposite of what you'd expect.
->> Honestly I think the fix here is just to turn it into a trylock. Yes
->> that'll miss some cases where we could've gotten the pid/cpu, but
->> doesn't seem worth caring about.
->>
->> IOW, fold in this incremental.
-> 
-> Should work, otherwise you probably can just park first.
+If an application does O_DIRECT writes with io_uring and the file system
+supports IOCB_DIO_CALLER_COMP, then completions of the dio write side is
+done from the task_work that will post the completion event for said
+write as well.
 
-In general I think it's better to have the observational side be less of
-an impact, which is why I liked not doing the parking. Sometimes apps do
-stupid things and monitor fdinfo/ etc continually. As it's possible to
-get the task/cpu anyway via other means, should be better to just skip
-if we don't get the lock.
+Whenever a dio write is done against a file, the inode i_dio_count is
+elevated. This enables other callers to use inode_dio_wait() to wait for
+previous writes to complete. If we defer the full dio completion to
+task_work, we are dependent on that task_work being run before the
+inode i_dio_count can be decremented.
 
-> Long term it'd be nice to make sqpoll to not hold sqd->lock during
-> submission + polling as it currently does. Park callers sleep on the
-> lock, but if we replace it with some struct completion the rest
-> should be easy enough.
+If the same task that issues io_uring dio writes with
+IOCB_DIO_CALLER_COMP performs a synchronous system call that calls
+inode_dio_wait(), then we can deadlock as we're blocked sleeping on
+the event to become true, but not processing the completions that will
+result in the inode i_dio_count being decremented.
 
-Yeah agree.
+Until we can guarantee that this is the case, then disable the deferred
+caller completions.
+
+Fixes: 099ada2c8726 ("io_uring/rw: add write support for IOCB_DIO_CALLER_COMP")
+Reported-by: Andres Freund <andres@anarazel.de>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+
+---
+
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index c8c822fa7980..807d83ab756e 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -913,15 +913,6 @@ int io_write(struct io_kiocb *req, unsigned int issue_flags)
+ 		kiocb_start_write(kiocb);
+ 	kiocb->ki_flags |= IOCB_WRITE;
+ 
+-	/*
+-	 * For non-polled IO, set IOCB_DIO_CALLER_COMP, stating that our handler
+-	 * groks deferring the completion to task context. This isn't
+-	 * necessary and useful for polled IO as that can always complete
+-	 * directly.
+-	 */
+-	if (!(kiocb->ki_flags & IOCB_HIPRI))
+-		kiocb->ki_flags |= IOCB_DIO_CALLER_COMP;
+-
+ 	if (likely(req->file->f_op->write_iter))
+ 		ret2 = call_write_iter(req->file, kiocb, &s->iter);
+ 	else if (req->file->f_op->write)
 
 -- 
 Jens Axboe
