@@ -2,117 +2,84 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 099CFC25B72
-	for <io-uring@archiver.kernel.org>; Wed, 25 Oct 2023 14:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37A48C0032E
+	for <io-uring@archiver.kernel.org>; Wed, 25 Oct 2023 14:42:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234992AbjJYOj4 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 25 Oct 2023 10:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S234367AbjJYOmy (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Wed, 25 Oct 2023 10:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344790AbjJYOEA (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 25 Oct 2023 10:04:00 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DB8189
-        for <io-uring@vger.kernel.org>; Wed, 25 Oct 2023 07:03:57 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-7a6643ba679so40446139f.1
-        for <io-uring@vger.kernel.org>; Wed, 25 Oct 2023 07:03:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1698242636; x=1698847436; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xmmBJe4qx/Z0FecJmP2HKoWoGSGv5MNLqFmWTEvkhKI=;
-        b=a/8qgnaEyPA2+d8L9scDYh0UYOxTJMS3BK0vc5+KINadxbd8jQdWq6+LEwx98nOVly
-         QYPXB7WikXnW7AijKNEUhH3X3mNTwxws0+hr9itZeAWfE7zkEv+j0sQaEQyDGjTfPI5m
-         Z63kUysNIdyjWSZS7XeBfu+j3muxPa0v1WQoll8aqn8y9vFZVyrvshAYBcKoxkC03yT9
-         Jsl+Syxfw0fyhDGofGoSgoVI/H2VyOu0CF4ILccExRaYfztxPUiyBg3E20syJ87UiipT
-         ubsIRvA5ZZO5cfEixyMI9Idhv53GILJcjwqxvJauCzg0yB9iWlMK+e/gRdweVnuXGgAv
-         jqOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698242636; x=1698847436;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xmmBJe4qx/Z0FecJmP2HKoWoGSGv5MNLqFmWTEvkhKI=;
-        b=Rh3SdhFLb+6x4OMxzSn3+YcP9jHQ77xLazrBzdjgYclLH2F8FLkf3Y2tjExit9vJCG
-         DWOTmmSO2WLUgwN9IxcbQTfI/HVKJNzNcyffJjMRbK1XHDURUflcuWTDYvEauJxJXye+
-         4PiG65ceKafFDRCdjvs7o0z1gMN1C9tJS41GZFqQIgp29Ojspk4mRAGlXuJG7M/DeCsN
-         ZuE3f9WkFkrGiav3xoJpx+2Lvi2Ec4BlrhWYbia/e9RoZ1ALvRM2n760WVF9GiDKjsi6
-         boXEPDwC/qFdZkbrKNG6d/BXTjqtDzgTQEoyozjBSbLZfUxOsENQGQxfQG5VjJ7iV32e
-         8qqw==
-X-Gm-Message-State: AOJu0YwQSpEiQ7nesrQ3xU9zLyJQ9Uf2SFFUdhmry3Z92LH0VbGYL5QC
-        42KxFqfftsEaDpn0gMZj8xnXFQ5FuQBac4hDW9SmZA==
-X-Google-Smtp-Source: AGHT+IFYmFywKXAzWWhg4qfxKE9/pCPls+VDtDPHa5McGJtGQk0XUmWH7jSIpHWbdFzkwKTT1x9JWg==
-X-Received: by 2002:a05:6e02:ec1:b0:357:a986:18ee with SMTP id i1-20020a056e020ec100b00357a98618eemr12760905ilk.1.1698242635601;
-        Wed, 25 Oct 2023 07:03:55 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id y13-20020a92090d000000b0034fccc27c11sm3735496ilg.76.2023.10.25.07.03.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 07:03:55 -0700 (PDT)
-Message-ID: <48d0ea0b-af74-4a2e-9961-0286466050a9@kernel.dk>
-Date:   Wed, 25 Oct 2023 08:03:54 -0600
+        with ESMTP id S234466AbjJYOmx (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Wed, 25 Oct 2023 10:42:53 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26364B0;
+        Wed, 25 Oct 2023 07:42:52 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AFB5C433C7;
+        Wed, 25 Oct 2023 14:42:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698244971;
+        bh=mLkOdv4b8i2eFv8X9BAoS+Y8GxKrlJPAVyrio6dKXsM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WNCl4OydQlz7ER2rwKCubLGIZ3l6bw4RfTfDTHRwG8h8gTk5uAEHNCOW8nJkh8/tm
+         v5IfrECbzJ87hTFtOria90MP+xZ4DZbIsQ5XcbF26nSne5s5gsICe9I6JXeuoS1rfW
+         CsYzCE84HAr/8BSLezYABVL1m12erLdFWL1gzO5alf2Jd7bkzGlMewwilXEWFuNsgu
+         ttJFQI5GaWOUmjfDPOCvkxO/hlR1MWe3F3gJPM/HStqJimqpQRj7dvjC3TF0qnADq2
+         b37MkX7iKEpEA3T7MGAnMy0g9kprK4eUquTYUPpkHxbfcYwPlm3+/uYujolQMiMXOQ
+         9U3YEHdaoWIqA==
+Date:   Wed, 25 Oct 2023 08:42:48 -0600
+From:   Keith Busch <kbusch@kernel.org>
+To:     Kanchan Joshi <joshi.k@samsung.com>
+Cc:     Keith Busch <kbusch@meta.com>, linux-block@vger.kernel.org,
+        linux-nvme@lists.infradead.org, io-uring@vger.kernel.org,
+        axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com
+Subject: Re: [PATCH 1/4] block: bio-integrity: add support for user buffers
+Message-ID: <ZTkpaHa8fM4xhLz4@kbusch-mbp.dhcp.thefacebook.com>
+References: <20231018151843.3542335-1-kbusch@meta.com>
+ <CGME20231018152817epcas5p454a337b03087ccaf8935a022884b7cd2@epcas5p4.samsung.com>
+ <20231018151843.3542335-2-kbusch@meta.com>
+ <1ca15dc4-6192-c557-2871-d2afbf19dd97@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To:     io-uring <io-uring@vger.kernel.org>
-Cc:     Andres Freund <andres@anarazel.de>,
-        Dave Chinner <david@fromorbit.com>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring/rw: disable IOCB_DIO_CALLER_COMP
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ca15dc4-6192-c557-2871-d2afbf19dd97@samsung.com>
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-If an application does O_DIRECT writes with io_uring and the file system
-supports IOCB_DIO_CALLER_COMP, then completions of the dio write side is
-done from the task_work that will post the completion event for said
-write as well.
+On Wed, Oct 25, 2023 at 06:21:55PM +0530, Kanchan Joshi wrote:
+> On 10/18/2023 8:48 PM, Keith Busch wrote:
+> >   }
+> >   EXPORT_SYMBOL(bio_integrity_add_page);
+> >   
+> > +int bio_integrity_map_user(struct bio *bio, void __user *ubuf, unsigned int len,
+> > +			   u32 seed, u32 maxvecs)
+> > +{
+> > +	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
+> > +	unsigned long align = q->dma_pad_mask | queue_dma_alignment(q);
+> > +	struct page *stack_pages[UIO_FASTIOV];
+> > +	size_t offset = offset_in_page(ubuf);
+> > +	unsigned long ptr = (uintptr_t)ubuf;
+> > +	struct page **pages = stack_pages;
+> > +	struct bio_integrity_payload *bip;
+> > +	int npages, ret, i;
+> > +
+> > +	if (bio_integrity(bio) || ptr & align || maxvecs > UIO_FASTIOV)
+> > +		return -EINVAL;
+> > +
+> > +	bip = bio_integrity_alloc(bio, GFP_KERNEL, maxvecs);
+> > +	if (IS_ERR(bip))
+> > +		return PTR_ERR(bip);
+> > +
+> > +	ret = pin_user_pages_fast(ptr, UIO_FASTIOV, FOLL_WRITE, pages);
+> 
+> Why not pass maxvecs here? If you pass UIO_FASTIOV, it will map those 
+> many pages here. And will result into a leak (missed unpin) eventually 
+> (see below).
 
-Whenever a dio write is done against a file, the inode i_dio_count is
-elevated. This enables other callers to use inode_dio_wait() to wait for
-previous writes to complete. If we defer the full dio completion to
-task_work, we are dependent on that task_work being run before the
-inode i_dio_count can be decremented.
+The 'maxvecs' is for the number of bvecs, and UIO_FASTIOV is for the
+number of pages. A single bvec can contain multiple pages, so the idea
+was to attempt merging if multiple pages were required.
 
-If the same task that issues io_uring dio writes with
-IOCB_DIO_CALLER_COMP performs a synchronous system call that calls
-inode_dio_wait(), then we can deadlock as we're blocked sleeping on
-the event to become true, but not processing the completions that will
-result in the inode i_dio_count being decremented.
-
-Until we can guarantee that this is the case, then disable the deferred
-caller completions.
-
-Fixes: 099ada2c8726 ("io_uring/rw: add write support for IOCB_DIO_CALLER_COMP")
-Reported-by: Andres Freund <andres@anarazel.de>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
----
-
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index c8c822fa7980..807d83ab756e 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -913,15 +913,6 @@ int io_write(struct io_kiocb *req, unsigned int issue_flags)
- 		kiocb_start_write(kiocb);
- 	kiocb->ki_flags |= IOCB_WRITE;
- 
--	/*
--	 * For non-polled IO, set IOCB_DIO_CALLER_COMP, stating that our handler
--	 * groks deferring the completion to task context. This isn't
--	 * necessary and useful for polled IO as that can always complete
--	 * directly.
--	 */
--	if (!(kiocb->ki_flags & IOCB_HIPRI))
--		kiocb->ki_flags |= IOCB_DIO_CALLER_COMP;
--
- 	if (likely(req->file->f_op->write_iter))
- 		ret2 = call_write_iter(req->file, kiocb, &s->iter);
- 	else if (req->file->f_op->write)
-
--- 
-Jens Axboe
-
+This patch though didn't calculate the pages right. Next version I'm
+working on uses iov_iter instead. V2 also retains a kernel copy
+fallback.
