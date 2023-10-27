@@ -2,120 +2,92 @@ Return-Path: <io-uring-owner@vger.kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 181C2C25B47
-	for <io-uring@archiver.kernel.org>; Thu, 26 Oct 2023 02:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52663C25B48
+	for <io-uring@archiver.kernel.org>; Fri, 27 Oct 2023 18:19:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjJZCsj (ORCPT <rfc822;io-uring@archiver.kernel.org>);
-        Wed, 25 Oct 2023 22:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
+        id S232301AbjJ0ST6 (ORCPT <rfc822;io-uring@archiver.kernel.org>);
+        Fri, 27 Oct 2023 14:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjJZCsi (ORCPT
-        <rfc822;io-uring@vger.kernel.org>); Wed, 25 Oct 2023 22:48:38 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AB7A4;
-        Wed, 25 Oct 2023 19:48:35 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 165815C025C;
-        Wed, 25 Oct 2023 22:48:32 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 25 Oct 2023 22:48:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1698288512; x=1698374912; bh=p4
-        mm4cDQKu961WJfXf5ZKxas8+Y9WvFVFAtM+Ijwt/o=; b=k4S+qME+vDCFI/L+OE
-        XhNh0TqTdiBzriTPN5QsC9VvK6NV7nRTgPgoflUo/Y15/p+SOYJChzCnnvvmUd8I
-        Do6TnS/l2w1DNQaC1iOX9X8HTIlUta5vP7HmYBwLJSCAyQr+1VBpMN9eSDi+6/8L
-        JQl2cfx+sQgmzrCPVBdJlCylt+iDrEgThoMNL3aVmpXtym84z87A2m/YSJ4HwRJ2
-        LbXnBcuvlbkAw7wz1IMdPq51p0hlKNQkBSuyGp1vRvhu5RXI+tDtXJzXo1LqPX9R
-        DA8BX+MzBEn+95d0qWPlS6QGorvS6X6G4WaetdVSWe7Kcq9ORkxmp47o8Ze9LaJm
-        cdPA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1698288512; x=1698374912; bh=p4mm4cDQKu961
-        WJfXf5ZKxas8+Y9WvFVFAtM+Ijwt/o=; b=m37B8FGmXPiLCc/wixUuL3tx5MeWN
-        WEV60oXL8y0gVVM6KpZp5O6HuLZSV0rjWdQqW8EyyFds3CHZ3FbJxXbgOpmv4fif
-        9t7bFiqNtfu6+UYovL/Z7wtCNAXOIjpAPiaKpcmS6CVZ+XFrFJq4e9fHwrTMMUbs
-        ViqWd0t4nd5ERoVmkgQCvl/nQouQwRrvhkphcaeeA7IZoGQOBLIE9xNaQgM+DHqy
-        0+M6o3X0Izp66zzVTXcoJA3mEfEGBCEnlZJP74bJ9gXYG0jA1/QiZSSLktlxKV+S
-        0eG856i7RlL8AoCCq8kMZX9zkhBjF6iu2UgpgrN8A1VwEOFm1tJM2rE8g==
-X-ME-Sender: <xms:f9M5ZeU1dIt9cfQJ7qS3wBOpMIQGjnlwQESweSSCRl7kZg90RsB1kg>
-    <xme:f9M5ZanM-FUf5OmTE2tJj68dUdw6ulCKBBDQkYNeVUCOuhieHn1gwYR3VWcPv8QFC
-    ug2EGuusn1xnGS2fA>
-X-ME-Received: <xmr:f9M5ZSZS-1MWjXlshEB1KHVR4G3ge99u8NPsxT6c2V1HGI3N-rkzhF7ry-1obz9O1W9OedCYI6UJEKhNrskS485jvq3ZOELYlOMvrqmqcy0V5RNdirYpxNIyasjB>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledugdeivdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgurhgv
-    shcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtffrrg
-    htthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteevudei
-    tedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grnhgurhgvshesrghnrghrrgiivghlrdguvg
-X-ME-Proxy: <xmx:f9M5ZVWKu4F5X-DEJrWOUPifnOs31R0_UQbFRqLMaVqXVq8QpKEYIQ>
-    <xmx:f9M5ZYkIwjOWSJdlvQK6OTpGPmHv3W1VbW_UKaP_SDHxfQAWCaUWQg>
-    <xmx:f9M5ZadUe4qrbz4oamXvJv7LqT7MyNns6TimcIUCzqxeyTaUdyf78w>
-    <xmx:gNM5ZRfPz3Z-EL5qoeIfU84DQ-FTiFEcdK-pab72Trhe8Slka9CEgQ>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 25 Oct 2023 22:48:31 -0400 (EDT)
-Date:   Wed, 25 Oct 2023 19:48:29 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Dave Chinner <david@fromorbit.com>, Theodore Ts'o <tytso@mit.edu>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        linux-ext4@vger.kernel.org,
-        Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
-        gustavo.padovan@collabora.com, zsm@google.com, garrick@google.com,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        io-uring@vger.kernel.org
-Subject: Re: task hung in ext4_fallocate #2
-Message-ID: <20231026024829.vcnlmdmwi5hjjquz@awork3.anarazel.de>
-References: <20231018004335.GA593012@mit.edu>
- <20231018025009.ulkykpefwdgpfvzf@awork3.anarazel.de>
- <ZTcZ9+n+jX6UDrgd@dread.disaster.area>
- <74921cba-6237-4303-bb4c-baa22aaf497b@kernel.dk>
- <ab4f311b-9700-4d3d-8f2e-09ccbcfb3df5@kernel.dk>
- <ZThcATP9zOoxb4Ec@dread.disaster.area>
- <4ace2109-3d05-4ca0-b582-f7b8db88a0ca@kernel.dk>
- <20231025153135.kfnldzle3rglmfvp@awork3.anarazel.de>
- <b5578447-81f6-4207-b83d-812da7c981a5@kernel.dk>
- <20231025161405.eroaskwdauj57wz6@awork3.anarazel.de>
+        with ESMTP id S230101AbjJ0ST5 (ORCPT
+        <rfc822;io-uring@vger.kernel.org>); Fri, 27 Oct 2023 14:19:57 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF37F196
+        for <io-uring@vger.kernel.org>; Fri, 27 Oct 2023 11:19:55 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39RE5Yg8006135
+        for <io-uring@vger.kernel.org>; Fri, 27 Oct 2023 11:19:55 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=14K4aSvh9zzHeXc3eYmxxneQuIpMkFPFLr74aX4jAbM=;
+ b=TGJuFBE1aQjjfurggepHZ27mNihKdx2Cf+0ozDFYC96is4pMipoL1wxmKukgQ4daoIXR
+ U8S8JrYgx1OEvPlyXy2wyqzAiNZKENQHJIVAiv0oaJcQDpEdu+m/19eYTERHWTvLL0J6
+ cfICDNy98PCDuTh1hB0uxaZb3cCg24DbS6XjF5pPnA6yT6PGfaHpqUGLuiY8OAyIxkKn
+ FOoMGsjTg8pwNSSfbiiUSAydR3tYLBN2V8xm7OOAQ1b8feFhNTJhsFmJrTaKYZSrl5Gi
+ eWKAzepqdRvvehXHXf0nKNB3LUXGbpa025Q/1V1Dnq/1Qs15LKoIYnAN1NcUvOEZw2Zw HA== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3u0c4pu407-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <io-uring@vger.kernel.org>; Fri, 27 Oct 2023 11:19:55 -0700
+Received: from twshared16118.09.ash9.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Fri, 27 Oct 2023 11:19:54 -0700
+Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
+        id 3ADAD20D0939E; Fri, 27 Oct 2023 11:19:36 -0700 (PDT)
+From:   Keith Busch <kbusch@meta.com>
+To:     <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <io-uring@vger.kernel.org>
+CC:     <axboe@kernel.dk>, <hch@lst.de>, <joshi.k@samsung.com>,
+        <martin.petersen@oracle.com>, Keith Busch <kbusch@kernel.org>
+Subject: [PATCHv2 0/4] block integrity: directly map user space addresses
+Date:   Fri, 27 Oct 2023 11:19:25 -0700
+Message-ID: <20231027181929.2589937-1-kbusch@meta.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231025161405.eroaskwdauj57wz6@awork3.anarazel.de>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: AkH1BcwNxQQOJGJjyG7GlMufJdPriwfL
+X-Proofpoint-ORIG-GUID: AkH1BcwNxQQOJGJjyG7GlMufJdPriwfL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-27_17,2023-10-27_01,2023-05-22_02
 Precedence: bulk
 List-ID: <io-uring.vger.kernel.org>
 X-Mailing-List: io-uring@vger.kernel.org
 
-Hi,
+From: Keith Busch <kbusch@kernel.org>
 
-On 2023-10-25 09:14:05 -0700, Andres Freund wrote:
-> On 2023-10-25 09:36:01 -0600, Jens Axboe wrote:
-> > On 10/25/23 9:31 AM, Andres Freund wrote:
-> > > Hi,
-> > >
-> > > On 2023-10-24 18:34:05 -0600, Jens Axboe wrote:
-> > >> Yeah I'm going to do a revert of the io_uring side, which effectively
-> > >> disables it. Then a revised series can be done, and when done, we could
-> > >> bring it back.
-> > >
-> > > I'm queueing a test to confirm that the revert actually fixes things.
-> > > Is there still benefit in testing your other patch in addition
-> > > upstream?
-> >
-> > Don't think there's much point to testing the quick hack, I believe it
-> > should work. So testing the most recent revert is useful, though I also
-> > fully expect that to work.
->
-> I'll leave it running for a few hours, just to be sure.
+Handling passthrough metadata ("integrity") today introduces overhead
+and complications that we can avoid if we just map user space addresses
+directly. This patch series implements that, falling back to a kernel
+bounce buffer if necessary.
 
-Quite a few hours and > 15TBW written later, no hang....
+v1->v2:
 
-Greetings,
+  Bounce to a kernel buffer if the user buffer fails to map to the
+  device's integrity constraints. The user address remains pinned for
+  the duration of the IO, which makes the copy out on completion safe
+  within interrupt context.
 
-Andres Freund
+  Merged up to current io_uring branch, which moved the driver owned
+  flags to a different file.
+
+Keith Busch (4):
+  block: bio-integrity: directly map user buffers
+  nvme: use bio_integrity_map_user
+  iouring: remove IORING_URING_CMD_POLLED
+  io_uring: remove uring_cmd cookie
+
+ block/bio-integrity.c     | 202 ++++++++++++++++++++++++++++++++++++++
+ drivers/nvme/host/ioctl.c | 174 +++++---------------------------
+ include/linux/bio.h       |   9 ++
+ include/linux/io_uring.h  |   9 +-
+ io_uring/uring_cmd.c      |   1 -
+ 5 files changed, 240 insertions(+), 155 deletions(-)
+
+--=20
+2.34.1
+
