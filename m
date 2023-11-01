@@ -1,52 +1,52 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08D514AA5;
-	Wed,  1 Nov 2023 22:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C3A14F6E
+	for <io-uring@vger.kernel.org>; Wed,  1 Nov 2023 22:47:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H+5z91mB"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1E09EC433C7;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9N9X65n"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56B95C433CB;
 	Wed,  1 Nov 2023 22:47:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1698878847;
-	bh=zuk24VyIhH3b0aIqqYro+nOwM0P1lXalIY2BpZxiaXo=;
+	bh=b2oT5gvPaU3k2pCiHXeYhBxPtUKkjM/j2f5Mfnr5VBs=;
 	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=H+5z91mBjITwQRq6y2zStlFK6kXVe9JyosfXxW5MBxkMGkIGBiOEdFyrQYqT6Krqg
-	 uWgskv6r/XGRZSeOycFZoSCj5gKDVpx3WVcVc/bWm/3+qgaHGhAbzVfbqXxPJrjgID
-	 CdStVDCZnlW1NjRIQOo0PiGpPIzIVzgLCP7jSynruIbIe/mD/uhCgelFFzmGWq143C
-	 Bw1GX0NQKMOA4Pj7+Up+Sr0ie2xICGglTy47z+nfLSyUnV2V7ibRV3QQGt/6LiBQqe
-	 Xtvj1C7DzT/cgOD8Xntl98SoVfdGd6tqQKJ9nHZFwcYLVvnBIOQGe4/aXGvTewZhiT
-	 T8WEloeXCzXsQ==
+	b=S9N9X65nTfNB9fr3xA4vDZVIEQ3SbBmu226gYUTsXts100W8Z3cnkvv0ARoG1mc7g
+	 UbQRwbzNoAq7WQtH/S+W8tlgswUBu4TCky/qLaJQ/VJstIvkb27AZTnM45hVxfQR4F
+	 1MJp7RTDeRMjFixQaZllZeJ9LpqMYsjZQJBw2y4qHf+/Qt7shwXSjIVWlj+lmBXzCS
+	 lYxmX3jdyLhvh1ummYQ5R+cc2PP6C6sJFAzTu1PGQNs9e7f5PSTWuICtDHyieEla80
+	 2tlP4Gz/HtlcWjtLOm2Sb86ilojVbG7WNlKvP7AGDiqlvn0O/x2FoNHC9CV1DJ20VQ
+	 a49uv+LXM6vTQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DC50C43168;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 412A3C4316B;
 	Wed,  1 Nov 2023 22:47:27 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring support for get/setsockopt
+Subject: Re: [GIT PULL] io_uring futex support
 From: pr-tracker-bot@kernel.org
-In-Reply-To: <7a0893f0-bae8-4aee-9e05-7c81354fc829@kernel.dk>
-References: <7a0893f0-bae8-4aee-9e05-7c81354fc829@kernel.dk>
+In-Reply-To: <49ec1791-f353-48f2-a39a-378b5463db42@kernel.dk>
+References: <49ec1791-f353-48f2-a39a-378b5463db42@kernel.dk>
 X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <7a0893f0-bae8-4aee-9e05-7c81354fc829@kernel.dk>
-X-PR-Tracked-Remote: git://git.kernel.dk/linux.git tags/for-6.7/io_uring-sockopt-2023-10-30
-X-PR-Tracked-Commit-Id: b9ec913212e6e91efa5a0a612c4a8ec4cf5da896
+X-PR-Tracked-Message-Id: <49ec1791-f353-48f2-a39a-378b5463db42@kernel.dk>
+X-PR-Tracked-Remote: git://git.kernel.dk/linux.git tags/io_uring-futex-2023-10-30
+X-PR-Tracked-Commit-Id: 8f350194d5cfd7016d4cd44e433df0faa4d4a703
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f5277ad1e9768dbd05b1ae8dcdba690215d8c5b7
-Message-Id: <169887884705.15957.4697402444529795323.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 4de520f1fcefd4ebb7dddcf28bde1b330c2f6b5d
+Message-Id: <169887884726.15957.2097278812294400804.pr-tracker-bot@kernel.org>
 Date: Wed, 01 Nov 2023 22:47:27 +0000
 To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>, netdev <netdev@vger.kernel.org>, Breno Leitao <leitao@debian.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 
-The pull request you sent on Mon, 30 Oct 2023 08:36:04 -0600:
+The pull request you sent on Mon, 30 Oct 2023 19:07:01 -0600:
 
-> git://git.kernel.dk/linux.git tags/for-6.7/io_uring-sockopt-2023-10-30
+> git://git.kernel.dk/linux.git tags/io_uring-futex-2023-10-30
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f5277ad1e9768dbd05b1ae8dcdba690215d8c5b7
+https://git.kernel.org/torvalds/c/4de520f1fcefd4ebb7dddcf28bde1b330c2f6b5d
 
 Thank you!
 
