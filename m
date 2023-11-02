@@ -1,55 +1,68 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C3A14F6E
-	for <io-uring@vger.kernel.org>; Wed,  1 Nov 2023 22:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618191C20;
+	Thu,  2 Nov 2023 05:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S9N9X65n"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56B95C433CB;
-	Wed,  1 Nov 2023 22:47:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GOGe+Iz2"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B769BC433CA;
+	Thu,  2 Nov 2023 05:01:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698878847;
-	bh=b2oT5gvPaU3k2pCiHXeYhBxPtUKkjM/j2f5Mfnr5VBs=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=S9N9X65nTfNB9fr3xA4vDZVIEQ3SbBmu226gYUTsXts100W8Z3cnkvv0ARoG1mc7g
-	 UbQRwbzNoAq7WQtH/S+W8tlgswUBu4TCky/qLaJQ/VJstIvkb27AZTnM45hVxfQR4F
-	 1MJp7RTDeRMjFixQaZllZeJ9LpqMYsjZQJBw2y4qHf+/Qt7shwXSjIVWlj+lmBXzCS
-	 lYxmX3jdyLhvh1ummYQ5R+cc2PP6C6sJFAzTu1PGQNs9e7f5PSTWuICtDHyieEla80
-	 2tlP4Gz/HtlcWjtLOm2Sb86ilojVbG7WNlKvP7AGDiqlvn0O/x2FoNHC9CV1DJ20VQ
-	 a49uv+LXM6vTQ==
+	s=k20201202; t=1698901260;
+	bh=acJj6QFcIDiHpvL6RASrOmVS0BORK7CIFOgwimaCzUw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=GOGe+Iz2zczVZ69TSqNEe/oPunTip9BQfNJtQzlDddzOtSQkRE8a11bEmlDNgSNgC
+	 xI9vOafsfx+2SIvXkpX9SvZZWQ8FSEXUz2TwZxAvmfmtuPqJdzULBQKBE9DumXweXg
+	 0gjcLrtyugAr1lVddezLYV1ApKwhKX+W84lZ6+ijELAspUNsyvYztZ0g80RSIBxcq0
+	 6kDQ+tIWlV4Rxv8R4sPgBj07ABHPsYoYd1xfHfKnUPhuFTj6YVPd8F2riDU3iPoYEB
+	 sWcYvq41OUkNsbABptxiqQ3ALs2hYlV96a9p7L7lJYNWQiky9SzE37/42YKSMNnTJX
+	 Za0q7VFH2RVhw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 412A3C4316B;
-	Wed,  1 Nov 2023 22:47:27 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring futex support
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <49ec1791-f353-48f2-a39a-378b5463db42@kernel.dk>
-References: <49ec1791-f353-48f2-a39a-378b5463db42@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <49ec1791-f353-48f2-a39a-378b5463db42@kernel.dk>
-X-PR-Tracked-Remote: git://git.kernel.dk/linux.git tags/io_uring-futex-2023-10-30
-X-PR-Tracked-Commit-Id: 8f350194d5cfd7016d4cd44e433df0faa4d4a703
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 4de520f1fcefd4ebb7dddcf28bde1b330c2f6b5d
-Message-Id: <169887884726.15957.2097278812294400804.pr-tracker-bot@kernel.org>
-Date: Wed, 01 Nov 2023 22:47:27 +0000
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, LKML <linux-kernel@vger.kernel.org>
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9D4E6EAB08B;
+	Thu,  2 Nov 2023 05:01:00 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [GIT PULL] io_uring support for get/setsockopt
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <169890126064.18253.12714422524953116222.git-patchwork-notify@kernel.org>
+Date: Thu, 02 Nov 2023 05:01:00 +0000
+References: <7a0893f0-bae8-4aee-9e05-7c81354fc829@kernel.dk>
+In-Reply-To: <7a0893f0-bae8-4aee-9e05-7c81354fc829@kernel.dk>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: torvalds@linux-foundation.org, io-uring@vger.kernel.org,
+ netdev@vger.kernel.org, leitao@debian.org
 
-The pull request you sent on Mon, 30 Oct 2023 19:07:01 -0600:
+Hello:
 
-> git://git.kernel.dk/linux.git tags/io_uring-futex-2023-10-30
+This pull request was applied to netdev/net.git (main)
+by Linus Torvalds <torvalds@linux-foundation.org>:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/4de520f1fcefd4ebb7dddcf28bde1b330c2f6b5d
+On Mon, 30 Oct 2023 08:36:04 -0600 you wrote:
+> Hi Linus,
+> 
+> On top of the core io_uring changes, this pull request adds support for
+> using getsockopt and setsockopt via io_uring. The main use cases for
+> this is to enable use of direct descriptors, rather than first
+> instantiating a normal file descriptor, doing the option tweaking
+> needed, then turning it into a direct descriptor. With this support, we
+> can avoid needing a regular file descriptor completely.
+> 
+> [...]
 
-Thank you!
+Here is the summary with links:
+  - [GIT,PULL] io_uring support for get/setsockopt
+    https://git.kernel.org/netdev/net/c/f5277ad1e976
 
+You are awesome, thank you!
 -- 
 Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
