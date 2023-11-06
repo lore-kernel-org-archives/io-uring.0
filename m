@@ -1,56 +1,56 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC8E029D09
-	for <io-uring@vger.kernel.org>; Mon,  6 Nov 2023 20:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B705529D11
+	for <io-uring@vger.kernel.org>; Mon,  6 Nov 2023 20:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bKOnzuI+"
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35086D76
-	for <io-uring@vger.kernel.org>; Mon,  6 Nov 2023 12:39:20 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-40806e40fccso30859745e9.2
-        for <io-uring@vger.kernel.org>; Mon, 06 Nov 2023 12:39:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pyn6QsqO"
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC065D51
+	for <io-uring@vger.kernel.org>; Mon,  6 Nov 2023 12:39:22 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-4083f613275so36526045e9.2
+        for <io-uring@vger.kernel.org>; Mon, 06 Nov 2023 12:39:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699303158; x=1699907958; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1699303160; x=1699907960; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CBqu+kBWQyi7JQ96NT52vJFaXu5bMWwsvdgWWdxySaE=;
-        b=bKOnzuI+17gMkL4D531q2JYEbs3+iMKSrOHNIcJaRH4SIeeTH/4hc/QXaupIeJLy8k
-         0UXhhznPCKVw6rQKWl/CmVE5sYjZTrAfDigJk7eB8iEAcjNX1eO5G5iurxK6X+p9NBYj
-         M+zNi8vimXypnAtqQaOqWjiw5oI6D5QwOA4rGmGbbn2kkMNoxR+mNXjSDHvex6814mZa
-         3MlvNBLXzMKfe741Q6MIP9VpN2wzBZ0QLOR3gKNY2vBhMcNZED4W0oqJ0szaUO5BNV6v
-         6POT6kB7xTv9HFbe/fmAKqU9nd7iyfVG2Y6w2KI6QHt9bPEePGzdfwG/fraSNiJSF+Jv
-         Fkwg==
+        bh=shEMrHKv3bMNF4Fl2Y8B64E5+9a0oPf8G8ISdUBcYxk=;
+        b=Pyn6QsqOVa2tCxtcZ5TCKkg8ohNY19RrHoq2oQINE45P1F5EPp12rmwMRPLHcV6EZK
+         JDmrLjr06y5xXEE94QdT6zTgfpUc7C1Rd6H7bFVIPE2LitWfN83HSYKViRH8nP/gwaL3
+         hq0t1krOv8LfQzxBOWEiMauqPMwU53umAhJtTfNPpSn6Ku9zCPbqI+0S/BoRoVsr4quB
+         MQ3EOOlqAf7q6tNOeNxPEE6c/556ngS1ez+9qdbGPqdVV5FifW36MwODjwZHJl6Cdjb3
+         vaTczz44lcABQ1f3hu4uDqQ0zawFyE/Pc5+kRpdJmIt3y9Qjlo3QnoJRj4Lja5fYfBzX
+         +ATw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699303158; x=1699907958;
+        d=1e100.net; s=20230601; t=1699303160; x=1699907960;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CBqu+kBWQyi7JQ96NT52vJFaXu5bMWwsvdgWWdxySaE=;
-        b=BfCoOif8N3SnwwjSucJ2hPAko50es//N1DNMszJd8/tYAAbZpkbx9mhmNohPkM9jms
-         GR+LKKHU8/5aur1sRNN8OPmfcm1sJjzTY3jv/M9EPoFyN+2kAC1lq8FQXSeZcHvFzHrS
-         5pj02wu4Oylf+nTP4JeW9pD/8gQZa9tuAupocR5Mc5emNeE3CrPV2wHY/LAUEnIcrFSz
-         uPboW42sdvBVLOvI80tx1sGSWbuPTm5ZW5JUMANcp/v+E315S48++u3y+CRh1rk6IKoe
-         WO/rv+Zhx6DXePv5TTvTPmF8tpUSSBQI+OKy1qv5YcuuLQ4yXcBWWsU13jFiTObRgEyz
-         Pcmg==
-X-Gm-Message-State: AOJu0YwCagZeB4xYHQnVSerCNSxlSNI+6DB51Z3Tp5ECeFOLRZhbs9dh
-	U3fsd6PB4Z1TCZ6FuKQzLUR1vry3hAs=
-X-Google-Smtp-Source: AGHT+IGiZHHDFwtg72NugPAdRuuLZ6kZXfGUPJpWm9r0q83dYK6g3hc/ya+h/bJ3KtqS1JijcTMitw==
-X-Received: by 2002:a05:600c:1c9d:b0:401:73b2:f043 with SMTP id k29-20020a05600c1c9d00b0040173b2f043mr787265wms.1.1699303157575;
-        Mon, 06 Nov 2023 12:39:17 -0800 (PST)
+        bh=shEMrHKv3bMNF4Fl2Y8B64E5+9a0oPf8G8ISdUBcYxk=;
+        b=E5dD4U9J3K/qjzcgUmkjj+QK3xSdSGvyXTpT8+SRQAuBR7XAngnqqM5GmQqJV85Eiw
+         SqYDmmvgZ2n5cFRlgfuq/Y0ZxLQ3BLyv61huJonkDGD6pHrdy5c7lfdrU23dN0a/2ZYG
+         pZmJDwD5kijfsovafghBJ9Nug1jg1rZWdk0hgpclmMLlDqT3dbluLOqCrXoAerJb4mG3
+         kyYQ+//w4vE6stF0vqUK8ZjFCQUF1ZMfi2ZLcsvRyWP/4kv87TzjGtMNDsS81O3Q8UTQ
+         RXnNpRlYsD0+AYgl7lC+uVRDDi4NN+Ata9bvlK+pwLLcXahsRiWYovz8kBgeFIEpIAhE
+         jZdw==
+X-Gm-Message-State: AOJu0Yw+GjsRYnsLLKdxqzJPMqkKNYSDWEin8qZmyAn2+Cq6Go5KfeKm
+	mwCo0laDgounF810y7biSucyzXFgbys=
+X-Google-Smtp-Source: AGHT+IHZUJFwekKXdSoqdAQMj+BGEnQ5yFxQCaBim1iIqMKgCfD1YNzD4OOKIj7znyp/jU/LK/bLSg==
+X-Received: by 2002:a05:600c:9:b0:408:cd96:7164 with SMTP id g9-20020a05600c000900b00408cd967164mr737490wmc.9.1699303160080;
+        Mon, 06 Nov 2023 12:39:20 -0800 (PST)
 Received: from puck.. (finc-22-b2-v4wan-160991-cust114.vm7.cable.virginm.net. [82.17.76.115])
-        by smtp.gmail.com with ESMTPSA id s7-20020a05600c45c700b003fc16ee2864sm13349062wmo.48.2023.11.06.12.39.16
+        by smtp.gmail.com with ESMTPSA id s7-20020a05600c45c700b003fc16ee2864sm13349062wmo.48.2023.11.06.12.39.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Nov 2023 12:39:17 -0800 (PST)
+        Mon, 06 Nov 2023 12:39:18 -0800 (PST)
 From: Dylan Yudaken <dyudaken@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: axboe@kernel.dk,
 	asml.silence@gmail.com,
 	Dylan Yudaken <dyudaken@gmail.com>
-Subject: [PATCH v2 1/3] io_uring: indicate if io_kbuf_recycle did recycle anything
-Date: Mon,  6 Nov 2023 20:39:07 +0000
-Message-ID: <20231106203909.197089-2-dyudaken@gmail.com>
+Subject: [PATCH v2 3/3] io_uring: do not clamp read length for multishot read
+Date: Mon,  6 Nov 2023 20:39:09 +0000
+Message-ID: <20231106203909.197089-4-dyudaken@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231106203909.197089-1-dyudaken@gmail.com>
 References: <20231106203909.197089-1-dyudaken@gmail.com>
@@ -62,92 +62,57 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It can be useful to know if io_kbuf_recycle did actually recycle the
-buffer on the request, or if it left the request alone.
+When doing a multishot read, the code path reuses the old read
+paths. However this breaks an assumption built into those paths,
+namely that struct io_rw::len is available for reuse by __io_import_iovec.
 
+For multishot this results in len being set for the first receive
+call, and then subsequent calls are clamped to that buffer length
+incorrectly.
+
+Instead keep len as zero after recycling buffers, to reuse the full
+buffer size of the next selected buffer.
+
+Fixes: fc68fcda0491 ("io_uring/rw: add support for IORING_OP_READ_MULTISHOT")
 Signed-off-by: Dylan Yudaken <dyudaken@gmail.com>
 ---
- io_uring/kbuf.c |  6 +++---
- io_uring/kbuf.h | 13 ++++++++-----
- 2 files changed, 11 insertions(+), 8 deletions(-)
+ io_uring/rw.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index fea06810b43d..a1e4239c7d75 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -52,7 +52,7 @@ static int io_buffer_add_list(struct io_ring_ctx *ctx,
- 	return xa_err(xa_store(&ctx->io_bl_xa, bgid, bl, GFP_KERNEL));
- }
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 8321e004ab13..64390d4e20c1 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -912,6 +912,7 @@ int io_read(struct io_kiocb *req, unsigned int issue_flags)
  
--void io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags)
-+bool io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags)
+ int io_read_mshot(struct io_kiocb *req, unsigned int issue_flags)
  {
- 	struct io_ring_ctx *ctx = req->ctx;
- 	struct io_buffer_list *bl;
-@@ -65,7 +65,7 @@ void io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags)
- 	 * multiple use.
++	struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
+ 	unsigned int cflags = 0;
+ 	int ret;
+ 
+@@ -928,7 +929,12 @@ int io_read_mshot(struct io_kiocb *req, unsigned int issue_flags)
+ 	 * handling arm it.
  	 */
- 	if (req->flags & REQ_F_PARTIAL_IO)
--		return;
-+		return false;
- 
- 	io_ring_submit_lock(ctx, issue_flags);
- 
-@@ -76,7 +76,7 @@ void io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags)
- 	req->buf_index = buf->bgid;
- 
- 	io_ring_submit_unlock(ctx, issue_flags);
--	return;
-+	return true;
- }
- 
- unsigned int __io_put_kbuf(struct io_kiocb *req, unsigned issue_flags)
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index d14345ef61fc..f2d615236b2c 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -53,11 +53,11 @@ int io_unregister_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg);
- 
- unsigned int __io_put_kbuf(struct io_kiocb *req, unsigned issue_flags);
- 
--void io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags);
-+bool io_kbuf_recycle_legacy(struct io_kiocb *req, unsigned issue_flags);
- 
- void *io_pbuf_get_address(struct io_ring_ctx *ctx, unsigned long bgid);
- 
--static inline void io_kbuf_recycle_ring(struct io_kiocb *req)
-+static inline bool io_kbuf_recycle_ring(struct io_kiocb *req)
- {
- 	/*
- 	 * We don't need to recycle for REQ_F_BUFFER_RING, we can just clear
-@@ -80,8 +80,10 @@ static inline void io_kbuf_recycle_ring(struct io_kiocb *req)
- 		} else {
- 			req->buf_index = req->buf_list->bgid;
- 			req->flags &= ~REQ_F_BUFFER_RING;
-+			return true;
- 		}
+ 	if (ret == -EAGAIN) {
+-		io_kbuf_recycle(req, issue_flags);
++		/*
++		 * Reset rw->len to 0 again to avoid clamping future mshot
++		 * reads, in case the buffer size varies.
++		 */
++		if (io_kbuf_recycle(req, issue_flags))
++			rw->len = 0;
+ 		return -EAGAIN;
  	}
-+	return false;
- }
  
- static inline bool io_do_buffer_select(struct io_kiocb *req)
-@@ -91,12 +93,13 @@ static inline bool io_do_buffer_select(struct io_kiocb *req)
- 	return !(req->flags & (REQ_F_BUFFER_SELECTED|REQ_F_BUFFER_RING));
- }
+@@ -941,6 +947,7 @@ int io_read_mshot(struct io_kiocb *req, unsigned int issue_flags)
+ 		 * jump to the termination path. This request is then done.
+ 		 */
+ 		cflags = io_put_kbuf(req, issue_flags);
++		rw->len = 0; /* similarly to above, reset len to 0 */
  
--static inline void io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
-+static inline bool io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
- {
- 	if (req->flags & REQ_F_BUFFER_SELECTED)
--		io_kbuf_recycle_legacy(req, issue_flags);
-+		return io_kbuf_recycle_legacy(req, issue_flags);
- 	if (req->flags & REQ_F_BUFFER_RING)
--		io_kbuf_recycle_ring(req);
-+		return io_kbuf_recycle_ring(req);
-+	return false;
- }
- 
- static inline unsigned int __io_put_kbuf_list(struct io_kiocb *req,
+ 		if (io_fill_cqe_req_aux(req,
+ 					issue_flags & IO_URING_F_COMPLETE_DEFER,
 -- 
 2.41.0
 
