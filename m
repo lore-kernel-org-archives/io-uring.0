@@ -1,48 +1,48 @@
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450202B2EE
-	for <io-uring@vger.kernel.org>; Tue,  7 Nov 2023 21:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18CD2BD13
+	for <io-uring@vger.kernel.org>; Tue,  7 Nov 2023 21:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="hA4BzTZA"
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BBA10E9
-	for <io-uring@vger.kernel.org>; Tue,  7 Nov 2023 13:41:10 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-3b6ad461599so584857b6e.1
-        for <io-uring@vger.kernel.org>; Tue, 07 Nov 2023 13:41:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="Damd4j7n"
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3945D10E5
+	for <io-uring@vger.kernel.org>; Tue,  7 Nov 2023 13:41:12 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1cc3c51f830so47359835ad.1
+        for <io-uring@vger.kernel.org>; Tue, 07 Nov 2023 13:41:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1699393270; x=1699998070; darn=vger.kernel.org;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1699393271; x=1699998071; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K2OFTXg8XBavOP2tPlsdD5TmFis6HNSAe4rWWmEFvho=;
-        b=hA4BzTZASh0LLFDHFG6EKQ9H2FUHjdRIwSm2OixwzcTzNh75FNPh4HJ6ts8obetJus
-         /s/38G/+HimGJO2TB+5M5ug4uz9VyA4mSBGFepg9ApHbFF1M7pph2oIgVRluDTv8T//j
-         D/d5Egl55KD2C8Q2TRsa13A3mpEMU/RL+yPJyOFvZQDFXPDJ84DOBrfceWhCkXPHH5p2
-         YVmMOP3QjJZQRmjQRjxPtUbShmxfzCb4Q4VFh2nB48R0E29siuI6Su0gD2tvGvFnQ9Qs
-         ykful/SsIvMPJsoAjb8dYkIkI3D27TUYtavyVdcdL7KdDQw/TnUqlYVYEHV6VCGM+GzI
-         df0Q==
+        bh=xpoMSiM7fsnsF8gAcS74BCI3r9yY1Vj9o22YU2WHyDA=;
+        b=Damd4j7n/+Ewv5u83FOG9R8VcapUTXZkhSjcAjhQD+3wbpzx5NFiubJIJevUDo0c9H
+         NsBFDrVMa6vNUk39DfP8WFCLClTZBMT9CD+JGcsDeRgFWPIMWvH6o1TRbKJDD6wFWe4/
+         zrxRPRDPjl+JQwNhj6mWUjCZgPgLqbaOYiKfotXM3ifrz8Gtp+Wz+gm4XNQMWS7jNHV4
+         m3oLpcw2/rYjamdR9XX6ORRGxoMYQIpBPnfAGoAB9jpNuPdYvx63WBO15cX7ikwUc0WH
+         cf/qRqgDmdsrqjTVluyqKhrsoWyjSv9J/HAEWJ5ZLkRiGFnkkaIb3jx9UPiObie5EO1J
+         gNCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699393270; x=1699998070;
+        d=1e100.net; s=20230601; t=1699393271; x=1699998071;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K2OFTXg8XBavOP2tPlsdD5TmFis6HNSAe4rWWmEFvho=;
-        b=iP5Xr5G2RjhVOQeB1FNKRmoGsd18gJ2qkJgzq9DhyT1KtK/jpubD6yGppTG7U/2EBE
-         EOCdOrOkwy/6nh1Z4yd2VGhVCeJxYLw6ZL8JKlyiFJMusAeyvegRDgAL2UaIUuOFCYOJ
-         XSOJs47vwuQ1LXLS2XceC/K7igkR1g0Qs9I+8V1+04Me9YWa3OGkQa27c2rFhiaL1Of5
-         GT9zS4rdKY3Fko2Yya/UUq/y3Ka176LaVD9hug8fVriD3h7lNEOE4A7Rf9IBXR3LzpnG
-         bsLf/CH5XbR0Ax9KUCoVcBDoxBxr1VwNGkem0BZsq3Gwr/BAJjA4yhjszxW3RAPC4TNh
-         W16g==
-X-Gm-Message-State: AOJu0Yw8JPHI9xPrA/9G+lwdg1AbH9MFyPDESGIOvKcdwxE01ZW5a8E7
-	FFLcZuhnKYHluZWRjWNHZQgmb9fmvMApwX4+s5uLVg==
-X-Google-Smtp-Source: AGHT+IEaaldIA3iOXxqK2zrInlxpweTaP+yU7mUkStGw/uDeYT3BPBfL6SPP3AY5ubOnpx1g9xzwtg==
-X-Received: by 2002:aca:1208:0:b0:3b2:f2a8:1a4c with SMTP id 8-20020aca1208000000b003b2f2a81a4cmr223003ois.44.1699393269875;
-        Tue, 07 Nov 2023 13:41:09 -0800 (PST)
-Received: from localhost (fwdproxy-prn-018.fbsv.net. [2a03:2880:ff:12::face:b00c])
-        by smtp.gmail.com with ESMTPSA id y188-20020a6364c5000000b005b92ba3938dsm1836687pgb.77.2023.11.07.13.41.09
+        bh=xpoMSiM7fsnsF8gAcS74BCI3r9yY1Vj9o22YU2WHyDA=;
+        b=Ca/oyLuOiRS93W9ERv0Ab9DXOtuQNXB7Jpb4/oEDYdTkflVVZGC36Y0+4lw2OsFSJO
+         Mf45otCbPhp3UrI5H6c7QDtA5w/II2wdi/KlMEzgIMep7cZ+9XLvRsVvUrm8kjEt0lrc
+         BNclNrN3/xfNZ6ea4VhtWrK09VJiQvlvIqD5OrwtEI7l8+Cga3ibDCs7+aE0bQUV619/
+         o2JOQgZ5Vwe4LB6BhpN9DOIdSceXE2gnH8gljYiFpnAg1ARGgwxWaJ/uCSMs3Q++DxFu
+         GczYceAUjyZA96F8Msxy/pU88rL1LwNHwToXtv6cS4Ys9vi5v+joeB64dFuf1bf6UjtJ
+         wXLQ==
+X-Gm-Message-State: AOJu0YzLJwviiQPevrz5vEOKMkYHfqe6n4xFeHB+Ec7WKHExXsqu/KH2
+	b9DlnnVZLzSEpksqKT9wTQC2JW+1mEo2gslZAkrs3w==
+X-Google-Smtp-Source: AGHT+IHtozb1N6C8iJ3U75mzIC4LwKXFGI/Y3hhHNrrAdS+TnaNZlMdQryi+qh+yEi1QBFVqjwPNYA==
+X-Received: by 2002:a17:903:2349:b0:1cc:436d:39dd with SMTP id c9-20020a170903234900b001cc436d39ddmr217210plh.65.1699393271584;
+        Tue, 07 Nov 2023 13:41:11 -0800 (PST)
+Received: from localhost (fwdproxy-prn-004.fbsv.net. [2a03:2880:ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id g10-20020a170902934a00b001b0358848b0sm273327plp.161.2023.11.07.13.41.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Nov 2023 13:41:09 -0800 (PST)
+        Tue, 07 Nov 2023 13:41:11 -0800 (PST)
 From: David Wei <dw@davidwei.uk>
 To: io-uring@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -57,9 +57,9 @@ Cc: Jens Axboe <axboe@kernel.dk>,
 	Mina Almasry <almasrymina@google.com>,
 	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	Dragos Tatulea <dtatulea@nvidia.com>
-Subject: [PATCH 15/20] io_uring/zcrx: add copy fallback
-Date: Tue,  7 Nov 2023 13:40:40 -0800
-Message-Id: <20231107214045.2172393-16-dw@davidwei.uk>
+Subject: [PATCH 17/20] io_uring/zcrx: copy fallback to ring buffers
+Date: Tue,  7 Nov 2023 13:40:42 -0800
+Message-Id: <20231107214045.2172393-18-dw@davidwei.uk>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20231107214045.2172393-1-dw@davidwei.uk>
 References: <20231107214045.2172393-1-dw@davidwei.uk>
@@ -73,190 +73,129 @@ Content-Transfer-Encoding: 8bit
 
 From: Pavel Begunkov <asml.silence@gmail.com>
 
-Currently, if user fails to keep up with the network and doesn't refill
-the buffer ring fast enough the NIC/driver will start dropping packets.
-That might be too punishing, so let's fall back to non-zerocopy version
-by allowing the driver to do normal kernel allocations. Later, when
-we're in the task context doing zc_rx_recv_skb() we'll detect such pages
-and copy them into user specified buffers.
+The copy fallback is currently limited to spinlock protected ->freelist,
+but we also want to be able to grab buffers from the refill queue, which
+is napi protected. Use the new napi_execute() helper to inject a
+function call into the napi context.
 
-This patch implement the second (copy) part. It'll facilitate adoption
-and help the user to strike the balance b/w allocation the right amount
-of zerocopy buffers and being resilient to surges in traffic.
-
-Note, due to technical reasons for now we're only using buffers from
-->freelist, which is unreliably and is likely to fail with time. It'll
-be revised in later patches.
+todo: the way we set napi_id with io_zc_rx_set_napi in drivers later is
+not reliable, we should catch all netif_napi_del() and update the id.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: David Wei <dw@davidwei.uk>
 ---
- io_uring/zc_rx.c | 115 ++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 105 insertions(+), 10 deletions(-)
+ include/linux/io_uring.h |  1 +
+ io_uring/zc_rx.c         | 45 ++++++++++++++++++++++++++++++++++++++--
+ io_uring/zc_rx.h         |  1 +
+ 3 files changed, 45 insertions(+), 2 deletions(-)
 
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index fb88e000c156..bf886d6de4e0 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -75,6 +75,7 @@ struct io_zc_rx_buf *io_zc_rx_get_buf(struct io_zc_rx_ifq *ifq);
+ struct io_zc_rx_buf *io_zc_rx_buf_from_page(struct io_zc_rx_ifq *ifq,
+ 					    struct page *page);
+ void io_zc_rx_put_buf(struct io_zc_rx_ifq *ifq, struct io_zc_rx_buf *buf);
++void io_zc_rx_set_napi(struct io_zc_rx_ifq *ifq, unsigned napi_id);
+ 
+ static inline dma_addr_t io_zc_rx_buf_dma(struct io_zc_rx_buf *buf)
+ {
 diff --git a/io_uring/zc_rx.c b/io_uring/zc_rx.c
-index c1502ec3e629..c2ed600f0951 100644
+index c2ed600f0951..14328024a550 100644
 --- a/io_uring/zc_rx.c
 +++ b/io_uring/zc_rx.c
-@@ -498,6 +498,26 @@ static void io_zc_rx_refill_cache(struct io_zc_rx_ifq *ifq, int count)
+@@ -7,6 +7,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/nospec.h>
+ #include <net/tcp.h>
++#include <net/busy_poll.h>
+ 
+ #include <uapi/linux/io_uring.h>
+ 
+@@ -41,6 +42,11 @@ struct io_zc_rx_pool {
+ 	u32			freelist[];
+ };
+ 
++struct io_zc_refill_data {
++	struct io_zc_rx_ifq *ifq;
++	unsigned count;
++};
++
+ static inline u32 io_zc_rx_cqring_entries(struct io_zc_rx_ifq *ifq)
+ {
+ 	struct io_rbuf_ring *ring = ifq->ring;
+@@ -244,6 +250,12 @@ static void io_zc_rx_destroy_ifq(struct io_zc_rx_ifq *ifq)
+ 	kfree(ifq);
+ }
+ 
++void io_zc_rx_set_napi(struct io_zc_rx_ifq *ifq, unsigned napi_id)
++{
++	ifq->napi_id = napi_id;
++}
++EXPORT_SYMBOL(io_zc_rx_set_napi);
++
+ static void io_zc_rx_destroy_pool_work(struct work_struct *work)
+ {
+ 	struct io_zc_rx_pool *pool = container_of(
+@@ -498,14 +510,43 @@ static void io_zc_rx_refill_cache(struct io_zc_rx_ifq *ifq, int count)
  	pool->cache_count += filled;
  }
  
-+static struct io_zc_rx_buf *io_zc_get_buf_task_safe(struct io_zc_rx_ifq *ifq)
++static bool io_napi_refill(void *data)
 +{
++	struct io_zc_refill_data *rd = data;
++	struct io_zc_rx_ifq *ifq = rd->ifq;
 +	struct io_zc_rx_pool *pool = ifq->pool;
-+	struct io_zc_rx_buf *buf = NULL;
-+	u32 pgid;
++	int i, count = rd->count;
 +
-+	if (!READ_ONCE(pool->free_count))
-+		return NULL;
++	lockdep_assert_no_hardirq();
++
++	if (!pool->cache_count)
++		io_zc_rx_refill_cache(ifq, POOL_REFILL_COUNT);
 +
 +	spin_lock_bh(&pool->freelist_lock);
-+	if (pool->free_count) {
-+		pool->free_count--;
-+		pgid = pool->freelist[pool->free_count];
-+		buf = &pool->bufs[pgid];
-+		atomic_set(&buf->refcount, 1);
++	for (i = 0; i < count && pool->cache_count; i++) {
++		u32 pgid;
++
++		pgid = pool->cache[--pool->cache_count];
++		pool->freelist[pool->free_count++] = pgid;
 +	}
 +	spin_unlock_bh(&pool->freelist_lock);
-+	return buf;
++	return true;
 +}
 +
- struct io_zc_rx_buf *io_zc_rx_get_buf(struct io_zc_rx_ifq *ifq)
+ static struct io_zc_rx_buf *io_zc_get_buf_task_safe(struct io_zc_rx_ifq *ifq)
  {
  	struct io_zc_rx_pool *pool = ifq->pool;
-@@ -576,6 +596,11 @@ static struct io_zc_rx_ifq *io_zc_rx_ifq_skb(struct sk_buff *skb)
- 	return NULL;
- }
+ 	struct io_zc_rx_buf *buf = NULL;
+ 	u32 pgid;
  
-+static inline void io_zc_return_rbuf_cqe(struct io_zc_rx_ifq *ifq)
-+{
-+	ifq->cached_cq_tail--;
-+}
+-	if (!READ_ONCE(pool->free_count))
+-		return NULL;
++	if (!READ_ONCE(pool->free_count)) {
++		struct io_zc_refill_data rd = {
++			.ifq = ifq,
++			.count = 1,
++		};
 +
- static inline struct io_uring_rbuf_cqe *io_zc_get_rbuf_cqe(struct io_zc_rx_ifq *ifq)
- {
- 	struct io_uring_rbuf_cqe *cqe;
-@@ -595,6 +620,51 @@ static inline struct io_uring_rbuf_cqe *io_zc_get_rbuf_cqe(struct io_zc_rx_ifq *
- 	return cqe;
- }
- 
-+static ssize_t zc_rx_copy_chunk(struct io_zc_rx_ifq *ifq, void *data,
-+				unsigned int offset, size_t len)
-+{
-+	size_t copy_size, copied = 0;
-+	struct io_uring_rbuf_cqe *cqe;
-+	struct io_zc_rx_buf *buf;
-+	unsigned int pgid;
-+	int ret = 0, off = 0;
-+	u8 *vaddr;
-+
-+	do {
-+		cqe = io_zc_get_rbuf_cqe(ifq);
-+		if (!cqe) {
-+			ret = ENOBUFS;
-+			break;
-+		}
-+		buf = io_zc_get_buf_task_safe(ifq);
-+		if (!buf) {
-+			io_zc_return_rbuf_cqe(ifq);
-+			ret = -ENOMEM;
-+			break;
-+		}
-+
-+		vaddr = kmap_local_page(buf->page);
-+		copy_size = min_t(size_t, PAGE_SIZE, len);
-+		memcpy(vaddr, data + offset, copy_size);
-+		kunmap_local(vaddr);
-+
-+		pgid = page_private(buf->page) & 0xffffffff;
-+		io_zc_rx_get_buf_uref(ifq->pool, pgid);
-+		io_zc_rx_put_buf(ifq, buf);
-+
-+		cqe->region = 0;
-+		cqe->off = pgid * PAGE_SIZE + off;
-+		cqe->len = copy_size;
-+		cqe->flags = 0;
-+
-+		offset += copy_size;
-+		len -= copy_size;
-+		copied += copy_size;
-+	} while (offset < len);
-+
-+	return copied ? copied : ret;
-+}
-+
- static int zc_rx_recv_frag(struct io_zc_rx_ifq *ifq, const skb_frag_t *frag,
- 			   int off, int len, bool zc_skb)
- {
-@@ -618,9 +688,21 @@ static int zc_rx_recv_frag(struct io_zc_rx_ifq *ifq, const skb_frag_t *frag,
- 		cqe->len = len;
- 		cqe->flags = 0;
- 	} else {
--		/* TODO: copy frags that aren't backed by zc pages */
--		WARN_ON_ONCE(1);
--		return -ENOMEM;
-+		u32 p_off, p_len, t, copied = 0;
-+		u8 *vaddr;
-+		int ret = 0;
-+
-+		skb_frag_foreach_page(frag, off, len,
-+				      page, p_off, p_len, t) {
-+			vaddr = kmap_local_page(page);
-+			ret = zc_rx_copy_chunk(ifq, vaddr, p_off, p_len);
-+			kunmap_local(vaddr);
-+
-+			if (ret < 0)
-+				return copied ? copied : ret;
-+			copied += ret;
-+		}
-+		len = copied;
- 	}
- 
- 	return len;
-@@ -633,7 +715,7 @@ zc_rx_recv_skb(read_descriptor_t *desc, struct sk_buff *skb,
- 	struct io_zc_rx_ifq *ifq = desc->arg.data;
- 	struct io_zc_rx_ifq *skb_ifq;
- 	struct sk_buff *frag_iter;
--	unsigned start, start_off;
-+	unsigned start, start_off = offset;
- 	int i, copy, end, off;
- 	bool zc_skb = true;
- 	int ret = 0;
-@@ -643,14 +725,27 @@ zc_rx_recv_skb(read_descriptor_t *desc, struct sk_buff *skb,
- 		zc_skb = false;
- 		if (WARN_ON_ONCE(skb_ifq))
- 			return -EFAULT;
--		pr_debug("non zerocopy pages are not supported\n");
--		return -EFAULT;
- 	}
--	start = skb_headlen(skb);
--	start_off = offset;
- 
--	// TODO: copy payload in skb linear data */
--	WARN_ON_ONCE(offset < start);
-+	if (unlikely(offset < skb_headlen(skb))) {
-+		ssize_t copied;
-+		size_t to_copy;
-+
-+		to_copy = min_t(size_t, skb_headlen(skb) - offset, len);
-+		copied = zc_rx_copy_chunk(ifq, skb->data, offset, to_copy);
-+		if (copied < 0) {
-+			ret = copied;
-+			goto out;
-+		}
-+		offset += copied;
-+		len -= copied;
-+		if (!len)
-+			goto out;
-+		if (offset != skb_headlen(skb))
-+			goto out;
++		napi_execute(ifq->napi_id, io_napi_refill, &rd);
 +	}
-+
-+	start = skb_headlen(skb);
  
- 	for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
- 		const skb_frag_t *frag;
+ 	spin_lock_bh(&pool->freelist_lock);
+ 	if (pool->free_count) {
+diff --git a/io_uring/zc_rx.h b/io_uring/zc_rx.h
+index fac32089e699..fd8828e4bd7a 100644
+--- a/io_uring/zc_rx.h
++++ b/io_uring/zc_rx.h
+@@ -20,6 +20,7 @@ struct io_zc_rx_ifq {
+ 	u32			cached_rq_head;
+ 	u32			cached_cq_tail;
+ 	void			*pool;
++	unsigned int		napi_id;
+ 
+ 	unsigned		nr_sockets;
+ 	struct file		*sockets[IO_ZC_MAX_IFQ_SOCKETS];
 -- 
 2.39.3
 
