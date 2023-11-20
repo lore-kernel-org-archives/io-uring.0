@@ -1,39 +1,41 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="BDrW9ouA"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="bqLjqQdM"
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71178A2
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6502C8
 	for <io-uring@vger.kernel.org>; Mon, 20 Nov 2023 14:41:15 -0800 (PST)
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3AKMSZNE013393
-	for <io-uring@vger.kernel.org>; Mon, 20 Nov 2023 14:41:14 -0800
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 3AKMSZNF013393
+	for <io-uring@vger.kernel.org>; Mon, 20 Nov 2023 14:41:15 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=s2048-2021-q4;
- bh=ug9QRpF/FSlWiJJzjUxxWpma7Oj8fHWym/H8mm64YIY=;
- b=BDrW9ouAOFrx2/BcEvAet9hhLURx4pPPJk4U0MtmyluWuCJ31cz9SfcwGqz3DRYJsclk
- Pgf+bP2Jus1p0PUsJ5DPTW3cm0B7fZjEzQaT2NW8DSd4ewknNqQtNEwBRwjEtVaVt5pw
- Ea9SdD7s81zZFClYGfMzOmMxR+ryEC6Utt3Oej+7kNaiBNiDor7iSKrfDi6qFY6ZxAod
- V8sxBWYtTX+KzYrYH/3KFHMYIL/94I4Cfl2nMsFcLhG5PTk6/fy5FMvjkKhZCUi2086B
- Uxy3Ey1jK+xs9+b34JjaBygM13eL7Vxajifozl1lZQYICIUDaGNI18zrNiCna6L33RyQ QA== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=jAGKyWeA8QTcQMk/vfy8VOIt2qAQYrVxiznwPWy89lU=;
+ b=bqLjqQdMna77OQGoh74v+kipvppsSBqh35fz4GwW9q3Vf8Ub2mEy/qqSq5cMRVmGP39Y
+ Ir7wMjSkuULc4BNoHlenQnXVaW3wz1MZGhMXlPPZeHS7F813JUC4Wg/gYpteZxcbI7Oo
+ mY622oAwU6TeyK7sSR+OHmoKOhO/u7Z5Li3pcG6RdM+u+oA0YxfsU0sHKWlBIR5mc8d5
+ ge2Kf06rPi+3wr9lMKzu/AfqKmCa39b1liibrwfXcnlDmGxEoXnbd37U49Lq7slYbDH9
+ 4GoaEg+Qy6dZ1ogTYhJeB3zvF87r8/9kMcEYDR68P0la53VM/kAUH0RuOQEfZLi7nUqR Ew== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3ugbt1abug-10
+	by m0001303.ppops.net (PPS) with ESMTPS id 3ugbt1abug-11
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Mon, 20 Nov 2023 14:41:14 -0800
-Received: from twshared13322.02.ash9.facebook.com (2620:10d:c085:208::11) by
+	for <io-uring@vger.kernel.org>; Mon, 20 Nov 2023 14:41:15 -0800
+Received: from twshared13322.02.ash9.facebook.com (2620:10d:c085:108::8) by
  mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2507.34; Mon, 20 Nov 2023 14:41:02 -0800
 Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-	id 81B2421F1B1A6; Mon, 20 Nov 2023 14:40:59 -0800 (PST)
+	id E21F821F1B1B1; Mon, 20 Nov 2023 14:40:59 -0800 (PST)
 From: Keith Busch <kbusch@meta.com>
 To: <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
         <io-uring@vger.kernel.org>
 CC: <axboe@kernel.dk>, <hch@lst.de>, <joshi.k@samsung.com>,
         <martin.petersen@oracle.com>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv3 0/5] block integrity: directly map user space addresses
-Date: Mon, 20 Nov 2023 14:40:53 -0800
-Message-ID: <20231120224058.2750705-1-kbusch@meta.com>
+Subject: [PATCHv3 4/5] iouring: remove IORING_URING_CMD_POLLED
+Date: Mon, 20 Nov 2023 14:40:57 -0800
+Message-ID: <20231120224058.2750705-5-kbusch@meta.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231120224058.2750705-1-kbusch@meta.com>
+References: <20231120224058.2750705-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -43,49 +45,33 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: M2D3XBtLr8Hl8b7rLEGZkAnesReF8oZP
-X-Proofpoint-ORIG-GUID: M2D3XBtLr8Hl8b7rLEGZkAnesReF8oZP
+X-Proofpoint-GUID: 0sw7Nlwy4UF8ppSqawMJsuc_rSGGaIgj
+X-Proofpoint-ORIG-GUID: 0sw7Nlwy4UF8ppSqawMJsuc_rSGGaIgj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-11-20_22,2023-11-20_01,2023-05-22_02
 
 From: Keith Busch <kbusch@kernel.org>
 
-Handling passthrough metadata ("integrity") today introduces overhead
-and complications that we can avoid if we just map user space addresses
-directly. This patch series implements that, falling back to a kernel
-bounce buffer if necessary.
+No more users of this flag.
 
-v2->v3:
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+---
+ include/linux/io_uring.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-  Introduces a multi-page bvec iterator.
-
-  Fix leaking pinned user pages (Kanchan)
-
-  Fix final unpaired 'put' on user pages (Kanchan)
-
-  Doesn't increase the size of 'struct bio_integrity_profile'; if the
-  'copy_vec' pointer is needed, it gets appended to the existing bvec.
-
-  Fix compiler warnings
-
-  Fix compiler error for !CONFIG_BLK_INTEGRITY
-
-Keith Busch (5):
-  bvec: introduce multi-page bvec iterating
-  block: bio-integrity: directly map user buffers
-  nvme: use bio_integrity_map_user
-  iouring: remove IORING_URING_CMD_POLLED
-  io_uring: remove uring_cmd cookie
-
- block/bio-integrity.c     | 212 ++++++++++++++++++++++++++++++++++++++
- drivers/nvme/host/ioctl.c | 197 ++++++-----------------------------
- include/linux/bio.h       |  12 +++
- include/linux/bvec.h      |   6 ++
- include/linux/io_uring.h  |   9 +-
- io_uring/uring_cmd.c      |   1 -
- 6 files changed, 261 insertions(+), 176 deletions(-)
-
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index aefb73eeeebff..fe23bf88f86fa 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -28,7 +28,6 @@ enum io_uring_cmd_flags {
+=20
+ /* only top 8 bits of sqe->uring_cmd_flags for kernel internal use */
+ #define IORING_URING_CMD_CANCELABLE	(1U << 30)
+-#define IORING_URING_CMD_POLLED		(1U << 31)
+=20
+ struct io_uring_cmd {
+ 	struct file	*file;
 --=20
 2.34.1
 
