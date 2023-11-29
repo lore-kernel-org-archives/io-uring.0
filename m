@@ -1,405 +1,169 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="mXPaWhGv"
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB0ED5D
-	for <io-uring@vger.kernel.org>; Tue, 28 Nov 2023 14:28:18 -0800 (PST)
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ASGXAaq028213
-	for <io-uring@vger.kernel.org>; Tue, 28 Nov 2023 14:28:18 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=vFnUfQv67t7xbN71IcefHQtSZrJP7dhwSFWfi58914A=;
- b=mXPaWhGvmt2q0tqVzFmX8cv550MXSSNVLcOpjBN8HUmfqliQoWNVmhWfkr3X/fqiHDu4
- gmR84TKQ78jyQ9erB+MFlQZRho9MVcSR7nemp+wRYyLIvv1ZaaURv4m6TYT5yo1LF1Ek
- f5rH5p7jXrfiwZnH5FQjRuiJ3dWsw+73Qm37FLmLI0KL2KBckNFMwr+IOnpq3WxhNOvi
- 62L5LMg6/LER/Wl7gaCRIVh7aR26z6SELgwN++9ZN0nq9fDhlrNYgvKWvRFvLoU8Ayn+
- O21ngcKdAzxF99SFjrl0zoiAxEpbp4Z3bDzb3rfW0mBa5xpqY6svpTgSutZy7hf1hhBS /w== 
-Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3un6j7q3ps-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Tue, 28 Nov 2023 14:28:18 -0800
-Received: from twshared15991.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 28 Nov 2023 14:28:07 -0800
-Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-	id 9BC6C2252F0C5; Tue, 28 Nov 2023 14:27:53 -0800 (PST)
-From: Keith Busch <kbusch@meta.com>
-To: <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <io-uring@vger.kernel.org>
-CC: <axboe@kernel.dk>, <hch@lst.de>, <joshi.k@samsung.com>,
-        <martin.petersen@oracle.com>, <ming.lei@redhat.com>,
-        Keith Busch
-	<kbusch@kernel.org>
-Subject: [PATCHv4 2/4] nvme: use bio_integrity_map_user
-Date: Tue, 28 Nov 2023 14:27:50 -0800
-Message-ID: <20231128222752.1767344-3-kbusch@meta.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231128222752.1767344-1-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XCbporUb";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="vg2K6p8U"
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FD2183;
+	Tue, 28 Nov 2023 17:38:04 -0800 (PST)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT0u5Eo031328;
+	Wed, 29 Nov 2023 01:37:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-11-20;
+ bh=L3Aw8Q7iOsxMqWZ5nffn5IQU58It66eKfegayr/8SE0=;
+ b=XCbporUbIJBg05FII+hI7aT1Ft2zdxSD/FCxPqu1hVqTp91kVR4Qawho9ve1fcvTxrpQ
+ uiOKbOoiYTk8fj7+MlsiSwQjE7Jzo9pUyVjtCvNeP+HMsB6BCWJunW0HL4ygFWNoU3VT
+ p964W3hLmb7WoTFi5BjhFMmfMuSi6yw62m55GhjALk/JXlxPSWzJwwMAbpOHKJkp68/t
+ XUa66I0q8Pff272NEAHhsrrtf/eaDhYzIBSc/sVA8oOgtJM073smDcf42H7dbtTFt+N4
+ r6mc+IfjxbD+217tE3dKKPDYj7gQ/MV2A7l0iv6gNq51R1wQSGzt0+I9srgcFkfp+X+P sQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3uk7ucqakp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Nov 2023 01:37:38 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT0jwDJ012649;
+	Wed, 29 Nov 2023 01:37:38 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3uk7c835jj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Nov 2023 01:37:38 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LrcM8Ar8w9H5sygIhqIdw5VyURXgEHxVMqH8RVCrSqL9UwtG5CZo6iRNHgslBM6qvJEn/oUqt/0s6mkJSnExmpC6uvxAsg7qAbRBww+UQPNCdq8XQtiO4NaUDx6cVuXnBAF2Hw+y+ngclD7NR69WZ4iAursU+gjsY4h/9PK4wbf0uABVxWfSgaApdN1wP0wztpLWSzu0PfAhYXQJIvhP3JrXWmENO3GjNeedcIUDkR5NGaygv6xeLde3H7iomSnmrjuoEf3t8vZPr8PmX09sMmAAVmnFCapgwB9dAx1DflMNTMhuKHx8rsRo4P+41rap3F5oHiMZi2fmDB5zwRnSmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L3Aw8Q7iOsxMqWZ5nffn5IQU58It66eKfegayr/8SE0=;
+ b=cK9LY6/Nn+6AU1TWW5mjQSj9kbCv4pIKgi1SUB5p7DGy5Ri7Sd97MxNSeqjxF+OEMAveAa8J32zXNt7T0g5oC8ZggI57aEXG17lj5FVuzQMbJDMA4PxCFAfPMdFKJ7VbsaaFbSm2Ck0eg37V5jbtVt9f6WW3+G7MSyYdvJjaCE2uzMrj2kpxXKRhs9ZpfSIQ1ydRDLcf60UnbsHflB9C208cMK7dY+OVJIbyacWFcpCVmx7zikAEtOAr0fNO+dLhyA4Dkte9jEO6QuyXIHOzjYfL0yH86iv/syiVA44eNFAU1vzGEaLF3Pshxooiowuemh4j8vbDyXkVnwa5AjdlLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L3Aw8Q7iOsxMqWZ5nffn5IQU58It66eKfegayr/8SE0=;
+ b=vg2K6p8Uv4N+jExE7iPrVPSPHK7mwo7H0QgWbCgnDnPORWkjx7n3wmQcVI8Pyz05bRJFlAr4kq6+hVIV4PP/a7hgVz3SrblTbnbRK1ROmdBqo67KDbA1J99QgKxTjGN7cUjGwwIxNmq7zC4KvUlRRpz8P2JcOJjymQT0UqBFvUw=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by SA1PR10MB5760.namprd10.prod.outlook.com (2603:10b6:806:23f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Wed, 29 Nov
+ 2023 01:37:35 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::995d:69a3:a135:1494]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::995d:69a3:a135:1494%5]) with mapi id 15.20.7025.022; Wed, 29 Nov 2023
+ 01:37:35 +0000
+To: Keith Busch <kbusch@meta.com>
+Cc: <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <io-uring@vger.kernel.org>, <axboe@kernel.dk>, <hch@lst.de>,
+        <joshi.k@samsung.com>, <martin.petersen@oracle.com>,
+        <ming.lei@redhat.com>, Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCHv4 0/4] block integrity: directly map user space addresses
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq134wptk5a.fsf@ca-mkp.ca.oracle.com>
 References: <20231128222752.1767344-1-kbusch@meta.com>
+Date: Tue, 28 Nov 2023 20:37:33 -0500
+In-Reply-To: <20231128222752.1767344-1-kbusch@meta.com> (Keith Busch's message
+	of "Tue, 28 Nov 2023 14:27:48 -0800")
+Content-Type: text/plain
+X-ClientProxiedBy: BL0PR01CA0025.prod.exchangelabs.com (2603:10b6:208:71::38)
+ To PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: MOdMBOSeD3yn07MZkPRT2mnlIUaV2b97
-X-Proofpoint-ORIG-GUID: MOdMBOSeD3yn07MZkPRT2mnlIUaV2b97
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|SA1PR10MB5760:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f07e18d-8eb8-4550-7ed2-08dbf07bc399
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	/17RWTK49gbDpDG7qufGbwBBBQoKJuhV457p9NnXM4akAMyy9UdxwAc0qbYYxvsFUVH3MqPk9vzRG0VoXsxEt4JTsgPtkvByL5G33P8L81W0YU/4m6nya9jCZXmN33ppOWBoGMCvqwi+izfjqvpn5/bjcXshOTkW6y6eGfE+AinHYVQmjFfv0MLWY8O3fNaTyaSz82HYWahJQvI98l+NQ0N5Aixse2tbW5aARSlnOI+h3PC40aF9qCsEhBopVCTAubX85bENXfGLjwE34ki8pJWUVfyrEjX/CEvznoBB0ZCkOparwwWCn4Mn6kBKmQjXRbFHJsoCzua1DuJloN4bGimxurLp7rN7Z58Q0BjLMXhYK6HoVkMRQz2ZzKeFSyeUtGb3SnaYsAcpvf3RRahCWBsRFOTOgH9zIlcf0PGqEuZ8Ia1r41c1WRw9bjcYgCSdoXEd0aONiK0eQ40ZTboYyKXHvtOJAiMbfZacd66tUqxGdle+DEVmHOLH35P1GcMqdM+KLxAg4BN4hTxRlPmJfJFh4uMCboA5P4WPBMs2QQACVcJhRLsBKY9dw+gX/qV8
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(366004)(136003)(396003)(346002)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(4326008)(8936002)(8676002)(6512007)(6506007)(36916002)(66556008)(54906003)(66476007)(316002)(6916009)(6486002)(478600001)(66946007)(4744005)(41300700001)(38100700002)(86362001)(26005)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?03yjgzT4rckyLTmMz0iYyGpjR5JogOgWR5i/11KJOfyZOcoX8Jm5yClFPLrf?=
+ =?us-ascii?Q?iP5IuPqGIfg2DTOtXODXf+NhsUyZxtsQh28t5BUEC7BF5V71sl1YHDUIpFHS?=
+ =?us-ascii?Q?Bgr6ZRDQwvMLr6BoCqLLLy7RzcqB0CE2Cm4+vVtUVvhzfiRyatEeTUKJmpwg?=
+ =?us-ascii?Q?l1TSc252xeTvwrZrevwf9PYUYiI81Ny4WMCDws13GMLzsjPbKVdGv7c00iOk?=
+ =?us-ascii?Q?ZLfjZccTmoUbqnotKkYaxcNocVLu3v8tcd5HcFazcMDWih4kU2oSRfe9A1vm?=
+ =?us-ascii?Q?Gpcape8JpF9e/JjEErwI/bBydu33xahgTOn+71PfP6DJPePADRDdP/mo82Ex?=
+ =?us-ascii?Q?dpT/4GVle4ofVRNIfxeeY+DNZN4xRc4fi1rZobYBCNyqphuVZrAtKK9yUT8A?=
+ =?us-ascii?Q?n4wF6K2vAiwXWI6UoeD5Q3wPHvo9+8SlAcSUmvV7MxKKl5q4/GCptIUi9SbG?=
+ =?us-ascii?Q?e4Bc1Q8vXsPbUa/ToAvIjLAYU3ixY3bB9uA63DhCwzPjwamY1CUYm2JwiJrK?=
+ =?us-ascii?Q?s59iuBudCcrGlgYG5pKJQPOOXpKelxI2e5opUpzG6Byh9jSZDTLWDk7VU5rL?=
+ =?us-ascii?Q?TPeRSkPzRHqCfs668DbVTzoCfeQvZ4x9K9tBncJuDcdzyGwwU0TpO30BxPpf?=
+ =?us-ascii?Q?FVjbC9COXIilpRfj7FVBAYl0EroGDbhhJ7jV1kz9LkYHUg0QAcc/Q0xMA/2T?=
+ =?us-ascii?Q?YOAVyRqZ3x6ln9LmCb2eCQVfSydqauLSpqWzGfl3NGJ8m4GZtztiF/zGv8rx?=
+ =?us-ascii?Q?nMSPrFzQEot1IsDaL6lOLuD+Ul5mm38H3fkKb4yr18szrQ+om05a7h1alZm8?=
+ =?us-ascii?Q?vy0tol6mWYsnEtQzH28HrPOKf9SjqCpNspWdOA0PN+hc2GkTZQRo9UjUTzpK?=
+ =?us-ascii?Q?RYp/BYJjyO5ogzirTp+lQY9ics+OxChs6RUFHleJ0Ji66s/g5//zakv0cAFD?=
+ =?us-ascii?Q?EXJFw3lN8hruahkLKELWlc3vxj4u+HBDsizd8L4OglGrBDiteXGvtaOeOEMm?=
+ =?us-ascii?Q?LlGktzsvnXvwaHHNYYvfhJRe5qAjv4BvxpG4ykGjoeEc4ha8BBudxW2EJoyL?=
+ =?us-ascii?Q?roVfYGDAW9g1Q2HKSmJU5MDo13hwI5Q/9LykVL+Itxwr47zTkFVcjdc1fn9G?=
+ =?us-ascii?Q?t+V64PGf1dILRhOidTbU2R256GGe0j20uuTazHPn9susVgwSPZ9CqPR7mRpq?=
+ =?us-ascii?Q?zGmPaKFLkUWJJBGRuLDcNRREOI8UmvXmOFQznVSXPO9CvLjBNwutzsoYUmLS?=
+ =?us-ascii?Q?njJS7lyYf9LLWyEJ6Zjhm3M6X740rybdHCK06+7rksox7NxCgxWu8QqES/VU?=
+ =?us-ascii?Q?jnq80HUlH9Tr6SuRkr49EzLifMKD1+w/lcUih7jxkWPIsBmiot7hwn2HZ2HK?=
+ =?us-ascii?Q?3YyztbLQsL+LZYOycMWB4YBPDh4ZS1Q2Vsz8HrvK+UiYzXpnD9QnpohIznPL?=
+ =?us-ascii?Q?NGdSbfor6CiDX9V4LW87jrOc6Mvlvhi65E0i/l4fu7ZD3TDKcSCUFk2YKsCu?=
+ =?us-ascii?Q?FSGFLCXREeG/D4ziwHdy9zKiAIitmqxTIBajHu4lDbyhYCWp+nzIEHFWUwdq?=
+ =?us-ascii?Q?BSDEAXPqDfSUfyqzHH29zpaZPoJFiC8CCYnpSvRPWAvn1CMFuOZT9JqtG7YD?=
+ =?us-ascii?Q?2A=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	=?us-ascii?Q?OAkhNbfftPabOY8CzHwdR4sks2DrSQ79fk/dz3ALOriFVVKqKtDFtMxI/sJu?=
+ =?us-ascii?Q?cxOmlrJ56RYU3Sae4J29OlnMqRFzQd7xBFvSmUtOSjqlkFcAKdMYXDvXZM9T?=
+ =?us-ascii?Q?+tar96z7ZVaPoggV5pSZzB7XdN1iTDWZAajFIKKZpmIvrVyGO2W/9M9waE7x?=
+ =?us-ascii?Q?pip723/oJCWOvakptlQfjN5vH8UziXorqM1Rq5VmscF3iE+HaJ6Bj6MXa6jA?=
+ =?us-ascii?Q?xbOe3xNAOTgQEOU/0Akgy6xVxJEYKeWS0irxhOMui++y+9NRGK1UO2YrmiXX?=
+ =?us-ascii?Q?C5hifx7rCs7gb4jnED9SDc8heARYzqEmkU/oHtGNwkOXMRt4W/JmTB9ZAgfJ?=
+ =?us-ascii?Q?i5C5cLdeY3gWRo+tkbquoWzNIfx+iFhI2ZFCKgISlbYBRhPYgRK9WhnrfD0b?=
+ =?us-ascii?Q?Wbxidjm/COO/xA3KHIFClmJ67Iw+Y/dQkxw8ZE9f81xXSR7ybw6LgUZ61NDd?=
+ =?us-ascii?Q?8STK7jOCAPUh9OQTW+L2b7o9ySZbmfnSgkaDGpDZQncDAR1loEHNp1hznqLw?=
+ =?us-ascii?Q?0YmZ8hL9jwnbqtQuk98VWvs6WBAHFVKPJ5VwSC6thL1kW9eLuNhKSEIvU+X3?=
+ =?us-ascii?Q?PuxR+F4hJs+XtiZB4Vq95KobnUJhWcCDPX8stRYRnB1m3sBRSWG2NYHsqOoP?=
+ =?us-ascii?Q?zMPuVNhPrGAZxFYs6j2ONog3ktq69RTDJfU9QHtYQ8epeNGiitjh+vgcuDsC?=
+ =?us-ascii?Q?OQdIfxDsNz2UP/eQisdV9NEjMTbbNi0GKD9jZe1PpFuv0Gmzwzzv3ANFj5mu?=
+ =?us-ascii?Q?ESADyGehbl9ese+MpU1QnjK3Mhlt5uPxsm0u6BQPBGA41yPP4QKucw6mc7Cw?=
+ =?us-ascii?Q?HxbidErMJUNq6009MyAFfU7EUp0YBNWWuvw7jgGuLRwNp5+fcut5wPIfGBcR?=
+ =?us-ascii?Q?DPB1M8A71MY9fxtm7FwxASh2y4kgtOB8Vqs9EXeukN68W9hqZqch5Ad07cSw?=
+ =?us-ascii?Q?CNq0U4kEWgvv1JXo/qChfp7n0roba8GHMUW42l+2qZg=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f07e18d-8eb8-4550-7ed2-08dbf07bc399
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 01:37:35.7376
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GOFGQEsFLzc5BYOWFa2yVQgAuajnltPaNrs/wkPDrEvq59vKRyoDXFZ/lTJkq8dZDxkgw/70aWrpWq3pz8H/sBrhLsBAe8408zmHmWUiG9M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB5760
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-28_24,2023-11-27_01,2023-05-22_02
+ definitions=2023-11-28_27,2023-11-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 adultscore=0 mlxlogscore=815
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311290010
+X-Proofpoint-GUID: SDKyaYk7NF9_gw66wLl5UfRvapmaorAW
+X-Proofpoint-ORIG-GUID: SDKyaYk7NF9_gw66wLl5UfRvapmaorAW
 
-From: Keith Busch <kbusch@kernel.org>
 
-Map user metadata buffers directly. Now that the bio tracks the
-metadata, nvme doesn't need special metadata handling and tracking with
-callbacks and additional fields in the pdu.
+Keith,
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- drivers/nvme/host/ioctl.c | 197 ++++++--------------------------------
- 1 file changed, 29 insertions(+), 168 deletions(-)
+> Handling passthrough metadata ("integrity") today introduces overhead
+> and complications that we can avoid if we just map user space
+> addresses directly. This patch series implements that, falling back to
+> a kernel bounce buffer if necessary.
 
-diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
-index 529b9954d2b8c..32c9bcf491a33 100644
---- a/drivers/nvme/host/ioctl.c
-+++ b/drivers/nvme/host/ioctl.c
-@@ -96,58 +96,6 @@ static void __user *nvme_to_user_ptr(uintptr_t ptrval)
- 	return (void __user *)ptrval;
- }
-=20
--static void *nvme_add_user_metadata(struct request *req, void __user *ub=
-uf,
--		unsigned len, u32 seed)
--{
--	struct bio_integrity_payload *bip;
--	int ret =3D -ENOMEM;
--	void *buf;
--	struct bio *bio =3D req->bio;
--
--	buf =3D kmalloc(len, GFP_KERNEL);
--	if (!buf)
--		goto out;
--
--	if (req_op(req) =3D=3D REQ_OP_DRV_OUT) {
--		ret =3D -EFAULT;
--		if (copy_from_user(buf, ubuf, len))
--			goto out_free_meta;
--	} else {
--		memset(buf, 0, len);
--	}
--
--	bip =3D bio_integrity_alloc(bio, GFP_KERNEL, 1);
--	if (IS_ERR(bip)) {
--		ret =3D PTR_ERR(bip);
--		goto out_free_meta;
--	}
--
--	bip->bip_iter.bi_sector =3D seed;
--	ret =3D bio_integrity_add_page(bio, virt_to_page(buf), len,
--			offset_in_page(buf));
--	if (ret !=3D len) {
--		ret =3D -ENOMEM;
--		goto out_free_meta;
--	}
--
--	req->cmd_flags |=3D REQ_INTEGRITY;
--	return buf;
--out_free_meta:
--	kfree(buf);
--out:
--	return ERR_PTR(ret);
--}
--
--static int nvme_finish_user_metadata(struct request *req, void __user *u=
-buf,
--		void *meta, unsigned len, int ret)
--{
--	if (!ret && req_op(req) =3D=3D REQ_OP_DRV_IN &&
--	    copy_to_user(ubuf, meta, len))
--		ret =3D -EFAULT;
--	kfree(meta);
--	return ret;
--}
--
- static struct request *nvme_alloc_user_request(struct request_queue *q,
- 		struct nvme_command *cmd, blk_opf_t rq_flags,
- 		blk_mq_req_flags_t blk_flags)
-@@ -164,14 +112,12 @@ static struct request *nvme_alloc_user_request(stru=
-ct request_queue *q,
-=20
- static int nvme_map_user_request(struct request *req, u64 ubuffer,
- 		unsigned bufflen, void __user *meta_buffer, unsigned meta_len,
--		u32 meta_seed, void **metap, struct io_uring_cmd *ioucmd,
--		unsigned int flags)
-+		u32 meta_seed, struct io_uring_cmd *ioucmd, unsigned int flags)
- {
- 	struct request_queue *q =3D req->q;
- 	struct nvme_ns *ns =3D q->queuedata;
- 	struct block_device *bdev =3D ns ? ns->disk->part0 : NULL;
- 	struct bio *bio =3D NULL;
--	void *meta =3D NULL;
- 	int ret;
-=20
- 	if (ioucmd && (ioucmd->flags & IORING_URING_CMD_FIXED)) {
-@@ -193,18 +139,17 @@ static int nvme_map_user_request(struct request *re=
-q, u64 ubuffer,
-=20
- 	if (ret)
- 		goto out;
-+
- 	bio =3D req->bio;
--	if (bdev)
-+	if (bdev) {
- 		bio_set_dev(bio, bdev);
--
--	if (bdev && meta_buffer && meta_len) {
--		meta =3D nvme_add_user_metadata(req, meta_buffer, meta_len,
--				meta_seed);
--		if (IS_ERR(meta)) {
--			ret =3D PTR_ERR(meta);
--			goto out_unmap;
-+		if (meta_buffer && meta_len) {
-+			ret =3D bio_integrity_map_user(bio, meta_buffer, meta_len,
-+						     meta_seed);
-+			if (ret)
-+				goto out_unmap;
-+			req->cmd_flags |=3D REQ_INTEGRITY;
- 		}
--		*metap =3D meta;
- 	}
-=20
- 	return ret;
-@@ -225,7 +170,6 @@ static int nvme_submit_user_cmd(struct request_queue =
-*q,
- 	struct nvme_ns *ns =3D q->queuedata;
- 	struct nvme_ctrl *ctrl;
- 	struct request *req;
--	void *meta =3D NULL;
- 	struct bio *bio;
- 	u32 effects;
- 	int ret;
-@@ -237,7 +181,7 @@ static int nvme_submit_user_cmd(struct request_queue =
-*q,
- 	req->timeout =3D timeout;
- 	if (ubuffer && bufflen) {
- 		ret =3D nvme_map_user_request(req, ubuffer, bufflen, meta_buffer,
--				meta_len, meta_seed, &meta, NULL, flags);
-+				meta_len, meta_seed, NULL, flags);
- 		if (ret)
- 			return ret;
- 	}
-@@ -249,9 +193,6 @@ static int nvme_submit_user_cmd(struct request_queue =
-*q,
- 	ret =3D nvme_execute_rq(req, false);
- 	if (result)
- 		*result =3D le64_to_cpu(nvme_req(req)->result.u64);
--	if (meta)
--		ret =3D nvme_finish_user_metadata(req, meta_buffer, meta,
--						meta_len, ret);
- 	if (bio)
- 		blk_rq_unmap_user(bio);
- 	blk_mq_free_request(req);
-@@ -446,19 +387,10 @@ struct nvme_uring_data {
-  * Expect build errors if this grows larger than that.
-  */
- struct nvme_uring_cmd_pdu {
--	union {
--		struct bio *bio;
--		struct request *req;
--	};
--	u32 meta_len;
--	u32 nvme_status;
--	union {
--		struct {
--			void *meta; /* kernel-resident buffer */
--			void __user *meta_buffer;
--		};
--		u64 result;
--	} u;
-+	struct request *req;
-+	struct bio *bio;
-+	u64 result;
-+	int status;
- };
-=20
- static inline struct nvme_uring_cmd_pdu *nvme_uring_cmd_pdu(
-@@ -467,31 +399,6 @@ static inline struct nvme_uring_cmd_pdu *nvme_uring_=
-cmd_pdu(
- 	return (struct nvme_uring_cmd_pdu *)&ioucmd->pdu;
- }
-=20
--static void nvme_uring_task_meta_cb(struct io_uring_cmd *ioucmd,
--				    unsigned issue_flags)
--{
--	struct nvme_uring_cmd_pdu *pdu =3D nvme_uring_cmd_pdu(ioucmd);
--	struct request *req =3D pdu->req;
--	int status;
--	u64 result;
--
--	if (nvme_req(req)->flags & NVME_REQ_CANCELLED)
--		status =3D -EINTR;
--	else
--		status =3D nvme_req(req)->status;
--
--	result =3D le64_to_cpu(nvme_req(req)->result.u64);
--
--	if (pdu->meta_len)
--		status =3D nvme_finish_user_metadata(req, pdu->u.meta_buffer,
--					pdu->u.meta, pdu->meta_len, status);
--	if (req->bio)
--		blk_rq_unmap_user(req->bio);
--	blk_mq_free_request(req);
--
--	io_uring_cmd_done(ioucmd, status, result, issue_flags);
--}
--
- static void nvme_uring_task_cb(struct io_uring_cmd *ioucmd,
- 			       unsigned issue_flags)
- {
-@@ -499,8 +406,7 @@ static void nvme_uring_task_cb(struct io_uring_cmd *i=
-oucmd,
-=20
- 	if (pdu->bio)
- 		blk_rq_unmap_user(pdu->bio);
--
--	io_uring_cmd_done(ioucmd, pdu->nvme_status, pdu->u.result, issue_flags)=
-;
-+	io_uring_cmd_done(ioucmd, pdu->status, pdu->result, issue_flags);
- }
-=20
- static enum rq_end_io_ret nvme_uring_cmd_end_io(struct request *req,
-@@ -509,53 +415,24 @@ static enum rq_end_io_ret nvme_uring_cmd_end_io(str=
-uct request *req,
- 	struct io_uring_cmd *ioucmd =3D req->end_io_data;
- 	struct nvme_uring_cmd_pdu *pdu =3D nvme_uring_cmd_pdu(ioucmd);
-=20
--	req->bio =3D pdu->bio;
--	if (nvme_req(req)->flags & NVME_REQ_CANCELLED) {
--		pdu->nvme_status =3D -EINTR;
--	} else {
--		pdu->nvme_status =3D nvme_req(req)->status;
--		if (!pdu->nvme_status)
--			pdu->nvme_status =3D blk_status_to_errno(err);
--	}
--	pdu->u.result =3D le64_to_cpu(nvme_req(req)->result.u64);
-+	if (nvme_req(req)->flags & NVME_REQ_CANCELLED)
-+		pdu->status =3D -EINTR;
-+	else
-+		pdu->status =3D nvme_req(req)->status;
-+	pdu->result =3D le64_to_cpu(nvme_req(req)->result.u64);
-=20
- 	/*
- 	 * For iopoll, complete it directly.
- 	 * Otherwise, move the completion to task work.
- 	 */
--	if (blk_rq_is_poll(req)) {
--		WRITE_ONCE(ioucmd->cookie, NULL);
-+	if (blk_rq_is_poll(req))
- 		nvme_uring_task_cb(ioucmd, IO_URING_F_UNLOCKED);
--	} else {
-+	else
- 		io_uring_cmd_do_in_task_lazy(ioucmd, nvme_uring_task_cb);
--	}
-=20
- 	return RQ_END_IO_FREE;
- }
-=20
--static enum rq_end_io_ret nvme_uring_cmd_end_io_meta(struct request *req=
-,
--						     blk_status_t err)
--{
--	struct io_uring_cmd *ioucmd =3D req->end_io_data;
--	struct nvme_uring_cmd_pdu *pdu =3D nvme_uring_cmd_pdu(ioucmd);
--
--	req->bio =3D pdu->bio;
--	pdu->req =3D req;
--
--	/*
--	 * For iopoll, complete it directly.
--	 * Otherwise, move the completion to task work.
--	 */
--	if (blk_rq_is_poll(req)) {
--		WRITE_ONCE(ioucmd->cookie, NULL);
--		nvme_uring_task_meta_cb(ioucmd, IO_URING_F_UNLOCKED);
--	} else {
--		io_uring_cmd_do_in_task_lazy(ioucmd, nvme_uring_task_meta_cb);
--	}
--
--	return RQ_END_IO_NONE;
--}
--
- static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
- 		struct io_uring_cmd *ioucmd, unsigned int issue_flags, bool vec)
- {
-@@ -567,7 +444,6 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, =
-struct nvme_ns *ns,
- 	struct request *req;
- 	blk_opf_t rq_flags =3D REQ_ALLOC_CACHE;
- 	blk_mq_req_flags_t blk_flags =3D 0;
--	void *meta =3D NULL;
- 	int ret;
-=20
- 	c.common.opcode =3D READ_ONCE(cmd->opcode);
-@@ -615,27 +491,16 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl=
-, struct nvme_ns *ns,
- 	if (d.addr && d.data_len) {
- 		ret =3D nvme_map_user_request(req, d.addr,
- 			d.data_len, nvme_to_user_ptr(d.metadata),
--			d.metadata_len, 0, &meta, ioucmd, vec);
-+			d.metadata_len, 0, ioucmd, vec);
- 		if (ret)
- 			return ret;
- 	}
-=20
--	if (blk_rq_is_poll(req)) {
--		ioucmd->flags |=3D IORING_URING_CMD_POLLED;
--		WRITE_ONCE(ioucmd->cookie, req);
--	}
--
- 	/* to free bio on completion, as req->bio will be null at that time */
- 	pdu->bio =3D req->bio;
--	pdu->meta_len =3D d.metadata_len;
-+	pdu->req =3D req;
- 	req->end_io_data =3D ioucmd;
--	if (pdu->meta_len) {
--		pdu->u.meta =3D meta;
--		pdu->u.meta_buffer =3D nvme_to_user_ptr(d.metadata);
--		req->end_io =3D nvme_uring_cmd_end_io_meta;
--	} else {
--		req->end_io =3D nvme_uring_cmd_end_io;
--	}
-+	req->end_io =3D nvme_uring_cmd_end_io;
- 	blk_execute_rq_nowait(req, false);
- 	return -EIOCBQUEUED;
- }
-@@ -786,16 +651,12 @@ int nvme_ns_chr_uring_cmd_iopoll(struct io_uring_cm=
-d *ioucmd,
- 				 struct io_comp_batch *iob,
- 				 unsigned int poll_flags)
- {
--	struct request *req;
--	int ret =3D 0;
--
--	if (!(ioucmd->flags & IORING_URING_CMD_POLLED))
--		return 0;
-+	struct nvme_uring_cmd_pdu *pdu =3D nvme_uring_cmd_pdu(ioucmd);
-+	struct request *req =3D pdu->req;
-=20
--	req =3D READ_ONCE(ioucmd->cookie);
- 	if (req && blk_rq_is_poll(req))
--		ret =3D blk_rq_poll(req, iob, poll_flags);
--	return ret;
-+		return blk_rq_poll(req, iob, poll_flags);
-+	return 0;
- }
- #ifdef CONFIG_NVME_MULTIPATH
- static int nvme_ns_head_ctrl_ioctl(struct nvme_ns *ns, unsigned int cmd,
---=20
-2.34.1
+Looks good to me.
 
+Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
