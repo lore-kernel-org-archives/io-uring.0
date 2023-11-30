@@ -1,48 +1,53 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Yt/0j+7j"
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1D493
-	for <io-uring@vger.kernel.org>; Thu, 30 Nov 2023 11:46:40 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7b37846373eso16353639f.0
-        for <io-uring@vger.kernel.org>; Thu, 30 Nov 2023 11:46:40 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="XnXwgLPZ"
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBA8D7F
+	for <io-uring@vger.kernel.org>; Thu, 30 Nov 2023 11:46:43 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-7b05e65e784so6243839f.1
+        for <io-uring@vger.kernel.org>; Thu, 30 Nov 2023 11:46:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1701373599; x=1701978399; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gSjrdmYeud8jkRInCLywv3RIxMiq9wQoWdwhXzJowIk=;
-        b=Yt/0j+7j9J3Ct5J73qYsN83D700GwAbiQCMIwVpVKIxITCFWp4bs5xTdfvyiUIEKgV
-         Ywyqh+Wuwc/Zz+uY+4cOOz2ITnqLAnEMnSSRy0FkgZwCcJCu/l2lhW4pzx9B21jg0ZhA
-         eWZnnYcjhDqBUnVozTTxP23xYCfiK6jDE506/DUiR7xNq4z1dkia5RatvQrQwZaYAnRE
-         5oVtm2rI7TRMNvfYX5zrwosIIfHWVDIIYKiGqZplTZi+aSEkebQCQSIiKA+2pfsxx5SE
-         i+fjhgXOAGUZMYWhjHKMHeXI6XnAzk6iQnijIWR1Nwz1ppFgRO9RC+0PJ3v5Z7Y92z4z
-         uVrA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1701373602; x=1701978402; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f9hDKK//PcdFxhtS7/Qn7jAt09MAas7oaU4k4FD1Rqw=;
+        b=XnXwgLPZvmIeKv2Y9jZtds8oYOniL/y4dXZrOBat7gqzpaT/wA3b9mK1k06+L/IsVW
+         xmftrj7K1Xr7lkTuDA44QTNiBuSYA+L25pGFYt7KP7iwr6Nu0zz2Ey4gRl2THyW6k7ur
+         LuUEaOEL3hrSPVsw/9raK9Jtv2r5NqkbrLgJDN+uKAOdy9G6hCdh+d0RnbpqbwR4FVeA
+         xUBGfzZo/klUzWUylM+8LDesp1dhdYqGnKBgQXWRUMWtpHGJtGpQRLTSKS0XLStgYYVi
+         T40L+ddaH9UDgzdKfqZb+gneehZui2HyeVcDkOARPjmkc1yFLecHXjGSayzBWubfEs7k
+         B7RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701373599; x=1701978399;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gSjrdmYeud8jkRInCLywv3RIxMiq9wQoWdwhXzJowIk=;
-        b=BE7MWHncOWGkLmaG64dceed6Wic4se3l5gKZHpzwFeDd0yb6Tt3b/quArHahVGbSk+
-         oZlv6cNqugl/53DUTO4c1hv0zrPgzdIAzJxW2yHje16A3H/HcHlZ5/AuF9m6T8vWQO0O
-         Ub8cY4r/EvaOwyvakiuCfEr4qVEDVJ1CDY69tgvF2tIxN5v5z2GSqeFrGlHwequbMEQq
-         Kyb7Iiyd6KdYNcn62R/d0+T+ojG9ZUQXf2NxZi9lBXzFmXDTTVpSBDhv4OOSCKvKEzNk
-         F+HHLDNQ7+JlEMQOMRB2MygGHDf5YrqpanttywpCuN8irfSGsLzOVxF98/DogyEIOggy
-         B7Mg==
-X-Gm-Message-State: AOJu0YyzBuW/s9J8T/vQ5J7Di78qhexvWYf161qVIEMZNL+8vplRa++j
-	Zs5NwflXjpeygJMZcTj7qunjzYXU1Ghd+RmhsdJwLw==
-X-Google-Smtp-Source: AGHT+IHWpGpRnMZQnu7kjv5zcSATh9JrclfrjboaYDKBQjp2KN1pVHZeMGcCqxyO2s0KdIkvkmLlng==
-X-Received: by 2002:a5e:cb02:0:b0:7b0:acce:5535 with SMTP id p2-20020a5ecb02000000b007b0acce5535mr24376309iom.1.1701373599415;
-        Thu, 30 Nov 2023 11:46:39 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701373602; x=1701978402;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f9hDKK//PcdFxhtS7/Qn7jAt09MAas7oaU4k4FD1Rqw=;
+        b=SyPgs44+j12PbkqrJamEPSmO7hRGETODzf6Pc3F+rZxQIBXBpZ1Ibkd0/PM89zT8Ie
+         QHmZmpOp9ER7XHAQjxVL4xKcWrgjJhi9QsZzbIzQYK+3edFeqhSlj5EScqPH12yiDlW9
+         gOrFtEHWVMPPofro37cKPwY/FBcIDzLHviSRbP11yHom3O4i1WZM7eMpqx994NQifA4/
+         Bo5ByYo12CjswSBOeC86Kl1+HGd4j3cRL56q9Lod6n8a+Q8VOCYRA5j1po4Ga0pv+Mzn
+         uooZ2/73x+g6jff/qjhVMBFNj6fpG0VtkJ6k+xt7KCG2oKVbiABp6+nVSYud9dn7Rjsb
+         FABQ==
+X-Gm-Message-State: AOJu0Yyk7wypOTBSPlIiffN7kBu/3jJ2M5k9T2qhbp9Dq7KVKObFs1DW
+	SGYC8UMDgWMx/BowdHVeNjZTMsZmYKZsNapvTZnwRQ==
+X-Google-Smtp-Source: AGHT+IFJ6mHvElhGT5jPQ8JYEJZcf+L1A7r0mDrYJ68VOR4tM1Lj8OUi3k06cw9dAGnoUNZ86ahGUg==
+X-Received: by 2002:a5e:9512:0:b0:7b0:75a7:6606 with SMTP id r18-20020a5e9512000000b007b075a76606mr22604509ioj.0.1701373602272;
+        Thu, 30 Nov 2023 11:46:42 -0800 (PST)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id a18-20020a029f92000000b004667167d8cdsm461179jam.116.2023.11.30.11.46.38
-        for <io-uring@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id a18-20020a029f92000000b004667167d8cdsm461179jam.116.2023.11.30.11.46.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Nov 2023 11:46:38 -0800 (PST)
+        Thu, 30 Nov 2023 11:46:41 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Subject: [PATCHSET 0/8] Various io_uring fixes
-Date: Thu, 30 Nov 2023 12:45:46 -0700
-Message-ID: <20231130194633.649319-1-axboe@kernel.dk>
+Cc: Jens Axboe <axboe@kernel.dk>,
+	stable@vger.kernel.org
+Subject: [PATCH 2/8] io_uring: don't guard IORING_OFF_PBUF_RING with SETUP_NO_MMAP
+Date: Thu, 30 Nov 2023 12:45:48 -0700
+Message-ID: <20231130194633.649319-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231130194633.649319-1-axboe@kernel.dk>
+References: <20231130194633.649319-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -51,11 +56,44 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+This flag only applies to the SQ and CQ rings, it's perfectly valid
+to use a mmap approach for the provided ring buffers. Move the
+check into where it belongs.
 
-Random assortment of fixes, most of them marked for stable.
+Cc: stable@vger.kernel.org
+Fixes: 03d89a2de25b ("io_uring: support for user allocated memory for rings/sqes")
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/io_uring.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index b45abfd75415..52e4b14ad8aa 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -3478,16 +3478,18 @@ static void *io_uring_validate_mmap_request(struct file *file,
+ 	struct page *page;
+ 	void *ptr;
+ 
+-	/* Don't allow mmap if the ring was setup without it */
+-	if (ctx->flags & IORING_SETUP_NO_MMAP)
+-		return ERR_PTR(-EINVAL);
+-
+ 	switch (offset & IORING_OFF_MMAP_MASK) {
+ 	case IORING_OFF_SQ_RING:
+ 	case IORING_OFF_CQ_RING:
++		/* Don't allow mmap if the ring was setup without it */
++		if (ctx->flags & IORING_SETUP_NO_MMAP)
++			return ERR_PTR(-EINVAL);
+ 		ptr = ctx->rings;
+ 		break;
+ 	case IORING_OFF_SQES:
++		/* Don't allow mmap if the ring was setup without it */
++		if (ctx->flags & IORING_SETUP_NO_MMAP)
++			return ERR_PTR(-EINVAL);
+ 		ptr = ctx->sq_sqes;
+ 		break;
+ 	case IORING_OFF_PBUF_RING: {
 -- 
-Jens Axboe
-
+2.42.0
 
