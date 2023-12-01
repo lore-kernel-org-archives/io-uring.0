@@ -1,53 +1,59 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EehTV34I"
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E1FD7D
-	for <io-uring@vger.kernel.org>; Thu, 30 Nov 2023 16:40:49 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-50bce40bc4aso1626029e87.2
-        for <io-uring@vger.kernel.org>; Thu, 30 Nov 2023 16:40:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CZ5WmVb6"
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3002B171D;
+	Thu, 30 Nov 2023 16:59:32 -0800 (PST)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c9d4740e1cso12074731fa.1;
+        Thu, 30 Nov 2023 16:59:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701391247; x=1701996047; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701392370; x=1701997170; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IucjSlaP6FuzeHx615x/W2K2FBNgUt5/NJII3nf6WWY=;
-        b=EehTV34IewS2nYbV8/OidhTNB8AC3em7EyjhVgM1K5Y4ibdU2YpT6oeoq1s/h6xCPL
-         tr6ETWIYe+0h5Q6tIm7/Y22gBD7bVNiMTzo/uaKm8Z0ktdIP9ErbPNk+0FdExRok9Na2
-         ixA4umaphM2XzPE4khf99mD0v3O5c/Y+LUwAwpWWa+wfu45y7HXhkRnW6QGehfjPtx4u
-         wqP6ppTcEa5MVvZNlASH+jlH11kGSgOtMBLmuf16gUPE/c6BZJATkSQgRV5aXEf2jWed
-         1tnYTN1GYYOPs3OLLXAIpvl9JKIUjTwoPnHXG5cDO0SPLlkBECAdtAjx3KJtZxe/EcGH
-         qEWA==
+        bh=QmhVSg59KnuTjEpkqtsVamEUiD5Q79qxS4NrNhYjt80=;
+        b=CZ5WmVb62J6aZEAHXVY1ikaAD8eaFaKbc/4H+vST/9XGDPzCeNGb/aChpx+YPWfHDC
+         Xj0+EAZ3uKwe3GvQjcJjCqzbbe1+MiZZhPMyW0g9CjbDMWRSE7NO0G+BykDvysvJKIVE
+         91iwAC/2PCz4MgTmzc6JsJQTmftnF/DRBMUmOJW7z7tqPXA15MUcehd9RAzvHi1uPqby
+         PmPfFGkbxZi8pZJM3qypt5Z8bixDY1QvxkN78aRchjxwuHrzJqjT7s2oMBMfTirBeu7c
+         dh55yUms4PecAnoBGoTM8zE0jZDaUyAD+uBa3+bo8H3HuVBtU8uC5rVhW8WzZ7LuWXhF
+         e4FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701391247; x=1701996047;
+        d=1e100.net; s=20230601; t=1701392370; x=1701997170;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IucjSlaP6FuzeHx615x/W2K2FBNgUt5/NJII3nf6WWY=;
-        b=afpfOi8pcYHnxKqgNZts6h6uAW3RjhwS6wDmGUFZ2ZIeZghpZGdJt4bZU7K7o2nrKj
-         Uy4w3TyFyojXE0zwtItyp92lQEvXdKo5hPLyjx5w0X2Jhi7lt1rDby8XN6ixj0wyn2Q8
-         7MMlBdjcfl0XvefU2Ij5+VAm0sy2OnLgCYNLjtYYEIyyfT3FaKlLCaydllPIRNhUa2Dh
-         eOOGyyjLGTYJFXJC7vtopq2g+qIPO1nCkLbF+nCZGwoofbbrrJuXI6wAKSrbVVqvD/IC
-         cYwy7Dfwox+mEd5cKvFRqSQJQbJkXnHNYC8fDJIHsbKwDaxoIDFCInYzRG4bRn1L2GHn
-         WkgQ==
-X-Gm-Message-State: AOJu0YxXmt77PVfbXMCTnx6OvBlHjFa8eijmzKoQuLipaP1BozPOMuGz
-	D7qoS2Uw22iqhOZFlze4jBCx7uWdGXo=
-X-Google-Smtp-Source: AGHT+IHSGss9JC6pKatY/to24ku/DcCQ+ga6UJn++zCaq6VAE+ISjr4RiiHpVGP9qhjN9SnblECOrg==
-X-Received: by 2002:a05:6512:31cd:b0:50b:d34a:209a with SMTP id j13-20020a05651231cd00b0050bd34a209amr289176lfe.0.1701391247233;
-        Thu, 30 Nov 2023 16:40:47 -0800 (PST)
+        bh=QmhVSg59KnuTjEpkqtsVamEUiD5Q79qxS4NrNhYjt80=;
+        b=kmQ6IJOLXvRw3EJsMV0mDldnQww+sYl0cwwJkBo1QvY9fPPe8c8zf9nDqPn4+FhpA/
+         vVJcTeZg/5YqUJmJZOlQSz7OaXCgrloIZ1bol9JDnD7zYlFOJiYU8YCwjkLxu18s1mtV
+         1d3JRm4XIw7KfjssT3wAh5YzTUPJAF/G6qFF7+xqC6zrrfMKQV5wV6nRtKXytkZPVcQq
+         zGnzWKa3Dxis/jYi5Ie3498Z4Jub7Pb1SseRACkx5VaTXGYOBtmOBthQkvE0eRGG81ck
+         w+benhP6kOH/OcM70P78HPpU4BaDybXzVRdZy4g1u8qDya0qKYNurGC9f/oFXZqabo3L
+         XLJA==
+X-Gm-Message-State: AOJu0Yw6maDPCGuXt4CbFe+w+BTcR0W5E0Adwl85AztYFsHZUeai61Ac
+	3ndGbMy+fUlspIOxGFgn15ZXDv+YkDY=
+X-Google-Smtp-Source: AGHT+IFhwTksU6dn/WHUnR2RoFhnlXair9hraJjUZcVNlXwb44nFIKJF0plmfx4cVZ1n9AGHLTjlrg==
+X-Received: by 2002:a2e:360a:0:b0:2c9:dae6:4446 with SMTP id d10-20020a2e360a000000b002c9dae64446mr78866lja.200.1701392369793;
+        Thu, 30 Nov 2023 16:59:29 -0800 (PST)
 Received: from 127.0.0.1localhost ([185.69.145.191])
-        by smtp.gmail.com with ESMTPSA id ca25-20020aa7cd79000000b005489e55d95esm1059139edb.22.2023.11.30.16.40.46
+        by smtp.gmail.com with ESMTPSA id ks19-20020a170906f85300b00a11b2677acbsm1250511ejb.163.2023.11.30.16.59.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Nov 2023 16:40:46 -0800 (PST)
+        Thu, 30 Nov 2023 16:59:29 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: Jens Axboe <axboe@kernel.dk>,
-	asml.silence@gmail.com
-Subject: [PATCH for-next 2/2] io_uring: optimise ltimeout for inline execution
-Date: Fri,  1 Dec 2023 00:38:53 +0000
-Message-ID: <8bf69c2a4beec14c565c85c86edb871ca8b8bcc8.1701390926.git.asml.silence@gmail.com>
+	asml.silence@gmail.com,
+	linux-block@vger.kernel.org,
+	ming.lei@redhat.com,
+	joshi.k@samsung.com,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	Paul Moore <paul@paul-moore.com>
+Subject: [PATCH v2 2/3] io_uring/cmd: inline io_uring_cmd_do_in_task_lazy
+Date: Fri,  1 Dec 2023 00:57:36 +0000
+Message-ID: <2ec9fb31dd192d1c5cf26d0a2dec5657d88a8e48.1701391955.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1701390926.git.asml.silence@gmail.com>
-References: <cover.1701390926.git.asml.silence@gmail.com>
+In-Reply-To: <cover.1701391955.git.asml.silence@gmail.com>
+References: <cover.1701391955.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -56,58 +62,132 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-At one point in time we had an optimisation that would not spin up a
-linked timeout timer when the master request successfully completes
-inline (during the first nowait execution attempt). We somehow lost it,
-so this patch restores it back.
-
-Note, that it's fine using io_arm_ltimeout() after the io_issue_sqe()
-completes the request because of delayed completion, but that that adds
-unwanted overhead.
+Now as we can easily include io_uring_types.h, move IOU_F_TWQ_LAZY_WAKE
+and inline io_uring_cmd_do_in_task_lazy().
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ include/linux/io_uring/cmd.h   | 31 ++++++++++++++++---------------
+ include/linux/io_uring_types.h | 11 +++++++++++
+ io_uring/io_uring.h            | 10 ----------
+ io_uring/uring_cmd.c           |  7 -------
+ 4 files changed, 27 insertions(+), 32 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 21e646ef9654..6212f81ed887 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1900,14 +1900,15 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
- 		return 0;
- 	}
- 
--	if (ret != IOU_ISSUE_SKIP_COMPLETE)
--		return ret;
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index 62fcfaf6fcc9..ee9b3bc3a4af 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -36,15 +36,6 @@ void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret, ssize_t res2,
+ void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+ 			    void (*task_work_cb)(struct io_uring_cmd *, unsigned),
+ 			    unsigned flags);
+-/* users should follow semantics of IOU_F_TWQ_LAZY_WAKE */
+-void io_uring_cmd_do_in_task_lazy(struct io_uring_cmd *ioucmd,
+-			void (*task_work_cb)(struct io_uring_cmd *, unsigned));
 -
--	/* If the op doesn't have a file, we're not polling for it */
--	if ((req->ctx->flags & IORING_SETUP_IOPOLL) && def->iopoll_queue)
--		io_iopoll_req_issued(req, issue_flags);
-+	if (ret == IOU_ISSUE_SKIP_COMPLETE) {
-+		ret = 0;
-+		io_arm_ltimeout(req);
+-static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+-			void (*task_work_cb)(struct io_uring_cmd *, unsigned))
+-{
+-	__io_uring_cmd_do_in_task(ioucmd, task_work_cb, 0);
+-}
  
--	return 0;
-+		/* If the op doesn't have a file, we're not polling for it */
-+		if ((req->ctx->flags & IORING_SETUP_IOPOLL) && def->iopoll_queue)
-+			io_iopoll_req_issued(req, issue_flags);
-+	}
-+	return ret;
+ void io_uring_cmd_mark_cancelable(struct io_uring_cmd *cmd,
+ 		unsigned int issue_flags);
+@@ -60,12 +51,9 @@ static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+ 		ssize_t ret2, unsigned issue_flags)
+ {
  }
- 
- int io_poll_issue(struct io_kiocb *req, struct io_tw_state *ts)
-@@ -2078,9 +2079,7 @@ static inline void io_queue_sqe(struct io_kiocb *req)
- 	 * We async punt it if the file wasn't marked NOWAIT, or if the file
- 	 * doesn't support non-blocking read/write attempts
- 	 */
--	if (likely(!ret))
--		io_arm_ltimeout(req);
--	else
-+	if (unlikely(ret))
- 		io_queue_async(req, ret);
+-static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
+-			void (*task_work_cb)(struct io_uring_cmd *, unsigned))
+-{
+-}
+-static inline void io_uring_cmd_do_in_task_lazy(struct io_uring_cmd *ioucmd,
+-			void (*task_work_cb)(struct io_uring_cmd *, unsigned))
++static inline void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
++			    void (*task_work_cb)(struct io_uring_cmd *, unsigned),
++			    unsigned flags)
+ {
  }
+ static inline void io_uring_cmd_mark_cancelable(struct io_uring_cmd *cmd,
+@@ -78,4 +66,17 @@ static inline struct task_struct *io_uring_cmd_get_task(struct io_uring_cmd *cmd
+ }
+ #endif
  
++/* users must follow the IOU_F_TWQ_LAZY_WAKE semantics */
++static inline void io_uring_cmd_do_in_task_lazy(struct io_uring_cmd *ioucmd,
++			void (*task_work_cb)(struct io_uring_cmd *, unsigned))
++{
++	__io_uring_cmd_do_in_task(ioucmd, task_work_cb, IOU_F_TWQ_LAZY_WAKE);
++}
++
++static inline void io_uring_cmd_complete_in_task(struct io_uring_cmd *ioucmd,
++			void (*task_work_cb)(struct io_uring_cmd *, unsigned))
++{
++	__io_uring_cmd_do_in_task(ioucmd, task_work_cb, 0);
++}
++
+ #endif /* _LINUX_IO_URING_CMD_H */
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 0bcecb734af3..8ff4642dc6e3 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -7,6 +7,17 @@
+ #include <linux/llist.h>
+ #include <uapi/linux/io_uring.h>
+ 
++enum {
++	/*
++	 * A hint to not wake right away but delay until there are enough of
++	 * tw's queued to match the number of CQEs the task is waiting for.
++	 *
++	 * Must not be used wirh requests generating more than one CQE.
++	 * It's also ignored unless IORING_SETUP_DEFER_TASKRUN is set.
++	 */
++	IOU_F_TWQ_LAZY_WAKE			= 1,
++};
++
+ enum io_uring_cmd_flags {
+ 	IO_URING_F_COMPLETE_DEFER	= 1,
+ 	IO_URING_F_UNLOCKED		= 2,
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index dc6d779b452b..48ffdb156f73 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -15,16 +15,6 @@
+ #include <trace/events/io_uring.h>
+ #endif
+ 
+-enum {
+-	/*
+-	 * A hint to not wake right away but delay until there are enough of
+-	 * tw's queued to match the number of CQEs the task is waiting for.
+-	 *
+-	 * Must not be used wirh requests generating more than one CQE.
+-	 * It's also ignored unless IORING_SETUP_DEFER_TASKRUN is set.
+-	 */
+-	IOU_F_TWQ_LAZY_WAKE			= 1,
+-};
+ 
+ enum {
+ 	IOU_OK			= 0,
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 4ed0c66e3aae..94e9de1c24aa 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -78,13 +78,6 @@ void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+ }
+ EXPORT_SYMBOL_GPL(__io_uring_cmd_do_in_task);
+ 
+-void io_uring_cmd_do_in_task_lazy(struct io_uring_cmd *ioucmd,
+-			void (*task_work_cb)(struct io_uring_cmd *, unsigned))
+-{
+-	__io_uring_cmd_do_in_task(ioucmd, task_work_cb, IOU_F_TWQ_LAZY_WAKE);
+-}
+-EXPORT_SYMBOL_GPL(io_uring_cmd_do_in_task_lazy);
+-
+ static inline void io_req_set_cqe32_extra(struct io_kiocb *req,
+ 					  u64 extra1, u64 extra2)
+ {
 -- 
 2.43.0
 
