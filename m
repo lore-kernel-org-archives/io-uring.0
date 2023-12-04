@@ -1,119 +1,86 @@
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="nScpq9EB"
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71870109
-	for <io-uring@vger.kernel.org>; Mon,  4 Dec 2023 09:54:04 -0800 (PST)
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B4BCvmK032746
-	for <io-uring@vger.kernel.org>; Mon, 4 Dec 2023 09:54:04 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=s2048-2021-q4;
- bh=1mhGxSkWo3Ada5UDMylojLGx/+rGIOTO13l7eqsWImI=;
- b=nScpq9EBz8gEHlr+rcjAeIg+TMBdCnXxw1HZly1NzWZJeajY2bT/KHavDByvoRdkF7+Z
- FxSNEAwW3+obO+pNwTpAOPBL0aVSbIp76zaE51BFaZRONeH6CMwZNpzhnxos5BWoAN/r
- D23SPgTEAuMR0MG2tPI8S8qjMw3VHYPIYf9JElsqQ9LtCvBzcxhn4/mILZ3qVhjs2v2r
- YK9CKjchqhvlJy0YkvQ9Fb77IxB0HUW7ag4XEgjviPX803pD0L7DqP/r+0lbuYRowAl4
- YRPPLhIkHstWK3g5du81sFFDxGSDYUGm4YhL3pOVlwTZY6QyMJGbA7l2GOeg7lWpStzZ AQ== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3urm879ek7-8
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Mon, 04 Dec 2023 09:54:03 -0800
-Received: from twshared15991.38.frc1.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a8:82::b) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 4 Dec 2023 09:53:59 -0800
-Received: by devbig007.nao1.facebook.com (Postfix, from userid 544533)
-	id BD31F229B6E99; Mon,  4 Dec 2023 09:53:43 -0800 (PST)
-From: Keith Busch <kbusch@meta.com>
-To: <linux-nvme@lists.infradead.org>, <io-uring@vger.kernel.org>
-CC: <axboe@kernel.dk>, <hch@lst.de>, <sagi@grimberg.me>,
-        <asml.silence@gmail.com>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCH 1/2] iouring: one capable call per iouring instance
-Date: Mon, 4 Dec 2023 09:53:41 -0800
-Message-ID: <20231204175342.3418422-1-kbusch@meta.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="gYG6PJd/"
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5A4196
+	for <io-uring@vger.kernel.org>; Mon,  4 Dec 2023 10:05:02 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-35d374bebe3so3477625ab.1
+        for <io-uring@vger.kernel.org>; Mon, 04 Dec 2023 10:05:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1701713101; x=1702317901; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cT+4YC/mheJocNiFQ9dpjgmB7r6hZL7ROf4mMG+AfOM=;
+        b=gYG6PJd/CQ3LpQDi/7e8cQ2DcBM6aO+apn9Fu2tC5ez8R1XfGZt2etZcPSGOGdPtWD
+         kk3ygkgr5Zem132psH7/BssIDiytWzeo6QH3Ug7FsI3fDE8FucOWfc2/0hdnwNAfW0+a
+         /Lm9QYe3Gg6Y8m7pO194Kb4K7YuEdUqQ4L5G8r1CAFcUFbWn0l1SZYff/J8Vr/hme25Z
+         dYSxXfBJDDMiuEFNvMVoa+41JXoNlPF6RS0DTdN0QAFaVTjS5zs9mH5wpt1oT8wslZL/
+         AXQd8NBSwuESmmbR0O3ZJ+IIZAZc5kib5S/imnpPabM5eKzjbcIw/KQGxwcQ5lLrLtP9
+         vxTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701713101; x=1702317901;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cT+4YC/mheJocNiFQ9dpjgmB7r6hZL7ROf4mMG+AfOM=;
+        b=tYpoay+DHnjENAUQsY+7lxZU+NeYklNTptXQaxncKHWhnu/rJC35RPNDRuzHPClO9Y
+         2TjOibC8l0ez34tu2YgUSOO5hlnDYHPISvsVANcPoAHotxg8l28hmhI2ij2gYoI03rlm
+         pN336xFw/sSv6sM1+JslrQ9GyIY0cneJQotVoXiN4FaQio8rz2qlQlHsEwawyceEMtXa
+         KEcSfAFOL3G6VkDYGGeC4m6VbZNZn+IN9LZh1FLLPKx5108bIhaJYEZYuW3HXr3Zkucs
+         GohWbYwx2sm9/Py/iIJZv6z2sY2m2gnXAxmxF7BEOMSQoNhaPEzhyuD2jAj6tGtGucEn
+         96vA==
+X-Gm-Message-State: AOJu0YyO+UAbjYHW8F+V264Xw78NXFryPIxiON9G77OE7wOHsy0/+X6u
+	m85nvNN0TZ0e9nU0aZVlGqFnwA==
+X-Google-Smtp-Source: AGHT+IEvGG2jQ2QiKm4yVfTLz6F1ahd/oETC2RXWCrCdVtSXGsP78J3QfviDMwPQAkwPVUqdn41Oag==
+X-Received: by 2002:a05:6602:489a:b0:7b3:95a4:de9c with SMTP id ee26-20020a056602489a00b007b395a4de9cmr32362013iob.1.1701713101320;
+        Mon, 04 Dec 2023 10:05:01 -0800 (PST)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id f1-20020a5ec701000000b007b0684e260dsm2910040iop.2.2023.12.04.10.05.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Dec 2023 10:05:00 -0800 (PST)
+Message-ID: <a387fd6a-7d4c-49e0-bb89-be129b10781c@kernel.dk>
+Date: Mon, 4 Dec 2023 11:05:00 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 6ZuteBda8Yc7ZMI73PcFjkSUtuC4TsrM
-X-Proofpoint-ORIG-GUID: 6ZuteBda8Yc7ZMI73PcFjkSUtuC4TsrM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-04_17,2023-12-04_01,2023-05-22_02
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] iouring: one capable call per iouring instance
+Content-Language: en-US
+To: Keith Busch <kbusch@meta.com>, linux-nvme@lists.infradead.org,
+ io-uring@vger.kernel.org
+Cc: hch@lst.de, sagi@grimberg.me, asml.silence@gmail.com,
+ Keith Busch <kbusch@kernel.org>
+References: <20231204175342.3418422-1-kbusch@meta.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20231204175342.3418422-1-kbusch@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Keith Busch <kbusch@kernel.org>
+On 12/4/23 10:53 AM, Keith Busch wrote:
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index 1d254f2c997de..4aa10b64f539e 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -3980,6 +3980,7 @@ static __cold int io_uring_create(unsigned entries, struct io_uring_params *p,
+>  		ctx->syscall_iopoll = 1;
+>  
+>  	ctx->compat = in_compat_syscall();
+> +	ctx->sys_admin = capable(CAP_SYS_ADMIN);
+>  	if (!ns_capable_noaudit(&init_user_ns, CAP_IPC_LOCK))
+>  		ctx->user = get_uid(current_user());
 
-The uring_cmd operation is often used for privileged actions, so drivers
-subscribing to this interface check capable() for each command. The
-capable() function is not fast path friendly for many kernel configs,
-and this can really harm performance. Stash the capable sys admin
-attribute in the io_uring context and set a new issue_flag for the
-uring_cmd interface.
+Hmm, what happens if the app starts as eg root for initialization
+purposes and drops caps after? That would have previously have caused
+passthrough to fail, but now it will work. Perhaps this is fine, after
+all this isn't unusual for eg opening device or doing other init special
+work?
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- include/linux/io_uring_types.h | 4 ++++
- io_uring/io_uring.c            | 1 +
- io_uring/uring_cmd.c           | 2 ++
- 3 files changed, 7 insertions(+)
+In any case, that should definitely be explicitly mentioned in the
+commit message for a change like that.
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_type=
-s.h
-index bebab36abce89..d64d6916753f0 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -36,6 +36,9 @@ enum io_uring_cmd_flags {
- 	/* set when uring wants to cancel a previously issued command */
- 	IO_URING_F_CANCEL		=3D (1 << 11),
- 	IO_URING_F_COMPAT		=3D (1 << 12),
-+
-+	/* ring validated as CAP_SYS_ADMIN capable */
-+	IO_URING_F_SYS_ADMIN		=3D (1 << 13),
- };
-=20
- struct io_wq_work_node {
-@@ -240,6 +243,7 @@ struct io_ring_ctx {
- 		unsigned int		poll_activated: 1;
- 		unsigned int		drain_disabled: 1;
- 		unsigned int		compat: 1;
-+		unsigned int		sys_admin: 1;
-=20
- 		struct task_struct	*submitter_task;
- 		struct io_rings		*rings;
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 1d254f2c997de..4aa10b64f539e 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3980,6 +3980,7 @@ static __cold int io_uring_create(unsigned entries,=
- struct io_uring_params *p,
- 		ctx->syscall_iopoll =3D 1;
-=20
- 	ctx->compat =3D in_compat_syscall();
-+	ctx->sys_admin =3D capable(CAP_SYS_ADMIN);
- 	if (!ns_capable_noaudit(&init_user_ns, CAP_IPC_LOCK))
- 		ctx->user =3D get_uid(current_user());
-=20
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 8a38b9f75d841..764f0e004aa00 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -164,6 +164,8 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int i=
-ssue_flags)
- 		issue_flags |=3D IO_URING_F_CQE32;
- 	if (ctx->compat)
- 		issue_flags |=3D IO_URING_F_COMPAT;
-+	if (ctx->sys_admin)
-+		issue_flags |=3D IO_URING_F_SYS_ADMIN;
- 	if (ctx->flags & IORING_SETUP_IOPOLL) {
- 		if (!file->f_op->uring_cmd_iopoll)
- 			return -EOPNOTSUPP;
---=20
-2.34.1
+-- 
+Jens Axboe
 
