@@ -1,25 +1,25 @@
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083BB1945A;
-	Tue, 19 Dec 2023 11:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5294618E15;
+	Tue, 19 Dec 2023 12:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="HWkkh4vr"
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="pD+ybuFa"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=default; t=1702986884;
-	bh=j+wxOJKysLJtxssC5f5pcx0mS7BYxK5ouYe5Yr9Td0A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HWkkh4vr6JXf2pljVT8oEgbxkj9gNAtQaTg4pys1+oly4EaCKWPO8dtJT5v9VHhK4
-	 8MkGSXHeJIJS8XkGeT89x+Cb1QorrPIi4rdfFYmoY5rV9R8VPgiisPMyM06cJVWbTO
-	 UHOmAK0au79HIoL9a4bdtivRFLF5C6hye3T73rcuq6zxZxeOVBNwxLPbZumm8XXmO1
-	 PdFhm1S19U2UDWT1WqRDpGoX8Cp1aqdA11ZMHTUX0Jj+/Cv95g5of+nBvMoA6gV5cR
-	 zmScKje6OBBaPYTFj8Wjy12yKxzb6/e5rPJA3i/jYkZW2hSJ2nmIU9zGW28tV9MJa5
-	 4jnTn5mavuR1Q==
+	s=default; t=1702986877;
+	bh=6y7QcMNqdf/KzxtBMRwl6JBNpcXBvZAGKI4OW6AiOww=;
+	h=From:To:Cc:Subject:Date;
+	b=pD+ybuFaLCHla+Xm8wAgMyEK5gI/x5SO96VdrCCQ/4lOTx/nw8I/t1HxZ5pk9CXuT
+	 YVz1SR6nR9AImqcJWVILoePxd3wsaW36909Cgh8fkpmMs6dqa75fHKccbXrsASRCoU
+	 5MV6dbpPUQ0FUOrKwFD0bBCYjM/14C8w2wQlYJH3vQDkJxK5V7Kp5VSUHz3iQfQv/P
+	 EsRS9w18Xb/Ype+DNYcctNnE+lkPWHSDqF57feR3Kul4GcGFD6iZ2BvHUPbDrF6aJL
+	 zu6eZR1heA06QblvA3ElBTaHvI9ZbtGx5Atn9zGIF3BMpURulPF3MVlcNy37I6x+AZ
+	 z5HG1iLqpA4cw==
 Received: from localhost.localdomain (unknown [182.253.230.19])
-	by gnuweeb.org (Postfix) with ESMTPSA id 9EE6B24BCE9;
-	Tue, 19 Dec 2023 18:54:41 +0700 (WIB)
+	by gnuweeb.org (Postfix) with ESMTPSA id 1D1C724C190;
+	Tue, 19 Dec 2023 18:54:33 +0700 (WIB)
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -28,12 +28,10 @@ Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
 	io-uring Mailing List <io-uring@vger.kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH liburing v1 2/2] t/no-mmap-inval: Replace `valloc()` with `t_posix_memalign()`
-Date: Tue, 19 Dec 2023 18:54:23 +0700
-Message-Id: <20231219115423.222134-3-ammarfaizi2@gnuweeb.org>
+Subject: [PATCH liburing v1 0/2] Makefile and t/no-mmap-inval updates
+Date: Tue, 19 Dec 2023 18:54:21 +0700
+Message-Id: <20231219115423.222134-1-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231219115423.222134-1-ammarfaizi2@gnuweeb.org>
-References: <20231219115423.222134-1-ammarfaizi2@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -41,6 +39,21 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+
+Hi Jens,
+
+There are two patches in this series:
+
+1. Makefile: Remove the `partcheck` target.
+
+Remove the `partcheck` target because it has remained unused for nearly
+four years, and the associated TODO comment has not been actioned since
+its introduction in commit:
+
+  b57dbc2d308a849 ("configure/Makefile: introduce libdevdir defaults to $(libdir)")
+
+
+2. t/no-mmap-inval: Replace `valloc()` with `t_posix_memalign()`.
 
 Address the limitations of valloc(). This function, which is primarily
 used for allocating page-aligned memory, is not only absent in some
@@ -65,29 +78,16 @@ error:
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- test/no-mmap-inval.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Ammar Faizi (2):
+  Makefile: Remove the `partcheck` target
+  t/no-mmap-inval: Replace `valloc()` with `t_posix_memalign()`
 
-diff --git a/test/no-mmap-inval.c b/test/no-mmap-inval.c
-index 9571fee0035ac5ce..244d4eb645115a44 100644
---- a/test/no-mmap-inval.c
-+++ b/test/no-mmap-inval.c
-@@ -20,12 +20,14 @@ int main(int argc, char *argv[])
- 		.flags		= IORING_SETUP_NO_MMAP,
- 	};
- 	struct io_uring ring;
-+	void *addr;
- 	int ret;
- 
- 	if (argc > 1)
- 		return T_EXIT_SKIP;
- 
--	p.cq_off.user_addr = (unsigned long long) (uintptr_t) valloc(8192);
-+	t_posix_memalign(&addr, sysconf(_SC_PAGESIZE), 8192);
-+	p.cq_off.user_addr = (unsigned long long) (uintptr_t) addr;
- 
- 	ret = io_uring_queue_init_params(2, &ring, &p);
- 	if (ret == -EINVAL) {
+ Makefile             | 3 ---
+ test/no-mmap-inval.c | 4 +++-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+
+base-commit: bbd27495d302856b1f28d64b346d3ad80be3a86f
 -- 
 Ammar Faizi
 
