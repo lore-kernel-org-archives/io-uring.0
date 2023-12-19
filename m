@@ -1,47 +1,47 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E6D3A269
-	for <io-uring@vger.kernel.org>; Tue, 19 Dec 2023 21:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61DA3B29D
+	for <io-uring@vger.kernel.org>; Tue, 19 Dec 2023 21:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="KTauUz9t"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso3792699a12.3
-        for <io-uring@vger.kernel.org>; Tue, 19 Dec 2023 13:04:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="mQAsWpko"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5c701bd98f3so1901362a12.1
+        for <io-uring@vger.kernel.org>; Tue, 19 Dec 2023 13:04:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1703019847; x=1703624647; darn=vger.kernel.org;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1703019849; x=1703624649; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AHaFgdexCzA0uTP4OJiRQISL/EACmJ6kzizjojPCXBw=;
-        b=KTauUz9txi8e8EDGRgr7KZDO3GLkQxgu9BD+dn1djoKo/8Enlb+nguOCnC3D8nyDmz
-         dzKgEX4OKmqK+TUm4Nv/izPM3FHj++rCwbB9aQYQOv6hPupeMWCQ3yui2JWK3vEObReB
-         /ccew2Dj455A2VWcpa9YFFCEo9CqzEW7aAIobFD/TZ1WWSnE+norGtTqjRdE5vcPlTTq
-         6mplqBvIZparTmqfSI6n9C1hZCC20AKZjgO5A2wmrNabqK0vptd+rpryxybdVOxwjmFK
-         dCyA5y/VmdCyuAm2aAbuU6ep7W7/08uGNyi1807TWc7Tf4L2LpS9sCmZFOsFkIVJV5Tc
-         x7Fg==
+        bh=w5PuaR4d/MoGidxq0L3iO4s55XxlUWagn7UVjiQLif0=;
+        b=mQAsWpko25z+CTg2NQCrn3+F/sH0Eoi9YUbQHrgmGGxjLbwEY6YsIfzFpthxOJgOHX
+         /hALO3Q5rXgVxL3NRJZslycn3rMeSPWyiiHt5OvhvjwvAOYc2iDrpr8dywWrkF9EprJ7
+         nNSvXpPKDJumRdZR+LIgNdtx+pTAUwW8ULXiJxim6D1rFNY28QWkslqjV7anF+dZJk2N
+         uKF+dhTG9TEGUd39BJAXU7J00Cpnhz3Pv3BY4KdbN5nyL4qh/pCEd8aelMV09LenVurg
+         8TSxPHs5nGOQ89YNnSU5PJt2G8DmyZKYxwKngjr1hbQVw/mTBwvsrcmb2cLPj4HT7pLT
+         nDGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703019847; x=1703624647;
+        d=1e100.net; s=20230601; t=1703019849; x=1703624649;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=AHaFgdexCzA0uTP4OJiRQISL/EACmJ6kzizjojPCXBw=;
-        b=w5YH8zfZMzwOC5x/3pT6nW+OaUIV3jV9if9u482pM4L4/JVdXjoIYdOw2m579XBAaw
-         U0U74lz+yBztJPmg5/AdnNdnPqU/vJ+kPXJprUx38XH6is/mrmuJwgHHRa8TXuFGWZcD
-         ad5mlSWDtPmOtHwEtm4PO2ay0WqSC/9KboGOE5s/aGFXVeJyMWs7fA4K1K2VdnvQVzZH
-         zPyM/DznhoR1Eoz3Oe1Dwr5gPreu3vSK29yBgZ5vlfv1WNF4V1vmCmeh98Cpx33VT0nH
-         Lh9+uRmVAt203M2iZaT/3D0//OqUMIf+eEZyjbQ9bBA4UhCTW21+teqgY6Sji3WCnXli
-         unqA==
-X-Gm-Message-State: AOJu0Yy80H9WsouZ94BbaQxUdBVLERS5de8Yr3XZqWCX1+9d/+GFoIH7
-	YC3Si394lxmHa+ew4Yd/nAfJDztvdcGOBj4o8l9y/g==
-X-Google-Smtp-Source: AGHT+IF16V9K9fxk40dVoBfsF4UCnLKdU0l3jKOgVGqIYtUJwS2ni4AdskvJa710jcq0aAXd9+X4lA==
-X-Received: by 2002:a17:90a:fa4f:b0:28b:c572:1f0 with SMTP id dt15-20020a17090afa4f00b0028bc57201f0mr819001pjb.90.1703019846948;
-        Tue, 19 Dec 2023 13:04:06 -0800 (PST)
-Received: from localhost (fwdproxy-prn-020.fbsv.net. [2a03:2880:ff:14::face:b00c])
-        by smtp.gmail.com with ESMTPSA id g15-20020a17090a4b0f00b0028bb87b2378sm2082025pjh.49.2023.12.19.13.04.06
+        bh=w5PuaR4d/MoGidxq0L3iO4s55XxlUWagn7UVjiQLif0=;
+        b=Z75qWvs3ViSE0ArPj+7eNPeORCaOYZpI8vOMg9oChw3tQa29qffsE9DqBb5gI0ydjg
+         +zzwpLzejfZ9/pgJwreS0MaFejJjMuxUWgzZTc1ExaqM91f4V2uoh61Vnx6UrMLJwoLD
+         o7qXedOxY0RjFkwkhGQDOl63hJK4sLND/ALE6LIWEstiCZwgoGGn8/G6lhWMS/FaYRSf
+         OsCKeilprsyWPz3xuUXk+SsUvQmiCdL9N0uJaLAs41vHK6iOlRVaSRLQMhnRvkc81B0H
+         hvTcAHjMrw0eHvjrNAqgKSYEMLt485RVrjs3N7+uLSSp+FgO1yPmO9C6IX+JhdzDpDBV
+         gBBg==
+X-Gm-Message-State: AOJu0YypiifJXjB8WlaSUNDqNAhbzeAkpoNcmZEM3Ir3wrafdK0G7ZLw
+	izTryx/rMnIRXAlKBHTDzq86N7suVyWAr7L7l5p0tQ==
+X-Google-Smtp-Source: AGHT+IFxU8K97jLnXcSyyO+D+sbfKINOieazzqXKOxdloDIB5FLVgcl8B8HXGUFAAoIhc0I94Q4ixg==
+X-Received: by 2002:a17:90a:7405:b0:28b:9a2d:c1c3 with SMTP id a5-20020a17090a740500b0028b9a2dc1c3mr2555650pjg.80.1703019848745;
+        Tue, 19 Dec 2023 13:04:08 -0800 (PST)
+Received: from localhost (fwdproxy-prn-008.fbsv.net. [2a03:2880:ff:8::face:b00c])
+        by smtp.gmail.com with ESMTPSA id bx15-20020a17090af48f00b0028b89520c7asm2091559pjb.9.2023.12.19.13.04.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Dec 2023 13:04:06 -0800 (PST)
+        Tue, 19 Dec 2023 13:04:08 -0800 (PST)
 From: David Wei <dw@davidwei.uk>
 To: io-uring@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -54,9 +54,9 @@ Cc: Jens Axboe <axboe@kernel.dk>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	David Ahern <dsahern@kernel.org>,
 	Mina Almasry <almasrymina@google.com>
-Subject: [RFC PATCH v3 02/20] tcp: don't allow non-devmem originated ppiov
-Date: Tue, 19 Dec 2023 13:03:39 -0800
-Message-Id: <20231219210357.4029713-3-dw@davidwei.uk>
+Subject: [RFC PATCH v3 04/20] net: enable napi_pp_put_page for ppiov
+Date: Tue, 19 Dec 2023 13:03:41 -0800
+Message-Id: <20231219210357.4029713-5-dw@davidwei.uk>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20231219210357.4029713-1-dw@davidwei.uk>
 References: <20231219210357.4029713-1-dw@davidwei.uk>
@@ -72,35 +72,83 @@ From: Pavel Begunkov <asml.silence@gmail.com>
 
 NOT FOR UPSTREAM
 
-There will be more users of struct page_pool_iov, and ppiovs from one
-subsystem must not be used by another. That should never happen for any
-sane application, but we need to enforce it in case of bufs and/or
-malicious users.
+Teach napi_pp_put_page() how to work with ppiov.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: David Wei <dw@davidwei.uk>
 ---
- net/ipv4/tcp.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/net/page_pool/helpers.h |  2 +-
+ net/core/page_pool.c            |  3 ---
+ net/core/skbuff.c               | 28 ++++++++++++++++------------
+ 3 files changed, 17 insertions(+), 16 deletions(-)
 
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 33a8bb63fbf5..9c6b18eebb5b 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -2384,6 +2384,13 @@ static int tcp_recvmsg_devmem(const struct sock *sk, const struct sk_buff *skb,
- 			}
+diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
+index ef380ee8f205..aca3a52d0e22 100644
+--- a/include/net/page_pool/helpers.h
++++ b/include/net/page_pool/helpers.h
+@@ -381,7 +381,7 @@ static inline long page_pool_defrag_page(struct page *page, long nr)
+ 	long ret;
  
- 			ppiov = skb_frag_page_pool_iov(frag);
-+
-+			/* Disallow non devmem owned buffers */
-+			if (ppiov->pp->p.memory_provider != PP_MP_DMABUF_DEVMEM) {
-+				err = -ENODEV;
-+				goto out;
-+			}
-+
- 			end = start + skb_frag_size(frag);
- 			copy = end - offset;
+ 	if (page_is_page_pool_iov(page))
+-		return -EINVAL;
++		return 0;
  
+ 	/* If nr == pp_frag_count then we have cleared all remaining
+ 	 * references to the page:
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index ecf90a1ccabe..71af9835638e 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -922,9 +922,6 @@ static void page_pool_empty_alloc_cache_once(struct page_pool *pool)
+ {
+ 	struct page *page;
+ 
+-	if (pool->destroy_cnt)
+-		return;
+-
+ 	/* Empty alloc cache, assume caller made sure this is
+ 	 * no-longer in use, and page_pool_alloc_pages() cannot be
+ 	 * call concurrently.
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index f44c53b0ca27..cf523d655f92 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -896,19 +896,23 @@ bool napi_pp_put_page(struct page *page, bool napi_safe)
+ 	bool allow_direct = false;
+ 	struct page_pool *pp;
+ 
+-	page = compound_head(page);
+-
+-	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
+-	 * in order to preserve any existing bits, such as bit 0 for the
+-	 * head page of compound page and bit 1 for pfmemalloc page, so
+-	 * mask those bits for freeing side when doing below checking,
+-	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
+-	 * to avoid recycling the pfmemalloc page.
+-	 */
+-	if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
+-		return false;
++	if (page_is_page_pool_iov(page)) {
++		pp = page_to_page_pool_iov(page)->pp;
++	} else {
++		page = compound_head(page);
++
++		/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
++		 * in order to preserve any existing bits, such as bit 0 for the
++		 * head page of compound page and bit 1 for pfmemalloc page, so
++		 * mask those bits for freeing side when doing below checking,
++		 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
++		 * to avoid recycling the pfmemalloc page.
++		 */
++		if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
++			return false;
+ 
+-	pp = page->pp;
++		pp = page->pp;
++	}
+ 
+ 	/* Allow direct recycle if we have reasons to believe that we are
+ 	 * in the same context as the consumer would run, so there's
 -- 
 2.39.3
 
