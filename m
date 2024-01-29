@@ -1,64 +1,64 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC4812B86
-	for <io-uring@vger.kernel.org>; Mon, 29 Jan 2024 20:30:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6460241E9
+	for <io-uring@vger.kernel.org>; Mon, 29 Jan 2024 20:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706560234; cv=none; b=CIx2xqqimlMFGuQbjqWGG9IecYm88Ck2MEpPKhAZ9AmDiKjJliNzYIQQnD8nD9+bMenbKHqNHY2iUg898IIG4Ec2EwF23pvJBIYk8nlt5WoAUMwPRWUthjtrEp4vbSb9zbzvsm5UGrzY6udiJzng+KwY65HKSqnNRkqolNmRKH4=
+	t=1706560235; cv=none; b=J+OV3uG/Y8gITtx700Gnlwtd/ijuG+s0Cqu5dysdopZ1PZw8n6VHlUll7Tim7pe+gcAs20Mz1FpXaklv2jwvA/v02cS8Vnx5S05B1NCshaEfbLLqqf0pm+uLt1tzO1rEdJgsfCe3IfkiUSBfRiEMfib+LHby0xM7/ZgZruNUAqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706560234; c=relaxed/simple;
-	bh=pR97qf/01SSuJ9StJBQqDjHNrvMuF05pBDnaNBcL02U=;
+	s=arc-20240116; t=1706560235; c=relaxed/simple;
+	bh=0+Rd3c+2VrjAHvhG2SXGTxJvV0LNchhXjiL1XoN1hYA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SDpMmtIql12f74wkxogq/iGLan+DLt/y2d1BqYZD05FaHrt9cb5zKbug2gpI+1aBmKme/thMuPvC8k2pyt/ohXpSErrgSHLGBa8K645HXuoqBxg/nIMa8AR46D/vZ7pYsa1kKc7ajUIqPYCj45iGVTBg1TMM7TMaFD5rfnVOV2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=J9IUmv5y; arc=none smtp.client-ip=209.85.166.52
+	 MIME-Version; b=cwQJuveLzh0b8x0dPFom9NL6VrfBSdwsh/xvsHfTkJkGMC3aaNj0O8NGsdVK2gnD4cfreLGgoFTqDDbjrweHEcx/h6ZdhzSL5TevaBpR9Z0PAHOnSBbV1ZVPHybvEG6Rg6YEVJmIewZBh5ifK2eNCBvJLCLvfyQ5Js69wsgZRLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=g79Wba8k; arc=none smtp.client-ip=209.85.166.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="J9IUmv5y"
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7bf3283c18dso42978439f.0
-        for <io-uring@vger.kernel.org>; Mon, 29 Jan 2024 12:30:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="g79Wba8k"
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7beeeb1ba87so49128939f.0
+        for <io-uring@vger.kernel.org>; Mon, 29 Jan 2024 12:30:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1706560229; x=1707165029; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1706560232; x=1707165032; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8ux8x8eUe7gD1jQ5pGHo2InXRKpLdO69yR0/M6Q9qck=;
-        b=J9IUmv5y6a5J+J0ZHkeCVSeDbvTTPJKY3wG+y/GpXdLrQq/sYWJnF2zPTGhPwBgBYq
-         Zg4YhVvnlnLFp1b6Gy8cR0d2QoUBT3G7BnIX1WqADUTtXv9h4ovybYVEyEPJJ7/aO/e5
-         IICvLY7lZuk1FrFhk+y/v9KeDD1SvwTKKCpeFn5tDAzktRIbZoNXJoZVwjTImRP6/45u
-         hhBLYxWWmKVhOWGqB1wlhHIedqckKJO7B8O6E4fKVIBQLLc4Jr1+mYw1uuxqyDe72Yd5
-         VsENIKKhkuAUzmBlVPHMqITciBDp+013AnTuS7XUUen9tOFqjyCzqKKdMI6hlG7HuTj1
-         +/6g==
+        bh=6Uq6s8O+pYHZy+YqyeW9aGwqRrlELW919jI2ZvhUwBE=;
+        b=g79Wba8krWHgWUkmqXySe4oo9o+vRUuaYWY/csaO3wprde+CEZL2+5Bl1evgNwFK9p
+         P52vyeY5M2+ZlZTHM9Cm5AtOPL975xWNMSkzte3D1r39cfYJ/tVZTyOv+/3fI5B23ddQ
+         4Hay+JenYL6EDG7DPJ3rMEoARuVbNKXgjzASoIsf0cJ+67O7Gqy4J7aB00SBxJJ29ZgY
+         Z7CN/RV8qw72VySOm83DwkWLGnB0GjTOKANzV6+QRrd5Yy714pp5t9Oo9YW/t5xP5ExU
+         6HQrR52r1qvkVAk/ib9qabiApI4NcgFGLnAUvz7RUL3M4ah8sSVwqE+bKoQacNLp4KtG
+         eXJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706560229; x=1707165029;
+        d=1e100.net; s=20230601; t=1706560232; x=1707165032;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8ux8x8eUe7gD1jQ5pGHo2InXRKpLdO69yR0/M6Q9qck=;
-        b=TstmTkx2BUOzJbrIgzU4D1wAQYfc1lcFXkq4wcBhNqXiUXpbImidyyTtNCiWTDsJFo
-         f49O7ZxVmaPFj2sjX1LOGnHLIh4RsZFqGtLHlq4iQkjR2S5wk77voGzd1W6Hg3XC1f65
-         AvV/3Df49f/I9asaH9TNL4i6WHh8/hyhT3Gci9Hc6pjLxLXZlKf9GBQ05v9ffmWIHut5
-         DFu33Qko1/0C9oLD9WfgFwEtTMHXxA3XPkBhkLdtokgQFUUUWqnvae5CFfET62Yv/b4k
-         OJlqm1aK5M2Mg4ocVyu/lXvKQhF2O6Wee/rPzz3/bz712mCRxj0U8vgE/+vKq2rdtZaU
-         BxUA==
-X-Gm-Message-State: AOJu0YxgnhSlFaLPktviTDap5afI3cEOSqqBYzC1DsibsiDn33+JRLVx
-	hI3w19hzD9NSTst17nPhgdqVc9djBm94zrXpaCBK9a6Ss2R00VKnIzZNBRZ0BU7oD03jk4VYYt9
-	K1Gw=
-X-Google-Smtp-Source: AGHT+IEiFJbTediERcLa3Q9EYApjHSJX2Rq1NXSiJa430u1iLG+hWypjhRk66EeYyl2IRjgyE6Zl0A==
-X-Received: by 2002:a5e:870b:0:b0:7bf:b18e:fccc with SMTP id y11-20020a5e870b000000b007bfb18efcccmr7692849ioj.1.1706560229514;
-        Mon, 29 Jan 2024 12:30:29 -0800 (PST)
+        bh=6Uq6s8O+pYHZy+YqyeW9aGwqRrlELW919jI2ZvhUwBE=;
+        b=MWQLrZvMVgm/jmVwJUIlDGqAyHramERUQ3j5NZG73jBBZetTWeP8kyWwvW9L+52mz0
+         QFu544mNjKzs5vb8XFzeP0YfczzMrK3VOQ17ZMm7K23fMTbfWav+0pyT8WkFjQ1aCVhG
+         cxcoRKWbqEoJkHLhEIpOv5QRCsVZjy2HuizWhjPNRcUhgQF7J6pR6v1+F9FERjmvv8Dx
+         hTr8Bca6ajrnQ3bYfoGE0nx+6CGx7XOEEOuXi3gaSan+IYuaiFiZgZUW0N2dibMpT/I5
+         8dYKN4HiTcc0RkiuUiYu5WMdep7KUb8zddoa+QWqoclGWu+cvIs3MbdqOftjUe4+t+0l
+         4Fgg==
+X-Gm-Message-State: AOJu0Yxa1Jkp+Nl4etxOqWOup+4tZZEgev4nhau3GaC+jeEuIvh6SBbp
+	0yFfoyW/Sm4LmR/6aWrJgD7ZmLYOJ4Jm6eqUUTJieiAk0c/rYebaowXhL18k/xMj6LomFseuGvj
+	ah3I=
+X-Google-Smtp-Source: AGHT+IFI9DGTXsdE+TE2omu5IVWlSJ8jTtoDnY7xieNFXkdniHwWsNW+nz2DK80hHJLKG3RGXcU2UQ==
+X-Received: by 2002:a05:6602:1508:b0:7bf:f336:8032 with SMTP id g8-20020a056602150800b007bff3368032mr5204169iow.2.1706560232543;
+        Mon, 29 Jan 2024 12:30:32 -0800 (PST)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id i8-20020a05663815c800b0046e6a6482d2sm1952510jat.97.2024.01.29.12.30.28
+        by smtp.gmail.com with ESMTPSA id i8-20020a05663815c800b0046e6a6482d2sm1952510jat.97.2024.01.29.12.30.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jan 2024 12:30:29 -0800 (PST)
+        Mon, 29 Jan 2024 12:30:31 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/4] io_uring/poll: move poll execution helpers higher up
-Date: Mon, 29 Jan 2024 13:23:44 -0700
-Message-ID: <20240129203025.3214152-2-axboe@kernel.dk>
+Subject: [PATCH 3/4] io_uring/poll: add requeue return code from poll multishot handling
+Date: Mon, 29 Jan 2024 13:23:46 -0700
+Message-ID: <20240129203025.3214152-4-axboe@kernel.dk>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240129203025.3214152-1-axboe@kernel.dk>
 References: <20240129203025.3214152-1-axboe@kernel.dk>
@@ -70,74 +70,81 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for calling __io_poll_execute() higher up, move the
-functions to avoid forward declarations.
+Since our poll handling is edge triggered, multishot handlers retry
+internally until they know that no more data is available. In
+preparation for limiting these retries, add an internal return code,
+IOU_REQUEUE, which can be used to inform the poll backend about the
+handler wanting to retry, but that this should happen through a normal
+task_work requeue rather than keep hammering on the issue side for this
+one request.
 
-No functional changes in this patch.
+No functional changes in this patch, nobody is using this return code
+just yet.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/poll.c | 40 ++++++++++++++++++++--------------------
- 1 file changed, 20 insertions(+), 20 deletions(-)
+ io_uring/io_uring.h | 8 +++++++-
+ io_uring/poll.c     | 9 ++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 04e33f25919c..d5495710c178 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -15,11 +15,17 @@
+ #include <trace/events/io_uring.h>
+ #endif
+ 
+-
+ enum {
+ 	IOU_OK			= 0,
+ 	IOU_ISSUE_SKIP_COMPLETE	= -EIOCBQUEUED,
+ 
++	/*
++	 * Requeue the task_work to restart operations on this request. The
++	 * actual value isn't important, should just be not an otherwise
++	 * valid error code, yet less than -MAX_ERRNO and valid internally.
++	 */
++	IOU_REQUEUE		= -3072,
++
+ 	/*
+ 	 * Intended only when both IO_URING_F_MULTISHOT is passed
+ 	 * to indicate to the poll runner that multishot should be
 diff --git a/io_uring/poll.c b/io_uring/poll.c
-index d59b74a99d4e..785a5b191003 100644
+index 785a5b191003..7513afc7b702 100644
 --- a/io_uring/poll.c
 +++ b/io_uring/poll.c
-@@ -228,6 +228,26 @@ enum {
+@@ -226,6 +226,7 @@ enum {
+ 	IOU_POLL_NO_ACTION = 1,
+ 	IOU_POLL_REMOVE_POLL_USE_RES = 2,
  	IOU_POLL_REISSUE = 3,
++	IOU_POLL_REQUEUE = 4,
  };
  
-+static void __io_poll_execute(struct io_kiocb *req, int mask)
-+{
-+	unsigned flags = 0;
-+
-+	io_req_set_res(req, mask, 0);
-+	req->io_task_work.func = io_poll_task_func;
-+
-+	trace_io_uring_task_add(req, mask);
-+
-+	if (!(req->flags & REQ_F_POLL_NO_LAZY))
-+		flags = IOU_F_TWQ_LAZY_WAKE;
-+	__io_req_task_work_add(req, flags);
-+}
-+
-+static inline void io_poll_execute(struct io_kiocb *req, int res)
-+{
-+	if (io_poll_get_ownership(req))
-+		__io_poll_execute(req, res);
-+}
-+
- /*
-  * All poll tw should go through this. Checks for poll events, manages
-  * references, does rewait, etc.
-@@ -364,26 +384,6 @@ void io_poll_task_func(struct io_kiocb *req, struct io_tw_state *ts)
- 	}
- }
+ static void __io_poll_execute(struct io_kiocb *req, int mask)
+@@ -329,6 +330,8 @@ static int io_poll_check_events(struct io_kiocb *req, struct io_tw_state *ts)
+ 			int ret = io_poll_issue(req, ts);
+ 			if (ret == IOU_STOP_MULTISHOT)
+ 				return IOU_POLL_REMOVE_POLL_USE_RES;
++			else if (ret == IOU_REQUEUE)
++				return IOU_POLL_REQUEUE;
+ 			if (ret < 0)
+ 				return ret;
+ 		}
+@@ -351,8 +354,12 @@ void io_poll_task_func(struct io_kiocb *req, struct io_tw_state *ts)
+ 	int ret;
  
--static void __io_poll_execute(struct io_kiocb *req, int mask)
--{
--	unsigned flags = 0;
--
--	io_req_set_res(req, mask, 0);
--	req->io_task_work.func = io_poll_task_func;
--
--	trace_io_uring_task_add(req, mask);
--
--	if (!(req->flags & REQ_F_POLL_NO_LAZY))
--		flags = IOU_F_TWQ_LAZY_WAKE;
--	__io_req_task_work_add(req, flags);
--}
--
--static inline void io_poll_execute(struct io_kiocb *req, int res)
--{
--	if (io_poll_get_ownership(req))
--		__io_poll_execute(req, res);
--}
--
- static void io_poll_cancel_req(struct io_kiocb *req)
- {
- 	io_poll_mark_cancelled(req);
+ 	ret = io_poll_check_events(req, ts);
+-	if (ret == IOU_POLL_NO_ACTION)
++	if (ret == IOU_POLL_NO_ACTION) {
+ 		return;
++	} else if (ret == IOU_POLL_REQUEUE) {
++		__io_poll_execute(req, 0);
++		return;
++	}
+ 	io_poll_remove_entries(req);
+ 	io_poll_tw_hash_eject(req, ts);
+ 
 -- 
 2.43.0
 
