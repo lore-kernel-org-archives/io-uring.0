@@ -1,234 +1,220 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC97112CD93
-	for <io-uring@vger.kernel.org>; Mon, 26 Feb 2024 16:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708963288; cv=none; b=F+BACg87+eQrH1o8HTLSRBknKtyhM80m1eYzSfzuQ/LDWEOebL1IJwSnwRJJo75Zo/7gf0QKfhiXrck4E/3JyR6ecRwFg2U35+CUVMEHPH/fNU3JN6ZZYWhYJXlMv4ZRX/uZxdRMcsuAy5BuMH01G3F2Af9LgFVny+Sta7XMfeM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708963288; c=relaxed/simple;
-	bh=CG6GpmkYwFQyWwX8c9FO3D4AAKxNwjrKnC2XvXXnKyU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ltRinBIrn/ZBQgVxV7lnNTqGArDREkTL9hXlLbSl3acTXBqJnFZfHGJK5OwasNy/IosoHDrktxVyHMGtI0Yuv8CsugUNhJpXLAHddbn+Pmt9SKB3kv7eOUlLvg51d9PckKayZF9ZY1TUHS/rfpFsizXZrbN1Omfz/QB8Doj9sJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLXU59Aw; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8800C605A1;
+	Mon, 26 Feb 2024 17:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708969048; cv=fail; b=tQ8sonoA4b+WhnpwncgyO8xJ112MVXSEOphYn7/nt+R7UOAPkqQk47O965kKRE812mc22sHyvMRd5HoqqUXes2boyyqI586AEALW4WLgiblKLIqpTsfpdDZp5UUGT+BFszU++/DSZSrBm1Q+ek7NLx55odQEVkAw5oHhXrOODEc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708969048; c=relaxed/simple;
+	bh=J7SZLmJmdKN0tMpMfOS+5xdLKuDvGLQyXizCexx4Js4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aNhuM7sldnEO0mslo47LQs87xSyZP30bVL+D0uIfVri4iH/dBjjHjm4FaxIEWvvmROxlYKv3IIgRbmSn6JDQ4r+IkrZg+Qu3tEN4PDCzCWrwuLiX6eUEtdZQIbm9MEDiZ9FM+bRtkPDv1GStmNF4kk2xQQ1dmuqMG2DnNOM/vNE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=UZtnyt0Z; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=w7clI7gB; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLXU59Aw"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5658082d2c4so4093681a12.1
-        for <io-uring@vger.kernel.org>; Mon, 26 Feb 2024 08:01:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="UZtnyt0Z";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="w7clI7gB"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41QGnG8Q018456;
+	Mon, 26 Feb 2024 17:36:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references :
+ content-transfer-encoding : content-type : mime-version;
+ s=corp-2023-11-20; bh=esWc5rIYrO2nyco4iv76jP73u1y8V7yGOLl+U5JSHKE=;
+ b=UZtnyt0ZsNlB6FLjObVcyfkgDjm2i3vedXRlmfXlbkViDSkv3MuMXAQ4Tslv3EZ/EviO
+ WCONM40yJIKRtnuWWkEdexqcOrMjoF7OdK3Y7s3vAc6Kb8NOIpAbVSTFw8PBF0y8RLss
+ lcfKm/zJhB+tZUdR9WU03lXHallZarTMCyAh20EPmNVTQ6Z9iSVJk7hiT8NidbjpCBp1
+ MRTczp4luepJh5STzS7Dm55MVgB+PyMrNZO7ZGg9ZXG7LlmuYcxeFHW7UfNV/oHf+4Wr
+ KLXfUVCchih+b9358MV3PDXEeHa3/v5OFwmePpvT256PrlrCNDTSat1RBgp58ZZJazW/ Ew== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3wf8bb52eh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 26 Feb 2024 17:36:43 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41QHKcHQ009796;
+	Mon, 26 Feb 2024 17:36:42 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3wf6w5w9vd-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 26 Feb 2024 17:36:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QSceUVbjtvPuudEu5wMVC11+A3kk9VMi7FT8PsHTnC0+uUnjzjOFLUrJO6r/x+UGV4h3bBGq8LiK/0OO/pjWAWciUtCIRvTxMBVhJGETT7ypmxYMBz+6ZhXBxyLq/yfnV9TL1dLPXKKiLSinFarWVGLLEVVlxgbBMPc9uLBJOoDIP9NmNXBf7e1Z0fqAmSi6TdOABmftC2SmfBBBWCOMxCqiox57M9RosDoKm+7uMC+r6ulxFdjFqTUiI866r5RLiMi9z5rYwNwe4cGGDmuP5lXE/prD/QBP5c0dKBYU/H8L37xjC9aLsZM4BrTtsb7Lc4ultiFfyzoaXv7TX7IabQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=esWc5rIYrO2nyco4iv76jP73u1y8V7yGOLl+U5JSHKE=;
+ b=lbEnh1prXDjYxBtZz+C+42M9qRIyaVMn77SQfYXtVAESatU21AvUhpDWyneamUpbz3FGtAhyEkmFI9sMk7uo+OIbIN3smCSYKnOVeqFsOEqbEXjB+ItLaGeGcVIMelkiOR+afXvDu/lCfj3bwmLeIQ/mD9sT9os79hdSuhBmiWlxCfSVNe4LRDS7kpXdigZDY65qCpRbHvhLL3PntCEI3uAAK+ZUbTT9/LmOkiAvW8aWUZW5IbFQ3ah5b0lIejCqUS2EAu1xkB+8aBBMpHsLpZ+DK1ShQCT6I45SJCk1XbrKcErl145/XZj25Ub7WejpRK8jEX+GSu/0W4wUpCymMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708963285; x=1709568085; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0d/qsOjbzkytdml2PGuFs9QDolHH7SGqnW0SyaSmUag=;
-        b=XLXU59AwxlmjAJHuNrB0HQtNmORmmWrxVpD9myqEhpdVFDyZluWSlUA7v3s2d761xo
-         UKuLX+Xw+nLacfN/6uMDZpdEG+2YzQRI/eJlZtTAq37fsokc/yk+oepKIwaO39uR1OwX
-         6QmHq2KW6TiLFwRGJqWL4Y0h7dTtTOvrsrsYsa7JOSOw6UM6mbWq6LMb9+giFK/8MxGq
-         Gxm0Fe+JQNLpUlk1mRsk6xw+E2jBcMU0Nm+XCWnX2fJe4VPP4A/vvQIxZtTLm414upa9
-         qghEfV2CLnCuKVuaAUA38xcpDRVU6UTm2xQkMDh7yaszMFder/gN9BbuV6Bk6kZr1CKw
-         KLbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708963285; x=1709568085;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0d/qsOjbzkytdml2PGuFs9QDolHH7SGqnW0SyaSmUag=;
-        b=cshaJMbkNSskn8kZ30avhBa1mI8rPUHlpzB4RteQIdM5veYNIPqgom26U+kzUNHFQj
-         e498uumP3MxsBR2r6yqHSHfTEM8k16xLGSzd6EMGpdST/+n0f5rffX4GGGZScxEqpdTd
-         Dp+GdisagL72G5zDpgcIr5p2ZqxVsAoaEKd8MdjBYNTdj+ke/JlnYVnn3tVm/RB56xp1
-         EssOcAQfiTPZ0ALy2ztS68P1wlQOXcbdNglDy4ggMakcaW6p7/kBPZEjpcHnu0wQZCtS
-         8RKv5fZcH3mOITKhXHJyZZaJlr4SfL+Z+EGd9VRL9xZHJ9dtRvIXNa2drrcx9f2QCkBn
-         9Gww==
-X-Gm-Message-State: AOJu0YzV4HEubjJYz/sbYt+OFMJIbDHrksrPGQU80DZ/N8Y3sVSctDIS
-	s9SRtGhf1jCD7/Z7mMdyrq1763kPtvubZAYbCt5kIhKHvaBLG3gTMC9D5eib
-X-Google-Smtp-Source: AGHT+IG6BUBXqQhQM1nvt7DUytLL2SlJ4TYJFxw5vz6Sf1BtnDhpDIvkGgKleIxburF9yZbrG8H9QQ==
-X-Received: by 2002:aa7:d958:0:b0:564:f6d5:f291 with SMTP id l24-20020aa7d958000000b00564f6d5f291mr5292308eds.34.1708963284716;
-        Mon, 26 Feb 2024 08:01:24 -0800 (PST)
-Received: from [192.168.8.100] ([85.255.235.18])
-        by smtp.gmail.com with ESMTPSA id b1-20020aa7dc01000000b00565e33da344sm1338072edu.68.2024.02.26.08.01.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Feb 2024 08:01:24 -0800 (PST)
-Message-ID: <a0f62e25-f19c-44b7-bf26-4460ae01de7f@gmail.com>
-Date: Mon, 26 Feb 2024 15:41:24 +0000
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=esWc5rIYrO2nyco4iv76jP73u1y8V7yGOLl+U5JSHKE=;
+ b=w7clI7gBxL9DPvl1NscA2lV47vmPKaJQccUgL+oxsi1yS4VjAG6HkEhV+auBdlWHI7I5dYZKtuexY8w2Q+2yLIxyqQem6ts8i1iwuLJ+uZP6bmdIr9qfH7iU9H6PxBu5MYXTaH/K6h9BhOVBRLA6vKbt5DOEFMFcAzS3XpZemi4=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by MW4PR10MB6298.namprd10.prod.outlook.com (2603:10b6:303:1e3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.34; Mon, 26 Feb
+ 2024 17:36:40 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::97a0:a2a2:315e:7aff]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::97a0:a2a2:315e:7aff%3]) with mapi id 15.20.7316.034; Mon, 26 Feb 2024
+ 17:36:40 +0000
+From: John Garry <john.g.garry@oracle.com>
+To: axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jack@suse.cz
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        tytso@mit.edu, jbongio@google.com, linux-scsi@vger.kernel.org,
+        ojaswin@linux.ibm.com, linux-aio@kvack.org,
+        linux-btrfs@vger.kernel.org, io-uring@vger.kernel.org,
+        nilay@linux.ibm.com, ritesh.list@gmail.com,
+        John Garry <john.g.garry@oracle.com>
+Subject: [PATCH v5 01/10] block: Pass blk_queue_get_max_sectors() a request pointer
+Date: Mon, 26 Feb 2024 17:36:03 +0000
+Message-Id: <20240226173612.1478858-2-john.g.garry@oracle.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20240226173612.1478858-1-john.g.garry@oracle.com>
+References: <20240226173612.1478858-1-john.g.garry@oracle.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: PH7PR17CA0027.namprd17.prod.outlook.com
+ (2603:10b6:510:323::13) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] io_uring/net: support multishot for send
-Content-Language: en-US
-To: Jens Axboe <axboe@kernel.dk>, Dylan Yudaken <dyudaken@gmail.com>
-Cc: io-uring@vger.kernel.org
-References: <20240225003941.129030-1-axboe@kernel.dk>
- <20240225003941.129030-7-axboe@kernel.dk>
- <CAO_YeojZHSnx471+HKKFgRo-yy5cv=OmEg_Ri48vMUOwegvOqg@mail.gmail.com>
- <63859888-5602-41fb-9a42-4edc6132766f@kernel.dk>
- <CAO_YeoiTpPALaeiQiCjoW1VSr6PMPDUrH5xT3dTD19=OK1ytPg@mail.gmail.com>
- <ecd796a4-e413-47d3-91c1-015b5c211ee2@kernel.dk>
- <f0046836-ef9d-4b58-bfae-f2bf087233e1@gmail.com>
- <454ef0d2-066f-4bdf-af42-52fd0c57bd56@kernel.dk>
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <454ef0d2-066f-4bdf-af42-52fd0c57bd56@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|MW4PR10MB6298:EE_
+X-MS-Office365-Filtering-Correlation-Id: c0eef075-3715-4590-ab69-08dc36f17d78
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	CozwIOgmiEzMJIMi01eZLh0n2ZOABrsgKihXgDJ5KcFXsa8hWeXgQlgHvg6PhxALCj/i0H1OpjhKJFPVG7o+uXy7Y5/wXhQ4UArisQCXhFCku1DbdHfmLrmxatGp/Ns9VzP4lqzPJ3YG7NEwxKwsqZSoPUYYHgMNkpe308Dvpr0fT1f9wYvaOmtrZfJOl6Tl7DZ9fOgGmb/ANJww5hYMKIk8Yw/rOoKbvvxJIBysdsA707eetCoSndmzKt9JxVHsFOQZz15tR0bkNb6mCnkDPY5hbEkou8/CtduwQ84RZa4j7mV4gNoen4y0CcP4hc0Orn/ZewsbT0GJCCUi4mI4eiapnpmpQMZy+DvIcxuj5sTi1WjzmJOxImWhbLiMFJTvjJyLyEJbsD4nLGKJDrlyUM86/bD9/9mv5zPG6QR1hxatBxV0yTlr2p74Pq7TTFuwrM94HTfdYJm/CRbvclpLXbRKd8qAKYaULWD9oQ3oPk6jnPS+1BsgOuJ1OjYMk5VOPyTGgw34pUVwTWyumnKSrbHI+dL5eneTTcNB5/M/uZ8dzGyr0LadPy33yUxKnuK1uch37IANde0Tz3lB/RErRymN7EYgqORC52NW9Hh69D6eF7IvyJ0w1Z0If1nHIE+woowNXMRA5MsjrzPeKcAWsGWRR9AT5xBuwNrj8WTIhTzRNBSTB9MXJcVuPAErLA8FdKqtduNhAjKAMLT+puGVyQ==
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(921011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?t25WHCaYTM775YFfzdRSUwpvC+UUbjpI67aEF5SOZCqOGJMjoAvNQmP9pp3r?=
+ =?us-ascii?Q?YwTHCn30By9L5DDfE6rAbiFQMrc7kwqY6bcUbHlscHO4H03yjRhu09kN/32O?=
+ =?us-ascii?Q?BA5epO5QKnPc4s3Gg+ZVxZ5iyx5KXUwJeIt2PP9MzjR5QwzA/o2IMCtfEncd?=
+ =?us-ascii?Q?kHjH8fBE3mg3bdcyybs5qNEmJVVsqaN89SN1KbqOWgLOkQvqqTKgqfCwsHIv?=
+ =?us-ascii?Q?jpbMoXfyY4z8pTRjRbHfWRM5LIDgp6Uo1EQF23uQGlLkQibpBQkBIcRYK5AW?=
+ =?us-ascii?Q?hp4wCrubfdxyYYnVjF5BryooGG6+qZ0JS4q2VSBlKWzjO33iGjlWi5I/2R3v?=
+ =?us-ascii?Q?ihNoFWlBwDIyYHZEIWrigUXPVilig3P9Mbqe80ls1jSueOAesIO9utnJoCpO?=
+ =?us-ascii?Q?hWrcJief8fSC4tIHme4th6pxdxSuPaAz5qeqDDZV46t2jc9AURWJehTFl8t6?=
+ =?us-ascii?Q?R3BRa8aMEJLaVQumw6kT7+z+jCKJ7kPTVilS1QpCNdMH9VmV2TwdD486KOEc?=
+ =?us-ascii?Q?lwez5tF+McJT8VlFlOK4RRxIn2vCBnbsif0iC3cFgSS9ap66OYYwATGmcX4x?=
+ =?us-ascii?Q?C5yCe43qXcUI6F/n2ZSHXIe2Yv/Y7cZG3kfBUPsE6a+XHnohqhtL9W5tKaoo?=
+ =?us-ascii?Q?jNC4VK16WfeCzvr2S6P25f8K61yowO+tDwyC2GLtP1QngvFN8VO/KCHJupsE?=
+ =?us-ascii?Q?lMuVziIIaZkMCx91ehzKF8IKOAjWCOzLSdnuDVe0cq9AWKM8weFCVAgKEOKI?=
+ =?us-ascii?Q?r1VwkZ6vL1X0l9GOdlKW+KApcOl+uaBAFoaxyp51HmTotGkzlZSV3z1aBGeb?=
+ =?us-ascii?Q?/blyKMYguElkICpu+0djpvRjQ1g0i0xuNIMRe05ZclSIEl1uQk3eQ1CGxwOU?=
+ =?us-ascii?Q?TXZSirZlmeIWho3SKKMw2N2LqfQHbUurrJ6QFoV6HPfC8BwLyiO05o4J/fNj?=
+ =?us-ascii?Q?qZRBnMqylAhpFUUcK5xcUq3rdgXxhkxpX7uMgxLZ22w6iLzBptBM4uknqTDo?=
+ =?us-ascii?Q?xI/+i3oRT0BmgXiBBisF3Kj0JdmLVZyulTAPTMvthdY/FvRue0tGRJnxFYkY?=
+ =?us-ascii?Q?bj7OGGr/FNIwaZ8HzI7moFR7pKQRa4YaLwYNgZ7b3wLG0FcqGzLEj+iyIt5b?=
+ =?us-ascii?Q?nJstzXUsHpif7FNrpikzV8JCWG8Es/B0uJuICjLXLFtrRjerF/9C9+GQg97p?=
+ =?us-ascii?Q?dJyWB+2WNs2tmlymKkk39Y8tkWgr93rHwmsoApnbyJGIwBE2c299IY3/zrML?=
+ =?us-ascii?Q?uSzHG58OfENpBClpnhUv2txkmoz3NOrWHNmsbjQmfyRNKMLGipSrgVWQxT8I?=
+ =?us-ascii?Q?vuEOx2DcVR6tFjbvcTO7Fb9fsN3kouBDLXteXitDNIVZjDJNtXptLO0RVALb?=
+ =?us-ascii?Q?jt6w2WXzed28Vio+X9mu13mdc7fb/mRJszmRx9hF8LDYWWdQD8eYsq1OvzL+?=
+ =?us-ascii?Q?iNUQ0VX1M/UTaGGFO47Y0JsEfL56gm0SoOyo5XEHdV2VEsRpWce7gY9DFI1J?=
+ =?us-ascii?Q?y7HOSKZjohN+D2w/D7iiJX3uEMlVOt33VG3eJrZO9MkH9sXOzhLQRsyF9Dt5?=
+ =?us-ascii?Q?bFkqoKuMwRBLNPfn068m7m1AS7H08VbjIuP0N0sIccKyr4va1MDMHcweTXD8?=
+ =?us-ascii?Q?rw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	3ze0TLp1rAWocLum4RTHbpdKxskPqaSWrHfDqFeRHibV0PWOrEhnQae1x9U+f83FUXmFlpi2xTO+cy3KE5q6qOUpgd7iHMq8AzElKXt6JrmrsbMtCpMcXdj6CXDII8oj0i25m2jII3m3N76q80DXTCzC/4SmLEpMws9RKy6zlcxAOAa955Blk1p0+lwF02o5vByp3/Dwi5HrWqxWTRk1YPTpleK4b8muCPa8FIJdbe/sxTuk5GOyygHqi0Shnprq8OOx+XT5usCtqZZprTGwYqS1eA9ph1rYxEk9T2pykqDOA8c4PSZ6HoHFYNc/HbsqhmjWIyQJttysL1IB0EbrqPCkw3uPcAFZVWwSd4p5U48IY69m7nM5k4xgv1sYnev5nhzVfiJSDFd/Dd9xCukiPQaiWAZ+4jnqKHZ03gpoPu1/mrtH2IV6LooGi5C1yG2LfU0aWPjutC0YSTr3QA7pyirZZENJar402fd6YWk3K5iWCZqTPWeATbKDUAHUKxZoIjcp3+dfI03/IKPXhg4t1v/YEQomOqadc6VKxdmiQdYwP2XqO+6yVNO+qLnd6XNVaNoElPMZpjvUUDXZbpfooJVctrpWwY/wGx4Mm/ranb4=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0eef075-3715-4590-ab69-08dc36f17d78
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2024 17:36:40.0902
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Xat9IJIv7kIiPIzDo4YrZkWJLO5Pa2twUylrQPn5WvWDsfdBfrxEdKsB2zi/ufBxB9QG8WcSRyJvwE8JNtIccw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6298
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-26_11,2024-02-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
+ definitions=main-2402260134
+X-Proofpoint-GUID: jO0-6-8HR80ZRamaB4qJbp5W8yiw8rC1
+X-Proofpoint-ORIG-GUID: jO0-6-8HR80ZRamaB4qJbp5W8yiw8rC1
 
-On 2/26/24 15:16, Jens Axboe wrote:
-> On 2/26/24 7:36 AM, Pavel Begunkov wrote:
->> On 2/26/24 14:27, Jens Axboe wrote:
->>> On 2/26/24 7:02 AM, Dylan Yudaken wrote:
->>>> On Mon, Feb 26, 2024 at 1:38?PM Jens Axboe <axboe@kernel.dk> wrote:
->>>>>
->>>>> On 2/26/24 3:47 AM, Dylan Yudaken wrote:
->>>>>> On Sun, Feb 25, 2024 at 12:46?AM Jens Axboe <axboe@kernel.dk> wrote:
->>>>>>>
->>>>>>> This works very much like the receive side, except for sends. The idea
->>>>>>> is that an application can fill outgoing buffers in a provided buffer
->>>>>>> group, and then arm a single send that will service them all. For now
->>>>>>> this variant just terminates when we are out of buffers to send, and
->>>>>>> hence the application needs to re-arm it if IORING_CQE_F_MORE isn't
->>>>>>> set, as per usual for multishot requests.
->>>>>>>
->>>>>>
->>>>>> This feels to me a lot like just using OP_SEND with MSG_WAITALL as
->>>>>> described, unless I'm missing something?
->>>>>
->>>>> How so? MSG_WAITALL is "send X amount of data, and if it's a short send,
->>>>> try again" where multishot is "send data from this buffer group, and
->>>>> keep sending data until it's empty". Hence it's the mirror of multishot
->>>>> on the receive side. Unless I'm misunderstanding you somehow, not sure
->>>>> it'd be smart to add special meaning to MSG_WAITALL with provided
->>>>> buffers.
->>>>>
->>>>
->>>> _If_ you have the data upfront these are very similar, and only differ
->>>> in that the multishot approach will give you more granular progress
->>>> updates. My point was that this might not be a valuable API to people
->>>> for only this use case.
->>>
->>> Not sure I agree, it feels like attributing a different meaning to
->>> MSG_WAITALL if you use a provided buffer vs if you don't. And that to me
->>> would seem to be confusing. Particularly when we have multishot on the
->>> receive side, and this is identical, just for sends. Receives will keep
->>> receiving as long as there are buffers in the provided group to receive
->>> into, and sends will keep sending for the same condition. Either one
->>> will terminate if we run out of buffers.
->>>
->>> If you make MSG_WAITALL be that for provided buffers + send, then that
->>> behaves differently than MSG_WAITALL with receive, and MSG_WAITALL with
->>> send _without_ provided buffers. I don't think overloading an existing
->>> flag for this purposes is a good idea, particularly when we already have
->>> the existing semantics for multishot on the receive side.
->>
->> I'm actually with Dylan on that and wonder where the perf win
->> could come from. Let's assume TCP, sends are usually completed
->> in the same syscall, otherwise your pacing is just bad. Thrift,
->> for example, collects sends and packs into one multi iov request
->> during a loop iteration. If the req completes immediately then
->> the userspace just wouldn't have time to push more buffers by
->> definition (assuming single threading).
-> 
-> The problem only occurs when they don't complete inline, and now you get
-> reordering. The application could of course attempt to do proper pacing
-> and see if it can avoid that condition. If not, it now needs to
+Currently blk_queue_get_max_sectors() is passed a enum req_op. In future
+the value returned from blk_queue_get_max_sectors() may depend on certain
+request flags, so pass a request pointer.
 
-Ok, I admit that there are more than valid cases when artificial pacing
-is not an option, which is why I also laid out the polling case.
-Let's also say that limits potential perf wins to streaming and very
-large transfers (like files), not "lots of relatively small
-request-response" kinds of apps.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: John Garry <john.g.garry@oracle.com>
+---
+ block/blk-merge.c | 3 ++-
+ block/blk-mq.c    | 2 +-
+ block/blk.h       | 6 ++++--
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-> serialize sends. Using provided buffers makes this very easy, as you
-> don't need to care about it at all, and it eliminates complexity in the
-> application dealing with this.
-
-If I'm correct the example also serialises sends(?). I don't
-think it's that simpler. You batch, you send. Same with this,
-but batch into a provided buffer and the send is conditional.
-
-Another downside is that you need a provided queue per socket,
-which sounds pretty expensive for 100s if not 1000s socket
-apps.
-
->> If you actually need to poll tx, you send a request and collect
->> data into iov in userspace in background. When the request
->> completes you send all that in batch. You can probably find
->> a niche example when batch=1 in this case, but I don't think
->> anyone would care.
->>
->> The example doesn't use multi-iov, and also still has to
->> serialise requests, which naturally serialises buffer consumption
->> w/o provided bufs.
-> 
-> IMHO there's no reason NOT to have both a send with provided buffers and
-> a multishot send. The alternative would be to have send-N, where you
-> pass in N. But I don't see much point to that over "just drain the whole
-> pending list". The obvious use case is definitely send multishot, but
-
-Not sure I follow, but in all cases I was contemplating about
-you sends everything you have at the moment.
-
-> what would the reasoning be to prohibit pacing by explicitly disallowing
-> only doing a single buffer (or a partial queue)? As mentioned earlier, I
-> like keeping the symmetry with the receive side for multishot, and not
-> make it any different unless there's a reason to.
-
-There are different, buffer content kernel (rx) vs userspace (tx)
-provided, provided queue / group per socket vs shared. Wake ups
-for multishots as per below. It's not like it's a one line change,
-so IMHO requires to be giving some benefits.
-
->>>> You do make a good point about MSG_WAITALL though - multishot send
->>>> doesn't really make sense to me without MSG_WAITALL semantics. I
->>>> cannot imagine a useful use case where the first buffer being
->>>> partially sent will still want the second buffer sent.
->>>
->>> Right, and I need to tweak that. Maybe we require MSG_WAITALL, or we
->>> make it implied for multishot send. Currently the code doesn't deal with
->>> that.
->>>
->>> Maybe if MSG_WAITALL isn't set and we get a short send we don't set
->>> CQE_F_MORE and we just stop. If it is set, then we go through the usual
->>> retry logic. That would make it identical to MSG_WAITALL send without
->>> multishot, which again is something I like in that we don't have
->>> different behaviors depending on which mode we are using.
->>>
->>>>>> I actually could imagine it being useful for the previous patches' use
->>>>>> case of queuing up sends and keeping ordering,
->>>>>> and I think the API is more obvious (rather than the second CQE
->>>>>> sending the first CQE's data). So maybe it's worth only
->>>>>> keeping one approach?
->>>>>
->>>>> And here you totally lost me :-)
->>>>
->>>> I am suggesting here that you don't really need to support buffer
->>>> lists on send without multishot.
->>>
->>> That is certainly true, but I also don't see a reason _not_ to support
->>> it. Again mostly because this is how receive and everything else works.
->>> The app is free to issue a single SQE for send without multishot, and
->>> pick the first buffer and send it.
->>
->> Multishot sound interesting, but I don't see it much useful if
->> you terminate when there are no buffers. Otherwise, if it continues
->> to sit in, someone would have to wake it up
-> 
-> I did think about the termination case, and the problem is that if there
-> are no buffers, you need it to wake when there are buffers. And at that
-> point you may as well just do another send, as you need the application
-> to trigger it. The alternative would be to invent a way to trigger that
-> wakeup, which would be send only and weird just because of that.
-
-Yeah, that's the point, wake ups would be userspace driven, and how
-to do it without heavy stuff like syscalls is not so clear.
-
-> If you end up poll armed because the socket buffer is full, then it
-> certainly makes sense to stay armed as there's a natural trigger there
-> when that condition resolves.
-
+diff --git a/block/blk-merge.c b/block/blk-merge.c
+index 2d470cf2173e..74e9e775f13d 100644
+--- a/block/blk-merge.c
++++ b/block/blk-merge.c
+@@ -592,7 +592,8 @@ static inline unsigned int blk_rq_get_max_sectors(struct request *rq,
+ 	if (blk_rq_is_passthrough(rq))
+ 		return q->limits.max_hw_sectors;
+ 
+-	max_sectors = blk_queue_get_max_sectors(q, req_op(rq));
++	max_sectors = blk_queue_get_max_sectors(rq);
++
+ 	if (!q->limits.chunk_sectors ||
+ 	    req_op(rq) == REQ_OP_DISCARD ||
+ 	    req_op(rq) == REQ_OP_SECURE_ERASE)
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 2dc01551e27c..0855f75bcad7 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -3046,7 +3046,7 @@ void blk_mq_submit_bio(struct bio *bio)
+ blk_status_t blk_insert_cloned_request(struct request *rq)
+ {
+ 	struct request_queue *q = rq->q;
+-	unsigned int max_sectors = blk_queue_get_max_sectors(q, req_op(rq));
++	unsigned int max_sectors = blk_queue_get_max_sectors(rq);
+ 	unsigned int max_segments = blk_rq_get_max_segments(rq);
+ 	blk_status_t ret;
+ 
+diff --git a/block/blk.h b/block/blk.h
+index 1ef920f72e0f..050696131329 100644
+--- a/block/blk.h
++++ b/block/blk.h
+@@ -166,9 +166,11 @@ static inline unsigned int blk_rq_get_max_segments(struct request *rq)
+ 	return queue_max_segments(rq->q);
+ }
+ 
+-static inline unsigned int blk_queue_get_max_sectors(struct request_queue *q,
+-						     enum req_op op)
++static inline unsigned int blk_queue_get_max_sectors(struct request *rq)
+ {
++	struct request_queue *q = rq->q;
++	enum req_op op = req_op(rq);
++
+ 	if (unlikely(op == REQ_OP_DISCARD || op == REQ_OP_SECURE_ERASE))
+ 		return min(q->limits.max_discard_sectors,
+ 			   UINT_MAX >> SECTOR_SHIFT);
 -- 
-Pavel Begunkov
+2.31.1
+
