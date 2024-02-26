@@ -1,65 +1,65 @@
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B996C12F39C
-	for <io-uring@vger.kernel.org>; Mon, 26 Feb 2024 19:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93E212FF64
+	for <io-uring@vger.kernel.org>; Mon, 26 Feb 2024 19:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708975509; cv=none; b=SeHkWg+NOqIhvhaKQWKC9DiTo4C3nkCUg9dPefseZiB/mNkBLwgzaiXjD/4F0WvEtz8ucFrTp/oLILdHqT1Zn+l7fQmVGKe4NpgwsjzgnyZp/CodryD6RFhpiskYc38AhHLS7bJ1iGCQfHMRS+uXDdZfXmF4qEnjzJcYB/Cnegg=
+	t=1708975512; cv=none; b=MKWn/GVLlgNcuay4jELm6K2YgwNWJgplrjXJ377PE8JYXynAfyLVOf7is7Ib7CyVnRTqqgXpsG2pFcorddLlDco/X0m2ufLOmdb0o0eDeEejy7Hte/LG/4+dlYP2iVTZYutnv9U/d9GydDzLxU/KNOm8CNl4lem0b1olCuNIDrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708975509; c=relaxed/simple;
-	bh=2ayUOfaEYiRowwWtv7K6yBwCX1wE9nF3iDBASOdcNs0=;
+	s=arc-20240116; t=1708975512; c=relaxed/simple;
+	bh=lGoC2BMu61GnabMZrBdyCwtqhshjhK1Ekf9h9Qs2UU8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IPW7Z3bXNIqhxLbDUEuXbV1odZpGVDNL78ImPb+ofiT6IY2DMJFykhXYVQuUvu+iEOLQLrUSlFrPNQ0FU+s0gd0IaP6RJBrQX8MdD7lPPIeik09iJq3T6NqoUZAm+nGR7DPdKFCXEnI4YbdSnHQH+0ETg1ZnTPljHXLWpw+EsM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=CWXIvkz8; arc=none smtp.client-ip=209.85.166.50
+	 MIME-Version; b=Z6ZBubqSP2mKQsPNgGFQSy45vlfrDuBD27OnhpZKY5gndiSpiU2Ap8FMrl3djxyza1LofsLyxc/P/n6rwOXogfiO2e8/DxIK6pFk24qj4rfg4MmdptgCQS+7KyhioJmAk2Qa7iPJRmUC9k2V9J8VdwL0efHl5YHcSstg1J7zDD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=oD+BZzYK; arc=none smtp.client-ip=209.85.166.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="CWXIvkz8"
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7c7bd118546so12300339f.1
-        for <io-uring@vger.kernel.org>; Mon, 26 Feb 2024 11:25:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="oD+BZzYK"
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-7c787eee137so39011839f.0
+        for <io-uring@vger.kernel.org>; Mon, 26 Feb 2024 11:25:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1708975506; x=1709580306; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1708975509; x=1709580309; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jw0Je0tw5r/73HhCk/nGFBZB/5kheAEr7X7sZwheg6c=;
-        b=CWXIvkz8mIobmAuHg+LSl1TqGViGhEvf+qXGAl6BdSNp4xvEFySV6rfsmsQo5AhOf2
-         Rik9GrF4lCou2LfGZYt8FjjuzxVvN2v19QZmFtDbO67NmLJC+tF3JW8Kqd3D2jcB/wjL
-         TwsmyWLSRjV/Ft8KovykkfVSiqge3fBBgw5LgjZ5HvTuCFn+3R1PFjJ0N6f5CaW+7mIZ
-         aK3DvB+IU0VGe2SiDMvJzmKb075C7M/6XB72UpJIa19nnRek7Xt3ZL4RdMgn0HEuUCEh
-         GIGUV7Y5DukOV0gjfFQERfjZTvrRkLKHm3XJQrhV6NJ6pDUMWx7QeaDK7pGUezGQ1Zig
-         VEfQ==
+        bh=I0ptQPO8d+OTLLsakqRHLt1Ahb+P2jcy8KvUJBo3TIw=;
+        b=oD+BZzYKtxANNrC8YUvPJrxmjDMkhKecyo83t+7SQeQnYs0vwpfrrDjyuEjtGc6wuR
+         KGJJeiu+onwcfpZxAtBbpSrTN/GP7+UOetz8L4AJJpruwf3hrCv64iafOxSFq2kPsX4y
+         8jdVHAU2PZoLEqnhiRTm45yf60yz/VYa9K6Cj0iRs/b/GjKDY1nK3EX+XHWcwKRbfYmy
+         iUGF6P4QSCqQpZsRYDWyYiAOfmrpjDO4xOycVHHic9G9z6iSUpoWFJcM+OHm/mIQ6XBJ
+         +Pfn0h86ymGyYkKv/sUrXUUF1ZAzQ6rwk9xAWOoBB/5uSNZBBRv12KY7khyyLkxqFQYi
+         +ZCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708975506; x=1709580306;
+        d=1e100.net; s=20230601; t=1708975509; x=1709580309;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jw0Je0tw5r/73HhCk/nGFBZB/5kheAEr7X7sZwheg6c=;
-        b=Xh37E/Q2CbakpPz1yxXlZQQ1UIY9j3148S1evtfz+25i3QMXQ1Yb/FFIT63OqNDChw
-         JCVeMuNH0py6SmcDio7zoEvul3HonwY7gIs9Dv7y6X5pXQMWRUihjglW83RdkgLikryi
-         Id86mzHGf5QTnc/3ZKIKpz3U4zF2mifDByeu4eIgHZHYklWeDxGDFBUyIyK2EATCmDQi
-         O1K5+KwfcVKL8kvtOedmTY8j6AnnqLHpEh+LikKLcy51K0ouP/qbIO/N82WImE70Hkds
-         twsSFTie5GMzGvLxiHkGwV2q+zwHRyZOCDY/n26ui1dbD1HBWba15RUB11/yLIbgIxM+
-         DoLg==
-X-Gm-Message-State: AOJu0YwNnbu+GAvxGGnO0zB9/AU94187jZpFCehJiJSESoeE1GR16Rd3
-	hKRz9iu0zBzWQGBmfUBw5T3l7xPTMCHWVi/hgltgKo21Tea7MofnB9HKbDKTGTvBZe0kiwxJOeU
-	W
-X-Google-Smtp-Source: AGHT+IHcaLFu8QbwdEtmuhQUKbkvfE27L0G0aQH8G3GIJ/M79XPZmCO9sEYYJzmavAjAq14aZmUsfg==
-X-Received: by 2002:a6b:5d0b:0:b0:7c7:b8fb:8922 with SMTP id r11-20020a6b5d0b000000b007c7b8fb8922mr4560752iob.0.1708975506517;
-        Mon, 26 Feb 2024 11:25:06 -0800 (PST)
+        bh=I0ptQPO8d+OTLLsakqRHLt1Ahb+P2jcy8KvUJBo3TIw=;
+        b=YqdZEBIUxaJBtGjYmIDdeevSQsDyeR/q2NMCMg6LY7DOokljFVV2mLQ3LifRvoMTra
+         d5y3N222pwclcfnHgbT118jqboygt+484W1oIILi7BbNdm6Qg5wfD9/3SqwTtEcIY5Wu
+         2JTsCYPknJ8zYTw/ZbRAcqAJ3NAaTBiePWPfuhSj3cl2ESKoibr2EXeYdHcQd7ltFUbu
+         wd5Njv1mDzuczIM+yAU2fc5rDAPujqPCjjErvs5TRn87Q0XCJbeVDJPfYRAbEbT9ImDy
+         2aoVNPAA1cPwC5zWHNYdSBUrl1N/qclXfDSWROcSvQdY7qa5j5rGGQONZF+5jneKBJpN
+         2O4w==
+X-Gm-Message-State: AOJu0YxM49b6QZ40prxgL/AP6Lg3hLeFt5FycgmUOoJmoaiQ4bCESTH0
+	OGJbtHSZb5EZYsLT1XuP1DTqW8wcuUKImKNe4GLXJ9fcVMNrud/Og2Wt8mGJjYtFXxDuH1mbzql
+	n
+X-Google-Smtp-Source: AGHT+IGxlaAZ9ISe685f8FnDQWCVcngONtKINNK3PvcvH3bAVYi3X8+a3PP2ctV4skgTsPIHNIYj9g==
+X-Received: by 2002:a6b:da17:0:b0:7c7:a02d:f102 with SMTP id x23-20020a6bda17000000b007c7a02df102mr7465761iob.0.1708975509227;
+        Mon, 26 Feb 2024 11:25:09 -0800 (PST)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id eh3-20020a056638298300b0047466fd3b1dsm1370484jab.22.2024.02.26.11.25.04
+        by smtp.gmail.com with ESMTPSA id eh3-20020a056638298300b0047466fd3b1dsm1370484jab.22.2024.02.26.11.25.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Feb 2024 11:25:05 -0800 (PST)
+        Mon, 26 Feb 2024 11:25:08 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	dyudaken@gmail.com,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/9] net: remove {revc,send}msg_copy_msghdr() from exports
-Date: Mon, 26 Feb 2024 12:21:13 -0700
-Message-ID: <20240226192458.396832-2-axboe@kernel.dk>
+Subject: [PATCH 3/9] io_uring/net: add provided buffer support for IORING_OP_SENDMSG
+Date: Mon, 26 Feb 2024 12:21:15 -0700
+Message-ID: <20240226192458.396832-4-axboe@kernel.dk>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240226192458.396832-1-axboe@kernel.dk>
 References: <20240226192458.396832-1-axboe@kernel.dk>
@@ -71,84 +71,68 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The only user of these was io_uring, and it's not using them anymore.
-Make them static and remove them from the socket header file.
+Adds provided buffer support for sendmsg as well, see the previous commit
+that added it to IORING_OP_SEND for a longer explanation of why this
+makes sense.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- include/linux/socket.h                         |  7 -------
- net/socket.c                                   | 14 +++++++-------
- tools/perf/trace/beauty/include/linux/socket.h |  7 -------
- 3 files changed, 7 insertions(+), 21 deletions(-)
+ io_uring/net.c   | 15 ++++++++++++++-
+ io_uring/opdef.c |  1 +
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/socket.h b/include/linux/socket.h
-index cfcb7e2c3813..139c330ccf2c 100644
---- a/include/linux/socket.h
-+++ b/include/linux/socket.h
-@@ -422,13 +422,6 @@ extern long __sys_recvmsg_sock(struct socket *sock, struct msghdr *msg,
- 			       struct user_msghdr __user *umsg,
- 			       struct sockaddr __user *uaddr,
- 			       unsigned int flags);
--extern int sendmsg_copy_msghdr(struct msghdr *msg,
--			       struct user_msghdr __user *umsg, unsigned flags,
--			       struct iovec **iov);
--extern int recvmsg_copy_msghdr(struct msghdr *msg,
--			       struct user_msghdr __user *umsg, unsigned flags,
--			       struct sockaddr __user **uaddr,
--			       struct iovec **iov);
- extern int __copy_msghdr(struct msghdr *kmsg,
- 			 struct user_msghdr *umsg,
- 			 struct sockaddr __user **save_addr);
-diff --git a/net/socket.c b/net/socket.c
-index ed3df2f749bf..0f5d5079fd91 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -2600,9 +2600,9 @@ static int ____sys_sendmsg(struct socket *sock, struct msghdr *msg_sys,
- 	return err;
+diff --git a/io_uring/net.c b/io_uring/net.c
+index c6a24973352e..679eefcd11c5 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -459,6 +459,17 @@ int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
+ 	    (sr->flags & IORING_RECVSEND_POLL_FIRST))
+ 		return io_setup_async_msg(req, kmsg, issue_flags);
+ 
++	if (io_do_buffer_select(req)) {
++		void __user *buf;
++		size_t len = sr->len;
++
++		buf = io_buffer_select(req, &len, issue_flags);
++		if (!buf)
++			return -ENOBUFS;
++
++		iov_iter_ubuf(&kmsg->msg.msg_iter, ITER_SOURCE, buf, len);
++	}
++
+ 	flags = sr->msg_flags;
+ 	if (issue_flags & IO_URING_F_NONBLOCK)
+ 		flags |= MSG_DONTWAIT;
+@@ -502,6 +513,7 @@ int io_send(struct io_kiocb *req, unsigned int issue_flags)
+ 	size_t len = sr->len;
+ 	struct socket *sock;
+ 	struct msghdr msg;
++	unsigned int cflags;
+ 	unsigned flags;
+ 	int min_ret = 0;
+ 	int ret;
+@@ -576,7 +588,8 @@ int io_send(struct io_kiocb *req, unsigned int issue_flags)
+ 		ret += sr->done_io;
+ 	else if (sr->done_io)
+ 		ret = sr->done_io;
+-	io_req_set_res(req, ret, 0);
++	cflags = io_put_kbuf(req, issue_flags);
++	io_req_set_res(req, ret, cflags);
+ 	return IOU_OK;
  }
  
--int sendmsg_copy_msghdr(struct msghdr *msg,
--			struct user_msghdr __user *umsg, unsigned flags,
--			struct iovec **iov)
-+static int sendmsg_copy_msghdr(struct msghdr *msg,
-+			       struct user_msghdr __user *umsg, unsigned flags,
-+			       struct iovec **iov)
- {
- 	int err;
- 
-@@ -2753,10 +2753,10 @@ SYSCALL_DEFINE4(sendmmsg, int, fd, struct mmsghdr __user *, mmsg,
- 	return __sys_sendmmsg(fd, mmsg, vlen, flags, true);
- }
- 
--int recvmsg_copy_msghdr(struct msghdr *msg,
--			struct user_msghdr __user *umsg, unsigned flags,
--			struct sockaddr __user **uaddr,
--			struct iovec **iov)
-+static int recvmsg_copy_msghdr(struct msghdr *msg,
-+			       struct user_msghdr __user *umsg, unsigned flags,
-+			       struct sockaddr __user **uaddr,
-+			       struct iovec **iov)
- {
- 	ssize_t err;
- 
-diff --git a/tools/perf/trace/beauty/include/linux/socket.h b/tools/perf/trace/beauty/include/linux/socket.h
-index cfcb7e2c3813..139c330ccf2c 100644
---- a/tools/perf/trace/beauty/include/linux/socket.h
-+++ b/tools/perf/trace/beauty/include/linux/socket.h
-@@ -422,13 +422,6 @@ extern long __sys_recvmsg_sock(struct socket *sock, struct msghdr *msg,
- 			       struct user_msghdr __user *umsg,
- 			       struct sockaddr __user *uaddr,
- 			       unsigned int flags);
--extern int sendmsg_copy_msghdr(struct msghdr *msg,
--			       struct user_msghdr __user *umsg, unsigned flags,
--			       struct iovec **iov);
--extern int recvmsg_copy_msghdr(struct msghdr *msg,
--			       struct user_msghdr __user *umsg, unsigned flags,
--			       struct sockaddr __user **uaddr,
--			       struct iovec **iov);
- extern int __copy_msghdr(struct msghdr *kmsg,
- 			 struct user_msghdr *umsg,
- 			 struct sockaddr __user **save_addr);
+diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+index 88fbe5cfd379..1f6b09e61ef8 100644
+--- a/io_uring/opdef.c
++++ b/io_uring/opdef.c
+@@ -139,6 +139,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.pollout		= 1,
+ 		.ioprio			= 1,
+ 		.manual_alloc		= 1,
++		.buffer_select		= 1,
+ #if defined(CONFIG_NET)
+ 		.prep			= io_sendmsg_prep,
+ 		.issue			= io_sendmsg,
 -- 
 2.43.0
 
