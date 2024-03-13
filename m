@@ -1,66 +1,62 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149A9482C6
-	for <io-uring@vger.kernel.org>; Wed, 13 Mar 2024 16:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF41482D4
+	for <io-uring@vger.kernel.org>; Wed, 13 Mar 2024 16:06:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710345981; cv=none; b=EBmAD1kQV3Ppx/dwAsUIQPxge8fuRZZ1v2CCQAsyGVfN22KXGwXVROe+3FFg1xH//1O4qxvPeIACEHRkBcTrjvnHraO8vObLFWleRJM6MBNHdM15PBtOBeQVcwssM+8d46pMtI5Ib+2Q34egF9AQeuu8zp6ExGCrGxb/gaAUuEk=
+	t=1710345983; cv=none; b=thCwMFhJoPghrx+v0pKMiM0N1Wl91VeEOPm0O0F8O/g6kf+apIG+QevCqw89CKxByIgcHmhf5GvgkdztqBPVGG2pg9Lr95+G8W2cxf36DsWSbk6BuDR3yslyRcvshxlALmHwUxcJUbZ0yrPhcpEu0qCSUxqeIQcV5Xkt9IjNuwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710345981; c=relaxed/simple;
-	bh=qEJvBqXlKk6/4ag2igLXi/tEQnH/mI1uVdOIK1lcjA0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LDRCKBOv33vg22Nar8qU6O/bt4Ca5lxMV9WvNIAv4jJeejPXjmJ7fH8uWbkF2H0BqICfX+M8l61hqtKjL2M4d6j3UihO45duygEGqoDO3EklxWJFtMamcIOPj9PSNR+FjCkuX4Kn+YXekxFIp1ClfuiyUDswN83UVCLcHyr/Rh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nVlBgDWE; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1710345983; c=relaxed/simple;
+	bh=56PS2uUv5D/XpSG1P4YjumZE+UBYxFvQD4M0HkMPk+Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fGkgSeDnlCi54df1YOwE8dtpJQH/swljV1GxOBAjzHEaVbd3mUo1Hx2J9JHfUw3gf8zMS9mChwjFJj8qBReDv1XxGEAhJUU8Yos6NbZ6lsC3PfkxQt6I4CEBmN9bBfAzug44EMxKRHOVVmr1pbc8UIOuYqCXLWy97WL/6FAH6lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W0M04uR0; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nVlBgDWE"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a3ddc13bbb3so195544066b.0
-        for <io-uring@vger.kernel.org>; Wed, 13 Mar 2024 09:06:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W0M04uR0"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a466a1f9ea0so52766b.1
+        for <io-uring@vger.kernel.org>; Wed, 13 Mar 2024 09:06:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1710345978; x=1710950778; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M6P9sTo17wusRH/vBHYP9uaX08In1VpmHa0U9XqM2zQ=;
-        b=nVlBgDWEGhtc0aJmce8aoQk1BrFmiAy4qEF51seqQWwWDGTWSrHqU6SCWpeIWgbZCm
-         /M+7ZxNJ39g5b4wB9781MLdHp0v9DxinhW7ghni3W2tvTyj570LFGIWJtddK/LDdoATK
-         E7bh6z5Wkvn/fYqqC0ahRPFtO8EHiLTLY9L31NS71+qbSTAv1XZaLeUga3J7KkpHCabP
-         rhpk7/BLsc6oJBhSYvElr04vT6olQX6vTXIUXwaIPZkM4lUCSxc0F0HJie0ult3ovQyI
-         hYi/BC/mkkR79w4v45xMvKEGYn0qvUBq2z1ygOJF5sKZc/tILq2ayRhHFHo9vcntelOY
-         VMdw==
+        d=gmail.com; s=20230601; t=1710345975; x=1710950775; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bgzyh5d8LhTz9uYH2p650WVQj8jVsmRi5cht21MxeRw=;
+        b=W0M04uR002W9n6gw9LNzlhe85vKxT+4lOabhL779LymNZiLBKuDbwy2chy/IoGIAWw
+         FWL4LjGDvdP6MEoO5n0vORjw4kXHCHlg5znGLlxCTuXplQ0I6F9y7y7G613R+xMKNIbP
+         UII+3AxodLLt5kIQXbbmj/Co5nXrmcB5WHnAtmrlw8FXUQ6+5UcBu+V7tkdS62/OViwH
+         Fej13uLuKQOr+/bg4rnZmqJJGY2lLfU4KhDavIM1entvGYlo8h0An4+vGswNufIp+2DP
+         KXelc4PFNWPwYzQjIViQLW1J1zxigl5US1ptRp+EAyahmbamTV/P0NfB/Dqy9By4WaXQ
+         kasQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710345978; x=1710950778;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M6P9sTo17wusRH/vBHYP9uaX08In1VpmHa0U9XqM2zQ=;
-        b=fWfg2QF9t9h1rqSxBMYANWvQNPy6bt0uDgkAtWFOQkNMzv66NdL7QpoS1Uffgsl5Bf
-         ZZiggZM2aRvn9A3K0EYpHQoaAjZdVRTZIPNMMETULCyq1vupnZq9/Tf29fr/tLWqGnPk
-         TNEGVE0x6L7e6wVxMWm88uYwv8Dk6ElaPfj5TlrZxYtzEi7UJLwMGjU4Eek6ZRiG2vN+
-         EHCwOJou4wwI6buCDwd5V4mM5HQSFYIivKBEd0QY/k91R3TvQT3ButueSraFNdAClGUO
-         P/8Jlke0FRU+zFPMe+OFEEJW6t6HrpxJbOMrJhZZBEujhcgsCfHhimIhKwEJsZ8kyPHn
-         0F+g==
-X-Gm-Message-State: AOJu0YytWOH9q/9+sOrmtaGNyBkIZO6k7x1hW/INocuNIukfbZMQM0nP
-	f2Yux8qMREUz6sj/PJbCRxAciN6JERSw1b0nzrc8n/68eN5pYfEOYpLtMVe+
-X-Google-Smtp-Source: AGHT+IGSV1+X/XJj5e89nz5MArzBYD8CkSzClfdt+bfTZvwhpevlQUwQXpOGFzT+VP0s05lS16wpLA==
-X-Received: by 2002:a17:906:ba84:b0:a46:13a0:2e5c with SMTP id cu4-20020a170906ba8400b00a4613a02e5cmr2920796ejd.25.1710345977767;
-        Wed, 13 Mar 2024 09:06:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1710345975; x=1710950775;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bgzyh5d8LhTz9uYH2p650WVQj8jVsmRi5cht21MxeRw=;
+        b=ITKV8x24OwlNoLpntcfxrdWrmGJW7EqGNYfqdcnzONnlxG2fPRaQVF+N1hjfWf8J7v
+         G3R9PeFzcTc7636zT+a8Of0cSQhQY3BM2Shfdd1U2d3hThUbZ3MhytCcBmggz1jKkOF7
+         RtP349Zf+iPlhSGeeqLtuhc9M81TLaW43ekhMDzBYmC54AJUHuUy0DSOOBqtoqG9a/QE
+         Y6tMD5d5Ig8y66VlS7zxBboZf2e2s8lbzDP3bN41c/3xXAltqBlyrPxrQ0CILbPL5QTV
+         yhkGE6rKjcI4+7uqdc1walQ/7qabJxzPn3OdYng6nMZXpjw1NoC3fmlD8LvNEABXoNnl
+         k5mg==
+X-Gm-Message-State: AOJu0YyQ2lR/XNwzxr3khqTO26I7fP9ZbdoyBhm+H8HOXtTozFuCl/N8
+	j8fASJB/1B9mjlWGa16Beck59FeKA69psna7l10f+vhOk7OSERGrZ0j1OCci
+X-Google-Smtp-Source: AGHT+IHce/Ki3GHt0IRXcNrBU/TXEqHHG/04N3DCvD731LiZZ4UEMAQmg4ZO8XVcTB05B5ZvEDCVZQ==
+X-Received: by 2002:a17:906:5642:b0:a44:74f6:a004 with SMTP id v2-20020a170906564200b00a4474f6a004mr8351207ejr.26.1710345975460;
+        Wed, 13 Mar 2024 09:06:15 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::1:7461])
-        by smtp.gmail.com with ESMTPSA id k16-20020a1709067ad000b00a4655976025sm798328ejo.82.2024.03.13.09.06.16
+        by smtp.gmail.com with ESMTPSA id k16-20020a1709067ad000b00a4655976025sm798328ejo.82.2024.03.13.09.06.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Mar 2024 09:06:16 -0700 (PDT)
+        Wed, 13 Mar 2024 09:06:15 -0700 (PDT)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: Jens Axboe <axboe@kernel.dk>,
 	asml.silence@gmail.com
-Subject: [PATCH 3/3] io_uring/kbuf: rename is_mapped
-Date: Wed, 13 Mar 2024 15:52:41 +0000
-Message-ID: <c4838f4d8ad506ad6373f1c305aee2d2c1a89786.1710343154.git.asml.silence@gmail.com>
+Subject: [PATCH 0/3] small rings clean up
+Date: Wed, 13 Mar 2024 15:52:38 +0000
+Message-ID: <cover.1710343154.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1710343154.git.asml.silence@gmail.com>
-References: <cover.1710343154.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -69,124 +65,19 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In buffer lists we have ->is_mapped as well as ->is_mmap, it's
-pretty hard to stay sane double checking which one means what,
-and in the long run there is a high chance of an eventual bug.
-Rename ->is_mapped into ->is_buf_ring.
+Some disconnected cleanup patches split out of a larger series
+as they make sense by themselves.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/kbuf.c | 20 ++++++++++----------
- io_uring/kbuf.h |  2 +-
- 2 files changed, 11 insertions(+), 11 deletions(-)
+Pavel Begunkov (3):
+  io_uring: simplify io_mem_alloc return values
+  io_uring: simplify io_pages_free
+  io_uring/kbuf: rename is_mapped
 
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 0677eae92e79..4cf742749870 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -199,7 +199,7 @@ void __user *io_buffer_select(struct io_kiocb *req, size_t *len,
- 
- 	bl = io_buffer_get_list(ctx, req->buf_index);
- 	if (likely(bl)) {
--		if (bl->is_mapped)
-+		if (bl->is_buf_ring)
- 			ret = io_ring_buffer_select(req, len, bl, issue_flags);
- 		else
- 			ret = io_provided_buffer_select(req, len, bl);
-@@ -253,7 +253,7 @@ static int __io_remove_buffers(struct io_ring_ctx *ctx,
- 	if (!nbufs)
- 		return 0;
- 
--	if (bl->is_mapped) {
-+	if (bl->is_buf_ring) {
- 		i = bl->buf_ring->tail - bl->head;
- 		if (bl->is_mmap) {
- 			/*
-@@ -274,7 +274,7 @@ static int __io_remove_buffers(struct io_ring_ctx *ctx,
- 		}
- 		/* make sure it's seen as empty */
- 		INIT_LIST_HEAD(&bl->buf_list);
--		bl->is_mapped = 0;
-+		bl->is_buf_ring = 0;
- 		return i;
- 	}
- 
-@@ -361,7 +361,7 @@ int io_remove_buffers(struct io_kiocb *req, unsigned int issue_flags)
- 	if (bl) {
- 		ret = -EINVAL;
- 		/* can't use provide/remove buffers command on mapped buffers */
--		if (!bl->is_mapped)
-+		if (!bl->is_buf_ring)
- 			ret = __io_remove_buffers(ctx, bl, p->nbufs);
- 	}
- 	io_ring_submit_unlock(ctx, issue_flags);
-@@ -519,7 +519,7 @@ int io_provide_buffers(struct io_kiocb *req, unsigned int issue_flags)
- 		}
- 	}
- 	/* can't add buffers via this command for a mapped buffer ring */
--	if (bl->is_mapped) {
-+	if (bl->is_buf_ring) {
- 		ret = -EINVAL;
- 		goto err;
- 	}
-@@ -575,7 +575,7 @@ static int io_pin_pbuf_ring(struct io_uring_buf_reg *reg,
- 	bl->buf_pages = pages;
- 	bl->buf_nr_pages = nr_pages;
- 	bl->buf_ring = br;
--	bl->is_mapped = 1;
-+	bl->is_buf_ring = 1;
- 	bl->is_mmap = 0;
- 	return 0;
- error_unpin:
-@@ -642,7 +642,7 @@ static int io_alloc_pbuf_ring(struct io_ring_ctx *ctx,
- 	}
- 	ibf->inuse = 1;
- 	bl->buf_ring = ibf->mem;
--	bl->is_mapped = 1;
-+	bl->is_buf_ring = 1;
- 	bl->is_mmap = 1;
- 	return 0;
- }
-@@ -688,7 +688,7 @@ int io_register_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg)
- 	bl = io_buffer_get_list(ctx, reg.bgid);
- 	if (bl) {
- 		/* if mapped buffer ring OR classic exists, don't allow */
--		if (bl->is_mapped || !list_empty(&bl->buf_list))
-+		if (bl->is_buf_ring || !list_empty(&bl->buf_list))
- 			return -EEXIST;
- 	} else {
- 		free_bl = bl = kzalloc(sizeof(*bl), GFP_KERNEL);
-@@ -730,7 +730,7 @@ int io_unregister_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg)
- 	bl = io_buffer_get_list(ctx, reg.bgid);
- 	if (!bl)
- 		return -ENOENT;
--	if (!bl->is_mapped)
-+	if (!bl->is_buf_ring)
- 		return -EINVAL;
- 
- 	__io_remove_buffers(ctx, bl, -1U);
-@@ -757,7 +757,7 @@ int io_register_pbuf_status(struct io_ring_ctx *ctx, void __user *arg)
- 	bl = io_buffer_get_list(ctx, buf_status.buf_group);
- 	if (!bl)
- 		return -ENOENT;
--	if (!bl->is_mapped)
-+	if (!bl->is_buf_ring)
- 		return -EINVAL;
- 
- 	buf_status.head = bl->head;
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index 5218bfd79e87..1c7b654ee726 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -26,7 +26,7 @@ struct io_buffer_list {
- 	__u16 mask;
- 
- 	/* ring mapped provided buffers */
--	__u8 is_mapped;
-+	__u8 is_buf_ring;
- 	/* ring mapped provided buffers, but mmap'ed by application */
- 	__u8 is_mmap;
- 	/* bl is visible from an RCU point of view for lookup */
+ io_uring/io_uring.c | 20 ++++++--------------
+ io_uring/kbuf.c     | 24 ++++++++++++------------
+ io_uring/kbuf.h     |  2 +-
+ 3 files changed, 19 insertions(+), 27 deletions(-)
+
 -- 
 2.43.0
 
