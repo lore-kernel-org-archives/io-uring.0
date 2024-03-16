@@ -1,146 +1,108 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63D71A702
-	for <io-uring@vger.kernel.org>; Sat, 16 Mar 2024 16:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EC929CA
+	for <io-uring@vger.kernel.org>; Sat, 16 Mar 2024 16:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710605653; cv=none; b=AXhSIrNAuKYdk01cbru+kcufG4Hs7w4C5GmtcH0EHoxhK7qdCwTY0tvGUNhZv21tbWM5WY5YlKCEOdZIwqQO7kqsk3pMLrxksAiiN6TGIZr/2NVSWf6cZQAlVX29fKqk5CTtHjT/E06yqCPg0BHHJGwXCYzcIze98Z+fN2vnErk=
+	t=1710606544; cv=none; b=hnS1wyqRfvSCVAcpg8ydcFzqdt/gXZ2dKEF3HSEt7mV5fMd9EXPcQUdkQi/IyepFqVtrsUDc0qQYcWCClZIVxM8w3xPTeeKXAt0TYj7V/lNu55iF7Np1RVxi/hKBA9gnIIfMjDHjY4MF1GhonjtktGOguJwiPphwobKJHBZGCxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710605653; c=relaxed/simple;
-	bh=Nfq+UT/oNnKb5vk0R1+zRuTDnVZdf6zKZVzZBaYfGfw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Gm3Jox1ouRr7dcLhejkjSCdchgH87ODIete+fKu4ZmcIjKFaULhwoTzFY02N03JpRfLMqVZJhLzBWiwz9kicFt8psdnFZW+UOMdT3sxT1lrRm5vyf51KYP+M4c8qZIENQXA/RmKJ1b1W3hsjD5bNBGsmJj1OJqk9WejuSCmkOSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=sPo3bfGc; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="sPo3bfGc"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1dee6672526so2803445ad.1
-        for <io-uring@vger.kernel.org>; Sat, 16 Mar 2024 09:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1710605651; x=1711210451; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EemyXo1L4J+rM6YeUNP6XPsjId+Q25jtES+gkv8dJyQ=;
-        b=sPo3bfGcz+zXF7PxU7vyXsyhWgJnzuS9bPx/PZMZdJ2bniqcQhHCuIJEPsrTH//K+7
-         3vML1Y8qqkfdKCCWsWY7tpuoXWRGwTIg2RZa7M0ozu73fwrvFnI5aH1vm9eRuKkN1ECA
-         qh0zwU3yqBG/IVMAbYPniZmXdJO0w7+pwG4lDhxukOPODBe7/MEXGCf3cIoaaR84SYSR
-         BVLRFuMC2o5HeNahE4Cx19taQjhZ0RiD9FQuPVnj5d0f5++22La9MW+ksJGbiVw719dq
-         plB673YBPpOA5VmrYAolchAHZpXuBaH7rUoKM/1zDc+2fyb+/sWgD6KzCjQ6SJ2zJOVb
-         oM+Q==
+	s=arc-20240116; t=1710606544; c=relaxed/simple;
+	bh=Y0yhbc7ydnQqmzLmsuHCZOKD7hhbhRbIktCPFdDExSo=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=hAs1Fq45aGwqiELnE9G05Upz6zo3bedEJKkMObFV0aUS01UsPI54j6dwhA33CsQf7bFkfjiJtEIw/472782iaRZp186XgwHYH+liHGnmJ4tWsMAEQ1GS/GXaotVKc1GG+ll8f03AN5EzO2zguw4uPGrXjWaVsdszD6H/YSnlmgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-366ba41e0c3so763415ab.3
+        for <io-uring@vger.kernel.org>; Sat, 16 Mar 2024 09:29:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710605651; x=1711210451;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1710606542; x=1711211342;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EemyXo1L4J+rM6YeUNP6XPsjId+Q25jtES+gkv8dJyQ=;
-        b=SioPhFl0K7tdi023xEKJ9dn78Fvn/cifQhOCieZ+JzrEtyx0ztx8YkL2u2IdLyK8Z3
-         rggOoJr3iQZMB71oC7e+a1G6IhKL2tshiyjUw+qV7afyhimiVJ+o9/Txd/5Vtyov2Lnw
-         nWyuXpwmVj/7YA9CeFDuXLWWFy+pvDZYJJNStO4KQ5zHxSTbeqU/EOJ8B756OSWyMo4Q
-         Om4tpZv/fq0AOsW4ilhT4g5H6mDijdeKM0OtYTUmWv7+Y1Q/RawW/9Rv0bGrcFi93CDP
-         POS4A73c/D69njCCVhO/lGaXxtDTxF253kPT+1qe4SRKnBf5f+bVX3vLuSA9P9PPn0s6
-         zjrA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjcOujWPzmXowFBJTBoxUpfoh2mXIE0EnrZ10QsTVbI7RpV8s7eP2/x4qPXeThPld/sIoKpOW8UQyDvVd4iGJjjFH0Ik/tNwI=
-X-Gm-Message-State: AOJu0YwRxS0BZPfsJAWuzkwZE4+KEHo0s/qKv42yX/3LgkTca95o4zZT
-	3wB6JZ5CWi76Y5ke/oBi6cu+j2ZmBcZaIRN7NemsRASAN+7qQ5knHNwJGvU9GTE=
-X-Google-Smtp-Source: AGHT+IHuUPzqNKkQM/Ql6H+aUqk8u71oJk/SzNHvlh021GsQyUxybCkS8wTI89o93aNNW+N+lDOBCw==
-X-Received: by 2002:a17:902:ce91:b0:1dc:df03:ad86 with SMTP id f17-20020a170902ce9100b001dcdf03ad86mr7614348plg.2.1710605650921;
-        Sat, 16 Mar 2024 09:14:10 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.194])
-        by smtp.gmail.com with ESMTPSA id ie15-20020a17090b400f00b0029de90f4d44sm4026713pjb.9.2024.03.16.09.14.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Mar 2024 09:14:10 -0700 (PDT)
-Message-ID: <083d800c-34b0-4947-b6d1-b477f147e129@kernel.dk>
-Date: Sat, 16 Mar 2024 10:14:09 -0600
+        bh=JKegllEXc4OdWtS04GQ5DNgtrIzoudxXYDeDXhOiLCA=;
+        b=DQyH1jZK3l2UfndKlUF1QRXwKkwdayuVJIFvjhUB1FM5I7Qrs2SSI4/WiHc9yHW35a
+         TmiK0K1V0EFLaXl0uRsNN5OzJudQlYkYJwCDrMJ5IvYTa7V4wUzNONw7NAF+fPzUKLFQ
+         4zwPlswnH0ETcP2xBdkSrTwSPVmoegPdrZDJgLHusuPsto2d+tRoBgIbkJz15UDhOIyY
+         rBdLi7XhygLb9pxxUCVcHRV8ZznGOCtciGOprAoUgCba3BSxZ2eRopT3I6Nii+RRkt1r
+         SnNqjdS2sqgafmMp44Me8ryphKsBnWU8MsekXt8BnaLsdLEWT/GPVOon0CGwSGuCLhcs
+         9qxA==
+X-Forwarded-Encrypted: i=1; AJvYcCUWqJffbpkuGVZPhgS9446Pkt1Hp7O6WnoY7QfeRbl/7iai9n54+9K9g/L3XVysweGauySDp9lLh+JdxoMVCxSh9qooo13iw30=
+X-Gm-Message-State: AOJu0YzHa8laCJLJ/Da+hx/uBEQzPDsXxQt1ekNT0GxyWAX/P2xaFkvs
+	hY8bNDS7JN5vjyvCl5NNQfno7NsvTVypWVJ3SYaZ0r0dHpxjC0Mq9mv7uoMTfQIJ21ccxtk0IFl
+	50CLlqqfKld3BRHp7ZB1lABLAqRPWL7CufSbdNOaKMCSMb4n+LX2PQ9M=
+X-Google-Smtp-Source: AGHT+IEoK+zNLWyJJmOEUTNpKE4dYQelUBa9p8rbSTAXYJ9sL6fs50GcdeMzNy5Q/oqRlPX9chbmssw0v+uvfVRMRYAJgM8FI8D5
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] io_uring/net: ensure async prep handlers always
- initialize ->done_io
-Content-Language: en-US
-To: Pavel Begunkov <asml.silence@gmail.com>,
- io-uring <io-uring@vger.kernel.org>
-References: <472ec1d4-f928-4a52-8a93-7ccc1af4f362@kernel.dk>
- <0ec91000-43f8-477e-9b61-f0a2f531e7d5@gmail.com>
- <cef96955-f7bc-4a0f-b3aa-befb338ca84d@gmail.com>
- <2af3dfa2-a91c-4cae-8c4c-9599459202e2@gmail.com>
- <cafdf8d7-2798-4d91-a6e5-3f9486303c6a@kernel.dk>
- <f44e113c-a70f-4293-aea9-bd7b2f9e1b32@gmail.com>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <f44e113c-a70f-4293-aea9-bd7b2f9e1b32@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:1d86:b0:366:b7d7:9734 with SMTP id
+ h6-20020a056e021d8600b00366b7d79734mr48661ila.3.1710606542282; Sat, 16 Mar
+ 2024 09:29:02 -0700 (PDT)
+Date: Sat, 16 Mar 2024 09:29:02 -0700
+In-Reply-To: <6e00b097-99db-44dc-a87b-08925c1f044d@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004db6840613c99fc6@google.com>
+Subject: Re: [syzbot] [io-uring?] KMSAN: uninit-value in io_sendrecv_fail
+From: syzbot <syzbot+f8e9a371388aa62ecab4@syzkaller.appspotmail.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 3/15/24 5:28 PM, Pavel Begunkov wrote:
-> On 3/15/24 23:25, Jens Axboe wrote:
->> On 3/15/24 5:19 PM, Pavel Begunkov wrote:
->>> On 3/15/24 23:13, Pavel Begunkov wrote:
->>>> On 3/15/24 23:09, Pavel Begunkov wrote:
->>>>> On 3/15/24 22:48, Jens Axboe wrote:
->>>>>> If we get a request with IOSQE_ASYNC set, then we first run the prep
->>>>>> async handlers. But if we then fail setting it up and want to post
->>>>>> a CQE with -EINVAL, we use ->done_io. This was previously guarded with
->>>>>> REQ_F_PARTIAL_IO, and the normal setup handlers do set it up before any
->>>>>> potential errors, but we need to cover the async setup too.
->>>>>
->>>>> You can hit io_req_defer_failed() { opdef->fail(); }
->>>>> off of an early submission failure path where def->prep has
->>>>> not yet been called, I don't think the patch will fix the
->>>>> problem.
->>>>>
->>>>> ->fail() handlers are fragile, maybe we should skip them
->>>>> if def->prep() wasn't called. Not even compile tested:
->>>>>
->>>>>
->>>>> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
->>>>> index 846d67a9c72e..56eed1490571 100644
->>>>> --- a/io_uring/io_uring.c
->>>>> +++ b/io_uring/io_uring.c
->>> [...]
->>>>>            def->fail(req);
->>>>>        io_req_complete_defer(req);
->>>>>    }
->>>>> @@ -2201,8 +2201,7 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
->>>>>            }
->>>>>            req->flags |= REQ_F_CREDS;
->>>>>        }
->>>>> -
->>>>> -    return def->prep(req, sqe);
->>>>> +    return 0;
->>>>>    }
->>>>>
->>>>>    static __cold int io_submit_fail_init(const struct io_uring_sqe *sqe,
->>>>> @@ -2250,8 +2249,15 @@ static inline int io_submit_sqe(struct io_ring_ctx *ctx, struct io_kiocb *req,
->>>>>        int ret;
->>>>>
->>>>>        ret = io_init_req(ctx, req, sqe);
->>>>> -    if (unlikely(ret))
->>>>> +    if (unlikely(ret)) {
->>>>> +fail:
->>>
->>> Obvious the diff is crap, but still bugging me enough to write
->>> that the label should've been one line below, otherwise we'd
->>> flag after ->prep as well.
->>
->> It certainly needs testing :-)
->>
->> We can go either way - patch up the net thing, or do a proper EARLY_FAIL
->> and hopefully not have to worry about it again. Do you want to clean it
->> up, test it, and send it out?
-> 
-> I'd rather leave it to you, I suspect it wouldn't fix the syzbot
-> report w/o fiddling with done_io as in your patch.
+Hello,
 
-I gave this a shot, but some fail handlers do want to get called. But
-they can't use sr->done_io at that point. I'll ponder this a bit and see
-what the best generic solution is.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KMSAN: uninit-value in io_sendrecv_fail
 
--- 
-Jens Axboe
+=====================================================
+BUG: KMSAN: uninit-value in io_sendrecv_fail+0x91/0x1e0 io_uring/net.c:1334
+ io_sendrecv_fail+0x91/0x1e0 io_uring/net.c:1334
+ io_req_defer_failed+0x456/0x6d0 io_uring/io_uring.c:1050
+ io_queue_sqe_fallback+0x1e3/0x280 io_uring/io_uring.c:2126
+ io_submit_fail_init+0x4e1/0x790 io_uring/io_uring.c:2310
+ io_submit_sqes+0x1a60/0x3030 io_uring/io_uring.c:2486
+ __do_sys_io_uring_enter io_uring/io_uring.c:3662 [inline]
+ __se_sys_io_uring_enter+0x409/0x4390 io_uring/io_uring.c:3597
+ __x64_sys_io_uring_enter+0x11b/0x1a0 io_uring/io_uring.c:3597
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
 
+Uninit was created at:
+ __alloc_pages+0x9a6/0xe00 mm/page_alloc.c:4592
+ __alloc_pages_node include/linux/gfp.h:238 [inline]
+ alloc_pages_node include/linux/gfp.h:261 [inline]
+ alloc_slab_page mm/slub.c:2190 [inline]
+ allocate_slab mm/slub.c:2354 [inline]
+ new_slab+0x2d7/0x1400 mm/slub.c:2407
+ ___slab_alloc+0x16b5/0x3970 mm/slub.c:3540
+ __kmem_cache_alloc_bulk mm/slub.c:4574 [inline]
+ kmem_cache_alloc_bulk+0x52a/0x1440 mm/slub.c:4648
+ __io_alloc_req_refill+0x248/0x780 io_uring/io_uring.c:1101
+ io_alloc_req io_uring/io_uring.h:405 [inline]
+ io_submit_sqes+0xaa2/0x3030 io_uring/io_uring.c:2475
+ __do_sys_io_uring_enter io_uring/io_uring.c:3662 [inline]
+ __se_sys_io_uring_enter+0x409/0x4390 io_uring/io_uring.c:3597
+ __x64_sys_io_uring_enter+0x11b/0x1a0 io_uring/io_uring.c:3597
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcf/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x63/0x6b
+
+CPU: 0 PID: 5478 Comm: syz-executor.0 Not tainted 6.8.0-syzkaller-00721-g3fdefe13e0a9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+=====================================================
+
+
+Tested on:
+
+commit:         3fdefe13 io_uring: explicitly flag early request failure
+git tree:       git://git.kernel.dk/linux.git io_uring-6.9
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c58006180000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a271c5dca0ff14df
+dashboard link: https://syzkaller.appspot.com/bug?extid=f8e9a371388aa62ecab4
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Note: no patches were applied.
