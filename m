@@ -1,59 +1,60 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9928712CDBF
-	for <io-uring@vger.kernel.org>; Wed, 27 Mar 2024 13:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4773F84D31
+	for <io-uring@vger.kernel.org>; Wed, 27 Mar 2024 15:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711546741; cv=none; b=ojl4obacOUnkUAaQe6aPLMgMAT/OSKHHonCXjaAhiCzVUp7tj8yey7Cq9lwasxCkeiRYAqK2I+oMiP5SzhnUrI7VRytOJcgNB+U6ZtxC1fmDJEpn02M2ckAQWJLRpyUhgRYg+1JifHw4bKt7FuiM26gHVsaPf7TCpoKJmRerKGc=
+	t=1711554345; cv=none; b=qMRUSWG4H0KWVzBUwpVJSJWFiVvp6izvZYdEQDtQEGcOyGCIDLYTInHAZ8y9lPOrqvj5AfhS+n5UDazC7X6+WfEBPMiC4dXfhxBcDS8/ADNIuprWEjnTnMmLKAvpHiB9L6KqiT/jesNUWsrgJ7w27D+tUHfMfKHfW7yxfMPhU48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711546741; c=relaxed/simple;
-	bh=qEv3WfXVYwfPcIwgn5BdsTEM/DGJakFlA/pc5M7llk0=;
+	s=arc-20240116; t=1711554345; c=relaxed/simple;
+	bh=fsDi1W2KTBJNW7A7tYK1xFEqga/Rcvt1+2Es6m8TITw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=fP7mXpAkZ3q5ODIzH9jRn7eW5GZ7VGZipJzmf9UKOGr3glM3I3IuaW1sUbKeWnzDmFoVVSdVgivNZbPNImO6U4wmWIUoa9xszX5kU8ad7sGTU1XkOu00hJfh9Kw3hzLBg6YyuWfnBrWvujXJfMfblCqtpAPxR+tGvi3dwpVlAVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FWQU6pRH; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=au5cWfhm+93oqEn1jlCQuYKcHc15pHxxcJ4g+kqyO6IaVW9Z6GKSX/TIFiP2rzQB0bChb+D3TOmf9fyBmB06vqsj26oFQzlXcbp7Qds+xgR+OCRYwdkHDIVi4k0Z8HdPoTIf/YL+tXo0NWw1AW2oEwRk0M5gW86c74P2/4cGKBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=dWn3YEGE; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWQU6pRH"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-41488f9708fso22342985e9.3
-        for <io-uring@vger.kernel.org>; Wed, 27 Mar 2024 06:38:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="dWn3YEGE"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1dde24ec08cso7236705ad.1
+        for <io-uring@vger.kernel.org>; Wed, 27 Mar 2024 08:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1711546738; x=1712151538; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1711554341; x=1712159141; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e0G4wYm2kkEwpFvVU4Lg/fsX4bBlRQ3hh4e4CEfKJgw=;
-        b=FWQU6pRHthCpL0vtNG0nynVRfiVgmkO9V7H1Cczg1mWCUgOimQWZACc+3+kv3g9XU0
-         jDXm3Q8CssWjhz135aTnZYqL0OwO9W/elwh5K42wo762mILVtJ8TyJtW8y3Z9ZlMJ3Pi
-         wGrWgpx5l1itFd5eVbSLzl2Ck8p6cA7vgxSgRFNghGhDmSBbl5Hu9eqVjVa0N3Qcee+T
-         90Gsqwnys6qJ5UTDweneFsPM79/GQgTcOZNJ8kKqjT5g+94jJyazCYLkEAXDljum7Ow9
-         8aDmltgEl53z/II90RPo4VUkicL+GB9H8EwtrbmeDFQ3EoYopNetWhZQ7cXeh6DeFLpl
-         FEmw==
+        bh=eEs4ZfiipmJVLC4z1ZS49Lyn4jfvVa/dtP9tAta76dQ=;
+        b=dWn3YEGEb7cvSG12sE3n8ymHm9iiDSoKsHuYK+lyVuNsEScB8hJVYPOaGGuz8t2FZ3
+         tGMjvM1vO0AKxt1bDnmbokR+/t27WQqFfwN92dISrkRH3VA/4/TuOVNcc3N1TgZRSSXV
+         ZWVeEq8FVPv+Vg5wTLntQpL+atBeHwdf/vOr5LupDXwfReQQM1k+kHfNbn5yZnupz0LH
+         ZS2AhjVQc/zmqHWDGI9XkcM09/HnqOpM7dbBgh64tZkF1DJYRW8tHmHKyt/AIyhLQAYO
+         qM2tdiPR/aJ/zNG6iCNSu/jxdknKu9OpJy2I9zUHW/J5/68vLieWVSQ3xFI9YxGj51oq
+         h6xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711546738; x=1712151538;
+        d=1e100.net; s=20230601; t=1711554341; x=1712159141;
         h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e0G4wYm2kkEwpFvVU4Lg/fsX4bBlRQ3hh4e4CEfKJgw=;
-        b=ZFxGv4qTtiMsbEUTof86u0yi0MgNgaxRI5mhuqRUpZqwHOUgwTGs+OSFIvuSVpuVIS
-         5p2MhbvhziG9qMRM+UWx3zX5JUYLcg3NiV6hMrR17o5bRNJsRl3bx/V6EJLM9xG5d45u
-         7G1BSx551K3OAsWYD6xxqe3wbtDXbiA1M+kEEnoBuZWtCcHFZPOmH7pjrtUn8cOBKizE
-         lwlWZWpriH6FfURxkljiFU34oVmJxRiislSwQorP1bceoAvjfrRaYglpEJ/u/S6ksfy7
-         DF0S4Z2yEwOHFHVusY8kFxGfOdWtMH9DvsC1Y5ZL2PYgaoMHVruo6Glg/psbJCXnUunP
-         WJLg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9O7GuShL99MF6kXygm2NFOe2xMVWB6DThCcwtIDVQ6mN8vtk7fbJobAlY/csNg0zK1TBKdVPsDqC4gp12rrThZnBmq9sk+Dg=
-X-Gm-Message-State: AOJu0YwL/I+QtrGynhoSDnEVHVIx9Yh19h6RGgF+yH/yHwkbcKGylJCt
-	8Y98O2x4WkGjT6fikBBQBHUnc/d+zhf/EDO+bjTRHSBt8sKF+9KlAnJrlP2c
-X-Google-Smtp-Source: AGHT+IHYbO3YaaOdiJiEhsscRim+IjH2+FZERwIvIi/X/1cKDFQjLsGMCDmf5W1sCTwOL8bd1TfEGA==
-X-Received: by 2002:a05:6000:1a4e:b0:33e:4d34:f40f with SMTP id t14-20020a0560001a4e00b0033e4d34f40fmr1969599wry.46.1711546737641;
-        Wed, 27 Mar 2024 06:38:57 -0700 (PDT)
-Received: from [192.168.8.100] ([85.255.233.105])
-        by smtp.gmail.com with ESMTPSA id k13-20020adff5cd000000b0033ec9936909sm14930415wrp.39.2024.03.27.06.38.57
+        bh=eEs4ZfiipmJVLC4z1ZS49Lyn4jfvVa/dtP9tAta76dQ=;
+        b=OiGbOgfvx926i/bLEbhFUUJnk4cSoqYW/dOO03HtMHJxGvF/ovuB7rU8jU1zObtmEf
+         OPAGayW4btT4fxXnIi/P0uZ6eoAdyK6690GJtCwy6zlz76KfmcTZOPDWDcdoslYOM9MV
+         6N1Eo5CGuR3zhm6TP7gOBs0284Qktg1xgh352LN3+ffYtJSgHsaAxEUm05PtM8uKIEin
+         AK2G18Li+k31PQH+8aTPfVYBtro4zyaDFa8gY55hHNGRg2V127kQBzeP7BjNqrUz/lVT
+         aQtiWDMulEGJSUPef4dha35lsl2fvyPia1/2NzkPW5iaHrH2obLm0rAIhqzhDnquznyk
+         TykQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1mXCiDVo5LfuX67+JzEQZ+410oXugUbO98TaDyh6qS0MNWU+KU5GlyvRe+S7qTvExRKTSMTxpc38ae3y46mXIZaQZBF8KWXQ=
+X-Gm-Message-State: AOJu0YzlEb3pO3tkgJr+vZjLEhFYCzC1JYrVfNG7a0bHV9ewyTcJ540H
+	F06fWqkdY/d+UHO2l/jKRIn+L8yVsy1CrIX/AxXk1Szuq8sghXUqZQfoUIRmP0bDPElQbst+Pad
+	M
+X-Google-Smtp-Source: AGHT+IH45On9bIt4gbYw83Kt3EXhOCeWnMaUuAdLAO3+4bzYYO2AGkK+W5L1+YqWMbcEUY41EuvZtg==
+X-Received: by 2002:a17:902:aa87:b0:1dd:667f:bf1b with SMTP id d7-20020a170902aa8700b001dd667fbf1bmr106801plr.0.1711554341408;
+        Wed, 27 Mar 2024 08:45:41 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:122::1:2343? ([2620:10d:c090:600::1:5ff4])
+        by smtp.gmail.com with ESMTPSA id m6-20020a170902bb8600b001e10b6f45dasm1723113pls.295.2024.03.27.08.45.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Mar 2024 06:38:57 -0700 (PDT)
-Message-ID: <03e57f18-1565-46a4-a6b1-d95be713bfb2@gmail.com>
-Date: Wed, 27 Mar 2024 13:33:58 +0000
+        Wed, 27 Mar 2024 08:45:40 -0700 (PDT)
+Message-ID: <7662a22e-caeb-4ffd-a4ee-482ff809e628@kernel.dk>
+Date: Wed, 27 Mar 2024 09:45:40 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -61,50 +62,157 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHSET 0/4] Use io_wq_work_list for task_work
+Subject: Re: [PATCH 2/4] io_uring: switch deferred task_work to an
+ io_wq_work_list
 Content-Language: en-US
-To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
 References: <20240326184615.458820-1-axboe@kernel.dk>
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240326184615.458820-1-axboe@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <20240326184615.458820-3-axboe@kernel.dk>
+ <22f87633-9efa-4cd2-ab5d-e6d225b28ad5@gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <22f87633-9efa-4cd2-ab5d-e6d225b28ad5@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/26/24 18:42, Jens Axboe wrote:
-> Hi,
+On 3/27/24 7:24 AM, Pavel Begunkov wrote:
+> On 3/26/24 18:42, Jens Axboe wrote:
+>> Lockless lists may be handy for some things, but they mean that items
+>> are in the reverse order as we can only add to the head of the list.
+>> That in turn means that iterating items on the list needs to reverse it
+>> first, if it's sensitive to ordering between items on the list.
+>>
+>> Switch the DEFER_TASKRUN work list from an llist to a normal
+>> io_wq_work_list, and protect it with a lock. Then we can get rid of the
+>> manual reversing of the list when running it, which takes considerable
+>> cycles particularly for bursty task_work additions.
+>>
+>> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>> ---
+>>   include/linux/io_uring_types.h |  11 ++--
+>>   io_uring/io_uring.c            | 117 ++++++++++++---------------------
+>>   io_uring/io_uring.h            |   4 +-
+>>   3 files changed, 51 insertions(+), 81 deletions(-)
+>>
+>> diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+>> index aeb4639785b5..e51bf15196e4 100644
+>> --- a/include/linux/io_uring_types.h
+>> +++ b/include/linux/io_uring_types.h
+>> @@ -329,7 +329,9 @@ struct io_ring_ctx {
+>>        * regularly bounce b/w CPUs.
 > 
-> This converts the deferred, normal, and fallback task_work to use a
-> normal io_wq_work_list, rather than an llist.
+> ...
 > 
-> The main motivation behind this is to get rid of the need to reverse
-> the list once it's deleted and run. I tested this basic conversion of
-> just switching it from an llist to an io_wq_work_list with a spinlock,
-> and I don't see any benefits from the lockless list. And for cases where
-> we get a bursty addition of task_work, this approach is faster as it
-> avoids the need to iterate the list upfront while reversing it.
-
-I'm curious how you benchmarked it including accounting of irq/softirq
-where tw add usually happens?
-
-One known problem with the current list approach I mentioned several
-times before is that it peeks at the previous queued tw to count them.
-It's not nice, but that can be easily done with cmpxchg double. I
-wonder how much of an issue is that.
-
-> And this is less code and simpler, so I'd prefer to go that route.
-
-I'm not sure it's less code, if you return optimisations that I
-believe were killed, see comments to patch 2, it might turn out to
-be even bulkier and not that simpler.
-
-
->   include/linux/io_uring_types.h |  13 +--
->   io_uring/io_uring.c            | 175 ++++++++++++++++-----------------
->   io_uring/io_uring.h            |   8 +-
->   io_uring/sqpoll.c              |   8 +-
->   io_uring/tctx.c                |   3 +-
->   5 files changed, 102 insertions(+), 105 deletions(-)
+>> -static inline void io_req_local_work_add(struct io_kiocb *req, unsigned flags)
+>> +static inline void io_req_local_work_add(struct io_kiocb *req, unsigned tw_flags)
+>>   {
+>>       struct io_ring_ctx *ctx = req->ctx;
+>> -    unsigned nr_wait, nr_tw, nr_tw_prev;
+>> -    struct llist_node *head;
+>> +    unsigned nr_wait, nr_tw;
+>> +    unsigned long flags;
+>>         /* See comment above IO_CQ_WAKE_INIT */
+>>       BUILD_BUG_ON(IO_CQ_WAKE_FORCE <= IORING_MAX_CQ_ENTRIES);
+>>         /*
+>> -     * We don't know how many reuqests is there in the link and whether
+>> +     * We don't know how many requests is there in the link and whether
+>>        * they can even be queued lazily, fall back to non-lazy.
+>>        */
+>>       if (req->flags & (REQ_F_LINK | REQ_F_HARDLINK))
+>> -        flags &= ~IOU_F_TWQ_LAZY_WAKE;
+>> -
+>> -    head = READ_ONCE(ctx->work_llist.first);
+>> -    do {
+>> -        nr_tw_prev = 0;
+>> -        if (head) {
+>> -            struct io_kiocb *first_req = container_of(head,
+>> -                            struct io_kiocb,
+>> -                            io_task_work.node);
+>> -            /*
+>> -             * Might be executed at any moment, rely on
+>> -             * SLAB_TYPESAFE_BY_RCU to keep it alive.
+>> -             */
+>> -            nr_tw_prev = READ_ONCE(first_req->nr_tw);
+>> -        }
+>> -
+>> -        /*
+>> -         * Theoretically, it can overflow, but that's fine as one of
+>> -         * previous adds should've tried to wake the task.
+>> -         */
+>> -        nr_tw = nr_tw_prev + 1;
+>> -        if (!(flags & IOU_F_TWQ_LAZY_WAKE))
+>> -            nr_tw = IO_CQ_WAKE_FORCE;
 > 
+> Aren't you just killing the entire IOU_F_TWQ_LAZY_WAKE handling?
+> It's assigned to IO_CQ_WAKE_FORCE so that it passes the check
+> before wake_up below.
+
+Yeah I messed that one up, did fix that one yesterday before sending it
+out.
+
+>> +        tw_flags &= ~IOU_F_TWQ_LAZY_WAKE;
+>>   -        req->nr_tw = nr_tw;
+>> -        req->io_task_work.node.next = head;
+>> -    } while (!try_cmpxchg(&ctx->work_llist.first, &head,
+>> -                  &req->io_task_work.node));
+>> +    spin_lock_irqsave(&ctx->work_lock, flags);
+>> +    wq_list_add_tail(&req->io_task_work.node, &ctx->work_list);
+>> +    nr_tw = ++ctx->work_items;
+>> +    spin_unlock_irqrestore(&ctx->work_lock, flags);
+> 
+> smp_mb(), see the comment below, and fwiw "_after_atomic" would not
+> work.
+
+For this one, I think all we need to do is have the wq_list_empty()
+check be fully stable. If we read:
+
+nr_wait = atomic_read(&ctx->cq_wait_nr);
+
+right before a waiter does:
+
+atomic_set(&ctx->cq_wait_nr, foo);
+set_current_state(TASK_INTERRUPTIBLE);
+
+then we need to ensure that the "I have work" check in
+io_cqring_wait_schedule() sees the work. The spin_unlock() has release
+semantics, and the current READ_ONCE() for work check sbould be enough,
+no?
+
+>>       /*
+>>        * cmpxchg implies a full barrier, which pairs with the barrier
+>> @@ -1289,7 +1254,7 @@ static inline void io_req_local_work_add(struct io_kiocb *req, unsigned flags)
+>>        * is similar to the wait/wawke task state sync.
+>>        */
+>>   -    if (!head) {
+>> +    if (nr_tw == 1) {
+>>           if (ctx->flags & IORING_SETUP_TASKRUN_FLAG)
+>>               atomic_or(IORING_SQ_TASKRUN, &ctx->rings->sq_flags);
+>>           if (ctx->has_evfd)
+>> @@ -1297,13 +1262,8 @@ static inline void io_req_local_work_add(struct io_kiocb *req, unsigned flags)
+>>       }
+>>         nr_wait = atomic_read(&ctx->cq_wait_nr);
+>> -    /* not enough or no one is waiting */
+>> -    if (nr_tw < nr_wait)
+>> -        return;
+>> -    /* the previous add has already woken it up */
+>> -    if (nr_tw_prev >= nr_wait)
+>> -        return;
+>> -    wake_up_state(ctx->submitter_task, TASK_INTERRUPTIBLE);
+>> +    if (nr_tw >= nr_wait)
+>> +        wake_up_state(ctx->submitter_task, TASK_INTERRUPTIBLE);
+> 
+> IIUC, you're removing a very important optimisation, and I
+> don't understand why'd you do that. It was waking up only when
+> it's changing from "don't need to wake" to "have to be woken up",
+> just once per splicing the list on the waiting side.
+> 
+> It seems like this one will keep pounding with wake_up_state for
+> every single tw queued after @nr_wait, which quite often just 1.
+
+Agree, that was just a silly oversight. I brought that back now.
+Apparently doesn't hit anything here, at least not to the extent that I
+saw it in testing. But it is a good idea and we should keep that, so
+only the first one over the threshold attempts the wake.
 
 -- 
-Pavel Begunkov
+Jens Axboe
+
