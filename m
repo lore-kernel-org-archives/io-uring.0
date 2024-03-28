@@ -1,120 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5761327E6;
-	Thu, 28 Mar 2024 15:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695671311B5
+	for <io-uring@vger.kernel.org>; Thu, 28 Mar 2024 18:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711641546; cv=none; b=do36iJrDsIsimtaqYC98ot3HFzfzv5p/knBn3YRzLLPW8hlEijTk1cjuQJjTzURqcFgM9Kg+EpMx/wKou+VYvz96wBIOeyb5qKFrjULzqS4UJm4WodxtUAE2PGuk7OFM9GKRnu4Z5tMdV43xw4b4a4D1Zbdv+c1v/uwefIFF5lE=
+	t=1711652059; cv=none; b=smL3ivuqI5w80DTxWXA2s6YjLsbhpSXqX34gEo0wV4tT+wA38OyHBc7+eswZbi5HIiwxk0qnJAqLcHAsqU260qtrKhrFBoLEM8FwIOxMnaSLfn49e9DIpIOWnPKMqdb1ar2wK2qqz6pjAT6UjKMEKKaYtv7xCewwtdXbgGgJq98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711641546; c=relaxed/simple;
-	bh=43XallgnzSLZhguS4VWitQ2Fcw54C6K2Ncxf6+7BSRI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RtHLcgbgrBp/5JWs2pdZL8AuGuI2YZbyRHs0+F2GZ2dxB1MwuXfYc7vtP+cnMSwwi130hK9zNKdcjqIh9cE9MbvCmKsvoePsQtK0qgoeOUlDhx9fse4fiDOt4VVz0CORh5/TRzUq5nWs4gEsj2Ps9tgQonEhxtNp9W5sgm+5Cbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKgqsRfH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1711652059; c=relaxed/simple;
+	bh=xQIq7pbSzFTyirjAKdgey3+ZNFlzHt8gP+0XwuZ4UaA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=q00/Nog75oQEY412AuPTf1PVCbh6g6tSTarLR+8lkdtJsAvms+c8Kj7fzoGVrfdIinq3ZuoCS94hlOc2lTfSuR49Q2Pao3+1Xd/Bd/1nOwvjSrpov8TpRmy8nHG4G7PISQu4Lp9taB3q/nHiMH3G4olKuI+2oyhERjPVSn20ggw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=dlGuJs1q; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKgqsRfH"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2F74AC43142;
-	Thu, 28 Mar 2024 15:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711641546;
-	bh=43XallgnzSLZhguS4VWitQ2Fcw54C6K2Ncxf6+7BSRI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=fKgqsRfHUCx6aBs250bwLQxrFH3Lt/DFlxIi8K/W26txiNrqxJep69UlidZtSxnVn
-	 k7iSc3CfIlmPR0UbHZqUpdqicpM92Ww6KLLDJoV/Qry79ox2BJ1pTf+muRfMeS23BZ
-	 p4i2qIH1mZzObREbjVuGDqhXLNAMEJnhF5aQtvrBlxljhYj0EgbZmcQ0Dp4zfo04Me
-	 C+tPRd7A842f/XiH5yoJ14adYy7E/MbzAGR7hwyIzfLBoLIe+y1x820s9EyNVwrNBO
-	 yN40GaJTPuM2NJdmotsIDLpSQg7ygtHrme3rJNFUudKpg+rfSWF+pZEf5nxlBBQ4AD
-	 uBTUPLvTuJ9ig==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23321CD1283;
-	Thu, 28 Mar 2024 15:59:06 +0000 (UTC)
-From: Joel Granados via B4 Relay <devnull+j.granados.samsung.com@kernel.org>
-Date: Thu, 28 Mar 2024 16:57:53 +0100
-Subject: [PATCH 6/7] io_uring: Remove the now superfluous sentinel elements
- from ctl_table array
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="dlGuJs1q"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6e6ca65edc9so316950b3a.0
+        for <io-uring@vger.kernel.org>; Thu, 28 Mar 2024 11:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1711652055; x=1712256855; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/BnypW2LILz4m5BH/bLJh+2iTr5yDHxwbmBQvrgmyPA=;
+        b=dlGuJs1qaVYnVWIEB6qSaSW04EsU9/Q2MMuIv2P5Qb/fwE/W8H8jNNjDvOnTFIvcka
+         ZhvVG21DkWy1I5LBT1L/qZLw4uNA7gF1NN3FDLHvlXcFm82pGpoCqikWewdK5fKTNfKA
+         MbFjhOVCx4OfneSJYReXq4iA1zGjEKWXZTKkqNxMYBXVr744/w+r9f/YN4AcL/x2mEPA
+         +jkO7yfbXYEVlYG2+n9Bs/sn7eIV9AhwJq7Sv6ZUJWgT5kyrh/TJaVhypWmU4qurNiyj
+         qBqOWGf7pOeaVVavbeZgBnODQ+2tQjaudGpahbg3l5EdHz7ElZgcnbSSOYq1lzS6X/G9
+         yX2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1711652055; x=1712256855;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/BnypW2LILz4m5BH/bLJh+2iTr5yDHxwbmBQvrgmyPA=;
+        b=lwXxOHfjR4s8+pFHxNVP8/C9Kh6fCENMZra+X9tm3m0mpzN6EYv0eHOFinhoAxFgv7
+         XDpMFuzWkrw/+FbC8THT6EBaVD9uctutTXew1VLjJ1/HzCkdbbaF7Hd1Nn4M+ZELuDmH
+         DqsH3ayuE3Ay8U3+p5AatVRI19nTI9/bYrQlPhuwxirzZ9T8sxWygxQZfVSHGjGe2/gS
+         GIPrDRasn8omMZ69S3cTyMB5WPXC4+CvVcKKiMY56Hyi+pY8PaV4GUsAU01mVbrHuiR2
+         Wti5RyvczVXyjt9QU56gxQ9b2EAjEjngGdB3IXpJjmbP+IPhlDj0N/Jr8cxmi5yPzu78
+         5hYw==
+X-Gm-Message-State: AOJu0Yxxfwf4v0IDZa6CGAT/e16ztuzxxTCY8Jp1zn+m0//PkcuAFIKw
+	y6YjCgpPr9lemqevYRSnJpmxPuxLRLDmkMh5c9bcb3Epp/W9gg559Px2kVLiVvTAuCoBjZsauhN
+	H
+X-Google-Smtp-Source: AGHT+IEobSOeFCWDYJSoHmclQVQqvUtlKg7VlubFFEi+dhz2HNnpascJH9TsmSYimE92mvBqOcz5CA==
+X-Received: by 2002:a05:6a00:bda:b0:6ea:d0b0:3f96 with SMTP id x26-20020a056a000bda00b006ead0b03f96mr179293pfu.1.1711652055268;
+        Thu, 28 Mar 2024 11:54:15 -0700 (PDT)
+Received: from m2max.thefacebook.com ([2620:10d:c090:600::1:b138])
+        by smtp.gmail.com with ESMTPSA id v17-20020a056a00149100b006e631af9cefsm1717357pfu.62.2024.03.28.11.54.14
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Mar 2024 11:54:14 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org
+Subject: [PATCHSET 0/3] Cleanup and improve MSG_RING performance
+Date: Thu, 28 Mar 2024 12:52:42 -0600
+Message-ID: <20240328185413.759531-1-axboe@kernel.dk>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240328-jag-sysctl_remset_misc-v1-6-47c1463b3af2@samsung.com>
-References: <20240328-jag-sysctl_remset_misc-v1-0-47c1463b3af2@samsung.com>
-In-Reply-To: <20240328-jag-sysctl_remset_misc-v1-0-47c1463b3af2@samsung.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Muchun Song <muchun.song@linux.dev>, Miaohe Lin <linmiaohe@huawei.com>, 
- Naoya Horiguchi <naoya.horiguchi@nec.com>, 
- John Johansen <john.johansen@canonical.com>, 
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
- "Serge E. Hallyn" <serge@hallyn.com>, David Howells <dhowells@redhat.com>, 
- Jarkko Sakkinen <jarkko@kernel.org>, Kees Cook <keescook@chromium.org>, 
- Herbert Xu <herbert@gondor.apana.org.au>, 
- "David S. Miller" <davem@davemloft.net>, Jens Axboe <axboe@kernel.dk>, 
- Pavel Begunkov <asml.silence@gmail.com>, 
- Atish Patra <atishp@atishpatra.org>, Anup Patel <anup@brainfault.org>, 
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
- apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
- keyrings@vger.kernel.org, linux-crypto@vger.kernel.org, 
- io-uring@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, 
- Joel Granados <j.granados@samsung.com>
-X-Mailer: b4 0.13-dev-2d940
-X-Developer-Signature: v=1; a=openpgp-sha256; l=866;
- i=j.granados@samsung.com; h=from:subject:message-id;
- bh=fE/NZmB4pRzGY5dsPYrxUBO9ZoOr+5OhzOId8tu7QTs=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGYFk8bmxZGot17fJWYqTrmMAyaWIBy9sBUWG
- aHGw/deIYoGrIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJmBZPGAAoJELqXzVK3
- lkFPPqgL/j0Ld5LzYavMO9DP8fYz7mNmdGMwclTzF1+obs3fJGdIR8B/yld44GUGxZL131jYcMG
- rHpj3oVP4UfarmvGW9AI2OimEgbMMWPFc1ZmFkY/CrgzinI5TjytwY+i2r2AavTNWRMT7zcLAQf
- Vdq3FZfdbZ+JpLovP5iiwvyb2Cd96kkzD/e4Oa1nyGkxFYPOAxO80j4LDy7GfxL6+9UIIGGFZv4
- DaZKSWK1X2UrZOmVK1qgRXej8kHjlVxhl53AUNyQ+rFa5VbLRO405J68WgjMP32GJMISyVW57h5
- ocoprGgLHRyg4LpPfHIL4yohqv2RIyMpZPgpoTW5dpYZqFRcURac/bVmRZRQx5wpJjjEowDk45c
- H7nH57Hsk+EcGqekPtpXVg4vLZuvXOmv5CConYIlM2ttcTJItblMO8RCNiIqgE21QlZc99oAynV
- a/OGIOEYnrYir1BnHvhD/LINHxzOFzcChPE2iJr9kbQNFsz7wr+soDr8zShfiwcyJ1Ika8nd5s7
- ik=
-X-Developer-Key: i=j.granados@samsung.com; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for j.granados@samsung.com/default with
- auth_id=70
-X-Original-From: Joel Granados <j.granados@samsung.com>
-Reply-To: j.granados@samsung.com
+Content-Transfer-Encoding: 8bit
 
-From: Joel Granados <j.granados@samsung.com>
+Hi,
 
-This commit comes at the tail end of a greater effort to remove the
-empty elements at the end of the ctl_table arrays (sentinels) which will
-reduce the overall build time size of the kernel and run time memory
-bloat by ~64 bytes per sentinel (further information Link :
-https://lore.kernel.org/all/ZO5Yx5JFogGi%2FcBo@bombadil.infradead.org/)
+MSG_RING rolls its own task_work handling, which there's really no need
+for. Rather, it should use the generic io_uring infrastructure for this.
 
-Remove sentinel element from kernel_io_uring_disabled_table
+Add a helper for remote execution, and switch over MSG_RING to use it.
+This both cleans up the code, and improves performance of this opcode
+considerably.
 
-Signed-off-by: Joel Granados <j.granados@samsung.com>
----
- io_uring/io_uring.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5d4b448fdc50..fe3c93e21e2c 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -169,7 +169,6 @@ static struct ctl_table kernel_io_uring_disabled_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec,
- 	},
--	{},
- };
- #endif
- 
+ io_uring/io_uring.c | 27 +++++++++++++++++++--------
+ io_uring/io_uring.h |  2 ++
+ io_uring/msg_ring.c | 37 ++++++++++++++-----------------------
+ 3 files changed, 35 insertions(+), 31 deletions(-)
 
 -- 
-2.43.0
-
+Jens Axboe
 
