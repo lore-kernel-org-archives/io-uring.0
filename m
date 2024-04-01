@@ -1,111 +1,162 @@
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765B54D59E
-	for <io-uring@vger.kernel.org>; Mon,  1 Apr 2024 17:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D051E4D59E
+	for <io-uring@vger.kernel.org>; Mon,  1 Apr 2024 17:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711993994; cv=none; b=DscLrI2062D833uymDf3pjJzr/mqwLmbNqMPDUJUt5iceKt/pmQrwv39HnjJBDDHZRNg9+W8WYyve0hGLGQ9+ll27N8LZBxpr/my+rM3c32CC2cNnyUMFSZMgyIzwJsbTPBkFGtfgKEpK72cHPs7+r+n5HWHj5k/pYs7OpHi/7I=
+	t=1711994249; cv=none; b=o3No51dVEFHtnrRJDK5mdFWRpgxmMYpYgoJDW/WjwoytM1sFWMFlVgs/pQLvdkqRmPOFsVt6JnhY2yVhKpWVJJrv2gSGEbs4fgrItRgXZipMWjw0EoxEBo0OymOkxeBXHH8HA+gG85CX+vwslvxv5OXJtkUcP6kJzKRZ669JmTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711993994; c=relaxed/simple;
-	bh=6eg0n59KBs0zRUKBf6SOF/jApkG2l9N6XA2aasOeg+s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PtHO6sm1SbcbFyboHkfaEh2Bv3dShNCO6Ll2WEEFeYOxFUf42HaxlimqCl42rMo1WzC3sIYbvFOIvLZlmOe+9odIv62BMCX6/HlDxJuAAnDgXjwiTQOEWIg8gZ+WQMHhrv2jPHSoa8YV03v+r6rc7UNhu+6BSgJOzgdn3YN/Z3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=tzDeCbPU; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1711994249; c=relaxed/simple;
+	bh=pE94p9Us/mS9SBb4ifZXN3W9xdupnry5J+uMI3JjTr0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=hPgNgUH7/a7ZU7yOhhWsygO5eiCEg1B7yBv56o5ACw8y0mQwlPVpwhNyenMK4FWNz5wo4LbPar2zEteN6s3cIMUnj6YcB2Cx/v1+et1zmtT09rdqD7tRqkX+RrRuPsz9EJXXTJWtd0860++GlIAmlQorvLGr6SFvbs+qNpEXOJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=XAUOqsPF; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="tzDeCbPU"
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3688dcc5055so1645885ab.1
-        for <io-uring@vger.kernel.org>; Mon, 01 Apr 2024 10:53:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="XAUOqsPF"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso1876987b3a.2
+        for <io-uring@vger.kernel.org>; Mon, 01 Apr 2024 10:57:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1711993992; x=1712598792; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8W3ugZY2UxWd610/Dfdbazi+rTB2V6f48BemOSZe18=;
-        b=tzDeCbPUpU2iTXqs+sjR0S16Rj57eDA4pM0UKcTeKBq9itVhBS0eBCoJTvhmqB3FlK
-         EE2C266gTqOfPA9ZA0fZ1tOE1tVEyZRLfGgiSBN0PUAx+Sn2bUmspX4Ss3WZMaakvQSw
-         EzFHXYAoIWREcQ01QLF2X6kkzEISL1QuM84wX+ZgELyjv0PdXgje2PL2e0UTBLNnkWj4
-         it/vY0njyKvhG0Ak17hLcoGmy/qWTkygxz2nFQjXiubsX51sB6yray26ajBXfWrqiSWa
-         JRJq5oiYor7CqgqTPKgN3EzZPBsKBgGyoZwp2MgkT4gz80wAXq+K8wDwkyxaQvkIzSzX
-         BdAQ==
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1711994247; x=1712599047; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WaGRorBT9wtynShxwcMaIbzFa9RilgpuoC3Pe6KEEds=;
+        b=XAUOqsPFhf1/9HdFhWmGBeiwdHCSckBpiq7MQH0BQ6+mFY3rxLyDZUKeL0ExeOb9Gp
+         rQ6dw9t/wp/9C5IhhL3zp5WbnPCybABQ1gk3K0YGqNfi39Fp4nwiAGlfgctebZ6sdwSh
+         hDFMjFMGzhP4s/vCbUQV/OO5ADCP11WLPvbMzhyc2cFz6t+uBap7azBh5UqUsTpfEwDw
+         7N2WM9subRxRB//vuIXY5j5nGgG7DvRg7zlIo49zHkxe5PCo689ZcEU2TgXNizWa+gnE
+         FBu54ffCvgLLPMwELr4wfNEVVZ8TEY3ozY5eAQexK74iX64zjpEu/cMTRaiNZlyI/wFH
+         wFDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711993992; x=1712598792;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T8W3ugZY2UxWd610/Dfdbazi+rTB2V6f48BemOSZe18=;
-        b=NpT+sgHoLDaB0NOjBHFwslQ+xNosMvJvwhaJ+ym3b8frUJWCa0szC40SA6t07EgOzh
-         jbab+VYNsm1p7vPqKCCWC0WMkFXgC6q5Nm7uvrEXoZCInd8qGnMEMjdcsUhjYxZyK9VZ
-         jPehfPO1aS8Ka9yy/BbsXLxR8/rHSiFxR+Y0RM1iPZhN41bOjj5iR+zFnDP9IYuPlviz
-         moWP4NynVUgtxfelsfoGC+j+/Fjfcz7jBP3Trq6rcT135IRu6wacPazK0zNy7rnAEWrB
-         GKXADwgg7v4x6IhRF34lzzDzKP2mnJtRBNDmvtakK9eraQlu/Qzp8SR9i7cu/kK4OyGu
-         SsCg==
-X-Gm-Message-State: AOJu0YwB3PKCisfabocA19mqwMe+DkPez0Ij9LU9/NhDKxTR8/FF49lw
-	huW4ulZiZiWKYIlnEOCaAw7+AjPyxDMX3ObIhgq3AweCNUmmIcGVLB1A2dgbVhuN8WtyoRlApqn
-	M
-X-Google-Smtp-Source: AGHT+IHS+PG6hIvtQRPJ9iRsByiCDr4J6r5jhTZPO8kgLm1EJHahQtiOqlIXUZ7gcNZIXIzUO6SPTg==
-X-Received: by 2002:a6b:f118:0:b0:7d0:c4db:39f2 with SMTP id e24-20020a6bf118000000b007d0c4db39f2mr3860239iog.2.1711993992249;
-        Mon, 01 Apr 2024 10:53:12 -0700 (PDT)
-Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id gm14-20020a0566382b8e00b004773d7a010dsm2663829jab.76.2024.04.01.10.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Apr 2024 10:53:10 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	stable@vger.kernel.org
-Subject: [PATCH 2/2] io_uring: disable io-wq execution of multishot NOWAIT requests
-Date: Mon,  1 Apr 2024 11:49:16 -0600
-Message-ID: <20240401175306.1051122-3-axboe@kernel.dk>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240401175306.1051122-1-axboe@kernel.dk>
-References: <20240401175306.1051122-1-axboe@kernel.dk>
+        d=1e100.net; s=20230601; t=1711994247; x=1712599047;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WaGRorBT9wtynShxwcMaIbzFa9RilgpuoC3Pe6KEEds=;
+        b=DsFqLKgZsXBB9ktY1jYaVkqE4ksxFFiMhUIBifEziCuutng8wr0aNOYYFCjfSDGX6+
+         L99+lNeh1tkR2G9wKMYBEE6UVpxiOnTOe46qtU9LAB08Q3p/J/xH62B1Ecd5a6dEQksH
+         oWLIVn3zHcD+H3aYiMF1CRrdqQra8za7ISb7P9aEJuw6i+5UsDu/24cLLl+zQ8OPguvU
+         gEMm/uFUWr48mfbHZeFUjNkwHZ1sm2oMNoynOX3lPY99lNbyfuYcj+pPUmjC0WgHKSaR
+         jiNT//6aJ/9qwypnFXmz703sGiyORDlWyTwcdaNm4aZkhck7iDVGCEYrt8fsqkVjnDy6
+         GoVw==
+X-Forwarded-Encrypted: i=1; AJvYcCUSEye4ECMj6q/bA0ITuM+c73SDYEmQnMSBBGoQnWdJnX4ixHjhq0x4ALVDucOWdWo5iWA5jtqjvgGH8gOxGSv5TX2wG8afnx8=
+X-Gm-Message-State: AOJu0YxFrLPptj1reUM9UNcjSfRwPyTZTYPACb/5vjGwQNB9+lW0OKdZ
+	v+2qIl1Bl544tXkCj4QvoFI4bzYNU3TjYPgIK9tCRdcaxA21lhLEBVu3v5t+g7A=
+X-Google-Smtp-Source: AGHT+IFOctQQNZ7iMkobRiq2sDhi9S7KL7xijSzq3YAWFYMIIxSgFMfFdgiJpaRuEIMMUNKerTcEZQ==
+X-Received: by 2002:a05:6a00:2d07:b0:6ea:bd59:9389 with SMTP id fa7-20020a056a002d0700b006eabd599389mr10295316pfb.8.1711994246931;
+        Mon, 01 Apr 2024 10:57:26 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1256:2:c51:2090:e106:83fa? ([2620:10d:c090:500::7:95f3])
+        by smtp.gmail.com with ESMTPSA id y7-20020aa793c7000000b006e6fd17069fsm8125570pff.37.2024.04.01.10.57.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 01 Apr 2024 10:57:26 -0700 (PDT)
+Message-ID: <e9f801eb-07c0-4077-8e42-5387de587409@davidwei.uk>
+Date: Mon, 1 Apr 2024 10:57:25 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] io_uring/msg_ring: improve handling of target CQE
+ posting
+Content-Language: en-GB
+To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+References: <20240329201241.874888-1-axboe@kernel.dk>
+ <20240329201241.874888-4-axboe@kernel.dk>
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20240329201241.874888-4-axboe@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Do the same check for direct io-wq execution for multishot requests that
-commit 2a975d426c82 did for the inline execution, and disable multishot
-mode (and revert to single shot) if the file type doesn't support NOWAIT,
-and isn't opened in O_NONBLOCK mode. For multishot to work properly, it's
-a requirement that nonblocking read attempts can be done.
+On 2024-03-29 13:09, Jens Axboe wrote:
+> Use the exported helper for queueing task_work, rather than rolling our
+> own.
+> 
+> This improves peak performance of message passing by about 5x in some
+> basic testing, with 2 threads just sending messages to each other.
+> Before this change, it was capped at around 700K/sec, with the change
+> it's at over 4M/sec.
+> 
+> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> ---
+>  io_uring/msg_ring.c | 24 ++++++------------------
+>  1 file changed, 6 insertions(+), 18 deletions(-)
+> 
+> diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
+> index d1f66a40b4b4..af8a5f2947b7 100644
+> --- a/io_uring/msg_ring.c
+> +++ b/io_uring/msg_ring.c
+> @@ -13,7 +13,6 @@
+>  #include "filetable.h"
+>  #include "msg_ring.h"
+>  
+> -
+>  /* All valid masks for MSG_RING */
+>  #define IORING_MSG_RING_MASK		(IORING_MSG_RING_CQE_SKIP | \
+>  					IORING_MSG_RING_FLAGS_PASS)
+> @@ -21,7 +20,6 @@
+>  struct io_msg {
+>  	struct file			*file;
+>  	struct file			*src_file;
+> -	struct callback_head		tw;
+>  	u64 user_data;
+>  	u32 len;
+>  	u32 cmd;
+> @@ -73,26 +71,18 @@ static inline bool io_msg_need_remote(struct io_ring_ctx *target_ctx)
+>  	return current != target_ctx->submitter_task;
+>  }
+>  
+> -static int io_msg_exec_remote(struct io_kiocb *req, task_work_func_t func)
+> +static int io_msg_exec_remote(struct io_kiocb *req, io_req_tw_func_t func)
+>  {
+>  	struct io_ring_ctx *ctx = req->file->private_data;
+> -	struct io_msg *msg = io_kiocb_to_cmd(req, struct io_msg);
+> -	struct task_struct *task = READ_ONCE(ctx->submitter_task);
+> -
+> -	if (unlikely(!task))
+> -		return -EOWNERDEAD;
+> -
+> -	init_task_work(&msg->tw, func);
+> -	if (task_work_add(ctx->submitter_task, &msg->tw, TWA_SIGNAL))
+> -		return -EOWNERDEAD;
+>  
+> +	req->io_task_work.func = func;
+> +	io_req_task_work_add_remote(req, ctx, IOU_F_TWQ_LAZY_WAKE);
+>  	return IOU_ISSUE_SKIP_COMPLETE;
+>  }
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/io_uring.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+This part looks correct. Now with io_req_task_work_add_remote(),
+req->io_task_work.func is added to tctx->task_list, and queued up for
+execution on the remote ctx->submitter_task via task_work_add(). The end
+result is that the argument @func is executed on the remote
+ctx->submitter_task, which is the same outcome as before.
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5d4b448fdc50..8baf8afb79c2 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1982,10 +1982,15 @@ void io_wq_submit_work(struct io_wq_work *work)
- 		err = -EBADFD;
- 		if (!io_file_can_poll(req))
- 			goto fail;
--		err = -ECANCELED;
--		if (io_arm_poll_handler(req, issue_flags) != IO_APOLL_OK)
--			goto fail;
--		return;
-+		if (req->file->f_flags & O_NONBLOCK ||
-+		    req->file->f_mode & FMODE_NOWAIT) {
-+			err = -ECANCELED;
-+			if (io_arm_poll_handler(req, issue_flags) != IO_APOLL_OK)
-+				goto fail;
-+			return;
-+		} else {
-+			req->flags &= ~REQ_F_APOLL_MULTISHOT;
-+		}
- 	}
- 
- 	if (req->flags & REQ_F_FORCE_ASYNC) {
--- 
-2.43.0
+Also, unsure how this hand rolled code interacted with defer taskrun
+before but now it is handled properly in io_req_task_work_add_remote().
 
+>  
+> -static void io_msg_tw_complete(struct callback_head *head)
+> +static void io_msg_tw_complete(struct io_kiocb *req, struct io_tw_state *ts)
+>  {
+> -	struct io_msg *msg = container_of(head, struct io_msg, tw);
+> -	struct io_kiocb *req = cmd_to_io_kiocb(msg);
+> +	struct io_msg *msg = io_kiocb_to_cmd(req, struct io_msg);
+>  	struct io_ring_ctx *target_ctx = req->file->private_data;
+>  	int ret = 0;
+>  
+> @@ -205,10 +195,8 @@ static int io_msg_install_complete(struct io_kiocb *req, unsigned int issue_flag
+>  	return ret;
+>  }
+>  
+> -static void io_msg_tw_fd_complete(struct callback_head *head)
+> +static void io_msg_tw_fd_complete(struct io_kiocb *req, struct io_tw_state *ts)
+>  {
+> -	struct io_msg *msg = container_of(head, struct io_msg, tw);
+> -	struct io_kiocb *req = cmd_to_io_kiocb(msg);
+>  	int ret = -EOWNERDEAD;
+>  
+>  	if (!(current->flags & PF_EXITING))
