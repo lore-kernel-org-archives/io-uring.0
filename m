@@ -1,69 +1,63 @@
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF2A15359E
-	for <io-uring@vger.kernel.org>; Tue,  9 Apr 2024 17:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51BF15666A
+	for <io-uring@vger.kernel.org>; Tue,  9 Apr 2024 17:37:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.211.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712684033; cv=none; b=HDj7syossNbmF271pIfyCWEi+PB7Lv3JDaK8HVkety4CEVvzCKe5pBvocUkiu4SrvYSRML8O345y8X94gbJ+V+mou1Y3IsHhanpSS0p/j4H3NGBpXDtsR8ZwDpEtsBdiVMgU81yboPuFwOwYRPtvXaJYDW7yI8btOq93xuNH77Y=
+	t=1712684267; cv=none; b=AQ+mc33VV1OCCQEuWdE8LTGlJTigHOOIGDIH5Z52raPybTCj6S3AZh8eGhY02JxCPyHMfPcP3CHZ1Z2kGXY9HymdztGwyyHkIxN/hkJGK5svLOQLILyfTVn/bci8uK4Cb0XrZe3BruD930GgeOAUDiw2PdCCc9aEYQrYk+7N6Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712684033; c=relaxed/simple;
-	bh=pcgPeauBhLGjwfJLxUR52iAtisD/biC3MAJKIqBm6Z4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Cogujs3lWOo9EhggRmO/IHAyQIQP+AFqO4+QNH6yWe7wL1/G+F9mtc8cF5KPUFdbqSEChsgpa47lgoNytUmQWlL6IqdYd5kpmx5T9ibUsn/V4gvj4lt2pEnW4FqGoczNjHIPv1xUqDwM4/Upwv7AGcOjO3Dw8os7Viefwz+VQwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=E0hRYo3M; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+	s=arc-20240116; t=1712684267; c=relaxed/simple;
+	bh=DWDmnrILdy4EWgj8XgYVDArV/w8gj6vRftFyPeontfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KvVEWk2VCBNlzXNWHEnUZPYtcfQEK4jv5jE9qZpQRGwMjcEmpNeDC0W/OpHAFoIVhER/z4uNdqfYVstrXYDFxUsICDYfNtvL7QNJGiRYMMqOzdbCQYbTASWTAYpq2Gs2BEPyk0PP6u9JbohEJtq2FM0T0Aj4mCBVulXvcjct31Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=hnCIRZWC; arc=none smtp.client-ip=51.81.211.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="E0hRYo3M"
-X-Virus-Scanned: SPAM Filter at disroot.org
-From: Arthur Williams <taaparthur@disroot.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1712683660; bh=pcgPeauBhLGjwfJLxUR52iAtisD/biC3MAJKIqBm6Z4=;
-	h=From:To:Cc:Subject:Date;
-	b=E0hRYo3M1Y+qUU1P1LymEnB17GukZxc/D+ji8YSOxEu7CVUL4N8mMvacZsftpeKKL
-	 Nhj7e/Opd7pU7yvYg1hzS/++TO9dFa6CbzIUggyE8tbxDBUpLCgzU5Bu1wKtOL82lp
-	 4tTQrtwABB/58BsSTDVIoEnbpTxSH8OaPpMF3y0BD68RN6BcJ8abJVZe+ecTojEors
-	 ZjlTt2cj7cbcBZADIbtgyrQWPY7UxYlpq/+enjRhDsMZ37P6p1XWhBqzdCXXCPLnZw
-	 rp+4Utpkjn+sNaDcYwwozjp9qZqc3zMLmW54TzP2g45n5gw0tkRyAm91wuc/RVtoX2
-	 ktqqVBfvcqD9Q==
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	Arthur Williams <taaparthur@disroot.org>
-Subject: [PATCH] Fix portability issues in configure script
-Date: Tue,  9 Apr 2024 10:27:35 -0700
-Message-ID: <20240409172735.1082-1-taaparthur@disroot.org>
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="hnCIRZWC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+	s=default; t=1712684259;
+	bh=DWDmnrILdy4EWgj8XgYVDArV/w8gj6vRftFyPeontfM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hnCIRZWCfQZSG3RkNTTywRsPwAxNsoir7BLLRvCQ7MVqezADjOYvHgq8ERWtC7Ii9
+	 xVSwieMGy5Zq9CoBHnkJjifEai6zAcqpMrrKliYgITvvqDHrCkDq6ynkcmMvMVUT66
+	 H3h97tDJwt5GkkKIOuwadwDP6xSkekcVK6hvHoqreSR4+doF5w3SJ0ABhlcjU30fBc
+	 k5sLFLDR9avLjuRyacU1BNeiP8gx0Bz8aS+Hj0tEgY0bE3KRqSC/8ts/KrFqUbDr/J
+	 nvP/boyzoukWVapQ2np0XuzDre8eiZUqxubXSS5cnLBKp1AYoaLJqs5sPWnRuBh+5Q
+	 viyQKl8LTW39g==
+Received: from biznet-home.integral.gnuweeb.org (unknown [114.10.16.27])
+	by gnuweeb.org (Postfix) with ESMTPSA id 0E02324ACB2;
+	Wed, 10 Apr 2024 00:37:37 +0700 (WIB)
+Date: Wed, 10 Apr 2024 00:37:33 +0700
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To: Arthur Williams <taaparthur@disroot.org>
+Cc: Jens Axboe <axboe@kernel.dk>,
+	io-uring Mailing List <io-uring@vger.kernel.org>
+Subject: Re: [PATCH] Fix portability issues in configure script
+Message-ID: <ZhV83Ryv1oz6NyxU@biznet-home.integral.gnuweeb.org>
+References: <20240409172735.1082-1-taaparthur@disroot.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240409172735.1082-1-taaparthur@disroot.org>
+X-Bpl: hUx9VaHkTWcLO7S8CQCslj6OzqBx2hfLChRz45nPESx5VSB/xuJQVOKOB1zSXE3yc9ntP27bV1M1
 
-The configure script failed on my setup because of the invalid printf
-directive "%" and for use of the unportable "echo -e". These have been
-replaced with more portable options.
----
- configure | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Tue, Apr 09, 2024 at 10:27:35AM -0700, Arthur Williams wrote:
+> The configure script failed on my setup because of the invalid printf
+> directive "%" and for use of the unportable "echo -e". These have been
+> replaced with more portable options.
+> ---
+>  configure | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configure b/configure
-index 052920d..f6b590b 100755
---- a/configure
-+++ b/configure
-@@ -519,9 +519,9 @@ print_config "CXX" "$cxx"
- # generate io_uring_version.h
- # Reset MAKEFLAGS
- MAKEFLAGS=
--MAKE_PRINT_VARS="include Makefile.common\nprint-%: ; @echo \$(\$*)\n"
--VERSION_MAJOR=$(env echo -e "$MAKE_PRINT_VARS" | make -s --no-print-directory -f - print-VERSION_MAJOR)
--VERSION_MINOR=$(env echo -e "$MAKE_PRINT_VARS" | make -s --no-print-directory -f - print-VERSION_MINOR)
-+MAKE_PRINT_VARS="include Makefile.common\nprint-%%: ; @echo \$(\$*)\n"
-+VERSION_MAJOR=$(printf "$MAKE_PRINT_VARS" | make -s --no-print-directory -f - print-VERSION_MAJOR)
-+VERSION_MINOR=$(printf "$MAKE_PRINT_VARS" | make -s --no-print-directory -f - print-VERSION_MINOR)
- io_uring_version_h="src/include/liburing/io_uring_version.h"
- cat > $io_uring_version_h << EOF
- /* SPDX-License-Identifier: MIT */
+The patch is missing your Signed-off-by tag.
+
 -- 
-2.44.0
+Ammar Faizi
 
