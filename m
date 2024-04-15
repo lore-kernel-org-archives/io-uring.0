@@ -1,63 +1,63 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A62126F38
-	for <io-uring@vger.kernel.org>; Mon, 15 Apr 2024 12:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B2B128391
+	for <io-uring@vger.kernel.org>; Mon, 15 Apr 2024 12:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713185414; cv=none; b=oOJxcEneQUyVzrTkOwkzhMTC4+app8ZxmBG1GsDm+kGdlDj8lsPyNEQxFTr0QECAQsEmOIr/RZ3XssizgwU7ekqpPHVvJMPe2WVjrN7FBL3WCkmnNWDG9LgORpQU4JX6DOt2xwE53gkMq950z6d1RVSOInJ5BZ/1AXGfNZImijk=
+	t=1713185417; cv=none; b=K2eaMPHRrM+XZXie2/ug0ndRMlDFIpsdvgeVisM/DeZ4PIavSXsH9Ec5DsPZCTAfLRdU23hBssYx14idTjNDLBFJ3KRTLn5wh9FNHbYHDD7F7frLEDp6nyshW44zlexFXJyaEI0URVANdD2bGR4DV8zkavF+cVr7jjCdWa0PFEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713185414; c=relaxed/simple;
-	bh=CHCF8k6Kh5Xm/SQkuxGeqHbf4NgLSHUbwK3H3HZoOog=;
+	s=arc-20240116; t=1713185417; c=relaxed/simple;
+	bh=4NnbX65Kg2IvqFTZ/HG8uZicY67C4dxXDpKHre9oz74=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DNb8ygCuBt99oR95OmEQpQ1EwqzzgYGpYUSWceA0WOEMT8BEHG44xleYRWyxUgfCHFQT0xl3cdbJPzjV9XZ2PeLrnwjxZm59ofBC5VuFQzKBaJNFZ4Osr0ELBLvwzQzHM9HQwLDpZpO6D7dYJ62e8fOdcgw14MnuKig3cku2FJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3EQmJpM; arc=none smtp.client-ip=209.85.221.45
+	 MIME-Version; b=OchVfqhIZGu/aWVLuxPf5KhtcxMiPpdLAcNzVor21SJl9s3LCFU9DxlDVOTppGnO6U22ufhMidaQqstQUz9qqM39ULDbxu3lAF03Gc9fwcFtigojHwzSa8AifDRxhAcQa1LoW9a6/GKmznLu/jAvOA0MjucoNTdzVZTdTWh0LOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q1Y/HSf9; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3EQmJpM"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-346b94fa7ecso3060907f8f.3
-        for <io-uring@vger.kernel.org>; Mon, 15 Apr 2024 05:50:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q1Y/HSf9"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-343b7c015a8so2627353f8f.1
+        for <io-uring@vger.kernel.org>; Mon, 15 Apr 2024 05:50:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713185411; x=1713790211; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713185413; x=1713790213; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pMVAnWOzczCOg7Kso9czT9v06/sxRgMSvtaGJ+5gesY=;
-        b=d3EQmJpMeN1M5aEtfpO5uLp+5aVNCeTDELnOgi+TuOmPXGK3bQ4CtL7Q8rCm9g9WGd
-         O8zryYnWLDvVm1hAAQ+HiZ1XpLHsLLp6Tjx8f4ZgZ/I14p0He4yGHBEfVqbZkyIgcPEZ
-         yKEioAvFnfk8pb4QriQIJVGLErMYKgE8Y7EosiuUcEsdUbLQkPPrZlgcg0xRes89gpwO
-         VGuPZjabxs4Hty39r7omd9zejBSmHdl6RSaLCZr8aqoRFwPQhq923kF9jAN/NPxMw33q
-         XVou7O3ePSERVN3Lje9hsZ0B4SqFsKUQkStRN0pWCV6zyvWWvO24faLVLbe1TFcj2ELR
-         QU1w==
+        bh=lQ3AM1VffgdehiFKtUuqAnNrVTntHp04Mu4cHKZqkgg=;
+        b=Q1Y/HSf9o6XG6zWkcLNJvLHDTatRD1h8ThW8ZLx85hHTziv97m/tVzxVwhwMQWUYbh
+         gSEeJ7cGXQ8WX6cRPHmUecrMZPph8f5tJ1ywiVmB+vsE8uqWHN3yKQdE2cafDjovCls8
+         c0fRQdK1aUgKh8ZGARVk1goRXKM33bXaW3UOz3oiqA02iGTzXyQqbQa3hlS9o3L71MdP
+         wQ1Ltv4Dm12PLKuJTW4zeM+xKi4D6W1QpTxeBbMnJfnEw6LXZ0k49i4k6MCUchsO5epV
+         CEiASA4o8dFNJAb6lqTpYKwCN/fmC5HlgX0DPUJQ9tVM7JAp7w3V4rZ6yztodR0GP5wR
+         vNzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713185411; x=1713790211;
+        d=1e100.net; s=20230601; t=1713185413; x=1713790213;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pMVAnWOzczCOg7Kso9czT9v06/sxRgMSvtaGJ+5gesY=;
-        b=R2eCLEUjWeYQzabnoQYP5TlZTf4gx/rZxmho8/zH1CM03ESeYfsq2GOBzoRcnNFb77
-         Zqp/10L6dK9qqt1BfmO/xUV396mMGoQxzo8A0HIXrwq3/8qSftnXa51ueh25C2J74sB0
-         yB6IYp2uiugmSQCwGCwJmGPXcp3jCFvsl3iEqiF2aaISklOhIwO3Mip6QV8JJmfBd5o0
-         A3ZD98yEgE6v6KkxnAVESULq0Y89ZQCh0LmmIGsM7KtuSebvxRJDZBfzn4GWws9XX8sJ
-         VMCNGMp7NnOQbCTzqp4SvF6kiV1UueZttAH7SjzLnvWuBupaSC4EQnR69sVLnrGUq4VR
-         2yDw==
-X-Gm-Message-State: AOJu0YzEUGg50jmDerofsS72sfxjVd6UZkLFUqpnGf4HaGP2cIuk+xgu
-	VqMY5/VqklHMjLMfrF4oNnfU2aUwP83BnleYsUsih6eBMZB7FPY9XgFu5g==
-X-Google-Smtp-Source: AGHT+IFxRO7srSNwRVEg38vUHHB/rITW5jIflQ2eitYmxqmH8XbiqvdStGFvtY9fV7fBmnrjry4PWg==
-X-Received: by 2002:a05:6000:1a8b:b0:347:9e5a:3078 with SMTP id f11-20020a0560001a8b00b003479e5a3078mr3952423wry.1.1713185410788;
-        Mon, 15 Apr 2024 05:50:10 -0700 (PDT)
+        bh=lQ3AM1VffgdehiFKtUuqAnNrVTntHp04Mu4cHKZqkgg=;
+        b=TRplX7fNQfYCoRLEQ+bnasTsK6XJ5otWRHLtNptljuQrAt2g5yvUobi0nJ0zBZcW0U
+         IMgdQUnB0IVeEsDXodqRZS4WKVQkeb4KlrmSRbWKrhEmSDacanxCnWfIOIvYoLnTacM/
+         MUXsALHKBSMoFeuavZ/IPsu6/r0vCeE/FZv6MMrH4BYp38jq/eaCF26FO3vs9iayoEKO
+         8ZauxRUiTbaNcY+eASAGGVSjDfBOKehlAL2c0NMRIItRLwzMoJgYjqhYKsXGH9Vq3KW1
+         n021xZpAUDrYYiNUA7RWtNQ3fwc/FrByb6zSm+vP7mMDFNUcvodu/HH0JJXJc/T9P5pQ
+         U7dA==
+X-Gm-Message-State: AOJu0Yzy75JfeDDKYvoKxaWUw30NB1g9SIQ0fyv2T4dx8jL5nz1g56hL
+	OXjnUHDSCVK31Qw9MKgmDQMA1e/PCik/q68qaQHiHWJPBLRcmj6k/p0xdg==
+X-Google-Smtp-Source: AGHT+IFMWmPjB7UuqSVWNLXJHQrhWlQqIyxxV3jdSVqileWsKl9IQscBmQ21MozIl1Asu1pcCqwMfg==
+X-Received: by 2002:adf:ed88:0:b0:347:62e:b606 with SMTP id c8-20020adfed88000000b00347062eb606mr5566898wro.11.1713185413144;
+        Mon, 15 Apr 2024 05:50:13 -0700 (PDT)
 Received: from 127.0.0.1localhost (82-132-213-93.dab.02.net. [82.132.213.93])
-        by smtp.gmail.com with ESMTPSA id h15-20020adff4cf000000b003432ffc3aeasm12022170wrp.56.2024.04.15.05.50.09
+        by smtp.gmail.com with ESMTPSA id h15-20020adff4cf000000b003432ffc3aeasm12022170wrp.56.2024.04.15.05.50.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Apr 2024 05:50:10 -0700 (PDT)
+        Mon, 15 Apr 2024 05:50:12 -0700 (PDT)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: Jens Axboe <axboe@kernel.dk>,
 	asml.silence@gmail.com
-Subject: [for-next 1/3] io_uring/notif: refactor io_tx_ubuf_complete()
-Date: Mon, 15 Apr 2024 13:50:11 +0100
-Message-ID: <43939e2b04dff03bff5d7227c98afedf951227b3.1713185320.git.asml.silence@gmail.com>
+Subject: [for-next 3/3] io_uring/notif: shrink account_pages to u32
+Date: Mon, 15 Apr 2024 13:50:13 +0100
+Message-ID: <19f2687fcb36daa74d86f4a27bfb3d35cffec318.1713185320.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1713185320.git.asml.silence@gmail.com>
 References: <cover.1713185320.git.asml.silence@gmail.com>
@@ -69,34 +69,29 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Flip the dec_and_test "if", that makes the function extension easier in
-the future.
+->account_pages is the number of pages we account against the user
+derived from unsigned len, it definitely fits into unsigned, which saves
+some space in struct io_notif_data.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/notif.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ io_uring/notif.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/io_uring/notif.c b/io_uring/notif.c
-index b561bd763435..452c255de04a 100644
---- a/io_uring/notif.c
-+++ b/io_uring/notif.c
-@@ -37,10 +37,11 @@ static void io_tx_ubuf_callback(struct sk_buff *skb, struct ubuf_info *uarg,
- 			WRITE_ONCE(nd->zc_copied, true);
- 	}
- 
--	if (refcount_dec_and_test(&uarg->refcnt)) {
--		notif->io_task_work.func = io_notif_tw_complete;
--		__io_req_task_work_add(notif, IOU_F_TWQ_LAZY_WAKE);
--	}
-+	if (!refcount_dec_and_test(&uarg->refcnt))
-+		return;
+diff --git a/io_uring/notif.h b/io_uring/notif.h
+index 52e124a9957c..2e25a2fc77d1 100644
+--- a/io_uring/notif.h
++++ b/io_uring/notif.h
+@@ -13,7 +13,8 @@
+ struct io_notif_data {
+ 	struct file		*file;
+ 	struct ubuf_info	uarg;
+-	unsigned long		account_pages;
 +
-+	notif->io_task_work.func = io_notif_tw_complete;
-+	__io_req_task_work_add(notif, IOU_F_TWQ_LAZY_WAKE);
- }
- 
- struct io_kiocb *io_alloc_notif(struct io_ring_ctx *ctx)
++	unsigned		account_pages;
+ 	bool			zc_report;
+ 	bool			zc_used;
+ 	bool			zc_copied;
 -- 
 2.44.0
 
