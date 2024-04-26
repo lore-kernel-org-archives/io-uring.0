@@ -1,71 +1,166 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from server02.seltendoof.de (server02.seltendoof.de [168.119.48.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887F814D6E5;
-	Fri, 26 Apr 2024 15:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5534A2B9AF;
+	Fri, 26 Apr 2024 16:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.48.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714144904; cv=none; b=EIj3ly3DmEgtlDQSQJRuoqGp0AnODktWZYWys+Pia36UquNoAXLV5Y3vTkxsUCZ4iKKHyGCCsn3Kj9UxBVmSYjzFwk8ZXU0Luv1ganFURTxXd/3LuZPm5uehMlpBSAlchrGkzF57d3BdYZ9TihIN9xakcOQgZoush+PYUrCn26c=
+	t=1714149130; cv=none; b=TlIjW6HirTetfEGaxb8CoEx5tWLBJuJ6lIjqoNGCAHsqmdJjETsQb4TAWuH0zlYti9bpH5wRupvun2SXcCU19wZadFsPBfpZtKySr8XHSsrUC6NGeRf6GFTlgk4HfLT1RYdkcR7o5K+/7UciY1mgTmbZBb2qwWadEn2f8Z+yKbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714144904; c=relaxed/simple;
-	bh=xPK28Iox1vdryqRd/xtRp+PiKJObrHW3XTZr3b861Yc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FbyUZ3c2VCFafuPpEc4BmM9RIzevxG3LBJPNJSsqO7bKEOypRik6rNcDidBourr2gUeIXhAf+9GjV/f3yhXnfBz7BlXiELda6KLjKJ4nq5iFy3iLcaEys+LG99izSzKdEzfpDi3XBxW0hMy/K+42cpDVDvAKVsNcoXkheWIwVyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WIep1t4u; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714149130; c=relaxed/simple;
+	bh=fGe0JQqXwScJg7nYQvWsn+u/6hpAOG8C2NbPdKgaIgQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XyKD7TsKUnd1pLPzl/yv6wt25uLb8Y3yGITQps9DbNEpNZTrNwNRkhhbOe22tHraTMY1hzZD5WENxUPE7yRYyPE/0BRdo8Do+qQZllJKYm+JDsFxVrj4vDAyqpp6RjLC/jNNIQjrT47xiPtBbaAhIGW/nuNQVYlw8sL9gTCP2dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de; spf=pass smtp.mailfrom=seltendoof.de; dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b=U1nKbjcn; arc=none smtp.client-ip=168.119.48.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seltendoof.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seltendoof.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WIep1t4u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96E2DC113CD;
-	Fri, 26 Apr 2024 15:21:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714144904;
-	bh=xPK28Iox1vdryqRd/xtRp+PiKJObrHW3XTZr3b861Yc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WIep1t4uVRkLM3U/+qJKwPwYMz6vBbHFexic/usbb6GBGMhrkyhUJgI64pY5KQdp4
-	 Wl23tcLgMMBYY6dW4FXrNEdwYpjAdfxmAbbhE3ARedOiEjTT9LGyL4ZBOeBmOmX7is
-	 gtKhr27omT1mnCXobOrXiHLRNo5Skg6FhofdvbngpC2NciWYBhnJJZQwQcmOYUyubk
-	 lh8yPc8ffDTgZSFkPzmz2CiMnvNxng9ZbY/FrO+HC5xPE7sJBIFjIRenB8/i70zZQd
-	 H4M1SGdWuNqUH1loHQpKIru4p2yt8F7V2Le21FC/7XhfK+HnclLpxnmHxIsMb+C1va
-	 W1VAOLo96APyw==
-Date: Fri, 26 Apr 2024 09:21:40 -0600
-From: Keith Busch <kbusch@kernel.org>
-To: Kanchan Joshi <joshi.k@samsung.com>
-Cc: axboe@kernel.dk, martin.petersen@oracle.com, hch@lst.de,
-	brauner@kernel.org, asml.silence@gmail.com, dw@davidwei.uk,
-	io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-block@vger.kernel.org, gost.dev@samsung.com,
-	Anuj Gupta <anuj20.g@samsung.com>
-Subject: Re: [PATCH 09/10] block: add support to send meta buffer
-Message-ID: <ZivGhB0rGwBb8Eic@kbusch-mbp.dhcp.thefacebook.com>
-References: <20240425183943.6319-1-joshi.k@samsung.com>
- <CGME20240425184708epcas5p4f1d95cd8d285614f712868d205a23115@epcas5p4.samsung.com>
- <20240425183943.6319-10-joshi.k@samsung.com>
+	dkim=pass (2048-bit key) header.d=seltendoof.de header.i=@seltendoof.de header.b="U1nKbjcn"
+From: =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgoettsche@seltendoof.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seltendoof.de;
+	s=2023072701; t=1714148463;
+	h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cFD0pvg4orrZWH7JCCIWvQcxitlwJBZqeb1sFDYG+1Y=;
+	b=U1nKbjcnG/dajzWMm81Rovn1ZBNp4KKwvZKHpnd1e71VjBKWrgmLZsbKnPBzDpCzVlXXi7
+	hzTrib9bZXcJfBA5DmYzjniFPX6aJ7IOWU+DoaFUNle4H+/ZgBxSVK6n4SLGL6fYLbTC+t
+	ypqv1ZGJm2kVwohG3v34yfEGi6vRrDC9urr/J+/2ckMwXrPaIzVG9mXhlO2p0kkqJRCSA+
+	IJki4rz0+T7VgPXW4lVEF7p2hiAyW1qtWOWEi1nb5Nfa/dgVXj2zoSLX/7DQETYuIrsyaF
+	z3yvB8IbANBk0Mic2y7iIlx4NBKMEHXmBqQlKWb7UGXSNO1CZPNhGuHTksTaxw==
+To: cgzones@googlemail.com
+Cc: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [PATCH v3 1/2] fs: rename struct xattr_ctx to kernel_xattr_ctx
+Date: Fri, 26 Apr 2024 18:20:15 +0200
+Message-ID: <20240426162042.191916-2-cgoettsche@seltendoof.de>
+In-Reply-To: <20240426162042.191916-1-cgoettsche@seltendoof.de>
+References: <20240426162042.191916-1-cgoettsche@seltendoof.de>
+Reply-To: cgzones@googlemail.com
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240425183943.6319-10-joshi.k@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 26, 2024 at 12:09:42AM +0530, Kanchan Joshi wrote:
-> diff --git a/block/fops.c b/block/fops.c
-> index 679d9b752fe8..e488fa66dd60 100644
-> --- a/block/fops.c
-> +++ b/block/fops.c
-> @@ -353,6 +353,15 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
->  		task_io_account_write(bio->bi_iter.bi_size);
->  	}
->  
-> +	if (unlikely(iocb->ki_flags & IOCB_USE_META)) {
-> +		ret = bio_integrity_map_iter(bio, iocb->private);
-> +		WRITE_ONCE(iocb->private, NULL);
-> +		if (unlikely(ret)) {
-> +			bio_put(bio);
-> +			return ret;
-> +		}
-> +	}
+From: Christian Göttsche <cgzones@googlemail.com>
 
-Should this also be done for __blkdev_direct_IO and
-__blkdev_direct_IO_simple?
+Rename the struct xattr_ctx to increase distinction with the about to be
+added user API struct xattr_args.
+
+No functional change.
+
+Suggested-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+v3: added based on feedback
+---
+ fs/internal.h    |  8 ++++----
+ fs/xattr.c       | 10 +++++-----
+ io_uring/xattr.c |  2 +-
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/fs/internal.h b/fs/internal.h
+index 7ca738904e34..1caa6a8f666f 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -260,7 +260,7 @@ struct xattr_name {
+ 	char name[XATTR_NAME_MAX + 1];
+ };
+ 
+-struct xattr_ctx {
++struct kernel_xattr_ctx {
+ 	/* Value of attribute */
+ 	union {
+ 		const void __user *cvalue;
+@@ -276,11 +276,11 @@ struct xattr_ctx {
+ 
+ ssize_t do_getxattr(struct mnt_idmap *idmap,
+ 		    struct dentry *d,
+-		    struct xattr_ctx *ctx);
++		    struct kernel_xattr_ctx *ctx);
+ 
+-int setxattr_copy(const char __user *name, struct xattr_ctx *ctx);
++int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx);
+ int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+-		struct xattr_ctx *ctx);
++		struct kernel_xattr_ctx *ctx);
+ int may_write_xattr(struct mnt_idmap *idmap, struct inode *inode);
+ 
+ #ifdef CONFIG_FS_POSIX_ACL
+diff --git a/fs/xattr.c b/fs/xattr.c
+index f8b643f91a98..941aab719da0 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -590,7 +590,7 @@ EXPORT_SYMBOL_GPL(vfs_removexattr);
+  * Extended attribute SET operations
+  */
+ 
+-int setxattr_copy(const char __user *name, struct xattr_ctx *ctx)
++int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx)
+ {
+ 	int error;
+ 
+@@ -620,7 +620,7 @@ int setxattr_copy(const char __user *name, struct xattr_ctx *ctx)
+ }
+ 
+ int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+-		struct xattr_ctx *ctx)
++		struct kernel_xattr_ctx *ctx)
+ {
+ 	if (is_posix_acl_xattr(ctx->kname->name))
+ 		return do_set_acl(idmap, dentry, ctx->kname->name,
+@@ -636,7 +636,7 @@ setxattr(struct mnt_idmap *idmap, struct dentry *d,
+ 	int flags)
+ {
+ 	struct xattr_name kname;
+-	struct xattr_ctx ctx = {
++	struct kernel_xattr_ctx ctx = {
+ 		.cvalue   = value,
+ 		.kvalue   = NULL,
+ 		.size     = size,
+@@ -719,7 +719,7 @@ SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
+  */
+ ssize_t
+ do_getxattr(struct mnt_idmap *idmap, struct dentry *d,
+-	struct xattr_ctx *ctx)
++	struct kernel_xattr_ctx *ctx)
+ {
+ 	ssize_t error;
+ 	char *kname = ctx->kname->name;
+@@ -754,7 +754,7 @@ getxattr(struct mnt_idmap *idmap, struct dentry *d,
+ {
+ 	ssize_t error;
+ 	struct xattr_name kname;
+-	struct xattr_ctx ctx = {
++	struct kernel_xattr_ctx ctx = {
+ 		.value    = value,
+ 		.kvalue   = NULL,
+ 		.size     = size,
+diff --git a/io_uring/xattr.c b/io_uring/xattr.c
+index 44905b82eea8..28b8f7b1af7c 100644
+--- a/io_uring/xattr.c
++++ b/io_uring/xattr.c
+@@ -18,7 +18,7 @@
+ 
+ struct io_xattr {
+ 	struct file			*file;
+-	struct xattr_ctx		ctx;
++	struct kernel_xattr_ctx		ctx;
+ 	struct filename			*filename;
+ };
+ 
+-- 
+2.43.0
+
