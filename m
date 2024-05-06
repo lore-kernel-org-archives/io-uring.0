@@ -1,234 +1,377 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57A51422A3
-	for <io-uring@vger.kernel.org>; Mon,  6 May 2024 09:04:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D15984FB3
+	for <io-uring@vger.kernel.org>; Mon,  6 May 2024 09:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714986286; cv=none; b=S6sedP/BPktmliuoA8cwAD2S631jRy2CLhvrUOGZkCDKA3HzljquoPrCBH7v5SqSeqeHB5ABiOqk5wiWkSZbILwaMu5n1/nENjkPTxwEKsW1UUfzU88RBj/xaeQCHOH/PckBuvanGhjcoRVjrQro6qXZQtO+7LWj8iofkERDYBg=
+	t=1714986550; cv=none; b=mDl2S4iz/k8srCph4nQa9QzcA3Tw/eqKcTbdUO/DBPYhd868/XSJekV+MlaTe6o0IQcEA8tPpuBgaLhfs2Rse5ik69hR6/rbl4eSll1X5Qa+bHCl2dJnAfXzuZhItHtX3QKLfplXeAfVP93n9ZBQNp6Rx+vuxQKCYHvI4bVPvRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714986286; c=relaxed/simple;
-	bh=P6jKRP8WdSAvZ8RrcvBEhhc2F5D0qVrJOPA9QiOcuWo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nNc3/bT0s8IKoFADLVFWBlqW842GzJm0XCeVTcwgqNVJ941SWDPpe6L0ao7P6rgcT25rtn7mqVkiPOAHfA77hxr6VGzULz+1D/4emQ58ZqNb0VqXhsUBuURQpZ7g/5atS72WRPIs6B/mjJHCaQktcyIK4DtVt1hUontmjcbKCJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y9aSENte; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1714986550; c=relaxed/simple;
+	bh=DIj3uOSTe54dSogyMn44tGSmCTlpJl//cqjBO+aBtyA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=PGfZbLxGx9TweD/LK83bGpGarRnreu1UKwakZ/SD05JD42qbv6VajxyzJmQJlbINSN3NvR8eQz8NRV/3HxOJXx9j465Vi9COSTQ7AiFHuAvLAhL9QFDBwOmT1n44EySKmj8D/tJoI5OESlYE+1Fs6hsPpwL4f7boFtigB4tA1Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=cU4p2A9l; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y9aSENte"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1714986283;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=TNxJ90r7OIOz6OKvqUrw671Q/oNs3xYKmR6x/WOwqn0=;
-	b=Y9aSENtedmt9LTJ8gAmbLP0r9zy4RizA7Dtqk+2KKlGsSgiExyZYleZkIWoRzedQW6L8/4
-	PxwLSId8v7p8UpbnLLh9feecNAokgrMC9C/bK3DcwvRN8TFFEOVPIcF0lzw7sIBBPcC/W6
-	z6HYxeTPhwjbgNLa97DEXBRWOk9rtIg=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-38-OO2FGM0bO7u5dUQJEmF-5Q-1; Mon, 06 May 2024 05:04:42 -0400
-X-MC-Unique: OO2FGM0bO7u5dUQJEmF-5Q-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-41ab62f535aso5804485e9.0
-        for <io-uring@vger.kernel.org>; Mon, 06 May 2024 02:04:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714986281; x=1715591081;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TNxJ90r7OIOz6OKvqUrw671Q/oNs3xYKmR6x/WOwqn0=;
-        b=prfDQoPWK8yJvvrEKo0ISuTtUjzMmM8F7Yd+uuKi5ImhSt2NhEjVHyM+gb5D9SLBus
-         01Qz+uszXKeILY51tSm2U+NpWGcZcXZZugBQlUCZ4DC6O9qyeTkBfF6QMxarKC178l0H
-         8FbASp8mPGwYE3RLbL7UP+EGg7w0lxOUFAxsUpzJjNGpDnbQzPGFwfnF9eP6Sy60cT3C
-         PAaDTkuZNznQhga8RKLm0Jtqc2YCwGpoD7S7NuirrKRWNwmdyRGuO7JE5gUJn6aocdmX
-         vaeY7AUgpA8FDOBBPyvqKjIYnokR1Ri4VdUjTR7mhNPXrc4m9cKDHik3TphY6qL3a9bd
-         Nsxg==
-X-Forwarded-Encrypted: i=1; AJvYcCWZwMdVrZm5ptVZg+iheyGFjH4K+7pmnpPpTqlsvs0Oy2YSNCmNjuNywEOtAgT9ZjBSIfLrKxMiDQH4EQlOKSJGCU4+Gw4RdlQ=
-X-Gm-Message-State: AOJu0Yw2Z+aqE2A74o69DS6JVwaxlwqYU9vDyoUqcG2DRCB7dEXtRJW8
-	unOZsCClxq/10u/3mfQ5GCgw/3yjSx9Xz5BEmZtO+g4vB88QDvOfLtwuMeBF6Pdy+OUMngGcjdA
-	v3n5DjbsguMRL9UOU7jHwUiVql/jlxcb1G0iO+AlGbRpzNUh+xr4w6y7Q
-X-Received: by 2002:a05:600c:4691:b0:41a:141c:e15a with SMTP id p17-20020a05600c469100b0041a141ce15amr7565496wmo.16.1714986281127;
-        Mon, 06 May 2024 02:04:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFOLIGr3ODLDhvC3tmKKtdQELzrPVmv7NZt12FE6eNlKj4YgDVIsNmX1yfGqnXQexcDMsAfOQ==
-X-Received: by 2002:a05:600c:4691:b0:41a:141c:e15a with SMTP id p17-20020a05600c469100b0041a141ce15amr7565473wmo.16.1714986280679;
-        Mon, 06 May 2024 02:04:40 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c74b:bf00:182c:d606:87cf:6fea? (p200300cbc74bbf00182cd60687cf6fea.dip0.t-ipconnect.de. [2003:cb:c74b:bf00:182c:d606:87cf:6fea])
-        by smtp.gmail.com with ESMTPSA id n44-20020a05600c502c00b004146e58cc35sm19248292wmr.46.2024.05.06.02.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 May 2024 02:04:40 -0700 (PDT)
-Message-ID: <af1a4b81-22f3-4955-8c44-95bede13a7bb@redhat.com>
-Date: Mon, 6 May 2024 11:04:39 +0200
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="cU4p2A9l"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240506090108epoutp02c7a8573838818ba1e703a8b157561f3a~M2r4Sataj1942119421epoutp02J
+	for <io-uring@vger.kernel.org>; Mon,  6 May 2024 09:01:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240506090108epoutp02c7a8573838818ba1e703a8b157561f3a~M2r4Sataj1942119421epoutp02J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1714986068;
+	bh=MkDRtuXUGYKnezppJCmDRci2myXg937PtzpJQb7sPuM=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=cU4p2A9lArx1AiWsXshlfCU+sD5EIh7KhCqEtSDZDF41mpAriCL3UBm1Oq8bLN1Dz
+	 XyFqiPi/Q16f3opMG+JY/f6RB9W8/UG/Oda43B6bve9z5XZoZd4l6CYDcYLScvNK1n
+	 51GEEG8fUHGaNL+yk2Xw2zO8UESx9LsI+2uccC1U=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20240506090107epcas5p236245498c4bbe36fa69ac3d862eed75f~M2r36MkD31172211722epcas5p2Z;
+	Mon,  6 May 2024 09:01:07 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4VXwPG3JnWz4x9Pv; Mon,  6 May
+	2024 09:01:06 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	73.4C.08600.15C98366; Mon,  6 May 2024 18:01:05 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240506075314epcas5p25333b80c8d6a3217d5352a5a7ed89278~M1wmydLbp0400404004epcas5p2d;
+	Mon,  6 May 2024 07:53:14 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240506075314epsmtrp15e121021c338f74f4005caf73bb3e6b1~M1wmxru-v1874718747epsmtrp1s;
+	Mon,  6 May 2024 07:53:14 +0000 (GMT)
+X-AuditID: b6c32a44-921fa70000002198-7d-66389c51c60f
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	7A.80.09238.A6C88366; Mon,  6 May 2024 16:53:14 +0900 (KST)
+Received: from testpc118124.samsungds.net (unknown [109.105.118.124]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240506075313epsmtip1be1b6f0884a91e44c09b7d3989f39c6b~M1wllq7kt3072130721epsmtip1Y;
+	Mon,  6 May 2024 07:53:13 +0000 (GMT)
+From: Chenliang Li <cliang01.li@samsung.com>
+To: axboe@kernel.dk, asml.silence@gmail.com
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+	peiwei.li@samsung.com, joshi.k@samsung.com, kundan.kumar@samsung.com,
+	gost.dev@samsung.com, Chenliang Li <cliang01.li@samsung.com>
+Subject: [PATCH] io_uring/rsrc: Add support for multi-folio buffer
+ coalescing
+Date: Mon,  6 May 2024 15:53:02 +0800
+Message-Id: <20240506075303.25630-1-cliang01.li@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [mm?] [io-uring?] WARNING in hpage_collapse_scan_pmd (2)
-To: syzbot <syzbot+5ea2845f44caa77f5543@syzkaller.appspotmail.com>,
- akpm@linux-foundation.org, axboe@kernel.dk, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- syzkaller-bugs@googlegroups.com, Peter Xu <peterx@redhat.com>
-References: <0000000000006923bb06178ce04a@google.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <0000000000006923bb06178ce04a@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAJsWRmVeSWpSXmKPExsWy7bCmlm7gHIs0gyf/xC3mrNrGaLH6bj+b
+	xem/j1ksbh7YyWTxrvUci8XR/2/ZLH5132W02PrlK6vF5V1z2Cye7eW0ODvhA6sDt8fOWXfZ
+	PS6fLfXo27KK0ePzJrkAlqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE
+	3FRbJRefAF23zBygm5QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BSYFesWJucWl
+	eel6eaklVoYGBkamQIUJ2RlPf3UxFzx2qPh4dS1rA+MOoy5GDg4JAROJDw/5uxi5OIQEdjNK
+	TD3yiRXC+cQo8WbVWijnG6PE861dbF2MnGAdC2btZoZI7GWUWH91HzuE84tRYua9drAqNgEd
+	id8rfrGA2CIC2hKvH09lASliFjjEKHG/fSIjyHJhAX+JZ/vB6lkEVCXWz9vDCmLzCthItG7Z
+	zgSxTV5i/8GzzBBxQYmTM5+AzWQGijdvnQ12hYTAS3aJaQdWQzW4SLTe6GCEsIUlXh3fwg5h
+	S0m87G9jh3i6WGLZOjmI3hZGiffv5kDVW0v8u7KHBaSGWUBTYv0ufYiwrMTUU+uYIPbySfT+
+	fgK1ildixzwYW1XiwsFtUKukJdZO2MoMYXtI/N12GewvIYFYif4/N1kmMMrPQvLOLCTvzELY
+	vICReRWjZGpBcW56arJpgWFeajk8YpPzczcxgpOmlssOxhvz/+kdYmTiYAQGLQezkgjv0Xbz
+	NCHelMTKqtSi/Pii0pzU4kOMpsAwnsgsJZqcD0zbeSXxhiaWBiZmZmYmlsZmhkrivK9b56YI
+	CaQnlqRmp6YWpBbB9DFxcEo1MKmEpbEWb5bzX1eeyH0/d8k0iWdtNz1e+wrrpFzldVu27Piv
+	a5qLXgYJCq3vOZVbcPHPwiXTUq3myVlMfaDQq/olniFlg5n5VV3HMM8yTrXFSju2SnlNFK1Z
+	s6n5tHRlINsfVfP1s0OCcyZ3Sl18/kLdZoNvr9jfaqErv8NjnvzUruK6trvli7zwMm3d5ANM
+	ef9z5pzJCQrK2R9ScWyv7M+/DUUS5/u0+n8KaajOvuam5jR3w1ebs5pJ5t7Pb/g2N9/anaXA
+	z+Mb2zJnyZRZxdEth45vjY8sM9u3JChGJkxN7VNZrtK+dfzZav+fOT/fAszANd+e7360ZZmM
+	7hyXF0/k595bU/1mu1Z4SvsKJZbijERDLeai4kQACxBxiSMEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDLMWRmVeSWpSXmKPExsWy7bCSnG5Wj0WawZmjKhZzVm1jtFh9t5/N
+	4vTfxywWNw/sZLJ413qOxeLo/7dsFr+67zJabP3yldXi8q45bBbP9nJanJ3wgdWB22PnrLvs
+	HpfPlnr0bVnF6PF5k1wASxSXTUpqTmZZapG+XQJXxtNfXcwFjx0qPl5dy9rAuMOoi5GTQ0LA
+	RGLBrN3MXYxcHEICuxklXi9/zQyRkJboONTKDmELS6z895wdougHo8S6rzvAitgEdCR+r/jF
+	0sXIwSEioCvReFcBpIZZ4BSjxNs1O8CahQV8JRqX/WYEsVkEVCXWz9vDCmLzCthItG7ZzgSx
+	QF5i/8GzzBBxQYmTM5+wgNjMQPHmrbOZJzDyzUKSmoUktYCRaRWjZGpBcW56brJhgWFearle
+	cWJucWleul5yfu4mRnAAa2nsYLw3/5/eIUYmDsZDjBIczEoivEfbzdOEeFMSK6tSi/Lji0pz
+	UosPMUpzsCiJ8xrOmJ0iJJCeWJKanZpakFoEk2Xi4JRqYOL99iQx20Lk2PlMrVCdtxO4OTf4
+	9H+RNJyi+dpwN9/UXxx/T6acWT853HuVzoWpwnEubQeMJpZnfU37cU7D+4LYtC5F44ZqkYCr
+	WysXRuqGfHcpWGR6TcbknembQkvnNbc8v71e5uURxrc58vOeloPyHy+o+OcZKe8zisrdEsnn
+	IfHzSGP88z1cKi9fGQjFzYzuW/X+1rnOwNfP2qwMk19wqG+x/nT0UJaSwtn0oOW3G0qWCDwp
+	4Qg3nHZ99dwdF7ftuv/h1yfe/4UWH388+v7lnGxlxYfCbad2aUW+7G7Ji+1ynVDZqiygVfze
+	IzLmR3LlzmUJ2zc1fOC68C+guWWyVPeLJaHbLG7tNDbcy6zEUpyRaKjFXFScCACxhWhHzwIA
+	AA==
+X-CMS-MailID: 20240506075314epcas5p25333b80c8d6a3217d5352a5a7ed89278
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240506075314epcas5p25333b80c8d6a3217d5352a5a7ed89278
+References: <CGME20240506075314epcas5p25333b80c8d6a3217d5352a5a7ed89278@epcas5p2.samsung.com>
 
-On 03.05.24 15:41, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    e67572cd2204 Linux 6.9-rc6
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1067d2f8980000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3310e643b6ef5d69
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5ea2845f44caa77f5543
-> compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10874a40980000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/d3c4905a7f32/disk-e67572cd.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/9e4d1fc8f9c1/vmlinux-e67572cd.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/4616b77edaee/bzImage-e67572cd.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+5ea2845f44caa77f5543@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 5288 at arch/x86/include/asm/pgtable.h:403 pte_uffd_wp arch/x86/include/asm/pgtable.h:403 [inline]
-> WARNING: CPU: 1 PID: 5288 at arch/x86/include/asm/pgtable.h:403 hpage_collapse_scan_pmd+0xd32/0x14c0 mm/khugepaged.c:1316
+Currently fixed buffers consisting of pages in one same folio(huge page)
+can be coalesced into a single bvec entry at registration.
+This patch expands it to support coalescing fixed buffers
+with multiple folios, by:
+1. Add a helper function and a helper struct to do the coalescing work
+at buffer registration;
+2. Add the bvec setup procedure of the coalsced path;
+3. store page_mask and page_shift into io_mapped_ubuf for
+later use in io_import_fixed.
 
-That's the
+Signed-off-by: Chenliang Li <cliang01.li@samsung.com>
+---
+ io_uring/rsrc.c | 156 +++++++++++++++++++++++++++++++++++-------------
+ io_uring/rsrc.h |   9 +++
+ 2 files changed, 124 insertions(+), 41 deletions(-)
 
-WARN_ON_ONCE(wp && pte_write(pte));
-
-check during pte_uffd_wp() in hpage_collapse_scan_pmd().
-
-Maybe fixed by
-
-commit fffa0c5024e8c90dced69b7fcde1d738384a1069
-Author: Peter Xu <peterx@redhat.com>
-Date:   Mon Apr 22 09:33:11 2024 -0400
-
-     mm/userfaultfd: reset ptes when close() for wr-protected ones
-
-
-That resides in mm-hotfixes-unstable
-
-(in which case we might want to tag it as stable)
-
-
-> Modules linked in:
-> CPU: 1 PID: 5288 Comm: syz-executor.4 Not tainted 6.9.0-rc6-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
-> RIP: 0010:pte_uffd_wp arch/x86/include/asm/pgtable.h:403 [inline]
-> RIP: 0010:hpage_collapse_scan_pmd+0xd32/0x14c0 mm/khugepaged.c:1316
-> Code: 90 90 e9 4b f6 ff ff 4c 8b 64 24 48 e8 f7 ee 9e ff 31 ff 4c 89 ee e8 fd e9 9e ff 4d 85 ed 0f 84 b5 01 00 00 e8 df ee 9e ff 90 <0f> 0b 90 41 be 09 00 00 00 0f b6 6c 24 47 48 8b 5c 24 10 e9 fb fa
-> RSP: 0018:ffffc90003abf9b0 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: ffff88807a402000 RCX: ffffffff81eed643
-> RDX: ffff888021ddbc00 RSI: ffffffff81eed651 RDI: 0000000000000007
-> RBP: 000000006897fc67 R08: 0000000000000007 R09: 0000000000000000
-> R10: 0000000000000002 R11: 0000000000000002 R12: 0000000020800000
-> R13: 0000000000000002 R14: 0000000000000400 R15: ffff88801e4dcc00
-> FS:  00007fd661dde6c0(0000) GS:ffff8880b9500000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f7e57ed9ba1 CR3: 0000000025328000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   <TASK>
->   madvise_collapse+0x738/0xb10 mm/khugepaged.c:2761
->   madvise_vma_behavior+0x202/0x1b20 mm/madvise.c:1074
->   madvise_walk_vmas+0x1cf/0x2c0 mm/madvise.c:1248
->   do_madvise+0x309/0x640 mm/madvise.c:1428
->   __do_sys_madvise mm/madvise.c:1441 [inline]
->   __se_sys_madvise mm/madvise.c:1439 [inline]
->   __x64_sys_madvise+0xa9/0x110 mm/madvise.c:1439
->   do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->   do_syscall_64+0xcf/0x260 arch/x86/entry/common.c:83
->   entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> RIP: 0033:0x7fd66227dea9
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007fd661dde0c8 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-> RAX: ffffffffffffffda RBX: 00007fd6623ac050 RCX: 00007fd66227dea9
-> RDX: 0000000000000019 RSI: 00000000dfc3efff RDI: 00000000203c1000
-> RBP: 00007fd6622ca4a4 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-> R13: 000000000000006e R14: 00007fd6623ac050 R15: 00007ffd98c8dfa8
->   </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> If the report is already addressed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
-
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-hotfixes-unstable
-
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 65417c9553b1..f9e11131c9a5 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -871,6 +871,80 @@ static int io_buffer_account_pin(struct io_ring_ctx *ctx, struct page **pages,
+ 	return ret;
+ }
+ 
++/*
++ * For coalesce to work, a buffer must be one or multiple
++ * folios, all the folios except the first and last one
++ * should be of the same size.
++ */
++static bool io_sqe_buffer_try_coalesce(struct page **pages,
++				       unsigned int nr_pages,
++				       struct io_imu_folio_stats *stats)
++{
++	struct folio	*folio = NULL, *first_folio = NULL;
++	unsigned int	page_cnt;
++	int		i, j;
++
++	if (nr_pages <= 1)
++		return false;
++
++	first_folio = page_folio(pages[0]);
++	stats->full_folio_pcnt = folio_nr_pages(first_folio);
++	if (stats->full_folio_pcnt == 1)
++		return false;
++
++	stats->folio_shift = folio_shift(first_folio);
++
++	folio = first_folio;
++	page_cnt = 1;
++	stats->nr_folios = 1;
++	/*
++	 * Check:
++	 * 1. Pages must be contiguous;
++	 * 2. All folios should have the same page count
++	 *    except the first and last one
++	 */
++	for (i = 1; i < nr_pages; i++) {
++		if (page_folio(pages[i]) != folio ||
++		   pages[i] != pages[i-1] + 1) {
++			if (folio == first_folio)
++				stats->first_folio_pcnt = page_cnt;
++			else if (page_cnt != stats->full_folio_pcnt)
++				return false;
++			folio = page_folio(pages[i]);
++			page_cnt = 1;
++			stats->nr_folios++;
++			continue;
++		}
++		page_cnt++;
++	}
++	if (folio == first_folio)
++		stats->first_folio_pcnt = page_cnt;
++
++	if (stats->first_folio_pcnt > 1)
++		/*
++		 * The pages are bound to the folio, it doesn't
++		 * actually unpin them but drops all but one reference,
++		 * which is usually put down by io_buffer_unmap().
++		 * Note, needs a better helper.
++		 */
++		unpin_user_pages(&pages[1], stats->first_folio_pcnt - 1);
++	j = stats->first_folio_pcnt;
++	nr_pages -= stats->first_folio_pcnt;
++	for (i = 1; i < stats->nr_folios; i++) {
++		unsigned int nr_unpin;
++
++		nr_unpin = min_t(unsigned int, nr_pages - 1,
++				stats->full_folio_pcnt - 1);
++		if (nr_unpin <= 1)
++			continue;
++		unpin_user_pages(&pages[j+1], nr_unpin);
++		j += stats->full_folio_pcnt;
++		nr_pages -= stats->full_folio_pcnt;
++	}
++
++	return true;
++}
++
+ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+ 				  struct io_mapped_ubuf **pimu,
+ 				  struct page **last_hpage)
+@@ -879,8 +953,9 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+ 	struct page **pages = NULL;
+ 	unsigned long off;
+ 	size_t size;
+-	int ret, nr_pages, i;
+-	struct folio *folio = NULL;
++	int ret, nr_pages, nr_bvecs, i, j;
++	bool coalesced;
++	struct io_imu_folio_stats stats;
+ 
+ 	*pimu = (struct io_mapped_ubuf *)&dummy_ubuf;
+ 	if (!iov->iov_base)
+@@ -895,39 +970,26 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+ 		goto done;
+ 	}
+ 
+-	/* If it's a huge page, try to coalesce them into a single bvec entry */
+-	if (nr_pages > 1) {
+-		folio = page_folio(pages[0]);
+-		for (i = 1; i < nr_pages; i++) {
+-			/*
+-			 * Pages must be consecutive and on the same folio for
+-			 * this to work
+-			 */
+-			if (page_folio(pages[i]) != folio ||
+-			    pages[i] != pages[i - 1] + 1) {
+-				folio = NULL;
+-				break;
+-			}
+-		}
+-		if (folio) {
+-			/*
+-			 * The pages are bound to the folio, it doesn't
+-			 * actually unpin them but drops all but one reference,
+-			 * which is usually put down by io_buffer_unmap().
+-			 * Note, needs a better helper.
+-			 */
+-			unpin_user_pages(&pages[1], nr_pages - 1);
+-			nr_pages = 1;
+-		}
+-	}
+-
+-	imu = kvmalloc(struct_size(imu, bvec, nr_pages), GFP_KERNEL);
++	/* If it's multiple huge pages, try to coalesce them into fewer bvec entries */
++	coalesced = io_sqe_buffer_try_coalesce(pages, nr_pages, &stats);
++	nr_bvecs = nr_pages;
++	if (coalesced)
++		nr_bvecs = stats.nr_folios;
++	imu = kvmalloc(struct_size(imu, bvec, nr_bvecs), GFP_KERNEL);
+ 	if (!imu)
+ 		goto done;
+ 
+ 	ret = io_buffer_account_pin(ctx, pages, nr_pages, imu, last_hpage);
+ 	if (ret) {
+-		unpin_user_pages(pages, nr_pages);
++		if (coalesced) {
++			unpin_user_page(pages[0]);
++			j = stats.first_folio_pcnt;
++			for (i = 1; i < stats.nr_folios; i++) {
++				unpin_user_page(pages[j]);
++				j += stats.full_folio_pcnt;
++			}
++		} else
++			unpin_user_pages(pages, nr_pages);
+ 		goto done;
+ 	}
+ 
+@@ -936,12 +998,29 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+ 	/* store original address for later verification */
+ 	imu->ubuf = (unsigned long) iov->iov_base;
+ 	imu->ubuf_end = imu->ubuf + iov->iov_len;
+-	imu->nr_bvecs = nr_pages;
++	imu->nr_bvecs = nr_bvecs;
++	imu->page_shift = PAGE_SHIFT;
++	imu->page_mask = PAGE_MASK;
++	if (coalesced) {
++		imu->page_shift = stats.folio_shift;
++		imu->page_mask = ~((1UL << stats.folio_shift) - 1);
++	}
+ 	*pimu = imu;
+ 	ret = 0;
+ 
+-	if (folio) {
+-		bvec_set_page(&imu->bvec[0], pages[0], size, off);
++	if (coalesced) {
++		size_t vec_len;
++
++		vec_len = min_t(size_t, size, PAGE_SIZE * stats.first_folio_pcnt - off);
++		bvec_set_page(&imu->bvec[0], pages[0], vec_len, off);
++		size -= vec_len;
++		j = stats.first_folio_pcnt;
++		for (i = 1; i < nr_bvecs; i++) {
++			vec_len = min_t(size_t, size, PAGE_SIZE * stats.full_folio_pcnt);
++			bvec_set_page(&imu->bvec[i], pages[j], vec_len, 0);
++			size -= vec_len;
++			j += stats.full_folio_pcnt;
++		}
+ 		goto done;
+ 	}
+ 	for (i = 0; i < nr_pages; i++) {
+@@ -1049,7 +1128,7 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+ 		 * we know that:
+ 		 *
+ 		 * 1) it's a BVEC iter, we set it up
+-		 * 2) all bvecs are PAGE_SIZE in size, except potentially the
++		 * 2) all bvecs are the same in size, except potentially the
+ 		 *    first and last bvec
+ 		 *
+ 		 * So just find our index, and adjust the iterator afterwards.
+@@ -1061,11 +1140,6 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+ 		const struct bio_vec *bvec = imu->bvec;
+ 
+ 		if (offset < bvec->bv_len) {
+-			/*
+-			 * Note, huge pages buffers consists of one large
+-			 * bvec entry and should always go this way. The other
+-			 * branch doesn't expect non PAGE_SIZE'd chunks.
+-			 */
+ 			iter->bvec = bvec;
+ 			iter->nr_segs = bvec->bv_len;
+ 			iter->count -= offset;
+@@ -1075,12 +1149,12 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+ 
+ 			/* skip first vec */
+ 			offset -= bvec->bv_len;
+-			seg_skip = 1 + (offset >> PAGE_SHIFT);
++			seg_skip = 1 + (offset >> imu->page_shift);
+ 
+ 			iter->bvec = bvec + seg_skip;
+ 			iter->nr_segs -= seg_skip;
+ 			iter->count -= bvec->bv_len + offset;
+-			iter->iov_offset = offset & ~PAGE_MASK;
++			iter->iov_offset = offset & ~(imu->page_mask);
+ 		}
+ 	}
+ 
+diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
+index c032ca3436ca..4c655e446150 100644
+--- a/io_uring/rsrc.h
++++ b/io_uring/rsrc.h
+@@ -47,9 +47,18 @@ struct io_mapped_ubuf {
+ 	u64		ubuf_end;
+ 	unsigned int	nr_bvecs;
+ 	unsigned long	acct_pages;
++	unsigned int	page_shift;
++	unsigned long	page_mask;
+ 	struct bio_vec	bvec[] __counted_by(nr_bvecs);
+ };
+ 
++struct io_imu_folio_stats {
++	unsigned int	first_folio_pcnt;
++	unsigned int	full_folio_pcnt;
++	unsigned int	nr_folios;
++	unsigned int	folio_shift;
++};
++
+ void io_rsrc_node_ref_zero(struct io_rsrc_node *node);
+ void io_rsrc_node_destroy(struct io_ring_ctx *ctx, struct io_rsrc_node *ref_node);
+ struct io_rsrc_node *io_rsrc_node_alloc(struct io_ring_ctx *ctx);
 -- 
-Cheers,
-
-David / dhildenb
+2.34.1
 
