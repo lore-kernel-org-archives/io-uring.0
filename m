@@ -1,61 +1,66 @@
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7227D182CC
-	for <io-uring@vger.kernel.org>; Wed,  8 May 2024 14:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CE4182CC
+	for <io-uring@vger.kernel.org>; Wed,  8 May 2024 14:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715178451; cv=none; b=X/HSh0wG6NJJOpS+WVMBHTamBF+cmmVXXJDWotxtJS5n0EDBauhQ8WGLNQKqT/BvZoBzZYErx/MwKptT21+smT1znT90FY/y5xN1VJdggACRl2b0dG0wVDQHN8tDUjLSyYJqpyVkctvsRhybisd/HZKYL7wdMvgfjaLEhSMWgfA=
+	t=1715178454; cv=none; b=W60PS5uBArdLtfm3K7fO1uTfor6D1HXSJxdppAnNauHe7BwAzxzTWm/Es7Hjn3ntiDfWxheetK8QGgnX3AzmuSKvw9nHdqbAox46LggAf2x4/ANxiXcW78SYI5Jhny5Vx/0/PdICs/OugDuZHbU0JY9DEh6Q9T0HhGy7jK+hXX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715178451; c=relaxed/simple;
-	bh=p8nai2ZAlYhtwxLIrH2p691jOjKJRRrZOPxqu1yc39o=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=SiJFSvpA0c5HMSGG+6NCxC/qDfppLzn16d/jtd7O+DgbWMfjvY+Oryi/POVAzFA5UbOuSyK/DqJerp5ZuOWmifCHi/u9rEJ9OBc1lV3koZk5auw4C/f/IOUN8PFmlDlpbDkKqUjx03jIcuNJ/wuwDkV595JvMZwgnbJRqHV/J+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=MgfI07sc; arc=none smtp.client-ip=209.85.166.52
+	s=arc-20240116; t=1715178454; c=relaxed/simple;
+	bh=GXFyDkGHAJklQ8XkFA0GcrAY6q+2BKptyc8P7wz4BiQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=S3TmONJ8TDzhGlPfZNj5mg9hDFkyOIM6D/pBuPSjd8soechq24Kmux/WjA+Wo2uVP9sJr6Bt6npk/caRaTQMbaUcuP9jUScIQj/jgjZw62Jt6KBywj/GbioX2YstDozPR7sEGMrf8Eor8Xq2EnI9CVaPGdU2VFXD6xDkqZ7ECv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=RWrCv+6q; arc=none smtp.client-ip=209.85.166.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="MgfI07sc"
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-7e1856fda57so16474039f.1
-        for <io-uring@vger.kernel.org>; Wed, 08 May 2024 07:27:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="RWrCv+6q"
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7d9d591e660so11462539f.2
+        for <io-uring@vger.kernel.org>; Wed, 08 May 2024 07:27:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1715178447; x=1715783247; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2djfWTBbW2y2tcbRKSDXWtWG+o4dv/dLxrRWgHoKOGA=;
-        b=MgfI07scapvKj5mFCF2m0+UBxh79U3pZlhrft8wQydKCmtMwYYhnzyUKbt/7Qf4laY
-         lFP4ypGZPpBEwISHh2R9Sxe28GlU0CEjNB3FVJlYMPKap9hlKPMI391yQvGA/MfYPb8+
-         3en5391GMip/kv9SDtT0J/22Qhi5Jw+4GxyljZacQ7RIfm13B9ZNZHq1ZU3WuT1RYR7l
-         Al06WW6y03fJG0nmFSf0azPHERuUHWgtQfLUrDYiGYQh+bFksoCjcRheV+/LMs+WLj9r
-         OSJF6UkGniwiTa33o8wd+t6E1h8iC8dgrYOAHFT8ncHJIiyM0LX+GUAHb/+15thO8aHc
-         i8gg==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1715178450; x=1715783250; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kuGxhO/l3ke6ObTpcXOcU2V2ZdgwmLVGPG3n99j8t20=;
+        b=RWrCv+6qoNrLVgTUObT1Pvt8t5NupBKOJSlffIQwj8KLLdD6I8o1NPe5f6Nn7qP9Qn
+         VDb0YD1/IRqJr37XsgI0W01hTAhICgnzmW033XurZ/2ynyDn/7Wwgl4S3Yvr8ioE+IuE
+         KOhpPbJKYB0ebNk0dSb40wRzzWtzwnt6RwMgDTrIBsE/ZaOpaTqG2QnzURrla4/FQ22I
+         UEoiIt0EAAmzu8NtU+18RZeCcPTu3nPKVcCBIb+Pwl7IObFFueYW9j5an8gmB4RJgKAM
+         XbdAc8OnxWLK9YjnLC3B5JiFel5DuyoWgEdAfAzlPUFPqm6LxWYlafTnCD3dLi/vWIxp
+         F6uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715178447; x=1715783247;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2djfWTBbW2y2tcbRKSDXWtWG+o4dv/dLxrRWgHoKOGA=;
-        b=kh6OhHGHP1XzKyBXKQkWBHA+DdUmDwWCohaWl1+1bBNZ2pq9xc/+YvfYC8doEbRPSS
-         e8pnyPEgAV4yp+oWuv3FufPFW/tStUhSogcYxOOeRyn4MGVn935O6OF1lScAPvOt13Hq
-         RCoBeEl22ibMCYRt38F4qcszyuSnYNDYKF623ddDImEirF+H5r+m4Cj44AI0eqTViojI
-         aNKQ+BQpDep2/pxVtzV4bKrGqr+8c3lOhwWpapB3pP8kxfv9BV5wuJzEFDfGSMegusrW
-         PKgG3FngQiJxfNtBbv829DOULRFeaFMer4qA9D9pTSxsyY+BVqj2zESeKiBukAyEb0iD
-         K9Og==
-X-Gm-Message-State: AOJu0YzJ9mSHqT5tyv8/2wiadbg3Ci93jveZV5exiYQgqorUdTfAF+MQ
-	9lzyY8k+J23TYm8ijbgRT7l6Jycx/BEHWkz2bZ3ROkDvFzSU/3fR2FJNdlX6JDVIzqNms2nC6cV
-	8
-X-Google-Smtp-Source: AGHT+IGliWdJCBVrTH97EuTWCHQaRj+078ob+A1FJJC1h1UHLvUafcCE+vDnhpk2Zaeu/EN7OcZx0Q==
-X-Received: by 2002:a05:6e02:1647:b0:368:974b:f7c7 with SMTP id e9e14a558f8ab-36caeb48b66mr32493305ab.0.1715178447553;
-        Wed, 08 May 2024 07:27:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1715178450; x=1715783250;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kuGxhO/l3ke6ObTpcXOcU2V2ZdgwmLVGPG3n99j8t20=;
+        b=wTYy0RyGvnfEQguUe4sQxeFRvzza+7Fe7YQ9BCJhnuxgruHjO1ik3Vg7yuDHfd4Bvl
+         S07hieYncMxfWahBnlxFZlaypD9RljDXAlbi2difaI0WEuNiCscu4fzA46wahw5tG/z3
+         ZieK8GMBGdt2a81mFDnNlxZQMR06vp0AmtPCO0yY9UPZvBW+lACLmFH2ErpBGLpvIAk5
+         GxO/Lh4h/2TbmKqyP82AUKJb6Lhh3ZphCTQVDCKbvSovfaKgu9Yl8k6T1YT6AK02jyOH
+         6BiwXqgsh/5RSpDztuN9gkBCZywK0eYuZSXj4T32b/hjXKx4YxQEQTeR7eL8g4/nLOsO
+         gCjg==
+X-Gm-Message-State: AOJu0Yx3qccffuFXrpfX//zaM2yVe81lVQ918HuGtIwgLo85wuG0ycp3
+	S8blCYuhC6KSfa+Sngxr6e7oue9KdPSrkVo5RJpceOGqNlQsWvYGRT/kOxUaQDhD6YXr2J6M58P
+	K
+X-Google-Smtp-Source: AGHT+IG0SOQmPo5qRDBal7QxygtYYIn18Y+fBW38P7W6wYP49allz7f73GWYW/gGHJEKMW+4j43RsA==
+X-Received: by 2002:a05:6e02:1d0d:b0:36b:2ff9:9275 with SMTP id e9e14a558f8ab-36caed52f66mr30114505ab.2.1715178449983;
+        Wed, 08 May 2024 07:27:29 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id k10-20020a92c24a000000b0036c6ebd0455sm3180672ilo.88.2024.05.08.07.27.26
-        for <io-uring@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id k10-20020a92c24a000000b0036c6ebd0455sm3180672ilo.88.2024.05.08.07.27.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 May 2024 07:27:27 -0700 (PDT)
+        Wed, 08 May 2024 07:27:28 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Subject: [PATCHSET 0/2] Accept tweaks
-Date: Wed,  8 May 2024 08:25:35 -0600
-Message-ID: <20240508142725.91273-1-axboe@kernel.dk>
+Cc: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/2] io_uring/net: add IORING_ACCEPT_POLL_FIRST flag
+Date: Wed,  8 May 2024 08:25:37 -0600
+Message-ID: <20240508142725.91273-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240508142725.91273-1-axboe@kernel.dk>
+References: <20240508142725.91273-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -64,21 +69,67 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Similarly to how polling first is supported for receive, it makes sense
+to provide the same for accept. An accept operation does a lot of
+expensive setup, like allocating an fd, a socket/inode, etc. If no
+connection request is already pending, this is wasted and will just be
+cleaned up and freed, only to retry via the usual poll trigger.
 
-Add support for a forced nonblock accept attempt, returning -EAGAIN
-if nothing is there to accept rather than arm poll. This is similar to
-similarly provided "-EAGAIN is final" for other opcodes.
+Add IORING_ACCEPT_POLL_FIRST, which tells accept to only initiate the
+accept request if poll says we have something to accept.
 
-Add support for doing polling first on accept. Again similar to support
-we have for eg recv/recvmsg on relying on poll before initiating the
-first accept request, avoiding expensive setup only to tear it down and
-wait for a retry.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ include/uapi/linux/io_uring.h | 1 +
+ io_uring/net.c                | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
- include/uapi/linux/io_uring.h |  2 ++
- io_uring/net.c                | 22 ++++++++++++++++------
- 2 files changed, 18 insertions(+), 6 deletions(-)
-
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 4a645d15516f..6dbac55f8686 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -380,6 +380,7 @@ enum io_uring_op {
+  */
+ #define IORING_ACCEPT_MULTISHOT	(1U << 0)
+ #define IORING_ACCEPT_DONTWAIT	(1U << 1)
++#define IORING_ACCEPT_POLL_FIRST	(1U << 2)
+ 
+ /*
+  * IORING_OP_MSG_RING command types, stored in sqe->addr
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 7861bc8fe8b1..070dea9a4eda 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -1487,6 +1487,9 @@ void io_sendrecv_fail(struct io_kiocb *req)
+ 		req->cqe.flags |= IORING_CQE_F_MORE;
+ }
+ 
++#define ACCEPT_FLAGS	(IORING_ACCEPT_MULTISHOT | IORING_ACCEPT_DONTWAIT | \
++			 IORING_ACCEPT_POLL_FIRST)
++
+ int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ {
+ 	struct io_accept *accept = io_kiocb_to_cmd(req, struct io_accept);
+@@ -1499,7 +1502,7 @@ int io_accept_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	accept->flags = READ_ONCE(sqe->accept_flags);
+ 	accept->nofile = rlimit(RLIMIT_NOFILE);
+ 	accept->iou_flags = READ_ONCE(sqe->ioprio);
+-	if (accept->iou_flags & ~(IORING_ACCEPT_MULTISHOT | IORING_ACCEPT_DONTWAIT))
++	if (accept->iou_flags & ~ACCEPT_FLAGS)
+ 		return -EINVAL;
+ 
+ 	accept->file_slot = READ_ONCE(sqe->file_index);
+@@ -1530,6 +1533,10 @@ int io_accept(struct io_kiocb *req, unsigned int issue_flags)
+ 	struct file *file;
+ 	int ret, fd;
+ 
++	if (!(req->flags & REQ_F_POLLED) &&
++	    accept->iou_flags & IORING_ACCEPT_POLL_FIRST)
++		return -EAGAIN;
++
+ retry:
+ 	if (!fixed) {
+ 		fd = __get_unused_fd_flags(accept->flags, accept->nofile);
 -- 
-Jens Axboe
+2.43.0
 
