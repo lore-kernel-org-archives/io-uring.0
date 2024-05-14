@@ -1,104 +1,127 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A0E7FB
-	for <io-uring@vger.kernel.org>; Tue, 14 May 2024 00:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF5E1852
+	for <io-uring@vger.kernel.org>; Tue, 14 May 2024 00:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715646283; cv=none; b=TOFlVmFin5PugigbAgvlIn03L6NhhnZTDUr84bOc5nRaiclOb78HHO4oSzgOM5NcqHqEDcPA1Qz30pzkV1efQW3gANWfbsbTgbAFBT4KmQIGttFXS6xXWtap/LDuTqrVbp+15OvcYmQZmQUniDCpTyotiKnQK173n4gtoUTqpz8=
+	t=1715647733; cv=none; b=AQplrEIQXFJVaaxqlXWy5P4Ckomrvn+znKLJtMhqn3hFSGkMtfai2jelOuSSVjqA4sCMsWEAWv5wkeRGq7sL7/4+0kwu/TlFIlI2ZpgJ0/x4gTCOeUmuo2sgqBLl6f5ujVdnb9B8te4sJghDZoRTXLYed2S0dCMfOG+cPbXPiig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715646283; c=relaxed/simple;
-	bh=t0auGNVQBeIHxq0bLd1+ULfQscoiXyCuF7VCFEwNfOA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kU5PxgaOWk/DiawC4C5pNRN9HQURavSUhd6SPBKCPsNu/P6mlXSBbQrvEfRg6FS5A90EsQ5t/X6gkrk8HC0Px2pI1sr9i1taRAwfteCbCqnWQWYJ/0ncskAzDA+LIZ2JNqjpA0H3Q77zsiUHRDLy2VSIqKhh6Ipe2y4h0M0kV5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Oaqu00a2; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1715647733; c=relaxed/simple;
+	bh=NLoKTt2ugJaI96plhbt/LIs0brSW4OwXJn1R/jNhXhc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=mRwqkc7FlFi+JbDBrcZGIxy66NXAOkBSITkgenF/9iMOj7WPX+2sV/Z68BPrfR4eM4R9GBEGOk1YyXmZgQqyAp9r6ZbXW09h3uzF6OKT4an5yrQlJ3zFNvKfZzDaGFpmajtMfzrSnTIiFQRWd1+ECzLMQMwGlz437buL8YSGh6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=WkJ0px44; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Oaqu00a2"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3c9a65308d0so105850b6e.2
-        for <io-uring@vger.kernel.org>; Mon, 13 May 2024 17:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1715646280; x=1716251080; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vv9tAk9ywvBLGmojvsSeKdtPXUn5PYoMEpo4ShJp7hM=;
-        b=Oaqu00a2lAklIIbKes+bstqQQWz6bldW/LwtB2EC9PZ03xi7uWGSj2MeE55egoZVbN
-         f7NwBNNqFaT5tjd84jneU/+G9te3djtFMW5LXN+KQAS7u7Ni7ooHNUMdFhm56+2/MUgB
-         pxe2Ws/GENzaescGSYVMofJIpWd0VpNXR0ROFcflwhlgNE+mARL38w1HOqYGxF6y5HFZ
-         Fz4M/E63uiSJOVbk0+ptERbuQX/VhbEA019JQOSxyu3i7CZrLg6Cx+BKmBuRUbei51va
-         jF4K075wbTKUO4ojX0IgQJWHHaPAm8ktZUq+3VHRhVqXkJyu9fhNMB7LXwhgyxMMi6HH
-         MCKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715646280; x=1716251080;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vv9tAk9ywvBLGmojvsSeKdtPXUn5PYoMEpo4ShJp7hM=;
-        b=Iev8S8uLjKQBM/c0+gpDqtFpa8FlwgCRLuxVde9hHTC+UZw82QGgNdKlMdCGHZvZln
-         FtvMIpsNicmz5aatJWnRwnHVLGapBLwEGZ9xEHfb4gafzKJix2LpnK0v/jcetLUa0lax
-         /BIZyqd76xBjeulmVfKa7hAIqAs+GW4k/AOVeluwjzWv+0UyKerMTkdE5b7u0wegt1uj
-         6BFvz+mHzJ/eb2twbTT9TtcZvRk4ss+/vfoUYwogkTaP3lV5XzuWLkqrStCiKgx51pZS
-         8Wm8v+IkGo6ONkqSka8Zv4etpGud651ukq8pRHyrmSAJf1JDm2+tcmuyNquOScYsg+IU
-         9eFw==
-X-Gm-Message-State: AOJu0YysDmg7Uvrutjb3CMdR6k/HibW5rO+chF61yn8VJ0AMTj0GQ7To
-	ncHAcObmWmjawJqvw9Zxy+0vQxgRBiN3fZFJZNoQIIu7l75W7w1BWDRaTuNODaM=
-X-Google-Smtp-Source: AGHT+IE5noQE8R5HMrOb/xoqVoPsOKt6780883wcR/yNCRrEI5wnHZY8XPt1NoYg9tNtvafk6w0u0w==
-X-Received: by 2002:a05:6870:9724:b0:23e:6d44:f97f with SMTP id 586e51a60fabf-24172a3d677mr13744472fac.1.1715646280135;
-        Mon, 13 May 2024 17:24:40 -0700 (PDT)
-Received: from [172.21.17.150] ([50.204.89.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f4d2af2b53sm7936468b3a.151.2024.05.13.17.24.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 May 2024 17:24:39 -0700 (PDT)
-Message-ID: <b4bb08a5-8213-4b31-870a-f4f24f7a2c4f@kernel.dk>
-Date: Mon, 13 May 2024 18:24:38 -0600
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="WkJ0px44"
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240514004847epoutp013c208dec68aa1cdf04f48b1cc6443298~PNIS9ryzd1983319833epoutp01j
+	for <io-uring@vger.kernel.org>; Tue, 14 May 2024 00:48:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240514004847epoutp013c208dec68aa1cdf04f48b1cc6443298~PNIS9ryzd1983319833epoutp01j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1715647727;
+	bh=NLoKTt2ugJaI96plhbt/LIs0brSW4OwXJn1R/jNhXhc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WkJ0px44o5fraRqtEgdwbys3lM0NAVuO3sRUsErnE5dVOQiWui7mOdtASPGNSlkEV
+	 01BoB2v1F20z+DcvAjtSAQky7wMSpfl8gIKDhQ9wsff5vXe9S5FWunhJLZUh6tsqGk
+	 fJvbdLAyHMT9vdIOmyHVxuDkKvb6sDBfAmrrgxOE=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20240514004847epcas5p196de6bdc81f64f71426545b3eef4a910~PNIShRonY0782007820epcas5p1Z;
+	Tue, 14 May 2024 00:48:47 +0000 (GMT)
+Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.180]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4Vdd5T4Gs9z4x9Q2; Tue, 14 May
+	2024 00:48:45 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	C0.0A.19431.DE4B2466; Tue, 14 May 2024 09:48:45 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20240514001443epcas5p362c60c233ed2aecdb5e144099b44d9be~PMqiu7jif2237322373epcas5p3v;
+	Tue, 14 May 2024 00:14:43 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240514001443epsmtrp2a167e48f869d5f003a618b4669e02a64~PMqitxSxp0343603436epsmtrp2-;
+	Tue, 14 May 2024 00:14:43 +0000 (GMT)
+X-AuditID: b6c32a50-f57ff70000004be7-63-6642b4ed6df5
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	21.CB.08924.3FCA2466; Tue, 14 May 2024 09:14:43 +0900 (KST)
+Received: from testpc118124.samsungds.net (unknown [109.105.118.124]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240514001442epsmtip170010857f75a0f0eae1fda4e5e97bb6d~PMqhs3IVG2169521695epsmtip1U;
+	Tue, 14 May 2024 00:14:41 +0000 (GMT)
+From: Chenliang Li <cliang01.li@samsung.com>
+To: anuj1072538@gmail.com
+Cc: asml.silence@gmail.com, axboe@kernel.dk, cliang01.li@samsung.com,
+	gost.dev@samsung.com, io-uring@vger.kernel.org, joshi.k@samsung.com,
+	kundan.kumar@samsung.com, peiwei.li@samsung.com
+Subject: Re: [PATCH v3 4/5] io_uring/rsrc: enable multi-hugepage buffer
+ coalescing
+Date: Tue, 14 May 2024 08:14:38 +0800
+Message-Id: <20240514001438.566160-1-cliang01.li@samsung.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CACzX3At7k+kspDrzz-=HhFGHpcgi+O8S6D+fPND7imfiodHTOg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHSET RFC 0/4] Propagate back queue status on accept
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org
-References: <20240509180627.204155-1-axboe@kernel.dk>
- <20240513171347.711741c7@kernel.org>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20240513171347.711741c7@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprPJsWRmVeSWpSXmKPExsWy7bCmhu7bLU5pBjunKFh8/PqbxWLOqm2M
+	Fqvv9rNZnP77mMXi5oGdTBbvWs+xWBz9/5bN4lf3XUaLrV++slo828tpcXbCB1YHbo+ds+6y
+	e1w+W+rRt2UVo8fnTXIBLFHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJ
+	uam2Si4+AbpumTlANykplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCkwK9IoTc4tL
+	89L18lJLrAwNDIxMgQoTsjN2f1jEWnCYuWJ57zPWBsZ3TF2MnBwSAiYSJ7vmMnYxcnEICexh
+	lFj3dg47hPOJUaL1zA9WCOcbo8TqAwvhWrbOuw9VtZdRYu6PfhYI5xejRMfOa+wgVWwCOhK/
+	V/xiAbFFBCQldn48CFbELLCPUeLDzFtgCWGBEIndP/+BjWURUJX4PRviKl4BW4mrF06yQ6yT
+	l9h/8CwziM0pEChxtXEWK0SNoMTJmU/A5jAD9XYfecoEYctLNG+dzQyyTEKgk0NiwfQzjBCD
+	XCR+bpnNAmELS7w6vgVqgZTE53d72boYOYDsYoll6+QgelsYJd6/mwPVay3x78oeqF5Ziamn
+	1kEt45Po/f0EGi68EjvmwdiqEhcOboOaLy2xdsJWZoj5HhJ39gaAmEICSxglprNNYFSYheSb
+	WUi+mYXkmwWMzKsYpVILinPTU5NNCwx181LL4fGcnJ+7iRGcUrUCdjCu3vBX7xAjEwfjIUYJ
+	DmYlEV6HQvs0Id6UxMqq1KL8+KLSnNTiQ4ymwACfyCwlmpwPTOp5JfGGJpYGJmZmZiaWxmaG
+	SuK8r1vnpggJpCeWpGanphakFsH0MXFwSjUwmRlds2N9nqG3Q/jK/uh977MehnLGyj1e2vrG
+	+4zQtt7fvr+nVzzPmhEge8Dx9Q+vGH/lI2sSdsvm9jOmBstluTPaRX2Lv3IkZ/WSxZmh7cZS
+	Qgef9sf/jfz17uvDJ9+NTC88rDkpHSD1ql3nzoMZ1yftqVET3p6Qu22qSd2Ouks71bU07giV
+	20xmiaqfW+SdbX5f1nGJ7pQPbFtifuvLfvq8oSH49faDZZxJ9hdTWU+75WSy2XRu+Prp2f9C
+	v8e3nl79vkHgZZA4l0TR2T2pnbv5Izd07be9FWIQ/DD80f2zs9lLpnR9ejVLdftLvcp7r7j3
+	eCvvOfLyIrdrgjyP+60Zc790KvnGvKn6V/HIQYmlOCPRUIu5qDgRADWSRQQyBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLLMWRmVeSWpSXmKPExsWy7bCSnO7nNU5pBq1PmC0+fv3NYjFn1TZG
+	i9V3+9ksTv99zGJx88BOJot3redYLI7+f8tm8av7LqPF1i9fWS2e7eW0ODvhA6sDt8fOWXfZ
+	PS6fLfXo27KK0ePzJrkAligum5TUnMyy1CJ9uwSujN0fFrEWHGauWN77jLWB8R1TFyMnh4SA
+	icTWeffZuxi5OIQEdjNKvFs1iwUiIS3RcaiVHcIWllj57zlU0Q9GiStnlrCBJNgEdCR+r/gF
+	1iAiICmx8+NBFpAiZoETjBL990+CdQsLBEn0PpvPDGKzCKhK/J4NsZpXwFbi6oWTUBvkJfYf
+	PAtWwykQKHG1cRYriC0kECDxZ+YONoh6QYmTM5+ALWMWUJboOrOMDcKWl2jeOpt5AqPgLCRl
+	s5CUzUJStoCReRWjZGpBcW56brFhgWFearlecWJucWleul5yfu4mRnCMaGnuYNy+6oPeIUYm
+	DsZDjBIczEoivA6F9mlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEecVf9KYICaQnlqRmp6YWpBbB
+	ZJk4OKUamAQeRGt/jd1t2rVvoUJ4UpZ7832JnwXzJv4p26StzJNtX+Wmed8o7SUnn4Xc/bVT
+	rDeIxBQbav0/8DLsWqdNy+O6umVNJ40+frKNPq758k9Cls6ce+cFNA57b8nd0XZXaW0gi8Ca
+	C8s2pmld/pC0+1Hdpt81U5YzNsjWh36OZU83n66/sNBEpaMn9gDj4u1e5oeCr4Ytbgk1fh6c
+	JaPUufCdr8yOtauK3z8/ZmLOURnX9v5D7q3TiyZWRKuJC8t8KRZR3TZlMtvh0OL9J3vj2Zzz
+	SvbtlMv4nplvwp2TEby2x69drU2E69fWrM3/TjyfeL3XtmfRglPnGT6JVDr8ieJvTCisVVKa
+	FcLzMsBJiaU4I9FQi7moOBEAdZVhxgADAAA=
+X-CMS-MailID: 20240514001443epcas5p362c60c233ed2aecdb5e144099b44d9be
+X-Msg-Generator: CA
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240514001443epcas5p362c60c233ed2aecdb5e144099b44d9be
+References: <CACzX3At7k+kspDrzz-=HhFGHpcgi+O8S6D+fPND7imfiodHTOg@mail.gmail.com>
+	<CGME20240514001443epcas5p362c60c233ed2aecdb5e144099b44d9be@epcas5p3.samsung.com>
 
-On 5/13/24 6:13 PM, Jakub Kicinski wrote:
-> On Thu,  9 May 2024 12:00:25 -0600 Jens Axboe wrote:
->> With io_uring, one thing we can do is tell userspace whether or not
->> there's more data left in a socket after a receive is done. This is
->> useful for applications to now, and it also helps make multishot receive
->> requests more efficient by eliminating that last failed retry when the
->> socket has no more data left. This is propagated by setting the
->> IORING_CQE_F_SOCK_NONEMPTY flag, and is driven by setting
->> msghdr->msg_get_inq and having the protocol fill out msghdr->msg_inq in
->> that case.
+On Mon, 13 May 2024 17:41:14 +0530, Anuj Gupta wrote:
+> On Mon, May 13, 2024 at 2:04 PM Chenliang Li <cliang01.li@samsung.com> wrote:
 >>
->> For accept, there's a similar issue in that we'd like to know if there
->> are more connections to accept after the current one has been accepted.
->> Both because we can tell userspace about it, but also to drive multishot
->> accept retries more efficiently, similar to recv/recvmsg.
->>
->> This series starts by changing the proto/proto_ops accept prototypes
->> to eliminate flags/errp/kern and replace it with a structure that
->> encompasses all of them.
-> 
-> Acked-by: Jakub Kicinski <kuba@kernel.org>
-> 
-> Feel free to submit for 6.10, or LMK if you want me to send the first
-> 3 to Linus.
+>> Modify the original buffer registration path to expand the
+>> one-hugepage coalescing feature to work with multi-hugepage
+>> buffers. Separated from previous patches to make it more
+>> easily reviewed.
 
-Thanks! I'll send them in later this merge window (post the net-next
-changes).
+> The last line should not be a part of the commit description IMO.
 
--- 
-Jens Axboe
-
+Will delete that. Thanks.
