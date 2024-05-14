@@ -1,68 +1,69 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02863125A9
-	for <io-uring@vger.kernel.org>; Tue, 14 May 2024 07:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788F3125A9
+	for <io-uring@vger.kernel.org>; Tue, 14 May 2024 08:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715673454; cv=none; b=dJSLxDjd96Y3LMtIoDu2MiYZtnN9MoDXpNpbwQHJfNI+Dp/htW+pE/+hTUJwxB+rnZayYZgj90AS4S/rg1IZKJd+/jDpSBCkkxIsVXcg6CHfrH3GbyWSsTDK/NSY2xqBlhF7B3xesprpLFe07QDOcojpQmdTu+AqWvtGcBACkjk=
+	t=1715673695; cv=none; b=cEoJ6JXeKj50QV7vz+WWhYCmTOpizZIEZp+3nzFVfVpH3LnyYHaO1OSTRwjJXdaucATd7/SYbfgrN8HNUfwlYq4nQ6Mjo48cUi4qdrebLn65PMHtv/c/oN2Uy3OiXPckCCXBnOHAjOZgirna8UuHISpbTA23F9gKzx8h8YBoa7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715673454; c=relaxed/simple;
-	bh=GgB79gShNLQoKk+gewD6WVXUhfoRMFUqTI993fcouUM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=ZlGJX6R/heMdawzonxHQN+VKfXUatRY8xt+Dy+BQhc20fV9gPiGcF5ncgG7kz1FNplZDO6cjOD15YZkL6FWiDtPN8V920o/uOFSh39BYzcGA/GJ0xXQyC4GJ/op70zyVVJGxd6ny8ThuBdRh576N+IRA9M8gc80D2VILZjMYUMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=faID5NVQ; arc=none smtp.client-ip=203.254.224.24
+	s=arc-20240116; t=1715673695; c=relaxed/simple;
+	bh=Bn43btKuiH6buNWIn4YsAt+J+q3EmB8CcDq/4sdW4Cs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=QtnlcgSINQWoUDu+FNPJQS/qv8B32b+w5CwaDV3kvYDJXVQMSg0RBrmcR/kdp1YCarzmIPlYkwHZokxZmK+tZat/b5b9Cbl1A5zBYF2hGXFsS0Mf+i3+go415hGxkXmb9MZ07vSyO86FxeQ/Vk7z/twU1lr+W7sOB/6v5zCEFGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=JcbfG/Ub; arc=none smtp.client-ip=203.254.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="faID5NVQ"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="JcbfG/Ub"
 Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240514075728epoutp0114586bcf4ab64ad7c398ed08b3e68b08~PS_lb22y61756217562epoutp01p
-	for <io-uring@vger.kernel.org>; Tue, 14 May 2024 07:57:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240514075728epoutp0114586bcf4ab64ad7c398ed08b3e68b08~PS_lb22y61756217562epoutp01p
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240514080130epoutp0409c2172346d920b7c2e885fc18726a29~PTCG1AKyI1378613786epoutp04J
+	for <io-uring@vger.kernel.org>; Tue, 14 May 2024 08:01:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240514080130epoutp0409c2172346d920b7c2e885fc18726a29~PTCG1AKyI1378613786epoutp04J
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1715673448;
-	bh=luky4jv5sJLLkurx2YzjEwBLcK+91Q/SXM6pUFX2CzU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=faID5NVQXC5L4sKV0XgFDVte5/tNCHCdAnXo0fFrQAiO6/9tNhyGdLLge20+ikYO2
-	 JtI70+FRbpth5dQ3MzSsAZkGNBbzulY4LwFsCn+DpSaPrJTDP+nFU+FzlDsEH1uPDb
-	 Nl6FXff4jOEEPCkP9Mb0H9+lc9h3YUnVHaByS2zw=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20240514075728epcas5p3c089ac80a41cadc715105eb9918be4f7~PS_k7Biw11959419594epcas5p3M;
-	Tue, 14 May 2024 07:57:28 +0000 (GMT)
-Received: from epsmges5p1new.samsung.com (unknown [182.195.38.178]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4Vdpc624ytz4x9QF; Tue, 14 May
-	2024 07:57:26 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	53.7E.09666.66913466; Tue, 14 May 2024 16:57:26 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240514075457epcas5p10f02f1746f957df91353724ec859664f~PS8YdLRbi2658726587epcas5p1v;
-	Tue, 14 May 2024 07:54:57 +0000 (GMT)
+	s=mail20170921; t=1715673690;
+	bh=BX6SHsh56ZWjckh1DjCA23/Y4maEzBj6vKCsZkwt7mY=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=JcbfG/UbJlh4iSzF4LU74KqnKVmweVQ0+BZ/vj99+gjUQcYLxeq2ALyOuZFxHemMa
+	 I6TZ0/UIhen66v/F8+4bpA3c1Pow6gG3XaKI9C/bEch8UBHsd1iD//nppxfeVrrqFA
+	 poRY4bd//2Z7yKylynbjCJf5DlbLo8qXQqcBieXY=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20240514080130epcas5p2df08c4c811618847f9d97fbcca0cbc58~PTCGUmth90805408054epcas5p26;
+	Tue, 14 May 2024 08:01:30 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.180]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4Vdphm0ptjz4x9Q0; Tue, 14 May
+	2024 08:01:28 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	A0.0B.08600.75A13466; Tue, 14 May 2024 17:01:28 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20240514080007epcas5p2b597ff212998cfe8a59332a8b320ec60~PTA48BUQG0233102331epcas5p2d;
+	Tue, 14 May 2024 08:00:07 +0000 (GMT)
 Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240514075457epsmtrp1c0a35af7cd0ac40b6171404cf6b7e852~PS8YcZ3wx0538105381epsmtrp1D;
-	Tue, 14 May 2024 07:54:57 +0000 (GMT)
-X-AuditID: b6c32a49-cefff700000025c2-b5-664319666521
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240514080007epsmtrp23e7f4e3b8417840e9b98e7077eeab1ee~PTA46KFxc1048410484epsmtrp2Q;
+	Tue, 14 May 2024 08:00:07 +0000 (GMT)
+X-AuditID: b6c32a44-921fa70000002198-3b-66431a57c2f6
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
 	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	61.D2.08390.1D813466; Tue, 14 May 2024 16:54:57 +0900 (KST)
-Received: from testpc118124.samsungds.net (unknown [109.105.118.124]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240514075456epsmtip2012dda6b7119e958e40e1700be8db43f~PS8XYIV0j0412004120epsmtip2R;
-	Tue, 14 May 2024 07:54:56 +0000 (GMT)
-From: Chenliang Li <cliang01.li@samsung.com>
-To: axboe@kernel.dk, asml.silence@gmail.com
-Cc: io-uring@vger.kernel.org, peiwei.li@samsung.com, joshi.k@samsung.com,
-	kundan.kumar@samsung.com, anuj20.g@samsung.com, gost.dev@samsung.com,
-	Chenliang Li <cliang01.li@samsung.com>
-Subject: [PATCH v4 1/4] io_uring/rsrc: add hugepage buffer coalesce helpers
-Date: Tue, 14 May 2024 15:54:41 +0800
-Message-Id: <20240514075444.590910-2-cliang01.li@samsung.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240514075444.590910-1-cliang01.li@samsung.com>
+	55.83.08390.60A13466; Tue, 14 May 2024 17:00:06 +0900 (KST)
+Received: from testpc11818.samsungds.net (unknown [109.105.118.18]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20240514080005epsmtip134f7e78f00960d45feb422a8149ea24f~PTA3e2VPp0969409694epsmtip1t;
+	Tue, 14 May 2024 08:00:05 +0000 (GMT)
+From: hexue <xue01.he@samsung.com>
+To: axboe@kernel.dk
+Cc: asml.silence@gmail.com, io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org, peiwei.li@samsung.com, joshi.k@samsung.com,
+	kundan.kumar@samsung.com, anuj20.g@samsung.com, ruyi.zhang@samsung.com,
+	wenwen.chen@samsung.com, xiaobing.li@samsung.com, cliang01.li@samsung.com,
+	hexue <xue01.he@samsung.com>
+Subject: [PATCH v4] io_uring: releasing CPU resources when polling
+Date: Tue, 14 May 2024 15:59:59 +0800
+Message-Id: <20240514075959.734682-1-xue01.he@samsung.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,177 +71,339 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprDJsWRmVeSWpSXmKPExsWy7bCmlm6apHOawZPZPBZNE/4yW8xZtY3R
-	YvXdfjaL038fs1jcPLCTyeJd6zkWi6P/37JZ/Oq+y2ix9ctXVotnezktzk74wOrA7bFz1l12
-	j8tnSz36tqxi9Pi8SS6AJSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8x
-	N9VWycUnQNctMwfoJiWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgUmBXnFibnFp
-	XrpeXmqJlaGBgZEpUGFCdsa86TtYC47KVVxdeY21gfGYRBcjJ4eEgInE6S0TmUFsIYHdjBJT
-	Ztd2MXIB2Z8YJR48ucYG4XxjlPj27z07TMeH05NYIRJ7GSX+/F/KDuH8YpTY8PgbE0gVm4CO
-	xO8Vv1hAbBEBbYnXj6eC2cwCuxglFp6TArGFBbwl5k+6wQZiswioSpz+dAhsA6+ArcTf7sVM
-	ENvkJfYfPAt0HwcHp4CdxKkZLhAlghInZz6BGikv0bx1NjPIDRICP9klplw+BHWpi0Rz7x82
-	CFtY4tXxLVBxKYmX/W3sIDMlBIollq2Tg+htYZR4/24OI0SNtcS/K3tYQGqYBTQl1u/ShwjL
-	Skw9tY4JYi+fRO/vJ1Bn8krsmAdjq0pcOLgNapW0xNoJW5khbA+Jn/vvsEDCaiKjxL+Tz5kn
-	MCrMQvLPLCT/zEJYvYCReRWjZGpBcW56arFpgWFeajk8kpPzczcxgpOplucOxrsPPugdYmTi
-	YDzEKMHBrCTC61BonybEm5JYWZValB9fVJqTWnyI0RQY3hOZpUST84HpPK8k3tDE0sDEzMzM
-	xNLYzFBJnPd169wUIYH0xJLU7NTUgtQimD4mDk6pBibHmzeKjgecfHcgyOmMpfMME/UzK3cq
-	sfX2/2+9lZFRdHXe42kCG30u/yxOvBc/67nWg1XXS7qLhbQ6limuzZtxPvTVjbfKEwM/Srzf
-	2/Y0/XqxT8YHLh/J+SmT2G8mJbFN+sZm/q/z5BHNlwc3vF3FWHr9QNoq28MVRsleZXeuP3s5
-	7WiCz5Nf9050MgRtu8tw1tj546313bkRddfNV/yW+H0r65jjD//UYj7nKUzNLmVOC/wPfLkm
-	fnMql/HnfXefXbC95+WSeSw3dlb+5C3PAhcs1lQr3DHFiPHPSvc7eVuXz1rBYCPO8OjqM1HT
-	9OebjMWW5x+5qnZ+n/6VLUc2TZPy4BdpPzQpYXe+T/uyy0osxRmJhlrMRcWJAMQobpEvBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrELMWRmVeSWpSXmKPExsWy7bCSvO5FCec0g2sveSyaJvxltpizahuj
-	xeq7/WwWp/8+ZrG4eWAnk8W71nMsFkf/v2Wz+NV9l9Fi65evrBbP9nJanJ3wgdWB22PnrLvs
-	HpfPlnr0bVnF6PF5k1wASxSXTUpqTmZZapG+XQJXxrzpO1gLjspVXF15jbWB8ZhEFyMnh4SA
-	icSH05NYQWwhgd2MEs0ThSHi0hIdh1rZIWxhiZX/ngPZXEA1PxglJrz5xgySYBPQkfi94hdL
-	FyMHh4iArkTjXQWQGmaBQ0BzNjQzgtQIC3hLzJ90gw3EZhFQlTj96RDYUF4BW4m/3YuZIBbI
-	S+w/eJYZZA6ngJ3EqRkuEPfYSmz+cxyqXFDi5MwnLCA2M1B589bZzBMYBWYhSc1CklrAyLSK
-	UTK1oDg3PbfYsMAoL7Vcrzgxt7g0L10vOT93EyM42LW0djDuWfVB7xAjEwcj0M0czEoivA6F
-	9mlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeb+97k0REkhPLEnNTk0tSC2CyTJxcEo1MCk8P7vZ
-	R7k25fPbzUdkZdQX8au/LFsykXv7J9ONgbKHrnw9Ok897r3EzROhj2PUhT1v+TR3OEQy+T48
-	y3BJemVzl/IVnfoaU2ZdrTv1nOxSjnfl1n/976B6KZHv547m8/MEGF3ef2pd8cJdsONE/430
-	hIInzz5uNJrS5hd/9KTk0y+vfpVE9OzivJTxMdv63PWLbhcXLg3SvxVf1yS6V8HlpNVuxR2T
-	RTSkuLu2RS368dZrUdKXLzWbxXMXqj+Rb3tslu7L/kPtdNemwhseM5jFFr4pvinxp9v73C65
-	lrhnWuJvn+5/uVTikdmlo6JCASYurbvqqpkMQyRCJBaq1zdcPqDeritc78vw4mFJlRJLcUai
-	oRZzUXEiAOh6ta3lAgAA
-X-CMS-MailID: 20240514075457epcas5p10f02f1746f957df91353724ec859664f
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmpm6ElHOawfzpTBZNE/4yW8xZtY3R
+	YvXdfjaL038fs1i8az3HYnH0/1s2i1/ddxkttn75ympxedccNotnezktvhz+zm5xdsIHVoup
+	W3YwWXS0XGa06Lpwis2B32PnrLvsHpfPlnr0bVnF6PF5k1wAS1S2TUZqYkpqkUJqXnJ+SmZe
+	uq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QnUoKZYk5pUChgMTiYiV9O5ui/NKS
+	VIWM/OISW6XUgpScApMCveLE3OLSvHS9vNQSK0MDAyNToMKE7IwVXW/ZCxa4Vyx7cJGtgfGa
+	ZRcjJ4eEgInEm2nH2UFsIYHdjBITlkd2MXIB2Z8YJeYdOMsG4XxjlFjbMYkVpuN+y0sWiMRe
+	RokPP6YzQjg/GCU2H77KBlLFJqAksX/LB0YQW0RAWGJ/RytYB7PAdiaJd6u2AiU4OIQFnCSe
+	T88GqWERUJWYeWoZ2B28AlYSsx5MZILYJi9xs2s/M0RcUOLkzCcsIDYzULx562xmkJkSAo0c
+	Eh9PfWOBaHCR+Le6nRHCFpZ4dXwLO4QtJfH53V42CDtfYvL39VA1NRLrNr+D6rWW+HdlDwvI
+	bcwCmhLrd+lDhGUlpp5axwSxl0+i9/cTqNt4JXbMg7GVJJYcWQE1UkLi94RF0NDykNj+8TML
+	JHxjJd6fa2WbwCg/C8k7s5C8Mwth8wJG5lWMkqkFxbnpqcmmBYZ5qeXwiE3Oz93ECE6uWi47
+	GG/M/6d3iJGJg/EQowQHs5IIr0OhfZoQb0piZVVqUX58UWlOavEhRlNgGE9klhJNzgem97yS
+	eEMTSwMTMzMzE0tjM0Mlcd7XrXNThATSE0tSs1NTC1KLYPqYODilGpguBcxfo7i0eGrbxHZm
+	a5MrZqbLc5u9OnxlLptvqch3vbH8xsQb+70kvWtVE/ZYpRTdFf4Y2NocxFtXtNFi+uRIZwa2
+	3+v/BgqfUMm488WE6f9b2xur5BaemMgSMGO1Zq5tyOUXM/Y+0TS3N5E323LeNeRqyrJvbKwL
+	TWp9v4bOP/7F95I6j7/aR9mLhppScdtDV+65phcx6/YHl6kOtxev+Lh0WWB5/b69os5tsnOt
+	5bMW2+xtsDkQcZ1JhNfv4KkJyt8bvGfc3JDzwj3Ij9f5Wc8ED7mtKQeX6nyYdG6OekvRm4bD
+	6R/uOav/bzGvM402l/5nzH8h9nfBnp+LgjkmLLiosrkjINKwWmzVhjwlluKMREMt5qLiRABr
+	grHjNwQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrALMWRmVeSWpSXmKPExsWy7bCSnC6blHOawfr7ZhZNE/4yW8xZtY3R
+	YvXdfjaL038fs1i8az3HYnH0/1s2i1/ddxkttn75ympxedccNotnezktvhz+zm5xdsIHVoup
+	W3YwWXS0XGa06Lpwis2B32PnrLvsHpfPlnr0bVnF6PF5k1wASxSXTUpqTmZZapG+XQJXxoqu
+	t+wFC9wrlj24yNbAeM2yi5GTQ0LAROJ+y0uWLkYuDiGB3YwS+7adY4ZISEjsePSHFcIWllj5
+	7zk7RNE3Romz054zgSTYBJQk9m/5wAhiiwAV7e9oBZvELHCUSWJ601OgBAeHsICTxPPp2SA1
+	LAKqEjNPLWMHsXkFrCRmPZjIBLFAXuJm135miLigxMmZT1hAbGagePPW2cwTGPlmIUnNQpJa
+	wMi0ilEytaA4Nz232LDAKC+1XK84Mbe4NC9dLzk/dxMjONC1tHYw7ln1Qe8QIxMH4yFGCQ5m
+	JRFeh0L7NCHelMTKqtSi/Pii0pzU4kOM0hwsSuK83173pggJpCeWpGanphakFsFkmTg4pRqY
+	qhYH1Dh8rlj8bHGCqu19hsweUf/LkwVlI5zeFP8P4r1Rk8wZHJd3u5XpSvmpCdZBxgtXaTG6
+	rrghZnPq+YqTi58taI9esefkrBD1yOvSfEaljflVG75POib54fzyQ9KNb67xW1bkrLTt8eVq
+	8vggf1Nrnoj9k0ti+26EzrnBuvj5z98XFaZFHtrwX8lpafsTMcduC7WSXRVfxE3vffl+pMhv
+	Q4LnjwOR53yj/NV3/s/i9vL7bMdypO/M3WrGUyeX2apuEUpb3l71TM6Bk+cHc9LLnw4TIuYd
+	v3l75e/pua88l0hXft2dHehrJnD0s4L4LNGcC/Huv+Zpxs/+Zsmzan3S4+2M87kXlfB+SNUr
+	VGIpzkg01GIuKk4EAKXYkEHjAgAA
+X-CMS-MailID: 20240514080007epcas5p2b597ff212998cfe8a59332a8b320ec60
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: REQ_APPROVE
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20240514075457epcas5p10f02f1746f957df91353724ec859664f
-References: <20240514075444.590910-1-cliang01.li@samsung.com>
-	<CGME20240514075457epcas5p10f02f1746f957df91353724ec859664f@epcas5p1.samsung.com>
+X-CMS-RootMailID: 20240514080007epcas5p2b597ff212998cfe8a59332a8b320ec60
+References: <CGME20240514080007epcas5p2b597ff212998cfe8a59332a8b320ec60@epcas5p2.samsung.com>
 
-Introduce helper functions to check whether a buffer can
-be coalesced or not, and gather folio data for later use.
+This patch is intended to release the CPU resources of io_uring in
+polling mode. When IO is issued, the program immediately polls for
+check completion, which is a waste of CPU resources when IO commands
+are executed on the disk.
 
-The coalescing optimizes time and space consumption caused
-by mapping and storing multi-hugepage fixed buffers.
+I add the hybrid polling feature in io_uring, enables polling to
+release a portion of CPU resources without affecting block layer.
 
-A coalescable multi-hugepage buffer should fully cover its folios
-(except potentially the first and last one), and these folios should
-have the same size. These requirements are for easier later process,
-also we need same size'd chunks in io_import_fixed for fast iov_iter
-adjust.
+The CPU optimization in peak workload of patch is tested as follows:
+  set 8 poll queues
+  all CPU utilization of original polling is 100% for per CPU, after
+  optimization, the CPU utilization drop a lot (per CPU);
 
-Signed-off-by: Chenliang Li <cliang01.li@samsung.com>
+   read(128k, QD64, 1Job)     37%   write(128k, QD64, 1Job)     40%
+   randread(4k, QD64, 16Job)  52%   randwrite(4k, QD64, 16Job)  12%
+
+  Compared to original polling, the optimised performance reduction
+  with peak workload within 1%.
+
+   read  0.29%     write  0.51%    randread  0.09%    randwrite  0%
+
+Signed-off-by: hexue <xue01.he@samsung.com>
+
 ---
- io_uring/rsrc.c | 78 +++++++++++++++++++++++++++++++++++++++++++++++++
- io_uring/rsrc.h | 10 +++++++
- 2 files changed, 88 insertions(+)
 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 65417c9553b1..d08224c0c5b0 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -871,6 +871,84 @@ static int io_buffer_account_pin(struct io_ring_ctx *ctx, struct page **pages,
- 	return ret;
- }
- 
-+static bool __io_sqe_buffer_try_coalesce(struct page **pages, int nr_pages,
-+					 struct io_imu_folio_data *data)
-+{
-+	struct folio *folio = page_folio(pages[0]);
-+	unsigned int count = 1;
-+	int i;
-+
-+	data->nr_pages_mid = folio_nr_pages(folio);
-+	if (data->nr_pages_mid == 1)
-+		return false;
-+
-+	data->folio_shift = folio_shift(folio);
-+	data->folio_size = folio_size(folio);
-+	data->nr_folios = 1;
-+	/*
-+	 * Check if pages are contiguous inside a folio, and all folios have
-+	 * the same page count except for the head and tail.
-+	 */
-+	for (i = 1; i < nr_pages; i++) {
-+		if (page_folio(pages[i]) == folio &&
-+			pages[i] == pages[i-1] + 1) {
-+			count++;
-+			continue;
-+		}
-+
-+		if (data->nr_folios == 1)
-+			data->nr_pages_head = count;
-+		else if (count != data->nr_pages_mid)
-+			return false;
-+
-+		folio = page_folio(pages[i]);
-+		if (folio_size(folio) != data->folio_size)
-+			return false;
-+
-+		count = 1;
-+		data->nr_folios++;
-+	}
-+	if (data->nr_folios == 1)
-+		data->nr_pages_head = count;
-+
-+	return true;
-+}
-+
-+static bool io_sqe_buffer_try_coalesce(struct page **pages, int nr_pages,
-+				       struct io_imu_folio_data *data)
-+{
-+	int i, j;
-+
-+	if (nr_pages <= 1 ||
-+		!__io_sqe_buffer_try_coalesce(pages, nr_pages, data))
-+		return false;
-+
-+	/*
-+	 * The pages are bound to the folio, it doesn't
-+	 * actually unpin them but drops all but one reference,
-+	 * which is usually put down by io_buffer_unmap().
-+	 * Note, needs a better helper.
-+	 */
-+	if (data->nr_pages_head > 1)
-+		unpin_user_pages(&pages[1], data->nr_pages_head - 1);
-+
-+	j = data->nr_pages_head;
-+	nr_pages -= data->nr_pages_head;
-+	for (i = 1; i < data->nr_folios; i++) {
-+		unsigned int nr_unpin;
-+
-+		nr_unpin = min_t(unsigned int, nr_pages - 1,
-+					data->nr_pages_mid - 1);
-+		if (nr_unpin == 0)
-+			break;
-+		unpin_user_pages(&pages[j+1], nr_unpin);
-+		j += data->nr_pages_mid;
-+		nr_pages -= data->nr_pages_mid;
-+	}
-+
-+	return true;
-+}
-+
- static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
- 				  struct io_mapped_ubuf **pimu,
- 				  struct page **last_hpage)
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index c032ca3436ca..b2a9d66b76dd 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -50,6 +50,16 @@ struct io_mapped_ubuf {
- 	struct bio_vec	bvec[] __counted_by(nr_bvecs);
+changes:
+v3:
+ - Simplified the patch comments
+
+v2:
+ - extend hybrid poll to async polled io
+
+v1:
+ - initial version
+---
+ include/linux/io_uring_types.h |  14 ++++
+ include/uapi/linux/io_uring.h  |   1 +
+ io_uring/io_uring.c            |   4 +-
+ io_uring/io_uring.h            |   3 +
+ io_uring/rw.c                  | 115 ++++++++++++++++++++++++++++++++-
+ 5 files changed, 135 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 854ad67a5f70..3a75b9904326 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -224,6 +224,11 @@ struct io_alloc_cache {
+ 	size_t			elem_size;
  };
  
-+struct io_imu_folio_data {
-+	/* Head folio can be partially included in the fixed buf */
-+	unsigned int	nr_pages_head;
-+	/* For non-head/tail folios, has to be fully included */
-+	unsigned int	nr_pages_mid;
-+	unsigned int	nr_folios;
-+	unsigned int	folio_shift;
-+	size_t		folio_size;
++struct iopoll_info {
++	long		last_runtime;
++	long		last_irqtime;
 +};
 +
- void io_rsrc_node_ref_zero(struct io_rsrc_node *node);
- void io_rsrc_node_destroy(struct io_ring_ctx *ctx, struct io_rsrc_node *ref_node);
- struct io_rsrc_node *io_rsrc_node_alloc(struct io_ring_ctx *ctx);
+ struct io_ring_ctx {
+ 	/* const or read-mostly hot data */
+ 	struct {
+@@ -421,6 +426,7 @@ struct io_ring_ctx {
+ 	unsigned short			n_sqe_pages;
+ 	struct page			**ring_pages;
+ 	struct page			**sqe_pages;
++	struct xarray		poll_array;
+ };
+ 
+ struct io_tw_state {
+@@ -571,6 +577,12 @@ static inline void io_kiocb_cmd_sz_check(size_t cmd_sz)
+ )
+ #define cmd_to_io_kiocb(ptr)	((struct io_kiocb *) ptr)
+ 
++struct hy_poll_time {
++	int		poll_state;
++	struct timespec64		iopoll_start;
++	struct timespec64		iopoll_end;
++};
++
+ struct io_kiocb {
+ 	union {
+ 		/*
+@@ -641,6 +653,8 @@ struct io_kiocb {
+ 		u64			extra1;
+ 		u64			extra2;
+ 	} big_cqe;
++	/* for hybrid iopoll */
++	struct hy_poll_time		*hy_poll;
+ };
+ 
+ struct io_overflow_cqe {
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 7a673b52827b..0038cdfec18f 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -198,6 +198,7 @@ enum {
+  * Removes indirection through the SQ index array.
+  */
+ #define IORING_SETUP_NO_SQARRAY		(1U << 16)
++#define IORING_SETUP_HY_POLL	(1U << 17)
+ 
+ enum io_uring_op {
+ 	IORING_OP_NOP,
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index cd9a137ad6ce..2c14768bbe27 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -311,6 +311,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 		goto err;
+ 
+ 	ctx->flags = p->flags;
++	xa_init(&ctx->poll_array);
+ 	atomic_set(&ctx->cq_wait_nr, IO_CQ_WAKE_INIT);
+ 	init_waitqueue_head(&ctx->sqo_sq_wait);
+ 	INIT_LIST_HEAD(&ctx->sqd_list);
+@@ -2921,6 +2922,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+ 	kfree(ctx->cancel_table_locked.hbs);
+ 	kfree(ctx->io_bl);
+ 	xa_destroy(&ctx->io_bl_xa);
++	xa_destroy(&ctx->poll_array);
+ 	kfree(ctx);
+ }
+ 
+@@ -4050,7 +4052,7 @@ static long io_uring_setup(u32 entries, struct io_uring_params __user *params)
+ 			IORING_SETUP_SQE128 | IORING_SETUP_CQE32 |
+ 			IORING_SETUP_SINGLE_ISSUER | IORING_SETUP_DEFER_TASKRUN |
+ 			IORING_SETUP_NO_MMAP | IORING_SETUP_REGISTERED_FD_ONLY |
+-			IORING_SETUP_NO_SQARRAY))
++			IORING_SETUP_NO_SQARRAY | IORING_SETUP_HY_POLL))
+ 		return -EINVAL;
+ 
+ 	return io_uring_create(entries, &p, params);
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index d5495710c178..72d6a4c3b46d 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -125,6 +125,9 @@ static inline void io_req_task_work_add(struct io_kiocb *req)
+ 	__io_req_task_work_add(req, 0);
+ }
+ 
++/* if sleep time less than 1us, then do not do the schedule op */
++#define MIN_SCHETIME 1000
++
+ #define io_for_each_link(pos, head) \
+ 	for (pos = (head); pos; pos = pos->link)
+ 
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index d5e79d9bdc71..29c7ce23ed71 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -713,6 +713,46 @@ static bool need_complete_io(struct io_kiocb *req)
+ 		S_ISBLK(file_inode(req->file)->i_mode);
+ }
+ 
++void init_hybrid_poll(struct io_ring_ctx *ctx, struct io_kiocb *req)
++{
++	/*
++	 * In multiple concurrency, a thread may operate several files
++	 * under different file systems, the inode numbers may be
++	 * duplicated. Each device has a different IO command processing
++	 * capability, so using device number to record the running time
++	 * of device
++	 */
++	u32 index = req->file->f_inode->i_rdev;
++	struct iopoll_info *entry = xa_load(&ctx->poll_array, index);
++	struct hy_poll_time *hpt = kmalloc(sizeof(struct hy_poll_time), GFP_KERNEL);
++
++	/* if alloc fail, go to regular poll */
++	if (!hpt) {
++		ctx->flags &= ~IORING_SETUP_HY_POLL;
++		return;
++	}
++	hpt->poll_state = 0;
++	req->hy_poll = hpt;
++
++	if (!entry) {
++		entry = kmalloc(sizeof(struct iopoll_info), GFP_KERNEL);
++		if (!entry) {
++			ctx->flags &= ~IORING_SETUP_HY_POLL;
++			return;
++		}
++		entry->last_runtime = 0;
++		entry->last_irqtime = 0;
++		xa_store(&ctx->poll_array, index, entry, GFP_KERNEL);
++	}
++
++	/*
++	 * Here we need nanosecond timestamps, some ways of reading
++	 * timestamps directly are only accurate to microseconds, so
++	 * there's no better alternative here for now
++	 */
++	ktime_get_ts64(&hpt->iopoll_start);
++}
++
+ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
+ {
+ 	struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
+@@ -750,6 +790,8 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode)
+ 		kiocb->ki_flags |= IOCB_HIPRI;
+ 		kiocb->ki_complete = io_complete_rw_iopoll;
+ 		req->iopoll_completed = 0;
++		if (ctx->flags & IORING_SETUP_HY_POLL)
++			init_hybrid_poll(ctx, req);
+ 	} else {
+ 		if (kiocb->ki_flags & IOCB_HIPRI)
+ 			return -EINVAL;
+@@ -1118,6 +1160,75 @@ void io_rw_fail(struct io_kiocb *req)
+ 	io_req_set_res(req, res, req->cqe.flags);
+ }
+ 
++void io_delay(struct hy_poll_time *hpt, struct iopoll_info *entry)
++{
++	struct hrtimer_sleeper timer;
++	struct timespec64 tc, oldtc;
++	enum hrtimer_mode mode;
++	ktime_t kt;
++	long sleep_ti;
++
++	if (hpt->poll_state == 1)
++		return;
++
++	if (entry->last_runtime <= entry->last_irqtime)
++		return;
++
++	/*
++	 * Avoid excessive scheduling time affecting performance
++	 * by using only 25 per cent of the remaining time
++	 */
++	sleep_ti = (entry->last_runtime - entry->last_irqtime) / 4;
++
++	/*
++	 * If the time available for sleep is too short, i.e. the
++	 * totle running time and the context switching loss time
++	 * are very close to each other, the scheduling operation
++	 * is not performed to avoid increasing latency
++	 */
++	if (sleep_ti < MIN_SCHETIME)
++		return;
++
++	ktime_get_ts64(&oldtc);
++	kt = ktime_set(0, sleep_ti);
++	hpt->poll_state = 1;
++
++	mode = HRTIMER_MODE_REL;
++	hrtimer_init_sleeper_on_stack(&timer, CLOCK_MONOTONIC, mode);
++	hrtimer_set_expires(&timer.timer, kt);
++	set_current_state(TASK_UNINTERRUPTIBLE);
++	hrtimer_sleeper_start_expires(&timer, mode);
++
++	if (timer.task)
++		io_schedule();
++
++	hrtimer_cancel(&timer.timer);
++	mode = HRTIMER_MODE_ABS;
++	__set_current_state(TASK_RUNNING);
++	destroy_hrtimer_on_stack(&timer.timer);
++
++	ktime_get_ts64(&tc);
++	entry->last_irqtime = tc.tv_nsec - oldtc.tv_nsec - sleep_ti;
++}
++
++int io_uring_hybrid_poll(struct io_kiocb *req,
++				struct io_comp_batch *iob, unsigned int poll_flags)
++{
++	struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
++	struct io_ring_ctx *ctx = req->ctx;
++	struct hy_poll_time *hpt = req->hy_poll;
++	u32 index = req->file->f_inode->i_rdev;
++	struct iopoll_info *entry = xa_load(&ctx->poll_array, index);
++	int ret;
++
++	io_delay(hpt, entry);
++	ret = req->file->f_op->iopoll(&rw->kiocb, iob, poll_flags);
++
++	ktime_get_ts64(&hpt->iopoll_end);
++	entry->last_runtime = hpt->iopoll_end.tv_nsec - hpt->iopoll_start.tv_nsec;
++	return ret;
++}
++
+ int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin)
+ {
+ 	struct io_wq_work_node *pos, *start, *prev;
+@@ -1145,7 +1256,9 @@ int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin)
+ 		if (READ_ONCE(req->iopoll_completed))
+ 			break;
+ 
+-		if (req->opcode == IORING_OP_URING_CMD) {
++		if (ctx->flags & IORING_SETUP_HY_POLL) {
++			ret = io_uring_hybrid_poll(req, &iob, poll_flags);
++		} else if (req->opcode == IORING_OP_URING_CMD) {
+ 			struct io_uring_cmd *ioucmd;
+ 
+ 			ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
 -- 
-2.34.1
+2.40.1
 
