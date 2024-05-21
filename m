@@ -1,120 +1,194 @@
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73BB2AE6C;
-	Tue, 21 May 2024 19:12:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3751DFE8
+	for <io-uring@vger.kernel.org>; Tue, 21 May 2024 19:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716318751; cv=none; b=m4ra0oZqp9j1gDWQ0f6OsERKVp34tAc66mdY0MdfwYmwBc5Ur1eG6qrwnZVEuy8Iu8N+oYMWyXV4DGHW/ZUkfwElkt0dza6ncgvC63YiEmlwxCiyhj0oMe7HoZFphYtO/QbIuDv3XyQtNlcuiT+qq745MgWMuVOLVot9lV2r9Jw=
+	t=1716319827; cv=none; b=ZHxxGtFOFVZH33RIdbg1K6X8hG63SU1uVftPE7QoQx7ibabq7B3gGnZSH+NHIj6DRkvoDocVtykKSucDR+NF0ICKDseHX6v8a0raEVMnbIABx4H58JHg24SniDZEDjF9NLePF88ipN38WH02sGrJidB3f3OZBV5KJ71nwi1l970=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716318751; c=relaxed/simple;
-	bh=7+eylbIRtzvGKRBYimN9UCkceRxk/8t4cChv90bI7mI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oIX3J8BCZquY3LM15t2Jf+XlRa0sJYhLi87/JK1Ox/z0PvkshHQVkrY+guNPMIpezRodU0DiM7RidPCtj4mUZpyZxKDtPrEYoAsX+byQsIJ5SpUPc9RkUXBunKUy9GHeFwLjHW+HB1VMOaYQgxUD27cxox6Lv/k4wogulnQCA+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu; spf=pass smtp.mailfrom=heusel.eu; dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b=mKIhI0H3; arc=none smtp.client-ip=212.227.17.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=heusel.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=heusel.eu
+	s=arc-20240116; t=1716319827; c=relaxed/simple;
+	bh=XtQaC+6enyI9cx5QPU7pupTIkAZ2nJ/HjfwxF4Wd5xg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=em/9kAS8oqpQyKd9YqVW8UvB87Yj6d23wvicJJFK1C0Y02O/1OmAxYe6ZKffZsIQo0/3LrOg9nCL+cAC+7dzKtxZJPc02mOByEXV8thpd4Dvj39z6aDojCdzfYdUk12b6hCUX3KX87gvCkh9kTe7NhvvYtvA910QCMcbwjn//Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzXMr2Ii; arc=none smtp.client-ip=209.85.222.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=heusel.eu header.i=christian@heusel.eu header.b="mKIhI0H3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=heusel.eu;
-	s=s1-ionos; t=1716318740; x=1716923540; i=christian@heusel.eu;
-	bh=7+eylbIRtzvGKRBYimN9UCkceRxk/8t4cChv90bI7mI=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:In-Reply-To:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=mKIhI0H39o6m/J8gAsD1F0vC7z9zZh5fKW+03laLONTIcWG8ItGQ1vM86C1eOPr4
-	 FTLcSTqz4CAzbm5gSmRW7yczY1m8mMbbsMSs4LXnEO5+Qk9DMWlqGuTkMDbNobLQj
-	 C4KTDdkbfMS3jC7h+gCCGk0Y4r7wEzm7E+pBcu7VkRKqHaDW42QtD8c5IlDuDWYuR
-	 56wz+O25tms1MM0ojGT1UIt7f/pDjNHTUTEY46rBu8oLP4uYtrlxZ2fj5EurvgnIR
-	 kyjQ+v1gL1eBI4CT8AvgJcUM+OH4A6v1Asznbx1M+ctgYfLjL8DAz2Dds8O51CDRZ
-	 yjd4SOR+26KurpJySA==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([141.70.80.5]) by mrelayeu.kundenserver.de (mreue106
- [212.227.15.183]) with ESMTPSA (Nemesis) id 1M894P-1sEhsw3d2J-006LD6; Tue, 21
- May 2024 21:07:05 +0200
-Date: Tue, 21 May 2024 21:07:05 +0200
-From: Christian Heusel <christian@heusel.eu>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Andrew Udvare <audvare@gmail.com>, regressions@lists.linux.dev, 
-	io-uring <io-uring@vger.kernel.org>
-Subject: Re: [REGRESSION] ETXTBSY when running Yarn (Node) since af5d68f
-Message-ID: <ocpimtl6f32k46tpcytix4kse4fhaivp7qvs4ohqmcx7ybtign@3yujd4llvah6>
-References: <313824bc-799d-414f-96b7-e6de57c7e21d@gmail.com>
- <8979ae0b-c443-4b45-8210-6394471dddd1@kernel.dk>
- <8de221f7-fe5a-4da9-899e-de2a856a4ddc@kernel.dk>
- <yywbp7fjnwgqxvc66zimea4hgdc2eysjx5nezky3vndr7xw25l@jv76rdseqm3e>
- <b8018270-6e9a-4888-87fd-69620d62c4e5@kernel.dk>
- <0ec1d936-ee3f-4df2-84df-51c15830091b@kernel.dk>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzXMr2Ii"
+Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-7f18331b308so11934241.0
+        for <io-uring@vger.kernel.org>; Tue, 21 May 2024 12:30:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716319825; x=1716924625; darn=vger.kernel.org;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XtQaC+6enyI9cx5QPU7pupTIkAZ2nJ/HjfwxF4Wd5xg=;
+        b=mzXMr2IiGrSpFYhdlUX1xRZMReGI40AErk7sgSrnRDYWYZc8qn0el0yDW+/o9mCchf
+         Kh1+xdBcRtbZuzhhHxJ31kVKM5haKB35VIY7gyC1JVLjDo4hW5QJHrqgwEh21Z7MJ4DC
+         rwon+n6epqdX+47DW2JiWfvZF4v0dvCnnVNiE3J9S0xw1w5Kh+SMHY8PGysScK8MIIdB
+         n+JMRQT+g2u1AKezDZUupWiFDuxNZ24RIGhUgrikkP3h/KX9lPu3Jq+/Zt3v+wo1Y7cO
+         6udpCxWA4XQ9H558rhcDWMoxHjjwZTCapTgiebDbct2hl1tYrfV+7lx97Iyk8CaECMq2
+         /DJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716319825; x=1716924625;
+        h=in-reply-to:autocrypt:from:content-language:references:cc:to
+         :subject:user-agent:mime-version:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XtQaC+6enyI9cx5QPU7pupTIkAZ2nJ/HjfwxF4Wd5xg=;
+        b=BS4jFBGvkcHLP8bE9YIGEAyl8CU/ITqSY25AjBHsrl1c/tnDjX8DubC370KKnKSQ2t
+         TpgPYrp6BXozK5KySN3YM9OCejqj57JQAUTd/IzB/QSOTkXIdK4xJK9oR1Qfns3MHM5Y
+         wscKaiOHoikajF6lh1y8wxj48lCdO+gKMYqGYFOaqSQWR/P8dGLMvp33HxAnGAoFu2D8
+         xRFacfq3KRYp9hH6IO2+/1BUnzaeuJDILdPTGj+mBbqDQ42E4P8lwaEBNlf/ndkZGD+1
+         K2xQy3VpjgXqFzf8yMosxAxedg0mwpnONLpSjqGtV9kmwnZ9TabANv4cvw+e1Xo6WodZ
+         BGKg==
+X-Forwarded-Encrypted: i=1; AJvYcCXAPYoxubT5u8KUb1yDl/K/XLtZRPSOathyN39mOgO4BqwVeSPKYWzX/pHpq9CrbFNAIjYBqix1Nr4DWtNwhJhU+ZPfcc8D5n8=
+X-Gm-Message-State: AOJu0YxuEU5Zrm59m72qjM3pO+MPNzj7rRiQSyJkOcDnGp9G+hnIgUFm
+	vdx6vp+It4edo/VCZjv4QKHAHPnbBYjkuWmiGmJ/TWu6uik3Gkqzb2uEFg4KX/g=
+X-Google-Smtp-Source: AGHT+IEXCjWiUa1QUGY/tzni9Q5JOfa0BmRedvU5PAfC3oLRaIGtulEYfQJYlBdOH+twk/548j49kA==
+X-Received: by 2002:a05:6102:3053:b0:47a:22cd:9716 with SMTP id ada2fe7eead31-48077e07a05mr34233373137.17.1716319825175;
+        Tue, 21 May 2024 12:30:25 -0700 (PDT)
+Received: from [192.168.1.101] (syn-142-197-127-150.res.spectrum.com. [142.197.127.150])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-7f9000e33cesm3537040241.37.2024.05.21.12.30.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 21 May 2024 12:30:24 -0700 (PDT)
+Message-ID: <5a1649cb-2711-4767-8313-0f6bfe0e4cd7@gmail.com>
+Date: Tue, 21 May 2024 15:30:23 -0400
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="b6sfvqwzy55htqxl"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] ETXTBSY when running Yarn (Node) since af5d68f
+To: Jens Axboe <axboe@kernel.dk>, Christian Heusel <christian@heusel.eu>
+Cc: regressions@lists.linux.dev, io-uring <io-uring@vger.kernel.org>
+References: <313824bc-799d-414f-96b7-e6de57c7e21d@gmail.com>
+ <8979ae0b-c443-4b45-8210-6394471dddd1@kernel.dk>
+ <8de221f7-fe5a-4da9-899e-de2a856a4ddc@kernel.dk>
+ <yywbp7fjnwgqxvc66zimea4hgdc2eysjx5nezky3vndr7xw25l@jv76rdseqm3e>
+ <b8018270-6e9a-4888-87fd-69620d62c4e5@kernel.dk>
+ <0ec1d936-ee3f-4df2-84df-51c15830091b@kernel.dk>
+Content-Language: en-GB
+From: Andrew Udvare <audvare@gmail.com>
+Autocrypt: addr=audvare@gmail.com; keydata=
+ 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
 In-Reply-To: <0ec1d936-ee3f-4df2-84df-51c15830091b@kernel.dk>
-X-Provags-ID: V03:K1:kgkegRoPeUGhjjEJa+tcyoRrRxXaq6BOFXwXjFP0Ha99JIt/M8v
- OfWDh1jbiv4fM86kgAPUw6IPBdZHvdpp4b/NhbMow/b3xPaZq0kpxG50BLau2KyARERquaS
- g9h/GlWMkzvoi0AMAbttuIBkmZpUyEhV3xsZo7tg/7lRzfm1RgGPtdXEttvy9VwDuqcqX3m
- XKVhhirOTF5FysQ7OlmsQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:92sUtXNc4Kc=;OjmIERMOmh/4i60NX/6IJsSC81g
- WBuo/K3Ar9xi4GcPoGBHE+InuCQ3Y9qUsNWduM23IXxdZJmoUKLBKdexbdaxy6j0WC+eB4pQs
- s7KBS5daIiZ2HUK1CE89iBaSTPf/NEi97sE/Pp2/IxsPuhnVC/nA9AZsvWmNNLvt6/6+ylooe
- CIqmDKsT5IUh/pnvLJvT9GYK28GE7/I3fEwEl03HM4h/0z6x7r488vGDXbryfSrP5KJ4SxWV8
- 5aO61GchGXlZaUXckWd6wolJIzEBDUSahoqKFhFayo5ZMiO6YbeFrOmdxjIq5ATQIEW1DSrrV
- 4WmSNQAy0N/z9UZb/FsGwjvybYhIa06Ot95CZMLZEU6tRuY8vXYUTUqAKuSodAZlP0JM4o7Z5
- CsEFf7JT4Lhp54P/GTHNQwbeSbHYmTmSW3q1wTOFIPwfBykQqwIVdlJ5oxI7rmw4PKX+gjX/6
- 9y+P7TAg8ILokOfVZQJ/NLflljo91xVPKVjAFEEStLQFwRqvUgow/pXuWczfQmMf1vsAW6DAg
- losdSWBV5lgKEJoG3zhWnQ1rZc0JetgtKYaMeHjPJLHiFfpawNb9OfW7yUYMYulexjAOSY6i0
- ZfazmunFO5+BjNV0A8RzbeQTnCzlsBT/S1+saUce8drPN41706+7Xs7ZBWbTNyGMnGpsW3hWS
- IR2AEgqar6TknH3uNMBMQuUtz3q9IJjwWDl9hg+srxu4rpDIn6zgQJZn8AoG5RNGjUFplSofQ
- 9RQw1x17qxZYjqAwYZhI0qkWUExqEwvH3joeaYeFgeSVT2pkeIWMc0=
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------kFUVciyrMP9rVm5nmoFCeusz"
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------kFUVciyrMP9rVm5nmoFCeusz
+Content-Type: multipart/mixed; boundary="------------do8ZyUJLCfHz03kbNMNhYbZQ";
+ protected-headers="v1"
+From: Andrew Udvare <audvare@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>, Christian Heusel <christian@heusel.eu>
+Cc: regressions@lists.linux.dev, io-uring <io-uring@vger.kernel.org>
+Message-ID: <5a1649cb-2711-4767-8313-0f6bfe0e4cd7@gmail.com>
+Subject: Re: [REGRESSION] ETXTBSY when running Yarn (Node) since af5d68f
+References: <313824bc-799d-414f-96b7-e6de57c7e21d@gmail.com>
+ <8979ae0b-c443-4b45-8210-6394471dddd1@kernel.dk>
+ <8de221f7-fe5a-4da9-899e-de2a856a4ddc@kernel.dk>
+ <yywbp7fjnwgqxvc66zimea4hgdc2eysjx5nezky3vndr7xw25l@jv76rdseqm3e>
+ <b8018270-6e9a-4888-87fd-69620d62c4e5@kernel.dk>
+ <0ec1d936-ee3f-4df2-84df-51c15830091b@kernel.dk>
+In-Reply-To: <0ec1d936-ee3f-4df2-84df-51c15830091b@kernel.dk>
 
---b6sfvqwzy55htqxl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--------------do8ZyUJLCfHz03kbNMNhYbZQ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-On 24/05/21 12:29PM, Jens Axboe wrote:
-> On 5/21/24 12:25 PM, Jens Axboe wrote:
-> > Outside of that, only other thing I can think of is that the final
-> > close would be punted to task_work by fput(), which means there's also
-> > a dependency on the task having run its kernel task_work before it's
-> > fully closed.
->=20
-> Yep I think that's it, the below should fix it.
+T24gMjEvMDUvMjAyNCAxNDoyOSwgSmVucyBBeGJvZSB3cm90ZToNCj4gT24gNS8yMS8yNCAx
+MjoyNSBQTSwgSmVucyBBeGJvZSB3cm90ZToNCj4+IE91dHNpZGUgb2YgdGhhdCwgb25seSBv
+dGhlciB0aGluZyBJIGNhbiB0aGluayBvZiBpcyB0aGF0IHRoZSBmaW5hbA0KPj4gY2xvc2Ug
+d291bGQgYmUgcHVudGVkIHRvIHRhc2tfd29yayBieSBmcHV0KCksIHdoaWNoIG1lYW5zIHRo
+ZXJlJ3MgYWxzbw0KPj4gYSBkZXBlbmRlbmN5IG9uIHRoZSB0YXNrIGhhdmluZyBydW4gaXRz
+IGtlcm5lbCB0YXNrX3dvcmsgYmVmb3JlIGl0J3MNCj4+IGZ1bGx5IGNsb3NlZC4NCj4gDQo+
+IFllcCBJIHRoaW5rIHRoYXQncyBpdCwgdGhlIGJlbG93IHNob3VsZCBmaXggaXQuDQo+IA0K
+PiANCj4gZGlmZiAtLWdpdCBhL2lvX3VyaW5nL3NxcG9sbC5jIGIvaW9fdXJpbmcvc3Fwb2xs
+LmMNCj4gaW5kZXggNTU0YzcyMTJhYTQ2Li42OGEzZTMyOTA0MTEgMTAwNjQ0DQo+IC0tLSBh
+L2lvX3VyaW5nL3NxcG9sbC5jDQo+ICsrKyBiL2lvX3VyaW5nL3NxcG9sbC5jDQo+IEBAIC0y
+NDEsNiArMjQxLDggQEAgc3RhdGljIHVuc2lnbmVkIGludCBpb19zcV90dyhzdHJ1Y3QgbGxp
+c3Rfbm9kZSAqKnJldHJ5X2xpc3QsIGludCBtYXhfZW50cmllcykNCj4gICAJCQlyZXR1cm4g
+Y291bnQ7DQo+ICAgCQltYXhfZW50cmllcyAtPSBjb3VudDsNCj4gICAJfQ0KPiArCWlmICh0
+YXNrX3dvcmtfcGVuZGluZyhjdXJyZW50KSkNCj4gKwkJdGFza193b3JrX3J1bigpOw0KPiAg
+IA0KPiAgIAkqcmV0cnlfbGlzdCA9IHRjdHhfdGFza193b3JrX3J1bih0Y3R4LCBtYXhfZW50
+cmllcywgJmNvdW50KTsNCj4gICAJcmV0dXJuIGNvdW50Ow0KPiANCg0KVGhpcyBwYXRjaCB3
+b3JrcyBmb3IgbWUgb24gNi45LjEuDQoNCiAgJCB5YXJuDQp5YXJuIGluc3RhbGwgdjEuMjIu
+MjINCndhcm5pbmcgcGFja2FnZS5qc29uOiAidGVzdCIgaXMgYWxzbyB0aGUgbmFtZSBvZiBh
+IG5vZGUgY29yZSBtb2R1bGUNCmluZm8gTm8gbG9ja2ZpbGUgZm91bmQuDQp3YXJuaW5nIHRl
+c3RAMS4wLjA6ICJ0ZXN0IiBpcyBhbHNvIHRoZSBuYW1lIG9mIGEgbm9kZSBjb3JlIG1vZHVs
+ZQ0KWzEvNF0gUmVzb2x2aW5nIHBhY2thZ2VzLi4uDQpbMi80XSBGZXRjaGluZyBwYWNrYWdl
+cy4uLg0KWzMvNF0gTGlua2luZyBkZXBlbmRlbmNpZXMuLi4NCls0LzRdIEJ1aWxkaW5nIGZy
+ZXNoIHBhY2thZ2VzLi4uDQpzdWNjZXNzIFNhdmVkIGxvY2tmaWxlLg0KRG9uZSBpbiAzLjMy
+cy4NCg0KICAkIHVuYW1lIC1hDQpMaW51eCBsaW1lbGlnaHQgNi45LjEtZ2VudG9vLWxpbWVs
+aWdodCAjMiBTTVAgUFJFRU1QVF9EWU5BTUlDIFRLRyBUdWUgDQpNYXkgMjEgMTU6MjE6MzMg
+RURUIDIwMjQNCg0KLS0NCkFuZHJldw0K
 
-It indeed does! I applied the patch on top of Linus tree and the issue
-is now gone!
+--------------do8ZyUJLCfHz03kbNMNhYbZQ--
 
-Tested-by: Christian Heusel <christian@heusel.eu>
-
-Cheers,
-Chris
-
---b6sfvqwzy55htqxl
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------kFUVciyrMP9rVm5nmoFCeusz
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEb3ea3iR6a4oPcswTwEfU8yi1JYUFAmZM8NkACgkQwEfU8yi1
-JYWchQ/+O/tAak+4j1iNvLfN/JV7KYQkA6jOesBc9p6DREfsSM+Ptu0me3IvnxEy
-OyeGys8XjcLzhpI5bZVXfxUK0W7lDqlHdPQQkeQjGe/ZMjuYNR3bv3zcdTuNZ572
-odGeCJzh1zzxy6yvlY5PFrVF6OIsriIyD7b6t2JbuuxQCbjk8ImEW0SUCE3/QZaE
-P9r+bBEUoNqKV8psWnYC9dZZja9y/V5Hh+x43ZKeaCKxVuytLypSYO0aT05uMJPU
-iI7FbasgWnP0dTSqmT35AWW8+nUoair3Ni/83SuO1AOVZnkTrJNQ9KmNebWjfNW2
-gP3nvyAf1pTLzfL/MuxNPnOoR9ziO+KhJmnzRSXHOdYteRUnKV5pWQ1VoGzdEYRw
-dDwSmLtak5NbevaInmoYuGbZP0+prFk4ulnLLp2zNQha0QPjYH3WFmI3LG5FpzUF
-DONMzg0V/gKom5a19xGG8gpCi4YDTQckRB1z9f+nVVLC2m5jMGx1v513ZeWUrAZy
-JXFahhUBArxHSHL5+paCVPrhl64Uc298bdg+aLIZ+C2VQcF0CIezMSeGfpOUVgyv
-0rF2tAGjjtjpumYDXYXC1kZWD73sRUiTPDfOuoCLi4mps2Ko+9B6Hkq2mnTLmaMm
-FhrFQaWS8hAXigvqTepStN5M0bp3RgtfXBEaqvYS84c6WCUJmPg=
-=f7N+
+wsF5BAABCAAjFiEEYK9084jvT0kxwI44Gv2a/BIMJt0FAmZM9k8FAwAAAAAACgkQGv2a/BIMJt2u
+VA//Q3WlBnSoeYOvjzcltC8GufmfW32tLMEgxYGYPtTs5697dQYBFZpGjEFNWJS2Ob5GIjPY3Lx6
+bblI6r2G+ntEZ6F/LWZ9zg7TFZlRk8QNgzpJbyJiTiy9bFZBwPNBNjRucNWxAXUPlfTTs61dskO6
+tisjaffpI3gZpmBSj8VVXip7a519GgUUkMZtyGY7P5RVagnaERNCv23qniRAjujepdZAB1jWUrVY
+4v9HrS2S7/wL/fPKeCNKnF2o32PuW+NJZ//8xisDP9/w2BYEdQi+WmCz0DojtofxqL+uxxrMW12Z
+8zdODT5Ez2bxjf6ZTyvqRVgK3ul0oBNPjarFUOKEm+vaIj7L+70ecJIzmTFxVpp3OGCDJPxtRF9U
+ASYqlcapXdD6L12FgF9WpQZmQH6fdJ2Js9JwDQmoncPdGd8Edutb7QCdhHqJcER+X3dE1J4eo5ZB
+b/PkYzfdylSNa/W6/XYY185zuOVkUwe0LFGrSxyxeR3CVXJh7a7UNwbE0/h1WUHTjEiMT/9151w/
+taFw2WOuRuA8wT5/uymTudMtZmvHOKZ50OLQyWW+FWtJ+gPez6brxQ77l2zi+/7OL9tTEJrXJ2Iy
+uJRq2kL76MFpw0ETldv8CDKKb7v49+CQJitEWiN9BtH/viS5mQ+awKU7KicDWPhAYTdvYJHj7NWf
+P/8=
+=g5El
 -----END PGP SIGNATURE-----
 
---b6sfvqwzy55htqxl--
+--------------kFUVciyrMP9rVm5nmoFCeusz--
