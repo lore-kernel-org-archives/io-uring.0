@@ -1,399 +1,274 @@
-Received: from out-187.mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3E213ACC
-	for <io-uring@vger.kernel.org>; Sun,  2 Jun 2024 08:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717318708; cv=none; b=UDe1wQXc+Ch3runw5RV5qNudvfmzavDxbAQr99keQH7grU46+8oNIBF1FPdwnxAdVlMnSGlzM4gAL7CoYfgvWGt0doHQfqzgy1v0KVSUz0+zl8kPP5HxHtO9gH9O7R+nG8VArE4NCPuFbRfzOeXC9fIW1eAG5IHJAuGqtY+2Zb0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717318708; c=relaxed/simple;
-	bh=FDPaB79oDHTKw5hios5th0f9m9GllhCjsa9iSk7BvcQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=sFNxu4ajaCP4QnhwdXQW1AB6ahw5WbrW0Jqe6bJ++J0ceL/er/lMQktEkILZ10dWGSXs1tpR+KcJ42J/P6oSApSQVInmWLmq4et1DG2PlbKLLc9qvwNa9MU7SYGmtiPZ0+L44odCDP2nvLnG/bPEpxrxZzhYTCCaVSiSIYmZeqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=s.muenzel.net; spf=pass smtp.mailfrom=s.muenzel.net; dkim=pass (1024-bit key) header.d=s.muenzel.net header.i=@s.muenzel.net header.b=v9YDt0ZZ; arc=none smtp.client-ip=91.218.175.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=s.muenzel.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=s.muenzel.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=s.muenzel.net header.i=@s.muenzel.net header.b="v9YDt0ZZ"
-X-Envelope-To: axboe@kernel.dk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=s.muenzel.net;
-	s=default; t=1717318702;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=//EgpEIB8cMmv3eErVhrj8VROZ/ZEm19kKhVM/ArZKU=;
-	b=v9YDt0ZZhCPd/Hj3Z1OyQ7pC7HzQzb5RU9UXLApqZc0d4fBFXTD9p19pPRR+qwDGang05h
-	sHtP0m0JzQ0orWglYeQHZ5vcD8z8NsvEf6bczpm9qYwY3HmNMUZufKUkJjOo0yIvKaCeJw
-	gQXDaxoH+IwjXlpM0MDAYHL0k82Jed4=
-X-Envelope-To: io-uring@vger.kernel.org
-Message-ID: <b7fd035e-6ec2-4482-93e9-acb7436ca07e@s.muenzel.net>
-Date: Sun, 2 Jun 2024 10:58:30 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5E93D387;
+	Sun,  2 Jun 2024 14:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717337418; cv=fail; b=FXMiT1FN/En9ifUqJ8lkA04c4lfVtg1xsFvB8As+l/yQvhWAxiXeYyTI1iI9WMszsTSMOsApfzyRskVz1OOSP+w5H9A0TuvF/9mKOvegT44nkHAUszbuxYRqU8t4aeBUoCuHe2ZF/YC7a+Wtbk5oN7S/VIezfJPQugp2/3EaPZc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717337418; c=relaxed/simple;
+	bh=sl1f16rLh6VuBRP96w1uGO1Jce7Sd7atKPgvxNCh4W0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TgbkwbQRD/C0cb0S31DzQjpPkiXbl/aP2L1ZQGltfpqKQvOnEjNYAbBZ+FXPKY+WXIzLDVYrL3ZSk8Nf137Z187EH3lw/sKbr+wZGgSFmfy1Z8zXng33H6jxt5lVF/wBWSYI/Qnu0YXBGSC1Lw+kGzy1DaqoFHmZa9A1cn5WzzE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4526jm3S004327;
+	Sun, 2 Jun 2024 14:09:53 GMT
+DKIM-Signature: =?UTF-8?Q?v=3D1;_a=3Drsa-sha256;_c=3Drelaxed/relaxed;_d=3Doracle.com;_h?=
+ =?UTF-8?Q?=3Dcc:content-transfer-encoding:content-type:date:from:in-reply?=
+ =?UTF-8?Q?-to:message-id:mime-version:references:subject:to;_s=3Dcorp-202?=
+ =?UTF-8?Q?3-11-20;_bh=3DhnwTjXg77Nze6LQe2mD+iyMVp1YWIYX58p+5m2fahrk=3D;_b?=
+ =?UTF-8?Q?=3DDAFVvbN4lMb9k8nIQl0UNIb/9iBhzGaypRqFBHCi1K2H5w27twbbNvn2RTjC?=
+ =?UTF-8?Q?ISYttx0B_jP1kxA882hzcUy8jQV4ZEewJFgAnd+31oFKwM0PxNKdbE5bNyW96LL?=
+ =?UTF-8?Q?2TD7MJ8LrffJlS_zB5OmaPKiU8140sZ9GxMNPnILDJhq0ggKndTQcXwSRK//u3Z?=
+ =?UTF-8?Q?f4aXaiS3b3sIr5UWN7t8_biQYKxBihSlAOEuhbvFppjEPqhO2dzsMvJR9lftQ/A?=
+ =?UTF-8?Q?0QTXL8nc27DBr71iuN8ScuAXPt_mRrQvs6nLgL2MGuscZS6v0UTRKDepBqjtu1c?=
+ =?UTF-8?Q?auSYvhBb/b/VfJW5rbVQ2qmg0FBOIu30_AQ=3D=3D_?=
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yfv6u1cnc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 02 Jun 2024 14:09:52 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 452CDYtY037809;
+	Sun, 2 Jun 2024 14:09:52 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ygrja1h81-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 02 Jun 2024 14:09:51 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hgCyo+NXusTZsIgf6k3dSiRgzBpsLx9LGA+HUnv0QBHR8HTFtUUFwMw5LFKsvegUQKQrQOLTe0UnZs/C+PeoN40sUJAHoh2NgjIV5ZDECW9Ag61uRbhl3Vl6BylSTuq7/DUaK/++rTNsYFoUwkvO0qpjIxlU/JcYHOczdtB/7YEjM6UknbXXs+F+AdeT2tjC/GSsC6xGfW3TYCLFow8rD0shO/gj/EdD7Rw1h03ZBkb0UZ8WW/aBzPx0X3KB9hBya2phyuY648EsHpWIXosMVzWPJrDCPd2hWVVt23hPzqwHfqoz5ESzLq5fbZ0Qb75itUgO6J/bRh79AHAUGDRo5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hnwTjXg77Nze6LQe2mD+iyMVp1YWIYX58p+5m2fahrk=;
+ b=AoVSV+JdqC65ywKEG4AfB9Xd7zPWPh8s58O80LcvS4Hyqj7g5Tl8dp8/5K3G6jTC/tykYR1xhwVdjWg5bKddhjBxxdBmT2itmxnbU6B2FFgnk1+pd5SC+ciBLBYHhZlTFtV/M2/70xqVoF6v7rb1Ji3iOVoCh9pzSPKGrcwZLY/bKFjz0uEedWMimpVVCn/m6xNA4EGGl1WppXYAPgamxQlbOZ6sm5f78sNqJfxvGNRih13A0UyW1t3t+ZQGHbHBNipBmmlFUcYyPHvFxexlxd3/MDPHvCQDT3Z+SZfr7naGuaY9ayrIlgnUQfabf6WvVDg2x0bkVhZE4tuvIySUzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hnwTjXg77Nze6LQe2mD+iyMVp1YWIYX58p+5m2fahrk=;
+ b=KCqSPMrE3UWVljJDRCXh9g2dHAlId7SPIg/OGW1Ahhu4GNtLRP3vekk13xnwGOwxg7ZYy90pcL7EhSgG0pex+C5GTIOTetyjtoW8p6LEFBYO7hES37J9d1eyaaEI989BLixwPBbpgsFZH71jKNKgF9OJXjwmtAOSXMdFar3TpQs=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by DS0PR10MB8078.namprd10.prod.outlook.com (2603:10b6:8:1fd::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.25; Sun, 2 Jun
+ 2024 14:09:49 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::4f45:f4ab:121:e088]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::4f45:f4ab:121:e088%5]) with mapi id 15.20.7633.018; Sun, 2 Jun 2024
+ 14:09:49 +0000
+From: John Garry <john.g.garry@oracle.com>
+To: axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, djwong@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, dchinner@redhat.com,
+        jack@suse.cz
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        tytso@mit.edu, jbongio@google.com, linux-scsi@vger.kernel.org,
+        ojaswin@linux.ibm.com, linux-aio@kvack.org,
+        linux-btrfs@vger.kernel.org, io-uring@vger.kernel.org,
+        nilay@linux.ibm.com, ritesh.list@gmail.com, willy@infradead.org,
+        John Garry <john.g.garry@oracle.com>
+Subject: [PATCH v7 6/9] block: Add fops atomic write support
+Date: Sun,  2 Jun 2024 14:09:09 +0000
+Message-Id: <20240602140912.970947-7-john.g.garry@oracle.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20240602140912.970947-1-john.g.garry@oracle.com>
+References: <20240602140912.970947-1-john.g.garry@oracle.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR03CA0022.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::27) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: madvise/fadvise 32-bit length
-To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-References: <bc92a2fa-4400-4c3a-8766-c2e346113ea7@s.muenzel.net>
- <db4d32d6-cc71-4903-92cf-b1867b8c7d12@kernel.dk>
- <2d4d3434-401c-42c2-b450-40dec4689797@kernel.dk>
- <c9059b69-96d0-45e6-8d05-e44298d7548e@s.muenzel.net>
- <d6e2f493-87ca-4203-8d23-2ced10d47d02@kernel.dk>
- <8b08398d-a66d-42ad-a776-78b52d5231c4@s.muenzel.net>
- <c6c149ac-ce0e-4c21-b235-03b5d8250d86@kernel.dk>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Stefan <source@s.muenzel.net>
-In-Reply-To: <c6c149ac-ce0e-4c21-b235-03b5d8250d86@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|DS0PR10MB8078:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b95f740-2669-4112-7567-08dc830da9ea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: 
+	BCL:0;ARA:13230031|366007|7416005|1800799015|376005|921011;
+X-Microsoft-Antispam-Message-Info: 
+	=?us-ascii?Q?zP+SIH+2k9RQY9rmNj/189mleTk25VBRC00geIQSQObgT1KawZagEDAYj6s7?=
+ =?us-ascii?Q?Jm0LZv4S0RjDzENuwvQTNTmHl+Adq5vXiTc3FN4E8Vq+l/XflHvS5dEO3V3H?=
+ =?us-ascii?Q?RCbQCuup4MIxfa6u+Ztd2tDuKZnsc+sd4g44hQlF8CJWkdWy9JC9tq4rpfWB?=
+ =?us-ascii?Q?MYGE/qGcXtB604uFI1BSZV3g4hf0ZP44VWf1z07gcOMBICr5Hj8e9J2Bd6NF?=
+ =?us-ascii?Q?6RcXGcJXmpAM/BuIUhidrBGvsfivjXT5EvpeT9eirYB4USdeRj/rtpvUvNHO?=
+ =?us-ascii?Q?uYhn/I+T74acFbfxAQU3UIntKWzU4Y5wfvYrP/zQsQibBa1KcQEIRI33wqXN?=
+ =?us-ascii?Q?yparXDTCcBpAHOLzH/bHf+IPhfn3unk2Q/yEe3IUnElI2erS3KzaImn7lwYj?=
+ =?us-ascii?Q?Aa2IRxju0HGyYWsbL14cRmSplIw0IKl5rVUm/1LsNLujslGKOV2ZZH2sPKQ7?=
+ =?us-ascii?Q?tnytOO1oabp8h7+Twm7y/BgZaShNB3asCYCgRzDGl/nNM67MV/dfBdij60cn?=
+ =?us-ascii?Q?8uDxRYeI5RnA6VtlS02oBBsEDk/QH0yyJK8O5OVSHBoqwOr47IKZ10RBqhTx?=
+ =?us-ascii?Q?5wXIQnxDa8LZaRjAAvJjNnqGJT85B4/ddemtUWIJ9BsHRPTNyk7Dsjs2zI9d?=
+ =?us-ascii?Q?6LdKFCFb1IZXgeAX/jV/r8dVzMp8trrLfROfQ30QtRuTys+ELG8glK6A1e4L?=
+ =?us-ascii?Q?hMee4S5xnXrRS66ErlQaQsSd6YbPNJKQxluLAPI30K/pdwksrMo4knz+3cS1?=
+ =?us-ascii?Q?+EkX1JhcG9x3JdfXdlZPxVlV03Cq1eOdOUiqLcgbesfPN48F3muXKUFp4Qt3?=
+ =?us-ascii?Q?F9JkwdUbGuQJfcb1u0tWiS2ZKhKOgfQ7DRkqy9Fs2ia1CvxZSR7th6d8Zt0r?=
+ =?us-ascii?Q?ivvZUv2OrVIZGPqoJhzVoQUlAqALu4D7WGqKFUtACSsAdCbEiPdoOjgcBqc4?=
+ =?us-ascii?Q?o+LwPxcH16yubo97Ezz0U2Lqcot+iyHJdARHOGFJ3AV+dwd6qRNbBQjQOOIH?=
+ =?us-ascii?Q?8pLyGjJfj28TLQTfyRSxR08lu8/As62tY9Dnnm71LeWEvx5PsnBQupujBnzU?=
+ =?us-ascii?Q?nHN7rQD8s5CpxSMqxvuD1KAcEtSHX3RqhaejHBnGmjop2xmLraW/4sWSfzLX?=
+ =?us-ascii?Q?5gV4IGQ+r5u0yIfHoSXcB7yUhQP0pzp099w3XapR+rd0XNOCmPjN/5S6c4j8?=
+ =?us-ascii?Q?cmNl9JGC3kmKD7cmKOGbwQFZw3kvjDIKBYPHEZ68M2Zp51SXniXHCK7euML/?=
+ =?us-ascii?Q?4ndtff3Fy16WrOP7XGG1JaHmw9UE6ceKSPrfycgOzIZJkSafkYEjOalJXon0?=
+ =?us-ascii?Q?Gwck1+DRHSbpX7jgNOaw/E9z?=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(1800799015)(376005)(921011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?us-ascii?Q?vlgy8YcnDw3Jq4pi7aC36fec/xiEMpd+dBXkdoYpsbOrEHK/CigK1PgVE89P?=
+ =?us-ascii?Q?BUolUNYk5W+XOHhcWic84D5CfE8NRUgn8Tl0iVlsZr8raKAtf6Lt5DDHirL2?=
+ =?us-ascii?Q?tigEYiE/82vBF7Tyv04BOY4sdJBiudb3Ga44gSAEedOVEbSm9OQyRhjeJdjc?=
+ =?us-ascii?Q?4iOftOLDcLErpuRC4M7owfMHUhWOJTOUW+iS0PyCbNhqCclRrf3xLCmz3jgP?=
+ =?us-ascii?Q?RVdPoGY5ZR/8QVzzKWLnFv7DO0J5WiXuacxqNVeSgoaZmGYbwvbN9W9WvJrR?=
+ =?us-ascii?Q?HT34FZwr9jQEdojlfwN1ff4ni7Uk42Nwmc3Zddw83VB0E7uWvXkLSw/v3egE?=
+ =?us-ascii?Q?HinRR98MC7MqiaQl92rfUDQcMkluZfdj2VT0nR6t1sJEZpC1Mru1ljPzfx/Q?=
+ =?us-ascii?Q?IKWuSPv65DofYnfEqJxdlywJWueLjdqaXOgzn6tSlAwJAmRRSScX/CQsynwI?=
+ =?us-ascii?Q?FkoZ5wFu7nF0z9O08qUyuRpVUT8eBvIuzEtyGJMhDjPZ0dTDcJBJaECR12xS?=
+ =?us-ascii?Q?DZWTdJR59u6s5eeBR1/2PEOoHVBCHk0w3lBVwcWScZHuMZKKe0dtlFZpJ8ky?=
+ =?us-ascii?Q?wGmImHPjApDMLwlVNZi4+RipK8Nl+eMQ2FalSzAeKOpy5/LcWiUIwccLgZge?=
+ =?us-ascii?Q?SUUnTRiQ9pHZ5XEygq0IttkFgd/980uXW4G+G6x1C9No+bRFKbQ8ZSV3zl5+?=
+ =?us-ascii?Q?sJswo9JQbgd3IffgmQguDQ5yToax2Lxu2NJ8LGYkG8U3EEnIP25nFJp6+wP6?=
+ =?us-ascii?Q?R/whcpuE9svGaYYDvo9HSgSBO2e+pEAW/wSDb40XeJv/AwZuH7RKs1wEneVl?=
+ =?us-ascii?Q?nrZEKyOzcPnVrhEtK3b1ho2ex+EqeMv8G+kYSUWwxlCW/yhB9e6PoIevzw02?=
+ =?us-ascii?Q?ZOVc6t2U8G1hP5PuIktmCJht0DRGy7oS+t0tcF157a/hZ+7Wi0f7ktVUMYQc?=
+ =?us-ascii?Q?aQYSXjHQXKPUAAXDVasq23cfLGiv5hnS+g815XH+c69eL3fAjIsoXFzyAgnO?=
+ =?us-ascii?Q?0W9tA6C/IDa12f9J/5FsBaI0UTvO33gXMCfd6GKUkeYtN1aXyx93u2oSOuCr?=
+ =?us-ascii?Q?yYdLZV+5tbOdXzJkOqj4JpFuozPrU6fyy5A+SpJ/uj9qkXo+p68Snp8vfaVe?=
+ =?us-ascii?Q?dv6ypEpQs9QzlgiCHLKS9KNph4QLJMpsFtc6V/EU2LxdIqMm0kRbhBE2MJHR?=
+ =?us-ascii?Q?Sw/k52bAKWigLDeFvXi6d/CRdYfeyPKmEDxw4mNQDlgMz0VVQ9wVuOOUlVGG?=
+ =?us-ascii?Q?mtgGegdo0UnVfcXBoRphcOpR6AIGRkaeLMfJlNP50huhPs8wOJVtanN3+FPr?=
+ =?us-ascii?Q?pNKkQQIWTrxrjQz9cHw1P0QOEg6i6Qyl0QKwl8vbIEGpVh3xsl36DJMINotF?=
+ =?us-ascii?Q?lA7P2qTJEE2H0MlXkEzDQJsPp/RxACZOL2vjyggw0AEwoB+rqM0jsitePae7?=
+ =?us-ascii?Q?AtX9vGWP3da8HQj9DrfMwfrOXhjU4Kv+PEWqLSMzh5RWhgD8lEYqQtsq+r1i?=
+ =?us-ascii?Q?Its8/fbxgOKpkOmdj5NC6Zo560gLdSGtgEKLqFnXmJBAhOZAfryYCyu1h9uS?=
+ =?us-ascii?Q?km5NoheagEbv0O47/lVTOhYd6xbZ3wfzfXGV1ICjWJKtFidY0qN0P6XpruUu?=
+ =?us-ascii?Q?2Q=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	d80DM8wcZCQy2p0m2bz8keAys0Kp0s5KDXgQ4GHyVJNzv72GvY6/eWyvZo+Ul00SuB+M/6UsgOQEHcRzPLlXOfo4cFgULgNc97SBrF0X3ICITqTtaLamI6coG3ZBgD8/AbY6B6Lr3loPR5alM1aV3SU0DgtshlUB2IkjuJ9CirBWfRkT8pPAkJexckN/05glZc5nLxaGxa7JIfHeAZ97enaBFoM5qL7lsXdOl9+qS/IWLXFB3khwn265AuXenfunkcqNeHbzTxOYTar8emRWmMIyNkBphFLGD1GZLuZCZdpfrRPvVlY+wOKQgyQf32G0vtx6dSuySTxT2Bpq+69BLEL4W/b8NeW/9QF+B0D+QMfYHk7Kik6N8xuaFb4OYsu8k1jbDWrNgn7NbRoiOuYM8WGC4//JNqHMebIWBk7eegWXuuV+OsNA3TyeHDbqGBEKQP3KgQrc9EbnkWXR/XhIwYZ0Zl/V8JUlKCnalYmjHlvCuO9F44mcaHIkrn21n/927ln6MTq1WJIUCu4Ml6XLPUjYhhx/TbvRwG0psSTGlyRSHgdm2wRsr45GlL6T/KARiwUaqKne7rD+0eNQhgsvx7mloDDCVonCVNARe3olgmo=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b95f740-2669-4112-7567-08dc830da9ea
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2024 14:09:48.9724
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OPECkUiAbbBLmXcfyzF4/k1IpnHwGm/0CdQtYzW8m59nRAFaKJFluoDks8QFj8lfCNEWTHDHvYsR3F3aEXCDiw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB8078
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-06-02_08,2024-05-30_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ adultscore=0 bulkscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2406020122
+X-Proofpoint-ORIG-GUID: viF77xZHgbq0Tw0EE2hxol6m48gzbASn
+X-Proofpoint-GUID: viF77xZHgbq0Tw0EE2hxol6m48gzbASn
 
-On 1/6/2024 20:33, Jens Axboe wrote:
-> On 6/1/24 9:51 AM, Stefan wrote:
->> On 1/6/2024 17:35, Jens Axboe wrote:
->>> On 6/1/24 9:22 AM, Stefan wrote:
->>>> On 1/6/2024 17:05, Jens Axboe wrote:
->>>>> On 6/1/24 8:19 AM, Jens Axboe wrote:
->>>>>> On 6/1/24 3:43 AM, Stefan wrote:
->>>>>>> io_uring uses the __u32 len field in order to pass the length to
->>>>>>> madvise and fadvise, but these calls use an off_t, which is 64bit on
->>>>>>> 64bit platforms.
->>>>>>>
->>>>>>> When using liburing, the length is silently truncated to 32bits (so
->>>>>>> 8GB length would become zero, which has a different meaning of "until
->>>>>>> the end of the file" for fadvise).
->>>>>>>
->>>>>>> If my understanding is correct, we could fix this by introducing new
->>>>>>> operations MADVISE64 and FADVISE64, which use the addr3 field instead
->>>>>>> of the length field for length.
->>>>>>
->>>>>> We probably just want to introduce a flag and ensure that older stable
->>>>>> kernels check it, and then use a 64-bit field for it when the flag is
->>>>>> set.
->>>>>
->>>>> I think this should do it on the kernel side, as we already check these
->>>>> fields and return -EINVAL as needed. Should also be trivial to backport.
->>>>> Totally untested... Might want a FEAT flag for this, or something where
->>>>> it's detectable, to make the liburing change straight forward.
->>>>>
->>>>>
->>>>> diff --git a/io_uring/advise.c b/io_uring/advise.c
->>>>> index 7085804c513c..cb7b881665e5 100644
->>>>> --- a/io_uring/advise.c
->>>>> +++ b/io_uring/advise.c
->>>>> @@ -17,14 +17,14 @@
->>>>>     struct io_fadvise {
->>>>>         struct file            *file;
->>>>>         u64                offset;
->>>>> -    u32                len;
->>>>> +    u64                len;
->>>>>         u32                advice;
->>>>>     };
->>>>>       struct io_madvise {
->>>>>         struct file            *file;
->>>>>         u64                addr;
->>>>> -    u32                len;
->>>>> +    u64                len;
->>>>>         u32                advice;
->>>>>     };
->>>>>     @@ -33,11 +33,13 @@ int io_madvise_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>>>     #if defined(CONFIG_ADVISE_SYSCALLS) && defined(CONFIG_MMU)
->>>>>         struct io_madvise *ma = io_kiocb_to_cmd(req, struct io_madvise);
->>>>>     -    if (sqe->buf_index || sqe->off || sqe->splice_fd_in)
->>>>> +    if (sqe->buf_index || sqe->splice_fd_in)
->>>>>             return -EINVAL;
->>>>>           ma->addr = READ_ONCE(sqe->addr);
->>>>> -    ma->len = READ_ONCE(sqe->len);
->>>>> +    ma->len = READ_ONCE(sqe->off);
->>>>> +    if (!ma->len)
->>>>> +        ma->len = READ_ONCE(sqe->len);
->>>>>         ma->advice = READ_ONCE(sqe->fadvise_advice);
->>>>>         req->flags |= REQ_F_FORCE_ASYNC;
->>>>>         return 0;
->>>>> @@ -78,11 +80,13 @@ int io_fadvise_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>>>     {
->>>>>         struct io_fadvise *fa = io_kiocb_to_cmd(req, struct io_fadvise);
->>>>>     -    if (sqe->buf_index || sqe->addr || sqe->splice_fd_in)
->>>>> +    if (sqe->buf_index || sqe->splice_fd_in)
->>>>>             return -EINVAL;
->>>>>           fa->offset = READ_ONCE(sqe->off);
->>>>> -    fa->len = READ_ONCE(sqe->len);
->>>>> +    fa->len = READ_ONCE(sqe->addr);
->>>>> +    if (!fa->len)
->>>>> +        fa->len = READ_ONCE(sqe->len);
->>>>>         fa->advice = READ_ONCE(sqe->fadvise_advice);
->>>>>         if (io_fadvise_force_async(fa))
->>>>>             req->flags |= REQ_F_FORCE_ASYNC;
->>>>>
->>>>
->>>>
->>>> If we want to have the length in the same field in both *ADVISE
->>>> operations, we can put a flag in splice_fd_in/optlen.
->>>
->>> I don't think that part matters that much.
->>>
->>>> Maybe the explicit flag is a bit clearer for users of the API
->>>> compared to the implicit flag when setting sqe->len to zero?
->>>
->>> We could go either way. The unused fields returning -EINVAL if set right
->>> now can serve as the flag field - if you have it set, then that is your
->>> length. If not, then the old style is the length. That's the approach I
->>> took, rather than add an explicit flag to it. Existing users that would
->>> set the 64-bit length fields would get -EINVAL already. And since the
->>> normal flags field is already used for advice flags, I'd prefer just
->>> using the existing 64-bit zero fields for it rather than add a flag in
->>> an odd location. Would also make for an easier backport to stable.
->>>
->>> But don't feel that strongly about that part.
->>>
->>> Attached kernel patch with FEAT added, and liburing patch with 64
->>> versions added.
->>>
->>
->> Sounds good!
->> Do we want to do anything about the current (32-bit) functions in
->> liburing? They silently truncate the user's values, so either marking
->> them deprecated or changing the type of length in the arguments to a
->> __u32 could help.
-> 
-> I like changing it to an __u32, and then we'll add a note to the man
-> page for them as well (with references to the 64-bit variants).
-> 
-> I still need to write a test and actually test the patches, but I'll get
-> to that Monday. If you want to write a test case that checks the 64-bit
-> range, then please do!
-> 
+Support atomic writes by submitting a single BIO with the REQ_ATOMIC set.
 
-Maybe something like the following for madvise?
-Create an 8GB file initialized with 0xaa, punch a (8GB - page_size) hole 
-using MADV_REMOVE, and check the contents.
-It requires support for FALLOC_FL_PUNCH_HOLE in the filesystem.
+It must be ensured that the atomic write adheres to its rules, like
+naturally aligned offset, so call blkdev_dio_invalid() ->
+blkdev_atomic_write_valid() [with renaming blkdev_dio_unaligned() to
+blkdev_dio_invalid()] for this purpose. The BIO submission path currently
+checks for atomic writes which are too large, so no need to check here.
 
+In blkdev_direct_IO(), if the nr_pages exceeds BIO_MAX_VECS, then we cannot
+produce a single BIO, so error in this case.
 
-diff --git a/test/helpers.c b/test/helpers.c
-index 779347f..acf1c7d 100644
---- a/test/helpers.c
-+++ b/test/helpers.c
-@@ -76,8 +76,9 @@ void *t_calloc(size_t nmemb, size_t size)
-   */
-  static void __t_create_file(const char *file, size_t size, char pattern)
-  {
--	ssize_t ret;
--	char *buf;
-+	ssize_t ret = 0;
-+	size_t size_remaining;
-+	char *buf, *buf_loc;
-  	int fd;
+Finally set FMODE_CAN_ATOMIC_WRITE when the bdev can support atomic writes
+and the associated file flag is for O_DIRECT.
 
-  	buf = t_malloc(size);
-@@ -86,11 +87,19 @@ static void __t_create_file(const char *file, size_t 
-size, char pattern)
-  	fd = open(file, O_WRONLY | O_CREAT, 0644);
-  	assert(fd >= 0);
+Signed-off-by: John Garry <john.g.garry@oracle.com>
+---
+ block/fops.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
--	ret = write(fd, buf, size);
-+	size_remaining = size;
-+	buf_loc = buf;
-+	while (size_remaining > 0) {
-+		ret = write(fd, buf_loc, size_remaining);
-+		if (ret <= 0)
-+			break;
-+		size_remaining -= ret;
-+		buf_loc += ret;
-+	}
-  	fsync(fd);
-  	close(fd);
-  	free(buf);
--	assert(ret == size);
-+	assert(size_remaining == 0);
-  }
-
-  void t_create_file(const char *file, size_t size)
-diff --git a/test/madvise.c b/test/madvise.c
-index 7938ec4..b5b0cbe 100644
---- a/test/madvise.c
-+++ b/test/madvise.c
-@@ -15,34 +15,7 @@
-  #include "helpers.h"
-  #include "liburing.h"
-
--#define FILE_SIZE	(128 * 1024)
--
--#define LOOPS		100
--#define MIN_LOOPS	10
--
--static unsigned long long utime_since(const struct timeval *s,
--				      const struct timeval *e)
--{
--	long long sec, usec;
--
--	sec = e->tv_sec - s->tv_sec;
--	usec = (e->tv_usec - s->tv_usec);
--	if (sec > 0 && usec < 0) {
--		sec--;
--		usec += 1000000;
--	}
--
--	sec *= 1000000;
--	return sec + usec;
--}
--
--static unsigned long long utime_since_now(struct timeval *tv)
--{
--	struct timeval end;
--
--	gettimeofday(&end, NULL);
--	return utime_since(tv, &end);
--}
-+#define FILE_SIZE	(8ULL * 1024ULL * 1024ULL * 1024ULL)
-
-  static int do_madvise(struct io_uring *ring, void *addr, off_t len, 
-int advice)
-  {
-@@ -76,83 +49,62 @@ static int do_madvise(struct io_uring *ring, void 
-*addr, off_t len, int advice)
-  		unlink(".madvise.tmp");
-  		exit(0);
-  	} else if (ret) {
--		fprintf(stderr, "cqe->res=%d\n", cqe->res);
-+		fprintf(stderr, "cqe->res=%d (%s)\n", cqe->res,
-+			strerror(-cqe->res));
-  	}
-  	io_uring_cqe_seen(ring, cqe);
-  	return ret;
-  }
-
--static long do_copy(int fd, char *buf, void *ptr)
--{
--	struct timeval tv;
--
--	gettimeofday(&tv, NULL);
--	memcpy(buf, ptr, FILE_SIZE);
--	return utime_since_now(&tv);
--}
--
-  static int test_madvise(struct io_uring *ring, const char *filename)
-  {
--	unsigned long cached_read, uncached_read, cached_read2;
-+	size_t page_size;
-+	unsigned char contents;
-  	int fd, ret;
--	char *buf;
--	void *ptr;
-+	unsigned char *ptr;
+diff --git a/block/fops.c b/block/fops.c
+index 376265935714..9d6d86ebefb9 100644
+--- a/block/fops.c
++++ b/block/fops.c
+@@ -34,9 +34,12 @@ static blk_opf_t dio_bio_write_op(struct kiocb *iocb)
+ 	return opf;
+ }
+ 
+-static bool blkdev_dio_unaligned(struct block_device *bdev, loff_t pos,
+-			      struct iov_iter *iter)
++static bool blkdev_dio_invalid(struct block_device *bdev, loff_t pos,
++				struct iov_iter *iter, bool is_atomic)
+ {
++	if (is_atomic && !generic_atomic_write_valid(pos, iter))
++		return true;
 +
-+	page_size = sysconf(_SC_PAGE_SIZE);
-
--	fd = open(filename, O_RDONLY);
-+	fd = open(filename, O_RDWR);
-  	if (fd < 0) {
-  		perror("open");
-  		return 1;
-  	}
-
--	buf = t_malloc(FILE_SIZE);
--
--	ptr = mmap(NULL, FILE_SIZE, PROT_READ, MAP_PRIVATE, fd, 0);
-+	ptr = mmap(NULL, FILE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  	if (ptr == MAP_FAILED) {
-  		perror("mmap");
-  		return 1;
-  	}
-
--	cached_read = do_copy(fd, buf, ptr);
--	if (cached_read == -1)
--		return 1;
--
--	cached_read = do_copy(fd, buf, ptr);
--	if (cached_read == -1)
--		return 1;
--
--	ret = do_madvise(ring, ptr, FILE_SIZE, MADV_DONTNEED);
--	if (ret)
--		return 1;
--
--	uncached_read = do_copy(fd, buf, ptr);
--	if (uncached_read == -1)
--		return 1;
--
--	ret = do_madvise(ring, ptr, FILE_SIZE, MADV_DONTNEED);
--	if (ret)
--		return 1;
--
--	ret = do_madvise(ring, ptr, FILE_SIZE, MADV_WILLNEED);
-+	ret =
-+	    do_madvise(ring, ptr + page_size, FILE_SIZE - page_size,
-+		       MADV_REMOVE);
-  	if (ret)
-  		return 1;
-
--	msync(ptr, FILE_SIZE, MS_SYNC);
--
--	cached_read2 = do_copy(fd, buf, ptr);
--	if (cached_read2 == -1)
--		return 1;
--
--	if (cached_read < uncached_read &&
--	    cached_read2 < uncached_read)
--		return 0;
-+	for (size_t i = 0; i < FILE_SIZE; i++) {
-+		contents = ptr[i];
-+		if (contents && i > page_size) {
-+			fprintf(stderr,
-+				"In removed page at %lu but contents=%x\n", i,
-+				contents);
-+			return 2;
-+		} else if (contents != 0xaa && i < page_size) {
-+			fprintf(stderr,
-+				"In non-removed page at %lu but contents=%x\n",
-+				i, contents);
-+			return 2;
-+		}
-+	}
-
--	return 2;
-+	return 0;
-  }
-
-  int main(int argc, char *argv[])
-  {
-  	struct io_uring ring;
--	int ret, i, good, bad;
-+	int ret;
-  	char *fname;
-
-  	if (argc > 1) {
-@@ -167,23 +119,12 @@ int main(int argc, char *argv[])
-  		goto err;
-  	}
-
--	good = bad = 0;
--	for (i = 0; i < LOOPS; i++) {
--		ret = test_madvise(&ring, fname);
--		if (ret == 1) {
--			fprintf(stderr, "test_madvise failed\n");
--			goto err;
--		} else if (!ret)
--			good++;
--		else if (ret == 2)
--			bad++;
--		if (i >= MIN_LOOPS && !bad)
--			break;
-+	ret = test_madvise(&ring, fname);
-+	if (ret) {
-+		fprintf(stderr, "test_madvise failed\n");
-+		goto err;
-  	}
-
--	/* too hard to reliably test, just ignore */
--	if ((0) && bad > good)
--		fprintf(stderr, "Suspicious timings (%u > %u)\n", bad, good);
-  	if (fname != argv[1])
-  		unlink(fname);
-  	io_uring_queue_exit(&ring);
+ 	return pos & (bdev_logical_block_size(bdev) - 1) ||
+ 		!bdev_iter_is_aligned(bdev, iter);
+ }
+@@ -72,6 +75,8 @@ static ssize_t __blkdev_direct_IO_simple(struct kiocb *iocb,
+ 	bio.bi_iter.bi_sector = pos >> SECTOR_SHIFT;
+ 	bio.bi_write_hint = file_inode(iocb->ki_filp)->i_write_hint;
+ 	bio.bi_ioprio = iocb->ki_ioprio;
++	if (iocb->ki_flags & IOCB_ATOMIC)
++		bio.bi_opf |= REQ_ATOMIC;
+ 
+ 	ret = bio_iov_iter_get_pages(&bio, iter);
+ 	if (unlikely(ret))
+@@ -343,6 +348,9 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
+ 		task_io_account_write(bio->bi_iter.bi_size);
+ 	}
+ 
++	if (iocb->ki_flags & IOCB_ATOMIC)
++		bio->bi_opf |= REQ_ATOMIC;
++
+ 	if (iocb->ki_flags & IOCB_NOWAIT)
+ 		bio->bi_opf |= REQ_NOWAIT;
+ 
+@@ -359,12 +367,13 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb *iocb,
+ static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+ {
+ 	struct block_device *bdev = I_BDEV(iocb->ki_filp->f_mapping->host);
++	bool is_atomic = iocb->ki_flags & IOCB_ATOMIC;
+ 	unsigned int nr_pages;
+ 
+ 	if (!iov_iter_count(iter))
+ 		return 0;
+ 
+-	if (blkdev_dio_unaligned(bdev, iocb->ki_pos, iter))
++	if (blkdev_dio_invalid(bdev, iocb->ki_pos, iter, is_atomic))
+ 		return -EINVAL;
+ 
+ 	nr_pages = bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS + 1);
+@@ -373,6 +382,8 @@ static ssize_t blkdev_direct_IO(struct kiocb *iocb, struct iov_iter *iter)
+ 			return __blkdev_direct_IO_simple(iocb, iter, bdev,
+ 							nr_pages);
+ 		return __blkdev_direct_IO_async(iocb, iter, bdev, nr_pages);
++	} else if (is_atomic) {
++		return -EINVAL;
+ 	}
+ 	return __blkdev_direct_IO(iocb, iter, bdev, bio_max_segs(nr_pages));
+ }
+@@ -612,6 +623,9 @@ static int blkdev_open(struct inode *inode, struct file *filp)
+ 	if (!bdev)
+ 		return -ENXIO;
+ 
++	if (bdev_can_atomic_write(bdev) && filp->f_flags & O_DIRECT)
++		filp->f_mode |= FMODE_CAN_ATOMIC_WRITE;
++
+ 	ret = bdev_open(bdev, mode, filp->private_data, NULL, filp);
+ 	if (ret)
+ 		blkdev_put_no_open(bdev);
+-- 
+2.31.1
 
