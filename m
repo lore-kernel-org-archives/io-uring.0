@@ -1,154 +1,123 @@
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEC712C7FB;
-	Thu, 18 Jul 2024 14:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B134204B;
+	Thu, 18 Jul 2024 18:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721313704; cv=none; b=JZKZ5Gn6LCcgheuffTNv9cRrpMnb5nqT2dflzZ22rjBBh+zr+dGdu/eX1eG7AV8dY5eceijBpDqptoFwLOwryMj7mdKl7FrvveJvvonAgFOU1/FL8EBLtW6hBROOUzgI4YRl3q98521WzQEA394TSLL9URPp6ESozRE3tMuXBzI=
+	t=1721325781; cv=none; b=jGnHTbXk4LQK7GxKeKqoPw85+Szs7eYz668BoM6hMEpXjXNtLG++KftmjTIQB/N6Ry31pKgOcU6NpMwPT9V5nyi2XvhjxalFHbC8jSx6Ny77KmDw9IFCxZiMC+/0nDR5zb31PTzp184jKny5YPBTIJ5qe63uussTyq3EPHeblmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721313704; c=relaxed/simple;
-	bh=iXzyFsVsJ6bOJ/aYkV/P6u+K+L2f9NSjbK9pGavbBIM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=ucw4gNiH4re51MxeDQAOPWxGjMC1yPJVgTGcPNspJmJBVtl7hQRvTXXCv1j5ERYbBnQD3fvol9nuvFxyadRBfgdOfWQjID6shZiI9t1SEkzn67jQWbr3kmgP8HghjjPShoqcm+5nu3fQ3vU+tG3eKDoGp//HXdKAMQsMfafHI9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4WPwPn1y2DzQlmF;
-	Thu, 18 Jul 2024 22:37:33 +0800 (CST)
-Received: from dggpemd200001.china.huawei.com (unknown [7.185.36.224])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1570F18009D;
-	Thu, 18 Jul 2024 22:41:38 +0800 (CST)
-Received: from [10.174.178.209] (10.174.178.209) by
- dggpemd200001.china.huawei.com (7.185.36.224) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Thu, 18 Jul 2024 22:41:37 +0800
-Message-ID: <4457af52-01a2-be1b-9d13-486b6bd8e579@huawei.com>
-Date: Thu, 18 Jul 2024 22:41:37 +0800
+	s=arc-20240116; t=1721325781; c=relaxed/simple;
+	bh=+VJtPR6VOe9LvNX/UZXH5jvX7PIQxO/JWJxMuAPIcpM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=iPXQ0HMDPw0/wBMl34t6uETaUgy1b3cmU6w3o5tsRoQxjuWCRMY9Sv098it+zhB+TLzZzU4DvbnzOMcuhuriuzsf26Mu+zrIsexWv3hMJEIrDPeDSu1XNOMv+yZYdXuQkgFhpv2XXjBE4WZPKqjv/UYhybuAGEhTTrbLaeicIeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JBWS5WWd; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JBWS5WWd"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1fc5296e214so9660265ad.0;
+        Thu, 18 Jul 2024 11:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721325779; x=1721930579; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AnzVYJeKKCpXlJ0KCWhZ40EvU8G8vZ7ZdJ8TzpSV98w=;
+        b=JBWS5WWdL99JjSk+NxMmC5KuuqHV5qk37poFOCkCQYhn1DyU44jzhHO0wQtO1FJ+2F
+         EMuQuQhhrfGz6wD5AO8j75H6K+wr3w/pHxmtjhQ7mZqKjPPh+yNsQmNwb6hcJYo7Zqod
+         obPJBVnnHRbbOLdWP0t4jX5M8VP3wM5jz7Bik6eTJ7uwYhYdO2FZGlszEfvFL1boCw/h
+         VdfXYsbXGaqBR4JhHsoca4XvBa5J7VFyV//NSITAYLumK+jDzSdoQixziqQnQJmipQ1a
+         OV9jAKwzR3n0kJ2aEl7w7fHWDWWvXEwzoZ/KK+hGl7GmA9++xx1gK/7572eab0isDgdU
+         1G3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721325779; x=1721930579;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AnzVYJeKKCpXlJ0KCWhZ40EvU8G8vZ7ZdJ8TzpSV98w=;
+        b=HhOMMLu3tHvJ3Lcdr1lqZe6DBLe4N0EEyvUHUjEQwPTpXOqScxaPUGkFe5QpZr7USZ
+         SXvTxfWTraaTxwH5U10MPQv/Erdj/+grLiTFvoie6FDyWkskwc0yoKBwPnzBJF5o4tSp
+         vRbqlh+3So5nAnYLE7QBdjEtwZ61nLHMwL9FK3ttHK1mUhPVUqiRFoqj9Ni6IsPQVxAe
+         DN89x0D/WZrzZhsWDj0paCQWYMD/iQj5WQHDi2w471pxvOjogH0aEAiLpgsHhux9bJWN
+         oKmaVP/GQE9XgOO0m9Bdtt8FMZ+yqXv0UR24Nm/YV0r0i/Y98brHAoZTbgekBvPFtVTf
+         5Z3w==
+X-Forwarded-Encrypted: i=1; AJvYcCUiIzdkp6peZBh0lKjCQCZIFs2oJuw3PBgdavwJDAqmpCAXPEJu+YGbIXIJm9M7FledLLuP6XKAzVYRPilDVfhz6DCFpmcvYZmgyMWoG5HccFtvw2FgoySFwKxrSJaNGcpEhDmvdSs=
+X-Gm-Message-State: AOJu0YyV2ptii528KYs1H+8hT0B9slrLz3xxJs54QVxRFqpmMQUOf983
+	NnTyh/S8QpucAJ/94W9cbCPGs8Vo9vYIcWPSMEAEgzMg06v4bRMNRq2/kOgv
+X-Google-Smtp-Source: AGHT+IECyYfOyBPfBcg6Q8G+frkFbY9aSrwdTxez0CNOyr81jToZzGaNhYogwxY94Uv/OIdKeg61Aw==
+X-Received: by 2002:a17:903:2308:b0:1fc:4a88:fe53 with SMTP id d9443c01a7336-1fc4e56bacamr49959585ad.51.1721325778981;
+        Thu, 18 Jul 2024 11:02:58 -0700 (PDT)
+Received: from [192.168.69.221] ([192.55.60.1])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fc0bc5372dsm95900445ad.295.2024.07.18.11.02.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jul 2024 11:02:58 -0700 (PDT)
+Message-ID: <d848129a-ed5e-46f5-ac17-add37d7799fd@gmail.com>
+Date: Thu, 18 Jul 2024 19:03:21 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: CVE-2024-41001: io_uring/sqpoll: work around a potential audit
- memory leak
-From: Wang Zhaolong <wangzhaolong1@huawei.com>
-To: <cve@kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-cve-announce@vger.kernel.org>, <axboe@kernel.dk>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	<io-uring@vger.kernel.org>
-References: <2024071253-CVE-2024-41001-7879@gregkh>
- <18634c7e-b234-ac02-20f8-4d5426733679@huawei.com>
-In-Reply-To: <18634c7e-b234-ac02-20f8-4d5426733679@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemd200001.china.huawei.com (7.185.36.224)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [io-uring?] general protection fault in
+ __io_remove_buffers
+To: syzbot <syzbot+2074b1a3d447915c6f1c@syzkaller.appspotmail.com>,
+ axboe@kernel.dk, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com
+References: <00000000000021e299061d7b6219@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <00000000000021e299061d7b6219@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello,
-
-I think a possible reason for the leak scenario is:
-
-When `audit_context->dummy` is 0. __audit_sockaddr() allocates sockaddr.
-
-In the below process, audit_reset_context() return early. ctx->sockaddr
-is not released.
-
-   io_issue_sqe
-     audit_uring_entry
-       __audit_uring_entry
-         ctx->dummy -- set dummy as non-zero
-     def->issue()
-     audit_uring_exit
-       __audit_uring_exit
-         audit_reset_context
-
-static void audit_reset_context(struct audit_context *ctx)
-{
-     ......
-     /* if ctx is non-null, reset the "ctx->context" regardless */
-     ctx->context = AUDIT_CTX_UNUSED;
-     if (ctx->dummy)
-         return;
-
-     ......
-     kfree(ctx->sockaddr);
-     ......
-}
-
-The `audit_uring_entry(IORING_OP_NOP);` statement initializes the 'dummy' once at the
-beginning to ensure that ctx->sockaddr is allocated and deallocated in pairs later
-in the process.
-
-According to the above analysis, I think the fixes tag should be
-5bd2182d58e9 ("audit,io_uring,io-wq: add some basic audit support to io_uring")
-Is my understanding correct?
-
-I look forward to hearing back.
-
-Best regards,
-Wang Zhaolong
-
+On 7/18/24 02:20, syzbot wrote:
 > Hello,
 > 
-> I was confused when reviewing the fix for CVE-2024-41001.
-> To better understand the issue and the proposed solution, I would
-> greatly appreciate your help in clarifying the following points:
+> syzbot found the following issue on:
 > 
-> 1. What was the original patch that introduced this issue (any Fixes tag)?
-> 2. Is the leaking variable member the "context->sockaddr"?
-> 3. Could you shed some light on how the reference to the leaked memory is
->     lost during the transition from the prep phase to the issue phase?
-> 4. The fix introduces a NOP operation "before the SQPOLL does anything."
->     How does this addition of a NOP operation prevent the memory leak from
->     occurring?
+> HEAD commit:    d67978318827 Merge tag 'x86_cpu_for_v6.11_rc1' of git://gi..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1178e9e9980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=e206d588252bd3ff
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2074b1a3d447915c6f1c
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10e07d9e980000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16adf045980000
 > 
-> Thank you in advance for taking the time to address my questions. Your
-> insights will help me better understand this fix.
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/f34b31760156/disk-d6797831.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/a92e51d8d32e/vmlinux-d6797831.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/000a6a162550/bzImage-d6797831.xz
 > 
-> Best regards,
-> Wang Zhaolong
+> The issue was bisected to:
 > 
->> Description
->> ===========
->>
->> In the Linux kernel, the following vulnerability has been resolved:
->>
->> io_uring/sqpoll: work around a potential audit memory leak
->>
->> kmemleak complains that there's a memory leak related to connect
->> handling:
->>
->> unreferenced object 0xffff0001093bdf00 (size 128):
->> comm "iou-sqp-455", pid 457, jiffies 4294894164
->> hex dump (first 32 bytes):
->> 02 00 fa ea 7f 00 00 01 00 00 00 00 00 00 00 00  ................
->> 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
->> backtrace (crc 2e481b1a):
->> [<00000000c0a26af4>] kmemleak_alloc+0x30/0x38
->> [<000000009c30bb45>] kmalloc_trace+0x228/0x358
->> [<000000009da9d39f>] __audit_sockaddr+0xd0/0x138
->> [<0000000089a93e34>] move_addr_to_kernel+0x1a0/0x1f8
->> [<000000000b4e80e6>] io_connect_prep+0x1ec/0x2d4
->> [<00000000abfbcd99>] io_submit_sqes+0x588/0x1e48
->> [<00000000e7c25e07>] io_sq_thread+0x8a4/0x10e4
->> [<00000000d999b491>] ret_from_fork+0x10/0x20
->>
->> which can can happen if:
->>
->> 1) The command type does something on the prep side that triggers an
->>     audit call.
->> 2) The thread hasn't done any operations before this that triggered
->>     an audit call inside ->issue(), where we have audit_uring_entry()
->>     and audit_uring_exit().
->>
->> Work around this by issuing a blanket NOP operation before the SQPOLL
->> does anything.
->>
->> The Linux kernel CVE team has assigned CVE-2024-41001 to this issue.
+> commit 87585b05757dc70545efb434669708d276125559
+> Author: Jens Axboe <axboe@kernel.dk>
+> Date:   Wed Mar 13 02:24:21 2024 +0000
 > 
+>      io_uring/kbuf: use vm_insert_pages() for mmap'ed pbuf ring
+Easily reproducible, the diff helps
+
+#syz test:
+
+
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index d2945c9c812b..c95dc1736dd9 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -657,8 +657,10 @@ static int io_alloc_pbuf_ring(struct io_ring_ctx *ctx,
+  	ring_size = reg->ring_entries * sizeof(struct io_uring_buf_ring);
+  
+  	bl->buf_ring = io_pages_map(&bl->buf_pages, &bl->buf_nr_pages, ring_size);
+-	if (!bl->buf_ring)
++	if (IS_ERR(bl->buf_ring)) {
++		bl->buf_ring = NULL;
+  		return -ENOMEM;
++	}
+  
+  	bl->is_buf_ring = 1;
+  	bl->is_mmap = 1;
 
