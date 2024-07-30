@@ -1,149 +1,60 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D666618DF9A
-	for <io-uring@vger.kernel.org>; Tue, 30 Jul 2024 20:29:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1562018DF91
+	for <io-uring@vger.kernel.org>; Tue, 30 Jul 2024 22:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.209.37.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722371369; cv=none; b=QQpGDNSbFDGgWhN/JYGOyYKPijQZfaXkoA7vOp7Ai1vzq4u31MDXWiuKGtS5Tg0ENDU91kKFYIIqe9FMvWBeNF+ST/CEzUm1Aq0yblxkabbQQXkhuNXmV8p8ygvQwquapRFrZFhhm6gwYfgD9oEJqvfOeibAhKh6V4cw7r4RvZs=
+	t=1722378171; cv=none; b=a6EW7XxIvhFqd61yS/20C+vrUibuCWzkrlwQwV1IVUq6Qh9XP/CY4ZrCBZRFuQdjPrUcH2reSuqQ+XNX+qSdtYreAWOxsfoHGBTcrPLz/H/R8b4/8Jtqf9GUPuZ8u9DXvcULnm2ELss2KbndfAmZRdLBFX71e0wiFtnzYrDu1OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722371369; c=relaxed/simple;
-	bh=JZOOWWe04FmpSsGhdrgPhCnpAbAOD6Rq2mMhZw+BKjs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uEhHuiC4waSaQhyotR88Uo4R5BvJwve9iBoOeLvHhLACBGDftA/fl7WkDLQTBNxq9voER8sGQhP/EdGBDFhRv+W5zKbOAOmN2WhbMU1YLpz9Uf9wlKaDYtbfBaZhmRPhMsKU91897X6pjyMKTTrzF9WMteMGFTpILDSRzucva8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bdZf2IGh; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bdZf2IGh"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-428243f928fso13266165e9.0
-        for <io-uring@vger.kernel.org>; Tue, 30 Jul 2024 13:29:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722371366; x=1722976166; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xb8u2LzTqPXQGpAJX7Eawxnuj0oeSkULgKH2OZy+MqQ=;
-        b=bdZf2IGhhWUq1vfE+U1V//rnjSwPgO/D5afOHe3MHePFaG/GYrcahmk7rFXYmPZZgA
-         V3NepThcyv8iY0Iny5+d17KD2Tv8S21qvV04k4RovLOqlNHYT1dLKl4HkZn1bWZN8ueR
-         Dfprs3cr0+D+3nNni5LnU9Zfmqs2Z6L0TPvLFTkeNHl1NkVDUzoQzIVwnC3VnTEyQlBx
-         XL2SUmciWJ3YEclMhJ8TebD4f5741CxN3RNi21jCa3x1GxCvvOnZ24HdC1AhiU6WpAPM
-         wzD80zL3gamMvZqZRI7BmarulhcizH1TXHdoMSzOYC1XlKalOsKSxdW9AtBFBuBoXFuB
-         NzXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722371366; x=1722976166;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xb8u2LzTqPXQGpAJX7Eawxnuj0oeSkULgKH2OZy+MqQ=;
-        b=IrBlm+t8YfrGPv7LuJol2bqaclcAGDSL7Tode+vj5s/kQ/W/Q7Ppsjb28/Fu671vp8
-         30xQ1tBSogGt9b4vLhTL18SbYasA90Xb1I3Co5lAT1GlQfz1wcK1YWX1IBRl1COT1gmj
-         rvCPCXT5TLjTPEPQaKDoK5CdDtSZ7SnYHrDczqhpAGMG4hNwvRW3K1pv8bdUxPRKc4KK
-         wy5PD5vlFPwtSoJRyWSCdvZQk07AzeFyzYlLXkf9OeMMbpXElYiZ8EAnDeHSqLrpK8Eb
-         Exl1BDALpvqKIZ1AXEeYEiGdGqX5bNE/Cwmba/19ApfhgH/tkGjG0SBsdhfCjfZ7h2Sy
-         fEDA==
-X-Gm-Message-State: AOJu0Yzrtmf2neYcu0gzZWRrNZKnBJaxZbzldMIwB99RexRGGopTt3xN
-	0Y8Qug7QMSMD0OcctRrSa3Vr+hO/ekSfcW4aSXFremGxHzYVpqJ5UOQ2og==
-X-Google-Smtp-Source: AGHT+IFEi5Vr8c/q+mEPUHBtUOwriUpfA5Hz1dQuRJSM0ghM5w/qzu7YdG4QIN8ekovfZXSVMbqFNQ==
-X-Received: by 2002:a05:600c:4fcd:b0:426:545b:ec00 with SMTP id 5b1f17b1804b1-42811da0861mr103358135e9.19.1722371365568;
-        Tue, 30 Jul 2024 13:29:25 -0700 (PDT)
-Received: from 127.0.0.1localhost ([85.255.235.94])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42808457c7fsm214488065e9.32.2024.07.30.13.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jul 2024 13:29:24 -0700 (PDT)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	asml.silence@gmail.com,
-	Lewis Baker <lewissbaker@gmail.com>
-Subject: [PATCH 3/3] io_uring: add absolute mode wait timeouts
-Date: Tue, 30 Jul 2024 21:29:44 +0100
-Message-ID: <8db7af5ac6f6c81dc731e214f927c58e53d2d015.1722357468.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <cover.1722357468.git.asml.silence@gmail.com>
-References: <cover.1722357468.git.asml.silence@gmail.com>
+	s=arc-20240116; t=1722378171; c=relaxed/simple;
+	bh=LItwvTjAr/dTBfvi42l08mJcGrRyHFm3FzrRsYFO+NU=;
+	h=From:Message-ID:Date:To:Subject; b=ri4exONu1eszpaqLtmC9q2Zpc2kfbKcChNRYVe0AMoNYP7TrkBELd3yXEV6Ed8NhGKBX5n8Q0fq8zyd/+Ufj/w/fXqVF4T4yyrJ+sPCfxoT365umcLsAP8gigqdT9neoj8ysnG2YTBZqd1GHPwS1Bit+6LimzqTj2LxJBvBGEUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trillion01.com; spf=pass smtp.mailfrom=trillion01.com; arc=none smtp.client-ip=173.209.37.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trillion01.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trillion01.com
+Received: from [45.44.224.220] (port=38618 helo=localhost)
+	by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <olivier@trillion01.com>)
+	id 1sYvF2-0000pj-1K;
+	Tue, 30 Jul 2024 18:22:48 -0400
+From: Olivier Langlois <olivier@trillion01.com>
+Message-ID: <cover.1722374370.git.olivier@trillion01.com>
+Date: Tue, 30 Jul 2024 17:19:30 -0400
+To: Jens Axboe <axboe@kernel.dk>,Pavel Begunkov <asml.silence@gmail.com>,io-uring@vger.kernel.org
+Subject: [PATCH 0/2] io_uring: minor sqpoll code refactoring
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-In addition to current relative timeouts for the waiting loop, where the
-timespec argument specifies the maximum time it can wait for, add
-support for the absolute mode, with the value carrying a CLOCK_MONOTONIC
-absolute time until which we should return control back to the user.
+the first patch is minor micro-optimization that attempts to avoid a memory
+access if by testing a variable to is very likely already in a register
 
-Link: https://github.com/axboe/liburing/issues/1162
-Suggested-by: Lewis Baker <lewissbaker@gmail.com>
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- include/uapi/linux/io_uring.h |  1 +
- io_uring/io_uring.c           | 13 +++++++------
- 2 files changed, 8 insertions(+), 6 deletions(-)
+the second patch is also minor but this is much more serious. Without it,
+it is possible to have a ring that is configured to enable NAPI busy polling
+to NOT perform busy polling in specific conditions.
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 2aaf7ee256ac..afc901502804 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -507,6 +507,7 @@ struct io_cqring_offsets {
- #define IORING_ENTER_SQ_WAIT		(1U << 2)
- #define IORING_ENTER_EXT_ARG		(1U << 3)
- #define IORING_ENTER_REGISTERED_RING	(1U << 4)
-+#define IORING_ENTER_ABS_TIMER		(1U << 5)
- 
- /*
-  * Passed in for io_uring_setup(2). Copied back with updated info on success
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 9ec07f76ad19..5940bd8f5630 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2387,7 +2387,7 @@ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
-  * Wait until events become available, if we don't already have some. The
-  * application must reap them itself, as they reside on the shared cq ring.
-  */
--static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
-+static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events, u32 flags,
- 			  const sigset_t __user *sig, size_t sigsz,
- 			  struct __kernel_timespec __user *uts)
- {
-@@ -2416,13 +2416,13 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events,
- 
- 	if (uts) {
- 		struct timespec64 ts;
--		ktime_t dt;
- 
- 		if (get_timespec64(&ts, uts))
- 			return -EFAULT;
- 
--		dt = timespec64_to_ktime(ts);
--		iowq.timeout = ktime_add(dt, ktime_get());
-+		iowq.timeout = timespec64_to_ktime(ts);
-+		if (!(flags & IORING_ENTER_ABS_TIMER))
-+			iowq.timeout = ktime_add(iowq.timeout, ktime_get());
- 	}
- 
- 	if (sig) {
-@@ -3153,7 +3153,8 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
- 
- 	if (unlikely(flags & ~(IORING_ENTER_GETEVENTS | IORING_ENTER_SQ_WAKEUP |
- 			       IORING_ENTER_SQ_WAIT | IORING_ENTER_EXT_ARG |
--			       IORING_ENTER_REGISTERED_RING)))
-+			       IORING_ENTER_REGISTERED_RING |
-+			       IORING_ENTER_ABS_TIMER)))
- 		return -EINVAL;
- 
- 	/*
-@@ -3252,7 +3253,7 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
- 				min_complete = min(min_complete,
- 						   ctx->cq_entries);
- 				ret2 = io_cqring_wait(ctx, min_complete, sig,
--						      argsz, ts);
-+						      flags, argsz, ts);
- 			}
- 		}
- 
+Olivier Langlois (2):
+  io_uring: micro optimization of __io_sq_thread() condition
+  io_uring: do the sqpoll napi busy poll outside the submission block
+
+ io_uring/napi.h   | 9 +++++++++
+ io_uring/sqpoll.c | 9 +++++----
+ 2 files changed, 14 insertions(+), 4 deletions(-)
+
 -- 
 2.45.2
 
