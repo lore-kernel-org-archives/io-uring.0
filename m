@@ -1,64 +1,64 @@
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4B21AF4D2
-	for <io-uring@vger.kernel.org>; Wed, 21 Aug 2024 14:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC861B1D56
+	for <io-uring@vger.kernel.org>; Wed, 21 Aug 2024 14:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724249958; cv=none; b=H1HePLsD+yKmVTW0NZFhqnQHPrLVBW4HKSsDw2OSWvJUjawNvN8V9NUowuzgHy28HiLd2mep9O39uuaQ0qsPFfttq1FuKVb3ufSjdpubZLFCr7BIiV0IKlA7QqkXxEgmoJeRJqg4cZWufhbgmVLYhw/dbC3xUrNegISJP0M1yAY=
+	t=1724249959; cv=none; b=Fk8lHl1ejogzoCMom+j2yjCcjsgmCVgjQkG82I950EFer9nookk6qmUqLY7yw/2oHtG/yzuygKF1ntgdnGZyzog3j0B7W7VtvpZcDk2H8FVO4wyb1ezQTU0c8Tt6pUc4Vo7fYtgl48ek0fX5t060RMPj5S9DLTAKK1/xX/dKJnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724249958; c=relaxed/simple;
-	bh=xMoc4My7QZ8jZ5RQ5B8Hxyx6CrgWlRJp/Q9mFmCwZGs=;
+	s=arc-20240116; t=1724249959; c=relaxed/simple;
+	bh=ZuKjf4ATUzMHz+NDRSe13wyM+i7gX2rCoBO5erLvIOQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ceh6nq8WUMl7s4/tEHnPgLILE5jaQm3CsTapiCIcPhFI7siNUGsUDQkmH8wy2sJI9QSQp+oKTesOO9b/frgkdNgJtfItkO6E5ocGg0RWjk69tB2ofboGHL74boT7Mfoaw/siOZUD2M53fEnANgMmtbzugxAegGhxwXSKfDAWtQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=bUIWAngH; arc=none smtp.client-ip=209.85.166.171
+	 MIME-Version; b=MURB4FGapz1xD88n2NABvBlRuZy9+g8ctesBsWCzUQMy4RxfPUku9nlYKpWOnrSmgyAPTrmKnZNtunWdZffptXgky01aOBalq6vd9iV++r/af3n02ieQsd5uvggFcAjhltq29hz+mLKTYd0YP1i6idcWrqqo5nyAaXegg3rq388=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=JH5Aq49b; arc=none smtp.client-ip=209.85.166.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="bUIWAngH"
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-39d3cd4fa49so3025395ab.1
-        for <io-uring@vger.kernel.org>; Wed, 21 Aug 2024 07:19:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="JH5Aq49b"
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-37636c3872bso26033395ab.3
+        for <io-uring@vger.kernel.org>; Wed, 21 Aug 2024 07:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1724249953; x=1724854753; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1724249956; x=1724854756; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A6LTIh3DcVfrLOVFkRBBopt0cmnN3QyNN9FFhzOKYYo=;
-        b=bUIWAngHGY0+adtTvpg0QQLsZfKdZD3u7EJl+4os4QJvFJqGvd2S16YscpVA6AGo5j
-         UCto7bOHZg/Eeoggi84cxZouSEZuTRmjBwhol7I2nBNIH8RmMQ2RXpQJbvLWoWMPLmDk
-         WVWyJCIRYX4aKY2nJ2RHJs1Kxz/yXSE+sMT/cKXxvcxq3fYVR4oUBYFkbIWX0Lqef2No
-         iSA0BxFs0c8rwkZ5Q3Ybpu2220UM6WnLNqZ7iwlmPOY/L2VaDFWU1Ev/E9QyTxZZDiYL
-         Ws2nRBBvWXLip5UbU+2akpBppDIX9ySbFFKvhHISNa7KIJ2xK7nA4zgkJkNmqyqKpDIR
-         mBSQ==
+        bh=GVnsGmbj3k+86VX6mvfNHtIqtKsh1mg4Q0PTn3axPDg=;
+        b=JH5Aq49bRVx6QuG/aMDLPFbtzgCm/7Gn2AIGB2kmfF99pvYhjOCVYxS34SBp+QlzC2
+         Z0DS1OlE7/Loe4wlFBlPihc8h7N4Ptl2MuYgqzj7DJ5dxH8FKNci6pPxG9X6wprBUenU
+         WUNygLA5xuQRVxhG7lS+hAkvzfS6sumsuKOGLt+0QTH/mPSsam99dEMUVK03oRlpoPgs
+         sGyckGczw0McN6XJh9FTc/t2ebVftr36suGh9A2EHuF0jbrXW3OJ1Sgt2UWtp2EokWEy
+         QUGPAfYb4f9MrUsx3LGncwTVegItB2ZLS5Y3WtjaoN0KMt7z4bom2M6szfLca6k4fRUj
+         ODEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724249953; x=1724854753;
+        d=1e100.net; s=20230601; t=1724249956; x=1724854756;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A6LTIh3DcVfrLOVFkRBBopt0cmnN3QyNN9FFhzOKYYo=;
-        b=TUmmoik5ROgKQQKY6dI2NkipSEYECxph96N0f6iJh7/NV03eUg8P9xN0GlufMykSS/
-         h7j/anS+XzouBVAnutC1yuEiQTz7rLg7z24muZAJ6A/5TUaLT7g4+3m89ANjJPwXav6c
-         +66v9aQiGwPx8PCrdmPuhwJSx7fzCBx2vZ/FMtfRin/YZdf0/jc42Ah10OlPw4Q1VJe1
-         z7lgAmd+tMIQ7fX4IrbLNHOJX0Tw5EhRjg88RwHyLCfPArSFXm5r+jGJWDYxUI/tuPoH
-         WsxB4CqaYMbMQrqSn7PldzPEgAAWU1Rq1gRNyADO3T1tdYsMUFa5cc7UCyzWLZC2NRYu
-         Xz8w==
-X-Gm-Message-State: AOJu0Yx2oGssVq2hYp1Me95D8BbWHqNlghlysiPsy0jHK7S8p1w1Wvr+
-	bGhd9O8E9eluvKgstdgLr1qEHyk1atFo3WJen8JIMWsKGHl91EZ6EVtLZmTdRVj/4QB46BnfLnI
-	m
-X-Google-Smtp-Source: AGHT+IHYoxO7kjfbBsDXbVUJLAGr5MmQ4Afq5NyUBt5LDoVdknrp46HPripSzP2q2zbjiy7addY1QQ==
-X-Received: by 2002:a05:6e02:152b:b0:39d:2e6f:bb19 with SMTP id e9e14a558f8ab-39d6c3c0e6cmr18502195ab.10.1724249953467;
-        Wed, 21 Aug 2024 07:19:13 -0700 (PDT)
+        bh=GVnsGmbj3k+86VX6mvfNHtIqtKsh1mg4Q0PTn3axPDg=;
+        b=UJ1VrfeW00Y6L4chKanunwsZ6DbHVm3lYSQ89l2PEWnJsace5BmezpT+j5fjnhH3dt
+         4Iptc5domnRFDJp9Y+TWk6gPyk4mmAgJlx6UhnLkeB24ip2UpFIy3PiS8LCpaeOBWSg1
+         BOKYxWlSAoMPdYolL4Xyju9h7U8+BpevG3MlmuUhU04zRGet1HI3/yHWa3XtIPTtHjJR
+         0XZexXIoRLhb4XjK0p5eo2SRptic2e8A9s5Nbsh8vMTti6KjBfs8pJixNs7261EWzFiH
+         k/+j2ZDh1h+ejo6OZFEW+XlFyZKYGAR6dnlnFoLexXGwtMirTpa8B80vsBE+5JDPBQAZ
+         B93g==
+X-Gm-Message-State: AOJu0YxeOJJmOcWoIJqftP8SWNKVv9Dm/G/kPm2GGiNA0ECUFb4qdFaQ
+	STqyd8Ag5aZjpUz0wuXceHAoe5hj8GrH+TzASYETHp7s5L/at1g/dfnRe2ncwSFICV2Mw84IyXX
+	V
+X-Google-Smtp-Source: AGHT+IEqwHsIoSyZnluWkAyY0OLmXSNQn8BEkZm3eSxM2qQmaQDAWyCyiVrYqxSQfLjEIJh401YBPQ==
+X-Received: by 2002:a05:6e02:1fe5:b0:39d:25ef:541e with SMTP id e9e14a558f8ab-39d6c3c7820mr24231875ab.26.1724249955807;
+        Wed, 21 Aug 2024 07:19:15 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39d1eb0bc93sm50967285ab.19.2024.08.21.07.19.12
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39d1eb0bc93sm50967285ab.19.2024.08.21.07.19.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2024 07:19:13 -0700 (PDT)
+        Wed, 21 Aug 2024 07:19:14 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: dw@davidwei.uk,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/5] io_uring: encapsulate extraneous wait flags into a separate struct
-Date: Wed, 21 Aug 2024 08:16:22 -0600
-Message-ID: <20240821141910.204660-2-axboe@kernel.dk>
+Subject: [PATCH 3/5] io_uring: implement our own schedule timeout handling
+Date: Wed, 21 Aug 2024 08:16:24 -0600
+Message-ID: <20240821141910.204660-4-axboe@kernel.dk>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240821141910.204660-1-axboe@kernel.dk>
 References: <20240821141910.204660-1-axboe@kernel.dk>
@@ -70,134 +70,92 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rather than need to pass in 2 or 3 separate arguments, add a struct
-to encapsulate the timeout and sigset_t parts of waiting. In preparation
-for adding another argument for waiting.
+In preparation for having two distinct timeouts and avoid waking the
+task if we don't need to.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 45 ++++++++++++++++++++++++---------------------
- 1 file changed, 24 insertions(+), 21 deletions(-)
+ io_uring/io_uring.c | 37 ++++++++++++++++++++++++++++++++-----
+ io_uring/io_uring.h |  2 ++
+ 2 files changed, 34 insertions(+), 5 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 20229e72b65c..37053d32c668 100644
+index 9e2b8d4c05db..4ba5292137c3 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -2384,13 +2384,18 @@ static inline int io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+@@ -2322,7 +2322,7 @@ static int io_wake_function(struct wait_queue_entry *curr, unsigned int mode,
+ 	 * Cannot safely flush overflowed CQEs from here, ensure we wake up
+ 	 * the task, and the next invocation will do it.
+ 	 */
+-	if (io_should_wake(iowq) || io_has_work(iowq->ctx))
++	if (io_should_wake(iowq) || io_has_work(iowq->ctx) || iowq->hit_timeout)
+ 		return autoremove_wake_function(curr, mode, wake_flags, key);
+ 	return -1;
+ }
+@@ -2350,6 +2350,34 @@ static bool current_pending_io(void)
+ 	return percpu_counter_read_positive(&tctx->inflight);
+ }
+ 
++static enum hrtimer_restart io_cqring_timer_wakeup(struct hrtimer *timer)
++{
++	struct io_wait_queue *iowq = container_of(timer, struct io_wait_queue, t);
++
++	WRITE_ONCE(iowq->hit_timeout, 1);
++	wake_up_process(iowq->wq.private);
++	return HRTIMER_NORESTART;
++}
++
++static int io_cqring_schedule_timeout(struct io_wait_queue *iowq,
++				      clockid_t clock_id)
++{
++	iowq->hit_timeout = 0;
++	hrtimer_init_on_stack(&iowq->t, clock_id, HRTIMER_MODE_ABS);
++	iowq->t.function = io_cqring_timer_wakeup;
++	hrtimer_set_expires_range_ns(&iowq->t, iowq->timeout, 0);
++	hrtimer_start_expires(&iowq->t, HRTIMER_MODE_ABS);
++
++	if (!READ_ONCE(iowq->hit_timeout))
++		schedule();
++
++	hrtimer_cancel(&iowq->t);
++	destroy_hrtimer_on_stack(&iowq->t);
++	__set_current_state(TASK_RUNNING);
++
++	return READ_ONCE(iowq->hit_timeout) ? -ETIME : 0;
++}
++
+ static int __io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+ 				     struct io_wait_queue *iowq)
+ {
+@@ -2362,11 +2390,10 @@ static int __io_cqring_wait_schedule(struct io_ring_ctx *ctx,
+ 	 */
+ 	if (current_pending_io())
+ 		current->in_iowait = 1;
+-	if (iowq->timeout == KTIME_MAX)
++	if (iowq->timeout != KTIME_MAX)
++		ret = io_cqring_schedule_timeout(iowq, ctx->clockid);
++	else
+ 		schedule();
+-	else if (!schedule_hrtimeout_range_clock(&iowq->timeout, 0,
+-						 HRTIMER_MODE_ABS, ctx->clockid))
+-		ret = -ETIME;
+ 	current->in_iowait = 0;
  	return ret;
  }
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 9935819f12b7..f95c1b080f4b 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -40,7 +40,9 @@ struct io_wait_queue {
+ 	struct io_ring_ctx *ctx;
+ 	unsigned cq_tail;
+ 	unsigned nr_timeouts;
++	int hit_timeout;
+ 	ktime_t timeout;
++	struct hrtimer t;
  
-+struct ext_arg {
-+	size_t argsz;
-+	struct __kernel_timespec __user *ts;
-+	const sigset_t __user *sig;
-+};
-+
- /*
-  * Wait until events become available, if we don't already have some. The
-  * application must reap them itself, as they reside on the shared cq ring.
-  */
- static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events, u32 flags,
--			  const sigset_t __user *sig, size_t sigsz,
--			  struct __kernel_timespec __user *uts)
-+			  struct ext_arg *ext_arg)
- {
- 	struct io_wait_queue iowq;
- 	struct io_rings *rings = ctx->rings;
-@@ -2415,10 +2420,10 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events, u32 flags,
- 	iowq.cq_tail = READ_ONCE(ctx->rings->cq.head) + min_events;
- 	iowq.timeout = KTIME_MAX;
- 
--	if (uts) {
-+	if (ext_arg->ts) {
- 		struct timespec64 ts;
- 
--		if (get_timespec64(&ts, uts))
-+		if (get_timespec64(&ts, ext_arg->ts))
- 			return -EFAULT;
- 
- 		iowq.timeout = timespec64_to_ktime(ts);
-@@ -2426,14 +2431,14 @@ static int io_cqring_wait(struct io_ring_ctx *ctx, int min_events, u32 flags,
- 			iowq.timeout = ktime_add(iowq.timeout, io_get_time(ctx));
- 	}
- 
--	if (sig) {
-+	if (ext_arg->sig) {
- #ifdef CONFIG_COMPAT
- 		if (in_compat_syscall())
--			ret = set_compat_user_sigmask((const compat_sigset_t __user *)sig,
--						      sigsz);
-+			ret = set_compat_user_sigmask((const compat_sigset_t __user *)ext_arg->sig,
-+						      ext_arg->argsz);
- 		else
- #endif
--			ret = set_user_sigmask(sig, sigsz);
-+			ret = set_user_sigmask(ext_arg->sig, ext_arg->argsz);
- 
- 		if (ret)
- 			return ret;
-@@ -3112,9 +3117,8 @@ static int io_validate_ext_arg(unsigned flags, const void __user *argp, size_t a
- 	return 0;
- }
- 
--static int io_get_ext_arg(unsigned flags, const void __user *argp, size_t *argsz,
--			  struct __kernel_timespec __user **ts,
--			  const sigset_t __user **sig)
-+static int io_get_ext_arg(unsigned flags, const void __user *argp,
-+			  struct ext_arg *ext_arg)
- {
- 	struct io_uring_getevents_arg arg;
- 
-@@ -3123,8 +3127,8 @@ static int io_get_ext_arg(unsigned flags, const void __user *argp, size_t *argsz
- 	 * is just a pointer to the sigset_t.
- 	 */
- 	if (!(flags & IORING_ENTER_EXT_ARG)) {
--		*sig = (const sigset_t __user *) argp;
--		*ts = NULL;
-+		ext_arg->sig = (const sigset_t __user *) argp;
-+		ext_arg->ts = NULL;
- 		return 0;
- 	}
- 
-@@ -3132,15 +3136,15 @@ static int io_get_ext_arg(unsigned flags, const void __user *argp, size_t *argsz
- 	 * EXT_ARG is set - ensure we agree on the size of it and copy in our
- 	 * timespec and sigset_t pointers if good.
- 	 */
--	if (*argsz != sizeof(arg))
-+	if (ext_arg->argsz != sizeof(arg))
- 		return -EINVAL;
- 	if (copy_from_user(&arg, argp, sizeof(arg)))
- 		return -EFAULT;
- 	if (arg.pad)
- 		return -EINVAL;
--	*sig = u64_to_user_ptr(arg.sigmask);
--	*argsz = arg.sigmask_sz;
--	*ts = u64_to_user_ptr(arg.ts);
-+	ext_arg->sig = u64_to_user_ptr(arg.sigmask);
-+	ext_arg->argsz = arg.sigmask_sz;
-+	ext_arg->ts = u64_to_user_ptr(arg.ts);
- 	return 0;
- }
- 
-@@ -3246,15 +3250,14 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
- 			}
- 			mutex_unlock(&ctx->uring_lock);
- 		} else {
--			const sigset_t __user *sig;
--			struct __kernel_timespec __user *ts;
-+			struct ext_arg ext_arg = { .argsz = argsz };
- 
--			ret2 = io_get_ext_arg(flags, argp, &argsz, &ts, &sig);
-+			ret2 = io_get_ext_arg(flags, argp, &ext_arg);
- 			if (likely(!ret2)) {
- 				min_complete = min(min_complete,
- 						   ctx->cq_entries);
- 				ret2 = io_cqring_wait(ctx, min_complete, flags,
--						      sig, argsz, ts);
-+						      &ext_arg);
- 			}
- 		}
- 
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ 	ktime_t napi_busy_poll_dt;
 -- 
 2.43.0
 
