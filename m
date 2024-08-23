@@ -1,100 +1,201 @@
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABCC188A22
-	for <io-uring@vger.kernel.org>; Fri, 23 Aug 2024 15:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFA118B49C
+	for <io-uring@vger.kernel.org>; Fri, 23 Aug 2024 16:28:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724425906; cv=none; b=s7emULw2aZJFu+JGcsyfyAD7uC6l2MK0imVGf7deDYPWYYYMqQAnY6rJg9eIrqI7QczoqU1Pc8IDhdnG8cMWIFdfTt5BMdKKfQoYRJp7h8802FsR87qvXXg3ENyF0UbTmoStscs1V8mhQLmYwGEp2fPLjiRYpzx0dfQEIFR+SJs=
+	t=1724430506; cv=none; b=Mquenf5I2LwGQxN6UUYGcTzGUqBzhvQfyluFKvpZGx0eblHH/AQUjIx0B2XjdapGgMn2khe2cS8CXlL4wgkmYaXlWCtJsNn6YM0B1ZxfvhI9Gwy7xqfTY1uhae71/dU00+VVlIIjoaKCZxbpu17Bzlwboy/A33bi1Vj38jiI700=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724425906; c=relaxed/simple;
-	bh=h+6nKVpBc+Bk2L/dR3ONjR5umF7ts3gpGWtlJc4t9cM=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Ou8O69Sz2+nkn4BsDr3YFVmIRSnzrpciTlTpSkIJTd4IJt/KQuuxQHMXbClSMFHNdZ4rpIzUZ9p3D0vJ6zY9fco1qbY4Qfx+4rDNOSKZ8jasWYpoLBTVITFf9obJdD3a87mXCsipSF3EUQbyB6EdYjHDeuc6atzbyQ8IZUFqdEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=wEQn3yMN; arc=none smtp.client-ip=209.85.166.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1724430506; c=relaxed/simple;
+	bh=u2UHUH2QcovdKIqIhhb336KV/vDjixFXikqzrzJlMEc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p+mkFlykZBwWl/MDg5TuUg9iSFO5wfGDP4sb4rEdDOjiIE4TeAu5aBWilBEBa3k77aLCddonKpUwGBkdq8H+cbMJZGU2vOgVxw/CJcNfLMSSzsf2ujRTtOL+o3F9hmG3Rv923H9mAob2DbEc87el/hwyEsmMjQny1qrBhxoxz80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b=pFV8S3pJ; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="wEQn3yMN"
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-81f94ce22f2so81236239f.1
-        for <io-uring@vger.kernel.org>; Fri, 23 Aug 2024 08:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1724425902; x=1725030702; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i7SF0+vN7JUXO63qIMjxRtNZPwMttnmHz7k/vsNZCRg=;
-        b=wEQn3yMNwx7dMfCuKZKH60pwSPvSpJdM/eZJtQDV88pc3rJxwac43JZQTKyvecItZc
-         ezzTxix8gZdb/wijW72HR4rP39FU4JdQfpaDBBk0oKtvCCgO9b1B3LUXlmYRgnO7dL+I
-         612+ByNEK1x5MKg1aWCOha0EQairfqnN19sTiTIT714Na1FRcyTxjG+EQA0ZQq2S4HKR
-         +B2XV/ysZoNAeVaqQS6H0h6ml04EXlFQXAmj3b4gg6o4HxxM0k9Y04Oc1nk/vGcJoTPE
-         qzg0tMTGxCLe4bEIq8NNjiUJue0wgZlZYHQh2hvab90I8t0WL2UzsK/n9qqPkowSaNEp
-         f9Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724425902; x=1725030702;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=i7SF0+vN7JUXO63qIMjxRtNZPwMttnmHz7k/vsNZCRg=;
-        b=sX9Eo/2l75yl3R0bzHDpChjn1b+yu5m1rjCwZVWDOEg5XLevj1k/+y2PZuXbOwW83Q
-         3ussYUiarB1K+YwuBCLOBZFBOzt94msGyCdp6jQ9tV3JnJ4yxc4NtCFRS4DWFcrj+AHJ
-         mDm9Uok2bhg2TaZMNx3BXyoyniXUVVJbVkkorBHqbmSlvrJaV2j8ShtbXql8hR3HC2eP
-         ltafplcjdgffLSv7cQYj63CncWJ7b8xm7UhM53DyIXVyud0C+f44/Z6sW5XKaOpDgwXK
-         MAkE3M8zaOU9vjHWzr55ORZmYRUN0xDpAjd7bJGV4zZaONNmFhWsdANVxeHGzipLQTeP
-         7Iaw==
-X-Gm-Message-State: AOJu0YzITEGNJBU3cP9eq9fnSiIstdxehfJ/VEqTsIkJ5FEu7s6saNKU
-	7JSdBsQ4rbLU0fR9e1MYIPwdUNSgUsVGjfMFuDK3lehQ0ng5Nv3UPFRaaLy2vF78iKMZeXMzAbO
-	t
-X-Google-Smtp-Source: AGHT+IE1qsS3Ia8MiHXj16RHAEbnHLarow39bhOA6qimmMGtdKatvIvseyiqL7TjR9vLnc6qr4w1Zg==
-X-Received: by 2002:a05:6602:2ccd:b0:825:1f11:5996 with SMTP id ca18e2360f4ac-82787360727mr255521239f.13.1724425901774;
-        Fri, 23 Aug 2024 08:11:41 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce70f5caccsm970873173.67.2024.08.23.08.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2024 08:11:41 -0700 (PDT)
-Message-ID: <e1c82466-845e-4a68-888e-43f6916ed5e2@kernel.dk>
-Date: Fri, 23 Aug 2024 09:11:40 -0600
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="pFV8S3pJ"
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47NAA3Pm028815
+	for <io-uring@vger.kernel.org>; Fri, 23 Aug 2024 09:28:24 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from
+	:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding:content-type; s=
+	facebook; bh=DAWFUTSH5DJZ93OM2LwGJe5MqjiJme9jvbPvblW0IpU=; b=pFV
+	8S3pJJzLt3y/D0hQssbRGHUtwceazmXpSmdFJjqp8i+atGCsEWt4XkMRfAc2lBDE
+	03nrZceoA/1017q2vjPUxxje7umKtPyD+0Pk0Sflm23NgtRy4+WuIO1S0b8plFcr
+	LhkVcD1BQDPkHeW2sZA7i55ArLO/ayQQ2PRsmwNI=
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 416reaa29v-9
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <io-uring@vger.kernel.org>; Fri, 23 Aug 2024 09:28:23 -0700 (PDT)
+Received: from twshared4354.35.frc1.facebook.com (2620:10d:c0a8:fe::f072) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.11; Fri, 23 Aug 2024 16:28:19 +0000
+Received: by devbig276.nha1.facebook.com (Postfix, from userid 660015)
+	id 4B1785CB7F7D; Fri, 23 Aug 2024 17:28:13 +0100 (BST)
+From: Mark Harmstone <maharmstone@fb.com>
+To: <io-uring@vger.kernel.org>, <linux-btrfs@vger.kernel.org>
+CC: Mark Harmstone <maharmstone@fb.com>
+Subject: [PATCH 4/6] btrfs: add btrfs_prepare_encoded_read
+Date: Fri, 23 Aug 2024 17:27:46 +0100
+Message-ID: <20240823162810.1668399-5-maharmstone@fb.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20240823162810.1668399-1-maharmstone@fb.com>
+References: <20240823162810.1668399-1-maharmstone@fb.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: io-uring <io-uring@vger.kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring fix for 6.11-rc5
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: RoCnT2yF3TmtK3neo7XGPZoJ65Vqt8MD
+X-Proofpoint-GUID: RoCnT2yF3TmtK3neo7XGPZoJ65Vqt8MD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-23_13,2024-08-22_01,2024-05-17_01
 
-Hi Linus,
+Move the beginning of btrfs_ioctl_encoded_read, responsible for
+initialization of priv and validation, into its own function.
 
-Just a single fix for provided buffer validation. Please pull!
+Signed-off-by: Mark Harmstone <maharmstone@fb.com>
+---
+ fs/btrfs/ioctl.c | 84 ++++++++++++++++++++++++++----------------------
+ 1 file changed, 46 insertions(+), 38 deletions(-)
 
-
-The following changes since commit 1fc2ac428ef7d2ab9e8e19efe7ec3e58aea51bf3:
-
-  io_uring: fix user_data field name in comment (2024-08-16 12:31:26 -0600)
-
-are available in the Git repository at:
-
-  git://git.kernel.dk/linux.git tags/io_uring-6.11-20240823
-
-for you to fetch changes up to e0ee967630c8ee67bb47a5b38d235cd5a8789c48:
-
-  io_uring/kbuf: sanitize peek buffer setup (2024-08-21 07:16:38 -0600)
-
-----------------------------------------------------------------
-io_uring-6.11-20240823
-
-----------------------------------------------------------------
-Jens Axboe (1):
-      io_uring/kbuf: sanitize peek buffer setup
-
- io_uring/kbuf.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
--- 
-Jens Axboe
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index 3fa661322c26..d2658508e055 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -4537,23 +4537,23 @@ static ssize_t btrfs_encoded_read_finish(struct b=
+trfs_encoded_read_private *priv
+ 	return ret;
+ }
+=20
+-static int btrfs_ioctl_encoded_read(struct file *file, void __user *argp=
+,
+-				    bool compat)
++static ssize_t btrfs_prepare_encoded_read(struct btrfs_encoded_read_priv=
+ate *priv,
++					  struct file *file, bool compat,
++					  void __user *argp)
+ {
+ 	size_t copy_end_kernel =3D offsetofend(struct btrfs_ioctl_encoded_io_ar=
+gs,
+ 					     flags);
+ 	size_t copy_end;
+ 	loff_t pos;
+ 	ssize_t ret;
+-	struct btrfs_encoded_read_private priv =3D {
+-		.pending =3D ATOMIC_INIT(1),
+-		.file =3D file,
+-	};
+=20
+-	if (!capable(CAP_SYS_ADMIN)) {
+-		ret =3D -EPERM;
+-		goto out;
+-	}
++	memset(priv, 0, sizeof(*priv));
++
++	atomic_set(&priv->pending, 1);
++	priv->file =3D file;
++
++	if (!capable(CAP_SYS_ADMIN))
++		return -EPERM;
+=20
+ 	if (compat) {
+ #if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
+@@ -4561,47 +4561,55 @@ static int btrfs_ioctl_encoded_read(struct file *=
+file, void __user *argp,
+=20
+ 		copy_end =3D offsetofend(struct btrfs_ioctl_encoded_io_args_32,
+ 				       flags);
+-		if (copy_from_user(&args32, argp, copy_end)) {
+-			ret =3D -EFAULT;
+-			goto out;
+-		}
+-		priv.args.iov =3D compat_ptr(args32.iov);
+-		priv.args.iovcnt =3D args32.iovcnt;
+-		priv.args.offset =3D args32.offset;
+-		priv.args.flags =3D args32.flags;
++		if (copy_from_user(&args32, argp, copy_end))
++			return -EFAULT;
++
++		priv->args.iov =3D compat_ptr(args32.iov);
++		priv->args.iovcnt =3D args32.iovcnt;
++		priv->args.offset =3D args32.offset;
++		priv->args.flags =3D args32.flags;
+ #else
+ 		return -ENOTTY;
+ #endif
+ 	} else {
+ 		copy_end =3D copy_end_kernel;
+-		if (copy_from_user(&priv.args, argp, copy_end)) {
+-			ret =3D -EFAULT;
+-			goto out;
+-		}
+-	}
+-	if (priv.args.flags !=3D 0) {
+-		ret =3D -EINVAL;
+-		goto out;
++		if (copy_from_user(&priv->args, argp, copy_end))
++			return -EFAULT;
+ 	}
+=20
+-	priv.iov =3D priv.iovstack;
+-	ret =3D import_iovec(ITER_DEST, priv.args.iov, priv.args.iovcnt,
+-			   ARRAY_SIZE(priv.iovstack), &priv.iov, &priv.iter);
++	if (priv->args.flags !=3D 0)
++		return -EINVAL;
++
++	priv->iov =3D priv->iovstack;
++	ret =3D import_iovec(ITER_DEST, priv->args.iov, priv->args.iovcnt,
++			   ARRAY_SIZE(priv->iovstack), &priv->iov, &priv->iter);
+ 	if (ret < 0) {
+-		priv.iov =3D NULL;
+-		goto out;
++		priv->iov =3D NULL;
++		return ret;
+ 	}
+=20
+-	if (iov_iter_count(&priv.iter) =3D=3D 0) {
+-		ret =3D 0;
+-		goto out;
+-	}
+-	pos =3D priv.args.offset;
+-	ret =3D rw_verify_area(READ, file, &pos, priv.args.len);
++	pos =3D priv->args.offset;
++	ret =3D rw_verify_area(READ, priv->file, &pos, priv->args.len);
+ 	if (ret < 0)
++		return ret;
++
++	priv->copy_out =3D argp + copy_end;
++
++	return 0;
++}
++
++static int btrfs_ioctl_encoded_read(struct file *file, void __user *argp=
+,
++				    bool compat)
++{
++	ssize_t ret;
++	struct btrfs_encoded_read_private priv;
++
++	ret =3D btrfs_prepare_encoded_read(&priv, file, compat, argp);
++	if (ret)
+ 		goto out;
+=20
+-	priv.copy_out =3D argp + copy_end;
++	if (iov_iter_count(&priv.iter) =3D=3D 0)
++		goto out;
+=20
+ 	ret =3D btrfs_encoded_read(&priv);
+=20
+--=20
+2.44.2
 
