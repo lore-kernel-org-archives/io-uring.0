@@ -1,122 +1,128 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E22518786D;
-	Fri, 23 Aug 2024 11:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9541DA4C
+	for <io-uring@vger.kernel.org>; Fri, 23 Aug 2024 14:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724414355; cv=none; b=PIJQdhhsn1BF06UMSv/X4lRsCZSY4P/mm8SiAY0CythgXkdFiUfZQwb/8e/jIUe09BD3mdjfpklzLZe3+BxQ9KYDMPYK1G1ZUWcV8x+UF7S2KTf0I0tsbOgAgYfBHyAvx51+lnVzUFiwUlmduH16Og7QALihPSTZK1PW14aFrsk=
+	t=1724424702; cv=none; b=QCUM4gPe57BeguS/Iu+Ht/sXK1ZYEpm+hTSO8sYz4eKNnP87TYGfFi0Uguy38IrR1F+eOci3wjH5JoiOafb6Yq4mcnEjBTikTsoeWkF5djfmhTAGcWOWFRoTzmxasj8lxcy2jYKcAKjtMxFV5BoAaZUeBmuSpLd0SwmOJHi3PGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724414355; c=relaxed/simple;
-	bh=c7waOoxEFxmNPp+X81D26VXenfNb5EykaZFHkHib2c4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HTDfggXFk1iwTi6Ez5bkyIXxvyZIzrLD/TnJSYpH4OWCYdkKzC7tjH2tU6srMyeXGxy6hOjQU5kHJ3FNukf44ytNBG7qG1G2EGjAcxRIE1PsTqAmhNiV3NkwV28jjPK8HtIy0MBOKdrY8/l9zuKMrbzYpsloTQt95/j0GTQeCNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=zIqhtD1w; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1724424702; c=relaxed/simple;
+	bh=ZVnVbV1eCvFCcWr0EGQphtReu+UcBoC7+WhrwT69bnU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gc+vu5Fa6J4Mk1h4ThqQC4K1Mjw2lqwROKV6n2tQXS9XoRwiuE5f7gsR/niUtLI6qUpbXMNvEi0rvpu5UX/pDOMlr9aIbs7MFr9wVy0xJGinmMKbQU38F5Ha9qZENtq16oNVJuvtHdYsQc/ZtRd/q+rcrxJzz4SvNcLUV1CCn2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=NmAbG0mK; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="zIqhtD1w"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-	:Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=MXxJTuEfTmUxd6qScc9KjmTA55na5LtJXZN9+i18IuU=; b=zIqhtD1whjn1MefVjKeXFaIJ9C
-	DYkAQQrts0+YUEXxY7CtCXDicxh3HJFiSNw9O8g4enC89obYJhEKIuf8gKiuL1q7SIdsklbpbKe+q
-	eMmU86bfUk0nJ6oUhQZvLrapCPhcZZvimd0+34tCqHcULnsdiAIC6iSYo6NC6EY3ldnfHFkZDdMff
-	On9SGDsZRg8NLMmwKRUAOHZ5eyO6k1XRI1RAYkh6oqaJq86WJ32pCAy4mQVjwHOiOrKapcn23p/nT
-	oQBrPj+8hsD01KYhjM0FOYeoqsEPJ5L0UcHigFglOIWqgW7DibNFeR/fi2UA0Je4bey+QGz6qfKGs
-	8mxvzfSw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1shSwj-0000000GbyR-0QHj;
-	Fri, 23 Aug 2024 11:59:13 +0000
-Date: Fri, 23 Aug 2024 04:59:13 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>, io-uring@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>, Conrad Meyer <conradmeyer@meta.com>,
-	linux-block@vger.kernel.org, linux-mm@kvack.org,
-	dchinner@redhat.com
-Subject: Re: [PATCH v2 5/7] block: implement async discard as io_uring cmd
-Message-ID: <Zsh5kZrcL-D7sjyB@infradead.org>
-References: <cover.1724297388.git.asml.silence@gmail.com>
- <e39a9aabe503bbd7f2b7454327d3e6a6620deccf.1724297388.git.asml.silence@gmail.com>
- <Zsbe1mIYMd9uf8cq@infradead.org>
- <c39469f3-2b9c-493b-9cd6-94ae9a4994b8@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="NmAbG0mK"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-81f905eb19cso108126639f.3
+        for <io-uring@vger.kernel.org>; Fri, 23 Aug 2024 07:51:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1724424698; x=1725029498; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sY/+cRD+7257nn9FuWVO70N6t8I0+npFIitfiMw5ZeU=;
+        b=NmAbG0mKnMj3EG1SS63teQSYnDXXrIHiiufjTQQGFCwr0VzLl1Hp/i3j8LZJxj+Fbm
+         nsWP4hG00uJIv/cUhxJObPpT48l+vRGRetzfU8nhwlqo4FDgVc8IwvnA3Ph4wmwWA1YM
+         FSjCz9K9ezqi0bftfEhTM1MGrNfb3HNl240UO//A8VdTP3rGnv/tQ3lQxCfL5zV96qrh
+         f1b3k7UpwvXtXdbUqYu5GSgl4A7x3tMAMcwujCeDJrI5Tj/aZPVpmd16mF5TA2mOZVRo
+         507hAOCcRnz9ehUf98e2f5i2qkUVnFWOjUekDuK+wx8fKOmgsHTOVq91QiHWgDp4Cm4O
+         GYxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724424698; x=1725029498;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sY/+cRD+7257nn9FuWVO70N6t8I0+npFIitfiMw5ZeU=;
+        b=X4upIiDkPXCePoCTj1y+dDG5K0ssmbWIApDXmceJTXvs7/1XkXbH5GBSObjf5UPOZY
+         6xa0qbLE5Muy8YN9jm8TnzTcPpDOEOXhyvtUKIqt+DYU5KJ+Nob6SMFfIqrBiopxQnuS
+         yXbZ+kw7UaxQk0lVYCUuCcIcbWR0OgejK7CKjpN/3mo6eRVRstGVpaxd7zUPUHhY2uco
+         Z8IEcgmZ0vZ+xxH8+KdMXmqlNyaoSpkVQXSDyNrEYRS5k9TfCLrM0xK0B2sU/id+rqDU
+         SqIMlxWfE9qhqZUBiOK3ay7xdz8q+2jgb3LqoGTkiE5zhuQ9mDY0CqqFlUhMe51hIq3G
+         AddQ==
+X-Gm-Message-State: AOJu0Yw7FFRxMXjiEMyl5h7hQQFu9TYRaBSzgvuMyXI4XjGHItXDEgld
+	JdIVss8NauaBOmP7C5E7abJkr5dAjaBP8iIKg1RxBvKX4nHBT3kUDTifqv4UzCsNz/8JIMzVvVT
+	O
+X-Google-Smtp-Source: AGHT+IFZXAOaAqFzfwYRVcz1rTHrQu8raxC+Y4O1L9HySHhaHvYdaZFRiyTnuItVdeVY1vuFFWuhtg==
+X-Received: by 2002:a05:6602:6b88:b0:803:83c0:6422 with SMTP id ca18e2360f4ac-8278813bc2dmr177678539f.9.1724424697783;
+        Fri, 23 Aug 2024 07:51:37 -0700 (PDT)
+Received: from localhost.localdomain ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8253d5aa137sm115039939f.11.2024.08.23.07.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2024 07:51:37 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 1/4] io_uring/kbuf: add io_kbuf_commit() helper
+Date: Fri, 23 Aug 2024 08:42:34 -0600
+Message-ID: <20240823145104.20600-3-axboe@kernel.dk>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240823145104.20600-2-axboe@kernel.dk>
+References: <20240823145104.20600-2-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c39469f3-2b9c-493b-9cd6-94ae9a4994b8@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Thu, Aug 22, 2024 at 02:07:16PM +0100, Pavel Begunkov wrote:
-> > > Note, unlike ioctl(BLKDISCARD) with stronger guarantees against races,
-> > > we only do a best effort attempt to invalidate page cache, and it can
-> > > race with any writes and reads and leave page cache stale. It's the
-> > > same kind of races we allow to direct writes.
-> > 
-> > Can you please write up a man page for this that clear documents the
-> > expecvted semantics?
-> 
-> Do we have it documented anywhere how O_DIRECT writes interact
-> with page cache, so I can refer to it?
+Committing the selected ring buffer is currently done in two different
+spots, combine it into a helper and just call that.
 
-I can't find a good writeup.  Adding Dave as he tends to do long
-emails on topic like this so he might have one hiding somewhere.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/kbuf.c |  3 +--
+ io_uring/kbuf.h | 14 ++++++++++----
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-> > GFP_KERNEL can often will block.  You'll probably want a GFP_NOWAIT
-> > allocation here for the nowait case.
-> 
-> I can change it for clarity, but I don't think it's much of a concern
-> since the read/write path and pretty sure a bunch of other places never
-> cared about it. It does the main thing, propagating it down e.g. for
-> tag allocation.
-
-True, we're only doing the nowait allocation for larger data
-structures.  Which is a bit odd indeed.
-
-> I'd rather avoid calling bio_discard_limit() an extra time, it does
-> too much stuff inside, when the expected case is a single bio and
-> for multi-bio that overhead would really matter.
-
-Compared to a memory allocation it's not really doing all the much.
-In the long run we really should move splitting discard bios down
-the stack like we do for normal I/O anyway.
-
-> Maybe I should uniline blk_alloc_discard_bio() and dedup it with
-
-uniline?  I read that as unіnline, but as it's not inline I don't
-understand what you mean either.
-
-> > > +#define BLOCK_URING_CMD_DISCARD			0
-> > 
-> > Is fs.h the reight place for this?
-> 
-> Arguable, but I can move it to io_uring, makes things simpler
-> for me.
-
-I would have expected a uapi/linux/blkdev.h for it (and I'm kinda
-surprised we don't have that yet).
-
-> 
-> > Curious:  how to we deal with conflicting uring cmds on different
-> > device and how do we probe for them?  The NVMe uring_cmds
-> > use the ioctl-style _IO* encoding which at least helps a bit with
-> > that and which seem like a good idea.  Maybe someone needs to write
-> > up a few lose rules on uring commands?
-> 
-> My concern is that we're sacrificing compiler optimisations
-> (well, jump tables are disabled IIRC) for something that doesn't even
-> guarantee uniqueness. I'd like to see some degree of reflection,
-> like user querying a file class in terms of what operations it
-> supports, but that's beyond the scope of the series.
-
-We can't guaranteed uniqueness, but between the class, the direction,
-and the argument size we get a pretty good one.  There is a reason
-pretty much all ioctls added in the last 25 years are using this scheme.
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index a4bde998f50d..e43f761fa073 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -171,9 +171,8 @@ static void __user *io_ring_buffer_select(struct io_kiocb *req, size_t *len,
+ 		 * the transfer completes (or if we get -EAGAIN and must poll of
+ 		 * retry).
+ 		 */
+-		req->flags &= ~REQ_F_BUFFERS_COMMIT;
++		io_kbuf_commit(req, bl, 1);
+ 		req->buf_list = NULL;
+-		bl->head++;
+ 	}
+ 	return u64_to_user_ptr(buf->addr);
+ }
+diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
+index 2ed141d7662e..c9798663cd9f 100644
+--- a/io_uring/kbuf.h
++++ b/io_uring/kbuf.h
+@@ -121,15 +121,21 @@ static inline bool io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
+ 	return false;
+ }
+ 
++static inline void io_kbuf_commit(struct io_kiocb *req,
++				  struct io_buffer_list *bl, int nr)
++{
++	if (unlikely(!(req->flags & REQ_F_BUFFERS_COMMIT)))
++		return;
++	bl->head += nr;
++	req->flags &= ~REQ_F_BUFFERS_COMMIT;
++}
++
+ static inline void __io_put_kbuf_ring(struct io_kiocb *req, int nr)
+ {
+ 	struct io_buffer_list *bl = req->buf_list;
+ 
+ 	if (bl) {
+-		if (req->flags & REQ_F_BUFFERS_COMMIT) {
+-			bl->head += nr;
+-			req->flags &= ~REQ_F_BUFFERS_COMMIT;
+-		}
++		io_kbuf_commit(req, bl, nr);
+ 		req->buf_index = bl->bgid;
+ 	}
+ 	req->flags &= ~REQ_F_BUFFER_RING;
+-- 
+2.43.0
 
