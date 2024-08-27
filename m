@@ -1,63 +1,63 @@
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576BB1C5793
-	for <io-uring@vger.kernel.org>; Tue, 27 Aug 2024 15:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00351BDA93
+	for <io-uring@vger.kernel.org>; Tue, 27 Aug 2024 15:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724772308; cv=none; b=DoNX9gk8bBUVywrntnt12jQSjsMAv3VRnuCboozqia2qWW6oUycTvOr9J62UW0VzWh6fhW28209Q4vprUHBIKMut5Nhn27SRn+5DwKd+fDxGL6k56RBMMT3NNHbgyH7na7/bOgd3LgpTn7/uo4XI4ebtoOvYxOHBVUIxesiVrew=
+	t=1724772309; cv=none; b=jToJjf8gT2gc5gQ9/cZYZTcqSJlJNbmAu8KCRaT3HBM+XzwCdoalvqCWeQ3mKqciUTS4OnWlgTdTzmVFmtDEmE0zkv9SmbOs2ASvy1fjhn9EEjZhOUBpD053Go7rnTGzPS5fNy2NZSZNjmNOzrlWs8tVNGYClCvWwlU/6IcuS6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724772308; c=relaxed/simple;
-	bh=0jZi558aWZcSDcT/7S4KInb4/vAWfH0yjGSS1wU3Nwc=;
+	s=arc-20240116; t=1724772309; c=relaxed/simple;
+	bh=qIbW6FfeBAgiAEVPpNmmbKusruIunvSfddy/MHjgqTY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j+vOmKTBzmNYFL2VHnCvr8Jsrp1W4Pb/WXhBReDVtGV+UGX27X0ZZasuokjH5qE8eeDp3LH/2a9R4UjKDjgJzDfRpxcQJ6t4F+fmFAPuHO6mEO9So98n0igl45zFlhkcR27/XaoTCNCjZ2dFznRw3Wos3TgeHVnkIt+QJDRB3r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=TO8+oO/s; arc=none smtp.client-ip=209.85.166.41
+	 MIME-Version; b=BkF4sAu/mSrLZiYnm6EHpMYRSsdBhksMUa24xGj0mlFY5tPIuaMCPIBwb0ZTNsmT3wtGjAz5tQ+1pIhMwaDVg1SZn86f2wTUpkuuY3Ft0zdU9kRWdO8eekzAp9HvzYtgi54fxyd42I2zM9+8VIomtrF+HUVNQuZMkG8bmzS7Qw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Axfq3bfN; arc=none smtp.client-ip=209.85.166.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="TO8+oO/s"
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-81f96ea9ff7so282496039f.3
-        for <io-uring@vger.kernel.org>; Tue, 27 Aug 2024 08:25:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Axfq3bfN"
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-824c85e414bso194902039f.2
+        for <io-uring@vger.kernel.org>; Tue, 27 Aug 2024 08:25:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1724772303; x=1725377103; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1724772305; x=1725377105; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gxJ8fAaqK7lBS0lsOZ/VIaF2xF3Oms1pyKaM115RzI8=;
-        b=TO8+oO/slziUQ3W68h/wbEn+i50CYxVqYiOqfnQZ9b1+aKysIOaE/idpbjx4N+Bbhk
-         ePZbhJO43KPVB6ucvBNjvGn38TIODYbNF3kzlepTU9AlgnnQAO77RfowOCk/TKNphb16
-         gxPtNk1to7DanBnf/HgDpOWQZSusHkcfMjSKnR3Fms9AxubWAEsOdqOFprgJs6AuYsIb
-         OlxXjxBwYmvr7E8Ue+zu/I7yl5LPAUNlvI8lAt65OGC2fttVviSJGOQKkZQ0mV03NL9r
-         BQHd2twGiF9UNnAA1/aL9jA7W0j5VZqOyu6wcZgp3XjrjHotdkdQJ+qyKwGHMCo74ocp
-         MZrg==
+        bh=YCOM0Q4MgNqZ63rGSpWE9o76VU8Wgv7xhomNVx1Fsek=;
+        b=Axfq3bfNYF0DWzhDlHaxFnENZdR7EHS4Dj8mBDAl5i+zXmvL8TTwSmp5LGO0hk7K8z
+         nGTOjQU51ybqxUIgRGlTeFYLYYmQ5a0j+P0qcIGTz7FXwweAsyOt8IXKdykXsHRNq3hB
+         nIwq/8AunIBiIUakRsMNPfZRBt2fXck1EL1xD7juLTokn3dEG3zD4TNldeAeOBXEDR0s
+         yLhO8P/dUrwb0IPOPMNjsYjdQnJ9XaVhj6EizWDloBkbUeL5D5wrM1u8gzDW4jTHbPw7
+         ezyqNJhyH7e3BzV3W5s3UnqnPrS+idjrNv95t+zae8U+so8cb71oQvWiOVWtzIAftkMH
+         t4cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724772303; x=1725377103;
+        d=1e100.net; s=20230601; t=1724772305; x=1725377105;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gxJ8fAaqK7lBS0lsOZ/VIaF2xF3Oms1pyKaM115RzI8=;
-        b=JQR4za+3+IMoDcq7ds4+DySbLxhFqt9PmMZ3MGiCb15SgjenkWSsTaayV5VUcVcy6l
-         otP8grRfmuj/bLacZN+iAP/hqMes+Ersu+BG3TMmcT2xrmICWzZ6yfoHao9Yv3lt2Qxy
-         4jPYAWnUY/J5IP71DEzfPoIuE4kjVJyDf3m3oKOwAvi5ncKkayvXS1oN2jhtgwWCJMoX
-         rLLmIe+aDtR0owntwU1LFk7ymg2+rF5sdl5jv8ihai5dOS5fVi4mI0sVoOOGiS2m/mvk
-         npqi1xiYRKMP/2FZds271wHv+qxcLb/qxV72BQ/O6aosMFV6TfX3bCyYc4hmCWJW89bI
-         862w==
-X-Gm-Message-State: AOJu0YyEhk51PE6eu04WZzjz65rNB2nX7+cjw1mAMh3J5fxb9oPqMD8M
-	aW4lQTr/oFNfPzBHMJWJlKa0XVccuynJGajfMPidAHgXpF8EJAq2MNO5HOFWVsm3WqHBqh+gYYn
-	r
-X-Google-Smtp-Source: AGHT+IFAwz7+V3ux+AZP5NMNbT+RO075NiWrJ2uRV1TPhoc6ml38O0lfPveTa/zZgfLHD6HySAIAMA==
-X-Received: by 2002:a05:6602:6087:b0:7fb:87d6:64b with SMTP id ca18e2360f4ac-8278738a54cmr1939937139f.17.1724772303082;
-        Tue, 27 Aug 2024 08:25:03 -0700 (PDT)
+        bh=YCOM0Q4MgNqZ63rGSpWE9o76VU8Wgv7xhomNVx1Fsek=;
+        b=PQ4g4Bc0gqd8AuopBeAezrhzMbccmI6HXHBv7WiEj/C9bBPuoAdWKG08rUF0UBQJzx
+         7umJYaSDeHXU9RvzPgerRfokfiEGRyQzfN45viqOcVS9q/+lKWqrLTxc0f2m3ayqFga3
+         Yoe30i0QFyVLF0yVajz9tfxobOLRYmOw8qiLuGKnIS/sy18LPGds1fKb/GsJ+FJ10Vvu
+         b3QS3J3zKlm0KJRYDMsVDa0ZIe4P2kA2PYp6N+iynUrh1TIAYnCFexMuBKwaKkovPdfq
+         6+Y4qMjnehe8PztPK3GpSMrvpiyHOJptlVNfrIP8wi4zMze3CT4UQUnhjSoe9brVNGSf
+         ZIBA==
+X-Gm-Message-State: AOJu0Yx/3pAhJl0fVms7esVFtQfwQy+Vz88tTdltgO0wvDRW5huOJWch
+	hV9IUEpEyQ4stEeYvnwEyZGNl8pYyZU8o/TdPR+8ysnWGCrr2SxqBCR9Ae2DTPfDvCMvUDgy1Wh
+	q
+X-Google-Smtp-Source: AGHT+IFHjxvo9IE61KwKoCVK+H+WtTO66IlkuHx5RV38tA7zb9fRzB51Z39vNqiVZwxZB/5rHMY0iA==
+X-Received: by 2002:a05:6602:3fcb:b0:805:afed:cea1 with SMTP id ca18e2360f4ac-82787376a19mr1579224939f.14.1724772305391;
+        Tue, 27 Aug 2024 08:25:05 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce7106a4a9sm2678580173.106.2024.08.27.08.25.02
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ce7106a4a9sm2678580173.106.2024.08.27.08.25.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2024 08:25:02 -0700 (PDT)
+        Tue, 27 Aug 2024 08:25:04 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/5] io_uring/kbuf: add io_kbuf_commit() helper
-Date: Tue, 27 Aug 2024 09:23:05 -0600
-Message-ID: <20240827152500.295643-2-axboe@kernel.dk>
+Subject: [PATCH 3/5] Revert "io_uring: Require zeroed sqe->len on provided-buffers send"
+Date: Tue, 27 Aug 2024 09:23:07 -0600
+Message-ID: <20240827152500.295643-4-axboe@kernel.dk>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240827152500.295643-1-axboe@kernel.dk>
 References: <20240827152500.295643-1-axboe@kernel.dk>
@@ -69,71 +69,47 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Committing the selected ring buffer is currently done in three different
-spots, combine it into a helper and just call that.
+This reverts commit 79996b45f7b28c0e3e08a95bab80119e95317e28.
+
+Revert the change that restricts a send provided buffer to be zero, so
+it will always consume the whole buffer. This is strictly needed for
+partial consumption, as the send may very well be a subset of the
+current buffer. In fact, that's the intended use case.
+
+For non-incremental provided buffer rings, an application should set
+sqe->len carefully to avoid the potential issue described in the
+reverted commit. It is recommended that '0' still be set for len for
+that case, if the application is set on maintaining more than 1 send
+inflight for the same socket. This is somewhat of a nonsensical thing
+to do.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/kbuf.c |  7 +++----
- io_uring/kbuf.h | 14 ++++++++++----
- 2 files changed, 13 insertions(+), 8 deletions(-)
+ io_uring/net.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index a4bde998f50d..c69f69807885 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -171,9 +171,8 @@ static void __user *io_ring_buffer_select(struct io_kiocb *req, size_t *len,
- 		 * the transfer completes (or if we get -EAGAIN and must poll of
- 		 * retry).
- 		 */
--		req->flags &= ~REQ_F_BUFFERS_COMMIT;
-+		io_kbuf_commit(req, bl, 1);
+diff --git a/io_uring/net.c b/io_uring/net.c
+index dc83a35b8af4..cc81bcacdc1b 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -434,8 +434,6 @@ int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 		sr->buf_group = req->buf_index;
  		req->buf_list = NULL;
--		bl->head++;
  	}
- 	return u64_to_user_ptr(buf->addr);
- }
-@@ -297,8 +296,8 @@ int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		 * committed them, they cannot be put back in the queue.
- 		 */
- 		if (ret > 0) {
--			req->flags |= REQ_F_BL_NO_RECYCLE;
--			bl->head += ret;
-+			req->flags |= REQ_F_BUFFERS_COMMIT | REQ_F_BL_NO_RECYCLE;
-+			io_kbuf_commit(req, bl, ret);
- 		}
- 	} else {
- 		ret = io_provided_buffers_select(req, &arg->out_len, bl, arg->iovs);
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index ab30aa13fb5e..43c7b18244b3 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -121,15 +121,21 @@ static inline bool io_kbuf_recycle(struct io_kiocb *req, unsigned issue_flags)
- 	return false;
- }
+-	if (req->flags & REQ_F_BUFFER_SELECT && sr->len)
+-		return -EINVAL;
  
-+static inline void io_kbuf_commit(struct io_kiocb *req,
-+				  struct io_buffer_list *bl, int nr)
-+{
-+	if (unlikely(!(req->flags & REQ_F_BUFFERS_COMMIT)))
-+		return;
-+	bl->head += nr;
-+	req->flags &= ~REQ_F_BUFFERS_COMMIT;
-+}
-+
- static inline void __io_put_kbuf_ring(struct io_kiocb *req, int nr)
- {
- 	struct io_buffer_list *bl = req->buf_list;
+ #ifdef CONFIG_COMPAT
+ 	if (req->ctx->compat)
+@@ -599,7 +597,7 @@ int io_send(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (io_do_buffer_select(req)) {
+ 		struct buf_sel_arg arg = {
+ 			.iovs = &kmsg->fast_iov,
+-			.max_len = INT_MAX,
++			.max_len = min_not_zero(sr->len, INT_MAX),
+ 			.nr_iovs = 1,
+ 		};
  
- 	if (bl) {
--		if (req->flags & REQ_F_BUFFERS_COMMIT) {
--			bl->head += nr;
--			req->flags &= ~REQ_F_BUFFERS_COMMIT;
--		}
-+		io_kbuf_commit(req, bl, nr);
- 		req->buf_index = bl->bgid;
- 	}
- 	req->flags &= ~REQ_F_BUFFER_RING;
 -- 
 2.45.2
 
