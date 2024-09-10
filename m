@@ -1,92 +1,85 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1AB18FC67;
-	Tue, 10 Sep 2024 14:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9588019309C
+	for <io-uring@vger.kernel.org>; Tue, 10 Sep 2024 14:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725978062; cv=none; b=fvvNtseHZJK7x6dKaipEWEkbzI9zeW9Mh8xZlaBh651NZnhbVr/jY/smS8gP7WQZon/ztLpORtR5/7bXXsQU+GDuH9/7ZkJ/0PCHR4ofoLxDEZ1j77h72X4dXb6OCI8zvxhEZ21oU1VgzLZvUy0gZwpddZkF4SD0x9sJbE5+jhY=
+	t=1725978816; cv=none; b=BoI6MH1Yx38x0xXmlJnxh0v3kZNd5L+G6YDSkFRtyCgJV+FCWWU2Mrp7KUxW4mpzr9V89bS4cc6CI6ved3QUcZQikx6RQWZKFa5+sxUG4jKBwihD7jUMdnFCNL2bLpmoEt4Cm1JOE3NCUIKFMGqRM8dzn0maXOw795MttagPwvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725978062; c=relaxed/simple;
-	bh=t0zfhUCzFbQpQ2vWvHz1DzfYXJoS1tC6CBScO8aept0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bGQWD9KZJUAkGXp4dKHh5fRC7xotDfsMn/4ZRmWamTn+mDE9xJ8q25KSno8HlJ8eLkgeJln2B1rhe1/dCA1fG5ql10xCLLrjsLAJd0z+3P02x5V96wI/sOjSrHWTpnakx0oAeNds0Dmw/RSb0ag36oqjJHfz2z9qnq44H1nO18s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=yXWuVvzp; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1725978816; c=relaxed/simple;
+	bh=HdjpHHoNjYhBNqAxemQTKbJ7B8cX2tOtQLZrtAyVLgk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=KCp0FKQ2tvNjPKgL0vbEl6Sx5gAvB67vsICOCB4PSBFfqLD+VdjZqrWEQ9fh7ZJpBhJQ7b/KUDuDvfPmj0IXJlHd0GM9gADgFRWJcZ1Hvw95wGw/rPuRDRL5fgtwe7eIH6jnf6968/MKnPMLAxkU8ZGN/HGy4xYOgpFuQp550DE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=felix.moessbauer@siemens.com header.b=aLjdWnrr; arc=none smtp.client-ip=185.136.65.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="yXWuVvzp"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=SQ27hHAn9LKNNpp23rFT1O9ivXHn5Hr9ICtgjyHmaxI=; b=yXWuVvzp4E5G7rZtyhPonNsJzN
-	teBE57AVqWoRuO/UsYMqNbQ+xfVl8lDgaH8zz5d5K/a8QAxHM+dTgszMHdYXF/H8h/ILvZ7FrmqoQ
-	bk/kUyp7hcooZ+H0XSeR0dQas8xSBYEY25TZ8jzlMLAJYxb8W2DgpjDiGIfQzMQuYa8kVrpBUTfJJ
-	eO3ISs5OJjCPQi0603wr21fzqsmQkUC+y1f6NDc6RlsooTTsCEBjkl/JVsDQtQvJCq1Y0VVF/e+DQ
-	83J0/4zgG6LKGem72HO3TW8oQbw8u9AqnT9lK4c1SWvvDMo32UHvHYwhxs3Fyk3bvqVQn0ACVpaDl
-	2a88HINg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1so1jn-00000005r8k-2FDr;
-	Tue, 10 Sep 2024 14:20:59 +0000
-Date: Tue, 10 Sep 2024 07:20:59 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>, io-uring@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>, Conrad Meyer <conradmeyer@meta.com>,
-	linux-block@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v4 8/8] block: implement async write zero pages command
-Message-ID: <ZuBVy2U7Whre7EnU@infradead.org>
-References: <cover.1725621577.git.asml.silence@gmail.com>
- <c465430b0802ced71d22f548587f2e06951b3cd5.1725621577.git.asml.silence@gmail.com>
- <Zt_9DEzoX6uxC9Q7@infradead.org>
- <d205d118-8907-4da1-8dd8-2c7c103d2754@gmail.com>
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=felix.moessbauer@siemens.com header.b="aLjdWnrr"
+Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 202409101433310109bec0d547149e50
+        for <io-uring@vger.kernel.org>;
+        Tue, 10 Sep 2024 16:33:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=felix.moessbauer@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=n2V+rpn0MsoDnSoEFfdxd31DQiUD8YinS8WdnXxpaHA=;
+ b=aLjdWnrraN9sTjU0K0JxfJEbsKlJHU3RGuyyvDTifxtBVtGcPAgQPicpqN0YzHzHMNJ0iN
+ lvbbSUTFekouVMhaU5rxBl/04r1pz6SkK1jN6O3szNKQeuijZR75rb6vcDuOSQjThb3IJRt9
+ QdtrpimuBVImvEO2PW7IrNTV5dN8+n3IXfPzo7dCMuV2vGEga0ynWkQ0Wpve2woBBszaaYkd
+ jJ4XOv/EQeJ6EmVMSgM8rw+QiE9DGVFOySl1bngfYbJ6tSuWVEVnZ4eeTwpuXKrmqvp2edmJ
+ RuVIfHb6siZsDUpz1cVYDsl32kcXIm8IcYPv8FshZtB+OMtsW4OBvLxA==;
+From: Felix Moessbauer <felix.moessbauer@siemens.com>
+To: axboe@kernel.dk
+Cc: asml.silence@gmail.com,
+	linux-kernel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	dqminh@cloudflare.com,
+	longman@redhat.com,
+	adriaan.schmidt@siemens.com,
+	florian.bezdeka@siemens.com,
+	Felix Moessbauer <felix.moessbauer@siemens.com>
+Subject: [PATCH 2/2] io_uring/io-wq: limit io poller cpuset to ambient one
+Date: Tue, 10 Sep 2024 16:33:20 +0200
+Message-Id: <20240910143320.123234-3-felix.moessbauer@siemens.com>
+In-Reply-To: <20240910143320.123234-1-felix.moessbauer@siemens.com>
+References: <20240910143320.123234-1-felix.moessbauer@siemens.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d205d118-8907-4da1-8dd8-2c7c103d2754@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1321639:519-21489:flowmailer
 
-On Tue, Sep 10, 2024 at 01:17:48PM +0100, Pavel Begunkov wrote:
-> > > Add a command that writes the zero page to the drive. Apart from passing
-> > > the zero page instead of actual data it uses the normal write path and
-> > > doesn't do any further acceleration, nor it requires any special
-> > > hardware support. The indended use is to have a fallback when
-> > > BLOCK_URING_CMD_WRITE_ZEROES is not supported.
-> > 
-> > That's just a horrible API.  The user should not have to care if the
-> > kernel is using different kinds of implementations.
-> 
-> It's rather not a good api when instead of issuing a presumably low
-> overhead fast command the user expects sending a good bunch of actual
-> writes with different performance characteristics.
+The io work queue polling threads are userland threads that just never
+exit to the userland. By that, they are also assigned to a cgroup (the
+group of the creating task).
 
-The normal use case (at least the ones I've been involved with) are
-simply zero these blocks or the entire device, and please do it as
-good as you can.  Needing asynchronous error handling in userspace
-for that is extremely counter productive.
+When creating a new io poller, this poller should inherit the cpu limits
+of the cgroup, as it belongs to the cgroup of the creating task.
 
-> In my experience,
-> such fallbacks cause more pain when a more explicit approach is
-> possible. And let me note that it's already exposed via fallocate, even
-> though in a bit different way.
+Fixes: da64d6db3bd3 ("io_uring: One wqe per wq")
+Signed-off-by: Felix Moessbauer <felix.moessbauer@siemens.com>
+---
+ io_uring/io-wq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Do you mean the FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE case in
-blkdev_fallocate?  As far as I can tell this is actually a really bad
-example, as even a hardware offloaded write zeroes can and often does
-write physical zeroes to the media, and does so from a firmware path
-that is often slower than the kernel loop.
-
-But you have an actual use case where you want to send a write zeroes
-command but never a loop of writes, it would be good to document that
-and add a flag for it.  And if we don't have that case it would still
-be good to have a reserved flags field to add it later if needed.
-
-Btw, do you have API documentation (e.g. in the form of a man page)
-for these new calls somewhere?
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index c7055a8895d7..a38f36b68060 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -1168,7 +1168,7 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
+ 
+ 	if (!alloc_cpumask_var(&wq->cpu_mask, GFP_KERNEL))
+ 		goto err;
+-	cpumask_copy(wq->cpu_mask, cpu_possible_mask);
++	cpuset_cpus_allowed(data->task, wq->cpu_mask);
+ 	wq->acct[IO_WQ_ACCT_BOUND].max_workers = bounded;
+ 	wq->acct[IO_WQ_ACCT_UNBOUND].max_workers =
+ 				task_rlimit(current, RLIMIT_NPROC);
+-- 
+2.39.2
 
