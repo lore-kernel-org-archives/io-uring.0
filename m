@@ -1,120 +1,111 @@
-Received: from mta-65-227.siemens.flowmailer.net (mta-65-227.siemens.flowmailer.net [185.136.65.227])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35741A01CC
-	for <io-uring@vger.kernel.org>; Tue, 10 Sep 2024 17:12:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A58A1A4E93
+	for <io-uring@vger.kernel.org>; Tue, 10 Sep 2024 17:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725988338; cv=none; b=oLitthbMimOLhVX6guddHA+indr346awWyyQ5BRBrTpQX5CT6OU0M56RYAtQmw9IJnQtMaMJ0f9BDcvsxBXcOtYmL+utQ2ww08Ks9ivAuwerYaIGYj70U4sxez4341FP0G7WS4QYr1L3iRbZ+rTPzsXX7olX4mEzy15zP2YD6uQ=
+	t=1725990162; cv=none; b=ZrZP2lS8NcI0jnJlXwJ4LnZ5Xhg0BaVtJbrwjOZHY9lK8EcFWtj4Aono1qqE8tdNFD0p2FuCYe7RqNHy5YPx9KXmJ98dxQSbfXGHlYARqDlGHXqG8/3XRXSAK01ju5wvYEbs67YgV+jw8HEwCO/Qu7P4ZDuC7MssN9+KsNe+Koo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725988338; c=relaxed/simple;
-	bh=gEr1cCpObgM8xPbCaVvgWMgIX9dT3M9/NLL3bHUSkQ0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ld980WP8amtIfNPMbCdg+sbxhr7hHw3WEooQLJu3E8s1XUca95k6TdhTvfF3wM+inD4Yrf8lq+zs2VaCfCBNJKsSM2xvuKP48ncHMRE77iJa4UswmRS0Vkv0QJoPBLJfcB9YOWilSSTb7AuqH9g2ZX2AR9sV7OjqH3YUzl4r7L8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=felix.moessbauer@siemens.com header.b=RlV2B1TK; arc=none smtp.client-ip=185.136.65.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+	s=arc-20240116; t=1725990162; c=relaxed/simple;
+	bh=fMoTGHkDaTGI1XLrajc2behIZwpEPBgHFXWguQYcElg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r5KbZcHVDsbn2zKTi7hx8ojj9cVAuSLm4agVNKb1Gqn/OOUYgqzD3Zv66FBmBm1Xhul+4qSkP3RvG+gSZSYxreZWrPejQNn6qVdy0XEeZ70MvXLyrOnhLUvEAlEaJN4HmHyvSpXmJMY6FlCdhQct/jVcDL177QgJEY5hWznBQYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dD9aw3zZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=felix.moessbauer@siemens.com header.b="RlV2B1TK"
-Received: by mta-65-227.siemens.flowmailer.net with ESMTPSA id 2024091017121132c193da9a817a2218
-        for <io-uring@vger.kernel.org>;
-        Tue, 10 Sep 2024 19:12:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=felix.moessbauer@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=V02Mv7Qi+O8u5o24OCWYd+wHeSgI3uHzoIbW8MTflmc=;
- b=RlV2B1TKiWSOzruY84ut2sHjQ2bqCLkRq4Sv25fhLx1qObm7+r7g0Wrki+RKDlyqnthIPo
- lDYaoF5GbqUISyZdt2eSuth76T4BGSJ7mikn5QKmiXynWF4jQcBJcs3IoVWZyKhycQPlWubn
- HxLf7+nIh9PECo/n9F+807gV2z0pFWV/j/nBxGps3jLexhxsydqcpwGNOsgLVXVPfms8Zbef
- 6nz1dUaTmgkd2gkMK18tzILuPYsHefNt8IWTRrgR9Xy1kfQ3/5Z1B9sZsBf3l6zVv9i1DVPu
- muSYahkfovKhmKo0OiGiedo+DGG2JkqQXZ5h49A/xf2Ynm5fqC5e7ZlA==;
-From: Felix Moessbauer <felix.moessbauer@siemens.com>
-To: axboe@kernel.dk
-Cc: asml.silence@gmail.com,
-	linux-kernel@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	dqminh@cloudflare.com,
-	longman@redhat.com,
-	adriaan.schmidt@siemens.com,
-	florian.bezdeka@siemens.com,
-	Felix Moessbauer <felix.moessbauer@siemens.com>
-Subject: [PATCH v3 1/2] io_uring/io-wq: do not allow pinning outside of cpuset
-Date: Tue, 10 Sep 2024 19:11:56 +0200
-Message-Id: <20240910171157.166423-2-felix.moessbauer@siemens.com>
-In-Reply-To: <20240910171157.166423-1-felix.moessbauer@siemens.com>
-References: <20240910171157.166423-1-felix.moessbauer@siemens.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dD9aw3zZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1725990159;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8vALpOiTX4q65DEi6gKSQySJMF+gLJveZ7rgNLBab20=;
+	b=dD9aw3zZ1q0nwkDl3dEEeTqTxaOrAl7/AP1d8Z5Q0c4qI/6HfoIxpHtryzQxnFQs6fZnGI
+	Nu4SmX9WWTW6nSkR74PnZ76FrXhnphkyFbZdA8lBwQpv8v3AJuRl/8p2GX/TD42yoTZSBz
+	iQe+IKbwRf8dyhq3zkDdFz+/MsMkLXo=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-658-X8RgaX72Oh-hzdVSHFc2Zw-1; Tue,
+ 10 Sep 2024 13:42:36 -0400
+X-MC-Unique: X8RgaX72Oh-hzdVSHFc2Zw-1
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E825C195608B;
+	Tue, 10 Sep 2024 17:42:33 +0000 (UTC)
+Received: from [10.2.16.251] (unknown [10.2.16.251])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id EA0021956086;
+	Tue, 10 Sep 2024 17:42:31 +0000 (UTC)
+Message-ID: <1589cf94-6d27-4575-bcea-e36c3667b260@redhat.com>
+Date: Tue, 10 Sep 2024 13:42:30 -0400
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-1321639:519-21489:flowmailer
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] io_uring/io-wq: inherit cpuset of cgroup in io
+ worker
+To: Felix Moessbauer <felix.moessbauer@siemens.com>, axboe@kernel.dk
+Cc: asml.silence@gmail.com, linux-kernel@vger.kernel.org,
+ io-uring@vger.kernel.org, cgroups@vger.kernel.org, dqminh@cloudflare.com,
+ adriaan.schmidt@siemens.com, florian.bezdeka@siemens.com
+References: <20240910171157.166423-1-felix.moessbauer@siemens.com>
+ <20240910171157.166423-3-felix.moessbauer@siemens.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20240910171157.166423-3-felix.moessbauer@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-The io worker threads are userland threads that just never exit to the
-userland. By that, they are also assigned to a cgroup (the group of the
-creating task).
 
-When changing the affinity of the io_wq thread via syscall, we must only
-allow cpumasks within the limits defined by the cpuset controller of the
-cgroup (if enabled).
+On 9/10/24 13:11, Felix Moessbauer wrote:
+> The io worker threads are userland threads that just never exit to the
+> userland. By that, they are also assigned to a cgroup (the group of the
+> creating task).
 
-Fixes: da64d6db3bd3 ("io_uring: One wqe per wq")
-Signed-off-by: Felix Moessbauer <felix.moessbauer@siemens.com>
----
- io_uring/io-wq.c | 23 ++++++++++++++++++-----
- 1 file changed, 18 insertions(+), 5 deletions(-)
+The io-wq task is not actually assigned to a cgroup. To belong to a 
+cgroup, its pid has to be present to the cgroup.procs of the 
+corresponding cgroup, which is not the case here. My understanding is 
+that you are just restricting the CPU affinity to follow the cpuset of 
+the corresponding user task that creates it. The CPU affinity (cpumask) 
+is just one of the many resources controlled by a cgroup. That probably 
+needs to be clarified.
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index f1e7c670add8..c7055a8895d7 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -13,6 +13,7 @@
- #include <linux/slab.h>
- #include <linux/rculist_nulls.h>
- #include <linux/cpu.h>
-+#include <linux/cpuset.h>
- #include <linux/task_work.h>
- #include <linux/audit.h>
- #include <linux/mmu_context.h>
-@@ -1322,17 +1323,29 @@ static int io_wq_cpu_offline(unsigned int cpu, struct hlist_node *node)
- 
- int io_wq_cpu_affinity(struct io_uring_task *tctx, cpumask_var_t mask)
- {
-+	cpumask_var_t allowed_mask;
-+	int ret = 0;
-+
- 	if (!tctx || !tctx->io_wq)
- 		return -EINVAL;
- 
-+	if (!alloc_cpumask_var(&allowed_mask, GFP_KERNEL))
-+		return -ENOMEM;
-+
- 	rcu_read_lock();
--	if (mask)
--		cpumask_copy(tctx->io_wq->cpu_mask, mask);
--	else
--		cpumask_copy(tctx->io_wq->cpu_mask, cpu_possible_mask);
-+	cpuset_cpus_allowed(tctx->io_wq->task, allowed_mask);
-+	if (mask) {
-+		if (cpumask_subset(mask, allowed_mask))
-+			cpumask_copy(tctx->io_wq->cpu_mask, mask);
-+		else
-+			ret = -EINVAL;
-+	} else {
-+		cpumask_copy(tctx->io_wq->cpu_mask, allowed_mask);
-+	}
- 	rcu_read_unlock();
- 
--	return 0;
-+	free_cpumask_var(allowed_mask);
-+	return ret;
- }
- 
- /*
--- 
-2.39.2
+Besides cpumask, the cpuset controller also controls the node mask of 
+the memory nodes allowed.
+
+Cheers,
+Longman
+
+>
+> When creating a new io worker, this worker should inherit the cpuset
+> of the cgroup.
+>
+> Fixes: da64d6db3bd3 ("io_uring: One wqe per wq")
+> Signed-off-by: Felix Moessbauer <felix.moessbauer@siemens.com>
+> ---
+>   io_uring/io-wq.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+> index c7055a8895d7..a38f36b68060 100644
+> --- a/io_uring/io-wq.c
+> +++ b/io_uring/io-wq.c
+> @@ -1168,7 +1168,7 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
+>   
+>   	if (!alloc_cpumask_var(&wq->cpu_mask, GFP_KERNEL))
+>   		goto err;
+> -	cpumask_copy(wq->cpu_mask, cpu_possible_mask);
+> +	cpuset_cpus_allowed(data->task, wq->cpu_mask);
+>   	wq->acct[IO_WQ_ACCT_BOUND].max_workers = bounded;
+>   	wq->acct[IO_WQ_ACCT_UNBOUND].max_workers =
+>   				task_rlimit(current, RLIMIT_NPROC);
 
