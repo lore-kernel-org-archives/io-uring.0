@@ -1,61 +1,66 @@
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2F21B7917
-	for <io-uring@vger.kernel.org>; Wed, 11 Sep 2024 20:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19721B6520
+	for <io-uring@vger.kernel.org>; Wed, 11 Sep 2024 20:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726085236; cv=none; b=apBFzY1dkLxnxNrAAHXvwMOelf0t/FtE2PD/yd9OwNy9/A7tmSx9E4fKVxrACuX2SMopN9FbRYNwsswXzga+fV1ToTOucejQkl/LBaguSyg7o3/OVwFCevhd1r6tp2W4qJiA/pJe3EYHA8VTumsQA0t1SHKIVUEoR/t5f6ZzKWs=
+	t=1726085237; cv=none; b=quxbURpT4ZuLR1J/Clv4GzBWLFBU2WbfacNiICiGkMWhZH8w2oZofOuh+r+xieHdhyQXGnKH5TUlqsAPymUV8kpbCOWLVsaUIETBlyAOVsQ3Ypvumqgkgd5pXr7sEpuGk4dlB0O/pCr8OiI2tHEBkgbjk69/eERr/1hfi7nWSqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726085236; c=relaxed/simple;
-	bh=eRiw7bSewnDCoKgkFsSjxYolaNSU423dH8dhpJ5LM98=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=sYvaEOLQbKWNhRXoE1bBfNsNKAYQ2IS3Vwycvx2qlwG9R9gvW/s/mKNm+G0LzTrOJw8nJ9Lt0BeMHgkORVQLv7CxJVy1U4b0E4iSdJqo4zHodg1QSeO7mKBwHQbqRdZRPMs3l4zdu+FBKaN727YThbdDy3w0wbm2wM9nFthylJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=FkmGRPSF; arc=none smtp.client-ip=209.85.166.53
+	s=arc-20240116; t=1726085237; c=relaxed/simple;
+	bh=GM5rez7i8AcYityEiDjC4PZI1ccMmlLlITNVJtUHxTM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aBvHn5xM/5sa5WFFdhxY9+BASlAp1T9vLXbQEQzOn1zUaB8n3FdW/MLazSxMjj9zqA9zwePu60IiOn24Gk0aE5uSOixo3bxhsdHs1V1g3ihLmCJjhYsmX9VoR5vrGusHKlY7tpMrYIrEwT/asy+aw/LArywXFqC/9j2FX8TqB3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=vKyIsyx3; arc=none smtp.client-ip=209.85.166.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="FkmGRPSF"
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-82ceab75c05so9773839f.0
-        for <io-uring@vger.kernel.org>; Wed, 11 Sep 2024 13:07:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="vKyIsyx3"
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82cd869453eso9070739f.0
+        for <io-uring@vger.kernel.org>; Wed, 11 Sep 2024 13:07:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1726085231; x=1726690031; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XCetFP/BgCOp+/QcEsMHLlGtRT8rBm7Ad7CpUiUqmBo=;
-        b=FkmGRPSFB0oQ6IEoWVQD6STlKsVL6WB1vIZeiYPHuy5w+jB+SPcAF6sy5YUe5F+lIA
-         Gu7pY+o9QAVLaWMPXn2wKYLexRb3Z8FZ5gen7GC4CHJyvXCoNhuHlmJGOhNLo9ugCSir
-         NNXYDajNHBnq5q55vU9gQA3IYXwvoUew9dAzKGrqCETJyQdpzeSqOubcFdxF2IOvX+xe
-         lRfTKZAidGR07IQ3LARIZkdU+Axxjc8VcNkvKk/7Ue2vzQ2wxUq5u7LD9ZXQQly5hD/K
-         jrnTbRi47d5f436fwwQ8+qEv+gxwO3fQVJcbme9YQsLv5v07BbSwrckOy5Y3ztjMh6HL
-         jQkA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1726085233; x=1726690033; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pbZg1ed04SkE9PDBN3N3iel9ESiPexbtZx/Ls3JLSeo=;
+        b=vKyIsyx3i8UHOK7MTPFJ/QnN1Iewad1PhoysqdyFdx416vttKmEs2y1kYrcH56Ecfk
+         rFs/YLeGOtec+uwrlwqv8maGdXOV993NcZrCxawtEY9f5GEhYPJFRgo6MC1AXpdsXSUF
+         VCsYpuGt3p8lpVqUme3HsYMj3+fa75ld89nON6ylCwH1wOkVrkJ44LtK85WjRlhJKMtd
+         lKVKRQFgUCAUWJ0KMRXVtQiGq/ja8xs3sscQnt4FCxcSCQkBLrxw43N19Lf6qijRGkpU
+         87lIdEgoS0bEkLkYUWy/WB4tOo3vXL4QEFdLUnOYTcTD5ozZ3F5nNr14qo7gWJKNDwpg
+         l9ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726085231; x=1726690031;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XCetFP/BgCOp+/QcEsMHLlGtRT8rBm7Ad7CpUiUqmBo=;
-        b=VLyKi9KAAY7uBrJvBhh0TvmjYmTRKOlAiX4s9mnd3wW5CfbgJRaQNsED5EZj5LHV5X
-         dlSb3+k6TTzLYhM0hecmFOzgRX0Zw42dlSpya6oCphrgTT0TD6sgxRBMKAgmGQuJQa3s
-         C+5taJA0pnXHM8hVfa+2cFn1qtaZiRZiWgfm8h6aAWbDwvjx9EaMF8l+iW/ZrtggUVB5
-         QfTGJg/XsOQOkzLRg2O/Chve3bV9klv1qniSQQ+3sFdsNtuiNuVWf20V7LOx5oDA83kB
-         PBKVU57yRzs+zB1SgHk2WWpwUTruU0Q1LIYZ5I6ubLWlBtLb8A/exGa4/WmCVCVrz8Pw
-         z4gg==
-X-Gm-Message-State: AOJu0YxDlTQYCx1/Xlh6eZlox2okI1MMuCvNxdQZXM5N3XE+NvAs9V8i
-	XfQJHtTPP+FCi1odSMXwJlYdcurk2ErlPJQzElrVrcj0/9fv1IhD1iOKPZoEqtUvE38XOHyqMDi
-	Xvc8=
-X-Google-Smtp-Source: AGHT+IEtaIELQz0muUPSLJWYumBiVWemz4+5DAmX+JbnhxUqxBQtSgTFxzQFrgqoturw8TXXMGCF+A==
-X-Received: by 2002:a05:6602:13d0:b0:82a:a454:6306 with SMTP id ca18e2360f4ac-82d1f8c7252mr97286539f.1.1726085230862;
-        Wed, 11 Sep 2024 13:07:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726085233; x=1726690033;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pbZg1ed04SkE9PDBN3N3iel9ESiPexbtZx/Ls3JLSeo=;
+        b=w3kFzHVYXgtRqYMLf3j/eFZ26nuZF6Jk6bvQOxuZAw+BdcH1U6euCZlvss4/yb/kAT
+         lGmEW/oRitQnHqbfht3Y6YDQ26sLvaoqPN2jfOKen1bmZ5xgN/WNIAx973elxf8SRrGm
+         cj1rC33/BDOZXz+eBnlgkXm97+stEztxiOI6ImkrHRAczwI9Kp/bv113Pgsn4MtaEicd
+         KOAPvfYSSPyaxbb+stmWoBx8RWRaS3Gp1eg2zvSfAt2h+9Ql0Gc3RTEiaHfRigHyDXAQ
+         fc4m/rVxsD6VMf6KDJfr5dMkN1nRQUZV25JdTiW2QyKDTSe9Wsr4bNu+7Pda/ehWHv7Y
+         /GxA==
+X-Gm-Message-State: AOJu0YwyxAS42KeTQ4K+jDppHF1gRacWCsq1jlgq1jINazTD8Iq2LJTX
+	g30NbM69MKmyXejQrKREHwNhwHdGjL9xd6NQMFqnbFaFQZYw4PdbD8pNzwbjJlTGFYdhvdFWQsr
+	cO0U=
+X-Google-Smtp-Source: AGHT+IGBYqW2ZAz0z/30zJzJ6WIo1Ls3V4PGZj322ssfjujSLuo+ksg/iQXsomqCQP5GhKmUdnwD8w==
+X-Received: by 2002:a05:6602:6d13:b0:82c:f30d:fc72 with SMTP id ca18e2360f4ac-82d1f8b72dfmr118386039f.2.1726085233383;
+        Wed, 11 Sep 2024 13:07:13 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-82aa733a1d6sm289860239f.1.2024.09.11.13.07.09
-        for <io-uring@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-82aa733a1d6sm289860239f.1.2024.09.11.13.07.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 13:07:10 -0700 (PDT)
+        Wed, 11 Sep 2024 13:07:12 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Subject: [PATCHSET 0/3] Provide more efficient buffer registration
-Date: Wed, 11 Sep 2024 14:03:51 -0600
-Message-ID: <20240911200705.392343-1-axboe@kernel.dk>
+Cc: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/3] io_uring/rsrc: add reference count to struct io_mapped_ubuf
+Date: Wed, 11 Sep 2024 14:03:53 -0600
+Message-ID: <20240911200705.392343-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240911200705.392343-1-axboe@kernel.dk>
+References: <20240911200705.392343-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -64,26 +69,50 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Currently there's a single ring owner of a mapped buffer, and hence the
+reference count will always be 1 when it's torn down and freed. However,
+in preparation for being able to link io_mapped_ubuf to different spots,
+add a reference count to manage the lifetime of it.
 
-Pretty much what the subject line says, it's about 25k to 40k times
-faster to provide a way to duplicate an existing rings buffer
-registration than it is manually map/pin/register the buffers again
-with a new ring.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/rsrc.c | 3 +++
+ io_uring/rsrc.h | 1 +
+ 2 files changed, 4 insertions(+)
 
-Patch 1 is just a prep patch, patch 2 adds refs to struct
-io_mapped_ubuf, and patch 3 finally adds the register opcode to allow
-a ring to duplicate the registered mappings from one ring to another.
-
-This came about from discussing overhead from the varnish cache
-project for cases with more dynamic ring/thread creation.
-
- include/uapi/linux/io_uring.h |  8 ++++
- io_uring/register.c           |  6 +++
- io_uring/rsrc.c               | 89 ++++++++++++++++++++++++++++++++++-
- io_uring/rsrc.h               |  2 +
- 4 files changed, 104 insertions(+), 1 deletion(-)
-
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index d42114845fac..28f98de3c304 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -116,6 +116,8 @@ static void io_buffer_unmap(struct io_ring_ctx *ctx, struct io_mapped_ubuf **slo
+ 
+ 	*slot = NULL;
+ 	if (imu != &dummy_ubuf) {
++		if (!refcount_dec_and_test(&imu->refs))
++			return;
+ 		for (i = 0; i < imu->nr_bvecs; i++)
+ 			unpin_user_page(imu->bvec[i].bv_page);
+ 		if (imu->acct_pages)
+@@ -990,6 +992,7 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+ 		imu->folio_shift = data.folio_shift;
+ 		imu->folio_mask = ~((1UL << data.folio_shift) - 1);
+ 	}
++	refcount_set(&imu->refs, 1);
+ 	off = (unsigned long) iov->iov_base & ~imu->folio_mask;
+ 	*pimu = imu;
+ 	ret = 0;
+diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
+index 3d0dda3556e6..98a253172c27 100644
+--- a/io_uring/rsrc.h
++++ b/io_uring/rsrc.h
+@@ -47,6 +47,7 @@ struct io_mapped_ubuf {
+ 	unsigned int    folio_shift;
+ 	unsigned long	acct_pages;
+ 	unsigned long   folio_mask;
++	refcount_t	refs;
+ 	struct bio_vec	bvec[] __counted_by(nr_bvecs);
+ };
+ 
 -- 
-Jens Axboe
+2.45.2
 
