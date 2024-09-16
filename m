@@ -1,110 +1,88 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DED2157493
-	for <io-uring@vger.kernel.org>; Mon, 16 Sep 2024 14:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0102813210D
+	for <io-uring@vger.kernel.org>; Mon, 16 Sep 2024 19:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.209.37.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726495639; cv=none; b=XFXxckfDDxfxBH0qLVtXkO9ukWGV64KAEBEoa+cN+GnQryyb2XcXVqw6/4qMADzoBtyBlme6YEhVdrrGL3gWesYFdjtSqvD6owcMaFo1FJjVWsbJum19FwOuFeAzwXwzgoZD5slpeQB/q4QsuoQ5+HE4AQwqZUVuh5spbcXrBRk=
+	t=1726514281; cv=none; b=mI64iodlZ7Kcv71j4c8fCn6EJeyhG04Uqe/V3BQFm3+4mV4+Y3rI34nXIKjbyB1QRYwsqYppB1wY1893GasvZGzTQooiLsJ0BGZkmzBoye5OpwL2ZWCRlKyVp5LOay8HkRA29FJyNdD56gK8SVwi+WijXyfRVb0bYlDXw/O/lVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726495639; c=relaxed/simple;
-	bh=9fpsYcPjxb1uoqdMEAieb7ZKGURnWGooE/R/MtJt0rg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Mkz9i//uzv6Vdm6CIW7Mu+ywSGYx6DgW7k0TTC4ra4cLcjWGkiQwApYS4XtrNLbrPA6Yfce+XJ2P7xgSzapIS8Y9Z5ZGTRQuvtck7k6S+qA3d91dtROuhzsAZEO/RGuIj6ma/qIyESEjf+PAazII2wunsXHpmC8iYtGXqAkKGYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dYc0C88A; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dYc0C88A"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5c413cf5de5so6289285a12.0
-        for <io-uring@vger.kernel.org>; Mon, 16 Sep 2024 07:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1726495635; x=1727100435; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+urhfmX0gEPcBzlVcIkRBv+Xc6c9XpUnmfqcLpG9k84=;
-        b=dYc0C88A+tEy+30aRTkY7qMmd66B2c1Ar0kzxevi+fe2LgQdGPO1SipDj+fbsYWyKR
-         WiKz8hYL71wMO6bKD1gqBvkhzv/Du3Vc0YZ3y84Jgon+OM+lSpXsuFDa0m4P8DNBxRDi
-         4D1BG+1/pHbvjinLPj6UM2BJIzjydAX9qkhfN+kGCCLx0jVLN1vvVRQ6uWKI7Q6IrobP
-         7S0TMFEMAy/6LmVun6Tmtj3Nl/gqLbvnALvJq2OEebcB5pnwDvO9PG9dG3trYTF3UKqR
-         PG0hMVIzgeHLOrjN2t6PNzHzsL0POwWpeIndbeQUx7b3g4aZ7S//BwM0R4gdZzbxvhRh
-         b/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726495635; x=1727100435;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+urhfmX0gEPcBzlVcIkRBv+Xc6c9XpUnmfqcLpG9k84=;
-        b=UxzJkQI813CRhVUKnA6AcJ0UXfOVkvMAHJvxBPN9TTj1UT1Lza397W2DXa9EP5DkoS
-         8kekfUFgqgBHrOZFPMog3HHFmkfGv+PerJyRDvpnZGJfgCv42AqdPxqyyS/mNDg8x7JY
-         RJ38Zcwhg+Ym5BRZfPZqjfCxOVoCxzVWIVXJzO/Skb8rQU5SMf7RRRzuQwctyu+QshBK
-         +vrKXzdrV/yUacIENcTozVdqvItKa/RYCVbweYZMYxQNxsnlzZSIB39wVzPDKlQgumEp
-         KmfMvh2PV039Cahce3CMXPmbQo60H1GToWaTzi5Ep9atTslrYCTZ9Sr+FQItogLJIu2Y
-         BlTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFFZR/jV7TIFVi36T/ugD4+D2+EsA3cOCF9mmeYT7x0HLWEAHIoVpG6EpLjiqdxl28+wG30DAlsw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXzhCm0yqvT77bHx5sVtaqXVfe3WSfSnn1lnZgcLeXfFRgjar2
-	JyurHkIwbGdbWApjV6eVgqYYaY1kZuBX/8hh0J3MdwrmTFjSFKZSmb2GTenlmiE=
-X-Google-Smtp-Source: AGHT+IGpdf/bVgk6BGObyyM95jOqlzvTJMhqTClXF6aSu3Wdslx9j/hss0XI+Ji9ZIWoH1+SkeVxYg==
-X-Received: by 2002:a05:6402:500c:b0:5c0:bba5:60d2 with SMTP id 4fb4d7f45d1cf-5c413e2cf48mr13620216a12.21.1726495635262;
-        Mon, 16 Sep 2024 07:07:15 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c42bb89c4esm2608985a12.61.2024.09.16.07.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Sep 2024 07:07:14 -0700 (PDT)
-Date: Mon, 16 Sep 2024 17:07:10 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] io_uring: clean up a type in io_uring_register_get_file()
-Message-ID: <6f6cb630-079f-4fdf-bf95-1082e0a3fc6e@stanley.mountain>
+	s=arc-20240116; t=1726514281; c=relaxed/simple;
+	bh=Pif03uLebz7j2yD6gu8mJsBQsgzSqXEf3VbKCMCfvqA=;
+	h=From:Date:Message-ID:To:Subject; b=AgPZ1v9MmN5U/giTaoNi8nmgVSdtUep01x+Ba6yCdMIyasIeURqvJZALik1kDTH+jOcgIDiPcYCZSYoe48a8rt1Q+U/k75OvVb9Kp8E/MXUgIfNzru/UJbxmXY2hKB085y5J6f2mzczBmIrCzNOcfUoVU++0Ts1Hns+GoNvFGX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trillion01.com; spf=pass smtp.mailfrom=trillion01.com; arc=none smtp.client-ip=173.209.37.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trillion01.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trillion01.com
+Received: from [45.44.224.220] (port=53342 helo=localhost)
+	by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <olivier@trillion01.com>)
+	id 1sqHES-0005xL-2a;
+	Mon, 16 Sep 2024 15:17:56 -0400
+From: Olivier Langlois <olivier@trillion01.com>
+Date: Mon, 16 Sep 2024 15:17:56 -0400
+Message-ID: <de7679adf1249446bd47426db01d82b9603b7224.1726161831.git.olivier@trillion01.com>
+To: Jens Axboe <axboe@kernel.dk>,Pavel Begunkov <asml.silence@gmail.com>,io-uring@vger.kernel.org
+Subject: [PATCH v3 RESEND] io_uring: do the sqpoll napi busy poll outside the
+ submission block
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - trillion01.com
+X-Get-Message-Sender-Via: cloud48395.mywhc.ca: authenticated_id: olivier@trillion01.com
+X-Authenticated-Sender: cloud48395.mywhc.ca: olivier@trillion01.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
 
-Originally "fd" was unsigned int but it was changed to int when we pulled
-this code into a separate function in commit 0b6d253e084a
-("io_uring/register: provide helper to get io_ring_ctx from 'fd'").  This
-doesn't really cause a runtime problem because the call to
-array_index_nospec() will clamp negative fds to 0 and nothing else uses
-the negative values.
+there are many small reasons justifying this change.
 
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+1. busy poll must be performed even on rings that have no iopoll and no
+   new sqe. It is quite possible that a ring configured for inbound
+   traffic with multishot be several hours without receiving new request
+   submissions
+2. NAPI busy poll does not perform any credential validation
+3. If the thread is awaken by task work, processing the task work is
+   prioritary over NAPI busy loop. This is why a second loop has been
+   created after the io_sq_tw() call instead of doing the busy loop in
+   __io_sq_thread() outside its credential acquisition block.
+
+Signed-off-by: Olivier Langlois <olivier@trillion01.com>
 ---
- io_uring/register.c | 2 +-
- io_uring/register.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ io_uring/sqpoll.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/io_uring/register.c b/io_uring/register.c
-index dab0f8024ddf..165f8661c12b 100644
---- a/io_uring/register.c
-+++ b/io_uring/register.c
-@@ -561,7 +561,7 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
-  * true, then the registered index is used. Otherwise, the normal fd table.
-  * Caller must call fput() on the returned file, unless it's an ERR_PTR.
-  */
--struct file *io_uring_register_get_file(int fd, bool registered)
-+struct file *io_uring_register_get_file(unsigned int fd, bool registered)
- {
- 	struct file *file;
+diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
+index 3b50dc9586d1..f9964eb03803 100644
+--- a/io_uring/sqpoll.c
++++ b/io_uring/sqpoll.c
+@@ -195,9 +195,6 @@ static int __io_sq_thread(struct io_ring_ctx *ctx, bool cap_entries)
+ 			ret = io_submit_sqes(ctx, to_submit);
+ 		mutex_unlock(&ctx->uring_lock);
  
-diff --git a/io_uring/register.h b/io_uring/register.h
-index cc69b88338fe..a5f39d5ef9e0 100644
---- a/io_uring/register.h
-+++ b/io_uring/register.h
-@@ -4,6 +4,6 @@
+-		if (io_napi(ctx))
+-			ret += io_napi_sqpoll_busy_poll(ctx);
+-
+ 		if (to_submit && wq_has_sleeper(&ctx->sqo_sq_wait))
+ 			wake_up(&ctx->sqo_sq_wait);
+ 		if (creds)
+@@ -322,6 +319,10 @@ static int io_sq_thread(void *data)
+ 		if (io_sq_tw(&retry_list, IORING_TW_CAP_ENTRIES_VALUE))
+ 			sqt_spin = true;
  
- int io_eventfd_unregister(struct io_ring_ctx *ctx);
- int io_unregister_personality(struct io_ring_ctx *ctx, unsigned id);
--struct file *io_uring_register_get_file(int fd, bool registered);
-+struct file *io_uring_register_get_file(unsigned int fd, bool registered);
- 
- #endif
++		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list)
++			if (io_napi(ctx))
++				io_napi_sqpoll_busy_poll(ctx);
++
+ 		if (sqt_spin || !time_after(jiffies, timeout)) {
+ 			if (sqt_spin) {
+ 				io_sq_update_worktime(sqd, &start);
 -- 
-2.45.2
+2.46.0
 
