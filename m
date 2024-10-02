@@ -1,42 +1,42 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140B69473;
-	Wed,  2 Oct 2024 01:22:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687DCB661;
+	Wed,  2 Oct 2024 01:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727832153; cv=none; b=Kt7c9jCmwq9xzb5FBvoyCRYqyrqJm/Wb/qgfWyqMi/waB2r7KfXSD8n7yNrwSYmk/pPaGFP6fLVHGi4nmFuuWw7kRFij4wDvjqokOPKJ2gP3vmEr4K5F0XkVvBxSh2FXF6XQmcw3EHVaatHM894gmG5P4QM7l+Inv15kEqV28IY=
+	t=1727832154; cv=none; b=m41m24WP9Oe43acWxN7+V8pSV13azHBv06Dc3to9xLN3y6phT+X+YS0i8CKOZ+40XwAtOYUhwEjsPn4zYntOVjKTzjepX22aLAHLBYRVBTVxceri6WVtHtu7VqVvxa6hKE7kv5FDQYoVqNYAyrde9uHrWZt2DgGfCjgwAquDP/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727832153; c=relaxed/simple;
-	bh=6hj6ON21ofjjrr4/UOKvjRRIfFsvmigcJlYXQoJvTDI=;
+	s=arc-20240116; t=1727832154; c=relaxed/simple;
+	bh=LAcO6kLar/jzXelC+U7P8E30181ld+xL6+yS0dU/V7Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qoHC2XIH3ph6IS+xj6Bd7cKECsuygGGgHuXj+TDSblgyPNItDy9HHAJZWj8PobSV2Or3rVL2bUhHnUGNww2PD16SexwXyVpJ9KHBHai9HOcnykJRMeAuuMer4PfSuwgY/GCVrJR/3xM6lDYZBEwa0oQ/DdjeOc1nLa98ogqo+D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=lepJrpI/; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=tN8H4gHIpv02f4X5ZY2snRMGv38vjJOCx6O521doVQLd0alwP3RgxcSKIJ+Cgc0SV0RwLHPPKBrsejSdlixl/VMpvBqkT2waynI+SHbHM2nuTapHH8KuQw5VaSF/AUi0xiC690zYXH9x7nWSlXOImbScyIxfvl19S475hAHLydg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=mtU4GHf5; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="lepJrpI/"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="mtU4GHf5"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=jFUq21m1sQJr6SiaClIO+hP/wJwmB67aDC/vU2ShIh4=; b=lepJrpI/M0lmoQvOPyEl63MJSQ
-	T5L31R3D3dOTjWanQ7ZKvGvSux3xdsA1uzet2AnNrTInMfuHQfSzLr/WAPewfRsoEYMTI0/6+wW87
-	9+2MRsYBye0B9JRUdi3G82o1S9RZtZI+SpyoGfuo/VT5uwsNuA8eu+sMyTsp1ZmIAKmB++/vBFbd6
-	R73eM0Q0YPoXfy+76I1LClOKjsJFO+6h93xGf+ij144oxALTle5ToZ0Xkd/RM86XbSlMkwlBSgcZc
-	Hh9RPrTgETfRmWL9LML0jTIoC3K+cdCFqL2F+vXuiTrorNC63IFiVlixjNWZQ7sRuvRoG8ZDfrl82
-	1f3p0uQw==;
+	bh=ohpVJLn9t4W/NiAg7UbpvG1tUTmBfnNzLpci18vWTkE=; b=mtU4GHf56PEUYo6Zk80af3alDL
+	F+BVu2NizvprXT0NlX5nXPvgJdSTw8GIP4b+Kz6SGN2e3njQEBfltHQ0cESOdbU7+i5Gzce5ELbuf
+	SOiCC3t1fQfbshkAqporuD+PZM8ovonzlq6nmCnMVmA7TgJ6+6W5iAaWnJbP8idJ5/Sjn7VacnqI6
+	8rjl9LZr8vnHKy5mRl9Bsj49oh90kQCGIMYoWMo/xPHwONad6UrqxLJSn8SvWLOpAac+4tU98YQH3
+	SR9BH5bWkwTSslBo25VAdXXaF2Q3X99LIsoVw8DkP1mEQ5rkLxRS5WEN1ayEM6mYsSQtfuio+jRbx
+	E4W0yM+A==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1svo4U-0000000HW0F-24Xk;
+	id 1svo4U-0000000HW0b-3eNo;
 	Wed, 02 Oct 2024 01:22:30 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: brauner@kernel.org,
 	io-uring@vger.kernel.org,
 	cgzones@googlemail.com
-Subject: [PATCH 4/9] new helper: import_xattr_name()
-Date: Wed,  2 Oct 2024 02:22:25 +0100
-Message-ID: <20241002012230.4174585-4-viro@zeniv.linux.org.uk>
+Subject: [PATCH 7/9] new helpers: file_listxattr(), filename_listxattr()
+Date: Wed,  2 Oct 2024 02:22:28 +0100
+Message-ID: <20241002012230.4174585-7-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.46.1
 In-Reply-To: <20241002012230.4174585-1-viro@zeniv.linux.org.uk>
 References: <20241002011011.GB4017910@ZenIV>
@@ -50,152 +50,74 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-common logics for marshalling xattr names.
+switch path_listxattr() and flistxattr(2) to those
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/internal.h    |  3 +++
- fs/xattr.c       | 45 +++++++++++++++++++++++----------------------
- io_uring/xattr.c |  7 ++-----
- 3 files changed, 28 insertions(+), 27 deletions(-)
+ fs/xattr.c | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/fs/internal.h b/fs/internal.h
-index 81c7a085355c..b9f5ac4d39fc 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -288,6 +288,9 @@ ssize_t do_getxattr(struct mnt_idmap *idmap,
- int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx);
- int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 		struct kernel_xattr_ctx *ctx);
-+
-+int import_xattr_name(struct xattr_name *kname, const char __user *name);
-+
- int may_write_xattr(struct mnt_idmap *idmap, struct inode *inode);
- 
- #ifdef CONFIG_FS_POSIX_ACL
 diff --git a/fs/xattr.c b/fs/xattr.c
-index 1214ae7e71db..d8f7c766f28a 100644
+index a0e304c65d51..0a1da16f74b1 100644
 --- a/fs/xattr.c
 +++ b/fs/xattr.c
-@@ -586,6 +586,17 @@ vfs_removexattr(struct mnt_idmap *idmap, struct dentry *dentry,
+@@ -886,24 +886,42 @@ listxattr(struct dentry *d, char __user *list, size_t size)
+ 	return error;
  }
- EXPORT_SYMBOL_GPL(vfs_removexattr);
  
-+int import_xattr_name(struct xattr_name *kname, const char __user *name)
+-static ssize_t path_listxattr(const char __user *pathname, char __user *list,
+-			      size_t size, unsigned int lookup_flags)
++static
++ssize_t file_listxattr(struct file *f, char __user *list, size_t size)
 +{
-+	int error = strncpy_from_user(kname->name, name,
-+					sizeof(kname->name));
-+	if (error == 0 || error == sizeof(kname->name))
-+		return -ERANGE;
-+	if (error < 0)
-+		return error;
-+	return 0;
++	audit_file(f);
++	return listxattr(f->f_path.dentry, list, size);
 +}
 +
- /*
-  * Extended attribute SET operations
-  */
-@@ -597,14 +608,10 @@ int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx)
- 	if (ctx->flags & ~(XATTR_CREATE|XATTR_REPLACE))
- 		return -EINVAL;
- 
--	error = strncpy_from_user(ctx->kname->name, name,
--				sizeof(ctx->kname->name));
--	if (error == 0 || error == sizeof(ctx->kname->name))
--		return  -ERANGE;
--	if (error < 0)
-+	error = import_xattr_name(ctx->kname, name);
-+	if (error)
- 		return error;
- 
--	error = 0;
- 	if (ctx->size) {
- 		if (ctx->size > XATTR_SIZE_MAX)
- 			return -E2BIG;
-@@ -763,10 +770,8 @@ getxattr(struct mnt_idmap *idmap, struct dentry *d,
- 		.flags    = 0,
- 	};
- 
--	error = strncpy_from_user(kname.name, name, sizeof(kname.name));
--	if (error == 0 || error == sizeof(kname.name))
--		error = -ERANGE;
--	if (error < 0)
-+	error = import_xattr_name(&kname, name);
-+	if (error)
- 		return error;
- 
- 	error =  do_getxattr(idmap, d, &ctx);
-@@ -906,12 +911,10 @@ static int path_removexattr(const char __user *pathname,
++static
++ssize_t filename_listxattr(int dfd, struct filename *filename,
++			   unsigned int lookup_flags,
++			   char __user *list, size_t size)
  {
  	struct path path;
- 	int error;
--	char kname[XATTR_NAME_MAX + 1];
-+	struct xattr_name kname;
- 
--	error = strncpy_from_user(kname, name, sizeof(kname));
--	if (error == 0 || error == sizeof(kname))
--		error = -ERANGE;
--	if (error < 0)
-+	error = import_xattr_name(&kname, name);
-+	if (error)
- 		return error;
+ 	ssize_t error;
  retry:
- 	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
-@@ -919,7 +922,7 @@ static int path_removexattr(const char __user *pathname,
- 		return error;
- 	error = mnt_want_write(path.mnt);
- 	if (!error) {
--		error = removexattr(mnt_idmap(path.mnt), path.dentry, kname);
-+		error = removexattr(mnt_idmap(path.mnt), path.dentry, kname.name);
- 		mnt_drop_write(path.mnt);
- 	}
+-	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
++	error = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
+ 	if (error)
+-		return error;
++		goto out;
+ 	error = listxattr(path.dentry, list, size);
  	path_put(&path);
-@@ -945,23 +948,21 @@ SYSCALL_DEFINE2(lremovexattr, const char __user *, pathname,
- SYSCALL_DEFINE2(fremovexattr, int, fd, const char __user *, name)
+ 	if (retry_estale(error, lookup_flags)) {
+ 		lookup_flags |= LOOKUP_REVAL;
+ 		goto retry;
+ 	}
++out:
++	putname(filename);
+ 	return error;
+ }
+ 
++static ssize_t path_listxattr(const char __user *pathname, char __user *list,
++			      size_t size, unsigned int lookup_flags)
++{
++	return filename_listxattr(AT_FDCWD, getname(pathname), lookup_flags,
++				  list, size);
++}
++
+ SYSCALL_DEFINE3(listxattr, const char __user *, pathname, char __user *, list,
+ 		size_t, size)
  {
- 	CLASS(fd, f)(fd);
--	char kname[XATTR_NAME_MAX + 1];
-+	struct xattr_name kname;
- 	int error;
+@@ -922,8 +940,7 @@ SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
  
  	if (fd_empty(f))
  		return -EBADF;
- 	audit_file(fd_file(f));
+-	audit_file(fd_file(f));
+-	return listxattr(fd_file(f)->f_path.dentry, list, size);
++	return file_listxattr(fd_file(f), list, size);
+ }
  
--	error = strncpy_from_user(kname, name, sizeof(kname));
--	if (error == 0 || error == sizeof(kname))
--		error = -ERANGE;
--	if (error < 0)
-+	error = import_xattr_name(&kname, name);
-+	if (error)
- 		return error;
- 
- 	error = mnt_want_write_file(fd_file(f));
- 	if (!error) {
- 		error = removexattr(file_mnt_idmap(fd_file(f)),
--				    fd_file(f)->f_path.dentry, kname);
-+				    fd_file(f)->f_path.dentry, kname.name);
- 		mnt_drop_write_file(fd_file(f));
- 	}
- 	return error;
-diff --git a/io_uring/xattr.c b/io_uring/xattr.c
-index 04abf0739668..71d9e2569a2f 100644
---- a/io_uring/xattr.c
-+++ b/io_uring/xattr.c
-@@ -65,11 +65,8 @@ static int __io_getxattr_prep(struct io_kiocb *req,
- 	if (!ix->ctx.kname)
- 		return -ENOMEM;
- 
--	ret = strncpy_from_user(ix->ctx.kname->name, name,
--				sizeof(ix->ctx.kname->name));
--	if (!ret || ret == sizeof(ix->ctx.kname->name))
--		ret = -ERANGE;
--	if (ret < 0) {
-+	ret = import_xattr_name(ix->ctx.kname, name);
-+	if (ret) {
- 		kfree(ix->ctx.kname);
- 		return ret;
- 	}
+ /*
 -- 
 2.39.5
 
