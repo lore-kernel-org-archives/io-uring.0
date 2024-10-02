@@ -1,42 +1,42 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687DCB661;
-	Wed,  2 Oct 2024 01:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84729450;
+	Wed,  2 Oct 2024 01:22:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727832154; cv=none; b=m41m24WP9Oe43acWxN7+V8pSV13azHBv06Dc3to9xLN3y6phT+X+YS0i8CKOZ+40XwAtOYUhwEjsPn4zYntOVjKTzjepX22aLAHLBYRVBTVxceri6WVtHtu7VqVvxa6hKE7kv5FDQYoVqNYAyrde9uHrWZt2DgGfCjgwAquDP/Y=
+	t=1727832154; cv=none; b=bxHag7TB27c6mr0JnAhk5G1uA/RFAvQpI4tu9cL2UZP+aw6b2RQz645Sg3o7/ISag3Qf2UZxWlr3mg+n40yAd9a2tYK3sS0pMFDGNflabU00hKV/G1gS65Yfzg7z3bkda3fWG8DMYCtmS1v/fe5D3yuoYhaYYWQJs1skQmocloE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727832154; c=relaxed/simple;
-	bh=LAcO6kLar/jzXelC+U7P8E30181ld+xL6+yS0dU/V7Y=;
+	bh=f88IB4PTDKAV6GtuYOuya4kyGV9E9/vovooueg0ZoLM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tN8H4gHIpv02f4X5ZY2snRMGv38vjJOCx6O521doVQLd0alwP3RgxcSKIJ+Cgc0SV0RwLHPPKBrsejSdlixl/VMpvBqkT2waynI+SHbHM2nuTapHH8KuQw5VaSF/AUi0xiC690zYXH9x7nWSlXOImbScyIxfvl19S475hAHLydg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=mtU4GHf5; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version:Content-Type; b=SISslf/oINiDX3Ks6rcUCfdgtA63khmLkMoqp51hetJkjzwiURy9yuuDyFjMkG5NpZttcndkx5fHAmoRAEGSgyiZTJL70vaM/CkOAkfBtqwA4PT+jtaV/iZ5XFFzDALLwahzY09BZwkJhEAtk14Tenk+i/q4n4zqkjvAti0rPwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ch0X0zpb; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="mtU4GHf5"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ch0X0zpb"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=ohpVJLn9t4W/NiAg7UbpvG1tUTmBfnNzLpci18vWTkE=; b=mtU4GHf56PEUYo6Zk80af3alDL
-	F+BVu2NizvprXT0NlX5nXPvgJdSTw8GIP4b+Kz6SGN2e3njQEBfltHQ0cESOdbU7+i5Gzce5ELbuf
-	SOiCC3t1fQfbshkAqporuD+PZM8ovonzlq6nmCnMVmA7TgJ6+6W5iAaWnJbP8idJ5/Sjn7VacnqI6
-	8rjl9LZr8vnHKy5mRl9Bsj49oh90kQCGIMYoWMo/xPHwONad6UrqxLJSn8SvWLOpAac+4tU98YQH3
-	SR9BH5bWkwTSslBo25VAdXXaF2Q3X99LIsoVw8DkP1mEQ5rkLxRS5WEN1ayEM6mYsSQtfuio+jRbx
-	E4W0yM+A==;
+	Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:
+	To:From:Reply-To:Content-ID:Content-Description;
+	bh=pkYbQ6A2E8yrKld2874J/quEWv8Girhvo1LfyLaZNPg=; b=ch0X0zpblgb/GayVafec7IRzPa
+	6RoPMifBXUgBg+kfqfESAQcAonG7vuiOzFn9SY/vdq4e4qcT9z/SMRgkY0a+wJqZIBOlsWHFmwnsU
+	cjM8+dyXtevVgMLU8/pGcKhd2J6GtEY9NyOCgd4QVj6kNMXKfNPkVwVA9Cud/YGwAJcElaa4ZRvpv
+	fD2c7S5IJcZtwwkzQ4t2DY2HXc8ouFuB8I77QSnZlQxLlqlHIBEtOwBRGg8HjFcqXVicNmEuFTe91
+	hKzbTFHvRwNcICC171O6OXC6UHoPVSTVjXNM7ctIFKXf/q3GOrbuRegHn80gjGiNLgHQ3PurkkOC+
+	byINkQKw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1svo4U-0000000HW0b-3eNo;
+	id 1svo4U-0000000HW0B-1ST7;
 	Wed, 02 Oct 2024 01:22:30 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: brauner@kernel.org,
 	io-uring@vger.kernel.org,
 	cgzones@googlemail.com
-Subject: [PATCH 7/9] new helpers: file_listxattr(), filename_listxattr()
-Date: Wed,  2 Oct 2024 02:22:28 +0100
-Message-ID: <20241002012230.4174585-7-viro@zeniv.linux.org.uk>
+Subject: [PATCH 2/9] fs: rename struct xattr_ctx to kernel_xattr_ctx
+Date: Wed,  2 Oct 2024 02:22:23 +0100
+Message-ID: <20241002012230.4174585-2-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.46.1
 In-Reply-To: <20241002012230.4174585-1-viro@zeniv.linux.org.uk>
 References: <20241002011011.GB4017910@ZenIV>
@@ -47,77 +47,127 @@ List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-switch path_listxattr() and flistxattr(2) to those
+From: Christian Göttsche <cgzones@googlemail.com>
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Rename the struct xattr_ctx to increase distinction with the about to be
+added user API struct xattr_args.
+
+No functional change.
+
+Suggested-by: Christian Brauner <brauner@kernel.org>
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+Link: https://lore.kernel.org/r/20240426162042.191916-2-cgoettsche@seltendoof.de
+Reviewed-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Christian Brauner <brauner@kernel.org>
 ---
- fs/xattr.c | 29 +++++++++++++++++++++++------
- 1 file changed, 23 insertions(+), 6 deletions(-)
+ fs/internal.h    |  8 ++++----
+ fs/xattr.c       | 12 ++++++------
+ io_uring/xattr.c |  2 +-
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
+diff --git a/fs/internal.h b/fs/internal.h
+index 8c1b7acbbe8f..81c7a085355c 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -267,7 +267,7 @@ struct xattr_name {
+ 	char name[XATTR_NAME_MAX + 1];
+ };
+ 
+-struct xattr_ctx {
++struct kernel_xattr_ctx {
+ 	/* Value of attribute */
+ 	union {
+ 		const void __user *cvalue;
+@@ -283,11 +283,11 @@ struct xattr_ctx {
+ 
+ ssize_t do_getxattr(struct mnt_idmap *idmap,
+ 		    struct dentry *d,
+-		    struct xattr_ctx *ctx);
++		    struct kernel_xattr_ctx *ctx);
+ 
+-int setxattr_copy(const char __user *name, struct xattr_ctx *ctx);
++int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx);
+ int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+-		struct xattr_ctx *ctx);
++		struct kernel_xattr_ctx *ctx);
+ int may_write_xattr(struct mnt_idmap *idmap, struct inode *inode);
+ 
+ #ifdef CONFIG_FS_POSIX_ACL
 diff --git a/fs/xattr.c b/fs/xattr.c
-index a0e304c65d51..0a1da16f74b1 100644
+index 0fc813cb005c..1214ae7e71db 100644
 --- a/fs/xattr.c
 +++ b/fs/xattr.c
-@@ -886,24 +886,42 @@ listxattr(struct dentry *d, char __user *list, size_t size)
- 	return error;
+@@ -590,7 +590,7 @@ EXPORT_SYMBOL_GPL(vfs_removexattr);
+  * Extended attribute SET operations
+  */
+ 
+-int setxattr_copy(const char __user *name, struct xattr_ctx *ctx)
++int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx)
+ {
+ 	int error;
+ 
+@@ -620,7 +620,7 @@ int setxattr_copy(const char __user *name, struct xattr_ctx *ctx)
  }
  
--static ssize_t path_listxattr(const char __user *pathname, char __user *list,
--			      size_t size, unsigned int lookup_flags)
-+static
-+ssize_t file_listxattr(struct file *f, char __user *list, size_t size)
-+{
-+	audit_file(f);
-+	return listxattr(f->f_path.dentry, list, size);
-+}
-+
-+static
-+ssize_t filename_listxattr(int dfd, struct filename *filename,
-+			   unsigned int lookup_flags,
-+			   char __user *list, size_t size)
+ int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
+-		struct xattr_ctx *ctx)
++		struct kernel_xattr_ctx *ctx)
  {
- 	struct path path;
+ 	if (is_posix_acl_xattr(ctx->kname->name))
+ 		return do_set_acl(idmap, dentry, ctx->kname->name,
+@@ -635,7 +635,7 @@ static int path_setxattr(const char __user *pathname,
+ 			 size_t size, int flags, unsigned int lookup_flags)
+ {
+ 	struct xattr_name kname;
+-	struct xattr_ctx ctx = {
++	struct kernel_xattr_ctx ctx = {
+ 		.cvalue   = value,
+ 		.kvalue   = NULL,
+ 		.size     = size,
+@@ -687,7 +687,7 @@ SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
+ 		const void __user *,value, size_t, size, int, flags)
+ {
+ 	struct xattr_name kname;
+-	struct xattr_ctx ctx = {
++	struct kernel_xattr_ctx ctx = {
+ 		.cvalue   = value,
+ 		.kvalue   = NULL,
+ 		.size     = size,
+@@ -720,7 +720,7 @@ SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
+  */
+ ssize_t
+ do_getxattr(struct mnt_idmap *idmap, struct dentry *d,
+-	struct xattr_ctx *ctx)
++	struct kernel_xattr_ctx *ctx)
+ {
  	ssize_t error;
- retry:
--	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
-+	error = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
- 	if (error)
--		return error;
-+		goto out;
- 	error = listxattr(path.dentry, list, size);
- 	path_put(&path);
- 	if (retry_estale(error, lookup_flags)) {
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
- 	}
-+out:
-+	putname(filename);
- 	return error;
- }
- 
-+static ssize_t path_listxattr(const char __user *pathname, char __user *list,
-+			      size_t size, unsigned int lookup_flags)
-+{
-+	return filename_listxattr(AT_FDCWD, getname(pathname), lookup_flags,
-+				  list, size);
-+}
-+
- SYSCALL_DEFINE3(listxattr, const char __user *, pathname, char __user *, list,
- 		size_t, size)
+ 	char *kname = ctx->kname->name;
+@@ -755,7 +755,7 @@ getxattr(struct mnt_idmap *idmap, struct dentry *d,
  {
-@@ -922,8 +940,7 @@ SYSCALL_DEFINE3(flistxattr, int, fd, char __user *, list, size_t, size)
+ 	ssize_t error;
+ 	struct xattr_name kname;
+-	struct xattr_ctx ctx = {
++	struct kernel_xattr_ctx ctx = {
+ 		.value    = value,
+ 		.kvalue   = NULL,
+ 		.size     = size,
+diff --git a/io_uring/xattr.c b/io_uring/xattr.c
+index 6cf41c3bc369..5b4594ede935 100644
+--- a/io_uring/xattr.c
++++ b/io_uring/xattr.c
+@@ -18,7 +18,7 @@
  
- 	if (fd_empty(f))
- 		return -EBADF;
--	audit_file(fd_file(f));
--	return listxattr(fd_file(f)->f_path.dentry, list, size);
-+	return file_listxattr(fd_file(f), list, size);
- }
+ struct io_xattr {
+ 	struct file			*file;
+-	struct xattr_ctx		ctx;
++	struct kernel_xattr_ctx		ctx;
+ 	struct filename			*filename;
+ };
  
- /*
 -- 
 2.39.5
 
