@@ -1,257 +1,119 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140FC9475;
-	Wed,  2 Oct 2024 01:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A467D8F66
+	for <io-uring@vger.kernel.org>; Wed,  2 Oct 2024 01:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727832155; cv=none; b=bIusIcYTKi29G4LEGua7znDcflWajvGkSGig+Z4qPh0zut0yMfYWKKQGTGD8/DYF7l91XvUoJShosmR80AczglFFhZdh9uot5w/bX1x+wKxzRWrWT86VHJJUNYIn9fJ4yeRyj2Ls0U1rnBnQVnggw2ZKt4pAWWgk7PD+yOr+qyk=
+	t=1727832857; cv=none; b=Byg1Fms6vv2GzA8HEU9lpZngfuIA2CFuJmLIAK4itoxG6xW7SVCN8XzBbYR5FAUVPh2LlGMlMg6pHCi5IArFnvR0pk01GJ/rvPKH/ggKbBLB+tFPyZs888pieIpsG7QuXhYbOs8MVRXTLHGQ0SXb3b6JbW4LVV4WzuqhnVbOZFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727832155; c=relaxed/simple;
-	bh=XtkxNFlzMcN60nLZXGyHQK9m1nCmZ2Em9nhZWDimLMo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ew81CfR98n7b4mr/Rke2/doSR4PMi8S/u/v3aukkdPFD5AZkgPJoccBAw9RIEU3It+lX+dNLNGBEYm3Y2nMVfajlJWlTAYcjAVf8B6uj5WEWhE/IQLV1JI32fygCK86rdoiZ/LPrWPj+x84AW9WB45Kq13/AFdsmhMqA3VxY7dY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=BDSI127M; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1727832857; c=relaxed/simple;
+	bh=MxemTxylnepD6rz6xU1Ej6EsH9Q1U3ZO2JLGzcMcej8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D8sFp89h/ayzcxQjl4jSn+SGIgOdAQL7Cna8HpPjFbs01ZYPCWLJ01f7OBN/85qaoQgVnmc9cm1ewTKmC+8Z3pUd57G5U8H/aysfcT+gCz9p/QcnTKq6shUt/Ys8e0gpodWsh7PF1ptE+5tBHr9tUoHFJ/wEVY0k5e3Lp0+D7nE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=id+FmlUM; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="BDSI127M"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=MUCkAroewEGiX5jQBsx3C0g+/ee/jcxLR3LB+g9sTJs=; b=BDSI127MIaxGUGYNmAWveSpQJZ
-	mzRKzx0W34KgR9qYHkdjYibKindXvzJOLMKIw1buDku0YAhRn1fxnweT1VqszNHq91fNn+IzBkQ0/
-	7GQMwUY4VtjLTI+XNcb7w+qZyAP9x0B3ginsGMdVX/B4bJAaoYLlDB3d81Q6HJ92G7LLdiAmWFAo+
-	MkYK5c3d9BpXRBRjnWWZo++x4nW9a8AdUZ93Td0fHJ0gqBba93zgRhS1kAS5mbRF31/XOlFgy1L3Z
-	MpHd+GzHq/1lhdrJXHxTdzXjzreWm81Py6t+iOmrfC8xvDpfjW9R83V+YOWl72NQpw2881/G2Sq9i
-	m1IFRt2Q==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1svo4U-0000000HW0Q-2f4a;
-	Wed, 02 Oct 2024 01:22:30 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-Cc: brauner@kernel.org,
-	io-uring@vger.kernel.org,
-	cgzones@googlemail.com
-Subject: [PATCH 5/9] replace do_setxattr() with saner helpers.
-Date: Wed,  2 Oct 2024 02:22:26 +0100
-Message-ID: <20241002012230.4174585-5-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20241002012230.4174585-1-viro@zeniv.linux.org.uk>
-References: <20241002011011.GB4017910@ZenIV>
- <20241002012230.4174585-1-viro@zeniv.linux.org.uk>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="id+FmlUM"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20b6458ee37so43941685ad.1
+        for <io-uring@vger.kernel.org>; Tue, 01 Oct 2024 18:34:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1727832855; x=1728437655; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gfarinC2Xn9KFl5pKSBmyVisUQmi+lpSng5euhDBafg=;
+        b=id+FmlUMms3vPxbMt49t9qKGBpB6qFwYpKvgSWFxmbnZ2bVOkQfI/A1glaIcKkgKwO
+         H54mm0MkOjMgg408NXgtAUfL8BfQ2OYY/f5mKGO4wf9WlzFwns1wxACXUqyXDt5BnlO1
+         BbCGFmq2+8X3PLxT8Md2UwpQmNN5iJ0pSKv92jaXlccjN2GuFiXSBnEi0Ymz5jIBmzGm
+         /vuHncvemw59zVs4cdmd/pRZ10fYCze5WwpBeAw71vgusWkxgKzrjKExi3M4ZralpCth
+         1Tt0YBLjDjVEGqUrG3gCuI5y/004HM3z8/iHMapxpsZSH6gOOFP2r4+4tOL+5NXhtOqd
+         d01w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727832855; x=1728437655;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gfarinC2Xn9KFl5pKSBmyVisUQmi+lpSng5euhDBafg=;
+        b=WHPmfIdxdFaHEtr0QpIt/PL4wjeXOgmwECZ+FIFHfxAlA06936seDIBbUDpAKGB411
+         5N/IdfJA2VSCbngc44zny1KUpRS5d8lCzUMRhKnVkv5TBkGFL7+wZXTVXHqu+0ceg2Ci
+         K7frVIcjcmUG7zg5woYQfUMbcA1y5GwWqLx6El2yDcC0GGw3UYHj7TwOyjVWAt3x6t6o
+         9w52+/qgL+2XLf6FXB7bMDj99F2fNckfU+cijpJ4Qsg0TZ3cBq1d04kKWq7Vx4IpLp9t
+         bJPX////O6LBID2s8MpzjHzpVni4BQ3kOgG2ffUm2rua8aYfFWMTB/O3jEvFNenA7PvG
+         zQLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVaD3NT6p1KKkNJC6QPQvNUHCqITPRs/tCrX7sYW1EhP64qtEygGsKMOsIewO372ek7+zRbABXsag==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMQ+tdZYsLgBLkLiCoIeN02Ka9fuvLYVkKCFdb2v6L/fJQRLA5
+	WzYDP636c1AO1SVmtZu6k2mFIzGVrlfu/OD42uzA8JktjxNQplKMnWqf3ibd19s=
+X-Google-Smtp-Source: AGHT+IFAD4TRtJ1wgh7w8a/eAU8N7oA/g3Jc4BMTqQ0/oXU7OEwf1UyjvGIgqbBOF6ZPFSLFXsGcEA==
+X-Received: by 2002:a17:903:2a8f:b0:20b:9034:fb4a with SMTP id d9443c01a7336-20bc5a76029mr19165015ad.49.1727832854665;
+        Tue, 01 Oct 2024 18:34:14 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e4d58csm76026745ad.231.2024.10.01.18.34.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Oct 2024 18:34:14 -0700 (PDT)
+Message-ID: <12334e67-80a6-4509-9826-90d16483835e@kernel.dk>
+Date: Tue, 1 Oct 2024 19:34:12 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/9] replace do_setxattr() with saner helpers.
+To: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org
+Cc: brauner@kernel.org, io-uring@vger.kernel.org, cgzones@googlemail.com
+References: <20241002011011.GB4017910@ZenIV>
+ <20241002012230.4174585-1-viro@zeniv.linux.org.uk>
+ <20241002012230.4174585-5-viro@zeniv.linux.org.uk>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20241002012230.4174585-5-viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-io_uring setxattr logics duplicates stuff from fs/xattr.c; provide
-saner helpers (filename_setxattr() and file_setxattr() resp.) and
-use them.
+On 10/1/24 7:22 PM, Al Viro wrote:
+> diff --git a/io_uring/xattr.c b/io_uring/xattr.c
+> index 71d9e2569a2f..7f6bbfd846b9 100644
+> --- a/io_uring/xattr.c
+> +++ b/io_uring/xattr.c
+>  int io_fsetxattr(struct io_kiocb *req, unsigned int issue_flags)
+>  {
+> +	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
+>  	int ret;
+>  
+>  	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
+>  
+> -	ret = __io_setxattr(req, issue_flags, &req->file->f_path);
+> +	ret = file_setxattr(req->file, &ix->ctx);
+>  	io_xattr_finish(req, ret);
+>  	return IOU_OK;
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/internal.h    |  6 ++---
- fs/xattr.c       | 68 ++++++++++++++++++++++++++++++------------------
- io_uring/xattr.c | 32 +++--------------------
- 3 files changed, 49 insertions(+), 57 deletions(-)
+This and ... ->
 
-diff --git a/fs/internal.h b/fs/internal.h
-index b9f5ac4d39fc..be7c0da3bcec 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -285,10 +285,10 @@ ssize_t do_getxattr(struct mnt_idmap *idmap,
- 		    struct dentry *d,
- 		    struct kernel_xattr_ctx *ctx);
- 
-+int file_setxattr(struct file *file, struct kernel_xattr_ctx *ctx);
-+int filename_setxattr(int dfd, struct filename *filename,
-+		      unsigned int lookup_flags, struct kernel_xattr_ctx *ctx);
- int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx);
--int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
--		struct kernel_xattr_ctx *ctx);
--
- int import_xattr_name(struct xattr_name *kname, const char __user *name);
- 
- int may_write_xattr(struct mnt_idmap *idmap, struct inode *inode);
-diff --git a/fs/xattr.c b/fs/xattr.c
-index d8f7c766f28a..6326a1ea28e9 100644
---- a/fs/xattr.c
-+++ b/fs/xattr.c
-@@ -626,7 +626,7 @@ int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx)
- 	return error;
- }
- 
--int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
-+static int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 		struct kernel_xattr_ctx *ctx)
- {
- 	if (is_posix_acl_xattr(ctx->kname->name))
-@@ -637,32 +637,31 @@ int do_setxattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 			ctx->kvalue, ctx->size, ctx->flags);
- }
- 
--static int path_setxattr(const char __user *pathname,
--			 const char __user *name, const void __user *value,
--			 size_t size, int flags, unsigned int lookup_flags)
-+int file_setxattr(struct file *f, struct kernel_xattr_ctx *ctx)
-+{
-+	int error = mnt_want_write_file(f);
-+
-+	if (!error) {
-+		audit_file(f);
-+		error = do_setxattr(file_mnt_idmap(f), f->f_path.dentry, ctx);
-+		mnt_drop_write_file(f);
-+	}
-+	return error;
-+}
-+
-+int filename_setxattr(int dfd, struct filename *filename,
-+		      unsigned int lookup_flags, struct kernel_xattr_ctx *ctx)
- {
--	struct xattr_name kname;
--	struct kernel_xattr_ctx ctx = {
--		.cvalue   = value,
--		.kvalue   = NULL,
--		.size     = size,
--		.kname    = &kname,
--		.flags    = flags,
--	};
- 	struct path path;
- 	int error;
- 
--	error = setxattr_copy(name, &ctx);
--	if (error)
--		return error;
--
- retry:
--	error = user_path_at(AT_FDCWD, pathname, lookup_flags, &path);
-+	error = filename_lookup(dfd, filename, lookup_flags, &path, NULL);
- 	if (error)
- 		goto out;
- 	error = mnt_want_write(path.mnt);
- 	if (!error) {
--		error = do_setxattr(mnt_idmap(path.mnt), path.dentry, &ctx);
-+		error = do_setxattr(mnt_idmap(path.mnt), path.dentry, ctx);
- 		mnt_drop_write(path.mnt);
- 	}
- 	path_put(&path);
-@@ -672,6 +671,30 @@ static int path_setxattr(const char __user *pathname,
- 	}
- 
- out:
-+	putname(filename);
-+	return error;
-+}
-+
-+static int path_setxattr(const char __user *pathname,
-+			 const char __user *name, const void __user *value,
-+			 size_t size, int flags, unsigned int lookup_flags)
-+{
-+	struct xattr_name kname;
-+	struct kernel_xattr_ctx ctx = {
-+		.cvalue   = value,
-+		.kvalue   = NULL,
-+		.size     = size,
-+		.kname    = &kname,
-+		.flags    = flags,
-+	};
-+	int error;
-+
-+	error = setxattr_copy(name, &ctx);
-+	if (error)
-+		return error;
-+
-+	error = filename_setxattr(AT_FDCWD, getname(pathname), lookup_flags,
-+				  &ctx);
- 	kvfree(ctx.kvalue);
- 	return error;
- }
-@@ -707,17 +730,12 @@ SYSCALL_DEFINE5(fsetxattr, int, fd, const char __user *, name,
- 
- 	if (fd_empty(f))
- 		return -EBADF;
--	audit_file(fd_file(f));
-+
- 	error = setxattr_copy(name, &ctx);
- 	if (error)
- 		return error;
- 
--	error = mnt_want_write_file(fd_file(f));
--	if (!error) {
--		error = do_setxattr(file_mnt_idmap(fd_file(f)),
--				    fd_file(f)->f_path.dentry, &ctx);
--		mnt_drop_write_file(fd_file(f));
--	}
-+	error = file_setxattr(fd_file(f), &ctx);
- 	kvfree(ctx.kvalue);
- 	return error;
- }
-diff --git a/io_uring/xattr.c b/io_uring/xattr.c
-index 71d9e2569a2f..7f6bbfd846b9 100644
---- a/io_uring/xattr.c
-+++ b/io_uring/xattr.c
-@@ -200,28 +200,14 @@ int io_fsetxattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return __io_setxattr_prep(req, sqe);
- }
- 
--static int __io_setxattr(struct io_kiocb *req, unsigned int issue_flags,
--			const struct path *path)
--{
--	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
--	int ret;
--
--	ret = mnt_want_write(path->mnt);
--	if (!ret) {
--		ret = do_setxattr(mnt_idmap(path->mnt), path->dentry, &ix->ctx);
--		mnt_drop_write(path->mnt);
--	}
--
--	return ret;
--}
--
- int io_fsetxattr(struct io_kiocb *req, unsigned int issue_flags)
- {
-+	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
- 	int ret;
- 
- 	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
- 
--	ret = __io_setxattr(req, issue_flags, &req->file->f_path);
-+	ret = file_setxattr(req->file, &ix->ctx);
- 	io_xattr_finish(req, ret);
- 	return IOU_OK;
- }
-@@ -229,23 +215,11 @@ int io_fsetxattr(struct io_kiocb *req, unsigned int issue_flags)
- int io_setxattr(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
--	unsigned int lookup_flags = LOOKUP_FOLLOW;
--	struct path path;
- 	int ret;
- 
- 	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
- 
--retry:
--	ret = filename_lookup(AT_FDCWD, ix->filename, lookup_flags, &path, NULL);
--	if (!ret) {
--		ret = __io_setxattr(req, issue_flags, &path);
--		path_put(&path);
--		if (retry_estale(ret, lookup_flags)) {
--			lookup_flags |= LOOKUP_REVAL;
--			goto retry;
--		}
--	}
--
-+	ret = filename_setxattr(AT_FDCWD, ix->filename, LOOKUP_FOLLOW, &ix->ctx);
- 	io_xattr_finish(req, ret);
- 	return IOU_OK;
- }
+> -retry:
+> -	ret = filename_lookup(AT_FDCWD, ix->filename, lookup_flags, &path, NULL);
+> -	if (!ret) {
+> -		ret = __io_setxattr(req, issue_flags, &path);
+> -		path_put(&path);
+> -		if (retry_estale(ret, lookup_flags)) {
+> -			lookup_flags |= LOOKUP_REVAL;
+> -			goto retry;
+> -		}
+> -	}
+> -
+> +	ret = filename_setxattr(AT_FDCWD, ix->filename, LOOKUP_FOLLOW, &ix->ctx);
+>  	io_xattr_finish(req, ret);
+>  	return IOU_OK;
+
+this looks like it needs an ix->filename = NULL, as
+filename_{s,g}xattr() drops the reference. The previous internal helper
+did not, and hence the cleanup always did it. But should work fine if
+->filename is just zeroed.
+
+Otherwise looks good. I've skimmed the other patches and didn't see
+anything odd, I'll take a closer look tomorrow.
+
 -- 
-2.39.5
-
+Jens Axboe
