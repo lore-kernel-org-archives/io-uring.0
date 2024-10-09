@@ -1,73 +1,74 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC02B7BAEC;
-	Wed,  9 Oct 2024 16:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48FA1E1C2F;
+	Wed,  9 Oct 2024 16:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728491306; cv=none; b=X8jqHUU3dsc76QNQV0whuQ+kvJQ9PXQJv6ifewHyVSuf+QzBGc74koDWmhlK3pvMbGyzgx/eL7BjqPiVgxhEe+Sl6XDd3zLpczzH556LBSZPoWAzovLAE+25moeQJNX6W8m5s1h0lBnIBNVkivmo/3uqbd63g9R6q+uOThMoUPg=
+	t=1728491423; cv=none; b=Z8Ga3DsCQ1SSSdvZU9/EBpha6VZJ0nt60lQoQYJd3DFJdpJBvrJbUMnGCjuhzz+fCyGiZY4PhydwceueSgF8W4uzGNJr+paXEUEtSH2K/iTssO6wePixMkV/7l63p4aiAepVpuHTRC3Aqiwp/gDmcvw2lH5IP2sA+AooEYL9Qi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728491306; c=relaxed/simple;
-	bh=od0tAH3/rCJbrl8G8rGMfLSYEfP2DV1tPP6XnEekH7E=;
+	s=arc-20240116; t=1728491423; c=relaxed/simple;
+	bh=rnFfpJwKKpScDBZ/fxV66dFCup5vbrrMbx4avl30qTg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=npqAGHXDeWxx3E0eerwjpKvBUbYwtE22WbN1JnaHIeANL1/99DHnlzxMD/JIzsRtOdEYrle+GD5+wui1I/fxbfiCislcJuFf54aMty5fhSQJql83CHNNgCbEjQNkM/w67cWxwHlZpdjKS7CMGV1u1aOtIUIQ4+xrVTBWYEHxJgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mL3RECTy; arc=none smtp.client-ip=209.85.215.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=MGfvhgeFUK4PRyIbvE6F7r8S5B1xhLOFmCcsYfpZEqI4R5Jkdp0jQiAnsJTG1GP2Qb6rPddn1XlOxptA0IHIq9pcY1+lbMsZvs8XgfHS2kIG9v2wUBKkiaF3961HvFLCNUAZCxFfKwT73eELOWsiFxUm0RTsd8gqGEsxyJHQgAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X4gyktCo; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mL3RECTy"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7e9fdad5af8so2849646a12.3;
-        Wed, 09 Oct 2024 09:28:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X4gyktCo"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-71dfe07489dso6899b3a.3;
+        Wed, 09 Oct 2024 09:30:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728491304; x=1729096104; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728491421; x=1729096221; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3SlEKMU6Yovy/NNNEw6pYL/e2D6bAzvVuRCK5L6mdaQ=;
-        b=mL3RECTyMznHWbM2/nPYiLKIe6VMV1kvjUI8ufynQVeF0FnUIFoTd+d6f2och8192n
-         +zLb2pMZfEHw6IsiiFBfKuYpI0SuKKJLW2C0La7mcfrhj/PATZe1fHZrG4g09jpO2vJS
-         dYpjX72us1qClz+bLw+LPHy9/vrhlc1C3yx29aXdQn0pC3gP0Lx0HBuBjOf4GBy0aWeV
-         w0hviMFB15HXS+O7fevCB7VMd2A0s+twuXWpp2b0wP22tUhyyY6iiLpBXDt4L0tbFhbp
-         sTSyhJqRvwz73nSQY7CvXyEv8LAGr0d/1+b7gr0aR0FcUE/Vt2kUlXB2r2tW1qCjmFkP
-         c8Sg==
+        bh=J6tBkoAxRcUXBcH6ylPks977Lpgg87dO/N6OEdsN19E=;
+        b=X4gyktColLiHenZNV+zTuEVM5jA7OzUIoGwhqf8iHy2n4LZ6JE0JyyBvluFBcZETAD
+         U/uQYFifqrNkAao+TmrqaXdseKyTI8dC5aY87l9xCxpRjsGieT11aVcAAo7G7q8KBeHK
+         RccLzDzt6gH6AoKeiXh5xfQC/1RUShRtR3tWXp6E4SGjwNiw/r0f4ZVzX6VLbUyhD2x7
+         CtsoN178mer0jB/1KLF7LhsSGTQ9LnUQ47KLSHpJSX7uQyKUwXGJIHxVgQxjngO/frW4
+         6m+Z1EjkSRszSvlejUbOmbg6oKrYyONYbB5dMhi4sZtgWn4U5bvyYjohOCGnOYlnRDjA
+         EAXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728491304; x=1729096104;
+        d=1e100.net; s=20230601; t=1728491421; x=1729096221;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3SlEKMU6Yovy/NNNEw6pYL/e2D6bAzvVuRCK5L6mdaQ=;
-        b=qfG78ZOavTlqfT19TGUEuMq57c8sstw53opFvVgiCEjTXGsENB4Vh6YKDvPMMg3zso
-         P8ZCEac7KvutqECzq6xPH8v4UbwDL/63rZzqkpm3KFv895El5r+xE27pKsKYzjRLoXYC
-         ggTKH6bo0q8xiM1fzk5a6RBEHw6MSRWbvJF0/d8+PP9mwlHUwikhRjXZ+EDWLiLjCZ1z
-         01DrAcBjhFHDeYy5cqbO61+Dc9y3tQ10JpyAbkgUoGjdwiRXbzGjT4aEF31BoE7Of5GJ
-         1sfinl46bLh5HbW/GvvSxbhhoOBaZGYLWz1tBPHCb06Eg5ELIv+5muGjK/YzRs3aJ8ho
-         BaMA==
-X-Forwarded-Encrypted: i=1; AJvYcCUyQz1e+x9shXGmz6pUQMFkCYWUjvYYmicWG4O6os7ovDUO/PpSHQwSnvJ7yRrPFWc/gDwI7djcCQ==@vger.kernel.org, AJvYcCWVx8P/lzlBoVXkFVAM3WP5O6g21w4zmx9qVzGJPH4l+TncqqQ1QaGLpG+ECQiu2Uqqjnu7IGtc@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx61qEhm0h5JlmArrE6xC/Sr9W5SRim7/Oa/QQNB5al7KwwJn0d
-	XSaEPzogvD9LXnGC3Ef+2i2aQgd9YjmxCAfE2gUIFErbKeaYmwQ=
-X-Google-Smtp-Source: AGHT+IELN89y5xMl4I0rWop66l6mY6j/Zo75tfC26y0z/ZMbJ7Y0GLy57WcDdSU7ccxymCHbXiowUw==
-X-Received: by 2002:a05:6a20:7b02:b0:1d8:a759:5251 with SMTP id adf61e73a8af0-1d8a7595303mr2590367637.21.1728491303946;
-        Wed, 09 Oct 2024 09:28:23 -0700 (PDT)
+        bh=J6tBkoAxRcUXBcH6ylPks977Lpgg87dO/N6OEdsN19E=;
+        b=B8dJiZWsFKki0gRdulFzgg42vJUpJk2eKLChIo9SgEptB+nzEWmOFGFfWnBwxGuLR6
+         ngYCfU69n6WtfZzvJ0USh7D4U9dUMCW9DlN1RxY0b81NKE51z+7OWdklmGmOLyb4ptW2
+         fE5tS3wq8Xr+wh/0AtaZPe41YhiBpcp+IXCYJGNqUZN18VhwgJ5xFnLWlR0UTBj0Sd18
+         ClQKqG0MuxnayOJ7JQdu0sJvv9TSWDm4hEzk/vUPO5SCk2CDpjBic4/soBAUUcC5ueEa
+         A4IK7awOaUe1yXcSKaNHOYaxtwcC3Su7RHCnc972a8AshwJBieoC4JofIm78MM2QeIrK
+         EpKA==
+X-Forwarded-Encrypted: i=1; AJvYcCXlUBEk/nOi9FAcoB/yBwSbzd5wVWQOnP2YvrX05/YmUfA7DQDbFwHdQwNaQSxknG0fFIfkOBY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFOH5RgLMe9jJhKzFPEEEsnxtmJ1D4NcfBoFJ/ofwMnu5fay8P
+	+mwpx9E5lXPfZkQoOCTAVuceBSpLBGLv1jEDDuphprn+VqB3EcP1TzUih10=
+X-Google-Smtp-Source: AGHT+IFRc1VOyNUx/b1CtreCkgFTK2fjRI8fIwedmCY5kXeD2Hy0fDwik3qSG4NsU7tlUTGii5GHNg==
+X-Received: by 2002:a05:6a00:4616:b0:71d:fd34:aa98 with SMTP id d2e1a72fcca58-71e1dbca3bcmr5161902b3a.24.1728491420989;
+        Wed, 09 Oct 2024 09:30:20 -0700 (PDT)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e2a55ff9f2sm1891006a91.15.2024.10.09.09.28.22
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e9f680cbd5sm7484366a12.8.2024.10.09.09.30.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2024 09:28:23 -0700 (PDT)
-Date: Wed, 9 Oct 2024 09:28:22 -0700
+        Wed, 09 Oct 2024 09:30:20 -0700 (PDT)
+Date: Wed, 9 Oct 2024 09:30:19 -0700
 From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: David Wei <dw@davidwei.uk>, io-uring@vger.kernel.org,
-	netdev@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+To: David Wei <dw@davidwei.uk>
+Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
 	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	David Ahern <dsahern@kernel.org>,
 	Mina Almasry <almasrymina@google.com>
-Subject: Re: [PATCH v1 03/15] net: generalise net_iov chunk owners
-Message-ID: <ZwavJuVI-6d9ZSuh@mini-arch>
+Subject: Re: [PATCH v1 13/15] io_uring/zcrx: add copy fallback
+Message-ID: <Zwavm2w30YAdoFsB@mini-arch>
 References: <20241007221603.1703699-1-dw@davidwei.uk>
- <20241007221603.1703699-4-dw@davidwei.uk>
- <ZwVT8AnAq_uERzvB@mini-arch>
- <ade753dd-caab-4151-af30-39de9080f69b@gmail.com>
+ <20241007221603.1703699-14-dw@davidwei.uk>
+ <ZwVWrAeKsVj5gbXY@mini-arch>
+ <6b57fb43-1271-4487-9342-5f82c972b9c5@davidwei.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -76,50 +77,37 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ade753dd-caab-4151-af30-39de9080f69b@gmail.com>
+In-Reply-To: <6b57fb43-1271-4487-9342-5f82c972b9c5@davidwei.uk>
 
-On 10/08, Pavel Begunkov wrote:
-> On 10/8/24 16:46, Stanislav Fomichev wrote:
+On 10/08, David Wei wrote:
+> On 2024-10-08 08:58, Stanislav Fomichev wrote:
 > > On 10/07, David Wei wrote:
-> > > From: Pavel Begunkov <asml.silence@gmail.com>
-> > > 
-> > > Currently net_iov stores a pointer to struct dmabuf_genpool_chunk_owner,
-> > > which serves as a useful abstraction to share data and provide a
-> > > context. However, it's too devmem specific, and we want to reuse it for
-> > > other memory providers, and for that we need to decouple net_iov from
-> > > devmem. Make net_iov to point to a new base structure called
-> > > net_iov_area, which dmabuf_genpool_chunk_owner extends.
-> > > 
-> > > Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-> > > Signed-off-by: David Wei <dw@davidwei.uk>
-> > > ---
-> > >   include/net/netmem.h | 21 ++++++++++++++++++++-
-> > >   net/core/devmem.c    | 25 +++++++++++++------------
-> > >   net/core/devmem.h    | 25 +++++++++----------------
-> > >   3 files changed, 42 insertions(+), 29 deletions(-)
-> > > 
-> > > diff --git a/include/net/netmem.h b/include/net/netmem.h
-> > > index 8a6e20be4b9d..3795ded30d2c 100644
-> > > --- a/include/net/netmem.h
-> > > +++ b/include/net/netmem.h
-> > > @@ -24,11 +24,20 @@ struct net_iov {
-> > >   	unsigned long __unused_padding;
-> > >   	unsigned long pp_magic;
-> > >   	struct page_pool *pp;
-> > > -	struct dmabuf_genpool_chunk_owner *owner;
-> > > +	struct net_iov_area *owner;
+> >> From: Pavel Begunkov <asml.silence@gmail.com>
+> >>
+> >> There are scenarios in which the zerocopy path might get a normal
+> >> in-kernel buffer, it could be a mis-steered packet or simply the linear
+> >> part of an skb. Another use case is to allow the driver to allocate
+> >> kernel pages when it's out of zc buffers, which makes it more resilient
+> >> to spikes in load and allow the user to choose the balance between the
+> >> amount of memory provided and performance.
 > > 
-> > Any reason not to use dmabuf_genpool_chunk_owner as is (or rename it
-> > to net_iov_area to generalize) with the fields that you don't need
-> > set to 0/NULL? container_of makes everything harder to follow :-(
+> > Tangential: should there be some clear way for the users to discover that
+> > (some counter of some entry on cq about copy fallback)?
+> > 
+> > Or the expectation is that somebody will run bpftrace to diagnose
+> > (supposedly) poor ZC performance when it falls back to copy?
 > 
-> It can be that, but then io_uring would have a (null) pointer to
-> struct net_devmem_dmabuf_binding it knows nothing about and other
-> fields devmem might add in the future. Also, it reduces the
-> temptation for the common code to make assumptions about the origin
-> of the area / pp memory provider. IOW, I think it's cleaner
-> when separated like in this patch.
+> Yeah there definitely needs to be a way to notify the user that copy
+> fallback happened. Right now I'm relying on bpftrace hooking into
+> io_zcrx_copy_chunk(). Doing it per cqe (which is emitted per frag) is
+> too much. I can think of two other options:
+> 
+> 1. Send a final cqe at the end of a number of frag cqes with a count of
+>    the number of copies.
+> 2. Register a secondary area just for handling copies.
+> 
+> Other suggestions are also very welcome.
 
-Ack, let's see whether other people find any issues with this approach.
-For me, it makes the devmem parts harder to read, so my preference
-is on dropping this patch and keeping owner=null on your side.
+SG, thanks. Up to you and Pavel on the mechanism and whether to follow
+up separately. Maybe even move this fallback (this patch) into that separate
+series as well? Will be easier to review/accept the rest.
