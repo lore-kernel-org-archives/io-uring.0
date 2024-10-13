@@ -1,29 +1,31 @@
 Received: from cloud48395.mywhc.ca (cloud48395.mywhc.ca [173.209.37.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5275B83CD6
-	for <io-uring@vger.kernel.org>; Sun, 13 Oct 2024 18:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBF713AD22
+	for <io-uring@vger.kernel.org>; Sun, 13 Oct 2024 18:28:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.209.37.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728844117; cv=none; b=Hg6qWPTPYdXLconQnAdNo7AFuMxW0tIGv0n9CQ1HV47xWtwAq5TYd5IoCccC4OTPYjh/ykVvVx9oqWQqX3cvpmpFvLrzrDTdHH9X5bqIx/vajeHD5mXHiVflTTyW5W3rTQk/hXTIdflu/O5t0llq15M88dV7a9HKXgZpDqR25z0=
+	t=1728844123; cv=none; b=V4HaMcZ0gt0qliT9Weys1r0zTVmUruvugjdlC7aZ+KnCV6JaaTOKnkCIvNREOt8m2E1Px5JZJBozsJjYcWlspDlSrk6Rz6H43lMvf7ZFV5wQ/sryeZQKPJH1pUJ2c6EQ1ECFfLg2HMID7kFQg1WQuXaBHEkesK77HgOSg4FDWCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728844117; c=relaxed/simple;
-	bh=vR+uiPei8nhKsLe20slFm0vlgaO8qI47bLaVkV9O/gQ=;
-	h=From:Date:Message-ID:To:Subject; b=oXz7X7GfmKDmDpVMjU0Z6B395mRWR5j/LzX2P8dg8Bz/Nk4HvgusiLgV/vYm18Y5SLs5n4Z157eoXme7lsL/0SzH9sgk3VrFOLj2mo3ECplf0Josf6F2/8Bj6Gap6JbpGbu2IsAASdbZx5N5ZS5C3KBmcLnu+mnX9LiozRad40s=
+	s=arc-20240116; t=1728844123; c=relaxed/simple;
+	bh=+INTVSSsgBMSUVTx5i/51LG8M8l0DQWPagLuI8sfkAM=;
+	h=From:Date:Message-ID:In-Reply-To:References:To:Subject; b=KUY9ZNHrHzUbMoQKXngN2B2z617KnWggF58wzb//VriI9PH3FYWrEwQGT8u6xr12AcLae6xGQlKHDUFcEBDQtEKLQXPnBRqw9/BU8PrN1tt84Hz02ueS6WbMgoR8bmelg4Tdpm+yeMhmkYn7ULuXiydD2unJaC8V4wPUpMU5drg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trillion01.com; spf=pass smtp.mailfrom=trillion01.com; arc=none smtp.client-ip=173.209.37.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trillion01.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trillion01.com
-Received: from [45.44.224.220] (port=55236 helo=localhost)
+Received: from [45.44.224.220] (port=60118 helo=localhost)
 	by cloud48395.mywhc.ca with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <olivier@trillion01.com>)
-	id 1t03K1-0002gw-2z;
-	Sun, 13 Oct 2024 14:28:05 -0400
+	id 1t03KZ-0002kN-1I;
+	Sun, 13 Oct 2024 14:28:39 -0400
 From: Olivier Langlois <olivier@trillion01.com>
-Date: Sun, 13 Oct 2024 14:28:05 -0400
-Message-ID: <cover.1728828877.git.olivier@trillion01.com>
+Date: Sun, 13 Oct 2024 14:28:38 -0400
+Message-ID: <9f53b5169afa8c7bf3665a0b19dc2f7061173530.1728828877.git.olivier@trillion01.com>
+In-Reply-To: <cover.1728828877.git.olivier@trillion01.com>
+References: <cover.1728828877.git.olivier@trillion01.com>
 To: Jens Axboe <axboe@kernel.dk>,Pavel Begunkov <asml.silence@gmail.com>,io-uring@vger.kernel.org
-Subject: [PATCH v4 0/6] napi tracking strategy
+Subject: [PATCH v4 2/6] io_uring/napi: fix io_napi_entry RCU accesses
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
 X-AntiAbuse: Primary Hostname - cloud48395.mywhc.ca
 X-AntiAbuse: Original Domain - vger.kernel.org
@@ -40,55 +42,63 @@ List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 
-the actual napi tracking strategy is inducing a non-negligeable overhead.
-Everytime a multishot poll is triggered or any poll armed, if the napi is
-enabled on the ring a lookup is performed to either add a new napi id into
-the napi_list or its timeout value is updated.
+correct 3 RCU structures modifications that were not using the RCU
+functions to make their update.
 
-For many scenarios, this is overkill as the napi id list will be pretty
-much static most of the time. To address this common scenario, the concept of io_uring_napi_tracking_strategy has been created.
-the tracking strategy can be specified when io_register_napi() is called.
+Signed-off-by: Olivier Langlois <olivier@trillion01.com>
+---
+ io_uring/napi.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-To keep backward compatibility, the legacy strategy IO_URING_NAPI_TRACKING_DYNAMIC is assigned the value 0 so that existing code using io_uring napi busy polling continue working as before. If IO_URING_NAPI_TRACKING_STATIC is provided, io_napi_add() becomes a noop function and the responsability to update the napi devices list is given to the user by calling io_register_napi() with the opcode value of IO_URING_NAPI_STATIC_ADD_ID or IO_URING_NAPI_STATIC_DEL_ID.
-
-the NAPI ids used by a process can be discovered by calling
-getsockopt(fd, SOL_SOCKET, SO_INCOMING_NAPI_ID, &napi_id, &len)
-
-the patch serie consist of very minor fixes followed by the core of the changes
-to implement the new feature.
-
-v4 changes:
-- improve cover letter text
-- rebase patch on for-6.13/io_uring
-- create a prep-patch for the __io_napi_add refactoring change
-- create a prep-patch for the Scope-Based Resource Management refactoring
-- create a prep-patch for the __io_napi_do_busy_loop cleanup
-- adress io_napi_add() code review comment
-
-v3 changes:
-- address minor comments in patch #3
-- replace the double for loop hash macro with the single loop list macro to iterate the napi elements in patch #2
-- add __cold attribute to common_tracking_show_fdinfo() and napi_show_fdinfo()
-
-v2 changes:
-- extract small changes from the core changes to ease minor fixes backport
-- totally remove the io_napi_tracking_ops interface
-
-Olivier Langlois (6):
-  io_uring/napi: protect concurrent io_napi_entry timeout accesses
-  io_uring/napi: fix io_napi_entry RCU accesses
-  io_uring/napi: improve __io_napi_add
-  io_uring/napi: Use lock guards
-  io_uring/napi: clean up __io_napi_do_busy_loop
-  io_uring/napi: add static napi tracking strategy
-
- include/linux/io_uring_types.h |   2 +-
- include/uapi/linux/io_uring.h  |  32 +++++-
- io_uring/fdinfo.c              |  54 +++++++---
- io_uring/napi.c                | 184 +++++++++++++++++++++++----------
- io_uring/napi.h                |   8 +-
- 5 files changed, 207 insertions(+), 73 deletions(-)
-
+diff --git a/io_uring/napi.c b/io_uring/napi.c
+index dda2e083fb5d..921de9de8d75 100644
+--- a/io_uring/napi.c
++++ b/io_uring/napi.c
+@@ -81,19 +81,24 @@ void __io_napi_add(struct io_ring_ctx *ctx, struct socket *sock)
+ 	}
+ 
+ 	hlist_add_tail_rcu(&e->node, hash_list);
+-	list_add_tail(&e->list, &ctx->napi_list);
++	list_add_tail_rcu(&e->list, &ctx->napi_list);
+ 	spin_unlock(&ctx->napi_lock);
+ }
+ 
+ static void __io_napi_remove_stale(struct io_ring_ctx *ctx)
+ {
+ 	struct io_napi_entry *e;
+-	unsigned int i;
+ 
+ 	spin_lock(&ctx->napi_lock);
+-	hash_for_each(ctx->napi_ht, i, e, node) {
++	/*
++	 * list_for_each_entry_safe() is not required as long as:
++	 * 1. list_del_rcu() does not reset the deleted node next pointer
++	 * 2. kfree_rcu() delays the memory freeing until the next quiescent
++	 *    state
++	 */
++	list_for_each_entry(e, &ctx->napi_list, list) {
+ 		if (time_after(jiffies, READ_ONCE(e->timeout))) {
+-			list_del(&e->list);
++			list_del_rcu(&e->list);
+ 			hash_del_rcu(&e->node);
+ 			kfree_rcu(e, rcu);
+ 		}
+@@ -204,13 +209,13 @@ void io_napi_init(struct io_ring_ctx *ctx)
+ void io_napi_free(struct io_ring_ctx *ctx)
+ {
+ 	struct io_napi_entry *e;
+-	unsigned int i;
+ 
+ 	spin_lock(&ctx->napi_lock);
+-	hash_for_each(ctx->napi_ht, i, e, node) {
++	list_for_each_entry(e, &ctx->napi_list, list) {
+ 		hash_del_rcu(&e->node);
+ 		kfree_rcu(e, rcu);
+ 	}
++	INIT_LIST_HEAD_RCU(&ctx->napi_list);
+ 	spin_unlock(&ctx->napi_lock);
+ }
+ 
 -- 
 2.47.0
 
