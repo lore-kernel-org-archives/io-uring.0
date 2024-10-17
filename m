@@ -1,158 +1,137 @@
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CAE1DD548
-	for <io-uring@vger.kernel.org>; Thu, 17 Oct 2024 11:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B101D5178;
+	Thu, 17 Oct 2024 12:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729166241; cv=none; b=NpxV0G4Ef3sshdeEoxfCuSdKHIXFl6W2GpXpiD1RCmoeR0VinrqQFTaDFhl7hPcGb801KQbtobfATcFA4g3O1t6YPyNPyds4PrflJiMbRna1WjqjpR/vmAA3Z18ZrzJX7jcxEdPTWY6XLPJfeeMQQy2ifk3vibg4B3esE3jkxBs=
+	t=1729166443; cv=none; b=CaZxgr56Yb9ZgNkF0XKOFVs3CgzaRw2nFO0qQ8xewNvpOeo9JzbQ2qRFbV5K+Lbu/E2VNwGvK/cQHIV8H6UB079r6bLp7eaWN152rFoQ+h0pFBrUbl+ffuPc5ljdF16tG/pTQo2BN9sfS4eOaxhtj0QFw57sf2ZN/I3yUG3OpvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729166241; c=relaxed/simple;
-	bh=Wvobxwk10eyYL3VqO3KmPO3FLWGsG64YhxPc6/akDoo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=GGp5fZf3py6qMr/FBxOzmHSuJpwrpfS7vmsl84Y/B2BBZgCcREI5aassvDULTSelSVlKdKm2bTrSdGozytPUNmBlVit+Y62nKuSs79I5MRiD5+8RE9HsuVhp5hjNiERiNaX7C3sxBmeXLSGdfU3unTZMj44SoSdlHjeqmbzm5AE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ijp/IOI1; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1729166443; c=relaxed/simple;
+	bh=vIaTO+t4gtILq00gPQynGtNdYTSLedibd+rmjdUA8yI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=kvzJnOXKdhGqBv0fx/spcXQGXgt+a7p5SPYhNE5GOsoRnmXV1pBNJ0Cl5oswcGSIQaNaIP2QHdWhI34OilyhmhGAyrCGu1szM6kzXFk71zKUknQ//xM4zGW9u2/YCQXiA8qDWXUdqrH+UmPDQwumM6tODiJMXBsoAD6YWJhzvBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l8t6+ZN2; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ijp/IOI1"
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20241017115716epoutp0255fecf5b9cc94dcdfdc764cce4d2f3cf~-O4fje8zP0296602966epoutp02k
-	for <io-uring@vger.kernel.org>; Thu, 17 Oct 2024 11:57:16 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20241017115716epoutp0255fecf5b9cc94dcdfdc764cce4d2f3cf~-O4fje8zP0296602966epoutp02k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1729166236;
-	bh=Q4hHKn1fvmxyFIMMGNPMj5Q2BqLJbwWcipMK/6ZRwgo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ijp/IOI1AwDIK2TNyWMKfEdXI1C7ikx5cmnK8HiR04kTXjWSEIdQNmFft5WqU9gud
-	 byJcA9q4Df8qRi81a9hW/O9iKrcTvijVun5S/kIgL42979FzyuE/qG+e3nBUtdiwYH
-	 fL8kEfNxo2s7IYv9IlP/IbE/FsV8leIKx6vdliV4=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20241017115715epcas5p3a3266c9f18db518c2ea85fb8f3e619da~-O4e1ekmR2518825188epcas5p3F;
-	Thu, 17 Oct 2024 11:57:15 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.180]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4XTmXp2hbMz4x9Pp; Thu, 17 Oct
-	2024 11:57:14 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	C5.F1.18935.A9BF0176; Thu, 17 Oct 2024 20:57:14 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20241017114701epcas5p257951decab3610f0fb7b77a5104ea23f~-OviwUmc73273832738epcas5p2q;
-	Thu, 17 Oct 2024 11:47:01 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241017114701epsmtrp20cd6a46e1646a64b8308ce8f6164173b~-OviviJJ12251122511epsmtrp2J;
-	Thu, 17 Oct 2024 11:47:01 +0000 (GMT)
-X-AuditID: b6c32a50-a99ff700000049f7-0f-6710fb9a11e6
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	A8.E1.07371.539F0176; Thu, 17 Oct 2024 20:47:01 +0900 (KST)
-Received: from green245 (unknown [107.99.41.245]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20241017114659epsmtip26cdaf5998c8ff6fe84d6b4a62d72f3a2~-Ovg5udWI2791127911epsmtip2c;
-	Thu, 17 Oct 2024 11:46:59 +0000 (GMT)
-Date: Thu, 17 Oct 2024 17:09:23 +0530
-From: Anuj Gupta <anuj20.g@samsung.com>
-To: axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
-	martin.petersen@oracle.com, asml.silence@gmail.com, anuj1072538@gmail.com,
-	krisman@suse.de
-Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-block@vger.kernel.org, gost.dev@samsung.com,
-	linux-scsi@vger.kernel.org, vishak.g@samsung.com
-Subject: Re: [PATCH v4 11/11] scsi: add support for user-meta interface
-Message-ID: <20241017113923.GC1885@green245>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l8t6+ZN2"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-539fb49c64aso1214596e87.0;
+        Thu, 17 Oct 2024 05:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729166439; x=1729771239; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=YajK/IkYGa6WwS99D9AWd7oTDV/cV6q2Ud8zvCfNZYY=;
+        b=l8t6+ZN2iTwgC7cDJ7a2uMULW2aPehLYjWrCXhabuZ3Pbap9lR+13TMzWkK3BWRwS8
+         SeERCKYXhwMa9F26/I90cd5uOjD8g/CnwY2qAHPKqbAtKuioFE+Rgnb2E4tBoPKxXJHq
+         82UWutU2nSCy+AuFLc4wcTuk85/vkmHzPPEUIumPrjBC+y2Z+a7StGfxR895iUvjCnaN
+         54xSnhi9Ye8T/c3njSCjQ+2tVLcDcfoCorQdpCyrTwrHRry6rmWjbLmqj4i6AO37omrl
+         8FMMGUYu7vDMR+70AvaQLP/Fn6LkUV9rJn4e1k29Pac3x1Z0mtH0JB+Vm60HrhXPXk6M
+         4zbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729166439; x=1729771239;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YajK/IkYGa6WwS99D9AWd7oTDV/cV6q2Ud8zvCfNZYY=;
+        b=cr0+yQjuMj3ZfqQ9hej35IGBsRrNuZHmHLPwav0h7IvhxjHl0tYIGaDx1othOSLCFE
+         EGgtrTkQz0wApyXZ76ZR6X4Z/LVlyhAqFpRHAhm3DAHRj6RmUm9lZsdV+gIVxFF+M3GG
+         3pMeiC78KM91pq9QqMxjeCkWldHpTvJH/xm8b0RKvLse9d/xnqmpgCTIPXASYUnDFmfN
+         slZhtuGyBg7bwaUJKutYiiZyHiQ7DumVo3G2x7YQ93y+9DKbEoa19Wl+RL1CDARe8T4p
+         6vZiMh8uf4tEeoiKx4OEyVqJqI2rmloI/x0xyERY/h6XDtUvVp0WEYwkrLPyfkvuL91g
+         9Bdg==
+X-Forwarded-Encrypted: i=1; AJvYcCVhSKWoTDNU8MS0thiZIAchrfw/RVV5Ud91G33pLSoiYGX2rjrykwkzgYYySza0+hp7Ja4NafRDeg==@vger.kernel.org, AJvYcCWCEjn31iGRfsiugF62zec2cw/YZJ3kMfZbnL8Qc9AXaO/DtdR/95JFLY9gmquJE0AqNUFQfUaAcGYZ4dZh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzzbyuj0+jnlhjQIx5u04hXga0cPMLu8/Ed2MS30cxNpA9L/7FU
+	x34iHou5Wp0NeS4D0pr4eDa4GN5fIo5c2LpsScFrd/zX4vl1ztdI
+X-Google-Smtp-Source: AGHT+IEukFtG3CsS2S9GITpOM20ego4bSmu33bPRWGPmxddFLHHibVFmlSbgluSW/fPqqN9z/2UhNw==
+X-Received: by 2002:a05:6512:6d0:b0:539:8f68:e036 with SMTP id 2adb3069b0e04-539e552184bmr11885399e87.34.1729166438018;
+        Thu, 17 Oct 2024 05:00:38 -0700 (PDT)
+Received: from [192.168.42.33] ([85.255.234.159])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a2973faffsm288256366b.48.2024.10.17.05.00.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Oct 2024 05:00:37 -0700 (PDT)
+Message-ID: <e40179ae-5b1a-446e-a982-607321b21d57@gmail.com>
+Date: Thu, 17 Oct 2024 13:00:57 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20241016112912.63542-12-anuj20.g@samsung.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te1BUVRzHOXcvdy8My1xA6rgmj+sYQQK7tWwXhMCJ4s5ktWaNyjStd5Y7
-	u8S+2oeZ0rSTrg0UCkghKxaN8XAxIlRcMggXdOPZ8JCSaW1iWM1lwlhCGxGnZe/S+N/n9zvf
-	7znf88J50UOYEC/WmliDllGTWDja2ZeckmpbJpSi4QtR1MLSMkrV2zsB1eo+hlHXe7sQ6kzr
-	FYSat46iVLVzClAXhxt5VPf009SXTR4+9ckvDoxqdj1EqJ9t9fw8Ad1lc/PpiREz3WEvw+hz
-	X39IX7puwegFzzRKHz1vB/S5oYP0YkecLKywJFvFMkWsIYHVKnRFxVplDvnyTvkL8gypSJwq
-	zqSeIxO0jIbNIfO3y1JfKlb7Q5MJ+xi12d+SMUYjmf58tkFnNrEJKp3RlEOy+iK1XqJPMzIa
-	o1mrTNOypiyxSPRMhl+4t0Q12tfG118O3z9ia8IsYB4vB2E4JCTQV/U5Wg7C8WjiBwAtY0PB
-	wgdg3+0KhCvuAnjI60LXLMeXWzFuoBvA6r6bQctNAN1z4wEVSmyGTlcLf5UxIgn237KCVV5H
-	VAN4a+LNVeYRjQCu9EtXOYYogCd6fg9oBMQWeNQxFspxFByomw3MGUZshUuTrYF+LLEJ9na6
-	AvEg0YvDOw+cGBcvH9ae9PA4joFe13k+x0K4ON8d1CjhvxMehGM9PHS1B3CcC62Dx3hcOBWc
-	uvNjsL8RfjbYhnD9SFixPBv0CqDjizUm4cdn6oMMYfeoxc+4n2k4fa2UO6AeANuv1IBKEG97
-	ZG+2R5bjeAtsuOTDbH47j9gAmx/iHCbDb79PbwChdiBk9UaNklVk6MWpWva9/69codN0gMCr
-	TpE5QGv7SpoTIDhwAojzyHWC6nKBMlpQxLx/gDXo5AazmjU6QYb/sqp4wliFzv8ttCa5WJIp
-	kkilUknms1Ix+bhgznqqKJpQMia2hGX1rGHNh+BhQgtyBG38Zzy0IaRwV78jrm5S0f4A/GmA
-	yLvzF67dd6+cteS+XlMadfmA7+53cscrvVhNqeSrxrLJ0LxXTSfy9qHRjzFldHxFZPKYdGD9
-	Ju8eW899Xcsf3/zkThk5vfCB7eyNd2bQmW5EkeaTDcXQE7ufarae8tzLKiCyey7exmd3fKo6
-	/VG2cLDpKnv8XsJYCDu+oeO10VlZ4Vt7I+B8ftXf1Iw8fXgw8Qnz1j1D8W+rdtX+tW1qzm7O
-	Tc/11b5Y0BZxOCLOMOCNity41IxVmvYT20yJaVimNssrrxMtJN44KdzRrH6jsquat5iUE7vb
-	upD0q+Zw05Pr535bbDkSclBet9NOokYVI07hGYzMf39EGGZeBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJXtf0p0C6wbddqhYfv/5msZizahuj
-	xeq7/WwWNw/sZLJYufook8W71nMsFpMOXWO02H5mKbPF3lvaFvOXPWW36L6+g81i+fF/TBbn
-	Z81hd+D12DnrLrvH5bOlHptWdbJ5bF5S77H7ZgObx8ent1g8+rasYvTYfLra4/MmuQDOKC6b
-	lNSczLLUIn27BK6Mnwua2QsaOSre/OthbmA8ztbFyMkhIWAiMfn3aiCbi0NIYDejxNfdl5kh
-	EhISp14uY4SwhSVW/nvODlH0hFFi8dbD7CAJFgFViUPHV4DZbALqEkeetzKCFIkITGKUmDfp
-	JgtIgllgKaPE3yNmILawgLvEjH33wabyCuhI9O24yAoxdR+jxM7Jn9ghEoISJ2c+gWrWkrjx
-	7yVTFyMHkC0tsfwfB0iYU8Ba4uuV1awgtqiAssSBbceZJjAKzkLSPQtJ9yyE7gWMzKsYJVML
-	inPTc5MNCwzzUsv1ihNzi0vz0vWS83M3MYJjTEtjB+O9+f/0DjEycTAeYpTgYFYS4Z3UxZsu
-	xJuSWFmVWpQfX1Sak1p8iFGag0VJnNdwxuwUIYH0xJLU7NTUgtQimCwTB6dUA9Ob4KivNZKP
-	7IT539id3BNTmb44/LTH39A7Gq0MSZk79j/ffq782rawl1apt3f/vbt1ikX+9jcThbfc5TYJ
-	70n7FSHgHJrz1/TQZD4e15zo869j0wTLPyn6iq3uP+8zS6En2Jn5961rJj8Yeqx28l26Xi/y
-	w7SD+fqVL7K2+5Zvcu2LcS9zEnjyZH1qj9XLX9vtdm0+ukRjxcXQ7PPfko4Hmtexsss6hl3Z
-	ylws/MFzhXLKbKsVe67oWRiaLpxu5za9T072z4NLjXck8ubtljhnFszVrn77afpSy8tr3FcV
-	RUlvbHBL0WMVyV4+nTkvT+PsoVcmGXc89XWu8AvX3zxqsfHybjtBRw97HQs+XSWW4oxEQy3m
-	ouJEAEGkjKAgAwAA
-X-CMS-MailID: 20241017114701epcas5p257951decab3610f0fb7b77a5104ea23f
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----Q5hryimWBrG20CTDo2Cycv07rC8cEZ5s1mVzGfufIajJO9l9=_50325_"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20241016113757epcas5p42b95123c857e5d92d9cdec55e190ce4e
-References: <20241016112912.63542-1-anuj20.g@samsung.com>
-	<CGME20241016113757epcas5p42b95123c857e5d92d9cdec55e190ce4e@epcas5p4.samsung.com>
-	<20241016112912.63542-12-anuj20.g@samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [io-uring?] KCSAN: data-race in io_req_defer_failed /
+ io_wq_free_work (3)
+To: syzbot <syzbot+2b8e48083b04a2e58fab@syzkaller.appspotmail.com>,
+ axboe@kernel.dk, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com
+References: <6710c8ce.050a0220.d5849.0026.GAE@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <6710c8ce.050a0220.d5849.0026.GAE@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-------Q5hryimWBrG20CTDo2Cycv07rC8cEZ5s1mVzGfufIajJO9l9=_50325_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
+On 10/17/24 09:20, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    c964ced77262 Merge tag 'for-linus' of git://git.kernel.org..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14d3cf27980000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=fd83253b74c9c570
+> dashboard link: https://syzkaller.appspot.com/bug?extid=2b8e48083b04a2e58fab
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/dc3d0edf69f7/disk-c964ced7.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/bb0052a85cf6/vmlinux-c964ced7.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/ec8def944d77/bzImage-c964ced7.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+2b8e48083b04a2e58fab@syzkaller.appspotmail.com
 
-> +/*
-> + * Can't check reftag alone or apptag alone
-> + */
-> +static bool sd_prot_flags_valid(struct scsi_cmnd *scmd)
-> +{
-> +	struct request *rq = scsi_cmd_to_rq(scmd);
-> +	struct bio *bio = rq->bio;
-> +
-> +	if (bio_integrity_flagged(bio, BIP_CHECK_REFTAG) &&
-> +	    !bio_integrity_flagged(bio, BIP_CHECK_APPTAG))
-> +		return false;
-> +	if (!bio_integrity_flagged(bio, BIP_CHECK_REFTAG) &&
-> +	    bio_integrity_flagged(bio, BIP_CHECK_APPTAG))
-> +		return false;
-> +	return true;
-> +}
-> +
+I'd assume io_req_defer_failed sets F_FAIL flag, req_ref_put_and_test()
+reads F_REFCOUNT, which never changes at this point, and there are
+dozens other such modifications.
 
-Martin, Christoph, and all,
-
-This snippet prevents a scenario where a apptag check is specified without
-a reftag check and vice-versa, which is not possible for scsi[1]. But for
-block layer generated integrity apptag check (BIP_CHECK_APPTAG) is not
-specified. When scsi drive is formatted with type1/2 PI, block layer would
-specify refcheck but not appcheck. Hence, these I/O's would fail. Do you
-see how we can handle this?
-
-[1] https://lore.kernel.org/linux-block/yq1ttgz5l6d.fsf@ca-mkp.ca.oracle.com/
-
-------Q5hryimWBrG20CTDo2Cycv07rC8cEZ5s1mVzGfufIajJO9l9=_50325_
-Content-Type: text/plain; charset="utf-8"
+The race is mild, it shouldn't be a problem unless the compiler
+misbehaves,  but may make sense to add WRITE_ONCE for every
+modification.
 
 
-------Q5hryimWBrG20CTDo2Cycv07rC8cEZ5s1mVzGfufIajJO9l9=_50325_--
+> ==================================================================
+> BUG: KCSAN: data-race in io_req_defer_failed / io_wq_free_work
+> 
+> write to 0xffff888117079648 of 8 bytes by task 3752 on cpu 1:
+>   io_req_defer_failed+0x73/0x440 io_uring/io_uring.c:935
+>   io_req_task_cancel+0x21/0x30 io_uring/io_uring.c:1361
+>   io_handle_tw_list+0x1b9/0x200 io_uring/io_uring.c:1063
+>   tctx_task_work_run+0x6c/0x1b0 io_uring/io_uring.c:1135
+>   tctx_task_work+0x40/0x80 io_uring/io_uring.c:1153
+>   task_work_run+0x13a/0x1a0 kernel/task_work.c:228
+>   get_signal+0xee9/0x1070 kernel/signal.c:2690
+>   arch_do_signal_or_restart+0x95/0x4b0 arch/x86/kernel/signal.c:337
+>   exit_to_user_mode_loop kernel/entry/common.c:111 [inline]
+>   exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
+>   __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
+>   syscall_exit_to_user_mode+0x59/0x130 kernel/entry/common.c:218
+>   do_syscall_64+0xd6/0x1c0 arch/x86/entry/common.c:89
+>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> 
+> read to 0xffff888117079648 of 8 bytes by task 3753 on cpu 0:
+>   req_ref_put_and_test io_uring/refs.h:22 [inline]
+>   io_wq_free_work+0x21/0x160 io_uring/io_uring.c:1779
+>   io_worker_handle_work+0x4cb/0x9d0 io_uring/io-wq.c:604
+>   io_wq_worker+0x286/0x820 io_uring/io-wq.c:655
+>   ret_from_fork+0x4b/0x60 arch/x86/kernel/process.c:147
+>   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+> 
+> value changed: 0x00000000802c2058 -> 0x00000000806c2118
+
+-- 
+Pavel Begunkov
