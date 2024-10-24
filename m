@@ -1,66 +1,66 @@
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C5F1C3045
-	for <io-uring@vger.kernel.org>; Wed, 23 Oct 2024 16:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340731C01
+	for <io-uring@vger.kernel.org>; Thu, 24 Oct 2024 05:12:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729700139; cv=none; b=NKA/Nd/VrEcgO/oIlsnFw6IlwCuag5oXzFbZQhs5Ck63IS0HuOsocZbIR55+jUCgme7vEWb0UE35hqaF69J1BrAvOVD2IzQUIk0gGoBui6UlrMZnpZIuyhcPDkqO4Eq7OmgIx0V4x7RY9ltl3iWr7Tqmi9sZxP8fZzFd12gELk4=
+	t=1729746762; cv=none; b=JVxmNy0Q4bao24I+CbCecW55PdvXci0M8KJqjj7KbNRXPbS2HGx/X0Cw9vWQR+1KCSeLbtV05ClL0QmzN2DtOjnEHpVhCTWZZt7816JGPM7TqPY4qUisfSlEhK5LUm6ywJZ9l1ot7YYjwxxnUWan+UHOVI7TV9dWsJIdUVtfoGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729700139; c=relaxed/simple;
-	bh=ECixvDA0CV9DbzgGfS1vLwyWdlt6qzfwBdUA5lTD+0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YKcIZcxlvQeg6AsooOerHRODx6OfkQGFaB+/lSv4HUZHRoJqekf2Iya98w1YL5ZWJO7Vg1DtpmpuOnjUTsEflUb4ePBeHMHZ2NokZgYG/lJ24G88GJzsbePDVpo4WUoo6+1cnDv72haq54zg+ZdCRJxLFBlpAPNkXUlaZlmmStc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=tXpO1Azf; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1729746762; c=relaxed/simple;
+	bh=QMHwjleCWdqJmffl09X8XxcLieRaYgHpBRHiOVAODVY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=Apa/mFsKrmqht+HZ7+F5TsZF2KHv7nyMdwJxqr/doHY2cvfX0b32yRvbwbgQCTC5hTGV3RUJAFpxLa6XvDvNdMXCOZcb7oJwnVppi5O5ePrRVsnLB1Yyf7xPerZreCoalYmr2nYYzxuC8mQyb2hTX/b9PwXwTTVDg1idSSXi/xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=EVLe2lpO; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="tXpO1Azf"
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-83abe7fc77eso205017139f.0
-        for <io-uring@vger.kernel.org>; Wed, 23 Oct 2024 09:15:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1729700136; x=1730304936; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4kOPdgM0vwRvx2gbkp5/pjZOR3nL5VqvejKEQrCn8qI=;
-        b=tXpO1AzfDVI+rtMblfcUPNa9PpdzdZAHnDS+32sIyi+9qDwDm1kXRee95u54cDfgkZ
-         VqUYpGUrxNFRRH5DyW5Ir5tsRjZv2EmV13jETgNw0Hwb2w1mHPPzWLRbUaiftL1XNRQH
-         I3Yi7qhc5izC5s9kFQtIx/8vvt+81voWrUmCjB58bTWyMRZQF+3BguSorJ5SLf6Lzsao
-         diGH+Oh7ic5hGgA8ecYp1J5COXpmp0QJRa5fvVfz9oa4hBFCLSQI2bsaLw0TX1db+rxz
-         /f3Hp4UmhAtZ/MvpCsLQbH2dOs/5CoXequsxzKnQKbrJ9Qnw2qcjrPPcAeUFdOZ1e68S
-         V1yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729700136; x=1730304936;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4kOPdgM0vwRvx2gbkp5/pjZOR3nL5VqvejKEQrCn8qI=;
-        b=unfBI8A8ne9J0zXLHef+lc/kgmA9YKKXlNJ4RhaXs6PIj4sD1qiJqeAo3RpeHEklcS
-         onejvkajjp2Gr5S/FbOrNoUyBojGq6FVh9GuVFv6SYR1veVHNGPF2CQE2LwZNdjRdBMb
-         TXeObL02CCzApZDVl38QRErJNUKbUubRRGuRAWW38woeS5UHIJaVzPCzuMA1SzdiAeQO
-         UeQRiGbOGKpjmcf8erla/6bS+egYyTwSmWxAl+e7uIJOZk5/i+pIkbp1TTHKS6f25wMw
-         MyHjbrEHViF/Gej4HgTZV44VHtYfulQW+208Keoh/AkBlAY1loWgbOuA6d/HG729osNs
-         oKsg==
-X-Gm-Message-State: AOJu0YyhQlRhe3KfWbhymHTAEwQWzDr953Ri595HVH8a0FQikZ2Y/7XB
-	y3RLEry47yDbiSOr8xdZu2wJcEVtecSmr21gy2UqVlMywCehU3J38EEWQZp30WwrA+uS+8tGYJn
-	V
-X-Google-Smtp-Source: AGHT+IFPv8t+UOSRBRrYN44onrF8tB2bt6NJr4qWaJqi2pmkQnFwKoFoF+dsRBAYW4pMcI6S92dyCQ==
-X-Received: by 2002:a05:6602:1483:b0:83a:b79c:66b6 with SMTP id ca18e2360f4ac-83af615132bmr358639039f.2.1729700132749;
-        Wed, 23 Oct 2024 09:15:32 -0700 (PDT)
-Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc2a556c29sm2138180173.43.2024.10.23.09.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2024 09:15:31 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 6/7] io_uring/kbuf: add support for mapping type KBUF_MODE_BVEC
-Date: Wed, 23 Oct 2024 10:07:39 -0600
-Message-ID: <20241023161522.1126423-7-axboe@kernel.dk>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241023161522.1126423-1-axboe@kernel.dk>
-References: <20241023161522.1126423-1-axboe@kernel.dk>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="EVLe2lpO"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20241024051236epoutp04f7d60641b7330e2174146f329636ff36~BS4KVIPKw2180021800epoutp04W
+	for <io-uring@vger.kernel.org>; Thu, 24 Oct 2024 05:12:36 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20241024051236epoutp04f7d60641b7330e2174146f329636ff36~BS4KVIPKw2180021800epoutp04W
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1729746756;
+	bh=20NJUmqLwCb2XXrI7br3jpwrndagv7bAxQXw0ZBPwdw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EVLe2lpOm5TJ64fr4cGEw2+Jlnl41VQGhecLlxHcIhovvLyQpGU26/5EKWwlY2Zm+
+	 SDuzzu0tMZy89JvUxo00c/cNv1Cvi+Ia04k7Kqyo54lMiRhQcwQEdhnolnFmpPRNmq
+	 TdsazmiVYpYalu/oIf/IWa/LBzKWESvqe2m9rGRk=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20241024051235epcas5p3f10791adf8ae8cff9b5acbfd1d32f3ce~BS4J2YuPp1462214622epcas5p3r;
+	Thu, 24 Oct 2024 05:12:35 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.181]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4XYvDb30Tfz4x9QK; Thu, 24 Oct
+	2024 05:12:31 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	69.6A.08574.F37D9176; Thu, 24 Oct 2024 14:12:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20241024023812epcas5p1e5798728def570cb57679eebdd742d7b~BQxW800j43055130551epcas5p1h;
+	Thu, 24 Oct 2024 02:38:12 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20241024023812epsmtrp1757909e7a598349e37b14d0a845ae2d2~BQxW8LAUq0664606646epsmtrp1u;
+	Thu, 24 Oct 2024 02:38:12 +0000 (GMT)
+X-AuditID: b6c32a44-6dbff7000000217e-01-6719d73f3f53
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	69.52.07371.413B9176; Thu, 24 Oct 2024 11:38:12 +0900 (KST)
+Received: from testpc11818.samsungds.net (unknown [109.105.118.18]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20241024023811epsmtip2d3692b7522bbf2b5914ba3084a2a39ce~BQxVzfvEs2454624546epsmtip2a;
+	Thu, 24 Oct 2024 02:38:11 +0000 (GMT)
+From: hexue <xue01.he@samsung.com>
+To: asml.silence@gmail.com, axboe@kernel.dk
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH v8] io_uring: releasing CPU resources when polling
+Date: Thu, 24 Oct 2024 10:38:05 +0800
+Message-Id: <20241024023805.1082769-1-xue01.he@samsung.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <293e5757-4160-4734-931c-9830df7c2f88@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -68,356 +68,110 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpmk+LIzCtJLcpLzFFi42LZdlhTXdf+umS6we5dYhZzVm1jtFh9t5/N
+	4l3rORaLX913GS0u75rDZnF2wgdWBzaPnbPusntcPlvq0bdlFaPH501yASxR2TYZqYkpqUUK
+	qXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QLuVFMoSc0qBQgGJxcVK
+	+nY2RfmlJakKGfnFJbZKqQUpOQUmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZZ//3sBd8Eqk4
+	/l2ngXGXYBcjJ4eEgInEopMHmLsYuTiEBHYzShw4eYYdwvnEKNE2aQ1U5hujxJwLBxlhWhpv
+	7GKFSOxllFjz7ypUyw9GiTePdzGBVLEJKEns3/IBrENEQFti7f3tLCA2s4CVxNk5P8FsYQEv
+	ifcbj7OD2CwCqhI7/n1lBrF5BawlHrb8YoXYJi9xs2s/WJxTwFai/9c/NogaQYmTM59AzZSX
+	aN46mxmi/hG7xJRbWRC2i8SZBa+ZIGxhiVfHt7BD2FISL/vboOx8icnf10N9ViOxbvM7Fgjb
+	WuLflT1ANgfQfE2J9bv0IcKyElNPrWOCWMsn0fv7CdR4Xokd82BsJYklR1ZAjZSQ+D1hESvI
+	GAkBD4lv37ghQTWBUaLn/jb2CYwKs5B8MwvJN7MQNi9gZF7FKJlaUJybnppsWmCYl1oOj+Pk
+	/NxNjODUqOWyg/HG/H96hxiZOBgPMUpwMCuJ8F7MkEwX4k1JrKxKLcqPLyrNSS0+xGgKDO6J
+	zFKiyfnA5JxXEm9oYmlgYmZmZmJpbGaoJM77unVuipBAemJJanZqakFqEUwfEwenVAPThq8H
+	K3ZdmdqR5fX2kW/+/iendJ4GW76YZ9kgWHDUIVmj/oQC1+a0O1fndRReOXyjJvz82RmrI897
+	GK5LetqrE+tWlv/y/tdsx/Ny0z2yX96ve+fp4J8pcN6PW9LhlWB7bHBp1ueun5MqPwYoC0Te
+	WRDF6pAkEa088Xo0d39M+ZljJ6fMWvzxc6iYGtcZvu5YH/2NTBOT/NV0ko1c2oPDTtwybxXY
+	c8lkf/Kky1+/3Lx9e3PxpC/pEXps1zJN0j9Z25qHOB3KaXXn0g786Rc0s3Hqq47NZ+0OLdmo
+	tCvUTvXNBjcv3xuzc/J7tfj856y4rZ+nMqfnyxTTTPFDp0/MK3Q/z8//beG3bQxbCgOVWIoz
+	Eg21mIuKEwF3cKySFgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrALMWRmVeSWpSXmKPExsWy7bCSvK7IZsl0g/0TpS3mrNrGaLH6bj+b
+	xbvWcywWv7rvMlpc3jWHzeLshA+sDmweO2fdZfe4fLbUo2/LKkaPz5vkAliiuGxSUnMyy1KL
+	9O0SuDLO/u9hL/gkUnH8u04D4y7BLkZODgkBE4nGG7tYuxi5OIQEdjNKvDv4kREiISGx49Ef
+	VghbWGLlv+fsEEXfGCXOTX/EDJJgE1CS2L/lA1iDiICuxNpNjWA2s4CNxM6WLewgtrCAl8T7
+	jcfBbBYBVYkd/76C9fIKWEs8bPkFtUBe4mbXfrA4p4CtRP+vf2xdjBxAy2wkFu6SgigXlDg5
+	8wkLSJhZQF1i/TwhiE3yEs1bZzNPYBSchaRqFkLVLCRVCxiZVzFKphYU56bnJhsWGOallusV
+	J+YWl+al6yXn525iBAe6lsYOxnvz/+kdYmTiYDzEKMHBrCTCezFDMl2INyWxsiq1KD++qDQn
+	tfgQozQHi5I4r+GM2SlCAumJJanZqakFqUUwWSYOTqkGJrWe4tmrLmUdyY9958hfK2dqmLBL
+	fA1TzHrWFz07Lzfpm5s4LDx2s+F+7dPZ+fOKTtZMlq4oDXrl7XmgLmtdN0e1kmv0uecd+rvs
+	2G4eWrWX8bobu//v1f2Lfp4+0bPj4nzNp/u65t2IkFW+c3LHjMKG+JNnFrgrbp0V3SHsFjHr
+	2HFhB8/jSu4L2L5nVsVPPGCo63uvY1JYxmfvJtM1EirWWQ82egUsTZxa0F4bXy/50PzCtg83
+	zWNPuhbOa95zLNvv4/Ji7u0eLX0x0vb1OxZPSHVjF3XN1Y4zddhsmB9xaqnDhL4dQrni/NFv
+	lZfq7TzN2nO7/qLxF4YnclPf5W80vrPuTsyO8HhLkaP3lViKMxINtZiLihMBHjsXkuMCAAA=
+X-CMS-MailID: 20241024023812epcas5p1e5798728def570cb57679eebdd742d7b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241024023812epcas5p1e5798728def570cb57679eebdd742d7b
+References: <293e5757-4160-4734-931c-9830df7c2f88@gmail.com>
+	<CGME20241024023812epcas5p1e5798728def570cb57679eebdd742d7b@epcas5p1.samsung.com>
 
-The provided buffer helpers always map to iovecs. Add a new mode,
-KBUF_MODE_BVEC, which instead maps it to a bio_vec array instead. For
-use with zero-copy scenarios, where the caller would want to turn it
-into a bio_vec anyway, and this avoids first iterating and filling out
-and iovec array, only for the caller to then iterate it again and turn
-it into a bio_vec array.
+On 9/25/2024 12:12, Pavel Begunkov wrote:
+>I don't have a strong opinion on the feature, but the open question
+>we should get some decision on is whether it's really well applicable to
+>a good enough set of apps / workloads, if it'll even be useful in the
+>future and/or for other vendors, and if the merit outweighs extra
+>8 bytes + 1 flag per io_kiocb and the overhead of 1-2 static key'able
+>checks in hot paths.
 
-Since it's now managing both iovecs and bvecs, change the naming of
-buf_sel_arg->nr_iovs member to nr_vecs instead.
+IMHO, releasing some of the CPU resources during the polling
+process may be appropriate for some performance bottlenecks
+due to CPU resource constraints, such as some database
+applications, in addition to completing IO operations, CPU
+also needs to peocess data, like compression and decompression.
+In a high-concurrency state, not only polling takes up a lot of
+CPU time, but also operations like calculation and processing
+also need to compete for CPU time. In this case, the performance
+of the application may be difficult to improve.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/kbuf.c | 170 +++++++++++++++++++++++++++++++++++++++++++-----
- io_uring/kbuf.h |   9 ++-
- io_uring/net.c  |  10 +--
- 3 files changed, 165 insertions(+), 24 deletions(-)
+The MultiRead interface of Rocksdb has been adapted to io_uring,
+I used db_bench to construct a situation with high CPU pressure
+and compared the performance. The test configuration is as follows,
 
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 42579525c4bd..10a3a7a27e9a 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -16,6 +16,7 @@
- #include "opdef.h"
- #include "kbuf.h"
- #include "memmap.h"
-+#include "rsrc.h"
- 
- /* BIDs are addressed by a 16-bit field in a CQE */
- #define MAX_BIDS_PER_BGID (1 << 16)
-@@ -117,20 +118,135 @@ static void __user *io_provided_buffer_select(struct io_kiocb *req, size_t *len,
- 	return NULL;
- }
- 
-+static struct io_mapped_ubuf *io_ubuf_from_buf(struct io_ring_ctx *ctx,
-+					       u64 addr, unsigned int *offset)
-+{
-+	struct io_mapped_ubuf *imu;
-+	u16 idx;
-+
-+	/*
-+	 * Get registered buffer index and offset, encoded into the
-+	 * addr base value.
-+	 */
-+	idx = addr & ((1ULL << IOU_BUF_REGBUF_BITS) - 1);
-+	addr >>= IOU_BUF_REGBUF_BITS;
-+	*offset = addr  & ((1ULL << IOU_BUF_OFFSET_BITS) - 1);
-+
-+	if (unlikely(idx >= ctx->nr_user_bufs))
-+		return ERR_PTR(-EFAULT);
-+
-+	idx = array_index_nospec(idx, ctx->nr_user_bufs);
-+	imu = READ_ONCE(ctx->user_bufs[idx]);
-+	if (unlikely(*offset >= imu->len))
-+		return ERR_PTR(-EFAULT);
-+
-+	return imu;
-+}
-+
-+static bool io_expand_bvecs(struct buf_sel_arg *arg)
-+{
-+	int nvecs = arg->nr_vecs + 8;
-+	struct bio_vec *bv;
-+
-+	if (!(arg->mode & KBUF_MODE_EXPAND))
-+		return false;
-+
-+	bv = kmalloc_array(nvecs, sizeof(struct bio_vec), GFP_KERNEL);
-+	if (unlikely(!bv))
-+		return false;
-+	memcpy(bv, arg->bvecs, arg->nr_vecs * sizeof(*bv));
-+	if (arg->mode & KBUF_MODE_FREE)
-+		kfree(arg->bvecs);
-+	arg->bvecs = bv;
-+	arg->nr_vecs = nvecs;
-+	arg->mode |= KBUF_MODE_FREE;
-+	return true;
-+}
-+
-+static int io_fill_bvecs(struct io_ring_ctx *ctx, u64 addr,
-+			 struct buf_sel_arg *arg, unsigned int len,
-+			 int *vec_off)
-+{
-+	struct bio_vec *src, *src_prv = NULL;
-+	struct io_mapped_ubuf *imu;
-+	unsigned int llen = len;
-+	unsigned int offset;
-+
-+	imu = io_ubuf_from_buf(ctx, addr, &offset);
-+	if (unlikely(IS_ERR(imu)))
-+		return PTR_ERR(imu);
-+
-+	if (unlikely(offset >= imu->len || len > imu->len))
-+		return -EOVERFLOW;
-+	if (unlikely(offset > imu->len - len))
-+		return -EOVERFLOW;
-+
-+	src = imu->bvec;
-+	if (offset > src->bv_len) {
-+		unsigned long seg_skip;
-+
-+		offset -= src->bv_len;
-+		seg_skip = 1 + (offset >> imu->folio_shift);
-+		offset &= ((1UL << imu->folio_shift) - 1);
-+		src += seg_skip;
-+	}
-+
-+	do {
-+		unsigned int this_len = len;
-+
-+		if (this_len + offset > src->bv_len)
-+			this_len = src->bv_len - offset;
-+
-+		/*
-+		 * If contig with previous bio_vec, merge it to minimize the
-+		 * number of segments needed. If not, then add a new segment,
-+		 * expanding the number of available slots, if needed.
-+		 */
-+		if (src_prv &&
-+		    page_folio(src_prv->bv_page) == page_folio(src->bv_page) &&
-+		    src_prv->bv_page + 1 == src->bv_page) {
-+			arg->bvecs[*vec_off - 1].bv_len += this_len;
-+		} else {
-+			struct bio_vec *dst;
-+
-+			if (*vec_off == arg->nr_vecs && !io_expand_bvecs(arg))
-+				break;
-+
-+			dst = &arg->bvecs[*vec_off];
-+			dst->bv_page = src->bv_page;
-+			dst->bv_len = this_len;
-+			dst->bv_offset = offset;
-+			(*vec_off)++;
-+		}
-+		offset = 0;
-+		len -= this_len;
-+		src_prv = src++;
-+	} while (len);
-+
-+	return llen - len;
-+}
-+
- static int io_provided_buffers_select(struct io_kiocb *req,
- 				      struct buf_sel_arg *arg,
- 				      struct io_buffer_list *bl, size_t *len)
- {
--	struct iovec *iov = arg->iovs;
- 	void __user *buf;
-+	int ret;
- 
- 	buf = io_provided_buffer_select(req, len, bl);
- 	if (unlikely(!buf))
- 		return -ENOBUFS;
- 
--	iov[0].iov_base = buf;
--	iov[0].iov_len = *len;
--	return 1;
-+	if (arg->mode & KBUF_MODE_BVEC) {
-+		u64 addr = (unsigned long)(uintptr_t) buf;
-+
-+		*len = io_fill_bvecs(req->ctx, addr, arg, *len, &ret);
-+	} else {
-+		arg->iovs[0].iov_base = buf;
-+		arg->iovs[0].iov_len = *len;
-+		ret = 1;
-+	}
-+	return ret;
- }
- 
- static void __user *io_ring_buffer_select(struct io_kiocb *req, size_t *len,
-@@ -196,13 +312,16 @@ void __user *io_buffer_select(struct io_kiocb *req, size_t *len,
- #define PEEK_MAX_IMPORT		256
- 
- static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
--				struct io_buffer_list *bl)
-+				struct io_buffer_list *bl, int *nbufs)
- {
- 	struct io_uring_buf_ring *br = bl->buf_ring;
- 	struct iovec *iov = arg->iovs;
--	int nr_iovs = arg->nr_iovs;
-+	int nr_iovs = arg->nr_vecs;
- 	__u16 nr_avail, tail, head;
- 	struct io_uring_buf *buf;
-+	int vec_off;
-+
-+	BUILD_BUG_ON(sizeof(struct iovec) > sizeof(struct bio_vec));
- 
- 	tail = smp_load_acquire(&br->tail);
- 	head = bl->head;
-@@ -236,10 +355,12 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 
- 	/*
- 	 * only alloc a bigger array if we know we have data to map, eg not
--	 * a speculative peek operation.
-+	 * a speculative peek operation. Note that struct bio_vec and
-+	 * struct iovec are the same size, so we can use them interchangably
-+	 * here as it's just for sizing purposes.
- 	 */
- 	if (arg->mode & KBUF_MODE_EXPAND && nr_avail > nr_iovs && arg->max_len) {
--		iov = kmalloc_array(nr_avail, sizeof(struct iovec), GFP_KERNEL);
-+		iov = kmalloc_array(nr_avail, sizeof(struct bio_vec), GFP_KERNEL);
- 		if (unlikely(!iov))
- 			return -ENOMEM;
- 		if (arg->mode & KBUF_MODE_FREE)
-@@ -255,6 +376,7 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 	if (!arg->max_len)
- 		arg->max_len = INT_MAX;
- 
-+	vec_off = 0;
- 	req->buf_index = buf->bid;
- 	do {
- 		u32 len = buf->len;
-@@ -266,15 +388,25 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 				buf->len = len;
- 		}
- 
--		iov->iov_base = u64_to_user_ptr(buf->addr);
--		iov->iov_len = len;
--		iov++;
-+		if (arg->mode & KBUF_MODE_BVEC) {
-+			int ret;
-+
-+			ret = io_fill_bvecs(req->ctx, buf->addr, arg, len, &vec_off);
-+			if (unlikely(ret < 0))
-+				return ret;
-+			len = ret;
-+		} else {
-+			iov->iov_base = u64_to_user_ptr(buf->addr);
-+			iov->iov_len = len;
-+			iov++;
-+			vec_off++;
-+		}
- 
- 		arg->out_len += len;
- 		arg->max_len -= len;
-+		(*nbufs)++;
- 		if (!arg->max_len)
- 			break;
--
- 		buf = io_ring_head_to_buf(br, ++head, bl->mask);
- 	} while (--nr_iovs);
- 
-@@ -283,7 +415,7 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 
- 	req->flags |= REQ_F_BUFFER_RING;
- 	req->buf_list = bl;
--	return iov - arg->iovs;
-+	return vec_off;
- }
- 
- int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
-@@ -299,7 +431,9 @@ int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		goto out_unlock;
- 
- 	if (bl->flags & IOBL_BUF_RING) {
--		ret = io_ring_buffers_peek(req, arg, bl);
-+		int nbufs = 0;
-+
-+		ret = io_ring_buffers_peek(req, arg, bl, &nbufs);
- 		/*
- 		 * Don't recycle these buffers if we need to go through poll.
- 		 * Nobody else can use them anyway, and holding on to provided
-@@ -307,9 +441,9 @@ int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		 * side anyway with normal buffers. Besides, we already
- 		 * committed them, they cannot be put back in the queue.
- 		 */
--		if (ret > 0) {
-+		if (nbufs) {
- 			req->flags |= REQ_F_BUFFERS_COMMIT | REQ_F_BL_NO_RECYCLE;
--			io_kbuf_commit(req, bl, arg->out_len, ret);
-+			io_kbuf_commit(req, bl, arg->out_len, nbufs);
- 		}
- 	} else {
- 		ret = io_provided_buffers_select(req, arg, bl, &arg->out_len);
-@@ -332,7 +466,9 @@ int io_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg)
- 		return -ENOENT;
- 
- 	if (bl->flags & IOBL_BUF_RING) {
--		ret = io_ring_buffers_peek(req, arg, bl);
-+		int nbufs = 0;
-+
-+		ret = io_ring_buffers_peek(req, arg, bl, &nbufs);
- 		if (ret > 0)
- 			req->flags |= REQ_F_BUFFERS_COMMIT;
- 		return ret;
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index 36aadfe5ac00..7c56ba994f21 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -53,13 +53,18 @@ enum {
- 	KBUF_MODE_EXPAND	= 1,
- 	/* if bigger vec allocated, free old one */
- 	KBUF_MODE_FREE		= 2,
-+	/* turn into bio_vecs, not iovecs */
-+	KBUF_MODE_BVEC		= 4,
- };
- 
- struct buf_sel_arg {
--	struct iovec *iovs;
-+	union {
-+		struct iovec *iovs;
-+		struct bio_vec *bvecs;
-+	};
- 	size_t out_len;
- 	size_t max_len;
--	unsigned short nr_iovs;
-+	unsigned short nr_vecs;
- 	unsigned short mode;
- };
- 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index dbef14aa50f9..154756762a46 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -643,17 +643,17 @@ static int io_send_import(struct io_kiocb *req, unsigned int issue_flags)
- 		struct buf_sel_arg arg = {
- 			.iovs = &kmsg->fast_iov,
- 			.max_len = min_not_zero(sr->len, INT_MAX),
--			.nr_iovs = 1,
-+			.nr_vecs = 1,
- 		};
- 
- 		if (kmsg->free_iov) {
--			arg.nr_iovs = kmsg->free_iov_nr;
-+			arg.nr_vecs = kmsg->free_iov_nr;
- 			arg.iovs = kmsg->free_iov;
- 			arg.mode = KBUF_MODE_FREE;
- 		}
- 
- 		if (!(sr->flags & IORING_RECVSEND_BUNDLE))
--			arg.nr_iovs = 1;
-+			arg.nr_vecs = 1;
- 		else
- 			arg.mode |= KBUF_MODE_EXPAND;
- 
-@@ -1140,12 +1140,12 @@ static int io_recv_buf_select(struct io_kiocb *req, struct io_async_msghdr *kmsg
- 	    sr->flags & IORING_RECVSEND_BUNDLE) {
- 		struct buf_sel_arg arg = {
- 			.iovs = &kmsg->fast_iov,
--			.nr_iovs = 1,
-+			.nr_vecs = 1,
- 			.mode = KBUF_MODE_EXPAND,
- 		};
- 
- 		if (kmsg->free_iov) {
--			arg.nr_iovs = kmsg->free_iov_nr;
-+			arg.nr_vecs = kmsg->free_iov_nr;
- 			arg.iovs = kmsg->free_iov;
- 			arg.mode |= KBUF_MODE_FREE;
- 		}
--- 
-2.45.2
+-------------------------------------------------------------------
+CPU Model 	Intel(R) Xeon(R) Platinum 8380 CPU @ 2.30GHz
+CPU Cores	8
+Memory		16G
+SSD			Samsung PM9A3
+-------------------------------------------------------------------
 
+Test case：
+./db_bench --benchmarks=multireadrandom,stats
+--duration=60
+--threads=4/8/16
+--use_direct_reads=true
+--db=/mnt/rocks/test_db
+--wal_dir=/mnt/rocks/test_db
+--key_size=4
+--value_size=4096
+-cache_size=0
+-use_existing_db=1
+-batch_size=256
+-multiread_batched=true
+-multiread_stride=0
+------------------------------------------------------
+Test result：
+			National	Optimization
+threads		ops/sec		ops/sec		CPU Utilization
+16			139300		189075		100%*8
+8			138639		133191		90%*8
+4			71475		68361		90%*8
+------------------------------------------------------
+
+When the number of threads exceeds the number of CPU cores,the
+database throughput does not increase significantly. However,
+hybrid polling can releasing some CPU resources during the polling
+process, so that part of the CPU time can be used for frequent
+data processing and other operations, which speeds up the reading
+process, thereby improving throughput and optimizaing database
+performance.I tried different compression strategies and got
+results similar to the above table.(~30% throughput improvement)
+
+As more database applications adapt to the io_uring engine, I think
+the application of hybrid poll may have potential in some scenarios.
+--
+Xue
