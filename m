@@ -1,46 +1,46 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E5E1E1A39
-	for <io-uring@vger.kernel.org>; Fri, 25 Oct 2024 12:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15CC82003C1
+	for <io-uring@vger.kernel.org>; Fri, 25 Oct 2024 12:24:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729859041; cv=none; b=WDvoEqDjqQ3s3Hc5x/cLbjMfaubAjWauScJ4y+0iinpNC9thAQ9V+cf5OBh/HB4pk8Xi5DKRsJZqUgjOYz5C0/W82I9aHWv555iA5i18V859QdQZKU7xf5L6fD1kwE/NLB3P7MKm8KgF+kejVXv1S/GS7jFnYwjKaTU/k2rBjgQ=
+	t=1729859044; cv=none; b=hKQh0ajHkQ8czIdpTb797206cqqB3vRIVDddq2/E4NbM8Y8xqdO/SzoGokaJavZFU7Di9GWiDd2/OllL4T0SOKUFCf46ZlRdIWYu9gCO724k1Fn9FHFwQxBiw0WzeN3jEpZw0oBOvtRKQMI/64pYdEcWRmpuSgOp1GrR6Pew1rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729859041; c=relaxed/simple;
-	bh=2lW3tx2drdKGhaeUZ2vPyduwEZzVpqIgcMsEP5dYjM4=;
+	s=arc-20240116; t=1729859044; c=relaxed/simple;
+	bh=vABzLKNvlOxdyet/MKsBKs8rtzdGuPcPBOr6mAJI6sM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a6gyoyilngx+818AF7RFk7vEXhIZHGV/8FsrTppDHxiHxqamPfKSmWocqMu25CR/mLcbqAJLgGGeLwoqLkM+DdNASZIfaOFeLxJx+FOrRzIzLYvG115YBpRwIt/MYovAYFsSnZ0Hl/+QjFg50imw1L/uO56DyHqvnnJrkLX9+ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fd2iPOuB; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=rvsvKb0J1uXXeK6NQgI+nmyzfv0XFa8aJRvu/cQCUXGyc8EGGveZfV5y+rrWjcmU4M9ZWJKFab09SCOV/gYqfmRps5CYPbOnoV09/Do7iDhtvIVbjXmkSZ92Rlo8Yx00PRQHmUIdJDPmtGHZm+vIWWCK4guI2fOZ5rz7DPJd2jI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T1tXd1/2; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fd2iPOuB"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T1tXd1/2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729859038;
+	s=mimecast20190719; t=1729859041;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=DIMBfrwdYfNOX2UOeCTE0NWQIo7aiZOeYzAIGl4DTI0=;
-	b=fd2iPOuBCq+GFed2FC+JFBkJ2vKmQlR9nxKNW2h7qcYC20tcXcfMGaq5vVsjCWF92RiDVd
-	RIgPDJePHQXUFF1nJIjFoQDPi1p7+roKxgboaaJs5EeRQpwSdqJ+xdi0I3DVEzOdeH9J6A
-	P+6zqo57Zzz7JgyOS4hMR1bpNswiarQ=
+	bh=cywKv9TEoDTr7tj5I18bYRcgvSakRA47XCPWDnlogL0=;
+	b=T1tXd1/2FJBECI3uwkz+wISY0Ko8VKpAREFFWDjWvkTknULakDBGXZc9yg+0NL5wFdszh4
+	UuhtsVjBlhtZH0xyzA+CFWTe49+Ls1dDbz3ty1n+EVLHTYXLhtc8e1drN38CwdLRoP9o6e
+	Eng6LGiD7/G0oC/Y4auSBvYse4YHX5s=
 Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-664--FMOeRDWPISgRPgoDVPnag-1; Fri,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-164-HydeUNApNS2RR6AwEGz7nw-1; Fri,
  25 Oct 2024 08:23:57 -0400
-X-MC-Unique: -FMOeRDWPISgRPgoDVPnag-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+X-MC-Unique: HydeUNApNS2RR6AwEGz7nw-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 39464197904E;
-	Fri, 25 Oct 2024 12:23:13 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 281A5191379F;
+	Fri, 25 Oct 2024 12:23:25 +0000 (UTC)
 Received: from localhost (unknown [10.72.116.106])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 046101956088;
-	Fri, 25 Oct 2024 12:23:11 +0000 (UTC)
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 26A4E196BB7D;
+	Fri, 25 Oct 2024 12:23:23 +0000 (UTC)
 From: Ming Lei <ming.lei@redhat.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org,
@@ -49,9 +49,9 @@ Cc: linux-block@vger.kernel.org,
 	Uday Shankar <ushankar@purestorage.com>,
 	Akilesh Kailash <akailash@google.com>,
 	Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V8 3/7] io_uring: add helper of io_req_commit_cqe()
-Date: Fri, 25 Oct 2024 20:22:40 +0800
-Message-ID: <20241025122247.3709133-4-ming.lei@redhat.com>
+Subject: [PATCH V8 6/7] io_uring/uring_cmd: support leasing device kernel buffer to io_uring
+Date: Fri, 25 Oct 2024 20:22:43 +0800
+Message-ID: <20241025122247.3709133-7-ming.lei@redhat.com>
 In-Reply-To: <20241025122247.3709133-1-ming.lei@redhat.com>
 References: <20241025122247.3709133-1-ming.lei@redhat.com>
 Precedence: bulk
@@ -61,63 +61,85 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Add helper of io_req_commit_cqe() for simplifying
-__io_submit_flush_completions() a bit.
+Add API of io_uring_cmd_lease_kbuf() for driver to lease its kernel
+buffer to io_uring.
 
-No functional change, and the added helper will be reused in sqe group
-code with same lock rule.
+The leased buffer can only be consumed by io_uring OPs in group wide,
+and the uring_cmd has to be one group leader.
+
+This way can support generic device zero copy over device buffer in
+userspace:
+
+- create one sqe group
+- lease one device buffer to io_uring by the group leader of uring_cmd
+- io_uring member OPs consume this kernel buffer by passing IOSQE_IO_DRAIN
+  which isn't used for group member, and mapped to GROUP_KBUF.
+- the kernel buffer is returned back after all member OPs are completed
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- io_uring/io_uring.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ include/linux/io_uring/cmd.h |  7 +++++++
+ io_uring/uring_cmd.c         | 13 +++++++++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 749ecc18049d..33856560ff87 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -898,6 +898,20 @@ bool io_req_post_cqe(struct io_kiocb *req, s32 res, u32 cflags)
- 	return posted;
- }
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index c189d36ad55e..bdf7abfa0d8a 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -60,6 +60,8 @@ void io_uring_cmd_mark_cancelable(struct io_uring_cmd *cmd,
+ /* Execute the request from a blocking context */
+ void io_uring_cmd_issue_blocking(struct io_uring_cmd *ioucmd);
  
-+static __always_inline void io_req_commit_cqe(struct io_ring_ctx *ctx,
-+		struct io_kiocb *req)
-+{
-+	if (unlikely(!io_fill_cqe_req(ctx, req))) {
-+		if (ctx->lockless_cq) {
-+			spin_lock(&ctx->completion_lock);
-+			io_req_cqe_overflow(req);
-+			spin_unlock(&ctx->completion_lock);
-+		} else {
-+			io_req_cqe_overflow(req);
-+		}
-+	}
-+}
-+
- static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
++int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
++		const struct io_uring_kernel_buf *grp_kbuf);
+ #else
+ static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter, void *ioucmd)
+@@ -82,6 +84,11 @@ static inline void io_uring_cmd_mark_cancelable(struct io_uring_cmd *cmd,
+ static inline void io_uring_cmd_issue_blocking(struct io_uring_cmd *ioucmd)
  {
- 	struct io_ring_ctx *ctx = req->ctx;
-@@ -1436,16 +1450,8 @@ void __io_submit_flush_completions(struct io_ring_ctx *ctx)
- 		struct io_kiocb *req = container_of(node, struct io_kiocb,
- 					    comp_list);
+ }
++static inline int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
++		const struct io_uring_kernel_buf *grp_kbuf)
++{
++	return -EOPNOTSUPP;
++}
+ #endif
  
--		if (!(req->flags & REQ_F_CQE_SKIP) &&
--		    unlikely(!io_fill_cqe_req(ctx, req))) {
--			if (ctx->lockless_cq) {
--				spin_lock(&ctx->completion_lock);
--				io_req_cqe_overflow(req);
--				spin_unlock(&ctx->completion_lock);
--			} else {
--				io_req_cqe_overflow(req);
--			}
--		}
-+		if (!(req->flags & REQ_F_CQE_SKIP))
-+			io_req_commit_cqe(ctx, req);
- 	}
- 	__io_cq_unlock_post(ctx);
+ /*
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 6994f60d7ec7..2c9c2c60c6cd 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -15,6 +15,7 @@
+ #include "alloc_cache.h"
+ #include "rsrc.h"
+ #include "uring_cmd.h"
++#include "kbuf.h"
  
+ static struct uring_cache *io_uring_async_get(struct io_kiocb *req)
+ {
+@@ -175,6 +176,18 @@ void io_uring_cmd_done(struct io_uring_cmd *ioucmd, ssize_t ret, ssize_t res2,
+ }
+ EXPORT_SYMBOL_GPL(io_uring_cmd_done);
+ 
++int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
++		const struct io_uring_kernel_buf *grp_kbuf)
++{
++	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
++
++	if (unlikely(ioucmd->flags & IORING_URING_CMD_FIXED))
++		return -EINVAL;
++
++	return io_lease_group_kbuf(req, grp_kbuf);
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_lease_kbuf);
++
+ static int io_uring_cmd_prep_setup(struct io_kiocb *req,
+ 				   const struct io_uring_sqe *sqe)
+ {
 -- 
 2.46.0
 
