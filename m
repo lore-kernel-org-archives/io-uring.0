@@ -1,318 +1,321 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE6317DFEC
-	for <io-uring@vger.kernel.org>; Fri, 25 Oct 2024 21:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531746A009
+	for <io-uring@vger.kernel.org>; Sat, 26 Oct 2024 05:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729892869; cv=none; b=fyOt5RtH3Qb8mQAxdq58E3GZWgLGRSyo0fl6rg9CAmpJ3Z7/833p45oiG1bcUJM9GhcRYk+H29id/cOK/sjPwv5esTqlK455BPhY9gim0Iy4L/D93hrUHl0z5FZkxfJDW24Tnk9c7vsp+NIXR5qvVXhdaHNKPv5uX5+cyXlPkp4=
+	t=1729921409; cv=none; b=oHl40pqCbVv64UU7PYtj9cbgymqTTwDvaX9+jOo8q3+pD+ZQAS79y4s8DJP5jpEEeZdbC1yfGvlMhFeJgSjmlBg/DvoEn4QzjK3nm6xLsOpOclYoI2vDxfdcVpb3vy3V6ndV0i39SLKCYXSZUuSJf977rgIcE3deN/0cX8vzxBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729892869; c=relaxed/simple;
-	bh=LD5x9rcWYdUb1bz76y3P0hMvu2pcICALqvz5cROUbEc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PC+OHSg2wFpuPrVyoMRzPrZqH7ubLni2x/Bi+lvUca6qVbVx1KR8bFZix+iuPJkpjuvCK+gKiYZwY49gYHvBphl3IRW0Qvp5MzJbIgLy/Eeip8a8JapXlV9bglj+UwuQ1yuoYIDNn8KI9YPLK/zUawVA1XGLZ2YLdARx3GtOYa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=Fe/VTCeu; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="Fe/VTCeu"
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 49PKXQim023076
-	for <io-uring@vger.kernel.org>; Fri, 25 Oct 2024 14:47:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=fgM+86KprSeGg9uvuSIoLMMs5jH0VA0ChwB/0oA4Xr8=; b=Fe/VTCeuRJKr
-	TSCtKboIN1udGiVQoINXDhUk4vTOsiDO6G1+WFDxE+wQpOGAU0FVUplWZtrb82xK
-	+PX+3EhWLTtl636LH1qkMEGFF491nhW2Bj9g2B4CPkERsptzC+uK9Hq8plgw6KHb
-	WOfsY3gFldQzusRY7zadw2S9W++tNeZeRzKfWOpi8HZSlEhqUhH3v1cWxDA7XQ8X
-	7glaIMdSwEYHXbd34RERoWOqGmTyIC3vfx/1oiLDGODp3nUPd6JGzWh+yH0Ulb+0
-	0hobjTscExsQw48BOmDtP2Knqmr/FZ4uRbUImRM3f0+ew/iCBoXNcU76bwFrfoTE
-	/1hlE07uUw==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 42gdaau2pr-5
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Fri, 25 Oct 2024 14:47:45 -0700 (PDT)
-Received: from twshared7093.02.ash9.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Fri, 25 Oct 2024 21:47:42 +0000
-Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id 9DA6F1476D742; Fri, 25 Oct 2024 14:37:06 -0700 (PDT)
-From: Keith Busch <kbusch@meta.com>
-To: <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <linux-scsi@vger.kernel.org>, <io-uring@vger.kernel.org>
-CC: <linux-fsdevel@vger.kernel.org>, <hch@lst.de>, <joshi.k@samsung.com>,
-        <javier.gonz@samsung.com>, <bvanassche@acm.org>,
-        Hui Qi
-	<hui81.qi@samsung.com>, Nitesh Shetty <nj.shetty@samsung.com>,
-        Hannes
- Reinecke <hare@suse.de>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv9 6/7] nvme: enable FDP support
-Date: Fri, 25 Oct 2024 14:36:44 -0700
-Message-ID: <20241025213645.3464331-7-kbusch@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241025213645.3464331-1-kbusch@meta.com>
-References: <20241025213645.3464331-1-kbusch@meta.com>
+	s=arc-20240116; t=1729921409; c=relaxed/simple;
+	bh=iG3XM4IjDFg4pYlWN0BeyJZy1JumqfoCK7aKPqEZgIY=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=A3Uzbm2zdM21yT85i56n6NeM7Ey4XMJPzABESv+3BSndBO7kuiPcLnfnQyZg9Rk3EZ6RIr0Y85uJXcRKlHBwvKP4WtmX329KvClRM7M8p7GEysIHgwnOPc/sasOOKGKbIHmbDOfa2fQf6dhxiupa8FzbiAPI1FK+RZzrU++9IDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a3c72d4ac4so24046325ab.3
+        for <io-uring@vger.kernel.org>; Fri, 25 Oct 2024 22:43:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729921405; x=1730526205;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bIsQ0oVQ7TY0dQoBRb8Vhdd/HS1uhC5yoJiiqe6eazE=;
+        b=LFM5jiUOKmmH4yVr8Zm+m7odidEMK3hpxDO5FbWMFcdXARoN31ZdIWXRQ8p8r6FmNP
+         RrHDH0sTxB//lwUyIf8rJintzC9E+lIEx39mgu0qfxej8Da4MyIZ9fRmJpPubA+DcpEm
+         EYYm0Ll+ALB41FkXhttKquPm08ar9qDBvkg8xGuuWmjuECxrqbgElyrti8dPsVPypR5T
+         O9MY1Zish4rv/ybPveKmS0HqYAujda4h99ehJKSeua1LglCb6uAkgVUZCGZEjOV8WthP
+         XepBYKNZtXb8Lv/3GFpWHVXm0voYNQIch7H78lJmjPINkMkt3rIyX+bCQKQ25lJQbfSQ
+         zXzw==
+X-Forwarded-Encrypted: i=1; AJvYcCXv9XcSHC9bahg0zd8rxCYXI09nZj8kjCEMosrHco4oxQXGLu9Kb5hA0HRM2d1NDul9Ll8/7W3ziQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvQoxtP9Q7RFtQ+ZXbtyPBrM6dWGg3Y2H4GuZD4U98+RlXrQoc
+	JrncBybK7q+19HU6B183Ktn8HwjznU9fo9VyyC6L4B9Gmmakj1NtyG5H+oCow70PNAc+DMqn71F
+	ThrpW6ORvgpTIB0hrLoVuq+XenVfl588idqJKfrwPakZHapaz9JHPciI=
+X-Google-Smtp-Source: AGHT+IHo2UNmMOmAQCFHqtMd4HZslw8RTLN7XP0PkzzlCL5ERqvCAWpemMY5XygzX/mosEMUwK07VLc3qzjQuVuMKZfI8pBly85M
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: olOyIF1zZNQAY8QC2imbZHqyPVPsdm5-
-X-Proofpoint-GUID: olOyIF1zZNQAY8QC2imbZHqyPVPsdm5-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+X-Received: by 2002:a05:6e02:1aa2:b0:3a4:e62b:4dfd with SMTP id
+ e9e14a558f8ab-3a4ed296312mr13767425ab.7.1729921405430; Fri, 25 Oct 2024
+ 22:43:25 -0700 (PDT)
+Date: Fri, 25 Oct 2024 22:43:25 -0700
+In-Reply-To: <67142ff9.050a0220.1e4b4d.002f.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <671c817d.050a0220.2b8c0f.01ad.GAE@google.com>
+Subject: Re: [syzbot] [io-uring?] INFO: task hung in io_wq_put_and_exit (4)
+From: syzbot <syzbot+58928048fd1416f1457c@syzkaller.appspotmail.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-From: Kanchan Joshi <joshi.k@samsung.com>
+syzbot has found a reproducer for the following issue on:
 
-Flexible Data Placement (FDP), as ratified in TP 4146a, allows the host
-to control the placement of logical blocks so as to reduce the SSD WAF.
-Userspace can send the write hint information using io_uring or fcntl.
+HEAD commit:    b423f5a9a61f Merge tag 'acpi-6.12-rc5' of git://git.kernel..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1393565f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=fd919c0fc1af4272
+dashboard link: https://syzkaller.appspot.com/bug?extid=58928048fd1416f1457c
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=122f04a7980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=132cbe40580000
 
-Fetch the placement-identifiers if the device supports FDP. The incoming
-write-hint is mapped to a placement-identifier, which in turn is set in
-the DSPEC field of the write command.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/49d1d501eff9/disk-b423f5a9.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f973ba06cb5d/vmlinux-b423f5a9.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a97302c30f3f/bzImage-b423f5a9.xz
 
-Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
-Signed-off-by: Hui Qi <hui81.qi@samsung.com>
-Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-Nacked-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+58928048fd1416f1457c@syzkaller.appspotmail.com
+
+INFO: task syz-executor295:5876 blocked for more than 143 seconds.
+      Not tainted 6.12.0-rc4-syzkaller-00245-gb423f5a9a61f #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor295 state:D stack:25360 pid:5876  tgid:5876  ppid:5861   flags:0x00024002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x185a/0x4b70 kernel/sched/core.c:6690
+ __schedule_loop kernel/sched/core.c:6767 [inline]
+ schedule+0x14b/0x320 kernel/sched/core.c:6782
+ schedule_timeout+0xb0/0x310 kernel/time/timer.c:2591
+ do_wait_for_common kernel/sched/completion.c:95 [inline]
+ __wait_for_common kernel/sched/completion.c:116 [inline]
+ wait_for_common kernel/sched/completion.c:127 [inline]
+ wait_for_completion+0x355/0x620 kernel/sched/completion.c:148
+ io_wq_exit_workers io_uring/io-wq.c:1249 [inline]
+ io_wq_put_and_exit+0x344/0x720 io_uring/io-wq.c:1277
+ io_uring_clean_tctx+0x168/0x1e0 io_uring/tctx.c:193
+ io_uring_cancel_generic+0x76a/0x820 io_uring/io_uring.c:3219
+ io_uring_files_cancel include/linux/io_uring.h:20 [inline]
+ do_exit+0x6a8/0x28e0 kernel/exit.c:895
+ do_group_exit+0x207/0x2c0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1097
+ x64_sys_call+0x2634/0x2640 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fdf6e9370f9
+RSP: 002b:00007ffcae28c868 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fdf6e9370f9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 00007fdf6e9b22d0 R08: ffffffffffffffb8 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf6e9b22d0
+R13: 0000000000000000 R14: 00007fdf6e9b2d40 R15: 00007fdf6e908280
+ </TASK>
+INFO: task syz-executor295:5878 blocked for more than 145 seconds.
+      Not tainted 6.12.0-rc4-syzkaller-00245-gb423f5a9a61f #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor295 state:D stack:25136 pid:5878  tgid:5878  ppid:5859   flags:0x00024002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x185a/0x4b70 kernel/sched/core.c:6690
+ __schedule_loop kernel/sched/core.c:6767 [inline]
+ schedule+0x14b/0x320 kernel/sched/core.c:6782
+ schedule_timeout+0xb0/0x310 kernel/time/timer.c:2591
+ do_wait_for_common kernel/sched/completion.c:95 [inline]
+ __wait_for_common kernel/sched/completion.c:116 [inline]
+ wait_for_common kernel/sched/completion.c:127 [inline]
+ wait_for_completion+0x355/0x620 kernel/sched/completion.c:148
+ io_wq_exit_workers io_uring/io-wq.c:1249 [inline]
+ io_wq_put_and_exit+0x344/0x720 io_uring/io-wq.c:1277
+ io_uring_clean_tctx+0x168/0x1e0 io_uring/tctx.c:193
+ io_uring_cancel_generic+0x76a/0x820 io_uring/io_uring.c:3219
+ io_uring_files_cancel include/linux/io_uring.h:20 [inline]
+ do_exit+0x6a8/0x28e0 kernel/exit.c:895
+ do_group_exit+0x207/0x2c0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1097
+ x64_sys_call+0x2634/0x2640 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fdf6e9370f9
+RSP: 002b:00007ffcae28c868 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fdf6e9370f9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 00007fdf6e9b22d0 R08: ffffffffffffffb8 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf6e9b22d0
+R13: 0000000000000000 R14: 00007fdf6e9b2d40 R15: 00007fdf6e908280
+ </TASK>
+INFO: task syz-executor295:5880 blocked for more than 147 seconds.
+      Not tainted 6.12.0-rc4-syzkaller-00245-gb423f5a9a61f #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor295 state:D stack:25744 pid:5880  tgid:5880  ppid:5855   flags:0x00024002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x185a/0x4b70 kernel/sched/core.c:6690
+ __schedule_loop kernel/sched/core.c:6767 [inline]
+ schedule+0x14b/0x320 kernel/sched/core.c:6782
+ schedule_timeout+0xb0/0x310 kernel/time/timer.c:2591
+ do_wait_for_common kernel/sched/completion.c:95 [inline]
+ __wait_for_common kernel/sched/completion.c:116 [inline]
+ wait_for_common kernel/sched/completion.c:127 [inline]
+ wait_for_completion+0x355/0x620 kernel/sched/completion.c:148
+ io_wq_exit_workers io_uring/io-wq.c:1249 [inline]
+ io_wq_put_and_exit+0x344/0x720 io_uring/io-wq.c:1277
+ io_uring_clean_tctx+0x168/0x1e0 io_uring/tctx.c:193
+ io_uring_cancel_generic+0x76a/0x820 io_uring/io_uring.c:3219
+ io_uring_files_cancel include/linux/io_uring.h:20 [inline]
+ do_exit+0x6a8/0x28e0 kernel/exit.c:895
+ do_group_exit+0x207/0x2c0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1097
+ x64_sys_call+0x2634/0x2640 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fdf6e9370f9
+RSP: 002b:00007ffcae28c868 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fdf6e9370f9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 00007fdf6e9b22d0 R08: ffffffffffffffb8 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf6e9b22d0
+R13: 0000000000000000 R14: 00007fdf6e9b2d40 R15: 00007fdf6e908280
+ </TASK>
+INFO: task syz-executor295:5884 blocked for more than 148 seconds.
+      Not tainted 6.12.0-rc4-syzkaller-00245-gb423f5a9a61f #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor295 state:D stack:25744 pid:5884  tgid:5884  ppid:5856   flags:0x00024002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x185a/0x4b70 kernel/sched/core.c:6690
+ __schedule_loop kernel/sched/core.c:6767 [inline]
+ schedule+0x14b/0x320 kernel/sched/core.c:6782
+ schedule_timeout+0xb0/0x310 kernel/time/timer.c:2591
+ do_wait_for_common kernel/sched/completion.c:95 [inline]
+ __wait_for_common kernel/sched/completion.c:116 [inline]
+ wait_for_common kernel/sched/completion.c:127 [inline]
+ wait_for_completion+0x355/0x620 kernel/sched/completion.c:148
+ io_wq_exit_workers io_uring/io-wq.c:1249 [inline]
+ io_wq_put_and_exit+0x344/0x720 io_uring/io-wq.c:1277
+ io_uring_clean_tctx+0x168/0x1e0 io_uring/tctx.c:193
+ io_uring_cancel_generic+0x76a/0x820 io_uring/io_uring.c:3219
+ io_uring_files_cancel include/linux/io_uring.h:20 [inline]
+ do_exit+0x6a8/0x28e0 kernel/exit.c:895
+ do_group_exit+0x207/0x2c0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1097
+ x64_sys_call+0x2634/0x2640 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fdf6e9370f9
+RSP: 002b:00007ffcae28c868 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fdf6e9370f9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 00007fdf6e9b22d0 R08: ffffffffffffffb8 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf6e9b22d0
+R13: 0000000000000000 R14: 00007fdf6e9b2d40 R15: 00007fdf6e908280
+ </TASK>
+INFO: task syz-executor295:5887 blocked for more than 150 seconds.
+      Not tainted 6.12.0-rc4-syzkaller-00245-gb423f5a9a61f #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor295 state:D stack:25360 pid:5887  tgid:5887  ppid:5862   flags:0x00024002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x185a/0x4b70 kernel/sched/core.c:6690
+ __schedule_loop kernel/sched/core.c:6767 [inline]
+ schedule+0x14b/0x320 kernel/sched/core.c:6782
+ schedule_timeout+0xb0/0x310 kernel/time/timer.c:2591
+ do_wait_for_common kernel/sched/completion.c:95 [inline]
+ __wait_for_common kernel/sched/completion.c:116 [inline]
+ wait_for_common kernel/sched/completion.c:127 [inline]
+ wait_for_completion+0x355/0x620 kernel/sched/completion.c:148
+ io_wq_exit_workers io_uring/io-wq.c:1249 [inline]
+ io_wq_put_and_exit+0x344/0x720 io_uring/io-wq.c:1277
+ io_uring_clean_tctx+0x168/0x1e0 io_uring/tctx.c:193
+ io_uring_cancel_generic+0x76a/0x820 io_uring/io_uring.c:3219
+ io_uring_files_cancel include/linux/io_uring.h:20 [inline]
+ do_exit+0x6a8/0x28e0 kernel/exit.c:895
+ do_group_exit+0x207/0x2c0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3f/0x40 kernel/exit.c:1097
+ x64_sys_call+0x2634/0x2640 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fdf6e9370f9
+RSP: 002b:00007ffcae28c868 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fdf6e9370f9
+RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
+RBP: 00007fdf6e9b22d0 R08: ffffffffffffffb8 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdf6e9b22d0
+R13: 0000000000000000 R14: 00007fdf6e9b2d40 R15: 00007fdf6e908280
+ </TASK>
+
+Showing all locks held in the system:
+3 locks held by kworker/u8:0/11:
+1 lock held by khungtaskd/30:
+ #0: ffffffff8e937e20 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:337 [inline]
+ #0: ffffffff8e937e20 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #0: ffffffff8e937e20 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x55/0x2a0 kernel/locking/lockdep.c:6720
+3 locks held by kworker/u8:2/35:
+3 locks held by kworker/u8:3/52:
+3 locks held by kworker/u8:5/148:
+2 locks held by getty/5585:
+ #0: ffff88803153f0a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
+ #1: ffffc90002f062f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x6a6/0x1e00 drivers/tty/n_tty.c:2211
+1 lock held by iou-wrk-5876/5877:
+1 lock held by iou-wrk-5878/5881:
+3 locks held by kworker/u8:1/5879:
+1 lock held by iou-wrk-5880/5882:
+1 lock held by iou-wrk-5884/5885:
+1 lock held by iou-wrk-5887/5888:
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 UID: 0 PID: 30 Comm: khungtaskd Not tainted 6.12.0-rc4-syzkaller-00245-gb423f5a9a61f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
+ nmi_cpu_backtrace+0x49c/0x4d0 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x198/0x320 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:162 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:223 [inline]
+ watchdog+0xff4/0x1040 kernel/hung_task.c:379
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 UID: 0 PID: 5888 Comm: iou-wrk-5887 Not tainted 6.12.0-rc4-syzkaller-00245-gb423f5a9a61f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+RIP: 0010:unwind_next_frame+0x17b5/0x22d0 arch/x86/kernel/unwind_orc.c:664
+Code: 01 c6 49 8d 55 40 4c 89 ef e8 37 0e 00 00 84 c0 0f 84 66 01 00 00 49 bc 00 00 00 00 00 fc ff df 48 8b 44 24 20 42 0f b6 04 20 <84> c0 0f 85 36 08 00 00 48 8b 6c 24 08 8b 84 24 84 00 00 00 39 45
+RSP: 0018:ffffc900041771d0 EFLAGS: 00000202
+RAX: 0000000000000000 RBX: ffffffff90add366 RCX: 0000000000000000
+RDX: dffffc0000000000 RSI: ffffc90004170000 RDI: ffffc90004177658
+RBP: dffffc0000000000 R08: ffffc90004177658 R09: 0000000000000000
+R10: ffffc900041772f0 R11: fffff5200082ee60 R12: dffffc0000000000
+R13: ffffc900041772a0 R14: ffffffff81fb4fe6 R15: ffffc900041772f0
+FS:  000055559112e380(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055a37bfd3600 CR3: 0000000032e0a000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <NMI>
+
+
 ---
- drivers/nvme/host/core.c | 82 ++++++++++++++++++++++++++++++++++++++++
- drivers/nvme/host/nvme.h |  5 +++
- include/linux/nvme.h     | 19 ++++++++++
- 3 files changed, 106 insertions(+)
-
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 84cb859a911d0..36c2b9be8eee7 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -44,6 +44,20 @@ struct nvme_ns_info {
- 	bool is_removed;
- };
-=20
-+struct nvme_fdp_ruh_status_desc {
-+	u16 pid;
-+	u16 ruhid;
-+	u32 earutr;
-+	u64 ruamw;
-+	u8  rsvd16[16];
-+};
-+
-+struct nvme_fdp_ruh_status {
-+	u8  rsvd0[14];
-+	__le16 nruhsd;
-+	struct nvme_fdp_ruh_status_desc ruhsd[];
-+};
-+
- unsigned int admin_timeout =3D 60;
- module_param(admin_timeout, uint, 0644);
- MODULE_PARM_DESC(admin_timeout, "timeout in seconds for admin commands")=
-;
-@@ -657,6 +671,7 @@ static void nvme_free_ns_head(struct kref *ref)
- 	ida_free(&head->subsys->ns_ida, head->instance);
- 	cleanup_srcu_struct(&head->srcu);
- 	nvme_put_subsystem(head->subsys);
-+	kfree(head->plids);
- 	kfree(head);
- }
-=20
-@@ -974,6 +989,13 @@ static inline blk_status_t nvme_setup_rw(struct nvme=
-_ns *ns,
- 	if (req->cmd_flags & REQ_RAHEAD)
- 		dsmgmt |=3D NVME_RW_DSM_FREQ_PREFETCH;
-=20
-+	if (req->write_hint && ns->head->nr_plids) {
-+		u16 hint =3D max(req->write_hint, ns->head->nr_plids);
-+
-+		dsmgmt |=3D ns->head->plids[hint - 1] << 16;
-+		control |=3D NVME_RW_DTYPE_DPLCMT;
-+	}
-+
- 	if (req->cmd_flags & REQ_ATOMIC && !nvme_valid_atomic_write(req))
- 		return BLK_STS_INVAL;
-=20
-@@ -2105,6 +2127,52 @@ static int nvme_update_ns_info_generic(struct nvme=
-_ns *ns,
- 	return ret;
- }
-=20
-+static int nvme_fetch_fdp_plids(struct nvme_ns *ns, u32 nsid)
-+{
-+	struct nvme_fdp_ruh_status_desc *ruhsd;
-+	struct nvme_ns_head *head =3D ns->head;
-+	struct nvme_fdp_ruh_status *ruhs;
-+	struct nvme_command c =3D {};
-+	int size, ret, i;
-+
-+	if (head->plids)
-+		return 0;
-+
-+	size =3D struct_size(ruhs, ruhsd, NVME_MAX_PLIDS);
-+	ruhs =3D kzalloc(size, GFP_KERNEL);
-+	if (!ruhs)
-+		return -ENOMEM;
-+
-+	c.imr.opcode =3D nvme_cmd_io_mgmt_recv;
-+	c.imr.nsid =3D cpu_to_le32(nsid);
-+	c.imr.mo =3D 0x1;
-+	c.imr.numd =3D  cpu_to_le32((size >> 2) - 1);
-+
-+	ret =3D nvme_submit_sync_cmd(ns->queue, &c, ruhs, size);
-+	if (ret)
-+		goto out;
-+
-+	i =3D le16_to_cpu(ruhs->nruhsd);
-+	if (!i)
-+		goto out;
-+
-+	ns->head->nr_plids =3D min_t(u16, i, NVME_MAX_PLIDS);
-+	head->plids =3D kcalloc(ns->head->nr_plids, sizeof(head->plids),
-+			      GFP_KERNEL);
-+	if (!head->plids) {
-+		ret =3D -ENOMEM;
-+		goto out;
-+	}
-+
-+	for (i =3D 0; i < ns->head->nr_plids; i++) {
-+		ruhsd =3D &ruhs->ruhsd[i];
-+		head->plids[i] =3D le16_to_cpu(ruhsd->pid);
-+	}
-+out:
-+	kfree(ruhs);
-+	return ret;
-+}
-+
- static int nvme_update_ns_info_block(struct nvme_ns *ns,
- 		struct nvme_ns_info *info)
- {
-@@ -2141,6 +2209,19 @@ static int nvme_update_ns_info_block(struct nvme_n=
-s *ns,
- 			goto out;
- 	}
-=20
-+	if (ns->ctrl->ctratt & NVME_CTRL_ATTR_FDPS) {
-+		ret =3D nvme_fetch_fdp_plids(ns, info->nsid);
-+		if (ret)
-+			dev_warn(ns->ctrl->device,
-+				"FDP failure status:0x%x\n", ret);
-+		if (ret < 0)
-+			goto out;
-+	} else {
-+		ns->head->nr_plids =3D 0;
-+		kfree(ns->head->plids);
-+		ns->head->plids =3D NULL;
-+	}
-+
- 	blk_mq_freeze_queue(ns->disk->queue);
- 	ns->head->lba_shift =3D id->lbaf[lbaf].ds;
- 	ns->head->nuse =3D le64_to_cpu(id->nuse);
-@@ -2171,6 +2252,7 @@ static int nvme_update_ns_info_block(struct nvme_ns=
- *ns,
- 	if (!nvme_init_integrity(ns->head, &lim, info))
- 		capacity =3D 0;
-=20
-+	lim.max_write_hints =3D ns->head->nr_plids;
- 	ret =3D queue_limits_commit_update(ns->disk->queue, &lim);
- 	if (ret) {
- 		blk_mq_unfreeze_queue(ns->disk->queue);
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index 093cb423f536b..cec8e5d96377b 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -454,6 +454,8 @@ struct nvme_ns_ids {
- 	u8	csi;
- };
-=20
-+#define NVME_MAX_PLIDS   (NVME_CTRL_PAGE_SIZE / sizeof(16))
-+
- /*
-  * Anchor structure for namespaces.  There is one for each namespace in =
-a
-  * NVMe subsystem that any of our controllers can see, and the namespace
-@@ -490,6 +492,9 @@ struct nvme_ns_head {
- 	struct device		cdev_device;
-=20
- 	struct gendisk		*disk;
-+
-+	u16                     nr_plids;
-+	u16			*plids;
- #ifdef CONFIG_NVME_MULTIPATH
- 	struct bio_list		requeue_list;
- 	spinlock_t		requeue_lock;
-diff --git a/include/linux/nvme.h b/include/linux/nvme.h
-index b58d9405d65e0..a954eaee5b0f3 100644
---- a/include/linux/nvme.h
-+++ b/include/linux/nvme.h
-@@ -275,6 +275,7 @@ enum nvme_ctrl_attr {
- 	NVME_CTRL_ATTR_HID_128_BIT	=3D (1 << 0),
- 	NVME_CTRL_ATTR_TBKAS		=3D (1 << 6),
- 	NVME_CTRL_ATTR_ELBAS		=3D (1 << 15),
-+	NVME_CTRL_ATTR_FDPS		=3D (1 << 19),
- };
-=20
- struct nvme_id_ctrl {
-@@ -843,6 +844,7 @@ enum nvme_opcode {
- 	nvme_cmd_resv_register	=3D 0x0d,
- 	nvme_cmd_resv_report	=3D 0x0e,
- 	nvme_cmd_resv_acquire	=3D 0x11,
-+	nvme_cmd_io_mgmt_recv	=3D 0x12,
- 	nvme_cmd_resv_release	=3D 0x15,
- 	nvme_cmd_zone_mgmt_send	=3D 0x79,
- 	nvme_cmd_zone_mgmt_recv	=3D 0x7a,
-@@ -864,6 +866,7 @@ enum nvme_opcode {
- 		nvme_opcode_name(nvme_cmd_resv_register),	\
- 		nvme_opcode_name(nvme_cmd_resv_report),		\
- 		nvme_opcode_name(nvme_cmd_resv_acquire),	\
-+		nvme_opcode_name(nvme_cmd_io_mgmt_recv),	\
- 		nvme_opcode_name(nvme_cmd_resv_release),	\
- 		nvme_opcode_name(nvme_cmd_zone_mgmt_send),	\
- 		nvme_opcode_name(nvme_cmd_zone_mgmt_recv),	\
-@@ -1015,6 +1018,7 @@ enum {
- 	NVME_RW_PRINFO_PRCHK_GUARD	=3D 1 << 12,
- 	NVME_RW_PRINFO_PRACT		=3D 1 << 13,
- 	NVME_RW_DTYPE_STREAMS		=3D 1 << 4,
-+	NVME_RW_DTYPE_DPLCMT		=3D 2 << 4,
- 	NVME_WZ_DEAC			=3D 1 << 9,
- };
-=20
-@@ -1102,6 +1106,20 @@ struct nvme_zone_mgmt_recv_cmd {
- 	__le32			cdw14[2];
- };
-=20
-+struct nvme_io_mgmt_recv_cmd {
-+	__u8			opcode;
-+	__u8			flags;
-+	__u16			command_id;
-+	__le32			nsid;
-+	__le64			rsvd2[2];
-+	union nvme_data_ptr	dptr;
-+	__u8			mo;
-+	__u8			rsvd11;
-+	__u16			mos;
-+	__le32			numd;
-+	__le32			cdw12[4];
-+};
-+
- enum {
- 	NVME_ZRA_ZONE_REPORT		=3D 0,
- 	NVME_ZRASF_ZONE_REPORT_ALL	=3D 0,
-@@ -1822,6 +1840,7 @@ struct nvme_command {
- 		struct nvmf_auth_receive_command auth_receive;
- 		struct nvme_dbbuf dbbuf;
- 		struct nvme_directive_cmd directive;
-+		struct nvme_io_mgmt_recv_cmd imr;
- 	};
- };
-=20
---=20
-2.43.5
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
