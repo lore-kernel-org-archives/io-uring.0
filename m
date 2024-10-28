@@ -1,63 +1,63 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 467961DE2C4
-	for <io-uring@vger.kernel.org>; Mon, 28 Oct 2024 15:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089361DE3B4
+	for <io-uring@vger.kernel.org>; Mon, 28 Oct 2024 15:04:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730127893; cv=none; b=b7k+lJumPDYbznUsZ1FzBfErZ16H4T6rWLrFfcbYEA0riR2PS2ovReYtmLPLM57QRYIwfnluzL48IcxZASJkJ5+9h1Rf3P5r9K0Hqp9wRDimozYpoM09BDDFlH5wviUmU0d9mc3/kO1/mJe0Rorl/gZXWD74wNzc2aJtOfsDjC8=
+	t=1730127895; cv=none; b=K9hy441yU/zg3ALMJtN5zpd++oGFERRSeVUwKJaNrZGnVySZp7yAJZL3br4qEwhCNRaSZB5d7Q13/ZhSJaAlfMRWWtPthkonZifi+jySN+sG8EBPDoZx2KiIXfyllE1sdXKkFXCIyJdri3TZXqXSWfjlyQJM6aVQxLepKILyrQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730127893; c=relaxed/simple;
-	bh=/fVZOAilfDDBwA4j0A3RHIJMhEBKne+Py4wXuj7ry3I=;
+	s=arc-20240116; t=1730127895; c=relaxed/simple;
+	bh=Fo/frzSKlv4OyiJGKpbBRm4RdvJKEoEHG1D8QYdklYc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VmBs/J4J/h2ZlcIm5ybj0ESbC6TkSHUZOYMeLxTTjkJ3yGylbyF92z1f6KKNEcGvuCCxgQfzOduq8NdKmaH9gTzxdBIUcyxNOW0PyYFwHTGqkjptZnKEkoN0QucKDC8cwj2xGGBipi9bH1XE+sJnPH0OxCOnWVNo4ZABwpeUDl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=SIAiFtTR; arc=none smtp.client-ip=209.85.167.173
+	 MIME-Version; b=QCs7pttQHPx/eWdmXQYx1K0Tzt8LOKYLQYhE1z5Kkx0/YUc/Flfr8M71uiCdeK4WkeKBT+ytTU58oYcuF46ZTSo7qkuiw7hpg+IZi10rVZrpy+029Uj7ooxNV51+Vsgx5KoTCoDKjW6XffsGdxtRJfhlhzZsXarY4wEen2xTnY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=aBTtE8fl; arc=none smtp.client-ip=209.85.166.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="SIAiFtTR"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3e600add5dcso1976154b6e.2
-        for <io-uring@vger.kernel.org>; Mon, 28 Oct 2024 08:04:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="aBTtE8fl"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a4d2d028b3so16367175ab.1
+        for <io-uring@vger.kernel.org>; Mon, 28 Oct 2024 08:04:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1730127889; x=1730732689; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1730127891; x=1730732691; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KdiXgBsgaIl4AHuNvVMJAsYeocIhfg9+qcEY/qVH01A=;
-        b=SIAiFtTRvHmdD9ba3Q96OY6EAsM6kNOOr9oFPsU7RZhfIDfdstQJnL8hzueNrigCtD
-         KzsFT71AE0gGQ3493fFhc+fwILNusmnDVGI7qpTqoPG4zvuYwr1tzqMq12AW+VwxTJfE
-         n5OPKkth0FzNAKNEXNaFfhS/yUaSYuhnoVRIzXlGh8Jvv1eorbpsJU4qMU44UXb7VEzd
-         eCpV+Y1APUJKGEbTgXlc0gV+j9v9wZfFz3JzZkX4oWOJSf7daikU5teJbgYyAi/Ecjd3
-         hiQJdCrcYLgl7faPAEzSiudeXqObdYn7fSd23+G7iHWZGr9+DB8qPW3tNVbesEkqYN/9
-         9FdQ==
+        bh=GJ3VbKxyariUHBQbk+XVcQESHHWp/zX87MdRysrKFDA=;
+        b=aBTtE8fl0Vb0S1nbBvG9fpxL8muszqJTmQldY1OoX7Cw1TWsBW3aL2CCVMwRXPqm1I
+         h+KwiPSthUluOBjl+WXAb4xB+2A5vTPiij07taztjaCjuXTGjLd5RhALVGPJej8ivmhD
+         +fPA0svzLTNonlJnXjiKZrXrDQFHWeCF1Ip6uj+WwTgfonnxVuNB75U+CuEvLFOx/E9H
+         dQ6i/6iuQnSWpwVIhDwDwAS0AbwHdqmhiEv4gBWx0rSInW4C6lk3p7kj4dUhPSZr2GqI
+         ajxE+GHGwk6a4UWr9NnfDmOO6k9tQRohOS00HG0xTPeUYf1rLqi16c/qYCDvGoHVFrsC
+         VbRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730127889; x=1730732689;
+        d=1e100.net; s=20230601; t=1730127891; x=1730732691;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KdiXgBsgaIl4AHuNvVMJAsYeocIhfg9+qcEY/qVH01A=;
-        b=KmPVUyF6P1qvAYZSCBX45bZ+pO91bKK8Z2IHDH1ifVGPIn6VnPqEtp2CaNLfKIM0TD
-         ieZBbYMG1jpGfYhhGEEiMd4vLMv8GDHT/nRjIjzBpp6qnRHpvi/7O5EBm4u5Yvb4wEp3
-         jTSPBA0ADvXbsSmE+YtJnSTiBwXj6ZzcjF6+n3SphsphaNcMDLtgveen79uMhINMK8dW
-         hLomHlg2TLYj0v40sZCGe9M2RFhIM8RQKqZzEgGHsM8d3Eac8i9VtjGO29ubwtyPKFWP
-         OklGJpRGV7uMagj+ECVmTk3Ymp5Fu9AlFAjGC/vSCXQ0s3UvaabHNqGphtnLWf5VqFuz
-         N9tw==
-X-Gm-Message-State: AOJu0YxT/XKIrDaldxPuiyY+q3R4RGL/0/aFt5LwImbpikiMKfPoAM5n
-	HV9VUC/NpK8SHLLg5dNZhI0DjCNxqsRF9oFTzlkTFhJi3PFfaZQaCxUdR5026UvMeeb/dT01+on
-	k
-X-Google-Smtp-Source: AGHT+IHDuek0JyhGxEoFTTdBKhuSsJzzkJ3KCVWX1+6YQUMd8Ea9vTNp2KUojk9ZRjNgHLFrO7W+TA==
-X-Received: by 2002:a05:6808:182a:b0:3e6:2d97:ca67 with SMTP id 5614622812f47-3e6384ce4fcmr6009617b6e.44.1730127889154;
-        Mon, 28 Oct 2024 08:04:49 -0700 (PDT)
+        bh=GJ3VbKxyariUHBQbk+XVcQESHHWp/zX87MdRysrKFDA=;
+        b=dNCJF/VL9y2JA54/4ZJivld+WIa1gGClt+FDf+mwnPJR25mPBLRMpCPjTaic6BIr05
+         CIy6erZgOqhikuBJmafoIhCX0e74+2pqYZh+oVEJf+x90whqLplMsIHdBtmb31eEnvhp
+         yOPm/vraJqq8YRoKk1uBCs4v+Xto7St+KZ4R+PePkISH+2Odr76PKiIgNbpg4FreR/Z2
+         C9/OHAoq7GsR8d+sh31Uo6L3E/qLBRTWTtzjSgnByL7edVHuOl7lRyCz4E5iqlh5++HE
+         QgRxAbK49RYGzebVBE61T8gRzOm+UANZeuP6lvEfRq/j76q9vkOx/9xtEJdVlhM7++C2
+         TNYg==
+X-Gm-Message-State: AOJu0YwkZgsNlMXjnG9HaSv8ZgnRQp+MRooDChjaNIJKKMUw8AthSvHZ
+	B/7CfuMaR89ir8ANygSIXu/OOrSfp93qch7NdmZv+rWml0aJvLZ+hY3etHglGiheYwGojJTlD5E
+	g
+X-Google-Smtp-Source: AGHT+IES7Jd6cCdJRy1MXc+PrwXrR23NQwRLXweEj2Rq4VrwSLsz0xX2jxdzSutkXImW2Nl3eMClCQ==
+X-Received: by 2002:a05:6e02:17ce:b0:3a3:b254:ca2c with SMTP id e9e14a558f8ab-3a4ed3524e1mr78114455ab.25.1730127891270;
+        Mon, 28 Oct 2024 08:04:51 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc7261c7e3sm1721616173.72.2024.10.28.08.04.48
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc7261c7e3sm1721616173.72.2024.10.28.08.04.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2024 08:04:48 -0700 (PDT)
+        Mon, 28 Oct 2024 08:04:50 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 05/13] io_uring/rsrc: kill io_charge_rsrc_node()
-Date: Mon, 28 Oct 2024 08:52:35 -0600
-Message-ID: <20241028150437.387667-6-axboe@kernel.dk>
+Subject: [PATCH 07/13] io_uring/rsrc: get rid of io_rsrc_node allocation cache
+Date: Mon, 28 Oct 2024 08:52:37 -0600
+Message-ID: <20241028150437.387667-8-axboe@kernel.dk>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241028150437.387667-1-axboe@kernel.dk>
 References: <20241028150437.387667-1-axboe@kernel.dk>
@@ -69,39 +69,109 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It's only used from __io_req_set_rsrc_node(), and it takes both the ctx
-and node itself, while never using the ctx. Just open-code the basic
-refs++ in __io_req_set_rsrc_node() instead.
+It's not going to be needed in the fast path going forward, so kill it
+off.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/rsrc.h | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ include/linux/io_uring_types.h |  3 ---
+ io_uring/io_uring.c            |  6 +-----
+ io_uring/rsrc.c                | 22 ++++++++--------------
+ 3 files changed, 9 insertions(+), 22 deletions(-)
 
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index e072fb3ee351..1589c9740083 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -97,18 +97,12 @@ static inline void io_put_rsrc_node(struct io_ring_ctx *ctx, struct io_rsrc_node
- 		io_rsrc_node_ref_zero(node);
- }
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 42c5f2c992c4..696f2a05a98b 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -370,9 +370,6 @@ struct io_ring_ctx {
+ 	struct io_rsrc_data		*file_data;
+ 	struct io_rsrc_data		*buf_data;
  
--static inline void io_charge_rsrc_node(struct io_ring_ctx *ctx,
--				       struct io_rsrc_node *node)
--{
--	node->refs++;
--}
+-	/* protected by ->uring_lock */
+-	struct io_alloc_cache		rsrc_node_cache;
 -
- static inline void __io_req_set_rsrc_node(struct io_kiocb *req,
- 					  struct io_ring_ctx *ctx)
+ 	u32			pers_next;
+ 	struct xarray		personalities;
+ 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 0876aa74c739..094788cca47f 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -312,9 +312,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	INIT_LIST_HEAD(&ctx->sqd_list);
+ 	INIT_LIST_HEAD(&ctx->cq_overflow_list);
+ 	INIT_LIST_HEAD(&ctx->io_buffers_cache);
+-	ret = io_alloc_cache_init(&ctx->rsrc_node_cache, IO_NODE_ALLOC_CACHE_MAX,
+-			    sizeof(struct io_rsrc_node));
+-	ret |= io_alloc_cache_init(&ctx->apoll_cache, IO_POLL_ALLOC_CACHE_MAX,
++	ret = io_alloc_cache_init(&ctx->apoll_cache, IO_POLL_ALLOC_CACHE_MAX,
+ 			    sizeof(struct async_poll));
+ 	ret |= io_alloc_cache_init(&ctx->netmsg_cache, IO_ALLOC_CACHE_MAX,
+ 			    sizeof(struct io_async_msghdr));
+@@ -358,7 +356,6 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ free_ref:
+ 	percpu_ref_exit(&ctx->refs);
+ err:
+-	io_alloc_cache_free(&ctx->rsrc_node_cache, kfree);
+ 	io_alloc_cache_free(&ctx->apoll_cache, kfree);
+ 	io_alloc_cache_free(&ctx->netmsg_cache, io_netmsg_cache_free);
+ 	io_alloc_cache_free(&ctx->rw_cache, io_rw_cache_free);
+@@ -2740,7 +2737,6 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+ 
+ 	WARN_ON_ONCE(!list_empty(&ctx->ltimeout_list));
+ 
+-	io_alloc_cache_free(&ctx->rsrc_node_cache, kfree);
+ 	if (ctx->mm_account) {
+ 		mmdrop(ctx->mm_account);
+ 		ctx->mm_account = NULL;
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index cc93d0c2df4c..1ba7f3e55947 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -13,7 +13,6 @@
+ #include <uapi/linux/io_uring.h>
+ 
+ #include "io_uring.h"
+-#include "alloc_cache.h"
+ #include "openclose.h"
+ #include "rsrc.h"
+ #include "memmap.h"
+@@ -132,18 +131,14 @@ struct io_rsrc_node *io_rsrc_node_alloc(struct io_ring_ctx *ctx,
  {
- 	lockdep_assert_held(&ctx->uring_lock);
- 	req->rsrc_node = ctx->rsrc_node;
--	io_charge_rsrc_node(ctx, ctx->rsrc_node);
-+	ctx->rsrc_node->refs++;
+ 	struct io_rsrc_node *node;
+ 
+-	node = io_alloc_cache_get(&ctx->rsrc_node_cache);
+-	if (!node) {
+-		node = kzalloc(sizeof(*node), GFP_KERNEL);
+-		if (!node)
+-			return NULL;
++	node = kzalloc(sizeof(*node), GFP_KERNEL);
++	if (node) {
++		node->ctx = ctx;
++		node->refs = 1;
++		node->type = type;
++		node->tag = 0;
++		node->rsrc = NULL;
+ 	}
+-
+-	node->ctx = ctx;
+-	node->refs = 1;
+-	node->type = type;
+-	node->tag = 0;
+-	node->rsrc = NULL;
+ 	return node;
  }
  
- static inline void io_req_set_rsrc_node(struct io_kiocb *req,
+@@ -492,8 +487,7 @@ void io_free_rsrc_node(struct io_rsrc_node *node)
+ 		break;
+ 	}
+ 
+-	if (!io_alloc_cache_put(&ctx->rsrc_node_cache, node))
+-		kfree(node);
++	kfree(node);
+ }
+ 
+ static void __io_sqe_files_unregister(struct io_ring_ctx *ctx)
 -- 
 2.45.2
 
