@@ -1,144 +1,230 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD961E2301;
-	Tue, 29 Oct 2024 12:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2047E192D84
+	for <io-uring@vger.kernel.org>; Tue, 29 Oct 2024 15:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730206032; cv=none; b=Htw3mRRiISuXSwg7V7NCduCp+1HC9riiJU4jO7Ao7nUs9AVPF/rVgtsU16+0yGqx2rQLJriz8SfCeH6cQoX7iDlJaAAUudCtZx1N5EhreyOQXDqaPmuaSjHga8YyDQjlpv4cndb9jajmhU3uO7EU4Sg9qR+lPgzc6A29Dg9kbW4=
+	t=1730215193; cv=none; b=Q3ELNjhsJOfa3mFSY6wW9CC1VTm+dPbN1VUaqtzjzq72ghVOJR6yuKwcUctFGBke8KoTOQp9aPjEAYdCEozi7PiZzs5ZZn4MT9q6F5/js++V3fTehhFgwnSHzRbSjni01Hmbv4HKahzxeQKaCVHhDXAEoJaHV9lr16D3BCM7tIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730206032; c=relaxed/simple;
-	bh=PKIGvIkqahKGpUaSw28+IKqMSUuUV0Hhi1F1HBqO43A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ViWHb2sVD8TAsOvIovL1SwzGc39okDvQ8ZtjOD2OOia+lQthWNq5rqn/E+DuUxSeJo+QsVbAblwE+M+qlUGXr5Y+USaTqAAE5VjzPSqTizbQvvlhyAVGyFZc4l1HaXArjqqI3zOoKgztw/lv9yDGuN/6RT7HDXjr0uj7tBpxFbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k2fJjsQ9; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730215193; c=relaxed/simple;
+	bh=a0Zx2TAwQU9UnfwSEprzmsqOgGkuhE+n1rpG5e7hjv0=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A4WFFYX/PNVMU198AEVP+bdwjZHuJe1YzEHHwYc+CR4yeC4828mKedK+lZy3ITxYikq6iO5TK9gIXjeDIk+V/y3+qn0jhdjgMPlZVPuUuCr+42jhbN2/+9mbQ/dPDyD1pacuN3zRTSvYTMxxxeqEZuGa40MNPmK9QrP2S3cgyXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=Iy4uN0Qe; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k2fJjsQ9"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a99fa009adcso366944966b.0;
-        Tue, 29 Oct 2024 05:47:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730206028; x=1730810828; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UXEU0K+HVbTbvp27dG/5AsENh9x1wq4XCrDbezUDB6I=;
-        b=k2fJjsQ9L4LWoM4PL7yZwKPUFTf4+W2wupzWIb/ZoMnu5UZ6K74DWIitK8BZtN2aP8
-         DDNTJXha54bcGgTf340F5t8zZubgVRbn9YoT7w8QP9S2wLJ2Im4uzFvlFbKMzUe1xWar
-         Od+glT5qcwGsZT/tiOHoFiADygKJuHeKrGUgSgtC4DJBocXoUy3U+depaBXSJzny7DG7
-         zmZEv/gGlnemfZ/MsuP+6rOMWGdAkOXEHnbeFzJDk3XMT68oEwa4j7qr7JepNdgFyeNH
-         pHm/8j8W+pvMUY7y4Kmop6F43R72fSEzQTnxZJxpKxWd/RXtdao/Hup6PLEjolxQMTmL
-         lBag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730206028; x=1730810828;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UXEU0K+HVbTbvp27dG/5AsENh9x1wq4XCrDbezUDB6I=;
-        b=rviQQKppHH/q6D3rsJ3vD8Np+vgz2bCrdLwnEQl/LlIR9/bPdWRCbtA9ZDGL2IK0t2
-         tiSZYGJdhOSYXY5vQUw9rIYdxMZLkxn+XN/PZyyTsqkY9sF1rL33Oiq1LTuPqkTdX3BY
-         Hqe/blm+SZOwZXLH0+fg4Vz2HJZo5sGw4VJZlABXaLuKqEZU1ZA23X6cdclIsGPVWmsk
-         ORZ4tdccfDENZ+zKdw4yRxOKyKv6SpoKF5C8JTBhQt3DyIPY+x2HM3gxYpfR2thEE7dc
-         BVVyYlZxx6rea6kFiX4Av5Q0l7+QKXYYPN5mz/ZVykw1culcXXu7hdxYeOPM+4Dj1VcQ
-         OttQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU4T+teNhJA7m3FeIWpz+R+WpzLRD8r34EjoVvYaLT38vjjGLnkYCJrGrHB+v5ePOoRxVW5P96WBQ==@vger.kernel.org, AJvYcCWGvH0a9OXs+3uIB+qHp3gHBZVvMoN8AAUwblU8SP5uyZT/S1n5ExT9rKMGbR/MT4BvHbmVKKpsi0kOxQ==@vger.kernel.org, AJvYcCWm/VatUyQD8aFm4dJhDhJa/M8GQFyebKNBVJiK0NUqGhN6jp9r21AwNSfDQ63zDvyb7p6hSWEP605agAhPfw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlId72CxpIhoabaIILcShUBBsqAxjoS56fAdZ+7761LjCDgq9v
-	ZQjnscx/nC8fQ5Ex40lgY/iEISaSVeCcgfhnMCFdM6E9629d1t8RSqP+vr7kORiMw0eyjFqueDx
-	5nOdcHWiUTJ76rJOEXoZ77Y41tQ==
-X-Google-Smtp-Source: AGHT+IH24jDXrN1/rLUODZ7dXWnQNAXgArrAqn9CD/XkQZPaaSbgd3HS6kL07anh4QVcaAdjYqc8XepfsP8tIRg++xU=
-X-Received: by 2002:a05:6402:348f:b0:5c9:34b4:69a8 with SMTP id
- 4fb4d7f45d1cf-5cbbf889850mr13754716a12.6.1730206028117; Tue, 29 Oct 2024
- 05:47:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="Iy4uN0Qe"
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 49TD7AbR021211
+	for <io-uring@vger.kernel.org>; Tue, 29 Oct 2024 08:19:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
+	 bh=qA+NGz+6KM5521lpDTzCtjJ24sEMb14jQTfwKkFiwJc=; b=Iy4uN0QeAnJo
+	fblju/KuxVMSg2VrDQlMo4Lu9MTYEXkSULblzcwPZ6jk8IUqfa4I8imCJXuJNs4P
+	xhxPIT8k6ybNErCpUNyU+xus9yJPN3rxpm7rmGhdAghKzbEfYXq2HdP7hNkJLhlu
+	IzFCkZckw8M0izhlhDxtBmhokwvTkilNq6KrCkw7oI9JgEtcTcQWuXeS3R/iJH2w
+	jBxdLnJJCPlw9rfMQ/uHC/Uir4th1yiTqe0D9+leiYUzr+CF82znP0ds5E/DAdu7
+	cpJhbBUjIC7jmvyrGmzN3W9jNN+RqTVN8MZ84xfqy4htzm6x2ShT0roiyr6rOSqF
+	gu/1cH/cmA==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 42k0af13x0-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <io-uring@vger.kernel.org>; Tue, 29 Oct 2024 08:19:48 -0700 (PDT)
+Received: from twshared22321.07.ash9.facebook.com (2620:10d:c0a8:1c::1b) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.11; Tue, 29 Oct 2024 15:19:47 +0000
+Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
+	id 1049714920EA3; Tue, 29 Oct 2024 08:19:44 -0700 (PDT)
+From: Keith Busch <kbusch@meta.com>
+To: <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <linux-scsi@vger.kernel.org>, <io-uring@vger.kernel.org>
+CC: <linux-fsdevel@vger.kernel.org>, <hch@lst.de>, <joshi.k@samsung.com>,
+        <javier.gonz@samsung.com>, <bvanassche@acm.org>,
+        Keith Busch
+	<kbusch@kernel.org>
+Subject: [PATCHv10 4/9] block: allow ability to limit partition write hints
+Date: Tue, 29 Oct 2024 08:19:17 -0700
+Message-ID: <20241029151922.459139-5-kbusch@meta.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241029151922.459139-1-kbusch@meta.com>
+References: <20241029151922.459139-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241025213645.3464331-1-kbusch@meta.com> <20241025213645.3464331-6-kbusch@meta.com>
-In-Reply-To: <20241025213645.3464331-6-kbusch@meta.com>
-From: Anuj gupta <anuj1072538@gmail.com>
-Date: Tue, 29 Oct 2024 18:16:29 +0530
-Message-ID: <CACzX3AvZ=+cBaoZ9oKW3osA1WiWm5H5b7+wWAouLryK4-ymYfA@mail.gmail.com>
-Subject: Re: [PATCHv9 5/7] io_uring: enable per-io hinting capability
-To: Keith Busch <kbusch@meta.com>
-Cc: linux-block@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	linux-scsi@vger.kernel.org, io-uring@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, hch@lst.de, joshi.k@samsung.com, 
-	javier.gonz@samsung.com, bvanassche@acm.org, Hannes Reinecke <hare@suse.de>, 
-	Nitesh Shetty <nj.shetty@samsung.com>, Keith Busch <kbusch@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: k-4eCFpsW40AP3ZduuAjGWHS777sQS4i
+X-Proofpoint-ORIG-GUID: k-4eCFpsW40AP3ZduuAjGWHS777sQS4i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
 
-On Sat, Oct 26, 2024 at 3:13=E2=80=AFAM Keith Busch <kbusch@meta.com> wrote=
-:
->
-> From: Kanchan Joshi <joshi.k@samsung.com>
->
-> With F_SET_RW_HINT fcntl, user can set a hint on the file inode, and
-> all the subsequent writes on the file pass that hint value down. This
-> can be limiting for block device as all the writes will be tagged with
-> only one lifetime hint value. Concurrent writes (with different hint
-> values) are hard to manage. Per-IO hinting solves that problem.
->
-> Allow userspace to pass additional metadata in the SQE.
->
->         __u16 write_hint;
->
-> If the hint is provided, filesystems may optionally use it. A filesytem
-> may ignore this field if it does not support per-io hints, or if the
-> value is invalid for its backing storage. Just like the inode hints,
-> requesting values that are not supported by the hardware are not an
-> error.
->
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
-> Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
-> Signed-off-by: Nitesh Shetty <nj.shetty@samsung.com>
-> Signed-off-by: Keith Busch <kbusch@kernel.org>
-> ---
->  include/uapi/linux/io_uring.h | 4 ++++
->  io_uring/rw.c                 | 3 ++-
->  2 files changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.=
-h
-> index 60b9c98595faf..8cdcc461d464c 100644
-> --- a/include/uapi/linux/io_uring.h
-> +++ b/include/uapi/linux/io_uring.h
-> @@ -92,6 +92,10 @@ struct io_uring_sqe {
->                         __u16   addr_len;
->                         __u16   __pad3[1];
->                 };
-> +               struct {
-> +                       __u16   write_hint;
-> +                       __u16   __pad4[1];
-> +               };
->         };
->         union {
->                 struct {
-> diff --git a/io_uring/rw.c b/io_uring/rw.c
-> index 8080ffd6d5712..5a1231bfecc3a 100644
-> --- a/io_uring/rw.c
-> +++ b/io_uring/rw.c
-> @@ -279,7 +279,8 @@ static int io_prep_rw(struct io_kiocb *req, const str=
-uct io_uring_sqe *sqe,
->                 rw->kiocb.ki_ioprio =3D get_current_ioprio();
->         }
->         rw->kiocb.dio_complete =3D NULL;
-> -
-> +       if (ddir =3D=3D ITER_SOURCE)
-> +               rw->kiocb.ki_write_hint =3D READ_ONCE(sqe->write_hint);
->         rw->addr =3D READ_ONCE(sqe->addr);
->         rw->len =3D READ_ONCE(sqe->len);
->         rw->flags =3D READ_ONCE(sqe->rw_flags);
-> --
-> 2.43.5
->
+From: Keith Busch <kbusch@kernel.org>
 
-Since this patch adds a couple of new fields, it makes sense to add
-BUILD_BUG_ON() checks in io_uring_init for these fields to assert the
-layout of struct io_uring_sqe. And probably a zero check for pad4 in
-io_prep_rw.
---
-Anuj Gupta
+When multiple partitions are used, you may want to enforce different
+subsets of the available write hints for each partition. Provide a
+bitmap attribute of the available write hints, and allow an admin to
+write a different mask to set the partition's allowed write hints.
+
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+---
+ Documentation/ABI/stable/sysfs-block |  6 ++++
+ block/bdev.c                         | 13 ++++++++
+ block/partitions/core.c              | 44 ++++++++++++++++++++++++++--
+ include/linux/blk_types.h            |  1 +
+ 4 files changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/sta=
+ble/sysfs-block
+index f2db2cabb8e75..8ab9f030e61d1 100644
+--- a/Documentation/ABI/stable/sysfs-block
++++ b/Documentation/ABI/stable/sysfs-block
+@@ -187,6 +187,12 @@ Description:
+ 		partition is offset from the internal allocation unit's
+ 		natural alignment.
+=20
++What:		/sys/block/<disk>/<partition>/write_hint_mask
++Date:		October 2024
++Contact:	linux-block@vger.kernel.org
++Description:
++		The mask of allowed write hints. You can limit which hints the
++		block layer will use by writing a new mask.
+=20
+ What:		/sys/block/<disk>/<partition>/stat
+ Date:		February 2008
+diff --git a/block/bdev.c b/block/bdev.c
+index 9a59f0c882170..0c5e87b111aed 100644
+--- a/block/bdev.c
++++ b/block/bdev.c
+@@ -415,6 +415,7 @@ void __init bdev_cache_init(void)
+ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
+ {
+ 	struct block_device *bdev;
++	unsigned short write_hint;
+ 	struct inode *inode;
+=20
+ 	inode =3D new_inode(blockdev_superblock);
+@@ -440,6 +441,18 @@ struct block_device *bdev_alloc(struct gendisk *disk=
+, u8 partno)
+ 		return NULL;
+ 	}
+ 	bdev->bd_disk =3D disk;
++
++	write_hint =3D bdev_max_write_hints(bdev);
++	if (write_hint) {
++		bdev->write_hint_mask =3D bitmap_alloc(write_hint, GFP_KERNEL);
++		if (!bdev->write_hint_mask) {
++			free_percpu(bdev->bd_stats);
++			iput(inode);
++			return NULL;
++		}
++		bitmap_set(bdev->write_hint_mask, 0, write_hint);
++	}
++
+ 	return bdev;
+ }
+=20
+diff --git a/block/partitions/core.c b/block/partitions/core.c
+index 815ed33caa1b8..24e1a79972f75 100644
+--- a/block/partitions/core.c
++++ b/block/partitions/core.c
+@@ -203,6 +203,40 @@ static ssize_t part_discard_alignment_show(struct de=
+vice *dev,
+ 	return sprintf(buf, "%u\n", bdev_discard_alignment(dev_to_bdev(dev)));
+ }
+=20
++static ssize_t part_write_hint_mask_show(struct device *dev,
++					 struct device_attribute *attr,
++					 char *buf)
++{
++	struct block_device *bdev =3D dev_to_bdev(dev);
++	unsigned short max_write_hints =3D bdev_max_write_hints(bdev);
++
++	if (!max_write_hints)
++		return sprintf(buf, "0");
++	return sprintf(buf, "%*pb\n", max_write_hints, bdev->write_hint_mask);
++}
++
++static ssize_t part_write_hint_mask_store(struct device *dev,
++					  struct device_attribute *attr,
++					  const char *buf, size_t count)
++{
++	struct block_device *bdev =3D dev_to_bdev(dev);
++	unsigned short max_write_hints =3D bdev_max_write_hints(bdev);
++	unsigned long *new_mask;
++
++	if (!max_write_hints)
++		return count;
++
++	new_mask =3D bitmap_alloc(max_write_hints, GFP_KERNEL);
++	if (!new_mask)
++		return -ENOMEM;
++
++	bitmap_parse(buf, count, new_mask, max_write_hints);
++	bitmap_copy(bdev->write_hint_mask, new_mask, max_write_hints);
++	bitmap_free(new_mask);
++
++	return count;
++}
++
+ static DEVICE_ATTR(partition, 0444, part_partition_show, NULL);
+ static DEVICE_ATTR(start, 0444, part_start_show, NULL);
+ static DEVICE_ATTR(size, 0444, part_size_show, NULL);
+@@ -211,6 +245,8 @@ static DEVICE_ATTR(alignment_offset, 0444, part_align=
+ment_offset_show, NULL);
+ static DEVICE_ATTR(discard_alignment, 0444, part_discard_alignment_show,=
+ NULL);
+ static DEVICE_ATTR(stat, 0444, part_stat_show, NULL);
+ static DEVICE_ATTR(inflight, 0444, part_inflight_show, NULL);
++static DEVICE_ATTR(write_hint_mask, 0644, part_write_hint_mask_show,
++		   part_write_hint_mask_store);
+ #ifdef CONFIG_FAIL_MAKE_REQUEST
+ static struct device_attribute dev_attr_fail =3D
+ 	__ATTR(make-it-fail, 0644, part_fail_show, part_fail_store);
+@@ -225,6 +261,7 @@ static struct attribute *part_attrs[] =3D {
+ 	&dev_attr_discard_alignment.attr,
+ 	&dev_attr_stat.attr,
+ 	&dev_attr_inflight.attr,
++	&dev_attr_write_hint_mask.attr,
+ #ifdef CONFIG_FAIL_MAKE_REQUEST
+ 	&dev_attr_fail.attr,
+ #endif
+@@ -245,8 +282,11 @@ static const struct attribute_group *part_attr_group=
+s[] =3D {
+=20
+ static void part_release(struct device *dev)
+ {
+-	put_disk(dev_to_bdev(dev)->bd_disk);
+-	bdev_drop(dev_to_bdev(dev));
++	struct block_device *part =3D dev_to_bdev(dev);
++
++	bitmap_free(part->write_hint_mask);
++	put_disk(part->bd_disk);
++	bdev_drop(part);
+ }
+=20
+ static int part_uevent(const struct device *dev, struct kobj_uevent_env =
+*env)
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index 6737795220e18..af430e543f7f7 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -73,6 +73,7 @@ struct block_device {
+ #ifdef CONFIG_SECURITY
+ 	void			*bd_security;
+ #endif
++	unsigned long		*write_hint_mask;
+ 	/*
+ 	 * keep this out-of-line as it's both big and not needed in the fast
+ 	 * path
+--=20
+2.43.5
+
