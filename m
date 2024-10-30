@@ -1,142 +1,92 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93F51E9090
-	for <io-uring@vger.kernel.org>; Wed, 30 Oct 2024 12:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748DA1E9072
+	for <io-uring@vger.kernel.org>; Wed, 30 Oct 2024 13:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730292560; cv=none; b=mMv3N5RlQLe5V0X6BDhcVuBzA/8SLPZLMWfIwjrpVxKdFIvuRBNL1dFRg18GlBuoLd5mdVGwcO4OcbakvT0aG1KozOiPW61HESQnpm4gvkYoUZpupJqfMNFUDjMwTN0ZxyQgoEPTX/gGjXWvBLp23rH5KMYfaNnoH+Y7byTW4nw=
+	t=1730293792; cv=none; b=ZppmGuGLV+PKfk/50ncvOA660xQs7pibwfBYPUf/OiwUcqOvED1m8PyY3AkrjRXa5AId6Qncwc//QFvl5jd7VXCtjbpk7emzqqWTynI2Tfj1JwjxK/cGaeT7k01M2Yr1dYK6awNkkUhTl5QCZ93WrEMwaArt4TWeFFuSc2DFcpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730292560; c=relaxed/simple;
-	bh=ox1XxL2xkJ9AWBVPd2jt2bGWyL7vTmzc+q0U9Jg4ivQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=gh6LNqx4Eq1kw+eRgbTXbSUwPbVLURDPhp9IB7T4tPWEtUVy1R2ALcugrJEuxP39oXbQ4sEYPQyKG+p32no5TwYUo/G0aOUSqoKE0ZKpRu2ExDf5YitTxizwxPgTg0y94W9c6ZenbJgMWtnVt6Xt4SCv2lKUTZcBYPMEMvT2TBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MVZM1PEu; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1730293792; c=relaxed/simple;
+	bh=E5OwLTPy54ufFGgeBpt5ox7GUyM51fdd+bAxUQchzFg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=XnFgGNPxnSYFMMW7H+I9Q4CicW1ORO7Spsllsw1Qj/MNpof/CjgG+apCXtSll/k85gJAZH116oNEHh4GjFmvFv3Iu456dv4St8wJghhqnmzQhSUjDPK7dJKmLoITX8JmQOhNuuLmSu5cDiXGwEOD9SXjS7gdwOs11SHtNVDRZ1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=hwMwd1xA; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MVZM1PEu"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-431616c23b5so5718465e9.0
-        for <io-uring@vger.kernel.org>; Wed, 30 Oct 2024 05:49:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="hwMwd1xA"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-8377fd760b0so247091739f.2
+        for <io-uring@vger.kernel.org>; Wed, 30 Oct 2024 06:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730292556; x=1730897356; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YtBFqcqhLSPTra5O0GoBkLjkqg1dbSgUbpph/miKzHI=;
-        b=MVZM1PEuBXRcZexYkLPUYOeDsuByIk+6S8mkGGIIAnYptiA2kua0xce7PTcSCPTFlS
-         Po+Y8JwH1Ypi8b4atOYsV7Ghyfax2owFdupt+Jk5GvHouqD9O8L1cgxp/ODPR4dYK63I
-         4AmytkOyX3T50bCLJKbW/5CjTRAGRJVSaGXBwqNr/gKzE5Yh5mhq1JYfDrOkU82m8Ppn
-         qrqRa0kYl11pIZTmdHLdlr7zeE8fvP5hQYv7+OA4x1WMIgtBPOA6cQXX5iisYV7mGUv/
-         /837VbaOLgc0CrQ2GuB8Ct7/b9uvg4htOrLvmGo875KOL2B0ehmEQbmVAZpBi6MjLy02
-         oYrg==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1730293788; x=1730898588; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LAS1y4kZ27f1rr18cg6s15oqwDD8HYKBoo6u8v38O4g=;
+        b=hwMwd1xAdjjzsa2bcepYVHhaKoyG6zIXaC0BNxmuQX1BrBMYhPWZk19ohypDhvh6d3
+         UGwW02p7ozyNSltuYAp2RVuu85PVPWiax5vrjs1opSRgisRwdk78haM5usLhXhQZQVrz
+         1AzIIG+u7TAcCOLYR4ZdeeC7H+SR/O2tU6Lt556LvBVKZwrJSvS/X6fex6Y3GFb9MXpM
+         EQb9b6vsOnuGlHW2Lzyp7i2OEvVUdbyEJpW63gq6T63AVaHrFr2hukCaKwnwS24UKGl3
+         3W7n/CJZpbowROnIgg0asRJ4qfzzLQKuG85FTpd1WcVBtic+5R4tYQBoOQCT5b5xsjZW
+         nJVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730292556; x=1730897356;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YtBFqcqhLSPTra5O0GoBkLjkqg1dbSgUbpph/miKzHI=;
-        b=dcWB945dnnje896RwmpRYkIz6EcqCDbJuGkCynOXZcHlyDdKdiv1b2OlpJXOZpoQ5H
-         66N374H6TfFzls5HPWv3eWoe6WRGrNLyTq7I0XdVXq2ho/SfyKxUH0BJ5AJpuWRSdDts
-         WRZxc/xJZ+/M97BT4gcfQ+Hc3pdzdf8o2Jucgi8JkrqRRDxOgY1UupH98pej4THfIKHo
-         Ig3peeQlaoklJMFMxZxN7T0PhXYiceYA3CWVBAaHSSKBlG15TedDbsnSFmM8wPbUxGo8
-         tEPLk+grwl8S5pk2NwzlaPG6VmxbRU1GlkidsXBzwcnGm35bbhrADZa2ck3DuVZBgKH/
-         rYHQ==
-X-Gm-Message-State: AOJu0YznSY2yLb5oGY1otNd7iI9piaTmzlEiwPfY29rnw0p2FHJ8TQx4
-	TPP6vL6f4bT5g0YShyviXJ4hqT2nD6I6iv4CwhJ3zZQsMr/e8fz47P3o+TI3KPqJmLgzAHbFali
-	j
-X-Google-Smtp-Source: AGHT+IHCfI+HSZ/qemM71hhQe2UBEUJFn4QNp3CB/sSe/ZGvm6iKYY5qIppe9RufXJeFAb722KEz9A==
-X-Received: by 2002:a05:600c:19c9:b0:431:52da:9d89 with SMTP id 5b1f17b1804b1-431b5704d0emr48948955e9.1.1730292556248;
-        Wed, 30 Oct 2024 05:49:16 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431bb78b809sm31444325e9.1.2024.10.30.05.49.15
+        d=1e100.net; s=20230601; t=1730293788; x=1730898588;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LAS1y4kZ27f1rr18cg6s15oqwDD8HYKBoo6u8v38O4g=;
+        b=PZbTdJJW/ZhJm56wCCHuiadMVCk5htVHdaA8YPZQZ5CANTLGWF/aaDJzhmfDNLXanf
+         ZWEei2bSJJhwFuCVIriEtApj7fBGtfKUhCTpiBWTtNoW7wiJNar8GFTmYHcmk9feI131
+         SVEuL4Y1czEt9P6pk7Hs1ksXJv0ysgH8EMthVTZH0jTKVSJMc9VLAsKCiJwoX35F6N7A
+         Ays/1AC6Yd+oiiwogbvUtK1VEwPLRuIUX5tDm171Yxb5tG5ifhoBeYiLreJSHIRlH+jZ
+         KuI+tqg5Yl+AdAmh2DVsQaKcUeqsMHUZOrZ4+P981j/gMrDDa+x+3p8c5EB90CMw1VDo
+         OwyA==
+X-Forwarded-Encrypted: i=1; AJvYcCWrkXLopqkDpinFNGvqmutO36LeXQp650fu2an1v7Swf1mBAtjfh9y/NnfeyR9mmRrMnwBK/r8h3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5iyGtmIQ/Yqh1WujhIWfn/8AaBhStI/V+PShjc/POitpk2e0G
+	LjPJvG8wBBYHW2dEUsK8lmMFi0OUYm4n61yqFCIVjXFJW5zfGIbvlHfdGQjkdUYnAt3NU3yh4cd
+	h
+X-Google-Smtp-Source: AGHT+IENNDyNNZGII1nL/NaaQ0kx9gLki/JevI1ijapsM9JD9CCx62rACXRjzrtMV0m6Zp+z0JciFA==
+X-Received: by 2002:a05:6602:1656:b0:834:d7b6:4fea with SMTP id ca18e2360f4ac-83b1c3e9fcemr1284626039f.6.1730293788122;
+        Wed, 30 Oct 2024 06:09:48 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc72751298sm2872855173.91.2024.10.30.06.09.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 05:49:16 -0700 (PDT)
-Date: Wed, 30 Oct 2024 14:40:45 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org
-Subject: [bug report] io_uring: add support for fixed wait regions
-Message-ID: <3191af58-8707-4916-a657-ee376b36810a@stanley.mountain>
+        Wed, 30 Oct 2024 06:09:47 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+In-Reply-To: <70879312-810a-49ce-aba3-fdf7f902a477@stanley.mountain>
+References: <70879312-810a-49ce-aba3-fdf7f902a477@stanley.mountain>
+Subject: Re: [PATCH next] io_uring/rsrc: fix error code in
+ io_clone_buffers()
+Message-Id: <173029378724.7840.5463253318064416297.b4-ty@kernel.dk>
+Date: Wed, 30 Oct 2024 07:09:47 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-Hello Jens Axboe,
 
-Commit 4b926ab18279 ("io_uring: add support for fixed wait regions")
-from Oct 22, 2024 (linux-next), leads to the following Smatch static
-checker warning:
+On Wed, 30 Oct 2024 12:55:06 +0300, Dan Carpenter wrote:
+> Return -ENOMEM if the allocation fails.  Don't return success.
+> 
+> 
 
-	io_uring/register.c:616 io_register_cqwait_reg()
-	warn: was expecting a 64 bit value instead of '~(~(((1) << 12) - 1))'
+Applied, thanks!
 
-io_uring/register.c
-    594 static int io_register_cqwait_reg(struct io_ring_ctx *ctx, void __user *uarg)
-    595 {
-    596         struct io_uring_cqwait_reg_arg arg;
-    597         struct io_uring_reg_wait *reg;
-    598         struct page **pages;
-    599         unsigned long len;
-    600         int nr_pages, poff;
-    601         int ret;
-    602 
-    603         if (ctx->cq_wait_page || ctx->cq_wait_arg)
-    604                 return -EBUSY;
-    605         if (copy_from_user(&arg, uarg, sizeof(arg)))
-    606                 return -EFAULT;
-    607         if (!arg.nr_entries || arg.flags)
-    608                 return -EINVAL;
-    609         if (arg.struct_size != sizeof(*reg))
-    610                 return -EINVAL;
-    611         if (check_mul_overflow(arg.struct_size, arg.nr_entries, &len))
-    612                 return -EOVERFLOW;
-    613         if (len > PAGE_SIZE)
-    614                 return -EINVAL;
-    615         /* offset + len must fit within a page, and must be reg_wait aligned */
---> 616         poff = arg.user_addr & ~PAGE_MASK;
+[1/1] io_uring/rsrc: fix error code in io_clone_buffers()
+      commit: 0f576012ae2ff08009ce91e2294832e2b88aba06
 
-This is a harmless thing, but on 32 bit systems you can put whatever you want in
-the high 32 bits of arg.user_addr and it won't affect anything.
+Best regards,
+-- 
+Jens Axboe
 
-    617         if (len + poff > PAGE_SIZE)
-    618                 return -EINVAL;
-    619         if (poff % arg.struct_size)
-    620                 return -EINVAL;
-    621 
-    622         pages = io_pin_pages(arg.user_addr, len, &nr_pages);
 
-There ought to be a Smatch warning about that sort of thing here really but
-there isn't yet.
 
-    623         if (IS_ERR(pages))
-    624                 return PTR_ERR(pages);
-    625         ret = -EINVAL;
-    626         if (nr_pages != 1)
-    627                 goto out_free;
-    628         if (ctx->user) {
-    629                 ret = __io_account_mem(ctx->user, 1);
-    630                 if (ret)
-    631                         goto out_free;
-    632         }
-    633 
-    634         reg = vmap(pages, 1, VM_MAP, PAGE_KERNEL);
-    635         if (reg) {
-    636                 ctx->cq_wait_index = arg.nr_entries - 1;
-    637                 WRITE_ONCE(ctx->cq_wait_page, pages);
-    638                 WRITE_ONCE(ctx->cq_wait_arg, (void *) reg + poff);
-    639                 return 0;
-    640         }
-    641         ret = -ENOMEM;
-    642         if (ctx->user)
-    643                 __io_unaccount_mem(ctx->user, 1);
-    644 out_free:
-    645         io_pages_free(&pages, nr_pages);
-    646         return ret;
-    647 }
-
-regards,
-dan carpenter
