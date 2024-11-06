@@ -1,37 +1,34 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BEBF1DE3B1
-	for <io-uring@vger.kernel.org>; Wed,  6 Nov 2024 14:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC421DC07B
+	for <io-uring@vger.kernel.org>; Wed,  6 Nov 2024 14:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730904379; cv=none; b=PRsxk1YEjOnyAQtpWU8GUoE0jD0h/E4bE2b7Hwsjm4FzAIBrzbH/SRwCBZfnsQWEmE3dqJQRq8Cpfdj9vj1bkZbOzwcTzuGrXRR4V/Wazyt1U3/Hl81Lw4WxAcacpUeK26suOZ+YOuFbuM2fr+iCYG47zmOxWyWPn0w4EAWrc9M=
+	t=1730904383; cv=none; b=LYRPL3D7QyUdfmCNV9/y8pG2KKs2dNrbkYh3r6r/AvIbnaORwGv+VVe93VUjoLjfo9yHCps1OMfz5o9Kgwud1PMA3agCPFrDmpGO29sh9KPPMy6ZcpD2fJUbTvQCumGbDPNWi4AiemEjnvnqB6RPW684WY38vNsxckI+TpRBOow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730904379; c=relaxed/simple;
-	bh=95QezPw9dVMZB62WuWYkZ1e+Ta6s35ztszBbsAjUAqo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MSHamgPxJWXOYnJJe2wWban7+IESH8Q62uEm4YQQuXUIFSZ+LFE+noovp5rOMcV0VhbvaxnzoSIJVArXQhIkL2Yn3vH+TDR5e9vpr1Bx0/tC6PWiVrWWNnRQ1zWU+cTQYiIoFOCbKz5aOglc63QHkcARxq9BtEH32//+oYKvdSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=I05jRsPp; arc=none smtp.client-ip=117.135.210.2
+	s=arc-20240116; t=1730904383; c=relaxed/simple;
+	bh=AVxgRj+6MNI3DbWhH3kSARHoaGa2nnguyQoKBp2NZsw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X9S7eqjwxZTx1PffpEqdLepqf2XcpZqinee5hUzBlE899UnShN3F0bVVn2wTbT/7GpcupgILpv/4x8z0P7ojsFvX73rk69iu32APSVE98Vk8a7vfipxhW4vKHAyqmMy6kYPP/6UhwwERJ+7lX7LR+GcQei+bM3Yq6Nb/MoadijY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=LWu/MnY+; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="I05jRsPp"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="LWu/MnY+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Hoq6p
-	S8ti9Ct5OMW5TxzWrM+F4MQRyWsOobJEkad4O8=; b=I05jRsPp4qLPlJsTe8JFD
-	z094YEe4gj7fVGie1yXODfDL66HbDwXh5zbD4OD0I0fcD9TQd++j2af9p7CHh0fl
-	kqbvaVin6rUHgNA7DPwygHEkGSdJn9zvZpbbVAy1ClkAYBBY32HFee4tecnnhX1Z
-	P4lFzuRPAiUuhOyZkesOqs=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=dpI+3
+	Zb2nolW10mS6l6rgGTPW9284/O0nlLp/nyec6c=; b=LWu/MnY+rKYCIPbmjgUPF
+	3l0WCL1BCpUibMaASx/UGs45kbWDnn46xsTIeYc8/9qvtB1JCEGUfbklGEP1n2Ls
+	VZjUsFOAxi8GXpPu/y4uNrexoF9Mt6KfoTPlu/nqzNTjxbjvZeBle/pDtn0H72Hs
+	ZwjdYLeCPLQfGt78KmRpzU=
 Received: from localhost.localdomain (unknown [114.86.104.95])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAnLw8zgStnNMASBA--.8628S3;
+	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAnLw8zgStnNMASBA--.8628S2;
 	Wed, 06 Nov 2024 22:46:12 +0800 (CST)
 From: Haiyue Wang <haiyuewa@163.com>
 To: io-uring@vger.kernel.org
 Cc: Haiyue Wang <haiyuewa@163.com>
-Subject: [PATCH liburing v1 2/2] .gitignore: Add compilation database file and directory
-Date: Wed,  6 Nov 2024 22:45:28 +0800
-Message-ID: <20241106144545.6476-2-haiyuewa@163.com>
+Subject: [PATCH liburing v1 1/2] .gitignore: Add `examples/reg-wait`
+Date: Wed,  6 Nov 2024 22:45:27 +0800
+Message-ID: <20241106144545.6476-1-haiyuewa@163.com>
 X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241106144545.6476-1-haiyuewa@163.com>
-References: <20241106144545.6476-1-haiyuewa@163.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -39,44 +36,31 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnLw8zgStnNMASBA--.8628S3
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GF43tryDJryxGw45Jr1xGrg_yoWfJrbEgr
-	1xCF1kW3sxGr1vkF15Jrs3Ar4Fk3ykJrW8ArsxAr1rA3sYywnxJwn8Wa13WF1rWF4UWF4a
-	kr93Wr4rCFySyjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUSAp5UUUUU==
-X-CM-SenderInfo: 5kdl53xhzdqiywtou0bp/1tbiLwKPa2crT6j55wACs+
+X-CM-TRANSID:_____wAnLw8zgStnNMASBA--.8628S2
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJpnQDUUUU
+X-CM-SenderInfo: 5kdl53xhzdqiywtou0bp/1tbiLwKPa2crT6j55wABs9
 
-The tool 'bear'[1] can be used to generate the C language server protocol
-database file while compiling: 'bear -- make -j $(nproc)'
-
-Add the database file into .gitignore as Linux Kernel [2] does.
-
-The clangd will parse the compile_commands.json language metadata into the
-.cache directory. Add it for clean git status track.
-
-[1]: https://github.com/rizsotto/Bear
-[2]: https://git.kernel.org/torvalds/c/26c4c71bcd9a
+Add the built binary file name from the commit for clean git track:
+abe992c56178 ("examples/reg-wait: add registered wait example")
 
 Signed-off-by: Haiyue Wang <haiyuewa@163.com>
 ---
- .gitignore | 4 ++++
- 1 file changed, 4 insertions(+)
+ .gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/.gitignore b/.gitignore
-index 7bcc514..4148091 100644
+index 8edb52d..7bcc514 100644
 --- a/.gitignore
 +++ b/.gitignore
-@@ -33,6 +33,10 @@
- /test/*.dmesg
- /test/output/
+@@ -27,6 +27,7 @@
+ /examples/send-zerocopy
+ /examples/rsrc-update-bench
+ /examples/kdigest
++/examples/reg-wait
  
-+# Clang's compilation database file and directory.
-+/.cache
-+/compile_commands.json
-+
- config-host.h
- config-host.mak
- config.log
+ /test/*.t
+ /test/*.dmesg
 -- 
 2.47.0
 
