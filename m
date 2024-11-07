@@ -1,216 +1,144 @@
-Received: from outbound-ip191b.ess.barracuda.com (outbound-ip191b.ess.barracuda.com [209.222.82.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B1A191F6A
-	for <io-uring@vger.kernel.org>; Thu,  7 Nov 2024 17:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.222.82.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731001186; cv=fail; b=BoVWMzxOGlB6s8w39cOk6r09RyrxEJtFoLmKeRNMAEMplnb9SKQdENpAGQcjYYT7UhpNWuI1twZY97gJESxh+81lXX6laa92JE6CXSuacn0oYa31Zvs861rnvfsqx5LQ6m34tcK/RBef//VN5IzsSpN4jqvXjkWsZz5IVypAok4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731001186; c=relaxed/simple;
-	bh=vNi3ideG1iLjK3+IpG5ceXtr7C851qaww+bttzRaeqM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UduCwHNRwRYIUw0Hfj4uuHEjjt2TEtOzc/cSvybJtzmLSbt03Ugm7ApIH7PUpIf+8p78e/K8tqNmxkDw/d9+Lbsh23pDnx1mCVAy8m33JiAzacpQH4HXnuQg4ZWwiC76SDYrZh3/ASgprVUFTkbrYXxvI0d/wbSl7xNTNoGqB+w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com; spf=pass smtp.mailfrom=ddn.com; dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b=eCO2ZYgv; arc=fail smtp.client-ip=209.222.82.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ddn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2296216A15;
+	Thu,  7 Nov 2024 18:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731004114; cv=none; b=UGNDL68mmyNRsW+ahPqPMdxqaSAlHvwHAPemMRwOBrMYnpsl5keLT6OsxE7Hk+S80ThepGb+kcdYOIblYqqn33rn6O01TDU4SzfzqLbFr2CVrenw8fH7DnH3LkNOk6mvqssRFZ6N4e34TDzgomnO4kHw4D2VEUpTsfwU+IRWl0M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731004114; c=relaxed/simple;
+	bh=+Wo6r82THbUjNXMk4MeQeta3Cu/1ECzHE0kWbvDojkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R7bGvil6enXac/5gff9t0qvx+qcKtAAsuUvxybGn/6+c6URzD9GlBjhbU1yZgh5f9Tdc/+ItD6/h621vbAQ7YNWuweWp6ve/d6sy/NeccsNHzArOn7LfWb77pBLnjHNPu2ryQ/C+mD5xHNj6B9GliT2xNEiXnx7zEB5HnZlhDQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zx73TQEF; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b="eCO2ZYgv"
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172]) by mx-outbound22-27.us-east-2b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 07 Nov 2024 17:39:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uuRDBpqb/UIcqqDLiKVWOx8sghwsFLHj/kl7Iyk5QCsjB3osUuxA9OZlWt/AZNEmuxw2Df29Xf2hzKb9MXxNAQTSnTq0vzzjm+Ikp8SodRJv30wPznAoOglMDW6pG4ijrSAV8UfCH2BV5aH/m1Et3fuV7Ekn7UySZgZx7x9LkkMlWFi308UWPxPc1fuzYRNmFUlpPrEouo0KijtuywggUK4cHKQ2Xfz99+eB4kK4EGp902zYXiAWRnYseWY37vUrt+b9H3XHKYoKUe3tfrTrIRcR8F3eM8Y8fWb/1qwflliunlpvyJLt/DI10MxwQ7+BNpxpNPVYjJ++9u1Q0yLOJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aBvVN7b+Ds0Ig2dbL7M3V9/Qz+0WwfDX3oe8Zqg06po=;
- b=T5OLSnwtK8lUCbSEZ6NkRCGl08MrXRka3umgOiE8461i7+BW2AM0SmhOMWGqbuXVEKTeHJ4l7KNq25BmVPd66ci3r1HLAw2M7LhaK8m67QrdPk03QaY7VTTix/0m2qNlP+flsihsLlulp/6Pw/PBfRXKO9l35kTJ3uK8VmMkBpadmWQi2cNLKzpF7Sh/BX9FzAAL20FFRoDyb6kWlf772i6BmFWarM4XjAWCiviim4WJwdgLg87GbXyp3jzjNn0CyBxWnSEN3gqA33xOwmTlNibDd/7PfBop3/KwMTkadXANeBit2G5dENs0tCiEntZQDjdfVWTqhnDm0mXipQWrlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 50.222.100.11) smtp.rcpttodomain=bsbernd.com smtp.mailfrom=ddn.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=ddn.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aBvVN7b+Ds0Ig2dbL7M3V9/Qz+0WwfDX3oe8Zqg06po=;
- b=eCO2ZYgv08wkCeDi1lCR1k0vxtCUAwU13qAsFe8ug1+Tz6A0ZN4ZGFR72EJNkUqYONyOxK2lNl09o1rg1lGTiWCDRjT1+lNFnfCEZyBX43cj0elE4H4tNpeWHlsCS0XFjfgAzlUu+dc/HrrWgC6uVoyepg1csBiuHaQEeE6vlfE=
-Received: from MN2PR20CA0054.namprd20.prod.outlook.com (2603:10b6:208:235::23)
- by SA1PR19MB8022.namprd19.prod.outlook.com (2603:10b6:806:388::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.20; Thu, 7 Nov
- 2024 17:04:24 +0000
-Received: from BL6PEPF0001AB73.namprd02.prod.outlook.com
- (2603:10b6:208:235::4) by MN2PR20CA0054.outlook.office365.com
- (2603:10b6:208:235::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.19 via Frontend
- Transport; Thu, 7 Nov 2024 17:04:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 50.222.100.11)
- smtp.mailfrom=ddn.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=ddn.com;
-Received-SPF: Pass (protection.outlook.com: domain of ddn.com designates
- 50.222.100.11 as permitted sender) receiver=protection.outlook.com;
- client-ip=50.222.100.11; helo=uww-mrp-01.datadirectnet.com; pr=C
-Received: from uww-mrp-01.datadirectnet.com (50.222.100.11) by
- BL6PEPF0001AB73.mail.protection.outlook.com (10.167.242.166) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8137.17
- via Frontend Transport; Thu, 7 Nov 2024 17:04:23 +0000
-Received: from localhost (unknown [10.68.0.8])
-	by uww-mrp-01.datadirectnet.com (Postfix) with ESMTP id E6692121;
-	Thu,  7 Nov 2024 17:04:22 +0000 (UTC)
-From: Bernd Schubert <bschubert@ddn.com>
-Date: Thu, 07 Nov 2024 18:03:57 +0100
-Subject: [PATCH RFC v5 13/16] io_uring/cmd: let cmds to know about dying
- task
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zx73TQEF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731004112; x=1762540112;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Wo6r82THbUjNXMk4MeQeta3Cu/1ECzHE0kWbvDojkQ=;
+  b=Zx73TQEF16YHYX2GUNQI+E4egK3tFzSpXEgO6wma4wYC/9bod4jPV7AK
+   V/+eDkGaCxfdsa0cASC+xkkNNfSzl9FFlm7LZk5/MKIYhRAifGADtRID9
+   s49Fqwq7Ux0vuQc9WlYLrj6IrgbKfgogsQWo44qyXJRkVeVIzoH6/r+xT
+   GtyBVAd7n4EJJOoXnzmuSAekmRi0fyzJfeZyKNf2OdoY56ehaI3dktYKJ
+   D/5a7847ECiwLp1bzoGortKjHMoXEmPSPDFvZCJf4544oidPV2+QlNrhH
+   Amgk/5/GdaKU8mS0WB94IJ/CrcjkasyIJshE3f+XO+Bz+8XkPpHme533z
+   g==;
+X-CSE-ConnectionGUID: tlONnJXGTzyoVTGB2g19vQ==
+X-CSE-MsgGUID: olUyjysCSTKeX58uz4Tycw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="48380865"
+X-IronPort-AV: E=Sophos;i="6.12,135,1728975600"; 
+   d="scan'208";a="48380865"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 10:28:31 -0800
+X-CSE-ConnectionGUID: zurYR6BgQBuTRkxzKAxxFg==
+X-CSE-MsgGUID: jgQgNA92TbqFNgqvtzw1+Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,135,1728975600"; 
+   d="scan'208";a="85984316"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 07 Nov 2024 10:28:29 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t97F3-000qZq-3B;
+	Thu, 07 Nov 2024 18:28:25 +0000
+Date: Fri, 8 Nov 2024 02:27:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-block@vger.kernel.org,
+	Uday Shankar <ushankar@purestorage.com>,
+	Akilesh Kailash <akailash@google.com>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH V10 11/12] io_uring/uring_cmd: support leasing device
+ kernel buffer to io_uring
+Message-ID: <202411080218.NHuzJ77W-lkp@intel.com>
+References: <20241107110149.890530-12-ming.lei@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241107-fuse-uring-for-6-10-rfc4-v5-13-e8660a991499@ddn.com>
-References: <20241107-fuse-uring-for-6-10-rfc4-v5-0-e8660a991499@ddn.com>
-In-Reply-To: <20241107-fuse-uring-for-6-10-rfc4-v5-0-e8660a991499@ddn.com>
-To: Miklos Szeredi <miklos@szeredi.hu>
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
- linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
- Joanne Koong <joannelkoong@gmail.com>, Josef Bacik <josef@toxicpanda.com>, 
- Amir Goldstein <amir73il@gmail.com>, Ming Lei <tom.leiming@gmail.com>, 
- David Wei <dw@davidwei.uk>, bernd@bsbernd.com, 
- Bernd Schubert <bschubert@ddn.com>
-X-Mailer: b4 0.15-dev-2a633
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730999049; l=2087;
- i=bschubert@ddn.com; s=20240529; h=from:subject:message-id;
- bh=OmthtYeq8dVdFY1LwFpLQXA5OxBwj2Q9ybgpxjq0bpA=;
- b=BOy+6XxmfrlRUXmdZrga9t7IOr5ma2a1s1/v5FJFpGIumRxeNhFDqfoTnVkxQsw3U5CThpWc5
- JtAgtg/rFS6DNHZNJ10i/UWLtnIYSdULpKuRQiWlspdhiLIKjtJirWF
-X-Developer-Key: i=bschubert@ddn.com; a=ed25519;
- pk=EZVU4bq64+flgoWFCVQoj0URAs3Urjno+1fIq9ZJx8Y=
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB73:EE_|SA1PR19MB8022:EE_
-X-MS-Office365-Filtering-Correlation-Id: ace8564e-5a6f-438e-edea-08dcff4e3aea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?R001WDUwdGptMW8yRVVRM0Q0bmw2R05WTFRqT3hMeTExTjFRTWJ2TnJ6S0pn?=
- =?utf-8?B?Zi93WE03MnkzUno4Sk1hWjVzRXBTWWlKOEgrS2ZiMFhBNkpBMkVWSGIvS3J5?=
- =?utf-8?B?VkFYakVoeW5Qc3h6WmtPWDdjZ2lMb20ycVpCd0xyUFljbXVDSXBhUXM5UzRr?=
- =?utf-8?B?RGZOWkZHNzNPUHZ0S1hySXhSanFYYzB6VDZya1hTRjZWNHhPSTYzNHNnNFlt?=
- =?utf-8?B?ZlM2TnRYQko0bzc2b2t6a1EvQ1NZNnNnYnJGd0Y3eGpZdjB5UWhKTG8vbnUx?=
- =?utf-8?B?NExEVk93YzJCV0c0bStUTlB1YlVvUS9leVBKcFZWcGVBdkFBU1FXUWdQZDFW?=
- =?utf-8?B?WjdFNnhWcXBKUkRnMDBHelpWWDRkeUNLWHJsS3hDOGYreFVtSlhGaXE3RGtj?=
- =?utf-8?B?UGl3Y3dVVDZRdmN6M0x4a2F3cmhQM3JYSTZiUEI0U0g5bGVpZ1djRUpwRTh6?=
- =?utf-8?B?ampuMjlPVmVSTzB5aEpEMUNXL2JkL3JxSU5FRC9VMWhCVjJYaE9uYjdxbkpI?=
- =?utf-8?B?Wm0xTDBhaFZKQkttakRBZlp2Nng0Y1hieXZLNHlYT0pWZ2NSTlFXbkQ5OXpU?=
- =?utf-8?B?dXdhN1BseU5PdFBDK1dwaDV1RTlRUm1qWEZrQmZKdTBZWjBSOWJTWTU3ZWtF?=
- =?utf-8?B?RDJKN2d1WE1KNTVKbHlnRU13aVVrSlZORzZ0Ry9JUWhyeThhcUNkZ0FEOWhy?=
- =?utf-8?B?NVBubGxiZkpVcWl4S0VjNFJ5ckRyRWVVTXdRTGdkUGQ2M242c3dmdE8vK2Zz?=
- =?utf-8?B?ZUVvNEdVK1NNclc2RkEyNzlpOVh0MFFvajZpODE3bDdFeld1TjZKdVFsZ0xx?=
- =?utf-8?B?WU5Zb05hTVcyM2VrMGUvVFBEci9EOTBWb2JtR2M0b3UvQUtPcEFYbUFjb1Yz?=
- =?utf-8?B?NGh0Ylgyc2sraEs5c0ZRTEc2REZjSUg3Zk0yUWdhenFqZDZDNmcrOHV0Q3FZ?=
- =?utf-8?B?WWhJandZMmV3VUtLS3p4c0lobFVEY0x3S3BMdkxBekY4NmZHVElDdGJXZWli?=
- =?utf-8?B?aXFPMlZUK1RGSUNsbUxMWmpkV2RqTS84ZU15dmUvWjBvaE9CRG4zZWJHbENr?=
- =?utf-8?B?TlMwN3lwU1BqMXI1MzdkdUhhU3VzczgxZFVJcWZsNlBQRjRNZHl4bGZqMHow?=
- =?utf-8?B?Z1dLM2tJNG5wTWVlY1FtbmhxOXNaYUNIRW5YU01HTE53RFNxNmtjZEhqRUtF?=
- =?utf-8?B?dHdkWFB4QlFlckNmOVkzS3h5ZzdqNGFQdllkbmFKM0UvRHZGZTdpcUxmbG13?=
- =?utf-8?B?d3ppdFIzdWFXNW9xSXo1eHBzL21EOFk2Y1ZuQ3pwSitpdlNKQmsxVzY0dTdv?=
- =?utf-8?B?N1JJaUI0L0JlWlpnTll4RkVCakw3RnZlNFlyOFljUTBHN1RyL1Y0TWRBZDM2?=
- =?utf-8?B?MCtiSlpicm0wQ1M3SlM3U0lYb0ZYbVVtTDYvcG9rcGROQ2lhd0s3TFpZM1RR?=
- =?utf-8?B?cmNRaEZaUlR0bVhwV2JjSVY1UGZON2N6RnFZcXErQW9QWjVMZFo3SHFlTnhU?=
- =?utf-8?B?WkNQTnBtL0RWaVRKaTZYOEpPelNPK3FTRUoxSkk1NHlUaUo1bDlUL3IxMmg0?=
- =?utf-8?B?aE9UQ1RWd1djVjBqMXVVTVc0WGJDcVVDd3V4YzNmVi82K3VPTGE0dEZmZ1Uv?=
- =?utf-8?B?d0VRNEd5cHU5cHdvM2FkdW9MeDZtVFdVV1lMOTdBUThjbjU5bkc1ckhTM2o1?=
- =?utf-8?B?V1RYUTJWN2VpK0xRb1hvZForRk9BT1hibk13UzRxTHhEL1FvcGM4Vmp3TG1U?=
- =?utf-8?B?ODBkMXhLcnZCdEZBaTFvMmwycEd2WkNXQi9vRk5iK2ZHWjJ4aFpXV1B6N0Ev?=
- =?utf-8?B?Yzh4Yis4M1gxendBbjczbExoSlpsbkNUMDVuWE1FazRyS2QwZG83RmozNExH?=
- =?utf-8?B?Tkw2TG5nSmpFcEUvK3ErYStVaDJSdlk5R1pmckRGcUgycHc9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:50.222.100.11;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:uww-mrp-01.datadirectnet.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(7416014)(376014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	kbuPVMupXnwquX/FJ+4xh9ZQxAbE2M3/3HQ97uEV+dRiY69AmRRGdBZB456TxxfihpJMjKDhMeAe54dg/S+Qrzjl7T3/yiVSriOojfDOHuduyCqtAIrO/7VKYW3q2wmWOpNuBu++oSVYLv3fWz83y4qd7dztay0wJsPxhCpAiRxIUX95rTsKQEZUSSU50s+/dRJBLd+J1ApPPwHd4S4SBnLrXKZ5m2DXG+1XcWIrs9f+zGWBvFraXoXjmSnrniMhyWREGRF8YLgaCh+CeMXjDty/43HPGCwF2d9uJxRLms2Rb0vqxppx8w/LR5gutnUNQ366fU1S8nybhtasYUXinbpvP/UxTAZxOlG+8Uw5shC/h8HZjEwB2xwocYvjlmD1IkaeIq4yKl+C08CWkSMNz1CT7B2st1kTe8mc0Xn54DoC7rYap8i5a3RwMRq+mXa3UTtaxvqNdjnc7/Lp89KVDIh8GrNu8treg4HAEVNDDm7aPTamY2rQrATCtFA8X5Mf2aV7/CWzi6oN4CjcjgyPF6uRYLrLayRHLvOVTUJQvT3oMX+9PdKU0yOGmMBHNMk1qUk+krP1OxPAXbSAR9eTCjTzskB86BT+3VdYoPH98sxcPEmguO0kZITBnwBQwfXeUA9ABP1Mu7UCS96bxUCs9w==
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2024 17:04:23.9055
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ace8564e-5a6f-438e-edea-08dcff4e3aea
-X-MS-Exchange-CrossTenant-Id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=753b6e26-6fd3-43e6-8248-3f1735d59bb4;Ip=[50.222.100.11];Helo=[uww-mrp-01.datadirectnet.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB73.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR19MB8022
-X-OriginatorOrg: ddn.com
-X-BESS-ID: 1731001183-105659-32192-2032-1
-X-BESS-VER: 2019.1_20241029.2310
-X-BESS-Apparent-Source-IP: 104.47.59.172
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVkYGFkZAVgZQ0DIlzdAyxcQwNd
-	Uw2TTN3MzI1NwiySjRxNggzTDF1DRJqTYWAEXSBnxBAAAA
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.260269 [from 
-	cloudscan14-251.us-east-2a.ess.aws.cudaops.com]
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------
-	0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS124931 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status:1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107110149.890530-12-ming.lei@redhat.com>
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+Hi Ming,
 
-When the taks that submitted a request is dying, a task work for that
-request might get run by a kernel thread or even worse by a half
-dismantled task. We can't just cancel the task work without running the
-callback as the cmd might need to do some clean up, so pass a flag
-instead. If set, it's not safe to access any task resources and the
-callback is expected to cancel the cmd ASAP.
+kernel test robot noticed the following build errors:
 
-Changed to
-if (req->task != current)
-based on discussion with Jens, needs to be double verified if really
-needed.
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on next-20241107]
+[cannot apply to linus/master v6.12-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Bernd Schubert <bschubert@ddn.com>
----
- include/linux/io_uring_types.h | 1 +
- io_uring/uring_cmd.c           | 6 +++++-
- 2 files changed, 6 insertions(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Ming-Lei/io_uring-rsrc-pass-struct-io_ring_ctx-reference-to-rsrc-helpers/20241107-190456
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+patch link:    https://lore.kernel.org/r/20241107110149.890530-12-ming.lei%40redhat.com
+patch subject: [PATCH V10 11/12] io_uring/uring_cmd: support leasing device kernel buffer to io_uring
+config: arc-randconfig-001-20241108 (https://download.01.org/0day-ci/archive/20241108/202411080218.NHuzJ77W-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411080218.NHuzJ77W-lkp@intel.com/reproduce)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 7abdc09271245ff7de3fb9a905ca78b7561e37eb..869a81c63e4970576155043fce7fe656293d7f58 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -37,6 +37,7 @@ enum io_uring_cmd_flags {
- 	/* set when uring wants to cancel a previously issued command */
- 	IO_URING_F_CANCEL		= (1 << 11),
- 	IO_URING_F_COMPAT		= (1 << 12),
-+	IO_URING_F_TASK_DEAD		= (1 << 13),
- };
- 
- struct io_wq_work_node {
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 21ac5fb2d5f087e1174d5c94815d580972db6e3f..405a39fdd91c9abf741c2b3b6bde2f4d850312ae 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -119,9 +119,13 @@ EXPORT_SYMBOL_GPL(io_uring_cmd_mark_cancelable);
- static void io_uring_cmd_work(struct io_kiocb *req, struct io_tw_state *ts)
- {
- 	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
-+	unsigned int flags = IO_URING_F_COMPLETE_DEFER;
-+
-+	if (req->task->flags & PF_EXITING)
-+		flags |= IO_URING_F_TASK_DEAD;
- 
- 	/* task_work executor checks the deffered list completion */
--	ioucmd->task_work_cb(ioucmd, IO_URING_F_COMPLETE_DEFER);
-+	ioucmd->task_work_cb(ioucmd, flags);
- }
- 
- void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411080218.NHuzJ77W-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from block/fops.c:20:
+>> include/linux/io_uring/cmd.h:89:1: error: expected identifier or '(' before '{' token
+      89 | {
+         | ^
+>> include/linux/io_uring/cmd.h:87:19: warning: 'io_uring_cmd_lease_kbuf' declared 'static' but never defined [-Wunused-function]
+      87 | static inline int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +89 include/linux/io_uring/cmd.h
+
+    62	
+    63	int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
+    64				    struct io_rsrc_node *node);
+    65	#else
+    66	static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+    67				      struct iov_iter *iter, void *ioucmd)
+    68	{
+    69		return -EOPNOTSUPP;
+    70	}
+    71	static inline void io_uring_cmd_done(struct io_uring_cmd *cmd, ssize_t ret,
+    72			ssize_t ret2, unsigned issue_flags)
+    73	{
+    74	}
+    75	static inline void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+    76				    void (*task_work_cb)(struct io_uring_cmd *, unsigned),
+    77				    unsigned flags)
+    78	{
+    79	}
+    80	static inline void io_uring_cmd_mark_cancelable(struct io_uring_cmd *cmd,
+    81			unsigned int issue_flags)
+    82	{
+    83	}
+    84	static inline void io_uring_cmd_issue_blocking(struct io_uring_cmd *ioucmd)
+    85	{
+    86	}
+  > 87	static inline int io_uring_cmd_lease_kbuf(struct io_uring_cmd *ioucmd,
+    88						  struct io_rsrc_node *node);
+  > 89	{
+    90		return -EOPNOTSUPP;
+    91	}
+    92	#endif
+    93	
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
