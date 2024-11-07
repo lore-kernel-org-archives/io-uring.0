@@ -1,277 +1,255 @@
-Received: from outbound-ip191a.ess.barracuda.com (outbound-ip191a.ess.barracuda.com [209.222.82.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C128B2170C0;
-	Thu,  7 Nov 2024 17:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.222.82.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730999102; cv=fail; b=dw2IpPltYa3YXd6UP0J1e7oMAqFSIPlO3pSHg/FRUGO5YjjhlQ0AnX4aZBvI8IjYjqidSIeBa/NL9Yk4a0vNn6Zit7cMfeQ8zfFILv04pAfy0k+1txuy9Cj+hJAm+4dGz882roaobo5zi/7euc1DH+dt0LkFym/j+qhgcOeNxms=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730999102; c=relaxed/simple;
-	bh=jPWR3XcsZ1Cmw5po+zK7lJlD+oF6fDj04DmSWzK5sFY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j2z8oTGLwCLGumAs7aDEXLNAQyDZsJtrhmDbv//46kFnRy3OdAwLqKLXVejJ8nlgCGoIC7uIiSxPYvbcZmJwKah6u6Tlh95SlpD3/dRGdIdFx+26NuRBQ44irZu7JFS9LB4YNXVlvBvNvh934SUPsL5jG8/PK+aX3Y4f0V0Bw60=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com; spf=pass smtp.mailfrom=ddn.com; dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b=Jf9kihgk; arc=fail smtp.client-ip=209.222.82.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ddn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653E4DDBE;
+	Thu,  7 Nov 2024 17:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731000216; cv=none; b=PM2GmhySn9ObzmZ9/VaebOexBTZ6Njvg9mg4tx/8wiitjH/Gy1c8XEhqlMMRqsQm8/LotKFbCNWK7LpNR1n/XuZDOBYoqt2ZOSCX8SeGzl12j+yZ4H+voh2vhShi3wOk3ljCuGUcWS5L/3NA/eNz4G1bH8f5vhEf/fxrvoAmJpA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731000216; c=relaxed/simple;
+	bh=GiEBH3vCaFny3F9wCmysPBdsf2lj75atnrwXemAxTp4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EqzW7wq2YUhoAhpdMQqUHrphAS3pibqIiJZt34UFLxxOZx7qRdmlFHL8ArL1AsBKZSZIFWHUhMum1nCSSbuZYwkzHBFZTGo5izGkRwvAmOo/ScgUrUu5aSpVi5Ksqxx/O07/csRG+UT5t1ZxgPb+4YkVKgYWmd5HwQht70LcCKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zykuer6S; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b="Jf9kihgk"
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2047.outbound.protection.outlook.com [104.47.74.47]) by mx-outbound46-164.us-east-2c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 07 Nov 2024 17:04:26 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gxg/nqDXK/ihNfyli83DjU5GXxe7o/vlurhcRx8Uu8yXVsb0VXUxsywJr42sOHqG4MfZlaf0d8t0VZuIdjQH79bEErViQoGScPy48VTguSR7zjvWXgIjhOhwkXJjqlKfay4+tkD1Tj4UAHfGEQ4Xygt80h4wfDBBDzLlYq7EpEa8H973KLwYXBu9k3hci9NFOtzw5FonpAmFhn6VL2JQ8D+hl3PEbfdiS4gvAcPh1TljOL7cFvZ9cFICxq3ktLZ0Y9G9iCNx0jYuFFBsEuVax9gdVgO9a56GM/miDBLV6rJVuHlqYxKCEQVGwtDNII+wjxSbfJJAIssMqQ/7MEey6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TI1apY/HHnxAvwZA3PFvZapzOk6WLqDpAOZN9ms8KgY=;
- b=g52LIJfDthAQY3ocTp826ZmP0ylnHtLO6KX/EOHg59z5+ROM5gS7oHQPiPMyKcoDYeXHrm+hi6aS/NQ9HTG+UnhDNRiXvyhcJZ3Y5RVxnQgrhs2zNXrXXvAbXRpRAqINkEVVNEoCNDUiHa3rH8weuYtM/4cmrtKAfAC6NOsBp58xwFGYjhGtroYUW3FPU5HGVH/x66SqaG0o6+UEl8Liq87jX4gCcGiVFKaK54iYKBeulfRmeo9+ImVPQkiZjy86QVTH5DvRmmrLwt9ZiZiGitYb2Yk0C86td3hQwVxaecZoyUxHyu61+ShSy0gVfDvIqcI4waO9Dt6861qA2POOew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 50.222.100.11) smtp.rcpttodomain=bsbernd.com smtp.mailfrom=ddn.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=ddn.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TI1apY/HHnxAvwZA3PFvZapzOk6WLqDpAOZN9ms8KgY=;
- b=Jf9kihgklLYf/BkfNmWir1WLueCJTSn4h+3AFlZA4jmWade7l8BZYNXU5xnsgtxApX6ymlm819goqRwT6171iAgExBmSIK45Iq22G4rD5r94Nf8g10c0vY8jepk24mBusr0ZVI0u/Uwg1UuGqVO4zltHH5y70C7ayHBHzIPaZGU=
-Received: from MN2PR10CA0006.namprd10.prod.outlook.com (2603:10b6:208:120::19)
- by PH0PR19MB5599.namprd19.prod.outlook.com (2603:10b6:510:143::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.19; Thu, 7 Nov
- 2024 17:04:18 +0000
-Received: from BN1PEPF00006002.namprd05.prod.outlook.com
- (2603:10b6:208:120:cafe::6d) by MN2PR10CA0006.outlook.office365.com
- (2603:10b6:208:120::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.30 via Frontend
- Transport; Thu, 7 Nov 2024 17:04:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 50.222.100.11)
- smtp.mailfrom=ddn.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=ddn.com;
-Received-SPF: Pass (protection.outlook.com: domain of ddn.com designates
- 50.222.100.11 as permitted sender) receiver=protection.outlook.com;
- client-ip=50.222.100.11; helo=uww-mrp-01.datadirectnet.com; pr=C
-Received: from uww-mrp-01.datadirectnet.com (50.222.100.11) by
- BN1PEPF00006002.mail.protection.outlook.com (10.167.243.234) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8137.17
- via Frontend Transport; Thu, 7 Nov 2024 17:04:18 +0000
-Received: from localhost (unknown [10.68.0.8])
-	by uww-mrp-01.datadirectnet.com (Postfix) with ESMTP id 238AAC6;
-	Thu,  7 Nov 2024 17:04:17 +0000 (UTC)
-From: Bernd Schubert <bschubert@ddn.com>
-Date: Thu, 07 Nov 2024 18:03:51 +0100
-Subject: [PATCH RFC v5 07/16] fuse: Make fuse_copy non static
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zykuer6S"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a9a16b310f5so195511366b.0;
+        Thu, 07 Nov 2024 09:23:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731000212; x=1731605012; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9FOmBpO65NUUZbynSIJljWcZSxtJSzr/BEmXGDAexTM=;
+        b=Zykuer6S6yeP15AYrU1FHU5KLcR1LBtunF5SopQRn4gZvKgwoSTO+hCiYQ7qzL+SeE
+         YMS/c3Hq5Zu6GOhdbKHnBlXg3wdj/UIWX4u7ngBrXICa9/ZSx11iYqFt7wfrv8cEz5il
+         dyYY1V2N/hcJEWbXjjyN7InwL8C7otYyiYETWaKbdpjRGgkLu3lauQE6pJbx0TXXJgJU
+         1QiQyO7QxySfqvCc8RbVDlitO4om2MESy5Qsz1AFAQ9rEck+quzH67pXGY3U56quUUNA
+         KaoTXFWPkEvCkICzgtxdZiw6BzqOSt8Au65f5anpTJbQFxmKe2l3r3ltxxdctTYFVmZh
+         OIfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731000212; x=1731605012;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9FOmBpO65NUUZbynSIJljWcZSxtJSzr/BEmXGDAexTM=;
+        b=swsP+TUpTVxmeVr13oxfrvqwRLc8e1uIcBiyuAr4zm6CgKMgOgkk/wOWGNDwCtHUM+
+         D04Z9RbZHdVFiJ8RmTfoerZu6DKeMO7EiOchgmWd14fMPZ2scCgGS7QlOieZdaOg0E+2
+         fv+BLAw8s6UfR3EgcK6CYNIQpAb+W3hEFdLd6RI635BhV921djNIL1o5lubLS2c8+JZr
+         bvruR7AwEqMd6tgXf+IUf+KGtYmIR6G7zKD5GuZY7C7WThSbAGzRQsZOJtR8kB+vO4RU
+         D3d2WJciJ+Dh9rz+YuYNeSK2BBj3HkDYq7PAAuXkTKDWufPFr7sHWi3hjS1Q6PQYsg92
+         ovxg==
+X-Forwarded-Encrypted: i=1; AJvYcCV9YW/e+sgRVDYWTacfs6HJaJFAr+z6Z5NG+9SffD27+i7Kj4W2lsfJ+GQKrcREliRkjL+YUZoGPw==@vger.kernel.org, AJvYcCVt63zz0U1aUvPXkH5ClJ62LV5E6ZTJHt5+BAvqfzncp4yXxB7y40nZ4lnSAE0Y8XVFn5r17lTJv02Z7/8=@vger.kernel.org, AJvYcCWDRoqlgMxFrFPFeAaJ/275ygzvuF8ohCIgQVLSpIQ7yQXHwJP01AGOXBywPUFj6++rm5jKwSdOGJLKiQ==@vger.kernel.org, AJvYcCXQKsxlzOqpn9tSrRQhsBTEzsuvBr4EEey/zX0FXf0J+8avmyCyYa0tWgr4LKN2SBGMdivfy1iSjeSUMyku9w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhMBow1XKz8E08JiuvwlQ+EFg0z8td6RgexZvxMXqMQEjDXTD4
+	NakwF7b7G8VOE4tL/5xk9IzcyHz7NT6WIoOcwvKu/vYonVZj3Am+
+X-Google-Smtp-Source: AGHT+IGjmKySyNTN/8QcAW8bxivaq94CNWApyrUQEWFwxsq+VaX7hSp+J5pWWeh6pYc6mWGzASLRLw==
+X-Received: by 2002:a17:907:6ea4:b0:a9a:dc3:c86e with SMTP id a640c23a62f3a-a9eeb36c852mr77812166b.11.1731000211235;
+        Thu, 07 Nov 2024 09:23:31 -0800 (PST)
+Received: from [192.168.42.11] (82-132-217-53.dab.02.net. [82.132.217.53])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0def54asm122435866b.157.2024.11.07.09.23.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Nov 2024 09:23:30 -0800 (PST)
+Message-ID: <b11cc81d-08b7-437d-85b4-083b84389ff1@gmail.com>
+Date: Thu, 7 Nov 2024 17:23:29 +0000
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241107-fuse-uring-for-6-10-rfc4-v5-7-e8660a991499@ddn.com>
-References: <20241107-fuse-uring-for-6-10-rfc4-v5-0-e8660a991499@ddn.com>
-In-Reply-To: <20241107-fuse-uring-for-6-10-rfc4-v5-0-e8660a991499@ddn.com>
-To: Miklos Szeredi <miklos@szeredi.hu>
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
- linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
- Joanne Koong <joannelkoong@gmail.com>, Josef Bacik <josef@toxicpanda.com>, 
- Amir Goldstein <amir73il@gmail.com>, Ming Lei <tom.leiming@gmail.com>, 
- David Wei <dw@davidwei.uk>, bernd@bsbernd.com, 
- Bernd Schubert <bschubert@ddn.com>
-X-Mailer: b4 0.15-dev-2a633
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730999049; l=3663;
- i=bschubert@ddn.com; s=20240529; h=from:subject:message-id;
- bh=jPWR3XcsZ1Cmw5po+zK7lJlD+oF6fDj04DmSWzK5sFY=;
- b=TAY1KPQOgHbn28sUU8Pt9gtC/U+IHoaD5fYYYMKYr9xdhxKubagE6SnE09tV5V0C0asIO4rxu
- CUfBAtVjHrzCn0RhCEpExUKUHlLDl0qWkOPLQe3kVjC5Yyj1z1kRYoX
-X-Developer-Key: i=bschubert@ddn.com; a=ed25519;
- pk=EZVU4bq64+flgoWFCVQoj0URAs3Urjno+1fIq9ZJx8Y=
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00006002:EE_|PH0PR19MB5599:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9a5609c9-0813-4087-98ae-08dcff4e377e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TnB2c1NCTjRka2dWcU1icE1XQ20wUytjL3ZFZnpzUitXVGo0V0VTcVRkOTRP?=
- =?utf-8?B?UzdjWEhBZ3ZSbGpBN2dIVk9hWXFjR1F5cUg2K1BzZGJUZEtBYjg5bGlveG50?=
- =?utf-8?B?VWtqeVJCMHp5NTJja3NjMVhpZEZ5VVVubGRHQXR0Q2V0bU12R1MweWNsSVc4?=
- =?utf-8?B?NGEyWE5oVHJnbWdwMDFhdEtLZnArRDFQaTg1Z1N3eG9sTmdjTWsyTXZPWlU0?=
- =?utf-8?B?RkdBeENQc3JSRjBWMG9vbVRrVVd0aTc1YXdvK1JpT0JMT0JmTkxUWmIva2pY?=
- =?utf-8?B?WlcyN2lCTmFuNE5PcURTcVNyYUlSaUxoVTV2YWpNMWpia0tUNUNOOVlVVUtY?=
- =?utf-8?B?OVlzUjNXK1g5Tjc2c3hYTnFKS05jOWtrTmdPZ0lWd0lQays0RWFuRUVZU3pM?=
- =?utf-8?B?eG5xcXIweW8zNUh6N0grdXVjSWVzVVRveDVUdEVqVlRGUklGTnVVbDl5UXdJ?=
- =?utf-8?B?V0I3bGNDRzJzeGFpd0htVXFSM3FEY1AyWWJVRUJ4MFI4b0t2MDR1V1cyN1ZX?=
- =?utf-8?B?Y2o5L0pZWXBvRFcwVXY0UVU3dWxVOUtZMDZNZERSZUMrMXRkOTVLWk5JZFpP?=
- =?utf-8?B?bzVyUENSVDJodDZJd3p0Wmp5RGZMWjJZZTFId0gzYlk1MUhwSW1sWmpDWnk3?=
- =?utf-8?B?MStHZWV5SHFMZW1mUk80VzJOOE9WQlIxUWJIN1ZvZlFCaEhucmV3OFZBcGs0?=
- =?utf-8?B?NlNJTXo1cHFBV1RuS1ZtMEwrTFg5QkxQMWNaOVNmQ3B4ZFNMNEY4aUw5N0RW?=
- =?utf-8?B?K3luZlNMR1k5NW5kM0UxcDF5R1FaYzhRUGNpRVhWRnZCbExvVUxRbEdxMFJj?=
- =?utf-8?B?OERuZmlnS04xWnkxd0tYaVhMakIyZzJvZDRlK1Y4Y2dLYm5HeXM2YlVwQ0x5?=
- =?utf-8?B?emE5ellYaE1EUmt1dGw5WUhnTEttdDYrVGdXcHBwL2NxNHJ0MDVCS1ZXNlpM?=
- =?utf-8?B?cjNQZzIrVCtGcElnUFZqTURpSWNrRml5UjJTUjFKMXJFb3ZjQkFoWWFoQUNZ?=
- =?utf-8?B?RVJTVjlJaS9ibHZ0K1dPSW1Dbk9EVDZVcVRNWXkyUlRkVmhvRC9lRWNJM3ZR?=
- =?utf-8?B?L3RTamVmc013OHg1cTd1MjZyRUFtRGF3eEo1TkZqV2pmdEoyOFFMa3FaVno1?=
- =?utf-8?B?M04rd2piQlNtdUZva0tBRWZ0VGNTWFFqY0Y1ZTMwSFZ4dWR0NEpRM0tlc09G?=
- =?utf-8?B?NDFmWldrNUErNnlvdXlMWEtKeWpNaE5HdGFld3R2MkF0OHNBRm8xYURkdEo1?=
- =?utf-8?B?VUpjVnJiWGJjSXRVREFRNENFUTAxaCs2K0tXRUQ2UG5mODZpUnB5SkdhZHFs?=
- =?utf-8?B?UTV4VnBZanQ0K2hVNnlVZWx6Q0xyNWZDdVQybkJVQmdweTVJUE1rbTZhUFBC?=
- =?utf-8?B?c2tFWXFCVHU2ZEdvWDVNcGpPcFMwQ0ZyTTB1enFocmhtVXZzNUdWZU5BT3hJ?=
- =?utf-8?B?MmhWN3Q0ZTdpVW80M0V1Zkh4U0dnMUY3UDg3U0U0WVVIcFZUMDJES0M3Q3ZX?=
- =?utf-8?B?aGpRVnVWL29SS2c5NklkOE5vZHpQZ0E0bXhjNithbTQwL1podkg2UytXZHVQ?=
- =?utf-8?B?STRBT0U1RHMzYk5MK3Z5OHJOaS8waHRrZjJtdytLazJYczc5SUh3SVZQV3k1?=
- =?utf-8?B?MU5BenZ4ZGV6bUdmM2ZkUmFPRklSTk9uOC92ZjE3M2g1cTV4ZWJBS2JUQ1Y2?=
- =?utf-8?B?bnFpMXM3YTFMMzQyQkNHNzRvdzlZdjFXcXg2UUZYaU5qd0NmNjJOTnRFL1Qy?=
- =?utf-8?B?Y1ZLaWpiNkF4THl0UkpaTnAvd1dSRmJVc3ZhM3prOW45NkYyVWljZWRjakZE?=
- =?utf-8?B?cjF2Q09zOVlvWTEzdmtaQzY2QmJzMlBDVk80WU9vWm5ITThJbDhNdGUyZHF5?=
- =?utf-8?B?bUd5VUNmRU0vMWZLV2xETkg0U0RmOVVpRHc0bk4vZWEwYlE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:50.222.100.11;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:uww-mrp-01.datadirectnet.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	W/l6+3p0xfcHxOepG9jCSZtcKLgZjCCCtI5yGf504DaxcbAom3oNtnAurnT8hSIDShHbQ46XZBMuvIYc94vSRPOK8Yh/qp5xYz1lr1+a4cmalENMov23hGGDA4tkpK/Cb+v+8MI+kZrkSLMo2p55fWxqp+e2qLZURX99vdQt2YrR7LTu138Xr/c8soU1uLcNZCyVAlfo3ggxPx3uQjciZewUeC/f43+JhxhWdI95KbhC+GD1vikk1Oe9pQlvz/2k9q9GV/aic+Hk/wMyyNS8RiGzM1OIDqhXrCzCG0sKdxNdNaeuRWlJS4fk7lyz2ktN122SGMzx74V70qTeR8QcwHuqfjJmOPBV3es5b3zAMgSzXxpslslb+X+erxmy89Xh2cIQBkv6+DJRaL7nBf+a7nG5qSVBTs+pN0oG0ljB3C/gxA7W7I16n7SGE2mDjT93ZKEJZXAQO2Fot8ez/qo6Hvb3Djc6ggaBVJqjkDm7TqMJ9C19rhnk84c4ebOcG7DRVTT0r0j+B/HvsZQQOASM6W5LLGv9gnMa4Ac2EEYdnlA5mcIVQmu63Ivf7aaG12R0LU6uFDXLUa+LyeaDIFEg5H3fqx8pWDWny2eukMrWBBC+Ywa29XcQ8kK4RkenVqeHGzCsqGsBUlRYQ7y5k4gveg==
-X-OriginatorOrg: ddn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2024 17:04:18.1937
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9a5609c9-0813-4087-98ae-08dcff4e377e
-X-MS-Exchange-CrossTenant-Id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=753b6e26-6fd3-43e6-8248-3f1735d59bb4;Ip=[50.222.100.11];Helo=[uww-mrp-01.datadirectnet.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00006002.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR19MB5599
-X-BESS-ID: 1730999066-111940-12772-9953-1
-X-BESS-VER: 2019.1_20241029.2310
-X-BESS-Apparent-Source-IP: 104.47.74.47
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVsamJmZAVgZQMM0gOSnVMinNLM
-	UsyTQ10TDNzDjNxMzYzMjYMjXVxMJQqTYWALAhJhBBAAAA
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.260269 [from 
-	cloudscan10-145.us-east-2a.ess.aws.cudaops.com]
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------
-	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS124931 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status:1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 06/10] io_uring/rw: add support to send metadata along
+ with read/write
+To: Kanchan Joshi <joshi.k@samsung.com>, Keith Busch <kbusch@kernel.org>
+Cc: axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
+ brauner@kernel.org, viro@zeniv.linux.org.uk, jack@suse.cz,
+ linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-scsi@vger.kernel.org, gost.dev@samsung.com, vishak.g@samsung.com,
+ anuj1072538@gmail.com, Anuj Gupta <anuj20.g@samsung.com>
+References: <20241030180112.4635-1-joshi.k@samsung.com>
+ <CGME20241030181013epcas5p2762403c83e29c81ec34b2a7755154245@epcas5p2.samsung.com>
+ <20241030180112.4635-7-joshi.k@samsung.com>
+ <ZyKghoCwbOjAxXMz@kbusch-mbp.dhcp.thefacebook.com>
+ <914cd186-8d15-4989-ad4e-f7e268cd3266@gmail.com>
+ <ceb58d97-b2e3-4d36-898d-753ba69476be@samsung.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ceb58d97-b2e3-4d36-898d-753ba69476be@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Move 'struct fuse_copy_state' and fuse_copy_* functions
-to fuse_dev_i.h to make it available for fuse-uring.
-'copy_out_args()' is renamed to 'fuse_copy_out_args'.
+On 11/1/24 17:54, Kanchan Joshi wrote:
+> On 10/31/2024 8:09 PM, Pavel Begunkov wrote:
+>> On 10/30/24 21:09, Keith Busch wrote:
+>>> On Wed, Oct 30, 2024 at 11:31:08PM +0530, Kanchan Joshi wrote:
+>>>> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/
+>>>> io_uring.h
+>>>> index 024745283783..48dcca125db3 100644
+>>>> --- a/include/uapi/linux/io_uring.h
+>>>> +++ b/include/uapi/linux/io_uring.h
+>>>> @@ -105,6 +105,22 @@ struct io_uring_sqe {
+>>>>             */
+>>>>            __u8    cmd[0];
+>>>>        };
+>>>> +    /*
+>>>> +     * If the ring is initialized with IORING_SETUP_SQE128, then
+>>>> +     * this field is starting offset for 64 bytes of data. For meta io
+>>>> +     * this contains 'struct io_uring_meta_pi'
+>>>> +     */
+>>>> +    __u8    big_sqe[0];
+>>>> +};
+>>
+>> I don't think zero sized arrays are good as a uapi regardless of
+>> cmd[0] above, let's just do
+>>
+>> sqe = get_sqe();
+>> big_sqe = (void *)(sqe + 1)
+>>
+>> with an appropriate helper.
+> 
+> In one of the internal version I did just that (i.e., sqe + 1), and
+> that's fine for kernel.
+> But afterwards added big_sqe so that userspace can directly access
+> access second-half of SQE_128. We have the similar big_cqe[] within
+> io_uring_cqe too.
+> 
+> Is this still an eyesore?
 
-Signed-off-by: Bernd Schubert <bschubert@ddn.com>
----
- fs/fuse/dev.c        | 30 ++++++++----------------------
- fs/fuse/fuse_dev_i.h | 25 +++++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 22 deletions(-)
+Yes, let's kill it as well please, and I don't think the feature
+really cares about it, so should be easy to do if not already in
+later revisions.
 
-diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-index d4e7d69f79cec192cb456aedfb7d4a2a274fea80..f210f91a937b24e75a467e943cdec4581900e061 100644
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -630,22 +630,8 @@ static int unlock_request(struct fuse_req *req)
- 	return err;
- }
- 
--struct fuse_copy_state {
--	int write;
--	struct fuse_req *req;
--	struct iov_iter *iter;
--	struct pipe_buffer *pipebufs;
--	struct pipe_buffer *currbuf;
--	struct pipe_inode_info *pipe;
--	unsigned long nr_segs;
--	struct page *pg;
--	unsigned len;
--	unsigned offset;
--	unsigned move_pages:1;
--};
--
--static void fuse_copy_init(struct fuse_copy_state *cs, int write,
--			   struct iov_iter *iter)
-+void fuse_copy_init(struct fuse_copy_state *cs, int write,
-+		    struct iov_iter *iter)
- {
- 	memset(cs, 0, sizeof(*cs));
- 	cs->write = write;
-@@ -999,9 +985,9 @@ static int fuse_copy_one(struct fuse_copy_state *cs, void *val, unsigned size)
- }
- 
- /* Copy request arguments to/from userspace buffer */
--static int fuse_copy_args(struct fuse_copy_state *cs, unsigned numargs,
--			  unsigned argpages, struct fuse_arg *args,
--			  int zeroing)
-+int fuse_copy_args(struct fuse_copy_state *cs, unsigned numargs,
-+		   unsigned argpages, struct fuse_arg *args,
-+		   int zeroing)
- {
- 	int err = 0;
- 	unsigned i;
-@@ -1883,8 +1869,8 @@ static struct fuse_req *request_find(struct fuse_pqueue *fpq, u64 unique)
- 	return NULL;
- }
- 
--static int copy_out_args(struct fuse_copy_state *cs, struct fuse_args *args,
--			 unsigned nbytes)
-+int fuse_copy_out_args(struct fuse_copy_state *cs, struct fuse_args *args,
-+		       unsigned nbytes)
- {
- 	unsigned reqsize = sizeof(struct fuse_out_header);
- 
-@@ -1986,7 +1972,7 @@ static ssize_t fuse_dev_do_write(struct fuse_dev *fud,
- 	if (oh.error)
- 		err = nbytes != sizeof(oh) ? -EINVAL : 0;
- 	else
--		err = copy_out_args(cs, req->args, nbytes);
-+		err = fuse_copy_out_args(cs, req->args, nbytes);
- 	fuse_copy_finish(cs);
- 
- 	spin_lock(&fpq->lock);
-diff --git a/fs/fuse/fuse_dev_i.h b/fs/fuse/fuse_dev_i.h
-index e82cbf9c569af4f271ba0456cb49e0a5116bf36b..f36e304cd62c8302aed95de89926fc894f602cfd 100644
---- a/fs/fuse/fuse_dev_i.h
-+++ b/fs/fuse/fuse_dev_i.h
-@@ -13,6 +13,23 @@
- #define FUSE_INT_REQ_BIT (1ULL << 0)
- #define FUSE_REQ_ID_STEP (1ULL << 1)
- 
-+struct fuse_arg;
-+struct fuse_args;
-+
-+struct fuse_copy_state {
-+	int write;
-+	struct fuse_req *req;
-+	struct iov_iter *iter;
-+	struct pipe_buffer *pipebufs;
-+	struct pipe_buffer *currbuf;
-+	struct pipe_inode_info *pipe;
-+	unsigned long nr_segs;
-+	struct page *pg;
-+	unsigned int len;
-+	unsigned int offset;
-+	unsigned int move_pages:1;
-+};
-+
- static inline struct fuse_dev *fuse_get_dev(struct file *file)
- {
- 	/*
-@@ -24,6 +41,14 @@ static inline struct fuse_dev *fuse_get_dev(struct file *file)
- 
- void fuse_dev_end_requests(struct list_head *head);
- 
-+void fuse_copy_init(struct fuse_copy_state *cs, int write,
-+			   struct iov_iter *iter);
-+int fuse_copy_args(struct fuse_copy_state *cs, unsigned int numargs,
-+		   unsigned int argpages, struct fuse_arg *args,
-+		   int zeroing);
-+int fuse_copy_out_args(struct fuse_copy_state *cs, struct fuse_args *args,
-+		       unsigned int nbytes);
-+
- #endif
- 
- 
+>>>> +
+>>>> +/* this is placed in SQE128 */
+>>>> +struct io_uring_meta_pi {
+>>>> +    __u16        pi_flags;
+>>>> +    __u16        app_tag;
+>>>> +    __u32        len;
+>>>> +    __u64        addr;
+>>>> +    __u64        seed;
+>>>> +    __u64        rsvd[2];
+>>>>    };
+>>>
+>>> On the previous version, I was more questioning if it aligns with what
+>>
+>> I missed that discussion, let me know if I need to look it up
+> 
+> Yes, please take a look at previous iteration (v5):
+> https://lore.kernel.org/io-uring/e7aae741-c139-48d1-bb22-dbcd69aa2f73@samsung.com/
+
+"But in general, this is about seeing metadata as a generic term to
+encode extra information into io_uring SQE."
+
+Yep, that's the idea, and it also sounds to me that stream hints
+is one potential user as well. To summarise, the end goal is to be
+able to add more meta types/attributes in the future, which can be
+file specific, e.g. pipes don't care about integrity data, and to
+be able to pass an arbitrary number of such attributes to a single
+request.
+
+We don't need to implement it here, but the uapi needs to be flexible
+enough to be able to accommodate that, or we should have an
+understanding how it can be extended without dirty hacks.
+
+> Also the corresponding code, since my other answers will use that.
+> 
+>>> Pavel was trying to do here. I didn't quite get it, so I was more
+>>> confused than saying it should be this way now.
+>>
+>> The point is, SQEs don't have nearly enough space to accommodate all
+>> such optional features, especially when it's taking so much space and
+>> not applicable to all reads but rather some specific  use cases and
+>> files. Consider that there might be more similar extensions and we might
+>> even want to use them together.
+>>
+>> 1. SQE128 makes it big for all requests, intermixing with requests that
+>> don't need additional space wastes space. SQE128 is fine to use but at
+>> the same time we should be mindful about it and try to avoid enabling it
+>> if feasible.
+> 
+> Right. And initial versions of this series did not use SQE128. But as we
+> moved towards passing more comprehensive PI information, first SQE was
+> not enough. And we thought to make use of SQE128 rather than taking
+> copy_from_user cost.
+
+Do we have any data how expensive it is? I don't think I've ever
+tried to profile it. And where the overhead comes from? speculation
+prevention?
+
+If it's indeed costly, we can add sth to io_uring like pre-mapping
+memory to optimise it, which would be useful in other places as
+well.
+  
+>   > 2. This API hard codes io_uring_meta_pi into the extended part of the
+>> SQE. If we want to add another feature it'd need to go after the meta
+>> struct. SQE256?
+> 
+> Not necessarily. It depends on how much extra space it needs for another
+> feature. To keep free space in first SQE, I chose to place PI in the
+> second one. Anyone requiring 20b (in v6) or 18b (in v5) space, does not
+> even have to ask for SQE128.
+> For more, they can use leftover space in second SQE (about half of
+> second sqe will still be free). In v5, they have entire second SQE if
+> they don't want to use PI.
+> If contiguity is a concern, we can move all PI bytes (about 32b) to the
+> end of second SQE.
+> 
+> 
+>   > And what if the user doesn't need PI but only the second
+>> feature?
+> 
+> Not this version, but v5 exposed meta_type as bit flags.
+
+There has to be a type, I assume it's being added back.
+
+> And with that, user will not pass the PI flag and that enables to use
+> all the PI bytes for something else. We will have union of PI with some
+> other info that is known not to co-exist.
+
+Let's say we have 3 different attributes META_TYPE{1,2,3}.
+
+How are they placed in an SQE?
+
+meta1 = (void *)get_big_sqe(sqe);
+meta2 = meta1 + sizeof(?); // sizeof(struct meta1_struct)
+meta3 = meta2 + sizeof(struct meta2_struct);
+
+Structures are likely not fixed size (?). At least the PI looks large
+enough to force everyone to be just aliased to it.
+
+And can the user pass first meta2 in the sqe and then meta1?
+
+meta2 = (void *)get_big_sqe(sqe);
+meta1 = meta2 + sizeof(?); // sizeof(struct meta2_struct)
+
+If yes, how parsing should look like? Does the kernel need to read each
+chunk's type and look up its size to iterate to the next one?
+
+If no, what happens if we want to pass meta2 and meta3, do they start
+from the big_sqe?
+
+How do we pass how many of such attributes is there for the request?
+
+It should support arbitrary number of attributes in the long run, which
+we can't pass in an SQE, bumping the SQE size is not scalable in
+general, so it'd need to support user pointers or sth similar at some
+point. Placing them in an SQE can serve as an optimisation, and a first
+step, though it might be easier to start with user pointer instead.
+
+Also, when we eventually come to user pointers, we want it to be
+performant as well and e.g. get by just one copy_from_user, and the
+api/struct layouts would need to be able to support it. And once it's
+copied we'll want it to be handled uniformly with the SQE variant, that
+requires a common format. For different formats there will be a question
+of perfomance, maintainability, duplicating kernel and userspace code.
+
+All that doesn't need to be implemented, but we need a clear direction
+for the API. Maybe we can get a simplified user space pseudo code
+showing how the end API is supposed to look like?
 
 -- 
-2.43.0
-
+Pavel Begunkov
