@@ -1,114 +1,329 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound-ip191b.ess.barracuda.com (outbound-ip191b.ess.barracuda.com [209.222.82.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA61190049;
-	Thu,  7 Nov 2024 17:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731000640; cv=none; b=IQZylMA58+CxjN6GB3rCpyw7sl29RJ+PIbzXQoAFxhpVFduBoIKZIIEwbtBlK2QPXYRTptdbXPUStKzcRxq31eLPy9uwxAHPNUf/xqqVn4m+tC4l/dy744Ij0UunNygbmYH6AHkPOyi4z9Bg9K8cdCVmRTlXU/nnMUpctZSkTjk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731000640; c=relaxed/simple;
-	bh=Kic2XLGRurlrGactitQeZzSqbNEAU2q2DiXEUxxAYj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SuN5LQLImGWmJzbq1kdYYUZ3QzxToLUC3p5dLX3wVrOPPrVi5+u3nZ6QShtR3sPb2pMYOsKwXqDZsVnr476rs8Y74SFNctQdgrsAs3kz5+PEpJOcGGeAFvC4hgNQ2+Bh2J7OkZsJE79kbpHmkrG1IKlJpSr0Y6woe2RxMUyBzTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KHLjb9st; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF2B215037
+	for <io-uring@vger.kernel.org>; Thu,  7 Nov 2024 17:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.222.82.124
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731001064; cv=fail; b=nOhUGKk+kqZEyKsWmBQQ7wGZPZzwKmnM0FeP2E2tmAqJXBFozulwjNf9lO8VGUbQazSwXzblECBP3Au74ARLYs8VvoAjtffCKt4HUqcGeCIB4L0kV7EHEGYlZlBxnSUckeSoWPLJhxUrp+W7CWzpH7kTL/PA0RSnl9nrBbSxq5k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731001064; c=relaxed/simple;
+	bh=qPjPlv+ALLWi2d1RcybZcXQ4moZV8H3KjAxZ8jqYrfY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=p09yEnauGEeRIi0n8hDzZRfWbpWTK7MCytSzyCrjPtNVkNrVDjS5pxrxtXYsXPX4ZpAlOc5cBLWroiXBAkD/q3cfIEPBqrdaI3OVdm6Zb823nxq0u6E6B8x2XBYmNn4Ms3Pbk3hwB+4BBNE21Zc91ps/ekJEhvwjmzyFm2/FzzA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com; spf=pass smtp.mailfrom=ddn.com; dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b=P+nmEc0z; arc=fail smtp.client-ip=209.222.82.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ddn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KHLjb9st"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5cacb76e924so1841140a12.0;
-        Thu, 07 Nov 2024 09:30:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731000637; x=1731605437; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lCnx04qdk6zMZ0LIRHX3e1wxnrAQ1/h0DrPbQAd66Xs=;
-        b=KHLjb9stO5rXZeQB8rSS6cOZ+oKE2iI0ZEde+2OtIwUT5jXXN7q7DBht0YfEl4gXNt
-         iCjRNupoM+ynr124e/FeZ2E15eqiscIbUdZnrF+Y12aBIIvvh8w0j/DnBCXP2MuBlphu
-         d241jO6yvFgMaWJYPvfOzMqxmxyr4ODK9Bk4WESLHzXwyjW1i8CM2gil501C+7jiExLa
-         amJE/0kfiBoNm+iHBE50oeJx1BZGaitQfEljjcWF0B5y6wLwbJ3OIsxIw4P4VH8y3HfR
-         RVmHZkf3Ps4B0WrRl5d6xzahPZyvazqGESE1MlEfehc9Z9vaOJ4Bkf51TF0aC57f3YiN
-         zoYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731000637; x=1731605437;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lCnx04qdk6zMZ0LIRHX3e1wxnrAQ1/h0DrPbQAd66Xs=;
-        b=AEtRYiOK1cvwoGpWpkrM4bUOu73yIug9mvweIjFAR1ErGQsCbM3C9g6U07T8LL9tmm
-         GHanIVYxnsWsUUCIgKCH87v87WCJuCUkSqBPiSJX1uhEBxVuIgb513xRpy+6MwNC02aF
-         bdPGGhmfqkPaXJwvYasIDpqv7iOgfOS0LBguxONgtqGOakHWla94o1oh6ttK9iQdRsbF
-         92LgDuvjh/6sn0vq8GXGsihq8QF39DoYlC1HMyhPJ8AxldE02qJUyjcFL5VFtnGnhKbL
-         yLNOCqmJX2jEr+J/xjtkWMz0wUocubZgz6YVCF/7lWYoUJRSyf4oIFXy0+OBIyF2oAcz
-         ha0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUtLnulpnFzeR8O2JJ+O6JQbvBBZtEnzaQs5o9ouWntGzlKSCE3qkf5snZg9v8i1vQkyhiLS9AgOU4hFnM=@vger.kernel.org, AJvYcCVK4WuEV3qCFFDx8c7xKEFurSZA7f7oiW+gCnsUm+gcErdQC8cs275Fgf0nZAtJySq/gggPEki1sS4npQ==@vger.kernel.org, AJvYcCWjJgfw4l6XUPcyoIaRhMol1IlJ7dSMvU51cBJGodrD3adO+UGvn4qLdFLUQPFgbQHLExREdq5BsQ==@vger.kernel.org, AJvYcCWkpYTVOXp/cV183izgyKwcfxp6ewmA4uTkD967WM4xZqlcikGCfTDVmSxcmppRDYwb1mKp/n8FAMqDPRzOng==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDC6bqWgJru9AbgTxwUMv737vQ1P71YnacgBeFgpyXNGITjl50
-	PdUn2k7FCd2Pe5PtvswWMlHGcjRNLLXpHURIQ/NQqu2E+FnvfHqK
-X-Google-Smtp-Source: AGHT+IESnbWGzA/22VokA2ZRCeQrgxKGn28bGagAmMqOxAFoTUKzdME8cEC2XEg/ojV+oORHekXoPw==
-X-Received: by 2002:a17:907:1c05:b0:a9a:19c8:740c with SMTP id a640c23a62f3a-a9e6587e0bbmr2393468966b.47.1731000636974;
-        Thu, 07 Nov 2024 09:30:36 -0800 (PST)
-Received: from [192.168.42.191] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0dc56fcsm124607466b.125.2024.11.07.09.30.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Nov 2024 09:30:36 -0800 (PST)
-Message-ID: <7995ffbd-7ec0-4f99-86a2-011bc3375228@gmail.com>
-Date: Thu, 7 Nov 2024 17:30:36 +0000
+	dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b="P+nmEc0z"
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2040.outbound.protection.outlook.com [104.47.70.40]) by mx-outbound42-219.us-east-2c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 07 Nov 2024 17:37:41 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qwuh0Swx/dkPN12MApAESsP40t/UL/n8Bbts2ur9eLo3RshZnIT92QJgWXwShP7mFHHf+iBLd7h/ZxeU7vDcZB2sv5DSd1Gm8NNN+5OOqw2RMiAQIvazdZQMnXIN6/Zed601uXDyArCK/W4B+QTuBo7M2Z/KBq3ethDsbglU4voJYNo/wtZG/0QpQehV0uITiFUAFqBYLGONtGm3HK/kuVrhvpm1xQJu0kfIn6RK6w7HCwbd/KdUhAzwbgIGhlweWy7KnVdHT69UmsiNm+HxZCJ6tvsZUZLVuZeNjZx2X68uJGnxSPjjM61BUYzCnDHIxDnJ4tJcau9pDC1Ilj7Ovg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UJbGYdfcKxrisStMC23eIxi28Iz9jbW7IhfhfVAUNR0=;
+ b=pdcDwXRCUyfKARotHqRJ6DzE2yvs0jxzD8HZupxAwAfZUYPvfK3YNARdNE1MRWZozgsTzaFreiPhfIA52ZEgvkEMeaoklmEJGrHWG0TaVHFrNyWaeJx/1pgdG0ZCTaFR10SQh/JxnHNUyn9s20PEN8L7MqgbIUe3OctpxzFyMQFkrV1NPkYWb0+6iWUtWlYlYMgL785O8IDvrSDUJzqnR05wLfTvrd1GSk6OyDi3sn0pLysFPUfqIrifdGhPwteVRFLPtYqUSblQghtW64RnrdJEbquF2aGVlhZZOOyQcmAPDB4BwRbwdY9vueQKQY2ZJ6OqQ2qVSqyu9W80tipctg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 50.222.100.11) smtp.rcpttodomain=bsbernd.com smtp.mailfrom=ddn.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=ddn.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UJbGYdfcKxrisStMC23eIxi28Iz9jbW7IhfhfVAUNR0=;
+ b=P+nmEc0zthInBnq80v5xg4sEbZjgPVsi6dEadLoHNJeL6WDNYcQmhEZs+nZ2zpDHBKstwz6xAhD/KGrm9myQzyDR9PGVvfOzh81uB4uHXo7K/rUUqYxJceSk3xLWkDUiYvuyxWpLA/HwDCv03/k6ejniPwJcI7s7xFYUxO/RMb0=
+Received: from MW4PR03CA0267.namprd03.prod.outlook.com (2603:10b6:303:b4::32)
+ by SN7PR19MB4799.namprd19.prod.outlook.com (2603:10b6:806:f6::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.21; Thu, 7 Nov
+ 2024 17:04:26 +0000
+Received: from SJ5PEPF000001CC.namprd05.prod.outlook.com
+ (2603:10b6:303:b4:cafe::39) by MW4PR03CA0267.outlook.office365.com
+ (2603:10b6:303:b4::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.19 via Frontend
+ Transport; Thu, 7 Nov 2024 17:04:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 50.222.100.11)
+ smtp.mailfrom=ddn.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=ddn.com;
+Received-SPF: Pass (protection.outlook.com: domain of ddn.com designates
+ 50.222.100.11 as permitted sender) receiver=protection.outlook.com;
+ client-ip=50.222.100.11; helo=uww-mrp-01.datadirectnet.com; pr=C
+Received: from uww-mrp-01.datadirectnet.com (50.222.100.11) by
+ SJ5PEPF000001CC.mail.protection.outlook.com (10.167.242.41) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8137.17
+ via Frontend Transport; Thu, 7 Nov 2024 17:04:25 +0000
+Received: from localhost (unknown [10.68.0.8])
+	by uww-mrp-01.datadirectnet.com (Postfix) with ESMTP id D6436C6;
+	Thu,  7 Nov 2024 17:04:24 +0000 (UTC)
+From: Bernd Schubert <bschubert@ddn.com>
+Date: Thu, 07 Nov 2024 18:03:59 +0100
+Subject: [PATCH RFC v5 15/16] fuse: {io-uring} Prevent mount point hang on
+ fuse-server termination
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 06/10] io_uring/rw: add support to send metadata along
- with read/write
-To: Keith Busch <kbusch@kernel.org>, Anuj Gupta <anuj20.g@samsung.com>
-Cc: axboe@kernel.dk, hch@lst.de, martin.petersen@oracle.com,
- anuj1072538@gmail.com, brauner@kernel.org, jack@suse.cz,
- viro@zeniv.linux.org.uk, io-uring@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
- gost.dev@samsung.com, linux-scsi@vger.kernel.org, vishak.g@samsung.com,
- linux-fsdevel@vger.kernel.org, Kanchan Joshi <joshi.k@samsung.com>
-References: <20241029162402.21400-1-anuj20.g@samsung.com>
- <CGME20241029163225epcas5p24ec51c7a9b6b115757ed99cadcc3690c@epcas5p2.samsung.com>
- <20241029162402.21400-7-anuj20.g@samsung.com>
- <ZyFuxfiRqH8YB-46@kbusch-mbp.dhcp.thefacebook.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ZyFuxfiRqH8YB-46@kbusch-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20241107-fuse-uring-for-6-10-rfc4-v5-15-e8660a991499@ddn.com>
+References: <20241107-fuse-uring-for-6-10-rfc4-v5-0-e8660a991499@ddn.com>
+In-Reply-To: <20241107-fuse-uring-for-6-10-rfc4-v5-0-e8660a991499@ddn.com>
+To: Miklos Szeredi <miklos@szeredi.hu>
+Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
+ linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
+ Joanne Koong <joannelkoong@gmail.com>, Josef Bacik <josef@toxicpanda.com>, 
+ Amir Goldstein <amir73il@gmail.com>, Ming Lei <tom.leiming@gmail.com>, 
+ David Wei <dw@davidwei.uk>, bernd@bsbernd.com, 
+ Bernd Schubert <bschubert@ddn.com>
+X-Mailer: b4 0.15-dev-2a633
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730999049; l=5408;
+ i=bschubert@ddn.com; s=20240529; h=from:subject:message-id;
+ bh=qPjPlv+ALLWi2d1RcybZcXQ4moZV8H3KjAxZ8jqYrfY=;
+ b=wdUEGYmxhJbr1XHg+aTQAMiYMsb7Qm7rbH28VP+TEgewB2R/fi2RgwQBAwAI1ax7QlayzNO1X
+ GrsA787zCSOAiJCeJ6PKCa30Wm3QRy6GiOOvqpX2hA2aMzhNNH7ZMG9
+X-Developer-Key: i=bschubert@ddn.com; a=ed25519;
+ pk=EZVU4bq64+flgoWFCVQoj0URAs3Urjno+1fIq9ZJx8Y=
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CC:EE_|SN7PR19MB4799:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9f1c937-b05d-406e-e137-08dcff4e3bec
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SG5qMGk1M2JjR1Y1OUFsMlhvQ3gzMnZPNzlxYWR2MExwLzQ3UzNzZjhRMDhx?=
+ =?utf-8?B?N0lmN2tNZzdVeFlIVk95dTRNQWRUQlN6dWowbmpOUlNrTzNSMXRuUDNyNWJJ?=
+ =?utf-8?B?bVRYcnREcDlRWVcyd3pVLy9KYzh5dXlYeHVMeUJMYjVZcnNMTFpPb3NRQlRn?=
+ =?utf-8?B?NU9sMzR5UkZPeW95OWxodFBrZHBYVEFJQkJmTjEzS21FU21GVExBa2I1ckVO?=
+ =?utf-8?B?Zm9BYU93WVowRzFTb3lnQzNqS0dYb3NaWEo4eHA0Q3N0dHA4MytNK1Zhckx2?=
+ =?utf-8?B?eTh6Mjd6SWZvdVU1UUVIb0ltRXhYL3RwYjVJRkh3K2VGUUovRHBsMXNTNnVN?=
+ =?utf-8?B?b3k0VnhocmlwYUMvcGRhQ2gvTDdOVWZ5UmRlK3E5TG1EVE0ydWR0RnBhdTJO?=
+ =?utf-8?B?SEgzOUkvb2JWZ00wdjZJQUFYNi95WGt0b1JLOHhqZmNuazlqY0FKYThPVDBs?=
+ =?utf-8?B?NFdKMFdNTDVLZ2dCY0lVUlBGcWVONEhtQytrRFZRL291N1RxR0E0a29IMWZx?=
+ =?utf-8?B?Ty9Udlk4d1pWUDZRUTJYMUQzMWQvaGRHQ1VSTFNuWENoRTJGQW1KSUZub21V?=
+ =?utf-8?B?SzVrcDVDMDMyWWFYNlk3ZXR0TmdqZExIdWlvR2IxTHB6UmhoV3U5bjVkODY0?=
+ =?utf-8?B?ODViQWNISzJaaGRKRktLK2hYZW0zVFIzMm44bGFVZGo1ZlhGLzlDQndxZ1dK?=
+ =?utf-8?B?SG8rQXBmWi9uZjdLQS9vMjhMajJrUzlXbzJyQkJyYVFLUkVrY3RUNUxvY0Vv?=
+ =?utf-8?B?RmZuV1hxZjYvc21VWGNTTEVDdzZ2a3hSNVYxSWNXTVgrTFAyR2ZhcG5BMkhl?=
+ =?utf-8?B?V3czQTgyTHZkSFJTTHJ2aGJnQmtYbDZqZ2Q4c3BDN01ySnZRaXRSMi83VVBY?=
+ =?utf-8?B?bXhPODZaWnhReDdhUjMwVmRRMXcyN2k2YjN3NUFRR0RxdGRKSHdZc0luaGxq?=
+ =?utf-8?B?NDN2T0NZeCtrWkk4WmRBM0FGWVpPRWpaN2RnRFVVd2dXQWd4VmpkbVdpSC8z?=
+ =?utf-8?B?cWVYOGdpSnZZT09kSnpTTDJsZW1aQ1hsTHhZSU5pOEYzRDZnWmc4RHpxRVBt?=
+ =?utf-8?B?U0hxVTRDV2hTbGdlcVNrK3NUd1NkSnB3OEFkZ3Y2OE5CMmYwS2dxaytISzRD?=
+ =?utf-8?B?Q1ZMQStYNVQrQ1VrZnhDTm9GN1d0ZWptS0dud1QzUUZLVlUvU3JuVDQzK2Uv?=
+ =?utf-8?B?eEFMRmRqd0tCNGNldWlWMzlFUmZWMHQ3QWFJZ3dBR1laWnR4K0szSUVWRGZL?=
+ =?utf-8?B?Y3ZIVjRWSmIraFBlSjBZY2pBNGltbnRuQjlvYVNCT3hNUXl5Z1F4S1dTOWhz?=
+ =?utf-8?B?Y1pHMEZOSUlVcHVjU0tmMHZRWXdQZW5ETkdBdTA1bTNMY0NadUVadjBUeVhz?=
+ =?utf-8?B?ZTcyUkVWcE5la0ZqL0MxVHNKOXBWOFprTm9mREF0aEFkSG9GWDVpNTNjNkVo?=
+ =?utf-8?B?Mnl4RmtNaTduS0JuUHJRY1pHSGhUcGdRcE1wYjVqMnpLUFRBOWdwRkFvMGhW?=
+ =?utf-8?B?dHVNUGF0a3g3Y3l3Y3Vzc1RkVTJrOHk0OWZRVC9ZdjhrVU9KN0dKNGdkN2sr?=
+ =?utf-8?B?dHdOSnNaVUtLTjdhTiszbXNsZzRlZkg0REw1R3JiSXN1UWJxYU1mVkxnVUZr?=
+ =?utf-8?B?RGcvUmI5WWlrWlc3YkdIdUJQaEhGTDluN3hqWWxuakR2anBTVlM4cjFUaTZH?=
+ =?utf-8?B?VUNPMGc4WmxsT01SSi95Q21jd1hORDNxOGNOVlV4NkVEN2hJVVY0V2xraGhK?=
+ =?utf-8?B?dkhySk9MaDUzS1NPaDBpM2hVemlnNkF3QjdWUDBhOFBLNDZjUDZpM2UrYUdm?=
+ =?utf-8?B?dGVNd3h5ckd6d0NnUGp3b0s1S0krTDB4NGVEZ0R5Y2svSG1ad3BCT2l0VW5s?=
+ =?utf-8?B?WHJwOHVtU2sxSUNXQkhWL1RvQi9EVUhMa2VVTitLcFpwRWc9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:50.222.100.11;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:uww-mrp-01.datadirectnet.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(7416014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	CmRkf9+x7Cbw0DvztJ7V81IBo+3jhTGItwcDM2x23bmvUpP8/dFbhKPbIVSMHWQdHR066cUrvFV1N7P9wOv9NC7o+Zes5QGE+tMNlBjpAM8nhDZMWqr6aO6NCXxsfKKnTLcZK3wmIOOwok9jSOoUCD71S2EyxHLAYr6AR4MN9kflz/anwAkE6/b/feMw/06hlJuFGjo8G7qXKwfIq/yV9G6c7LRr65cZ/UmIzSpXf8vpDs540YSF/3dA5duwHHaC8975/1nRhq67OfjGfeU8vhchDOJhLOOgCt3qwtlR1Z1RKzEgYUZBwJu9VQD462IrhMnRokJKw304LNIZAjfNzbq+lQlLtR4p+T4aPs2MpiWPsdOh3e1THxOxeCcwtGWwU19faeJpxTnBkaZ6yqivfydgNg/cttDvUkAohlTyQOXvBbpezO8FNu+vuCRzSg/eoglZldecMmslRUT5xPzis07fRMAdomNVrpo6qSOBhuI/AZqdKBUleCHYV03cKsICvShOIoKeTcZZgPPG3/8DZM8FIEIy/tb5zZZJdeNV+aLjGwH6zNCmFlzTIHIj1I8VXKJEpZfKdizGZaCOhrQ3nj3Enwn0FwontUhWC1fjtFaAWbUBfHMxqPFUKreddgj/5LZGf6yBGCuF4CfWOacdPA==
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2024 17:04:25.6429
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9f1c937-b05d-406e-e137-08dcff4e3bec
+X-MS-Exchange-CrossTenant-Id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=753b6e26-6fd3-43e6-8248-3f1735d59bb4;Ip=[50.222.100.11];Helo=[uww-mrp-01.datadirectnet.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001CC.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR19MB4799
+X-OriginatorOrg: ddn.com
+X-BESS-ID: 1731001061-110971-12656-9425-1
+X-BESS-VER: 2019.1_20241029.2310
+X-BESS-Apparent-Source-IP: 104.47.70.40
+X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVqZGJoZAVgZQ0CA10cQ8Mc0o2d
+	zMLMXCJM0ixdjAwNgkzcjQNNXE1NhQqTYWAB8s6L9BAAAA
+X-BESS-Outbound-Spam-Score: 0.00
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.260269 [from 
+	cloudscan8-29.us-east-2a.ess.aws.cudaops.com]
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------
+	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+	0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS124931 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
+X-BESS-BRTS-Status:1
 
-On 10/29/24 23:24, Keith Busch wrote:
-> On Tue, Oct 29, 2024 at 09:53:58PM +0530, Anuj Gupta wrote:
->> This patch adds the capability of sending metadata along with read/write.
->> A new meta_type field is introduced in SQE which indicates the type of
->> metadata being passed. This meta is represented by a newly introduced
->> 'struct io_uring_meta_pi' which specifies information such as flags,buffer
->> length,seed and apptag. Application sets up a SQE128 ring, prepares
->> io_uring_meta_pi within the second SQE.
->> The patch processes the user-passed information to prepare uio_meta
->> descriptor and passes it down using kiocb->private.
->>
->> Meta exchange is supported only for direct IO.
->> Also vectored read/write operations with meta are not supported
->> currently.
-> 
-> It looks like it is reasonable to add support for fixed buffers too.
-> There would be implications for subsequent patches, mostly patch 10, but
-> it looks like we can do that.
-> 
-> Anyway, this patch mostly looks okay to me. I don't know about the whole
-> "meta_type" thing. My understanding from Pavel was wanting a way to
-> chain command specific extra options. For example, userspace metadata
-> and write hints, and this doesn't look like it can be extended to do
-> that.
+When the fuse-server terminates while the fuse-client or kernel
+still has queued URING_CMDs, these commands retain references
+to the struct file used by the fuse connection. This prevents
+fuse_dev_release() from being invoked, resulting in a hung mount
+point.
 
-It makes sense to implement write hints as a meta/attribute type,
-but depends on whether it's supposed to be widely supported by
-different file types vs it being a block specific feature, and if
-SQEs have space for it.
+This patch addresses the issue by making queued URING_CMDs
+cancelable, allowing fuse_dev_release() to proceed as expected
+and preventing the mount point from hanging.
+
+Signed-off-by: Bernd Schubert <bschubert@ddn.com>
+---
+ fs/fuse/dev_uring.c | 76 ++++++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 70 insertions(+), 6 deletions(-)
+
+diff --git a/fs/fuse/dev_uring.c b/fs/fuse/dev_uring.c
+index 6af515458695ccb2e32cc8c62c45471e6710c15f..b465da41c42c47eaf69f09bab1423061bc8fcc68 100644
+--- a/fs/fuse/dev_uring.c
++++ b/fs/fuse/dev_uring.c
+@@ -23,6 +23,7 @@ MODULE_PARM_DESC(enable_uring,
+ 
+ struct fuse_uring_cmd_pdu {
+ 	struct fuse_ring_ent *ring_ent;
++	struct fuse_ring_queue *queue;
+ };
+ 
+ /*
+@@ -382,6 +383,61 @@ void fuse_uring_stop_queues(struct fuse_ring *ring)
+ 	}
+ }
+ 
++/*
++ * Handle IO_URING_F_CANCEL, typically should come on daemon termination
++ */
++static void fuse_uring_cancel(struct io_uring_cmd *cmd,
++			      unsigned int issue_flags, struct fuse_conn *fc)
++{
++	struct fuse_uring_cmd_pdu *pdu = (struct fuse_uring_cmd_pdu *)cmd->pdu;
++	struct fuse_ring_queue *queue = pdu->queue;
++	struct fuse_ring_ent *ent;
++	bool found = false;
++	bool need_cmd_done = false;
++
++	spin_lock(&queue->lock);
++
++	/* XXX: This is cumbersome for large queues. */
++	list_for_each_entry(ent, &queue->ent_avail_queue, list) {
++		if (pdu->ring_ent == ent) {
++			found = true;
++			break;
++		}
++	}
++
++	if (!found) {
++		pr_info("qid=%d Did not find ent=%p", queue->qid, ent);
++		spin_unlock(&queue->lock);
++		return;
++	}
++
++	if (ent->state == FRRS_WAIT) {
++		ent->state = FRRS_USERSPACE;
++		list_move(&ent->list, &queue->ent_in_userspace);
++		need_cmd_done = true;
++	}
++	spin_unlock(&queue->lock);
++
++	if (need_cmd_done)
++		io_uring_cmd_done(cmd, -ENOTCONN, 0, issue_flags);
++
++	/*
++	 * releasing the last entry should trigger fuse_dev_release() if
++	 * the daemon was terminated
++	 */
++}
++
++static void fuse_uring_prepare_cancel(struct io_uring_cmd *cmd, int issue_flags,
++				      struct fuse_ring_ent *ring_ent)
++{
++	struct fuse_uring_cmd_pdu *pdu = (struct fuse_uring_cmd_pdu *)cmd->pdu;
++
++	pdu->ring_ent = ring_ent;
++	pdu->queue = ring_ent->queue;
++
++	io_uring_cmd_mark_cancelable(cmd, issue_flags);
++}
++
+ /*
+  * Checks for errors and stores it into the request
+  */
+@@ -606,7 +662,8 @@ static int fuse_uring_send_next_to_ring(struct fuse_ring_ent *ring_ent)
+  * Put a ring request onto hold, it is no longer used for now.
+  */
+ static void fuse_uring_ent_avail(struct fuse_ring_ent *ring_ent,
+-				 struct fuse_ring_queue *queue)
++				 struct fuse_ring_queue *queue,
++				 unsigned int issue_flags)
+ 	__must_hold(&queue->lock)
+ {
+ 	struct fuse_ring *ring = queue->ring;
+@@ -626,6 +683,7 @@ static void fuse_uring_ent_avail(struct fuse_ring_ent *ring_ent,
+ 	list_move(&ring_ent->list, &queue->ent_avail_queue);
+ 
+ 	ring_ent->state = FRRS_WAIT;
++	fuse_uring_prepare_cancel(ring_ent->cmd, issue_flags, ring_ent);
+ }
+ 
+ /* Used to find the request on SQE commit */
+@@ -729,7 +787,8 @@ static void fuse_uring_commit(struct fuse_ring_ent *ring_ent,
+  * Get the next fuse req and send it
+  */
+ static void fuse_uring_next_fuse_req(struct fuse_ring_ent *ring_ent,
+-				    struct fuse_ring_queue *queue)
++				    struct fuse_ring_queue *queue,
++				    unsigned int issue_flags)
+ {
+ 	int has_next, err;
+ 	int prev_state = ring_ent->state;
+@@ -738,7 +797,7 @@ static void fuse_uring_next_fuse_req(struct fuse_ring_ent *ring_ent,
+ 		spin_lock(&queue->lock);
+ 		has_next = fuse_uring_ent_assign_req(ring_ent);
+ 		if (!has_next) {
+-			fuse_uring_ent_avail(ring_ent, queue);
++			fuse_uring_ent_avail(ring_ent, queue, issue_flags);
+ 			spin_unlock(&queue->lock);
+ 			break; /* no request left */
+ 		}
+@@ -813,7 +872,7 @@ static int fuse_uring_commit_fetch(struct io_uring_cmd *cmd, int issue_flags,
+ 	 * and fetching is done in one step vs legacy fuse, which has separated
+ 	 * read (fetch request) and write (commit result).
+ 	 */
+-	fuse_uring_next_fuse_req(ring_ent, queue);
++	fuse_uring_next_fuse_req(ring_ent, queue, issue_flags);
+ 	return 0;
+ }
+ 
+@@ -853,7 +912,7 @@ static void _fuse_uring_fetch(struct fuse_ring_ent *ring_ent,
+ 	struct fuse_ring *ring = queue->ring;
+ 
+ 	spin_lock(&queue->lock);
+-	fuse_uring_ent_avail(ring_ent, queue);
++	fuse_uring_ent_avail(ring_ent, queue, issue_flags);
+ 	ring_ent->cmd = cmd;
+ 	spin_unlock(&queue->lock);
+ 
+@@ -1021,6 +1080,11 @@ int fuse_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 	if (fc->aborted)
+ 		goto out;
+ 
++	if ((unlikely(issue_flags & IO_URING_F_CANCEL))) {
++		fuse_uring_cancel(cmd, issue_flags, fc);
++		return 0;
++	}
++
+ 	switch (cmd_op) {
+ 	case FUSE_URING_REQ_FETCH:
+ 		err = fuse_uring_fetch(cmd, issue_flags, fc);
+@@ -1080,7 +1144,7 @@ fuse_uring_send_req_in_task(struct io_uring_cmd *cmd,
+ 
+ 	return;
+ err:
+-	fuse_uring_next_fuse_req(ring_ent, queue);
++	fuse_uring_next_fuse_req(ring_ent, queue, issue_flags);
+ }
+ 
+ /* queue a fuse request and send it if a ring entry is available */
 
 -- 
-Pavel Begunkov
+2.43.0
+
