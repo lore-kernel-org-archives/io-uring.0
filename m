@@ -1,222 +1,203 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBE01FF606
-	for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 16:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B7F205ABB
+	for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 16:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731429064; cv=none; b=rrtvnrqK//fASFgTZXyYG9cbE5e6aAaqDXPKJ91E4inxhnT9tx0ADNJd9NNmW5mD+kSqHSswsTZE3WdQV66jN614WdpO0yGfSuq949Hy4QaxGGzW4Xn6mwScXqNcr5vEkZLU7YkuTP3KStvLOhRRJLkI0wo66tEByqOvF+Gn3d0=
+	t=1731429126; cv=none; b=HgAwob0Ao3QZvNhRON8IDUN2cCWAJJQ9FKqCIv6GOs1ZqBO/nGhZ+f0KMYNa62TODS9TR3C2oDe8ufEWCGai/fiQSKRpUg9Oq5skUBS4EPqwI2qXxMDgIO3E2wwrIzox9eFuQ1YhpvKlP7jiaiEwaL6j7BxPRuH4hNOulT59sZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731429064; c=relaxed/simple;
-	bh=VNWs4lJ7gieJ8qYMcGgkoiMsOw2wzlQrK2uG6cSAcNg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eqxBSCUyYmJDHiYAbq+sxeEuE90UxJq8eTmbLYZxpF8sdUsSmW9ccGYJL4vPdWLU1wdU0VdHlUN0n+F81iDLjhYCYi28hwshEWPDkb/0FZ2lvBULM6hs9XLxvYepLOEXsf7Os3qPCC4lakgSsC+MP/CKUgtmzntCyrP0TEGzSc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b=fAx2Nj8j; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1731429126; c=relaxed/simple;
+	bh=20+Y4zAdakYSoTYa70QV9aDu8bHP40w2Jlt6fgPJaLs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=Cy6meb8rpX7PauXnxXtgwA6CrL5XOMrOZO0GIyHBeMn+TjOuBRreF1be5daQqRTfFY8kgjLCeCXWVV9K+zuUiTp3gpDJnz7j6yW1L5/l0PxBaCpOlmuxQpNGbEA/KGSW14wkkaXuLjHd2o1yZ7tktD4qqfuAPUpqm/DdNkcehjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=r9jx87aA; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fAx2Nj8j"
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4ACEmL38022180
-	for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 08:31:00 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=facebook; bh=NSnTXW6rmt53Ko8ssjbFmfR
-	0T1sJIyfSFre9XduMcJQ=; b=fAx2Nj8jUgisR19iUYyYpnWygJiLVrpVDV3MAZJ
-	bFDVTVFBqwmaGIYUQDEK294RdSP3UdbDrbbjp7QPQu1Rwlag2QxFtl618gSaeR/y
-	r3+XjNhg8Rp6AWnmN8VdUC6XJ56nsS5WuwWPd/3bv4zmcXI43hiou0zmqRUwStp2
-	SCjY=
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 42v93p0w4p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 08:30:59 -0800 (PST)
-Received: from twshared18321.17.frc2.facebook.com (2620:10d:c0a8:1b::8e35) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Tue, 12 Nov 2024 16:30:59 +0000
-Received: by devbig276.nha1.facebook.com (Postfix, from userid 660015)
-	id B72418966EE1; Tue, 12 Nov 2024 16:30:51 +0000 (GMT)
-From: Mark Harmstone <maharmstone@fb.com>
-To: <linux-btrfs@vger.kernel.org>, <io-uring@vger.kernel.org>
-CC: Mark Harmstone <maharmstone@fb.com>
-Subject: [PATCH] btrfs: add io_uring interface for encoded writes
-Date: Tue, 12 Nov 2024 16:29:55 +0000
-Message-ID: <20241112163021.1948119-1-maharmstone@fb.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="r9jx87aA"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20241112163201epoutp0126dfad0e8ab0eeb3449b94049ced6ce8~HRZzpqX-g0598105981epoutp01g
+	for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 16:32:01 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20241112163201epoutp0126dfad0e8ab0eeb3449b94049ced6ce8~HRZzpqX-g0598105981epoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1731429122;
+	bh=fO/OTNmk4ZkIxUUWP9hECq35FEXHCAw5L7TpQZFyrrk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=r9jx87aAoAT60wSmq0LNj01LHODnaHm4iTFuxLzAGjRVm/tcJEINh9iTWE7wYAMd4
+	 LAclhw9pPDcCRFs+9IBG7yjrXGf8JiOisyjxCN2BuJxRjW5anptOk69VenuKO4L63j
+	 C2D2u759/nraMRS5LeA/Ro5XvPDQFxGGkLc+g814=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20241112163201epcas5p20de7f1d5121373334dccef77ee2bcc20~HRZzLDACV1829918299epcas5p2T;
+	Tue, 12 Nov 2024 16:32:01 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4XnsPr2dQ5z4x9Pp; Tue, 12 Nov
+	2024 16:32:00 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	3A.1F.08574.00383376; Wed, 13 Nov 2024 01:32:00 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20241112140022epcas5p149b2709709e7a52109dfca99cefc4663~HPVZYeMAs2906529065epcas5p1Q;
+	Tue, 12 Nov 2024 14:00:22 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241112140022epsmtrp26ef2ac422dfa4f075d1bb656973e7bbd~HPVZXxwZl0763707637epsmtrp2b;
+	Tue, 12 Nov 2024 14:00:22 +0000 (GMT)
+X-AuditID: b6c32a44-6dbff7000000217e-fc-67338300c3af
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	A5.00.35203.67F53376; Tue, 12 Nov 2024 23:00:22 +0900 (KST)
+Received: from ubuntu (unknown [107.99.41.245]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20241112140020epsmtip2d85a84822d57f03f02e4212268895bda~HPVXfWIw20570005700epsmtip2t;
+	Tue, 12 Nov 2024 14:00:20 +0000 (GMT)
+Date: Tue, 12 Nov 2024 19:22:33 +0530
+From: Nitesh Shetty <nj.shetty@samsung.com>
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: Javier Gonzalez <javier.gonz@samsung.com>, Matthew Wilcox
+	<willy@infradead.org>, Keith Busch <kbusch@kernel.org>, Christoph Hellwig
+	<hch@lst.de>, Keith Busch <kbusch@meta.com>, "linux-block@vger.kernel.org"
+	<linux-block@vger.kernel.org>, "linux-nvme@lists.infradead.org"
+	<linux-nvme@lists.infradead.org>, "linux-scsi@vger.kernel.org"
+	<linux-scsi@vger.kernel.org>, "io-uring@vger.kernel.org"
+	<io-uring@vger.kernel.org>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "joshi.k@samsung.com" <joshi.k@samsung.com>
+Subject: Re: [PATCHv10 0/9] write hints with nvme fdp, scsi streams
+Message-ID: <20241112135233.2iwgwe443rnuivyb@ubuntu>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: QKb8GD4fuCJgbJwUHp_cwopiVSpvSceI
-X-Proofpoint-ORIG-GUID: QKb8GD4fuCJgbJwUHp_cwopiVSpvSceI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+In-Reply-To: <a7ebd158-692c-494c-8cc0-a82f9adf4db0@acm.org>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAJsWRmVeSWpSXmKPExsWy7bCmhi5Ds3G6wdVV/BbTPvxktli5+iiT
+	xbvWcywWj+98Zrc4+v8tm8WkQ9cYLc5cXchisfeWtsWevSdZLOYve8pu0X19B5vF7x9z2Bx4
+	PC5f8fbYvELLY9OqTjaPzUvqPXbfbGDzOHexwqNvyypGj8+b5AI4orJtMlITU1KLFFLzkvNT
+	MvPSbZW8g+Od403NDAx1DS0tzJUU8hJzU22VXHwCdN0yc4AuVVIoS8wpBQoFJBYXK+nb2RTl
+	l5akKmTkF5fYKqUWpOQUmBToFSfmFpfmpevlpZZYGRoYGJkCFSZkZ0x/8p+x4L5Exb6Pz9ka
+	GH8KdzFyckgImEhcm/eYsYuRi0NIYDejxIQHLawgCSGBT4wS2y8mQCS+MUr0vb/P1sXIAdbR
+	2R8PEd/LKHFw2lM2COcJo0TrpweMIN0sAqoShxZPZwJpYBPQljj9nwMkLCKgIfHtwXIWkHpm
+	gYUsEr8/3mQBSQgLOEv0zL0L1ssLtODK6kNMELagxMmZT8BqOAWsJRrf/meDOHslh8TbhaEQ
+	tovExPanjBC2sMSr41vYIWwpic/v9kLVl0usnLIC7FAJgRZGiVnXZ0E12Eu0nupnBjmUWSBD
+	4twfd4iwrMTUU+vAbmAW4JPo/f2ECSLOK7FjHoytLLFm/QKo+ZIS1743QtkeEvO//oQG6XVm
+	ie53ExknMMrNQvLPLIR1s8BWWEl0fmhihQhLSyz/xwFhakqs36W/gJF1FaNkakFxbnpqsmmB
+	YV5qOTyKk/NzNzGCk66Wyw7GG/P/6R1iZOJgPMQowcGsJMJ7ytk4XYg3JbGyKrUoP76oNCe1
+	+BCjKTB6JjJLiSbnA9N+Xkm8oYmlgYmZmZmJpbGZoZI47+vWuSlCAumJJanZqakFqUUwfUwc
+	nFINTDd9J97U+ZMl7hUumGLdymrNOcm5umd5W94E0ZXK3u6M1yRn1626r59TY/Hs5uK1HAc6
+	b82b/4OJb+bL05Lb2fkbA3L2BDaWLpxaWDLxZXCKf4OpxZ79q+Wecuzy5JubvXq17dWZlctf
+	KWWofL4Qr5Y56+OUgxVnIm6fDM6TUNhRtdg7IdA7VWWDwdp2BXE9JfabSsePOOxxeiHWZ7kr
+	9+qMjQJBNYX2U+8tnBS4+5PDjHJGi2v2XbbsX5mP2th+kjmwrfxanLAvB9urhx5N94/2VX3+
+	zaR1KdTVfY8q3zQGjwmFlRLdeyyERd9duKW5c4nZ9GAhA99LP+dv+WV12rdl4Y6oyzqePAmC
+	aq4/lViKMxINtZiLihMBYi0trUMEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMLMWRmVeSWpSXmKPExsWy7bCSvG5ZvHG6welFahbTPvxktli5+iiT
+	xbvWcywWj+98Zrc4+v8tm8WkQ9cYLc5cXchisfeWtsWevSdZLOYve8pu0X19B5vF7x9z2Bx4
+	PC5f8fbYvELLY9OqTjaPzUvqPXbfbGDzOHexwqNvyypGj8+b5AI4orhsUlJzMstSi/TtErgy
+	mtaeYC+YKFaxfspxxgbGo4JdjBwcEgImEp398V2MXBxCArsZJRace8jaxcgJFJeUWPb3CDOE
+	LSyx8t9zdoiiR4wSkz6vZANJsAioShxaPJ0JZBCbgLbE6f8cIGERAQ2Jbw+Ws4DUMwssZZG4
+	MPc42CBhAWeJnrl3GUFsXqDFV1YfYgKxhQRuM0v8+lgLEReUODnzCQuIzSxgJjFv80NmkPnM
+	AtISy/+BzecUsJZofPufbQKjwCwkHbOQdMxC6FjAyLyKUTK1oDg3PbfYsMAwL7Vcrzgxt7g0
+	L10vOT93EyM4XrQ0dzBuX/VB7xAjEwfjIUYJDmYlEd5TzsbpQrwpiZVVqUX58UWlOanFhxil
+	OViUxHnFX/SmCAmkJ5akZqemFqQWwWSZODilGpi4L7Y3lwYtWnEmZyVjUIpRwvSP2YdOd79d
+	MEePUVHrV+qjrredH3UFXh7oNZzslDH/0n2VW6fK/vvJFUje27fj2bdX1YeTLlyKnq6fOzFZ
+	7trdBfPXCG3lfH5264dnVuuLeqYdqF0TsnB93fuZT21kZvd9X7lpCa9ktlDoAk3rfy+NHjEI
+	KzdenyN5uuHpYn85M8ZTd3li7mhp9Ab1Ggp0ZSy4s+Boy/+q2V89mPj9J31aY7FKYM7lr/t3
+	hVYt+3am81kO+66Fz4NzzI01fA84/P/h4qj+K21Xw1tbZqkv53lqdtz5NH9Zsc6qiU6Te0tY
+	TgadmLDhbeyT8zfeT92db7C1xtpBaam9F9PligP6TUosxRmJhlrMRcWJADV7k30GAwAA
+X-CMS-MailID: 20241112140022epcas5p149b2709709e7a52109dfca99cefc4663
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----w5-2f3KIOrSunQhSxAIo7Dy_B_SBAQB3Xz8aCSUoiMSFB8w5=_c2979_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241108165444eucas1p183f631e2710142fbbc7dee9300baf77a
+References: <20241105155014.GA7310@lst.de> <Zy0k06wK0ymPm4BV@kbusch-mbp>
+	<20241108141852.GA6578@lst.de> <Zy4zgwYKB1f6McTH@kbusch-mbp>
+	<CGME20241108165444eucas1p183f631e2710142fbbc7dee9300baf77a@eucas1p1.samsung.com>
+	<Zy5CSgNJtgUgBH3H@casper.infradead.org>
+	<d7b7a759dd9a45a7845e95e693ec29d7@CAMSVWEXC02.scsc.local>
+	<2b5a365a-215a-48de-acb1-b846a4f24680@acm.org>
+	<20241111093154.zbsp42gfiv2enb5a@ArmHalley.local>
+	<a7ebd158-692c-494c-8cc0-a82f9adf4db0@acm.org>
 
-Add an io_uring interface for encoded writes, with the same parameters
-as the BTRFS_IOC_ENCODED_WRITE ioctl.
+------w5-2f3KIOrSunQhSxAIo7Dy_B_SBAQB3Xz8aCSUoiMSFB8w5=_c2979_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
 
-As with the encoded reads code, there's a test program for this at
-https://github.com/maharmstone/io_uring-encoded, and I'll get this
-worked into an fstest.
+On 11/11/24 09:45AM, Bart Van Assche wrote:
+>On 11/11/24 1:31 AM, Javier Gonzalez wrote:
+>>On 08.11.2024 10:51, Bart Van Assche wrote:
+>>>On 11/8/24 9:43 AM, Javier Gonzalez wrote:
+>>>>If there is an interest, we can re-spin this again...
+>>>
+>>>I'm interested. Work is ongoing in JEDEC on support for copy offloading
+>>>for UFS devices. This work involves standardizing which SCSI copy
+>>>offloading features should be supported and which features are not
+>>>required. Implementations are expected to be available soon.
+>>
+>>Do you have any specific blockers on the last series? I know you have
+>>left comments in many of the patches already, but I think we are all a
+>>bit confused on where we are ATM.
+>
+>Nobody replied to this question that was raised 4 months ago:
+>https://lore.kernel.org/linux-block/4c7f30af-9fbc-4f19-8f48-ad741aa557c4@acm.org/
+>
+>I think we need to agree about the answer to that question before we can
+>continue with implementing copy offloading.
+>
+Yes, even I feel the same.
+Blocker with copy has been how we should plumb things in block layer.
+A couple of approaches we tried in the past[1].
+Restating for reference,
 
-How io_uring works is that it initially calls btrfs_uring_cmd with the
-IO_URING_F_NONBLOCK flag set, and if we return -EAGAIN it tries again in
-a kthread with the flag cleared.
+1.payload based approach:
+   a. Based on Mikulas patch, here a common payload is used for both source
+     and destination bio. 
+   b. Initially we send source bio, upon reaching driver we update payload
+     and complete the bio.
+   c. Send destination bio, in driver layer we recover the source info
+     from the payload and send the copy command to device.
 
-Ideally we'd honour this and call try_lock etc., but there's still a lot
-of work to be done to create non-blocking versions of all the functions
-in our write path. Instead, just validate the input in
-btrfs_uring_encoded_write() on the first pass and return -EAGAIN, with a
-view to properly optimizing the happy path later on.
+   Drawback:
+   Request payload contains IO information rather than data.
+   Based on past experience Christoph and Bart suggested not a good way
+   forward.
+   Alternate suggestion from Christoph was to used separate BIOs for src
+   and destination and match them using token/id.
+   As Bart pointed, I find it hard how to match when the IO split happens.
 
-Signed-off-by: Mark Harmstone <maharmstone@fb.com>
----
- fs/btrfs/ioctl.c | 116 +++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+2. Plug based approach:
+   a. Take a plug, send destination bio, form request and wait for src bio
+   b. send source bio, merge with destination bio
+   c. Upon release of plug send request down to driver.
 
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index 6478216305c7..37578270686a 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -5030,6 +5030,116 @@ static int btrfs_uring_encoded_read(struct io_uri=
-ng_cmd *cmd, unsigned int issue
- 	return ret;
- }
-=20
-+static int btrfs_uring_encoded_write(struct io_uring_cmd *cmd, unsigned =
-int issue_flags)
-+{
-+	struct btrfs_ioctl_encoded_io_args args;
-+	struct iovec iovstack[UIO_FASTIOV];
-+	struct iovec *iov =3D iovstack;
-+	struct iov_iter iter;
-+	loff_t pos;
-+	struct kiocb kiocb;
-+	struct file *file;
-+	ssize_t ret;
-+	void __user *sqe_addr;
-+
-+	if (!capable(CAP_SYS_ADMIN)) {
-+		ret =3D -EPERM;
-+		goto out_acct;
-+	}
-+
-+	file =3D cmd->file;
-+	sqe_addr =3D u64_to_user_ptr(READ_ONCE(cmd->sqe->addr));
-+
-+	if (!(file->f_mode & FMODE_WRITE)) {
-+		ret =3D -EBADF;
-+		goto out_acct;
-+	}
-+
-+	if (issue_flags & IO_URING_F_COMPAT) {
-+#if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
-+		struct btrfs_ioctl_encoded_io_args_32 args32;
-+
-+		if (copy_from_user(&args32, sqe_addr, sizeof(args32))) {
-+			ret =3D -EFAULT;
-+			goto out_acct;
-+		}
-+		args.iov =3D compat_ptr(args32.iov);
-+		args.iovcnt =3D args32.iovcnt;
-+		args.offset =3D args32.offset;
-+		args.flags =3D args32.flags;
-+		args.len =3D args32.len;
-+		args.unencoded_len =3D args32.unencoded_len;
-+		args.unencoded_offset =3D args32.unencoded_offset;
-+		args.compression =3D args32.compression;
-+		args.encryption =3D args32.encryption;
-+		memcpy(args.reserved, args32.reserved, sizeof(args.reserved));
-+#else
-+		return -ENOTTY;
-+#endif
-+	} else {
-+		if (copy_from_user(&args, sqe_addr, sizeof(args))) {
-+			ret =3D -EFAULT;
-+			goto out_acct;
-+		}
-+	}
-+
-+	ret =3D -EINVAL;
-+	if (args.flags !=3D 0)
-+		goto out_acct;
-+	if (memchr_inv(args.reserved, 0, sizeof(args.reserved)))
-+		goto out_acct;
-+	if (args.compression =3D=3D BTRFS_ENCODED_IO_COMPRESSION_NONE &&
-+	    args.encryption =3D=3D BTRFS_ENCODED_IO_ENCRYPTION_NONE)
-+		goto out_acct;
-+	if (args.compression >=3D BTRFS_ENCODED_IO_COMPRESSION_TYPES ||
-+	    args.encryption >=3D BTRFS_ENCODED_IO_ENCRYPTION_TYPES)
-+		goto out_acct;
-+	if (args.unencoded_offset > args.unencoded_len)
-+		goto out_acct;
-+	if (args.len > args.unencoded_len - args.unencoded_offset)
-+		goto out_acct;
-+
-+	if (issue_flags & IO_URING_F_NONBLOCK) {
-+		ret =3D -EAGAIN;
-+		goto out_acct;
-+	}
-+
-+	ret =3D import_iovec(ITER_SOURCE, args.iov, args.iovcnt, ARRAY_SIZE(iov=
-stack),
-+			   &iov, &iter);
-+	if (ret < 0)
-+		goto out_acct;
-+
-+	if (iov_iter_count(&iter) =3D=3D 0) {
-+		ret =3D 0;
-+		goto out_iov;
-+	}
-+	pos =3D args.offset;
-+	ret =3D rw_verify_area(WRITE, file, &pos, args.len);
-+	if (ret < 0)
-+		goto out_iov;
-+
-+	init_sync_kiocb(&kiocb, file);
-+	ret =3D kiocb_set_rw_flags(&kiocb, 0, WRITE);
-+	if (ret)
-+		goto out_iov;
-+	kiocb.ki_pos =3D pos;
-+
-+	file_start_write(file);
-+
-+	ret =3D btrfs_do_write_iter(&kiocb, &iter, &args);
-+	if (ret > 0)
-+		fsnotify_modify(file);
-+
-+	file_end_write(file);
-+out_iov:
-+	kfree(iov);
-+out_acct:
-+	if (ret > 0)
-+		add_wchar(current, ret);
-+	inc_syscw(current);
-+	return ret;
-+}
-+
- int btrfs_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
- {
- 	switch (cmd->cmd_op) {
-@@ -5038,6 +5148,12 @@ int btrfs_uring_cmd(struct io_uring_cmd *cmd, unsi=
-gned int issue_flags)
- 	case BTRFS_IOC_ENCODED_READ_32:
- #endif
- 		return btrfs_uring_encoded_read(cmd, issue_flags);
-+
-+	case BTRFS_IOC_ENCODED_WRITE:
-+#if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
-+	case BTRFS_IOC_ENCODED_WRITE_32:
-+#endif
-+		return btrfs_uring_encoded_write(cmd, issue_flags);
- 	}
-=20
- 	return -EINVAL;
---=20
-2.45.2
+   Drawback:
+   Doesn't work for stacked devices which has async submission.
+   Bart suggested this is not good solution overall.
+   Alternate suggestion was to use list based approach.
+   But we observed lifetime management problems, especially in
+   failure handling.
 
+3. Single bio approach:
+   a. Use single bio to represent both src and dst info.
+   b. Use abnormal IO handling similar to discard.
+   Drawback:
+   Christoph pointed out that, this will have issue of payload containing
+   information for both IO stack and wire.
+
+
+I am really torn on how to proceed further ?
+-- Nitesh Shetty
+
+
+[1] https://lore.kernel.org/linux-block/20240624103212.2donuac5apwwqaor@nj.shetty@samsung.com/
+
+------w5-2f3KIOrSunQhSxAIo7Dy_B_SBAQB3Xz8aCSUoiMSFB8w5=_c2979_
+Content-Type: text/plain; charset="utf-8"
+
+
+------w5-2f3KIOrSunQhSxAIo7Dy_B_SBAQB3Xz8aCSUoiMSFB8w5=_c2979_--
