@@ -1,73 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A77901FEFD1;
-	Tue, 12 Nov 2024 14:25:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E2C200C8E
+	for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 15:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731421549; cv=none; b=CYRQvBEVzMAIfAZcljuCUeotflOQplXWh+kNpwvfVB9midSTlfQ1HrKUWKh5JKcoykt9MKf666BsiByv+IkE3PA3BMlyFz1PMV9QfOUDsHv8ima3WZxuBs4Zgh1Ejoare1dL3UVaEGIArFFyTRjsZ/7MPEShdb2EoOtiFLlBqU0=
+	t=1731426199; cv=none; b=n3dm98Qsp78da2eJuUavs9k4DWIyqFnOHdjkNKD/1rjvv1uUt2NLYHAHjKViy9rGiGeAb8vfc5rIwIbZkhFpGL3M99iiyyerS161FlmY+59gBUPvX+x3CSMyfDMBstoUf7qgf5RUkPZiDFVBaVAS+FSel1b59fCvZzT6lmQ4SAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731421549; c=relaxed/simple;
-	bh=FqK6AvBbok3agYaXcwWnCFMmVIqq7T/f8WTFeYDo4R8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pAawZicFCVQXj8rIgLRzwIfHAUyJ74mdomKRw7rz2nRSZQfs/NYPw1YyLZhh3OQQjUsyMQIxx2ji8a9GMtr15/cpzseBAQlpSlhpCHvY66pmEKUgheWKZzRoqL1n3mkH73gWLX+LFMl8mdia0CdmKsgovljYKgrq1RClHH0qdp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ePHLU2/h; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731426199; c=relaxed/simple;
+	bh=jLg3iIGdqUsUy8PbumjydYiC8wGi4ADE4Xjhm44Sa3A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GKYCjqy99gxc5vtrBN67yCNcrMVWPbybrVeCyGlOh48tgZNDOxPp43xEN0QA30NmYaSmEBXEr3LD1ZJB5laJ7lHhp675/wo67MUR4y8Qilv7t7IZx0F/v2u6J2rsCeQp1fKHysPjLo3Wy0hrSDScbwMYs0DsUA//v81nGtodLbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=bBHRXVej; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ePHLU2/h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58F4AC4CECD;
-	Tue, 12 Nov 2024 14:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731421549;
-	bh=FqK6AvBbok3agYaXcwWnCFMmVIqq7T/f8WTFeYDo4R8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ePHLU2/hD6U7PnMMH7nbItnFIAQtapvtYXrLfgEyRh4w1ARIGASKPWGmKV1vKvybR
-	 1EKZvr1QfDBPgUlscNmxhahhmpFrR3vrFkx6aHUnAlH8kwxALSJmqUYcE+nu8SOmbI
-	 0iG1helEUWOdLRfC5PTBSCRxJyBvCiTLDIMgCSMjafxj4k9HZkfNZsC0Vv3ljeJ9bB
-	 WnjjK5n7Lf5wK1OKCGlRUM3O72GrzsH/kTenZhQlJRdHDLPKxdHKLVsR8CdDgENc8k
-	 1C8WcFReORB9mUGjtybP4t6kITOXEr2pwCHcyHlb11/JfLm4+za1LevRJd/DT/tMpN
-	 1I5gvWqlJLpBg==
-Date: Tue, 12 Nov 2024 07:25:45 -0700
-From: Keith Busch <kbusch@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Kanchan Joshi <joshi.k@samsung.com>, Keith Busch <kbusch@meta.com>,
-	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org, axboe@kernel.dk,
-	martin.petersen@oracle.com, asml.silence@gmail.com,
-	javier.gonz@samsung.com
-Subject: Re: [PATCHv11 0/9] write hints with nvme fdp and scsi streams
-Message-ID: <ZzNlaXZTn3Pjiofn@kbusch-mbp.dhcp.thefacebook.com>
-References: <20241108193629.3817619-1-kbusch@meta.com>
- <CGME20241111103051epcas5p341a23ed677f2dfd6bc6d4e5c4826327b@epcas5p3.samsung.com>
- <20241111102914.GA27870@lst.de>
- <7a2f6231-bb35-4438-ba50-3f9c4cc9789a@samsung.com>
- <20241112133439.GA4164@lst.de>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="bBHRXVej"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-71811aba576so3500387a34.1
+        for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 07:43:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731426196; x=1732030996; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MPGRYVZnENQchqDtOkd6T23ctHQLbROEiqELavnqalk=;
+        b=bBHRXVejZpnoYCYDMY+9pgYe9wgOsytNlZ/UTpBm1v0XdPHDywDvIaQIs9malw39Wo
+         geOMVx6c46paVNzMWgHX+GB8C8sFiBTDJdycr6c9imXZUlG5uKArt2/yV7A7FEW1KGxF
+         nXuubBNCPtBepq8KyXJtkTydNg1ANShRQYApA/+wiEigPH0z3d4TUONDtkPK7X73yGd3
+         yHgjWnMA+QM4xpO7DNRogVzcNb5a+IzdQ7y3uPwt0G1hqWvKdOxcRF3gJS31tQiM56Gs
+         7sHjX5L5nz/mcfHkTTlCOZGUX/BVHWA74S0jh+IlS41Q9W5T5MCTZTjDao1zv2lw368y
+         zAvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731426196; x=1732030996;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MPGRYVZnENQchqDtOkd6T23ctHQLbROEiqELavnqalk=;
+        b=MWOzS4LU6PR9yJVH0oeRZzDEasHU4X8o5MbyxPVcYn1CY2Nj8fpMjBkojCT5aUCuWW
+         pwWh88mX/YLUOq8ltglRksgcrdziNq0WskblqLOaYP8SFoi1w4XflACrSuGqRTUpQ+F/
+         QELiZ0rfyjCTSHslSsVGlRfTod9J+AB2dLiaN5m8Aq59D2OflO8oBo8CcgJ7eCwso/yl
+         sf2ZFVEqR3L/XJ90St75Y8XwQgvkDRHKVXTAwKyBF893Gtov4aC3xBup4D4RlaY/Leqb
+         FxJg8EVwkt8dxnG4ls3U+uwogxbDEfCKIsv5mYEoVr/xds386/180mn3J1yQmOfp5Z1A
+         f5iQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXxwMLNr6b7o73XAy72ZrG0Hsxv7APyHXvkxzZU6k2UnyzrnZ9Za234hyXM0Q1/IfqULshNeplmHA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxRTvUIG0ywdAffpx0zx63TEV9i4QpnYJ+amPiKZ9Z7g8ykwQP
+	2/LnI/GqbYo4ZGQNRdn/Bub3lpBPvMTLHonKiN4kOMBt0M5NZNKXI+NJk8E3Yxg=
+X-Google-Smtp-Source: AGHT+IGWRW9zxLPcJ5x2fkal5OOLMH4WIgl8/rLC/lU0qkUAN08LLFyRp5+T7eXmY61Tvha4d7ZdTg==
+X-Received: by 2002:a05:6870:450e:b0:277:ca34:27e9 with SMTP id 586e51a60fabf-295603c0c36mr9373068fac.6.1731426196316;
+        Tue, 12 Nov 2024 07:43:16 -0800 (PST)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71a109219dbsm2741817a34.67.2024.11.12.07.43.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Nov 2024 07:43:15 -0800 (PST)
+Message-ID: <c0eb2b6f-1145-4ce3-a2b3-98d32cdfa623@kernel.dk>
+Date: Tue, 12 Nov 2024 08:43:14 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112133439.GA4164@lst.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH liburing] test: add test cases for hybrid iopoll
+To: Anuj Gupta <anuj20.g@samsung.com>, hexue <xue01.he@samsung.com>
+Cc: asml.silence@gmail.com, io-uring@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <CGME20241111123656epcas5p20cac863708cd83d1fdbb523625665273@epcas5p2.samsung.com>
+ <20241111123650.1857526-1-xue01.he@samsung.com>
+ <20241112104406.2rltxkliwhksn3hw@green245>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20241112104406.2rltxkliwhksn3hw@green245>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 12, 2024 at 02:34:39PM +0100, Christoph Hellwig wrote:
-> On Tue, Nov 12, 2024 at 06:56:25PM +0530, Kanchan Joshi wrote:
-> > IMO, passthrough propagation of hints/streams should continue to remain 
-> > the default behavior as it applies on multiple filesystems. And more 
-> > active placement by FS should rather be enabled by some opt in (e.g., 
-> > mount option). Such opt in will anyway be needed for other reasons (like 
-> > regression avoidance on a broken device).
-> 
-> I feel like banging my head against the wall.  No, passing through write
-> streams is simply not acceptable without the file system being in
-> control.  I've said and explained this in detail about a dozend times
-> and the file system actually needing to do data separation for it's own
-> purpose doesn't go away by ignoring it.
+On 11/12/24 3:44 AM, Anuj Gupta wrote:
+>> +utilization than polling. Similarly, this feature also requires the devices
+>> +to support polling configuration.
+> This feature would work if a device doesn't have polled queues,right?
+> The performance might be suboptimal in that case, but the userspace won't
+> get any errors.
 
-But that's just an ideological decision that doesn't jive with how
-people use these. The applications know how they use their data better
-than the filesystem, so putting the filesystem in the way to force
-streams look like zones is just a unnecessary layer of indirection
-getting in the way.
+We've traditionally been a mix of lax and strict on this. IMHO we should
+return -EOPTNOTSUPP for IOPOLL (and IOPOLL|HYBRID) if polling isn't
+configured correctly. I've seen way too many not realize that they need
+to configure their nvme side for pollable queues for it to do what it
+needs to do. If you don't and it's just allowed, then you don't really
+get much of a win, you're just burning CPU.
+
+Hence I do think that this should strongly recommend that the devices
+support polling, that part is fine.
+
+Agree with your other comments, thanks for reviewing it!
+
+> This patch mostly looks fine. But the code here seems to be largely
+> duplicated from "test/io_uring_passthrough.c" and "test/iopoll.c".
+> Can we consider adding the hybrid poll test as a part of the existing
+> tests as it seems that it would only require passing a extra flag
+> during ring setup.
+
+Yeah I do think modifying test/iopoll.c to test all the same
+configurations but with HYBRID added would be the way to go, rather than
+duplicate all of this. Ditto for passthrough.
+
+-- 
+Jens Axboe
