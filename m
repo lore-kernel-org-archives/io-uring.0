@@ -1,81 +1,107 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA6E219E4A
-	for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 21:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7910915F40B
+	for <io-uring@vger.kernel.org>; Wed, 13 Nov 2024 03:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731446373; cv=none; b=roO0Rw5YkSapwWJHe8nAOnM/373bDZRz/AWq+otIIht9ZKfGs8kvJ4YNJJVS9lPVHkIYNce8u9FSqxmSpUAsBUljUXL1qXV6vnPPyrL3EOecrejRpz7aWcXhjuwmEgVH2hbwR+AdbletwzofzePfhkb0xQINw0NX7G3qzjDnyWc=
+	t=1731468322; cv=none; b=stTt98JlN+wy9RcWNsZ84wnZnfYxmNroSiOyXkqiX7s9kHCTE+G/rGIj1ksA3cA5tSZtIsQSAR02K2+O+brDsNA8IWquenbJvrC8u1FbYUspoDtTSS0nGfjI26t5Jp6XF2RAxLSnlU9HR3VHu3x5NUOORAaSgFO4jf7m5f7Lwpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731446373; c=relaxed/simple;
-	bh=SEL6X6hdUxF6ym4A9NUSeFNUTCyHas6dfssLeN1VhQo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
-	 In-Reply-To:Content-Type; b=qdsaBq1Z+ZOvRVGq4QEtI060yG9MPFK1B8yDDBVs7f1rPvEkrQiqKf3smLZW84+RboAqe1e9889qhOjv4JPZLwhd5tuio7SMN9BblmHZOVWhxn0iLClVnYEgJEA2TMnJZvpeYYcdC2ncYDvOTeNmSheIVvg5inUh/XTYNgDXUc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=W9yGcKdm; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1731468322; c=relaxed/simple;
+	bh=eqSYwEOXhdLlmw4h0pKAwaqWf6FkiVxc8iO/Fliesmg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C0c1GHP002L1n/8S0ChYO8LNVu9+fWwNNtAlLeutjpu26rONCkO+A3D+0i5TJk9jy2y03sTlcipxJ7W0PL3xPxBwnOFGRB6TRdfreNc3Lh8D+0kAdy6OLZ9IKJrSUb2BPtz8Fg97q35n9NCJVGivrU+dQ8qSu4DfnEMJI0oaPck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hbg6ej+K; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="W9yGcKdm"
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3e5f835c024so3770535b6e.2
-        for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 13:19:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hbg6ej+K"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43152b79d25so53944885e9.1
+        for <io-uring@vger.kernel.org>; Tue, 12 Nov 2024 19:25:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731446371; x=1732051171; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g0LGAAhnzSPN+1d55yonk1/GMChB/jRmj1V/dRhQ/hk=;
-        b=W9yGcKdm9K8ak393hUNH6YNvpU7+rVuMK+LhHjG9X5mUJQ3I4xbZMgY605A+2HgtwW
-         0ybjcxib3ozswqOJL7yaznh51ZtEcS/9Uy6t15KTrhZtZSD9w6pK1rYczs2SzGKQXLSQ
-         K8zDwGDMJfq4ToU9TOhQhGyGjTeEpjcllk4R7NHme08rV5hqJkmwK3+n8DiIzfb2O4sn
-         l94nnyZ48ErGGT4J7C85e1OxFbV+9yBgxHm7YfveVIAnki1MDQTt6Vi6DxTAPXaEKceS
-         4pWI/VqPMs0ZSdd/OaTxMLeXgXH9Y1I6C/8Bgp8qly+d8gLUZfd7Oz1kn/zmvwikkNLu
-         MipQ==
+        d=gmail.com; s=20230601; t=1731468319; x=1732073119; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=W9PHFX19JO7aEDyPCPoGmB6kyxp6GJCC82C3tQrCuB4=;
+        b=hbg6ej+KYVINTOGPwY4QivJob4cEMyFKLDC8LzIK7MKtlu/56AhoEqmeLhc9QAQNSY
+         PXbZzQMmVm+J5WjKVTRtTu/goF0vJ5EqPTPR2Q4DlXtgQgcmjqgBGkefrXqtwCVCwXx+
+         LxPezrMh8qY1HXVhSwjXtWEVAPRFQAI7c2YXxm4yks3LXoyjtg4F2itWsUhWvWNW6Z2y
+         2UbUoxVb0f6RiL0TLXRWFFx00jCq0A3WjlfBH8X+YW0f09Yvr+lYN/urK8NsiX21eswI
+         5G+xLCLjd1917Zp+WR2zhTBSi8h7Nhdy8kF7Fh19ciR9HPjilgTMW1Akv4Jt/qs+u1KX
+         1O1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731446371; x=1732051171;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g0LGAAhnzSPN+1d55yonk1/GMChB/jRmj1V/dRhQ/hk=;
-        b=BFmsj5fza9LKqHi3ElcNMGsSpQ65g31XE9PrKU8Fw7aZo/A9f1jTJhFoyiZAnFMhul
-         /m918qL3EEqrQ4Sudmedy7Wz91v3jo17Y0/QNNV6ZJzgBNs2em30TIfIWGP2wnOcMvqa
-         +X7MyQRQNW/edLy4D0z8YZ/5bgV6479eoeYT4g+hUsElubaB22H6h+iqUbaEcTj+UMBY
-         rBDwNOUredFcfOsF5KKaQW7p9+39pFbubuQxeyUaxdIcXwcKMR9AjDpQLIS52MmpL5Nx
-         OjxuiDQTYr9f6Oi97yUzCwqYeFfAWgjBsYKlgUadnSO8/9guI0RhTUo+alpwGKdVFYwm
-         NNjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXzG/U3NCFSaAVw0lHO2sCASeLiakr93hcqO2e7CNzHeCYL9mRBSskTiuDtSFhiql1+2EZ3Gq+gsQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzz4xGdOS+w42E6MxybpSUN6Q6eCdfco8/+hcQ2tyKZ/ptbIpjT
-	9S06jcLteUzgDFWLICQjI3VpA9M+Hb8H3aBBc5dp0+WyQllnqIuwaXVwyJjn8KU=
-X-Google-Smtp-Source: AGHT+IHRWQzNVJxVEAh22puDycpcVGRjweG7PJYNurtD1CyzmW7C4IptCPtXOB2QuJi+mTvvENQ8tw==
-X-Received: by 2002:a05:6808:138c:b0:3e6:2f8c:317a with SMTP id 5614622812f47-3e79469a506mr14762715b6e.2.1731446371234;
-        Tue, 12 Nov 2024 13:19:31 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e7b0969cddsm74292b6e.17.2024.11.12.13.19.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Nov 2024 13:19:30 -0800 (PST)
-Message-ID: <4c59f6ff-c766-4820-9b7d-c5bd453ed3bc@kernel.dk>
-Date: Tue, 12 Nov 2024 14:19:29 -0700
+        d=1e100.net; s=20230601; t=1731468319; x=1732073119;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W9PHFX19JO7aEDyPCPoGmB6kyxp6GJCC82C3tQrCuB4=;
+        b=SJ/c4jrQ1mFYepSUgnesXMvcWHg8FdYzgYIYho6EWtqfM37zOUMexYLfqAcDfL8QOV
+         53TxogeS7ya1U6bIhZNwRmVd76yCxNuZM05zmkhbTZnv9nAMHSg27G0bFUm37aghqh1+
+         cqVqGVe/eV2ScNo4NBRR0WDm16w0WPyc+nB7iBn9ylfXORRTv1zTP7PFOtzXUrSAwdt6
+         yZUvkOdhi/JlRkJ3h6R2E8aXxBh3UKO1YTLK8o341U38MwovbE64x1K4UZ7uIo5JHh/Y
+         92o0bGhoeHKfTrZH8OW3J7p7nLDVCcIIi0O/Dxzvhi4+hbfE7wsn6vrGirSZZkwJFgOy
+         ta1A==
+X-Gm-Message-State: AOJu0Yys8VDBTxGkreBkFrxWtARwsENrhpQE/TfrNyx+ETV8nBf4uz3J
+	UpX+j7fzhir3f7kJr4+t33CWegZKI0XkmALJTygl+/L0j3M6z5pUOptWWg==
+X-Google-Smtp-Source: AGHT+IE/aUBNpXoLqKGPxtCRic1EtCAUV+4GOXaDeJIuXrUmJbB3tAcAY6Ie46rX7pIjD3p0XfXS0w==
+X-Received: by 2002:a05:6000:1f84:b0:37d:4ebe:1650 with SMTP id ffacd0b85a97d-3820df7ad83mr1098108f8f.46.1731468318444;
+        Tue, 12 Nov 2024 19:25:18 -0800 (PST)
+Received: from 127.0.0.1localhost ([148.252.132.111])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381ed9ea4c5sm17256857f8f.76.2024.11.12.19.25.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2024 19:25:18 -0800 (PST)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	xue01.he@samsung.com
+Subject: [PATCH 1/1] io_uring: fix invalid hybrid polling ctx leaks
+Date: Wed, 13 Nov 2024 03:26:01 +0000
+Message-ID: <b57f2608088020501d352fcdeebdb949e281d65b.1731468230.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] btrfs: add io_uring interface for encoded writes
-From: Jens Axboe <axboe@kernel.dk>
-To: Mark Harmstone <maharmstone@fb.com>, linux-btrfs@vger.kernel.org,
- io-uring@vger.kernel.org
-References: <20241112163021.1948119-1-maharmstone@fb.com>
- <5ecbdce7-d143-4cee-b771-bf94a08f801a@kernel.dk>
-Content-Language: en-US
-In-Reply-To: <5ecbdce7-d143-4cee-b771-bf94a08f801a@kernel.dk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/12/24 2:01 PM, Jens Axboe wrote:
-> I'm also pondering if the encoded read side suffers from the same issue?
+It has already allocated the ctx by the point where it checks the hybrid
+poll configuration, plain return leaks the memory.
 
-It does, it needs the same fixup.
+Fixes: 01ee194d1aba1 ("io_uring: add support for hybrid IOPOLL")
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ io_uring/io_uring.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index f34fa1ead2cf..8a7b5a899d46 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -3915,11 +3915,6 @@ static __cold int io_uring_create(unsigned entries, struct io_uring_params *p,
+ 	if (!(ctx->flags & IORING_SETUP_NO_SQARRAY))
+ 		static_branch_inc(&io_key_has_sqarray);
+ 
+-	/* HYBRID_IOPOLL only valid with IOPOLL */
+-	if ((ctx->flags & (IORING_SETUP_IOPOLL|IORING_SETUP_HYBRID_IOPOLL)) ==
+-			IORING_SETUP_HYBRID_IOPOLL)
+-		return -EINVAL;
+-
+ 	if ((ctx->flags & IORING_SETUP_DEFER_TASKRUN) &&
+ 	    !(ctx->flags & IORING_SETUP_IOPOLL) &&
+ 	    !(ctx->flags & IORING_SETUP_SQPOLL))
+@@ -3970,6 +3965,11 @@ static __cold int io_uring_create(unsigned entries, struct io_uring_params *p,
+ 		ctx->notify_method = TWA_SIGNAL;
+ 	}
+ 
++	/* HYBRID_IOPOLL only valid with IOPOLL */
++	if ((ctx->flags & (IORING_SETUP_IOPOLL|IORING_SETUP_HYBRID_IOPOLL)) ==
++			IORING_SETUP_HYBRID_IOPOLL)
++		goto err;
++
+ 	/*
+ 	 * For DEFER_TASKRUN we require the completion task to be the same as the
+ 	 * submission task. This implies that there is only one submitter, so enforce
 -- 
-Jens Axboe
+2.46.0
+
