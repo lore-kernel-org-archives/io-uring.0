@@ -1,184 +1,117 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22503262A3
-	for <io-uring@vger.kernel.org>; Thu, 14 Nov 2024 17:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4161A9B5D;
+	Thu, 14 Nov 2024 20:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731605894; cv=none; b=cuXR25VVOW/n/4iwTq7e8hlb5cpgRXlDRlnkh0c0PxCr9awxbCAM9XNiNelyjt5v6zwJCB+XrM5K9lO12/+vH72Oe61EUGi0CSygRc2ZaG8fdB/zB804BGEMzJ7HTA+ORBVD0ym122kxkVlejOJWWKxyIkmnGJFTurKUgzSs6Jc=
+	t=1731615066; cv=none; b=F9iTyTzchL7SS5g9sMibw3GEJswog/U+fzA2Lf5idKyuFoSz9IxJzm00AGGTMtzXunbKkvjVLEK1Wx/z21XipbQfLUXhNFLdAFi/3e6DQAzVqo72EV6E8RmNYEDdukWfxPQz7Jr7f7YRwYdRMdCevDwNwqO1KwAyJEg4Io8KO3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731605894; c=relaxed/simple;
-	bh=LNgFjHLiBir6oEIW8ncov4hMQdVBoAL03Xq3o0BzmJw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iKhrvTEMkveLVanEgb+SwDgLhDf4AbInW4ddEK/FdIsIfwwY0SmycGDNfRen66CszE1h8iNZEiLYwXgDHK8IWgYlKYIkTTqe3Ooy26sBDjqeJWaPaVLmIAhfoIO3nl7CEXkQKjqbCdw0JTdWzKHEO2+h00orfo3SGqtnvTxRtTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d4Kubfcp; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731615066; c=relaxed/simple;
+	bh=ASl8LSAvyQVJiieFrry6JPr3SCOWxU/QgkzXXpnO05k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=drxFhEPbMbjY39Y4iwOyuq2dsavqcNImFcqm1Z5cawbW0a2HX6rG8/C2+5JchZZpkamRHSEc2vgkDYyRtsm1Awpa8lk/YntQKSd437OFfhJVCv8VH85UgpNe0cJZxriR11G90oDEg910qbf1yQ3NQg95ojX9JPjApHuZCkRXnMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=anx91EaE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d4Kubfcp"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5cb6ca2a776so1534963a12.0
-        for <io-uring@vger.kernel.org>; Thu, 14 Nov 2024 09:38:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731605891; x=1732210691; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rK2Es19MgdCzXZpmiUCx1KpjgTYixs0FFvqPiUOwGyE=;
-        b=d4KubfcpiPd/ANUeD/ru51MxbQyAaTm61ckC9u8CzpVZ2uzB5cOIBSAPBODasqwoIF
-         75BoyGL8Yd5dcZERUejnAK/r5e1iUJKRvyo2tUDNXzXn0dtB9QoYZ44/uMX/TEb6fSuC
-         lD3zWucwzh+wvi1OMjp1L/xTQLgsGu9GdRU/8OxQ9RAA4JtjWeTD4UBTowZP+6m0AD+N
-         nVYUIyUlJUim2pXQ/6dlR4I9lHVetdaCZD4pW+UCFryWyXbh4mEAuk0aoybb8YjtWibf
-         AfKpraHseS2JPo5oMHZqa/7+Ue/fEX4Ir3EWwxKTY89ZcneWDrZmUo4b34bav+9WpW09
-         E89w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731605891; x=1732210691;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rK2Es19MgdCzXZpmiUCx1KpjgTYixs0FFvqPiUOwGyE=;
-        b=mHjlPfrbKg/McUGfbpLLhwRgxeXOSNclzonjUG4HYgj21dVa/pKRHfF9uwqgv5yzgB
-         cLs+zliwkfNFphK0ypfSApXhmRK10D8yf1JExjdKqM0TuBGjrtsi0PclXXm2vwVpCLFU
-         colCWC9pvqIwj9Msb8zmGTx+fnb/AfLhEPwgv32p91eKgBkyN3Gv/xrgcZb1OB/f/g03
-         Sf7qMSLjH+E8rN/0y2uD4i7npPiNBXPtC2IIY1n9FiFcHjnlbZlPe0Jq6EPx97yOfC2B
-         o+loTbz0CIx50yuEk2GbIjLNXHBfcqpGlqviGW4YLOXZKwDcH/yd7QBMpxJUEQlf6yDF
-         LgHQ==
-X-Gm-Message-State: AOJu0Yyv10pJ3W7EdvZOEeEq4i9S59Ra6znPeLFLr4PrLdiwcTV1DCRE
-	9bwSRSdwyVeRH/OtIibqHi85KT3ntAa7O7urpM1/bJgsGz6AOUHVymBBRA==
-X-Google-Smtp-Source: AGHT+IGdXbqRjcDjqcCMd7GwWsdcPsPqhg28WyCNh5h6lv9ND4VBLteor9VFGPe8msOiJyzFAMzWMQ==
-X-Received: by 2002:a17:907:c12:b0:a9a:76d:e86c with SMTP id a640c23a62f3a-aa1c57ef2c1mr1203170366b.49.1731605890465;
-        Thu, 14 Nov 2024 09:38:10 -0800 (PST)
-Received: from 127.0.0.1localhost ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20df56b31sm85799966b.72.2024.11.14.09.38.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 09:38:10 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com
-Subject: [PATCH v2 6/6] io_uring: restore back registered wait arguments
-Date: Thu, 14 Nov 2024 17:38:36 +0000
-Message-ID: <24cce6841e4d5ebb3a33bb602a94f5ded77757c3.1731604990.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <cover.1731604990.git.asml.silence@gmail.com>
-References: <cover.1731604990.git.asml.silence@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="anx91EaE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C035C4CECD;
+	Thu, 14 Nov 2024 20:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731615066;
+	bh=ASl8LSAvyQVJiieFrry6JPr3SCOWxU/QgkzXXpnO05k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=anx91EaEjJy6ntu/ddhlMwoMHjGZHqXIcwlIbSxu2kcIowwLvk0UMlYby2HoawQBE
+	 sbHvq+nARD/fY8HjJLg0VQCU5jOhJpqefyvJJFZ+f+qLvTpgcBp+tjagV8VPGSTX60
+	 4kskjjjHURDBovPsnp/VTNUO8ITbMWwx2W2KL+5N2QKDS7IRQ9oAIkEmJm+59XuIOA
+	 l1VzSp7HwTt1oIQOTTmYjK82gHnErDFI3wDf+EKeei1n2xKrAKGHUEWdD7uchJoI3V
+	 PC5BtRgOOKwMQ0g+7H4HCnJlTN/H4VNZ+dTMPpc4aPLFr+AOKTMj7fybJKs94y7uhH
+	 7wMQc3PHz3+RQ==
+Date: Thu, 14 Nov 2024 13:11:03 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>, Keith Busch <kbusch@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	linux-block@vger.kernel.org, virtualization@lists.linux.dev,
+	linux-nvme@lists.infradead.org, io-uring@vger.kernel.org
+Subject: Re: [PATCH 4/6] block: add a rq_list type
+Message-ID: <20241114201103.GA2036469@thelio-3990X>
+References: <20241113152050.157179-1-hch@lst.de>
+ <20241113152050.157179-5-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241113152050.157179-5-hch@lst.de>
 
-Now we've got a more generic region registration API, place
-IORING_ENTER_EXT_ARG_REG and re-enable it.
+Hi Christoph,
 
-First, the user has to register a region with the
-IORING_MEM_REGION_REG_WAIT_ARG flag set. It can only be done for a
-ring in a disabled state, aka IORING_SETUP_R_DISABLED, to avoid races
-with already running waiters.
+On Wed, Nov 13, 2024 at 04:20:44PM +0100, Christoph Hellwig wrote:
+> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> index 65f37ae70712..ce8b65503ff0 100644
+> --- a/include/linux/blkdev.h
+> +++ b/include/linux/blkdev.h
+> @@ -1006,6 +1006,11 @@ extern void blk_put_queue(struct request_queue *);
+>  void blk_mark_disk_dead(struct gendisk *disk);
+>  
+>  #ifdef CONFIG_BLOCK
+> +struct rq_list {
+> +	struct request *head;
+> +	struct request *tail;
+> +};
+> +
+>  /*
+>   * blk_plug permits building a queue of related requests by holding the I/O
+>   * fragments for a short period. This allows merging of sequential requests
+> @@ -1018,10 +1023,10 @@ void blk_mark_disk_dead(struct gendisk *disk);
+>   * blk_flush_plug() is called.
+>   */
+>  struct blk_plug {
+> -	struct request *mq_list; /* blk-mq requests */
+> +	struct rq_list mq_list; /* blk-mq requests */
+>  
+>  	/* if ios_left is > 1, we can batch tag/rq allocations */
+> -	struct request *cached_rq;
+> +	struct rq_list cached_rqs;
+>  	u64 cur_ktime;
+>  	unsigned short nr_ios;
+>  
+> @@ -1683,7 +1688,7 @@ int bdev_thaw(struct block_device *bdev);
+>  void bdev_fput(struct file *bdev_file);
+>  
+>  struct io_comp_batch {
+> -	struct request *req_list;
+> +	struct rq_list req_list;
 
-The other API difference is that we're now passing byte offsets instead
-of indexes. The user _must_ align all offsets / pointers to the native
-word size, failing to do so might but not necessarily has to lead to a
-failure usually returned as -EFAULT. liburing will be hiding this
-details from users.
+This change as commit a3396b99990d ("block: add a rq_list type") in
+next-20241114 causes errors when CONFIG_BLOCK is disabled because the
+definition of 'struct rq_list' is under CONFIG_BLOCK. Should it be moved
+out?
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- include/linux/io_uring_types.h |  3 +++
- include/uapi/linux/io_uring.h  |  5 +++++
- io_uring/io_uring.c            | 14 +++++++++++++-
- io_uring/register.c            | 16 +++++++++++++++-
- 4 files changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index e1d69123e164..aa5f5ea98076 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -324,6 +324,9 @@ struct io_ring_ctx {
- 		unsigned		cq_entries;
- 		struct io_ev_fd	__rcu	*io_ev_fd;
- 		unsigned		cq_extra;
-+
-+		void			*cq_wait_arg;
-+		size_t			cq_wait_size;
- 	} ____cacheline_aligned_in_smp;
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 00212e96261a..a1fd0ddce5cf 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1006,12 +1006,12 @@ extern void blk_put_queue(struct request_queue *);
  
- 	/*
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 1ee35890125b..4418d0192959 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -663,6 +663,11 @@ struct io_uring_region_desc {
- 	__u64 __resv[4];
+ void blk_mark_disk_dead(struct gendisk *disk);
+ 
+-#ifdef CONFIG_BLOCK
+ struct rq_list {
+ 	struct request *head;
+ 	struct request *tail;
  };
  
-+enum {
-+	/* expose the region as registered wait arguments */
-+	IORING_MEM_REGION_REG_WAIT_ARG		= 1,
-+};
-+
- struct io_uring_mem_region_reg {
- 	__u64 region_uptr; /* struct io_uring_region_desc * */
- 	__u64 flags;
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index c640b8a4ceee..c93a6a9cd47e 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3195,7 +3195,19 @@ void __io_uring_cancel(bool cancel_all)
- static struct io_uring_reg_wait *io_get_ext_arg_reg(struct io_ring_ctx *ctx,
- 			const struct io_uring_getevents_arg __user *uarg)
- {
--	return ERR_PTR(-EFAULT);
-+	unsigned long size = sizeof(struct io_uring_reg_wait);
-+	unsigned long offset = (uintptr_t)uarg;
-+	unsigned long end;
-+
-+	if (unlikely(offset % sizeof(long)))
-+		return ERR_PTR(-EFAULT);
-+
-+	/* also protects from NULL ->cq_wait_arg as the size would be 0 */
-+	if (unlikely(check_add_overflow(offset, size, &end) ||
-+		     end >= ctx->cq_wait_size))
-+		return ERR_PTR(-EFAULT);
-+
-+	return ctx->cq_wait_arg + offset;
- }
- 
- static int io_validate_ext_arg(struct io_ring_ctx *ctx, unsigned flags,
-diff --git a/io_uring/register.c b/io_uring/register.c
-index 2cbac3d9b288..1a60f4916649 100644
---- a/io_uring/register.c
-+++ b/io_uring/register.c
-@@ -588,7 +588,16 @@ static int io_register_mem_region(struct io_ring_ctx *ctx, void __user *uarg)
- 
- 	if (memchr_inv(&reg.__resv, 0, sizeof(reg.__resv)))
- 		return -EINVAL;
--	if (reg.flags)
-+	if (reg.flags & ~IORING_MEM_REGION_REG_WAIT_ARG)
-+		return -EINVAL;
-+
-+	/*
-+	 * This ensures there are no waiters. Waiters are unlocked and it's
-+	 * hard to synchronise with them, especially if we need to initialise
-+	 * the region.
-+	 */
-+	if ((reg.flags & IORING_MEM_REGION_REG_WAIT_ARG) &&
-+	    !(ctx->flags & IORING_SETUP_R_DISABLED))
- 		return -EINVAL;
- 
- 	ret = io_create_region(ctx, &ctx->param_region, &rd);
-@@ -598,6 +607,11 @@ static int io_register_mem_region(struct io_ring_ctx *ctx, void __user *uarg)
- 		io_free_region(ctx, &ctx->param_region);
- 		return -EFAULT;
- 	}
-+
-+	if (reg.flags & IORING_MEM_REGION_REG_WAIT_ARG) {
-+		ctx->cq_wait_arg = io_region_get_ptr(&ctx->param_region);
-+		ctx->cq_wait_size = rd.size;
-+	}
- 	return 0;
- }
- 
--- 
-2.46.0
++#ifdef CONFIG_BLOCK
+ /*
+  * blk_plug permits building a queue of related requests by holding the I/O
+  * fragments for a short period. This allows merging of sequential requests
 
+>  	bool need_ts;
+>  	void (*complete)(struct io_comp_batch *);
+>  };
