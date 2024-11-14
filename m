@@ -1,135 +1,102 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2CBD2C859
-	for <io-uring@vger.kernel.org>; Thu, 14 Nov 2024 15:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898BA2AE8E
+	for <io-uring@vger.kernel.org>; Thu, 14 Nov 2024 17:38:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731597711; cv=none; b=Tza1aQs1+iX4u0+QzMNnsPiLv8CRLXpapNZ4O04Q7pn/T6glTDE7f9gTBEiXcl4T3FE9zW7wl4x2D0qBmDMgBqnVxD2jdOHmr/6TsyBzfVdQLJVHF7oRLeq2AWLwbz5a2JhV1Z+T/hUrMCs2JA/vAPu53WLj9OuvKXbWHOvyvtQ=
+	t=1731605888; cv=none; b=qnLodqm7nRLAH59Pw9Qb8SkFPKSHFimT176x0PFUMJnGeiVG60vJsog5WNDTWXpDznPDVA4Qg6AuubyG1gN/d1QMHDbe1C2KA7o/B0ZzJqd+/BLl6PSXF3Aez+Qrvf3S2nHTlCJsSSyEz3Ww3BXrv45cgGSY8N/G9Sx5b7KnKKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731597711; c=relaxed/simple;
-	bh=TkTDD2RBDV7sIIVkEaor+Jhu6eLvbT0o3IVngzyAups=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uzHIGbDwv0zAcZPOtOguqkLkkMb1rXJJ5M2iCKFETDxDTGhrxzChVhkj5kvQXZOPkPnzH4zJaxpnXtX2D/5I1B+q6CtRxQNWGjPAsj9ehcL5mQ4grTlcOepcMT6H71NQKLWKdgOh/blUT6aZ4b9BIczJZ2XCy5JhSs0D7Ku5Ldc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=HnjLBj06; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1731605888; c=relaxed/simple;
+	bh=U5QF/x6b8+AVnGXyhRLblaAIRQzMWVGP0691lgarnBI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IBOwo9wmuBUqRNq9uV8RMtKa+IQ5jQMGF+qHGC1RB+Z/As2g0mGcDfMDZPm6LfTUm/9qoQdAAWw2k+g3Ai/8ZEsHL3zQ47v+/m3SE+95Wuvtwkf1BrWvY25+yWFkbun2xdjZEQy7sCOXNJQ7jhplgYsAofS+GPjZdoeLlG92onk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cm/TO0yn; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="HnjLBj06"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3e5f835c024so408253b6e.2
-        for <io-uring@vger.kernel.org>; Thu, 14 Nov 2024 07:21:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cm/TO0yn"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a9ed7d8c86cso177262066b.2
+        for <io-uring@vger.kernel.org>; Thu, 14 Nov 2024 09:38:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731597709; x=1732202509; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IhiHo84MP1UBxEQIr32cazmzolaVBZwyLy4hsoyUvpc=;
-        b=HnjLBj06scMtBlPzU9qXfkExkbBRNTLuTk/8QVqUEMAF2zzAFhLHD6Kvibaekgvkgq
-         xxvCWFEVPNokRwMkfeisNklHaz9ZW/EmCNfqd1weCGsQIV3WlC5V2cqMKVzBxYvsUWK7
-         y91qKC/DJWoHIsNpbvUAMK2+QKR9uDp8hqB/WuN9JZLETp310IFJLvXKO2V2h+GwY3YL
-         WYE5oj7MzYPrwtoqq50x9hK4Rg8A+6ukj7b6bJBvPxslbd/1tLju2CXsIQxi9Xin67Uh
-         YodL1Zpa4bzX9eYci5lsYNAAplVl3hHDbwzjm/paL4c93OaJnVWuF2EjYzvwiKzdB7hK
-         z04w==
+        d=gmail.com; s=20230601; t=1731605885; x=1732210685; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z4ypbSiI4hdag8CKI3LLUTCpl2wpJ0QYfEe4bYMO1/o=;
+        b=cm/TO0yngZw+8+Tw0JUImZVJtK//ZAjULEa/45qpXnVjjacEil7qnN42pD1Rq58JTH
+         iFJy9ty0H3dw88Htl17OBZsjQ1gorcpefs8DyoBFPyqYHe1VvytY75wjwCjAyT7R4WJR
+         pR41GVRb4m50HcrxzPNqdyRXiISfAgqC4Mg3uokWduTVkGgP0TaCz13HZ4NwucFCFcGH
+         JGuOp30SZDv6ey1u15EVQMKBuhP12nrq4DgLRhI3KiNkvi9gkdAEYHKvxFsgZs6gDX/e
+         0ETEU3DrV/h4zN/1+QpJjM8Fjw84A81lvrkVY+q3psGBsgv9vQqPIHrcKR8JNH0UvRjE
+         xGMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731597709; x=1732202509;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IhiHo84MP1UBxEQIr32cazmzolaVBZwyLy4hsoyUvpc=;
-        b=GPiRj/wp14mCDlorcUEHqaL679+tAJ6/hK+zhxU/Yv7WffYO2Jx4MMeY9YXqQpOnFh
-         uct0iecv/R1CUSiTJm4J5asxRrwdKxNdj87+PWzhId/xff0VRMCTIDtg3NM0gbjIlVek
-         Zv61oaTmpL+pbWKBiucKO+VGW3j9ccXhI67H1O8HleSwgPHzRXUXE8SX93FWTuGoaYcd
-         vwOVPYPQFZsVKbdZPUkN0yEU6d01OXiJCmYrbXKRtCEdc1CUTLJlxT6RZ1fiQ+5BG0OM
-         h5cxrAnAkVzpUpPI8EMT5Q/mZ3peuXrmDtnK6gsLLFHW9I2nAP/gE/wZFfqPaqcExbd4
-         W2nQ==
-X-Gm-Message-State: AOJu0Yw85NOJuyGeO/oz45EX94xP4T4k8bwW55m3Nv8vp79SbhtYn1iW
-	5T6DNLmkcnKnN18q8ee2bN3SXB6FNLi68cIVC7WUs5mYYsImjv+r30+pv+MQPKs=
-X-Google-Smtp-Source: AGHT+IF2xM5cF5lrcm7z3Ppt5W2zSRmGCfJHS2qO+H9XY0ibX96ffRlATC1Ljsm4ZQkP68yXaIXCiA==
-X-Received: by 2002:a05:6808:68d:b0:3e7:a494:ae6d with SMTP id 5614622812f47-3e7a494b2d6mr11900976b6e.42.1731597708919;
-        Thu, 14 Nov 2024 07:21:48 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e7b8597a0dsm354160b6e.8.2024.11.14.07.21.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2024 07:21:48 -0800 (PST)
-Message-ID: <3aada5a2-074a-45e8-882c-0302cae4c41b@kernel.dk>
-Date: Thu, 14 Nov 2024 08:21:47 -0700
+        d=1e100.net; s=20230601; t=1731605885; x=1732210685;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z4ypbSiI4hdag8CKI3LLUTCpl2wpJ0QYfEe4bYMO1/o=;
+        b=Wyhu6cIZ3SN5eQdC6IiuNYTOckWwYZ4oACnSTdIlXRuyh2hNmbBw61GSwsSdErgoSw
+         zSsmeBoDg/CXsM5aTYG3z5IvkvYw6R3hcPe+SYv58Ka1r1JX0BhZZh2b0/snj7blPtsi
+         PXLaOMPqgcKy0H+sIFyQztBtstiqwRoA1WMhvqm2F1iUE8La7YfkF1W8LUy7LyG1dxrz
+         L63oiPs6r0sNsu2LaAPeggGY8NoIuQQojMeDu/8E+GFM4E0eeAeopE4ppu7MQsPZuToz
+         igepolnN5IbBfN3rCDDwrG0AkkjlNdOaC+enF24MAQfzwWNssG8buDSYaZNpUHVDf40N
+         Pyjw==
+X-Gm-Message-State: AOJu0YxmTWJ9PgSUj83nh0siotIbabhg9VsKbnRVQU7LRL0MD8JOY9kn
+	TLu/IZu67+ujZZBDJsN18E71uVzn+MBAfbn3+KecDMknDJKQI/xEbEhcLw==
+X-Google-Smtp-Source: AGHT+IHyLsh9xUzWoUfqtyYp/VxR0k1fJiao9xrG4VMoMWvuTKAyzm1paxJXGzXFzp30YPMOuXLTBg==
+X-Received: by 2002:a17:907:c2a:b0:a9e:c4df:e3c5 with SMTP id a640c23a62f3a-aa1f813b2fdmr725812366b.54.1731605884316;
+        Thu, 14 Nov 2024 09:38:04 -0800 (PST)
+Received: from 127.0.0.1localhost ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20df56b31sm85799966b.72.2024.11.14.09.38.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 09:38:03 -0800 (PST)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com
+Subject: [PATCH v2 0/6] regions, param pre-mapping and reg waits extension
+Date: Thu, 14 Nov 2024 17:38:30 +0000
+Message-ID: <cover.1731604990.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH liburing v2] test: add test cases for hybrid iopoll
-To: hexue <xue01.he@samsung.com>, asml.silence@gmail.com
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <CGME20241114050337epcas5p174214fb58aedefee4077447fa71b70f0@epcas5p1.samsung.com>
- <20241114050330.4006367-1-xue01.he@samsung.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20241114050330.4006367-1-xue01.he@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/13/24 10:03 PM, hexue wrote:
-> diff --git a/man/io_uring_setup.2 b/man/io_uring_setup.2
-> index 2f87783..fa928fa 100644
-> --- a/man/io_uring_setup.2
-> +++ b/man/io_uring_setup.2
-> @@ -78,7 +78,15 @@ in question. For NVMe devices, the nvme driver must be loaded with the
->  parameter set to the desired number of polling queues. The polling queues
->  will be shared appropriately between the CPUs in the system, if the number
->  is less than the number of online CPU threads.
-> -
-> +.TP
-> +.B IORING_SETUP_HYBRID_IOPOLL
-> +This flag must setup with
+A bit late but first we need a better and more generic API for
+ring/memory/region registration (see Patch 4), and it changes the API
+extending registered waits to be a generic parameter passing mechanism.
+That will be useful in the future to implement a more flexible rings
+creation, especially when we want to share same huge page / mapping.
+Patch 6 uses it for registered wait arguments, and it can also be
+used to optimise parameter passing for normal io_uring requests.
 
-This flag must be used with
+A dirty liburing branch with tests:
 
-> +.B IORING_SETUP_IOPOLL
-> +flag. hybrid poll is a new
+https://github.com/isilence/liburing/tree/io-uring-region-test
 
-Like before, skip new. Think about what happens when someone reads this
-in 5 years time. What does new mean? Yes it may be new now, but docs
-are supposed to be timeless.
+v2: cleaned up namings and commit messages
+    moved all EXT_ARG_REG related bits Patch 5 -> 6 
+    added alignment checks (Patch 6)
 
-> +feature baed on iopoll, this could be a suboptimal solution when running
+Pavel Begunkov (6):
+  io_uring: fortify io_pin_pages with a warning
+  io_uring: disable ENTER_EXT_ARG_REG for IOPOLL
+  io_uring: temporarily disable registered waits
+  io_uring: introduce concept of memory regions
+  io_uring: add memory region registration
+  io_uring: restore back registered wait arguments
 
-based on
-
-> +on a single thread, it offers higher performance than IRQ and lower CPU
-> +utilization than polling. Similarly, this feature also requires the devices
-> +to support polling configuration.
-
-This doesn't explain how it works. I'd say something like:
-
-Hybrid io polling differs from strict polling in that it will delay a
-bit before doing completion side polling, to avoid wasting too much CPU.
-Like IOPOLL, it requires that devices support polling.
-
-
-> diff --git a/src/setup.c b/src/setup.c
-> index 073de50..d1a87aa 100644
-> --- a/src/setup.c
-> +++ b/src/setup.c
-> @@ -320,6 +320,10 @@ int __io_uring_queue_init_params(unsigned entries, struct io_uring *ring,
->  			ring->int_flags |= INT_FLAG_APP_MEM;
->  	}
->  
-> +	if ((p->flags & (IORING_SETUP_IOPOLL|IORING_SETUP_HYBRID_IOPOLL)) ==
-> +			IORING_SETUP_HYBRID_IOPOLL)
-> +		return -EINVAL;
-> +
-
-The kernel should already do this, no point duplicating it in liburing.
-
-The test bits look much better now, way simpler. I'll just need to
-double check that they handle EINVAL on setup properly, and EOPNOTSUPP
-at completion time will turn off further testing of it. Did you run it
-on configurations where hybrid io polling will both fail at setup time,
-and at runtime (eg the latter where the kernel supports it, but the
-device/fs does not)?
+ include/linux/io_uring_types.h | 20 +++----
+ include/uapi/linux/io_uring.h  | 28 +++++++++-
+ io_uring/io_uring.c            | 27 +++++-----
+ io_uring/memmap.c              | 67 +++++++++++++++++++++++
+ io_uring/memmap.h              | 14 +++++
+ io_uring/register.c            | 97 ++++++++++++----------------------
+ io_uring/register.h            |  1 -
+ 7 files changed, 164 insertions(+), 90 deletions(-)
 
 -- 
-Jens Axboe
+2.46.0
+
