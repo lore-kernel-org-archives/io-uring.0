@@ -1,96 +1,87 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C52C16F282
-	for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 15:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA81C1CEAD6;
+	Fri, 15 Nov 2024 16:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731686036; cv=none; b=ZyfnwctNwWNLrz5h5G3CUKZJSwHSzpx/VEQRCD8wV4WXa/evROgnlvowgV585pKRhesg+Nrtiz48SWLayY3Eu+M0PBfm6fFiX4MOGjooGjWmnG8aHqAlrFQnq8bqDLyJS5mMEc6AUeS5ULuift4WnAQ8i7tT9jIBTGWfuonRY9A=
+	t=1731688089; cv=none; b=d7KcJBjAK3Nyion77ktXTkD7uY8jgJl7Bg8JXKXVteXPHFsCO+S2tjpqqa2dv9EIj6cPEFlbQ68BOZUEHJla5G6+jGqK6g1fyhctFQyXHwrszTMHedI2j6g8idv0Sdl6UhUtBhfBGhX6Xy/jfyfHH+fuIV450RWHGaqMCa7B2oA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731686036; c=relaxed/simple;
-	bh=F0BwOFY37ZuVvqmVP4Gqvm/6PgGe0rl4PyIkPPOOjh4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=neWlwEIejAynVvK2JwE3xuyGHDjylx4R/yvmhXO09NdLYd+u05JMPutHNZBRR2qywV+zzPC3owNwVNXTtf5ky1cBK3dgSsu6QUkJm1J6q2Yv4cD52qtsej6Xs5gQdc7Mbeb6ZhXOWd/uMrEIXEwacd5eey83TtiIayLA7pSGS8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XhlYGJpW; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731688089; c=relaxed/simple;
+	bh=XOUgdezN4ZR1SvSwisJLzjliFvPotJwHe9wFvR4ENX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hJFx/7UEXyhuGuPawVrJtDkaEuU5jYYGgrOM91Jbqjnvnwj3ZEpAYsO6dZMnlCrwR0ojNVJTZGyZuJTWLUNRizieW3XOHGBU7YKpHu+GTRLhTCPRkIf9F43WvoQeBCGGGhc6S+KAosWnwdhLE/vLK3HPT989UPbYM6KEkJGxMbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RXqZSo45; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XhlYGJpW"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3821c5f6eb1so1336256f8f.3
-        for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 07:53:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731686033; x=1732290833; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/7ZAyRIRoptrIRj76X39POdtrGGWt+FLdcDLY+8+OeM=;
-        b=XhlYGJpWgnXKwYM4QC+yjZo0LbBzF1ydMDPaiQoI87LvxtsuENT2F6pJsDkaOnvNbt
-         uoCK0WywsG4yJaVFzM5aA7H/a5WXJGs2IJce2J6JkF4YMu1fK+i+P60vtopSHEQi0zOv
-         f9fUbhYaIeV+OdcJ13fwQwJZyN2htJc8m60onKj4mmBdn44eKrzgP6lHMt0tBse9UC/D
-         0rhSflBT4hK9dNaoxWHewOZdQwskPAHmBNAN+nOV7C8SL9DPcNItXFZVZaXlETFqhjBp
-         ggLUmjR76FTyMKqJwaYLLYzdW/pExKIO240Yjvs/a1A46E9ckZy56ub7NCO5xUJ9gjTC
-         5idg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731686033; x=1732290833;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7ZAyRIRoptrIRj76X39POdtrGGWt+FLdcDLY+8+OeM=;
-        b=n1sG8oePtBRHJf1wsQm0AgeabCs0ofDccAJgL+s8aWh3YjyDubLyQaNIGWTXYXTQty
-         p7BZ8kWT/C6YSVIIgq7cUQB+K65CoVaqm4L3WG5Jr8VEQeUJBC14O2rjt038p7dq26/Q
-         VCKTGTvbaYTMCQ505ntexXJzzaMayeYLZT0cbFpK1HTuH11akjzPhoAsMi1Du6yJaO/g
-         I0xUGdv1GtJS4tlW/o5cuTeWkYq4kGNJMclkPwEV017SLAfHOK40UHznehck0TxFOspm
-         thbTszTLZwoQ8zerMquLd+5nysIblHnqPSCOOylBeAvDuFQKoC4kuv/T6foyNZJJD4fB
-         u+yA==
-X-Forwarded-Encrypted: i=1; AJvYcCWjVIEA+G/yt6vGSAiUfxRWEJRahs12FbruqyKPFayduHP74NoDBFZap0+QvEMYZO7uWUuxy/E3RQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQj3HjGcedmZUn3pjoomgcq7ICGUG7eLPqHwR1U0/8STtDbtNz
-	wp/lVy7lNeJy4fcnQ2MAdx01Gd9IiMf3qdXhctPprZNP+bgc2RtFquR/6Q==
-X-Google-Smtp-Source: AGHT+IFoiKrZkOLezMNzOHcUUm4EkxVD/IkDgbKGY2MkSe8I8myqjVCp9hU7AWYAB0HN6h9o1U3Ybw==
-X-Received: by 2002:a05:6000:1448:b0:37d:3e6d:3c2f with SMTP id ffacd0b85a97d-38225a8baeemr2592620f8f.47.1731686032460;
-        Fri, 15 Nov 2024 07:53:52 -0800 (PST)
-Received: from [192.168.42.191] ([148.252.132.111])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-382207fd632sm3924416f8f.44.2024.11.15.07.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 07:53:52 -0800 (PST)
-Message-ID: <4836a0b6-b978-4c1f-bce4-b606e890c5c0@gmail.com>
-Date: Fri, 15 Nov 2024 15:54:40 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RXqZSo45"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA789C4CECF;
+	Fri, 15 Nov 2024 16:28:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731688089;
+	bh=XOUgdezN4ZR1SvSwisJLzjliFvPotJwHe9wFvR4ENX8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RXqZSo45vVeTt/JN3nwEBmIhhFCDSMdJ0gFzSXt2LzR+bWzr7z5NDQ/PNKeQVA0hT
+	 QHkm3aE4qO44nudL9NZL4aHmVnHQlkh6lDffbKCbMAHAXosypock/hdjoZk9KHFlXO
+	 vGKwhpY9gJCiaF+zHU1/bLK8ulxxjEICPa4yKF4hgf1b6wJlPZT2r6YPwJn7+tbfsn
+	 ruhVTfUY4jVa6ZNTalNcBjvZOYiyDiRWPhv2zOc3ksqtEWvxiWsciVyv8zKcRhW0R0
+	 kSIsqqgklQ7SupdtgZhCdoxIUFGxtMcy5gQBLJpg0GsRh4hqEH3YJqRRvRvw+ufgOI
+	 TY0RCoD7mdmyw==
+Date: Fri, 15 Nov 2024 09:28:05 -0700
+From: Keith Busch <kbusch@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Dave Chinner <david@fromorbit.com>, Pierre Labat <plabat@micron.com>,
+	Kanchan Joshi <joshi.k@samsung.com>, Keith Busch <kbusch@meta.com>,
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+	"linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+	"axboe@kernel.dk" <axboe@kernel.dk>,
+	"martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+	"asml.silence@gmail.com" <asml.silence@gmail.com>,
+	"javier.gonz@samsung.com" <javier.gonz@samsung.com>
+Subject: Re: [EXT] Re: [PATCHv11 0/9] write hints with nvme fdp and scsi
+ streams
+Message-ID: <Zzd2lfQURP70dAxu@kbusch-mbp>
+References: <20241108193629.3817619-1-kbusch@meta.com>
+ <CGME20241111103051epcas5p341a23ed677f2dfd6bc6d4e5c4826327b@epcas5p3.samsung.com>
+ <20241111102914.GA27870@lst.de>
+ <7a2f6231-bb35-4438-ba50-3f9c4cc9789a@samsung.com>
+ <20241112133439.GA4164@lst.de>
+ <ZzNlaXZTn3Pjiofn@kbusch-mbp.dhcp.thefacebook.com>
+ <DS0PR08MB854131CDA4CDDF2451CEB71DAB592@DS0PR08MB8541.namprd08.prod.outlook.com>
+ <20241113044736.GA20212@lst.de>
+ <ZzU7bZokkTN2s8qr@dread.disaster.area>
+ <20241114060710.GA11169@lst.de>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] io_uring: introduce memory regions
-To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-References: <cover.1731556844.git.asml.silence@gmail.com>
- <cd8e0927651ecdb99776503e50aa3554573b9a61.1731556844.git.asml.silence@gmail.com>
- <073858ab-ad4c-4f57-ae3c-b9b30c59fc6e@kernel.dk>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <073858ab-ad4c-4f57-ae3c-b9b30c59fc6e@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241114060710.GA11169@lst.de>
 
-On 11/15/24 14:44, Jens Axboe wrote:
-> On 11/13/24 9:14 PM, Pavel Begunkov wrote:
->> +void io_free_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr)
->> +{
->> +	if (mr->pages)
->> +		unpin_user_pages(mr->pages, mr->nr_pages);
->> +	if (mr->vmap_ptr)
->> +		vunmap(mr->vmap_ptr);
->> +	if (mr->nr_pages && ctx->user)
->> +		__io_unaccount_mem(ctx->user, mr->nr_pages);
->> +
->> +	memset(mr, 0, sizeof(*mr));
->> +}
+On Thu, Nov 14, 2024 at 07:07:10AM +0100, Christoph Hellwig wrote:
+> On Thu, Nov 14, 2024 at 10:51:09AM +1100, Dave Chinner wrote:
+> > SGI wrote an entirely new allocator for XFS whose only purpose in
+> > life is to automatically separate individual streams of user data
+> > into physically separate regions of LBA space.
 > 
-> This is missing a kvfree(mr->pages);
+> One of the interesting quirks of streams/FDP is that they they operate
+> on (semi-)physical data placement that is completely decoupled from LBA
+> space.  
 
-Indeed, I'll fix it.
+That's not particularly interesting about FDP. All conventional NAND
+SSDs operates that way. FDP just reports more stuff because that's what
+people kept asking for. But it doesn't require you fundamentally change
+how you acces it. You've singled out FDP to force a sequential write
+requirement that that requires unique support from every filesystem
+despite the feature not needing that.
 
-FWIW, this is v1 instead of v2 (which also has the same problem).
-
--- 
-Pavel Begunkov
+We have demonstrated 40% reduction in write amplifcation from doing the
+most simplist possible thing that doesn't require any filesystem or
+kernel-user ABI changes at all. You might think that's not significant
+enough to let people realize those gains without more invasive block
+stack changes, but you may not buying NAND in bulk if that's the case.
