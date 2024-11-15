@@ -1,60 +1,59 @@
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B33754769
-	for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 14:44:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2FA1C07EE
+	for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 15:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731681886; cv=none; b=G6eFaUx8q1XEv9vzQ/5IWYWzhxpq/zvY2ojLjVmRKWPjE6UQ9iLcKfLumT6KRCnSg3dmDfRwXBeyLjMjHx8x2gnLVxEryAsN7SOsRjBty02MpIvImba1x2W/tkBB/ZVHdK4x4iF7kohJoNMEh5zEn6bftfvhtPuvJSweA4EvZ2I=
+	t=1731685259; cv=none; b=X+6FvZnp8vJm+2U5Vm2dN/NRJwKk2rkKT9/jYW4PbMMatNDCD7IYBgHQw0guRykq9pEUKHbfL+pXKdKtInuz4lHyfXU94udrx+uhRMV9wBRkoZNPw4ebwKBs6aumHn4r1BQBeYDqquPgEXD759RascqTtVQV6S5nerpMdLGFRmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731681886; c=relaxed/simple;
-	bh=sliCBDy3xzT9tSxC4hfpbA465KRX3eXIW2Sf3yYjtz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=BTk6r3VOEAz1v5YQvW0fbrwj78TDmu3RIz4EwjWldBW40t8qBAlWraqSHLZybZAvId9zdSMdZkwQBOrXtPTHSmeFRp9UkChYoLBpQsk+71ytjFIKNYDHuzzntns1FVN556v7bFfw/TfDXA6K7ktxcZoi2AAYBDMVoVi/6C/nsvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=MyNg62Sy; arc=none smtp.client-ip=209.85.167.177
+	s=arc-20240116; t=1731685259; c=relaxed/simple;
+	bh=jdr8qNxy+Jo1gsIHbtkxZqlHxWm+kUlA4DWc5Z9WKtw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CqJ8hXyqL5eXJr6pqFMcH37/N6OUyN93FNAe14fLqpEgY5/ywLUk/6sedhagT2Lulb2aJ6RHrso/T8mH/mF6TTopkCwmHH2m2PVTLROkWaLSUr19blutTC8TDMyhAgDoP3FNCoAvhwfKxCv9huk98W2/6zHTUOXgMc+pLDvks68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=TC9LE44L; arc=none smtp.client-ip=209.85.167.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="MyNg62Sy"
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3e6075cba82so1101225b6e.0
-        for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 06:44:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="TC9LE44L"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3e602994635so536063b6e.0
+        for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 07:40:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731681882; x=1732286682; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731685256; x=1732290056; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NY4ekCIco7kjju0U19tJGE0DaTlYgc+R3dCSvLjiMCE=;
-        b=MyNg62SyXJsQFTEUCUqlhKq4OS76hAwDptlIL0utjeyhJZv679R5vw+4hkA0Q+y7fJ
-         FLKiWlY/hc1wMP9UsiSOlbg4WVx/9cwiW32y311uTtQHDGxMul3MpnQeRhzcKYkCK/8L
-         TtPguwFk/r7jVwPp7k+PZDpfZbr24JIkVw90E1B+wteLHcR4s+iNFk2bhZY/Ju56Vda9
-         dQvwKYr6SJnjBy8dhekjZeOVp/QXmLJxC9okTIqceUhzBmLIlXVhVsm21bVghwdKDHpf
-         HM1EqOxeTIbCE3mQl8qNcYhMKRe32P90TzSQBpeltWmFodFsp0ntdWHDhu5uElfxLuwf
-         M86w==
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qoZnHCDbvEhSS1c5SRWBNLiOwRUEY61DZ2aXp4JDEYc=;
+        b=TC9LE44LpmuaBUF2ni7msJ+oK51W1D83PnHgzYUlflAY+cERqgR0vE3LBLWk9TxC7a
+         p1jISsurUq6S59DUx37zcfpMiJCv0awylLruPYU+YwApwtBUxVxZlHm1bI/POjy+BFtn
+         lqh86KHsj+bVsS2fy/299PTkWQB9HX+9Ha/fgfEhvLbFblmNostVlEjJU99Lbx3adXJ/
+         rznhtFl0LPcslGWEQYTRdzLVPEzO2z0r3kxqHWvZUO87CGUO8Jp5zg4tjqakkUGRNgu2
+         avNFass9dSjg0z0AhbOJfrmY5zTcAI8aw8srkccowzVXjare5LgxZaCh3lNhUyep4inO
+         JgFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731681882; x=1732286682;
+        d=1e100.net; s=20230601; t=1731685256; x=1732290056;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NY4ekCIco7kjju0U19tJGE0DaTlYgc+R3dCSvLjiMCE=;
-        b=u0Eg1LslqxjDvGE/DUeTEMPs4KsoNXdHOmr77WZZcSKcC9II+qu8VRe9t+Zst2p7P1
-         EUyv6PGH1swGGZShCKKfak6LSQH2UByQznCrXVq8JrjpLAgtpyuH0xSQ2ejdhYwZ28rw
-         7xRKuzlpENe6rlIMqeCsuOnQtAKFb2JFlhnsc8hxgNp/TpjM4l11O1YYEwJaSrvnuwcj
-         KSNcLzQVdAM06GGg16uagNNNJRguLuTgsXGZ50XApeseTZFBOiHT05jY+84pogkvx8uW
-         BpTAI01UwVXV8zVKPQSRmQB46Do+FXH6fMu3c2fPlb2XoAndmg/rJNMMrSknNRcEWHRH
-         hcqA==
-X-Forwarded-Encrypted: i=1; AJvYcCXwQW0pITqcjrxf3qYrYknwDXkWIJGDrISN3+j1WL41p5z78h5ZVELkWBNZfYllgOvOBTWTC1cKuA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfFOHbqz/1HjSTA91soVJ9fGSpbH+BVjTh00iYczhjIyJUq0Y0
-	c1OHz5Fg8agPKVXYBbPO+PDEnbROVtflAjDz2sQVIDWYCbzMpWB/R665UczlcHUVVjx3OzUDPB8
-	snxo=
-X-Google-Smtp-Source: AGHT+IEsdBwZZ/uSjM5+U7Z+/b7LOEfYGf4+dRINQgCSzH/roupntGBVq9Nqrxtv5auyI41P9oPblQ==
-X-Received: by 2002:a05:6870:56a2:b0:277:c113:5b26 with SMTP id 586e51a60fabf-2962dcc7206mr2308088fac.7.1731681881966;
-        Fri, 15 Nov 2024 06:44:41 -0800 (PST)
+        bh=qoZnHCDbvEhSS1c5SRWBNLiOwRUEY61DZ2aXp4JDEYc=;
+        b=q3oNOyHbNNzs34MsaFZUoXUcMvVLX+NqezGmzzqYzYibbQ0emLVq2zXZpdC/pG9zZo
+         LlVeI8crRlPXN7d4QAKMhl5UXbchCkv/aY6v25rvFPWuf3ejQR4DYfaH/e3zXMPvSS5F
+         l1uA+d8H5tvyJ0pjNaBebXQGUdTAqrRDRNtmTEjBa4Q+svg20kdGLp5VHeB2BMpsBLei
+         Vu0YSNHY766hOnMaWgmhnLn8MhwxA8PRIcIPOoneECeWpDKdRiGyxCtvtFjmuZaPCgX7
+         OJPOMgwJlFaynIgE1gwLfzbm0u6ZS7bqP7oSMT0j+t/g8Ul0cxto07+BJTK2fq8fWxSq
+         /m7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXNg91WxAhT1nHhvSbsi4lCzkcteDnpIlLfdOIBlCc2NHD1iJ1lUyLOoPihHmHSSWPrGW5YpWZoPg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpBaima9lwMghh00l8mrZUoKSHaJKQrHPX2dnBebtt2cEdjRr5
+	HBMeLix0uEl2IIWBhpLCdogmeld96ANeB9c1Vchg9rg7NKJD1gROth/LBd7XGQE=
+X-Google-Smtp-Source: AGHT+IFdUS8uN49tDNf746ur2SPDst9sm3KOAJaU1AK84+5cj7rnDzwIuOtF3souY+5wecSwvnATWA==
+X-Received: by 2002:a05:6870:e38a:b0:288:a00e:92dc with SMTP id 586e51a60fabf-2962deeacdamr3161996fac.2.1731685256497;
+        Fri, 15 Nov 2024 07:40:56 -0800 (PST)
 Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2961092cba5sm1465674fac.22.2024.11.15.06.44.41
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-29610949b12sm1516348fac.26.2024.11.15.07.40.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 06:44:41 -0800 (PST)
-Message-ID: <073858ab-ad4c-4f57-ae3c-b9b30c59fc6e@kernel.dk>
-Date: Fri, 15 Nov 2024 07:44:40 -0700
+        Fri, 15 Nov 2024 07:40:55 -0800 (PST)
+Message-ID: <7b1ed2bb-dc06-41ea-ba48-85c25d085dd8@kernel.dk>
+Date: Fri, 15 Nov 2024 08:40:54 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -62,30 +61,36 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] io_uring: introduce memory regions
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-References: <cover.1731556844.git.asml.silence@gmail.com>
- <cd8e0927651ecdb99776503e50aa3554573b9a61.1731556844.git.asml.silence@gmail.com>
+Subject: Re: [PATCH liburing] test: add test cases for hybrid iopoll
+To: hexue <xue01.he@samsung.com>
+Cc: asml.silence@gmail.com, io-uring@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <3aada5a2-074a-45e8-882c-0302cae4c41b@kernel.dk>
+ <CGME20241115033450epcas5p10bdbbfa584b483d8822535d43da868d2@epcas5p1.samsung.com>
+ <20241115033445.742464-1-xue01.he@samsung.com>
 Content-Language: en-US
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cd8e0927651ecdb99776503e50aa3554573b9a61.1731556844.git.asml.silence@gmail.com>
+In-Reply-To: <20241115033445.742464-1-xue01.he@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/13/24 9:14 PM, Pavel Begunkov wrote:
-> +void io_free_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr)
-> +{
-> +	if (mr->pages)
-> +		unpin_user_pages(mr->pages, mr->nr_pages);
-> +	if (mr->vmap_ptr)
-> +		vunmap(mr->vmap_ptr);
-> +	if (mr->nr_pages && ctx->user)
-> +		__io_unaccount_mem(ctx->user, mr->nr_pages);
-> +
-> +	memset(mr, 0, sizeof(*mr));
-> +}
+On 11/14/24 8:34 PM, hexue wrote:
+>> The kernel should already do this, no point duplicating it in liburing.
+>>
+>> The test bits look much better now, way simpler. I'll just need to
+>> double check that they handle EINVAL on setup properly, and EOPNOTSUPP
+>> at completion time will turn off further testing of it. Did you run it
+>> on configurations where hybrid io polling will both fail at setup time,
+>> and at runtime (eg the latter where the kernel supports it, but the
+>> device/fs does not)?
+> 
+> Yes, I have run both of these error configurations. The running cases are: 
+> hybrid poll without IORING_SETUP_IOPOLL and device with incorrect queue
+> configuration, EINVAL and EOPNOTSUPP are both identified.
 
-This is missing a kvfree(mr->pages);
+I figured that was the case, as the existing test case should already
+cover both of those cases. I'll get this applied once you send the
+updated version.
 
 -- 
 Jens Axboe
