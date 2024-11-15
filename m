@@ -1,96 +1,91 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2FA1C07EE
-	for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 15:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649472F29
+	for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 15:43:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731685259; cv=none; b=X+6FvZnp8vJm+2U5Vm2dN/NRJwKk2rkKT9/jYW4PbMMatNDCD7IYBgHQw0guRykq9pEUKHbfL+pXKdKtInuz4lHyfXU94udrx+uhRMV9wBRkoZNPw4ebwKBs6aumHn4r1BQBeYDqquPgEXD759RascqTtVQV6S5nerpMdLGFRmM=
+	t=1731685436; cv=none; b=dKgG9COeICbedr+OIbVF0bNaGV0Moq2W3NZMnr4+SimnAgXd2NsnheYSjSVPJu9KTU6IaBdnBZC9ZyJR2wq1jrGjt7JzYCbFI0+zsfdKvwKaYjYG3EkIK/2GCZl8v4q1bZPjOqCGjojhEqnzg6fsMYOFSXoYalnkZ9Fm8JVfxUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731685259; c=relaxed/simple;
-	bh=jdr8qNxy+Jo1gsIHbtkxZqlHxWm+kUlA4DWc5Z9WKtw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CqJ8hXyqL5eXJr6pqFMcH37/N6OUyN93FNAe14fLqpEgY5/ywLUk/6sedhagT2Lulb2aJ6RHrso/T8mH/mF6TTopkCwmHH2m2PVTLROkWaLSUr19blutTC8TDMyhAgDoP3FNCoAvhwfKxCv9huk98W2/6zHTUOXgMc+pLDvks68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=TC9LE44L; arc=none smtp.client-ip=209.85.167.173
+	s=arc-20240116; t=1731685436; c=relaxed/simple;
+	bh=2vXnHLGXI1nqsq4g2fvZanDqWRJ0aXZ76QxPPC06v7I=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=dTr/LrNokn5E2FW6dG9g0/Bn9rfWfc/oBO/KVSA9ghoYOJEppPqUk/hssHyD9tQzLAOmCtjbI6t43RQZwUACdjxC2wEHLuozClEavz/bl28/UQHanwMoNhLFVmYxzoIftVXziXEGfzHwn6wmn98feCPoZASL0xaIppEvxJ2QJr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=m4820q7J; arc=none smtp.client-ip=209.85.167.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="TC9LE44L"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3e602994635so536063b6e.0
-        for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 07:40:57 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="m4820q7J"
+Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3e6075cba82so1143138b6e.0
+        for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 07:43:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731685256; x=1732290056; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qoZnHCDbvEhSS1c5SRWBNLiOwRUEY61DZ2aXp4JDEYc=;
-        b=TC9LE44LpmuaBUF2ni7msJ+oK51W1D83PnHgzYUlflAY+cERqgR0vE3LBLWk9TxC7a
-         p1jISsurUq6S59DUx37zcfpMiJCv0awylLruPYU+YwApwtBUxVxZlHm1bI/POjy+BFtn
-         lqh86KHsj+bVsS2fy/299PTkWQB9HX+9Ha/fgfEhvLbFblmNostVlEjJU99Lbx3adXJ/
-         rznhtFl0LPcslGWEQYTRdzLVPEzO2z0r3kxqHWvZUO87CGUO8Jp5zg4tjqakkUGRNgu2
-         avNFass9dSjg0z0AhbOJfrmY5zTcAI8aw8srkccowzVXjare5LgxZaCh3lNhUyep4inO
-         JgFQ==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1731685433; x=1732290233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u6Q0wdk4ZkvBe0nUUQrCV7YJHywsuhUgJ4bITCNssrc=;
+        b=m4820q7JttycVf4rDZM3hPZWHKgZk4NS1mjtFbnKsj6uBDzJidASvMlCStoAq6korm
+         7gaILqtNWBKJkkYICR0/8+AtI7aJBO2MA1B/5+bg6Rt8om66UVuWDF8IVYZZmV+ViyH2
+         bN00J8rYTdn2dCHfUmQ8OFoCVKNQY/hOsTwtH3J83lAoXF3Rzc2kQNMVlybWb5Q313r1
+         d/4XvjRW2ec6iQQw67j/zcK+fAFQl6K0G4JlojMn3bD1NsdLh1vm3UBDmOq79E/7SDgI
+         639nK9Ed83YCSNB08YSvMJiAjK/ssRKdcWpMsTEK8XYF3DXZ67vER5TkHfSKNHiWeElK
+         ec1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731685256; x=1732290056;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qoZnHCDbvEhSS1c5SRWBNLiOwRUEY61DZ2aXp4JDEYc=;
-        b=q3oNOyHbNNzs34MsaFZUoXUcMvVLX+NqezGmzzqYzYibbQ0emLVq2zXZpdC/pG9zZo
-         LlVeI8crRlPXN7d4QAKMhl5UXbchCkv/aY6v25rvFPWuf3ejQR4DYfaH/e3zXMPvSS5F
-         l1uA+d8H5tvyJ0pjNaBebXQGUdTAqrRDRNtmTEjBa4Q+svg20kdGLp5VHeB2BMpsBLei
-         Vu0YSNHY766hOnMaWgmhnLn8MhwxA8PRIcIPOoneECeWpDKdRiGyxCtvtFjmuZaPCgX7
-         OJPOMgwJlFaynIgE1gwLfzbm0u6ZS7bqP7oSMT0j+t/g8Ul0cxto07+BJTK2fq8fWxSq
-         /m7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXNg91WxAhT1nHhvSbsi4lCzkcteDnpIlLfdOIBlCc2NHD1iJ1lUyLOoPihHmHSSWPrGW5YpWZoPg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpBaima9lwMghh00l8mrZUoKSHaJKQrHPX2dnBebtt2cEdjRr5
-	HBMeLix0uEl2IIWBhpLCdogmeld96ANeB9c1Vchg9rg7NKJD1gROth/LBd7XGQE=
-X-Google-Smtp-Source: AGHT+IFdUS8uN49tDNf746ur2SPDst9sm3KOAJaU1AK84+5cj7rnDzwIuOtF3souY+5wecSwvnATWA==
-X-Received: by 2002:a05:6870:e38a:b0:288:a00e:92dc with SMTP id 586e51a60fabf-2962deeacdamr3161996fac.2.1731685256497;
-        Fri, 15 Nov 2024 07:40:56 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-29610949b12sm1516348fac.26.2024.11.15.07.40.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Nov 2024 07:40:55 -0800 (PST)
-Message-ID: <7b1ed2bb-dc06-41ea-ba48-85c25d085dd8@kernel.dk>
-Date: Fri, 15 Nov 2024 08:40:54 -0700
+        d=1e100.net; s=20230601; t=1731685433; x=1732290233;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=u6Q0wdk4ZkvBe0nUUQrCV7YJHywsuhUgJ4bITCNssrc=;
+        b=QBxvdIDv3wcQZ4UM5TJuMCI1B5OJng6B/NT/iCmZvvbqHmdx2fp3wy0gSepjr3bPWd
+         tNUnIXmKTTK8F+dhqR7DxXzoRto98chO8b0aOxmTUO0WSODx/WV3Li+PqMtgBQ9K/D26
+         qK97uS+BKg4mNxtO3LPaFl90vKdsGbbg0qdsDqch+MSFXGElHjAbHkPL67BuY0nyE4jR
+         vhz9uKUELvClmXeKFuR4PHJ14uoCPGoyg51gRVBos3CYLWj+9VfLC2pJYRqne05fuJY3
+         BusKWZkktPDm+Ynm0FMZyavO0FpQCBXtOJmq9gg8k0J35q4oaXKjj4TC8W1q6tDdPHVe
+         4bFw==
+X-Gm-Message-State: AOJu0YxeQ+YImB36pqnRp2RSZeyGrzrjQZWLTPdzPEMDgdxnO2UYho9W
+	wQoaYh68/J44D8v1+/Nhyn5zGHHSdGFTZAqtG8OT3Jee7VCqF1x40uOU1bOJZ3tNfm5YRLB/+qQ
+	r6nk=
+X-Google-Smtp-Source: AGHT+IHoKx0DNEOlKpWzoQy2ROeqpBYo8WbCoTYJ6+Hw2EASga/6br7UpMDnvxf+cXpuyIDRatPwSA==
+X-Received: by 2002:a05:6808:1a22:b0:3e6:3a82:f790 with SMTP id 5614622812f47-3e7bc7b0b26mr3470295b6e.6.1731685433461;
+        Fri, 15 Nov 2024 07:43:53 -0800 (PST)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e7bcd82997sm563072b6e.34.2024.11.15.07.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Nov 2024 07:43:52 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org
+In-Reply-To: <20241115034902.GP3387508@ZenIV>
+References: <20241115034902.GP3387508@ZenIV>
+Subject: Re: [PATCH] switch io_msg_ring() to CLASS(fd)
+Message-Id: <173168543269.2491301.6332603954754033870.b4-ty@kernel.dk>
+Date: Fri, 15 Nov 2024 08:43:52 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH liburing] test: add test cases for hybrid iopoll
-To: hexue <xue01.he@samsung.com>
-Cc: asml.silence@gmail.com, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <3aada5a2-074a-45e8-882c-0302cae4c41b@kernel.dk>
- <CGME20241115033450epcas5p10bdbbfa584b483d8822535d43da868d2@epcas5p1.samsung.com>
- <20241115033445.742464-1-xue01.he@samsung.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20241115033445.742464-1-xue01.he@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-On 11/14/24 8:34 PM, hexue wrote:
->> The kernel should already do this, no point duplicating it in liburing.
->>
->> The test bits look much better now, way simpler. I'll just need to
->> double check that they handle EINVAL on setup properly, and EOPNOTSUPP
->> at completion time will turn off further testing of it. Did you run it
->> on configurations where hybrid io polling will both fail at setup time,
->> and at runtime (eg the latter where the kernel supports it, but the
->> device/fs does not)?
+
+On Fri, 15 Nov 2024 03:49:02 +0000, Al Viro wrote:
+> 	Trivial conversion, on top of for-6.13/io_uring.
+> No point backmerging and doing that in #work.fd, seeing that
+> it's independent from anything in there...
 > 
-> Yes, I have run both of these error configurations. The running cases are: 
-> hybrid poll without IORING_SETUP_IOPOLL and device with incorrect queue
-> configuration, EINVAL and EOPNOTSUPP are both identified.
+> 
 
-I figured that was the case, as the existing test case should already
-cover both of those cases. I'll get this applied once you send the
-updated version.
+Applied, thanks!
 
+[1/1] switch io_msg_ring() to CLASS(fd)
+      commit: ffd58b00769a9cfee6a110231eb7d1fa70fe64b9
+
+Best regards,
 -- 
 Jens Axboe
+
+
+
