@@ -1,97 +1,73 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FED1D6193
-	for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 16:54:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5981BC069;
+	Fri, 15 Nov 2024 16:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731689642; cv=none; b=aa8HMFU+GinmHtfXDUmudIVQMNFr5i9Lj34Xz3iZbeO3he+OXC6PpyfwZ4Q6vInazNKm3xMK7rt7OLgWNUZ1ZqBLLUweWymtKtR/74xZC2uXzdz25x4Pn4LaYbjd2Qs1U0r4j40C8h6QX2G9VnNBdgBmQVbuSkCrbezJtGvq0cs=
+	t=1731689643; cv=none; b=TumnVHPonYDAE0yHFC6kw7//Yx2r7+UeOLDWfJTBS0x1kTGzZMpv+qDY8JdsfwxoxASHa4iy8/gejPSkD0dhG5+nneBQk+ESE022agxxvAxU+BR1izm+bYNFKVL53+XtKZwAUe83WgEKZEULVZuG7FSJ5pfyZlsodRNg44TkT9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731689642; c=relaxed/simple;
-	bh=eGfmk5pHWRmz/5IEyopxX540NFO23oPagEaL0p8rDAI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IZ4nAAqhJ+TxLFJUVlTcE1/F3XpvO8nctuQ6uwu4Cmrw3Ciqbb1ZHv0kqrnyKWAMVRc8bfiXo5/gOEzDw5AuY539CNha8vTmI2paXMRd3Qc+PXUOqYwexOrMAoBZrUifeB+k6A4AmuDIyhP0cm1mC5+A7bCEBD3RNjT53ZmpuMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XFshcYp1; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XFshcYp1"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43152b79d25so7625685e9.1
-        for <io-uring@vger.kernel.org>; Fri, 15 Nov 2024 08:54:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731689638; x=1732294438; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LbuG+/DWjJeYlovcxNfbsJzRVRRM+t1Xz3YpJq8xpS0=;
-        b=XFshcYp14LWrKv0blDx2iz22niZjbVcSHkZIY7vnaoOMTsiidoqDt6Iw+FsdnbLioU
-         gF1LB6W+SYOAoBKqBeyoWvyq/wnBAGDyRqn1Ni/8jZg41RWSP5Po1s76o+gvVdhZQ+ny
-         UKXDvs2+v1T1coqs71T3MuWbOVdHtY2ried69hMpwNzi+XUbi9fsktcuVuQTPeNzzYw7
-         GO48lFOR5xgoFbOONv0nVNsxhLxzOMHk4vSfKAR5WDEcUE4IGbiJotZMk6cMZGLCcXt3
-         v4oTDb166hXnB+pYjJjKqendtAqg/FSt2iNriZzmCKkyW5gCOQfHh6troJ8JniF9Xvca
-         t/4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731689638; x=1732294438;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LbuG+/DWjJeYlovcxNfbsJzRVRRM+t1Xz3YpJq8xpS0=;
-        b=S8o2ihfG+XZocGHZr9JKqvJE2NmcNB55aDOUe++ucqZ60o4GWl9wpACXPUSPgM4KTw
-         FBL67qaIXcXfetI/R31EzN1WQRG78p1FCB3321gxhjLewD9JxKBr630d7DSQgKGyHpZ1
-         YvBQqN/xQI56BHn393qalIC7wT26TMB6LhmXDXvfoCZ3j2kH59Zz5607ucTL3zYmjD+T
-         Y0HXgnKpcnmnT37HsnJg+49BsmOiQUKndJoFNQ8aAJC7nvYAY9q4a3AeO6BjSeBi3KLW
-         3s+xZn5u71htNo0ypoiPBHOoldhFZ4nfpMevL+RENxEOo2XzD0/4hANhMdG2u9K78JE9
-         KGXw==
-X-Gm-Message-State: AOJu0Ywng52HzXy/67QLh7wbPWQM+HwS7YszVtccDsDJxDou6O+AWYqB
-	QvBgl7WNZS183u4EwnMoO4A7Ilc/wcNmZcsFstwK+PTCyPQbdaGZqqn6eQ==
-X-Google-Smtp-Source: AGHT+IEJxaVtJYtyJ0rRdBA+3ko+Tv/ERgTAwAYV3iLFWdiDtvdJIlIEfvII4r4pzj7HXM4Sabrczw==
-X-Received: by 2002:a05:6000:400c:b0:382:2ba9:9d53 with SMTP id ffacd0b85a97d-3822ba9a365mr1252396f8f.16.1731689638208;
-        Fri, 15 Nov 2024 08:53:58 -0800 (PST)
-Received: from 127.0.0.1localhost ([148.252.132.111])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3821ae2f651sm5011895f8f.87.2024.11.15.08.53.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2024 08:53:56 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com
-Subject: [PATCH v3 1/6] io_uring: fortify io_pin_pages with a warning
-Date: Fri, 15 Nov 2024 16:54:38 +0000
-Message-ID: <d48e0c097cbd90fb47acaddb6c247596510d8cfc.1731689588.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <cover.1731689588.git.asml.silence@gmail.com>
-References: <cover.1731689588.git.asml.silence@gmail.com>
+	s=arc-20240116; t=1731689643; c=relaxed/simple;
+	bh=yDXkpXU6/IAPVs2ZLps/GO7tZ5rNTL5loe+l0zKWTb0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y7Oo+wN38CVw/Mav1bXRmEaRGUA97Sy4vQcrv9NHtT+qdr3agJ1a+3Z50eM3M8AfJSXqsYWybjF4uGJX9B92KPPgCRdzENP82xthzplq2Gm/jHhDPowlGxmCjBl7mYvq+r7iRw5Q9uS645HKhrCl2t4IItDC9GXk1ay4FxybUwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 8B41D67373; Fri, 15 Nov 2024 17:53:49 +0100 (CET)
+Date: Fri, 15 Nov 2024 17:53:48 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Keith Busch <kbusch@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Dave Chinner <david@fromorbit.com>,
+	Pierre Labat <plabat@micron.com>,
+	Kanchan Joshi <joshi.k@samsung.com>, Keith Busch <kbusch@meta.com>,
+	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+	"linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+	"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+	"axboe@kernel.dk" <axboe@kernel.dk>,
+	"martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+	"asml.silence@gmail.com" <asml.silence@gmail.com>,
+	"javier.gonz@samsung.com" <javier.gonz@samsung.com>
+Subject: Re: [EXT] Re: [PATCHv11 0/9] write hints with nvme fdp and scsi
+ streams
+Message-ID: <20241115165348.GA22628@lst.de>
+References: <CGME20241111103051epcas5p341a23ed677f2dfd6bc6d4e5c4826327b@epcas5p3.samsung.com> <20241111102914.GA27870@lst.de> <7a2f6231-bb35-4438-ba50-3f9c4cc9789a@samsung.com> <20241112133439.GA4164@lst.de> <ZzNlaXZTn3Pjiofn@kbusch-mbp.dhcp.thefacebook.com> <DS0PR08MB854131CDA4CDDF2451CEB71DAB592@DS0PR08MB8541.namprd08.prod.outlook.com> <20241113044736.GA20212@lst.de> <ZzU7bZokkTN2s8qr@dread.disaster.area> <20241114060710.GA11169@lst.de> <Zzd2lfQURP70dAxu@kbusch-mbp>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zzd2lfQURP70dAxu@kbusch-mbp>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-We're a bit too frivolous with types of nr_pages arguments, converting
-it to long and back to int, passing an unsigned int pointer as an int
-pointer and so on. Shouldn't cause any problem but should be carefully
-reviewed, but until then let's add a WARN_ON_ONCE check to be more
-confident callers don't pass poorely checked arguents.
+On Fri, Nov 15, 2024 at 09:28:05AM -0700, Keith Busch wrote:
+> SSDs operates that way. FDP just reports more stuff because that's what
+> people kept asking for. But it doesn't require you fundamentally change
+> how you acces it. You've singled out FDP to force a sequential write
+> requirement that that requires unique support from every filesystem
+> despite the feature not needing that.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/memmap.c | 2 ++
- 1 file changed, 2 insertions(+)
+No I haven't.  If you think so you are fundamentally misunderstanding
+what I'm saying.
 
-diff --git a/io_uring/memmap.c b/io_uring/memmap.c
-index 85c66fa54956..6ab59c60dfd0 100644
---- a/io_uring/memmap.c
-+++ b/io_uring/memmap.c
-@@ -140,6 +140,8 @@ struct page **io_pin_pages(unsigned long uaddr, unsigned long len, int *npages)
- 	nr_pages = end - start;
- 	if (WARN_ON_ONCE(!nr_pages))
- 		return ERR_PTR(-EINVAL);
-+	if (WARN_ON_ONCE(nr_pages > INT_MAX))
-+		return ERR_PTR(-EOVERFLOW);
- 
- 	pages = kvmalloc_array(nr_pages, sizeof(struct page *), GFP_KERNEL);
- 	if (!pages)
--- 
-2.46.0
+> We have demonstrated 40% reduction in write amplifcation from doing the
+> most simplist possible thing that doesn't require any filesystem or
+> kernel-user ABI changes at all. You might think that's not significant
+> enough to let people realize those gains without more invasive block
+> stack changes, but you may not buying NAND in bulk if that's the case.
 
+And as iterared multiple times you are doing that by bypassing the
+file system layer in a forceful way that breaks all abstractions and
+makes your feature unavailabe for file systems.
+
+I've also thrown your a nugget by first explaining and then even writing
+protype code to show how you get what you want while using the proper
+abstractions.  But instead of a picking up on that you just whine like
+this.  Either spend a little bit of effort to actually get the interface
+right or just shut up.
