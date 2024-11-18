@@ -1,127 +1,72 @@
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0845B153BE4;
-	Mon, 18 Nov 2024 23:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06AC1E767D
+	for <io-uring@vger.kernel.org>; Mon, 18 Nov 2024 23:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731971441; cv=none; b=pSEyEQv129d10vDJXjiVD8Pf5hu1l1VafvlcQ5g63xkaorBhhHttsgyKbwW77BkPrE2k3qMSAxG84hY3rQM9iYEDqpAzEG0LrYnfdRlOUY3EFURGdjLIENTOFla4tPOpBTJmI+GhqMCwHVQFG5k9y5SVwAnoQdjFzLdTYZlTyvM=
+	t=1731971646; cv=none; b=Dj/VzFcWMcoiEo/JPGiMtEBnQSsFGaN3FEtJcQqYeUQOOvjws+CsJdEXxWYRpFiOkMXfDQNc8Mozfn3C3Y6jg17Itsuvj5k7frhOCKUgG2iKRQyDNUX6TqcHGILwyfWjcU7tN7+49lZv5Tu6+ufX56BXZFN+cO9dv8ycyU58Se0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731971441; c=relaxed/simple;
-	bh=UTsScOuiOnZAf0N7bi0kKSG8twQH/EN51DMMmvUFUJs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=svah+dhRSyiFCjBIB9O2BGmX+Dj+wgxAI2nthFOUTgVhJNSeFWXuk2LJiWTV2kK6UhZJtgp6swI8AtC6ZFpju187/VStOpfsMfStkV8V5SqHpdLxqMHL3w7o3MJ8gxpQvu6crKAcNjOMDjU98kvXbEzyW/Aqc9eqFWyyN0DXzz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EDxOX/MF; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731971646; c=relaxed/simple;
+	bh=6bYubbpF16uZAHfJA4POwg11kPW/PNd3hELQMRWvl1M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oSZy+tQXEoerUBfSKqtA2Kc0eIwTTVkketfwKE6iseyfFLU5rZslV8e+KR4KRhITWTXB8Ce3fnS4PFmLyFxtojh2y+OQ1aBzAKHbn0TOtvgD+FcRpCosgGvbVAMXMXNSn3Bc33BwY1XoXEhalRFCdIYvUIV/sliXg4aOXejwS3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWZgYdp0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EDxOX/MF"
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-460ad0440ddso1877641cf.3;
-        Mon, 18 Nov 2024 15:10:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731971439; x=1732576239; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DXiyuALWVuDoOJhucZvM36T1DPAUGVkjFgg29QK7pNc=;
-        b=EDxOX/MFglYkyd4iGLgWUwKFuknijiNuJ4UqcZAFPNz/qTVLHYM0c8cbCzE8FcFCvk
-         zVuEaqfeJa+UZgSclfH/9UjERe3hGNqrk5mt/tWXg9DqTdwXZSH5v/+co/M7SQMZwdN6
-         3oRnD8ElV7GEmk8+ObFvRMgXnY8fiUp/rLeqwsHbu52/ZFgm2/G1M39QedB1Ic4mDIfc
-         g983APD2vNZIZMzA5fzFmWEE6naTSUnOgwyHuyVJcQIuXGkIlfFUVn0mN166AQKhe0zZ
-         y0YwHnIxNFYVz8bZL6yW3q6nUJ3dnuLI1AHHfLB80jRh7w222/d+W6rWWrAHq3GgFseH
-         IAHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731971439; x=1732576239;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DXiyuALWVuDoOJhucZvM36T1DPAUGVkjFgg29QK7pNc=;
-        b=UOciCMgOqluVNV4wCJQtT+nF8ozVOIPMBDplR3/Ad9/Gt/x40aPk2E9l591XokM+Tq
-         sDPHDacW1kQP8r6VmUgs0XXiYVtpO4xiRBl52CuPXyZxBLKziHHqX0nLFv9JnLB42aIu
-         J14n4Ceag0OfHXRKeuAZnMcUz8J+3bFNvSiG5MINxZNCRUM8foQepQhiMTupCdH3pwRk
-         q84+d9E2Wvq9zaKQDn2LhSJhiIC67g99wg8z+pqDae9nVfdpI/6cJ9bqp7LhgnNNpKgP
-         +njfvPPIa9nUCwH9uuoBZRsi89VYm058oBmwinJA4I7YtzuPDysOtK69jTEB4IHzXOUk
-         nNkw==
-X-Forwarded-Encrypted: i=1; AJvYcCWBzIz/1hcibf2Q9rAzVZB/bbsdhqiWFODjCnO2iKVhZEFr/KJzTxfTE53XjZJBwEE37lOGEMmQpQ==@vger.kernel.org, AJvYcCWx0AhCpY+PzirXXEGKZm5VCspYQviyrFtdojnf8vjx6j4dS2MZOLDnld7O1zidsBguiwLEq7dKZWG5TAzVyg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkHII0jT4bO5oeEYmb4hNgKhfWeAOclTfP+IXnhZ7TGYE/ejv2
-	u1QsspGgkyqLI7z24h2JGIN2ceLFVF2lYnvW6M+xIJ26Nk1VFaKBibFnj3QyJ9pshXkWXdqIUkB
-	f3anN7PocGoxrrFPkA3a37jyunKA=
-X-Google-Smtp-Source: AGHT+IH3hbsCbzRg6Xo/GzchZfftr06ZcozEZW4kQLl75ssXq19oaaWMvfZICQLMND19LBrrHqXDTPRzxTMmW3OWm3Y=
-X-Received: by 2002:a05:622a:529b:b0:461:57f9:6294 with SMTP id
- d75a77b69052e-46363e9fba9mr191600851cf.38.1731971438724; Mon, 18 Nov 2024
- 15:10:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWZgYdp0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A64C4CECC;
+	Mon, 18 Nov 2024 23:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731971645;
+	bh=6bYubbpF16uZAHfJA4POwg11kPW/PNd3hELQMRWvl1M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YWZgYdp01Coei4JSy59F/VXdCpNGh4l2JOE/5wI2fqKG8al9n4OVEu5poWRXIyOTm
+	 WvS8JdBZ3Und/BvGUFSJhVGrw28lLPpMp1MiistDPRTv2PZtfi0LzGwSge4J12JIRk
+	 VE3ZglwyfXaFTuyNp8tweLTCMuUVHav7g43mR5Gnfd9GmfiGvGryynw94AX6gWilKx
+	 c0rbrAlkzOx3ssJqwfQ12w4M4lUhdUjg1Dzuq21dvUQpxo602NOsQacb8nIMkTpwEi
+	 +Pvwe6rchHtZeZqEeXg5wzrt1O0Clt2O1H7bPeCVhVHLs0OUffsoLpua/+E7XG6QNf
+	 FpgPkfbTDDbWQ==
+Date: Mon, 18 Nov 2024 17:06:46 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	io-uring <io-uring@vger.kernel.org>, tglx@linutronix.de
+Subject: Re: [GIT PULL] io_uring changes for 6.13-rc1
+Message-ID: <Zzu6dkYTFX2AA26c@sashalap>
+References: <ad411989-3695-4ac9-9f96-b95f71918285@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107-fuse-uring-for-6-10-rfc4-v5-0-e8660a991499@ddn.com>
- <20241107-fuse-uring-for-6-10-rfc4-v5-15-e8660a991499@ddn.com>
- <CAJnrk1ZexeFu7PopHUe_jPNRCGWWG5ha-P9min0VV+LJO5mAZw@mail.gmail.com> <97f18455-7651-42c1-9e76-4fb62220e739@fastmail.fm>
-In-Reply-To: <97f18455-7651-42c1-9e76-4fb62220e739@fastmail.fm>
-From: Joanne Koong <joannelkoong@gmail.com>
-Date: Mon, 18 Nov 2024 15:10:27 -0800
-Message-ID: <CAJnrk1aF0DDBX08KcPD3Y4pP-KyeoS0-tRsDH0a9SJnRzgHwJg@mail.gmail.com>
-Subject: Re: [PATCH RFC v5 15/16] fuse: {io-uring} Prevent mount point hang on
- fuse-server termination
-To: Bernd Schubert <bernd.schubert@fastmail.fm>
-Cc: Bernd Schubert <bschubert@ddn.com>, Miklos Szeredi <miklos@szeredi.hu>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, linux-fsdevel@vger.kernel.org, 
-	io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>, 
-	Amir Goldstein <amir73il@gmail.com>, Ming Lei <tom.leiming@gmail.com>, David Wei <dw@davidwei.uk>, 
-	bernd@bsbernd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ad411989-3695-4ac9-9f96-b95f71918285@kernel.dk>
 
-On Mon, Nov 18, 2024 at 11:55=E2=80=AFAM Bernd Schubert
-<bernd.schubert@fastmail.fm> wrote:
->
->
-> On 11/18/24 20:32, Joanne Koong wrote:
-> > On Thu, Nov 7, 2024 at 9:04=E2=80=AFAM Bernd Schubert <bschubert@ddn.co=
-m> wrote:
-> >>
-> >> When the fuse-server terminates while the fuse-client or kernel
-> >> still has queued URING_CMDs, these commands retain references
-> >> to the struct file used by the fuse connection. This prevents
-> >> fuse_dev_release() from being invoked, resulting in a hung mount
-> >> point.
-> >
-> > Could you explain the flow of what happens after a fuse server
-> > terminates? How does that trigger the IO_URING_F_CANCEL uring cmd?
->
-> This is all about daemon termination, when the mount point is still
-> alive. Basically without this patch even plain (non forced umount)
-> hangs.
-> Without queued IORING_OP_URING_CMDs there is a call into
-> fuse_dev_release() on daemon termination, with queued
-> IORING_OP_URING_CMDs this doesn't happen as each of these commands
-> holds a file reference.
->
-> IO_URING_F_CANCEL is triggered from from io-uring, I guess when
-> the io-uring file descriptor is released
-> (note: 'io-uring fd' !=3D '/dev/fuse fd').
+Hi Jens, Thomas,
 
-Gotcha. I took a look at the io_uring code and it looks like the call
-chain looks something like this:
+On Mon, Nov 18, 2024 at 07:22:59AM -0700, Jens Axboe wrote:
+>hexue (1):
+>      io_uring: add support for hybrid IOPOLL
 
-io_uring_release()
-  io_ring_ctx_wait_and_kill()
-    io_ring_exit_work()
-      io_uring_try_cancel_requests()
-        io_uring_try_cancel_uring_cmd()
-            file->f_op->uring_cmd() w/ IO_URING_F_CANCEL issues_flag
+After merging of this pull request into linus-next, I've started seeing
+build errors:
 
->
->
-> I guess I need to improve the commit message a bit.
->
->
->
-> Cheers,
-> Bernd
->
->
->
->
+/builds/linux/io_uring/rw.c: In function 'io_hybrid_iopoll_delay':
+/builds/linux/io_uring/rw.c:1179:2: error: implicit declaration of function 'hrtimer_init_sleeper_on_stack'; did you mean 'hrtimer_setup_sleeper_on_stack'? [-Werror=implicit-function-declaration]
+   hrtimer_init_sleeper_on_stack(&timer, CLOCK_MONOTONIC, mode);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   hrtimer_setup_sleeper_on_stack
+
+This is because 01ee194d1aba ("io_uring: add support for hybrid IOPOLL")
+adds a call to hrtimer_init_sleeper_on_stack() which was removed earlier
+today in Thomas's PR[1], specifically in commit f3bef7aaa6c8
+("hrtimers: Delete hrtimer_init_sleeper_on_stack()").
+
+
+[1] https://lore.kernel.org/all/173195758632.1896928.11371209657780930206.tglx@xen13/
+
+-- 
+Thanks,
+Sasha
