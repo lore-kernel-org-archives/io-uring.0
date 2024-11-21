@@ -1,116 +1,87 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B32A1AC420;
-	Thu, 21 Nov 2024 08:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB2A1CB322;
+	Thu, 21 Nov 2024 10:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732176957; cv=none; b=UJHy0RP0FlGNXB2s2bSP652y6MCqWnlF1DenGn7ejCOyFpPAIBuLAp284ugqnbV1wG01yd4EN9wCehE+8xRf5Ije5GQxpKj5QRzbIEJ6PQdvGeeSaBkm6cNn85LHtiFpXKzBZKk/B7zLpucqQ2XYM/M1uTrzC1VQaZ1n2LKYdzc=
+	t=1732184355; cv=none; b=qIlWwEP2jpRnfX6F4Iirk3LsCgPszsxQwvE3FbFhGJYHCFctGBv/uPwG94eiwYv6l/sCmA576zx5u3AYhNFvNjueBtGbu7xi+4ee30BUgCtl7gHGzSiiJBOLwf8qyEX9JuwcmVSYue23M5cYoxparRtL2JeGRzl8TM3X0UcI3vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732176957; c=relaxed/simple;
-	bh=9o2/CH4id7fZ663DryZCUjiGj2CBRaiKI71WozjFFpM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HTXmXdmiI46vRRT4iLL0AyVl5ay9PAjTbG+xPx+loLxAX39l0LQsr3bG4PEMcKWDLoUVtx+4ittt+Gj5SVDU4RVes+tojoAMWSz3d7mCJC+Ni1MGkWzaBRTU2kQ97u7Rcll8+kT0jGZ5KNO/s4x9D7D8Z1HOkzDhZ/Uw0FamVaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6eebc318242so5529837b3.3;
-        Thu, 21 Nov 2024 00:15:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732176953; x=1732781753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fa1bafhgnf4UjyHiSsOg5v1diyDhD3E0RXZDuNixLkQ=;
-        b=mw1RKNUwy8tZW8U0tbx1lVhrqMMnwXG9ZO8kK50fly97i34fri/arLi6cERj/A8jaP
-         DBti9E7qt12BKWRki1+UB1FAJcKWcCgVmDc4Bq2ZLoiQe2W4XO84ETPcv+vpHN++wXuR
-         AT1ltkxLh2Dd/QwrVctWxeVKZwn7UCn97k68KNgRGi2qGy0xYn2yyY+E6iIQaI1Ia/u7
-         IJP3eSS/kqBR1kceY8g2kZobhYGM7nT86gWQTbdFcx37kMa6qce++GQznyyyHbEuIl4e
-         mE8qZWF1CKmkTH9c9Kpl6/RmMKNo7GWIHIY6Ygt1+THKsIG1PLCj9nM8NzH90DzUFPaJ
-         cy/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWen/YNkpCg0RU6xCH2mOeNTUmK7G1qi0YFPA9Eg7dk2biBBtetJ1k2RSLGoS5ETTZg9KTfiNus1A==@vger.kernel.org, AJvYcCXFFWPl3Q5cgpoeff00QtjlQc6Iv/obPpoNOPE4Ye80NFSQZEdZ+S2XJL0ypKMoyG1LgRhQYWMYxxJQD1dZ@vger.kernel.org, AJvYcCXnvSApmPnuB7igXKffYyPEfpijiOq+PAxQ2d5YKqTgHtui11bYlxLaKukxOqfNN3fYuA9J48S4wggRrg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpNi/K1MbjzDVyJJdInaUwZ80SCel+7ceDLF8vfLFUvlv6xklB
-	uxgKrD3D2wGBNeXz/WNRZVhN/XyVRBHd1eCitBGNx4H7tqgJiIUnPRfG1A+o
-X-Google-Smtp-Source: AGHT+IFNs9xzqjSTuoDKG/VbsgjHOTZpoSVmWKXyFN2pv8oz/YTJqZcinuLSTo9hr4iYI0MUEmrekQ==
-X-Received: by 2002:a05:690c:23c4:b0:6ee:ac2f:c6fa with SMTP id 00721157ae682-6eebd13026emr74713127b3.24.1732176953261;
-        Thu, 21 Nov 2024 00:15:53 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ee7137f6aasm26001927b3.124.2024.11.21.00.15.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Nov 2024 00:15:51 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6eeb31b10ceso5985737b3.1;
-        Thu, 21 Nov 2024 00:15:49 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWJT/DQApNPYjF6m+UesPut5zsBstHjgZklD9PrMvfNlqLr7TiggXr8QcKS0Yhfcm3H4/xdB2wYF8hmR91z@vger.kernel.org, AJvYcCWpuFM/FtqzAd0CKT6wognT+F3YSYG5iYdsBcNEyL5RCQXUo6wmkbTImVw6+d7GBUEv07aVUqnzyU6+Wg==@vger.kernel.org, AJvYcCXw1AyxCxFVBrKFGVMxir0S5huU42jVkky6guNNJGqV4LGF7nQJH6uiD0SG3rboi6zH5nRYcAWsXw==@vger.kernel.org
-X-Received: by 2002:a05:690c:7209:b0:6e2:fcb5:52ea with SMTP id
- 00721157ae682-6eebd2ae56emr67688777b3.29.1732176948950; Thu, 21 Nov 2024
- 00:15:48 -0800 (PST)
+	s=arc-20240116; t=1732184355; c=relaxed/simple;
+	bh=vdU01yydMwwx3sSdNOgVdvAm97pz89kQ5OB0TAdlmVI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ifN0dU2FuQpCAIHpkAFC8tkbUK//HBI0aO2oUwUrPq+l1Rtm0jYOg+jld6N+aHQWety9kdVo2Irf2HWygwji0y++wHFTci0NGp9gCjoZ+dvAN+6riFqZifZRtfst5yX4iPPel3x5VQcTRcoURjx7jgl24WiUTpB7CwtSGnDSjMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WqOtcATb; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WqOtcATb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7484C4CECC;
+	Thu, 21 Nov 2024 10:19:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732184355;
+	bh=vdU01yydMwwx3sSdNOgVdvAm97pz89kQ5OB0TAdlmVI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WqOtcATb1VkKmyUI/NcRWkuA09JLY/gsuhqTD+gzFS/qKpmoOPMzMk0ePxX4ocACb
+	 4EB2TRDNyFEsdXY/NDfvGyD/DDcn+EWCl0wSIVE237WWygYuKiQmzyjvaAdawtPcnW
+	 GIXmpkzJ/DAw+y1awNeD3VlflRD6cofwoz7W1h1+UyRUcTCG8lU0j7Tle69F7M/9f0
+	 6BprUazlD8s8yrLdQo3ENUYufgH+duQqZkYYO+/J1Md3k5fPj0JJTU42PR2X4Bt23u
+	 M0pR0eGQLP+bRB/bTXbueKJPYPptDJ1eT1a9lN0cWG8VG8GFCFIGs1UNwyZYIYYF1Q
+	 wFsfNy8pTVlhw==
+Date: Thu, 21 Nov 2024 11:19:07 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Christoph Lameter <cl@linux.com>, Pekka Enberg <penberg@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
+	Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, Mike@rox.of.borg, 
+	Rapoport@rox.of.borg, Guenter Roeck <linux@roeck-us.net>, 
+	Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org, 
+	io-uring@vger.kernel.org, linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] slab: Fix too strict alignment check in create_cache()
+Message-ID: <20241121-zwietracht-klugheit-4acf0bb07f2b@brauner>
+References: <80c767a5d5927c099aea5178fbf2c897b459fa90.1732106544.git.geert@linux-m68k.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <80c767a5d5927c099aea5178fbf2c897b459fa90.1732106544.git.geert@linux-m68k.org>
- <4f70f8d3-4ba5-43dc-af1c-f8e207d27e9f@suse.cz> <2e704ffc-2e79-27f7-159e-8fe167d5a450@gentwo.org>
-In-Reply-To: <2e704ffc-2e79-27f7-159e-8fe167d5a450@gentwo.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 21 Nov 2024 09:15:37 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWQisrjqaPPd0xLgtSAxRwnxCPdsqnWSncMiPYLnre2MA@mail.gmail.com>
-Message-ID: <CAMuHMdWQisrjqaPPd0xLgtSAxRwnxCPdsqnWSncMiPYLnre2MA@mail.gmail.com>
-Subject: Re: [PATCH] slab: Fix too strict alignment check in create_cache()
-To: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Pekka Enberg <penberg@kernel.org>, 
-	David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Hyeonggon Yoo <42.hyeyoo@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Mike Rapoport <rppt@kernel.org>, 
-	Christian Brauner <brauner@kernel.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>, linux-mm@kvack.org, 
-	io-uring@vger.kernel.org, linux-m68k@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <80c767a5d5927c099aea5178fbf2c897b459fa90.1732106544.git.geert@linux-m68k.org>
 
-Hi Christoph,
+On Wed, Nov 20, 2024 at 01:46:21PM +0100, Geert Uytterhoeven wrote:
+> On m68k, where the minimum alignment of unsigned long is 2 bytes:
+> 
+>     Kernel panic - not syncing: __kmem_cache_create_args: Failed to create slab 'io_kiocb'. Error -22
+>     CPU: 0 UID: 0 PID: 1 Comm: swapper Not tainted 6.12.0-atari-03776-g7eaa1f99261a #1783
+>     Stack from 0102fe5c:
+> 	    0102fe5c 00514a2b 00514a2b ffffff00 00000001 0051f5ed 00425e78 00514a2b
+> 	    0041eb74 ffffffea 00000310 0051f5ed ffffffea ffffffea 00601f60 00000044
+> 	    0102ff20 000e7a68 0051ab8e 004383b8 0051f5ed ffffffea 000000b8 00000007
+> 	    01020c00 00000000 000e77f0 0041e5f0 005f67c0 0051f5ed 000000b6 0102fef4
+> 	    00000310 0102fef4 00000000 00000016 005f676c 0060a34c 00000010 00000004
+> 	    00000038 0000009a 01000000 000000b8 005f668e 0102e000 00001372 0102ff88
+>     Call Trace: [<00425e78>] dump_stack+0xc/0x10
+>      [<0041eb74>] panic+0xd8/0x26c
+>      [<000e7a68>] __kmem_cache_create_args+0x278/0x2e8
+>      [<000e77f0>] __kmem_cache_create_args+0x0/0x2e8
+>      [<0041e5f0>] memset+0x0/0x8c
+>      [<005f67c0>] io_uring_init+0x54/0xd2
+> 
+> The minimal alignment of an integral type may differ from its size,
+> hence is not safe to assume that an arbitrary freeptr_t (which is
+> basically an unsigned long) is always aligned to 4 or 8 bytes.
+> 
+> As nothing seems to require the additional alignment, it is safe to fix
+> this by relaxing the check to the actual minimum alignment of freeptr_t.
+> 
+> Fixes: aaa736b186239b7d ("io_uring: specify freeptr usage for SLAB_TYPESAFE_BY_RCU io_kiocb cache")
+> Fixes: d345bd2e9834e2da ("mm: add kmem_cache_create_rcu()")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Closes: https://lore.kernel.org/37c588d4-2c32-4aad-a19e-642961f200d7@roeck-us.net
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
 
-On Wed, Nov 20, 2024 at 6:50=E2=80=AFPM Christoph Lameter (Ampere)
-<cl@gentwo.org> wrote:
-> On Wed, 20 Nov 2024, Vlastimil Babka wrote:
-> > > Fixes: aaa736b186239b7d ("io_uring: specify freeptr usage for SLAB_TY=
-PESAFE_BY_RCU io_kiocb cache")
-> > > Fixes: d345bd2e9834e2da ("mm: add kmem_cache_create_rcu()")
-> > > Reported-by: Guenter Roeck <linux@roeck-us.net>
-> > > Closes: https://lore.kernel.org/37c588d4-2c32-4aad-a19e-642961f200d7@=
-roeck-us.net
-> > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> >
-> > Thanks, will add it to slab pull for 6.13.
->
-> Note that there are widespread assumptions in kernel code that the
-> alignment of scalars is the "natural alignment". Other portions of the
-> kernel may break. The compiler actually goes along with this??
-
-Linux has supported m68k since last century.
-Any new such assumptions are fixed quickly (at least in the kernel).
-If you need a specific alignment, make sure to use __aligned and/or
-appropriate padding in structures.
-And yes, the compiler knows, and provides __alignof__.
-
-> How do you deal with torn reads/writes in such a scenario? Is this UP
-> only?
-
-Linux does not support (rate) SMP m68k machines.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Looks good to me,
+Reviewed-by: Christian Brauner <brauner@kernel.org>
