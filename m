@@ -1,67 +1,67 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073A31DEFFD
-	for <io-uring@vger.kernel.org>; Fri, 22 Nov 2024 16:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877C11DF738
+	for <io-uring@vger.kernel.org>; Fri, 22 Nov 2024 16:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732292217; cv=none; b=dEtkl2//RdkjnWcCPL+82+3zut3dcP2mOpQgCuPPVvReqepwzH7gp+MwM9TNyzt142pAtln9E2KHlbbAxzNYvSeDoclpSDb4jeo/z4ThgxCqenFhQLlQN8BJha/bsaT/fq9imR5+rZPy3rr2ZJtA47dc1l5pk/Gw2BpXKWw57DA=
+	t=1732292219; cv=none; b=XoiJ4MJvE0iPJXT1zM4ttfnBVDcRgUh9poCNw5oZ5e+o/gyQ43dgZ34FnibNcf+9WFUQJIpmyyiqdFTquX199BpDKL99CBnusArLP0JYiorlVblTHEDBSaAOMQ06Q/ZdBItK5eSf56r3wQgQ2bSl8EfoZl6HHxCRNFJRNlY6jPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732292217; c=relaxed/simple;
-	bh=+DHAUY6acGwCf5k1bOSelonQxNO0aX/NS/jsXA9/eKA=;
+	s=arc-20240116; t=1732292219; c=relaxed/simple;
+	bh=xF3F0FOjBfPlxMd+dGq+wT4hyDi9iVYRTYBV+kH3y7I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hbQ02X441syfIu0U3snu2MZU2Jh2WcLupKGZVmVeEpPtWv2R3qaT6Z6wc2+osPB0juUr0n+sW2ByvQojK9gbckD/Y99nKsn3nisJ8HTRJwErxu88WK5Q/DV5kJoOmPnvFY/ykyJNDU0D+ymf/fsZboT7QsugIp0b0JHDlhuKwb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=bO3rs31w; arc=none smtp.client-ip=209.85.160.45
+	 MIME-Version; b=tV8ErlcEzQx+rGtcddjDAsy+EL7PVvDNwjdIvRyAlSsdLKlOuX5jnQeGKGd+f3l4jkOFMwuz/dsXrhfJIzjTuLnF7cOcpamm+pAkUNzKVHsp5dhkstjaNgXUka6CzD28uMaWq8jC1UWHX2MOpEWgawboW7bIovBn4eZAkHNwLDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=JwUEncMp; arc=none smtp.client-ip=209.85.210.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="bO3rs31w"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-2973b53ec02so88028fac.1
-        for <io-uring@vger.kernel.org>; Fri, 22 Nov 2024 08:16:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="JwUEncMp"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-71a6c05dc10so1658901a34.1
+        for <io-uring@vger.kernel.org>; Fri, 22 Nov 2024 08:16:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1732292213; x=1732897013; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1732292216; x=1732897016; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qefPjpPCJpGhgrdxo9V7RKjuQexAKAK6JHZ2wpLql9I=;
-        b=bO3rs31woBy5kqzrnk8gJ/hYV1NNfmB3QFPJ4K94voKapiuw6I7rbEs9aXx2+carhd
-         RRWpX6V9w2XIjONJb9/HP7L4yZGcirjfWk2wpBDo7ipMv3xEeoPnAipfzf5RYHLaVga/
-         PITtaQutSL6LSAYLRGikUEDgPUKnTK0y4P0lLWqiPhT7BcPPCjUCUAYjGt5E53TbcLx/
-         YLFWJmdE2Aty6JU+XqY2YhPeEpmgmWdP+62wbZJN923Srm932kbkxo3Mu+Ma5B/vJztg
-         eMtKTlIXh2xfQ1evM77sRJRiXc8Obn4NoBQORGXnpE9z/ljMa9M5tfDt7kZqaQM++FQt
-         BQZw==
+        bh=aZyZMmV9iblLjdCcfE3CRt2M+y2t90QN+C7X66Z7Ik8=;
+        b=JwUEncMpaXFmEqa2rP0g/KhR1SfXL51xTB9+k4y8I6b+sh7RZDU9WRX/B2c6IQVWNJ
+         8Uh2dV/EeUV4rTnh3u/vkA8CXUN23RpTsXVJtA5C+HMwPbO1e3esyhCdcbBC3GiGefAR
+         qPqSCXq3WQJrHlsT9AIDPyRRZpwpkwITmMuDdizF7mmxjt7EH/woonqwvQvLH51zb8CE
+         S//41+F0HhwTIHkVtGgLt+EJKm3NmoEiTknRUvTqfN6Hunf8KOjuIo5LVEk9Vhw4oiB/
+         hAJoVmozGmpxoiaJ6KxiCWmsHg/6XrwySymY58/vFgsaf8eiUb9odQ2aESABZKbA3e/B
+         PK7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732292213; x=1732897013;
+        d=1e100.net; s=20230601; t=1732292216; x=1732897016;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qefPjpPCJpGhgrdxo9V7RKjuQexAKAK6JHZ2wpLql9I=;
-        b=OwSBjZsCSj/2qTlCo/q20RJccFVAh6PuDC+oUpHauxmUSDw5aaiBBf5VH0ytQs9Jn7
-         3+Ywaxije5ApErtMD3r/3SM4+f/736zqlJP5eK8cpSQKuhQSnZEEqf5QZf1y3HJtIIlO
-         8jf/s2Z1WVjCESTnAAMa3uI1Dmxm2dXxoas8vjFEYHpCt5z8fqaubZUqwDiGsYIORaCh
-         BcUFK0liIi8ul0EesKI3ELJ5YDf6WEydGThB08l7tmy+fTwm+u08IGVCLYDlPGYJyika
-         fy9DW1mntwD/1XkfCYjVI8xIlIBR0vh19hwcYjrwpyrwuIqw3q4BIDTiUezUQJKLaJt+
-         lvWw==
-X-Gm-Message-State: AOJu0Yz5y1ZLkvGpSJra3q9cuHnhLgQiMYWOncIfBnvG0J724taV5Ahy
-	VgAfTfxYewrXBO4snqBivEGTN5IoMNaL4hKFowdNSwrB+Z2b00OW5rqLfKu92mgfld2BOGFDYho
-	YGT0=
-X-Gm-Gg: ASbGnctnk5BDANxawV9hNtRlgDbndPruQWhUcQrubSlvIIZxPesbVsBkTTrLSmP8Xdc
-	Ma+7Kxsea2RJMVO/ZJtOmppugncGSo7GfnIbsEshGGfk5hqfXSFHjrkc9GsAkWEabq1kgz+zcKH
-	x4KNCpn0gki5m8e80cafmzkqZwTLcPmRgsGdzGcJBan5l+KEbQqAFjO8sL0zQ/hUA1wK58SftLo
-	sk56hKkxhS6Oy0fpdeHJUmp95hTjd/DOLkgnVYBgy/V8NK1DvVywQ==
-X-Google-Smtp-Source: AGHT+IFavmrB+zlPYettxpKS7DOPfDiiCUpIz3v+k3zHxlmRJMzAj0T/Eh+b+F08oXrOkwTfciYAFg==
-X-Received: by 2002:a05:6871:68c:b0:288:c383:788d with SMTP id 586e51a60fabf-29720c37be8mr4067013fac.21.1732292213654;
-        Fri, 22 Nov 2024 08:16:53 -0800 (PST)
+        bh=aZyZMmV9iblLjdCcfE3CRt2M+y2t90QN+C7X66Z7Ik8=;
+        b=RQz4M+rIsYy4phfTnHobyxdJzSZAynDeQo1PwU0B2kcdVcgWTCC2vkz9vvc27LikCf
+         a3DxKSl4w2AmmuFq4W80ANo+PQ2VeP3ejDav/n4u8zooUcNyw0j93c1wMB3pszGJbW2x
+         ru8CbIxJmlADdIvJ5iiZej68wY6szQFvdfH4clxtu0z/grZSnMf68yMUA8rQSdCPN2AJ
+         JKuQm5DFQG7Ll0ViF0PCYjBWE2g/AAt5i1MnOo7F6zQDDsa1uJV2GFCWXQrjTcnIW3FN
+         B+VvFT964EV0KFRgEbYx09dTMb1zXi8/42KYqI3limBlMaQIx5Sc5dLGKe4nQUKBIH+6
+         hm8Q==
+X-Gm-Message-State: AOJu0Yw50ItphcvzlNfZT7qnMAVM89ZFAWE+JqKuZVTyuxQSgGwT37uP
+	GA9Tw2p9Vg2MhaNTPrM2QWXWt0b2GxqlWYVKiFdOCvupVPH32S7SlH0QZ9aKenzIiBkvfREsyAC
+	9u5M=
+X-Gm-Gg: ASbGncswfW1JSm7t70AdhDqAFTkr+YIy/TF1s48Hra1pcY8QGYBqyHMYY4p42/mBWxI
+	NtywqtSHiFYZ7xZeo73mIgYgr6kAnK99ubzHNRn575wDy4cuQLTfKN3FfeVemw3RQBupteikmXW
+	RHGDpISZfmjzf0UnJpYv/smZs/AauXvqHQjRfIiKGjLENnzwg3LO4VxkNdM7Y04A2BC5fRiwO30
+	ZWIzwdG+36Pifj0iUS2N9eFQwQ2LlPX/2fHftTvOp6x6ba3l0AxVg==
+X-Google-Smtp-Source: AGHT+IHfb/QVESXZsxfxYuZvkTUz7HN0XWWtLskg9UiBf5Pi3ZIV68U3amZ2CMhIEhkvAiNKTi4wBg==
+X-Received: by 2002:a05:6830:1e90:b0:718:d38:7bbe with SMTP id 46e09a7af769-71b0e598d3cmr4116649a34.11.1732292216260;
+        Fri, 22 Nov 2024 08:16:56 -0800 (PST)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5f06976585esm436958eaf.18.2024.11.22.08.16.52
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5f06976585esm436958eaf.18.2024.11.22.08.16.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 08:16:52 -0800 (PST)
+        Fri, 22 Nov 2024 08:16:55 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 3/6] io_uring/slist: add list-to-list list splice helper
-Date: Fri, 22 Nov 2024 09:12:41 -0700
-Message-ID: <20241122161645.494868-4-axboe@kernel.dk>
+Subject: [PATCH 5/6] io_uring: add __tctx_task_work_run() helper
+Date: Fri, 22 Nov 2024 09:12:43 -0700
+Message-ID: <20241122161645.494868-6-axboe@kernel.dk>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241122161645.494868-1-axboe@kernel.dk>
 References: <20241122161645.494868-1-axboe@kernel.dk>
@@ -73,40 +73,101 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a helper to splice a source list to a destination list.
+Most use cases only care about running all of the task_work, and they
+don't need the node passed back or the work capped. Rename the existing
+helper to __tctx_task_work_run(), and add a wrapper around that for the
+more basic use cases.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/slist.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ io_uring/io_uring.c | 18 ++++++++++++------
+ io_uring/io_uring.h |  9 +++------
+ io_uring/sqpoll.c   |  2 +-
+ 3 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/io_uring/slist.h b/io_uring/slist.h
-index 0eb194817242..7ac7c136b702 100644
---- a/io_uring/slist.h
-+++ b/io_uring/slist.h
-@@ -85,6 +85,22 @@ static inline bool wq_list_splice(struct io_wq_work_list *list,
- 	return false;
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 3bb93c77ac3f..bc520a67fc03 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1137,9 +1137,9 @@ static void io_fallback_tw(struct io_uring_task *tctx, bool sync)
+ 	__io_fallback_tw(&tctx->task_list, &tctx->task_lock, sync);
  }
  
-+static inline bool wq_list_splice_list(struct io_wq_work_list *src,
-+				       struct io_wq_work_list *dst)
+-struct io_wq_work_node *tctx_task_work_run(struct io_uring_task *tctx,
+-					   unsigned int max_entries,
+-					   unsigned int *count)
++struct io_wq_work_node *__tctx_task_work_run(struct io_uring_task *tctx,
++					     unsigned int max_entries,
++					     unsigned int *count)
+ {
+ 	struct io_wq_work_node *node;
+ 
+@@ -1167,14 +1167,20 @@ struct io_wq_work_node *tctx_task_work_run(struct io_uring_task *tctx,
+ 	return node;
+ }
+ 
++unsigned int tctx_task_work_run(struct io_uring_task *tctx)
 +{
-+	bool ret = false;
++	unsigned int count = 0;
 +
-+	if (wq_list_empty(dst)) {
-+		*dst = *src;
-+	} else {
-+		dst->last->next = src->first;
-+		dst->last = src->last;
-+		ret = true;
-+	}
-+	INIT_WQ_LIST(src);
-+	return false;
++	__tctx_task_work_run(tctx, UINT_MAX, &count);
++	return count;
 +}
 +
- static inline void wq_stack_add_head(struct io_wq_work_node *node,
- 				     struct io_wq_work_node *stack)
+ void tctx_task_work(struct callback_head *cb)
  {
+ 	struct io_uring_task *tctx;
+-	unsigned int count = 0;
+ 
+ 	tctx = container_of(cb, struct io_uring_task, task_work);
+-	if (tctx_task_work_run(tctx, UINT_MAX, &count))
+-		WARN_ON_ONCE(1);
++	tctx_task_work_run(tctx);
+ }
+ 
+ static inline void io_req_local_work_add(struct io_kiocb *req,
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 0b5181b128aa..2b0e7c5db30d 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -93,8 +93,9 @@ void io_req_task_queue_fail(struct io_kiocb *req, int ret);
+ void io_req_task_submit(struct io_kiocb *req, struct io_tw_state *ts);
+ struct io_wq_work_node *io_handle_tw_list(struct io_wq_work_node *node,
+ 	unsigned int *count, unsigned int max_entries);
+-struct io_wq_work_node *tctx_task_work_run(struct io_uring_task *tctx,
++struct io_wq_work_node *__tctx_task_work_run(struct io_uring_task *tctx,
+ 	unsigned int max_entries, unsigned int *count);
++unsigned int tctx_task_work_run(struct io_uring_task *tctx);
+ void tctx_task_work(struct callback_head *cb);
+ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd);
+ int io_uring_alloc_task_context(struct task_struct *task,
+@@ -332,12 +333,8 @@ static inline int io_run_task_work(void)
+ 			resume_user_mode_work(NULL);
+ 		}
+ 		if (current->io_uring) {
+-			unsigned int count = 0;
+-
+ 			__set_current_state(TASK_RUNNING);
+-			tctx_task_work_run(current->io_uring, UINT_MAX, &count);
+-			if (count)
+-				ret = true;
++			ret = tctx_task_work_run(current->io_uring) != 0;
+ 		}
+ 	}
+ 	if (task_work_pending(current)) {
+diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
+index 615707260f25..aec6c2d56910 100644
+--- a/io_uring/sqpoll.c
++++ b/io_uring/sqpoll.c
+@@ -232,7 +232,7 @@ static unsigned int io_sq_tw(struct io_wq_work_node **retry_list, int max_entrie
+ 			goto out;
+ 		max_entries -= count;
+ 	}
+-	*retry_list = tctx_task_work_run(tctx, max_entries, &count);
++	*retry_list = __tctx_task_work_run(tctx, max_entries, &count);
+ out:
+ 	if (task_work_pending(current))
+ 		task_work_run();
 -- 
 2.45.2
 
