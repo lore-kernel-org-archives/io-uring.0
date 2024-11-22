@@ -1,74 +1,171 @@
-Received: from gentwo.org (gentwo.org [62.72.0.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEA229A5;
-	Fri, 22 Nov 2024 18:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6505175D25
+	for <io-uring@vger.kernel.org>; Fri, 22 Nov 2024 21:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732301687; cv=none; b=F9+2j6b2I3g4QmMrssW8lU/gBky7xILoyhCsXbOHapiNQ/HPkSWBqkJyyrL1ugXGh7Bt9bqQ5JzXFtYIcOFjsRE+RFTtVRsSXZfpK7b9UtFUZ0PJ7+E7jgssrcYkYMyCDghUDJJ2fpxmH4khOt3gUbbdM1tOE91iV3bp8YFM98A=
+	t=1732310157; cv=none; b=UkL0usyce8WYrookgEtNq3hexpUqCEBohFfRCOCved0EwhEnxHrUnjo1QNLss19ehZlwRK72kXAS4i9IQh1cY1zjQRg6h+aGpDxA8sbh3nBpTn4zlO6awlA7BEnwzVIMv2GvC9f6xeCL+O9GQxdgHfuSWstXjIRXgM5T3bFt7+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732301687; c=relaxed/simple;
-	bh=PG0pD3fq0s9X3wR1/Iw8DyETcfy6GZDNYlO1dcCrCpg=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=pLg0wHdrw9det/Zul0aKly1tbX+oJF2jbv7qYxzhtE2FXiqZQYdihrQDPolMAR8hQC9FL4gRAsOg6qMiGFutGQcsGsZ2uo5pi+fqdFBuQlzpeeAF4wYriQSoxKvvD9X74efwL82IDa8AI7x5GdjOQ1Ki5anZmFPQoqubN09jk2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=iQQORzPd; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+	s=arc-20240116; t=1732310157; c=relaxed/simple;
+	bh=BBaMLGHJfK2NjRYV4grWKBmxae8Q/AOnhL16FkoD8tI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cjRzcxBPPad6HOtLGYy3rWKinZRXNdDsyFxLtLFiPncE6QQFE9UJTgcv3D+OR69PKpUeJzfwWjGoZ5qrPypT0FL2wT/mi6znw9bHG0dDwf6RI5hjIXnKDJ5NNVCmUCUKGNN6ziuDGOK+2p96adKN9BshonMTUNXKWTsefzHHv0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AqWRKetO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=11dN+SOJ; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AqWRKetO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=11dN+SOJ; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="iQQORzPd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1732301679;
-	bh=PG0pD3fq0s9X3wR1/Iw8DyETcfy6GZDNYlO1dcCrCpg=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=iQQORzPd4U5Jp0NEIcfFdaYBQerl3p0SQ/39/pQKi3Vz9OvPKDLPo3x5iZTOLanLd
-	 tobWNI81/Q4y8v8cJ/OG+Raa8lG9MueSGJBKkUv8xFQm3VSNgwZpnMQowzfSejMy9e
-	 eTOlyb4dd1o88LVr+QOlVjU42Fd0hedHIjyLZuDA=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id 6AA92401E7; Fri, 22 Nov 2024 10:54:39 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 683B0400CA;
-	Fri, 22 Nov 2024 10:54:39 -0800 (PST)
-Date: Fri, 22 Nov 2024 10:54:39 -0800 (PST)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-cc: Guenter Roeck <linux@roeck-us.net>, 
-    Geert Uytterhoeven <geert@linux-m68k.org>, 
-    Vlastimil Babka <vbabka@suse.cz>, Pekka Enberg <penberg@kernel.org>, 
-    David Rientjes <rientjes@google.com>, Joonsoo Kim <iamjoonsoo.kim@lge.com>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    Roman Gushchin <roman.gushchin@linux.dev>, 
-    Hyeonggon Yoo <42.hyeyoo@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-    Pavel Begunkov <asml.silence@gmail.com>, Mike Rapoport <rppt@kernel.org>, 
-    Christian Brauner <brauner@kernel.org>, Kees Cook <keescook@chromium.org>, 
-    Jann Horn <jannh@google.com>, linux-mm@kvack.org, io-uring@vger.kernel.org, 
-    linux-m68k@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] slab: Fix too strict alignment check in create_cache()
-In-Reply-To: <9be80a9f-1587-4e8a-98cb-edf4920e587e@lucifer.local>
-Message-ID: <170f59ce-7739-2e84-35d9-fc6da6955ae1@gentwo.org>
-References: <80c767a5d5927c099aea5178fbf2c897b459fa90.1732106544.git.geert@linux-m68k.org> <4f70f8d3-4ba5-43dc-af1c-f8e207d27e9f@suse.cz> <2e704ffc-2e79-27f7-159e-8fe167d5a450@gentwo.org> <CAMuHMdWQisrjqaPPd0xLgtSAxRwnxCPdsqnWSncMiPYLnre2MA@mail.gmail.com>
- <693a6243-b2bd-7f2b-2b69-c7e2308d0f58@gentwo.org> <f602e322-af21-4bb3-86d4-52795a581354@roeck-us.net> <CAMuHMdXDmLoNAcKHpjp2O4D05nAd5SOZ=Xqdbb2O_3B09yU1Gw@mail.gmail.com> <508aa9c4-4176-4336-8948-a31f9791dd39@roeck-us.net> <4535df8b-0ca2-4c3c-9523-d27d3de2b9c7@roeck-us.net>
- <9be80a9f-1587-4e8a-98cb-edf4920e587e@lucifer.local>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="AqWRKetO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="11dN+SOJ";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="AqWRKetO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="11dN+SOJ"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id D55AC211FF;
+	Fri, 22 Nov 2024 21:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1732310153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/287T9g3gFxMclWhQz7JGBexhglTHPIXP8sYh5trkAE=;
+	b=AqWRKetOf44rKHmilScnlg9aaxmkOXKl1KxbS69g8xkjQ0wraI7Kjmt8057NhMBmsXeNsZ
+	hsoXZfOuTeMTpfPCtaQhl179bFAuykBiSdS92fiY4DNK0Ml1Ovz2Ihf0KpOi0PubL0VCey
+	RNqU51wcLllalJpU+GRWHiSdgg2etCc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1732310153;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/287T9g3gFxMclWhQz7JGBexhglTHPIXP8sYh5trkAE=;
+	b=11dN+SOJvZxO1K4W0PPDMXJWL+K7UibzbDJN/OKlGNRcetGYIXhkrOWeVISFdHo7JHe+CD
+	1VwUIKEEtAHFAfAQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1732310153; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/287T9g3gFxMclWhQz7JGBexhglTHPIXP8sYh5trkAE=;
+	b=AqWRKetOf44rKHmilScnlg9aaxmkOXKl1KxbS69g8xkjQ0wraI7Kjmt8057NhMBmsXeNsZ
+	hsoXZfOuTeMTpfPCtaQhl179bFAuykBiSdS92fiY4DNK0Ml1Ovz2Ihf0KpOi0PubL0VCey
+	RNqU51wcLllalJpU+GRWHiSdgg2etCc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1732310153;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/287T9g3gFxMclWhQz7JGBexhglTHPIXP8sYh5trkAE=;
+	b=11dN+SOJvZxO1K4W0PPDMXJWL+K7UibzbDJN/OKlGNRcetGYIXhkrOWeVISFdHo7JHe+CD
+	1VwUIKEEtAHFAfAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9DED013998;
+	Fri, 22 Nov 2024 21:15:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 84WMIIn0QGe7XQAAD6G6ig
+	(envelope-from <krisman@suse.de>); Fri, 22 Nov 2024 21:15:53 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: axboe@kernel.dk,
+	asml.silence@gmail.com
+Cc: io-uring@vger.kernel.org,
+	Gabriel Krisman Bertazi <krisman@suse.de>
+Subject: [PATCH v2 1/9] io_uring: Fold allocation into alloc_cache helper
+Date: Fri, 22 Nov 2024 16:15:33 -0500
+Message-ID: <20241122211541.2135280-2-krisman@suse.de>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241122211541.2135280-1-krisman@suse.de>
+References: <20241122211541.2135280-1-krisman@suse.de>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[kernel.dk,gmail.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	RCPT_COUNT_THREE(0.00)[4];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spam-Score: -1.30
+X-Spam-Flag: NO
 
-On Fri, 22 Nov 2024, Lorenzo Stoakes wrote:
+The allocation paths that use alloc_cache duplicate the same code
+pattern, sometimes in a quite convoluted way.  Fold the allocation into
+the cache code itself, making it just an allocator function, and keeping
+the cache policy invisible to callers.  Another justification for doing
+this, beyond code simplicity, is that it makes it trivial to test the
+impact of disabling the cache and using slab directly, which I've used
+for slab improvement experiments.
 
-> An aside, but note that there is a proposal to add nommu support to UML,
-> which would entirely prevent our ability to eliminate it [0] (though it
-> would make testing it easier! :)
+One relevant detail is that we provide a callback to optionally
+initialize memory only when we actually reach slab.  This allows us to
+avoid blindly executing the allocation with GFP_ZERO and only clean
+fields when they matter.
 
-Ok back to the alignment check. The patch is ok and an improvement since
-it properly checks for the alignment of the scalar and does not assume
-that a scalar is naturally aligned. That may not be necessary but it is
-formally more correct.
+Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-So
+---
+since v1:
+  - add a callback to initialize objects coming from slab
+  - rename io_alloc_cache_alloc -> io_cache_alloc
+---
+ io_uring/alloc_cache.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Acked-by: Christoph Lameter <cl@linux.com>
-
+diff --git a/io_uring/alloc_cache.h b/io_uring/alloc_cache.h
+index b7a38a2069cf..a3a8cfec32ce 100644
+--- a/io_uring/alloc_cache.h
++++ b/io_uring/alloc_cache.h
+@@ -30,6 +30,19 @@ static inline void *io_alloc_cache_get(struct io_alloc_cache *cache)
+ 	return NULL;
+ }
+ 
++static inline void *io_cache_alloc(struct io_alloc_cache *cache, gfp_t gfp,
++				   void (*init_once)(void *obj))
++{
++	if (unlikely(!cache->nr_cached)) {
++		void *obj = kmalloc(cache->elem_size, gfp);
++
++		if (obj && init_once)
++			init_once(obj);
++		return obj;
++	}
++	return io_alloc_cache_get(cache);
++}
++
+ /* returns false if the cache was initialized properly */
+ static inline bool io_alloc_cache_init(struct io_alloc_cache *cache,
+ 				       unsigned max_nr, size_t size)
+-- 
+2.47.0
 
