@@ -1,66 +1,66 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF5B163
-	for <io-uring@vger.kernel.org>; Sun, 24 Nov 2024 21:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184FF165EFC
+	for <io-uring@vger.kernel.org>; Sun, 24 Nov 2024 21:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732482726; cv=none; b=h4/kUCsz/PY93yyPTPNvJ4bz6RqzdYeFsqejLxEnQfqURYfjlwbpNmBqti1T9BfufiGpQl3bfXjbgV3EIoV7PuekF2QC4gPRWO06cCzFwldVLfrmqNDJxG9SXdGJ2RVK44Wi9twXLKydPP0SSmI4RHgXcZl436rzP3PngtPEgDg=
+	t=1732482728; cv=none; b=ndNQZJMlzlf0Q0/TOZf81U4t0gUj0fIb4+t7HPU5Co9SOgyoq3B3oTwtlKI5mTdgdznpz0Uahwok3/AxTr1L+dBPKL0YrqnzJVSpeHsm1IoeKYjvDF0dMaTjByXtFys1iDSwm2MqoA/MGq03xBBsblxTR6FdCSEmg+o+TIBG2eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732482726; c=relaxed/simple;
-	bh=1jmb/YGUScs5yrYsukVscAuiJXOxz0cRSODGRVeVGzI=;
+	s=arc-20240116; t=1732482728; c=relaxed/simple;
+	bh=1gdiLeCNSwVhK3nzWHMR4xFD8ClHJFNdvlyHODABro0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SKOYXeU/KnVUWTqGIxPlmi9N6sPSulSybkCom3S8uqBO7hNhV3kfZMS9NCpjWgTdVxz/MeqzlNIO/WogE8FydNiVZsQ+phxkCSAyT8jr7abzYyYS/KNxNUEJLTmmFz4rAyWOWo3HBFQdLEEYFq+HLpFACDJmu5ua+LqLEtvtY9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=btr6UIMz; arc=none smtp.client-ip=209.85.128.42
+	 MIME-Version; b=A0hefYjvqqSN2nPjRGdH79tuGB7qEVOj91AQW/8yvQ+z9N4Opq9IxoyTZKOINgr55yDCgu7mqKYi5BhOPd5zYqxFqYobn1fZoVLj9MuGHLQBilARlGNlmOUoz8x+rJx95OUWdHr0ErF7laKCzsyPTUinBIB6uyh7oWn4/XH/Efk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kowIrtKs; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="btr6UIMz"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-434a099ba95so129555e9.0
-        for <io-uring@vger.kernel.org>; Sun, 24 Nov 2024 13:12:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kowIrtKs"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43168d9c6c9so34993105e9.3
+        for <io-uring@vger.kernel.org>; Sun, 24 Nov 2024 13:12:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732482723; x=1733087523; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732482725; x=1733087525; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gaPvSNc+wa5krf/6t9pRuh8xeS0CHz0dlFRi5Cy4Ht8=;
-        b=btr6UIMzI88dtQ0kKhuLu1jrhnNZ9jqjCfhixpxFAmtXPfkHF2nxdF0hZdT9h+7CAt
-         meQW7CKMZdOT8THsrsB5GfbhysL2j1ldO1UjttS8O7GNZkyR7QtnKNxqH7iBxmPqFjWz
-         wX+wNFv6m5XBpwbyWWze+1eXozP7tP3NUOUFfeYr6nQAcFYx6sH4McxxBEZFNhNIE9Sa
-         lkbSVhyO9C5r3etmw3+Aju+6Km1fdzB2Fn+zYLSV4Jm5rJlCFdv6qwBCLlnyiElifGoV
-         KZ9f8J/4uVYH3KC9L06KxT2zJA611xSzzzRcr1h6SewPSRfxnUOefuNNkFTtarIthFCD
-         UzKg==
+        bh=usEgNxoUAlzm7LvnyJowdrWjygvIn9+DGkjQ7Uu9NSo=;
+        b=kowIrtKsk1htJr6Rtl5vLTfbIf+RNfEUmzAMmirUcZot1JtH5heR9jbDTHlrOQODfj
+         hiGs0m9Z22fNXf1AN9SNM4zL/dlnZ5yisjUeDcsvRE/Kxm/niGL9i6lAglSwamr/udlg
+         uV9+GIbVxwEySop6Mbqa/B8rSjn4IYgxUZl4gsKqoYm3UqdIVgaJhm9oIaMMq+Ky5MHt
+         dDbnDztI89zI2NETcPprAJk4NMjWxdFSPIoBUX13r/+G5yHVvD/C0OCqWqm/49coFkrU
+         LFuoatO4mN6WOLxXzgjNvs30SePAmVw1pw9xcnaZTP0UozS9mifDDbgFGw6yL9ngIW2R
+         uBFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732482723; x=1733087523;
+        d=1e100.net; s=20230601; t=1732482725; x=1733087525;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gaPvSNc+wa5krf/6t9pRuh8xeS0CHz0dlFRi5Cy4Ht8=;
-        b=jH9F5Atjk4v/Qw2N77GxK5/b/2gL3Vg98moG6N2veyFPfCBtmjRk0Jz7nrwhnavcfN
-         cTblDy0VSC5JKVMtrex8I43A7ld5zdhInAWjUMbUifIljDLpQ3ClTXjo5MEqbsU+/SIQ
-         EKurx4s/wZlaRSJ6M64bI7dt+vpQwROaOIei0fA9R2c7qoGpos0kjgEKLxP/1BdDp7kp
-         c+YT8DKs7fe/S7eFcyeY0rMgpFOT5EWpJJ9cfiXscGGM37B74e8zjbvxDE070m9guJ1p
-         42t0Q6PhGh9N21iUGI5A1phUAJdvgCEwpWzN499783WR3eIojIg+gnTpmmcwqynXm3dM
-         DnPg==
-X-Gm-Message-State: AOJu0Ywyplx0cCH+SK+Zlbf9t2RUzPmWkN292CJWuxLboeNrjLRekvM+
-	ZNTQBgCfSBMp7BLaZ5rzkhvCe3IZ//jtpmmIh2amRet4TaigqGIynoWiBg==
-X-Gm-Gg: ASbGncvPyR/0rkA1weSEBzWo+fFSgUWk9gipr+OMJiYaR2sk0x/jBv00QjejYliO5rN
-	8jGHy7tL+b1SExKRBjpBGy7McCdrBNYlPMkU1SJfapu+jxOb2Uw3DJ//xFgAfMBofcRqejjMc6X
-	xk8uK6GDLkrp7CerZSLcbr8KYK61oonJVwQNSAsKaAs+UB9the0DFqagBw7WbOtTrEbD5/vi02F
-	5gJZ6daexg6/i3M1NJ8GrJ/9A55nNXSX2cNXbLyTpGe5If8NH0VkO/PWxVuxRQ=
-X-Google-Smtp-Source: AGHT+IGZO+gfmdQKj8NYX5z7sQDyeONWOeooKM6+STiKR/au2AZVcwRCAKoSsARdhKCyRCHSTIBFug==
-X-Received: by 2002:a05:6000:401f:b0:37c:d57d:71cd with SMTP id ffacd0b85a97d-38260be22f9mr9864420f8f.52.1732482722480;
-        Sun, 24 Nov 2024 13:12:02 -0800 (PST)
+        bh=usEgNxoUAlzm7LvnyJowdrWjygvIn9+DGkjQ7Uu9NSo=;
+        b=RyVjsSBEx8uYHu9M93Oj8oGELqyxPA6LX4ZSPwdV8graGIVMGK6eekXKXSIrR0n9D2
+         sBLVQk+KF0eHWVjj2cHSIEGyaH/YY8f2a9D44tEpzxCH/jN0/ZKuYkfaNVjqmnmrm3+v
+         VS4mp46/AgwGQoALd8QKWBgAjSpUAKkU/x2Y5dGiTgFP2x50aaAy7RZYujTc/THu/rnK
+         LbvK8igmnrnKOd5SoNRekzpV5awemxx30rIlu0b5Dfqx81XX279ZldWzBd2OxFsVMbQm
+         RC95tKM9Bk6G3fQaj+DissA7OsyfQQy6SmYqoiTi6VYl5B5hTFKK/5treTR8OeNTkGOv
+         IRyg==
+X-Gm-Message-State: AOJu0YytWWOFA6pdnRoR3TJzKUT42/ZLdwozHVSv8Lr4Aq+opeplzG7B
+	VOtwk3A1ONpYUtcNJjesxm2naLQuusuDK7lUv6cDS2niwluzWhE3VB1PiA==
+X-Gm-Gg: ASbGncs6lf6rTPpiLpF4J5HfC3wRJJZ5AG7VjYG+AO651aMmT1HlEcAX0Z0z6kWsyYr
+	w3sNT1uyIRceAfcTTeGeK5VHjuu5Uoy/okzAM7c9+jlpz7WA92AnNEJUNVeORcK0WCRfWJkSTpi
+	yzEhnxhisvrfmKZs7daPzcK1vxNp1UbXtQsetW29+9ye1tTqAYMwPeC+T+LlE0MG9cPzAKXYX7m
+	wJDWk5EC4n9CC6zFNDsRX7qXmZR8pnlLgYbtmfWkCCD+xYjfOzEf3E/W0Xm0Yc=
+X-Google-Smtp-Source: AGHT+IF6S6c25dScAr6hUeKDZYVyQyU446CpUJC+pjEmxe1svaNtuFSzcIIeLiF5i3Ao4SmfseEwIA==
+X-Received: by 2002:a05:600c:3c92:b0:42c:b905:2bf9 with SMTP id 5b1f17b1804b1-433ce42883fmr102884415e9.16.1732482725039;
+        Sun, 24 Nov 2024 13:12:05 -0800 (PST)
 Received: from 127.0.0.1localhost ([85.255.235.224])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432f643b299sm132733745e9.0.2024.11.24.13.12.01
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432f643b299sm132733745e9.0.2024.11.24.13.12.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 Nov 2024 13:12:01 -0800 (PST)
+        Sun, 24 Nov 2024 13:12:04 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com
-Subject: [PATCH v2 02/18] io_uring/rsrc: export io_check_coalesce_buffer
-Date: Sun, 24 Nov 2024 21:12:19 +0000
-Message-ID: <4a82c18ed2615f3381f1849f108a421c2022c846.1732481694.git.asml.silence@gmail.com>
+Subject: [PATCH v2 04/18] io_uring/memmap: flag regions with user pages
+Date: Sun, 24 Nov 2024 21:12:21 +0000
+Message-ID: <29de51f8d8b328125f647226e76850b21f554423.1732481694.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <cover.1732481694.git.asml.silence@gmail.com>
 References: <cover.1732481694.git.asml.silence@gmail.com>
@@ -72,115 +72,45 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-io_try_coalesce_buffer() is a useful helper collecting useful info about
-a set of pages, I want to reuse it for analysing ring/etc. mappings. I
-don't need the entire thing and only interested if it can be coalesced
-into a single page, but that's better than duplicating the parsing.
+In preparation to kernel allocated regions add a flag telling if
+the region contains user pinned pages or not.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/rsrc.c | 22 ++++++++++++----------
- io_uring/rsrc.h |  4 ++++
- 2 files changed, 16 insertions(+), 10 deletions(-)
+ io_uring/memmap.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index adaae8630932..e51e5ddae728 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -626,11 +626,12 @@ static int io_buffer_account_pin(struct io_ring_ctx *ctx, struct page **pages,
- 	return ret;
- }
+diff --git a/io_uring/memmap.c b/io_uring/memmap.c
+index 21353ea09b39..f76bee5a861a 100644
+--- a/io_uring/memmap.c
++++ b/io_uring/memmap.c
+@@ -197,12 +197,16 @@ void *__io_uaddr_map(struct page ***pages, unsigned short *npages,
  
--static bool io_do_coalesce_buffer(struct page ***pages, int *nr_pages,
--				struct io_imu_folio_data *data, int nr_folios)
-+static bool io_coalesce_buffer(struct page ***pages, int *nr_pages,
-+				struct io_imu_folio_data *data)
- {
- 	struct page **page_array = *pages, **new_array = NULL;
- 	int nr_pages_left = *nr_pages, i, j;
-+	int nr_folios = data->nr_folios;
- 
- 	/* Store head pages only*/
- 	new_array = kvmalloc_array(nr_folios, sizeof(struct page *),
-@@ -667,15 +668,14 @@ static bool io_do_coalesce_buffer(struct page ***pages, int *nr_pages,
- 	return true;
- }
- 
--static bool io_try_coalesce_buffer(struct page ***pages, int *nr_pages,
--					 struct io_imu_folio_data *data)
-+bool io_check_coalesce_buffer(struct page **page_array, int nr_pages,
-+			      struct io_imu_folio_data *data)
- {
--	struct page **page_array = *pages;
- 	struct folio *folio = page_folio(page_array[0]);
- 	unsigned int count = 1, nr_folios = 1;
- 	int i;
- 
--	if (*nr_pages <= 1)
-+	if (nr_pages <= 1)
- 		return false;
- 
- 	data->nr_pages_mid = folio_nr_pages(folio);
-@@ -687,7 +687,7 @@ static bool io_try_coalesce_buffer(struct page ***pages, int *nr_pages,
- 	 * Check if pages are contiguous inside a folio, and all folios have
- 	 * the same page count except for the head and tail.
- 	 */
--	for (i = 1; i < *nr_pages; i++) {
-+	for (i = 1; i < nr_pages; i++) {
- 		if (page_folio(page_array[i]) == folio &&
- 			page_array[i] == page_array[i-1] + 1) {
- 			count++;
-@@ -715,7 +715,8 @@ static bool io_try_coalesce_buffer(struct page ***pages, int *nr_pages,
- 	if (nr_folios == 1)
- 		data->nr_pages_head = count;
- 
--	return io_do_coalesce_buffer(pages, nr_pages, data, nr_folios);
-+	data->nr_folios = nr_folios;
-+	return true;
- }
- 
- static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
-@@ -729,7 +730,7 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
- 	size_t size;
- 	int ret, nr_pages, i;
- 	struct io_imu_folio_data data;
--	bool coalesced;
-+	bool coalesced = false;
- 
- 	if (!iov->iov_base)
- 		return NULL;
-@@ -749,7 +750,8 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
- 	}
- 
- 	/* If it's huge page(s), try to coalesce them into fewer bvec entries */
--	coalesced = io_try_coalesce_buffer(&pages, &nr_pages, &data);
-+	if (io_check_coalesce_buffer(pages, nr_pages, &data))
-+		coalesced = io_coalesce_buffer(&pages, &nr_pages, &data);
- 
- 	imu = kvmalloc(struct_size(imu, bvec, nr_pages), GFP_KERNEL);
- 	if (!imu)
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index 7a4668deaa1a..c8b093584461 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -40,6 +40,7 @@ struct io_imu_folio_data {
- 	/* For non-head/tail folios, has to be fully included */
- 	unsigned int	nr_pages_mid;
- 	unsigned int	folio_shift;
-+	unsigned int	nr_folios;
+ enum {
+ 	IO_REGION_F_VMAP			= 1,
++	IO_REGION_F_USER_PINNED			= 2,
  };
  
- struct io_rsrc_node *io_rsrc_node_alloc(struct io_ring_ctx *ctx, int type);
-@@ -66,6 +67,9 @@ int io_register_rsrc_update(struct io_ring_ctx *ctx, void __user *arg,
- int io_register_rsrc(struct io_ring_ctx *ctx, void __user *arg,
- 			unsigned int size, unsigned int type);
- 
-+bool io_check_coalesce_buffer(struct page **page_array, int nr_pages,
-+			      struct io_imu_folio_data *data);
-+
- static inline struct io_rsrc_node *io_rsrc_node_lookup(struct io_rsrc_data *data,
- 						       int index)
+ void io_free_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr)
  {
+ 	if (mr->pages) {
+-		unpin_user_pages(mr->pages, mr->nr_pages);
++		if (mr->flags & IO_REGION_F_USER_PINNED)
++			unpin_user_pages(mr->pages, mr->nr_pages);
++		else
++			release_pages(mr->pages, mr->nr_pages);
+ 		kvfree(mr->pages);
+ 	}
+ 	if ((mr->flags & IO_REGION_F_VMAP) && mr->ptr)
+@@ -259,7 +263,7 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
+ 	mr->pages = pages;
+ 	mr->ptr = vptr;
+ 	mr->nr_pages = nr_pages;
+-	mr->flags |= IO_REGION_F_VMAP;
++	mr->flags |= IO_REGION_F_VMAP | IO_REGION_F_USER_PINNED;
+ 	return 0;
+ out_free:
+ 	if (pages_accounted)
 -- 
 2.46.0
 
