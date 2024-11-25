@@ -1,119 +1,110 @@
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69FE1CD2C;
-	Mon, 25 Nov 2024 23:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAE81E480
+	for <io-uring@vger.kernel.org>; Mon, 25 Nov 2024 23:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732576923; cv=none; b=G2scl7sPFUfj7zHgvglkek0NGrWp2k14afe3oaKouW2vvt4pQjbH5JkMDUBwaeImP06YDuREniDzx+6VBNlxi4M/WkBikBPUARhTvsfXigfmOxsFSHWi/JliBYiL2xE74808SfBBabw4upZLljBh+p41+IuELIYU+pKlTUSfPJg=
+	t=1732577644; cv=none; b=qHAV/hfSe9CFwuV+huXYpXdyoedo6hlxQ/tFMfJ2gXR0g7m3hncpnpGxwqe1snoSqkOechA+q3R8baySYkWHjLXgU02HbYWIEmx15gNyJkR+2Mp6pILgWtwO/r6AVVpc9zu8WkBLhEmgw2gqZ4mQoeKgols2LZRNF6I3KIY79/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732576923; c=relaxed/simple;
-	bh=PnyEp5HDwkYdC+u2fYrcD9DZmakb7fsgFLTXkys5mYs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AxIfGDZA6G1R1/yZzsm+TLUzRSLJo/M1tbk+nYq4jhKIFsMUOOidcmRENj3sXYfU3iA72Vow3aoWKjA1Vq2TnpAGuny1rmdHbcNA9ndyAIYyegtxXEe1t43mJhUs7MAvxRSFaooeJx4EzfzOSWOtjQhsL3csHVvDqM7tk0d/09s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=hcZeOtsJ; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="hcZeOtsJ"
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4Xy1tx0rF8zlgVnN;
-	Mon, 25 Nov 2024 23:22:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1732576915; x=1735168916; bh=gYn7SNmvOgRtVyBpUwpt9+SL
-	l1/GKJuJp2r+ZPcDOn8=; b=hcZeOtsJw9MqKA073h8LluDpnwkJA8502Ny5K5xF
-	5PfmkXqYsr98J6k8bsoVBWRhGvfkc8AmRW/jDo1Bkx23NRvqBjqvo1+x3qCSF9KX
-	V1DsxVXZzyBgwsnE+LebnaFkNCluTDTt33itJcqDiVtQT5W4WCVezcse/lbJ2kpF
-	hueFUBl0hPqsa7JlnOJ/4Q/EFdNKAUAfnWBGZYntZngXkgtqKzBBT/NdITW9LzNx
-	5XMbsPPGsxYddl6z0XmbqEqeeMIRjdtL6M8cQM6IAJBqmeaA60Ja7AsV9Xz0wwIk
-	WNeXb7FqSUA7IOjgr6amIp0EtKAqVWbwD0H7uIS2/5AmMw==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id 7mH7bJMGB4rO; Mon, 25 Nov 2024 23:21:55 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4Xy1tk4CG6zlgVXv;
-	Mon, 25 Nov 2024 23:21:50 +0000 (UTC)
-Message-ID: <9d61a62f-6d95-4588-bcd8-de4433a9c1bb@acm.org>
-Date: Mon, 25 Nov 2024 15:21:47 -0800
+	s=arc-20240116; t=1732577644; c=relaxed/simple;
+	bh=rgkpqdqQkvHavA8r6D6Nk7TJzX420Xwq9vCjntuQn+Q=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=kikD1xIx4zUDKiHiJ/apehCYo+tDoMlF3lmJz7bM6dlNF9vkEZ3i6CqgJJxFH/VCIr2bK2wIG83s/Ez1WsSHLrjcgbbJ+p2OEkzwVf9Cpu2NkcXrW0jtNhHlKeMQr1S2uL9puXph780wJF+2udObsrRVQVxSi5My+Zhxvc4/HTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a71bdd158aso55045205ab.1
+        for <io-uring@vger.kernel.org>; Mon, 25 Nov 2024 15:34:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732577642; x=1733182442;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lqNaDCIYNAGDm8DdpOLHaZPXRGpBbn3nGU7MsIFIGCw=;
+        b=XcWvyfiYQ10c2ie1ykkb/5Q+5GtKYlGjMQub1wwkXH0qJKvMGZFY1mk4jw0GujKXCu
+         powOD6qK6uc9+SQGpSTUf2J7Q+VnsYR8YyUYpB8vL/lylEQPaVg0ZDFnZpnqWnpSjzfT
+         bI5osJI6N/gDfd9EI1317zJOsqLSyH88boP0rCzuBCc56HdT/wMPhyirGH1vidrHHfv9
+         ZDqlH4OgfDeKrwMht5foRzI28BahUQi15b+e2dZ9Bl4D++K9/DA1zhkqlTP9lYQ4nzUT
+         LmzlW/k5NTEkCZz1ka2PiVdSWchMMOnGdzqhaIYVCCmRYEuIYN9LQBU70bXcRBgNBiAN
+         d1QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVsK0lUStf++62Fu24IMgMc6hOxYKqZBIDzp1H/UPfpmdbvwZOpnQQ3GirVDF2kIyEGgP559NOGRQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNHt8T2pbsAgjskrrP9aTdnmY4YviY50SHkqkhqeei3rn07bHv
+	IyqXmihSXIMqwMgktBOYbpgJQo16hJz6Y1/ugKgqhz8XZaHg7uWKqwpIoOfMy+OsRAN8QxTkLSN
+	RzxTNzxJeqSYx4q2++/S5B2MqaN8yo3ZvTpz2Zjp+P6HqzfRkTNy++rE=
+X-Google-Smtp-Source: AGHT+IFnTudC4Rlie0Zbp02yyIsZP/XWgPyiYGNe+qn3ta2BXhs/9DdBVFVSa9p9PcL+rJpg/KwVtPwTWseiMavDz7uY1dae6hHp
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv10 0/9] write hints with nvme fdp, scsi streams
-To: "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nitesh Shetty <nj.shetty@samsung.com>
-Cc: Javier Gonzalez <javier.gonz@samsung.com>,
- Matthew Wilcox <willy@infradead.org>, Keith Busch <kbusch@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@meta.com>,
- "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
- "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
- "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "joshi.k@samsung.com" <joshi.k@samsung.com>
-References: <20241105155014.GA7310@lst.de> <Zy0k06wK0ymPm4BV@kbusch-mbp>
- <20241108141852.GA6578@lst.de> <Zy4zgwYKB1f6McTH@kbusch-mbp>
- <CGME20241108165444eucas1p183f631e2710142fbbc7dee9300baf77a@eucas1p1.samsung.com>
- <Zy5CSgNJtgUgBH3H@casper.infradead.org>
- <d7b7a759dd9a45a7845e95e693ec29d7@CAMSVWEXC02.scsc.local>
- <2b5a365a-215a-48de-acb1-b846a4f24680@acm.org>
- <20241111093154.zbsp42gfiv2enb5a@ArmHalley.local>
- <a7ebd158-692c-494c-8cc0-a82f9adf4db0@acm.org>
- <20241112135233.2iwgwe443rnuivyb@ubuntu>
- <yq1ed38roc9.fsf@ca-mkp.ca.oracle.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <yq1ed38roc9.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:12cc:b0:3a7:7fc0:ee16 with SMTP id
+ e9e14a558f8ab-3a79ad787b5mr173421145ab.8.1732577641866; Mon, 25 Nov 2024
+ 15:34:01 -0800 (PST)
+Date: Mon, 25 Nov 2024 15:34:01 -0800
+In-Reply-To: <4db729f9-eece-4732-8d6d-405a997ed35c@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67450969.050a0220.1286eb.0006.GAE@google.com>
+Subject: Re: [syzbot] [io-uring?] WARNING in io_pin_pages
+From: syzbot <syzbot+2159cbb522b02847c053@syzkaller.appspotmail.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in io_pin_pages
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 6625 at io_uring/memmap.c:146 io_pin_pages+0x149/0x180 io_uring/memmap.c:146
+Modules linked in:
+CPU: 0 UID: 0 PID: 6625 Comm: syz.0.15 Not tainted 6.12.0-rc4-syzkaller-00087-g9788f6363f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+RIP: 0010:io_pin_pages+0x149/0x180 io_uring/memmap.c:146
+Code: 63 fd 4c 89 f8 5b 41 5c 41 5e 41 5f 5d c3 cc cc cc cc e8 0a f9 e8 fc 90 0f 0b 90 49 c7 c7 ea ff ff ff eb de e8 f8 f8 e8 fc 90 <0f> 0b 90 49 c7 c7 b5 ff ff ff eb cc 44 89 f1 80 e1 07 80 c1 03 38
+RSP: 0018:ffffc90002ee7c10 EFLAGS: 00010293
+RAX: ffffffff84abe228 RBX: fff0000000000091 RCX: ffff88806d4c9e00
+RDX: 0000000000000000 RSI: fff0000000000091 RDI: 000000007fffffff
+RBP: 000ffffffffffff0 R08: ffffffff84abe12e R09: 1ffff1100f98b260
+R10: dffffc0000000000 R11: ffffed100f98b261 R12: ffffffffffff0000
+R13: ffffffffffff0000 R14: ffffc90002ee7c80 R15: 1ffff110024de520
+FS:  00007f3e6a15a6c0(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b3255ffff CR3: 00000000339f8000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __io_uaddr_map+0xfb/0x2d0 io_uring/memmap.c:185
+ io_rings_map io_uring/io_uring.c:2632 [inline]
+ io_allocate_scq_urings+0x212/0x710 io_uring/io_uring.c:3491
+ io_uring_create+0x5b5/0xc00 io_uring/io_uring.c:3713
+ io_uring_setup io_uring/io_uring.c:3802 [inline]
+ __do_sys_io_uring_setup io_uring/io_uring.c:3829 [inline]
+ __se_sys_io_uring_setup+0x2ba/0x330 io_uring/io_uring.c:3823
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f3e6937e759
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f3e6a159fc8 EFLAGS: 00000202 ORIG_RAX: 00000000000001a9
+RAX: ffffffffffffffda RBX: 00007f3e69535f80 RCX: 00007f3e6937e759
+RDX: 0000000000000000 RSI: 0000000020000400 RDI: 0000000000002c0c
+RBP: 0000000020000400 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000002c0c R15: 0000000000000000
+ </TASK>
 
 
-On 11/18/24 6:03 PM, Martin K. Petersen wrote:
-> In my experience the payload-based approach was what made things work. I
-> tried many things before settling on that. Also note that to support
-> token-based SCSI devices, you inevitably need to separate the
-> read/copy_in operation from the write/copy_out ditto and carry the token
-> in the payload.
-> 
-> For "single copy command" devices, you can just synthesize the token in
-> the driver. Although I don't really know what the point of the token is
-> in that case because as far as I'm concerned, the only interesting
-> information is that the read/copy_in operation made it down the stack
-> without being split.
-Hi Martin,
+Tested on:
 
-There are some strong arguments in this thread from May 2024 in favor of
-representing the entire copy operation as a single REQ_OP_ operation:
-https://lore.kernel.org/linux-block/20240520102033.9361-1-nj.shetty@samsung.com/
+commit:         9788f636 io_uring: sanitise nr_pages for SQ/CQ
+git tree:       https://github.com/isilence/linux.git syz/sanitise-cqsq
+console output: https://syzkaller.appspot.com/x/log.txt?x=1040e778580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f0635751ca15fb7a
+dashboard link: https://syzkaller.appspot.com/bug?extid=2159cbb522b02847c053
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 
-Token-based copy offloading (called ODX by Microsoft) could be
-implemented by maintaining a state machine in the SCSI sd driver and
-using a single block layer request to submit the four following SCSI
-commands:
-* POPULATE TOKEN
-* RECEIVE ROD TOKEN INFORMATION
-* WRITE USING TOKEN
-
-I'm assuming that the IMMED bit will be set to zero in the WRITE USING
-TOKEN command. Otherwise one or more additional RECEIVE ROD TOKEN
-INFORMATION commands would be required to poll for the WRITE USING TOKEN
-completion status.
-
-I guess that the block layer maintainer wouldn't be happy if all block
-drivers would have to deal with three or four phases for copy offloading
-just because ODX is this complicated.
-
-Thanks,
-
-Bart.
+Note: no patches were applied.
