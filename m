@@ -1,66 +1,66 @@
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21551990C1
-	for <io-uring@vger.kernel.org>; Fri, 29 Nov 2024 13:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83CE199E89
+	for <io-uring@vger.kernel.org>; Fri, 29 Nov 2024 13:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732887246; cv=none; b=O69sBYDc2ARRASCzKbEwW0/b2tKSXcK6mDB+R28nw5bP9VeOMfqknJZfyYoBMmfH77QAmKfjQ7bVmhHLDJZd4Q44vTpo5kQfcE3uaafVcctKryrsMwUqLh+5KOHJ1wRAY0OEBaYcN2v7P84EjyEuhVVvcBhXgP/E9jy4mI1YoqU=
+	t=1732887247; cv=none; b=cpzapsnw5ycnnZ1tMyOeDvMVPI0ToRqfiazp6bLLrMkWBbyBswy92oCcGtoHVFc7qQcgYo4orx21RfstV2Pb/2AGmryyok+i31INYyvAYE/D3moeI6tiDibZ0ah3ZJpbV4m3wrrlxnZu3bQr/ut+Ihz/yJbQ9muF3v8ZIqtJVlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732887246; c=relaxed/simple;
-	bh=0HSMXa5ydW7c2+PHnx1xmN1oHJJ2GN/Ij2zM+mEECIA=;
+	s=arc-20240116; t=1732887247; c=relaxed/simple;
+	bh=xG5BJVMYMK/ic6yBusHqEDPDk8SnMuUQSGJz4Wz7DsA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ondViAQIWMjel3DrlAawLqSAp64epCMwPs7jb/pfjfh1dOk+11b2O8zu/z8GjNZu40uEOQm6PQwsKpPjrEv921KlAZalncEYbngcS2US65bENEOYHF6jNdz7TiK7yr+p01Qyu6R7uygCjTzxX4O00hqk3tpUOG2YFhvlwt1Q1PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QTJxMkR+; arc=none smtp.client-ip=209.85.167.43
+	 MIME-Version; b=q0yO+5co3nUnX+l4lmGDRO/dPsKeIGQEMme5FnmthUTB3hs4Eh/6LAJvGEeFYRf1xIpaTL83a/yvA4YWz9YIQ5WKAINWDio9d0oabW+ZAYF8dPpocqrh2VH7so+tR770WD648DQVkUKzGi3/5ZNZHat6114gKfKH95zq1ht/WTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VwgNRa11; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QTJxMkR+"
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53de579f775so2841440e87.2
-        for <io-uring@vger.kernel.org>; Fri, 29 Nov 2024 05:34:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VwgNRa11"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5d0be79e7e7so358355a12.0
+        for <io-uring@vger.kernel.org>; Fri, 29 Nov 2024 05:34:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732887243; x=1733492043; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1732887244; x=1733492044; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y7DUsvzcDYnCxbLMe5yWIbUXISp/cV61F4ZJFZF0PUI=;
-        b=QTJxMkR+aicmk9AabuPPX1DYtyqYip1nNUAJZCU/3GxGaJ6jiISMoR+kSRxgN9/f49
-         3M2ZNZfAeeEbVEp7zMKo+asvFQ+VBdumhsSD+tSaXIp6EIpeS3yuR+PD2ovMNdLmuc4R
-         JydtdCiYcET1cBraXi/IeXu7tSN2ZxqEh6yAIPY4jVnceRO8nhHUl4BplhSyT4ldkr0Y
-         A16tHCTudT4FlX5zkV9uoPGP+4qkdCt1OoPyvpvckTsBIkwN8PLppqHrksQD03LMDbeG
-         hF+joAhIP5SMRRu7YgeMd50QOdBPKm5lezSWkVMIh8LUwHsssoyjE9xDM2T91Hfvf73L
-         PR7Q==
+        bh=iw9KjbDCnQd55jzzAKjgJBEKh2EnMTZarOWnv7TTLMc=;
+        b=VwgNRa11fhlySS+d6AfClKv9gWStu8MqPRbxiWIfavRc1srA2PWWu2ldeKXdd2vlvM
+         bUDFTpr/t3KrYEduDyxJd0VeggSzbfJuXFRvV5c4XrTJBIYDmnrj170zjsMWizF14XMx
+         rc57FXOGXZN/n5gmAjt8U53yWBhJlLH4zoLgAlxoigTYgzIj0wfMBXizaT/KSdm3cuil
+         zAgA/Gzh/WAaG/odUycHWZc9bKi/te51n0Rl+9VVuXDAtTDH0/olD+P5t0iHc0wJxWi+
+         fRuiZ9glhwM07o/GaeId8sCXZZm6A6F7U/U9F+FLhLaZbXW+Js/Q0pln7zk8OFb1gU1D
+         w1Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732887243; x=1733492043;
+        d=1e100.net; s=20230601; t=1732887244; x=1733492044;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=y7DUsvzcDYnCxbLMe5yWIbUXISp/cV61F4ZJFZF0PUI=;
-        b=C1xF8bd9sH1nMDLGzgxSDCzF/zHdcLKv4bhkwX3gXXVxx8gjBesVVAiIMn1kw/62ma
-         mgJMTwjd99vbcBNYerBtC98PLENlmkcl7fcBQC7fDc8PxEV/YSKgBNtJRyXz1TZxvnqx
-         /e47CBO6tKlaUr+BlhxHkDRWA/pYiC58OiwZF9mefi3nAZAinDQEoI153Biv8dABxyeE
-         3wRok1hMd/Ixjxk0AvrzwaaMqNptixaiD8TvOI4y4AVblLqBaGKHJpsagNHQnk0YJ4EN
-         7JQmmSqE30YJNGiWocSEFvGs5MR9ZPTF/CAMVdaq8l1frUYgMhJYBweKZPkPlJW/rBJv
-         4cUQ==
-X-Gm-Message-State: AOJu0Ywc0j2udEcYJgNZws8VV3BdQjjiZT6BSf7fH7DRZplbrRKAm2fJ
-	E2+X61anDgOPBkOoVf/kbEsMcnO0qU30vsp1tfma0fp5qFk4+/ogNOwqZA==
-X-Gm-Gg: ASbGnctTJJyx5gZBxLdRwpoGKOCqm6bFBZQEjkmuzZXKLt9vXHzETrgjztMdCOQUDov
-	fnz1aTl9ol05xMf4DtrEPY9lChYU7a44OlGsn1Gr5A6Nl1WtitLHxv4gE664yTMBWySLscaEovw
-	4PwIWtHbAPX6pR2L6cmUEkVOu0NPcfsZcv/okABoyvshdLzDXdlNYhsACbtDNZGw4QP7CSkzxhQ
-	0w4XBkU0OnOv6c/u6ABuQAFUTkOqejw3D8q11dycfBC+mh+Y/GvXRY6MlmSxZYL
-X-Google-Smtp-Source: AGHT+IF40+OtybuLZ3RxOqfCt3cLscbhQoVOgRNJ6yeSzp6q/4Ezf2kngq10/YxeHrZ33Bw5If5Cyw==
-X-Received: by 2002:a19:9147:0:b0:53d:f0ca:41f2 with SMTP id 2adb3069b0e04-53df0ca4242mr8444911e87.41.1732887242480;
-        Fri, 29 Nov 2024 05:34:02 -0800 (PST)
+        bh=iw9KjbDCnQd55jzzAKjgJBEKh2EnMTZarOWnv7TTLMc=;
+        b=vBWPg01ibQOo09AEGvC0NegSs4QKcWHzbqsYI+H6gT4ruPP5kQdYczauQHZkHNa1MW
+         x6QYIgVtWKxfJRQS+g2pxrwRBTyi8Bxlde16odau7Y/k97Muqs29BV3buRPcVjukBmcT
+         AJiW3QR5ZXRyc4+qnRiblsiSm/rf1UHEuePUFX1mu4B0TkHvLLSNxAnXoT3hw+g4CV0g
+         8eWaHnyWz+K/IOD2v5IQXuzpRzL1o3gXxBOT8L31cMNjU8/Q24vTHCSgx0IyL9RwBKed
+         8z6jzdwGY3/S8Pg0XUPc/Et6CCKH992zXh0AeA6vDGdNnUHO2uaWiliWlnmyEma8tOAh
+         uEyg==
+X-Gm-Message-State: AOJu0Yx1uB9kry2UlD/zWC8GC+zikgjc/5lpnY6FYdVOkjq8i9sOblqu
+	7drTQ0edbPyfpwU3yz9vWfdpvxwOQYXvfjODqgAnoMokgur2z+bT0BuLUQ==
+X-Gm-Gg: ASbGncsRgTI5y1D3GyH99lXV2byatou2HxCAwK2B8TONM6EZr+eHRB9NyUnfeldwdF/
+	U/i9zshBVN/lzIqclDA+rbbQPU8y6MccJZb9bAVAq9I5vaxzhcYzttSItn9He/57wdN/eWX8iqV
+	UkNDByI0AFDfUHPJ/FG752oPoksqmdWdSWyqgtrUxbXNQxlA2M6wGvhg3vM0Cp0BFr2opKZSRSy
+	pMO3KycVRvm1ODXhpQJxqy7o188mdK+rH/wQeJs1nIyuYyNKVq5Dd76ZxUriby4
+X-Google-Smtp-Source: AGHT+IHsNRqZe14BbrAzNFA6CcOOUCUjd3bjNThTeH2sfPKu1tChv9c03Sz46qBtK80/CZI+d1DTOQ==
+X-Received: by 2002:a17:906:3d29:b0:aa5:1699:e25a with SMTP id a640c23a62f3a-aa580ee98eamr809780966b.10.1732887243828;
+        Fri, 29 Nov 2024 05:34:03 -0800 (PST)
 Received: from 127.0.0.1localhost ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5996c2471sm173996866b.13.2024.11.29.05.34.01
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5996c2471sm173996866b.13.2024.11.29.05.34.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 05:34:01 -0800 (PST)
+        Fri, 29 Nov 2024 05:34:03 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com
-Subject: [PATCH v3 07/18] io_uring/memmap: optimise single folio regions
-Date: Fri, 29 Nov 2024 13:34:28 +0000
-Message-ID: <d5240af23064a824c29d14d2406f1ae764bf4505.1732886067.git.asml.silence@gmail.com>
+Subject: [PATCH v3 09/18] io_uring/memmap: add IO_REGION_F_SINGLE_REF
+Date: Fri, 29 Nov 2024 13:34:30 +0000
+Message-ID: <a7abfa7535e9728d5fcade29a1ea1605ec2c04ce.1732886067.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <cover.1732886067.git.asml.silence@gmail.com>
 References: <cover.1732886067.git.asml.silence@gmail.com>
@@ -72,68 +72,44 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We don't need to vmap if memory is already physically contiguous. There
-are two important cases it covers: PAGE_SIZE regions and huge pages.
-Use io_check_coalesce_buffer() to get the number of contiguous folios.
+Kernel allocated compound pages will have just one reference for the
+entire page array, add a flag telling io_free_region about that.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/memmap.c | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
+ io_uring/memmap.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/io_uring/memmap.c b/io_uring/memmap.c
-index 96c4f6b61171..fd348c98f64f 100644
+index 5d261e07c2e3..a37ccb167258 100644
 --- a/io_uring/memmap.c
 +++ b/io_uring/memmap.c
-@@ -226,12 +226,31 @@ void io_free_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr)
- 	memset(mr, 0, sizeof(*mr));
- }
+@@ -207,15 +207,23 @@ enum {
+ 	IO_REGION_F_VMAP			= 1,
+ 	/* memory is provided by user and pinned by the kernel */
+ 	IO_REGION_F_USER_PROVIDED		= 2,
++	/* only the first page in the array is ref'ed */
++	IO_REGION_F_SINGLE_REF			= 4,
+ };
  
-+static int io_region_init_ptr(struct io_mapped_region *mr)
-+{
-+	struct io_imu_folio_data ifd;
-+	void *ptr;
-+
-+	if (io_check_coalesce_buffer(mr->pages, mr->nr_pages, &ifd)) {
-+		if (ifd.nr_folios == 1) {
-+			mr->ptr = page_address(mr->pages[0]);
-+			return 0;
-+		}
-+	}
-+	ptr = vmap(mr->pages, mr->nr_pages, VM_MAP, PAGE_KERNEL);
-+	if (!ptr)
-+		return -ENOMEM;
-+
-+	mr->ptr = ptr;
-+	mr->flags |= IO_REGION_F_VMAP;
-+	return 0;
-+}
-+
- int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
- 		     struct io_uring_region_desc *reg)
+ void io_free_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr)
  {
- 	struct page **pages;
- 	int nr_pages, ret;
--	void *vptr;
- 	u64 end;
- 
- 	if (WARN_ON_ONCE(mr->pages || mr->ptr || mr->nr_pages))
-@@ -267,13 +286,9 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
- 	mr->pages = pages;
- 	mr->flags |= IO_REGION_F_USER_PROVIDED;
- 
--	vptr = vmap(pages, nr_pages, VM_MAP, PAGE_KERNEL);
--	if (!vptr) {
--		ret = -ENOMEM;
-+	ret = io_region_init_ptr(mr);
-+	if (ret)
- 		goto out_free;
--	}
--	mr->ptr = vptr;
--	mr->flags |= IO_REGION_F_VMAP;
- 	return 0;
- out_free:
- 	io_free_region(ctx, mr);
+ 	if (mr->pages) {
++		long nr_refs = mr->nr_pages;
++
++		if (mr->flags & IO_REGION_F_SINGLE_REF)
++			nr_refs = 1;
++
+ 		if (mr->flags & IO_REGION_F_USER_PROVIDED)
+-			unpin_user_pages(mr->pages, mr->nr_pages);
++			unpin_user_pages(mr->pages, nr_refs);
+ 		else
+-			release_pages(mr->pages, mr->nr_pages);
++			release_pages(mr->pages, nr_refs);
++
+ 		kvfree(mr->pages);
+ 	}
+ 	if ((mr->flags & IO_REGION_F_VMAP) && mr->ptr)
 -- 
 2.47.1
 
