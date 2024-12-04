@@ -1,111 +1,120 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6973E217F54
-	for <io-uring@vger.kernel.org>; Wed,  4 Dec 2024 17:34:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBC214287
+	for <io-uring@vger.kernel.org>; Wed,  4 Dec 2024 17:39:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733333700; cv=none; b=uQL/MoDiXuALWCDt2nWLE3h/Qr+WwKbjv354/eSgikEaeddJKqhiThNBRui1M2C79+Dh9QkSLzLmwFjAMfskUqRkTbPEU1YXHLNQTMipjbBOFmo8079jJfIGStKWzcSOjl5KdoQ25d0yL6xCpCxhjwYMeiIIOI2d/ga7wFwIDKo=
+	t=1733333944; cv=none; b=gqCcp7vzTq4jEvh7ixE1DXr/Uz5BTYGoSO4CHU8J2S1iu9MVvq0+WujbvZNRr1I9CjymG3lhusvKkt16MaGbhHTpc77JPAh09m9IhxA/boqB6DsVY4dfN0QApUt+wxsSkveLpnGg772q4/8Znust57c3k5RsMoNhQQwL+7rg49Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733333700; c=relaxed/simple;
-	bh=dlihfuBp2YdmTwP/7phGNNouqWJWqjGdJ8qALliZeIY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oOh4bxHwNqYLoFVXMTaBhbc8nNm/56G8YXwKFO0mWYotbPtYzGDUdot6f+qKI2Ia5g+PFjHvDUmcj0IktqADJeVfE9P19jGqtzmd1u/mHQJSPE8dcQG8Aimkco8fcB9KrCDergT6AorwrLAvf9He6lFqg3WM2Pzojg5+uOWYVSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N0qLsgi0; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1733333944; c=relaxed/simple;
+	bh=Wv3xb61sc0ZFwM1CF09p6Z+3FQpIIW1chil23ZovVVw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ACQZazakEF0xfd7spBnMiFyVH9UaLFH3wgyUuMqEQgAYd8R/qhCUmX07rR42uB6mphYwi7d6P5uPnVh04Aw8eP5NT4sWTNQc348i6syktvFPFurkwR7djg4FDRg7FYnTsFtsX9siwssestfLLQ05C+ZvxdGwyHfHPYg+3EfsU+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=W7Nak71G; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N0qLsgi0"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2ee74291415so46857a91.3
-        for <io-uring@vger.kernel.org>; Wed, 04 Dec 2024 09:34:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="W7Nak71G"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2155312884fso126475ad.0
+        for <io-uring@vger.kernel.org>; Wed, 04 Dec 2024 09:39:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733333699; x=1733938499; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dlihfuBp2YdmTwP/7phGNNouqWJWqjGdJ8qALliZeIY=;
-        b=N0qLsgi0Q029EI7QXQLQ8NRybU6WOfneD5UhNYsy0RKlgZ+1XxqRBrtI8QXkqj3IlC
-         smbMCVRFzD83cJjbOGFnUivl7R9ux0hZ5d3jnVo9hRE3hEd24CVzQlTqPxbfBGO1TfnU
-         r8NVRn7uhschJCYVp6DyvytBCU1ab/kf6PmdBaNmZdgGhxbRzXy6k72ti1d99oWH6/qz
-         Nt/E2QOiR3EBkO29GU3IBFt5HRasqMFD8czBUor7siB+AnV5d56l+AOgTNATKDI/1Mse
-         Wn9LGzTo1/rwliCCfoH1zhgsoPWSZbAbd84hMJco4wcsM4x01R8drzyOTXmDELQP0YCW
-         xalw==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1733333941; x=1733938741; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VFClu+Hvt7amMncVjBqzTSbdie8DwUy5v4UirHChi6g=;
+        b=W7Nak71GxErBNvtcimNa4VzT2MQVv8KeCc4r6NA8V5RGLl6W4uH4RqW8dMQpTmj0ms
+         N8FLwLqebjg4aNgqfmGgnNfvK1r74p6rpT5YeGrV29Fg5mxeIU19Mxu+ivJf6wTDi5gO
+         Cxb1wXFoCIWxD6aGK/uyTxkkKylZ81H9n+CaQlxmp98Srm1OzgZYLD4bi+3lQ8lLx3Zh
+         DKRli7GZr+keCcj2W7+yY29+xL3+H3M2uoVERDRug50wgNQ5HMhklatb7kcn0TxNAVpC
+         E29z3Hj6BcLobsk3o/qrY81CLe5+prheRkDjedMaQFE9Ydu4i6enyrFa0MyDlzpDct6K
+         Ct7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733333699; x=1733938499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dlihfuBp2YdmTwP/7phGNNouqWJWqjGdJ8qALliZeIY=;
-        b=K8Was0oD1xLML4KoFQ8LRUAaMvSsCHEjqnvrx4YH/kI08omQKUPIYGSj7vftfavqFF
-         PaShCGxdOI+JdbOFg9G4kJWl96EgUWw6i9I2nFtb2R6b+KWRAp/N/AdtpBG2VT56ayq7
-         b7LnBl8m2S9KWqz2n5/jyak/Ymp4CCAeS+mo46bAYkfF0MTQ6TrbAk43ps6lsvkmcjRA
-         xXSeX/chbKHZOFg8Ylnx1Eg27gsos8YSiZC8fhIRGyLKFmCLbNsThjsu9qqwNAwz9iXg
-         ZDVbdj68B8A5xYK9IIX0W4UmdjDNFiQ9QXxxcHnVfh+bkusQO/SHqF40hbgB8Na2vJwX
-         EztA==
-X-Forwarded-Encrypted: i=1; AJvYcCVz1vGHEwtFDUmtPwbuFjfRAPdsgcShsXugrfEhqS1ZsmON6F8hxffutfZaPJRK5PxCs4/kRCAQNg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw22OG6s1n2FSK3w0JorGQSOZXGH5K9pZV10M5Ts3yAJ9GEYM8K
-	OcZos0ZANwsFP0v5KxPmtRNv89jOC23wcKfgQpy6lfEAGIvF6KRS76tGAsTt8xJzdZatAm7rGvA
-	92jEe4PJjMaQsogeuG0PjAlTnod11NiZqvVz3
-X-Gm-Gg: ASbGncuHXDtLRy5C8YBBw54WTH2uVVUWnIHaQKiuvZpwopZOBylIpB6BdOu6w547sf1
-	egxzKavV4qsvbU+5O0FvV97IlWlZ1XgHaz3ri3ws7Api4pkyAQCoYIxrJNYWnKQ==
-X-Google-Smtp-Source: AGHT+IHRzC2VYGKnvKMJTo0lMqyoXM3QWGse1yWJvWexAnmSFEoDo0s4BM0ZVzAdXpM8Wl3GTl7EyEL7ik5RHAsQBfQ=
-X-Received: by 2002:a17:90b:3b4c:b0:2ee:bc7b:9237 with SMTP id
- 98e67ed59e1d1-2ef1cf04837mr7054839a91.27.1733333698535; Wed, 04 Dec 2024
- 09:34:58 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733333941; x=1733938741;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VFClu+Hvt7amMncVjBqzTSbdie8DwUy5v4UirHChi6g=;
+        b=o4+QVXZYx/LH8T1mBqF+z6dS1ACTN6AtFJy2KwFkLQau2i9HgeDgt+X5H4IPZqZyw/
+         yqZ4Aw/273ajODYozXpn3znLGLh5IHXMMCddCBm1cTPRhJpiPKoKPNKx56dkX8vR355k
+         yyAsx6p4UuemnVitcw3y9Rd5I5zyc0kqNayf+baSzd0qNnbrjDPRWt0dValTyhajVNX3
+         IqvYWYuztN+CBptnzZURClup5TRcnv4p1j16L+yhGPME45Ig0b+iWV5ZSzy/LlJ4gSwY
+         38xWnoBy4yYW7h59foFJZtrNWqEpYQooQ0ErdWGnEcvkyYFBC29QTucakf+LJuQsSQDA
+         mr0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXZQL5iEVYdLSkC0+aAmE6vAzyEhV2g/T3d932bqDZhy34ekd/KyMKUrug+rUO1IiuOML4fTfbqPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqVLVskrc/XGiZc/r3PLUPvmX7Ynn6BxrYqWu75BACRX44kbsa
+	hnVSy1aKK0hjwxa7NJ+rbDaHoFsK9JT8HUfA64iO/qY5+lgkEWoaL0F/eWobx7M=
+X-Gm-Gg: ASbGncuLaK/WZH+EpR15glMGivceeK3MA6yzgwnSYSdjxfJ7Ww28aGfTqYpPWJ3gPMI
+	t1Pozbvuf1iIfivyj3lty5r8c1r7wZJHq1jMbR0AwQNUVCbpDRg5tM+D9CXK/8PWw2qgZRlDIeV
+	s3UzAJxMn7Z7QH2/mc/WCTTgGZQ3CagOCC6ZNzut6W1b1/TLhNpzt0Yd4e+q8F8pV6/g5+8TzlH
+	Rjtmr70xdQ1OKfolplQMzmnXwCiYpssZIvSXSpP3O2XColXE5kWewB/Og==
+X-Google-Smtp-Source: AGHT+IEWwmwlmTiq2H81pZwumsdyTa//GeiFxgP24xH6IM5xZVH1ovP6c15jfg3covmiQRAdntPWQw==
+X-Received: by 2002:a17:902:ce08:b0:212:e29:3b2f with SMTP id d9443c01a7336-215bd250316mr90887145ad.44.1733333941081;
+        Wed, 04 Dec 2024 09:39:01 -0800 (PST)
+Received: from ?IPV6:2620:10d:c096:122::1:2343? ([2620:10d:c090:600::1:a7a9])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215a6fd3f1esm48257605ad.72.2024.12.04.09.39.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Dec 2024 09:39:00 -0800 (PST)
+Message-ID: <3ede47bf-8612-47f7-9851-13c6622ecf44@kernel.dk>
+Date: Wed, 4 Dec 2024 10:38:59 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <67253504.050a0220.3c8d68.08e1.GAE@google.com> <67272d83.050a0220.35b515.0198.GAE@google.com>
- <1ce3a220-7f68-4a68-a76c-b37fdf9bfc70@kernel.dk> <CANp29Y5U3oMc3jYkxmnfd_9YYvWK3TwUhAbhA111k57AYRLd+A@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [io-uring?] general protection fault in
+ io_sqe_buffer_register
+To: Aleksandr Nogikh <nogikh@google.com>
+Cc: syzbot <syzbot+05c0f12a4d43d656817e@syzkaller.appspotmail.com>,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com
+References: <67253504.050a0220.3c8d68.08e1.GAE@google.com>
+ <67272d83.050a0220.35b515.0198.GAE@google.com>
+ <1ce3a220-7f68-4a68-a76c-b37fdf9bfc70@kernel.dk>
+ <CANp29Y5U3oMc3jYkxmnfd_9YYvWK3TwUhAbhA111k57AYRLd+A@mail.gmail.com>
  <9e8ccb61-e77a-4354-a848-81242625658c@kernel.dk>
-In-Reply-To: <9e8ccb61-e77a-4354-a848-81242625658c@kernel.dk>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Wed, 4 Dec 2024 18:34:47 +0100
-Message-ID: <CANp29Y4dWOk3Hk2NJbQSnSE-XoQfCv5vM1FM_FWr5Xbv+d3yFg@mail.gmail.com>
-Subject: Re: [syzbot] [io-uring?] general protection fault in io_sqe_buffer_register
-To: Jens Axboe <axboe@kernel.dk>
-Cc: syzbot <syzbot+05c0f12a4d43d656817e@syzkaller.appspotmail.com>, 
-	io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <CANp29Y4dWOk3Hk2NJbQSnSE-XoQfCv5vM1FM_FWr5Xbv+d3yFg@mail.gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CANp29Y4dWOk3Hk2NJbQSnSE-XoQfCv5vM1FM_FWr5Xbv+d3yFg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 4, 2024 at 6:14=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
->
-> On 12/4/24 10:11 AM, Aleksandr Nogikh wrote:
-> > Hi Jens,
-> >
-> > Just in case:
-> >
-> > Syzbot reported this commit as the result of the cause (bug origin)
-> > bisection, not as the commit after which the problem was gone. So
-> > (unless it actually is a fixing commit) reporting it back via #syz fix
-> > is not correct.
->
-> The commit got fixed, and hence there isn't a good way to convey this
-> to syzbot as far as I can tell. Just marking the updated one as the
-> fixer seems to be the best/closest option.
->
-> Other option is to mark it as invalid, but that also doesn't seem right.
->
-> I'm fine doing whatever to get issues like this closed, but it's not
-> an uncommon thing to have a buggy commit that's not upstream yet be
-> fixed up and hence not have the issue anymore.
+On 12/4/24 10:34 AM, Aleksandr Nogikh wrote:
+> On Wed, Dec 4, 2024 at 6:14 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 12/4/24 10:11 AM, Aleksandr Nogikh wrote:
+>>> Hi Jens,
+>>>
+>>> Just in case:
+>>>
+>>> Syzbot reported this commit as the result of the cause (bug origin)
+>>> bisection, not as the commit after which the problem was gone. So
+>>> (unless it actually is a fixing commit) reporting it back via #syz fix
+>>> is not correct.
+>>
+>> The commit got fixed, and hence there isn't a good way to convey this
+>> to syzbot as far as I can tell. Just marking the updated one as the
+>> fixer seems to be the best/closest option.
+>>
+>> Other option is to mark it as invalid, but that also doesn't seem right.
+>>
+>> I'm fine doing whatever to get issues like this closed, but it's not
+>> an uncommon thing to have a buggy commit that's not upstream yet be
+>> fixed up and hence not have the issue anymore.
+> 
+> I see. You are right, thanks for the explanation!
+> 
+> There's indeed no better way to convey this at the moment. I've filed
+> https://github.com/google/syzkaller/issues/5567 to discuss what can be
+> done.
 
-I see. You are right, thanks for the explanation!
+Thanks! Guess I wasn't totally blind, I did check to see if there was
+a better way to do this currently and didn't spot it.
 
-There's indeed no better way to convey this at the moment. I've filed
-https://github.com/google/syzkaller/issues/5567 to discuss what can be
-done.
+-- 
+Jens Axboe
 
---=20
-Aleksandr
-
->
-> --
-> Jens Axboe
->
-> --
