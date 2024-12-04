@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5786621149D;
-	Wed,  4 Dec 2024 23:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49BE82139D1;
+	Wed,  4 Dec 2024 23:35:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733355307; cv=none; b=N7afQG4QzhlUJlM3NoLPenPp7ncCYkZcJ/RUMGiudJLZCMzGQnA1WsUj3lTJefXycb/aoEkh4/uZCaAd1sduwBq5Ap3BimRxwXKaWE2NAYTz/nLsJYZFXEjtFusFnhQQImz6HwUeigj4wRgBR/OETeJmyE97pzAPaqs5jPEkmF4=
+	t=1733355333; cv=none; b=pr/LunC9ixUDgE/5eHuA9Pt8PD1EcvDBPpmfU4vGIOGdAw5hlgoU41tcShYMo6u6WZrZBmCwu+L0Fv6D4FLsk5n1hu3QkVdB+n6X0SUuk+4VDY2HjFMRhWQ6h+6wo5cK3HUxX16qY6AXJyTTGM7WACpWDoMa9VIouEsx2s3+1Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733355307; c=relaxed/simple;
+	s=arc-20240116; t=1733355333; c=relaxed/simple;
 	bh=LrCwv/xA6yOQwsDPd5GsKlTBmspBObiOds2AdXGx3pM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cd8+JGSD+vVSr6cmml2W2adNczYknSoMHjTHq+0lzG3R1Uq8pyFjJ3ZAuTWAiBm8oA1MCsEOzHqO1UKV5nopL7NxrTwWOozQjFQ4oppNN13E5CKCoe/pBFhymLFRiRlh6XQ6S4+pcQkNrjGek5K497tS+MqHcNYNkubIcJNB1/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoUHC1ME; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=MdsHz+rlY7eju9SRISBRlOjhOvyQvYfmBAybMg8gN5RslA3HqC2AWYqDBBs35eAzPwCWWa8w8JeNIimZ6N3km+hHizj4YQiSVBRHePt+ryzuhdIYGCuFnkyZEfnmLh6xNiOL/RIpBuF13G8gc/8tAHWquCKupsKy0XG12CK7aY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kYL216vs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoUHC1ME"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CAEAC4CEE0;
-	Wed,  4 Dec 2024 23:35:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kYL216vs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54571C4CECD;
+	Wed,  4 Dec 2024 23:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733355306;
+	s=k20201202; t=1733355333;
 	bh=LrCwv/xA6yOQwsDPd5GsKlTBmspBObiOds2AdXGx3pM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MoUHC1MESMAacfdEF+1GMNqdJL496oHHzyTwetN5ILsxuwnDz1MZ4aPORXgMgVe99
-	 do1Xec5/ql3SSm1tbNfBhAkVuzjuAhlWfqREkbUNayMoIYQzPetw2JWJfKo83PDbWa
-	 L2Bqe/cqLBTDmoizM0rLCzlxRm3HkwQtLVRnBtajr32fpvBFJQpbiB2fssEPXbGnMr
-	 aWhVNW/Egea/ghwsRy22Z/sN0Vv9WIsaM8i+ZRx7hzYB5LFtOST5PiaqIAmTyA9umV
-	 EcAFVaSeBenM2Eb2nRwMWdrUqPoSUrDqbWnuI1t1bpL3aO+2cd8H+Q8VSdbcaTfRpd
-	 l0bkRtjlHossg==
+	b=kYL216vs+2VcOqF3dtkSCXSF/1ldcMvKx72C4ZzWaAQLcG8m5oIr8j1AqhH0NzzPY
+	 CC3cua4puip4etHMudvan2mr20gQLbFhd+HINhGVL4NIA6zelloXfBxWoAaVz20qjh
+	 dZbwTMG7AYCl9K5AwDjQU1apC+3xDTC0njbxrD0OB1/xrMNDT+TlkJLM6X6RE7E9CL
+	 vqrkET+HmuXXYlmJjsGOfKzAwXHnMGeDIJxxOhy5y5loWj4Enujbzfe/5soX8tEpS8
+	 0sw66Ze139XiHrcD/1X9Y86tZ0/3IwDpMr1vcHl29IhmWZBe5rUmFSIt/T82e9KRmk
+	 Oimtvkj+1xvvA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -34,12 +34,12 @@ Cc: Jens Axboe <axboe@kernel.dk>,
 	Sasha Levin <sashal@kernel.org>,
 	asml.silence@gmail.com,
 	io-uring@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 8/8] io_uring/tctx: work around xa_store() allocation error issue
-Date: Wed,  4 Dec 2024 17:23:24 -0500
-Message-ID: <20241204222334.2249307-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 7/7] io_uring/tctx: work around xa_store() allocation error issue
+Date: Wed,  4 Dec 2024 17:23:49 -0500
+Message-ID: <20241204222402.2249702-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204222334.2249307-1-sashal@kernel.org>
-References: <20241204222334.2249307-1-sashal@kernel.org>
+In-Reply-To: <20241204222402.2249702-1-sashal@kernel.org>
+References: <20241204222402.2249702-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -48,7 +48,7 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
 From: Jens Axboe <axboe@kernel.dk>
