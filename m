@@ -1,173 +1,164 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC83196C67;
-	Fri,  6 Dec 2024 05:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E05217E4;
+	Fri,  6 Dec 2024 11:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733462873; cv=none; b=HGhUcl1R6jGWljjBEvaogx7+eHbHgkWaUXDRf7Crr1KAk8dGprOspB7ok/EynQV0c/7uv58t+RyCLnI/M3KalAOwHADjeZgESEirXwQh8f89P/EVL0Y2eGEyD7V2Qh41ay13Ap0tp3h/yJu9SZDuEGo9Vn/e2PJa7IAxJrh87To=
+	t=1733484986; cv=none; b=EIDDfgx59a0Nri+CZahCEI1NiJImsEzRc/Y1cHLKCAk2PdRErRZJbHKEkGD0UUwNw1kz+/vlClkbYxR7Zy1Q7LgvU23wF9oZl58WO/GTUhuUOieC0bwRoxvqcxQkjAvlAmqe8kIQ38x02BN/MoGIWW2WFyRMq3dV61zogNh5XXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733462873; c=relaxed/simple;
-	bh=X9VFMKr7/fJOGLXPS8atTYCy0j+P7k6TXaVhXB6yhIM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n8M9YefnSIBv4yb2KtLI/SHHF31X8WJWEboCl3TcmQmSWFGuwarLUKqwP6ACXGStxaF3cS2gadtWxKnRcR/fDm8n0EIw+YLXsDme9Zo2lgoqw1uU6YdYyP7kIg5Lx1QJ+hGrlADDYoh4Zah+KxhPPFbuZ9/7gU+wQkasWtzVcpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=by6NMBS3; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1733484986; c=relaxed/simple;
+	bh=NGfrCPaC9Jl2RnXNtgjXIHb4CtjJRorjKlYtUg+8SsU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R1pr2+dhjvh0eDm7m4hvzRac4l2R3d2Fr+Evu8PV5wvvDqRui/BCFDPcfHBvV/mItcZWkKQQuUmI8vHnXDKsGdwhgxCXdi8yw85YYPxrcVG++bOt+9kGwCth29pUlN3TA1DXjFwfZSjOYExmsS6WPwMSkYGsMGOJ9ZjaLx7xGPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.fm; spf=pass smtp.mailfrom=fastmail.fm; dkim=pass (2048-bit key) header.d=fastmail.fm header.i=@fastmail.fm header.b=DQsGfhK0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=enWew1AT; arc=none smtp.client-ip=202.12.124.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.fm
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.fm
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="by6NMBS3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733462871; x=1764998871;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=X9VFMKr7/fJOGLXPS8atTYCy0j+P7k6TXaVhXB6yhIM=;
-  b=by6NMBS3uuoSS7jABjt9Zm3SNEQdWKKljeRvA2gA5evSGQVa+tuRN77R
-   E+FmhGtvHfLck/XXpnliXxwOep7ut6Oti0NmIF2zrSn3BFofTrHro9Hy9
-   b3M6oeU2hXU/JRV5yuutDkrlRavEEppee1yGMbqz1ymoEPmJWTGmk+W0n
-   DmN2OeIc0Ct6h4LLss1B8zmCbe1mkqxaBsV0LwZnir1md/5xJcf2Xb4XH
-   9ywufUdn6dwbQusn1Ukfo79lzwSf8SFUur/h1xG4NZHLwlYhEqXHlyLUi
-   S2F4fd0xg/+oTAfYuW4YkI/cVDIz6N1KCiyQaBMgSoGPC3Lh9//r7RDn4
-   g==;
-X-CSE-ConnectionGUID: c1q1MMzBTMSHzEULQZ/MOQ==
-X-CSE-MsgGUID: G1cJ9ZENSpGms5A9Jyq/pw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11277"; a="56299061"
-X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="56299061"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 21:27:50 -0800
-X-CSE-ConnectionGUID: 46M0KqbPSFGW7xrYdXXJNA==
-X-CSE-MsgGUID: DsKRuo40THuu3yk9bYd+6w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,212,1728975600"; 
-   d="scan'208";a="131724228"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 05 Dec 2024 21:27:48 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tJQsT-0000jD-1x;
-	Fri, 06 Dec 2024 05:27:45 +0000
-Date: Fri, 6 Dec 2024 13:26:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: Keith Busch <kbusch@meta.com>, axboe@kernel.dk, hch@lst.de,
-	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, sagi@grimberg.me,
-	asml.silence@gmail.com, Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCHv11 09/10] nvme: register fdp queue limits
-Message-ID: <202412061328.YMG9MZn5-lkp@intel.com>
-References: <20241206015308.3342386-10-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=fastmail.fm header.i=@fastmail.fm header.b="DQsGfhK0";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="enWew1AT"
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id 60F6411400CA;
+	Fri,  6 Dec 2024 06:36:22 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Fri, 06 Dec 2024 06:36:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1733484982;
+	 x=1733571382; bh=KHGl+PMlY7Mdi8VDO8QB3BgfcXM9VYqd5RWD4B9OyYA=; b=
+	DQsGfhK0LRBRlygLI/uwhoTi9BbNQ10d7l+rNH6Y3rfxbIhGvPHjyVLEn7an/Dvl
+	xqpKCTLwRucu+IuEO4Rdt8jAsNXjScCVRgP7pGpfdbPHXjbLSUApG9atq4X/mXwA
+	CBiehubr7LRrCUX9rtj2uwYqht+l5iSJo3uSysM4fnWWtM7E25IWEkf/lVrV0Sno
+	x3LS3Ha+d6HEb6NSsXGHIY1lGz7qp38lwAZQbEkcisN/NNkn5b3nd9E5kMEzjdaj
+	6HAXX4DS9o0pe0Nx8Zrcuzi8nGpxhk5VvFtNTBRH8oUAfHtD4c26r+ZtAnwkfpCv
+	zTIqVdipQ3gK5zW1VcqYAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1733484982; x=
+	1733571382; bh=KHGl+PMlY7Mdi8VDO8QB3BgfcXM9VYqd5RWD4B9OyYA=; b=e
+	nWew1ATB6qLDCEvgf528+iQPD7JVHxsYmV/ejIqj7LmqXCyeOmHxfcLN5UEixrJH
+	JNwmOO/WWI1mQ5K32Z/zQRentHDRFAyndhxfvpn37kqCuECVpohHVvZfwj/nuT7K
+	UZN9vWkk41jrwdjOj7NFrWTWGbrZyruchTJKVeSjH4GmDD+t2qNFGWVCIEERgtme
+	nmFOxQhon2FmvOmU0ob+edXPjzCtXty47c3mDYtlFig8OFBH1SIQn4OC6mSVPCAt
+	DR6A8qgT0klDMZP22qSLiFtwCQF6rOhCqHO8jOaJEB1SjsMS5OKIZ1AagPHcR2Ik
+	Ox9xcX7Q7RsHyyR6Go1Uw==
+X-ME-Sender: <xms:teFSZ4fftWHGVGzJKeny7wKNhdPv1xk7AwrmQ5xCWpRELnooeObqMA>
+    <xme:teFSZ6OSrWsmo1bmn5i5dRHZsAav5Q4M77J9iKxq_tHcZR99FQWMp0BBXKArr_9Jp
+    fzHfSShaXdzQqYF>
+X-ME-Received: <xmr:teFSZ5g5Skr0kyEiIjpV9OtueSHCeXy8ORE1EnIs3J3hPVW_gJ7kSi93vp2oMtmfleB7cRJkVeTOBSTx4qXobO8_Z2a_YukQRLrZ9CYDqt-yjjRYSyZx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrieelgddvkecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttddvjeen
+    ucfhrhhomhepuegvrhhnugcuufgthhhusggvrhhtuceosggvrhhnugdrshgthhhusggvrh
+    htsehfrghsthhmrghilhdrfhhmqeenucggtffrrghtthgvrhhnpeevhffgvdeltddugfdt
+    gfegleefvdehfeeiveejieefveeiteeggffggfeulefgjeenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsvghrnhgurdhstghhuhgsvghrthes
+    fhgrshhtmhgrihhlrdhfmhdpnhgspghrtghpthhtohepuddvpdhmohguvgepshhmthhpoh
+    huthdprhgtphhtthhopegrshhmlhdrshhilhgvnhgtvgesghhmrghilhdrtghomhdprhgt
+    phhtthhopegsshgthhhusggvrhhtseguughnrdgtohhmpdhrtghpthhtohepmhhikhhloh
+    hssehsiigvrhgvughirdhhuhdprhgtphhtthhopegrgigsohgvsehkvghrnhgvlhdrughk
+    pdhrtghpthhtoheplhhinhhugidqfhhsuggvvhgvlhesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehiohdquhhrihhnghesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehjohgrnhhnvghlkhhoohhnghesghhmrghilhdrtghomhdprhgtphhtth
+    hopehjohhsvghfsehtohigihgtphgrnhgurgdrtghomhdprhgtphhtthhopegrmhhirhej
+    fehilhesghhmrghilhdrtghomh
+X-ME-Proxy: <xmx:teFSZ9-BXH5OL4T_fAfXcJbCVHqsekCRdxJOZrzfR_N6DooK3IUzXg>
+    <xmx:teFSZ0tq6UHmaWDIJ5ZdwA8hBtq0p_vfgpdczJCh_tsVHp9WqUYC_w>
+    <xmx:teFSZ0FA7E3I3TuMPQ94zroggknOZQ1MqWKKp8GbhbLzPuBSeXDNEA>
+    <xmx:teFSZzNT23vDhfR1toyGkvGHQxuiJIl4jJ0hETVAAvFV0YacLAd9OA>
+    <xmx:tuFSZ1GGHqPg31D2VQpZaNe1ff8ODUrPyQqwPOzreQmaT3n2IVZ79cDc>
+Feedback-ID: id8a24192:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 6 Dec 2024 06:36:19 -0500 (EST)
+Message-ID: <eadccc5d-79f8-4c26-a60c-2b5bf9061734@fastmail.fm>
+Date: Fri, 6 Dec 2024 12:36:18 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241206015308.3342386-10-kbusch@meta.com>
-
-Hi Keith,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on next-20241205]
-[cannot apply to brauner-vfs/vfs.all hch-configfs/for-next linus/master v6.13-rc1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Keith-Busch/fs-add-a-write-stream-field-to-the-kiocb/20241206-095707
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-patch link:    https://lore.kernel.org/r/20241206015308.3342386-10-kbusch%40meta.com
-patch subject: [PATCHv11 09/10] nvme: register fdp queue limits
-config: i386-buildonly-randconfig-003 (https://download.01.org/0day-ci/archive/20241206/202412061328.YMG9MZn5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241206/202412061328.YMG9MZn5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412061328.YMG9MZn5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/nvme/host/core.c:8:
-   In file included from include/linux/blkdev.h:9:
-   In file included from include/linux/blk_types.h:10:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:8:
-   In file included from include/linux/cacheflush.h:5:
-   In file included from arch/x86/include/asm/cacheflush.h:5:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/nvme/host/core.c:2178:18: warning: variable 'h' is uninitialized when used here [-Wuninitialized]
-    2178 |         n = le16_to_cpu(h->numfdpc) + 1;
-         |                         ^
-   include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
-      91 | #define le16_to_cpu __le16_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   drivers/nvme/host/core.c:2157:36: note: initialize the variable 'h' to silence this warning
-    2157 |         struct nvme_fdp_config_log hdr, *h;
-         |                                           ^
-         |                                            = NULL
-   2 warnings generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v7 00/16] fuse: fuse-over-io-uring
+To: Pavel Begunkov <asml.silence@gmail.com>,
+ Bernd Schubert <bschubert@ddn.com>, Miklos Szeredi <miklos@szeredi.hu>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, Joanne Koong <joannelkoong@gmail.com>,
+ Josef Bacik <josef@toxicpanda.com>, Amir Goldstein <amir73il@gmail.com>,
+ Ming Lei <tom.leiming@gmail.com>, David Wei <dw@davidwei.uk>,
+ bernd@bsbernd.com
+References: <20241127-fuse-uring-for-6-10-rfc4-v7-0-934b3a69baca@ddn.com>
+ <57546d3d-1f62-4776-ba0c-f6a8271ee612@gmail.com>
+ <a7b291db-90eb-4b16-a1a4-3bf31d251174@fastmail.fm>
+From: Bernd Schubert <bernd.schubert@fastmail.fm>
+Content-Language: en-US, de-DE, fr
+In-Reply-To: <a7b291db-90eb-4b16-a1a4-3bf31d251174@fastmail.fm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +/h +2178 drivers/nvme/host/core.c
 
-  2153	
-  2154	static int nvme_check_fdp(struct nvme_ns *ns, struct nvme_ns_info *info,
-  2155				  u8 fdp_idx)
-  2156	{
-  2157		struct nvme_fdp_config_log hdr, *h;
-  2158		size_t size = sizeof(hdr);
-  2159		int i, n, ret;
-  2160		void *log;
-  2161	
-  2162		info->runs = 0;
-  2163		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIG, 0, NVME_CSI_NVM,
-  2164				   (void *)&hdr, size, 0, info->endgid);
-  2165		if (ret)
-  2166			return ret;
-  2167	
-  2168		size = le32_to_cpu(hdr.sze);
-  2169		log = kzalloc(size, GFP_KERNEL);
-  2170		if (!log)
-  2171			return 0;
-  2172	
-  2173		ret = nvme_get_log_lsi(ns->ctrl, 0, NVME_LOG_FDP_CONFIG, 0, NVME_CSI_NVM,
-  2174				   log, size, 0, info->endgid);
-  2175		if (ret)
-  2176			goto out;
-  2177	
-> 2178		n = le16_to_cpu(h->numfdpc) + 1;
-  2179		if (fdp_idx > n)
-  2180			goto out;
-  2181	
-  2182		h = log;
-  2183		log = h->configs;
-  2184		for (i = 0; i < n; i++) {
-  2185			struct nvme_fdp_config_desc *config = log;
-  2186	
-  2187			if (i == fdp_idx) {
-  2188				info->runs = le64_to_cpu(config->runs);
-  2189				break;
-  2190			}
-  2191			log += le16_to_cpu(config->size);
-  2192		}
-  2193	out:
-  2194		kfree(h);
-  2195		return ret;
-  2196	}
-  2197	
+On 12/3/24 15:32, Bernd Schubert wrote:
+> 
+> 
+> On 12/3/24 15:24, Pavel Begunkov wrote:
+>> On 11/27/24 13:40, Bernd Schubert wrote:
+>>> [I removed RFC status as the design should be in place now
+>>> and as xfstests pass. I still reviewing patches myself, though
+>>> and also repeatings tests with different queue sizes.]
+>>
+>> I left a few comments, but it looks sane. At least on the io_uring
+>> side nothing weird caught my eye. Cancellations might be a bit
+>> worrisome as usual, so would be nice to give it a good run with
+>> sanitizers.
+> 
+> Thanks a lot for your reviews, new series is in preparation, will 
+> send it out tomorrow to give a test run over night. I'm 
+> running xfstests on a kernel that has lockdep and ASAN enabled, which
+> is why it takes around 15 hours (with/without FOPEN_DIRECT_IO).
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I found a few issues myself and somehow xfstests take more 
+than twice as long right with 6.13 *and a slightly different kernel 
+config. Still waiting for test completion.
+
+
+I have a question actually regarding patch 15 that handles
+IO_URING_F_CANCEL. I think there there is a race in v7 and before,
+as the fuse entry state FRRS_WAIT might not have been reached _yet_ 
+and then io_uring_cmd_done() would not be called.
+Can I do it like this in fuse_uring_cancel()
+
+
+if (need_cmd_done) {
+	io_uring_cmd_done(cmd, -ENOTCONN, 0, issue_flags);
+} else {
+	/*
+	 * We don't check for the actual state, but let io-uring
+	 * layer handle if re-sending the IO_URING_F_CANCEL SQE is still
+	 * needed.
+	 */
+	ret = -EAGAIN;
+}
+
+I.e. lets assume umount races with IO_URING_F_CANCEL (for example umount
+triggers a daemon crash). The umount process/task could now already do
+or start to do io_uring_cmd_done and just around the same time and
+IO_URING_F_CANCEL comes in.
+
+My question is if io-uring knows that re-sending the
+IO_URING_F_CANCEL is still needed or will it avoid re-sending if
+io_uring_cmd_done() was already done?
+I could also add state checking in the fuse_uring_cancel function.
+
+
+Thanks,
+Bernd
+
+
+
+
