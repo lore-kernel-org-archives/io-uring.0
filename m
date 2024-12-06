@@ -1,44 +1,44 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD7D14D708
-	for <io-uring@vger.kernel.org>; Fri,  6 Dec 2024 01:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1F7154C12
+	for <io-uring@vger.kernel.org>; Fri,  6 Dec 2024 01:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733450014; cv=none; b=ZfFxAXPGE2ZGrBNTwRSyoElOV1MhV+uZOfmBO2ySp01wY9dhymM3kxNn0GWJUTTpr9QWu7kmP78CbHvZ765F7RaJHVAJiSqDmf+MJNrXVf1mXCXu8T9QzGqi/qRBgufH8r4DwiElApsQD+yIDKFUEn9tm09rHGv/6z/d4bdIz6o=
+	t=1733450016; cv=none; b=hJhGDzMB+KhzfpCR2JX94jQY/bJIIh/nbjaVt9UNHKKdsiAcAo/ZbTAaADHGkFysw6m9rz80Cp/1nBhPa0d5q1Mk4CJ131nnZDXZTjOVJQvWcvFqaxL0ENV2YFihxdFcTTcw7PFOyULFap4AHWiPDzp4NsaKan2Qj04BugCzCfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733450014; c=relaxed/simple;
-	bh=TShGIinhtFGgvq8AU4aYd/uSo6I+vUdgnqrheypY8Fc=;
+	s=arc-20240116; t=1733450016; c=relaxed/simple;
+	bh=a6bic9lWReIENxTHeZoG8ChH6lXRFB7Rkje1NanJ8/Q=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DxwwKqQL2bbVBnL8Qx3iAjQHRMvT5XHO7T73U53wwQ6XM+njjI3JafqrYn3PJqgFvrDjG+obN+D5vAoc4JzBpzWhuWwLZ6ISKiyxDMOusCJiN8sZjNXvoXKv8souGtlFrrVoQWQr3didPysOkSDNDebZ1p0+gaxl8DynnFWcvRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=e/abHQ40; arc=none smtp.client-ip=67.231.153.30
+	 MIME-Version:Content-Type; b=fXxudbw0kbzeBOBC8wuEFihRxoVbFDGmmFzvrWr2tOHlNbU2XQ2A93nvZFButYq8aw7M0IfyqlzHy1BRYTrjXCIwcgnwHoLPTpWRVGUJgvLQr7kYaM6Ha7UxwpB/RIzzoRms9Otd78leYfZ+o7ra/7qgAV+8DzeNFSy3qsWqw7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=QpbdAmJk; arc=none smtp.client-ip=67.231.153.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="e/abHQ40"
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 4B605dJ4013872
-	for <io-uring@vger.kernel.org>; Thu, 5 Dec 2024 17:53:30 -0800
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="QpbdAmJk"
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B603MMu014363
+	for <io-uring@vger.kernel.org>; Thu, 5 Dec 2024 17:53:33 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=qdL6YTuP4C1ftheSaTqqa06tk40Qi3hfBfSgmatUaHM=; b=e/abHQ40oZkx
-	4PpLiZCdAbi9CnSWu/1sB1QRUfaHgxSM8Cqx4Zh+juhU3i0EUE3qoW6bz+q37dZm
-	QI0XEDG1Em3/f9HGlDVMg9/hbjggIyP5BSZX4GXcF7qIAlutm0Sm/nSw3PxwWq3P
-	3IV4xDfGDObKgScfBgeg1TadSGYqOHcI2KsjyyGTZNMbn3fvl0HlZaUFKyKI3r1a
-	VpFxBXCE9Q6y1mwUjznJ9WPlP8bR6mg6qImKxQMtgrYEczsQTH4NF4YYjzSajxQx
-	pGQ1mSz0njwRtFjgt88xhQm+IgQC+94aPxyr1xvKIGqg779AADzDXlZ6ri2WP1Za
-	mxgwGJ76eg==
+	 bh=aqSWgHfWMagd/tVBxU1j+3PESQendeFXQhXEUWomWZI=; b=QpbdAmJkjzgF
+	iYh3gGcrBDjNQGDCBSqOonvTJo9dHOHxO5skvx61cilBsjAGLYhg2i0kDvjAutvl
+	TB0NzDbaLrSj2TftKl5ETJu05MWWmf2dFjLDCff1rI/r4o+1Xp9067sHobFlgQWg
+	lqTVpswYJE4snjQ8YP5gn0GVukU95RqiZNroCilgxmIq4Vp1O4YVu54Jf/Vub8uV
+	5QhzQfUWj93gckRapfcZVqQ6+/PxLBeQhIkjYaR4vDpXKCzdDs7D201SX1s4Zzio
+	JeNOSvGY8o3KkBYxu68SyLYzlY39I2LRJLa3XJDp3C95Z96RqU2sgSfJKJFJFTk8
+	4EB0Rqbe9w==
 Received: from mail.thefacebook.com ([163.114.134.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 43bmrwh5m0-9
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43bmru153t-6
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Thu, 05 Dec 2024 17:53:30 -0800 (PST)
+	for <io-uring@vger.kernel.org>; Thu, 05 Dec 2024 17:53:33 -0800 (PST)
 Received: from twshared11082.06.ash8.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Fri, 6 Dec 2024 01:53:23 +0000
+ 15.2.1544.11; Fri, 6 Dec 2024 01:53:24 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id F086D15B2114D; Thu,  5 Dec 2024 17:53:08 -0800 (PST)
+	id 4791315B2115A; Thu,  5 Dec 2024 17:53:09 -0800 (PST)
 From: Keith Busch <kbusch@meta.com>
 To: <axboe@kernel.dk>, <hch@lst.de>, <linux-block@vger.kernel.org>,
         <linux-nvme@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
@@ -46,9 +46,9 @@ To: <axboe@kernel.dk>, <hch@lst.de>, <linux-block@vger.kernel.org>,
 CC: <sagi@grimberg.me>, <asml.silence@gmail.com>,
         Keith Busch
 	<kbusch@kernel.org>
-Subject: [PATCHv11 02/10] io_uring: protection information enhancements
-Date: Thu, 5 Dec 2024 17:53:00 -0800
-Message-ID: <20241206015308.3342386-3-kbusch@meta.com>
+Subject: [PATCHv11 08/10] nvme: add a nvme_get_log_lsi helper
+Date: Thu, 5 Dec 2024 17:53:06 -0800
+Message-ID: <20241206015308.3342386-9-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20241206015308.3342386-1-kbusch@meta.com>
 References: <20241206015308.3342386-1-kbusch@meta.com>
@@ -61,96 +61,73 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 1d9lJ6CiZflj39NIOy40-S5TcI16MEVP
-X-Proofpoint-ORIG-GUID: 1d9lJ6CiZflj39NIOy40-S5TcI16MEVP
+X-Proofpoint-GUID: BaZd6h2OjSefDJpd1nWSwrMN8GDFKetf
+X-Proofpoint-ORIG-GUID: BaZd6h2OjSefDJpd1nWSwrMN8GDFKetf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
 
-From: Keith Busch <kbusch@kernel.org>
+From: Christoph Hellwig <hch@lst.de>
 
-Just fixing up some formatting, removing unused parameters,  and paving
-the way to allow chaining additional arbitrary attributes.
+For log pages that need to pass in a LSI value, while at the same time
+not touching all the existing nvme_get_log callers.
 
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- include/uapi/linux/io_uring.h | 14 ++++++++------
- io_uring/rw.c                 | 10 +++++-----
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ drivers/nvme/host/core.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.=
-h
-index 38f0d6b10eaf7..5fa38467d6070 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -115,14 +115,16 @@ struct io_uring_sqe {
- #define IORING_RW_ATTR_FLAG_PI	(1U << 0)
- /* PI attribute information */
- struct io_uring_attr_pi {
--		__u16	flags;
--		__u16	app_tag;
--		__u32	len;
--		__u64	addr;
--		__u64	seed;
--		__u64	rsvd;
-+	__u16	flags;
-+	__u16	app_tag;
-+	__u32	len;
-+	__u64	addr;
-+	__u64	seed;
-+	__u64	rsvd;
- };
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 571d4106d256d..36c44be98e38c 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -150,6 +150,8 @@ static void nvme_remove_invalid_namespaces(struct nvm=
+e_ctrl *ctrl,
+ 					   unsigned nsid);
+ static void nvme_update_keep_alive(struct nvme_ctrl *ctrl,
+ 				   struct nvme_command *cmd);
++static int nvme_get_log_lsi(struct nvme_ctrl *ctrl, u32 nsid, u8 log_pag=
+e,
++		u8 lsp, u8 csi, void *log, size_t size, u64 offset, u16 lsi);
 =20
-+#define IORING_RW_ATTR_FLAGS_SUPPORTED (IORING_RW_ATTR_FLAG_PI)
-+
- /*
-  * If sqe->file_index is set to this for opcodes that instantiate a new
-  * direct descriptor (like openat/openat2/accept), then io_uring will al=
-locate
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 04e4467ab0ee8..a2987aefb2cec 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -272,14 +272,14 @@ static inline void io_meta_restore(struct io_async_=
-rw *io, struct kiocb *kiocb)
- }
-=20
- static int io_prep_rw_pi(struct io_kiocb *req, struct io_rw *rw, int ddi=
-r,
--			 u64 attr_ptr, u64 attr_type_mask)
-+			 u64 *attr_ptr)
+ void nvme_queue_scan(struct nvme_ctrl *ctrl)
  {
- 	struct io_uring_attr_pi pi_attr;
- 	struct io_async_rw *io;
- 	int ret;
-=20
--	if (copy_from_user(&pi_attr, u64_to_user_ptr(attr_ptr),
--	    sizeof(pi_attr)))
-+	if (copy_from_user(&pi_attr, u64_to_user_ptr(*attr_ptr),
-+			   sizeof(pi_attr)))
- 		return -EFAULT;
-=20
- 	if (pi_attr.rsvd)
-@@ -295,6 +295,7 @@ static int io_prep_rw_pi(struct io_kiocb *req, struct=
- io_rw *rw, int ddir,
- 		return ret;
- 	rw->kiocb.ki_flags |=3D IOCB_HAS_METADATA;
- 	io_meta_save_state(io);
-+	*attr_ptr +=3D sizeof(pi_attr);
+@@ -3074,8 +3076,8 @@ static int nvme_init_subsystem(struct nvme_ctrl *ct=
+rl, struct nvme_id_ctrl *id)
  	return ret;
  }
 =20
-@@ -335,8 +336,7 @@ static int io_prep_rw(struct io_kiocb *req, const str=
-uct io_uring_sqe *sqe,
- 	if (attr_type_mask) {
- 		u64 attr_ptr;
+-int nvme_get_log(struct nvme_ctrl *ctrl, u32 nsid, u8 log_page, u8 lsp, =
+u8 csi,
+-		void *log, size_t size, u64 offset)
++static int nvme_get_log_lsi(struct nvme_ctrl *ctrl, u32 nsid, u8 log_pag=
+e,
++		u8 lsp, u8 csi, void *log, size_t size, u64 offset, u16 lsi)
+ {
+ 	struct nvme_command c =3D { };
+ 	u32 dwlen =3D nvme_bytes_to_numd(size);
+@@ -3089,10 +3091,18 @@ int nvme_get_log(struct nvme_ctrl *ctrl, u32 nsid=
+, u8 log_page, u8 lsp, u8 csi,
+ 	c.get_log_page.lpol =3D cpu_to_le32(lower_32_bits(offset));
+ 	c.get_log_page.lpou =3D cpu_to_le32(upper_32_bits(offset));
+ 	c.get_log_page.csi =3D csi;
++	c.get_log_page.lsi =3D cpu_to_le16(lsi);
 =20
--		/* only PI attribute is supported currently */
--		if (attr_type_mask !=3D IORING_RW_ATTR_FLAG_PI)
-+		if (attr_type_mask & ~IORING_RW_ATTR_FLAGS_SUPPORTED)
- 			return -EINVAL;
+ 	return nvme_submit_sync_cmd(ctrl->admin_q, &c, log, size);
+ }
 =20
- 		attr_ptr =3D READ_ONCE(sqe->attr_ptr);
++int nvme_get_log(struct nvme_ctrl *ctrl, u32 nsid, u8 log_page, u8 lsp, =
+u8 csi,
++		void *log, size_t size, u64 offset)
++{
++	return nvme_get_log_lsi(ctrl, nsid, log_page, lsp, csi, log, size,
++			offset, 0);
++}
++
+ static int nvme_get_effects_log(struct nvme_ctrl *ctrl, u8 csi,
+ 				struct nvme_effects_log **log)
+ {
 --=20
 2.43.5
 
