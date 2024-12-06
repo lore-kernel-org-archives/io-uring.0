@@ -1,56 +1,39 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E5716132F
-	for <io-uring@vger.kernel.org>; Fri,  6 Dec 2024 01:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5062AE9A;
+	Fri,  6 Dec 2024 02:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733450017; cv=none; b=r4BcZvEMfEoDmI81BHrvlZqp9uduT+vBdkvBtYfvwc5sAk/Ja9BTnjZIQhuTyp94hIZVrh9AcNbnhYnhmAOKKAWkkDGe1iwqLxJApgy/fvl3iQIpRkosdMnAcrXS6g6OhW3SxnETyw9RW54i+x0HZNUYBYzShn0e8/2i5kwFMmg=
+	t=1733451483; cv=none; b=P0+y3eQwoaq6WdIzzEmMZ5WSJ5PO3GgM603C0CH+3ukrSZQ3gI6Pgi1sO+uDyB2vk1QN/FKap8mta0X5/JWJnfg/gNdvpF5Hs3YD7dRh2acBjp50g6Cm0w2dyY5/T3i2Y0jKbGbIC7WWyme4K0NF+lZhdoG57AeLVpbsDh0QyjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733450017; c=relaxed/simple;
-	bh=c+UVhkKbwuD8UQEwseys8Y1G4kpR1yRUBsykIZ6n1sk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=J7o4TCEEsw2a38NLhC1aQS3adQV0BgMjkPFdxlvsb1vBu6GGDokI5wTl45MP9RdkbRiOPgnbIAushRj6Gra88UhZ0hTP9CMdf2MqdCROu4RNTeIMec6P90sRLCYbfX0MzEHjYt3CGx4U9ggiF8kFuRe6QlXQR6HS3wzIaPCu1Ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=hihcg3gY; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1733451483; c=relaxed/simple;
+	bh=r87v6RI14MYvQVvrhHKKo5H2rpySP4RbfqYlrBpFKZM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N3uKhbaPz3IQcM+yQq9woYOG+u7X/LOZoPUhw/zBxUzJ9+bfbb1Fud2DGdg6+ASYDXfwNYzS+nHMNsHkiWf8RODUyAtibU/8c8uEGtPE0J2aPb8zHe4MW4pP9iBQAiChjxAt384JEwNXDCnFj0jL9Lam0KlyhDkO+ApXjaha43o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j23gqL9N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="hihcg3gY"
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 4B605dJC013872
-	for <io-uring@vger.kernel.org>; Thu, 5 Dec 2024 17:53:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=QQZf+H6qxvbae0if9/efVpaNOckqg81tEPEEkknyOUs=; b=hihcg3gYMgFz
-	E94ESmiPgrPlD7LfdJt3VEa/EBxmNAGNUY0LPeQ6LBpBm97Krhjco5sFG9dNGJkl
-	FYUNrugt0MjMxfwC8E1XNTnLfL55zptMIbhfGZ4si0sgvgEKqfHaQWePS31MsO6V
-	Tn1wd4dqaflhknwLjT9V9XB9e56nxAeayjg1jxtfanLK24c6crgA3kpK7J5/lzPG
-	jejQoIPB3fcm2hTiEuatTNUZ3ua4VjZYfQ/98QMqIEjKv9GG3zbp2CKXW1Q8U4eb
-	rVjM4CG6LIteeAJ4NWIVn7wm5iHpJq6xDEw8y9P/yWrBspt95WX1aPzlUJ/osVce
-	FFZopNNLpg==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 43bmrwh5m0-17
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Thu, 05 Dec 2024 17:53:34 -0800 (PST)
-Received: from twshared11082.06.ash8.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Fri, 6 Dec 2024 01:53:24 +0000
-Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id 375D515B21158; Thu,  5 Dec 2024 17:53:09 -0800 (PST)
-From: Keith Busch <kbusch@meta.com>
-To: <axboe@kernel.dk>, <hch@lst.de>, <linux-block@vger.kernel.org>,
-        <linux-nvme@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
-        <io-uring@vger.kernel.org>
-CC: <sagi@grimberg.me>, <asml.silence@gmail.com>,
-        Keith Busch
-	<kbusch@kernel.org>
-Subject: [PATCHv11 07/10] block: expose write streams for block device nodes
-Date: Thu, 5 Dec 2024 17:53:05 -0800
-Message-ID: <20241206015308.3342386-8-kbusch@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241206015308.3342386-1-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j23gqL9N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82697C4CED1;
+	Fri,  6 Dec 2024 02:18:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733451482;
+	bh=r87v6RI14MYvQVvrhHKKo5H2rpySP4RbfqYlrBpFKZM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j23gqL9NEopbGtSbdZPKivdMJRqAbKO9sZrmDC9Ftd7yGWUZjm7lqHDO+LEwRqY8d
+	 ravnVsXVQyLyjxep89kWNPXh6GBbszdLpwXr949hXgA6myo8XkrUh38CEWu3Y0E3yP
+	 7VefFhA/L9eD9sJ66hry0eg642xiu0axIFqdVHWLzKa/ja1ZGPaVMuAkHxWMIo3CB/
+	 fAo/MnU4QUa0oycKNt2Mayt0BIqPwAOI8FthnQDHJLTdt/uhxBJOTc9zB3E9wQRs2O
+	 PcJnm9gXJ2c9Ka0TZKACIgHBjNatA9vsIO4mutBw3MyVnf6t1GyMe3eiD+NdyQFfLC
+	 2IYRR7LQK3HRA==
+Date: Thu, 5 Dec 2024 18:18:00 -0800
+From: Keith Busch <kbusch@kernel.org>
+To: Keith Busch <kbusch@meta.com>
+Cc: axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org, sagi@grimberg.me, asml.silence@gmail.com
+Subject: Re: [PATCHv11 00/10] block write streams with nvme fdp
+Message-ID: <Z1Je2Do8Tj_NYePW@kbusch-mbp.dhcp.thefacebook.com>
 References: <20241206015308.3342386-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
@@ -58,105 +41,102 @@ List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: XcVDIGnBTrNpaZMU9_x5CneW7sQeId06
-X-Proofpoint-ORIG-GUID: XcVDIGnBTrNpaZMU9_x5CneW7sQeId06
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241206015308.3342386-1-kbusch@meta.com>
 
-From: Christoph Hellwig <hch@lst.de>
+On Thu, Dec 05, 2024 at 05:52:58PM -0800, Keith Busch wrote:
+> Changes from v10:
+> 
+>  Merged up to block for-6.14/io_uring, which required some
+>  new attribute handling.
+> 
+>  Not mixing write hints usage with write streams. This effectively
+>  abandons any attempts to use the existing fcntl API for use with
+>  filesystems in this series.
+> 
+>  Exporting the stream's reclaim unit nominal size.
+> 
+> Christoph Hellwig (5):
+>   fs: add a write stream field to the kiocb
+>   block: add a bi_write_stream field
+>   block: introduce a write_stream_granularity queue limit
+>   block: expose write streams for block device nodes
+>   nvme: add a nvme_get_log_lsi helper
+> 
+> Keith Busch (5):
+>   io_uring: protection information enhancements
+>   io_uring: add write stream attribute
+>   block: introduce max_write_streams queue limit
+>   nvme: register fdp queue limits
+>   nvme: use fdp streams if write stream is provided
 
-Export statx information about the number and granularity of write
-streams, use the per-kiocb write hint and map temperature hints to write
-streams (which is a bit questionable, but this shows how it is done).
+I fucked up the format-patch command by ommitting a single patch. The
+following should have been "PATCH 1/11", but I don't want to resend for
+just this:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- block/bdev.c |  6 ++++++
- block/fops.c | 23 +++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+commit 9e40f4a4da6d0cef871d1c5daf55cc0497fd9c39
+Author: Keith Busch <kbusch@kernel.org>
+Date:   Tue Nov 19 13:16:15 2024 +0100
 
-diff --git a/block/bdev.c b/block/bdev.c
-index 738e3c8457e7f..c23245f1fdfe3 100644
---- a/block/bdev.c
-+++ b/block/bdev.c
-@@ -1296,6 +1296,12 @@ void bdev_statx(struct path *path, struct kstat *s=
-tat,
- 		stat->result_mask |=3D STATX_DIOALIGN;
- 	}
-=20
-+	if ((request_mask & STATX_WRITE_STREAM) &&
-+	    bdev_max_write_streams(bdev)) {
-+		stat->write_stream_max =3D bdev_max_write_streams(bdev);
-+		stat->result_mask |=3D STATX_WRITE_STREAM;
-+	}
-+
- 	if (request_mask & STATX_WRITE_ATOMIC && bdev_can_atomic_write(bdev)) {
- 		struct request_queue *bd_queue =3D bdev->bd_queue;
-=20
-diff --git a/block/fops.c b/block/fops.c
-index 6d5c4fc5a2168..f16aa39bf5bad 100644
---- a/block/fops.c
-+++ b/block/fops.c
-@@ -73,6 +73,7 @@ static ssize_t __blkdev_direct_IO_simple(struct kiocb *=
-iocb,
- 	}
- 	bio.bi_iter.bi_sector =3D pos >> SECTOR_SHIFT;
- 	bio.bi_write_hint =3D file_inode(iocb->ki_filp)->i_write_hint;
-+	bio.bi_write_stream =3D iocb->ki_write_stream;
- 	bio.bi_ioprio =3D iocb->ki_ioprio;
- 	if (iocb->ki_flags & IOCB_ATOMIC)
- 		bio.bi_opf |=3D REQ_ATOMIC;
-@@ -206,6 +207,7 @@ static ssize_t __blkdev_direct_IO(struct kiocb *iocb,=
- struct iov_iter *iter,
- 	for (;;) {
- 		bio->bi_iter.bi_sector =3D pos >> SECTOR_SHIFT;
- 		bio->bi_write_hint =3D file_inode(iocb->ki_filp)->i_write_hint;
-+		bio->bi_write_stream =3D iocb->ki_write_stream;
- 		bio->bi_private =3D dio;
- 		bio->bi_end_io =3D blkdev_bio_end_io;
- 		bio->bi_ioprio =3D iocb->ki_ioprio;
-@@ -333,6 +335,7 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb =
-*iocb,
- 	dio->iocb =3D iocb;
- 	bio->bi_iter.bi_sector =3D pos >> SECTOR_SHIFT;
- 	bio->bi_write_hint =3D file_inode(iocb->ki_filp)->i_write_hint;
-+	bio->bi_write_stream =3D iocb->ki_write_stream;
- 	bio->bi_end_io =3D blkdev_bio_end_io_async;
- 	bio->bi_ioprio =3D iocb->ki_ioprio;
-=20
-@@ -398,6 +401,26 @@ static ssize_t blkdev_direct_IO(struct kiocb *iocb, =
-struct iov_iter *iter)
- 	if (blkdev_dio_invalid(bdev, iocb, iter))
- 		return -EINVAL;
-=20
-+	if (iov_iter_rw(iter) =3D=3D WRITE) {
-+		u16 max_write_streams =3D bdev_max_write_streams(bdev);
-+
-+		if (iocb->ki_write_stream) {
-+			if (iocb->ki_write_stream > max_write_streams)
-+				return -EINVAL;
-+		} else if (max_write_streams) {
-+			enum rw_hint write_hint =3D
-+				file_inode(iocb->ki_filp)->i_write_hint;
-+
-+			/*
-+			 * Just use the write hint as write stream for block
-+			 * device writes.  This assumes no file system is
-+			 * mounted that would use the streams differently.
-+			 */
-+			if (write_hint <=3D max_write_streams)
-+				iocb->ki_write_stream =3D write_hint;
-+		}
-+	}
-+
- 	nr_pages =3D bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS + 1);
- 	if (likely(nr_pages <=3D BIO_MAX_VECS)) {
- 		if (is_sync_kiocb(iocb))
---=20
-2.43.5
+    fs: add write stream information to statx
+    
+    Add new statx field to report the maximum number of write streams
+    supported and the granularity for them.
+    
+    Signed-off-by: Keith Busch <kbusch@kernel.org>
+    [hch: renamed hints to streams, add granularity]
+    Signed-off-by: Christoph Hellwig <hch@lst.de>
 
+diff --git a/fs/stat.c b/fs/stat.c
+index 0870e969a8a0b..00e4598b1ff25 100644
+--- a/fs/stat.c
++++ b/fs/stat.c
+@@ -729,6 +729,8 @@ cp_statx(const struct kstat *stat, struct statx __user *buffer)
+ 	tmp.stx_atomic_write_unit_min = stat->atomic_write_unit_min;
+ 	tmp.stx_atomic_write_unit_max = stat->atomic_write_unit_max;
+ 	tmp.stx_atomic_write_segments_max = stat->atomic_write_segments_max;
++	tmp.stx_write_stream_granularity = stat->write_stream_granularity;
++	tmp.stx_write_stream_max = stat->write_stream_max;
+ 
+ 	return copy_to_user(buffer, &tmp, sizeof(tmp)) ? -EFAULT : 0;
+ }
+diff --git a/include/linux/stat.h b/include/linux/stat.h
+index 3d900c86981c5..36d4dfb291abd 100644
+--- a/include/linux/stat.h
++++ b/include/linux/stat.h
+@@ -57,6 +57,8 @@ struct kstat {
+ 	u32		atomic_write_unit_min;
+ 	u32		atomic_write_unit_max;
+ 	u32		atomic_write_segments_max;
++	u32		write_stream_granularity;
++	u16		write_stream_max;
+ };
+ 
+ /* These definitions are internal to the kernel for now. Mainly used by nfsd. */
+diff --git a/include/uapi/linux/stat.h b/include/uapi/linux/stat.h
+index 887a252864416..547c62a1a3a7c 100644
+--- a/include/uapi/linux/stat.h
++++ b/include/uapi/linux/stat.h
+@@ -132,9 +132,11 @@ struct statx {
+ 	__u32	stx_atomic_write_unit_max;	/* Max atomic write unit in bytes */
+ 	/* 0xb0 */
+ 	__u32   stx_atomic_write_segments_max;	/* Max atomic write segment count */
+-	__u32   __spare1[1];
++	__u32   stx_write_stream_granularity;
+ 	/* 0xb8 */
+-	__u64	__spare3[9];	/* Spare space for future expansion */
++	__u16   stx_write_stream_max;
++	__u16	__sparse2[3];
++	__u64	__spare3[8];	/* Spare space for future expansion */
+ 	/* 0x100 */
+ };
+ 
+@@ -164,6 +166,7 @@ struct statx {
+ #define STATX_MNT_ID_UNIQUE	0x00004000U	/* Want/got extended stx_mount_id */
+ #define STATX_SUBVOL		0x00008000U	/* Want/got stx_subvol */
+ #define STATX_WRITE_ATOMIC	0x00010000U	/* Want/got atomic_write_* fields */
++#define STATX_WRITE_STREAM	0x00020000U	/* Want/got write_stream_* */
+ 
+ #define STATX__RESERVED		0x80000000U	/* Reserved for future struct statx expansion */
+ 
