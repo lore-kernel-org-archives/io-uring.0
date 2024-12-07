@@ -1,229 +1,111 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A7622C6D9
-	for <io-uring@vger.kernel.org>; Fri,  6 Dec 2024 22:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C07628F5
+	for <io-uring@vger.kernel.org>; Sat,  7 Dec 2024 00:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733524598; cv=none; b=r7LdjTR1s83I07ln9bbaUcP4osuZDlrjJ54j1pjn6fEyq+GsNRaLpLg1tjYk1/zIYIgz/pJ545oZTNvP9aor2uw89Y5wuX7/EgGFh10OqE6a1D25g4uztYXTV7mgzY4wKLuRtj3HvDeqY+JBf3mkDTB48q9nbwrwXhDgN+YzyqQ=
+	t=1733532115; cv=none; b=Z+VOZY3OSF7tQTCqxQ+zfJV3MS7dg+XJjoShQC69bz3JXyUcksUOeb2I2DQXnKk6lR0+2c5wr7ss7e5aOWaciOZn6y3GQwVNZFiJgMYTeRqXauHrtn9JmhiJzaqZCv8n5tfuwfudpDumNfbmsnP1teCiSnOr3OjoXiYCVCdMJYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733524598; c=relaxed/simple;
-	bh=roA9MJz3NEVEn2KFgHV5G25yCwgCNSCbMZDFMHVZt7E=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eoEO0r58kEH9Nkdo95qam6x4y7Cc7WYgLbdCImIS/RqmwEE4csTTQdtvAoZNZsDk/67nbSQBwa90jvetVW4V6NC/K1KHccUzDe+mZjL+Sr6DtL6YJ1PUEcf7Kw7V6jB5CiWfKdXk9TeNa8iCBSOnYhYzr3EegQ6Vn0zHjSikHuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=H9nCgfup; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1733532115; c=relaxed/simple;
+	bh=zP7ebWxe9g3DAiSxA5kkmZzp1hNsAkpYzbVcBZfZ0mI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g4VEjOW0ag6Y4iH6oycQJ8u47Pco+Ilg8vf3qLN3BSmMR1qgGhXGMWh8oYlLUoV87z6DEo8L14CxVUEldNQrWclrl1mhD+dtvCNagI4Lf+R+pafsiwRhGUeOqS6iHLRiNR1cxtzFYGMGrMRbvApsi83X0dFbXD3Rk2uFkQ+0Azw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=ubjyqSf+; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="H9nCgfup"
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B6MaRT4002274
-	for <io-uring@vger.kernel.org>; Fri, 6 Dec 2024 14:36:35 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=l06P/hzIb97V1tm7MFuefws7PCOG+jrPqbqmapoufhw=; b=H9nCgfuppHs9
-	hH8SeWLqrynsFmxL5Eb7peZGx08lADHP80Bh6nC/2gVJVWQAtHR7VSSf6R8HjgwN
-	iB3Lld3YJ2EAoHNSFdGh+Oq2Jqv3mo3LvjIljO2oY2XkiJRUw2f6NwSKGQ5+mmK4
-	ClvyoQYL4SnAhhpt2tlj4e4TqIva6xJzpjODbVDSZHDfNkbj33lGxxqmCATyh1gn
-	qENl/EdbEzdioLhsXSvS1GLdxCzoKAgkejXg++TmMtp/MxSR/oFdzHDUwbf04gzn
-	8vmj+cyU3fj0cJMnFQFtjoYbN0A8MirAv8yrupl8CSffDdrNWt3hZFxPTNQlRTqh
-	iH5sLdaBWw==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43c8kv8nyk-9
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Fri, 06 Dec 2024 14:36:34 -0800 (PST)
-Received: from twshared7122.08.ash9.facebook.com (2620:10d:c0a8:1c::1b) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Fri, 6 Dec 2024 22:35:50 +0000
-Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id 5FAD215B8CB8A; Fri,  6 Dec 2024 14:18:27 -0800 (PST)
-From: Keith Busch <kbusch@meta.com>
-To: <axboe@kernel.dk>, <hch@lst.de>, <linux-block@vger.kernel.org>,
-        <linux-nvme@lists.infradead.org>, <linux-fsdevel@vger.kernel.org>,
-        <io-uring@vger.kernel.org>
-CC: <sagi@grimberg.me>, <asml.silence@gmail.com>, <anuj20.g@samsung.com>,
-        <joshi.k@samsung.com>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv12 10/12] nvme.h: add FDP definitions
-Date: Fri, 6 Dec 2024 14:17:59 -0800
-Message-ID: <20241206221801.790690-11-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="ubjyqSf+"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-724e1742d0dso2453079b3a.0
+        for <io-uring@vger.kernel.org>; Fri, 06 Dec 2024 16:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1733532111; x=1734136911; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j7mYa6jWU0GfQ3BnbC7hZLbjFgqXpblx7lc2NnYmzno=;
+        b=ubjyqSf+ztAX69zwWFZfX8ITgY1dQWVo5DCnoBCFRYrNGZ75N7WkY6MJ1w+8njayZ1
+         Z5VazBMD06JL1s2aimOuq43knFt9nVUNe9E3zm2AU/PVsC9ctQKGcaG2jRFeDspSdZIN
+         OHcnMw9zb6L6tkiKwwsJDu/wDW3g/0gV9Aiqn1VhBdMX/0whsxyl+cbeADnl/2M7BTOT
+         GSK+YIKAvvWfms+Q70PouiqIfVaury5uzbUBXDSP6QtjKfeh9VCap3+W2clZ9znTjaZQ
+         nPGo/tb/VhQIED+b0NBG4lR8L5MT6dZq7afN1Kcu6DJ0nFigY2lEqCXAQGE16BtpFg3n
+         HWvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733532111; x=1734136911;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j7mYa6jWU0GfQ3BnbC7hZLbjFgqXpblx7lc2NnYmzno=;
+        b=h8QFZIISnxle+JNDQumQGTS2ZgMzIag7EsPBGTgDEB+dqcYjJliZf76MYiYHn5W9GY
+         i7D3Wb3+m3AZjeDpkaS3N49tffB9g0bSGRektP+5fmzWyVQf9L2qLjhYfgyLWCGKGvsl
+         q94hcKL6AS81bEB3yekV56qg4RdklA91AjbcEsO2ObSAdgV2OQzEK8LfVLqA15th08wN
+         WiQIIh3eAT2npG+0IY12VnRbBfieeJaNAIoH/oM9J3pL8QcJMT/7O1iyo2J4ViEcQBU6
+         Ku7rGk4cgTKdY+kLqGHoEwDvGmBTxXOByLoT32R68hDYMxtSxIP+n7SIvrcf3VHQhXBQ
+         tbkA==
+X-Gm-Message-State: AOJu0YzMCqmxhVTs2lswEUcM4Z3RjZMyfT2e2ojDtyoR9qDniOVuSpBt
+	Net06qNcwcGCFVOllBHYMJG+5VFDMmDyTat9FvKDIf7zSusmg2EydcCqrO0S9vYiMDRabvzS8m0
+	m
+X-Gm-Gg: ASbGnctDXliickUnv/FIVq0U61Ptd09aummyfL4Sxaee+Js30Av/r8z5AZjTvZ+O4MU
+	pONGVyxpoHeKBUiwXcln4PiMPQ9nYBlzKZe4SrKsVObhLyL2kxMqVeozurts58nNDELn+iMpNcu
+	t5ZUYTpKYheKVlB1Q83EUXuONLs7mzNT5z9fUa7NlBKbY6XNRLBqT5/vt5wovTNoAbwQYZUvXms
+	2TaNFKtLkh4DiWmHCba4+udsANXdND8Rx8=
+X-Google-Smtp-Source: AGHT+IF5kHLfiOPOn/SPhP9MsvkUlvrDDYhmZVwsYly887ajoNWj6CUVMkkqgJ0wa6mHH7j2chwsMA==
+X-Received: by 2002:a05:6a00:17a9:b0:71d:fe64:e3fa with SMTP id d2e1a72fcca58-725b81f2514mr8838703b3a.19.1733532111462;
+        Fri, 06 Dec 2024 16:41:51 -0800 (PST)
+Received: from localhost ([2a03:2880:ff:14::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a29eb432sm3523602b3a.72.2024.12.06.16.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 16:41:51 -0800 (PST)
+From: David Wei <dw@davidwei.uk>
+To: io-uring@vger.kernel.org
+Cc: David Wei <dw@davidwei.uk>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>
+Subject: [PATCH for-next] io_uring: clean up io_prep_rw_setup()
+Date: Fri,  6 Dec 2024 16:41:44 -0800
+Message-ID: <20241207004144.783631-1-dw@davidwei.uk>
 X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241206221801.790690-1-kbusch@meta.com>
-References: <20241206221801.790690-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: 4aJHk2y7URpnKGrHIVTicpylTvWVeuIQ
-X-Proofpoint-ORIG-GUID: 4aJHk2y7URpnKGrHIVTicpylTvWVeuIQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+Content-Transfer-Encoding: 8bit
 
-From: Christoph Hellwig <hch@lst.de>
+Remove unnecessary call to iov_iter_save_state() in io_prep_rw_setup()
+as io_import_iovec() already does this. Then the result from
+io_import_iovec() can be returned directly.
 
-Add the config feature result, config log page, and management receive
-commands needed for FDP.
-
-Partially based on a patch from Kanchan Joshi <joshi.k@samsung.com>.
-
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-[kbusch: renamed some fields to match spec]
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: David Wei <dw@davidwei.uk>
 ---
- include/linux/nvme.h | 77 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ io_uring/rw.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/include/linux/nvme.h b/include/linux/nvme.h
-index 13377dde4527b..7680078fa67fd 100644
---- a/include/linux/nvme.h
-+++ b/include/linux/nvme.h
-@@ -275,6 +275,7 @@ enum nvme_ctrl_attr {
- 	NVME_CTRL_ATTR_HID_128_BIT	=3D (1 << 0),
- 	NVME_CTRL_ATTR_TBKAS		=3D (1 << 6),
- 	NVME_CTRL_ATTR_ELBAS		=3D (1 << 15),
-+	NVME_CTRL_ATTR_FDPS		=3D (1 << 19),
- };
-=20
- struct nvme_id_ctrl {
-@@ -661,6 +662,44 @@ struct nvme_rotational_media_log {
- 	__u8	rsvd24[488];
- };
-=20
-+struct nvme_fdp_config {
-+	__u8			flags;
-+#define FDPCFG_FDPE	(1U << 0)
-+	__u8			fdpcidx;
-+	__le16			reserved;
-+};
-+
-+struct nvme_fdp_ruh_desc {
-+	__u8			ruht;
-+	__u8			reserved[3];
-+};
-+
-+struct nvme_fdp_config_desc {
-+	__le16			dsze;
-+	__u8			fdpa;
-+	__u8			vss;
-+	__le32			nrg;
-+	__le16			nruh;
-+	__le16			maxpids;
-+	__le32			nns;
-+	__le64			runs;
-+	__le32			erutl;
-+	__u8			rsvd28[36];
-+	struct nvme_fdp_ruh_desc ruhs[];
-+};
-+
-+struct nvme_fdp_config_log {
-+	__le16			numfdpc;
-+	__u8			ver;
-+	__u8			rsvd3;
-+	__le32			sze;
-+	__u8			rsvd8[8];
-+	/*
-+	 * This is followed by variable number of nvme_fdp_config_desc
-+	 * structures, but sparse doesn't like nested variable sized arrays.
-+	 */
-+};
-+
- struct nvme_smart_log {
- 	__u8			critical_warning;
- 	__u8			temperature[2];
-@@ -887,6 +926,7 @@ enum nvme_opcode {
- 	nvme_cmd_resv_register	=3D 0x0d,
- 	nvme_cmd_resv_report	=3D 0x0e,
- 	nvme_cmd_resv_acquire	=3D 0x11,
-+	nvme_cmd_io_mgmt_recv	=3D 0x12,
- 	nvme_cmd_resv_release	=3D 0x15,
- 	nvme_cmd_zone_mgmt_send	=3D 0x79,
- 	nvme_cmd_zone_mgmt_recv	=3D 0x7a,
-@@ -908,6 +948,7 @@ enum nvme_opcode {
- 		nvme_opcode_name(nvme_cmd_resv_register),	\
- 		nvme_opcode_name(nvme_cmd_resv_report),		\
- 		nvme_opcode_name(nvme_cmd_resv_acquire),	\
-+		nvme_opcode_name(nvme_cmd_io_mgmt_recv),	\
- 		nvme_opcode_name(nvme_cmd_resv_release),	\
- 		nvme_opcode_name(nvme_cmd_zone_mgmt_send),	\
- 		nvme_opcode_name(nvme_cmd_zone_mgmt_recv),	\
-@@ -1059,6 +1100,7 @@ enum {
- 	NVME_RW_PRINFO_PRCHK_GUARD	=3D 1 << 12,
- 	NVME_RW_PRINFO_PRACT		=3D 1 << 13,
- 	NVME_RW_DTYPE_STREAMS		=3D 1 << 4,
-+	NVME_RW_DTYPE_DPLCMT		=3D 2 << 4,
- 	NVME_WZ_DEAC			=3D 1 << 9,
- };
-=20
-@@ -1146,6 +1188,38 @@ struct nvme_zone_mgmt_recv_cmd {
- 	__le32			cdw14[2];
- };
-=20
-+struct nvme_io_mgmt_recv_cmd {
-+	__u8			opcode;
-+	__u8			flags;
-+	__u16			command_id;
-+	__le32			nsid;
-+	__le64			rsvd2[2];
-+	union nvme_data_ptr	dptr;
-+	__u8			mo;
-+	__u8			rsvd11;
-+	__u16			mos;
-+	__le32			numd;
-+	__le32			cdw12[4];
-+};
-+
-+enum {
-+	NVME_IO_MGMT_RECV_MO_RUHS	=3D 1,
-+};
-+
-+struct nvme_fdp_ruh_status_desc {
-+	__le16			pid;
-+	__le16			ruhid;
-+	__le32			earutr;
-+	__le64			ruamw;
-+	__u8			reserved[16];
-+};
-+
-+struct nvme_fdp_ruh_status {
-+	__u8			rsvd0[14];
-+	__le16			nruhsd;
-+	struct nvme_fdp_ruh_status_desc ruhsd[];
-+};
-+
- enum {
- 	NVME_ZRA_ZONE_REPORT		=3D 0,
- 	NVME_ZRASF_ZONE_REPORT_ALL	=3D 0,
-@@ -1281,6 +1355,7 @@ enum {
- 	NVME_FEAT_PLM_WINDOW	=3D 0x14,
- 	NVME_FEAT_HOST_BEHAVIOR	=3D 0x16,
- 	NVME_FEAT_SANITIZE	=3D 0x17,
-+	NVME_FEAT_FDP		=3D 0x1d,
- 	NVME_FEAT_SW_PROGRESS	=3D 0x80,
- 	NVME_FEAT_HOST_ID	=3D 0x81,
- 	NVME_FEAT_RESV_MASK	=3D 0x82,
-@@ -1301,6 +1376,7 @@ enum {
- 	NVME_LOG_ANA		=3D 0x0c,
- 	NVME_LOG_FEATURES	=3D 0x12,
- 	NVME_LOG_RMI		=3D 0x16,
-+	NVME_LOG_FDP_CONFIGS	=3D 0x20,
- 	NVME_LOG_DISC		=3D 0x70,
- 	NVME_LOG_RESERVATION	=3D 0x80,
- 	NVME_FWACT_REPL		=3D (0 << 3),
-@@ -1888,6 +1964,7 @@ struct nvme_command {
- 		struct nvmf_auth_receive_command auth_receive;
- 		struct nvme_dbbuf dbbuf;
- 		struct nvme_directive_cmd directive;
-+		struct nvme_io_mgmt_recv_cmd imr;
- 	};
- };
-=20
---=20
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 04e4467ab0ee..5b24fd8b69f6 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -240,7 +240,6 @@ static int io_rw_alloc_async(struct io_kiocb *req)
+ static int io_prep_rw_setup(struct io_kiocb *req, int ddir, bool do_import)
+ {
+ 	struct io_async_rw *rw;
+-	int ret;
+ 
+ 	if (io_rw_alloc_async(req))
+ 		return -ENOMEM;
+@@ -249,12 +248,7 @@ static int io_prep_rw_setup(struct io_kiocb *req, int ddir, bool do_import)
+ 		return 0;
+ 
+ 	rw = req->async_data;
+-	ret = io_import_iovec(ddir, req, rw, 0);
+-	if (unlikely(ret < 0))
+-		return ret;
+-
+-	iov_iter_save_state(&rw->iter, &rw->iter_state);
+-	return 0;
++	return io_import_iovec(ddir, req, rw, 0);
+ }
+ 
+ static inline void io_meta_save_state(struct io_async_rw *io)
+-- 
 2.43.5
 
