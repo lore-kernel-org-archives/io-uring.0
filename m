@@ -1,218 +1,197 @@
-Received: from outbound-ip168b.ess.barracuda.com (outbound-ip168b.ess.barracuda.com [209.222.82.102])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46FE222D6C;
-	Mon,  9 Dec 2024 14:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.222.82.102
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733756233; cv=fail; b=NVvHNSZIpzV0FGPFWZ51zrbfJii8fSOnGBf5GuoVQTyefk18EaYqXKaEC6YCBEPKNUkBD4GI9Ezc9SFrYQymMUqjKI4Lfr8/gG3IuBALqM8g4ZjWDGPLnUgYDSz9qwyQogCkhjT+ElXvJGUN33yoL/c+g0d3FBb81t6WW1b0ZBE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733756233; c=relaxed/simple;
-	bh=CZr3S7iiYqHqnIv3eTleEfD+5LU4X0VMvfqqhWyF0kI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UI89LPMB4Wnmg25cYE7Dw1QRX1oA8u1tQZ2Eg1haRq4GC+5YktnDcfT3/qz0UW0mFAMYaW07LJ48abysWbuVYTCUan+vs8ljB+Pm3VmMn4GkFSogL/l5omHgBTeFlHcJHxrg9WVxBzpRhMTaqoRwetovFOD1D2fN323Q/BDM4JM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com; spf=pass smtp.mailfrom=ddn.com; dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b=aXNW/ew7; arc=fail smtp.client-ip=209.222.82.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ddn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BFCE1BEF8E
+	for <io-uring@vger.kernel.org>; Mon,  9 Dec 2024 14:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733756377; cv=none; b=Zc7OTtsujlox5ht5HC5IZ2Uoy5FblGTYjcJ8bP8rKEzdWDOUKXAJ1WYnC+N74Kw2kZNdJ3keiWicdgDFUBUFxNFYrmbLTp0fcXSQsn+PP8sDpCJq/qGsgyaAc5/qgEg6FvLBTT9xYjwpdU1pVJiF+sZHTA159zlpHkpedXXrSpo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733756377; c=relaxed/simple;
+	bh=rYOFWrfVUQTN8/4FwS3/505lkR5EUzR4fqzcqOg80j0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=l2pcxHMR+kh//GrE9BLHofTTaP2kisN+mjeRmKhw5vQ1ouQA+Ij03Wqxoqgu34EelT60phP3lq6B3ofxN87TeIcnBSqYu9EBS/waiht8wm8mPSFnVySQNgQMNckSNtdC1TJsfoTNmmwkKc9H+beXQIFMElPAfAUk2m6PbfEI49k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=01D2GAKw; arc=none smtp.client-ip=209.85.210.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b="aXNW/ew7"
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168]) by mx-outbound19-223.us-east-2b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Mon, 09 Dec 2024 14:57:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QCIN4Mj+k/4s+P+upM2iTMqWgWalXOGM3h+5ozsTD+hrauxChRFGXf1Nhe25XEu5C8a0jc49VMw/1GI1rtwgRL9JlV+KrCK/VPFL4ofZSLyyQxqkUztSBotLCdq+szxLuzWgRkeYCM8pjJfXSt9mLkaAv4lI+cxRDdeuS8vmut1+HOiz9JoGGNpnVAI8zy3+zFfUlKR9UMF5cYWe5MGfND16OLNo1EwBj8c/epQaePSn2E7AQtT+MY9XRUoBD8Z08KaDpq9T9hfN7ooNvLqjXf5nYyW2/EFUR21eoua9k4z1SoDcyi++6HvZT7+upFJdMiqiiZbyTVu1T2PX5WeEEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J7Iq7p4MbRs+sH4wgNVtfpwoxwBVqkpF837dtxkSE+4=;
- b=njwdknqXiRvE3R7/qh40gtxoEOFR53YG1P0R1cVmkRKP7kxeKWOC0pk7SamnWqFR+jJCgHU0lh5JWPf02+YEAMUMwVHo90Zj7LYNcao6LaY8Ixs0zSjtXvGLYoJNF0zD6WTkB6O13eTTNebBD6Fuw/lLkxf59uL6gzKOD5cgXLCSqssUNzFkEMBaj2LK+FddQ7pSytM9XMRsU+itDCHr8jfLMoNKs/3E5f/GiE5RDa6bWy2GhQooQnkbMEt/QZsF4ZI44wQZKosddFU8A0nUGbnAdFROVaFFLCgJmYO0jkI5E3IOxKRh1ZYmM75p4j7cvddnBZCBRj3XC6H0PKk6YA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 50.222.100.11) smtp.rcpttodomain=bsbernd.com smtp.mailfrom=ddn.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=ddn.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J7Iq7p4MbRs+sH4wgNVtfpwoxwBVqkpF837dtxkSE+4=;
- b=aXNW/ew749hpdE0XoNNc4DilT897qVDVcLtWxhFlnUDeP7IBJ7fRz7f4+q8RMjldij5OZeYuu0ltuam/MuT+DK51novGqUJQpZVnIpVUuDMwzLdhy0ttlhBOvxv6i+N4Y6Ho+MEJhYUaqtL1Ct1zZqd9M1vT8CCYutiucfGAZCw=
-Received: from CH0PR13CA0043.namprd13.prod.outlook.com (2603:10b6:610:b2::18)
- by DS0PR19MB7719.namprd19.prod.outlook.com (2603:10b6:8:fc::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.12; Mon, 9 Dec
- 2024 14:56:52 +0000
-Received: from DS3PEPF000099DC.namprd04.prod.outlook.com
- (2603:10b6:610:b2:cafe::f5) by CH0PR13CA0043.outlook.office365.com
- (2603:10b6:610:b2::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8251.11 via Frontend Transport; Mon,
- 9 Dec 2024 14:56:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 50.222.100.11)
- smtp.mailfrom=ddn.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=ddn.com;
-Received-SPF: Pass (protection.outlook.com: domain of ddn.com designates
- 50.222.100.11 as permitted sender) receiver=protection.outlook.com;
- client-ip=50.222.100.11; helo=uww-mrp-01.datadirectnet.com; pr=C
-Received: from uww-mrp-01.datadirectnet.com (50.222.100.11) by
- DS3PEPF000099DC.mail.protection.outlook.com (10.167.17.198) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8230.7
- via Frontend Transport; Mon, 9 Dec 2024 14:56:52 +0000
-Received: from localhost (unknown [10.68.0.8])
-	by uww-mrp-01.datadirectnet.com (Postfix) with ESMTP id 7C26155;
-	Mon,  9 Dec 2024 14:56:51 +0000 (UTC)
-From: Bernd Schubert <bschubert@ddn.com>
-Date: Mon, 09 Dec 2024 15:56:34 +0100
-Subject: [PATCH v8 12/16] fuse: {io-uring} Make
- fuse_dev_queue_{interrupt,forget} non-static
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="01D2GAKw"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-71de334f141so316216a34.0
+        for <io-uring@vger.kernel.org>; Mon, 09 Dec 2024 06:59:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1733756372; x=1734361172; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=p9VsEyze9R+3sj6eCL+mDcpy5BazmAvcI6ia+EAKp88=;
+        b=01D2GAKweyO+PFb2cXzK8UpFRTP+fJdlbnixXM9zXZmUMJ4V/fmFu9h2OQDp4iGnoh
+         c4QyC1o5XlVZsfdOuc2826bABe8fcXBmPvHma0qk1u7Cpvsp8Hl+/hVrGJJZzTM26CYS
+         NofAz//GwDPnWKACmVv0JyjXSLw73NiCQtGoP5FwQLZpV7dlVDnGPGXYzHUxO6IscdSe
+         h/mz9cKSvuznHTheDcXuwslfRJ5KnXLtB7cKOHzlfkyLa2bmXdl3QkzPq2oLbpf/qS1k
+         csnFZK8G2Ih3HQM+QoYx41tGAfEBwyTpZE7PyEkn3B3uEFPizQ4MWMZZzG7tHWkLf2B1
+         BwUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733756372; x=1734361172;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p9VsEyze9R+3sj6eCL+mDcpy5BazmAvcI6ia+EAKp88=;
+        b=VxvXEpfMCQcoNy8K6JWtAm1C+TmpZPrADGobt0SUD5hM9aT65YuXgTkqS57TLVcQis
+         ZfMBsoPMe5zilet6K2o6Kt3k39gVMUS/K27X+IMhxAIYOIysHuG6ESq3BtTuigFr1Q6Q
+         7tMm6QJ/0SEPhv+f46U4pipVDCCI4kcv01oRWdgI9uMolrvTR5bitXEM/h3oqYkFGtc3
+         MIfVr0xtKVLveUEFnD77r1y+47/YR4TkvTfTMNolOo7LSmlDtVqDCRLjyZDrRAY9KDRF
+         gNvtomjlrIJeXADi7c4NnNaWh6Wl3xvi3T02Nwxr3JQNd+KkAEkQxmmMit2q76TL4DYg
+         L+Rw==
+X-Forwarded-Encrypted: i=1; AJvYcCU+M4REgkf5L0yeRBSlk2jNOFjksg6+WrBLsBrKI1ouELDF3mC5mWZjaB3iecK4DWEUW5ucfbXdsQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdICUn/f3sQnAdfes3/uQDTa/uEHJg5zUQpiWKKUmeAgXsj1Db
+	zTNGc4fxgHTkAKsq0Ypt43/Cad3BRL9vX+TnbouTrJs+RBzrN+Wl3VmFwP4p2N4=
+X-Gm-Gg: ASbGncuGEeJmMB39TL67r3dDPt7+LPoP8XuQ/FqHl9L3eUqNTpVVudQRR3PV5pZkAxP
+	zQ5ExLzM6Ma4fmCsuodv3O9+Ah3skixoRPHADT0+p5DAAMp0yMC+t9oWsDiHH22ObVRehRfSh+6
+	tNTPOzPfNmhFgdmhTvZR2RY5351jSHdymR9R2V6/tkUwuFTxL62hOXVmo8ls3TWWQCiydE5gvAu
+	95SE9IB0IYKS3tLBdoZRln5o2lzgQNwvA0LYihzW2i8Ew==
+X-Google-Smtp-Source: AGHT+IFePRQsi6wZhtlXqLC99WNSl9mHjo4bWNZNboomAG5uegyJwmrtlNIk2qdRi6mVVRqjTlCgkA==
+X-Received: by 2002:a05:6830:378c:b0:71a:6845:7d7a with SMTP id 46e09a7af769-71e0219363amr567328a34.5.1733756372133;
+        Mon, 09 Dec 2024 06:59:32 -0800 (PST)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5f2792464a6sm2027479eaf.21.2024.12.09.06.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Dec 2024 06:59:31 -0800 (PST)
+Message-ID: <1a779207-4fa8-4b8e-95d7-e0568791e6ac@kernel.dk>
+Date: Mon, 9 Dec 2024 07:59:29 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: possible deadlock in __wake_up_common_lock
+To: chase xd <sl1589472800@gmail.com>, Pavel Begunkov
+ <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <CADZouDRFJ9jtXHqkX-PTKeT=GxSwdMC42zEsAKR34psuG9tUMQ@mail.gmail.com>
+From: Jens Axboe <axboe@kernel.dk>
+Content-Language: en-US
+In-Reply-To: <CADZouDRFJ9jtXHqkX-PTKeT=GxSwdMC42zEsAKR34psuG9tUMQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241209-fuse-uring-for-6-10-rfc4-v8-12-d9f9f2642be3@ddn.com>
-References: <20241209-fuse-uring-for-6-10-rfc4-v8-0-d9f9f2642be3@ddn.com>
-In-Reply-To: <20241209-fuse-uring-for-6-10-rfc4-v8-0-d9f9f2642be3@ddn.com>
-To: Miklos Szeredi <miklos@szeredi.hu>
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
- linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
- Joanne Koong <joannelkoong@gmail.com>, Josef Bacik <josef@toxicpanda.com>, 
- Amir Goldstein <amir73il@gmail.com>, Ming Lei <tom.leiming@gmail.com>, 
- David Wei <dw@davidwei.uk>, bernd@bsbernd.com, 
- Bernd Schubert <bschubert@ddn.com>
-X-Mailer: b4 0.15-dev-2a633
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733756199; l=1912;
- i=bschubert@ddn.com; s=20240529; h=from:subject:message-id;
- bh=CZr3S7iiYqHqnIv3eTleEfD+5LU4X0VMvfqqhWyF0kI=;
- b=5SvKvr+oNHrrErmPGprJTijJglJmlo2AWPzoQKirNNLA2de7tNW2u1+4GY/Z4QQY93XDiLR4o
- fcaaZ/KfUa8CK62MZGMnjzabgG5yVbgs6n2NNT3ptPMNtRKc7439aY/
-X-Developer-Key: i=bschubert@ddn.com; a=ed25519;
- pk=EZVU4bq64+flgoWFCVQoj0URAs3Urjno+1fIq9ZJx8Y=
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099DC:EE_|DS0PR19MB7719:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d03c427-78a8-4a8e-73d4-08dd1861b75d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|36860700013|7416014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Zm53T1FFMWVtemJvcmM3aC8wU1Z6WWFRdUpmdktlM3FRKzMwbDFGVG1USWd0?=
- =?utf-8?B?WkVKL2pYZllJMXR6OU5uY3hWMURBZnVLaW1mUVJ4VWNnOEtpeitud21mWkFj?=
- =?utf-8?B?R2VDMEl6MHAwVmM3MmZDSnJITFRXKzhwOHQ0NWgrYXZOL1k0SHA1SkYvdFZF?=
- =?utf-8?B?MjRwaWFGM2V2WDMwV2h5MnNLQWlIa1ZpWGR5SG5saXdUbVdBOFFEd1NiOWN5?=
- =?utf-8?B?TDBJcTdUNVhMTzFQYlg3RnIrcmJTcnkvM0RXdjFIVDNQcFN0RWFaYng1KzNx?=
- =?utf-8?B?M1J5ZWpaMEpyQWpDV0dJdDhrSWoybUVZbDhiNzgza1kwUDZ5dFlvV2FtUkpY?=
- =?utf-8?B?cUU0bWVzOThDN0E2UDcwRDF2RDBUUE9TZ01GMDduSzZ0cVpueUx5VXVGVFFI?=
- =?utf-8?B?Wm00U0liS3Z4WHRWdHVMelRaUFMzc2tGYjZOWE56WGFRMVRHRG95Ukl5Qi9h?=
- =?utf-8?B?M2ZNM01HakQ1NUZIeXlrQkZEeXMwMVBGMnZmbHFwR2czQ1NSWmlLa29OSmJj?=
- =?utf-8?B?eTQvc09xMmlid1E5c2FqTWkvSXFlWTNOc2M1ZGhydVhIdGt6UlljenJXSkM4?=
- =?utf-8?B?bW9wY0U5QWZudFNxTnB2UDc3c3pOUDI2WjB5U0RNMzBMQUNWT0lZcFJaQkx3?=
- =?utf-8?B?bGpaVHBHc2U5c0kyZGRPR3ZxS2F1Y1lNS21MTDhhTDRQQlB3Nzk0K2hoR1ow?=
- =?utf-8?B?eldpSThLckhJUDU5dnEydHFJQmJ5aEMvZWtINjRESDdaUndQazJXTi9mQm5t?=
- =?utf-8?B?Wll0aVNXM1EySXp0WWJDMzVqSk5FTXpKbS9GYWlUaVZvS3lwK2JDRUVNYUM2?=
- =?utf-8?B?dEJ5a3pEV0ttNDJyK2lvbzVQVmdCVG9IdW5EanhlUTkvQWwrTUxXa1dDL0J4?=
- =?utf-8?B?bUljWkI0TzdFRUgyK2VxTmFRT0pjdWRUVnVDcktEQzhjc2pjQTRXNkxoa0tZ?=
- =?utf-8?B?RUZFbTVrV0dCMmU0V1VQU21WRFdtWDhqZ256QUZpSWJ6UTI3Q3c0SFhtblAx?=
- =?utf-8?B?MGkrSGNzSzFVTitGUktmT0lpdHlTQjZqVXBHczJpSkdWWDBCeG5zRk1OVEpm?=
- =?utf-8?B?V3pBTFYydGNzMURBM0dRU3RsWks4K09ic1h5eG52Q2FXOVUvQXMvY2FrVDhK?=
- =?utf-8?B?VmRmdjhrSlVVSjB2aGJoTElYRDZSWDA1MTk5ZzdxNjZkcFdyK0NMeE9FNmNI?=
- =?utf-8?B?OC8xV2MyaXNpYUZzcHFndEQvU2FXeWttMWZzOXJ0RUNzazhhSlhLUWtnWmxs?=
- =?utf-8?B?Q255cmFMbkhQcHl0cUU5M0NQcU40UmpyWnFYMlgxU0E0cUJsY0xBUHRXcnZy?=
- =?utf-8?B?enZvRm5GaElTMXZkeGtlaUtDak05VUZnY0tjQ1lOTGJlV1oza2NLaG1VVVVU?=
- =?utf-8?B?WkpyTk1hMGpySFB5SXF4cnl6K2ZtYmRLMml4VVVVeUFSZXhkWnppOHI2ZFdI?=
- =?utf-8?B?bWRmaXdybnJuUVZad3FzcVFZSGNEZm5Hc2tEeHoydFd5UEFJWVFMSUI0Tm9E?=
- =?utf-8?B?Z0NvaG94RG1pbEtuWDNtMkhEQXpibVR1UHErUGpUYS9PN1k4WlB0K0IwQ0hF?=
- =?utf-8?B?UURJZGY1MHNGZEltRm0xY0oycy9ubVREQ1dNOWxUa3R5aHkrU1RIWnR4dVMw?=
- =?utf-8?B?SU00eUxRWmhuTzRGNmlaNFhsMCs5b1RlVVh1S0hZZHd3TzRvLzlmWWRDalBx?=
- =?utf-8?B?M0FpejhLN21idWZRTFdHb1NJRDZUWGU1eDNEcU5YV1ZOT2tEOEoxUHcrb3Vj?=
- =?utf-8?B?L054L2l5RTNadUtOWXZsQlZSYWtseHB3d3pKekpHZVM5cUVGQ2V3L1ppSHlM?=
- =?utf-8?B?YzgvOUIrMnlxaTBwWm5IUDhYcldMZUdlTkk0N241MTNteXNTclRCamprSzg2?=
- =?utf-8?B?U21peUx2OVBhK2UxeVFKT1Bra2s5WDcxYUhNd0IxTXVWQWNtdG5xWlBwNnJJ?=
- =?utf-8?Q?0hEH3NPFHs4N8klCmGQqBvWqx89TNi0E?=
-X-Forefront-Antispam-Report:
-	CIP:50.222.100.11;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:uww-mrp-01.datadirectnet.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	exUCp/fQWHHvHKA9/dhof20C5s2KJvoJu88Uoygl7cSnGgTWLoySUwQ25KVv9570Ir/ORuBshXWYnEEkTEP7MyJX3A2v9XclUQRa746OdEDThzUVLXyHIo3RzdHZoZgjanjz9XmvRhSsPcktCiIuBoHqls+EmM0MOIPPgTIsg5CLC27FMivA2aE7U8mOui1K+DNX0R47qTouipuGmzvm6Gp6T5OCBmWeO7CqHvTbqjwZ3dC8xv1Q13crqQB0Rori5iENuAjL80rJYzSzzW3Q7ACgNTXwyrLG29k56NOm4t/DQnL8OLkFpAspwZa62ejMCD3pcMCJT6IrACJlGMESi5gHv08310zXVhtuf2mKXwPcW/G03cdb+bXSzKzba8dL4dLTDhoGDz2L01Sw+6BYDMWv5iAzvjw4ye0HgjkbwmI4xVUmTGGpOBAOlCuPbX1kkMNSd+hbg4o2GU9xtpJ4xo1j25ZXybmb9HHNdq8GZEH9IYopRNXQtqf4iSDfqRCmLKLdqaUtDviVGxHvAsYQ1qnczLbk+lQO6MMRTS0PkLzsFnao+3JScNGVtYnWKg8uIqIbfSWXzIALNrZ17BR9pAtDz+RfDtpTZeFbqKEGY10tJh+6KmP3ZCXZHxWnn2/I8DfCdT3q0NTX0c053C9e/w==
-X-OriginatorOrg: ddn.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2024 14:56:52.2165
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d03c427-78a8-4a8e-73d4-08dd1861b75d
-X-MS-Exchange-CrossTenant-Id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=753b6e26-6fd3-43e6-8248-3f1735d59bb4;Ip=[50.222.100.11];Helo=[uww-mrp-01.datadirectnet.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF000099DC.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR19MB7719
-X-BESS-ID: 1733756223-105087-13364-17990-1
-X-BESS-VER: 2019.1_20241126.2220
-X-BESS-Apparent-Source-IP: 104.47.55.168
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVoYWpmZAVgZQ0NTA0tg4ycAiKd
-	k8Mc0izdwiNSUx2TLNyCg11cIoOdVUqTYWAE3yzCVBAAAA
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.260997 [from 
-	cloudscan15-202.us-east-2a.ess.aws.cudaops.com]
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------
-	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS124931 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status:1
 
-These functions are also needed by fuse-over-io-uring.
+On 12/9/24 5:03 AM, chase xd wrote:
+> ============================================
+> WARNING: possible recursive locking detected
+> 6.1.119-dirty #3 Not tainted
+> --------------------------------------------
+> syz-executor199/6820 is trying to acquire lock:
+> ffff88807c386378 (&ctx->cq_wait){....}-{2:2}, at:
+> __wake_up_common_lock+0xb8/0x140 kernel/sched/wait.c:137
+> 
+> but task is already holding lock:
+> ffff88807c386378 (&ctx->cq_wait){....}-{2:2}, at:
+> __wake_up_common_lock+0xb8/0x140 kernel/sched/wait.c:137
+> 
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+> 
+>        CPU0
+>        ----
+>   lock(&ctx->cq_wait);
+>   lock(&ctx->cq_wait);
+> 
+>  *** DEADLOCK ***
+> 
+>  May be due to missing lock nesting notation
+> 
+> 2 locks held by syz-executor199/6820:
+>  #0: ffff88807c3860a8 (&ctx->uring_lock){+.+.}-{3:3}, at:
+> __do_sys_io_uring_enter+0x8fc/0x2130 io_uring/io_uring.c:3313
+>  #1: ffff88807c386378 (&ctx->cq_wait){....}-{2:2}, at:
+> __wake_up_common_lock+0xb8/0x140 kernel/sched/wait.c:137
+> 
+> stack backtrace:
+> CPU: 7 PID: 6820 Comm: syz-executor199 Not tainted 6.1.119-dirty #3
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x5b/0x85 lib/dump_stack.c:106
+>  print_deadlock_bug kernel/locking/lockdep.c:2983 [inline]
+>  check_deadlock kernel/locking/lockdep.c:3026 [inline]
+>  validate_chain kernel/locking/lockdep.c:3812 [inline]
+>  __lock_acquire.cold+0x219/0x3bd kernel/locking/lockdep.c:5049
+>  lock_acquire kernel/locking/lockdep.c:5662 [inline]
+>  lock_acquire+0x1e3/0x5e0 kernel/locking/lockdep.c:5627
+>  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+>  _raw_spin_lock_irqsave+0x3d/0x60 kernel/locking/spinlock.c:162
+>  __wake_up_common_lock+0xb8/0x140 kernel/sched/wait.c:137
+>  __io_cqring_wake io_uring/io_uring.h:224 [inline]
+>  __io_cqring_wake io_uring/io_uring.h:211 [inline]
+>  io_req_local_work_add io_uring/io_uring.c:1135 [inline]
+>  __io_req_task_work_add+0x4a4/0xd60 io_uring/io_uring.c:1146
+>  io_poll_wake+0x3cb/0x550 io_uring/poll.c:465
+>  __wake_up_common+0x14c/0x650 kernel/sched/wait.c:107
+>  __wake_up_common_lock+0xd4/0x140 kernel/sched/wait.c:138
+>  __io_cqring_wake io_uring/io_uring.h:224 [inline]
+>  __io_cqring_wake io_uring/io_uring.h:211 [inline]
+>  io_cqring_wake io_uring/io_uring.h:231 [inline]
+>  io_cqring_ev_posted io_uring/io_uring.c:578 [inline]
+>  __io_cq_unlock_post io_uring/io_uring.c:586 [inline]
+>  __io_submit_flush_completions+0x778/0xba0 io_uring/io_uring.c:1346
+>  io_submit_flush_completions io_uring/io_uring.c:159 [inline]
+>  io_submit_state_end io_uring/io_uring.c:2203 [inline]
+>  io_submit_sqes+0xa78/0x1ce0 io_uring/io_uring.c:2317
+>  __do_sys_io_uring_enter+0x907/0x2130 io_uring/io_uring.c:3314
+>  do_syscall_x64 arch/x86/entry/common.c:51 [inline]
+>  do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:81
+>  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+> RIP: 0033:0x7fa54e70640d
+> Code: 28 c3 e8 46 1e 00 00 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48
+> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+> 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007ffd0ad80be8 EFLAGS: 00000246 ORIG_RAX: 00000000000001aa
+> RAX: ffffffffffffffda RBX: 00007ffd0ad80df8 RCX: 00007fa54e70640d
+> RDX: 0000000000000000 RSI: 000000000000331b RDI: 0000000000000003
+> RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+> R13: 00007ffd0ad80de8 R14: 00007fa54e783530 R15: 0000000000000001
+>  </TASK>
 
-Signed-off-by: Bernd Schubert <bschubert@ddn.com>
----
- fs/fuse/dev.c        | 5 +++--
- fs/fuse/fuse_dev_i.h | 5 +++++
- 2 files changed, 8 insertions(+), 2 deletions(-)
+I think this backport of:
 
-diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-index 8da0e6437250b8136643e47bf960dd809ce06f78..71f2baf1481b95b7fe10250e348cfba427199720 100644
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -237,7 +237,8 @@ __releases(fiq->lock)
- 	spin_unlock(&fiq->lock);
+3181e22fb799 ("io_uring: wake up optimisations")
+
+should fix that. Can you try?
+
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 4f0ae938b146..0b1361663267 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -582,6 +582,16 @@ static inline void __io_cq_unlock_post(struct io_ring_ctx *ctx)
+ 	io_cqring_ev_posted(ctx);
  }
  
--static void fuse_dev_queue_forget(struct fuse_iqueue *fiq, struct fuse_forget_link *forget)
-+void fuse_dev_queue_forget(struct fuse_iqueue *fiq,
-+			   struct fuse_forget_link *forget)
++static inline void __io_cq_unlock_post_flush(struct io_ring_ctx *ctx)
++	__releases(ctx->completion_lock)
++{
++	io_commit_cqring(ctx);
++	spin_unlock(&ctx->completion_lock);
++	io_commit_cqring_flush(ctx);
++	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN))
++		__io_cqring_wake(ctx);
++}
++
+ void io_cq_unlock_post(struct io_ring_ctx *ctx)
  {
- 	spin_lock(&fiq->lock);
- 	if (fiq->connected) {
-@@ -250,7 +251,7 @@ static void fuse_dev_queue_forget(struct fuse_iqueue *fiq, struct fuse_forget_li
+ 	__io_cq_unlock_post(ctx);
+@@ -1339,7 +1349,7 @@ static void __io_submit_flush_completions(struct io_ring_ctx *ctx)
+ 		if (!(req->flags & REQ_F_CQE_SKIP))
+ 			__io_fill_cqe_req(ctx, req);
  	}
- }
+-	__io_cq_unlock_post(ctx);
++	__io_cq_unlock_post_flush(ctx);
  
--static void fuse_dev_queue_interrupt(struct fuse_iqueue *fiq, struct fuse_req *req)
-+void fuse_dev_queue_interrupt(struct fuse_iqueue *fiq, struct fuse_req *req)
- {
- 	spin_lock(&fiq->lock);
- 	if (list_empty(&req->intr_entry)) {
-diff --git a/fs/fuse/fuse_dev_i.h b/fs/fuse/fuse_dev_i.h
-index d7bf72dabd84c3896d1447380649e2f4d20b0643..1d1c1e9848fba8dae46651e28809f73e165e74fe 100644
---- a/fs/fuse/fuse_dev_i.h
-+++ b/fs/fuse/fuse_dev_i.h
-@@ -17,6 +17,8 @@ struct fuse_arg;
- struct fuse_args;
- struct fuse_pqueue;
- struct fuse_req;
-+struct fuse_iqueue;
-+struct fuse_forget_link;
- 
- struct fuse_copy_state {
- 	int write;
-@@ -58,6 +60,9 @@ int fuse_copy_args(struct fuse_copy_state *cs, unsigned int numargs,
- 		   int zeroing);
- int fuse_copy_out_args(struct fuse_copy_state *cs, struct fuse_args *args,
- 		       unsigned int nbytes);
-+void fuse_dev_queue_forget(struct fuse_iqueue *fiq,
-+			   struct fuse_forget_link *forget);
-+void fuse_dev_queue_interrupt(struct fuse_iqueue *fiq, struct fuse_req *req);
- 
- #endif
- 
+ 	io_free_batch_list(ctx, state->compl_reqs.first);
+ 	INIT_WQ_LIST(&state->compl_reqs);
 
 -- 
-2.43.0
-
+Jens Axboe
