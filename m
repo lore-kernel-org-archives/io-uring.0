@@ -1,64 +1,62 @@
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0879618F2FB
-	for <io-uring@vger.kernel.org>; Fri, 13 Dec 2024 20:19:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825C33207
+	for <io-uring@vger.kernel.org>; Fri, 13 Dec 2024 20:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734121158; cv=none; b=JkW4Jrrop/WMcyYrKCFNgJGO29Pvyb5MlWMSuOzP+82QrHM0vVYsnSOJme/kZCU4LWoLFjjDaoyot2UZpaTTun8JNidypeYdagzhFUD6lcuN0CbLKcCeSWWWZBWNHr8yUa/L9MNkSNSKJMrwZRPIn1SSGehuRDHQUiAtd+M2ICA=
+	t=1734122778; cv=none; b=UE29ZEhuTVf5U5imbua9cM5glr0P5KI739WBHD8x+9qFqmlb+sSChiulLu+Ph+V+NZg2l+MRHHtLggXpwUDI5IJO+vEI0ULEWaNQv2Ib6+GoH5r8FVRCk/uX6T8Fwqf80C/1L154GRbFcGRLb4GraZAbAfC0Ms5ADz6Enz5qqLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734121158; c=relaxed/simple;
-	bh=smCs9UmXtJPjFiU3uifpihSrf85xBBxVxy499zh6onM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=vFYLHOZvkffDr6zv657TrdoH7IJmK/hjyN6c6DYUj+6A+BlWm/Crgdik5zuuRc0wsBOH5ON7fUBjnYC/IuGeBLWS2JF1qjqAGPbZMPSPNL7OulWhrAnnrBNPjTPMg4ipKVtOrF01Bp5FUhg+OBND/24/13d/aYxzgmOvCNHLLgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=EK5nINVA; arc=none smtp.client-ip=209.85.222.54
+	s=arc-20240116; t=1734122778; c=relaxed/simple;
+	bh=hGznOAEZJoGi6FhpnDxNPdyur4uw8hWg7RIjfScqGbI=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=g+W/Ff6ivr+AlULnrAwtUO8aoQ1b8CXHdB+W9dLKJFwvs0rZXMCYlz7CYrR/1zd1Po+B5K94mz8wJFVLPFdb3lSMvmPoQR60kGmOWCfA7nPbgpzjSh9S6pcEtcd5AXcUmE4mvBy/g+BnM7Sr95XINJFtY1szt8SVm+xm8AeDuVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=EGtqImV9; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="EK5nINVA"
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-85ba8b1c7b9so1082029241.1
-        for <io-uring@vger.kernel.org>; Fri, 13 Dec 2024 12:19:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="EGtqImV9"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21631789fcdso22496545ad.1
+        for <io-uring@vger.kernel.org>; Fri, 13 Dec 2024 12:46:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1734121155; x=1734725955; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/lDloO6Oi1p5gWtp9SabZKV2wm3DDD9SCjB4kdUqBlg=;
-        b=EK5nINVAp+eoPEzjtuqULaYEyH+HFMeZaTb4rnVglnsx29HQw1VVBc9+DO7WWNCtIl
-         Usw9BF4pAGlWHxpf6j3QwSXseBa5zEz2byqWTesgTsAN1njEA+akNEud2dFX/rQzpcWK
-         I7KG8Enr+eoyVoBhtMibjGQl8mVqlQDelrP9KnR8rXIZ86iMETZ77giFCDTmj53IQOuC
-         DiEz/DDEqikJ5Q1sYhYt/fLKLaaW9tCpFsfYOXa0DzV+45l57sbdsmwZfuTPcFVg2WyC
-         bMScuHCzKXE5Zed6+In8PEbA+YY6ICajd7FAl2lq8MTrNmEqL4CRs+T8a6bmAMrY4LSt
-         qnuw==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1734122773; x=1734727573; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zjn2GxM7KrMQ/tKgesPmA4YSkuJ5TlJgrkuLSxkD3Ko=;
+        b=EGtqImV9dYB2z3x3BXTcQJl/6ruc4mxvz9IuekcE0vXFpd9l69g+F6NRTbrTnHXZ/n
+         GH6TosCI2sSykVZFh8OLw4s7Hfh9wDfB0Itx4a5hWJawTiB+rNgMQY7PLtkQjTLEbChp
+         1ME/y4+cLFSCNGZ2rrtEwSt0CLnHjZ1elbk0nP5voi5+qVjb4sxY8FJvzpwCwtQwiG9r
+         RPUJwV3WkbBTKi8BYQH57rdZJImYvXXqFkGZTpA8kSdpW9LFX4bnFt3ji2d/px2ZrrkE
+         5d9LdWVRDWGvD5B0b0WcpPxKVtAbKfb14CkjvYr87/wfMvXy1C21udSrHaSdeZf6+wij
+         eoDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734121155; x=1734725955;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/lDloO6Oi1p5gWtp9SabZKV2wm3DDD9SCjB4kdUqBlg=;
-        b=m3ZFKV60WEXPdHIRScIF4zppb3ivIQqAeSStSmIusgTnR9k6hIrFuQTfzsRi3DInCu
-         0D7DigzNQ86OZgA3fRCUTiArOEnNsBZChIgyaTLr+2lqLZYkXSxN3/cqc73aqWnH4XiD
-         VjyqQ5B7eLvFG3lrfu/H7CgpMb0fYj0OG1DedPIFyYuqHvspJI73CRDAliXziNSU+Mdk
-         fYV8IC6dZHpgV8+9R+yILNd3W/lYXdcniAuzRcuL9bTdXa1RK31UneJobFlODI4dFiPo
-         CaUwXDYV6LszBvnFt3vhRh6fLwX428P73mZT37ZW25jqBfuwlkN50lQqp2CHJpCBpR6V
-         fHeA==
-X-Forwarded-Encrypted: i=1; AJvYcCXNFhkUT3XL+mF+NPXPJd4p4ld+rn93wyBQiSPeUt31l//d2cXzzN4pcyU8zC6k9Li0Pp/o2MgIzw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuKTXSS8mnXf84bIdp2aS10WxYtK1vr0i5Jw6fKqJErbk+KZT+
-	b01U0XBBnAmQ875LC+w2q0StyEmegJVnQne6gi+WFr/EdaIgPGM1/uCxfLQFzYsO701nkxTL/M2
-	V
-X-Gm-Gg: ASbGncs+pNrcMCQFFRA4GDEeIYY27nCBhXXTSC8avqW37flkW8fA3J2HIIayB4SdGEn
-	VWMjFLY06nCG7KhhDj02YAeeGiT8aDd7RmniXzOWspPGtWvtH6mpEeOKfrr9zqXkQqPh4mutexu
-	WkipfNj4ykcmeS3xF6xgu1rOeQpjKCP1G6Aias7UbTipfNHcMY01gWpEYAgldk4duD9SmeTpCPS
-	MrO1scvfLYtu1fJIUyOgUsVp8olEP0AbYY9urnhTQ8+s8ORDAO0Vw==
-X-Google-Smtp-Source: AGHT+IFWQ8O03w9sCZX7QdUh3+tEkrMGP05QEC0pcj2VGuP/WOMg+0K2J7T30/VuJZglaUiqpxb4ng==
-X-Received: by 2002:a17:90b:38cb:b0:2ef:83df:bb3b with SMTP id 98e67ed59e1d1-2f13aba96a6mr12293455a91.8.1734119432568;
-        Fri, 13 Dec 2024 11:50:32 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734122773; x=1734727573;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Zjn2GxM7KrMQ/tKgesPmA4YSkuJ5TlJgrkuLSxkD3Ko=;
+        b=gHQXsvtkybZb05a6Gok8lRTlW/ifFVBcxWNYz1dt3mNQal56FGhk1dj3PLRS+ObEHz
+         Y2OnxD0SIOcebwVV2W/JXJi1qA01Y2i8jPuRDFI/ncJhFd9XY+sHAhfg9JRZYsunKEHS
+         urMTp1eJPwtk7by5X/fT/FDwGa0SyWoaKepNhre7O/oj+YR4xTeZl0cV604h36gNY8qu
+         EZSUvfTr3X+ajJSExSZOd3H9cUtyOTiV9fXbLqiMAmdPKqaz44HDdNsIJE75WC3KObaE
+         N4dRKAwR3V4aX29YFKO0sSyeRpdcMeSH5YH3aIJrCcBoq83pv2uUKf8REUuZog2G2YTP
+         fDWg==
+X-Gm-Message-State: AOJu0Yw8GHtPBkqLk1wJwIYpEi7f3kRY0pf09jrNhoXnIci2vccQhGPv
+	ADaIPyaU92ZvMR1PX2PyDBkxV5RdMRsjJrt/w1vIVUSjDvfOLQur/dgXZiiJjSWvLrXKprZMb23
+	e
+X-Gm-Gg: ASbGnctxG3KrlwWxWcLMoB76rRKX7qStTARlcXCqWcMpTziR4XtakchPKlBBNjCux4j
+	LzatfcswGunPuc/804T40ozd8zvpqYK7neinj6GvcFNZzq4Fjz6TidtIR7G8YfnVxY1ck6a3Fmj
+	aC3Km4q/f7LLmKFQHN2kZpgcanCSTTslrjSNFht8IQ5F6vr7hAhsYhtE2inDs17A+z7dgCRZD5E
+	wEK/Dt7uzs1zY4iRSLksc25dhtjQBVw+Lbn0eZtcZ6ZixdTfMc68A==
+X-Google-Smtp-Source: AGHT+IHIvDF64auY/0VUb6yKCjwjEjyaFRJZ0k30bXdF/6AB40Da7Wo+LZDU5QJPRDI3pwsi4he5Tg==
+X-Received: by 2002:a17:902:e88e:b0:215:4f99:4ef5 with SMTP id d9443c01a7336-2189422a4fcmr56226905ad.28.1734122773539;
+        Fri, 13 Dec 2024 12:46:13 -0800 (PST)
 Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142fa1cd5sm3566691a91.34.2024.12.13.11.50.31
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1dcb8desm1837625ad.91.2024.12.13.12.46.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Dec 2024 11:50:31 -0800 (PST)
-Message-ID: <3464006e-e1a5-48e4-b229-4c1c8609164f@kernel.dk>
-Date: Fri, 13 Dec 2024 12:50:30 -0700
+        Fri, 13 Dec 2024 12:46:12 -0800 (PST)
+Message-ID: <a92669cb-c413-463e-b2f1-ddea802dad0c@kernel.dk>
+Date: Fri, 13 Dec 2024 13:46:12 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -66,29 +64,41 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] btrfs: don't read from userspace twice in
- btrfs_uring_encoded_read()
-To: Mark Harmstone <maharmstone@fb.com>, linux-btrfs@vger.kernel.org,
- io-uring@vger.kernel.org
-References: <20241213184444.2112559-1-maharmstone@fb.com>
- <20241213184444.2112559-3-maharmstone@fb.com>
 Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: io-uring <io-uring@vger.kernel.org>
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20241213184444.2112559-3-maharmstone@fb.com>
+Subject: [GIT PULL] io_uring fix for 6.13-rc3
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/13/24 11:44 AM, Mark Harmstone wrote:
-> If we return -EAGAIN the first time because we need to block,
-> btrfs_uring_encoded_read() will get called twice. Take a copy of args
-> the first time, to prevent userspace from messing around with it.
+Hi Linus,
 
-Looks good to me, however I think you'd want to add:
+Just a single fix for a regression introduced in the 6.13 merge window.
+Please pull!
 
-Reported-by: Jens Axboe <axboe@kernel.dk>
-Fixes: 34310c442e17 ("btrfs: add io_uring command for encoded reads (ENCODED_READ ioctl)")
 
-to the tags, but probably whoever applies this can do that.
+The following changes since commit a07d2d7930c75e6bf88683b376d09ab1f3fed2aa:
+
+  io_uring: Change res2 parameter type in io_uring_cmd_done (2024-12-03 06:33:13 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.dk/linux.git tags/io_uring-6.13-20241213
+
+for you to fetch changes up to 99d6af6e8a22b792e1845b186f943cd10bb4b7b0:
+
+  io_uring/rsrc: don't put/free empty buffers (2024-12-12 08:01:52 -0700)
+
+----------------------------------------------------------------
+io_uring-6.13-20241213
+
+----------------------------------------------------------------
+Jens Axboe (1):
+      io_uring/rsrc: don't put/free empty buffers
+
+ io_uring/rsrc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 -- 
 Jens Axboe
