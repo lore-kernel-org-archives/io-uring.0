@@ -1,100 +1,237 @@
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADE81FA17F
-	for <io-uring@vger.kernel.org>; Tue, 17 Dec 2024 17:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E7050276
+	for <io-uring@vger.kernel.org>; Tue, 17 Dec 2024 18:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734458070; cv=none; b=JNXtpoy8+AwQbiULrwR8HdPMJENDiSBGd2iS6e1J7dS+DLZNO7JYv9Sm40mc/B/jT7mM5fRIlIsBXUxniKrlk0LNZYGusRp701AGIyPgMC5ztfLJF9lYb4lwj4sD8Kw1khnHJ1iRH6/364hBtt3sW/jWoakacAelLlVu6oB/lo4=
+	t=1734458538; cv=none; b=Bh9mpVuhQGeiayPs8ls+sCvyfq6CcfBO2pTffomwHNcjh7uxg4Lj8MGA39zfz/VTZb5tUZoBp3BOAZ7nAeEqYmruLLtMkZi/Ix8xTMWKZ5Oy7ikQSyGgVfAlKxIo7Q6jV6juxgNR8fgDvulMYEDTwaDO/5508y4W+R02+kZOAx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734458070; c=relaxed/simple;
-	bh=Lyz3pxba+WfjDFPIDQ6xn8XAtkSqhUaQDO2p6HbBcnE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=txsrUupS99MOqBURrK+g8pFeoa6eqg5ASag1vmUb8WmHtugKChvEDrf28RhWZUFe8qjacmAlEPFRR1fd89RcbP7w5+W6WMi7cl64kemo0aTI0NzcuT7CiLxZVhgacTOd2FiSwL54goSLK4v6v9PcqRJL2suNUIb8RA/sb/MMNv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=RyHAqJ/m; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1734458538; c=relaxed/simple;
+	bh=5yqhbwARB2dfOC2OxL9NeLiIhrPSsYRRj4S+/+XGylE=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=b03Rh2ZaeC4D2Qz/HhrmnD9yo2haannSXWMzMxhAzpF/w4J/UhRQUWM8TjJMcQybOHTWVx9n5xq5H2gtMwzq+cEvaEyblrJ+E4bsmts+nmI9sgQgrjJtuzOFxUMGNlZumi/klvhoe3t8XvgpLwKd5VPkOmlFZVPsn1czizMiI48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b=Fp0/9Kn5; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="RyHAqJ/m"
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-8442ec2adc7so186333639f.2
-        for <io-uring@vger.kernel.org>; Tue, 17 Dec 2024 09:54:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1734458067; x=1735062867; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+S2KbhIrhYKECFApyJjGLk7qrmZwBnp+gEfOwbZqgUo=;
-        b=RyHAqJ/mDor0NPB6E4y9tWb453DBiOvljE6m6eiPMtOr4e2sRJSzWqNZYd1dkMO3bl
-         7vKY0s0MkSFXVmEZ3ZA8VhVNsx62cY3/jKsFeVzfY/bsR1gHnKXu4hx1iK1dKA8Cce6p
-         XrKrmuCa8p7I7qyn7u8G5SKpBrsC42+6iXol+y7UoYJ+YT3cHPwn8p2zBVyFDkfpjPyF
-         JfoaFmmD3JyyXzanbOmSUA+E8coMIOaRCGJkBDpr9Q6CgsaoyRaLZENp2i9/cgpjxPEu
-         YUaxV2SMYjK6shepU6EPMNADn+CZGuDKOYrzxXC8n+1TTnIQVopfXVRhWJe1KbHD6wMI
-         rksA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734458067; x=1735062867;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+S2KbhIrhYKECFApyJjGLk7qrmZwBnp+gEfOwbZqgUo=;
-        b=ljidmlA2uNbQ47EGRcN4vpWd4rDKUXo4eHytNDEUpcZsrZ3IOSf5bsAmVMUNuXRRWO
-         aC23KDeU3EK1oyBugrAcVZ1dct5oly27YGjWQ6RNxY1g8LrdVtIK0M7EJiZv50+6qBSA
-         XUYMm1Pef6SkAvVdKDtOeHUr38TsCTY1arsIRLXqg5Wwp479YMZ53ycnMRia01nTUfnf
-         ILs2JsKGsYdQQzhA5Dz7W19XJKsYyPiiybWufnpEZIghzghxXryfPePtKJGZHF2XuTxr
-         rf2J4sPsoj6ZE35vn7krW/6sOEOWahI9+GpvHZCMzZE1hZRFz/gxVJMYTlAdxY0b6/hC
-         vM/w==
-X-Forwarded-Encrypted: i=1; AJvYcCXDb/KtVAJqkU/rg9vpCmOaKHJsMMqE3MsjBBE4WKlBTWZRVA2PxfwfIS0+FAzK7H8sU6hcvZ0Nhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAPmAUfruJ5vSk2gC4dRK4dSBoXNeUmKAYfP6HrypEU5TyXE0d
-	mlGDw+YcHoGgYkJYGkgcI7qte37HDIkHh+7AzLUAKA3DmUERBiikKQQL5YcZfPU=
-X-Gm-Gg: ASbGncvWIiY2tTq2AqWi12toKLoc+ThQAfiMVCWTUp+pnIvPfoDwCwxk4XD+Sefr93z
-	tnaQQ3TBCetqEKzUFt2IfNMtlCydN6jruP6PbndGX7xOcyN5io3HAp/PVDbJrGSbJA3FIrZ+sVX
-	3J0STGBgW+V6meppF2vt6Uf/kUJxKfsyYfKO8zy57toWrZhAvcRKhL8fufmkPHBCyI2pxsmc5Zo
-	JWjWstirhwOIunoroQpMJ5Yib35Y9HhAkjb0qw3YC0oTFO6vER6
-X-Google-Smtp-Source: AGHT+IEu4IjNs/5xorwpYlZBESvq5LvFi/8gufZqjoD/nmtALPkmYF9FSVwvwu7wAaOMQC3j/4k6gQ==
-X-Received: by 2002:a92:c564:0:b0:3a7:6636:eb3b with SMTP id e9e14a558f8ab-3aff800d5d2mr172047215ab.17.1734458067401;
-        Tue, 17 Dec 2024 09:54:27 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e5e32a33cdsm1793038173.81.2024.12.17.09.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2024 09:54:26 -0800 (PST)
-Message-ID: <acaf46f3-3f6c-44c9-86b5-98aa7845f1b6@kernel.dk>
-Date: Tue, 17 Dec 2024 10:54:26 -0700
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Fp0/9Kn5"
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BHI1CDo010924
+	for <io-uring@vger.kernel.org>; Tue, 17 Dec 2024 10:02:15 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=facebook; bh=1
+	YMYRxo9wVOGVZereeoruzokqxg0JBG4GmlvMe9HwW8=; b=Fp0/9Kn5oqdNSRw2o
+	Yj8r0oExDPuDGv+inWcoij4RzJHebRyhZnl+ycQHBqqX2ZufJrNLCbYdFNpM/SxR
+	v0BWzy28FUyg1spLNW6z1U6DCwatUVt7POGnVm9PNpF5aRhAg67USJceyfmV1rli
+	K90KNn8REQSxVmocQC2QbN4yRk=
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43ke7480dq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <io-uring@vger.kernel.org>; Tue, 17 Dec 2024 10:02:15 -0800 (PST)
+Received: from twshared18153.09.ash9.facebook.com (2620:10d:c0a8:fe::f072) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.11; Tue, 17 Dec 2024 18:02:14 +0000
+Received: by devbig276.nha1.facebook.com (Postfix, from userid 660015)
+	id 5B5A89A41152; Tue, 17 Dec 2024 18:02:12 +0000 (GMT)
+From: Mark Harmstone <maharmstone@fb.com>
+To: <linux-btrfs@vger.kernel.org>, <io-uring@vger.kernel.org>
+CC: Mark Harmstone <maharmstone@fb.com>, Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH v3 4/4] btrfs: don't read from userspace twice in btrfs_uring_encoded_read()
+Date: Tue, 17 Dec 2024 18:02:02 +0000
+Message-ID: <20241217180210.4044318-4-maharmstone@fb.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241217180210.4044318-1-maharmstone@fb.com>
+References: <20241217180210.4044318-1-maharmstone@fb.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3][RFC] virtio-blk: add io_uring passthrough support for
- virtio-blk
-To: Jingbo Xu <jefflexu@linux.alibaba.com>,
- Stefan Hajnoczi <stefanha@gmail.com>, Christoph Hellwig <hch@infradead.org>
-Cc: Ferry Meng <mengferry@linux.alibaba.com>,
- "Michael S . Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- linux-block@vger.kernel.org, virtualization@lists.linux.dev,
- linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
- Joseph Qi <joseph.qi@linux.alibaba.com>
-References: <20241203121424.19887-1-mengferry@linux.alibaba.com>
- <Z2BNHWFWgLjEMiAn@infradead.org>
- <CAJSP0QXU_uNqL-9LmLRkDdPPSdUAGdesQ2DFuCMHnjyEuREvXQ@mail.gmail.com>
- <0535520b-a6a6-4578-9aca-c698e148004e@linux.alibaba.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <0535520b-a6a6-4578-9aca-c698e148004e@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: 2uITFNg9wkJvCq2WGwMev5vYqgHTkJGn
+X-Proofpoint-ORIG-GUID: 2uITFNg9wkJvCq2WGwMev5vYqgHTkJGn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_02,2024-10-04_01,2024-09-30_01
 
-On 12/16/24 11:08 PM, Jingbo Xu wrote:
->> That's why I asked Jens to weigh in on whether there is a generic
->> block layer solution here. If uring_cmd is faster then maybe a generic
->> uring_cmd I/O interface can be defined without tying applications to
->> device-specific commands. Or maybe the traditional io_uring code path
->> can be optimized so that bypass is no longer attractive.
+If we return -EAGAIN the first time because we need to block,
+btrfs_uring_encoded_read() will get called twice. Take a copy of args
+the first time, to prevent userspace from messing around with it.
 
-It's not that the traditional io_uring code path is slower, it's in fact
-basically the same thing. It's that all the other jazz that happens
-below io_uring slows things down, which is why passthrough ends up being
-faster.
+Signed-off-by: Mark Harmstone <maharmstone@fb.com>
+Reported-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 34310c442e17 ("btrfs: add io_uring command for encoded reads (ENCO=
+DED_READ ioctl)")
+---
+ fs/btrfs/ioctl.c | 74 +++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 48 insertions(+), 26 deletions(-)
 
--- 
-Jens Axboe
+diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+index 7872de140489..da91cdb88324 100644
+--- a/fs/btrfs/ioctl.c
++++ b/fs/btrfs/ioctl.c
+@@ -4791,7 +4791,7 @@ static int btrfs_uring_encoded_read(struct io_uring=
+_cmd *cmd, unsigned int issue
+ {
+ 	size_t copy_end_kernel =3D offsetofend(struct btrfs_ioctl_encoded_io_ar=
+gs, flags);
+ 	size_t copy_end;
+-	struct btrfs_ioctl_encoded_io_args args =3D { 0 };
++	struct btrfs_ioctl_encoded_io_args *args;
+ 	int ret;
+ 	u64 disk_bytenr, disk_io_size;
+ 	struct file *file;
+@@ -4806,6 +4806,7 @@ static int btrfs_uring_encoded_read(struct io_uring=
+_cmd *cmd, unsigned int issue
+ 	struct extent_state *cached_state =3D NULL;
+ 	u64 start, lockend;
+ 	void __user *sqe_addr;
++	struct io_uring_cmd_data *data =3D io_uring_cmd_get_async_data(cmd);
+=20
+ 	if (!capable(CAP_SYS_ADMIN)) {
+ 		ret =3D -EPERM;
+@@ -4819,32 +4820,53 @@ static int btrfs_uring_encoded_read(struct io_uri=
+ng_cmd *cmd, unsigned int issue
+=20
+ 	if (issue_flags & IO_URING_F_COMPAT) {
+ #if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
+-		struct btrfs_ioctl_encoded_io_args_32 args32;
+-
+ 		copy_end =3D offsetofend(struct btrfs_ioctl_encoded_io_args_32, flags)=
+;
+-		if (copy_from_user(&args32, sqe_addr, copy_end)) {
+-			ret =3D -EFAULT;
+-			goto out_acct;
+-		}
+-		args.iov =3D compat_ptr(args32.iov);
+-		args.iovcnt =3D args32.iovcnt;
+-		args.offset =3D args32.offset;
+-		args.flags =3D args32.flags;
+ #else
+ 		return -ENOTTY;
+ #endif
+ 	} else {
+ 		copy_end =3D copy_end_kernel;
+-		if (copy_from_user(&args, sqe_addr, copy_end)) {
+-			ret =3D -EFAULT;
++	}
++
++	args =3D data->op_data;
++
++	if (!args) {
++		args =3D kzalloc(sizeof(*args), GFP_NOFS);
++		if (!args) {
++			ret =3D -ENOMEM;
+ 			goto out_acct;
+ 		}
+-	}
+=20
+-	if (args.flags !=3D 0)
+-		return -EINVAL;
++		data->op_data =3D args;
+=20
+-	ret =3D import_iovec(ITER_DEST, args.iov, args.iovcnt, ARRAY_SIZE(iovst=
+ack),
++		if (issue_flags & IO_URING_F_COMPAT) {
++#if defined(CONFIG_64BIT) && defined(CONFIG_COMPAT)
++			struct btrfs_ioctl_encoded_io_args_32 args32;
++
++			if (copy_from_user(&args32, sqe_addr, copy_end)) {
++				ret =3D -EFAULT;
++				goto out_acct;
++			}
++
++			args->iov =3D compat_ptr(args32.iov);
++			args->iovcnt =3D args32.iovcnt;
++			args->offset =3D args32.offset;
++			args->flags =3D args32.flags;
++#endif
++		} else {
++			if (copy_from_user(args, sqe_addr, copy_end)) {
++				ret =3D -EFAULT;
++				goto out_acct;
++			}
++		}
++
++		if (args->flags !=3D 0) {
++			ret =3D -EINVAL;
++			goto out_acct;
++		}
++	}
++
++	ret =3D import_iovec(ITER_DEST, args->iov, args->iovcnt, ARRAY_SIZE(iov=
+stack),
+ 			   &iov, &iter);
+ 	if (ret < 0)
+ 		goto out_acct;
+@@ -4854,8 +4876,8 @@ static int btrfs_uring_encoded_read(struct io_uring=
+_cmd *cmd, unsigned int issue
+ 		goto out_free;
+ 	}
+=20
+-	pos =3D args.offset;
+-	ret =3D rw_verify_area(READ, file, &pos, args.len);
++	pos =3D args->offset;
++	ret =3D rw_verify_area(READ, file, &pos, args->len);
+ 	if (ret < 0)
+ 		goto out_free;
+=20
+@@ -4868,15 +4890,15 @@ static int btrfs_uring_encoded_read(struct io_uri=
+ng_cmd *cmd, unsigned int issue
+ 	start =3D ALIGN_DOWN(pos, fs_info->sectorsize);
+ 	lockend =3D start + BTRFS_MAX_UNCOMPRESSED - 1;
+=20
+-	ret =3D btrfs_encoded_read(&kiocb, &iter, &args, &cached_state,
++	ret =3D btrfs_encoded_read(&kiocb, &iter, args, &cached_state,
+ 				 &disk_bytenr, &disk_io_size);
+ 	if (ret < 0 && ret !=3D -EIOCBQUEUED)
+ 		goto out_free;
+=20
+ 	file_accessed(file);
+=20
+-	if (copy_to_user(sqe_addr + copy_end, (const char *)&args + copy_end_ke=
+rnel,
+-			 sizeof(args) - copy_end_kernel)) {
++	if (copy_to_user(sqe_addr + copy_end, (const char *)args + copy_end_ker=
+nel,
++			 sizeof(*args) - copy_end_kernel)) {
+ 		if (ret =3D=3D -EIOCBQUEUED) {
+ 			unlock_extent(io_tree, start, lockend, &cached_state);
+ 			btrfs_inode_unlock(inode, BTRFS_ILOCK_SHARED);
+@@ -4893,7 +4915,7 @@ static int btrfs_uring_encoded_read(struct io_uring=
+_cmd *cmd, unsigned int issue
+ 		 * undo this.
+ 		 */
+ 		if (!iov) {
+-			iov =3D kmemdup(iovstack, sizeof(struct iovec) * args.iovcnt,
++			iov =3D kmemdup(iovstack, sizeof(struct iovec) * args->iovcnt,
+ 				      GFP_NOFS);
+ 			if (!iov) {
+ 				unlock_extent(io_tree, start, lockend, &cached_state);
+@@ -4906,13 +4928,13 @@ static int btrfs_uring_encoded_read(struct io_uri=
+ng_cmd *cmd, unsigned int issue
+ 		count =3D min_t(u64, iov_iter_count(&iter), disk_io_size);
+=20
+ 		/* Match ioctl by not returning past EOF if uncompressed. */
+-		if (!args.compression)
+-			count =3D min_t(u64, count, args.len);
++		if (!args->compression)
++			count =3D min_t(u64, count, args->len);
+=20
+ 		ret =3D btrfs_uring_read_extent(&kiocb, &iter, start, lockend,
+ 					      cached_state, disk_bytenr,
+ 					      disk_io_size, count,
+-					      args.compression, iov, cmd);
++					      args->compression, iov, cmd);
+=20
+ 		goto out_acct;
+ 	}
+--=20
+2.45.2
+
