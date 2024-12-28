@@ -1,90 +1,65 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E64F978F5B
-	for <io-uring@vger.kernel.org>; Sat, 28 Dec 2024 20:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69825197A87
+	for <io-uring@vger.kernel.org>; Sat, 28 Dec 2024 20:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735418005; cv=none; b=rQSpnkgBeYD+WoAospccqVimeCjuZFHt0F2EdbPhtOjdps+GIhehef9PYpQbV14RD9oZSCPENBbLmvf9biJQKWSgU7HrhNcJ46fUBElN2w0vpQX1RTxh31zzgR6rVSyHzPZ39khloAfu++agebOYB+MZfl8B9sxKQg3AuPWbAZ8=
+	t=1735419474; cv=none; b=X70RmqkiLR4ciL5bpmakBf+4f925PgRLRZjqHWdbJIlxMixhktPNx0UQeHMAECn72jFgvOylec8Z+5Aryptq+2QOv9I0VSQUf3hhKCciOj2950VdFT6qCHOE/JI2+dAeCJGhbWedRw31bvwPnvpwI6hZ4s7Yct0kH7ITs7E9dbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735418005; c=relaxed/simple;
-	bh=Wju1wWVEdudY10wnnOFt3Xff2n5vefDsJklzI8vhMQs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=P+px4AA5jeE9/Iqs23IxvD9Qjd1fnF/sy6mruAseKx7kaWlF5jOX5AKQpcQGmoaEPm3wOYckAoYQ0oIuTvj6cqjR0Brkgokj/yGbRkD910iRdicF/kl5OpSlNXdVm2mBLwDWbm9yW+SHxdHTRxMtwotttkVtahiuOYomxt4JGoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=KhsLJyl3; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="KhsLJyl3"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-216401de828so97988755ad.3
-        for <io-uring@vger.kernel.org>; Sat, 28 Dec 2024 12:33:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1735418003; x=1736022803; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=x15Lyg1HfitWyD8CW8oTyMUBNGYdwVa9e/fNCeGl6HQ=;
-        b=KhsLJyl3pW7Cst08KXXSWLtYnZHnLW5fWoXEUW1kdOif7X40ScYMdpGParrG0zq5c9
-         bk9+JtKyuvFJTU+LHGzDhl2Z77C6L7uN2GQkC37oDOKZErH3no+OLPZWHv2Go2E9NW8K
-         RZ5tfrnRMAvUN4D4OSHdzVm76aDUWhw+9MA71PF7pnfIrt3+KI1GD1d8+UfhElWjhwtO
-         3njb3a3S6STWsQcGurd0vuoY+HNLUMwMJOe+KpB2L2LpKqptE6pACRIc6DWZaiXwuOvp
-         ecArRUC1RF51yHFWtaU9QCqPCt9OXPHeWOcRzPN9rGuT35ZjP/YkutbnuEyUIo4H7CwI
-         1NLQ==
+	s=arc-20240116; t=1735419474; c=relaxed/simple;
+	bh=zJdD/Hlgm0Mo0Jn/353hQ1sZGVhsqxgZKb0UmG/2gxM=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=QGIW0CqbTJi6LmhJBvXhaMM9lTNB5t79jl/Dc2NJBN96U0Cc8tOQnZexWeQm9EF0SIKUsaLfnU0zLGr1WTVj3+Do/qCtXEe7lnVOhD02v+atBSXqomDDGK9FFTfn53KZE/bZnAM/RTriZluLJv6w9tXuvu3kwMGs9pgdv9ml6Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a7e0d5899bso183374915ab.0
+        for <io-uring@vger.kernel.org>; Sat, 28 Dec 2024 12:57:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735418003; x=1736022803;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1735419472; x=1736024272;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x15Lyg1HfitWyD8CW8oTyMUBNGYdwVa9e/fNCeGl6HQ=;
-        b=SbiFWrTwfimxctmW4oR9dem+kHxrKyaRsgwR7btPLuJJYg3PueG+KDnEz3RdBod5yb
-         gtW+1M7KA7AZZhekzycAXRPioKYE1zBdKfl3tB0oTOFhxn8TGoe46U1VU30vtZVGaExz
-         Lr82mwVFWBlvJa8CoqtCxfoU9u8S0xru4mME6pWWaFCZ65ULJTx9Ds4mfLUKr5K4DRz/
-         jN9W/ttRbv5Q0LtRHEcZZ2MUUZtd3WBc9KB2FaU2oKpvSvT2k0I5JvK0PeP2YTsSC7ex
-         NpMGZjl+GreizdCo3a5QmVEXFFM9lFFUbf4ZjTqCQ6DrTGq3BnLHgNBxz5UzFRsOvvlZ
-         dypg==
-X-Forwarded-Encrypted: i=1; AJvYcCX9OOY34dF5ak5osiDKx9eiqVQnXGCgIUGjJXXl+dBY28ugTayi7fmoT6bxu0XlLDlkBzckb69Ztw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJ2Jgxt3gO1sE59NRpbJFK2I6ABsH0LpB5keWOJCW+RQdsEw8S
-	HLs+Ieuwfr6lwWsm4hZsRaeocN0T4AywIbpE2M1W2PPIDp5RB/DPgU0PuG1doFY=
-X-Gm-Gg: ASbGncsGjLnjpe3IAnHLkVJDRMJkB/lXBvrr7s3KN+VgEUC1kVepDev8kml85MYV/AV
-	fPIkDQvOWe/XA5T9Bv2upcXrNmohVqgr/Wi/bqQ36CGeAOq2cPebW6XpBkc3jXiGZY0QFpveoHO
-	rquDir7908OcI4RDdN8mpEGv95OSVStSpOeui3BB9ZXD6s9lGOe5q7vsKSxoMsTk7Jt6KdAgfEq
-	Az2VjhxtwSWSxlZbOoob2eTRpxC8zXDwPnN5TPttz3+/E/v5n+KqA==
-X-Google-Smtp-Source: AGHT+IGRO9sZFQ4SKJZO9Hk1uENN8kYbBsibMekolJACPeiDY19LE9k2pWuZjEVzlhF4Z3tAqk45RQ==
-X-Received: by 2002:aa7:8895:0:b0:71e:2a0:b0b8 with SMTP id d2e1a72fcca58-72abdd3c48emr41968186b3a.1.1735418003279;
-        Sat, 28 Dec 2024 12:33:23 -0800 (PST)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8164c7sm16582051b3a.4.2024.12.28.12.33.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Dec 2024 12:33:22 -0800 (PST)
-Message-ID: <092163e2-598e-4c6c-afb4-d17e0e0cfd13@kernel.dk>
-Date: Sat, 28 Dec 2024 13:33:21 -0700
+        bh=m/dbaQWcTz64med4ZDxAOY2XdL0mP5cmgRkLcZzXkQA=;
+        b=XlrXsAgoXr9NT2UoUn8V6wDweJyt/4yJqG+0oqYyZ1FUvQoeF6yP11Z/yH75GOM+wx
+         JzHwUC+PVLLNGndzPQIQrWnpFKWicJhjdAbRJO0qHCnTkWF9D3Mw8823wRYMkhZha6Xt
+         qh/mZX4X5u+DDNwG5IQNY25NB0k8WdFVxrqsHbBjxkS0ZTVmy43xtOBdAZ+vQxDxHkPb
+         fvZoThXUIBnxPsfAOkDaZJ7fXYkQ4GdhmUJ8AyUH5r5GRd97+0BdDHEmpI/Zsoa9yNfJ
+         zRKvxyJqfLjgm/4TP2Ii8fjm7roYztRjXjNZXYaO2kNpZF3egPMyuq21aAHI6O6yK45V
+         IjQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQP1V+oSofxSYNRS25U6wInoeKFZiMIZFQ+bWJxh9x5/ikqmFKE3wgTW4XseJOTOFQATKAj3YxjA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzkax6l+MP4X6QzLbD02kP6wC9TVvhiWM9ccHfbirQeAfp5XhNU
+	A1yXwIOeEAyC+AV0WT5Epzn3AYkOv2gAiA/3Eg0g7A+IPoffsmgDGvcw0eM9TpKYTG8sd/YKhGD
+	U/tNmBh9qMGASrbyZSKFVpwn2n72X4CYNMyBckJc6OMNFYpJINppDypM=
+X-Google-Smtp-Source: AGHT+IHEwI8M2TnSsOC7e/5GzWkjMmwdkSKcGRp2HVkzZfIo+Tp8Ma7zB7VA+O0YYEsyT/XZZ+IKwPfuU4sySCU4nJtqcPd7yL4q
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [io-uring?] WARNING: locking bug in sched_core_balance
-To: syzbot <syzbot+14641d8d78cc029add8a@syzkaller.appspotmail.com>,
- asml.silence@gmail.com, bp@alien8.de, dave.hansen@linux.intel.com,
- hpa@zytor.com, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- mingo@redhat.com, syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
- x86@kernel.org
-References: <676babe1.050a0220.2f3838.02bf.GAE@google.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <676babe1.050a0220.2f3838.02bf.GAE@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:20e9:b0:3a3:4175:79da with SMTP id
+ e9e14a558f8ab-3c2d2d5164bmr257871345ab.13.1735419472675; Sat, 28 Dec 2024
+ 12:57:52 -0800 (PST)
+Date: Sat, 28 Dec 2024 12:57:52 -0800
+In-Reply-To: <0ffbbde1-b5d8-4a53-91e3-80e16da18e28@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67706650.050a0220.226966.00b3.GAE@google.com>
+Subject: Re: [syzbot] [io-uring?] [usb?] WARNING in io_get_cqe_overflow (2)
+From: syzbot <syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com>
+To: axboe@kernel.dk
+Cc: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 12/24/24 11:53 PM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+> Should be fixed in upstream for quite a while:
+>
+> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-No indication that this is related to io_uring at all.
+This crash does not have a reproducer. I cannot test it.
 
-#syz set subsystems: kernel
-
--- 
-Jens Axboe
-
+>
+> -- 
+> Jens Axboe
