@@ -1,197 +1,115 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31161FA25D
-	for <io-uring@vger.kernel.org>; Fri,  3 Jan 2025 15:02:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED4B1F9F48;
+	Fri,  3 Jan 2025 15:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735916574; cv=none; b=J7F58WQRYZRghpqx3TqsuScjBPTNzq67UZUscYpJcQ2gCMT5t6qOoIJ/FL7542g2tmcq+MbsbQNXbf/ES2d2qnC5v8686qGfo2rWBJH9GjfMkLu0Wl6HVUtXXcCuSO5zEaTmvUxWukTVB2Z8llYCaNdXNq/pSCyrtDvLkCoTINc=
+	t=1735916698; cv=none; b=RCVdh7FHPN0WI5rmj/tDPJ3ev2YeIPcCJ7OIA3BwE227jLDIzswwDJWWW2p/U1ZhWcCVJ3HodwxU2kWKE34onP+b1NOo2TdgbAx876K6zaSbVRDJ0adtU0Yl+8wPUQwYJgrmXPGv5uh5aLZPX1VsLpz2p6hrgypvNnGLqcE8QjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735916574; c=relaxed/simple;
-	bh=rT++9iJ6ZQNB8q5DWeR2FUycNTru/sqFL0Cz2X7ZSvw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qE+m4GKSUY/M08lc8E/dxk6euf0UVbbz0IgoVu/bZVCovv+DRxhcH/1eQJ97haoUvy6Lrz97jINKfpj45enJ8Q1v/wqprq0pqNL/0HKFtXTRg95RBAW6sRQTf4qZGAiiou2KLpEmTLQyrk0DPmnBGLewbdZaNdI/xuGn2llg+Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b=HA6k7VdW; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1735916698; c=relaxed/simple;
+	bh=H5400TLePfLQxI7UD5AI3D5cWC0CjAxIvYqocj4GrHo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f+BIAUeO+0tt5J0DFHeIfU9qUzE1ry7xh2RH/3zhp12tDhx8of0EnzMEAFObVX2hRlqniqvLnqBLsbmpv5X88uc+EtCiiZXYe8bkHpnTTewfVz8LnWdZOn8gDScOMa2a858oqcAgBm7GHD+kBqtlW4hdjL7iYz5vL3TG1jNNL+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c952Rs9g; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HA6k7VdW"
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 503F0psl027350
-	for <io-uring@vger.kernel.org>; Fri, 3 Jan 2025 07:02:51 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=facebook; bh=p
-	rt3/yOItv2hOwJMePcR62drvYabi2Oe7HXQ5W1t2qA=; b=HA6k7VdWaQW02PXP+
-	ktKyrno6leOyjrEAjYYUS7/+EyXRx2D8WlxXzjzZaqD2JMbyybk01rX4rBkACutU
-	Ux+qzOwc/nxrCGT+jFzGAXdng8QofN0zj/gYoz3UB1/HerQxJ4YOj0y5NUfyysGB
-	0R3g1VGtqN68o7tTDgVunqLVUs=
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43xhcyr8mn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Fri, 03 Jan 2025 07:02:51 -0800 (PST)
-Received: from twshared3076.40.frc1.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.14; Fri, 3 Jan 2025 15:02:50 +0000
-Received: by devbig276.nha1.facebook.com (Postfix, from userid 660015)
-	id 68EABA240683; Fri,  3 Jan 2025 15:02:34 +0000 (GMT)
-From: Mark Harmstone <maharmstone@fb.com>
-To: <linux-btrfs@vger.kernel.org>, <io-uring@vger.kernel.org>
-CC: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 1/4] io_uring/cmd: rename struct uring_cache to io_uring_cmd_data
-Date: Fri, 3 Jan 2025 15:02:23 +0000
-Message-ID: <20250103150233.2340306-2-maharmstone@fb.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250103150233.2340306-1-maharmstone@fb.com>
-References: <20250103150233.2340306-1-maharmstone@fb.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c952Rs9g"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2163bd70069so73191865ad.0;
+        Fri, 03 Jan 2025 07:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735916695; x=1736521495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXusr2UpHDeSOUhdbX5qqXLthJbsIE7+HUFoo4sDdoY=;
+        b=c952Rs9gbEQFbz6GuVuEaJsvspz9h2N5OM6IUnRcjI02XlECUOGgw65lwd3Wq6cLbk
+         LybJGPvvu3BsCndMXhgu20JkbDEuKvLbmzu5Jp7vOw0N+8qbtTkGC8fAK7bqRivfYCb7
+         7NSRqozOcBmYQXBkLZc5SQGFXtFu1dhx0ImK/+0MrxbhLaHZe0+KCEnfa2slCM/4DDnX
+         d7vUuiAINBhYKZWeTSv7VHzvK95uBSb3mty033wu3dfPtOgRSSAehEoRYeM/jzkpCP9d
+         C3O7+8UxQh80FIQpAtU2OW2cSmIzAFhO/yruwqpMdEVTONn8s6OdjoPuYIdm1LddnkBS
+         bffA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735916695; x=1736521495;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gXusr2UpHDeSOUhdbX5qqXLthJbsIE7+HUFoo4sDdoY=;
+        b=C7/oZ2PMGwjwPUpXPTnnf2jm/LfPaW/rM5Q5HqYwfQNDQhp2zyMnB8EfWpOz2b1GYd
+         /IkDqZ99+MMMSkU67jprxn0WbUQtMbAYogMtUMI5sKSt/TIgifIfX7gfiydFTTFxgZSj
+         Z1b/tkGaUH+egUcGi59L5Kiv/hdiZdYeqerjBT7gEe1gcEXWKp4BNZysxVOWwP53D17i
+         lNI75qLTXCCasx+KbNdOsiF5l6UKxUha8kQZWR4nd2gNI7x3092gB85ZRpnI2dEcJDo7
+         U0UWGAu19P8YVaqg7nY6qfTrvtCTxfksbHOH2qfmXVZXVYBn2J1U5MTxN4XZfm3vzB84
+         ar9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUJzTk0UVdcj3oQtFFcJV3VGb5wf/IdyQc4iBErIaQsKXC+/T4BXzwyHrQg69faxEq1hugljczU8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxba8m8SsP/20BOjSIqAZKwSveigzgLrFoC39z8h2iZfbtS/FsH
+	562PJr9TazW62mPt2vKpdvUTPdNgA0UqP/4uVjVOwEr6ETU+NJtx+O5uWw==
+X-Gm-Gg: ASbGncvsvoG+Ynz5LaQNGpoo0xMQY5CR5OWSfymZVXixYJu4XSTRE6ZzIK2U0G3JVHX
+	RqzVpcyejJy3/im+rJoxv/Fi8GJK95VCsnlQiB3jmKtNIsU7Ilr2aSHhKrY/H7Gs+t7Yx2/JAsP
+	4gd/VdSHjcdMeQhuMPJnX9K4caJMXcPI+ZuiPLWGWjdllGX3cqUfsyqXMrDggQy973m/88cLOXj
+	doTwAHxOzt8YhuuaeXskoPW2Zt3tnYaQY61exWDxYW6alG05xPLKFI=
+X-Google-Smtp-Source: AGHT+IFZxJeo9O3rGEx8BnQZOtx8uzYu6YgIJ8pYv8JscsUpnxCfwpTqN++H4rUUS7e4dqv0Ruvgfg==
+X-Received: by 2002:a05:6a20:6a24:b0:1db:ff9d:1560 with SMTP id adf61e73a8af0-1e5e0484baemr77098226637.18.1735916694562;
+        Fri, 03 Jan 2025 07:04:54 -0800 (PST)
+Received: from local.. ([2001:ee0:4f0f:f760:12a3:e9a:304:ed])
+        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-842aba72f4fsm24180459a12.11.2025.01.03.07.04.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jan 2025 07:04:54 -0800 (PST)
+From: Bui Quang Minh <minhquangbui99@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: Bui Quang Minh <minhquangbui99@gmail.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	io-uring@vger.kernel.org
+Subject: [PATCH] io_uring/rsrc: simplify the bvec iter's count calculation
+Date: Fri,  3 Jan 2025 22:04:11 +0700
+Message-ID: <20250103150412.12549-1-minhquangbui99@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ZlOEnxbLlEyTQVKenoaCYSdPMjV-KL9p
-X-Proofpoint-GUID: ZlOEnxbLlEyTQVKenoaCYSdPMjV-KL9p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+Content-Transfer-Encoding: 8bit
 
-From: Jens Axboe <axboe@kernel.dk>
+As we don't use iov_iter_advance() but our own logic in io_import_fixed(),
+we can remove the logic that over-sets the iter's count to len + offset
+then adjusts it later to len. This helps to make the code cleaner.
 
-In preparation for making this more generically available for
-->uring_cmd() usage that needs stable command data, rename it and move
-it to io_uring/cmd.h instead.
-
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Bui Quang Minh <minhquangbui99@gmail.com>
 ---
- include/linux/io_uring/cmd.h |  4 ++++
- io_uring/io_uring.c          |  2 +-
- io_uring/opdef.c             |  3 ++-
- io_uring/uring_cmd.c         | 10 +++++-----
- io_uring/uring_cmd.h         |  4 ----
- 5 files changed, 12 insertions(+), 11 deletions(-)
+ io_uring/rsrc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
-index 0d5448c0b86c..61f97a398e9d 100644
---- a/include/linux/io_uring/cmd.h
-+++ b/include/linux/io_uring/cmd.h
-@@ -18,6 +18,10 @@ struct io_uring_cmd {
- 	u8		pdu[32]; /* available inline for free use */
- };
-=20
-+struct io_uring_cmd_data {
-+	struct io_uring_sqe	sqes[2];
-+};
-+
- static inline const void *io_uring_sqe_cmd(const struct io_uring_sqe *sq=
-e)
- {
- 	return sqe->cmd;
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index d3403c8216db..ff691f37462c 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -320,7 +320,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(s=
-truct io_uring_params *p)
- 	ret |=3D io_alloc_cache_init(&ctx->rw_cache, IO_ALLOC_CACHE_MAX,
- 			    sizeof(struct io_async_rw));
- 	ret |=3D io_alloc_cache_init(&ctx->uring_cache, IO_ALLOC_CACHE_MAX,
--			    sizeof(struct uring_cache));
-+			    sizeof(struct io_uring_cmd_data));
- 	spin_lock_init(&ctx->msg_lock);
- 	ret |=3D io_alloc_cache_init(&ctx->msg_cache, IO_ALLOC_CACHE_MAX,
- 			    sizeof(struct io_kiocb));
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 3de75eca1c92..e8baef4e5146 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -7,6 +7,7 @@
- #include <linux/fs.h>
- #include <linux/file.h>
- #include <linux/io_uring.h>
-+#include <linux/io_uring/cmd.h>
-=20
- #include "io_uring.h"
- #include "opdef.h"
-@@ -414,7 +415,7 @@ const struct io_issue_def io_issue_defs[] =3D {
- 		.plug			=3D 1,
- 		.iopoll			=3D 1,
- 		.iopoll_queue		=3D 1,
--		.async_size		=3D 2 * sizeof(struct io_uring_sqe),
-+		.async_size		=3D sizeof(struct io_uring_cmd_data),
- 		.prep			=3D io_uring_cmd_prep,
- 		.issue			=3D io_uring_cmd,
- 	},
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index af842e9b4eb9..629cb4266da6 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -16,10 +16,10 @@
- #include "rsrc.h"
- #include "uring_cmd.h"
-=20
--static struct uring_cache *io_uring_async_get(struct io_kiocb *req)
-+static struct io_uring_cmd_data *io_uring_async_get(struct io_kiocb *req=
-)
- {
- 	struct io_ring_ctx *ctx =3D req->ctx;
--	struct uring_cache *cache;
-+	struct io_uring_cmd_data *cache;
-=20
- 	cache =3D io_alloc_cache_get(&ctx->uring_cache);
- 	if (cache) {
-@@ -35,7 +35,7 @@ static struct uring_cache *io_uring_async_get(struct io=
-_kiocb *req)
- static void io_req_uring_cleanup(struct io_kiocb *req, unsigned int issu=
-e_flags)
- {
- 	struct io_uring_cmd *ioucmd =3D io_kiocb_to_cmd(req, struct io_uring_cm=
-d);
--	struct uring_cache *cache =3D req->async_data;
-+	struct io_uring_cmd_data *cache =3D req->async_data;
-=20
- 	if (issue_flags & IO_URING_F_UNLOCKED)
- 		return;
-@@ -183,7 +183,7 @@ static int io_uring_cmd_prep_setup(struct io_kiocb *r=
-eq,
- 				   const struct io_uring_sqe *sqe)
- {
- 	struct io_uring_cmd *ioucmd =3D io_kiocb_to_cmd(req, struct io_uring_cm=
-d);
--	struct uring_cache *cache;
-+	struct io_uring_cmd_data *cache;
-=20
- 	cache =3D io_uring_async_get(req);
- 	if (unlikely(!cache))
-@@ -260,7 +260,7 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int i=
-ssue_flags)
-=20
- 	ret =3D file->f_op->uring_cmd(ioucmd, issue_flags);
- 	if (ret =3D=3D -EAGAIN) {
--		struct uring_cache *cache =3D req->async_data;
-+		struct io_uring_cmd_data *cache =3D req->async_data;
-=20
- 		if (ioucmd->sqe !=3D (void *) cache)
- 			memcpy(cache, ioucmd->sqe, uring_sqe_size(req->ctx));
-diff --git a/io_uring/uring_cmd.h b/io_uring/uring_cmd.h
-index 7dba0f1efc58..f6837ee0955b 100644
---- a/io_uring/uring_cmd.h
-+++ b/io_uring/uring_cmd.h
-@@ -1,9 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-=20
--struct uring_cache {
--	struct io_uring_sqe sqes[2];
--};
--
- int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags);
- int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *s=
-qe);
-=20
---=20
-2.45.2
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 077f84684c18..d0d6ee85f32b 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -883,7 +883,7 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+ 	 * and advance us to the beginning.
+ 	 */
+ 	offset = buf_addr - imu->ubuf;
+-	iov_iter_bvec(iter, ddir, imu->bvec, imu->nr_bvecs, offset + len);
++	iov_iter_bvec(iter, ddir, imu->bvec, imu->nr_bvecs, len);
+ 
+ 	if (offset) {
+ 		/*
+@@ -905,7 +905,6 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+ 		const struct bio_vec *bvec = imu->bvec;
+ 
+ 		if (offset < bvec->bv_len) {
+-			iter->count -= offset;
+ 			iter->iov_offset = offset;
+ 		} else {
+ 			unsigned long seg_skip;
+@@ -916,7 +915,6 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+ 
+ 			iter->bvec += seg_skip;
+ 			iter->nr_segs -= seg_skip;
+-			iter->count -= bvec->bv_len + offset;
+ 			iter->iov_offset = offset & ((1UL << imu->folio_shift) - 1);
+ 		}
+ 	}
+-- 
+2.43.0
 
