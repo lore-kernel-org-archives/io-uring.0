@@ -1,97 +1,97 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408001F2C45
-	for <io-uring@vger.kernel.org>; Tue,  7 Jan 2025 14:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E5CD1F190E
+	for <io-uring@vger.kernel.org>; Tue,  7 Jan 2025 14:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736259071; cv=none; b=XyieqgdPlvr6/kK+xwjnInSHi1TyN2fxiqQvP90qv++V5bjhUSaA1DMxkrDXLMqPI1slUdNV/5YiQSyrnmXiNeyoxvxqCVtYJWVXJ2gsEmamuyR9WDFPzsa2pxfWCtk4JH67FySP/HdWuPsbo7YRn8n2l+5aBvtKHrWy7HIPNYU=
+	t=1736260327; cv=none; b=nYDCcyR1jaZvhM72HhcsJkWKoZiQ1iVdscEVjNgSCvBdQhzvOD+gbvGJh+1zd6NbnaAM89Afnw0xJo0Hpv3xSVyNaWr9PoRllB0Cw3XyhlPdtD6HrIdkHRXn4N79slMy1z3Yai1cfsPwn2bQbUHFChxLIwoOjsBBciz723kI04s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736259071; c=relaxed/simple;
-	bh=/OEpI+hErthwQr6/ZeGti7oaesYJnfHzyWz/+GNh+q4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=I2v7O7p7FRGH/tH93s9ylz922xklx4bBv9M9Hju33wU9RKKOUSkq/iDa37Q89xU4Esnc+OczZ35OXIBTbW82ipopUX/2CKevJVcI0LgglCSoVdSTw8SpW8mAqpd+X9CgIJuZpkTsD2aD0wepqbpGvv84N+y9ywsbWZM6f+fSoqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dsxJ7uib; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736260327; c=relaxed/simple;
+	bh=EwTI9gcVnuBMZMmwgi4Qg+kgB3qukr0/Je7Jwlw1doc=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=pWdktxtpE1j8nFQ8j7EaBoWK0Uyk/ZuCgFYisn6Okd7KC1G0PFW/0cbQLUwqGp89of/xj0wkWmOFUss0MkfM6jbt/XQZgDaGO3f0GzeNeVhVefJaaXx8EAMWUtrl5MONXCEgC+4JHfwcwwBzVVJM1zdhFrLSV779GqBhPd1mAYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=wwSm6y20; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dsxJ7uib"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aa67f31a858so2806650566b.2
-        for <io-uring@vger.kernel.org>; Tue, 07 Jan 2025 06:11:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="wwSm6y20"
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-844bff5ba1dso1232350039f.1
+        for <io-uring@vger.kernel.org>; Tue, 07 Jan 2025 06:32:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736259063; x=1736863863; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UGh/tgXi2Vy9Zhpo6lxTL6CZsFAYLpfoWGWSZG6TQUo=;
-        b=dsxJ7uibsdmwYkhC0xaX81SVAZL5wDWK4SE5lvulrCCxmSAqwpoho+OFC+vn3UpO/0
-         l7ADws6bZFHsvMyqlj8s2PRRSseLXCwbE8z9+W0niav2fFPv+0NBP/98y4zj6+rL4kLg
-         wWgZrxha5TcbRJG5/ZlCpLtEB6vjsCufLcWetRChMWznCL9jjeX1tbdC3TJz9cRz5XVM
-         VE1OIy77omAfiuSiQfimjsDW8pHkcR81yaDDlLCB5b4WLXwRwVoQJB2O2G2dGLMcyO4V
-         arMZ8BWYwDBBpWsmAx7Lbc/KJUIn/6bnfi4ShAGCLzLzYsWrf4eeXl9UsqMGZiAZvQPl
-         7N1A==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1736260320; x=1736865120; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8wFdIjs9ss266RZaJ9NRZ2i+XZujTSffS+OMUY6hkEI=;
+        b=wwSm6y20Lzt2fk94m3FYcZ/xZsETST1oMLD+yIcYCUu5+myeEV0Wq0Q0yDNPOkDsmv
+         F16hrZN1FcGI9/JD64K8xhUB57fc/ji4ogc7eEsLApvXEhmaVGWUOwKbEEv7udFqndl8
+         LP0m12vT43lLCVXSdtz2BAJABls4YELmnCVRVkATJXF4oyKLEWCAthkQJVQj31uJq0E4
+         ammJAY65kR9hVKk5OkXybxHADX8TEi3VC+NX/pDUA42icI00sFlhaBRl+zZWS27eFBlY
+         iX0mf2sRVKd8F/F9vLv3TUDB+T0beVKNESkvxbrlbu70HUL0Aqkzqhe3CvbARYvJ1Sep
+         IhyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736259063; x=1736863863;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UGh/tgXi2Vy9Zhpo6lxTL6CZsFAYLpfoWGWSZG6TQUo=;
-        b=ZyC/mBcqy4sLDUDPNIWBDiJAOSNfua8x1TOt32iq88kli+nimqxc8mjVXL+UvnLh7l
-         gAWuh7jrgTVr/LDKmmt3DJfwv+bbNGhAcV53XE8oWpRQNtXkGZtT+ak7AmrL2rekvDdI
-         8PODBteQApRSOpaetrxC+vXZLH9YrW/tdHaQrR8M2O5asBAP4NOL1/1axTUqPR7GV0gF
-         bxZxtnylcFv8AuvVho4SJJ4EF7A92Lwq3NGBfTnmu8tHbllO/5IPI7aeEJoCMsnZK4zr
-         525w/aKGgEOeZSWVOKsYJ/y/cMzZLVlxX/QUvlkFcT4NQ5be0C39VzoUuiaO3tN6fupk
-         D5qA==
-X-Gm-Message-State: AOJu0YwucDiRVuOa36AdulU11VR+RgnceZ8jwbQnyW0sfynaXdxbVbW3
-	QyWxaz+/tfbiDKHtXeQ6CIojHhSkllZjWY7cyrCXO11g8leXvT8/DCnoXQ==
-X-Gm-Gg: ASbGncv5890/Kotl2Xwf/dubAOXiJAYnSR/Me6XKRO8KvVLohTRfM6OlF/tWOzpz9b1
-	2DdcgIOKXbBrjaerzP4HYRr/QJbmn7Ouuj4+gZi5u6tjsex9W29JuQxZsmO1bHT4cCKpqWXL4FQ
-	FRkBGa2rPxkGLt9aC0/TNeDkfbDYZMa4Xvvwx8/FinWpvFs82qYUmYMg4qK3V7laSQw9CeL7Ekg
-	y85tV1iWjI8IfAE7idwWYsFqzHJpoOxxe2f7Sy0
-X-Google-Smtp-Source: AGHT+IEoXNEf0YMpc1CzUA2RJnjGcwlXUGNdqzzAGBKI3BVknq4EeuV9piv3pqiZEVn9tF/2zYHilA==
-X-Received: by 2002:a17:907:3f87:b0:aa6:a732:212b with SMTP id a640c23a62f3a-aac3365de80mr5683534866b.58.1736259062767;
-        Tue, 07 Jan 2025 06:11:02 -0800 (PST)
-Received: from 127.com ([2620:10d:c092:600::1:7fae])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0e82f58asm2390451166b.39.2025.01.07.06.11.02
+        d=1e100.net; s=20230601; t=1736260320; x=1736865120;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8wFdIjs9ss266RZaJ9NRZ2i+XZujTSffS+OMUY6hkEI=;
+        b=ADkrE4iQOMtWSkzljDWF1Uj8d9YwPxuUhq2oSoSVmYli97b/ztxa3rJfPCNFXr4i1s
+         dvzCrWpUzGVeCwlJ1eGyHQEVqwdHDlGCA0K8E9WKKTeMy4xOBx8jB7bjcEP3xIQa1W1u
+         SjtTrydRiGIhT7o88YLQEOWlVU/T1KJSAHo8jNtnNPicJYWrsChLIRMIGhVpNiofcgKL
+         bgdg6kxxBV2ibP0yZ7RqOcfBcPcQsQ9CrNBmngByv2am0Wgg511rtZdNv0T9uch9UEAT
+         9TzV5KC5Vg8cV1JxFcX889wQn4wy2U810cWGh4wJ2fPDxtxPyER/i8FwdorOacW2Eqbn
+         HK1A==
+X-Gm-Message-State: AOJu0YwRnRoA157J3OYawD8X6VDGjRTEl5zVCu9EzrC/R93W7dQT6pNU
+	lJd2QUEmtDDvqwxmxvYwdflNqUSQJrFiMW+Kty57rLsOAVpXRs/qQOH8+8SN6l4=
+X-Gm-Gg: ASbGncsBzhnrqP9fYI28nGvAjnfYnURIptC/dNSNRIApgCHAhxMFg1gy1rOzNSaX2RW
+	d8JVYWds7dsd3XyFec/0Y/+DxRE083NWCJ2gmkY/RqTN/p0hiuNB2dbG2byc/zMZDRh8z5+tTtO
+	tojx3TWO96iXXcfNXLSnYsjI8VWhqWyzqeFNGp8ENiSE9Kgbtgq7Nz1K/4HlkCMdoCAStpdKpQa
+	QcCVNbxGohC9LhftGjMzIxtIzL4O73SNbAmEkNqXfD6pGc=
+X-Google-Smtp-Source: AGHT+IGCtMXxekydrpOk/VqzXWBKg5FMV9YEm2pbiVRjMODEFeZQ5qVM+JK/bPh74TR3lgfmipb30w==
+X-Received: by 2002:a05:6e02:1c8d:b0:3a7:e0e6:65a5 with SMTP id e9e14a558f8ab-3c2d1f753e4mr531830485ab.6.1736260319962;
+        Tue, 07 Jan 2025 06:31:59 -0800 (PST)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e68c1e332dsm9973069173.140.2025.01.07.06.31.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 06:11:02 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com
-Subject: [PATCH 1/1] io_uring/rw: reissue only from the same task
-Date: Tue,  7 Jan 2025 14:11:56 +0000
-Message-ID: <e769b0d12b3c70861c2144b3ea58d3f08d542bbc.1736259071.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.47.1
+        Tue, 07 Jan 2025 06:31:59 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+Cc: syzbot+1bcb75613069ad4957fc@syzkaller.appspotmail.com
+In-Reply-To: <7e5f68281acb0f081f65fde435833c68a3b7e02f.1736257837.git.asml.silence@gmail.com>
+References: <7e5f68281acb0f081f65fde435833c68a3b7e02f.1736257837.git.asml.silence@gmail.com>
+Subject: Re: [PATCH 1/1] io_uring: silence false positive warnings
+Message-Id: <173626031901.181565.11287557073803698265.b4-ty@kernel.dk>
+Date: Tue, 07 Jan 2025 07:31:59 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-14bd6
 
-io_rw_should_reissue() tries to propagate EAGAIN back to io_uring when
-happens off the submission path, which is when it's staying within the
-same task, and so thread group checks don't make much sense.
 
-Cc: stable@vger.kernel.org
-Fixes: ef04688871f33 ("io_uring: don't block level reissue off completion path")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/rw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 07 Jan 2025 14:11:32 +0000, Pavel Begunkov wrote:
+> If we kill a ring and then immediately exit the task, we'll get
+> cancellattion running by the task and a kthread in io_ring_exit_work.
+> For DEFER_TASKRUN, we do want to limit it to only one entity executing
+> it, however it's currently not an issue as it's protected by uring_lock.
+> 
+> Silence lockdep assertions for now, we'll return to it later.
+> 
+> [...]
 
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index ca1b19d3d142..4d5aeff79130 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -485,7 +485,7 @@ static bool io_rw_should_reissue(struct io_kiocb *req)
- 	 * Play it safe and assume not safe to re-import and reissue if we're
- 	 * not in the original thread group (or in task context).
- 	 */
--	if (!same_thread_group(req->tctx->task, current) || !in_task())
-+	if (req->tctx->task != current || !in_task())
- 		return false;
- 	return true;
- }
+Applied, thanks!
+
+[1/1] io_uring: silence false positive warnings
+      commit: 60495b08cf7a6920035c5172a22655ca2001270b
+
+Best regards,
 -- 
-2.47.1
+Jens Axboe
+
+
 
