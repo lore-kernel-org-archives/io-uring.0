@@ -1,94 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE501A072A;
-	Tue, 28 Jan 2025 11:22:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A131A76AC
+	for <io-uring@vger.kernel.org>; Tue, 28 Jan 2025 13:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738063363; cv=none; b=WIed3RYgYQwzRJ8kptd6WG0A7azbhd6tlAJ8xEBUaWX2ov0kUBy04gQIi6BbWu8tMFYNKl75YN8czkWDvn+WWRj8QIwQhjvvqbNMsrA3L5EA19mI/kH3RDJIhN/o6fCHiQgk2PAGt6/tbb88ey/PRCR2gcvdGF3miENGXU3HHl8=
+	t=1738071580; cv=none; b=ZvKuX7IHbcBeyoPenq0iilqTyIoOXThtJxHLwm3FkLEfS3g9f3id1wxfaKyyh6kY6ZoSzFpgzrlnjiFd1rrZ8fVHToOymj88VL/SF+IigTxQIiVwLcV5rY+GBMSpywb1/Hr2C0zyrH/F/07tTADJI7muw3vSS+AdMO8P6Lsmm78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738063363; c=relaxed/simple;
-	bh=AJfDJn9pFkPItjs+l9CjDlC33TdlTCE01Kr4mfJIOJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g+cCyGb2/fsQowQreYNLg9qSUrLirXR7MS1CsgJTWL5oNhbhe1swUVk/CwSswe8PDryMSusPUfNKlrWUa3532e8R+YEEmmA4oN6QzpCINKU580mS3vkG99WHUT1yexgg3lDas9CYY6cW1AeZPm219ztniPyeJErJcq9Nc2Lg5xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=foTouGKI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738071580; c=relaxed/simple;
+	bh=srkResxdP4Pqydq94udETtB9G/kWLvauGsd1OifrxTQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CHzgV5liSzrPodOyeRPxL5Ulg4IXJg7MZT5fygthFyeEp74nMBZg/Ptjic9H6lx7D0IT1Y+4jRaVmMawMzKhwYGwcSIT9QpCb5Iw+nTzzzpG/89TPmC271f8vC53HVv93ZhG1srqheQo9NRsDPvF/P8+pHMGJx264jMZPbO+o6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=dyk+YEbt; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="foTouGKI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98109C4CEDF;
-	Tue, 28 Jan 2025 11:22:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738063362;
-	bh=AJfDJn9pFkPItjs+l9CjDlC33TdlTCE01Kr4mfJIOJE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=foTouGKI5Xpt6DiifiySGU1Px4B0JlxynZkL/A+4GJ+F1wUAFkM/N4G83a9sI8N06
-	 lsMHA2F0I+BGkV1h4oylhwmSeJznMzbN+UJy9qwbYRK5QlpfqNfv8Msq/ndA/iDm4I
-	 JYp3P2GR22dNEIcBnZOOATJGYPU+gMIFK9XfLLma3B24+UKToDLZL/ZLBF6bwp16qy
-	 HMKr9svtYad8MrCuOMMF5t2I0WLB8bGS9HGYMu9w94+SD6sanYCztaTmP2cubx4D+F
-	 lhSPEntAtoYhJR/j92VqRwE5MifEf7tNzvj9NQnTwv0sbHofELHMou005/QzH1lonP
-	 yczCENnq4hKEA==
-Date: Tue, 28 Jan 2025 12:22:37 +0100
-From: Joel Granados <joel.granados@kernel.org>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Jani Nikula <jani.nikula@intel.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Kees Cook <kees@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	openipmi-developer@lists.sourceforge.net, intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	intel-xe@lists.freedesktop.org, linux-hyperv@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org, linux-serial@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-aio@kvack.org, linux-fsdevel@vger.kernel.org, 
-	netfs@lists.linux.dev, codalist@coda.cs.cmu.edu, linux-mm@kvack.org, 
-	linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev, fsverity@lists.linux.dev, 
-	linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
-	keyrings@vger.kernel.org, Song Liu <song@kernel.org>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	"Darrick J. Wong" <djwong@kernel.org>, Corey Minyard <cminyard@mvista.com>
-Subject: Re: Re: Re: Re: [PATCH v2] treewide: const qualify ctl_tables where
- applicable
-Message-ID: <u2fwibsnbfvulxj6adigla6geiafh2vuve4hcyo4vmeytwjl7p@oz6xonrq5225>
-References: <20250110-jag-ctl_table_const-v2-1-0000e1663144@kernel.org>
- <Z4+jwDBrZNRgu85S@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <nslqrapp4v3rknjgtfk4cg64ha7rewrrg24aslo2e5jmxfwce5@t4chrpuk632k>
- <CAMj1kXEZPe8zk7s67SADK9wVH3cfBup-sAZSC6_pJyng9QT7aw@mail.gmail.com>
- <f4lfo2fb7ajogucsvisfd5sg2avykavmkizr6ycsllcrco4mo3@qt2zx4zp57zh>
- <87jzag9ugx.fsf@intel.com>
- <Z5epb86xkHQ3BLhp@casper.infradead.org>
+	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="dyk+YEbt"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-386329da1d9so2904606f8f.1
+        for <io-uring@vger.kernel.org>; Tue, 28 Jan 2025 05:39:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1738071577; x=1738676377; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CelVTbMR7GPzFcsvtgcyQD9/IaPZPL2IppoN0M2ePcg=;
+        b=dyk+YEbthISWkdcqxuLiVFjyarAOmKSoohVqr6g4AIo3AVs06haipYSpJStqqYlj/c
+         uZr5cQb5czQzA2BJMjX8YrVI7uGgQ7aXEQYMlARjZCEbydkcn5yqLB+kbyZ9wIAzdxN3
+         hOKg1Ed6Id9TQu4FDJ6N4n9fOrZwKzRQjOD/GhUfaOjF8WDaA1n/mWUjNlUw7slDAtsB
+         wlsvCVPGYpywLO9yd/2aViQWO4fYDH3FlhEZ0+y8qxjxzfXEt4jmFboqr3Qif/0uFW/v
+         V6gkjSBEJYLLGXY68b7SEmAUk0dhh7udzkAseEIRHsMr4nNHlVhZNInk9VpXJ47B5bWW
+         26Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738071577; x=1738676377;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CelVTbMR7GPzFcsvtgcyQD9/IaPZPL2IppoN0M2ePcg=;
+        b=fI9C6OxX5xOA0eGj2BS3Whs1S33K1fiVfH4jZ5kDQPKPXRDPu263lKDYxrHyouz9Tp
+         INhwvilGLxYZnKLTS6Mhq0JJFXdA9XQtR/FQoEYqfV0su5yDb9eFLMroMUbXnlETsF/I
+         oCL5J1GyeGfO1HcDPBJ7mvuVSr6dkEW1YaOFjDG60UarYqTpy7Uo6DLc2wpsTiQKVLaF
+         Ob9HpdpnhAgV6sz5dthJq0GBm8zD5mws/IIxiRryZ4BPE0jXOsfRA2IF5IJVLdKB9mHZ
+         XwpEGA4GwHjaghmVGSeyJgzuC+MuZZ3AUXoMToSE5Fr2yAIbOYb3SahIGEbAeiCUsVVS
+         AU4A==
+X-Forwarded-Encrypted: i=1; AJvYcCUWvuiwXVZiAClpQwsutQRHBrLyWZRiDUQUgOSNfvYO2SLZKuJ1rTKH9G6GV7Xf3VozFRPzTFNpSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy14IyX1IzAxnN2mlswniaeUoEsccDOTvHtJgKcu7EIa6q2tosB
+	27RZIYUGehHPZMFs+yqEtXmG3GWVy7ilur6ZFkKMZZINcPu5hxIfzLqf4sH2HncYTt4ob8WEMpt
+	hUwc=
+X-Gm-Gg: ASbGncvptqKi07edmZm1kx9XrL+MNS2MMw2mVHbWJG3yHJe0p+yCJxoLiqC/k7Dmkx2
+	3PXrHtJYaQVGkiRdS0IaWG0oSPfySVXX54GdogGbmV3wU2xL1D1d1dFRMo0mBb5e/skbOS5r7tb
+	bNB+NRBG570zImMmsjdo9TAESCQncG4pOkQc/shQ2YE5GJiK5nbKUdG/PuyEVv8EOdliS0gXsaV
+	Q7snb7oWHVotogDH27Tt4KQUR3X9l4UctsP0lktQxsX7mM72TDBIi5K6GAKW7w2j6YTOpBCpxxH
+	XiHEEC47v4MeqS/+wn0O3p6qD7DnlD/emfTNVUofwFQBRVom6y+Z1JENIhTOhh+lVU5VcEvt92x
+	z/aEgvQ8K2KsEy7k=
+X-Google-Smtp-Source: AGHT+IF8M/ADaKWu3naSkh4B3oSig0LdPOLITkVOWQq8v9u1yCs+3hetH7yo8n6SXAQJJZxuKwKRAQ==
+X-Received: by 2002:a05:6000:1a8c:b0:38a:888c:6786 with SMTP id ffacd0b85a97d-38bf57c063fmr41035427f8f.52.1738071576767;
+        Tue, 28 Jan 2025 05:39:36 -0800 (PST)
+Received: from raven.intern.cm-ag (p200300dc6f2b6900023064fffe740809.dip0.t-ipconnect.de. [2003:dc:6f2b:6900:230:64ff:fe74:809])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1bb02dsm14160780f8f.70.2025.01.28.05.39.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jan 2025 05:39:36 -0800 (PST)
+From: Max Kellermann <max.kellermann@ionos.com>
+To: axboe@kernel.dk,
+	asml.silence@gmail.com,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Max Kellermann <max.kellermann@ionos.com>
+Subject: [PATCH 1/8] io_uring/io-wq: eliminate redundant io_work_get_acct() calls
+Date: Tue, 28 Jan 2025 14:39:20 +0100
+Message-ID: <20250128133927.3989681-2-max.kellermann@ionos.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250128133927.3989681-1-max.kellermann@ionos.com>
+References: <20250128133927.3989681-1-max.kellermann@ionos.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z5epb86xkHQ3BLhp@casper.infradead.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 27, 2025 at 03:42:39PM +0000, Matthew Wilcox wrote:
-> On Mon, Jan 27, 2025 at 04:55:58PM +0200, Jani Nikula wrote:
-> > You could have static const within functions too. You get the rodata
-> > protection and function local scope, best of both worlds?
-> 
-> timer_active is on the stack, so it can't be static const.
-> 
-> Does this really need to be cc'd to such a wide distribution list?
-That is a very good question. I removed 160 people from the original
-e-mail and left the ones that where previously involved with this patch
-and left all the lists for good measure. But it seems I can reduce it
-even more.
+Instead of calling io_work_get_acct() again, pass acct to
+io_wq_insert_work() and io_wq_remove_pending().
 
-How about this: For these treewide efforts I just leave the people that
-are/were involved in the series and add two lists: linux-kernel and
-linux-hardening.
+This atomic access in io_work_get_acct() was done under the
+`acct->lock`, and optimizing it away reduces lock contention a bit.
 
-Unless someone screams, I'll try this out on my next treewide.
+Signed-off-by: Max Kellermann <max.kellermann@ionos.com>
+---
+ io_uring/io-wq.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-Thx for the feedback
-
-Best
-
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 5d0928f37471..6d26f6f068af 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -903,9 +903,8 @@ static void io_run_cancel(struct io_wq_work *work, struct io_wq *wq)
+ 	} while (work);
+ }
+ 
+-static void io_wq_insert_work(struct io_wq *wq, struct io_wq_work *work)
++static void io_wq_insert_work(struct io_wq *wq, struct io_wq_acct *acct, struct io_wq_work *work)
+ {
+-	struct io_wq_acct *acct = io_work_get_acct(wq, work);
+ 	unsigned int hash;
+ 	struct io_wq_work *tail;
+ 
+@@ -951,7 +950,7 @@ void io_wq_enqueue(struct io_wq *wq, struct io_wq_work *work)
+ 	}
+ 
+ 	raw_spin_lock(&acct->lock);
+-	io_wq_insert_work(wq, work);
++	io_wq_insert_work(wq, acct, work);
+ 	clear_bit(IO_ACCT_STALLED_BIT, &acct->flags);
+ 	raw_spin_unlock(&acct->lock);
+ 
+@@ -1021,10 +1020,10 @@ static bool io_wq_worker_cancel(struct io_worker *worker, void *data)
+ }
+ 
+ static inline void io_wq_remove_pending(struct io_wq *wq,
++					struct io_wq_acct *acct,
+ 					 struct io_wq_work *work,
+ 					 struct io_wq_work_node *prev)
+ {
+-	struct io_wq_acct *acct = io_work_get_acct(wq, work);
+ 	unsigned int hash = io_get_work_hash(work);
+ 	struct io_wq_work *prev_work = NULL;
+ 
+@@ -1051,7 +1050,7 @@ static bool io_acct_cancel_pending_work(struct io_wq *wq,
+ 		work = container_of(node, struct io_wq_work, list);
+ 		if (!match->fn(work, match->data))
+ 			continue;
+-		io_wq_remove_pending(wq, work, prev);
++		io_wq_remove_pending(wq, acct, work, prev);
+ 		raw_spin_unlock(&acct->lock);
+ 		io_run_cancel(work, wq);
+ 		match->nr_pending++;
 -- 
+2.45.2
 
-Joel Granados
