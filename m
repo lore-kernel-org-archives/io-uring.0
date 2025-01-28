@@ -1,72 +1,73 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E24B15CD41
-	for <io-uring@vger.kernel.org>; Tue, 28 Jan 2025 13:39:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857261A9B2A
+	for <io-uring@vger.kernel.org>; Tue, 28 Jan 2025 13:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738071582; cv=none; b=TjtM3T4LyBnBo/G4CnY7F29/bmNCRWkt2f38EmIpp5HYByrXMdO2/eUBMVmLfbZ7y1YA8V+ELpb8MB3h12fNMI4YfDAuiz+hOYmFcHFO2aS4293rDfR4K2Co+JXcNjBK1QHTn/Yuhl7vE+4rtWM63cjitn1Dh8hxL8lecQJqldc=
+	t=1738071583; cv=none; b=N0YbjWGcYigTn4GH9dygE/PT9fbYlDrQRZ53gkr4n7DPPE90IgS4IIkLIr1VCbEus+ojC0fSW8P/whrARK/hQXy1egZL+/BBVpgaTPvcmovGiICnjVmJrChTwF7JoJceTj9rBSSfQES14aQKpsN7CGHbSp3C8TZIPWcbEMhA8wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738071582; c=relaxed/simple;
-	bh=mvwqkwgQ/VbBCILFRqc5Ce5W30pZPIIiXsjC5pLsUOw=;
+	s=arc-20240116; t=1738071583; c=relaxed/simple;
+	bh=nxpfJ3wB5nCck0yc+TIyGkKA+HJxeVDU44WyMwYM6D8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bpmT4qjSrFOtl5n2yX7tjhkdtfO4M6N78nJf/fe02oBzfTAjDyIs2cDM599SugFJhYz+XjcWlqJO/vxbVxGPCHPJ3pl/qM9rY2qgp0wrWNQVKAY4jz5nZN4lv7o0oHtmJy+bdvH4xoMDmqhBL9t6OwTgpnHDnDh5zt/ASI1hwKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=dmcTbvJq; arc=none smtp.client-ip=209.85.128.52
+	 MIME-Version; b=thnTVqwX5yQ4ZDTj9PxP5ppO7QBf/gq7j1uLNMAzpe/j2Rodwre/oiXmuuHJIDlxDaLwfsLoMfAtE8UFpdwRlOYkEQgE9k8T9TUWYyIiTCjQ/+85ZMlD7lmuluMREpAQH4CzG9lCpOqhw/xQWqWPkLoOEdNDxxM1v/vPdlyG98k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=eRTpXbZo; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="dmcTbvJq"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-436345cc17bso40185305e9.0
-        for <io-uring@vger.kernel.org>; Tue, 28 Jan 2025 05:39:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="eRTpXbZo"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-38637614567so2743724f8f.3
+        for <io-uring@vger.kernel.org>; Tue, 28 Jan 2025 05:39:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1738071578; x=1738676378; darn=vger.kernel.org;
+        d=ionos.com; s=google; t=1738071580; x=1738676380; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3Mh2jFvUal50P1kZhLOmeKi1LJ4OQZ7qeSID+lPKLRI=;
-        b=dmcTbvJq5LwZgER+aOP9EMfJB3fym6t/rTAyYesr4HpBjdKqfHKVrb8FBZGdfniwpt
-         o+pjOkEljT2cCZuc21djJ3qYoI7jN0qvMp7OVgs3vvSQ/3ZxGAe1xE1SLGhtMfJBVB7z
-         hBmFeDAuv9MVacejRHva/7JfPnToJVPNfxEf4q76/PyFAq3v5R6QfPNR4eDjzDdhPfLx
-         QUVkubAoOE3n7Aba6Va/pYusD57mRzHsPkK+ypsLUxjhrquytPtK/AfHFk0ReRiteLDG
-         wc4pzbLyQoYuxVRsD3v8B3RjA7V11GZ4GzsmLx1es76o1m/XgAOMI8mLTmRjhGvDyVJQ
-         zIOA==
+        bh=q0Sb1zzl9lHTXysx3Zj4dezvRrbNaG/3CIED1Ppo3HQ=;
+        b=eRTpXbZo0q2KH4RaOi4L4vOHpN94ehAMpw7bXAForil75RQdh3FDWOZRpEZ/KHC2ky
+         Cg5JSf1drvBFLgUjjMwU2ignlHkaXDN5x2i7gldGGML6v3YaGU/nS8EOrngNECxgEqQ6
+         lNbdXH8/rmV2m7HDcj1DpXEjVqaQ1c3K6sKYVbPr2WEUZK99lPEjorFme5aG5/FU3UpV
+         tABRum2vIikFLNjIsToRoUIzn3c4+ABiOVF6hXIceIDipyyQ6qf7nsXH2WLHwR7NYT6Q
+         vGLhgyBVBBMD9sc9A2qjDaQlQfDEmjgJvmh6rpJJeL9EktYw+XU0aJdSaD6vcb8cJApM
+         ixtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738071578; x=1738676378;
+        d=1e100.net; s=20230601; t=1738071580; x=1738676380;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3Mh2jFvUal50P1kZhLOmeKi1LJ4OQZ7qeSID+lPKLRI=;
-        b=kJ2Y0cm128PcVbircly1vFJ7kneOlzbMHLvLJkesb9eA0T3kTolWdVcfwDnXd77lgW
-         P1YGCgv7qteLHRNRFbg2JJJhCSbztNg5S1gvHwieQ6GVIBolst/TyZTzv+SwktN28TZH
-         0qaLJB6xH+WRTVBhHfd3vhB2FGEUgP57nGLEmNLSh2k/uH0OKMe6QkG+aA14PZubJFiI
-         maVuZWidMQm7A7nl0E5997FMrs+bsP1zhx9O0FGzsLpAfnTL68Fz5NibPhzJgQQzm1ls
-         6vJxqNXYM5daI2YPKJzSP46G70wYPWunYZBv8TEZhtslJOqi1QxnDJXOBB8LTXsqaw/K
-         lUOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVAnZLjZ/yPdHJCFMwQeT+PQz7mafX5fte/eAUx5CCEg1AFw6dGS5UA/H3xsL7ySJGG6sfN4l2WDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYPd9BezzGlQmHKlokU/84wHLEkcbyCZtIM8K0FPdTUzSeNl71
-	r65e4KOSfMYSbo0a5bPQxcLR8nz363Ahz9RyXLwAGhbH22sB0DjIHFMVufIP2dE=
-X-Gm-Gg: ASbGnctxi1EqvsWtrh0IJRFlFhd6EhEI94DbGtiCLfgOlvsUDOtJVLzdEm65p7Xekml
-	CrxdBgTG4oZFJjxn+qbJqBF7fUJXtwMU4Q+65au5IGTxJ9P/pmLfd0UM9Tc/O+YtyzoY2/v8czO
-	QCI2TAsFdozybUQy6YwK6/jLOJMQI0UXikFYIZNdMYtQcRiwbExIN3QPpx2RjXRb0AAKW1Jhr/o
-	rWvpzP7pMeb4mWDdmtjSj3M1L79gW1VAA+FE6RaVHncH3T1cUdpWxKnZSXmcqi6pmJuShYkDlJJ
-	/SglwQF1xA3chykZ671qikznro9FYMsgnIglvP0HPCLqGNQkcJ52+7dDwvhUzn5zXp/wLk36erL
-	hRBAFm0/ewFSxGNk=
-X-Google-Smtp-Source: AGHT+IHgeKju9Jzoyobd7WVJUbZyx4+buUWEWE2AbiOXa5JBGh33t4+gMIX8Byr7egoIWtLFm9Wfsg==
-X-Received: by 2002:a05:600c:1d19:b0:434:f623:9ff3 with SMTP id 5b1f17b1804b1-438913e0303mr456136895e9.15.1738071577698;
-        Tue, 28 Jan 2025 05:39:37 -0800 (PST)
+        bh=q0Sb1zzl9lHTXysx3Zj4dezvRrbNaG/3CIED1Ppo3HQ=;
+        b=NU9UwbSn/JkrN1UTYDcaYkHLjjsjsmECk+zENseE45OGx84Ub6HKL3FX9ApBQLR0As
+         wAVRol8sknyioU0IVKyWHeAVu9ZP5QUrrlAx1BXLrEirOkx/n+58UP+qmRGggl5LBRY6
+         TKLw6rQoPqOPXR4hERJnQ/QRCOZijrozt2ng0Zj85MEqq5G5eN2U0nYFVsX2ItX3jreI
+         mLe0S70Bxesdxsv6Ciq3k5aArQXHPQ5mUYySOrHu4urc2yL4y3s7eYNZJnev/FlJ1L7d
+         kmGW8tCrqqK2jDgxxtxo0DTWSudPSs1izffRjZRw/2uJKwhz4yi/V8JebgD1DN86uUC8
+         C/FQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUz6iPLQ63CgQia+QF/8rHcuRYLO2forgG6Xtlb/Rj8Syu3rBDoRyH93APcg9n8KuNm7BwlHMFLVA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw40auSDnwwjwPamytzlK4XnSqS4YaoWYMuPKl2Gx5xNMFw+Cd6
+	bCSGLJh/KOB1pswEpmbUrPPX0j0xdxeDPqe8uuXJrPSDI1QNOoGGQQ/xc9NR4p7+qOgep49Mfis
+	V2A4=
+X-Gm-Gg: ASbGncuQaoN1M/DtG8gxWhrJCpK017pxvqF3N5rU71xBxCrFrifX7XyIBUw9J7a2cHN
+	qj2hLST17UtKFS7dVi0EVXEolblFsvcjP+KWLN2yV+aDJmDo7s4kQNk3bnyViGWo8177rIRMaja
+	oBjnsM8V3OK/NdrbzEKlrQSIEw5qrXdAyjmX5crZMWAROjHF2/0/Wb7HQBAZYD2LuChjus9V2Z8
+	NLiOvhY+eaIrpxDxSbqdg4M49Xw+hsue053WqUmiH12fXv0WSOtrqVhseSitqauJ4CnychcsT+X
+	UXoHgPHdA621UgXsg1VRPGcx//ZRmdGlR4LuvVattHGRRKBg++q01lSKrx5s2ifpxNx1/1pqUzq
+	TSq3Ndjz+DMTBXNQ=
+X-Google-Smtp-Source: AGHT+IGcdEBNubL7sukg4uu3ewHXC+3+vOT/IFRpwXZUOGiTZ50OLbhjM/qTzmALbuEz5d8UD8/mSw==
+X-Received: by 2002:a05:6000:18a9:b0:38a:86fe:52dc with SMTP id ffacd0b85a97d-38c3b0cbb61mr9338899f8f.13.1738071579794;
+        Tue, 28 Jan 2025 05:39:39 -0800 (PST)
 Received: from raven.intern.cm-ag (p200300dc6f2b6900023064fffe740809.dip0.t-ipconnect.de. [2003:dc:6f2b:6900:230:64ff:fe74:809])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1bb02dsm14160780f8f.70.2025.01.28.05.39.36
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1bb02dsm14160780f8f.70.2025.01.28.05.39.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jan 2025 05:39:37 -0800 (PST)
+        Tue, 28 Jan 2025 05:39:38 -0800 (PST)
 From: Max Kellermann <max.kellermann@ionos.com>
 To: axboe@kernel.dk,
 	asml.silence@gmail.com,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Max Kellermann <max.kellermann@ionos.com>
-Subject: [PATCH 2/8] io_uring/io-wq: add io_worker.acct pointer
-Date: Tue, 28 Jan 2025 14:39:21 +0100
-Message-ID: <20250128133927.3989681-3-max.kellermann@ionos.com>
+Subject: [PATCH 4/8] io_uring/io-wq: cache work->flags in variable
+Date: Tue, 28 Jan 2025 14:39:23 +0100
+Message-ID: <20250128133927.3989681-5-max.kellermann@ionos.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250128133927.3989681-1-max.kellermann@ionos.com>
 References: <20250128133927.3989681-1-max.kellermann@ionos.com>
@@ -78,138 +79,173 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This replaces the `IO_WORKER_F_BOUND` flag.  All code that checks this
-flag is not interested in knowing whether this is a "bound" worker;
-all it does with this flag is determine the `io_wq_acct` pointer.  At
-the cost of an extra pointer field, we can eliminate some fragile
-pointer arithmetic.  In turn, the `create_index` and `index` fields
-are not needed anymore.
+This eliminates several redundant atomic reads and therefore reduces
+the duration the surrounding spinlocks are held.
+
+In several io_uring benchmarks, this reduced the CPU time spent in
+queued_spin_lock_slowpath() considerably:
+
+io_uring benchmark with a flood of `IORING_OP_NOP` and `IOSQE_ASYNC`:
+
+    38.86%     -1.49%  [kernel.kallsyms]  [k] queued_spin_lock_slowpath
+     6.75%     +0.36%  [kernel.kallsyms]  [k] io_worker_handle_work
+     2.60%     +0.19%  [kernel.kallsyms]  [k] io_nop
+     3.92%     +0.18%  [kernel.kallsyms]  [k] io_req_task_complete
+     6.34%     -0.18%  [kernel.kallsyms]  [k] io_wq_submit_work
+
+HTTP server, static file:
+
+    42.79%     -2.77%  [kernel.kallsyms]     [k] queued_spin_lock_slowpath
+     2.08%     +0.23%  [kernel.kallsyms]     [k] io_wq_submit_work
+     1.19%     +0.20%  [kernel.kallsyms]     [k] amd_iommu_iotlb_sync_map
+     1.46%     +0.15%  [kernel.kallsyms]     [k] ep_poll_callback
+     1.80%     +0.15%  [kernel.kallsyms]     [k] io_worker_handle_work
+
+HTTP server, PHP:
+
+    35.03%     -1.80%  [kernel.kallsyms]     [k] queued_spin_lock_slowpath
+     0.84%     +0.21%  [kernel.kallsyms]     [k] amd_iommu_iotlb_sync_map
+     1.39%     +0.12%  [kernel.kallsyms]     [k] _copy_to_iter
+     0.21%     +0.10%  [kernel.kallsyms]     [k] update_sd_lb_stats
 
 Signed-off-by: Max Kellermann <max.kellermann@ionos.com>
 ---
- io_uring/io-wq.c | 23 ++++++++---------------
- 1 file changed, 8 insertions(+), 15 deletions(-)
+ io_uring/io-wq.c | 33 +++++++++++++++++++++------------
+ io_uring/io-wq.h |  7 ++++++-
+ 2 files changed, 27 insertions(+), 13 deletions(-)
 
 diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 6d26f6f068af..197352ef78c7 100644
+index dfdd45ebe4bb..ba9974e6f521 100644
 --- a/io_uring/io-wq.c
 +++ b/io_uring/io-wq.c
-@@ -30,7 +30,6 @@ enum {
- 	IO_WORKER_F_UP		= 0,	/* up and active */
- 	IO_WORKER_F_RUNNING	= 1,	/* account as running */
- 	IO_WORKER_F_FREE	= 2,	/* worker on free list */
--	IO_WORKER_F_BOUND	= 3,	/* is doing bounded work */
- };
+@@ -170,9 +170,9 @@ static inline struct io_wq_acct *io_get_acct(struct io_wq *wq, bool bound)
+ }
  
- enum {
-@@ -46,12 +45,12 @@ enum {
-  */
- struct io_worker {
- 	refcount_t ref;
--	int create_index;
- 	unsigned long flags;
- 	struct hlist_nulls_node nulls_node;
- 	struct list_head all_list;
- 	struct task_struct *task;
- 	struct io_wq *wq;
-+	struct io_wq_acct *acct;
- 
- 	struct io_wq_work *cur_work;
- 	raw_spinlock_t lock;
-@@ -79,7 +78,6 @@ struct io_worker {
- struct io_wq_acct {
- 	unsigned nr_workers;
- 	unsigned max_workers;
--	int index;
- 	atomic_t nr_running;
- 	raw_spinlock_t lock;
- 	struct io_wq_work_list work_list;
-@@ -135,7 +133,7 @@ struct io_cb_cancel_data {
- 	bool cancel_all;
- };
- 
--static bool create_io_worker(struct io_wq *wq, int index);
-+static bool create_io_worker(struct io_wq *wq, struct io_wq_acct *acct);
- static void io_wq_dec_running(struct io_worker *worker);
- static bool io_acct_cancel_pending_work(struct io_wq *wq,
- 					struct io_wq_acct *acct,
-@@ -167,7 +165,7 @@ static inline struct io_wq_acct *io_work_get_acct(struct io_wq *wq,
+ static inline struct io_wq_acct *io_work_get_acct(struct io_wq *wq,
+-						  struct io_wq_work *work)
++						  unsigned int work_flags)
+ {
+-	return io_get_acct(wq, !(atomic_read(&work->flags) & IO_WQ_WORK_UNBOUND));
++	return io_get_acct(wq, !(work_flags & IO_WQ_WORK_UNBOUND));
+ }
  
  static inline struct io_wq_acct *io_wq_get_acct(struct io_worker *worker)
- {
--	return io_get_acct(worker->wq, test_bit(IO_WORKER_F_BOUND, &worker->flags));
-+	return worker->acct;
- }
- 
- static void io_worker_ref_put(struct io_wq *wq)
-@@ -323,7 +321,7 @@ static bool io_wq_create_worker(struct io_wq *wq, struct io_wq_acct *acct)
- 	raw_spin_unlock(&wq->lock);
- 	atomic_inc(&acct->nr_running);
- 	atomic_inc(&wq->worker_refs);
--	return create_io_worker(wq, acct->index);
-+	return create_io_worker(wq, acct);
- }
- 
- static void io_wq_inc_running(struct io_worker *worker)
-@@ -343,7 +341,7 @@ static void create_worker_cb(struct callback_head *cb)
- 
- 	worker = container_of(cb, struct io_worker, create_work);
- 	wq = worker->wq;
--	acct = &wq->acct[worker->create_index];
-+	acct = worker->acct;
- 	raw_spin_lock(&wq->lock);
- 
- 	if (acct->nr_workers < acct->max_workers) {
-@@ -352,7 +350,7 @@ static void create_worker_cb(struct callback_head *cb)
+@@ -457,9 +457,14 @@ static void __io_worker_idle(struct io_wq_acct *acct, struct io_worker *worker)
  	}
- 	raw_spin_unlock(&wq->lock);
- 	if (do_create) {
--		create_io_worker(wq, worker->create_index);
-+		create_io_worker(wq, acct);
- 	} else {
- 		atomic_dec(&acct->nr_running);
- 		io_worker_ref_put(wq);
-@@ -384,7 +382,6 @@ static bool io_queue_worker_create(struct io_worker *worker,
- 
- 	atomic_inc(&wq->worker_refs);
- 	init_task_work(&worker->create_work, func);
--	worker->create_index = acct->index;
- 	if (!task_work_add(wq->task, &worker->create_work, TWA_SIGNAL)) {
- 		/*
- 		 * EXIT may have been set after checking it above, check after
-@@ -821,9 +818,8 @@ static void io_workqueue_create(struct work_struct *work)
- 		kfree(worker);
  }
  
--static bool create_io_worker(struct io_wq *wq, int index)
-+static bool create_io_worker(struct io_wq *wq, struct io_wq_acct *acct)
++static inline unsigned int __io_get_work_hash(unsigned int work_flags)
++{
++	return work_flags >> IO_WQ_HASH_SHIFT;
++}
++
+ static inline unsigned int io_get_work_hash(struct io_wq_work *work)
  {
--	struct io_wq_acct *acct = &wq->acct[index];
- 	struct io_worker *worker;
- 	struct task_struct *tsk;
+-	return atomic_read(&work->flags) >> IO_WQ_HASH_SHIFT;
++	return __io_get_work_hash(atomic_read(&work->flags));
+ }
  
-@@ -842,12 +838,10 @@ static bool create_io_worker(struct io_wq *wq, int index)
+ static bool io_wait_on_hash(struct io_wq *wq, unsigned int hash)
+@@ -489,17 +494,19 @@ static struct io_wq_work *io_get_next_work(struct io_wq_acct *acct,
+ 	struct io_wq *wq = worker->wq;
  
- 	refcount_set(&worker->ref, 1);
- 	worker->wq = wq;
-+	worker->acct = acct;
- 	raw_spin_lock_init(&worker->lock);
- 	init_completion(&worker->ref_done);
+ 	wq_list_for_each(node, prev, &acct->work_list) {
++		unsigned int work_flags;
+ 		unsigned int hash;
  
--	if (index == IO_WQ_ACCT_BOUND)
--		set_bit(IO_WORKER_F_BOUND, &worker->flags);
--
- 	tsk = create_io_thread(io_wq_worker, worker, NUMA_NO_NODE);
- 	if (!IS_ERR(tsk)) {
- 		io_init_new_worker(wq, worker, tsk);
-@@ -1176,7 +1170,6 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
- 	for (i = 0; i < IO_WQ_ACCT_NR; i++) {
- 		struct io_wq_acct *acct = &wq->acct[i];
+ 		work = container_of(node, struct io_wq_work, list);
  
--		acct->index = i;
- 		atomic_set(&acct->nr_running, 0);
- 		INIT_WQ_LIST(&acct->work_list);
- 		raw_spin_lock_init(&acct->lock);
+ 		/* not hashed, can run anytime */
+-		if (!io_wq_is_hashed(work)) {
++		work_flags = atomic_read(&work->flags);
++		if (!__io_wq_is_hashed(work_flags)) {
+ 			wq_list_del(&acct->work_list, node, prev);
+ 			return work;
+ 		}
+ 
+-		hash = io_get_work_hash(work);
++		hash = __io_get_work_hash(work_flags);
+ 		/* all items with this hash lie in [work, tail] */
+ 		tail = wq->hash_tail[hash];
+ 
+@@ -596,12 +603,13 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
+ 		/* handle a whole dependent link */
+ 		do {
+ 			struct io_wq_work *next_hashed, *linked;
+-			unsigned int hash = io_get_work_hash(work);
++			unsigned int work_flags = atomic_read(&work->flags);
++			unsigned int hash = __io_get_work_hash(work_flags);
+ 
+ 			next_hashed = wq_next_work(work);
+ 
+ 			if (do_kill &&
+-			    (atomic_read(&work->flags) & IO_WQ_WORK_UNBOUND))
++			    (work_flags & IO_WQ_WORK_UNBOUND))
+ 				atomic_or(IO_WQ_WORK_CANCEL, &work->flags);
+ 			wq->do_work(work);
+ 			io_assign_current_work(worker, NULL);
+@@ -917,18 +925,19 @@ static void io_run_cancel(struct io_wq_work *work, struct io_wq *wq)
+ 	} while (work);
+ }
+ 
+-static void io_wq_insert_work(struct io_wq *wq, struct io_wq_acct *acct, struct io_wq_work *work)
++static void io_wq_insert_work(struct io_wq *wq, struct io_wq_acct *acct,
++			      struct io_wq_work *work, unsigned int work_flags)
+ {
+ 	unsigned int hash;
+ 	struct io_wq_work *tail;
+ 
+-	if (!io_wq_is_hashed(work)) {
++	if (!__io_wq_is_hashed(work_flags)) {
+ append:
+ 		wq_list_add_tail(&work->list, &acct->work_list);
+ 		return;
+ 	}
+ 
+-	hash = io_get_work_hash(work);
++	hash = __io_get_work_hash(work_flags);
+ 	tail = wq->hash_tail[hash];
+ 	wq->hash_tail[hash] = work;
+ 	if (!tail)
+@@ -944,8 +953,8 @@ static bool io_wq_work_match_item(struct io_wq_work *work, void *data)
+ 
+ void io_wq_enqueue(struct io_wq *wq, struct io_wq_work *work)
+ {
+-	struct io_wq_acct *acct = io_work_get_acct(wq, work);
+ 	unsigned int work_flags = atomic_read(&work->flags);
++	struct io_wq_acct *acct = io_work_get_acct(wq, work_flags);
+ 	struct io_cb_cancel_data match = {
+ 		.fn		= io_wq_work_match_item,
+ 		.data		= work,
+@@ -964,7 +973,7 @@ void io_wq_enqueue(struct io_wq *wq, struct io_wq_work *work)
+ 	}
+ 
+ 	raw_spin_lock(&acct->lock);
+-	io_wq_insert_work(wq, acct, work);
++	io_wq_insert_work(wq, acct, work, work_flags);
+ 	clear_bit(IO_ACCT_STALLED_BIT, &acct->flags);
+ 	raw_spin_unlock(&acct->lock);
+ 
+diff --git a/io_uring/io-wq.h b/io_uring/io-wq.h
+index b3b004a7b625..d4fb2940e435 100644
+--- a/io_uring/io-wq.h
++++ b/io_uring/io-wq.h
+@@ -54,9 +54,14 @@ int io_wq_cpu_affinity(struct io_uring_task *tctx, cpumask_var_t mask);
+ int io_wq_max_workers(struct io_wq *wq, int *new_count);
+ bool io_wq_worker_stopped(void);
+ 
++static inline bool __io_wq_is_hashed(unsigned int work_flags)
++{
++	return work_flags & IO_WQ_WORK_HASHED;
++}
++
+ static inline bool io_wq_is_hashed(struct io_wq_work *work)
+ {
+-	return atomic_read(&work->flags) & IO_WQ_WORK_HASHED;
++	return __io_wq_is_hashed(atomic_read(&work->flags));
+ }
+ 
+ typedef bool (work_cancel_fn)(struct io_wq_work *, void *);
 -- 
 2.45.2
 
