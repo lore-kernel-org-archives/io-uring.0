@@ -1,88 +1,116 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 270401E1C1F
-	for <io-uring@vger.kernel.org>; Wed, 29 Jan 2025 19:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFB2190462;
+	Wed, 29 Jan 2025 19:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738177893; cv=none; b=RdqfyrXiYGeAfBicrbrqkNA1KWgY/Ik75KYrpzMHpcosiIUs5tlj2T8GwPXjjuLxiawud9xg+P3lMaRginM/aMC+uKd/OU8VRqdr3cFYs0Q1CV1FXbhjrGKjJ7k59o3RsWR1ckyIHJZqUnMk17DC6YcwRDOwwaD4VsBWZAgDORA=
+	t=1738179028; cv=none; b=ZkqpCQKpmQHggCywwxcA+ZI8w471l4E9sUNay+CEvyONcdl16DvjA7f0vkjcs98ysekaiQo2Gg/sZrIzxZQyxcVgD7Fpo8oz33Mi+yZMyWLKVdBSUEQ8WUj/y02+qT7DuMpvf9qVuBYu3tQCtVJFepPI93rLmvwgOfDEA5zw6Xo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738177893; c=relaxed/simple;
-	bh=GhlIZMqOwR1HkQLXtngsck0tPKlOdv4q2Zj0KZS+n1w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FnBZEMhGlAGuKeUSNcrlutRvyNjSiazbHxd0/6N3T8HAXQupQyzeOC8fMl9li+/HJ+hJO5uFjTw67F6gDnLwnte7FDK2ADXamGahXHBk+MXRTrdoarAtcs80AgSakeuw48OO5uJXfliZ7RoABP9mTimEOy04gckZkwu6mg8g6zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=aO79BLrK; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ionos.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
+	s=arc-20240116; t=1738179028; c=relaxed/simple;
+	bh=rWQreQiAU48uL9T3JNDkwkNmknGBAbDTji6X7fbwfKA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V8K7BXq0Lq1hKeG073/r9fk2uNlXqRLfvwvMjXKuqvWmLHDD9rOqXfwlnw2cByuRaHENtzunpw3NjR+tZ4WWRxapElGUgOLd0z/cuoN1mR44Rft5Raz9KC6dg/E3O3frX3xEa426fJxtaq4v1PTnowrKbgZ6c6XyQJ0Nro/ROLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UhTihInd; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="aO79BLrK"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ab68a4ab074so8308266b.0
-        for <io-uring@vger.kernel.org>; Wed, 29 Jan 2025 11:11:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UhTihInd"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43624b2d453so81243665e9.2;
+        Wed, 29 Jan 2025 11:30:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1738177889; x=1738782689; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GhlIZMqOwR1HkQLXtngsck0tPKlOdv4q2Zj0KZS+n1w=;
-        b=aO79BLrK6bDQp/LUQK8713J+ND8yGLewCXZUowQNDQxa9MSvwRw0IUyHNiNe1EIPch
-         pdhlUMsI1lLMJLTPKoqK4nA6HYijYOND+7FqTREnRSajvWiBCC4tVdvZMpokzsAKAJyi
-         7KZgUNEekrf4xhbMQzZ8rHEj4fTxLuQMl4lVKZYXKf3tFcSIV/k+pY2wj9d7JxII4sG3
-         xc9kEqOkkXehTnihAGXzKrG14pA9/BaxKZiMu8wA+wgRog5X0ntC7RbNKI7BNJGByUb7
-         zAB+RY3EtgbznJPJTEYzBL0fH8hNV9udnc+r8uIblBNI+QZjmyfQRTzOoe8q0EzaO0cy
-         XxoQ==
+        d=gmail.com; s=20230601; t=1738179025; x=1738783825; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FmDVhjSuNtL0NR/wOvEkkLqWRufG3IvH9lliz9davJI=;
+        b=UhTihIndgdHqvVQXNuVCH24YFnYWho7AKEna7t/cXuFYrCLX0pbr5Sve2sOBjurfs3
+         zWY0O7PN+pbY9vX0NggluyVOBbOQrwnibsQLi5Kk3zjrUvGydqiRA9ZwkYFtLpHqr73T
+         XbJ9/83IN8fRb1RPn+PR6ttE/aBNCgMV2EJSPD3rqJD6w3EAT9IwTb6HQyQ1CrjJrgBH
+         uvkM9FxBaVARsYjfS7Y32yXQ/xHrMkHLJI5CC+jg6Vr9alwFjdJmOx6PpEBs58JHhwk+
+         6Aaz0FcPRoaeaNFbbXJvYk7HdkI8i0ulgAyG730TDL/cwMoxUYDnJV0kZXaiHZgR+ugq
+         YUJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738177889; x=1738782689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GhlIZMqOwR1HkQLXtngsck0tPKlOdv4q2Zj0KZS+n1w=;
-        b=QyR54WKULJPZjDbeyN1FQE5Xs37QB/frRLyZgW+3iO2tY4lQ9xZnXsQWkLze9eW6rA
-         0trXEL2U0s3MlxLX9NO/rpOVyX9khzmT8D2z8txL6eEWqkNfe6C3fD4O5ygRGt0/pe/U
-         PhXcXwGxrrKbuAqY+TZnr614Xqj3wWLe5C/4UA3euuLfneQ0YflzOJVzs78kVRfeZOqk
-         POlLdY7MRded9lDySXLNIDiScTmuWi970vHPGlI5C/7wLosRnJUSdLbkkpEGgkU956v5
-         l5Bll9bDoXfEI1mArRreECQNhgBQJEnxNPj4mGM8Rt1/+iSeL2I0cyRXGnozV0JM3n3w
-         hcVA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmEWlTAjYLcCwASRi6OmW6DaohZTPGgn1c2hOioPMqpk/u6fC1UxQ+hb8TysECmXLqTAuCS/HyGQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwtkGOi8/Qn4MtKfjm2sE99hRVyieLPZg4y5YASdkeSTuO4KVq
-	1vXYJ/u+VqeJjgPY+lD2omilp8nSxSOGT3EopRcM7fYgdt/aEtffPMzn7Tt2/zKacqXP/yVNtkw
-	hcK1tHqVcnweaqSe98Lno2gqFDxUV4Fmd7SpPQGFoPvwzx5QZdDek5Q==
-X-Gm-Gg: ASbGncuz5QlcBWbYxebPtcfXscFLzhMjXhheDJ98H7AfAT0KcknOKWvTmu4lSAtIbpQ
-	9RFPla7wP1gX5coQ2A69Oq28oPKRyyqDh7jBcywiPw/CDGvClomLzrbz4/H5FQHPDZOxOTPFtTU
-	tFTvgK9U9Gkfg2y13okYMCIIccWQ==
-X-Google-Smtp-Source: AGHT+IE219ZwdyYxwg9UGBTR/PKOr2GHzNh2WNdhnHDSJJCT1n3/BOB/tMcF5dlhHm1Q++2IGQ4hA9rQdGrBzYdnw0w=
-X-Received: by 2002:a05:6402:3511:b0:5d0:81f5:a398 with SMTP id
- 4fb4d7f45d1cf-5dc5efa8b65mr8934946a12.1.1738177889464; Wed, 29 Jan 2025
- 11:11:29 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738179025; x=1738783825;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FmDVhjSuNtL0NR/wOvEkkLqWRufG3IvH9lliz9davJI=;
+        b=FDFbSarX2WBy3CXNVCjLt2SgXO8154uItrr/oDFKuHq6xBwZCmylMwJCDiAbLjTcvc
+         lt6Dlv6XJ8PB9s0RDzEcUudEuZPQuf1LKXqmXq/fCnReq+sxuulvh/7Oe6sSKFWzFW+b
+         Q6GkiWmSDKAhg99guBaIEpAeu5z/n7jq37ar0uf2Qk32SXgOjHzfLsVA/d0xv4bUdtJH
+         kss+y0SAo5QBcDGISNUfdwlNGob/6KXJsT/9R6G2dj+8SdpSii9vzC+Nud3jKqtpdASe
+         BZxmhXzUVrR6fPxbQRX8FcyrP/HkpFtzwj74jp4dbBW5IsfVFPi3ts3Nyi5PVKgKPpmZ
+         y2Jg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxWZI+tCVAJoB25rKCVxg2bvqDzXEQNEPan+olO0dmgFRL8u9BgOp2rrE+FXhKS8IUEz0WYDSADjU3pNk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwebNCHxOgfCjZSe2VPl6RUfCy7hPetw9WEbgYE+LM6q41mR48j
+	5T+iroWjtaQVolKDMouL/5bJp1yIbbIRsm7fF6/uVNmbscg8EdxP
+X-Gm-Gg: ASbGnctDLsulDLvXTUF2JAPJzETHRZz39X3X5BVXCvCVU2jpugEVCeVoD7MFVNhccXB
+	GLFK2AGW500Daununi5HmG0w1LJeahLXbzQebaD6IzIhTguqvj56FsPGBpmH9pq8M5azCMj5Q8+
+	cgrC6OeUHNjR2QJA34rhy3KjKdBInv9iJHpY27R4/vqH5fY8kV5MPYge0aFPi2lOSQvKWWEsTtO
+	0oYOvkhkAhYT0dGH/RbqNnJ6/kIQmOwXA6OAZXarvYlWnCq2mN/sp239EO6QhUtRl34p27sF4WX
+	2IfsrRMXn+8FtJzoZx20rRDH1Q==
+X-Google-Smtp-Source: AGHT+IFO4M9+9EH1K7BeLhcwlrue3FMAM0Y/HMdT3eAAsdx74yDxpJEgJikBayBE6IUVp0idwQVq/g==
+X-Received: by 2002:a05:600c:4f55:b0:434:a1d3:a321 with SMTP id 5b1f17b1804b1-438dc3aada7mr42461765e9.3.1738179024523;
+        Wed, 29 Jan 2025 11:30:24 -0800 (PST)
+Received: from [192.168.8.100] ([148.252.147.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438dcbbc52dsm34178265e9.0.2025.01.29.11.30.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jan 2025 11:30:23 -0800 (PST)
+Message-ID: <a5d8d039-f2d7-4adb-afd7-693b3be41e45@gmail.com>
+Date: Wed, 29 Jan 2025 19:30:43 +0000
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/8] Various io_uring micro-optimizations (reducing lock
+ contention)
+To: Max Kellermann <max.kellermann@ionos.com>, Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250128133927.3989681-1-max.kellermann@ionos.com>
- <20250128133927.3989681-5-max.kellermann@ionos.com> <856ed55d-b07b-499c-b340-2efa70c73f7a@gmail.com>
-In-Reply-To: <856ed55d-b07b-499c-b340-2efa70c73f7a@gmail.com>
-From: Max Kellermann <max.kellermann@ionos.com>
-Date: Wed, 29 Jan 2025 20:11:17 +0100
-X-Gm-Features: AWEUYZlW_MDfPCAWAmFfh5_6BXOC71Ep2fITVNb9uw3ezdU1iUJLGAdCwxk2vGA
-Message-ID: <CAKPOu+-Mfx9q79nin7tGi1Rr4qGGY=y-2OhuP80U=7EtRpfBdg@mail.gmail.com>
-Subject: Re: [PATCH 4/8] io_uring/io-wq: cache work->flags in variable
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: axboe@kernel.dk, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <7f046e6e-bb9d-4e72-9683-2cdfeabf51bc@kernel.dk>
+ <CAKPOu+90YT8KSbadN8jsag+3OnwPKWUDABv+RUFdBgj73yzgWQ@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAKPOu+90YT8KSbadN8jsag+3OnwPKWUDABv+RUFdBgj73yzgWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 29, 2025 at 7:56=E2=80=AFPM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
-> What architecture are you running? I don't get why the reads
-> are expensive while it's relaxed and there shouldn't even be
-> any contention. It doesn't even need to be atomics, we still
-> should be able to convert int back to plain ints.
+On 1/29/25 17:39, Max Kellermann wrote:
+> On Wed, Jan 29, 2025 at 6:19 PM Jens Axboe <axboe@kernel.dk> wrote:
+>> The other patches look pretty straight forward to me. Only thing that
+>> has me puzzled a bit is why you have so much io-wq activity with your
+>> application, in general I'd expect 0 activity there. But Then I saw the
+>> forced ASYNC flag, and it makes sense. In general, forcing that isn't a
+>> great idea, but for a benchmark for io-wq it certainly makes sense.
+> 
+> I was experimenting with io_uring and wanted to see how much
+> performance I can squeeze out of my web server running
+> single-threaded. The overhead of io_uring_submit() grew very large,
+> because the "send" operation would do a lot of synchronous work in the
+> kernel. I tried SQPOLL but it was actually a big performance
+> regression; this just shifted my CPU usage to epoll_wait(). Forcing
+> ASYNC gave me large throughput improvements (moving the submission
+> overhead to iowq), but then the iowq lock contention was the next
+> limit, thus this patch series.
 
-I measured on an AMD Epyc 9654P.
-As you see in my numbers, around 40% of the CPU time was wasted on
-spinlock contention. Dozens of io-wq threads are trampling on each
-other's feet all the time.
-I don't think this is about memory accesses being exceptionally
-expensive; it's just about wringing every cycle from the code section
-that's under the heavy-contention spinlock.
+It's great to see iowq getting some optimisations, but note that
+it wouldn't be fair comparing it to single threaded peers when
+you have a lot of iowq activity as it might be occupying multiple
+CPUs. A curious open question is whether it'd be more performant
+to have several user threads with their private rings.
+
+> I'm still experimenting, and I will certainly revisit SQPOLL to learn
+> more about why it didn't help and how to fix it.
+
+It's wasteful unless you saturate it close to 100%, and then you
+usually have SQPOLL on a separate CPU than the user task submitting
+requests, and so it'd take some cache bouncing. It's not a silver
+bullet.
+
+-- 
+Pavel Begunkov
+
