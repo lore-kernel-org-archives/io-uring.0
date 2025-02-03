@@ -1,44 +1,44 @@
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3637E1D63C5
-	for <io-uring@vger.kernel.org>; Mon,  3 Feb 2025 18:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700B21D63C5
+	for <io-uring@vger.kernel.org>; Mon,  3 Feb 2025 18:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738608415; cv=none; b=KIat+5wCUAKsNep0XfG326J4lBUHFwZtxPcSPmV9AZmX7fE2UMyyncv6qgl1ralui8P29jCnjehMyAsijowj4zSjIQoOwTjLOv3n01y/S/37b3JnV4U0hmrPGoyvsKDub1s3wEGqET4NphE2P4DEn7LrBp83lCTcOdnlkj3KaFA=
+	t=1738608418; cv=none; b=bmWe40zDF+muo7XOiS4JAOe2QakXYGBtkbLy0kDBsB4ORlbFjY1UuS1tg3EpY/ntZVzRPm7CEgVRVtGKsuhzptbTlpyqnq9qBP6yGnJGeRdtuVN0DGvRp9tV2n3pwKLNhBW5wMPJMQLXyOcNtr6ZymQnEpm0r6rQBP6Xw13gkeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738608415; c=relaxed/simple;
-	bh=ZmPBU+y0wUs+Dct6iyCseKDNT93XKYQWtki3HrGZh9I=;
+	s=arc-20240116; t=1738608418; c=relaxed/simple;
+	bh=/+wKU5EJqDJqXOd/rmfTWOgOxq2l6MFNquGYw1bk2Ao=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BaG36y69jxShd+ssCnNWzw3Jrz+ncV7hg7nVvvbJvXVoxZAIBtDpO+xaCEoPNwIqm+FRAB1njQQPu28vfvo9kQx6D2OpAMx6nc2s753IKbAyD8FlieYeAPdnEnO5pt/tfDuQWDkNk6zTvanRRC538IdJ3TXuVxfDrEhG3b0tfIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=T0T50WP7; arc=none smtp.client-ip=67.231.145.42
+	 MIME-Version:Content-Type; b=iGE/DFokYh4EelW3tszIDasks+n+66AB1QgYGZILm7CSCFREwg90MxXRSZ08c631ggdbfKiTWG2k9X+j7OD3RO+qdCTbbqLA/Uug15ShYY3O/fQJwFzWoRabe+kU5piZFE0hvn3GkHLtQaU89qQRQeZTgwI6rqmp5sqEV66uEE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=Screztrm; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="T0T50WP7"
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 513IHo8V002115
-	for <io-uring@vger.kernel.org>; Mon, 3 Feb 2025 10:46:53 -0800
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="Screztrm"
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 513IHnAc023598
+	for <io-uring@vger.kernel.org>; Mon, 3 Feb 2025 10:46:55 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=CRYlmtHGoiktA/eCNL20FwlrxpVyl/ohOo4w2aG06+M=; b=T0T50WP766gj
-	3YC8kKmGOJkP1AH49JGSBoafmicnhf9tx+hBjarsECY/i6GfC182OLN5E65/BlUT
-	1/k4fiarPx/Dqhig672oiCRTK8lWJHVOcNdwpBbOIuCiY8gjungehKqcXbXVmS8/
-	d6pbAE53wA1o7W309CUaR3dI+JQdzFYCi3AHn+gfEV0hNG85CDHL1iJ0s5j0FULU
-	m5GC+vQ7ftUf1K6rKoeIdOkjQJ0uYH0cQE3+yg2L2bWeEMgpCQwv5Cd/NqGNzbKU
-	m7YCv6oqETDhQhrdM7s374PA/UiBIZGF5xYR7DD8tg0SZhDrRiMdPcvgoQvLcKfS
-	CjYeNKqFHQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 44k21ugsgm-6
+	 bh=fNIXKTXv0cNcZjIIi47wETlFoGESbcaSE+f+/sI3Kv4=; b=ScreztrmcYk+
+	ik4FLgNhL9x1uriOEuoWH9gd8JsYQ5JEWkbQ/jbUTHo7eM0yw5BF5J4H09Kejr+J
+	RAFpmDo9V4rHfzY6IdF65fqDiXtDsdIWqJhh2seZ847c9WmviqUKAP27jQ+n6YkR
+	zMqn2icdmR8TaahvyVnVqkIYCOFsA9RKfbPC151Yhx4BIG+G6nJ65KKvOvLJ9rbm
+	CqkJ1XpaHe2rQtXcb85b8x6BCD1Cl5WZf31aCH9S7tzFwDgQpWdRJs5OHBwhv40g
+	CgSLfhmswjse5qOsWv1qHzPCa4s/j2qvoKa3KaspOCtyZ3ckp8NFyOJPkqTOzY5b
+	3CbsOjcYKQ==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 44k2muge55-10
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Mon, 03 Feb 2025 10:46:53 -0800 (PST)
-Received: from twshared55211.03.ash8.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+	for <io-uring@vger.kernel.org>; Mon, 03 Feb 2025 10:46:55 -0800 (PST)
+Received: from twshared7122.08.ash9.facebook.com (2620:10d:c0a8:1c::11) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.14; Mon, 3 Feb 2025 18:46:50 +0000
+ 15.2.1544.14; Mon, 3 Feb 2025 18:46:49 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id C3E71179C262F; Mon,  3 Feb 2025 10:41:34 -0800 (PST)
+	id AD981179C262B; Mon,  3 Feb 2025 10:41:34 -0800 (PST)
 From: Keith Busch <kbusch@meta.com>
 To: <linux-nvme@lists.infradead.org>, <io-uring@vger.kernel.org>,
         <linux-block@vger.kernel.org>
@@ -48,9 +48,9 @@ CC: <linux-fsdevel@vger.kernel.org>, <asml.silence@gmail.com>,
 	<hare@suse.de>, Nitesh Shetty <nj.shetty@samsung.com>,
         Keith Busch
 	<kbusch@kernel.org>
-Subject: [PATCHv2 07/11] nvme: add a nvme_get_log_lsi helper
-Date: Mon, 3 Feb 2025 10:41:25 -0800
-Message-ID: <20250203184129.1829324-8-kbusch@meta.com>
+Subject: [PATCHv2 05/11] block: expose write streams for block device nodes
+Date: Mon, 3 Feb 2025 10:41:23 -0800
+Message-ID: <20250203184129.1829324-6-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250203184129.1829324-1-kbusch@meta.com>
 References: <20250203184129.1829324-1-kbusch@meta.com>
@@ -63,75 +63,86 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: NN9ujvMTbmpo_9Me71bDpBcwMMH81KbG
-X-Proofpoint-GUID: NN9ujvMTbmpo_9Me71bDpBcwMMH81KbG
+X-Proofpoint-ORIG-GUID: BIytgupAaLi-GoxDunS47HP1rRcXJGLs
+X-Proofpoint-GUID: BIytgupAaLi-GoxDunS47HP1rRcXJGLs
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-03_08,2025-01-31_02,2024-11-22_01
 
 From: Christoph Hellwig <hch@lst.de>
 
-For log pages that need to pass in a LSI value, while at the same time
-not touching all the existing nvme_get_log callers.
+Use the per-kiocb write stream if provided, or map temperature hints to
+write streams (which is a bit questionable, but this shows how it is
+done).
 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
 Signed-off-by: Christoph Hellwig <hch@lst.de>
+[kbusch: removed statx reporting]
 Signed-off-by: Keith Busch <kbusch@kernel.org>
 ---
- drivers/nvme/host/core.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ block/fops.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 653aa6544a90e..8c43823cc37e1 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -150,6 +150,8 @@ static void nvme_remove_invalid_namespaces(struct nvm=
-e_ctrl *ctrl,
- 					   unsigned nsid);
- static void nvme_update_keep_alive(struct nvme_ctrl *ctrl,
- 				   struct nvme_command *cmd);
-+static int nvme_get_log_lsi(struct nvme_ctrl *ctrl, u32 nsid, u8 log_pag=
-e,
-+		u8 lsp, u8 csi, void *log, size_t size, u64 offset, u16 lsi);
+diff --git a/block/fops.c b/block/fops.c
+index be9f1dbea9ce0..11902b7120af2 100644
+--- a/block/fops.c
++++ b/block/fops.c
+@@ -73,6 +73,7 @@ static ssize_t __blkdev_direct_IO_simple(struct kiocb *=
+iocb,
+ 	}
+ 	bio.bi_iter.bi_sector =3D pos >> SECTOR_SHIFT;
+ 	bio.bi_write_hint =3D file_inode(iocb->ki_filp)->i_write_hint;
++	bio.bi_write_stream =3D iocb->ki_write_stream;
+ 	bio.bi_ioprio =3D iocb->ki_ioprio;
+ 	if (iocb->ki_flags & IOCB_ATOMIC)
+ 		bio.bi_opf |=3D REQ_ATOMIC;
+@@ -206,6 +207,7 @@ static ssize_t __blkdev_direct_IO(struct kiocb *iocb,=
+ struct iov_iter *iter,
+ 	for (;;) {
+ 		bio->bi_iter.bi_sector =3D pos >> SECTOR_SHIFT;
+ 		bio->bi_write_hint =3D file_inode(iocb->ki_filp)->i_write_hint;
++		bio->bi_write_stream =3D iocb->ki_write_stream;
+ 		bio->bi_private =3D dio;
+ 		bio->bi_end_io =3D blkdev_bio_end_io;
+ 		bio->bi_ioprio =3D iocb->ki_ioprio;
+@@ -333,6 +335,7 @@ static ssize_t __blkdev_direct_IO_async(struct kiocb =
+*iocb,
+ 	dio->iocb =3D iocb;
+ 	bio->bi_iter.bi_sector =3D pos >> SECTOR_SHIFT;
+ 	bio->bi_write_hint =3D file_inode(iocb->ki_filp)->i_write_hint;
++	bio->bi_write_stream =3D iocb->ki_write_stream;
+ 	bio->bi_end_io =3D blkdev_bio_end_io_async;
+ 	bio->bi_ioprio =3D iocb->ki_ioprio;
 =20
- void nvme_queue_scan(struct nvme_ctrl *ctrl)
- {
-@@ -3083,8 +3085,8 @@ static int nvme_init_subsystem(struct nvme_ctrl *ct=
-rl, struct nvme_id_ctrl *id)
- 	return ret;
- }
+@@ -398,6 +401,26 @@ static ssize_t blkdev_direct_IO(struct kiocb *iocb, =
+struct iov_iter *iter)
+ 	if (blkdev_dio_invalid(bdev, iocb, iter))
+ 		return -EINVAL;
 =20
--int nvme_get_log(struct nvme_ctrl *ctrl, u32 nsid, u8 log_page, u8 lsp, =
-u8 csi,
--		void *log, size_t size, u64 offset)
-+static int nvme_get_log_lsi(struct nvme_ctrl *ctrl, u32 nsid, u8 log_pag=
-e,
-+		u8 lsp, u8 csi, void *log, size_t size, u64 offset, u16 lsi)
- {
- 	struct nvme_command c =3D { };
- 	u32 dwlen =3D nvme_bytes_to_numd(size);
-@@ -3098,10 +3100,18 @@ int nvme_get_log(struct nvme_ctrl *ctrl, u32 nsid=
-, u8 log_page, u8 lsp, u8 csi,
- 	c.get_log_page.lpol =3D cpu_to_le32(lower_32_bits(offset));
- 	c.get_log_page.lpou =3D cpu_to_le32(upper_32_bits(offset));
- 	c.get_log_page.csi =3D csi;
-+	c.get_log_page.lsi =3D cpu_to_le16(lsi);
-=20
- 	return nvme_submit_sync_cmd(ctrl->admin_q, &c, log, size);
- }
-=20
-+int nvme_get_log(struct nvme_ctrl *ctrl, u32 nsid, u8 log_page, u8 lsp, =
-u8 csi,
-+		void *log, size_t size, u64 offset)
-+{
-+	return nvme_get_log_lsi(ctrl, nsid, log_page, lsp, csi, log, size,
-+			offset, 0);
-+}
++	if (iov_iter_rw(iter) =3D=3D WRITE) {
++		u16 max_write_streams =3D bdev_max_write_streams(bdev);
 +
- static int nvme_get_effects_log(struct nvme_ctrl *ctrl, u8 csi,
- 				struct nvme_effects_log **log)
- {
++		if (iocb->ki_write_stream) {
++			if (iocb->ki_write_stream > max_write_streams)
++				return -EINVAL;
++		} else if (max_write_streams) {
++			enum rw_hint write_hint =3D
++				file_inode(iocb->ki_filp)->i_write_hint;
++
++			/*
++			 * Just use the write hint as write stream for block
++			 * device writes.  This assumes no file system is
++			 * mounted that would use the streams differently.
++			 */
++			if (write_hint <=3D max_write_streams)
++				iocb->ki_write_stream =3D write_hint;
++		}
++	}
++
+ 	nr_pages =3D bio_iov_vecs_to_alloc(iter, BIO_MAX_VECS + 1);
+ 	if (likely(nr_pages <=3D BIO_MAX_VECS)) {
+ 		if (is_sync_kiocb(iocb))
 --=20
 2.43.5
 
