@@ -1,61 +1,94 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52377A31;
-	Mon,  3 Feb 2025 06:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F7B61FFC5B
+	for <io-uring@vger.kernel.org>; Mon,  3 Feb 2025 15:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738565619; cv=none; b=BQutZOWNbI9WDkKo05gFCySiUP5NQRYSXdM6Hz2XhCeuXa2h3dvbKHgarZgm6bfL/DghAwnxyxrJ9D8n56GH6ceVQRQzsGoCUvIjcYIfwop1krCghpIVAi7DZ2DWiNPOuQLTy1qE+Ne7jKmZP3+73FctY5v4igyPZK0rvo1R2Vk=
+	t=1738597532; cv=none; b=i4XmhNYWYiWH5DaFrKa+4LjwL4FmBjQGzhCCm/+NTbRbQDDHA1XmPvfYsnshiuxOONp5RZyFKcjBaOaX/vxdQxYQgTH9Q03jpRi+YvUjuz+g8GpBZZxELPkoQvH1mgBDZwCqzPtgx/alYwztJR403fsFslrAvp3I7CxV38fEvHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738565619; c=relaxed/simple;
-	bh=wNHkO8AYBkpkeZDZHNXEfxSSONXKnyJtfYDwnwALPM8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U0jVWDnnrKrK+mGsIxEenR/tnxKHUrscSrz53g5okWWJXk1Ef/mk7digpQxGYe0LUgDoHZGWrOugpyhvK9Mki6YW6YcgWXUAhWvrhGwZvMeclkgOM+CKLzrkA44OL5nYDLHfLexIANvTA8Qbnz/OKXkVxc6iyHK4srL7wmqo5uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id 303E467373; Mon,  3 Feb 2025 07:53:32 +0100 (CET)
-Date: Mon, 3 Feb 2025 07:53:31 +0100
-From: Christoph Hellwig <hch@lst.de>
-To: Anuj Gupta <anuj20.g@samsung.com>
-Cc: axboe@kernel.dk, hch@lst.de, kbusch@kernel.org,
-	martin.petersen@oracle.com, asml.silence@gmail.com,
-	anuj1072538@gmail.com, brauner@kernel.org, jack@suse.cz,
-	viro@zeniv.linux.org.uk, io-uring@vger.kernel.org,
-	linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
-	gost.dev@samsung.com, linux-scsi@vger.kernel.org,
-	vishak.g@samsung.com, linux-fsdevel@vger.kernel.org,
-	Kanchan Joshi <joshi.k@samsung.com>
-Subject: Re: [PATCH v11 07/10] block: introduce
- BIP_CHECK_GUARD/REFTAG/APPTAG bip_flags
-Message-ID: <20250203065331.GA16999@lst.de>
-References: <20241128112240.8867-1-anuj20.g@samsung.com> <CGME20241128113112epcas5p186ef86baaa3054effb7244c54ee2f991@epcas5p1.samsung.com> <20241128112240.8867-8-anuj20.g@samsung.com>
+	s=arc-20240116; t=1738597532; c=relaxed/simple;
+	bh=ZVpnQeZDvmWq8PWdrxYLmBji7nWmv/s8k945A+PflJc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DeROrZMY9/7cjb4TleVbn6/wvXhpuxKDnsiU2nCS7xRE3qBj3saTLYq672o2CGSyS6DD8ru8kY01uf9RHNQeWLILEGd2ctCpbkjvXPngL3/ui6LpkSffW9VaOy69CiU1uNjYjJk0ERCEr8Txeb2NUz5Ac1TDk0rkLB/3iaoBc5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=iU5MAg3V; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="iU5MAg3V"
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 513FjCvn004352
+	for <io-uring@vger.kernel.org>; Mon, 3 Feb 2025 07:45:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
+	 bh=3LzCimmsEH510F0QP2lhVvZdh6+zWH5CEv8c030524E=; b=iU5MAg3V5dBo
+	gyxfUPoujVpdZrBQrSEROiQv5214TszNiL2dO62gVFQFkBTtxVvIXPjvmYWz/3Je
+	+QpTFrphOzZeolxvLChMX9Ug8A6JDGvI86LRtASaDkVByNT0VyP0u5auQMcyLjSu
+	CxdCVvEMjETIvQvRqU5OmooQ68duiPXDJiLTEG6P12NGA6IGcsokCuPfLG/sSQ6X
+	AsEyR8Rx0ywt3DX/4y60F+kZBXZyF863Q3FsiFUQzicK0suO5LBnjRHABkCK2R1i
+	eVZVczLtUZXPx3Dja8raY0W/vymVjOUSJHC1K3DSwWNn+s712+GwVb9hS8lIC2hV
+	q6dPJrXfRQ==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 44k0q6r041-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <io-uring@vger.kernel.org>; Mon, 03 Feb 2025 07:45:29 -0800 (PST)
+Received: from twshared55211.03.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.14; Mon, 3 Feb 2025 15:45:27 +0000
+Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
+	id 67695179A9844; Mon,  3 Feb 2025 07:45:21 -0800 (PST)
+From: Keith Busch <kbusch@meta.com>
+To: <io-uring@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <ming.lei@redhat.com>, <axboe@kernel.dk>, <asml.silence@gmail.com>
+CC: Keith Busch <kbusch@kernel.org>
+Subject: [PATCH 1/6] block: const blk_rq_nr_phys_segments request
+Date: Mon, 3 Feb 2025 07:45:12 -0800
+Message-ID: <20250203154517.937623-2-kbusch@meta.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250203154517.937623-1-kbusch@meta.com>
+References: <20250203154517.937623-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241128112240.8867-8-anuj20.g@samsung.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: M005xvZIguV9UIiogZugaBIYg7Spu1e2
+X-Proofpoint-GUID: M005xvZIguV9UIiogZugaBIYg7Spu1e2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-03_06,2025-01-31_02,2024-11-22_01
 
-Hi Anuj,
+From: Keith Busch <kbusch@kernel.org>
 
-I just stumbled over this patch when forward porting my XFS PI support
-code over the weekend, which failed badly because it didn't set the
-new BIP_CHECK_GUARD and BIP_CHECK_REFTAG flags.  Now for the XFS side
-that was just me being to lazy to forward port, but when I started
-looking over bio_integrity_add_page users as part of doing this I think
-I found a regression caused by this patch.
+The request is not modified. Mark it as const so that other const
+functions may use this helper.
 
-The scsi and nvme targets never sets these new flags when passing on PI,
-so that will probably stop working.  So we'll need to set them and for
-nvmet we could also improve the code to actually pass through the
-individual flags.  Note that this is just by observation, I didn't find
-time to actually set up the SCSI and NVMe target code with PI support.
-Maybe we also need blktests test cases to exercise the code and avoid
-regressions in the future?
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+---
+ include/linux/blk-mq.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index a0a9007cc1e36..56ef03bc68884 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -1125,7 +1125,7 @@ void blk_abort_request(struct request *);
+  * own special payload.  In that case we still return 1 here so that thi=
+s
+  * special payload will be mapped.
+  */
+-static inline unsigned short blk_rq_nr_phys_segments(struct request *rq)
++static inline unsigned short blk_rq_nr_phys_segments(const struct reques=
+t *rq)
+ {
+ 	if (rq->rq_flags & RQF_SPECIAL_PAYLOAD)
+ 		return 1;
+--=20
+2.43.5
 
