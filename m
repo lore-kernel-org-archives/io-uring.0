@@ -1,166 +1,198 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261272AF12
-	for <io-uring@vger.kernel.org>; Tue, 11 Feb 2025 00:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5496D34CF5;
+	Tue, 11 Feb 2025 01:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739235442; cv=none; b=Mrx9nZr+AwTQzHdtJkgX00xgHIVVV8XmH3PvkIEMLgn3l4qROfpQlSmGjIFgPNiWH8Olb6YWryfJT+feJPl3Pdtozg00OR8tShuQT5+FDkMbi+msJcqmzU5c6k7yrirl/vLZaUvKhTHn2CsIFasyUFYUIb/uaGg81EQjOAVN4uU=
+	t=1739237405; cv=none; b=uznaJapGtO3Jdhk2ngIKbJmhaSAn2wvkQl4pIgEFLdQIinCkzMrzFMEQWDhIc2+B1H1LkiJVUKJbM+F8+vNw0CdgF4sXG968/EZ2TUacBZWb4LKI2uWvK5+DXP+9+SBx0j0Q3SlmoAJkrywJlO/abibk0QbzrwrKrRar2emrQoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739235442; c=relaxed/simple;
-	bh=nukutWW51oSk/fRTc20Hqo5GtL2WEygpdwp+WbbFKb8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pEvKEJ/ckCnvYV9URjn73tn7nZwCwHynkg3Ldvs5iWJY77uG5iqnXbd+gKEwIbwKWVVoyCjcCQwtK/A494VSxvtVog96KFl/LOMF+WMepXOm0knkb3F6KaSht68ekh2oRGYHyoKsefFlJvRQaa3j/jPUk/M70YZrUJKlo67g0AM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=VhUJjR0Q; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1739237405; c=relaxed/simple;
+	bh=hFtL0x/+GUZwi7+zGRJFNZQHyYh0YyIT9e3JHkAa0hI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mHCB8OoWXq3yUj7Ezenk6vUBHGcq8EGE8WL4KsEXcUSAC3Xo8g2bon6qmBH1n9+RXEDEAx6FTplnncxjG0ucPEBoiaPNfGZAcVgdZR9QtJNF/TkIKGKoKY5O7h89c7VxAEnQUleGU6bTpCZhfxoaDKsj82pCR0cThOIjwXGqN4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ueTEKO/D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="VhUJjR0Q"
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51B0oXGR027408
-	for <io-uring@vger.kernel.org>; Mon, 10 Feb 2025 16:57:19 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=jLLIHfW+mKONINFmqcybC+5D/sdcEJrut1FJWmazW78=; b=VhUJjR0QnFtF
-	YIY14Anb5n6ak9y8e6NGHPIDmbv+QzbqsSG+QW2x3sHaZBLSEUQaeeAId+TaWjim
-	GkjMz/L5PAl4B+4qR09stiij443PhO+8hfrep3VTuihxVnoRrux9vG9cluOVv9nv
-	xd1WI0t8+QyUKLGl1vmaMB2pYuJo8aSDhdNGbz4ZkZAlSoGxtqtcD3hjxhr+5Yi2
-	MyMBdbYC1iWmwVcaVGveh44xn/ZmoBaRTUJ49YzN3qHN0jvjMcLC2b6Kt9j7N+jp
-	2TEi/uOQsIBluU2ZMwYoWvil1EF2VDnUyAPNyF16nZ3yosI+pE9OJMVJCCxsWPTR
-	0TN+H4tkvA==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 44qpm92u3k-5
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Mon, 10 Feb 2025 16:57:19 -0800 (PST)
-Received: from twshared9216.15.frc2.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.14; Tue, 11 Feb 2025 00:57:01 +0000
-Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id 7AFE117E18F7E; Mon, 10 Feb 2025 16:56:48 -0800 (PST)
-From: Keith Busch <kbusch@meta.com>
-To: <ming.lei@redhat.com>, <asml.silence@gmail.com>, <axboe@kernel.dk>,
-        <linux-block@vger.kernel.org>, <io-uring@vger.kernel.org>
-CC: <bernd@bsbernd.com>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv2 1/6] io_uring: use node for import
-Date: Mon, 10 Feb 2025 16:56:41 -0800
-Message-ID: <20250211005646.222452-2-kbusch@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250211005646.222452-1-kbusch@meta.com>
-References: <20250211005646.222452-1-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ueTEKO/D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE317C116C6;
+	Tue, 11 Feb 2025 01:30:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739237404;
+	bh=hFtL0x/+GUZwi7+zGRJFNZQHyYh0YyIT9e3JHkAa0hI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ueTEKO/DsAyGDfIvo2ko+OO8cP+C5P90b42cF+OoAsh4n45+q2IOVRXpyW2hUcoLw
+	 SPp3rozDRr38vjBvjcjkqxoicfAif4lR/Lnxf9C4z/sdXvheuWY05HW3hGyPCcO4GU
+	 DMlM7LSpQ9qityJ+hUXC3YcfYNk/298txONa5VmW7e9xngMcXTdt6K+MWd6WKw0vWC
+	 uAu77vgJJrnT8kvW3o8k1kZOeQMdciBZiXJYt53emfFJmm1aNTKQfeQVSpXd8rgtK1
+	 IDnRTID5+1MqXX+5SMA4EVH5iilJxChEEV5KO2UYA+Q434lC+S8QIP1869e/mwBPPw
+	 VSt8PWiAOGoQQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>,
+	Jann Horn <jannh@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Sasha Levin <sashal@kernel.org>,
+	asml.silence@gmail.com,
+	mingo@redhat.com,
+	io-uring@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.13 06/21] futex: Pass in task to futex_queue()
+Date: Mon, 10 Feb 2025 20:29:39 -0500
+Message-Id: <20250211012954.4096433-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250211012954.4096433-1-sashal@kernel.org>
+References: <20250211012954.4096433-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: yMGOeD5tAKwMUK8Hvk5aCrPyxzJhCkTB
-X-Proofpoint-ORIG-GUID: yMGOeD5tAKwMUK8Hvk5aCrPyxzJhCkTB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-11_01,2025-02-10_01,2024-11-22_01
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.13.2
+Content-Transfer-Encoding: 8bit
 
 From: Jens Axboe <axboe@kernel.dk>
 
-Replace the mapped buffer to the parent node. This is preparing for a
-future for different types with specific handling considerations.
+[ Upstream commit 5e0e02f0d7e52cfc8b1adfc778dd02181d8b47b4 ]
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+futex_queue() -> __futex_queue() uses 'current' as the task to store in
+the struct futex_q->task field. This is fine for synchronous usage of
+the futex infrastructure, but it's not always correct when used by
+io_uring where the task doing the initial futex_queue() might not be
+available later on. This doesn't lead to any issues currently, as the
+io_uring side doesn't support PI futexes, but it does leave a
+potentially dangling pointer which is never a good idea.
+
+Have futex_queue() take a task_struct argument, and have the regular
+callers pass in 'current' for that. Meanwhile io_uring can just pass in
+NULL, as the task should never be used off that path. In theory
+req->tctx->task could be used here, but there's no point populating it
+with a task field that will never be used anyway.
+
+Reported-by: Jann Horn <jannh@google.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Link: https://lore.kernel.org/all/22484a23-542c-4003-b721-400688a0d055@kernel.dk
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- io_uring/net.c       | 3 +--
- io_uring/rsrc.c      | 6 +++---
- io_uring/rsrc.h      | 5 ++---
- io_uring/rw.c        | 2 +-
- io_uring/uring_cmd.c | 2 +-
- 5 files changed, 8 insertions(+), 10 deletions(-)
+ io_uring/futex.c        |  2 +-
+ kernel/futex/core.c     |  5 +++--
+ kernel/futex/futex.h    | 11 ++++++++---
+ kernel/futex/pi.c       |  2 +-
+ kernel/futex/waitwake.c |  4 ++--
+ 5 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 10344b3a6d89c..280d576e89249 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -1377,8 +1377,7 @@ static int io_send_zc_import(struct io_kiocb *req, =
-unsigned int issue_flags)
- 			return ret;
-=20
- 		ret =3D io_import_fixed(ITER_SOURCE, &kmsg->msg.msg_iter,
--					node->buf, (u64)(uintptr_t)sr->buf,
--					sr->len);
-+					node, (u64)(uintptr_t)sr->buf, sr->len);
- 		if (unlikely(ret))
- 			return ret;
- 		kmsg->msg.sg_from_iter =3D io_sg_from_iter;
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index af39b69eb4fde..4d0e1c06c8bc6 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -860,10 +860,10 @@ int io_sqe_buffers_register(struct io_ring_ctx *ctx=
-, void __user *arg,
- 	return ret;
+diff --git a/io_uring/futex.c b/io_uring/futex.c
+index e29662f039e1a..f108da4ff863c 100644
+--- a/io_uring/futex.c
++++ b/io_uring/futex.c
+@@ -349,7 +349,7 @@ int io_futex_wait(struct io_kiocb *req, unsigned int issue_flags)
+ 		hlist_add_head(&req->hash_node, &ctx->futex_list);
+ 		io_ring_submit_unlock(ctx, issue_flags);
+ 
+-		futex_queue(&ifd->q, hb);
++		futex_queue(&ifd->q, hb, NULL);
+ 		return IOU_ISSUE_SKIP_COMPLETE;
+ 	}
+ 
+diff --git a/kernel/futex/core.c b/kernel/futex/core.c
+index ebdd76b4ecbba..3db8567f5a44e 100644
+--- a/kernel/futex/core.c
++++ b/kernel/futex/core.c
+@@ -532,7 +532,8 @@ void futex_q_unlock(struct futex_hash_bucket *hb)
+ 	futex_hb_waiters_dec(hb);
  }
-=20
--int io_import_fixed(int ddir, struct iov_iter *iter,
--			   struct io_mapped_ubuf *imu,
--			   u64 buf_addr, size_t len)
-+int io_import_fixed(int ddir, struct iov_iter *iter, struct io_rsrc_node=
- *node,
-+		    u64 buf_addr, size_t len)
+ 
+-void __futex_queue(struct futex_q *q, struct futex_hash_bucket *hb)
++void __futex_queue(struct futex_q *q, struct futex_hash_bucket *hb,
++		   struct task_struct *task)
  {
-+	struct io_mapped_ubuf *imu =3D node->buf;
- 	u64 buf_end;
- 	size_t offset;
-=20
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index 190f7ee45de93..abd0d5d42c3e1 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -50,9 +50,8 @@ void io_free_rsrc_node(struct io_ring_ctx *ctx, struct =
-io_rsrc_node *node);
- void io_rsrc_data_free(struct io_ring_ctx *ctx, struct io_rsrc_data *dat=
-a);
- int io_rsrc_data_alloc(struct io_rsrc_data *data, unsigned nr);
-=20
--int io_import_fixed(int ddir, struct iov_iter *iter,
--			   struct io_mapped_ubuf *imu,
--			   u64 buf_addr, size_t len);
-+int io_import_fixed(int ddir, struct iov_iter *iter, struct io_rsrc_node=
- *node,
-+		    u64 buf_addr, size_t len);
-=20
- int io_register_clone_buffers(struct io_ring_ctx *ctx, void __user *arg)=
-;
- int io_sqe_buffers_unregister(struct io_ring_ctx *ctx);
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 7aa1e4c9f64a3..c25e0ab5c996b 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -369,7 +369,7 @@ static int io_prep_rw_fixed(struct io_kiocb *req, con=
-st struct io_uring_sqe *sqe
- 	io_req_assign_buf_node(req, node);
-=20
- 	io =3D req->async_data;
--	ret =3D io_import_fixed(ddir, &io->iter, node->buf, rw->addr, rw->len);
-+	ret =3D io_import_fixed(ddir, &io->iter, node, rw->addr, rw->len);
- 	iov_iter_save_state(&io->iter, &io->iter_state);
- 	return ret;
+ 	int prio;
+ 
+@@ -548,7 +549,7 @@ void __futex_queue(struct futex_q *q, struct futex_hash_bucket *hb)
+ 
+ 	plist_node_init(&q->list, prio);
+ 	plist_add(&q->list, &hb->chain);
+-	q->task = current;
++	q->task = task;
  }
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 1f6a82128b475..aebbe2a4c7183 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -274,7 +274,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long=
- len, int rw,
-=20
- 	/* Must have had rsrc_node assigned at prep time */
- 	if (node)
--		return io_import_fixed(rw, iter, node->buf, ubuf, len);
-+		return io_import_fixed(rw, iter, node, ubuf, len);
-=20
- 	return -EFAULT;
+ 
+ /**
+diff --git a/kernel/futex/futex.h b/kernel/futex/futex.h
+index 99b32e728c4ad..6b2f4c7eb720f 100644
+--- a/kernel/futex/futex.h
++++ b/kernel/futex/futex.h
+@@ -285,13 +285,15 @@ static inline int futex_get_value_locked(u32 *dest, u32 __user *from)
  }
---=20
-2.43.5
+ 
+ extern void __futex_unqueue(struct futex_q *q);
+-extern void __futex_queue(struct futex_q *q, struct futex_hash_bucket *hb);
++extern void __futex_queue(struct futex_q *q, struct futex_hash_bucket *hb,
++				struct task_struct *task);
+ extern int futex_unqueue(struct futex_q *q);
+ 
+ /**
+  * futex_queue() - Enqueue the futex_q on the futex_hash_bucket
+  * @q:	The futex_q to enqueue
+  * @hb:	The destination hash bucket
++ * @task: Task queueing this futex
+  *
+  * The hb->lock must be held by the caller, and is released here. A call to
+  * futex_queue() is typically paired with exactly one call to futex_unqueue().  The
+@@ -299,11 +301,14 @@ extern int futex_unqueue(struct futex_q *q);
+  * or nothing if the unqueue is done as part of the wake process and the unqueue
+  * state is implicit in the state of woken task (see futex_wait_requeue_pi() for
+  * an example).
++ *
++ * Note that @task may be NULL, for async usage of futexes.
+  */
+-static inline void futex_queue(struct futex_q *q, struct futex_hash_bucket *hb)
++static inline void futex_queue(struct futex_q *q, struct futex_hash_bucket *hb,
++			       struct task_struct *task)
+ 	__releases(&hb->lock)
+ {
+-	__futex_queue(q, hb);
++	__futex_queue(q, hb, task);
+ 	spin_unlock(&hb->lock);
+ }
+ 
+diff --git a/kernel/futex/pi.c b/kernel/futex/pi.c
+index d62cca5ed8f4c..635c7d5d42220 100644
+--- a/kernel/futex/pi.c
++++ b/kernel/futex/pi.c
+@@ -982,7 +982,7 @@ int futex_lock_pi(u32 __user *uaddr, unsigned int flags, ktime_t *time, int tryl
+ 	/*
+ 	 * Only actually queue now that the atomic ops are done:
+ 	 */
+-	__futex_queue(&q, hb);
++	__futex_queue(&q, hb, current);
+ 
+ 	if (trylock) {
+ 		ret = rt_mutex_futex_trylock(&q.pi_state->pi_mutex);
+diff --git a/kernel/futex/waitwake.c b/kernel/futex/waitwake.c
+index 3a10375d95218..a9056acb75eef 100644
+--- a/kernel/futex/waitwake.c
++++ b/kernel/futex/waitwake.c
+@@ -350,7 +350,7 @@ void futex_wait_queue(struct futex_hash_bucket *hb, struct futex_q *q,
+ 	 * access to the hash list and forcing another memory barrier.
+ 	 */
+ 	set_current_state(TASK_INTERRUPTIBLE|TASK_FREEZABLE);
+-	futex_queue(q, hb);
++	futex_queue(q, hb, current);
+ 
+ 	/* Arm the timer */
+ 	if (timeout)
+@@ -461,7 +461,7 @@ int futex_wait_multiple_setup(struct futex_vector *vs, int count, int *woken)
+ 			 * next futex. Queue each futex at this moment so hb can
+ 			 * be unlocked.
+ 			 */
+-			futex_queue(q, hb);
++			futex_queue(q, hb, current);
+ 			continue;
+ 		}
+ 
+-- 
+2.39.5
 
