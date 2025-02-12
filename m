@@ -1,69 +1,67 @@
-Received: from mail-pj1-f98.google.com (mail-pj1-f98.google.com [209.85.216.98])
+Received: from mail-io1-f100.google.com (mail-io1-f100.google.com [209.85.166.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 750C62010F6
-	for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 20:46:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65041EEA4A
+	for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 20:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739393170; cv=none; b=ob+ZNY3ez65Kx5PshO7x9FqJvZkU2PYYfHRSF+f/QB/ebMu5aPu631IyJPy5s7gpWZnx73C83YQ+rqVG09pOHtU9unFMIvjfFZmNgbWb5SHT50tfoC+mD2NrazsXg7Xv+cduKtXC0oDUDkqy8LRf/1b6EYdfjOu6494f/J9TomY=
+	t=1739393195; cv=none; b=WTAlW8H1QXLuyrOp8j1PZsncW4TQRUVT8zCT4ovdRdD1agjd0NbgaSr/WHH7dXHWDsVAeDTfNT3QH6Wu+HClAaMlXALa7Tzq0ujVn2w8DMISEFx8icC7Sb1ljUrrw3Q9VdA+tZJwU1u1IqZ1f5vj0/ujMvZIr+GJM67UpnVp4+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739393170; c=relaxed/simple;
-	bh=eeT59URkB8BtNx633XNrD7bxhoHpewE+65P5H0rT0oE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vFSdlj9UJT31r3emCG5XabPu/y50uiwzhwscBIA5ZiwxoBgVnpi3K1TNIxNa3mtiiSWoVUiSdhCA6Wck/HLUXNYoA+RqLFQo1dEzRbJSeHQL9GULExDUzp5JSgK7WxDiHW1eqPbUqIvC7w++ExWkm7pkSHqPnJnOVBY3BeTZMRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=SsQzcMpj; arc=none smtp.client-ip=209.85.216.98
+	s=arc-20240116; t=1739393195; c=relaxed/simple;
+	bh=WEbvghG5qG37wCBWMvGFFRMd/IgFtSFjI1yWwCpYjpU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hydJmHqzryVSO++//0mPkZ4DTbeWHjhspszBtLLviJt0DQpKARcSLJWjdBrTsOCRRYiJe27e5z1Dc+B/xvfO5owlFekSRbdsX+3UD5ej/S2CrrZUbSlOZJPnS5pfKWE2BFTw78RIvESNxTqDIyCaNVg12jzA1AKncI/yw490dc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=asumzZjL; arc=none smtp.client-ip=209.85.166.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="SsQzcMpj"
-Received: by mail-pj1-f98.google.com with SMTP id 98e67ed59e1d1-2fbf706c9cbso44327a91.3
-        for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 12:46:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="asumzZjL"
+Received: by mail-io1-f100.google.com with SMTP id ca18e2360f4ac-8551f4fda6aso475139f.3
+        for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 12:46:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1739393167; x=1739997967; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oPNijH5Sc3nr2XmbysFEspzjbNv2CMnY8sx3nT5qMWI=;
-        b=SsQzcMpjTCck10euX3vb1V7WFAcLvIwA/86YqNu4EYBIId1d3ZNcw7RA4IJYtbIlI4
-         wnklpCs7tYZSOktTP2PCcqzIvIKfzBclgMue+2a3OT75zjcbCrXys2/BUfvSF2Pl+LaS
-         cB2/K2q5U9Y/J15B7yeCOHO4RHZaC2LpY9VFvIXTdbPnuo7upeEBzb9DZvfVOgzyik1q
-         TEVCWL0t6Fd8sbAydgFcZIoMBzVCNMy7nFvtAwDRrUR0KKpFA5Ye+7HMyUvampJi0GJt
-         JWf5TFsKk/car9IsSZGXKIERs6MSaXYSUkC0Z0x9OCCdY5L3KJO5/br9ao8Xay3i/lpz
-         5zYA==
+        d=purestorage.com; s=google2022; t=1739393193; x=1739997993; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C1Szppuqbw+roNwcR7rWxy0Q8IaoVRiOv/Zo+HVKhVU=;
+        b=asumzZjLUxObP7y+oqQwbEjVQA+59XA5DlnkgYtifN56VpeXFrMNRI7bJlNvuicXGm
+         DoPlYrM8h6VE4rCwTCzd+OWrtneeDiLywZVXs1qRmm8w0beO1CcRz1h+kmp6pz+WB7Xz
+         Wxz5inMa8FW9G2PyRrnMnySQAkvelgYkxm24z+DAVnmQOPtDpGjphcx7xk1xMyqp4RX/
+         ViUuR6Ucegb2lySKR1KoeK7yVzeGQD9EZsI5Vtcx61rFfM5j9bHjq8ESYJR6ZRSuTqB0
+         y8n9RyuLSL2HXpFgL1fU4Wcxt9cLz5Jn87QGURc9Ae7ZjHYClVgVqGbscfix4ZBP2Esn
+         jWVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739393167; x=1739997967;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oPNijH5Sc3nr2XmbysFEspzjbNv2CMnY8sx3nT5qMWI=;
-        b=D9+CtNX3G8MBwwswrfoTjqTDZrS/eiV/sEl90V5FKYEGaX7Ln0GxCg00OYUEZC2fcx
-         VPoRrxv9bdX4p9ePkWFlQIEw4cH3Pi9oKY0jhpbGQS7LHD0yjt+/bYSD2ysplUbvhccn
-         mjxzRiNkcZ3/hPtmFsXuOovfzmfBZFUAwm+47IPkKRycPW1hEpXZKcfP6rxp2Tn1hfbk
-         JIw+S67OxLzd22MGJtciS5RPKVo3rgmw5it7uAdKfl6OVWqGcbHzqXOgsdCUclBYeUTp
-         CAa+B5zqJCmkYY5G0wOmJAXtZ1VDcPmVpF0y8oIOCFTxr2hc6Ik+EWrv2m6ZnUydXksR
-         h88A==
-X-Forwarded-Encrypted: i=1; AJvYcCU1xL0LV7fLuSVJVnFIOMCJgQXPEeKlc1CZhXFvX3qjMNAQIudJWh1k8o8Il03731eT/oUuRf16Vg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwGAIq/stV3horpluGl+6q40gCbVaGJpSghj/qLdnZ8pXAiORf
-	nlTzw+2zLSg4iGKIOVn79hlmAbg2Ub4m+a80ZVqz8cMBkrhDxFs9WaBGWBlv8acOQJBmM8P36Ee
-	kx0modp9Db1UJzDIN3j9KR54se/ldJZ19
-X-Gm-Gg: ASbGncti24UM84iF/HpAWH/rORP9HGKjNayvmvalpseEZPFwjzveURAoYeBe9YF4TBU
-	xmPZpki7ffvzgtGBKCCFmxYWKvB5yWnLCDmTmz5qkygSz4neUgIOjd+TZ3BSUkGWxBBtS0QAEFu
-	LMxjM6YTi/EGWHAsSAwhOW8CC0KDIaN/O6mWikpL5pXGoLGm7Nw3G40GdGb3hkCmDJqUSAxs8e8
-	cclCy3WU3qfy0pp40Ufda5+ks4+nrbSyQRJ5Qeoyw3FPU/aBxFIYaeXSRhi8FckKVOViE0dl52L
-	5M/y+jAARkhLzPz/oQMlolpujyBJABLQekqJZQ==
-X-Google-Smtp-Source: AGHT+IEGGGYFBXQjVOXTA9A01ACW598Eb6VOLJN33xDmsi02G3BvTVlhYf6Ii7mAGdq/sBr0KLz9S/+1QQxO
-X-Received: by 2002:a17:90b:1807:b0:2ee:a558:b6bf with SMTP id 98e67ed59e1d1-2fbf5c79d4emr2804484a91.8.1739393166677;
-        Wed, 12 Feb 2025 12:46:06 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-2fbf98b9449sm129276a91.4.2025.02.12.12.46.06
+        d=1e100.net; s=20230601; t=1739393193; x=1739997993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C1Szppuqbw+roNwcR7rWxy0Q8IaoVRiOv/Zo+HVKhVU=;
+        b=CLx8k3E/ttgtWaYHzwq4WXD7Fdwn42XDQvkzpW+QXIVUTD6GfBOiM6jZZd65Iwt+jp
+         jrRNdhFL+SfjpYxWBkXseZcHyWhVZz6KRMdqRMBgLzdtJQAxAyVEyPBOUtbfufS73ZE2
+         OADGjAYTdEM53D9r1fsRlclpyPa+laQdWVGrGFhHITN7PJ+8SHT+Vu/GjLyj8IyrWC+R
+         43bf19ngi8wGdAe8FSiyhW5/9MrDi6R3Uch58IffGLF+M+aYVV9A8dnwrE7KVPPXxf3J
+         Q8sQ23C2nUd/TBQfRkKUCMVphFb9LgMP+pW62mZbQb6ERizQMy9GIj+9O+c7rPHrWqBk
+         9iEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUTouup+/UldF0wC5pPQ/K1ABWvqCo+0oT7xFCcoPWZvr5EdKYbLWxCKGAQoelh3X05gFDKL0l6Gg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwR6AiylGN0XO9RXxApp0uEXkId1ew9PauDkfPqX2uERb3HuYuy
+	27dCRYCQ70DwV51DmeB+p+QTxRTHFP0jGk3wyo6nhHMuD/FNm1PtX91GfqUgPHVPPBo3OzBH0mf
+	sEe65PmHM0RBrUld5SfHtTHMsY33OKduAkL/RGK0Gz5t9f/zN
+X-Gm-Gg: ASbGncslZpzqPKAKT9ro7bXyAAkMnNpFdzCbZG3KSccTxKho74OcWYCeY/+aeplsUUG
+	C8uPlqtXMBZsGD5dtN8mFqUrWckZ23fh6Fztj7fCuIEe7IQ4bQyqZdVPj6Xs3Dv8dNpUy3QnPZZ
+	UDn5K8w1hjM9m4Arbop8btRD8U6qLfz+PGbpEdxs1unAraOggt/UHssfatFBH/JTR6Ykz5Mw3/z
+	wcMYLesVNu2yHNuXK5dfMOqZQwN+ugPNvWLDd+Kcs+NQIAuFb1THogo8NJRHlGKBt4StrKz6xak
+	X80HFHNHxvQYR0D51QKVUiY=
+X-Google-Smtp-Source: AGHT+IERRFz28hVonQcVW2NGKlN7rUa7EdvNtmcD5oahOamuqm8rs+l1MW3XjQINiNLg48cf22LBeVh8KsUC
+X-Received: by 2002:a05:6e02:3208:b0:3ce:7ac0:64c2 with SMTP id e9e14a558f8ab-3d17d0725efmr8768165ab.1.1739393192833;
+        Wed, 12 Feb 2025 12:46:32 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id e9e14a558f8ab-3d05e8d8fa9sm8855715ab.11.2025.02.12.12.46.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 12:46:06 -0800 (PST)
+        Wed, 12 Feb 2025 12:46:32 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id E55423401A2;
-	Wed, 12 Feb 2025 13:46:05 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id A78583401A2;
+	Wed, 12 Feb 2025 13:46:31 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id E1AFDE419A0; Wed, 12 Feb 2025 13:46:05 -0700 (MST)
+	id 9D155E41973; Wed, 12 Feb 2025 13:46:01 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Pavel Begunkov <asml.silence@gmail.com>
@@ -71,12 +69,10 @@ Cc: Riley Thomasson <riley@purestorage.com>,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 2/2] io_uring/uring_cmd: switch sqe to async_data on EAGAIN
-Date: Wed, 12 Feb 2025 13:45:46 -0700
-Message-ID: <20250212204546.3751645-3-csander@purestorage.com>
+Subject: [PATCH 0/2] uring_cmd SQE corruptions
+Date: Wed, 12 Feb 2025 13:45:44 -0700
+Message-ID: <20250212204546.3751645-1-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250212204546.3751645-1-csander@purestorage.com>
-References: <20250212204546.3751645-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -85,91 +81,59 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-5eff57fa9f3a ("io_uring/uring_cmd: defer SQE copying until it's needed")
-moved the unconditional memcpy() of the uring_cmd SQE to async_data
-to 2 cases when the request goes async:
+In our application issuing NVMe passthru commands, we have observed
+nvme_uring_cmd fields being corrupted between when userspace initializes
+the io_uring SQE and when nvme_uring_cmd_io() processes it.
+
+We hypothesized that the uring_cmd's were executing asynchronously after
+the io_uring_enter() syscall returned, yet were still reading the SQE in
+the userspace-mapped SQ. Since io_uring_enter() had already incremented
+the SQ head index, userspace reused the SQ slot for a new SQE once the
+SQ wrapped around to it.
+
+We confirmed this hypothesis by "poisoning" all SQEs up to the SQ head
+index in userspace upon return from io_uring_enter(). By overwriting the
+nvme_uring_cmd nsid field with a known garbage value, we were able to
+trigger the err message in nvme_validate_passthru_nsid(), which logged
+the garbage nsid value.
+
+The issue is caused by commit 5eff57fa9f3a ("io_uring/uring_cmd: defer
+SQE copying until it's needed"). With this commit reverted, the poisoned
+values in the SQEs are no longer seen by nvme_uring_cmd_io().
+
+Prior to the commit, each uring_cmd SQE was unconditionally memcpy()ed
+to async_data at prep time. The commit moved this memcpy() to 2 cases
+when the request goes async:
 - If REQ_F_FORCE_ASYNC is set to force the initial issue to go async
 - If ->uring_cmd() returns -EAGAIN in the initial non-blocking issue
 
-Unlike the REQ_F_FORCE_ASYNC case, in the EAGAIN case, io_uring_cmd()
-copies the SQE to async_data but neglects to update the io_uring_cmd's
-sqe field to point to async_data. As a result, sqe still points to the
-slot in the userspace-mapped SQ. At the end of io_submit_sqes(), the
-kernel advances the SQ head index, allowing userspace to reuse the slot
-for a new SQE. If userspace reuses the slot before the io_uring worker
-reissues the original SQE, the io_uring_cmd's SQE will be corrupted.
+This patch set fixes a bug in the EAGAIN case where the uring_cmd's sqe
+pointer is not updated to point to async_data after the memcpy(),
+as it correctly is in the REQ_F_FORCE_ASYNC case.
 
-Introduce a helper io_uring_cmd_cache_sqes() to copy the original SQE to
-the io_uring_cmd's async_data and point sqe there. Use it for both the
-REQ_F_FORCE_ASYNC and EAGAIN cases. This ensures the uring_cmd doesn't
-read from the SQ slot after it has been returned to userspace.
+However, uring_cmd's can be issued async in other cases not enumerated
+by 5eff57fa9f3a, also leading to SQE corruption. These include requests
+besides the first in a linked chain, which are only issued once prior
+requests complete. Requests waiting for a drain to complete would also
+be initially issued async.
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-Fixes: 5eff57fa9f3a ("io_uring/uring_cmd: defer SQE copying until it's needed")
----
- io_uring/uring_cmd.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+While it's probably possible for io_uring_cmd_prep_setup() to check for
+each of these cases and avoid deferring the SQE memcpy(), we feel it
+might be safer to revert 5eff57fa9f3a to avoid the corruption risk.
+As discussed recently in regard to the ublk zero-copy patches[1], new
+async paths added in the future could break these delicate assumptions.
 
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index cfb22e1de0e7..bcfca18395c4 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -166,10 +166,19 @@ void io_uring_cmd_done(struct io_uring_cmd *ioucmd, ssize_t ret, u64 res2,
- 		io_req_task_work_add(req);
- 	}
- }
- EXPORT_SYMBOL_GPL(io_uring_cmd_done);
- 
-+static void io_uring_cmd_cache_sqes(struct io_kiocb *req)
-+{
-+	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
-+	struct io_uring_cmd_data *cache = req->async_data;
-+
-+	memcpy(cache->sqes, ioucmd->sqe, uring_sqe_size(req->ctx));
-+	ioucmd->sqe = cache->sqes;
-+}
-+
- static int io_uring_cmd_prep_setup(struct io_kiocb *req,
- 				   const struct io_uring_sqe *sqe)
- {
- 	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
- 	struct io_uring_cmd_data *cache;
-@@ -177,18 +186,14 @@ static int io_uring_cmd_prep_setup(struct io_kiocb *req,
- 	cache = io_uring_alloc_async_data(&req->ctx->uring_cache, req);
- 	if (!cache)
- 		return -ENOMEM;
- 	cache->op_data = NULL;
- 
--	if (!(req->flags & REQ_F_FORCE_ASYNC)) {
--		/* defer memcpy until we need it */
--		ioucmd->sqe = sqe;
--		return 0;
--	}
--
--	memcpy(cache->sqes, sqe, uring_sqe_size(req->ctx));
--	ioucmd->sqe = cache->sqes;
-+	ioucmd->sqe = sqe;
-+	/* defer memcpy until we need it */
-+	if (unlikely(req->flags & REQ_F_FORCE_ASYNC))
-+		io_uring_cmd_cache_sqes(req);
- 	return 0;
- }
- 
- int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
-@@ -251,11 +256,11 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
- 	ret = file->f_op->uring_cmd(ioucmd, issue_flags);
- 	if (ret == -EAGAIN) {
- 		struct io_uring_cmd_data *cache = req->async_data;
- 
- 		if (ioucmd->sqe != cache->sqes)
--			memcpy(cache->sqes, ioucmd->sqe, uring_sqe_size(req->ctx));
-+			io_uring_cmd_cache_sqes(req);
- 		return -EAGAIN;
- 	} else if (ret == -EIOCBQUEUED) {
- 		return -EIOCBQUEUED;
- 	}
- 
+Thoughts?
+
+[1]: https://lore.kernel.org/io-uring/7c2c2668-4f23-41d9-9cdf-c8ddd1f13f7c@gmail.com/
+
+Caleb Sander Mateos (2):
+  io_uring/uring_cmd: don't assume io_uring_cmd_data layout
+  io_uring/uring_cmd: switch sqe to async_data on EAGAIN
+
+ io_uring/uring_cmd.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
+
 -- 
 2.45.2
 
