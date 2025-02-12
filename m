@@ -1,82 +1,82 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f226.google.com (mail-pl1-f226.google.com [209.85.214.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B87C262817
-	for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 18:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626D11FF5EF
+	for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 20:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739386760; cv=none; b=hs8lwOsKb+vwOPG+ZXXARGYCnG709JkcVa9dnAn5Jxxsi+5nx66hMQbMOhxjp9blJaG33MPUlZF31dkCQH8fLzCRKHHymZRWaWsxfSgSEaZiOaiTHRbewNBD4H3CuJKNCYwplZLHL+CKEjq/D35JIozz/PtWxImieYWOZv9bRtU=
+	t=1739393167; cv=none; b=e+8E2DE7rIyIA5GQmpD7xwablR4FCmy1rQibuKSrS3+k5B+GkoYNEx9avGHYjCWU5DyEDV8tviQQ66nX1TpWTrxki6d0gqjU6SgdKKN2mcknkcVFGMShLRC45/j63D6cMgh1xcQ92IMIt7UnLFfsmYG8JFMHttdFOtc3ZRq6RoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739386760; c=relaxed/simple;
-	bh=9pTdmByBVpWL3oRo72V1P/Qnfm3p1w1EAQ8TvZwzW4E=;
+	s=arc-20240116; t=1739393167; c=relaxed/simple;
+	bh=0LJjSt3oEend1gmYZZak25M8M1v0B3rrlIqISknkskg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pesTNugIFGUoxuK9MbdjpIYjaOO4UIEdJImTVm0DyrDjbe7LYNwwfKH7P4j7WkC3MTuG4Rt7NcOjgEgqt9rL9CnhWsoKYLsrWJtKWhC7DAgLAs9ORBxHBaQQE3UpHYU0kiA5H7FB6JEX0RLnFJ0jYA2PX52TCIp6AT+a9b6h2E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=EmbZ8TjM; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	 MIME-Version; b=os6sAnsekJZ0hjWibgrxEFTRslynDR4mmdGxoFIrLgp5J+qKk/Fbjj5e428m+qoquO/KjxeUxuXNUoan8vuE6CBKP2BR2lIR5tKSUipEkSYC56wC53Q+MjX0GR+DfX8P4fR2bX2M5XXTWi1nGN9eo9ilvK27sbaLbrl/PwMZ/sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=T+xlsJEg; arc=none smtp.client-ip=209.85.214.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="EmbZ8TjM"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-220c8f38febso14439925ad.2
-        for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 10:59:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="T+xlsJEg"
+Received: by mail-pl1-f226.google.com with SMTP id d9443c01a7336-21f54143aeaso184875ad.1
+        for <io-uring@vger.kernel.org>; Wed, 12 Feb 2025 12:46:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1739386756; x=1739991556; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1739393164; x=1739997964; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NHWoGsRhiFc/ooKo3TvF3R3d8ADOTW+DffRpnDLhJ48=;
-        b=EmbZ8TjMTdDrfcM+n2gNijV42NI28HDG6dgezndFymBVQOffsQgEGvR/VobYIOtV/z
-         0fPdqzePGwTnA5hav5gIwAcU2gbDgXbuQ8jjoMggRFzDJnKbpTJ1XOeU1WjwidZhSlvu
-         /YT7yHqaEeh3e2hLq4RQirH4D/1xZEXgjO140KDdsKP/xQh7SLm/uFrTjsUH6FibYPec
-         YogppvISJX1K+Ipt7BTtn21yVnc7EIcz16OtzeZc5jlQLsvLhIv2k6gS1YByp+CEnnXX
-         SX/76WjQ8VR3nv0B6EuYlKX9VmEoJkcRX2H+w0X7SBkUsvvH9Om6MPbQaB7Zq6lJKqGT
-         2swg==
+        bh=ZiHGm8Z7lClPdUqk0kB1EHyQ03s+QvOZkIRAonfJV60=;
+        b=T+xlsJEg3Enk1k+4E+HGWPbEvYUvBODmMjPAfVZr6smu3MGE3nI7FTv1PnL+nvPCij
+         uoLL9/PrCsSsu+WhF4ITXost4ZH6ZqpcEpr3u1YKb5faDDDpjHo3JWQKGU2rqkVwyvOg
+         hXl7snm+fujE3z2jw1yTrXFjfu2ABt1mwat4O0/y06TeYZ22IRSQq/Q3U9JGmlB6dHEc
+         pR98JMhW37Xn7LTKnqsT3erudRz+NwPcX5FBRFB6GGTqePFRMGJ7ZaiAc+uNY1Ucgv1p
+         ng43YLC2L5tb96HXiAKeW1HxRyJ3TjT42+tKiQ/P3L1crpFGPzVJdkXKtKQdeDXpIh3H
+         WadQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739386756; x=1739991556;
+        d=1e100.net; s=20230601; t=1739393164; x=1739997964;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NHWoGsRhiFc/ooKo3TvF3R3d8ADOTW+DffRpnDLhJ48=;
-        b=K2hPrMgxfoW6dSMHZzrILq60zOZkABv6UxG6rMGaBUGKPuTQXIgBAKa4JGXyQ7Kq7K
-         Jrygz1Q4BvgDcDy8X/18tQGed1njqjl1AsayuVZ42gFRyWKOKgmm4lNNxG/A9TPaBXzk
-         lW+sjkaMhRNkxwsBsgxfrKB5/Ijfzivsl2Na8+88ZFnt55eGEEsbYPM6dOZf9NDLqfoq
-         rXN/dJZQ4QuiHHF1fYnXSjopVbvLAJxKoM4GrfP62FLs+YY1t392SiYKLeGlWWdIRvfT
-         E8mVXxzJykWoxCkgFlFrjz8KsnnrL4YnG1LA1HCG0fojz21Zn70zmOSSyWCnuYCQdx2I
-         IT4w==
-X-Gm-Message-State: AOJu0YwtEfjN2QPPmbjpiXkb38p8mvT7E/w0Q6Zb5ZcR8da3zqHZtVfU
-	gbdH2R79jFb4qj/mFtjbioC4A744P4YoLntiAifnxrsuUPNbITDfj6XJMLuxvkMJA5f5gB8yc7b
-	V
-X-Gm-Gg: ASbGncvthEd+04Viq1rhjpGYthJfI11sE0A9sLdoQ3frONJ1XU2TBkdNiSollA94nVK
-	bkRX74Ug23uszEfCNW40K2cv3Fd00wHAsCBZ8nvFbt7s5/xUH7xYva0baknXjprJ/uH39I4khIf
-	SO1dXlTWc00Nu0PMKVZ+X6zYKpHdXPTxBPKH7Cf98PL4ILaGyPm5yYCa85QHzhG3Qzq8aK57J0Y
-	UMhE8myFAhxpi5C5CalWBDkNZ5VoFL463B0E7PKKQfWBUU1tfH+Iy59hIaRVRjyfeo5x8toUpwB
-X-Google-Smtp-Source: AGHT+IHCFlfixa6KjP6YmcpUGIN/NNsejdfcLQhFihNNDU8POVbfi8RxA+ESXd2uIhuEC5K8YngjiQ==
-X-Received: by 2002:a05:6a21:6da8:b0:1e1:cbbf:be0 with SMTP id adf61e73a8af0-1ee5e5bbea4mr7406758637.22.1739386755760;
-        Wed, 12 Feb 2025 10:59:15 -0800 (PST)
-Received: from localhost ([2a03:2880:ff:71::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7307a29ecdesm8003949b3a.173.2025.02.12.10.59.15
+        bh=ZiHGm8Z7lClPdUqk0kB1EHyQ03s+QvOZkIRAonfJV60=;
+        b=Oc77Ndk4Uz4eLeMAC8nPIyDwwiIYFIcNRMFyTwA6z8BeRTiSCEk2dIPV3oT5mBPdsu
+         X0LD3LxBerHC6FyCZGeS6ug+kyJvapGoSIjx3r//f02MfM6CF9EehPIXrJRHebjIiHPO
+         EaxSV1UnXLl6vZyjtwcKgHwgjQPbCg5/3jpBDyWlbcDknA56syZjT9mvKSPv16rbgDqy
+         g70EChwoueffZkac11Tl78JyTzcMrd+5Aoff8ZdVApP2rJmFfu+OWT2xO12k9ZarIBel
+         PVC8ytlVxbhskKjbgcJT5oEH6g9EQYpNkmCuw67PSMN2yU6abrpduT4hFxYxh4KRTFwC
+         mtSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUALtP4D/zrKLkRZtX1rHbOnvrVzDFPh28jEt7GsQoq1daL/LS5zJWurRQFI9PTLCQYT7HAVn6OAg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YytCPdEUnAIBYTmn0c079cmkfaa7WtWiKK2OI7d1/1GyrM3HzG7
+	WhpDQcnF1hS8Cb+8Cw5h/pcBJvC5WCBG8sPIfTVhLH8d4rWw0cnxYhvlM5VmL3eiEaNpyqNf49D
+	lcjVwQ1g6Pgt9XzeNSuuB8r0Y2EYfv7vF
+X-Gm-Gg: ASbGncstXjdtOqa7rU5dMt/DdQNho4ODFKb/ogsMD2/kuduu9LnFpf626YoPGFmOqK4
+	CD6PXbIyJhUBsd4Le0AWBfBZTPi5J9gVEIewKt3faj8DPxALYILdI2kMCtj0fJRwRcRCMJb2IRj
+	fOqpJhFpXxuly4Gbr+AJAg9bVaFrvk2/RkwgO34obYl2HsxLkVeX7ZxbkmnKHh26IDW7FzUvrKd
+	Nf53WjuZi/GwSeARqSm4iUUF+/kELonhfso/ZRa4dSjytCZpVI2NkJJum4UmvFiqPWyQtP7E17i
+	elYmuXdW3l6SRrqolcAe3pLV2w+xzr7w3sjWBQ==
+X-Google-Smtp-Source: AGHT+IEesfnwMWPhBe3XCPFux/HTRuC73toUxHqLiz/tK4QjkS1qFTzqnxeFbt046WfoZgAZrpqPeYrRUO/D
+X-Received: by 2002:a17:902:dac2:b0:215:b75f:a1d8 with SMTP id d9443c01a7336-220bbaaefcemr27593215ad.2.1739393164580;
+        Wed, 12 Feb 2025 12:46:04 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-220c93caa35sm550195ad.47.2025.02.12.12.46.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 10:59:15 -0800 (PST)
-From: David Wei <dw@davidwei.uk>
-To: io-uring@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Mina Almasry <almasrymina@google.com>,
-	Stanislav Fomichev <stfomichev@gmail.com>,
-	Joe Damato <jdamato@fastly.com>,
-	Pedro Tammela <pctammela@mojatatu.com>
-Subject: [PATCH net-next v13 10/11] net: add documentation for io_uring zcrx
-Date: Wed, 12 Feb 2025 10:58:00 -0800
-Message-ID: <20250212185859.3509616-11-dw@davidwei.uk>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250212185859.3509616-1-dw@davidwei.uk>
-References: <20250212185859.3509616-1-dw@davidwei.uk>
+        Wed, 12 Feb 2025 12:46:04 -0800 (PST)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id F35263401A2;
+	Wed, 12 Feb 2025 13:46:03 -0700 (MST)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id EF352E419A0; Wed, 12 Feb 2025 13:46:03 -0700 (MST)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>
+Cc: Riley Thomasson <riley@purestorage.com>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH 1/2] io_uring/uring_cmd: don't assume io_uring_cmd_data layout
+Date: Wed, 12 Feb 2025 13:45:45 -0700
+Message-ID: <20250212204546.3751645-2-csander@purestorage.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250212204546.3751645-1-csander@purestorage.com>
+References: <20250212204546.3751645-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -85,236 +85,40 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add documentation for io_uring zero copy Rx that explains requirements
-and the user API.
+eaf72f7b414f ("io_uring/uring_cmd: cleanup struct io_uring_cmd_data
+layout") removed most of the places assuming struct io_uring_cmd_data
+has sqes as its first field. However, the EAGAIN case in io_uring_cmd()
+still compares ioucmd->sqe to the struct io_uring_cmd_data pointer using
+a void * cast. Since fa3595523d72 ("io_uring: get rid of alloc cache
+init_once handling"), sqes is no longer io_uring_cmd_data's first field.
+As a result, the pointers will always compare unequal and memcpy() may
+be called with the same source and destination.
 
-Signed-off-by: David Wei <dw@davidwei.uk>
+Replace the incorrect void * cast with the address of the sqes field.
+
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+Fixes: eaf72f7b414f ("io_uring/uring_cmd: cleanup struct io_uring_cmd_data layout")
 ---
- Documentation/networking/index.rst    |   1 +
- Documentation/networking/iou-zcrx.rst | 202 ++++++++++++++++++++++++++
- 2 files changed, 203 insertions(+)
- create mode 100644 Documentation/networking/iou-zcrx.rst
+ io_uring/uring_cmd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/networking/index.rst b/Documentation/networking/index.rst
-index 058193ed2eeb..c64133d309bf 100644
---- a/Documentation/networking/index.rst
-+++ b/Documentation/networking/index.rst
-@@ -63,6 +63,7 @@ Contents:
-    gtp
-    ila
-    ioam6-sysctl
-+   iou-zcrx
-    ip_dynaddr
-    ipsec
-    ip-sysctl
-diff --git a/Documentation/networking/iou-zcrx.rst b/Documentation/networking/iou-zcrx.rst
-new file mode 100644
-index 000000000000..0127319b30bb
---- /dev/null
-+++ b/Documentation/networking/iou-zcrx.rst
-@@ -0,0 +1,202 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+=====================
-+io_uring zero copy Rx
-+=====================
-+
-+Introduction
-+============
-+
-+io_uring zero copy Rx (ZC Rx) is a feature that removes kernel-to-user copy on
-+the network receive path, allowing packet data to be received directly into
-+userspace memory. This feature is different to TCP_ZEROCOPY_RECEIVE in that
-+there are no strict alignment requirements and no need to mmap()/munmap().
-+Compared to kernel bypass solutions such as e.g. DPDK, the packet headers are
-+processed by the kernel TCP stack as normal.
-+
-+NIC HW Requirements
-+===================
-+
-+Several NIC HW features are required for io_uring ZC Rx to work. For now the
-+kernel API does not configure the NIC and it must be done by the user.
-+
-+Header/data split
-+-----------------
-+
-+Required to split packets at the L4 boundary into a header and a payload.
-+Headers are received into kernel memory as normal and processed by the TCP
-+stack as normal. Payloads are received into userspace memory directly.
-+
-+Flow steering
-+-------------
-+
-+Specific HW Rx queues are configured for this feature, but modern NICs
-+typically distribute flows across all HW Rx queues. Flow steering is required
-+to ensure that only desired flows are directed towards HW queues that are
-+configured for io_uring ZC Rx.
-+
-+RSS
-+---
-+
-+In addition to flow steering above, RSS is required to steer all other non-zero
-+copy flows away from queues that are configured for io_uring ZC Rx.
-+
-+Usage
-+=====
-+
-+Setup NIC
-+---------
-+
-+Must be done out of band for now.
-+
-+Ensure there are at least two queues::
-+
-+  ethtool -L eth0 combined 2
-+
-+Enable header/data split::
-+
-+  ethtool -G eth0 tcp-data-split on
-+
-+Carve out half of the HW Rx queues for zero copy using RSS::
-+
-+  ethtool -X eth0 equal 1
-+
-+Set up flow steering, bearing in mind that queues are 0-indexed::
-+
-+  ethtool -N eth0 flow-type tcp6 ... action 1
-+
-+Setup io_uring
-+--------------
-+
-+This section describes the low level io_uring kernel API. Please refer to
-+liburing documentation for how to use the higher level API.
-+
-+Create an io_uring instance with the following required setup flags::
-+
-+  IORING_SETUP_SINGLE_ISSUER
-+  IORING_SETUP_DEFER_TASKRUN
-+  IORING_SETUP_CQE32
-+
-+Create memory area
-+------------------
-+
-+Allocate userspace memory area for receiving zero copy data::
-+
-+  void *area_ptr = mmap(NULL, area_size,
-+                        PROT_READ | PROT_WRITE,
-+                        MAP_ANONYMOUS | MAP_PRIVATE,
-+                        0, 0);
-+
-+Create refill ring
-+------------------
-+
-+Allocate memory for a shared ringbuf used for returning consumed buffers::
-+
-+  void *ring_ptr = mmap(NULL, ring_size,
-+                        PROT_READ | PROT_WRITE,
-+                        MAP_ANONYMOUS | MAP_PRIVATE,
-+                        0, 0);
-+
-+This refill ring consists of some space for the header, followed by an array of
-+``struct io_uring_zcrx_rqe``::
-+
-+  size_t rq_entries = 4096;
-+  size_t ring_size = rq_entries * sizeof(struct io_uring_zcrx_rqe) + PAGE_SIZE;
-+  /* align to page size */
-+  ring_size = (ring_size + (PAGE_SIZE - 1)) & ~(PAGE_SIZE - 1);
-+
-+Register ZC Rx
-+--------------
-+
-+Fill in registration structs::
-+
-+  struct io_uring_zcrx_area_reg area_reg = {
-+    .addr = (__u64)(unsigned long)area_ptr,
-+    .len = area_size,
-+    .flags = 0,
-+  };
-+
-+  struct io_uring_region_desc region_reg = {
-+    .user_addr = (__u64)(unsigned long)ring_ptr,
-+    .size = ring_size,
-+    .flags = IORING_MEM_REGION_TYPE_USER,
-+  };
-+
-+  struct io_uring_zcrx_ifq_reg reg = {
-+    .if_idx = if_nametoindex("eth0"),
-+    /* this is the HW queue with desired flow steered into it */
-+    .if_rxq = 1,
-+    .rq_entries = rq_entries,
-+    .area_ptr = (__u64)(unsigned long)&area_reg,
-+    .region_ptr = (__u64)(unsigned long)&region_reg,
-+  };
-+
-+Register with kernel::
-+
-+  io_uring_register_ifq(ring, &reg);
-+
-+Map refill ring
-+---------------
-+
-+The kernel fills in fields for the refill ring in the registration ``struct
-+io_uring_zcrx_ifq_reg``. Map it into userspace::
-+
-+  struct io_uring_zcrx_rq refill_ring;
-+
-+  refill_ring.khead = (unsigned *)((char *)ring_ptr + reg.offsets.head);
-+  refill_ring.khead = (unsigned *)((char *)ring_ptr + reg.offsets.tail);
-+  refill_ring.rqes =
-+    (struct io_uring_zcrx_rqe *)((char *)ring_ptr + reg.offsets.rqes);
-+  refill_ring.rq_tail = 0;
-+  refill_ring.ring_ptr = ring_ptr;
-+
-+Receiving data
-+--------------
-+
-+Prepare a zero copy recv request::
-+
-+  struct io_uring_sqe *sqe;
-+
-+  sqe = io_uring_get_sqe(ring);
-+  io_uring_prep_rw(IORING_OP_RECV_ZC, sqe, fd, NULL, 0, 0);
-+  sqe->ioprio |= IORING_RECV_MULTISHOT;
-+
-+Now, submit and wait::
-+
-+  io_uring_submit_and_wait(ring, 1);
-+
-+Finally, process completions::
-+
-+  struct io_uring_cqe *cqe;
-+  unsigned int count = 0;
-+  unsigned int head;
-+
-+  io_uring_for_each_cqe(ring, head, cqe) {
-+    struct io_uring_zcrx_cqe *rcqe = (struct io_uring_zcrx_cqe *)(cqe + 1);
-+
-+    unsigned long mask = (1ULL << IORING_ZCRX_AREA_SHIFT) - 1;
-+    unsigned char *data = area_ptr + (rcqe->off & mask);
-+    /* do something with the data */
-+
-+    count++;
-+  }
-+  io_uring_cq_advance(ring, count);
-+
-+Recycling buffers
-+-----------------
-+
-+Return buffers back to the kernel to be used again::
-+
-+  struct io_uring_zcrx_rqe *rqe;
-+  unsigned mask = refill_ring.ring_entries - 1;
-+  rqe = &refill_ring.rqes[refill_ring.rq_tail & mask];
-+
-+  unsigned long area_offset = rcqe->off & ~IORING_ZCRX_AREA_MASK;
-+  rqe->off = area_offset | area_reg.rq_area_token;
-+  rqe->len = cqe->res;
-+  IO_URING_WRITE_ONCE(*refill_ring.ktail, ++refill_ring.rq_tail);
-+
-+Testing
-+=======
-+
-+See ``tools/testing/selftests/drivers/net/hw/iou-zcrx.c``
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 1f6a82128b47..cfb22e1de0e7 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -250,11 +250,11 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	ret = file->f_op->uring_cmd(ioucmd, issue_flags);
+ 	if (ret == -EAGAIN) {
+ 		struct io_uring_cmd_data *cache = req->async_data;
+ 
+-		if (ioucmd->sqe != (void *) cache)
++		if (ioucmd->sqe != cache->sqes)
+ 			memcpy(cache->sqes, ioucmd->sqe, uring_sqe_size(req->ctx));
+ 		return -EAGAIN;
+ 	} else if (ret == -EIOCBQUEUED) {
+ 		return -EIOCBQUEUED;
+ 	}
 -- 
-2.43.5
+2.45.2
 
