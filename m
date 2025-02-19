@@ -1,223 +1,104 @@
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 988A5214A81
-	for <io-uring@vger.kernel.org>; Wed, 19 Feb 2025 17:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC41247DE1
+	for <io-uring@vger.kernel.org>; Wed, 19 Feb 2025 20:56:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739985973; cv=none; b=Ey81UPqsccwlYEdIbdyODNAYGmPsPW5eKMb7GK0k1itARBqlcZqSfy5fFy33nPs+597Sh07NZFqP8/ymoGZspGodfVidfa1qjTWd8R2iNjtcKz43zy9AJRtnyLQcd4bICWeB21+JRSQM4WO0SDIBPffGWLFXM/22dvYhkRDhENM=
+	t=1739998567; cv=none; b=IoKJt9B2iOml3nGGRanwwDOf72MRNRAeFb6QTkz4xmBYZGVA97d2z+gZ4xDyES63n7zI0CHuG4IO+5OtmTcEBM81q3vl+UeC+lQnN0rYIuXDDGtbsLxIzkkqkvVtiElG23SavaHChpmAI3IiV599zok3bEfbtiFw08Ew0EH8AkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739985973; c=relaxed/simple;
-	bh=Dgu/2bYkWXrAMq3iF1/8GI7X79S6G6gmhyLC1ec2mfY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U+ccJkm5/MlLYPaT8v3J0tAlMW52lQXLjrwHf1weSctv0kIneUE56C9524U85VsWN+j/dBWm7ow7qWqDiW2AOgeBTRkJ7X0GXs4sR0MtPcJkuCzI7vuDKXJbDf97a/piZERJmriVKt++tbTing9B43sGWR3UVjKikwqB/bZHwQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=C2nFRDgx; arc=none smtp.client-ip=209.85.166.51
+	s=arc-20240116; t=1739998567; c=relaxed/simple;
+	bh=KWD6OD2n1o2ros7LTUEWgm/ubHlzSResbAdfOLBw3hI=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=D2f3n6hVF/2Nj/jdPszKIeus6Q/2MknSlyzSAMP/SoS/BG4R3fDSH9jew6CthOmAnqOFYpY7IEnh5B994ve9yAIk7JWP3azWKcuTMhjMW8WeNtbI3d+jt5sTSe3MJqoZblpQT6OVaUVR72sXFVmJIaPZsoH70AdK1cxkIZW6glw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Mux0mXRk; arc=none smtp.client-ip=209.85.166.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="C2nFRDgx"
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-855a7e3be0eso1088139f.1
-        for <io-uring@vger.kernel.org>; Wed, 19 Feb 2025 09:26:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Mux0mXRk"
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3ce85545983so905595ab.0
+        for <io-uring@vger.kernel.org>; Wed, 19 Feb 2025 12:56:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1739985970; x=1740590770; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1gAHZg9kSYTvKQ33H52aoGebUTskPe032Qb9P2hQu70=;
-        b=C2nFRDgxkeUJxOFus0XdLUwXUYVZZEsSkdAI1XHXzqRNSSQQmrJD9OXmqK81dXZ+BU
-         niwem1/kEPxvdxUZ4YiskDmNk3XSt7OfAbpvEKkdN7ArTzI6ot1FF25GTJ5yH7Pn9+uZ
-         flvqOxHUsldj7pQwY3oAWiOs9wBRDD647+RID/uADI4JAAEs46G5JA7AsA7MMk5HErtN
-         XhWEQDxMA0mD9Ygz5zU2DfKt8w2L6YiZuftaXcoJiiDHarie7tDMknHTp/GULPB2F199
-         xFwnXfySPzu1SCSPP34lIziFl53ES2XTG+iMHkehQXmKmPF++FLWcvkUio6s1clC0SOr
-         tiAg==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1739998562; x=1740603362; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dVJKL2/YFN7RKaOsWIhuPViPj91EWujZm4pXUbaXRn0=;
+        b=Mux0mXRkbmZiEB6FP6pQ2hH4iNb2eyHIxW59oPqsnZMwwQiAEu1NsMMMFo+dJ/qvNH
+         GY/dlzN1Og6UapgaGT7IgBxXVa8AHOxb1qeldIXNv5woakE/ZtbkrTl/vXpEUEea6DBJ
+         mpb8lJ+SKl6nUvCeWLUFOi7nn46GVpmyZQPki3S7vws1+ZAPr2As0b5DC62N/OY3XBco
+         kUjOF1n1hI4mo0Hgl/0SeqhOnkXgUgTZ9PTHS5S+UUWmLIpfGwimWAl8kh5ZU620PLde
+         A5vd3bbwNUch7K8194v4LdmTUCmiNVj9tUM5xb3HbNXOrHht6+Ubg13qQk1nfYBbi+9w
+         WwtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739985970; x=1740590770;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1739998562; x=1740603362;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1gAHZg9kSYTvKQ33H52aoGebUTskPe032Qb9P2hQu70=;
-        b=pSdXA7SZCYxEhMTxNxkhAiQGXWKxoSZ0kgUym828aSW3SkGT8OcC3R4j5juSBSihi2
-         //ezB5TDt4PbZFbpkYxgFJcUwld48gspcCnkk/Z58jDOFfaK72GdhCEC00vRYI0XS8Zm
-         SpVDnzCWlbbYnLrC5mZ6XZy9eorQ9fZI2GMHikDwBTH5D1Q02sD1GotPKfp9R0RK/1iT
-         IVPdvPs9piQb9xXLw5dX8f+Y72V9PpYCnbrAzohoJzwnfx5GX/nukK4u/NH5+uSDU90b
-         zKANzGirliXWOfXmyqtOYm346gTasSOpQ3ujp541wIgxe267N7FKjsHGcdPZgbGYiYcs
-         7Kgg==
-X-Gm-Message-State: AOJu0Yy0aIo9WeGuCGTJT8nexDI2NspzzJQD62FckBs3DNlaxBLrexOj
-	+XmIcE9OtAROLQdphIHrmyjazrCopkaeGYG8C96GA+Bhpk9Rx5GMhNJMpFq+8Fu+tHAZH0/uE8T
-	a
-X-Gm-Gg: ASbGncs5ngFQg5NXtcG2Zlz/ESNcDlXuTVjGfhjVJ1se4buLgApN0r0sJoj+RbGIwCM
-	A16z5QDYqJgPJuQfwp+YtWf04a1bsCavnCAwPvVOOzY8iDgO5DJ8SmtK5QYacwpkrSiNKel5CCG
-	VMIDKTE3KVxnrrUN7/2IO3ISsDjIY6S6e7NvoDmUxiEx2rZxUnvDpZTUjktPCJ2GDtsbG3tVma5
-	iWl8aYkTL3g7WqwnKRFg+KymNmlboZ+r5gzUlxMY9ALWGF/5HfTm8MU5U3q/sRxvC29YXMHEtXI
-	uaCYVRVmf6I3RhBKKSU=
-X-Google-Smtp-Source: AGHT+IHjnt3iA5lsKLTSE6k9kN1FP0fHcpHTu6e9TZVmjZOfhdBtx2VkZxFxTUM+se6BvwdrScUk8Q==
-X-Received: by 2002:a05:6602:6d8d:b0:855:b5fe:3fb7 with SMTP id ca18e2360f4ac-855b5fe4041mr283100139f.7.1739985970155;
-        Wed, 19 Feb 2025 09:26:10 -0800 (PST)
-Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8558f3ccdcesm142192839f.16.2025.02.19.09.26.08
+        bh=dVJKL2/YFN7RKaOsWIhuPViPj91EWujZm4pXUbaXRn0=;
+        b=bbycEeUwlk3V1pKOLLKGVihHqq2QvNyo3N+pYVHDbYus160T0yZJ/lNW4vVxpE8NvD
+         N+z2ayMlp8+uHccETpDzxGQdIAXmosa7jDOUxv2nSKwViXm/nEtvBZ8dJ10yoNRvizVp
+         FmvSMNYeyt2BPcLY8mhOF+XVFg6NDag9Uv1m2TpzstZgpakQ1pvWuCJTOMLJfy0HOQa9
+         8TyWx9ITcZSCEGGLqgidJj1jhT5QtMzAnYUDvpgBOpd08BJpNCrZx5EeFpuwv9tBkCF6
+         5hD2W4tSARKwQ/wt64V+FcmkqSgPXY+lRcCxxbHvwR0sCcOMZh3zG7CCiIPT7S/EFBDS
+         x4Bg==
+X-Gm-Message-State: AOJu0Yw/zzS7PYfXo7Dsj+cO9GyZa0A+w91AccXKg3SDSeEjp4pHb+XL
+	mzYomyrlwaezXHyOuEfnQZAgWSEtcOwstsLD8+Xn9pHmg7bWWyCeZUbRUbkFeR0csjKTRoqlwQi
+	c
+X-Gm-Gg: ASbGncsfVGpeRNlystO2nZ0Th0XMVgcd2AEHMAkilC3fnrmGxACrK87914UdKG5ryhY
+	d+SpJxqotZgZI94EBeQoZBR0e8hq/rCeeh0otECD80PTRCtjDtI73Z7kvS+gbeuGvCamUlKx7Mm
+	Y0s9oXzZ94ck6yXSN/0yOK7F67lw/ju2UEmloHO5Gy/w31SMHwWE0u88oxkDzJxS8fEK2UkHZ8S
+	nApBtl4PlOLx9SgBmHaawx28qaMIxbnvnZ0qkZgO3uAss5cmkAJw3jWkKoDAcDYRisUJARUq4qT
+	W4DXvA==
+X-Google-Smtp-Source: AGHT+IGlwYVNWMWQ1OUZDuSRuMuk/k+uCWS0BbFpQH2+SuOHg/PLYKlqWw9jhySo5k8jYabRJ206hw==
+X-Received: by 2002:a92:6412:0:b0:3d1:5037:c97a with SMTP id e9e14a558f8ab-3d2c00bca61mr9582595ab.3.1739998562367;
+        Wed, 19 Feb 2025 12:56:02 -0800 (PST)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ee82c8d5b0sm2412858173.120.2025.02.19.12.56.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 09:26:09 -0800 (PST)
+        Wed, 19 Feb 2025 12:56:01 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org,
-	brauner@kernel.org,
-	asml.silence@gmail.com,
-	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5/5] io_uring/epoll: add support for IORING_OP_EPOLL_WAIT
-Date: Wed, 19 Feb 2025 10:22:28 -0700
-Message-ID: <20250219172552.1565603-6-axboe@kernel.dk>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250219172552.1565603-1-axboe@kernel.dk>
-References: <20250219172552.1565603-1-axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <cover.1739919038.git.asml.silence@gmail.com>
+References: <cover.1739919038.git.asml.silence@gmail.com>
+Subject: Re: [PATCH v2 0/4] forced sync mshot read + cleanups
+Message-Id: <173999856140.1624493.2433795023250819728.b4-ty@kernel.dk>
+Date: Wed, 19 Feb 2025 13:56:01 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-14bd6
 
-For existing epoll event loops that can't fully convert to io_uring,
-the used approach is usually to add the io_uring fd to the epoll
-instance and use epoll_wait() to wait on both "legacy" and io_uring
-events. While this work, it isn't optimal as:
 
-1) epoll_wait() is pretty limited in what it can do. It does not support
-   partial reaping of events, or waiting on a batch of events.
+On Wed, 19 Feb 2025 01:33:36 +0000, Pavel Begunkov wrote:
+> A respin of the patch forcing mshot reads to be executed synchornously
+> with cleanups on top. Let me know if you want me to separate the set,
+> as ideally patches should target different versions.
+> 
+> v2: clarified commit message
+>     + patches 2-4
+> 
+> [...]
 
-2) When an io_uring ring is added to an epoll instance, it activates the
-   io_uring "I'm being polled" logic which slows things down.
+Applied, thanks!
 
-Rather than use this approach, with EPOLL_WAIT support added to io_uring,
-event loops can use the normal io_uring wait logic for everything, as
-long as an epoll wait request has been armed with io_uring.
+[1/4] io_uring/rw: forbid multishot async reads
+      commit: 67b0025d19f99fb9fbb8b62e6975553c183f3a16
+[2/4] io_uring/rw: don't directly use ki_complete
+      commit: 4e43133c6f2319d3e205ea986c507b25d9b41e64
+[3/4] io_uring/rw: move ki_complete init into prep
+      commit: 74f3e875268f1ce2dd01029c29560263212077df
+[4/4] io_uring/rw: clean up mshot forced sync mode
+      commit: 4614de748e78a295ee9b1f54ca87280b101fbdf0
 
-Note that IORING_OP_EPOLL_WAIT does NOT take a timeout value, as this
-is an async request. Waiting on io_uring events in general has various
-timeout parameters, and those are the ones that should be used when
-waiting on any kind of request. If events are immediately available for
-reaping, then This opcode will return those immediately. If none are
-available, then it will post an async completion when they become
-available.
-
-cqe->res will contain either an error code (< 0 value) for a malformed
-request, invalid epoll instance, etc. It will return a positive result
-indicating how many events were reaped.
-
-IORING_OP_EPOLL_WAIT requests may be canceled using the normal io_uring
-cancelation infrastructure.
-
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- include/uapi/linux/io_uring.h |  1 +
- io_uring/epoll.c              | 33 +++++++++++++++++++++++++++++++++
- io_uring/epoll.h              |  2 ++
- io_uring/opdef.c              | 14 ++++++++++++++
- 4 files changed, 50 insertions(+)
-
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 05d6255b0f6a..135eb9296296 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -280,6 +280,7 @@ enum io_uring_op {
- 	IORING_OP_BIND,
- 	IORING_OP_LISTEN,
- 	IORING_OP_RECV_ZC,
-+	IORING_OP_EPOLL_WAIT,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
-diff --git a/io_uring/epoll.c b/io_uring/epoll.c
-index 7848d9cc073d..6d2c48ba1923 100644
---- a/io_uring/epoll.c
-+++ b/io_uring/epoll.c
-@@ -20,6 +20,12 @@ struct io_epoll {
- 	struct epoll_event		event;
- };
- 
-+struct io_epoll_wait {
-+	struct file			*file;
-+	int				maxevents;
-+	struct epoll_event __user	*events;
-+};
-+
- int io_epoll_ctl_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct io_epoll *epoll = io_kiocb_to_cmd(req, struct io_epoll);
-@@ -57,3 +63,30 @@ int io_epoll_ctl(struct io_kiocb *req, unsigned int issue_flags)
- 	io_req_set_res(req, ret, 0);
- 	return IOU_OK;
- }
-+
-+int io_epoll_wait_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-+{
-+	struct io_epoll_wait *iew = io_kiocb_to_cmd(req, struct io_epoll_wait);
-+
-+	if (sqe->off || sqe->rw_flags || sqe->buf_index || sqe->splice_fd_in)
-+		return -EINVAL;
-+
-+	iew->maxevents = READ_ONCE(sqe->len);
-+	iew->events = u64_to_user_ptr(READ_ONCE(sqe->addr));
-+	return 0;
-+}
-+
-+int io_epoll_wait(struct io_kiocb *req, unsigned int issue_flags)
-+{
-+	struct io_epoll_wait *iew = io_kiocb_to_cmd(req, struct io_epoll_wait);
-+	int ret;
-+
-+	ret = epoll_sendevents(req->file, iew->events, iew->maxevents);
-+	if (ret == 0)
-+		return -EAGAIN;
-+	if (ret < 0)
-+		req_set_fail(req);
-+
-+	io_req_set_res(req, ret, 0);
-+	return IOU_OK;
-+}
-diff --git a/io_uring/epoll.h b/io_uring/epoll.h
-index 870cce11ba98..4111997c360b 100644
---- a/io_uring/epoll.h
-+++ b/io_uring/epoll.h
-@@ -3,4 +3,6 @@
- #if defined(CONFIG_EPOLL)
- int io_epoll_ctl_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
- int io_epoll_ctl(struct io_kiocb *req, unsigned int issue_flags);
-+int io_epoll_wait_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
-+int io_epoll_wait(struct io_kiocb *req, unsigned int issue_flags);
- #endif
-diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-index 89f50ecadeaf..9344534780a0 100644
---- a/io_uring/opdef.c
-+++ b/io_uring/opdef.c
-@@ -527,6 +527,17 @@ const struct io_issue_def io_issue_defs[] = {
- 		.issue			= io_recvzc,
- #else
- 		.prep			= io_eopnotsupp_prep,
-+#endif
-+	},
-+	[IORING_OP_EPOLL_WAIT] = {
-+		.needs_file		= 1,
-+		.audit_skip		= 1,
-+		.pollin			= 1,
-+#if defined(CONFIG_EPOLL)
-+		.prep			= io_epoll_wait_prep,
-+		.issue			= io_epoll_wait,
-+#else
-+		.prep			= io_eopnotsupp_prep,
- #endif
- 	},
- };
-@@ -761,6 +772,9 @@ const struct io_cold_def io_cold_defs[] = {
- 	[IORING_OP_RECV_ZC] = {
- 		.name			= "RECV_ZC",
- 	},
-+	[IORING_OP_EPOLL_WAIT] = {
-+		.name			= "EPOLL_WAIT",
-+	},
- };
- 
- const char *io_uring_get_opcode(u8 opcode)
+Best regards,
 -- 
-2.47.2
+Jens Axboe
+
+
 
