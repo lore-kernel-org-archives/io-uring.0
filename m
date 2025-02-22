@@ -1,64 +1,64 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B1D15853B
-	for <io-uring@vger.kernel.org>; Sat, 22 Feb 2025 01:07:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E6215853B
+	for <io-uring@vger.kernel.org>; Sat, 22 Feb 2025 01:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740186472; cv=none; b=sO+hgq9ut5Xx9wfKT+E9JmdsYTsayrIdtRj9U/0wLhhAG0pwP3SWo2iKf0wP0IA6igRtR9mbpdovrPwwbsYKGsqFsjfFcoDOGil9ASWUc2NK21HiJig1pK0eHpbOdtut6B2f0V3JbZnjvXyK85vM9LPxX0bsJDP7+Kdy8bY2+TQ=
+	t=1740186524; cv=none; b=eVSGMPKDaezygpoy0MrSF2mtxzff9RUu+deua4F0tiAD35Kn4Xf9lgV73GP0eyDZCjuqhSHE+6O14yj10I6ZkMg+rmqjwvCyY2i8XftkM+mZomSOVFvebxdkSCum2ARASHIBGzoFNvz2Q1ISjeYLfoeeYv3q3ni31TXyEHMXBBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740186472; c=relaxed/simple;
-	bh=jRCh9PGyLJIdlEplAogSd5BH1appCfrUD/DyqKy0EuI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=vElyo3QJUykT32tGoG9NbPYUdneLlV/kMLGfKxabSz+CfaPeACiIMaWnH1xj79VP6166vicM9i32Ped6K2/FdXJdqxICJwEYqylCUsEyJROe3mCmN8g0Idtwe1gaPpcRbQ6/yAw858YTgMTe3/HNSOTw1evDvXhxfmPSiuGdM1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=HpelUik9; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1740186524; c=relaxed/simple;
+	bh=7i/We4idmmCrX88ecH7ftqX9qkpj6SvV0Qf4E3DixN4=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
+	 In-Reply-To:Content-Type; b=lkiYNjOjlfExHS6bRMefP54fxQLZ7ie8qsQxcnT1wV9y3OxaqfimD5zSlYbaDn/C7YPrPQhMLg2OqiMCPbbMFCEM5U/ybqfTo3fXhKBbgmWVZWdhP9dzOyV53dbeHxdeWSesy3Ftj7a+a++Xy6JWiT8ihLMra6/SjMySFrgOjFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AMELI1l6; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="HpelUik9"
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3cfe17f75dfso23653495ab.2
-        for <io-uring@vger.kernel.org>; Fri, 21 Feb 2025 17:07:49 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AMELI1l6"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4399ee18a57so16222705e9.1
+        for <io-uring@vger.kernel.org>; Fri, 21 Feb 2025 17:08:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1740186468; x=1740791268; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CpCVpg8qALXzOm1VW+Ct2xQ8dtp2ExGWm/pHaG7PVUE=;
-        b=HpelUik9oms82CiA2JPFOzavMHoAQFeNMu8+JCakCRmzVFI+koFQRX66XyNhHKad9M
-         TRoOxtl2ifPhyoXIRJ6VSXI+az66/4vssqbzI8vuhEhl4rsrdK3fcxKwsIgTuTIR1TSf
-         LB/caZ7+ZV5OwBFDsSVaXxxXDDpvWVZyu/vdUXmdFWwbeBNeJz0dZ5vsn+HI7N/dvjO7
-         91XP/BJTEC+/l46Wa9BG138/R/ZSRq+HIkS37PX6K8xNilDonowObu3lTA130TDE2/C1
-         l2RYwu2Qp2tkqDdeXs1fOi1wMe+FmBONoh2LRFNAb02ukRMISufKZXdZNN2M7dN8bO9K
-         6USg==
+        d=gmail.com; s=20230601; t=1740186521; x=1740791321; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :to:from:subject:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JRo/eVLDdU7CvlKi4YzbNTA4/ToMQhMoqSGc/TY1LSU=;
+        b=AMELI1l6J2QAe5a2tQIwQVPDdNqYRgeHuOU9l7dbUZH/uwa50XfuumyLVhuH8VCtKU
+         ZJAVyG4zGAH7EeVKO0dvVztbo0et9KwvEbVKdQgwnPCajMpdFkX0/7U3QiCz9H5mwqye
+         bDtyolFSaF3mcKzFhcvyKViHXjAauVDTdR1OoV60x2PikYp1R4UQtpdEYo4P3FpZNDOm
+         Nn+sL3jmCjdaEWmWbz2Tj6Gu6Dt7N+i+pah0O7n0n52gT9VBgRc/snf71jGKxHPbCirG
+         Y5XGyh8D+xQuNnxXYCl8JsWTDy6fa8VcKI/5PStxiXci2cz6AqZCf0ZsEMnOnVFlwn4F
+         AoeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740186468; x=1740791268;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1740186521; x=1740791321;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :to:from:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CpCVpg8qALXzOm1VW+Ct2xQ8dtp2ExGWm/pHaG7PVUE=;
-        b=g8hgsEFYIPh/MXRTpau3lkm1AmqRZjQuRBwJEbNwbif6QFC3xEKnjj8jcS0IJoOfjF
-         p9Y0DAjaDZZZpCV3SxC+IAX3w6/KATola07ksske1WAHyBrSmkaZHt+P8ZbBiJ6EIYEy
-         baw9v95BODzPKbHf5O3siqGVctyC7IvltkxuuCWUSt/1fkU4/p0yn45AdgO0BXKq2HF/
-         xccXcFi5MqWd/HjpcRW0QcLSveQmPqoWwP3FrNGu9M5tO6anNhzegjzXWRwwpLoovuDn
-         ZdkDrizoY6xtLyYVNcMhSVOwIffweWYly5CzVil0qkPZ2dXa0F/P9e629xDlfH+mK1ne
-         /LGg==
-X-Forwarded-Encrypted: i=1; AJvYcCV4ffm6XPnu0xfWrf8moN35Zv/FrOJN/7OsiS9Pfsgb/Vd/k2W+/mSsHI8C+sDrUvgDFS0+ZiSi/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlBSPig+ZV1A8PWvoltckbrqMeSyBoDWl001W1uvvhJls2MfGs
-	TxceQ2bXbN/P+eM90CMdZKDrZNBMuCxs7v6Xa5WpfLPbmlz9PeggSnujCBlbKBk=
-X-Gm-Gg: ASbGncs0GClwXHq8y1SPKY0Ey9IsmvyJo9GCa0/WF32du1ZSdlRWz0zZmzPOhHAvDwF
-	NiLUgz/uDVCL2i/EH/TKc3q+FPnwTaO6aFfjNa6tneugFNCNlcjqcyeOI6c5uRYh+LaBt451ZfN
-	g9XnEe2BHtH/FLIEIwasui1lPfSEcBL75uWGIHliJatYWyD82ZV7Y47AP18GRZhg6+PjiJz19iF
-	3/3YbNotwS2xN4q5M+ojUZt83X1fsZnoaH1sJ/wo3/2C4eyYKN8MMVQ9ajXJBEMZAmJf9MLFAZc
-	ag1RbRNKAq4Ugs8jF4jDAAs=
-X-Google-Smtp-Source: AGHT+IE53cvl/cDmPIbHGcSamrjM1vq6Up8LIXcbr9/N59/B+TBIHW3+7E11k6I6P6jpJCE4p4N4qQ==
-X-Received: by 2002:a05:6e02:12c6:b0:3d0:618c:1b22 with SMTP id e9e14a558f8ab-3d2cb492ea0mr54454415ab.11.1740186468625;
-        Fri, 21 Feb 2025 17:07:48 -0800 (PST)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4eeaf1cf709sm2008625173.133.2025.02.21.17.07.47
+        bh=JRo/eVLDdU7CvlKi4YzbNTA4/ToMQhMoqSGc/TY1LSU=;
+        b=FBwQbUXurjY/nvyik1S4vZqKKhRVgwz7VDXKsNdrSbVO3Hqzu+qgJWLskT4Tx05wsS
+         SNfWUTsmYtqMiy7c09P5ZHKC7K6jxIR+889OdLepPcI8pZ7p697smBIYRTMlCXgLi2uv
+         /sOyMVsL61JVCMCYWXYkUpPPJGuPitTlsmKrU7bs0qOwGpZsMVDyv5QRhgGamMqP+PlJ
+         qdF7T7CMt/Mh7QllnXVgXZKL6euciaSToiQcGM3nODiBGOSWzTxfv6AhcylC6vOqqVFI
+         aMLsGgpzfE74T627sRhb0QhDvg86DdMveitpvs76Vu+QvlmJnVFTZQmB4EQzCCcYvcn4
+         QpPw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLGC9/jPb7z+o3SGkDepxK4svPSqPq8eSzPj9n+V0orOP1F7bVkFCGxyurl9l2nnBGYoOHMFkjDA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YztPD4N25tzzMbwgfPmnpWCsHa0TG0TNMELad9OY9h4eJsObQHx
+	ah3fvyy502ulpHAq68jI9HgQeQQums3OtACH7MZ+zwgmfgqAqSrK
+X-Gm-Gg: ASbGncuIDJVQOqeUIAE4HEnVO2VSRiHJD3jRgIPUJ5SX9uizLJeBOocKzlG2kxbmMPK
+	cyJlvwYYJzX9YGquMJoSDoYKZD4qkZfEjPEfutCzp3Wz6ESh2I3EW3vtiNkfC+/AfZPxjlHGm4+
+	h6Nkh7crBz5qOsHBSW8K5yDC9R4y4N3jCOcSh3gp72yM77dKi03EBZbjvNy6Xt7mtGUCD1xGZ6x
+	JCAJr7LUSV4IZKsEoMCwpaORxdJaXtBgXKkClrEcZMb1lcZLZHmfhzXf75vQVrQ7COGuXbT8b6l
+	7yA0xvyKEbfI8Zh3GQZRFv4S3s62gf+o7SiC
+X-Google-Smtp-Source: AGHT+IGpnPXmGVutcPNi84rNgi12UT2AQdPe4vFb8o5fsCk9JvuAb2BjbXmaPWkUNblMe3DZEwdPbw==
+X-Received: by 2002:a05:600c:1d0b:b0:439:98fd:a4b6 with SMTP id 5b1f17b1804b1-439ae33cb6bmr45158175e9.15.1740186521047;
+        Fri, 21 Feb 2025 17:08:41 -0800 (PST)
+Received: from [192.168.8.100] ([148.252.141.194])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439b03675dfsm32362685e9.29.2025.02.21.17.08.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2025 17:07:47 -0800 (PST)
-Message-ID: <16aef2a7-d20e-48a1-aa5d-747619c8a2c9@kernel.dk>
-Date: Fri, 21 Feb 2025 18:07:47 -0700
+        Fri, 21 Feb 2025 17:08:40 -0800 (PST)
+Message-ID: <58441ad9-f1b2-4869-9bef-2491157d75f6@gmail.com>
+Date: Sat, 22 Feb 2025 01:09:45 +0000
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -67,44 +67,51 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/2] io_uring/zcrx: add single shot recvzc
-To: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>, David Wei <dw@davidwei.uk>,
  io-uring@vger.kernel.org
 References: <20250221205146.1210952-1-dw@davidwei.uk>
  <20250221205146.1210952-2-dw@davidwei.uk>
- <9d081ae3-6f9d-48d2-a14c-f53430a523d0@kernel.dk>
- <f8409430-a83d-4bda-a654-3f9bedb36bbc@gmail.com>
-From: Jens Axboe <axboe@kernel.dk>
+ <6165d6a4-a8d3-4c2f-8550-e157a279c8f3@gmail.com>
+ <a44a6ed1-8a4c-4334-9785-aee8b545c68d@kernel.dk>
+ <516fdf90-1f0a-4c2e-b7ed-23a72b7a4342@gmail.com>
 Content-Language: en-US
-In-Reply-To: <f8409430-a83d-4bda-a654-3f9bedb36bbc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <516fdf90-1f0a-4c2e-b7ed-23a72b7a4342@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2/21/25 6:01 PM, Pavel Begunkov wrote:
-> On 2/22/25 00:08, Jens Axboe wrote:
->> Just a few minor drive-by nits.
+On 2/22/25 01:06, Pavel Begunkov wrote:
+> On 2/22/25 00:52, Jens Axboe wrote:
+>>>> @@ -1250,6 +1251,12 @@ int io_recvzc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>>>>        zc->ifq = req->ctx->ifq;
+>>>>        if (!zc->ifq)
+>>>>            return -EINVAL;
+>>>> +    zc->len = READ_ONCE(sqe->len);
+>>>> +    if (zc->len == UINT_MAX)
+>>>> +        return -EINVAL;
+>>>
+>>> The uapi gives u32, if we're using a special value it should
+>>> match the type. ~(u32)0
 >>
->>> @@ -1250,6 +1251,12 @@ int io_recvzc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
->>>       zc->ifq = req->ctx->ifq;
->>>       if (!zc->ifq)
->>>           return -EINVAL;
->>> +    zc->len = READ_ONCE(sqe->len);
->>> +    if (zc->len == UINT_MAX)
->>> +        return -EINVAL;
->>> +    /* UINT_MAX means no limit on readlen */
->>> +    if (!zc->len)
->>> +        zc->len = UINT_MAX;
->>
->> Why not just make UINT_MAX allowed, meaning no limit? Would avoid two
->> branches here, and as far as I can tell not really change anything in
->> terms of API niceness.
+>> Any syscall in Linux is capped at 2G anyway, so I think all of this
 > 
-> I think 0 goes better as a special uapi value. It doesn't alter the
-> uapi, and commonly understood as "no limits", which is the opposite
-> to the other option, especially since UINT_MAX is not a max value for
-> an unlimited request, I'd easily expect it to drive more than 4GB.
+> I don't see how it related, you don't have to have a weird
+> 00111111b as a special value.
+> 
+>> special meaning of ->len just needs to go away. Just ask for whatever
 
-Yeah that's certainly better, and as you say also has the same (forced)
-semantics for multishot.
+And there will need to be some special value for that. Setting
+the maximum limit to 4GB is reasonable, but when it's crunching
+data without limits 4GB is nothing. IMHO not worth growing the
+uapi field u32 -> u64.
+
+>> bytes you want, but yes more than 2G will not be supported anyway.
+> 
+> That's not the case here, the request does support more than 2G,
+> it's just spread across multiple CQEs, and the limit accounts
+> for multiple CQEs.
+> 
 
 -- 
-Jens Axboe
+Pavel Begunkov
+
