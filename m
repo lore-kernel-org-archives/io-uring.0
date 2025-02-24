@@ -1,115 +1,116 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A7A1FCFC6
-	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 21:31:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4321F19F48D
+	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 21:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740432705; cv=none; b=FQo+aTDlwUeT82mNQh0Afb6CqfKWGUhrwmfM8CKlaff6L2ATs3CkclPE5GDT0H/pRLju3oFcRpKxPtQcVo3mvf7d+3lurlI8u0VCJnNT9wACTb+xpq5wE44gC0i8VQRb5gjurXyoYMfc3AoAvmfvMLuTHzP3MiURAAz+QZ68sn4=
+	t=1740433191; cv=none; b=SUgknr3xtQBhmWFn4rA4IYW8rJUN6ne5Siws/igP4wrWWU0ALMkoJARNV1ieFk3ksH0BnoeNUfiiOWIR8iBR7X0Oc9rxT7orqmZ7LX83zpsxlQiGAhZ4lCgJCyoGLR7rgr7ILyTHNaMV5NLaCF2v77HYOGjDij+m477ew1Mf0lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740432705; c=relaxed/simple;
-	bh=OhH73J9J+vByXQd0nSIiVg8cPPHIHgcXH0YZ6SZvhoI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DCq+HiN7wALluNkrEkXnME/1jbrXmOHZ6JikTC+Gc5+59ER0wefTKWcfgE+x2Xhc20urdgmbMBqbjYT0AEwXnf/7/CQX9Gn9bdXpsTfbgtdaPI1P6k2LFi5EjmlQSxZKoqer3/pvNk2EcPb4lGwN49oWwJKcBbI1JDS5ZU9OWC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=cv774OZn; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1740433191; c=relaxed/simple;
+	bh=9FTBOSdhT8Fk49aybKjxWWzf6EmwXh52+BABmAiLiFs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O35s/rBMh2t+knuD0bMFz5JEGXanHvqRg+h3iVwIBZGM7FoXDhKsZoObpTYq3Mix42leS96umDfnxJhbgWDnn4FiyurjUhEhSxBBD9ShDb8TPmfSPgecag8T7C5kpRaYTQMDqX4nL6J5ooeioArXagg/Mf551uDYnJNesAa4Rjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Wt8iXrEu; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="cv774OZn"
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51OIuNtl016161
-	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 13:31:43 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=z3zE/JpygxHalJZkRBF5AYpcbJa/t5fQiwdoTI91yjM=; b=cv774OZnFZJJ
-	xaT3mzejKLW50qQ1lsvvYwAnJRN0XwtwgzevbrVdil0QRtk7O03rimJqAgVWNl/p
-	Iln3qoVBQGHBJyPNO48EHJJvZ3VwfT6JjfrBp3Fr+p485fIGSx4giXcrvUWRlZEu
-	o85Z1w5rNzyY6yX8PxiuxpUqLTVesNgJ6wiV5MQexfWYlAfFSmPMm2EWdypNVtuB
-	xaOa3XmnLve0Re72ZPq51/OB0XMgYqSWjdiYwI/XsJp89rL5BKW046lg9t6d2T1o
-	MD924ZW6h7+jFDsNpi61X9SUDv0pwf++QS1rg+3n5l9AQi/TBtoUcXinG092IlJ2
-	xuu9DPcPcA==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 450xg0s6up-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 13:31:43 -0800 (PST)
-Received: from twshared11082.06.ash8.facebook.com (2620:10d:c0a8:1b::8e35) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.14; Mon, 24 Feb 2025 21:31:24 +0000
-Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id 64C8E1868C4ED; Mon, 24 Feb 2025 13:31:17 -0800 (PST)
-From: Keith Busch <kbusch@meta.com>
-To: <ming.lei@redhat.com>, <asml.silence@gmail.com>, <axboe@kernel.dk>,
-        <linux-block@vger.kernel.org>, <io-uring@vger.kernel.org>
-CC: <bernd@bsbernd.com>, <csander@purestorage.com>,
-        Keith Busch
-	<kbusch@kernel.org>
-Subject: [PATCHv5 03/11] io_uring/net: reuse req->buf_index for sendzc
-Date: Mon, 24 Feb 2025 13:31:08 -0800
-Message-ID: <20250224213116.3509093-4-kbusch@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250224213116.3509093-1-kbusch@meta.com>
-References: <20250224213116.3509093-1-kbusch@meta.com>
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Wt8iXrEu"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-220c3e25658so11656885ad.1
+        for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 13:39:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1740433187; x=1741037987; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HbT5GxY7U8d29szFcIEb937yeprNIBlLXP0MxBpt1uw=;
+        b=Wt8iXrEuMVsAb+Im1xMoSggQl9BdKe5nHqgzSldeJ8HNPNGZVroA1CkFvWAo/uQ2DN
+         8jaBoJY1PTNRPr8GMBrGm63SqKDguqNggbRiX/IdwkBnnw/4a+ejxVb0AExxnNi/682P
+         WAo31zjd53E5rSc3U2WFrwwQiIveUPPBSuCWcPk8uv99b802wJELniwRsIS/xQF0x+F8
+         N1yUaiqfmK8eM0xca4uziVunqBxLONnxkRFV6JJ47Y2BEuCGskAy9pv9sK9Z1xLvv2IH
+         XXUIqmA08E1rG3mVcZatDhfBcwH/fFoG2A74vsNp6Fxxc3oGDqWLyRno66aqTGJjoW+T
+         5CZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740433187; x=1741037987;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HbT5GxY7U8d29szFcIEb937yeprNIBlLXP0MxBpt1uw=;
+        b=d13QwTerH46VWDdWnSxjPVTPJN5jWOMGWcCrxTvYi99z3PcwETIv1/WqNGsieq1TLD
+         DptL0Mw3Eqm4+ocfLH2s0Zx7Beoni1bHDZec5nHjPD/bGD96+ufy0AtOJ/3Pzr29Sue2
+         8ffEtoWqYh1vJFU8KeLZ6TVB2+INqkYsgw4czgzZBcBdC2HIF3tvMMVJ2jKpwG8aNYIN
+         yZK1bqtk1IZX1yQtFoRCggM6//kb9sfiRvJllZj21pruVV3ExBpgNFXYojlRKLs6vm4t
+         KRsF7UVKXH89Ps2dN8dfy4FxLOLdWJHgofUz/213iDEW21a9r3taEUKJL2K3zVlHlHF7
+         8qTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWl7NXTN+3PcEtJw1wRurqJeuo8AylfRLinRa5haC6EFeCBnHC3gpuxy1p87ZkutFKJCFvzWFulTQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzf3v6WZb/qR2Y6HWOlDEC34BqXuhTl8sJgrTOaxp1CnfcABKcF
+	NLaH+DDMpyrr6o9YcjM0tKbnNDrCPVBgOGWXpcqeTETBJa0Fdi5HdwvO1fkyMrtlkInkpRMSCSE
+	kwubCAiku/7vty6ZIce2TLvtQMLZadb6CPxKMJA==
+X-Gm-Gg: ASbGncvtMYPnyzz+SOR5aYTDGpCNeU9c6WMJZhiQlKYfKCNUZkptWd2naDp676GWzmF
+	NcmFWjPPHSMMCm4L7//C4N/WQqeC8lSaJ1iVSuwIiIAuWK0y9kv4jOJBF/wCzy7rK72poA1pHnk
+	QpnQqZsZE=
+X-Google-Smtp-Source: AGHT+IH8rrLIdP/vBzrKzcBOAgB0iZOygLzf1jzMPI39fpDZZ3eZVixpVuQWLyQGQvndxOTo31U7KHyiT902oOEaGTM=
+X-Received: by 2002:a17:902:e884:b0:216:3dd1:5460 with SMTP id
+ d9443c01a7336-2219ff4e2bdmr91667145ad.2.1740433187429; Mon, 24 Feb 2025
+ 13:39:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250218224229.837848-1-kbusch@meta.com> <20250218224229.837848-6-kbusch@meta.com>
+ <CADUfDZq5CDOZyyfjOgW_JE_A_GWLscZkbJDgQ-UKTbFC66FjKA@mail.gmail.com> <Z7zeNLEnZqsniK69@kbusch-mbp>
+In-Reply-To: <Z7zeNLEnZqsniK69@kbusch-mbp>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Mon, 24 Feb 2025 13:39:35 -0800
+X-Gm-Features: AWEUYZlp7pcVXtW5Q-RqbTsTSpF0m36Os2YU2YRa2vl7senSIcqny3nHoyNmlGk
+Message-ID: <CADUfDZqF-AV7MfdXHchxgQRLMFuLvbOoWkzZmki4_L5upKcs4A@mail.gmail.com>
+Subject: Re: [PATCHv4 5/5] io_uring: cache nodes and mapped buffers
+To: Keith Busch <kbusch@kernel.org>
+Cc: Keith Busch <kbusch@meta.com>, ming.lei@redhat.com, asml.silence@gmail.com, 
+	axboe@kernel.dk, linux-block@vger.kernel.org, io-uring@vger.kernel.org, 
+	bernd@bsbernd.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: kDhE8SPmrUAfCxZExJyKOuiPWiMsCKYv
-X-Proofpoint-GUID: kDhE8SPmrUAfCxZExJyKOuiPWiMsCKYv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-24_10,2025-02-24_02,2024-11-22_01
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+On Mon, Feb 24, 2025 at 1:01=E2=80=AFPM Keith Busch <kbusch@kernel.org> wro=
+te:
+>
+> On Tue, Feb 18, 2025 at 08:22:36PM -0800, Caleb Sander Mateos wrote:
+> > > +struct io_alloc_cache {
+> > > +       void                    **entries;
+> > > +       unsigned int            nr_cached;
+> > > +       unsigned int            max_cached;
+> > > +       size_t                  elem_size;
+> >
+> > Is growing this field from unsigned to size_t really necessary? It
+> > probably doesn't make sense to be caching allocations > 4 GB.
+>
+> It used to be a size_t when I initially moved the struct to here, but
+> it's not anymore, so I'm out of sync. I'll fix it up.
+>
+> > > @@ -859,10 +924,8 @@ int io_sqe_buffers_register(struct io_ring_ctx *=
+ctx, void __user *arg,
+> > >                         }
+> > >                         node->tag =3D tag;
+> > >                 }
+> > > -               data.nodes[i] =3D node;
+> > > +               table.data.nodes[i] =3D node;
+> > >         }
+> > > -
+> > > -       ctx->buf_table.data =3D data;
+> >
+> > Still don't see the need to move this assignment. Is there a reason
+> > you prefer setting ctx->buf_table before initializing its nodes? I
+> > find the existing code easier to follow, where the table is moved to
+> > ctx->buf_table after filling it in. It's also consistent with
+> > io_clone_buffers().
+>
+> Yes, it needs to move to earlier. The ctx buf_table needs to be set
+> before any allocations from io_rsrc_node_alloc() can happen.
 
-There is already a field in io_kiocb that can store a registered buffer
-index, use that instead of stashing the value into struct io_sr_msg.
+Got it, thank you for explaining.
 
-Reviewed-by: Keith Busch <kbusch@kernel.org>
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/net.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 173546415ed17..fa35a6b58d472 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -76,7 +76,6 @@ struct io_sr_msg {
- 	u16				flags;
- 	/* initialised and used only by !msg send variants */
- 	u16				buf_group;
--	u16				buf_index;
- 	bool				retry;
- 	void __user			*msg_control;
- 	/* used only for send zerocopy */
-@@ -1371,7 +1370,7 @@ int io_send_zc_prep(struct io_kiocb *req, const str=
-uct io_uring_sqe *sqe)
-=20
- 	zc->len =3D READ_ONCE(sqe->len);
- 	zc->msg_flags =3D READ_ONCE(sqe->msg_flags) | MSG_NOSIGNAL | MSG_ZEROCO=
-PY;
--	zc->buf_index =3D READ_ONCE(sqe->buf_index);
-+	req->buf_index =3D READ_ONCE(sqe->buf_index);
- 	if (zc->msg_flags & MSG_DONTWAIT)
- 		req->flags |=3D REQ_F_NOWAIT;
-=20
-@@ -1447,7 +1446,7 @@ static int io_send_zc_import(struct io_kiocb *req, =
-unsigned int issue_flags)
-=20
- 		ret =3D -EFAULT;
- 		io_ring_submit_lock(ctx, issue_flags);
--		node =3D io_rsrc_node_lookup(&ctx->buf_table, sr->buf_index);
-+		node =3D io_rsrc_node_lookup(&ctx->buf_table, req->buf_index);
- 		if (node) {
- 			io_req_assign_buf_node(sr->notif, node);
- 			ret =3D 0;
---=20
-2.43.5
-
+Best,
+Caleb
