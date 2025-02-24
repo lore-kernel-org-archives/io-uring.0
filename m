@@ -1,53 +1,53 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26C61DF98D
-	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 21:31:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A7A1FCFC6
+	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 21:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740432704; cv=none; b=lEnWZ6+d7Ye4uofPBDLnvJK7eR0r41egWVd7p4if6uD0jv6D9lMRsaRccR9OlVLo97lP/BJbDm5SCj6Q1FhxUwiz8aKy4WtEMDuK61k3tt0I7NFnXPoxUbf4iMlERk4QHGwk8yWyV8gLFlhjrB/5utrh0ZlMcutVj098QZ0nnds=
+	t=1740432705; cv=none; b=FQo+aTDlwUeT82mNQh0Afb6CqfKWGUhrwmfM8CKlaff6L2ATs3CkclPE5GDT0H/pRLju3oFcRpKxPtQcVo3mvf7d+3lurlI8u0VCJnNT9wACTb+xpq5wE44gC0i8VQRb5gjurXyoYMfc3AoAvmfvMLuTHzP3MiURAAz+QZ68sn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740432704; c=relaxed/simple;
-	bh=ov23JLGISNFtGAJ3q/hjds5wAHClRaKSX9bv0Ek/R6E=;
+	s=arc-20240116; t=1740432705; c=relaxed/simple;
+	bh=OhH73J9J+vByXQd0nSIiVg8cPPHIHgcXH0YZ6SZvhoI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CquNsiuU6Ua/FVSUAtX5K8/MjmqcyGOeHhvou4+QCAR3xqoahznf20xQZFWzvv0Q+/TVHcg3LP9woZqw/H9A/obFpl92x2GvYVcHDNBP4+8S+sE/FuvzQM4TOwDnsewmOM6BoAlEubXfXGwz/zUy75ODWA8CN391d79515PRL5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=ULbSLL0E; arc=none smtp.client-ip=67.231.153.30
+	 MIME-Version:Content-Type; b=DCq+HiN7wALluNkrEkXnME/1jbrXmOHZ6JikTC+Gc5+59ER0wefTKWcfgE+x2Xhc20urdgmbMBqbjYT0AEwXnf/7/CQX9Gn9bdXpsTfbgtdaPI1P6k2LFi5EjmlQSxZKoqer3/pvNk2EcPb4lGwN49oWwJKcBbI1JDS5ZU9OWC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=cv774OZn; arc=none smtp.client-ip=67.231.153.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="ULbSLL0E"
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-	by m0089730.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 51OKXrHZ017915
-	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 13:31:39 -0800
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="cv774OZn"
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51OIuNtl016161
+	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 13:31:43 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=HVuEJr6UbILHmR6HfKP+QsgqAVu4/LafIuqdsitVN9E=; b=ULbSLL0EqLVN
-	+34xp4XPMre42lKcvP7utGBa9oYip3y/c8XF9K5Z0dU2DLaoGxeOaG0ljXCedLTA
-	fckAFQ9s+av35SPnMeSSiqAvWBJCgQJ5vR4EbELO5fpfeQhe7l4ut0gUt/mpFbwu
-	tYLQ47UBKCS5V6yJEdEb4a/e8GmX9fkXPnZei/d1n8NUlLl4fM7ccidMb8lIO45a
-	B3JIFc9WJ2DPZIbIGXLPR+0Kjrjfnvu1iZmBDgJMfm9QfTBGKOkNKz/FjxBKWODY
-	K+8/4pF9teJCAhr3J1S++T769duIqFy8HUoyd6tkl5oZoL1C6gIDQxDlL8Mrwpoy
-	2bxVpu/eig==
+	 bh=z3zE/JpygxHalJZkRBF5AYpcbJa/t5fQiwdoTI91yjM=; b=cv774OZnFZJJ
+	xaT3mzejKLW50qQ1lsvvYwAnJRN0XwtwgzevbrVdil0QRtk7O03rimJqAgVWNl/p
+	Iln3qoVBQGHBJyPNO48EHJJvZ3VwfT6JjfrBp3Fr+p485fIGSx4giXcrvUWRlZEu
+	o85Z1w5rNzyY6yX8PxiuxpUqLTVesNgJ6wiV5MQexfWYlAfFSmPMm2EWdypNVtuB
+	xaOa3XmnLve0Re72ZPq51/OB0XMgYqSWjdiYwI/XsJp89rL5BKW046lg9t6d2T1o
+	MD924ZW6h7+jFDsNpi61X9SUDv0pwf++QS1rg+3n5l9AQi/TBtoUcXinG092IlJ2
+	xuu9DPcPcA==
 Received: from maileast.thefacebook.com ([163.114.135.16])
-	by m0089730.ppops.net (PPS) with ESMTPS id 450ywj8dbc-12
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 450xg0s6up-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 13:31:38 -0800 (PST)
-Received: from twshared46479.39.frc1.facebook.com (2620:10d:c0a8:fe::f072) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 13:31:43 -0800 (PST)
+Received: from twshared11082.06.ash8.facebook.com (2620:10d:c0a8:1b::8e35) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.2.1544.14; Mon, 24 Feb 2025 21:31:24 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id 528821868C4E7; Mon, 24 Feb 2025 13:31:17 -0800 (PST)
+	id 64C8E1868C4ED; Mon, 24 Feb 2025 13:31:17 -0800 (PST)
 From: Keith Busch <kbusch@meta.com>
 To: <ming.lei@redhat.com>, <asml.silence@gmail.com>, <axboe@kernel.dk>,
         <linux-block@vger.kernel.org>, <io-uring@vger.kernel.org>
 CC: <bernd@bsbernd.com>, <csander@purestorage.com>,
         Keith Busch
 	<kbusch@kernel.org>
-Subject: [PATCHv5 01/11] io_uring/rsrc: remove redundant check for valid imu
-Date: Mon, 24 Feb 2025 13:31:06 -0800
-Message-ID: <20250224213116.3509093-2-kbusch@meta.com>
+Subject: [PATCHv5 03/11] io_uring/net: reuse req->buf_index for sendzc
+Date: Mon, 24 Feb 2025 13:31:08 -0800
+Message-ID: <20250224213116.3509093-4-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250224213116.3509093-1-kbusch@meta.com>
 References: <20250224213116.3509093-1-kbusch@meta.com>
@@ -60,55 +60,56 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: 85pfEsznhxefcQQqdM8xHqG16u8cjs5L
-X-Proofpoint-ORIG-GUID: 85pfEsznhxefcQQqdM8xHqG16u8cjs5L
+X-Proofpoint-ORIG-GUID: kDhE8SPmrUAfCxZExJyKOuiPWiMsCKYv
+X-Proofpoint-GUID: kDhE8SPmrUAfCxZExJyKOuiPWiMsCKYv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-24_10,2025-02-24_02,2024-11-22_01
 
-From: Keith Busch <kbusch@kernel.org>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-The only caller to io_buffer_unmap already checks if the node's buf is
-not null, so no need to check again.
+There is already a field in io_kiocb that can store a registered buffer
+index, use that instead of stashing the value into struct io_sr_msg.
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
+Reviewed-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/rsrc.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ io_uring/net.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 20b884c84e55f..efef29352dcfb 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -103,19 +103,16 @@ int io_buffer_validate(struct iovec *iov)
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 173546415ed17..fa35a6b58d472 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -76,7 +76,6 @@ struct io_sr_msg {
+ 	u16				flags;
+ 	/* initialised and used only by !msg send variants */
+ 	u16				buf_group;
+-	u16				buf_index;
+ 	bool				retry;
+ 	void __user			*msg_control;
+ 	/* used only for send zerocopy */
+@@ -1371,7 +1370,7 @@ int io_send_zc_prep(struct io_kiocb *req, const str=
+uct io_uring_sqe *sqe)
 =20
- static void io_buffer_unmap(struct io_ring_ctx *ctx, struct io_rsrc_node=
- *node)
- {
-+	struct io_mapped_ubuf *imu =3D node->buf;
- 	unsigned int i;
+ 	zc->len =3D READ_ONCE(sqe->len);
+ 	zc->msg_flags =3D READ_ONCE(sqe->msg_flags) | MSG_NOSIGNAL | MSG_ZEROCO=
+PY;
+-	zc->buf_index =3D READ_ONCE(sqe->buf_index);
++	req->buf_index =3D READ_ONCE(sqe->buf_index);
+ 	if (zc->msg_flags & MSG_DONTWAIT)
+ 		req->flags |=3D REQ_F_NOWAIT;
 =20
--	if (node->buf) {
--		struct io_mapped_ubuf *imu =3D node->buf;
--
--		if (!refcount_dec_and_test(&imu->refs))
--			return;
--		for (i =3D 0; i < imu->nr_bvecs; i++)
--			unpin_user_page(imu->bvec[i].bv_page);
--		if (imu->acct_pages)
--			io_unaccount_mem(ctx, imu->acct_pages);
--		kvfree(imu);
--	}
-+	if (!refcount_dec_and_test(&imu->refs))
-+		return;
-+	for (i =3D 0; i < imu->nr_bvecs; i++)
-+		unpin_user_page(imu->bvec[i].bv_page);
-+	if (imu->acct_pages)
-+		io_unaccount_mem(ctx, imu->acct_pages);
-+	kvfree(imu);
- }
+@@ -1447,7 +1446,7 @@ static int io_send_zc_import(struct io_kiocb *req, =
+unsigned int issue_flags)
 =20
- struct io_rsrc_node *io_rsrc_node_alloc(int type)
+ 		ret =3D -EFAULT;
+ 		io_ring_submit_lock(ctx, issue_flags);
+-		node =3D io_rsrc_node_lookup(&ctx->buf_table, sr->buf_index);
++		node =3D io_rsrc_node_lookup(&ctx->buf_table, req->buf_index);
+ 		if (node) {
+ 			io_req_assign_buf_node(sr->notif, node);
+ 			ret =3D 0;
 --=20
 2.43.5
 
