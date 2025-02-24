@@ -1,63 +1,63 @@
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648B01E5B95
-	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 19:10:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D50B674
+	for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 19:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740424208; cv=none; b=UO6eMtPuK6tJqRA0CYqyeeMm+WXKgSulNbgGHMWryDPkDnOR4jPYBocle48z/OaHpcbsOdUSa4nZVUq03mBDXlSMJ9offsQIcCkOd51rea34CFZqI5NxrWBakBhUj1YH/Bb8gKIUu2WSVbR52dx+fC2oycFAJzWxh+U49tB0Mx4=
+	t=1740424224; cv=none; b=Z2OYfDXgnuSqdlDJNzQnxqaBJJtvB+lw3iHC++Hwqgu1xDgTtCTloGvEHAkza4kDgPzDgTT8StpCe0TeCqqKlJ2/ICm8JInaGvYAMSbsB94ey+KqQGZFRdMfz7RpYEoS66KxVquJeJfGv7AMuZpH4zX+AqkD0LzMvYFkpf5DBko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740424208; c=relaxed/simple;
-	bh=T7YErwBzM3Xp9awb651aOZgPiu2dAaV63y7n1aimj9I=;
+	s=arc-20240116; t=1740424224; c=relaxed/simple;
+	bh=i2T6gNXTDl325V79np5whHJFXBpriHDQez+8rSlW5hA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DE2oX+BEcd5Xq+jdz3LN0KpYQBAmBlAnQJ7ZWxtj0XST2nbUxCqiJWZGvFiIbmIC/Lfb59YLd8MJgv4vEwdk+nxAoMLtHlvyZnNSsk8jxuEK7JRIucrHZUcB9YoL9n6qGBHGyJE/1aVpcQZiGXv0a7sMteHZRg7cOhbdqzkOFVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=C48qejSx; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	 In-Reply-To:Content-Type; b=Kdwkh1tlE0uyzznXvuEuYGr8369+5i3B31EH0ULtNlqYjqGRGUwtxkcc5ciW1DD0BNPLpsFTKYAy2/whXIakuZaeDruuxzHTvpDEshLI9d5JT5skJm4/vtAuclGX/uHyRMe1Ik3MOm68gBDbbQZ0nh8q528dyyV449tszIyH7M4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qb3KCe6e; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="C48qejSx"
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3d2f7257181so1276745ab.1
-        for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 11:10:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qb3KCe6e"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-439a331d981so41686155e9.3
+        for <io-uring@vger.kernel.org>; Mon, 24 Feb 2025 11:10:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1740424205; x=1741029005; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
+        d=gmail.com; s=20230601; t=1740424221; x=1741029021; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PqbHB05B4SvIPHaJMOkpStsDUjppa28qG+czwoXrbKg=;
-        b=C48qejSxH6IF1Ow052MGWOqndOtse36ibHm7CKPnPRydPSBfLJqUd2e3PHYuK1NO2U
-         xtiPFryTzdZ8XvwuJ3y99oMhuhGExvVdNpmgJkSyI5RJ4Db2pAW8JSFy0xNGQcIPCdyv
-         sX5LXbJ+Q0VaNEGfkbxP5GYUk0ma08qoMoi2Jg3gQVkQ5CXPzWEVx3Uxq4qXRx3xQSIg
-         1hvk1BLvcF7FHR7rOfCi+MMtwa0l18GwDe8fZb3MIXCTjNHzya2mDj1cBxXHOmkDeld6
-         N4jlS/BHA9NmOYYjTHDcEqrfKVQHWOluzIiVSJMKPO9dbWnIca0BEW+5HYNlKmywn3tZ
-         ZYww==
+        bh=b7GZ+bXOm4llmHFI19nn2ZrZoMccW7yjRL+zBmnGud8=;
+        b=Qb3KCe6e07AKPicCbBYZ9wG6RQZU1KYnIr0tWTi/6fJmum+safXTfD5jXx7jwWnKE5
+         Vhg7AybRqFETVbz6AH4FcbOMsxdP+i8jziDnn9zPC0wuv8IP1Fqp6aevLzXUCsnyB/Q7
+         FkfdgUTT20oDLjTBtJ1xS6MWqvB+sNcgKgV9NtUhoN76aTCnCX2SAqAZuSrG7kIFDtPJ
+         U0MSR1SZoFx7oh67RonFTgszUhiHv29UfpZTeuinxVnwt328gJkZxX9CN3adX65GAhe0
+         Z81viicavDjPAA3r3EbrKeWTp8PlzQJqZvvcGE3f5sV1YYaey98Egb//qhPvrSuFGoOH
+         w0YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740424205; x=1741029005;
-        h=content-transfer-encoding:in-reply-to:content-language:from
+        d=1e100.net; s=20230601; t=1740424221; x=1741029021;
+        h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PqbHB05B4SvIPHaJMOkpStsDUjppa28qG+czwoXrbKg=;
-        b=Z6xJcQ0Co9R7r6xduaBjz5hqvqslm3rnrcDoLWt5aYlIZv1NbFOM0qul0yYgA96UQc
-         cLj06+u3+vxGjvNHtDNkIKa42ptpzOdnqR/k5beuAMNouKkfi/kBba08aYzn+kycq4Vn
-         eP0NJt1NI3k6uInTGg4HrGqgHR/GOOPWoAszG3ppUL0fHpgTSY3e2Ez/a3K7cj47r2Mp
-         9nHQhO+Vy5O+qyTUUYt7vDMAX2HY+Pu1cxmhcZ5trb4rYFWW46XvWPfg+LWI2DQyK3fY
-         ranJKawTNmoBsXdGnrNEkPDqbwbXfrjHLioNxvCsr2IbqMU/+zy2BIsLmZyrdgPhwAvs
-         ejzA==
-X-Gm-Message-State: AOJu0YwDo4WunswgIzFZgjeU744Yr71G2tA6m7E2DOBleMtVHT4yXr0x
-	0SExEEJGkGW3mWWfnG0hXWdJcEwklPka1GizbUvNVqnZE226bEUA6xCHBWkCzpc=
-X-Gm-Gg: ASbGnctr42y2yvuNzVaTmfnuQ2lFnfnaKEgrdX9I5IrmHc631W7VZ756TGX13R7dUBu
-	Ir9oHoUXYaQOJd4BHkR7vWGkFo2/u02/vMoN7H7sqdrLSpMy/CEKKKe5LartBqOmApGx8Xxdq8r
-	PytQP3pfcoMrMJVLoVWpmK4XUGBJVL15dK70ha/riP8mPbtslWuLBot2B3FZHsa1w2CZxRFFP4M
-	tbGO2x9rK5he5rF/Y9/rbF/mo/uYqRqB40TgTAcgbsg7LsoXA/GqcsXHlCjRYXuXPjY7b7e3rom
-	njkDHDRfqOaS3Q45ncwoF0U=
-X-Google-Smtp-Source: AGHT+IE9yRT47uLO/qnZ8m+KBTEjrY8OpDaMFUTbEWKNyPYD36u9FByoFodrZPa/f5LtblX40YcluQ==
-X-Received: by 2002:a05:6e02:20ca:b0:3d2:ae4f:fa12 with SMTP id e9e14a558f8ab-3d2caf01848mr117386215ab.15.1740424205319;
-        Mon, 24 Feb 2025 11:10:05 -0800 (PST)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f0475134c2sm25231173.91.2025.02.24.11.10.04
+        bh=b7GZ+bXOm4llmHFI19nn2ZrZoMccW7yjRL+zBmnGud8=;
+        b=XFh/ENaUCNi/gT9IZzWrfDUNmrikvec2r/3q7to1rhusZNgM3aM6gwNXap2bXEuQPF
+         MnsbwIesyj2f+I1AbrrragPdJNOE8UlUFH8m679xqQjeKKh6JcGy/JDk/sDqcojlXwDn
+         LJh+OIo68tzOa/3T9uLYzMkGqxbWZLfLySQ03cbizMlW1unhR6u8aY78q5D7aaI7Mo6R
+         pixAT8M2AFND8MRg87gVKQB8NwgK0PFB7ufAD6DmILXJzi1UEd5xr0DuibBoRgXufQvg
+         +X5CpdPEYhohTXTLMQdruJwGuevrr/eDyvvDyBQ+6BoW3GJ8lfqisyJS1poOMsh/SILQ
+         dRHA==
+X-Gm-Message-State: AOJu0Yzj39hO59K2oS/BVTdS3oNbz4gsFAj3TcLHLQkj/Qixf17X/Xb6
+	O0QggraQ/f5ABlA8hWO1yCUvU6rpDBqCiaNlmtHhUG46MSgEUI2FCw27bg==
+X-Gm-Gg: ASbGncuLi/pIwLcJbdOAtcNXCVeIAP3urjhbPAXa1BTgiatN6zGO0tRHVXIv3c5Tm8n
+	3plrZFrtGDn6jo5p6tFx5IOARX59dETbBggOWsIpN3DZp4rFMeLMrETdKXifb7jcQT46Za0DvMo
+	gy3X+P6qRkuJaU0PayktVpucn2myqwwYQzU+Fz+1YwUi1hjjdsJ3XkKu7O9zUTeh5HtQYf61/UN
+	tAJqNn/jHwP5LU3gO2830AOUAins2Xdd/oozXN5qqyXIu0YHx9HbJLgkKR9+SKpBXGc/sRGszfl
+	B/rIuvWKdz2IjPi13SBm92f7lJnKkdSK2RE=
+X-Google-Smtp-Source: AGHT+IE2RbaEDG11OH8ZxBIx4IV8gyhuGYcVFlMWpaazkuvDE42kJ4CdRGQ4vYMGQS9mW2FVJtznHw==
+X-Received: by 2002:a5d:6daa:0:b0:38a:87cc:fb42 with SMTP id ffacd0b85a97d-38f6e95d5famr12488795f8f.21.1740424221066;
+        Mon, 24 Feb 2025 11:10:21 -0800 (PST)
+Received: from [192.168.8.100] ([148.252.146.93])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43ab155eb6csm263285e9.31.2025.02.24.11.10.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2025 11:10:04 -0800 (PST)
-Message-ID: <2f7a0d65-afc2-4592-935a-30cc324104c6@kernel.dk>
-Date: Mon, 24 Feb 2025 12:10:03 -0700
+        Mon, 24 Feb 2025 11:10:20 -0800 (PST)
+Message-ID: <7aaf635e-8c20-40be-ab6f-383024b07576@gmail.com>
+Date: Mon, 24 Feb 2025 19:11:21 +0000
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -65,48 +65,49 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/waitid: remove #ifdef CONFIG_COMPAT
-To: Pavel Begunkov <asml.silence@gmail.com>,
- Caleb Sander Mateos <csander@purestorage.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250224172337.2009871-1-csander@purestorage.com>
- <ebad3c9b-9305-4efd-97b7-bbdf07060fea@kernel.dk>
- <CADUfDZrXAn=+4B9boaKe3aMBq19TXn8JDQm4kL0ctOxwB6YF9g@mail.gmail.com>
- <fedd8628-327a-473b-9443-4504fab48c2c@kernel.dk>
- <91c200cd-2b2d-4756-b641-aa1bd4ec9796@gmail.com>
-From: Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 3/4] io_uring/rw: extract helper for iovec import
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: io-uring@vger.kernel.org
+References: <cover.1740412523.git.asml.silence@gmail.com>
+ <5cf589c0efb611bfe32fc3b69b47d2b067fc8a65.1740412523.git.asml.silence@gmail.com>
+ <CADUfDZp5FJ52F4SUejCcXO4YzM8r411_MwT3sRRTWQBeo89pmQ@mail.gmail.com>
 Content-Language: en-US
-In-Reply-To: <91c200cd-2b2d-4756-b641-aa1bd4ec9796@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CADUfDZp5FJ52F4SUejCcXO4YzM8r411_MwT3sRRTWQBeo89pmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2/24/25 12:10 PM, Pavel Begunkov wrote:
-> On 2/24/25 17:55, Jens Axboe wrote:
->> On 2/24/25 10:53 AM, Caleb Sander Mateos wrote:
->>> On Mon, Feb 24, 2025 at 9:44?AM Jens Axboe <axboe@kernel.dk> wrote:
->>>>
->>>> On 2/24/25 10:23 AM, Caleb Sander Mateos wrote:
->>>>> io_is_compat() is already defined to return false if CONFIG_COMPAT is
->>>>> disabled. So remove the additional #ifdef CONFIG_COMPAT guards. Let the
->>>>> compiler optimize out the dead code when CONFIG_COMPAT is disabled.
->>>>
->>>> Would you mind if I fold this into Pavel's patch? I can keep it
->>>> standalone too, just let me know.
->>>
->>> Fine by me, though I thought Pavel was suggesting keeping it separate:
->>> https://lore.kernel.org/io-uring/da109d01-7aab-4205-bbb1-f5f1387f1847@gmail.com/T/#u
+On 2/24/25 16:48, Caleb Sander Mateos wrote:
+> On Mon, Feb 24, 2025 at 8:07 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
 >>
->> I'm reading it as he has other stuff that will go on top. I don't see
->> any reason to double stage this part, might as well remove the
->> CONFIG dependency at the same time, if it's doable.
+>> Split out a helper out of __io_import_rw_buffer() that handles vectored
+>> buffers. I'll need it for registered vectored buffers, but it also looks
+>> cleaner, especially with parameters being properly named.
 >>
->> Pavel?
+>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>> ---
+>>   io_uring/rw.c | 57 ++++++++++++++++++++++++++++-----------------------
+>>   1 file changed, 31 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/io_uring/rw.c b/io_uring/rw.c
+>> index e636be4850a7..0e0d2a19f21d 100644
+>> --- a/io_uring/rw.c
+>> +++ b/io_uring/rw.c
+>> @@ -76,41 +76,23 @@ static int io_iov_buffer_select_prep(struct io_kiocb *req)
+>>          return 0;
+>>   }
+>>
+>> -static int __io_import_rw_buffer(int ddir, struct io_kiocb *req,
+>> -                            struct io_async_rw *io,
+>> -                            unsigned int issue_flags)
+>> +static int io_import_vec(int ddir, struct io_kiocb *req,
+>> +                        struct io_async_rw *io, void __user *uvec,
+>> +                        size_t uvec_segs)
 > 
-> I'm not sure why you'd want that, but I don't mind
+> Could use a more specific type for uvec:  const struct iovec __user *uvec?
 
-Just because it imho should've been in the initial commit, so I'd
-consider it more of a fixup commit. But if you're fine with it, I'll
-fold it in with a note.
+Indeed
 
 -- 
-Jens Axboe
+Pavel Begunkov
+
