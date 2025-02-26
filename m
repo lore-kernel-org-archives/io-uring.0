@@ -1,110 +1,356 @@
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBD021CC6A
-	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 17:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3F7821C19E
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 18:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740591682; cv=none; b=qRXmhEFIaYse5j2vaVSq5Ox9a7ejZhCtwKyxrt27yYUEcWrtXXfrU5iP7Ez2CC3O3uKFUP+ODBE47jQIlq3DccGMCBzfT19OiIayVLbtCou0UwXlo2I4pmvjt2ZzkONzH0tZv2CXBcqyQLIPzZQk040NBNyDosD061pn750Jr8o=
+	t=1740593416; cv=none; b=JFGy6F/MN31cDa8u1PLPbFqDH+y05ecvqdaX2pSpTGlqpQMokDSVOZdh9yfHDqA61NYPEcwPW7yjmOMz9yuLZnWYew6LP05r6msAe14u3LmvjLe5kc7aNziARwdbkr6GlnGLNWPNsdyTrEZxMmo6LvZXV1wIhnRLu3VYJHQWujI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740591682; c=relaxed/simple;
-	bh=00qHpqccB62GYU9Ki7MTAiyUZ5btmWs6SXnOcgalEBA=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RiCgRj2v27X5qjLBSffH7tAYCERbXm9fEhdX7iNnMZH6AYqBbDHy2rSlPka1c6P49ZUr0dd2GeOj4TTTkGu2lc3vyFvuvMcEPX+swQ6OvRDwUFVFm9io0ksEJYnca/UmEGkZmrjK/KJIO4EsaSKNFIM1O2GfIhtBA0kVbyRhVro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=SSYxwarf; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1740593416; c=relaxed/simple;
+	bh=l1AFxrxGgV95zI+B1/sL16G/usO1VwzeRMdezrsrExg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bahQsEtCnAwbK0/vxYirQt0s8WO4ymQ1UGrgsWRTSXN+zwzUm/d3npY/CEsPXlnQ0X+93xs1CbExkyrQvzYGXdiAFOKEdol7QkbzOX2m80INmrlSLVHmQq5NRUyLTKHVZ/7LMKHDKsAT+GpJ1rpO5E7F5bWsACJsIyCDwPelnyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=c9PvMaCg; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="SSYxwarf"
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3d19e40a891so274655ab.3
-        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 09:41:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1740591679; x=1741196479; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GcQGktGX9qknrBwZiMTT1RnbRZbxscab5vQvpnjw6rY=;
-        b=SSYxwarf6+n9QWd9TWi7mRBACvy4hegApnNQauQeuErG00G4EJQdeQ+AMLTy5+vt/k
-         tmpD43jR0zZ4N75tUKLNaaOKMofLspZddW+e861ty4p+a2Ba75lwSqauLLltgqjIdU/V
-         b8FW8tnMn5jdeHoISuNEQXb6i9vKoCd26N8PmqYrhDrkJN1EmlxtP430BGtKIt/9ebz0
-         xXRtcd97YJa569CRrr/amcLKyracD/1ENfmYxPLfuLJEsakxtE60wZ6qIyd2qiM+6rEo
-         buz0f+i1JUHeULJ/8AwhP8C3y+BAuXCl/ZS7R+HQKubERra2+JEGbnkddGbS18q8W3Rh
-         WjSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740591679; x=1741196479;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GcQGktGX9qknrBwZiMTT1RnbRZbxscab5vQvpnjw6rY=;
-        b=NFsIiZVtK92H33gAYW+joShPqBnaJCucYnufEntsshWMLYdqqzwqZq6ZQkL7n9Qn6o
-         T6/AFDBjQi5dnqw5qF6zKri9GGMeKdwRlUYQVOhMEcP39pNEygziXUtqgS3Zytc5M8bg
-         ntSCPZcPIF8iLtOxlRBRxPhRoscreDJBa6XA2z0T1lZkpcBClBNkQc7PnFinGthTFqn7
-         CY6v3NTDmVBbriRPWklsGOXw19rNYDaY33CQ6w702wfP68NVHNmDEMqlLMSxOo0HwFq9
-         Fhp9+t4t/ILe7qRsIs3peLOO2AbxB6UoKx7y250vaUKaY6Hv0sIaezNCrGX9dnMcQXpQ
-         uzkQ==
-X-Gm-Message-State: AOJu0YxD9qnIOC4NnXXEHDG+4kIAJVfaMJcOm7gAYNpFTqebRLNXNQMZ
-	7kN2Zp31fqasMXJEzDV8YsKAVbWMFtf4tSPy00/5gzb7Zxe8mSbeug1wfNYEgA1JgoEMmQkBftu
-	m
-X-Gm-Gg: ASbGnct16NAcfBpDciv5WDKyIGPS3sCDegyQfyBLBx0C076b4hWUKV+1FKKx5vHU9Ks
-	T2jNaXSAhpaPmbNMc+80AYRfrZ3CT5NC9XMZBNGnogS3gnXfPX9RmZqRGY/kAQhYfaQKi+3Dmuc
-	c6p8oQn+6xKUvGT2pKE69O8kG42r3aN8TDjv3pcrBkr7JWqtNopmebaUDyfLtC4YGZhDslg8R2T
-	Riel+CBpfD+kdqoX8YRYUxTeAYRu6m9ne+sFFtTVD4S3erAdJ0V2yiYhO/u8sL5saTt3oAFdurN
-	LIshN9QXT7M27vG1
-X-Google-Smtp-Source: AGHT+IGku4O++U5dQ0mGPB3HALVe1UVZui3mQbiMjToQQGfKVwvC3KZqpXGxcZOvNtdzdOjMjXEHEQ==
-X-Received: by 2002:a05:6e02:1b06:b0:3cf:c8ec:d390 with SMTP id e9e14a558f8ab-3d2fc0c1158mr87898115ab.4.1740591678810;
-        Wed, 26 Feb 2025 09:41:18 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d36165309csm9014665ab.16.2025.02.26.09.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 09:41:18 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <cover.1740569495.git.asml.silence@gmail.com>
-References: <cover.1740569495.git.asml.silence@gmail.com>
-Subject: Re: [PATCH 0/7] improve net msghdr / iovec handlng
-Message-Id: <174059167782.2279502.4185819427784696172.b4-ty@kernel.dk>
-Date: Wed, 26 Feb 2025 10:41:17 -0700
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="c9PvMaCg"
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 51QFa2jU015036
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 10:10:12 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
+	 bh=pZ7hsLEDh+ICLvM8xUOac2m7aznqbKdVGcLsSqsMS4I=; b=c9PvMaCg4UMZ
+	OjMnZqTNNqT7vmUSlWjLv8ZH3rUHoouEMBYrWPkmmu/U9Y7Bey30oi8cvZ2VBoYK
+	iYpLzaN13YB1/nuDsYpMLd8WH+wJLzlV9PWbp7O3H8Py6/A3b9w8Xnb8ft4lGhWv
+	ORY8XawMgSUYUfmJJP9gGCRnij7qw3mf/Qn32SCxmt96Oka5pzWNIAgeDel/IoIb
+	WWHi6BZXoIsihXL+1pJE0mmSNtgX1c2zdWwb9RmgI2u8Pf6r6v/XLhV6BGvkSc7I
+	NXwQgyglGBMsizQ4WuQDxDZKuogOjwaawPeXWCxkbLLXzTv+KxCJdAb7r2/MO94P
+	O7NIpURKaA==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 4525r796m0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 10:10:12 -0800 (PST)
+Received: from twshared29376.33.frc3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.14; Wed, 26 Feb 2025 18:10:03 +0000
+Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
+	id 09EBD187C4AE6; Wed, 26 Feb 2025 10:10:07 -0800 (PST)
+From: Keith Busch <kbusch@meta.com>
+To: <ming.lei@redhat.com>, <asml.silence@gmail.com>, <axboe@kernel.dk>,
+        <linux-block@vger.kernel.org>, <io-uring@vger.kernel.org>
+CC: <bernd@bsbernd.com>, <csander@purestorage.com>,
+        <linux-nvme@lists.infradead.org>, Keith Busch <kbusch@kernel.org>
+Subject: [PATCHv6 5/6] io_uring: add abstraction for buf_table rsrc data
+Date: Wed, 26 Feb 2025 10:10:00 -0800
+Message-ID: <20250226181002.2574148-10-kbusch@meta.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250226181002.2574148-1-kbusch@meta.com>
+References: <20250226181002.2574148-1-kbusch@meta.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3-dev-94c79
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: Ri5oLPO4CNAL9QDipARZrb6mOAyHhwqS
+X-Proofpoint-ORIG-GUID: Ri5oLPO4CNAL9QDipARZrb6mOAyHhwqS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-26_04,2025-02-26_01,2024-11-22_01
 
+From: Keith Busch <kbusch@kernel.org>
 
-On Wed, 26 Feb 2025 11:41:14 +0000, Pavel Begunkov wrote:
-> Note: depends on ("io_uring/net: save msg_control for compat")
-> 
-> Continuing refactoring how iovecs are treated, this series adds
-> some more sanity to handling struct msghdr in the networking code.
-> We can do some more cleaning on top, but it should be in a good
-> shape, and it'll be easier to do new stuff with that in.
-> 
-> [...]
+We'll need to add more fields specific to the registered buffers, so
+make a layer for it now. No functional change in this patch.
 
-Applied, thanks!
+Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+---
+ include/linux/io_uring_types.h |  6 +++-
+ io_uring/fdinfo.c              |  8 +++---
+ io_uring/nop.c                 |  2 +-
+ io_uring/register.c            |  2 +-
+ io_uring/rsrc.c                | 51 +++++++++++++++++-----------------
+ 5 files changed, 36 insertions(+), 33 deletions(-)
 
-[1/7] io_uring/net: remove unnecessary REQ_F_NEED_CLEANUP
-      commit: 398421b7d776edecbd89a7ca6cdaaac0d965762d
-[2/7] io_uring/net: simplify compat selbuf iov parsing
-      commit: c30f89f1d08b205ab96aa09ce06549ba34bbba67
-[3/7] io_uring/net: isolate msghdr copying code
-      commit: 6b69dd00e98a6f9041415351f9894539da0e73c4
-[4/7] io_uring/net: verify msghdr before copying iovec
-      commit: 820c215726a57ffd766376d23feed2bebe27a18f
-[5/7] io_uring/net: derive iovec storage later
-      commit: 67f9fbe72a2d2abb25aafd1af6d9f6373cbc5024
-[6/7] io_uring/net: unify *mshot_prep calls with compat
-      commit: 68525267875757520752ff1abbda0af58fc172b9
-[7/7] io_uring/net: extract iovec import into a helper
-      commit: 7eb5bb749ed945ead6a089e18e1d1da74523ac9a
-
-Best regards,
--- 
-Jens Axboe
-
-
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_type=
+s.h
+index c0fe8a00fe53a..a05ae4cb98a4c 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -69,6 +69,10 @@ struct io_file_table {
+ 	unsigned int alloc_hint;
+ };
+=20
++struct io_buf_table {
++	struct io_rsrc_data	data;
++};
++
+ struct io_hash_bucket {
+ 	struct hlist_head	list;
+ } ____cacheline_aligned_in_smp;
+@@ -293,7 +297,7 @@ struct io_ring_ctx {
+ 		struct io_wq_work_list	iopoll_list;
+=20
+ 		struct io_file_table	file_table;
+-		struct io_rsrc_data	buf_table;
++		struct io_buf_table	buf_table;
+=20
+ 		struct io_submit_state	submit_state;
+=20
+diff --git a/io_uring/fdinfo.c b/io_uring/fdinfo.c
+index f60d0a9d505e2..d389c06cbce10 100644
+--- a/io_uring/fdinfo.c
++++ b/io_uring/fdinfo.c
+@@ -217,12 +217,12 @@ __cold void io_uring_show_fdinfo(struct seq_file *m=
+, struct file *file)
+ 			seq_puts(m, "\n");
+ 		}
+ 	}
+-	seq_printf(m, "UserBufs:\t%u\n", ctx->buf_table.nr);
+-	for (i =3D 0; has_lock && i < ctx->buf_table.nr; i++) {
++	seq_printf(m, "UserBufs:\t%u\n", ctx->buf_table.data.nr);
++	for (i =3D 0; has_lock && i < ctx->buf_table.data.nr; i++) {
+ 		struct io_mapped_ubuf *buf =3D NULL;
+=20
+-		if (ctx->buf_table.nodes[i])
+-			buf =3D ctx->buf_table.nodes[i]->buf;
++		if (ctx->buf_table.data.nodes[i])
++			buf =3D ctx->buf_table.data.nodes[i]->buf;
+ 		if (buf)
+ 			seq_printf(m, "%5u: 0x%llx/%u\n", i, buf->ubuf, buf->len);
+ 		else
+diff --git a/io_uring/nop.c b/io_uring/nop.c
+index ea539531cb5f6..da8870e00eee7 100644
+--- a/io_uring/nop.c
++++ b/io_uring/nop.c
+@@ -66,7 +66,7 @@ int io_nop(struct io_kiocb *req, unsigned int issue_fla=
+gs)
+=20
+ 		ret =3D -EFAULT;
+ 		io_ring_submit_lock(ctx, issue_flags);
+-		node =3D io_rsrc_node_lookup(&ctx->buf_table, req->buf_index);
++		node =3D io_rsrc_node_lookup(&ctx->buf_table.data, req->buf_index);
+ 		if (node) {
+ 			io_req_assign_buf_node(req, node);
+ 			ret =3D 0;
+diff --git a/io_uring/register.c b/io_uring/register.c
+index cc23a4c205cd4..f15a8d52ad30f 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -926,7 +926,7 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, =
+unsigned int, opcode,
+ 	ret =3D __io_uring_register(ctx, opcode, arg, nr_args);
+=20
+ 	trace_io_uring_register(ctx, opcode, ctx->file_table.data.nr,
+-				ctx->buf_table.nr, ret);
++				ctx->buf_table.data.nr, ret);
+ 	mutex_unlock(&ctx->uring_lock);
+=20
+ 	fput(file);
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 5b234e84dcba6..c30a5cda08f3e 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -236,9 +236,9 @@ static int __io_sqe_buffers_update(struct io_ring_ctx=
+ *ctx,
+ 	__u32 done;
+ 	int i, err;
+=20
+-	if (!ctx->buf_table.nr)
++	if (!ctx->buf_table.data.nr)
+ 		return -ENXIO;
+-	if (up->offset + nr_args > ctx->buf_table.nr)
++	if (up->offset + nr_args > ctx->buf_table.data.nr)
+ 		return -EINVAL;
+=20
+ 	for (done =3D 0; done < nr_args; done++) {
+@@ -270,9 +270,9 @@ static int __io_sqe_buffers_update(struct io_ring_ctx=
+ *ctx,
+ 			}
+ 			node->tag =3D tag;
+ 		}
+-		i =3D array_index_nospec(up->offset + done, ctx->buf_table.nr);
+-		io_reset_rsrc_node(ctx, &ctx->buf_table, i);
+-		ctx->buf_table.nodes[i] =3D node;
++		i =3D array_index_nospec(up->offset + done, ctx->buf_table.data.nr);
++		io_reset_rsrc_node(ctx, &ctx->buf_table.data, i);
++		ctx->buf_table.data.nodes[i] =3D node;
+ 		if (ctx->compat)
+ 			user_data +=3D sizeof(struct compat_iovec);
+ 		else
+@@ -550,9 +550,9 @@ int io_sqe_files_register(struct io_ring_ctx *ctx, vo=
+id __user *arg,
+=20
+ int io_sqe_buffers_unregister(struct io_ring_ctx *ctx)
+ {
+-	if (!ctx->buf_table.nr)
++	if (!ctx->buf_table.data.nr)
+ 		return -ENXIO;
+-	io_rsrc_data_free(ctx, &ctx->buf_table);
++	io_rsrc_data_free(ctx, &ctx->buf_table.data);
+ 	return 0;
+ }
+=20
+@@ -579,8 +579,8 @@ static bool headpage_already_acct(struct io_ring_ctx =
+*ctx, struct page **pages,
+ 	}
+=20
+ 	/* check previously registered pages */
+-	for (i =3D 0; i < ctx->buf_table.nr; i++) {
+-		struct io_rsrc_node *node =3D ctx->buf_table.nodes[i];
++	for (i =3D 0; i < ctx->buf_table.data.nr; i++) {
++		struct io_rsrc_node *node =3D ctx->buf_table.data.nodes[i];
+ 		struct io_mapped_ubuf *imu;
+=20
+ 		if (!node)
+@@ -809,7 +809,7 @@ int io_sqe_buffers_register(struct io_ring_ctx *ctx, =
+void __user *arg,
+=20
+ 	BUILD_BUG_ON(IORING_MAX_REG_BUFFERS >=3D (1u << 16));
+=20
+-	if (ctx->buf_table.nr)
++	if (ctx->buf_table.data.nr)
+ 		return -EBUSY;
+ 	if (!nr_args || nr_args > IORING_MAX_REG_BUFFERS)
+ 		return -EINVAL;
+@@ -862,7 +862,7 @@ int io_sqe_buffers_register(struct io_ring_ctx *ctx, =
+void __user *arg,
+ 		data.nodes[i] =3D node;
+ 	}
+=20
+-	ctx->buf_table =3D data;
++	ctx->buf_table.data =3D data;
+ 	if (ret)
+ 		io_sqe_buffers_unregister(ctx);
+ 	return ret;
+@@ -873,7 +873,7 @@ int io_buffer_register_bvec(struct io_uring_cmd *cmd,=
+ struct request *rq,
+ 			    unsigned int issue_flags)
+ {
+ 	struct io_ring_ctx *ctx =3D cmd_to_io_kiocb(cmd)->ctx;
+-	struct io_rsrc_data *data =3D &ctx->buf_table;
++	struct io_rsrc_data *data =3D &ctx->buf_table.data;
+ 	struct req_iterator rq_iter;
+ 	struct io_mapped_ubuf *imu;
+ 	struct io_rsrc_node *node;
+@@ -937,7 +937,7 @@ void io_buffer_unregister_bvec(struct io_uring_cmd *c=
+md, unsigned int index,
+ 			       unsigned int issue_flags)
+ {
+ 	struct io_ring_ctx *ctx =3D cmd_to_io_kiocb(cmd)->ctx;
+-	struct io_rsrc_data *data =3D &ctx->buf_table;
++	struct io_rsrc_data *data =3D &ctx->buf_table.data;
+ 	struct io_rsrc_node *node;
+=20
+ 	io_ring_submit_lock(ctx, issue_flags);
+@@ -1034,7 +1034,7 @@ static inline struct io_rsrc_node *io_find_buf_node=
+(struct io_kiocb *req,
+ 		return req->buf_node;
+=20
+ 	io_ring_submit_lock(ctx, issue_flags);
+-	node =3D io_rsrc_node_lookup(&ctx->buf_table, req->buf_index);
++	node =3D io_rsrc_node_lookup(&ctx->buf_table.data, req->buf_index);
+ 	if (node)
+ 		io_req_assign_buf_node(req, node);
+ 	io_ring_submit_unlock(ctx, issue_flags);
+@@ -1084,10 +1084,10 @@ static int io_clone_buffers(struct io_ring_ctx *c=
+tx, struct io_ring_ctx *src_ctx
+ 	if (!arg->nr && (arg->dst_off || arg->src_off))
+ 		return -EINVAL;
+ 	/* not allowed unless REPLACE is set */
+-	if (ctx->buf_table.nr && !(arg->flags & IORING_REGISTER_DST_REPLACE))
++	if (ctx->buf_table.data.nr && !(arg->flags & IORING_REGISTER_DST_REPLAC=
+E))
+ 		return -EBUSY;
+=20
+-	nbufs =3D src_ctx->buf_table.nr;
++	nbufs =3D src_ctx->buf_table.data.nr;
+ 	if (!arg->nr)
+ 		arg->nr =3D nbufs;
+ 	else if (arg->nr > nbufs)
+@@ -1097,13 +1097,13 @@ static int io_clone_buffers(struct io_ring_ctx *c=
+tx, struct io_ring_ctx *src_ctx
+ 	if (check_add_overflow(arg->nr, arg->dst_off, &nbufs))
+ 		return -EOVERFLOW;
+=20
+-	ret =3D io_rsrc_data_alloc(&data, max(nbufs, ctx->buf_table.nr));
++	ret =3D io_rsrc_data_alloc(&data, max(nbufs, ctx->buf_table.data.nr));
+ 	if (ret)
+ 		return ret;
+=20
+ 	/* Fill entries in data from dst that won't overlap with src */
+-	for (i =3D 0; i < min(arg->dst_off, ctx->buf_table.nr); i++) {
+-		struct io_rsrc_node *src_node =3D ctx->buf_table.nodes[i];
++	for (i =3D 0; i < min(arg->dst_off, ctx->buf_table.data.nr); i++) {
++		struct io_rsrc_node *src_node =3D ctx->buf_table.data.nodes[i];
+=20
+ 		if (src_node) {
+ 			data.nodes[i] =3D src_node;
+@@ -1112,7 +1112,7 @@ static int io_clone_buffers(struct io_ring_ctx *ctx=
+, struct io_ring_ctx *src_ctx
+ 	}
+=20
+ 	ret =3D -ENXIO;
+-	nbufs =3D src_ctx->buf_table.nr;
++	nbufs =3D src_ctx->buf_table.data.nr;
+ 	if (!nbufs)
+ 		goto out_free;
+ 	ret =3D -EINVAL;
+@@ -1132,7 +1132,7 @@ static int io_clone_buffers(struct io_ring_ctx *ctx=
+, struct io_ring_ctx *src_ctx
+ 	while (nr--) {
+ 		struct io_rsrc_node *dst_node, *src_node;
+=20
+-		src_node =3D io_rsrc_node_lookup(&src_ctx->buf_table, i);
++		src_node =3D io_rsrc_node_lookup(&src_ctx->buf_table.data, i);
+ 		if (!src_node) {
+ 			dst_node =3D NULL;
+ 		} else {
+@@ -1154,7 +1154,7 @@ static int io_clone_buffers(struct io_ring_ctx *ctx=
+, struct io_ring_ctx *src_ctx
+ 	 * old and new nodes at this point.
+ 	 */
+ 	if (arg->flags & IORING_REGISTER_DST_REPLACE)
+-		io_rsrc_data_free(ctx, &ctx->buf_table);
++		io_sqe_buffers_unregister(ctx);
+=20
+ 	/*
+ 	 * ctx->buf_table must be empty now - either the contents are being
+@@ -1162,10 +1162,9 @@ static int io_clone_buffers(struct io_ring_ctx *ct=
+x, struct io_ring_ctx *src_ctx
+ 	 * copied to a ring that does not have buffers yet (checked at function
+ 	 * entry).
+ 	 */
+-	WARN_ON_ONCE(ctx->buf_table.nr);
+-	ctx->buf_table =3D data;
++	WARN_ON_ONCE(ctx->buf_table.data.nr);
++	ctx->buf_table.data =3D data;
+ 	return 0;
+-
+ out_free:
+ 	io_rsrc_data_free(ctx, &data);
+ 	return ret;
+@@ -1190,7 +1189,7 @@ int io_register_clone_buffers(struct io_ring_ctx *c=
+tx, void __user *arg)
+ 		return -EFAULT;
+ 	if (buf.flags & ~(IORING_REGISTER_SRC_REGISTERED|IORING_REGISTER_DST_RE=
+PLACE))
+ 		return -EINVAL;
+-	if (!(buf.flags & IORING_REGISTER_DST_REPLACE) && ctx->buf_table.nr)
++	if (!(buf.flags & IORING_REGISTER_DST_REPLACE) && ctx->buf_table.data.n=
+r)
+ 		return -EBUSY;
+ 	if (memchr_inv(buf.pad, 0, sizeof(buf.pad)))
+ 		return -EINVAL;
+--=20
+2.43.5
 
