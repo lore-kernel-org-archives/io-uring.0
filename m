@@ -1,105 +1,116 @@
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0035427561C
-	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 20:36:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1796275614
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 20:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740602179; cv=none; b=fIyMf63FP14svXCSuXqW7xoNyEZN76abhirJXg7SY6GQgzZ1NkertPfjIpiJd7DfFaA8mVzUAWpqmrKODm8zHJKhiQePCB0srk76N9tQlmAYXB5WOi55ow6UF8o1Uop0352DOiJdTZDpXIETQM6N7QyVe4CVe48OM6LNb98RYFo=
+	t=1740602742; cv=none; b=juAIaKthlhHW9bGxrpjRK1pfKim7fZHQMUsAB+qktfCfAEQOr8A0kePgEf2k392g4g4QXX4ZCGM6mKG9qV32YCLgAvGps9UNTqpC74bouSuOi6wmDt4Hr2Fh03cfeAOZ3VIeuB7yZ+gtpr8lLbq94/sY96bXgv1bx4jc1IxvqgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740602179; c=relaxed/simple;
-	bh=VC3SAPTEl0i49ihRbrDdJsQYLdTwF6Wi5VeIuAFox50=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dRsskKxM8kupFokNA7zssn8D6XReLCg+AwWInrarvwx0AaIRsCmjhIu1hKhPNIMcHG/qXzkTxNg0NVULltzz+73iIhGLV5ai9Nu5SwAEkJRyaVHhVCCxAi2KVejgVZQeT5ZgrQ5A9ZzUvYfLTRWu+n/OBR/PuWB9pJjQ5OQ913g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=OGC0f7lO; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1740602742; c=relaxed/simple;
+	bh=gN5ptnFPL1Eavg/tGFRqiXzHpSxMWA4IDbXzDMGth2Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G32Ht9j0BDzdvsrI7+CbsBEzf6efwEur0xFc1do7937hE/Jkb23Vy3Zig/io9GykKW/t208LAPC4RO6h2cCwPQ2JsEcxIyjWFBlVPrM86oxOqMvtU1R5Z8q+H3XQWMBhDni/br/5n0S1WYtilwGhVomFs0tDcTbCStjUlh0MHSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nReWZbLe; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="OGC0f7lO"
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3d1a428471fso1926755ab.2
-        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 12:36:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nReWZbLe"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-abec925a135so31344666b.0
+        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 12:45:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1740602176; x=1741206976; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hmzqUtuLFgT2c7u/W65oS618sUsNHDHfq220kvzNU6c=;
-        b=OGC0f7lOayOhgQ/acv2MgoIggYZT2/PmQAxeu71GXIKDaGy0ueYZKv91gACs0/x59u
-         NCFiQDz4gTdHNOoTEeIl7acP0HguFFND/nSR7lvZ/YFpVAyb3rHfwrTcy5WJcD9Hj9Bu
-         hmNFFo4TuFw5zWTTGiekt+5J4qTRh2bSKBeM4BXFOTzA4W5K8ydm1F4LRwyCJnNBUrXM
-         CdW2j2szmGOpLZYmx6WhmQreYVJjjhK0iUs8d3Utzh7g8igzbDN2yn32vMlBZp343Iyi
-         Rt6TxXyHelHgY0zSdvEgqCqoIDnylW8h/xrZEqgUr3b9U7cjzgYFm7nSDax1ie2e8gnj
-         Yzrw==
+        d=gmail.com; s=20230601; t=1740602739; x=1741207539; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d5OkdHrD9QiCz+CB89cQEzcFF0kCNJ8x1Jtev0C6O5U=;
+        b=nReWZbLeOvn3lAWPQoUI8Clv54FK42cmtuyHZ6HXjD9zY9RKMnhvQmok1aathZbLgS
+         xw+/orL6VTD33GkQw22w0JV+/Su2xAEEMTwu5BHkeiQbqruwwTvmjfG1kxzpRKCcN3iO
+         t0r4ofyWoDaNdWnBn0feKj3dNc1+6jUioqJZyNNp79ocY7BHiD6iib9Cm1Uufepfn4wN
+         OIszNGT/JwgrFHBQVT222hFNsY/3Rn4e8n4HPo1WOoVKP5DLqkn9zyTjG1oRAMUaJUc+
+         ea/2KeYYcaYI7WT4t0X9aSGby29oKHmmoqkvrUqbp494iZGvvkHFbjomQo5C+0bQ/HB/
+         GavA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740602176; x=1741206976;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hmzqUtuLFgT2c7u/W65oS618sUsNHDHfq220kvzNU6c=;
-        b=IhQ2onvKN9E44PJ5sh+8g7FE+gJ+IzZMcVt8bDCNEvanoHk/Lp9sbdmlVJ9RpVG0Y0
-         sFsn9qT2/3NoKFRWpfyYGpjhKnRn9lONm/QYLnhG3b1JkGdVv4eabkncM/f4EzUk8Snu
-         jTOIPRiOSMEJdGqOsqvMVVeZJbsdATSMmI50062jraM+exdzy4qiUuN08bdLR/6IAlBw
-         pKwy45nbnHBxDRCoeMW0s9OPM9l5DiCqtVEx1q+c+R1tCtLjguc6cwDl4SuVvTtt0qz8
-         8KYYJm/UQiJd+qtXsbJEHMWQx4FmOjRAbb87kmrPxs0U8QzzwY7t/t6dyl5jICLUNHXO
-         /5jw==
-X-Forwarded-Encrypted: i=1; AJvYcCXHDAa1BPSW/gf31ltsAOnB8Bap5LseEyR8jlffrvLbGFVqiHnuZNl6XuKZ64lSJP8scIjp1HncwA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYLIOBKkKG0sfZC9/8CE5LH3fiqLmO31IEl1qE+0Lzu/J1C67K
-	IUvkGdrmq9XUhe8tu+sRpwYOn0E65xKmjD7w2RUQZGSyGQ5VJPcSWEl65WN09gE=
-X-Gm-Gg: ASbGncuH3goFnVU1ULm7eCPO4bdW9Fb5CZfHp2wyBTP+dMj8CA3jx0CxHe1QGGuEYIo
-	sqlNb2/7z+hLkOXJsdjtvLH1UYna7WnfBDJJdT3U3eyCYBH84ShKFWVnyIO4H5byDhvjXZfEMyD
-	axOg3eu77L8KO1gx3ALLQvpJ58IryUOK4qUa5rU/eOboxirJQObgUFIDlJN3XPZ5HivbKRKL8+c
-	3QoLeRhkzDaR3WtqRa/RfCk4nH4i4nvRuCbJiWiavzC6M58Ys8d2N6eXV23TzuD+8XMHZ6cgbzO
-	tDQy2lCF8wG0bd6IZRH2Mw==
-X-Google-Smtp-Source: AGHT+IFZhUDa0aBEcOlvPZddOMoMuQxC93b3SQFzlP0FnLZWxjGnGimX11rNVAbPFw+yMxcl4BKkvQ==
-X-Received: by 2002:a05:6e02:1906:b0:3d3:d4a2:94a0 with SMTP id e9e14a558f8ab-3d3d4a29640mr41989075ab.8.1740602175816;
-        Wed, 26 Feb 2025 12:36:15 -0800 (PST)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f061fa8750sm12443173.136.2025.02.26.12.36.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2025 12:36:15 -0800 (PST)
-Message-ID: <e7e3d82d-d983-4073-8cfa-91f2a3f2ea62@kernel.dk>
-Date: Wed, 26 Feb 2025 13:36:14 -0700
+        d=1e100.net; s=20230601; t=1740602739; x=1741207539;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d5OkdHrD9QiCz+CB89cQEzcFF0kCNJ8x1Jtev0C6O5U=;
+        b=ggP+o388ypfd8JmZVVGfU9Q8XIofKWmF2aDNLvB5hbXvvLGSHLrQa/aPJyIKmwfX1I
+         J5zA9rPaGlKvCsBYy5facPEsPR16S0x5f8FQ+fZqYvTJVHpE3O5HK4xgUQNDTH3Z0fNi
+         z5X5NkaGW73AjM3h/09GT34t+snS846r8pBHRCLo/tJAYQELwwHMspaXaPRUeHEDE2L3
+         91gg3TqdpSIxw98RoUffYGDfyeqegBoG1USMjjT+zEHXHZuOzB4NyKoerWN6mQ9lAVba
+         oh9YCPGXbSzmjKPSxxg7DFjABGYnNEsYmoNQre/sT2ASkkZFda7tOF92torWrjEKD9Wn
+         ScKg==
+X-Gm-Message-State: AOJu0YxUSigHmNdIB+rkZRsetvX+LjM863dOZn5n0WqZiVynlB0zpKV8
+	5jC12R5a9zjfVUusKiX830oe+r1Jngx26voIiedhHLi3pDwi6noxHIFMXw==
+X-Gm-Gg: ASbGncv5DY+7mrouapUYWp08nXraQMdQzzk/J9FT0NAOJmLqJp0f0K/3tYWOz4NT3Uj
+	I4tBK+jKKEUPcrjmRPKTL99RbhkPFgthTOvcWGzh/gQatwWmnmLeyyHenZmpnttKbLwN1L5IVCK
+	HMQ5V35x0vi+smkxL+T3hXx2wlfTMm3O6qsvvF+D33y2TbNfDMWsHsgaWFjcbKJUPLZsqJGOIqF
+	C+mzyutP1KVVbBeiEUTsl7qA+CR7lVa/MyJjaee7vPk9Rl1x97yCcYUxk56i6rqhGMSfP2wqc6c
+	Od+PUo2gV9tEYEMMM4KvPryrAbCHT4ESwISNRw==
+X-Google-Smtp-Source: AGHT+IEs/8tECykk7KCWdEJw7kBQkdCIXhFCWJETqHBORRFiynr+3SXp6Xw1IVlRZItoybMh5luU2w==
+X-Received: by 2002:a17:906:c142:b0:ab7:beeb:d1f1 with SMTP id a640c23a62f3a-abeeef76330mr592431366b.51.1740602738625;
+        Wed, 26 Feb 2025 12:45:38 -0800 (PST)
+Received: from 127.0.0.1localhost ([85.255.235.21])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c74fb39sm993766b.132.2025.02.26.12.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Feb 2025 12:45:37 -0800 (PST)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	axboe@kernel.dk
+Subject: [PATCH 1/1] io_uring: rearrange opdef flags by use pattern
+Date: Wed, 26 Feb 2025 20:46:34 +0000
+Message-ID: <ef03b6ce4a0c2a5234cd4037fa07e9e4902dcc9e.1740602793.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv7 2/6] io_uring: add support for kernel registered bvecs
-To: Keith Busch <kbusch@meta.com>, ming.lei@redhat.com,
- asml.silence@gmail.com, linux-block@vger.kernel.org, io-uring@vger.kernel.org
-Cc: bernd@bsbernd.com, csander@purestorage.com,
- linux-nvme@lists.infradead.org, Keith Busch <kbusch@kernel.org>
-References: <20250226182102.2631321-1-kbusch@meta.com>
- <20250226182102.2631321-3-kbusch@meta.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20250226182102.2631321-3-kbusch@meta.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/26/25 11:20 AM, Keith Busch wrote:
-> From: Keith Busch <kbusch@kernel.org>
-> 
-> Provide an interface for the kernel to leverage the existing
-> pre-registered buffers that io_uring provides. User space can reference
-> these later to achieve zero-copy IO.
-> 
-> User space must register an empty fixed buffer table with io_uring in
-> order for the kernel to make use of it.
+Keep all flags that we use in the generic req init path close together.
+That saves a load for x86 because apparently some compilers prefer
+reading single bytes.
 
-Just a suggestion, but might make sense to not use ->release() as
-a gating whether this is a kernel buffer or not, there's room in the
-struct anyway with the 'u8 perm' having holes anyway. And if we did
-that, then we could just have a default release that does the unpin
-and put rather than needing to check and have branches for the two
-types of release. Yes the indirect function call isn't free either,
-like the branches aren't, but I don't think it matters on the release
-side. At least not enough to care, and it'd help streamline the code
-a bit and not overload ->release() with meaning "oh this is a kernel
-buffer".
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ io_uring/opdef.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
+diff --git a/io_uring/opdef.h b/io_uring/opdef.h
+index 14456436ff74..719a52104abe 100644
+--- a/io_uring/opdef.h
++++ b/io_uring/opdef.h
+@@ -7,6 +7,12 @@ struct io_issue_def {
+ 	unsigned		needs_file : 1;
+ 	/* should block plug */
+ 	unsigned		plug : 1;
++	/* supports ioprio */
++	unsigned		ioprio : 1;
++	/* supports iopoll */
++	unsigned		iopoll : 1;
++	/* op supports buffer selection */
++	unsigned		buffer_select : 1;
+ 	/* hash wq insertion if file is a regular file */
+ 	unsigned		hash_reg_file : 1;
+ 	/* unbound wq insertion if file is a non-regular file */
+@@ -15,14 +21,8 @@ struct io_issue_def {
+ 	unsigned		pollin : 1;
+ 	unsigned		pollout : 1;
+ 	unsigned		poll_exclusive : 1;
+-	/* op supports buffer selection */
+-	unsigned		buffer_select : 1;
+ 	/* skip auditing */
+ 	unsigned		audit_skip : 1;
+-	/* supports ioprio */
+-	unsigned		ioprio : 1;
+-	/* supports iopoll */
+-	unsigned		iopoll : 1;
+ 	/* have to be put into the iopoll list */
+ 	unsigned		iopoll_queue : 1;
+ 	/* vectored opcode, set if 1) vectored, and 2) handler needs to know */
 -- 
-Jens Axboe
+2.48.1
 
