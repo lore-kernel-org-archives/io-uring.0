@@ -1,67 +1,67 @@
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7C621505D
-	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 11:40:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCFD216380
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 11:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740570041; cv=none; b=g3B6l6qhTadEC4EklvnSL1sYxei5gT0d3kDcTZ3FjNu7gc1vBIpt9+lOFVq/YpsAvdps8eCLx+EncYGN3S3gcX7yKsuEKg/9cHKrnd+OQrU9l40f0IlSJqDKB18H9JbUo0S1QqQkmYzFXzh6qhoIPTe5WFRSstQ1yPo+gtus7LY=
+	t=1740570044; cv=none; b=JMIWJ6GTBp6W6uBZ1fto3h+IJj4UxtC9I5YT934WPKSepzv4xHH6OD/rPCGo693nqDCYgeoC4Zc9zas4FqxI5m0/E59WxRGMG4k5eL9M34G1hsyzjyvxvpnRt5kF1gBHzPAWpR6wiVgGMix8DcsYpN7VnEYlpteVCabCPnLO0b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740570041; c=relaxed/simple;
-	bh=24FvXa9aG9vZ4yHSjilp07gbtCfvWhj/d8PPrNWFwKM=;
+	s=arc-20240116; t=1740570044; c=relaxed/simple;
+	bh=ZjqhMIKWojNH1Fw5h0ut7wxl/cVzvmR5RoeB+laF98k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NR0N892wG8SMktROGiusF8U6eC6PXEhIk3fIhFryK9OEpAlcjNFszHLckJYVmYZY1A89PMKXpHEfg6vZP2Ph/oNZNR1M5JSOWrF8MiljJc9p6FtxMC2h1BK0sxtS7KejGWVcu1QwvHzVFatfNB2Lo+eMoIgY6sgw2yKUaABx9KQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LeUFI9Mq; arc=none smtp.client-ip=209.85.208.48
+	 MIME-Version; b=hKrgLP2PreNpc0mD4MtTiIk5p9dhLyzSAGwXEhK1k8nWN0EsSwxcUJAGfm6maK/+GHQwa20PukXE+Q0P1S8869gRVnDt+Plt9LSTFSf4Q3PVHAsYNC9RgC/lfTrIjGwP1gMzidYLI7EV+GxEqRvw1Ocjf0vPMO7GRWd3PBNjjFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C0HsjIJ0; arc=none smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LeUFI9Mq"
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5e04064af07so10690002a12.0
-        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 03:40:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C0HsjIJ0"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5e05717755bso10164644a12.0
+        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 03:40:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740570038; x=1741174838; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740570040; x=1741174840; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Jp+JgVKUVU7tG6AlWMu65MLLWLDtLTF+BDF9puXzNcs=;
-        b=LeUFI9MqTg2s3S8lDME99rq8epgjC4Lg5wnhkrZ+oNU3C3NZbuOWE3zm7TfN7CUEs3
-         CZPeJ5WsZt9rw0DI+S1JfWPz/dF54fiqzyoXs+hcfvilXcWAlWwQWFxeV5DPJIh9AItL
-         3IGqitVu5GcbrVEnrN2S44uJ2iFV8K4SWNhi3bJcIOm36HutnGKbeeC0yPrT1vARifby
-         ZrpovF6dRDIP+HP2pbuHalneOshxJ5NSrnbro935Md6AD72WyFo9L6hLDRkylm1PgH+5
-         U1LutIM64gemcds2XCyfnrjun3Rhhb+kVKsv42k3HJ/aP92LqRd13gVY+X6GMMH4ifk4
-         Mkyg==
+        bh=d2FjhbDI3XS7khyxUO37XmaPy8jPaHgTcWcgyeR3Bjo=;
+        b=C0HsjIJ0MDRnWtjc8WcLv5v+YdlVtHEWGUt+zSAHdnhlFIlBGqh4O+VS5LSv/PWlgI
+         K3vvfx6iZaDIvd7ZQCT/wP3bJL1hbYkgnGqn3YT3rjR1xWotnTCx1F0f2LiCwZRATDnO
+         SpJbcd9lUs9A8dJUyJA4V92Izy0oOrc14o+/8nsyvDC+G14V6TSlzSsTzTaYBbOYYWbu
+         Asr3xDootklHzRtDvYXYzwMyj2IAyvpSxX6munElF6YXZWafmvLKrzoN9dxrTCb0jHUe
+         cfU88YOA0U7+nxi1CJnHPi96ronblAaJqwCKFLbFckAdM+NPOeS9nYorLPuUZHMf+k0T
+         ZtBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740570038; x=1741174838;
+        d=1e100.net; s=20230601; t=1740570040; x=1741174840;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jp+JgVKUVU7tG6AlWMu65MLLWLDtLTF+BDF9puXzNcs=;
-        b=MFJadfuIPdZXZeDVGYBzMh7ofyiREkoi4cI6H/Ww6tpH21SsFjPoid8bqYvBQTxp89
-         dMC8ZVhe6JgN5mdBOzCcmPZ5ZwnHCTw/4rBK605WvZHQRNZTX90xou9il17Dx4WyYktE
-         RsKHL4M5+ytOx9HymIdtnN/oAUmcbnNKLZv6VC3lea3DSLyWXgTB6kGnHCeLTrXzpVv1
-         3RD19Clc/VrTtQyyaKEwfuPLyhJzVckw1jO1DSvyDRQiIaBebhFBuHBynWCW9isTNRYf
-         Wzh9IwTPpkxBlntDLW4sy3dK+WsbwNiEkcRXLDIZW/DZFq4CV1KMH2M3aZX2aj+IOcRH
-         W5/A==
-X-Gm-Message-State: AOJu0YzbwKzqFzDWG/pr/sPwLyC9Ue6KW5I5odUzO56m7sPmzEV13GqQ
-	Sw+3uBAZJnvkbCWm32MtOldvQ7oduPJdQeDrA6Q+6K/wqvosvFTejpfLjQ==
-X-Gm-Gg: ASbGnctbJBJYzktSPWbMhIU1FTryARde+Bu68f0qo/0VWVeX+SyMmKeqPWpQq58fhHl
-	BUxPfTcZu3S5xnWAZzvvUViAsndMW8j8qdz4/bSgeSPbfWeoeMA6fiYfAWlWlqJ8AVXROXp+ZOb
-	SABPvxKAPYS800zsoKItHrkwjCqOtsjJVzfKSpbSvd6uL8Kvh3v5LM/LgXH6gFiJBcEPehXnyOF
-	UzrjLHRlZ5CdSckoO1XdZomIqBwrqH81qC0yFVkI9vaVGgxBaktKTcXQV39vko6DP7X6Hv2r86J
-	xg8bpnal1A==
-X-Google-Smtp-Source: AGHT+IG3uk2c8fvUhhmNHDfR5Z3PwlP2xPAFP3fTe7U1tpyPBps6HLjezA5hLKUKoJCSrM1YGQ0oLg==
-X-Received: by 2002:a05:6402:4604:b0:5e0:8c55:531 with SMTP id 4fb4d7f45d1cf-5e445994128mr6374449a12.14.1740570037693;
-        Wed, 26 Feb 2025 03:40:37 -0800 (PST)
+        bh=d2FjhbDI3XS7khyxUO37XmaPy8jPaHgTcWcgyeR3Bjo=;
+        b=j3JVCDl7GH4nCJFV/OJpL7CZcVaPkVhpNr47wwO/4GZDgMjoTUkkaxbD7Ah9dphsw/
+         sWpT7LNZmlRnYG7SLj0cl0+xghsFdesp3KnV2XU2FI88fj1aKOBsaGqzhyxSJqIxYEHt
+         wBjJFCDptBRfMB4OTKTJje0uZOG9pyuaZOLsy065lur0tzVu/yN9idSDTp9R+mBQ9O2R
+         G03kYf3nGdGxDmR6ky0NbJn7LnowZsQbHtxZQGobOrqIdThs/WnypDDp2iCuY7A9QfQe
+         ZOAS2HBvDFCFb3TaBrRgg1co2VB0Z53BpU2RM++20TpcOAA9UlyZ1/PoiXGPoOcUtWZ4
+         Gy6A==
+X-Gm-Message-State: AOJu0YxNEOGNlX7c43+DQx5XFOZjg8Qjygg8Rc6lUHXm7Gowe6qm+PJs
+	fYXQZOiQ+/laVlUSwBDn2pMsEWjgR5u+yaAglhE1K1QyIC768FF3W5s8dg==
+X-Gm-Gg: ASbGncvlnvmrcfniLB+7Qh5OOOA26jCEe3ATi2W4QD2w8ldByOsdQiHwoBkhkk2O8E+
+	YEXuV3TBLur5sLMP/WoZJqh8J5khcrHOc+3XSzu+d+DkE9zQZbwbc376o/Za3mRZ5RcYOcop2Gr
+	+DYkq1Ro7Ic0G5vwtJwPKOhmA1R/IvfKq5d6TTZfprlZjRqfeqW6MMWwZV5TPJCApnAb+YV24+9
+	QkUr9LVDyYHPrQNYm+HWB5PSe297m1UE9p2ol626vw8e4CqAnIeGZJSty6EjsXdLZGbmxkib4UF
+	Kba6tAE4QA==
+X-Google-Smtp-Source: AGHT+IFe1iy3YKe9l4rfiHeXdmiRwkwkQM1EwKgD0AuAXULvyCOXnxOMnUxDgEqv1vihvAMjxzhpaw==
+X-Received: by 2002:a05:6402:1e96:b0:5de:dff7:7d8f with SMTP id 4fb4d7f45d1cf-5e4469dd8b9mr9219072a12.18.1740570040104;
+        Wed, 26 Feb 2025 03:40:40 -0800 (PST)
 Received: from 127.com ([2620:10d:c092:600::1:7b07])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e45b80b935sm2692418a12.41.2025.02.26.03.40.36
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e45b80b935sm2692418a12.41.2025.02.26.03.40.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 03:40:37 -0800 (PST)
+        Wed, 26 Feb 2025 03:40:39 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com
-Subject: [PATCH 3/7] io_uring/net: isolate msghdr copying code
-Date: Wed, 26 Feb 2025 11:41:17 +0000
-Message-ID: <d3eb1f81c8cfbea9f1aa57dab90c472d2aa6e371.1740569495.git.asml.silence@gmail.com>
+Subject: [PATCH 5/7] io_uring/net: derive iovec storage later
+Date: Wed, 26 Feb 2025 11:41:19 +0000
+Message-ID: <8bfa7d74c33e37860a724f4e0e96660c25cd4c02.1740569495.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <cover.1740569495.git.asml.silence@gmail.com>
 References: <cover.1740569495.git.asml.silence@gmail.com>
@@ -73,94 +73,105 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The user access section in io_msg_copy_hdr() is overextended by covering
-selected buffers. It's hard to work with and prone to errors. Limit the
-section to msghdr import only, selected buffers will do a separate
-copy_from_user() call, and then move it into its own function. This
-should be fine, selected buffer single shots are not important, for
-multishots the overhead should be non-existent, and it's not that
-expensive overall.
+Don't read free_iov until right before we need it to import the iovec.
+The only place that uses it before that is provided buffer selection,
+but it only serves as temporary storage and iovec content is not reused
+afterwards, so use a local variable for that.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/net.c | 45 +++++++++++++++++++++++++--------------------
- 1 file changed, 25 insertions(+), 20 deletions(-)
+ io_uring/net.c | 43 +++++++++++++++++++++----------------------
+ 1 file changed, 21 insertions(+), 22 deletions(-)
 
 diff --git a/io_uring/net.c b/io_uring/net.c
-index 0013a7169d10..67d768e6ecdd 100644
+index 14eeebfd8a5a..8a9ec4783a2b 100644
 --- a/io_uring/net.c
 +++ b/io_uring/net.c
-@@ -243,6 +243,24 @@ static int io_compat_msg_copy_hdr(struct io_kiocb *req,
- }
- #endif
+@@ -203,14 +203,6 @@ static int io_compat_msg_copy_hdr(struct io_kiocb *req,
+ 	struct iovec *iov;
+ 	int ret, nr_segs;
  
-+static int io_copy_msghdr_from_user(struct user_msghdr *msg,
-+				    struct user_msghdr __user *umsg)
-+{
-+	if (!user_access_begin(umsg, sizeof(*umsg)))
-+		return -EFAULT;
-+	unsafe_get_user(msg->msg_name, &umsg->msg_name, ua_end);
-+	unsafe_get_user(msg->msg_namelen, &umsg->msg_namelen, ua_end);
-+	unsafe_get_user(msg->msg_iov, &umsg->msg_iov, ua_end);
-+	unsafe_get_user(msg->msg_iovlen, &umsg->msg_iovlen, ua_end);
-+	unsafe_get_user(msg->msg_control, &umsg->msg_control, ua_end);
-+	unsafe_get_user(msg->msg_controllen, &umsg->msg_controllen, ua_end);
-+	user_access_end();
-+	return 0;
-+ua_end:
-+	user_access_end();
-+	return -EFAULT;
-+}
-+
- static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 			   struct user_msghdr *msg, int ddir)
- {
-@@ -259,16 +277,10 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 		nr_segs = 1;
+-	if (iomsg->free_iov) {
+-		nr_segs = iomsg->free_iov_nr;
+-		iov = iomsg->free_iov;
+-	} else {
+-		iov = &iomsg->fast_iov;
+-		nr_segs = 1;
+-	}
+-
+ 	if (copy_from_user(msg, sr->umsg_compat, sizeof(*msg)))
+ 		return -EFAULT;
+ 
+@@ -221,8 +213,7 @@ static int io_compat_msg_copy_hdr(struct io_kiocb *req,
+ 	uiov = compat_ptr(msg->msg_iov);
+ 	if (req->flags & REQ_F_BUFFER_SELECT) {
+ 		if (msg->msg_iovlen == 0) {
+-			sr->len = iov->iov_len = 0;
+-			iov->iov_base = NULL;
++			sr->len = 0;
+ 		} else if (msg->msg_iovlen > 1) {
+ 			return -EINVAL;
+ 		} else {
+@@ -238,6 +229,14 @@ static int io_compat_msg_copy_hdr(struct io_kiocb *req,
+ 		return 0;
  	}
  
--	if (!user_access_begin(umsg, sizeof(*umsg)))
--		return -EFAULT;
-+	ret = io_copy_msghdr_from_user(msg, umsg);
-+	if (unlikely(ret))
-+		return ret;
++	if (iomsg->free_iov) {
++		nr_segs = iomsg->free_iov_nr;
++		iov = iomsg->free_iov;
++	} else {
++		iov = &iomsg->fast_iov;
++		nr_segs = 1;
++	}
++
+ 	ret = __import_iovec(ddir, (struct iovec __user *)uiov, msg->msg_iovlen,
+ 				nr_segs, &iov, &iomsg->msg.msg_iter, true);
+ 	if (unlikely(ret < 0))
+@@ -275,14 +274,6 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
+ 	struct iovec *iov;
+ 	int ret, nr_segs;
  
--	ret = -EFAULT;
--	unsafe_get_user(msg->msg_name, &umsg->msg_name, ua_end);
--	unsafe_get_user(msg->msg_namelen, &umsg->msg_namelen, ua_end);
--	unsafe_get_user(msg->msg_iov, &umsg->msg_iov, ua_end);
--	unsafe_get_user(msg->msg_iovlen, &umsg->msg_iovlen, ua_end);
--	unsafe_get_user(msg->msg_control, &umsg->msg_control, ua_end);
--	unsafe_get_user(msg->msg_controllen, &umsg->msg_controllen, ua_end);
- 	msg->msg_flags = 0;
+-	if (iomsg->free_iov) {
+-		nr_segs = iomsg->free_iov_nr;
+-		iov = iomsg->free_iov;
+-	} else {
+-		iov = &iomsg->fast_iov;
+-		nr_segs = 1;
+-	}
+-
+ 	ret = io_copy_msghdr_from_user(msg, umsg);
+ 	if (unlikely(ret))
+ 		return ret;
+@@ -295,20 +286,28 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
  
  	if (req->flags & REQ_F_BUFFER_SELECT) {
-@@ -276,24 +288,17 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 			sr->len = iov->iov_len = 0;
- 			iov->iov_base = NULL;
+ 		if (msg->msg_iovlen == 0) {
+-			sr->len = iov->iov_len = 0;
+-			iov->iov_base = NULL;
++			sr->len = 0;
  		} else if (msg->msg_iovlen > 1) {
--			ret = -EINVAL;
--			goto ua_end;
-+			return -EINVAL;
+ 			return -EINVAL;
  		} else {
  			struct iovec __user *uiov = msg->msg_iov;
++			struct iovec tmp_iov;
  
--			/* we only need the length for provided buffers */
--			if (!access_ok(&uiov->iov_len, sizeof(uiov->iov_len)))
--				goto ua_end;
--			unsafe_get_user(iov->iov_len, &uiov->iov_len, ua_end);
-+			if (copy_from_user(iov, uiov, sizeof(*iov)))
-+				return -EFAULT;
- 			sr->len = iov->iov_len;
+-			if (copy_from_user(iov, uiov, sizeof(*iov)))
++			if (copy_from_user(&tmp_iov, uiov, sizeof(tmp_iov)))
+ 				return -EFAULT;
+-			sr->len = iov->iov_len;
++			sr->len = tmp_iov.iov_len;
  		}
--		ret = 0;
--ua_end:
--		user_access_end();
--		return ret;
-+		return 0;
+ 		return 0;
  	}
  
--	user_access_end();
++	if (iomsg->free_iov) {
++		nr_segs = iomsg->free_iov_nr;
++		iov = iomsg->free_iov;
++	} else {
++		iov = &iomsg->fast_iov;
++		nr_segs = 1;
++	}
++
  	ret = __import_iovec(ddir, msg->msg_iov, msg->msg_iovlen, nr_segs,
  				&iov, &iomsg->msg.msg_iter, false);
  	if (unlikely(ret < 0))
