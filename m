@@ -1,52 +1,52 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61761235368
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B731233723
 	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 18:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740593417; cv=none; b=g4GI+l/qgNTANolKe9WfZX7MLsSRhzPV/6QoZ/ngDCEVpT7RUYPTbXihojFP1PHErBly1Nejss5RLGzS6rhxqBqgq+jhwQiG+FDwUitBtIVyCYIGEOmIN+kk0u39WcqUimvhYuO74oAfUU8RA+Bj0LtSJrkvngyYceNpu7c4qH4=
+	t=1740593417; cv=none; b=MpKBecDnBx07L1DdqYYbD8dkiZ1jA4m21S5kEnw3tcW6/MgDMcy+ODWH2gVGdkAxY4jLR+jz56HvvoTytOV0iu4vi42jSFpPwWeW1YH2/k2b6Ue4AZ5b4VA0A1emzbZOQuuOaMxSqdqR7SOKcBLdrX2VeyIv+Y3GFx8mOIu5ZjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740593417; c=relaxed/simple;
 	bh=42doPWHs01cCRK+7iQ8nxJijoXH+EnGvaHbI6a7w6GI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oredTJh0fNrXgRRVlAM5YVZboNzAZEdsJC5sNfWDRk5OB9VkKQvk9Ocp50FRij0amoIXlmmy7Dfslfhqopnuw+vJOMtURfjnzMObxImhJehy9ctJMIeDlBVhcakPqY9DKQSDbMYdawztYl+m+LN3Dmfg0kVHAJRUSxwu1qUkrSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=LsIjd3CV; arc=none smtp.client-ip=67.231.153.30
+	 MIME-Version:Content-Type; b=Z2b4Tv2PbyTamH3tauGXWbR4V+Eke/3aqxRltZAkGie/jKQKdibw458NmuZKPyCNyeJkA6XJzg8LeCt42DF7k+Z/ZVRGeiqo498P2uQi7auQ5loLO5XB4dVe6vRU2DRH5+PlGQWs8eb8rqNP2N/h5Zf2WuvzB1L/zk5f+iWVt2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=UXlmkX87; arc=none smtp.client-ip=67.231.153.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="LsIjd3CV"
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 51QFa932015227
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="UXlmkX87"
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51QF0jR8019840
 	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 10:10:14 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
 	:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=y0Y/ECEqgQaIDn98rUw+oY23UvTFuskrGecxUwUlobU=; b=LsIjd3CVm6gf
-	yK8zsCuuexFlrR3Qbbn9V9LS13S1grjlNFxGf4cUZ8lc+YczMCBS8xSnHhR32huR
-	2u1qUrlbwa2vqW9WZRZkwnIb6JKBxZv9C9xXHFKvH6QquFlwAPhgHqTkBak/o+pb
-	dFrKpOXMh8/xsuowWotXr7xY285iPANM9FZgf3HI3c71mX1WheWekJ1Z5jgSc+xb
-	yTjtCz1f7Vl9VJTwTu4a++MNi08Lx1pCAda4/JK+VvuQi3bL3Sk+Rat6Na//J3ug
-	c5sZMXCm5Qzk5Jb1dSFwMBPqgWyDLWOCADwoD/cUwPL2Mc0mIG9ggQObhqoZzYuh
-	nXTRN8a7Mw==
+	 bh=y0Y/ECEqgQaIDn98rUw+oY23UvTFuskrGecxUwUlobU=; b=UXlmkX872RvS
+	fVZcwbzR8w10azLWTVmP21uM57kD9h7g02SPvgGZA/QfscBFe/gCsjH8k4Ly+U4Q
+	EbMRDLYZYKTPWGuJKJy7Sl1rUpBTEyioe7inTk8yPFj6wIcUnrZAWZJ2P2ooAg8J
+	cpKAc1xTwWs9VsG+dZOxJfNVWvBGMjfcSBIf+VyqVYoUjXNinddj+NDoJwMKOeL2
+	/P8IuxIBbEY3eOMboBoh5AKMrHXcfzZTGLJ3wGrfPvNmTzz3reBWYNeeMrdtIPFO
+	Y3VpUa2Mno3GXt8VdEy38Qdpyl9jnpNsmFVYBZqYEe4uNRXfYd+PdzjV5Ie8Jk/J
+	hKAJcpesEA==
 Received: from maileast.thefacebook.com ([163.114.135.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 4525r796ku-7
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 45257j1ewn-7
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 10:10:14 -0800 (PST)
-Received: from twshared8234.09.ash9.facebook.com (2620:10d:c0a8:1c::11) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 10:10:13 -0800 (PST)
+Received: from twshared55211.03.ash8.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.14; Wed, 26 Feb 2025 18:10:04 +0000
+ 15.2.1544.14; Wed, 26 Feb 2025 18:10:02 +0000
 Received: by devbig638.nha1.facebook.com (Postfix, from userid 544533)
-	id BCEAD187C4AD8; Wed, 26 Feb 2025 10:10:05 -0800 (PST)
+	id B189E187C4ACF; Wed, 26 Feb 2025 10:10:05 -0800 (PST)
 From: Keith Busch <kbusch@meta.com>
 To: <ming.lei@redhat.com>, <asml.silence@gmail.com>, <axboe@kernel.dk>,
         <linux-block@vger.kernel.org>, <io-uring@vger.kernel.org>
 CC: <bernd@bsbernd.com>, <csander@purestorage.com>,
         <linux-nvme@lists.infradead.org>, Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv6 2/6] io_uring: add support for kernel registered bvecs
-Date: Wed, 26 Feb 2025 10:09:54 -0800
-Message-ID: <20250226181002.2574148-4-kbusch@meta.com>
+Subject: [PATCHv6 1/5] io_uring: add support for kernel registered bvecs
+Date: Wed, 26 Feb 2025 10:09:52 -0800
+Message-ID: <20250226181002.2574148-2-kbusch@meta.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250226181002.2574148-1-kbusch@meta.com>
 References: <20250226181002.2574148-1-kbusch@meta.com>
@@ -59,8 +59,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: pCmP8HC2WrYlwRvwD9SpiuMW1MHE4mm0
-X-Proofpoint-ORIG-GUID: pCmP8HC2WrYlwRvwD9SpiuMW1MHE4mm0
+X-Proofpoint-ORIG-GUID: Gf9QXlAnbvssPuQmj3VfmM7IYfeSnZIX
+X-Proofpoint-GUID: Gf9QXlAnbvssPuQmj3VfmM7IYfeSnZIX
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-26_04,2025-02-26_01,2024-11-22_01
