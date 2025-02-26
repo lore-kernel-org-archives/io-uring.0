@@ -1,216 +1,105 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90AE19E98C
-	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 20:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0035427561C
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 20:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740602179; cv=none; b=K3is4O8ph2iS9T0z1nyjDD2v/RuULAbsrBtA5Kjx01LoGxjt+Z1dX/yT34uQFIQOgDaJD5feKbzgFKH0ratmlrkzQ5UWCysUETZluVQfO9J1zCvSu4pxGy7Wo5whQFsi7CCOjLY/8qp3U9easmHLSibi5l/XN7qLL4q8z4lEUaY=
+	t=1740602179; cv=none; b=fIyMf63FP14svXCSuXqW7xoNyEZN76abhirJXg7SY6GQgzZ1NkertPfjIpiJd7DfFaA8mVzUAWpqmrKODm8zHJKhiQePCB0srk76N9tQlmAYXB5WOi55ow6UF8o1Uop0352DOiJdTZDpXIETQM6N7QyVe4CVe48OM6LNb98RYFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740602179; c=relaxed/simple;
-	bh=bSfCnBGLpKHCnCtdnfko3eEoettMod/zsg0lwnGfS7Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=je6P22DWlMOrdvBnupnX1pQreBUsJVYFUVDE8fZ8iM6CWBTr74ptVwac0lix/C0lzt3PbMwPzeIjJSQNFrS77mjuYGOEyx874q5TPqweyLEaQg7tOTM/kq1QubUNferHz14jmsEoLq/wrGhTVAliGKKBk8G2yoakv5kuOQB8l/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bDQ6VbwK; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	bh=VC3SAPTEl0i49ihRbrDdJsQYLdTwF6Wi5VeIuAFox50=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dRsskKxM8kupFokNA7zssn8D6XReLCg+AwWInrarvwx0AaIRsCmjhIu1hKhPNIMcHG/qXzkTxNg0NVULltzz+73iIhGLV5ai9Nu5SwAEkJRyaVHhVCCxAi2KVejgVZQeT5ZgrQ5A9ZzUvYfLTRWu+n/OBR/PuWB9pJjQ5OQ913g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=OGC0f7lO; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bDQ6VbwK"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-ab78e6edb99so24561366b.2
-        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 12:36:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="OGC0f7lO"
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3d1a428471fso1926755ab.2
+        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 12:36:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740602176; x=1741206976; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8pfVb2jJwmxIauVKaI2S3DqVyZkb4z9/MscMiM2buxM=;
-        b=bDQ6VbwKN5sCc01/NVYKZ+yXtSkc6d10LjYAlhDG4wfI5lXiebZdh8mFs9QhAXB8AL
-         DH7mf5BD1snf5B3J6NpX6FFcNeRfFlKduIyvx9lu8fw3Iov/+8IZHkMMlvgWbCMO5t8l
-         IG3Ec83xyyqMXqhwqUU68NDgHAovoz1ryx2Vck6s6KPLEF77LpJ7kPkWAuw/57nwI631
-         XB+Vp4TT9OR9IYpL2F8jc4OvOh7YOj00GN8vhbRMogeJaIRU1B2RznjzpDVceRf4pQdR
-         laS5Yr1IHL3boaUP98OtXhbgS/jus6G20UHilyiCABbVWkZwpB9cn62wMvfTQfTYPQQ2
-         6DKQ==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1740602176; x=1741206976; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hmzqUtuLFgT2c7u/W65oS618sUsNHDHfq220kvzNU6c=;
+        b=OGC0f7lOayOhgQ/acv2MgoIggYZT2/PmQAxeu71GXIKDaGy0ueYZKv91gACs0/x59u
+         NCFiQDz4gTdHNOoTEeIl7acP0HguFFND/nSR7lvZ/YFpVAyb3rHfwrTcy5WJcD9Hj9Bu
+         hmNFFo4TuFw5zWTTGiekt+5J4qTRh2bSKBeM4BXFOTzA4W5K8ydm1F4LRwyCJnNBUrXM
+         CdW2j2szmGOpLZYmx6WhmQreYVJjjhK0iUs8d3Utzh7g8igzbDN2yn32vMlBZp343Iyi
+         Rt6TxXyHelHgY0zSdvEgqCqoIDnylW8h/xrZEqgUr3b9U7cjzgYFm7nSDax1ie2e8gnj
+         Yzrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1740602176; x=1741206976;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8pfVb2jJwmxIauVKaI2S3DqVyZkb4z9/MscMiM2buxM=;
-        b=LyE9PK8BcEJF4Er12QTbmfnDv7NvGLY+W7y3UI4hfagZYe6BPzYLW7zQF+Xea/m2Hc
-         zKglwBhFl77xso1IQyjWQfBsYCXJ+47xSLXeLp0jBhiqk/XocMWir2Kls1R387E+Iidc
-         D0xgu0Fq8rQM5XX3e9akLi6ow8TqgraxYqxyl/Fwa5mc4mCyeHoMWFDHyfu892a9lqS3
-         aOYX8vctkFartMcayd/Eo2TlaOSGdaLJt/5SCZ+g+tJrNmfp3rtj0ol/K167l3ykvzxP
-         e3egyqvX5Br/NM25tXzmHIQ/qX/qhxdh38GLrbFmtQNOeNd215vhe+RbMSUbHGFlJxPK
-         uTXQ==
-X-Gm-Message-State: AOJu0YwoyQmaxPc0BCt/0xQKmEE+chOQzVuvkIT7eWMpMfKkRP4GXy4s
-	JzgCC3/MWU4F3owaK/nFrx4tF8cmM+lqNp8SmIMH5Ub5P+c2FHbzX6aB9w==
-X-Gm-Gg: ASbGncvQhq/kHEjwRkyZIGhNkj1qMbSLZKHSkQXYF/OVeos8LSQbwuqJfkFTLFIiGPs
-	I9ThZuI+6g/YMRbsWuTKUgfyTshB6Gv/qkMNzF694MDrrt3KJDqrh2EzPBRybfRWME7y+GVxYqZ
-	zXNk78DaIyQPPVieR0S9hktbxvRu6IubTGeTJRx+n/KGGJ0iXSlc2tTT5uHc9ozBqIxliwCMNCc
-	ajepqtJs4jMh9rMCv8EBQ9aprsk7+lO1H/Q+nBklflgMzWzGTVtdL5683o/iupqbCFg1Sssae3i
-	8tJZNvuFSY3s8cwRKlSHIL5ht+Av54jB7Q5Nlg==
-X-Google-Smtp-Source: AGHT+IGnq0n1Uj7EFUNqvmWANZUTfQJpwaTwAASd6c/INOrDJioAvS816rYI+Cpmp/GTyhDh5n5HHA==
-X-Received: by 2002:a17:907:7f0c:b0:abc:269d:d534 with SMTP id a640c23a62f3a-abeeef34ed6mr692356066b.40.1740602175269;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hmzqUtuLFgT2c7u/W65oS618sUsNHDHfq220kvzNU6c=;
+        b=IhQ2onvKN9E44PJ5sh+8g7FE+gJ+IzZMcVt8bDCNEvanoHk/Lp9sbdmlVJ9RpVG0Y0
+         sFsn9qT2/3NoKFRWpfyYGpjhKnRn9lONm/QYLnhG3b1JkGdVv4eabkncM/f4EzUk8Snu
+         jTOIPRiOSMEJdGqOsqvMVVeZJbsdATSMmI50062jraM+exdzy4qiUuN08bdLR/6IAlBw
+         pKwy45nbnHBxDRCoeMW0s9OPM9l5DiCqtVEx1q+c+R1tCtLjguc6cwDl4SuVvTtt0qz8
+         8KYYJm/UQiJd+qtXsbJEHMWQx4FmOjRAbb87kmrPxs0U8QzzwY7t/t6dyl5jICLUNHXO
+         /5jw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHDAa1BPSW/gf31ltsAOnB8Bap5LseEyR8jlffrvLbGFVqiHnuZNl6XuKZ64lSJP8scIjp1HncwA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYLIOBKkKG0sfZC9/8CE5LH3fiqLmO31IEl1qE+0Lzu/J1C67K
+	IUvkGdrmq9XUhe8tu+sRpwYOn0E65xKmjD7w2RUQZGSyGQ5VJPcSWEl65WN09gE=
+X-Gm-Gg: ASbGncuH3goFnVU1ULm7eCPO4bdW9Fb5CZfHp2wyBTP+dMj8CA3jx0CxHe1QGGuEYIo
+	sqlNb2/7z+hLkOXJsdjtvLH1UYna7WnfBDJJdT3U3eyCYBH84ShKFWVnyIO4H5byDhvjXZfEMyD
+	axOg3eu77L8KO1gx3ALLQvpJ58IryUOK4qUa5rU/eOboxirJQObgUFIDlJN3XPZ5HivbKRKL8+c
+	3QoLeRhkzDaR3WtqRa/RfCk4nH4i4nvRuCbJiWiavzC6M58Ys8d2N6eXV23TzuD+8XMHZ6cgbzO
+	tDQy2lCF8wG0bd6IZRH2Mw==
+X-Google-Smtp-Source: AGHT+IFZhUDa0aBEcOlvPZddOMoMuQxC93b3SQFzlP0FnLZWxjGnGimX11rNVAbPFw+yMxcl4BKkvQ==
+X-Received: by 2002:a05:6e02:1906:b0:3d3:d4a2:94a0 with SMTP id e9e14a558f8ab-3d3d4a29640mr41989075ab.8.1740602175816;
         Wed, 26 Feb 2025 12:36:15 -0800 (PST)
-Received: from 127.0.0.1localhost ([85.255.235.21])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c0b92a4sm1327066b.8.2025.02.26.12.36.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 12:36:14 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com,
-	axboe@kernel.dk
-Subject: [PATCH liburing 1/1] tests/rw: test iowq offload
-Date: Wed, 26 Feb 2025 20:37:09 +0000
-Message-ID: <0ba2c9c8302b4d2318bd33580e6170e3bce90e86.1740602134.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.48.1
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f061fa8750sm12443173.136.2025.02.26.12.36.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Feb 2025 12:36:15 -0800 (PST)
+Message-ID: <e7e3d82d-d983-4073-8cfa-91f2a3f2ea62@kernel.dk>
+Date: Wed, 26 Feb 2025 13:36:14 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv7 2/6] io_uring: add support for kernel registered bvecs
+To: Keith Busch <kbusch@meta.com>, ming.lei@redhat.com,
+ asml.silence@gmail.com, linux-block@vger.kernel.org, io-uring@vger.kernel.org
+Cc: bernd@bsbernd.com, csander@purestorage.com,
+ linux-nvme@lists.infradead.org, Keith Busch <kbusch@kernel.org>
+References: <20250226182102.2631321-1-kbusch@meta.com>
+ <20250226182102.2631321-3-kbusch@meta.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20250226182102.2631321-3-kbusch@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-We miss fixed read/write + IOSQE_ASYNC tests, so add it
+On 2/26/25 11:20 AM, Keith Busch wrote:
+> From: Keith Busch <kbusch@kernel.org>
+> 
+> Provide an interface for the kernel to leverage the existing
+> pre-registered buffers that io_uring provides. User space can reference
+> these later to achieve zero-copy IO.
+> 
+> User space must register an empty fixed buffer table with io_uring in
+> order for the kernel to make use of it.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- test/read-write.c | 35 +++++++++++++++++++++--------------
- 1 file changed, 21 insertions(+), 14 deletions(-)
+Just a suggestion, but might make sense to not use ->release() as
+a gating whether this is a kernel buffer or not, there's room in the
+struct anyway with the 'u8 perm' having holes anyway. And if we did
+that, then we could just have a default release that does the unpin
+and put rather than needing to check and have branches for the two
+types of release. Yes the indirect function call isn't free either,
+like the branches aren't, but I don't think it matters on the release
+side. At least not enough to care, and it'd help streamline the code
+a bit and not overload ->release() with meaning "oh this is a kernel
+buffer".
 
-diff --git a/test/read-write.c b/test/read-write.c
-index 23f1d582..ba98c744 100644
---- a/test/read-write.c
-+++ b/test/read-write.c
-@@ -46,7 +46,7 @@ static int create_nonaligned_buffers(void)
- 
- static int _test_io(const char *file, struct io_uring *ring, int write,
- 		    int buffered, int sqthread, int fixed, int nonvec,
--		    int buf_select, int seq, int exp_len)
-+		    int buf_select, int seq, int exp_len, bool worker_offload)
- {
- 	struct io_uring_sqe *sqe;
- 	struct io_uring_cqe *cqe;
-@@ -144,6 +144,10 @@ static int _test_io(const char *file, struct io_uring *ring, int write,
- 		sqe->user_data = i;
- 		if (sqthread)
- 			sqe->flags |= IOSQE_FIXED_FILE;
-+
-+		if (worker_offload)
-+			sqe->flags |= IOSQE_ASYNC;
-+
- 		if (buf_select) {
- 			if (nonvec)
- 				sqe->addr = 0;
-@@ -227,12 +231,12 @@ err:
- 
- static int __test_io(const char *file, struct io_uring *ring, int write,
- 		     int buffered, int sqthread, int fixed, int nonvec,
--		     int buf_select, int seq, int exp_len)
-+		     int buf_select, int seq, int exp_len, bool worker_offload)
- {
- 	int ret;
- 
- 	ret = _test_io(file, ring, write, buffered, sqthread, fixed, nonvec,
--		       buf_select, seq, exp_len);
-+		       buf_select, seq, exp_len, worker_offload);
- 	if (ret)
- 		return ret;
- 
-@@ -263,7 +267,7 @@ static int __test_io(const char *file, struct io_uring *ring, int write,
- 			return ret;
- 		}
- 		ret = _test_io(file, &ring2, write, buffered, sqthread, 2,
--			       nonvec, buf_select, seq, exp_len);
-+			       nonvec, buf_select, seq, exp_len, worker_offload);
- 		if (ret)
- 			return ret;
- 
-@@ -284,7 +288,7 @@ static int __test_io(const char *file, struct io_uring *ring, int write,
- }
- 
- static int test_io(const char *file, int write, int buffered, int sqthread,
--		   int fixed, int nonvec, int exp_len)
-+		   int fixed, int nonvec, int exp_len, bool worker_offload)
- {
- 	struct io_uring ring;
- 	int ret, ring_flags = 0;
-@@ -301,7 +305,7 @@ static int test_io(const char *file, int write, int buffered, int sqthread,
- 	}
- 
- 	ret = __test_io(file, &ring, write, buffered, sqthread, fixed, nonvec,
--			0, 0, exp_len);
-+			0, 0, exp_len, worker_offload);
- 	io_uring_queue_exit(&ring);
- 	return ret;
- }
-@@ -481,7 +485,8 @@ static int test_buf_select_short(const char *filename, int nonvec)
- 		io_uring_cqe_seen(&ring, cqe);
- 	}
- 
--	ret = __test_io(filename, &ring, 0, 0, 0, 0, nonvec, 1, 1, exp_len);
-+	ret = __test_io(filename, &ring, 0, 0, 0, 0, nonvec, 1, 1, exp_len,
-+			false);
- 
- 	io_uring_queue_exit(&ring);
- 	return ret;
-@@ -620,7 +625,7 @@ static int test_buf_select(const char *filename, int nonvec)
- 	for (i = 0; i < BUFFERS; i++)
- 		memset(vecs[i].iov_base, i, vecs[i].iov_len);
- 
--	ret = __test_io(filename, &ring, 1, 0, 0, 0, 0, 0, 1, BS);
-+	ret = __test_io(filename, &ring, 1, 0, 0, 0, 0, 0, 1, BS, false);
- 	if (ret) {
- 		fprintf(stderr, "failed writing data\n");
- 		return 1;
-@@ -633,7 +638,7 @@ static int test_buf_select(const char *filename, int nonvec)
- 	if (ret)
- 		return ret;
- 
--	ret = __test_io(filename, &ring, 0, 0, 0, 0, nonvec, 1, 1, BS);
-+	ret = __test_io(filename, &ring, 0, 0, 0, 0, nonvec, 1, 1, BS, false);
- 	io_uring_queue_exit(&ring);
- 	return ret;
- }
-@@ -933,17 +938,18 @@ int main(int argc, char *argv[])
- 	vecs = t_create_buffers(BUFFERS, BS);
- 
- 	/* if we don't have nonvec read, skip testing that */
--	nr = has_nonvec_read() ? 32 : 16;
-+	nr = has_nonvec_read() ? 64 : 32;
- 
- 	for (i = 0; i < nr; i++) {
- 		int write = (i & 1) != 0;
- 		int buffered = (i & 2) != 0;
- 		int sqthread = (i & 4) != 0;
- 		int fixed = (i & 8) != 0;
--		int nonvec = (i & 16) != 0;
-+		int offload = (i & 16) != 0;
-+		int nonvec = (i & 32) != 0;
- 
- 		ret = test_io(fname, write, buffered, sqthread, fixed, nonvec,
--			      BS);
-+			      BS, offload);
- 		if (ret) {
- 			fprintf(stderr, "test_io failed %d/%d/%d/%d/%d\n",
- 				write, buffered, sqthread, fixed, nonvec);
-@@ -1047,14 +1053,15 @@ int main(int argc, char *argv[])
- 		int buffered = (i & 2) != 0;
- 		int sqthread = (i & 4) != 0;
- 		int fixed = (i & 8) != 0;
--		int nonvec = (i & 16) != 0;
-+		int offload = (i & 16) != 0;
-+		int nonvec = (i & 32) != 0;
- 
- 		/* direct IO requires alignment, skip it */
- 		if (!buffered || !fixed || nonvec)
- 			continue;
- 
- 		ret = test_io(fname, write, buffered, sqthread, fixed, nonvec,
--			      -1);
-+			      -1, offload);
- 		if (ret) {
- 			fprintf(stderr, "test_io failed %d/%d/%d/%d/%d\n",
- 				write, buffered, sqthread, fixed, nonvec);
 -- 
-2.48.1
+Jens Axboe
 
