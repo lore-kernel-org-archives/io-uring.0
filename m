@@ -1,72 +1,70 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EED419C54E
-	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 11:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D8217BB35
+	for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 11:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740569986; cv=none; b=gqcL/0ePMDaG6kVSM38X88Ja7GC7W0RQt2OeUuYXoxpGRqUPFpZYtKPfLR0LIDv7iJDls7gOHIZDAqr5pjt9gdaq6Ot+B8PWdLsSGILUdxlAZkF6hKN+/cNP3pgwUyR7V0858GnoOEFVJprrFMBrI/79iMixyz1gcsbKMj0VXbs=
+	t=1740570037; cv=none; b=XzsQbMvMYWsaBgWhwaxJBpzkLVL9diCYSaWUqww1SLHUKHZAHELuuy9Byrbab/AoTgitf2GA2GbGoioQ9uY/iwJUl7qYT1em8SLSw7oRiIISb3X/Kh89lpdQRJatt+PKNZfvAxI+KlsNBdID6VcKwDRnlYsx4wiKoUdBBk7bywI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740569986; c=relaxed/simple;
-	bh=nxXKSrBkcEctdHXJ1EIDy5SMRGntL5ukUQhgK9FCjtw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PF8FOBrZp+tp0ewZxN9/jEhzksupSutPEyTY+tKMjmkGSnGijJpmbY4G91eK2fQorf6yT5ZECAx+bOCkiJAcGxbQynFcslngB67GqymlTcysKpFANRuZlUT5UVu96e217G551NwdvRu6wQ++qMmcr/zlJSbbUhRcJRErSrY8+r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com; spf=pass smtp.mailfrom=shopee.com; dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b=aB+tigxd; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shopee.com
+	s=arc-20240116; t=1740570037; c=relaxed/simple;
+	bh=/pxwft0KfZH7w3fHGORDU64FaSwjat6dBOf5sp4tL5g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q2p1C5u05yFqJpBYk7zYfqWKJd9xges9NeULF+c/4stxwVxX5uhLa17BRKsKNbmMGElyyW5cN4cfkkx7zdEkV8OvI+zUCOhomlGS1aVx4oo+SjAchc+OdF1DWJmorYriEUGyyLj3zKRArRkjAUEj+oRuGmNZZqsKc2v33ApRN34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RPv2+6Xa; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b="aB+tigxd"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2210d92292eso47247655ad.1
-        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 03:39:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RPv2+6Xa"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5dca468c5e4so11963609a12.1
+        for <io-uring@vger.kernel.org>; Wed, 26 Feb 2025 03:40:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1740569982; x=1741174782; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RvZRoCysp+rlQWcsd6zeQXMTiABhtLdxvlTgkNMlriQ=;
-        b=aB+tigxdxeuiWucGJkDQkRXbT2EWBxCCvdwqB0rEtrikTXWYvtQ1e2fEXZ0/WTI7v1
-         MYl0cBZ74OapLA+8g4SXAmc+GL2KQHRdETSbQWAcCBuFP/oraSBC3O23EcyE5LRTSYv3
-         AXzJjYp8dlHr2anbR9as8M9pYXZtgxw7jiEFchaTLHw4mxt1sfT93Y+cuhf0Sdy8ISrw
-         OfxMN3x+6uWaX0F7SoxUyUXSVV0tt9ZFUVPQOX3iL/2nacPpQzpoMi7J2szGWH1Hvcz8
-         OU0VzO8dtEIKEDLMZyQ06+ipoB+mkRT1++8y8oPYjlupOG3xot8nyrYi69jLwjgBYDz8
-         1pFw==
+        d=gmail.com; s=20230601; t=1740570033; x=1741174833; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0LXbnwcIBc2J1W8+NT/KbDyiw6ZmnDEsBSK3rUjcCzQ=;
+        b=RPv2+6XavdwBnJGiIMj92UQt+y1vgAf9n6SlzKm90PXa4hwZAB6AoGeEjIckJTNNNv
+         ypCgFbQ33xFp+BuYDyiYF2C23v3ff+2THaVd8ZlvN4b8uwSMjy0h5RGEPtf9E21/k23I
+         M6LryG731DrJ7HTzQAKfF/wzi5jCOoa+4kIEmynRIM0K+/AN/cwtMBs7+RnocHlTP7dl
+         QKSs0a2upyGeLeXx2p/k/HhW5GwMLjs54zZ9wDJFg9dzyZN6YUvtVucapoyINmp1ORaB
+         C/nNQu3iRJ+YUmMDzNcq9WHXMIp0uHFv7EaR6UkWpDD63iXdR2vjdZ7/A6IEqn9mbaM7
+         +bjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740569982; x=1741174782;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RvZRoCysp+rlQWcsd6zeQXMTiABhtLdxvlTgkNMlriQ=;
-        b=BJpMvXWZqHRwkJM9pG4ffydjAO4KAJVm0W8SUSt7XGM/WnjfvXWJte9EZs50bwoMNU
-         yH50+NGge4L8Xku0WqJibPQCptOssQ8CN+mOmaxDSw0zCyL6KIQHAGO9yx/LAMM716fF
-         dvgwCc26zBGeXL/VS2W+HYeCaO101XhczeiZZefaN3bdQHPRK2BDDxR28SDzN8/So1H7
-         5Kmkt5k+w1P2qY65fGk/DjVSXpDm2brZ2SHTDXvncOBjmvcRQOoEqvVYbeoHen9AIrYh
-         n/UqFBmGyIXlWOgu/CUsJbJDYC1Qb1MkoS1qM4ncfYzvanaVzRhN/xHOI2j/1lyydPoc
-         iKLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWUyK1mrMN2ejdvuvSNI1BRoLGUPFI2Lz2UZdR/iTOqgt9RQslwpZ/k+Gb56hn3+O8EFnBNeSLFw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyM6GBQEVZ5eDdqzbwIGW0qfI7LluKgDm7j8sTZqM7F1yUXJVV7
-	3p0OkeL8ptvnoqHyDMt0X1CwFW8GEChUh04sy6HFIrQD17wGFg9JxpWoLqSSmlI=
-X-Gm-Gg: ASbGncsK7ipgw9ImVnhhwXaNdzOUFQHG45KMynAdCtCpuIETjufWLd3peemS9HwqMk/
-	5LPy/qDNb6Ch5GYNI+6tY8/5HyGaFJVS2foROUuvUhJQiXeK2zy9TfpTYQfwiUQcHlmhunk59M0
-	SvpCb+6s5lr+4Z+kHRytCMDduxtHRwweCLwTRe1N+m5AECwhCq3ZleHVrpa0wxJoxr4DGQw9oFO
-	IV+Foeej4uooyPqaiKBUG8XBtU0qE8GI/EgzgJl18MzGHAlgbe4GC9NHYvxd/z9ZgjnwrkNz/Ee
-	/h01dB0hxpPcyEEIm1rKqNBTozr1V+qafnd577o=
-X-Google-Smtp-Source: AGHT+IHcn4EEo4WPTpfgcEsDlsTsz+oaWbJGqi2HHp7v/+pSfj1SHXoJSq3noFhxaJx0MCPmKPT7ag==
-X-Received: by 2002:a05:6a00:928d:b0:732:7fc1:92b with SMTP id d2e1a72fcca58-7348bdd9611mr4958392b3a.14.1740569981842;
-        Wed, 26 Feb 2025 03:39:41 -0800 (PST)
-Received: from localhost.localdomain ([143.92.64.17])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a83cd83sm3306520b3a.177.2025.02.26.03.39.39
+        d=1e100.net; s=20230601; t=1740570033; x=1741174833;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0LXbnwcIBc2J1W8+NT/KbDyiw6ZmnDEsBSK3rUjcCzQ=;
+        b=p9sep1XgjhkijEFjz1RxTjsmtCKOhlmqSegqxuxAaVeG2wXvSHDamByaFODymwHrlq
+         uqoFlFTYrBeQNrGQxUBrsnM79+5NdxaGLsLmdCG7GeOLzNdlqxVDavjZGlxejDoouZ8w
+         uSRSfj17vGhzGbmTQZwGL+N/Wy+olmWcKLua0pOQ3x2F5eIMdleNfQ7ReJ7PMCh92dXw
+         6OHjKLi/+XP9ckyZg5eQNC7JNU4z3MRAOEfKo9xL0VxViOHiqG1p5Tiqr/i7stjIigY8
+         T4lXp9LnzcaSLYWcBJCemffoH2AL73W8g6AUz980jZ5BODPhigMK8UbdsFlNLwaZO8QW
+         0vMA==
+X-Gm-Message-State: AOJu0YweL2eMgWbMNVgdM/GqMBxEwx5aF9RLZaCxm+NGPpfaZAoxpqAK
+	0ijnNn9uyeShmg9K8wozmGtPnDk4G50MRoDAkDQ9xhreME4EBSX5TqIqaA==
+X-Gm-Gg: ASbGnct8Fa308i9KXDY427bKklfDCgF+cb4q2oC9RduM5u2obdph1nuSuWkKQEYYDk8
+	F/oW1LFzU33R4tU12rW2VeVZXdSwd/OeeiH4sJhxW4f5JJU/NVr/CfU9fwhfz9428uzt8d5utkb
+	5T8TgjFVchHLDoPVN7OC39XaYD9cQ1ToQiFJv9TRupiacpG7Wy5k9MUk6OSPsMlFVIZUrnfcX9t
+	CmGVsz7ZHvHsAOafJBcPTGRJ5N7qXY5YJFwmOscae/Wk7yvdHbZfPPj/XoqAHrzDk7/XWVdRCpK
+	0Imc8kjQ9Q==
+X-Google-Smtp-Source: AGHT+IH5N+MU1rm63geijzZE5ziA1EbI/NAfepVyuGX2dIZldjZoZj0k8JdvJygqXoqUe2jlu2EXJQ==
+X-Received: by 2002:a05:6402:2743:b0:5df:4181:d2c6 with SMTP id 4fb4d7f45d1cf-5e4469dd8d8mr7902700a12.19.1740570033268;
+        Wed, 26 Feb 2025 03:40:33 -0800 (PST)
+Received: from 127.com ([2620:10d:c092:600::1:7b07])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e45b80b935sm2692418a12.41.2025.02.26.03.40.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 03:39:41 -0800 (PST)
-From: Haifeng Xu <haifeng.xu@shopee.com>
-To: asml.silence@gmail.com,
-	axboe@kernel.dk,
-	ebiederm@xmission.com
-Cc: olivier@trillion01.com,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Haifeng Xu <haifeng.xu@shopee.com>
-Subject: [RFC] io_uring: fix the dead lock between io_uring and core dump
-Date: Wed, 26 Feb 2025 19:39:36 +0800
-Message-ID: <20250226113936.385747-1-haifeng.xu@shopee.com>
-X-Mailer: git-send-email 2.43.0
+        Wed, 26 Feb 2025 03:40:32 -0800 (PST)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com
+Subject: [PATCH 1/7] io_uring/net: remove unnecessary REQ_F_NEED_CLEANUP
+Date: Wed, 26 Feb 2025 11:41:15 +0000
+Message-ID: <6aedc3141c1fc027128a4503656cfd686a6980ef.1740569495.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <cover.1740569495.git.asml.silence@gmail.com>
+References: <cover.1740569495.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -75,212 +73,47 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In our production environment, we found many hung tasks.
+REQ_F_NEED_CLEANUP in io_recvmsg_prep_setup() and in io_sendmsg_setup()
+are relics of the past and don't do anything useful, the flag should be
+and are set earlier on iovec and async_data allocation.
 
-	Thead A (exit_mm)
-	...
-		if (core_state) {
-		struct core_thread self;
-
-		mmap_read_unlock(mm);
-
-		self.task = current;
-		if (self.task->flags & PF_SIGNALED)
-			self.next = xchg(&core_state->dumper.next, &self);
-		else
-			self.task = NULL;
-		/*
-		 * Implies mb(), the result of xchg() must be visible
-		 * to core_state->dumper.
-		 */
-		if (atomic_dec_and_test(&core_state->nr_threads))
-			complete(&core_state->startup);
-
-		for (;;) {
-			set_current_state(TASK_UNINTERRUPTIBLE);
-			if (!self.task) /* see coredump_finish() */
-				break;
-			freezable_schedule();
-		}
-		__set_current_state(TASK_RUNNING);
-		mmap_read_lock(mm);
-	}
-	...
-
-	Thead B (coredump_wait)
-	...
-		if (core_waiters > 0) {
-		struct core_thread *ptr;
-
-		freezer_do_not_count();
-		wait_for_completion(&core_state->startup);
-		freezer_count();
-		/*
-		 * Wait for all the threads to become inactive, so that
-		 * all the thread context (extended register state, like
-		 * fpu etc) gets copied to the memory.
-		 */
-		ptr = core_state->dumper.next;
-		while (ptr != NULL) {
-			wait_task_inactive(ptr->task, 0);
-			ptr = ptr->next;
-		}
-	...
-
-	Thead C (io_worker_exit)
-	...
-		if (refcount_dec_and_test(&worker->ref))
-		complete(&worker->ref_done);
-		wait_for_completion(&worker->ref_done);
-	...
-
-Thread A is waiting Thead B to finish core dump, but Thead B found that there is
-still one thread which doesn't step into exit_mm() to dec core_state->nr_threads.
-The thead is Thread C, it has submitted a task_work (create_worker_cb) to Thread B
-and then wait Thread B to execute or cancel the work. So this causes deadlock between
-io_uring and core dump.
-
-Our kernel vesion is stable 5.15.125, and the commit 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
-is included. When the last io woker exits, it doesn't find any callback. Once scheduled out,
-it will invoke io_wq_worker_sleeping() to submit a task work to the master thread. So the
-commit 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency") won't help in this case.
-
-For the core dump thread, we can set a timeout to check whether the taks_work callback exists,
-If needed, cancel the task_work and wake up the io worker, so the dead lock will be resolved.
-
-Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- fs/coredump.c              |  6 ++++--
- include/linux/completion.h |  2 ++
- io_uring/io-wq.c           |  3 +--
- io_uring/io-wq.h           |  1 +
- kernel/sched/completion.c  | 11 +++++++++++
- kernel/sched/core.c        |  6 ++++++
- 6 files changed, 25 insertions(+), 4 deletions(-)
+ io_uring/net.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index 591700e1b2ce..1d972d5882f0 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -42,6 +42,7 @@
- #include <linux/path.h>
- #include <linux/timekeeping.h>
- #include <linux/sysctl.h>
-+#include <linux/sched/sysctl.h>
- #include <linux/elf.h>
- 
- #include <linux/uaccess.h>
-@@ -406,6 +407,7 @@ static int coredump_wait(int exit_code, struct core_state *core_state)
+diff --git a/io_uring/net.c b/io_uring/net.c
+index bce75d64be92..c78edfd5085e 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -388,14 +388,10 @@ static int io_sendmsg_setup(struct io_kiocb *req, const struct io_uring_sqe *sqe
  {
- 	struct task_struct *tsk = current;
- 	int core_waiters = -EBUSY;
-+	unsigned long hang_check = sysctl_hung_task_timeout_secs;
+ 	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
+ 	struct io_async_msghdr *kmsg = req->async_data;
+-	int ret;
  
- 	init_completion(&core_state->startup);
- 	core_state->dumper.task = tsk;
-@@ -415,8 +417,8 @@ static int coredump_wait(int exit_code, struct core_state *core_state)
- 	if (core_waiters > 0) {
- 		struct core_thread *ptr;
+ 	sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
  
--		wait_for_completion_state(&core_state->startup,
--					  TASK_UNINTERRUPTIBLE|TASK_FREEZABLE);
-+		wait_for_completion_state_timeout(&core_state->startup, TASK_UNINTERRUPTIBLE|TASK_FREEZABLE,
-+						  hang_check * (HZ/2));
- 		/*
- 		 * Wait for all the threads to become inactive, so that
- 		 * all the thread context (extended register state, like
-diff --git a/include/linux/completion.h b/include/linux/completion.h
-index fb2915676574..432de8ecc32d 100644
---- a/include/linux/completion.h
-+++ b/include/linux/completion.h
-@@ -104,6 +104,8 @@ extern void wait_for_completion_io(struct completion *);
- extern int wait_for_completion_interruptible(struct completion *x);
- extern int wait_for_completion_killable(struct completion *x);
- extern int wait_for_completion_state(struct completion *x, unsigned int state);
-+extern int wait_for_completion_state_timeout(struct completion *x, unsigned int state,
-+					     unsigned long timeout);
- extern unsigned long wait_for_completion_timeout(struct completion *x,
- 						   unsigned long timeout);
- extern unsigned long wait_for_completion_io_timeout(struct completion *x,
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 91019b4d0308..1c03dc57a3b3 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -141,7 +141,6 @@ static bool io_acct_cancel_pending_work(struct io_wq *wq,
- 					struct io_wq_acct *acct,
- 					struct io_cb_cancel_data *match);
- static void create_worker_cb(struct callback_head *cb);
--static void io_wq_cancel_tw_create(struct io_wq *wq);
- 
- static bool io_worker_get(struct io_worker *worker)
- {
-@@ -1230,7 +1229,7 @@ void io_wq_exit_start(struct io_wq *wq)
- 	set_bit(IO_WQ_BIT_EXIT, &wq->state);
+-	ret = io_sendmsg_copy_hdr(req, kmsg);
+-	if (!ret)
+-		req->flags |= REQ_F_NEED_CLEANUP;
+-	return ret;
++	return io_sendmsg_copy_hdr(req, kmsg);
  }
  
--static void io_wq_cancel_tw_create(struct io_wq *wq)
-+void io_wq_cancel_tw_create(struct io_wq *wq)
- {
- 	struct callback_head *cb;
+ #define SENDMSG_FLAGS (IORING_RECVSEND_POLL_FIRST | IORING_RECVSEND_BUNDLE)
+@@ -774,10 +770,7 @@ static int io_recvmsg_prep_setup(struct io_kiocb *req)
+ 		return 0;
+ 	}
  
-diff --git a/io_uring/io-wq.h b/io_uring/io-wq.h
-index b3b004a7b625..48ba66b5d0bd 100644
---- a/io_uring/io-wq.h
-+++ b/io_uring/io-wq.h
-@@ -43,6 +43,7 @@ struct io_wq_data {
- 	free_work_fn *free_work;
- };
- 
-+void io_wq_cancel_tw_create(struct io_wq *wq);
- struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data);
- void io_wq_exit_start(struct io_wq *wq);
- void io_wq_put_and_exit(struct io_wq *wq);
-diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
-index 3561ab533dd4..9e7936a3cad4 100644
---- a/kernel/sched/completion.c
-+++ b/kernel/sched/completion.c
-@@ -269,6 +269,17 @@ int __sched wait_for_completion_state(struct completion *x, unsigned int state)
+-	ret = io_recvmsg_copy_hdr(req, kmsg);
+-	if (!ret)
+-		req->flags |= REQ_F_NEED_CLEANUP;
+-	return ret;
++	return io_recvmsg_copy_hdr(req, kmsg);
  }
- EXPORT_SYMBOL(wait_for_completion_state);
  
-+int __sched wait_for_completion_state_timeout(struct completion *x, unsigned int state,
-+					      unsigned long timeout)
-+{
-+	long t = wait_for_common(x, timeout, state);
-+
-+	if (t == -ERESTARTSYS)
-+		return t;
-+	return 0;
-+}
-+EXPORT_SYMBOL(wait_for_completion_state_timeout);
-+
- /**
-  * wait_for_completion_killable_timeout: - waits for completion of a task (w/(to,killable))
-  * @x:  holds the state of this particular completion
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 9aecd914ac69..1cbe48559163 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -6790,6 +6790,7 @@ static inline void sched_submit_work(struct task_struct *tsk)
- {
- 	static DEFINE_WAIT_OVERRIDE_MAP(sched_map, LD_WAIT_CONFIG);
- 	unsigned int task_flags;
-+	struct io_uring_task *io_uring = tsk->io_uring;
- 
- 	/*
- 	 * Establish LD_WAIT_CONFIG context to ensure none of the code called
-@@ -6806,6 +6807,11 @@ static inline void sched_submit_work(struct task_struct *tsk)
- 		wq_worker_sleeping(tsk);
- 	else if (task_flags & PF_IO_WORKER)
- 		io_wq_worker_sleeping(tsk);
-+	else if ((task_flags & PF_DUMPCORE) && io_uring) {
-+		struct io_wq *wq = io_uring->io_wq;
-+
-+		io_wq_cancel_tw_create(wq);
-+	}
- 
- 	/*
- 	 * spinlock and rwlock must not flush block requests.  This will
+ #define RECVMSG_FLAGS (IORING_RECVSEND_POLL_FIRST | IORING_RECV_MULTISHOT | \
 -- 
-2.43.0
+2.48.1
 
