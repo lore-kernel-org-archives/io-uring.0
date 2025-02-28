@@ -1,79 +1,81 @@
-Received: from mail-oa1-f99.google.com (mail-oa1-f99.google.com [209.85.160.99])
+Received: from mail-io1-f97.google.com (mail-io1-f97.google.com [209.85.166.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCAD923F370
-	for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 23:14:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89E91DF74E
+	for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 23:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740784478; cv=none; b=uQRTslLr06rrV+tlwMZWs8z29GrT7dQa4xok4rXyD3Y6tmuenwu8mqXe5bEsS+0gi2JJuYB4D1iUNroj9JkYihz9JU/zDzaE8oWcxi5hqvxTFV7Z4LaxyHUyI1X0zN5zDELRtSDHmxTYMidvVIDqrVcSfs5prTzgo/fPGNonZjs=
+	t=1740787169; cv=none; b=VKAPhp55XBlb3iuj0LZDJRU2inYeUtV5YlphnJdpc7obrjEuk0GbCHJBErx+FZ8k3AZirbcV3nTLwZXTS+3ACArKQKhBFPNeXuFVsWJi+ZdtCRI/GGcwc/0x2j1pIW0SSHUQQwXadLoEG7trs7VuvDI+iOXnOT6UA8mlWan6cL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740784478; c=relaxed/simple;
-	bh=sXf5/A1zFytM8lFmj2gEeV5EMeYDWOAN3JXS2CuB0z0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gsK08v26xG4NJ9p78LSuIKoiMuIE4nvFSx6iyY2/3fqFFewVs+iTvB959pdTGvKFWQ0MYdZFggf2Q8wOYfrYwP8HvOnX0njv5ZQ2VFvzWaAEtpMU31aV9OPvmSecVV4vJSVdzSbKK/FPU6yIPw4Qz4/hcVC+icjjC7sxRCz4OTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=ClO6Qt1+; arc=none smtp.client-ip=209.85.160.99
+	s=arc-20240116; t=1740787169; c=relaxed/simple;
+	bh=QFjWgNXy9Kx8/WOzwsIn/1I5TFpqOsgdfFlTxY3gJ2I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pp0OUXY5BM0axzXY2UoOiNhVq/6FAz64EA7wVvFRdbHcM3Lf79L+AQsw2h1/GMuy/OBfeaUQR8WlMzg5NsEOIVG+NX5eYe6BBqYddD6UaugVGHH8DCIHLZ2lnKPr9c8JZUziKDMDr/7HdxnlEYUTsYw3jTBPAngBTv11UYoCWsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=gqnn/7va; arc=none smtp.client-ip=209.85.166.97
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="ClO6Qt1+"
-Received: by mail-oa1-f99.google.com with SMTP id 586e51a60fabf-2a890f85cb1so113075fac.1
-        for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 15:14:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="gqnn/7va"
+Received: by mail-io1-f97.google.com with SMTP id ca18e2360f4ac-85597c291f1so6295239f.1
+        for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 15:59:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1740784475; x=1741389275; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=td3QLI6VMDUiQOrb4BUroNuidyjitBQIjpVlt7JOrWo=;
-        b=ClO6Qt1+RSnuk4+Sh77B2GRSKqwrpoxIB8lU93xNfEioWZ5F7VpXnqSOA1RnwLK5x8
-         JlWypEp/n5tX4nhY74Khnv2DxyBH1DmgIiY6aPDXSvwJBqHk3muIvTy32NgfqNfBk7tQ
-         rDnf6RpgI63X3ZHy4m/AGDBXRXq10e+vxtVD5zk8olEHbzw344TyNLQsokqvWgZPTioK
-         ISuFymSEMelPwuM5SkAVNBgkJl8NaBjN7eWvXb6etFi+okXdSqQMsYtRxK+NFp1TVvfb
-         j1kNMlgh+sFOXOs61oAbhCkxXy+fiuD7ATt1vy9Z0G0ZL1xqz+dYopPJAAl5CzPqaw0o
-         MAzA==
+        d=purestorage.com; s=google2022; t=1740787166; x=1741391966; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hK6QOjfXK+fgEevkc21x4GT0Qq5JPIuUXpL7Fx2XzDA=;
+        b=gqnn/7vaDIXgAqm8A5CHGZtj+IRGGog0VDj/YYCBW+1EfJ/X7ZJyR2cPp6HkHg/Yxk
+         8vDmP/qOG5fGRraMcV7QyFgCKHjtE6LAHhw3PXDShuz2TOxTu4MQDRs9aBhTwZZhah5I
+         cYkuEzL3UA5XEke9Ar1wulAmRvCnEwAbiRaYEV9ST2d/79e0+1+UpRTa7F9dui+P0air
+         83VVNhJmADSw5k4itOjCTtOCHnrc+fSu7UsF0VPkc1tfvSjqVj4LmWIrMGayi1HBkT3w
+         rVkc8bjzNxb4ha1j6Atvhi9l9JOgfSiGj2OJfXWELZ6F2OCYOfVX/1UDoIXIH2Ke0kHg
+         8MAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740784475; x=1741389275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=td3QLI6VMDUiQOrb4BUroNuidyjitBQIjpVlt7JOrWo=;
-        b=nYUE5mbJbLTzz+tVfyXAZij/ZfPOJByeJfBGWagsOfF0xKNSfqgRqCl6wiff+Ncx0I
-         P9K8fqzBjTnsPRVN25VaWqteSOjwYUUxSdd0EQ7dI9hiil3sB6yAfJBXZc8n/Q5+hOTP
-         LW1Iqi0IORwNM1Z7Geme+x+EYV5s9yGoGl5aTxX8TRSqKwAhIUhmt1IGwV2DqEUwe7K0
-         v2yNdBmWvZJStWPPuXYkJiLSBn1BxxNYzp9hAL2GE9NMfmNQ68xRzkb+LxvAuLsoqKXU
-         IvCtt01pXgNoCrCJS120fuwHShqAuRAKycksk3lPpRKl3P9Y1ZP0tVDEPyOqatJD83i4
-         BwHw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHvYSeH3N5O08/WhFjIOGuHf2X+vNh3UN7Tx7pDJdAU5nyGL+rmz9RblUw1HnjlzilSV8KRBIZUQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD0Iy3NZUVsluFV99TL54TUkc6k/KqdslAaej+wuuA1HnD38VV
-	vBoJ0oCKKPd53AmCe9gCf1FmRLrkPDWjGrNQcrgpV5RooLV1w/utZ8OovZuIf3g2lAvkkuuHOfj
-	vN7pk51wH4OtyHsURhcbYZr7U3b/VmDFKydYgO9hM91Kt3HQf
-X-Gm-Gg: ASbGncuHr2jDd9Z94aVtR/Snj7i4BD1Emmm4DGU4V5aOWvDGVwUTpoh0gLuAguBBuf5
-	uZysCnErtnV5e5Av7AxlTCOWxLRbdmykbnjkflrFr9uGKm9B6RmAIH2x+BXtoI9ChIVeSY5c4Q6
-	NfaoTMtWSgmrtS8FB4kdxtCjx519lXwOhAAEInsINMICyRYj4KPDfYAhOhqKM2Wh3XmeC499zjU
-	u+NvchdteLI5wJvcM9rqLq7+eY9RaAidXgcTEurFfHuZKHZ05SRSCG3UXSsC9ftIDFnzia4mWFY
-	8aaDFEnRIg9Czmuh79NqEeGQLKz3TAGV6A==
-X-Google-Smtp-Source: AGHT+IE1+WxOcP+PFDf9gVT8bBwaZ8BjfRRqOWZNPk/1wluXto7KDqsniux9pWhX0MxzxMrxHOiWccWukV59
-X-Received: by 2002:a05:6871:3804:b0:297:270f:d79d with SMTP id 586e51a60fabf-2c1786717b0mr1131713fac.8.1740784474779;
-        Fri, 28 Feb 2025 15:14:34 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-2c15c4d775fsm235764fac.34.2025.02.28.15.14.34
+        d=1e100.net; s=20230601; t=1740787166; x=1741391966;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hK6QOjfXK+fgEevkc21x4GT0Qq5JPIuUXpL7Fx2XzDA=;
+        b=ppTOuyHNWgPxNul2b/znkCcDu3SczUz2Y1iNBdgaszFT1FeXUksj3rYCvb32gDyWgq
+         Rd2a+RhGHUksyPEyMc/cQFXmI7Y86rUlD3rxk8jSbQirQ4bdQhKiEHN4PoT0UbITs2Pq
+         UQr4LzrbUw+8L/gwarLVorKjAW1nLbSrr3n+NAAAgy4oZ5OyfgDWULutZhbR78r1Fs+D
+         cS79XrZE/pQ1FJDqKx3Dz3JAdyZBnIZbottTh96Eod2PEqep8fL+f3g8YL6E4E9ggJ99
+         70MbQlmFX4Ae1pLvvfbD5UHTfloYHTRQcHOM0ZP+goluCpcnxBZYylSV4Tk35mATNFdc
+         L/8w==
+X-Forwarded-Encrypted: i=1; AJvYcCXORzdczidioXLnMm5girvwFnDGFUZlvz8iMGmwMAjEDqeX3CMQcdKYqrTjlumVQLqBryZqxvno3A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgytF8yeprx2O0UW1dHAzW93GKJInwY7abYxTDYE2HAW/11nz1
+	BWOpkHSMwGb6b6sIIt5Khio64Kd2F0iu69rMeD+LYGCe4Pj8qoOTmPEJmnSBGXT2Gxo5criNLtK
+	iU2fR/zcEEq0NRIqZ+0ZVdZtXb9UbASyh
+X-Gm-Gg: ASbGncsZEt02fBKC80xdARvUg/tVdSG3Ar3l4VgQ7qlDwZvc3NsiD5uTljqowmDgOBq
+	qviL8OdIYF3pDtY6k+r40TpVrgP6oldj+0wjDj1SmKzs283kgWfSKp0Q54vT67X4pSOoiMWCMuJ
+	S8dJlbv9fiUgpZniX9WdXs8mDZ0kN8eUU+Nkf+PmSQg5e4mcq4fTkK4FmUgwf2OCbLvLZot9cqW
+	5T/v75qsRNqibr7Nn4d0kmN5MyOaWHRy9Qjhp15SoptQyAdwQ7EJYopauFSLgz8VZ9fzfpu8k9Z
+	B6UmLbp7bfzVJby6upZY3ghRhGQbqIYOCWtHcyS5UJf5wqvY
+X-Google-Smtp-Source: AGHT+IG/Nq900tpHhaf/0mNrSn5JRVXcZZ+nNO4WfDhJCn+LVSSYjcj85ej1aZMx9Yzu7PxQoceMQhcBDyrs
+X-Received: by 2002:a05:6e02:1fc7:b0:3d1:936d:1e22 with SMTP id e9e14a558f8ab-3d3e6e45d8emr12968445ab.1.1740787166685;
+        Fri, 28 Feb 2025 15:59:26 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
+        by smtp-relay.gmail.com with ESMTPS id 8926c6da1cb9f-4f061c5563dsm256932173.16.2025.02.28.15.59.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 15:14:34 -0800 (PST)
+        Fri, 28 Feb 2025 15:59:26 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id A9BF934028F;
-	Fri, 28 Feb 2025 16:14:33 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 8845F34028F;
+	Fri, 28 Feb 2025 16:59:25 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 9E713E419D4; Fri, 28 Feb 2025 16:14:33 -0700 (MST)
+	id 7D6AEE41AF2; Fri, 28 Feb 2025 16:59:25 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
-To: Ming Lei <ming.lei@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
+To: Jens Axboe <axboe@kernel.dk>,
 	Pavel Begunkov <asml.silence@gmail.com>
 Cc: Caleb Sander Mateos <csander@purestorage.com>,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	io-uring@vger.kernel.org
-Subject: [PATCH] io_uring/ublk: report error when unregister operation fails
-Date: Fri, 28 Feb 2025 16:14:31 -0700
-Message-ID: <20250228231432.642417-1-csander@purestorage.com>
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 4/5] io_uring/rsrc: avoid NULL node check on io_sqe_buffer_register() failure
+Date: Fri, 28 Feb 2025 16:59:13 -0700
+Message-ID: <20250228235916.670437-4-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250228235916.670437-1-csander@purestorage.com>
+References: <20250228235916.670437-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -82,101 +84,32 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Indicate to userspace applications if a UBLK_IO_UNREGISTER_IO_BUF
-command specifies an invalid buffer index by returning an error code.
-Return -EINVAL if no buffer is registered with the given index, and
--EBUSY if the registered buffer is not a kernel bvec.
+The done: label is only reachable if node is non-NULL. So don't bother
+checking, just call io_free_node().
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- drivers/block/ublk_drv.c     |  3 +--
- include/linux/io_uring/cmd.h |  4 ++--
- io_uring/rsrc.c              | 18 ++++++++++++++----
- 3 files changed, 17 insertions(+), 8 deletions(-)
+ io_uring/rsrc.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index b5cf92baaf0f..512cbd456817 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -1785,12 +1785,11 @@ static int ublk_register_io_buf(struct io_uring_cmd *cmd,
- 
- static int ublk_unregister_io_buf(struct io_uring_cmd *cmd,
- 				  const struct ublksrv_io_cmd *ub_cmd,
- 				  unsigned int issue_flags)
- {
--	io_buffer_unregister_bvec(cmd, ub_cmd->addr, issue_flags);
--	return 0;
-+	return io_buffer_unregister_bvec(cmd, ub_cmd->addr, issue_flags);
- }
- 
- static int __ublk_ch_uring_cmd(struct io_uring_cmd *cmd,
- 			       unsigned int issue_flags,
- 			       const struct ublksrv_io_cmd *ub_cmd)
-diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
-index cf8d80d84734..05d7b6145731 100644
---- a/include/linux/io_uring/cmd.h
-+++ b/include/linux/io_uring/cmd.h
-@@ -127,9 +127,9 @@ static inline struct io_uring_cmd_data *io_uring_cmd_get_async_data(struct io_ur
- }
- 
- int io_buffer_register_bvec(struct io_uring_cmd *cmd, struct request *rq,
- 			    void (*release)(void *), unsigned int index,
- 			    unsigned int issue_flags);
--void io_buffer_unregister_bvec(struct io_uring_cmd *cmd, unsigned int index,
--			       unsigned int issue_flags);
-+int io_buffer_unregister_bvec(struct io_uring_cmd *cmd, unsigned int index,
-+			      unsigned int issue_flags);
- 
- #endif /* _LINUX_IO_URING_CMD_H */
 diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 45bfb37bca1e..29c0c31092eb 100644
+index 398c6f427bcc..95def9e5f3a7 100644
 --- a/io_uring/rsrc.c
 +++ b/io_uring/rsrc.c
-@@ -975,30 +975,40 @@ int io_buffer_register_bvec(struct io_uring_cmd *cmd, struct request *rq,
- 	io_ring_submit_unlock(ctx, issue_flags);
- 	return ret;
+@@ -835,12 +835,11 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
+ 	}
+ done:
+ 	if (ret) {
+ 		if (imu)
+ 			io_free_imu(ctx, imu);
+-		if (node)
+-			io_free_node(ctx, node);
++		io_free_node(ctx, node);
+ 		node = ERR_PTR(ret);
+ 	}
+ 	kvfree(pages);
+ 	return node;
  }
- EXPORT_SYMBOL_GPL(io_buffer_register_bvec);
- 
--void io_buffer_unregister_bvec(struct io_uring_cmd *cmd, unsigned int index,
--			       unsigned int issue_flags)
-+int io_buffer_unregister_bvec(struct io_uring_cmd *cmd, unsigned int index,
-+			      unsigned int issue_flags)
- {
- 	struct io_ring_ctx *ctx = cmd_to_io_kiocb(cmd)->ctx;
- 	struct io_rsrc_data *data = &ctx->buf_table;
- 	struct io_rsrc_node *node;
-+	int ret = 0;
- 
- 	io_ring_submit_lock(ctx, issue_flags);
--	if (index >= data->nr)
-+	if (index >= data->nr) {
-+		ret = -EINVAL;
- 		goto unlock;
-+	}
- 	index = array_index_nospec(index, data->nr);
- 
- 	node = data->nodes[index];
--	if (!node || !node->buf->is_kbuf)
-+	if (!node) {
-+		ret = -EINVAL;
- 		goto unlock;
-+	}
-+	if (!node->buf->is_kbuf) {
-+		ret = -EBUSY;
-+		goto unlock;
-+	}
- 
- 	io_put_rsrc_node(ctx, node);
- 	data->nodes[index] = NULL;
- unlock:
- 	io_ring_submit_unlock(ctx, issue_flags);
-+	return ret;
- }
- EXPORT_SYMBOL_GPL(io_buffer_unregister_bvec);
- 
- static int io_import_fixed(int ddir, struct iov_iter *iter,
- 			   struct io_mapped_ubuf *imu,
 -- 
 2.45.2
 
