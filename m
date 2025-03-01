@@ -1,116 +1,105 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B0F25760
-	for <io-uring@vger.kernel.org>; Sat,  1 Mar 2025 02:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6716D22066
+	for <io-uring@vger.kernel.org>; Sat,  1 Mar 2025 02:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740794675; cv=none; b=WRh57QinBm9yKpXVnSXMRtCBABal2TqXHtBapNff2v7dNeHYTNE17r+7/7pfT/NI2V1RzmfNw3DMi9vpOyWMCjh5IfS6PZ/mpvX4h35qL4OrAaDGAwm7UhIfsCEz6P8h40kvhDGH4NsywMP656Hl22ZojyApXbZYe2diBoLaEkE=
+	t=1740795026; cv=none; b=ESUrGOU23MGYlVJv0hdFeOSxOFqhc8R6IqPhypBKbtY5FQ+w4pY+uCMIIZcpACn2fWj1ANQPiz8yE92WHW1Ty3DN2F9800H9sCHyOXZSngTw4ppeR9wiVFYMFxV03g1alHPG4YympCsFQ0KyVza4IwI7ehhRKSmILYp5Y0hhTr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740794675; c=relaxed/simple;
-	bh=9xsg0YcftDg7nvIpff5lygFDIzDA5lfF057ozLxjCcM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fKyKYSX+V6psg2XtXQyhEFp5z/9YAS/0Kmou+rshM9cK74IDmUD8y2kDftwcXINrfaZsKQwduVGpHJadlS2HExR+WHVNIeal5BZxkuPDNQpje3w+tHiNx4A5ySur5TquLVjwGeKHGUXP4rC4Tuvfe+VPOMe4kdT8lQ25IWRb08Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=SasezqDh; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1740795026; c=relaxed/simple;
+	bh=cOqR/qGcS7+aoTuth+4VWwF280pMk6Npby2RKTfkRMY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FNCFutnyk91UknD4v87gfOXex4TCkzpR/MFY1iNP4qFL1jhkHJf7fBDNMvh+uI0jd+IwfwhpedIF2SReWX8V3kLZtfL3xMalQ2hbq/YcU5mkx/wS9xDVFlZULUq6+EmcbHlU4AN0GYPg+IMh7WjNrUFWz7ilIBaBUVgm41KC0Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mp6laf0W; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="SasezqDh"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2fe9fd5e7f8so756102a91.3
-        for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 18:04:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mp6laf0W"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5e51e3274f1so184453a12.0
+        for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 18:10:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1740794672; x=1741399472; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NMRMpyLGkuXKFKe3vNfVg0nl7bqc/JfSPYacGN4zRuI=;
-        b=SasezqDhI/1+7OVbXArHIagiutFVqnTlVM1wgwsF8XGukrguj9N7Y4ohEBnCdXMmxK
-         hJ0K1PGoGngXfGIWSKLjEmXur0JZR2F14yrl9HruDXmC2cJ5ArEhAUlPCSvIU2fnJTnN
-         8DgJpT+moFfbxdRkEaWhRfUzPYUVyKJ4IRCglpbKWulP4HPfjCmgTIetGL3Bc4JblgX9
-         W946zchQOQx4EIDbcsuHbY9K/i0b6qwRMsGugW2fWNC35WBtgbJw5TRpv5jiX543h5Y1
-         H1I5wy6C+s+EC6GmYg0EQfR0VxyWy2a8uDsvXFVo0m6AsT+854aiFoP/SU2cl7dEOpwg
-         RxWA==
+        d=gmail.com; s=20230601; t=1740795023; x=1741399823; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0mahqV3piLkX91uYcafXIPvrIgqxY0UElMaISteuUBw=;
+        b=Mp6laf0WDe9IOFrzr3S7VCWICFdkygu7/Ds58OIzW4v/8PAcSGYsxOseuxswgcBZdE
+         8e/66e0rUG7YyUV2np8Klg3KtI4WiyFq/miCCHpSwDGUABHpQaie6ozL+dc3SWo9tRpN
+         Q/Uhys/jAE+oaZ0G6YqEHVu4OlozJLRMghZH/hCRJiNyLFWlhtcu7JiCFVWJhwkaUqYT
+         bsRgCL9h2C9+EWNkiY1Uk9c+8mbgTGB3cNNneFWNnxZ7cPbhj07+FIW+wYxPTDbKI4dx
+         mkfEwb9HvnWJ7gGxFBHTfE9Cw322W/gkyvx0vybHSa39E/fQ2ASi6qqkV3FW7QnbLKD2
+         jEsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740794672; x=1741399472;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NMRMpyLGkuXKFKe3vNfVg0nl7bqc/JfSPYacGN4zRuI=;
-        b=M/TGLZ46UtkWj1lhH/xL+8D8c5jX/wCjIQcCuKEhZjIgEwd7/XsIVcXqFsj7EAiExU
-         Rctg9BToeSjKikvhpZrXaCbUO4GtaVyCjM20ruCQ9c+VnH0tnQS++GBRINRugB6BoPTa
-         SXl/RXbtrps16Q/Uj8UKA4MtvLCT+J6/VJv6CSQIxwXGhPy6a3OPMIHiof/Q8J+yItQQ
-         Az/Y3wdYtcYqL/qdctZvzahu9OPA6phfluXqsTkQJo5DIUP47vY5kETL4ep2NIKuhnvt
-         fxNbHuUZz3LzFO5JSLhJLBmOnRIvRUikfr/mKNosEC+39T8mYBoj6WxCRKYMF8LiJqcB
-         Mx3A==
-X-Forwarded-Encrypted: i=1; AJvYcCXNZgAAcHZtYPCw5jP3UwWYofdrG7LQE42/PoSPEKsLCIZrO4puD7T+X4dPDVf1N2cPZAERLHXBGQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXc8zvv6jypT+6R7ZeoB51vokypRQM/5hk9348UG9bAeqGw219
-	hW3xefYB0XuG/ACgo1iHj+DVH4xhldQGB0lcycLPmVHArfS/5W+4xmmJJCMwvFH+2IbSYxelLwS
-	UNG4u+9kp5FjVqC+bx0G3kC2wow7VpaGEQSKNcs2uU1nHywX6/Q0=
-X-Gm-Gg: ASbGncvGutNsM69Z3ExV3zwQ8sL1lCZh/FRLfnbQVtVTx4b6d2pbFgpsO1iY6nwQeXA
-	mixDEgCXPrlbiPEyrGG7VtRP04sUm2v/HFt1u0MMp/a7SKfK6lP2/QWe2V+ZsQXHdF21H2aas8S
-	xD+2KYhUvrP4w8TLdLPJOA9k0Z
-X-Google-Smtp-Source: AGHT+IG9yG3AscvIs7xF7jEOslIjGL3EISGyHSJ7WZ2CphR9x7QlnnKI9aWzs32OZBuYiwh401z6I5rO7eg54sU/IcY=
-X-Received: by 2002:a17:90b:2251:b0:2fb:f9de:9497 with SMTP id
- 98e67ed59e1d1-2febabf4096mr3585651a91.5.1740794671827; Fri, 28 Feb 2025
- 18:04:31 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740795023; x=1741399823;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mahqV3piLkX91uYcafXIPvrIgqxY0UElMaISteuUBw=;
+        b=c8dAsGTWFdsaVArWjHE3k9BgdPOMqZfXfiHpcnvCIekc5nfjGDjn5UTsmZuvJP5UNi
+         Nf9KR6IiFOaaKLspDoEYbPNtHxuwMZZblrk/SqwfVcT/VXRhm6AIGU0aXhJeBK309RRX
+         q0l770lSRpXOMSh89q9fE2zd9kDN59hVWMZPNDoH14rdzzASNnXY426YVdD8Lb234hC9
+         XYOxYMLXH3nPcAK2jK+j/5cEwY+STH5NYW0M3jYDHJIOFDuIUlvNIBeqmdYD4dwmiyt9
+         61wNNf7HUYkcjZ9E2fBg3IzKQI7eKJYrzepiNotRHtGgXlVbCmZDGO8hJsnBft4mZ6eR
+         ty9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWgO49hYfaG3QkGdiZ6NxWesDD7rTl2kDAQGsgE3XENwJJtOiboV1YLp8gkWgzX0FOVG1f9tW8H6w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7ZcRwxqviHbOdxRqt9jlu/yTWJOuMjAEEWUPRe2W2P7HposXL
+	zCEZN2+XDnL1vpMZ2otkoJhf8dffv0vhI9X71l0vTidZEpf8LDtI
+X-Gm-Gg: ASbGncub2lRIFXRKJ+cQrvR4z3CTDdITauc43DquVpPPIhqXSn27TTLyCG2ti6hqHE1
+	D7XyWrw5YbCjLQ/kHFIgLW6dlFLB5Y4+7pYoOGyXWQm5WoDYbGMQHhD6Ka3KuVQcDLUtCVTFvik
+	kz6cyPXSElyAZcUhL23m8hf5iCIcnVUYGtoxXFHrABfAN7rAZTCPK7uaC4OgI+HygoJCbZUnY69
+	h3TaDEBL7IjK24kfVcDDCo4qqdf8A5IvazrYovYm71YprpssPibK1u7F/OHkrjfGN9FJKzwPrLI
+	3DXUG6/3VdDWVr/ISaAI6fspcZDQxjBudxRoHrs2NnyCmGTPOlPeQVE=
+X-Google-Smtp-Source: AGHT+IFqRhsEduqiaNtTPfwXJtQ3No4OFtI9lz40lG//nwqK28wDoOZ4h4oY+JBSxQtSlFepmIDsHw==
+X-Received: by 2002:a05:6402:51cb:b0:5e0:3447:f6b7 with SMTP id 4fb4d7f45d1cf-5e4d6adeba9mr3636405a12.8.1740795022539;
+        Fri, 28 Feb 2025 18:10:22 -0800 (PST)
+Received: from [192.168.8.100] ([148.252.144.117])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e4c3b4aadbsm3300326a12.6.2025.02.28.18.10.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Feb 2025 18:10:20 -0800 (PST)
+Message-ID: <8df34da9-2a35-40da-8923-a90d2d02b594@gmail.com>
+Date: Sat, 1 Mar 2025 02:11:27 +0000
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250301001610.678223-1-csander@purestorage.com> <86d5f210-d70f-4854-8ecf-eb771f26685a@gmail.com>
-In-Reply-To: <86d5f210-d70f-4854-8ecf-eb771f26685a@gmail.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Fri, 28 Feb 2025 18:04:20 -0800
-X-Gm-Features: AQ5f1JogyzdDhsSU4u6-6ldO8cFm2tSqWRRE6OcEpmlX-dpUU4jWdczXcSu4XKE
-Message-ID: <CADUfDZrOoSgT5n51N5=UFSum96mj2MAytQbJNbBVC1BJrmNVtA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] io_uring/rsrc: declare io_find_buf_node() in header file
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] io_uring/nop: use io_find_buf_node()
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+References: <20250301001610.678223-1-csander@purestorage.com>
+ <20250301001610.678223-2-csander@purestorage.com>
+ <d4271290-2abb-49ee-a99a-bc8bb6dde558@gmail.com>
+ <CADUfDZq43eAJxsnZ71hnPsoJsM9m7UnLWBMavUYwufiTu+UBow@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CADUfDZq43eAJxsnZ71hnPsoJsM9m7UnLWBMavUYwufiTu+UBow@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 28, 2025 at 5:45=E2=80=AFPM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
->
-> On 3/1/25 00:16, Caleb Sander Mateos wrote:
-> > Declare io_find_buf_node() in io_uring/rsrc.h so it can be called from
-> > other files.
-> >
-> > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-> > ---
-> >   io_uring/rsrc.c | 4 ++--
-> >   io_uring/rsrc.h | 2 ++
-> >   2 files changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-> > index 45bfb37bca1e..4c4f57cd77f9 100644
-> > --- a/io_uring/rsrc.c
-> > +++ b/io_uring/rsrc.c
-> > @@ -1066,12 +1066,12 @@ static int io_import_fixed(int ddir, struct iov=
-_iter *iter,
-> >       }
-> >
-> >       return 0;
-> >   }
-> >
-> > -static inline struct io_rsrc_node *io_find_buf_node(struct io_kiocb *r=
-eq,
-> > -                                                 unsigned issue_flags)
->
-> That's a hot path, an extra function call wouldn't be great,
-> and it's an internal detail as well. Let's better see what we
-> can do with the nop situation.
+On 3/1/25 01:58, Caleb Sander Mateos wrote:
+> On Fri, Feb 28, 2025 at 5:40 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 3/1/25 00:16, Caleb Sander Mateos wrote:
+>>> Call io_find_buf_node() to avoid duplicating it in io_nop().
+>>
+>> IORING_NOP_FIXED_BUFFER interface looks odd, instead of pretending
+>> to use a buffer, it basically pokes directly into internal infra,
+>> it's not something userspace should be able to do.
+> 
+> I assumed it was just for benchmarking the overhead of fixed buffer
 
-I can add back inline. With that, there shouldn't be any difference to
-the generated instructions for io_import_reg_buf().
+Right
 
->
-> btw, don't forget cover letters for series.
+> lookup. Since a normal IORING_OP_NOP doesn't use any buffer, it makes
+> sense for IORING_NOP_FIXED_BUFFER not to do anything with the fixed
+> buffer either.
 
-Okay, I didn't have much else to add to the brief commit messages. But
-sure, I'll add a cover letter in the future.
+That's a special api that benchmarks internal details that no
+other request knows about, no, that's not great.
 
-Best,
-Caleb
+-- 
+Pavel Begunkov
+
