@@ -1,81 +1,81 @@
-Received: from mail-vk1-f228.google.com (mail-vk1-f228.google.com [209.85.221.228])
+Received: from mail-pl1-f225.google.com (mail-pl1-f225.google.com [209.85.214.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3092B1DFE3D
-	for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 23:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A79B676
+	for <io-uring@vger.kernel.org>; Sat,  1 Mar 2025 00:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740787198; cv=none; b=RA05Z0MNnxN/5ykcjmM66sthfuWdu+1y4hWSk38l1BqGkL8LMeAayYL1pg8JpQbUuuGh6duh1OENLpvIAGSqH4WiDskkVJXt83iy4KEnpBfYankvRBPW9fquPtEuqcZP6vazYs3bLx9Se4MHWP5W2aJN1g+vpw29RNCVZGf8NCg=
+	t=1740788177; cv=none; b=jvsNFlk/VfKGFFwzORfw+AmsTaFR2AJBZTQtgn1LNoHb11LhSEfqhVFmnime9PxSdceoEG5p6lk7OaHRFmcuCwa4vsBkgPOEZXjYX+AGDUKXERmoPM7hZHUEMLDJcvA3PVl+Bq3OmuLIyE9rN5Ob4znBAg4HGEf2KpuAPfy/5n4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740787198; c=relaxed/simple;
-	bh=GqEhJOiyYXdr8rGQugNrCU6kawK92vTYNv4q8/6+xKU=;
+	s=arc-20240116; t=1740788177; c=relaxed/simple;
+	bh=gEsO3KSN33JHbOjHTf+tQsfxSg1mhFmpgrI1pGdf+Bs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GqN3b3UxbwIjTu9fYFn1sN+N/pSYSIZd6sJXPMo4HXsvrGDWjpVGwGqdGUO8CWgRy5CduMTgFqlzaiJeX0R/9pCJqM4U/XxEm22+M2gMB55YqRNe0A1/dY0HrxOATUMW56D0UG+1LPS1hOAndLCKWovDRf+uxHDSjYDb5PSRdOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=bbYcnhvh; arc=none smtp.client-ip=209.85.221.228
+	 MIME-Version; b=Cfl/xFIcNWbTW38Gx768RBlsceVxdTaMPUdG2vHpSjfy7YB6bZzz80FelO3a/VnMVU4GWK7eT9ESlD/QbuytqAYxVWdfK/J6taO2ZEL+VFNJxq1vTW1hIu7PqpvyPtsWoQzKWN3bYQIgiivdWqVQtCkAwoY5vPR889+QK92o3OQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=TZRVwYdo; arc=none smtp.client-ip=209.85.214.225
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="bbYcnhvh"
-Received: by mail-vk1-f228.google.com with SMTP id 71dfb90a1353d-523610d834eso22705e0c.0
-        for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 15:59:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="TZRVwYdo"
+Received: by mail-pl1-f225.google.com with SMTP id d9443c01a7336-22367eba6f5so4644315ad.2
+        for <io-uring@vger.kernel.org>; Fri, 28 Feb 2025 16:16:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1740787196; x=1741391996; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1740788174; x=1741392974; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IqbUgsOP74rQAaYypSD/gLbYz0cVUXhGZfBogbxaru4=;
-        b=bbYcnhvhpzE+esEVp0I7U0EDjNqvwDySuY0XTWgXlYJxrCawT3hYpHiWdN95RxL2U9
-         e6bKZnoOIZ4QzUeJeOmo0nu2YxcFQjAkmNNnmlcrxsVhiRV1NzmvjW8NgD2AIefJR85g
-         JJn+ZG6Om1SHOKuFlHgkd0syQBxv29Av2V8hfBVUTHgMOY0zP3CU1L9DpxHAtPOp3JfL
-         I+CdouGPDKU/kuQkm6c0zxgF3MGtt0gwQQL9IZ0NRV/rGno/hyECfFl/fewzhDCgCMx+
-         jzxpgMItWzgOLV4LHY/DjJuhTp31b14C7G1A1yNDD4CYA9FaD5rQVuUnNFqI1815YRS2
-         jULA==
+        bh=KQZ71ECrKkWECl6xiI/pDVZ0FP+103ZQTyoLJB/O+Z4=;
+        b=TZRVwYdothALMFYxxZa/Evs3/rFbbkU/wa1uWjzrTOUjVgwq17FPVQPzrkTWCAA8Bl
+         fpkOPqd3W2aSbJxd9IpD8nWrqHOqEA7Ck1K9wQJOmbUAq5Wt0uCH6PZNcQ95tx4vEjAm
+         k+GYwnbO9ql/SVCT8pJ4ZnggFcV5Hvvi4+vi0IbUdnpLbMFLdvXjURDkooiDMFTiHHZ1
+         nYEVTzWiwPiet2keQvBlHGyVYd+o7owLipLRw14tUMckM7zpWBrv4XISFgGuUGuSEVww
+         0Dnv6AWa2Dagd/IcH1pJUKuoDoycMGFVRJSW3EGIFrkUtWErlriueDZvyB82QwAQ6nDD
+         Cflg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740787196; x=1741391996;
+        d=1e100.net; s=20230601; t=1740788174; x=1741392974;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IqbUgsOP74rQAaYypSD/gLbYz0cVUXhGZfBogbxaru4=;
-        b=kfgdcURDEQzUMGbQke/AA4MQAYN/GudK39vXL0vcgmJTFbfIKp/sbAYfROsa0/hl1o
-         dai4rFZwckmdOgeCXr/soxAlIBdL7Gw8iIpTmXH5lvaD/o6PpIRsLSGl4ZSVE9QH51Td
-         Yzmmg6ay+HpvDRO9oWXhI6w7mdsfqy5dVOd2Kq7LLpvdVR4rom0ZbLOUCqjxqnmu1RwH
-         dAPBnXhBkdBRj0ApebY0DrHczBjDykngHHtxopPljiUcnaekESiqEuORodQk3wRWqzIF
-         hQEUpjMRJQmkGKNh5M5W6XAOE8XeeesCFOJkDuAMoo6l3ySY7maK/ifHIRx2WAOCG6Ks
-         LI8w==
-X-Forwarded-Encrypted: i=1; AJvYcCWu69k0shh01AL+KOnpnIR5Alf3p1/98njpYNn9tcX7s8wvGCeXZy8PvqBwuEFrnnm+4kaYQsbqcQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjeEDA+SgMDCv8yp1lFH94fMeB5H/tuRmJN6WM1QhP/MbwbPTi
-	fUeb8U5wAMD0wgkNHnA51QZQf2PhKIrSbpQ7Dxk9ar9gWfHH8UAq4dUHrqI/CDtIEe73FRQLUiq
-	uibag/8f6tKlWsvu6wrRjSYwJ7xImfPCuP6HfIxa7YPStZrZF
-X-Gm-Gg: ASbGncvjuknkHcqN8WYwlHc+YMqkTLlW5jh/pe01zwBmyXj94EHDlQGe7GuUVWvlET0
-	Uv/KjpAo4rVmlCmZXhtrDdF9VH1xcv1fc+SrJ4D0/myVn+toZkFIqP/70tpKAdsZN6Vy3KRCNa9
-	9nSHDFRvpObBDMJKyYCk7h61GPMgv6Vwe1sl2xVoVknFaLxwb7n8jiIYAyIddVWTYQtYSqX0/3B
-	tKAs3rTvB2C2K2GDn+2ELVAnf79dGDTuyB7xk6J6URDZ3kfrk8oSetfquKG6KB98SOIFBJ8HG2g
-	+UbBGTYndVcvcYYH5pP+hzB8FmqvpLJvYA==
-X-Google-Smtp-Source: AGHT+IGRBEGoIDXj6ALCnhETDFnXCj12VARjJtS72JzhHgZ8tigxOcRZZIHSTkQ218vW8h9TJLZxg4EO/5ga
-X-Received: by 2002:a05:6122:1b8d:b0:520:579d:893c with SMTP id 71dfb90a1353d-5235b64757dmr1239548e0c.1.1740787195935;
-        Fri, 28 Feb 2025 15:59:55 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 71dfb90a1353d-5234bec414fsm230393e0c.2.2025.02.28.15.59.55
+        bh=KQZ71ECrKkWECl6xiI/pDVZ0FP+103ZQTyoLJB/O+Z4=;
+        b=erRUSWDosrA7ev7oiUQyGodoz0iOalZWoQtrwFn99uRrpKM9mIw12FWJ4eswqaObaV
+         baprprRNOedUABfLe2lVRh14maF8ezMIPyn2XZQgRot9uFl4kf/NCXQaXwesja47uVKV
+         2aL0tvcyWKkRdC8Oh6wvNg32x6kyN5VIEL+lh2uL9ULgdP+F9zyrrOlKtPFxM12goOxK
+         9eeeuAzR16raDp4ilomGi/f3Mzg5tBhbC9uzMyEVjoSZuliRXV45AyDtPqsuTrUVOo4L
+         w7qSKRmjzGYe/mJy7ZlZv2kZSINlGIBek7nsz+viDXtZ89FtYPu/viqtMglDp2FNlP6L
+         YsBg==
+X-Forwarded-Encrypted: i=1; AJvYcCX+d0H8x77H+g8wMdC7WT+VSCbMuEmGJOj/dvWk3e4qXLACDMvDc+XiDDGCgnf4uNpYT8lQMTVC9g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZJKmVInMkNsS/UkJhcOaSUp00QgjxzAUO/8oN0ayreHp2IWn4
+	FysYpV/027beZHnGT5Li42yhdObB/RQ+PYFMxaZkBOaIguAotaJ+zolbR4gsGX9aHbVGcCzLvgo
+	lVB6Rb7MTlfQnvQxDhIB3N1wzDY92rohE
+X-Gm-Gg: ASbGncttjsXqfDXJHaJQ6WkmaIPhxKr/ziv9T+iw5bFI8khlJOr5hsot3DKjuoqqZLp
+	U3qhw0F1x/FPs4QNK0LAoq6dp89CatZaLdCHG2E5mrX/tIw0n4GRYqWE42FMoqAs1+J1m4BtKCz
+	N278zCVs8fNdDvpnAD90emz7Gy3PGLgHhkjDRW4Gt2fPRqJdNXt+1fyAgq/EWgQD42a7ZetVapn
+	ADkdYMMT39nJ2gLl5VikxZTPLO85qeEa1i6IAqVH/H1OjTGQf97BwRWwBieeFtUTporTYmxPnPl
+	+NIr1e2uBGYwn5sX5nnup46s6cK22xOoFn5oxfu7n5k+/D2y
+X-Google-Smtp-Source: AGHT+IHm7l5gSAjpuXl6sjpSEETVwb08PP2ae8KBZIblUgIaqAeUNtu1Pov6eYfnSnHcoVeKU6k3kOvp+iND
+X-Received: by 2002:aa7:8895:0:b0:730:87b2:e848 with SMTP id d2e1a72fcca58-734ac4a764bmr3123476b3a.5.1740788174093;
+        Fri, 28 Feb 2025 16:16:14 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
+        by smtp-relay.gmail.com with ESMTPS id d2e1a72fcca58-7349fde9edasm289102b3a.8.2025.02.28.16.16.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 15:59:55 -0800 (PST)
+        Fri, 28 Feb 2025 16:16:14 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 6B12334028F;
-	Fri, 28 Feb 2025 16:59:54 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 8BA97340D6A;
+	Fri, 28 Feb 2025 17:16:13 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 5C474E41A01; Fri, 28 Feb 2025 16:59:24 -0700 (MST)
+	id 86D82E419EA; Fri, 28 Feb 2025 17:16:13 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Pavel Begunkov <asml.silence@gmail.com>
 Cc: Caleb Sander Mateos <csander@purestorage.com>,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] io_uring/rsrc: call io_free_node() on io_sqe_buffer_register() failure
-Date: Fri, 28 Feb 2025 16:59:12 -0700
-Message-ID: <20250228235916.670437-3-csander@purestorage.com>
+Subject: [PATCH 2/2] io_uring/nop: use io_find_buf_node()
+Date: Fri, 28 Feb 2025 17:16:08 -0700
+Message-ID: <20250301001610.678223-2-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250228235916.670437-1-csander@purestorage.com>
-References: <20250228235916.670437-1-csander@purestorage.com>
+In-Reply-To: <20250301001610.678223-1-csander@purestorage.com>
+References: <20250301001610.678223-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -84,48 +84,41 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-io_sqe_buffer_register() currently calls io_put_rsrc_node() if it fails
-to fully set up the io_rsrc_node. io_put_rsrc_node() is more involved
-than necessary, since we already know the reference count will reach 0
-and no io_mapped_ubuf has been attached to the node yet.
-
-So just call io_free_node() to release the node's memory. This also
-avoids the need to temporarily set the node's buf pointer to NULL.
+Call io_find_buf_node() to avoid duplicating it in io_nop().
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- io_uring/rsrc.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ io_uring/nop.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 748a09cfaeaa..398c6f427bcc 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -780,11 +780,10 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
- 		return NULL;
- 
- 	node = io_rsrc_node_alloc(ctx, IORING_RSRC_BUFFER);
- 	if (!node)
- 		return ERR_PTR(-ENOMEM);
--	node->buf = NULL;
- 
- 	ret = -ENOMEM;
- 	pages = io_pin_pages((unsigned long) iov->iov_base, iov->iov_len,
- 				&nr_pages);
- 	if (IS_ERR(pages)) {
-@@ -837,11 +836,11 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
- done:
- 	if (ret) {
- 		if (imu)
- 			io_free_imu(ctx, imu);
- 		if (node)
--			io_put_rsrc_node(ctx, node);
-+			io_free_node(ctx, node);
- 		node = ERR_PTR(ret);
+diff --git a/io_uring/nop.c b/io_uring/nop.c
+index ea539531cb5f..28f06285fdc2 100644
+--- a/io_uring/nop.c
++++ b/io_uring/nop.c
+@@ -59,21 +59,12 @@ int io_nop(struct io_kiocb *req, unsigned int issue_flags)
+ 			ret = -EBADF;
+ 			goto done;
+ 		}
  	}
- 	kvfree(pages);
- 	return node;
- }
+ 	if (nop->flags & IORING_NOP_FIXED_BUFFER) {
+-		struct io_ring_ctx *ctx = req->ctx;
+-		struct io_rsrc_node *node;
+-
+-		ret = -EFAULT;
+-		io_ring_submit_lock(ctx, issue_flags);
+-		node = io_rsrc_node_lookup(&ctx->buf_table, req->buf_index);
+-		if (node) {
+-			io_req_assign_buf_node(req, node);
+-			ret = 0;
+-		}
+-		io_ring_submit_unlock(ctx, issue_flags);
++		if (!io_find_buf_node(req, issue_flags))
++			ret = -EFAULT;
+ 	}
+ done:
+ 	if (ret < 0)
+ 		req_set_fail(req);
+ 	io_req_set_res(req, nop->result, 0);
 -- 
 2.45.2
 
