@@ -1,64 +1,64 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F084E249E5
-	for <io-uring@vger.kernel.org>; Tue,  4 Mar 2025 14:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235DE28D05D
+	for <io-uring@vger.kernel.org>; Tue,  4 Mar 2025 15:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741097972; cv=none; b=d71A4++cGCuubR1iWlmhRhxgBl9/ge0AnvNn5G/BpAdysU6wBp0DH9c2AM7DeCJUmmyJuEBvGNNAUlXTkmsKObnG+t3ry2v94FNYqhp8yfADRpjFtCCfQLudZvHgYS+pisNIIIfLgS/XIK+5inzMOWw3Lj3PZXZ4qtSqnHdmbV4=
+	t=1741101425; cv=none; b=axRNFEIHrlXhJXC5mFNaOOtdguCvGD/WohsytQqRjMJ5LbK6LDuN1jkxhxoY029w73pOUt0FK5fhgbVn5gHErRxd/4yjQxjE871SfZVtvZM3mA/1Z+JPbXOAUhBqgSqOc2erXvX1M5Y5bv2KDp4H35PEXngL3TQrFuUE5ANnXag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741097972; c=relaxed/simple;
-	bh=b0jSvBSYYtCQYPsiv50IabooFbiJx/XYyCZCorGnVgI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mUCQllN+IxLT1RrdSBuMBIvMlNXlK6D0t0tlSKCIMSfT5m8ldM8eBZd6zALhXiuexL1t5MW6Dn9HeIYnH6WXNhoSVIjw2Wp23P99Y4YfWi1KnlRKNWDgfpS8v/qGE3+TQxfMGuWA8KqhG6u0Oud3P62rTynYHVOwrSktXVf0+KU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yqmq6+YU; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1741101425; c=relaxed/simple;
+	bh=xjcKEXP5jAfCiSUUz6fjVd8Hsn30AytpNcFfT7b8uIw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XtI+akFyu/q38PDBuaQ/9HEWkzjn/z7fva4cD79hcHAUo9OfldJWMAcZPeDhvXA6dz8CHFKcBu4qAiHMikYKwaAcfe4m3Gt743luHl3zZcF9z38eMSBcFg5EoqBx9M3uJx9SrEHI9pfzE8K6v8wt21+7fcjrXcHPcj/tpR2NHzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MXVqitqv; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yqmq6+YU"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-abf5e1a6cd3so516391666b.2
-        for <io-uring@vger.kernel.org>; Tue, 04 Mar 2025 06:19:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MXVqitqv"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5e0373c7f55so8875498a12.0
+        for <io-uring@vger.kernel.org>; Tue, 04 Mar 2025 07:17:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741097969; x=1741702769; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lo0Q5BRfGD+PtFpLW33HM+7KkReOcly1dlugDnT8TNk=;
-        b=Yqmq6+YUhaCV7xXejqtkUGBocT/ySmADP1Kr9/jlPlu8cUImWpX0wTNfh2yOZjMbHH
-         J+PtpK7QMj8mykLdh6EwwCOZRKSEaa9MQStmcwfeRXMpkb2flPoEFFm1qks+xmPcZoFS
-         dmlLAw0c/3k9fH2ubjHfcjxSKgvvE+7p3FN4WCWEM3E290kVut95TaEl+taf+bE7UggY
-         rX4LMMyzZtC3K1Rw6v5MU1YP7SYyZaU2i/PSnuA0XMoLB7yx3BTdn+bqDbPH78ziTQxH
-         0iMFxACKGqJlqTBn5w/zYCArOZgW6S3HMy3LNFyFmVKN5qHyoQ16+s9+kY+sSUd4rEfY
-         jQ8w==
+        d=gmail.com; s=20230601; t=1741101422; x=1741706222; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=+ALTJqAZUqbI5/3XhYOF3OjwZcPQJTsmPJuGItJiNXw=;
+        b=MXVqitqvOacLtnhFCX9cSlU6TFKGgn9dKWC5Fwo4VJHo20cjFR/1PzMbB3Or2pvMuf
+         gYjiVpaorXZQ9JMe/om8Ktm1CsbyXsxmZHpRfL/Km0cU4vYSxs24iDsHYSKz5QV2iDm2
+         3PFdLB9elD6Apl/vhb5VTBVE2scnFVJc50JmPC9/KuTERK3ScBCadVFz064EyKnMZDb6
+         gxOLukyMtOkZRbHp/CZ79326FXVOiJu/aI2dj3yeFFeagJMIxOPRSAf5FNo9oBhX97/t
+         LqC5YskykKDJc+GMKJlg88rz5Xtr6wzbyRfFU5pcjzBBAiUU0uEnHNXwNIqKOZ2RQrF8
+         dC8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741097969; x=1741702769;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1741101422; x=1741706222;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lo0Q5BRfGD+PtFpLW33HM+7KkReOcly1dlugDnT8TNk=;
-        b=HYpHDZxlxjR8yxRRb6915dc/yvNSZh16q2MJRCmYn1YC5QnJCY4U36sppe8E7cTqB0
-         853jy0SGodszDKHH5zpC1HFREgPKh/bTc6due21FAgsK2wXv0As3cTBJyJ6XzHd0wU3X
-         Hup6s0wUp7t6wFFAdLdTx2/HadwaSScaXoTS95qxChuosuIDhZ4qvSDhGVPNMsOpu6qE
-         bJaMw3XpBFJ4R7WRN03ujxAh6V0C+kq/cw/tT5bwyuBCUZDT6fYZo10Ofy2Q0G0pj0g5
-         dZwvK/yX6V2CQ38k2G9hpoeXDPcVy9lGJqAtK2K4DZpHDfSo051UD56ffe9TeG/xOYj/
-         83xQ==
-X-Gm-Message-State: AOJu0YwZF6ctiX9f0wf8qry5bDWu04FMYE3sE7PaCQwGTyaVZwombvLY
-	4BnZfSVgJ5uQmiQ7rCkN8dKmurO98ctn+R0BKY7wc4bUcE3Rm0rH
-X-Gm-Gg: ASbGncsFWxA1tHUSLoBkIZqTO/xhkxss5wj3/splJj/zZipbKLOaZePMOB2yPy9CQzF
-	hDExKQ3MVF4XL0jd9UldvsRJcPX/Lu6hUcQD/9mijtj2RYZNWFYIWBy+y+0MfbQDn63DzshytDL
-	fseI6zwuad6sRqPP5Bb4FwZq/PlCAkKb/mCdvt5aqBXboJtrmQM1lSKiq+1j1uPuwYwjbRxXVlL
-	9csxAMOmRa9IJYZc+ZUMejrV96jJCHv0GRvSPjmeW6lzi9GrntA4/qvgzdB3NbylJMKxbs1dhJC
-	VTcufDFYNdfd3O6kgkSUrmMCGXU16Cui5boOK4DI1xZ/6o1iWOV5Uhey75ftFTPnIc9L6ArbA7x
-	oSA==
-X-Google-Smtp-Source: AGHT+IEbbLsnAzFEhxqsdBWvbBXnVqcC1dSK/urihPvdf8NUpsqKNNeju1XL+BC8VjqkrWEnSGUc/w==
-X-Received: by 2002:a17:907:3fa7:b0:abf:64f9:1fcb with SMTP id a640c23a62f3a-abf64f97986mr1305799766b.30.1741097968919;
-        Tue, 04 Mar 2025 06:19:28 -0800 (PST)
+        bh=+ALTJqAZUqbI5/3XhYOF3OjwZcPQJTsmPJuGItJiNXw=;
+        b=blFECPD4TDiNPLNY24+o9BoADUlC63mcIQUd2W7vDLlEbUdZ37yxJLmkDEMp+TxcLV
+         S9bSr9Y1J0ENXg8TR6+gG0O1kdYwC+lRPKCsX7Ak54/1m8s4rFr6MdXushyzmVUgqrKi
+         1PZtqg54qopXeMZhSJ9kEE25ZcMMxUnFiyB0CGEvxzH9JAXMFLBZ+V9Q3526gtpNbCr6
+         bEzHuyveqhwfDZqlL1w8N7jvhDDOqiWS9vAVVNNHYthilGCGXf62Vw94JUdVu0Y/lYHQ
+         r5Y7ReMocU1BKWIqhbwRGqgvl7JE1ImonNoElYYT67A7cPB1J9KVDSfgb+MQvn/7/F8O
+         wQ7Q==
+X-Gm-Message-State: AOJu0Yy67YWwVgF64snrOAJsY9mvTvQlWnS1AvyLbbXm5VLJ8SOlnI3s
+	8jmPr5FyafN0PZXIP0/GoYeRHPntNOpSWjKLiw7Oq9gZp9M8CflRnLkPGg==
+X-Gm-Gg: ASbGncvToIlMM+MHrcef8PIAKQB2lqE0pVtN60TjP28z4i7O/lDJhw4/SRGGmSOKa53
+	4hS5pAs3V7RQX9Hjx5WCo7twXgGorVssTRBEuXJrZfSaxJRIXkvZQdkjsQLLiPJf+o31x3S105X
+	pzi94JP0l9tgS+wkVFgLtGQotf+FNOxgJW88yq1383kq/5IV9AjDMJ0AyoK7sAe6bRAyXIYAQyR
+	pbqY4z8B8ASkIlJ8e00+b0tOHoOsqecWOvbj9/sKmqJMv3TAQXoL61iMhTESCwpWChU66yMTnBf
+	gdX7w8LBtGDmUbQsB28YHALPq7KDE1jQHwHR37JR+eJilFp68mvf7gKyjo+xuINkUMGv6hsY8yj
+	ZdA==
+X-Google-Smtp-Source: AGHT+IFB55EU4r74eXyi4FeDQ/EZeYJI0r2S4hTUrTCICWBqc3Dv5rqmMrg7olPKf+OJY8GO8wpTOA==
+X-Received: by 2002:a17:907:1ca2:b0:abf:6842:d46 with SMTP id a640c23a62f3a-abf684213e6mr1003486866b.32.1741101422006;
+        Tue, 04 Mar 2025 07:17:02 -0800 (PST)
 Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:3bd7])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abfa393dd6dsm323768666b.96.2025.03.04.06.19.27
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac1e5aff06esm218450266b.130.2025.03.04.07.17.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Mar 2025 06:19:28 -0800 (PST)
-Message-ID: <f0490adc-ef8f-4409-a143-529555b96d26@gmail.com>
-Date: Tue, 4 Mar 2025 14:20:38 +0000
+        Tue, 04 Mar 2025 07:17:01 -0800 (PST)
+Message-ID: <8ad09b2e-7bc6-4379-be68-033e9e164ee8@gmail.com>
+Date: Tue, 4 Mar 2025 15:18:11 +0000
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -66,65 +66,34 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/8] Add support for vectored registered buffers
-To: Stefan Metzmacher <metze@samba.org>,
- Caleb Sander Mateos <csander@purestorage.com>
+Subject: Re: [PATCH 2/8] io_uring: add infra for importing vectored reg
+ buffers
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: Caleb Sander Mateos <csander@purestorage.com>
 Cc: io-uring@vger.kernel.org, Andres Freund <andres@anarazel.de>
 References: <cover.1741014186.git.asml.silence@gmail.com>
- <CADUfDZqrXsdnwT=W3HqaVUeegY0jee4G4YztancBfsNBXMKWOg@mail.gmail.com>
- <f5f1571e-d2b9-4675-9bc9-f5bc95fdff3f@samba.org>
+ <841b4d5b039b9db84aa1e1415a6d249ea57646f6.1741014186.git.asml.silence@gmail.com>
+ <CADUfDZobvM1V38qSizh=WqAv1o5-pTOSZ+PUDMgEhgY3OVAssg@mail.gmail.com>
+ <9a5e3d75-afef-4942-881c-444d35472758@gmail.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <f5f1571e-d2b9-4675-9bc9-f5bc95fdff3f@samba.org>
+In-Reply-To: <9a5e3d75-afef-4942-881c-444d35472758@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 3/4/25 12:12, Stefan Metzmacher wrote:
-> Hi Pavel,
-> 
->>> Add registered buffer support for vectored io_uring operations. That
->>> allows to pass an iovec, all entries of which must belong to and
->>> point into the same registered buffer specified by sqe->buf_index.
->>>
->>> The series covers zerocopy sendmsg and reads / writes. Reads and
->>> writes are implemented as new opcodes, while zerocopy sendmsg
->>> reuses IORING_RECVSEND_FIXED_BUF for the api.
->>>
->>> Results are aligned to what one would expect from registered buffers:
->>>
->>> t/io_uring + nullblk, single segment 16K:
->>>    34 -> 46 GiB/s
->>> examples/send-zerocopy.c default send size (64KB):
->>>    82558 -> 123855 MB/s
+On 3/4/25 10:05, Pavel Begunkov wrote:
+> On 3/3/25 20:49, Caleb Sander Mateos wrote:
+>> On Mon, Mar 3, 2025 at 7:51 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+> ...
+>>> +       for (i = 0; i < nr_iovs; i++)
+>>> +               max_segs += (iov[i].iov_len >> shift) + 2;
 >>
->> Thanks for implementing this, it's great to be able to combine these 2
->> optimizations! Though I suspect many applications will want to perform
->> vectorized I/O using iovecs that come from different registered
->> buffers (e.g. separate header and data allocations). Perhaps a future
->> improvement could allow a list of buffer indices to be specified.
+>> Sees like this may overestimate a bit. I think something like this
+>> would give the exact number of segments for each iovec?
+>> (((u64)iov_base & folio_mask) + iov_len + folio_mask) >> folio_shift
 > 
-> I'm wondering about the same. And it's not completely
-> clear to me what the value of iov_base is in this case,
-> is it the offset into the buffer, or the real pointer address
-> that must within the range of the registered buffer?
+> It's overestimated exactly to avoid a beast like this.
 
-Same as with other registered buffer requests. It's a pointer into
-the initial buffer you specified when registering it, which serves
-to calculate the offset.
-
-See the io_uring_register(2) man, addr and len are iov_base and
-iov_len and there are multiple of them. You can call it confusing,
-and I'd agree, but that's how it was done from the very beginning,
-so staying consistent here.
-
-https://github.com/axboe/liburing/blob/master/man/io_uring_register.2#L87
-
-  
-> It might also be very useful to have some vector elements pointing
-> into one of the registered buffer, while others refer to non-registered
-> buffers.
-
-See the other reply.
+And it'd be broken as well for 0 len.
 
 -- 
 Pavel Begunkov
