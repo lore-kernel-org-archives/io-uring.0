@@ -1,201 +1,67 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D80913AA2E
-	for <io-uring@vger.kernel.org>; Wed,  5 Mar 2025 01:19:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3CD5228;
+	Wed,  5 Mar 2025 01:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741137592; cv=none; b=mwQz/NoYVOhL2/p9Y24vwznRMLdDMeJKOUJTBtEPwW7lADfC/QJfYnb6oVDGKvy1Cdaykf9hop00THWPWeqka0Z0WXKtQABBXy+VRyr/D6e6dwDnjXjLmeXXgLOGvAYZ6iSjYS1hPSRhteInvKJ9vb84sA4Dvzi8tpdyihcfo0U=
+	t=1741137816; cv=none; b=lXUyL/wci2t8aLymTqq9qhx9ArrKBsz99qZvmWBCsaWuDvb7BrlQb9X5wtXiBuGbKX0z6W3cAcvR08Yf/W3Ek/zgRd6GgsFcAthAU7mnuZ0+EZjrmPtVBRFAPRxcbOuAJlZSs2iIG4ZK07Evou1fkvFboSXNgd84R7BE8LG2ySM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741137592; c=relaxed/simple;
-	bh=T1D0UqlZtbjIAEcYeH3bL+9/Rhwt5iKWzyArHVZ2rd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ab4PXGzdcNvB4qqAJuJxICoVb0Q3TilM145+zWxwh0nWqu6FYdv+K04/9s7dOswMTpZfzsq6JDk8/dK6F8MB/nmxbLj7WNAEYMIazmz6EzMu1Zne5mRhRqo5CG4cBgYoQlbYzPDvVSbLalQUjDUZ5A2TLxN/BYK74sM3vBe/oO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com; spf=pass smtp.mailfrom=fromorbit.com; dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b=Mu4oTEKE; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fromorbit.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b="Mu4oTEKE"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2234e4b079cso114926995ad.1
-        for <io-uring@vger.kernel.org>; Tue, 04 Mar 2025 17:19:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1741137590; x=1741742390; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HDeGX06pM1RLaKTpFDMieK0IZgiOy+R0dUCo59PMS84=;
-        b=Mu4oTEKEXkk/fncXQPj12qTM7R0MliQhgEb20vxLu6lYkAlaEWQ2MFKejbygJKu0U6
-         dbtp4LpP9WNgpCPZQdAJemWdC5kZRwoIpVlpfnPZafESdgrfKcLsJrxWK8fkZ/58bcor
-         H7g1Dy444aKcCjzPi18DJSrLbdwRxeni5uGWR+/dVWZmOG7gDFMIItGJhMSsSRQdXi+o
-         M/UvGXgMqujoGKY2hA3TojI6cg5n2REwTqTngHZa2xwEoxcJZxLCb/PLY+cH2UabF34T
-         NYZO+Xim+icyfRce8F0B+TJh90q/zhN6YLK+FroyxkyItV5CLYv7U1Tw9bisWo7Fe6ml
-         SY5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741137590; x=1741742390;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HDeGX06pM1RLaKTpFDMieK0IZgiOy+R0dUCo59PMS84=;
-        b=B1AkX55gOUQmmbZYtWrj52F+yfrLn7ly00bvLStO+OeAraGXf0P35Y9ymGVwargKer
-         AopCUABm6wyJaHSAPAonzt/WkqPJtThP/Gz8+Fv6xeNsKSg7HDZmb65MeATTrkHlaeEE
-         Fiiasc4c5E7UIQlOf2XXBuPJYzn1EMGFaN98uTnhoYpKFZ3+V2Ftx4XF4tEdM/v+nlVM
-         gccaGi6QQwbPlKWxO12XpSkrhLztQn/K6NgJDjDp5ExLWEQetWGmknLoR+0RvrUvUKau
-         Q4VIp4WlWJWXr3f8Tf96BeD5SkDIIvWPO6iJYhUD3Xbalm82e52nZImcwhRsCjMcfxkP
-         fE4A==
-X-Forwarded-Encrypted: i=1; AJvYcCX43wFiuPMZXz6303ZfLwMECsvPekl+EMz/bFXaV0Ks2JsSGwjQyctV3oUteSHlXmuN5r/WsVjdoQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTze2WxPL4D9kWAy8RJduUUNBC+UQ813cWLPJS5t/ZmzwB8lg4
-	vPlCdRLpfNtbVoOXF1GdsvTpF58Yg/bbGskWhEfE+/SXfah+GNbp7/2VCu7XC20=
-X-Gm-Gg: ASbGncuQdhJICtr3yzL6FmGYpPZ7sIdtd6oO1h2Ipb1c6xUzpFhKyIYG+vYS4ohDDzB
-	h9OnAYs83SEm1RDtN7ABa43RU//rUABDulKzJf/om4VOqt4Wc9fExVyFYt8O+NcGY/SD4VRoqiu
-	AjNc4WCt/JoDNd4gVNtkoIyYuXeVPrypudOwT5nBjDt82Z2Em/ZMWj635+xA1R/wl6buZaZOmSF
-	FuHAZMCyGaaua6gfvDJzghVWM5oijavxAHE30hpac+uj7cm79sELj9i5q7cFAc8J3jcVu85eTXQ
-	5zKerfYfSST5dIQdo6nj8WTKYIf0MbOacMQQAXJjSE/AV3I4rnfNjVsc6bFUQsmiSSDes2A1Lwu
-	giuufGjj0XA==
-X-Google-Smtp-Source: AGHT+IEYSEaRJWNjHT1mSMe9OLAaH/XQ2Im1sJS6hHV/lUkLx/BJl5WN3GSomkJPz7v2Wa1bAfkxZg==
-X-Received: by 2002:a05:6a20:9185:b0:1f3:2c55:8d95 with SMTP id adf61e73a8af0-1f349449752mr2066270637.8.1741137589615;
-        Tue, 04 Mar 2025 17:19:49 -0800 (PST)
-Received: from dread.disaster.area (pa49-186-89-135.pa.vic.optusnet.com.au. [49.186.89.135])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7ddf242bsm10725070a12.13.2025.03.04.17.19.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 17:19:49 -0800 (PST)
-Received: from dave by dread.disaster.area with local (Exim 4.98)
-	(envelope-from <david@fromorbit.com>)
-	id 1tpdQI-00000008yUp-0BsL;
-	Wed, 05 Mar 2025 12:19:46 +1100
-Date: Wed, 5 Mar 2025 12:19:46 +1100
-From: Dave Chinner <david@fromorbit.com>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org, "Darrick J . Wong" <djwong@kernel.org>,
-	linux-xfs@vger.kernel.org, wu lei <uwydoc@gmail.com>
-Subject: Re: [PATCH v2 1/1] iomap: propagate nowait to block layer
-Message-ID: <Z8emslEolstG76A7@dread.disaster.area>
-References: <f287a7882a4c4576e90e55ecc5ab8bf634579afd.1741090631.git.asml.silence@gmail.com>
- <Z8dsfxVqpv-kqeZy@dread.disaster.area>
- <970ec89d-4161-41f4-b66f-c65ebd4bd583@gmail.com>
+	s=arc-20240116; t=1741137816; c=relaxed/simple;
+	bh=/pGsyz/6ThzK+KceFflPkTk2ot9eWG/BfuA8GInaWtw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jXL/EDygv1lFJnfhVvfdYuRx26W+/KNHS1IvLKwyHIRrTpU7XDTTlesNIXbkhM6GcWEdmrTv5rTx5VN6l4xeJY6y0UHTNpm4DxE7g5BrDjD6raWPjygfmr7uvTQLbCPdktG8s576sPyEiqSRmwIAP0BdksBFWvY/mwCOhUu+0ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Z6vpZ1N3Kz1f07W;
+	Wed,  5 Mar 2025 09:19:18 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id E94C01401F3;
+	Wed,  5 Mar 2025 09:23:30 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpemf500002.china.huawei.com
+ (7.185.36.57) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 5 Mar
+ 2025 09:23:30 +0800
+From: Yue Haibing <yuehaibing@huawei.com>
+To: <axboe@kernel.dk>, <asml.silence@gmail.com>
+CC: <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<yuehaibing@huawei.com>
+Subject: [PATCH -next] io_uring: Remove unused declaration io_alloc_async_data()
+Date: Wed, 5 Mar 2025 09:34:54 +0800
+Message-ID: <20250305013454.3635021-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <970ec89d-4161-41f4-b66f-c65ebd4bd583@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-On Tue, Mar 04, 2025 at 10:47:48PM +0000, Pavel Begunkov wrote:
-> On 3/4/25 21:11, Dave Chinner wrote:
-> > > @@ -374,6 +379,23 @@ static loff_t iomap_dio_bio_iter(const struct iomap_iter *iter,
-> > >   	if (!(dio->flags & (IOMAP_DIO_INLINE_COMP|IOMAP_DIO_CALLER_COMP)))
-> > >   		dio->iocb->ki_flags &= ~IOCB_HIPRI;
-> > > +	bio_opf = iomap_dio_bio_opflags(dio, iomap, use_fua, atomic);
-> > > +
-> > > +	if (!is_sync_kiocb(dio->iocb) && (dio->iocb->ki_flags & IOCB_NOWAIT)) {
-> > > +		/*
-> > > +		 * This is nonblocking IO, and we might need to allocate
-> > > +		 * multiple bios. In this case, as we cannot guarantee that
-> > > +		 * one of the sub bios will not fail getting issued FOR NOWAIT
-> > > +		 * and as error results are coalesced across all of them, ask
-> > > +		 * for a retry of this from blocking context.
-> > > +		 */
-> > > +		if (bio_iov_vecs_to_alloc(dio->submit.iter, BIO_MAX_VECS + 1) >
-> > > +					  BIO_MAX_VECS)
-> > > +			return -EAGAIN;
-> > > +
-> > > +		bio_opf |= REQ_NOWAIT;
-> > > +	}
-> > 
-> > Ok, so this allows a max sized bio to be used. So, what, 1MB on 4kB
-> > page size is the maximum IO size for IOCB_NOWAIT now? I bet that's
-> > not documented anywhere....
-> > 
-> > Ah. This doesn't fix the problem at all.
-> > 
-> > Say, for exmaple, I have a hardware storage device with a max
-> > hardware IO size of 128kB. This is from the workstation I'm typing
-> > this email on:
-> > 
-> > $ cat /sys/block/nvme0n1/queue/max_hw_sectors_kb
-> > 128
-> > $  cat /sys/block/nvme0n1/queue/max_segments
-> > 33
-> > $
-> > 
-> > We build a 1MB bio above, set REQ_NOWAIT, then:
-> > 
-> > submit_bio
-> >    ....
-> >    blk_mq_submit_bio
-> >      __bio_split_to_limits(bio, &q->limits, &nr_segs);
-> >        bio_split_rw()
-> >          .....
-> >          split:
-> > 	.....
-> >          /*
-> >           * We can't sanely support splitting for a REQ_NOWAIT bio. End it
-> >           * with EAGAIN if splitting is required and return an error pointer.
-> >           */
-> >          if (bio->bi_opf & REQ_NOWAIT)
-> >                  return -EAGAIN;
-> > 
-> > 
-> > So, REQ_NOWAIT effectively limits bio submission to the maximum
-> > single IO size of the underlying storage. So, we can't use
-> > REQ_NOWAIT without actually looking at request queue limits before
-> > we start building the IO - yuk.
-> > 
-> > REQ_NOWAIT still feels completely unusable to me....
-> 
-> Not great but better than not using the async path at all (i.e. executing
-> by a kernel worker) as far as io_uring concerned.
+Commit ef623a647f42 ("io_uring: Move old async data allocation helper
+to header") leave behind this unused declaration.
 
-I really don't care about what io_uring thinks or does. If the block
-layer REQ_NOWAIT semantics are unusable for non-blocking IO
-submission, then that's the problem that needs fixing. This isn't a
-problem we can (or should) try to work around in the iomap layer.
+Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+---
+ io_uring/io_uring.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-> It should cover a good
-> share of users, and io_uring has a fallback path, so userspace won't even
-> know about the error. The overhead per byte is less biting for 128K as well.
-
-That 128kb limit I demonstrated is not a fixed number. Stacking
-block devices (e.g. software RAID devices) can split bios at any
-sector offset within the submitted bio.
-
-For example: we have RAID5 witha 64kB chunk size, so max REQ_NOWAIT
-io size is 64kB according to the queue limits. However, if we do a
-64kB IO at a 60kB chunk offset, that bio is going to be split into a
-4kB bio and a 60kB bio because they are issued to different physical
-devices.....
-
-There is no way the bio submitter can know that this behaviour will
-occur, nor should they even be attempting to predict when/if such
-splitting may occur.
-
-> The patch already limits the change to async users only, but if you're
-> concerned about non-io_uring users, I can try to narrow it to io_uring
-> requests only, even though I don't think it's a good way.
-
-I'm concerned about any calling context that sets IOCB_NOWAIT. I
-don't care if it's io_uring, AIO or a synchronous
-preadv2(RWF_NOWAIT) call: we still have the same issue that
-REQ_NOWAIT submission side -EAGAIN is only reported through IO
-completion callbacks.
-
-> Are you only concerned about the size being too restrictive or do you
-> see any other problems?
-
-I'm concerned abou the fact that REQ_NOWAIT is not usable as it
-stands. We've identified bio chaining as an issue, now bio splitting
-is an issue, and I'm sure if we look further there will be other
-cases that are issues (e.g. bounce buffers).
-
-The underlying problem here is that bio submission errors are
-reported through bio completion mechanisms, not directly back to the
-submitting context. Fix that problem in the block layer API, and
-then iomap can use REQ_NOWAIT without having to care about what the
-block layer is doing under the covers.
-
--Dave.
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index daf0e3b740ee..b95dab77e32d 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -88,7 +88,6 @@ struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
+ void __io_req_task_work_add(struct io_kiocb *req, unsigned flags);
+ void io_req_task_work_add_remote(struct io_kiocb *req, struct io_ring_ctx *ctx,
+ 				 unsigned flags);
+-bool io_alloc_async_data(struct io_kiocb *req);
+ void io_req_task_queue(struct io_kiocb *req);
+ void io_req_task_complete(struct io_kiocb *req, io_tw_token_t tw);
+ void io_req_task_queue_fail(struct io_kiocb *req, int ret);
 -- 
-Dave Chinner
-david@fromorbit.com
+2.34.1
+
