@@ -1,67 +1,67 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DABEDF71
-	for <io-uring@vger.kernel.org>; Fri,  7 Mar 2025 15:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D281DF71
+	for <io-uring@vger.kernel.org>; Fri,  7 Mar 2025 15:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741362501; cv=none; b=qWlVoykWx6Qqe2ifygwbOZ5/PhrhLRIoH9FENEY56qdhzVDCbsSsxV5+k+oLk/9C11xfnTEoGD9dvVSa3PH8maTc1wS/R/Y/4am6XZmuLm3znlRs2cLNeyvw31eR34Hup967yzgVSKC9r0A7TOTz02M7i8VVd9/4aZP6mBZZxrs=
+	t=1741362503; cv=none; b=ScVn4GkA7sybvVAzMJRXqq1KqOiYvgJFxGcSRJsaKzTnvb4AWs7XYSUml0Z2kseKQlUHkvrDBcjI+3Vrd8wO25fdqDHdQTgntVD5hehTrLOfes44gaOhk8VVYl39sTEMHMkYOBRO6SDX9gaCCM9xmU/NOGtnJi6xcfnNNxd8bZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741362501; c=relaxed/simple;
-	bh=dFLQOj2ZLIbINKKwcv5tlrqtAVZRjLUjvTJ5sPCh7Go=;
+	s=arc-20240116; t=1741362503; c=relaxed/simple;
+	bh=+ko6qVLwFbY8p2fCkuMHNRIwwTZQjN0AL9uVp4qcr08=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m60cndu9ooRQXSftstmgZN67NajNqaO6Nh01LraMe+sHC8AqefiaE1TDv4F9ZT07FUOpjEsmx8Alq9MWZ0Q4h9+qa+SbRX9DMKmoZN6F87D5wEVZLLo8/Av3Q9CtyqPCe72bvbKxtjXZUAg3UMFQWvTBnovEmG07IQNvgfq07SQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dSm90Dz/; arc=none smtp.client-ip=209.85.218.45
+	 MIME-Version; b=ZKTTn9N8UbioiO4jBY8vCeIrjfJP4Jqxpb79VqS7AVbV2I0XKb+nGan+798DpQv4ySXrUCLqAZ3AzqoJuD47HcbamlgN0rmiZ/SH7n2Y3ZknAiJgqdgyPwZR7/3yzqJuz9ZvkioPuPqZ8NZpC3aZVPQRgz5aZhQ7IWgB6H/xgTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VdydvhaU; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dSm90Dz/"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ab78e6edb99so310725266b.2
-        for <io-uring@vger.kernel.org>; Fri, 07 Mar 2025 07:48:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VdydvhaU"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5e5c7d6b96fso3185434a12.3
+        for <io-uring@vger.kernel.org>; Fri, 07 Mar 2025 07:48:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741362497; x=1741967297; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741362499; x=1741967299; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xq9H3dhjnKdFz5nEV9/T6Wusp8ITCyq4E/MzF/cO3lc=;
-        b=dSm90Dz/MgaUYub7LDuoPz2+fnNYRh6qvl5EYGqgIZIecOIlMcI/vias095IgYOCrq
-         2jamepk6lnf4XHMfa1puiq5apD3okZZBib1S6RujKVgRbXezfE1gc72yR5NoZGWuQlL+
-         Nh5LyQBpR62S/zavVxf9zMN63056W+i1YFEdMQMg91JARWfvYLcUMvSkN6AxzLBRJV3B
-         dQ40B3cxnrLsjaocEH9sH7uRfiGyMtlPzoNYc1agxPsLrkVnMiDsOA5hvQgN6ckIgCpo
-         csvc7AcmMovosN4Ydsa/3Apm7uOhDe/WELy1xQIJHpyNCvYEKy916vqHKdgWqZhebOVz
-         sxzQ==
+        bh=yljV5A1erT6qwC3xVxpqpVfrN9r/MNCu0zylOYIEozc=;
+        b=VdydvhaUg5Mdvo+6pey7ci+gjz/lg0GStXgyQNiacYVHAYDukHqUtUhWez5gBENs1x
+         GcGHWl8q2Q9SXWVX0fczYM2d2sOoC4zmihjGGaBx236EGEORf6sWxppF8pLB3Xpxt+sE
+         S/vSBHRR3wS5YE2a1gnu4GvlkvghcHWIdvsZHjXhY5AbOrDZ0we2gvyPaWfZH2ojK0TD
+         quPXutSDo92rh12NwRn/m8oMZlCDg9RotY426GJcw86BWXXqCKPmdlkFL/0y9W8iTmRS
+         zJZW+OR18Kv3uvRdJ3a+EP8OlR8QE0S9zkhBIgwMylJ1BLEDRrAYfzSOBGJImmVaPUcO
+         VGRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741362497; x=1741967297;
+        d=1e100.net; s=20230601; t=1741362499; x=1741967299;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xq9H3dhjnKdFz5nEV9/T6Wusp8ITCyq4E/MzF/cO3lc=;
-        b=UxVuJQD5cPnxBG5/k2Oq3MbPTcqfCwbwVGqBJLhJTkEzmHXZsyq7e5VsMt/4mVGlhO
-         8zUOxpfYMi71b1Q5O6nm9MefnqwTWoDMeI0JV7X4FjsSCt+HeEj+OG7CML6am7ekg3gb
-         MRvdLgEPokeLK533+Ybkf7xAkrJ+yIBxc0gNnf2GpCjNMJqWDO4IJWRtKSznYWUUBpIX
-         idL9RVP7pXTcEJSJT8bP3Z7I5ft1qbtGscVoKeIBAsyko3+Kwl6MxN8d5JM6oaqa5DID
-         8G8bm53pP28ELp0e17rs3VeRFeF36f95XcG3hlAF84Nnqz/wT7f+NpczmJV+q0HrDj2K
-         P/fQ==
-X-Gm-Message-State: AOJu0YzMaguag+IDDlncMougbwTXzEO9uPDeJiLdjptG/xOE7oLDP7rq
-	OyX0ZRX9NLU+HTQdlBfnaoahYQAxmMabAHE8ogRdJzF896t8fgmGPSHSTQ==
-X-Gm-Gg: ASbGnct1sFFFErCTBWRvCi/IPE4PkMgSxukvH8AvJwYbqMmUTYawu0K/JQQqxr7CoEe
-	baoDNsff3hD+r9qlOtPB586Uq82zztd9iMnMo5wpksZTo2vC7VjKhmsH6+LuQIukG1OnCScdCnM
-	489ObGkzU1NpqjCnFCwLzY8mlnB4egvUGyoE+ZBcz8E/1InCh9DGqBpdZdMSLXUqXfqpKk5NxVe
-	7hvF6C8G17uog2AJwWGpbtLkuoeWWidfA8rcFga/3S4QnklXk2TVxtxqYcXJveiE9WR7Zz877Rt
-	blgyfcGs4yMyY3OcPx0GBXi0JHDi
-X-Google-Smtp-Source: AGHT+IFtiesCHuNrORx96JsQDdJG2OxoxpxMdqYEE5kiMfy9VSZYOWXnHl0Ur1pkEz5EXiHdShECJg==
-X-Received: by 2002:a17:907:2d8d:b0:abf:6db5:c9a9 with SMTP id a640c23a62f3a-ac252f9f653mr479879066b.39.1741362497021;
-        Fri, 07 Mar 2025 07:48:17 -0800 (PST)
+        bh=yljV5A1erT6qwC3xVxpqpVfrN9r/MNCu0zylOYIEozc=;
+        b=wlVrP+qK7MbdbT4PmaFBCGNnd038fcBLhK+w8flxMQGxmL5y4H5A9iQP42QTRcI2Yh
+         VC6pN2k1dmn/dcMf7NrRfC4MnXUGgf6uNLLPemG6UKOhk+cWYcxuXzl4RGCjocNjCE2D
+         fP1KUfL+4rpflU6CE3+zb+SNrQIySwiAl/TZ7zwggNfzKeFiY1VhhpKsQ+yuxxY/lFrv
+         Os6WZwRFPKdLRoxp9aiiqtlNIzLuNw/vbEDFW7BZHiI8qXdtbh2eCiZhdsZk7VzNhO5d
+         1eDW0bW30ckPdIUC5er2tkc9p6H8ztSDdAEMRTIAqIsKuKx1W8RN2mKxQ5YKZyLSDBIq
+         aTmg==
+X-Gm-Message-State: AOJu0YzMIILr1PUh7Sr7r9bQUzccUw3xeJgzw7bJ92n050hS7LKLxw8N
+	Z/OjVTQra4qxydsxOehMTdWeAXHW7rysvsJbsSAYTQPv0lwy61/06ygTTw==
+X-Gm-Gg: ASbGncuOcjAn9ax5ckzp3LyMAONzXmqUn47YzOYk+vAvkMUEDSfAVTCDr2+5HNASvgF
+	pKO04T3ZFmOpVr1ytZ/mArcglie5Da81K1bmIuMFyyrMnVi9aSD8iPkGxOoOrpacNGShrOhQOIQ
+	NJsVBsVSeyF0NIPuXk7c1IyYumxSpTeRd14KQ6cDY6/VCNwIEJku5psquOULnuuVLwNOQpk/Swb
+	JlMl3W25l2I89QU+KspwTbHM07pAZrecPYiXesoxKXdw9uZz2WHxM+MdHShJKdzyy7YIDDzJFjw
+	O+55rXvTHYU1/hhpeGY23g8UHpgO
+X-Google-Smtp-Source: AGHT+IF2tLXtQyqecrT83VDAwCbmRXARWHJkEL39+aFQZQpoqpfFSFC04GaIDnabETmi07kSUDn/LQ==
+X-Received: by 2002:a50:8dca:0:b0:5e5:bd8d:edb9 with SMTP id 4fb4d7f45d1cf-5e5e22db548mr3514793a12.10.1741362499192;
+        Fri, 07 Mar 2025 07:48:19 -0800 (PST)
 Received: from 127.com ([2620:10d:c092:600::1:1422])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c766a033sm2665591a12.56.2025.03.07.07.48.15
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e5c766a033sm2665591a12.56.2025.03.07.07.48.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 07:48:16 -0800 (PST)
+        Fri, 07 Mar 2025 07:48:18 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com
-Subject: [PATCH v3 6/9] io_uring/net: pull vec alloc out of msghdr import
-Date: Fri,  7 Mar 2025 15:49:07 +0000
-Message-ID: <e60010541dead44a0d1d04c68c72fa69da9a5584.1741361926.git.asml.silence@gmail.com>
+Subject: [PATCH v3 8/9] io_uring/net: implement vectored reg bufs for zctx
+Date: Fri,  7 Mar 2025 15:49:09 +0000
+Message-ID: <ae30f9c33e40eb685e54fc94e8194dc6b93ce33b.1741361926.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <cover.1741361926.git.asml.silence@gmail.com>
 References: <cover.1741361926.git.asml.silence@gmail.com>
@@ -73,71 +73,111 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I'll need more control over iovec management, move
-io_net_import_vec() out of io_msg_copy_hdr().
+Add support for vectored registered buffers for send zc.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/net.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ io_uring/net.c | 59 ++++++++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 55 insertions(+), 4 deletions(-)
 
 diff --git a/io_uring/net.c b/io_uring/net.c
-index 33076bd22c16..cbb889b85cfc 100644
+index a4b39343f345..5e27c22e1d58 100644
 --- a/io_uring/net.c
 +++ b/io_uring/net.c
-@@ -253,12 +253,8 @@ static int io_compat_msg_copy_hdr(struct io_kiocb *req,
- 				return -EFAULT;
- 			sr->len = tmp_iov.iov_len;
- 		}
--
--		return 0;
- 	}
--
--	return io_net_import_vec(req, iomsg, (struct iovec __user *)uiov,
--				 msg->msg_iovlen, ddir);
-+	return 0;
+@@ -395,6 +395,44 @@ static int io_sendmsg_setup(struct io_kiocb *req, const struct io_uring_sqe *sqe
+ 	return io_sendmsg_copy_hdr(req, kmsg);
  }
  
- static int io_copy_msghdr_from_user(struct user_msghdr *msg,
-@@ -328,10 +324,8 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 				return -EFAULT;
- 			sr->len = tmp_iov.iov_len;
- 		}
--		return 0;
- 	}
--
--	return io_net_import_vec(req, iomsg, msg->msg_iov, msg->msg_iovlen, ddir);
-+	return 0;
- }
- 
- static int io_sendmsg_copy_hdr(struct io_kiocb *req,
-@@ -342,6 +336,12 @@ static int io_sendmsg_copy_hdr(struct io_kiocb *req,
- 	int ret;
- 
- 	ret = io_msg_copy_hdr(req, iomsg, &msg, ITER_SOURCE, NULL);
++static int io_sendmsg_zc_setup(struct io_kiocb *req, const struct io_uring_sqe *sqe)
++{
++	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
++	struct io_async_msghdr *kmsg = req->async_data;
++	struct user_msghdr msg;
++	int ret, iovec_off;
++	struct iovec *iov;
++	void *res;
++
++	if (!(sr->flags & IORING_RECVSEND_FIXED_BUF))
++		return io_sendmsg_setup(req, sqe);
++
++	sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
++
++	ret = io_msg_copy_hdr(req, kmsg, &msg, ITER_SOURCE, NULL);
 +	if (unlikely(ret))
 +		return ret;
++	sr->msg_control = kmsg->msg.msg_control_user;
 +
-+	if (!(req->flags & REQ_F_BUFFER_SELECT))
-+		ret = io_net_import_vec(req, iomsg, msg.msg_iov, msg.msg_iovlen,
-+					ITER_SOURCE);
- 	/* save msg_control as sys_sendmsg() overwrites it */
- 	sr->msg_control = iomsg->msg.msg_control_user;
- 	return ret;
-@@ -719,6 +719,13 @@ static int io_recvmsg_copy_hdr(struct io_kiocb *req,
- 	ret = io_msg_copy_hdr(req, iomsg, &msg, ITER_DEST, &iomsg->uaddr);
- 	if (unlikely(ret))
- 		return ret;
++	if (msg.msg_iovlen > kmsg->vec.nr || WARN_ON_ONCE(!kmsg->vec.iovec)) {
++		ret = io_vec_realloc(&kmsg->vec, msg.msg_iovlen);
++		if (ret)
++			return ret;
++		req->flags |= REQ_F_NEED_CLEANUP;
++	}
++	iovec_off = kmsg->vec.nr - msg.msg_iovlen;
++	iov = kmsg->vec.iovec + iovec_off;
 +
-+	if (!(req->flags & REQ_F_BUFFER_SELECT)) {
-+		ret = io_net_import_vec(req, iomsg, msg.msg_iov, msg.msg_iovlen,
-+					ITER_DEST);
++	res = iovec_from_user(msg.msg_iov, msg.msg_iovlen, kmsg->vec.nr, iov,
++			      io_is_compat(req->ctx));
++	if (IS_ERR(res))
++		return PTR_ERR(res);
++
++	kmsg->msg.msg_iter.nr_segs = msg.msg_iovlen;
++	req->flags |= REQ_F_IMPORT_BUFFER;
++	return ret;
++}
++
+ #define SENDMSG_FLAGS (IORING_RECVSEND_POLL_FIRST | IORING_RECVSEND_BUNDLE)
+ 
+ int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+@@ -1333,8 +1371,6 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	if (req->opcode != IORING_OP_SEND_ZC) {
+ 		if (unlikely(sqe->addr2 || sqe->file_index))
+ 			return -EINVAL;
+-		if (unlikely(zc->flags & IORING_RECVSEND_FIXED_BUF))
+-			return -EINVAL;
+ 	}
+ 
+ 	zc->len = READ_ONCE(sqe->len);
+@@ -1350,7 +1386,7 @@ int io_send_zc_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 		return -ENOMEM;
+ 	if (req->opcode != IORING_OP_SENDMSG_ZC)
+ 		return io_send_setup(req, sqe);
+-	return io_sendmsg_setup(req, sqe);
++	return io_sendmsg_zc_setup(req, sqe);
+ }
+ 
+ static int io_sg_from_iter_iovec(struct sk_buff *skb,
+@@ -1506,6 +1542,22 @@ int io_sendmsg_zc(struct io_kiocb *req, unsigned int issue_flags)
+ 	unsigned flags;
+ 	int ret, min_ret = 0;
+ 
++	kmsg->msg.sg_from_iter = io_sg_from_iter_iovec;
++
++	if (req->flags & REQ_F_IMPORT_BUFFER) {
++		unsigned uvec_segs = kmsg->msg.msg_iter.nr_segs;
++		unsigned iovec_off = kmsg->vec.nr - uvec_segs;
++		int ret;
++
++		ret = io_import_reg_vec(ITER_SOURCE, &kmsg->msg.msg_iter, req,
++					&kmsg->vec, uvec_segs, iovec_off,
++					issue_flags);
 +		if (unlikely(ret))
 +			return ret;
++		kmsg->msg.sg_from_iter = io_sg_from_iter;
++		req->flags &= ~REQ_F_IMPORT_BUFFER;
 +	}
- 	return io_recvmsg_mshot_prep(req, iomsg, msg.msg_namelen,
- 					msg.msg_controllen);
- }
++
+ 	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+ 		return -ENOTSOCK;
+@@ -1524,7 +1576,6 @@ int io_sendmsg_zc(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	kmsg->msg.msg_control_user = sr->msg_control;
+ 	kmsg->msg.msg_ubuf = &io_notif_to_data(sr->notif)->uarg;
+-	kmsg->msg.sg_from_iter = io_sg_from_iter_iovec;
+ 	ret = __sys_sendmsg_sock(sock, &kmsg->msg, flags);
+ 
+ 	if (unlikely(ret < min_ret)) {
 -- 
 2.48.1
 
