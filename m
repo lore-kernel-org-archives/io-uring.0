@@ -1,66 +1,70 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AC2238179
-	for <io-uring@vger.kernel.org>; Fri,  7 Mar 2025 16:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2302238179
+	for <io-uring@vger.kernel.org>; Fri,  7 Mar 2025 16:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741364520; cv=none; b=OR1BB+PKrXode9CyKdxEjrsyZyEknGq6nJl+6ktLEl/xjWcnP9aUPUrT/s/j502ybLFoRj/VsvdS6SzMhVo3LyqveWp+H4ulPLhNDDLhaJKtDM2HCEPpF22F/iWiBPV5iuL36n/FOemiYEQwLDtIkdHKtjz++N0z0IsnqgJ2DGM=
+	t=1741364522; cv=none; b=PhAiRUStOLel1vgMHWYu8rgKvjbWiQT9n15qmjqbLW7dt4gAmCdstWyYc9cR643TTZ7TyiK/tKbCGdhY9telqC7H9X3ePu5q0ubt/6KFD+kWGm6NVY+2g4h/NPUGsNQygw1N7quaQUZ/Mpar2DjtvDCU7oD9JKZDcsHDLyQ1W/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741364520; c=relaxed/simple;
-	bh=hUPDR8f2e+lDM5w1EoSdb8Aphr9tOvKIHyT5nnqfnHY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HuQ7lx4nz3mEeUsqW9Kc4yUsAf2vulAVVnu5OWU7cM0/fK08RcxiW7qq7RdAyOHvCP3AXNxLvz1ldfqTmITncamPRupF+vrJBrO5djJ4pPwupAOVUeoRS8Kgh811gAZJbcABUIQxH2/cMvXKyZXewb6V+3UvKBE8tBPoL/M1Pj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hzLr9QQO; arc=none smtp.client-ip=209.85.218.42
+	s=arc-20240116; t=1741364522; c=relaxed/simple;
+	bh=ekUvtFH/SfQXgIHgfIYiXK40M2zqG/dda6QIuokadQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sMGpRYk8iw3OtbPXflGMOXKCdmZYg9JT3qql+/q0JT8Mxramx/xTZBDevoD8PNxMxncZ8U7JpivjFtFQfYZZhrGVej1eGiqWaTwKqZGri7aDgc2BoUYjZTSx2HBFue5p6ROQO1qMnWRMhv4n66dPUTO3IcmSigHr+Sm7HFqu9QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mDKhVxvZ; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hzLr9QQO"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-abec8b750ebso350100366b.0
-        for <io-uring@vger.kernel.org>; Fri, 07 Mar 2025 08:21:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mDKhVxvZ"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-abf48293ad0so324388066b.0
+        for <io-uring@vger.kernel.org>; Fri, 07 Mar 2025 08:22:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741364516; x=1741969316; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=66vJPulE1k9A7YiJQoS+ci0DvGy5Zq5WuIFmXX+AfKk=;
-        b=hzLr9QQOWrjDyjTtadxHtEc33vrcyvX2OjyKqmwfxyJOeY6T4n+o8dk2Hcgezu5AWJ
-         uoOzwvMQeceAn3BnmFxCjAwUP0BGPvqCe0/2dH15RilAZOdGXEb4PMUZN4dwwpbFSBcC
-         rJ2qNJjSxnOlPQgli4JhO+Njk9zV2JHmprE3fdOgcQYpVAhnjyygbnWJknW7y4OKly9z
-         KkwOjgjU3gzucls1XllxbPDy7SqSxuU6KPYO/Weky0tflKi0uI4lMjyBp0jsvtHX2dfy
-         ylGnuLZqKaskxFb67mM4UP0RkwsOcDxbPTpSMZXrxtjt7Gtp4LktsKj1hqq5PEsfq0Q6
-         s0DQ==
+        d=gmail.com; s=20230601; t=1741364519; x=1741969319; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rwjHxuGNfHhbmaESXrubOfAJtb+l3BJVFh0Fi9idhfo=;
+        b=mDKhVxvZaoERSt3r0qD09i7dOns/P+jWTkkD95KEmEDY2WeoqzlLYFb0bwl0vBGHmN
+         B97Br601Ja4MLAO901XKItn3lMGtYOW2tjRKpeWx5+t0baLwt7hCR5pGWlvXg838U01w
+         S7/TT/NYxJYIUW4pZFjzX+i/wKlEwL+PIs6Ccn+VAbZbY5IsJ9RgVJx3jaKuss5HCUpL
+         7Mep4+gBdJTD+j2DJm0mE6QhrGuhHQWMfiw1J/74+vMPrPMf6GjVIjvEE4ZXX1mYcarW
+         jGfNL1cCoYt1LKyh6aCIZMqKMpB9DxKqHqPEBUSm2SuWXg+x59Am0VK2idGSJjcrBa+Z
+         k/1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741364516; x=1741969316;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=66vJPulE1k9A7YiJQoS+ci0DvGy5Zq5WuIFmXX+AfKk=;
-        b=Em6IttJQrYG/a87pZ6PHiLIfhWLpOK+7HiceGNfWfhOte1+simolqyVuqGOel7cg7B
-         bZVvVv/Od2blufdkDS1ICWcT+5e1kP31fc8WQHbuYNierktHwjvbMECvQkFcRS+OVO+/
-         SEtcRg+t1RcAB9aY9VpvSKkvOz4Ai4coLQ8mKpEy0zPXIzKrMScEFY6zqHZD8g/36xB/
-         zNEVWr7V7lfWmcivROBuWRHuACZkxA2gSjbSQB/ZFr8wXIqGHkkiVK+utSIvevGKKv55
-         WQHRFAUCUyjoUg4YFbnKg8s2WQozgYjHh543WgR53U71r0bKmnXG3a6wPCDOkcFpiWO1
-         qJ6A==
-X-Gm-Message-State: AOJu0Yx0vJ0AaEM8LYtpF7vu+CMKpATj/sz9d1jiFCw/V5IJ6VxalKeR
-	UqWwxFG62r35/jM9xxGFmC6SpP44cvkhXKGsax80W33k5TBrvEL/b4jrjQ==
-X-Gm-Gg: ASbGncu5hPQ40fLI+KEs/6hfFc5zUKdgY1RzFpz32m1ipLibebKnT6jUBlT0+e8P+zR
-	0kDafzYyD7XvMrvDdPK+Gd4ofFKTUhKAGIhCequMnfnqkdhegk/QxxTtL45KEVEkLExXqryMZvm
-	luQWqhdThKQim8NknRRTzc+I/8x9Sf2igPvYqRVMTy51XMHg3vZy8VYlzwj4QOs9C+DGXtQHzol
-	CdIZaFMNSpC/Qw6uDl7it+qt7f0rJwojw71l9JJP7LpXUOa5gzpjOuLKPn6e2lnLobFEmr+6mkz
-	8bBQyz/6Ahh9Wxl+i9KyrzM1KPK4
-X-Google-Smtp-Source: AGHT+IH9qw8Ziza1WGNgPF1WvtYtSxFPCXDFdJZWqEzgA66v5aUKkkjJBQ7tjWiswaQeFEBxdlhFTA==
-X-Received: by 2002:a17:906:6a03:b0:ab7:cb84:ecd6 with SMTP id a640c23a62f3a-ac253086697mr447601266b.56.1741364513906;
-        Fri, 07 Mar 2025 08:21:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741364519; x=1741969319;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rwjHxuGNfHhbmaESXrubOfAJtb+l3BJVFh0Fi9idhfo=;
+        b=uqZYerOh44F8LIGdrTYmWBCRDXHHuIBl1kplv+BxI8I4GW2J0QReSZL7nlVV5AykkZ
+         IEQRv9UzOlOI75Wxq+N/6SepC4clpZjzMzIu9dPHZ4bpmx7w6spvjRYXmen+ScjCtyrf
+         1k528+54P1ymX9Mipa8TpPaV4fbDYi/XHLiiek2xLqU5GKoVudKrZiAKlapOmk5cxbSq
+         XZemJbltTBWdETnlIe8cuZ32UH4gwi8Zc663j2IS89zzX4rqRWIFjgGm0Qkhu3J2dWXT
+         QdzVv29agX8Jtz4F0/4vVYCXaro7Q66UFYJyUJ/DoyF3Mk3xXL5hzM9DewWMyBcgi3zb
+         Lh0g==
+X-Gm-Message-State: AOJu0YwQnqZ5dJvhB/6FagGI4aV3vQOhv5yTT0gao3xNqWQI07ztEXAy
+	kwdILkQER1oV95ku6DhRGSG/LXsBDm7owctmv5vH/qMMqIuttR1Zr/GwCA==
+X-Gm-Gg: ASbGncuPLHigeTCuJfsD2easC+TNfTrxiB5LoFx0BouUponiJ3l7Jnu1+F8E+i/GNXN
+	/LJp5obE0LCNCR9DPKc50T2CPlYDkyQxSsoZFCFV3IJXPi8NozJsctZjfj3fHcrRoehWsOqRRpW
+	euw7mblI727E8pym/SMs4OlYtxWNMsIwpE/S1iCcVwiZM1RhzFyW760gUtLI37lok3rFOTYtapp
+	8nxQIh2Ew8r88pnbc2FOpxZ6VtjmsA3n8Zqq+1LbzoooVDCfdk+zQezjQVOXKk+vAnr24NxXN/8
+	7ze6uzNVo9yCDbVIgnpTCdiGL7jJ
+X-Google-Smtp-Source: AGHT+IG2COW4QwB1M301Y84BZByda+Ytc1fDRR3LsYgvr9WuNV+H5xXltgnHTi1rx6O+ztGmrjZ6QQ==
+X-Received: by 2002:a17:907:3e23:b0:ac0:527c:9cd5 with SMTP id a640c23a62f3a-ac252fa204fmr383013066b.42.1741364518334;
+        Fri, 07 Mar 2025 08:21:58 -0800 (PST)
 Received: from 127.com ([2620:10d:c092:600::1:a068])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac239438955sm300566166b.19.2025.03.07.08.21.53
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac239438955sm300566166b.19.2025.03.07.08.21.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Mar 2025 08:21:53 -0800 (PST)
+        Fri, 07 Mar 2025 08:21:57 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com
-Subject: [PATCH liburing 0/4] vectored registered buffer support and tests
-Date: Fri,  7 Mar 2025 16:22:42 +0000
-Message-ID: <cover.1741364284.git.asml.silence@gmail.com>
+Subject: [PATCH liburing 2/4] test/sendzc: test registered vectored buffers
+Date: Fri,  7 Mar 2025 16:22:44 +0000
+Message-ID: <d56231867c95e9f9cc54981db6b636a70047571d.1741364284.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <cover.1741364284.git.asml.silence@gmail.com>
+References: <cover.1741364284.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -69,24 +73,65 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It should give good coverage, I plan to extend read-write.c to
-use it as well.
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ test/send-zerocopy.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-Pavel Begunkov (4):
-  Add vectored registered buffer req init helpers
-  test/sendzc: test registered vectored buffers
-  tests/helpers: add t_create_socketpair_ip
-  tests: targeted registered vector tests
-
- src/include/liburing.h |  31 +++
- test/Makefile          |   1 +
- test/helpers.c         | 111 ++++++++
- test/helpers.h         |   5 +
- test/regvec.c          | 604 +++++++++++++++++++++++++++++++++++++++++
- test/send-zerocopy.c   | 138 ++--------
- 6 files changed, 776 insertions(+), 114 deletions(-)
- create mode 100644 test/regvec.c
-
+diff --git a/test/send-zerocopy.c b/test/send-zerocopy.c
+index c8eafe28..680481a0 100644
+--- a/test/send-zerocopy.c
++++ b/test/send-zerocopy.c
+@@ -69,6 +69,7 @@ static size_t page_sz;
+ static char *tx_buffer, *rx_buffer;
+ static struct iovec buffers_iov[__BUF_NR];
+ 
++static bool has_regvec;
+ static bool has_sendzc;
+ static bool has_sendmsg;
+ static bool hit_enomem;
+@@ -96,6 +97,7 @@ static int probe_zc_support(void)
+ 
+ 	has_sendzc = p->ops_len > IORING_OP_SEND_ZC;
+ 	has_sendmsg = p->ops_len > IORING_OP_SENDMSG_ZC;
++	has_regvec = p->ops_len > IORING_OP_READV_FIXED;
+ 	io_uring_queue_exit(&ring);
+ 	free(p);
+ 	return 0;
+@@ -448,6 +450,11 @@ static int do_test_inet_send(struct io_uring *ring, int sock_client, int sock_se
+ 			else
+ 				io_uring_prep_sendmsg(sqe, sock_client, &msghdr[i], msg_flags);
+ 
++			if (real_fixed_buf) {
++				sqe->ioprio |= IORING_RECVSEND_FIXED_BUF;
++				sqe->buf_index = conf->buf_index;
++			}
++
+ 			if (!conf->iovec) {
+ 				io = &iov[i];
+ 				iov_len = 1;
+@@ -619,7 +626,11 @@ static int test_inet_send(struct io_uring *ring)
+ 			conf.tcp = tcp;
+ 			regbuf = conf.mix_register || conf.fixed_buf;
+ 
+-			if (conf.iovec && (!conf.use_sendmsg || regbuf || conf.cork))
++			if (!tcp && conf.long_iovec)
++				continue;
++			if (conf.use_sendmsg && regbuf && !has_regvec)
++				continue;
++			if (conf.iovec && (!conf.use_sendmsg || conf.cork))
+ 				continue;
+ 			if (!conf.zc) {
+ 				if (regbuf)
+@@ -637,7 +648,7 @@ static int test_inet_send(struct io_uring *ring)
+ 				continue;
+ 			if (!client_connect && conf.addr == NULL)
+ 				continue;
+-			if (conf.use_sendmsg && (regbuf || !has_sendmsg))
++			if (conf.use_sendmsg && !has_sendmsg)
+ 				continue;
+ 			if (msg_zc_set && !conf.zc)
+ 				continue;
 -- 
 2.48.1
 
