@@ -1,103 +1,133 @@
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7AD13C914
-	for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 19:13:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258E522C35D
+	for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 19:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742584410; cv=none; b=J2oAsF1Vhf5ssGBuUOki8O0NrEjOKw/aNNB6HTFT+JOHZlLxp59fFKZ9qrmj+TTDYLh/FonkzQNp262UVidF6r2j8oANxdUGZ7jcr4CMXRDgGZJuNp7FTA+spxrMXTDfp56Eb/Q2zUX/eS9/a4XPFJ4zP8fu82WY9o5TT1kfNYY=
+	t=1742585505; cv=none; b=UWSxTMsHiOdpGe1mq65X3VNDx+FGHyHsjzJGzwZd5JvEcMQP7V/SOMAJPgbG+GIFrSR26aSj+J+o7rd6twRnTHrpkXhpzIRzM0z/9oms45T+IwpH2uV/iT0fvpsin66sIsnyTtXHjMWZL1P5LNqdVVCmkSa+c4po2mWq3l3y27I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742584410; c=relaxed/simple;
-	bh=Hnq/W9TyPXNU3C9XoXIM2ZENp3XbjOClPI4nqd8dgCc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=jZbqFNgbGsw+w+j3xTmB89BkLp3WWSxFk+80027/Qm0r3WvRMtlfeAXFc7yVN6SdwOkwhCjBe/7+RySlZi47Vy+tqm56qi8rmcDwpo7vivalPuaGmmW9OKvLVmYxmkrivebfiaXwd0UEQZbGxxOUxeLP6A8wNUZm93uM2Z+jLw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=WGaFeGxC; arc=none smtp.client-ip=209.85.166.47
+	s=arc-20240116; t=1742585505; c=relaxed/simple;
+	bh=tmu44H8PHF/Ekh/eMQW+LHxOQINbgxEcpXVMvOIj8SI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qX25ERdRKPqRNY0mpGAl04ocu67qvn3jtEdu7U87+89hEkSaLye479vXF1mUY+4lVM1Mm1ZedZCfJONotj1b4O0zv9G/Hb3avtvIDyDUDHbXERExcHfbmhizL5M1JkV/uyvy35gylatm04L0mEtdV1LwSi1XYkIUTKKIRzScTV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=U27JJS2W; arc=none smtp.client-ip=209.85.166.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="WGaFeGxC"
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-85b4277d03fso87930339f.1
-        for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 12:13:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="U27JJS2W"
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-85b4170f1f5so64571339f.3
+        for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 12:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1742584405; x=1743189205; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+z2jprTaHP0ZXqwHTDmpVKB+7Pb26sJjgu5u9wo5sCs=;
-        b=WGaFeGxC+Nk3S49OK6XGI72Wbqb3Py0XV5frPEO6VqkVt95BN2nSZw1nkDYM+3tI0u
-         SFASokvHlw1JTUWtGMH0MQTEgzwx8Pr0n2i4kiljesDxhqSvOqnLk6I5KlriIOt7dtLK
-         w1oFC+4CwSREK5cZVvOoVG+6dgIfmDJWZxIso2IYe9LSjneyaicOoOkOZiG6UR1yPoc7
-         euniQQGBWo04Ik0JA3KmWB8t69zhI4/0CBkSmU1StSrz8z6z0+XX9qJmz/PI8yGQCkBF
-         X/BjL51ZDO72A5Yq+u0dc05EM5m9DClh2M0l9CuBS7wjngnk86/BEBICt5vBxCOaUVDY
-         Lz0A==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1742585500; x=1743190300; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bZ6z0kB+ScBGWw7Jv+htutGbkm2LGsdDyHzOuI7s9j0=;
+        b=U27JJS2W20uEb9gj1lm2ksItiVXuKaPV/snpjWrM5NpEn2iZ0+dvUb5Xi+mziEqYqf
+         aZSnEj/aCM6rxZQBlb6VOE9N3ZF/KEHvq0oiNSgq4HoroHX8KRxjHrYhnoFZdzPBI7a1
+         rfy5vK5eEpSzHqldgSBTtYf5cJv8+8z6TDfIPbPFsiXO9UkBOij9550S0FE41ceuxn+6
+         rJnLmklfUOlRuJznzmJzOTMj9oNNxeP3O+tGxoYwdNceM87CeleYr2oQSK0pD4ss3ga9
+         h7OeANT+DpoKCNoMpSXcPEOR2RNnAHXK2Afo3uKUem/4ZhZu3cjtcELLhhogPHaVeL/2
+         O5Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742584405; x=1743189205;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+z2jprTaHP0ZXqwHTDmpVKB+7Pb26sJjgu5u9wo5sCs=;
-        b=fQQH4s4JccOTykDu9RxB3ud/Cf3KwS1FY5ZWQBvFRpXylmZIAQAHvovOW4GNAa58yA
-         cpEkMHksGnrabp5e8UnVdEdVlqz/I+LSImI61aJNH5ykFP66G4X5LH05HYf8RMpR4A8l
-         FVdKqBFCa3HJoBp/T9cVJCN1kWfh/5W/A6A8EFdo9s7h4mbrx4cpInIjo8bjmXIX1PZl
-         18uR8+YCi5zgSV9bjDotql+zE9ooSnF910AwWLJEjeF1d3apehQrLcYJLN5RFAtZxLPA
-         A/GZ/7N9Z8yEv2MGG9XO9xwo+w3INKpFMvBzx84T0GcvkXU49TjgxKuwpRCAauge3yaz
-         vK0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUUR1eJ/Ebsud8KTs6roUE22TI/SYaozNtxL4qDFcIr9Z8NZDnrUfELOZ8BXwLtwVvFkxeGoGNkhA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB8IvcH7hjvxfZ6fPgQi36ncVZlbKt/g6LGlUiF0U3bCjSYrMp
-	7hLn5Q1Q0SBDIeQBgasWYU20tCCYg+Vo3wSXIH8rnLT2zx9lePHmDD1X8oRNnvg=
-X-Gm-Gg: ASbGncusnsus5e0XgObHBb3dngiCE1TqlJ6HFScqpisUW885OydPt7u5j21Sa/nPNhh
-	SvFD6KEGP1pL0ZgrkaCfB8UCFmcE23O9EcrsqftSx+JAOBcyC62ou6+kj5ZMn712EL/4gtWKIvU
-	G1oW+4gNI5bL/d4idA9OAvYCi0sNMnXpNXru9VuiGl3bSDbVvMvhya18PEpvxBy0ZyV6h3B1QwC
-	ZPvkYG0oU3u0nYLv0BLG0gEw1Cu7OIKwfGPOpyA2c/ZKhxTKZc6h733rbuNgFrXEM4PcBkyoOvu
-	JgzDSXuRb1IZ6BKfsZoma7aLAyqb85FMReugN85N7ArPXIdRJFtP
-X-Google-Smtp-Source: AGHT+IGvpKBZdpw2DkyV1upUUYtgCNRn57r4f4eNsxwDkc8mtppuGF/p65hobw1qv1jlYVsOtT+Cmw==
-X-Received: by 2002:a05:6602:7206:b0:85b:3d1e:2e23 with SMTP id ca18e2360f4ac-85e2cb4116amr460178639f.12.1742584404787;
-        Fri, 21 Mar 2025 12:13:24 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f2cbeb5364sm556501173.128.2025.03.21.12.13.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Mar 2025 12:13:24 -0700 (PDT)
-Message-ID: <0c6e6b27-05db-4709-be80-52d0f877d2ce@kernel.dk>
-Date: Fri, 21 Mar 2025 13:13:23 -0600
+        d=1e100.net; s=20230601; t=1742585500; x=1743190300;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bZ6z0kB+ScBGWw7Jv+htutGbkm2LGsdDyHzOuI7s9j0=;
+        b=ce8s1/ptbktbVGEoP+9l5GbzUqvpPWJnxhiualYmb9cMpXJas3zufVVUGsu9E2GuvD
+         iDanwJq1pPlDX55cPDPrcyxteuX7LmL5TuFOgewdyTJKjoHpDER2FqGCdH9+i0GTdm+a
+         lTlF6gPg5QuD4E1RhECKQStEubOQRIrZvrVtE6s0GavB0QmJZFhK6X28rfLy1FI3VzmV
+         26useDwQHZwwi+8oIlWi8WNm7aEZKEcMLjE4Y/eLvoF5cPoyjKLbvjK3rVXCw4EK+IVC
+         Im/9CeszquHRnxTdG/oRsgZvNI44Od4vSgkYS63wQcgwKWWoLx5k2uUJPsUk4Duz/y5l
+         yTow==
+X-Gm-Message-State: AOJu0YyE+qZ0ANnEn6kCFKuge677tg8sy/VvGQ1pslfDYALclClSNhz/
+	ksqPcRbZQTaEMEw5YefZLh8Tk90eZJHSVh2wCQp8dMOeqJOFZVzdJorue/2CUdXNI9IS2dNvHC1
+	I
+X-Gm-Gg: ASbGncsDZoXDNqFvDx6Sjjflc3IKLbpSRNSUjCEGVN4PjnSymdk3XugE9/+tjUfR3s8
+	ptiwFH2KO5n7DLrTsDmHZstaN6bmtQx1XsZaxrCUAht9x3E6YiRfZeFXdenHqnnas/tYcPr9Rt6
+	m5FFdOgM/9FfoZ5Ag4IQbToy0ps7klpv2zZ0/xbU+Kj3SWMLo/v1OlsNX28e9KTDBr67DwLQ9iV
+	glns2sYm8CQ31X6474cmXi4ETjp2e9yJKJE1i2dpI4ceH/+f5dOVhbcL8v8LQtme62wwXFneYVy
+	OU+ql72Dy50p9QzKSP4/Jh480jb0Pj/2pR2+7wxKZhg/dbU+tA==
+X-Google-Smtp-Source: AGHT+IH8zFuinsrUjDC6QESRtve95GCm71awmku+n53Oz5A6Zkkm6aPHDG+1m96v56KKBok9sBl3Vg==
+X-Received: by 2002:a05:6602:b8b:b0:85b:3763:9551 with SMTP id ca18e2360f4ac-85e2ca756a0mr561008539f.7.1742585500522;
+        Fri, 21 Mar 2025 12:31:40 -0700 (PDT)
+Received: from localhost.localdomain ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f2cbdeac82sm571268173.71.2025.03.21.12.31.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Mar 2025 12:31:40 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 1/5] fs: gate final fput task_work on PF_NO_TASKWORK
+Date: Fri, 21 Mar 2025 13:24:55 -0600
+Message-ID: <20250321193134.738973-2-axboe@kernel.dk>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250321193134.738973-1-axboe@kernel.dk>
+References: <20250321193134.738973-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] cmd infra for caching iovec/bvec
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-References: <cover.1742579999.git.asml.silence@gmail.com>
-Content-Language: en-US
-Cc: Ming Lei <ming.lei@redhat.com>
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cover.1742579999.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/21/25 12:04 PM, Pavel Begunkov wrote:
-> Add infrastructure that is going to be used by commands for importing
-> vectored registered buffers. It can also be reused later for iovec
-> caching.
-> 
-> v2: clear the vec on first ->async_data allocation
->     fix a memory leak
-> 
-> Pavel Begunkov (2):
->   io_uring/cmd: add iovec cache for commands
->   io_uring/cmd: introduce io_uring_cmd_import_fixed_vec
-> 
->  include/linux/io_uring/cmd.h | 13 ++++++++++++
->  io_uring/io_uring.c          |  5 +++--
->  io_uring/opdef.c             |  1 +
->  io_uring/uring_cmd.c         | 39 +++++++++++++++++++++++++++++++++++-
->  io_uring/uring_cmd.h         | 11 ++++++++++
->  5 files changed, 66 insertions(+), 3 deletions(-)
+Rather than hardwire this to kernel threads, add a task flag that tells
+us whether the task in question runs task_work or not. At fork time,
+this flag is set for kernel threads. This is in preparation for allowing
+kernel threads to signal that they will run deferred task_work.
 
-This version works for me - adding in Ming, so he can test and
-verify as well.
+No functional changes in this patch.
 
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ fs/file_table.c       | 2 +-
+ include/linux/sched.h | 2 +-
+ kernel/fork.c         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/fs/file_table.c b/fs/file_table.c
+index 5c00dc38558d..d824f1330d6e 100644
+--- a/fs/file_table.c
++++ b/fs/file_table.c
+@@ -520,7 +520,7 @@ void fput(struct file *file)
+ 			file_free(file);
+ 			return;
+ 		}
+-		if (likely(!in_interrupt() && !(task->flags & PF_KTHREAD))) {
++		if (likely(!in_interrupt() && !(task->flags & PF_NO_TASKWORK))) {
+ 			init_task_work(&file->f_task_work, ____fput);
+ 			if (!task_work_add(task, &file->f_task_work, TWA_RESUME))
+ 				return;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 9c15365a30c0..301f5dda6a06 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1709,7 +1709,7 @@ extern struct pid *cad_pid;
+ 						 * I am cleaning dirty pages from some other bdi. */
+ #define PF_KTHREAD		0x00200000	/* I am a kernel thread */
+ #define PF_RANDOMIZE		0x00400000	/* Randomize virtual address space */
+-#define PF__HOLE__00800000	0x00800000
++#define PF_NO_TASKWORK		0x00800000	/* task doesn't run task_work */
+ #define PF__HOLE__01000000	0x01000000
+ #define PF__HOLE__02000000	0x02000000
+ #define PF_NO_SETAFFINITY	0x04000000	/* Userland is not allowed to meddle with cpus_mask */
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 735405a9c5f3..3745407624c7 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2235,7 +2235,7 @@ __latent_entropy struct task_struct *copy_process(
+ 		goto fork_out;
+ 	p->flags &= ~PF_KTHREAD;
+ 	if (args->kthread)
+-		p->flags |= PF_KTHREAD;
++		p->flags |= PF_KTHREAD | PF_NO_TASKWORK;
+ 	if (args->user_worker) {
+ 		/*
+ 		 * Mark us a user worker, and block any signal that isn't
 -- 
-Jens Axboe
+2.49.0
 
