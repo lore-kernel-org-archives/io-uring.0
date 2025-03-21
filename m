@@ -1,67 +1,72 @@
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2A522D781
-	for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 19:31:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB477225A20
+	for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 19:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742585505; cv=none; b=B4lfRTruRA00H/w3n8ukYXhMC7JuIE28Kq5hnGEMH6Ez/qfVvvBEMOqBugSylWcFc3ATJXAU1UTFj5STRolSqIc22t1IKVgMR5M5oR9g9z8VaGN5oKBQyNgtEBUMSvkw/ADSwUKzwB+6FXSqbYwp+3/XotIdH2TLvpJMlg+x5Ls=
+	t=1742585506; cv=none; b=J3fJgCK7EDA9g97DJfiH5CKSCqCi9EeSbfcWRAwiad2K0iuGvbcYACjC5f8HMcLqSZrQ+6jOnAbvdqGYgnQK013+ihJvN2NlSX02ppTmIizohUCCw7LNJAW6bGLJ30q6RyVjRFi9JDER78XkQsprjdHOh+lK4C9rNdT7tzMjH44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742585505; c=relaxed/simple;
-	bh=f7qDZuQpOZs95ANnuZCGGbS1V4U83lbedYVN4EhWHqY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M0q6/WrPPXhcDuP+w+WOgXABb0kAmg/Uzt/JHC9zFGfyp9R48wSa4BV+kB4e81u880fkpgQCy7dW6WJiXEm8elEc6IutuHQbCHJz/KSiQUZmjhGoZfPp91vXi9zxoso/mHRO+NemzbwMjWsxb9T9fq6bGZd5NqlvfsvFA2tKKfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=JzirajHm; arc=none smtp.client-ip=209.85.166.44
+	s=arc-20240116; t=1742585506; c=relaxed/simple;
+	bh=TWHf8sidIKTXj3vh9lpN8ep+HAEsBdmybz1YeWb2ICk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Qnhn8R30D6syBb/rX30WhAnFDQYTCiYUsjYtezqsIlMjzkWMH7FIIlmIW85et6HKw4wpMri3QMucHvoRWWJQOrFa+6Weahl0GKTYgTra8xRpYggcMbBqpOMGvzIJwH1mZSyOcvxTlI1nGIq0k7Y8R6PbhQznp44IMy3JmjaDmgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Sa752X2G; arc=none smtp.client-ip=209.85.166.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="JzirajHm"
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-851c4ee2a37so154261239f.3
-        for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 12:31:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Sa752X2G"
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-85b3f92c8dfso77926139f.2
+        for <io-uring@vger.kernel.org>; Fri, 21 Mar 2025 12:31:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1742585500; x=1743190300; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pt1RTWAqdIYdf2VC0s9lDHoBObb7iKaNhIX0AxAFxKQ=;
-        b=JzirajHmXy5lKvPGDRMNhalW/fqHHGYosrs/dPI2Jfv9/pWlL/td8nOt2AgIVrGooM
-         Gtj/KT48a1/6itTOF0JiAcHMhHh7K+ro0UOXlQ+9761RynVO7p5zQ3dMRL88nP75Vkh4
-         nRbuCKGjLbZ92R4uuWWL2Dni8oLxW8f03h49i9nCuO0aUNXcsux5UI41tXCQ6KCkS45U
-         cGMq0vCpdX9nWtnM8sYDkj+HRPupSkRZj9zGkLiXEWVATsMpjn24H+hRrzduK0exl2v8
-         iL9mHeHbFBbZfxc7HX4HsBQP21DiShnHGpNjpmJZrEmMLYZ81rgSMuXj5eGgHm25T6Gw
-         whlA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1742585502; x=1743190302; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S7ct+aok0+e88ngkQ9ijTRO+pVsgJ58u38oJY4wLvbk=;
+        b=Sa752X2G2rnVOzVbozn+OZJBJ/0aSI75br0WaBL+JfzRNgiFyMdTQinRSK9XyQ750p
+         UE3T0F0AwLDWd8ha+L37W2SSqjrMmRB1tYbK9uAd6Nbi4JBI6QumNYR4yzfiZFAbA0LI
+         v/+j0FflOCrNAE9S7hHHPB2eXMrC8Xm8I4pfrlZ3TNGMLqbaac+/jHIxHjLxccyhl7R+
+         yfC16BvkGX+D7/Qmuod8jXBtr8GiP1sEwlrZc3SC80fZgfB1xwXGBexaX4JNMvAjIWFw
+         VvGFNbfGDAvhZIATPHVSHEWpvw+Y2q9d2VL/vQFteO/++CXPeVkcmSDp1jBbb0bxzyzK
+         XEqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742585500; x=1743190300;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pt1RTWAqdIYdf2VC0s9lDHoBObb7iKaNhIX0AxAFxKQ=;
-        b=q8HdO8ILuW9pwbfQb+RQYlOYubOLpVkF/jbkNSQbU5sqWQcbeACWqS0amkyMNJKbJs
-         5wGsTRhrzved0ZndR/lv5FjD5orGHFM+a8+Z5xlboMavyXPfEjbD6pNyPjh0Djsb1UYv
-         Ux5zI5PPpA3dQiiu3qlEaNq5NWGCaI1uV8G/L/PL2Npxa+K6PdiuFqsoFCYc+lNv5qD1
-         RDeRPNlTgjP+2jHHNYMkdX3DjpsCOUVhmiW8gD6ykwMsw3KK2Ars7Fxv9P4sNqKM9pR7
-         H4pzmQNwyUsRlI14EpYG/IsFtO4TtY6nyk3hsOARmT9kpOVJQajEiH5YVgcIdcN3hFR2
-         8cUg==
-X-Gm-Message-State: AOJu0YwVrR8K17vrVguJI5zfOEiOBIoDDhtSJC5e1fvdp3YYrCPaCOtX
-	l6L+DPRRfAMcKN0b8dTOguc3yumSRefRKRjmk2NJRe3M/0skPr7SQUMf1IgomDY4+a8/9vk533p
-	y
-X-Gm-Gg: ASbGnctw3UrQ+kMd4XMHbjrnvgje2dJUgsNmBEdjn04B47jfVv4aotagz+21eefyuXj
-	30UxZGXIc1X4Fv7rUtsXEtz4VhlxGttEw3RfDE3z6zBElBQjakzivS7ac/pUPRV4M1xjmCx0CoR
-	tVXn3crdeE3/KCFE6tY9m1tSj8EPH1BIbWM3xxWQlgxlhuORgc7XQxJtzhhCSg8KjZ2p1Z/RVhI
-	AzjXGGnBID3q0DXNihv/j1vQ5cp7iHwAzpG1B5FlcftusQetq4eme4k9TLrg84h/M2Gv2izElw8
-	U2Lx4JUqO/jxrO0zJY/l8Nzkxeh/tFsq9I4dwWjBIk822jh3Cg==
-X-Google-Smtp-Source: AGHT+IFUW7Sj5DnDBz0m2mE4m06hCXx/jNmpeaFyC4mZb7VXuNrz7JikmQNTMMQPD0NynUUAG2o9/A==
-X-Received: by 2002:a05:6602:489a:b0:85d:a235:e91b with SMTP id ca18e2360f4ac-85e2cc9f759mr480379839f.13.1742585499696;
-        Fri, 21 Mar 2025 12:31:39 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1742585502; x=1743190302;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S7ct+aok0+e88ngkQ9ijTRO+pVsgJ58u38oJY4wLvbk=;
+        b=Yk0hDQxuEaP8J4qSJa5yEPaFKY6DjqmTb7acloqHp42pqXhH5EE7u+ZmiESWtyL6Fm
+         w35m0J0jYuPuS8gbRl4L1XvnGMoEK/qR4bhHKT8m++oRQmdIQ0XktvKMOuj6AupSBIYd
+         PZIRQW2EjnyyDWhN1txL3WSzB/vmSp4flVcwqIlw01v99rb0nUPhef0QLbT/wnlvs8S6
+         6AHiAvix68BVs8Q72rLsxsIhND9uUxHqf5l4LB5nP9R4abfU5ZP9czgZad6gC/x+/qe0
+         EQbIgw36l4p3O74SEecYDYDyxbE0wZ709Or9YAcIqnDSsNFDTlENqVTjbiQBRag+sstr
+         8KJA==
+X-Gm-Message-State: AOJu0YwnKPFCQfPFj5o9yTpy5iNQZbc1kiUpW06gPwWD4qeD6+MP9nHM
+	eU/JWK2V5Mgob3iQJxSHTEfd7xRJ/vrZUTKjU9SQBSpEGQLKyrTRqZiqtTx/ie8oh+mbq0q7eE6
+	j
+X-Gm-Gg: ASbGncscRw3aTFUdV2qJa3LOu2S3GVVAd6+eFIZa8yF8jzdbihURRLylp2405MapI3L
+	umyvyAn+XNc7ltF439uhG3GlBsqegg05We2+EaVmVH6lVOSsORoznSoYIu3qJlsLRaIuyzSQffo
+	ngo8GG+lCySi1nTu4Cde4yXREkZx89F7cmTzRtLZwvEorK1gHo96dh32zb1op8dyUHh8qrg4mJM
+	ZlKQMEIvxv7cNOsWNpUJMPlt1aCp8xhoKICp8otgaUdbhoQJ1YjkVtnhQPKL30T9XFq+bXadxpX
+	Su1sfjbx7QxaQCirK2z7Sw5Mg2olI/p32UdmFoKflNhSs5JObA==
+X-Google-Smtp-Source: AGHT+IGNRnt4rzZJAHoD3dEpG69YDtr4uytrMiOPn8OYlhL2VyHmNMiPkUwqJjwR9eZumSUgTZkY/A==
+X-Received: by 2002:a05:6602:a10d:b0:85b:46b5:6fb5 with SMTP id ca18e2360f4ac-85e2cb4605cmr333349939f.11.1742585502149;
+        Fri, 21 Mar 2025 12:31:42 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f2cbdeac82sm571268173.71.2025.03.21.12.31.38
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f2cbdeac82sm571268173.71.2025.03.21.12.31.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Mar 2025 12:31:39 -0700 (PDT)
+        Fri, 21 Mar 2025 12:31:40 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com
-Subject: [PATCHSET RFC v2 0/5] Cancel and wait for all requests on exit
-Date: Fri, 21 Mar 2025 13:24:54 -0600
-Message-ID: <20250321193134.738973-1-axboe@kernel.dk>
+Cc: asml.silence@gmail.com,
+	Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/5] io_uring: mark exit side kworkers as task_work capable
+Date: Fri, 21 Mar 2025 13:24:56 -0600
+Message-ID: <20250321193134.738973-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250321193134.738973-1-axboe@kernel.dk>
+References: <20250321193134.738973-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,53 +75,90 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+There are two types of work here:
 
-Currently, when a ring is being shut down, some cancelations may happen
-out-of-line. This means that an application cannot rely on the ring
-exit meaning that any IO has fully completed, or someone else waiting
-on an application (which has a ring with pending IO) being terminated
-will mean that all requests are done. This has also manifested itself
-as various testing sometimes finding a mount point busy after a test
-has exited, because it may take a brief period of time for things to
-quiesce and be fully done.
+1) Fallback work, if the task is exiting
+2) The exit side cancelations
 
-This patchset makes the task wait on the cancelations, if any, when
-the io_uring file fd is being put. That has the effect of ensuring that
-pending IO has fully completed, and files closed, before the ring exit
-returns.
+and both of them may do the final fput() of a file. When this happens,
+fput() will schedule delayed work. This slows down exits when io_uring
+needs to wait for that work to finish. It is possible to flush this via
+flush_delayed_fput(), but that's a big hammer as other unrelated files
+could be involved, and from other tasks as well.
 
-I did post a previous version of this - fundamentally this one is the
-same, with the main difference being that rather than invent our own
-type of references for the ring, a basic atomic_long_t is used.
-io_uring batches the reference gets and puts on the ring, so this should
-not be noticeable. The only potential outlier is setting up a ring
-without DEFER_TASKRUN, where running task_work will result in an atomic
-dec and inc per ring in running the task_work. We can probably do
-something about that, but I don't consider it pressing.
+Add two io_uring helpers to temporarily clear PF_NO_TASKWORK for the
+worker threads, and run any queued task_work before setting the flag
+again. Then we can ensure we only flush related items that received
+their final fput as part of work cancelation and flushing.
 
-The switch away from percpu reference counts is done mostly because
-exiting those references will cost us an RCU grace period. That will
-noticeably slow down the ring tear down.
+For now these are io_uring private, but could obviously be made
+generically available, should there be a need to do so.
 
-The changes can also be found here:
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/io_uring.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-https://git.kernel.dk/cgit/linux/log/?h=io_uring-exit-cancel.2
-
- fs/file_table.c                |  2 +-
- include/linux/io_uring_types.h |  4 +-
- include/linux/sched.h          |  2 +-
- io_uring/io_uring.c            | 79 +++++++++++++++++++++++-----------
- io_uring/io_uring.h            |  3 +-
- io_uring/msg_ring.c            |  4 +-
- io_uring/refs.h                | 43 ++++++++++++++++++
- io_uring/register.c            |  2 +-
- io_uring/rw.c                  |  2 +-
- io_uring/sqpoll.c              |  2 +-
- io_uring/zcrx.c                |  4 +-
- kernel/fork.c                  |  2 +-
- 12 files changed, 111 insertions(+), 38 deletions(-)
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 5f625be52e52..2b9dae588f04 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -238,6 +238,20 @@ static inline void io_req_add_to_cache(struct io_kiocb *req, struct io_ring_ctx
+ 	wq_stack_add_head(&req->comp_list, &ctx->submit_state.free_list);
+ }
+ 
++static __cold void io_kworker_tw_start(void)
++{
++	if (WARN_ON_ONCE(!(current->flags & PF_NO_TASKWORK)))
++		return;
++	current->flags &= ~PF_NO_TASKWORK;
++}
++
++static __cold void io_kworker_tw_end(void)
++{
++	while (task_work_pending(current))
++		task_work_run();
++	current->flags |= PF_NO_TASKWORK;
++}
++
+ static __cold void io_ring_ctx_ref_free(struct percpu_ref *ref)
+ {
+ 	struct io_ring_ctx *ctx = container_of(ref, struct io_ring_ctx, refs);
+@@ -253,6 +267,8 @@ static __cold void io_fallback_req_func(struct work_struct *work)
+ 	struct io_kiocb *req, *tmp;
+ 	struct io_tw_state ts = {};
+ 
++	io_kworker_tw_start();
++
+ 	percpu_ref_get(&ctx->refs);
+ 	mutex_lock(&ctx->uring_lock);
+ 	llist_for_each_entry_safe(req, tmp, node, io_task_work.node)
+@@ -260,6 +276,7 @@ static __cold void io_fallback_req_func(struct work_struct *work)
+ 	io_submit_flush_completions(ctx);
+ 	mutex_unlock(&ctx->uring_lock);
+ 	percpu_ref_put(&ctx->refs);
++	io_kworker_tw_end();
+ }
+ 
+ static int io_alloc_hash_table(struct io_hash_table *table, unsigned bits)
+@@ -2879,6 +2896,8 @@ static __cold void io_ring_exit_work(struct work_struct *work)
+ 	struct io_tctx_node *node;
+ 	int ret;
+ 
++	io_kworker_tw_start();
++
+ 	/*
+ 	 * If we're doing polled IO and end up having requests being
+ 	 * submitted async (out-of-line), then completions can come in while
+@@ -2935,6 +2954,8 @@ static __cold void io_ring_exit_work(struct work_struct *work)
+ 		 */
+ 	} while (!wait_for_completion_interruptible_timeout(&ctx->ref_comp, interval));
+ 
++	io_kworker_tw_end();
++
+ 	init_completion(&exit.completion);
+ 	init_task_work(&exit.task_work, io_tctx_exit_cb);
+ 	exit.ctx = ctx;
 -- 
-Jens Axboe
+2.49.0
 
