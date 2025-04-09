@@ -1,71 +1,71 @@
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B83125DCE6
-	for <io-uring@vger.kernel.org>; Wed,  9 Apr 2025 13:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA8A2641CB
+	for <io-uring@vger.kernel.org>; Wed,  9 Apr 2025 13:41:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744206066; cv=none; b=lSpbXDmK9pBfmeSLGImUiPYLKjQb5wzwdcyVp3D/ecHTHLPc/WetPuEA6VZNSfmxTOyegB7h8SXZDPIUsHuSLpxvr+a/iWOtLZgAU5NxErDVG9NUbP/hCjTfksaA8dzunF1c7MUuflgEIOT1BW/qRkguUq8pu1u911mP27sglj8=
+	t=1744206068; cv=none; b=FOI3/bWLQsrk49iJKFmWO6aTVq4AVoXzAZyvZXs9O86vxnCqcKRqs2Yj/oiBInyobml2ov+g9YMapjS+rlQ5bhGPk7Kp3UJ/Ak/BNBIYDA0pBFY+hPud0jqj9WXgnbf128F4PaAyDlovn5BWiKEjv8DsHZbqD88IbYZViqdY70g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744206066; c=relaxed/simple;
-	bh=zuxlLmuecWxhF7HszDSq63lAbf31f923lFK+DIkLLjo=;
+	s=arc-20240116; t=1744206068; c=relaxed/simple;
+	bh=27DHst1S12oqLMIhtZ9NLeDleZ1uTNSrSckCS8D3bdg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UiAkSqMuYuWhFrN10eFNTD5aJXj20CpMu/IL1m6bY6FmIojTjcErj8iVINPkRJMkvdCj5xQ4aojp37oqkYqoRVYyOwxsKYdku82EddvOnboaM9terTlRwV0qpHKYXenuAm82eb87zZO1I/MgMFd3thtm63r/OwI23CW2lPaQtSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=W5ygwhuc; arc=none smtp.client-ip=209.85.166.181
+	 MIME-Version; b=MD775pKEWGAdKCIJpV6aUvM4HEY1yG8mMi7SccUWegSCmzXL9U+I1p/yu2doH5xFJsKwP5U/hujudYt+uGG7N+kzPsId50zHqieCvMaSh6KOlM+42M/6PdHH6lfoPOVAl1cFSVWj9XCzIEAl611sn8q/p5Eo8b2T5YNVeVIjQws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=g3mwdPSh; arc=none smtp.client-ip=209.85.166.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="W5ygwhuc"
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3ce886a2d5bso65526295ab.1
-        for <io-uring@vger.kernel.org>; Wed, 09 Apr 2025 06:41:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="g3mwdPSh"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-8616b7ad03bso1830839f.0
+        for <io-uring@vger.kernel.org>; Wed, 09 Apr 2025 06:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1744206063; x=1744810863; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1744206066; x=1744810866; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GvkiZRlirJGnWsP0AYjs2Wu7b2S9Zip2/izFiqNb4LM=;
-        b=W5ygwhucnXEU2nF7WrOBCXTq9YWNvCkBaelo7tfD1HEIjyG3qWsK1BQ7yyLiyg+pNo
-         drLef8E9HB4sbOETPZJTxAYHcv1QEavDuIehKEHUST1A6UK4e/Bf56XraB9uoel48p73
-         oVAo7QNczfhBhDJIhSOwts7X8ZFxOBoNs9uYI5A52D2fphFJhpEFIkC2gvxTe1pJbgGa
-         os2mjpPFFcz8jXvi+fsP/c1yQXcZFBENfJL0DSUq7n+3l+qyMQ4wMSF54Hzb+B9z/Mql
-         ixgu0J9eeeuacMJ6mHRQaFDWL4rM8YafPBjHt3uH3kucfJxHc9YUcxhS6WL26gp+liza
-         2Q3g==
+        bh=1Ez1BnkBDoh4P/XSdyZjO5+p/KT887tz530CwsgerFI=;
+        b=g3mwdPSh3gffxljaZdwwAhV/99lm0jGV7XmCV8AP7OaL3+RJkUHf76Yserd8NTHUAJ
+         Uh51e+tOOBzM/Xlso3o7VxNqNkfKov299R3DCa7gHhAyN/GuzZhpOl7M0C+7PVGDQZZ6
+         tZXrIJE7P4KCei0CV9gSKVzB0LxavMTWESfKQoyS4j1mw0eYk8gwLvZUsVUU4TptvPZL
+         VKWB5Awd6YhLn+OzhQ2LykKd3gPUGxuMyOUtvi6uISESbISQDV/Yj2lIy/Yim7UkfHCE
+         0yE8CSJ5yqsH3MixguLWE72yBjzOBrfCVmmHnZh7WVZqoVZbM60UUPYA564M7gvAoOvl
+         OxYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744206063; x=1744810863;
+        d=1e100.net; s=20230601; t=1744206066; x=1744810866;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GvkiZRlirJGnWsP0AYjs2Wu7b2S9Zip2/izFiqNb4LM=;
-        b=TYiNpavdU3N2sCQeZjzZT54Ucw7fngAZxLhiys/uu3LDCn64zGJzK9dHYOqQCSYY/E
-         l+2XWKVQWxqCKoYu1CZ6n5IVngyBaDzvdwqWDAjqihqBy7j5lre5tZexKa3B1oXBI+wR
-         YDrTpyVMVXbRbfCXsJnzyxEwbT/nNGUqZfvAf42kTxmLr/oC56lSJC+Ys+ARQauuuqDX
-         K94Jr/DZiidScAKz0whDPaxRI8axIod2Io+5mZd0eoyInQ0RWj8pFnTJZsPru1QCZYmB
-         /Yx0iAC+PjN4iD95D+5MX6kUjQL8SmrCv91Q/TNSdK+R7PVBl2UE4kFITbh6afWpYlly
-         +QEQ==
-X-Gm-Message-State: AOJu0YzOREBb6Rc+3hIo3l176UDsZXWvY1K3iwVbx3nKoaqJWUjNhvKN
-	Qfk/Dlqv8YPbpizQz+BF2b71IqNedxgehlVh5t+ojFvG22TNE/YqTuu5jPJc1sLsdX/mBNrphad
-	H
-X-Gm-Gg: ASbGncvHE8oo7BktHFjEKf4bRy9MMZgHBKnHGasO/+k/JTu6Kwuo7PvM+EOaXu8TfB/
-	w+SbB1nAUBkwM3SZbg2Dc4/KhQtfE7l3RwYBZmXqPR2r2jr7rpQwvkoJd96PTOx61Q9KhHcsh8z
-	6K97yrLeHUgAfTK/QoeqOA6pR9oMJ79qbJlM0pkbCTdXjoaa6iUdPUL6LJu8L/bstb1jlIsX2VE
-	81lvgGZoRwR9b8UYF2PEvBJRuYjuTPBPS+MK7ymM1ZFTK3LFvm7ibST4H8dkCXuz9KT72d7LxDT
-	YZMusUZxKDIymdjh1+ZdfdMA3D+eHOWq1j3kC3S4gb4m
-X-Google-Smtp-Source: AGHT+IF36kiX97IX8oYRAdsiUjrXc1nff3hi3JC3PBUjQfHi0RlevA3PTzyZY9ZvWEsLxoZVfPqn+g==
-X-Received: by 2002:a05:6e02:3cc3:b0:3d3:e287:3e7a with SMTP id e9e14a558f8ab-3d77c2cc28bmr27919245ab.19.1744206063178;
-        Wed, 09 Apr 2025 06:41:03 -0700 (PDT)
+        bh=1Ez1BnkBDoh4P/XSdyZjO5+p/KT887tz530CwsgerFI=;
+        b=GbiLKr2XQ4hEgq8wCmIr2Nn3G1/18D2SamDaISWw1cFPtWi2Ki2nTDDZG5gcsfKEDV
+         btiCCQP+uJsOhMZzym2OAV1CHzivj+ip0mbsV834v/Ot7BI3x1ZTk9tuHXyVjm+4DI1H
+         el7BfWFWKHAm+g+MtsEax5CaXnCbuISo3d0Ar1TZhikmLEPOcj/h/Xme2l1/ftzVXGGn
+         oy6O+jznnZcEphDwwa1vEKNcYlRgCxaVJhbgh+LaSY0kZ7dDKQnJcHQ/nrt3Aq+1GQn7
+         6FbargbBUUSvPwOJFOE7wD00lt6t19Xg8gwpzDpEAuM2qhODF4uMkV5T6TbFNaZOiBUL
+         39Tw==
+X-Gm-Message-State: AOJu0YxMKSRrmHZjg5817BbE7L258Y3r4Ar8Byr0w376YgmtH9CYxQvZ
+	y8ggeAK3x9gdPiUNUQlycklxYV3ofkIlEaU/PcduCciy5K229I0XmEdiLWEdcz+TbM+B5uBoSII
+	s
+X-Gm-Gg: ASbGnctZEh8F+WvZz49WA0r4nnsVSnCZN4jzFNuNVY8x/EjyksCmFOQ9Pg78rRsOW9I
+	wSxYfE9JMO+kpRkqDuz2YJYePOTxrlq6eJ7RkF4Vozky8eDl5oZ90gifdWANUp+D2OO9ziJbVgN
+	HQsh+V51NQMZS7ItGQQTYvazS4HWhCWlTVql089eoZTyZ62IenUMfJW7y3JnctVxx/318epAh9O
+	DLFUOrU80nO831UmRZPe6fF25ZXkq3Z2DVdJDQxtjwygL/TyRdueamDqCBKm0j+0WlKDKloXxoB
+	jAaEtEEHzuMbFJJpIiRMA5dOx5A2aU3Want/RmIGof6dI2jWFsraae4=
+X-Google-Smtp-Source: AGHT+IFW2Fyl8Ve7PRrc2IiSrj0fh4NJ12qB3srO6FA/0CYOgdkfnTwoGNdFBJf7eo1f/sG8hS25RA==
+X-Received: by 2002:a05:6602:4019:b0:85b:46d7:1886 with SMTP id ca18e2360f4ac-86162828f69mr289311339f.7.1744206065750;
+        Wed, 09 Apr 2025 06:41:05 -0700 (PDT)
 Received: from localhost.localdomain ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505e2eaeesm242546173.126.2025.04.09.06.41.01
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505e2eaeesm242546173.126.2025.04.09.06.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Apr 2025 06:41:01 -0700 (PDT)
+        Wed, 09 Apr 2025 06:41:04 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	brauner@kernel.org,
 	linux-fsdevel@vger.kernel.org,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 2/5] io_uring: mark exit side kworkers as task_work capable
-Date: Wed,  9 Apr 2025 07:35:20 -0600
-Message-ID: <20250409134057.198671-3-axboe@kernel.dk>
+Subject: [PATCH 4/5] io_uring: wait for cancelations on final ring put
+Date: Wed,  9 Apr 2025 07:35:22 -0600
+Message-ID: <20250409134057.198671-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250409134057.198671-1-axboe@kernel.dk>
 References: <20250409134057.198671-1-axboe@kernel.dk>
@@ -77,90 +77,79 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There are two types of work here:
+We still offload the cancelation to a workqueue, as not to introduce
+dependencies between the exiting task waiting on cleanup, and that
+task needing to run task_work to complete the process.
 
-1) Fallback work, if the task is exiting
-2) The exit side cancelations
-
-and both of them may do the final fput() of a file. When this happens,
-fput() will schedule delayed work. This slows down exits when io_uring
-needs to wait for that work to finish. It is possible to flush this via
-flush_delayed_fput(), but that's a big hammer as other unrelated files
-could be involved, and from other tasks as well.
-
-Add two io_uring helpers to temporarily clear PF_NO_TASKWORK for the
-worker threads, and run any queued task_work before setting the flag
-again. Then we can ensure we only flush related items that received
-their final fput as part of work cancelation and flushing.
-
-For now these are io_uring private, but could obviously be made
-generically available, should there be a need to do so.
+This means that once the final ring put is done, any request that was
+inflight and needed cancelation will be done as well. Notably requests
+that hold references to files - once the ring fd close is done, we will
+have dropped any of those references too.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ include/linux/io_uring_types.h |  2 ++
+ io_uring/io_uring.c            | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+)
 
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index b44d201520d8..4d26aef281fb 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -450,6 +450,8 @@ struct io_ring_ctx {
+ 	struct io_mapped_region		param_region;
+ 	/* just one zcrx per ring for now, will move to io_zcrx_ifq eventually */
+ 	struct io_mapped_region		zcrx_region;
++
++	struct completion		*exit_comp;
+ };
+ 
+ /*
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index c6209fe44cb1..bff99e185217 100644
+index ce00b616e138..4b3e3ff774d6 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -238,6 +238,20 @@ static inline void io_req_add_to_cache(struct io_kiocb *req, struct io_ring_ctx
- 	wq_stack_add_head(&req->comp_list, &ctx->submit_state.free_list);
- }
- 
-+static __cold void io_kworker_tw_start(void)
-+{
-+	if (WARN_ON_ONCE(!(current->flags & PF_NO_TASKWORK)))
-+		return;
-+	current->flags &= ~PF_NO_TASKWORK;
-+}
-+
-+static __cold void io_kworker_tw_end(void)
-+{
-+	while (task_work_pending(current))
-+		task_work_run();
-+	current->flags |= PF_NO_TASKWORK;
-+}
-+
- static __cold void io_ring_ctx_ref_free(struct percpu_ref *ref)
- {
- 	struct io_ring_ctx *ctx = container_of(ref, struct io_ring_ctx, refs);
-@@ -253,6 +267,8 @@ static __cold void io_fallback_req_func(struct work_struct *work)
- 	struct io_kiocb *req, *tmp;
- 	struct io_tw_state ts = {};
- 
-+	io_kworker_tw_start();
-+
- 	percpu_ref_get(&ctx->refs);
- 	mutex_lock(&ctx->uring_lock);
- 	llist_for_each_entry_safe(req, tmp, node, io_task_work.node)
-@@ -260,6 +276,7 @@ static __cold void io_fallback_req_func(struct work_struct *work)
- 	io_submit_flush_completions(ctx);
- 	mutex_unlock(&ctx->uring_lock);
- 	percpu_ref_put(&ctx->refs);
-+	io_kworker_tw_end();
- }
- 
- static int io_alloc_hash_table(struct io_hash_table *table, unsigned bits)
-@@ -2876,6 +2893,8 @@ static __cold void io_ring_exit_work(struct work_struct *work)
+@@ -2891,6 +2891,7 @@ static __cold void io_ring_exit_work(struct work_struct *work)
+ 	struct io_ring_ctx *ctx = container_of(work, struct io_ring_ctx, exit_work);
+ 	unsigned long timeout = jiffies + HZ * 60 * 5;
+ 	unsigned long interval = HZ / 20;
++	struct completion *exit_comp;
+ 	struct io_tctx_exit exit;
  	struct io_tctx_node *node;
  	int ret;
+@@ -2955,6 +2956,10 @@ static __cold void io_ring_exit_work(struct work_struct *work)
  
-+	io_kworker_tw_start();
-+
- 	/*
- 	 * If we're doing polled IO and end up having requests being
- 	 * submitted async (out-of-line), then completions can come in while
-@@ -2932,6 +2951,8 @@ static __cold void io_ring_exit_work(struct work_struct *work)
- 		 */
- 	} while (!wait_for_completion_interruptible_timeout(&ctx->ref_comp, interval));
+ 	io_kworker_tw_end();
  
-+	io_kworker_tw_end();
++	exit_comp = READ_ONCE(ctx->exit_comp);
++	if (exit_comp)
++		complete(exit_comp);
 +
  	init_completion(&exit.completion);
  	init_task_work(&exit.task_work, io_tctx_exit_cb);
  	exit.ctx = ctx;
+@@ -3017,9 +3022,21 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
+ static int io_uring_release(struct inode *inode, struct file *file)
+ {
+ 	struct io_ring_ctx *ctx = file->private_data;
++	DECLARE_COMPLETION_ONSTACK(exit_comp);
+ 
+ 	file->private_data = NULL;
++	WRITE_ONCE(ctx->exit_comp, &exit_comp);
+ 	io_ring_ctx_wait_and_kill(ctx);
++
++	/*
++	 * Wait for cancel to run before exiting task
++	 */
++	do {
++		if (current->io_uring)
++			io_fallback_tw(current->io_uring, false);
++		cond_resched();
++	} while (wait_for_completion_interruptible(&exit_comp));
++
+ 	return 0;
+ }
+ 
 -- 
 2.49.0
 
