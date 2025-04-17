@@ -1,106 +1,165 @@
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9F31F949
-	for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 12:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE9D156CA
+	for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 12:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744893101; cv=none; b=CJsEi4uZBlUGB2CJvxpIVuTrcySm2Pt9yM0yue2mCacEv8AZBxc1baucvMYi1NQ2lggJq563wdV66sr1QxLFh/VPC7KTnaxdf7jD3aDJH9FnC0DiO41pd1Lcn527XNR+eTV7jdCU3xhO4+pmZ0lTJlzaLDnuaNWGNBFzC2NsY9k=
+	t=1744893369; cv=none; b=peQ0MJAP+3BPs99rjTRgPf6SU2DE0Z+4aYq1hwUBoEHnOIz07qKO2NmmdYbIfL6s22i0PWCnQa6P8IxOKaUmT3keL8VpORWMfl0jvWjNZfU2RJvBdS2adRIo4ShIixdpOeB1t2TGf4t6FFiwzuJJJw2CKOKBNcZf/FoP9yr3UI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744893101; c=relaxed/simple;
-	bh=xRuSZtVbTypZbpZsidqwam2Cf6Ow3TvHYXBjFPzdOJw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=KducrMw4iSuHLAkxq+0pZEq7mY79q8j9X6rVPJkQRV8azMGzluec6KvJ8XAZ9/++xlfs957MwS2cS3kkxDE1ygbm1FiaJos9hOFUGsyk6dhLFeVOth0/J+nIyydTiznISU2bCA9S3Cg34KZglEDlaLF6Sepv14jXMW6Dyz4PrWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=hiOjNziJ; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1744893369; c=relaxed/simple;
+	bh=IAiucThut58RDk8ZhhimqED1zyoLwVw90iq0QCwQpPs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=UbDTPpISoMgtgr1tOWVeHT9R0jGQuzdAC3g3MkR6+eYSJWXNt2eQ26y6vey1zIzwiWqyjIuuWisxV2BdS8tsEOxjfx6uloLeIonhrjCM+X2veAHi4vsMEv/83bvbWS66t0NKnZsAPIqbGUgcFSQn3vbDYRf/mNDSBl+TClgAH6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=j3Eq/VKb; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="hiOjNziJ"
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3d80bbf3aefso1693235ab.1
-        for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 05:31:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1744893098; x=1745497898; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5TU3kkCxCJDJn3nVGJCqr1uYfrRaI7MOE0+iQ5mg6eQ=;
-        b=hiOjNziJyIaFp5clNPhuO75e5RDHdUUzJwY3rwKKoJMkFSpBVfrRVbjo1Ivu1zi9vJ
-         sHJRVPOwXf+/hjOO4DHKKm9x2woQdKeaPyysTm4xYipkFErUkoBrGMHe8uqjiG5qq5bj
-         dw5b13gAFUYNtE7i7IO2zqVqRcDoyIo0SRLX5n8FGWNMNrF+rXp7/uPuuKFVJxMJgvMr
-         5klaFJGYvrC9I/DiF3Gg1kKUCy8/HfO0U0JAWdhVt1MSvZqTXVlc9996JWT3x8rj6kDj
-         sKHtBpghWJKUQCxZODa0R2x8U4RA92NkqbnJFn6FM767Az5XL6cwGZwyVucUgaaWPZn6
-         450w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744893098; x=1745497898;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5TU3kkCxCJDJn3nVGJCqr1uYfrRaI7MOE0+iQ5mg6eQ=;
-        b=Znbop4FauFCNZX6Ws6ycl7/SUhap379ouEFiqKsRg3trRgByGbdI7q5f1k+Ttp35o5
-         BIjPYHW5xY8fTtlsHhn88vTEQSk0/N+pklt/ESV4tL1nTki/T4CnDYdiqhA+AT6DonbN
-         vDzJszYFy2qjRo+xi31tnBP+JI+DnnVqgmn1cm98iAHDiUjmcaNspPTC5ADTgYfy2Z5x
-         ZkT708IsZIa/b8oQayyT+85ZaGz6trDJYZ4ohBKdtABYI5CAKp5YMZeKt/zX0NCc33Ug
-         XHq/rJRDsOBva+XrDDOpZXwGU5MLf/aoCmRCrdeM8B63/y6cHs+IneBt7zDXuR3l60xO
-         yDnw==
-X-Gm-Message-State: AOJu0YzxvpRIEIP2K+C7McKuny01ACRlnOwKZZ5HUuPNd8kJ0H857pSW
-	IDLb/Qk5zH48W15jNT+Qat5go9hN/Zno1VBUH/7yuPJ73sER/jVrBRTDNsuvSJ0=
-X-Gm-Gg: ASbGncsh7MBg5AVidsXvc5hrEtJ0JHw5iZZ+tIsLcAPmoxzJGroKmIUbMgNCJRzOwFe
-	bfJly0Ta+k5a4+DXLLZeq/1z0Z8wgq2q9MyehHy9Y6o+ovG1SgS1URDxn0Mii3gbgUWeGa+EOwn
-	GpEtz2l0vKBwFg1U9GUAPVMKcgevUC83HV/4ktbjBcUt9wKBYtuPloI/DprBHMxbLsCWzifFTvc
-	ZN0iVWQCFpfH6GIBM4yX28jrnIdmT+RPqmzevhQGBEAUll9n4LwfBMMFLHvadQE8HFc7O9Q8sKj
-	+hcd8+wFmy0DEl98t0K6HPUF6LiZjZoA
-X-Google-Smtp-Source: AGHT+IFFyTJ833tyK5IBv+3LDBsObG47d/4Apdl9ujKXRuQE1OfsAh8iy/Z8CwIwKK64A+u9Oqwpcg==
-X-Received: by 2002:a05:6e02:1905:b0:3d0:21aa:a752 with SMTP id e9e14a558f8ab-3d815af7f23mr54635395ab.2.1744893098373;
-        Thu, 17 Apr 2025 05:31:38 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505e0155fsm3990668173.77.2025.04.17.05.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Apr 2025 05:31:37 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-Cc: Nitesh Shetty <nj.shetty@samsung.com>
-In-Reply-To: <cover.1744882081.git.asml.silence@gmail.com>
-References: <cover.1744882081.git.asml.silence@gmail.com>
-Subject: Re: [PATCH 0/4] io_import_fixed cleanups and optimisation
-Message-Id: <174489309759.518785.7848466794591666791.b4-ty@kernel.dk>
-Date: Thu, 17 Apr 2025 06:31:37 -0600
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="j3Eq/VKb"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20250417123603epoutp02aa9ad1993de5f65edc0a6a32e7513884~3G0T3RdN10278302783epoutp02S
+	for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 12:36:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20250417123603epoutp02aa9ad1993de5f65edc0a6a32e7513884~3G0T3RdN10278302783epoutp02S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1744893363;
+	bh=dbM7SFnXuTW60BkIOGq/jdvJYedD/gfHBLOZQiDITLY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=j3Eq/VKbnBfIfz3CgTcuFPqCys1hVj281oyUl3FmHQIYSTZj9UkJ5YBWG6NsRxuh+
+	 Ozhgj/xibk5AbVJ82lk/y/8akkxLhsBriCqiLbZ2kvAh4tHBAQjmjzgLl0KfAy5FeO
+	 Qxj1jJw8K+2oZx4Em1peV80ZQ499WPZgfNwUaq2o=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20250417123603epcas5p1f09e87644d5784e08c37874b40b1b637~3G0TV8AzH1441114411epcas5p1Z;
+	Thu, 17 Apr 2025 12:36:03 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.177]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4ZdcnY5x5Rz3hhT4; Thu, 17 Apr
+	2025 12:36:01 +0000 (GMT)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250417115843epcas5p2e2586ad60698927d9f200cd05871996e~3GTtWoMdm2941029410epcas5p2M;
+	Thu, 17 Apr 2025 11:58:43 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250417115843epsmtrp1d5e1ae85e50d0a75fdd449fd8555d9a3~3GTtWEa2D3244832448epsmtrp1x;
+	Thu, 17 Apr 2025 11:58:43 +0000 (GMT)
+X-AuditID: b6c32a52-41dfa70000004c16-c7-6800ecf3a055
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	B2.90.19478.3FCE0086; Thu, 17 Apr 2025 20:58:43 +0900 (KST)
+Received: from ubuntu (unknown [107.99.41.245]) by epsmtip1.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20250417115842epsmtip1927666472c859f3ff11ad5a846dd9e15~3GTstPlXd2540025400epsmtip1q;
+	Thu, 17 Apr 2025 11:58:42 +0000 (GMT)
+Date: Thu, 17 Apr 2025 17:20:16 +0530
+From: Nitesh Shetty <nj.shetty@samsung.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: io-uring@vger.kernel.org
+Subject: Re: [PATCH 4/4] io_uring/rsrc: send exact nr_segs for fixed buffer
+Message-ID: <20250417115016.d7kw4gch7mig6bje@ubuntu>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20250417102307.y2f6ac2cfw5uxfpk@ubuntu>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKLMWRmVeSWpSXmKPExsWy7bCSnO7nNwwZBn8WcljMWbWN0eJd6zkW
+	ByaPnbPusnt83iQXwBTFZZOSmpNZllqkb5fAlfFu1mmmgneCFdvatzA3MK7n62Lk5JAQMJH4
+	9vw9WxcjF4eQwHZGiW2fJrBAJCQllv09wgxhC0us/PecHaLoEaNE76HHbCAJFgFViRudU4Ea
+	ODjYBLQlTv/nAAmLAJmvrx9iB7GZBWQkJs+5DGYLC3hLLDx/BKyVF2jxlWfnmCFm7mOS+HWy
+	CSohKHFy5hMWiGYziXmbHzKDzGcWkJZY/g9sPqeAqcT39r9MExgFZiHpmIWkYxZCxwJG5lWM
+	oqkFxbnpuckFhnrFibnFpXnpesn5uZsYwSGpFbSDcdn6v3qHGJk4GA8xSnAwK4nwnjP/ly7E
+	m5JYWZValB9fVJqTWnyIUZqDRUmcVzmnM0VIID2xJDU7NbUgtQgmy8TBKdXAtNnxzDXpamuZ
+	Qp+jD1ZXx65i4hDNeiuQ5d+hLNG5fdW855eELQ81Ty6dNiElMn7XxmtOb6eE2Puzsa76YLHi
+	Swtr7YLdIQd0WZ+IpbtMuV/jYCm6temKIl9Yz3n9X7FdS8tl737fv0l+qVvlJn8mFw6jxGTl
+	sL2HLT5eq3pTPVHTbr/C3TZ3Jmdm6T9yOaax+nLa7QV1U57MVG/pUox9wmn84FbZNSdhu61t
+	HqYaF5XYmHanuB9i/s1tIXVetZohvudCtuqGjFP+Ef4T5TUdL3yrWOtyO8r89NYIPXnJ04/2
+	5M+5Krim9ODnlvcPEvQd8/LfPREILMtXYJaYuqN95rziV9WCPYtTDi/MWqnEUpyRaKjFXFSc
+	CAB5CsTxuAIAAA==
+X-CMS-MailID: 20250417115843epcas5p2e2586ad60698927d9f200cd05871996e
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----BT9WqRiWUEIwQLQqwzcffU0e5sYl32tGYDBltTglx_TmJHNe=_2f7_"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250417103133epcas5p32c1e004e7f8a5135c4c7e3662b087470
+References: <cover.1744882081.git.asml.silence@gmail.com>
+	<7a1a49a8d053bd617c244291d63dbfbc07afde36.1744882081.git.asml.silence@gmail.com>
+	<d699cc5b-acc9-4e47-90a4-2a36dc047dc5@gmail.com>
+	<CGME20250417103133epcas5p32c1e004e7f8a5135c4c7e3662b087470@epcas5p3.samsung.com>
+	<20250417102307.y2f6ac2cfw5uxfpk@ubuntu>
+
+------BT9WqRiWUEIwQLQqwzcffU0e5sYl32tGYDBltTglx_TmJHNe=_2f7_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Disposition: inline
+
+On 17/04/25 03:53PM, Nitesh Shetty wrote:
+>On 17/04/25 10:34AM, Pavel Begunkov wrote:
+>>On 4/17/25 10:32, Pavel Begunkov wrote:
+>>>From: Nitesh Shetty <nj.shetty@samsung.com>
+>>...
+>>>diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+>>>index 5cf854318b1d..4099b8225670 100644
+>>>--- a/io_uring/rsrc.c
+>>>+++ b/io_uring/rsrc.c
+>>>@@ -1037,6 +1037,7 @@ static int io_import_fixed(int ddir, struct iov_iter *iter,
+>>> 			   u64 buf_addr, size_t len)
+>>> {
+>>> 	const struct bio_vec *bvec;
+>>>+	size_t folio_mask;
+>>> 	unsigned nr_segs;
+>>> 	size_t offset;
+>>> 	int ret;
+>>>@@ -1067,6 +1068,7 @@ static int io_import_fixed(int ddir, struct iov_iter *iter,
+>>> 	 * 2) all bvecs are the same in size, except potentially the
+>>> 	 *    first and last bvec
+>>> 	 */
+>>>+	folio_mask = (1UL << imu->folio_shift) - 1;
+>>> 	bvec = imu->bvec;
+>>> 	if (offset >= bvec->bv_len) {
+>>> 		unsigned long seg_skip;
+>>>@@ -1075,10 +1077,10 @@ static int io_import_fixed(int ddir, struct iov_iter *iter,
+>>> 		offset -= bvec->bv_len;
+>>> 		seg_skip = 1 + (offset >> imu->folio_shift);
+>>> 		bvec += seg_skip;
+>>>-		offset &= (1UL << imu->folio_shift) - 1;
+>>>+		offset &= folio_mask;
+>>> 	}
+>>>-	nr_segs = imu->nr_bvecs - (bvec - imu->bvec);
+>>>+	nr_segs = (offset + len + folio_mask) >> imu->folio_shift;
+>>
+>>Nitesh, let me know if you're happy with this version.
+>>
+>This looks great to me, I tested this series and see the
+>improvement in IOPS from 7.15 to 7.65M here.
+>
+
+There is corner case where this might not work,
+This happens when there is a first bvec has non zero offset.
+Let's say bv_offset = 256, len = 512, iov_offset = 3584 (512*7, 8th IO),
+here we expect IO to have 2 segments with present codebase, but this
+patch set produces 1 segment.
+
+So having a fix like this solves the issue,
++	nr_segs = (offset + len + bvec->bv_offset + folio_mask) >> imu->folio_shift;
+
+Note:
+I am investigating whether this is a valid case or not, because having a
+512 byte IO with 256 byte alignment feel odd. So have sent one patch for
+that as well[1]. If that patch[1] is upstreamed then above case is taken
+care of, so we can use this series as it is.
+
+Thanks,
+Nitesh
+
+[1]
+https://lore.kernel.org/all/20250415181419.16305-1-nj.shetty@samsung.com/
+
+
+------BT9WqRiWUEIwQLQqwzcffU0e5sYl32tGYDBltTglx_TmJHNe=_2f7_
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3-dev-7b9b9
 
 
-On Thu, 17 Apr 2025 10:32:30 +0100, Pavel Begunkov wrote:
-> io_import_fixed() cleanups topped with the nr segs optimisation
-> patch from Nitesh. Doesn't have the kbuf part, assuming Jens will
-> add it on top.
-> 
-> Based on io_uring-6.15
-> 
-> Nitesh Shetty (1):
->   io_uring/rsrc: send exact nr_segs for fixed buffer
-> 
-> [...]
-
-Applied, thanks!
-
-[1/4] io_uring/rsrc: don't skip offset calculation
-      commit: 1ac571288822253db32196c49f240739148417e3
-[2/4] io_uring/rsrc: separate kbuf offset adjustments
-      commit: 50169d07548441e3033b9bbaa06e573e7224f140
-[3/4] io_uring/rsrc: refactor io_import_fixed
-      commit: 59852ebad954c8a3ac8b746930c2ea60febe797a
-[4/4] io_uring/rsrc: send exact nr_segs for fixed buffer
-      commit: c5a173d9864a597288c6acd091315cfc3b32ca1c
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+------BT9WqRiWUEIwQLQqwzcffU0e5sYl32tGYDBltTglx_TmJHNe=_2f7_--
