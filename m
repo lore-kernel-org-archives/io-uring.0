@@ -1,63 +1,64 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC02217CA12
-	for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 14:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982D715A8
+	for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 14:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744898461; cv=none; b=EFuRKPm/sMgUGJWLX3xABJOveaBGJX5m93mZ4Drtj3Jld89wiyTs8ey1gYqI0h6KB61v7zIUE5h93/rvqOjemPnc5QO9tAJ3djC8tj2Bvji9DTz1lPRgQMUakgCr9h9VftYJhNFlS1OjevTCUgh+tSgtuUjaPh1wgDPvByDgMp0=
+	t=1744898756; cv=none; b=kX+83B1kWBr+kk/a1x7W/W8MNhxIMDBnx3fPrtEeg3L3aw9iwcrF0O15UdfD/3yzGm9nRHk+RwhYHfp9vepbksR5UQYenc5bUFMI4M9eBa652WLimSmtlWxsEq5jDsTuqMqWLkYINjN9ZZom+ueRn21sHqzeRoaVy6UXBxVNRa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744898461; c=relaxed/simple;
-	bh=S33vVH62Ipcxp0rWly3eyOchMSqBzBo+OASVpMIetFc=;
+	s=arc-20240116; t=1744898756; c=relaxed/simple;
+	bh=rQuH3kiytCIdCkQQLu6fGQfDMkeA+aTYWGxZqI6KbHk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qEsg1QFMabGdMvUDtPDWwpu2OXcOMg8SMJ2uo9VTCS9g8v6cYKERrpZVff+FLiYeG0kf1SyAHYvFLcjVb8zeW3JrG5RHumievBWONwNXR7xkZEGyzTQrovKzpfy7EhoUB/r3fLyxL/nhvd9Kv6k79z0Ke65qjQS3vBt8zE39NDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjsSLf8i; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=THRneUsMs4KmEUFOF5uAcuhL1x33vPqA9fpK3HjC69VF19rVa/+cWMqlUB9X9D6v7EXvEK/YGB5IkaPqK3dWWqDauQSG6+x03qu4D8o95hZVT9O923nRfOr83A57+7X8TWTTZOMulqAbVoGmCnI+W9/9bI92cl/775ldDrpfw30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=YeiCT1US; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjsSLf8i"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5f435c9f2f9so1275959a12.1
-        for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 07:00:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="YeiCT1US"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-85b43b60b6bso24322739f.0
+        for <io-uring@vger.kernel.org>; Thu, 17 Apr 2025 07:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744898458; x=1745503258; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1744898750; x=1745503550; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xKq4ypYBfvFz1mRzRFiyY7Cej4SfNKK6kZkOocBR5Xk=;
-        b=jjsSLf8iQ6HqrT/IvgBHZ/vVI9jqfBsdILt3sFBwXheDfsecIN1pmricf9maV/VwsS
-         G1tAGOJ0R+1i5tDvO0tvcv2RggtvPLOgNS7l0BKRSLWyTsOzkFx9eT/zvuU2+GBRDosO
-         iMGUYB/qIlzk8H5SohJ0N1MCeuKdG7fMGnvvDDB166rBzYSJOkYTI+U63roggzdZxFhb
-         ci/UbT0Ew38W0426cqHyvCm8Kj11cQEJ/xgN0A2a4/CITnLbe97y7SPXRhmQv6u+NkMA
-         L6e/wg+7qvQraZV7pbIipDpJF0Iy9SopnNIiGTwjWTU/QN5a0Nx2fLmyu5SaZmdNiUUQ
-         D0yA==
+        bh=qIjewrVkl0xqvS85fNuGSkGDg650bk18SldcIxmH+ik=;
+        b=YeiCT1USmFXNhM/M8buT8RE7Fi1sbh1dzPNoUg7/2eiKsQAlYe7v0G91+i1FvGdWxZ
+         ciNySvQWe7NB58Nw5e3hCsRe7vCmnLICEh+O8rtkA9VgK2/mWFJlQfmoyffaeqkwXSF+
+         PzZIA3OAtsrhZET0XKpMaukkDA5LdAo1pQ+7htBRUKFLBsL6QkYPSjuRFPJtnBdA31YP
+         meoFxm3C9Ibp5uB0S48cOrOqS4L16mP6/jK5Zh5Px4+YsspchLH2mkDK5CZSv16eX8BU
+         rwWdxed7ymSMUrYVsrQWYqRkdaRfHvVkRMww9qejUUzTM1O3e/Zw7x8VXdxrXhGdndB+
+         hSjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744898458; x=1745503258;
+        d=1e100.net; s=20230601; t=1744898750; x=1745503550;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xKq4ypYBfvFz1mRzRFiyY7Cej4SfNKK6kZkOocBR5Xk=;
-        b=ezG+AVPo40NXqd3uwZsn5HobsNeuzHV8nUDgqEui1HMbtFQuhO7zmulHJlycb/slgL
-         bDgkw4BgkxN2fFHwMsBV1Ro3Y1eyHF7gKyG7QMdVL2+n/O4SnOM8P8S5eUwlXzprNo4r
-         arjx9Ih5z/PtTnvJOF36caG31qYn1G+NLggl+wWL5g6e2+mwaqdnf2H9dXxbBaCbwVq6
-         Su5Q8SduP0HRid+ZEh8O+DWl1z3laZ6hSV8KjEbShY139p5ERlNBAvJwZsUCCK9Zzjg8
-         zibHOqknS1jyPSCieVKQ2WF74b4Su4iZrHztxBymi2I2QFJEkBhTRofMLDEwqV2bSZJa
-         0/2w==
-X-Gm-Message-State: AOJu0YyWrXgkLiV+ge4onSNi3AYZmyEaYavTvkrShMXHLXGmyjEeJET6
-	IB7uo9Xanx9ValP+cMLubxSrCplQQ7GUPOdUXTV0nYJV+7aQZ4GpYW0R2w==
-X-Gm-Gg: ASbGnct1loM9O4C/qrtKl/nSjGCgsiU7T6FOKKKmCrIvvVhR1GhC9JPvBB1qf/tIVug
-	kSBSjei350YJpWenRHilJEf+eQ6t6tQbAnePLvHPkq9pfk8dDSgdis7SefSE8N3cotcGbxQUowd
-	o7smne2ryJcpklnML06HYfk1DgKte1XcYOQAbDsF5fN2tStXJ04O6byz0lDHaq33yWtPUU68QvQ
-	tLJNLbDBPoUsHCYJ+mgyNv2HAPo0EJ/tVNlLOTNfVNYIcx5L4sYK73QxnuJSmG7ndR8+bIu262J
-	eRCS5RtN9ze34fVQGFr714xyBgPN5IuUK5BE2xTnbyCUljhb8Uo2aA==
-X-Google-Smtp-Source: AGHT+IERCcDohMefhcxVCl/DLtDlTP8oUA7TNuqpUig6wSfjaZTfKzpPxj2vvPV38J2AzxuFrzAt1g==
-X-Received: by 2002:a05:6402:42c5:b0:5eb:cc22:aa00 with SMTP id 4fb4d7f45d1cf-5f4b748ff90mr4970448a12.19.1744898456757;
-        Thu, 17 Apr 2025 07:00:56 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:325::1e4? ([2620:10d:c092:600::1:f7d5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5f36ee5500dsm9906082a12.4.2025.04.17.07.00.55
+        bh=qIjewrVkl0xqvS85fNuGSkGDg650bk18SldcIxmH+ik=;
+        b=boEoKuSnlDknm+WIbIc/z10ijsfVK2hYeQlOBShnD0VKdvN0Z+XUTCzVV+ynxD6cwt
+         K+u8UzEk8IASVm75yD9ySKhcslitCpX87AYCW3aTdS4rQFwaqH+81TOhBsu/sM3wHnOM
+         16wQq01aotGV2DQd4FKjZqDq9WhpkqK1ftBLPgLR8Lyjzam2dr9NhfEe6hJzz/Ygs6uq
+         23QblWpth+vsXZeIF+0/eLqFIQGjBGPa5ysS6Ymv1PnXYuFsPQKZ5r9G/CZkDmQ3YUSq
+         XQNKnkZnrf0OpEu8LFzcdmPSNG7swh/Lv6k6e0iEoke/Ix+tn/3s46dglSAAque+imaS
+         GYJw==
+X-Gm-Message-State: AOJu0YyweZiSz6j5wCRBhYapkmO96BTvveyhYpw2WBG6uY8N6vpce4eH
+	uU2EZxj0NeoxNNuJJR2B2QCLMhyzqAM+H2eDxFOEenx+pK+TFN+X0q9c8bpwqcQu070yIPzY3Dy
+	S
+X-Gm-Gg: ASbGncuOygZVXtzv2gYAHUZC/YBczlPhZg28bL/n43ExvNW8ksMdNfeaMGAcjVBSA/c
+	ImwnHqRKtD1Ympk6meoVJYZQPMxVLMR7McT4xRpdZn3Nuz5I4rZmMPcX/u6+6EM+cPIUuZ9AJxl
+	P/02iMSEcEDauP2Rh5F/LqkDG5XQjLBehf88PIvn26q8Z/heLL0uTYgdmylaA9SqOjTf6r0T60q
+	HJ5/EEu5j3H28F2k5kGbArnErG+DCkLRShjvkalE1Zw4p8OZCXu33IYPU7IrzsDYn8ySzuBMihF
+	YNEtM8e0JaWRxHwIT1vMQpqC/e2c7BXnjd0qsw==
+X-Google-Smtp-Source: AGHT+IELhAIWQIcHuSUPIBXP0UlReqxdY4WO6unPV1aSP0+O5zTLB84MeqsuDqw4Mu7cQT6Utevq1A==
+X-Received: by 2002:a5e:9705:0:b0:85e:dbe3:137f with SMTP id ca18e2360f4ac-861d86f97e1mr3561339f.0.1744898750688;
+        Thu, 17 Apr 2025 07:05:50 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f505cf81bcsm4095521173.10.2025.04.17.07.05.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Apr 2025 07:00:55 -0700 (PDT)
-Message-ID: <167282a3-7b78-4692-8e8e-261a964b3556@gmail.com>
-Date: Thu, 17 Apr 2025 15:02:11 +0100
+        Thu, 17 Apr 2025 07:05:50 -0700 (PDT)
+Message-ID: <b79ce02d-3bb9-4de2-815d-b4ca35aa6832@kernel.dk>
+Date: Thu, 17 Apr 2025 08:05:49 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -66,7 +67,8 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 4/4] io_uring/rsrc: send exact nr_segs for fixed buffer
-To: Jens Axboe <axboe@kernel.dk>, Nitesh Shetty <nj.shetty@samsung.com>
+To: Pavel Begunkov <asml.silence@gmail.com>,
+ Nitesh Shetty <nj.shetty@samsung.com>
 Cc: io-uring@vger.kernel.org
 References: <cover.1744882081.git.asml.silence@gmail.com>
  <7a1a49a8d053bd617c244291d63dbfbc07afde36.1744882081.git.asml.silence@gmail.com>
@@ -77,23 +79,29 @@ References: <cover.1744882081.git.asml.silence@gmail.com>
  <ca357dbb-cc51-487c-919e-c71d3856f915@gmail.com>
  <603628d3-78ec-47a3-804a-ee6dc93639fd@kernel.dk>
  <f8e4d7d9-fb06-4a1b-9cba-0a42982bce48@kernel.dk>
+ <167282a3-7b78-4692-8e8e-261a964b3556@gmail.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <f8e4d7d9-fb06-4a1b-9cba-0a42982bce48@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <167282a3-7b78-4692-8e8e-261a964b3556@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 4/17/25 14:57, Jens Axboe wrote:
-> On 4/17/25 7:41 AM, Jens Axboe wrote:
->> I'll turn the test case into something we can add to liburing, and fold
->> in that change.
+On 4/17/25 8:02 AM, Pavel Begunkov wrote:
+> On 4/17/25 14:57, Jens Axboe wrote:
+>> On 4/17/25 7:41 AM, Jens Axboe wrote:
+>>> I'll turn the test case into something we can add to liburing, and fold
+>>> in that change.
+>>
+>> Here's what I tested, fwiw, and it reliably blows up pre the fixup. I'll
+>> turn it into a normal test case, and then folks can add more invariants
+>> to this one if they wish.
 > 
-> Here's what I tested, fwiw, and it reliably blows up pre the fixup. I'll
-> turn it into a normal test case, and then folks can add more invariants
-> to this one if they wish.
+> Awesome, thanks!
 
-Awesome, thanks!
+Done:
+
+https://git.kernel.dk/cgit/liburing/commit/?id=d700f83631a780182c3a3f1315e926d5547acedb
 
 -- 
-Pavel Begunkov
+Jens Axboe
 
