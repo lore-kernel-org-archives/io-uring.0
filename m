@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB5C256994;
-	Tue, 29 Apr 2025 23:51:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3429D2BE642;
+	Tue, 29 Apr 2025 23:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970679; cv=none; b=gvZaWiG57CWJS/AUZmgHGSvGIQ7PMfB0UmHSJFaYq/XCucfVNHh+qahn50WesCvtDEodOFWJti+nD0y6JAamiR6De6eyZI4vZElV2BPfBDWMKyZx/g4nlyec9gZbWSfGlISW90hEvzvKTQ4xBY1HeBNuKo5LG/Sd6WtXuQQjfWA=
+	t=1745970750; cv=none; b=eLR6dFzO1JJPjyvAjue6YjVIKRmQOCWGxt5maLof7UerXg9D7BpqtVS4Wd1p9vk3MuqDkB+2x5ByQoZoFiVmq3H9JtA6oBfg5nVscuW3yErla73NZn9CNBzsVDrN+xm23Hmtptk/fyCR1p5pxiM0xRrriA/oY0wxkJ/ivQ5cg9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970679; c=relaxed/simple;
-	bh=hCMqzhW+XfQ1sGbaSzvh3YAc5ANAD/fo2v3VJx9zzZs=;
+	s=arc-20240116; t=1745970750; c=relaxed/simple;
+	bh=M7DfSalEfQUmz6ViDdHnXlWr6K4czZ429fliA3dRkhA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UcG0DzPMDcKS17BNIM17rFG7FyjN9s5mXYYLe9w0wgoycN7kfk5o4mp4OifXqTXx8OjQt75+mYcgdyWcDh+d4DxpAayKVVQ52BOdblqwZwsT/+gZd5dp8DKFsDiV33A4Vf7kSCuSKVv9SKE2mKkmxgLRiRCgMyZlWwTYU7oOfHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFH9Tp0L; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=dw4B31q21MX6eUTDrDgFnvKErZeLXrjaGRYlJr0fBnml7jWibhPEGuwD3PJT6rb94yU/NUI+JPv/AG78Cu7yudY6zeB76BJmeRlnpb2MROiRvWTnjsH8RjNPGLmbmNkFDRpuQWDiagh10cr8k8qa5gajW8WeC1nFPvRHyVPeUT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lv/iQvOg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFH9Tp0L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1338BC4CEEE;
-	Tue, 29 Apr 2025 23:51:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lv/iQvOg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B6AC4CEEE;
+	Tue, 29 Apr 2025 23:52:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745970678;
-	bh=hCMqzhW+XfQ1sGbaSzvh3YAc5ANAD/fo2v3VJx9zzZs=;
+	s=k20201202; t=1745970749;
+	bh=M7DfSalEfQUmz6ViDdHnXlWr6K4czZ429fliA3dRkhA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GFH9Tp0LH6wckso2DdsqoFiS12EPRXHwYa9TUx10HEZXe/ZDRguvQMk7z1PPDbcPo
-	 RKX1tsenKJQcrdZtp1hP1sJP6fJuxwKL2xyn3JFiFyEFhFuT3wE5AgCutMKHQcaPbI
-	 1a6RQyEY/zu3FidqRBFEQ4P6zRdorvQ1fXBG/Y1g8TAoHNUPiDrD0oi7PxTEfgaQuq
-	 TWbx4GzPZL6ekjLMfgwZGC4gsfCZDVWh0Jh2iYyZNU/apGlPtVm2IVWgBOe+3xNyhu
-	 oyUxeU1nvRkNH0WS0ZQMUJ1zpesMEmLQPiz5K3Bl4Cny57DUMbEOmvNeuQUkcc51nv
-	 AWYT73j2lmdBQ==
+	b=Lv/iQvOgF0xu5NKSvr+PaJTl0reP1FQvXWFvHc+LIMci8gBYPw6IlnN1M9jtvSweh
+	 +mFsx5Etak0CAcByEyJCuEs5sBJZB7nSV1JFRGY5D0hIsljStPtke7vHLzuCrO6xWk
+	 UGcfssNIJ8VHFIeNYz2fIkDREB3xaKX4BQPq4cf0CNVNhJQAZcwFz4gstEd4CgbuDf
+	 txLj4p2kUvDLSRqNlmtLmvnVzBISH54ysY7NVLZDMpu8E3Wdyrx3pNTf3KLbnBMzET
+	 ri0wpu5TJOQScTXjhn+6J9KVIdQwUTWIyE3UWOsUaZuC4HMddMYn9gU+qE4XAJkGgx
+	 rMosJk21eycxA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -33,12 +33,12 @@ Cc: Pavel Begunkov <asml.silence@gmail.com>,
 	Jens Axboe <axboe@kernel.dk>,
 	Sasha Levin <sashal@kernel.org>,
 	io-uring@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 37/39] io_uring: don't duplicate flushing in io_req_post_cqe
-Date: Tue, 29 Apr 2025 19:50:04 -0400
-Message-Id: <20250429235006.536648-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 35/37] io_uring: don't duplicate flushing in io_req_post_cqe
+Date: Tue, 29 Apr 2025 19:51:20 -0400
+Message-Id: <20250429235122.537321-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250429235006.536648-1-sashal@kernel.org>
-References: <20250429235006.536648-1-sashal@kernel.org>
+In-Reply-To: <20250429235122.537321-1-sashal@kernel.org>
+References: <20250429235122.537321-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -47,7 +47,7 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14.4
+X-stable-base: Linux 6.12.25
 Content-Transfer-Encoding: 8bit
 
 From: Pavel Begunkov <asml.silence@gmail.com>
@@ -67,10 +67,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 7370f763346f4..1421ada5b0330 100644
+index 19de7129ae0b3..ef24988af8cd5 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -877,10 +877,15 @@ bool io_req_post_cqe(struct io_kiocb *req, s32 res, u32 cflags)
+@@ -887,10 +887,15 @@ bool io_req_post_cqe(struct io_kiocb *req, s32 res, u32 cflags)
  	lockdep_assert(!io_wq_current_is_worker());
  	lockdep_assert_held(&ctx->uring_lock);
  
