@@ -1,70 +1,66 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086872641EA
-	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 10:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC2A27FD75
+	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746526844; cv=none; b=u3+BZLE9StP/ssxvTQesHLWcl21sKv7Tedd3XQz6AxGRvaf1rbrQBOfjjDOtk7pyHXPCAI0MTOVW+qZaLhBfjZwuM5kuX4nG5c9wtI8RpuDSQgUwWQIO9oFk0+sLynBAXyeCpgSBo3kIwb6KnVg6yFoRYKVhn7vLlwPK7Dwtnzs=
+	t=1746534402; cv=none; b=XABhLxKL+Rj2BDxbtArW7p1pfayGKkaE4C9EPanANFk1ZIYTtX+p+6Cz9OhY053IazDPFvlkXG2Y9YVZCBBSKYcSnQUFjr3ZsHU+Wg7d6lkK4ZydD1JbAa5I2UIKJiSoG+s7Qhpd1JL9/vdmrnnFyUE+hfP12PMVQxBfoxv6PX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746526844; c=relaxed/simple;
-	bh=dA+oNPgFY6mBu3MQ9jN08HGSvfOjY1D3Lp8vRlnILfw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hUReYXYV2R0RMAJwyL2mZZd2+7AsKZ2gvD83ULBtUhuTYES4hG9Lc4N9ZdstFyNUJvaDMjp6HCx2qrhH2jh0UyYQDMjAtcjOVTHLb8spTnabBZaNhP7Xlx7I+CtSmWWLAi6+WD0Nc000E8EuxOClEIU/XUtf3/+n3a3qJ9XM/r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XhE3uB4j; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1746534402; c=relaxed/simple;
+	bh=hDAgRjFMKpQ0l+HpYx3S8yneqg8NQ2zTn538Fj+lkno=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=QZ5RO6XWVFFb6BFBAYUmQn6qEj0Wi5PMEVDD4fYbVicEGqp4kQ4Qy7wMBFdZrQtZC+L3AWNYDK6WpYSk6e8IMH/B5lri8NXxHwrN2q/AzaDxXHRLJm5QzkQyCQ1xWf8GepcAzaGk4BPdi75jkjmTjSvft7SPbrpqZ1G16ojmbvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=p4an/w0Z; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XhE3uB4j"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5e5e0caa151so31050a12.0
-        for <io-uring@vger.kernel.org>; Tue, 06 May 2025 03:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746526841; x=1747131641; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q9QDnCKQXaAF5znur9Umh7vXy96O5oYSHXpUUcyI3Mw=;
-        b=XhE3uB4jsSOCQtt/q8vzpq2J448oufK7994OXEXppNxmwyZXHrDNxIXpUOSL2RuXDe
-         gYX2FU1khbipqGuH2gQOBs/6EYV9joG4levTN0/ZI49yzI1LXBP5Se6fnr+Ht2sdMkPh
-         oVnhqxOX66GKqddvCQ/tsTT9BRx1GLPDxaWnyPvZGkqGnbVftpOb+PmYE4hEQwURByEO
-         t4tkZIL/7awS6GQS3bUxPHdCYWL0Sul6iGoQyu/Xrhnd63dxseJH1G7z9b2wwfzP0LBn
-         9ZyKRAqkbCo+qPLh7UP6t6iiLXfBmMeRCv9OlMrp/WrYI5C1KUVA2+m1ubXlXfkCjMzs
-         DziA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746526841; x=1747131641;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q9QDnCKQXaAF5znur9Umh7vXy96O5oYSHXpUUcyI3Mw=;
-        b=OmKA/ChxyM+3pJZj/PUG3Pe5gzafV5VOTJDsaKCNrLST49fApo6jCXjTRwsBUf9Hay
-         sfc32NiYgxEyvmLsqn6CWx7x8aoR+l4qzS9mJ8Ll/wx3aQhtLTvhnnIK4OSStxqI2hVS
-         saWCXcBlDb8DE0AGos+/o0ET4hQ7ws5GRUHA6IhkiLyP7H/9cx0AuWsvApNwby8l+ARf
-         ICR3iAQykh4o2/HdrXjLRKoW9VeSOKR9ngruoQMVnax4Z8J+HAH9cepmyESVRQsWKlEt
-         1oAkjiDa//eFMvDo51iwLWgZMCWv9aEGn/tigsHyYNHdfypC2fjKOVrOMpM1mo/03CAe
-         ArGw==
-X-Gm-Message-State: AOJu0Ywr32F+RdCg7449vcMJT8c/yP3LuSVutlQnHGBmSP3g0huuosh1
-	kyDweSQxHTIz1MMyCVtMDiynvYTRarpuIdV8aYaI/wxXe2gLFX3JWeemYw==
-X-Gm-Gg: ASbGncuM4bJkfCIZUktfephgnMiYqndfuRmwHc7D39U3rOazOaPhuyJyM0duVf0dnbH
-	RBRszH13wHlQrdCThyNLKEU6x2h2Mpt7N9Mtu2yC4vtAqKXJdtkXbPcl9LyYz8hU/7eNPBmnSk+
-	zqVsLNmJjeiRFQpVlCjaE8PRtzGY6E9CQoJZO3Jjw7B8RG/8zNny25m/RC5zJuq/BzQG3k+dZaO
-	afb6ZPKb0Zr9cZcSSr7BrSqMuHMPyPrNBVtJWABBZg0AkJcd+B0+m9AWnk8VkeDew4oOFg1aEFa
-	0QOzXJ92eCD+Kdb+CW9r3OiP
-X-Google-Smtp-Source: AGHT+IE+6VX8itFjO4054qHFlU4PV3uUyYPR6K3jtMn+bAnF1dJxOkudHnN8dSnwBzsT0mEJ13ecDg==
-X-Received: by 2002:a17:906:dc92:b0:ace:d957:d6d8 with SMTP id a640c23a62f3a-ad1a49fefe2mr975455066b.34.1746526840712;
-        Tue, 06 May 2025 03:20:40 -0700 (PDT)
-Received: from 127.com ([2620:10d:c092:600::1:b5bd])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ad1891a2df5sm671750566b.38.2025.05.06.03.20.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 May 2025 03:20:39 -0700 (PDT)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com
-Subject: [PATCH liburing 2/2] examples/zcrx: udmabuf backed areas
-Date: Tue,  6 May 2025 11:21:51 +0100
-Message-ID: <73c4937901b2d874f651ff0fa1d6b0cf632f3f01.1746526793.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <cover.1746526793.git.asml.silence@gmail.com>
-References: <cover.1746526793.git.asml.silence@gmail.com>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="p4an/w0Z"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250506122638epoutp037449d473e43e35172939d0ac5ca2eb3f~878g4VCvD2443224432epoutp03g
+	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:26:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250506122638epoutp037449d473e43e35172939d0ac5ca2eb3f~878g4VCvD2443224432epoutp03g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1746534398;
+	bh=e1WF8Ob+GON5uG07kvRTf2t3e7hQoxPf1adrp1Dan5c=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=p4an/w0ZNiGdIDMAbe7CAKI2py+qwwgaFlG9mzPJDi4QxqEYwdu/6AIbTBUQ8oYG6
+	 UvuEBoex0fqGWaLnesA1Id1e4w/2C56dRaIkWCTt4YLy8PC+GQXPqK5hOjAs4EaGOd
+	 x/80mBSGr6mWWe6xpXpbeb2Pf0QO/HZuPy+WBMFY=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20250506122637epcas5p454fb550df70381e9b126fd575ddc09ac~878f6Rk8s0664406644epcas5p4m;
+	Tue,  6 May 2025 12:26:37 +0000 (GMT)
+Received: from epcas5p4.samsung.com (unknown [182.195.38.177]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4ZsHgv6G1wz6B9m7; Tue,  6 May
+	2025 12:26:35 +0000 (GMT)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac~878drNAQa0911209112epcas5p1r;
+	Tue,  6 May 2025 12:26:35 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20250506122635epsmtrp21eaa58a53218f12e73a6c9a11ac112d3~878dqiBVO0521905219epsmtrp2H;
+	Tue,  6 May 2025 12:26:35 +0000 (GMT)
+X-AuditID: b6c32a28-46cef70000001e8a-d7-6819fffbeff9
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	6B.E5.07818.BFFF9186; Tue,  6 May 2025 21:26:35 +0900 (KST)
+Received: from localhost.localdomain (unknown [107.99.41.245]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250506122633epsmtip26207664adaebf8511d3a5e2c81e07337~878cE_q031679416794epsmtip2Z;
+	Tue,  6 May 2025 12:26:33 +0000 (GMT)
+From: Kanchan Joshi <joshi.k@samsung.com>
+To: axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, asml.silence@gmail.com
+Cc: io-uring@vger.kernel.org, linux-block@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-nvme@lists.infradead.org, Hannes
+	Reinecke <hare@suse.de>, Nitesh Shetty <nj.shetty@samsung.com>, Kanchan
+	Joshi <joshi.k@samsung.com>
+Subject: [PATCH v16 01/11] fs: add a write stream field to the kiocb
+Date: Tue,  6 May 2025 17:47:22 +0530
+Message-Id: <20250506121732.8211-2-joshi.k@samsung.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250506121732.8211-1-joshi.k@samsung.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -72,109 +68,57 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGLMWRmVeSWpSXmKPExsWy7bCSvO7v/5IZBi3XOCzmrNrGaLH6bj+b
+	xZ5Fk5gsVq4+ymTxrvUci8XR/2/ZLCYdusZosfeWtsWevSdZLOYve8puse33fGYHbo+ds+6y
+	e1w+W+qxaVUnm8fmJfUeu282sHn0bVnF6LH5dLXH501yARxRXDYpqTmZZalF+nYJXBkNbw4x
+	FXSyV0z9sIC5gfEhaxcjJ4eEgInE1D2P2LoYuTiEBHYzSvTOW8kGkRCXaL72gx3CFpZY+e85
+	O0TRR0aJS3sesHQxcnCwCWhKXJhcClIjIhAg8XLxY2aQGmaBD4wSeybOZgRJCAu4SDycOwds
+	KIuAqkT73/9MIDavgLnE4m87GCEWyEvMvPQdbBmngIXE8j2zwOJCQDUvjh5hh6gXlDg58wkL
+	iM0MVN+8dTbzBEaBWUhSs5CkFjAyrWKUTC0ozk3PTTYsMMxLLdcrTswtLs1L10vOz93ECI4K
+	LY0djO++NekfYmTiYDzEKMHBrCTCe/++ZIYQb0piZVVqUX58UWlOavEhRmkOFiVx3pWGEelC
+	AumJJanZqakFqUUwWSYOTqkGpor58925uoXuSkuou23fyPv7scWPfYdqP12yL6ma8qzY/ejR
+	8/fy3siJnFP83X688dCmy1/OLL2fvkby4OS/Ktt0rq2a1r+uM3S6X9LZjnWz9mkzSe378zfD
+	gbPbZ1uqOcdx4w2pQZlPz794avzTMEtUbOmFU8rfNhZdZzrXxlK4+6dOl2qR4NMFe1UvhMiJ
+	Ldg6z0LR10bAcPKqr2q8YdFeJU7LOWNXaTz0m6Bz6p5LfOLDt2pnLfsFclu5ph+ot9y8+uY7
+	l21TPOvc4le626g+DVj20K9h8l+/Tf8S1lTxPT6udMkwIvbnomVvmP1lZ15TLX9bs2jp7p3L
+	pp5qjp5oIp39KuPvvHKGNecWVd1TYinOSDTUYi4qTgQASOsS3vkCAAA=
+X-CMS-MailID: 20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac
+References: <20250506121732.8211-1-joshi.k@samsung.com>
+	<CGME20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac@epcas5p1.samsung.com>
 
-Add an example of how to create dmabuf backed area. For that we use
-udmabuf and mmap it into user space, however in more realistic scenarios
-won't have direct access to the memory and will need to use dmabuf
-provider specific api, e.g. OpenCl.
+From: Christoph Hellwig <hch@lst.de>
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Prepare for io_uring passthrough of write streams. The write stream
+field in the kiocb structure fits into an existing 2-byte hole, so its
+size is not changed.
+
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
+Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
 ---
- examples/zcrx.c | 55 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ include/linux/fs.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/examples/zcrx.c b/examples/zcrx.c
-index 6b06e4fa..c5e1b42f 100644
---- a/examples/zcrx.c
-+++ b/examples/zcrx.c
-@@ -37,6 +37,10 @@
- #include <sys/wait.h>
- #include <linux/mman.h>
- 
-+#include <linux/memfd.h>
-+#include <linux/dma-buf.h>
-+#include <linux/udmabuf.h>
-+
- #include "liburing.h"
- #include "helpers.h"
- 
-@@ -56,6 +60,7 @@ static long page_size;
- enum {
- 	AREA_TYPE_NORMAL,
- 	AREA_TYPE_HUGE_PAGES,
-+	AREA_TYPE_DMABUF,
- 	__AREA_TYPE_MAX,
- };
- 
-@@ -83,6 +88,9 @@ static bool stop;
- static size_t received;
- static __u32 zcrx_id;
- 
-+static int dmabuf_fd;
-+static int memfd;
-+
- static inline size_t get_refill_ring_size(unsigned int rq_entries)
- {
- 	ring_size = rq_entries * sizeof(struct io_uring_zcrx_rqe);
-@@ -91,11 +99,58 @@ static inline size_t get_refill_ring_size(unsigned int rq_entries)
- 	return T_ALIGN_UP(ring_size, page_size);
- }
- 
-+static void zcrx_populate_area_udmabuf(struct io_uring_zcrx_area_reg *area_reg)
-+{
-+	struct udmabuf_create create;
-+	int ret, devfd;
-+
-+	devfd = open("/dev/udmabuf", O_RDWR);
-+	if (devfd < 0)
-+		t_error(1, devfd, "Failed to open udmabuf dev");
-+
-+	memfd = memfd_create("udmabuf-test", MFD_ALLOW_SEALING);
-+	if (memfd < 0)
-+		t_error(1, memfd, "Failed to open udmabuf dev");
-+
-+	ret = fcntl(memfd, F_ADD_SEALS, F_SEAL_SHRINK);
-+	if (ret < 0)
-+		t_error(1, 0, "Failed to set seals");
-+
-+	ret = ftruncate(memfd, AREA_SIZE);
-+	if (ret == -1)
-+		t_error(1, 0, "Failed to resize udmabuf");
-+
-+	memset(&create, 0, sizeof(create));
-+	create.memfd = memfd;
-+	create.offset = 0;
-+	create.size = AREA_SIZE;
-+	dmabuf_fd = ioctl(devfd, UDMABUF_CREATE, &create);
-+	if (dmabuf_fd < 0)
-+		t_error(1, dmabuf_fd, "Failed to create udmabuf");
-+
-+	area_ptr = mmap(NULL, AREA_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED,
-+			dmabuf_fd, 0);
-+	if (area_ptr == MAP_FAILED)
-+		t_error(1, 0, "Failed to mmap udmabuf");
-+
-+	memset(area_reg, 0, sizeof(*area_reg));
-+	area_reg->addr = 0; /* offset into dmabuf */
-+	area_reg->len = AREA_SIZE;
-+	area_reg->flags |= IORING_ZCRX_AREA_DMABUF;
-+	area_reg->dmabuf_fd = dmabuf_fd;
-+
-+	close(devfd);
-+}
-+
- static void zcrx_populate_area(struct io_uring_zcrx_area_reg *area_reg)
- {
- 	unsigned flags = MAP_PRIVATE | MAP_ANONYMOUS;
- 	unsigned prot = PROT_READ | PROT_WRITE;
- 
-+	if (cfg_area_type == AREA_TYPE_DMABUF) {
-+		zcrx_populate_area_udmabuf(area_reg);
-+		return;
-+	}
- 	if (cfg_area_type == AREA_TYPE_NORMAL) {
- 		area_ptr = mmap(NULL, AREA_SIZE, prot,
- 				flags, 0, 0);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 016b0fe1536e..d5988867fe31 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -408,6 +408,7 @@ struct kiocb {
+ 	void			*private;
+ 	int			ki_flags;
+ 	u16			ki_ioprio; /* See linux/ioprio.h */
++	u8			ki_write_stream;
+ 	union {
+ 		/*
+ 		 * Only used for async buffered reads, where it denotes the
 -- 
-2.48.1
+2.25.1
 
