@@ -1,64 +1,64 @@
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC2A27FD75
-	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA93C280017
+	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746534402; cv=none; b=XABhLxKL+Rj2BDxbtArW7p1pfayGKkaE4C9EPanANFk1ZIYTtX+p+6Cz9OhY053IazDPFvlkXG2Y9YVZCBBSKYcSnQUFjr3ZsHU+Wg7d6lkK4ZydD1JbAa5I2UIKJiSoG+s7Qhpd1JL9/vdmrnnFyUE+hfP12PMVQxBfoxv6PX0=
+	t=1746534407; cv=none; b=HSh3ukQkSlWnhoj10UePzylKUSp4W64qRR5WCNDHXkSWNn5jLBpRpCJ2Iamj787beIrUOgrkeN7LNXh+tfHOTxC0hzvhOALzlOKABSKNEA5ugwK5LbTZ33LPbhElkSVNOCsNdsMhBkUyxqogj2pS3HqgaIqCI8VzgoBCKjfkgdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746534402; c=relaxed/simple;
-	bh=hDAgRjFMKpQ0l+HpYx3S8yneqg8NQ2zTn538Fj+lkno=;
+	s=arc-20240116; t=1746534407; c=relaxed/simple;
+	bh=ABoNIgz/xgY495NHkDYsEf6ooXrqrPeOIrxvg8twSO0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=QZ5RO6XWVFFb6BFBAYUmQn6qEj0Wi5PMEVDD4fYbVicEGqp4kQ4Qy7wMBFdZrQtZC+L3AWNYDK6WpYSk6e8IMH/B5lri8NXxHwrN2q/AzaDxXHRLJm5QzkQyCQ1xWf8GepcAzaGk4BPdi75jkjmTjSvft7SPbrpqZ1G16ojmbvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=p4an/w0Z; arc=none smtp.client-ip=203.254.224.33
+	 Content-Type:References; b=kIvRG5/4zpRMfc9FMvsDRM4SMgBLmyalEjKv3+bMJMMjp+VWLVSsQg6xl8CRMyb+FWpKgnOiWVVOyQaNG95RKYLRIYpVNgqy2G5z76f79DDg523LW2GZVKCB6mn62AuqVZUhcS1VS/jkUE7XQTwrKMuikVDXNwiws2QNiUGkuQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=dHwExi6p; arc=none smtp.client-ip=203.254.224.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="p4an/w0Z"
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250506122638epoutp037449d473e43e35172939d0ac5ca2eb3f~878g4VCvD2443224432epoutp03g
-	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:26:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250506122638epoutp037449d473e43e35172939d0ac5ca2eb3f~878g4VCvD2443224432epoutp03g
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="dHwExi6p"
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250506122642epoutp013db4d6d0d6719b419930c194a35bd706~878kOmGKI2795627956epoutp016
+	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:26:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250506122642epoutp013db4d6d0d6719b419930c194a35bd706~878kOmGKI2795627956epoutp016
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1746534398;
-	bh=e1WF8Ob+GON5uG07kvRTf2t3e7hQoxPf1adrp1Dan5c=;
+	s=mail20170921; t=1746534402;
+	bh=8aC0iu4ntzgbduxwIsWFSVIL0mxp4STZHoEOULQX0RI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p4an/w0ZNiGdIDMAbe7CAKI2py+qwwgaFlG9mzPJDi4QxqEYwdu/6AIbTBUQ8oYG6
-	 UvuEBoex0fqGWaLnesA1Id1e4w/2C56dRaIkWCTt4YLy8PC+GQXPqK5hOjAs4EaGOd
-	 x/80mBSGr6mWWe6xpXpbeb2Pf0QO/HZuPy+WBMFY=
-Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250506122637epcas5p454fb550df70381e9b126fd575ddc09ac~878f6Rk8s0664406644epcas5p4m;
-	Tue,  6 May 2025 12:26:37 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.177]) by
-	epsnrtp04.localdomain (Postfix) with ESMTP id 4ZsHgv6G1wz6B9m7; Tue,  6 May
-	2025 12:26:35 +0000 (GMT)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac~878drNAQa0911209112epcas5p1r;
-	Tue,  6 May 2025 12:26:35 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250506122635epsmtrp21eaa58a53218f12e73a6c9a11ac112d3~878dqiBVO0521905219epsmtrp2H;
-	Tue,  6 May 2025 12:26:35 +0000 (GMT)
-X-AuditID: b6c32a28-46cef70000001e8a-d7-6819fffbeff9
+	b=dHwExi6pr6dQMg27zg3uk7spIStYQ7EFVrDFG30UDg8IQ3CUxhltSixDggT6aXj+E
+	 25ON2uZ7Ky0/YxDFcJK9i1asw1t9YGCRpVl2Psag0C1nDhQGF2XDRfzK1kxOaEVhbh
+	 XgHplos/e9wAUdLUrTBlqhfPc3nySk/SYr05Hzu8=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
+	20250506122641epcas5p35019744778d94ee4ce88bbde6da04ef6~878jidzAM0387503875epcas5p3M;
+	Tue,  6 May 2025 12:26:41 +0000 (GMT)
+Received: from epcas5p2.samsung.com (unknown [182.195.38.181]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4ZsHgz6Ytpz6B9m4; Tue,  6 May
+	2025 12:26:39 +0000 (GMT)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250506122638epcas5p364107da78e115a57f1fa91436265edeb~878g9s7uU1254712547epcas5p3E;
+	Tue,  6 May 2025 12:26:38 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250506122638epsmtrp101da3f6a9a86b6e08723a626b726585f~878g9A6w62555625556epsmtrp10;
+	Tue,  6 May 2025 12:26:38 +0000 (GMT)
+X-AuditID: b6c32a2a-d57fe70000002265-59-6819fffe1864
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	6B.E5.07818.BFFF9186; Tue,  6 May 2025 21:26:35 +0900 (KST)
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	B1.6E.08805.EFFF9186; Tue,  6 May 2025 21:26:38 +0900 (KST)
 Received: from localhost.localdomain (unknown [107.99.41.245]) by
 	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250506122633epsmtip26207664adaebf8511d3a5e2c81e07337~878cE_q031679416794epsmtip2Z;
-	Tue,  6 May 2025 12:26:33 +0000 (GMT)
+	20250506122637epsmtip2acc13ee0a12e95a5610fc0d10b7183c9~878fZJoHZ1679416794epsmtip2a;
+	Tue,  6 May 2025 12:26:37 +0000 (GMT)
 From: Kanchan Joshi <joshi.k@samsung.com>
 To: axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, asml.silence@gmail.com
 Cc: io-uring@vger.kernel.org, linux-block@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org, linux-nvme@lists.infradead.org, Hannes
 	Reinecke <hare@suse.de>, Nitesh Shetty <nj.shetty@samsung.com>, Kanchan
 	Joshi <joshi.k@samsung.com>
-Subject: [PATCH v16 01/11] fs: add a write stream field to the kiocb
-Date: Tue,  6 May 2025 17:47:22 +0530
-Message-Id: <20250506121732.8211-2-joshi.k@samsung.com>
+Subject: [PATCH v16 03/11] block: introduce max_write_streams queue limit
+Date: Tue,  6 May 2025 17:47:24 +0530
+Message-Id: <20250506121732.8211-4-joshi.k@samsung.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250506121732.8211-1-joshi.k@samsung.com>
 Precedence: bulk
@@ -68,57 +68,120 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGLMWRmVeSWpSXmKPExsWy7bCSvO7v/5IZBi3XOCzmrNrGaLH6bj+b
-	xZ5Fk5gsVq4+ymTxrvUci8XR/2/ZLCYdusZosfeWtsWevSdZLOYve8puse33fGYHbo+ds+6y
-	e1w+W+qxaVUnm8fmJfUeu282sHn0bVnF6LH5dLXH501yARxRXDYpqTmZZalF+nYJXBkNbw4x
-	FXSyV0z9sIC5gfEhaxcjJ4eEgInE1D2P2LoYuTiEBHYzSvTOW8kGkRCXaL72gx3CFpZY+e85
-	O0TRR0aJS3sesHQxcnCwCWhKXJhcClIjIhAg8XLxY2aQGmaBD4wSeybOZgRJCAu4SDycOwds
-	KIuAqkT73/9MIDavgLnE4m87GCEWyEvMvPQdbBmngIXE8j2zwOJCQDUvjh5hh6gXlDg58wkL
-	iM0MVN+8dTbzBEaBWUhSs5CkFjAyrWKUTC0ozk3PTTYsMMxLLdcrTswtLs1L10vOz93ECI4K
-	LY0djO++NekfYmTiYDzEKMHBrCTCe/++ZIYQb0piZVVqUX58UWlOavEhRmkOFiVx3pWGEelC
-	AumJJanZqakFqUUwWSYOTqkGpor58925uoXuSkuou23fyPv7scWPfYdqP12yL6ma8qzY/ejR
-	8/fy3siJnFP83X688dCmy1/OLL2fvkby4OS/Ktt0rq2a1r+uM3S6X9LZjnWz9mkzSe378zfD
-	gbPbZ1uqOcdx4w2pQZlPz794avzTMEtUbOmFU8rfNhZdZzrXxlK4+6dOl2qR4NMFe1UvhMiJ
-	Ldg6z0LR10bAcPKqr2q8YdFeJU7LOWNXaTz0m6Bz6p5LfOLDt2pnLfsFclu5ph+ot9y8+uY7
-	l21TPOvc4le626g+DVj20K9h8l+/Tf8S1lTxPT6udMkwIvbnomVvmP1lZ15TLX9bs2jp7p3L
-	pp5qjp5oIp39KuPvvHKGNecWVd1TYinOSDTUYi4qTgQASOsS3vkCAAA=
-X-CMS-MailID: 20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCLMWRmVeSWpSXmKPExsWy7bCSvO6//5IZBju+aVvMWbWN0WL13X42
+	iz2LJjFZrFx9lMniXes5Fouj/9+yWUw6dI3RYu8tbYs9e0+yWMxf9pTdYtvv+cwO3B47Z91l
+	97h8ttRj06pONo/NS+o9dt9sYPPo27KK0WPz6WqPz5vkAjiiuGxSUnMyy1KL9O0SuDJ+XPrH
+	XNAgU9HyqZOpgXGeRBcjJ4eEgInEhZ65rCC2kMBuRompz5Qg4uISzdd+sEPYwhIr/z0HsrmA
+	aj4ySuyd8ZSxi5GDg01AU+LC5FKQGhGBAImXix8zg9QwC3xglNgzcTYjSEJYwFNi+ZsNzCD1
+	LAKqEr1rqkDCvALmEuf/z2WDmC8vMfPSd7BdnAIWEsv3zGKEuMdc4sXRI+wQ9YISJ2c+YQGx
+	mYHqm7fOZp7AKDALSWoWktQCRqZVjJKpBcW56bnFhgVGeanlesWJucWleel6yfm5mxjBEaGl
+	tYNxz6oPeocYmTgYDzFKcDArifDevy+ZIcSbklhZlVqUH19UmpNafIhRmoNFSZz32+veFCGB
+	9MSS1OzU1ILUIpgsEwenVAMT04R7xtk/2/YvOJeVNMV1hq5wtET28qfXzzF/52gz/dbj2fRb
+	hv2il/Mlx+WXT6++yrNC8qawT/ID+0uMHCH/3mb8rm098epPmcvHqvY+kSPSBWurpB6lPtXb
+	eezWnuxUdb2bk0S1z9w+lXx5m1bu8/hi5VkzS16cZDqdlpFX1PREUXqi6WdFlycKq6M5JR75
+	X3+mX7CmtrC2rMIm/n8s867Lr/h/R4rP2lxW2tozUYavXuLJ1paiZ4ISsr+6/z2MPjzBOMv+
+	QeBBTvMpPbGhN2qsSoUFnjDK+ou1FfekfFF7O+98w6OvhVkPAo/NPJ10LtPLSyL0kMXuqqUv
+	Ti7Y1JHx8sDz1BWPXrDpulQosRRnJBpqMRcVJwIAIR4M4vcCAAA=
+X-CMS-MailID: 20250506122638epcas5p364107da78e115a57f1fa91436265edeb
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 cpgsPolicy: CPGSC10-542,Y
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac
+X-CMS-RootMailID: 20250506122638epcas5p364107da78e115a57f1fa91436265edeb
 References: <20250506121732.8211-1-joshi.k@samsung.com>
-	<CGME20250506122635epcas5p145565666b3bfedf8da08075dd928d2ac@epcas5p1.samsung.com>
+	<CGME20250506122638epcas5p364107da78e115a57f1fa91436265edeb@epcas5p3.samsung.com>
 
-From: Christoph Hellwig <hch@lst.de>
+From: Keith Busch <kbusch@kernel.org>
 
-Prepare for io_uring passthrough of write streams. The write stream
-field in the kiocb structure fits into an existing 2-byte hole, so its
-size is not changed.
+Drivers with hardware that support write streams need a way to export how
+many are available so applications can generically query this.
 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Keith Busch <kbusch@kernel.org>
+[hch: renamed hints to streams, removed stacking]
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Kanchan Joshi <joshi.k@samsung.com>
 ---
- include/linux/fs.h | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/ABI/stable/sysfs-block | 7 +++++++
+ block/blk-sysfs.c                    | 3 +++
+ include/linux/blkdev.h               | 9 +++++++++
+ 3 files changed, 19 insertions(+)
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 016b0fe1536e..d5988867fe31 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -408,6 +408,7 @@ struct kiocb {
- 	void			*private;
- 	int			ki_flags;
- 	u16			ki_ioprio; /* See linux/ioprio.h */
-+	u8			ki_write_stream;
- 	union {
- 		/*
- 		 * Only used for async buffered reads, where it denotes the
+diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
+index 11545c9e2e93..8bbe1eca28df 100644
+--- a/Documentation/ABI/stable/sysfs-block
++++ b/Documentation/ABI/stable/sysfs-block
+@@ -547,6 +547,13 @@ Description:
+ 		[RO] Maximum size in bytes of a single element in a DMA
+ 		scatter/gather list.
+ 
++What:		/sys/block/<disk>/queue/max_write_streams
++Date:		November 2024
++Contact:	linux-block@vger.kernel.org
++Description:
++		[RO] Maximum number of write streams supported, 0 if not
++		supported. If supported, valid values are 1 through
++		max_write_streams, inclusive.
+ 
+ What:		/sys/block/<disk>/queue/max_segments
+ Date:		March 2010
+diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+index 1f9b45b0b9ee..986cdba4f550 100644
+--- a/block/blk-sysfs.c
++++ b/block/blk-sysfs.c
+@@ -134,6 +134,7 @@ QUEUE_SYSFS_LIMIT_SHOW(max_segments)
+ QUEUE_SYSFS_LIMIT_SHOW(max_discard_segments)
+ QUEUE_SYSFS_LIMIT_SHOW(max_integrity_segments)
+ QUEUE_SYSFS_LIMIT_SHOW(max_segment_size)
++QUEUE_SYSFS_LIMIT_SHOW(max_write_streams)
+ QUEUE_SYSFS_LIMIT_SHOW(logical_block_size)
+ QUEUE_SYSFS_LIMIT_SHOW(physical_block_size)
+ QUEUE_SYSFS_LIMIT_SHOW(chunk_sectors)
+@@ -488,6 +489,7 @@ QUEUE_LIM_RO_ENTRY(queue_max_hw_sectors, "max_hw_sectors_kb");
+ QUEUE_LIM_RO_ENTRY(queue_max_segments, "max_segments");
+ QUEUE_LIM_RO_ENTRY(queue_max_integrity_segments, "max_integrity_segments");
+ QUEUE_LIM_RO_ENTRY(queue_max_segment_size, "max_segment_size");
++QUEUE_LIM_RO_ENTRY(queue_max_write_streams, "max_write_streams");
+ QUEUE_RW_ENTRY(elv_iosched, "scheduler");
+ 
+ QUEUE_LIM_RO_ENTRY(queue_logical_block_size, "logical_block_size");
+@@ -642,6 +644,7 @@ static struct attribute *queue_attrs[] = {
+ 	&queue_max_discard_segments_entry.attr,
+ 	&queue_max_integrity_segments_entry.attr,
+ 	&queue_max_segment_size_entry.attr,
++	&queue_max_write_streams_entry.attr,
+ 	&queue_hw_sector_size_entry.attr,
+ 	&queue_logical_block_size_entry.attr,
+ 	&queue_physical_block_size_entry.attr,
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index a9bd945e87b9..3747fbbd65fa 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -402,6 +402,8 @@ struct queue_limits {
+ 	unsigned short		max_integrity_segments;
+ 	unsigned short		max_discard_segments;
+ 
++	unsigned short		max_write_streams;
++
+ 	unsigned int		max_open_zones;
+ 	unsigned int		max_active_zones;
+ 
+@@ -1285,6 +1287,13 @@ static inline unsigned int bdev_max_segments(struct block_device *bdev)
+ 	return queue_max_segments(bdev_get_queue(bdev));
+ }
+ 
++static inline unsigned short bdev_max_write_streams(struct block_device *bdev)
++{
++	if (bdev_is_partition(bdev))
++		return 0;
++	return bdev_limits(bdev)->max_write_streams;
++}
++
+ static inline unsigned queue_logical_block_size(const struct request_queue *q)
+ {
+ 	return q->limits.logical_block_size;
 -- 
 2.25.1
 
