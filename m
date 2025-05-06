@@ -1,159 +1,124 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EF2527A478
-	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8E91F5849
+	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 13:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746534859; cv=none; b=f//vPvgm3pPmjoczbc4JXrsoajxSCooF352mN72Lh0HTlU7W8KIZkz097VN8NF1Vhf2vHNfKBn5pudiBESe4z1NWh7HqmuIo02/lt2Adu8eyqZpwgLZYuCOfH9hvFilA1NHgx7kAzHcrSBcCYJGC3T/WuGZ0YyJJUuUWj1tdkzc=
+	t=1746539314; cv=none; b=jPKMKS6NGSXSD3+2iF++DahCXoNfWyWBIkDP9ndB2zlbKtF2dnFijsvbE0Zfn0asRQItmG0W3nocPRwyRi6rIV+EzUwMzJ6OK+N8qP2z66KLmHciURHRZ1MWQE8+v81R3whXU0DW/cVcHXPlzGys1ydgs9He4R1y3E8kSiwuQVM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746534859; c=relaxed/simple;
-	bh=eOQE0gLVZYrr9y6H0YJ9SasJQbUCpS4eWuL/O+Fkv7Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=nJNvQQHKATLxmiedWm0h75Oe2aMqNOQ1E7lAoRAkgk/ZNZhO1L3QMvuvgDBQHI5WP40CN9be++6LC+P3SCPQjUkwwj/gYEohIn/IgpH0CUy6hWoZxMmpZtn9iTUgXxFmaaMRsigGafoR6HrTDE8RvHWbZkgkxm3G6hJGiaFgXDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=saxEBW7e; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1746539314; c=relaxed/simple;
+	bh=F33ltflILZaO4kCD4Wzy/q5GHLExZInJUrC5PJN1Ay0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=PESZpK40yfIOoSEP0Sha4VNdjejJCKFqWRA7Yz0VUYcF2QCGe3sJnKC3cO67ZY9xz6Xt7OtOFINSd3qjZUPlxJ/civ1RWjh0080o6+eR7GHvvYVzwMzJZ828ZSiw+5e43QYCF0+JToz/HvTms5Ky2Rk2zir4ehfCUNHH+7WoJHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=P96rtaq8; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="saxEBW7e"
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250506122636epoutp014bb42ca02677453598bbe5de9deaeb4b~878eYEewS2795627956epoutp012
-	for <io-uring@vger.kernel.org>; Tue,  6 May 2025 12:26:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250506122636epoutp014bb42ca02677453598bbe5de9deaeb4b~878eYEewS2795627956epoutp012
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1746534396;
-	bh=EP95YAKMGmar4fGvEahN3sfxzyzUKGg4D2wnOZeDrg8=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=saxEBW7etCxAbwq6GD5VB8cpEMo6Dzevc3cdhIZwcWgP45zlhw/ZGjwrr2fqIlrtx
-	 yR1REtuaqWnP+j+Mb1O7AHxD6EuwFAA/DzkEwfnbOb/gfKIX1LZIT8LeEkHzRJqjlO
-	 atJQXJUbhODGZ8HiV5vtbpp5A27iyJ3788RWf0+E=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250506122635epcas5p415c62b44a7a1d9d877a84bc1ae8ca4d4~878d-Huyq1362913629epcas5p48;
-	Tue,  6 May 2025 12:26:35 +0000 (GMT)
-Received: from epcas5p3.samsung.com (unknown [182.195.38.181]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4ZsHgs6YTBz2SSKX; Tue,  6 May
-	2025 12:26:33 +0000 (GMT)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250506122633epcas5p21d2c989313f38dea82162fff7b9856e7~878cBgr0K2629626296epcas5p2D;
-	Tue,  6 May 2025 12:26:33 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250506122633epsmtrp137c67cdfd15529befad5ce1ab710c2ba~878cA1-UT2524025240epsmtrp1f;
-	Tue,  6 May 2025 12:26:33 +0000 (GMT)
-X-AuditID: b6c32a2a-d63ff70000002265-4a-6819fff90a16
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	00.6E.08805.9FFF9186; Tue,  6 May 2025 21:26:33 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.99.41.245]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250506122632epsmtip2077afd01fb4311aaad9b024ee9ba4802~878an1Igm1679416794epsmtip2Y;
-	Tue,  6 May 2025 12:26:31 +0000 (GMT)
-From: Kanchan Joshi <joshi.k@samsung.com>
-To: axboe@kernel.dk, kbusch@kernel.org, hch@lst.de, asml.silence@gmail.com
-Cc: io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-nvme@lists.infradead.org, Kanchan Joshi
-	<joshi.k@samsung.com>
-Subject: [PATCH v16 00/11] Block write streams with nvme fdp
-Date: Tue,  6 May 2025 17:47:21 +0530
-Message-Id: <20250506121732.8211-1-joshi.k@samsung.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="P96rtaq8"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3d96d16b375so29768365ab.1
+        for <io-uring@vger.kernel.org>; Tue, 06 May 2025 06:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1746539311; x=1747144111; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nwZo3vS66EatPpWKcNBFiFt6i1hah0QeRGJTjdHslY4=;
+        b=P96rtaq88ORNphdm2vWWhyTv8bMCBisrYNjIbntDbADaTpPHYLHpZEFp0yvLP8RtDt
+         PVTB758FVLVu6ye/AWZLdrd9m9MuXDGao8jd+i1Qy/+gV5J3Ubz5Zat6yqOEBu2OzWYS
+         gRc0lv8uZNcAbMFj72wiSVIynB7rPdAjvOub6uYdJedvv7zKHHcpNlSFCVhsgLgN0e3a
+         cTYi511qb59Ew8asTiX6N0o1RnyEogS74Y1bhnrWSHRIawgC8GuVkST5T2ijkbTAMmBe
+         eDKbA5eTlNGiJtjHE4kuATSlD9X0c/gkQ9WrHhibj8mO1GFMbA+ABKSDepfBcDXpqHGt
+         oarQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746539311; x=1747144111;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nwZo3vS66EatPpWKcNBFiFt6i1hah0QeRGJTjdHslY4=;
+        b=GkaiLiNQVakXufPzrmyA3yWiRCDwdN/PWgU+Q+Dwvr/PLvGgB2FlwQNOw6jQf+eP3J
+         FE3aMtcgKK3sXMxQSkhlf565s9y2nqXNxMtRTf/K0vTWWy3ngIzScmK7RRLXstfsY08T
+         oWSrXjlPn2RwSl7K6Qe+3yQME7fydLQVSDK7WBBQ9s4aO3Hv1C5jesFxNMr2OkOpEi1n
+         sU+Wb+jL1Yihrht86wDTJCXnEU8YsNYyXbDU1HNjwsS6cFYfi9TmT6+yb97YZJDg1kCG
+         AP//d9wsYUJj4aymLA65HJ8plWOEoUpRjDGg7ozyShcKsFTxEDC/BsOMpf3NVWbZnyxZ
+         ynWA==
+X-Gm-Message-State: AOJu0YziYZ0/L69Za6t3RjAQftM1Tqu5+2lB9cnCiIHtJmiVd4vTYJpO
+	MVFJrWb/Mn6XAOkW40inEDLSvVNdUqFZVnSSQXivfVfdfOmSUx3WWw1GEEI6HL0=
+X-Gm-Gg: ASbGnctJynE8Ol3gdPWKxAEPAkMuleJponSf6IcxVwwf0EcyiqzmrQB1Ty8hxcqUNjq
+	IyZk8xbUJgt8zb9+10qq3bputQ0R1HoI44+XmUuJ3DBdddmGy16HXZUEmLVXLTaW2Z/5VLYIwLd
+	Y85TqvJzNHTPprzxPIbpe1nRotOtuYeEdhGGuV/ugFVmTgM8zZPkuo8wgwVkP5mHtUzBl0kD8tz
+	V1Kah5lJfNYn55/66XvH8gw6+o5sW19sVv63jLqy0l7w9vqPJ81hZ/dJuJDGMndntFeTmv9QjTk
+	WcODRZaz8zMOTDbBGFRcJdR7AGq79Cw=
+X-Google-Smtp-Source: AGHT+IG7WE7HRobsTLuIHeNzb6EgLlDBqw2C/DFW2yv8E33HAfisJnBRcMgTyQ4uXgsmnCPMeMlQDQ==
+X-Received: by 2002:a05:6e02:1fe6:b0:3d4:6ff4:261e with SMTP id e9e14a558f8ab-3da6cd50eb1mr34812345ab.0.1746539311539;
+        Tue, 06 May 2025 06:48:31 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d975f58be3sm25930915ab.58.2025.05.06.06.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 May 2025 06:48:30 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: kbusch@kernel.org, hch@lst.de, asml.silence@gmail.com, 
+ Kanchan Joshi <joshi.k@samsung.com>
+Cc: io-uring@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-nvme@lists.infradead.org
+In-Reply-To: <20250506121732.8211-1-joshi.k@samsung.com>
+References: <CGME20250506122633epcas5p21d2c989313f38dea82162fff7b9856e7@epcas5p2.samsung.com>
+ <20250506121732.8211-1-joshi.k@samsung.com>
+Subject: Re: [PATCH v16 00/11] Block write streams with nvme fdp
+Message-Id: <174653931017.1466231.2831663960512265480.b4-ty@kernel.dk>
+Date: Tue, 06 May 2025 07:48:30 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPLMWRmVeSWpSXmKPExsWy7bCSvO7P/5IZBj/6xC3mrNrGaLH6bj+b
-	xcrVR5ks3rWeY7E4+v8tm8WkQ9cYLfbe0rbYs/cki8X8ZU/ZHTg9ds66y+5x+Wypx6ZVnWwe
-	m5fUe+y+2cDm0bdlFaPH501yAexRXDYpqTmZZalF+nYJXBkT359iLngpWfHk9h2WBsY3Il2M
-	HBwSAiYSHxbHdzFycQgJ7GaUmPj2AnMXIydQXFyi+doPdghbWGLlv+fsEEUfGSUuzDvGCNLM
-	JqApcWFyKUiNiECAxMvFj5lBapgFljJKdCycCDZIWMBG4teN02CDWARUJTZsnMoIYvMKmEvM
-	v/2LFWKBvMTMS9/ZIeKCEidnPmEBsZmB4s1bZzNPYOSbhSQ1C0lqASPTKkbJ1ILi3PTcYsMC
-	o7zUcr3ixNzi0rx0veT83E2M4DDW0trBuGfVB71DjEwcjIcYJTiYlUR479+XzBDiTUmsrEot
-	yo8vKs1JLT7EKM3BoiTO++11b4qQQHpiSWp2ampBahFMlomDU6qBSezZcS2JRfpH/7xpOaf0
-	L/sSn7LJtB13dinIbTSsf9Y9MbVTd3tXw80J0VETN4SIcOsZqh/+oSRTqfKIleFv65zw0ud1
-	AozspRdYhBzNvzSGaJ/RbVZsWGfy2+ii4u2SrXK/zG6bRYXr3J7Yk1IZya827WvFRi65ysWy
-	T065snK7Jc2SPj+55eTzzMe3uZWnziu9sk7724pHWtJ7jl1MnDJvrbM6b/iuiaZqVpt3utUt
-	r007vOda/pG0xusTJeynGVqcyqnMbj7a0WDTP9nTZuOUc3c3sCxO/nrw/5sipp4fKzg6MuZ5
-	F3zzn79p1q3nxq+39H95vJpRNcOPP/LeliX1Sf+tbdbZvJ6+7m6ikBJLcUaioRZzUXEiALK5
-	JHnSAgAA
-X-CMS-MailID: 20250506122633epcas5p21d2c989313f38dea82162fff7b9856e7
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250506122633epcas5p21d2c989313f38dea82162fff7b9856e7
-References: <CGME20250506122633epcas5p21d2c989313f38dea82162fff7b9856e7@epcas5p2.samsung.com>
-
-The series enables FDP support for block IO.
-The patches
-- Add ki_write_stream in kiocb (patch 1), and bi_write_stream in bio (patch 2).
-- Introduce two new queue limits - max_write_streams and
-  write_stream_granularity (patch 3, 4)
-- Pass write stream (either from kiocb, or from inode write hints)
-  for block device (patch 5)
-- Per I/O write stream interface in io_uring (patch 6)
-- Register nvme fdp via write stream queue limits (patch 10, 11)
-
-Changes since v15:
-- Merged to latest for-next (Jens)
-
-Previous discussions:
-v15: https://lore.kernel.org/linux-nvme/20250203184129.1829324-1-kbusch@meta.com/T/#u
-v14: https://lore.kernel.org/linux-nvme/20241211183514.64070-1-kbusch@meta.com/T/#u
-v13: https://lore.kernel.org/linux-nvme/20241210194722.1905732-1-kbusch@meta.com/T/#u
-v12: https://lore.kernel.org/linux-nvme/20241206221801.790690-1-kbusch@meta.com/T/#u
-v11: https://lore.kernel.org/linux-nvme/20241206015308.3342386-1-kbusch@meta.com/T/#u
-v10: https://lore.kernel.org/linux-nvme/20241029151922.459139-1-kbusch@meta.com/T/#u
-v9: https://lore.kernel.org/linux-nvme/20241025213645.3464331-1-kbusch@meta.com/T/#u
-v8: https://lore.kernel.org/linux-nvme/20241017160937.2283225-1-kbusch@meta.com/T/#u
-v7: https://lore.kernel.org/linux-nvme/20240930181305.17286-1-joshi.k@samsung.com/T/#u
-v6: https://lore.kernel.org/linux-nvme/20240924092457.7846-1-joshi.k@samsung.com/T/#u
-v5: https://lore.kernel.org/linux-nvme/20240910150200.6589-1-joshi.k@samsung.com/T/#u
-v4: https://lore.kernel.org/linux-nvme/20240826170606.255718-1-joshi.k@samsung.com/T/#u
-v3: https://lore.kernel.org/linux-nvme/20240702102619.164170-1-joshi.k@samsung.com/T/#u
-v2: https://lore.kernel.org/linux-nvme/20240528150233.55562-1-joshi.k@samsung.com/T/#u
-v1: https://lore.kernel.org/linux-nvme/20240510134015.29717-1-joshi.k@samsung.com/T/#u
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-7b9b9
 
 
-Christoph Hellwig (7):
-  fs: add a write stream field to the kiocb
-  block: add a bi_write_stream field
-  block: introduce a write_stream_granularity queue limit
-  block: expose write streams for block device nodes
-  nvme: add a nvme_get_log_lsi helper
-  nvme: pass a void pointer to nvme_get/set_features for the result
-  nvme: add FDP definitions
+On Tue, 06 May 2025 17:47:21 +0530, Kanchan Joshi wrote:
+> The series enables FDP support for block IO.
+> The patches
+> - Add ki_write_stream in kiocb (patch 1), and bi_write_stream in bio (patch 2).
+> - Introduce two new queue limits - max_write_streams and
+>   write_stream_granularity (patch 3, 4)
+> - Pass write stream (either from kiocb, or from inode write hints)
+>   for block device (patch 5)
+> - Per I/O write stream interface in io_uring (patch 6)
+> - Register nvme fdp via write stream queue limits (patch 10, 11)
+> 
+> [...]
 
-Keith Busch (4):
-  block: introduce max_write_streams queue limit
-  io_uring: enable per-io write streams
-  nvme: register fdp parameters with the block layer
-  nvme: use fdp streams if write stream is provided
+Applied, thanks!
 
- Documentation/ABI/stable/sysfs-block |  15 +++
- block/bio.c                          |   2 +
- block/blk-crypto-fallback.c          |   1 +
- block/blk-merge.c                    |   4 +
- block/blk-sysfs.c                    |   6 +
- block/fops.c                         |  23 ++++
- drivers/nvme/host/core.c             | 191 ++++++++++++++++++++++++++-
- drivers/nvme/host/nvme.h             |   7 +-
- include/linux/blk_types.h            |   1 +
- include/linux/blkdev.h               |  10 ++
- include/linux/fs.h                   |   1 +
- include/linux/nvme.h                 |  77 +++++++++++
- include/uapi/linux/io_uring.h        |   4 +
- io_uring/io_uring.c                  |   2 +
- io_uring/rw.c                        |   1 +
- 15 files changed, 339 insertions(+), 6 deletions(-)
+[01/11] fs: add a write stream field to the kiocb
+        commit: 732f25a2895a8c1c54fb56544f0b1e23770ef4d7
+[02/11] block: add a bi_write_stream field
+        commit: 5006f85ea23ea0bda9a8e31fdda126f4fca48f20
+[03/11] block: introduce max_write_streams queue limit
+        commit: d2f526ba27d29c442542f7c5df0a86ef0b576716
+[04/11] block: introduce a write_stream_granularity queue limit
+        commit: c23acfac10786ac5062a0615e23e68b913ac8da0
+[05/11] block: expose write streams for block device nodes
+        commit: c27683da6406031d47a65b344d04a40736490d95
+[06/11] io_uring: enable per-io write streams
+        commit: 02040353f4fedb823f011f27962325f328d0689f
+[07/11] nvme: add a nvme_get_log_lsi helper
+        commit: d4f8359eaecf0f8b0a9f631e6652b60ae61f3016
+[08/11] nvme: pass a void pointer to nvme_get/set_features for the result
+        commit: 7a044d34b1e21fc4e04d4e48dae1dc3795621570
+[09/11] nvme: add FDP definitions
+        commit: ee203d3d86113559b77b1723e0d10909ebbd66ad
+[10/11] nvme: register fdp parameters with the block layer
+        commit: 30b5f20bb2ddab013035399e5c7e6577da49320a
+[11/11] nvme: use fdp streams if write stream is provided
+        commit: 38e8397dde6338c76593ddb17ccf3118fc3f5203
 
-
-base-commit: e6d9dcfdc0c53b87cfe86163bfbd14f6457ef2b7
+Best regards,
 -- 
-2.25.1
+Jens Axboe
+
+
 
