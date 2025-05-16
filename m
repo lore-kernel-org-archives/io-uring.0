@@ -1,108 +1,206 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807C3214A60
-	for <io-uring@vger.kernel.org>; Fri, 16 May 2025 16:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1149274667
+	for <io-uring@vger.kernel.org>; Fri, 16 May 2025 17:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747414688; cv=none; b=CI4FjOY4fp0b6Tj7jC3LL4jie+MVXLn38rRYMXlYxVIodjx4tQowQJEwuElyDejneLfUAhM9tf2X008CSwvWWf5Ao07XyblHcCdi6Vde7Xbtu8Q/dzbvyBMiVNYViAVCJL4cLYtm5BN33Ct9ZFsHekrXm4Qjo487fqzsSLrynxI=
+	t=1747415665; cv=none; b=YHlKgH3otCzO5B5I7kXgE1LRNH6l24bSQA20Jd5Jjh7YrEcW7J9svJFAF1Q3zjJOx28iJrJz2yzH3dx5Q8grU8tpaUHhO05XfK77I8qmHg+UsGfdRLmCNsJEdaIw9riBfcjehLJv6giG0Iyq3/NTjYDMXRJ6Mq8p79JeS0kikVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747414688; c=relaxed/simple;
-	bh=GY637Y0wyQGGOgBBGthaVo1TavoK7NCVVw9PIDFhrog=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jAMqL9jR/fM5fyIW5bN5cr4lLW7kUj1lQZmA4BtTHpJ8A8LRWufAyAVokdXoktFUWDqI08Mfj7gjhLX90/HF8LFvWgGKe/8X1WTimYh11Op6r983bLk4uD5/AFXL/+e5Ujjn5awRw01p5Qv7Sea7HXH+20gE8dzuvgwM8bR5w78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=jc3Gznlg; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1747415665; c=relaxed/simple;
+	bh=VNCHMd4sUwJjyvJAGt3zNw+sCT2nY7BKCx2RDnTBeDY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=udDpyvHEjXZbu30O+5Ww2erR9I9eshczmNZmRbefm1RbtXQD0l+8j2RIQBJNKorpQ2F9zCu9kQgPLHKnxrWjppccQmtue2Inyxp+gwfTONzT0d8N1FpOmZkkaAep5KyFVO1AgJhyzp+vQsymXEvf7BTb4jE9u+XTZSQ25Zr3Xjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aCE0TGSw; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="jc3Gznlg"
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3db87f6f106so5136775ab.1
-        for <io-uring@vger.kernel.org>; Fri, 16 May 2025 09:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1747414684; x=1748019484; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=XLSrQL7B8XhL2qeojHn7fq9jVUFWsPm3E3IE51zn3Jw=;
-        b=jc3Gznlgy0hdsXGKs9afV/OQEKg1lrx7TuB9DPycHx/wDq04wkBcor8s7+kkPTcgpw
-         b0TymZPOWg/aFWFWX0Cw1Oeq+4w+SCGnvT5p8IV8aEDidzaK99lskTQeW4BlYd1HQvsJ
-         kiCMofdREWMScWfJIQ3MMr7aNXhdFnYf68Y0+NsW92efOlOllnfJrc2nHgGorILNpnNY
-         ilgpwm2RZbM324sE9fSt/wuxtU30Qb0N2Cjwztg28nvN4cDVMh15D3oTRNJ7NK92cSXk
-         Lg7bxhEHD0ewg98PoZN/phtnjoNk4lPpXLUKeYhLPXbQ/2Pjac4+RLJVHVXcAwpdWi4A
-         /G2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747414684; x=1748019484;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XLSrQL7B8XhL2qeojHn7fq9jVUFWsPm3E3IE51zn3Jw=;
-        b=cA/gAPblROG7FKpL3cRr1J3fBkp1jw+1X7Rv5iTH1t3aWCD7GWgvz+Ihsz113ZqGaC
-         Z3Gvn4a2+1q4Cscz+fswTxusSEQC21EWM7M6uGnE7hPJamQUD/Hs7p21iRzLhgMQj681
-         LZSXmL/g9B7RT0TrNfi/17myfNxaMeIFP8czm8FI42C4f2It7E2tOYly7T32maIQLp3O
-         iWx19XdKQ/Ho38eGfzrLg+mvW3DJbKQ5cyHfqdR+YDahWFyJuPa76aupo4ozzPYOC1Uh
-         Dq69aVy1z3F0B1lko1ZWZ7ygFQ0e49SnPZ8UfKO/tw3rVb0p2ywGo47qtF7BQUn4ATep
-         eSeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1unn1pK/AKR5TxwfibABfugMsuEjOGK5bMyGIkMUGTOm42+K1m8TO5RZEi2mwcMls7BkFioT1tw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqQqWwr759dsBXDk8PHN6WkChTioEtHPvK5Wxd4FqmOesXtML1
-	jHvZoVJoO7xsIp0PMBfbXO6k9MzkWNiMJBuKvSA1/MQoXNowDRiYkQLhR4LJG589kHoCWfkPuPg
-	WL6z9
-X-Gm-Gg: ASbGncsvTNVOSYOPOfaxZKFX0SQJtKB83B6CLjwIR6hoQrQEYTYrrTmupNd/hFNgYax
-	CQQByM/yDrt2hOUq5A9pS8IjeY1Jnwo/7L2NcK+qMVCjigosKpEWEUCKMEG9lSn3p7NWS7SC/rP
-	4t8ThfUm0Zx+Robwfr/qdtI4UzOj7vapIFVUcnfKKr0Nk5pEGtDs+Yj2Ay4UDDubVOcIwXrzPjN
-	9kstizNyzGgy9BMBfCLAUcc+jiafvm7GrOiK683EX1NQr/ZWB0RwG1hH2nqlUmjrgEKtWBuMQJh
-	WXDX0dYbE1pw2pC/Xl5RuJtvWpguGIeFgx31PhssMfzHSbk=
-X-Google-Smtp-Source: AGHT+IGEvBICeyQsU/ED6NvtCwG3sDIM4VdvubyXEQM5jwQuKaX95dvEqKLDQbOG17sO+Okci1UrsQ==
-X-Received: by 2002:a05:6e02:164b:b0:3d9:659d:86de with SMTP id e9e14a558f8ab-3db84332185mr46527705ab.20.1747414673138;
-        Fri, 16 May 2025 09:57:53 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4fbcc3b1ad9sm486417173.53.2025.05.16.09.57.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 May 2025 09:57:52 -0700 (PDT)
-Message-ID: <f0d9fb95-5539-4a5d-972f-6904c1b9c2db@kernel.dk>
-Date: Fri, 16 May 2025 10:57:51 -0600
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aCE0TGSw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Wd
+	uh8JyWy11VVn4hwJM7a+avCmPoopwOQDe+fs/YZDY=; b=aCE0TGSwbi9A0WA6TJ
+	LlHglYUcwvLj0AQYoKS+/dFcb5yFrtsYclD+VzhFcFMyU+t2/LC7qci3woij56Np
+	19bmyTkf5zLv8tNmy+f9X3U0W5GstphvibBjPVohWM5PiXQ5ySVCNBczXI5an1Ls
+	GYfvMSACZNLRs7RU4nL2AYVf0=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wB3tOxmcidoMHqOBw--.62835S2;
+	Sat, 17 May 2025 01:14:14 +0800 (CST)
+From: Haiyue Wang <haiyuewa@163.com>
+To: io-uring@vger.kernel.org
+Cc: Haiyue Wang <haiyuewa@163.com>
+Subject: [PATCH liburing v3] register: Remove deprecated io_uring_cqwait_reg_arg
+Date: Sat, 17 May 2025 01:12:25 +0800
+Message-ID: <20250516171351.1735-1-haiyuewa@163.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] io_uring: split alloc and add of overflow
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-References: <20250516161452.395927-1-axboe@kernel.dk>
- <20250516161452.395927-2-axboe@kernel.dk>
- <01275ac2-8d33-4f33-b216-f9d37e7c83af@gmail.com>
- <036598fc-cc22-4e37-a83c-8378ef630f55@kernel.dk>
- <f8f99262-2e11-4204-ad18-fabe836881b6@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <f8f99262-2e11-4204-ad18-fabe836881b6@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wB3tOxmcidoMHqOBw--.62835S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAr48Kr4kKw1ftr4DurW7Jwb_yoW7JrWUpa
+	yFkw13GrWjvF129ayDCF4UuF98A3yfJF47CrZxAw13ZFyavFnIkr40krWFkFyjqrW7Ar4j
+	vrsaq39rZw4DAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUgyCdUUUUU=
+X-CM-SenderInfo: 5kdl53xhzdqiywtou0bp/1tbiERlPa2gna4msOwAAsW
 
-On 5/16/25 10:58 AM, Pavel Begunkov wrote:
-> On 5/16/25 17:44, Jens Axboe wrote:
->> On 5/16/25 10:43 AM, Pavel Begunkov wrote:
->>> On 5/16/25 17:08, Jens Axboe wrote:
->>>> Add a new helper, io_alloc_ocqe(), that simply allocates and fills an
->>>> overflow entry. Then it can get done outside of the locking section,
->>>> and hence use more appropriate gfp_t allocation flags rather than always
->>>> default to GFP_ATOMIC.
->>>>
->>>> Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
->>>
->>> I didn't suggest that. If anything, it complicates CQE posting
->>> helpers when we should be moving in the opposite direction.
->>
->> I'll kill the attribution then - it's not meant to mean the
->> approach, but the concept of being able to use GFP_KERNEL
->> when we can.
-> 
-> Sure, but that will be blurred by time, while the patch IMHO is
-> making it worse and should never see the light.
+The opcode IORING_REGISTER_CQWAIT_REG and its argument io_uring_cqwait_reg_arg
+have been removed by [1] and [2].
 
-Well, you're certainly cheerful today.
+And a more generic opcode IORING_REGISTER_MEM_REGION has been introduced by [3]
+since Linux 6.13.
 
+Update the document about IORING_REGISTER_MEM_REGION based on [4] and [5].
+
+[1]: https://git.kernel.org/torvalds/c/83e041522eb9
+[2]: https://git.kernel.org/torvalds/c/c750629caeca
+[3]: https://git.kernel.org/torvalds/c/93238e661855
+[4]: https://git.kernel.org/torvalds/c/dfbbfbf19187
+[5]: https://git.kernel.org/torvalds/c/d617b3147d54
+
+Signed-off-by: Haiyue Wang <haiyuewa@163.com>
+---
+v3:
+ - Replace the document CQWAIT_REG with MEM_REGION.
+v2: https://lore.kernel.org/io-uring/20250516091040.32374-1-haiyuewa@163.com/
+ - Correct the commit message about the IORING_REGISTER_CQWAIT_REG which
+   is really removed.
+v1: https://lore.kernel.org/io-uring/20250516090704.32220-1-haiyuewa@163.com/
+---
+ man/io_uring_enter.2            |  4 +--
+ man/io_uring_register.2         | 55 +++++++++++++++++++++------------
+ src/include/liburing/io_uring.h | 14 ---------
+ 3 files changed, 37 insertions(+), 36 deletions(-)
+
+diff --git a/man/io_uring_enter.2 b/man/io_uring_enter.2
+index bbae6fb..99c0ab2 100644
+--- a/man/io_uring_enter.2
++++ b/man/io_uring_enter.2
+@@ -133,8 +133,8 @@ is not a pointer to a
+ but merely an offset into an area of wait regions previously registered with
+ .BR io_uring_register (2)
+ using the
+-.B IORING_REGISTER_CQWAIT_REG
+-operation. Available since 6.12
++.B IORING_REGISTER_MEM_REGION
++operation. Available since 6.13
+ 
+ .PP
+ .PP
+diff --git a/man/io_uring_register.2 b/man/io_uring_register.2
+index a81d950..75112d0 100644
+--- a/man/io_uring_register.2
++++ b/man/io_uring_register.2
+@@ -951,40 +951,55 @@ of this system call, which can be used to memory map the ring just like how
+ a new ring would've been mapped. Available since kernel 6.13.
+ 
+ .TP
+-.B IORING_REGISTER_CQWAIT_REG
+-Supports registering fixed wait regions, avoiding unnecessary copying in
+-of
++.B IORING_REGISTER_MEM_REGION
++Supports registering multiple purposes memory regions, avoiding unnecessary
++copying in of
+ .IR struct io_uring_getevents_arg
+ for wait operations that specify a timeout or minimum timeout. Takes a pointer
+ to a
+-.IR struct io_uring_cqwait_reg_arg
++.IR struct io_uring_mem_region_reg
+ structure, which looks as follows:
+ .PP
+ .in +12n
+ .EX
+-struct io_uring_cqwait_reg_arg {
+-    __u32 flags;
+-    __u32 struct_size;
+-    __u32 nr_entries;
+-    __u32 pad;
+-    __u64 user_addr;
+-    __u64 pad2[2];
++struct io_uring_mem_region_reg {
++    __u64 region_uptr;
++    __u64 flags;
++    __u64 __resv[2];
+ };
+ .EE
+ .in
+ .TP
+ .PP
+ where
++.IR region_uptr
++must be set to the region being registered as memory regions,
+ .IR flags
+ specifies modifier flags (must currently be
+-.B 0 ),
+-.IR struct_size
+-must be set to the size of the struct, and
+-.IR user_addr
+-must be set to the region being registered as wait regions. The pad fields
+-must all be cleared to
++.B IORING_MEM_REGION_REG_WAIT_ARG ). The pad fields must all be cleared to
+ .B 0 .
+-Each wait regions looks as follows:
++Each memory regions looks as follows:
++.PP
++.in +12n
++.EX
++struct io_uring_region_desc {
++    __u64 user_addr;
++    __u64 size;
++    __u32 flags;
++    __u32 id;
++    __u64 mmap_offset;
++    __u64 __resv[4];
++};
++.EE
++.in
++.TP
++.PP
++where
++.IR user_addr
++points to userspace memory mappings,
++.IR size
++is the size of userspace memory. Current supported userspace memory regions
++looks as follows:
+ .PP
+ .in +12n
+ .EX
+@@ -1018,9 +1033,9 @@ which, if set, says that the values in
+ are valid and should be used for a timeout operation. The
+ .IR user_addr
+ field of
+-.IR struct io_uring_cqwait_reg_arg
++.IR struct io_uring_region_desc
+ must be set to an address of
+-.IR struct io_uring_cqwait_reg
++.IR struct io_uring_reg_wait
+ members, an up to a page size can be mapped. At the size of 64 bytes per
+ region, that allows at least 64 individual regions on a 4k page size system.
+ The offsets of these regions are used for an
+diff --git a/src/include/liburing/io_uring.h b/src/include/liburing/io_uring.h
+index a89d0d1..73d2997 100644
+--- a/src/include/liburing/io_uring.h
++++ b/src/include/liburing/io_uring.h
+@@ -851,20 +851,6 @@ enum {
+ 	IORING_REG_WAIT_TS		= (1U << 0),
+ };
+ 
+-/*
+- * Argument for IORING_REGISTER_CQWAIT_REG, registering a region of
+- * struct io_uring_reg_wait that can be indexed when io_uring_enter(2) is
+- * called rather than pass in a wait argument structure separately.
+- */
+-struct io_uring_cqwait_reg_arg {
+-	__u32		flags;
+-	__u32		struct_size;
+-	__u32		nr_entries;
+-	__u32		pad;
+-	__u64		user_addr;
+-	__u64		pad2[3];
+-};
+-
+ /*
+  * Argument for io_uring_enter(2) with
+  * IORING_GETEVENTS | IORING_ENTER_EXT_ARG_REG set, where the actual argument
 -- 
-Jens Axboe
+2.49.0
 
