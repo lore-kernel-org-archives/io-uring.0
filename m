@@ -1,184 +1,119 @@
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A8270547
-	for <io-uring@vger.kernel.org>; Wed, 21 May 2025 13:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCBE274FFE
+	for <io-uring@vger.kernel.org>; Wed, 21 May 2025 13:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747832874; cv=none; b=DT+0aqMf7xRBR5Yi+F6LphUhSE9cmHpPbJuDr4Qip37upQFhOTz486rWgNJmF5heCtWaivn5DoyN0JQKFDzCL3vPYSBoI8d+UUJuynzzFcyApwNHGemS/uJgJDXrep8kaU7P9JiuwHN1xmRjJ8DBXc9vX4xNlHnbkfNU5HkyIw8=
+	t=1747832919; cv=none; b=BjAG6eKQpJuLgOtJl1+DPMSjfH9mhwgSFk+RObPXLpvm04wbsg7y0PcpDNxfsv9/IgKwmyKmNPHOI0SaHKhAWEhpBosyjg7ueisGL9ayfrYHOYEhY6B35qqSCMbjP9JB479INNLZ7TR8B+1VzlhNgpz18infW7FY8zoCkkaXnFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747832874; c=relaxed/simple;
-	bh=hEb7/xLQ3UvFAso72P7Tm6TvfoxavTjcoFOZyU8kEJI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=SQhRpss4LMy9byMooYcSiDyUAOuzT3020yH6QQYdsA2LIabQyGYdmnqKCfOZMgKiNU2ZIdqTG6F9r1VKUJsb4RhGQAiMkSMWnddpyLQyA3H8iSnOpIzJoGaxmtih+9XSZ5ghjEMLi6SkSZvgq6IpJNI0W7SaphHc27m26X+LilM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=vNNwT5sg; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1747832919; c=relaxed/simple;
+	bh=A95YUTb8yjQBhLhcBvSqS4Udv+HPRjnCS895oeAHWso=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o5fxXYP3iYbrTEm1mWW02tz45s/H9Ge0u701tkr73y+8WTwkmELXxylsC1KXui5rKKs3zkRZrJdNoPrgo9ctc9qIMzkFToPrlHBEXl1IXD3I/8m0SSB67BpLNVT9YkMSI/11Y6W66kqmMht3sQxnB2d1ce42PTy+6oFQfhDIj0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=RqmXNZJe; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="vNNwT5sg"
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250521130749epoutp0435b5d8d1533f7f4310276f8847756aa8~BjLv9M7gy0370903709epoutp04v
-	for <io-uring@vger.kernel.org>; Wed, 21 May 2025 13:07:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250521130749epoutp0435b5d8d1533f7f4310276f8847756aa8~BjLv9M7gy0370903709epoutp04v
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1747832869;
-	bh=FpbzYexdQXr6xqh2JhEkec9qakdSnlFgbhoCq3cixrM=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=vNNwT5sgnfgcpsqynrPghTP+MtUHWjbd80x2biX6bVVOUBrJLoetF/hvm52ruHNJf
-	 /Mq2QKU4iHBvWgDXqCKcXsw2cmpPrAPfTFeO/2w604NMRfx9qPY89p4msI2CG/95TS
-	 f1YlKDqrXPyqRqUbFGPlcBgNjIFyYllzKUcLrkvE=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPS id
-	20250521130749epcas5p31474f16bbf6d68b4021636718ea5f782~BjLvkUTRo0781307813epcas5p3C;
-	Wed, 21 May 2025 13:07:48 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.182]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4b2WtW4SYFz3hhT3; Wed, 21 May
-	2025 13:07:47 +0000 (GMT)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250521125340epcas5p44d0f9a187e59ded5975323dc3017a8e3~Bi-ZZ5CXt1065910659epcas5p4g;
-	Wed, 21 May 2025 12:53:40 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250521125340epsmtrp199532c4f44fc52175fcb61de342bc0a9~Bi-ZZQHn62940529405epsmtrp1I;
-	Wed, 21 May 2025 12:53:40 +0000 (GMT)
-X-AuditID: b6c32a52-41dfa70000004c16-25-682dccd4e8da
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	79.50.19478.4DCCD286; Wed, 21 May 2025 21:53:40 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.99.41.245]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250521125339epsmtip2d7268da94e894801a88b99f231616716~Bi-YY3M_y1905819058epsmtip2G;
-	Wed, 21 May 2025 12:53:39 +0000 (GMT)
-From: Anuj Gupta <anuj20.g@samsung.com>
-To: io-uring@vger.kernel.org, anuj1072538@gmail.com, axboe@kernel.dk,
-	asml.silence@gmail.com
-Cc: joshi.k@samsung.com, Anuj Gupta <anuj20.g@samsung.com>
-Subject: [PATCH liburing] test/io_uring_passthrough: remove
- io_uring_prep_read/write*() helpers
-Date: Wed, 21 May 2025 18:06:43 +0530
-Message-Id: <20250521123643.4793-1-anuj20.g@samsung.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="RqmXNZJe"
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-85dac9728cdso229142539f.0
+        for <io-uring@vger.kernel.org>; Wed, 21 May 2025 06:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1747832916; x=1748437716; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gt3XFPtSptUI7aaEreVu3gUubLuWy8OGp5Gd9ciB1WA=;
+        b=RqmXNZJeVeWiUBIsVq07mgGAg16p/Pw2++raSHeyAGjboz7b96+kv1Gm/ZGm4x3YcM
+         CNpYZftztzQ65NUC4LOfN7yr33K6owSgRgXZPIJ7o0+c5LNblD1SM7UbNzoUiIh/Rr6M
+         B/qktmukyX9djgX6+EZl6DaBMlWhWKEsdlF9jWLqr+0wiCX9+P0TuokNcuy+J97zUxXe
+         pF+Q1eahtqKkuUeilpUNK2Qd+h+ukFMz0Vbr5t3pzt4OispS2capLPBGxHGaFDD2DcB5
+         yZ46rSUFplsRpwYM6nstHs3p9brVVK6dXv8fQDZxZ7XLOoDG0peMQ+Q5tHJ5Av2HXJHE
+         TK/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747832916; x=1748437716;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gt3XFPtSptUI7aaEreVu3gUubLuWy8OGp5Gd9ciB1WA=;
+        b=BDKzJ/ltB2yONiLSya3fOOquihML5MimgEG3tfrXfADp30dPc3SxdmQD2p9Wv/p2DF
+         PcexNhAkaas7vPpee/OYeTVuja7NEki1HwkY+fFOwqkdTHr92mlxJe7nCb5oHiQjCqDF
+         8n/NguawiQF6zxuxsbkE+WyakFDxeq2KtPLL1NfzZRLL/vnDF9nP3yuhwWovlel5DJ6E
+         gX8Iq1j6OYwcv3B9QnjyaqBLT6dZAh3VRkuzWrfTGefmOgjNXHgQ+FAe7/YSD0hEjpK/
+         b/a9FX+OAO7FOtGieM7d9L98kYA7yCnBiJU0PVdGz6u0HgIiDewwJzCNrPoEQLSHvSmm
+         kSTw==
+X-Forwarded-Encrypted: i=1; AJvYcCWczQWMH81yIwisUdlzZdo8hFykQrdSUyfHatqfqdOl8yvf0RpObqFcqBdsYMtapzOAXhYswNJYAA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YykiJR1Bj8QTGKC5Y0jJqdcjfrisxMHwHakjCW0txKXw1dzVx5r
+	rI/K5bRD/D2+LmPVskyGYKd9FbKE7yfe5lo4x8uQLaj65lz+J13Elszz91uBNWjd25BmHDQXcYf
+	d/uzp
+X-Gm-Gg: ASbGncubSKdtgdAoaAOBPknapF6BUe1pUYWvsdgnSbXP0QFKHlTyPyaKWWxtY4X/5uI
+	FamkH3BV8KZYwTHtHgPz1eI1jsGQ2yxlq5dLDhgd1qRJd2i/1RrKom118ecx1COkAszn29AmWUZ
+	00Ro9XY5x6HvI0Uib11h16qEnwz1qZmffdAHxTfatK1p9sUVulxmrYdMZR77P6mPzDFch+V+yJj
+	UEIG3N0ovtujlzSwDQz3jhSndzURVeHRJSxvVAypscJBrPk/APXiA2lh9Cr+ovx6xGxr4hGH/xo
+	B2zEXOFAo7c/z49kyQs8xSPLo7zc9dLD0nKkV90f1YpbUqdLZt9pMuH2Ig==
+X-Google-Smtp-Source: AGHT+IFz6JAxU10bYyrgn5yhg0be8127cbl5Xmaum6Ku0LLYlzQfKKz90aTMMg6L/UJHgzfEfKrmuA==
+X-Received: by 2002:a05:6e02:184c:b0:3d9:34c8:54ce with SMTP id e9e14a558f8ab-3db84334f5emr247128245ab.18.1747832904627;
+        Wed, 21 May 2025 06:08:24 -0700 (PDT)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3dc83f3d0f3sm3233355ab.22.2025.05.21.06.08.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 May 2025 06:08:24 -0700 (PDT)
+Message-ID: <5b728d70-d698-4997-a5a3-5e90ae93daf8@kernel.dk>
+Date: Wed, 21 May 2025 07:08:23 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHLMWRmVeSWpSXmKPExsWy7bCSvO6VM7oZBnenyFh8/PqbxaJpwl9m
-	izmrtjFarL7bz2bxrvUci8XR/2/ZHNg8ds66y+5x+WypR9+WVYwenzfJBbBEcdmkpOZklqUW
-	6dslcGXMnXadqeC1SMXPrvvsDYyP+LsYOTkkBEwkzm17wNjFyMUhJLCdUaK3+wsTREJC4tTL
-	ZYwQtrDEyn/P2SGKPjJKfHr3GKyITUBd4sjzVrAiEYEkiX8blrF2MXJwMAvYSFy4HA0SFhaI
-	l9i1/hALiM0ioCqx/NlJFpASXgELiVPHgiHGy0vMvPSdHcTmFRCUODnzCVg5M1C8eets5gmM
-	fLOQpGYhSS1gZFrFKJpaUJybnptcYKhXnJhbXJqXrpecn7uJERyEWkE7GJet/6t3iJGJg/EQ
-	owQHs5IIb+wKnQwh3pTEyqrUovz4otKc1OJDjNIcLErivMo5nSlCAumJJanZqakFqUUwWSYO
-	TqkGpqjDj1/P0F7ot3ieTPyque2LpbMNDLmvm2T39vpwdtl5uom6bn//pOePZ4j6Zoupb7bM
-	bj23VmqH8o7ag1INkToSIp41qinHdnzasSfaRvedmv43w8iiBLeJcq9XvnT/tvltzIxCofxr
-	i7ytnqf2/Cl+NCUq7L+93uKS5ilb+r06NlX+3LVf6E6awjujp+tj79848mhjbYjOfJ7tkvXZ
-	zjvk8j91SaaVGopLbJnxnkG9fM3Uek7fz+EODk+ncG7JXreyfD2XtOPSvr0yLdfmz2hmufLk
-	eMjluSqvLj4y9zrT+t2Cc4VqSpdr6gHvz0lr69hdb764lfv0jLeG57EihfA1z+6Zt/7uUE7V
-	u2c/Q4mlOCPRUIu5qDgRANk6KKGxAgAA
-X-CMS-MailID: 20250521125340epcas5p44d0f9a187e59ded5975323dc3017a8e3
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250521125340epcas5p44d0f9a187e59ded5975323dc3017a8e3
-References: <CGME20250521125340epcas5p44d0f9a187e59ded5975323dc3017a8e3@epcas5p4.samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH liburing] test/io_uring_passthrough: add test for vectored
+ fixed-buffers
+To: Anuj gupta <anuj1072538@gmail.com>,
+ Pavel Begunkov <asml.silence@gmail.com>
+Cc: Anuj Gupta <anuj20.g@samsung.com>, io-uring@vger.kernel.org,
+ joshi.k@samsung.com
+References: <CGME20250521083658epcas5p2c2d23dbcfac4242343365bb85301c5ea@epcas5p2.samsung.com>
+ <20250521081949.10497-1-anuj20.g@samsung.com>
+ <7e846c8a-3506-4581-bbc5-fdf9e084a5bf@gmail.com>
+ <CACzX3Av3G1K0aoZXDOHjfT=Su6G9D-_RyKWjdMwsNpba8T7CFA@mail.gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CACzX3Av3G1K0aoZXDOHjfT=Su6G9D-_RyKWjdMwsNpba8T7CFA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-io_uring passthrough doesn't require setting the rw fields of the SQE.
-So get rid of them, and just set the required fields.
+On 5/21/25 4:35 AM, Anuj gupta wrote:
+>> LGTM, it's great to have the test, thanks Anuj. FWIW, that's the
+>> same way I tested the kernel patch.
+>>
+>> Somewhat unrelated questions, is there some particular reason why all
+>> vectored versions are limited to 1 entry iovec? And why do we even care
+>> calling io_uring_prep_read/write*() helpers when non of the rw related
+>> fields set are used by passthrough? i.e. iovec passed in the second half
+>> of the sqe.
+> 
+> Thanks, Pavel!
+> 
+> Regarding the vectored I/O being limited to 1 iovec ? yeah, I kept it
+> simple initially because the plumbing was easier that way. It?s the same
+> in test/read-write.c, where vectored calls also use just one iovec. But
+> I agree, for better coverage, it makes sense to test with multiple
+> iovecs. I?ll prepare and post a follow-up patch that adds that.
 
-Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
-Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
----
- test/io_uring_passthrough.c | 61 +++++++++----------------------------
- 1 file changed, 15 insertions(+), 46 deletions(-)
+We really should ensure it exercises at least the three common types
+for iovec imports:
 
-diff --git a/test/io_uring_passthrough.c b/test/io_uring_passthrough.c
-index 66c97da..b62eccf 100644
---- a/test/io_uring_passthrough.c
-+++ b/test/io_uring_passthrough.c
-@@ -74,7 +74,7 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 	struct nvme_uring_cmd *cmd;
- 	int open_flags;
- 	int do_fixed;
--	int i, ret, fd = -1;
-+	int i, ret, fd = -1, use_fd = -1;
- 	off_t offset;
- 	__u64 slba;
- 	__u32 nlb;
-@@ -120,53 +120,22 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 			fprintf(stderr, "sqe get failed\n");
- 			goto err;
- 		}
--		if (read) {
--			int use_fd = fd;
--
--			do_fixed = fixed;
--
--			if (sqthread)
--				use_fd = 0;
--			if (fixed && (i & 1))
--				do_fixed = 0;
--			if (do_fixed) {
--				io_uring_prep_read_fixed(sqe, use_fd, vecs[i].iov_base,
--								vecs[i].iov_len,
--								offset, i);
--				sqe->cmd_op = NVME_URING_CMD_IO;
--			} else if (nonvec) {
--				io_uring_prep_read(sqe, use_fd, vecs[i].iov_base,
--							vecs[i].iov_len, offset);
--				sqe->cmd_op = NVME_URING_CMD_IO;
--			} else {
--				io_uring_prep_readv(sqe, use_fd, &vecs[i], 1,
--								offset);
--				sqe->cmd_op = NVME_URING_CMD_IO_VEC;
--			}
-+		use_fd = fd;
-+		do_fixed = fixed;
-+
-+		if (sqthread)
-+			use_fd = 0;
-+		if (fixed && (i & 1))
-+			do_fixed = 0;
-+		if (do_fixed) {
-+			sqe->buf_index = i;
-+			sqe->cmd_op = NVME_URING_CMD_IO;
-+		} else if (nonvec) {
-+			sqe->cmd_op = NVME_URING_CMD_IO;
- 		} else {
--			int use_fd = fd;
--
--			do_fixed = fixed;
--
--			if (sqthread)
--				use_fd = 0;
--			if (fixed && (i & 1))
--				do_fixed = 0;
--			if (do_fixed) {
--				io_uring_prep_write_fixed(sqe, use_fd, vecs[i].iov_base,
--								vecs[i].iov_len,
--								offset, i);
--				sqe->cmd_op = NVME_URING_CMD_IO;
--			} else if (nonvec) {
--				io_uring_prep_write(sqe, use_fd, vecs[i].iov_base,
--							vecs[i].iov_len, offset);
--				sqe->cmd_op = NVME_URING_CMD_IO;
--			} else {
--				io_uring_prep_writev(sqe, use_fd, &vecs[i], 1,
--								offset);
--				sqe->cmd_op = NVME_URING_CMD_IO_VEC;
--			}
-+			sqe->cmd_op = NVME_URING_CMD_IO_VEC;
- 		}
-+		sqe->fd = use_fd;
- 		sqe->opcode = IORING_OP_URING_CMD;
- 		if (do_fixed)
- 			sqe->uring_cmd_flags |= IORING_URING_CMD_FIXED;
+1) Single segment
+2) Multi segment, but below dynamic alloc range
+3) Multi segment, above (or equal) to dynamic alloc range
+
+These days 2+3 are the same thing, so makes it a bit easier, as we
+just embed a single vec.
+
+Bonus points if you want to send followup patches for both the
+passthrough and read-write case using eg 4 segments or something
+like that.
+
 -- 
-2.25.1
-
+Jens Axboe
