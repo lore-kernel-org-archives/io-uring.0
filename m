@@ -1,106 +1,106 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C982367D4
-	for <io-uring@vger.kernel.org>; Wed, 21 May 2025 10:36:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809DA26FD92
+	for <io-uring@vger.kernel.org>; Wed, 21 May 2025 13:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747823767; cv=none; b=LyG5P7qpT7SHvqTVsKvYAjRmAgxW2DCiSEQFyDXkLn7/0SleslT1PAxgXgYUGRXKeig8iyAZARR89iHxT5wobcn/8WoTdH70NvQDrkHTuBtjOJGxKPHwNvV7Uj0l83wrFyw/Q68y1VkhwkHTBHpANHX3ZyHe3eNQnrNSHJJLU6w=
+	t=1747832534; cv=none; b=MgetuMux57PrMDqHWMchBuEXwAxR9Toh0enKeqQSjHjk+fLK7fM17jFzo9ylCxLoZcgXmMMlXZHqipWFetBpN/J4GXLCYKvrP3JVbUNdo8J+llYoolgqJkFNsTCaRQ2+B9xkEjebveX9j56wfQif1ptgT0qzaZfr+HBp3guwH9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747823767; c=relaxed/simple;
-	bh=3bjZvtZ7qDJluKRiTPEtvISWZVye5XI9Qsrqp7BlSqw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DpSLLl0Ug1Lqu/IwH7WGu3cTC4BkPfzn7BqikgRcGcAGUuI582c7cUXHMbny9uQa25BurL6b4FtD87TdAVeCJ9vxiMs2c9CEypYEZ8b9afzh6W0q6SdR2KJJ3P/Wj9fdWnQBabK+4+bT/kJf2pKYUKk0xRUAAtbOGnQtt6m8pBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R08qbMjr; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1747832534; c=relaxed/simple;
+	bh=mxgL0rLrZs3SIXWy3kJYU0JR4DO0Frc5fC+X6w3xA6E=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ZKBut7l7AMqm0fcPfkzbB72f/KN3YX8skvXuFBdFlWVqAp7Xj+HqoD8DenwDI8U9G0KcLS1gh4Ch58VHGoMqRiCQwgn6XRzKDxU06TCmoegzvisV8IpnJXEiGtHYFwtaWxZGYWVz2+Exv47P1v4InJa67aR7VDeT5Ha60T+NoZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Tfobp1va; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R08qbMjr"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ad53cd163d9so839472566b.0
-        for <io-uring@vger.kernel.org>; Wed, 21 May 2025 03:36:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Tfobp1va"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3dc73b1bd7aso17482935ab.1
+        for <io-uring@vger.kernel.org>; Wed, 21 May 2025 06:02:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747823764; x=1748428564; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3bjZvtZ7qDJluKRiTPEtvISWZVye5XI9Qsrqp7BlSqw=;
-        b=R08qbMjrRvJtM1L27b/b00MWHGwCkmZ7ftaIsr9tcHGDgC/RG2lz1J5rkbofzwV5iE
-         pG7+ZA0rQDEHfAuS7L+r5tLkAK7eBax2LXmKfWmhjpyzxgpVADez7wq6H3QfPtbw0rJ6
-         2IdybvWLCJtbmAAHkL5l0zeeeR45xv+hS73VMrjIdXijpJquwSQVVNy4j94m8VAAA2z8
-         RJw7cJEFGiE67hQpUqS9gdJys0IJWUzQcWZfoF5BSSPQDrTzbkINAJZzP8lv3eyfTyKQ
-         jQON0g+IMOzfJs7AgSjZ1IELdeW5Z/J+Hs6trkplJc/ao6n9Zsq4c8JqqK2yTRh6rH7x
-         W1bA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1747832529; x=1748437329; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uGIxR6q7gPTeUGmIU4ayMh8hbEC5ns9ioJ4KiylS2pk=;
+        b=Tfobp1vaEw5t2RsMfYEPxiVRyhT1l4xcSKftuOb+31Z7GJhupWd5zPCJZQcN8RfXMw
+         dmOAV8D+woDVnPOzG1RDFykIxqh9RX0ObPj7naeDuwU0YaNbhN/pfSeZDjqTJCFPzNmH
+         imqA9fMPt3WHrPhqCZBm1DRTEFN/8iW6zFpo1DHbVuR8/J+JxKIPRD/T89gSzRezv/Vf
+         XWS9cxZrJafJ+/3DWhVYKY5if3ZGUHwsAI9s8Wj9tmK8I6ymLJ2ZoXCtl3XyCBFaEbow
+         VmVTOM2FLsvBL/M090l1jzyl5pPtc1/GuvWPflU4RVRpt2KkNxd7ffHN6ZX9k0IOEtM5
+         gZBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747823764; x=1748428564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1747832529; x=1748437329;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3bjZvtZ7qDJluKRiTPEtvISWZVye5XI9Qsrqp7BlSqw=;
-        b=iUGdMZHEOxCprz/LE9Q02bgA10LgbFGFcESRXMED65z5/AbFjYWEZw21688atnbLrO
-         EFLbIjYANDvydFW3YKqwEqmW/8g1Cg8kb7uRkg4W7C7mRE7tmWR6SYc4uPZyqXHXlzT3
-         rvrjmQI+lJuTs2z/2Lnj+esrfMGxMpEe9qXbK7C1F/iHRKHidCwwtQule/yzlLiZ6oCs
-         VDbcoKsXwnojVF+zygMTTHuMwXu1WYyrdY1JGdIius+kUB+Jq2WZ/2mczTc3ErcX0FkP
-         rm7tBLN5JwoCRX8vYCFDGg/hmQw2Cq6BDMzANsmMW//ydOwQZeO1IzeubtuQI03Dq51g
-         rrDA==
-X-Forwarded-Encrypted: i=1; AJvYcCWddHeyD1RdNYXQFseRUsb1nR15jfPhzqTDK0eU5xMu/6/vxVyqHYtWf7ruyaCH+Ccve2qZgvoyFA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu6bd75ChrWHp820KnivwU0bZjDNo7u19mQC7FimYQQn2Tcdeb
-	euHZ5iC95H07etrohPyxrU+k+lNakgzWEaT8BL85fSZQcmT7L9o0AlWzG+CdCYcK0yTLK1Lm9kw
-	7zx2SuBtgOlrwrBXhmElOTctkAUSBGQ==
-X-Gm-Gg: ASbGncu6SsbkiJB9Q7jbfoU+tnPw2WwuFczbu6zLzxpnNCBstjkdqFc/c8abaYRQjbH
-	zb8Y0tsJ5QyEYGAjdiAGeDpv6k2QiQmXdH2ZvVD7KoPPW74YfHFnbx0qA7SPyZyjwXdMoq2MxWY
-	6kaT4zqBQkXeQzQ1Vj1ARzCsdwT0oPPWR1pSXBwaiFimJ7Y6QkVVJegZ9ooz8qnk8/Pw==
-X-Google-Smtp-Source: AGHT+IF86W+quI1z5OOH/mOSn+1bJ2Nv7s4s92BllFXmivcnEFM+ezVuWEa/YHZuSqfAAKsMqvtMzBly5QgyxlktqIY=
-X-Received: by 2002:a17:906:8d7:b0:ad5:372d:87e3 with SMTP id
- a640c23a62f3a-ad5372dbbb2mr1429272866b.27.1747823763577; Wed, 21 May 2025
- 03:36:03 -0700 (PDT)
+        bh=uGIxR6q7gPTeUGmIU4ayMh8hbEC5ns9ioJ4KiylS2pk=;
+        b=jSAnUHRDk3qKa3xlVLXZFbegzWb0/NvpPBm+n5qW64Ya6OY4501zvdaEHS3NASRP1i
+         pDNZW+cocK1SMzl2uw2ibF6gmqVc6qL+/ro7hMGLm+kSZ6RQ7lyW06rXTnCad2/liEub
+         dtLoXagx60xeRr9nVeY5lADtnYF0OwNLjKp+yv6+vP/O4seYUFAJCFP8Pa6NBkAqvIRc
+         HW6UPr5cD7hY5wlnU7ba0ln8ka0LeFIrJa7VKoxTXnyOVsNTonUFkegQk3gYtjBbq45A
+         2+FLxdQ3iIBepTqqh2uEY2gJVz4xv4Ng2Cac6z9pVE+hCd+JVAQAyrLoAqiNq6bh66i4
+         j+5A==
+X-Gm-Message-State: AOJu0Yz0IQxnoMtTMjSvnMxz+9fSXa3CYORMv5Qv0jqihr/sbt3qYH/P
+	64ux8OyYpBFdaWBOJTG6fwH+EkWNp1pGS8UkesUsbxzvPwlLFFFb91iQZU1kKaMeSBpRxmlnMop
+	stSgX
+X-Gm-Gg: ASbGncvOf3nTtVgRyKkyrHTzdQlEqQzPKB+0wzsNfGFWklOXepmPXx3C/GisX3cvhia
+	8CDSDmNw9OEa2JtAqG0y0HTcSnmf38GGUITJicKYcS+ReawE8ybHTsbQx7vsh7cyWgAqLhZMb4x
+	gZ9fCrCiMyX1MD4kKiYVqIunb4IWUMe3wZdpZeqXvOwSKGZ54ZzriJu2qGg2N1xWRT3W7nqaysx
+	tzn7juFEbJqMH/Vq4/ha1nsQ7WDNjL5D67UxSXIx5vJ11s1mgabNjCrnL8N91rbN+4Z5CWSldkh
+	FwnYMIzMsOl0/IJJbBynDHDb5S/u7+CITNtAM81CRQ==
+X-Google-Smtp-Source: AGHT+IGPlooLitYGbmGjh7TEUuZKkczuR1LXXAE9g7aHTCvfB8bI12hue3bl3DgueVlAH8H7JA+dGg==
+X-Received: by 2002:a05:6602:4019:b0:85b:3885:159e with SMTP id ca18e2360f4ac-86a24baec5dmr2875752839f.3.1747832528675;
+        Wed, 21 May 2025 06:02:08 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-86a2602eb68sm236955239f.45.2025.05.21.06.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 May 2025 06:02:07 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <cover.1747483784.git.asml.silence@gmail.com>
+References: <cover.1747483784.git.asml.silence@gmail.com>
+Subject: Re: (subset) [PATCH v2 0/7] simplify overflow CQE handling
+Message-Id: <174783252768.802301.7494120185111906318.b4-ty@kernel.dk>
+Date: Wed, 21 May 2025 07:02:07 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250521083658epcas5p2c2d23dbcfac4242343365bb85301c5ea@epcas5p2.samsung.com>
- <20250521081949.10497-1-anuj20.g@samsung.com> <7e846c8a-3506-4581-bbc5-fdf9e084a5bf@gmail.com>
-In-Reply-To: <7e846c8a-3506-4581-bbc5-fdf9e084a5bf@gmail.com>
-From: Anuj gupta <anuj1072538@gmail.com>
-Date: Wed, 21 May 2025 16:05:24 +0530
-X-Gm-Features: AX0GCFvJGApY5yz7B7xl-azFkfWRnh8JtNXl02AdnQXC5eGWWx_XqQGEO6cXhXw
-Message-ID: <CACzX3Av3G1K0aoZXDOHjfT=Su6G9D-_RyKWjdMwsNpba8T7CFA@mail.gmail.com>
-Subject: Re: [PATCH liburing] test/io_uring_passthrough: add test for vectored fixed-buffers
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Anuj Gupta <anuj20.g@samsung.com>, io-uring@vger.kernel.org, axboe@kernel.dk, 
-	joshi.k@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-7b9b9
 
-> LGTM, it's great to have the test, thanks Anuj. FWIW, that's the
-> same way I tested the kernel patch.
->
-> Somewhat unrelated questions, is there some particular reason why all
-> vectored versions are limited to 1 entry iovec? And why do we even care
-> calling io_uring_prep_read/write*() helpers when non of the rw related
-> fields set are used by passthrough? i.e. iovec passed in the second half
-> of the sqe.
 
-Thanks, Pavel!
+On Sat, 17 May 2025 13:27:36 +0100, Pavel Begunkov wrote:
+> Some improvements for overflow posting like replacing GFP_ATOMIC
+> with GFP_KERNEL in few cases and debug assertions for invariant
+> violations.
+> 
+> v2: nest another lock to get rid of conditional locking
+> 
+> Pavel Begunkov (7):
+>   io_uring: fix overflow resched cqe reordering
+>   io_uring: init overflow entry before passing to tracing
+>   io_uring: open code io_req_cqe_overflow()
+>   io_uring: split __io_cqring_overflow_flush()
+>   io_uring: separate lock for protecting overflow list
+>   io_uring: avoid GFP_ATOMIC for overflows if possible
+>   io_uring: add lockdep warning for overflow posting
+> 
+> [...]
 
-Regarding the vectored I/O being limited to 1 iovec =E2=80=94 yeah, I kept =
-it
-simple initially because the plumbing was easier that way. It=E2=80=99s the=
- same
-in test/read-write.c, where vectored calls also use just one iovec. But
-I agree, for better coverage, it makes sense to test with multiple
-iovecs. I=E2=80=99ll prepare and post a follow-up patch that adds that.
+Applied, thanks!
 
-About the use of io_uring_prep_read/write*() helpers =E2=80=94 you're right=
-,
-they don=E2=80=99t really add much here since the passthrough command handl=
-es
-the fields directly. I=E2=80=99ll work on a cleanup patch to remove those a=
-nd
-simplify the submission code.
+[1/7] io_uring: fix overflow resched cqe reordering
+      commit: a7d755ed9ce9738af3db602eb29d32774a180bc7
 
->
-> --
-> Pavel Begunkov
->
+Best regards,
+-- 
+Jens Axboe
+
+
+
