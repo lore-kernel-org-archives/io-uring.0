@@ -1,234 +1,142 @@
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C041EE00C
-	for <io-uring@vger.kernel.org>; Thu, 22 May 2025 11:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B5C1DF965
+	for <io-uring@vger.kernel.org>; Thu, 22 May 2025 12:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747915013; cv=none; b=C5zuQOJBn8tF5FdboSV0TMZpEI0GU46DVJrFrcY8C1MwufzL2syC2Ev5vT9EO1S/Ps60Hex9UiK194JoL2JBRzOaU6wym570Hrgr/l6kL53LlLkxYhV3FBbbiuJTbBqtAVrn7HinrIr6ZEWC+lOAmMzfh6Kd26qHvWLQ9T3qF6o=
+	t=1747915290; cv=none; b=XxHQQb0mOJ8ywSRZQdQhZS86DFly/+E9seocGJ1rCuywfFuUC/8vhjdIDZzyq7c9JCTFK5tlS9ZNxgAUqDR07g3n361FQqLPuGKEbUuwB3RRx7JjzOROqDsV+bHiC4rN39y6RkWOPBMH6IgCb/dzY88q451eVqmGcD8ZFKgWgl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747915013; c=relaxed/simple;
-	bh=SpenVr3w1qaH98/caqbxsnhjqpXBI+j5b5fXQ50oaXc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 References; b=W3e+lMNpvtAQhdCYwFFIDXRlRMx7QIn6Eqya9zSeyOW3ryOL0HxWbLCb8RxGeDqMRZfrWOJVdd3miP5wYZWp0LQS5UFUbTt1FFnq27HM8B5m86hI8/fscT69sTtNEUXyGWnMLRbesX6/sNO7OmfmqCwaUCguAKh0Mzp0mSG62Ys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=hsOXIyaD; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1747915290; c=relaxed/simple;
+	bh=GhZeLzoJWGZOm4BxuopAfxvdhO/uvdoahziCxijPIuY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cr4EPN8osbZb/0nRG162/CPGlS4Mh4qlA+7c9vhNwuZ3eQ6kjFkfdzaPpqS+JOyz5vvbXV3eUkr/NlFbsN0H/TcCsxQs7UnBfcT2WJg0wngg78+dmvHlsKmV7nfL4PE282UGZbt6agnoEPMYw8dSFm2tGGUQhw6AKhvbuBr2dU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=OHAMAG4C; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="hsOXIyaD"
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250522115642epoutp04ef18ae2407275d07295dbfab8fc12fed~B128ZrCbg2978229782epoutp04Q
-	for <io-uring@vger.kernel.org>; Thu, 22 May 2025 11:56:42 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250522115642epoutp04ef18ae2407275d07295dbfab8fc12fed~B128ZrCbg2978229782epoutp04Q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1747915002;
-	bh=2qDM2iSRPAfeA6VJl7YO03JNFrjloGgZCpt2Fe3bmB0=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=hsOXIyaD675mKC3YeLt6Mj4VnQQnnxj8YSVEoSK9rOefUI7+bU7AmELI0pXDF516R
-	 TWF+yFhDmsbAl3ZLOonrmkIbe7aKTrVHGGf8kdNpdivmjGZi0RIWaQSCxF8+VOvSND
-	 iGmuR5sllJCMhShZlXgLV0a2BlursWIrynUXwMvc=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20250522115642epcas5p4efae5aaaf34cd9485ac4ede683d48e9b~B128JAEpO0784607846epcas5p4I;
-	Thu, 22 May 2025 11:56:42 +0000 (GMT)
-Received: from epcas5p4.samsung.com (unknown [182.195.38.181]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4b36G04l5bz6B9m4; Thu, 22 May
-	2025 11:56:40 +0000 (GMT)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250522114649epcas5p26e8ab0fef3ff0d39a64345c3d63f64a2~B1uTqwV1u0958909589epcas5p2U;
-	Thu, 22 May 2025 11:46:49 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250522114649epsmtrp150dd8d86d2815a032b269fcdb8464e7b~B1uTqGFTl2485424854epsmtrp13;
-	Thu, 22 May 2025 11:46:49 +0000 (GMT)
-X-AuditID: b6c32a52-40bff70000004c16-0b-682f0ea8865b
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	6B.FE.19478.8AE0F286; Thu, 22 May 2025 20:46:49 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.99.41.245]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250522114648epsmtip132b66912ad7e12f6a71af492844ee32e~B1uStWX_52721427214epsmtip1Z;
-	Thu, 22 May 2025 11:46:47 +0000 (GMT)
-From: Anuj Gupta <anuj20.g@samsung.com>
-To: io-uring@vger.kernel.org, anuj1072538@gmail.com, axboe@kernel.dk,
-	asml.silence@gmail.com
-Cc: joshi.k@samsung.com, Anuj Gupta <anuj20.g@samsung.com>
-Subject: [PATCH liburing] test/io_uring_passthrough: enhance vectored I/O
- test coverage
-Date: Thu, 22 May 2025 16:59:48 +0530
-Message-Id: <20250522112948.2386-1-anuj20.g@samsung.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="OHAMAG4C"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2d9b61e02d1so2311450fac.2
+        for <io-uring@vger.kernel.org>; Thu, 22 May 2025 05:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1747915286; x=1748520086; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YyggFob9sRNy2t1hj1Lm94WDKgJBKbM3Y6yGvQfBdLg=;
+        b=OHAMAG4CKroqku6RXDBc5Oo7mvaKPemxM68CabRVYIKcwt3EqTgY02jDWA+pReDS7A
+         F23xcMPLCFDETiCiUP5KRa122Yw5qxA55m4to/iH3yDkBWE3bGveJpHbZoi6o6qjam0G
+         NywXLi6XUCMSCn+Qc8RWkDVFFxiABxa96q1w43vhaxclP2yIili6CIS3ZA5hSgGDc6LL
+         7r/eAiJj749bIMUKIOEW+38CTnNWGPxp3H7zlp9MobGOS87VLJkIlJCZLpJpqEBGIxSk
+         dHncvClGsGyptVQgjkQYMw5ZqhL7aar0LTmD7B72LPV8VnLSvugPs5qQgO9L5SG3d340
+         rIqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747915286; x=1748520086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YyggFob9sRNy2t1hj1Lm94WDKgJBKbM3Y6yGvQfBdLg=;
+        b=pVEyFvUMjjuPrK3RzOohbo6ZoLQIj7y7GlGOyrTkLcBX1O3WDViU668HMHvN2DOE+4
+         F/ZnY1ZgdwY91DTM1Ndjy+JTBjnOM/zsB9vvzj52IOgUiS25gJ4t+iulEPOK0NL5Wy7L
+         8YVlrRKt7hWV74mCiStC1l15jj1IusNyG6PL3e6UZbBYIS3yO2NZlzGkV8TcUeaFsdCa
+         I9UfF6Tdzrikd9wdPvfCDpYivhAmJkC2tb2sHqffQd3sbD4UuT4sLkBfxrKz2ObZOGUL
+         tqLRtYCw3FB4emE5H01JzCa+5nVwMOf3SHcVwmtot355NeTctrZuooXi7PkDJ5/+95Rr
+         E6ww==
+X-Forwarded-Encrypted: i=1; AJvYcCWu2oGELA5aBa7w0QBfLdpAMlKqsqlzU5Xgpkq8iWQ7Apu7LCCywpgfI6wxN3w8xb3mIck8rDpVyA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV19QJVwJgefKaOoasX1KisnaXFxQ8i9RR5YPhP3X2wnt9hLtC
+	h7yebQtL5wWlILQupR+8Xr3C2Dp4lUodTzYrPiTSfoRLujrBN7ZRvI0gNdwbm3zqmM0YMPoJwE7
+	7kPRYBPtTzKK7SwJw7ZRXU+ND68HmIEJ7Db9fnjoCwg==
+X-Gm-Gg: ASbGncvIblt221xgpg+h71poOwyh7C/Qd/U7EtBQ5/1WCntUz0mMpZccqtmi2xqDDWU
+	4V0m+e4TKsxUWLer86Lnki0EfwyzLPFxz6SQYAlO9idtXrNOg6uvg/mIRL83CPB8ffv+st2z18B
+	wFe9W5Mlj9gHE7KSqnPpnwkgFZG/MWZXkxVw==
+X-Google-Smtp-Source: AGHT+IFZCV3fiex3dmkpEIFMAOP3bcBdEagCKtrfBKS55Q+LQM9dxgKAfurTsiezOnGMt5mEvHiLemDEEH1dBT49AYk=
+X-Received: by 2002:a05:6870:e416:b0:2d5:817a:9dfa with SMTP id
+ 586e51a60fabf-2e3c85e8ee3mr11980543fac.38.1747915286097; Thu, 22 May 2025
+ 05:01:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHLMWRmVeSWpSXmKPExsWy7bCSnO5KPv0Mgyc9jBYfv/5msWia8JfZ
-	Ys6qbYwWq+/2s1m8az3HYnH0/1s2BzaPnbPusntcPlvq0bdlFaPH501yASxRXDYpqTmZZalF
-	+nYJXBlHV59lLdijUrGqezZLA+MmmS5GTg4JAROJBW9+M3cxcnEICWxnlPgx8TYTREJC4tTL
-	ZYwQtrDEyn/P2SGKPjJKbOqbClbEJqAuceR5K1iRiECSxL8Ny1i7GDk4mAVsJC5cjgYxhQXC
-	Jc7c5gKpYBFQldi9ZC4riM0rYCHxvr+ZDWK8vMTMS9/ZIeKCEidnPmEBsZmB4s1bZzNPYOSb
-	hSQ1C0lqASPTKkbR1ILi3PTc5AJDveLE3OLSvHS95PzcTYzgINQK2sG4bP1fvUOMTByMhxgl
-	OJiVRHiPPtPLEOJNSaysSi3Kjy8qzUktPsQozcGiJM6rnNOZIiSQnliSmp2aWpBaBJNl4uCU
-	amDqEfw24Wvcpt9XyvSNbVYIG/7ZJ50QxSATvftL2u4lPZ8e/eTI+7gr5ovRXXf7O9tucF4+
-	3pJ+myFq9elqyd3Plv6J64zXenr83M6Lgmsebe9foX399v1/uyfPtPBS8ny+0e78mRv5h6Lq
-	JZ4oft+m/nyPB9u+3AczfUxXPNS9/mv1vkadizcy5q6/dPDofe7Kvso3z97t9IxQWRF0zM4z
-	3jJ0+utvkp1F1rJakhK6MRtLVnbtbg53sOW4raHwP/KQm6RZIfupaoH1nIffe4S1Jxk51l5L
-	W7deaUO9eKOh2Z8u+4X6dZ69hxfcW7Dp9dm+ZCnJszILY7XSLAtXSW9MnOGWHS4z5aBWU2WH
-	4h8nJZbijERDLeai4kQAwxjSXrECAAA=
-X-CMS-MailID: 20250522114649epcas5p26e8ab0fef3ff0d39a64345c3d63f64a2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250522114649epcas5p26e8ab0fef3ff0d39a64345c3d63f64a2
-References: <CGME20250522114649epcas5p26e8ab0fef3ff0d39a64345c3d63f64a2@epcas5p2.samsung.com>
+References: <20250522090909.73212-1-changfengnan@bytedance.com> <b8cd8947-76fa-4863-a1f6-119c6d086196@kernel.dk>
+In-Reply-To: <b8cd8947-76fa-4863-a1f6-119c6d086196@kernel.dk>
+From: Fengnan Chang <changfengnan@bytedance.com>
+Date: Thu, 22 May 2025 20:01:15 +0800
+X-Gm-Features: AX0GCFvKIcfUEvqZXX7L5pb2ygk7SBUe8zwkr1Cd4tUrDSXoUdS4Zp8q3LS6ikw
+Message-ID: <CAPFOzZtxRYsCg1BVdpDUH=_bsLEQRvsp5+x-7Kpwow66poUVtA@mail.gmail.com>
+Subject: Re: [External] Re: [RFC PATCH] io_uring: fix io worker thread that
+ keeps creating and destroying
+To: Jens Axboe <axboe@kernel.dk>
+Cc: asml.silence@gmail.com, io-uring@vger.kernel.org, 
+	Diangang Li <lidiangang@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch improves the vectored io test coverage by ensuring that we
-exercise all three kinds of iovec imports:
-1. Single segment iovec
-2. Multi segment iovec, below dynamic allocation threshold
-3. Multi segment iovec, above dynamic allocation threshold
+Jens Axboe <axboe@kernel.dk> =E4=BA=8E2025=E5=B9=B45=E6=9C=8822=E6=97=A5=E5=
+=91=A8=E5=9B=9B 19:35=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 5/22/25 3:09 AM, Fengnan Chang wrote:
+> > When running fio with buffer io and stable iops, I observed that
+> > part of io_worker threads keeps creating and destroying.
+> > Using this command can reproduce:
+> > fio --ioengine=3Dio_uring --rw=3Drandrw --bs=3D4k --direct=3D0 --size=
+=3D100G
+> > --iodepth=3D256 --filename=3D/data03/fio-rand-read --name=3Dtest
+> > ps -L -p pid, you can see about 256 io_worker threads, and thread
+> > id keeps changing.
+> > And I do some debugging, most workers create happen in
+> > create_worker_cb. In create_worker_cb, if all workers have gone to
+> > sleep, and we have more work, we try to create new worker (let's
+> > call it worker B) to handle it.  And when new work comes,
+> > io_wq_enqueue will activate free worker (let's call it worker A) or
+> > create new one. It may cause worker A and B compete for one work.
+> > Since buffered write is hashed work, buffered write to a given file
+> > is serialized, only one worker gets the work in the end, the other
+> > worker goes to sleep. After repeating it many times, a lot of
+> > io_worker threads created, handles a few works or even no work to
+> > handle,and exit.
+> > There are several solutions:
+> > 1. Since all work is insert in io_wq_enqueue, io_wq_enqueue will
+> > create worker too, remove create worker action in create_worker_cb
+> > is fine, maybe affect performance?
+> > 2. When wq->hash->map bit is set, insert hashed work item, new work
+> > only put in wq->hash_tail, not link to work_list,
+> > io_worker_handle_work need to check hash_tail after a whole dependent
+> > link, io_acct_run_queue will return false when new work insert, no
+> > new thread will be created either in io_wqe_dec_running.
+> > 3. Check is there only one hash bucket in io_wqe_dec_running. If only
+> > one hash bucket, don't create worker, io_wq_enqueue will handle it.
+>
+> Nice catch on this! Does indeed look like a problem. Not a huge fan of
+> approach 3. Without having really looked into this yet, my initial idea
+> would've been to do some variant of solution 1 above. io_wq_enqueue()
+> checks if we need to create a worker, which basically boils down to "do
+> we have a free worker right now". If we do not, we create one. But the
+> question is really "do we need a new worker for this?", and if we're
+> inserting hashed worked and we have existing hashed work for the SAME
+> hash and it's busy, then the answer should be "no" as it'd be pointless
+> to create that worker.
 
-To support this we adjust the test logic to vary iovcnt appropriately
-across submissions. For fixed vectored I/O support (case 2 and 3), we
-register a single large buffer and slice it into vecs[]. This ensures
-that all iovecs map to valid regions within the registered fixed buffer.
-Additionally buffer allocation is adjusted accordingly, while
-maintaining compatibility with existing non-vectored  tests.
+Agree
 
-Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
-Suggested-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
----
- test/io_uring_passthrough.c | 40 +++++++++++++++++++++++++++----------
- 1 file changed, 30 insertions(+), 10 deletions(-)
+>
+> Would it be feasible to augment the check in there such that
+> io_wq_enqueue() doesn't create a new worker for that case? And I guess a
+> followup question is, would that even be enough, do we always need to
+> cover the io_wq_dec_running() running case as well as
+> io_acct_run_queue() will return true as well since it doesn't know about
+> this either?
+Yes=EF=BC=8CIt is feasible to avoid creating a worker by adding some checks=
+ in
+io_wq_enqueue. But what I have observed so far is most workers are
+created in io_wq_dec_running (why no worker create in io_wq_enqueue?
+I didn't figure it out now), it seems no need to check this
+in io_wq_enqueue.  And cover io_wq_dec_running is necessary.
 
-diff --git a/test/io_uring_passthrough.c b/test/io_uring_passthrough.c
-index 74bbfe0..5efe2a0 100644
---- a/test/io_uring_passthrough.c
-+++ b/test/io_uring_passthrough.c
-@@ -13,12 +13,14 @@
- #include "../src/syscall.h"
- #include "nvme.h"
- 
-+#define min(a, b)	((a) < (b) ? (a) : (b))
-+
- #define FILE_SIZE	(256 * 1024)
- #define BS		8192
- #define BUFFERS		(FILE_SIZE / BS)
- 
- static void *meta_mem;
--static struct iovec *vecs;
-+static struct iovec *vecs, *backing_vec;
- static int no_pt;
- static bool vec_fixed_supported = true;
- 
-@@ -75,7 +77,7 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 	struct nvme_uring_cmd *cmd;
- 	int open_flags;
- 	int do_fixed;
--	int i, ret, fd = -1, use_fd = -1;
-+	int i, ret, fd = -1, use_fd = -1, submit_count = 0;
- 	off_t offset;
- 	__u64 slba;
- 	__u32 nlb;
-@@ -86,7 +88,7 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 		open_flags = O_WRONLY;
- 
- 	if (fixed) {
--		ret = t_register_buffers(ring, vecs, BUFFERS);
-+		ret = t_register_buffers(ring, backing_vec, 1);
- 		if (ret == T_SETUP_SKIP)
- 			return 0;
- 		if (ret != T_SETUP_OK) {
-@@ -116,6 +118,9 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 
- 	offset = 0;
- 	for (i = 0; i < BUFFERS; i++) {
-+		unsigned int iovcnt = 1;
-+		size_t total_len;
-+
- 		sqe = io_uring_get_sqe(ring);
- 		if (!sqe) {
- 			fprintf(stderr, "sqe get failed\n");
-@@ -129,7 +134,7 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 		if (fixed && (i & 1))
- 			do_fixed = 0;
- 		if (do_fixed)
--			sqe->buf_index = i;
-+			sqe->buf_index = 0;
- 		if (nonvec)
- 			sqe->cmd_op = NVME_URING_CMD_IO;
- 		else
-@@ -147,8 +152,14 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 
- 		cmd->opcode = read ? nvme_cmd_read : nvme_cmd_write;
- 
-+		if (!nonvec) {
-+			iovcnt = (submit_count % 3 == 0) ? 1 : ((submit_count % 3 == 1) ? 3 : 9);
-+			iovcnt = min(iovcnt, BUFFERS - i);
-+		}
-+		total_len = BS * iovcnt;
-+
- 		slba = offset >> lba_shift;
--		nlb = (BS >> lba_shift) - 1;
-+		nlb = (total_len >> lba_shift) - 1;
- 
- 		/* cdw10 and cdw11 represent starting lba */
- 		cmd->cdw10 = slba & 0xffffffff;
-@@ -160,7 +171,7 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 			cmd->data_len = vecs[i].iov_len;
- 		} else {
- 			cmd->addr = (__u64)(uintptr_t)&vecs[i];
--			cmd->data_len = 1;
-+			cmd->data_len = iovcnt;
- 		}
- 
- 		if (meta_size) {
-@@ -170,16 +181,19 @@ static int __test_io(const char *file, struct io_uring *ring, int tc, int read,
- 		}
- 		cmd->nsid = nsid;
- 
--		offset += BS;
-+		offset += total_len;
-+		if (!nonvec)
-+			i += iovcnt - 1;
-+		submit_count++;
- 	}
- 
- 	ret = io_uring_submit(ring);
--	if (ret != BUFFERS) {
-+	if (ret != submit_count) {
- 		fprintf(stderr, "submit got %d, wanted %d\n", ret, BUFFERS);
- 		goto err;
- 	}
- 
--	for (i = 0; i < BUFFERS; i++) {
-+	for (i = 0; i < submit_count; i++) {
- 		ret = io_uring_wait_cqe(ring, &cqe);
- 		if (ret) {
- 			fprintf(stderr, "wait_cqe=%d\n", ret);
-@@ -439,7 +453,13 @@ int main(int argc, char *argv[])
- 	if (ret)
- 		return T_EXIT_SKIP;
- 
--	vecs = t_create_buffers(BUFFERS, BS);
-+	vecs = t_malloc(BUFFERS * sizeof(struct iovec));
-+	backing_vec = t_create_buffers(1, BUFFERS * BS);
-+	/* Slice single large backing_vec into multiple smaller vecs */
-+	for (int i = 0; i < BUFFERS; i++) {
-+		vecs[i].iov_base = backing_vec[0].iov_base + i * BS;
-+		vecs[i].iov_len = BS;
-+	}
- 	if (meta_size)
- 		t_posix_memalign(&meta_mem, 0x1000,
- 				 meta_size * BUFFERS * (BS >> lba_shift));
--- 
-2.25.1
-
+>
+> I'll take a closer look at this later today, but figured I'd shoot some
+> questions your way first...
+>
+> --
+> Jens Axboe
