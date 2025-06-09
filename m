@@ -1,67 +1,72 @@
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A7E21A931
-	for <io-uring@vger.kernel.org>; Mon,  9 Jun 2025 17:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2A3E21B191
+	for <io-uring@vger.kernel.org>; Mon,  9 Jun 2025 17:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749490753; cv=none; b=BnJvrc2YcYUZG5iDAV48f/OkZCnBSdcfvUtnkVHXbztDcGrhQFwp9AsBwHvUnudycAoiBsEJ1IimsqyvVvJQAY7xScTL5cA57II3fzUUH0hX8eE7mR23TKDWn6cA+bE1PCZQbFtKHNnxXkQhF7mV5PkWZhlcyt+QcNQCNFQYy18=
+	t=1749490754; cv=none; b=dIFruiBLIOSz0GE/Q5NThnFmnhy5DwkA5wEWe+8hem/6WHupwT4bMbZKzmf2vEJNAM9/d6O8xvyu3DPjL8+phY7+4CgK6Nmz5/yFPBmblIpHce80hEKXs91cx3QuLXDowUlUs44nhVFR5degDtoY4CX8OTLdvGpJZ9NiBVAZavE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749490753; c=relaxed/simple;
-	bh=gBmWq30AT4j7Ok+BF5D+qo09MakEmJovtVbzF+bhdn0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OHgAjgYSU+huQYytcmOAoPRT8B/NZMXWVIlkqh4OlZPFVtuF0caCP46CbC2gSwXLtFVq3N74m8y8BvKE7I3/jKSHdEi97aogq8Md1804MK91j+HG4fpQV7U1pI70h7ZuS2WtjTFk15gJZjULp8d946nw/X1/AeTNUvLq1RL0CqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=ig/RTEIX; arc=none smtp.client-ip=209.85.166.47
+	s=arc-20240116; t=1749490754; c=relaxed/simple;
+	bh=STn+ztrE6NJW07svoUHmlKM66vOPGmawxypN0MvmQnc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dde1UZFRpb8Nu9yaYoQM0e3xOFWxdf80h728AyLY6Ubv/P/WXv/ui6a0tvUlGnRuSZ+Uon7F4+6dlqBqmKK92zWGOhLpbInRuQdJPvwYwFVjeUl5McdlVpw6qScmOtKH5w6EJos4XFdbzjmCcvUeGx1N2oOrwnLG9wX/0jBUjaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=IqgY5Hvh; arc=none smtp.client-ip=209.85.166.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="ig/RTEIX"
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-86d074fc24bso145339639f.1
-        for <io-uring@vger.kernel.org>; Mon, 09 Jun 2025 10:39:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="IqgY5Hvh"
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-86d0c5981b3so153936139f.3
+        for <io-uring@vger.kernel.org>; Mon, 09 Jun 2025 10:39:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1749490748; x=1750095548; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JZ47ieDoP3jNVWu6vTww3ngTGFSGJEXo0z8PGp5L+X8=;
-        b=ig/RTEIXxLd54hkxuu0F0OYiNvQw68BUw+hR6aqHgYWV8OvWGneYP3Eis6ZdxUpDdh
-         gTYLTxwiefV73J87+cuNG/wkWzbUr+/u/iRkcF8/mo9HzXtGME1i5Azo3MJNFWgz8Afj
-         8ljzIQ+kYUrfm6SS4oc1DCNmS5EkCVFlBWwZjFXOeNOZO/nkeDxILvvzSHmOvMC5TP1q
-         cnIIYWvVCtRlbrGqTbWwFMuL1g0IWFRpA5Kmsp4b/6Df9D24NL/Vj5egGlgw4cfnbovL
-         govqD3FK3k/vOP05gh/WY8ymf48LOo5ZFNFJY/kWIacj1yu93ENOdNUb+BPJMgKIxT3e
-         QzxQ==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1749490751; x=1750095551; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7P/+YdjdpsEE10P0sQZ1zhUk6eM4/bv0WEfoprwSJpw=;
+        b=IqgY5HvhvA8/XnytuArNwYxYlEW5v3mGl+uiOm8RxTMcGBqfawBjCcpN6oUeFJ6Xkn
+         2akxz1Fkp2ArB2CSgZtW8BuwnpJSbCje9VtPFsMqW9CmfCYD5AEOEpF4UoZTjs4S/PsF
+         /hUmWo+XouLYsB8fcvCxtu5lCsJe/9zVKuJpCDaZdoFGepLV3BaKBvun7W0p343aM8o/
+         rDoBs7TGS97+rFDGPnkYAZJPWUQBOsk6RwGTLE/0PlFwl23+NVGv90iLAwbnlv0JQ+q6
+         0c8NTieArZSrtV8dpdx9jIHRgmJ+m5glc/eYDgWSYbi5oj+hecxfF+cxRClKhdKHjAGU
+         lKLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749490748; x=1750095548;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JZ47ieDoP3jNVWu6vTww3ngTGFSGJEXo0z8PGp5L+X8=;
-        b=ZCkjvFruwPt7F/xyt5xMekrCuZ4c1qTPrupduWDwO6VRsCtdy6AbYzacWrmWK30vYv
-         xNSD9MZwDKOMQqfclXF+Qh0W0MOWYe3gOuLwe/21/rSqvEIWQxgRhwyEbu1UJ16ZTr0K
-         Kfc6hXKlu6wPimePyZ/XeiPRu+JINjJFAbmRo2WolOJuMKTxsIBCdeT34pPRb6mfV46u
-         RVYCj2+cwPczc8mf23GpO3QKDjZKT1nIGUZB4YigQeXrStUDh4qZtPc33xYQJUvjr6dj
-         dlxyA2ZCJzklraSbpQAPA87iht2HH1ALTyNYz8q1QVImWx204QZG3/vPpDSaLvfZh21U
-         Melw==
-X-Gm-Message-State: AOJu0Yy7iHf6cmdq1IoegVCanSjku1Lfee3NzbVHH7ArvDOZrf9iwJOt
-	+3CWikwxkmuyl/BCMyYMIMQdgse2utxxT1i0QNIzRSv+DTivQk8xbzm1XyNFVuecYlTAsaSwTYx
-	729I+
-X-Gm-Gg: ASbGncvA6zy3e/FQqJ1Na4M6NQXQwoKPs9AjxMBWywVB9krVTjm/DlUGnYaOcxgA5yM
-	XlnkU55RDhV4umvknVqecDNC3IqFyxQP5EyRtLIOD1HAdUHfV/VAAg7EwLhxACM+i0Yo80WOjMQ
-	S/DNlJWTuw5blW0jNEM8b4xyJTUr/veGH21UHm2xSBRCnZh5SparQBBRsaI0JYbDdFmCluRYwLZ
-	5JlRDM1pLra7fQC/E6Y8NpMgTmJDuOQAzvB8cD/GZkjwza60f6bq1KNlxdYC23TPFkgMcNpUy/Q
-	inl+aTzkMpnuWkuESIiR9wXJP+2PzsOxYYfu02sGjBxxuR5XekVZdp2YlZvCSbe/hGU=
-X-Google-Smtp-Source: AGHT+IGzHcemSggPGHz0qMpDnNWTTj9e2CzeI0ockUbwYMUvHMDVfAUDYkhCyKS8FZJgOWltykVqsg==
-X-Received: by 2002:a05:6602:378b:b0:86c:efdb:6ed2 with SMTP id ca18e2360f4ac-873366c84d7mr1532909039f.11.1749490747999;
-        Mon, 09 Jun 2025 10:39:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749490751; x=1750095551;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7P/+YdjdpsEE10P0sQZ1zhUk6eM4/bv0WEfoprwSJpw=;
+        b=Rao6tipEVHb/zWoXVFXo1uQ/s2cE637qwRJUqGFHSe27tyJN7DiFe9J86eY4glzJOp
+         a1+Odrx9AMruYLzKa5v4pV3DkrDMzRSq0SNgd8jT6s/X+HpXOveH93pTmB83dRWRPrBG
+         a4g6axf1YwNMvyxvE3z59ip6rEbFptI3jQyg0vIjNDvIBYRIwYulr5HNGwQKb7jgVpi9
+         M3mZvug24fjDcwONPkV5uBz5r2q90Yz+5VGJX1D63KfKAz84LvuQkiQLfSOyGCaVH5qW
+         wqKaUVRNIs8myyQ60ANLNtaxlnu+qZMQMo10ZfY5dTMUvdN2NdIKGXgI4ZDjYSpv/Ccs
+         WIcw==
+X-Gm-Message-State: AOJu0Yx59LjMEAwJZzqWuwXvpcAKHDiFa95V+nYw9EhCbCa5YgGgL+Vj
+	H19BzxwVRRHaiRR+6hm3cZWlLhMNiYskKaxhOHFXhL+d8UcRlBvORMdpH+aasIXjcBYO0xEJNKI
+	uhK6K
+X-Gm-Gg: ASbGncs/kUOlplY8s0O8SZ4hRDdooXX+ansKCyrsLNeldZ4Gh4sPkPF2ugZRKezdZ6V
+	mfIO+T2e16tWX6lXFU52v03bhhm70ILsTRREdyr/Y3mXkBsPyvVMuhHWKW0cR3AJG7AfjqCV4TJ
+	GMp8J882HdHZhSW4FUUWSmpzO6rOQ7PYdp35dLl9Uj6q/GmFSUqR92bM60H1wI2ci+cD0iaBREf
+	KAh52vrRM/KA5mPnxAtzGXZWVGfu+x8xXDCPjndlltAz/jHGdudG7HkgKKweOJPTXjPQ8fddrBc
+	j1DYQg8GgXxnYF1O7vBmifHkC55mE8Hy+P2VeJsNAVKddT/OOygbwGfF
+X-Google-Smtp-Source: AGHT+IFJeOjWIktp3DOMZ+wphWda/N80RDWqsKVfbeFFJhEDtNs9CCO17rThIhoCawNwaSWzpORcIw==
+X-Received: by 2002:a05:6602:3608:b0:86d:60:702f with SMTP id ca18e2360f4ac-8733651c11bmr1573192939f.0.1749490750706;
+        Mon, 09 Jun 2025 10:39:10 -0700 (PDT)
 Received: from localhost.localdomain ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-87338a1eb84sm166607639f.44.2025.06.09.10.39.07
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-87338a1eb84sm166607639f.44.2025.06.09.10.39.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jun 2025 10:39:07 -0700 (PDT)
+        Mon, 09 Jun 2025 10:39:09 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Cc: csander@purestorage.com
-Subject: [PATCHSET v4 0/4] uring_cmd copy avoidance
-Date: Mon,  9 Jun 2025 11:36:32 -0600
-Message-ID: <20250609173904.62854-1-axboe@kernel.dk>
+Cc: csander@purestorage.com,
+	Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/4] io_uring: add struct io_cold_def->sqe_copy() method
+Date: Mon,  9 Jun 2025 11:36:34 -0600
+Message-ID: <20250609173904.62854-3-axboe@kernel.dk>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250609173904.62854-1-axboe@kernel.dk>
+References: <20250609173904.62854-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,78 +75,121 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Will be called by the core of io_uring, if inline issue is not going
+to be tried for a request. Opcodes can define this handler to defer
+copying of SQE data that should remain stable.
 
-Currently uring_cmd unconditionally copies the SQE at prep time, as it
-has no other choice - the SQE data must remain stable after submit.
-This can lead to excessive memory bandwidth being used for that copy,
-as passthrough will often use 128b SQEs, and efficiency concerns as
-those copies will potentially use quite a lot of CPU cycles as well.
+Only called if IO_URING_F_INLINE is set. If it isn't set, then there's a
+bug in the core handling of this, and -EFAULT will be returned instead
+to terminate the request. This will trigger a WARN_ON_ONCE(). Don't
+expect this to ever trigger, and down the line this can be removed.
 
-As a quick test, running the current -git kernel on a box with 23
-NVMe drives doing passthrough IO, memcpy() is the highest cycle user
-at 9.05%, which is all off the uring_cmd prep path. The test case is
-a 512b random read, which runs at 91-92M IOPS.
-
-With these patches, memcpy() is gone from the profiles, and it runs
-at 98-99M IOPS, or about 7-8% faster.
-
-Before:
-
-IOPS=91.12M, BW=44.49GiB/s, IOS/call=32/32
-IOPS=91.16M, BW=44.51GiB/s, IOS/call=32/32
-IOPS=91.18M, BW=44.52GiB/s, IOS/call=31/32
-IOPS=91.92M, BW=44.88GiB/s, IOS/call=32/32
-IOPS=91.88M, BW=44.86GiB/s, IOS/call=32/32
-IOPS=91.82M, BW=44.83GiB/s, IOS/call=32/31
-IOPS=91.52M, BW=44.69GiB/s, IOS/call=32/32
-
-with the top perf report -g --no-children being:
-
-+    9.07%  io_uring  [kernel.kallsyms]  [k] memcpy
-
-and after:
-
-# bash run-peak-pass.sh
-[...]
-IOPS=99.30M, BW=48.49GiB/s, IOS/call=32/32
-IOPS=99.27M, BW=48.47GiB/s, IOS/call=31/32
-IOPS=99.60M, BW=48.63GiB/s, IOS/call=32/32
-IOPS=99.68M, BW=48.67GiB/s, IOS/call=32/31
-IOPS=99.80M, BW=48.73GiB/s, IOS/call=31/32
-IOPS=99.84M, BW=48.75GiB/s, IOS/call=32/32
-
-with memcpy not even in profiles. If you do the actual math of 100M
-requests per second, and 128b of copying per IOP, then it's almost
-12GB/sec of reduced memory bandwidth.
-
-Even for lower IOPS production testing, Caleb reports that memcpy()
-overhead is in the realm of 1.1% of CPU time.
-
-I think this approach is saner, and in fact it can be extended to
-reduce over-eager copies in other spots. For now I just did uring_cmd,
-and verified that the memcpy's are still gone from my test.
-
-Can also be found here:
-
-https://git.kernel.dk/cgit/linux/log/?h=uring_cmd.2
-
- include/linux/io_uring_types.h |  5 ++++
- io_uring/io_uring.c            | 39 ++++++++++++++++++++++++------
- io_uring/opdef.c               |  1 +
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ include/linux/io_uring_types.h |  3 +++
+ io_uring/io_uring.c            | 27 +++++++++++++++++++++++++--
  io_uring/opdef.h               |  1 +
- io_uring/uring_cmd.c           | 43 +++++++++++++++-------------------
- io_uring/uring_cmd.h           |  1 +
- 6 files changed, 59 insertions(+), 31 deletions(-)
+ 3 files changed, 29 insertions(+), 2 deletions(-)
 
-Since v3:
-- Add REQ_F_SQE_COPY flag, so that ->sqe_copy() can only be called once
-  and so that the IO_URING_F_INLINE WARN_ON_ONCE()/-EFAULT check
-  actually works.
-- Call io_req_sqe_copy() for any link member
-- Update patch 4 commit message
-- Rebase on 6.16-rc1
-
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 054c43c02c96..a0331ab80b2d 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -504,6 +504,7 @@ enum {
+ 	REQ_F_BUF_NODE_BIT,
+ 	REQ_F_HAS_METADATA_BIT,
+ 	REQ_F_IMPORT_BUFFER_BIT,
++	REQ_F_SQE_COPY_BIT,
+ 
+ 	/* not a real bit, just to check we're not overflowing the space */
+ 	__REQ_F_LAST_BIT,
+@@ -593,6 +594,8 @@ enum {
+ 	 * For SEND_ZC, whether to import buffers (i.e. the first issue).
+ 	 */
+ 	REQ_F_IMPORT_BUFFER	= IO_REQ_FLAG(REQ_F_IMPORT_BUFFER_BIT),
++	/* ->sqe_copy() has been called, if necessary */
++	REQ_F_SQE_COPY		= IO_REQ_FLAG(REQ_F_SQE_COPY_BIT),
+ };
+ 
+ typedef void (*io_req_tw_func_t)(struct io_kiocb *req, io_tw_token_t tw);
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 0f9f6a173e66..3768d426c2ad 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1935,14 +1935,34 @@ struct file *io_file_get_normal(struct io_kiocb *req, int fd)
+ 	return file;
+ }
+ 
+-static void io_queue_async(struct io_kiocb *req, int ret)
++static int io_req_sqe_copy(struct io_kiocb *req, unsigned int issue_flags)
++{
++	const struct io_cold_def *def = &io_cold_defs[req->opcode];
++
++	if (req->flags & REQ_F_SQE_COPY)
++		return 0;
++	req->flags |= REQ_F_SQE_COPY;
++	if (!def->sqe_copy)
++		return 0;
++	if (WARN_ON_ONCE(!(issue_flags & IO_URING_F_INLINE)))
++		return -EFAULT;
++	def->sqe_copy(req);
++	return 0;
++}
++
++static void io_queue_async(struct io_kiocb *req, unsigned int issue_flags, int ret)
+ 	__must_hold(&req->ctx->uring_lock)
+ {
+ 	if (ret != -EAGAIN || (req->flags & REQ_F_NOWAIT)) {
++fail:
+ 		io_req_defer_failed(req, ret);
+ 		return;
+ 	}
+ 
++	ret = io_req_sqe_copy(req, issue_flags);
++	if (unlikely(ret))
++		goto fail;
++
+ 	switch (io_arm_poll_handler(req, 0)) {
+ 	case IO_APOLL_READY:
+ 		io_kbuf_recycle(req, 0);
+@@ -1971,7 +1991,7 @@ static inline void io_queue_sqe(struct io_kiocb *req, unsigned int extra_flags)
+ 	 * doesn't support non-blocking read/write attempts
+ 	 */
+ 	if (unlikely(ret))
+-		io_queue_async(req, ret);
++		io_queue_async(req, issue_flags, ret);
+ }
+ 
+ static void io_queue_sqe_fallback(struct io_kiocb *req)
+@@ -1986,6 +2006,8 @@ static void io_queue_sqe_fallback(struct io_kiocb *req)
+ 		req->flags |= REQ_F_LINK;
+ 		io_req_defer_failed(req, req->cqe.res);
+ 	} else {
++		/* can't fail with IO_URING_F_INLINE */
++		io_req_sqe_copy(req, IO_URING_F_INLINE);
+ 		if (unlikely(req->ctx->drain_active))
+ 			io_drain_req(req);
+ 		else
+@@ -2197,6 +2219,7 @@ static inline int io_submit_sqe(struct io_ring_ctx *ctx, struct io_kiocb *req,
+ 	 */
+ 	if (unlikely(link->head)) {
+ 		trace_io_uring_link(req, link->last);
++		io_req_sqe_copy(req, IO_URING_F_INLINE);
+ 		link->last->link = req;
+ 		link->last = req;
+ 
+diff --git a/io_uring/opdef.h b/io_uring/opdef.h
+index 719a52104abe..c2f0907ed78c 100644
+--- a/io_uring/opdef.h
++++ b/io_uring/opdef.h
+@@ -38,6 +38,7 @@ struct io_issue_def {
+ struct io_cold_def {
+ 	const char		*name;
+ 
++	void (*sqe_copy)(struct io_kiocb *);
+ 	void (*cleanup)(struct io_kiocb *);
+ 	void (*fail)(struct io_kiocb *);
+ };
 -- 
-Jens Axboe
+2.49.0
 
