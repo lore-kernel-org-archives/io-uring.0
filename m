@@ -1,135 +1,124 @@
-Received: from fx.arvanta.net (93-87-244-166.static.isp.telekom.rs [93.87.244.166])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAFA32853E5
-	for <io-uring@vger.kernel.org>; Mon, 16 Jun 2025 16:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.87.244.166
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBF83208
+	for <io-uring@vger.kernel.org>; Mon, 16 Jun 2025 19:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750092275; cv=none; b=UYSlzOANOnN6D6yExYTmxL3/Pzf9xuzUcYLHP7vMfcXGFeV0bfukNGvrUka0AU8LjfH7RWe2KbxrI0jGPUgI2mgasZtlGMQ2Wz4D1GA49//fo8GG9Gp3ha/AsFnQsXPhbWRQ2bl3zwVh7ml6mvD4HTbrUeLfYH3ziE6cigphJ9M=
+	t=1750100863; cv=none; b=sGZJzPusYDfDly3RYlneL0iqOWYGlmYVE87LaClnGoWVB3X0qSQCCFJbzED8qX1RBD5YV/Mlwg2wFCnjyahB2TbnauKazmv5d0DmzxhKrlr2u8001EU6JLj+soXJPNNAEbkeAoDhN6qX24ZgEnvd9Oizl2bxkZ6NkdeuuO0r+Es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750092275; c=relaxed/simple;
-	bh=Nbo08adM22amw50MHM0cMWoI1TzYUlabtPRpiZE8gpg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oH6oouL9zqiV3SUPPe1RlGa25MgaSKYwUa6IGe2lSM74Ip9xQdS8jAYmbNxkPexxPlHmsjo9xsP6mzTMto6wRHaESAdIRiL1AB8gzECSA0v+wPAbX3xu46Kr8BUbcPimjgVrz9bW6PJLAcKUCNqLWug7BReoEIZbYa+yIgENSwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arvanta.net; spf=pass smtp.mailfrom=arvanta.net; arc=none smtp.client-ip=93.87.244.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=arvanta.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arvanta.net
-Received: from m1pro.arvanta.net (m1pro.arvanta.net [10.5.1.11])
-	by fx.arvanta.net (Postfix) with SMTP id 0DF7D10A7C;
-	Mon, 16 Jun 2025 18:44:32 +0200 (CEST)
-Date: Mon, 16 Jun 2025 18:44:00 +0200
-From: Milan =?utf-8?Q?P=2E_Stani=C4=87?= <mps@arvanta.net>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org
-Subject: Re: Building liburing on musl libc gives error that errno.h not found
-Message-ID: <20250616164400.GA24503@m1pro.arvanta.net>
-References: <b94bfb39-0083-446a-bc76-79b99ea84a4e@kernel.dk>
- <20250615195617.GA15397@m1pro.arvanta.net>
- <1198c63d-4fe8-4dda-ae9f-23a9f5dafd5c@kernel.dk>
- <20250616130612.GA21485@m1pro.arvanta.net>
- <39ae421b-a633-4b47-bf2b-6a55d818aa7c@kernel.dk>
- <20250616141823.GA27374@m1pro.arvanta.net>
- <290bfa14-b595-4fea-b1fe-a3f0881f4220@kernel.dk>
- <a3aaaba3-17d6-4d23-8723-2a25526a4587@kernel.dk>
- <20250616163244.GA16126@m1pro.arvanta.net>
- <f5b6a7f1-ecb2-4247-b339-b7a3f51f5216@kernel.dk>
+	s=arc-20240116; t=1750100863; c=relaxed/simple;
+	bh=tojlh8I7B+L6io83lX0RvZLU6DolLnvgOchK37yfwKk=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=EtKEtp8b73g/9sJrbNSd7dmM/fUh8AJ89DjItDfChDwFNU4F6/3bGWlgz0tElUj7Rub2QwiV6/J3gv5Brfzp9PNh2znNxCWHkMhUe6mz6SC625jHwcq2Z0lSwefaLHJAh0k97DwAJHXocJ4PMo7aIj99jlzQl+bdeF2dzUlOMAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=GsKcvLqN; arc=none smtp.client-ip=209.85.166.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="GsKcvLqN"
+Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-86efcef9194so164808939f.0
+        for <io-uring@vger.kernel.org>; Mon, 16 Jun 2025 12:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1750100858; x=1750705658; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cwlkdRRfFDC8VZfDg3O1DZe/1dOaA00Eu5rM8YdKb8A=;
+        b=GsKcvLqN/mJBL0wC0wlwU+XWZtY4CdzY9b0j9jdewxGAdMlZJ0ylKc/bJjcDGpMDGR
+         +PsEKL83qLIMd9wmG6VnjillqCroHO02zWXIrQtWnfobHpvYpH4kY+TMsennOWBeRE2V
+         sCvkYtbU6f0G2o2qJ2GWOC2eWT5pysi+Qama/c4rStYDQbw64OirrzhOCcawE5g7eNgn
+         AI6Cw7W0P4+gA6mS+qVLQu0/KpDNqOMTN8fOBLynDkaSUzSrhqhErMzaZ6xpLHbO1DJt
+         +mZSIa519gvpr1FefnRrcu10x7+cNhuSX8rh3xT/nLJzMmYDWDzKMPHMo/WLCr8dW4xo
+         C18w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750100858; x=1750705658;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cwlkdRRfFDC8VZfDg3O1DZe/1dOaA00Eu5rM8YdKb8A=;
+        b=NB9Rf8kow7VAMvmt3/4bnbRIG3FPH9F1V6i+FLQNPVjLRXPUIkW2UChvi2Ga7b1XLH
+         airuTtyx0s0Vg37TR9wH59wOJ6Tw+3Au0SZ2dABqGuFzCBBxhJH+GbWFD4l0CNnXQ6IW
+         Kvu329B2awDKso7OqiGRZWzMNfmAMqsKFKKnqki3n97DsMq2nMBGTKbudpwuxDAQo437
+         NmpPImY706TM8wKQx4QIKOOHBRAZbcouHYqOg1OFwuTZSvWfbFeS3tE8WsqoxJpvqVeB
+         ftRrymgNNabEVB51oniT58sSh8Qii3PMs2l/4zPYHW5PER6IIO9OT3KWwDMcqmTXzVGO
+         MCmg==
+X-Gm-Message-State: AOJu0YxBTKk5i8sn2DU2U1EfV9QH6fmhqcZUWMhCfDfbXEaSKWsjd3xW
+	ic650D9U0LvBwRatGr7HPCZlLIkh3ESh3x2w8GjEfRs8V3HKbYRSBxPRrrQMdlOQ0iWJIlXFRhz
+	9lRQ3
+X-Gm-Gg: ASbGncurYTDHL0Vv/LDxWU55iy1P2HD2ukPOI42sDl7wfg4BODzvQwYuT+eAj0hn8yg
+	AYaR4zATTSNpRfZZaW++iyIbVZkObOtKawkyPFnCFrl/WisNZwEZvg4PbpR1OgOG5IM0mrDRzcS
+	1rD05+PggCTDA8CrzE0CmqkPsyANbYAHRPbByaZACz6a8Q/0nftWr2UPLdYG9G6xWn3YDywOEB1
+	2g9T5kwjULKKAuSUs6wFYjBXCzgvRXkiWqChQq4r4RG+6VB3Gql2G0PFNd3/rniTQCYFa32rqpU
+	1RNUb+VW74F+kL0esuJmAxZy9VPXzjLGWw+IJRzwOf6y2mawFgRomjJY1gw=
+X-Google-Smtp-Source: AGHT+IHU79veWZ2c2g/C/nACc1+Q5mVe8jgex7QnuW3qPpagO2x+4sb1bHUHaot7G23ykVvGIFElCQ==
+X-Received: by 2002:a05:6602:3a0d:b0:875:bd67:2abe with SMTP id ca18e2360f4ac-875ded92a3amr1149079739f.11.1750100858163;
+        Mon, 16 Jun 2025 12:07:38 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-875d572b7f3sm191674639f.16.2025.06.16.12.07.37
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Jun 2025 12:07:37 -0700 (PDT)
+Message-ID: <deb4cb2b-ea20-475e-b460-3dae58c588bb@kernel.dk>
+Date: Mon, 16 Jun 2025 13:07:36 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5b6a7f1-ecb2-4247-b339-b7a3f51f5216@kernel.dk>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring/nop: add IORING_NOP_TW completion flag
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2025-06-16 at 10:35, Jens Axboe wrote:
-> On 6/16/25 10:32 AM, Milan P. Stani? wrote:
-> > On Mon, 2025-06-16 at 09:35, Jens Axboe wrote:
-> >> On 6/16/25 9:13 AM, Jens Axboe wrote:
-> >>> On 6/16/25 8:18 AM, Milan P. Stani? wrote:
-> >>>> On Mon, 2025-06-16 at 07:59, Jens Axboe wrote:
-> >>>>> On 6/16/25 7:06 AM, Milan P. Stani? wrote:
-> >>>>>> On Mon, 2025-06-16 at 06:34, Jens Axboe wrote:
-> >>>>>>> On 6/15/25 1:56 PM, Milan P. Stani? wrote:
-> >>>>>>>> On Sun, 2025-06-15 at 12:57, Jens Axboe wrote:
-> >>>>>>>>> On 6/15/25 11:16 AM, Milan P. Stani? wrote:
-> >>>>>>>>>> Hi,
-> >>>>>>>>>>
-> >>>>>>>>>> Trying to build liburing 2.10 on Alpine Linux with musl libc got error
-> >>>>>>>>>> that errno.h is not found when building examples/zcrx.c
-> >>>>>>>>>>
-> >>>>>>>>>> Temporary I disabled build zcrx.c, merge request with patch for Alpine
-> >>>>>>>>>> is here:
-> >>>>>>>>>> https://gitlab.alpinelinux.org/alpine/aports/-/merge_requests/84981
-> >>>>>>>>>> I commented in merge request that error.h is glibc specific.
-> >>>>>>>>>
-> >>>>>>>>> I killed it, it's not needed and should've been caught during review.
-> >>>>>>>>> We should probably have alpine/musl as part of the CI...
-> >>>>>>>>
-> >>>>>>>> Fine.
-> >>>>>>>>
-> >>>>>>>>>> Side note: running `make runtests` gives 'Tests failed (32)'. Not sure
-> >>>>>>>>>> should I post full log here.
-> >>>>>>>>>
-> >>>>>>>>> Either that or file an issue on GH. Sounds like something is very wrong
-> >>>>>>>>> on the setup if you get failing tests, test suite should generally
-> >>>>>>>>> pass on the current kernel, or any -stable kernel.
-> >>>>>>>>>
-> >>>>>>>> I'm attaching log here to this mail. Actually it is one bug but repeated
-> >>>>>>>> in different tests, segfaults
-> >>>>>>>
-> >>>>>>> Your kernel is ancient, and that will surely account from some of the
-> >>>>>>> failures you see. A 6.6 stable series from January 2024 is not current
-> >>>>>>> by any stretch, should definitely upgrade that. But I don't think this
-> >>>>>>> accounts for all the failures seen, it's more likely there's some musl
-> >>>>>>> related issue as well which is affecting some of the tests.
-> >>>>>>
-> >>>>>> This happens also on 6.14.8-1 asahi kernel on apple m1pro machine.
-> >>>>>> I forgot to mention this in previous mail, sorry.
-> >>>>>
-> >>>>> Also on musl, correct?
-> >>>>
-> >>>> Yes, correct.
-> >>>>
-> >>>>> Guessing it must be some musl oddity. I'll try and setup a vm with
-> >>>>> alpine and see how that goes.
-> >>>>
-> >>>> It could be. I can ask on #musl IRC channel on libera.chat
-> >>>
-> >>> Probably easier if I just take a look at it, as long as I can get
-> >>> an alpine vm image going.
-> >>
-> >> Pure guesswork, but you are most likely running into default ulimit
-> >> limits being tiny. Probably something ala:
-> >>
-> >> rc_ulimit="-n 524288 -l 262144"
-> >>
-> >> in /etc/rc.conf would help.
-> > 
-> > Tried, but didn't help.
-> > 
-> > I will left it for now and return to test it when new liburing is
-> > released. It must pass our builders and CI, so I disabled test earlier.
-> > 
-> > Thank you for help.
-> 
-> That's fine, I don't recommend distros attempt to verify it by using
-> the test suite anyway, that's not really its intended purpose. Though it
-> can be useful in terms of verifying all relevant fixes are backported,
-> particular if the distro is one of those oddballs that don't base on or
-> pull in -stable.
+To test and profile the overhead of io_uring task_work and the various
+types of it, add IORING_NOP_TW which tells nop to signal completions
+through task_work rather than complete them inline.
 
-Fine for me also. So I will keep tests disabled for Alpine in future.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-> I'll be releasing 2.11 shortly, but it likely won't change anything on
-> your end, outside of having the examples/zcrx compilation fixed.
+---
 
-ok.
-
-> FWIW, I'm on Alpine Linux 3.22 and it passes here.
-
-We do developing new release in 'edge' (something like rolling release)
-and only backport for security fixes and some bugs to stable releases.
-So, I always  run all things on 'edge' (except servers, ofc)
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index cfd17e382082..8c3d43caab02 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -449,6 +449,7 @@ enum io_uring_msg_ring_flags {
+ #define IORING_NOP_FILE			(1U << 1)
+ #define IORING_NOP_FIXED_FILE		(1U << 2)
+ #define IORING_NOP_FIXED_BUFFER		(1U << 3)
++#define IORING_NOP_TW			(1U << 4)
+ 
+ /*
+  * IO completion data structure (Completion Queue Entry)
+diff --git a/io_uring/nop.c b/io_uring/nop.c
+index 6ac2de761fd3..20ed0f85b1c2 100644
+--- a/io_uring/nop.c
++++ b/io_uring/nop.c
+@@ -20,7 +20,8 @@ struct io_nop {
+ };
+ 
+ #define NOP_FLAGS	(IORING_NOP_INJECT_RESULT | IORING_NOP_FIXED_FILE | \
+-			 IORING_NOP_FIXED_BUFFER | IORING_NOP_FILE)
++			 IORING_NOP_FIXED_BUFFER | IORING_NOP_FILE | \
++			 IORING_NOP_TW)
+ 
+ int io_nop_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ {
+@@ -68,5 +69,10 @@ int io_nop(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (ret < 0)
+ 		req_set_fail(req);
+ 	io_req_set_res(req, nop->result, 0);
++	if (nop->flags & IORING_NOP_TW) {
++		req->io_task_work.func = io_req_task_complete;
++		io_req_task_work_add(req);
++		return IOU_ISSUE_SKIP_COMPLETE;
++	}
+ 	return IOU_COMPLETE;
+ }
 
 -- 
-Kind regards
+Jens Axboe
+
