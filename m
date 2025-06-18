@@ -1,37 +1,37 @@
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2517E105
-	for <io-uring@vger.kernel.org>; Wed, 18 Jun 2025 07:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755AC219E8
+	for <io-uring@vger.kernel.org>; Wed, 18 Jun 2025 11:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750233193; cv=none; b=VR8Qa6+ZN8fRWhWAJeilid8WFBt5njiSr8epjIUWwhgWXF3eC+cgRg7H8rDwNeW0BRYjfc1esvT03fWALaHfA5pdHR+2LRrKDuX0rHb1TW1Vo+mqfEZPEYEE672GYqzLI8jDrxctdkTH6Vh5fOP+4w9nNgQQxTtfVIbgy1ch1TI=
+	t=1750244450; cv=none; b=YCi6mzGmbeAD+PxPMaIZCWjjTFDS4Gz6LETd6hneinwHH63kg9Xn9aP/8s1pq0nbEzvX7Z6ZssALvrIUUKdz5TMe0eThcXDtWPdBNuUKgJMYPdumYiEsgmTYF0kRWaVGaUkf+PEjv/h3PR9yuoJyawLEbLUz0txzh0XsmT1BkOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750233193; c=relaxed/simple;
-	bh=/PvCz3pw5Og8hHlo//GR0WyWlUaVz+i70vG9ya2gWt4=;
+	s=arc-20240116; t=1750244450; c=relaxed/simple;
+	bh=aB3v5nrL55VC1ypEw6e3OUbNKZST4ehYZwNTE1K+5bc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pEs140QTCeaXFNtagXUzdiUGyn+7SSgRU30AQowtwwA1/mgM4FUT0Z0SFncQSYl6k6T6xNMUWHSHx7jvhNO9LsErK/+FhT2+H+0kqGfYdbchjGrLTb/u2WgPtpQPPnWB8srMQ0mQ2apUlbRpp8bAWuCEuptymLUEEZx0O+NweDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai; spf=none smtp.mailfrom=cloudprime.ai; arc=none smtp.client-ip=54.254.200.92
+	 MIME-Version; b=EoKZvlgmNKO7gs7AkAB0RRUhoylgXN1CUy59Vr9RYu8K0YZO0hvw7p1SBowqVmEaOjWawRjN/FoYuCI+2fpP1Bfbjrj9UGKr5qs0ExlbhW7+GzK2VFzA9GcJCHtJ7eO42bC4y+2pvEVImkzwmMTtPmxoEhe4irPk/rci5MgPgCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai; spf=none smtp.mailfrom=cloudprime.ai; arc=none smtp.client-ip=52.59.177.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cloudprime.ai
-X-QQ-mid: zesmtpgz1t1750233074t9fe2aa1f
-X-QQ-Originating-IP: SujidDy8NnZrAIhuQmU0HYKHZuAf8B9qrtdCxZ0b3PM=
+X-QQ-mid: zesmtpgz8t1750244442t6f1f2219
+X-QQ-Originating-IP: KTy/6ocDACoLlRnLTV8ruz+cZLkyOwMdtoUs4Ge3DV0=
 Received: from haiyue-pc.localdomain ( [222.64.207.179])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 18 Jun 2025 15:51:13 +0800 (CST)
+	id ; Wed, 18 Jun 2025 19:00:42 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 2705348779738801561
+X-BIZMAIL-ID: 14031602900658797052
 EX-QQ-RecipientCnt: 2
 From: Haiyue Wang <haiyue.wang@cloudprime.ai>
 To: io-uring@vger.kernel.org
 Cc: Haiyue Wang <haiyue.wang@cloudprime.ai>
-Subject: [PATCH liburing v1 5/6] test/reg-wait: use uring_ptr_to_u64() helper to convert ptr to u64
-Date: Wed, 18 Jun 2025 15:49:20 +0800
-Message-ID: <CC0C2F62427F0CA0+20250618075056.142118-6-haiyue.wang@cloudprime.ai>
+Subject: [PATCH liburing v2 1/6] Add uring_ptr_to_u64() helper
+Date: Wed, 18 Jun 2025 18:55:38 +0800
+Message-ID: <916859AE41FC06CF+20250618110034.30904-2-haiyue.wang@cloudprime.ai>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
-References: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
+In-Reply-To: <20250618110034.30904-1-haiyue.wang@cloudprime.ai>
+References: <20250618110034.30904-1-haiyue.wang@cloudprime.ai>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -41,130 +41,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:cloudprime.ai:qybglogicsvrgz:qybglogicsvrgz7a-0
-X-QQ-XMAILINFO: MeGVnsUF9M9xZ7hAUSnYtEdyvDWjZKUC7KC5kpqJg8jDBF3srl0BVuqG
-	3OaG1U9QsN7QuoYzdcFuDZ3fFnTxVyn3jG1Bxorh0ROkE7QfJhx0jQe3MnVWQ4xY2+N+zf+
-	8f/ugxo/XorC6wwbPr9qGI35adk7l9hu/5R4CbZJ16cMAf7AH9EG1aFU0T3lShM/zj1+uW1
-	XS+MPrmujiB8VRStWNwu7QFkysqNO9chLq0LY4MVjdNoEZTPjDVV9cNywM6E3/YF/ZzG7nx
-	ORqXMFz3f6qOaJ7Kn9xHvHsFXO32z1Ns7LYKsVxFci5Ubcz2HknQQqOTfgDmu7huXf7N0TD
-	gT4YTxFCr3jgeMiLYVA+HZEUUIHadNpnEygCXcduz1v/17bMjDiOJkkHauUtlsFIC5WdNTP
-	715/79kOfaxOiEGM7BGkbapz0tk87Y5/cW0W27IiEF0Qmezx6eekXSicDpKF/5bogwPMvXZ
-	oy8wgIKdCDtqWkkGnaMV0MVqwTeQShEdFIz2aX5zV3YI+1UnTsUSAW+wblDYT41xlcjV4nl
-	DtjYzF215A/gVKs9qs5Mh+lXV8bG20kfPrRl2cKgSa2p3ff/7wxWrSey/H68eRIIeIVd1MI
-	cd2RQwls1dv3Lc1B/HOtp+Zd0eT/UzwqJg8UF5F9FwKz8BlTZeLRXnF0qRQS058jy2FRJMB
-	l9rV9JGDRzPjog7YtER42X0C/2jrDMmBfSXi44FjJr310pybSWOruq4KOvR+74VKEfQt1TB
-	oAFM29GYA9qH4JApQJ4i+O1QulZtGWzDsFgKWXQRZ8tkSDG2iRMZ/JNc4sZbuBlL7yeIIA/
-	fchcw+uqyDCyhXjPNpTjI9LpOxCGyxjtf5QJEJoI/LD88dGQTM6ZWVgvbfemEXqxfhGfJs/
-	essvK18+woHD0gFi4CRlz+o7mdZnuSW6ab3PMzNvgO68dq0x8IP/OvaKTE4nQ6Wj9KCEWJ6
-	NbIBT6F2wHAhcUerqN2P3Nbmol6kkH2xbBMUcoZ1K0IubsDWzFQuXYsOuCvbva1Mbsp03TC
-	x4enTrwSACqzQyB2yjCkU8R68KpeE=
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+X-QQ-XMAILINFO: Ni68Q0J6fxe25YECQwR24hssrgoJLkECLewf9QEaBDmLW+1SQ7hNaLUy
+	CRTuwO1pQO/U7pErwKkSJbMdOyDXLBBZhj5TmL6gpiQSXU8CdN4H1vmnyaNtRO789LcQkgq
+	ETRWiEr4EepoL2IuepLyn/f+nP0caIMw9FSAIKfNQf+7oDUwoy+UhWa/UwvT63Q+xWX3Lj0
+	oGSldMnIJJkGaqlS7LfhdX1e8lh4Ga7EXSyGGn1ppwqrPBFhOwTsve0mj3PZuQD9sSNcqzR
+	iC2B33KedBbAoB6LqKbPn5MjcDHNzvQcYgGrjfrLZtFqfJAl7PQHEWaWoPWoktwtZgWcctS
+	G73EkQMuBtFLJvMs7MGmntZ6J8C9K6j4iYQrzdu8lfk93dYIbfHv68CilKSLxPprrOAP5dV
+	C9P6yn2FIPNP2uC0TJHYdm1hmBCNrksbNvntzkZnE4HGtdec6rNd17M+VUjWQQqIppqXpvu
+	UYiGZMqZPQ8byTwq1EuKkqrQhV96EfxoY5fb81I3gnXRZwTpcrQSbzPJw5U6EodjCeNzk3J
+	WtxzF3TZ3+j54Mz+6guNhKJR9F+eC/tbJpkuZW7nZWbJ0y1rXd5BESV/iXglhQOYT3APcCs
+	SqpR9almTJKpQnR1z6wrnNKEPw+yAJdlNaqB0A5oC9IovEcm7cx/84ifRGEA8FPZVlQ88Kn
+	F1HRsXZoPgS7VgLghbcza5mcpDGyukrzENwGf3ABgrE48VPrBMUSvWZOLXa+vh7ZXGP2EdF
+	YqrVEs/olpyl2yyAYEaFDydAMRyl9FLRxzebsnwtoL/7HLsBYJGY3+qxko1npS3Mg/fx6WO
+	RZz83u3KnytjCoGqWcBrXu1qZJO+yyRVMIP6+UAdEsNt9nW+Umq674C1OUmqqf7meOQueFh
+	YBFDEhTd7CdRc3sYyQnbxJr5FTtKbh1vCqQFIewnnYqCFTYhlLBaKYcDw3f9Ubw8JrHGJdr
+	RBcJrlPZeJjtjrnZgsBtpvuWD2nUPIdlE2WXvntQ/isF7xBV0b9JIOqeZlmPFVxMAsOwp4A
+	JFXNIFXQ==
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 X-QQ-RECHKSPAM: 0
 
-Use the helper to handle type convertions, instead of two type
-convertions by hand: '(__u64) (unsigned long)'.
+Add this helper to convert '*ptr' type to '__u64' type directly.
 
 Signed-off-by: Haiyue Wang <haiyue.wang@cloudprime.ai>
 ---
- test/reg-wait.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ src/include/liburing.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/test/reg-wait.c b/test/reg-wait.c
-index 01d5e8f..af517a1 100644
---- a/test/reg-wait.c
-+++ b/test/reg-wait.c
-@@ -219,10 +219,10 @@ static int test_wait_arg(void)
- 		return T_EXIT_FAIL;
- 	}
+diff --git a/src/include/liburing.h b/src/include/liburing.h
+index 96eeed3..520b07d 100644
+--- a/src/include/liburing.h
++++ b/src/include/liburing.h
+@@ -146,6 +146,11 @@ struct io_uring_zcrx_rq {
+  * Library interface
+  */
  
--	rd.user_addr = (__u64)(unsigned long)buffer;
-+	rd.user_addr = uring_ptr_to_u64(buffer);
- 	rd.size = page_size;
- 	rd.flags = IORING_MEM_REGION_TYPE_USER;
--	mr.region_uptr = (__u64)(unsigned long)&rd;
-+	mr.region_uptr = uring_ptr_to_u64(&rd);
- 	mr.flags = IORING_MEM_REGION_REG_WAIT_ARG;
- 
- 	ret = io_uring_register_region(&ring, &mr);
-@@ -287,11 +287,11 @@ static int test_regions(void)
- 		return T_EXIT_FAIL;
- 	}
- 
--	rd.user_addr = (__u64)(unsigned long)buffer;
-+	rd.user_addr = uring_ptr_to_u64(buffer);
- 	rd.size = page_size;
- 	rd.flags = IORING_MEM_REGION_TYPE_USER;
- 
--	mr.region_uptr = (__u64)(unsigned long)&rd;
-+	mr.region_uptr = uring_ptr_to_u64(&rd);
- 	mr.flags = IORING_MEM_REGION_REG_WAIT_ARG;
- 
- 	ret = test_try_register_region(&mr, true);
-@@ -324,7 +324,7 @@ static int test_regions(void)
- 		fprintf(stderr, "test_try_register_region() null uptr fail %i\n", ret);
- 		return T_EXIT_FAIL;
- 	}
--	rd.user_addr = (__u64)(unsigned long)buffer;
-+	rd.user_addr = uring_ptr_to_u64(buffer);
- 
- 	rd.flags = 0;
- 	ret = test_try_register_region(&mr, true);
-@@ -348,7 +348,7 @@ static int test_regions(void)
- 		fprintf(stderr, "test_try_register_region() NULL region %i\n", ret);
- 		return T_EXIT_FAIL;
- 	}
--	mr.region_uptr = (__u64)(unsigned long)&rd;
-+	mr.region_uptr = uring_ptr_to_u64(&rd);
- 
- 	rd.user_addr += 16;
- 	ret = test_try_register_region(&mr, true);
-@@ -363,7 +363,7 @@ static int test_regions(void)
- 		fprintf(stderr, "test_try_register_region() bogus uptr %i\n", ret);
- 		return T_EXIT_FAIL;
- 	}
--	rd.user_addr = (__u64)(unsigned long)buffer;
-+	rd.user_addr = uring_ptr_to_u64(buffer);
- 	free(buffer);
- 
- 	buffer = mmap(NULL, page_size, PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-@@ -372,7 +372,7 @@ static int test_regions(void)
- 		return 1;
- 	}
- 
--	rd.user_addr = (__u64)(unsigned long)buffer;
-+	rd.user_addr = uring_ptr_to_u64(buffer);
- 	ret = test_try_register_region(&mr, true);
- 	if (ret != -EFAULT) {
- 		fprintf(stderr, "test_try_register_region() RO uptr %i\n", ret);
-@@ -393,7 +393,7 @@ static int test_regions(void)
- 
- 	has_kernel_regions = true;
- 	rd.flags = 0;
--	rd.user_addr = (__u64)(unsigned long)buffer;
-+	rd.user_addr = uring_ptr_to_u64(buffer);
- 	ret = test_try_register_region(&mr, true);
- 	if (!ret) {
- 		fprintf(stderr, "test_try_register_region() failed uptr w kernel alloc %i\n", ret);
-@@ -421,7 +421,7 @@ static int t_region_create_kernel(struct t_region *r,
- {
- 	struct io_uring_region_desc rd = { .size = r->size, };
- 	struct io_uring_mem_region_reg mr = {
--		.region_uptr = (__u64)(unsigned long)&rd,
-+		.region_uptr = uring_ptr_to_u64(&rd),
- 		.flags = IORING_MEM_REGION_REG_WAIT_ARG,
- 	};
- 	void *p;
-@@ -458,9 +458,9 @@ static int t_region_create_user(struct t_region *r,
- 	if (p == MAP_FAILED)
- 		return -ENOMEM;
- 
--	mr.region_uptr = (__u64)(unsigned long)&rd;
-+	mr.region_uptr = uring_ptr_to_u64(&rd);
- 	mr.flags = IORING_MEM_REGION_REG_WAIT_ARG;
--	rd.user_addr = (__u64)(unsigned long)p;
-+	rd.user_addr = uring_ptr_to_u64(p);
- 	rd.flags = IORING_MEM_REGION_TYPE_USER;
- 	rd.size = r->size;
- 
++IOURINGINLINE __u64 uring_ptr_to_u64(const void *ptr)
++{
++	return (__u64) (unsigned long) ptr;
++}
++
+ /*
+  * return an allocated io_uring_probe structure, or NULL if probe fails (for
+  * example, if it is not available). The caller is responsible for freeing it
 -- 
 2.49.0
 
