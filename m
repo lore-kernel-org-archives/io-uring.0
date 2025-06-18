@@ -1,34 +1,34 @@
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
+Received: from smtpbguseast2.qq.com (smtpbguseast2.qq.com [54.204.34.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF91727EFE7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A2E1D61AA
 	for <io-uring@vger.kernel.org>; Wed, 18 Jun 2025 07:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.92
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.204.34.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750233085; cv=none; b=Ym3BQw84WVB+YsKKo5LKlXJRud/rm1k//zt5+4PvfXSar/x9+6s1ElahpTOb1eQLvq+TjTLfvnDmnVf2VEjr5wDXybbbncXkvY/wAE+UaEWrmeozcLcp8Nb7y7tqATi2EhEJlu9y7impOx1ALbU3YD4uX9Gu60wFd3BcfRVING4=
+	t=1750233086; cv=none; b=E56G4wcK8HHWfTAXQxTviU6NsZyHHM/zAcoUJ2GV36FxcZJlMA9221HjUjjPnSWCXPcojecUSIhQYRI0aDhnGsSyryz3MPYhK2DSLaxL4DiPgbOaKJ0XadQtBb8Tjs1b/OIMRUGTRmON1ABiZmYuLQ6rK8yxZLAutvub+TBN+uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750233085; c=relaxed/simple;
-	bh=1nlKgAOpMdMo24T2nqevD4E+oGiRn+YhvOGUhqXCtY4=;
+	s=arc-20240116; t=1750233086; c=relaxed/simple;
+	bh=dJtJzFMsQQ6bO7iVcDgMfNWZu/ixqPlMy3hlUlon5/U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FfPi2E9SDYHl9sRHE16sg/5giCYgt+P7tvS2nRGZOS/gdHCAoOy5MtYJQVhEvSRIM6Irt5uxq3OxGBX7oECYbl/pdS6mvjbaCEMrBLxIvXR61iGapmqlZqb/7FdDSQTkLzfarLQWafkxyJ2OLbU0DrdDHOtPWoU8Zoz7WPfqubk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai; spf=none smtp.mailfrom=cloudprime.ai; arc=none smtp.client-ip=54.254.200.92
+	 MIME-Version; b=ZLcxa08F5pY96X4++65biUh9LN4sBLNJZoMDt3NzofbTRloZcwPn0LxksQypCjwWyB5krwxvPcYS40ZKBm0MA4fTcj01WjMKRld3DCpXxBSIKpUEOSkWbXT5BIcvspmj8eTNmB7RZ1aLdIXybMOg0eMlwJHW2FxMuLWZR9E8LhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai; spf=none smtp.mailfrom=cloudprime.ai; arc=none smtp.client-ip=54.204.34.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cloudprime.ai
-X-QQ-mid: zesmtpgz1t1750233071t1a346685
-X-QQ-Originating-IP: 7Yku9JOxyHD9yklBXtO2VR2MDqLU81D1BUqT4SGDGSA=
+X-QQ-mid: zesmtpgz1t1750233076t1a38d176
+X-QQ-Originating-IP: 9l2rb1gHaozN2hPF4Di2J57qVwsnxsQCvReLvMnLHek=
 Received: from haiyue-pc.localdomain ( [222.64.207.179])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 18 Jun 2025 15:51:10 +0800 (CST)
+	id ; Wed, 18 Jun 2025 15:51:15 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9659161133647207417
+X-BIZMAIL-ID: 4958974494793665604
 EX-QQ-RecipientCnt: 2
 From: Haiyue Wang <haiyue.wang@cloudprime.ai>
 To: io-uring@vger.kernel.org
 Cc: Haiyue Wang <haiyue.wang@cloudprime.ai>
-Subject: [PATCH liburing v1 3/6] examples/reg-wait: use uring_ptr_to_u64() helper to convert ptr to u64
-Date: Wed, 18 Jun 2025 15:49:18 +0800
-Message-ID: <EEA6B2B9763599F1+20250618075056.142118-4-haiyue.wang@cloudprime.ai>
+Subject: [PATCH liburing v1 6/6] test/zcrx: use uring_ptr_to_u64() helper to convert ptr to u64
+Date: Wed, 18 Jun 2025 15:49:21 +0800
+Message-ID: <6678AFF9D9CC2DEE+20250618075056.142118-7-haiyue.wang@cloudprime.ai>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
 References: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
@@ -41,23 +41,23 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:cloudprime.ai:qybglogicsvrgz:qybglogicsvrgz7a-0
-X-QQ-XMAILINFO: OffpsKYrFLbUWfI+hbgrvdDaiBDixxNld/TatA1R+eoQARWCF7tvZoeX
-	wiGCTtBDqWTdNFc6tDrS2thFnld1mGJ/1PxY50ni7K78yR75yOerBXH1jD54LjuC0T4Nkub
-	e0SCnS1z27fJRtlgH+9O4mnOFg3iENyyIGjo3ltje8EYcAC6js/279ezOZOwiNr+Ps8trdg
-	b7K1DT5FazDJDN13XNNUxyw9yRq1M0Bn0Oe2BYdY0HXCgl+NVPAIDRo6kMBwJkOhSN/dA88
-	jxHk+juKKpxWxaTHNKbKVA1k7OmD7+5nrcBm3mEN2Hf5MefSbDoknuSZ+3yjh+AP0/Mtx/6
-	zoWtffHFe7bvmC0R6tl6T4mtVjVA34/bhTIlMuAY3gay87Bfhk9z2Es2I1tGgNB6Ddr4KLQ
-	LdTTlJnyk/qKKI4A9s0i8DAU7yXzviGNZ7BRUJz3Ik+UulPAxCQ+4dXjF/wvTLXSsNuVfx9
-	+2O5oVwKjaVs6aS8Z8NjANfZeC5tm+D+7JSfCLsHjDTp+boKpR5+nkzxwWXTB8g/Y3JhIli
-	P64nVhXccpHq1dIpAijrXE3AHnvBax+jpDBGlUu7Zmmr/kmmIfPMxdkbWP7qrypr8aH7GfK
-	UeJOpfaK7pIVzbaXZS8yS7FoHKWB65KZHPb4ooWceOCyudLYfPAezMk6NlT+Q9fstXwBZ0N
-	0cRs5xMUo2SW6a0VnOQuTJrESYwUd2uS1iJr1jV3rj0BGqgWIXOA1J2ASEQZiELEH+dSie7
-	PoFWlzGuXluT8sKSeZEj5/ubxsEPQbZkGzOJH3bTWW+D6d4a3shOj8AXvpoLm7NNynZTwkX
-	UK0N5szapS9o+/PO/9xUwwfkVbjB63dRUw7VS/tZIYwlARZrrluDRdd+uWeqULlFnqcuMLV
-	0h+PHpulIg8tP0rPl9wF+/2QPZCt9fLmzzcjy/M0t4NNrTGyE7wANR7L4MGXZNDE3d+iI0x
-	m70BA2CGUsgwxBnVE+H4FT+k9ZdwRiMnYcaOPCKSN+QbLTHIwpz/4Mm7rNKKlGh0OfSrPoX
-	WdusI1Vg==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
+X-QQ-XMAILINFO: ND3CPZxVFFQcluyGOEzoKc7TJfIWH86yhSCzYEcGerYvUwCjvDUM9Kwf
+	8+T+N4Swi8bG6LVLJeGW6Xbz8503rLBpzjTS3hNCmlX2qwb6F4AHAjgaxqOQnaIeEWO6VxK
+	NPuOukCsFOqCeSWelvn6XFTMZTU2FtWeB2LUKJzh+TZd9tXxhENefHv0sBRVUiEZUUUS86n
+	A1S598JM5kxNMTDvPkgcliueYR7tjU4oX+1M6FxCcN2FmF7cLwGEPEZ8vr4oJE9zTDU2apA
+	Tw/g8Oivl1Rhezgwk2p1sM5B+a1adEURA0VYW9TMtpFgkrwuee7aS5dO1h5dIBY6kQQ6xCJ
+	/sFp9vu2O9OZ83pNZZfv/4HCafBB2mrgM3mtTAkLUNCOt0MMolWqbIiiGAR2QScERWniorU
+	5j1JtA2YshlQxOun+cIGboXkKOcNXOWYzGk+lLyMjL/4PaOm/FxNzwQ1eriBxsMzPcqPvkk
+	IEjjTKlMhzpNPT2VAFCHOXLmK6nZvxjCPuBOsu/YHGRIJJVLOuqVASN4SAnAva503v312Br
+	9BfKHahI+bKVJTrvRmRMu+CrGHznMRxzq1eDIYVRvGW2+GsKO/97PFu1diMNPLYK/keHnOA
+	YJiz1UlUyKu2t5zhTW4DIJcd8WI1tq3MkMz0MXBsVf8QR1mJKrxe73UjStWL/eWq7GQTNzj
+	6VnmEYfHokfTEPpMpQHk3kfio3TJKaXyCGkIteUbgWM1ML4lyDEAQ4CvBuQOpijA/bnUG0E
+	g/mQ2Rf4yoEJAbvrrJWRMy7Ai9Tw+KoLR78uxWnCGUplq0hm2yRhSnesRIrBEgzDU4YswdD
+	xwca/f/bupcaXVMPt1YMH2BZgt6zvl0bcOi7Lo700UmjSyZKbqq4Tu5blftrMZSoCXUDkiY
+	z1JG6g2Afcwzm3jX5+9rrAWabbSnJSBx6vut2x9gbvm+7dNTBXi9y8copeRRQHLo/0lpgPc
+	hqzyBcckuF2GuZiDF6zzJBAynN7QcHt3Q7PIBtwWyDqoSEfdkBNu/u6YNsiOyolLMVxgjaD
+	Ss81BuuMYWF8Yx9lRTqD0tZ7+lpu8=
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 X-QQ-RECHKSPAM: 0
 
 Use the helper to handle type convertions, instead of two type
@@ -65,26 +65,209 @@ convertions by hand: '(__u64) (unsigned long)'.
 
 Signed-off-by: Haiyue Wang <haiyue.wang@cloudprime.ai>
 ---
- examples/reg-wait.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ test/zcrx.c | 44 ++++++++++++++++++++++----------------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/examples/reg-wait.c b/examples/reg-wait.c
-index e868f3f..4f04293 100644
---- a/examples/reg-wait.c
-+++ b/examples/reg-wait.c
-@@ -45,10 +45,10 @@ static int register_memory(struct io_uring *ring, void *ptr, size_t size)
- 	struct io_uring_region_desc rd = {};
- 	struct io_uring_mem_region_reg mr = {};
+diff --git a/test/zcrx.c b/test/zcrx.c
+index 61c984d..572e118 100644
+--- a/test/zcrx.c
++++ b/test/zcrx.c
+@@ -43,7 +43,7 @@ static char str[] = "iv5t4dl500w7wsrf14fsuq8thptto0z7i2q62z1p8dwrv5u4kaxpqhm2rb7
+ static int probe_zcrx(void *area)
+ {
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)area,
++		.addr = uring_ptr_to_u64(area),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -51,7 +51,7 @@ static int probe_zcrx(void *area)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 	struct io_uring ring;
+ 	int ret;
+@@ -99,7 +99,7 @@ static int test_invalid_if(void *area)
+ {
+ 	int ret;
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)area,
++		.addr = uring_ptr_to_u64(area),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -107,7 +107,7 @@ static int test_invalid_if(void *area)
+ 		.if_idx = -1,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
  
--	rd.user_addr = (__u64)(unsigned long)ptr;
-+	rd.user_addr = uring_ptr_to_u64(ptr);
- 	rd.size = size;
- 	rd.flags = IORING_MEM_REGION_TYPE_USER;
--	mr.region_uptr = (__u64)(unsigned long)&rd;
-+	mr.region_uptr = uring_ptr_to_u64(&rd);
- 	mr.flags = IORING_MEM_REGION_REG_WAIT_ARG;
+ 	ret = try_register_ifq(&reg);
+@@ -131,7 +131,7 @@ static int test_invalid_ifq_collision(void *area)
+ {
+ 	struct io_uring ring, ring2;
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)area,
++		.addr = uring_ptr_to_u64(area),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -139,7 +139,7 @@ static int test_invalid_ifq_collision(void *area)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 	int ret;
  
- 	return io_uring_register_region(ring, &mr);
+@@ -182,7 +182,7 @@ static int test_rq_setup(void *area)
+ {
+ 	int ret;
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)area,
++		.addr = uring_ptr_to_u64(area),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -191,7 +191,7 @@ static int test_rq_setup(void *area)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = 0,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 
+ 	ret = try_register_ifq(&reg);
+@@ -232,7 +232,7 @@ static int test_null_area_reg_struct(void)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)0,
++		.area_ptr = uring_ptr_to_u64(0),
+ 	};
+ 
+ 	ret = try_register_ifq(&reg);
+@@ -244,7 +244,7 @@ static int test_null_area(void)
+ 	int ret;
+ 
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)0,
++		.addr = uring_ptr_to_u64(0),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -253,7 +253,7 @@ static int test_null_area(void)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 
+ 	ret = try_register_ifq(&reg);
+@@ -264,7 +264,7 @@ static int test_misaligned_area(void *area)
+ {
+ 	int ret;
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)(area + 1),
++		.addr = uring_ptr_to_u64(area + 1),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -273,13 +273,13 @@ static int test_misaligned_area(void *area)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 
+ 	if (!try_register_ifq(&reg))
+ 		return T_EXIT_FAIL;
+ 
+-	area_reg.addr = (__u64)(unsigned long)area;
++	area_reg.addr = uring_ptr_to_u64(area);
+ 	area_reg.len = AREA_SZ - 1;
+ 	ret = try_register_ifq(&reg);
+ 	return ret ? T_EXIT_PASS : T_EXIT_FAIL;
+@@ -289,7 +289,7 @@ static int test_larger_than_alloc_area(void *area)
+ {
+ 	int ret;
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)area,
++		.addr = uring_ptr_to_u64(area),
+ 		.len = AREA_SZ + 4096,
+ 		.flags = 0,
+ 	};
+@@ -298,7 +298,7 @@ static int test_larger_than_alloc_area(void *area)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 
+ 	ret = try_register_ifq(&reg);
+@@ -315,7 +315,7 @@ static int test_area_access(void)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 	int i, ret;
+ 	void *area;
+@@ -331,7 +331,7 @@ static int test_area_access(void)
+ 			return T_EXIT_FAIL;
+ 		}
+ 
+-		area_reg.addr = (__u64)(unsigned long)area;
++		area_reg.addr = uring_ptr_to_u64(area);
+ 
+ 		ret = try_register_ifq(&reg);
+ 		if (ret != -EFAULT) {
+@@ -348,7 +348,7 @@ static int test_area_access(void)
+ static int create_ring_with_ifq(struct io_uring *ring, void *area, __u32 *id)
+ {
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)area,
++		.addr = uring_ptr_to_u64(area),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -356,7 +356,7 @@ static int create_ring_with_ifq(struct io_uring *ring, void *area, __u32 *id)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 	int ret;
+ 
+@@ -653,7 +653,7 @@ static void *recv_fn(void *data)
+ 	struct io_uring ring;
+ 	int ret, sock;
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)rd->area,
++		.addr = uring_ptr_to_u64(rd->area),
+ 		.len = AREA_SZ,
+ 		.flags = 0,
+ 	};
+@@ -661,7 +661,7 @@ static void *recv_fn(void *data)
+ 		.if_idx = ifidx,
+ 		.if_rxq = rxq,
+ 		.rq_entries = RQ_ENTRIES,
+-		.area_ptr = (__u64)(unsigned long)&area_reg,
++		.area_ptr = uring_ptr_to_u64(&area_reg),
+ 	};
+ 
+ 	p.flags = RING_FLAGS;
 -- 
 2.49.0
 
