@@ -1,34 +1,34 @@
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.58.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5812C27EFEF
-	for <io-uring@vger.kernel.org>; Wed, 18 Jun 2025 07:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77D07E105
+	for <io-uring@vger.kernel.org>; Wed, 18 Jun 2025 07:51:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.58.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750233089; cv=none; b=apH2REz8yUJdTlppCINkZXNIxvriKW7XVqjEpTIfHqcS2tA3I6SJ6kxTOABO4AYnwpT0mgE6OzI5xqvcrc3lUg5zE4XqyxpsfYO62qQwp379/aLOlKXu5gObj77A60PD/DTuUEAGz/s9emWuLjG2wzUsEdovegqQ0R72uXOJQoE=
+	t=1750233098; cv=none; b=aelr1GJ++pxefd0Moe9mKM0C4an3/3Uep3Fqf+x2qVtW4szAWwV2C12PbDuFzRK1BP/zcJ+ct4UCZJFYndl2su26BuI0L+TbgtHDZj995+tGWzpJAjvV583VGeoLvjuAxc0Q+0BtSJbiDNMV0zlicjm/AcaFLK81vAYVzvjKyS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750233089; c=relaxed/simple;
-	bh=+A9nfo9MXB2/wailjqB24i0nnzV6/JryHZ2jPIqjyME=;
+	s=arc-20240116; t=1750233098; c=relaxed/simple;
+	bh=Sd2+rinfXNFORFv5YPnfSf1Jtu/5E4qznIAezT45lZc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aFm9B8mKB6vZbDEHiDKe9WkkKuwk1qwO4/E/++/d6HznaSAwU/vPY1U/wY78Ik1+/e7hLCpxGzpCPUiKBcSJI2Re0FEsfvkubAUujzcDUwBFznkznqDzp8LstpdsL01blELlr3IagAqVFzW4qRNqFCGR5OWZw2iFxESLZh3UzBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai; spf=none smtp.mailfrom=cloudprime.ai; arc=none smtp.client-ip=54.206.16.166
+	 MIME-Version; b=ioC8fHxbjs9ikJlhyhGA8i3ZZng+sReVUtq3GtW2adSuQarFSEGFoS49a7DP5pbg6W+9XCrvaOCnR9yXqkSf+m8/QXgtvdu1tfXfUJFAcdl4p+modOzCPJAMl6tnu7GtCyb2oKc6xU31Syzqz8HamwaKs+E5XLuINLYENvwaokQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai; spf=none smtp.mailfrom=cloudprime.ai; arc=none smtp.client-ip=114.132.58.6
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cloudprime.ai
-X-QQ-mid: zesmtpgz1t1750233073t28448ebe
-X-QQ-Originating-IP: mGXhao2E0Rrr7I2x2HxMykNFMQ7I5wBl0EawmspFK8s=
+X-QQ-mid: zesmtpgz1t1750233067t2163279a
+X-QQ-Originating-IP: CcIfWSRlPwB9vLauNETTdNT1ZmI5mFVMOVMM+CA5ulc=
 Received: from haiyue-pc.localdomain ( [222.64.207.179])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Wed, 18 Jun 2025 15:51:12 +0800 (CST)
+	id ; Wed, 18 Jun 2025 15:51:07 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 3458643990699294890
+X-BIZMAIL-ID: 17761109489978830081
 EX-QQ-RecipientCnt: 2
 From: Haiyue Wang <haiyue.wang@cloudprime.ai>
 To: io-uring@vger.kernel.org
 Cc: Haiyue Wang <haiyue.wang@cloudprime.ai>
-Subject: [PATCH liburing v1 4/6] examples/zcrx: use uring_ptr_to_u64() helper to convert ptr to u64
-Date: Wed, 18 Jun 2025 15:49:19 +0800
-Message-ID: <0599278798038A7C+20250618075056.142118-5-haiyue.wang@cloudprime.ai>
+Subject: [PATCH liburing v1 1/6] Add uring_ptr_to_u64() helper
+Date: Wed, 18 Jun 2025 15:49:16 +0800
+Message-ID: <4039F3DF27B2BC61+20250618075056.142118-2-haiyue.wang@cloudprime.ai>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
 References: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
@@ -41,66 +41,47 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpgz:cloudprime.ai:qybglogicsvrgz:qybglogicsvrgz7a-0
-X-QQ-XMAILINFO: NBkE/PP8DpFYcHefFScrwbyWwNGe6pO2gg7zPG9F8HaApJfrbpHeEpO8
-	Mr6mzN0fuPloORywwSpQvbue81JRlJjBuyRgvfTapEauDzhlGKK9BZ9H9rH8fRmEvw4rylL
-	drwbdTjJVtwwTFKpZEI95BOjeKAKuYxpa8tVDhyTgeqPMvDYnCm+ilGaefw2uOOwr82DjIN
-	CeZZOW6ZnPAdF3WRKJvnXU4YOY7GU0ugxVN8UzHWqvRtdLiOGJbiOEM+Q4PpklnKLQtMOvF
-	iKKCJ/ia03c7IElv1KKAsWeUqNWv3xDl/92Ya/CYz9+qt8jlV8YhPYoXFWnDqU1j/8CR/43
-	viawgUtc3I5pqYxJGfwMujIoVx+b8yh4H+FuSKA7lSVtjaCTlT0AuwnBpYhyC3VCil4NZKy
-	B2fpGSHt4sNdCvnyOWZeg22YM7eWNeORjp1/N3yfxIsqq8MYPrgpZFlLuQVZYRDciYBOXBC
-	r1kZn4FcJA6VTCkKUPe17Zt1GfwmyWNs05ljZOj7dIKNMKht30ehIkB/QFSuaJJF4RxzfFX
-	/oZkXyx5YGnex+xvmlWOT3pVUHNyIAhzSF0TlFHD99f9z8eElBSM6r77qXZO81N9uu642a1
-	TEXV0LPjwLQY54PXe+CHtEzNkwMQHqtTqJFpW9ZPIuV5udl1gSLQpnUlJ6QuWYaIRHskxuF
-	MJ62hbi86FzG5rSeGBteh6/T2hCxgmOrGVsuy7na3qa/OmUZBX5AN3rzJxb7YjyP1ztxt5o
-	EqdubStRCx2pcrDI+ycYHwbfKnj26u8XIztvWxbSU7OMKU1rYrFSNKDIUI+oh9aJF1x7PwJ
-	/IXWiPzc7sUukF7pyIrBSw3OsqEJogv3Vhc0THoEKyWJqw2UW9kzJcU5AyGzzjm5tQ8vPra
-	Se5gk646r3E3MD8bk07yvVCxlvr4PipGsoUlcL7DwoeAQNtAp8CKAI6c88zf6b02WJbNJOv
-	axr0iY9Se9q4MiRLHqMEqS/+bXfO/oHb0UT1Ogh0wtDgo5mmzXzk3Vu1TT2O5REvSzvyyzj
-	F2ZhMqhzVFbLwbKZxigOR8sxw1UdQ=
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-XMAILINFO: Mnff/9wu0oJYYL1JhmxiaOijUl5q19Tehm4JcHGMBdF+IWgGAxgXwP1I
+	Bb3MqKTpfzXCTdg3gCQcJrYT2t3nGuX2xcoBpBzFjGVZFBTT7Q9IOXKIeGhXeQgyOTNZqyJ
+	TuKU97KoEDA4TjTOzKFyhnCpD/jOsJVTI0mywKOCjLyOLnMt6WJMzbaQlTh7T+6t5l7cT9v
+	73LdorSvw4x2y09ALVyBuZ6qgQPuTwW5q73ZsTIPryU0BvqyRUPe4/NyrE+HcE9HknzhFEx
+	7wurrz7uAM7pbQSldh+wa62txNJxertzjPA3X6LXkTXBTPlJWZV79AcswYDdQWJ4kVDZEjh
+	U0DRF1pAMwiwmKQeEU9yYKooZOvE+o2G2asytsuEytTWg1n+NJXn8CI0xGHZL/YZdHH36di
+	hP9P5gAF3ROZkd0dVu5PMnRblBh/1KrxQq1Cyb0wxnGL1uzxRxREUNOdb2RnJLs+nRVa8rD
+	OagFyTFdWdx3BjVp0HSp8zEZt33Fkqq8xBceSGRUySLWfZKZzpiG5H2VcQXDLSrWePoNRKw
+	Rb86+IWeYAHKHhxFH3Oag4u1y7KuLqPMnIDa6Y70QJ1xqmrpU0rjD9jmowW25+bKGjO9ASk
+	GgwUd1hyH1jWevINNCw6Cp3aKDwlQApfsMajQSR7BWrffzMynXNS0QpYnIWQmDrPcXKbLwO
+	7BmDKMKOXJgA5R7mVsZz6A2+Pr+Xyx+8Z7Gg+kh1M0sFa++AoXrx3lGGDeAis6Yj29yQPzo
+	/K/uUDI0OKfg//vBwnLvy8+YHpTkqbfVU3QFCAvMHq9kwW2Q3yhA3U6wP4sqZNiXu75tTS7
+	BH3Oxb+x5vizMHisMqysenrq6Z5Lmg6HdYmfalFkD2mtKqDkdirqaqJW1EuJyPEFc35xJFe
+	jaHTHAghq18x4OohSAJzaVul5wL0cb/S0gM+ln1BEwR+9X/wK4FUzCCw/kZYf5D18XamX3y
+	XZnRd0LBOMym2KCiAK0AByQ8IN9rp7KDlVtv7OaVBuHg2+w==
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
 X-QQ-RECHKSPAM: 0
 
-Use the helper to handle type convertions, instead of two type
-convertions by hand: '(__u64) (unsigned long)'.
+Add this helper to convert *ptr type to u64 type easily.
 
 Signed-off-by: Haiyue Wang <haiyue.wang@cloudprime.ai>
 ---
- examples/zcrx.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ src/include/liburing.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/examples/zcrx.c b/examples/zcrx.c
-index 5fc8814..a269b1a 100644
---- a/examples/zcrx.c
-+++ b/examples/zcrx.c
-@@ -163,7 +163,7 @@ static void zcrx_populate_area(struct io_uring_zcrx_area_reg *area_reg)
- 		t_error(1, 0, "mmap(): area allocation failed");
+diff --git a/src/include/liburing.h b/src/include/liburing.h
+index 96eeed3..6d87248 100644
+--- a/src/include/liburing.h
++++ b/src/include/liburing.h
+@@ -32,6 +32,11 @@
+ #define IOURINGINLINE static inline
+ #endif
  
- 	memset(area_reg, 0, sizeof(*area_reg));
--	area_reg->addr = (__u64)(unsigned long)area_ptr;
-+	area_reg->addr = uring_ptr_to_u64(area_ptr);
- 	area_reg->len = AREA_SIZE;
- 	area_reg->flags = 0;
- }
-@@ -194,7 +194,7 @@ static void setup_zcrx(struct io_uring *ring)
- 
- 	struct io_uring_region_desc region_reg = {
- 		.size = ring_size,
--		.user_addr = (__u64)(unsigned long)ring_ptr,
-+		.user_addr = uring_ptr_to_u64(ring_ptr),
- 		.flags = rq_flags,
- 	};
- 
-@@ -204,8 +204,8 @@ static void setup_zcrx(struct io_uring *ring)
- 		.if_idx = ifindex,
- 		.if_rxq = cfg_queue_id,
- 		.rq_entries = rq_entries,
--		.area_ptr = (__u64)(unsigned long)&area_reg,
--		.region_ptr = (__u64)(unsigned long)&region_reg,
-+		.area_ptr = uring_ptr_to_u64(&area_reg),
-+		.region_ptr = uring_ptr_to_u64(&region_reg),
- 	};
- 
- 	ret = io_uring_register_ifq(ring, &reg);
++IOURINGINLINE __u64 uring_ptr_to_u64(const void *ptr)
++{
++	return (__u64) (unsigned long) ptr;
++}
++
+ #ifdef __alpha__
+ /*
+  * alpha and mips are the exceptions, all other architectures have
 -- 
 2.49.0
 
