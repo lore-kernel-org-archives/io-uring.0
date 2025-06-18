@@ -1,89 +1,95 @@
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F611A23BB;
-	Wed, 18 Jun 2025 07:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529B125A33A
+	for <io-uring@vger.kernel.org>; Wed, 18 Jun 2025 07:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750230152; cv=none; b=McH3JUwCH5rwGfzhI6EZ0QbytKdg8Ka5GiOJjR4Ziv3UH6LASCvHjryFXlg0qiZ9iBpccKyhhxwb/u0A9szmOB/jLwFdcf0U1LqRyLySwCB6al7XnAl7rs5fE0QkXQUT+Q98jGnfYX+ajHHH+bKpUoWr8SjfYIhVMZD7Nmn45GI=
+	t=1750233078; cv=none; b=ktIg/XTet527vcBYZFOGso1zcygHZTHL+WeEkg3VpJECW3gCIucWjVE3qRCBtdJZUqB4wscPz4DNl3B8mhOBtEgqtG0IvYPNBtscNTfZEaKsdYZs2QVsCeg5ROoYLlxp1XRLY58sm1Pfm6hUqZeYFc95YtISTsDvEGjCQeD1uwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750230152; c=relaxed/simple;
-	bh=AZ8eakkbu827EuhTE2TgSWfoJamjsmR+ZwSjs+5D78o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ulwvPjgw8SZDfkwp2ITv6v8w4q2HUi53r4AYLKD/kD37jpFPvVQJ4cnc1JCOQQcoL8CgjB381NX03IVkJq9cbve8zyGyVknjHswtlKLm2PjABpnCZRp85RQpEWkE71mpj5Ep7A2fLukkhh7+D9vWQwpJvygik41Hs80yrfU9jzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OPp4O0WF; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OPp4O0WF"
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3ddd2710d14so60905185ab.2;
-        Wed, 18 Jun 2025 00:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750230150; x=1750834950; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZ8eakkbu827EuhTE2TgSWfoJamjsmR+ZwSjs+5D78o=;
-        b=OPp4O0WFb3bZDzUH0gOHDHkeXt9XdietkJ18gt67e/IuHSs1KEdW2OPMAq54CcstFL
-         WvgiPO/MC0gVGF0dNzMVazRsb+zbRGitwNb6PuTOrkjwsR8Tyi0IQ/qPJS+ldLoSJbzL
-         Iaa6V0z7eKqVR69Q7m/q1CKEs67V9FZbgQC10t9UYjLMnbyzStJ6xWqVmcDtACpGRC0j
-         VZ155G8jC9VLkZcy9z2eIDbAZEXE19onmjtgSAC5YPkeMJr+YLbhUUpu6GKC9eOgo68b
-         sNSsT7Hf2/gOvuQYED7yPq5ELsuibu0RcNbOGwdctixADyCJtkaBh0hFezZvT/kqcA2K
-         zfvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750230150; x=1750834950;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AZ8eakkbu827EuhTE2TgSWfoJamjsmR+ZwSjs+5D78o=;
-        b=qMAwZa1bf+OcHU1qZH4Ist11DOhL9THEJVkJgpk0MU+ljZilvulRF+cpEw/JbJ9BCX
-         HdmMHsRJyoV0P99scxlScREnvaNSMbT9wlKaqL1qXf5Vv/czi94ltRLiXHXldei3iHhB
-         u2kGjfjWvQFvwvs7FBXiFEaJ4ql69bwvBJ5ZP/sllCSZJQmm2jtgIFhL5jhjtXxc1PC3
-         2nW2/e0fXLCDt8BLILdNSF9SA2cAnxyrKAO/qtjVMzu380YWlroQLS4ypTLSh3qtPlVo
-         eSSAJwp+rbt7CT9SL4JzVH4c5HbXVeilfzTy/xxJLAuQnZCHZ73nVo5c3pPNm/TBZU4v
-         LCaA==
-X-Forwarded-Encrypted: i=1; AJvYcCVsTmhIW2vDp7Dwb8Hq8BJ3lON09EsubfIC2wuLIrL8z6wi00nUuynIAk91rnJ0Brs45rntxgs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHYoGPf/azMXe62aWANVIrDcMdntYnVxB8i65Vi3JHCy/15yhq
-	5BWTRsAy2SqZ+Klv3kXXLaJUW0UGPv3RHE7YOZWvblCeP1sw1NUWguH7RvjTc1asACJUIr//3p3
-	kT1JccCyE5uu1JIY1odXRHtmgk/zzt8I=
-X-Gm-Gg: ASbGncsa6bn8Lx8jHqD6izbhvJ5WSdjkTAp+Y+RDlf0Uor9HLjASehmoUj9eyV9kgCf
-	jEUCwuXLq31dkz0wDb3VvoEMMK2x0MPm/u7LQTebhEszEBxqkxFacc6cUSAh2uR8tHSWXPIeQD1
-	thbBpPjCUAVMamTwa6zdAOh/Gchik2hrKEI9BBPdnlZDY=
-X-Google-Smtp-Source: AGHT+IFagww3pxOoOKsEFeuXbX+NHva9IsyD9xZhOtoR8v7SpOOBVYkojySXKhuMk5XZSqETNSbTEv9mBPBVHaZh344=
-X-Received: by 2002:a05:6e02:2482:b0:3dc:8058:ddfc with SMTP id
- e9e14a558f8ab-3de07cd045fmr165604885ab.11.1750230149937; Wed, 18 Jun 2025
- 00:02:29 -0700 (PDT)
+	s=arc-20240116; t=1750233078; c=relaxed/simple;
+	bh=jEGcUrUzW4bBd4XLG92+QqiiXo/KXyBHaL1GxUKmxeM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lhQ4uVlOpM37IXkwb0Od/xWtjX3a06cQWvNxe4/reRs1tObqBCrsYkVB4WbPZT1bhKFCFi46XhrhVGXoSsdOs3aZ8IT/oGKQHPsPIV5eudt3Idytnp4DnIGtKH2w0/A8aGq/CckCwGbe0QvpOE6JCt3x4ZSQnsB1Tyr3NV5kKyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai; spf=none smtp.mailfrom=cloudprime.ai; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cloudprime.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cloudprime.ai
+X-QQ-mid: zesmtpgz1t1750233069t230d9931
+X-QQ-Originating-IP: fSynssGf0uTaYUHV1mZRBypWe+DYBpAPFoNVmbkEzyQ=
+Received: from haiyue-pc.localdomain ( [222.64.207.179])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 18 Jun 2025 15:51:08 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 9162071731163168030
+EX-QQ-RecipientCnt: 2
+From: Haiyue Wang <haiyue.wang@cloudprime.ai>
+To: io-uring@vger.kernel.org
+Cc: Haiyue Wang <haiyue.wang@cloudprime.ai>
+Subject: [PATCH liburing v1 2/6] liburing: use uring_ptr_to_u64() helper to convert ptr to u64
+Date: Wed, 18 Jun 2025 15:49:17 +0800
+Message-ID: <D389371A903202C0+20250618075056.142118-3-haiyue.wang@cloudprime.ai>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
+References: <20250618075056.142118-1-haiyue.wang@cloudprime.ai>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1750065793.git.asml.silence@gmail.com> <702357dd8936ef4c0d3864441e853bfe3224a677.1750065793.git.asml.silence@gmail.com>
-In-Reply-To: <702357dd8936ef4c0d3864441e853bfe3224a677.1750065793.git.asml.silence@gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 18 Jun 2025 15:01:51 +0800
-X-Gm-Features: AX0GCFtI_6Syj--jN1osN8b3IwBnDhOc9cmGPDIfbz9j-qf3m5_nSa7qw0hJtXc
-Message-ID: <CAL+tcoAeWk0MPw56NjrPBm3BOUmAMnSrw=wbbMUe3X92-wd4Mg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/5] net: timestamp: add helper returning skb's tx tstamp
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring@vger.kernel.org, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@amazon.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S . Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:cloudprime.ai:qybglogicsvrgz:qybglogicsvrgz7a-0
+X-QQ-XMAILINFO: NY3HYYTs4gYS6+JgFWz3tulITIAZWRmatxfh+0+7KtV7YyHs5cH/IHvG
+	oGGwHZJafPoMBigTcOabIHyFQLc1tMn+QoNL4/fWRt+9Of9+CPPoiTH+HXQzsEy9oKWiofY
+	e8Vsx6ISrTC/FPk+99cP9RjIrwTAa3NRQM2eLXA+HHB7Fyb0aG8vGoekqqJFCkVjM9X6Rw8
+	AkDYjjHGh9m272NPgntNAOqnJKCaoVIvnzNOYexRcOzxxjExktRReTyof3WobMNJwOS8uMT
+	S4pXl3Z+vZbuxlaAlGudhOnlPP1MxnnC2WJpnHqA9YLrv/kBs6Gb35NNVinbVfFASyXb+TZ
+	Tl4/gnG8pTwDWfQozUIaY98/8q9iBVPll66fbifxSSDB4qdfyZSm7TCu1cdgbIUwvTI97LJ
+	Hifdc6vrKdECWmTtezBbbicnkm7k3WiQ8/40QNmRQ+aK6u0Hxdv63Ni0twNM2IB5dYmZfjC
+	9MIc5AWjgaceSJi12Sr3GJe4PA4ppE+GDXPsN+qS7iw4C9bcveOPnM2VDZ9j1diGxrxiHJX
+	DufAxzn/u0xzBvloGkn7iIsKV7QOR99xn7aZrr/CvREOAeWKMg8QlqOcJqW8Ha2WL1mBIhs
+	Rcvq1VcxtSTdnvJY0VdFkQrmPYb2WK3yy3AwdcozxjN4a/bSRwRaGWJyF47xev8Mnh7Hb5k
+	szsOdVNySkTGX68iw+0v7pbq0wyjt8O+/i7N76k5JT6OKHor+RZaE3ddeQUiQVQASSxv2h3
+	YeMFrOjysHifQAkbEnXdQppU43ceDRgLykA1o3bNsi8tVAvIRXkLMHJBRj9vCesQUHYEtkt
+	gyiaZ/JmxIracjJiKpe54g5MRN8RPCYjTVfth9BkEQ+crNhXiTQPKI73yIeBXrzAefzqpSi
+	/MQlzFYc+JARXWBADUXVi9Q6y1+oNO9k43oCJqsZnE0Y9+vH0XZ0qP5yTS+Kxqs9I5Ve/AT
+	/9DFgjAu6HcY0lbAFfhQvHbtTlkWs2dAdKc3zWL0l2zGZSBV23GPM8Hxp7ca4wqddG4ZFK4
+	V5e2939iTMCZ8EH/BI
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
-On Mon, Jun 16, 2025 at 5:45=E2=80=AFPM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
->
-> Add a helper function skb_get_tx_timestamp() that returns a tx timestamp
-> associated with an error queue skb.
->
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Use the helper to handle type convertions, instead of two type
+convertions by hand: '(__u64) (unsigned long)'
 
-Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
+Signed-off-by: Haiyue Wang <haiyue.wang@cloudprime.ai>
+---
+ src/include/liburing.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
+diff --git a/src/include/liburing.h b/src/include/liburing.h
+index 6d87248..9f13e78 100644
+--- a/src/include/liburing.h
++++ b/src/include/liburing.h
+@@ -721,7 +721,7 @@ IOURINGINLINE void io_uring_prep_accept(struct io_uring_sqe *sqe, int fd,
+ 					socklen_t *addrlen, int flags)
+ {
+ 	io_uring_prep_rw(IORING_OP_ACCEPT, sqe, fd, addr, 0,
+-				(__u64) (unsigned long) addrlen);
++				uring_ptr_to_u64(addrlen));
+ 	sqe->accept_flags = (__u32) flags;
+ }
+ 
+@@ -907,7 +907,7 @@ IOURINGINLINE void io_uring_prep_statx(struct io_uring_sqe *sqe, int dfd,
+ 				       unsigned mask, struct statx *statxbuf)
+ {
+ 	io_uring_prep_rw(IORING_OP_STATX, sqe, dfd, path, mask,
+-				(__u64) (unsigned long) statxbuf);
++				uring_ptr_to_u64(statxbuf));
+ 	sqe->statx_flags = (__u32) flags;
+ }
+ 
+-- 
+2.49.0
+
