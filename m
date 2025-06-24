@@ -1,141 +1,127 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83952F43
-	for <io-uring@vger.kernel.org>; Tue, 24 Jun 2025 13:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7D4D2D5439
+	for <io-uring@vger.kernel.org>; Tue, 24 Jun 2025 15:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750772365; cv=none; b=N8z3mlCPF1vZIT4v+JsjUKGj7Zu0bo42FuCsWaRme161jWyMXd93isFrJaONYw3xHnlq7ReYQHTAbntKSBN0bvcxTofS6HioEp1EETS/WsQ5PamBJoa1pbFKaXadwow82BSizIjy4eVQP6f4DHT339gb1jBYZF9XSqVFN0avtJ8=
+	t=1750777381; cv=none; b=gHHRPztpQ5E7ey0cqBwC6/IUhT+Obt72lIgvd0gpEb5kh9IJkF1JT9rsdB0dSMEapEp8TuiS/iLoz1wgwxEox8CpL8OLL8NEsn2gZpaK2sYMQnHgmnlrhkuBaCdZGgoP0+v3v+GZeTDYnkRfuU124X2tAAo6DZynRd67gZFmYaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750772365; c=relaxed/simple;
-	bh=alDrcBczh/zLgglB893Pgk/X8u16PwMiZCxap5paS0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=imvLozAo/wlLBka3w9S+H7OUgyGJJP08VKgOHn+ke+J/g8KXRCMX43+CJvToa9l8E3hzI4H+vqoyGd3aP0WLL1g4cnSqTBbLPEcFCP4HSM0ubXG0qo3tWifVKKQZ+IwqBYdgmgYb3syQujdL/ErPLqA06twcC38mFI3iDLYbnbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jTOsLQda; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1750777381; c=relaxed/simple;
+	bh=aZ6d2ww+sAxXhhU8DObEXMjD5Yjx9X+/HeWN0awnxJs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WuQzjOzdy6GoK8eEWha/xPprE6Pd6xNBCW1x3J3x4ho3Jshfk7vfgLA+S+ZPmWaSpSkrHoimqEUr8TUvPnXlV3xmcQwks5SDD3VJbbfN/6ii8IZ2ubuJfhK4o0M7gPKOZEQlEzRS62r5Hl7qUHgZsjNR4Wyw0ugtMWECzRNK+v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EJRBYBap; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jTOsLQda"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-60702d77c60so877222a12.3
-        for <io-uring@vger.kernel.org>; Tue, 24 Jun 2025 06:39:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750772357; x=1751377157; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dtmZfbvCItCFme/rtUJPCdctxkHEaHPnKauFh33zosk=;
-        b=jTOsLQdaEHwYyQxnNmgUfq3pQ/INWS6JhW4neR0DMtx9Z0XSLlJ9ruwLqvfrXZgfoe
-         ov7o6EMtC8tXqsLFNd991Ub192WRSLT7k1W/Q4iDcDyxgb/Q9KOEBecKsKt5M1M0kB6F
-         btmUa397GzPdHHWuiEQSdVTIhFBPAJpbXEXPJnoZa3CrbhTXrmuzDi/jYOVq2Fq3tuLr
-         D7JKqwMbfMY6lwFT6H/uZRu7pCDMu/lxL/OTfbbhAaz+Q/HGRNCMATWWWWeZQ+RmecYp
-         m9XvyiggOkTi/ugW3X7CKqQ9QvHGG4AR9Ocf+csxAj6qIf9wBLkFK6Xs8D80NVS6rsOa
-         yp5Q==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EJRBYBap"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1750777378;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=26knUQsm6IfAjeqD8XI9QpiX0JprUBMdNcpaBL6aJPw=;
+	b=EJRBYBapxtIcVhJHBiPtNnk2OA8BW1aozUiqUmOoom6yHORD15LimXR9YKINXTOPDD4dpx
+	0zC+MLXVMBrfE+lYEeyvIE2pjkTWlzZQDs0s/P3yQuf9wNMzGsauCdzgWcEjlUbA/VrFxn
+	n+JEnPipSjY0CiOccRrovvU3LoIGcpo=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-362-nKVYY2jHNeaHD_aJn9C7eA-1; Tue, 24 Jun 2025 11:02:53 -0400
+X-MC-Unique: nKVYY2jHNeaHD_aJn9C7eA-1
+X-Mimecast-MFC-AGG-ID: nKVYY2jHNeaHD_aJn9C7eA_1750777373
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-311e98ee3fcso4846172a91.0
+        for <io-uring@vger.kernel.org>; Tue, 24 Jun 2025 08:02:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750772357; x=1751377157;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1750777372; x=1751382172;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dtmZfbvCItCFme/rtUJPCdctxkHEaHPnKauFh33zosk=;
-        b=lPZPdFLIVai/qc+TFSkiNewKL/bat3rTaygyI4VFky31sFC3pIYjNBVj249ZKdx1jA
-         71xMp/ziqY0uZ9BPLMqq3cfOL9M/dWIy3Buo0ubxf9EbPsiPpNpFa4wXQ6tLTHkfAEUr
-         NCNBbbt4QeqY+Yx6Wz7B8bNgNvrbqffMlwxD4WlWkXQj3e4qajayb/Dgf2zdmr53oSkU
-         kHHCDYTG2eN1MnR5yFIq9cNm0SzbVbbeVRszEZqlYUHWiG6uPsL3pFBFwt0HOyzDSJgg
-         tqkwQGGnlYZv4PiHKBtZRvpEgJQRy+XlXOdh8HN48Xiktqw3VDu6m5sny4siFtR0uNo+
-         mKgQ==
-X-Gm-Message-State: AOJu0Yw/hqd/A67/W3pnH5nctdh4o9cf3wLWco9ttTlvgln2TJR8pL9z
-	Y+Z0HjCqZTnThYRP+bR6SgreLNdFF65mv4FNauHPvSyA328onM6ZJfi6r4/Opg==
-X-Gm-Gg: ASbGncsESSkB1coL3Uow+RJHNOhM9AdFquRYB2NCGz6BsbsVEaTionv2IZBAsZqGnYO
-	uQZjL0b2FHT4aOhD0ZgKZ6UKMRt7w2uNryhtOnDaPcrJdE0QiYJPjDjOe4vPFgaxbTdTKmA4bnJ
-	he7YnABedy0CdItG5qce2xteg6M3XnUy1Ns5EoAu5mMG4am9UB7XoTLqNZcZk7E1xipb+JejM+F
-	2zZZO4zuec9PvpVHrRsDM8MT5ve+j9xoMebWhpZbE3iSWg7YleVoPoO/UfBOkLpvArq4/kNgtFq
-	YERI9LJGYtDnBLLreAdfE9+XbTx1UhuRyV6OEmK6wppcGg==
-X-Google-Smtp-Source: AGHT+IFjwD0GGtgPYjgy0kfSCsluef2MTsDD7WmnWKyJJPdFNvdKk0rJKqx7JqbKMZdBYdipiREpAw==
-X-Received: by 2002:a05:6402:3592:b0:60c:43d9:d075 with SMTP id 4fb4d7f45d1cf-60c43d9d44fmr236158a12.13.1750772356694;
-        Tue, 24 Jun 2025 06:39:16 -0700 (PDT)
-Received: from 127.com ([2620:10d:c092:600::1:112b])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-60c2f196e13sm1052892a12.11.2025.06.24.06.39.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 06:39:16 -0700 (PDT)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com,
-	David Hildenbrand <david@redhat.com>
-Subject: [PATCH v2 1/3] io_uring/rsrc: fix folio unpinning
-Date: Tue, 24 Jun 2025 14:40:33 +0100
-Message-ID: <a28b0f87339ac2acf14a645dad1e95bbcbf18acd.1750771718.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <cover.1750771718.git.asml.silence@gmail.com>
-References: <cover.1750771718.git.asml.silence@gmail.com>
+        bh=26knUQsm6IfAjeqD8XI9QpiX0JprUBMdNcpaBL6aJPw=;
+        b=ZurQPKZPdjeTGNqngYyHWEdum81DkQEuSXME78ttq65rTh/A2ifwQeKD9OeceRQseP
+         YDFD1DwoK5Chd+CPwC4hdme+QGRuGoXaehGm0991TjgEavXqR8EUslelt1WioeuCqN6G
+         ORZUbiFLO+2K3wXqTsSH/jtccX0K4aj1BiGdRkbOFIr/LXZdMCiz9IamHM3m4EU64qgq
+         2FFuRFOwe744GFoRqTvXkgSQWi0oClT4K74OexIjDsNzZMy/xSw4TWTyhOeFA1kw8Niy
+         9ITAIWzagUvosJivE3G7iEiWrcSStQd/nDBoUIjmDNJXa1CWOG3Snqxa9GYlPky7jxUC
+         H/pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVu4mUd+r4kAPVbctQptKOR5LQS7HVVU4nGiuJ9cM5H7+8ZCkZZMBqpIYHMwX/YS5IzpoD7TRgdag==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxb+FwjhEsk01qpFJpBjhKi/5Fx057uHqL/8gXBEoNqS3wbaMh3
+	IB8r7/63IwjGP31SPYbyTnnfPUrDyVImi0fO6mTBJantzSAOL07WgQvo0ugBQnkOxbe5CO/LRne
+	wCyqZULiRa3d7S+k+7EDFgrD0SO/PjlgyB89H98GdMxzdulhtCNXm+mD8FNQY9ubdh2ONc5tX0s
+	woZ2ycO4tNgjyaNOxiGFrm0AazZT5mK2bPI/159OmN9EBZOQ==
+X-Gm-Gg: ASbGncsYT8A93+Wpq4Y2zDZcv2X88QyCENmXR8jnpFxFYqfXAIANF1k3CrYxMtHQlgm
+	/xVBct1mDa/CW+xFHJhBEwpjwy9IPogIxPlWJLZPUEH9VoRJTkiBmtbnOYm3WMgqPFc8UO6yYPC
+	lVDF35
+X-Received: by 2002:a17:90b:2e07:b0:30e:3737:7c87 with SMTP id 98e67ed59e1d1-315ccc94eabmr5231071a91.5.1750777371794;
+        Tue, 24 Jun 2025 08:02:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHUoxnJOmDWOiFN6+y0j0WjolvSI3k0vnLz5GanKeKUeNgZzu6/9x1t8stmhncEliSTG7rQEkKF9/x2jTX0AqA=
+X-Received: by 2002:a17:90b:2e07:b0:30e:3737:7c87 with SMTP id
+ 98e67ed59e1d1-315ccc94eabmr5230998a91.5.1750777371158; Tue, 24 Jun 2025
+ 08:02:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CAGVVp+UFKKb4ydw1+zWX9Bre6vt9TUFt9FY2qOx0LMv+8VaVoA@mail.gmail.com>
+ <aFpb3BjH4T8q8KAY@fedora>
+In-Reply-To: <aFpb3BjH4T8q8KAY@fedora>
+From: Changhui Zhong <czhong@redhat.com>
+Date: Tue, 24 Jun 2025 23:02:39 +0800
+X-Gm-Features: Ac12FXwnHZkJcRl6FvYU6yXk_BvQss7qEWIOp8lSPnfnln_4oRxx-uvcIcMYZG8
+Message-ID: <CAGVVp+VNFCUt68A1-P+Rx85kKJpVioJt7U-=hKyw6ji7_5OzZA@mail.gmail.com>
+Subject: Re: [bug report] WARNING: CPU: 3 PID: 175811 at io_uring/io_uring.c:2921
+ io_ring_exit_work+0x155/0x288
+To: Ming Lei <ming.lei@redhat.com>
+Cc: Linux Block Devices <linux-block@vger.kernel.org>, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[  108.070381][   T14] kernel BUG at mm/gup.c:71!
-[  108.070502][   T14] Internal error: Oops - BUG: 00000000f2000800 [#1]  SMP
-[  108.123672][   T14] Hardware name: QEMU KVM Virtual Machine, BIOS edk2-20250221-8.fc42 02/21/2025
-[  108.127458][   T14] Workqueue: iou_exit io_ring_exit_work
-[  108.174205][   T14] Call trace:
-[  108.175649][   T14]  sanity_check_pinned_pages+0x7cc/0x7d0 (P)
-[  108.178138][   T14]  unpin_user_page+0x80/0x10c
-[  108.180189][   T14]  io_release_ubuf+0x84/0xf8
-[  108.182196][   T14]  io_free_rsrc_node+0x250/0x57c
-[  108.184345][   T14]  io_rsrc_data_free+0x148/0x298
-[  108.186493][   T14]  io_sqe_buffers_unregister+0x84/0xa0
-[  108.188991][   T14]  io_ring_ctx_free+0x48/0x480
-[  108.191057][   T14]  io_ring_exit_work+0x764/0x7d8
-[  108.193207][   T14]  process_one_work+0x7e8/0x155c
-[  108.195431][   T14]  worker_thread+0x958/0xed8
-[  108.197561][   T14]  kthread+0x5fc/0x75c
-[  108.199362][   T14]  ret_from_fork+0x10/0x20
+On Tue, Jun 24, 2025 at 4:03=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wrot=
+e:
+>
+> On Tue, Jun 24, 2025 at 01:37:55PM +0800, Changhui Zhong wrote:
+> > Hello,
+> >
+> > the following warnning info was triggered by ubdsrv  generic/004 tests,
+> > please help check and let me know if you need any info/test, thanks.
+> >
+> > repo: https://github.com/torvalds/linux.git
+> > branch: master
+> > INFO: HEAD of cloned kernel
+> > commit 86731a2a651e58953fc949573895f2fa6d456841
+> > Author: Linus Torvalds <torvalds@linux-foundation.org>
+> > Date:   Sun Jun 22 13:30:08 2025 -0700
+> >
+> >     Linux 6.16-rc3
+> >
+> >
+> > reproducer:
+> > # echo 0 > /proc/sys/kernel/io_uring_disabled
+> > # modprobe ublk_drv
+> > # for i in {0..30};do make test T=3Dgeneric; done
+>
+> Hi Changhui,
+>
+> Please try the fix for your yesterday's report:
+>
+> https://lore.kernel.org/linux-block/20250624022049.825370-1-ming.lei@redh=
+at.com/
+>
+> The same test can survive for hours in my VM with the fix.
+>
+>
+> Thanks,
+> Ming
+>
 
-We can pin a tail page of a folio, but then io_uring will try to unpin
-the the head page of the folio. While it should be fine in terms of
-keeping the page actually alive, but mm folks say it's wrong and
-triggers a debug warning. Use unpin_user_folio() instead of
-unpin_user_page*.
+Hi=EF=BC=8CMing
 
-Cc: stable@vger.kernel.org
-Debugged-by: David Hildenbrand <david@redhat.com>
-Reported-by: syzbot+1d335893772467199ab6@syzkaller.appspotmail.com
-Closes: https://lkml.kernel.org/r/683f1551.050a0220.55ceb.0017.GAE@google.com
-Fixes: a8edbb424b139 ("io_uring/rsrc: enable multi-hugepage buffer coalescing")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/rsrc.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+I ran the test 'make test T=3Dgeneric' 50 times with your patch V2 and
+not hit this issue.
 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index c592ceace97d..e83a294c718b 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -112,8 +112,11 @@ static void io_release_ubuf(void *priv)
- 	struct io_mapped_ubuf *imu = priv;
- 	unsigned int i;
- 
--	for (i = 0; i < imu->nr_bvecs; i++)
--		unpin_user_page(imu->bvec[i].bv_page);
-+	for (i = 0; i < imu->nr_bvecs; i++) {
-+		struct folio *folio = page_folio(imu->bvec[i].bv_page);
-+
-+		unpin_user_folio(folio, 1);
-+	}
- }
- 
- static struct io_mapped_ubuf *io_alloc_imu(struct io_ring_ctx *ctx,
-@@ -810,7 +813,8 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
- 	imu->nr_bvecs = nr_pages;
- 	ret = io_buffer_account_pin(ctx, pages, nr_pages, imu, last_hpage);
- 	if (ret) {
--		unpin_user_pages(pages, nr_pages);
-+		for (i = 0; i < nr_pages; i++)
-+			unpin_user_folio(page_folio(pages[i]), 1);
- 		goto done;
- 	}
- 
--- 
-2.49.0
+Thanks=EF=BC=8C
 
