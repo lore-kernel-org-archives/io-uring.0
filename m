@@ -1,140 +1,88 @@
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57F07292B35
-	for <io-uring@vger.kernel.org>; Mon, 30 Jun 2025 16:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10DB1293469
+	for <io-uring@vger.kernel.org>; Mon, 30 Jun 2025 17:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751302461; cv=none; b=XVeTEl89LGZixVBaOYUPX5JiUuO9HcrXmbKWDxq1ORV0Ee8cajDeID/3BG/q9cmMh4Ezbl/f3EpCu/DgMzOP/vjsJwcy15h95Go/LO+0Y63+MPcUJhhXvuLfi4bw/UD0nYE92BliS3DzESve6UkijkOij9m070RoV9Bk4oZFHbc=
+	t=1751303354; cv=none; b=RJEtPSlcQgsbvXU5VDUqVRnz8veB4vsk1SZcNAn3vsVa5klKK4iN3dEMCSieFreSx1D9usC1Nvahf0+sv3zBvioShmTjg0Us9ou2tB7fTTShLgo+HGwQ3QUruHCNCb7PrxvYicQ6zRwW3pEW99VkPASsqg0jTT5GNzrhnl6tuDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751302461; c=relaxed/simple;
-	bh=hIicDJomNI+T0FBpJZKvllTZ2iiqC+aiC4Tw0xXleuA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ReramhrjVeCZmzRs2FQZKgb5LK2+awOhUet/aaR2jwWg7/pD2igW9WpOaKNGkTMzr5ILKjRGSB6+k2asJBLHUDhbFh0PtDFqKi+N66wGdBzUy0cJ7er40PTOIjSxbokh8CmtzR3oU+jVCrxdN5vCUjJ7D0H3hwuV4HMbKojC+6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=n/dBr8X/; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1751303354; c=relaxed/simple;
+	bh=Ne3+5n+KVL0tsAmZpcZX9OKrDrZYXgfPWL22pCR1kzE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VTc644HeEyTiw0/CKTt4HXqxtRrrcxhf4Ax/hgefK58mv7f1lG9sbL3zcUnSZqT46Whfx/Ir7wUEdBN+6VqCcPUPkOpfLubg2wZaJzNBqlb7qNTQ78wlI4ipgucbDeTYZp22oZSNCT8oUQvSI2IBwyioB7JrczQDFOmk8XG3nW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J2+itUVw; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="n/dBr8X/"
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-86cfa53d151so2602339f.2
-        for <io-uring@vger.kernel.org>; Mon, 30 Jun 2025 09:54:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J2+itUVw"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-234c5b57557so21205095ad.3
+        for <io-uring@vger.kernel.org>; Mon, 30 Jun 2025 10:09:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1751302456; x=1751907256; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mtJIAjrtHSY0a3dQckVwISiiBjQW3PZAQk5wVdLJAE4=;
-        b=n/dBr8X/ACZAfMO4uh96zs1zB0G2UbyA2MUKzBazWdyUXsBN77mKV99GHcQGEU4BX0
-         Sx3CwLhooDHiMHqe7K721LNndUKFntyz2zNS+9mF1z/D+zSOXyWFEshx992/yuBb+HaB
-         xlyZF3EVMldMPI8xOy8kO+IbiPf1GoqXBzLyw1NFddZDGeP1O2qnPYX7RwYIZlGYDloV
-         r+30c2wfP3s9qLnhVqOWnKNjIYSn3zPNCLteNaMb5YwS3MLSs2c0va0NZqc8csBYpNrb
-         EvOSRrramFtMioOLyx1JGG+lxGhc90pGmRGwlL1ml6us6Vo2zguEaxGLydrS8XdTlu/N
-         MdgA==
+        d=gmail.com; s=20230601; t=1751303352; x=1751908152; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MI04kBm25A1fDD8Hhss3Z0Nk9JbnVoN/eUMS+dpmOjQ=;
+        b=J2+itUVw4zNIhnRMPSvilA6DU0eR81548Z2VxCVrWZcb9JhMqVmEasDnJGpcBN+O0m
+         RMoKwJ6X5t2TMUyMxYcyH/kKpsicK/wGnkqhkpEALow3ebbvxUOwWHkmy3e9IFmapYE4
+         l2r5OBxoBa+7nk0cBRRXs2Wq7HPlbbtiioqmj9ZGddg/ubNj1RgBt9XOJwYCzY6oERlq
+         DMCZNvDCdcInOSLhGwKYCTprmhWBzLD7+6iAUNv/2BmhOUcXEbZURYErPqmip1sGF/JN
+         0b/zAEOW7jknulK6FMxsTZvUVae9XWe+nZuUdeDeGUk+Dvminp1oY3sHxylARoLBcq0y
+         ZlPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751302456; x=1751907256;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mtJIAjrtHSY0a3dQckVwISiiBjQW3PZAQk5wVdLJAE4=;
-        b=o/dazGzi0kvZNNyog2UBluxLKu6iJBLRppZnqBx1WKI2+fjc/LnwvbKvXcTqgAXLh1
-         a+NQgZ6/GDevTQjyPAaOiE5/v+D19w/H8KrFLj9hApvK5ARo5U6Pi0TdSuFpmpUHHah/
-         RTO2p1Cl48t5agD09Mu7YsnF1/1PQhD9xQeqlECzEKeNfZh4Xx++DlIbU//OZvCRHEF5
-         HBNrKQLkj7rpSA66TKp+36v7Cq5VYJOLhwoIM6oegpbYDp3tJHm3C6lFf8GcDSQd1WUC
-         zw9TIWS2+Rr9dHC9AQ8i38bb67eqxvs8RDBTJmt8P+ta2yRZ2TPPKYhGYphPmq7NM9AS
-         gf/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVuYY0czG+/4c47fIXmtn338O1W+6IDhBydTIjM0ZYi2mDigXznex8RCjYax+v890JgWlFE5HsWxg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym1otiRJoebxjfUagNGiEybj3/P+pi3I36iQpzffhCL6zTJJVo
-	0ADVtV7kwQ2odIxTq6nRdDJpZPaTrNI4yANzkep0Q3IyQHdnrSv+VgLOw/fmk61pSeE=
-X-Gm-Gg: ASbGncvb6lrDGdDkFQyCSEcyMtaTqWbawDakgKICGixJEbQMJ6Vv4VX/S8yCalTDBlE
-	xUcOv7LM1lSwX/bc081UgZDaOPHAj/FJT1md1XLa3miWcR669oVYZRWngnE/tAwJWEGmHQ4JtSz
-	nDkdLC13JjuJY2ehkWdJzxrxHsqrOXM1++LyP/ENchXPhlrjeVh62vIOHAOMr3IlGJmyqg+IAo3
-	kdhZSMwbOM2HU5ImUyhVciAZhiYM86eHbKKYaiLjqXz2sjAQTqZwCBNO40J4iTli0CpXm3xWEfP
-	kZa6Q1bFK7S4Id2u//dMXNjiQHgHTU49AGf9CxtHWlGq1DQZvjsLO94y3tU=
-X-Google-Smtp-Source: AGHT+IHJJ+NZMQE/+J5LgUQ+BGgDDV86ksa69HYnqvS6JgAv6a8w819wlFG8V3pr7ffTmxLVm3+8ww==
-X-Received: by 2002:a05:6602:1683:b0:862:fe54:df4e with SMTP id ca18e2360f4ac-876882c7367mr1653664639f.7.1751302456374;
-        Mon, 30 Jun 2025 09:54:16 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-502048608c6sm2008378173.17.2025.06.30.09.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jun 2025 09:54:15 -0700 (PDT)
-Message-ID: <0c7bca50-5026-4049-aa80-ec19e4d0544f@kernel.dk>
-Date: Mon, 30 Jun 2025 10:54:15 -0600
+        d=1e100.net; s=20230601; t=1751303352; x=1751908152;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MI04kBm25A1fDD8Hhss3Z0Nk9JbnVoN/eUMS+dpmOjQ=;
+        b=gEofRyyd/3VIoVHUr9ZURojaD2VZPGm+62bpqkiH3l7auhWZd2iJUnabIKCedlgme1
+         S054YfTisr2DOC/cxkYDfUwB5aRDRXdoMPf6GNyoSi6XBeeh+2odSnfxqwh4XUA0WCkV
+         J+glmfLr2nnK0CmKIJizSxYar0nJFSMzAasIBxsIgupD4iFRJ9fYy9eXHFzsG180c7PA
+         ok/TOHY/OTWtV9d9tkbSR8FyFVPaHAKgJ0FlVTHJ4MhqpsYVB/mlQImMzLB2stDIA49g
+         v34rmObhO5+ro8anWUWUgmjPppyYce8NBb5D4OTv+D+/BTM/M2vE0xVFZP0XZ+W8d5pF
+         1Jow==
+X-Gm-Message-State: AOJu0YzzdGyl56WE6BwwtqqaQe+fB7m1SHx3FUW6Ehz7nrsvpotN/1Ol
+	r5Z1UaBoOcSES6gR3+tUaC/3IkQLX9GCJExY+WON/yt6MpZF5Pgd4AqWE7ficDEK
+X-Gm-Gg: ASbGncu9CjiTC9NIvUk3WxCl5hVZACAREtVD2Yq45VSgymUwRpL3rj6y4qndIU0fExM
+	yUdEL1Wts7gwxNS6KakGsFPKECsdivfUAoqMjcIWOYAqpRYx9Moa4opxv5TJ8mt3W+06uT6aGME
+	TAMpPGmavgR0/UNXWbTyj+70jaxVt30JfDdYnWTzik5J52lbn34QpgRjKiCsPUTVSvkdRVRUNjZ
+	Rb/9ZsZFPbOIARm1QVdXTnybEgVdwE1bHGbDcVSpqwhrDPiLwwRDg8oZutj5Ld0GBl/Xmfq1ymU
+	9t0Jimhs504J2jDvPUeB1OjQUfAmKp2ek6CBF9qXabaT+kYMhI6V7B85
+X-Google-Smtp-Source: AGHT+IE4XBAvkTEZVL3EtdaGAeydpJWQpPgSY5Io+X70P9ZcshrT1lWb/1RKE8S+L7T7mFJAbHmRBg==
+X-Received: by 2002:a17:903:3bc6:b0:237:de7e:5bbc with SMTP id d9443c01a7336-23ac4665e18mr219067775ad.49.1751303351968;
+        Mon, 30 Jun 2025 10:09:11 -0700 (PDT)
+Received: from 127.com ([2620:10d:c090:600::1:335c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb2f2239sm89182395ad.81.2025.06.30.10.09.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 10:09:11 -0700 (PDT)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com
+Subject: [PATCH liburing v2 0/2] add tx timestamp tests
+Date: Mon, 30 Jun 2025 18:10:29 +0100
+Message-ID: <cover.1751303417.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] tests: timestamp example
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-References: <cover.1751299730.git.asml.silence@gmail.com>
- <4ba2daee657f4ff41fe4bcae1f75bc0ad7079d6d.1751299730.git.asml.silence@gmail.com>
- <accdc66c-1ee4-44af-9555-be2bd9236e25@kernel.dk>
- <79255ffd-9985-41f4-b404-4478d11501e5@gmail.com>
- <1c1a2761-9e4d-4abd-ab43-e6d302092b6b@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <1c1a2761-9e4d-4abd-ab43-e6d302092b6b@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 6/30/25 10:50 AM, Pavel Begunkov wrote:
-> On 6/30/25 17:45, Pavel Begunkov wrote:
->> On 6/30/25 17:20, Jens Axboe wrote:
->>> On 6/30/25 10:09 AM, Pavel Begunkov wrote:
->>>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->>>
->>> A bit of commit message might be nice? Ditto the other patch.
->>> I know they are pretty straight forward, but doesn't hurt to
->>> spell out a bit why the change is being made.
->>
->> It's not like there is much to describe. The only bit
->> I can add is the reference to the selftest as per the CV
->>
->>>> +#ifndef SCM_TS_OPT_ID
->>>> +#define SCM_TS_OPT_ID 0
->>>> +#endif
->>
->> Otherwise it needs to be
->>
->> #ifdef SCM_TS_OPT_ID
->>
->> All tests using SCM_TS_OPT_ID
->>
->> #else
->> int main() {
->>      return skip;
->> }
->> #endif
->>
->> which is even uglier
->>
->>> This one had me a bit puzzled, particularly with:
->>>
->>>> +    if (SCM_TS_OPT_ID == 0) {
->>>> +        fprintf(stderr, "no SCM_TS_OPT_ID, skip\n");
->>>> +        return T_EXIT_SKIP;
->>>> +    }
->>>
->>> as that'll just make the test skip on even my debian unstable/testing
->>> base as it's still not defined there. But I guess it's because it's arch
->>> specific? FWIW, looks like anything but sparc/parisc define it as 81,
->>> hence in terms of coverage might be better to simply define it for
->>> anything but those and actually have the test run?
->>
->> That only works until someone runs it on those arches and complain,
->> i.e. delaying the problem. And I honesty don't want to parse the
->> current architecture and figuring the value just for a test.
-> 
-> #include <asm/socket.h>
-> 
-> Is that even legit?
+Add definitions / tests test for tx timestamping io_uring API. See
 
-Good question... We can always try. Looking at debian, their newest
-package for testing/unstable is 6.12.33 which is why asm doesn't even
-have it. There is an 6.15 based package too, but still listed as
-experimental.
+https://lore.kernel.org/all/cover.1750065793.git.asml.silence@gmail.com/
+
+Pavel Begunkov (2):
+  Sync io_uring.h with tx timestamp api
+  tests: add a tx timestamp test
+
+ src/include/liburing/io_uring.h |  16 ++
+ test/Makefile                   |   1 +
+ test/timestamp.c                | 373 ++++++++++++++++++++++++++++++++
+ 3 files changed, 390 insertions(+)
+ create mode 100644 test/timestamp.c
 
 -- 
-Jens Axboe
+2.49.0
+
