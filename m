@@ -1,108 +1,102 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AA72AE90;
-	Tue,  8 Jul 2025 09:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDABB2D8DA8
+	for <io-uring@vger.kernel.org>; Tue,  8 Jul 2025 14:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751967917; cv=none; b=U0ws0NvccN/8Y8Z3boVfVzondSmbcKe7RHzX1biU/BT9vxS6FN2v28wnqFpbEFjffLM3+/s9qeaGaaF603N0O0wSX5jRJ89F15Msm+sknn8dWEKMAlmbgfgBuVybRP9o+ylFzGOQsZhyvejLPDm3MRULY/9KHImb1SAoTfeczv8=
+	t=1751985554; cv=none; b=ZO9D+b3eRAa4BW+nPhPw2kR9nZXMAIkl1IlBQwk6yNtMSa3aAR+Qygof6PLmiQRDTeWLtstCJeEhIjKwofJN0d7PvYRTAx2QjpPTGEQyIcmhBgF9Mr06qdR6iPNy3CoNd5/0Xv8xJcNXmgz7X2ShCZb1MUXcx9ZPBxhrhMcJTwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751967917; c=relaxed/simple;
-	bh=dGcUdxYiM4ayxMycyB2LSOUC00gSDU0QfvS9fJ9kzxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JkP4ufBrUnCAl3E2Ztt2umBH5PfpMl/zyLZEWHlxoOnFzIlVU2oHYfkr0u9z1jZ8ZAaVkOko3wKg5rSYp0qDzJ0CxEs4ny6S1luJ+4tI7jh1TGd7nkOQIFDeqKoqgmL1n8QGa1cyQPF3fHXGPsdJU9TWC2LGRZpvKKEkaT7GrT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=UWKNWOvb; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1751985554; c=relaxed/simple;
+	bh=hK0x8tCd38wd1AcTPvD6hJnSew5C4/9y2Me6qtX6cPM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=V2WxkorFmlHdIAfYomzqJsARr8lbfQVmfkR751uwcHr92BZH+a2JAU6Om2RlzlGdgl2HnUdlWF4imp0mhBrlpb3z6uNHQAi/URTY1h5Rdk6nias2oR64yMVUUnGl6x3F6sEuPwotmqT/Ii3yrVIsxLGTResQbZHO8a2ZXsSnmlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=tJ86WTpi; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UWKNWOvb"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=aIbqbwBgG/lyES8ZapCr+jWLXI49EU1keL2UKBLl4ZQ=; b=UWKNWOvbW1xTiQyAkogBIy5vXY
-	1kMTpJM38uJiKRySLNvCg1/KWyoRb1P010eKGu0Ne4OmVDj2enRDpDMIYiYutgg62elXC6HX5fRwp
-	M1LNLNaS6wDYR9RjAnmSCamtrf8dgwjDhxgF2622TFGsWOtY8XIgCxUX7uUkeFHHe88+IJxPP1aH5
-	C5UZrWlj2eHwJoWhyOzwHz2bpVaRlInzIv2GdifcrnVgCksZ0myip6UGZhhb0Tu0LW3YV/B7CjhVD
-	9z4Jd2Nv/RLlugnLGApfhYL3NyOuZthIVKEvuC2NpqgIbuLqfHQrETLIoiOgkss1GF0ULYqQBX//B
-	eBqoAwnQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uZ4t1-00000004vIx-0KrK;
-	Tue, 08 Jul 2025 09:45:15 +0000
-Date: Tue, 8 Jul 2025 02:45:15 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Christoph Hellwig <hch@infradead.org>, io-uring@vger.kernel.org,
-	linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
-	David Wei <dw@davidwei.uk>, Vishal Verma <vishal1.verma@intel.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [RFC 00/12] io_uring dmabuf read/write support
-Message-ID: <aGzoqyM06rgXIJst@infradead.org>
-References: <cover.1751035820.git.asml.silence@gmail.com>
- <aGaSb5rpLD9uc1IK@infradead.org>
- <f2216c30-6540-4b1a-b798-d9a3f83547b2@gmail.com>
- <aGveLlLDcsyCBKuU@infradead.org>
- <e210595b-d01f-4405-9b5d-a486ddca49ed@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="tJ86WTpi"
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-8723a232750so443624539f.1
+        for <io-uring@vger.kernel.org>; Tue, 08 Jul 2025 07:39:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1751985550; x=1752590350; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iGM1E3DYMEASkYf+b3zNDldK0JLh3lOR67oalgyg/HI=;
+        b=tJ86WTpiOXxjsszhIBlGO35+5QK6XLtW9eFDeDU1GEVUTzJIycSoarzHnPC067ID/p
+         wNRXH5GWYNt8z7atLpX/oU8LLEnkJXrYBg1kES64AEqHmYwtbLx2Ta/9My/yrGXCmg1i
+         HqPDn/7pRwmaVckvZRrHgdVq6OPczdAHQZL+mZ5SOy7FMay719hx8B8CHtuGmo9MkSd4
+         hGoKj4NSaLbEws8uPhV5Uoucc51Ifofs3qmJHEwI0zs3HEB3zRq3yB1XUzR8ZJ8Ph/vF
+         U/eHaHHlGejfZuR4pAlnjKx0s6bK5sNgQtfedCs11Ha9x9rZlNQcEaY6xiIGfvGqPTZp
+         qZgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751985550; x=1752590350;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iGM1E3DYMEASkYf+b3zNDldK0JLh3lOR67oalgyg/HI=;
+        b=MBdDDhFIc70CKOZKcQNrGrpp1THW3ADmphqo3HIjzPgIsmjHJYZpAkn3jgbrkYI9Sm
+         W6qu1R4NzAfHulht2txnmSF2MOy1YTkvmsLc512bM6TJALT8cIAwkgpd7umlt+kyqAqV
+         brZjtOaEYV4BHzjAWJHnu0/2l2rhfD33dwEsNyFaxOZCEqkZNVnkscZMv8XDA8hW9DNf
+         7q8kILk2t/ULha+bZiUl1fB3v5buh9USYKYH8tGt4GzIzXcLp+UGc9dIbQq2fS/C4bts
+         rOr6HLE+9rxOfN8Hcb7WKYKhyoqN6NI7uSKUb0LGCa/97hJMizxWByjfYGTn7u/3zdZI
+         t0GQ==
+X-Gm-Message-State: AOJu0YyMKXJUyLChDv05zS8tvy2tj0dBTkwxFwuYKjfPIOyvCNE+56gG
+	4m+YW2kSjQUb5qD3z5MHNynbIiLPqJgpiBlgJRhcidUr4bTwkk8iwJjCWYBpccadLfL3MNwoubW
+	t3zdC
+X-Gm-Gg: ASbGnctKrKLQk24pH9iUcDyfUwq2T7KUbNN45kLgC9nSFsAfZlp5ko0pGx9lvJERp+6
+	xhsmJ7Gisb+2PXBq48GsaN85p9iUPDWyknXl3An+eZagK+rHtdcgRy3t3dVPuXDjfR15kthF4p/
+	WHsrkG6HdWANBkG+pRruEh4e2WcQJPjs00kFU9fSmYxBPUx6iZtuNmVRTNr1bdXXmmT0ZLBsJuf
+	n0TibYeBUi4TAgn1Kzt7tnnjUTq8gYcpYoJh4x3K15tjkfl3mRTCblMsO/EVDXrlPPlphmaKsDM
+	zw+mrMCB6t9zJJm31DuoJpWWnUKiYCcc+niOPr7du0UJ9w==
+X-Google-Smtp-Source: AGHT+IH8RuHrEu01D6vtSFKy+cX6JkvKk1xzQbJ5MZ4RW97nNscHq1+OCHiXWF8/UyrAW34tfgDEkQ==
+X-Received: by 2002:a05:6602:b97:b0:873:1cc3:29d6 with SMTP id ca18e2360f4ac-876e15dfbd5mr1705273339f.8.1751985550141;
+        Tue, 08 Jul 2025 07:39:10 -0700 (PDT)
+Received: from m2max ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5053aa4e546sm166739173.134.2025.07.08.07.39.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jul 2025 07:39:09 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 2/3] io_uring/net: use passed in 'len' in io_recv_buf_select()
+Date: Tue,  8 Jul 2025 08:26:54 -0600
+Message-ID: <20250708143905.1114743-3-axboe@kernel.dk>
+X-Mailer: git-send-email 2.50.0
+In-Reply-To: <20250708143905.1114743-1-axboe@kernel.dk>
+References: <20250708143905.1114743-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e210595b-d01f-4405-9b5d-a486ddca49ed@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 07, 2025 at 04:41:23PM +0100, Pavel Begunkov wrote:
-> > I mean a reference the actual dma_buf (probably indirect through the file
-> > * for it, but listen to the dma_buf experts for that and not me).
-> 
-> My expectation is that io_uring would pass struct dma_buf to the
+len is a pointer to the desired len, use that rather than grab it from
+sr->len again. No functional changes as of this patch, but it does
+prepare io_recv_buf_select() for getting passed in a value that differs
+from sr->len.
 
-io_uring isn't the only user.  We've already had one other use case
-coming up for pre-load of media files in mobile very recently.  It's
-also a really good interface for P2P transfers of any kind.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/net.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> file during registration, so that it can do a bunch of work upfront,
-> but iterators will carry sth already pre-attached and pre dma mapped,
-> probably in a file specific format hiding details for multi-device
-> support, and possibly bundled with the dma-buf pointer if necessary.
-> (All modulo move notify which I need to look into first).
-
-I'd expect that the exported passed around the dma_buf, and something
-that has access to it then imports it to the file.  This could be
-directly forwarded to the device for the initial scrope in your series
-where you only support it for block device files.
-
-Now we have two variants:
-
- 1) the file instance returns a cookie for the registration that the
-    caller has to pass into every read/write
- 2) the file instance tracks said cookie itself and matches it on
-    every read/write
-
-1) sounds faster, 2) has more sanity checking and could prevent things
-from going wrong.
-
-(all this is based on my limited dma_buf understanding, corrections
-always welcome).
-
-> > > But maybe that's fine. It's 40B -> 48B,
-> > 
-> > Alternatively we could the union point to a struct that has the dma buf
-> > pointer and a variable length array of dma_segs. Not sure if that would
-> > create a mess in the callers, though.
-> 
-> Iteration helpers adjust the pointer, so either it needs to store
-> the pointer directly in iter or keep the current index. It could rely
-> solely on offsets, but that'll be a mess with nested loops (where the
-> inner one would walk some kind of sg table).
-
-Yeah.  Maybe just keep is as a separate pointer growing the structure
-and see if anyone screams.
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 328301dc9a43..72276339e9e6 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -1084,7 +1084,7 @@ static int io_recv_buf_select(struct io_kiocb *req, struct io_async_msghdr *kmsg
+ 		}
+ 
+ 		if (kmsg->msg.msg_inq > 1)
+-			arg.max_len = min_not_zero(sr->len, kmsg->msg.msg_inq);
++			arg.max_len = min_not_zero(*len, kmsg->msg.msg_inq);
+ 
+ 		ret = io_buffers_peek(req, &arg);
+ 		if (unlikely(ret < 0))
+-- 
+2.50.0
 
