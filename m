@@ -1,81 +1,109 @@
-Received: from server-vie001.gnuweeb.org (server-vie001.gnuweeb.org [89.58.62.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2567323D2A8;
-	Fri, 25 Jul 2025 18:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.62.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A7E8F6E
+	for <io-uring@vger.kernel.org>; Fri, 25 Jul 2025 18:21:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753466750; cv=none; b=dJsdPN7lfAE+kq9asdBf4zPWvfDckdf8wnogVZvHDPaNRUTme5M8fXkPflAUgotYXnyLGENcF9+sLs6JuxZ9mOjmIqPJKCv+vwJNpXWPDR+Lh6vDAaoG58/A7m3VktQf5xftozbpxfgp4DGNoTOVfQdeoFDCJcGX2I1AXMrWBLU=
+	t=1753467693; cv=none; b=Pkfw26zw96bBqTrpHn4UrEGR9aW5lN+FHaLOYcMzpurmppe+AlguxYvjkaf6VCq8x5QRZbSz2HOjC5zAEGh/wXpJ2xDvpmDJ+Cles27fl+c8fsAdmPI5nh7DeZdNuZHoZ/QPTSRr+bmeYdfrXkAE/00OSlhFEmV2cKR9fXmCCTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753466750; c=relaxed/simple;
-	bh=RbaHXKOumQvn00PCmVrWI0kuNbT0c/19c0zosGE1V1s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=E2/Fj8Au46fhOlMx+1pykxHhZZymxD2ch8XAeJtFyKbFAid1ZhSNQDkjka/I61kduTWwWyasiPhqhvGHULmUwkPwnMC0evPd7c63AP3hFBZuvE/0SV07DFOj1WT2UaJZ42icyM0FF9EEKtet5tqxRPW/fIxYjPLGZccG4RZhpyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=FcPBDz27; arc=none smtp.client-ip=89.58.62.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
+	s=arc-20240116; t=1753467693; c=relaxed/simple;
+	bh=GIr52zleFwu2eEPwKn3CzW/cCTYb+FEUP4KL2XLJQzI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=HKo/ICE4MFz1KdGOUvirPMtKpgOhMkXog3bUk0h2SNgRLxKK1AzEIfikpN+PUQAZ9STcW82Bo0rxpZLHyu0zZ6LDSpLgJdDGG4KnhggzzhvkyDs9e3RbWB9lIKvEp2K20SvtJYuaJX69ohhv2z21vuGuLnwTBn3mPjKICRUQ/6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=tctxKcUN; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="FcPBDz27"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=new2025; t=1753466362;
-	bh=RbaHXKOumQvn00PCmVrWI0kuNbT0c/19c0zosGE1V1s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-	 Content-Transfer-Encoding:Message-ID:Date:From:Reply-To:Subject:To:
-	 Cc:In-Reply-To:References:Resent-Date:Resent-From:Resent-To:
-	 Resent-Cc:User-Agent:Content-Type:Content-Transfer-Encoding;
-	b=FcPBDz27zuUqwmeqgjFeFBnsW2niRJGJObJ6Xb8N/3wXw16SCBmITsJK0LbeKZ5Vy
-	 +JJBKFl7EelWwM5rhDNGa8HuMATxNPo4X+Wuk9BRuINkLwjrWPxJsfotjbbd3y6DxU
-	 K3U/GKxiCdZXHs4EMIFZ9Xh/hGHBS0koVIN4J6RZ0TSY4YPLiWiODnRFSfBJ281Yl2
-	 GpilVm04eU46vZH8wx2IevOlStR6uORz+4buMamXHErdpGstpg6rdcpahTkwd/Zn1E
-	 t+sT45uKZ/XBSiOgm3WgEC15EL8b/A7XFj4CV3E855z0nltjc1y6Mqg4K7tx1L88mF
-	 8lu5qJLHe2Ekg==
-Received: from integral2.. (unknown [182.253.126.144])
-	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id 12BE32109AB5;
-	Fri, 25 Jul 2025 17:59:19 +0000 (UTC)
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-	Christian Mazakas <christian.mazakas@gmail.com>,
-	Michael de Lang <michael@volt-software.nl>,
-	io-uring Mailing List <io-uring@vger.kernel.org>,
-	GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH liburing 0/2] liburing fixes
-X-Gw-Bpl: wU/cy49Bu1yAPm0bW2qiliFUIEVf+EkEatAboK6pk2H2LSy2bfWlPAiP3YIeQ5aElNkQEhTV9Q==
-Date: Sat, 26 Jul 2025 00:59:11 +0700
-Message-Id: <20250725175913.2598891-1-ammarfaizi2@gnuweeb.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="tctxKcUN"
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3e2c683524fso9797055ab.0
+        for <io-uring@vger.kernel.org>; Fri, 25 Jul 2025 11:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1753467690; x=1754072490; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BXcKol1McKvTjcvK+Gvpwmco8x2EGt21oUQ32BuDOlQ=;
+        b=tctxKcUN54M2hrNeVizfhoEWlfGbEvYeT3gcQTO0gyk3j/D9hHULNnBoxez4u1rFie
+         ci3qYqRXOUMyMcIDFC1AoL35vJ9VSdSFptuPrX0/g2Uw7C+ORjwlsdYOmCWDvPJc05FW
+         JHkp8VtRfOWpgIbQMXxb+mBZotCeGNsaoA6acO0k9zpb3NZAMkJHDJvyCTkGiTEQkIpK
+         La3JIdkD4fpjK7FuIn1M6gdmMvx6Uoe3EFI2FyCnpW+tavPCSEmh5lQ8Lc9/MjwMSnsX
+         FyUHq1iI1Fvq9k+G41zC1vIa7BAS+T8eoDQ+SuF7O+PHs625L1kAwx3H9cNLE0OsdrZ4
+         KEbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753467690; x=1754072490;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BXcKol1McKvTjcvK+Gvpwmco8x2EGt21oUQ32BuDOlQ=;
+        b=mr0YtVfaTPHd1aRnZIeDAhdZG6ZJT3/QdRZVHJfj8UDKPaOOffsSdZsw1AXuHQUyAw
+         dgS+2bf0JIx+9EcrQJzpbyTgH7IivVLHrcjFPMkr6XBrDgMIFYAYd9N5w7QseW3+lfyO
+         YC36BiRGmswP9o1e/zp5R1t+Z2+mr7LfCR+hglwDYczIpxUTQD+YG9DAfEmvZ1Wm5TMv
+         J+uBHmcGzk30HpgfOr6GsUjlIgBXBNkp79L3gB1oDLR3GRb8ZGUi0xNrCfwkIm0Tt7vn
+         lohVC8ixfa5CQc8Qe8uB85Odz+cLgaaDM9X3zmnIYQvBIoGdpYn4gmvKTsoF8U5IjGth
+         zqJg==
+X-Forwarded-Encrypted: i=1; AJvYcCVSR1M7wX9UtqEPNCLVY76Hh58h9aHw9JbGLfjiQuVV0xTvzOMXPyLYwTOeW8G2/3p2C/mEtQkvVw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyg1g9oJkMBSoTOvPR5/LnvQ9P80c0O0a0BQsPkKVC4JPf7sKg3
+	aGyvFEGObkfp6dGBAwISyGtmK7VoTaytxbcDxw9q7OPD1pHLZBumQthKPlH4Kfbud0S790nyXwQ
+	iVNJ8
+X-Gm-Gg: ASbGncsX3ud6PMjeK+3fktFae8jvGj6Q32Uwd1anQ+mQ4ekWsCuSYkinkk/WAY2CxRS
+	9PpXbyDqmAe5p3wB6ub1XW3PnR68pu3hX28kHEIWBTQvfcTfw1+bPpJG7JfU5aSg2c22ZXtBIFy
+	Pm5xmsEexqJ/F0x9k/gbsSkbwRrehDEMSLFEo+rwlOHTnSivxZ4dA0kEM5qlqP9ulgNPmP7QW/x
+	YSimACUXPuDzQW4x7EJRIbqJQRDNXy6YW8AOTg4wHohFED5ojhjT5/ycwUfkfBW2bTxnItRUY0I
+	LtGHdKOGATGNoVRk6ilNIdBzwjvrDWv0+wPD04iU7O8DNNozskoT88HeOX93h7rUbWO6z151mjh
+	AnKRkpCo0PIlB
+X-Google-Smtp-Source: AGHT+IFLXYQ0jDVk1FSpHmh6JYPHrFtRg8noGavUKgAIqDPFowo9HqHWonzGQTsKS5YLFfnYaszn7g==
+X-Received: by 2002:a05:6e02:2490:b0:3df:154d:aa60 with SMTP id e9e14a558f8ab-3e3c5322bdemr54633665ab.22.1753467689699;
+        Fri, 25 Jul 2025 11:21:29 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-508c91c9687sm107313173.21.2025.07.25.11.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Jul 2025 11:21:29 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, 
+ Christian Mazakas <christian.mazakas@gmail.com>, 
+ Michael de Lang <michael@volt-software.nl>, 
+ io-uring Mailing List <io-uring@vger.kernel.org>, 
+ GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>, 
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+In-Reply-To: <20250725175913.2598891-1-ammarfaizi2@gnuweeb.org>
+References: <20250725175913.2598891-1-ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH liburing 0/2] liburing fixes
+Message-Id: <175346768877.681403.14218875042208173659.b4-ty@kernel.dk>
+Date: Fri, 25 Jul 2025 12:21:28 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-
-Hi Jens,
-
-Hopefully, not too late for 2.12. Two small final fixes here:
-
-  - Fix build error when using address sanitizer due to missing
-    `IORING_OP_PIPE` in `sanitize.c`.
-
-  - Don't use `IOURINGINLINE` on `__io_uring_prep_poll_mask` as it
-    is not a function that should be exported in the FFI API.
-
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
-Ammar Faizi (2):
-  sanitize: Fix missing `IORING_OP_PIPE`
-  liburing: Don't use `IOURINGINLINE` on `__io_uring_prep_poll_mask`
-
- src/include/liburing.h | 2 +-
- src/sanitize.c         | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-2ce6c
 
 
-base-commit: ec856cecab2ed4bcbdba2b06a8c7cb5a52083c28
+On Sat, 26 Jul 2025 00:59:11 +0700, Ammar Faizi wrote:
+> Hopefully, not too late for 2.12. Two small final fixes here:
+> 
+>   - Fix build error when using address sanitizer due to missing
+>     `IORING_OP_PIPE` in `sanitize.c`.
+> 
+>   - Don't use `IOURINGINLINE` on `__io_uring_prep_poll_mask` as it
+>     is not a function that should be exported in the FFI API.
+> 
+> [...]
+
+Applied, thanks!
+
+[1/2] sanitize: Fix missing `IORING_OP_PIPE`
+      commit: ed54d3b7e324220f70dac48b83df4e61763bf844
+[2/2] liburing: Don't use `IOURINGINLINE` on `__io_uring_prep_poll_mask`
+      commit: 6d3d27bc42733f5a407424c76aadcc84bd4b0cf0
+
+Best regards,
 -- 
-Ammar Faizi
+Jens Axboe
+
+
 
