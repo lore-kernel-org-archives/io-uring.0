@@ -1,38 +1,38 @@
 Received: from server-vie001.gnuweeb.org (server-vie001.gnuweeb.org [89.58.62.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142EC29D0E;
-	Sun, 27 Jul 2025 00:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383EA2A1CF;
+	Sun, 27 Jul 2025 00:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.62.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753577025; cv=none; b=c2VpSXe9yz7hBoGtRFxzCUO6AgBiuZxtAxN9Q6AeEvptV4xMHXn6Dps+382ONRGQkmYgONc7X9yIqB5spjEUCYx68O2tkIlJNt4U58e7vmUH0zrkuVO+qAuVG2UDjeJEge0xIoxh6ntbBjgxnTbc7ccszpW0Oo/fqnYa7ENyUV0=
+	t=1753577025; cv=none; b=IhxA7GhxvPVM8L1wNHTrcDZOwJ6qC6CG6IRI9u7Nd3YLFZKgFyKcznBbngV3E3TQMXdVaKsXlshgWFdLmP+BD/SMZGTY0DRxSks9ew0IMwvTxvlVOXWVtDavGV61bjDPqURYPpirS0elh11yW7ClvO2MooxISFc5Wf94eCB5zGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1753577025; c=relaxed/simple;
-	bh=fQEtNqEHIesEawF/VNyCeFOve8UBkyQyLxZfH6rKsLk=;
+	bh=u+LMdMlZmXbZ2orkb0poCs5sPB8DiAEbn1KiRhovcm4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RRNKZujFvHXifx/q2+Ejt0YVuwT43gNV1XKR4bNguj3kz31tuAiIQuKUSqugwknZ/ZUOuqTHgtmHhVhpT8jfth0I9P4HPxh6HJjskP0USi0l+fPa25fxEPn9+2G2n7UAaKsuEhaO3cz4DSnyKn/zR/XzTXyKZU6uSuLYIt4JtPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=wjMlhRzB; arc=none smtp.client-ip=89.58.62.56
+	 MIME-Version; b=MtT9ODwLHFX8GbIl+5gV2gfM1VMZ735sfGA7lQvMdoe6A8Vzxb0RTqIclWfY9A8pLkuW3TVg5e7euUSCTLtmTUAOP7lx/u9qB2WaKKjPVpLVDbWhOmWHQL4ekoZKGV8els4gSqaZlh75RO023ojSY8VpqUonpFihrw1NQaIoe7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=thrwQxmr; arc=none smtp.client-ip=89.58.62.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="wjMlhRzB"
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="thrwQxmr"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=new2025; t=1753577020;
-	bh=fQEtNqEHIesEawF/VNyCeFOve8UBkyQyLxZfH6rKsLk=;
+	s=new2025; t=1753577016;
+	bh=u+LMdMlZmXbZ2orkb0poCs5sPB8DiAEbn1KiRhovcm4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding:Message-ID:Date:From:
 	 Reply-To:Subject:To:Cc:In-Reply-To:References:Resent-Date:
 	 Resent-From:Resent-To:Resent-Cc:User-Agent:Content-Type:
 	 Content-Transfer-Encoding;
-	b=wjMlhRzB9eW1Z89Q2581hW5ILdNvkg17kvWs1d2/wfKvelLa7NWCCrBYSyiQZUXp2
-	 fT9SxIpNsR+rNwIP7xLuresMAscopL58KAOvc+br3S0Q2FybvNnNxbgTAkgpS2sgRI
-	 bxeDbW9PJvYd5TTehonM1mrMOoiPRn0dg9AuJN23nKDTyLgJjTJn6oPJQF5PWnYYRp
-	 w3jxzS8SMdiN4452Ae5Db7LePeaOsl0r4zljOgXFzY5vC/07YvjytWs/JopqM3kxL4
-	 cQzv1pPKhiGENEgL8m3IvmQZ640uF4AkyYSw/N1iSSbH7HKfbHZGVknx5hHaxN1snk
-	 MTFfoq4BAuHaA==
+	b=thrwQxmrbeYIlM3+Q12FkG9yhZ9xPMjRNDjW8/Z9VQRBIxiEMRp+5ThUnPg1KsLwX
+	 8JicqXi30piT+9Htc6t61Olaf1x+X720ROXfTLpLUKtCT91PF9XY662xUswwv1/qSq
+	 OXFEIbsCMRjllCGObm7snNQjmtHqjXb8KBZG5RTGeSnW6epkdIkrcQSLBRVJ+t8e70
+	 lgigFnzcsnhEOP/L3S6Z1VCvA3Vby41bq0Dd2IxlKfBseQf+Bzv5Z6a1YOhCxzNVp0
+	 6tJ6LEwJN7fDg3WHdRTZ1neCcYelKz+dEyLQ6sltyEob6PfW2xNUeiipox7Rlprzyx
+	 YWghEaQ2OpWMw==
 Received: from integral2.. (unknown [182.253.126.144])
-	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id 926863126E07;
-	Sun, 27 Jul 2025 00:43:38 +0000 (UTC)
+	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id 5907B3126E05;
+	Sun, 27 Jul 2025 00:43:34 +0000 (UTC)
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -41,10 +41,10 @@ Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
 	Christian Mazakas <christian.mazakas@gmail.com>,
 	io-uring Mailing List <io-uring@vger.kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH liburing 3/3] liburing: Don't use `IOURINGINLINE` on private helpers
+Subject: [PATCH liburing 1/3] man: Add `io_uring_set_iowait(3)`
 X-Gw-Bpl: wU/cy49Bu1yAPm0bW2qiliFUIEVf+EkEatAboK6pk2H2LSy2bfWlPAiP3YIeQ5aElNkQEhTV9Q==
-Date: Sun, 27 Jul 2025 07:43:16 +0700
-Message-Id: <20250727004316.3351033-4-ammarfaizi2@gnuweeb.org>
+Date: Sun, 27 Jul 2025 07:43:14 +0700
+Message-Id: <20250727004316.3351033-2-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250727004316.3351033-1-ammarfaizi2@gnuweeb.org>
 References: <20250727004316.3351033-1-ammarfaizi2@gnuweeb.org>
@@ -56,51 +56,79 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-These functions:
+Based on an explanation from the Linux kernel upstream commit:
 
-  __io_uring_set_target_fixed_file
-  __io_uring_peek_cqe
-  __io_uring_buf_ring_cq_advance
+  07754bfd9aee ("io_uring: enable toggle of iowait usage when waiting on CQEs")
 
-are not exported for FFI. Don't use `IOURINGINLINE` on them.
-
-Cc: Christian Mazakas <christian.mazakas@gmail.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- src/include/liburing.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ man/io_uring_set_iowait.3 | 57 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 man/io_uring_set_iowait.3
 
-diff --git a/src/include/liburing.h b/src/include/liburing.h
-index 83434f6eca65..6f415c12c38b 100644
---- a/src/include/liburing.h
-+++ b/src/include/liburing.h
-@@ -522,7 +522,7 @@ IOURINGINLINE void io_uring_sqe_set_buf_group(struct io_uring_sqe *sqe,
- 	sqe->buf_group = (__u16) bgid;
- }
- 
--IOURINGINLINE void __io_uring_set_target_fixed_file(struct io_uring_sqe *sqe,
-+static inline void __io_uring_set_target_fixed_file(struct io_uring_sqe *sqe,
- 						    unsigned int file_index)
- 	LIBURING_NOEXCEPT
- {
-@@ -1742,7 +1742,7 @@ IOURINGINLINE int io_uring_wait_cqe_nr(struct io_uring *ring,
-  * "official" versions of this, io_uring_peek_cqe(), io_uring_wait_cqe(),
-  * or io_uring_wait_cqes*().
-  */
--IOURINGINLINE int __io_uring_peek_cqe(struct io_uring *ring,
-+static inline int __io_uring_peek_cqe(struct io_uring *ring,
- 				      struct io_uring_cqe **cqe_ptr,
- 				      unsigned *nr_available)
- 	LIBURING_NOEXCEPT
-@@ -1883,7 +1883,7 @@ IOURINGINLINE void io_uring_buf_ring_advance(struct io_uring_buf_ring *br,
- 	io_uring_smp_store_release(&br->tail, new_tail);
- }
- 
--IOURINGINLINE void __io_uring_buf_ring_cq_advance(struct io_uring *ring,
-+static inline void __io_uring_buf_ring_cq_advance(struct io_uring *ring,
- 						  struct io_uring_buf_ring *br,
- 						  int cq_count, int buf_count)
- 	LIBURING_NOEXCEPT
+diff --git a/man/io_uring_set_iowait.3 b/man/io_uring_set_iowait.3
+new file mode 100644
+index 000000000000..5caf0a3a4cc6
+--- /dev/null
++++ b/man/io_uring_set_iowait.3
+@@ -0,0 +1,57 @@
++.\" Copyright (C) 2025 Jens Axboe <axboe@kernel.dk>
++.\" Copyright (C) 2025 Ammar Faizi <ammarfaizi2@gnuweeb.org>
++.\"
++.\" SPDX-License-Identifier: LGPL-2.0-or-later
++.\"
++.TH io_uring_set_iowait 3 "July 27, 2025" "liburing-2.12" "liburing Manual"
++.SH NAME
++io_uring_set_iowait \- toggle of iowait usage when waiting on CQEs
++.SH SYNOPSIS
++.nf
++.B #include <liburing.h>
++.PP
++.BI "int io_uring_set_iowait(struct io_uring *" ring ",
++.BI "                        bool " enable_iowait ");"
++.fi
++.SH DESCRIPTION
++.PP
++By default, io_uring marks a waiting task as being in iowait if it's
++sleeping waiting on events and there are pending requests. This isn't
++necessarily always useful, and may be confusing on non-storage setups
++where iowait isn't expected. It can also cause extra power usage by
++preventing the CPU from entering lower sleep states.
++
++The
++.BR io_uring_set_iowait (3)
++function allows the user to toggle this behavior. If
++.BI enable_iowait
++is set to true, the iowait behavior is enabled. If it is set to false,
++the iowait behavior is disabled. The iowait behavior is enabled by
++default when a ring is created.
++
++If the iowait is disabled, the submit functions will set
++.B IORING_ENTER_NO_IOWAIT
++in the
++.BI flags
++argument to
++.BR io_uring_enter (2).
++
++If the kernel supports this feature, it will be marked by having
++the
++.B IORING_FEAT_NO_IOWAIT
++feature flag set.
++
++Available since kernel 6.15.
++
++
++.SH RETURN VALUE
++On success,
++.BR io_uring_set_iowait (3)
++returns 0. On failure, it returns
++.BR -EOPNOTSUPP .
++
++
++.SH SEE ALSO
++.BR io_uring_enter (2),
++.BR io_uring_submit (3),
++.BR io_uring_submit_and_wait (3)
 -- 
 Ammar Faizi
 
