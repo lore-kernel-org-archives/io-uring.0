@@ -1,36 +1,38 @@
 Received: from server-vie001.gnuweeb.org (server-vie001.gnuweeb.org [89.58.62.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 985988F6E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142EC29D0E;
 	Sun, 27 Jul 2025 00:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.62.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753577024; cv=none; b=HXDgElmNKI1AroqFJB1MIA1pzwVJlT3CpsQaeNoJXdm2EgohHgLgv973FPKQl3kIBDIWszSHi7hZjiLQHxsP+s61JiEUQqXv4i6Ut8LTuEuACiAQmM6TJ3IyfilQi8OtNUttZoSq1dlQ5Gs1C0WoxoXnlqRst43WP7eGrK8eS6Y=
+	t=1753577025; cv=none; b=c2VpSXe9yz7hBoGtRFxzCUO6AgBiuZxtAxN9Q6AeEvptV4xMHXn6Dps+382ONRGQkmYgONc7X9yIqB5spjEUCYx68O2tkIlJNt4U58e7vmUH0zrkuVO+qAuVG2UDjeJEge0xIoxh6ntbBjgxnTbc7ccszpW0Oo/fqnYa7ENyUV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753577024; c=relaxed/simple;
-	bh=TnXW7fZnrm+uavSGu7+OvFNTZCEXcKrFHrQeTFKXCGk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JW5ZHfzGWx4f5X7nYP2lCnMt70gOgWZ7KpJSw6UZxyn2y/c+V2Hj6xOGJabsqvGldr9cBJ1wm2f3BfIw9jpg7Iwa/FuN+b9TWA5hksGq1vEtMOWyOax822b+5afhGSlQopC0U6eSr+Hshes3KHtEsuzYyRUn6NDwloddYb++SZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=Nd6wWWc6; arc=none smtp.client-ip=89.58.62.56
+	s=arc-20240116; t=1753577025; c=relaxed/simple;
+	bh=fQEtNqEHIesEawF/VNyCeFOve8UBkyQyLxZfH6rKsLk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=RRNKZujFvHXifx/q2+Ejt0YVuwT43gNV1XKR4bNguj3kz31tuAiIQuKUSqugwknZ/ZUOuqTHgtmHhVhpT8jfth0I9P4HPxh6HJjskP0USi0l+fPa25fxEPn9+2G2n7UAaKsuEhaO3cz4DSnyKn/zR/XzTXyKZU6uSuLYIt4JtPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org; spf=pass smtp.mailfrom=gnuweeb.org; dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b=wjMlhRzB; arc=none smtp.client-ip=89.58.62.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gnuweeb.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="Nd6wWWc6"
+	dkim=pass (2048-bit key) header.d=gnuweeb.org header.i=@gnuweeb.org header.b="wjMlhRzB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-	s=new2025; t=1753577013;
-	bh=TnXW7fZnrm+uavSGu7+OvFNTZCEXcKrFHrQeTFKXCGk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-	 Content-Transfer-Encoding:Message-ID:Date:From:Reply-To:Subject:To:
-	 Cc:In-Reply-To:References:Resent-Date:Resent-From:Resent-To:
-	 Resent-Cc:User-Agent:Content-Type:Content-Transfer-Encoding;
-	b=Nd6wWWc6R0BsD+cwBXtWTI6OsEU9GVu5c4xIec0nQ+yJjPgpAFyuKCMW2hgxqGnF3
-	 zospQ/p0psp+sqCiGVdy7Bc/3h+SFH9GYeBpU8Xmzzanstab1mCdSMw/bSTMNoIpKA
-	 ecStKMBjiAkAeSBXh9DJqQwB1UW8DOlsYAj5/d6opJuok7X/Qnh5BwKCUuAHr3FOyB
-	 C4YjyoBlPiexMxFQ9vFGQ4cjTATzWpUr6/7ZVgZd9My6F4esHIBQfUH3LBXbpVR9u+
-	 0Du2DO1aRjbQtNUCABAFDQ8SdunZN5HBao8FpmrAxU+JQWwbNzdo2PrV9YTD8PP94l
-	 D0OuRDji4u9vw==
+	s=new2025; t=1753577020;
+	bh=fQEtNqEHIesEawF/VNyCeFOve8UBkyQyLxZfH6rKsLk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding:Message-ID:Date:From:
+	 Reply-To:Subject:To:Cc:In-Reply-To:References:Resent-Date:
+	 Resent-From:Resent-To:Resent-Cc:User-Agent:Content-Type:
+	 Content-Transfer-Encoding;
+	b=wjMlhRzB9eW1Z89Q2581hW5ILdNvkg17kvWs1d2/wfKvelLa7NWCCrBYSyiQZUXp2
+	 fT9SxIpNsR+rNwIP7xLuresMAscopL58KAOvc+br3S0Q2FybvNnNxbgTAkgpS2sgRI
+	 bxeDbW9PJvYd5TTehonM1mrMOoiPRn0dg9AuJN23nKDTyLgJjTJn6oPJQF5PWnYYRp
+	 w3jxzS8SMdiN4452Ae5Db7LePeaOsl0r4zljOgXFzY5vC/07YvjytWs/JopqM3kxL4
+	 cQzv1pPKhiGENEgL8m3IvmQZ640uF4AkyYSw/N1iSSbH7HKfbHZGVknx5hHaxN1snk
+	 MTFfoq4BAuHaA==
 Received: from integral2.. (unknown [182.253.126.144])
-	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id 3A3133126E01;
-	Sun, 27 Jul 2025 00:43:32 +0000 (UTC)
+	by server-vie001.gnuweeb.org (Postfix) with ESMTPSA id 926863126E07;
+	Sun, 27 Jul 2025 00:43:38 +0000 (UTC)
 From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
@@ -39,11 +41,13 @@ Cc: Ammar Faizi <ammarfaizi2@gnuweeb.org>,
 	Christian Mazakas <christian.mazakas@gmail.com>,
 	io-uring Mailing List <io-uring@vger.kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH liburing 0/3] Manpage updates for iowait toggle feature and one extra FFI fix
+Subject: [PATCH liburing 3/3] liburing: Don't use `IOURINGINLINE` on private helpers
 X-Gw-Bpl: wU/cy49Bu1yAPm0bW2qiliFUIEVf+EkEatAboK6pk2H2LSy2bfWlPAiP3YIeQ5aElNkQEhTV9Q==
-Date: Sun, 27 Jul 2025 07:43:13 +0700
-Message-Id: <20250727004316.3351033-1-ammarfaizi2@gnuweeb.org>
+Date: Sun, 27 Jul 2025 07:43:16 +0700
+Message-Id: <20250727004316.3351033-4-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250727004316.3351033-1-ammarfaizi2@gnuweeb.org>
+References: <20250727004316.3351033-1-ammarfaizi2@gnuweeb.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -52,35 +56,51 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Jens,
+These functions:
 
-As previously discussed on Discord, here are two manpage updates
-about the iowait toggle feature. And then I have one extra FFI
-trivial fix. The FFI fix is safe to apply for the liburing 2.12
-release.
+  __io_uring_set_target_fixed_file
+  __io_uring_peek_cqe
+  __io_uring_buf_ring_cq_advance
 
-  - Add `io_uring_set_iowait(3)` manpage.
+are not exported for FFI. Don't use `IOURINGINLINE` on them.
 
-  - Add `IORING_ENTER_NO_IOWAIT` flag to `io_uring_enter(2)`
-
-  - Don't use `IOURINGINLINE` on private helpers in `liburing.h`.
-
+Cc: Christian Mazakas <christian.mazakas@gmail.com>
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
+ src/include/liburing.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Ammar Faizi (3):
-  man: Add `io_uring_set_iowait(3)`
-  man: Add `IORING_ENTER_NO_IOWAIT` flag
-  liburing: Don't use `IOURINGINLINE` on private helpers
-
- man/io_uring_enter.2      | 16 ++++++++++-
- man/io_uring_set_iowait.3 | 57 +++++++++++++++++++++++++++++++++++++++
- src/include/liburing.h    |  6 ++---
- 3 files changed, 75 insertions(+), 4 deletions(-)
- create mode 100644 man/io_uring_set_iowait.3
-
-
-base-commit: 6d3d27bc42733f5a407424c76aadcc84bd4b0cf0
+diff --git a/src/include/liburing.h b/src/include/liburing.h
+index 83434f6eca65..6f415c12c38b 100644
+--- a/src/include/liburing.h
++++ b/src/include/liburing.h
+@@ -522,7 +522,7 @@ IOURINGINLINE void io_uring_sqe_set_buf_group(struct io_uring_sqe *sqe,
+ 	sqe->buf_group = (__u16) bgid;
+ }
+ 
+-IOURINGINLINE void __io_uring_set_target_fixed_file(struct io_uring_sqe *sqe,
++static inline void __io_uring_set_target_fixed_file(struct io_uring_sqe *sqe,
+ 						    unsigned int file_index)
+ 	LIBURING_NOEXCEPT
+ {
+@@ -1742,7 +1742,7 @@ IOURINGINLINE int io_uring_wait_cqe_nr(struct io_uring *ring,
+  * "official" versions of this, io_uring_peek_cqe(), io_uring_wait_cqe(),
+  * or io_uring_wait_cqes*().
+  */
+-IOURINGINLINE int __io_uring_peek_cqe(struct io_uring *ring,
++static inline int __io_uring_peek_cqe(struct io_uring *ring,
+ 				      struct io_uring_cqe **cqe_ptr,
+ 				      unsigned *nr_available)
+ 	LIBURING_NOEXCEPT
+@@ -1883,7 +1883,7 @@ IOURINGINLINE void io_uring_buf_ring_advance(struct io_uring_buf_ring *br,
+ 	io_uring_smp_store_release(&br->tail, new_tail);
+ }
+ 
+-IOURINGINLINE void __io_uring_buf_ring_cq_advance(struct io_uring *ring,
++static inline void __io_uring_buf_ring_cq_advance(struct io_uring *ring,
+ 						  struct io_uring_buf_ring *br,
+ 						  int cq_count, int buf_count)
+ 	LIBURING_NOEXCEPT
 -- 
 Ammar Faizi
 
