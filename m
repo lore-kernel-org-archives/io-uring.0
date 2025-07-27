@@ -1,152 +1,128 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9322D21D585
-	for <io-uring@vger.kernel.org>; Sun, 27 Jul 2025 15:04:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753628678; cv=none; b=fb/c8DGdAMvI7oQYuCSDEVKH0DuUZ4S65SEaTCB54cLjANPoAm/wq8ZtuxatH1I20HFN5JhKKhGieu/dbJYSr4eBxhixNrwljnMd06YG3hS5U9Z/s38pWlbHZsYkT0k4XCM1rCNT2mV9y+6/KzuRobuqHCcN9IhZP/Ekhb9FnV8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753628678; c=relaxed/simple;
-	bh=jNgn+CIvun+R8VfNUxSXEoyphazpmnbHYWrUF62SfyI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XlMVahhltvCtaFovePccI8oKoftfLdoXjdE7OuY+PvM7b3s776LfPdOWZond/y396DY3yGD7exbu6eFFHtn52/Fxz8LzTeROgB+0yrvInWQG5AcoUixHH5nhytEyqoqkAY+AXsa/YXFJkl7hwtNQMY0XtKkZV8MYTh89YI8Xhi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=furiosa.ai; spf=none smtp.mailfrom=furiosa.ai; dkim=pass (1024-bit key) header.d=furiosa.ai header.i=@furiosa.ai header.b=ir2XY/E5; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=furiosa.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=furiosa.ai
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02EE81724;
+	Sun, 27 Jul 2025 17:17:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753636670; cv=pass; b=YNOF4pgkK20SS62tD+OwDKHEBwnPonjfQ3+ftxRtLBepKiB+eLh2T38oRwRsD52xkYVGJBf6m6XovROSUMJf+3KRYqOs/elI/jl8R5jWJUApeoGnebj+2BwhelVB1p64aynQb+CCCRAd3b1183aGa7KIZZ+/vf6VkffnXoRaJSQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753636670; c=relaxed/simple;
+	bh=vaZVi9JGzmaEuqLuOHnGEW875OUE5MDTLAfJ99AXyC8=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=NNkl0C4MQUjVh7SHDv9cCpfiY2yPhEcCGJ9k7+rGvO2rSX0zQbpyLVoHrFJi8MJxcMgkiHIOD0rIb+OPeuCevkd2SOG4PQei9hFomZm/3dOI1vLVBteF62x3vgofxsmVHumF6ssFksM+x4NlTUYFOKDpVFntV06f95ZCkmuUwXU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=Weriryb1; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=furiosa.ai header.i=@furiosa.ai header.b="ir2XY/E5"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-23aeac7d77aso33109985ad.3
-        for <io-uring@vger.kernel.org>; Sun, 27 Jul 2025 08:04:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=furiosa.ai; s=google; t=1753628676; x=1754233476; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BeNP/PP8zrdwI/UScK/RcuZJZ4ARpjDlW5AwHswNcR4=;
-        b=ir2XY/E5gcnilqBBkpD/V/9/SfBhZ7t9ruUs6al5TzEx9aAlEQVjHbnT7fZMytQ3B7
-         ThmxRCNLpXgdlsxhk3Lv2VBKvY9YL0bD40MMMOh2YDgEPrQ0/TsJIiOpiF7H1aEVSXnQ
-         tTnl/W6Ite76U7giSmcpHIo5y2CdiWO8cA6pU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753628676; x=1754233476;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BeNP/PP8zrdwI/UScK/RcuZJZ4ARpjDlW5AwHswNcR4=;
-        b=ByO0siULzaKNUgQnFuK4L2YMtnXQTGEK+uZXPULZJ63lqG9JrwH0lz/K27hkMCyvVD
-         1b655IDOzhPgS2LEaU3n1Q+lHlY9G0Nu+t3oij6FvFWfAry6f+GkYHA9hEq0DTQlpNgU
-         XjpNniCDhDdwhdr+qTzg9jMmc6n0gB/82xr7XPEhHIvdRvGnftF5N0tZk78KmrgH8JOv
-         L1mgZ5HhUEoYGNFd8TZ6XSPwYn4KUAu3pZ8QIqCuRQtSTQiOQhDpJNtGCiKXUB6YSk0J
-         wHk8hIb2iFQFwSzMc+oUkegtIXu3RVs318fvZueLNZhdTyNxP4dhi5iBYW0qM3j99/vM
-         Iywg==
-X-Forwarded-Encrypted: i=1; AJvYcCVYxDkETb38ZVBXznQ4/RhQEFyNAanu4/lahWkIqGBFAYUBlg0Jc14vpPY+3JohOZ5Ena/K73gzKg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbotTLetONoh9jBBA9gJUuCc00aLnXNvS7eszve6tfDw7hjOFW
-	QIVIVrA+DKUqor+Llf3DOlrGjMn7PbNRSETujrdepAz8i1eRKtS3gX20JLwsVNXUmSE=
-X-Gm-Gg: ASbGncte5phtIysT3TAKViVPe9mtX9zIpaPA1dBygY9UGwQQ6fFn9Yo0qWpgCwEZqeK
-	T3+QALDgNyx90Y8FpI06PaY/75/ZEA4gHHbutgex5+q4S0mJbWVRdXHK6XCPjzx36xFcdlymUST
-	C2h4jpHfIouNx0sYLOPjjvLGWYp5v1xvpc9ZNLQ0qGj6/D8ari3VXrZioqZJQa5CT8LYlnLIPIa
-	m/C4p6KsPzTPRaL19BJYzyU5IOD99+SZJ70m1QzJLiJEw88/RkYL1yMlemBu9o5Y5Ajja2eXfjA
-	f6MMhQ7jTV1tg5NtvJstia6wIq72TuCT3Ov0oxy7wJPcGSYBdh2qgW3ATdTRHjh0eYnX8L7f4xL
-	rHlOQa96JyyuPIcZK5GuawYNlUGI7a17GNHjj3pqaocbJJDMWVlGGA9T5kR6JLg==
-X-Google-Smtp-Source: AGHT+IEcwUGTvIwSkq572UO1/rKsozpV5VbkWfGTO1wB9NAisfgejoLG5RhSTngcNuD/suDu9l8M6g==
-X-Received: by 2002:a17:903:3c4d:b0:234:c8f6:1afb with SMTP id d9443c01a7336-23fb2ee8a67mr118373005ad.0.1753628675847;
-        Sun, 27 Jul 2025 08:04:35 -0700 (PDT)
-Received: from sidong.sidong.yang.office.furiosa.vpn ([175.195.128.78])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23ffdec96aesm15381965ad.165.2025.07.27.08.04.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Jul 2025 08:04:35 -0700 (PDT)
-From: Sidong Yang <sidong.yang@furiosa.ai>
-To: Caleb Sander Mateos <csander@purestorage.com>,
-	Benno Lossin <lossin@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Jens Axboe <axboe@kernel.dk>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	Sidong Yang <sidong.yang@furiosa.ai>
-Subject: [RFC PATCH v2 4/4] samples: rust: rust_misc_device: add uring_cmd example
-Date: Sun, 27 Jul 2025 15:03:29 +0000
-Message-ID: <20250727150329.27433-5-sidong.yang@furiosa.ai>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250727150329.27433-1-sidong.yang@furiosa.ai>
-References: <20250727150329.27433-1-sidong.yang@furiosa.ai>
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="Weriryb1"
+ARC-Seal: i=1; a=rsa-sha256; t=1753636655; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=B577dRGqexhbKFmKh+c69nTrdBqUCCXicwKcYtjllSgUPia1A+RpsvEa5dNFH7ub56m5wOK65Wz1xVqWkG3DLUN6QwOwQydpU9weSmRda4GotE4ccPtSziT8vuUXvUHmhEMxvTxnJFqrd8zItRZuIiZU2rGW/BCNxpLehAgLeMw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1753636655; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=okMS3/1S2iNACQoSQsLmd+UrausqQyZ3VLxCRlug4Ms=; 
+	b=NE1vKRizRodnTf1W7Oq3r07FzpGNG9cUdtd1U1S5E7eQVnxzLFbeZ8OF6/GBdqUMX8PRKXxrJuUIg7sBmZolObyKCtyBspNuUI+2BSt/XtGC6PDq/tub/pDTYH45/aQD8A5t6jvMsz6+oMqHrWAbocYJbEODCvjAGJsjtoNVbbA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753636655;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=okMS3/1S2iNACQoSQsLmd+UrausqQyZ3VLxCRlug4Ms=;
+	b=Weriryb14hInS3N7Krl4CI3aHdf5FK6q9ZytzElz+vDWBe7pDHn4dHgHFg/HGagm
+	Eu9ID4K+8gwbV4KbwjvPDU/5mh0V7W+Tcanica7FkNs+0fWj1doJeSOsvY3g5BxFVuY
+	9uE9WsZ0XfE27kbF+V4TG3LdZrYEy1w3waXIWuts=
+Received: by mx.zohomail.com with SMTPS id 1753636652954912.0321119634177;
+	Sun, 27 Jul 2025 10:17:32 -0700 (PDT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
+Subject: Re: [RFC PATCH v2 0/4] rust: miscdevice: abstraction for uring-cmd
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20250727150329.27433-1-sidong.yang@furiosa.ai>
+Date: Sun, 27 Jul 2025 14:17:05 -0300
+Cc: Caleb Sander Mateos <csander@purestorage.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Jens Axboe <axboe@kernel.dk>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ io-uring@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <CACB1415-0535-4A05-B904-5F388A1F7C08@collabora.com>
+References: <20250727150329.27433-1-sidong.yang@furiosa.ai>
+To: Sidong Yang <sidong.yang@furiosa.ai>
+X-Mailer: Apple Mail (2.3826.600.51.1.1)
+X-ZohoMailClient: External
 
-This patch makes rust_misc_device handle uring_cmd. Command ops are like
-ioctl that set or get values in simple way.
+Hi Sidong,
 
-Signed-off-by: Sidong Yang <sidong.yang@furiosa.ai>
----
- samples/rust/rust_misc_device.rs | 34 ++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+> On 27 Jul 2025, at 12:03, Sidong Yang <sidong.yang@furiosa.ai> wrote:
+>=20
+> This patch series implemens an abstraction for io-uring sqe and cmd =
+and
+> adds uring_cmd callback for miscdevice. Also there is an example that =
+use
+> uring_cmd in rust-miscdevice sample.
+>=20
+> I received a email from kernel bot that `io_tw_state` is not FFI-safe.
+> It seems that the struct has no field how can I fix this?
 
-diff --git a/samples/rust/rust_misc_device.rs b/samples/rust/rust_misc_device.rs
-index c881fd6dbd08..1044bde86e8d 100644
---- a/samples/rust/rust_misc_device.rs
-+++ b/samples/rust/rust_misc_device.rs
-@@ -101,6 +101,7 @@
-     c_str,
-     device::Device,
-     fs::File,
-+    io_uring::IoUringCmd,
-     ioctl::{_IO, _IOC_SIZE, _IOR, _IOW},
-     miscdevice::{MiscDevice, MiscDeviceOptions, MiscDeviceRegistration},
-     new_mutex,
-@@ -114,6 +115,9 @@
- const RUST_MISC_DEV_GET_VALUE: u32 = _IOR::<i32>('|' as u32, 0x81);
- const RUST_MISC_DEV_SET_VALUE: u32 = _IOW::<i32>('|' as u32, 0x82);
- 
-+const RUST_MISC_DEV_URING_CMD_SET_VALUE: u32 = _IOR::<i32>('|' as u32, 0x83);
-+const RUST_MISC_DEV_URING_CMD_GET_VALUE: u32 = _IOW::<i32>('|' as u32, 0x84);
-+
- module! {
-     type: RustMiscDeviceModule,
-     name: "rust_misc_device",
-@@ -190,6 +194,36 @@ fn ioctl(me: Pin<&RustMiscDevice>, _file: &File, cmd: u32, arg: usize) -> Result
- 
-         Ok(0)
-     }
-+
-+    fn uring_cmd(
-+        me: Pin<&RustMiscDevice>,
-+        io_uring_cmd: Pin<&mut IoUringCmd>,
-+        _issue_flags: u32,
-+    ) -> Result<i32> {
-+        dev_info!(me.dev, "UringCmd Rust Misc Device Sample\n");
-+
-+        let cmd = io_uring_cmd.cmd_op();
-+        let cmd_data = io_uring_cmd.sqe().cmd_data().as_ptr() as *const usize;
-+
-+        // SAFETY: `cmd_data` is guaranteed to be a valid pointer to the command data
-+        // within the SQE structure.
-+        // FIXME: switch to read_once() when it's available.
-+        let addr = unsafe { core::ptr::read_volatile(cmd_data) };
-+
-+        match cmd {
-+            RUST_MISC_DEV_URING_CMD_SET_VALUE => {
-+                me.set_value(UserSlice::new(addr, 8).reader())?;
-+            }
-+            RUST_MISC_DEV_URING_CMD_GET_VALUE => {
-+                me.get_value(UserSlice::new(addr, 8).writer())?;
-+            }
-+            _ => {
-+                dev_err!(me.dev, "-> uring_cmd not recognised: {}\n", cmd);
-+                return Err(ENOTTY);
-+            }
-+        }
-+        Ok(0)
-+    }
- }
- 
- #[pinned_drop]
--- 
-2.43.0
+It=E2=80=99s not something that you introduced. Empty structs are =
+problematic when
+used in FFI, because  ZSTs are not defined in the C standard AFAIK, =
+although
+they are supported in some compilers. For example, this is not illegal =
+nor UB
+in GCC [0]. The docs say:
+
+> The structure has size zero.
+
+This aligns with Rust's treatment of ZSTs, which are also zero-sized, so =
+I
+don't think this will be a problem, but lets wait for others to chime =
+in.
+
+I'll review this tomorrow.
+
+>=20
+> Changelog:
+> v2:
+> * use pinned &mut for IoUringCmd
+> * add missing safety comments
+> * use write_volatile for read uring_cmd in sample
+>=20
+> Sidong Yang (4):
+>  rust: bindings: add io_uring headers in bindings_helper.h
+>  rust: io_uring: introduce rust abstraction for io-uring cmd
+>  rust: miscdevice: add uring_cmd() for MiscDevice trait
+>  samples: rust: rust_misc_device: add uring_cmd example
+>=20
+> rust/bindings/bindings_helper.h  |   2 +
+> rust/kernel/io_uring.rs          | 183 +++++++++++++++++++++++++++++++
+> rust/kernel/lib.rs               |   1 +
+> rust/kernel/miscdevice.rs        |  41 +++++++
+> samples/rust/rust_misc_device.rs |  34 ++++++
+> 5 files changed, 261 insertions(+)
+> create mode 100644 rust/kernel/io_uring.rs
+>=20
+> --=20
+> 2.43.0
+>=20
+>=20
+
+
+=E2=80=94 Daniel
+
+[0]: https://gcc.gnu.org/onlinedocs/gcc/Empty-Structures.html
+
 
