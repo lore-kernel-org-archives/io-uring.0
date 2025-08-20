@@ -1,107 +1,96 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F4836CDEB
-	for <io-uring@vger.kernel.org>; Wed, 20 Aug 2025 19:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F363275AEB
+	for <io-uring@vger.kernel.org>; Wed, 20 Aug 2025 19:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755716543; cv=none; b=XHvvWyYwXbui/asezt+qGIv9+XoMVHBwelyJC5IvEpv15U0ezAZ08e5x4qfsAGedjEsGJAXq+WAH0qJU2bDEuUiJnueMsLC+/o1vo5ihNpJvLAGgdvkZNTSHrtvt2jbHZhChj+vBsBu24A5NgwMD6v2zdDUu3HDjZQOr4ZJ0VHM=
+	t=1755716753; cv=none; b=uA8UdA9f/ZwzCJxELTp9NBDMTGC7t9LkF7W12J8f/LXPIFWCESZWF0XgETD2Xk9ER2RgbX3woYOHfNfOQBUyxt5TNcglzXRFN9t0FdBx/HCH+OC9HDRrC2UaXIUman+ks9nKoPCB3Mp0pIscIIj6aaNC7lL4CRNy/qEuoXFa64k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755716543; c=relaxed/simple;
-	bh=WNpoeRJgBvYgC7+JitZL+Ny2DDwIDFsAea8R/ACJ8wA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=bN36U1UqSL7tjEGdfK6h/JQyyvRHfysQK56rabm/sSxVAlr4dGLLdev+JUj/bh00iE+uFC/IWcqXCyoMQQU+NQlb3ShUTq8u9XwstgnbW3wJ4wH3+tKGvpETBcMzGv4urS69Uxfai+tY59Mwl/KEvNabIf0bbudzmA5d2ZMCeJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Co7gE49h; arc=none smtp.client-ip=209.85.167.180
+	s=arc-20240116; t=1755716753; c=relaxed/simple;
+	bh=IP0vkI4Ttpa3KER1jhWEqmhDmuUzX9KyhNhjckRr1Ek=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=DywcfRiVq/pXQxJTrZm/sT0MD80sIaK0Kds314wjVscr21FIJO3TD/GyWznH++UTliiyRLCq9Oo5qJY17foyCsz4v1mag2DVsHu2IMcdlxFlkC1ENyMFKOZhki7lIWnPlB/Sgixw0AynCqa2S+ljNPlA4E0T63dqZBhh034pkN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=FMrOIW4G; arc=none smtp.client-ip=209.85.166.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Co7gE49h"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-435de70ed23so157259b6e.1
-        for <io-uring@vger.kernel.org>; Wed, 20 Aug 2025 12:02:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="FMrOIW4G"
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3e56fc0f337so1238095ab.1
+        for <io-uring@vger.kernel.org>; Wed, 20 Aug 2025 12:05:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1755716540; x=1756321340; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gT0wU22HIJ6M3eQbOipqoVrJ93lojIEBXuanCmtFCHI=;
-        b=Co7gE49h7vGUBB10mOnSn3hYYWhxw9joSKpl5NzTsuliSUleSQAw1EIuKjkOfflYoM
-         RtgDZmwzUBF2zMGRIOkoJcugW78oJxbBQYVBl+LFX6/0pv71xAIC0eF1I1mMJ8t/AhaT
-         23+I/dzCB25iJXTMC87aI90WSq2ngoAAUl/m+vcbg0E1CxRX0F4UUyQPfNfodDcNEY8A
-         vscUQnV4ckcvFXErYJXmeyi9Mupe4VzMb22UpyZWhYYOLWzziGXF6HwtA8OjN3Cww/iH
-         KxthqDr8rZQuLSdXOCG9COQc5Uspe69yf5ZZe5D38/0l1cB17Zg+AyQIsBNoJsK6gvHn
-         jZMA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1755716749; x=1756321549; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8xT/LLnh+wvwNr6x7XkQBB6UfVMcDcEDXcWVkvmNkls=;
+        b=FMrOIW4Gkfxbalq+Ib1DJ5qgRX9tw9v0GKPAOnbjaRk80UdLmxXr8RI+Jp6y0p/eEX
+         W4nvKP4Utav3WwHfOAPV3fxYyulEDIgWxCrRHd0T+IHIc17Ki/GIVRH1cU9Cm0X0XDvz
+         dfYH1GdknXuPW/ww86RVSFY8vO5Pzc+JQwJtUiCNECKcy9RZTHqQryQLm2qeVF6Qlvx8
+         gSjWZH0piw8tkfqvr3TpTAqxX4O+TU/IZcraSdooX+Xy7FI+89rteQCwU77EZzOWuA8n
+         2Ir1eIkYKvnpE6q0XyxRpTh+u1UzoJv92xDONoz0n7qRaNs9+vIxfBHgdEQXTyPMEJZZ
+         KTnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755716540; x=1756321340;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gT0wU22HIJ6M3eQbOipqoVrJ93lojIEBXuanCmtFCHI=;
-        b=RYy9ZiREO+jvRRySi8q1HiVVal4iM9/kYAPvvOzE8ylvzgkp/V+4ZCwrW65H+bfsrh
-         21L9G990yERr7C5TdD5cH7+yzWcf8K7wmDe77eaHfvvhUFvpvMZeE6fZi1J/+qrFDpZj
-         8GjMet/fSe/dQgWboyc4Kn6L3wgtIOeUk3ht2Fnk8hI5hHXJSafslAGwRxg2nD4ujaVq
-         DzW1uw1VLL0f5xTdJGuzYfkBQkAZWOKadpRuuVjU8Miv321UoOYx5+zMZbj3QC/lJEAr
-         X7MXG6RwEyOODL71ewKhfOrt6N9+g3sDL3oCybGANeeqjwqbbauf9cAB9qIM4AxYfcrU
-         kT6w==
-X-Forwarded-Encrypted: i=1; AJvYcCWzpHHZgiipOQrLsRGmJzh+hUSK/dmL5868Vc1mdgQUkFGPFknw0g1hsQUU9K6An8ezoR1qVUqlaw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTTUamdYGnBWR3NcPmpmZdcA0VRVWk1pP8dqbRZg8kvQHJSoeg
-	UBm5KtrFCmVl5wo1vVfZDLe6IikQ8Gfk99PYBqllispic9OXQQFfBydQRrt/m02NPkY=
-X-Gm-Gg: ASbGncs5VZCApEbFp0VgvB1tnzgvLUgDmYWpL2shmhKMGNHp1zK/lpkuzaPdf2YBncH
-	8lezhILCuquMtKFPPbjNBy8bTSGz3BKXugd4W4YAVPzQ8mAqrmIOpRSQXPAkcr0SDYXYJKkIu3p
-	6q7rmtgDzI0qOrwqFEArdz41OiVM4VM2WTHSRL32Xdv6nmAxcE9XKcJ1Sx8F9Di+yTmu1eHMued
-	ELZHyqpnYPPMovq4dyDkJQAbnK1lEY7vp+OQnZ8WgCXcUv8od6K3w9HbM91vLzs7W+53yTmf67Q
-	v3IdoU/SgvXr+fsIg+UKyLEvoE84jTgDC+H8kH+JH91+f85+/8mOZE39FhTnurMxHyA2UgGmC5A
-	6U47icZfmV81x+69dkYniMVgSyNT5Vg==
-X-Google-Smtp-Source: AGHT+IGkxdRBFLqwpI1c1NLzvRX0u3QtkrVD6ZfK8wjelNpyVzWiFcDh1FjPZa1JChcL4M2LXZvDZQ==
-X-Received: by 2002:a05:6808:2f11:b0:437:75ea:6c84 with SMTP id 5614622812f47-43775ea72c5mr972649b6e.47.1755716540164;
-        Wed, 20 Aug 2025 12:02:20 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50c947d4976sm4442563173.36.2025.08.20.12.02.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Aug 2025 12:02:19 -0700 (PDT)
-Message-ID: <b811389e-2a4b-42b3-b9ed-3d31e5e30fd2@kernel.dk>
-Date: Wed, 20 Aug 2025 13:02:18 -0600
+        d=1e100.net; s=20230601; t=1755716749; x=1756321549;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8xT/LLnh+wvwNr6x7XkQBB6UfVMcDcEDXcWVkvmNkls=;
+        b=sTL4A4TIAbRkHD4eyTZlhlezVEtfPnxhoiUlsRGYWGp26eD+BXjMAS/99FcofUhJly
+         WHiApYgVYLcMtNdt0APZYTDsZP2pEbhnqCMmp8zo598CAulppnrgKwlb0n8l71A/MCfC
+         OACM74UQrwsZYh+WHlZKLYQx6Tnyx+H8AZeci4nmHEP0uuoRAUoawYbJJWh6ntH1UCuX
+         V3l40Pa477Q0ANAll6RN1aBc807tE7j2zufg4bIHEXIzZrCNbO1pFlICnq17tXJBXzyY
+         IZCp8jiubjHlMVmCat7QdiHX1r6PsLTpyI8UdTrQiw9bfwDaE6Gn6AFK0DQ/VmZoOGPE
+         GaIA==
+X-Gm-Message-State: AOJu0YzBrO626lTy+KIJ0xEl7MsUl8wGkqYtBpTTPvf/G0xblpZtl92p
+	aIc7xJoOC58EQ/AscUyTmN9QNCCQWWH2G2WbbymKdEuC77cVqI9CoeZ+0xzoNEfFW1/QntAlbRz
+	9hSK+
+X-Gm-Gg: ASbGncuxfUyoZ6Aj1172cfKVHatL23IneKHlW3inidDIi2Yu4Yr4vQhjTBpez6I6zdK
+	tYqYvcRwGhzRxqNjaTZR9KNzKiTd9IDJO4PG1u80zWxwKpl+HMZweg4LX3fBK069CuSA1c8mSTD
+	xQxBSvMqyO1EWGh3HPl41HmR+yaI452/35REi8r36Y+8iDzo2xz9pWtdrSgavSyZmr1nPmCP3ZC
+	zSEACo9DoKsbnaS2PDOZei8vjZqcIbigJOY+nZoKLtLtzXssguAMG3mUboZRmRp174XQstHemh0
+	faaavD+P65JZVxwN5XS8FESSSU2/GTvGsW2z8rcJQ4RrHB+tql3Nl9xDPqszmAT8e4xvn0uX7JR
+	aCeBLlHj7RcPQzTTKu7bdQBmX
+X-Google-Smtp-Source: AGHT+IFvlilmKKUfme3SeHGU4bMPxJV/8or/DeusHkDREFVkdJghdbILGPUbCe4m6rkPTkllrC8q3w==
+X-Received: by 2002:a05:6e02:218d:b0:3e5:70b0:4f9c with SMTP id e9e14a558f8ab-3e68340e289mr12556375ab.6.1755716749361;
+        Wed, 20 Aug 2025 12:05:49 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e68210a198sm4017035ab.1.2025.08.20.12.05.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Aug 2025 12:05:48 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <fd527d8638203fe0f1c5ff06ff2e1d8fd68f831b.1755179962.git.asml.silence@gmail.com>
+References: <fd527d8638203fe0f1c5ff06ff2e1d8fd68f831b.1755179962.git.asml.silence@gmail.com>
+Subject: Re: [PATCH 1/1] io_uring/zctx: check chained notif contexts
+Message-Id: <175571674823.450846.8897056737037156094.b4-ty@kernel.dk>
+Date: Wed, 20 Aug 2025 13:05:48 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [zcrx-next 0/2] add support for synchronous refill
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-References: <cover.1755468077.git.asml.silence@gmail.com>
- <175571405086.442349.7150561067887044481.b4-ty@kernel.dk>
- <c6ea1a29-3a0a-4eee-b137-a0b2929f00df@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <c6ea1a29-3a0a-4eee-b137-a0b2929f00df@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-2ce6c
 
-On 8/20/25 12:57 PM, Pavel Begunkov wrote:
-> On 8/20/25 19:20, Jens Axboe wrote:
->>
->> On Sun, 17 Aug 2025 23:44:56 +0100, Pavel Begunkov wrote:
->>> Returning buffers via a ring is efficient but can cause problems
->>> when the ring doesn't have space. Add a way to return buffers
->>> synchronously via io_uring "register" syscall, which should serve
->>> as a slow fallback path.
->>>
->>> For a full branch with all relevant dependencies see
->>> https://github.com/isilence/linux.git zcrx/for-next
->>>
->>> [...]
->>
->> Applied, thanks!
+
+On Thu, 14 Aug 2025 15:40:57 +0100, Pavel Begunkov wrote:
+> Send zc only links ubuf_info for requests coming from the same context.
+> There are some ambiguous syz reports, so let's check the assumption on
+> notification completion.
 > 
-> Leave these and other series out please. I sent them for
-> review, but it'll be easier to keep in a branch and rebase
-> it if necessary. I hoped tagging with zcrx-next would be
-> good enough of a sign.
+> 
 
-Alright, but then please make it clear when you are sending
-something out for merging.
+Applied, thanks!
 
+[1/1] io_uring/zctx: check chained notif contexts
+      commit: aad1370a6125e1f676c18aabc2e819348e65c25a
+
+Best regards,
 -- 
 Jens Axboe
+
+
 
