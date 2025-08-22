@@ -1,121 +1,113 @@
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A88302CCC
-	for <io-uring@vger.kernel.org>; Fri, 22 Aug 2025 13:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025A32F6575
+	for <io-uring@vger.kernel.org>; Fri, 22 Aug 2025 13:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755868566; cv=none; b=WXR9KWrWJ0DGVn+sh0fPaMNUNRAZi5hrsvAO66kurr7qN5pFZGN8UzfXj8zRzPZKMfFjNnFWEhJrDZcTG0GNM6tGFY+MAvmu7vLQ/K9iaVHHuGruHWVtdJzIIZMXUrr+SU47c6CL8Dt0CYU6eXHCQYomG/h3MD80y5nOqdmdKiE=
+	t=1755868639; cv=none; b=peS77lMjX/x5sj2RIwyh4qIclFPzq10x2i+/mA2sySq/2EuSCpGkXGKwdRSHRrI7z/oxFDtS2rKvRn647w/O+T+qJROUsmYcABUUZlxnsbKbfwPnFMjHftBATEmVwyrILAf7X20j0Fqtotef9rPdOEsWRSKTNIXqpXXn2/58gAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755868566; c=relaxed/simple;
-	bh=lCsro4CJBMF+D3264rl3CNoPtUXoImd/BPkzVlHunKo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m9fVEofw6lE3UwUh+aUDkPMrdxvRD/s7exnRPhsJBMKQmIhU5uSf3UeT222DqmbyO9ElpC1e9OItU5RJpj/aX/AnzteyO2KKblMEOI2dq5Up+zGqWNiTW+BEM1Ql9Q7QvYLBP0/N0UKaDdOsFlg2iwJR8CMGYzd2Erwc51n+KOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=CydOrFPe; arc=none smtp.client-ip=209.85.166.43
+	s=arc-20240116; t=1755868639; c=relaxed/simple;
+	bh=i3ImefrQTdzsKVGX5GItXtdrghecVlixYsaMWpAIRBY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=TJktpDoCw99u9dnJcRxVYkq6iYDjsJq5b30m152qmuGIy3Z8GzWPBMpBqJal2RQQvJTz7cojNPBp5nIRQmYD8c/wC4gDfy7Qz48ijl4VRkmyhf37NFgUH3/xmTlQZHiydWSMSFeiTCUkwxPjyFENwbmJ4VV58d582hi6GMcs1JQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=pvCsLk33; arc=none smtp.client-ip=209.85.166.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="CydOrFPe"
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-88432dc61d8so185450139f.1
-        for <io-uring@vger.kernel.org>; Fri, 22 Aug 2025 06:16:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="pvCsLk33"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-88432cbe172so22015939f.0
+        for <io-uring@vger.kernel.org>; Fri, 22 Aug 2025 06:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1755868562; x=1756473362; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1755868637; x=1756473437; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9AKAb0qEkHWYZZg+YlLBlMjnmdIz5QWZ/OiVNDXJAIQ=;
-        b=CydOrFPeOQ+0BSMZr30hcUvwt+yUY6P0+BkAZHPB4krN7NugIakvyIauuati9q7Qly
-         8aTd7Eevg9YbZJ9xQ4TgUs0F+pPmHEvgGXNn/UyFsmGarO23ZnXHoF4C9MyCb7gPz/zQ
-         cCiYLL+0cTvrUUxiDpMRdrEJfq4xEMqcEpdiEWcSzeHW29FYW996xDZz1tua+/M2L/Q5
-         cb9/pDqXk9pKkeKS9TIKWzpuOv/fjdo5JDKkA7UXq8HKC17BLMp7XyaXFiLpYM8SmoiK
-         x7BqPhm+Vtz+hBrrE5CRjqDg4nUSuqPpZrCCoRTjxTpvBTeOFjlWHcT49EBbDJ9UrCtT
-         ET8w==
+        bh=BIy5V84eM2aiF0NjcXQDhw18FjLOEcCawYSvufdpw1o=;
+        b=pvCsLk33jtK0XVHZDy3u1jDQnOSP1n+kRIJQUbWXP561qOel5RsJUVZyF0WVJDzqQI
+         v8k0lofH9AfZbDeqoH+8D/+LhBcb+rGuxhUWkuNyty03Q3Lz0ig4eFQ4wi98cAyLZp2g
+         gtBsdRx/5Jdso+ammc/BYcQPetUOi1UpVSxG+BVjFNb/qVFRZaBHt6d8rVX7BOiYBW6F
+         QMdNnFPRpyU5vTutYt+juxjSrgPy7vlX286uWqCxyub4oWCkaDgiTY7xmKvwayJ6ECI7
+         f12FZkVb+mfXyGUQvKpIaxvpkQgaKsb86eY2597gYTBsnWU4r0Ggy/mbn5V3Gi6FRic6
+         WN3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755868562; x=1756473362;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9AKAb0qEkHWYZZg+YlLBlMjnmdIz5QWZ/OiVNDXJAIQ=;
-        b=xSZPDa1a/moAPoMCpJYB5ergdsNPbgbXYcAkPa/wlPZq4Es62/tKUURvzDXr2lsPOU
-         Rqrr2TZb1rOMJbdE+l5rAiK1+QwhF2x0Y2qgbHwojO5shTukwBpoXUlIjObhY9S3p5jr
-         UXc6id+9UVa+YrIlhAvzwkyJSgzJ6M7Enhn0gI6SW4+Fl/+OqcEr2R16NDPy2UryTHC/
-         nk5mO5zvckiDUYkrZxMC21tXuZdDKQbVmvHW4MLbaRqeyDESuBP4umanKkuetmDV5Iys
-         j7EHQGREupLEUzmyk2/K8oEPR2GcGtRztPkvPp4hL5kmCC772QuekixcFz6QHnsSLy+I
-         34Aw==
-X-Gm-Message-State: AOJu0YxZ8rZtup43+TGUts5WC8A7NUF3FSGizI6hAcRoLMjqrr4o+6aD
-	6wNsQxhoxuJgAoE2JP64GdN/Wq6Z3ohhQXNY7XFamA5VaiNln0wiROcz1MSxPEE4Djc7Y0jmJpe
-	b6azu
-X-Gm-Gg: ASbGncsKpfIQEvCd5F+rsPigoQMzeW/S/x+ht6E1WXiIrssplrmZgtrJYhmitGLL41m
-	Qbe2KyCR8oc8pVT6a95GsUxRj/ne8hnVr5opCdYQRccB1YHQBz6cv6tdKeoGhMja8419c/pfk5x
-	dHpzVQ08ZJN7e608TWg7eevbtX54220NmbKoweuurKUGL/GhXD++VY14QHADN/UATLVHYMUc0ir
-	0ZGgkVq9GA5+/B9z/JmA71w4n9jTKzeS1y+0NHzacDQ9cGoTghs7gjSws1eX9ZHujXNTwa9PRON
-	aj7EJIdFXZcXNersN/lILVC5eMGZkJ2Hvy++bgOZYOG5PJf/25AOb+uNITPVoBkVjpU6BnS8b7D
-	w3/el6A==
-X-Google-Smtp-Source: AGHT+IHZ5YQhjejrPhudiZOgQaijyjtdhk+xq2EPlLZOIVAxl150S4/CKW7qPcD+okX5qetQN5C0cA==
-X-Received: by 2002:a05:6e02:228b:b0:3e9:eec4:9b74 with SMTP id e9e14a558f8ab-3e9eec49f44mr11692415ab.31.1755868561112;
-        Fri, 22 Aug 2025 06:16:01 -0700 (PDT)
-Received: from m2max ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e57e679121sm89355595ab.30.2025.08.22.06.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Aug 2025 06:16:00 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	stable@vger.kernel.org
-Subject: [PATCH 1/2] io_uring/futex: ensure io_futex_wait() cleans up properly on failure
-Date: Fri, 22 Aug 2025 07:14:46 -0600
-Message-ID: <20250822131557.891602-2-axboe@kernel.dk>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250822131557.891602-1-axboe@kernel.dk>
-References: <20250822131557.891602-1-axboe@kernel.dk>
+        d=1e100.net; s=20230601; t=1755868637; x=1756473437;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BIy5V84eM2aiF0NjcXQDhw18FjLOEcCawYSvufdpw1o=;
+        b=ert97HtUgeyefPzRhL4BYhwLRXOV+tHsp+8q3NMEXwdpTKw+i2Sz2J9WakKw0y4Y/5
+         MDrHh+jlkDjh9mu4lzt76sk5/Iq1jQVGsSDCSYa/zPd8VKhqK9t4vqti5937dwVMAQdi
+         U2dGu9cNKn9QBi4Ct3Hst7n/EtJjiVAMQ8Ib2Du0eUX6WWzuISC+EmYjZEKD2qlhIF+J
+         hen7DCd44hhq3GUjzqP3SgG1pnc1Et0Yb20eVQdJGXYCCyZG7euLlmsBHsWjMrWKBPOB
+         vWwCr5q2lC2oJrT3MneurbMbH4oubv69cyvzaf1clexB6oUowWY+ohVmvzevDoLuAdUA
+         W6cQ==
+X-Gm-Message-State: AOJu0Yzk81z4LP9Rsbh7IQ2iF9YJH40l/1qpjmQ/KrbBijIvWaHlTMQm
+	HmQUC8frd7uNjxFb4VqlmKdsY68RjS+pZB0oCXKgQwKnuPN62kT/5XRioRkbRdB3Vnhh16una3T
+	W0dAK
+X-Gm-Gg: ASbGncsSxHxW2CehsrVB6lBxnWJ0OfKdfHNE8ti+JOsW57x79O2qXh9N+vYOFZoecvD
+	GjA+vodypkRf+tgYJzCBPeyEV5C60Z1rNhvgLJri2snFWxAhfTzrl2NTi+GphXl6EdAf4rMERqN
+	gm8JT/dyZtg79wQHb7x0oDWErhoNykMRWFoW/E57LMF8Y7YiUZpoGlUP9vTHcnQxsfeMnQBpZw+
+	47YEd6DZcYfytvFj9KYSnSZYwj5gf6NNKC47vyEnZ4RYx1OTNn4HDhi50oTq/QY8eiCFtPZf+sc
+	J3FiGe2TsyRR/rm/cx5MG2+/kcatwQt6wXccbukd2N4xKY9+InDBElRo69284eNkF/1hz8eMam2
+	goAiO6PRuRLJqCaBArls=
+X-Google-Smtp-Source: AGHT+IECLqx9VOHVnaVvRg4lFJ5T1BH0pWTpONXMXy+8MtkK0xk16Zo3eF5ZxWCsQ/Yvoz2hLhRHYQ==
+X-Received: by 2002:a05:6602:3c3:b0:86d:9ec7:267e with SMTP id ca18e2360f4ac-886bd155520mr554921539f.4.1755868636963;
+        Fri, 22 Aug 2025 06:17:16 -0700 (PDT)
+Received: from [192.168.1.116] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8843fa1787esm811689139f.31.2025.08.22.06.17.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Aug 2025 06:17:16 -0700 (PDT)
+Message-ID: <9eda00d9-2316-49c4-bdb7-af1e20546e7b@kernel.dk>
+Date: Fri, 22 Aug 2025 07:17:15 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [GIT PULL] io_uring fixes for 6.17-rc3
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The io_futex_data is allocated upfront and assigned to the io_kiocb
-async_data field, but the request isn't marked with REQ_F_ASYNC_DATA
-at that point. Those two should always go together, as the flag tells
-io_uring whether the field is valid or not.
+Hi Linus,
 
-Additionally, on failure cleanup, the futex handler frees the data but
-does not clear ->async_data. Clear the data and the flag in the error
-path as well.
+Just two small fixes for 6.17-rc3 - one that fixes inconsistent
+->async_data vs REQ_F_ASYNC_DATA handling in futex, and a followup that
+just ensures that if other opcode handlers mess this up, it won't cause
+any issues.
 
-Thanks to Trend Micro Zero Day Initiative and particularly ReDress for
-reporting this.
+Please pull!
 
-Cc: stable@vger.kernel.org
-Fixes: 194bb58c6090 ("io_uring: add support for futex wake and wait")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/futex.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/io_uring/futex.c b/io_uring/futex.c
-index 692462d50c8c..9113a44984f3 100644
---- a/io_uring/futex.c
-+++ b/io_uring/futex.c
-@@ -288,6 +288,7 @@ int io_futex_wait(struct io_kiocb *req, unsigned int issue_flags)
- 		goto done_unlock;
- 	}
- 
-+	req->flags |= REQ_F_ASYNC_DATA;
- 	req->async_data = ifd;
- 	ifd->q = futex_q_init;
- 	ifd->q.bitset = iof->futex_mask;
-@@ -309,6 +310,8 @@ int io_futex_wait(struct io_kiocb *req, unsigned int issue_flags)
- 	if (ret < 0)
- 		req_set_fail(req);
- 	io_req_set_res(req, ret, 0);
-+	req->async_data = NULL;
-+	req->flags &= ~REQ_F_ASYNC_DATA;
- 	kfree(ifd);
- 	return IOU_COMPLETE;
- }
+The following changes since commit 9d83e1f05c98bab5de350bef89177e2be8b34db0:
+
+  io_uring/io-wq: add check free worker before create new worker (2025-08-13 06:31:10 -0600)
+
+are available in the Git repository at:
+
+  git://git.kernel.dk/linux.git tags/io_uring-6.17-20250822
+
+for you to fetch changes up to e4e6aaea46b7be818eba0510ba68d30df8689ea3:
+
+  io_uring: clear ->async_data as part of normal init (2025-08-21 13:54:01 -0600)
+
+----------------------------------------------------------------
+io_uring-6.17-20250822
+
+----------------------------------------------------------------
+Jens Axboe (2):
+      io_uring/futex: ensure io_futex_wait() cleans up properly on failure
+      io_uring: clear ->async_data as part of normal init
+
+ io_uring/futex.c    | 3 +++
+ io_uring/io_uring.c | 1 +
+ 2 files changed, 4 insertions(+)
+
 -- 
-2.50.1
+Jens Axboe
 
