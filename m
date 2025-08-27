@@ -1,170 +1,100 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748F630CDA8
-	for <io-uring@vger.kernel.org>; Wed, 27 Aug 2025 14:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280B41F8AC5
+	for <io-uring@vger.kernel.org>; Wed, 27 Aug 2025 14:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756305058; cv=none; b=g1/FN5s2V/ZBGNpAOhT6c0VMFPNnfsa8qyNXwxpp8Jg4u2CtEXOokTdLgcm+YePgSM5R6JO31+7032d4sGHWrTRnvYfsArFSBtozVcVqKOk8hIExg7udixT+sTM1G6nzMRAWG8mdroVWk+Hw44rlcZzXR/XE4yt2fKlAlI8LFJg=
+	t=1756305661; cv=none; b=bUuWu+5+nXp0OmbqMDc6I0iOkkIkvcr+4Qnoc6jB4ugw/nK1e0ysTWFbUbJS0G8IsxbcBcaAOE9Hf2klWzPZ/xwKEMgORN16BDLGO6QPzedyPKjXd1mO6qDRQClNLBQn06Ap2ucJ3O1SrWhENkAAKbkx2vSHrsk09oUXqYUFUPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756305058; c=relaxed/simple;
-	bh=ekYO+g2DeAY7OpkpV3uLfFZhqmRFp4OHZb6J73pGdnY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C1VFCAYCeRhfZgHIMwdizAIWWFaYVUrAwt9tKSBbgDQv/WYnC6qfzyjOph8YKqq6mw/tTD2HzBKGwNP6MWQefwYrfyNbaMVnLtsnne29/HOUm6LKONHSP/NapC68tl+pi+oY+7c/YJhPJuB4ck+4XRMJ3Dxt/96MSXTlxBMLHdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=UZ3fJ4vY; arc=none smtp.client-ip=209.85.166.170
+	s=arc-20240116; t=1756305661; c=relaxed/simple;
+	bh=VcCyV0h99WUADxaBXjHoNSU1j+lFTssXyePUgVwi0NY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=F79OuVTKLmQcL8pxLdnQrXtvufZ+b0TiM0IcvscnM33amJ1qAajLYlPpcSefpz4xcWBB+KR3YI7dtfsIQu0+9UvRRoU5BjoP9lSZPr7BK+FxhdDGwUXNv8KxVLDYfsLZaGC/PPIIZukC3owz8VPjTp9kYpDWeFLei+j5DFZ0X10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Yb3eA3nL; arc=none smtp.client-ip=209.85.166.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="UZ3fJ4vY"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3ea779929b0so27574105ab.1
-        for <io-uring@vger.kernel.org>; Wed, 27 Aug 2025 07:30:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Yb3eA3nL"
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-88432e29adcso175682439f.2
+        for <io-uring@vger.kernel.org>; Wed, 27 Aug 2025 07:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1756305054; x=1756909854; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BvhGwzAhrDpzRW76hw6st02Qx9plIVjdiLTJdLVN7ms=;
-        b=UZ3fJ4vYtL89Hy7qitdjpODoWXsN16zgEzzSM78vC+alWIiNPT0puOC2EMx4UmOqGM
-         aL6Odtu8Wr4amqGPBS/dYxOMd9JtmeULimUcyslAzGa9fn7o2YO7GiVabcP1mIdvvP1O
-         7m++ePfxI8f70GF+PrVRXsaZ4LQF8uO2EyLUBhmlYQ5yE6AJc9E3AGdVA+KJaylD+auX
-         vWl4/2mjJpUDmKIym0cvuVxEoaKsHG9QTHGaaJ1PxgNYZhryXna6w5OOz30cgS68TIRT
-         ckMOfoesp6/0MSl8Yk+IUpRFIEW8jGZa9xd/no987ccuAw0FPsMTPSSj1Oa/wFSY0bYt
-         dtdQ==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1756305658; x=1756910458; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x6jss1HK22eg3m+MD1IuP2xt6eQ1mCmZ4ofGe3ejiHs=;
+        b=Yb3eA3nLo+gRCdhrzCWhAyFxt43p9EsWDgpHtRFmd8L4JG1NnYIfFUfKvr3b0qhm4l
+         cdep6+0H1UM81J65+4c+1A8S1TElNIVR7fDVuRbuubx7rMKiGskPX1VZusUXOPJdjczJ
+         i86YazY0TLq/uj+kDqhsIK/uFPeKV5uFOHjPGqEqT+OhiJ3RnUF6jRaKPqB0chCt5r12
+         84kjg8RoKA1WZ1M778Ez0sowXyebOj4DqHj9qW6z0dMHNM0lVzaiEiWauxbIuJ/UBoJf
+         RLhPPkW0WnP6VWFmOw9lOU+ITQNzln3zzuODlSi7bGzoKjlVDHiGIOR/flh9n602TXuH
+         nTRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756305054; x=1756909854;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BvhGwzAhrDpzRW76hw6st02Qx9plIVjdiLTJdLVN7ms=;
-        b=Qkx0M+3YlRS9av4FBUM3rUaf2J5gWyVnkueKVVCQ8v+mb6mmyk6NbnQlcCvlJPjx0f
-         cURsl3MzGboFcN+mx022MsMqr9ua+L0VENya3tQxEIvF4xT1BGq2fGanImV3iBjhGUng
-         AifOvBLqhPadSD2FxOQysv76wq161RY5Fu4OiJlHuszMpn1vlI/Mb3/1wJ/1b1CbwzeK
-         7I77XOoxTlQm0z1RMPWMBvVqsb2vupBmz9MNbbQIZ00qPPI7asNYiN9IoiXe7tiuTCaX
-         u2OKXZYMpaB8aLRKUJCO67iWWismt1jujPjwkm107z1yIQ5u/NEJ97eZXTdDSQIByK/x
-         GgjA==
-X-Gm-Message-State: AOJu0Yx+5x6pWLqwDgZ3IKaGeEEE++6H8TEChR+EsioMLOLjM5pfEq/t
-	s8jgA6GnVPW8YlYxFw+vbB1IHCBvRdeXf/mEFbgNSpyJ0wlVTzibkJgyHdx8ZvDayJE=
-X-Gm-Gg: ASbGncu6KzhhUgFrbGNobpUDD42C8i/B+wjkges5LwLY6fzzWHTrUkeA31qxoAIMDzT
-	EitX1mYbhfhg2zL4nx4DDA1GFzfXBE0ER/JXT4pK32Mey+y75wexGkMiS7nxTT7ZXa3PIQxfqk/
-	x3tdQDe3hFLoUOyfgoaM4MnlqpFumMKWzn8elhbL/5sFeY/iRQTi7dF2Ern3CB/0em9s69f0Nz1
-	0yf6k1Edh1eAx8sratekbvT9vVCBe8m8LSpMZrbVEaEQq2nZTMiOlGuVMhDYRdRW81AyM0IBcds
-	pNcljPHA7cVqK6qYUA1FDtEkPVHgGIqi/WLi5BskKjKSzZJ3M+SJq9DjdlsjTmA0jJJa52CPLBr
-	iMLr//QwGXpMQR5ULsPBchHofTWO7M0FlUUBuJPoq
-X-Google-Smtp-Source: AGHT+IFnFm3nE5momCbmzhmqVeWBi4QobS9Cc/xr+4yGN08493B+GGco3c+Pt/f1l2wDN+e4gkkJEQ==
-X-Received: by 2002:a05:6e02:2142:b0:3e5:5357:6dd4 with SMTP id e9e14a558f8ab-3e92231673fmr272052845ab.20.1756305054391;
-        Wed, 27 Aug 2025 07:30:54 -0700 (PDT)
-Received: from [192.168.1.116] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3eaa5f05661sm78097235ab.52.2025.08.27.07.30.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Aug 2025 07:30:53 -0700 (PDT)
-Message-ID: <fcfd5324-9918-4613-94b0-c27fb8398375@kernel.dk>
-Date: Wed, 27 Aug 2025 08:30:52 -0600
+        d=1e100.net; s=20230601; t=1756305658; x=1756910458;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x6jss1HK22eg3m+MD1IuP2xt6eQ1mCmZ4ofGe3ejiHs=;
+        b=sNq/G7I8Gn+vp2NOQ7Ne01TD4GZcWjzwSS2wFa/4XehgdN/sxrWyonafxqXx3VExVa
+         5lHBVp19YwuQLxXoVg8IiajNHdffaoQRKW3V0BOx0UT4bRw5pYlQZHkxdXI8SefYhIyB
+         57iRcu9nlk8OqPEPTJNB9dJ78v7E9rUWZHKKZgVwCwPZCcbpzRCnh0z0259cbOsGVtOa
+         ltycUq2KmMFn1zVk3rf5Gj7dYZqDeOz9CwBeSGf8d2Ba4AzH6G4n4/lYMWIAREFGI72N
+         en1TbALxSeqij/NwoidGQcmRbrsNeKPActZq3C9o1D9mot4OzVznje35pnWAWmRkxCCu
+         odOw==
+X-Gm-Message-State: AOJu0YzS2QQdHIvbxUf+qPJCaRiGrH0RP88+u7c+KvrFMM+aMo8+IX/P
+	SQwXIRLdY567Hnzs+gipiq2BZz0yNFOTxJKm+htrehuiZsz4nkT5uEnj9bVEvyOMlwMBwXrGbXN
+	mdYEn
+X-Gm-Gg: ASbGnctvXBtt1JMdfHON+QR+qEFo+w+AtfXXmbm76UT4BX5+Gmdd4GBy+A78QHfAj4/
+	TXX1zDix+k9Ay+FCIanZ16a64+QFtw8AS6gwrB3eLhj53A9w9avFU5XQy3a71QgU5wx4v2bj73Y
+	bFHwCktP4N32Ev2GMs6jP/smlcrbkaRe9GhCU9Ha0Ogxq3jcLwUvXAkPoIdRj+9aLNvTxsOEPM+
+	fi1okvjGttvvJcXT8BW9uW9xJZFu0v42hzJHBMsvLRn712AedVPkH8V23NC0f2sLDvW0Vw+ajiK
+	0pKlNaZGFdohjX6t3UZXr+X9GUdZvgF4GN2l8/LfgteK2ueVGJ5QvNF9utVpqX/M/RmWVvy+4KZ
+	hFpBpPHQLe5MajhwNkYouu/kf
+X-Google-Smtp-Source: AGHT+IG4Xk4If6wny0cArzGMonADC9U9f3BTYeY/auZoT4YbfvzU+lW//x1d+jW8i+og7Gf8TGIcyA==
+X-Received: by 2002:a6b:784a:0:b0:87c:a4e:fc7d with SMTP id ca18e2360f4ac-886bd2047cdmr2208034939f.14.1756305658194;
+        Wed, 27 Aug 2025 07:40:58 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-886fc6cd75csm76142139f.6.2025.08.27.07.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Aug 2025 07:40:57 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Qingyue Zhang <chunzhennn@qq.com>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Suoxing Zhang <aftern00n@qq.com>
+In-Reply-To: <tencent_4DBB3674C0419BEC2C0C525949DA410CA307@qq.com>
+References: <tencent_4DBB3674C0419BEC2C0C525949DA410CA307@qq.com>
+Subject: Re: [PATCH 1/2] io_uring/kbuf: fix signedness in this_len
+ calculation
+Message-Id: <175630565742.226956.8766758074257445746.b4-ty@kernel.dk>
+Date: Wed, 27 Aug 2025 08:40:57 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] io_uring/kbuf: fix infinite loop in
- io_kbuf_inc_commit()
-To: Qingyue Zhang <chunzhennn@qq.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- Suoxing Zhang <aftern00n@qq.com>
-References: <20250827114339.367080-1-chunzhennn@qq.com>
- <tencent_000C02641F6250C856D0C26228DE29A3D30A@qq.com>
-From: Jens Axboe <axboe@kernel.dk>
-Content-Language: en-US
-In-Reply-To: <tencent_000C02641F6250C856D0C26228DE29A3D30A@qq.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3-dev-2ce6c
 
-On 8/27/25 5:44 AM, Qingyue Zhang wrote:
-> In io_kbuf_inc_commit(), buf points to a user-mapped memory region,
-> which means buf->len might be changed between importing and committing.
-> Add a check to avoid infinite loop when sum of buf->len is less than
-> len.
+
+On Wed, 27 Aug 2025 19:43:39 +0800, Qingyue Zhang wrote:
+> When importing and using buffers, buf->len is considered unsigned.
+> However, buf->len is converted to signed int when committing. This
+> can lead to unexpected behavior if buffer is large enough to be
+> interpreted as a negative value. Make min_t calculation unsigned.
 > 
-> Co-developed-by: Suoxing Zhang <aftern00n@qq.com>
-> Signed-off-by: Suoxing Zhang <aftern00n@qq.com>
-> Signed-off-by: Qingyue Zhang <chunzhennn@qq.com>
-> ---
->  io_uring/kbuf.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-> index 81a13338dfab..80ffe6755598 100644
-> --- a/io_uring/kbuf.c
-> +++ b/io_uring/kbuf.c
-> @@ -34,11 +34,12 @@ struct io_provide_buf {
->  
->  static bool io_kbuf_inc_commit(struct io_buffer_list *bl, int len)
->  {
-> +	struct io_uring_buf *buf, *buf_start;
-> +
-> +	buf_start = buf = io_ring_head_to_buf(bl->buf_ring, bl->head, bl->mask);
->  	while (len) {
-> -		struct io_uring_buf *buf;
->  		u32 this_len;
->  
-> -		buf = io_ring_head_to_buf(bl->buf_ring, bl->head, bl->mask);
->  		this_len = min_t(u32, len, buf->len);
->  		buf->len -= this_len;
->  		if (buf->len) {
-> @@ -47,6 +48,10 @@ static bool io_kbuf_inc_commit(struct io_buffer_list *bl, int len)
->  		}
->  		bl->head++;
->  		len -= this_len;
-> +
-> +		buf = io_ring_head_to_buf(bl->buf_ring, bl->head, bl->mask);
-> +		if (unlikely(buf == buf_start))
-> +			break;
->  	}
->  	return true;
->  }
 
-Maybe I'm dense, but I don't follow this one. 'len' is passed in, and
-the only thing that should cause things to loop more than it should
-would be if we do:
+Applied, thanks!
 
-len -= this_len;
+[1/2] io_uring/kbuf: fix signedness in this_len calculation
+      commit: c64eff368ac676e8540344d27a3de47e0ad90d21
 
-and this_len > len;
-
-Yes, buf->len is user mapped, perhaps we just need to do:
-
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index f2d2cc319faa..569f4d957051 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -36,15 +36,18 @@ static bool io_kbuf_inc_commit(struct io_buffer_list *bl, int len)
- {
- 	while (len) {
- 		struct io_uring_buf *buf;
--		u32 this_len;
-+		u32 buf_len, this_len;
- 
- 		buf = io_ring_head_to_buf(bl->buf_ring, bl->head, bl->mask);
--		this_len = min_t(int, len, buf->len);
--		buf->len -= this_len;
--		if (buf->len) {
-+		buf_len = READ_ONCE(buf->len);
-+		this_len = min_t(int, len, buf_len);
-+		buf_len -= this_len;
-+		if (buf_len) {
- 			buf->addr += this_len;
-+			buf->len = buf_len;
- 			return false;
- 		}
-+		buf->len = 0;
- 		bl->head++;
- 		len -= this_len;
- 	}
-
-so that we operate on a local variable, and just set buf->len
-appropriate for each buffer.
-
-?
-
+Best regards,
 -- 
 Jens Axboe
+
+
+
