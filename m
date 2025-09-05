@@ -1,103 +1,133 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D38278779
-	for <io-uring@vger.kernel.org>; Fri,  5 Sep 2025 19:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABED821FF33
+	for <io-uring@vger.kernel.org>; Fri,  5 Sep 2025 19:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757100265; cv=none; b=Tfn3pIw0nIbn02sqgsTx5fBI9aZ49P0mTN+OB0j97gn2JkqtcbOv1AfC3m7N5OL/FSfkr03rQqivvm6a6DF8qKBPSHWog2LFqSbMfNpFmf98XIvoKWpYhKnrxM9ENDP8kBmdX6FaF+k3JhY3bV63AYrB+YlVXdYB+zxGaF5UNYg=
+	t=1757100626; cv=none; b=NxR/H5M9OQvUGKMmsRJi3gcLW9r4O60J6VwyDrGT5RpWb6xJgyrrztE7G4iCDQq1zpeklG+KdeyJckbH5UZ5ckrOsg9qjV+I5cTaC1KA9lx3qkPj+pM74Yfw57EUpTqqpotk4AKocso0TmW7tTi85YJGs7+mq4QZz83jkMap2/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757100265; c=relaxed/simple;
-	bh=YQgaFRVScBR8CdN31XeTpzd8Co0aGjdN2SIVDDdkZYI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ufHxU19SEe2uvScaHAoRVbLP6X0J5Bt3v7KZx0GdpF7ZiVHDg/cGkDNw/gPtdXuVJDqfgFmWRHDPPy1r45DqikJLBwxp066I8qVk1mgkw9a1+DAmxLwUzZ4g0ruIpD2FqXylW9st+DVJzfR5+8jA52dy0ZL5EwFk362z8NJmrIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=X2XXkTkT; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1757100626; c=relaxed/simple;
+	bh=LIvLLzeWxngEMM03p/AmrSIdqWB80bRVcTwF4Db8KI4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n2imH7gjahbbNpuQQUY5WRLggMzsF2dTaZXp4W/OKupTYL8/4kZt6k01VrUoL6g5t1jR7BjskJh1jKZ6GxLvbcOz6c+wJ+COEDrwit90QjtrToUyyWrNwzNZ840/AX7Ip/jP+Qm8LDYSQBxGvCH/WIVNl3dzYwgJQohAgVX3Qi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=B0grQHhQ; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="X2XXkTkT"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b0475ce7f41so473646466b.1
-        for <io-uring@vger.kernel.org>; Fri, 05 Sep 2025 12:24:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="B0grQHhQ"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-723ae0bb4e4so28729767b3.1
+        for <io-uring@vger.kernel.org>; Fri, 05 Sep 2025 12:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1757100262; x=1757705062; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LraTCc7ZDr/qseb9fCpwX5ASeZ9pStoMGqMFLaHyNCg=;
-        b=X2XXkTkTz2D4DLIFr5YoIIANQfkk3HUvbEhe79OsHkP17feDzSLfAI4jOeboytxb2X
-         Y6kLC3WJEifzKh+gcJzWq5wwCVf4g9dtd20xTCtv4O1lJjC2PlYNk950hfHIY9Qm+iKz
-         5QHQGUeE8+Akg4BhJTuAE3C+/tD7p/lDt7cKY=
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1757100621; x=1757705421; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UeCLZVR9qp4o8K0h7QYu1xDU39mEJgRdW0I1Y4sZcfI=;
+        b=B0grQHhQKGW3jkTqY95aERSFWQW/ULIGUpbggRFfKWTiKsPt7JvBLSBCK3sOYEOeiC
+         tGfY3yoILKGDIKUoGZeGRKqxidSQ4aiJLz6JyxKRVrUMichzvSsvANwH44uNad/XzRzb
+         w1/s5tZDWdy/6LXjGV+YFtp2F6DM/eHiX2O/pDzD4Xtsx75BxazKrYQ3qqWAmJjBGJVg
+         9Gwl0tbVlEnCCKGTt+g/1p+LgEspiR3+e9ZAuq/M3t0O6opar+MmFjuWOqzz/02DGWX1
+         V3jz6GVg71+Y5d4iquJ3Nq0FJSOT5MxMKBNiggB146/Wct8x3xd4bZlZuvKoYIptqq+8
+         pMtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757100262; x=1757705062;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LraTCc7ZDr/qseb9fCpwX5ASeZ9pStoMGqMFLaHyNCg=;
-        b=CwWsTrf0UMZZPE9ycls2DMydd+sJuMviggtkkI/gzPjELCSsuCIEOrfmaAUA/AkX/h
-         l6XHNuVQuSu3l/HyeUEE9OL+4n5uh63Jf8tEvKdUGeqJO3YU9mEqpwgfxqMiSa3RiDpo
-         hRj6wzfMHQ3IsIeDeJu+CNMStZ2erKkrNlcBLKlFSQ5Spp2coO9X3RGzlujetbk3n28n
-         +GyJGStDuM2UJAslUOnN1nypWL1jRle+VuMA+BDlJB1bwriC55x0oN94a4GxOmocY0BL
-         YEK1F8RJGD80rKfBN+GVugMXaXPGyTqLCeR0wVXjYHzxWdz5XxX5E6ZUV9xBAxVgQiRM
-         B+VQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUTa9q7ANCE9Ji7sejOfjoZVtj8OrVaKR4aQyHaJasg2yL6Bdf15c97OfiJf+6VHLXvIRuHBoHDYA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywav2Hdz7Fu5MGsaBmS5INmSMzseMyooVSGXi1iYqtJ2EI5Y/ZC
-	vHEoH1c63Ou7ZmfhySfSl2oclHULbVwaGJjNz+uLT+1in953jk2bApaSL5t7eAwXCFDLN6Syg5e
-	Cn8xJh58=
-X-Gm-Gg: ASbGnctRrm4dwyiI7XkeRA7PqRBaTEKqNAuKrYzu7RGNvXFsR6Dbo7dSPLbGaH7fYeu
-	xkFpOsE0Z8tI4zgsNfJYAxoZagw5xKgcSECHHOx/n/YyqJqcFfTzbPsLDu32MjGGZBj/HEgbB2R
-	wjb2iWwo2fCBdMkAGDx/XDhEkc8UZlxxujcNpSl00vkWl0W6dH5+ObDyGVWnLHuIk71jDQc6VFN
-	Q3/iuBXWJBAsJvblG3N1OBWiONFMWfg2wmUcyRrF3nvErUaH8dsX4Ib/HoBYLyEWYDjfJcyFABu
-	ECM/mUqODXVKxetIQHJj80M6JJhdpQst2rZHlksK7XfAz6kelUTjf1sEkxflvAohhXlVsuIVQdD
-	s8jUOYFNkJRw0ZRUoB/Eebmmgcp448FQ3R0a0bS4x/HpuPhk3hXs32jIFMaM71ys9ME9wpuoZwY
-	Y/AxmPnXf9rAhuTsPJ/g==
-X-Google-Smtp-Source: AGHT+IGybl0JZ3MZP5VffIshdUipe0lGgY87QGKqM7XZEd0QwzX4s8W9/87AhWt58Zk4weGQOL2E0A==
-X-Received: by 2002:a17:906:6a0b:b0:b04:ae7c:703e with SMTP id a640c23a62f3a-b04ae7c786cmr37236266b.24.1757100261614;
-        Fri, 05 Sep 2025 12:24:21 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b0431832a98sm1248514766b.80.2025.09.05.12.24.21
-        for <io-uring@vger.kernel.org>
+        d=1e100.net; s=20230601; t=1757100621; x=1757705421;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UeCLZVR9qp4o8K0h7QYu1xDU39mEJgRdW0I1Y4sZcfI=;
+        b=qJZpZ4xoEdC3XzHUo55P52yqvYhW0EB9NTsaDVp6joqe+HQqHQ1+qLwedcEnZuoGcL
+         z11PRU8tP4Zve+kN6Md8PyfZpIxGhP3+7Avng2B9SK4bdhNYTjrmTG6gALRseaxsewMc
+         XjdZ01ZUi9W0DVHai1VvIOET/iCxX6qJqoSF0FM99/MwMVjIF6BDtT8z24B56Zi0IIpW
+         fvldotomG+QD6ldQkFCBL5k7rlwErt9mvVYCYMOnHOlEHhu2fDQYEvaDrJJ7/3fhQISB
+         +HcUmKVH6cmxr+71EhIEY3mtPLm4B021ee3zqEc9Flo3LvueSUHzHiPIhkShd5OCA1no
+         FOgg==
+X-Forwarded-Encrypted: i=1; AJvYcCVemrUeDejyU42rVOhfnEo1MwRa0d+gFLKQkuvwOcpI5oeS8jywv55HQgcyCwlUGBxeQFMo9quAoQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPuMRGLZ4f+15Z0fzzSiLOSKAvz7YQ1sZX/DV2ysgYYlLrtuK9
+	ECcR78Kl7qMJC1vLjulnR8lp2ow56DbJZDFymlcUqpXxDupdxBN1rPVZPc1R/VVGAOQ=
+X-Gm-Gg: ASbGnctkajUPSFmnl7XmHAXzOASMcCqTTbgZuB//wHeRbIt4Sd4X8YQ4e5eCZKk5O15
+	ME7DD5Kvo+gKyMxtpnyH4QIgg2PGnPA0qGz963FQFmlath8KLXI6mRe60os+EL5hx+FXd5zbkb/
+	N3O/WNrmOHxGTdQFBArhFztpr0ebwW0A6X0kaOnnHlY9I7tBLi1eGrof9ogpPKiLujYqOusC7NK
+	qEIUv08eEjPJWjQeo5e6HQRVDnSIinhZaIB1Wnk0AqF0Jg1GtclugH6gFyFPL4///daAhIYIp4N
+	HaGsTgLPiC3fa0o/G9MYioE0fOivWrs/BmNfOQT/IsAlpnF1gbEm8YtRlzJOZ8nNAZWO5guBauL
+	A/eBocs+IbIgOeuKTZi7c/mg323xSCw==
+X-Google-Smtp-Source: AGHT+IG0gQO8H6mqRXwALtCbtcE7r45Vp1bxBcTphTjbS1pb5ua70uZIuVvidY9u/Sq0ntrl7dJ06A==
+X-Received: by 2002:a05:690c:9688:b0:723:b94d:97cf with SMTP id 00721157ae682-727f4383b3amr461947b3.10.1757100621371;
+        Fri, 05 Sep 2025 12:30:21 -0700 (PDT)
+Received: from [172.17.0.109] ([50.168.186.2])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-608110cabd6sm2004567d50.8.2025.09.05.12.30.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 05 Sep 2025 12:24:21 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-61ce4c32a36so4765460a12.3
-        for <io-uring@vger.kernel.org>; Fri, 05 Sep 2025 12:24:21 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVGx3TJSaA1V3yLwpxZ+69jXdbRpchjBN0aNH6ux4a6dGMrgG6peGx5CpPIEayhLJRvgUNbop8UJg==@vger.kernel.org
-X-Received: by 2002:a17:907:1c1a:b0:b04:6338:c936 with SMTP id
- a640c23a62f3a-b0463391027mr1285634566b.17.1757099773481; Fri, 05 Sep 2025
- 12:16:13 -0700 (PDT)
+        Fri, 05 Sep 2025 12:30:21 -0700 (PDT)
+Message-ID: <72fb5776-0c50-42b8-943d-940960714811@kernel.dk>
+Date: Fri, 5 Sep 2025 13:30:20 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <9ef87524-d15c-4b2c-9f86-00417dad9c48@kernel.dk>
- <CAHk-=wjamixjqNwrr4+UEAwitMOd6Y8-_9p4oUZdcjrv7fsayQ@mail.gmail.com> <f0f31943-cfed-463d-8e03-9855ba027830@kernel.dk>
-In-Reply-To: <f0f31943-cfed-463d-8e03-9855ba027830@kernel.dk>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Fri, 5 Sep 2025 12:15:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi-jomx2=9jRbUz0F_AQ9vKs2uN42mPsEurYNQsUCJn-w@mail.gmail.com>
-X-Gm-Features: Ac12FXy70hC-VxcARa1uOiuMe7T-lcPrYf6omHFP8_0CpXkjJOQa0QTa_RFLw8A
-Message-ID: <CAHk-=wi-jomx2=9jRbUz0F_AQ9vKs2uN42mPsEurYNQsUCJn-w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [GIT PULL] io_uring fix for 6.17-rc5
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Caleb Sander Mateos <csander@purestorage.com>, io-uring <io-uring@vger.kernel.org>, 
-	Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Caleb Sander Mateos <csander@purestorage.com>,
+ io-uring <io-uring@vger.kernel.org>,
+ Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+References: <9ef87524-d15c-4b2c-9f86-00417dad9c48@kernel.dk>
+ <CAHk-=wjamixjqNwrr4+UEAwitMOd6Y8-_9p4oUZdcjrv7fsayQ@mail.gmail.com>
+ <f0f31943-cfed-463d-8e03-9855ba027830@kernel.dk>
+ <CAHk-=wgkgSoqMh3CQgj=tvKdEwJhFvr1gtDbK7Givr1bNRZ==w@mail.gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAHk-=wgkgSoqMh3CQgj=tvKdEwJhFvr1gtDbK7Givr1bNRZ==w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 5 Sept 2025 at 12:04, Jens Axboe <axboe@kernel.dk> wrote:
->
-> IMHO it's better to have a Link and it _potentially_ being useful than
-> not to have it and then need to search around for it.
+On 9/5/25 1:21 PM, Linus Torvalds wrote:
+> On Fri, 5 Sept 2025 at 12:04, Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> What is the hurt here, really, other than you being disappointed there's
+>> nothing extra in the link?
+> 
+> And just to clarify: the hurt is real. It's not just the
+> disappointment. It's the wasted effort of following a link and having
+> to then realize that there's nothing useful there.
+> 
+> Those links *literally* double the effort for me when I try to be
+> careful about patches.
+> 
+> So the "what's the hurt here" question is WRONG. The cost is real. The
+> cost is something I've complained about before.
+> 
+> I'm tired of having to complain about this, and I'm really really
+> tired of wasting my time on links that people have added with
+> absolutely zero effort and no thinking to back them up.
 
-No. Really.
+Like I said, I think there more fruitful ways to get the point across
+and this picked up and well known, because I don't believe it is right
+now.
 
-The issue is "potentially - but very likely not - useful" vs "I HIT
-THIS TEN+ TIMES EVERY SINGLE F%^& RELEASE".
+> Yes, it's literally free to you to add this cost. No, *YOU* don't see
+> the cost, and you think it is helpful. It's not. It's the opposite of
+> helpful.
 
-There is just no comparison.  I have literally *never* found the
-original submission email to be useful, and I'm tired of the
-"potentially useful" argument that has nothing to back it up with.
+As a maintainer, yes it's free to add, and it removes the cost of
+needing to think about this. Which is why lots of people just have -l as
+the default. Exactly because then you don't have to think about it. I do
+agree that this adds a lot of frivolous links, I think the mindset has
+just been "well better to always have it there, rather than to never
+even if you rarely need it".
 
-It's literally magical thinking of "in some alternate universe, pigs
-can fly, and that link might be useful"
+> So I want commit messages to be relevant and explain what is going on,
+> and I want them to NOT WASTE MY TIME.
+> 
+> And I also don't want to ignore links that are actually *useful* and
+> give background information.
+> 
+> Is that really too much to ask for?
 
-          Linus
+No I think that's fine, I'm mostly just complaining about the approach
+in getting there. I think we all prefer the commit messages to be as
+useful and relevant as possible.
+
+-- 
+Jens Axboe
