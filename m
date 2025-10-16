@@ -1,69 +1,68 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 637B826D4E8
-	for <io-uring@vger.kernel.org>; Thu, 16 Oct 2025 13:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EB72417D1
+	for <io-uring@vger.kernel.org>; Thu, 16 Oct 2025 13:22:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760620933; cv=none; b=bGjOhLvOY1/PjP5ieG75CAmAs+kctY2U5/i1AQz3NBFgCxCjMUg/D68shiTBlpyqPxiiB4VTHoeNG4vVPykW/MX5rZS8NI5ulGw3TGkqNrjkXJV26yTWebKnN7lKTbLYILQtWdAnqFGfeLX6d0XG5MxCaRY3KzMyVQXbkTfzqbE=
+	t=1760620935; cv=none; b=FAEcCL5Mc9Khm9MUMDooJRo6vVM1Q5XsvB61UKImHK3YasKgz/1u48mKJB7tMOpa+vVUw5tTovqc8SOwpKWhMdOkQR0M44cxFjIc9fKaz/3YF9FZBZwvssYdiDzNWdYqM9teSkAGyunzYtOeTC3hNN2nIx3U3fykyPY3tChPNiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760620933; c=relaxed/simple;
-	bh=t5rASJfqVSk/kUqnR7KZ65IadHTa7fXgAzxL5dNiWlQ=;
+	s=arc-20240116; t=1760620935; c=relaxed/simple;
+	bh=5/lcdWtHLYuCTD7KOu8MVnH7xCBdhOLA7vHAGXWamGc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tB2p9Zkl0f9+F8P6My/08qkKajWsH145OaOCzqmt38hoTtMv44JuDRoZA4QcJRpTc2aZWZY3meCB3jMY3bY5Q1wTSpR5DgZeG/EQthJKZjLJLvbIY6ldtLgdSH9efR/tXjL5Ug6tXhJOBSOQtw0vIi8+ZXQZdFB/uWYbzcF9zNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JgdW3yG/; arc=none smtp.client-ip=209.85.128.47
+	 MIME-Version; b=pjZnbaoG3d20k5rDNv2JArZMW6Kg7mn/u2Yed9uWFqE7GF1FbCUpcCSOSSWFVFeLufGji8V6DpKpzPs68OpoFGx1FueU4wShno1Vdk4NMS/eJFZ2MIHh7QJavCh5SHMStCE9J/097fdgKg7arEtPd63HU7xZWNAs9S1Kbow5G7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iXshED0B; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JgdW3yG/"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-46e6a6a5e42so3769155e9.0
-        for <io-uring@vger.kernel.org>; Thu, 16 Oct 2025 06:22:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iXshED0B"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4710022571cso5919205e9.3
+        for <io-uring@vger.kernel.org>; Thu, 16 Oct 2025 06:22:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760620928; x=1761225728; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760620930; x=1761225730; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7AFJ7MVQEOk5j7h5Ole8O51c7lBV+/c6GRjTKRsvu/k=;
-        b=JgdW3yG/LTHB68SmZD3C80u3w2PBNAHk+53+ZuexSjGj71V4dScStOv+Xe7yypG1Fc
-         M4b9BbNVfDfckYVypSGJSSNOqP74U3AincEkP/+SBZBNBzVvki0PmEdVkf+DS21Whovq
-         wwohwOGKGGYYDTlcMNGtYOQG6ZAmLTUsd332R/IrcgVa6YJuuE8E0Aufr8pbwwMzxWxZ
-         YnDdEXNOcDa5wI490o1er5zh8txcwp6MINPvqbZDrfFIQSJP5Y0+fqbINFJza1lPNC4g
-         5JtCCfgvaAQAZZAXOCe7xXo/X4FVLIRBKDYWR63ARmQad/vfuFGySx173ZuE/as62YBq
-         76Gw==
+        bh=/l9UMEDDXir/7x27i96c4snrYuH81YYQUHa0RXZ0UGg=;
+        b=iXshED0BFcWLf9+gTiHiD6p6Sz0gqF4NdrOCeEa2/WkaDzA6LSUAc2XthRE5miezz7
+         AchnDMkiN7fwIKqZf5yDK57OQBV9WVBPBK98Kw8PxWaOEGLimx1Q1aeAKlf5cYKMBxbG
+         XbmRBC8hm3e7S9dkiSNNfluv4tv6TGsUSn7Mx0xQOodsDgKtVUIoezWu+1oBUVbFkpQS
+         QTrauDDZ+ytCFen7F322C17/GtvYmfZXkWSXPm0eD7S6cOjlYez6nMsOjr6MWztE/Sor
+         719HXC6gc7r/Nd5M0IXfnBq4TdSrzhSC5m1Y3dVOITY6FV82tSNT1vrOiwVuOenk4ob2
+         9KCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760620928; x=1761225728;
+        d=1e100.net; s=20230601; t=1760620930; x=1761225730;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7AFJ7MVQEOk5j7h5Ole8O51c7lBV+/c6GRjTKRsvu/k=;
-        b=l50nL5SvO7LWw61qJZUB8UvVleOMcMMigS9zNuvzCqMqG4T3J+gYp3dtxopbvxAbXd
-         E5o6jcgD7oALpuQJhfzmSdXSeKZKAlwztLZnRuA2GZll2U8DU253sJaqdqi7Q8GegGtB
-         lcF72srn0kiiak+1EVGOSjwTNM6N9r8PV8sZG7tLs7uiWDrwjgMhcza/WO/KiO0y1Rmp
-         LCBA67WKnR+boTFAMoN6gscNbJRcQuVhVuDrOWGUOsT168/PJBY6le2Z6oyzCKT+iF0K
-         trDuOScvWF6jB+h5qe3jcLKxPQNmme9DX0mSPo59TM74m5q3prcigQ1ZYs3865Z5K7Bq
-         sREA==
-X-Gm-Message-State: AOJu0Yyn4UhwwO+XEK6Wr+mcZmrvda5drmt1HaLTB8REax4pNFfrflVl
-	GMybRmnQwNBmAgR7E4F+wvS5TY80XNjtlgXRqgvI9vkzrfLTDDWjl3T0afJp2A==
-X-Gm-Gg: ASbGncvnkXcwSZ7R/zUvxLt+nwygUDMvDOjPiM8tgA/NTgahcqDrTjYqhjPIu3/0LYN
-	8tBHYN9uY5fCwJ/5fIZS2cOXUbxTzsKtLGmGSC0VC5bIhmMZZ1G94e8YawSD2iWUkMHVmcVanMO
-	5fmo+g9MgWQBLJq2ah6h1G46plKbYGPkGMjBfqBlIR1Kfe4nbCJMOPmftpw6Hk5HMNtSuwH7Sjw
-	iYWVGL7tUMY8i7Q0AexPQyRJ5yO/FldhRA2VwkXbEOIC4wUdPoJLqICKXnDBuWLXcbF8fOGSDGu
-	LtTiSMEpuHVJBCPZVWcrHIQnmTqLvZQ3Q8+8jeR76avkKC1xYvb+MxKGdZL6Qnhd50MvLd4xB6Z
-	tdflVQb/2cHyS5Fqna5AFvNHMFZ9JmAPdJy1SNzZK4JC4pUwtOK/fMNm6MR+Q2wtrtPsj8WbX5M
-	xfL/F4
-X-Google-Smtp-Source: AGHT+IExYYHtBhVAAahSLd0GrpzpZNOGcmBtlXl3Ou2vBobm9Gt2kMiPHFTtjSS4eJ+0gy/sv8IluQ==
-X-Received: by 2002:a05:600c:45c6:b0:46d:ba6d:65bb with SMTP id 5b1f17b1804b1-46fa9b01de9mr245118485e9.31.1760620928015;
-        Thu, 16 Oct 2025 06:22:08 -0700 (PDT)
+        bh=/l9UMEDDXir/7x27i96c4snrYuH81YYQUHa0RXZ0UGg=;
+        b=UnhfdKt33fRA4C5A4H1CdTNVc4WBiZkA+tP6JAWVfmwXVpoHc26Fa+gkECgp6eeU3T
+         HI530WXJqfyarlfKu1saydFHUO8rvABGryjVboklTGwAkCJSl8oQxNtOzhNsCl4J8K6U
+         rgkX+mrcxyztDRxeNLqQ1X3HGRf5m7q7Hj7Dlm1aVSOnRNOaHzdTLLAx1YOTr7VXSaFE
+         MdpztLDnehJEWXpKN/Ne3oDH32URNqLemvIGb7A/8fKWLp059W+nRxNAHd4i2N1KDOwc
+         A+nHnqmPtqVbN0hJgy+SGO4U5J9XTtQe036dRi1oNrbfalMJJvS1mllmGlnKE6yFCox9
+         /MZQ==
+X-Gm-Message-State: AOJu0YwBAWjzw7vAAQk8Jom5fu2t46sTW4+8KTrlHBtbJ3BvjAKEDvJ+
+	a/MdbFOYto6sUYQj0HWYIMch9xz6eAU067uPLXCuwlvFJShnhGopbcWNmG/s0g==
+X-Gm-Gg: ASbGnctU7HtUCrL9SfwTjFHK0D6dvRsCNUfjimExLRpbAXCUTFC3HK0L0ql7IuaUQkZ
+	eW/71zh9BilHVYfrZEczXxDNhMrme2UpYKJpZN9+BQE54wdoIDAJ+w344IMrSI8L4bmvYZjyy9j
+	YxM7tnp7He0404eXHHfd1yRHCxk+BFx8Vq4Go8f+0NKSnVW8zkWyN3bQwrwtEsqEi4pPi5kOLfg
+	V7mrOA2teePCr7/DFFPw9WwFyMrYj700uM2VwJ8xaE8kq0V25jEXjmJjWpKWJ24CDekZazB5YJy
+	nQ8kkrbGlzJe6az/Y9hAlF4Bmmvf7TNv3sT3NNyL+E3GP65hKnIwOyNfeQJl+SgG2cBV5OYqoi2
+	vtHgjNR9ZJ7uPbfyryBW5EmNPHBZ/TA7hPVOsnBilAukhR/5H63pnOLxX9w0=
+X-Google-Smtp-Source: AGHT+IHwK4bDQ+mR5lYZr/iC+APzVVCrHfAdgth52cx+8+VDi1qcA2tNOBQ3CpSUHptFv6+Tz9LObw==
+X-Received: by 2002:a5d:588f:0:b0:425:8591:8f5b with SMTP id ffacd0b85a97d-42704da4b6amr56971f8f.59.1760620929751;
+        Thu, 16 Oct 2025 06:22:09 -0700 (PDT)
 Received: from 127.com ([2620:10d:c092:600::1:2b54])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-471144239bdsm41834385e9.3.2025.10.16.06.22.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-471144239bdsm41834385e9.3.2025.10.16.06.22.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 06:22:07 -0700 (PDT)
+        Thu, 16 Oct 2025 06:22:09 -0700 (PDT)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com
-Subject: [PATCH 2/7] io_uring: sanity check sizes before attempting allocation
-Date: Thu, 16 Oct 2025 14:23:18 +0100
-Message-ID: <902410e76d5bd6e6be991de1dfbcb9e2fbb2bdb2.1760620698.git.asml.silence@gmail.com>
+Subject: [PATCH 4/7] io_uring: remove extra args from io_register_free_rings
+Date: Thu, 16 Oct 2025 14:23:20 +0100
+Message-ID: <1117db2950b38d285561111f74d5722ac576f58d.1760620698.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1760620698.git.asml.silence@gmail.com>
 References: <cover.1760620698.git.asml.silence@gmail.com>
@@ -75,71 +74,71 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It's a good practice to validate parameters before doing any heavy stuff
-like queue allocations. Do that for io_allocate_scq_urings().
+io_register_free_rings() doesn't use its "struct io_uring_params"
+parameter, remove it.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/io_uring.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+ io_uring/register.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index f9fc297e2fce..1e8566b39b52 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3606,21 +3606,27 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
+diff --git a/io_uring/register.c b/io_uring/register.c
+index a809d95153e4..f7f71f035b0d 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -379,7 +379,6 @@ struct io_ring_ctx_rings {
+ };
+ 
+ static void io_register_free_rings(struct io_ring_ctx *ctx,
+-				   struct io_uring_params *p,
+ 				   struct io_ring_ctx_rings *r)
  {
- 	struct io_uring_region_desc rd;
- 	struct io_rings *rings;
--	size_t size, sq_array_offset;
--	size_t sqe_size;
-+	size_t sq_array_offset;
-+	size_t sq_size, cq_size, sqe_size;
- 	int ret;
+ 	io_free_region(ctx, &r->sq_region);
+@@ -434,7 +433,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 	}
+ 	ret = io_create_region(ctx, &n.ring_region, &rd, IORING_OFF_CQ_RING);
+ 	if (ret) {
+-		io_register_free_rings(ctx, &p, &n);
++		io_register_free_rings(ctx, &n);
+ 		return ret;
+ 	}
+ 	n.rings = io_region_get_ptr(&n.ring_region);
+@@ -453,7 +452,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 	WRITE_ONCE(n.rings->cq_ring_entries, p.cq_entries);
  
- 	/* make sure these are sane, as we already accounted them */
- 	ctx->sq_entries = p->sq_entries;
- 	ctx->cq_entries = p->cq_entries;
+ 	if (copy_to_user(arg, &p, sizeof(p))) {
+-		io_register_free_rings(ctx, &p, &n);
++		io_register_free_rings(ctx, &n);
+ 		return -EFAULT;
+ 	}
  
--	size = rings_size(ctx->flags, p->sq_entries, p->cq_entries,
-+	sqe_size = sizeof(struct io_uring_sqe);
-+	if (p->flags & IORING_SETUP_SQE128)
-+		sqe_size *= 2;
-+	sq_size = array_size(sqe_size, p->sq_entries);
-+	if (sq_size == SIZE_MAX)
-+		return -EOVERFLOW;
-+	cq_size = rings_size(ctx->flags, p->sq_entries, p->cq_entries,
- 			  &sq_array_offset);
--	if (size == SIZE_MAX)
-+	if (cq_size == SIZE_MAX)
+@@ -462,7 +461,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 	else
+ 		size = array_size(sizeof(struct io_uring_sqe), p.sq_entries);
+ 	if (size == SIZE_MAX) {
+-		io_register_free_rings(ctx, &p, &n);
++		io_register_free_rings(ctx, &n);
  		return -EOVERFLOW;
+ 	}
  
- 	memset(&rd, 0, sizeof(rd));
--	rd.size = PAGE_ALIGN(size);
-+	rd.size = PAGE_ALIGN(cq_size);
- 	if (ctx->flags & IORING_SETUP_NO_MMAP) {
- 		rd.user_addr = p->cq_off.user_addr;
- 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
-@@ -3637,18 +3643,8 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
- 	rings->sq_ring_entries = p->sq_entries;
- 	rings->cq_ring_entries = p->cq_entries;
+@@ -474,7 +473,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 	}
+ 	ret = io_create_region(ctx, &n.sq_region, &rd, IORING_OFF_SQES);
+ 	if (ret) {
+-		io_register_free_rings(ctx, &p, &n);
++		io_register_free_rings(ctx, &n);
+ 		return ret;
+ 	}
+ 	n.sq_sqes = io_region_get_ptr(&n.sq_region);
+@@ -564,7 +563,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ out:
+ 	spin_unlock(&ctx->completion_lock);
+ 	mutex_unlock(&ctx->mmap_lock);
+-	io_register_free_rings(ctx, &p, to_free);
++	io_register_free_rings(ctx, to_free);
  
--	sqe_size = sizeof(struct io_uring_sqe);
--	if (p->flags & IORING_SETUP_SQE128)
--		sqe_size *= 2;
--
--	size = array_size(sqe_size, p->sq_entries);
--	if (size == SIZE_MAX) {
--		io_rings_free(ctx);
--		return -EOVERFLOW;
--	}
--
- 	memset(&rd, 0, sizeof(rd));
--	rd.size = PAGE_ALIGN(size);
-+	rd.size = PAGE_ALIGN(sq_size);
- 	if (ctx->flags & IORING_SETUP_NO_MMAP) {
- 		rd.user_addr = p->sq_off.user_addr;
- 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
+ 	if (ctx->sq_data)
+ 		io_sq_thread_unpark(ctx->sq_data);
 -- 
 2.49.0
 
