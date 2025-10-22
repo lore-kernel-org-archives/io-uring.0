@@ -1,96 +1,170 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-lf1-f98.google.com (mail-lf1-f98.google.com [209.85.167.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6732F8BCA
-	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 22:10:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF5F307AE1
+	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 23:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761171005; cv=none; b=O4NJMcaiZl9wKa3jl49xpJtIbUuC+ppLxRY/BO4aiO1Zb4lNPa7hrB1U5/kMVZOkWEhOwMd5pxJ2ivo05qo9LtvENFjNQlmFPA4NPgXJ5dMpTznwthx8HgQxjOBMxONhWEiuKZwfJc77is9JNArxtDv3Rf6de/a1U5/Sm9AQupU=
+	t=1761174824; cv=none; b=C8oCkU8BFRVEtqlBWh7mecOjMxsWafBbYN2AaH9AdC540SnhBU7JdT9d7iICvm9OwwB5xllFrYeYlir/Ps3+AEm6yGh1lTSkJqnQ8dN13FAuMn2XzYiAvyC79Ag3wdTfPWn8V+pCdJmf0Ya+gKs5Odm63smvDMjLLYlh4evjtuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761171005; c=relaxed/simple;
-	bh=xmv8xuwGQ3nc0l67LUpUlDbuFdiUOjQwhJmCeLw3o4k=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=OfVGkFF3lluA/eLGhVF7Ma8OSdRF9g+5WXVtu89cJNRMmBX/iodLdhKQPZNZFCXb58R2Dk4+tJ3xnpP+0zNQN4rTVgJUW+Vaw4WRbJVPoc7EYHxd9SFxWhr1bwIIJuVqzC3bgZotx4RwRK37r79GyZ6B4nLQ9yITEdSDJ8+K8Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=t/36PsjU; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1761174824; c=relaxed/simple;
+	bh=5e89GXt6DhKyASePnDrD7cthV1505P8u/yKg4DMfB4Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oQwS0bDdGBoLbG6rEphNyzLXZnuyicOleCnnz79DeKbWrOJ2c0vuN8uYOvrAQJbEEHj64+dhqqzWBYHfgC6xgWjOpdFwP+km4r0fOOWgirJsYrXMr0PP45RjUWSG/XkpJTiDSWhtSPJYnf+S+GZ/9F58MpRSLeyOucUSAg17Qpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=FiKXf9Fa; arc=none smtp.client-ip=209.85.167.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="t/36PsjU"
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-430d08d56caso772985ab.2
-        for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 15:10:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="FiKXf9Fa"
+Received: by mail-lf1-f98.google.com with SMTP id 2adb3069b0e04-582067563fcso25238e87.0
+        for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 16:13:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1761171002; x=1761775802; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+        d=purestorage.com; s=google2022; t=1761174820; x=1761779620; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YQ6htWzRflK+ICGK6X/bLRh49guoXzNTV+K0TWWiI5A=;
-        b=t/36PsjUsvcqExS6BZ4Iq+2OUNX1Ol11pB7WQ8Zoi1C+qAb2/LxdieRPGnEd9qF1T6
-         kctbz4QwDq4W6+Yt/v/VdNaY7+9AjIjTVZiCWaHjNKuHJUhWRDagzabeQWTQDN83ryc/
-         YQvuR2nikfiOkfwd7kut7m7kf4P1PtV4KtITGQlDLf11udvGxJLWOiZ9D3amv2QEGhzg
-         1R5k4uaIY3hHqzdCSBU6ccYZBCGAEYhGvuIDpNmey2DkZN6URcfnIx7l4O4ZKcP4fjtf
-         qyl6oq1Xve8JXOFSJYxtBcWE0xBQHdvFiSYM/8QVYJjFpulsrOaLIFB5d5vvOyaqkdWJ
-         qgwQ==
+        bh=96BiLrpc0TjSBBUxSZ5BCVjSp2BMxOcWJzQbIZwxLNw=;
+        b=FiKXf9FaU3BYrYwrRbv4OE29zmFm+UpmIvBYgzLofZvqaAxBVf6rq8d76ApJ/8nrrj
+         dKOQjVnupxM/9ZAhxhDiouvB0IbrDSgQt2UJZXfTW05Nb+c7c6LmXG9YGQyNHUy7/tso
+         Ag3RKol94LTq0KdLEKq7xptTBBKYtcylXgYz4By/KlJOml+8h0PTohxKK4cgmNyPFj0k
+         7Hsq1gi1Y4viEOslDbTtvtDr1d2vNbdsoehrXc81loS6llfaruWLdukonzPVGFZG/s5V
+         JAfW1C6lBxT7GmLFJjX5mK6NMMeb7Ns+OqJCZ/hR8e7qf20C1U8Jf7sWWugZkAVuS8ZE
+         Whbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761171002; x=1761775802;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1761174820; x=1761779620;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YQ6htWzRflK+ICGK6X/bLRh49guoXzNTV+K0TWWiI5A=;
-        b=gr//j9lSg7C8iDua8x+MXXpXM8K6/jIrMVlsVmm1yecvPgvNmGuH2V3JizDh2TOkhc
-         DtOho51ScUsIFGrnjwR/k2bNdDk9EUfdPhq1BD5nxNUlZu7cqU9Ep5p9SJhdgRouIqYD
-         IX/vCFVsizk2VjMZraiX57o/uSnlgLmPupGlVM0jKmR7KhWwPsNLkoqJ7vJ4xZFvXueS
-         pZJq0yAi0lBEx3My3u4fjYGoJbGCRwNlCEs1lo7kQN6/HB3DNZVimJAZzYtduS5fgBk6
-         dssgWgF+3t0yp2cMQorb10MHqVDK/1UWQ395YQmPRa41WoqC6qMdnaBcpQMQ9SbXRJ3Z
-         mYEg==
-X-Gm-Message-State: AOJu0Yw1cXaAYa2lUGKk8oTA0mhsZ+5cpt1gNY+ljrzxCLcKry6Olwg7
-	HIg95/OVup4a+3B10f92VulJzsIGsaEf0XTZ6IwBEeqZAq5pk1NCf1k1jTcy+HCx1Rk=
-X-Gm-Gg: ASbGncuLAVDlfJo4ZWCWke6KdQ1Y5IY2Ors0ubgDo8/2VOyW6owC62zteIQS3CWXRBC
-	aruWc/tlsawy/DA9L9T4gdG5XPn3KGEKXLWhH03NwBq8H/A65JHGofDwW7tF8GFFR+cUJSkvW4w
-	HG5H20V8hpmVbfJllV34sJpmmu2C/z1N5KowfdfJdNWybBKVzC1Vh6N0Q88v/VaTDuZt46/GRlI
-	dbsfUhf3TS2i6lDYTEYkCmEo3j1pXdweuuqJA7Iu6I3YMXdUbrzZpkrboCWy9o6oI1CbmKjnqlu
-	DKcM4s6ubeaZCwyrdlWrAHjiQy0PU1FQBVUbPtflHtnSCSJ4Wkt2dpoI2eouuvZ7+pyJ0UcoR18
-	7HokPhomm0LjL3WrZOy+HVOfh8O2AbIqYw4OtpyzOTJ0oexv9B8qf13hptEpCbWCCNhK1
-X-Google-Smtp-Source: AGHT+IHDBQaVXxF3Iaxtt15PzMPCFh7Tv3Ywm2UUvakjMUJmiAznJVwTo2c7LbuOWoYaPTAFjxsipQ==
-X-Received: by 2002:a92:cda3:0:b0:430:c491:583b with SMTP id e9e14a558f8ab-430c52367d5mr310015715ab.14.1761171002115;
-        Wed, 22 Oct 2025 15:10:02 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5abb4d55efcsm126930173.11.2025.10.22.15.10.01
+        bh=96BiLrpc0TjSBBUxSZ5BCVjSp2BMxOcWJzQbIZwxLNw=;
+        b=BNUl57ju4KhfRAgeVexfsfDOUVenznzTwmZRW3sr66weLNVV15yO5YReH3ABQlJqZb
+         bfjsAMZL0AF8iMSraboAzeWiiyB+Mwhin08imhODUm5Mzmnjk1FEeKAQJLOlVmkflulw
+         DdGRCjfytAFn9z76MqUTMVNzudM5GsrkRiwWOWIrRH+Y8DE+HcFMeqlcgqVy3NKDjpB+
+         rEup9s2fKvEeYtQ+p3t3HL4olDjEX1Ua3AKF87aelVZ8olUqjkI2q60AbRj6QZYcEL4W
+         JFtPgbnqaYk10SU+1IrYA1xu1fLKiaigHbmaGXNWuqZxUbOrx/YwRqmKa1ALRW3FK11c
+         KtjA==
+X-Gm-Message-State: AOJu0Yz7PLrOF4+1qF4zsaRgIe4EVuXhXieqACgyT/KaShkMFbrgNweV
+	z8f+POvA4sw4j1YvImh09RCJty3EV3y+q5p27/aIYo2dnFxnPFhVos+q2xsGW4dHmb3yNR3OTSk
+	LiOch4hsE53luq9bmjwSIyPSAYVjm2nykOqQQ
+X-Gm-Gg: ASbGncvOhLi4inq4GGWfYTsWaBRw+q1raseYXpF1FlkLiMlpHLz5UMg27ue6AiwcYD/
+	n2rdijzO4uqkKoSouvwLNZQZ1p+CNzS9rWVbXZo2Zu9EmnEF06/lJhARr9XMBaZtAxV9fFtrf+u
+	lQyUFIDVs3PIhQX4rV5AjeAJw2fTE6wChZ1Aq2WiqSfW8ZU93uOTr6QK4KJi6uZ7mhfNZ8QsHfL
+	X80T95xcq4QXpdwFpmbeYqzjpN5p73IEB2FSfwYdwjg079ZtWc7ryxKUXr3rYQURGQ89/4hIfgO
+	k5jX5RnRejdohjbI4VqtvOfyNlH1GTVicao4Q/ewsNMAlk8aSHZYrKQ1ngEVeMQu6c2vbinrp2V
+	55dzYwZuZrjTfhouRbpzoX/u29COHucs=
+X-Google-Smtp-Source: AGHT+IFL+l6RiiF9NVqqr9YCIdVCyARHhrDoK0DxchCYTCey03a/1xzZtxLnzmVhVLR9bTz6N+i4aHRAWF2/
+X-Received: by 2002:a05:6512:308d:b0:55f:6637:78f with SMTP id 2adb3069b0e04-591ea31cd1cmr1457181e87.9.1761174819856;
+        Wed, 22 Oct 2025 16:13:39 -0700 (PDT)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
+        by smtp-relay.gmail.com with ESMTPS id 2adb3069b0e04-592f4e44e32sm33929e87.46.2025.10.22.16.13.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 15:10:01 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Keith Busch <kbusch@meta.com>
-Cc: Keith Busch <kbusch@kernel.org>
-In-Reply-To: <20251022205607.4035359-1-kbusch@meta.com>
-References: <20251022205607.4035359-1-kbusch@meta.com>
-Subject: Re: [PATCH] io_uring/fdinfo: show SQEs for no array setup
-Message-Id: <176117100123.172292.11432176457482807538.b4-ty@kernel.dk>
-Date: Wed, 22 Oct 2025 16:10:01 -0600
+        Wed, 22 Oct 2025 16:13:39 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 372123404B4;
+	Wed, 22 Oct 2025 17:13:38 -0600 (MDT)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id 307C1E4181C; Wed, 22 Oct 2025 17:13:38 -0600 (MDT)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Ming Lei <ming.lei@redhat.com>,
+	Keith Busch <kbusch@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Chris Mason <clm@fb.com>,
+	David Sterba <dsterba@suse.com>
+Cc: io-uring@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	linux-nvme@lists.infradead.org,
+	linux-btrfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH 1/3] io_uring: expose io_should_terminate_tw()
+Date: Wed, 22 Oct 2025 17:13:24 -0600
+Message-ID: <20251022231326.2527838-2-csander@purestorage.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20251022231326.2527838-1-csander@purestorage.com>
+References: <20251022231326.2527838-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
 
+A subsequent commit will call io_should_terminate_tw() from an inline
+function in include/linux/io_uring/cmd.h, so move it from an io_uring
+internal header to include/linux/io_uring.h. Callers outside io_uring
+should not call it directly.
 
-On Wed, 22 Oct 2025 13:56:07 -0700, Keith Busch wrote:
-> The sq_head indicates the index directly in the submission queue when
-> the IORING_SETUP_NO_SQARRAY option is used, so use that instead of
-> skipping showing the entries.
-> 
-> 
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+---
+ include/linux/io_uring.h | 14 ++++++++++++++
+ io_uring/io_uring.h      | 13 -------------
+ 2 files changed, 14 insertions(+), 13 deletions(-)
 
-Applied, thanks!
-
-[1/1] io_uring/fdinfo: show SQEs for no array setup
-      commit: 0ecf0e6748120842700efc5dbf22a18580f7efcf
-
-Best regards,
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 85fe4e6b275c..c2a12287b821 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -1,13 +1,27 @@
+ /* SPDX-License-Identifier: GPL-2.0-or-later */
+ #ifndef _LINUX_IO_URING_H
+ #define _LINUX_IO_URING_H
+ 
++#include <linux/io_uring_types.h>
+ #include <linux/sched.h>
+ #include <linux/xarray.h>
+ #include <uapi/linux/io_uring.h>
+ 
++/*
++ * Terminate the request if either of these conditions are true:
++ *
++ * 1) It's being executed by the original task, but that task is marked
++ *    with PF_EXITING as it's exiting.
++ * 2) PF_KTHREAD is set, in which case the invoker of the task_work is
++ *    our fallback task_work.
++ */
++static inline bool io_should_terminate_tw(struct io_ring_ctx *ctx)
++{
++	return (current->flags & (PF_KTHREAD | PF_EXITING)) || percpu_ref_is_dying(&ctx->refs);
++}
++
+ #if defined(CONFIG_IO_URING)
+ void __io_uring_cancel(bool cancel_all);
+ void __io_uring_free(struct task_struct *tsk);
+ void io_uring_unreg_ringfd(void);
+ const char *io_uring_get_opcode(u8 opcode);
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 46d9141d772a..78777bf1ea4b 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -556,23 +556,10 @@ static inline bool io_allowed_run_tw(struct io_ring_ctx *ctx)
+ {
+ 	return likely(!(ctx->flags & IORING_SETUP_DEFER_TASKRUN) ||
+ 		      ctx->submitter_task == current);
+ }
+ 
+-/*
+- * Terminate the request if either of these conditions are true:
+- *
+- * 1) It's being executed by the original task, but that task is marked
+- *    with PF_EXITING as it's exiting.
+- * 2) PF_KTHREAD is set, in which case the invoker of the task_work is
+- *    our fallback task_work.
+- */
+-static inline bool io_should_terminate_tw(struct io_ring_ctx *ctx)
+-{
+-	return (current->flags & (PF_KTHREAD | PF_EXITING)) || percpu_ref_is_dying(&ctx->refs);
+-}
+-
+ static inline void io_req_queue_tw_complete(struct io_kiocb *req, s32 res)
+ {
+ 	io_req_set_res(req, res, 0);
+ 	req->io_task_work.func = io_req_task_complete;
+ 	io_req_task_work_add(req);
 -- 
-Jens Axboe
-
-
+2.45.2
 
