@@ -1,103 +1,116 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1AF27442
-	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 17:21:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34370155389
+	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 17:35:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761153691; cv=none; b=hiQy9cmJaTJrMFodzzuvF3H7ZFLRwWYbFzzzKOd2xAL8OQSqrkoHPyjtqPdgQuPWfir38hhLUg0tSrr4y0yEugULeaKH/UnpVi0tE88GdciB0zGQNAPltXolcnxhuxnWH14PJoFvnHbfoGn8hdoNUu7/c3nQVgKutPUpAy3GnNo=
+	t=1761154512; cv=none; b=EkZ6p5hTvTQJrnacYZkS6alddxHnpuskhTEcDQ9/tgkFtGq00P9YrN0eq4ta9XVTvlLEW6lN12UbeJiME6tjE9+7BGyiN8tADYjShqBPfOJZNOgyeXjidgcUVEVvA/+5qWwPkCpddKyL/3v+0WDF8O+Epgy5c3fOKUMNKj9g6Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761153691; c=relaxed/simple;
-	bh=KFe5Mofj2+KK+CvN9m5SU6q6qMU7rLmX/9+z4W61Swk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YVrINc8QUfLI1C6R8xmv0bQkxYx58zT4i/tpsd2yVeeEiHj75D5YhKrnjccgk0kuFDkgCr6R2P6HiyDJzsjXyPr1HnjECfptDojlTj8hExzPkN3eQYwU/JPuspk/k5FHBTnU9EbrhD2I+hDUyJzCAGW8Ja/14hDc9U+ALMAMEKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=hIbwc/3f; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1761154512; c=relaxed/simple;
+	bh=5cHNuq8GotRfdnaDg5noPrmf7+ui12EeCs1R2nfvRUg=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=SlbZqFwDMwLh9/pl5XoGYf0Sf7qWDX9dCXNsBpgwV7wLYaggzAGAJxbWMsRC/z87WGAekX0PGHMFo//oVPRTq5t9YECLqIIW1/SrUiTs8ZECI6J2If18KaOKFmxx/TszgMy8MoDjacJxdkZpzr7vRBtN7fy4b+QbDUNBUmRVmJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jNqE6TLl; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="hIbwc/3f"
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 59MG9CDl3395534
-	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 10:21:28 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=RbHjjwqMvJDaAlNXncy+xkS8zxOsxLHCEScJykExcZk=; b=hIbwc/3f7pEL
-	kT0fgrQGV1nUzTewCcSwsnGmQAKxo+GksV9aFp7zAEjLtF0FfY4g/xs7G93cFVA9
-	S1woFuf1bVgdh7DQpfmzrETP9JOUvNdzh6MheJ/zRaVcXyFekSLVmHPJe6L21vbh
-	KOOocPFk2XgKBZNMOdOmqDg1a7rJ1+QgBJUHSc8qCcAj+PSXog2AGCko3A4fIG23
-	s83r23eyZKYB0DbJBduDaKDQYkRMqBaGRJl+MWJfsyzGNxJ4ID6Yh4FCHX3X9vII
-	LpE6xkzCB+vhsLnMmMq9HCTZy1TqqCmDlLtddJchyPvoL3u411g2F0Uj5nBbpfTT
-	VKnUvbylXQ==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 49xvtebqfw-5
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 10:21:28 -0700 (PDT)
-Received: from twshared17671.07.ash8.facebook.com (2620:10d:c0a8:fe::f072) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.20; Wed, 22 Oct 2025 17:21:24 +0000
-Received: by devbig197.nha3.facebook.com (Postfix, from userid 544533)
-	id EB6D22F95CB7; Wed, 22 Oct 2025 10:21:04 -0700 (PDT)
-From: Keith Busch <kbusch@meta.com>
-To: <io-uring@vger.kernel.org>, <axboe@kernel.dk>, <csander@purestorage.com>
-CC: Keith Busch <kbusch@kernel.org>
-Subject: [PATCHv6 5/6] test/fdinfo: flush sq prior to reading
-Date: Wed, 22 Oct 2025 10:19:23 -0700
-Message-ID: <20251022171924.2326863-6-kbusch@meta.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251022171924.2326863-1-kbusch@meta.com>
-References: <20251022171924.2326863-1-kbusch@meta.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jNqE6TLl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761154510;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aP2592wD6pDzloXbQY7q0offaHySOcPIxnRXEJJFI8o=;
+	b=jNqE6TLl+uycEV4k9675YCWrvOPwVvIzlYYp1Hfl3uhN0+okbPJItOkoyLiPCbOsEL+PAD
+	AX3dz+EdBlezUIgipUlvZ0aLbZTJHk1UJ9J4VIklIoXgZ68cd8zH41Y5ObtBkragXseekw
+	g/2A5ltOxfyEtTf0ZSQwe3Lu+kYdufA=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-635-e74ElI3VP1SlWz5lkRDc3g-1; Wed,
+ 22 Oct 2025 13:35:08 -0400
+X-MC-Unique: e74ElI3VP1SlWz5lkRDc3g-1
+X-Mimecast-MFC-AGG-ID: e74ElI3VP1SlWz5lkRDc3g_1761154507
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A7A2A1800451;
+	Wed, 22 Oct 2025 17:35:07 +0000 (UTC)
+Received: from segfault.usersys.redhat.com (unknown [10.22.89.32])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E5C48180044F;
+	Wed, 22 Oct 2025 17:35:06 +0000 (UTC)
+From: Jeff Moyer <jmoyer@redhat.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: io-uring@vger.kernel.org
+Subject: Re: [PATCH v2] io_uring: check for user passing 0 nr_submit
+References: <9f43c61b36bc5976e7629663b4558ce439bccc64.1760609826.git.asml.silence@gmail.com>
+	<x49sefbyrkk.fsf@segfault.usersys.redhat.com>
+	<355c371d-124d-4414-9af4-fd9247692db3@gmail.com>
+X-PGP-KeyID: 1F78E1B4
+X-PGP-CertKey: F6FE 280D 8293 F72C 65FD  5A58 1FF8 A7CA 1F78 E1B4
+Date: Wed, 22 Oct 2025 13:35:04 -0400
+In-Reply-To: <355c371d-124d-4414-9af4-fd9247692db3@gmail.com> (Pavel
+	Begunkov's message of "Wed, 22 Oct 2025 17:53:13 +0100")
+Message-ID: <x49cy6ezvp3.fsf@segfault.usersys.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.3 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Qx3Qc1ECvtfW-pZ5jijka2K_uTYT160y
-X-Authority-Analysis: v=2.4 cv=bsdBxUai c=1 sm=1 tr=0 ts=68f91298 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8
- a=dP-AYbWbu4cuEZD88EMA:9
-X-Proofpoint-GUID: Qx3Qc1ECvtfW-pZ5jijka2K_uTYT160y
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDIyMDE0MSBTYWx0ZWRfX2yM6QrF3KjYp
- u1ygEieN5r/h0tgTjNGLTb/qJpyDHASfk5RPu07Hs5qq4aeDvCH2YB/IrRyp7PnEjabM8oYmdE5
- Ok820YbKl4GHi7QA4gV4DLDch0zLm0+F+nOM5QCnr85lxmK/RD/ofLZnmq/Y1kQb0oC932xP0b3
- QLITsghMnhCNMZk2XNwAVepoHVBsFJy/34p0+AkMpr3rh3ebrG2sYuhIoj4Xtz9IzAYvjCYdzGN
- gdkkV64qaNO5j1s4FjglJvGkYNvO/irnw5nXaXduvJtOS/SFgFOYcfgCbopY32lYRhtVt5S7fdw
- H0jMjiiFRop937OAjNmMQBHkQUUdnh8nMmx5qC9Sum1qpN+X1YAZP3p47CnXhcX0rZAO+UTRXGN
- cYHywgdDCEuo+1kuVlQoLF52Y7N05w==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-22_07,2025-10-22_01,2025-03-28_01
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-From: Keith Busch <kbusch@kernel.org>
+Pavel Begunkov <asml.silence@gmail.com> writes:
 
-Ensure the kernel can see the updated tail value before reading the
-ring's fdinfo. This tests the kernel's handling for walking the
-submission queue.
+> On 10/22/25 14:49, Jeff Moyer wrote:
+>> Pavel Begunkov <asml.silence@gmail.com> writes:
+>> 
+>>> io_submit_sqes() shouldn't be stepping into its main loop when there is
+>>> nothing to submit, i.e. nr=0. Fix 0 submission queue entries checks,
+>>> which should follow after all user input truncations.
+>> I see two callers of io_submit_sqes, and neither of them will pass 0
+>> for
+>> nr.  What am I missing?
+>
+> You're right, we can drop the fixes/stable part. It's still
+> good to have as it's handled not in the best way.
 
-Signed-off-by: Keith Busch <kbusch@kernel.org>
----
- test/fdinfo.c | 1 +
- 1 file changed, 1 insertion(+)
+Agreed.
 
-diff --git a/test/fdinfo.c b/test/fdinfo.c
-index 179f575f..49522a0a 100644
---- a/test/fdinfo.c
-+++ b/test/fdinfo.c
-@@ -167,6 +167,7 @@ static int __test_io(const char *file, struct io_urin=
-g *ring, int write,
- 			offset +=3D BS;
- 	}
-=20
-+	__io_uring_flush_sq(ring);
- 	fdinfo_read(ring);
-=20
- 	ret =3D io_uring_submit(ring);
---=20
-2.47.3
+Cheers,
+Jeff
+
+>
+>
+>>> Cc: stable@vger.kernel.org
+>>> Fixes: 6962980947e2b ("io_uring: restructure submit sqes to_submit checks")
+>>> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+>>> ---
+>>>
+>>> v2: split out of the series with extra tags, no functional changes
+>>>
+>>>   io_uring/io_uring.c | 5 +++--
+>>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+>>> index 820ef0527666..ee04ab9bf968 100644
+>>> --- a/io_uring/io_uring.c
+>>> +++ b/io_uring/io_uring.c
+>>> @@ -2422,10 +2422,11 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+>>>   	unsigned int left;
+>>>   	int ret;
+>>>   +	entries = min(nr, entries);
+>>>   	if (unlikely(!entries))
+>>>   		return 0;
+>>> -	/* make sure SQ entry isn't read before tail */
+>>> -	ret = left = min(nr, entries);
+>>> +
+>>> +	ret = left = entries;
+>>>   	io_get_task_refs(left);
+>>>   	io_submit_state_start(&ctx->submit_state, left);
+>> 
 
