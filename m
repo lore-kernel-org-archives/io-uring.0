@@ -1,77 +1,72 @@
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F522638B2
-	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 17:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529062749C4
+	for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 17:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761152665; cv=none; b=l5FRSwF1n9LMJQMAh1gzRjh5N20iPj/+YUuFmitKWA+fpu5QaPo10hJrIk9aZ3+MOOVkuEaedMPEnIbfxAfTwlMEhyRtLoAccrhU60WZjNTfKcjSLpCI51KFm2DvOf31F5hldeP2HrbeV5L4lLJebsuuCxCbgcJLa+wVBWZNaMo=
+	t=1761152666; cv=none; b=e55CDolnaXJxQUaJjW7GEzy0AR9V5EoxjdZiU1rcMZ7Boil2NTEiK65cMTV8sYP2KxAVw6Nwmu2Z+iJuWqeNfusYo8H65bm2JbNLxHJ5jUdF4xkzCQKJM0bbocsXRMSxSTVrRRG6woKkLG7EH6XZRZ6KlEBdmdkrIY+QYN8+4mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761152665; c=relaxed/simple;
-	bh=i2eQI3XaFWULmqdYv3Ny6NLiIEgT6YS61RrHqGyQgdQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jR21fqftI4ql658/44cpKmKM7xgrGnmTuEFE1SPTPlaVMit6wyoavlnfDcRm1/JGIy5YMV7ZRZR8EC4mFgkSZLbyowuytLpjztYWsbf7LU1j3q+chronc8ODUQLiQSCjiD4BVObQ7gNoDKQ1q4fOBJ+rPZvjqQpb2COw+Y+dsDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Bpa6Ue4A; arc=none smtp.client-ip=209.85.166.176
+	s=arc-20240116; t=1761152666; c=relaxed/simple;
+	bh=nrkRa93fSCg019oCWqu1On1c9RPlmFRHWuKDM/1dW7g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q6MzRTIhuK8vSlor1Ump/cnegCzUxj8PIskKYEGAvagKwrYJFHWGmmqpfzamSl2nhC0f9wgj9PEQ/WB45V91fKVR8XED0tZZWKqaSdaGR9aFjzlzLljTQaubq9PNs2dtRCLa8a7YvV9mYN4i7Hxq98Li40vtUZ6+HZq4EL5KjFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=O0zjeIQ0; arc=none smtp.client-ip=209.85.166.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Bpa6Ue4A"
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-430ae09ea23so26209595ab.0
-        for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 10:04:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="O0zjeIQ0"
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-9379a062ca8so306043139f.2
+        for <io-uring@vger.kernel.org>; Wed, 22 Oct 2025 10:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1761152662; x=1761757462; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cedYix93UpXuofahRWuOpgf8u8HttF8oaEywpS7Ki3c=;
-        b=Bpa6Ue4At2+Hv3K8vQI8nax33G7EN1SKCh4HLKNyi1lNUdt1JGicHUsYv1VfWZZjTi
-         tnlXD403d2+IpH3fsXvnO3hPIt9hPw0nBdjo2GuNZR0iFJNI5OgbZZM+7G4XAYXncww1
-         PlOjepelpSgjmOn8v7bwazO/LSP/sfXieMcYegbGzz+YcO7d/aYuPYy+lIEwOYFBDxeO
-         OwKJdi0DSIfCTXrj1TRjCT/3PMtA5LvisQMoxZtoem7wNEhdoHoDfh2gj0K558oyCUQI
-         RWcPBcCnyxB8DgVux0lX0nOddvvwQpirSLhP4lBMaH8FlOMT41Pba/8vvTSRacPskT+1
-         dNwg==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1761152664; x=1761757464; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hl7SoL/Aj4d8pBeRGHrKsUFa0hwIa+5REjt6BwD/dCk=;
+        b=O0zjeIQ0dku81oh+ngsZflpUbvyGb6Rvf2eo7zbKUW2hoYG0QiwnxB1pzmFr8Hvgpr
+         zESo90FaBW44UBbs+lJe/YuyvzKFZoUltTY1p62fys8+YReR2O2gruqER7LXAxR/8XxA
+         MKMc6z2A1jkHLzWkEb4uo8njiDjFIJ/Dt+JsohtJaOBYLe8dnGGKSDJtlJMFiqUVQw8y
+         bRreAFuUwrZVxivTHe2JA4/v4+NB/1sk6HWtsuwhap3RJC1DM8lbT2mrJwZtMa7GWdLf
+         vGSV5DbiPAg5LdPE67yIttnMoFyDU4uVU3114J/WloZEq5+9bQNNqbWHxbGMMJJACEh6
+         YqZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761152662; x=1761757462;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cedYix93UpXuofahRWuOpgf8u8HttF8oaEywpS7Ki3c=;
-        b=OVJOQ48VqtYpgqZBSst8tmAF7vwTxjXPhEJ0pdbT7Tw2wJ+PIQfco5BtGv5j+HDb0R
-         jmkdppb/rvNS8iuus1bNffnQkUoSAZz9sjqu3G/1XvXjx87mZxIzb8a+fAwaIpwbFtW1
-         rXQPTjnXR/txcyGwy2e/1HuuLN+2IcZj9E24psrUGEBJIF+pUweeFBvWAdYVcMKXWBvH
-         KtgB1yaOb3rSXaj5p0jXbu/s/njKphfnvWOqt55Q+DMwHXHwBBhqrXdEP0HZUtB9iE4u
-         IcaBxktrlAsUYq6Ewlj69erxnYUswB4+rVMb2ICFBGGV5P9MmcbT+iZOtemUQE5lJ8A6
-         oXAw==
-X-Gm-Message-State: AOJu0Yw8FX9w3QTbGn+NtTPQ+Vj3hRjQ2KOBS5Hk2dFFL+hFFRB707w5
-	THAVVXhz17/Ti0rLkfz6PBwcT24Gf/sWnib5H4n1jTvtbygrb8lvxvWCQgnKHpzZmxENfG1GT5F
-	T6PT7SE4=
-X-Gm-Gg: ASbGncssktzD9xIuScsVAXxwJzW0ljE+mYa1LaBzwilxTai+qQRhuy9+/3qRID4LoZw
-	vqwNl5z/rcQnSMDrBNMy15t/KSXHNeonACRaV+VKSwlVfRLVKbTiXUT28nqRLsZpLjiIa/AA3nu
-	5eXUDmHkAFW3trjg6yRbKlgbbT9/wgV1uoNdvcAc906NH7K4jqt5BuCtzQYTew0e2AVlFfXXEnp
-	JjUlkN+hu14nTzbeQt+jvXjpPtGXkrTvoXG67PXc9JT6SMADuPTaiW0OkhQU7/j6lsEYK38OKtH
-	OLYHhO3uoQ6kCIp9hsF8WufhRrc1G3Y94AKAV/WSipLoVsAmtM8IZdBC5xFxn/tZA/uMGwSMx5L
-	/TvWD0phmcGwKaOgEsJKN+zO/+/ieikIt2BSRkYPdNkNsOXNCtYRuAmwvCy6D9zPBt2saWw==
-X-Google-Smtp-Source: AGHT+IEJRLIffhnekfUs4Wa5GpeiQRdkAifYgfyJsZn6gm0eOsIz3qpZGPGBALf4SfP+0qwODAn0xw==
-X-Received: by 2002:a05:6e02:178e:b0:430:d061:d9f7 with SMTP id e9e14a558f8ab-430d061da22mr242828915ab.23.1761152661583;
-        Wed, 22 Oct 2025 10:04:21 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761152664; x=1761757464;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hl7SoL/Aj4d8pBeRGHrKsUFa0hwIa+5REjt6BwD/dCk=;
+        b=kYcurjQKvuyFiE7/WZB7a2S1RCRetg94IaCtz6fR1yifQWmTREGP6ZrrDHzg4119xF
+         6tzVvvGTWM0QQD6Sm7o6xxnnDjZ/6OZBvWL54XQwdeyYpVEk3NlWC5yWd4G71flPr9Mg
+         riyIE3A2ZC8jJGLLX0NzMst7f9GswXdEt0d64GtLeuozHx64LuIr/RZq8fiyDaR9CzDy
+         Mmo9b+oKXTsxp6om/Za4i3M1HFvkdkBzpTP3k1t8+Tt79OUkN7EG5rNY0ITabgvNEVhk
+         HdLKi75khqIj4ryNbhJQjrwDO/2KsWxQa5xik3MmUr0VaqeVX+YUgXIWn9y1J5f0F24d
+         5E+w==
+X-Gm-Message-State: AOJu0Yy3AsbqvbND6C/Rgg6+NbPAAr4HHoT3uiqCVtZALaVvPJEb6b1V
+	DPRg618kTfsaTDXYxbWM6WgQQGh2sl2tq9lclZBA33gqprgFnnqqRUt2XTENFXMPMvOcRI1ELMl
+	Xwf1XNx8=
+X-Gm-Gg: ASbGnctAEJAmVXVIZz4WsAaJ03LZkUFbNd2pDUc+PxeV6bIM3Yu4PCcbERtxpHWLy8H
+	9Xyl1JFg0TUiW35gPWtX7LLpfs6YnCr1DWeI//co82GGAO8wg+w7gsCGYCM4lEgzkw9j+bxBDpK
+	80KJsASruXNNCCReFG8ar4fXvU+iZKGHL99e639ohm+H1PiamjoCYT+MIkaj26sMyCzsSlhK7PK
+	Atqs53IHIIYwHnyVQ8mVWP92JjSuzP5I6FMtDFQGcKVWh/53yuTQaMBDyQcU4w5DRSqfutR486l
+	chSBMQkKH3eIDHlW1rPOd24CkUl9aa+HTYMbK3quQdaDqomLKHw4MpjYprFjWM8SJ5fzpfQiHgc
+	GwQo51OLb7DWkTHhiKXPr4R5K/aEJZlBuYkkl+dqvic0M3RRvj0+gTu0UOryCE+5KCqC5HyMjSN
+	y72nQ4
+X-Google-Smtp-Source: AGHT+IGXexC9VUoqUJzSIRPDbNx41BXxwmxwnGdsDXOSQTbzHu1nhQPD9WTY3RHzCcFTYLNiutmfLg==
+X-Received: by 2002:a05:6e02:148d:b0:42d:bb9d:5358 with SMTP id e9e14a558f8ab-430c527f7a5mr311765945ab.27.1761152659259;
+        Wed, 22 Oct 2025 10:04:19 -0700 (PDT)
 Received: from m2max ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a95fede6sm5352995173.12.2025.10.22.10.04.20
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a95fede6sm5352995173.12.2025.10.22.10.04.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Oct 2025 10:04:20 -0700 (PDT)
+        Wed, 22 Oct 2025 10:04:18 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: changfengnan@bytedance.com,
 	xiaobing.li@samsung.com,
 	lidiangang@bytedance.com,
-	krisman@suse.de,
-	Jens Axboe <axboe@kernel.dk>,
-	stable@vger.kernel.org
-Subject: [PATCH 2/2] io_uring/sqpoll: be smarter on when to update the stime usage
-Date: Wed, 22 Oct 2025 11:02:48 -0600
-Message-ID: <20251022170416.116554-3-axboe@kernel.dk>
+	krisman@suse.de
+Subject: [PATCHSET v2 0/2] Fix crazy CPU accounting usage for SQPOLL
+Date: Wed, 22 Oct 2025 11:02:46 -0600
+Message-ID: <20251022170416.116554-1-axboe@kernel.dk>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251022170416.116554-1-axboe@kernel.dk>
-References: <20251022170416.116554-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -80,148 +75,23 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The current approach is a bit naive, and hence calls the time querying
-way too often. Only start the "doing work" timer when there's actual
-work to do, and then use that information to terminate (and account) the
-work time once done. This greatly reduces the frequency of these calls,
-when they cannot have changed anyway.
+Hi,
 
-Running a basic random reader that is setup to use SQPOLL, a profile
-before this change shows these as the top cycle consumers:
+Fengnan Chang reports [1] excessive CPU usage from the SQPOLL work vs
+total time accounting, and that indeed does look like a problem. The
+issue seems to be just eager time querying, and using essentially the
+wrong interface. Patch 1 gets rid of getrusage() for this, and patch 2
+attempts to be a bit smarter in how often the time needs to get
+queried. Profile results in patch 2 as well.
 
-+   32.60%  iou-sqp-1074  [kernel.kallsyms]  [k] thread_group_cputime_adjusted
-+   19.97%  iou-sqp-1074  [kernel.kallsyms]  [k] thread_group_cputime
-+   12.20%  io_uring      io_uring           [.] submitter_uring_fn
-+    4.13%  iou-sqp-1074  [kernel.kallsyms]  [k] getrusage
-+    2.45%  iou-sqp-1074  [kernel.kallsyms]  [k] io_submit_sqes
-+    2.18%  iou-sqp-1074  [kernel.kallsyms]  [k] __pi_memset_generic
-+    2.09%  iou-sqp-1074  [kernel.kallsyms]  [k] cputime_adjust
+Since v1:
+- Store time in usec rather than convert between nsec and timespec64.
 
-and after this change, top of profile looks as follows:
+ io_uring/fdinfo.c |  8 +++----
+ io_uring/sqpoll.c | 65 ++++++++++++++++++++++++++++++++++++++-----------------
+ io_uring/sqpoll.h |  1 +
+ 3 files changed, 50 insertions(+), 24 deletions(-)
 
-+   36.23%  io_uring     io_uring           [.] submitter_uring_fn
-+   23.26%  iou-sqp-819  [kernel.kallsyms]  [k] io_sq_thread
-+   10.14%  iou-sqp-819  [kernel.kallsyms]  [k] io_sq_tw
-+    6.52%  iou-sqp-819  [kernel.kallsyms]  [k] tctx_task_work_run
-+    4.82%  iou-sqp-819  [kernel.kallsyms]  [k] nvme_submit_cmds.part.0
-+    2.91%  iou-sqp-819  [kernel.kallsyms]  [k] io_submit_sqes
-[...]
-     0.02%  iou-sqp-819  [kernel.kallsyms]  [k] cputime_adjust
-
-where it's spending the cycles on things that actually matter.
-
-Reported-by: Fengnan Chang <changfengnan@bytedance.com>
-Cc: stable@vger.kernel.org
-Fixes: 3fcb9d17206e ("io_uring/sqpoll: statistics of the true utilization of sq threads")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/sqpoll.c | 43 ++++++++++++++++++++++++++++++++-----------
- 1 file changed, 32 insertions(+), 11 deletions(-)
-
-diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
-index 2b816fdb9866..e22f072c7d5f 100644
---- a/io_uring/sqpoll.c
-+++ b/io_uring/sqpoll.c
-@@ -170,6 +170,11 @@ static inline bool io_sqd_events_pending(struct io_sq_data *sqd)
- 	return READ_ONCE(sqd->state);
- }
- 
-+struct io_sq_time {
-+	bool started;
-+	u64 usec;
-+};
-+
- u64 io_sq_cpu_usec(struct task_struct *tsk)
- {
- 	u64 utime, stime;
-@@ -179,12 +184,24 @@ u64 io_sq_cpu_usec(struct task_struct *tsk)
- 	return stime;
- }
- 
--static void io_sq_update_worktime(struct io_sq_data *sqd, u64 usec)
-+static void io_sq_update_worktime(struct io_sq_data *sqd, struct io_sq_time *ist)
-+{
-+	if (!ist->started)
-+		return;
-+	ist->started = false;
-+	sqd->work_time += io_sq_cpu_usec(current) - ist->usec;
-+}
-+
-+static void io_sq_start_worktime(struct io_sq_time *ist)
- {
--	sqd->work_time += io_sq_cpu_usec(current) - usec;
-+	if (ist->started)
-+		return;
-+	ist->started = true;
-+	ist->usec = io_sq_cpu_usec(current);
- }
- 
--static int __io_sq_thread(struct io_ring_ctx *ctx, bool cap_entries)
-+static int __io_sq_thread(struct io_ring_ctx *ctx, struct io_sq_data *sqd,
-+			  bool cap_entries, struct io_sq_time *ist)
- {
- 	unsigned int to_submit;
- 	int ret = 0;
-@@ -197,6 +214,8 @@ static int __io_sq_thread(struct io_ring_ctx *ctx, bool cap_entries)
- 	if (to_submit || !wq_list_empty(&ctx->iopoll_list)) {
- 		const struct cred *creds = NULL;
- 
-+		io_sq_start_worktime(ist);
-+
- 		if (ctx->sq_creds != current_cred())
- 			creds = override_creds(ctx->sq_creds);
- 
-@@ -278,7 +297,6 @@ static int io_sq_thread(void *data)
- 	unsigned long timeout = 0;
- 	char buf[TASK_COMM_LEN] = {};
- 	DEFINE_WAIT(wait);
--	u64 start;
- 
- 	/* offload context creation failed, just exit */
- 	if (!current->io_uring) {
-@@ -313,6 +331,7 @@ static int io_sq_thread(void *data)
- 	mutex_lock(&sqd->lock);
- 	while (1) {
- 		bool cap_entries, sqt_spin = false;
-+		struct io_sq_time ist = { };
- 
- 		if (io_sqd_events_pending(sqd) || signal_pending(current)) {
- 			if (io_sqd_handle_event(sqd))
-@@ -321,9 +340,8 @@ static int io_sq_thread(void *data)
- 		}
- 
- 		cap_entries = !list_is_singular(&sqd->ctx_list);
--		start = io_sq_cpu_usec(current);
- 		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
--			int ret = __io_sq_thread(ctx, cap_entries);
-+			int ret = __io_sq_thread(ctx, sqd, cap_entries, &ist);
- 
- 			if (!sqt_spin && (ret > 0 || !wq_list_empty(&ctx->iopoll_list)))
- 				sqt_spin = true;
-@@ -331,15 +349,18 @@ static int io_sq_thread(void *data)
- 		if (io_sq_tw(&retry_list, IORING_TW_CAP_ENTRIES_VALUE))
- 			sqt_spin = true;
- 
--		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list)
--			if (io_napi(ctx))
-+		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
-+			if (io_napi(ctx)) {
-+				io_sq_start_worktime(&ist);
- 				io_napi_sqpoll_busy_poll(ctx);
-+			}
-+		}
-+
-+		io_sq_update_worktime(sqd, &ist);
- 
- 		if (sqt_spin || !time_after(jiffies, timeout)) {
--			if (sqt_spin) {
--				io_sq_update_worktime(sqd, start);
-+			if (sqt_spin)
- 				timeout = jiffies + sqd->sq_thread_idle;
--			}
- 			if (unlikely(need_resched())) {
- 				mutex_unlock(&sqd->lock);
- 				cond_resched();
 -- 
-2.51.0
+Jens Axboe
 
