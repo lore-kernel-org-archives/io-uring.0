@@ -1,111 +1,137 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E2D2D373F
-	for <io-uring@vger.kernel.org>; Mon, 10 Nov 2025 13:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45E8631D748
+	for <io-uring@vger.kernel.org>; Mon, 10 Nov 2025 16:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762779904; cv=none; b=u/YtwEKbvLqgRk2/+NY4+TGVD5i6P5mFlJXzlkArBIGNHuLYZOZtfJQ8vy+THJlDNYtA+eI5ZkuACr7g122rR8rCE/QJgth0d2jqxnHTAJanfjA9ZVE0/rQ9sKEJdRSiMxJM21b13Aj/uPJ4Y1+OOONrPPSRatg5Cm+SlFpXOYs=
+	t=1762792927; cv=none; b=Ik+GEA99dTCVbQL/Mh2XMbs4rTYfWh/Xf3ese+XS5Y1EvO1FJhHVx8iz7ObrSC80hn0ug4txTw1x8oeLWmOG4OehX0cGxjioCIqwhQB6xcAvX4CXZm6+4MGTg04QjzVUK3bOefvKN0kZdY1Og6IWwbdfRMZjq7qbL3SjmG0Qqg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762779904; c=relaxed/simple;
-	bh=kwEMnR94NMkM+f8OHcXHJnFIrVoi6qbtQ1zLgwdL7DQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=udbluKBrqHqN7WOFlYHSCDK97qvwT/D1ZIXQgGZmEzxVM1426hece2sqnVIr4By4JYlsb+ddL3U3uHzk6Lkqr9qcqs4nc3f8gNKfxrKlbCEINHYzkZDeuPZn4FX9L9/e5g0yRP/ZwZ6mBqbWipBWsgnT36aFKl1qqehGr5+XV9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKXZqWer; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1762792927; c=relaxed/simple;
+	bh=GKjNPhJUmE3ffBWuGrURvcOJiiT4jJnfaIvMg2ZBr5E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TPaNj7HFZXf/hGqfaDyVHz8Xe4XOpMfXxKLnkP9BnrjyDoYRjJZNhr7HeqaiRbYTQ/QNxbvC3x06vwYegv1LdCk/Z0+0VKhZNuAm7n3FHqD1rSV1vrZAZaY+TFy7I+WXOs+Y+VKEgvRf5NoVTdba9NK2f/sbm5WXylC7+jcbmyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LUKuim1N; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKXZqWer"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b3b0d76fcso550529f8f.3
-        for <io-uring@vger.kernel.org>; Mon, 10 Nov 2025 05:05:02 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LUKuim1N"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b7277324054so473029766b.0
+        for <io-uring@vger.kernel.org>; Mon, 10 Nov 2025 08:42:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762779901; x=1763384701; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HHY5C9oNMocp5qpKH3Mqaeh72lxqYBuYU4tuWipg2TY=;
-        b=VKXZqWerQCWipSgm5nCSl1cw4E1Ien89rdoJJLMHDjXuN8qmweMptjs1Ex1LUWPbJ5
-         xBf3BoEZoDiJ2zmgrrE41J8TjbLq9ABA40T4FEHPPTW/P3ZK/eVpoQZXCsLbYrBv+z+M
-         U7ohbgskB0lIX4ILQ82OX1wNDX5pp2YruH1NfJEKWiGZ91gqnlwQF3REjegz7bsqLcan
-         HA5bFdzm8p8n4uBI8F6kaUFOY69JYTFmxDbnDnV9HGvU87jbJvmA5H+9DD0soQWMGRcr
-         DWvJsqV7pzoZ5VqfPtAcH8GUG7fgDLCfIflWBawwcAH3Ot+FLLorLC26zbFDRUtnkt6m
-         ADQQ==
+        d=linux-foundation.org; s=google; t=1762792923; x=1763397723; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oEQJCmiS2IMzNjbxI9qhqVkNRGDbuejNOKBcwtqGw/c=;
+        b=LUKuim1N0j3S16p1DLfN7+deJD/PIxRM9qwe+h2dwcZTnOoIRp4XfI9OAXWyIuP2yE
+         qkfv3z07mbQXqV3bvSYeE70A6pDRsCxTvvHpGJIXKw4BjumgVJ8JO0p3IiIae6ult9Qx
+         d+cSuFf+aJNcM/T8HZ/7EvgEhNyP11q0ADFx4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762779901; x=1763384701;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HHY5C9oNMocp5qpKH3Mqaeh72lxqYBuYU4tuWipg2TY=;
-        b=xImVkjQXg2+YCufaeawUQ/PpAesUya4NuXIluL+ZeB2Riu9hFl89jTgw2KOFjJb9+4
-         hV56pKxY39KVW92jsMbaPwcsdDgzrHYNw+8lpjA82lmDmFP2XLkWeBSimnZ+8h9URt7J
-         BjDcnL5jv5hNhUUy50Ai3UdFPJirNnapbZ0pRpj3VwV+v63swRz+3RhiI4YHyF5oR7TO
-         j1JwiMrhWhC9gIDZXOELuh4DYdYyTO5UERqirAt7412ScTbqQKbT++fJchQ/yyTBFy97
-         /wlxJGiduqyGHSVXTN/yMwHhkQmO1HNrWo2JhMRbVlbaWzlIoY4kZqGi+yiBrJEMABFm
-         3F8Q==
-X-Gm-Message-State: AOJu0YxgJHF08Q1I/1VkekjpyWacY0XkjUBP4+K5Ctekg3o+1CluAVwI
-	qq8lAcDqRQvvceMchshKUM7NlQVdmdQF+RRc5ABNXviKoalPl3lAgVUvSK6zLQ==
-X-Gm-Gg: ASbGncsaYR7aunBLjb/YYcS49T9qTp9dFk0z+HMosqOKJQFBwdx3NiHvb2C/sgNyT7t
-	6BH7zXy3N9QNRzYTTDl8RFXED0Lwq1hZc2DWD2Weho9yGaxh7QSWaD+K0vlhW0s/L8BebsZVbgR
-	V2Al86QjbPHxoDll425mvSRtDeIu5E3b3K0L16esK38QJ0jYMaLDJS/ZUhM7EGK8j2xBB9Wp9yF
-	Btl4CyfC/3Lu270sL2AOTerD5/6zQH6NVzDRNk1faM2H5h9n2zCoCsU0Ocsik/YnBwi7J45Arib
-	xoOhAvKi0XWYR+K9rM77uKeIcvKXX/iSHZnA6v53XyO2yCtS0szT5963tTl8aEtzSG1Mq0ErF3b
-	kmsfqk2GeyhpfoZUMz6J5ebAjRN+Iy5ZvmSaDwx1ClXH3CS0KruZvqXcbb1JoeDldu6r6cS4UFY
-	bFFySF/gr7EG9H5v7daxEJtW/H
-X-Google-Smtp-Source: AGHT+IHsMCQ4dDAh9bg7V6vwfQ8FkimmpFPngALhtrCddxoHQTOgfyHmM8NJrzzQgZ9XiyiTw0hkYQ==
-X-Received: by 2002:a05:6000:2608:b0:42b:30f9:7998 with SMTP id ffacd0b85a97d-42b30f97b53mr6577957f8f.27.1762779900750;
-        Mon, 10 Nov 2025 05:05:00 -0800 (PST)
-Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b330f6899sm10584648f8f.21.2025.11.10.05.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 05:05:00 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com
-Subject: [PATCH 4/4] io_uring: move flags check to io_uring_sanitise_params
-Date: Mon, 10 Nov 2025 13:04:52 +0000
-Message-ID: <90d1f84d28afbf5bc619bbc82a5b7fa811212d89.1762701490.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <cover.1762701490.git.asml.silence@gmail.com>
-References: <cover.1762701490.git.asml.silence@gmail.com>
+        d=1e100.net; s=20230601; t=1762792923; x=1763397723;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oEQJCmiS2IMzNjbxI9qhqVkNRGDbuejNOKBcwtqGw/c=;
+        b=NkURY07xgfszhWOAhLJkLDM87jrxYXUZW0Yrv1HlPG2bvbnAG4TNOhMBMDOZgdWdUk
+         0KOG3KnFXSmIUv8Rizp7YZOwt5LrDHowjLcBhJVjfrn91zF3DzQ7rGXzFtRJlK/AK8AM
+         KuMU3buaeHFBox+tC7huEX0dQfpwSmilU/4CxQvrn7CSgDOVJnxP/vRtWvfpaR9VRyNY
+         164meyNtqU/dHTIZqbGpkFVR4j4y333UoWdudYdPxpcLXApGx7JXC6uebquY8N41+ovX
+         NE2pNQwdW6u7yZgPccSBtrgJuazC+pYdCe8chC9EWCR7fUPXnGdBxhhUqjo6Rl51+njY
+         714A==
+X-Forwarded-Encrypted: i=1; AJvYcCWZsDTyHC3klvIRdxpRIDZfVVxC7snheHMgHX34120g29ygD3RAt+mh2cDXvF2m45z12IgPxwNriA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmEqhFJzcieQe3lP8Cos/nCpD33H00VPSJKIJpzWKjQ47h9Swy
+	OCJEm2r3txGjr4kVLO99M1/1B3Gjv97fvlKdpNKZ78bT6iRHidTwhauYFAkmarT0J4t4b6TOJgH
+	K/pGFz+Y=
+X-Gm-Gg: ASbGnctlNosUgaY9zRnu+sZlF9iBlhfyzGLzocgwN1EsAK4nRq9tgfFH4WABJ4MUUbG
+	1arayGZI64odUClFzZSjrB6wah3LhROUvi46eeOwHeo8Wr+QCDa5FmZLva3rekUYrLc3IL9ZE3x
+	Ch8Db78/rlV/1a2WmsHbJBQUjjqUaQeq/R4WkX8aQ5f2JGfz8OCakx1dcnH2QlZLrsQQ5iNvT2+
+	bmHokJE2FfrJXWHjbqABFh7e/ZxGXuVVOmSba2txCXttGbXMtpFmBgJWiFP0XDSjHrk45WP+2JN
+	wvABUM7mB6O2Epxgxt5ofmpMF7o5FA45mVI1oYBEbOLWq3fathdTfkNKj/mq+yIdUwF0AZyQX7w
+	vgYXOHURm/WqU0C898eT+yROE+pa6gOCBgc6FuEG7PtHW6vRaYDBpfn4cWSPr+kNHngBGzhVaiN
+	X8AjLk7wm64kog4vqQ1GSJBeBzKy2qlX108y5QwLQXOCzV1ETBloX14Pfoves8
+X-Google-Smtp-Source: AGHT+IGfTQ+dvYdG1sBBtvgS+dJiE28s3g4dLHp9HVGHwXqH+5tNIEKiCPGh8tAlVs3alc0YzgsPKQ==
+X-Received: by 2002:a17:907:1c9f:b0:b5c:753a:a4d8 with SMTP id a640c23a62f3a-b72e05bce7emr850596066b.62.1762792923350;
+        Mon, 10 Nov 2025 08:42:03 -0800 (PST)
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6411f862bd0sm11856745a12.26.2025.11.10.08.42.02
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 08:42:02 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b5a8184144dso422244166b.1
+        for <io-uring@vger.kernel.org>; Mon, 10 Nov 2025 08:42:02 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXvWKRzqJmKIedsfE/tS9nUcWnktMrh9Efb9piOcTMFbvtCd/Tmn3WGKZkY4lU3Nqkk/6IFkIquPA==@vger.kernel.org
+X-Received: by 2002:a17:907:7ea4:b0:b72:d9ee:db89 with SMTP id
+ a640c23a62f3a-b72e056d064mr770836966b.47.1762792922013; Mon, 10 Nov 2025
+ 08:42:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251109063745.2089578-1-viro@zeniv.linux.org.uk>
+ <20251109063745.2089578-11-viro@zeniv.linux.org.uk> <CAHk-=wgXvEK66gjkKfUxZ+G8n50Ms65MM6Sa9Vj9cTFg7_WAkA@mail.gmail.com>
+ <CAHk-=wjA=iXRyu1-ABST43vdT60Md9zpQDJ4Kg14V3f_2Bf+BA@mail.gmail.com> <20251110051748.GJ2441659@ZenIV>
+In-Reply-To: <20251110051748.GJ2441659@ZenIV>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Mon, 10 Nov 2025 08:41:45 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bmrAqXZ2m4pzkboWqVgXqNR03LoZBcEW296TEL_nMeJgv27T0QqUNlPZ1A
+Message-ID: <CAHk-=wgBewVovNTK4=O=HNbCZSQZgQMsFjBTq6bNFW2FZJcxnQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH 10/13] get rid of audit_reusename()
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz, 
+	mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk, 
+	audit@vger.kernel.org, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-io_uring_sanitise_params() sanitises most of the setup flags invariants,
-move the IORING_SETUP_FLAGS check from io_uring_setup() into it.
+On Sun, 9 Nov 2025 at 21:17, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> That's more about weird callers of getname(), but...
+>
+> #ifdef CONFIG_SYSFS_SYSCALL
+> static int fs_index(const char __user * __name)
+> {
+>         struct file_system_type * tmp;
+>         struct filename *name;
+>         int err, index;
+>
+>         name = getname(__name);
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- io_uring/io_uring.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Yeah, ok, this is certainly a somewhat unusual pattern in that "name"
+here is not a pathname, but at the same time I can't fault this code
+for using a convenient function for "allocate and copy a string from
+user space".
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index af7b4cbe9850..7e069d56b8a1 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3430,6 +3430,9 @@ static int io_uring_sanitise_params(struct io_uring_params *p)
- {
- 	unsigned flags = p->flags;
- 
-+	if (flags & ~IORING_SETUP_FLAGS)
-+		return -EINVAL;
-+
- 	/* There is no way to mmap rings without a real fd */
- 	if ((flags & IORING_SETUP_REGISTERED_FD_ONLY) &&
- 	    !(flags & IORING_SETUP_NO_MMAP))
-@@ -3691,8 +3694,6 @@ static long io_uring_setup(u32 entries, struct io_uring_params __user *params)
- 	if (!mem_is_zero(&p.resv, sizeof(p.resv)))
- 		return -EINVAL;
- 
--	if (p.flags & ~IORING_SETUP_FLAGS)
--		return -EINVAL;
- 	p.sq_entries = entries;
- 	return io_uring_create(&p, params);
- }
--- 
-2.49.0
+> Yes, really - echo $((`sed -ne "/.\<$1$/=" </proc/filesystems` - 1))
+> apparently does deserve a syscall.  Multiplexor, as well (other
+> subfunctions are about as hard to implement in userland)...
 
+I think those are all "crazy legacy from back in the dark ages when we
+thought iBCS2 was a goal".
+
+I doubt anybody uses that 'sysfs()' system call, and it's behind the
+SYSFS_SYSCALL config variable that was finally made "default n" this
+year, but has actually had a help-message that called it obsolete
+since at least 2014.
+
+The code predates not just git, but the bitkeeper history too - and
+we've long since removed all the actual iBCS2 code (see for example
+commit 612a95b4e053: "x86: remove iBCS support", which removed some
+binfmt left-overs - back in 2008).
+
+> IMO things like "xfs" or "ceph" don't look like pathnames - if
+> anything, we ought to use copy_mount_string() for consistency with
+> mount(2)...
+
+Oh, absolutely not.
+
+But that code certainly could just do strndup_user(). That's the
+normal thing for "get a string from user space" these days, but it
+didn't historically exist..
+
+That said, I think that code will  just get removed, so it's not even
+worth worrying about. I don't think anybody even *noticed* that we
+made it "default n" after all these years.
+
+             Linus
