@@ -1,92 +1,189 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFF0337BA4
-	for <io-uring@vger.kernel.org>; Thu, 13 Nov 2025 10:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843C23346A2
+	for <io-uring@vger.kernel.org>; Thu, 13 Nov 2025 11:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763030949; cv=none; b=gLp4tE2SmBY6YuatR/CkxpE1p0UMeB9wMRHwyZAo4HqBGPwvFYynCV8YYcvcMM/5dlxxqqe5p+xu+msyFuMISKs6leRe+fqw5YsY2SnCfBIn1/+rtGSSYR8cPaxx4UaLt6uZESwqYEGiK/eiuXIMoQ9wbQavdaaDdC84x1/cAqg=
+	t=1763031675; cv=none; b=iGMIDsu2aGWWEOuR7THbOxXCCgXdOznpw63CaRUm6vslXfUB6iJcCAGKt3KcR5UY6bWztCG+MjjQd7m/vW3dayMghSwmXL9zZ2bUitBYm2+zWAT6bCauhCezaNQYcu7+N4G3DuSOeA3tCQYs3l5L20R8K9emfONJ/5VzcuCnMhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763030949; c=relaxed/simple;
-	bh=en3l3gNHhUFIemWPTODBQDH7X/YR3C/OoVAQVr2zyas=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DF3Jp6Z70ZUWNkC6ASwEDfbxzR9DeSouO3n9AJIuD4xlU3sTQA25AUQ0LT+XOahg5hHAoVSzIAt11q5fi1L6nHVCYA0Pen/qXHYwkQl0eQEB0jK2XBY2MXMGhakYPivmI+hAk9A0eyaCwzN36RhpSKm1i9i9c33+fl7dPtuTlCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W18zCLYM; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1763031675; c=relaxed/simple;
+	bh=dWZ57ctAvh6zYSImXe3rOe28g+rysrCLCpD2RZJukd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jglUR1NumyvSOeS3l07Lpje+nS4s8ngnzspMD66C0fISU3nvsFFMxgebtmOrRKpsuOVJLFJ8X/rZQJF9l8yz/Cqn4rE6ke4SRasLg9EfEn79DauVEVhrRxLT6ef6PQke7ETWHOUP5xRJHKpFbDSIivn3yDZ0zN33E1rHlHh9+fA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LchsgSqo; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W18zCLYM"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47777000dadso4688275e9.1
-        for <io-uring@vger.kernel.org>; Thu, 13 Nov 2025 02:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763030942; x=1763635742; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iPKQhJAg7ens1xf07gWshSPBDBZ1ZqBMJ8fPZp3A6fI=;
-        b=W18zCLYMScwXxOAgCOP29FfpOe1NU5x02kgvE5s2Sip4i/DbqjZ5BovPbHh50y4f8c
-         85MC1NyKh64ylekWhg3Qgeoa5a/Y2blt/MmWkwmkKET7L00iPpp0wH6/OgwB60l1IiMN
-         sAwsAuScXzRH07x7HXgXZQVe7FG3pGzkiktsmgyr3mww/HpaR6q14IBH3rdUbz/alsoS
-         cTBCtKjj7bjxXbDlClvst8wIioPDq+CpMz23USMxy1Gex8JR5b3Qu7mWhpoU5Gj/ozsw
-         rirX1MuJ5Ax1zgxHtQvMGBRVkaQdl55RKtNDbxMWfyPu4buJMODpQWsVvQfXBUhQ0Z6r
-         RUkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763030942; x=1763635742;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iPKQhJAg7ens1xf07gWshSPBDBZ1ZqBMJ8fPZp3A6fI=;
-        b=pC5w13iD5pQlNTgDWDb7oqAkFQrMx+II184OWqb8osWHvDnhyZssR42JJrMxN5Z5Il
-         HPpcaK3xvFS/3RCIwgjodd4b33itjfn+mb0J74IOBfRHabrJYBVJI7WoWqQ5jPUdJEJZ
-         4Qx6bMJSExDLejObNIDaTnfN3FXQnP7wdF2X4np4oHS+dhVPhhx1as8spibXQG5dVErY
-         cMebQa3goGsoi0y3FkWTXMp8evoQdnOYicaAZy1qc9lnH1pZN2a6Z+HOeqbjxdIK2iKN
-         Va+TVPiW2NDBJP42lfsXV1NdpJO5f6M0O+dvRFrmRklZAhTqJakTwzZElqQjyAF7A26j
-         1vkw==
-X-Gm-Message-State: AOJu0YxpEXO4aoPn0yZZb5ypBg5ZsPbm6ChZVosNjboVIdtYqkMMqBwT
-	WN28Xy/0heIsujarVhT/oh6/nBWMBzmvSVwjUBz+2dIdQdw1e/Pu9qZiImOoZA==
-X-Gm-Gg: ASbGncs2a+KaSWArQSnveXH5qCxfqg5LOpn8B3UsJjxbU8LXNzf9uaMKxROs60kAA/i
-	4RgdiX0W2U8e8Jtu0QMM3IJcJ8mIlrjWJRDUhS3vGFOHQYFZOa8z/E5pvwAGIBKAIwr1tJ9ZfWv
-	9Y06ljoWYneInZSZasJgpQgFDr8G7If5AxhyZWFrHg9FlGVkXzRJbTZW43fUQQlRF2W1a2Lzr1q
-	djrGxzd2pz2JHqdKdQIUqQpm/MW2TlP/cc6Pm/JKTHxiT+ffsdFGkRu2KLX0PlKubzVcbMBSQrX
-	Pa26Gr0yamqxnNanQCLqg/8zZep3KDNbDFYVO4NeKgCW8z1bdnfCHJ8eJcpEvxF2HqkB0Da0fyw
-	MCOYNDjVK59AP+99+vlcZKpuQe7+UbWkUJURT8AmLVT2LfU3V0y+F1H1xisI=
-X-Google-Smtp-Source: AGHT+IG2eqWjWoIQLXtM3wqoth2VdI2hRms3KNtXfmWBXhTMYf8ZYiSOwWUSDcdi7tOWwOXvvvgWGg==
-X-Received: by 2002:a05:600c:215a:b0:477:89d5:fdb2 with SMTP id 5b1f17b1804b1-47789d5ff9amr26574715e9.14.1763030941952;
-        Thu, 13 Nov 2025 02:49:01 -0800 (PST)
-Received: from 127.com ([2620:10d:c092:600::1:6794])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47787e442c2sm88850945e9.7.2025.11.13.02.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 02:49:01 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com
-Subject: [PATCH 0/2] zcrx and SQ/CQ queries
-Date: Thu, 13 Nov 2025 10:48:56 +0000
-Message-ID: <cover.1763030298.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LchsgSqo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763031672;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xkwPanruht+tVCaTSjqmyz1RwODzJHjVCA3D3SgXxaA=;
+	b=LchsgSqoNJ7vEhhJmhUh63ZdztjGEZBPYVRj6jLXC/N2TzovW8efjhGphSs/ghpaRWmfRd
+	HYPzfnZniRPb/hDIQLl1H1P901k5VlFo4VkwGFph/zvY2CYYxK18+tcnq96lVZ+kX1kS3M
+	MHXCujoVgiOfzgg3JdGyBR3QtJySot0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-444-MaKrvlBuNZ-BTZZXknTIww-1; Thu,
+ 13 Nov 2025 06:00:16 -0500
+X-MC-Unique: MaKrvlBuNZ-BTZZXknTIww-1
+X-Mimecast-MFC-AGG-ID: MaKrvlBuNZ-BTZZXknTIww_1763031614
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2B31418002F8;
+	Thu, 13 Nov 2025 11:00:07 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.82])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DD2DA18004A3;
+	Thu, 13 Nov 2025 11:00:02 +0000 (UTC)
+Date: Thu, 13 Nov 2025 18:59:57 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Stefan Metzmacher <metze@samba.org>
+Cc: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>,
+	Akilesh Kailash <akailash@google.com>, bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH 3/5] io_uring: bpf: extend io_uring with bpf struct_ops
+Message-ID: <aRW6LfJi63X7wbPm@fedora>
+References: <20251104162123.1086035-1-ming.lei@redhat.com>
+ <20251104162123.1086035-4-ming.lei@redhat.com>
+ <94f94f0e-7086-4f44-a658-9cb3b5496faf@samba.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94f94f0e-7086-4f44-a658-9cb3b5496faf@samba.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Note: depends on the 6.19 zcrx updates, and based on top of a
-recent 6.18 query patch.
+On Thu, Nov 13, 2025 at 11:32:56AM +0100, Stefan Metzmacher wrote:
+> Hi Ming,
+> 
+> > io_uring can be extended with bpf struct_ops in the following ways:
+> > 
+> > 1) add new io_uring operation from application
+> > - one typical use case is for operating device zero-copy buffer, which
+> > belongs to kernel, and not visible or too expensive to export to
+> > userspace, such as supporting copy data from this buffer to userspace,
+> > decompressing data to zero-copy buffer in Android case[1][2], or
+> > checksum/decrypting.
+> > 
+> > [1] https://lpc.events/event/18/contributions/1710/attachments/1440/3070/LPC2024_ublk_zero_copy.pdf
+> > 
+> > 2) extend 64 byte SQE, since bpf map can be used to store IO data
+> >     conveniently
+> > 
+> > 3) communicate in IO chain, since bpf map can be shared among IOs,
+> > when one bpf IO is completed, data can be written to IO chain wide
+> > bpf map, then the following bpf IO can retrieve the data from this bpf
+> > map, this way is more flexible than io_uring built-in buffer
+> > 
+> > 4) pretty handy to inject error for test purpose
+> > 
+> > bpf struct_ops is one very handy way to attach bpf prog with kernel, and
+> > this patch simply wires existed io_uring operation callbacks with added
+> > uring bpf struct_ops, so application can define its own uring bpf
+> > operations.
+> 
+> This sounds useful to me.
+> 
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >   include/uapi/linux/io_uring.h |   9 ++
+> >   io_uring/bpf.c                | 271 +++++++++++++++++++++++++++++++++-
+> >   io_uring/io_uring.c           |   1 +
+> >   io_uring/io_uring.h           |   3 +-
+> >   io_uring/uring_bpf.h          |  30 ++++
+> >   5 files changed, 311 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+> > index b8c49813b4e5..94d2050131ac 100644
+> > --- a/include/uapi/linux/io_uring.h
+> > +++ b/include/uapi/linux/io_uring.h
+> > @@ -74,6 +74,7 @@ struct io_uring_sqe {
+> >   		__u32		install_fd_flags;
+> >   		__u32		nop_flags;
+> >   		__u32		pipe_flags;
+> > +		__u32		bpf_op_flags;
+> >   	};
+> >   	__u64	user_data;	/* data to be passed back at completion time */
+> >   	/* pack this to avoid bogus arm OABI complaints */
+> > @@ -427,6 +428,13 @@ enum io_uring_op {
+> >   #define IORING_RECVSEND_BUNDLE		(1U << 4)
+> >   #define IORING_SEND_VECTORIZED		(1U << 5)
+> > +/*
+> > + * sqe->bpf_op_flags		top 8bits is for storing bpf op
+> > + *				The other 24bits are used for bpf prog
+> > + */
+> > +#define IORING_BPF_OP_BITS	(8)
+> > +#define IORING_BPF_OP_SHIFT	(24)
+> > +
+> >   /*
+> >    * cqe.res for IORING_CQE_F_NOTIF if
+> >    * IORING_SEND_ZC_REPORT_USAGE was requested
+> > @@ -631,6 +639,7 @@ struct io_uring_params {
+> >   #define IORING_FEAT_MIN_TIMEOUT		(1U << 15)
+> >   #define IORING_FEAT_RW_ATTR		(1U << 16)
+> >   #define IORING_FEAT_NO_IOWAIT		(1U << 17)
+> > +#define IORING_FEAT_BPF			(1U << 18)
+> >   /*
+> >    * io_uring_register(2) opcodes and arguments
+> > diff --git a/io_uring/bpf.c b/io_uring/bpf.c
+> > index bb1e37d1e804..8227be6d5a10 100644
+> > --- a/io_uring/bpf.c
+> > +++ b/io_uring/bpf.c
+> > @@ -4,28 +4,95 @@
+> >   #include <linux/kernel.h>
+> >   #include <linux/errno.h>
+> >   #include <uapi/linux/io_uring.h>
+> > +#include <linux/init.h>
+> > +#include <linux/types.h>
+> > +#include <linux/bpf_verifier.h>
+> > +#include <linux/bpf.h>
+> > +#include <linux/btf.h>
+> > +#include <linux/btf_ids.h>
+> > +#include <linux/filter.h>
+> >   #include "io_uring.h"
+> >   #include "uring_bpf.h"
+> > +#define MAX_BPF_OPS_COUNT	(1 << IORING_BPF_OP_BITS)
+> > +
+> >   static DEFINE_MUTEX(uring_bpf_ctx_lock);
+> >   static LIST_HEAD(uring_bpf_ctx_list);
+> > +DEFINE_STATIC_SRCU(uring_bpf_srcu);
+> > +static struct uring_bpf_ops bpf_ops[MAX_BPF_OPS_COUNT];
+> 
+> This indicates to me that the whole system with all applications in all namespaces
+> need to coordinate in order to use these 256 ops?
 
-Introduce zcrx and SQ/CQ layout queries. The former returns what
-zcrx features are available. And both return the ring size
-information to help with allocation size calculation for user
-provided rings like IORING_SETUP_NO_MMAP and.
-IORING_MEM_REGION_TYPE_USER
+So far there is only 62 in-tree io_uring operation defined, I feel 256
+should be enough.
 
-Pavel Begunkov (2):
-  io_uring/query: introduce zcrx query
-  io_uring/query: introduce rings info query
+> 
+> I think in order to have something useful, this should be per
+> struct io_ring_ctx and each application should be able to load
+> its own bpf programs.
 
- include/uapi/linux/io_uring/query.h | 24 ++++++++++++++++++++++
- io_uring/query.c                    | 32 +++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
+per-ctx requirement looks reasonable, and it shouldn't be hard to
+support.
 
--- 
-2.49.0
+> 
+> Something that uses bpf_prog_get_type() based on a bpf_fd
+> like SIOCKCMATTACH in net/kcm/kcmsock.c.
+
+I considered per-ctx prog before, one drawback is the prog can't be shared
+among io_ring_ctx, which could waste memory. In my ublk case, there can be
+lots of devices sharing same bpf prog.
+
+
+
+thanks,
+Ming
 
