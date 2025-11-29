@@ -1,63 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A00326E6F6
-	for <io-uring@vger.kernel.org>; Fri, 28 Nov 2025 21:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBB21F4168;
+	Sat, 29 Nov 2025 17:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764364715; cv=none; b=sCzoHYj0iQa/XqcbBRLguMAJQmmzQfYVk8l42Ot47xZuD+SegCedj4zzNEa+QrtDnEZONuzBkkh2619lpFbxbaRS+CkzIrxtAq4KKwsL1bRM13Pipx7CCk8gIX2mQq8ZMfGpjJckwyLo0oq2ubxPHh8CqKkVJJjzHcZeBaASmTc=
+	t=1764435699; cv=none; b=VhQIdcQRv1+H2PPDOOE2E9J4ImVrnybJp0PlEMBP3aiTMwiydm5lEbwAOMcmlig5PlA2t9rEe2x5qfyJg83tTrZJD3cCgH8O1EX7Q6lGVHBu7+ety277NqFW0h0n+YYrNrDEwcpVkCtixGzsoCFv3r8jl+NDHt7KI8H0gJS3pgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764364715; c=relaxed/simple;
-	bh=Cy1Fbmw2Ex+psjR2AXuVlmTa6j5o0g4gYZWvrg2seVQ=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=K3hfpSIZ00e4PaqOL4T7RIW/jaWC8zuNRHcKitZOlOmhCnDwWzWvl+0V22gTR7loOJyjIba8OxDL78oVLXiVq/eMWZ1e7B4xmzoCD5iymVWl+n3JQtdy7m99C+RmI6uMkT8X49x05E+ChnoTdctN0HTlRPhUoy2F1nobvfmPrdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctHSmIRg; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1764435699; c=relaxed/simple;
+	bh=xQ7El2M28M0wHx+P+g8Yo1qBcNgqMr0WmiWcFdzVu9w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XvF27EPT529bo790suBLTfTYTTdJC9ru6QpGXH9cAgqpxqiEkz3uaGr5xMtbbQTnU+TbO2m9+O3q0Vc6lAeBt++WaZmj6SGkMAIeAbltPqKc8coe7dA0JR7KWaUMAlCuWd2bdIJ3fG44kJBHXyAeYuvtRoHcbr8CF8JvqT6Ve1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=T4Emt3U4; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ctHSmIRg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B10C4CEF1;
-	Fri, 28 Nov 2025 21:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764364715;
-	bh=Cy1Fbmw2Ex+psjR2AXuVlmTa6j5o0g4gYZWvrg2seVQ=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=ctHSmIRgP9g2BXGS8PG2dG+jayPjNkjvL4VtMb/V//cmI1sGgxgOYLJh62kX9YzH0
-	 fR28dJN2nQaMvNFiKOciCqCJO+fbZSS4p+oKFhUP79Z2auhvh0LJGe4HMd3KSNvKR+
-	 leFr5g7kn6r5Ll1dnetXT1AVe1atqDRH/xUhnGKtdvp2lD4RmiOe+UcerYQPsbDMJH
-	 y6aMf8mTnlMYI91MPtQZyOSt7+ZxEgNcSN5HUGcpC5DcKhJYH/Fh8ajO6QzZprjyTy
-	 ZLlh0Pqen2Pz84CXVmF45BHzCfPL62uoNb3R0ZzAVPeL/g2Rt3A67Uk9l91ulrdbeR
-	 24c68czz2TzXQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2803380692B;
-	Fri, 28 Nov 2025 21:15:37 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring fixes for 6.18-final
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <c7983db3-002d-41a0-bc04-523eceb70748@kernel.dk>
-References: <c7983db3-002d-41a0-bc04-523eceb70748@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <c7983db3-002d-41a0-bc04-523eceb70748@kernel.dk>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-6.18-20251128
-X-PR-Tracked-Commit-Id: f6dc5a36195d3f5be769f60d6987150192dfb099
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9917bf8e7f5a9efbab844cf06cfd8da8eb7e13b6
-Message-Id: <176436453652.799297.13615048823146938365.pr-tracker-bot@kernel.org>
-Date: Fri, 28 Nov 2025 21:15:36 +0000
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="T4Emt3U4"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=OSmE8RDttZ57sO3CJH0P4rRo3qRd5TrH+VcvqqudS9I=; b=T4Emt3U468OJpWCEF3VRYAR/ll
+	NrngMAi2N4+03J2sWont+MJqyvSrCoOH1lA8vA5MbkgaGEpLXKEviheoy7/ipVY7BFatvGwqhpuU1
+	M8BoBhPA1mi9z2JXs/A28B8splPaCWZz12SK/iPthYoIvYtfEssVpfXBP4KfWsQwpz9+cbtdB7+69
+	S91M7w0OjBHpWb/A3Ka7e4opjn0ZAghy83oTB4ivEPap1HSTjLyafNSaudFX8rYzSJjI2Q78pfXYB
+	Jjz8R0IbMFZc/XhjVX9tw1NbP3coMJ3I43J4O7TZFYFLmk7cbjFELZoBZtU9KuztPxrd1sO2a1tU+
+	/27i2QlQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vPOKN-00000000dCh-0yab;
+	Sat, 29 Nov 2025 17:01:43 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mjguzik@gmail.com,
+	paul@paul-moore.com,
+	axboe@kernel.dk,
+	audit@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [RFC PATCH v2 06/18] chroot(2): import pathname only once
+Date: Sat, 29 Nov 2025 17:01:30 +0000
+Message-ID: <20251129170142.150639-7-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
+References: <20251129170142.150639-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-The pull request you sent on Fri, 28 Nov 2025 12:32:52 -0700:
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-6.18-20251128
+In this case we never pass LOOKUP_EMPTY, so getname_flags() is equivalent
+to plain getname().
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9917bf8e7f5a9efbab844cf06cfd8da8eb7e13b6
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
 
-Thank you!
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/open.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/fs/open.c b/fs/open.c
+index 8bc2f313f4a9..e67baae339fc 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -603,8 +603,9 @@ SYSCALL_DEFINE1(chroot, const char __user *, filename)
+ 	struct path path;
+ 	int error;
+ 	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
++	struct filename *name = getname(filename);
+ retry:
+-	error = user_path_at(AT_FDCWD, filename, lookup_flags, &path);
++	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
+ 	if (error)
+ 		goto out;
+ 
+@@ -628,6 +629,7 @@ SYSCALL_DEFINE1(chroot, const char __user *, filename)
+ 		goto retry;
+ 	}
+ out:
++	putname(name);
+ 	return error;
+ }
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.47.3
+
