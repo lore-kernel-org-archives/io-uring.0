@@ -1,78 +1,82 @@
-Received: from mail-vk1-f227.google.com (mail-vk1-f227.google.com [209.85.221.227])
+Received: from mail-pf1-f226.google.com (mail-pf1-f226.google.com [209.85.210.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7102E7BCA
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AD42EFD95
 	for <io-uring@vger.kernel.org>; Mon, 15 Dec 2025 20:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.227
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765829430; cv=none; b=NB7OCOkM7O1GB2fQBzoEv/rF5UPZUbTFl9C8r3RURkySgvli8N6hAbmus+ZVz+doH0ujJNKcKm86RpNMRK1DyClgF56mxFkreKrMXwOwGihs+NPdSWxUb4cBAJYRkkVzcq1t6l+2Sl/kC3bUWu1fJfwBd9vJ7ueKeDusjGDMexU=
+	t=1765829430; cv=none; b=RRpumld5EYOirEvB8dh6TyHWywjItafqOrX8Mb005o1pe50Yf5fph/3ebRx/MEgjhgr01oTPzvQOoetVzKW37FfvBRot0f8755Un8kOh8s4hAlwwrBTqc/t8jLTDHvwlXjtCQW6DBLaT0zPKGrnY2pUDsRg9jyygJqybtZjKj+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765829430; c=relaxed/simple;
-	bh=r3aZL/nPRHVdgXvS1uHrExxfnyWcDLDYHy9oUaLcqxU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tNt0zlDD5aCNtOfjlTNbrEJZh7LYPCpL8tJRHehYvBIa9/XBHNI22JmAzkkl8iO774SMZLeHgCCp0AlT6zA2Dn9AxW73IHPLoDewFkWDm3IaqXlHth93r9F8rhC6LyZsIGeKu4gM1Ihz27JIWZo3XQ6EqyY3Y5J3HrY3gbHgD/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=StntWg7t; arc=none smtp.client-ip=209.85.221.227
+	bh=mCH4UHXC/WywxK2XbUmSCE7uuYnugHpAiJbLAuIlfJ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rRxMGBdWYQ4t4CiXEQOY5BEV/O7vAtbxzfLtgMQ3XHDsyIrue0nyS/51hCOSvfcr22HrW5n0j/Ob/vtpxY3a/TTTrodiotb56VD3XlRftxRBD3UIKrquQ6HrZzZmNKrRkWHBf6aETDjJZ6jckFlw42UkQXUS47bP/sGiVupgl6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=fb261Wwr; arc=none smtp.client-ip=209.85.210.226
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="StntWg7t"
-Received: by mail-vk1-f227.google.com with SMTP id 71dfb90a1353d-55b9bef45c0so104665e0c.0
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="fb261Wwr"
+Received: by mail-pf1-f226.google.com with SMTP id d2e1a72fcca58-7c9011d6039so198692b3a.2
         for <io-uring@vger.kernel.org>; Mon, 15 Dec 2025 12:10:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1765829427; x=1766434227; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xdM4XJ2ez7XOjy41ohA0SOEmeTWMsFYcc3ndm6aDi5w=;
-        b=StntWg7tBJOSNC+RwjQEZm5aew/j/ri1YLJpT8r/iK1KkxxwYegDoxkDu0EO13+vjA
-         nViInaVJrl85MHNATb8+CQ5VKUrt8Kwx+1Yyex/59jMFACp5lFxFEgi0yIDZIT4DjYeC
-         Rjqw10IaRyr4ZjBJnGDbsMYg8MBvfp40MsaJMgxi95g8kRer4s90+RBtaKLhdpcgZMpc
-         Ed9aqQSbDGSBvMnte6hc7q8sea9CI/fKcdi/fZb7QIBZOdTJ1rT0nUDl9S5i4KCHt/CL
-         hKAA4IAV7lU3xaSr84l/GiSNR43eItLq0MQhFkIr0+PCqp0wfvNTFMqKBKpobvcYnzvY
-         9hMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765829427; x=1766434227;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=purestorage.com; s=google2022; t=1765829428; x=1766434228; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xdM4XJ2ez7XOjy41ohA0SOEmeTWMsFYcc3ndm6aDi5w=;
-        b=HyfJQsizJ/jQAhcSM3BhVXrXZ3pfynn0PsrfcPw8c67GvPfjGkNJT4bXYfsOwuBRAu
-         G1qpQdO0Cr4MhO3cY90BrL5qsuPOoj+xAzuFnIxpEBggo65CrVB5yOKa+V/UftXUy+To
-         8Dl7v2ucpnfojxrxqgdxc2hMFNbS6jkA0Ar3FfxN5L5MLGyt3zhTQ0/9mO9o28a6R/h2
-         ynobuTpCHGMHHagq6dgz/2KLvieDNlSNvzOVRGhdkAGqOmn7LaykAGh9MEvZ7pfIMVY1
-         ntRjgKYg+Z4hJZu98hj/aUAhGd6FxZpQfhmlAWlImmCKzXvU0SAX+zWuNWgME43Iyibl
-         9IJw==
-X-Forwarded-Encrypted: i=1; AJvYcCWocOVsasPWkUCjEAf/wa5bfFySpurea/wErXEJUQxs9BG8UofAddTlL1nVdiNI5fAehry1PPVzmA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFK5VAndo01lZLwTRrfLpJLi5hV+CJKLZroty8+TASrn2hhSDA
-	vSsjJKH0Sp3wRQp33KtRihxDG62AS/1Tf2a8+VrB/cGwmPpiI2mkHzQBClHaKZO+Qn5v8M7KJbO
-	scvBllTxilVubSL31R5VgGsXIh7cXgwmkeLa8nFteCETKWXtQgkHO
-X-Gm-Gg: AY/fxX4sZsVojfAIHAvbsA3XUn28AL47ZJx18YTzYzSflUaaSf9tgG1MJQcx1c95XAO
-	REkk57LxEy4AhBZwuXMVDm3gH1MKqmFC1SDOEum5IT4R/GyaL/dUhODFkV7iJEDZWj5ULRsfQfV
-	WnDiQL85r59jhpoGj+era2YnxWk+R9CTNRrSrXyxZg1iojwkpHy/P3pLe5X22cIc45oi7wC/E2h
-	iVZdpRMr5g4x5tc64PmsEtnTWuXYzFtL/ykJx+c0ej8RkTPbLVhUB50A+P5de/j7lESyymdqE/p
-	v6Bi1uOu0g1GdFbHEo/o6jogWwhbrNXdENt59isu0piNbZUOHnstE15drNtBAD+85fx/qHw9jYR
-	xZCbYJLjIo46miGacbByFDl40BzM=
-X-Google-Smtp-Source: AGHT+IFC7r65Zy9vDexVlbYPsn+B9b4vwDI8VlclB2tKlUjAl0k+02cbkKszwk3p6YyO1x0q2iq13gImsq+/
-X-Received: by 2002:ac5:ccc2:0:b0:559:a3ec:d35d with SMTP id 71dfb90a1353d-55fed626732mr1907036e0c.2.1765829427082;
+        bh=tc5cAPWLhKrkCI4CYdzzTi0ug0E8D643Rd4mnx3PNyc=;
+        b=fb261Wwr26iDMrjN6rRp2/liMKX/YtdRsmRn/uT0qzoM+f2BFZ6ehBwdsrtPeLExcv
+         6Yf2gfHdA+qQu3jr5jdvtHmqW34hjOS8oWSiNuLnEOfrcT8xeIIGNs9pqraSxbnmVm5w
+         o1npCKyYDGYgC9539CsH5TMYS53k2GnFjhfIdq3N3leWivXy0vq8s7BgAv5Tz36K/oye
+         c5/ZiYVT5I+ilu8sWP6fGAvfBpDO+q3Uxo2K/HqKyOdjzS6pMRcBA8T0Lwf1OMUNqiSE
+         2MbVbs+FNpl/1FXWT0GYjzCwzryDIyYtwrFDZcgzmTLatIyQL6GHHX7x5fVc9FGFr4QL
+         NxRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765829428; x=1766434228;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tc5cAPWLhKrkCI4CYdzzTi0ug0E8D643Rd4mnx3PNyc=;
+        b=ljOL6XkJvhWOhxThPZ1NDnyZfh084F/l6nDIkyn8siSHYWbJ9pFxPNBeJ4AA8gGnnL
+         eIryqbLsOY0EyWdQM6diEgRYm7hsRz7O8NvVikgNlx843JpCQsnc6jx7xuSXcagxjCho
+         A0b6YS6eQwvB0dXow2U3vsN439VKBv2+Hun11R/9Cg2XcZCYTC9IxiV6ZV9iiVaSEAd0
+         kdTJj0n+h90gZFodKbLCYb42mfvPPuT7NYAzLohUEl9K9/xmNO7+j4wXC40KtQmuTQ6P
+         7grhEINKDFMFQXUshk4a5HC4lpjXTjhCtZM+AICJ/LeqdyKrb0ItO6silac59WyZYFJg
+         uHuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWyZBUaeVRIg4GBuMvYD/FSqlsQ/asjurfAT6PggS3Z5mdBZOjfbp2r80sn9WciU4A36N9ZOyBxAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YymbOOwheFzQYa78Pw4qp1mY7f3xSAXKJI0F1Iai+zhkww3/B0w
+	Di0OM2hliIflR4IPMTWLWsQsOMKTE/HHBi0YXigtl1GNyWdo77l65w2S9YVhml5Cze2JshE8iQr
+	rk8FgsGkY1nGvlJDvPYOQlWDO4UM5XhlBiVDbGex2ZHV6Oz1mhDOh
+X-Gm-Gg: AY/fxX64prWJPEsnZWK+xl5wf/XPVGlZ3CQZOZUPLES/vyCMXNVRZzL1k2rFX46PkIB
+	dpRwovWCQSReuEiMiuGBPE37eDK6xn6+xyr3IwlBOvAz1QUzGdbxHAdaj/zZIQ0OeCT6JiO1Axa
+	6UCLGPGnTcoc0xFvU5ONBkLboW4IGfBEcJGMsb5zdI9t5RWB10WTQdpYdi1g1hycUcxjcNwiM+R
+	Vf5JGqKg5RnuROAIgblvQPtFPIXUd0wm5qJ+6R3Bx6l4itgi4RIiW4ixwtxeWMJXCgZXoPAfaf0
+	IjZvTCc/wm92zK5yEmIViD1D6NSW0YH1gRCrgeSDqdhIyvSb3vDOeh5SswtBBUmhHHWXHNGiG/P
+	+EhEfLRcJskoRsmMgEqjrMFiWv2k=
+X-Google-Smtp-Source: AGHT+IEGuk3sz77FXrQmCpSJFrQkto4AKlscE81EjDJnI5PpcY4ooIEl2sS/zT/JoK6BwdRaXQJ+J4oVa0Ls
+X-Received: by 2002:a17:903:11d0:b0:297:e67f:cd5 with SMTP id d9443c01a7336-29f23ca7d97mr83328505ad.7.1765829427722;
         Mon, 15 Dec 2025 12:10:27 -0800 (PST)
 Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 71dfb90a1353d-55fdc5ef7d6sm1987757e0c.2.2025.12.15.12.10.26
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a0a4a6163fsm11123395ad.38.2025.12.15.12.10.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 15 Dec 2025 12:10:27 -0800 (PST)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id F08F03401D2;
-	Mon, 15 Dec 2025 13:10:25 -0700 (MST)
+Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 45722341FDC;
+	Mon, 15 Dec 2025 13:10:27 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id DEC89E41D23; Mon, 15 Dec 2025 13:10:25 -0700 (MST)
+	id 4040EE41D23; Mon, 15 Dec 2025 13:10:27 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Joanne Koong <joannelkoong@gmail.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v5 0/6] io_uring: avoid uring_lock for IORING_SETUP_SINGLE_ISSUER
-Date: Mon, 15 Dec 2025 13:09:03 -0700
-Message-ID: <20251215200909.3505001-1-csander@purestorage.com>
+Subject: [PATCH v5 4/6] io_uring: use io_ring_submit_lock() in io_iopoll_req_issued()
+Date: Mon, 15 Dec 2025 13:09:07 -0700
+Message-ID: <20251215200909.3505001-5-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20251215200909.3505001-1-csander@purestorage.com>
+References: <20251215200909.3505001-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -81,94 +85,49 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Setting IORING_SETUP_SINGLE_ISSUER when creating an io_uring doesn't
-actually enable any additional optimizations (aside from being a
-requirement for IORING_SETUP_DEFER_TASKRUN). This series leverages
-IORING_SETUP_SINGLE_ISSUER's guarantee that only one task submits SQEs
-to skip taking the uring_lock mutex for the issue and task work paths.
+Use the io_ring_submit_lock() helper in io_iopoll_req_issued() instead
+of open-coding the logic. io_ring_submit_unlock() can't be used for the
+unlock, though, due to the extra logic before releasing the mutex.
 
-First, we need to disable this optimization for IORING_SETUP_SQPOLL by
-clearing the IORING_SETUP_SINGLE_ISSUER flag. For IORING_SETUP_SQPOLL,
-the SQ thread is the one taking the uring_lock mutex in the issue path.
-Since concurrent io_uring_register() syscalls are allowed on the thread
-that created/enabled the io_uring, some additional synchronization
-method would be required to synchronize the two threads. This is
-possible in principle by having io_uring_register() schedule a task work
-item to suspend the SQ thread, but seems complex for a niche use case.
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+---
+ io_uring/io_uring.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Then we factor out helpers for interacting with uring_lock to centralize
-the logic.
-
-Finally, we implement the optimization for IORING_SETUP_SINGLE_ISSUER.
-If the io_ring_ctx is setup with IORING_SETUP_SINGLE_ISSUER, skip the
-uring_lock mutex_lock() and mutex_unlock() on the submitter_task. On
-other tasks acquiring the ctx uring lock, use a task work item to
-suspend the submitter_task for the critical section.
-If the io_ring_ctx is IORING_SETUP_R_DISABLED (possible during
-io_uring_setup(), io_uring_register(), or io_uring exit), submitter_task
-may be set concurrently, so acquire the uring_lock before checking it.
-If submitter_task isn't set yet, the uring_lock suffices to provide
-mutual exclusion.
-
-v5:
-- Ensure submitter_task is initialized in io_uring_create() before
-  calling io_ring_ctx_wait_and_kill() (kernel test robot)
-- Correct Fixes tag (Joanne)
-- Add Reviewed-by tag
-
-v4:
-- Handle IORING_SETUP_SINGLE_ISSUER and IORING_SETUP_R_DISABLED
-  correctly (syzbot)
-- Remove separate set of helpers for io_uring_register()
-- Add preliminary fix to prevent races between accessing ctx->flags and
-  submitter_task
-
-v3:
-- Ensure mutual exclusion on threads other than submitter_task via a
-  task work item to suspend submitter_task
-- Drop patches already merged
-
-v2:
-- Don't enable these optimizations for IORING_SETUP_SQPOLL, as we still
-  need to synchronize SQ thread submission with io_uring_register()
-
-Caleb Sander Mateos (6):
-  io_uring: use release-acquire ordering for IORING_SETUP_R_DISABLED
-  io_uring: clear IORING_SETUP_SINGLE_ISSUER for IORING_SETUP_SQPOLL
-  io_uring: ensure io_uring_create() initializes submitter_task
-  io_uring: use io_ring_submit_lock() in io_iopoll_req_issued()
-  io_uring: factor out uring_lock helpers
-  io_uring: avoid uring_lock for IORING_SETUP_SINGLE_ISSUER
-
- include/linux/io_uring_types.h |  12 +-
- io_uring/cancel.c              |  40 +++---
- io_uring/cancel.h              |   5 +-
- io_uring/eventfd.c             |   5 +-
- io_uring/fdinfo.c              |   8 +-
- io_uring/filetable.c           |   8 +-
- io_uring/futex.c               |  14 +-
- io_uring/io_uring.c            | 226 ++++++++++++++++++++-------------
- io_uring/io_uring.h            | 183 +++++++++++++++++++++++---
- io_uring/kbuf.c                |  32 +++--
- io_uring/memmap.h              |   2 +-
- io_uring/msg_ring.c            |  33 +++--
- io_uring/notif.c               |   5 +-
- io_uring/notif.h               |   3 +-
- io_uring/openclose.c           |  14 +-
- io_uring/poll.c                |  21 +--
- io_uring/register.c            |  81 ++++++------
- io_uring/rsrc.c                |  51 +++++---
- io_uring/rsrc.h                |   6 +-
- io_uring/rw.c                  |   2 +-
- io_uring/splice.c              |   5 +-
- io_uring/sqpoll.c              |   5 +-
- io_uring/tctx.c                |  27 ++--
- io_uring/tctx.h                |   5 +-
- io_uring/uring_cmd.c           |  13 +-
- io_uring/waitid.c              |  13 +-
- io_uring/zcrx.c                |   2 +-
- 27 files changed, 547 insertions(+), 274 deletions(-)
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 6d6fe5bdebda..40582121c6a7 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -1670,15 +1670,13 @@ void io_req_task_complete(struct io_tw_req tw_req, io_tw_token_t tw)
+  * accessing the kiocb cookie.
+  */
+ static void io_iopoll_req_issued(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_ring_ctx *ctx = req->ctx;
+-	const bool needs_lock = issue_flags & IO_URING_F_UNLOCKED;
+ 
+ 	/* workqueue context doesn't hold uring_lock, grab it now */
+-	if (unlikely(needs_lock))
+-		mutex_lock(&ctx->uring_lock);
++	io_ring_submit_lock(ctx, issue_flags);
+ 
+ 	/*
+ 	 * Track whether we have multiple files in our lists. This will impact
+ 	 * how we do polling eventually, not spinning if we're on potentially
+ 	 * different devices.
+@@ -1701,11 +1699,11 @@ static void io_iopoll_req_issued(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (READ_ONCE(req->iopoll_completed))
+ 		wq_list_add_head(&req->comp_list, &ctx->iopoll_list);
+ 	else
+ 		wq_list_add_tail(&req->comp_list, &ctx->iopoll_list);
+ 
+-	if (unlikely(needs_lock)) {
++	if (unlikely(issue_flags & IO_URING_F_UNLOCKED)) {
+ 		/*
+ 		 * If IORING_SETUP_SQPOLL is enabled, sqes are either handle
+ 		 * in sq thread task context or in io worker task context. If
+ 		 * current task context is sq thread, we don't need to check
+ 		 * whether should wake up sq thread.
 -- 
 2.45.2
 
