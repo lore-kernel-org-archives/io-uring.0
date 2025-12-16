@@ -1,141 +1,124 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DE52BE64A
-	for <io-uring@vger.kernel.org>; Tue, 16 Dec 2025 03:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8B63115AF;
+	Tue, 16 Dec 2025 03:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765854478; cv=none; b=O/PJS4txGofqAxYspz1QRtZ/hhXvX1VOyuitK8Sc/ZkMfQdNrxjV4E2Bf3yC9Hujm6oZY3B8cq6FOpTODqg4+0cLXJGlkUUkZSg4uekLjBOUYEVdLKpPB7QTSac3DI7WfDeZhH16UufVUWBUY1ZAk0h5ixv5A9j1w4EMYRzUyjs=
+	t=1765857291; cv=none; b=lYnbkOAJKTDqMNLi8yt6qQML6qAYaYSvdZ3A8XJWTbyM3tq9A6MzfMCKdIpPG9ryYOnoSlZceoARjToX3t358sI2fT6RRdTlScF3YTtKLE8qGDCODysTPvMyEambzHDeFcug6hb9an9gG+EjX1fmkw3LQ8GmXC+MNCEn1Q7wQJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765854478; c=relaxed/simple;
-	bh=oNczs+Op/enBhLN5wk5s5RblT5qG1Ab4V5eXZu0DuZQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GAMtdj+kKGwrKc97OBicd9VezS/uwAtmsAyZ4BAZfl0tSbxw6futhIkD/3qu/TOeG+KFdE2I5c3SaVwJczNCDLFYwZNK7FJKye1m7vP+kirjKyOhaVNwNuL5iCM5CrMgxhk2oH/jgohzKoW5PA9tA+5iOwY/FRsSzAzEfc6A/18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Lqp9yliZ; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1765857291; c=relaxed/simple;
+	bh=z/VLR9eMxqpn2kvuklpoYwJtnuXwpuC7asBssPdV4t8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Yp7MPB0jMr7Zz4IoJoLdpMMMyO+PxWrExP3CqA2sEplt+EFEqc5Icaoow2DJXzgq9ubWpmIbuJfqZrJivuAMzwb5e9eM7EIxGNCoakcOBLOEuU/u5/u+rLbirQmsTJ5LHNAJEaURzn6NxNB4UBaVYxDxROPa1BSfyip/hzFZw/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=pcjUgE3B; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Lqp9yliZ"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-349e7fd4536so574237a91.3
-        for <io-uring@vger.kernel.org>; Mon, 15 Dec 2025 19:07:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1765854476; x=1766459276; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i32kBNi0DJqYnn5gUYyWAtk6nPGBOqaLEFAY1AGj4T8=;
-        b=Lqp9yliZWgiLJc/ZH3jCfOEJf+dMq/iU2iKxvPWBtE7Ih8/6FqBbIlhb6+nFUfPvog
-         6zz7VCf7ONd6JG8sueftRvUdQGIxuoVW4eku2aajBCUGAnMpSUGgeyefPjTXAr1b3Xeu
-         2GIyvahmnEoOCjejEuVX3LDhISsdWOD956MzZ8J30zsd8Shp/nzYEVKtKW1bjgCoBtLB
-         vAbMeX5855Nxo1sMyTzhe42x6fqHxnRlNz+vJwheQKSMu5osyZaPMMUa/L2eJO1Q4Xg7
-         Z5bZX0Zd4iTvVopa6o7280krggaKEyr4OmWAMszRA1TnCxN+BHJDcX2FRtooSHPz+Opr
-         7kBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765854476; x=1766459276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=i32kBNi0DJqYnn5gUYyWAtk6nPGBOqaLEFAY1AGj4T8=;
-        b=uWDwX8ENdnyCYl/I269pH7RZKZ5i1xe7E69Eeq0Tsd8nC6bntGoEF7B/mLYX9lNLbV
-         xSEKQwDsEfRs/vu7o87UaG7sdJeXcoi8RoW7BrkiKsfAen0yyUtlf7QLEZRJ+HsxUX2S
-         8IcCW8H+XUaYc3AfaJoyTh08tDIWWGkN795YZaSntsbLQK+E+Y9J0V6dvRMuz8Y+ZBdT
-         8LkRTEONEsZbXpIjX+3qhK6GS6BkMn+KsHeUVaEuCQAFHetC5p8uiwSW9sNwIUhkfyo2
-         LNuRQxAkEdQp1HJqxH2UJlvcGfoyRYwzVTW6FbzLNBi5gqp6LzgPtBPoG4zcJ7YTXi2P
-         /SIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMNejX6vzlv02CzNULk9QvB1NJ3awoRPY20xBmqamvlcv0krvAthxXK8fW71PMe8NwA5XyAXrV8w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIaUymsViQWaZ4l9pWdemVXiVuPAKBMD0GysAAyAqI3GxUZDI+
-	kA6sTO9uIMxBFSnG4Zl91svDYRHS/z2qBC7RNi3pn9Gc31oezwYNUr43pP06AvdHPH5ywkaaAgk
-	rihMMrkIbOQ9CSeCMR0dWoU5+oi2uQRdu/PXtiz4mDw==
-X-Gm-Gg: AY/fxX41lT4mPvpgx8YZ7z1oOobSbOW1GyW/jMfgRNFx6L8WIq0qVPoRv88SUrVR7DP
-	LLA1XHs4x7dKCYFo2Qf/MCgMWuY+qbksz+A4M9/+lJ5vd3hWkiCyViRVuHjqLsMOmqf6lJEFDc/
-	ZbKwls3oztKy7bIH14LFJTinXehqhK08qmxal2TaxkdIOl/KN6GSTDnyh8WILqbSW4gw18uySne
-	e4R9W2Q/x246dpU6rhZWecdhm20l7FITFTUNq5bvhDu0KtxnVA0XDAVeOxCEGrgUyKULg+w
-X-Google-Smtp-Source: AGHT+IEkdAVOYyrzH2Vn0TCTeVw7DcwshVmz6ZS2XMprUMhrrm3CgypWJ2YPV/Vdl4267ZP4bVvWUx4X9lYhEbPlhIs=
-X-Received: by 2002:a05:7022:ec0b:b0:11b:1c6d:98ed with SMTP id
- a92af1059eb24-11f349a9d7emr5968016c88.2.1765854476034; Mon, 15 Dec 2025
- 19:07:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="pcjUgE3B"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=psyse3tF8YfUqMHWKKqTPMQFoI6DnJDYxVm2oFFXrG8=; b=pcjUgE3BcltxGsi7YIigOtnx8e
+	2Tn3cqRa5VpD6SeDPKQFO54G8ZceH1j3LO+OQgjrfTx8FLBoBUpyNwB6oJgEJ39YmOMsIRpWcO+W6
+	harvNUgfA3QWuPGUUbN6Ea4YPi/NwY/kQX9KheuIBv07i1FLJXWLdbf2awTeh0meqQO8SZBM4YhKu
+	PQ4oER17eIQ9pd18qC6w7ZBlTQuR5zvCPGGuIFRUfken19mJfkvGzTgXXNhDead5Ep8RMFyfgIedP
+	vEo2VdBlAPl6CeDpLVneTh5CPfWNFg9RqmbujPWBFiiCsZJWkSqyjewqeP+BpuDPxOKy3oaVamlH7
+	7/QqMgVw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vVM9f-0000000GwIp-0Gs1;
+	Tue, 16 Dec 2025 03:55:19 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mjguzik@gmail.com,
+	paul@paul-moore.com,
+	axboe@kernel.dk,
+	audit@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v3 04/59] do_utimes_path(): import pathname only once
+Date: Tue, 16 Dec 2025 03:54:23 +0000
+Message-ID: <20251216035518.4037331-5-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
+References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251203003526.2889477-1-joannelkoong@gmail.com>
- <20251203003526.2889477-23-joannelkoong@gmail.com> <CADUfDZp3NCnJ7-dAmFo2VbApez9ni+zR7Z-iGsudDrTN4qw1Xg@mail.gmail.com>
- <CAJnrk1YO+xWWAQtEvk_xAsoBStRR=o0=t3audmmGrEpKpYGPpg@mail.gmail.com>
-In-Reply-To: <CAJnrk1YO+xWWAQtEvk_xAsoBStRR=o0=t3audmmGrEpKpYGPpg@mail.gmail.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Mon, 15 Dec 2025 19:07:44 -0800
-X-Gm-Features: AQt7F2pCCnk4VD1YEf4p6JENbqY7Nml3f00KeaP3YXqjMXyifAnUo5W-x6D8z2c
-Message-ID: <CADUfDZp3_r2E5uhu88HgfWQhf5-QWdYL+JiicTeBMDFLrdvVCw@mail.gmail.com>
-Subject: Re: [PATCH v1 22/30] io_uring/rsrc: refactor io_buffer_register_bvec()/io_buffer_unregister_bvec()
-To: Joanne Koong <joannelkoong@gmail.com>
-Cc: miklos@szeredi.hu, axboe@kernel.dk, bschubert@ddn.com, 
-	asml.silence@gmail.com, io-uring@vger.kernel.org, xiaobing.li@samsung.com, 
-	linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Fri, Dec 12, 2025 at 9:11=E2=80=AFPM Joanne Koong <joannelkoong@gmail.co=
-m> wrote:
->
-> On Sun, Dec 7, 2025 at 5:33=E2=80=AFPM Caleb Sander Mateos
-> <csander@purestorage.com> wrote:
-> >
-> > On Tue, Dec 2, 2025 at 4:37=E2=80=AFPM Joanne Koong <joannelkoong@gmail=
-.com> wrote:
-> > >
-> > > +int io_uring_cmd_buffer_unregister(struct io_uring_cmd *cmd, unsigne=
-d int index,
-> > > +                                  unsigned int issue_flags)
-> > > +{
-> > > +       struct io_ring_ctx *ctx =3D cmd_to_io_kiocb(cmd)->ctx;
-> > > +
-> > > +       return io_buffer_unregister(ctx, index, issue_flags);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(io_uring_cmd_buffer_unregister);
-> >
-> > It would be nice to avoid these additional function calls that can't
-> > be inlined. I guess we probably don't want to include the
-> > io_uring-internal header io_uring/rsrc.h in the external header
-> > linux/io_uring/cmd.h, which is probably why the functions were
-> > declared in linux/io_uring/cmd.h but defined in io_uring/rsrc.c
-> > previously. Maybe it would make sense to move the definitions of
-> > io_uring_cmd_buffer_register_request() and
-> > io_uring_cmd_buffer_unregister() to io_uring/rsrc.c so
-> > io_buffer_register_request()/io_buffer_unregister() can be inlined
-> > into them?
->
-> imo I think having the code organized more logically outweighs the
-> minimal improvement we would get from inlining (especially as
-> io_buffer_register_request() is not a small function), but I'm happy
-> to make this change if you feel strongly about it.
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
 
-Yes, io_buffer_register_request() is a large function, but this
-io_uring_cmd_buffer_unregister() wrapper is small. It would be nice to
-either inline it into its caller or have io_buffer_register_request()
-inlined into it. I don't feel that strongly, but this is in the ublk
-zero-copy I/O path. You make a good point that this organization is a
-cleaner abstraction. And I guess there are already plenty of thin
-wrapper functions in io_uring/uring_cmd.c. Let's hope LTO comes to the
-rescue!
+Since we have the default logics for use of LOOKUP_EMPTY (passed iff
+AT_EMPTY_PATH is present in flags), just use getname_uflags() and
+don't bother with setting LOOKUP_EMPTY in lookup_flags - getname_uflags()
+will pass the right thing to getname_flags() and filename_lookup()
+doesn't care about LOOKUP_EMPTY at all.
 
-Thanks,
-Caleb
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
 
->
-> Thanks,
-> Joanne
->
-> >
-> > Best,
-> > Caleb
-> >
-> > > +
-> > >  /*
-> > >   * Return true if this multishot uring_cmd needs to be completed, ot=
-herwise
-> > >   * the event CQE is posted successfully.
-> > > --
-> > > 2.47.3
-> > >
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/utimes.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/fs/utimes.c b/fs/utimes.c
+index 86f8ce8cd6b1..84889ea1780e 100644
+--- a/fs/utimes.c
++++ b/fs/utimes.c
+@@ -8,6 +8,7 @@
+ #include <linux/compat.h>
+ #include <asm/unistd.h>
+ #include <linux/filelock.h>
++#include "internal.h"
+ 
+ static bool nsec_valid(long nsec)
+ {
+@@ -83,27 +84,27 @@ static int do_utimes_path(int dfd, const char __user *filename,
+ {
+ 	struct path path;
+ 	int lookup_flags = 0, error;
++	struct filename *name;
+ 
+ 	if (flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH))
+ 		return -EINVAL;
+ 
+ 	if (!(flags & AT_SYMLINK_NOFOLLOW))
+ 		lookup_flags |= LOOKUP_FOLLOW;
+-	if (flags & AT_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
++	name = getname_uflags(filename, flags);
+ 
+ retry:
+-	error = user_path_at(dfd, filename, lookup_flags, &path);
++	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
+ 	if (error)
+-		return error;
+-
++		goto out;
+ 	error = vfs_utimes(&path, times);
+ 	path_put(&path);
+ 	if (retry_estale(error, lookup_flags)) {
+ 		lookup_flags |= LOOKUP_REVAL;
+ 		goto retry;
+ 	}
+-
++out:
++	putname(name);
+ 	return error;
+ }
+ 
+-- 
+2.47.3
+
