@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CE2312800;
-	Tue, 16 Dec 2025 03:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CF531281B;
+	Tue, 16 Dec 2025 03:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857293; cv=none; b=CQwCt8EboDlRl0BjpOs45C3zWUpEsAbWVyHwiGWnShzw2Om/g4YZKWZDk+ysftsRyp+aasR1CxRLUgDd3yCFa1AEBqUEo2i4Iun/ZB+N+2D292fAZBj4U/+OSuyL4rARO4LpCRjvn8WHZ29Sjt2YLgqdLASUvi5bMJ7yw2wvvR8=
+	t=1765857294; cv=none; b=YKdGMKue/DoMYV0cZC5AO4OR/dcah9X691/d8kGJ2gy7CtK5aa/YkezuISWNpP8NKj/DkyDdmNgOEzRGqEj/qU+jUywTMcIfUqlpsF6xN6IKLxAE1N0SJ6bejo0wsg80AZeBW5rkKVi1A5oFcXWMDlp45//cJCSqqtR8O6hu8K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765857293; c=relaxed/simple;
-	bh=RZMRszjUY/fIM2JLm9jks2g6cg0EVOixOwmn11+9ZsU=;
+	s=arc-20240116; t=1765857294; c=relaxed/simple;
+	bh=QmdvDh6ZC+vTUW7I+/3NR1ZSyfxcvYqlL1sBR3JZVe0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=skZ8MWwa4Q0doBbDhFIttjetIUErSEgkK+uBCBBVtd2sNaRUXhQhCkISlUKGIg3EaHIstkBnBUcmoqtkdgtqWL9+oRJGbwC2xU0mew81PS424nM3fIKwe1BbBNBKoR5w64geUPbhQcUbqKbyNcqmf/hEJr/u15A1FuenmB0WDXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=RBYsS4H1; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=TY+Cj6AKp8oiDByHErhdOCxe76RUQuP2bnLOXc41+gW0j0Kv6ZJVDjHPy9OT+/Kwiz/ta0CPL3fLdv/0ZlmOpiNXukZBMZNyKgQCPJ7rLIv4omTOBlqs4OpHALPhLlQDYUKbzQ9lAUbCDr7a7KwZsJhp4HOqprJfYA6SJ32fDwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Tqjj+jQB; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="RBYsS4H1"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Tqjj+jQB"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=2HkCXtuYG81yDH2ptlOKycPDQQLzNXbW/SGw7cqaL7M=; b=RBYsS4H11aDEviOHeGZjIRWra6
-	2WxaO9gH1DJ6RX8zcVoH4gdJw7bnVKg5D4gddF5fCkno9/HYPFoBkkxy/0WsyItzIEpjLHGen+fMa
-	GHTtYogR1om174Ma5pqEOZaQSHe4UUOuoqKLI0FjtRg/EbOj/m2YOgWN6pyunbeNdiJzHgX9ADNWD
-	TMz/I3zF4nOyl41z5fHotclLYcodbYCjkx5HncfcktQLKZD5hfPK02teCms5md5n/rQFNB5zkNlPy
-	t64AiGnynf1j1575i1y9e3UChmsAHspuxTeZq1bOR391Kqlj2IqpTlYJ13iWgFIMZRjgPGN6WIOa6
-	BmIXVlRQ==;
+	bh=Y/tgOGIFg+4nJnG3/oUX+72381wYKpaNlwOXFe6p+iM=; b=Tqjj+jQBZ2/AGLQsUCf8zgnkJe
+	0ZVogFd9ocw24etLMgthihgYPL671liFhTyNxO95cuhM0WWHhqH/RX78BP3M0ITj5ZGe+toVa1Ogp
+	EkMV0RhRLgNylj7ZQEcZ6kJcNyOgsAhKCucynOphRZt0G3ks/qqd7KnR3tY6jUkdQxq6Psj+GyhxQ
+	iOBzXi5r9lM6a3CaqxpvXnLxv7AjArKeo2uSk4FAoxLCjda8bf7s0mDaVv2g19N28HbHhc55A3Sac
+	6ve7WYlEVNBYvh0lmffmcKrVi2EqI/My7uTCnzrC7S4DbMhHferO/RR2pmvIa/5Ntq3LBscIckxlw
+	+JoqQ0OQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9k-0000000GwOP-302h;
-	Tue, 16 Dec 2025 03:55:24 +0000
+	id 1vVM9f-0000000GwJU-3vG1;
+	Tue, 16 Dec 2025 03:55:19 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 58/59] alpha: switch osf_mount() to strndup_user()
-Date: Tue, 16 Dec 2025 03:55:17 +0000
-Message-ID: <20251216035518.4037331-59-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 13/59] getname_flags() massage, part 2
+Date: Tue, 16 Dec 2025 03:54:32 +0000
+Message-ID: <20251216035518.4037331-14-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,74 +55,90 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-... same as native mount(2) is doing for devname argument.  While we
-are at it, fix misspelling ufs_args as cdfs_args in osf_ufs_mount() -
-layouts are identical, so it doesn't change anything, but the current
-variant is confusing for no reason.
+Take the "long name" case into a helper (getname_long()). In
+case of failure have the caller deal with freeing the original
+struct filename.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- arch/alpha/kernel/osf_sys.c | 34 +++++++++++-----------------------
- 1 file changed, 11 insertions(+), 23 deletions(-)
+ fs/namei.c | 56 ++++++++++++++++++++++++++++--------------------------
+ 1 file changed, 29 insertions(+), 27 deletions(-)
 
-diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-index a08e8edef1a4..7b6543d2cca3 100644
---- a/arch/alpha/kernel/osf_sys.c
-+++ b/arch/alpha/kernel/osf_sys.c
-@@ -454,42 +454,30 @@ static int
- osf_ufs_mount(const char __user *dirname,
- 	      struct ufs_args __user *args, int flags)
- {
--	int retval;
--	struct cdfs_args tmp;
--	struct filename *devname;
-+	struct ufs_args tmp;
-+	char *devname __free(kfree) = NULL;
- 
--	retval = -EFAULT;
- 	if (copy_from_user(&tmp, args, sizeof(tmp)))
--		goto out;
--	devname = getname(tmp.devname);
--	retval = PTR_ERR(devname);
-+		return -EFAULT;
-+	devname = strndup_user(tmp.devname, PATH_MAX);
- 	if (IS_ERR(devname))
--		goto out;
--	retval = do_mount(devname->name, dirname, "ext2", flags, NULL);
--	putname(devname);
-- out:
--	return retval;
-+		return PTR_ERR(devname);
-+	return do_mount(devname, dirname, "ext2", flags, NULL);
+diff --git a/fs/namei.c b/fs/namei.c
+index ea7efbddc7f4..471e4db2dbdb 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -131,6 +131,32 @@ static inline void initname(struct filename *name)
+ 	atomic_set(&name->refcnt, 1);
  }
  
- static int
- osf_cdfs_mount(const char __user *dirname,
- 	       struct cdfs_args __user *args, int flags)
++static struct filename *getname_long(struct filename *old,
++				     const char __user *filename)
++{
++	int len;
++	/*
++	 * size is chosen that way we to guarantee that
++	 * p->iname[0] is within the same object and that
++	 * p->name can't be equal to p->iname, no matter what.
++	 */
++	const size_t size = offsetof(struct filename, iname[1]);
++	struct filename *p __free(kfree) = kzalloc(size, GFP_KERNEL);
++	if (unlikely(!p))
++		return ERR_PTR(-ENOMEM);
++
++	memmove(old, &old->iname, EMBEDDED_NAME_MAX);
++	p->name = (char *)old;
++	len = strncpy_from_user((char *)old + EMBEDDED_NAME_MAX,
++				filename + EMBEDDED_NAME_MAX,
++				PATH_MAX - EMBEDDED_NAME_MAX);
++	if (unlikely(len < 0))
++		return ERR_PTR(len);
++	if (unlikely(len == PATH_MAX - EMBEDDED_NAME_MAX))
++		return ERR_PTR(-ENAMETOOLONG);
++	return no_free_ptr(p);
++}
++
+ struct filename *
+ getname_flags(const char __user *filename, int flags)
  {
--	int retval;
- 	struct cdfs_args tmp;
--	struct filename *devname;
-+	char *devname __free(kfree) = NULL;
- 
--	retval = -EFAULT;
- 	if (copy_from_user(&tmp, args, sizeof(tmp)))
--		goto out;
--	devname = getname(tmp.devname);
--	retval = PTR_ERR(devname);
-+		return -EFAULT;
-+	devname = strndup_user(tmp.devname, PATH_MAX);
- 	if (IS_ERR(devname))
--		goto out;
--	retval = do_mount(devname->name, dirname, "iso9660", flags, NULL);
--	putname(devname);
-- out:
--	return retval;
-+		return PTR_ERR(devname);
-+	return do_mount(devname, dirname, "iso9660", flags, NULL);
- }
- 
- static int
+@@ -173,34 +199,10 @@ getname_flags(const char __user *filename, int flags)
+ 	 * userland.
+ 	 */
+ 	if (unlikely(len == EMBEDDED_NAME_MAX)) {
+-		const size_t size = offsetof(struct filename, iname[1]);
+-		struct filename *p;
+-
+-		/*
+-		 * size is chosen that way we to guarantee that
+-		 * result->iname[0] is within the same object and that
+-		 * kname can't be equal to result->iname, no matter what.
+-		 */
+-		p = kzalloc(size, GFP_KERNEL);
+-		if (unlikely(!p)) {
+-			__putname(result);
+-			return ERR_PTR(-ENOMEM);
+-		}
+-		memmove(result, &result->iname, EMBEDDED_NAME_MAX);
+-		kname = (char *)result;
+-		p->name = kname;
+-		len = strncpy_from_user(kname + EMBEDDED_NAME_MAX,
+-					filename + EMBEDDED_NAME_MAX,
+-					PATH_MAX - EMBEDDED_NAME_MAX);
+-		if (unlikely(len < 0)) {
+-			kfree(p);
+-			__putname(result);
+-			return ERR_PTR(len);
+-		}
+-		if (unlikely(len == PATH_MAX - EMBEDDED_NAME_MAX)) {
+-			kfree(p);
++		struct filename *p = getname_long(result, filename);
++		if (IS_ERR(p)) {
+ 			__putname(result);
+-			return ERR_PTR(-ENAMETOOLONG);
++			return p;
+ 		}
+ 		result = p;
+ 	}
 -- 
 2.47.3
 
