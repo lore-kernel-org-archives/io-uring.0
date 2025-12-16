@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FE03126AF;
-	Tue, 16 Dec 2025 03:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3EE312825;
+	Tue, 16 Dec 2025 03:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857294; cv=none; b=ffQ+LO5jyZWaj5J2SWIMuE/8p+v8uPVgWoJ5SzgXJQc6jg3hzQPWDf1XpTqqGMrUcRVp9GIP9yZrEvEqWHFyXMRpcfsmHExHHzLH/eLFQ4N5bML1K9gLHbSmrAq0azubNWqYEud129mjkfxAqpr2TrahRspJ7j2dD770NHg1+r0=
+	t=1765857294; cv=none; b=W3eDQfcSjcpBJijLT0jE+NxbBMh/NYhp1vntcR5iXK9xxXD/21cUMpiibm0hElyQ4lRabH71FZ/lrv/RLE2x8g5OWz6YKi06Ol04GwhyD1Awa9xjilLha1qjJEG6PUIP+H0tEn47yThR5lF2yCGdTv8E3wXB/YBbLwxx0M78sZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765857294; c=relaxed/simple;
-	bh=JqqD6xeqUDj3nRwRtlOX37SQyfwoFYklo2JzhGSCFzA=;
+	bh=5FlUUS1jD/qO4GjkFoeGP/pqV3ffAtfSXhOlZdx96OI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e4HtL0+xSQ5t9hM7hc9dlKieprnoCpp2RdMir5nAas8C6HWzkb0+fts3ln9YfX9ZnZAtAyeowNz1g9repiUsfk/5QCSF8J4pK65kFwtjp/yLcHpuF4XHslGR5nRjzfdqgTNXOvnL82Lp9tZ+4lihOXCabQg94bkhw1b8wutP43k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ClIMu526; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=EZeDnCuJRBhMt1QD8wDVLUxCwNSv3ouWkPoTq0m5ZLrm4MUYQhefneTI5l+blgFTlInERS2Z0AsKAcalBLlp12wExw+Hpg8iqWkBwanwQ2LC3j9RChod7IXpKS02RS3rwN6V4+V13KKlmaaMGIFXmwYK6hlxREBo6Vp7OLWhZCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=eDL6unSj; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ClIMu526"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="eDL6unSj"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=KvYo9U9Xs4PTrMtECgI7ahcosY5DMnE4tqcTdGN6Z+w=; b=ClIMu526cgeJ2lo2thXM1gLmhF
-	0BgTHgDSvpndVxX/TrP+rQtSIVbv23Vxw3uFLh8xqw71l+ZDqwkbPL5GDxKm8+Mk0Yb0xyD7ksl4v
-	m0aNnslX6dGtWzWj9AeKdPj+mBJDH4urD7ksufRwW3wcwVEKzWKETFNE24zOgz55toDmpQmiqHl1Z
-	9+2P/1yitl1K1olAPk37vs6djPBo5yHDXSDxwy+utj5h3J2dK91HLT7wwwgYumhK8g9sM1eDHbTRJ
-	ebBNNl1O4yaSNCvgowHi5BDa0vlC1oKSkAB57PNnhz/ixWLOZdbxky1gRQ20JOHT501luTEZxmgA+
-	71t4XHog==;
+	bh=RyR3DA8HjjdPyUD9sKhD9cSoJBBdR+vnig5rZSsrQgk=; b=eDL6unSj2eovkNAwj5r1sgNkWS
+	1dNluo8dUTAc7/Zv48Op3LcU8hQb5+K4Q3ev88GQ8i13OO2olnlAjwJzYdJx0LwzN1LPzv+25ABmY
+	5An1arm6tbCGTG0VTJQ70z01JImrTsZG3tcLInXFJOCwfucKKKowZVoAPEUm4yF3ym3A5UMUvX3jv
+	xbo0VM+6Ggz1R2XfXI/4/Vg+ahC6hrMH4JbMtLcrVz+Dd4B/PjsTb/jk7l3ae9nmsdMtBlArZxwrG
+	G+VVv1sixaRyjpVZOh/6b7CCPwHwB2vKBHIhD+OhXG9iV86qhOLTyho7Qc0tEH+OspIAp8Vro/RqR
+	QipadUvg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9k-0000000GwOG-2akA;
-	Tue, 16 Dec 2025 03:55:24 +0000
+	id 1vVM9g-0000000GwKL-3fQB;
+	Tue, 16 Dec 2025 03:55:20 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 56/59] mqueue: switch to CLASS(filename)
-Date: Tue, 16 Dec 2025 03:55:15 +0000
-Message-ID: <20251216035518.4037331-57-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 23/59] ksmbd_vfs_path_lookup(): vfs_path_parent_lookup() accepts ERR_PTR() as name
+Date: Tue, 16 Dec 2025 03:54:42 +0000
+Message-ID: <20251216035518.4037331-24-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,63 +55,27 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
+no need to check in the caller
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- ipc/mqueue.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+ fs/smb/server/vfs.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index c4f6d65596cf..53a58f9ba01f 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -912,13 +912,12 @@ static struct file *mqueue_file_open(struct filename *name,
- static int do_mq_open(const char __user *u_name, int oflag, umode_t mode,
- 		      struct mq_attr *attr)
- {
--	struct filename *name __free(putname) = NULL;;
- 	struct vfsmount *mnt = current->nsproxy->ipc_ns->mq_mnt;
- 	int fd, ro;
+diff --git a/fs/smb/server/vfs.c b/fs/smb/server/vfs.c
+index 98b0eb966d91..e874b27666a1 100644
+--- a/fs/smb/server/vfs.c
++++ b/fs/smb/server/vfs.c
+@@ -67,9 +67,6 @@ static int ksmbd_vfs_path_lookup(struct ksmbd_share_config *share_conf,
+ 	}
  
- 	audit_mq_open(oflag, mode, attr);
- 
--	name = getname(u_name);
-+	CLASS(filename, name)(u_name);
- 	if (IS_ERR(name))
- 		return PTR_ERR(name);
- 
-@@ -942,20 +941,19 @@ SYSCALL_DEFINE4(mq_open, const char __user *, u_name, int, oflag, umode_t, mode,
- SYSCALL_DEFINE1(mq_unlink, const char __user *, u_name)
- {
- 	int err;
--	struct filename *name;
- 	struct dentry *dentry;
- 	struct inode *inode;
- 	struct ipc_namespace *ipc_ns = current->nsproxy->ipc_ns;
- 	struct vfsmount *mnt = ipc_ns->mq_mnt;
-+	CLASS(filename, name)(u_name);
- 
--	name = getname(u_name);
- 	if (IS_ERR(name))
- 		return PTR_ERR(name);
- 
- 	audit_inode_parent_hidden(name, mnt->mnt_root);
- 	err = mnt_want_write(mnt);
- 	if (err)
--		goto out_name;
-+		return err;
- 	dentry = start_removing_noperm(mnt->mnt_root, &QSTR(name->name));
- 	if (IS_ERR(dentry)) {
- 		err = PTR_ERR(dentry);
-@@ -971,9 +969,6 @@ SYSCALL_DEFINE1(mq_unlink, const char __user *, u_name)
- 
- out_drop_write:
- 	mnt_drop_write(mnt);
--out_name:
--	putname(name);
+ 	filename = getname_kernel(pathname);
+-	if (IS_ERR(filename))
+-		return PTR_ERR(filename);
 -
- 	return err;
- }
- 
+ 	err = vfs_path_parent_lookup(filename, flags,
+ 				     path, &last, &type,
+ 				     root_share_path);
 -- 
 2.47.3
 
