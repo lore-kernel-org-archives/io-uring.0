@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC1531329B;
-	Tue, 16 Dec 2025 03:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CC8312838;
+	Tue, 16 Dec 2025 03:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857296; cv=none; b=TRhtrjcxsqIIpb++7pKvnGehsd3Ye8z+2i8HBBg8/Kddu1PBgKd8c/1S2Yd/Rxb1uxaZdLDQai1UUkVLyignNNuWpaVtjOoK/b/D3OgUds2JAyOc/8H1gtr3CiGfuYuX6YLvBCXkccVZqUibzetx/pKExlXl+z0LR15zLkdH9o0=
+	t=1765857297; cv=none; b=K8Tsj6MMMwsrRAQF5bAYWpvm/qi4hzylFJM4RvyXXaubSC1cRrYpyyFoUsJBjqYStMZ3vVqyzBQUwKE9chsbD/N1Nwa/gCa9/wPzoqs3omsj9/uzaxTgnlaWqeOl7mlm6nwxM6icbX3HG0rZZRoT/mYlCofMNmqOYdMBz+sC74k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765857296; c=relaxed/simple;
-	bh=urAa3ZS6X7nMsa9ZRz2Pqn/hpkIvLTL3N56s9umZyt4=;
+	s=arc-20240116; t=1765857297; c=relaxed/simple;
+	bh=jdzYbS+XFnEHgYaBnGvA1HE7+1/v+uYUnrU+3o8mAwI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JfiogYp3MnVUoFJqAdmBtySDeMBMUwkzwcjn1cwE2SzCxwF42VYv/jrdK/lL7tAfplEtzsm52t3XL3Et7X2YnXrm6/fDx+x+mAyfoNlF41rmnd7Grd/rcOflFypNL7Egdh0xHZKMy3EXfGB50nRhvor6xII63fQKT7Uo6U27Y9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=F/5yebOA; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=tkk/+Q6Xn1+GwV7RVZfPxZ1byu9WB0A3uUvl425JLGT3pBYW+LvSshcNMMeid1jRb9XcMOkPO7zWRkj042U689Zg0ZG73yRKYN8GSPUGdFwXzq1SsZ3zcrWHbHGF9OW9zviUMmvTCjellq8joyVKdRFu73AKrY2Ko+US5TEw1z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=g4oJ0eBX; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="F/5yebOA"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="g4oJ0eBX"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=5+CNfJBBa99USZB4Xzhgo+c1jKCiUr7CLOmJPPMy31A=; b=F/5yebOABSkdX4KaD+TVbsIiAG
-	18JF+8x4EoKXEBAw1px0hlGElp5+FKZfp861l+jWemj+zjero4wlIwviLoB70EKhlC9IiNri4ubhI
-	eZss75gfgRkkQM+WJIa2uvf59eo9iDFknWdBIT/DwMs4L1rLqz5p61frYUNdn6788gU3tEnotWIZ9
-	+XIiFU7wSJxKxoInaz4CX6lAB0W9Cxt27SJQcv6Y1fC5+TKdJ+4eW6nqwosESsqwSnEpav6IWI4Gg
-	jQ1RWI80kamrDgG/IdoujKak4R9a/Z4mJhEE4OKa3jGqlFRW+YfPNzaDOX4e902Dq7CEClGLWWI8U
-	8daa4Dpw==;
+	bh=HnM8yEWuhhQLT940Vc2y+rRmTPsMSEE4Li0pZlObJ28=; b=g4oJ0eBXi/h7FV7cOSvH83WHs5
+	NeIUTpKCUrp3gtq18pBL8yuwkGRBP5RibWRgqx/MnPeX3SVux2ntu+qo/DOAHDxZm5CQuPEZHDPYV
+	WgxZtlgUj0Of/s+xf76AsCI12V2Mjb258XWsUQcs7tRkrPTHC5nC5DWX6PnO2xiXOTr4c18TBuhmz
+	pWcZ3sBvB0iukUKee1zoBXFVh/2Ip/g7sccfxSwAF3aXPyL+wk0OvR1cmnmlqXnJRw3YOUpc7PSTu
+	ZfJh7zTOLs3YORcpL0yNjCmKXyVIMvOp1WXV5hhKexAKqUy+RKlNEUlhpuLq/LOa3Suet8D0YM7em
+	uXT7+JLQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9i-0000000GwLw-2oLY;
-	Tue, 16 Dec 2025 03:55:22 +0000
+	id 1vVM9h-0000000GwKS-01Sq;
+	Tue, 16 Dec 2025 03:55:21 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 39/59] chdir(2): unspaghettify a bit...
-Date: Tue, 16 Dec 2025 03:54:58 +0000
-Message-ID: <20251216035518.4037331-40-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 24/59] ksmbd_vfs_rename(): vfs_path_parent_lookup() accepts ERR_PTR() as name
+Date: Tue, 16 Dec 2025 03:54:43 +0000
+Message-ID: <20251216035518.4037331-25-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,52 +55,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
+no need to check in the caller
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
+ fs/smb/server/vfs.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index 425c09d83d7f..bcaaf884e436 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -558,26 +558,19 @@ SYSCALL_DEFINE1(chdir, const char __user *, filename)
- 	struct path path;
- 	int error;
- 	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
--	struct filename *name = getname(filename);
-+	CLASS(filename, name)(filename);
- retry:
- 	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
--	if (error)
--		goto out;
--
--	error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
--	if (error)
--		goto dput_and_out;
--
--	set_fs_pwd(current->fs, &path);
--
--dput_and_out:
--	path_put(&path);
--	if (retry_estale(error, lookup_flags)) {
--		lookup_flags |= LOOKUP_REVAL;
--		goto retry;
-+	if (!error) {
-+		error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
-+		if (!error)
-+			set_fs_pwd(current->fs, &path);
-+		path_put(&path);
-+		if (retry_estale(error, lookup_flags)) {
-+			lookup_flags |= LOOKUP_REVAL;
-+			goto retry;
-+		}
- 	}
--out:
--	putname(name);
- 	return error;
- }
+diff --git a/fs/smb/server/vfs.c b/fs/smb/server/vfs.c
+index e874b27666a1..abfaebcf8cde 100644
+--- a/fs/smb/server/vfs.c
++++ b/fs/smb/server/vfs.c
+@@ -674,10 +674,6 @@ int ksmbd_vfs_rename(struct ksmbd_work *work, const struct path *old_path,
+ 		return -ENOMEM;
  
+ 	to = getname_kernel(newname);
+-	if (IS_ERR(to)) {
+-		err = PTR_ERR(to);
+-		goto revert_fsids;
+-	}
+ 
+ retry:
+ 	err = vfs_path_parent_lookup(to, lookup_flags | LOOKUP_BENEATH,
+@@ -737,7 +733,6 @@ int ksmbd_vfs_rename(struct ksmbd_work *work, const struct path *old_path,
+ 	}
+ out1:
+ 	putname(to);
+-revert_fsids:
+ 	ksmbd_revert_fsids(work);
+ 	return err;
+ }
 -- 
 2.47.3
 
