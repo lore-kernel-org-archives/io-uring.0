@@ -1,104 +1,104 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBC433ADB9;
-	Tue, 16 Dec 2025 04:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583AE332EAC
+	for <io-uring@vger.kernel.org>; Tue, 16 Dec 2025 04:32:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765858379; cv=none; b=IstnnhZ4ehK4VH++W81D0c0vCGdv5wfLJ5VOFBaYZjywzJ4ndmUatlj9Q0PpakETgHGxC2rWnz2PzHEORUnzfg/914wf4YwTuRtFMg15AFhUw9TnnotGoZwo6g421iVWV7S5WeCWLVN37FWm7vOV2Kut7iGp9NqRnuPdw8fgGoY=
+	t=1765859551; cv=none; b=BkF2JLsM7df/AaMlfSMQrKNjIEepyJxgYOUZjuFRZjl5IZh13dA//aaXfOHbSmWY/loEm486itsXfpqTCHVdft49RtPRxyp1TLAeHpHjGHjlUCDY05G1sfhmY/oJPqDPb18GxGshblwK0ezqCc3hBv+wkyq52Lsr5fmgtQNUxLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765858379; c=relaxed/simple;
-	bh=oyKBfs/wj+3AFANKikryvf2/aOkh/ktfJ9g7Txd0zkM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qCOVgdxiJatkQwpdNOwxVt6l3wXi82nyIXUqzVEztZgiVhSQjO82AlncKqDOvQWpnLdUj+0wfzEONNgfC7F1HjOdh+Turg4Bu5Wv9O83gFsS0a4X/KEeaa4cMgSvH2ao0vQbXBgF4N2JBKTxERYKxmAzW1tJHJ0qK6pCx4+juos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=nQQyieJa; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1765859551; c=relaxed/simple;
+	bh=JAC7T84OH3rJpKA9s8hbP8b38NGlwWMNJLYmPCkoa0A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OF/FKR4i11ZmBloY72ac15PoCv3VPVHK28QPKJLf2F7BZmiCKn8ck2luyzbrEXJNNL5bBWXu8cZj40Njf0sufdLbkkP1KCSVmfOe4LWg+Sd+V5HuodmerjFQ9gtcmwuPCycc6MQtJnFY3sD08EMH5RZX3cZFosAcM5MXH/sEJfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=dnuy74tg; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="nQQyieJa"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=MIN8O3p6p0pbv2G0caQzyJS0UvmyEXVx3gIFuoTDNSc=; b=nQQyieJaFx0lqaigNsTb2H461V
-	y5mIqrtFTehZO0RP67qE5SUy4zIXHn8LxmlMGI/+1TN8sSSXdvI1yLzyhRl3qSSQHXVYwaPYufU1F
-	IVzoYw4Y0xeLZgeiq9G0rvbxr1ELU/rhIMxXlNjmsGb6wpoc6o1VgpWLrMyd9dF8Ecfw3CRcPM5ih
-	3/DetEESmFvTf6nmqInqlwt0q3cHB+r37NtmLcS+L4tjJD+0HouX+Yg/ttZpnRjvNDEkpZQWW4Xeq
-	THyTdUnZ5buq6K5MlMnOoh+EOyoYPU5KXgt8WVi7wpUo/gAYiK7Sa5HPmIXTNTXHZBaPbo32TO8Ez
-	deaw4MMg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9i-0000000GwM7-3bEa;
-	Tue, 16 Dec 2025 03:55:22 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-Cc: torvalds@linux-foundation.org,
-	brauner@kernel.org,
-	jack@suse.cz,
-	mjguzik@gmail.com,
-	paul@paul-moore.com,
-	axboe@kernel.dk,
-	audit@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 41/59] do_sys_truncate(): switch to CLASS(filename)
-Date: Tue, 16 Dec 2025 03:55:00 +0000
-Message-ID: <20251216035518.4037331-42-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
-References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="dnuy74tg"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b7355f6ef12so797655666b.3
+        for <io-uring@vger.kernel.org>; Mon, 15 Dec 2025 20:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1765859541; x=1766464341; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u04lKI+ITCEhSjyN8l/3SfN1GaX76pkUdUELbvLmtVI=;
+        b=dnuy74tgEdeg4sZQHPQgfnWfF65ZIaEb5VaAbZbGlMltJVDW0a5u0idlX00NVT9MKv
+         aZEye1jQa/uTxf9x3WflndEYSycittJiYS4qGTFjnB2wgj5nLvrkoDLkfrTvUXZsVqJJ
+         GjdJkjtJqCXh0J0oBfcOTARTHjwr6JFQic18M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765859541; x=1766464341;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u04lKI+ITCEhSjyN8l/3SfN1GaX76pkUdUELbvLmtVI=;
+        b=RdX48SYljRiVmGYz5NVg8cp+fZYYc0UTSexneAiFskaiP1h0VkuRWUSnOYQf29c29J
+         shstw3SGZw8KDtgOJUi6pgIL1Wj8UzioIsAEQJ/bY+P6JMVYfqL6C4oZMKqT7Ljw2L/U
+         ZKD0kK3pVeQM37AefxZtvUVR5Cwq/9qnC5xkc5gp3msW4uW/DWu56+es8yMK2ylIgkmq
+         xSaAVYqsiAC68fI8wdQKQlFNncuHWxZDdpL1fNbEah7k8zuC9gjlnlUpfZswru4V6YXU
+         14wnrqdGMNBj1jzT+Z4Ov/aRH3P3xkvc9YPNfWmtzdt0bCdm97MviwQJIXy/5jc6w7TH
+         4Wkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXrfSdGw58wnZAU5/EkOwgJC1LlyQOjciWBqb6+YFt6G2xDqKyBe5thB6oc38FneDleGZBGiA15xg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7y5MVf3rkrJcLCIiw8/TruyGQHhby96VBqHgg1kfDcVOuSQmI
+	t52c4+IqR4WzqzwotF4zh5GjGIXhzy9nkvx1MwP8jDw6vXVbrhe0UqEy+ar3TzOWPkxsCcXzZ3T
+	0efjoznePbQ==
+X-Gm-Gg: AY/fxX516qjNJ+niWdJq2l9WS1b7pESHZJnCMHu7G47X5YP8wjzlVcLj+IC0jPXzoKg
+	cxhyKS88UPRtc6IK2VjzYeMC9lZWlJtSk5TtSff3u7ViN4JW/g/vwKAyJGQPHGwsMtioJZyAH5L
+	KxbSM+WgpHYQy/aI9voxKEvk3cWt0mksPNOnDaYLY6Ld37y9TbglyGrGNcLlNfHCaDwL9Baq/Ye
+	0lAcYsS/WkWihWi2n1wPCstp7LiCvNc65yZ7M4/UKKN8KApAhtUTDd6X1UBfDKZEcvKXIiru4FA
+	m4Bm6EPOCRbir3mTN5LaYtykzYRKViPKY/QHVYPcAd+6NXfjracpyQM77F5whqncKd0gTAwd6Rq
+	iJ4itTrgVrD1cWGxUi/4SDgUfxNbFAtxH+t9oDetnKDU9rPMBgSP9vAQP0MMWQiuyoWmZlwZFoA
+	zEFJha2rp2DszhuFwM48jKDeiPq98eIgPqX44Bjwbq+JheBCiH31JrQoPzDzKX
+X-Google-Smtp-Source: AGHT+IF0xmiqiJ++KXKGj/vsGF9CfhaIO3VSMORQKNTflNnxMfvm7Bp61Cp0igOs4mV2CojIqONx/Q==
+X-Received: by 2002:a17:907:6093:b0:b73:7fc8:a9c9 with SMTP id a640c23a62f3a-b7d23ab3780mr1389039466b.29.1765859541001;
+        Mon, 15 Dec 2025 20:32:21 -0800 (PST)
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com. [209.85.218.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7cfa2ed80dsm1562589366b.16.2025.12.15.20.32.19
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Dec 2025 20:32:19 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b728a43e410so658294566b.1
+        for <io-uring@vger.kernel.org>; Mon, 15 Dec 2025 20:32:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUcIjX24efJ3Jj2qKDNdUVn4GR4eMPorqdG2nXE92ynsQ6ItcB2RSVIJBHdhM8d0mDdgWbrx/DWtQ==@vger.kernel.org
+X-Received: by 2002:a17:907:7e8d:b0:b7a:2ba7:18c0 with SMTP id
+ a640c23a62f3a-b7d23d13db8mr1509432666b.61.1765859539518; Mon, 15 Dec 2025
+ 20:32:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
+In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 16 Dec 2025 16:32:03 +1200
+X-Gmail-Original-Message-ID: <CAHk-=wi4j0+zDZPTr4-fyEE4qzHwNdVOwCSuPoJ4w0fpDZcDRQ@mail.gmail.com>
+X-Gm-Features: AQt7F2rYyucJ8k8M5suIcIYwHZryFGRojM10TYRYQXZevxtnA0xqMtui8-ALNA8
+Message-ID: <CAHk-=wi4j0+zDZPTr4-fyEE4qzHwNdVOwCSuPoJ4w0fpDZcDRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 00/59] struct filename work
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz, 
+	mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk, 
+	audit@vger.kernel.org, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Note that failures from filename_lookup() are final - ESTALE returned
-by it means that retry had been done by filename_lookup() and it failed
-there.
+So I like the whole series, but..
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/open.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+On Tue, 16 Dec 2025 at 15:56, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+>   struct filename ->refcnt doesn't need to be atomic
 
-diff --git a/fs/open.c b/fs/open.c
-index bcaaf884e436..34d9b1ecc141 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -129,25 +129,23 @@ EXPORT_SYMBOL_GPL(vfs_truncate);
- int do_sys_truncate(const char __user *pathname, loff_t length)
- {
- 	unsigned int lookup_flags = LOOKUP_FOLLOW;
--	struct filename *name;
- 	struct path path;
- 	int error;
- 
- 	if (length < 0)	/* sorry, but loff_t says... */
- 		return -EINVAL;
- 
--	name = getname(pathname);
-+	CLASS(filename, name)(pathname);
- retry:
- 	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
- 	if (!error) {
- 		error = vfs_truncate(&path, length);
- 		path_put(&path);
-+		if (retry_estale(error, lookup_flags)) {
-+			lookup_flags |= LOOKUP_REVAL;
-+			goto retry;
-+		}
- 	}
--	if (retry_estale(error, lookup_flags)) {
--		lookup_flags |= LOOKUP_REVAL;
--		goto retry;
--	}
--	putname(name);
- 	return error;
- }
- 
--- 
-2.47.3
+Does ->refcnt need to exist _at_all_ if audit isn't enabled?
 
+Are there any other users of it? Maybe I missed some?
+
+Because I'm wondering if we could just encapsulate the thing entirely
+in some #ifdef CONFIG_AUDIT check.
+
+Now, I think absolutely everybody does enable audit, so it's not
+because I'd try to save one word of memory and a few tests, it's more
+of a "could we make it very explicit that all that code is purely
+about the audit case"?
+
+                    Linus
