@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16562312824;
-	Tue, 16 Dec 2025 03:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7535231280B;
+	Tue, 16 Dec 2025 03:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765857294; cv=none; b=T2KshaqMSE8jL8SIJvXcynG7z3FPw6P5/++XBfBsw5ZwyRvewtFHLyaUzu9PmJV81LLWFPnwSBj2Rk8ugmAadob+A2CC9jAJktXHrfGlSwigq79DtB0+tDnx5ltdrVWXS635WNaVMySO/rRwDaeiABOiBmNOP1/z7VP/J5eZ3Ew=
+	t=1765857294; cv=none; b=CJaNtXUAw9uLTm+DLbVQgGxmaXRCebQU1kYGTGToax0a6fpv1mHdW1HmhI0pOukVWC9jn7pQ7ksYICU5zYPAdRcsZA2mYYNbnsjTdOC2cHWZxJOTranvjvI5lwCVYXAoo6IZmdQTse6RsqzEo0OhUYmbHju9UjgoBaUwBLD/mSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765857294; c=relaxed/simple;
-	bh=wKWJZZdbUbSwMoIn246Vmp9XLWPXndgTlWmmQPMekrQ=;
+	bh=ed4inkFbKg5gXwGxXVyNFfqCJTe0MbLbW/j1/GoDH1w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lEbRKADZdXsqsC+7Nzi876GrQLmN9nAFQObY7ppatNNGIsexsEntl8Xs9AZa6bwpHe4dy8QdP/qZ9J4UjpA5R35HkoxCihheMQg5xdDvJXGz6gt6FDLhZLg5dv9RTDHSexySo357Nk0R7C2HdW0A75Q03UVM7MEnSIn9eOLldQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=b8JvIdo9; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=dhE4MhY5J+sAeP7TkI/Z1FcgshSLBWqhcerdPaHznxL7YmiTv5RzrdtirzVp/Z0Kp93i2bqEFaXakqIqj5J4bLBmpfVmLC1/E3bcPw/Ee2aw02ARfHNKlqLEe58UxDFcadZJq8buZcauJDryJmI0Wj+a7jTBfyHDN0OcH0V/mXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=m70MiiA7; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="b8JvIdo9"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="m70MiiA7"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=h5xnIpG93qiqQd/wnfuUtnAxrf53oJ7yelGXYhNBaps=; b=b8JvIdo9+H4c6uWkX4Co1P3uXl
-	NIAyGRvhM1f/Ezj07jqUsdMGMr+didEMNUwMIrDY+BUhEbOKSUh3z0h6mLRhOfhYz+XigKKXNWn4j
-	i/eLNpN8TeL6n6EGWxcjbKdwd2um84H78PoKkZBEOQEB8wMjcKaErHZ4rvpk3vL8e8s9p5chTlVvF
-	WBysysscWHXYm0KW1/MBcMhswp6GZO2gjI+pLMjKCQbGoMhc33t1ZYnm4ntk/wh/G0jg9KTNQ91lp
-	rlaEQFV81slYhXz+lrX7cQ8YFl89ZqVURhAwA/S7DAY+ajDWDK+c18hmtsFrE7MGem22dvwXgoFll
-	f+Z+lv4A==;
+	bh=sz/9K14xSZCaQltDnYlKvdLrLATpRcUYc8VoMWgUXMw=; b=m70MiiA7LhOiREd71u5WzvtE2J
+	J9VUrqeM6uUzdw5oj9CCS5fvay4nz+GOplKjWEJWewZ13vDjxbtrUHZIzylEHrDZZJLjQYn9sGszr
+	nvoEYCqbkMXoHM3nOP4zbI0nAtt7vXbg6WjX9+ldA97O63BaceZPZ27I5C6DEWL5KgqiT7S7DuRYU
+	Lj6czZrwl2YhaZC5c+xj0IwuE+pqTFpT0Rw8m5bCwatU969Kart+m8uDFX92+zukHYghBU0O+R7Fl
+	sZSzE0PLP5wIEHQnele7I3yGtW9UndDas6wRestliai1o4OVPg0smtRKcCGaoql53djQpy7o7SSjQ
+	fCpmMC2g==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vVM9g-0000000GwK4-2Rrn;
-	Tue, 16 Dec 2025 03:55:20 +0000
+	id 1vVM9k-0000000GwOg-3FtF;
+	Tue, 16 Dec 2025 03:55:24 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 21/59] file_setattr(): filename_lookup() accepts ERR_PTR() as filename
-Date: Tue, 16 Dec 2025 03:54:40 +0000
-Message-ID: <20251216035518.4037331-22-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH v3 59/59] sysfs(2): fs_index() argument is _not_ a pathname
+Date: Tue, 16 Dec 2025 03:55:18 +0000
+Message-ID: <20251216035518.4037331-60-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
 References: <20251216035518.4037331-1-viro@zeniv.linux.org.uk>
@@ -55,27 +55,45 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-no need to check it in the caller
+... it's a filesystem type name.
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/file_attr.c | 3 ---
- 1 file changed, 3 deletions(-)
+ fs/filesystems.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/fs/file_attr.c b/fs/file_attr.c
-index f9e4d4014afc..915e9a40cd42 100644
---- a/fs/file_attr.c
-+++ b/fs/file_attr.c
-@@ -457,9 +457,6 @@ SYSCALL_DEFINE5(file_setattr, int, dfd, const char __user *, filename,
- 		return error;
+diff --git a/fs/filesystems.c b/fs/filesystems.c
+index 95e5256821a5..0c7d2b7ac26c 100644
+--- a/fs/filesystems.c
++++ b/fs/filesystems.c
+@@ -132,24 +132,21 @@ EXPORT_SYMBOL(unregister_filesystem);
+ static int fs_index(const char __user * __name)
+ {
+ 	struct file_system_type * tmp;
+-	struct filename *name;
++	char *name __free(kfree) = strndup_user(__name, PATH_MAX);
+ 	int err, index;
  
- 	name = getname_maybe_null(filename, at_flags);
--	if (IS_ERR(name))
--		return PTR_ERR(name);
--
- 	if (!name && dfd >= 0) {
- 		CLASS(fd, f)(dfd);
- 		if (fd_empty(f))
+-	name = getname(__name);
+-	err = PTR_ERR(name);
+ 	if (IS_ERR(name))
+-		return err;
++		return PTR_ERR(name);
+ 
+ 	err = -EINVAL;
+ 	read_lock(&file_systems_lock);
+ 	for (tmp=file_systems, index=0 ; tmp ; tmp=tmp->next, index++) {
+-		if (strcmp(tmp->name, name->name) == 0) {
++		if (strcmp(tmp->name, name) == 0) {
+ 			err = index;
+ 			break;
+ 		}
+ 	}
+ 	read_unlock(&file_systems_lock);
+-	putname(name);
+ 	return err;
+ }
+ 
 -- 
 2.47.3
 
