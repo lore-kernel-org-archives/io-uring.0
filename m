@@ -1,79 +1,80 @@
-Received: from mail-pl1-f225.google.com (mail-pl1-f225.google.com [209.85.214.225])
+Received: from mail-pl1-f227.google.com (mail-pl1-f227.google.com [209.85.214.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2132FC86B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3C22749FE
 	for <io-uring@vger.kernel.org>; Thu, 18 Dec 2025 02:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.225
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766025907; cv=none; b=LB5Wsc6BfWJ+NbueJfGW4+e4kobqj5O/d2b5BnBg7c0rOWwryMxi384/gAWYcOBYrU4PkNeg3G5SylA7Q8GMHGrp4/voOUOTG7OBDLt290TkHEk0jtRPjfse4f74HLNHh/m/XhsnDJVaE7uO3Rz0iM2tGuJ4XZuWaPuwpG40tdk=
+	t=1766025907; cv=none; b=FLQPyX/Q8oyhhW56UpsMiZeKGBO6hZgSdWsZGYTtPYTUeoJ3cXHSOWrT58pdMTifcMdslkdx4w8s2+O/AyTKTJQ1ttItRy1TrDYdZmflit+Z1jELTWMgzmnt2rCyq8QAgzRRxVNYi/RIkubycu/rRgFwFNmb6h2uFC1LZVczLug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1766025907; c=relaxed/simple;
-	bh=L5Uqu9+rr+DwT6pdOZXAwcq9nYIz91fuoF+OXKgDo4U=;
+	bh=hZIRs+tNNb1mG9XvgPl7q/rGi8qz0UKB7MRvjX+k19Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oLZ+HVogsExWB/UOvCzXHVgckcc28EAhEEMh0Lk1MN0OZi1Tajtlb9DX6bsbWzQ2lfWWxXIO/1QznAqBZ65IR9I/Qi0lrQcTHwTymRDHeZiIH40Js0ZafZ5dYCfGEIja3NjYJO9NPkNs0U26QqahxHt7GMw0zLEMbHAqmJh4edE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=QWg/Jpch; arc=none smtp.client-ip=209.85.214.225
+	 MIME-Version; b=Yth+oPJlhQFv6JuXai1AFwxVpOxoLPubdWKewJqFYZBRC6oLeEaicCFdEpu9CCdqnIq8kiQvUKpxv7hSlvUDN4Sg0KVJ6H6Ymqoq88LVLYBdSdJauTX7+aUfhXh5JaCYzdfr+l83gIS/0a9KYQb30lxx2lwmpBNZoCwAPCJ+pxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=SpGrw55M; arc=none smtp.client-ip=209.85.214.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="QWg/Jpch"
-Received: by mail-pl1-f225.google.com with SMTP id d9443c01a7336-2a097cc08d5so345985ad.0
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="SpGrw55M"
+Received: by mail-pl1-f227.google.com with SMTP id d9443c01a7336-29f2d829667so364955ad.0
         for <io-uring@vger.kernel.org>; Wed, 17 Dec 2025 18:45:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1766025904; x=1766630704; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8/b4bbf5Fpl1ur/4rCqqMbk9Yx0Nl8rzYgHyXMsZmA8=;
-        b=QWg/JpchEaI+A2XxnCK3RiZ1vRCZalvOa9J5DO55Fsq1OM25XT0Xhsrf7WnORjARY7
-         SRus9koTp4mOVaZJHL5fS+B091b+iE58ZeWyMTq6CFKjJT7aqqx+8AzQGrYtxQAyYd9S
-         9Zy9FQsXsN11VE5fpuoVsTVChlm6owaO5T+19PNDh9C+EcFYRbcuC+6CizPDbbs4+aeH
-         0KqmrqeclKkwGbMRVadJyj+0Wv3MUCJcgb2KypFkSa2DBsfiAz/EmGZHoC4pmUE0zFIg
-         uPeZTwD8YKyd1Fm8digSCiFqACpuLMb79Il0e2xrsP/VhivlJGPnfZShaMVXnSvf3bjP
-         NFzA==
+        bh=xCOT1eJLhQi6SepBGbijdrE2xjpshazJgxdmtCDHEFc=;
+        b=SpGrw55M9zv1zOs3PguZ/uQ05fJH9mwHNWWuvdBV6sIGZuoNI4CErDsDa3Mw7b0y9B
+         90awx051BmKasWL4Mbk4AMnEmdLpnOTAp7OnCYwHvVadc2fZIRveMw3sFnXjKvfBxnG1
+         qbWJfIvmsva2eZF5loetuvUlLSCc8WOKoagiovKfc0nB8gtZUiJA65FyKDtjqKKPXszx
+         sWdFdCMmLkff4vycKzyuTO1j/UnhDTWfQ2LXyumuD/h22yQ3tJesfNsgI9sEPMnb70G/
+         hsvpBkIMLEj4lTP+KwwC6B7l8CgF7/hevwmZ86QQv9ZtBYHpDG3lgFb3Y/scXSnH2jQG
+         T6dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1766025904; x=1766630704;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=8/b4bbf5Fpl1ur/4rCqqMbk9Yx0Nl8rzYgHyXMsZmA8=;
-        b=s+8wWqLq2BX44S48nyIjkHQyDLdIRik/a85/D0RhE1UOHaRz+XyGf5aQmfwYAM8c5v
-         eK/O5uMtekhypL4pS7EpS++TEzodiphY+6gxntlczGOPDlYCK6eqVA9y3tG/Bk6vMq3a
-         gMlXelMNpGxDbopG1uTbvF7TZ8ElKjLGPbS/N6AtNONjGC4P3PEiWPmDU29n53/ypnko
-         VvAGq6QxWndJkWsCzMFGvnDP/glUK+ie2NdqmNbCzUjmWCzHytZ0PzRkfqWGkimEZIJa
-         hGWECStxeQgnixRpnbJtkp+BYr/4xYdSEPlgz65KVqtcYAiYg+FQV+34JN71tB1UU+mQ
-         ao8A==
-X-Forwarded-Encrypted: i=1; AJvYcCXUJVXTcFh93DbXBeN3TswtByvdGn4mIrqfw3/VJyT3Om1Ovl5i/S7DxA0QVsxM5EcxBByhzHW7Vg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywv3L5uIJkKgtEfWKVftVyMKE5cD+PiNAqm4VEvJhI6i8pyBRfR
-	kRVR5qkyL8xouAcc746xNJseb7tBRN4sa7ij9GMX+svtODLGAtXjuX25dpVHCiqzuW+DyOf5nrZ
-	qfQmCtxdeVsXBUzf6Q5aEkc/GX7+MJkbKMp7NRjTn/duiajFyCCyI
-X-Gm-Gg: AY/fxX4TfVxo7adefFKI/8UmUYXHQpTLEbkVxr52O8l8Tk7+sVF5/Q8w1276JcmMKJp
-	Ps5SMUS/qkeILHinuTV2jaHjOZXy9Tvk74hfbUD208lfndC4sR9T+9Qfq6IKQBLczuqTDp60T66
-	PdXyoNFx5jqGIK0UK1VVQgSKl4w9qzY3JU/I55NVyTNCFd/Mb1VvMv8gc4vvUPq2uAs2rhC8Omf
-	wrH7Pn4b7mMwKIAEI+AyM87k+Eh2HSB4I0kTNEihvEpFrx8zRTEk/1TBL1f7Y86k+uSmhK2StqK
-	xI3zN/0SVwWoeGA+13LPzQBBVahYi+O17tAjaJ9EBF2jupoT3GhmVEEoRSREzseO+ClfFjsP1xT
-	UG1kMBpqaIpNPOkI2+x0w4J8iQXA=
-X-Google-Smtp-Source: AGHT+IELQcyX0BuhAdYyweS2xiLxp/916xvfJHq29Z1LD/xwAwNxnN1c74MVP7pk5B0pAgqSxlddAfPDutJN
-X-Received: by 2002:a17:902:ebc9:b0:29a:56a:8b81 with SMTP id d9443c01a7336-2a2d4509762mr5916985ad.8.1766025904052;
-        Wed, 17 Dec 2025 18:45:04 -0800 (PST)
+        bh=xCOT1eJLhQi6SepBGbijdrE2xjpshazJgxdmtCDHEFc=;
+        b=BZX+E64K3kmJR3exfTTPtmSdmql1XXn+PiB8EIcVPapKLFCnKQF54tpghxsnJxVFGN
+         HfdJIU6iBQg3aSXVO+WhFv1AgCrqen6iPNXCTfAQJFO026rkrwPd1w/ffJ2/wm/U6ZK/
+         BhQX0+rK37scLLKebSMdYfOgE5uQhB3dZwbHyU8iBzZmKzN9RNoo68bLiJESmg/nV5zo
+         TdaK8f1uFTPlkLPID9Ra5H2m75t4qi5WA7DN+MAraaFZkHlaNJxbmY1YXb5DHdNTfNcb
+         XsrTQliQ2OeG8a+9PfMdy2PkfR7OwKsVioQgmcoLCWiioFvIcKcfms4iYD9TQwG/fwJ1
+         06NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ5HGA0GU74beKYNFTB3/g1lIrvi3SqmiP4iLliz+4bvm5J5UE3Hq6uC62JegZ5qsbJ5RzuyFnsA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyikjuePhXK6i8JqAhTWoiSL+yMWZV+adODk2R91hJ3bFoJw+Er
+	7KdKEv2L2JwU4XuOVfWWML7oBUHqMrIA/9KQTTA2hoPYjgEdvuUcX9UYzvt/leNZJKVzbvwrV0L
+	NPZAWsgJP8e5j0yxcn0ICzOwlsJmVmu/fQOYAe5cOJHm5yYK1sqVf
+X-Gm-Gg: AY/fxX6Cca20EEZ+jowxfgovdQcQNq5hlFVr7rTa3TrWbpG3mi7iQeBn1+E5egIcCOa
+	8i/GpYSoguUmp06zuihWXPb8uvCy6rwWmvs9VVOBVYhtU5Q4XuPwNMyQ+h5q98RPQKmxc2aYqrK
+	ehsBuYMLbYJ2xgp3HTIqeS8cbRT3cwx2xz+xsfCzPPx8dbPZ9Ag/Bp1BG9VabuBUdpT+kcRMfOb
+	tAXUnVJCDQ8GYlbdeNqCZKtLQhJmYwvt0u9IkMKcrh66QVESKNLw1aqzgJ7ZKlKyyDEuU2QemXl
+	VBVy7sMc7OsCuf/PwMgfMTKU9TV7GYCHLeXWn9YtI92ng5g9IrYt0UA43RZPPad7B92+5OiNBqw
+	pd2B1KzdpZbYjRgny/hVozhQsdx4=
+X-Google-Smtp-Source: AGHT+IGjOqg3N+0jyfihCulwzlp/UmV9H0wtrz3m1WHnufqQWqck6o1b14hPo+tV+fQgv+Iim0Otdg9FdiQt
+X-Received: by 2002:a05:7022:1e05:b0:11e:3e9:3e89 with SMTP id a92af1059eb24-1206289ff38mr414137c88.7.1766025903683;
+        Wed, 17 Dec 2025 18:45:03 -0800 (PST)
 Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a2d08ab029sm1603095ad.24.2025.12.17.18.45.03
+        by smtp-relay.gmail.com with ESMTPS id a92af1059eb24-12061f9c99dsm154191c88.3.2025.12.17.18.45.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Dec 2025 18:45:04 -0800 (PST)
+        Wed, 17 Dec 2025 18:45:03 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 764913420E0;
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 361A734023F;
 	Wed, 17 Dec 2025 19:45:03 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 6923CE41A13; Wed, 17 Dec 2025 19:45:02 -0700 (MST)
+	id 34016E417CF; Wed, 17 Dec 2025 19:45:03 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Joanne Koong <joannelkoong@gmail.com>,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v6 2/6] io_uring: clear IORING_SETUP_SINGLE_ISSUER for IORING_SETUP_SQPOLL
-Date: Wed, 17 Dec 2025 19:44:55 -0700
-Message-ID: <20251218024459.1083572-3-csander@purestorage.com>
+	Caleb Sander Mateos <csander@purestorage.com>,
+	syzbot@syzkaller.appspotmail.com
+Subject: [PATCH v6 6/6] io_uring: avoid uring_lock for IORING_SETUP_SINGLE_ISSUER
+Date: Wed, 17 Dec 2025 19:44:59 -0700
+Message-ID: <20251218024459.1083572-7-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251218024459.1083572-1-csander@purestorage.com>
 References: <20251218024459.1083572-1-csander@purestorage.com>
@@ -85,44 +86,236 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-IORING_SETUP_SINGLE_ISSUER doesn't currently enable any optimizations,
-but it will soon be used to avoid taking io_ring_ctx's uring_lock when
-submitting from the single issuer task. If the IORING_SETUP_SQPOLL flag
-is set, the SQ thread is the sole task issuing SQEs. However, other
-tasks may make io_uring_register() syscalls, which must be synchronized
-with SQE submission. So it wouldn't be safe to skip the uring_lock
-around the SQ thread's submission even if IORING_SETUP_SINGLE_ISSUER is
-set. Therefore, clear IORING_SETUP_SINGLE_ISSUER from the io_ring_ctx
-flags if IORING_SETUP_SQPOLL is set.
+io_ring_ctx's mutex uring_lock can be quite expensive in high-IOPS
+workloads. Even when only one thread pinned to a single CPU is accessing
+the io_ring_ctx, the atomic CASes required to lock and unlock the mutex
+are very hot instructions. The mutex's primary purpose is to prevent
+concurrent io_uring system calls on the same io_ring_ctx. However, there
+is already a flag IORING_SETUP_SINGLE_ISSUER that promises only one
+task will make io_uring_enter() and io_uring_register() system calls on
+the io_ring_ctx once it's enabled.
+So if the io_ring_ctx is setup with IORING_SETUP_SINGLE_ISSUER, skip the
+uring_lock mutex_lock() and mutex_unlock() on the submitter_task. On
+other tasks acquiring the ctx uring lock, use a task work item to
+suspend the submitter_task for the critical section.
+If the io_ring_ctx is IORING_SETUP_R_DISABLED (possible during
+io_uring_setup(), io_uring_register(), or io_uring exit), submitter_task
+may be set concurrently, so acquire the uring_lock before checking it.
+If submitter_task isn't set yet, the uring_lock suffices to provide
+mutual exclusion. If task work can't be queued because submitter_task
+has exited, also use the uring_lock for mutual exclusion.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+Tested-by: syzbot@syzkaller.appspotmail.com
 ---
- io_uring/io_uring.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ io_uring/io_uring.c |  12 +++++
+ io_uring/io_uring.h | 118 ++++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 127 insertions(+), 3 deletions(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 761b9612c5b6..44ff5756b328 100644
+index 237663382a5e..38390c8c54e0 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -3478,10 +3478,19 @@ static int io_uring_sanitise_params(struct io_uring_params *p)
- 	 */
- 	if ((flags & (IORING_SETUP_SQE128|IORING_SETUP_SQE_MIXED)) ==
- 	    (IORING_SETUP_SQE128|IORING_SETUP_SQE_MIXED))
- 		return -EINVAL;
- 
-+	/*
-+	 * If IORING_SETUP_SQPOLL is set, only the SQ thread issues SQEs,
-+	 * but other threads may call io_uring_register() concurrently.
-+	 * We still need ctx uring lock to synchronize these io_ring_ctx
-+	 * accesses, so disable the single issuer optimizations.
-+	 */
-+	if (flags & IORING_SETUP_SQPOLL)
-+		p->flags &= ~IORING_SETUP_SINGLE_ISSUER;
-+
- 	return 0;
+@@ -363,10 +363,22 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	xa_destroy(&ctx->io_bl_xa);
+ 	kfree(ctx);
+ 	return NULL;
  }
  
- static int io_uring_fill_params(struct io_uring_params *p)
++void io_ring_suspend_work(struct callback_head *cb_head)
++{
++	struct io_ring_suspend_work *suspend_work =
++		container_of(cb_head, struct io_ring_suspend_work, cb_head);
++	DECLARE_COMPLETION_ONSTACK(suspend_end);
++
++	*suspend_work->suspend_end = &suspend_end;
++	complete(&suspend_work->suspend_start);
++
++	wait_for_completion(&suspend_end);
++}
++
+ static void io_clean_op(struct io_kiocb *req)
+ {
+ 	if (unlikely(req->flags & REQ_F_BUFFER_SELECTED))
+ 		io_kbuf_drop_legacy(req);
+ 
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 57c3eef26a88..c2e39ca55569 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -1,8 +1,9 @@
+ #ifndef IOU_CORE_H
+ #define IOU_CORE_H
+ 
++#include <linux/completion.h>
+ #include <linux/errno.h>
+ #include <linux/lockdep.h>
+ #include <linux/resume_user_mode.h>
+ #include <linux/kasan.h>
+ #include <linux/poll.h>
+@@ -195,19 +196,93 @@ void io_queue_next(struct io_kiocb *req);
+ void io_task_refs_refill(struct io_uring_task *tctx);
+ bool __io_alloc_req_refill(struct io_ring_ctx *ctx);
+ 
+ void io_activate_pollwq(struct io_ring_ctx *ctx);
+ 
++/*
++ * The ctx uring lock protects most of the mutable struct io_ring_ctx state
++ * accessed in the struct io_kiocb issue path. In the I/O path, it is typically
++ * acquired in the io_uring_enter() syscall and in io_handle_tw_list(). For
++ * IORING_SETUP_SQPOLL, it's acquired by io_sq_thread() instead. io_kiocb's
++ * issued with IO_URING_F_UNLOCKED in issue_flags (e.g. by io_wq_submit_work())
++ * acquire and release the ctx uring lock whenever they must touch io_ring_ctx
++ * state. io_uring_register() also acquires the ctx uring lock because most
++ * opcodes mutate io_ring_ctx state accessed in the issue path.
++ *
++ * For !IORING_SETUP_SINGLE_ISSUER io_ring_ctx's, acquiring the ctx uring lock
++ * is done via mutex_(try)lock(&ctx->uring_lock).
++ *
++ * However, for IORING_SETUP_SINGLE_ISSUER, we can avoid the mutex_lock() +
++ * mutex_unlock() overhead on submitter_task because a single thread can't race
++ * with itself. In the uncommon case where the ctx uring lock is needed on
++ * another thread, it must suspend submitter_task by scheduling a task work item
++ * on it. io_ring_ctx_lock() returns once the task work item has started.
++ * io_ring_ctx_unlock() allows the task work item to complete.
++ * If io_ring_ctx_lock() is called while the ctx is IORING_SETUP_R_DISABLED
++ * (e.g. during ctx create or exit), io_ring_ctx_lock() must acquire uring_lock
++ * because submitter_task isn't set yet. submitter_task can be accessed once
++ * uring_lock is held. If submitter_task exists, we do the same thing as in the
++ * non-IORING_SETUP_R_DISABLED case. If submitter_task isn't set, all other
++ * io_ring_ctx_lock() callers will also acquire uring_lock, so it suffices for
++ * mutual exclusion.
++ * Similarly, if io_ring_ctx_lock() is called after submitter_task has exited,
++ * task work can't be queued on it. Acquire uring_lock to exclude other callers.
++ */
++
++struct io_ring_suspend_work {
++	struct callback_head cb_head;
++	struct completion suspend_start;
++	struct completion **suspend_end;
++};
++
++void io_ring_suspend_work(struct callback_head *cb_head);
++
+ struct io_ring_ctx_lock_state {
++	bool mutex_held;
++	struct completion *suspend_end;
+ };
+ 
+ /* Acquire the ctx uring lock with the given nesting level */
+ static inline void io_ring_ctx_lock_nested(struct io_ring_ctx *ctx,
+ 					   unsigned int subclass,
+ 					   struct io_ring_ctx_lock_state *state)
+ {
+-	mutex_lock_nested(&ctx->uring_lock, subclass);
++	struct io_ring_suspend_work suspend_work;
++
++	if (!(ctx->flags & IORING_SETUP_SINGLE_ISSUER)) {
++		mutex_lock_nested(&ctx->uring_lock, subclass);
++		return;
++	}
++
++	state->mutex_held = false;
++	state->suspend_end = NULL;
++	if (unlikely(smp_load_acquire(&ctx->flags) & IORING_SETUP_R_DISABLED)) {
++		mutex_lock_nested(&ctx->uring_lock, subclass);
++		if (likely(!ctx->submitter_task)) {
++			state->mutex_held = true;
++			return;
++		}
++
++		/* submitter_task set concurrently, must suspend it */
++		mutex_unlock(&ctx->uring_lock);
++	} else if (likely(current == ctx->submitter_task)) {
++		return;
++	}
++
++	/* Use task work to suspend submitter_task */
++	init_task_work(&suspend_work.cb_head, io_ring_suspend_work);
++	init_completion(&suspend_work.suspend_start);
++	suspend_work.suspend_end = &state->suspend_end;
++	if (unlikely(task_work_add(ctx->submitter_task, &suspend_work.cb_head,
++				   TWA_SIGNAL))) {
++		/* submitter_task is exiting, use mutex instead */
++		state->mutex_held = true;
++		mutex_lock_nested(&ctx->uring_lock, subclass);
++		return;
++	}
++
++	wait_for_completion(&suspend_work.suspend_start);
+ }
+ 
+ /* Acquire the ctx uring lock */
+ static inline void io_ring_ctx_lock(struct io_ring_ctx *ctx,
+ 				    struct io_ring_ctx_lock_state *state)
+@@ -217,29 +292,66 @@ static inline void io_ring_ctx_lock(struct io_ring_ctx *ctx,
+ 
+ /* Attempt to acquire the ctx uring lock without blocking */
+ static inline bool io_ring_ctx_trylock(struct io_ring_ctx *ctx,
+ 				       struct io_ring_ctx_lock_state *state)
+ {
+-	return mutex_trylock(&ctx->uring_lock);
++	if (!(ctx->flags & IORING_SETUP_SINGLE_ISSUER))
++		return mutex_trylock(&ctx->uring_lock);
++
++	state->suspend_end = NULL;
++	if (unlikely(smp_load_acquire(&ctx->flags) & IORING_SETUP_R_DISABLED)) {
++		if (!mutex_trylock(&ctx->uring_lock))
++			return false;
++		if (likely(!ctx->submitter_task)) {
++			state->mutex_held = true;
++			return true;
++		}
++
++		mutex_unlock(&ctx->uring_lock);
++		return false;
++	}
++
++	state->mutex_held = false;
++	return current == ctx->submitter_task;
+ }
+ 
+ /* Release the ctx uring lock */
+ static inline void io_ring_ctx_unlock(struct io_ring_ctx *ctx,
+ 				      struct io_ring_ctx_lock_state *state)
+ {
+-	mutex_unlock(&ctx->uring_lock);
++	if (!(ctx->flags & IORING_SETUP_SINGLE_ISSUER)) {
++		mutex_unlock(&ctx->uring_lock);
++		return;
++	}
++
++	if (unlikely(state->mutex_held))
++		mutex_unlock(&ctx->uring_lock);
++	if (unlikely(state->suspend_end))
++		complete(state->suspend_end);
+ }
+ 
+ /* Return (if CONFIG_LOCKDEP) whether the ctx uring lock is held */
+ static inline bool io_ring_ctx_lock_held(const struct io_ring_ctx *ctx)
+ {
++	/*
++	 * No straightforward way to check that submitter_task is suspended
++	 * without access to struct io_ring_ctx_lock_state
++	 */
++	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER &&
++	    !(ctx->flags & IORING_SETUP_R_DISABLED))
++		return true;
++
+ 	return lockdep_is_held(&ctx->uring_lock);
+ }
+ 
+ /* Assert (if CONFIG_LOCKDEP) that the ctx uring lock is held */
+ static inline void io_ring_ctx_assert_locked(const struct io_ring_ctx *ctx)
+ {
++	if (ctx->flags & IORING_SETUP_SINGLE_ISSUER &&
++	    !(ctx->flags & IORING_SETUP_R_DISABLED))
++		return;
++
+ 	lockdep_assert_held(&ctx->uring_lock);
+ }
+ 
+ static inline void io_lockdep_assert_cq_locked(struct io_ring_ctx *ctx)
  {
 -- 
 2.45.2
