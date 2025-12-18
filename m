@@ -1,106 +1,171 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f225.google.com (mail-pl1-f225.google.com [209.85.214.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99BEC13B
-	for <io-uring@vger.kernel.org>; Thu, 18 Dec 2025 02:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59F32D29B7
+	for <io-uring@vger.kernel.org>; Thu, 18 Dec 2025 02:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766024894; cv=none; b=gVEyNFQGeoFvawsdopd/QvqM689HBQR+aBTzQeNV1Ja2kCi2dbrmOM2FYdEctAdy+bMP1CS0mynfJEyv9MObNOJmx6Yt8mYRDjPlkcZsjM7NeoLDewAkZthvB3q4NCPIYBiSIggd6T+BgfIpfBbaKn0UVgN4Newjt6726p2thqo=
+	t=1766025906; cv=none; b=gqPddABVGhzmPNhQe0I7Vr3n2m0ZrjDQ7MohcP8krUe+9pwUNRySNg+ejJKn7XmqA5YkDYBua5ei2wwR9W6f5PSHazMgSX1VA/3Ian04EUneLBn5nCDvfs9yRli7Up10O8jEGli04sk/aBmu/9bSieSGWj7iPUu1cIhdEe6nWLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766024894; c=relaxed/simple;
-	bh=0G9RwQPZnidn84bY4N0PMdm3GvmrF+rAs7nbKNPCFTo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YR9AILLgcPlrPYgyyMsWMO2PHV4bQoIgvlxQsEaL3IHxGw9g/5bKw9eQxIUprgfzqNrThbJX/a2ASYq+0Ds0Yv/s98DAJHUelrp12kwTTy3N6kzs+X/Sb8eCoYLpAkmGS3V9vj0LA7y4tRVaJoGkg1AntsepQcbw6wgYs03EGpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZexA4MLZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1766025906; c=relaxed/simple;
+	bh=rpg9xRwqXJdoa9o/0hJC0BVwNsBbVZZp4L9qh0QLmM4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=h2rYe9U47H+MdwPtPKOUEVoxTaeFU0dfMvlblrnA5569J6iIJrsdJ+1gLVYHzk6gJcQBJIOla+uojbaPTnlhufDO9yvRHg9P4r4r0ISUS+nYFiNPpSJtqOmp7sXaCatcIU/7KazPGzzJtCAn8iiC9jMy6hVBSmxNyC6vXbbAoX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=NladGGCv; arc=none smtp.client-ip=209.85.214.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZexA4MLZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766024891;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t+7SLw0T/yPzRR5se1r+f3gd/PFT+EhJyTxPKtGag9k=;
-	b=ZexA4MLZBQ3RRFFyI5vKzCh6kariC/zU2N/BmStgzndP7XiX8q8JGHtOktQpiQmg40TfcF
-	ml+xNr+Vj8SMYAtpzuOemkkDoJmrsnLjDdJvcPZQtw6Z6QFlh6bqShLJ2D7+TqW58nhe3d
-	GdV+6h5+FYKoEyI1HLHMRfxdn9JNKrs=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-223-0aOTJEZjNSW2uhXVdZRJ8g-1; Wed,
- 17 Dec 2025 21:28:07 -0500
-X-MC-Unique: 0aOTJEZjNSW2uhXVdZRJ8g-1
-X-Mimecast-MFC-AGG-ID: 0aOTJEZjNSW2uhXVdZRJ8g_1766024886
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 901641956050;
-	Thu, 18 Dec 2025 02:28:06 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.190])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 13CAE30001A2;
-	Thu, 18 Dec 2025 02:28:02 +0000 (UTC)
-Date: Thu, 18 Dec 2025 10:27:57 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: huang-jl <huang-jl@deepseek.com>
-Cc: axboe@kernel.dk, csander@purestorage.com, io-uring@vger.kernel.org,
-	nj.shetty@samsung.com
-Subject: Re: [PATCH v6.20] io_uring/rsrc: refactor io_import_kbuf() to use
- single loop
-Message-ID: <aUNmrSVkZEMk7xmF@fedora>
-References: <20251217123156.1100620-1-ming.lei@redhat.com>
- <20251217151647.193815-1-huang-jl@deepseek.com>
- <aUNcE48RnCy_rFQj@fedora>
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="NladGGCv"
+Received: by mail-pl1-f225.google.com with SMTP id d9443c01a7336-29f08b909aeso303795ad.2
+        for <io-uring@vger.kernel.org>; Wed, 17 Dec 2025 18:45:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1766025903; x=1766630703; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BMOc2yXwMWNwizXE4LJ3r+8jQkSXD2ri2LLDuLQglmM=;
+        b=NladGGCvz9hx3HUKT+udV9PoXHncEEwwjBmd/DWBBV9fYZY+O+pcyYoGqTAuh84ROt
+         LNy1i5az+fCWRHewJhgSYFZhf08hjq39a40ZFcdjkpcoX994S+O1qjrHufUVbCJDR5S/
+         EWVt1Dseu5QY/q2fohWSrovOoT8jmw+vtB+h1o3RTFPiQT8nl2aZuN6K5jodTaXBSWV5
+         hV4M37nooP+kEvC5OcifI+/L/h0xb4XRaR5HRfD9E6Y8FWPDv77CQmV3MUTccl2UO2c3
+         lzm4un4uf31DvgWcbp5TTUzA+3nIfW0v7UKkOHDWa+IF2Lji545HPf8GnUC4K4CvH+ct
+         zQIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766025903; x=1766630703;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BMOc2yXwMWNwizXE4LJ3r+8jQkSXD2ri2LLDuLQglmM=;
+        b=HJcHy9+2aZp4qvAuYmEAodA3cEGVhbdr2rA3l2oSSC8Dpo6KcAXJznXwXYl9t8UigW
+         Iz6bf/PmggILzYbQRQMyUWSkivLIIa1E+j01Cr1wLfquOIOp/VLtQgzmZ6ozJb/upFoy
+         Dp9tAgv9lIaLEympn5RcwhDnXUwIvs7i+9REc9smAngxaBITZlX9XnzvJ/99bNgwbziu
+         4tiLmZvTknD4EE4uECWWR7Kqwjwg3zQMkEpHZpmY33oFARuwIj5Dl1Obl1XfQuFanIsO
+         RiPatMQWaev9jsacW59lG3MtM56Mkhe6qIFIHEvwfSTW1ab9CsU8RkAwu3qvJdxfKgrv
+         eB/A==
+X-Forwarded-Encrypted: i=1; AJvYcCW3GaLxc9EVOTuXskAQ0SREwOEe73iMlWXxcI2eIdTHtbfKCJYV2XhW4byCV7VurZnkPBMOYcSfTA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwS74Mn3nW1gWxgwvM6H3RUJrxJ/lNOLWxVb6LBIx/h+slWhKsR
+	sEGMna4pB3w3JVpa6AMA0ZruX07EHw9TXW/9N/N/ri8i+buusy8wldmJbknX7a0lOJbd6Tcpns7
+	W9E5osDSYrd0e2vukmh5zbHri15RfBmjS6CQioMEAEPbyAINfXM0m
+X-Gm-Gg: AY/fxX75gN3IIEl1Bj3s/lByWGUtzYyQDN1QLfsMA8fvMGPNqmfRqHUP2PuNLcyr2jm
+	fVhHENwGEkt3TF2DDB4XTqFpFUjTt5lJLuMs/TjQSrkp+O+UVbjgOszVSJeaVQum7guHr477zdV
+	cqURQ8YuOeaFDGyr2wKElnWkQ9OQfweGDZIPOBUKqZjIx2iMV2BDRxBsdiwdZOUpdgyh77AN45h
+	HkGLq23/oRuNCQp2O3RQ3god8vhC8WuOkgxXIJ5wsKYPwQcVmOvcE7ef38LwN4AFYM0vlCD+lnT
+	RBoXjNARpuR5dt9fDNc/pri7ezvGNtql4zEo/vnH0f1aHHf4ZO3Dbl/wawDsBk0fSkGZ/YsRi2C
+	8p41Hx3KYmuQpxo//2MH1Nuas4TU=
+X-Google-Smtp-Source: AGHT+IFH+pl8jKSdmMofH8xpbY+iOFdJxlVTeWYz56gwdoc2mTCaFO5HLwh1g+k03mnsyYLRY4FHfibrTnS6
+X-Received: by 2002:a17:902:f647:b0:29f:2df2:cf49 with SMTP id d9443c01a7336-2a2d4516c82mr6470925ad.5.1766025902885;
+        Wed, 17 Dec 2025 18:45:02 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2a2d13e9e91sm1610865ad.46.2025.12.17.18.45.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 18:45:02 -0800 (PST)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 3203334023F;
+	Wed, 17 Dec 2025 19:45:02 -0700 (MST)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id 2DBE7E41A13; Wed, 17 Dec 2025 19:45:02 -0700 (MST)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Joanne Koong <joannelkoong@gmail.com>,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH v6 1/6] io_uring: use release-acquire ordering for IORING_SETUP_R_DISABLED
+Date: Wed, 17 Dec 2025 19:44:54 -0700
+Message-ID: <20251218024459.1083572-2-csander@purestorage.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20251218024459.1083572-1-csander@purestorage.com>
+References: <20251218024459.1083572-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aUNcE48RnCy_rFQj@fedora>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 18, 2025 at 09:42:43AM +0800, Ming Lei wrote:
-> On Wed, Dec 17, 2025 at 11:16:47PM +0800, huang-jl wrote:
-> > The code looks correct to me.
-> > 
-> > > This simplifies the logic
-> > 
-> > I'm not an expert in Linux development, but from my perspective, the
-> > original version seems simpler and more readable. The semantics of
-> > iov_iter_advance() are clear and well-understood.
-> > 
-> > That said, I understand the appeal of merging them into a single loop.
-> > 
-> > > and avoids the overhead of iov_iter_advance()
-> > 
-> > Could you clarify what overhead you mean? If it's the function call
-> > overhead, I think the compiler would inline it anyway. The actual
-> > iteration work seems equivalent between both approaches.
-> 
-> iov_iter_advance() is global function, and it can't be inline.
-> 
-> Also single loop is more readable, cause ->iov_offset can be ignored easily.
-> 
-> In theory, re-calculating nr_segs isn't necessary, it is just for avoiding
-> potential split, however not get idea how it is triggered. Nitesh didn't
-> mention the exact reason:
-> 
-> https://lkml.org/lkml/2025/4/16/351
-> 
-> I will look at the reason and see if it can be avoided.
+io_uring_enter() and io_msg_ring() read ctx->flags and
+ctx->submitter_task without holding the ctx's uring_lock. This means
+they may race with the assignment to ctx->submitter_task and the
+clearing of IORING_SETUP_R_DISABLED from ctx->flags in
+io_register_enable_rings(). Ensure the correct ordering of the
+ctx->flags and ctx->submitter_task memory accesses by storing to
+ctx->flags using release ordering and loading it using acquire ordering.
 
-The reason is in both bio_iov_bvec_set() and bio_may_need_split().
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+Fixes: 4add705e4eeb ("io_uring: remove io_register_submitter")
+Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
+---
+ io_uring/io_uring.c | 2 +-
+ io_uring/msg_ring.c | 4 ++--
+ io_uring/register.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-->bi_vcnt doesn't make sense for cloned bio, and shouldn't be used as multiple
-segment hint.
-
-However, it also shows bio_split_rw() is too heavy.
-
-
-Thanks,
-Ming
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 6cb24cdf8e68..761b9612c5b6 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -3249,11 +3249,11 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
+ 			goto out;
+ 	}
+ 
+ 	ctx = file->private_data;
+ 	ret = -EBADFD;
+-	if (unlikely(ctx->flags & IORING_SETUP_R_DISABLED))
++	if (unlikely(smp_load_acquire(&ctx->flags) & IORING_SETUP_R_DISABLED))
+ 		goto out;
+ 
+ 	/*
+ 	 * For SQ polling, the thread will do all submissions and completions.
+ 	 * Just return the requested submit count, and wake the thread if
+diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
+index 7063ea7964e7..c48588e06bfb 100644
+--- a/io_uring/msg_ring.c
++++ b/io_uring/msg_ring.c
+@@ -123,11 +123,11 @@ static int __io_msg_ring_data(struct io_ring_ctx *target_ctx,
+ 
+ 	if (msg->src_fd || msg->flags & ~IORING_MSG_RING_FLAGS_PASS)
+ 		return -EINVAL;
+ 	if (!(msg->flags & IORING_MSG_RING_FLAGS_PASS) && msg->dst_fd)
+ 		return -EINVAL;
+-	if (target_ctx->flags & IORING_SETUP_R_DISABLED)
++	if (smp_load_acquire(&target_ctx->flags) & IORING_SETUP_R_DISABLED)
+ 		return -EBADFD;
+ 
+ 	if (io_msg_need_remote(target_ctx))
+ 		return io_msg_data_remote(target_ctx, msg);
+ 
+@@ -243,11 +243,11 @@ static int io_msg_send_fd(struct io_kiocb *req, unsigned int issue_flags)
+ 
+ 	if (msg->len)
+ 		return -EINVAL;
+ 	if (target_ctx == ctx)
+ 		return -EINVAL;
+-	if (target_ctx->flags & IORING_SETUP_R_DISABLED)
++	if (smp_load_acquire(&target_ctx->flags) & IORING_SETUP_R_DISABLED)
+ 		return -EBADFD;
+ 	if (!msg->src_file) {
+ 		int ret = io_msg_grab_file(req, issue_flags);
+ 		if (unlikely(ret))
+ 			return ret;
+diff --git a/io_uring/register.c b/io_uring/register.c
+index 62d39b3ff317..9e473c244041 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -191,11 +191,11 @@ static int io_register_enable_rings(struct io_ring_ctx *ctx)
+ 	}
+ 
+ 	if (ctx->restrictions.registered)
+ 		ctx->restricted = 1;
+ 
+-	ctx->flags &= ~IORING_SETUP_R_DISABLED;
++	smp_store_release(&ctx->flags, ctx->flags & ~IORING_SETUP_R_DISABLED);
+ 	if (ctx->sq_data && wq_has_sleeper(&ctx->sq_data->wait))
+ 		wake_up(&ctx->sq_data->wait);
+ 	return 0;
+ }
+ 
+-- 
+2.45.2
 
