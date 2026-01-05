@@ -1,121 +1,107 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8BE13FEE
-	for <io-uring@vger.kernel.org>; Mon,  5 Jan 2026 18:45:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972D41A9F85
+	for <io-uring@vger.kernel.org>; Mon,  5 Jan 2026 18:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767638755; cv=none; b=rNpea/TMeXeuxObKDA4SKao7D78eHdlX/jsOKggIQP78zgYTsXZ7xDc0SDFbKp83R2RCuTr28nrUZqXRxoGmPED/NTAYrj+Xx7bU+RSUn9aLlIJxanWhiUdn/AN5Am26/Z/AbFCzn7XK6YWiMQ4BhQZ+1RqK7h5c0n9nlF58Luk=
+	t=1767638917; cv=none; b=pWiX9PW36P+phPb83jil9CSWkihgHk1XtEMlT4NER7lIA9HxmvkmoUjNBfopLtLQAXVeD8yE0Rq2oQE0Ak2Uxr0xhOnRTrY3CEHeJqFTEQxdWYdMHviTS2SyH2WXKpkIwzdxli3ufxQxZsFCaoq34YPGSpCxW4ysIKTA5tDmYQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767638755; c=relaxed/simple;
-	bh=Qot2MoHl6pUeeThNFIM55c16lm8atXupdzTfNiM8u2k=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=tIUSB1xO+qFZkWXWD1HRQ9tXmhb9c0txKaxi6/pjk6AlMLxfdERwn7SoompWecz/sAUCSc4NAH1MWsZllyEQdAb2HeEPqR09Lusep48mMCdfoyyJ/Ko14itMJL9TTzVmf4ZkDYCYKzuHVfl4fuvVGbRBsfdsHMxN6dqwbN76yNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=u2/LsQFC; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1767638917; c=relaxed/simple;
+	bh=DTZ8KiTOYhKKF7JWpxvSypjJd/tyi/UI8lOO/R/foeo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RWU4RmWAmauNq3cNN/VRrHEZnAKcST5zXWB6D/B+6APTRu8LpNCFYziSgVgSvGFr8kF5kAkFD6rshhp0/IiSOiXipEc6aiY6qR1hHSD/LcxjH03oyG04LR01DdNQmD08wcKAUeM2Ll/yXFPt4mRW7ohgFboHm5njFSaNmpIU1q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d9VrOgxv; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="u2/LsQFC"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-3e0f19a38d0so177931fac.0
-        for <io-uring@vger.kernel.org>; Mon, 05 Jan 2026 10:45:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d9VrOgxv"
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-65b6b69baf8so64200eaf.3
+        for <io-uring@vger.kernel.org>; Mon, 05 Jan 2026 10:48:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1767638752; x=1768243552; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1767638914; x=1768243714; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cs96TSTNXaDrcHqhE/HdChh6u+fGIFjI3uW5jKXN7+M=;
-        b=u2/LsQFCh06w+xgilKZdWwGX/kC/VI6gN3hZ+POvyYR/DbRHjygUgLMdYRbGN4dveO
-         9FxnblYgbP/EuvdabjAhPtfWeTC18+Sw6tcIjrZizG0ym/kviVp+V5O/zLQBuCGSDYjg
-         ubBwvImKQ7kLc0zQZYOepsR/F+GpRzU6OWcdhxx6lTa2p3cewy58QGQBVDkK+jwYnHFY
-         F1b0fSw+heX9mtF0G8BssKTylEjbke0fXKc0r5A64OxZO1SbZvnEprqre+TMcZjjFGJk
-         hOtyftX4QczgfVa+gQmLj0W2dy/4Kb4vGwW4lhAlXGcWwL+UN48EVxCREl8SrC1FATC3
-         3Ykg==
+        bh=OtolCuYzYAufR5Qi+keXAb6Ku5HPbADoe47YYKB+jAw=;
+        b=d9VrOgxvYgqwOF7hHVBQXne41xGlbjOnnFPNGw3GDI/8rRen7TBcimLYJcIglVZJwL
+         pF2Z9vn4RZbzBYWkIl1ds7yG8onfPXLxmRn6+eFQd1UDwP1Cl8C0YEaFMMTEPOEgDsom
+         ztRxYs2s+aACOOpfKnxzC5/j2NaKwmDXCpvOVyfJkilndylO4XiAuISeFAWwLS+H45HH
+         lkY9SWetlsoRtHvbQu3xls+rLsXqQsvwNoxyrlNaWjVRXvM31Snp1F2MMqHiWmFyEsPz
+         skCuLGwhptK3gshiIzZEP5ITcn9STOp3iilq7BomuIt62yL269TeLzpLEiKnu5Dz049l
+         F8qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767638752; x=1768243552;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Cs96TSTNXaDrcHqhE/HdChh6u+fGIFjI3uW5jKXN7+M=;
-        b=EWq9uY1FCTjnRBl1CqcXj/nS/EQi0CfWtN/SmnZ0Px1S6/FUoe1Rz+sxuD74jZGOab
-         2MzcSClLZvXJy5aifJQeOKuLrDsPYlxAFPebIoCJDAbpspCgCv8XiaSQzQd3fr4bYEvr
-         nsvn2FIkCt41SKtoSp/lPAbp3npLzkLTqcV7sJjCgdmuK/dFVBQu9fYdmTKQbC/Wf7wh
-         wzJFwBd8RzyDpl0vC2X9/jbLCzn2Cw3ZI26pCwp1U+B0XQnnaL/vkCUJeSDXJS8cEiK2
-         piGLoe8jW5q1spTpvlNKTLIZPDToA7YzQwdk1/W0/xnaelLKZyTNv1GyaMWyuk6GHING
-         ed0g==
-X-Gm-Message-State: AOJu0Yz5RWOZtqeohuOLrla252gJHdLZJOMkTx/JV+zDhFNOyxYqqhXO
-	JbZ/xyksw1G9Bsy2tIVqHem5vqfX4yoW6j8vZphrP2lvgVgmIJAPeKlEoRHkhcnTttP51lKaGOU
-	/Xg45
-X-Gm-Gg: AY/fxX4KaWIAt/KR2dMYQUb1k2Ol1fHYJW79J6EZxrtgyAZKCoBfqVo2rlg4qrPd+kH
-	NBVvqcB+eo1U+ONEkss2ySvc/HqUcpls21X9gMGoyqafv6D8xmqjT3YrjZZvG77fOrQy3ns2++d
-	SJmXvzFARi9UeDjkNtcWxGkHB5TB7fnlGUgc/tX6LoU3x9M8vJivqv6TPhf8F/wCYoQvsL2D1/q
-	PaAKD+zPb08KLzP87jYMOSYRSMVV7wsfMD7mH0mDonffn+IFPUBGF9j+9vg4wCbf7WGWtyOsgOA
-	LDX6pChf+UxCIBFQ9NSgnT2tHSFofKyyc4nV/gd1FCb0tH1gZFbYO+arwFuD9Iz3XUPtPFfZsSe
-	fogrz8O1oMzrFyO+IdAHSBvbv3QoFfUwczCm5axTSKrjgRMPhmvpntWENRFCFF3accC8ZLfjG4Q
-	VWQ9Zd85oY
-X-Google-Smtp-Source: AGHT+IFyEUb8lZkTf8JYX66CoELfBxkgY0QTGjuWfyj/VrOaXlZYDZA7LnQ1e4nn8X8tWGsTwIuPxw==
-X-Received: by 2002:a05:6820:2202:b0:65c:f821:9dd0 with SMTP id 006d021491bc7-65f47a9772emr192374eaf.59.1767638751660;
-        Mon, 05 Jan 2026 10:45:51 -0800 (PST)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-65f4782ac2asm188185eaf.5.2026.01.05.10.45.50
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jan 2026 10:45:50 -0800 (PST)
-Message-ID: <708b2a6d-7c87-4f94-8d15-c450228c6b6b@kernel.dk>
-Date: Mon, 5 Jan 2026 11:45:50 -0700
+        d=1e100.net; s=20230601; t=1767638914; x=1768243714;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OtolCuYzYAufR5Qi+keXAb6Ku5HPbADoe47YYKB+jAw=;
+        b=pYCxa4sgj8euPJxXpYw4QuYFvNOadYVsHHJpN9KyZ11k/d1j9wHOen0HDANoUm+tWv
+         ZAyu5SlCXXINTnSUqMjU3oRePYPkKdgw0c3/4+dtN3DR9h1+OZLIQYqEKQ9+i/latUlS
+         eRmqI9vFZSMOXt9sxYtnYepFi9RMWqdPffPbPfEhfOljwTKqYr2IejvHPth2TdAHe2eo
+         /xTgVWfSs7wM07luM0LztCdzunMBX0btpjV1ndbEGGB8ndF9x5W+qO7IPeDdQyqq6i0U
+         7uqxBtrPwUGd5R1uTiyHdzwGabG917SZHopNyT1Uu/8nLf4I1uRXzwCyblqi8mqTTIwN
+         rmBw==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ6TZYdlVlj54FAxM0rS6qPQMacXxIYPYk4e42e39r+dSLQ5x/Ifbquk0tTA0fyl7vCpY+RzpmkQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6jJua07RsCJ+/RGylH3KSzHZX3RW0dZrbDBzSXRqnjoIDAKwM
+	abO23eB4Nmnv/61uyzjFV4fKQLdjwH/OnNcD/vIhQEC9/90j2poknA9kZnmR6xOvP+5HiTEw8dN
+	WOVcBoFz3z7NTMyxa0Olu4T3MR1BYhXtusw==
+X-Gm-Gg: AY/fxX5S9002dIRCZJlrazgfR7s6aq6cdv1J9CI6TxcSLJJwiJKwZx3dG0jMtHJ21W8
+	XoYxTq93E9zzROg/XIeGixhPZW9cjAWKvcNvhahwV+AcroTrVRt/XmH+0vCkToD6Ay2TUlwZxKk
+	hMFtnYsbMBWZisEsseR6gUccaqZISRmIu4pU7LWeu/oQDTVLE+8TIjcWqsLbrJYp1cgJF3w9ahQ
+	IYQ9kcpRxslpqP7Ys1hjTccxdZFfL8HUaPBaI6uXwaeMP6HcOIB1z/1NDDeCqPea/B5L7I=
+X-Google-Smtp-Source: AGHT+IFHfv73Y3+mWKIEQ8fD1NYvD2ClmijWLCv3FtUKYMFJTc4JQ4rh8Q4MGpnBlu8Ckp4YrMju5xzUoKctf9JSWqk=
+X-Received: by 2002:a05:6820:1501:b0:65d:1e7:953c with SMTP id
+ 006d021491bc7-65f47a62978mr211576eaf.73.1767638914427; Mon, 05 Jan 2026
+ 10:48:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: io-uring <io-uring@vger.kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring/io-wq: remove io_wq_for_each_worker() return value
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <f98f318f-0c3b-4b01-afb2-2b276f3fe6cd@kernel.dk>
+ <87y0mc6ihs.fsf@mailhost.krisman.be> <53244a6d-75ca-4fa0-90f6-8d2952d85b46@kernel.dk>
+In-Reply-To: <53244a6d-75ca-4fa0-90f6-8d2952d85b46@kernel.dk>
+From: David Kahurani <k.kahurani@gmail.com>
+Date: Mon, 5 Jan 2026 21:54:18 +0300
+X-Gm-Features: AQt7F2oyT74kgNXO5pX8F2KXLmcGw04OSyHjk08nsy-ddZFy5IJEgAAe2bm_kmU
+Message-ID: <CAAZOf26OeMPr7wrcJsZ94NVXBSstYLWNQDU8_JNeuAw_gszeTw@mail.gmail.com>
+Subject: Re: [PATCH v2] io_uring/io-wq: fix incorrect io_wq_for_each_worker()
+ termination logic
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Gabriel Krisman Bertazi <krisman@suse.de>, io-uring <io-uring@vger.kernel.org>, 
+	Max Kellermann <max.kellermann@ionos.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The only use of this helper is to iterate all of the workers, and
-hence all callers will pass in a func that always returns false to do
-that. As none of the callers use the return value, get rid of it.
+FOSS is generally in perfect condition for rip off :-)
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
----
-
-Followup to previous patch fixing an issue with the iteration, while
-at it let's clean up the io_wq_for_each_worker() helper to always
-just return void as no callers use the return value.
-
-This could potentially go one step further and ignore the
-io_acct_for_each_worker() return value as well, but let's keep it as-is
-in that regard, for the case where a new caller is added that does
-provide a func that may return true to terminate the iteration.
-
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 6c5ef629e59a..9fd9f6ab722c 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -947,16 +947,13 @@ static bool io_acct_for_each_worker(struct io_wq_acct *acct,
- 	return ret;
- }
- 
--static bool io_wq_for_each_worker(struct io_wq *wq,
-+static void io_wq_for_each_worker(struct io_wq *wq,
- 				  bool (*func)(struct io_worker *, void *),
- 				  void *data)
- {
--	for (int i = 0; i < IO_WQ_ACCT_NR; i++) {
-+	for (int i = 0; i < IO_WQ_ACCT_NR; i++)
- 		if (io_acct_for_each_worker(&wq->acct[i], func, data))
--			return true;
--	}
--
--	return false;
-+			break;
- }
- 
- static bool io_wq_worker_wake(struct io_worker *worker, void *data)
--- 
-Jens Axboe
-
+On Mon, Jan 5, 2026 at 9:41=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> On 1/5/26 11:07 AM, Gabriel Krisman Bertazi wrote:
+> > Jens Axboe <axboe@kernel.dk> writes:
+> >
+> >> A previous commit added this helper, and had it terminate if false is
+> >> returned from the handler. However, that is completely opposite, it
+> >> should abort the loop if true is returned.
+> >>
+> >> Fix this up by having io_wq_for_each_worker() keep iterating as long
+> >> as false is returned, and only abort if true is returned.
+> >
+> > The fix is good, but the API is just weird.
+> >
+> > io_acct_for_each_worker returning true indicates an error that will
+> > abort the wq walk.  It is a non-issue, since all the two callers cannot
+> > fail and always return false for success :-)
+> >
+> > Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+>
+> Thanks for taking a look! Was going to post a followup just killing
+> the return value of io_wq_for_each_worker() to void as nobody uses
+> it. Only the cancelation side with its matching will use a true
+> return, most of iterations want to iterate all of them.
+>
+> --
+> Jens Axboe
+>
