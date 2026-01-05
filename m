@@ -1,107 +1,167 @@
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972D41A9F85
-	for <io-uring@vger.kernel.org>; Mon,  5 Jan 2026 18:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FB3629D26E
+	for <io-uring@vger.kernel.org>; Mon,  5 Jan 2026 18:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767638917; cv=none; b=pWiX9PW36P+phPb83jil9CSWkihgHk1XtEMlT4NER7lIA9HxmvkmoUjNBfopLtLQAXVeD8yE0Rq2oQE0Ak2Uxr0xhOnRTrY3CEHeJqFTEQxdWYdMHviTS2SyH2WXKpkIwzdxli3ufxQxZsFCaoq34YPGSpCxW4ysIKTA5tDmYQs=
+	t=1767638981; cv=none; b=qyO+S9HgLrC8RlDf+zsQNXPiMCXcYSKTbJyZm/SyOSflpTxEVagbAfxQel94rQwWgQDgjBb2yJg0Y2KMUElyupNnkb4k5lf27sH5wD0+mQptbXFTYnPz8yhiZ1R1ZPuKd3Dj46HqIgkIvXRPBAy61TZQiAXJ3SACVbT5VeijIWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767638917; c=relaxed/simple;
-	bh=DTZ8KiTOYhKKF7JWpxvSypjJd/tyi/UI8lOO/R/foeo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RWU4RmWAmauNq3cNN/VRrHEZnAKcST5zXWB6D/B+6APTRu8LpNCFYziSgVgSvGFr8kF5kAkFD6rshhp0/IiSOiXipEc6aiY6qR1hHSD/LcxjH03oyG04LR01DdNQmD08wcKAUeM2Ll/yXFPt4mRW7ohgFboHm5njFSaNmpIU1q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d9VrOgxv; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1767638981; c=relaxed/simple;
+	bh=rSGv+BlFMGxxakwLr1BkoKCuhfW0aUzX2Fd6UW2LkpQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=PlapeJ9/uxSjivmeHYHlpd2mODVjJR9rUNRiRHWY4gMV/Qk9JawttM20PlOe7+WLvCHNKZRZxJtUjBRZgfdM2+CyKzOpQi5AZPtcBR76wmNgz3zeG49bXio3R/VUkdPALjH5NtiKAIklKbdST7UYzRHbJXVvtQfscwuzCGhmQB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JVUOZG0w; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mHdcbXk1; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=JVUOZG0w; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=mHdcbXk1; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d9VrOgxv"
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-65b6b69baf8so64200eaf.3
-        for <io-uring@vger.kernel.org>; Mon, 05 Jan 2026 10:48:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767638914; x=1768243714; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OtolCuYzYAufR5Qi+keXAb6Ku5HPbADoe47YYKB+jAw=;
-        b=d9VrOgxvYgqwOF7hHVBQXne41xGlbjOnnFPNGw3GDI/8rRen7TBcimLYJcIglVZJwL
-         pF2Z9vn4RZbzBYWkIl1ds7yG8onfPXLxmRn6+eFQd1UDwP1Cl8C0YEaFMMTEPOEgDsom
-         ztRxYs2s+aACOOpfKnxzC5/j2NaKwmDXCpvOVyfJkilndylO4XiAuISeFAWwLS+H45HH
-         lkY9SWetlsoRtHvbQu3xls+rLsXqQsvwNoxyrlNaWjVRXvM31Snp1F2MMqHiWmFyEsPz
-         skCuLGwhptK3gshiIzZEP5ITcn9STOp3iilq7BomuIt62yL269TeLzpLEiKnu5Dz049l
-         F8qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767638914; x=1768243714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OtolCuYzYAufR5Qi+keXAb6Ku5HPbADoe47YYKB+jAw=;
-        b=pYCxa4sgj8euPJxXpYw4QuYFvNOadYVsHHJpN9KyZ11k/d1j9wHOen0HDANoUm+tWv
-         ZAyu5SlCXXINTnSUqMjU3oRePYPkKdgw0c3/4+dtN3DR9h1+OZLIQYqEKQ9+i/latUlS
-         eRmqI9vFZSMOXt9sxYtnYepFi9RMWqdPffPbPfEhfOljwTKqYr2IejvHPth2TdAHe2eo
-         /xTgVWfSs7wM07luM0LztCdzunMBX0btpjV1ndbEGGB8ndF9x5W+qO7IPeDdQyqq6i0U
-         7uqxBtrPwUGd5R1uTiyHdzwGabG917SZHopNyT1Uu/8nLf4I1uRXzwCyblqi8mqTTIwN
-         rmBw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ6TZYdlVlj54FAxM0rS6qPQMacXxIYPYk4e42e39r+dSLQ5x/Ifbquk0tTA0fyl7vCpY+RzpmkQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6jJua07RsCJ+/RGylH3KSzHZX3RW0dZrbDBzSXRqnjoIDAKwM
-	abO23eB4Nmnv/61uyzjFV4fKQLdjwH/OnNcD/vIhQEC9/90j2poknA9kZnmR6xOvP+5HiTEw8dN
-	WOVcBoFz3z7NTMyxa0Olu4T3MR1BYhXtusw==
-X-Gm-Gg: AY/fxX5S9002dIRCZJlrazgfR7s6aq6cdv1J9CI6TxcSLJJwiJKwZx3dG0jMtHJ21W8
-	XoYxTq93E9zzROg/XIeGixhPZW9cjAWKvcNvhahwV+AcroTrVRt/XmH+0vCkToD6Ay2TUlwZxKk
-	hMFtnYsbMBWZisEsseR6gUccaqZISRmIu4pU7LWeu/oQDTVLE+8TIjcWqsLbrJYp1cgJF3w9ahQ
-	IYQ9kcpRxslpqP7Ys1hjTccxdZFfL8HUaPBaI6uXwaeMP6HcOIB1z/1NDDeCqPea/B5L7I=
-X-Google-Smtp-Source: AGHT+IFHfv73Y3+mWKIEQ8fD1NYvD2ClmijWLCv3FtUKYMFJTc4JQ4rh8Q4MGpnBlu8Ckp4YrMju5xzUoKctf9JSWqk=
-X-Received: by 2002:a05:6820:1501:b0:65d:1e7:953c with SMTP id
- 006d021491bc7-65f47a62978mr211576eaf.73.1767638914427; Mon, 05 Jan 2026
- 10:48:34 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JVUOZG0w";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mHdcbXk1";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="JVUOZG0w";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="mHdcbXk1"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 395C433750;
+	Mon,  5 Jan 2026 18:49:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767638977; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GBlu/tOBxV908moG/lkaU3l0aelM/P8LluhY6WvfIms=;
+	b=JVUOZG0wjKub8hg1ckvT7Uav4iP4X1lO88EF7wni5KHaha+AiXuo1ydzwjEl5pibd6xoZV
+	w/cMDOlIq7+S7T6bLi+/XuAzKkjX9Mi+NsJXhD1AaooC9GrzVBojHxV24Q4smazIcyCoNV
+	WZ5D37wpwA4xuMxFBHbcm6F2aguxmB0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767638977;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GBlu/tOBxV908moG/lkaU3l0aelM/P8LluhY6WvfIms=;
+	b=mHdcbXk1ksd6lrLxyWE3hdAg1ZF4z5UYpHFqKPHOo/mI2kCTSK1nkxmjmfaPAIgKQhv7Gj
+	WNaK8jy9ghklm6Bw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=JVUOZG0w;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=mHdcbXk1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767638977; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GBlu/tOBxV908moG/lkaU3l0aelM/P8LluhY6WvfIms=;
+	b=JVUOZG0wjKub8hg1ckvT7Uav4iP4X1lO88EF7wni5KHaha+AiXuo1ydzwjEl5pibd6xoZV
+	w/cMDOlIq7+S7T6bLi+/XuAzKkjX9Mi+NsJXhD1AaooC9GrzVBojHxV24Q4smazIcyCoNV
+	WZ5D37wpwA4xuMxFBHbcm6F2aguxmB0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767638977;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GBlu/tOBxV908moG/lkaU3l0aelM/P8LluhY6WvfIms=;
+	b=mHdcbXk1ksd6lrLxyWE3hdAg1ZF4z5UYpHFqKPHOo/mI2kCTSK1nkxmjmfaPAIgKQhv7Gj
+	WNaK8jy9ghklm6Bw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EAD3A3EA63;
+	Mon,  5 Jan 2026 18:49:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Z2yOMsAHXGnSNwAAD6G6ig
+	(envelope-from <krisman@suse.de>); Mon, 05 Jan 2026 18:49:36 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Joanne Koong <joannelkoong@gmail.com>
+Cc: miklos@szeredi.hu,  axboe@kernel.dk,  bschubert@ddn.com,
+  asml.silence@gmail.com,  io-uring@vger.kernel.org,
+  csander@purestorage.com,  xiaobing.li@samsung.com,
+  linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 07/25] io_uring/kbuf: add recycling for kernel
+ managed buffer rings
+In-Reply-To: <CAJnrk1YRZYdEBL=6K0-7oAq6s-TfL7AnuHwZsN2miPYy1vGCOg@mail.gmail.com>
+	(Joanne Koong's message of "Mon, 29 Dec 2025 17:15:42 -0800")
+References: <20251223003522.3055912-1-joannelkoong@gmail.com>
+	<20251223003522.3055912-8-joannelkoong@gmail.com>
+	<87tsx9ymm9.fsf@mailhost.krisman.be>
+	<87ms31ylor.fsf@mailhost.krisman.be>
+	<CAJnrk1YRZYdEBL=6K0-7oAq6s-TfL7AnuHwZsN2miPYy1vGCOg@mail.gmail.com>
+Date: Mon, 05 Jan 2026 13:49:34 -0500
+Message-ID: <87pl7n7v41.fsf@mailhost.krisman.be>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f98f318f-0c3b-4b01-afb2-2b276f3fe6cd@kernel.dk>
- <87y0mc6ihs.fsf@mailhost.krisman.be> <53244a6d-75ca-4fa0-90f6-8d2952d85b46@kernel.dk>
-In-Reply-To: <53244a6d-75ca-4fa0-90f6-8d2952d85b46@kernel.dk>
-From: David Kahurani <k.kahurani@gmail.com>
-Date: Mon, 5 Jan 2026 21:54:18 +0300
-X-Gm-Features: AQt7F2oyT74kgNXO5pX8F2KXLmcGw04OSyHjk08nsy-ddZFy5IJEgAAe2bm_kmU
-Message-ID: <CAAZOf26OeMPr7wrcJsZ94NVXBSstYLWNQDU8_JNeuAw_gszeTw@mail.gmail.com>
-Subject: Re: [PATCH v2] io_uring/io-wq: fix incorrect io_wq_for_each_worker()
- termination logic
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Gabriel Krisman Bertazi <krisman@suse.de>, io-uring <io-uring@vger.kernel.org>, 
-	Max Kellermann <max.kellermann@ionos.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[szeredi.hu,kernel.dk,ddn.com,gmail.com,vger.kernel.org,purestorage.com,samsung.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,mailhost.krisman.be:mid]
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 395C433750
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
 
-FOSS is generally in perfect condition for rip off :-)
+Joanne Koong <joannelkoong@gmail.com> writes:
 
-On Mon, Jan 5, 2026 at 9:41=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
+>> But now I see this is never exposed to userspace as an io_uring_cmd
+>> command itself, it is only used internally by other fuse operations.
+>> Nevertheless, it's implemented as an io_uring_cmd by
+>> io_uring_cmd_kmbuffer_recycle.
+>>
+>> Is it eventually going to be exposed as operations to userspace? If not,
+>> I'd suggest to stay out of the io_uring_cmd namespace (perhaps call
+>> io_kmbuf_recycle directly from fs/fuse).  Do we need to have this
+>> io_uring_cmd abstraction for some reason I'm missing?
 >
-> On 1/5/26 11:07 AM, Gabriel Krisman Bertazi wrote:
-> > Jens Axboe <axboe@kernel.dk> writes:
-> >
-> >> A previous commit added this helper, and had it terminate if false is
-> >> returned from the handler. However, that is completely opposite, it
-> >> should abort the loop if true is returned.
-> >>
-> >> Fix this up by having io_wq_for_each_worker() keep iterating as long
-> >> as false is returned, and only abort if true is returned.
-> >
-> > The fix is good, but the API is just weird.
-> >
-> > io_acct_for_each_worker returning true indicates an error that will
-> > abort the wq walk.  It is a non-issue, since all the two callers cannot
-> > fail and always return false for success :-)
-> >
-> > Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+> Hi Gabriel,
 >
-> Thanks for taking a look! Was going to post a followup just killing
-> the return value of io_wq_for_each_worker() to void as nobody uses
-> it. Only the cancelation side with its matching will use a true
-> return, most of iterations want to iterate all of them.
+> Thanks for taking a look at the patchset.
 >
-> --
-> Jens Axboe
+> This is not going to be exposed as an operation to userspace. Only the
+> kernel will be able to recycle kmbufs.
 >
+> I was under the impression the io_uring_cmd_* abstraction was
+> preferred as the API for interfacing with io_uring from another
+> subsystem.
+
+Hello,
+
+I don't think that's the case, no. io_uring_cmd are used to expose
+backend-specific file operations to userspace, similar to an
+asynchronous ioctl.  Moreover, it would just add an extra layer, without
+bringing any benefits, IMO.
+
+> In that case then, I'll get rid of the io_uring_cmd layers
+> for the calls then, that will make things simpler.
+
+-- 
+Gabriel Krisman Bertazi
