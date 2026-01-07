@@ -1,203 +1,212 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011033.outbound.protection.outlook.com [52.101.52.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B5A39C657;
-	Wed,  7 Jan 2026 15:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767801214; cv=none; b=qVuWuvbvRNf22ZzCNQ2jlM4tUUjYNHicqlfNwzNY4SubdK2NvvwuZ8N0GvMuedyB6lgPReLVG2DBzMJhloGmfB6H1MqTPYeKOPSsL7C1Jv4NAIdAhmNtSff8WxKjOO1VKE8RwDW6TFfsowZ8cqqiTQ/YqfERtWU4rCylhf3Muhw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767801214; c=relaxed/simple;
-	bh=1l8gtyiVh89SnrAAKIoGglB35M8j8jbonFhl8c4Gh40=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L8cBEuTMuLslgGz771D6QAh5ZEX+mdMBt8QLAfG/mJsaluZxrOcad4TGsZgj0pj9IODRVZ50ykhVaU6USZL35zL2BWqkB7/6ORKGMrgR1yKuZeYv3/G4dl0Ckd4p9vkXnGEqiLko7N1dhcXcjE3eTqZxxXk7eaiuCH9/8CYLGdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SAJZ2nA8; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616DE321F5F;
+	Wed,  7 Jan 2026 15:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767801378; cv=fail; b=NDR3OMMMES+qLwki68qG7Phe2xwwz8l7Pdbd+xRnDAu0Jcf65KP0Zm0MdA/cadVBn96VibVKTiDs/A8lnzbb4K1VxhmorDJE5QnSuauMUT0C4WmT/JeUnGqrl6EPXBixNhhVReTKDN7KCskFghvzzdoM2diKpkaucDz66/vK0uQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767801378; c=relaxed/simple;
+	bh=k7bATTiZkWOgFS/WEht9i/80RAe2MM/pLT2iT3E3z7Y=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=VNWzbIS2KuU5u6pUtkzuBbVwysuEulNktkawPi3pkWQQipsGjPKC/PtTrvss613YtsAxcb/1d+A37k5rrr55D8oLqHMZmscrJ4Lt+CdEVhNXN8stcxIF2Qi2qO66g0W1BJ6uJYbP//5EQYAhIuXRKP16pPD+hUTpDjCSdoKRQsA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=5i4WeyxQ; arc=fail smtp.client-ip=52.101.52.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SAJZ2nA8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31618C19422;
-	Wed,  7 Jan 2026 15:53:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767801212;
-	bh=1l8gtyiVh89SnrAAKIoGglB35M8j8jbonFhl8c4Gh40=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SAJZ2nA8+w/T0cOLmRCYqOAYrDWeqoXUD+dqoDvMBAY1N9cSSUrxylOLn8mL8XGm/
-	 8EX1mAiA0+2Udxoug70GGvFuAyirph8wko39dCjnQj4s5n01Q9hEQ7tZce4Mj80Xwd
-	 jYSp4EeU9FBHlOMQCsCF4gQstibDzKAI/vsTmeN+nlQuxWTWT+Az/VSLts4B2EmnXC
-	 RFU8w4aPgDAlmOzQ7fTzXH+1YjUucC6/NqC1L5ICTCK8oHbrqpYtVHnkCQzu+9cxOv
-	 9Zr1KeD9ALy3VCl6x+UuLBL+gfOOWT4S2TDBHgeDi/UPmtSfftz/nw+DXoFGTOnwCJ
-	 1wSfEa8dI6JSQ==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Alexandre Negrel <alexandre@negrel.dev>,
-	Jens Axboe <axboe@kernel.dk>,
-	Sasha Levin <sashal@kernel.org>,
-	io-uring@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18] io_uring: use GFP_NOWAIT for overflow CQEs on legacy rings
-Date: Wed,  7 Jan 2026 10:53:04 -0500
-Message-ID: <20260107155329.4063936-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260107155329.4063936-1-sashal@kernel.org>
-References: <20260107155329.4063936-1-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5i4WeyxQ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JQQ501cBUratPYNc0BMOoDnbPobXSAyWpkGrYsJsLPD9QzxFjDjTfGtb3AZnluaU8bIa4JSIo+RxCQHx63xKFiPrN5riiK55hu7H+mtxhWnAOP9Ez+wl9WHm0eFXi2szOj0fp+Kahg/JPzVBdliU+qQMpkd0ehC3yxZtiCeaP4Pl7KXW/QIFrZ9CGBUX6xh85ICuvyy4fMvpydAQTHz95rN0wCZuz5LeM/sGtfsHCVnR2i50r/GTQlf7z1aueGDvQH5Z6pBz+EUkclR6Mudc+oKkKLo83zQHXOUL2j7zT3pmY965WJhRDjv702el4MeZAc/GV//ZhH+5r2GvAGq6yw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yI812y4koyhAdOEl6YrNnBtpM+Ex0VABxMKXej+OcJw=;
+ b=ehlwo/gH9q9IZ5n8TtARUtm71gqMPyaN8O0dgyq2tBQ0brnpk0qalpbtc1/7XxdAUKkIUEed1QyvvdZzWzoR1gpRqn9DJgXX1Zob8le1UTtaVUXTxVkX586XK0yVdSg5J5204JlFscjzmygQ9N5/uwY4Pgs+lx0+T9XrWLGeUb04nV7DXcyGpQrbccbnTnsbUgoQaskzywuQPCOH++T+pqzKVh1vrQ4z+MK2FuL+JTs7g7dyFkL5d1eDLfxLCov7CI7DxBjddICCzDD3XY5trb5wVQ/zdNs63yuKIhip/NbGLJBMElvIlVFv/EBUgg0yNYdfBhUHljufX/h7O7GorQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yI812y4koyhAdOEl6YrNnBtpM+Ex0VABxMKXej+OcJw=;
+ b=5i4WeyxQOq24Ya+TDzVpCOlHDdpd7Q95nkAAz5P6a5hS/Sw5otUtIOOBiWOTxwzg4uWsxLrTq3AhzCGCoULCXvLIoVhTalVpXXIEGUqqTXpKaZOlbYBeePZC7pH8x93u4bEEax2mtDte62vJqF5RVqxzknBnm20HTMxJOn6eUxQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by MW4PR12MB6974.namprd12.prod.outlook.com (2603:10b6:303:207::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Wed, 7 Jan
+ 2026 15:56:12 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::46fb:96f2:7667:7ca5%4]) with mapi id 15.20.9499.002; Wed, 7 Jan 2026
+ 15:56:12 +0000
+Message-ID: <754b4cc9-20ab-4d87-85bf-eb56be058856@amd.com>
+Date: Wed, 7 Jan 2026 16:56:05 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC v2 01/11] file: add callback for pre-mapping dmabuf
+To: Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, linux-block@vger.kernel.org,
+ io-uring@vger.kernel.org, Vishal Verma <vishal1.verma@intel.com>,
+ tushar.gohad@intel.com, Keith Busch <kbusch@kernel.org>,
+ Jens Axboe <axboe@kernel.dk>, Sagi Grimberg <sagi@grimberg.me>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, linux-kernel@vger.kernel.org,
+ linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org
+References: <cover.1763725387.git.asml.silence@gmail.com>
+ <74d689540fa200fe37f1a930165357a92fe9e68c.1763725387.git.asml.silence@gmail.com>
+ <7b2017f4-02a3-482a-a173-bb16b895c0cb@amd.com>
+ <20251204110709.GA22971@lst.de>
+ <0571ca61-7b17-4167-83eb-4269bd0459fe@amd.com>
+ <20251204131025.GA26860@lst.de> <aVnFnzRYWC_Y5zHg@fedora>
+Content-Language: en-US
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+In-Reply-To: <aVnFnzRYWC_Y5zHg@fedora>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: YT4PR01CA0267.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:109::22) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18.3
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|MW4PR12MB6974:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3607b8f6-42fc-4b54-e20b-08de4e0547dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TE9BSG9xMFJzTGpJVmJnajNubUlEeGFKNDEvUExwakhjMXpERStCQjk5cDVj?=
+ =?utf-8?B?aFgrUnNSeitXdDNDb253cE5OZjlOblVhWnFyZGtycXdmeDBiRzRYaWxFYlVZ?=
+ =?utf-8?B?eUtIdElSVlJ0V2t3NEpUSlhrTlVDSW13UktndHl6QzliYjd2RkZrMmdqOTRI?=
+ =?utf-8?B?T2MzeHhPdDFySnErRUszdFY0bkgwc2lxdnk5aEgyOVl4YjhvbzF0dzlpRFhH?=
+ =?utf-8?B?aXdzc05yUU85RmI0WG9ocEh2bm5LU05ROXFOWG1mUUpDaWJTVm1qdWVpMGRL?=
+ =?utf-8?B?ZTByWEQ4YjhhNUFzUlZnT3huZjUrMk14bWh6aTF0UVBrV3c5VWZubUFBNmJW?=
+ =?utf-8?B?Qk1vZlZ5UGRVc2ZGekk1bDRGT1VTUUp6WjViUGNTYWtQazBad0VRL0Z3aE5S?=
+ =?utf-8?B?S3Jmb1FIN05ZQ1JBdXRxYWU1MGFjT1dON3I3Y3JXOGZXWlFqTXlHeSs4bTRL?=
+ =?utf-8?B?enduazdJd3Ird2RkR0QvdHYySTBWeGFvRzVHN1JxSjZoaXJlWmhTSXlZeXRX?=
+ =?utf-8?B?ZDI3N21yTDhvV2R3VDJZT08vaDIxMjR4M1kwSE9UaWNtd3c1dk1obGRPbUlR?=
+ =?utf-8?B?NUpFK29Rd2hoYThDN3dIUVEzZVgrVFNZbW41aVFETklWTnVnMmFoZXc0RmNS?=
+ =?utf-8?B?NmxNOUppNFJqc3BXcVNqRnNxNHBLRE1oT2VIQXFvZDZRLzB6akJMd2FEVXlB?=
+ =?utf-8?B?VnpoT2tTOS9xK0FzYktITlQ0akUxK2ptUXNKeXJhT1Y0K0Y2WUkyMllsQk1q?=
+ =?utf-8?B?ZFBKOVFFdjE4czc1OGhFcVJtQTZwdXF1U3BnMm5PSDhTWWRDaXZDMFNvSVU1?=
+ =?utf-8?B?Q3JKSzg1bzNDQ05JTC82VFloSzY3Qm9Eb1BDNzkwU3l3S1pNZTlaSzdObUpI?=
+ =?utf-8?B?RWR0NzlzWlFsRmptVzJubU5EWmxuaytRREVGTWFNd1pkV25wTHhTcDQrb1hq?=
+ =?utf-8?B?anhxTjRabXEyWEsrN2ZiS2FqNkVVU0NMQmg0MFl0VEdrOGx0Y2JxakZ5OU5L?=
+ =?utf-8?B?WFE1SXppYld0YkxhNDBmOXo5SWk2R2F6UG0zWWIxYjRsVlNrUDU0S2pPT1Rq?=
+ =?utf-8?B?UlorWWhXRldhMkRrVFpFRVMwMzNQcmxJQkpycEdCMUR5MGhvNzBlKy9sNS9E?=
+ =?utf-8?B?TkRXb0E3a3JCZmdwb3liMHVzUEFEMmtvUVlYMDBNcDFoak1KaWN0bDRIVEJw?=
+ =?utf-8?B?NXBnMDNQNTVIdENOTVhvQjBLRWJDQ3ZOVWVwV3FNNjFiMUNhNEhDRkpDanlO?=
+ =?utf-8?B?TGlicnlwRVdtQVJrbm5oVm9CV2lxUXNrWjhLSVpnQmZZQmI0NER6Y29abDVu?=
+ =?utf-8?B?Nkh6eXZKaGZJaU5QOXk2Mjd1TDArZjNPWkZmejZ2MUYzbEc4aGN1eG1mV1NL?=
+ =?utf-8?B?UENFYUZyeU5pSlJIRVM4V1VWNmQ1NWc4VC9jVUZJVXR4SitBbDhoRUIwV0Q5?=
+ =?utf-8?B?aGlNWlJEMGZlUnRraVI3YnRLYTRnL3krbjlKOTZxbGVkd09KblllbVpueC9w?=
+ =?utf-8?B?Z1dMWHU5TFdpaVlsQUVaNGhTY3RKajBxeFAraVhoSjJZRzVxTGJoSmtGcDly?=
+ =?utf-8?B?d083RFJLaFY4aGZHUlVZV3JLU041K2IrQTBFSG41RDRwblZST0ZmTEtSbGN2?=
+ =?utf-8?B?aDJ1TzAyRUtjY0doVXdPUlBqMG5YU3VlNklyUDh6WkR5ckJ5bVdKOEQ2aytD?=
+ =?utf-8?B?cXRIKy9OWlZuN0ZrTFdpVnhiZGtGUVJ4c0JiYjFKTXY1OW9DMW1hYndPcWhq?=
+ =?utf-8?B?d1JodlBOclU4QkZXTnFBR0xKVnVNUlJXQWljdXBPQU41ZUpQSmtCTXJmWUV6?=
+ =?utf-8?B?SWxkbnRzU0VmczZBOUtrOTRhUlAyNDBsYTRYLzV3MFZLT3NKNE9CSHkySG9Q?=
+ =?utf-8?B?TER5WEQzRE02TDdqVk8xZkxkeFFjZXhkRWVNUzJYUlBZTGdZRm9oZHlQY2tR?=
+ =?utf-8?Q?/GNdQ41tynkPL7X0Ki0dD1n30kqYa2Hm?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Ry9UM1FDZWVHK3lMdzM0RnJRUzV4aC9yaE1Mekp0N1dZY2hXZ1QycGE5a2VV?=
+ =?utf-8?B?VGxiUzVldy9oTERDVzN4QkFGcVNqWCs4aGZPaS9TdFZjR2RWSFRpNTNKRUlD?=
+ =?utf-8?B?TnUxU2oxK0dDaWVRY1BYcGlxTmVLaE5XWE8wemhaelBabnhuWjkrM3dvNUky?=
+ =?utf-8?B?M2swUm01VzV2S1lpL2xqL05wdnppR3F1WXgwUGhZeVYyQUFwT3pHek5JTTU4?=
+ =?utf-8?B?SUhGM1NVOUtPVXA4dWFyZUhnS0J6NUh0cGNoWEFURE05MFZwL0UzQmZVZ1RK?=
+ =?utf-8?B?Z0FGY2FzRTl2ajMyaHNQSkIzZHdnc2hkWlc4dmZ4WHQ0NGZBdnVIL000N0lR?=
+ =?utf-8?B?TngrdEVUa2RnUzVqNzVVcElKNC9CaGRMNUJhOGFOVFk0dXJ3YVF0VXRFSmZs?=
+ =?utf-8?B?RmJnaUVYck5SbnRGb1QzTHVIeURuVk1XQUx6OHlRS3g2OUNrSkE1Wlo2WFJO?=
+ =?utf-8?B?SnA4b2laUVEwdUwyTjhpeEJQaFloUDNJbTh5bjIrVVJmOG9GaEVzUjNCa1Fs?=
+ =?utf-8?B?NXZ1VHAvbys2QmdLVUQvWGNDRHpOZGUreHpmV09CK2xzWTU5dDF2ZUdWQnpF?=
+ =?utf-8?B?NHBXSkpxMWpEeFJ4VFFiYlVwd1JjRHNaNzRWRmVNbGQ1OU5WcTlzQkl6OS9R?=
+ =?utf-8?B?dXhwYnhBdnllQUhURzhCaEh5ZkhYSnhlRllYR05YWkdQWWJmajVuNm9rWERh?=
+ =?utf-8?B?T3dibW0rS3BucFlROWt1YXIvakV2YzVxaFVHZ25GaXBGd1Z5dkF5ZGVZdXBR?=
+ =?utf-8?B?KzVxbHJhRmp5RXhaTVB2ZmlsRGNWUDNXOFpyT3VpaXhFY2p4K04wYkg1blRN?=
+ =?utf-8?B?eEw3cFhVUmthOFZRYzFPditjU0tRV1hZeFE0Z3k2NmxPa1R6MUpHNkNBYjZv?=
+ =?utf-8?B?K0IxRW9WcXd0RjhTYmlDZmp5YlRwN1EzNDhCdVoxVXJGcG9Id3dmNGs5bU9l?=
+ =?utf-8?B?ZUNnODNqejhIQWNTbFRxcjRuc2lHMHBHODcyMXRuNytmV0hmVUVUNzN3NFY0?=
+ =?utf-8?B?aHljODVKdWJQTjhZTWxoakRvQWxVU3R4dUUyRDBLSlk0ek9iSHlkUXRMWk02?=
+ =?utf-8?B?R0lScVV0VHRNRFBYbFZ5MHhvTCtTVVl3Y3dhaWxUU2ttb3ZXbnlvN0V3VThm?=
+ =?utf-8?B?MHRjL2RGSWNwTlNkTTRKckkrMm1WUnZ0UnhWWkowNnl4aGRRNlpsb3FtMUVt?=
+ =?utf-8?B?dWJzb08rV1ZRa1IvTnRHYVM4cGJZMk5JRUY5T3Q0aVQ0UnVuSjh1ZlZvTHgw?=
+ =?utf-8?B?WUpLbHdkWG1PZVJuVUt3MmZBK005UzhVWnlKMWxjRDkrUERDOEIwSURqZnEw?=
+ =?utf-8?B?TkNUMnFYV3I3WnhsdGFBNGlRZlpERm0rL0t4ajJvdXk0dklkckZ5Z3VzL3Vh?=
+ =?utf-8?B?YVR0ZmdhZndydldYWElWQmNiZmFIM2lJQkdKbVEwWUhmWklyNkNIOUZrMFY4?=
+ =?utf-8?B?ZTJSTUgzaFJDNDRnc2w1dzVITzdsY3NaU1AzOEtZdnJJZ3gwTS8vTVBNWWdw?=
+ =?utf-8?B?V2xBV2ZLYnFvbDFSWTc5dDl6Wmc4TS9FNE9lMDg0N2lyR1ZZZ21xTDVkWVYr?=
+ =?utf-8?B?RXZoOU5JV2h6ZW5NMVM1aDh0bHdseXNabGt0OTVjNkEwcEVsdGc1ZkJJRklJ?=
+ =?utf-8?B?NnVyOHIrUzYrVWlEV1dSNlZERnZmM3ZPOUcycXhvSjZNRUlKUHVWWW8xbmRJ?=
+ =?utf-8?B?RERONzBqR2l0ZGdFMnE4aHNRd0FZVjR0V1Q3Snp5amkzSWZucno1VDFiT3BN?=
+ =?utf-8?B?WG1RYWV2MGZTNndKZ1I2ekUyTlJ2ZTRwbVN4VUl3VUNzU05mVmNJYzFtbVZN?=
+ =?utf-8?B?UDFHRWw0Z1BXWmxDL1d6V2s0dHlpWVVlZDIzZEROTHFnUlF5bFcvS1JBdnZk?=
+ =?utf-8?B?SDhkbUd6ZWQrOW9ET1JEeTR1Z21RalIzK09FSEhGbUxKakF5SW53dHJLczFs?=
+ =?utf-8?B?dGRieWxDYVFSNzdxZDRoNU9xSzZoUUlDSVp2Rnd2aCtmR2RKQ2dMbkNWc29U?=
+ =?utf-8?B?cFh0VE5sZHg5WGRFdXV4RFkwaHhhdGxkU21ndUhkbFE1UURMUHFtK3dwbEhO?=
+ =?utf-8?B?bUE3YzJUOUJVUVhWZVFrYmMwQ1RFUG5WakluSkN5Uk1oNkMxdXhqVmxPVnhP?=
+ =?utf-8?B?ZXdEWDMxaUZGYVBZUi8zSCtxb3JxT3cwNE5SaGhXYjRTdnJsdGNyWGdmVisw?=
+ =?utf-8?B?c3o5cUVjaXZKcEhkL1Z1KzRISHgycWY2MSs1ZzZYYlRkWmVJRUl6R2JEendv?=
+ =?utf-8?B?UG5YckJtR2pETkdiRTZ3NmNUT2h4VjhQN20zV2drdE1YYllYNjJ5azlOekIz?=
+ =?utf-8?B?cDFsU2NKejF4cGJ2T3M2a0I5RXppeERLQ0RpbkRIdHFrcUxmZm1ZQT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3607b8f6-42fc-4b54-e20b-08de4e0547dc
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2026 15:56:12.2204
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: B+3AU2iFjnI4pkM/6aA7Z0g3Hlz4I/oxBvNkz1HH3nooV8dPz1Rqb1Q1+7v2VRXY
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6974
 
-From: Alexandre Negrel <alexandre@negrel.dev>
+On 1/4/26 02:42, Ming Lei wrote:
+> On Thu, Dec 04, 2025 at 02:10:25PM +0100, Christoph Hellwig wrote:
+>> On Thu, Dec 04, 2025 at 12:09:46PM +0100, Christian König wrote:
+>>>> I find the naming pretty confusing a well.  But what this does is to
+>>>> tell the file system/driver that it should expect a future
+>>>> read_iter/write_iter operation that takes data from / puts data into
+>>>> the dmabuf passed to this operation.
+>>>
+>>> That explanation makes much more sense.
+>>>
+>>> The remaining question is why does the underlying file system / driver
+>>> needs to know that it will get addresses from a DMA-buf?
+>>
+>> This eventually ends up calling dma_buf_dynamic_attach and provides
+>> a way to find the dma_buf_attachment later in the I/O path.
+> 
+> Maybe it can be named as ->dma_buf_attach()?  For wiring dma-buf and the
+> importer side(nvme).
 
-[ Upstream commit fc5ff2500976cd2710a7acecffd12d95ee4f98fc ]
+Yeah that would make it much more cleaner.
 
-Allocate the overflowing CQE with GFP_NOWAIT instead of GFP_ATOMIC. This
-changes causes allocations to fail earlier in out-of-memory situations,
-rather than being deferred. Using GFP_ATOMIC allows a process to exceed
-memory limits.
+Also some higher level documentation would certainly help.
 
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=220794
-Signed-off-by: Alexandre Negrel <alexandre@negrel.dev>
-Link: https://lore.kernel.org/io-uring/20251229201933.515797-1-alexandre@negrel.dev/
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
+> But I am wondering why not make it as one subsystem interface, such as nvme
+> ioctl, then the whole implementation can be simplified a lot. It is reasonable
+> because subsystem is exactly the side for consuming/importing the dma-buf.
 
-LLM Generated explanations, may be completely bogus:
+Yeah that it might be better if it's more nvme specific came to me as well.
 
-## Analysis of io_uring GFP_NOWAIT Commit
+Regards,
+Christian.
 
-### 1. COMMIT MESSAGE ANALYSIS
-
-The commit message is clear and well-structured:
-- **Problem**: Using `GFP_ATOMIC` for overflow CQE allocations allows
-  processes to exceed memory limits
-- **Solution**: Change to `GFP_NOWAIT` which fails earlier in OOM
-  situations
-- **Bug Reference**: Links to kernel bugzilla (bug 220794) - indicates a
-  real user-reported issue
-- **Proper sign-offs**: Author and maintainer (Jens Axboe) signatures
-  present
-
-The key insight is that `GFP_ATOMIC` can dip into emergency memory
-reserves, allowing allocations to succeed even when a process should be
-constrained by memory limits. This is a resource exhaustion / memory
-limit bypass issue.
-
-### 2. CODE CHANGE ANALYSIS
-
-The change is minimal - a single line:
-```c
-- ocqe = io_alloc_ocqe(ctx, cqe, big_cqe, GFP_ATOMIC);
-+       ocqe = io_alloc_ocqe(ctx, cqe, big_cqe, GFP_NOWAIT);
-```
-
-**Technical mechanism of the bug:**
-- `io_cqe_overflow_locked()` is called when the completion queue is full
-  and entries must overflow
-- This function runs with `completion_lock` held, so it cannot sleep
-  (ruling out `GFP_KERNEL`)
-- `GFP_ATOMIC` can access emergency memory reserves, bypassing memory
-  limits
-- `GFP_NOWAIT` is also non-sleeping but respects memory limits by
-  failing instead of dipping into reserves
-
-**Why the fix works:**
-- Both flags are appropriate for the atomic context (holding spinlock)
-- `GFP_NOWAIT` is semantically correct: the allocation should fail
-  gracefully under memory pressure rather than bypass system memory
-  constraints
-
-### 3. CLASSIFICATION
-
-- **Bug fix**: Yes - fixes memory limit bypass
-- **Feature**: No - no new functionality added
-- **Security-relevant**: Yes - this could be exploited for resource
-  exhaustion/DoS, particularly in containerized or multi-tenant
-  environments with memory cgroups
-
-### 4. SCOPE AND RISK ASSESSMENT
-
-- **Lines changed**: 1
-- **Files touched**: 1 (io_uring/io_uring.c)
-- **Complexity**: Trivial
-- **Function context**: `__cold` path - not in hot path, used only
-  during overflow conditions
-
-**Risk analysis:**
-- Allocation may fail more readily under memory pressure - but that's
-  the *intended* behavior
-- If overflow allocation fails, the CQE won't be recorded - applications
-  relying on completion notifications might be affected, but this is
-  correct behavior when memory is exhausted
-- Very low risk of regression since this is the semantically correct
-  change
-
-### 5. USER IMPACT
-
-- **Who is affected**: Users running io_uring workloads (databases,
-  high-performance I/O applications)
-- **Severity of bug**: Medium-High - allows memory limit bypass which is
-  particularly problematic in:
-  - Container environments (Docker, Kubernetes)
-  - Systems with memory cgroups
-  - Multi-tenant systems
-- **Reported by users**: Yes - bugzilla link indicates real-world issue
-
-### 6. STABILITY INDICATORS
-
-- Accepted by Jens Axboe (io_uring maintainer)
-- Has proper Link: to mailing list discussion
-- Referenced bug report demonstrates real user impact
-- Simple, well-understood change
-
-### 7. DEPENDENCY CHECK
-
-- No dependencies on other commits
-- `io_alloc_ocqe()` and `io_cqe_overflow_locked()` exist in stable
-  kernels
-- io_uring has been present since kernel 5.1
-
-### CONCLUSION
-
-**Meets stable criteria:**
-- ✅ Obviously correct - semantically appropriate GFP flag
-- ✅ Fixes a real bug - memory limit bypass (resource exhaustion)
-- ✅ Small and contained - single line change
-- ✅ No new features or APIs
-- ✅ Tested in mainline
-- ✅ Referenced bug report shows real user impact
-
-**Risk vs Benefit:**
-- Risk: Minimal - well-understood change to allocation flags
-- Benefit: Fixes a memory limit bypass that could be used for DoS
-
-This is an ideal stable backport candidate: a tiny, surgical fix
-addressing a real security-relevant bug (memory limit bypass) with
-minimal risk of regression.
-
-**YES**
-
- io_uring/io_uring.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 60adab71ad2d..93b203205a16 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -897,7 +897,7 @@ static __cold bool io_cqe_overflow_locked(struct io_ring_ctx *ctx,
- {
- 	struct io_overflow_cqe *ocqe;
- 
--	ocqe = io_alloc_ocqe(ctx, cqe, big_cqe, GFP_ATOMIC);
-+	ocqe = io_alloc_ocqe(ctx, cqe, big_cqe, GFP_NOWAIT);
- 	return io_cqring_add_overflow(ctx, ocqe);
- }
- 
--- 
-2.51.0
+>  
+> 
+> Thanks, 
+> Ming
+> 
 
