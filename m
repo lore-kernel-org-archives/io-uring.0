@@ -1,34 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CB0359FAC;
-	Thu,  8 Jan 2026 07:40:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2119F35970E;
+	Thu,  8 Jan 2026 07:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767858052; cv=none; b=vBy7W6dPq7mmueHZyvzoOHkMp/LNP1+Ow32g2PBDUsNQXFt+ndbRAEAcGSmvqd4wiefO8XFuXGOME1tyrqDKwhCIEzjcwuUCIWfal7a59FwqXr9LJ0Nn7+Ee5xDI0uj3q2avqxiFLZfhEPgjlgTKiXowhxCTPsGUBEMKtO5SyyM=
+	t=1767858053; cv=none; b=VbzXN83jORKcNZpUmxMOq++QQebXRkSjdBZSekp8VgoUD4o/v6mTO566DBuacil6URbzA/8jWNmX/fRf8ScmAcIq5rydCt0TduhNnGdcj335oi6mgXEMZKKGBO8EpNIrDCg8VnEf9gAyV3Pqw2hxwAi9XuyKJLq8GEgfV2aN8Rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767858052; c=relaxed/simple;
-	bh=YYYAsBcchiEX6jTu4koZi5Dx1eLSczpR7tymQfKyC4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JBZi5mN8dpPbocpnQ3KjUCNGu53Yqt+6qCok+suyG2zFpK8FjficwRS30jYlLH4FbMlbZZAkA5FpepkvygYQNX9aqrYex/JXGzt/4XUAF11Th629+SmwnCpLw+/uns1obJGYXexBZfLJl67kNq/ZuOfNX2qx78IkTfzedId2qrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=BRhrk4U3; arc=none smtp.client-ip=62.89.141.173
+	s=arc-20240116; t=1767858053; c=relaxed/simple;
+	bh=y0fSS88FaLD/1hjr9i8JnMRqbkv5ATcNAM09cFE0wiE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rZbcHookGjibRnBRSROv0vdr6CZrYc5Bitylj0pDHMeN259MXmf6laAJsRXg8ojKMr/D3O3ANXMPh4ZFmqKVolZWKEUaR4kkGMNqe4X3AzuQEA28AifnSRJewyOsgBVdV3vUpfSRRhOJt08FgbktUJlEt8Y/J70z0EGy4zUHk5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=SInSFdnw; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="BRhrk4U3"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="SInSFdnw"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=JcA9xF/qUKyoDRsfXihT0Yhg31Gwyc+UC3U5oSPw9as=; b=BRhrk4U37T4C/59dzw/BVHex+o
-	w9rNf0hgGN3RR2j6SvisFi6w3CQXU9UWdTOX2j7LiTbfql1x7/S8ysn99zohIyN5tMEQHCNYEytTM
-	IWXE3TPrzxIIcBU/60YYCdOyzxfpx99ILJL8l89BQcytSp1qyshbYj19e94BsSS3t3OLeoS3FGCcn
-	ktDjjoJe8yWH3w+3rJasA0HNMriAVZ/usO5BWTcgpZSihFRffZXdsmQCvdxzExm/N38XkkPgrJONX
-	68skXOMFSqrPMUOV+azBfLFDJfLPugNjxm/7KUZabcF6NLklV8VmyPjySxKiWADnZejAt3MT03Prd
-	fRyGKuOg==;
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=RqSr8nXaCST8kjVIFWUJupZ4lw+rAvvvW2rbESyuJxE=; b=SInSFdnwlKfcAp42G4d9ZZ9vsA
+	x6T9H5E4gk06wTZxFCrz8uPEJKB4wlE4AaFHh6fn8f8741W42xLwUcV3lLAxfX3mPvRjHZHF+rHZp
+	4ux+93s+ktvy18/CQpX7Tl+g2eSFGyHTEavqe54WeczrGqCpqphD67LqP5gYyWv+CE65U++vOSqH+
+	rdeCG5UgxB099X9AwYQ1cV92b0OylpzKx67PBWoeWC5Axjr+8aCPqw47foFQuUeOYpDyxRyip5W28
+	py1YlTLqFxDzgijFOzE9S0hkdjv5uzMPTjrCqslN/S/Zo6RXdJmCcSyESttg/bgMAz2fINoUGcpbL
+	1U3/xoZw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkei-00000001pHZ-0AhU;
-	Thu, 08 Jan 2026 07:42:04 +0000
+	id 1vdkef-00000001pEr-0jmD;
+	Thu, 08 Jan 2026 07:42:01 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,12 +39,10 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 8/8] do_execveat_common(): don't consume filename reference
-Date: Thu,  8 Jan 2026 07:42:01 +0000
-Message-ID: <20260108074201.435280-9-viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH 0/8] experimental struct filename followups
+Date: Thu,  8 Jan 2026 07:41:53 +0000
+Message-ID: <20260108074201.435280-1-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260108074201.435280-1-viro@zeniv.linux.org.uk>
-References: <20260108074201.435280-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -55,71 +52,40 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-... and convert its callers to CLASS(filename...)
+This series switches the filename-consuming primitives to variants
+that leave dropping the reference(s) to caller.  These days it's
+fairly painless, and results look simpler wrt lifetime rules:
+	* with 3 exceptions, all instances have constructors and destructors
+happen in the same scope (via CLASS(filename...), at that)
+	* CLASS(filename_consume) has no users left, could be dropped.
+	* exceptions are:
+		* audit dropping the references it stashed in audit_names
+		* fsconfig(2) creating and dropping references in two subcommands
+		* fs_lookup_param() playing silly buggers.
+	  That's it.
+If we go that way, this will certainly get reordered back into the main series
+and have several commits in there ripped apart and folded into these ones.
+E.g. no sense to convert do_renameat2() et.al. to filename_consume, only to
+have that followed by the first 6 commits here, etc.
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/exec.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+For now I've put those into #experimental.filename, on top of #work.filename.
+Comments would be very welcome...
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 4e192d7b7e71..3405c754da80 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1775,12 +1775,11 @@ static int bprm_execve(struct linux_binprm *bprm)
- 	return retval;
- }
- 
--static int do_execveat_common(int fd, struct filename *__filename,
-+static int do_execveat_common(int fd, struct filename *filename,
- 			      struct user_arg_ptr argv,
- 			      struct user_arg_ptr envp,
- 			      int flags)
- {
--	CLASS(filename_consume, filename)(__filename);
- 	int retval;
- 
- 	/*
-@@ -1927,7 +1926,8 @@ SYSCALL_DEFINE3(execve,
- 		const char __user *const __user *, argv,
- 		const char __user *const __user *, envp)
- {
--	return do_execveat_common(AT_FDCWD, getname(filename),
-+	CLASS(filename, name)(filename);
-+	return do_execveat_common(AT_FDCWD, name,
- 				  native_arg(argv), native_arg(envp), 0);
- }
- 
-@@ -1937,7 +1937,8 @@ SYSCALL_DEFINE5(execveat,
- 		const char __user *const __user *, envp,
- 		int, flags)
- {
--	return do_execveat_common(fd, getname_uflags(filename, flags),
-+	CLASS(filename_uflags, name)(filename, flags);
-+	return do_execveat_common(fd, name,
- 				  native_arg(argv), native_arg(envp), flags);
- }
- 
-@@ -1952,7 +1953,8 @@ COMPAT_SYSCALL_DEFINE3(execve, const char __user *, filename,
- 	const compat_uptr_t __user *, argv,
- 	const compat_uptr_t __user *, envp)
- {
--	return do_execveat_common(AT_FDCWD, getname(filename),
-+	CLASS(filename, name)(filename);
-+	return do_execveat_common(AT_FDCWD, name,
- 				  compat_arg(argv), compat_arg(envp), 0);
- }
- 
-@@ -1962,7 +1964,8 @@ COMPAT_SYSCALL_DEFINE5(execveat, int, fd,
- 		       const compat_uptr_t __user *, envp,
- 		       int,  flags)
- {
--	return do_execveat_common(fd, getname_uflags(filename, flags),
-+	CLASS(filename_uflags, name)(filename, flags);
-+	return do_execveat_common(fd, name,
- 				  compat_arg(argv), compat_arg(envp), flags);
- }
- #endif
--- 
-2.47.3
+Al Viro (8):
+  non-consuming variant of do_renameat2()
+  non-consuming variant of do_linkat()
+  non-consuming variant of do_symlinkat()
+  non-consuming variant of do_mkdirat()
+  non-consuming variant of do_mknodat()
+  non-consuming variants of do_{unlinkat,rmdir}()
+  execve: fold {compat_,}do_execve{,at}() into their sole callers
+  do_execveat_common(): don't consume filename reference
 
+ Documentation/filesystems/porting.rst |  8 +++
+ fs/coredump.c                         |  3 +-
+ fs/exec.c                             | 87 ++++++++-------------------
+ fs/init.c                             | 22 ++++---
+ fs/internal.h                         | 14 ++---
+ fs/namei.c                            | 87 +++++++++++++++------------
+ io_uring/fs.c                         | 25 +++++---
+ 7 files changed, 117 insertions(+), 129 deletions(-)
