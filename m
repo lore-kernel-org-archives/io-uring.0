@@ -1,245 +1,282 @@
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1744B22097
-	for <io-uring@vger.kernel.org>; Thu,  8 Jan 2026 07:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5DE318BAB;
+	Thu,  8 Jan 2026 07:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767856025; cv=none; b=obxgFgoH12x1YmGPeWmDy+nhiIicbAsK807n2DecwQov6DWwbT3t45YX2wC8b3L14jkQ3c5y0UpktMyheI9qxcX0mVeOGlUYfXy2kTdQhfYkl9V1d2jFULJrLXQGGVUXcsQfsN+GXmHJeMkN3h/fXkzrS8wYRfgWV54/HLec4MA=
+	t=1767857811; cv=none; b=FWF398sMjoKukhCdcXCyVhax6fk88sbZwbw2/FoXe846DRegwmxk+QQXpZL4R4EJfHEjs41zj4BQ/yyksGRWKZTgtNhrPyYjBEhvlmIWVM+d6p9ucy3yCGKqjEPWXh9vd7kz58M48BlPC1Zy7yh7IpQPTzNo75EOoWF3lP8kY2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767856025; c=relaxed/simple;
-	bh=iYhUwMe0Sk8rm8N8c9ec2+TXBN25qmKxc9tbIyK3ZyI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jIbfRBb+LxuTHbOmTnk2Yw2AhOGPeVqaSIoTpRuRB6wv4WOY0b8b4ZZ9cXeoMMKeem+0K/vMf2Gs1raLmd4k3l/IYOJtQG+iGnW0ohJVzOW1hEKl0dwxFgQ9yRbDI4hjebAbwNu6TXktLL35KJZgBfwQh5BD/OKH59RYEYfStPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Gc/hznHP; arc=none smtp.client-ip=74.125.82.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1767857811; c=relaxed/simple;
+	bh=IzrgXOT9z6vkgtrPDIdf13q7qyMmn+4ybA/ta0J+TBo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hDoJoaS4BjVcQzS2IOE5JF2RYHo5aoqAhgtBsTGuciRNUysqh0Rj9O0thbNeIdZN3LA+9e/DAfbYOBkGeq6ahC9/ZLHeiNDCKqSSmqeFQTAGRUn5C0oRPvm8P9lZz0LDbAVdpxkdLCky4PFl0CXInmh2YA41sIhECf0ur1SuTh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=A+BMRwqt; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Gc/hznHP"
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-11bba84006dso249816c88.2
-        for <io-uring@vger.kernel.org>; Wed, 07 Jan 2026 23:07:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767856022; x=1768460822; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HfaBcy8tb5KfvL9qS1tptXYCuks8r8SRbJn5dBFC3zc=;
-        b=Gc/hznHP/t90XDrVG/7rtNC8+FFCF+LiXyNkFNMx/OAIlTF92QgHzLi89yeeSdPeMP
-         cXiQLUyzrEoSzimB85/Y2CtX7391AWmeK8RCShEkjrBMvF3I3HRNDW2/uUY8y6uZE0Q/
-         pc8qfrQ01tI00EpGvfyHwqkkCHnvk8LGLHTYHlIrT4KtWJ/G9kiDdAl0vt0+1PRz7yFZ
-         kF8hspiBmY6esOrTifQ6TyfbE+KxiSgP7Qc38nSaW0x7jkH/R4nhI8BlWizLypAjledV
-         HqNSsTU1Zupg1NDqd5xMAKOGQcQz2VvQ7XeFZiBUcNVCcRPCsivIOrXUrYJz8mArHi+t
-         4uLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767856022; x=1768460822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HfaBcy8tb5KfvL9qS1tptXYCuks8r8SRbJn5dBFC3zc=;
-        b=QJD5SUQqCbTwcmXdBKe8UgbSFJ9VoA2vegN1ZQkFGM9/5PzYlHBzfcGw6BV88gyx1x
-         FPB2kmDfTzaBL36KP1nASJpTpql4wiejpCZruodtOr1Lmyl/zbQJ7+ETYXyCX83TPW0t
-         Dml3pAxbBnH1bmUtTfWZF5/qhYSalHbS5bg9ybN44MwX5kUoomwJr+w01RyL5pU37yKB
-         XOiQly+IXPZIXvPMhfXHsjUz41q0I3NTfIAogagYByLlfx6XapBwgfShyYBRVj6I1lON
-         1Gfqpk64S6zOsg9w+iU+taCr7MSAzd50EmLaXIvIPrQPLz331QNKbrii5rkKRcJ36bYc
-         oVYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxsUII1w81I7trVP2XTuq5m2NTTZnfLq46AbFHeVvAku/OUVVeFY/4DN5Zrz2WUCTQgOE/aZ6v3w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMAl2Isxus7Bqb77d1aohD79N9V4PgN/z1jAPoyFxeHKsdBC+z
-	l0IJwmc0JuIjGL1U7t14/qJIB53qJnVuDAU6UbsyYJTj8Yal4+RnMhAEedzBWfTMPaOe0fJdipD
-	NhLSq1YcwysJT/K4du+SVFbXp2MhptFbfP5mre2hOSfgZ8dzz6tFFR3s=
-X-Gm-Gg: AY/fxX79Ce/owmGjO8JnXo6pxwTYeo4Cruy8av7a4/nn7//aaS6yp58HRUFb1oUKXEq
-	TKxZ2XLN77nUZPwYyvnKtgN+PUhQHrJT2TZm1M6wkcVNJkq2MJpc5xETlNkG65nxOI/m1evTqmJ
-	AB0yAORW7JpH54riAMSdTCohxtmt93qoqhPTfTzSkbYeNKgYilVZFuJJ/GJ/gLaV0N3Z1NFupYx
-	fOL8PM7Gn20yN8iofwOcWduS8BT887dnzXVqG9N2DKMMMN2wXYERRN3bucdMz4ggHM4VfVh
-X-Google-Smtp-Source: AGHT+IEYasnyDaYZATTTmpxZBR2V8l9ev4wpn02pLGPoxQcsfHUWeNXhenE4Q+jmy13IuN2ycTn+Gez/3N7H1mlErHM=
-X-Received: by 2002:a05:7022:f415:b0:119:e56b:46b6 with SMTP id
- a92af1059eb24-121f8a30d8emr2507084c88.0.1767856021944; Wed, 07 Jan 2026
- 23:07:01 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="A+BMRwqt"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=qlZnLmrphR+14Jm/ap5jKQC7QyDfASXXE6J1NbaMqlo=; b=A+BMRwqtnlJ73cmnN9eNs7RJ0o
+	AysIJ6pu/KcP3Hwl2pIUrHE4OaAdIoky/uO5JFZks18Zlgt9uXmEMyXNPwQp0167nKjF80z6g2SvD
+	XwLeaYoAQkUXpjZhpEZ3n4ECsG66QHqzq2ePwQ2ogJtzvDz+tj/rs3vTa91EBT6zm1HAuSxqzE1zi
+	31WRWJAcPqkFKqfXDzYRKM1QC+dFKjmzILgv1MxYhlN6xKC2ICv4pABUgMJzwy4UaOiSXA8ckIgb9
+	0XBwDVImyYdH60TqIrJLnmuh9ReqJGuNaXGNHRbzsWQVsQ+TTeAadpOdFZFKy6DmgUIJpk219jIuj
+	aeUm+mTA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vdkar-00000001mgf-0JAP;
+	Thu, 08 Jan 2026 07:38:05 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: torvalds@linux-foundation.org,
+	brauner@kernel.org,
+	jack@suse.cz,
+	mjguzik@gmail.com,
+	paul@paul-moore.com,
+	axboe@kernel.dk,
+	audit@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 11/59] ntfs: ->d_compare() must not block
+Date: Thu,  8 Jan 2026 07:37:15 +0000
+Message-ID: <20260108073803.425343-12-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
+References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260105210543.3471082-1-csander@purestorage.com>
- <20260105210543.3471082-3-csander@purestorage.com> <CAJnrk1YBQdCgOHG2T_D6wV_94kLLftP_G6sLyocRf2wCLTsweg@mail.gmail.com>
-In-Reply-To: <CAJnrk1YBQdCgOHG2T_D6wV_94kLLftP_G6sLyocRf2wCLTsweg@mail.gmail.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Wed, 7 Jan 2026 23:06:50 -0800
-X-Gm-Features: AQt7F2rjv1UO5kt6yQ38qsN73qFLG4Oyqa0CxL7aeS4Gqsz7ZNIv5SEz6dApqEU
-Message-ID: <CADUfDZqYRgMpRATciSzW+Gha_W-RJiX0RYF0K-RLoT_s3OX5qg@mail.gmail.com>
-Subject: Re: [PATCH v7 2/3] io_uring/msg_ring: drop unnecessary submitter_task checks
-To: Joanne Koong <joannelkoong@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Wed, Jan 7, 2026 at 8:25=E2=80=AFPM Joanne Koong <joannelkoong@gmail.com=
-> wrote:
->
-> On Mon, Jan 5, 2026 at 1:05=E2=80=AFPM Caleb Sander Mateos
-> <csander@purestorage.com> wrote:
-> >
-> > __io_msg_ring_data() checks that the target_ctx isn't
-> > IORING_SETUP_R_DISABLED before calling io_msg_data_remote(), which call=
-s
-> > io_msg_remote_post(). So submitter_task can't be modified concurrently
-> > with the read in io_msg_remote_post(). Additionally, submitter_task mus=
-t
-> > exist, as io_msg_data_remote() is only called for io_msg_need_remote(),
-> > i.e. task_complete is set, which requires IORING_SETUP_DEFER_TASKRUN,
-> > which in turn requires IORING_SETUP_SINGLE_ISSUER. And submitter_task i=
-s
-> > assigned in io_uring_create() or io_register_enable_rings() before
-> > enabling any IORING_SETUP_SINGLE_ISSUER io_ring_ctx.
-> > Similarly, io_msg_send_fd() checks IORING_SETUP_R_DISABLED and
-> > io_msg_need_remote() before calling io_msg_fd_remote(). submitter_task
-> > therefore can't be modified concurrently with the read in
-> > io_msg_fd_remote() and must be non-null.
-> > io_register_enable_rings() can't run concurrently because it's called
-> > from io_uring_register() -> __io_uring_register() with uring_lock held.
-> > Thus, replace the READ_ONCE() and WRITE_ONCE() of submitter_task with
-> > plain loads and stores. And remove the NULL checks of submitter_task in
-> > io_msg_remote_post() and io_msg_fd_remote().
-> >
-> > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-> > ---
-> >  io_uring/io_uring.c |  7 +------
-> >  io_uring/msg_ring.c | 18 +++++-------------
-> >  io_uring/register.c |  2 +-
-> >  3 files changed, 7 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-> > index ec27fafcb213..b31d88295297 100644
-> > --- a/io_uring/io_uring.c
-> > +++ b/io_uring/io_uring.c
-> > @@ -3663,17 +3663,12 @@ static __cold int io_uring_create(struct io_ctx=
-_config *config)
-> >                 ret =3D -EFAULT;
-> >                 goto err;
-> >         }
-> >
-> >         if (ctx->flags & IORING_SETUP_SINGLE_ISSUER
-> > -           && !(ctx->flags & IORING_SETUP_R_DISABLED)) {
-> > -               /*
-> > -                * Unlike io_register_enable_rings(), don't need WRITE_=
-ONCE()
-> > -                * since ctx isn't yet accessible from other tasks
-> > -                */
-> > +           && !(ctx->flags & IORING_SETUP_R_DISABLED))
-> >                 ctx->submitter_task =3D get_task_struct(current);
-> > -       }
-> >
-> >         file =3D io_uring_get_file(ctx);
-> >         if (IS_ERR(file)) {
-> >                 ret =3D PTR_ERR(file);
-> >                 goto err;
-> > diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
-> > index 87b4d306cf1b..57ad0085869a 100644
-> > --- a/io_uring/msg_ring.c
-> > +++ b/io_uring/msg_ring.c
-> > @@ -78,26 +78,21 @@ static void io_msg_tw_complete(struct io_tw_req tw_=
-req, io_tw_token_t tw)
-> >         io_add_aux_cqe(ctx, req->cqe.user_data, req->cqe.res, req->cqe.=
-flags);
-> >         kfree_rcu(req, rcu_head);
-> >         percpu_ref_put(&ctx->refs);
-> >  }
-> >
-> > -static int io_msg_remote_post(struct io_ring_ctx *ctx, struct io_kiocb=
- *req,
-> > +static void io_msg_remote_post(struct io_ring_ctx *ctx, struct io_kioc=
-b *req,
-> >                               int res, u32 cflags, u64 user_data)
-> >  {
-> > -       if (!READ_ONCE(ctx->submitter_task)) {
-> > -               kfree_rcu(req, rcu_head);
-> > -               return -EOWNERDEAD;
-> > -       }
-> >         req->opcode =3D IORING_OP_NOP;
-> >         req->cqe.user_data =3D user_data;
-> >         io_req_set_res(req, res, cflags);
-> >         percpu_ref_get(&ctx->refs);
-> >         req->ctx =3D ctx;
-> >         req->tctx =3D NULL;
-> >         req->io_task_work.func =3D io_msg_tw_complete;
-> >         io_req_task_work_add_remote(req, IOU_F_TWQ_LAZY_WAKE);
-> > -       return 0;
-> >  }
-> >
-> >  static int io_msg_data_remote(struct io_ring_ctx *target_ctx,
-> >                               struct io_msg *msg)
-> >  {
-> > @@ -109,12 +104,12 @@ static int io_msg_data_remote(struct io_ring_ctx =
-*target_ctx,
-> >                 return -ENOMEM;
-> >
-> >         if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
-> >                 flags =3D msg->cqe_flags;
-> >
-> > -       return io_msg_remote_post(target_ctx, target, msg->len, flags,
-> > -                                       msg->user_data);
-> > +       io_msg_remote_post(target_ctx, target, msg->len, flags, msg->us=
-er_data);
-> > +       return 0;
-> >  }
-> >
-> >  static int __io_msg_ring_data(struct io_ring_ctx *target_ctx,
-> >                               struct io_msg *msg, unsigned int issue_fl=
-ags)
-> >  {
-> > @@ -125,11 +120,11 @@ static int __io_msg_ring_data(struct io_ring_ctx =
-*target_ctx,
-> >                 return -EINVAL;
-> >         if (!(msg->flags & IORING_MSG_RING_FLAGS_PASS) && msg->dst_fd)
-> >                 return -EINVAL;
-> >         /*
-> >          * Keep IORING_SETUP_R_DISABLED check before submitter_task loa=
-d
-> > -        * in io_msg_data_remote() -> io_msg_remote_post()
-> > +        * in io_msg_data_remote() -> io_req_task_work_add_remote()
-> >          */
-> >         if (smp_load_acquire(&target_ctx->flags) & IORING_SETUP_R_DISAB=
-LED)
-> >                 return -EBADFD;
-> >
-> >         if (io_msg_need_remote(target_ctx))
-> > @@ -225,14 +220,11 @@ static void io_msg_tw_fd_complete(struct callback=
-_head *head)
-> >
-> >  static int io_msg_fd_remote(struct io_kiocb *req)
-> >  {
-> >         struct io_ring_ctx *ctx =3D req->file->private_data;
-> >         struct io_msg *msg =3D io_kiocb_to_cmd(req, struct io_msg);
-> > -       struct task_struct *task =3D READ_ONCE(ctx->submitter_task);
-> > -
-> > -       if (unlikely(!task))
-> > -               return -EOWNERDEAD;
-> > +       struct task_struct *task =3D ctx->submitter_task;
->
-> Is the if !task check here still needed? in the
-> io_register_enable_rings() logic I see
->
-> if (ctx->flags & IORING_SETUP_SINGLE_ISSUER && !ctx->submitter_task) {
->         ctx->submitter_task =3D get_task_struct(current);
->         ...
-> }
-> and then a few lines below
-> ctx->flags &=3D ~IORING_SETUP_R_DISABLED;
->
-> but I'm not seeing any memory barrier stuff that prevents these from
-> being reordered.
->
-> In io_msg_send_fd() I see that we check "if (target_ctx->flags &
-> IORING_SETUP_R_DISABLED) return -EBADFD;" before calling into
-> io_msg_fd_remote() here but if the ctx->submitter_task assignment and
-> IORING_SETUP_R_DISABLED flag clearing logic are reordered, then it
-> seems like this opens a race condition where there could be a null ptr
-> crash when task_work_add() gets called below?
+... so don't use __getname() there.  Switch it (and ntfs_d_hash(), while
+we are at it) to kmalloc(PATH_MAX, GFP_NOWAIT).  Yes, ntfs_d_hash()
+almost certainly can do with smaller allocations, but let ntfs folks
+deal with that - keep the allocation size as-is for now.
 
-Shouldn't patch 1's switch to use smp_store_release() for the clearing
-of IORING_SETUP_R_DISABLED and smp_load_acquire() for the check of
-IORING_SETUP_R_DISABLED in io_msg_send_fd() ensure the necessary
-ordering? Or am I missing something?
+Stop abusing names_cachep in ntfs, period - various uses of that thing
+in there have nothing to do with pathnames; just use k[mz]alloc() and
+be done with that.  For now let's keep sizes as-in, but AFAICS none of
+the users actually want PATH_MAX.
 
-Thanks,
-Caleb
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/ntfs3/dir.c    |  5 ++---
+ fs/ntfs3/fsntfs.c |  4 ++--
+ fs/ntfs3/inode.c  | 13 ++++++-------
+ fs/ntfs3/namei.c  | 17 ++++++++---------
+ fs/ntfs3/xattr.c  |  5 ++---
+ 5 files changed, 20 insertions(+), 24 deletions(-)
+
+diff --git a/fs/ntfs3/dir.c b/fs/ntfs3/dir.c
+index b98e95d6b4d9..cf038d713f50 100644
+--- a/fs/ntfs3/dir.c
++++ b/fs/ntfs3/dir.c
+@@ -423,8 +423,7 @@ static int ntfs_readdir(struct file *file, struct dir_context *ctx)
+ 	if (!dir_emit_dots(file, ctx))
+ 		return 0;
+ 
+-	/* Allocate PATH_MAX bytes. */
+-	name = __getname();
++	name = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!name)
+ 		return -ENOMEM;
+ 
+@@ -502,7 +501,7 @@ static int ntfs_readdir(struct file *file, struct dir_context *ctx)
+ 
+ out:
+ 
+-	__putname(name);
++	kfree(name);
+ 	put_indx_node(node);
+ 
+ 	if (err == 1) {
+diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
+index 5f138f715835..bd67ba7b5015 100644
+--- a/fs/ntfs3/fsntfs.c
++++ b/fs/ntfs3/fsntfs.c
+@@ -2627,7 +2627,7 @@ int ntfs_set_label(struct ntfs_sb_info *sbi, u8 *label, int len)
+ 	u32 uni_bytes;
+ 	struct ntfs_inode *ni = sbi->volume.ni;
+ 	/* Allocate PATH_MAX bytes. */
+-	struct cpu_str *uni = __getname();
++	struct cpu_str *uni = kmalloc(PATH_MAX, GFP_KERNEL);
+ 
+ 	if (!uni)
+ 		return -ENOMEM;
+@@ -2671,6 +2671,6 @@ int ntfs_set_label(struct ntfs_sb_info *sbi, u8 *label, int len)
+ 		err = _ni_write_inode(&ni->vfs_inode, 0);
+ 
+ out:
+-	__putname(uni);
++	kfree(uni);
+ 	return err;
+ }
+diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
+index 0a9ac5efeb67..edfb973e4e82 100644
+--- a/fs/ntfs3/inode.c
++++ b/fs/ntfs3/inode.c
+@@ -1281,7 +1281,7 @@ int ntfs_create_inode(struct mnt_idmap *idmap, struct inode *dir,
+ 		fa |= FILE_ATTRIBUTE_READONLY;
+ 
+ 	/* Allocate PATH_MAX bytes. */
+-	new_de = kmem_cache_zalloc(names_cachep, GFP_KERNEL);
++	new_de = kzalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!new_de) {
+ 		err = -ENOMEM;
+ 		goto out1;
+@@ -1702,7 +1702,7 @@ int ntfs_create_inode(struct mnt_idmap *idmap, struct inode *dir,
+ 	ntfs_mark_rec_free(sbi, ino, false);
+ 
+ out2:
+-	__putname(new_de);
++	kfree(new_de);
+ 	kfree(rp);
+ 
+ out1:
+@@ -1723,7 +1723,7 @@ int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
+ 	struct NTFS_DE *de;
+ 
+ 	/* Allocate PATH_MAX bytes. */
+-	de = kmem_cache_zalloc(names_cachep, GFP_KERNEL);
++	de = kzalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!de)
+ 		return -ENOMEM;
+ 
+@@ -1737,7 +1737,7 @@ int ntfs_link_inode(struct inode *inode, struct dentry *dentry)
+ 
+ 	err = ni_add_name(ntfs_i(d_inode(dentry->d_parent)), ni, de);
+ out:
+-	__putname(de);
++	kfree(de);
+ 	return err;
+ }
+ 
+@@ -1760,8 +1760,7 @@ int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry)
+ 	if (ntfs_is_meta_file(sbi, ni->mi.rno))
+ 		return -EINVAL;
+ 
+-	/* Allocate PATH_MAX bytes. */
+-	de = kmem_cache_zalloc(names_cachep, GFP_KERNEL);
++	de = kzalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!de)
+ 		return -ENOMEM;
+ 
+@@ -1797,7 +1796,7 @@ int ntfs_unlink_inode(struct inode *dir, const struct dentry *dentry)
+ 
+ out:
+ 	ni_unlock(ni);
+-	__putname(de);
++	kfree(de);
+ 	return err;
+ }
+ 
+diff --git a/fs/ntfs3/namei.c b/fs/ntfs3/namei.c
+index 3b24ca02de61..b2af8f695e60 100644
+--- a/fs/ntfs3/namei.c
++++ b/fs/ntfs3/namei.c
+@@ -68,7 +68,7 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
+ 				  u32 flags)
+ {
+ 	struct ntfs_inode *ni = ntfs_i(dir);
+-	struct cpu_str *uni = __getname();
++	struct cpu_str *uni = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	struct inode *inode;
+ 	int err;
+ 
+@@ -85,7 +85,7 @@ static struct dentry *ntfs_lookup(struct inode *dir, struct dentry *dentry,
+ 			inode = dir_search_u(dir, uni, NULL);
+ 			ni_unlock(ni);
+ 		}
+-		__putname(uni);
++		kfree(uni);
+ 	}
+ 
+ 	/*
+@@ -303,8 +303,7 @@ static int ntfs_rename(struct mnt_idmap *idmap, struct inode *dir,
+ 			return err;
+ 	}
+ 
+-	/* Allocate PATH_MAX bytes. */
+-	de = __getname();
++	de = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!de)
+ 		return -ENOMEM;
+ 
+@@ -349,7 +348,7 @@ static int ntfs_rename(struct mnt_idmap *idmap, struct inode *dir,
+ 	ni_unlock(ni);
+ 	ni_unlock(dir_ni);
+ out:
+-	__putname(de);
++	kfree(de);
+ 	return err;
+ }
+ 
+@@ -407,7 +406,7 @@ static int ntfs_d_hash(const struct dentry *dentry, struct qstr *name)
+ 	/*
+ 	 * Try slow way with current upcase table
+ 	 */
+-	uni = kmem_cache_alloc(names_cachep, GFP_NOWAIT);
++	uni = kmalloc(PATH_MAX, GFP_NOWAIT);
+ 	if (!uni)
+ 		return -ENOMEM;
+ 
+@@ -429,7 +428,7 @@ static int ntfs_d_hash(const struct dentry *dentry, struct qstr *name)
+ 	err = 0;
+ 
+ out:
+-	kmem_cache_free(names_cachep, uni);
++	kfree(uni);
+ 	return err;
+ }
+ 
+@@ -468,7 +467,7 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+ 	 * Try slow way with current upcase table
+ 	 */
+ 	sbi = dentry->d_sb->s_fs_info;
+-	uni1 = __getname();
++	uni1 = kmalloc(PATH_MAX, GFP_NOWAIT);
+ 	if (!uni1)
+ 		return -ENOMEM;
+ 
+@@ -498,7 +497,7 @@ static int ntfs_d_compare(const struct dentry *dentry, unsigned int len1,
+ 	ret = !ntfs_cmp_names_cpu(uni1, uni2, sbi->upcase, false) ? 0 : 1;
+ 
+ out:
+-	__putname(uni1);
++	kfree(uni1);
+ 	return ret;
+ }
+ 
+diff --git a/fs/ntfs3/xattr.c b/fs/ntfs3/xattr.c
+index c93df55e98d0..f3bb2c41c000 100644
+--- a/fs/ntfs3/xattr.c
++++ b/fs/ntfs3/xattr.c
+@@ -556,8 +556,7 @@ struct posix_acl *ntfs_get_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	if (unlikely(is_bad_ni(ni)))
+ 		return ERR_PTR(-EINVAL);
+ 
+-	/* Allocate PATH_MAX bytes. */
+-	buf = __getname();
++	buf = kmalloc(PATH_MAX, GFP_KERNEL);
+ 	if (!buf)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -588,7 +587,7 @@ struct posix_acl *ntfs_get_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	if (!IS_ERR(acl))
+ 		set_cached_acl(inode, type, acl);
+ 
+-	__putname(buf);
++	kfree(buf);
+ 
+ 	return acl;
+ }
+-- 
+2.47.3
+
