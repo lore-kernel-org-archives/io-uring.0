@@ -1,91 +1,69 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2119F35970E;
-	Thu,  8 Jan 2026 07:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA1139E6E3;
+	Thu,  8 Jan 2026 10:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767858053; cv=none; b=VbzXN83jORKcNZpUmxMOq++QQebXRkSjdBZSekp8VgoUD4o/v6mTO566DBuacil6URbzA/8jWNmX/fRf8ScmAcIq5rydCt0TduhNnGdcj335oi6mgXEMZKKGBO8EpNIrDCg8VnEf9gAyV3Pqw2hxwAi9XuyKJLq8GEgfV2aN8Rs=
+	t=1767867439; cv=none; b=EjFYsVWgmLzeH6KmJN9Htjr3vwnSCRkMa3KW0OCanSNIWWRGn6PfrEsZy1OiohfWqjwRJSW5Om8xzNxQFyj+GFSZz7mibuswPxilW0doCM6NjUYmn+VGZrRMrWT3Ycef0v9J6TUh4Tcjh62msZHnxMEFyIHnBpsTkvHrHvShxRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767858053; c=relaxed/simple;
-	bh=y0fSS88FaLD/1hjr9i8JnMRqbkv5ATcNAM09cFE0wiE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rZbcHookGjibRnBRSROv0vdr6CZrYc5Bitylj0pDHMeN259MXmf6laAJsRXg8ojKMr/D3O3ANXMPh4ZFmqKVolZWKEUaR4kkGMNqe4X3AzuQEA28AifnSRJewyOsgBVdV3vUpfSRRhOJt08FgbktUJlEt8Y/J70z0EGy4zUHk5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=SInSFdnw; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="SInSFdnw"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=RqSr8nXaCST8kjVIFWUJupZ4lw+rAvvvW2rbESyuJxE=; b=SInSFdnwlKfcAp42G4d9ZZ9vsA
-	x6T9H5E4gk06wTZxFCrz8uPEJKB4wlE4AaFHh6fn8f8741W42xLwUcV3lLAxfX3mPvRjHZHF+rHZp
-	4ux+93s+ktvy18/CQpX7Tl+g2eSFGyHTEavqe54WeczrGqCpqphD67LqP5gYyWv+CE65U++vOSqH+
-	rdeCG5UgxB099X9AwYQ1cV92b0OylpzKx67PBWoeWC5Axjr+8aCPqw47foFQuUeOYpDyxRyip5W28
-	py1YlTLqFxDzgijFOzE9S0hkdjv5uzMPTjrCqslN/S/Zo6RXdJmCcSyESttg/bgMAz2fINoUGcpbL
-	1U3/xoZw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkef-00000001pEr-0jmD;
-	Thu, 08 Jan 2026 07:42:01 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: linux-fsdevel@vger.kernel.org
-Cc: torvalds@linux-foundation.org,
-	brauner@kernel.org,
-	jack@suse.cz,
-	mjguzik@gmail.com,
-	paul@paul-moore.com,
-	axboe@kernel.dk,
-	audit@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 0/8] experimental struct filename followups
-Date: Thu,  8 Jan 2026 07:41:53 +0000
-Message-ID: <20260108074201.435280-1-viro@zeniv.linux.org.uk>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1767867439; c=relaxed/simple;
+	bh=ODGdH7RlSR+dio8YcadH4b5hAYSaRoEE5ObchUQmYbM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ry+Vcbfw2VmEjeU6qx0baHYoHbB0bsqLuK82kJQvZgDpIprwZUjuhl3zwcLlpZfVwPW6jWrUBwDJhLP7oEtC7yCRPreJjHQDCNFDuiceK72FEF7muE0XAncTIZGZoWLj/DexOU0GcJJIs2/OsKcQUSA4/p79DXhTSv7XVx+et2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id E3BE3227A87; Thu,  8 Jan 2026 11:17:03 +0100 (CET)
+Date: Thu, 8 Jan 2026 11:17:03 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Ming Lei <ming.lei@redhat.com>
+Cc: Christoph Hellwig <hch@lst.de>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+	Vishal Verma <vishal1.verma@intel.com>, tushar.gohad@intel.com,
+	Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Subject: Re: [RFC v2 01/11] file: add callback for pre-mapping dmabuf
+Message-ID: <20260108101703.GA24709@lst.de>
+References: <cover.1763725387.git.asml.silence@gmail.com> <74d689540fa200fe37f1a930165357a92fe9e68c.1763725387.git.asml.silence@gmail.com> <7b2017f4-02a3-482a-a173-bb16b895c0cb@amd.com> <20251204110709.GA22971@lst.de> <0571ca61-7b17-4167-83eb-4269bd0459fe@amd.com> <20251204131025.GA26860@lst.de> <aVnFnzRYWC_Y5zHg@fedora> <754b4cc9-20ab-4d87-85bf-eb56be058856@amd.com> <20260107160151.GA21887@lst.de> <aV8UJvkt7VGzHjxS@fedora>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aV8UJvkt7VGzHjxS@fedora>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-This series switches the filename-consuming primitives to variants
-that leave dropping the reference(s) to caller.  These days it's
-fairly painless, and results look simpler wrt lifetime rules:
-	* with 3 exceptions, all instances have constructors and destructors
-happen in the same scope (via CLASS(filename...), at that)
-	* CLASS(filename_consume) has no users left, could be dropped.
-	* exceptions are:
-		* audit dropping the references it stashed in audit_names
-		* fsconfig(2) creating and dropping references in two subcommands
-		* fs_lookup_param() playing silly buggers.
-	  That's it.
-If we go that way, this will certainly get reordered back into the main series
-and have several commits in there ripped apart and folded into these ones.
-E.g. no sense to convert do_renameat2() et.al. to filename_consume, only to
-have that followed by the first 6 commits here, etc.
+On Thu, Jan 08, 2026 at 10:19:18AM +0800, Ming Lei wrote:
+> > The feature is in no way nvme specific.  nvme is just the initial
+> > underlying driver.  It makes total sense to support this for any high
+> > performance block device, and to pass it through file systems.
+> 
+> But why does FS care the dma buffer attachment? Since high performance
+> host controller is exactly the dma buffer attachment point.
 
-For now I've put those into #experimental.filename, on top of #work.filename.
-Comments would be very welcome...
+I can't parse what you're trying to say here.
 
-Al Viro (8):
-  non-consuming variant of do_renameat2()
-  non-consuming variant of do_linkat()
-  non-consuming variant of do_symlinkat()
-  non-consuming variant of do_mkdirat()
-  non-consuming variant of do_mknodat()
-  non-consuming variants of do_{unlinkat,rmdir}()
-  execve: fold {compat_,}do_execve{,at}() into their sole callers
-  do_execveat_common(): don't consume filename reference
+> If the callback is added in `struct file_operations` for wiring dma buffer
+> and the importer(host contrller), you will see it is hard to let it cross device
+> mapper/raid or other stackable block devices.
 
- Documentation/filesystems/porting.rst |  8 +++
- fs/coredump.c                         |  3 +-
- fs/exec.c                             | 87 ++++++++-------------------
- fs/init.c                             | 22 ++++---
- fs/internal.h                         | 14 ++---
- fs/namei.c                            | 87 +++++++++++++++------------
- io_uring/fs.c                         | 25 +++++---
- 7 files changed, 117 insertions(+), 129 deletions(-)
+Why?
+
+But even when not stacking, the registration still needs to go
+through the file system even for a single device, never mind multiple
+controlled by the file system.
+
