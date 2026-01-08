@@ -1,34 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471A9318B9B;
-	Thu,  8 Jan 2026 07:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA9830FF1E;
+	Thu,  8 Jan 2026 07:36:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857813; cv=none; b=Ig8L7vJn3a0YXYUnexmor66F1cKJRZv3dGB2ymBpaM2ba2hlSGowjHxond8JEd26kzJFRfo5vXWSHQ4Vd0RXw+t3uPILzqPbyP5w2ErbZkH4ZFccZa+Kd65SPMukrB05v2HK9eeyTGGwIKJsVnuBbi/W/z8DyEU7dMPxUE+kRQ0=
+	t=1767857815; cv=none; b=dho5KPtnEAm9/17uRFQRlj5Nxm0CXwWuAGCSrBkd86zHwvewoQWW0n6TnQrBHxF2lh+Bc2v1hy/jByuuJ7KcEqhsfcaNRvlJLAk2NUHMIzy+tYUETH4i2ziURK7KMXOJ4XVRpHiTMKGJu4tYBBCV4gJfwr2nZilxtBKx8/Co0Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767857813; c=relaxed/simple;
-	bh=TP4bXazyeAFWsY9bPJQfnwJ5eTqrvE4ywPovrdBMTTY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UDQfFJo97R+3GDlb/0XuJOC0o4dQAfp8KIS6dew5YbtUklhOx+lgaEuHDPGkZ6M/T5QNrdDkH6vT7tWN3Ijj7+c7RHBbQgUU/l7rDcsq2KYgbVJSdV7PJF2QvxnCM8JO4mwVrx9yfG2X+zladOishLMqyI+QorO4HGbKdBlhRtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=wPOxKUNs; arc=none smtp.client-ip=62.89.141.173
+	s=arc-20240116; t=1767857815; c=relaxed/simple;
+	bh=3CwEx7g4XxzBUc0Q+bIGX7rkAAwNZQrWabi2+H1hf6Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pafPl1bPGEzpJqa+A0jJ9P1rFB+IVkoU+bYGzrdqiDGkJRhreaA7ogO1QWRcZZMc2do1K1awbcVFYgnJzVshpFap0H2Nn8IH+3sBCNI2zGJo1TJ3yQUMIjHXJgoAlQ6zMthObSxZBm8JxtbicTdULr2/V64frlwyhoJIQRhW1x4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=M/OMdZOe; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="wPOxKUNs"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="M/OMdZOe"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=hhgbpYrJGOmEX7WzIV0zHzETCPqUVX3gsZjmkgHxe7s=; b=wPOxKUNsg/Iv9GX7Fv53XRvBS7
-	QazPfuJUyhVmLDv/Ig9pi9yezQq/WNfTL1O5xYUg8tTZxHXpjMtUaRvO9pijIEWmZVOgmp/IW7akD
-	DcApm5U/GTodxlKxs4HJ69+CNRaD6IYD0fY7Hzf/6JvGQquMNanWtA4DD3MiLdqD0T+KBBqAD8dEZ
-	pe9K2IZ0ZToWuyCqyTHTiB4fGuatIIfIVLfiscKmROVhQncT2tgR7CSViwywpCcXhgrD6oRiFBuAg
-	Zh4d0y7Xx7nE8W+T3HdNVUUTTpo7vlS72W7HxolHYa9LtlAO4Ke4dCpViSTsDGecgKSkoGHT1ot83
-	GiTWAhwg==;
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=hW78ad4/blxMqS8sR/BdPAXHAf9Mx4sVWDJCcUn/Rm4=; b=M/OMdZOerK7ZZ97QjzAv3mDicA
+	ZeQlbslxgxaMCaBmHUGWInXKo39jS3nfGgQiQu+A2xpy9vO0rESVhva8Oveu6iWZwG30MBZ9WrK2a
+	+j2eeMhznnlK4PVQONzgiyXqHfazsFpBYMLmusuq8HUJ5l/AXkEALouvs4T6H5R0WLl1iV09KIRfQ
+	SMRyFM/Sv9iwUAzjfHSPbPbYIyCEXxQgjQDdVMBkkeBf/FNISmWwfEMLAy6dUNMz9PyrTdu1qiyGz
+	D37y0Pq6vJi0YHM4qJUBhBx4IuPLaX1GIOPIuvW9C8c6eEJq6O/+Br2USL7oJLVoLXA0LGE+/Kv/Y
+	GhtRbJFg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkaq-00000001mgT-44EP;
-	Thu, 08 Jan 2026 07:38:04 +0000
+	id 1vdkap-00000001mee-2yf9;
+	Thu, 08 Jan 2026 07:38:03 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: torvalds@linux-foundation.org,
@@ -40,12 +39,10 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 10/59] get rid of audit_reusename()
-Date: Thu,  8 Jan 2026 07:37:14 +0000
-Message-ID: <20260108073803.425343-11-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 00/59] struct filename series
+Date: Thu,  8 Jan 2026 07:37:04 +0000
+Message-ID: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
-References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -55,160 +52,177 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Originally we tried to avoid multiple insertions into audit names array
-during retry loop by a cute hack - memorize the userland pointer and
-if there already is a match, just grab an extra reference to it.
+[See https://lore.kernel.org/all/20251216035518.4037331-1-viro@zeniv.linux.org.uk/
+for previous variant]
 
-Cute as it had been, it had problems - two identical pointers had
-audit aux entries merged, two identical strings did not.  Having
-different behaviour for syscalls that differ only by addresses of
-otherwise identical string arguments is obviously wrong - if nothing
-else, compiler can decide to merge identical string literals.
+Changes compared to v3:
+	* rebased to v6.19-rc4
+	* the size of embedded name is increased to the point where struct filename
+is 192 bytes long
+	* introduction of CLASS machinery moved up by several commits, so
+that "allow incomplete imports of filenames" could make use of it immediately;
+as the result, a couple of followups in io_uring/* fold into it.
+	* __getname_maybe_null() makes use of CLASS(filename_flags)
+	* calls of refname() (all 3 of them, all in kernel/auditsc.c) expanded.
+	* convert init_mkdir() et.al. to use of do_mkdirat() and friends, similar
+to how init_rmdir() and init_unlink() are done.
 
-Besides, this hack does nothing for non-audited processes - they get
-a fresh copy for retry.  It's not time-critical, but having behaviour
-subtly differ that way is bogus.
+Practically all destructor calls are done via CLASS(filename...) now;
+only 3 explicit calls left (one in audit, dropping the references it has
+grabbed for itself, two in the vicinity of fsconfig - separate story).
+No uses of __free(putname) remain; I haven't removed DEFINE_FREE yet,
+but it's really tempting.
 
-These days we have very few places that import filename more than once
-(9 functions total) and it's easy to massage them so we get rid of all
-re-imports.  With that done, we don't need audit_reusename() anymore.
-There's no need to memorize userland pointer either.
+I've got some continuations for that series (non-consuming variants of
+do_renameat2() and friends, now that it can be done with minimal PITA
+in the callers; with that added we get almost all constructors done via
+CLASS(...); the only exceptions are around fsconfig), but that's in
+a separate branch (#experimental.filename) on top of this one.
 
-Acked-by: Paul Moore <paul@paul-moore.com>
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
----
- fs/namei.c            | 11 +++--------
- include/linux/audit.h | 11 -----------
- include/linux/fs.h    |  1 -
- kernel/auditsc.c      | 23 -----------------------
- 4 files changed, 3 insertions(+), 43 deletions(-)
+The branch lives in
+git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.filename
+now; individual patches in followups.
 
-diff --git a/fs/namei.c b/fs/namei.c
-index bf0f66f0e9b9..f22cfdff72ab 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -125,9 +125,8 @@
- 
- #define EMBEDDED_NAME_MAX	(PATH_MAX - offsetof(struct filename, iname))
- 
--static inline void initname(struct filename *name, const char __user *uptr)
-+static inline void initname(struct filename *name)
- {
--	name->uptr = uptr;
- 	name->aname = NULL;
- 	atomic_set(&name->refcnt, 1);
- }
-@@ -139,10 +138,6 @@ getname_flags(const char __user *filename, int flags)
- 	char *kname;
- 	int len;
- 
--	result = audit_reusename(filename);
--	if (result)
--		return result;
--
- 	result = __getname();
- 	if (unlikely(!result))
- 		return ERR_PTR(-ENOMEM);
-@@ -210,7 +205,7 @@ getname_flags(const char __user *filename, int flags)
- 			return ERR_PTR(-ENAMETOOLONG);
- 		}
- 	}
--	initname(result, filename);
-+	initname(result);
- 	audit_getname(result);
- 	return result;
- }
-@@ -268,7 +263,7 @@ struct filename *getname_kernel(const char * filename)
- 		return ERR_PTR(-ENAMETOOLONG);
- 	}
- 	memcpy((char *)result->name, filename, len);
--	initname(result, NULL);
-+	initname(result);
- 	audit_getname(result);
- 	return result;
- }
-diff --git a/include/linux/audit.h b/include/linux/audit.h
-index 536f8ee8da81..d936a604d056 100644
---- a/include/linux/audit.h
-+++ b/include/linux/audit.h
-@@ -316,7 +316,6 @@ extern void __audit_uring_exit(int success, long code);
- extern void __audit_syscall_entry(int major, unsigned long a0, unsigned long a1,
- 				  unsigned long a2, unsigned long a3);
- extern void __audit_syscall_exit(int ret_success, long ret_value);
--extern struct filename *__audit_reusename(const __user char *uptr);
- extern void __audit_getname(struct filename *name);
- extern void __audit_inode(struct filename *name, const struct dentry *dentry,
- 				unsigned int flags);
-@@ -380,12 +379,6 @@ static inline void audit_syscall_exit(void *pt_regs)
- 		__audit_syscall_exit(success, return_code);
- 	}
- }
--static inline struct filename *audit_reusename(const __user char *name)
--{
--	if (unlikely(!audit_dummy_context()))
--		return __audit_reusename(name);
--	return NULL;
--}
- static inline void audit_getname(struct filename *name)
- {
- 	if (unlikely(!audit_dummy_context()))
-@@ -624,10 +617,6 @@ static inline struct audit_context *audit_context(void)
- {
- 	return NULL;
- }
--static inline struct filename *audit_reusename(const __user char *name)
--{
--	return NULL;
--}
- static inline void audit_getname(struct filename *name)
- { }
- static inline void audit_inode(struct filename *name,
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index f5c9cf28c4dc..2244c54d3bfa 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2411,7 +2411,6 @@ extern struct kobject *fs_kobj;
- struct audit_names;
- struct filename {
- 	const char		*name;	/* pointer to actual string */
--	const __user char	*uptr;	/* original userland pointer */
- 	atomic_t		refcnt;
- 	struct audit_names	*aname;
- 	const char		iname[];
-diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-index dd0563a8e0be..67d8da927381 100644
---- a/kernel/auditsc.c
-+++ b/kernel/auditsc.c
-@@ -2169,29 +2169,6 @@ static struct audit_names *audit_alloc_name(struct audit_context *context,
- 	return aname;
- }
- 
--/**
-- * __audit_reusename - fill out filename with info from existing entry
-- * @uptr: userland ptr to pathname
-- *
-- * Search the audit_names list for the current audit context. If there is an
-- * existing entry with a matching "uptr" then return the filename
-- * associated with that audit_name. If not, return NULL.
-- */
--struct filename *
--__audit_reusename(const __user char *uptr)
--{
--	struct audit_context *context = audit_context();
--	struct audit_names *n;
--
--	list_for_each_entry(n, &context->names_list, list) {
--		if (!n->name)
--			continue;
--		if (n->name->uptr == uptr)
--			return refname(n->name);
--	}
--	return NULL;
--}
--
- /**
-  * __audit_getname - add a name to the list
-  * @name: name to add
--- 
-2.47.3
+Please, review; if nobody objects, I'm putting that in #for-next on Saturday.
 
+Rough overview:
+1--9:
+	moving pathname import out of retry loops
+10:
+	now we can get rid of "reuse the struct filename if
+we'd just imported it from the same address _and_ audit is
+enabled" logics.
+11:
+	get rid of names_cachep abuse in ntfs
+12--15:
+	embed reasonably short pathnames into struct filename,
+*always* get struct filename out names_cachep, take the long
+names into explicitly kmalloc'ed objects.
+16:
+	runtime_const machinery for names_cachep; there's
+a potentially better variant (statically allocated kmem_cache),
+but that's a separate series.
+17:
+	infrastructure for CLASS(filename...)
+18:
+	switch __getname_maybe_null() to that.
+19:
+	delayed_filename machinery, solves the audit vs. io_uring
+problems.
+20:
+	now we don't need filename->refcnt to be atomic.
+21--25:
+	simplify checks in callers of pathwalk primitives -
+	they (with exception of do_filp_open()) will do
+	the right thing if given ERR_PTR() for name.
+26--32:	... get rid of that one exception and simplify
+	more callers.
+33--56:
+	conversions to CLASS(filename...), cleanups
+57, 58:
+	... and these should not have been using getname().
+59:
+	trimming fs/init.c down - doing to init_mkdir() et.al. what's
+	already been done to init_rmdir() and init_unlink().
+
+Shortlog:
+Al Viro (58):
+      do_faccessat(): import pathname only once
+      do_fchmodat(): import pathname only once
+      do_fchownat(): import pathname only once
+      do_utimes_path(): import pathname only once
+      chdir(2): import pathname only once
+      chroot(2): import pathname only once
+      user_statfs(): import pathname only once
+      do_sys_truncate(): import pathname only once
+      do_readlinkat(): import pathname only once
+      get rid of audit_reusename()
+      ntfs: ->d_compare() must not block
+      getname_flags() massage, part 1
+      getname_flags() massage, part 2
+      struct filename: use names_cachep only for getname() and friends
+      struct filename: saner handling of long names
+      allow to use CLASS() for struct filename *
+      switch __getname_maybe_null() to CLASS(filename_flags)
+      allow incomplete imports of filenames
+      struct filename ->refcnt doesn't need to be atomic
+      file_getattr(): filename_lookup() accepts ERR_PTR() as filename
+      file_setattr(): filename_lookup() accepts ERR_PTR() as filename
+      move_mount(): filename_lookup() accepts ERR_PTR() as filename
+      ksmbd_vfs_path_lookup(): vfs_path_parent_lookup() accepts ERR_PTR() as name
+      ksmbd_vfs_rename(): vfs_path_parent_lookup() accepts ERR_PTR() as name
+      do_filp_open(): DTRT when getting ERR_PTR() as pathname
+      rename do_filp_open() to do_file_open()
+      do_sys_openat2(): get rid of useless check, switch to CLASS(filename)
+      simplify the callers of file_open_name()
+      simplify the callers of do_open_execat()
+      simplify the callers of alloc_bprm()
+      switch {alloc,free}_bprm() to CLASS()
+      file_[gs]etattr(2): switch to CLASS(filename_maybe_null)
+      mount_setattr(2): don't mess with LOOKUP_EMPTY
+      do_open_execat(): don't care about LOOKUP_EMPTY
+      vfs_open_tree(): use CLASS(filename_uflags)
+      name_to_handle_at(): use CLASS(filename_uflags)
+      fspick(2): use CLASS(filename_flags)
+      do_fchownat(): unspaghettify a bit...
+      chdir(2): unspaghettify a bit...
+      do_utimes_path(): switch to CLASS(filename_uflags)
+      do_sys_truncate(): switch to CLASS(filename)
+      do_readlinkat(): switch to CLASS(filename_flags)
+      do_f{chmod,chown,access}at(): use CLASS(filename_uflags)
+      do_{renameat2,linkat,symlinkat}(): use CLASS(filename_consume)
+      do_{mknodat,mkdirat,unlinkat,rmdir}(): use CLASS(filename_consume)
+      namei.c: convert getname_kernel() callers to CLASS(filename_kernel)
+      namei.c: switch user pathname imports to CLASS(filename{,_flags})
+      filename_...xattr(): don't consume filename reference
+      move_mount(2): switch to CLASS(filename_maybe_null)
+      chroot(2): switch to CLASS(filename)
+      quotactl_block(): switch to CLASS(filename)
+      statx: switch to CLASS(filename_maybe_null)
+      user_statfs(): switch to CLASS(filename)
+      mqueue: switch to CLASS(filename)
+      ksmbd: use CLASS(filename_kernel)
+      alpha: switch osf_mount() to strndup_user()
+      sysfs(2): fs_index() argument is _not_ a pathname
+      switch init_mkdir() to use of do_mkdirat(), etc.
+
+Mateusz Guzik (1):
+      fs: hide names_cache behind runtime const machinery
+
+Diffstat:
+ arch/alpha/kernel/osf_sys.c       |  34 ++--
+ fs/dcache.c                       |   8 +-
+ fs/exec.c                         |  99 ++++------
+ fs/fhandle.c                      |   5 +-
+ fs/file_attr.c                    |  12 +-
+ fs/filesystems.c                  |   9 +-
+ fs/fsopen.c                       |   6 +-
+ fs/init.c                         |  88 +--------
+ fs/internal.h                     |   5 +-
+ fs/namei.c                        | 370 ++++++++++++++++++++------------------
+ fs/namespace.c                    |  22 +--
+ fs/ntfs3/dir.c                    |   5 +-
+ fs/ntfs3/fsntfs.c                 |   4 +-
+ fs/ntfs3/inode.c                  |  13 +-
+ fs/ntfs3/namei.c                  |  17 +-
+ fs/ntfs3/xattr.c                  |   5 +-
+ fs/open.c                         | 119 +++++-------
+ fs/quota/quota.c                  |   3 +-
+ fs/smb/server/vfs.c               |  15 +-
+ fs/stat.c                         |  28 +--
+ fs/statfs.c                       |   3 +-
+ fs/utimes.c                       |   8 +-
+ fs/xattr.c                        |  33 +---
+ include/asm-generic/vmlinux.lds.h |   3 +-
+ include/linux/audit.h             |  11 --
+ include/linux/fs.h                |  42 +++--
+ io_uring/fs.c                     | 101 ++++++-----
+ io_uring/openclose.c              |  26 +--
+ io_uring/statx.c                  |  17 +-
+ io_uring/xattr.c                  |  30 ++--
+ ipc/mqueue.c                      |  11 +-
+ kernel/acct.c                     |   4 +-
+ kernel/auditsc.c                  |  29 +--
+ mm/huge_memory.c                  |  15 +-
+ mm/swapfile.c                     |  21 +--
+ 35 files changed, 483 insertions(+), 738 deletions(-)
