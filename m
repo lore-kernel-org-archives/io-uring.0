@@ -1,33 +1,33 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D33340D92;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566A8340DB2;
 	Thu,  8 Jan 2026 07:36:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767857822; cv=none; b=dGAlWPGtsHlDju284HVvJy6BoBY2Yj/KQ17MoGO1G8GYVVGGuLjOCsWNskOGjh9BoiRqmaEy4PHRypisG058rbh3v3h4oOHfPGD8iXVpESI9HHoTcgV2JL+NKhQPYJoUrad07bCT7oNnaEN1MpmCEDkVC419DAY5wLwqq6WmpPM=
+	t=1767857822; cv=none; b=g5sjQ8tfDKHIt0TArTz2i3eB1bnlvmJmJBxqQTNb9PbhHmHUzP45ySV/n8MwT4+MBOid9N42cKwlcA8yRaSQPjjoVXLRvj0mxCHoOftkZ0r6Gf7iP++A4pnCyasi6wtalu4go2k2dkuYPUN+SNSnaXjOrF6XK2Ydu3LgZL3f2Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767857822; c=relaxed/simple;
-	bh=+PwKgi/02suRYVooSrcTQ74mPtX7iYni4fKimRheEbA=;
+	bh=nTHKXw8UwcLMJ53XI29POh8UPZpmRIfzCZ6jAwlP48s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VuAg13G0/1AL0kahvEgw1sG+pYhq9pdE2fx0QTYuBfdc6fOwe//EteM2FqXZSdrIb/TIwEqVuf3lqFHH2ArnuJ4V7Byudgc40GqSkvzIfheJ9JQlufSrc0gJ2+Br+fWfPLG7dp8rh9z4CH6Ie4i2/BNaZslZZ4xEZmKfi5iHqLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=skyrTFjD; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=pUSIYqCoapxzS7+NJ3BjXcoBH/ncdrCWIlXTXiFhXweakxJexOG2xxcV1GoZ1tgQdp7zaDOVOv+CsCOUNwku/qvmRHM9MO8q2TsE1CoTaksNR2Rr3T1rW/qZ+/FUCNv2ozkgj8VZNmrbyfxOrOsH+n8WKJ33pVFdD6OtyBdDlM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Lo/ZumX9; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="skyrTFjD"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Lo/ZumX9"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=58ApSCbomH5xnx9mYPWsN3IKMopiJHG9xz18HM9ct5I=; b=skyrTFjDkXzsebQNT+sIouo3dT
-	ZbIWtfzCalIxsCuZCKOFeN1gQhwDBR6S+X0o2dKRztyTpobAEnQBnrN7eyt//7F+zwfl2wb4VA1go
-	E8JNBJtkIHxL1hKqPZbk/y8yLPqYd49dhrQOmcylrE4pSmYbJNotJa3hKty5OXuhaN45D1DwqM27i
-	hI3guhlmodUzMTaJSo3N0ylZVU8wDf3TrszPURDIuGXIz3bmbLwI7Wke+vurlOWkEjbAz0luJljQ4
-	NBEodOMkCN+06/4Sles13LdArn4BacJ5g41KKvbeAR67YV7T/q0KImr/pgSzDdQW/YGeBmVRjtgHX
-	+rguFUaw==;
+	bh=FD17jUCcWuTCEQI03eM0GnSRloJ9zIEZc4eT9v4ubz4=; b=Lo/ZumX9mQKjPPhqKap5cWBikf
+	JinkpExLRlcKqkOBLr5uf2ITH3wUaF2bFlf/FtVEYF4xYJSAqOiRVOayQXt5+5LlsAA/qoCFY6KcE
+	d6SxlCO1zeKsNIELG51BfxNNeuqRldBo3ivYGxBWsnLmiAw7lJYgrJW/WHwGAg2/l+yDRTIig0t5m
+	wHb7nra4KToEG2+tx/vRR866JTIspiAIAk+1lHoCddqLh9g/6rmIDYWw+KiCqYV0kl05PJP3t1wA8
+	38n/5bsDeqkRXZO9hMSYuoVvXEC2Rob/2lHtoCAcqoci6JKWdeMngE/DFTWxRCu3XdDzZToo5h6Mt
+	2FsbXQrw==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vdkaz-00000001msv-0eHf;
+	id 1vdkaz-00000001mtl-34xm;
 	Thu, 08 Jan 2026 07:38:13 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: torvalds@linux-foundation.org,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 46/59] do_{mknodat,mkdirat,unlinkat,rmdir}(): use CLASS(filename_consume)
-Date: Thu,  8 Jan 2026 07:37:50 +0000
-Message-ID: <20260108073803.425343-47-viro@zeniv.linux.org.uk>
+Subject: [PATCH v4 50/59] move_mount(2): switch to CLASS(filename_maybe_null)
+Date: Thu,  8 Jan 2026 07:37:54 +0000
+Message-ID: <20260108073803.425343-51-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
 References: <20260108073803.425343-1-viro@zeniv.linux.org.uk>
@@ -55,142 +55,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-same rationale as for previous commit
-
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c | 32 +++++++++++++-------------------
- 1 file changed, 13 insertions(+), 19 deletions(-)
+ fs/namespace.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 86e2467c5460..5acb071c92c4 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -5063,9 +5063,10 @@ static int may_mknod(umode_t mode)
- 	}
- }
- 
--static int do_mknodat(int dfd, struct filename *name, umode_t mode,
-+static int do_mknodat(int dfd, struct filename *__name, umode_t mode,
- 		unsigned int dev)
+diff --git a/fs/namespace.c b/fs/namespace.c
+index 888df8ee43bc..612757bd166a 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -4402,8 +4402,6 @@ SYSCALL_DEFINE5(move_mount,
  {
-+	CLASS(filename_consume, name)(__name);
- 	struct delegated_inode di = { };
- 	struct mnt_idmap *idmap;
- 	struct dentry *dentry;
-@@ -5075,12 +5076,11 @@ static int do_mknodat(int dfd, struct filename *name, umode_t mode,
+ 	struct path to_path __free(path_put) = {};
+ 	struct path from_path __free(path_put) = {};
+-	struct filename *to_name __free(putname) = NULL;
+-	struct filename *from_name __free(putname) = NULL;
+ 	unsigned int lflags, uflags;
+ 	enum mnt_tree_flags_t mflags = 0;
+ 	int ret = 0;
+@@ -4425,7 +4423,7 @@ SYSCALL_DEFINE5(move_mount,
+ 	if (flags & MOVE_MOUNT_T_EMPTY_PATH)
+ 		uflags = AT_EMPTY_PATH;
  
- 	error = may_mknod(mode);
- 	if (error)
--		goto out1;
-+		return error;
- retry:
- 	dentry = filename_create(dfd, name, &path, lookup_flags);
--	error = PTR_ERR(dentry);
- 	if (IS_ERR(dentry))
--		goto out1;
-+		return PTR_ERR(dentry);
+-	to_name = getname_maybe_null(to_pathname, uflags);
++	CLASS(filename_maybe_null,to_name)(to_pathname, uflags);
+ 	if (!to_name && to_dfd >= 0) {
+ 		CLASS(fd_raw, f_to)(to_dfd);
+ 		if (fd_empty(f_to))
+@@ -4448,7 +4446,7 @@ SYSCALL_DEFINE5(move_mount,
+ 	if (flags & MOVE_MOUNT_F_EMPTY_PATH)
+ 		uflags = AT_EMPTY_PATH;
  
- 	error = security_path_mknod(&path, dentry,
- 			mode_strip_umask(path.dentry->d_inode, mode), dev);
-@@ -5114,8 +5114,6 @@ static int do_mknodat(int dfd, struct filename *name, umode_t mode,
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
- 	}
--out1:
--	putname(name);
- 	return error;
- }
- 
-@@ -5198,8 +5196,9 @@ struct dentry *vfs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
- }
- EXPORT_SYMBOL(vfs_mkdir);
- 
--int do_mkdirat(int dfd, struct filename *name, umode_t mode)
-+int do_mkdirat(int dfd, struct filename *__name, umode_t mode)
- {
-+	CLASS(filename_consume, name)(__name);
- 	struct dentry *dentry;
- 	struct path path;
- 	int error;
-@@ -5208,9 +5207,8 @@ int do_mkdirat(int dfd, struct filename *name, umode_t mode)
- 
- retry:
- 	dentry = filename_create(dfd, name, &path, lookup_flags);
--	error = PTR_ERR(dentry);
- 	if (IS_ERR(dentry))
--		goto out_putname;
-+		return PTR_ERR(dentry);
- 
- 	error = security_path_mkdir(&path, dentry,
- 			mode_strip_umask(path.dentry->d_inode, mode));
-@@ -5230,8 +5228,6 @@ int do_mkdirat(int dfd, struct filename *name, umode_t mode)
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
- 	}
--out_putname:
--	putname(name);
- 	return error;
- }
- 
-@@ -5305,8 +5301,9 @@ int vfs_rmdir(struct mnt_idmap *idmap, struct inode *dir,
- }
- EXPORT_SYMBOL(vfs_rmdir);
- 
--int do_rmdir(int dfd, struct filename *name)
-+int do_rmdir(int dfd, struct filename *__name)
- {
-+	CLASS(filename_consume, name)(__name);
- 	int error;
- 	struct dentry *dentry;
- 	struct path path;
-@@ -5317,7 +5314,7 @@ int do_rmdir(int dfd, struct filename *name)
- retry:
- 	error = filename_parentat(dfd, name, lookup_flags, &path, &last, &type);
- 	if (error)
--		goto exit1;
-+		return error;
- 
- 	switch (type) {
- 	case LAST_DOTDOT:
-@@ -5359,8 +5356,6 @@ int do_rmdir(int dfd, struct filename *name)
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
- 	}
--exit1:
--	putname(name);
- 	return error;
- }
- 
-@@ -5448,8 +5443,9 @@ EXPORT_SYMBOL(vfs_unlink);
-  * writeout happening, and we don't want to prevent access to the directory
-  * while waiting on the I/O.
-  */
--int do_unlinkat(int dfd, struct filename *name)
-+int do_unlinkat(int dfd, struct filename *__name)
- {
-+	CLASS(filename_consume, name)(__name);
- 	int error;
- 	struct dentry *dentry;
- 	struct path path;
-@@ -5461,7 +5457,7 @@ int do_unlinkat(int dfd, struct filename *name)
- retry:
- 	error = filename_parentat(dfd, name, lookup_flags, &path, &last, &type);
- 	if (error)
--		goto exit_putname;
-+		return error;
- 
- 	error = -EISDIR;
- 	if (type != LAST_NORM)
-@@ -5508,8 +5504,6 @@ int do_unlinkat(int dfd, struct filename *name)
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
- 	}
--exit_putname:
--	putname(name);
- 	return error;
- }
- 
+-	from_name = getname_maybe_null(from_pathname, uflags);
++	CLASS(filename_maybe_null,from_name)(from_pathname, uflags);
+ 	if (!from_name && from_dfd >= 0) {
+ 		CLASS(fd_raw, f_from)(from_dfd);
+ 		if (fd_empty(f_from))
 -- 
 2.47.3
 
