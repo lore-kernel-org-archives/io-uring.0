@@ -1,167 +1,70 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8152630F7EB;
-	Mon, 12 Jan 2026 08:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBF7281531;
+	Mon, 12 Jan 2026 10:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768207605; cv=none; b=WmvImEkbUkLN2N8GEv6HKv+DafgCV+sE734nBxkDxnAUzp2c79NMczu0ATTaEjCTwaP5/xn7GUV1NrGaBBER+Kw3yXkg2rBbO5/IhcPzzw/8dYT24fqHkvX/30Q+a3uGVShQ7Q6DZbgPUU6L9c0OMD/HF2/kBDv07l5lQ9cM+qc=
+	t=1768212015; cv=none; b=SjQu0CYa0fkhND3nlYv9yAH1imKuTDJsIRp5FwpVPcdvVqrIQrIu+CnKeR6C/v67jIBPwqrZ1b/xgSLI0h4KvPNJKLp6TF2JYqDckzDGXgZQhUCYFbO3Pn5FrGNX9mwsQGscyt9zu1D/rnFpFFP2VMazUM0VeY8iNPwgNaRuB6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768207605; c=relaxed/simple;
-	bh=6W+pwhEMusJhlVoQwXujAalsQImKp8AqCknuXHetF6I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZoGet590tPJrJB1IPVB/jdnWrFFch5oPsl0uzwUQU83mtaDpG/19tZ5ugS1AOD6CUIkEVpC7jeELNYVQfLXxWyAWLIyEcPatmYGQwdEWkc50K7ETYBk9qHSkhCd6HqOfvCkZF1WFNpIpfwO5JFt+BVgOIS20phVIh+368aodzlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Z7QVEzys; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1768212015; c=relaxed/simple;
+	bh=k6Qq4YmJVqbqE4gAtcaB7VytqgVUJn3lvub+moTNfJw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HtHvEar0Y+aNV2Nwl/RpUHaQEUu7PaVhs2iCiL3LsBZZvTjDVDlBKiMovqTLxxeP8GUIJ3mkXZ9nR2QQ74/EtlIO8SnQyUV6BT9UArrX43uNmvLXf1qKcAl1k4SCkcEjW7g5c7U2XMbeVy5SAuxctRE30WFdjNvgRA55ds543sE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bDO/f+uj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Z7QVEzys"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=EN
-	YboWHq245XH7sMOam8C93TlN9x9lZgNl9rLntdMcc=; b=Z7QVEzysJjJdZzW30u
-	zx0BwehYpjCO1rUZlYGn9k/SWBDezFc2sRwTEY7UHEle4/T+QwOt0bvQpco+1424
-	/j4inmBhiHZewYznKsv/nR2t4zvkGF5VvNaGosnMcybTk1LJJSj0O7s152cPhfmP
-	S+gch4qLYg8LdAI6AViXLBCrg=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgDX7+bQtGRpQ4BSMg--.12084S4;
-	Mon, 12 Jan 2026 16:46:12 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: linux-scsi@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	io-uring@vger.kernel.org
-Cc: fujita.tomonori@lab.ntt.co.jp,
-	axboe@kernel.dk,
-	James.Bottomley@HansenPartnership.com,
-	martin.petersen@oracle.com,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: [RFC PATCH 2/3] bsg: add uring_cmd support to BSG generic layer
-Date: Mon, 12 Jan 2026 16:46:05 +0800
-Message-Id: <20260112084606.570887-3-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260112084606.570887-1-yangxiuwei@kylinos.cn>
-References: <20260112084606.570887-1-yangxiuwei@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bDO/f+uj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E467FC19421;
+	Mon, 12 Jan 2026 10:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768212015;
+	bh=k6Qq4YmJVqbqE4gAtcaB7VytqgVUJn3lvub+moTNfJw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bDO/f+ujXdt4gCQdEo3X0tWsgc84Jp+eGkgzg3ZB/Eegp57dACkvbzw/eoX/Pfur/
+	 jPrVJ1sKnvaF4yIX8qRNSfOyQFHVYWiLqgiBaUcUSg9ErLygxBO6wUEaLEI0hzse9l
+	 nmLsIfFOTtn96E482IhJphXUb4bOKHe0ciRItETkYp+ZZt6dmq4m0zJ+TnNvyCV7P0
+	 HKtbps1Q3sOlZODongujk4Y4CdYoPPsf9pLzYAq7Tf9gIi+zr9vz9vbA2okp51A4LB
+	 9m0ufhQnUayvGYBl09z7vBq/qfPUiCceTwf4cqcoIzGhnIMDBiBWB46jMeWTQZkNm7
+	 kR+1Srbqttqlg==
+Date: Mon, 12 Jan 2026 11:00:10 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
+	jack@suse.cz, mjguzik@gmail.com, paul@paul-moore.com, axboe@kernel.dk, 
+	audit@vger.kernel.org, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/8] experimental struct filename followups
+Message-ID: <20260112-manifest-benimm-be85417d4f06@brauner>
+References: <20260108074201.435280-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgDX7+bQtGRpQ4BSMg--.12084S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWF4fCw47AF48GrWfJF47urg_yoW5tr1UpF
-	WDZw4UAFWFgr18ua4DCan8Ar9Igw4kK347JFW2934Yyr9FyF9Yg3yv9r18tFy8JrZ2kayq
-	q3Z29rZ8Cr1jqw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jYoGQUUUUU=
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6RTVZmlktNTuVAAA3Z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260108074201.435280-1-viro@zeniv.linux.org.uk>
 
-Add io_uring command handler to the generic BSG layer. This handler
-validates that SQE128 and CQE32 flags are set (required for the command
-structure and status information), then delegates to the SCSI-specific
-handler.
+On Thu, Jan 08, 2026 at 07:41:53AM +0000, Al Viro wrote:
+> This series switches the filename-consuming primitives to variants
+> that leave dropping the reference(s) to caller.  These days it's
+> fairly painless, and results look simpler wrt lifetime rules:
+> 	* with 3 exceptions, all instances have constructors and destructors
+> happen in the same scope (via CLASS(filename...), at that)
+> 	* CLASS(filename_consume) has no users left, could be dropped.
+> 	* exceptions are:
+> 		* audit dropping the references it stashed in audit_names
+> 		* fsconfig(2) creating and dropping references in two subcommands
+> 		* fs_lookup_param() playing silly buggers.
+> 	  That's it.
+> If we go that way, this will certainly get reordered back into the main series
+> and have several commits in there ripped apart and folded into these ones.
+> E.g. no sense to convert do_renameat2() et.al. to filename_consume, only to
+> have that followed by the first 6 commits here, etc.
+> 
+> For now I've put those into #experimental.filename, on top of #work.filename.
+> Comments would be very welcome...
 
-The handler is registered via the file_operations.uring_cmd field.
-Add function declaration in include/linux/bsg.h and a stub
-implementation
-in drivers/scsi/scsi_bsg.c to allow compilation.
-
-Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
-
-diff --git a/block/bsg.c b/block/bsg.c
-index 72157a59b788..cdccf86b8673 100644
---- a/block/bsg.c
-+++ b/block/bsg.c
-@@ -12,6 +12,7 @@
- #include <linux/idr.h>
- #include <linux/bsg.h>
- #include <linux/slab.h>
-+#include <linux/io_uring/cmd.h>
- 
- #include <scsi/scsi.h>
- #include <scsi/scsi_ioctl.h>
-@@ -158,11 +159,38 @@ static long bsg_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
- 	}
- }
- 
-+static int bsg_uring_cmd_checks(unsigned int issue_flags)
-+{
-+	/* BSG passthrough requires big SQE/CQE support */
-+	if ((issue_flags & (IO_URING_F_SQE128|IO_URING_F_CQE32)) !=
-+	    (IO_URING_F_SQE128|IO_URING_F_CQE32))
-+		return -EOPNOTSUPP;
-+	return 0;
-+}
-+
-+static int bsg_uring_cmd(struct io_uring_cmd *ioucmd, unsigned int issue_flags)
-+{
-+	struct bsg_device *bd = to_bsg_device(file_inode(ioucmd->file));
-+	struct request_queue *q = bd->queue;
-+	bool open_for_write = ioucmd->file->f_mode & FMODE_WRITE;
-+	int ret;
-+
-+	if (!q)
-+		return -EINVAL;
-+
-+	ret = bsg_uring_cmd_checks(issue_flags);
-+	if (ret)
-+		return ret;
-+
-+	return scsi_bsg_uring_cmd(q, ioucmd, issue_flags, open_for_write);
-+}
-+
- static const struct file_operations bsg_fops = {
- 	.open		=	bsg_open,
- 	.release	=	bsg_release,
- 	.unlocked_ioctl	=	bsg_ioctl,
- 	.compat_ioctl	=	compat_ptr_ioctl,
-+	.uring_cmd	=	bsg_uring_cmd,
- 	.owner		=	THIS_MODULE,
- 	.llseek		=	default_llseek,
- };
-diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
-index a9a9ec086a7e..4399a25990fc 100644
---- a/drivers/scsi/scsi_bsg.c
-+++ b/drivers/scsi/scsi_bsg.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/bsg.h>
-+#include <linux/io_uring/cmd.h>
- #include <scsi/scsi.h>
- #include <scsi/scsi_ioctl.h>
- #include <scsi/scsi_cmnd.h>
-@@ -9,6 +10,12 @@
- 
- #define uptr64(val) ((void __user *)(uintptr_t)(val))
- 
-+int scsi_bsg_uring_cmd(struct request_queue *q, struct io_uring_cmd *ioucmd,
-+		       unsigned int issue_flags, bool open_for_write)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
- 		bool open_for_write, unsigned int timeout)
- {
-diff --git a/include/linux/bsg.h b/include/linux/bsg.h
-index ee2df73edf83..68ec50b5e97c 100644
---- a/include/linux/bsg.h
-+++ b/include/linux/bsg.h
-@@ -7,6 +7,7 @@
- struct bsg_device;
- struct device;
- struct request_queue;
-+struct io_uring_cmd;
- 
- typedef int (bsg_sg_io_fn)(struct request_queue *, struct sg_io_v4 *hdr,
- 		bool open_for_write, unsigned int timeout);
-@@ -16,4 +17,7 @@ struct bsg_device *bsg_register_queue(struct request_queue *q,
- 		bsg_sg_io_fn *sg_io_fn);
- void bsg_unregister_queue(struct bsg_device *bcd);
- 
-+int scsi_bsg_uring_cmd(struct request_queue *q, struct io_uring_cmd *ioucmd,
-+		       unsigned int issue_flags, bool open_for_write);
-+
- #endif /* _LINUX_BSG_H */
--- 
-2.25.1
-
+Yeah, that looks nice. I like this a lot more than having calleee
+consume it.
+Reviewed-by: Christian Brauner <brauner@kernel.org>
