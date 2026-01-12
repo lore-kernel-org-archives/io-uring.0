@@ -1,248 +1,291 @@
-Received: from outbound-ip191a.ess.barracuda.com (outbound-ip191a.ess.barracuda.com [209.222.82.58])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D6122AE65;
-	Sun, 11 Jan 2026 16:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=209.222.82.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768147453; cv=fail; b=GhKzFjn3rP+vboFqxWKUIWhK+pvpenyw5ZtEd4yPuF0iOm2eUeT2BFdAG5+qU8qnoJ1/TXzfwZrnSmwbIjc7r2wE+wpvJtkU+khdPlzQ8/yKCenF4HCVsw5y+flXusAvVtvieCaoc3f3rI8gQsMaPJsdSd+nCuSZsRuKALODQ3I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768147453; c=relaxed/simple;
-	bh=M/fJuaQGLVfEJIG/33+RMXXT8nvd7/5MRnqcjIAhdGs=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=JMbmSC/pnxZY0Au+eWYHnuoPXk+xJCBRHABdoJLm5EdFlajoO//eOVdfB2WHmWmyoKNS39oOmOWzGB6h8Gq+LWO+gYh3/hMX9Tzt6gg/MjHUY2rZ7QJLoa7zmGOfFmlGL+NeYcvS3SFAa8l85+gfu/dxvUCNzJ38p9TXD2PnIxY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com; spf=pass smtp.mailfrom=ddn.com; dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b=MR33ue/n; arc=fail smtp.client-ip=209.222.82.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ddn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ddn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF0534404E;
+	Mon, 12 Jan 2026 08:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768207603; cv=none; b=BJkiqeUZpU9YNr6HC4FSly6UIIplo0Tip2qiKaG5zfcsyDbe5MSUcNU3qKUUfAoBWbEdpciOBfjB8QI1PHKfP//YhByB5FfDtId8ls3Mx/tCZ218l3J11EJ/wzKzfKlIebc5fsSe7cBb0y/RTMD5moChkIeFXZ7PaGdb+5xYSMU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768207603; c=relaxed/simple;
+	bh=1fQ+wCidl8AdlNQr0yTP+kzimLcX6917SAdUURzbovk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=oX8vuOPn/BI0GbIRqz3wwo15/pKYTc4aoWnuYf3VD2rT2EUpF0IhYXej/oyOUAYGjxK1xfk8uVjHEIUU20cqlzO3DaQe9c1lHWw689uozUYCSH2kJaI7cXy0IQBPOWtYYQjpETfMpsqtizL52MvriEVPohAmCIY8vy7HjrAuy40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=G6BHNV7y; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ddn.com header.i=@ddn.com header.b="MR33ue/n"
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11022096.outbound.protection.outlook.com [40.107.209.96]) by mx-outbound46-170.us-east-2c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Sun, 11 Jan 2026 16:04:00 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RqG5ZXJ0XkjLwqq73tIb27mZ33Zf5GBmQisfb7Ohjdl1hkZUBcxDj1bu6OBgrNKLe0QEJ/mozddBB9tGkjQtbigtsbCfOLK6EECUgjlkn2Cw8Tjbd8N1d7i+tjVZnmT976IjUbC3AXvYFjCpnPQuqP9vCgN3ydqkbkzivXB1kGgLEVIMw8IrgM2EdXOEoLJtcs0hz9FS1Gjm/IfGfS/ivrJzMxm4WNMurI3olyjNUTfvJ7XRphngLliA6tRX5Q+ptS2y2pecQzBvScoR32QMBvgnNeMt7InM3de+rub8fpKj0ITNLl5v8LOlMhfvT/VxX+1MAhXm7tGvcsTzYtnL4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M/fJuaQGLVfEJIG/33+RMXXT8nvd7/5MRnqcjIAhdGs=;
- b=I0WYhk4VuMAiBvzIIlbAd8YxyHQpOgGq2cjUWZinJRd61DEOO7eCuFLinVu7WxsP80kWLxS8nFd90cHkK5t1I0R1ADV1p4UoOnJ+NTzQukTwJVKj2lRDSElWbgiLx4rtxPCW5gF7EYds/xTkGfB0PVO+0712KoGci9vQ8YWwtetRTz+UY3x2983EgaLnU5Lt/bPVEi2QdrC27RbLyPqq6HCOjzXHvIcgNk8uCEqR3grPl0XtG8ekS+n0OHTC+FwLCGFmGVNNyF671h22MAKimrVnBeHY3PE/DDZ4CTYJ1DFDkrizdxdns+mJ0Zi9XGa3peDpzjoSmcD1E5Ccwx8lHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
- header.d=ddn.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M/fJuaQGLVfEJIG/33+RMXXT8nvd7/5MRnqcjIAhdGs=;
- b=MR33ue/nXg+l6mIi8ePf6x2IUVcAAGzUBvZmfp5gwu+r1TWOev2QU4eckl6sy6ErF9h2j7SkrkkNHKpF6ApQTA3e9Mqb4WtpJEtH0BNR2e3wFMAlENuGJJOESSeHp0bKtru8+BdTJLrs85MH0cJgXCEEJfPpAgev9mbDmrpgn38=
-Received: from CH2PR19MB3864.namprd19.prod.outlook.com (2603:10b6:610:93::21)
- by IA0PR19MB7629.namprd19.prod.outlook.com (2603:10b6:208:3df::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.7; Sun, 11 Jan
- 2026 16:03:57 +0000
-Received: from CH2PR19MB3864.namprd19.prod.outlook.com
- ([fe80::c2de:bba2:8877:3704]) by CH2PR19MB3864.namprd19.prod.outlook.com
- ([fe80::c2de:bba2:8877:3704%6]) with mapi id 15.20.9499.005; Sun, 11 Jan 2026
- 16:03:57 +0000
-From: Bernd Schubert <bschubert@ddn.com>
-To: Joanne Koong <joannelkoong@gmail.com>, "miklos@szeredi.hu"
-	<miklos@szeredi.hu>, "axboe@kernel.dk" <axboe@kernel.dk>
-CC: "asml.silence@gmail.com" <asml.silence@gmail.com>,
-	"io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-	"csander@purestorage.com" <csander@purestorage.com>,
-	"xiaobing.li@samsung.com" <xiaobing.li@samsung.com>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH v3 14/25] fuse: refactor io-uring header copying to ring
-Thread-Topic: [PATCH v3 14/25] fuse: refactor io-uring header copying to ring
-Thread-Index: AQHcc6Q8Iu61PuOer0+HH+UUkG4w6LVNQH4A
-Date: Sun, 11 Jan 2026 16:03:57 +0000
-Message-ID: <a27b24fe-659e-4aa1-830c-7096a3c293b8@ddn.com>
-References: <20251223003522.3055912-1-joannelkoong@gmail.com>
- <20251223003522.3055912-15-joannelkoong@gmail.com>
-In-Reply-To: <20251223003522.3055912-15-joannelkoong@gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Mozilla Thunderbird
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=ddn.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR19MB3864:EE_|IA0PR19MB7629:EE_
-x-ms-office365-filtering-correlation-id: b808b1ec-f6c2-4f26-21e0-08de512b06cf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|19092799006|366016|10070799003|1800799024|38070700021;
-x-microsoft-antispam-message-info:
- =?utf-8?B?YmhxUHc2bmc3RlhFSGc2Rk9HMlFSNEJ1cUQ2Q2FyaEZTeVY4elN0SGNaTXhm?=
- =?utf-8?B?SytqVjNqdWc4enRKNkExb3hGTzIzb0ZGTmY1TVF3c25kM0N1Vkw0UTZSNWl2?=
- =?utf-8?B?MzcxQnN2TGIrSENFK01hVTFNWGRyUElibkNhUE05N3VsTm5yME5NMVc2M1JQ?=
- =?utf-8?B?Y3hKUEx3TitJYXdUMkIyVTYyMTFRUGVlWDNwTnNuV0ZhdjJvZlFHTzF3ZE4x?=
- =?utf-8?B?QXRyVnhxbTZjOURQdk9QUjVrMDVxaXNxa28zNFhxR0ZrMUgzM1J2NlBJaXVR?=
- =?utf-8?B?RUFaQXpZek1Lc083cnRvSmdQNTZSSVRLZyttazhyTEdWMkVlQzdUNE5uL0NH?=
- =?utf-8?B?NFdETVdtMjB2ekRNemtRYmVMQkVPOG1lbGl0VUQ0S2drWjMvVDNHOUpLdjRB?=
- =?utf-8?B?TGZGQ204djRGOFJNQ01WaFp0eXNoZTdsTmI4MTdFZUNBeDdOV1FhOVhIQXZi?=
- =?utf-8?B?NkpnZCtEbHBlQnh4eEN2TXRkUkh1eERUY2N4T0oyV0FJQy94Mnd3NDFaSExI?=
- =?utf-8?B?alFUSGRFRDI5d1BWemlqUkNiREoyMWhWM1dieE40aXVhTmpsQ1B0VWxZbG5I?=
- =?utf-8?B?Vm9jWHNVVDRzY3FMLzRha3J4amZDWUU4a0Y1bERNNGJRemh5bVhzclJrd3V1?=
- =?utf-8?B?VEFITHhNNU1ZYzJMdEFFaURvRG9wemdRVGJTV0hCR2ZmRVZkeTcwaEF4aWVQ?=
- =?utf-8?B?dUhUWWMyeGEzbVpaTWlSQkRxUW5TUElEUzdpaHIrVVhMY3d6OU9VOTRXOWJX?=
- =?utf-8?B?VWlyTkUvNGlubFFaYXZSL2FkWXNacm9JY2dCZmoxYWxjeE42elpsemhsN1Z2?=
- =?utf-8?B?N1pNL2N3Y09yWDk5cUlGVzl4K1F1YzhKRk1qUnBOamRCUFFIanhIMzZXdnVU?=
- =?utf-8?B?SzU3djIremsxSkZQK0FJNlpiN0lWYUt1NytEUVFHRXkyempJRlVVU015OHJZ?=
- =?utf-8?B?c1J2Z0c1cWJXRXo2VVJwN0lPWDZ2MjNPbm9vRmFaZlQ3TlFoeFVVK3dwRi9t?=
- =?utf-8?B?eEhFR1UybVNnVGV0YVBjV3dValB1empOZE4wNlZ4aElVbE5MVTI1cG9RVTJx?=
- =?utf-8?B?TUk1eEJaVFNoUm1oVDZCZ0NJdkJvWFVLdytiTEpiVFB4ZktzMjBxTHhVUGd4?=
- =?utf-8?B?L0Z0b3o3ejkyQWZ2YmV3L1dIV1Fpc0ZYS1hXYW51S2phUnV6c0N3TzZqZGc2?=
- =?utf-8?B?NUloUlBhZkxHOFltdlBnRXFOTmVyY3RJZk1iL0JUc0kwQkEwekZZSzMvNWl6?=
- =?utf-8?B?THIwZkJDOFJqUlNna0FVQWZjOVcya2lrUU1zR3ZrK2d4R3BLdjh6ak1aWDBv?=
- =?utf-8?B?cXVxUEJrN0kzYWYxT2lta0k0ajEvdjM3YWtsUUYzKzJuMnFsQUpMR3RzeWxs?=
- =?utf-8?B?dTU3Zlg4RUVEWE9wRHdyREd2WDNiWmVkYXdiT29ZejlOSDJ3elZrTXZ1Y1ov?=
- =?utf-8?B?dzF1eElhNHlXVzNkV0JqZlNGbFI2N2wrV3IvSldac3Q5TTAwZnBIOFlIOVVx?=
- =?utf-8?B?aGFlcWE3TXhTTEIxT2daN3lFQm1hZnFUMHY1cFdtV1pXd1VwZi80NW4xTmhO?=
- =?utf-8?B?aDVBTThYTDJYMllNK2llZ0RxaGcxNzlEUmMvTVFRZXJ0b05Bd3MxZEJ2VGla?=
- =?utf-8?B?RkVSQzhxYXlCcXRwK2dhbGZxRllIMUV2dzhUOEZHclN0SmZyZ3BFUXQ1VVdG?=
- =?utf-8?B?eWdBdThKS0xLbXJRLzQ0anRVTGpxeUNERDRMbHl4a2k0em9hdXNWaWRDZWJ0?=
- =?utf-8?B?UEZsaHN3cWtldHlQWFR5UU1qUWNOZnM1WjBqaGlBblNnNXUxaWFoYVRVV2wx?=
- =?utf-8?B?SERNdVlRTnVqN2NmanBDczNTdkN2Q0trMG1WanJMajdtYmw2ZitPaVVyR0Vy?=
- =?utf-8?B?c05MOWtoMWZTQVArdmh1V3RTa1BQaWNMNFJFeUZXbGY1Vm5KVzFHdER6NmtM?=
- =?utf-8?B?QkVkSzcrenBJR25RQncyNFRBUDN1bUJJQjY2NDU4RGNFelV5VUdtdjlwZ2pN?=
- =?utf-8?B?anZ6YzZmWUZ4YTVQWEhwbHErUm5LSEZWUG9RclR2WFlNNTdBQVR2RSs2ZE5Q?=
- =?utf-8?Q?DQAVEl?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR19MB3864.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(19092799006)(366016)(10070799003)(1800799024)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?cUlMMWxZeEsvWjhtNDBYeGJmaUN4cjFCOFh6YjRmVHpvN2h1dXR4TS9uWkVh?=
- =?utf-8?B?RW8vY0xwWXFHRVFJMkZTMFZKajhvQmxVd3ArL1dtbjVrbmx4SzYvUmxCQ0tq?=
- =?utf-8?B?RFJlS1hCNVUyczV1a1dkK1h5OGhoc1RscWp5WHRXdjR4UDVyK0xKYUtSRFdF?=
- =?utf-8?B?a0s4Y1lTQTJtdVlBenlBU3liZmRocHBlTk8vVFo2c3hDK1FXc1Nrb1p0M1dH?=
- =?utf-8?B?K2lyYzg1NlhIZzMzRHpFc0RRMzAyTVFrTWJaS1JjVS9OL1lKd2crK1RpeHQv?=
- =?utf-8?B?N0c4TkYxNDY0ZVpreEhtTy83NE82ekNJYWdEYTdqSGE0Y1NlS3k4N3A4dGNY?=
- =?utf-8?B?cEJ4VkNweVVNMkNTSTB5MkN1cGE4eFdPY1VCOTFjY00wbE1zeEZNYlpmRU5T?=
- =?utf-8?B?YmhlWjZjVUQyOEJLZWNua0gxSlBVUmxKdEIzS0xXa3dBN0JkWEFxS1Q0WHZx?=
- =?utf-8?B?SGdFT2MxMElSeU94MWR4aVI5N21PZVNLQVdObTlsYkJBQ2dUYVkrMys0cEZG?=
- =?utf-8?B?ZFJGbC9qZlUyK09lVCtibm1tYzU1dU5JWUtNUEVrcUsxb1hOY1N3eklDS0ta?=
- =?utf-8?B?M3pGQU4xekRFdS8zL2t6UW5GT1BmajVtV25TQkhkeWtxd01ia0NWelNRazZk?=
- =?utf-8?B?aDBmZGJTNVliUDlPRUtEZXBUY3JOSkxhOG1tTHM0RW9JeWNwaUkxOEl4ZWtC?=
- =?utf-8?B?eGU5TkdVdnVubWJXTlY4b0VMWVZOVHloTUQ5dDhlNWNVa0NiWEJ6alVBNjdX?=
- =?utf-8?B?M3ZGMkhLQnNiTThiVk9CVlE0dUtoOFNPZkI3L21HQTZoVU0yMlBEZmRmNG51?=
- =?utf-8?B?RFBPNm5oVktqcDQyRGtiNGFUQWZhV2JIb25obEg3czR0UFdXdVN6RE1VOUxR?=
- =?utf-8?B?aHVwSVlRYlFQOXRYekhDdUh2YVRhTWsybnluSlozTEtZT1hUVXd4MzZjSUJw?=
- =?utf-8?B?NGNmTU5VaWVFV3NqMHF5S2pkNE9aQUFRdFZORXh0c1J3NG5PbzlHT05OTjk0?=
- =?utf-8?B?WWNlOFh6aXFUZGc5M2FkUkE4WlV5QVVkU2VzWEZraVROYmhvM1BiWnFIYkJY?=
- =?utf-8?B?SDdwQ0pzdHE4TzlPblJEUSt0MWltSktsVEhZSHBXVitFUnFCdWptNXJtb3o5?=
- =?utf-8?B?QUx0ekVmb25hRW4zTFNLbUJLYWFkTUd6cEMwZEMwbTVXRWM5YmNKQWdRNkU1?=
- =?utf-8?B?ODBlbmtxVld2NG9ERDlpZ2hVQVZWRU9aWmtZaEVPK0Y3ZWZZTFU5NGVpVGpk?=
- =?utf-8?B?STJpdzFQK3BMQ3FkcG5JbUx3U1JOYjNUWW5UZzFnRG0wcTlxYjY2VzExeDZI?=
- =?utf-8?B?ZlBCWkxyR3FMVDZtRklEaFJMVzBsbU4vdHlFWHFqYlpGV2NFczRDRTBZejlL?=
- =?utf-8?B?WjJMSnFzK01IbGlycXFwZTExa1BVNHkzZ2lBU0lubEhVbDRKT1hzRk5MYktB?=
- =?utf-8?B?cTJtYW9sZW9iZ0l5RnArK29GY3VTMHlSRUROYWF0NE5lTGkwWjhVRHlKN21j?=
- =?utf-8?B?U2ZSanBUVDJ5dm9GSktDYW1MQjZNaldCMGphU1pkbktlb2NmZGlvbWJwZ3Bz?=
- =?utf-8?B?ZkFjaXdhQnNGaVFscWpTaXBnakFLYVZ4MHdtUVMvS0hKbzZJZmJlQmFFUjlB?=
- =?utf-8?B?V2U5TUwrSk05VWxQd2x5OFZVdW1lUGVIVnZSbDFHeVFYalFrdkV1KzBjZmFi?=
- =?utf-8?B?dzZGZGhhZW40bEdHOXR0R3pUQ05sdUZPYkRnNlVhY1VyWmUrL2ZIcFNaWHdl?=
- =?utf-8?B?em5ZTVFyVzYyb1FvcGZUdEpkdWRQbGNCZGliZWI2WUk1dmp5Ti9RVTBUa3V0?=
- =?utf-8?B?NmRWTmViRllUSkl1UC9JYURMVEdNN2syNFNpeU4xMUNaWTVrS2ZSY1pvOEtP?=
- =?utf-8?B?dUlHNnZxVmRBRWIyeGEyUmVQVlBEL3VjTWp0MThvOHA0cG1OWFFkUlNJaE5h?=
- =?utf-8?B?ZXZGUU5SYWRkRnIrOU1aYnY1N0RPUmovRGlLRWJlcFUzYytPVW81ZFdqaEpv?=
- =?utf-8?B?NkVZSnMvTjVsOXQvSDAyZ003NlN6aGJCTnIvSDNSdFhsNFdQVldRSnROUlM4?=
- =?utf-8?B?UzB2ZjVvdUF4Nlc1aWFKWlRobjM5ZUtadmRWcDBXc0QvM3kvRDRRVWpPOWtI?=
- =?utf-8?B?aXcyTzJ4TVdXaERuVFpURjNPMlNiMkk2OUFHRTFza3BLS0p0aEltcDZLL3RK?=
- =?utf-8?B?UGpzWDl0bGRIR0UwTng2dDYyZklQbTdFRlI0ZURYMEFIMFRNL1hZOHVTd2xi?=
- =?utf-8?B?R1ZhUHdzTHY0OGp4OW1PRWdPWjFuVUc4V0gvUWhRL2tyeUFpVDd2ZXZ6MWo1?=
- =?utf-8?B?UWk1V0hSbHM0T1FFYmNoajRLclRNaXF2elQ1YWd0dDBZY3BrVmV0SUZJM3Nv?=
- =?utf-8?Q?kYpV8yNFWBL9kS4MnpzgH3jfwDfGd9i99TNTA?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3277FE743AFC014F821D2CDEE23B27F0@namprd19.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="G6BHNV7y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=aJ
+	mw2UKvTCOZIMChkwQSwywauH0iuPure5AD/kUzQgY=; b=G6BHNV7yiBdvJ8wLym
+	Gjd3gzCf+XBI4ZRJZdUbcViRlSRWZlFRKnQJDyNUQaUI764vecgK3PP5P2wVgJ98
+	J3u1cxh8UuvQiLyMwnut241g2bEmgWxlyDbwbqUMKSwfQLQoknRoXuPDayNm+Zvq
+	Db9nLxJspIdEnGza7HJqJb3ts=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgDX7+bQtGRpQ4BSMg--.12084S5;
+	Mon, 12 Jan 2026 16:46:13 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	io-uring@vger.kernel.org
+Cc: fujita.tomonori@lab.ntt.co.jp,
+	axboe@kernel.dk,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [RFC PATCH 3/3] bsg: implement SCSI BSG uring_cmd handler
+Date: Mon, 12 Jan 2026 16:46:06 +0800
+Message-Id: <20260112084606.570887-4-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260112084606.570887-1-yangxiuwei@kylinos.cn>
+References: <20260112084606.570887-1-yangxiuwei@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	kMhWzdnLtTIC5wojXUnslFXc1UwgJrBaxxBWgHvvAMxLsLGQAN8pV8IJTvORUMHrUwYmutr+yEQXkOoBfa23MXp4aVsSonYP92Qi6uEbK5W44RY0J9hDtrt2RTFG9uRtz6xzvYLq6UaiaLENdln0/vfyCZ7GvyRhsusdRKy6g0jgDIuecV277LAQ3Y8EBjihvo8NIZHXj8DKgQvmHiGwknLAikkwf4jXMr96WpZ4C9G/YdaMr9iXPCuCvli8dd3icnuKslLO/xU0uABNeS1o1BiwC2AloQ1hpegcwjr8/SsLs5GYvXX2H4UjFgHqzcgo+tbtIrJFFUyAw3zCuYBfRUTyYqRekSP0b7rqUmbWU/LGas3DXYW9XxTkWo0rbrmJZZbPtbqbCE4ZYB5SKFFu1CeB+1jTNg4uoKH3MuPw0p7f/z7hy0nT0wvOZUX3Pb26B0s5t8DwVYUaybTdU9WBQBCdUOZbmHtFnIkqfnDmvDqo5OQJbmtV8661CeW2tM5XiNUFkZ/Kkhbn6v6oM1gMHAQ8Ls/Z2J/XAfN6oe0Tbj/DaUsH/2fgCrdP3quO5h3jksXryVaLdN5S88j+kf0vton0TAw3rFe7Hxixbl+QX7Ez2d8+ohn/JgsPm09bGeTAtqQob+vwtHdCeHEibNESsg==
-X-OriginatorOrg: ddn.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR19MB3864.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b808b1ec-f6c2-4f26-21e0-08de512b06cf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2026 16:03:57.2514
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ScGTwnRCcSs7m2H01h+zqQIVS5mB1kf1YEEqhwLGsVElYxIjsskh7v5oh1ITr+JAdlaPoEjJH1pTNjgocjHpLg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR19MB7629
-X-BESS-ID: 1768147439-111946-7665-8882-1
-X-BESS-VER: 2019.1_20251217.1707
-X-BESS-Apparent-Source-IP: 40.107.209.96
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVsaGpuZAVgZQ0CLV3MjSxNDUyM
-	QiNcnYyDgtxcwiMcXA0sA41dDEINVAqTYWAMlQsaJBAAAA
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.270324 [from 
-	cloudscan17-180.us-east-2b.ess.aws.cudaops.com]
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------
-	0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS124931 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status:1
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgDX7+bQtGRpQ4BSMg--.12084S5
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Jr1DJF4kurW8JF4rWr4kZwb_yoW3JF1xpF
+	W5tw4jvrW5Ww409FykAr4DCFyYqws5ua47KFW5u3ySkr1UCF90ga10kF10qF1fJr4kAa42
+	qF4vkF98CF1jq37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j-8n5UUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6hXVZmlktNXq7wAA3l
 
-T24gMTIvMjMvMjUgMDE6MzUsIEpvYW5uZSBLb29uZyB3cm90ZToNCj4gTW92ZSBoZWFkZXIgY29w
-eWluZyB0byByaW5nIGxvZ2ljIGludG8gYSBuZXcgY29weV9oZWFkZXJfdG9fcmluZygpDQo+IGZ1
-bmN0aW9uLiBUaGlzIGNvbnNvbGlkYXRlcyBlcnJvciBoYW5kbGluZy4NCj4gDQo+IFNpZ25lZC1v
-ZmYtYnk6IEpvYW5uZSBLb29uZyA8am9hbm5lbGtvb25nQGdtYWlsLmNvbT4NCj4gLS0tDQo+ICBm
-cy9mdXNlL2Rldl91cmluZy5jIHwgMzkgKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0t
-LS0tLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMjEgaW5zZXJ0aW9ucygrKSwgMTggZGVsZXRpb25z
-KC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZnMvZnVzZS9kZXZfdXJpbmcuYyBiL2ZzL2Z1c2UvZGV2
-X3VyaW5nLmMNCj4gaW5kZXggMWVmZWU0MzkxYWY1Li43OTYyYTk4NzYwMzEgMTAwNjQ0DQo+IC0t
-LSBhL2ZzL2Z1c2UvZGV2X3VyaW5nLmMNCj4gKysrIGIvZnMvZnVzZS9kZXZfdXJpbmcuYw0KPiBA
-QCAtNTc1LDYgKzU3NSwxOCBAQCBzdGF0aWMgaW50IGZ1c2VfdXJpbmdfb3V0X2hlYWRlcl9oYXNf
-ZXJyKHN0cnVjdCBmdXNlX291dF9oZWFkZXIgKm9oLA0KPiAgCXJldHVybiBlcnI7DQo+ICB9DQo+
-ICANCj4gK3N0YXRpYyBfX2Fsd2F5c19pbmxpbmUgaW50IGNvcHlfaGVhZGVyX3RvX3Jpbmcodm9p
-ZCBfX3VzZXIgKnJpbmcsDQo+ICsJCQkJCSAgICAgICBjb25zdCB2b2lkICpoZWFkZXIsDQo+ICsJ
-CQkJCSAgICAgICBzaXplX3QgaGVhZGVyX3NpemUpDQoNCk1pbm9yIG5pdDogVGhlIG9ubHkgcGFy
-dCBJIGRvbid0IGxpa2UgdG9vIG11Y2ggaXMgdGhlIF9fYWx3YXlzX2lubGluZS4gSQ0KaGFkIGF0
-IGxlYXN0IHR3byB0aW1lcyBhIGRlYnVnIGlzc3VlIHdoZXJlIEkgZGlkbid0IGdldCBtdWNoIG91
-dCBvZiB0aGUNCnRyYWNlIGFuZCB0aGVuIHVzZWQgZm9yIGZ1c2Uua28NCg0KK2NjZmxhZ3MteSAr
-PSAtZyAtTzFcDQorICAgICAgICAgICAgIC1mbm8taW5saW5lLWZ1bmN0aW9ucyBcDQorICAgICAg
-ICAgICAgIC1mbm8tb21pdC1mcmFtZS1wb2ludGVyIFwNCisgICAgICAgICAgICAgLWZuby1vcHRp
-bWl6ZS1zaWJsaW5nLWNhbGxzIFwNCisgICAgICAgICAgICAgLWZuby1zdHJpY3QtYWxpYXNpbmcg
-XA0KKyAgICAgICAgICAgICAtZm5vLWRlbGV0ZS1udWxsLXBvaW50ZXItY2hlY2tzIFwNCisgICAg
-ICAgICAgICAgLWZuby1jb21tb24gXA0KDQpBZnRlciB0aGF0IHRoZSB0cmFjZSBiZWNhbWUgdmVy
-eSBjbGVhciB3aXRoaW4gNW1pbiwgYmVmb3JlIHRoYXQgSQ0KY291bGRuJ3QgZGVjb2RlIHRoZSB0
-cmFjZS4NCg0KPiArew0KPiArCWlmIChjb3B5X3RvX3VzZXIocmluZywgaGVhZGVyLCBoZWFkZXJf
-c2l6ZSkpIHsNCj4gKwkJcHJfaW5mb19yYXRlbGltaXRlZCgiQ29weWluZyBoZWFkZXIgdG8gcmlu
-ZyBmYWlsZWQuXG4iKTsNCj4gKwkJcmV0dXJuIC1FRkFVTFQ7DQo+ICsJfQ0KPiArDQo+ICsJcmV0
-dXJuIDA7DQo+ICt9DQo+ICsNCj4gIHN0YXRpYyBpbnQgZnVzZV91cmluZ19jb3B5X2Zyb21fcmlu
-ZyhzdHJ1Y3QgZnVzZV9yaW5nICpyaW5nLA0KPiAgCQkJCSAgICAgc3RydWN0IGZ1c2VfcmVxICpy
-ZXEsDQo+ICAJCQkJICAgICBzdHJ1Y3QgZnVzZV9yaW5nX2VudCAqZW50KQ0KPiBAQCAtNjM3LDEz
-ICs2NDksMTEgQEAgc3RhdGljIGludCBmdXNlX3VyaW5nX2FyZ3NfdG9fcmluZyhzdHJ1Y3QgZnVz
-ZV9yaW5nICpyaW5nLCBzdHJ1Y3QgZnVzZV9yZXEgKnJlcSwNCj4gIAkJICogU29tZSBvcCBjb2Rl
-IGhhdmUgdGhhdCBhcyB6ZXJvIHNpemUuDQo+ICAJCSAqLw0KPiAgCQlpZiAoYXJncy0+aW5fYXJn
-c1swXS5zaXplID4gMCkgew0KPiAtCQkJZXJyID0gY29weV90b191c2VyKCZlbnQtPmhlYWRlcnMt
-Pm9wX2luLCBpbl9hcmdzLT52YWx1ZSwNCj4gLQkJCQkJICAgaW5fYXJncy0+c2l6ZSk7DQo+IC0J
-CQlpZiAoZXJyKSB7DQo+IC0JCQkJcHJfaW5mb19yYXRlbGltaXRlZCgNCj4gLQkJCQkJIkNvcHlp
-bmcgdGhlIGhlYWRlciBmYWlsZWQuXG4iKTsNCj4gLQkJCQlyZXR1cm4gLUVGQVVMVDsNCj4gLQkJ
-CX0NCj4gKwkJCWVyciA9IGNvcHlfaGVhZGVyX3RvX3JpbmcoJmVudC0+aGVhZGVycy0+b3BfaW4s
-DQo+ICsJCQkJCQkgIGluX2FyZ3MtPnZhbHVlLA0KPiArCQkJCQkJICBpbl9hcmdzLT5zaXplKTsN
-Cj4gKwkJCWlmIChlcnIpDQo+ICsJCQkJcmV0dXJuIGVycjsNCj4gIAkJfQ0KPiAgCQlpbl9hcmdz
-Kys7DQo+ICAJCW51bV9hcmdzLS07DQo+IEBAIC02NTksOSArNjY5LDggQEAgc3RhdGljIGludCBm
-dXNlX3VyaW5nX2FyZ3NfdG9fcmluZyhzdHJ1Y3QgZnVzZV9yaW5nICpyaW5nLCBzdHJ1Y3QgZnVz
-ZV9yZXEgKnJlcSwNCj4gIAl9DQo+ICANCj4gIAllbnRfaW5fb3V0LnBheWxvYWRfc3ogPSBjcy5y
-aW5nLmNvcGllZF9zejsNCj4gLQllcnIgPSBjb3B5X3RvX3VzZXIoJmVudC0+aGVhZGVycy0+cmlu
-Z19lbnRfaW5fb3V0LCAmZW50X2luX291dCwNCj4gLQkJCSAgIHNpemVvZihlbnRfaW5fb3V0KSk7
-DQo+IC0JcmV0dXJuIGVyciA/IC1FRkFVTFQgOiAwOw0KPiArCXJldHVybiBjb3B5X2hlYWRlcl90
-b19yaW5nKCZlbnQtPmhlYWRlcnMtPnJpbmdfZW50X2luX291dCwgJmVudF9pbl9vdXQsDQo+ICsJ
-CQkJICAgc2l6ZW9mKGVudF9pbl9vdXQpKTsNCj4gIH0NCj4gIA0KPiAgc3RhdGljIGludCBmdXNl
-X3VyaW5nX2NvcHlfdG9fcmluZyhzdHJ1Y3QgZnVzZV9yaW5nX2VudCAqZW50LA0KPiBAQCAtNjkw
-LDE0ICs2OTksOCBAQCBzdGF0aWMgaW50IGZ1c2VfdXJpbmdfY29weV90b19yaW5nKHN0cnVjdCBm
-dXNlX3JpbmdfZW50ICplbnQsDQo+ICAJfQ0KPiAgDQo+ICAJLyogY29weSBmdXNlX2luX2hlYWRl
-ciAqLw0KPiAtCWVyciA9IGNvcHlfdG9fdXNlcigmZW50LT5oZWFkZXJzLT5pbl9vdXQsICZyZXEt
-PmluLmgsDQo+IC0JCQkgICBzaXplb2YocmVxLT5pbi5oKSk7DQo+IC0JaWYgKGVycikgew0KPiAt
-CQllcnIgPSAtRUZBVUxUOw0KPiAtCQlyZXR1cm4gZXJyOw0KPiAtCX0NCj4gLQ0KPiAtCXJldHVy
-biAwOw0KPiArCXJldHVybiBjb3B5X2hlYWRlcl90b19yaW5nKCZlbnQtPmhlYWRlcnMtPmluX291
-dCwgJnJlcS0+aW4uaCwNCj4gKwkJCQkgICBzaXplb2YocmVxLT5pbi5oKSk7DQo+ICB9DQo+ICAN
-Cj4gIHN0YXRpYyBpbnQgZnVzZV91cmluZ19wcmVwYXJlX3NlbmQoc3RydWN0IGZ1c2VfcmluZ19l
-bnQgKmVudCwNCg0KDQpSZXZpZXdlZC1ieTogQmVybmQgU2NodWJlcnQgPGJzY2h1YmVydEBkZG4u
-Y29tPg0KDQo=
+Implement the SCSI-specific io_uring command handler for BSG. This
+handler processes SCSI passthrough commands asynchronously via io_uring,
+supporting both traditional user buffers and zero-copy fixed buffers.
+
+Key features:
+- Async command execution with proper completion handling
+- Zero-copy support via io_uring fixed buffers
+- Status information returned in CQE res2 field
+- Non-blocking I/O support via IO_URING_F_NONBLOCK
+- Proper error handling and validation
+
+The implementation uses a PDU structure overlaying io_uring_cmd.pdu[32]
+to store temporary state during command execution. Completion is handled
+via task work to safely access user space.
+
+This patch replaces the stub implementation from patch 2/3 with the full
+implementation.
+
+Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
+
+diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
+index 4399a25990fc..1c4c29ef7e35 100644
+--- a/drivers/scsi/scsi_bsg.c
++++ b/drivers/scsi/scsi_bsg.c
+@@ -10,10 +10,205 @@
+ 
+ #define uptr64(val) ((void __user *)(uintptr_t)(val))
+ 
++/*
++ * BSG io_uring PDU structure overlaying io_uring_cmd.pdu[32].
++ * Stores temporary data needed during command execution.
++ */
++struct scsi_bsg_uring_cmd_pdu {
++	struct bio *bio;		/* mapped user buffer, unmap in task work */
++	struct request *req;		/* block request, freed in task work */
++	u64 sense_addr;			/* user space sense buffer address */
++	u32 resid_len;			/* residual transfer length */
++	u8 sense_len_wr;		/* actual sense data length written */
++	u8 device_status;		/* SCSI device status (low 8 bits of result) */
++	u8 host_status;			/* SCSI host status (host_byte of result) */
++	u8 driver_status;		/* SCSI driver status (DRIVER_SENSE if check condition) */
++};
++
++static inline struct scsi_bsg_uring_cmd_pdu *scsi_bsg_uring_cmd_pdu(
++	struct io_uring_cmd *ioucmd)
++{
++	return io_uring_cmd_to_pdu(ioucmd, struct scsi_bsg_uring_cmd_pdu);
++}
++
++/*
++ * Task work callback executed in process context.
++ * Builds res2 with status information and copies sense data to user space.
++ * res2 layout (64-bit):
++ *   0-7:   device_status
++ *   8-15:  driver_status
++ *   16-23: sense_len_wr
++ *   24-31: host_status
++ *   32-63: resid_len
++ */
++static void scsi_bsg_uring_task_cb(struct io_tw_req tw_req, io_tw_token_t tw)
++{
++	struct io_uring_cmd *ioucmd = io_uring_cmd_from_tw(tw_req);
++	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
++	struct scsi_cmnd *scmd;
++	struct request *rq = pdu->req;
++	int ret = 0;
++	u64 res2;
++
++	scmd = blk_mq_rq_to_pdu(rq);
++
++	if (pdu->bio)
++		blk_rq_unmap_user(pdu->bio);
++
++	res2 = ((u64)pdu->resid_len << 32) |
++	       ((u64)(pdu->host_status & 0xff) << 24) |
++	       ((u64)(pdu->sense_len_wr & 0xff) << 16) |
++	       ((u64)(pdu->driver_status & 0xff) << 8) |
++	       (pdu->device_status & 0xff);
++
++	if (pdu->sense_len_wr && pdu->sense_addr) {
++		if (copy_to_user(uptr64(pdu->sense_addr), scmd->sense_buffer,
++				 pdu->sense_len_wr))
++			ret = -EFAULT;
++	}
++
++	blk_mq_free_request(rq);
++	io_uring_cmd_done32(ioucmd, ret, res2,
++			    IO_URING_CMD_TASK_WORK_ISSUE_FLAGS);
++}
++
++/*
++ * Async completion callback executed in interrupt/atomic context.
++ * Saves SCSI status information and schedules task work for final completion.
++ */
++static enum rq_end_io_ret scsi_bsg_uring_cmd_done(struct request *req,
++						  blk_status_t status)
++{
++	struct io_uring_cmd *ioucmd = req->end_io_data;
++	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
++	struct scsi_cmnd *scmd = blk_mq_rq_to_pdu(req);
++
++	pdu->device_status = scmd->result & 0xff;
++	pdu->host_status = host_byte(scmd->result);
++	pdu->driver_status = 0;
++	pdu->sense_len_wr = 0;
++
++	if (scsi_status_is_check_condition(scmd->result)) {
++		pdu->driver_status = DRIVER_SENSE;
++		if (pdu->sense_addr)
++			pdu->sense_len_wr = min_t(u8, scmd->sense_len, SCSI_SENSE_BUFFERSIZE);
++	}
++
++	pdu->resid_len = scmd->resid_len;
++
++	io_uring_cmd_do_in_task_lazy(ioucmd, scsi_bsg_uring_task_cb);
++	return RQ_END_IO_NONE;
++}
++
++/*
++ * Map user buffer to request, supporting both zero-copy (fixed buffers)
++ * and traditional mode.
++ */
++static int scsi_bsg_map_user_buffer(struct request *req,
++				    struct io_uring_cmd *ioucmd,
++				    unsigned int issue_flags, gfp_t gfp_mask)
++{
++	const struct bsg_uring_cmd *cmd = io_uring_sqe_cmd(ioucmd->sqe);
++	struct request_queue *q = req->q;
++	struct iov_iter iter;
++	bool is_write = cmd->dout_xfer_len > 0;
++	u64 buf_addr = is_write ? cmd->dout_xferp : cmd->din_xferp;
++	unsigned long buf_len = is_write ? cmd->dout_xfer_len : cmd->din_xfer_len;
++	bool use_fixed = (ioucmd->flags & IORING_URING_CMD_FIXED) != 0;
++	int ddir = is_write ? WRITE : READ;
++	int ret;
++
++	if (use_fixed) {
++		ret = io_uring_cmd_import_fixed(buf_addr, buf_len, ddir,
++						&iter, ioucmd, issue_flags);
++		if (ret < 0)
++			return ret;
++		ret = blk_rq_map_user_iov(q, req, NULL, &iter, gfp_mask);
++	} else {
++		ret = blk_rq_map_user(q, req, NULL, uptr64(buf_addr),
++				      buf_len, gfp_mask);
++	}
++
++	return ret;
++}
++
+ int scsi_bsg_uring_cmd(struct request_queue *q, struct io_uring_cmd *ioucmd,
+ 		       unsigned int issue_flags, bool open_for_write)
+ {
+-	return -EOPNOTSUPP;
++	struct scsi_bsg_uring_cmd_pdu *pdu = scsi_bsg_uring_cmd_pdu(ioucmd);
++	const struct bsg_uring_cmd *cmd = io_uring_sqe_cmd(ioucmd->sqe);
++	struct scsi_cmnd *scmd;
++	struct request *req;
++	blk_mq_req_flags_t blk_flags = 0;
++	gfp_t gfp_mask = GFP_KERNEL;
++	int ret = 0;
++
++	if (cmd->protocol != BSG_PROTOCOL_SCSI ||
++	    cmd->subprotocol != BSG_SUB_PROTOCOL_SCSI_CMD)
++		return -EINVAL;
++
++	if (cmd->cdb_len == 0 || cmd->cdb_len > 32)
++		return -EINVAL;
++
++	if (!cmd->cdb_addr)
++		return -EINVAL;
++
++	if (cmd->dout_xfer_len && cmd->din_xfer_len)
++		return -EOPNOTSUPP;
++
++	if (cmd->dout_iovec_count > 0 || cmd->din_iovec_count > 0)
++		return -EOPNOTSUPP;
++
++	if (issue_flags & IO_URING_F_NONBLOCK) {
++		blk_flags = BLK_MQ_REQ_NOWAIT;
++		gfp_mask = GFP_NOWAIT;
++	}
++
++	req = scsi_alloc_request(q, cmd->dout_xfer_len ?
++				 REQ_OP_DRV_OUT : REQ_OP_DRV_IN, blk_flags);
++	if (IS_ERR(req))
++		return PTR_ERR(req);
++
++	scmd = blk_mq_rq_to_pdu(req);
++	scmd->cmd_len = cmd->cdb_len;
++	scmd->allowed = SG_DEFAULT_RETRIES;
++
++	if (copy_from_user(scmd->cmnd, uptr64(cmd->cdb_addr), cmd->cdb_len)) {
++		ret = -EFAULT;
++		goto out_free_req;
++	}
++
++	if (!scsi_cmd_allowed(scmd->cmnd, open_for_write)) {
++		ret = -EPERM;
++		goto out_free_req;
++	}
++
++	pdu->sense_addr = cmd->sense_addr;
++	scmd->sense_len = cmd->sense_len ?
++		min(cmd->sense_len, SCSI_SENSE_BUFFERSIZE) : SCSI_SENSE_BUFFERSIZE;
++
++	if (cmd->dout_xfer_len || cmd->din_xfer_len) {
++		ret = scsi_bsg_map_user_buffer(req, ioucmd, issue_flags, gfp_mask);
++		if (ret)
++			goto out_free_req;
++		pdu->bio = req->bio;
++	} else {
++		pdu->bio = NULL;
++	}
++
++	req->timeout = cmd->timeout_ms ?
++		msecs_to_jiffies(cmd->timeout_ms) : BLK_DEFAULT_SG_TIMEOUT;
++
++	req->end_io = scsi_bsg_uring_cmd_done;
++	req->end_io_data = ioucmd;
++	pdu->req = req;
++
++	blk_execute_rq_nowait(req, false);
++	return -EIOCBQUEUED;
++
++out_free_req:
++	blk_mq_free_request(req);
++	return ret;
+ }
+ 
+ static int scsi_bsg_sg_io_fn(struct request_queue *q, struct sg_io_v4 *hdr,
+-- 
+2.25.1
+
