@@ -1,89 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88009296BB7;
-	Wed, 14 Jan 2026 03:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85522DFA54;
+	Wed, 14 Jan 2026 04:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768361775; cv=none; b=FocCfMZOiK294dnuWPjq/CUbiTPNpDSSLBEsEbTN3wsmJXo6x3G3bd9wCC/CoIIt9GEG61/DLiLHmFWVzrKJ33Qx/8QGxPT/LR0ivI0K1pxz5LnFk6HkBu7xA28E9ty7st8lsQB5NLCsJKiOLisrgSRhrQmwtTjY1rEmu0qJHic=
+	t=1768365111; cv=none; b=Gln4GXsSPcsTRkDTGKVkcwprmSlhKdWPgOG9ucq2tVoBj6n/qG18zemJgu2UHRvJhIIAcBI/9ogYKOX+AG4mdsHBPdqtrS73IOgEyYIZXrtaCEBAg2AEA19aMyWuMIYfOqKUJeTm/youpgrRAXQLAzDJbYXck/DUKcx1+wOw5kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768361775; c=relaxed/simple;
-	bh=XdgwGXL6Xkf7KFiVxYJaa6oGaEzMG6qYj6DrtcALVZw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TyRPnPB9CkYtPh7m+Ap0z1zVsPQ4PoqZVqvVXt3/+YgXDcVdhm8x+XDviL38sUV77PIjEWWTJJFqbD8zusirtRQlvDniDMLEQZw0pq5mrKA0BtvOOyfhfHos53GcKCvem5RKQtR3U0q/2Zm1cFoWktPksdA6gRuml2mE0lkiDik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtPxaBvF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1768365111; c=relaxed/simple;
+	bh=l5FHgW47f+Yj1iy0m1MGYj33Um71tv4luVBFCT40jnU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iOKNa0Szr3ytGGMwogKFg3wX8ImWKqOzKjsCsPg0IbdGTzSdZVsM1iVHyzwrDa84s9NM88Y/R3ooZ6SG/PWtO9xcez9emD988JXMSEBT/RB0KoUb58NAnYbDdkJcAHjuOxYb4w/NAADBmvSXgrWpzBjMdKW//yAQ3M3XO80gdCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=KfAxo3FH; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtPxaBvF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5F8C4CEF7;
-	Wed, 14 Jan 2026 03:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768361775;
-	bh=XdgwGXL6Xkf7KFiVxYJaa6oGaEzMG6qYj6DrtcALVZw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KtPxaBvFjvBQXFgO6ttgm1CTd9pwSd7h+Lyh+D9BlZcO995/kseP/Wry1CiCN3v/n
-	 gBwIeg1brhKqIgABt6UECFua/Ct/X6gYsG38FVO8f6nWOf173R366ktySg2c/OI6jY
-	 vk2Ge2hCtjCrU3a9L6qa0l7mSw2vfPb0vGqD7MpfJV5pEDB/zBBeNPk3CdhrwD5Zu0
-	 eumNzZOYzfdZb4LKIHdXfESrFvoslPCoWdoC1b0JaoLC/mIXrjkvL3pAioVtBHM6eI
-	 WeCKp318EhcZFMv/64Kg8sLAhyMxzF4GhCzOaMZyc6/3d1xjwxIJU83EoMG09a8DJm
-	 WGF3Zo8ytomJg==
-Date: Tue, 13 Jan 2026 19:36:12 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
- Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>, Pavan
- Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Joshua Washington
- <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, Saeed
- Mahameed <saeedm@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, Mark Bloch
- <mbloch@nvidia.com>, Leon Romanovsky <leon@kernel.org>, Alexander Duyck
- <alexanderduyck@fb.com>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>, Ankit
- Garg <nktgrg@google.com>, Tim Hostetler <thostet@google.com>, Alok Tiwari
- <alok.a.tiwari@oracle.com>, Ziwei Xiao <ziweixiao@google.com>, John Fraker
- <jfraker@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Mohsin
- Bashir <mohsin.bashr@gmail.com>, Joe Damato <joe@dama.to>, Mina Almasry
- <almasrymina@google.com>, Dimitri Daskalakis
- <dimitri.daskalakis1@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Kuniyuki Iwashima <kuniyu@google.com>, Samiullah Khawaja
- <skhawaja@google.com>, Ahmed Zaki <ahmed.zaki@intel.com>, Alexander Lobakin
- <aleksander.lobakin@intel.com>, David Wei <dw@davidwei.uk>, Yue Haibing
- <yuehaibing@huawei.com>, Haiyue Wang <haiyuewa@163.com>, Jens Axboe
- <axboe@kernel.dk>, Simon Horman <horms@kernel.org>, Vishwanath Seshagiri
- <vishs@fb.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-kselftest@vger.kernel.org, dtatulea@nvidia.com,
- io-uring@vger.kernel.org
-Subject: Re: [PATCH net-next v8 7/9] eth: bnxt: support qcfg provided rx
- page size
-Message-ID: <20260113193612.2abfcf10@kernel.org>
-In-Reply-To: <28028611f572ded416b8ab653f1b9515b0337fba.1767819709.git.asml.silence@gmail.com>
-References: <cover.1767819709.git.asml.silence@gmail.com>
-	<28028611f572ded416b8ab653f1b9515b0337fba.1767819709.git.asml.silence@gmail.com>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="KfAxo3FH"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=ZTmwRYazdVffyBhN86itvLOlmBSFDHLQsgXip1U1wEw=; b=KfAxo3FHMN98EnMTwigbun8dgm
+	4X9/GjMd0cNIdeAKRxIt9AMezGjzKQw4Z0yad4pJMDmx2rt9haMhRbaStCUbl9c2+9V1tTj7Tk9Lz
+	HSJ6DAtg8x/y1bFGW0TEgBYIuBg2So2J5saT2Jaj6srFT+mcWcGLtOCCEuXovr4pZZOM5UqXw8Izg
+	HHVDbFgDpeyQSazFGg37tVEnXMTShjUOY4ZevtwhW0upPw6iT/uDiEMYeK/cWQNOENM/fRP9n2q1L
+	TCwyzc52s6OHv3DAD5Pv6m2k/Hy1u6rtUT2/72qaT0UA4X+YXv4WyI3lZhJUP7QhgNQmFoRPpxb3i
+	YQ+b6rwg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vfsZD-0000000GInC-1eX3;
+	Wed, 14 Jan 2026 04:33:11 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-fsdevel@vger.kernel.org
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	audit@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v5 07/68] do_fchmodat(): import pathname only once
+Date: Wed, 14 Jan 2026 04:32:09 +0000
+Message-ID: <20260114043310.3885463-8-viro@zeniv.linux.org.uk>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
+References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Fri,  9 Jan 2026 11:28:46 +0000 Pavel Begunkov wrote:
-> @@ -4342,7 +4343,8 @@ static void bnxt_init_ring_struct(struct bnxt *bp)
->  		if (!rxr)
->  			goto skip_rx;
->  
-> -		rxr->rx_page_size = BNXT_RX_PAGE_SIZE;
-> +		rxq = __netif_get_rx_queue(bp->dev, i);
-> +		rxr->rx_page_size = rxq->qcfg.rx_page_size;
+Convert the user_path_at() call inside a retry loop into getname_flags() +
+filename_lookup() + putname() and leave only filename_lookup() inside
+the loop.
 
-Pretty sure I asked for the netdev_queue_config() helper to make 
-a return, instead of drivers poking directly into core state.
-Having the config live in rxq directly is also ugh.
+Since we have the default logics for use of LOOKUP_EMPTY (passed iff
+AT_EMPTY_PATH is present in flags), just use getname_uflags() and
+don't bother with setting LOOKUP_EMPTY in lookup_flags - getname_uflags()
+will pass the right thing to getname_flags() and filename_lookup()
+doesn't care about LOOKUP_EMPTY at all.
 
-But at this stage we're probably better off if you just respin
-to fix the nits from Paolo and I try to de-lobotimize the driver
-facing API. This is close enough.
+The things could be further simplified by use of cleanup.h stuff, but
+let's not clutter the patch with that.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ fs/open.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/fs/open.c b/fs/open.c
+index f3bacc583ef0..82bfa06dbfa5 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -679,6 +679,7 @@ static int do_fchmodat(int dfd, const char __user *filename, umode_t mode,
+ 		       unsigned int flags)
+ {
+ 	struct path path;
++	struct filename *name;
+ 	int error;
+ 	unsigned int lookup_flags;
+ 
+@@ -686,11 +687,9 @@ static int do_fchmodat(int dfd, const char __user *filename, umode_t mode,
+ 		return -EINVAL;
+ 
+ 	lookup_flags = (flags & AT_SYMLINK_NOFOLLOW) ? 0 : LOOKUP_FOLLOW;
+-	if (flags & AT_EMPTY_PATH)
+-		lookup_flags |= LOOKUP_EMPTY;
+-
++	name = getname_uflags(filename, flags);
+ retry:
+-	error = user_path_at(dfd, filename, lookup_flags, &path);
++	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
+ 	if (!error) {
+ 		error = chmod_common(&path, mode);
+ 		path_put(&path);
+@@ -699,6 +698,7 @@ static int do_fchmodat(int dfd, const char __user *filename, umode_t mode,
+ 			goto retry;
+ 		}
+ 	}
++	putname(name);
+ 	return error;
+ }
+ 
+-- 
+2.47.3
+
