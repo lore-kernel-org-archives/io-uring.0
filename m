@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7E5314A76;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13F12E2DD2;
 	Wed, 14 Jan 2026 04:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365119; cv=none; b=SA8XA3vC/TNCHr9wY4UwFuHOsOIx5X2EFQZWa8RJ8NBMv4gF+Un4nXtUEBRhSeL2dy8j0IMoOxfkgn3w5o7VCF0lY6PjucDfuX4H7b/FXrxJaaxf6q8xz6+L27TSohVj2BaJ7pP0BxI2VMvhAI3XxHptfhsAi0OPdDYjw7kQFFM=
+	t=1768365118; cv=none; b=DpSwwZdW522iPgQN3rwmMAWnkRf+tk9qUxysxNHlalb+2ZRUpX2Q2DydofqdgcnWAjHnbdXLxO7NzHuSfVVX50tu4zCYINnFo+tsLBOqmtlS6OCprVpEBqgVBvPfa2kBpQWfDOvxu9qKepj/oL8pAiy39SdfqVuOgGoXDoGPhcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365119; c=relaxed/simple;
-	bh=ZQKnnJ+DT/olw6Lm8LfztDzd27NRaCqPT+q4vUOkjL0=;
+	s=arc-20240116; t=1768365118; c=relaxed/simple;
+	bh=Ln2QhD1+LiE6hrU8DCpZyq1Aafnjm0E3+Q2zcNTr2ow=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bq+zBE6/nt7XRY9VN1z9H5CAYqx4T7jsvT9+ySo5Azbd/nyHpYjxuLhdcUZf+bSaha1DOSiZReKWtz1yblUbZ/480dwt/cDzI5iJrviTSjiS53CrfIhTPqrWWnHYIPv8X8Zd09dpxR1IqK7k3S/VBS2lQSnKv7eQbA4fztMsFro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=iaYxLbX6; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=DLE5BONQ2DpLVJ+OjDm8NPWKV95dE/HT9lTlUGeRvWqWF4hFkfVfsxzBOYZzXtZB0HX/7Ti0fbMKVcl1iRIgSlrM5n7Pea7vNNo+d24GQMf8c28UtLovuJtaOOR0DQPFFDQnGjcB1QQry+wJG927v3KFDvKgnlkS6FaI5L1aMpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=lLJYzHu4; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="iaYxLbX6"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="lLJYzHu4"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=6hUHHzqGq4rboHjLsjdGtX8PCDDP5BU01+h08kclRhg=; b=iaYxLbX6Jw+u11/tdoDO+SeNdn
-	pmTwcEuXyT+yoKzAov3P0u9Tr6xqDBJ4ZTsD9Q4GrvwpKUNbCfLFyjJqdVCUuBR+y7WjHjz9cenjP
-	IyBgV/JGsizCYcIz5Ow1mPM+OgyhblPkeX9omlglFNM5Rt+NLA7BhgvAbllkL2BppsUG/T6QrU0GX
-	MwRO0g8oh7lRD+JNLJko2sFsNyEWg1YMGSU3+SyH6eMMWBJc6Ti/1WLswVgTGcxZyQcY0PCB5y2dH
-	bUDE9uDQDM6ttTPCLstyYW/xqttWdNo4znWWjem85SccPKfNcPzAf6jVjQhiRK8raZebBA1SviQQF
-	cKWcOHGA==;
+	bh=3DYt1b8jTHOd45/ui01BMEhPrHOrIWRFTqLRN9vGwUo=; b=lLJYzHu4dxQMl90dUuKtwEtrj2
+	M9pobuv3AiJIy8Z8irYkAbd1gM51rip2wbbhpEORnPTPis4ODKYMR1trRzhOB6ygBWv7J6rGemLaF
+	uBfQSxxnqwtRvdmjFCkcpiCt+pKtgm5L82Ss5i8d/zdOGjc7MveY1mnpya5+hsjrxZVxSoecX3ZLF
+	cA3iUB+2mTTYBBvy5FZ7F+0MVaM99xC7D9kurSZw9Cy9CLwLUYowEQRERNBnxLPyYsvnPc8pdH7pH
+	LXNjHFe73RbI5fK03IwZUUbktXNFYV9sTWGF9ftUs1iTZzUrtZBqcP+qSnJ40+2lvQaphu+ASNGJr
+	oKJ1am4g==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZM-0000000GIxr-0gfy;
-	Wed, 14 Jan 2026 04:33:20 +0000
+	id 1vfsZL-0000000GIx4-2tf4;
+	Wed, 14 Jan 2026 04:33:19 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 55/68] do_readlinkat(): switch to CLASS(filename_flags)
-Date: Wed, 14 Jan 2026 04:32:57 +0000
-Message-ID: <20260114043310.3885463-56-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 53/68] do_utimes_path(): switch to CLASS(filename_uflags)
+Date: Wed, 14 Jan 2026 04:32:55 +0000
+Message-ID: <20260114043310.3885463-54-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -57,40 +57,39 @@ Sender: Al Viro <viro@ftp.linux.org.uk>
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/stat.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ fs/utimes.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/fs/stat.c b/fs/stat.c
-index ee9ae2c3273a..d18577f3688c 100644
---- a/fs/stat.c
-+++ b/fs/stat.c
-@@ -564,20 +564,17 @@ static int do_readlinkat(int dfd, const char __user *pathname,
- 			 char __user *buf, int bufsiz)
+diff --git a/fs/utimes.c b/fs/utimes.c
+index 84889ea1780e..e22664e4115f 100644
+--- a/fs/utimes.c
++++ b/fs/utimes.c
+@@ -84,27 +84,24 @@ static int do_utimes_path(int dfd, const char __user *filename,
  {
  	struct path path;
+ 	int lookup_flags = 0, error;
 -	struct filename *name;
- 	int error;
- 	unsigned int lookup_flags = 0;
  
- 	if (bufsiz <= 0)
+ 	if (flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH))
  		return -EINVAL;
  
--	name = getname_flags(pathname, LOOKUP_EMPTY);
-+	CLASS(filename_flags, name)(pathname, LOOKUP_EMPTY);
+ 	if (!(flags & AT_SYMLINK_NOFOLLOW))
+ 		lookup_flags |= LOOKUP_FOLLOW;
+-	name = getname_uflags(filename, flags);
+ 
++	CLASS(filename_uflags, name)(filename, flags);
  retry:
  	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
--	if (unlikely(error)) {
--		putname(name);
-+	if (unlikely(error))
- 		return error;
--	}
- 
- 	/*
- 	 * AFS mountpoints allow readlink(2) but are not symlinks
-@@ -597,7 +594,6 @@ static int do_readlinkat(int dfd, const char __user *pathname,
+ 	if (error)
+-		goto out;
++		return error;
+ 	error = vfs_utimes(&path, times);
+ 	path_put(&path);
+ 	if (retry_estale(error, lookup_flags)) {
  		lookup_flags |= LOOKUP_REVAL;
  		goto retry;
  	}
+-out:
 -	putname(name);
  	return error;
  }
