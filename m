@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98FB91DD877;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6072E1EE7;
 	Wed, 14 Jan 2026 04:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365113; cv=none; b=Rk8nfmyp+sX5KJ1u1a5YE7IN+uD+430guHtoJMTWDa0GpNDiqeh2rqFSFuQ1ejAGQ5ujxIH+E+GkHKJDevNKnoPHCndEY20mzagnbf3y0WbImmfB2/X11N7L4Cl9oYfnh48nVRGBerwI5AiHdrIiFex08RxqZOpssbBhGJE0Owc=
+	t=1768365114; cv=none; b=F7t+mvWOyS79795cg29Z6uCMA2dBx51J+q4cxM0LEsJoZaa9sW2y7pkHXSOXzIJb4Lgh7pM/BrCPq7Fb8a6o/VR2DN7FcfbIHMQhNB1uNtK6THJsrh0wHJOE7fMoR09O+Tsb8/3mQjYsm0Vvj9FLq7MKFB1YRd3KlGUusYIvy5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365113; c=relaxed/simple;
-	bh=yfzVKOGC6J1mfQAkrJGAOfs9h1A24vTRVEs1IwTgzSw=;
+	s=arc-20240116; t=1768365114; c=relaxed/simple;
+	bh=xKaH/NZFW5DN3VJir82hEz4CpporN5Oy57a9aSeWAFQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c7XHb5yG6WoO/SFUegU6UgHvcdzuYOuhKLwJWh3CYFU66/S8rZy86Ejny9lk7qyu7Uf6gs1NOkR+PkdOsLoAh/KE8FIyvdQobWgbhDGpmAC0LkIoClg/Kd/QD+tRqHXnyaV/mh6ecZh1IysRvtqXYssq3Uaw2NfJTbbIccuHo6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=esNL/zwR; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=jE2ti8iBQY2N8HgQ7RYw8j6kbRGAwVtfnE5nVnRJ1WGLFBjfd/9gF3vbzmZjFOyxbYCPXdr+dsnK/oQLII3jWOhM5vRD+/HqDoocPg/KBV9SDZb1Ca4nXCnQALW27Yg4VX5X0q04yFugEAUM4YSH0mBGgHZnu8xj0A86ZPBqgYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=vFXQVmd0; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="esNL/zwR"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vFXQVmd0"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=glqNvFd2WCWs9BPH2ZT1TzGGKLgx5BNyq9RljQnkTIg=; b=esNL/zwRFaIc6HXCD9ivssxvLX
-	OFZXOop3QmRIelnyfyzk+/EBiloD5R0xQZjfc2rNesa/5qiqjnQ7NPNo10ZdL9efAWy2jZmINWzCk
-	/Vjwp9DJvTFBk8JLvqrjIlqsZErcChBVsdKUqtdKY3TWAyScjTdIIGr+0IuM6BgunUGtvb/tNhm/q
-	oAfz62ZjXK3liPbvIbbiTzH4y09Y71/wAGbrvZpEbXCj2xBe0JErPm9rT1KM/zfzuS1MgFRkbEmJo
-	0ArxqTpQ9XZIzQsS1NZu7xajqWtdcvHiow2kfxj5DuXcCfXC2sluAEaD5d3ClmE3dsyHKgymbAqzu
-	E9pltGXA==;
+	bh=gaYRFNRfoRssLh/Ga6RL0HdpHSyeDiJIvDb89vnXUNo=; b=vFXQVmd0qkv6J5Ez2WjTVeS+4O
+	6JUC+YLswCAyV84l/NbUYCf6WlMJolyGYBJE3i8XyLWgDhGpsEYCTtFnFnRk+3FiptGh+QOEXCwjp
+	GcnP5O7jF2p8i9EU5DXsxBgPrqvbZyLVgf2FrGYxi06NS0/MmqJYQMDNrS5SrzYhdTsUPuibiR+dX
+	0XlIsCOPzZXgYdi8Wygb8gPy0RumI+UyOq/RarprYfNfmNVMMbC6PsXIOfayNe5Mi8mCNSBxVMTog
+	rTLog7DWwYCtBYFo6nqlH9WTXs7jRT1U2zac6cxNtVaxHf1AWJTiGpL3KCXeJmmz8AxTDhistP8Iq
+	50W7wZ8A==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZG-0000000GIoZ-4BOQ;
-	Wed, 14 Jan 2026 04:33:15 +0000
+	id 1vfsZG-0000000GIoK-1xAK;
+	Wed, 14 Jan 2026 04:33:14 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 37/68] do_execveat_common(): don't consume filename reference
-Date: Wed, 14 Jan 2026 04:32:39 +0000
-Message-ID: <20260114043310.3885463-38-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 32/68] do_sys_openat2(): get rid of useless check, switch to CLASS(filename)
+Date: Wed, 14 Jan 2026 04:32:34 +0000
+Message-ID: <20260114043310.3885463-33-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,92 +55,39 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-... and convert its callers to CLASS(filename...)
+do_file_open() will do the right thing when given ERR_PTR() as name...
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/exec.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+ fs/open.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 5d15c0440c3d..9e799af13602 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1789,20 +1789,16 @@ static int do_execveat_common(int fd, struct filename *filename,
- 	 * whether NPROC limit is still exceeded.
- 	 */
- 	if ((current->flags & PF_NPROC_EXCEEDED) &&
--	    is_rlimit_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC))) {
--		retval = -EAGAIN;
--		goto out_ret;
--	}
-+	    is_rlimit_overlimit(current_ucounts(), UCOUNT_RLIMIT_NPROC, rlimit(RLIMIT_NPROC)))
-+		return -EAGAIN;
- 
- 	/* We're below the limit (still or again), so we don't want to make
- 	 * further execve() calls fail. */
- 	current->flags &= ~PF_NPROC_EXCEEDED;
- 
- 	bprm = alloc_bprm(fd, filename, flags);
--	if (IS_ERR(bprm)) {
--		retval = PTR_ERR(bprm);
--		goto out_ret;
--	}
-+	if (IS_ERR(bprm))
-+		return PTR_ERR(bprm);
- 
- 	retval = count(argv, MAX_ARG_STRINGS);
- 	if (retval < 0)
-@@ -1850,9 +1846,6 @@ static int do_execveat_common(int fd, struct filename *filename,
- 	retval = bprm_execve(bprm);
- out_free:
- 	free_bprm(bprm);
+diff --git a/fs/open.c b/fs/open.c
+index 3d2e2a2554c5..ac8dedea8daf 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1425,18 +1425,12 @@ static int do_sys_openat2(int dfd, const char __user *filename,
+ 			  struct open_how *how)
+ {
+ 	struct open_flags op;
+-	struct filename *tmp __free(putname) = NULL;
+-	int err;
 -
--out_ret:
--	putname(filename);
- 	return retval;
- }
+-	err = build_open_flags(how, &op);
++	int err = build_open_flags(how, &op);
+ 	if (unlikely(err))
+ 		return err;
  
-@@ -1941,7 +1934,8 @@ SYSCALL_DEFINE3(execve,
- 		const char __user *const __user *, argv,
- 		const char __user *const __user *, envp)
- {
--	return do_execveat_common(AT_FDCWD, getname(filename),
+-	tmp = getname(filename);
+-	if (IS_ERR(tmp))
+-		return PTR_ERR(tmp);
+-
+-	return FD_ADD(how->flags, do_file_open(dfd, tmp, &op));
 +	CLASS(filename, name)(filename);
-+	return do_execveat_common(AT_FDCWD, name,
- 				  native_arg(argv), native_arg(envp), 0);
++	return FD_ADD(how->flags, do_file_open(dfd, name, &op));
  }
  
-@@ -1951,7 +1945,8 @@ SYSCALL_DEFINE5(execveat,
- 		const char __user *const __user *, envp,
- 		int, flags)
- {
--	return do_execveat_common(fd, getname_uflags(filename, flags),
-+	CLASS(filename_uflags, name)(filename, flags);
-+	return do_execveat_common(fd, name,
- 				  native_arg(argv), native_arg(envp), flags);
- }
- 
-@@ -1966,7 +1961,8 @@ COMPAT_SYSCALL_DEFINE3(execve, const char __user *, filename,
- 	const compat_uptr_t __user *, argv,
- 	const compat_uptr_t __user *, envp)
- {
--	return do_execveat_common(AT_FDCWD, getname(filename),
-+	CLASS(filename, name)(filename);
-+	return do_execveat_common(AT_FDCWD, name,
- 				  compat_arg(argv), compat_arg(envp), 0);
- }
- 
-@@ -1976,7 +1972,8 @@ COMPAT_SYSCALL_DEFINE5(execveat, int, fd,
- 		       const compat_uptr_t __user *, envp,
- 		       int,  flags)
- {
--	return do_execveat_common(fd, getname_uflags(filename, flags),
-+	CLASS(filename_uflags, name)(filename, flags);
-+	return do_execveat_common(fd, name,
- 				  compat_arg(argv), compat_arg(envp), flags);
- }
- #endif
+ int do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
 -- 
 2.47.3
 
