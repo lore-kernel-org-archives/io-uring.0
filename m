@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E811C2DC350;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81CA2DCF57;
 	Wed, 14 Jan 2026 04:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365113; cv=none; b=NpEXJU/0xZv3SidBRwDV2wBPVg4/40gCqnOONa+Sa6zMxdCVMlHVZdr4kbFd9omh0kL7PSd9H62r69MfJtTWqUZS8C29X4uDemxgfUA+8MSVNFaW15mqU4itIzgzYr0yvwT7NpFpY61ptDt9FkP/bvgcr3MV8j9YlKTCR3xpTOY=
+	t=1768365113; cv=none; b=EKaWBUGlWiC7gA2VN2ZT9vEc+JCcSdKCW26FsogbveseV0UUVwX1plcmqIf/EHe4JRuh6TcTjkcANmoNLih3zUHDuinX+m9gv+Vj7uhu5d3uJppHWqDqZ2liNTcSwPIjdE3T+llAK7juRrJ57UFNZJGNG1faeEMYeB4809+XrKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768365113; c=relaxed/simple;
-	bh=HuofTO6W7vR4qzfevIkIBi62Ny1xGF40NvZUmdOESYA=;
+	bh=rYNiXERMORELD3rtPdZULgbnCI+3YEmNF+Hwi5pTBHM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UfZdvS+48bCI8BFkRqq9wwtKHqMoSteZEXPN1uye4paGb7dBXZFUUo+gPVfnSjTdtMrEUaZg+scDXzPm9KnajJ/u1FBqTwLDIeGnj+WuwWJZD1FqOskuYKc8jm4DiwfBWMoZczADHQLlk4Tm9ld1vyNt2upK1Ke4XKPj0oRrw7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ooKloF7Y; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=TioWhAx70B69cpi+82jcWLNIf/9riut7k5CAN3GP1oNssPRxGLUdWcBQX7hVnqPhwqhk+HGT3VqAFaNDD7pfhd5kCkHzcpNHC06uWrhu37Rn9hpQawb1JqSl+F/eAos2Qhnj+7T5sucFBn9z1oBX8CSWcS4Icr7wpknKUO/IwmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=r2CFTjOb; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ooKloF7Y"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="r2CFTjOb"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=5sjmtHpN+aNv13Y+x7OR9WyKLSyrvAiIxsgVcm3G3Vk=; b=ooKloF7Y5owgjXCDb2rohL8m+F
-	E8xTkvDuL+MAjgnO773vg/6C9RgY9im6OWJd6AocKJZYvvuhffS7+ey374q7XqBCa/9MPWmNxEQo7
-	kB6WEsq+fpoX3AUSFn7qVcPpuAA+a/vBIOuhFl2XZOlkpBm/VAM6vE2lQfZjUNKsTfOHk2ELMTyuA
-	b0v9wlzcb/rRSiI1leG7x1QkqG2HB58YflkAjUXH0sEzbdHTsufEtfCpavGUa6VdkrFnUK6cjwVRM
-	D9UOs1Oe9xbnv5R2akxbA9CsM0yI/Eg61VTauy32Tktk2dkCmaXAdZin3P3P8SZANgtrTQYPNQm7l
-	wpLzmuWA==;
+	bh=O3vCMEIcJ6QDV68ynljSAAzPvL85FljOJrW2O7eAqj8=; b=r2CFTjObWufo0qMU6F9uUguivd
+	SMJLG/fmXOotEHrVOKHMWtaZvdt0NPkkSzDm8oWB7fWo1BG/9CoUNTHBvar3sic44tQnXnTvtKOE9
+	PQtHae6VyJiMnrxMdWwCwFW8DkhgPaKdxYDpcvY7hMR5WYy9kqfr37qsArWRVar62d8QwQNNuMfqI
+	4b7hh/BnxpBo7o/eHRQoTUKy38xeXyM/5b0lXJ4MyYUMEHnOhJs1SG8cXYmTL/6iK+E+eW/s9rafT
+	S22NO7oVIvUiwRrOTJwWhgnEWXeZak7+5SzNbISSjC/cG1ByHXAFtaO52emKYpdKey3ARXZub1qph
+	981aj2Rg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZC-0000000GIn4-48tA;
-	Wed, 14 Jan 2026 04:33:11 +0000
+	id 1vfsZG-0000000GIoD-0n2S;
+	Wed, 14 Jan 2026 04:33:14 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 03/68] init_symlink(): turn into a trivial wrapper for do_symlinkat()
-Date: Wed, 14 Jan 2026 04:32:05 +0000
-Message-ID: <20260114043310.3885463-4-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 29/68] ksmbd_vfs_rename(): vfs_path_parent_lookup() accepts ERR_PTR() as name
+Date: Wed, 14 Jan 2026 04:32:31 +0000
+Message-ID: <20260114043310.3885463-30-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,37 +55,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
+no need to check in the caller
+
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/init.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+ fs/smb/server/vfs.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/fs/init.c b/fs/init.c
-index 4b1fd7675095..27e149a4e8ce 100644
---- a/fs/init.c
-+++ b/fs/init.c
-@@ -180,19 +180,8 @@ int __init init_link(const char *oldname, const char *newname)
+diff --git a/fs/smb/server/vfs.c b/fs/smb/server/vfs.c
+index a97226116840..30b65b667b96 100644
+--- a/fs/smb/server/vfs.c
++++ b/fs/smb/server/vfs.c
+@@ -674,10 +674,6 @@ int ksmbd_vfs_rename(struct ksmbd_work *work, const struct path *old_path,
+ 		return -ENOMEM;
  
- int __init init_symlink(const char *oldname, const char *newname)
- {
--	struct dentry *dentry;
--	struct path path;
--	int error;
--
--	dentry = start_creating_path(AT_FDCWD, newname, &path, 0);
--	if (IS_ERR(dentry))
--		return PTR_ERR(dentry);
--	error = security_path_symlink(&path, dentry, oldname);
--	if (!error)
--		error = vfs_symlink(mnt_idmap(path.mnt), path.dentry->d_inode,
--				    dentry, oldname, NULL);
--	end_creating_path(&path, dentry);
--	return error;
-+	return do_symlinkat(getname_kernel(oldname), AT_FDCWD,
-+			    getname_kernel(newname));
+ 	to = getname_kernel(newname);
+-	if (IS_ERR(to)) {
+-		err = PTR_ERR(to);
+-		goto revert_fsids;
+-	}
+ 
+ retry:
+ 	err = vfs_path_parent_lookup(to, lookup_flags | LOOKUP_BENEATH,
+@@ -737,7 +733,6 @@ int ksmbd_vfs_rename(struct ksmbd_work *work, const struct path *old_path,
+ 	}
+ out1:
+ 	putname(to);
+-revert_fsids:
+ 	ksmbd_revert_fsids(work);
+ 	return err;
  }
- 
- int __init init_unlink(const char *pathname)
 -- 
 2.47.3
 
