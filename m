@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC74303A1D;
-	Wed, 14 Jan 2026 04:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C40A326D68;
+	Wed, 14 Jan 2026 04:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365120; cv=none; b=p6+aeXHHRthEbGP3u7vAP20KIo28AfxW6eDKTGXcJ+aWYyzs3MeLlJJTjcn+i9kPDWpf3N9ijBFwpooxKcSTMcwI2ycGAQVFrc6Kik3bGqwGFid8cbqwXI7y+/UMEF7d/Dle/7/TFhMm9eHZoHsOUySirvFFGs2n3xbgUPkoNJM=
+	t=1768365121; cv=none; b=UR8oN9UllbnL4WgWnaNVkAjavzzlGphqTorA9zD0pG44+hN98SBrgWLkNiDfVP7Tt2UHeatqJtM+NU+w8q+IHmXT9RI8FHriFiG7YZrNhk2u3DZ7XEqmTUR8cQRHN6YU3rTieHXXrEkZBea+TisOPK+hWaRfzKXRC8TYlnbOej4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365120; c=relaxed/simple;
-	bh=urAa3ZS6X7nMsa9ZRz2Pqn/hpkIvLTL3N56s9umZyt4=;
+	s=arc-20240116; t=1768365121; c=relaxed/simple;
+	bh=JqqD6xeqUDj3nRwRtlOX37SQyfwoFYklo2JzhGSCFzA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VZue41xhgVtWo96h5s14raZrs+vG58Xn5gv4VDc6bQV1nLfUhySS6UTcV7quhe/40tewu0KhyVvyvYl2znOJxAByjI9uXHPZR4XG7cTwG26MaPA6DBWaBdChdwDWBZ5sWYDygYkQwhumnAetVdxs7j0ewyPAGs2QrJ1ll5wD41A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Va9dJkUm; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=Gv2etsrZKpmg+EOEoakEnlrmv+NCSEZmmlesqYCko7l7k1cM7HvQf6JlZrZ9ZVdhq+zFfeI0Nza5T+lnb4L+WAvGml651KqAtbgN5yy/7bI2yKL5Ab5vmhUJpqQMrEkWFjycaqJGwdT7MJhVc6C5xcp6wqfxvQ3kpcbj/rcexRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=RJlzETtR; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Va9dJkUm"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="RJlzETtR"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=5+CNfJBBa99USZB4Xzhgo+c1jKCiUr7CLOmJPPMy31A=; b=Va9dJkUmRZ6qkdGkQKEsXYEUtf
-	98HjeXCJpQ+CR4pk7/Ru4qbh5VuTyjEZLOaqe6kodcb63JqXwx1l6CsAb5L3xnb3XxlgEGjWjQHPb
-	I9BADjZvFp8/5GHSl44pgjF2xWc6hEx+7PExqnpZO7c2Honz6umVtvB0C7dS8fG7L36wKBCFCMu6T
-	IAWzKD6XcfdNECS1V4g18VIlnOMpkPnDLhOYFVvxL/sOKiivja3BQomQ6agr33PCiUJQGLoosxlWL
-	SeGgkevMT6I9ahicQQmD0+MxelCsaMmCiTJEA1HJbyC42JsJv+4fbchbMYFxM2/C+RoRlfNaofvSu
-	q+bUsfxA==;
+	bh=KvYo9U9Xs4PTrMtECgI7ahcosY5DMnE4tqcTdGN6Z+w=; b=RJlzETtRM78ojvFTsE7/gP3g2w
+	RUdV9z2sOCznXNdKqEebQwW0/oBa1szAe9Aj12Wt8RhU5kojl1cwuOuqcDQAKak40HdXwkIGO3xNO
+	r2Ug1R6+NthI/atMpn5sEq7OL326qilpf2MHrQRAof7aIybr+BTemuFmkkKGJTcshOuBf2jXmFx/N
+	fc6e5pw1fn3L+t2Uusz9wP0m1t1PEYrGgAB97uxK4de/vzPUfViP++kwzkQ3LBnvCH84Jc4NpVg6n
+	rR4vWNOhbbjRV0FxHj6QomWeGwJ0uerodAIu7W4mOgJxwXPuVyHBO+FOdKjNslHJD8SzabFggkPKU
+	ZmTFAbYQ==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZL-0000000GIwu-2Jw5;
-	Wed, 14 Jan 2026 04:33:19 +0000
+	id 1vfsZO-0000000GJ0F-1x7s;
+	Wed, 14 Jan 2026 04:33:22 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 52/68] chdir(2): unspaghettify a bit...
-Date: Wed, 14 Jan 2026 04:32:54 +0000
-Message-ID: <20260114043310.3885463-53-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 65/68] mqueue: switch to CLASS(filename)
+Date: Wed, 14 Jan 2026 04:33:07 +0000
+Message-ID: <20260114043310.3885463-66-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -57,48 +57,59 @@ Sender: Al Viro <viro@ftp.linux.org.uk>
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 27 ++++++++++-----------------
- 1 file changed, 10 insertions(+), 17 deletions(-)
+ ipc/mqueue.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index 425c09d83d7f..bcaaf884e436 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -558,26 +558,19 @@ SYSCALL_DEFINE1(chdir, const char __user *, filename)
- 	struct path path;
- 	int error;
- 	unsigned int lookup_flags = LOOKUP_FOLLOW | LOOKUP_DIRECTORY;
--	struct filename *name = getname(filename);
-+	CLASS(filename, name)(filename);
- retry:
- 	error = filename_lookup(AT_FDCWD, name, lookup_flags, &path, NULL);
--	if (error)
--		goto out;
--
--	error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
--	if (error)
--		goto dput_and_out;
--
--	set_fs_pwd(current->fs, &path);
--
--dput_and_out:
--	path_put(&path);
--	if (retry_estale(error, lookup_flags)) {
--		lookup_flags |= LOOKUP_REVAL;
--		goto retry;
-+	if (!error) {
-+		error = path_permission(&path, MAY_EXEC | MAY_CHDIR);
-+		if (!error)
-+			set_fs_pwd(current->fs, &path);
-+		path_put(&path);
-+		if (retry_estale(error, lookup_flags)) {
-+			lookup_flags |= LOOKUP_REVAL;
-+			goto retry;
-+		}
- 	}
--out:
+diff --git a/ipc/mqueue.c b/ipc/mqueue.c
+index c4f6d65596cf..53a58f9ba01f 100644
+--- a/ipc/mqueue.c
++++ b/ipc/mqueue.c
+@@ -912,13 +912,12 @@ static struct file *mqueue_file_open(struct filename *name,
+ static int do_mq_open(const char __user *u_name, int oflag, umode_t mode,
+ 		      struct mq_attr *attr)
+ {
+-	struct filename *name __free(putname) = NULL;;
+ 	struct vfsmount *mnt = current->nsproxy->ipc_ns->mq_mnt;
+ 	int fd, ro;
+ 
+ 	audit_mq_open(oflag, mode, attr);
+ 
+-	name = getname(u_name);
++	CLASS(filename, name)(u_name);
+ 	if (IS_ERR(name))
+ 		return PTR_ERR(name);
+ 
+@@ -942,20 +941,19 @@ SYSCALL_DEFINE4(mq_open, const char __user *, u_name, int, oflag, umode_t, mode,
+ SYSCALL_DEFINE1(mq_unlink, const char __user *, u_name)
+ {
+ 	int err;
+-	struct filename *name;
+ 	struct dentry *dentry;
+ 	struct inode *inode;
+ 	struct ipc_namespace *ipc_ns = current->nsproxy->ipc_ns;
+ 	struct vfsmount *mnt = ipc_ns->mq_mnt;
++	CLASS(filename, name)(u_name);
+ 
+-	name = getname(u_name);
+ 	if (IS_ERR(name))
+ 		return PTR_ERR(name);
+ 
+ 	audit_inode_parent_hidden(name, mnt->mnt_root);
+ 	err = mnt_want_write(mnt);
+ 	if (err)
+-		goto out_name;
++		return err;
+ 	dentry = start_removing_noperm(mnt->mnt_root, &QSTR(name->name));
+ 	if (IS_ERR(dentry)) {
+ 		err = PTR_ERR(dentry);
+@@ -971,9 +969,6 @@ SYSCALL_DEFINE1(mq_unlink, const char __user *, u_name)
+ 
+ out_drop_write:
+ 	mnt_drop_write(mnt);
+-out_name:
 -	putname(name);
- 	return error;
+-
+ 	return err;
  }
  
 -- 
