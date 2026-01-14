@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6072E1EE7;
-	Wed, 14 Jan 2026 04:31:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC94A27B32C;
+	Wed, 14 Jan 2026 04:31:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365114; cv=none; b=F7t+mvWOyS79795cg29Z6uCMA2dBx51J+q4cxM0LEsJoZaa9sW2y7pkHXSOXzIJb4Lgh7pM/BrCPq7Fb8a6o/VR2DN7FcfbIHMQhNB1uNtK6THJsrh0wHJOE7fMoR09O+Tsb8/3mQjYsm0Vvj9FLq7MKFB1YRd3KlGUusYIvy5Q=
+	t=1768365113; cv=none; b=O3OCt4HDUF2BwYy/Nw9NTFp+1qgQqnD0c6t9kJ40+20v0k2H9374N5mEelJ79K4YM00hzCAZOnSxQQ4PTvNJbTc0KgPSvp5+vNCK209mgUMOgTaxaDYDJtzudeos9nICMjZgCgqky0X4zZUSXQytcWzbEhzgVj56InUq3AzHFJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365114; c=relaxed/simple;
-	bh=xKaH/NZFW5DN3VJir82hEz4CpporN5Oy57a9aSeWAFQ=;
+	s=arc-20240116; t=1768365113; c=relaxed/simple;
+	bh=av9suRxH/37UFm53T9UpXb9WlDmQfxwVuqUciT4uPIk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jE2ti8iBQY2N8HgQ7RYw8j6kbRGAwVtfnE5nVnRJ1WGLFBjfd/9gF3vbzmZjFOyxbYCPXdr+dsnK/oQLII3jWOhM5vRD+/HqDoocPg/KBV9SDZb1Ca4nXCnQALW27Yg4VX5X0q04yFugEAUM4YSH0mBGgHZnu8xj0A86ZPBqgYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=vFXQVmd0; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=iuIrpYOaMGHw3cueij4SwpA2a16GJ1bSfN2QIOxKYOVDqxqyyo9eviEK3Gm/wfLYIWzXmFF7y/HCYuyl2qQc+cjv3sR9/SZYQlx1IHrQQxWoTDC9iGHl8Blog2gj2YQze5hhbgHaTlGz7hAveUUNhHktT2/5ryLkT3S3eEUk0eE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=F1NlNsMc; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="vFXQVmd0"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="F1NlNsMc"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=gaYRFNRfoRssLh/Ga6RL0HdpHSyeDiJIvDb89vnXUNo=; b=vFXQVmd0qkv6J5Ez2WjTVeS+4O
-	6JUC+YLswCAyV84l/NbUYCf6WlMJolyGYBJE3i8XyLWgDhGpsEYCTtFnFnRk+3FiptGh+QOEXCwjp
-	GcnP5O7jF2p8i9EU5DXsxBgPrqvbZyLVgf2FrGYxi06NS0/MmqJYQMDNrS5SrzYhdTsUPuibiR+dX
-	0XlIsCOPzZXgYdi8Wygb8gPy0RumI+UyOq/RarprYfNfmNVMMbC6PsXIOfayNe5Mi8mCNSBxVMTog
-	rTLog7DWwYCtBYFo6nqlH9WTXs7jRT1U2zac6cxNtVaxHf1AWJTiGpL3KCXeJmmz8AxTDhistP8Iq
-	50W7wZ8A==;
+	bh=X7jzL/LB8VmNSWhjEMOaVlC5iqrIbTfUbf9f5vgIgz4=; b=F1NlNsMcJw7hphjoW+hHY5faZL
+	lFDSxumUMzLujM+2RREYb1fIKsiak47lj+B5xA8TJpLdAUQyTj2ckcuvsUyLXs1/IolhyHttvXabb
+	Ur2dPAa98Re73v2YJdbQ9bQMGA8a4R4ElnSSlKJLK96Zm3HegKFZbJXJ93OfVRWZhxHfLtcVSXAoS
+	c4jKpUK2yneSeUh/eaOr/tSXLxNR+AQSV3iKzqYBtBxanY3BTPqxwKakU85f6ufeerXvz2ItCcQQV
+	jmi7OWQcdNdS5dJX0EVR1nNw95EPPUMH/TnptYoYQW3YZNfy7+kqBAc4aJPETx1D9SKHhegutNHIz
+	D7xxIcow==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZG-0000000GIoK-1xAK;
-	Wed, 14 Jan 2026 04:33:14 +0000
+	id 1vfsZH-0000000GIqX-4B4O;
+	Wed, 14 Jan 2026 04:33:16 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 32/68] do_sys_openat2(): get rid of useless check, switch to CLASS(filename)
-Date: Wed, 14 Jan 2026 04:32:34 +0000
-Message-ID: <20260114043310.3885463-33-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 40/68] non-consuming variant of do_linkat()
+Date: Wed, 14 Jan 2026 04:32:42 +0000
+Message-ID: <20260114043310.3885463-41-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -55,39 +55,149 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Al Viro <viro@ftp.linux.org.uk>
 
-do_file_open() will do the right thing when given ERR_PTR() as name...
+similar to previous commit; replacement is filename_linkat()
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/open.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ Documentation/filesystems/porting.rst |  6 +++---
+ fs/init.c                             |  5 +++--
+ fs/internal.h                         |  2 +-
+ fs/namei.c                            | 27 ++++++++++++---------------
+ io_uring/fs.c                         |  5 +++--
+ 5 files changed, 22 insertions(+), 23 deletions(-)
 
-diff --git a/fs/open.c b/fs/open.c
-index 3d2e2a2554c5..ac8dedea8daf 100644
---- a/fs/open.c
-+++ b/fs/open.c
-@@ -1425,18 +1425,12 @@ static int do_sys_openat2(int dfd, const char __user *filename,
- 			  struct open_how *how)
- {
- 	struct open_flags op;
--	struct filename *tmp __free(putname) = NULL;
--	int err;
--
--	err = build_open_flags(how, &op);
-+	int err = build_open_flags(how, &op);
- 	if (unlikely(err))
- 		return err;
+diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
+index 577f7f952a51..8ecbc41d6d82 100644
+--- a/Documentation/filesystems/porting.rst
++++ b/Documentation/filesystems/porting.rst
+@@ -1339,6 +1339,6 @@ in-tree filesystems have done).
  
--	tmp = getname(filename);
--	if (IS_ERR(tmp))
--		return PTR_ERR(tmp);
--
--	return FD_ADD(how->flags, do_file_open(dfd, tmp, &op));
-+	CLASS(filename, name)(filename);
-+	return FD_ADD(how->flags, do_file_open(dfd, name, &op));
+ **mandatory**
+ 
+-do_renameat2() is gone; filename_renameat2() replaces it.  The difference
+-is that the former used to consume filename references; the latter does
+-not.
++do_{link,renameat2}() are gone; filename_{link,renameat2}() replaces those.
++The difference is that the former used to consume filename references;
++the latter do not.
+diff --git a/fs/init.c b/fs/init.c
+index da6500d2ee98..f46e54552931 100644
+--- a/fs/init.c
++++ b/fs/init.c
+@@ -145,8 +145,9 @@ int __init init_mknod(const char *filename, umode_t mode, unsigned int dev)
+ 
+ int __init init_link(const char *oldname, const char *newname)
+ {
+-	return do_linkat(AT_FDCWD, getname_kernel(oldname),
+-			 AT_FDCWD, getname_kernel(newname), 0);
++	CLASS(filename_kernel, old)(oldname);
++	CLASS(filename_kernel, new)(newname);
++	return filename_linkat(AT_FDCWD, old, AT_FDCWD, new, 0);
  }
  
- int do_sys_open(int dfd, const char __user *filename, int flags, umode_t mode)
+ int __init init_symlink(const char *oldname, const char *newname)
+diff --git a/fs/internal.h b/fs/internal.h
+index 5047cfbb8c93..c9b70c2716d1 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -62,7 +62,7 @@ int filename_renameat2(int olddfd, struct filename *oldname, int newdfd,
+ int do_mkdirat(int dfd, struct filename *name, umode_t mode);
+ int do_mknodat(int dfd, struct filename *name, umode_t mode, unsigned int dev);
+ int do_symlinkat(struct filename *from, int newdfd, struct filename *to);
+-int do_linkat(int olddfd, struct filename *old, int newdfd,
++int filename_linkat(int olddfd, struct filename *old, int newdfd,
+ 			struct filename *new, int flags);
+ int vfs_tmpfile(struct mnt_idmap *idmap,
+ 		const struct path *parentpath,
+diff --git a/fs/namei.c b/fs/namei.c
+index 5354f240b86a..e5d494610c2c 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -5729,9 +5729,9 @@ EXPORT_SYMBOL(vfs_link);
+  * We don't follow them on the oldname either to be compatible
+  * with linux 2.0, and to avoid hard-linking to directories
+  * and other special files.  --ADM
+- */
+-int do_linkat(int olddfd, struct filename *old, int newdfd,
+-	      struct filename *new, int flags)
++*/
++int filename_linkat(int olddfd, struct filename *old,
++		    int newdfd, struct filename *new, int flags)
+ {
+ 	struct mnt_idmap *idmap;
+ 	struct dentry *new_dentry;
+@@ -5740,10 +5740,8 @@ int do_linkat(int olddfd, struct filename *old, int newdfd,
+ 	int how = 0;
+ 	int error;
+ 
+-	if ((flags & ~(AT_SYMLINK_FOLLOW | AT_EMPTY_PATH)) != 0) {
+-		error = -EINVAL;
+-		goto out_putnames;
+-	}
++	if ((flags & ~(AT_SYMLINK_FOLLOW | AT_EMPTY_PATH)) != 0)
++		return -EINVAL;
+ 	/*
+ 	 * To use null names we require CAP_DAC_READ_SEARCH or
+ 	 * that the open-time creds of the dfd matches current.
+@@ -5758,7 +5756,7 @@ int do_linkat(int olddfd, struct filename *old, int newdfd,
+ retry:
+ 	error = filename_lookup(olddfd, old, how, &old_path, NULL);
+ 	if (error)
+-		goto out_putnames;
++		return error;
+ 
+ 	new_dentry = filename_create(newdfd, new, &new_path,
+ 					(how & LOOKUP_REVAL));
+@@ -5794,23 +5792,22 @@ int do_linkat(int olddfd, struct filename *old, int newdfd,
+ 	}
+ out_putpath:
+ 	path_put(&old_path);
+-out_putnames:
+-	putname(old);
+-	putname(new);
+-
+ 	return error;
+ }
+ 
+ SYSCALL_DEFINE5(linkat, int, olddfd, const char __user *, oldname,
+ 		int, newdfd, const char __user *, newname, int, flags)
+ {
+-	return do_linkat(olddfd, getname_uflags(oldname, flags),
+-		newdfd, getname(newname), flags);
++	CLASS(filename_uflags, old)(oldname, flags);
++	CLASS(filename, new)(newname);
++	return filename_linkat(olddfd, old, newdfd, new, flags);
+ }
+ 
+ SYSCALL_DEFINE2(link, const char __user *, oldname, const char __user *, newname)
+ {
+-	return do_linkat(AT_FDCWD, getname(oldname), AT_FDCWD, getname(newname), 0);
++	CLASS(filename, old)(oldname);
++	CLASS(filename, new)(newname);
++	return filename_linkat(AT_FDCWD, old, AT_FDCWD, new, 0);
+ }
+ 
+ /**
+diff --git a/io_uring/fs.c b/io_uring/fs.c
+index e5829d112c9e..e39cd1ca1942 100644
+--- a/io_uring/fs.c
++++ b/io_uring/fs.c
+@@ -280,12 +280,13 @@ int io_linkat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ int io_linkat(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_link *lnk = io_kiocb_to_cmd(req, struct io_link);
++	CLASS(filename_complete_delayed, old)(&lnk->oldpath);
++	CLASS(filename_complete_delayed, new)(&lnk->newpath);
+ 	int ret;
+ 
+ 	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
+ 
+-	ret = do_linkat(lnk->old_dfd, complete_getname(&lnk->oldpath),
+-			lnk->new_dfd, complete_getname(&lnk->newpath), lnk->flags);
++	ret = filename_linkat(lnk->old_dfd, old, lnk->new_dfd, new, lnk->flags);
+ 
+ 	req->flags &= ~REQ_F_NEED_CLEANUP;
+ 	io_req_set_res(req, ret, 0);
 -- 
 2.47.3
 
