@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B82D318EE3;
-	Wed, 14 Jan 2026 04:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83B6328623;
+	Wed, 14 Jan 2026 04:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365119; cv=none; b=LVWKtVQ8qpwDGWd5ee+kGrr62s75Lm/SrRKFKyhH3QeX1/OT28Ya4yBxWzgLVfasSeFJJLUEzz+J1kkfjnQiwJDJPj24xuYGry3dr6Z3fw3YedtndcJ7Xc+AtK0HKovDm55PyvML4nHua625YbtYbOPMRLANa+D5dHKq+CtWr6Y=
+	t=1768365121; cv=none; b=WWwAm7Uulw6hcR6WjmxT9Rob5hrkKLkxkZjdyJ2/dlMqDI6aDAkyq1Aho9ofqSb2ckC+TaFegUbi8hzbrVioSvvX23fA3mS6wCY7bkOn1sd5olgtCq3gM28RuUbKLvLMG4KI2LKuoBeDHDksTEs9CF1hKPjDO2Dfli+83S3gOrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768365119; c=relaxed/simple;
-	bh=ljJhsM2UM5HEh3KIUjpWPjWzR98+V6slammE6w3oPzk=;
+	s=arc-20240116; t=1768365121; c=relaxed/simple;
+	bh=AIif+faRQeRaAqpK3WJa8jVZgeyvF8kX2QVOTCmr1Rc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QpHvqaYjMKj35XS9UgCE49KmOKTUVVCitMFNJsV6jqiAg/SR4uh1vKcIVATqkSqkzl5Y1BS9TlrU3UEkV5VHp8L5SkOnCbscFwL5TmDFdbDwrBmQbT32CfPQTfKgoSsV3NCv/nBTcWlpw+Tn1aQIkh2GLOu4d3H+rUVX9aIWEgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=HGTog5Y8; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=Gp9tnc9ctylsL6wWBh4MOMhzSLSQf537m88R03tfF6cJPMeuwmSpH33UK4FmVlSmqplsFKy5mqPOR56YWvmbgdVXjEzgu7zImW0GixUPnXJSu7ovomIT7Yq1svDBFZmFPd8YwXOZGYjk8ThQXrO+sFcx2w7tHKnB5k/jLwVZdHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=btDc3Tkw; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="HGTog5Y8"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="btDc3Tkw"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=u60OFkXUnAqsCaBd4FJv+u2v9etfYl45qHO74HpFUVs=; b=HGTog5Y8Lmgj/rKKNAyvdvcIuG
-	2Z96leJmRV9ue55kTKUWWbeGw/WqV40ehHQ4NfZG8+Xqz/nkcIuIVS1hvD5FFY+5NjaZrjBf82PCY
-	LbyWr+5GIm30ZznDjJRXTyZxU5GIj0ftzCqvkkyIWMjdT+oy8pWitlVKyQCTRtS3utBFy0XmAZ5cg
-	YOazENxsQQ32l2bIKisq0OVLEbgj787yi0nukFRVSp4aAaOuxJpJad+AxmNcN5Zcm3BGTISJ3tlmR
-	9o5YDn+34bQptxTHmsilOW/FHhsA+sYkW77lh0b1V8cEh++Y7ev4cNY7zBNlABkWjE6dW2gK9SQvN
-	lkbRpfgg==;
+	bh=ZdeAiGVCfTu+ZLXJbm8zIQ/4MuEQJKR0dkiqqtUv5W8=; b=btDc3TkwQwc7Z1UBpQWNJTlEzi
+	CFbocq1lVIPvFn0AHWDcPZQ/jxFloTv5dEzdu/CSjQsX25HqjQe0H3NxKuZb377CXWfWQoYlSrza6
+	7RDu6hI7QQe0uRkIl4oAXdzD+1PDvl9JuqL+3BC7Hx5QOwfecViUEXSm2stVlGdpjvWMtqakHl0ih
+	CO3ZIfYbgXGRZuC7CD8lCsnFESkyKZRNFuBsj2hKnHrEGBS3QyzyhJm0Gu835mPohLMm6UtxWYEWe
+	3LhXDWtR1Fyf3H6IJUsdhyUB3zNRpu9bbWOEPdNPRo5UEsM+nI5nCLUvvlGBcaeiNHP5q40hh94rN
+	EcjPW0sg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZM-0000000GIyW-32vR;
-	Wed, 14 Jan 2026 04:33:20 +0000
+	id 1vfsZN-0000000GIza-3FtC;
+	Wed, 14 Jan 2026 04:33:21 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 57/68] namei.c: convert getname_kernel() callers to CLASS(filename_kernel)
-Date: Wed, 14 Jan 2026 04:32:59 +0000
-Message-ID: <20260114043310.3885463-58-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 62/68] quotactl_block(): switch to CLASS(filename)
+Date: Wed, 14 Jan 2026 04:33:04 +0000
+Message-ID: <20260114043310.3885463-63-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -57,105 +57,29 @@ Sender: Al Viro <viro@ftp.linux.org.uk>
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/namei.c | 36 ++++++++++--------------------------
- 1 file changed, 10 insertions(+), 26 deletions(-)
+ fs/quota/quota.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/fs/namei.c b/fs/namei.c
-index ba6e15339ad6..1158beb9a399 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -3002,7 +3002,7 @@ static struct dentry *__start_removing_path(int dfd, struct filename *name,
- struct dentry *kern_path_parent(const char *name, struct path *path)
+diff --git a/fs/quota/quota.c b/fs/quota/quota.c
+index 7c2b75a44485..ed906725e183 100644
+--- a/fs/quota/quota.c
++++ b/fs/quota/quota.c
+@@ -867,7 +867,7 @@ static struct super_block *quotactl_block(const char __user *special, int cmd)
  {
- 	struct path parent_path __free(path_put) = {};
--	struct filename *filename __free(putname) = getname_kernel(name);
-+	CLASS(filename_kernel, filename)(name);
- 	struct dentry *d;
- 	struct qstr last;
- 	int type, error;
-@@ -3023,11 +3023,8 @@ struct dentry *kern_path_parent(const char *name, struct path *path)
- 
- struct dentry *start_removing_path(const char *name, struct path *path)
- {
--	struct filename *filename = getname_kernel(name);
--	struct dentry *res = __start_removing_path(AT_FDCWD, filename, path);
--
--	putname(filename);
--	return res;
-+	CLASS(filename_kernel, filename)(name);
-+	return __start_removing_path(AT_FDCWD, filename, path);
- }
- 
- struct dentry *start_removing_user_path_at(int dfd,
-@@ -3044,12 +3041,8 @@ EXPORT_SYMBOL(start_removing_user_path_at);
- 
- int kern_path(const char *name, unsigned int flags, struct path *path)
- {
--	struct filename *filename = getname_kernel(name);
--	int ret = filename_lookup(AT_FDCWD, filename, flags, path, NULL);
--
--	putname(filename);
--	return ret;
--
-+	CLASS(filename_kernel, filename)(name);
-+	return filename_lookup(AT_FDCWD, filename, flags, path, NULL);
- }
- EXPORT_SYMBOL(kern_path);
- 
-@@ -3083,15 +3076,11 @@ int vfs_path_lookup(struct dentry *dentry, struct vfsmount *mnt,
- 		    const char *name, unsigned int flags,
- 		    struct path *path)
- {
--	struct filename *filename;
-+	CLASS(filename_kernel, filename)(name);
- 	struct path root = {.mnt = mnt, .dentry = dentry};
--	int ret;
- 
--	filename = getname_kernel(name);
- 	/* the first argument of filename_lookup() is ignored with root */
--	ret = filename_lookup(AT_FDCWD, filename, flags, path, &root);
--	putname(filename);
--	return ret;
-+	return filename_lookup(AT_FDCWD, filename, flags, path, &root);
- }
- EXPORT_SYMBOL(vfs_path_lookup);
- 
-@@ -4888,13 +4877,12 @@ struct file *do_file_open_root(const struct path *root,
- {
- 	struct nameidata nd;
- 	struct file *file;
--	struct filename *filename;
- 	int flags = op->lookup_flags;
- 
- 	if (d_is_symlink(root->dentry) && op->intent & LOOKUP_OPEN)
- 		return ERR_PTR(-ELOOP);
- 
--	filename = getname_kernel(name);
-+	CLASS(filename_kernel, filename)(name);
- 	if (IS_ERR(filename))
- 		return ERR_CAST(filename);
- 
-@@ -4905,7 +4893,6 @@ struct file *do_file_open_root(const struct path *root,
- 	if (unlikely(file == ERR_PTR(-ESTALE)))
- 		file = path_openat(&nd, op, flags | LOOKUP_REVAL);
- 	restore_nameidata();
--	putname(filename);
- 	return file;
- }
- 
-@@ -4961,11 +4948,8 @@ static struct dentry *filename_create(int dfd, struct filename *name,
- struct dentry *start_creating_path(int dfd, const char *pathname,
- 				   struct path *path, unsigned int lookup_flags)
- {
--	struct filename *filename = getname_kernel(pathname);
--	struct dentry *res = filename_create(dfd, filename, path, lookup_flags);
--
--	putname(filename);
--	return res;
-+	CLASS(filename_kernel, filename)(pathname);
-+	return filename_create(dfd, filename, path, lookup_flags);
- }
- EXPORT_SYMBOL(start_creating_path);
+ #ifdef CONFIG_BLOCK
+ 	struct super_block *sb;
+-	struct filename *tmp = getname(special);
++	CLASS(filename, tmp)(special);
+ 	bool excl = false, thawed = false;
+ 	int error;
+ 	dev_t dev;
+@@ -875,7 +875,6 @@ static struct super_block *quotactl_block(const char __user *special, int cmd)
+ 	if (IS_ERR(tmp))
+ 		return ERR_CAST(tmp);
+ 	error = lookup_bdev(tmp->name, &dev);
+-	putname(tmp);
+ 	if (error)
+ 		return ERR_PTR(error);
  
 -- 
 2.47.3
