@@ -1,34 +1,34 @@
 Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93412E06EA;
-	Wed, 14 Jan 2026 04:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067D82E11B0;
+	Wed, 14 Jan 2026 04:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768365113; cv=none; b=cnjNalMF6s+9IClUQxOQUdfcb+DEgqPR+8gRI/foRnB8oQroWmu3xCxRYPrmvbv5fGbodZ06YS6fFwsg7RffL7cNm4RBF4YOdaNR5TX8F+oAR5UdwdkObKeMveOnDiUIAf2zBigdemxUUDuDQmqou11irhZaJPH3C1vOPQV8M9E=
+	t=1768365113; cv=none; b=tZ75f+w3xfefzZsBOE/i4rvh93iClsHMtZyMjU/dEo0EqsLdZeTQDGf9sIIqfO1UTaxA0EAb/VsU6OIfUsRWtCliQLNpVjdj1jtXZO0u7EyIFm03/f5oMQz33uivV/Doc5Si0dA57OCyEvVcmYcZ3RERO77rySNkbkL0UWJp8xA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768365113; c=relaxed/simple;
-	bh=+/2fJOB1BO4S+MXr2Oiqwn2QXMarVYCqR7o31SP5sBI=;
+	bh=dKazOTpP98uEsD5tvT0eCFSPEKi73Z7M/OFRDrSl8h4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G2KEFK8m3WL0RzBW/0b97s0F3U4plJPO1uQTlEP8v4pWHttz1RQDCOc1LTFJZLal3mrKJpbbGF0iqwQjYt/DHxb2y4GpqhClVxWKvPfxwgHOhmC99YWaW5A1lMv46Pw0FoQYBoKdwFtypYTwvQFzVV8VYchlOaztEKMjx1+vOuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ghdvX/qX; arc=none smtp.client-ip=62.89.141.173
+	 MIME-Version; b=UMUDINPUGTMXskWYsMd1Bu3byoMne8YH6+GjMoXyibNx+g17mf5Oq8QniBZxUX+LjtUan1kvK1O/X/HTje7iaNp5fDNz9B7skXCu+znkUXGnHtBZJSXIs9xEJzjZV/LkTFvHbfiVpLjYVVUBI8UzvfKibf+mw2savn9AezYTV+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=YR+W8c9t; arc=none smtp.client-ip=62.89.141.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ghdvX/qX"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="YR+W8c9t"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
 	Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=DaO+ZA83YcIa1UqEs5gSGH8vIlxyVTG0/Vk+SuN8d7U=; b=ghdvX/qXZbt5hXyxx8S+cQwRpC
-	BHbRvqfzH0A5u2/hb6DCol9OQtymQVUC4M5YU7iyQkGNQx/QASvV8qgx3KiCKb3Krzf5F39XrDDed
-	lUc/W9CBtbUQp9V9Vu5nupNLLn8UOgqt65tG4nTS2RRnKf2Z6f/wAl04it5lh2Yr+7UBHIJ8Ky6hk
-	oFNxBjy0UsU2gzBCU0iVvexwmHyWd6HAD9ucFiYobERa0CRzuMzccad+oh80Av2YgRUMRr9uTQBZU
-	S1rkN+8U/XsZGhd8yAMstmR6qOoTB3gcpitGOj1LynEP9ZA77qHm23m9EfdnWliuoZVnqvNXMyZiv
-	g4E3JTDQ==;
+	bh=/taDnA0SgX1kjdBTGSIJQ+UnMnEm3NgXYjqO+SzjTkM=; b=YR+W8c9tc6JQbqqzjO+//SsLtE
+	XTkVKnKd+lTyw4TSxKN4L287M8hDod3y6DqeqgFfgbcWCVc+I0pfdXaBNky6k5U15NZHpbzZA493Q
+	/EsXwxR4NJG5S104VAMqKKYajwyv8/yemEuJXLOo06lXIlWHarOqoHZfw4WtTVJWYL50mO96oHfwZ
+	1Ssyk9ZcoBXV/x2KygFTLlXvldeAzZtHPHhWWaxaLneFbaG8RfMcQqDIfJZsSuDCdNI4ZHuxEbCo6
+	eYxiUKZDI0ah4+d+1LxaN/rJGQ51ff2ggPqDkgBWxcVib7u/lEBM4mcoSB7TsI8+0BM2KRcvn29Vf
+	Oo0XReIg==;
 Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
-	id 1vfsZC-0000000GIn1-3kmJ;
-	Wed, 14 Jan 2026 04:33:10 +0000
+	id 1vfsZG-0000000GIoQ-2sj4;
+	Wed, 14 Jan 2026 04:33:14 +0000
 From: Al Viro <viro@zeniv.linux.org.uk>
 To: linux-fsdevel@vger.kernel.org
 Cc: Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	audit@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 02/68] init_mkdir(): turn into a trivial wrapper for do_mkdirat()
-Date: Wed, 14 Jan 2026 04:32:04 +0000
-Message-ID: <20260114043310.3885463-3-viro@zeniv.linux.org.uk>
+Subject: [PATCH v5 34/68] simplify the callers of do_open_execat()
+Date: Wed, 14 Jan 2026 04:32:36 +0000
+Message-ID: <20260114043310.3885463-35-viro@zeniv.linux.org.uk>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
 References: <20260114043310.3885463-1-viro@zeniv.linux.org.uk>
@@ -57,39 +57,30 @@ Sender: Al Viro <viro@ftp.linux.org.uk>
 
 Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 ---
- fs/init.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+ fs/exec.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/fs/init.c b/fs/init.c
-index 746d02628bc3..4b1fd7675095 100644
---- a/fs/init.c
-+++ b/fs/init.c
-@@ -202,24 +202,7 @@ int __init init_unlink(const char *pathname)
- 
- int __init init_mkdir(const char *pathname, umode_t mode)
+diff --git a/fs/exec.c b/fs/exec.c
+index b7d8081d12ea..5b4110c7522e 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -815,14 +815,8 @@ static struct file *do_open_execat(int fd, struct filename *name, int flags)
+  */
+ struct file *open_exec(const char *name)
  {
--	struct dentry *dentry;
--	struct path path;
--	int error;
+-	struct filename *filename = getname_kernel(name);
+-	struct file *f = ERR_CAST(filename);
 -
--	dentry = start_creating_path(AT_FDCWD, pathname, &path,
--				     LOOKUP_DIRECTORY);
--	if (IS_ERR(dentry))
--		return PTR_ERR(dentry);
--	mode = mode_strip_umask(d_inode(path.dentry), mode);
--	error = security_path_mkdir(&path, dentry, mode);
--	if (!error) {
--		dentry = vfs_mkdir(mnt_idmap(path.mnt), path.dentry->d_inode,
--				  dentry, mode, NULL);
--		if (IS_ERR(dentry))
--			error = PTR_ERR(dentry);
+-	if (!IS_ERR(filename)) {
+-		f = do_open_execat(AT_FDCWD, filename, 0);
+-		putname(filename);
 -	}
--	end_creating_path(&path, dentry);
--	return error;
-+	return do_mkdirat(AT_FDCWD, getname_kernel(pathname), mode);
+-	return f;
++	CLASS(filename_kernel, filename)(name);
++	return do_open_execat(AT_FDCWD, filename, 0);
  }
+ EXPORT_SYMBOL(open_exec);
  
- int __init init_rmdir(const char *pathname)
 -- 
 2.47.3
 
