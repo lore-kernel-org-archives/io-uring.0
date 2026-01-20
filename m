@@ -1,65 +1,66 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8D7243387
-	for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 14:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9135542DFE1
+	for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 15:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768921043; cv=none; b=rkJe28qRcqTXbMt6rqAnOExeny0lXLfUA5xpEYR2tOwchuTagR4j7vzhHgouxLUGqkmGhP0Ykt4SgXIvA7h442LIaT7GG1dEHSguK2CwUsHZe4qtQ4dIWvHCfH7lVsNzZtZPwidbaaqCt3KsD8oAJuy5J8ZOwlbxmFlvbgn5pqg=
+	t=1768921456; cv=none; b=DTLKePHRNKq7aDLu6x+QKp4IJxHsA2cn1K6F6ilgeDTsK4ozvow9XRTmKlecfnygAvcikARhxen4PAV1bHLdQ2keYLQQfNoOx0T4xld9bN6zfd0V34j4jdOKiOcT6KtRFwETzHk9duLViR8XcojjoCXs+WgraLUeauAqGFudCi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768921043; c=relaxed/simple;
-	bh=MNDHOzGOjwdHNpVqzd6uezrl3mpAJcuJ8BscLdMS2ew=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=Ma26TJvwHKw2jE1RQetS8hL5DyFnvLdGKSu3fOZRbIcCwu1JkALsDdNCqCoDFXEfMrKwg57v3Hxw1FIZU/e14j813tY5i2S/Qe28DdFK/+gREEZCpRCsVbs2XyF/Sac4akQ+FuRkaaZAmZmvnNhDAEHuWePvaUGEZYXhaWYiEiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=jDM2FRJm; arc=none smtp.client-ip=209.85.210.49
+	s=arc-20240116; t=1768921456; c=relaxed/simple;
+	bh=0kwFPNTS1wBhcrS2p64yAmyKrub/8csVHG8WUrdDfm0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=WM1xrlu55yVoAGvWFjDgnfGwWyRCv65Aq4yzox9pXy04D2axgD7Gk4mnd8wt1EMlYyA141OxdJVrBehj9b2cmcvQl/8tUvmmIQDRle8wPlk8qT6IEIFHJhtxgykHUt7Dnc+7kxRHZqhr4jyaWflHIeV3CNKksYB6+H7/BkLcMe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=m3HN4eP3; arc=none smtp.client-ip=209.85.161.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="jDM2FRJm"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7cfca52ac2dso3385975a34.0
-        for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 06:57:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="m3HN4eP3"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6610b05b37dso4548541eaf.2
+        for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 07:04:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1768921038; x=1769525838; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C8Ahd/r5jeIUKCDp42qLCzSwfl0NdeJBQjQPD07byx8=;
-        b=jDM2FRJmNKr8GSWXYj5vbcnpU59gUuQ7BLgRf6kXzTqxz2NuVu7Awxpek2Aj3VYMFL
-         Fq9SMVxIki5d+R9YM1sqdnfoaFacsVbaEz39Q2XR/6OZ/LsrKN6xEZoFcluQkUj0v3nn
-         yZjm75u8LeZivG8ZR3Tn45GLwsbJ+Qg2cdmnFshMkUo1de+YnVkBHRGhKzOT4yhQkQBM
-         +TaBwCRBWgB5893vEDn69+7GR6MQ7TqBj8KOtELP4PHXpexd9Lwc9hlQf4mNAmDmaagi
-         8k5kjpciaoPYS9p7kc/0SVpIq2yocTVbUVrzK0Zi46j8B9auoh1taUE03NsMm4tBYdVm
-         J3AA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1768921453; x=1769526253; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1PXHcWfbR1I64hahQZo+kOLn6fFlrmRf6akqxxtdaLQ=;
+        b=m3HN4eP3zz0K9/9wh/8Av92xfUsGHfjkKET3HhW6Ti+mL+bEnnCBlYtUJ4zrnnp0ze
+         A1K96Or7AGPyYa5DBpEABlvbuo6nn81t7yIfK8GBcB+G9D06/F/gpn4vt69DC2rH3/cA
+         +Tddnn7eQUMgFmz9v8H/nTWBPOVdY052v3epdINuZWxnfmDT8UptFH6krEJFJ47A/CG5
+         unI0Q7GcCgFatKhREB052ogkKe1e+pI4l2zxWv6tOIg9GdguI405gAc1v+TFDt5yDIOC
+         0Ul5u4UYrJ56p/cJLS1ao384GZUc02KU7N+rcJd8iyLJLmUjK7mRiu6R+2T2QLS2DFl7
+         qjKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768921038; x=1769525838;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C8Ahd/r5jeIUKCDp42qLCzSwfl0NdeJBQjQPD07byx8=;
-        b=cHxsOWbgwjGKZ6KsZd2IGSN1TrTv2mm5VV2/4quZp+k9TPxqP5aEMdd3cFXavHl4kb
-         2D27LtWhM34Fzypw1uJG8iHFdpbRXr5EUz/zqcdOJ69yVuC9Uhg9bT236lhmrhXJGfBE
-         NVBNIKgR/zSttePntm352uFVcBKiiP+z4yGXrTXwVz/y1sDDUcYQ7kSyJOfO5pWEMG6x
-         rJMyXw1ODSCx/Hls7Es40GOHjuyrjvOmNtDKCScudKbCE/DqCHgyKL/tjtxwZQYK8Jso
-         15z3dYuQ6QuFnilstBTgqltA2cK5B1yaTksw/FTEZWsRwUyjCdeHEYIfsIYidruCzpZD
-         BBrw==
-X-Gm-Message-State: AOJu0Yy7hWmZF9SQZ6LZNRaFxHUtDcpMxM4gU84n89vgpDZ7baAHnR+L
-	EjdEszV4m95UerbzhLzm/8uPsV+DHM0YDg2fsf4jadAffV6hOAPMKLS0WQA9xKVg2/NWeulwqYm
-	yTSDVQ1Q=
-X-Gm-Gg: AY/fxX6NvO0UyAP5MHWkA2sZnTFHZT9X+YhdVOy9nAGwU20wsu9zv8Qv8I8j34+BAWd
-	z8xZqdTszEmbO4gzoy6rAhJ8cCM8QzDysfEgK9AFjzXzyatMTyDHnMFcatz61ww/IQcfohEOiDc
-	UtxkRccCJg2CAoR6iRAFzkZJr1GAzwds+ObmebMvEtmOOq2Xfq6UeLtJ8QEzT1eFC3n76urOxmp
-	MPvkn6zyM79ZHYiR/7AB57XVlPnEQRXDoGLGHUR9pSlDGydQv+VEpdoo/TLIHVtrZq2/kvC3k1H
-	siyYCkXQa5wA5WAOX0hmeDKgScNQYPvi1diL5MZzvA7kZLkxER88I6ggd84zR3irXn4AM882Zr8
-	mqUVxn259hUEL/q9GftM0HWNP49avHGMv0scWmtF3VQfOIGUzzUYegDtkduyPfTXucNCtMAKVWa
-	PoBAq42gnx6DYcWZgOAABpws76UHpG1cn4iyEwHeWnFC/qf284UyEt8mliylwzNGpbtdl9
-X-Received: by 2002:a05:6830:4125:b0:7c7:69c8:2cb with SMTP id 46e09a7af769-7d140aae18bmr1082604a34.24.1768921038511;
-        Tue, 20 Jan 2026 06:57:18 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768921453; x=1769526253;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1PXHcWfbR1I64hahQZo+kOLn6fFlrmRf6akqxxtdaLQ=;
+        b=bqCuQ9Jy1BSlbqoyhBEloBQ20Ad16ZTrjbbNTPVic9KONuBbYgHukKEhB0Xi5Woe7W
+         f8i3HKWxeBGfLegqbrFJSXKZIRIpwt81GNEMPiugPOfSXd6QNNArnqm8yMKq6H52O0TV
+         dtamwMseNtQARtiKub6Cmp9GWSKxqoJmJZWF/x2B3rbafLIH0DSGsgD13SbGCaNuLO+V
+         IpZDh1SGltv/ZEr5hM+tTV2xOuWik9Oif76ErGT9D9b0KUVm45QkujeCwRr166WpY60i
+         sdkAUvtdH2wTuspoJxqJlpI6EgP0pS/tL5fFD9VJrVNu8F9SGQZKOKF0T+iv/yZnngmi
+         l3vw==
+X-Forwarded-Encrypted: i=1; AJvYcCVa+gwddeVdywOVGHuZaBEO5UftQZsnEfaRTQ46zihZKhKFRt6gqReAQY7s+dBEr4gIyv59Id0Wyg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbMWznTF3ZuL24ChGBz4Zy9Czp5fjEb9RMXPFR9W6RxGoL9Uy8
+	0ubeMV5YwpViSZK0bCMQw2LDiCWazlthfyU7rMpRZfBqhqEjFj0f4cNWnVtfG4MHsaM=
+X-Gm-Gg: AY/fxX6eNV+um5IXzd1Nm1noytbXSJwodj+ATykhGqngonW7NWvbkOWoLk2qvC/mY3L
+	URoIpzE2LqBIW5QQmJ54qfcGhRMjRa0ljRM81mGrNhEPUckZatqpaMR3a2P7yeR6xFg7sqGgeSW
+	WRDg+AsUQKFxo8/ONcaxqni4uu4xB3aF2u5REm/SMyOidXNh9n0JgBzCeKu4VIBDXyXJBnWUPgQ
+	LBVhsb9rk6mnEkKOEC25z2Z01Ci2Ym69mxf5XbR29I8/l44CH50BNYV4/d8CsD8D3GRvr7xbKy1
+	zg7h20E+Vy9wOgIJiG9I0fzgpG6ZrEtKmUqp9SGFj4Vefzctns40AAM1A5cf7zxpyA95vzSboEQ
+	Qb9gHXDRNVs7HLs3n4EVl9J6vfttDFI6ozUkISRP22KM7BFFVUu8eV9Z4frgXaJ3l+aYHvpzqAN
+	wFLGDzaEjErnU7tKhG3pU2eCjNxYOhz0BdXQs/OQPfchGLmEF5vWQdTj1ba9e/+VTdPUlF
+X-Received: by 2002:a05:6820:1993:b0:65f:67b7:95c2 with SMTP id 006d021491bc7-661179f382fmr6532331eaf.55.1768921453213;
+        Tue, 20 Jan 2026 07:04:13 -0800 (PST)
 Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7cfdf0e956esm8629772a34.10.2026.01.20.06.57.17
-        for <io-uring@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-66118781fedsm6071471eaf.11.2026.01.20.07.04.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 06:57:17 -0800 (PST)
-Message-ID: <937c3e38-368e-43eb-9d7e-2dcc0697799f@kernel.dk>
-Date: Tue, 20 Jan 2026 07:57:17 -0700
+        Tue, 20 Jan 2026 07:04:12 -0800 (PST)
+Message-ID: <7aa47c41-df51-4a9a-b021-866ea1bacb7b@kernel.dk>
+Date: Tue, 20 Jan 2026 08:04:11 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -67,94 +68,26 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [io-uring?] INFO: task hung in io_wq_put_and_exit (6)
+To: syzbot <syzbot+4eb282331cab6d5b6588@syzkaller.appspotmail.com>,
+ anna-maria@linutronix.de, frederic@kernel.org, io-uring@vger.kernel.org,
+ linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+ tglx@linutronix.de
+References: <68a2decc.050a0220.e29e5.0099.GAE@google.com>
 Content-Language: en-US
-To: io-uring <io-uring@vger.kernel.org>
 From: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring/io-wq: check IO_WQ_BIT_EXIT inside work run loop
+In-Reply-To: <68a2decc.050a0220.e29e5.0099.GAE@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Currently this is checked before running the pending work. Normally this
-is quite fine, as work items either end up blocking (which will create a
-new worker for other items), or they complete fairly quickly. But syzbot
-reports an issue where io-wq takes seemingly forever to exit, and with a
-bit of debugging, this turns out to be because it queues a bunch of big
-(2GB - 4096b) reads with a /dev/msr* file. Since this file type doesn't
-support ->read_iter(), loop_rw_iter() ends up handling them. Each read
-returns 16MB of data read, which takes 20 (!!) seconds. With a bunch of
-these pending, processing the whole chain can take a long time. Easily
-longer than the syzbot uninterruptible sleep timeout of 140 seconds.
-This then triggers a complaint off the io-wq exit path:
+Just to wrap this one up - there's a fairly lengthy explanation posted
+here:
 
-INFO: task syz.4.135:6326 blocked for more than 143 seconds.
-      Not tainted syzkaller #0
-      Blocked by coredump.
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz.4.135       state:D stack:26824 pid:6326  tgid:6324  ppid:5957   task_flags:0x400548 flags:0x00080000
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5256 [inline]
- __schedule+0x1139/0x6150 kernel/sched/core.c:6863
- __schedule_loop kernel/sched/core.c:6945 [inline]
- schedule+0xe7/0x3a0 kernel/sched/core.c:6960
- schedule_timeout+0x257/0x290 kernel/time/sleep_timeout.c:75
- do_wait_for_common kernel/sched/completion.c:100 [inline]
- __wait_for_common+0x2fc/0x4e0 kernel/sched/completion.c:121
- io_wq_exit_workers io_uring/io-wq.c:1328 [inline]
- io_wq_put_and_exit+0x271/0x8a0 io_uring/io-wq.c:1356
- io_uring_clean_tctx+0x10d/0x190 io_uring/tctx.c:203
- io_uring_cancel_generic+0x69c/0x9a0 io_uring/cancel.c:651
- io_uring_files_cancel include/linux/io_uring.h:19 [inline]
- do_exit+0x2ce/0x2bd0 kernel/exit.c:911
- do_group_exit+0xd3/0x2a0 kernel/exit.c:1112
- get_signal+0x2671/0x26d0 kernel/signal.c:3034
- arch_do_signal_or_restart+0x8f/0x7e0 arch/x86/kernel/signal.c:337
- __exit_to_user_mode_loop kernel/entry/common.c:41 [inline]
- exit_to_user_mode_loop+0x8c/0x540 kernel/entry/common.c:75
- __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
- syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
- syscall_exit_to_user_mode_work include/linux/entry-common.h:159 [inline]
- syscall_exit_to_user_mode include/linux/entry-common.h:194 [inline]
- do_syscall_64+0x4ee/0xf80 arch/x86/entry/syscall_64.c:100
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fa02738f749
-RSP: 002b:00007fa0281ae0e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00007fa0275e6098 RCX: 00007fa02738f749
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fa0275e6098
-RBP: 00007fa0275e6090 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fa0275e6128 R14: 00007fff14e4fcb0 R15: 00007fff14e4fd98
+https://lore.kernel.org/io-uring/937c3e38-368e-43eb-9d7e-2dcc0697799f@kernel.dk/
 
-There's really nothing wrong here, outside of processing these reads
-will take a LONG time. However, we can speed up the exit by checking the
-IO_WQ_BIT_EXIT inside the io_worker_handle_work() loop, as syzbot will
-exit the ring after queueing up all of these reads. Then once the first
-item is processed, io-wq will simply cancel the rest. That should avoid
-syzbot running into this complaint again.
-
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/all/68a2decc.050a0220.e29e5.0099.GAE@google.com/
-Reported-by: syzbot+4eb282331cab6d5b6588@syzkaller.appspotmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
----
-
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 9fd9f6ab722c..2fa7d3601edb 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -598,9 +598,9 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
- 	__releases(&acct->lock)
- {
- 	struct io_wq *wq = worker->wq;
--	bool do_kill = test_bit(IO_WQ_BIT_EXIT, &wq->state);
- 
- 	do {
-+		bool do_kill = test_bit(IO_WQ_BIT_EXIT, &wq->state);
- 		struct io_wq_work *work;
- 
- 		/*
+which details why this isn't really a bug, it's just slow exit due to
+the odd huge reads (and number of them) syzbot queues up with io_uring
+before exiting.
 
 -- 
 Jens Axboe
-
