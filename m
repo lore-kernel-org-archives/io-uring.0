@@ -1,65 +1,67 @@
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+Received: from mail-oi1-f193.google.com (mail-oi1-f193.google.com [209.85.167.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D1B320CA3
-	for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 16:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A4A346FA6
+	for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 17:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768928259; cv=none; b=WnVs4t/2b8qGDcczum4TZutg3G/TCjQbX/bcTDcUWPFBvIzg3KJr4ONiN0oZd+EanJOW3knj8QHvqpOidkBToehCv1MBHETX7Q1dF0lFWtZcHDC859qa2dsqufE4Dr5i+54bcdLc/nMOaYlkONznellZ+vCEV1d9V5k/GDUfY5Q=
+	t=1768928627; cv=none; b=Wudt94R/cFzmoyJxv+VpmZ2WO8iTwheIOJEgAoZ+HoCA+J38u6GCoDjBlAcR4LEG6Xz4zsc9IN91RAJCdhUWhK2YwBUacRmWcnXDBt+2zgYKB+3roDrujH6JAhpETTAyXRDNQy94whL7axQ1zuV3QcAtVBN7Mo8+5RUbYaMqqCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768928259; c=relaxed/simple;
-	bh=Xr9aZoU+bdKamHRiCyKDaCOtMWJcq/m23w+fbYBzk50=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=CIWV0bosaEufL6caSMvV8E76dkIpTE8wcH4a9oFsXMBfD9PKsu1JTzLA4ANBkQ8QhZmjsC6BZTp5oA26zGD0HozPfA+Jwpil8/NQzheKnCdSBZcNmNUZ9yJpaRgAvoA+CF3lLA0tSox9zbNVuRLN5moH1/6jjaNGarzqhUAGliw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=tMsxuUDZ; arc=none smtp.client-ip=209.85.167.171
+	s=arc-20240116; t=1768928627; c=relaxed/simple;
+	bh=pJjxoJ8ZV0RDeAQzTE88gBAR7M4kAsbQDew/ase9Cvo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r8J2TkE0DB8RvPzvi9RhzrS7ccgoHS8rUW8a7segHzd4LfHH+LxOZbksqmRsdM1ODz2Dw0p+lbHwZGIWXgg/EBBVwpYKrjFb9mfdOjorHBxL5ch4HElp84YjpRpBAqh6NeKEF85p0z2mIdYbGSCOTYHNtmr+NPUHBF1CHHPzj9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=FqNKzHDi; arc=none smtp.client-ip=209.85.167.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="tMsxuUDZ"
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-45c7400259bso2103263b6e.3
-        for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 08:57:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="FqNKzHDi"
+Received: by mail-oi1-f193.google.com with SMTP id 5614622812f47-45c86087949so2026784b6e.2
+        for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 09:03:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1768928255; x=1769533055; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t3NUL5cq0XWWxQhoC9j/1hjWyGWvHVhTW5NY0JROu+k=;
-        b=tMsxuUDZHfiRblCOkFY6oHU3BJJqLC7Ot/pEHRdnvcnGzpZE571bJZ1FJ5EEC1gb+D
-         lID54rJYb0W7ohxtYUQMpLIGliNdbjpUFeqroVNii4QQmvEVar+vXA+Ee4Nrb6HYuwiE
-         x/EO/NLSJRhf+I8MvoOzBJU7t+yp7zcV/cv9auMG5UhuuPm/Wfb4pWUDw2sg5ZzTWdGl
-         raanMnuQcPsINsnus9DD5J+UZImFszJMlA1SR/cOWlw9ECCO8aPu0HJr/50uvtViZyxD
-         DiY164Vs8vHDPfyfmLrzG+1bef5GBYSLvK19pIwoFFys5DkDLQ/0MkWMeRQqbPRXTbbu
-         xMtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768928255; x=1769533055;
-        h=content-transfer-encoding:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1768928624; x=1769533424; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=t3NUL5cq0XWWxQhoC9j/1hjWyGWvHVhTW5NY0JROu+k=;
-        b=vrYjIQwF8tWDeQkSle8GQsNWKfNM44ZiOaCeScjOmAShsoTd+swG+HTF53PJya0A14
-         ky4a8hW83B5YE+8Nr83FDro78GLwzwV4tal7VWU6Jd8xftK6Zaxe+fdswJRyF0127bAn
-         egf0UJhrd5nUf8H7+PpQUA/bix8UjO9UmkcZpCK3+qIq3cWYIiJKaGAC8JEZY1koPBhq
-         fny0jtYSBDyJrJudbl6R/Qr3CwYl2GRsKFWmCI1K28Dbtkm4sDAEMCMf72BoIxPnPGeJ
-         BziwnPLSnACuNTxh7aolH0y28hCz/e9yjazdW08rp0fXhjrSVViVOgJV1pKzh16Vk3/M
-         ftTw==
-X-Gm-Message-State: AOJu0YymdOlaVafCAd1/lHdrMxcd9EEGtKyfFNqHSTTE/YzowTsOaGms
-	tyEULbCy5JLEi9GALEvBm7x0rC1zuyRBvLon7DnEJfeEj96sr5PkrV8S5bBO6t46BWWdhWoDwsb
-	fOqKl4f0=
-X-Gm-Gg: AY/fxX6iu6oz/Tm5JWXvdoIhFJV6wdCi9IdtQcNrS6Uq1UzIfdQUJH3uGm2pe4DSYK0
-	dHw5j01l3nZQJQjgcfFz/ouZsLcpjQWFbZ3hzZQzRXE1sK9GuBNDNPwBXoMBumFDGNYzNgERUfu
-	v7qS3QzmLwSu1+wxvSb2DSFbs+jLzW0KspIA2Uy4Zth00vtmm8P/pNei2HJS3PecYaNp2vWxc3A
-	KPTLgBudhjVq0LmZp9eGSfBjSNedLF/3dHyheU2S8xWSTJdYoEKjYMbSDm5NHtEZYjkT4ikWQtw
-	f+pYBezo+iEEvh5SXU7eLNggan7GVSKBq5xQ8zZ9r7JBs3tuhL3Z//L6/qixJjuS05+wh5/neO+
-	AsnJChVrtZ29uajB3XzYLw5o5zFVd6v1+gXkLQ4erhZDLVTTy0mnpDOTJsTIInYV9VdGkmj8UGz
-	nOFlnvFACJ2/jsp07VP3NlAYFJz886sKuztnRU5rCK1cJaK30gVQ8TdYjTKbRyd+1Ow3uL
-X-Received: by 2002:a05:6808:4fde:b0:45c:96bb:1202 with SMTP id 5614622812f47-45c9d8e9726mr6871253b6e.58.1768928254804;
-        Tue, 20 Jan 2026 08:57:34 -0800 (PST)
+        bh=Vf1OjI+ofEbUEpptjhVbn5HMY4y4Bo5wpFAmArgvbwA=;
+        b=FqNKzHDijEyd9bY1auA+X5cH7+Lu7SdvyQTuw3Kv5NG36xjLrgaG11B3vhn9QyBGi9
+         Xdf1cq6fG8fXaPT4rnDfPQ6By3nHWqy49DqPcURjwdSfwShfAHS8aQMV2Wnn+UNGyJcF
+         ftsQZh4VWbj0QJxOmSxC35JFJ0OkB3ZOIKgKvnEbwqVn52Q0mf3DbOXWTcq8X9+LB6oe
+         ti0DVRSJMrms2uZfvBygm1Mavmg6uHT5FI+Eiuqt+wQ7q4raBeguCjg4uU/99dPPJIMm
+         yDVNbZ8PhWgHkktPYNraJR4dAbatvslI4Om7HBkQ5QhoGuK1aMs8xLAag0KiPHGy/qTG
+         6y1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768928624; x=1769533424;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vf1OjI+ofEbUEpptjhVbn5HMY4y4Bo5wpFAmArgvbwA=;
+        b=vvdMJcfUPr51SnVP7h1FxxCYPCRFAAibv29sMS3i0L3f/D///bwE9EUheEj4ptEcLQ
+         kN6wNTxquOWVlWCAJSHAvAnOYRxxv36bF+ybdJxGLV0zSWv8gOsI7+WYxLTgYIWqzzz7
+         tyfTO5E8wmNKuokvKhLfEPnEFAiPMfEU0WVXWV/GZfDQe3c3NPW4H72pPJPy+slizG06
+         JTtXNjZZWyg0j2BMOMdQHJ7AIByJhEtp86xbrC3cpsXDTRfyb44ztfUQl4i+yp06Dvp0
+         xcaWUnfgsaQhV/lYjnIwJQxhzZIXUFEy2BqN/BrGFp4HzkrImJDDfnj//Amv9ZKGNf1k
+         /Xow==
+X-Gm-Message-State: AOJu0Yyn1qR4bdCD4/TBp4M/cnXAe5ERgkyYj4jhOaugrA4S/LNghmle
+	AvYY8S/2XO6k3kTzy/TGEEmHkt7vVzjr2C9OQyh9Hv7h/rVUWwlO/6fSYRNxyaQ5/WndGVoS30z
+	WrwErcpFgdQ==
+X-Gm-Gg: AY/fxX7BMIiB4U/amR+ipGDdHg4kzSEth/4tNFsVbhq5JgQ/kYZJIhzMUHqriinpEzT
+	4GaAWWgGbpJraxFZMiTuJhDBopiw+E8OHM8o4bkqyzC4Mn3IySq8ZXkQXoX5UOQhDCzi49JzQfT
+	mc+X09eb/U9Ig3pD5lhVuyQ0bw8vtvoBrGleAnU4dOkrF3THM1XfhadMKiOXRmt5HOKWKJJBs/i
+	nmnN7WkedfEFPn5zFnK6Pwz4ycZe1/cavJwjs6IXBl57d6+3KoQmfMnBxaRkfwtLlCM6xw7n5Rp
+	TuHnlgdQcZ5MYIMXab8q030Mw8qR0e5pUR/FzXv4sIBKfW/LErWri3vMtNR/B22pq7nS1zzEc3U
+	8Jjf6J2peU0sPp3vR2d+DAZNt/4EhPzjiaZg/6mbWPnmJs0NYoi3aujqUp8jnNr5nMYh9Dvo+A/
+	c2rpGMTzs5cs60kTVFPDqRZdYULDGsLFrpKuDmPfMoDe8JQlkfAo6NJ9/7UcMXFSdN+8uTXTDpk
+	IhiNI8=
+X-Received: by 2002:a05:6808:2206:b0:45c:9b88:d368 with SMTP id 5614622812f47-45c9d85901bmr5710863b6e.39.1768928624213;
+        Tue, 20 Jan 2026 09:03:44 -0800 (PST)
 Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4044bd15c79sm9431457fac.10.2026.01.20.08.57.33
-        for <io-uring@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-45c9dff95a2sm7114917b6e.11.2026.01.20.09.03.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 08:57:34 -0800 (PST)
-Message-ID: <3c841bbb-ab4e-4afc-827f-caef3998eef5@kernel.dk>
-Date: Tue, 20 Jan 2026 09:57:33 -0700
+        Tue, 20 Jan 2026 09:03:43 -0800 (PST)
+Message-ID: <8c6a9114-82e9-416e-804b-ffaa7a679ab7@kernel.dk>
+Date: Tue, 20 Jan 2026 10:03:42 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -67,39 +69,81 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] io_uring/rsrc: fix RLIMIT_MEMLOCK bypass by removing
+ cross-buffer accounting
+To: Pavel Begunkov <asml.silence@gmail.com>,
+ Yuhao Jiang <danisjiang@gmail.com>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20260119071039.2113739-1-danisjiang@gmail.com>
+ <bc2e8ec1-8809-4603-9519-788cfff2ae12@kernel.dk>
+ <CAHYQsXTHfRKBuTDYWus9r5jDLO2WLBeopt4_bGH_vVm=0z7mWw@mail.gmail.com>
+ <2919f3c5-2510-4e97-ab7f-c9eef1c76a69@kernel.dk>
+ <CAHYQsXQK4nKu+fcni71__=V241RN=QxUHrvNQMQtPMzeL_z=BA@mail.gmail.com>
+ <d8d28435-2a89-4b25-925e-14fdb346839b@gmail.com>
 Content-Language: en-US
-To: io-uring <io-uring@vger.kernel.org>
 From: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH for-next] io_uring/timeout: annotate data race in
- io_flush_timeouts()
+In-Reply-To: <d8d28435-2a89-4b25-925e-14fdb346839b@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-syzbot correctly reports this as a KCSAN race, as ctx->cached_cq_tail
-should be read under ->uring_lock. This isn't immediately feasible in
-io_flush_timeouts(), but as long as we read a stable value, that should
-be good enough. If two io-wq threads compete on this value, then they
-will both end up calling io_flush_timeouts() and at least one of them
-will see the correct value.
+On 1/20/26 5:05 AM, Pavel Begunkov wrote:
+> On 1/20/26 07:05, Yuhao Jiang wrote:
+>> Hi Jens,
+>>
+>> On Mon, Jan 19, 2026 at 5:40 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>>
+>>> On 1/19/26 4:34 PM, Yuhao Jiang wrote:
+>>>> On Mon, Jan 19, 2026 at 11:03 AM Jens Axboe <axboe@kernel.dk> wrote:
+>>>>>
+>>>>> On 1/19/26 12:10 AM, Yuhao Jiang wrote:
+>>>>>> The trade-off is that memory accounting may be overestimated when
+>>>>>> multiple buffers share compound pages, but this is safe and prevents
+>>>>>> the security issue.
+>>>>>
+>>>>> I'd be worried that this would break existing setups. We obviously need
+>>>>> to get the unmap accounting correct, but in terms of practicality, any
+>>>>> user of registered buffers will have had to bump distro limits manually
+>>>>> anyway, and in that case it's usually just set very high. Otherwise
+>>>>> there's very little you can do with it.
+>>>>>
+>>>>> How about something else entirely - just track the accounted pages on
+>>>>> the side. If we ref those, then we can ensure that if a huge page is
+>>>>> accounted, it's only unaccounted when all existing "users" of it have
+>>>>> gone away. That means if you drop parts of it, it'll remain accounted.
+>>>>>
+>>>>> Something totally untested like the below... Yes it's not a trivial
+>>>>> amount of code, but it is actually fairly trivial code.
+>>>>
+>>>> Thanks, this approach makes sense. I'll send a v3 based on this.
+>>>
+>>> Great, thanks! I think the key is tracking this on the side, and then
+>>> a ref to tell when it's safe to unaccount it. The rest is just
+>>> implementation details.
+>>>
+>>> -- 
+>>> Jens Axboe
+>>>
+>>
+>> I've been implementing the xarray-based ref tracking approach for v3.
+>> While working on it, I discovered an issue with buffer cloning.
+>>
+>> If ctx1 has two buffers sharing a huge page, ctx1->hpage_acct[page] = 2.
+>> Clone to ctx2, now both have a refcount of 2. On cleanup both hit zero
+>> and unaccount, so we double-unaccount and user->locked_vm goes negative.
+>>
+>> The per-context xarray can't coordinate across clones - each context
+>> tracks its own refcount independently. I think we either need a global
+>> xarray (shared across all contexts), or just go back to v2. What do
+>> you think?
+> 
+> The Jens' diff is functionally equivalent to your v1 and has
+> exactly same problems. Global tracking won't work well.
 
-Reported-by: syzbot+6c48db7d94402407301e@syzkaller.appspotmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
----
-
-diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index d8fbbaf31cf3..84dda24f3eb2 100644
---- a/io_uring/timeout.c
-+++ b/io_uring/timeout.c
-@@ -130,7 +130,7 @@ __cold void io_flush_timeouts(struct io_ring_ctx *ctx)
- 	u32 seq;
- 
- 	raw_spin_lock_irq(&ctx->timeout_lock);
--	seq = ctx->cached_cq_tail - atomic_read(&ctx->cq_timeouts);
-+	seq = READ_ONCE(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts);
- 
- 	list_for_each_entry_safe(timeout, tmp, &ctx->timeout_list, list) {
- 		struct io_kiocb *req = cmd_to_io_kiocb(timeout);
+Why not? My thinking was that we just use xa_lock() for this, with
+a global xarray. It's not like register+unregister is a high frequency
+thing. And if they are, then we've got much bigger problems than the
+single lock as the runtime complexity isn't ideal.
 
 -- 
 Jens Axboe
