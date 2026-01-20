@@ -1,66 +1,65 @@
-Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B9A427A0A
-	for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 12:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F8D7243387
+	for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 14:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768910716; cv=none; b=DAvwDKb2L0YlzbcUoDeWrXhYElmyhgXJoIpoVXbvcChboKOHbhM/mvVuoKK++60yAgC43nG+KsXa8TwF0PVp33IyStHsNYvKDkmeb0uGlnEqdzGAfEwinDL8SBk2I2NVC9aqMDUWarSrvikW8eS8YFJOcw/olPtcPBPLMIftwPo=
+	t=1768921043; cv=none; b=rkJe28qRcqTXbMt6rqAnOExeny0lXLfUA5xpEYR2tOwchuTagR4j7vzhHgouxLUGqkmGhP0Ykt4SgXIvA7h442LIaT7GG1dEHSguK2CwUsHZe4qtQ4dIWvHCfH7lVsNzZtZPwidbaaqCt3KsD8oAJuy5J8ZOwlbxmFlvbgn5pqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768910716; c=relaxed/simple;
-	bh=1SUJOIbcpKZ97vROXHZbc4uywvg5mICVVTFXnu+8N0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m7/J+jdITVZNDlwRGOv8XRaPDpTXc5NKX3c93ijJ46K34g8tX7i3qR6stExn8TyfhCRRKDVC3PiS934KSZWy+HWKej/YV4IeF3lO4YVIjsqsU+swZ6jbS7c89DPI9474GyDnvr5nz3RpjV5/i7XfHxu3Rx5iaMB/SAw/teNi0+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e5hRf789; arc=none smtp.client-ip=209.85.128.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1768921043; c=relaxed/simple;
+	bh=MNDHOzGOjwdHNpVqzd6uezrl3mpAJcuJ8BscLdMS2ew=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=Ma26TJvwHKw2jE1RQetS8hL5DyFnvLdGKSu3fOZRbIcCwu1JkALsDdNCqCoDFXEfMrKwg57v3Hxw1FIZU/e14j813tY5i2S/Qe28DdFK/+gREEZCpRCsVbs2XyF/Sac4akQ+FuRkaaZAmZmvnNhDAEHuWePvaUGEZYXhaWYiEiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=jDM2FRJm; arc=none smtp.client-ip=209.85.210.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e5hRf789"
-Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-4801bbbdb4aso27005165e9.1
-        for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 04:05:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="jDM2FRJm"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7cfca52ac2dso3385975a34.0
+        for <io-uring@vger.kernel.org>; Tue, 20 Jan 2026 06:57:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768910713; x=1769515513; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JckE27aaTC/MenhzlCHYt+N31ilQSZiKPy2PxHLLEmg=;
-        b=e5hRf789+sDFQRo4cko4z9oRXrlGElRU7lc3q4NIGtOKRke9YROX5TAjFeOGYG6zAW
-         3afOnjx6LtmlHGG8SnjkSYi60DZlm+xWEtNPl5XHhbOigMUkNQXq9Vkjk2/KUM83xdJe
-         Qr2vyCN7NhlYNZEXAyhadErhC5U7UxK8mu7qesPXXLphqQgmkfTwyKPcv0UgmLCtO3+w
-         g+K5+owI/G78G9+Buz9UkqF9jdtxHHto+udzSPwkkLdMvZ/B4qq3NFxDUjuyQaQUStO9
-         Qm1FFIHgeC/RgGVPEBVFXfQbTnr+LDxjUuqkJSa9bwCJKjns+s+IcSIgwoq0ffvymAIB
-         DKoQ==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1768921038; x=1769525838; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C8Ahd/r5jeIUKCDp42qLCzSwfl0NdeJBQjQPD07byx8=;
+        b=jDM2FRJmNKr8GSWXYj5vbcnpU59gUuQ7BLgRf6kXzTqxz2NuVu7Awxpek2Aj3VYMFL
+         Fq9SMVxIki5d+R9YM1sqdnfoaFacsVbaEz39Q2XR/6OZ/LsrKN6xEZoFcluQkUj0v3nn
+         yZjm75u8LeZivG8ZR3Tn45GLwsbJ+Qg2cdmnFshMkUo1de+YnVkBHRGhKzOT4yhQkQBM
+         +TaBwCRBWgB5893vEDn69+7GR6MQ7TqBj8KOtELP4PHXpexd9Lwc9hlQf4mNAmDmaagi
+         8k5kjpciaoPYS9p7kc/0SVpIq2yocTVbUVrzK0Zi46j8B9auoh1taUE03NsMm4tBYdVm
+         J3AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768910713; x=1769515513;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JckE27aaTC/MenhzlCHYt+N31ilQSZiKPy2PxHLLEmg=;
-        b=cd73ZvskDC0/I2aB9TH1PEd8tUv2RTFzjAvmDHGEX9LfPQp4JTQBcynMppfoGeSRNR
-         xg9f8v1PhQDPQfyL/AZKRztX8BNYrieRBWqxVK2aS8ExvjjCLrt9C0JXgoceslau+Y4b
-         rHJ4ccAqoJJ/v6cYwDFAVWD70C/lJ0N2u/ttetqspRxsywx60ghZxTvGMe8ei75KU+1D
-         2nn92JP3nu/1+f0nwhJJr3s1eV7AmNOsFd+TiT9fKI1n54+qLObnc1KSClrPG9k7mqKM
-         x6lHDv9lHkkhnJ8RdEIEzhS2mQl/bzwzeiOJyhS6xHFAZlLyvzWoqyXjUCThLPPhT91L
-         3WBA==
-X-Gm-Message-State: AOJu0YwD/CbZI480qEYyoVQsOaxla2avMjwomxddyqEOTt6puhkXXjyL
-	tiHLEDkCSF5DfWV4KnIeNRhYnbpeT3Diwx3c2woSLnZsKrf92E8Aopx4
-X-Gm-Gg: AY/fxX6TM8Vbask2F0IUES/+fwel9majR2fPi8j/2EztKzPcXWdrkq3recWhMtw6WKU
-	i9zP7JoVMAQG7+6Fjy1+xyqKA6PD1hFyDHYcRwGoyX+JPjMVtkz6ynwVjtUVS4d6sJ2lFKUWgcm
-	W7ooGaefEuE20q/aYjawGEXH+nFIaBpjEVfX0azQKv6UemJmzdARroD0/FGVuydr0xmR25SqYRL
-	3/Ys5fVXRkqzlwtyLxVOEutBXkJkFU22yruvBP19IFJoZXIsHfI5MQ9dJ7K9e2bYGdHYfwUwZ3T
-	bJcupiDQVu6KQh+T9605Z+f3h446PNHgCs8YGb1zXcn4ocpD5f59zSkPq2g5TAWI3llZzXZg0bx
-	4HCetJwKlO9W4uPbGdbFUuln4i1zgrIoEx8VZWOzujL7j6aBbhHlBbPzMNZ61ZgkbvXtPc2j+E6
-	htSnwxvsPrKpk9t538coTCaAxfxVOba9MFz23aeKxFTNTQ+zQ3IJpfT0AQpn6U5wPoX5isYmj8F
-	32fKSA02DRHiRXwhcqqYlsfgFCbUH7lz75BDfxEWgAmDNEH7YZnOBqGYnX8HkH7
-X-Received: by 2002:a05:600c:8b6c:b0:46e:2815:8568 with SMTP id 5b1f17b1804b1-4801e66fcc5mr167787885e9.10.1768910712480;
-        Tue, 20 Jan 2026 04:05:12 -0800 (PST)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f4289b789sm302284295e9.1.2026.01.20.04.05.11
+        d=1e100.net; s=20230601; t=1768921038; x=1769525838;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C8Ahd/r5jeIUKCDp42qLCzSwfl0NdeJBQjQPD07byx8=;
+        b=cHxsOWbgwjGKZ6KsZd2IGSN1TrTv2mm5VV2/4quZp+k9TPxqP5aEMdd3cFXavHl4kb
+         2D27LtWhM34Fzypw1uJG8iHFdpbRXr5EUz/zqcdOJ69yVuC9Uhg9bT236lhmrhXJGfBE
+         NVBNIKgR/zSttePntm352uFVcBKiiP+z4yGXrTXwVz/y1sDDUcYQ7kSyJOfO5pWEMG6x
+         rJMyXw1ODSCx/Hls7Es40GOHjuyrjvOmNtDKCScudKbCE/DqCHgyKL/tjtxwZQYK8Jso
+         15z3dYuQ6QuFnilstBTgqltA2cK5B1yaTksw/FTEZWsRwUyjCdeHEYIfsIYidruCzpZD
+         BBrw==
+X-Gm-Message-State: AOJu0Yy7hWmZF9SQZ6LZNRaFxHUtDcpMxM4gU84n89vgpDZ7baAHnR+L
+	EjdEszV4m95UerbzhLzm/8uPsV+DHM0YDg2fsf4jadAffV6hOAPMKLS0WQA9xKVg2/NWeulwqYm
+	yTSDVQ1Q=
+X-Gm-Gg: AY/fxX6NvO0UyAP5MHWkA2sZnTFHZT9X+YhdVOy9nAGwU20wsu9zv8Qv8I8j34+BAWd
+	z8xZqdTszEmbO4gzoy6rAhJ8cCM8QzDysfEgK9AFjzXzyatMTyDHnMFcatz61ww/IQcfohEOiDc
+	UtxkRccCJg2CAoR6iRAFzkZJr1GAzwds+ObmebMvEtmOOq2Xfq6UeLtJ8QEzT1eFC3n76urOxmp
+	MPvkn6zyM79ZHYiR/7AB57XVlPnEQRXDoGLGHUR9pSlDGydQv+VEpdoo/TLIHVtrZq2/kvC3k1H
+	siyYCkXQa5wA5WAOX0hmeDKgScNQYPvi1diL5MZzvA7kZLkxER88I6ggd84zR3irXn4AM882Zr8
+	mqUVxn259hUEL/q9GftM0HWNP49avHGMv0scWmtF3VQfOIGUzzUYegDtkduyPfTXucNCtMAKVWa
+	PoBAq42gnx6DYcWZgOAABpws76UHpG1cn4iyEwHeWnFC/qf284UyEt8mliylwzNGpbtdl9
+X-Received: by 2002:a05:6830:4125:b0:7c7:69c8:2cb with SMTP id 46e09a7af769-7d140aae18bmr1082604a34.24.1768921038511;
+        Tue, 20 Jan 2026 06:57:18 -0800 (PST)
+Received: from [192.168.1.102] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7cfdf0e956esm8629772a34.10.2026.01.20.06.57.17
+        for <io-uring@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jan 2026 04:05:11 -0800 (PST)
-Message-ID: <d8d28435-2a89-4b25-925e-14fdb346839b@gmail.com>
-Date: Tue, 20 Jan 2026 12:05:09 +0000
+        Tue, 20 Jan 2026 06:57:17 -0800 (PST)
+Message-ID: <937c3e38-368e-43eb-9d7e-2dcc0697799f@kernel.dk>
+Date: Tue, 20 Jan 2026 07:57:17 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -68,77 +67,94 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] io_uring/rsrc: fix RLIMIT_MEMLOCK bypass by removing
- cross-buffer accounting
-To: Yuhao Jiang <danisjiang@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20260119071039.2113739-1-danisjiang@gmail.com>
- <bc2e8ec1-8809-4603-9519-788cfff2ae12@kernel.dk>
- <CAHYQsXTHfRKBuTDYWus9r5jDLO2WLBeopt4_bGH_vVm=0z7mWw@mail.gmail.com>
- <2919f3c5-2510-4e97-ab7f-c9eef1c76a69@kernel.dk>
- <CAHYQsXQK4nKu+fcni71__=V241RN=QxUHrvNQMQtPMzeL_z=BA@mail.gmail.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHYQsXQK4nKu+fcni71__=V241RN=QxUHrvNQMQtPMzeL_z=BA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring/io-wq: check IO_WQ_BIT_EXIT inside work run loop
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 1/20/26 07:05, Yuhao Jiang wrote:
-> Hi Jens,
-> 
-> On Mon, Jan 19, 2026 at 5:40 PM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 1/19/26 4:34 PM, Yuhao Jiang wrote:
->>> On Mon, Jan 19, 2026 at 11:03 AM Jens Axboe <axboe@kernel.dk> wrote:
->>>>
->>>> On 1/19/26 12:10 AM, Yuhao Jiang wrote:
->>>>> The trade-off is that memory accounting may be overestimated when
->>>>> multiple buffers share compound pages, but this is safe and prevents
->>>>> the security issue.
->>>>
->>>> I'd be worried that this would break existing setups. We obviously need
->>>> to get the unmap accounting correct, but in terms of practicality, any
->>>> user of registered buffers will have had to bump distro limits manually
->>>> anyway, and in that case it's usually just set very high. Otherwise
->>>> there's very little you can do with it.
->>>>
->>>> How about something else entirely - just track the accounted pages on
->>>> the side. If we ref those, then we can ensure that if a huge page is
->>>> accounted, it's only unaccounted when all existing "users" of it have
->>>> gone away. That means if you drop parts of it, it'll remain accounted.
->>>>
->>>> Something totally untested like the below... Yes it's not a trivial
->>>> amount of code, but it is actually fairly trivial code.
->>>
->>> Thanks, this approach makes sense. I'll send a v3 based on this.
->>
->> Great, thanks! I think the key is tracking this on the side, and then
->> a ref to tell when it's safe to unaccount it. The rest is just
->> implementation details.
->>
->> --
->> Jens Axboe
->>
-> 
-> I've been implementing the xarray-based ref tracking approach for v3.
-> While working on it, I discovered an issue with buffer cloning.
-> 
-> If ctx1 has two buffers sharing a huge page, ctx1->hpage_acct[page] = 2.
-> Clone to ctx2, now both have a refcount of 2. On cleanup both hit zero
-> and unaccount, so we double-unaccount and user->locked_vm goes negative.
-> 
-> The per-context xarray can't coordinate across clones - each context
-> tracks its own refcount independently. I think we either need a global
-> xarray (shared across all contexts), or just go back to v2. What do
-> you think?
+Currently this is checked before running the pending work. Normally this
+is quite fine, as work items either end up blocking (which will create a
+new worker for other items), or they complete fairly quickly. But syzbot
+reports an issue where io-wq takes seemingly forever to exit, and with a
+bit of debugging, this turns out to be because it queues a bunch of big
+(2GB - 4096b) reads with a /dev/msr* file. Since this file type doesn't
+support ->read_iter(), loop_rw_iter() ends up handling them. Each read
+returns 16MB of data read, which takes 20 (!!) seconds. With a bunch of
+these pending, processing the whole chain can take a long time. Easily
+longer than the syzbot uninterruptible sleep timeout of 140 seconds.
+This then triggers a complaint off the io-wq exit path:
 
-The Jens' diff is functionally equivalent to your v1 and has
-exactly same problems. Global tracking won't work well. You can try
-to double account clones, or wrap it all together with the xarray
-into an object that you share b/w rings on clone. Just make sure
-it's protected right.
+INFO: task syz.4.135:6326 blocked for more than 143 seconds.
+      Not tainted syzkaller #0
+      Blocked by coredump.
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz.4.135       state:D stack:26824 pid:6326  tgid:6324  ppid:5957   task_flags:0x400548 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5256 [inline]
+ __schedule+0x1139/0x6150 kernel/sched/core.c:6863
+ __schedule_loop kernel/sched/core.c:6945 [inline]
+ schedule+0xe7/0x3a0 kernel/sched/core.c:6960
+ schedule_timeout+0x257/0x290 kernel/time/sleep_timeout.c:75
+ do_wait_for_common kernel/sched/completion.c:100 [inline]
+ __wait_for_common+0x2fc/0x4e0 kernel/sched/completion.c:121
+ io_wq_exit_workers io_uring/io-wq.c:1328 [inline]
+ io_wq_put_and_exit+0x271/0x8a0 io_uring/io-wq.c:1356
+ io_uring_clean_tctx+0x10d/0x190 io_uring/tctx.c:203
+ io_uring_cancel_generic+0x69c/0x9a0 io_uring/cancel.c:651
+ io_uring_files_cancel include/linux/io_uring.h:19 [inline]
+ do_exit+0x2ce/0x2bd0 kernel/exit.c:911
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1112
+ get_signal+0x2671/0x26d0 kernel/signal.c:3034
+ arch_do_signal_or_restart+0x8f/0x7e0 arch/x86/kernel/signal.c:337
+ __exit_to_user_mode_loop kernel/entry/common.c:41 [inline]
+ exit_to_user_mode_loop+0x8c/0x540 kernel/entry/common.c:75
+ __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
+ syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:159 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:194 [inline]
+ do_syscall_64+0x4ee/0xf80 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fa02738f749
+RSP: 002b:00007fa0281ae0e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+RAX: fffffffffffffe00 RBX: 00007fa0275e6098 RCX: 00007fa02738f749
+RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00007fa0275e6098
+RBP: 00007fa0275e6090 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fa0275e6128 R14: 00007fff14e4fcb0 R15: 00007fff14e4fd98
+
+There's really nothing wrong here, outside of processing these reads
+will take a LONG time. However, we can speed up the exit by checking the
+IO_WQ_BIT_EXIT inside the io_worker_handle_work() loop, as syzbot will
+exit the ring after queueing up all of these reads. Then once the first
+item is processed, io-wq will simply cancel the rest. That should avoid
+syzbot running into this complaint again.
+
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/all/68a2decc.050a0220.e29e5.0099.GAE@google.com/
+Reported-by: syzbot+4eb282331cab6d5b6588@syzkaller.appspotmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+
+---
+
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 9fd9f6ab722c..2fa7d3601edb 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -598,9 +598,9 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
+ 	__releases(&acct->lock)
+ {
+ 	struct io_wq *wq = worker->wq;
+-	bool do_kill = test_bit(IO_WQ_BIT_EXIT, &wq->state);
+ 
+ 	do {
++		bool do_kill = test_bit(IO_WQ_BIT_EXIT, &wq->state);
+ 		struct io_wq_work *work;
+ 
+ 		/*
 
 -- 
-Pavel Begunkov
+Jens Axboe
 
