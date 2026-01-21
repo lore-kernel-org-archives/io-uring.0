@@ -1,73 +1,68 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA75423A60
-	for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 22:23:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07E7263C8F
+	for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 23:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769034215; cv=none; b=gj2PCpVFBXUAgo3IahUBH72NHY6Yev4p4ZkAtsIExj+fSSbB21dsMjZVD+2EcntNxEkwU3gwtsjiJorjuCJf1k+wJyOkHC6K/jjeV8o2A7bF2xHlmgYSBOf3ijpIRQd357N3l2Bs3g9c3dJht3cxINoc0SR6GS+oxNCC7552WzM=
+	t=1769037954; cv=none; b=YbyLbOclViFOczEE0vcA8tLwEoGzi4jGrZxZ+4GyTLR7ENNxCIrUucxLXK55aj4WSjtoPEKw09rKamS5vn24Fs+n/MA88Dpi4HSXNUZAcjtJT1/EcKtxnow1eNRk1wgJCoaxduAqso5GAMoMsDy8vv8c6OjcuF3udKtIuS4QnYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769034215; c=relaxed/simple;
-	bh=p5c3R/7UgAcitLZhb1KfeV0GkiliKTdUBDo8omqavBw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eX5Uy704NQUrVmt1YIEXayQCAQ0JxmfVUgvHWQlnEUQ3CTaijY0xwNczVyVBKIp/uRyGWOmeIOduRuVY1klTgTBCgPQ540uu0K/frreNwK15EMKu0eyuvKd7fF+TsPfgBwn13x6yEVZALJMkxKBn9mqkJWxnh5hseyzNmo+szUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XpAnZQZb; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769037954; c=relaxed/simple;
+	bh=P/QJ69O5NSm3TzT36fUtlY4I9kgAl2JEdS7UPFvzvZ0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=dYpyQmmnfhGdCRtnUjC/b4qXNQStEO2QyZ+Cs1IfouIXwnbpYdN5DuRm+ZTVFrLAD7WGXU/z3kGfzpGH38dxdXrCS3gLsUzL9HRlD0tgyI443GuFU39Llg2miOYG6f4Yzacn1IsXvInMQZnnSwVgM+ObsnTfOg/ETHP3weioahg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=HaEwMzhQ; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XpAnZQZb"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4358fb60802so168773f8f.1
-        for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 14:23:32 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="HaEwMzhQ"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-4044854464fso240538fac.3
+        for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 15:25:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769034211; x=1769639011; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I8+YlHxnCds48LVn9WvKBgrDdQ8fHdQBH98uMG7Rc9I=;
-        b=XpAnZQZbME1EIcA46Yho9Oof/6UggGRyKKdf3g/spPSwyIRaLKQEiru86IHofJ7wRe
-         tGPnOfetyYfseTTZuS8H57XqDDbKuY2r84QHUO+YlST2xW1tGN88eq5O9F7Mnx3LGTS5
-         tww64AemVQbgP5V1R2FkWMOJcunKwd1nFdhyDn/grrweVcWQ2mGs4QhKFgXRqAGM74hW
-         341xCKEbKRW4BjtStX4AcxMt94zt/Yk/yTS2edZalj6wIQYdZTUHndai5uZMS0uEzoiq
-         iWpTQbA6/44mRa5BsyfY65O1oEJhvXMAoFnIYX1csbOw3QWaGj4lrgU8GEfSHgrhH44T
-         ttpA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1769037949; x=1769642749; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNaIM1h7KFcJgZXA5aRAJu8jYgZW057npcW5S8I8khQ=;
+        b=HaEwMzhQ+f5ekEvwUbBjM/EFFpYMx/DXDikpHVnWS1vRGrHRwHwwQ/cbGDnc9SYO2m
+         Dmk9F/Ve+cn/pDm5kZfgIt5GMUhUFDJM0bXnLn5Ik3EHwSa9EPX8A6pEg/WMAvkTiqUt
+         5Oqvz9KOUxXjqItGj5J7WYQk6qwadqkWc3Lx4z3fpkB6YBbodbX/O4H95kGj7WKIcSQV
+         q++HLhYJxjTzkILY1INOAmfwBX3SPMxbEdh27iTUP5ohMGcl2xRQp/80T3xrI4BUFOwv
+         RijLlETp2QLXO/SLewC/s2Sj6hzqk19aDV0hH7n4thtktVl87D9cE0kwZX9+4mNqHZ46
+         h26g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769034211; x=1769639011;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=I8+YlHxnCds48LVn9WvKBgrDdQ8fHdQBH98uMG7Rc9I=;
-        b=b0b+kU8zW/IJiGRel84SUNbdfFt+1bWJlJV5ixznwhVoNucJ2OytCBCv8igkgg6XO5
-         T+zswiEFyPtEOv8wxIFBAQaVWZfbfLzTCUPAdg9dHXNmDDik/90AbOrtnN3Lb8eOAaae
-         3spa/KSJGhcbXQ6RM+Pl+H2yvF32Wt/wMeUcOnAq7nyRQRq7/7h8ukF4WzXM9i66oJ2L
-         +jmrhiR7wQbn5SimEg8qHaf1CESsP1h8tAhAjtEm/dgaC1RNZrFy02/q6LX3PcTzKHK8
-         2EOEoWDa0tzFp/yIjRnLpDk99DKWSZNhLbCW86GMnifzb6PiFYWNM7BEVJMM9PtWu+s5
-         JM2Q==
-X-Gm-Message-State: AOJu0YyQhgjClz3er7ARK1wANUo2ZWsNnsHy4YRjeBT5QBHNXFbGH0jH
-	bEL3rETuFdZYTpN1cc8m2PyNVbbqqOmpXRJZlzaOTo0FYiC/OaWgWVOXnYvjjw==
-X-Gm-Gg: AZuq6aJP4OCBPWWd+eM9lnK4pyUn5tNraNkmO9l5b1H0uRPGbg7CTS1uCLLqC/Wvmyv
-	66thgE014wTNUiT+RCfgfSOfMydir6/bOh3Q7WgdXvF/eGmzN/JQpIlRvgIbOlxapamINgW0HEn
-	tdx7CeJgDQgeWld80vRCnPsqCGmI4IrlglAFBcQi+FM4Pyht3shAe7iNMj9brrHRKSVJwOK0tNz
-	NatvPzSunZiPf8kQMalJbvJYVD2i4jTtiYafvpF4oM92QS1gz5jklvk+sutGY8jyCmeoy1X2TCO
-	GsAMSqcwh90/Qa4bzQIK3f4UKkTxW8cedXJHiJ6zVp4hlWGIE61yCVCe7rRPA4IaJF1zym/WSx3
-	XSqtz1KGGC0RhE1cypuxMw1yukuuKQmSYFQ5TGO/ndvbDtX4YEgMBI2gFqy+2svtwNNGdUuu1+l
-	u9apzEPu6rMKqNxQVF3UwFxPE7WlWtHicb8a7gsM2d1pjzEQmI9F1dKPs475ZrvoK/yCGU8nu29
-	DB48dlNh0MD7GRHTw==
-X-Received: by 2002:a05:6000:40ce:b0:431:2ff:128f with SMTP id ffacd0b85a97d-435a5f4df12mr1834624f8f.6.1769034210441;
-        Wed, 21 Jan 2026 14:23:30 -0800 (PST)
-Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43569921da2sm40011103f8f.1.2026.01.21.14.23.29
+        d=1e100.net; s=20230601; t=1769037949; x=1769642749;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mNaIM1h7KFcJgZXA5aRAJu8jYgZW057npcW5S8I8khQ=;
+        b=oz8cMipiTk9oK1jm5RAX2leAEnjWhAh9WJK8O1qiF+WREl9xAfjDcrtNpETLErbAhD
+         KV2jJmKWwK0W6w59o5W+3Jn3fWp/v2YhGu9+ziUdMQJ/O3ggBwwamQVxjFhO/yhaBv2s
+         KL7UOedWmcLgDVvtTScihJ0+apxlX+XAhAEgTka9g2cC6PI529AHLUdbHzKUJZ0rvIuj
+         gMGWSpbHLx7kk7NWDRaLkP5mDujFKexVhydbkWDzO0aCswMGE0+cNudjCX50Gy2walyX
+         5b/vrXZ3VQ7qtOpCK7RYWHzQNhBQinaPCP7dsX8Dk8qKn7VzWjvAudNJ6HuSUKH79cP/
+         6QvA==
+X-Gm-Message-State: AOJu0YzQ5pwnDHEl4GlJOZAcS+Z/q9aNpbAtjMQNd78Ri3Xtc9A0TfAQ
+	pE6zT/L9EXnkLfLIiyYz7M9G2064XDd3oNoOW4m64lqX0qbSlA5V0RvLJ1pwaToj9sg7i7gkr22
+	8Vr0BRa8=
+X-Gm-Gg: AZuq6aKlDVQ7GIC7Trz7trJkf6uZxAyQXfMizH1QZ68XD+eeQdkBZ5EWUPERQ21ogpv
+	pGXQI1fjgHO7nOR9hhF1HHABRpfP0iG1wX4ueR401jKkptDr7fKbP6WUW3EhUTA1RM40L8e9ZG6
+	Du+MKntZfEpJnTo+iKQZrVEKdg6pg68eidWyGTloeyk2TDqOlgtOWQo4IH0h0BHz1QxE6Q51w1S
+	VBkHd86KO+2GGQgS6r/EJl7pQGncGf0IGEwhBWtHE9tiYBoKQ5ah9TTw/7hdjg92E9F9NqGdXlq
+	wv2GJDB4meBkOr8M53A2iBj6Cmrb7EDBdKpvNqTxl3u3OugZ2+tv2zWxDO0zYXb6ohL/Bu8akpW
+	gq3I0TO6NKKSuZ38q5E4zVZ1JfLhYpmgQvClofpLASmRji4gwLCh8irScg5jjbBWBcJhDLk8EAp
+	3TzfbZpTr621t7vc6z8AZIC/mOMXipg7x6DSMiuNfmpHtcwk1KPkiRnZckeoGrXH0BmGk=
+X-Received: by 2002:a05:6870:9623:b0:404:2856:6036 with SMTP id 586e51a60fabf-4044c4f0364mr9537269fac.47.1769037949011;
+        Wed, 21 Jan 2026 15:25:49 -0800 (PST)
+Received: from m2max ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4044bb55928sm12074632fac.7.2026.01.21.15.25.48
+        for <io-uring@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 14:23:29 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
+        Wed, 21 Jan 2026 15:25:48 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com,
-	axboe@kernel.dk
-Subject: [PATCH liburing 2/2] tests: add SETUP_SQ_REWIND tests
-Date: Wed, 21 Jan 2026 22:23:22 +0000
-Message-ID: <0756e58db8eca305ccdcb16949cbc49d0c931411.1769034107.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1769034107.git.asml.silence@gmail.com>
-References: <cover.1769034107.git.asml.silence@gmail.com>
+Subject: [PATCHSET 0/2] Avoid spurious syzbot induced hung task panics
+Date: Wed, 21 Jan 2026 16:22:15 -0700
+Message-ID: <20260121232546.260055-1-axboe@kernel.dk>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -76,26 +71,34 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a couple of IORING_SETUP_SQ_REWIND configurations to the nop test.
+Hi,
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- test/test.h | 2 ++
- 1 file changed, 2 insertions(+)
+For details, see this saga:
 
-diff --git a/test/test.h b/test/test.h
-index e99a8d20..f6baf61d 100644
---- a/test/test.h
-+++ b/test/test.h
-@@ -20,6 +20,8 @@ static io_uring_test_config io_uring_test_configs[] = {
- 	{ IORING_SETUP_SQE128, 				"large SQE"},
- 	{ IORING_SETUP_CQE32, 				"large CQE"},
- 	{ IORING_SETUP_SQE128 | IORING_SETUP_CQE32, 	"large SQE/CQE" },
-+	{ IORING_SETUP_SQ_REWIND,			"rewind SQ"},
-+	{ IORING_SETUP_SQ_REWIND | IORING_SETUP_SQE128,	"large rewind SQ"},
- };
- 
- #define FOR_ALL_TEST_CONFIGS							\
+https://lore.kernel.org/io-uring/68a2decc.050a0220.e29e5.0099.GAE@google.com/
+
+where the tldr is that there's no real bug here, it's just syzbot doing
+hundreds of 2GB /dev/msr* reads in a tiny vm and with a bunch of
+debugging enabled. That leads to triggering the hung task detector when
+we wait on io-wq workers to exit. I did queue a patch for 6.19 that
+makes this less likely to occur, as it'll only run the very first of
+the items before noticing the cancelation:
+
+https://lore.kernel.org/io-uring/937c3e38-368e-43eb-9d7e-2dcc0697799f@kernel.dk/
+
+but even that isn't quite enough due to how much syzbot overloads the
+system.
+
+This will still throw a WARN_ON_ONCE(), which perhaps should just be a
+printk() of some sort as the trace isn't THAT interesting. But it will
+avoid hitting the hung task timeout detector, which for syzbot leads
+to a panic + reboot.
+
+ io_uring/io-wq.c    | 22 +++++++++++++++++++++-
+ io_uring/io_uring.c |  2 +-
+ io_uring/io_uring.h |  6 ++++++
+ 3 files changed, 28 insertions(+), 2 deletions(-)
+
 -- 
-2.52.0
+Jens Axboe
 
