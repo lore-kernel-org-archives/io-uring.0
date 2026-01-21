@@ -1,68 +1,66 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89B136828B
-	for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 14:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8A8340DAB
+	for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 17:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769007597; cv=none; b=TghYQJklJfFg+xOxga896eOozse6iVIwer/wD9+eFUkWDPDBSqWQnsopaDKRETvBux6ZkcrVd8E2gL1kZhFF0WoAWB7iWgwOBdtGanKCeNUQmR3hBO2iiZ/g+rXs8vQfS70Km/pWqOWnx/VhOM78S9Rhb4oZywDRe3LBFe/vYXo=
+	t=1769017205; cv=none; b=kW893VnulgHecz/VJw7bAfd1UQLefnLLzoXFGgv38av6WNFAqDHsNk1ujaO6VOY4s4mS5yeBIUgsCM8KHX0ABRmphjjjITulcdCx/G2dKyDW7qAhC/0tD9wJ5/mx6+P/JEIRkzVndtICjdKhT6jTJ9njrPbmI128h0a91rymRaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769007597; c=relaxed/simple;
-	bh=qi/Z2ETe5nVMmlpmskkRIftB+4ayylMZh0aXzLq3at8=;
+	s=arc-20240116; t=1769017205; c=relaxed/simple;
+	bh=zFTo0irLgEmqdaedqmgzumllkNbee2ofdCeXyzwf32A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=M84Nhz0g62hcSTT1wSm7LbEHNJDfRTuUrboRElP0Cso7fybQkWv/F6DU2KGNyN5OKFp8xYREQuS2/x4uo/8ZQupAnBJ3p41daYI1wx5rkZ86XDd0a/04w7K+2vZettSErQgnPLj8nYgwfkp7pXwdMheLp8bfdPRGNKG7t5gofe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=ZziRADvI; arc=none smtp.client-ip=209.85.167.176
+	 In-Reply-To:Content-Type; b=B5azD8pfjByrLyadv/qQbwMcPjCIz7jtL2w6iIzkYTu2yZ7klvHRzxRuBLbCn/y4RpgF04ytOvIVbVLMndAUdxi4EW1gO3UHL/ZG+wlzrPdViZanI1d6CHVR+1LTeufqq/EfMd+GhhuYWOYNmX25fXtXgQVeXD1thKkfocDlNCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=sw8Ft/Yd; arc=none smtp.client-ip=209.85.167.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="ZziRADvI"
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-45c78da5936so493553b6e.1
-        for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 06:59:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="sw8Ft/Yd"
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-45c92df37fdso52959b6e.3
+        for <io-uring@vger.kernel.org>; Wed, 21 Jan 2026 09:40:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1769007593; x=1769612393; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1769017200; x=1769622000; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=3swerRYnwqhWtpGyAPWU/v5WaTeow8Irh6yZszKDEkI=;
-        b=ZziRADvIhceKrFpYLHxgIjcqKJImsOhum+4ZSiDjluNQ4EC2So6bN1yUm9Qn9vO1PC
-         oR7AZW1ZT06+wuRRAerFCOz6+ISe+poGwgkIwX05RWhNCfVkDO0maAIDGYbxDCfeQxgB
-         V8pNRQUiFcCiqYCbM27jCMcD5XOstrfUCNVOwZW1oQ2d5mDDdnp2dZWMezOgrAv9b6HE
-         mkC+RykoYQZmjntLZrAXx4RHtayV5QJUJv7Kb0U22zfBhAXYjf50+FFWFWV35bQdmibr
-         Xxlp9hBdOkC8rjboiezFn0oDwVY+6fw7S0LBiiNVdK9RM5jBdy9tXrPXiSBX3I0jsCv4
-         J27g==
+        bh=lbfr84cBvpJtHIkeEU7JKZu5BFioyd+LYtmfg4+rFT0=;
+        b=sw8Ft/YdCMmQvn9+OzvlnPMGz2igB5gL94xmxuIM7SIy+FlLnhbTAg7agdLbKIpWme
+         0H7+qW/TkpJO30fU0Bml+uqX/y/0COT6KDZAKGzkK4wZzf1mnv4pGoG38XZjUprcZkin
+         G8ib3BB6GOWDdaHc+4WMbNeXH48Ma0ij6LJi61d8UfgCKqGbRMDX4SyQuCUMyf5DJfVn
+         UTjprW1Rdxd1mi0WBw/39wVCJosYZDLA1m9IaRyHeebuU3TaqgWF2ir55lsDqqvQ+aUO
+         BeDXrcDzu46bumj19WsMbDo5nv+qmt8ol79O1Iwyv6oDm8eK/2fU5FKw6jrdBAEGUzBE
+         P21Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769007593; x=1769612393;
+        d=1e100.net; s=20230601; t=1769017200; x=1769622000;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3swerRYnwqhWtpGyAPWU/v5WaTeow8Irh6yZszKDEkI=;
-        b=enqkT2wXTdEl0Jiwp/M51tqZNbAImDI3RES9D4/n5fPlofQazEchFS5GETCVzJXXM9
-         Q8Mb9rPUWsD7hBlgwS66K5ZBTKi7b7lnNUFk8fDWQ7KSzXUICWRIE0/meKkTo1s6X/vA
-         uyKl0SeE66KYlJA7I3n9S74MFqhXFtj4QYtzkwujZGkT4Tao+DxXg9X841Ar8mVsKYFo
-         kPonNxvcOLkavLcuPJgBdoBHDuGG9t3I3BCgZoH43p3XshEORPhchFFtJUeKl/N+hwn0
-         G8Csb0Tft/caPSKehZjFLkTHi23ab9K8hIQtzhLA8cBDUOYcMAiNWkA/01azmhIO8sv4
-         lgxA==
-X-Forwarded-Encrypted: i=1; AJvYcCURtpauk6myaH1KXUkja/viN3/eGCvWSy5C5o4eD5nxwdSV7h0X5bo+R2zyUawcaZ0563qmtNG05Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJO0qwHLZrrpykfe6/XOwFuiXJ0wksqX7P1ksUUHmGObfWedxk
-	AgvW4buHgDUz+N4Fz4PkMBYFFC1heaohZMG4K+u1uEG/MqJxLb0+pwKuFqMXB+HNv1qdG3Yemrq
-	I+Lz2B1U=
-X-Gm-Gg: AZuq6aLfhhJmFHfJXnfZIY7bA55KPVy2MyeFiWLAUy/fLPxjfLqNXzlL4NEVIlV8qMA
-	6egwcgav7Dkw4W+m9YC4YpxcbN0mWxAivM9w8OLsroy0tydYksgJeoFXbIz7+Qqro2TFN0DLpx9
-	ngSEsrChaml9n8DXSL6zMg1BQZTubDkk1AedMQ1uoQpWW+K+IXm/44NsJfD/ODrHdlUrzZlhY0r
-	LVq6vlLdqzAQV7jW+EGFK7wwnNziXjcclvD+qIgNWOEdgyYaLv5Efhvh2a/qNSgzHALLQLM0FS4
-	gDoagdmJPmo/xMoql2/CwuG89JolhhUoum7eU3Rd6TFfgx533P1//b01JsoQKRp5oxPKSCCW35l
-	PqFi0uYSCiz1iPGJCspKqgSEam0rwpOcaaa84ZBI9HdumG7nCuP4IL6yrcYuR5b9BAzvYO1Psiw
-	zj1bkHoi2v0dQO9ZfOTMQU5pnKYqoS1Gb/Zlq1PjsX277SJ29CQ3jpZJFnZ/mtNQoCjNnYcWhoO
-	70rAJhG03oCJP9atQ==
-X-Received: by 2002:a05:6808:50aa:b0:44f:ef44:9cc4 with SMTP id 5614622812f47-45c8817ac81mr11585873b6e.32.1769007593003;
-        Wed, 21 Jan 2026 06:59:53 -0800 (PST)
+        bh=lbfr84cBvpJtHIkeEU7JKZu5BFioyd+LYtmfg4+rFT0=;
+        b=V4743RVZy+3O+VXLyrkhv08svnCloi0XzIQoY4krwgCE1NxaCcvHGPR0t9MzWgDpfS
+         oliUVT2JwOkSD8wKq6pqFO/Xd2SfTj3/yk2cDyb+Yea/jn1HrFx1wPTGp4hgiivB0qyY
+         QZQquafYEIu2OUyaxP5jwbhYl2W8In80yeLk1Z6jv8YmshmeG1MGOAUwdnsJcXg3X/zS
+         Csaqs44lWaQhph4G8nta77xTRtCEtHmOkSIqVhPdeKt5Mb6koJyVIOoK5uhpogr/fohD
+         b4j2l2Ph/h4/39C2nZ2R5zG2Ew5LNF0P6InBltCD69TrcouKccXHwU/jCV7BKvdpCgvV
+         c78w==
+X-Forwarded-Encrypted: i=1; AJvYcCXhzexaklC2wnisKMCV/GcNsvEt1GKofXp1r51TNVLz6+LABaItc5YoMXAqdsn7yA2RVUTLSrRNXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0wtLSgZ8Eyb9QPkbX/6YdL3LtnVVHnaDBkGiuavvyc22Uprh5
+	kVT85HdgkfNeQ9Q/moF/M4PYNj+/rT2ZS1mcUatgCSwooumoYDQD3F2FqkULktQIR48=
+X-Gm-Gg: AZuq6aKe04soPEdd6jQCcNGfW391mST7I2728FRRwmwBuUHTZOLA3CmhYWo+LpCafF5
+	V1b+THPxwYkkRCWNtNJQye4Ik81n4ZKOKmmD76CgxGABKoKeuF3/x64TflLkD0jY/rzm3dSyPZO
+	WvYebP3vFzahnwkBjPTrmHHbt4/tQ8pbBQjb8z+s8+/ksK0094t1ePUjY5FVqkeiGoZZxq2kMs+
+	BGYcFe9EQG9RDdr6yqfhbmp75JOpk/M7vl1k5wOBUDtf3nLteL04WY5xfNKiD+/7VPOS1m0VygM
+	iASo6xxRzvp6ejZLHjjMOMog0Az/BgKA4tAjE01MwlYbOrn0HOsHQV4WJNaZuMe1Obf1mWCCP4a
+	Ld9azvLeeDgkRWlrAKkx69laO1gAzqg94yI56VIC2blBH0bi/J8GItBZgBfw5vuWSihcJD9WYFv
+	LOtyBa2Jgp0KwktXtXNeIomU5uSyP2mCOiu4B0OrSTwzOmpPztywpML8Esz2DXRC3ZHWIp
+X-Received: by 2002:a05:6808:6709:b0:450:cfd3:cfba with SMTP id 5614622812f47-45c9c11f263mr8226935b6e.57.1769017200601;
+        Wed, 21 Jan 2026 09:40:00 -0800 (PST)
 Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-45c9df08545sm8441805b6e.8.2026.01.21.06.59.52
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4044bd150dasm11909862fac.14.2026.01.21.09.39.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jan 2026 06:59:52 -0800 (PST)
-Message-ID: <1b75c1d3-88f9-4946-8303-223b068c38c1@kernel.dk>
-Date: Wed, 21 Jan 2026 07:59:51 -0700
+        Wed, 21 Jan 2026 09:40:00 -0800 (PST)
+Message-ID: <3b3a65a9-44d7-43d3-a4ad-62557fb48758@kernel.dk>
+Date: Wed, 21 Jan 2026 10:39:59 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,34 +68,96 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/1] io_uring: introduce non-circular SQ
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-References: <b7a5502ee3da7ef096455498cd1ad3efbdbee288.1768940337.git.asml.silence@gmail.com>
+Subject: Re: [syzbot] [io-uring?] INFO: task hung in io_wq_put_and_exit (6)
+To: syzbot <syzbot+4eb282331cab6d5b6588@syzkaller.appspotmail.com>,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ syzkaller-bugs@googlegroups.com
+References: <696fc9e7.a70a0220.111c58.0006.GAE@google.com>
 Content-Language: en-US
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <b7a5502ee3da7ef096455498cd1ad3efbdbee288.1768940337.git.asml.silence@gmail.com>
+In-Reply-To: <696fc9e7.a70a0220.111c58.0006.GAE@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 1/20/26 1:47 PM, Pavel Begunkov wrote:
-> Outside of SQPOLL, normally SQ entries are consumed by the time the
-> submission syscall returns. For those cases we don't need a circular
-> buffer and the head/tail tracking, instead the kernel can assume that
-> entries always start from the beginning of the SQ at index 0. This patch
-> introduces a setup flag doing exactly that. It's a simpler and helps
-> to keeps SQEs hot in cache.
+On 1/20/26 11:31 AM, syzbot wrote:
+> Hello,
 > 
-> The feature is optional and enabled by setting IORING_SETUP_SQ_REWIND.
-> The flag is rejected if passed together with SQPOLL as it'd require
-> waiting for SQ before each submission. It also requires
-> IORING_SETUP_NO_SQARRAY, which can be supported but it's unlikely there
-> will be users, so leave more space for future optimisations.
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> INFO: task hung in io_wq_put_and_exit
+> 
+> INFO: task syz.1.135:6891 blocked for more than 143 seconds.
+>       Not tainted syzkaller #0
+>       Blocked by coredump.
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz.1.135       state:D stack:25688 pid:6891  tgid:6887  ppid:6342   task_flags:0x400548 flags:0x00080000
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5260 [inline]
+>  __schedule+0xfe4/0x5e10 kernel/sched/core.c:6867
+>  __schedule_loop kernel/sched/core.c:6949 [inline]
+>  schedule+0xdd/0x390 kernel/sched/core.c:6964
+>  schedule_timeout+0x1b2/0x280 kernel/time/sleep_timeout.c:75
+>  do_wait_for_common kernel/sched/completion.c:100 [inline]
+>  __wait_for_common+0x2e7/0x4c0 kernel/sched/completion.c:121
+>  io_wq_exit_workers io_uring/io-wq.c:1325 [inline]
 
-Do you have liburing tests and man page updates for this too?
+Not sure how much better we can make this. syzbot is running on 2 cpus,
+and spawns hundreds of "lets read 2GB from MSR", which are super slow.
+So you have 2 cpus wanting to run hundreds of these. And yes that'll
+mean that exiting a ring can take a loooong time, because even if it
+needs to finish just a single reader, that's a lot of MSR data to read
+when you have hundreds of tasks doing the same thing.
 
-The feature itself looks fine, makes sense to keep reusing SQEs
-rather than always going around the wheel.
+IOW, there's no bug here, other than yes if you overload the system so
+substantially on a small system, then yes things will take a long time
+to finish.
+
+That said, it'd be nice to get this bug flagged as such, however I'm not
+aware of any way to really do that. We can obviously work-around this in
+io-wq:
+
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 2fa7d3601edb..3c94f281ff6b 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -17,6 +17,7 @@
+ #include <linux/task_work.h>
+ #include <linux/audit.h>
+ #include <linux/mmu_context.h>
++#include <linux/sched/sysctl.h>
+ #include <uapi/linux/io_uring.h>
+ 
+ #include "io-wq.h"
+@@ -1313,6 +1314,13 @@ static void io_wq_cancel_tw_create(struct io_wq *wq)
+ 
+ static void io_wq_exit_workers(struct io_wq *wq)
+ {
++	/*
++	 * Shut up hung task complaint, see for example
++	 *
++	 * https://lore.kernel.org/all/696fc9e7.a70a0220.111c58.0006.GAE@google.com/
++	 */
++	unsigned long timeout = sysctl_hung_task_timeout_secs * HZ / 2;
++
+ 	if (!wq->task)
+ 		return;
+ 
+@@ -1322,7 +1330,11 @@ static void io_wq_exit_workers(struct io_wq *wq)
+ 	io_wq_for_each_worker(wq, io_wq_worker_wake, NULL);
+ 	rcu_read_unlock();
+ 	io_worker_ref_put(wq);
+-	wait_for_completion(&wq->worker_done);
++	do {
++		if (wait_for_completion_timeout(&wq->worker_done, timeout))
++			break;
++		printk("io-wq: taking a long time to exit\n");
++	} while (1);
+ 
+ 	spin_lock_irq(&wq->hash->wait.lock);
+ 	list_del_init(&wq->wait.entry);
+
+which we can obviously do, but it's also really annoying imho. But I
+guess that can be coupled with a dump, etc.
 
 -- 
 Jens Axboe
-
