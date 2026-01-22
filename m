@@ -1,69 +1,71 @@
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BAC388863
-	for <io-uring@vger.kernel.org>; Thu, 22 Jan 2026 22:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48413D8094
+	for <io-uring@vger.kernel.org>; Thu, 22 Jan 2026 22:59:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769122765; cv=none; b=S/vl0cej1th+Tc2rNHUCvYX8xKWiUPTOLCVaFUYS/GtA3i8io9gpX7kHK3yZ4kEY8+qNohVBQczSb8o6/jUJtrXN4nmp5fvycO+fS+QBtiVChZuwdyPKsR25Kd4aQDfDBcAYQZCQqDzbkO2JWb/CGRvELjcH0x1M5WzTNWojkew=
+	t=1769122767; cv=none; b=qPo3d23OMfJoBFib3Bl/tdV8BZFF19PtBQIZJQTHRdOQXqk6LNBYMcj+kyPWCVX0g6LFgnFcvkwydfG67bSLmWzmLZNNakpqg3FsLQQQeSXqU4eGuzoHvybKxeluUUtIDFE1i2ZK/EzEgm2IqgKji0GsORoC3eh2Q9EODfthqPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769122765; c=relaxed/simple;
-	bh=JYJ47g6zJv9NYJZHcOhfg/2XWfdaoAK9Kbz2/5Njwvs=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=lv0sIf0xOVr16QscsYBiIIuTY7qLqpA5ectAUP8L47GXGq12fRh5Rx0V90xA1K3Q8ezVknZMPoIfMjpNJVJ0GHG07KMq1LXmd2p3C1SKZcgLb3shms9T8n0CP1uyrCGiuuHJxa9hEOhuQJ133bNn3BaEz26L660gKfj70sXvqk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=T7HKBza8; arc=none smtp.client-ip=209.85.160.43
+	s=arc-20240116; t=1769122767; c=relaxed/simple;
+	bh=Wi64H88y19xhSauRYglp7elxd1D99YnLBaKlPC6UXX0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=bbDZeBBFX8P80O3XhyOXv0UJjA7AfCbEfEqzBzuLG2FptIixcYh4kbOq2eAqs+d83i1rdRxyg1Oyd1y7iuIPZrqvZKxKqPAZp1QuPJe8N55T9p81LQZMfV2xruqZAe0h8jUBI6P3ZczvqeX5b5Iv/BAOPLaoLe1b0qJwsJvcvlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=ku/ZaNU8; arc=none smtp.client-ip=209.85.167.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="T7HKBza8"
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-40439fb8584so1869418fac.0
-        for <io-uring@vger.kernel.org>; Thu, 22 Jan 2026 14:59:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="ku/ZaNU8"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-45c7f3a9676so1186686b6e.1
+        for <io-uring@vger.kernel.org>; Thu, 22 Jan 2026 14:59:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1769122752; x=1769727552; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1769122760; x=1769727560; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZL9IwoihS3pYVQCFPhDjkCA5SD9ojjApRellNIcrMGI=;
-        b=T7HKBza8TpB6c3VY8h+1EmRbHUbe5hHGpvbTL8+4aT65LzushfpPjVnHJAkabKkGqv
-         Bk75rEGXv/v79E2CeaFNROuraagSt2ziISVxphr1w1ypnchIa3WxV24/+2sE11TYqyrf
-         6SdOhQ2nAQbIJX3ISObvHPdr/dQxBK6D4ZGmqYsNY/nOibmiagsIDmIrt+Sbe6Ms9EEs
-         03sN/3EdKFSqmfgQJZuCIBHxgCHsHW147wmaeAfUAcvoYiOM6qufaj7B45+l8FOk+t6y
-         ADSqthi3Umf28VduTGDA18fUvIZs0DqW5NmbE+qh1l+lp3TLi2lnyG6fjA6+XQ6ixIJN
-         Eb4g==
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ORu2aq64SUgYQh0aU04+Akrjmz7zeyzEZX8BfiY+G/s=;
+        b=ku/ZaNU8038Tmf5uBaKxusMXSFAkajHSNYsXkteWKgKv2sIz4X0zaCuGQKSJwcq++N
+         /dsIfLWKp/3x5N6U3ZIqDYlwLlftwXKBERXCh5d8i5PJsn4U4YxcDHyHvGxxCmbTCtXF
+         4Ta1NsE+AYE8G9dZv6OTQsp8MIEWjTnLBqdevhdWFaBa2evxhN4WYrd3jcJir4zEbeRi
+         eLX29+osIOozEa6pIXzSspwEU1uMA1jmf3xy4Kz4Pzsf2c97xBN8WOtMYwmkE477FlxH
+         tVwn9NJI44TEmLBn+oYHOV66UypsrJplQn2VNfjMKKjyV0BrxFiz7Y6E08GxI+igy14U
+         KmLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769122752; x=1769727552;
+        d=1e100.net; s=20230601; t=1769122760; x=1769727560;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZL9IwoihS3pYVQCFPhDjkCA5SD9ojjApRellNIcrMGI=;
-        b=SHvlKki9Tu5jyyf5X5lw1oS0yX06U9s8dZh6I/xQgZWlapIY1jpF+d20odJTvr+Bzt
-         fHm+uiPfLF6+O5XG5ytXN//8xhTfN6oomtf0BusCT3c7HtGb1kvj/8VnYcUWNXZxOHRs
-         Ok6VshfdCu2ix7eN3cy+ZbiW2Y55GgZnItTd9/AMzgSG9x7/xrdER2GBd2ak7SD4voTg
-         H8GjkX/jJh1WxADBQ9KuI6/vIQLlUaZ+W5eNwUowCk1DeWZEtL92VkU5bkw8fcYLpkI9
-         JsJAZhyy3CDzc7JXdMU6GfeSzs1zLJX6OGwHFEQ8F33FGmyif9lfEcJaNZSpcj6JlzXh
-         HWUQ==
-X-Gm-Message-State: AOJu0YxC2OGwIz9OKqbmEidQ+7r77mj/U5aGsYvKB5GZAjR6aFAApSU/
-	Nq/opGH7CcCyGszlhAOPgZ1ckRJfBtANUqe8Il5XjeziFgasVY2gWALelBD+c7Z1Z5Q=
-X-Gm-Gg: AZuq6aKyi4Bt9VsH6editP/nHSgKpC+thEYtHgjMcqxQaaLtWdzyNZePeq0myxc85Qr
-	xi9FBdUzpA51nEJxsy182s8M/huJHVIcdSPUQOvz5NmyWrbdtYP3r+OU+sb8whMTTlphuMd0LtY
-	wo6VxuXFTDkYPNuC9Zfilrvt2XpMBNaPcJf5q0EnqW15RLAehJKlxd9xR+JTQo5uwFMME34AJ5D
-	35njxpL1loiia7ZHgs8tCneYQUGcim0F33eydS7q6ODP3ZYQErkSol1LBqpb14V1px9Hdo2kOsf
-	4V0P/S9f8nHGZfS7tBQvA8MAoPOBcMttvk7GC3vLbvkYJ2pdHwCesQHujZHxPmacvO4s0F2vATz
-	kUGdwpY8hGJfEoqKv0NNYAWcPMSaNev+jeb7+emcDYDGPFjFgkop2tGQ59Bxxgh5Ry8VN9kN2iK
-	TzNwOZ0ENxDfv4Mf1rdl5+LM6LHCveH1JPICbGKd6WclAyG/O8G6G2l864SdRAvNDg
-X-Received: by 2002:a05:6870:8883:b0:404:1843:e5bf with SMTP id 586e51a60fabf-408ac51a164mr587824fac.18.1769122752056;
-        Thu, 22 Jan 2026 14:59:12 -0800 (PST)
+         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ORu2aq64SUgYQh0aU04+Akrjmz7zeyzEZX8BfiY+G/s=;
+        b=nfRjm9igp6gl9ULg+jZlY1WUqTdA00z0sMLqlUIdENfk5FPKUddpXYDQIY4/JC6Piv
+         cI4vGR2uhN7GTKFu+oyre3gSlFnFmquKnAyYRrDkcjf8+hmmcxvRHzsnXosPeg3icRhw
+         al8Uc1eoa0sY08+ADAizVa8MEVIQ1MCfWnpHdCursQCUfVrwh5mVtZx32pZkxFPYrwgJ
+         Uk3acn5lUv4Oc3VuBpqE9zYzrM8FNwXqYFXzfUdvSwj1JpS8U+kO38ixCt044JONbufu
+         CDwJlPbl7WduG8uZ8fOhbjPVhw9OHYgvuIEfhfsfy3Ue9d50m4F6KjHtsxTQlIo60Q3e
+         3oMw==
+X-Gm-Message-State: AOJu0Yz04eeC3eYKYU9S63C4Vd37Qj+5V68hPBQN2Suyb4NC5RO1M2k6
+	8kGEoKtJV6dYGTA5rx9zmcC8DC3tc8DO0QDIlppLBec2ov/bbfnpOB21ul4sRH22p0w=
+X-Gm-Gg: AZuq6aKdGyDaEXNoy5y0oSv/4sQkdszTTOoy/rA3GACHckVHHND2HAn3/T0X9XGa21m
+	R7Ozy8O6waXbG6gWo3poGjwbZ2i+Hmf5q9l6ExmdPtMsv7pNZbux0FUZi2zk5srismX6bpLvw1B
+	uaaXqYZU2XTKNYD1j1/DE0f5LBLw7RqbHWYIX4/p283NWsWpg3rt5/oPDAO0LxeLve9wtJmhe8e
+	gJgm1kLjFZ6jJ+/VaAG/DiOaaqu2KzRtswqpRGYwcvWORqLE9Ceu/XmPDmPYi55MGqGkITbWAsN
+	4AS0QStoDRVR66a48hv9gzwWHwnYuys87EWvC3ubHeVW4vWk2J6RZmpYhT74o1oVuWwhQTXsd59
+	+ao1JVJsMWj2POMGWZ3AtVahc0aa0GEnUbwKCen+4F09GSbIP91j0nBYfhpR1ksyggn6/PIC1KF
+	BX60zzGRguX8NpJ0iqQrrtS0BtB2jRRiNCLFRhdCP22gqo35CiaA0Dyk2PUv0F0l6a
+X-Received: by 2002:a05:6808:2507:b0:43f:68b:acb3 with SMTP id 5614622812f47-45eb22f8f8emr439797b6e.17.1769122759710;
+        Thu, 22 Jan 2026 14:59:19 -0800 (PST)
 Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-408afc0397csm388888fac.17.2026.01.22.14.59.11
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-45eb4235b50sm290180b6e.14.2026.01.22.14.59.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 14:59:11 -0800 (PST)
+        Thu, 22 Jan 2026 14:59:18 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <cover.1769034107.git.asml.silence@gmail.com>
-References: <cover.1769034107.git.asml.silence@gmail.com>
-Subject: Re: [PATCH liburing 0/2] Add support for IORING_SETUP_SQ_REWIND
-Message-Id: <176912275112.522897.5400530813917730862.b4-ty@kernel.dk>
-Date: Thu, 22 Jan 2026 15:59:11 -0700
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20260122214506.88529-1-csander@purestorage.com>
+References: <20260122214506.88529-1-csander@purestorage.com>
+Subject: Re: [PATCH] io_uring/rsrc: take unsigned index in
+ io_rsrc_node_lookup()
+Message-Id: <176912275829.523910.8844345576274421651.b4-ty@kernel.dk>
+Date: Thu, 22 Jan 2026 15:59:18 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -75,27 +77,21 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.3
 
 
-On Wed, 21 Jan 2026 22:23:20 +0000, Pavel Begunkov wrote:
-> Add liburing support and tests for IORING_SETUP_SQ_REWIND.
-> 
-> Pavel Begunkov (2):
->   src/queue: Add support for non circular SQ
->   tests: add SETUP_SQ_REWIND tests
-> 
-> src/include/liburing.h          |  5 ++++-
->  src/include/liburing/io_uring.h | 12 ++++++++++++
->  src/queue.c                     |  5 +++++
->  test/test.h                     |  2 ++
->  4 files changed, 23 insertions(+), 1 deletion(-)
+On Thu, 22 Jan 2026 14:45:04 -0700, Caleb Sander Mateos wrote:
+> io_rsrc_node_lookup() takes a signed int index as input and compares it
+> to an unsigned length. Since the signed int is implicitly cast to an
+> unsigned int for the comparison and the length is bounded by
+> IORING_MAX_FIXED_FILES/IORING_MAX_REG_BUFFERS, negative indices are
+> already rejected on architectures where int is at least 32 bits. Make
+> this a bit clearer and avoid compiler warnings for comparisons of
+> signed and unsigned values by taking an unsigned int index instead.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] src/queue: Add support for non circular SQ
-      commit: c22129cf0b8c936eb478d920ef84e53d89c6a5cc
-[2/2] tests: add SETUP_SQ_REWIND tests
-      commit: 346c063d16bda52f02d00feb744aafe35b4002a9
+[1/1] io_uring/rsrc: take unsigned index in io_rsrc_node_lookup()
+      commit: 82dadc8a494758093e775336390cb31033c6f9a3
 
 Best regards,
 -- 
