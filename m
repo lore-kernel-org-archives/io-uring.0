@@ -1,70 +1,70 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89F722EAD09
-	for <io-uring@vger.kernel.org>; Tue, 27 Jan 2026 10:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B266033C19C
+	for <io-uring@vger.kernel.org>; Tue, 27 Jan 2026 10:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769508878; cv=none; b=UOvgJU21zZJHk6orj7f1k/m0EgPc+QzfkwTIXXo3EKZU64oikQ5edRpPMrUfCDuofAEnwGqgFOK2wbQmXec8VVrNuIQNhvtjG5zBZU7fGyhR4l8LQFePuWqRZmE/PZEq+1YRhrGn7p7R1H/gKWeRUwMt+Wba2HmhcAYHdlR2uH0=
+	t=1769508879; cv=none; b=KJPY66/LRc5ZrHrVnYtPuI+qCTifDd2x8X0PjdrN+l9i/eRV425Nwk2qnA91D7WjBUkPdn7iAuKboDE7YKP3mCUhaVXtpxDQX9z8yYP9hZubvQ5+CbXFjFGWmT536A+kxwuORS9ARsXeF5JJpk6vMiwgjuDSAOQ363IV05yLlOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769508878; c=relaxed/simple;
-	bh=PmLa2E/qa9vx+3T7sbbzNQ3iNQeuhouOCpLOpTlYoqg=;
+	s=arc-20240116; t=1769508879; c=relaxed/simple;
+	bh=XmPry/OxPrEyMg/xg/1hD+YQK8vhAdJbzWFuLff8N8g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gRNhuW4d/1tWseRrJE9DPT71Luux/aAxRNcgxc1b2UGXzBAh+rHJwnYwmLY9vyKwAZZtHXSXehI/CXAOawn2GAfTG8TCXvIW6FnTXo/X2n2gB8RfwDr8GUztULlSb9YIXWq7rz6QcOdHprnMk2Yu6VPY/H+7V85gzOJCqbEZZWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MatjPdoh; arc=none smtp.client-ip=209.85.128.52
+	 MIME-Version; b=O3KMfNSOmO2hAX/Bnw9uQ2enFWTOtqvSUA8AJpNiS2Wb4jTrpBCOWuEwlmO3ilbSPZBAE6Frn90KKauYLrKhsiNhGB39brOofknee6Cw3XIuiIztlxtPq09sMpDhoIoQquxsGbQm+eHFSCBqlG76qKvMjrgCHpcEBKi2RXYND/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FGgsJz++; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MatjPdoh"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47f5c2283b6so41207625e9.1
-        for <io-uring@vger.kernel.org>; Tue, 27 Jan 2026 02:14:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGgsJz++"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-432d2c7dd52so5564371f8f.2
+        for <io-uring@vger.kernel.org>; Tue, 27 Jan 2026 02:14:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769508874; x=1770113674; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769508876; x=1770113676; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KE2SkxLTZslRj/svpD5iSf0B3A+oiEa6juQ6HgBYPtM=;
-        b=MatjPdohHHLyWh95s0o6NBo8ip32EgsthHo1E6PliT1nkA7xK09MMH3JCzi6xeq9jE
-         7Ze1yXicusAoAbBGAg6yWFkXmggOw90yBjD6NmaXE0LH825dErUehmjdkO/dGtcg8ig3
-         hXtY3CFpMbFZShKpu+RsiP6lAff7AvUcx3B+5b8CZRiNmL8zCFktxhVtXu1mmarD/A2A
-         lBDlcB3KbE5QvCVjf/VQuiwHHUlOy+WCW1l/M06I6f41dfUfQKLnSRXKg0261vGLPzPP
-         uitWE8+j0GFoYj4dKX7k6RCOJMqxIvQT91H8QR6Rz1CXw2h5F7+31eo/rnl/WPPV0u96
-         jaHQ==
+        bh=bQZULh+1aOViUNzlyUitezWDtyBZNbRYLQVS+ZcBn2g=;
+        b=FGgsJz++9U2I6V9JA8tJ3KUSIOMyO2bVx1/mYDVO4RmOliSaSjcNZxxYFbR/tL16Cg
+         5o/5I5d7J3V3FjT+QbEZfTjFoq2n9RONcq2LHRxdPWBYIBQ7kn1z31rNdj9z9WubrWiD
+         jfZWSncLpqy0crRMJgtR5qg58mlQ7PKC2MIvbEvSsoKaZQkQQaHPeO83l08lDo4e9jo+
+         axPnESnV2nwQ8V07y8FBzPh9H3gRVmUO244ue3Z8jN2hfNUSxEB/bqoGJMM2IC5T21C1
+         yCRQf78G6qTYMtlTe2LkU+qr4YqBr0W0mPT9wvbiYr3lBJg9JbKZ08+YDCsGRA029qxU
+         d23A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769508874; x=1770113674;
+        d=1e100.net; s=20230601; t=1769508876; x=1770113676;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=KE2SkxLTZslRj/svpD5iSf0B3A+oiEa6juQ6HgBYPtM=;
-        b=WCPFJH1krTotouGqu5Dj1Cp1F5wfpiA5ZdfOw0xm0nbXBD6axAFWwouKrsbZgMC4Jr
-         GTbd6Smsuq96uUQgz+DxIVbtg6JF6cEPSwFTLuq3Su2XGpznzA8VLukqFJga7Anw/MQ6
-         lVrDRLdEuIZuFGJKOkyn7ClmR4x5dpx/qrvB/9Yzf4ky3ftKprEgCv7gtdYwcLB2TGcb
-         jpefzBGL9w5r4HxfniwkSgeUKwFVAhnLuXFhiR/HofZR3TZs1slq3j7bEDyUF1Y5mtDb
-         +NOpks/ZHFp2ugWFE96EcO6PfN0FpIajpPanETMdr45p5pf/dzysTsjCcuiSKbBl3eGp
-         cvmQ==
-X-Gm-Message-State: AOJu0YyM45ykXTmPzGClk5Xnx80GKHOo/kbhZO+w4Uc+4jNyquhqbDuk
-	iWZZWF7T0nVlUKvrV7X66VY4VCYIo3PUbn3HC63n7x4670764coG25+oIvSni1wr
-X-Gm-Gg: AZuq6aLkFTVAbVS1jl+tasJOOOKoRQxMKA0UoxhR6/dwRnynIzK+slxFlCOsBjxx3y0
-	tlZWhrcoxuVz1siw782xIy0KS5ZmimXraLgBEX9wL/UyTwvDjc8d1yQ7gZ4WdRSAWuARxv7CSp/
-	BEjZxqKyR3S8sFdKFGUuA9uZWikPv/ibo54jntN6CZWkVCWFIHpfrrLj01wgF4ts9Ot1o0gmN6r
-	m/YYwu3r2ktz0ymk5dPGFvpbIbUIrDsyZMIWB1+DGRBaH6wNpewTDJ6ThnAIqxT7qsw+sxd2lkK
-	k0Md0EKv6bEsJjnvEyAVoC+XmUr7xvefCY+ZXRLOLOhVvVQqUX/33kbILalyQJlKwEmEL/hPIVK
-	65jT0nGZVymHelu6MSI6Wwbg7b/za+Rmjkr7NwdAkQOBNnMf703Kho0NYlzJnci4bpzkeQLZXK9
-	HJPGIeMWe8D8Y5SDcFdK0f72TKVLPku7dTWldlxYTMV2VAHCP+2PJvSFR++yixr0VEau540JZCr
-	q82UB2DftlcoGB5zoVRJr+cPhgt
-X-Received: by 2002:a05:6000:1a8f:b0:435:db6e:e3b2 with SMTP id ffacd0b85a97d-435dd090a39mr1700488f8f.27.1769508873839;
-        Tue, 27 Jan 2026 02:14:33 -0800 (PST)
+        bh=bQZULh+1aOViUNzlyUitezWDtyBZNbRYLQVS+ZcBn2g=;
+        b=Isnim0gMHhAElPzHyMc/w6VBH2+nXlRNQsK2raSoqMoSE51uFL1UyiCkHk0J3AI5G4
+         9FTE4cTjSv/YEWP8WRHSP3NAQxFLzGTp7v8A6Bf5wG8MifnCiA7iGG9eT7z9SCNRFrC4
+         gMnFaqBLe+xmQ58JK8a/htcEgDWkrGIWSfP2i/Tqag/YGX+Olr4a1BLVMcCV5BXyeQnU
+         0Z4cc9E87iND+l0m10ejzGPKex0GT+qykXVVolf8u72lDbFUuybouw9tQh/lGmGFaXLV
+         HXb/XaP/FM+lt4C88/XXOi9brTxYmR3mozgJqBba2J6dcR6NYIB03XC8UUyUkYEf5hi7
+         DRNg==
+X-Gm-Message-State: AOJu0Yx7KArzIFXaP9RX/UG6tQkWB34mCaSA2doJdotXjd7qWl8RRgvZ
+	gKGYZ7BAqbWQANXO27q6D+1xCArizFSyB1rYLkanN3yFOZtU4A/NOw0z5XyrDbfu
+X-Gm-Gg: AZuq6aLMhjI4hCWZ69j3DCoe+/l2mAddlkYI/AYcfygBTlVOX5ro12Gep04tYjExfq7
+	ltKyuxu3c3DFN3wsuQM+Di+Xi8IWDyj2mOvZNLr78xQWobZoSHRAAJHTFVVOOcEsYPy1LEKC3iT
+	VfAnNTb96Rqc7Qz9bHk6kAvhl2Efyhqxw8ZiZQZgGoVAI6zthLb/sCG6N+izOFDU5puw8V4shBu
+	N5LaB3nempDzCl8iorbo+UnJOXI9h++3vqCH84W+BsTXeT7lTNukEFiZDCRYXIwMBZsrgjsFaR6
+	fpd5/kmXENtCqbiHCR/EocaLeRLa/sSXbFYz+53C6+EhG29Z7Yw54rrK+vgIwnSXwKYAU4qT3mX
+	rQQZx53rK2lyz8phwM2YSzo8aXh2MY/zFSVfPNQ41noF8i1tSpZe9lZXLHXLajoD/lof3o9HrPw
+	rWXhppsoWB5cI2f/z+cR17q3jwfe/iGyl4nFMcyPqJCp2aD2ByYGn9fUxoAi1KgUYOuKnNC+HYE
+	GKGdrK097zLgWwIyA==
+X-Received: by 2002:a05:6000:609:b0:435:9bf5:b32c with SMTP id ffacd0b85a97d-435dd1c0c81mr1764022f8f.29.1769508875493;
+        Tue, 27 Jan 2026 02:14:35 -0800 (PST)
 Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c24acdsm38190407f8f.13.2026.01.27.02.14.33
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c24acdsm38190407f8f.13.2026.01.27.02.14.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 02:14:33 -0800 (PST)
+        Tue, 27 Jan 2026 02:14:35 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	bpf@vger.kernel.org
-Subject: [PATCH v4 1/6] io_uring: introduce callback driven main loop
-Date: Tue, 27 Jan 2026 10:14:05 +0000
-Message-ID: <20968b8f501a4ca8801f38f1b2cf052f32d03e40.1769470552.git.asml.silence@gmail.com>
+Subject: [PATCH v4 3/6] io_uring/bpf-ops: add loop_step struct_ops callback
+Date: Tue, 27 Jan 2026 10:14:07 +0000
+Message-ID: <05a3f3c4b6f1e3117ba90ba87611c292f436bcb5.1769470552.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1769470552.git.asml.silence@gmail.com>
 References: <cover.1769470552.git.asml.silence@gmail.com>
@@ -76,236 +76,100 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The io_uring_enter() has a fixed order of execution: it submits
-requests, waits for completions, and returns to the user. Allow to
-optionally replace it with a custom loop driven by a callback called
-loop_step. The basic requirements to the callback is that it should be
-able to submit requests, wait for completions, parse them and repeat.
-Most of the communication including parameter passing can be implemented
-via shared memory.
-
-The callback should return IOU_LOOP_CONTINUE to continue execution or
-IOU_LOOP_STOP to return to the user space. Note that the kernel may
-decide to prematurely terminate it as well, e.g. in case the process was
-signalled or killed.
-
-The hook takes a structure with parameters. It can be used to ask the
-kernel to wait for CQEs by setting cq_wait_idx to the CQE index it wants
-to wait for. Spurious wake ups are possible and even likely, the callback
-is expected to handle it. There will be more parameters in the future
-like timeout.
-
-It can be used with kernel callbacks, for example, as a slow path
-deprecation mechanism overwiting SQEs and emulating the wanted
-behaviour, however it's more useful together with BPF programs
-implemented in following patches.
-
-Note that keeping it separately from the normal io_uring wait loop
-makes things much simpler and cleaner. It keeps it in one place instead
-of spreading a bunch of checks in different places including disabling
-the submission path. It holds the lock by default, which is a better fit
-for BPF synchronisation and the loop execution model. It nicely avoids
-existing quirks like forced wake ups on timeout request completion. And
-it should be easier to implement new features.
+Allow BPF to implement the loop_step callback to overwrite the main loop
+logic. As described in the patch introducing the callback, it receives
+iou_loop_params as an argument, which BPF can directly use to control
+the loop.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- include/linux/io_uring_types.h |  5 ++
- io_uring/Makefile              |  2 +-
- io_uring/io_uring.c            |  6 +++
- io_uring/loop.c                | 88 ++++++++++++++++++++++++++++++++++
- io_uring/loop.h                | 27 +++++++++++
- 5 files changed, 127 insertions(+), 1 deletion(-)
- create mode 100644 io_uring/loop.c
- create mode 100644 io_uring/loop.h
+ io_uring/bpf-ops.c | 36 ++++++++++++++++++++++++++++++++++++
+ io_uring/bpf-ops.h |  4 ++++
+ 2 files changed, 40 insertions(+)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index dc6bd6940a0d..9990df98790d 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -41,6 +41,8 @@ enum io_uring_cmd_flags {
- 	IO_URING_F_COMPAT		= (1 << 12),
- };
+diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
+index a89d1dea60c7..7db07eda5a48 100644
+--- a/io_uring/bpf-ops.c
++++ b/io_uring/bpf-ops.c
+@@ -1,11 +1,22 @@
+ #include <linux/mutex.h>
+ #include <linux/bpf.h>
++#include <linux/bpf_verifier.h>
  
-+struct iou_loop_params;
-+
- struct io_wq_work_node {
- 	struct io_wq_work_node *next;
- };
-@@ -342,6 +344,9 @@ struct io_ring_ctx {
- 		struct io_alloc_cache	rw_cache;
- 		struct io_alloc_cache	cmd_cache;
- 
-+		int (*loop_step)(struct io_ring_ctx *ctx,
-+				 struct iou_loop_params *);
-+
- 		/*
- 		 * Any cancelable uring_cmd is added to this list in
- 		 * ->uring_cmd() by io_uring_cmd_insert_cancelable()
-diff --git a/io_uring/Makefile b/io_uring/Makefile
-index bf9eff88427a..d4dbc16a58a5 100644
---- a/io_uring/Makefile
-+++ b/io_uring/Makefile
-@@ -14,7 +14,7 @@ obj-$(CONFIG_IO_URING)		+= io_uring.o opdef.o kbuf.o rsrc.o notif.o \
- 					advise.o openclose.o statx.o timeout.o \
- 					cancel.o waitid.o register.o \
- 					truncate.o memmap.o alloc_cache.o \
--					query.o
-+					query.o loop.o
- 
- obj-$(CONFIG_IO_URING_ZCRX)	+= zcrx.o
- obj-$(CONFIG_IO_WQ)		+= io-wq.o
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 5c503a3f6ecc..aea27e3538bb 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -94,6 +94,7 @@
- #include "alloc_cache.h"
- #include "eventfd.h"
- #include "wait.h"
-+#include "loop.h"
- 
- #define SQE_COMMON_FLAGS (IOSQE_FIXED_FILE | IOSQE_IO_LINK | \
- 			  IOSQE_IO_HARDLINK | IOSQE_ASYNC)
-@@ -2557,6 +2558,11 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
- 	if (unlikely(smp_load_acquire(&ctx->flags) & IORING_SETUP_R_DISABLED))
- 		goto out;
- 
-+	if (io_has_loop_ops(ctx)) {
-+		ret = io_run_loop(ctx);
-+		goto out;
-+	}
-+
- 	/*
- 	 * For SQ polling, the thread will do all submissions and completions.
- 	 * Just return the requested submit count, and wake the thread if
-diff --git a/io_uring/loop.c b/io_uring/loop.c
-new file mode 100644
-index 000000000000..bf38f20f0537
---- /dev/null
-+++ b/io_uring/loop.c
-@@ -0,0 +1,88 @@
-+#include "io_uring.h"
-+#include "napi.h"
-+#include "wait.h"
+ #include "io_uring.h"
+ #include "register.h"
+ #include "bpf-ops.h"
 +#include "loop.h"
 +
-+struct iou_loop_state {
-+	struct iou_loop_params		p;
-+	struct io_ring_ctx		*ctx;
-+};
++static const struct btf_type *loop_params_type;
 +
-+static inline int io_loop_nr_cqes(const struct io_ring_ctx *ctx,
-+				  const struct iou_loop_state *ls)
++static int io_bpf_ops__loop_step(struct io_ring_ctx *ctx,
++				 struct iou_loop_params *lp)
 +{
-+	return ls->p.cq_wait_idx - READ_ONCE(ctx->rings->cq.tail);
++	return IOU_LOOP_STOP;
 +}
+ 
+ static struct io_uring_bpf_ops io_bpf_ops_stubs = {
++	.loop_step = io_bpf_ops__loop_step,
+ };
+ 
+ static bool bpf_io_is_valid_access(int off, int size,
+@@ -27,6 +38,14 @@ static int bpf_io_btf_struct_access(struct bpf_verifier_log *log,
+ 				    const struct bpf_reg_state *reg, int off,
+ 				    int size)
+ {
++	const struct btf_type *t = btf_type_by_id(reg->btf, reg->btf_id);
 +
-+static inline void io_loop_wait_finish(struct io_ring_ctx *ctx)
-+{
-+	__set_current_state(TASK_RUNNING);
-+	atomic_set(&ctx->cq_wait_nr, IO_CQ_WAKE_INIT);
-+}
-+
-+static void io_loop_wait(struct io_ring_ctx *ctx, struct iou_loop_state *ls,
-+			 unsigned nr_wait)
-+{
-+	atomic_set(&ctx->cq_wait_nr, nr_wait);
-+	set_current_state(TASK_INTERRUPTIBLE);
-+
-+	if (unlikely(io_local_work_pending(ctx) ||
-+		     io_loop_nr_cqes(ctx, ls) <= 0) ||
-+		     READ_ONCE(ctx->check_cq)) {
-+		io_loop_wait_finish(ctx);
-+		return;
++	if (t == loop_params_type) {
++		if (off >= offsetof(struct iou_loop_params, cq_wait_idx) &&
++		    off + size <= offsetofend(struct iou_loop_params, cq_wait_idx))
++			return SCALAR_VALUE;
 +	}
 +
-+	mutex_unlock(&ctx->uring_lock);
-+	schedule();
-+	io_loop_wait_finish(ctx);
-+	mutex_lock(&ctx->uring_lock);
+ 	return -EACCES;
+ }
+ 
+@@ -36,8 +55,25 @@ static const struct bpf_verifier_ops bpf_io_verifier_ops = {
+ 	.btf_struct_access = bpf_io_btf_struct_access,
+ };
+ 
++static const struct btf_type *
++io_lookup_struct_type(struct btf *btf, const char *name)
++{
++	s32 type_id;
++
++	type_id = btf_find_by_name_kind(btf, name, BTF_KIND_STRUCT);
++	if (type_id < 0)
++		return NULL;
++	return btf_type_by_id(btf, type_id);
 +}
 +
-+int io_run_loop(struct io_ring_ctx *ctx)
-+{
-+	struct iou_loop_state ls = {};
-+	int ret = -EINVAL;
-+
-+	if (!io_allowed_run_tw(ctx))
-+		return -EEXIST;
-+	mutex_lock(&ctx->uring_lock);
-+
-+	while (true) {
-+		unsigned nr_wait;
-+		int step_res;
-+
-+		if (unlikely(!ctx->loop_step)) {
-+			ret = -EFAULT;
-+			goto out_unlock;
-+		}
-+		step_res = ctx->loop_step(ctx, &ls.p);
-+		if (step_res == IOU_LOOP_STOP)
-+			break;
-+
-+		nr_wait = io_loop_nr_cqes(ctx, &ls);
-+		if (nr_wait > 0)
-+			io_loop_wait(ctx, &ls, nr_wait);
-+
-+		if (task_work_pending(current)) {
-+			mutex_unlock(&ctx->uring_lock);
-+			io_run_task_work();
-+			mutex_lock(&ctx->uring_lock);
-+		}
-+		if (task_sigpending(current)) {
-+			ret = -EINTR;
-+			goto out_unlock;
-+		}
-+
-+		nr_wait = max(nr_wait, 0);
-+		io_run_local_work_locked(ctx, nr_wait);
-+
-+		if (READ_ONCE(ctx->check_cq) & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
-+			io_cqring_do_overflow_flush(ctx);
+ static int bpf_io_init(struct btf *btf)
+ {
++	loop_params_type = io_lookup_struct_type(btf, "iou_loop_params");
++	if (!loop_params_type) {
++		pr_err("io_uring: Failed to locate iou_loop_params\n");
++		return -EINVAL;
 +	}
 +
-+	ret = 0;
-+out_unlock:
-+	mutex_unlock(&ctx->uring_lock);
-+	return ret;
-+}
-diff --git a/io_uring/loop.h b/io_uring/loop.h
-new file mode 100644
-index 000000000000..d7718b9ce61e
---- /dev/null
-+++ b/io_uring/loop.h
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifndef IOU_LOOP_H
-+#define IOU_LOOP_H
+ 	return 0;
+ }
+ 
+diff --git a/io_uring/bpf-ops.h b/io_uring/bpf-ops.h
+index a6756b391387..e8a08ae2df0a 100644
+--- a/io_uring/bpf-ops.h
++++ b/io_uring/bpf-ops.h
+@@ -5,6 +5,10 @@
+ #include <linux/io_uring_types.h>
+ 
+ struct io_uring_bpf_ops {
++	int (*loop_step)(struct io_ring_ctx *ctx, struct iou_loop_params *lp);
 +
-+#include <linux/io_uring_types.h>
-+
-+struct iou_loop_params {
-+	/*
-+	 * The CQE index to wait for. Only serves as a hint and can still be
-+	 * woken up earlier.
-+	 */
-+	__u32			cq_wait_idx;
-+};
-+
-+enum {
-+	IOU_LOOP_CONTINUE = 0,
-+	IOU_LOOP_STOP,
-+};
-+
-+static inline bool io_has_loop_ops(struct io_ring_ctx *ctx)
-+{
-+	return data_race(ctx->loop_step);
-+}
-+
-+int io_run_loop(struct io_ring_ctx *ctx);
-+
-+#endif
++	__u32 ring_fd;
++	void *priv;
+ };
+ 
+ #endif /* IOU_BPF_OPS_H */
 -- 
 2.52.0
 
