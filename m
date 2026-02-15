@@ -1,101 +1,114 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B140530B513
-	for <io-uring@vger.kernel.org>; Sun, 15 Feb 2026 22:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EA3E17736
+	for <io-uring@vger.kernel.org>; Sun, 15 Feb 2026 23:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771193614; cv=none; b=frL1ojC+99akxjiRnEg9RJRDgpMobTKxyVdsS82S9xgRrXPc+C7ljMVb8MvXZG+0Xz8X5lDF2D9xROX4ZFwceXg4xF/rMBK7sdEA8lxzrbHke91gwwCaZ4jW+/prqLYgKeTn1OhpXsjMIGaFFAlT4RXfodUzoSDRlGLFwc2OZpE=
+	t=1771197338; cv=none; b=bipcnbGe6sE1NqzJu/jpM6F+CJYlu5C60dj73lfaTdX3WFdSNmMaaglC3fxeuAF5oKjJWkCN+GQTABQ/N33dxqOEyxtxvY9xV1q5KYKdqX/ntegu2P53vtG6tZ0e5J93SmhTS+mIplwH5SwGg/D76iX+ltiaV1d6MDnxXh3pE0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771193614; c=relaxed/simple;
-	bh=KM/b2sDRAa6rGHvDPfdqOut0uA21hg4dEnXe7vIL8XY=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=lPRZDmcZY2JMJZSYokVcVt8MjMho8J2QYin89tw6Z6Qa6ipKB2Vb4MsTIB+Rgp53q0EiO9dtefv4GqVklA/NE7aqdeE5BSuT4CW8ca4DWnKYhaEo7aLXk8A6qtea4T0/G7qSGBv+q+0awtro2vcoI20xAQ+ENucG4+VeW5Vigms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Bju2sI1f; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1771197338; c=relaxed/simple;
+	bh=VHaE1qH/vNfAbmIj9H85V0LRn/CxNxtosu6+KrNlyU4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h3jYA8KOlOxhtkLBab2gVF3FRJwSAnz55/Wq8+31zP/RkTHiQWtECB/lzY8kPFIAL+0ONupSnJxTQ/6v3StCnECSMtisJ/Y3qgYNz06QHFdMm15nAP9xnsuADu51rl/MmAeX+OHeA16WyUxZxbrLcJBAE0+V+DkMIUIpbuNEUDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EhfxX2W3; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Bju2sI1f"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7d4c4b494fcso1397542a34.3
-        for <io-uring@vger.kernel.org>; Sun, 15 Feb 2026 14:13:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EhfxX2W3"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4806e0f6b69so19850135e9.3
+        for <io-uring@vger.kernel.org>; Sun, 15 Feb 2026 15:15:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1771193613; x=1771798413; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=crXKJvX6kY6JhEWsLVFA3cmlh+GvC4J1kvUfExxSWgw=;
-        b=Bju2sI1f7McWMK2MIej3hdrfQGY6/bnmGeTKZheHlZ1dYG3RwcpFBfixUv1NuqF10f
-         UC/nMJpTq6Gkw8463lq6Lk65yo/pUAYRi7bdPcRIMVosbYsasQC+tR27ehx3pZ+/OdT5
-         P/EYz36/ok2XnkTieE27nfkWJ7QosnCsX0vj2u0djKIzPlSlate6kDXq1z9/PZ0ZOHD8
-         qrYuJkpvOfpS3l6qkYUezi/o+QZ0YqEgFXL0fsP4d825UL9hmp57Cuq9DosHl3w44ltq
-         qITMRDTRN1gsj3km3Vl+JPg/d1U99BwiLZt80Qp4AfgFavAUBkL1Mq0FTXXfYV1bGfU5
-         XS0g==
+        d=gmail.com; s=20230601; t=1771197336; x=1771802136; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7kPDK0pti3fCly5apvA5k9zBjT+FAQ4Sk6VhfjFwHqI=;
+        b=EhfxX2W3NtcV3DQXICjfRq2imtNM54TViBEAedquRguX/5rpSLiwW00Fhr+2nWv2ev
+         kLj6P7Vx3ota4iFBcM+yYowaRIH2wg5gc5IxWTZSNCtqUYkuPq+UhtHa/AZpJIseWYtr
+         ByqKs0dU1HjN9U8I/B/efB9EdNgpkuyotIkkW6hZ2jJ29KHPOew9iAOj0u1w141wJfND
+         5uKjp285roEanR6qw+Q79iio26qM6v2PWa1pB3rTM/fvoED2VsFoqh0CGZW0tWra3gVh
+         0qIQor0ufWksbBFtPjVjtRhJfyyIZJDABQhWmxSc4RWx5JJlOwh/OpxqcuvOAasLEHLL
+         QvMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771193613; x=1771798413;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=crXKJvX6kY6JhEWsLVFA3cmlh+GvC4J1kvUfExxSWgw=;
-        b=fvufb+qx9/vVM3a0obbpDvLFQuSbMuZhyI0cKuMu8gMNhYqTCnv1rOAqwOq07yoPHl
-         iBjoxLlCRMDgtFxJUwM7T0ttmWBaMyk/tOjuNo7ulyC0LhVgmaYpCJMLtHkkgkZ6AHdj
-         4w5zGgyRyFOdsYQMEeExFvqNOjX5LQsxpN2XYWg7k+QsDNCiaFWNcyxdKmHEuTkk6zsr
-         Rg0qt4fRm337NBWjFd5vbOqjXqcBqCkLuctXEoU9bqs4jCqem2Kkp0mbm4T5PFrc72Pn
-         wvYAipxi23dd/cuttp3LfaG/p14rPR3co0zVY5SVNLbrpLzJSZMQE1CupZKgcA/GFqS7
-         iItQ==
-X-Gm-Message-State: AOJu0YxBgij2vnGIB7H12naewXH723VYQVY0zO4VC1yJtsDWRY4X0V9f
-	tVSUmxvgjHHkil4vjlP6oJvxG7FtUcu9bxy57HPqDpmr12b1Tct57hGPL8pqWgnjIhvpkEWrEMq
-	pe4R2tWc=
-X-Gm-Gg: AZuq6aLXkdDzN4x8hXfRcnN9g/+vK9ulsInc4PiMWgijabiho6k+rG4/TSAahTqEGbi
-	KmpIS67zX591dC+d+ZauSM/OZtj4QOpfu6YO2FU5VSB4iJAfQOp33eK8/ayCz/wLsq4hasLi4km
-	aGNF3X2GBbsJVJyl0+zCrdXWFWGk5p9Qh7gEKlGn+61kC3MOoTajfhU407NuCIpAN6Fvs40dJFJ
-	JbDYtMB9hMTvdzTqrnMQ7YYFdi5hp45DuDAfcC0QT3jmZEGaNVJYgMXrxyhn7fg5Bjs6735yL96
-	qAsHF5Se3/4YKXZ+1mXwLZSuYykqSo+kHTeQxmYI0xdGAeWAj3k0N+DNDd/bDTJ3Mskvr6wwPUJ
-	V1VGgFavETJcwtVAah9nDgdhsIvl1iF7jzwFejOkDtqdugfu1n1sb/0/e6Bo3VicinQ3gM0hSaD
-	9ZrnHqrhK+LIZszBDaY+GyGs8dFrCCsWpmsFTzaSBlbYJRAfubOH07Pf0QRVbTzEZ9hRwRd66SW
-	KyB
-X-Received: by 2002:a05:6830:6213:b0:7cf:d1b7:7b28 with SMTP id 46e09a7af769-7d4d0a935b4mr3354036a34.4.1771193612734;
-        Sun, 15 Feb 2026 14:13:32 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-40eaf178c1fsm13191922fac.17.2026.02.15.14.13.31
+        d=1e100.net; s=20230601; t=1771197336; x=1771802136;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7kPDK0pti3fCly5apvA5k9zBjT+FAQ4Sk6VhfjFwHqI=;
+        b=VFmljIn5dBM+h6BjRfZAAIHfbRto1wIGmmqlcTNPfmNms0NRDZ3K1X+QkZ7VlFbi0B
+         9Pk5cCOAA8WZ06mPBhmnVI3Bl0cJrYVdeVUM22A25j6wlbLYR1aDTmo6bZH3G3TALGYs
+         GdULuB3qA9raM8I+5wd4zt/3/eNyp6pQHaX/6TMRItMp97mN+mU8lrL86gWgJEacF9fa
+         Mc7J2lJhtVl1LZmEtYJrJkcYeGbu2O+AY7KHmhqIYPDMxXa9TbOhnOsY0BPatW3m2NmF
+         NWIPiEXZo/UYtEUwp1GMBty1+EeDJyKTOKDmLD8vPh7j8cwbHszQWwXpu8+DrXTnehIO
+         1HKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8t1R+HP3dFinCSLUqQeJ0YXFVb+NhpA9alsqVLMVczmi3GKZiwNmcRnAhwonMt6rUNGDwYYIpHA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJoUXTWT9OxTN3CJHbJTRRbvqfcXo4hlv6DYOmmJnOscg4r+Hm
+	zJiRyt1l+WWwZOnFg/yYkhYdrk9uUlQKMrYGWhQBiUfX8pjnaoADFZkw
+X-Gm-Gg: AZuq6aI8VU7vfnvpHiE1g+oYlVjnWw+hyX0UJAMs0UvdwTxQlwbsk1qYiZbwTVS0S+Y
+	O/JNB2fjwoHxzPoledgiEI2FPWUi+WRQaDd+/VH800InxCMxWZJdrP4sRv9Vz5k98j5rbHu66Dn
+	AX6V1Zrqdf8xUDrCHMp5lzpkHQGWJZpop5UyebfDgn74UuTSf2UKqH5QvXnzgJnNNxYNGbJe7GC
+	f+JRNkcRv8E0LIBGrloi/iuPPVbjwPWnQBMxLJdfpeYsYNY7Kz1iwPCLgnrNhaJA7fehUfqw2V/
+	Oniq0eARWQna1fmCAbn1XresWDQnXxKkBai5ho4FHPNuTtVIU8GYlA4EU9JMHLCNvBxYHRw85+l
+	v/C07vRA3fX0W2wea0he815HKTDp5LYYC9aO5A7V9i8uWMl4AElxl9QV11rJlZeucaWZweGxs5R
+	PbocazQ0b0/JuYK8RysDMmHOpWBd7lbIfpUIvJeEw4Dw==
+X-Received: by 2002:a05:600c:1991:b0:480:1e8f:d15f with SMTP id 5b1f17b1804b1-48371043dbfmr149828225e9.2.1771197335658;
+        Sun, 15 Feb 2026 15:15:35 -0800 (PST)
+Received: from puck (234.243.199.146.dyn.plus.net. [146.199.243.234])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796a5d156sm24789446f8f.5.2026.02.15.15.15.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Feb 2026 14:13:31 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <0837f85d2d0beb1ab012812bd373cbdbc3d71551.1771193194.git.asml.silence@gmail.com>
-References: <0837f85d2d0beb1ab012812bd373cbdbc3d71551.1771193194.git.asml.silence@gmail.com>
-Subject: Re: [PATCH v2 1/1] io_uring: delay sqarray static branch
- disablement
-Message-Id: <177119361123.79392.3562541510878676890.b4-ty@kernel.dk>
-Date: Sun, 15 Feb 2026 15:13:31 -0700
+        Sun, 15 Feb 2026 15:15:35 -0800 (PST)
+From: Dylan Yudaken <dyudaken@gmail.com>
+To: axboe@kernel.dk,
+	io-uring@vger.kernel.org,
+	asml.silence@gmail.com
+Cc: Dylan Yudaken <dyudaken@gmail.com>
+Subject: [PATCH] io_uring: remove unneeded io_send_zc accounting
+Date: Sun, 15 Feb 2026 23:15:23 +0000
+Message-ID: <20260215231523.308665-1-dyudaken@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
+
+zc->len and zc->buf are not actually used once you get to the retry
+stage. The buffer remains in kmsg->msg.msg_iter, which is setup in
+io_send_setup.
+Note: it still seems needed in io_send due to io_send_select_buffer
+needing it (for the len parameter).
+
+Signed-off-by: Dylan Yudaken <dyudaken@gmail.com>
+---
+Hi,
+
+I'm reasonably sure this is correct - but I think Pavel might want to
+double check that I did not miss anything. The tests seem to pass with no
+changes.
+
+Thanks,
+Dylan
 
 
-On Sun, 15 Feb 2026 22:06:52 +0000, Pavel Begunkov wrote:
-> io_key_has_sqarray static branch can be easily switched on/off by the
-> user every time patching the kernel. That can be very disruptive as it
-> might require heavy synchronisation across all CPUs. Use deferred static
-> keys, which can rate-limit it by deferring, batching and potentially
-> effectively eliminating dec+inc pairs.
-> 
-> 
-> [...]
+ io_uring/net.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Applied, thanks!
+diff --git a/io_uring/net.c b/io_uring/net.c
+index a6f3cbb7dfea..8576c6cb2236 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -1493,8 +1493,6 @@ int io_send_zc(struct io_kiocb *req, unsigned int issue_flags)
+ 			return -EAGAIN;
+ 
+ 		if (ret > 0 && io_net_retry(sock, kmsg->msg.msg_flags)) {
+-			zc->len -= ret;
+-			zc->buf += ret;
+ 			zc->done_io += ret;
+ 			return -EAGAIN;
+ 		}
 
-[1/1] io_uring: delay sqarray static branch disablement
-      commit: 56112578c71213a10c995a56835bddb5e9ab1ed0
-
-Best regards,
+base-commit: 26a4cfaff82a2dcb810f6bfd5f4842f9b6046c8a
 -- 
-Jens Axboe
-
-
+2.50.1
 
