@@ -1,83 +1,74 @@
-Received: from mail-oo1-f98.google.com (mail-oo1-f98.google.com [209.85.161.98])
+Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE54D2236EB
-	for <io-uring@vger.kernel.org>; Thu, 19 Feb 2026 01:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1221F1315
+	for <io-uring@vger.kernel.org>; Thu, 19 Feb 2026 04:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771465428; cv=none; b=F6/L50v3ABrndvTCYSOnKb5WQqlp3A67Dq0b+Pw+u3A0MT+6iqJtST2ierdrg9xj0fu+Fa03Ki07JStVbo+9PndNDoCJ8fMciL8ZSoBA8IN7fl1I4VJwrafHJ8pvOQJvLnI0Sv5zq9xtRm2oBPZRRv7dLqs1ALsaveE5DtLk05Y=
+	t=1771477176; cv=none; b=hoZhB9Ma39AE2Eh8cidYqfn7YDeRfz60RIkbn4wfqOmiChTSNcsT4e3e/iCnp9fAdpyeBB2Mdg8HtgOZBHZoLrsRZsVXaL/QSgOTsSPdNfly2K9t9zElDSO2rO4mSiyYCeUEMHoZmxZkHDDOqrmr5GDrxWrTpJBqwkh/E2cSx7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771465428; c=relaxed/simple;
-	bh=tV41JT4N82HtLiVT4LDve0d5RQZWyngFmDTN+LM2KSQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U3qN7aBs6AE6Uaxy34ePhl1WdU6aXLmrnXYncie4zhb1qPaHCy8cnApxiXPBL/GaRZCGK4VNc9ioq62jeVp21T1pLdPVjGOKLJvW4gKlZmiQceSzp1aNj5J8J0p91aeESXyZO3/zjeiv9ar8jK38R5P6cIEFvscnEdkoltJ4qOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=K1QMBc0t; arc=none smtp.client-ip=209.85.161.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1771477176; c=relaxed/simple;
+	bh=8toOouew2j+r2RYwsmBEbJ9n5vOF7vdtdZ8kwxzOAew=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tG4KOm94sPNrQElh2rVbb+pqqplKTNr6KQdcFOSCbU+1GZ6c8glnDr0o3N98zVK04zGIw22t1bLuJP/G/4Hn+UqLoDiNDiloeb87KsJdU4G1lql49y8ZuIB0Ruz//bbRyJXN3FNYfQb29s6ldIuFq2JOkyFGfF2a5qzJXgjljfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=igCnTZJ5; arc=none smtp.client-ip=74.125.82.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="K1QMBc0t"
-Received: by mail-oo1-f98.google.com with SMTP id 006d021491bc7-66b0418ebe7so30182eaf.1
-        for <io-uring@vger.kernel.org>; Wed, 18 Feb 2026 17:43:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="igCnTZJ5"
+Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2bd3b0bc201so1251538eec.1
+        for <io-uring@vger.kernel.org>; Wed, 18 Feb 2026 20:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1771465425; x=1772070225; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cD5qcELz1szuWzdXkgd0fgG80WegTttIPZeozvdhos4=;
-        b=K1QMBc0tijEvOQMuBRX61IYuaNingv8UqIP75jzJdtB+oFOFSFJX9A22Wgt198UeVl
-         Gg/EqhboLZj4eUEifY/Lg2fqZGgsaxon60yMafnoAE074OSryzJXmtXCm3YTTvItucTm
-         Rnuz40FD2Q4SY7Ah6Y0EdadYgqjO7mzbFHyjc5baGrHRnin7kyE0/wE1zBazLNMq6VFi
-         60TzMK+4+q1OQt1dwNB53J1G8XKl3XaA/M5N4nYwsn0otrran7CuSSV7Sh2umOF8O1u5
-         Z4Dkj0h3ZXYRzQognhp7Y0kWtet0yqwjQ6WQegTL+QxD1Rtv1ESF0I39+GyTfB7RRQ8h
-         0O+w==
+        d=gmail.com; s=20230601; t=1771477173; x=1772081973; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=URVoEWWXIZWs8eLF0NtSZs2yK2ef/h2NoEcTm7ge7Lc=;
+        b=igCnTZJ5D8dR3+AYe0CeRKFEavj7nSiQmdrTRBcnV5IgdpUebHap7tSeDI9ngrTMhY
+         vZ1z+r0Bfc2CfsrOAe/sMSIWS72odZBT4n9vgiZFeq9d20TMTO1Ah2sgJwYe3wcMdJs2
+         GaSDSeHOcnE5wItryjIMApSiuO29OzyUVoy5ddcgjCCPKSfAOeWYiusc49HW/oAP+bGC
+         Gs9pjPEh5m3YEwYfdATkIr56sRbnk9pyEJ7xv+uma3Y97fcJXEoL7Bh5KqnJyeZscQDX
+         3vndZpdYmPZn4AJuhDQ/MdBrF222t3NJxbM/EDksYCtpP1QYlJY4O5k8WJLLnwncPQw3
+         Viqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771465425; x=1772070225;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cD5qcELz1szuWzdXkgd0fgG80WegTttIPZeozvdhos4=;
-        b=LaorUhi2xLmwEIPlLSqI83Z/NtNb1bv6Xwpx9ZLuatLQCNoUbVtDZkraLUO1l9ob5R
-         Gv2X/zqMddrQDHF/JdO8All+6C8b/jprt3EWk2H7WP/nGTso/bpTwQmp5tZ5yvQwnkbg
-         TSPb8cFLZMmS1ZUBW3/fA0YlRSx8ZsBBO/AC0GypxJ7XxTqkiEqQeTB3/g+FPFW4PAWf
-         RoxTaQ2LtynS2IWdIPbcNdxwLSLg9rsBMref2lQPlDuS9f3SNZFi+DTQUNX3p9t1I1cY
-         ShrrVKPl+tPe5XaenaKgDo9i1wrNGIqLaQjTUoeOqbIU6RZZPVj3gNt7qAdx+c9JpI6N
-         XtQA==
-X-Gm-Message-State: AOJu0YxX3c9aTH2wCBaUFWsH2G8rh+x4DYY8ya3xXg+hIeopjqv6vR/+
-	KEjG4ZOHfr8qZ2S6/pTs3bF9TIWyW1G7AvSlPebF12VJztE5sYZ9cuZGPqITWnXsA0LE5pqe8pJ
-	jSFYCfbTQ5rW65OrmyNTO5baQy7nsfgecFgyd
-X-Gm-Gg: AZuq6aJEBZ6v7AD+qIkKKx6vB6UWhdvqwOvtsac7dnkxZrzq04ZRqPh3e4YA5CyV55N
-	Dx3sB7B2gpeXspqEPXutCRePXUZycv5RXl4hvG6MEf+x86Etk//hFJLugSPQWJB1W/vef6Ug/40
-	wkq/uRYQrGPLYad3jv+umgL5Hb4/zDaWrZiQIcjLWlL3bm3+6iQ0bvbCeiNwc3HQeVX8zN5pOwV
-	7NrW1oTAQjDWiVYfYMzLzhQgJDgxWHmQGlJTug9kOfmBahIC0xmEmhc8BqcYHmv2Iksncq2CcEM
-	kwG4tyPzmyd4NalIAFXsokoC07p1AV5ja5y1F+MIFZhSIONQRTkOefgtcwswLuwJQpPSuMEEGhM
-	0w9fb3OzuXJDfLRyFKKZA2MoQo8w5b3hnXppaARhLP9Gv7kQRt9+wUg==
-X-Received: by 2002:a05:6820:498f:b0:679:ae61:ed85 with SMTP id 006d021491bc7-679ae61f23dmr566445eaf.1.1771465424693;
-        Wed, 18 Feb 2026 17:43:44 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id 006d021491bc7-67997aeee34sm737226eaf.5.2026.02.18.17.43.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Feb 2026 17:43:44 -0800 (PST)
-X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.29.101])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id D8A4A3422C7;
-	Wed, 18 Feb 2026 18:43:43 -0700 (MST)
-Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id D4182E41D2F; Wed, 18 Feb 2026 18:43:43 -0700 (MST)
-From: Caleb Sander Mateos <csander@purestorage.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	Christoph Hellwig <hch@lst.de>,
-	Keith Busch <kbusch@kernel.org>,
-	Sagi Grimberg <sagi@grimberg.me>
-Cc: io-uring@vger.kernel.org,
-	linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v2 3/4] io_uring/uring_cmd: allow non-iopoll cmds with IORING_SETUP_IOPOLL
-Date: Wed, 18 Feb 2026 18:43:34 -0700
-Message-ID: <20260219014335.9061-4-csander@purestorage.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260219014335.9061-1-csander@purestorage.com>
-References: <20260219014335.9061-1-csander@purestorage.com>
+        d=1e100.net; s=20230601; t=1771477173; x=1772081973;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=URVoEWWXIZWs8eLF0NtSZs2yK2ef/h2NoEcTm7ge7Lc=;
+        b=j3ItJU5PztBvCP6YOZLXOuLIeIO9ioUiuME19mdGr9Hq+wU2kLBDWjcarwfUJFEmOq
+         RhEqbIK7mp63jGV+R871iaTGXOmN2dfgM+xeDH5MiR8K78O8sH4iBsJz8rW/X4+qL5Tu
+         VK2BMT45BJlFySgNRdW8e0HIaq3Qb4m/j0RlKeXNjSeyDZWfuxdsqo94quk/HLVvic0/
+         WSpgBq0mgBjBf6zUG6SQm/8P/w/BK1hNqKC5iIdf7scDG/8zL1oiskjFCicw2WuKF0Pm
+         fz7AHfK1RAS/cwEOilFRUEQUC6NcosVXSpg8Ul7N0TzOjGBmrm0Wnui4XiSLwfBCSS6C
+         jCkQ==
+X-Gm-Message-State: AOJu0Yyhwi4DWTwvi8P9XQO1Pvsr+CBH+gMdJy6XJAssSrAI4jTRMmI2
+	aPlNX0WjyirufdUJeVLnAj/9/AHCh1lx1UAHEaSF0klps/OsekfIqgc3jaDwXXlg
+X-Gm-Gg: AZuq6aKtOjUvO7AY+gQ+zchWGzupVVrIeFR992C7lFzG32Ev0Jb4t9BzcUlY/xlP5gO
+	tdG8iWGotnrWyqSkOAmogrOAhR11NiQSk3rXgIUSUnMjDCy3yI0uzakaJTTwFrxKVdiCjglp3EY
+	ZNRS2+LlAf2kDOvfc2yTfTogznldkR3XpGCX3Zbxy5JJhuGJBWGeIoQlUZoDMMccyDdgYzg2ht/
+	6QQ8JrumWJN3vEyNPL6tvC8vUvMvxuqdck8ll+5eRnE17M6ORBaxiyYczw/Xmh+bWy2LI/wsEpT
+	hV2dmBHOQPhv878II9Kxpb+DwHjfYrp3hKii7f0YqixLWtLcdzouxlxl8qwpWQVVFblKb4wwZvH
+	QoLyO3R4K3GuK01LNYw1jsOsQeoQXdzcvwye0GMNvwTmtz6RFj3LQAgTnbGlfc3oE76FMWnAqj/
+	+LmNpmECAdjiB9V/HFsHuzTQbczrejaUELxBM8+Q==
+X-Received: by 2002:a05:693c:374c:b0:2b0:52ac:92fe with SMTP id 5a478bee46e88-2bd5b3c7078mr913025eec.21.1771477173288;
+        Wed, 18 Feb 2026 20:59:33 -0800 (PST)
+Received: from localhost ([2601:646:8100:f8:a787:ffd3:9020:3716])
+        by smtp.gmail.com with UTF8SMTPSA id 5a478bee46e88-2bacb67b638sm20564693eec.31.2026.02.18.20.59.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Feb 2026 20:59:32 -0800 (PST)
+From: Govindarajulu Varadarajan <govind.varadar@gmail.com>
+To: io-uring@vger.kernel.org,
+	axboe@kernel.dk,
+	csander@purestorage.com
+Cc: ming.lei@redhat.com,
+	kbusch@kernel.org,
+	hch@lst.de,
+	sagi@grimberg.me,
+	miklos@szeredi.hu,
+	Govindarajulu Varadarajan <govind.varadar@gmail.com>
+Subject: [LINUX PATCH v4] io_uring: Add size check for sqe->cmd
+Date: Wed, 18 Feb 2026 20:59:30 -0800
+Message-ID: <20260219045930.935755-1-govind.varadar@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -86,43 +77,141 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, creating an io_uring with IORING_SETUP_IOPOLL requires all
-requests issued to it to support iopoll. This prevents, for example,
-using ublk zero-copy together with IORING_SETUP_IOPOLL, as ublk
-zero-copy buffer registrations are performed using a uring_cmd. There's
-no technical reason why these non-iopoll uring_cmds can't be supported.
-They will either complete synchronously or via an external mechanism
-that calls io_uring_cmd_done(), so they don't need to be polled.
+For SQE128, sqe->cmd provides 80 bytes for uring_cmd. Add macro to
+check if size of user struct does not exceed 80 bytes at compile time.
+User doesn't have to track this manually during development.
 
-Allow uring_cmd requests to be issued to IORING_SETUP_IOPOLL io_urings
-even if their files don't implement ->uring_cmd_iopoll(). For these
-uring_cmd requests, skip initializing struct io_kiocb's iopoll fields,
-don't set REQ_F_IOPOLL, and don't set IO_URING_F_IOPOLL in issue_flags.
+Replace io_uring_sqe_cmd() inline func with macro and add
+io_uring_sqe128_cmd() which checks struct
+size for 16 bytes cmd and 80 bytes cmd respectively.
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+Signed-off-by: Govindarajulu Varadarajan <govind.varadar@gmail.com>
+Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- io_uring/uring_cmd.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+v4: Rebase on top of for-next
+v3: Remove extra parentheses.
+v2:
+  - Replace all caps macro with lower case definition.
+  - Add const qualifier to return type.
+  - Rebase on top of series "[PATCH 0/4] ublk: fix struct
+    ublksrv_ctrl_cmd accesses"
 
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index b651c63f6e20..7b25dcd9d05f 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -255,13 +255,11 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
- 		issue_flags |= IO_URING_F_SQE128;
- 	if (ctx->flags & (IORING_SETUP_CQE32 | IORING_SETUP_CQE_MIXED))
- 		issue_flags |= IO_URING_F_CQE32;
- 	if (io_is_compat(ctx))
- 		issue_flags |= IO_URING_F_COMPAT;
--	if (ctx->flags & IORING_SETUP_IOPOLL) {
--		if (!file->f_op->uring_cmd_iopoll)
--			return -EOPNOTSUPP;
-+	if (ctx->flags & IORING_SETUP_IOPOLL && file->f_op->uring_cmd_iopoll) {
- 		req->flags |= REQ_F_IOPOLL;
- 		issue_flags |= IO_URING_F_IOPOLL;
- 		req->iopoll_completed = 0;
- 		if (ctx->flags & IORING_SETUP_HYBRID_IOPOLL) {
- 			/* make sure every req only blocks once */
+BRANCH: for-next
+---
+ drivers/block/ublk_drv.c     | 12 ++++++++----
+ drivers/nvme/host/ioctl.c    |  3 ++-
+ fs/fuse/dev_uring.c          |  6 ++++--
+ include/linux/io_uring/cmd.h | 15 +++++++++++----
+ 4 files changed, 25 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index c13cda58a7c6..46a785ce078d 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -3255,7 +3255,8 @@ static int ublk_ch_uring_cmd_local(struct io_uring_cmd *cmd,
+ 		unsigned int issue_flags)
+ {
+ 	/* May point to userspace-mapped memory */
+-	const struct ublksrv_io_cmd *ub_src = io_uring_sqe_cmd(cmd->sqe);
++	const struct ublksrv_io_cmd *ub_src = io_uring_sqe_cmd(cmd->sqe,
++							       struct ublksrv_io_cmd);
+ 	u16 buf_idx = UBLK_INVALID_BUF_IDX;
+ 	struct ublk_device *ub = cmd->file->private_data;
+ 	struct ublk_queue *ubq;
+@@ -3833,7 +3834,8 @@ static int ublk_validate_batch_fetch_cmd(struct ublk_batch_io_data *data)
+ static int ublk_handle_non_batch_cmd(struct io_uring_cmd *cmd,
+ 				     unsigned int issue_flags)
+ {
+-	const struct ublksrv_io_cmd *ub_cmd = io_uring_sqe_cmd(cmd->sqe);
++	const struct ublksrv_io_cmd *ub_cmd = io_uring_sqe_cmd(cmd->sqe,
++							       struct ublksrv_io_cmd);
+ 	struct ublk_device *ub = cmd->file->private_data;
+ 	unsigned tag = READ_ONCE(ub_cmd->tag);
+ 	unsigned q_id = READ_ONCE(ub_cmd->q_id);
+@@ -3862,7 +3864,8 @@ static int ublk_handle_non_batch_cmd(struct io_uring_cmd *cmd,
+ static int ublk_ch_batch_io_uring_cmd(struct io_uring_cmd *cmd,
+ 				       unsigned int issue_flags)
+ {
+-	const struct ublk_batch_io *uc = io_uring_sqe_cmd(cmd->sqe);
++	const struct ublk_batch_io *uc = io_uring_sqe_cmd(cmd->sqe,
++							  struct ublk_batch_io);
+ 	struct ublk_device *ub = cmd->file->private_data;
+ 	struct ublk_batch_io_data data = {
+ 		.ub  = ub,
+@@ -5253,7 +5256,8 @@ static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
+ 		unsigned int issue_flags)
+ {
+ 	/* May point to userspace-mapped memory */
+-	const struct ublksrv_ctrl_cmd *ub_src = io_uring_sqe_cmd(cmd->sqe);
++	const struct ublksrv_ctrl_cmd *ub_src = io_uring_sqe128_cmd(cmd->sqe,
++								    struct ublksrv_ctrl_cmd);
+ 	struct ublksrv_ctrl_cmd header;
+ 	struct ublk_device *ub = NULL;
+ 	u32 cmd_op = cmd->cmd_op;
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index fb62633ccbb0..8844bbd39515 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -447,7 +447,8 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 		struct io_uring_cmd *ioucmd, unsigned int issue_flags, bool vec)
+ {
+ 	struct nvme_uring_cmd_pdu *pdu = nvme_uring_cmd_pdu(ioucmd);
+-	const struct nvme_uring_cmd *cmd = io_uring_sqe_cmd(ioucmd->sqe);
++	const struct nvme_uring_cmd *cmd = io_uring_sqe128_cmd(ioucmd->sqe,
++							       struct nvme_uring_cmd);
+ 	struct request_queue *q = ns ? ns->queue : ctrl->admin_q;
+ 	struct nvme_uring_data d;
+ 	struct nvme_command c;
+diff --git a/fs/fuse/dev_uring.c b/fs/fuse/dev_uring.c
+index 5ceb217ced1b..60f2058feb74 100644
+--- a/fs/fuse/dev_uring.c
++++ b/fs/fuse/dev_uring.c
+@@ -879,7 +879,8 @@ static int fuse_ring_ent_set_commit(struct fuse_ring_ent *ent)
+ static int fuse_uring_commit_fetch(struct io_uring_cmd *cmd, int issue_flags,
+ 				   struct fuse_conn *fc)
+ {
+-	const struct fuse_uring_cmd_req *cmd_req = io_uring_sqe_cmd(cmd->sqe);
++	const struct fuse_uring_cmd_req *cmd_req = io_uring_sqe128_cmd(cmd->sqe,
++								       struct fuse_uring_cmd_req);
+ 	struct fuse_ring_ent *ent;
+ 	int err;
+ 	struct fuse_ring *ring = fc->ring;
+@@ -1083,7 +1084,8 @@ fuse_uring_create_ring_ent(struct io_uring_cmd *cmd,
+ static int fuse_uring_register(struct io_uring_cmd *cmd,
+ 			       unsigned int issue_flags, struct fuse_conn *fc)
+ {
+-	const struct fuse_uring_cmd_req *cmd_req = io_uring_sqe_cmd(cmd->sqe);
++	const struct fuse_uring_cmd_req *cmd_req = io_uring_sqe128_cmd(cmd->sqe,
++								       struct fuse_uring_cmd_req);
+ 	struct fuse_ring *ring = smp_load_acquire(&fc->ring);
+ 	struct fuse_ring_queue *queue;
+ 	struct fuse_ring_ent *ent;
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index 375fd048c4cb..331dcbefe72f 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -20,10 +20,17 @@ struct io_uring_cmd {
+ 	u8		unused[8];
+ };
+ 
+-static inline const void *io_uring_sqe_cmd(const struct io_uring_sqe *sqe)
+-{
+-	return sqe->cmd;
+-}
++#define io_uring_sqe128_cmd(sqe, type)	({					\
++	BUILD_BUG_ON(sizeof(type) > ((2 * sizeof(struct io_uring_sqe)) -	\
++				     offsetof(struct io_uring_sqe, cmd)));	\
++	(const type *)(sqe)->cmd;						\
++})
++
++#define io_uring_sqe_cmd(sqe, type)	({					\
++	BUILD_BUG_ON(sizeof(type) > (sizeof(struct io_uring_sqe) -		\
++				     offsetof(struct io_uring_sqe, cmd)));	\
++	(const type *)(sqe)->cmd;						\
++})
+ 
+ static inline void io_uring_cmd_private_sz_check(size_t cmd_sz)
+ {
 -- 
-2.45.2
+2.53.0
 
