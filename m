@@ -1,66 +1,68 @@
-Received: from mail-qt1-f225.google.com (mail-qt1-f225.google.com [209.85.160.225])
+Received: from mail-pl1-f227.google.com (mail-pl1-f227.google.com [209.85.214.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B3A34D902
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97F2B34CFBA
 	for <io-uring@vger.kernel.org>; Thu, 19 Feb 2026 17:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.225
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771521788; cv=none; b=mT1y51Zz71bbZjvcRbV3KrhUDt0JNiQGddAxOeWkQQjtqm9CD1sT9j6wnwKgVgVLBE7DUxGjLGSngJU4wD8hJ9sh6GYuJpwXHoYZLHLyZ7mS6AZV/qmWZL7Fm+JHHMVak35PtqK6yFR1woc3UGm85D5HghKqUi1xmMe+qk8OMXc=
+	t=1771521788; cv=none; b=X73687WNJq5g9ULztZ86TO1eA4xDR8w5WK2K/U0PBbzhfY4stHBhhS7OFUNUyO7OSy0x74gT5OtgwRwH+SuGApXATr4FNSoqQhoI3yFNNuWzsxF2G5lergoXcGuP9eckXuysV5UpaShogITopHO+8GXCYtWiGfff/cAjfmI/KOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771521788; c=relaxed/simple;
-	bh=rCfwpGZ1zY1oR+FJDyVECm7GFtKYQS+W42K+Nc+4P/M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JN8n7Rw8Epgzhs1S4TbH5BYNPldRP2iOChByrb8Yie9r25qWGH5EjNm9vAUu5YG1QZbgI0nCCMNfYQhzSXyLE+WYU+NnX6TitSD/0NWvdWvw9Fpu8a6dR63uszZvJkR5/a0aomRLxfb/b9SDka3nsfPXEkQCQHwi4YqrA6J3J+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=cHu4L21s; arc=none smtp.client-ip=209.85.160.225
+	bh=tV41JT4N82HtLiVT4LDve0d5RQZWyngFmDTN+LM2KSQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WwG1LA6EdaPQOs5Kf6jaXOx8CWfImi1x6FQeJXeN3xZxfjQMKEzkPgYKd9rrocp4NO8QxYpibo4rWFGuCt+/etlZa+ym8PGPr6HggnO5DcWBrXliIUPMQvhpDmbMAOvIiKDwmD4IklL9vTttMsJSeWVWuXY71VfYJNT7iJW9O78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=JAB4HSGa; arc=none smtp.client-ip=209.85.214.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="cHu4L21s"
-Received: by mail-qt1-f225.google.com with SMTP id d75a77b69052e-5032e59c8d3so1546521cf.2
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="JAB4HSGa"
+Received: by mail-pl1-f227.google.com with SMTP id d9443c01a7336-2a8720818aeso523055ad.1
         for <io-uring@vger.kernel.org>; Thu, 19 Feb 2026 09:23:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1771521785; x=1772126585; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DQ0IUqmOj4ktterC5Me/w/j1jMtCqZq/q6fvEBLAaBM=;
-        b=cHu4L21sm1lQzHZOjVHTAjZfrS5QPtpBMoVq1DAhJpvD0C+xTVc+RkobT/+1s/sOf2
-         B8k2iSwn6yzWEKOoywHHMipOlha0zu0u2Ml60Bw9JrMUod6OTD769MxxDocmyIJWg0j5
-         xrZ/p7ZGDiFqrGyzfWavBTJ4xe60f8Fp9GnMrwyGbaFxIblmaMHDBo1GhZX7frwNobVR
-         sPCmN5T8WPSGp7xfxTJEUuuRoYIRwo6dRVvbZmZumIQ278twRo2t8V1Vs6BR+ZcPsu7K
-         RTg3ofoZmuU/DAwN57em/1/i+5kqwYvTynM+nA7c60cHEnOxNOWbjMccOO5bJHzP66Pg
-         O/Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771521785; x=1772126585;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=purestorage.com; s=google2022; t=1771521786; x=1772126586; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DQ0IUqmOj4ktterC5Me/w/j1jMtCqZq/q6fvEBLAaBM=;
-        b=Wr7P5Jb7C62Ab0CBaw6WQPou89CaEBZPhTnD8fHRB+N55Ey7nP3068/99Rr8atkvW2
-         6pUCzxm7uGfpTCBG33iQnIQgLi5oIpibqh9rcwcVmCrl3Y1eRhT5S3icl8l4PKg1Dok0
-         OYok0DPmP6ZaeVWRCXhSN8qDRbFeuKIcdLo0eU0skVTLsyu87snvvOiryjGmsaGxCLGl
-         Cr0VtlDj6YlIKXSDyIn02QJcncUXr7LlaThXhLzvFc/w97eU3ewyV+xtBBJb8QT+sb3j
-         LwRW9AprYlE4xJPVAW5VEVIi4LYYifldgM+3lP2OCPd/Ug3vbRZV/cdumQ4ku4ASP6QY
-         EhZQ==
-X-Gm-Message-State: AOJu0YxxVuTM2GRTXgNdNaBVHuCAisQVy1w3z1n+J1Osl4+4ZoR9VS7w
-	rA2x8t01t5Gl7N8PwOf6CgHwWHi6hTvW0uYXfNKlcKSl7Sv9HsuekIccKXy5cOh0erjKUWC+bPC
-	gdnNwbQ4hXkstGWjRMrEnUejnfPGyBrCkQ2Le
-X-Gm-Gg: AZuq6aKZilDio9DQVlxwM4ZHSIx+lunRJhaVDE8rMbkBA5iyjIjJIjDLUWcWh+hz0f4
-	ZK2MV5Z0Z5rE9Cs8fBZieZ0oWtv6KZU1l1JqBrmuvNCvrdxcTBzupgQuWUpie5OBVaG0g8tweVY
-	z74MLn35b+NhjkvsUfNvT8+89JWHTeOiMoHnOewZpUlSoYT6MbouEd3h1Fd+pEylJqB7aUZJgk4
-	xWMMjUbXA280Xwg7c3NtuAwGz7kAJ4uGT+MJP4wurySDL2aWMQWSS4paeSDruPifPjcTDmYOD/D
-	vWi+aNqKD8EeeJf4/vN0uo7BAPEE0zfSPb4sUijcYLVkdzFr8jPuCopI92gDoNl9Uk/wCSQcc6U
-	FFwLRJojX+vsDcSUxz1LVNA+1FIMQVQqCmaZICC936dXtZsSgSJ02pQ==
-X-Received: by 2002:ac8:5ccb:0:b0:506:bb3d:384c with SMTP id d75a77b69052e-506bb3d4c96mr198048761cf.10.1771521785284;
+        bh=cD5qcELz1szuWzdXkgd0fgG80WegTttIPZeozvdhos4=;
+        b=JAB4HSGaBijit6dpJZg285XUG7gn1q7WgnAOzFzjKDjnF5luVR1E4AirCW95LaNj1H
+         VhCUPbJEUIlIJxgqGPozbUSd5LCjEsZzsWOrjIdGAHhmdC3DH9RrwDKeYmt81K8nuzkI
+         BClqIOUnmUItP7xaeXvUm2pxjGgh+VwAjOHxDxt0XCWdRyMrcS5eH6ZKxgGdA1NWwj81
+         X/j6g5SCMyKulSUi5bAKHeBma/U4bsHc7NnAXsJYHJDY1QMglCM/Q8DrhWx6X5+5q+Bq
+         eQOuFXnH6/hmvnoVQN6JbPKC4VbH0rUOZ8YSzW9+zlhgKAZePw2z336031oWMTMSCb4f
+         d6Zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771521786; x=1772126586;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=cD5qcELz1szuWzdXkgd0fgG80WegTttIPZeozvdhos4=;
+        b=GzNxqVE1TkkAZwvjLzAUWTXQD/sg1ooX5b2DxYViB/nLX9uMNn1mjylw1BloNSL1LP
+         EdBrL6keOZGKDhLljJzDK3BGtaFcpp10ynZZrAtwYZZpIsP5+BJXvAHouksJpRAmyZlt
+         fXfTHQgpjM8ndo39ZDwq1g+qgnR3SgorBpPio1gP57p6bXJkia8Yjopo9MxVNX1JuKl3
+         mT11r6vc8cnLHdVfNl6CWyz/Ab8WRXWp3TlYRnWzVUkI0VBe0DcMMfgft4TncpdO6PiW
+         iEaphbYxGQm1rFHhxhLE/f8gBUIZxtcKEO5sWtJ8x9OL8moVs2sY7DFbVGGZJzsDpikb
+         S8RQ==
+X-Gm-Message-State: AOJu0YzbmtbhEhrgiryUkYW5fJlKs5lhlDvzZ8ZFXIL0Gasi9e3wT7H8
+	7dy/vQqd5QdUU96o/K0tcSqONqWW4xFya6uLgV0Po0j7MYu/n8IFbuJccLW4PADMj3dlNIeYk7X
+	PYP6M0rOtUChclX9r0WOX5NDXP4FoJ0G83+ZfYsJvX2ZhMdQilX9S
+X-Gm-Gg: AZuq6aK6fEZztrY3FKTAD423fjiPAthKt4/rIv1v5q9oZ1OymLBlP1hazVI5+ao4xnz
+	etSMxVrIO4Pqe/byLxsygx5rkhzXU4U1JEU8dsWGPXC47imtS84u446fqFQCXnjAg2N+oF7Knuh
+	5tGR8MpYOLtv7+X+lF2hZ56l6gUMxcGIhZRv+FZOcaFJ38ANiIPPxwGUzW81FUhcGBFBQV8p/se
+	1GwjPRn341Lrjo/z8pYT1WEbfabDYDXzA7BEQ+NJT8caO/3Ixo9qRX8NkPOtDZ0PRCUuFGyvkmh
+	FUA7gprA33pGwqm4a89slTGft3R2wwuAVCXUKUVEDs8bJ6jUjehPl0Fe1V4aTxafi7R9D98bfJv
+	QOG5t8abdoJsfbB6yLSkfFDVkE721rFYTOBVH1rg=
+X-Received: by 2002:a17:903:1b63:b0:2a7:8bf3:5674 with SMTP id d9443c01a7336-2ab4cb003e4mr163336915ad.0.1771521785949;
         Thu, 19 Feb 2026 09:23:05 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-8971cd571a2sm31063356d6.20.2026.02.19.09.23.05
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2ad1a78f7c0sm21662705ad.28.2026.02.19.09.23.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 19 Feb 2026 09:23:05 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.29.101])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 995183400C7;
-	Thu, 19 Feb 2026 10:23:04 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 2F5A4342181;
+	Thu, 19 Feb 2026 10:23:05 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 7CDCFE41AE3; Thu, 19 Feb 2026 10:23:04 -0700 (MST)
+	id 27164E41AE3; Thu, 19 Feb 2026 10:23:05 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Christoph Hellwig <hch@lst.de>,
@@ -72,10 +74,12 @@ Cc: io-uring@vger.kernel.org,
 	Anuj gupta <anuj1072538@gmail.com>,
 	Kanchan Joshi <joshi.k@samsung.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v3 0/4] io_uring/uring_cmd: allow non-iopoll cmds with IORING_SETUP_IOPOLL
-Date: Thu, 19 Feb 2026 10:22:23 -0700
-Message-ID: <20260219172228.429479-1-csander@purestorage.com>
+Subject: [PATCH v3 3/4] io_uring/uring_cmd: allow non-iopoll cmds with IORING_SETUP_IOPOLL
+Date: Thu, 19 Feb 2026 10:22:26 -0700
+Message-ID: <20260219172228.429479-4-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20260219172228.429479-1-csander@purestorage.com>
+References: <20260219172228.429479-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -93,36 +97,34 @@ They will either complete synchronously or via an external mechanism
 that calls io_uring_cmd_done(), so they don't need to be polled.
 
 Allow uring_cmd requests to be issued to IORING_SETUP_IOPOLL io_urings
-even if their files don't implement ->uring_cmd_iopoll().
+even if their files don't implement ->uring_cmd_iopoll(). For these
+uring_cmd requests, skip initializing struct io_kiocb's iopoll fields,
+don't set REQ_F_IOPOLL, and don't set IO_URING_F_IOPOLL in issue_flags.
 
-Use a new REQ_F_IOPOLL flag to track whether a request is using iopoll.
-This makes the iopoll_queue opcode definition flag unnecessary.
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+---
+ io_uring/uring_cmd.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-The last commit removes an unnecessary IO_URING_F_IOPOLL check in
-nvme_dev_uring_cmd() as NVMe admin passthru commands can be issued to
-IORING_SETUP_IOPOLL io_urings now.
-
-v3: fix REW -> REQ typo (Anuj)
-
-v2:
-- Add REQ_F_IOPOLL request flag, remove redundant iopoll_queue
-- Split IORING_OP_URING_CMD128 fix to a separate commit
-
-Caleb Sander Mateos (4):
-  io_uring: add REQ_F_IOPOLL
-  io_uring: remove iopoll_queue from struct io_issue_def
-  io_uring/uring_cmd: allow non-iopoll cmds with IORING_SETUP_IOPOLL
-  nvme: remove nvme_dev_uring_cmd() IO_URING_F_IOPOLL check
-
- drivers/nvme/host/ioctl.c      |  4 ----
- include/linux/io_uring_types.h |  3 +++
- io_uring/io_uring.c            | 10 ++++------
- io_uring/opdef.c               | 10 ----------
- io_uring/opdef.h               |  2 --
- io_uring/rw.c                  | 11 ++++++-----
- io_uring/uring_cmd.c           |  9 ++++-----
- 7 files changed, 17 insertions(+), 32 deletions(-)
-
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index b651c63f6e20..7b25dcd9d05f 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -255,13 +255,11 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ 		issue_flags |= IO_URING_F_SQE128;
+ 	if (ctx->flags & (IORING_SETUP_CQE32 | IORING_SETUP_CQE_MIXED))
+ 		issue_flags |= IO_URING_F_CQE32;
+ 	if (io_is_compat(ctx))
+ 		issue_flags |= IO_URING_F_COMPAT;
+-	if (ctx->flags & IORING_SETUP_IOPOLL) {
+-		if (!file->f_op->uring_cmd_iopoll)
+-			return -EOPNOTSUPP;
++	if (ctx->flags & IORING_SETUP_IOPOLL && file->f_op->uring_cmd_iopoll) {
+ 		req->flags |= REQ_F_IOPOLL;
+ 		issue_flags |= IO_URING_F_IOPOLL;
+ 		req->iopoll_completed = 0;
+ 		if (ctx->flags & IORING_SETUP_HYBRID_IOPOLL) {
+ 			/* make sure every req only blocks once */
 -- 
 2.45.2
 
