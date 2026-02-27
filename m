@@ -1,68 +1,68 @@
-Received: from mail-yx1-f97.google.com (mail-yx1-f97.google.com [74.125.224.97])
+Received: from mail-vk1-f230.google.com (mail-vk1-f230.google.com [209.85.221.230])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E354C3D4118
-	for <io-uring@vger.kernel.org>; Fri, 27 Feb 2026 22:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771FD478858
+	for <io-uring@vger.kernel.org>; Fri, 27 Feb 2026 22:35:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.230
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772231710; cv=none; b=jVgfwJKg2P7mNZOQYM1N+1bcSJA4PAq7AAE6GyJ2huRbfDFMqmTsX4lvfjmgHgRBps73v1FshDBUuy0vGxw499JZzhqnIZNwXmTGYlAgHKmDLNeUSQS269/KtWY0PCxxBNZBwpQgV/7r6CcOCcAFXx1z3t2RRi9hr4rIqRLa++g=
+	t=1772231711; cv=none; b=irnx6WZAYnTIFUeddzsaa3/J7BWm0dGlDgQBjezVYjnzVBVinOwUE/tFGjTUt1WBjn7UzfmYBhCBYs7DMlExvGgkdKNbUiZzyOmNpSYADmkq17K1ENc5t9xX8UdQTzEp46ZljGS0ojN9TNNWCGgg0Nd+IYIA4o3n+HfgPpNQur8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772231710; c=relaxed/simple;
-	bh=x/lgR7lfxoNQ8NgcIqgi/nGp9L0HR70DpaM2xD91Dbc=;
+	s=arc-20240116; t=1772231711; c=relaxed/simple;
+	bh=jitPk8dZO7gURW0hp4tgB7XQfWHqvV5p0qzZsigRrzI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ruoEMPR6YRwQFTc8q1W09UsDjPpEzPSvzUawKRwIcC9DAa+pYSMW9gGQ5albt7zVDUH2uAcCYWs3OXs49VaEj3BvM6ax3EPmVXwg0lMVt5Xj/+cGbmDv5W7rWTj2yFKTxFGmWGXNUnRkHwFEsBoDmn/7dfagElRLn4tEqhT7jhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=WlCXbMQo; arc=none smtp.client-ip=74.125.224.97
+	 MIME-Version; b=kSMxoe+17U2wrIQpifnJsbA0GpZ7FtmbO9r0A29kUAB2TmWnhPl430wHgbu1NM8Ah/QDxgmEr5WbkiLTW4glMpU+JIclYJJJ+2mgCRtN3NdD9r0Zkh97zn0JQ7pFRHkLp8SgsNc0wHFFRiFZNL9BUYySpipXgzpyO2rq7WBeBPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Wwd7h+dc; arc=none smtp.client-ip=209.85.221.230
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="WlCXbMQo"
-Received: by mail-yx1-f97.google.com with SMTP id 956f58d0204a3-6470d549e10so270472d50.3
-        for <io-uring@vger.kernel.org>; Fri, 27 Feb 2026 14:35:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Wwd7h+dc"
+Received: by mail-vk1-f230.google.com with SMTP id 71dfb90a1353d-5675c6dc64cso128603e0c.0
+        for <io-uring@vger.kernel.org>; Fri, 27 Feb 2026 14:35:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1772231708; x=1772836508; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=doNIdz9wMn9gx8zF7Ky2pC6GD/iifRgNWdZEMqpkv1c=;
-        b=WlCXbMQohgfDevE37gEl1e8EgNC0Z6xLKsdJVlurSnx9q07v1xhQ1vGJIoXwEHDw8u
-         mSyt/WEGenHvRUmx+Y/pgo39YFJIVlBX1NYOVDzbJzREH3ou9RGIk3UW167282iiDg2x
-         zCSf/6bzmz7+G7CJeGNhek4fUNAoVt/0dWwk0Z7798Z5IcZMppJv2C0cVGA20FXVNwMX
-         iU25QNuYl79/PrDr0HV0GDUCdIiyx3kcL+++fGndqxExKebAZSyv9IsiK+E5gB5E5YFM
-         uI3rWl1EJqUafrTJipmQmS2qKLDT6NBV1To+F350xkAlqpfFsASriT04RtR65Ert6TpC
-         svgA==
+        bh=FOsPp0sNuMqBvgksLLC7w2ENUHuNEhH517t3YeRJRmc=;
+        b=Wwd7h+dcR3SndiU9NtECqJXQH7Ii2M2V8rpOQdeLln8zwaKKyUfTK0wy6fDvstLCcg
+         lzjNaUglnhHRcCOpVYmeUqd7hc+DcLt/M88K1C4B6uexIsZ9izKApoyS65Yzz8Uv9d7l
+         Vs/bjQeNqtDOGd5gsCMbJMCZs5AwR1b9OPCdpqbpveOTQ4U20V/tNVF3kGwRUwOCSq6k
+         EQFsPOMNM89Hp8ypUWnQWHCKotm53BEY/qtNLh1Z9abAR3WKgGf85KOU6RLcnbsltLO4
+         K7y7RLUsVM9tEr/mL+4tvb++UgZ3klYEVUGhewFe5H5gYFKQ0UU74ZonHYUOJUCblZ+s
+         Fawg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1772231708; x=1772836508;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=doNIdz9wMn9gx8zF7Ky2pC6GD/iifRgNWdZEMqpkv1c=;
-        b=ECykJMi7fWx8K8WdKAysJR6wMTN1vIanLfhq8tVKvyajlt8rkQX1U1PNadt1BMLXgw
-         9727Uw+NVjcR9+R4dGuOd3jKtsxdGio/YHKraItu+FGW3Td3Uyk/huRifPmqHBM0C4bl
-         /76ymI91f3xiqx85U19ysk+UlC4P+uekNq9y7FXkRIvxM6cEfrs5QKqfYb3+cMiYa6pR
-         iSaXhcWfBDPlzXMg9JdNdVNEKNSWrsRaAM2VKwTbJi3tTPQwn7KKL9SbxlAjEJulvray
-         sBZT7mLZ53Ng6cXp/ovjKA3UHVmgfWO5LBmqqUz15MrB54EWf9GHhOedeytUwsnNa7nc
-         Exyg==
-X-Gm-Message-State: AOJu0YydWqV61rMRJa7xXCswoucoNJ5Ju+7kVsR5c7+Mbd/VXcpvmCH1
-	4DSerVCFJuNDWMWC/I1VgCMWL287HNZz5NOtxQxr0Tj1d7zLYoHuhHwZMUp1jQTqxCblDEI6My0
-	8UTKYGmQVUCBS2tlLtZLmWhFBz1lrGBIwkzBN
-X-Gm-Gg: ATEYQzznBnI8yL8Y3IwH/x9tPS3gEioDY6lKxI406LLte6fnMkpqvl/TFOb0+0/g47o
-	IKLx3iprla5r0oo/lxXzscFtKGPBx1wXglLj4VWuHkb5aghvUfO9v9cy9XjyZlej6yAAk+I31q7
-	2SLgTy8J4aDNXB12okE0VODfmiSiw32vo1aknk+jMIhPmwJTxixBO2qVsEvihOVhRXR2X2Qv6wp
-	uljTJXMVwhq1NbIqtLaR+sKk+sTqDJDfQMaXl/Y5yWEV4WDOJD+zRFrySueTZ/u1nN/DWFsXau5
-	SEdCM94rutFKDXTLDBJz0bJjTSyPToCsgClDrZ/9RjPaOJJar3insDkPlDpA0CpctyyndzY7+GQ
-	E950eC94hA4y376bz01RCl5QBEMFDN9VmfMcZf6ZtOYCJTVG8RYigRw==
-X-Received: by 2002:a05:690c:c4fa:b0:797:a57b:d200 with SMTP id 00721157ae682-798850f351bmr35803657b3.0.1772231707838;
-        Fri, 27 Feb 2026 14:35:07 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-79876ab7b69sm6884587b3.1.2026.02.27.14.35.07
+        bh=FOsPp0sNuMqBvgksLLC7w2ENUHuNEhH517t3YeRJRmc=;
+        b=P52bCZCk5k5fhaE8vHrSvJEqy2dCLIWFAOey6Oykgk6q9qgDp4SR16TO4PUA/F00Kb
+         iOUfgUi6wT0T3Y4is1mQp9BtYvJ6mRAlD/Pbacaf613GuSL7M+bg5FzHyMM/03GffHIm
+         7veZ3mlIz6QDlBvSMFgEn1bXQaVl/MRUEfmPGaTHdoL+g2c1jyOwdsGg8RHg+uXxrCh1
+         1p4OnPU9itSW0FIdZjXIPXDWGB5bMilDq+FOqWEF73YJx9efTfZFubrDC8J6v38pIudF
+         yj3YyIsZSRMEbB/gE1Dx50JVIMtrUlL0JnMCvqMGExhxaEXpP0lyhJI9fKoiAQ/Cz8nw
+         uPIg==
+X-Gm-Message-State: AOJu0Yw3xXlu9ah/OtfoTmGgNLW2Tx5S4IvxKdgbro95ha/52LhmHVX9
+	AMG1nCMPLWPhf45A4q/RCzfFwGSND0Y59f3D8uvpI3wnkmcm8gJ71jYd7Ke+XQfn2oA4OLfRHaI
+	g+4Towgx/1DDt7olrqVENXE5ITQwwVtqd8osGnTjVfPGgAf+N60+F
+X-Gm-Gg: ATEYQzzKXA/NDIHYeWZ4KsTYVXQCBpH3w3CKtAwdYXqGmf7icD9dKID+okIRxRIRlQJ
+	mUbtzZo4YwIIUtMHn3Rw/owZPmqnospO56Fbx/1vcE5FWz99bNGdaoxjdUt6Nl93pVsWUSSXQdq
+	7JxKpavSksb/xRA+FNtgjcyy2cwdAnjzxhJDgFhZ89pP01/ubXSJ2zVgj8WSXdNbMV0v7pWuStu
+	8gsQiUEoD47NW+eXzFUzDVHwh4m0urdgfFQaJ3ib3osGtdhPpgiETow02CBlyzbC4030Qw7i7JN
+	XB8FyBig8cGtKNLjW2jFIVDmcbUOdfUEThSkfRvk30I+3aTUlELX21DIQTj/6+ahpZf69iKxPFN
+	GL3qrAAAW76reh//AE11/i/U4YgOPkNIprmjckPw=
+X-Received: by 2002:a05:6122:6217:b0:566:3608:f8db with SMTP id 71dfb90a1353d-56aa0a96612mr1226798e0c.2.1772231708429;
+        Fri, 27 Feb 2026 14:35:08 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id 71dfb90a1353d-56a91e287fbsm859123e0c.3.2026.02.27.14.35.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 14:35:07 -0800 (PST)
+        Fri, 27 Feb 2026 14:35:08 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.29.101])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 255C9341DB3;
-	Fri, 27 Feb 2026 15:35:07 -0700 (MST)
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id B6F3C340B96;
+	Fri, 27 Feb 2026 15:35:06 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 213C2E420D8; Fri, 27 Feb 2026 15:35:07 -0700 (MST)
+	id B285EE420D8; Fri, 27 Feb 2026 15:35:06 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Christoph Hellwig <hch@lst.de>,
@@ -75,9 +75,9 @@ Cc: io-uring@vger.kernel.org,
 	Kanchan Joshi <joshi.k@samsung.com>,
 	Ming Lei <ming.lei@redhat.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v4 3/5] io_uring: count CQEs in io_iopoll_check()
-Date: Fri, 27 Feb 2026 15:35:01 -0700
-Message-ID: <20260227223504.1162421-4-csander@purestorage.com>
+Subject: [PATCH v4 1/5] io_uring: add REQ_F_IOPOLL
+Date: Fri, 27 Feb 2026 15:34:59 -0700
+Message-ID: <20260227223504.1162421-2-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20260227223504.1162421-1-csander@purestorage.com>
 References: <20260227223504.1162421-1-csander@purestorage.com>
@@ -89,100 +89,249 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A subsequent commit will allow uring_cmds that don't use iopoll on
-IORING_SETUP_IOPOLL io_urings. As a result, CQEs can be posted without
-setting the iopoll_completed flag for a request in iopoll_list or going
-through task work. For example, a UBLK_U_IO_FETCH_IO_CMDS command could
-call io_uring_mshot_cmd_post_cqe() to directly post a CQE. The
-io_iopoll_check() loop currently only counts completions posted in
-io_do_iopoll() when determining whether the min_events threshold has
-been met. It also exits early if there are any existing CQEs before
-polling, or if any CQEs are posted while running task work. CQEs posted
-via io_uring_mshot_cmd_post_cqe() or other mechanisms won't be counted
-against min_events.
+A subsequent commit will allow uring_cmds to commands that don't
+implement ->uring_cmd_iopoll() to be issued to IORING_SETUP_IOPOLL
+io_urings. This means the ctx's IORING_SETUP_IOPOLL flag isn't
+sufficient to determine whether a given request needs to be iopolled.
+Introduce a request flag REQ_F_IOPOLL set in ->issue() if a request
+needs to be iopolled to completion. Set the flag in io_rw_init_file()
+and io_uring_cmd() for requests issued to IORING_SETUP_IOPOLL ctxs. Use
+the request flag instead of IORING_SETUP_IOPOLL in places dealing with a
+specific request.
 
-Explicitly check the available CQEs in each io_iopoll_check() loop
-iteration to account for CQEs posted in any fashion.
+A future possibility would be to add an option to enable/disable iopoll
+in the io_uring SQE instead of determining it from IORING_SETUP_IOPOLL.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+Reviewed-by: Kanchan Joshi <joshi.k@samsung.com>
+Reviewed-by: Anuj Gupta <anuj20.g@samsung.com>
 ---
- io_uring/io_uring.c | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
+ include/linux/io_uring_types.h |  3 +++
+ io_uring/io_uring.c            |  9 ++++-----
+ io_uring/rw.c                  | 11 ++++++-----
+ io_uring/uring_cmd.c           |  5 +++--
+ 4 files changed, 16 insertions(+), 12 deletions(-)
 
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 3e4a82a6f817..d74b2a8c7305 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -541,10 +541,11 @@ enum {
+ 	REQ_F_BUFFERS_COMMIT_BIT,
+ 	REQ_F_BUF_NODE_BIT,
+ 	REQ_F_HAS_METADATA_BIT,
+ 	REQ_F_IMPORT_BUFFER_BIT,
+ 	REQ_F_SQE_COPIED_BIT,
++	REQ_F_IOPOLL_BIT,
+ 
+ 	/* not a real bit, just to check we're not overflowing the space */
+ 	__REQ_F_LAST_BIT,
+ };
+ 
+@@ -632,10 +633,12 @@ enum {
+ 	 * For SEND_ZC, whether to import buffers (i.e. the first issue).
+ 	 */
+ 	REQ_F_IMPORT_BUFFER	= IO_REQ_FLAG(REQ_F_IMPORT_BUFFER_BIT),
+ 	/* ->sqe_copy() has been called, if necessary */
+ 	REQ_F_SQE_COPIED	= IO_REQ_FLAG(REQ_F_SQE_COPIED_BIT),
++	/* request must be iopolled to completion (set in ->issue()) */
++	REQ_F_IOPOLL		= IO_REQ_FLAG(REQ_F_IOPOLL_BIT),
+ };
+ 
+ struct io_tw_req {
+ 	struct io_kiocb *req;
+ };
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 46f39831d27c..5f694052f501 100644
+index aa95703165f1..e7f392e962bd 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -1184,11 +1184,10 @@ __cold void io_iopoll_try_reap_events(struct io_ring_ctx *ctx)
- 		io_move_task_work_from_local(ctx);
+@@ -354,11 +354,10 @@ static struct io_kiocb *__io_prep_linked_timeout(struct io_kiocb *req)
  }
  
- static int io_iopoll_check(struct io_ring_ctx *ctx, unsigned int min_events)
+ static void io_prep_async_work(struct io_kiocb *req)
  {
--	unsigned int nr_events = 0;
- 	unsigned long check_cq;
+ 	const struct io_issue_def *def = &io_issue_defs[req->opcode];
+-	struct io_ring_ctx *ctx = req->ctx;
  
- 	min_events = min(min_events, ctx->cq_entries);
- 
- 	lockdep_assert_held(&ctx->uring_lock);
-@@ -1205,19 +1204,12 @@ static int io_iopoll_check(struct io_ring_ctx *ctx, unsigned int min_events)
- 		 * dropped CQE.
- 		 */
- 		if (check_cq & BIT(IO_CHECK_CQ_DROPPED_BIT))
- 			return -EBADR;
+ 	if (!(req->flags & REQ_F_CREDS)) {
+ 		req->flags |= REQ_F_CREDS;
+ 		req->creds = get_current_cred();
  	}
--	/*
--	 * Don't enter poll loop if we already have events pending.
--	 * If we do, we can potentially be spinning for commands that
--	 * already triggered a CQE (eg in error).
--	 */
--	if (io_cqring_events(ctx))
--		return 0;
+@@ -376,11 +375,11 @@ static void io_prep_async_work(struct io_kiocb *req)
  
--	do {
-+	while (io_cqring_events(ctx) < min_events) {
- 		int ret = 0;
+ 		/* don't serialize this request if the fs doesn't need it */
+ 		if (should_hash && (req->file->f_flags & O_DIRECT) &&
+ 		    (req->file->f_op->fop_flags & FOP_DIO_PARALLEL_WRITE))
+ 			should_hash = false;
+-		if (should_hash || (ctx->flags & IORING_SETUP_IOPOLL))
++		if (should_hash || (req->flags & REQ_F_IOPOLL))
+ 			io_wq_hash_work(&req->work, file_inode(req->file));
+ 	} else if (!req->file || !S_ISBLK(file_inode(req->file)->i_mode)) {
+ 		if (def->unbound_nonreg_file)
+ 			atomic_or(IO_WQ_WORK_UNBOUND, &req->work.flags);
+ 	}
+@@ -1417,11 +1416,11 @@ static int io_issue_sqe(struct io_kiocb *req, unsigned int issue_flags)
  
- 		/*
- 		 * If a submit got punted to a workqueue, we can have the
- 		 * application entering polling for a command before it gets
-@@ -1227,34 +1219,30 @@ static int io_iopoll_check(struct io_ring_ctx *ctx, unsigned int min_events)
- 		 * the poll to the issued list. Otherwise we can spin here
- 		 * forever, while the workqueue is stuck trying to acquire the
- 		 * very same mutex.
- 		 */
- 		if (list_empty(&ctx->iopoll_list) || io_task_work_pending(ctx)) {
--			u32 tail = ctx->cached_cq_tail;
--
- 			(void) io_run_local_work_locked(ctx, min_events);
+ 	if (ret == IOU_ISSUE_SKIP_COMPLETE) {
+ 		ret = 0;
  
- 			if (task_work_pending(current) || list_empty(&ctx->iopoll_list)) {
- 				mutex_unlock(&ctx->uring_lock);
- 				io_run_task_work();
- 				mutex_lock(&ctx->uring_lock);
- 			}
- 			/* some requests don't go through iopoll_list */
--			if (tail != ctx->cached_cq_tail || list_empty(&ctx->iopoll_list))
-+			if (list_empty(&ctx->iopoll_list))
- 				break;
- 		}
- 		ret = io_do_iopoll(ctx, !min_events);
- 		if (unlikely(ret < 0))
- 			return ret;
- 
- 		if (task_sigpending(current))
- 			return -EINTR;
- 		if (need_resched())
- 			break;
--
--		nr_events += ret;
--	} while (nr_events < min_events);
-+	}
- 
- 	return 0;
+ 		/* If the op doesn't have a file, we're not polling for it */
+-		if ((req->ctx->flags & IORING_SETUP_IOPOLL) && def->iopoll_queue)
++		if ((req->flags & REQ_F_IOPOLL) && def->iopoll_queue)
+ 			io_iopoll_req_issued(req, issue_flags);
+ 	}
+ 	return ret;
  }
  
- void io_req_task_complete(struct io_tw_req tw_req, io_tw_token_t tw)
+@@ -1433,11 +1432,11 @@ int io_poll_issue(struct io_kiocb *req, io_tw_token_t tw)
+ 	int ret;
+ 
+ 	io_tw_lock(req->ctx, tw);
+ 
+ 	WARN_ON_ONCE(!req->file);
+-	if (WARN_ON_ONCE(req->ctx->flags & IORING_SETUP_IOPOLL))
++	if (WARN_ON_ONCE(req->flags & REQ_F_IOPOLL))
+ 		return -EFAULT;
+ 
+ 	ret = __io_issue_sqe(req, issue_flags, &io_issue_defs[req->opcode]);
+ 
+ 	WARN_ON_ONCE(ret == IOU_ISSUE_SKIP_COMPLETE);
+@@ -1531,11 +1530,11 @@ void io_wq_submit_work(struct io_wq_work *work)
+ 		 * We can get EAGAIN for iopolled IO even though we're
+ 		 * forcing a sync submission from here, since we can't
+ 		 * wait for request slots on the block side.
+ 		 */
+ 		if (!needs_poll) {
+-			if (!(req->ctx->flags & IORING_SETUP_IOPOLL))
++			if (!(req->flags & REQ_F_IOPOLL))
+ 				break;
+ 			if (io_wq_worker_stopped())
+ 				break;
+ 			cond_resched();
+ 			continue;
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 1a5f262734e8..3bdb9914e673 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -502,11 +502,11 @@ static bool io_rw_should_reissue(struct io_kiocb *req)
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 
+ 	if (!S_ISBLK(mode) && !S_ISREG(mode))
+ 		return false;
+ 	if ((req->flags & REQ_F_NOWAIT) || (io_wq_current_is_worker() &&
+-	    !(ctx->flags & IORING_SETUP_IOPOLL)))
++	    !(req->flags & REQ_F_IOPOLL)))
+ 		return false;
+ 	/*
+ 	 * If ref is dying, we might be running poll reap from the exit work.
+ 	 * Don't attempt to reissue from that path, just let it fail with
+ 	 * -EAGAIN.
+@@ -638,11 +638,11 @@ static inline void io_rw_done(struct io_kiocb *req, ssize_t ret)
+ 			ret = -EINTR;
+ 			break;
+ 		}
+ 	}
+ 
+-	if (req->ctx->flags & IORING_SETUP_IOPOLL)
++	if (req->flags & REQ_F_IOPOLL)
+ 		io_complete_rw_iopoll(&rw->kiocb, ret);
+ 	else
+ 		io_complete_rw(&rw->kiocb, ret);
+ }
+ 
+@@ -652,11 +652,11 @@ static int kiocb_done(struct io_kiocb *req, ssize_t ret,
+ 	struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
+ 	unsigned final_ret = io_fixup_rw_res(req, ret);
+ 
+ 	if (ret >= 0 && req->flags & REQ_F_CUR_POS)
+ 		req->file->f_pos = rw->kiocb.ki_pos;
+-	if (ret >= 0 && !(req->ctx->flags & IORING_SETUP_IOPOLL)) {
++	if (ret >= 0 && !(req->flags & REQ_F_IOPOLL)) {
+ 		u32 cflags = 0;
+ 
+ 		__io_complete_rw_common(req, ret);
+ 		/*
+ 		 * Safe to call io_end from here as we're inline
+@@ -874,10 +874,11 @@ static int io_rw_init_file(struct io_kiocb *req, fmode_t mode, int rw_type)
+ 		req->flags |= REQ_F_NOWAIT;
+ 
+ 	if (ctx->flags & IORING_SETUP_IOPOLL) {
+ 		if (!(kiocb->ki_flags & IOCB_DIRECT) || !file->f_op->iopoll)
+ 			return -EOPNOTSUPP;
++		req->flags |= REQ_F_IOPOLL;
+ 		kiocb->private = NULL;
+ 		kiocb->ki_flags |= IOCB_HIPRI;
+ 		req->iopoll_completed = 0;
+ 		if (ctx->flags & IORING_SETUP_HYBRID_IOPOLL) {
+ 			/* make sure every req only blocks once*/
+@@ -961,11 +962,11 @@ static int __io_read(struct io_kiocb *req, struct io_br_sel *sel,
+ 	if (ret == -EAGAIN) {
+ 		/* If we can poll, just do that. */
+ 		if (io_file_can_poll(req))
+ 			return -EAGAIN;
+ 		/* IOPOLL retry should happen for io-wq threads */
+-		if (!force_nonblock && !(req->ctx->flags & IORING_SETUP_IOPOLL))
++		if (!force_nonblock && !(req->flags & REQ_F_IOPOLL))
+ 			goto done;
+ 		/* no retry on NONBLOCK nor RWF_NOWAIT */
+ 		if (req->flags & REQ_F_NOWAIT)
+ 			goto done;
+ 		ret = 0;
+@@ -1186,11 +1187,11 @@ int io_write(struct io_kiocb *req, unsigned int issue_flags)
+ 	/* no retry on NONBLOCK nor RWF_NOWAIT */
+ 	if (ret2 == -EAGAIN && (req->flags & REQ_F_NOWAIT))
+ 		goto done;
+ 	if (!force_nonblock || ret2 != -EAGAIN) {
+ 		/* IOPOLL retry should happen for io-wq threads */
+-		if (ret2 == -EAGAIN && (req->ctx->flags & IORING_SETUP_IOPOLL))
++		if (ret2 == -EAGAIN && (req->flags & REQ_F_IOPOLL))
+ 			goto ret_eagain;
+ 
+ 		if (ret2 != req->cqe.res && ret2 >= 0 && need_complete_io(req)) {
+ 			trace_io_uring_short_write(req->ctx, kiocb->ki_pos - ret2,
+ 						req->cqe.res, ret2);
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index ee7b49f47cb5..b651c63f6e20 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -108,11 +108,11 @@ void io_uring_cmd_mark_cancelable(struct io_uring_cmd *cmd,
+ 	 * Doing cancelations on IOPOLL requests are not supported. Both
+ 	 * because they can't get canceled in the block stack, but also
+ 	 * because iopoll completion data overlaps with the hash_node used
+ 	 * for tracking.
+ 	 */
+-	if (ctx->flags & IORING_SETUP_IOPOLL)
++	if (req->flags & REQ_F_IOPOLL)
+ 		return;
+ 
+ 	if (!(cmd->flags & IORING_URING_CMD_CANCELABLE)) {
+ 		cmd->flags |= IORING_URING_CMD_CANCELABLE;
+ 		io_ring_submit_lock(ctx, issue_flags);
+@@ -165,11 +165,11 @@ void __io_uring_cmd_done(struct io_uring_cmd *ioucmd, s32 ret, u64 res2,
+ 		if (req->ctx->flags & IORING_SETUP_CQE_MIXED)
+ 			req->cqe.flags |= IORING_CQE_F_32;
+ 		io_req_set_cqe32_extra(req, res2, 0);
+ 	}
+ 	io_req_uring_cleanup(req, issue_flags);
+-	if (req->ctx->flags & IORING_SETUP_IOPOLL) {
++	if (req->flags & REQ_F_IOPOLL) {
+ 		/* order with io_iopoll_req_issued() checking ->iopoll_complete */
+ 		smp_store_release(&req->iopoll_completed, 1);
+ 	} else if (issue_flags & IO_URING_F_COMPLETE_DEFER) {
+ 		if (WARN_ON_ONCE(issue_flags & IO_URING_F_UNLOCKED))
+ 			return;
+@@ -258,10 +258,11 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (io_is_compat(ctx))
+ 		issue_flags |= IO_URING_F_COMPAT;
+ 	if (ctx->flags & IORING_SETUP_IOPOLL) {
+ 		if (!file->f_op->uring_cmd_iopoll)
+ 			return -EOPNOTSUPP;
++		req->flags |= REQ_F_IOPOLL;
+ 		issue_flags |= IO_URING_F_IOPOLL;
+ 		req->iopoll_completed = 0;
+ 		if (ctx->flags & IORING_SETUP_HYBRID_IOPOLL) {
+ 			/* make sure every req only blocks once */
+ 			req->flags &= ~REQ_F_IOPOLL_STATE;
 -- 
 2.45.2
 
