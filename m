@@ -1,37 +1,39 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98102877DE;
-	Sun,  1 Mar 2026 01:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA5728851C;
+	Sun,  1 Mar 2026 01:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772328489; cv=none; b=T8SPdbzBWgQDJ6AWXVcCq2cwrWCOy28J0hT/hAMI35Ga8pSet8RLPa25YaGCjHo7JXAmGsMet5taE0oTDJj+Y+bxbimUIj4Y3JtKBE6p8JTBYkA/F+7C74eCdo7P3wCgIiZcjxZPoyQ+I5zcx4/v1M7zAMQI+ZHNRvXYzn9y8z0=
+	t=1772328556; cv=none; b=JFvY6LoHrknwb1SVrJx1fEQqWc/OWlpW2NZIpV0gzSPksUs8HoJ/mdbA6VFfRECiMr72yoQXylGz8hCIahVzEEtJi/Mk7wOWIqVP4Qvnf05fXbrc4NNkpJuHDWbAvOmjRWCOYb7TK1G+I2zU6BTWd21fI8Y2RYqFYFKJR9fswWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772328489; c=relaxed/simple;
-	bh=2w0HPfexbY4dq5Qg3k8bdALRpWhha4BW8mi1TpCOj1g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n3fkAUw1Nezh+23sVXvk0HDLGNx+O0CtkaDxKa578CbLFagUjyT27wBheipmBrXh0tUNxv1SKLoZs6gNncwqVjkB/zmdsuNaYEjghOXkeEWw54PsDzq2y1QJ700jpvBcYsoFEkH5ZI0R4FBSC/AFSee+BBJ5a5xGsayEnC4PMgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YcFAGKI/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772328556; c=relaxed/simple;
+	bh=d8LEJhUrXE7nx3KVR/NfjI60j0q3smueBCCi8kTMZXk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=O+s9FjVGZyGpAbRnRNVnF/wtdSFdjNEiKJmwok47qizAkdjv6aPVqcQlPHCbXFo7TEyhiMuEwfkEHTnoTS50334nhUjSbycRsWmexNAiyfMEr2ZOCzB4WUjKQEPUw4kYwAN7xQieAZlpYAhZ5K4mQ81FjIlxstc7KUd91gH0mvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qrtYTaTZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YcFAGKI/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25907C19421;
-	Sun,  1 Mar 2026 01:28:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qrtYTaTZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C42D1C19421;
+	Sun,  1 Mar 2026 01:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772328489;
-	bh=2w0HPfexbY4dq5Qg3k8bdALRpWhha4BW8mi1TpCOj1g=;
+	s=k20201202; t=1772328556;
+	bh=d8LEJhUrXE7nx3KVR/NfjI60j0q3smueBCCi8kTMZXk=;
 	h=From:To:Cc:Subject:Date:From;
-	b=YcFAGKI//IMAa+Pt7CI5Jz5KAwshnCjoj5H8F6ihG69VAW5q8Tze+HikWXIil/zgj
-	 E8vzu29oOf98IbB9t9PT65zYMwNby6ERcLoTXwJFoySbFRHnNAbcP1df/4Sz96kIh7
-	 HVlCI9kWYTF6mh9CHFkmOenko1GfO9pgOEJaC6UQkxT6iBPi4fdCuDi8ZaNAcjGz8h
-	 2sjAELKwxNexnlJkn3MkPUB0RMyTFUHtsT8o0BbdiOZ2uu6Pce8fc7xjn4y7fFFgjl
-	 4Ft6SwIv8IbndkVRt079E5lQRTu8aJkkD/W6ZbH+qPvMRqD2yk0cRWIw2/pjG4mYPj
-	 kuysI3R+bWytA==
+	b=qrtYTaTZ0Bl6ZXxI+LlO8y6OgM3xgWWucuGjQfjuZ+qYXNAE0PHN468wLUI+8P0Nu
+	 J+RoNEJxbyDEtzqV7+eSNTM7nxZWfBhcjBLjwp/P6J0MG5wTR3fYANb01WDkCK64gu
+	 wP08OK56rWweNPXRg9P9/DPb/0aBz8I03sPRaCrGvANEdQAKqBLK0V0R5YTX1PR1Zg
+	 ESDCHwUzrbfRCOZZxGa2UoMh9wBkuwmBcqRsz//hvzjhlWK46apuTjYK65Mzj64oOw
+	 Y+7N++EWOKrLuja4XeevS5mwBnwnV/F9E74SaTbZHoXXxITrS1ubEWtRyIOgjJnJ3B
+	 JODOEic3Swr3g==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	axboe@kernel.dk
-Cc: io-uring@vger.kernel.org
-Subject: FAILED: Patch "io_uring/filetable: clamp alloc_hint to the configured alloc range" failed to apply to 6.12-stable tree
-Date: Sat, 28 Feb 2026 20:28:07 -0500
-Message-ID: <20260301012807.1685821-1-sashal@kernel.org>
+	ast@fiberby.net
+Cc: Gabriel Krisman Bertazi <krisman@suse.de>,
+	Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org
+Subject: FAILED: Patch "io_uring/cmd_net: fix too strict requirement on ioctl" failed to apply to 6.12-stable tree
+Date: Sat, 28 Feb 2026 20:29:02 -0500
+Message-ID: <20260301012914.1686902-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
@@ -41,6 +43,7 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-Patchwork-Hint: ignore
 X-stable: review
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 The patch below does not apply to the 6.12-stable tree.
@@ -53,47 +56,64 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From a6bded921ed35f21b3f6bd8e629bf488499ca442 Mon Sep 17 00:00:00 2001
-From: Jens Axboe <axboe@kernel.dk>
-Date: Wed, 11 Feb 2026 15:12:03 -0700
-Subject: [PATCH] io_uring/filetable: clamp alloc_hint to the configured alloc
- range
+From 600b665b903733bd60334e86031b157cc823ee55 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>
+Date: Mon, 16 Feb 2026 10:27:18 +0000
+Subject: [PATCH] io_uring/cmd_net: fix too strict requirement on ioctl
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Explicit fixed file install/remove operations on slots outside the
-configured alloc range can corrupt alloc_hint via io_file_bitmap_set()
-and io_file_bitmap_clear(), which unconditionally update alloc_hint to
-the bit position. This causes subsequent auto-allocations to fall
-outside the configured range.
+Attempting SOCKET_URING_OP_SETSOCKOPT on an AF_NETLINK socket resulted
+in an -EOPNOTSUPP, as AF_NETLINK doesn't have an ioctl in its struct
+proto, but only in struct proto_ops.
 
-For example, if the alloc range is [10, 20) and a file is removed at
-slot 2, alloc_hint gets set to 2. The next auto-alloc then starts
-searching from slot 2, potentially returning a slot below the range.
+Prior to the blamed commit, io_uring_cmd_sock() only had two cmd_op
+operations, both requiring ioctl, thus the check was warranted.
 
-Fix this by clamping alloc_hint to [file_alloc_start, file_alloc_end)
-at the top of io_file_bitmap_get() before starting the search.
+Since then, 4 new cmd_op operations have been added, none of which
+depend on ioctl. This patch moves the ioctl check, so it only applies
+to the original operations.
+
+AFAICT, the ioctl requirement was unintentional, and it wasn't
+visible in the blamed patch within 3 lines of context.
 
 Cc: stable@vger.kernel.org
-Fixes: 6e73dffbb93c ("io_uring: let to set a range for file slot allocation")
+Fixes: a5d2f99aff6b ("io_uring/cmd: Introduce SOCKET_URING_OP_GETSOCKOPT")
+Signed-off-by: Asbjørn Sloth Tønnesen <ast@fiberby.net>
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/filetable.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ io_uring/cmd_net.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/io_uring/filetable.c b/io_uring/filetable.c
-index 794ef95df293c..cb1838c9fc377 100644
---- a/io_uring/filetable.c
-+++ b/io_uring/filetable.c
-@@ -22,6 +22,10 @@ static int io_file_bitmap_get(struct io_ring_ctx *ctx)
- 	if (!table->bitmap)
- 		return -ENFILE;
+diff --git a/io_uring/cmd_net.c b/io_uring/cmd_net.c
+index cb2775936fb84..57ddaf8746117 100644
+--- a/io_uring/cmd_net.c
++++ b/io_uring/cmd_net.c
+@@ -160,16 +160,19 @@ int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
+ 	struct proto *prot = READ_ONCE(sk->sk_prot);
+ 	int ret, arg = 0;
  
-+	if (table->alloc_hint < ctx->file_alloc_start ||
-+	    table->alloc_hint >= ctx->file_alloc_end)
-+		table->alloc_hint = ctx->file_alloc_start;
+-	if (!prot || !prot->ioctl)
+-		return -EOPNOTSUPP;
+-
+ 	switch (cmd->cmd_op) {
+ 	case SOCKET_URING_OP_SIOCINQ:
++		if (!prot || !prot->ioctl)
++			return -EOPNOTSUPP;
 +
- 	do {
- 		ret = find_next_zero_bit(table->bitmap, nr, table->alloc_hint);
- 		if (ret != nr)
+ 		ret = prot->ioctl(sk, SIOCINQ, &arg);
+ 		if (ret)
+ 			return ret;
+ 		return arg;
+ 	case SOCKET_URING_OP_SIOCOUTQ:
++		if (!prot || !prot->ioctl)
++			return -EOPNOTSUPP;
++
+ 		ret = prot->ioctl(sk, SIOCOUTQ, &arg);
+ 		if (ret)
+ 			return ret;
 -- 
 2.51.0
 
