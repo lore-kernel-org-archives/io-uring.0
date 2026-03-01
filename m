@@ -1,39 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C183FC8F0;
-	Sun,  1 Mar 2026 01:17:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6214813B7AE;
+	Sun,  1 Mar 2026 01:24:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772327868; cv=none; b=Vt7xgyjyrEn3ut20nEUtkBBFBmrBHlpsMzp8fLbmeaCupgRgN1BI0svgXriTIvPWM9u9O0GkvWBkbwOGYSdjJTXYjvL0iuAuvjqvk2FGZuw8MccXINFXA0E23XoHYpXYXl41LFGWuzDS9Bqp4rx82BG5Wd+Rwn9MnX0nGV6ZmWM=
+	t=1772328251; cv=none; b=PDaTZy43zBN9KQzTi/Lhc1Llc7RW6h7padAq3lRxVTk9uXBz0gld/k1fXRohlCLVD77U68HNBUMsBOmgzdTITkGiJ/Lq4+/H21LY8hDoEh46TLxC6Gacl5sQ8OJQv1sACd3bvf0p2ZxW+JJArTOOYjrta7/gzvP0ms5Z4/XSy7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772327868; c=relaxed/simple;
-	bh=KUiwBsCvnldM4Mf66cLudWCkM/yFgxTv4Tb3P9AfQDA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ayw29fFN9xVMEcys4tky4Ez0HwIiC+bcp60kOCWtVddaB7LgGknnZr8aMmvAJN+G66RGpKHkK3O15OHDdpU4shESEwxwBQh9fY2II/OvulF9vySKDNdm/CNEDcktrwLkAa6Ave5iV0MVrrbabjC3ye34OznF3pSUdXoNdV8kTf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FMzVsyew; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772328251; c=relaxed/simple;
+	bh=nBHyryKGDGsZacfYeyhHAa5VbbwgdXI6JjnY7WHB3y4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p7ygRy3heUpxkO30BsQb2YbxVLFRY2q2gFBTapeqmQ+1UH+hwdd6HtPzOuacpythwDpA0VfTOL2NdfQThiVVR6RpwRHtKGuwOlxGVTks7igQFhxDXVK8CYK1UFgVtPLUjpjuRHvXJCpzENd5x07SW68rmdLirPdxipGCzGO7/sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iURT7AFk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FMzVsyew"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2AC7C19424;
-	Sun,  1 Mar 2026 01:17:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iURT7AFk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3C49C19421;
+	Sun,  1 Mar 2026 01:24:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772327868;
-	bh=KUiwBsCvnldM4Mf66cLudWCkM/yFgxTv4Tb3P9AfQDA=;
+	s=k20201202; t=1772328251;
+	bh=nBHyryKGDGsZacfYeyhHAa5VbbwgdXI6JjnY7WHB3y4=;
 	h=From:To:Cc:Subject:Date:From;
-	b=FMzVsyewIzNaAKi9Apmj8Akvet6fxBDGfhKfVzfmRB89WAvskXBWJzQ5ggQRDWYTX
-	 0i78UGoFETVTYFVELjI2G3Ph5tRww+o8OfzOhGrCeXz+dmQijkmYG8QRkKBBieGYM2
-	 jKwaJkM46damdolJmjdI77GCCaEOYR4WrHwnRYKa4BmLxZ9Dotap8k/eClWHYZob0B
-	 yBLHmD8/8LgQgN0+b0u1ha3VFE+kdDCKG9a+p+mTWZnfni3Rqg/TZm37Bemzlbv1TT
-	 7V9IrQ0383me4vcjtj00y30jHllqaqiuQ5A3P/S4oGVSSF7LEyDePB0wR+dqYQZKc9
-	 C7uRs4cDz+zaA==
+	b=iURT7AFkxYsImzDdMnjN1O4hKMKYV7GOs2WdeakO/cjEw63gNJUwthJQ0k95FPvjm
+	 HvPSWw7J5eO70xjumVw+yBqWokzlPyAbk5ykJ5egfkFk+/boKYLyz1/ubzZqBAA1RL
+	 OqeUfrbej5yec9Djx8kd16VITfUh8/JGa5PyJ5P3hq5nds5De5FMfaTz9oHoPFg7L6
+	 DA9QOiSUdsZR+syFb1FBzPkJ4i6gS512P62gHY6hV3brdbK1QwbRC06slDZM/YF3OJ
+	 lJtyyeYqCEZXM0gYa8JR0WxxhOVGRk04/h1n5/XbFT8LXGG/0rEjD3rNlcA/Kyd9Cp
+	 QHpPDKEpSQ9bw==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	asml.silence@gmail.com
-Cc: Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: FAILED: Patch "io_uring/zcrx: fix post open error handling" failed to apply to 6.18-stable tree
-Date: Sat, 28 Feb 2026 20:17:46 -0500
-Message-ID: <20260301011746.1671806-1-sashal@kernel.org>
+	axboe@kernel.dk
+Cc: io-uring@vger.kernel.org
+Subject: FAILED: Patch "io_uring/net: don't continue send bundle if poll was required for retry" failed to apply to 6.12-stable tree
+Date: Sat, 28 Feb 2026 20:24:09 -0500
+Message-ID: <20260301012409.1680931-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
@@ -45,7 +43,7 @@ X-Patchwork-Hint: ignore
 X-stable: review
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the 6.18-stable tree.
+The patch below does not apply to the 6.12-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
@@ -55,62 +53,48 @@ Sasha
 
 ------------------ original commit in Linus's tree ------------------
 
-From 5d540e4508950c674d6feef1d95463d039bbf4f5 Mon Sep 17 00:00:00 2001
-From: Pavel Begunkov <asml.silence@gmail.com>
-Date: Sat, 14 Feb 2026 22:20:47 +0000
-Subject: [PATCH] io_uring/zcrx: fix post open error handling
+From 806ae939c41e5da1d94a1e2b31f5702e96b6c3e3 Mon Sep 17 00:00:00 2001
+From: Jens Axboe <axboe@kernel.dk>
+Date: Tue, 27 Jan 2026 21:01:41 -0700
+Subject: [PATCH] io_uring/net: don't continue send bundle if poll was required
+ for retry
 
-Closing a queue doesn't guarantee that all associated page pools are
-terminated right away, let the refcounting do the work instead of
-releasing the zcrx ctx directly.
+If a send bundle has picked a bunch of buffers, then it needs to send
+all of those to be complete. This may require poll arming, if the send
+buffer ends up being full. Once a send bundle has been poll armed, no
+further bundles should be attempted.
+
+This allows a current bundle to complete even though it needs to go
+through polling to do so, but it will not allow another bundle to be
+started once that has happened. Ideally we would abort a bundle if it
+was only partially sent, but as some parts of it already went out on the
+wire, this obviously isn't feasible. Not continuing more bundle attempts
+post encountering a full socket buffer is the second best thing.
 
 Cc: stable@vger.kernel.org
-Fixes: e0793de24a9f6 ("io_uring/zcrx: set pp memory provider for an rx queue")
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Fixes: a05d1f625c7a ("io_uring/net: support bundles for send")
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/zcrx.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ io_uring/net.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index 006e1bfefa5f2..b24d1da2e1ca4 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -515,9 +515,6 @@ static void io_close_queue(struct io_zcrx_ifq *ifq)
- 		.mp_priv = ifq,
- 	};
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 519ea055b7619..d9a4b83804a25 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -515,7 +515,11 @@ static inline bool io_send_finish(struct io_kiocb *req,
  
--	if (ifq->if_rxq == -1)
--		return;
--
- 	scoped_guard(mutex, &ifq->pp_lock) {
- 		netdev = ifq->netdev;
- 		netdev_tracker = ifq->netdev_tracker;
-@@ -525,7 +522,8 @@ static void io_close_queue(struct io_zcrx_ifq *ifq)
- 	}
+ 	cflags = io_put_kbufs(req, sel->val, sel->buf_list, io_bundle_nbufs(kmsg, sel->val));
  
- 	if (netdev) {
--		net_mp_close_rxq(netdev, ifq->if_rxq, &p);
-+		if (ifq->if_rxq != -1)
-+			net_mp_close_rxq(netdev, ifq->if_rxq, &p);
- 		netdev_put(netdev, &netdev_tracker);
- 	}
- 	ifq->if_rxq = -1;
-@@ -833,13 +831,12 @@ int io_register_zcrx_ifq(struct io_ring_ctx *ctx,
- 	}
- 	return 0;
- netdev_put_unlock:
--	netdev_put(ifq->netdev, &ifq->netdev_tracker);
- 	netdev_unlock(ifq->netdev);
- err:
- 	scoped_guard(mutex, &ctx->mmap_lock)
- 		xa_erase(&ctx->zcrx_ctxs, id);
- ifq_free:
--	io_zcrx_ifq_free(ifq);
-+	zcrx_unregister(ifq);
- 	return ret;
- }
+-	if (bundle_finished || req->flags & REQ_F_BL_EMPTY)
++	/*
++	 * Don't start new bundles if the buffer list is empty, or if the
++	 * current operation needed to go through polling to complete.
++	 */
++	if (bundle_finished || req->flags & (REQ_F_BL_EMPTY | REQ_F_POLLED))
+ 		goto finish;
  
+ 	/*
 -- 
 2.51.0
 
