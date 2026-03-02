@@ -1,142 +1,108 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D07421F00
-	for <io-uring@vger.kernel.org>; Mon,  2 Mar 2026 15:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DFC364038
+	for <io-uring@vger.kernel.org>; Mon,  2 Mar 2026 16:28:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772466878; cv=none; b=nmw4Jjl0qrAhUE3fwyOAdJ0c/Wrea+5Fe+3oSPqEnOOCwxed6/k2atl7g324t7x7tuhrO8OEjNQ3EKz32KCix4ixcKRAfkaj/Z9Y+evSjZFL9asj0VKhPHq8Yi/docJspetEp+JUv1GM5ux1HRspPPSNVDDkWJs+p6G04SmsN+A=
+	t=1772468929; cv=none; b=DgUluxk4aiAeqVNdhSNIyQCw0WfNhOBTVnJKrdoCjqTT/Huq18ASd0DrI9y/68qJp4RqW44D2sOl8df9HKpKy14VhuIKao8wrZ3pQFImMQJo04r/mW6Dlz36f1yEu3a05sx1g1uOjUCQJHtNNNT4TBtEGYlr11TahKNhVQjm97I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772466878; c=relaxed/simple;
-	bh=dDpcbfDi0yi7fEFTxd12xIV5BQ3X3OV+mFeaeykwVCM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=loAL/vuuJ6NMgpLJ4jfxXhi0Vq2F+h9GAwcOPUvr3INVEOXrALLxMpDZFZ0I1UEq7zPndxR+fLcTZiD/iNI2UBmVMtdNWamaAk+jZm5ZMzVK7uEVbehRGHyV8THuQnOurYo3nrsFx6G/D9FYBUvhaboxo8T0WWzw/N2tM7qskAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=zHZDllC4; arc=none smtp.client-ip=74.125.82.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	s=arc-20240116; t=1772468929; c=relaxed/simple;
+	bh=H/3h5AXOS5WQAuvECHje4+hBpxw2lroEnJ9rk6aavqw=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LQFTRdpzYDnBSTy7Z5WVPcXdZSSnyShmTgLtjhVJP1REnQDHgh089s7LcFYpV1yM0ERuTf4FRgAgNvsWmgPHtEAI7EgFSLERKqYQg6Q+XyLEhCvV+yJ7N0yudqwT5U1t3jkD+kO2CPVkDclGab6NSVSu7sSjaPPmOrQghiyQONs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=YsGA+TLm; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="zHZDllC4"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2be06a2be90so2286166eec.0
-        for <io-uring@vger.kernel.org>; Mon, 02 Mar 2026 07:54:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="YsGA+TLm"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-899aede64e8so43953566d6.1
+        for <io-uring@vger.kernel.org>; Mon, 02 Mar 2026 08:28:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1772466870; x=1773071670; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vYKX84PLbw1ik011AtUFY/JoiQVlKtt+8d30XwsrbyA=;
-        b=zHZDllC4F8vhmIye6X0hKfi9I2znFzlhAdHfhUzK/9PJ1wSMBFVNUcRV2K/Q0E6FbO
-         dGSLu/ViHr6mZbr+JxW8NvqoUglssyBfP4LnrZ1BmfutjquEOmST1/7G3ZETOXSA3Z0y
-         A4Jidrl15Ex/tcF6Vn2k/gjER8+zmvFhkeNhvoIwCZTIa5GZc16Qbo7QHNFDudOqu7CE
-         0ZfH7KVe56T242mitHDwKgrCsLFynQRTJ0MY5TI7EIBEEYNUhAsh6l/UPSPfsESPvRzM
-         kdXFOVjBgWDRvAm1jA4hweX9x96FI8oH3LchAe6U58mnQkFtCsbUjkHTdL3Iee3u5Blt
-         5C9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772466870; x=1773071670;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1772468927; x=1773073727; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vYKX84PLbw1ik011AtUFY/JoiQVlKtt+8d30XwsrbyA=;
-        b=AbaHJiv6SbCewRgbsyEgrk502+nj989pHEXPVmK/lAnfDZS/gbK5VWyjQGa2+m8vBk
-         dGle3MgIcevhmMBHQFoHoXLVMW12qFLqkE/djrs7qMDHB/geEruWQC2bOxePn8S2AvdL
-         Lg3l+wOa4fhQcE39qJ9mX/JNZQGCQOo2oMWeVMDWeco2VEj7vfa4ZORAywuFdJMyrQsD
-         JPC9dPHj7mCSgWNACcUj67zzQrjgYK1RhoZKgaMCF3s7YTTCw0jiuMR4qenowHHKt44q
-         r2OLrXv/gWmdPUHCvufQT/P3roE1gg2qGqP0nsUc3Jf7s9G2xS2kpC2D2nwtU+pjEA/T
-         7t1g==
-X-Forwarded-Encrypted: i=1; AJvYcCVySkMfyivT4kf6roXIAWjgCNXZILKgzOMNJWPxVWovKPmtDroQbD8LWnfMfiZjSrw8HYDH7l5fzA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyQF+7QrqsqkpWtezYoQlc/S/xkFY4agUXnhSwM17dG6WQU4+j4
-	wSsmrtdxPTukvtIZuH9VNNQUrXr/Bivc30bl4ZkHmMmeWCtAszWTUSkFGZulbR3bXtI=
-X-Gm-Gg: ATEYQzz22GzyTmslhS4amHcr6ZQFP24A/B0pAzoEowJ0soaKhgnIo1DRjob/tZdnydW
-	jL1EwmEw/bvFurRamfRJLW4GmMoJEWfQWs7p62KpB0AYny9k+idfQ/pT/woEM5BImcuvUq3dUSL
-	eB9y920CXl2b8pZ2mr6GaHWuonj+q2dUbnjuL2qermaqma0pYuKcdJiPnHVjDzOx95aG38jn1y+
-	MnRwDS8QWpROA2bR/aOMAnuECTK0C3uEtBCumtsF92yqWJ6rhWY8iVSNDGHC0qViOV+xL9pQQeZ
-	OCPuTxPTo8S9HOvUGD20yue3lBsbnTov8o7CDZEDhk8zybVDeaZGLWrkKu01UhFRAkTErolgiBK
-	ztOhNQ8Btx3xkzTCUvA3ZbnO58IDAbhjAsa0XPcQI5H+DHxaCHexxdCnIiPJ3zDIG4eO1bufGtH
-	ELvJxpwYBXBTvyImi//gOx+Y2Cf8BSs2evC+DQkNxcPKmNIqwuJACLcb1tN1FK6a20eVibL20QY
-	X47ATMpJfOBkPJStN7EKWuazkMCQUPz
-X-Received: by 2002:a05:7301:fa0b:b0:2be:617:2ddf with SMTP id 5a478bee46e88-2be06173268mr2046986eec.16.1772466870425;
-        Mon, 02 Mar 2026 07:54:30 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::badb])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1a45a58sm10660215eec.0.2026.03.02.07.54.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Mar 2026 07:54:30 -0800 (PST)
-Message-ID: <90cfcf06-e987-4817-acba-2037a436a744@davidwei.uk>
-Date: Mon, 2 Mar 2026 07:54:28 -0800
+        bh=Lof3znx9pC1SeCY3Z1eFlMRuYmH1KqQXA50mK4U9hCQ=;
+        b=YsGA+TLmrjCyL4guZ0HKN1QXepRuo+PH10ieExd9aXqcleioW236ylFdD19v3fuHjc
+         x7TRWdnm90vN7za/KlT6O7NZ8IhpEm4pnAjPgtpBR4R9ALsp6tRcHcV+oF0VcGxtuNCA
+         bs3iP7gNegwqmwO0TTbddEOFdpg6dZ771JkzAx3UQs5p2RvLL5+Tu0XE+ogMx5k864sK
+         7TioWh8i9q0oSe1X1ry1JpSwS5p0EXFmAdzOCFYyeeXiC+0/w2Q3VjK13F/ZhEtYJWRs
+         B+HVmP7GxLyKJUYWbRfFPH0ELOXkJ0hRTdKtoBJ3oXa1s6WV2mlhVyfB9IoSkrCiJOYH
+         mkQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772468927; x=1773073727;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Lof3znx9pC1SeCY3Z1eFlMRuYmH1KqQXA50mK4U9hCQ=;
+        b=TnxpzzyTzl65pSIoT0OzjDVZGof+O9cd/u+jatFf+VVVUA+F8RY114XH6Q8Q3glHeg
+         RF15dZpSPj4k38dOtiNO28MtUhUMV5zObxUxP8qSiOgkKlz8zV7GQJqST29/e6e6IY5d
+         kDzGcERWkc01ypalRqpQKfJcOaVqRtkMguaGouXohgLzKdzPa0D3wrJx6BE+gOjmwbEM
+         OiYSDrS1iPfyuc530SqOxqraJKTdQ2z4A9AUzkRHbLzQ/3HA8Y8EYuxRw0cwYunaqz9n
+         yknyMVU9o8HQ8VaG4aU08kiSdq9T4daXf+uOQ4OsQNbswynulEWz66WzY6T4IHB1psvj
+         seXA==
+X-Gm-Message-State: AOJu0YxOCrOnWyJaWELnFxtMGkFrmSE8mdH0oZlVXZ4MSRBllNjjFusJ
+	rmgCehZjyiEBpLnNlWrko38bU1iUBS7LChbQpzgELPNjQ/I3q6XpeSW2e6Nd8S+mV9dnZHQRiTg
+	GXAEcVVk=
+X-Gm-Gg: ATEYQzwGytxVN+pgp/LKjtspsEF/9LuGzqo7rwoautA7eer9VA8FYziKaz/uKen0le2
+	5gNpJyczsspETxOTYeukYd0O7aZp5Nmh7KfDuVMQRgD5YvV1qGW20xtwaXm2t/Vpy+Znv5ju8uc
+	/s8le8G6lqams2VWm5jCWwHNrs21Y3Fjp+GirpJbqNg9B4TJsEZhkVHg3VKGvwWKGpbSpne393i
+	FsASTy7ws52ktYVLN5G98XMpZO1NU2obAOBqnoOVmfUTemHsd7SS2cingYGYP+Dhzry+97elATP
+	hbpYnTniU3Ovc8nK7yUntOV2c1v6F3w5RgC07AvNNHwsBH6w6G6ff90U1M9CqA4tJtAnnRGlQsP
+	U7O3qaI7y3TL7VgBbnF1eybKTD9Hn0QVu9wPvtZm91aaNXk0+c+inyJ3WmbStv61l71RThhEHNC
+	f1ICv22lZU8KZVJj0MSgMjTOmlpMEaRG4guCxeqaqTe2sPlnvF4Fme7f8dPqmzaqhFNYni/ek6Q
+	jo=
+X-Received: by 2002:a05:6214:cc1:b0:899:ac8c:dacd with SMTP id 6a1803df08f44-899d2023ac1mr153642376d6.26.1772468927245;
+        Mon, 02 Mar 2026 08:28:47 -0800 (PST)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89a04849cb3sm9035126d6.6.2026.03.02.08.28.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 08:28:46 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <cover.1772456786.git.asml.silence@gmail.com>
+References: <cover.1772456786.git.asml.silence@gmail.com>
+Subject: Re: [PATCH v3 0/4] timeout immediate arg
+Message-Id: <177246892619.112159.9148726991074312317.b4-ty@kernel.dk>
+Date: Mon, 02 Mar 2026 09:28:46 -0700
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/3] selftests: drv-net: iou-zcrx: rework large
- chunks test to use common setup
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, jdamato@fastly.com,
- asml.silence@gmail.com, io-uring@vger.kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260227171305.2848240-1-kuba@kernel.org>
- <20260227171305.2848240-3-kuba@kernel.org>
-Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20260227171305.2848240-3-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.3
 
-On 2026-02-27 09:13, Jakub Kicinski wrote:
-> Commit a32bb32d0193 ("selftests: iou-zcrx: test large chunk sizes")
-> and commit de7c600e2d5b ("selftests/net: parametrise iou-zcrx.py with
-> ksft_variants") landed at similar time. The large chunks test was
-> actually not included in the list of tests, so it never run.
-> We haven't noticed that it uses the old-style helpers
-> (_get_combined_channels, _get_current_settings, _set_flow_rule)
-> that were removed by the other commit.
-> 
-> Rework test_zcrx_large_chunks to reuse the single() setup function
-> and add it to the ksft_run cases list so it actually gets executed.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: shuah@kernel.org
-> CC: dw@davidwei.uk
-> CC: jdamato@fastly.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
->   .../selftests/drivers/net/hw/iou-zcrx.py      | 31 ++++---------------
->   1 file changed, 6 insertions(+), 25 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> index c27c2064701d..1649c23e05e2 100755
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-> @@ -135,36 +135,16 @@ SKIP_CODE = 42
->   
->       cfg.require_ipver('6')
->   
-> -    combined_chans = _get_combined_channels(cfg)
-> -    if combined_chans < 2:
-> -        raise KsftSkipEx('at least 2 combined channels required')
-> -    (rx_ring, hds_thresh) = _get_current_settings(cfg)
-> -    port = rand_port()
-> -
-> -    ethtool(f"-G {cfg.ifname} tcp-data-split on")
-> -    defer(ethtool, f"-G {cfg.ifname} tcp-data-split auto")
-> -
-> -    ethtool(f"-G {cfg.ifname} hds-thresh 0")
-> -    defer(ethtool, f"-G {cfg.ifname} hds-thresh {hds_thresh}")
-> -
-> -    ethtool(f"-G {cfg.ifname} rx 64")
-> -    defer(ethtool, f"-G {cfg.ifname} rx {rx_ring}")
-> -
-> -    ethtool(f"-X {cfg.ifname} equal {combined_chans - 1}")
-> -    defer(ethtool, f"-X {cfg.ifname} default")
-> -
-> -    flow_rule_id = _set_flow_rule(cfg, port, combined_chans - 1)
-> -    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
-> -
-> -    rx_cmd = f"{cfg.bin_local} -s -p {port} -i {cfg.ifname} -q {combined_chans - 1} -x 2"
-> -    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {port} -l 12840"
-> +    single(cfg)
 
-Let's use ksft_variants() with both single() and rss()?
+On Mon, 02 Mar 2026 13:10:33 +0000, Pavel Begunkov wrote:
+> Allow the user to pass the timeout value inside the SQE instead of
+> pointing to a timespec, people asked for it as it makes user space
+> simpler. More details description is in Patch 4.
+> 
+> v3: Enable the feature for the abs timeout mode
+>     Convert internal request handling to ktime
+>     Validate unused SQE fields for timeout reqs
+> v2: ditto for timeout updates
+> 
+> [...]
+
+Applied, thanks!
+
+[1/4] io_uring/timeout: check unused sqe fields
+      commit: db74fcdb2659790cca5a2be7317c703f18289cc8
+[2/4] io_uring/timeout: add helper for parsing user time
+      commit: e23b896d6b3aa9167206f60abba2d17a188ef010
+[3/4] io_uring/timeout: migrate reqs from ts64 to ktime
+      commit: e4f28b04894d2d2ced34b1fbc89238881c3a9fdd
+[4/4] io_uring/timeout: immediate timeout arg
+      commit: ee1d7dc3399054247e6146d8ce35bcd5ab8f2bd1
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
