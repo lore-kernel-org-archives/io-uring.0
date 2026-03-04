@@ -1,96 +1,101 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D8428726D
-	for <io-uring@vger.kernel.org>; Wed,  4 Mar 2026 02:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67B82D949B;
+	Wed,  4 Mar 2026 08:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772592200; cv=none; b=QY7T0UGaYALky2pFMO9w236N+oyPV03ugiUWTOavcxE5Lt+MMRsfo315t7hDIuaW34A4bF+w7QooftdE0WsAhs5NW0FLuJAxnIe49iPmeo/9XdsLEjAuRIuPAToVjLTrFgB8PKbJF1RMARxlLI3drIINyeNueUr83w8RfB3cCPA=
+	t=1772611445; cv=none; b=HHn9sIbMfMxtev3IJhC/X9Z+aWAfRBLIUgKIyna2GzYOF3bgovV9hV2b2H+pihoHubAO041SlZvAEkJYR1XvlyDW8aw13qeSLiNtO133eV4tmhNXyk0CIQ7oab482W8E+bzG6BwUPQ/VCMsWaq7DM3lzXBeOorm6vZSDCt1nMwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772592200; c=relaxed/simple;
-	bh=gZDucJZNiqyC6wEwPHP+1tEMO/8GgbNa2iI5dEFvHIc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=tfJw3VWKZnfoKV0YdC2M9jk05Wp2tSoKespI95StwXR4p1k9kSEubX3XCLtFicvKeenI7qKH/c5cJhMWEiWnZNwfzadIUB7CXKEpJGKNC7xVjFvCpuhpLm+FY0/isNSKBPQYmQNS/aPaCuB2GfIE39OKc3upYiOAJsW712RLzw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=R4IzB+iB; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1772611445; c=relaxed/simple;
+	bh=4nhnK/caT+5lVyHZhvTwEdE//w0eYhU8dWxnE45mTEY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=JsbIDX8nVik+kuEbuIFOTy8jR3GbOqhzLQs61AYX/DMAFMsz0yExVZlmlB8ySwwWRnAApwLDMJYao3qkTqkeYQrp+VIZmceBjzPlZz76TlAKO8IkXLsrgtdlQniEn+5kFLlghYpVCpeRCOCJIk7eHJdF62ftJKrufefbO+zUhyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=P376xUdN; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="R4IzB+iB"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-45f194e9a98so2463681b6e.3
-        for <io-uring@vger.kernel.org>; Tue, 03 Mar 2026 18:43:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1772592198; x=1773196998; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=olGvzGnK884LIKgHUdGsxJO2+aaiMfZ7Qy8nahnwFFk=;
-        b=R4IzB+iB3jjpChYw+x17jMQuF0ajJkK6vuZYvY/k6BDUNDTqE0xef9tjmhZDzXOym1
-         3HAkjMhV9t1+c6OT2RHcMnV/EwgyeMmwtTYptfGJFYrM8sqUyB3k2cwFLiLKOr6dLrmx
-         tmdow82qVTfkmx/KSCeI4psVdSrA9TA93GpOLgbei19I9tHZVk0GzQqQ13uwUntSIaVO
-         TS5DLfduCjNCYg4Wo80lEBHieT3v6ogTLEYlVYgMvr4/qI8yb9hmCQ3DnPE4/DRvVTAR
-         D8J/Cwem9HOgFI9B+tPe9mZHTAesaYuZuV9VVuThqn3sbAXp/0A0C3iiUsB0IWQOPSnK
-         QNJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772592198; x=1773196998;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=olGvzGnK884LIKgHUdGsxJO2+aaiMfZ7Qy8nahnwFFk=;
-        b=uBaqA+nxGrUS6zgOCaNir+9ZWqIp3U43GWUed6pVwwvctPXPqzi0hEE8ZPYdqe9MOS
-         +7lf4RzuN6BeTt8h4F7xmuBHUJb3EH95BF/hsaQG3NF5Al0lhnC+cq1XPq+htB8ZDdMZ
-         rOhl+TWqDoDXqoutQan05WGcVWVyJwrYpNScKxln5yhygymyvjwyN/nLjy0GlhgbVEts
-         6L4gC+YR3Px+orV2vX/FC5ai5Da9dm34L+0GemGuuDY8Ostl4OhqFgN/9/eYsjxAbtWn
-         rd0/J9qCpk5ROdJcpvFHLNLjbyty5wFlSI6VZButoGKVhvC0aRNYk/691eXsfJeAJYH6
-         gRgg==
-X-Gm-Message-State: AOJu0Yx9f+oL24wwCio0u2zluWZPFG83JpD95ha+ep8jS6z7sag30GbI
-	tyAo0dXkCS0DoHmcH92F0FxtHrqIdSbejGAfMU9nn0096i000DbQDyUZQJ1TKLd6KGQ=
-X-Gm-Gg: ATEYQzxnBrTmN5KdH/21uapi49ehlojCfvaSZkDma89vaYtc2e84GvRRo5+DIpMcP43
-	5vCqbYR8oGeB7F0MVXBfGucubZUUuClElbT+hbdMemCxUTQE+gD1nz256UovWLN3WxEJfm056ZT
-	3VES5Sj1dpO2nSQQDVHGeatxU2FxrhFeIqLBCUgX1za4XdoMt+rsCTl5youO0YMuZa41W8Db2xs
-	gw2DUWCwl72Qs8MerrtH9OBTcjj/v8b28weIL2V9oz8WdpD6PJBOYmIcd6PRUKqYulQNMStvjX+
-	K/wVynQked0ueibrfjzHVE20auPedpIuG3hpV7+gD3tRi6VUAYRGkW3iNt8zcktUcPx61nskM5R
-	gsap1KvXz+ZRH/KIjV55xGQWif+CLQ3+AjuJooR61FNK0SaT7BIWGyBRw4iACGUtvlzrasXjCQJ
-	X8bX3xipVZZZJ5W/ahQIWEJwriL/Luq8CkR4t2VsNHYxb/6zcYpSor1yY3mR0PHCo9JDRl46J2B
-	pvP
-X-Received: by 2002:a05:6808:c3ed:b0:45f:2719:32ac with SMTP id 5614622812f47-4651aba62dcmr310851b6e.21.1772592198010;
-        Tue, 03 Mar 2026 18:43:18 -0800 (PST)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-464bb352592sm10570750b6e.1.2026.03.03.18.43.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 18:43:17 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, 
- =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.ne@posteo.net>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, linux-kernel@vger.kernel.org
-In-Reply-To: <20260304-uring-typo-v1-1-152bd7474dde@posteo.net>
-References: <20260304-uring-typo-v1-1-152bd7474dde@posteo.net>
-Subject: Re: [PATCH] io_uring/mock: Fix typo in help text
-Message-Id: <177259219665.19488.15072428169240272252.b4-ty@kernel.dk>
-Date: Tue, 03 Mar 2026 19:43:16 -0700
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="P376xUdN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=1Y
+	BNzXxLpA3HY1a54/AnAdwwruJdKBfVzW9rKDno53k=; b=P376xUdNwCEPq/i73S
+	bqmGIV16h2pzHTB47WoKvz/GZgszi95Xwl9tvLmTg8PqbG3DWgBU3rwcOayjlijL
+	gAg9AFm+/CFYKWsBYDBDUMjohYPHDng+6pdpl3Emmk3NSCH8HDVlndih3D3mtJsN
+	aCXKvLJcOIOCG18je43QGhys4=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-3 (Coremail) with SMTP id _____wD3CvhD56dpCDV7PA--.26869S3;
+	Wed, 04 Mar 2026 16:03:23 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: fujita.tomonori@lab.ntt.co.jp,
+	axboe@kernel.dk,
+	James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: bvanassche@acm.org,
+	linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH v5 1/3] bsg: add bsg_uring_cmd uapi structure
+Date: Wed,  4 Mar 2026 16:03:11 +0800
+Message-Id: <20260304080313.675768-2-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260304080313.675768-1-yangxiuwei@kylinos.cn>
+References: <20260304080313.675768-1-yangxiuwei@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.14.3
+X-CM-TRANSID:_____wD3CvhD56dpCDV7PA--.26869S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CF1xJF4fWFWfXF4xJFWUurg_yoW8XrWfpF
+	s8Kw4fXFWUWw4I9r43Wa4jka4YqF40y3W7G3y7Zrn093Z0qFy8Ar4UCF4UK3Wjq39rAry0
+	9r17trZ8Cw4jvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jUzV8UUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwgtQ4Gmn50vMtwAA3g
 
+Add the bsg_uring_cmd structure to the BSG UAPI header to support
+io_uring-based SCSI passthrough operations via IORING_OP_URING_CMD.
 
-On Wed, 04 Mar 2026 01:42:57 +0100, J. Neuschäfer wrote:
-> Fix the spelling of "subsystem".
-> 
-> 
+Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
+---
+ include/uapi/linux/bsg.h | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-Applied, thanks!
-
-[1/1] io_uring/mock: Fix typo in help text
-      commit: 9e7dc228bb6d4afa74dd6bab4f3aad43126cc2db
-
-Best regards,
+diff --git a/include/uapi/linux/bsg.h b/include/uapi/linux/bsg.h
+index cd6302def5ed..983c6e2b6871 100644
+--- a/include/uapi/linux/bsg.h
++++ b/include/uapi/linux/bsg.h
+@@ -63,5 +63,26 @@ struct sg_io_v4 {
+ 	__u32 padding;
+ };
+ 
++struct bsg_uring_cmd {
++	__u64 request;		/* [i], [*i] command descriptor address */
++	__u32 request_len;	/* [i] command descriptor length in bytes */
++	__u32 protocol;		/* [i] protocol type (BSG_PROTOCOL_*) */
++	__u32 subprotocol;	/* [i] subprotocol type (BSG_SUB_PROTOCOL_*) */
++	__u32 max_response_len;	/* [i] response buffer size in bytes */
++
++	__u64 response;		/* [i], [*o] response data address */
++	__u64 dout_xferp;	/* [i], [*i] */
++	__u32 dout_xfer_len;	/* [i] bytes to be transferred to device */
++	__u32 dout_iovec_count;	/* [i] 0 -> "flat" dout transfer else
++				 * dout_xferp points to array of iovec
++				 */
++	__u64 din_xferp;	/* [i], [*o] */
++	__u32 din_xfer_len;	/* [i] bytes to be transferred from device */
++	__u32 din_iovec_count;	/* [i] 0 -> "flat" din transfer */
++
++	__u32 timeout_ms;	/* [i] timeout in milliseconds */
++	__u32 flags;		/* [i] bit mask */
++	__u8  reserved[8];	/* reserved for future extension */
++};
+ 
+ #endif /* _UAPIBSG_H */
 -- 
-Jens Axboe
-
-
+2.25.1
 
