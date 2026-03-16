@@ -1,107 +1,219 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F963A5E93
-	for <io-uring@vger.kernel.org>; Mon, 16 Mar 2026 15:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1409A3DFC7A
+	for <io-uring@vger.kernel.org>; Mon, 16 Mar 2026 18:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773676180; cv=none; b=rF4T2mvWLUmPrelFNtjZ+UpZkjkgUXZ/yoPkN2SuI8k1tTIMBIp6DA3vqv7acrGO399IY5M7zeNE5byYp1vcjUFTxJwtf193ELcEUTJbqlXuWrpaDlz0teYLOpypYKyW8d5vOmDrLhqrb3SQyQ0VJ+yIS29dxe3sgV2H6NXjwlU=
+	t=1773686447; cv=none; b=l1xnudPUBAE0WOjmSRil+hgJOYTnzTuhcZWW3vBH7QE0gL0hdzSppI0V3ZmWKcj1zAOKs5smrvKzWoyPg9ifPLPt3bomHeWY2EcAWch+64dejtkU/wbKgdNZjyLuKFi3xkSfWDBzlqLS7QvolhYh4UkoWdwczgmCLm0G4dEWtrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773676180; c=relaxed/simple;
-	bh=xhj7V5VOHhyPhjZT8w+2BQtGE00MYdrzk3o+IvpVuEQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hrrcUaL5I/nVmX1bwX+0N7foY0rBmyfuKtTI8SGlPnIZ77YveKW+CUCxn5zWCFqsWj1TOJvLrGeRmSYuOOfPMOMzAu11bpvA2oI77YbMD0QDaLDb0OIaO/Q22b8+mF8FQQAQgjBU7f/b+Ac0FLWM8YlanugoVLOoG9+r7r44Wao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cKRe4kkC; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1773686447; c=relaxed/simple;
+	bh=KjcLFVHtSt6G0DLVXbwWJgFK/HJvabRpb+1HkhP0nlA=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=GtAPo1kK+2PSxLIMAX7vKdyl7hgnh97yM0/0lR16MGtQipKypwtX26GpWnKMp8uN0Hlh++lQ93sU9K3bNsWHc1yr4wuSQyiXz+WukcyfxO7yEDd/OLXEIXs7xm93/etWISv5zwXjZhlG/7ZwLIqUrlJkd6w2JUrBsAi0/8famXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=PHPjCXTG; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cKRe4kkC"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c70c112cb61so3134085a12.0
-        for <io-uring@vger.kernel.org>; Mon, 16 Mar 2026 08:49:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="PHPjCXTG"
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-41576c5c01cso3051551fac.3
+        for <io-uring@vger.kernel.org>; Mon, 16 Mar 2026 11:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1773676177; x=1774280977; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6uZPXtzqz7Sbxlt8I3hTrbR+x+36hfWguC11NiV9bo=;
-        b=cKRe4kkC59oBmJ/78byqIkDm1LmxXNPPoJGE8qOKBJuQZUCnYTODgvPMoeLThip/gH
-         cqtA+wF5+eH2EZECS59Udi4JZTc6pOhB1Xb3+hd79gnVLdOxmsIS9wwt/cLohLhKnYJk
-         SJor9rSTQSIsr4Dbw0k44e8Dm6bahMoB7uUDQmhhnDcqu95UQX/XRomcik9/P16Btifk
-         kuntQnF/vDpwF/5cptIlXTe+aanMzsuWtFmftowKxVncKxL+GqEDFxIGeQkcAgL2ZfJU
-         /7+AbgolCVryXr6K2oEIt+5dz+39+J0H3e5FsNHWUiR8/jl4c6LtEFyby+lmigFcVP87
-         gckA==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1773686442; x=1774291242; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sQNPklb+pjPxNR3JRE18HCGZzSZKnk3uiQQhKadqP3E=;
+        b=PHPjCXTGt+RqlmNzHzDC3jRgX/U5YsLK+zN0CopXlhN7ED/r1FfetcK+SL6lYAIoif
+         lM+RYB55DYspeFM3KIU+ayhN6KLUoB41fJghMA6Wmv9DaBEZbQTI1LulR63xEWQimMsx
+         lur4xZjZQaOhot9HT8rz7KoHodNRjv/Rr+2AYcM3b1SqipBVMtKYZq/7gbnTMiqAun5p
+         MmODWzcaQwE4/5VoucUEumbRC7OSahYfPIwFWm/fBkgUDLBf3qbGTVHsV6KNmW/WllcH
+         mOMo9j7lhYSJ2x/sNtoaqGuh9qa95eekYSS/djPulVUjJJ7c4eZ3iIP6pYF5FMk/43w4
+         OaBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1773676177; x=1774280977;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I6uZPXtzqz7Sbxlt8I3hTrbR+x+36hfWguC11NiV9bo=;
-        b=VnnqSZNwJDSqmJFXDD0FBG33LGcaicsVSA/unnIn2myc942sO9nZYZ2SetZT42p/nX
-         GvP4wAAGBdsKv+VtZkBjpXMrF6nRom5PEUNuj2+XnkgtIll+GZZXNiP7pMq6j/6zsrwP
-         c4Yd7eEgoTt4E+GklJ5McvUpKoalkFoCRX1YkZd1s/QU/xUlSnAlPwh2ncBX+e9XDhuF
-         wnmr4YBfHf4j+QE6eybSXGRGet4Zk1lyIRZxYbJOTZ9ttZw3GokYgg65cGWZeetwDzB3
-         k40/GuC9OsNWPGODuGwAwrmLzi3ErBGsbUAO2UyFM3SA5UZ0a+091n6dESiOdgcsGDKj
-         aP5A==
-X-Gm-Message-State: AOJu0YzFW2sAzbY6KVRni39Sl65N4t8nXUZJyepuJN2v16AEvhs4wTq/
-	twm7j5HpCAgWboDmwLkw6YVH/PVMuelhEhezelSoH757rXVDSi6UC1hzRQs+vo7wBbY=
-X-Gm-Gg: ATEYQzxSy2La64nlFn1e4o2T7ceSiBkyuwnXnsJSsdUYzW93nxrBA97qYdzWNvIN7U/
-	rHm0oOUQa9QSkc4SEc9pgj3/ob9aix2Igj5gpuy0lsiieYrirMbPwMv4NfugA41p3P4pxHsOao8
-	q2HWH3c7v/zRWMLdntnIhA3WT+mKJOXIOwYG4TnIvOcMB+FaGtPXJa4EdoLY9p7oOewY5aG6naq
-	l6dQypYkZtC96THZ2w1Uojht+4QA5Z8mCzf+AVsDIfG58mx35nhyXU+0XSO+b1edF24v9h3oIY5
-	dcCnipMzirTmF9crCH7TwyznfhlpWVg34JrFNf12x0r4NORHFX8O4Clyn7fIHCqD5VuGhMq4jSx
-	2tqxLLAmIhy/D6Z/yjIwe8fEkEpP5LWgKZ6ucOJnVE2Zqg9m+2zKmeG1smEwprp24uUAZEvzTTb
-	JEOxHaYsPJV3EmlWg1H4VJ4I2A
-X-Received: by 2002:a05:6a20:a111:b0:398:72b7:ec8f with SMTP id adf61e73a8af0-398eca384d3mr12261294637.18.1773676177484;
-        Mon, 16 Mar 2026 08:49:37 -0700 (PDT)
-Received: from ubuntu.. ([152.58.131.4])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73eb993e40sm9149350a12.8.2026.03.16.08.49.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2026 08:49:37 -0700 (PDT)
-From: Anas Iqbal <mohd.abd.6602@gmail.com>
-To: Pavel Begunkov <asml.silence@gmail.com>,
-	Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Anas Iqbal <mohd.abd.6602@gmail.com>
-Subject: [PATCH] io_uring: cast id to u64 before shifting in io_allocate_rbuf_ring()
-Date: Mon, 16 Mar 2026 15:06:36 +0000
-Message-ID: <20260316150636.2123-1-mohd.abd.6602@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20251104; t=1773686442; x=1774291242;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sQNPklb+pjPxNR3JRE18HCGZzSZKnk3uiQQhKadqP3E=;
+        b=pJqAGXNxj8SRIRUM/H38bwR/WLM430eD3/qtGGfmzZ4tZNmqjXFBhbwWnohX32tRy9
+         2HngBY2hMtrEyLW3NcYat24K/hsfXiMP5eo+VHqGlNxvaNbwE6YuYm1Fmr/hAj0+4Sth
+         DrE1/rlyIqK95rEnU+F5l/f5hoo/h1v9TsbqSr6g3rq91eqBlKqOtPGoy/oB2OCQ/7cD
+         QAkz/LLTPHYnC3YHekKVDVzRzX4BQsgc1DlyFirzIp0IPPJLVg0yu34PLdTyYgtf33yC
+         1cOid5VhMDUjhIRTx7GJnN9usgx68tTUPBcZqBx2i/nt+/NCQMH3RaSVKlIep8J0jnV/
+         HuuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUV1pUVr2hanYNmv070zVWe1vpJJpvMafT6yKEzZV/oXuhiJFwPIrxAwyHezT5JEpkMV6Fliscjuw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwNcWKYQEYWnaXueI6pwTmJswxhdB/Zw/p/5R3A5UBH15OSQA+
+	wXbyDTxg3+PGxUpexvPacP+VAaEiows75ji8TdGOPRmWlyqsNvB5olmrMmxWFjnqmY7IRMCw4lA
+	0zf0IPTQ=
+X-Gm-Gg: ATEYQzzKbzZ7+l8y8NfddjM7J5Wxlmz33btlYRF972Fpyr30kNXRY1OxS0oEK6+mhXd
+	Ic6z+W1FveyiXDEMjDxv5eWRJtLa1mvAFfarEzfHeHeMrbpg7S7gjA+Bos6gffSW6n8ZqMSNZFF
+	XyWFoF2xzOV/CnkUF5VMlWfSQ+rebH4HCkU7o2USQi2NnlFUvo9o7A0LQZa+elI8TYH9QTaSEha
+	mk4oQ7EBWKjlRiwcEJP9TWItJcxPbZLME1q80IWMzo4XS41JmRCkSmhrK5J+BZYvrNP/DbnlX9S
+	Z6E1icwe99dkHvKVqzRqs67gkrRUq3FTQkWHbKedVw3nkoqr5jpAK5/fpDrwq/l+SgsFSVov26g
+	K1xRL8zIrBGFqweXuKapUAOibI/TjyV46Yg8NbEopKfq/75MRpvhGVhnh31+uTcKQl6I7EMN3ov
+	T3+4lQ/TG23rKYmyDUKbVmbrn4yBmqtUZIT35Kxy9Ik8f9En1rhgQ1boihuD8Tht9eVziaBe6LB
+	aFvgYn3NQ==
+X-Received: by 2002:a05:6870:826a:b0:409:68f6:569b with SMTP id 586e51a60fabf-417b91c5d44mr9004790fac.12.1773686441741;
+        Mon, 16 Mar 2026 11:40:41 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4177e6c7885sm16094525fac.17.2026.03.16.11.40.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Mar 2026 11:40:41 -0700 (PDT)
+Message-ID: <0fce925b-9148-4f83-92cb-19d164a7ea32@kernel.dk>
+Date: Mon, 16 Mar 2026 12:40:40 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/poll: fix multishot recv missing EOF on wakeup
+ race
+From: Jens Axboe <axboe@kernel.dk>
+To: Pavel Begunkov <asml.silence@gmail.com>,
+ io-uring <io-uring@vger.kernel.org>
+Cc: francis <francis@brosseau.dev>
+References: <8688cc4e-8619-4392-8d5c-93c554d70c34@kernel.dk>
+ <2e2d6e81-bf95-47bf-9c70-1b2f8b63cfbc@gmail.com>
+ <876c9e94-0782-4561-8ae3-0cfed18ee375@kernel.dk>
+ <3b6769f8-4b44-47ee-a308-6f7e23304c8a@gmail.com>
+ <c1499122-9444-4ef9-908a-84e290d450d2@gmail.com>
+ <6c0f631e-5015-4578-954a-07a1ca726b34@kernel.dk>
+Content-Language: en-US
+In-Reply-To: <6c0f631e-5015-4578-954a-07a1ca726b34@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Smatch warns:
-io_uring/zcrx.c:393 io_allocate_rbuf_ring() warn: should 'id << 16' be a 64 bit type?
+On 3/16/26 9:16 AM, Jens Axboe wrote:
+> On 3/16/26 8:44 AM, Pavel Begunkov wrote:
+>> On 3/16/26 14:40, Pavel Begunkov wrote:
+>>> On 3/16/26 14:28, Jens Axboe wrote:
+>>>> On 3/16/26 8:17 AM, Pavel Begunkov wrote:
+>>>>> On 3/15/26 16:19, Jens Axboe wrote:
+>>>>>> When a socket send and shutdown() happen back-to-back, both fire
+>>>>>> wake-ups before the receiver's task_work has a chance to run. The first
+>>>>>> wake gets poll ownership (poll_refs=1), and the second bumps it to 2.
+>>>>>> When io_poll_check_events() runs, it calls io_poll_issue() which does a
+>>>>>> recv that reads the data and returns IOU_RETRY. The loop then drains all
+>>>>>> accumulated refs (atomic_sub_return(2) -> 0) and exits, even though only
+>>>>>> the first event was consumed. Since the shutdown is a persistent state
+>>>>>> change, no further wakeups will happen, and the multishot recv can hang
+>>>>>> forever.
+>>>>>>
+>>>>>> Fix this by only draining a single poll ref after io_poll_issue()
+>>>>>> returns IOU_RETRY for the APOLL_MULTISHOT path. If additional wakes
+>>>>>> raced in (poll_refs was > 1), the loop iterates again, vfs_poll()
+>>>>>> discovers the remaining state.
+>>>>>
+>>>>> How often will iterate with no effect for normal execution (i.e.
+>>>>> no shutdown)? And how costly it'll be? Why not handle HUP instead?
+>>>>
+>>>> That is my worry too. I spent a bit of time on it this morning to figure
+>>>> out why this is a new issue, and traced it down to 6.16..6.17, and this
+>>>> commit in particular:
+>>>>
+>>>> commit df30285b3670bf52e1e5512e4d4482bec5e93c16
+>>>> Author: Kuniyuki Iwashima <kuniyu@google.com>
+>>>> Date:   Wed Jul 2 22:35:18 2025 +0000
+>>>>
+>>>>      af_unix: Introduce SO_INQ.
+>>>>
+>>>> which is then not the first time I've had to fix fallout from that
+>>>> commit. Need to dig a bit deeper. That said, I do also worry a bit about
+>>>> missing events. Yes if both poll triggers are of the same type, eg
+>>>> POLLIN, then we don't need to iterate again. IN + HUP is problematic, as
+>>>> would anything else where you'd need separate handling for the trigger.
+>>>
+>>> Thinking more, I don't think the patch is correct either. Seems you
+>>> expect the last recv to return 0, but let's say you have 2 refs and
+>>> 8K in the rx queue. The first recv call gets 4K b/c some allocation
+>>> fails. The 2nd recv call returns another 4K, and now you're in the
+>>> same situation as before.
+>>>
+>>> You're trying to rely on a too specific behaviour. HUP handling should
+>>> be better.
+>>
+>> Some variation on, if HUP'ed, it spins until the opcode give up.
+> 
+> Took a quick look, and we don't even get a HUP, the hangup side
+> ends up with a 0 mask. Which is less than useful... I'll keep
+> digging.
 
-The expression 'id << IORING_OFF_PBUF_SHIFT' is evaluated using 32-bit
-arithmetic because id is a u32. This may overflow before being promoted
-to the 64-bit mmap_offset.
+How about something like this? Will only retry if hup was seen, and
+there are multiple refs. Avoids re-iterating for eg multiple POLLIN
+wakes, which should be the common hot path if v & IO_POLL_REF_MASK != 1.
+Keeps it local too.
 
-Cast id to u64 before shifting to ensure the shift is performed in
-64-bit arithmetic.
-
-Signed-off-by: Anas Iqbal <mohd.abd.6602@gmail.com>
----
- io_uring/zcrx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index 62d693287457..d96d2802f3da 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -390,7 +390,7 @@ static int io_allocate_rbuf_ring(struct io_ring_ctx *ctx,
- 		return -EINVAL;
+diff --git a/io_uring/poll.c b/io_uring/poll.c
+index b671b84657d9..bd79a04a2c59 100644
+--- a/io_uring/poll.c
++++ b/io_uring/poll.c
+@@ -228,6 +228,16 @@ static inline void io_poll_execute(struct io_kiocb *req, int res)
+ 		__io_poll_execute(req, res);
+ }
  
- 	mmap_offset = IORING_MAP_OFF_ZCRX_REGION;
--	mmap_offset += id << IORING_OFF_PBUF_SHIFT;
-+	mmap_offset += (u64)id << IORING_OFF_PBUF_SHIFT;
++static inline bool io_poll_loop_retry(struct io_kiocb *req, int v)
++{
++	if (req->opcode == IORING_OP_POLL_ADD)
++		return false;
++	/* multiple refs and HUP, ensure we loop once more */
++	if (v != 1 && req->cqe.res & (POLLHUP | POLLRDHUP))
++		return true;
++	return false;
++}
++
+ /*
+  * All poll tw should go through this. Checks for poll events, manages
+  * references, does rewait, etc.
+@@ -246,8 +256,9 @@ static int io_poll_check_events(struct io_kiocb *req, io_tw_token_t tw)
+ 		return -ECANCELED;
  
- 	ret = io_create_region(ctx, &ifq->region, rd, mmap_offset);
- 	if (ret < 0)
+ 	do {
+-		v = atomic_read(&req->poll_refs);
++		bool retry = false;
+ 
++		v = atomic_read(&req->poll_refs);
+ 		if (unlikely(v != 1)) {
+ 			/* tw should be the owner and so have some refs */
+ 			if (WARN_ON_ONCE(!(v & IO_POLL_REF_MASK)))
+@@ -287,13 +298,15 @@ static int io_poll_check_events(struct io_kiocb *req, io_tw_token_t tw)
+ 			if (unlikely(!req->cqe.res)) {
+ 				/* Multishot armed need not reissue */
+ 				if (!(req->apoll_events & EPOLLONESHOT))
+-					continue;
++					goto finish;
+ 				return IOU_POLL_REISSUE;
+ 			}
+ 		}
+ 		if (req->apoll_events & EPOLLONESHOT)
+ 			return IOU_POLL_DONE;
+ 
++		retry = io_poll_loop_retry(req, v);
++
+ 		/* multishot, just fill a CQE and proceed */
+ 		if (!(req->flags & REQ_F_APOLL_MULTISHOT)) {
+ 			__poll_t mask = mangle_poll(req->cqe.res &
+@@ -317,12 +330,17 @@ static int io_poll_check_events(struct io_kiocb *req, io_tw_token_t tw)
+ 		/* force the next iteration to vfs_poll() */
+ 		req->cqe.res = 0;
+ 
++		if (retry)
++			continue;
+ 		/*
+ 		 * Release all references, retry if someone tried to restart
+ 		 * task_work while we were executing it.
+ 		 */
++finish:
+ 		v &= IO_POLL_REF_MASK;
+-	} while (atomic_sub_return(v, &req->poll_refs) & IO_POLL_REF_MASK);
++		if (!(atomic_sub_return(v, &req->poll_refs) & IO_POLL_REF_MASK))
++			break;
++	} while (1);
+ 
+ 	io_napi_add(req);
+ 	return IOU_POLL_NO_ACTION;
+
 -- 
-2.43.0
-
+Jens Axboe
