@@ -1,66 +1,68 @@
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE571D63F3
-	for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 14:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175073AC0D2
+	for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 14:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774275658; cv=none; b=iKrS04qMVJJ9bTnNH0O/Fw1Arex+l0E3Iz3HegcW8O/itfDuvcbs7paofTM3Hl5l3CXAHoBJqxpi6JOIy9R5APF+h8LyqlEiXh1+daXOqc7e9ncVFlmsiVMvj222IEx+YqK6N0jU1lJ0IuZ8VOj3Tx6EkgcGhJU+yfORAdYjjDc=
+	t=1774275793; cv=none; b=DNE8sHqfWOiuS2rM+tapYjopS/uyMb8tK0NQaFlYwuuSly0vZsH8xXYcfsJX2YwSspN7UQOYaPif7c0tKyr5WBS4qVFs1iR4Z8ntIzFYjt5qLG4gbvXTTVAuGW8VXIktCUohbiRFQyILxKHfbwhWgBOjyUoBNmK+AIDh9blL0QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774275658; c=relaxed/simple;
-	bh=zASd+EOD13ftIhyXflTViXMTNoBklIHpY3QeXreZJdE=;
+	s=arc-20240116; t=1774275793; c=relaxed/simple;
+	bh=C+9I8qKss0WgLUFVKxwU390YrmBUMAcHGwnzXZi12Vg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AqtOTLRahKi1QGk9Y7YAXkBKaKFiQm4u+T7b7SlkxVlL9hBDuFs58cNi0lrxrKhC0aYwKXgMzuzxF/c/w5zCo6YBJl6bfhul1y/2tM/vWjiPkXfemhwDIlP5znf8BaLNnDI8sPDTH+Xqrt1YoL3X99eh0PxoY4+Ab0Rgi+GTGCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=aZ0nyrmf; arc=none smtp.client-ip=209.85.167.172
+	 In-Reply-To:Content-Type; b=mqhXIBkEu8Nz3YV+uFZZfKo1eT27ALqGw7PTWH0UOmobRjBXfKxqO8i2FuqMhUXf/BAS1FrS3XVXIBbnIElr27oOQO2R+RKIm+NZhhzoXX8EPgtk/35WzLnBPI/VCwDbFqvFwEJJBKoLXS5ekQP/WCyvi9iWRT0iqZBuLCUZUlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=jI7GABMN; arc=none smtp.client-ip=209.85.160.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="aZ0nyrmf"
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-46701f2077cso3870677b6e.0
-        for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 07:20:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="jI7GABMN"
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-41c4d660b19so319162fac.1
+        for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 07:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1774275655; x=1774880455; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1774275791; x=1774880591; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dEq1d5NT4C1cBdRHUylNiTgQKOSaQf+PeJbEdc2Od9I=;
-        b=aZ0nyrmf1eOBguV+l7xSHrXEiVYNi1mlCoj1X/HehYuH8cmnnWUa1IlKRvfwuVKLyD
-         aS9gaB86VJTtLyUTYnD1r48iBVaPhpnnyvoLPzFMB1WnvNVZ1oRXisYep4uSOH0dk3K4
-         FFPmSrn8B97wbFk8NsqelzgE4DXt8ygobirx5kuQIx9t24/zY4Klaa7ZV5+lXrDjCsMn
-         Bjowt3DgIh7RpUyQBvTU87opCZQY88pLKf5ICRTTeMwxYpflCFaxDj/7Bh2G9+07v3Yr
-         26zA6BI48wSyMGsUt1Z2HGb8qnCEmbFhcVoyhfZRshYcW+Zzj96nQIRB3B71ssfwSp8X
-         jIIQ==
+        bh=3zm+uLazNQIplB8qIgyuexcD83A6/QI4uC1344ND9QI=;
+        b=jI7GABMNhA8JVmNX75DdYanW8D4zZxB8EvshRZRCRZ3rc8ac4ASQqjSJELsMWrhagj
+         a2iMY2e0b9w6+OlmJ7MeHBWc75m+66sdYQ5mHf0AGefKjANNWpJ7QplVdim3OLfkk72Z
+         aG01jykkr6j3/T2HtFB5zH+goRdVA3MjcGC78M8mN5dLXjGuUSQXeo3kmmd/BqNy7Ykw
+         zmqBBvcNns0KbB7VVZyhovPcCZJxR/K9mSIn4fEs+nlO2irQKVY6nghRT1t4FsNgXhD6
+         uJJWN27G/cexXSjuhJvEfMeami193uBRdMe8fRbk25Z3Zp4yMBHWFd24H4F0kEjvEtpB
+         BtAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774275655; x=1774880455;
-        h=content-transfer-encoding:in-reply-to:from:content-language
+        d=1e100.net; s=20251104; t=1774275791; x=1774880591;
+        h=content-transfer-encoding:in-reply-to:content-language:from
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dEq1d5NT4C1cBdRHUylNiTgQKOSaQf+PeJbEdc2Od9I=;
-        b=odtQ/39h14DgHU1a3AXbW4rrk0t82i52Z+n6H9pWR3rudxXPkX/SWq6Ks/7NzSUrPf
-         YsGtF36ad+sSsz6up2BRZHBtAgd2pTYYbgqF8P8XXjG0TkJw3lJp+SmLl5vp9/JHUvwF
-         /UqcBrKo5wuWwWaa6Erw9FgrvGFGnkAt8R11tpKE+9hCMDBIsVHe2yBiiAvcXNOkijXy
-         CRubz4UYfoPe3tOCbBxbTs5Ib4GiIN58yk6OJiDNYe91/uEMdUQO23gelJbtDRSJjs0b
-         /ZnAv0EzFJslVIhbVrzWRWRcNLWad1b1Gov4f+t7Q+OTuZUPE4utmM2rgyPP/3whE6/8
-         G9BA==
-X-Gm-Message-State: AOJu0YwauQesFSzS6+DPQW//ceZPGJYRZO5vkTCD6i2/EszE1ljAiZuN
-	qVP1RgxbeLyWVa6c8hupUPvOM3LFSmtsLbbUsFQhp4mC+vfyiCVHbQFZ9EWVFRJiKI8=
-X-Gm-Gg: ATEYQzx14vxFR/Yq6iMq6GPAlDSonUS/cz5CD0kndWAe2zXu7BaZVViDI2Hj7xjAIQq
-	7F+liAfJv5MR2XhM1Qq9pyG/r+pKagnES8dmbRXJJtNjw45A0kSMQKtezLXeIZBnE/iS50evQBK
-	CEjUcyr1bxs9u5of/i+vDkRFR9xmg4cWv0tmumNhFfYW3E4o7Bn5JNzUcjYYieSoVA7o6jGMZTK
-	6MlL4hdXbDjS2KDFzQQYvqtW7Mkq5zkwl8lvmw+iG0rHOnXfgVP4QzfhxL+vByn2r7xfyc97sGf
-	fR+14CnKRBWvkGpPHoBJtjHqyOmRoD+fGTe++wJhKlcLspJKj+qEX0GJDZenI5idpYrJFbRpFge
-	H03oAGYjbO4HhKOzJIVU4RpyC2X2i+6UJ6GOn6VNyhmjgqD9h79IZwcjam0115SC6/jzUhgRcpz
-	pIq7Mr33x80FqIhY+j8INDnOG68YIBJHdzq2IiDsczth2wdADie24gFW1iJ7UHE9HBFwhbx2MVC
-	E9KynOmVw==
-X-Received: by 2002:a05:6808:17a5:b0:468:1f2:5336 with SMTP id 5614622812f47-46801f2801fmr4546884b6e.28.1774275655162;
-        Mon, 23 Mar 2026 07:20:55 -0700 (PDT)
+        bh=3zm+uLazNQIplB8qIgyuexcD83A6/QI4uC1344ND9QI=;
+        b=nWJKysP1K5BzTI5HqJamZYPj0BCKdGWeeJ/i6MQI74pbf+0QoTUPnKig/2x0N2fWOl
+         KIFVHjYlNVMcHQb1wuAO/qMEF+BmY2fTUPMgvie86z24H6eorNzY8XhjNRd5RZFh5oaB
+         HV6ie9kQQyyM+k/uZ0Khv1biAUrbzvDXBy9WIbjfvxfzlx59i529tBTVXTUVUNoAsPja
+         MiK3kwnoJwDVJ1otDo/N3HodQLI2Zon657p2gToKmQYGisVcPxRKViArSl9kCvUp2OHA
+         agHCLHUKdGjXXbVgukphFxI1kZFWB8oRAKssq+/xePIzyT/1LWAEJT0RUapxgnxddXd4
+         YG7w==
+X-Forwarded-Encrypted: i=1; AJvYcCVVk9TfbMP86SfQXb3Kn4PpMLag6augMVidY/fOtJmC0F0ytYyCfiRqv1Z1iBt6FBjjm9Jn43vDmw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5esgZ7NR+qBoUC/sld9iY6XDOdbvgxnExlrYWBMoQFHlqNtGE
+	RwVGyK37iI+GlaxI6DEmhIN3eWW3Xbrf2UH0vNUbHG7bNW2ZpNLKXTLjKGJKmxRj60v5mK887LU
+	+eUI3vbU=
+X-Gm-Gg: ATEYQzxn1m2GhFst9tJqUZXRMuk9DfisSb8kTtsuNWwGKg+Ct2h8QV5ouxr0xENoeQ9
+	l04iDLvjMjdx6j8LLbA8BzPt+KcNRqxgo05HW5fZm8oS0hYR7wQRg+sNfXPIUf0t6dV0ZIYk3KK
+	CAF+kc+g2BlzfoFkkkr7+g/ofBd//ObmDsr1S76WgOdaoOeU8BFDiMujop8rRcuhjrFnfKLYshC
+	bD1rL+W8X01KsP7fIHoZXlAQaG+6pXHYdfAUIxwD3GPpDMNLMUNpHDI+Zx53PMXppB9fuC/0jtm
+	lJAesCcD1PJuZ2QxXXTWWU2S58Jj7oJl0+k+jVVdC/T3k1dLtKBXuoZq/OH5oaGj7qX0miYPY5L
+	NRR1KtbMFYIALzOwN+BS563jyP11BP9jS6VjvvIJApq0kSPAZwLv5O/d8A6k431tUN/ZFG87eIo
+	1Lo9yniubk4HW77eNMFh1VvzZy0W0MsRrcyEwxeGKX4zq4rKxMeiYTiVzqgdeLGML5Sw1nDpViR
+	zkt59N9Ew==
+X-Received: by 2002:a05:6870:51cd:b0:417:359c:292e with SMTP id 586e51a60fabf-41c10f84c98mr6864368fac.12.1774275790874;
+        Mon, 23 Mar 2026 07:23:10 -0700 (PDT)
 Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41c148a90f3sm10715182fac.1.2026.03.23.07.20.54
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-41c14e45213sm9682225fac.18.2026.03.23.07.23.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Mar 2026 07:20:54 -0700 (PDT)
-Message-ID: <4970a06b-95f5-45d7-86dd-1055c1811ed6@kernel.dk>
-Date: Mon, 23 Mar 2026 08:20:53 -0600
+        Mon, 23 Mar 2026 07:23:10 -0700 (PDT)
+Message-ID: <4a3cf1f2-274a-4ceb-9980-4b379e81394a@kernel.dk>
+Date: Mon, 23 Mar 2026 08:23:09 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -68,41 +70,49 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] fs: Export new helper do_replace_fd_locked()
-To: Christian Brauner <brauner@kernel.org>,
- Daniele Di Proietto <daniele.di.proietto@gmail.com>
-Cc: io-uring@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
- Pavel Begunkov <asml.silence@gmail.com>, linux-fsdevel@vger.kernel.org,
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v3 4/4] io_uring: Add IORING_OP_DUP
+To: Daniele Di Proietto <daniele.di.proietto@gmail.com>,
+ io-uring@vger.kernel.org
+Cc: Keith Busch <kbusch@kernel.org>, Pavel Begunkov <asml.silence@gmail.com>,
+ linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
 References: <20260321232142.911280-1-daniele.di.proietto@gmail.com>
- <20260321232142.911280-4-daniele.di.proietto@gmail.com>
- <20260323-kocht-meisennest-ac89063f104f@brauner>
-Content-Language: en-US
+ <20260321232142.911280-5-daniele.di.proietto@gmail.com>
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260323-kocht-meisennest-ac89063f104f@brauner>
+Content-Language: en-US
+In-Reply-To: <20260321232142.911280-5-daniele.di.proietto@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 3/23/26 6:00 AM, Christian Brauner wrote:
-> On Sat, Mar 21, 2026 at 11:21:41PM +0000, Daniele Di Proietto wrote:
->> This is a new helper that installs a new file in a specific fd number
->> and returns the previous file that was there. It requires holding the
->> files_lock.
->>
->> In order to keep ksys_dup3() simple, this commit introduces a new
->> static do_dup3() helper.
->>
->> It's going to be used in a future commit.
->>
->> Signed-off-by: Daniele Di Proietto <daniele.di.proietto@gmail.com>
->> ---
-> 
-> I think this spaghetti here is really not acceptable and the export of
-> do_replace_fd_locked() is really ugly. Please try and come up with a
-> solution where you modify e.g. replace_fd() that does like 90% of what
-> you want minues that "needs async" shortcut you have.
+On 3/21/26 5:21 PM, Daniele Di Proietto wrote:
+> +	if (((id->flags & IORING_DUP_NEW_FIXED) == 0) ==
+> +		    ((id->flags & IORING_DUP_OLD_FIXED) == 0) &&
+> +	    id->old_fd == id->new_fd)
+> +		return -EINVAL;
 
-Fully agree.
+I think !(id->flags BLA) == would be shorter and hence easier to read.
+This is hard to read, at least for me.
+
+> +static int io_dup_to_fd(struct io_kiocb *req, unsigned int issue_flags,
+> +			bool old_fixed, int old_fd, int new_fd, int o_flags)
+> +{
+> +	bool non_block = issue_flags & IO_URING_F_NONBLOCK;
+> +	struct files_struct *files = current->files;
+> +	struct file *old_file, *to_close = NULL;
+> +	int err;
+> +
+> +	if (new_fd >= rlimit(RLIMIT_NOFILE))
+> +		return -EBADF;
+> +
+> +	if (old_fixed)
+> +		old_file = io_dup_get_old_file_fixed(req, issue_flags, old_fd);
+> +
+> +	{
+> +		guard(spinlock)(&files->file_lock);
+
+I did suggest a function, but if you're not doing that, at least use a
+scoped_guard rather than have some randomly inserted scope here. That
+looks like AI code..
 
 -- 
 Jens Axboe
