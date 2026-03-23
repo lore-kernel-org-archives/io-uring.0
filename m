@@ -1,147 +1,79 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5BE33B8920
-	for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 16:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62FB3B9D97
+	for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 16:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774281661; cv=none; b=G6xCjM2dZriZ8adEkyvsoCmvgwchT4uIBRsu8aoDoNcDjaAo3akSbYcT3kV24aWs4RFRRIvuYnjV1ivpE3RzEn6tBbHPEf3RHrhk39Pkn2LN2S20YsENhLjrlyZKP6367pnvkKAbQkmBpEzybvwxjjUFz485f6040wPGF/If+2Y=
+	t=1774281669; cv=none; b=iwTSqNdnxLKbWVgK3wUXTz1mUHqgr3KeLL4Q+bW19yM/IDy8r8bSLflrqtLS1eWLtkP/w5GLC47KY7xP3Gu++GJj6+sZxM0ziCjeTno2xSVZhXsSib8nsSPqfePIilPCeWYk8EqfZRN1qiRO+3rBx2y80w5kmbutAmlPLF+Sasw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774281661; c=relaxed/simple;
-	bh=Bz3Ots6yk9ZczWzMqmrxecnG8LNR/r4o3HZXwJKixbA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dsc32zJI4+zux6FhAyHJgOg5dD1kS4QgG7LoDz6QEE4hkWPNLARD3SgHo2Z+ho69TdZ58JvWM4tuG92m2zM9IeLa9Nzfv25+6XLY/uguBa5GdaBeoN/MB8c49pNnQjyK9rIJsm1Efk7wAN+blF7htrBwbpN9sOI2B5IoJPvMtWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=icTJgAMR; arc=none smtp.client-ip=209.85.161.47
+	s=arc-20240116; t=1774281669; c=relaxed/simple;
+	bh=Hj2JhMI5b6Lafwdjdamwe1jMGPYt17fp5OkHh3BHS7g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MdFM339zmDMbHpc2yOtfG3VMXACs4dMPMEB4n336doFNPbTDsOEau0vAvFNvD6/dtSY/lAr5Vn5atzpKqakmiNQE1YqpOJ+E5I2spQEMOtOXBg5nOeDfXuOMIemqGcSyVB+m3c27pYSTa7nfm0AGsDBj6re2oAKt53ebNmDdRQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org; spf=pass smtp.mailfrom=bitbyteword.org; dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b=Q8oFKUkK; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bitbyteword.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bitbyteword.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="icTJgAMR"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-66ee7b9af94so1393056eaf.0
-        for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 09:00:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bitbyteword.org header.i=@bitbyteword.org header.b="Q8oFKUkK"
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8cb3bae8d3eso405651285a.1
+        for <io-uring@vger.kernel.org>; Mon, 23 Mar 2026 09:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1774281658; x=1774886458; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7SscKSPRtp5r0bOyZYtc8orw97P+lM4BuDDRyRnpM2Q=;
-        b=icTJgAMR0oeLmZ/KWfLwRrhOP+EsA5wl9eKYkctdG+jFUxkdpinSnf2VcJjIGT1ldW
-         8faZggbpkd8NYEieO4mYUuOAYj1+A72IArYttf9BWOIrU4rwJLJd/miC42tsAVwEFVJy
-         66Ti2OFUfy/HXBknYPGxqAyu+UL+6AmHQvZtAuPzlGc2n9aEOOhgemTQdsIzkot+rZHD
-         zOeSlK/xnyBwjh+Jf5Ptj0RpSg2E2UhK3v9S/T/JaoGb3ta+awmnU4NQq9NLF3jIbmcd
-         y7nTnDhmLABhFmA4CKzRMvPexu2BOZf5R0MoCXYf+kvlR/rpgKaIXkVRCw2S1/CKv+FF
-         J2mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774281658; x=1774886458;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=bitbyteword.org; s=google; t=1774281667; x=1774886467; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7SscKSPRtp5r0bOyZYtc8orw97P+lM4BuDDRyRnpM2Q=;
-        b=o5MZAlVk9Ci+dOTSHYN/sIvMZDSoC9RRj2XWKkTtiQkJxess1eYY5/Me7lDjlm9C5s
-         kuMx0qQ7getSAtTmRb5F5fLiCvIchoeqsrhWQgVL5+qkX9UtjkHeTlqU9U+H5+9Q7ccB
-         BaBsnKt/RwLFneFvET7IuOmQ9qAkN3+QGk6kS/1Lq9DV/PtC0hl8sITXJ3ZvIQx0Y0Rd
-         p0FbXTUcWlAvRSIGfDckgZBG7f67wNgAUcmE6+pr19eWK6R+QIQs9PjOaz/NEwJ5no3H
-         sPeu4bjaSMHIG5vICOvzklmQpWpenXk+V8Ykg4M8tEfzAXQ+bofcaPHKKf18yso9MILy
-         C3Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCVbR1Cju1wiOUB0kMoN5lpar3lgmYv79fY1NsLX+szR96ugmVVlwEgVLZyIgRP/HFVpte/Z0FcFmg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBdC/S14bf5fcHFXZbIfmeZqdReSDuL4Y78HqrXv0hS/TcThXu
-	Bk+FVgRIKTl6rdQ3grVRpricGgttrZ7aPopjqQ2sXaPZR48FcIUMC/T3RbDmAikD6m8=
-X-Gm-Gg: ATEYQzxTZPJ9DwdjXMU3pdNvBu7TXXABJb/M/Nqwd1tjpnJMP7dZImLVgZXkYFS2wlC
-	r5+7p0yjEvDx4MNAWL2eD+WkLiTpRiN3HxWFnNeVDB3VSPqci7e7NFCGMYZt3+/V3OQhRL/S0Xe
-	alOhoO7H6Hel9WrQOEo7wg1X5m72ztMPLNA+TuMkOmVA3Tzf3xftuoGKZOM+KZqOuUQpiLJvOPJ
-	teo/ITCdiJvyIgzUTVw/zbYFo339oac71f+9YWD2qfhD4icmOScO7Ab4pBEcODlIgXZwNDl4CTc
-	KYOivX8QjExwA0xmKLttjz4JNsqwTYELFr42oRrMcGy6H4+D/+5OASYw7ceLwsDZywyndvCowWE
-	iEtZL0YybElzfU7D6bS6v0rsK8lLDQN511k8E9+SMwQZokCrFhjjCYHzGUWoH9Wg2GDBfwmkFAC
-	YA2kjCsBUQGOvECoV2Mt/7Ptd+T1qCHqGYF/KOAon+VXcIORrjmPQHXS+41BgIZe0jyw==
-X-Received: by 2002:a05:6820:3091:b0:67d:9cc0:968 with SMTP id 006d021491bc7-67d9cc00e0dmr6486936eaf.63.1774281657494;
-        Mon, 23 Mar 2026 09:00:57 -0700 (PDT)
+        bh=a4j4tflgND4Uiq9FcYinLLfKMNOFlVvGkpZDXfO0Vpc=;
+        b=Q8oFKUkKk31RX4VSpufeeZR/L2ttmdhrNRS/xpusWMuJ3uT77h9XdawdBslPDqAxfS
+         QA4JJVHgbpliXhKVMF7XPf1vNWGvVwhLg7FTYKqqCmhLT8bmjFGXuFVuhbDld2OB4Pp8
+         UFe/LC2eQIueylGEa3HPqAVjfzBCSfMM8yfY0kPltCYPQG/zsfa71kGewEvtUK6B3nqQ
+         pT+sysiqFrsDyA0gA8tea8VFyJ+gIpuiVDN5vxxcJRCxzQVgg7FsiPc154vdyUeBXeGH
+         jYvnXi9eNUGijd+xknI9mShD+y8aK3H2hcGpVW89OGqRzcDbZ9TTb+e2hEFnTvBylti1
+         srOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774281667; x=1774886467;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=a4j4tflgND4Uiq9FcYinLLfKMNOFlVvGkpZDXfO0Vpc=;
+        b=dMvil8Y3js6R4mXTopYXxMjtVRwyAvtFc0GqFIf3eeR5fWn2D1byJ/Wgcf2pBWa3Jl
+         PinXyYfYlINNkVYuy4V49AZDZpvdwLCt9Cd+FLgozFPEu9D35vL79KdnSQoqprN4iUjn
+         TK30z7E8aXTBPfrJU4fSJVP9D5OmMFfQ9p+s4DP86KqkM4SET8A8sNl9o8BQwaoz5aRe
+         GY5wDQXvm2h6zTPgu90+4c8CedW54ri5/KUfWfxHXgY49q8SogxsR5kddtzC07R6NDSv
+         rn2753Zi5ZKzzcFI0t8ybH2aBArOZIFlwgmgH5fM+j7xuXZk6YPQg47pr6tSNw/a+vOx
+         qxMg==
+X-Forwarded-Encrypted: i=1; AJvYcCXr8G+XdrG45lQ7L2z/QV9HyzsjU+0DFid98MkeVyg/ORzorETY+0vMkj+56guHp/Er738Jr12ZFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDOaGF0MHEyUuDJZKjR9eUobVnDxSK3L47jC9wTP/DH5jNgVGH
+	PRsDL9I0sJPhEW6X3y3jPHqn6JmPQMGFrojof/81pKuQXGhx9OoA4BzOJ2DynZEge9k=
+X-Gm-Gg: ATEYQzwI7dLp3oQzObxZDUwZwsbFmhfy168rf0CHSsPOgrsMz9uH79FYJDnllOpD0pN
+	5xxbn6zQLjdm0Ls49/Ks7K2e6IV3HJEIBAfIoLwVnaN3toFHB/96W/TAcxDhmyRqgTCB/VJYUo1
+	lP7OPewJQpXGZLRiM82LY5PMqOHkz/bEnDD9BNYysclYqHiaHMXTSbqaulWJs3lOPB1mlMQVofK
+	gJtcU1ixlJMAWUJXz1tbB6Shf4jVgsnK8w2JgftZOnZ5VkYKCQJHquTBa7sJNGfme6szVvocu7+
+	clMMh2s4JQyWMFLmpgVWIanGGuS0gD+Yc9FhiSC2GTh/5jJ8dCpdhOVKznaDyvPse+UA6r8LW4X
+	hqME28Jb0Wc4iGqkeYswe9ie7eslFshVSo4UzNRgmoC1xJf0WcN2GwhNGpeFkRV0QgL7TRRA83O
+	bk9o7j/llayIlaXYKTK8/7SRNC0F96VWt2gBLi2nrpDpeW5TJyYfuDQ3VdEh6pXgi2EK5mL9rAs
+	Yoo
+X-Received: by 2002:a05:620a:2845:b0:8cd:9033:1724 with SMTP id af79cd13be357-8cfc7b65cb3mr1863344685a.9.1774281666365;
+        Mon, 23 Mar 2026 09:01:06 -0700 (PDT)
 Received: from vinmini.lan (c-73-143-21-186.hsd1.vt.comcast.net. [73.143.21.186])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc9088df1sm843364185a.25.2026.03.23.09.00.53
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cfc9088df1sm843364185a.25.2026.03.23.09.01.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2026 09:00:56 -0700 (PDT)
+        Mon, 23 Mar 2026 09:01:05 -0700 (PDT)
 From: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Dmitry Ilvokhin <d@ilvokhin.com>
+To: 
 Cc: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Ingo Molnar <mingo@redhat.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Jens Axboe <axboe@kernel.dk>,
 	io-uring@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-	Xin Long <lucien.xin@gmail.com>,
-	Jon Maloy <jmaloy@redhat.com>,
-	Aaron Conole <aconole@redhat.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Ilya Maximets <i.maximets@ovn.org>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-sctp@vger.kernel.org,
-	tipc-discussion@lists.sourceforge.net,
-	dev@openvswitch.org,
-	Jiri Pirko <jiri@resnulli.us>,
-	Oded Gabbay <ogabbay@kernel.org>,
-	Koby Elbaz <koby.elbaz@intel.com>,
-	dri-devel@lists.freedesktop.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Huang Rui <ray.huang@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Len Brown <lenb@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	linaro-mm-sig@lists.linaro.org,
-	Eddie James <eajames@linux.ibm.com>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Joel Stanley <joel@jms.id.au>,
-	linux-fsi@lists.ozlabs.org,
-	David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	Harry Wentland <harry.wentland@amd.com>,
-	Leo Li <sunpeng.li@amd.com>,
-	amd-gfx@lists.freedesktop.org,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	linux-input@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	linux-spi@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org,
-	Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	linux-btrfs@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	SeongJae Park <sj@kernel.org>,
-	linux-mm@kvack.org,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 00/19] tracepoint: Avoid double static_branch evaluation at guarded call sites
-Date: Mon, 23 Mar 2026 12:00:19 -0400
-Message-ID: <20260323160052.17528-1-vineeth@bitbyteword.org>
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH v2 03/19] io_uring: Use trace_call__##name() at guarded tracepoint call sites
+Date: Mon, 23 Mar 2026 12:00:22 -0400
+Message-ID: <20260323160052.17528-4-vineeth@bitbyteword.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260323160052.17528-1-vineeth@bitbyteword.org>
+References: <20260323160052.17528-1-vineeth@bitbyteword.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -150,122 +82,33 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When a caller already guards a tracepoint with an explicit enabled check:
-
-  if (trace_foo_enabled() && cond)
-      trace_foo(args);
-
-trace_foo() internally re-evaluates the static_branch_unlikely() key.
-Since static branches are patched binary instructions the compiler cannot
-fold the two evaluations, so every such site pays the cost twice.
-
-This series introduces trace_call__##name() as a companion to
-trace_##name().  It calls __do_trace_##name() directly, bypassing the
-redundant static-branch re-check, while preserving all other correctness
-properties of the normal path (RCU-watching assertion, might_fault() for
-syscall tracepoints).  The internal __do_trace_##name() symbol is not
-leaked to call sites; trace_call__##name() is the only new public API.
-
-  if (trace_foo_enabled() && cond)
-      trace_call__foo(args);   /* calls __do_trace_foo() directly */
-
-The first patch adds the three-location change to
-include/linux/tracepoint.h (__DECLARE_TRACE, __DECLARE_TRACE_SYSCALL,
-and the !TRACEPOINTS_ENABLED stub).  The remaining 18 patches
-mechanically convert all guarded call sites found in the tree:
-kernel/, io_uring/, net/, accel/habanalabs, cpufreq/, devfreq/,
-dma-buf/, fsi/, drm/, HID, i2c/, spi/, scsi/ufs/, btrfs/,
-net/devlink/, kernel/time/, kernel/trace/, mm/damon/, and arch/x86/.
-
-This series is motivated by Peter Zijlstra's observation in the discussion
-around Dmitry Ilvokhin's locking tracepoint instrumentation series, where
-he noted that compilers cannot optimize static branches and that guarded
-call sites end up evaluating the static branch twice for no reason, and
-by Steven Rostedt's suggestion to add a proper API instead of exposing
-internal implementation details like __do_trace_##name() directly to
-call sites:
-
-  https://lore.kernel.org/linux-trace-kernel/8298e098d3418cb446ef396f119edac58a3414e9.1772642407.git.d@ilvokhin.com
+Replace trace_foo() with the new trace_call__foo() at sites already
+guarded by trace_foo_enabled(), avoiding a redundant
+static_branch_unlikely() re-evaluation inside the tracepoint.
+trace_call__foo() calls the tracepoint callbacks directly without
+utilizing the static branch again.
 
 Suggested-by: Steven Rostedt <rostedt@goodmis.org>
 Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
+Assisted-by: Claude:claude-sonnet-4-6
+---
+ io_uring/io_uring.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v2:
-- Renamed trace_invoke_##name() to trace_call__##name() (double
-  underscore) per review comments.
-- Added 4 new patches covering sites missed in v1, found using
-  coccinelle to scan the tree (Keith Busch):
-    * net/devlink: guarded tracepoint_enabled() block in trap.c
-    * kernel/time: early-return guard in tick-sched.c (tick_stop)
-    * kernel/trace: early-return guard in trace_benchmark.c
-    * mm/damon: early-return guard in core.c
-    * arch/x86: do_trace_*() wrapper functions in lib/msr.c, which
-      are called exclusively from tracepoint_enabled()-guarded sites
-      in asm/msr.h
-
-v1: https://lore.kernel.org/linux-trace-kernel/abSqrJ1J59RQC47U@kbusch-mbp/
-
-Vineeth Pillai (Google) (19):
-  tracepoint: Add trace_call__##name() API
-  kernel: Use trace_call__##name() at guarded tracepoint call sites
-  io_uring: Use trace_call__##name() at guarded tracepoint call sites
-  net: Use trace_call__##name() at guarded tracepoint call sites
-  accel/habanalabs: Use trace_call__##name() at guarded tracepoint call
-    sites
-  cpufreq: Use trace_call__##name() at guarded tracepoint call sites
-  devfreq: Use trace_call__##name() at guarded tracepoint call sites
-  dma-buf: Use trace_call__##name() at guarded tracepoint call sites
-  fsi: Use trace_call__##name() at guarded tracepoint call sites
-  drm: Use trace_call__##name() at guarded tracepoint call sites
-  HID: Use trace_call__##name() at guarded tracepoint call sites
-  i2c: Use trace_call__##name() at guarded tracepoint call sites
-  spi: Use trace_call__##name() at guarded tracepoint call sites
-  scsi: ufs: Use trace_call__##name() at guarded tracepoint call sites
-  btrfs: Use trace_call__##name() at guarded tracepoint call sites
-  net: devlink: Use trace_call__##name() at guarded tracepoint call
-    sites
-  kernel: time, trace: Use trace_call__##name() at guarded tracepoint
-    call sites
-  mm: damon: Use trace_call__##name() at guarded tracepoint call sites
-  x86: msr: Use trace_call__##name() at guarded tracepoint call sites
-
- arch/x86/lib/msr.c                                |  6 +++---
- drivers/accel/habanalabs/common/device.c          | 12 ++++++------
- drivers/accel/habanalabs/common/mmu/mmu.c         |  3 ++-
- drivers/accel/habanalabs/common/pci/pci.c         |  4 ++--
- drivers/cpufreq/amd-pstate.c                      | 10 +++++-----
- drivers/cpufreq/cpufreq.c                         |  2 +-
- drivers/cpufreq/intel_pstate.c                    |  2 +-
- drivers/devfreq/devfreq.c                         |  2 +-
- drivers/dma-buf/dma-fence.c                       |  4 ++--
- drivers/fsi/fsi-master-aspeed.c                   |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c            |  2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c            |  4 ++--
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  2 +-
- drivers/gpu/drm/scheduler/sched_entity.c          |  4 ++--
- drivers/hid/intel-ish-hid/ipc/pci-ish.c           |  2 +-
- drivers/i2c/i2c-core-slave.c                      |  2 +-
- drivers/spi/spi-axi-spi-engine.c                  |  4 ++--
- drivers/ufs/core/ufshcd.c                         | 12 ++++++------
- fs/btrfs/extent_map.c                             |  4 ++--
- fs/btrfs/raid56.c                                 |  4 ++--
- include/linux/tracepoint.h                        | 11 +++++++++++
- io_uring/io_uring.h                               |  2 +-
- kernel/irq_work.c                                 |  2 +-
- kernel/sched/ext.c                                |  2 +-
- kernel/smp.c                                      |  2 +-
- kernel/time/tick-sched.c                          | 12 ++++++------
- kernel/trace/trace_benchmark.c                    |  2 +-
- mm/damon/core.c                                   |  2 +-
- net/core/dev.c                                    |  2 +-
- net/core/xdp.c                                    |  2 +-
- net/devlink/trap.c                                |  2 +-
- net/openvswitch/actions.c                         |  2 +-
- net/openvswitch/datapath.c                        |  2 +-
- net/sctp/outqueue.c                               |  2 +-
- net/tipc/node.c                                   |  2 +-
- 35 files changed, 74 insertions(+), 62 deletions(-)
-
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 0fa844faf2871..e99975ffdda12 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -299,7 +299,7 @@ static __always_inline bool io_fill_cqe_req(struct io_ring_ctx *ctx,
+ 	}
+ 
+ 	if (trace_io_uring_complete_enabled())
+-		trace_io_uring_complete(req->ctx, req, cqe);
++		trace_call__io_uring_complete(req->ctx, req, cqe);
+ 	return true;
+ }
+ 
 -- 
 2.53.0
 
