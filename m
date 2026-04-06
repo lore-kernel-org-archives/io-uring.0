@@ -1,148 +1,154 @@
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6995381B17
-	for <io-uring@vger.kernel.org>; Sun,  5 Apr 2026 23:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F4B3290AA;
+	Mon,  6 Apr 2026 04:39:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1775433216; cv=none; b=puadzGYH5yQ41YUJ2rFsIW6fe/OC6J9IMNqwfrMiKl9chCessgB74Dvq+AaR0M82Na7V0s1HkyqZd4oBMdDkpkVwew0/ErGmcfmN4lRGnptIfy9aRRfBc5aQWX/3LvISbwEdlYj1qb/OyllphiuIwUYZfn1WKNuuDyEJ2qVh4g0=
+	t=1775450372; cv=none; b=WHi/1bQre0cAodHDmmXnzgbKIh27pPwpDWk/vuva+hDliMx6/S9vARQ07ymwok3YJzwGW63HY7sO3yE2M/iFqOLGwhIBQ9Ya1r4PJmoRLnHom988I+qelTTXjkQfrN6t35PXtqkQCnc5+HcQst8oCc01NNZWjm9GwT3nwUS+sLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1775433216; c=relaxed/simple;
-	bh=Yj0hD69zan3jXoQa+KU3ZuqYzZkT2re7up7IKvAvly8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d2JS7Hws80yJ8Fj/PFhOJp0m1qKiYipFZGySOtL/qZNsfUYnrnvOwuuqKgqq2fH8m0tMLrGZ7eOO5eKboO8a/oLnaIXe0vYa18CjHLoa+tUd9onpGfGGvpwptEnvmMk5GmCaeEp+MtoUC2rr7pDoNSHX5cPeYbvjwG+ybuHxYR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ex2I1O6F; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1775450372; c=relaxed/simple;
+	bh=5wFMBkbNcWEKQfciEN3tPppkZZ/hT+uEl/M30p0cKnw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d4t6l4QUw4XCVnqotBwD+5mnZ1HBcD89MAOvGS1puDl7p0MojqcjXhMy9z6C9sUErXZSFGE2u5qVKexmdbXI0+tHc41bWOuDu0itPstBJZHiLHr5YnZCnLhYyQeL+kCEU7vioqdbO0zjS5RPwRPoWVEBw59Hwbqbqstnp/x9Hho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CvZmSErQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ex2I1O6F"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43cfb723698so3158294f8f.3
-        for <io-uring@vger.kernel.org>; Sun, 05 Apr 2026 16:53:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1775433213; x=1776038013; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+o8SlLfQNJf2zGSX+T9XxW7oHeUb1Mk1jVVU90cHf6g=;
-        b=ex2I1O6FOARnHA4VjrQ6hW3vWmfratct83ejU16KTAOTBA+OdSqGSPJlpkbt++hy8t
-         OxsVCC+syYG+D/eyCBhTj1zTRuqY798V1t9HE63eVwZSKLh1QYjcFtSlH2NlsuUNAN9q
-         ZOGHpA2jq9g/WehP0uYZ8YVCLvYvrb5W6vyqJR7ZSa93fwkYxi7nOTOOvE57uDbfF3ym
-         BJIQzAAONhmIvEsNVImc1iAyOdJeRaNe6ig/2Eyqnbz4y2b5FC6P3xJDs7JB/te5dAYY
-         POzt/oudtiJyi70duY+2BaYmbtga9UYX4QYEvGdQSrSPI5xpaSCz2XH+QEkugCBhYiK0
-         mHKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1775433213; x=1776038013;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+o8SlLfQNJf2zGSX+T9XxW7oHeUb1Mk1jVVU90cHf6g=;
-        b=nXyL8w5p5SqPZRXEpu4a3tPCoTN1Ifvf+MSVpA7qDS2cGibVaiGNS4mEtZsKS07k4S
-         qvTU8B9tyyyBhhDSmfdmBn6tnSqgtI4buyzbpQwozpjJGVPChpHQIo8MMUx1LXhtEq2V
-         8zgn7DqHxzXQ8DClpzMjLTqhEgZScR6SRusNkvGCDBkpPFHyezKo5beGt8L/4Lk6xnl2
-         Aogm+WTZ57vTHV7DssWGdKAh27XvG3OaG8zW6Gjg1nIFeQQl5vv06yCE2i5YusswihKY
-         EGN+jBL8StUNIgUb/H1IcrUBpvwI6tjc1d+Jk2S/73p5GfNfFxfUZHHdUfp+rcywdpCL
-         LbWw==
-X-Gm-Message-State: AOJu0Yx0KJpUR7SQe5pBy+t6g/R/T7/jTb/OamNvvFlJLdNasZT/eNr+
-	+671IdWTt7zxuZPuxZaUWrg+Wr5wPnP76kiHdz3Sn/5prX0CdLpNSmvzR/33w0Pt0jc=
-X-Gm-Gg: AeBDiev7vEemPVP/R2UdBdUNa478XE1rHw4JfHcVHgSISJxY7igTdcJZlxZAA7YLTN7
-	IJK7diQGMA8mT8UDuc3G99ekyeKBCb789hkuCQdQG94gYZOeAc3yAmf49Q9bA2nIN5xS0OiZ6z6
-	lpSdraKwRX0JqqUw4o7b/BWgSTYPZB7OwtLi3YRIKewSQHrGIVgybvpSaSD9sW4qLnJFxrB7/CO
-	nT0X2jfT+4p2x4dg1ZD52pYu1oMEBfBk08/d5ZPI1p1YI4LEd4fw5JtQnpB4Mv3McMlERhttiGm
-	3JYEAcXeRvhaZwGml12HgBvUn+cPkSS/dmYBA9dUpZzOX6LrtBFwj0xbP6RAzbDYnJTrzGboDr4
-	ZGYpw2gq7npN0ylmj1Wl+sFsZha3JJAUJAyR9Lm7qgrH4iwyecujxasomgChf3xS468Fk6T1wq4
-	TDkvYmKvi+NEh7/saIH43g1HFO/8FzjiDUDsUJXBYb63NpvhTzzvvwUGXfKLILSmKpcz8vOz+H0
-	N/I/2y0vJDlPzFfW4rutMh+Da3yHgtLKmXCI0vR
-X-Received: by 2002:a05:6000:1446:b0:43d:4c:22be with SMTP id ffacd0b85a97d-43d292d4789mr16005305f8f.36.1775433212609;
-        Sun, 05 Apr 2026 16:53:32 -0700 (PDT)
-Received: from localhost.localdomain (host86-175-208-130.range86-175.btcentralplus.com. [86.175.208.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43d1e4d29bbsm36284485f8f.21.2026.04.05.16.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Apr 2026 16:53:31 -0700 (PDT)
-From: Bertie Tryner <bertietryner@gmail.com>
-X-Google-Original-From: Bertie Tryner <Bertie.Tryner@warwick.ac.uk>
-To: io-uring@vger.kernel.org
-Cc: axboe@kernel.dk,
-	asml.silence@gmail.com,
-	Bertie Tryner <Bertie.Tryner@warwick.ac.uk>
-Subject: [PATCH] io_uring/zcrx: reorder fd allocation and disclosure in zcrx_export()
-Date: Mon,  6 Apr 2026 00:53:30 +0100
-Message-Id: <20260405235330.49287-1-Bertie.Tryner@warwick.ac.uk>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CvZmSErQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02A57C2BCB0;
+	Mon,  6 Apr 2026 04:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1775450372;
+	bh=5wFMBkbNcWEKQfciEN3tPppkZZ/hT+uEl/M30p0cKnw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CvZmSErQmK36/0I5I7bxseumwyYM8Pfyi/Rgt7KEzw3FBvxJPh+VyxwBqHMEgIZXt
+	 zSlE+ckWVC1KOfaPI3XPt99y2Zb7rN/f+rj+v0dNoK+leVbnmOyIUpH0ywYC+7YkJX
+	 lwWa4wp4hUyt9lkPl73ZsIQNqWKdAU23UH4kiwMBDO8S5dpChTBhJJCBFjgDv2DRPf
+	 287mEFJoalKjwvoCZTTZNjhLXKfYk3YcyS6mghu981FLos91SrpB99wIpwr9AFsghx
+	 WhDoXwwADW/P8thTeLNN9y9S5t538mwN5Ie99nr+0WrFQuP7ueXi5igrH9iv8Q7mL4
+	 S6IiH5WGaVpTw==
+Date: Sun, 5 Apr 2026 21:39:31 -0700
+From: Kees Cook <kees@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Kusaram Devineni <kusaram@devineni.in>,
+	Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org,
+	io-uring@vger.kernel.org, Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH] signalfd: don't dequeue the forced fatal signals
+Message-ID: <202604052136.440E9CFA44@keescook>
+References: <adKJMRkQJXEwHs-j@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <adKJMRkQJXEwHs-j@redhat.com>
 
-Currently, zcrx_export() allocates and discloses a file descriptor to
-userspace before the backing file is successfully created. If file
-creation fails, the fd is released back to the pool, but the number
-has already been written to the user-provided control structure.
+On Sun, Apr 05, 2026 at 06:09:21PM +0200, Oleg Nesterov wrote:
+> These signals should act like SIGKILL, in that userspace must never dequeue
+> them. But as Kusaram explains, io_uring-driven signalfd_read_iter() called
+> from get_signal() -> task_work_run() paths can do this before get_signal()
+> has a chance to dequeue such a signal and notice SA_IMMUTABLE.
+> 
+> Change signalfd_poll() and signalfd_dequeue() to add pending SA_IMMUTABLE
+> signals to ctx->sigmask.
+> 
+> Cc: stable@kernel.org
+> Reported-by: syzbot+0a4c46806941297fecb9@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=0a4c46806941297fecb9
+> Tested-by: syzbot+0a4c46806941297fecb9@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/all/69d122fd.050a0220.2dbe29.001c.GAE@google.com/
+> Suggested-by: Kusaram Devineni <kusaram@devineni.in>
+> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
 
-While this requires a misbehaving or racing userspace to trigger,
-it is better practice to ensure the file descriptor is only
-disclosed once the operation is guaranteed to succeed. This aligns
-the ZCRX export logic with the standard patterns used in the VFS
-layer and other fd-publishing paths.
+Reviewed-by: Kees Cook <kees@kernel.org>
 
-Move the get_unused_fd_flags() and copy_to_user() calls to after
-the file has been successfully created.
+Who should take this? I'm happy to add it to my seccomp tree if akpm (or
+maybe Christian wants it)?
 
-Signed-off-by: Bertie Tryner <Bertie.Tryner@warwick.ac.uk>
----
- io_uring/zcrx.c | 25 ++++++++++++++-----------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+-Kees
 
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index 262ac73..700eff9 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -637,19 +637,10 @@ static int zcrx_export(struct io_ring_ctx *ctx, struct io_zcrx_ifq *ifq,
- {
- 	struct zcrx_ctrl_export *ce = &ctrl->zc_export;
- 	struct file *file;
--	int fd = -1;
-+	int fd;
- 
- 	if (!mem_is_zero(ce, sizeof(*ce)))
- 		return -EINVAL;
--	fd = get_unused_fd_flags(O_CLOEXEC);
--	if (fd < 0)
--		return fd;
--
--	ce->zcrx_fd = fd;
--	if (copy_to_user(arg, ctrl, sizeof(*ctrl))) {
--		put_unused_fd(fd);
--		return -EFAULT;
--	}
- 
- 	refcount_inc(&ifq->refs);
- 	refcount_inc(&ifq->user_refs);
-@@ -657,11 +648,23 @@ static int zcrx_export(struct io_ring_ctx *ctx, struct io_zcrx_ifq *ifq,
- 	file = anon_inode_create_getfile("[zcrx]", &zcrx_box_fops,
- 					 ifq, O_CLOEXEC, NULL);
- 	if (IS_ERR(file)) {
--		put_unused_fd(fd);
- 		zcrx_unregister(ifq);
- 		return PTR_ERR(file);
- 	}
- 
-+	fd = get_unused_fd_flags(O_CLOEXEC);
-+	if (fd < 0) {
-+		fput(file);
-+		return fd;
-+	}
-+
-+	ce->zcrx_fd = fd;
-+	if (copy_to_user(arg, ctrl, sizeof(*ctrl))) {
-+		fput(file);
-+		put_unused_fd(fd);
-+		return -EFAULT;
-+	}
-+
- 	fd_install(fd, file);
- 	return 0;
- }
+> ---
+>  fs/signalfd.c | 28 ++++++++++++++++++++++------
+>  1 file changed, 22 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/signalfd.c b/fs/signalfd.c
+> index dff53745e352..107a83336657 100644
+> --- a/fs/signalfd.c
+> +++ b/fs/signalfd.c
+> @@ -48,17 +48,30 @@ static int signalfd_release(struct inode *inode, struct file *file)
+>  	return 0;
+>  }
+>  
+> +static void mk_sigmask(struct signalfd_ctx *ctx, sigset_t *sigmask)
+> +{
+> +	struct k_sigaction *k = current->sighand->action;
+> +	int n;
+> +
+> +	*sigmask = ctx->sigmask;
+> +	for (n = 1; n <= _NSIG; ++n, ++k) {
+> +		if (k->sa.sa_flags & SA_IMMUTABLE)
+> +			sigaddset(sigmask, n);
+> +	}
+> +}
+> +
+>  static __poll_t signalfd_poll(struct file *file, poll_table *wait)
+>  {
+>  	struct signalfd_ctx *ctx = file->private_data;
+>  	__poll_t events = 0;
+> +	sigset_t sigmask;
+>  
+>  	poll_wait(file, &current->sighand->signalfd_wqh, wait);
+>  
+>  	spin_lock_irq(&current->sighand->siglock);
+> -	if (next_signal(&current->pending, &ctx->sigmask) ||
+> -	    next_signal(&current->signal->shared_pending,
+> -			&ctx->sigmask))
+> +	mk_sigmask(ctx, &sigmask);
+> +	if (next_signal(&current->pending, &sigmask) ||
+> +	    next_signal(&current->signal->shared_pending, &sigmask))
+>  		events |= EPOLLIN;
+>  	spin_unlock_irq(&current->sighand->siglock);
+>  
+> @@ -155,11 +168,13 @@ static ssize_t signalfd_dequeue(struct signalfd_ctx *ctx, kernel_siginfo_t *info
+>  				int nonblock)
+>  {
+>  	enum pid_type type;
+> -	ssize_t ret;
+>  	DECLARE_WAITQUEUE(wait, current);
+> +	sigset_t sigmask;
+> +	ssize_t ret;
+>  
+>  	spin_lock_irq(&current->sighand->siglock);
+> -	ret = dequeue_signal(&ctx->sigmask, info, &type);
+> +	mk_sigmask(ctx, &sigmask);
+> +	ret = dequeue_signal(&sigmask, info, &type);
+>  	switch (ret) {
+>  	case 0:
+>  		if (!nonblock)
+> @@ -174,7 +189,7 @@ static ssize_t signalfd_dequeue(struct signalfd_ctx *ctx, kernel_siginfo_t *info
+>  	add_wait_queue(&current->sighand->signalfd_wqh, &wait);
+>  	for (;;) {
+>  		set_current_state(TASK_INTERRUPTIBLE);
+> -		ret = dequeue_signal(&ctx->sigmask, info, &type);
+> +		ret = dequeue_signal(&sigmask, info, &type);
+>  		if (ret != 0)
+>  			break;
+>  		if (signal_pending(current)) {
+> @@ -184,6 +199,7 @@ static ssize_t signalfd_dequeue(struct signalfd_ctx *ctx, kernel_siginfo_t *info
+>  		spin_unlock_irq(&current->sighand->siglock);
+>  		schedule();
+>  		spin_lock_irq(&current->sighand->siglock);
+> +		mk_sigmask(ctx, &sigmask);
+>  	}
+>  	spin_unlock_irq(&current->sighand->siglock);
+>  
+> -- 
+> 2.52.0
+> 
+> 
+
 -- 
-2.50.1 (Apple Git-155)
-
+Kees Cook
