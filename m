@@ -1,152 +1,94 @@
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661A02D9EC2
-	for <io-uring@vger.kernel.org>; Tue, 21 Apr 2026 13:56:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE5AF3A4F58
+	for <io-uring@vger.kernel.org>; Tue, 21 Apr 2026 13:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776779798; cv=none; b=YUR6ES3qMUm+Wo/yXlrO7ZXXHPo9GCVbFOae1Des2mGN7g3jLMcqIrOWPhDLT+yAczm2wKfsIZ/3DnpTShqP7a6Lj/BSsqfWSkzl0c+ywjhCDuUcpyz7DcIH/QZU8FNdyc2L5GDecZYvAYT44Om2jexmPmOD/BGnofhkzr8zFJ4=
+	t=1776779895; cv=none; b=ZSqv80ylSgXBKFrnE2WS5n1IbLYy2+13nLEMLfCRvYvI+hJQsmk5AjobB0T3rlCvhFE55UmZuaZC6m50zukQjuHnopUMiyKtd6oWVBDfcY/zEBis9wquoXGhEOGLpSg13o59xbLyMdMSX3pmyHbN0PQwX0/v8D4/RKixL3J7tJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776779798; c=relaxed/simple;
-	bh=NfyaQ5tAQXt1thNuLiGOQacLHo7mjr3LxbcV8JXcvZs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UsphBPoDWcPYT5bWGLiVaJ7r56j0afI5uFDgwXF80Ie96PIbE/REgs6PpXK60kWLMfp/XcC7KFAW5zxYW6pcpu8uAixMZq8XOl2RyNL9hnN3dv7GCPEOhdkUNudINmfdIpH/Uh8/R4yJC49zdWJ3saV0ANlaU1ZnHxb3+lAgj8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=lGL6Y7Y5; arc=none smtp.client-ip=209.85.160.46
+	s=arc-20240116; t=1776779895; c=relaxed/simple;
+	bh=h79PSbg/IUermI8GVLDR2GFVPUmxoadUkF2GldaCZoQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=nrAXUSqsKbfvCD0SHrziWS6Zi64JxZEiHY8H2Ja8SEn0/ucPGzp0cMq8gHrXb6f7G1VNZBPIOZ3shFg14EYNsEh2/rhsF9i76iT6w/2vkzJW4eOjVdTPc3D/yypl7XF1lDz/BBJwodhZxQSrzw6WWIFuWBr6urVw0dIheOVhwzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=d5hH2Ee4; arc=none smtp.client-ip=209.85.161.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="lGL6Y7Y5"
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-409de4132b5so2667443fac.1
-        for <io-uring@vger.kernel.org>; Tue, 21 Apr 2026 06:56:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="d5hH2Ee4"
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-66f747175d8so2069860eaf.0
+        for <io-uring@vger.kernel.org>; Tue, 21 Apr 2026 06:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1776779796; x=1777384596; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1776779893; x=1777384693; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JQumuCrV/YCb7guXkPqjc1FwMZmuvspfr+/5Sw2Nn/Y=;
-        b=lGL6Y7Y5Ak17zkyI6SUVTY6Cs8Zx+rRKymUDxTWGh7x38glSaYdO8KXOVGRAkLjXnE
-         J5SRJUdnXiBcd8M3mfzr3bjIrTpENZfP4hu/i+Z98vYu1g5r3swOvnXRxl9VH38B92/9
-         YjvyJJndky0QNer0kgkBEhAEnlqW2xxU/DATLtySNS0fTSEpIoWCNBLTwuXpXLsZ/nVc
-         rxnKMIg9rlZRg9DVtHcKGd524X7sNRKUDgtvNvvzmCoIej5ZlAQ4sCAyoqEhEfK+Yxpe
-         3tS141eRKlzsZ+g/j37136azllFF23MisdnBL+s4qAGbf/8m8+iTFumqkFbHW5zpEeDL
-         Q8HQ==
+        bh=7JNGZDDJHB9Ki23I1vuWlnb/tBBT2Wz3AVfTrWTmwcA=;
+        b=d5hH2Ee4dTVdm9yENqC7RbDAuPbI0fnnB5oAsViaZvAUjO0qcfW9FjN8ogIywISPie
+         m5kBdEhwEB0cqQo5mKJG+0Ddz2+pUTPQe2qmmEMbuOpIQzTOpPdKNFw74jEofK9IXJlt
+         NqCfoYqSLysXrHQAob5CrRqX3NlM3W9vTAWUrNSWeMKMk1xPhXyWivk++W6S05UYluRG
+         eTWv6++oa5Wi5STjg7w8fwhqbk6+QqXlcOl5DBEmN0tt7MK0SynREhWyf5jSr85YgXUl
+         F7rb1tVTSpO0GW74mjPbJ67C2mTYagzox+hRMU7v2oBuhhYZRcW/Y6L/NN/BgWKkcOHo
+         XW1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1776779796; x=1777384596;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20251104; t=1776779893; x=1777384693;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=JQumuCrV/YCb7guXkPqjc1FwMZmuvspfr+/5Sw2Nn/Y=;
-        b=mk7zNxYrhxR7BQ2wu+dZdao6z7FbbRauC7bYll9MBLCi0T5KEC0fv8swGWQXjJaKIe
-         XZjvqyOlnAJA3C8dY2M1Meyb5AR5FuGvHlGL2tYrLOMtoCs9eTpBDIRn0ox782Y6lRUI
-         RZhDtSwMoSG/0MdEpJ1e+3fe/Js06i+4S/YJW3aYidY9+CVyeHP3GF2jCTVbIJL2ga66
-         JPeWsx/RNIgKqeecrBsuMZxcD69T+b0jbWlenH0TCIP9DM+ZmYwg+MvxNWSOny4uQcMo
-         bXrXfyMvWcYIS9zID+4bY76HKd7yIuFRPPXgJQ4bSU1oKkBKser4BdgABAfuFZdse/3J
-         O8JQ==
-X-Gm-Message-State: AOJu0YwqgoH08fcG5j1XaCCLU1A8U0lt0hqJvy82ZdMaQUufL+1/C3DG
-	v+cxJQl4+weIAn6zH4mqz1KYL8gRRgS1Od9B+TMC3u6ncMFKVXwUUUdC0mq5FRipSOy40JON3Z5
-	ABgwmcQk=
-X-Gm-Gg: AeBDietKz+v0g2rvZr3kibn6dR+ol1C0tE8dQsfKxhdE/UW5yT6faZpp27xT/8Kfs1Q
-	9Ohkg9DPx1EioNeDMsCuf1XspSWY/x+Pqw9miVUSCXtwhttv/D0Va4rQGfT9+eAbcwPlIpKcs36
-	5g6H3/SMhm/jdFEf84mHz5S9mK9q5AoKELwUxWVLGRM4bMGAHS+hJxDcIA7jJb2e4NM3iyTdrX6
-	v+7VvXI+86bXPN6L/ElKcGVnRAyFXV/kGrtpCO0OnfmKJcwTp49ihaQUGox6hwcTMkqC87V/yyZ
-	+gwEJAkWu24S1rHSBW83PWs8r6qBbEhWydk4ejwxthiUX4g49WJzY1G/FyyaAPY33R/b9fn3HXC
-	Yf4jpYGdSZdUpuu4WheyiU11+EzZ7nxXeStge8txyDpUrr2chwpkFqfLhz9oSs7sg4rPDYMySXv
-	hkNPiPKN6uqNgM/IXFtNxI0ryF3ibAxQZP7s7gz+8rNUzwoiMMt3DgyzXev2m9y8rv+cF0N9guu
-	ia5HNDu/aaai1RbPw==
-X-Received: by 2002:a05:6870:b0c7:b0:41b:cc55:c398 with SMTP id 586e51a60fabf-42abf2d96ccmr11916034fac.15.1776779795962;
-        Tue, 21 Apr 2026 06:56:35 -0700 (PDT)
-Received: from m2max ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42b8fe2c52bsm11756474fac.0.2026.04.21.06.56.34
+        bh=7JNGZDDJHB9Ki23I1vuWlnb/tBBT2Wz3AVfTrWTmwcA=;
+        b=cW+C8DfkzSzGUaiZs2yFsGfh2PQ0+gpGtBJysYw4nj02QOW3Y+I+1ZgZyW5B/dImdw
+         ZfOfCCDLsBJnseMac5dXO+HMoyesqK7P6+gz5BfDsj3WjhYcexcmL1di/8vnm96Kl2Z4
+         Z2IHj9b8qcC0t9lMeUS9sBIGcNcf3Ct8dsTk3AptQAPjmda1K90U7Uok+dKtCtm5KwFK
+         CQEj0W5lFYhTBYbltrBUzO5ZIok+LO9m1pqmhORDsserkKAZbPbGXMFxGgOI+UzYDKLe
+         n4AXo/k2eVT98xKonrAzReEo6Q1Vh9wd0LeT+7wgejWxcb8ICN94aeSydj6rPDRfol5A
+         i6xg==
+X-Gm-Message-State: AOJu0YyziCD5O8BI+gf74c8TRqMiBf1RcpBZMZb/e2qb5918cjnXZOCz
+	J61LZsRjbwqn3dSdysiZa5p2+vDL2LHbIWltlvGPQ2fa9I/hWsk9PwaAleDuPHEDbhQ=
+X-Gm-Gg: AeBDiet2pwZRqguXpkUVrxkd1Ln7VQ82RwLdOqXUNl+d5XboGfRxJiKOw8v7wo8jqkI
+	apfCbxyynuU+ZmpueMfpJdWH35zP6/qC6nHMFhWHfh4d44QPCM32J5f7gayuRCNRkzLCcFP2FAL
+	5w3s8yAw5x4FtmftNK3wrogsfRn7+GZmjt1KkgwuoPWlVCC2z5lvuR9iHh5MD9bzi9q3Qpcdm4c
+	3uq69/vptcSmD5kNuT/EMhVKzbjiMX+PiaPA1BzyUFPcjxZphMDJ4PMJS1ZvgdNcfjYWfoZKzWB
+	o10TLnzeFbZllieyY/cYLXPvL7XW8BFZ8Q8YapKXEciONIieVjYgfV10ift4FkRGuvbrAWlOcJo
+	yq7zvAX1yH+Y1czVak+65DSAGkdUwrsdDdSoBAjG2K6j/GWBNEwhzItzRqyJU1TV4ZbraJQb3Nh
+	sfAvcMMMudV27ucSps1tloF2Vg+TLoQm2M6pckm6pPwW84bmDUJIo+Wb4ki7Hz1wIaqwCH0Vq4p
+	Adn3WpxOswD6/8=
+X-Received: by 2002:a05:6820:2901:b0:694:9d3d:e040 with SMTP id 006d021491bc7-6949d3de22cmr704907eaf.31.1776779892805;
+        Tue, 21 Apr 2026 06:58:12 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-694984114f5sm1229359eaf.7.2026.04.21.06.58.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2026 06:56:35 -0700 (PDT)
+        Tue, 21 Apr 2026 06:58:12 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	stable@kernel.org
-Subject: [PATCH 6/6] io_uring/register: fix ring resizing with mixed/large SQEs/CQEs
-Date: Tue, 21 Apr 2026 07:51:43 -0600
-Message-ID: <20260421135626.581917-7-axboe@kernel.dk>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260421135626.581917-1-axboe@kernel.dk>
-References: <20260421135626.581917-1-axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+Cc: netdev@vger.kernel.org
+In-Reply-To: <e560ae00960d27a810522a7efc0e201c82dff351.1776760917.git.asml.silence@gmail.com>
+References: <e560ae00960d27a810522a7efc0e201c82dff351.1776760917.git.asml.silence@gmail.com>
+Subject: Re: [PATCH 1/1] io_uring/zcrx: fix user_struct uaf
+Message-Id: <177677989210.583761.13165622082638162638.b4-ty@b4>
+Date: Tue, 21 Apr 2026 07:58:12 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-The ring resizing only properly handles "normal" sized SQEs or CQEs, if
-there are pending entries around a resize. This normally should not be
-the case, but the code is supposed to handle this regardless.
 
-For the mixed SQE/CQE cases, the current copying works fine as they
-are indexed in the same way. Each half is just copied separately. But
-for fixed large SQEs and CQEs, the iteration and copy need to take that
-into account.
+On Tue, 21 Apr 2026 09:47:04 +0100, Pavel Begunkov wrote:
+> io_free_rbuf_ring() usees a struct user_struct, which
+> io_zcrx_ifq_free() puts it down before destroying the ring.
 
-Cc: stable@kernel.org
-Fixes: 79cfe9e59c2a ("io_uring/register: add IORING_REGISTER_RESIZE_RINGS")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/register.c | 36 ++++++++++++++++++++++++++++--------
- 1 file changed, 28 insertions(+), 8 deletions(-)
+Applied, thanks!
 
-diff --git a/io_uring/register.c b/io_uring/register.c
-index 24e593332d1a..dce5e2f9cf77 100644
---- a/io_uring/register.c
-+++ b/io_uring/register.c
-@@ -599,10 +599,20 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
- 	if (tail - old_head > p->sq_entries)
- 		goto overflow;
- 	for (i = old_head; i < tail; i++) {
--		unsigned src_head = i & (ctx->sq_entries - 1);
--		unsigned dst_head = i & (p->sq_entries - 1);
--
--		n.sq_sqes[dst_head] = o.sq_sqes[src_head];
-+		unsigned index, dst_mask, src_mask;
-+		size_t sq_size;
-+
-+		index = i;
-+		sq_size = sizeof(struct io_uring_sqe);
-+		src_mask = ctx->sq_entries - 1;
-+		dst_mask = p->sq_entries - 1;
-+		if (ctx->flags & IORING_SETUP_SQE128) {
-+			index <<= 1;
-+			sq_size <<= 1;
-+			src_mask = (ctx->sq_entries << 1) - 1;
-+			dst_mask = (p->sq_entries << 1) - 1;
-+		}
-+		memcpy(&n.sq_sqes[index & dst_mask], &o.sq_sqes[index & src_mask], sq_size);
- 	}
- 	WRITE_ONCE(n.rings->sq.head, old_head);
- 	WRITE_ONCE(n.rings->sq.tail, tail);
-@@ -619,10 +629,20 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
- 		goto out;
- 	}
- 	for (i = old_head; i < tail; i++) {
--		unsigned src_head = i & (ctx->cq_entries - 1);
--		unsigned dst_head = i & (p->cq_entries - 1);
--
--		n.rings->cqes[dst_head] = o.rings->cqes[src_head];
-+		unsigned index, dst_mask, src_mask;
-+		size_t cq_size;
-+
-+		index = i;
-+		cq_size = sizeof(struct io_uring_cqe);
-+		src_mask = ctx->cq_entries - 1;
-+		dst_mask = p->cq_entries - 1;
-+		if (ctx->flags & IORING_SETUP_CQE32) {
-+			index <<= 1;
-+			cq_size <<= 1;
-+			src_mask = (ctx->cq_entries << 1) - 1;
-+			dst_mask = (p->cq_entries << 1) - 1;
-+		}
-+		memcpy(&n.rings->cqes[index & dst_mask], &o.rings->cqes[index & src_mask], cq_size);
- 	}
- 	WRITE_ONCE(n.rings->cq.head, old_head);
- 	WRITE_ONCE(n.rings->cq.tail, tail);
+[1/1] io_uring/zcrx: fix user_struct uaf
+      commit: 17a2407de81bf3ef450fddb89230ac10141be110
+
+Best regards,
 -- 
-2.53.0
+Jens Axboe
+
+
 
