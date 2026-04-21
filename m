@@ -1,78 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 226A62D9EC2
-	for <io-uring@vger.kernel.org>; Tue, 21 Apr 2026 13:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209DC2D9EC2
+	for <io-uring@vger.kernel.org>; Tue, 21 Apr 2026 13:56:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1776779741; cv=none; b=S6vSXLr9nsxg9mbR51Q0pVqniPrCdXd5O5HYMz5M01eL0rC3LYv8NoTnSsaqiEAzRLHmwB+OqW9w5fJ7xg1+wCd5tRl/LyLoDm7POV2ta22v6GkYWkrZQk97d8HTb/CorLLkyEs2eLrmTQNGX9SxNIpZEhe+iOK3wrXzzSYVJbQ=
+	t=1776779791; cv=none; b=mI1/S/MuFLSeHw69TCpJSYdm/cSeKRPplng4SbBkEivYMNrr8eF6lESaXLz9UfyCUCNQqGj2N4fp6zRxr5OLOocnMFvvdBx6wrSs9T0KYGy7pytttGTDlhVud2mzW26/D9pyZsvB6DKTrd1UCJvavXKx5Aw019A3KhYrA7T0lzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1776779741; c=relaxed/simple;
-	bh=Pn79hZC55AAJm6orMAw/AtvVsrxQLBNVHTd3te5BSTo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bxkkO32YNRJo9pZgBovDj2JxK0HjWaqkz5a6Ibg3e/lkEkqqivtvw9XcLzFuayHhh6YlHPfX9UDow0PNCDSkG3z7nQnLEbrDYdEVJutAYf3SxQ77mxLR+9Ix4Xh0rovt6J/csoZdd4WFq9PXK+hbTjR4t+OFA4S+m+bD9YX90a0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vmUN33M5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1776779791; c=relaxed/simple;
+	bh=GSbk5VdwZAM79AlMeGjfbPx2vl4AVWT3VBjOe6OyMkU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ihK5OUmVG5SS7uMoMwS1naU2M56A7w+Qf54Tb+WyYj7/IXV8BnJ2ibCC6XCMCKAXuNEHs+l8XOshW0/NccX18uT/yl10pLw3RPcHUxtWUQjErQLsJCSGQzcQ0sbdiRRCb0n1Qlfv/zPLfOGXlgsPKqxp0Pp429Iw0qt2FHJ3mtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=uiCB17kd; arc=none smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vmUN33M5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CF39C2BCB0;
-	Tue, 21 Apr 2026 13:55:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1776779740;
-	bh=Pn79hZC55AAJm6orMAw/AtvVsrxQLBNVHTd3te5BSTo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vmUN33M5R/+URLDZgEhEcZyTKMvTLlvvc8muScgz0dpDA9LqoP4tJEVtAJfymcujP
-	 uChhYxduKmXlWBEPLQwfsc79VjP1x5B4Y7Po6zwUmPbw/tGfjqbbRGCKAMeUSTxbTP
-	 nJNd8eyfqOmhcPT2aIk2NUThsMmZLojt81SPLd+o=
-Date: Tue, 21 Apr 2026 15:55:38 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org
-Subject: Re: [PATCH] io_uring: take page references for NOMMU pbuf_ring mmaps
-Message-ID: <2026042108-fiscally-unglazed-56c7@gregkh>
-References: <2026042115-body-attention-d15b@gregkh>
- <842a9dff-b12c-4cec-bc8d-8c1adb3ba280@kernel.dk>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="uiCB17kd"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-40946982a78so1431870fac.2
+        for <io-uring@vger.kernel.org>; Tue, 21 Apr 2026 06:56:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1776779789; x=1777384589; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KgsTTvhuZyYbTWwId7JLygOCGSvOanjt2xaoeErqvrQ=;
+        b=uiCB17kdZucGjawqoj+KPqFe10UkjybeDSf2IpaYCRvCuZEn2wakBHK+wBq9o4K+6N
+         IV77NYwjCJ9c/FgJAzsK+eZXHe7VsYR6wm64J+rojgWwKQ6HhNC4sHLi29L4SwaWzlRJ
+         7gYwmmhFxMSxd7+dVe64NBaWI5vvySxgTVG4H5xZ+qo+VwG4i1BYADhvE1SFblfg9eMJ
+         2uWYTy2rk5ksIENcbrOO0IOOWrxN1Mb+/iDhPtgN15CT0whk3B886XfwekaZBpAzPgqL
+         BMyHAsdszsAFrCsniE9XIQIfmp4Hxz06EuwMDf1hv+BQ4fsMqDHqaqw8+v6g5LT8/BnK
+         LU5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1776779789; x=1777384589;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KgsTTvhuZyYbTWwId7JLygOCGSvOanjt2xaoeErqvrQ=;
+        b=Jw4yInkCJ8Eih7rMh1qVKkXBzOsZbm2PtimHe8Vt8uzINSS/i4cvU7lvK733H6Bgy5
+         TpwTfKGOVtTgo81sdo94M1U4cZFJYHVoTVkxgZ1tvf6UzWgJWMXMJ+YGSUrcuZuSf1XW
+         zqf9us/Pl8nvqEh9OBme0dH6tB27DS1Wm223NtUfF7ajZ+2wsgg37pQ1XCkCQVCmn1ZQ
+         4JVmDNf6BDmCBvn+JmR9Dye94kVE7wKNxsSNn80tHRoVb2chC0sI1WWv4ZtCOkWsoAx1
+         ybQOOdMZPZCsK3IS6TlDaqKKcTwvuR/x6yaH3Ln1ovWw1IV8R/UuxfboqB8LTnbx++EJ
+         djiA==
+X-Gm-Message-State: AOJu0YwW0R98Kj9fww7Cyfij9eWH2LrwvsNVJmpsZlNhNUKe5L4aAMHF
+	pAupXO8IvNCMTlSMcr4DIRyU8VKaii5iEUH03Lv95TOsrdlErUe7q/t3kzpOjMDEWh1w6WYbb7l
+	bMXSaGVM=
+X-Gm-Gg: AeBDieusdTZuXKHiqObMoEKnQfrtvL04pr8X7MWHJRgObEKAElJABYQVTHSRwspmAX+
+	5ahEOOlFQp/FxGL+ZycF6zZvkCjAxO2JrqujGSTkybkDDIq26yrMJxKPmnoIhiDD5KVZkLsuSHy
+	ubA5uxiBbgujpuwLlnm+xXSXTZ15ctRfWxGDz3f/PYaYw1ArhI78D/XxoM89cg91CwiSzb/hPm0
+	mUllII4ECOwcjJylVAOcZDjlcpPDd64KoRK+7RGGkv2mVInfzZAxlyyN+zeNndJqeKjv2a1KRYQ
+	a/b+nB/M/sNCUbZDnXax7lVYZjhG2vbagST89pkMOhT7APzDPpmYvmhawkK3WscfIZAZANFnwaA
+	4OF9YddSAxS3bXg0Iqdt9/VGpYOxksReI7hZEC6L4zQDvFqACW1KJi/eAGsRPYHuWfhiQlAFZNV
+	rgT2HeY1kaCMkCzbx+u3KZ2YmS739T7jodYRSD6mR2WlKV56PuHHE8Hogfb42/xBmil9lhDMMYq
+	WT3LfQ=
+X-Received: by 2002:a05:6870:d91:b0:417:3260:8586 with SMTP id 586e51a60fabf-42adede6712mr10142319fac.34.1776779788557;
+        Tue, 21 Apr 2026 06:56:28 -0700 (PDT)
+Received: from m2max ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-42b8fe2c52bsm11756474fac.0.2026.04.21.06.56.27
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Apr 2026 06:56:28 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org
+Subject: [PATCHSET 0/6] Various bug fixes
+Date: Tue, 21 Apr 2026 07:51:37 -0600
+Message-ID: <20260421135626.581917-1-axboe@kernel.dk>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <842a9dff-b12c-4cec-bc8d-8c1adb3ba280@kernel.dk>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Apr 21, 2026 at 07:50:32AM -0600, Jens Axboe wrote:
-> On 4/21/26 7:46 AM, Greg Kroah-Hartman wrote:
-> > Note, I have no way of testing this, I'm only forwarding this on because
-> > I got the bug report and was able to generate something that "seems"
-> 
-> AI bug report I presume? Because I can't imagine anyone ever attempted
-> to run this.
+Hi,
 
-Yes, I got a bunch of "non-mmu" bug reports, which is a bit odd but I
-guess you can do that with qemu these days?  I should dig into that,
-maybe that way I can test this and get a reproducer for you.  If not,
-let's just bin the thing.
+A random bag of fixes and cleanups. In detail:
 
-> > correct, but it might be a total load of crap here, my knowledge of the
-> > vm layer is very low so take this for where it is coming from (i.e. a
-> > non-deterministic pattern matching system.)
-> > 
-> > I do have another patch that just disables io_uring for !MMU systems, if
-> > you want that instead?  Or is this feature something that !MMU devices
-> > actually care about?
-> 
-> I mean, who really cares about !MMU in the first place, we should just
-> kill that off with a passion.
-> 
-> Let me take a closer look at this and bounce it past some vm people, my
-> nommu knowledge is close to zero as it's never been relevant in my
-> professional life time. Which is saying something...
+- Patch 1, defensive cleanup for a patch merged in this merge window.
+  Not reachable, but it's confusing and should get cleaned up.
 
-Let me try to get a reproducer going first, let's not waste any more
-human time on this just yet, sorry for sending this out without that
-done first...
+- Patch 2, spectre masking for file updates.
 
-thanks,
+- Patch 3, defensive cleanup for the imu cache, using kvfree()
+  consistently. Idea being that it'd be easy to mess this up in the
+  future if caching changes.
 
-greg k-h
+- Patch 4, more defensive cleanups, just hardening ensuring that
+  only >= 0 is passed in for bytes consumed for the kbuf path.
+
+- Patch 5, actual fix for futex, where multiple partial wakeups would
+  end up waking the same queue multiple times, rather than moving on
+  to the next one.
+
+- Patch 6, actual fix for ring resizing with CQE32/SQE128 and pending
+  entries in the SQ or CQ rings.
+
+ io_uring/alloc_cache.h |  2 +-
+ io_uring/futex.c       |  4 +++-
+ io_uring/io_uring.c    |  3 ++-
+ io_uring/register.c    | 36 ++++++++++++++++++++++++++++--------
+ io_uring/rsrc.c        |  5 ++++-
+ io_uring/rsrc.h        |  9 +++++++--
+ io_uring/rw.c          |  4 ++--
+ 7 files changed, 47 insertions(+), 16 deletions(-)
+
+-- 
+Jens Axboe
+
+
