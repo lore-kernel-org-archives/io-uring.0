@@ -1,95 +1,120 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959151E0DE8
-	for <io-uring@vger.kernel.org>; Sun, 26 Apr 2026 11:27:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5540B2264A7
+	for <io-uring@vger.kernel.org>; Sun, 26 Apr 2026 17:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777202874; cv=none; b=A3+Kycwvamb+KzOc6o8+of74nIcxlDeeHdgPfv9uw4E3Wy6glVDDE7yw/B8e6FODoODKBjOXfJrom1RoyDnTPCNYJ5q9tXSKYsb2sT/gQGOfT/oOm1Fe0RvWl9OlFj3NnIOUe9qrfYUtuu7MHgxfgTytecg+ul/sAdndnXeLEm8=
+	t=1777224684; cv=none; b=MQZCK5NmSZQB/L9L9fNvX6lR1TQPy/F6p/t0bjv5kHF5q/4gWMHeAUQry4Tls2KEKk2ICPLgPldxoIl/2FVTJ7J3z3c5KBf4nzUEmSFc/iefvnIP7dzG0Y2eJiWZNUVquZ9jM8/iYvSXzipFsRVmyCL4fV3ehWeXuqKQu3MqMG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777202874; c=relaxed/simple;
-	bh=XwX4X4KFeq9barroBiPxBDLOlXCuwSHtVn6u5AeMLmA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D2WsHTDrW9alJqSZ0rxJOK21YrUk+PHkX8SYp8KarknApTMMJ0iT5ObkkfB347DVH7KcBI5kiPfa2J4wn+fqcw97QII4e4zwxEgtsSho+Zkt4J3pXfAIuJ0l4FkA0oPLBiweh4x9NMDAcRrrir3GglWeGcvwGWZD6HIERFcsT3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NlSRP0DE; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1777224684; c=relaxed/simple;
+	bh=BpzEgM2/+wh+El5gqvjBzJq1Q2Ul3PcmCQt82Dkj+IQ=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=pdTRiM6cfAchT8tVMVLUm+cRZjN9ZYalA3huO/GXd+t05YiNeNW8dyJtqXcCaWwjQYzMu85XMlJ7Gcvhf9raGQ00dB0E5REOGQYtIjdBHYTgSHu0RKi8tWB46WiLNc0WczaHiQAmNFTRjEBIxflebC6Z3q+F8pXH1JDaOJUzGWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=QofQipdk; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NlSRP0DE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=MI
-	xUqq93JVNNwTe8Cawpq6riu4a6pich3cqObY9Msog=; b=NlSRP0DEO2EDknC9gZ
-	QESd/PozTDfMN87vDZ7pEZctExi4SyZXND7ODt2AWWXCTfJquILi6Uj8fH4wHGwg
-	0Qf02hyT0nBUmJyQtDHDzUa4yvOV9pD40dklmkfuEVC4OZ7Q1FP8QcyvzEPpBKvd
-	PPevfno6udkxTa9OjIAtJqFWc=
-Received: from haiyue-pc.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgCX1OSq9u1ptpJ3Bw--.6916S2;
-	Sun, 26 Apr 2026 19:27:39 +0800 (CST)
-From: Haiyue Wang <haiyuewa@163.com>
-To: io-uring@vger.kernel.org
-Cc: Haiyue Wang <haiyuewa@163.com>
-Subject: [PATCH liburing v1 1/2] tests: fix bpf ops build error
-Date: Sun, 26 Apr 2026 19:27:30 +0800
-Message-ID: <20260426112732.300165-1-haiyuewa@163.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="QofQipdk"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7de4a9cb8eeso3450766a34.0
+        for <io-uring@vger.kernel.org>; Sun, 26 Apr 2026 10:31:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1777224682; x=1777829482; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GZO64qVsC9xCB+2W6fybYLXw/QxsW4FITHO19+99+fQ=;
+        b=QofQipdkZJnqWMXIZcl+5NfCUAw2TyWm41gts2Hu4404HIYgnlPubo9yviyCRIBk+B
+         btRntqnmXCJmj6ESpACPvYREr7tQL9q92/22UwsHYn9I5S3QbTg4f57iICxIJzwlwDDs
+         esSPxgFBx/wZzyWMPqoi9mFP+7We+FTH3DeTe8hkiEDrbj8ZNIVuvWbt5snbPUROKlSs
+         J9Nw4IBgtsbaXD8s+IN+SqVG3zFOhOOwm7r2AU2ComK4h335sfVPIeHMciWlvoQePE5d
+         VbXstSPS7fLUmygOcHvsHHUXy8EPhdeK7DRmSDGjx3wB2eSyEBriK+Kvwmgq2f4Pd3Zt
+         9uTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777224682; x=1777829482;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GZO64qVsC9xCB+2W6fybYLXw/QxsW4FITHO19+99+fQ=;
+        b=g5+IpWrJh959H4offCCIcoWfgmVevD1BRhuIaRiCpGYkN42GZEN/gYx/5nVuOgi1O0
+         m4J6VDwFVzWjhKmOl1t5arnbG7UdobT/Bm4Dm0WQS7UjJDnjUOnKboS7FNSE4leagnGd
+         6q12Df+TmOGcV8bxlybSF22vWgzSiPhEWP/FEixM5NDCLEwro2gh5zbXzIS2/l7jqGnS
+         iwL8obClE7u5hFyiUCzPzBsZEud2xcYy3W8YeEp+Sb3OUo3+Q/Qw1XScraJ5b8ocRgC+
+         ltbGYhZYqATC0inUrZTUHJ5pTJDFDExGZ0/aTM5ZqBzna/hNV2pDhcsyLF/aw2yHYiTi
+         2brA==
+X-Gm-Message-State: AOJu0YwD8x9kUlnL3OAiv0WAct22XaTBbK18sq5UbCqnw+eJlKVYvsuP
+	iWWI0zoC0JPJlgEp606JWBp6QBvgzNytn+FywxkNlNg25QTDjgtoQiJ9uJSWyGNS7jeJm0GeW9g
+	HM2R0DkU=
+X-Gm-Gg: AeBDieuc93CdDCCEDExbrUI6F7V4G9ZrNKE6DoaPR1vt1Kk11j2ObH84Bq/2khnPxYw
+	xfObUwwdpX3bEdC/ZOPuRppdwpaTQxNhKXNwejDS9YLdBX5860CLVVbNgg80F2dDv9z9ei+5Mr3
+	ySTwILEggNzMgRDXW6faM9z6GTrM3eT8XmWU54EEmHplHjg2vZ0KuF9jBEEmodK6IfIaR/KsyqR
+	TmIunDMxzNHuTE5km6r/bFIuPMOKYMy+JhkyQPb4qXuwJh6gkZlJgxB42hijlZIyHcyJ3HMylOH
+	FNCBA1I5MDViUgGfMXcLrSwHw0AT1V/SZWI+9m3L1RE+bpVMyuBshlVFyCP53ksr2CC+mEsMHmv
+	e2Ps9Zm2nPJo4a+EU25GNb/zJ3Lfxzf8NM/Lh5UBJHiv71IdKyOmgS/z8vquaFtdaxP7ZiG0zDt
+	p4N58/FpGgUpu0NGnUppyDEm+YAXAJAIOch3gFMjoGsv/dKHfHHq7c8DB9vUoc+AGUB1OmpKqL9
+	w/wBQruKyBtrYg=
+X-Received: by 2002:a05:6820:4b8f:b0:684:2b28:f9a6 with SMTP id 006d021491bc7-69462f451a4mr21835313eaf.58.1777224681947;
+        Sun, 26 Apr 2026 10:31:21 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-694994277a4sm10845980eaf.4.2026.04.26.10.31.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Apr 2026 10:31:21 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Haiyue Wang <haiyuewa@163.com>
+In-Reply-To: <20260426112732.300165-1-haiyuewa@163.com>
+References: <20260426112732.300165-1-haiyuewa@163.com>
+Subject: Re: [PATCH liburing v1 1/2] tests: fix bpf ops build error
+Message-Id: <177722468044.1676227.12840209959534437092.b4-ty@b4>
+Date: Sun, 26 Apr 2026 11:31:20 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgCX1OSq9u1ptpJ3Bw--.6916S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1fAr15Kry7JFyxZF1UKFg_yoW8CrWfpr
-	Z0vw43t3yjy3yxWF1kWFWSkFy7tF40k3WjyFWUWr1jyFyxXasFqr4jkryv9r1fXrWYvrWY
-	vasF9FZrurWDXwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR_HUhUUUUU=
-X-CM-SenderInfo: 5kdl53xhzdqiywtou0bp/xtbC8Au9KWnt9qvceQAA3T
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-If removed the previous install by 'rm -rf /usr/include/liburing', the
-test build will fail:
 
-make[1]: Entering directory '/root/linux/liburing/test'
-     CC helpers.o
-mkdir -p output/bpf
-     CC output/bpf/nops.bpf.o
-mkdir -p output/bpf
-     CC output/bpf/cp.bpf.o
-In file included from /root/linux/liburing/test/bpf-progs/nops.bpf.c:2:
-/root/linux/liburing/test/bpf-progs/../bpf_defs.h:9:10: fatal error: 'liburing/io_uring.h' file not found
-    9 | #include "liburing/io_uring.h"
-      |          ^~~~~~~~~~~~~~~~~~~~~
-1 error generated.
-make[1]: *** [Makefile:387: output/bpf/nops.bpf.o] Error 1
-make[1]: *** Waiting for unfinished jobs....
-In file included from /root/linux/liburing/test/bpf-progs/cp.bpf.c:2:
-/root/linux/liburing/test/bpf-progs/../bpf_defs.h:9:10: fatal error: 'liburing/io_uring.h' file not found
-    9 | #include "liburing/io_uring.h"
-      |          ^~~~~~~~~~~~~~~~~~~~~
-1 error generated.
-make[1]: *** [Makefile:387: output/bpf/cp.bpf.o] Error 1
-make[1]: Leaving directory '/root/linux/liburing/test'
-make: *** [Makefile:14: all] Error 2
+On Sun, 26 Apr 2026 19:27:30 +0800, Haiyue Wang wrote:
+> If removed the previous install by 'rm -rf /usr/include/liburing', the
+> test build will fail:
+> 
+> make[1]: Entering directory '/root/linux/liburing/test'
+>      CC helpers.o
+> mkdir -p output/bpf
+>      CC output/bpf/nops.bpf.o
+> mkdir -p output/bpf
+>      CC output/bpf/cp.bpf.o
+> In file included from /root/linux/liburing/test/bpf-progs/nops.bpf.c:2:
+> /root/linux/liburing/test/bpf-progs/../bpf_defs.h:9:10: fatal error: 'liburing/io_uring.h' file not found
+>     9 | #include "liburing/io_uring.h"
+>       |          ^~~~~~~~~~~~~~~~~~~~~
+> 1 error generated.
+> make[1]: *** [Makefile:387: output/bpf/nops.bpf.o] Error 1
+> make[1]: *** Waiting for unfinished jobs....
+> In file included from /root/linux/liburing/test/bpf-progs/cp.bpf.c:2:
+> /root/linux/liburing/test/bpf-progs/../bpf_defs.h:9:10: fatal error: 'liburing/io_uring.h' file not found
+>     9 | #include "liburing/io_uring.h"
+>       |          ^~~~~~~~~~~~~~~~~~~~~
+> 1 error generated.
+> make[1]: *** [Makefile:387: output/bpf/cp.bpf.o] Error 1
+> make[1]: Leaving directory '/root/linux/liburing/test'
+> make: *** [Makefile:14: all] Error 2
+> 
+> [...]
 
-Add the include option in 'CPPFLAGS' for bpf build.
+Applied, thanks!
 
-Fixes: fd8a6e66c739 ("tests: test io_uring bpf ops")
-Signed-off-by: Haiyue Wang <haiyuewa@163.com>
----
- test/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+[1/2] tests: fix bpf ops build error
+      commit: 49f1a2ab7833a3563329fd9a86f58f84875d57e4
+[2/2] .gitignore: add new test build output
+      commit: 4330d09391470154ba4e453d01b1cf2f1f5ef32d
 
-diff --git a/test/Makefile b/test/Makefile
-index bcb97da1..05e1f9e9 100644
---- a/test/Makefile
-+++ b/test/Makefile
-@@ -385,6 +385,7 @@ CLANG_BPF_SYS_INCLUDES ?= $(shell $(CLANG) -v -E - </dev/null 2>&1 \
- $(BPF_OUTPUT)/%.bpf.o: $(BPF_PROGS_DIR)/%.bpf.c $(wildcard %.h)
- 	mkdir -p ${BPF_OUTPUT}
- 	$(QUIET_CC)$(CLANG) -g -O2 -target bpf \
-+		     -I../src/include/ \
- 		     -I$(BPF_OUTPUT) $(CLANG_BPF_SYS_INCLUDES) \
- 		     -Wno-missing-declarations \
- 		     -c $(filter %.c,$^) -o $(patsubst %.bpf.o,%.tmp.bpf.o,$@) -mcpu=v4
+Best regards,
 -- 
-2.54.0
+Jens Axboe
+
+
 
