@@ -1,114 +1,117 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37EC4266B1
-	for <io-uring@vger.kernel.org>; Wed,  6 May 2026 11:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778065322; cv=pass; b=q6GRNDQUmusiTRCM2TKkPElhwRAjLASkfLCIrz8RmLKCp9xsyoXtKVHPr4ur1F7TmMD1AK1L9NaBxPKJl9OHruFRMhJkv1Aio8ecTsAjDTqJgQmLfoxfEuIiZgQI9oeA9vm+ZAC9Cimh47/hpP8TLowIWNzOB+8sCFEZ151JqCM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778065322; c=relaxed/simple;
-	bh=2W4xc01OCZSjdezljbpq6wDdaWMKQzCAB3GE8z39gtY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ydjk1G9toU62EvyNckeyx1ECnA7JWTkdJ5lwp8BLOCfHcZ/8dzqQWVN94E2EEEYfcWVMJlYSPJbq8cLE66Zd0X4XFujpMMsUA2o/toI2YAknZIk1xLoYhY19xX7fhrbLIutfMPnH359yEW3d5wjabPIq8RitsHKSg5pHgTJEDcc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYMe4wyo; arc=pass smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0540D3FE341
+	for <io-uring@vger.kernel.org>; Wed,  6 May 2026 11:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1778065489; cv=none; b=JcwcqWoS0vpBC+4z35FM1N3a1WCz+Wd38Y6CPubRtleS04+MqwiQBRPd6rhZV74d2vHa2s4u9IcClcBhvU8/jZbjsMOWxNQ48OJP99BujxAVHIKEZFFKmU9odmQu9taWqQ7jvcTYbhePeHDHl6EHukdpiP0Nyn8Oidc/YY9oavw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1778065489; c=relaxed/simple;
+	bh=Ep/l3Tx4naPqZAkU32u2xL4oqc77BusXOyLruaz4vWA=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=XLV4+ev7j+G4nEGaJSfm4RA/ytsm1CiP4jdO3ZF5ws9lX+qQ4QRxBxitytX2bDLbJtlmTiX4y/HxYPvAy/bHOUOkdooLh5kmfYNOF1YViH3LPMV+83I8Vs/2bfJGTkPqTRYF1nltwUtZAKEvJpv5N82ysyI57opH8H0X9bA8HrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=PzGFpBUV; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYMe4wyo"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-488b3f8fa2bso7671205e9.1
-        for <io-uring@vger.kernel.org>; Wed, 06 May 2026 04:02:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1778065319; cv=none;
-        d=google.com; s=arc-20240605;
-        b=iMDzvko6H/JYhzk62VotSxsVFydlxHD70ppVV/IhN8J8Yn+Q4WoiI3WCTcBsoQ0gUf
-         PZ0aYzaH6d6gjesJw+/iUpgt5Qev5VTP+19E4eJHw/39RAXmWFqxzXRUesSICMhTiuTa
-         uM7+iCmfCc/ZbyUfx8JDupxKPzDlojmalde1lLikdQ7UrDSyKluRrK/tM1feMf5YRPQQ
-         qjK/dWcUX4LkA7BFuO2t0o3ODMUxJp4tjtdz5tTpKVglfbwCDbLTDtllhwS6z1tFfRYM
-         YUHovJKJw3WJD73jvEv8L21yqHFLXSSy7v+fP1DBYmo7ddew60X+YQ4zuf7U8IK/MJoi
-         BwdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=2W4xc01OCZSjdezljbpq6wDdaWMKQzCAB3GE8z39gtY=;
-        fh=579UN2cuQUhyB60fSFS27oPzPqCGaKcGfm7nCxJPMTo=;
-        b=HgAsNc9o168uAT0LXPs4fnF8fpQOzzAcjzf9DU+jzoc1VSqUkrHXraTFUGrVU6eaRL
-         4J0vwWG6Luh3TxSsIdYsqscnSX0rsV95ix1jiN7ivGzJW0W1UeVRJlybCbEQ1MZJQH4K
-         XdbuJ2JvULbaPHUja3pKuXFQ8NtUscGJNe2O8n9FKqY7ZZAqc5zOvRQpjC+AyEEeQc6H
-         BcGONRnZ7Mn4UZLUeM/fYYULkMY5IH12blRczeF8BiEZqquEBNjEUDBuXdzA9F8xKYJv
-         +RLD0oMpUvzaHByW7JbCgTK83pWsa64YebLhANSrFuxhQbU8G21fzplMUfv3iUFjvyU2
-         JsWg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="PzGFpBUV"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-488ff90d6c7so59620055e9.2
+        for <io-uring@vger.kernel.org>; Wed, 06 May 2026 04:04:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778065319; x=1778670119; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2W4xc01OCZSjdezljbpq6wDdaWMKQzCAB3GE8z39gtY=;
-        b=lYMe4wyo3yFLsNgaLsfvHOYriQjWY1Z8f0PQGvBGgtKNhlyMArpr/fY791x1ArmZFz
-         SKDlEDeJDzn2picIbiZL0hX+XOJyYqxaWl65QbBifTuEZjUJ//PnHRo01sAoCZDO7baQ
-         HeDEYlT/Ev0IJJBBPurGQLFzG6Ozsc1aZs3FK3YQXHWczrxOB9lFORm4FgX+pJFoapTd
-         V1LPPimtHt7WaKKGftG0S69m3Jow+US1xE6ttgct79ucoZojRkucTkYln7uH7+JD06ko
-         mcAj7dmP3joo4J9WizovWA52dkkCRM+iAiL1LrqdI2kHZOSUgs3Lp8kk6+0zWH2EH6cZ
-         Qc3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778065319; x=1778670119;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1778065484; x=1778670284; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2W4xc01OCZSjdezljbpq6wDdaWMKQzCAB3GE8z39gtY=;
-        b=jYX1eLsK24oMQSw+EPnSGlktrRv+QSFonQAEzlQfVAiB+zlvafQFq3JVBOp9eHoO/d
-         YXY6Yy5tm1uP9sk+Ozc8TlviUDEPZYqgFRnfmKG8K5oe+4oD4aCepb+Fd8XmtwPQqnFL
-         1gGCg7m2UCFdh0q3Rdxg9N+CQqzanLsAlwkA7SZMEymZT+gR/a6xKvnYCVQp1oyTG33k
-         tpHSQ0IX5T0/ouQw2SmHOJ+wKmH58r162dH41NvIHbAIom/i72Tq+FdCgVFlhtNMce8D
-         FdMngPd2gb01sA0bUZBdFwpypwbe5lHL8pty+I4ndmIDBd250gSgWzStTL4mN3e0Jkyr
-         0jSg==
-X-Forwarded-Encrypted: i=1; AFNElJ9enfYgXqwN4ZpJlq2jgCf+Hs6aWmG5ypC8ZN0DKk8xRlJ9SK/bNcH98rcJKFXnqWE1+Btz6ELnFA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY95MUVUuAb2FVFcy5xW6KZLXELmmWNUa6NTF1DyeZKnyuh4kH
-	B4+y0G4U0NzcS5SxxqTqcwHJOtptRQWkQRG51A8EURHV9+yQO/hLPsmab68LBYeggsnG+beRCYk
-	Us6heLW4nBRCgANPEP3xB0ee9Zh0sQyc=
-X-Gm-Gg: AeBDieuGHpSPZH5yDsiacm3US28QzSNXK7XNEeCk/4ldII5vmtfw9a7YtLO3tlyC5UP
-	ECI0brmlQ/poIz/7GYJLCoDVTufeF6SNLsBRRUx5ySxMh/jdRmsggWfxN7yTBIJFY36dtrhfgtJ
-	kX7k7WDCG990E51vau2WkUUsh7eB8Ju8JhH5DzibiTQzUMZIr0ofY71mFT10VoFSNgX7gnwx/4l
-	fa2zubWSO9hODzo7cRqHsDaEq8oqU2NhhCaxwBnq+HduT4PKTidBF49hAGr3NKsJmIamKxKJ7OO
-	D1+1mS9Jwlg3Qj0crA==
-X-Received: by 2002:a05:600c:821a:b0:48a:79d8:a8d6 with SMTP id
- 5b1f17b1804b1-48e52286b5dmr39571025e9.7.1778065319047; Wed, 06 May 2026
- 04:01:59 -0700 (PDT)
+        bh=zG+MVy2+yzM0YmAXRqlUNKNXzostrBe4j+S4Kg5YiGI=;
+        b=PzGFpBUVXb1cIFijajaSxQ2kY/qTKuwv4Sv0oDBOiF2x/kBUqZGt3mYIjtp9Yia49y
+         vqBMfT5lncOuPtqo2TL2GB/8kfo4+o/pJ3QMBkEKVjUv7zpIAQx3rvOqQccEjIOxXavL
+         fHTnQ+QFUxaXLOm9Qth5Q61MLUP4qROrmxNIEKBSQ07auQ3MwKGHvphGdhplMRGX37K1
+         FQ1wz8sWYZ3A36WA+yuH67D3QiGxOQvLbCOdIJRD4vFNlUqeYLZe2YDBOmQG7cp0C/2O
+         wEJQuuDGAQeZeH/RssdjiGo9ARTdNhrA1+g3fVeTu0p53+n9Haj6DcXQHvdiaVsLT9u1
+         M+rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1778065484; x=1778670284;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zG+MVy2+yzM0YmAXRqlUNKNXzostrBe4j+S4Kg5YiGI=;
+        b=NdYl1hNLcz7cFrh9bF9ySY71raum4TCnHUNLq58Wb7ZI32LFygdi8vk2gJd3OQuGT5
+         nIQzyawSq1I8ywg2Il6wUPfxq9puf6aR6UyLm2eTxo0cnm6pIgLEB/CIWfGJ6vlbT9uU
+         o/We/52gMZWwtNsiKg8PQnM4VCHcP7oWEpsF0FgoefYf5GBFbP92422XRwXX68iMHrzY
+         woMImMtXBuLGtLVhEC69CHqObw+Duntl2UdnqnrKoFNXqEkG3mH4TWWrxWtCl3YjH0bI
+         CNDN2RjuTfyX5ZvWJj71Xj55Xzon0Qpp9kD8Nj7zRNZ7XU0Tqnx+BIp2SRXjhVOHZtO7
+         fjRg==
+X-Gm-Message-State: AOJu0YwLtduhxWfxnmKfm2xrufCtnA2nrWlhpzZBEZbOwe8R0u1cYIPz
+	M/ODTAthrQH+ci02D06xCdTed48YIlxq1uSxDEDfRD6aC1lzRvfq07dty5vHgCJtzZZH6ld0cr1
+	2yh1tbM4=
+X-Gm-Gg: AeBDiespNiBryqnOVlJ1i3or4Tc4U/o6PWQROit02/Pf/UQ2UvcfCXPwWUrv1rnS4B2
+	uV4o8FEmTkzAgq7ElkixN1rjeBqcOLLp/vlDsSijw8qYbKDIdYlbV1/iRLe27v2pQRLYrkv6Y33
+	VkMMPhruN/qOt2vSCxe4tpaDeltUlY29r0WOATydXwen1omg7j3oOemGXZyUh9lKI68SCu+pYqu
+	gDNs4uHqlZAPIx6Uz2nfntW91azKGf9IwGJK41zyjz/LjxPqXvVU7X/sjs3ZO8nKw9/67m7/0lc
+	pAXiOJnLG+DuprhS4eBr2RqdBqmE9BrJK/UfqTLxDP91x1eNDQPhCZ5vJU4OUoYD4pKH6fY9EN5
+	qo5OUYW8lltm+dX2YpHkNYYrdm5IXRMcoUQ/fnkH4hBhgD5NYzgzliMl87xBTdI4p2x/LZErPoW
+	n7blYEISv/I1cXwHtW7Vbop4b4VQC/Zd2YJSwVr9wbim5Sri0MrtRphSH4sJqioqsZqe6knr7NQ
+	CWhdLUpK7OhLYiM1xmGWdDwsl4Wl9g=
+X-Received: by 2002:a05:600c:8485:b0:488:af7f:775f with SMTP id 5b1f17b1804b1-48e51f32a64mr54457955e9.18.1778065484353;
+        Wed, 06 May 2026 04:04:44 -0700 (PDT)
+Received: from [10.211.9.173] ([213.147.98.98])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e538acf23sm37121445e9.8.2026.05.06.04.04.43
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 May 2026 04:04:43 -0700 (PDT)
+Message-ID: <2469b617-3b4d-442f-84a9-7d1136d84065@kernel.dk>
+Date: Wed, 6 May 2026 05:04:42 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260504153755.1293932-1-maoyi.xie@ntu.edu.sg> <c2d26c6e-c064-4e6d-a1e2-69e84b867ba8@gmail.com>
-In-Reply-To: <c2d26c6e-c064-4e6d-a1e2-69e84b867ba8@gmail.com>
-From: Maoyi Xie <maoyixie.tju@gmail.com>
-Date: Wed, 6 May 2026 19:01:47 +0800
-X-Gm-Features: AVHnY4IKexqiQduQw4iAq6u7IzS2_J2CCmVeN3wZwyMAYQytytSkpzVlww5TCTo
-Message-ID: <CAHPEe=GvCTUh2S29S2Hzjf_orh8bYJgO4B0gMkFrncM2GcdyFA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] io_uring: honour submitter's time namespace for ABS timeouts
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring/uring_cmd: skip inline completion cleanup if
+ unlocked
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Pavel,
+If the call path to __io_uring_cmd_done() is not locked, then we
+cannot recycle the uring_cmd to our allocation cache. Check for
+that and skip it, and let the normal locked completion flushing
+do the cleanup.
 
-Thanks for the look. We will turn the reproducers into a
-liburing test and send it shortly.
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-The current shape is two minimal C programs. Each forks into
-a fresh user namespace plus time namespace with a -10s
-monotonic offset. The child submits either IORING_OP_TIMEOUT
-or io_uring_enter with IORING_ENTER_ABS_TIMER and a deadline
-of now + 1s. The test asserts the call returns after the
-expected ~1000ms rather than after <1ms.
+---
 
-We will reshape that into a single liburing test that
-exercises both paths. The test will gate the unshare on
-CLONE_NEWUSER | CLONE_NEWTIME availability so it skips
-gracefully on kernels without time namespace support. It
-will use the standard t_* helpers.
+This effectively defeats proper cache recyling for uring_cmd opcodes,
+with the fix it's working fine again.
 
-Maoyi
-Nanyang Technological University
-https://maoyixie.com/
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 42be1be5b132..35e2aa8b9446 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -166,7 +166,9 @@ void __io_uring_cmd_done(struct io_uring_cmd *ioucmd, s32 ret, u64 res2,
+ 			req->cqe.flags |= IORING_CQE_F_32;
+ 		io_req_set_cqe32_extra(req, res2, 0);
+ 	}
+-	io_req_uring_cleanup(req, issue_flags);
++	/* defer cleanup if not locked, otherwise cache recyling is skipped */
++	if (!(issue_flags & IO_URING_F_UNLOCKED))
++		io_req_uring_cleanup(req, issue_flags);
+ 	if (req->flags & REQ_F_IOPOLL) {
+ 		/* order with io_iopoll_req_issued() checking ->iopoll_complete */
+ 		smp_store_release(&req->iopoll_completed, 1);
+@@ -211,6 +213,7 @@ int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	ac = io_uring_alloc_async_data(&req->ctx->cmd_cache, req);
+ 	if (!ac)
+ 		return -ENOMEM;
++	req->flags |= REQ_F_NEED_CLEANUP;
+ 	ioucmd->sqe = sqe;
+ 	return 0;
+ }
+
+-- 
+Jens Axboe
+
