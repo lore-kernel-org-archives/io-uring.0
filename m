@@ -1,130 +1,106 @@
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA66626E6F3
-	for <io-uring@vger.kernel.org>; Tue, 12 May 2026 09:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F31395AF4
+	for <io-uring@vger.kernel.org>; Tue, 12 May 2026 10:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778578241; cv=none; b=umIsvIT0b8/qBRH1v3vpXjExkO9/OqPjq4pXjd8m0nC2Z7IzPbsg3bwOEhHUA74XAmFTU26vzz/6o2MqwOs2hhEgdZngNB4JCBr0W/kVf6TQnD/5dki3tKg8xt7AeJMXIlD7bCTI3czXYogOuQkWN+z4dLOxyP2V8+otCJhON6U=
+	t=1778581529; cv=none; b=hFJboLgMPZ5rx8v1gsEf+q8e280V4zB2DQUiDfGMEnufNVcIiis5Ise3Cvg+6SLz3t/2yDuvRfTYNaioIG3ZbzaxrgUJBN4Oy4lfx7gHipPF2nyNMw3sEnR/KVlSuI/hzX4qbqViHRh0fbO9cJcT7h1HRuqHdzeyQgOIVzNmadI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778578241; c=relaxed/simple;
-	bh=AmxHQti+Cn5C3pCrdSnBlqV6BaHV+iBm0oydG8MleKw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K+oBMdgL953teDw9ggAoir6fPDh9We10M9+y3N+spHlOv8PxpwPmdc/nxdzxplcYsWf9sYYWlY8QGzQ/uGEXjF9bARf2GLkZNp6IWToe+BkipGNofSYH+VSFiqX0jF8ShZkppAqILLj757yNxB4lVdB8bx8mR/5S5a03lUnX8tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WHcEIjXa; arc=none smtp.client-ip=209.85.208.54
+	s=arc-20240116; t=1778581529; c=relaxed/simple;
+	bh=sBOTTT/hZwbHIngdOqOniPski00+V5/fid9M3+WPdUc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FnPaQOtLmRACSqzWkhr8v6DV5UxNz1TD8BmMWCB3VvAHnNzuSZSRNyesPlmtMnVewQhDWAbUp82oRKKG42x6EGbeJOVNu1d85qopGFlsrzoVbazvjSaMT8/AH/wyTRMMXLLRkUzq5slQQzODE30R3f+1ARlDQ5qLKvpLCqK1d8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JSzOdNwh; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WHcEIjXa"
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-67c1e0229acso8135955a12.1
-        for <io-uring@vger.kernel.org>; Tue, 12 May 2026 02:30:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JSzOdNwh"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48374014a77so49346365e9.3
+        for <io-uring@vger.kernel.org>; Tue, 12 May 2026 03:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1778578238; x=1779183038; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1i6gK0r7rGWa5W/9WTpQ/H0vww/+AQmB17cNctDGbjU=;
-        b=WHcEIjXadNkPFUtxZjibbIycxST9iPZAoiAmYMM+LukrN41+AEMZMMUijkA9iID3PE
-         xg4pwXQf1Jf28htElNpnJC22niTXyfKF2ymcgg/R2KWT8wuJf7+q2BzapkmyoHtiZ9yp
-         ZeXZ3dQBvv9XhLemLk6KoEUkaMeUy6581GgCbmz5Bl7y6+kbR3Wnh6/jD6M/cDn9kMfZ
-         8AT9zIXP9OC7N3eldFmoe4xsIW/dvKGuw497uGm9lfr9q33CRajDdp+P2QckaO8WZZWu
-         SK3l7wPIIMsdE2Ht4/8hyulcplC4t6peIu+13WnT+be/vVykhbBCd5Kgo5tQ7Kxl6IsG
-         JtHA==
+        d=gmail.com; s=20251104; t=1778581526; x=1779186326; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Edr+ytgwsmK9YysqqZ45HcW/A2JY308WqKVGXyYCiys=;
+        b=JSzOdNwhxryTgGzl+knueXrRGfqA+lxpNMmok+0+puBz0HmF9NkqtIWOJFBn/rc5pw
+         cJIxz14LV6v1qx4t/aFG9qi2UbpVgr6TvpvW6gFQ4rAWt6YceVGwP4KsLIaNK8wiauZp
+         M4SJqkw2qNcTbZ2tgM68b5UseXhDZ1j5Y/P62ZeeyyeLY0xY6VAFDpl9Hn/ewqL6rzG1
+         mZrrv74Eb5wCDa62PlddiDqpMlFjLyooX/G5mceWZZXRWdEZoTCIy1fyNpIH8yxbcW17
+         M4ah+/Q/YcchFJFh7NusxOfDtHrBFjD9Ijk2s0A9LHWqJG4CRvB5zX/qpL+DHsbyOgRL
+         x32g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778578238; x=1779183038;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1i6gK0r7rGWa5W/9WTpQ/H0vww/+AQmB17cNctDGbjU=;
-        b=MumY7MzANhDt9Ch9o39qcndl/y/pYkzh/c1I/BUauJyMFEdFwEcbIbq8IX19eTOL8U
-         Zqzklbc2GV26csN6ZQy7MSUJ9EuOIdN5bANYgDT4605zHYyaco+mxHm9RqmfX/b6rXXn
-         yojSTCKXRWDIb7nWIPk4+6AVl+PPugl38RWcWrMpHXI5HvwHtkHqea1kUHI3s6kHzXzB
-         d+DuvNISV6d3fJX6nMIT2NeXKMKUOjelMzyHiVoWBSr2oMEkFPelA0wz4L1GPq4+WOA0
-         ooX7foYx2Ep66+gGACaQNR/c10/CX58ySUNzvzEot8xbG8lb7ip+cltR+W9G4pDCs8FR
-         pZ0A==
-X-Forwarded-Encrypted: i=1; AFNElJ+IrB0NBsKi16nkZGSYd2zjQQ2pMxkHEkVozDyq2fU3VMEacE3C/l332hfSKHX89y7XgknmWloX/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwscQLo7SlOoIKK4yeKwCb+62BaYzvaS3tFQ/txFDx2LD1cuKvf
-	iqb1dvqtcvEVKe+fUJEa+2sqwuEf8OOD2ZsgIFc7BqRHeMdSMcES1b0Q
-X-Gm-Gg: Acq92OH0kn9TkOHIdsBqoUP/kgyuxJiqTB5pNs1/cRtO/otQJniz1iB+SQ3tgfMB/Zd
-	2W+CGcRlIcd6ZSnAvLC6tGyF5CXpMw1J0VSadVZKRREC0KQqzGOpshcvEZjzd4v6sK/MnhdqKbS
-	72yOtEpj4LAjjHQATylpmygmCT374aiDZ4QEO/TgI6QypK1KG0SX60Ol2kD0oOtRkCviCoM4tQu
-	ooXamqxFc0ljA5Az1/JLV9TyKLUZxWPVQktrlCeZOkPcA+YSq3CvkOJtZExNdQQoEOx+gwVfi9O
-	E1Zbu1gttHbMpBmRpZcjSqGtAFnFc1sinlSKT/HuSQlCmy/2464iiknMmwJQZN0fpGA473jywb7
-	FTrO8pPXJWlkjR0/Vn/rcOsbQWAiWBtMgghCqliIeXMIlFierkYkpJFdoC9H7YFWtPUNztDpP87
-	WtNKCog6j56uhrLjug87cpWQ73CiWKADfB+7B8J/dao059uNfIawWegl4g/dgOkzYk5Akf4rLRP
-	+b63epZHqNnjN/PvL19/hkVBUZ/NCkNcO27W0NKamm8pp70YQ==
-X-Received: by 2002:a17:907:97d0:b0:bc2:1dab:3ea0 with SMTP id a640c23a62f3a-bd28de036d4mr114881866b.8.1778578237873;
-        Tue, 12 May 2026 02:30:37 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:325::372? ([2620:10d:c092:600::1:8c90])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-bcfb7b17d1fsm303492866b.41.2026.05.12.02.30.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 02:30:37 -0700 (PDT)
-Message-ID: <24cc68b2-c432-4623-92eb-b56b76850c35@gmail.com>
-Date: Tue, 12 May 2026 10:30:34 +0100
+        d=1e100.net; s=20251104; t=1778581526; x=1779186326;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Edr+ytgwsmK9YysqqZ45HcW/A2JY308WqKVGXyYCiys=;
+        b=SwExmRRCD0mWZf99xDzTx8htgqTRtEFOl/A05GT3rPrmgs4rBoxtH045VFlgH3JxYJ
+         /gRpT0ChC3kJVz1umzsGJLWXcTylNGfcoM5HnUX41uvulW0nsWrC76kZ1ABTgcQnWfIH
+         duL9b1ya+W200N5jkEhSnlb0rAgc9peGQJlMSo1eERkd9S9mcmvju3bhItJuO419eBx+
+         X0Ozx/iWqx2H9wI/m61K3pkwC3TEoWAUo/FlqVauA/RQoZN6rAjPu/aZaBW9eGGkjG4j
+         Y/e+GdPpfbMq344cYKopRBCBLEAzm4dV7ntJbOfnY56ilTFOrA4U9dt+wm3umJluPXO3
+         3ffA==
+X-Gm-Message-State: AOJu0Yz1Na1ebkAefMHM3l/d4k/WtpB4YySFGmzKwj3uXCYauAs6rkUn
+	yQS4N3wyHb0nLgr2ts0QtusNKQ8r6YDkgu+idKZVE8MGzhOI/om5pdo5NEuxPQ==
+X-Gm-Gg: Acq92OE2OmphmhV9Er6WCgTrA4+nfHfTYy50lz0BfunYlm9L4aFAOVI+7KKNFiGY4X6
+	CLueUJaQ9w+c1uJA8f+ZBuVdzveIDMr0Z7PW7p2qBNGsr3lXuNkpcGqmliJf2EqDYdytJqlKKwe
+	1i678YUvUlEok9OUwBwWki7mXGpcnTLfVJ8v1x2ls6AzQd7FiGiA4jW0JyKPtYDzOeqBFmC8MKY
+	HBnVIV1cDtPERkWMcgqppcdoXdibT7Pb7t84Bf9xxnp318C5mDWhzJX0AMSpDajRWBo1ptXTMgN
+	piiRHx1dG1TSjSsrR+DcaL3Xz5UQHIMDog02IoH3kmvI/hWNMiS2W6ED8J5hK/vJsvZMFPyyMJl
+	fYP4BFZTHxvK2j691ZwkQdZnLdWC/6GlbHqEmqOLtJsxO3LgyZmQeKWn+fAj3kUMnFJWXmhoFtW
+	lXHBhswxTP1FSD+hRy7pNai9fdbbnRhg7d5OVQv43X4oh7OtUph8orPWLZI6DuBd0WgRMEkY9Sf
+	3VURRbarw==
+X-Received: by 2002:a05:600c:4509:b0:48a:56d5:16f2 with SMTP id 5b1f17b1804b1-48e706b3cadmr212454415e9.7.1778581525830;
+        Tue, 12 May 2026 03:25:25 -0700 (PDT)
+Received: from 127.net ([2620:10d:c092:600::1:8c90])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48e9052c9fesm74352255e9.1.2026.05.12.03.25.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2026 03:25:25 -0700 (PDT)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	netdev@vger.kernel.org
+Subject: [RFC 1/6] io_uring/zcrx: remove extra ifq close
+Date: Tue, 12 May 2026 11:25:01 +0100
+Message-ID: <3adec4b4bfb3b82232eda6152bb07f9cf86e0391.1778581283.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <cover.1778581283.git.asml.silence@gmail.com>
+References: <cover.1778581283.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/10] Add dmabuf read/write via io_uring
-To: Ming Lei <tom.leiming@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
- Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>,
- William Power <william.power@intel.com>, Phil Cayton
- <phil.cayton@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
-References: <cover.1777475843.git.asml.silence@gmail.com>
- <afi7c-VUJWOLlC1m@fedora> <6873d617-c904-45f3-bad9-e1ae39cfecd2@gmail.com>
- <afxgc4hizusnAA26@fedora>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <afxgc4hizusnAA26@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5/7/26 10:50, Ming Lei wrote:
-...
->>> BTW, inspired by this approach, I adds similar feature to ublk via UBLK_IO_F_SHMEM_ZC
->>> which can maintain long-term vfio dma mapping over registered user-place aligned buffer.
->>
->> Interesting, just too a glance, and it looks like what David Wei
->> was thinking to add to fuse, but IIUC he gave up exactly because the
->> client will need to cooperate and that could be troublesome.
-> 
-> Here the cooperation is minimized, maybe one shmem/hugetlb path, or memfd,
-> and it is one optimization and opt-in, and fallback to normal path
-> if application doesn't cooperate.
+By the time io_zcrx_ifq_free() is called the interface queue should
+already be closed, so io_close_queue() will be a no-op. Remove the call
+and add a couple of warnings.
 
-My point is that with widely enough adopted interface the user will be
-able to opportunistically use it without knowledge about the file, i.e.
-not knowing whether it's ublk or something else. But as you mentioned
-below, it'd be cooperative interface in either case.
->> Should we try to push everything under the same interface instead of
->> keeping a ublk specific one? Again to the point that it requires
-> 
-> If generic interface can be figured out, it shouldn't be a big deal for
-> ublk to switch to it, and the usage is simple actually.
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ io_uring/zcrx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Sure, you'd just need to maintain both as there is a mismatch between
-interfaces.
-
-> So far, ublk supports both FS and nvme block device.
-> 
-> And cooperation can't be avoided for this usage no matter if generic or
-> driver specific implementation is taken, for both fuse & ublk.
+diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+index 7b93c87b8371..3478040f2197 100644
+--- a/io_uring/zcrx.c
++++ b/io_uring/zcrx.c
+@@ -576,7 +576,10 @@ static void io_close_queue(struct io_zcrx_ifq *ifq)
+ 
+ static void io_zcrx_ifq_free(struct io_zcrx_ifq *ifq)
+ {
+-	io_close_queue(ifq);
++	if (WARN_ON_ONCE(ifq->if_rxq != -1))
++		return;
++	if (WARN_ON_ONCE(ifq->netdev != NULL))
++		return;
+ 
+ 	if (ifq->area)
+ 		io_zcrx_free_area(ifq, ifq->area);
 -- 
-Pavel Begunkov
+2.53.0
 
