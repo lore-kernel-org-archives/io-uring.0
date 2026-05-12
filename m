@@ -1,98 +1,75 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A133A59BC
-	for <io-uring@vger.kernel.org>; Tue, 12 May 2026 15:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6597F2F8E9B;
+	Tue, 12 May 2026 19:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778600877; cv=none; b=MtGqK+aPWvi6zLp9HRKlaZiZYvCFxCWyXYYqPN/gGNPRNndHWMw7xLAlhhzTGuEkdVNTpvNdOJFFj4qY2hVyuGQ80GMu3qTzOeX3OX1Jacsmc+bJ9MDKFuerR+f3GR2q5NJLsLjle0jIG6gSqng+lTsS2gT1YJeZJbDopN3i56k=
+	t=1778615427; cv=none; b=I3AFTaG/V1QVa93F5qMdDd5cwwZP9gDeaDAKiHKOJAS4/QOOgODl9j5ujjhFQ6K3HENH8KaLSRJiQm0dHwoLYYpLzNiGQL0EmKhH4QsOOgrjgMJyPuCbwPBkue/S0tzwwiwc80Bf7hOesaSzIDZmI/OA/JzRI46DU3dgzZXeUrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778600877; c=relaxed/simple;
-	bh=+fFU7jIK5BFPkMYtAIwxntL9yQQw08VG6EF5OZCivYU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DpDLCajvOK8gWiCTKANfeX7h2je7+5LZKh1euBMvAEX9UnpFrCFMWbm8Y3qgWAnJmFUbqrggdf9tM0PtGDc138o4aUxI/qa7oiCbiThQs2xcKbG2moJwBPkYlCEvNkHkBzYAIL2tE8wzjk353QF/hgJJRV09D1pdhohG3LrEz6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=fCUd6a+1; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1778615427; c=relaxed/simple;
+	bh=yutGWzZd9bLDvk3hSnpaLW1RsRfw1eEooO3Xgdh5p/4=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=ELUeBUCJIHnXzPkPNybwNPJIDW3Qn534VKhNMi31oM6zG/V11vijgBElUunaK3fg2CXRNLyLyjkTpC1ISXd+9/TOVNOT8RhGGQvMT9+jkUU7m0+SRfyzLJplKzrD0r3FMKa1ZTuiR3OmSXoP1jzMZzfnbqW8cVxNcnX+GdQBZxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LxWYI2wc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="fCUd6a+1"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-479fc1fc048so4104637b6e.1
-        for <io-uring@vger.kernel.org>; Tue, 12 May 2026 08:47:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1778600875; x=1779205675; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HdFF4dCw+6mO/bxdzEz9RKka+BXsp2V02/j635sy9XI=;
-        b=fCUd6a+1dbTlbcXSBux+6ty7YaUaJK2/Z1Q3KqAMmY0eAiqtnrczr6SL6Z7aA0iZF6
-         BHT67MdxypV8WhC16B72CE5D3TG0Ashob0PtRyi+h+O//McQTRWR7xc/79PdtTz6FzjU
-         p1NuWIOTYXc+ZQhT2J9+Xk3+TKK6uXytEC0PlwkeyeK1HfnHo7UsBThAa2daH8n9QSg5
-         lICLum0v2CWN85/U8OnyuDF6xieIG/LY5b8M6RZqAANb2UJ8dhzmsDQP6kdfox+vm7qM
-         K4Q9i1WnmJYAyduXxMLUTOw8Q9mPJ+AuQs04KC6UDttq3VqkYNATLdxXWPB/ymg+gArD
-         759w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778600875; x=1779205675;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HdFF4dCw+6mO/bxdzEz9RKka+BXsp2V02/j635sy9XI=;
-        b=n5ppc2meB1QuJ7oGwdZKdUiAw7Ap96B3bvkTNeeKEq9MEBQ/H6NTFhlmrf3B7Pxscm
-         ffHHQvrp7tHAwmYp2fQFFU3FYtQEg3rA89r17MNf9hgSj7COY9sw9A4WizQwQ4aLvGCq
-         PhF3aYD96VBKsppVToenGcz1teSiIYFEbBpkeVh5IvOXKKGx1m524SUZ97s4JCAwtQiO
-         eZ9ElOx2YxIV6p92k26FamcIJJF3A2wkZqL2nzaUd7aW/VJzVZUN0QGKDAu+ApUPnbCw
-         /RKIrCv4RL63q8XXtXMm01vxzliLx76PhnNLysBojU9CbkVdafqhebQ6z+nYoY0/payZ
-         feLQ==
-X-Forwarded-Encrypted: i=1; AFNElJ8mw5pjwd2gjZtCr2qUzamZrkbNYkaDhxcvaQPXV2W61vNJZJ0aSiRCZ0xi3aHPvNwFa546OzJCXQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCehm1fWfAvIBI7fwfTosYwSUJqzSP94JNTKKSq1BADu9XA5pE
-	kixeHSTLn9T1vaisBNQpe1i62FtmGPciEfT83VL+c586CbKeEW7FgiPyMOlgt0EyK08=
-X-Gm-Gg: Acq92OFtE3y2qLYELkYpgRPUo76GCLyyQGofy3s9ee0ujSDnN/EsGrcxn2df5AfHAhR
-	6gxXwmlHAj2CZj/vTPSVEIoS2URuEuFoC6nk9DruPN+9kKJ5Kx3X35FLA6rGjxoDLkyZnMgxku0
-	xq4S8LQsimF+esOZmkbNppU4MaQT3TM2yYKXKuCcDialgmeiYQElLDAe1NFcPv0bcUu0C40ofc5
-	1tEv0D5FWssSKrbKotTt7qzyKqNDPQxNt7cWqm9u/OEPgAOn4zAPa0YAIbbmvqM6JPzPnq2pZgc
-	WHQ/k67wGxcSUBvTsKNFOwsEAPli/5D7MOSSIIq4BUagGmU2INP+Glfys3F1iR9s/7r+ubej4PO
-	yVh/CjVFeok/aYfpq8RWijJIXv0DwF43Yh6TCGSIh8Q42Z9jw+hJV1eNr+eRjjIrwwNnscV0hIT
-	OpdUxfLMckBlzFM1nEByia85GudMjMCrrHLds7DKRzd6UbgSnl6AkaincXUUGlDtwoOI2IJJpBD
-	9Nx+P0TJOJ5cM4vn4U=
-X-Received: by 2002:a05:6808:c298:b0:469:fc59:b128 with SMTP id 5614622812f47-4829731fd75mr2139910b6e.25.1778600874805;
-        Tue, 12 May 2026 08:47:54 -0700 (PDT)
-Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-47c76986f9dsm22873454b6e.16.2026.05.12.08.47.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 May 2026 08:47:53 -0700 (PDT)
-Message-ID: <e12d01e9-8934-4150-bcb3-09ba147fc842@kernel.dk>
-Date: Tue, 12 May 2026 09:47:53 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LxWYI2wc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA92C2BCB0;
+	Tue, 12 May 2026 19:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1778615426;
+	bh=yutGWzZd9bLDvk3hSnpaLW1RsRfw1eEooO3Xgdh5p/4=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date:From;
+	b=LxWYI2wcmcAj3wsEt6gVenl8qdmJHQ4uApP2ikXfTxbyeUefQsTsh64rFYNYbiwsK
+	 4vnMXe3eXXB39BmNoCv2W4e5Su/+0HLtFAdZUSp0eQR2Ded8ow1eZ8yLFY2rlv9KEo
+	 q/eIErxDixtjVO2p6nlzoWN8UFakuybzC8B3oAzXDdyrogocCDThtLllJHggv5LqY/
+	 7zxuBnUnaSz1XCLN/Cze4swZgd8iVS4P49Cv0/ypGbeckCWkVaPdQGIK9gq8poo+L2
+	 AAfWOnDkF2YrCcJckdQiygXPWi6N0u4aX18cqVeWGY1abHoweGfoga7lqDXGLLA6f9
+	 OwqCQ2bu87quw==
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH AUTOSEL 7.0] io_uring/wait: honour caller's time namespace
- for IORING_ENTER_ABS_TIMER
-To: Sasha Levin <sashal@kernel.org>, patches@lists.linux.dev,
- stable@vger.kernel.org
-Cc: Maoyi Xie <maoyixie.tju@gmail.com>,
- Pavel Begunkov <asml.silence@gmail.com>, Maoyi Xie <maoyi.xie@ntu.edu.sg>,
- io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260511221931.2370053-1-sashal@kernel.org>
- <20260511221931.2370053-13-sashal@kernel.org>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260511221931.2370053-13-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCHSET 0/5] io_uring related epoll cleanups
+From: Christian Brauner <brauner@kernel.org>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ brauner@kernel.org
+In-Reply-To: <20260503085101.112698-1-axboe@kernel.dk>
+References: <20260503085101.112698-1-axboe@kernel.dk>
+Date: Tue, 12 May 2026 21:50:21 +0200
+Message-Id: <177861542127.846060.15247420422293788438.b4-review@b4>
+X-Mailer: b4 0.16-dev-d5d98
+X-Developer-Signature: v=1; a=openpgp-sha256; l=690; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=yutGWzZd9bLDvk3hSnpaLW1RsRfw1eEooO3Xgdh5p/4=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQxtzQGzm6ueuIdlh9aJiR9pW5yO1ugxNurJ+5tlG88E
+ pm4UqKro5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCLlaowM59Oa+3M+cR0M+OpY
+ sXzaSr75bRsU2WS2dmxfsSy1Qfq4AcP/4NWH97+KdZ4t1nO5sHbG7rNi13rXnS4LZrhsVqF10iu
+ SBwA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On 5/11/26 4:19 PM, Sasha Levin wrote:
-> From: Maoyi Xie <maoyixie.tju@gmail.com>
+On Sun, 03 May 2026 02:49:11 -0600, Jens Axboe <axboe@kernel.dk> wrote:
+> Hi,
 > 
-> [ Upstream commit 45d2b37a37ab98484693533496395c610a2cab96 ]
+> One of the nastier things about epoll is how it allows nesting contexts
+> inside each other, leading to the necessity of loop detection and the
+> issues that have come with that.
+> 
+> I don't believe there's any reason to support nesting on the io_uring
+> side, in fact IORING_OP_EPOLL_CTL is a historical mistake, imho. But
+> let's at least try and contain the damage and disallow nested contexts
+> from our side.
 
-If you auto-pick this one, please also do the other one in the
-series, 9cc6bac1bebf8310d2950d1411a91479e86d69a1. Makes no sense
-to do just one of them.
+I can stuff the epoll preliminaries onto
+
+vfs-7.2.eventpoll
+
+which is where the refactor I did lives and you can just pull it.
 
 -- 
-Jens Axboe
-
+Christian Brauner <brauner@kernel.org>
