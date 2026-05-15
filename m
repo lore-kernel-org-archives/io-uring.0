@@ -1,103 +1,106 @@
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557C63B0ADB
-	for <io-uring@vger.kernel.org>; Fri, 15 May 2026 14:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA28C481FD3;
+	Fri, 15 May 2026 14:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778853758; cv=none; b=uj7O2JQ6kQfvcOo2pf+7ogtyydClMD3lOCtjXbu7XQfASjfS9fhTEMH6px5gD2Wg3Tj61L6KMc2pt9J8X8KWPN2XB8RewJCjgZLuZ7TMy5Y8PiHc50U4DmUF9XkKYguTQTLop3HXS789ta7GVjklo+txYRZ7oh1zVlEnAzu72w8=
+	t=1778853891; cv=none; b=FzKVs6I7VX9MYLx+GmgZlODJwoyYAeKHhldVnb0w+j3tnPT1dhFjBFso/MzUaKmVob6Dna7giDEC65U8mdS8rTy1PsQCL0+X6gVgz/ZZ4kXk+q/uXKceiWiVo6ZAWN3k8Rv0LbGQgCe8BhjQLW2/0W49qONOAIy7Ybyc/v2/fQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778853758; c=relaxed/simple;
-	bh=afPtjVszG169QH6km9gCzMGnB9TiIq5NUkjgJXxJDUw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=L65VCpl4bXh/dnKBwCLaSglHPcwIS+C/Wih4VD9HXBPu2wBoIUf8n4YSKwa61EIZu1vG9RcigCXin+uFA3wS4s3glWa+8/+ehOIwTg+DQsMkGhaoQE/TNNjFY0hbSNqLhTANqRCOc4nzu17vz/VmcNLDVpbX/Z6bX77jcvBlqt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=dJmabCf2; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="dJmabCf2"
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-40ef10ec84cso7489787fac.2
-        for <io-uring@vger.kernel.org>; Fri, 15 May 2026 07:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1778853753; x=1779458553; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=juyqAozJPA3kiT6vrGKXzyTGpJuBd6TpJcgmUOrO5k4=;
-        b=dJmabCf2PiOsZv0sv4zyT/YWsEngce3vGvFov/s2UW9pwZkI6nG3oiDmTBhW5+fkuG
-         MjaUjtoeM92+epZ2SpPolXffVsGUE264tfu5xuE1LGX6E8jFkR2o1g4dUtBSWXWeqBy4
-         hW9IZFUX6dHV5+MUzFDjxTE0/HWS68/lzs2aEBMCq++IwvPZnZcyKOTjSR/e2iSouiHi
-         /vVKyVmjoYWmJLBzVu75rbyqZEpeg/4Z7kjazYLQPXej5F0ZJi6bIzq/kdoWRtnrv1b9
-         nq5PhzL43BtzIgPjofN34zt9rcVo6akMqhLO/wKZN7o3jVKch3SxzQB9xB5gdgqfuxtP
-         Qhdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1778853753; x=1779458553;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=juyqAozJPA3kiT6vrGKXzyTGpJuBd6TpJcgmUOrO5k4=;
-        b=sfQftKHE4+ac2BRdnT3RSFZoFgfhJ2c0aaJv3CNdGuqF3/F1z4F2UeVyAz8b2v75zT
-         14BIe0AswaJyxg1aRWTrZbakfbIpAdRcdE/Eabjg0nLob+SIx2KXZ94Ei5qOUPYM35GM
-         nBS1RSlmT/LFWvvMGgX5VaWBk00xDL/XBzThYcPc9t1/pUXMCOJlE8W78GC5ArryR4ei
-         j5608efpy+s3Rzg68xsOHahbxuBRTDDtBgkuuMHcGkDdqYqm14UpYhWYvjHPnf34tiex
-         dOElJfJTKbVLyJFn6WxlcUu/zFMtFsDFUnYTo1zmWKIoiLCWwkFy8bp3+cIq/Z9fhBNt
-         ooaA==
-X-Gm-Message-State: AOJu0Yy9v4v0Ms31Z+dVV4YRCkV3NTm/mO5lDXk082UJOuaJos1MacgT
-	RqnGGjU+lSKRrO6BCpToxujnm0ZRi/xBqaf845kx+Cye0Pundvely/nNUkz7ysgkFxk=
-X-Gm-Gg: Acq92OFyXE6wT5TeMZt9K0C5KpK8p20RqsRyKKpAgyy1+O1zPS3yUf+MGcG9ry25Odi
-	mhC6wq7qekeQBBGSSKlEeO6YsWl2maMW6UL1J7zF3Pwn61p1+l+ROj0tcCQ9X+hhScOnczYHAVE
-	n90lI8TfGC46/LFlQ0l6J62MLuUilDShwCgu6Q3iGwEnRTkCpcI8B3kvBjKIz2ACHRzYT55V1WZ
-	KCBNXyrR/GrWp6tIbd4LGBSZv0HTvU3JEppZO8WRNOO8V7qB0H/XMR0UsXA7zsLWn3AVMQqmV+/
-	Prm0AVs0GLKF+VGdMcB4K3Ik7wX6gozuazKVI2iCcGhFVddz/0077PAR/ScJwjJ3Kx59hw7ZvBJ
-	J1FWvsV1NPGmzQXSs1Qg9ByK0+t1pFHGFc7AqJv6Dy62A9pdbSQAVcbY8O5NZb061eMxLjvm3eD
-	TjvfeA5HDmHHLvgbV44oyqtmMRDZqCiG2y
-X-Received: by 2002:a05:6871:3606:b0:43a:2320:8a29 with SMTP id 586e51a60fabf-43a2da085b8mr2687226fac.16.1778853753215;
-        Fri, 15 May 2026 07:02:33 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-439fc4dcab3sm3990377fac.11.2026.05.15.07.02.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2026 07:02:32 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
+	s=arc-20240116; t=1778853891; c=relaxed/simple;
+	bh=a4rLErMOWg6d2WSQIOfFnoxXjYJCxR1igfe3YIucAS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cZ8R6QPgFLnvHuGI6aBx/M2UGGpLlUk+r1vd4ARd0/z3MGNFC9Pdg5p1LQPWycRLX1TJnD6Mt+eZF7AAcoCOjq53Tx274yB+yBYqX6fxBzjRpDX3pTxaW+Z6Mnh2HLacAWzz0eS8iig9rgnEePwGlGiY49grDkE8oP2rKqBSia8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf14.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id F294A1A00EC;
+	Fri, 15 May 2026 14:04:42 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id 28EEE2F;
+	Fri, 15 May 2026 14:04:41 +0000 (UTC)
+Date: Fri, 15 May 2026 10:04:48 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
 To: "Vineeth Pillai (Google)" <vineeth@bitbyteword.org>
-Cc: io-uring@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>, 
+Cc: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v3 01/11] io_uring: Use trace_call__##name() at guarded
+ tracepoint call sites
+Message-ID: <20260515100448.715589f6@gandalf.local.home>
 In-Reply-To: <20260515135903.2238731-1-vineeth@bitbyteword.org>
 References: <20260515135903.2238731-1-vineeth@bitbyteword.org>
-Subject: Re: (subset) [PATCH v3 01/11] io_uring: Use trace_call__##name()
- at guarded tracepoint call sites
-Message-Id: <177885375208.726485.17873052916016595792.b4-ty@b4>
-Date: Fri, 15 May 2026 08:02:32 -0600
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 28EEE2F
+X-Stat-Signature: 1t3hq8tyz3pe3o9kjmeyc47tpw6jt155
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/dwOBiOhHojBhVtxMJ+MTplucGfB4fjAI=
+X-HE-Tag: 1778853881-800517
+X-HE-Meta: U2FsdGVkX1+X/nbcDBP9T8AusXahy0hJ5Uuv85d1hYx9Dfg0hmDH/oRGpX/nNIVyFFNgKNH+NyDEriaAcMLDn6XoYUnmfghv+aPNa6iPXu3yzJ2ZnHxrG1O0dBtATR2j5L8FnWdcMgXzFpH/5Xa9LGexRU2oHyeV3TSRTjtkMj4cQEixXnZE3vXk/YX6WOR8c0erMi6MjFeROn2Hx9JZocacFwLCIo9H0ul7Po/ElvW9a+W/EMGFZ1TdEHAV4kRzrIXTKjg2lHzFGUM+9gJj8YIjw678LxWFP70l7BYpqkqsA9mPw/Yr9kSfXbvVolBDBy1fH4E9ewEQSzJasKDo3Jah+4yAIPxobPDOTjYmicGyEFLUhoyOfmcUYjnzMcYwJAmyTPVAYra213DsdzZwoGVb2MsRjnsYZgbTcGK/6EHuPpusrmqxmsxFJHhHfjVrtgy0mb/xUKnza6lWWueyZsJM5N2XnMCK9y68dsBOo58L7gPCK5m/uAUSs45w/vleNX+RjKpXQcw=
 
+On Fri, 15 May 2026 09:59:03 -0400
+"Vineeth Pillai (Google)" <vineeth@bitbyteword.org> wrote:
 
-On Fri, 15 May 2026 09:59:03 -0400, Vineeth Pillai (Google) wrote:
+> From: Vineeth Pillai <vineeth@bitbyteword.org>
+> 
+
+Hi Vineeth,
+
 > Replace trace_foo() with the new trace_call__foo() at sites already
 > guarded by trace_foo_enabled(), avoiding a redundant
 > static_branch_unlikely() re-evaluation inside the tracepoint.
 > trace_call__foo() calls the tracepoint callbacks directly without
 > utilizing the static branch again.
 > 
+
 > Original v2 series:
 > https://lore.kernel.org/linux-trace-kernel/20260323160052.17528-1-vineeth@bitbyteword.org/
 > 
-> [...]
+> Parts of the original v2 series have already been merged in mainline.
+> This patch is being reposted as a follow-up cleanup for the remaining
+> unmerged pieces.
 
-Applied, thanks!
+This part should go below the '---'. There's no reason to add it to the git
+change log.
 
-[01/11] io_uring: Use trace_call__##name() at guarded tracepoint call sites
-        commit: cf9a29544a01ff818c7f0a01716dc5e48f8ad7b5
+You should probably also state that these can now go in individually as all
+the dependencies are upstream.
 
-Best regards,
--- 
-Jens Axboe
+> 
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Vineeth Pillai (Google) <vineeth@bitbyteword.org>
+> Assisted-by: Claude:claude-sonnet-4-6
+> ---
 
+  <<here>>
 
+Thanks,
+
+-- Steve
+
+>  io_uring/io_uring.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+> index e612a66ee80e..1b657b714373 100644
+> --- a/io_uring/io_uring.h
+> +++ b/io_uring/io_uring.h
+> @@ -312,7 +312,7 @@ static __always_inline bool io_fill_cqe_req(struct io_ring_ctx *ctx,
+>  	}
+>  
+>  	if (trace_io_uring_complete_enabled())
+> -		trace_io_uring_complete(req->ctx, req, cqe);
+> +		trace_call__io_uring_complete(req->ctx, req, cqe);
+>  	return true;
+>  }
+>  
 
