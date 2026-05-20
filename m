@@ -1,40 +1,56 @@
-Received: from mta.al2klimov.de (mta.al2klimov.de [162.55.223.79])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148E33F4DC0;
-	Wed, 20 May 2026 18:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.55.223.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D3736A34D
+	for <io-uring@vger.kernel.org>; Wed, 20 May 2026 20:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779300061; cv=none; b=QlFH0lUwWidef11hBKsTFfxV0pc98YFLxrgFqKiTxVY42IE5vBUAx40A8uc9Yk19jPcQLWmptc4WkvJeU06o8+u0xJ8t2IjV5kDQ5qVl638ySmo/8fOkxxD6xsoGn1fRkgrabflBI/Rm2yZcaJq8+vlpOz//PoW1hF45FBPKnWU=
+	t=1779309878; cv=none; b=LQmaKt//YJZOBmQRyav/7+87QqhJspXUpLWUkDZhSTcm/lFGR6t86A+K1y9I0lgBv1GruiSIZSTIbbG7rFRlXZdeumbPHX6XwFq2HJA9/GG09Y+mMIP3dQw8CfUzRS7kWbeO/lvsNu4X/+nDIKuHBq5FbvryWK6hGs0ESq63c/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779300061; c=relaxed/simple;
-	bh=6ecsCMsxlfuBrGJ9K/XozOYSjef/olTbV6t7984eiC4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cMuowoZIhI1fB1UXHBVNE4VrXg5oeYx7HKKo+UxFBJ2TBS5BHy/LeZRe9iPvJOrsR77pHek3hMBZKiZuj9nj2w6TFADan4NMDw3P5DCA0IqLDu4s23fRMZHHEDI3/agPn6dkr3/z6z82LjXPPet4yMjwo3wJzCdSROutjOtV7eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=al2klimov.de; spf=pass smtp.mailfrom=al2klimov.de; dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b=n8X3g2ZU; arc=none smtp.client-ip=162.55.223.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=al2klimov.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=al2klimov.de
+	s=arc-20240116; t=1779309878; c=relaxed/simple;
+	bh=JA4oajjjfzv/jShp9a0EdZWx9s4yuYdeynOXUADoypM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Ed0sBP0py2hK1jE9kOG/GEoph0nJf4YpiekUZzfKgU1nKXbmE4EeZZqi7IW8t41wCQt4DmClCsRJt/ipooAlsScxGms+Vl76wci4XiBJI70P1Qzu7/jHc+SppOSh2Rcp3oO4TxbVC6O+gpBj2C2R+T1eiVKBdNRBkagyZxm10Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fmmr.tech; spf=pass smtp.mailfrom=fmmr.tech; dkim=fail (2048-bit key) header.d=fmmr.tech header.i=@fmmr.tech header.b=QaxK6M6V reason="signature verification failed"; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fmmr.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fmmr.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=al2klimov.de header.i=@al2klimov.de header.b="n8X3g2ZU"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=default; bh=6ecsCMsxlfuB
-	rGJ9K/XozOYSjef/olTbV6t7984eiC4=; h=date:subject:cc:to:from;
-	d=al2klimov.de; b=n8X3g2ZUN8UseDwRo+dJSxMXJNzkImkJE6DpeUrwbJ2gRas8NQzR
-	I98zPuUBUkfJpV3+Ta5Cf3SFnqOHDYiD36y0eYVxaCBJhCKaKzPLGrECd/DHiwkEBkC+EZ
-	rF59l1WepAxflHZczveXp+xh5PnK/wH2N8NufnD/6o634EcQMv8TDDAcvUGOga9td04fr4
-	fkU3QeymuRlD8TDstX+L8/UMHexIdrQs22J0nzlHU0LVCeDXEmdf+4dfICLdqjjNxlAUMy
-	YWnhSvzfy9tb73lE7/OoKxKOCJa8dgAoI/3zbQeJBiBhTfEgrXLD/zLysUF0u4fnu2eQUf
-	OfP1E0wByg==
-Received: from cachy-ak (2a02-2455-18e9-e011-4d8a-aad2-c25c-50e5.dyn6.pyur.net [2a02:2455:18e9:e011:4d8a:aad2:c25c:50e5])
-	by mta.al2klimov.de (OpenSMTPD) with ESMTPSA id d623d0dc (TLSv1.3:TLS_CHACHA20_POLY1305_SHA256:256:NO);
-	Wed, 20 May 2026 18:00:57 +0000 (UTC)
-From: "Alexander A. Klimov" <grandmaster@al2klimov.de>
-To: Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org (open list:IO_URING),
-	linux-kernel@vger.kernel.org (open list)
-Cc: "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Subject: [PATCH] io_uring/nop: pass all errors to userspace
-Date: Wed, 20 May 2026 20:00:44 +0200
-Message-ID: <20260520180045.538533-1-grandmaster@al2klimov.de>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fmmr.tech header.i=@fmmr.tech header.b="QaxK6M6V"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <robert@fmmr.tech>)
+	id 1wPnmJ-0039ar-2f; Wed, 20 May 2026 22:44:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fmmr.tech;
+	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
+	:Message-ID:Date:Subject:Cc:To:From;
+	bh=efk02pEZUCJC1+M1yFwDpmrjykp88X3o7rpxIWwWT14=; b=QaxK6M6VB6h/EsQ4u94I7Z2miC
+	YrgUi8sPB+y7QgAt1o4caUuXzDMA4KuarOhPBAHSjv+qFPfQzR8/rg2IIiu6YAq8HZEjg8QjLynGP
+	jKFbi9IpDxJx3t2/lOTpGxmYG3032ZsqOEC+4E6jPeGxViV5LEnl5c2kKfbCY/FuogAuMr86lX1JT
+	LoRX1S6bcJOOUOx+ANJB2hkTCY/FNkaTqE9Uh4zotvQZZPX2iwMTP4Yvgh6jaKkeLoQLcAYKWDE7V
+	7ZgdyeWh3mD0RgQPnUl8QzXab5p64VC7E5v6VROer0wNd/engIwKr4ZuwZc4glWBqC6IaQQdyxCuA
+	9q0gyxZA==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <robert@fmmr.tech>)
+	id 1wPnmI-00061E-PW; Wed, 20 May 2026 22:44:30 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (1125095)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.95)
+	id 1wPnmI-00EbZa-7a;
+	Wed, 20 May 2026 22:44:30 +0200
+From: Robert Femmer <robert@fmmr.tech>
+To: io-uring@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	kasan-dev@googlegroups.com,
+	Robert Femmer <robert@fmmr.tech>
+Subject: [PATCH v2] io_uring: annotate remote tasks for kcoverage
+Date: Wed, 20 May 2026 22:43:04 +0200
+Message-ID: <20260520204303.558392-2-robert@fmmr.tech>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <CA+fCnZcHbkT=knNbOnAAmrbhx+8+WdcshLty84S_0UbYWVL-=A@mail.gmail.com>
+References: <CA+fCnZcHbkT=knNbOnAAmrbhx+8+WdcshLty84S_0UbYWVL-=A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -43,33 +59,141 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This fixes an inconsistency where io_nop() called req_set_fail()
-based on ret, but passed just nop->result to userspace.
-Originally, ret is a even copy of nop->result, but is set to an error
-when such happens subsequently. Now that's also passed to userspace.
+Fuzzers use coverage information to guide generation of test cases
+towards new or interesting code paths. Syzkaller, specifically, makes
+use kcoverage (CONFIG_KCOV). Coverage information is not collected for
+kernel tasks unless annotated by kcov_remote_start and kcov_remote_stop.
+This patch annotates io-uring's work queue and sqpoll tasks.
 
-Fixes: a85f31052bce ("io_uring/nop: add support for testing registered files and buffers")
-Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+Signed-off-by: Robert Femmer <robert@fmmr.tech>
 ---
- io_uring/nop.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ include/linux/io_uring_types.h |  4 ++++
+ io_uring/io-wq.c               |  4 ++++
+ io_uring/io_uring.c            |  3 +++
+ io_uring/io_uring.h            | 24 ++++++++++++++++++++++++
+ io_uring/sqpoll.c              |  4 ++++
+ 5 files changed, 39 insertions(+)
 
-diff --git a/io_uring/nop.c b/io_uring/nop.c
-index 3caf07878f8a..f5c9969e7f64 100644
---- a/io_uring/nop.c
-+++ b/io_uring/nop.c
-@@ -79,9 +79,9 @@ int io_nop(struct io_kiocb *req, unsigned int issue_flags)
- 	if (ret < 0)
- 		req_set_fail(req);
- 	if (nop->flags & IORING_NOP_CQE32)
--		io_req_set_res32(req, nop->result, 0, nop->extra1, nop->extra2);
-+		io_req_set_res32(req, ret, 0, nop->extra1, nop->extra2);
- 	else
--		io_req_set_res(req, nop->result, 0);
-+		io_req_set_res(req, ret, 0);
- 	if (nop->flags & IORING_NOP_TW) {
- 		req->io_task_work.func = io_req_task_complete;
- 		io_req_task_work_add(req);
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 244392026c6d..b92b8e7169ea 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -504,6 +504,10 @@ struct io_ring_ctx {
+ 	struct io_mapped_region		ring_region;
+ 	/* used for optimised request parameter and wait argument passing  */
+ 	struct io_mapped_region		param_region;
++
++#ifdef CONFIG_KCOV
++	u64				kcov_handle;
++#endif
+ };
+ 
+ /*
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 8cc7b47d3089..16af75b1cfe0 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -639,6 +639,7 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
+ 		/* handle a whole dependent link */
+ 		do {
+ 			struct io_wq_work *next_hashed, *linked;
++			struct io_kiocb *req;
+ 			unsigned int work_flags = atomic_read(&work->flags);
+ 			unsigned int hash = __io_wq_is_hashed(work_flags)
+ 				? __io_get_work_hash(work_flags)
+@@ -649,7 +650,10 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
+ 			if (do_kill &&
+ 			    (work_flags & IO_WQ_WORK_UNBOUND))
+ 				atomic_or(IO_WQ_WORK_CANCEL, &work->flags);
++			req = container_of(work, struct io_kiocb, work);
++			io_kcov_remote_start(req->ctx);
+ 			io_wq_submit_work(work);
++			io_kcov_remote_stop(req->ctx);
+ 			io_assign_current_work(worker, NULL);
+ 
+ 			linked = io_wq_free_work(work);
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 036145ee466c..f38b8eca6bbb 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -293,6 +293,9 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	INIT_HLIST_HEAD(&ctx->cancelable_uring_cmd);
+ 	io_napi_init(ctx);
+ 	mutex_init(&ctx->mmap_lock);
++#ifdef CONFIG_KCOV
++	ctx->kcov_handle = current->kcov_handle;
++#endif
+ 
+ 	return ctx;
+ 
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index e612a66ee80e..881d43bd529c 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -7,6 +7,7 @@
+ #include <linux/resume_user_mode.h>
+ #include <linux/poll.h>
+ #include <linux/io_uring_types.h>
++#include <linux/kcov.h>
+ #include <uapi/linux/eventpoll.h>
+ #include "alloc_cache.h"
+ #include "io-wq.h"
+@@ -581,4 +582,27 @@ static inline bool io_has_work(struct io_ring_ctx *ctx)
+ 	return test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq) ||
+ 	       io_local_work_pending(ctx);
+ }
++
++#ifdef CONFIG_KCOV
++static inline void io_kcov_remote_start(struct io_ring_ctx *ctx)
++{
++	if (ctx->kcov_handle)
++		kcov_remote_start(ctx->kcov_handle);
++}
++
++static inline void io_kcov_remote_stop(struct io_ring_ctx *ctx)
++{
++	if (ctx->kcov_handle)
++		kcov_remote_stop();
++}
++#else
++static inline void io_kcov_remote_start(struct io_ring_ctx *ctx)
++{
++}
++
++static inline void io_kcov_remote_stop(struct io_ring_ctx *ctx)
++{
++}
++#endif
++
+ #endif
+diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
+index 46c12afec73e..8d2876e31acb 100644
+--- a/io_uring/sqpoll.c
++++ b/io_uring/sqpoll.c
+@@ -342,19 +342,23 @@ static int io_sq_thread(void *data)
+ 
+ 		cap_entries = !list_is_singular(&sqd->ctx_list);
+ 		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
++			io_kcov_remote_start(ctx);
+ 			int ret = __io_sq_thread(ctx, sqd, cap_entries, &ist);
+ 
+ 			if (!sqt_spin && (ret > 0 || !list_empty(&ctx->iopoll_list)))
+ 				sqt_spin = true;
++			io_kcov_remote_stop(ctx);
+ 		}
+ 		if (io_sq_tw(&retry_list, IORING_TW_CAP_ENTRIES_VALUE))
+ 			sqt_spin = true;
+ 
+ 		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
++			io_kcov_remote_start(ctx);
+ 			if (io_napi(ctx)) {
+ 				io_sq_start_worktime(&ist);
+ 				io_napi_sqpoll_busy_poll(ctx);
+ 			}
++			io_kcov_remote_stop(ctx);
+ 		}
+ 
+ 		io_sq_update_worktime(sqd, &ist);
 -- 
 2.54.0
 
