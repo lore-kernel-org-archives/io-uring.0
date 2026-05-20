@@ -1,199 +1,167 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mx0b-00364e01.pphosted.com (mx0b-00364e01.pphosted.com [148.163.139.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D3736A34D
-	for <io-uring@vger.kernel.org>; Wed, 20 May 2026 20:44:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA84F375AB2
+	for <io-uring@vger.kernel.org>; Wed, 20 May 2026 20:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.139.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779309878; cv=none; b=LQmaKt//YJZOBmQRyav/7+87QqhJspXUpLWUkDZhSTcm/lFGR6t86A+K1y9I0lgBv1GruiSIZSTIbbG7rFRlXZdeumbPHX6XwFq2HJA9/GG09Y+mMIP3dQw8CfUzRS7kWbeO/lvsNu4X/+nDIKuHBq5FbvryWK6hGs0ESq63c/8=
+	t=1779310240; cv=none; b=hgkkCRLmzyitKiC9pyzQDdb0g66fCDnTRTYTGwZ/3SxfssezDnmS1ZPMR1IXAh31lUdXCLSmzqLPDYPFBvcKp2SMzcmeE64fqGgTlzcaRu9rlQ6fQQatarbPhIpJThGPw6YUba+JIkmOHPTQdih2uvnt4+AkH6spfzQIztk1tMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779309878; c=relaxed/simple;
-	bh=JA4oajjjfzv/jShp9a0EdZWx9s4yuYdeynOXUADoypM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ed0sBP0py2hK1jE9kOG/GEoph0nJf4YpiekUZzfKgU1nKXbmE4EeZZqi7IW8t41wCQt4DmClCsRJt/ipooAlsScxGms+Vl76wci4XiBJI70P1Qzu7/jHc+SppOSh2Rcp3oO4TxbVC6O+gpBj2C2R+T1eiVKBdNRBkagyZxm10Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fmmr.tech; spf=pass smtp.mailfrom=fmmr.tech; dkim=fail (2048-bit key) header.d=fmmr.tech header.i=@fmmr.tech header.b=QaxK6M6V reason="signature verification failed"; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fmmr.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fmmr.tech
+	s=arc-20240116; t=1779310240; c=relaxed/simple;
+	bh=VtCji9Vx3n0Qm0HWIP6UWTPSjZWdzR1UjYoNBHm1Y+c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Xsq0qOjU1rxxj9QfjWK03dd2BDPjuk75eDAuS8Ls1s8n2/zT6L75GhPbdttIXQPk1vw9Cm54576FSYIs9Rr5aLOZ2uoAOa/5rD977PaOxNmJMFnvaxBWm6TVa+EpLAVjqca77xAG9/UbatiLj/cksuoyj0ym1QzFWGOhMpzNGNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu; spf=pass smtp.mailfrom=columbia.edu; dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b=e3ggfQ5i; arc=none smtp.client-ip=148.163.139.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=columbia.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=columbia.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fmmr.tech header.i=@fmmr.tech header.b="QaxK6M6V"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <robert@fmmr.tech>)
-	id 1wPnmJ-0039ar-2f; Wed, 20 May 2026 22:44:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=fmmr.tech;
-	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
-	:Message-ID:Date:Subject:Cc:To:From;
-	bh=efk02pEZUCJC1+M1yFwDpmrjykp88X3o7rpxIWwWT14=; b=QaxK6M6VB6h/EsQ4u94I7Z2miC
-	YrgUi8sPB+y7QgAt1o4caUuXzDMA4KuarOhPBAHSjv+qFPfQzR8/rg2IIiu6YAq8HZEjg8QjLynGP
-	jKFbi9IpDxJx3t2/lOTpGxmYG3032ZsqOEC+4E6jPeGxViV5LEnl5c2kKfbCY/FuogAuMr86lX1JT
-	LoRX1S6bcJOOUOx+ANJB2hkTCY/FNkaTqE9Uh4zotvQZZPX2iwMTP4Yvgh6jaKkeLoQLcAYKWDE7V
-	7ZgdyeWh3mD0RgQPnUl8QzXab5p64VC7E5v6VROer0wNd/engIwKr4ZuwZc4glWBqC6IaQQdyxCuA
-	9q0gyxZA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <robert@fmmr.tech>)
-	id 1wPnmI-00061E-PW; Wed, 20 May 2026 22:44:30 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (1125095)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.95)
-	id 1wPnmI-00EbZa-7a;
-	Wed, 20 May 2026 22:44:30 +0200
-From: Robert Femmer <robert@fmmr.tech>
-To: io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	kasan-dev@googlegroups.com,
-	Robert Femmer <robert@fmmr.tech>
-Subject: [PATCH v2] io_uring: annotate remote tasks for kcoverage
-Date: Wed, 20 May 2026 22:43:04 +0200
-Message-ID: <20260520204303.558392-2-robert@fmmr.tech>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <CA+fCnZcHbkT=knNbOnAAmrbhx+8+WdcshLty84S_0UbYWVL-=A@mail.gmail.com>
-References: <CA+fCnZcHbkT=knNbOnAAmrbhx+8+WdcshLty84S_0UbYWVL-=A@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=columbia.edu header.i=@columbia.edu header.b="e3ggfQ5i"
+Received: from pps.filterd (m0167073.ppops.net [127.0.0.1])
+	by mx0b-00364e01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 64KKO0cE2354673
+	for <io-uring@vger.kernel.org>; Wed, 20 May 2026 16:50:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=columbia.edu; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pps01; bh=Vd43
+	LnA947EFq0/DCZQf4Ap5tt7EnbD+Y9KrusTIT/M=; b=e3ggfQ5iJZvEHRmVWX+j
+	LpFK6H+LsUTgm8fyI6wL9f0vMt7W2oIbT9qn60r4FWKZqhpLkP3JPi064tiKO5DZ
+	fkdq8VvYDIilfbURYABMrhkiDk6vnaAbF4FQsQ5CbvQQ693ktoG3RgD1IfVwDM02
+	GtQWDjriMuc858rYZhQ8SwA8zKivQg4b1oB+Qr69f6/kyIX0+1MuF1XwUUTlZGbR
+	oBKUlf2O2jQAMQgaGGwYC/2k2+I1UR2RtYy86RcLqQb0I0x0/HoYiUO8PCbpOwzd
+	LlLoeCgkDOCpeW+7VspTHmsDFE7B4hWWUbpO2aYngH6S4S0QVjQu8/n3rWcHI4dr
+	9g==
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
+	by mx0b-00364e01.pphosted.com (PPS) with ESMTPS id 4e958qwyxq-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <io-uring@vger.kernel.org>; Wed, 20 May 2026 16:50:32 -0400 (EDT)
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-911cf6eb48cso1260158285a.1
+        for <io-uring@vger.kernel.org>; Wed, 20 May 2026 13:50:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779310232; x=1779915032;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Vd43LnA947EFq0/DCZQf4Ap5tt7EnbD+Y9KrusTIT/M=;
+        b=XjpeuOIOZU+Eix3KpXA8LYlpGWsdbcI2ERgzKlClyYCtg0faM9dqI3ZrGUFYkLOZ8M
+         JIelS03ZgHOCdH7XQWoqxymp3j0jQBuOLc1Cm7aWLnAx4Gf9cVFwMm2nG0QPsQI4ODrh
+         TsFHRKzTxiU6Xyt7Xbjqr2JUykB/uGkIlhGJ76GbAnPzdA4xnp4twkmhC8VyRV3po33i
+         udD1SVPogqo9FdlH7xNCnX2IILFhs6IAV0Ig2LVDokkDAgf9f/+9Et8In78LAUycsF/V
+         cXRNBPGSo78bzIKjIzTXIv0lNV+steKbFzwSzMqaTDlbwsAOLfc8E5dDuyJEjucb1eNb
+         JRQg==
+X-Forwarded-Encrypted: i=1; AFNElJ/qrbQ8lJMH+I4nbwtOHah8M90PB8gmxwFzrIApB+cMMwy9OxuHNZk9tOHIsRNhrP8gcd1VJMto7Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJA1UOfngikMJQixYaasGZBKv5jGHvH8N8XmobqOlMyQ439ZGl
+	XN8iBkgN+HEoIsLc84eUFwR7kEzT/3kMjJSpfzq6bEv67Y6uGAfcBg7MGqk03SxeDSi7rUH53YC
+	b6nEAEqQf7CelAbFkWfaKqEwebZ92yDPYX8CpKCZyylYp1sPtGamD8tE5zgkizJrW
+X-Gm-Gg: Acq92OEURd7HXMLcL7/3SPL4k/ccG1WHSMB3JgwCcEr6uQc48QL8denqax6UgwXrzj1
+	2UoLW5RRS9sCFr+Xx8pbJf5gLPnArbRVmgbiNteUm8kfp+hw41VXgtHvhAb2l0L7waKtSPOT60R
+	9Qb+U56p6degByIIJVBrRibs5Pt/baja+hCYOEdewhXLXUkfXXwzwEEBscUum9oX3Pfyuggcgbp
+	kC9yzJc4BT1IMmPLo0yIOWvuf93fMwwQTc5+DMPTL7k4NApRKxtTFTSaR3gXoFb2GoM3FCcI1dF
+	oK4CMdD9gPLMauZ2pkCb028oHnLbcdE6g+JqsKUs6dVgcG26CNdO0cAGGSoQpPzJwP5Q2jcEsMV
+	ltUfTROXriAr9rHtQ8ykfBTi1KOBTyMdVym9+o1OZOvR8NHhM+rLupTSL84275REGMYg=
+X-Received: by 2002:a05:620a:45a1:b0:90d:3af3:2a62 with SMTP id af79cd13be357-911d01b8480mr3765383885a.46.1779310231910;
+        Wed, 20 May 2026 13:50:31 -0700 (PDT)
+X-Received: by 2002:a05:620a:45a1:b0:90d:3af3:2a62 with SMTP id af79cd13be357-911d01b8480mr3765379085a.46.1779310231448;
+        Wed, 20 May 2026 13:50:31 -0700 (PDT)
+Received: from [127.0.1.1] (dyn-160-39-33-242.dyn.columbia.edu. [160.39.33.242])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-910bcf37274sm2232692085a.37.2026.05.20.13.50.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 May 2026 13:50:30 -0700 (PDT)
+From: Tal Zussman <tz2294@columbia.edu>
+Date: Wed, 20 May 2026 16:48:52 -0400
+Subject: [PATCH RFC 01/11] mm: add folio_wake_writeback() helper
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260520-filemap-split-v1-1-c36ddc2b6cf2@columbia.edu>
+References: <20260520-filemap-split-v1-0-c36ddc2b6cf2@columbia.edu>
+In-Reply-To: <20260520-filemap-split-v1-0-c36ddc2b6cf2@columbia.edu>
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+        "Liam R. Howlett" <liam@infradead.org>,
+        Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, io-uring@vger.kernel.org,
+        Tal Zussman <tz2294@columbia.edu>
+X-Mailer: b4 0.14.3-dev-d7477
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1779310229; l=1111;
+ i=tz2294@columbia.edu; s=20250528; h=from:subject:message-id;
+ bh=VtCji9Vx3n0Qm0HWIP6UWTPSjZWdzR1UjYoNBHm1Y+c=;
+ b=azfgHe+wJUmJYcnwmRy9nfEahOjxOjPQSFoLVtJuTFiY0m9rg0Q8a5Ipg+OYQuIMW9Uilws3E
+ gf20tFxHI6SAIQaIiaLwaqYFsnM1ib8jXHnImDriiGvJgm0NNJdZl85
+X-Developer-Key: i=tz2294@columbia.edu; a=ed25519;
+ pk=BIj5KdACscEOyAC0oIkeZqLB3L94fzBnDccEooxeM5Y=
+X-Proofpoint-GUID: zIviMk7wvZNixZX2n5E3zMoZg_g1yIJC
+X-Proofpoint-ORIG-GUID: zIviMk7wvZNixZX2n5E3zMoZg_g1yIJC
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNTIwMDIwMyBTYWx0ZWRfX0wnRyGl2WEO9
+ T3PgDiJKaBngyMH+wk7+hQcIf/GxDN6AbwAHD75G6vgv1Aoq5Lk1Ulw/Lv+DQc/Xj58A/4lfPcn
+ HNnkB7yxsnnkpQDPHqm9ri6DCq7aXCAEpS2y5jhlq4Zonc+ABh6JZueeXMyT3ys6CfmMZKHxJEn
+ TyBsR/f/qLuU2BjkWKrABqNNwMystwo9cq3PUGdZpGmXnwGebnu615ztQRkI97F0KArFyT+9CV+
+ /CWKVIUTlnive63g2WjPjAbFuDxHo76znMYvr9h2/XOOKjgz1J6wO4poCepa6uN9noPjZi/Udop
+ QB2vjP9Sv0ItmJomBXQpMbg1SIdWZlDJYZ0ojy8nJK4bGhji1L+EMm9cjqv7Q0Ex3SF8NoSYSL1
+ 3aZD4kB7WYq8D8pL3LJWbYJ5e1M6FczrG7p8aKA+AvgYZMvTTAVunJOa1j9ClWfTPjIkwUAtLZ2
+ NGI/Bz6Ii7qqUJ7aWoQ==
+X-Authority-Analysis: v=2.4 cv=W6sIkxWk c=1 sm=1 tr=0 ts=6a0e1e98 cx=c_pps
+ a=50t2pK5VMbmlHzFWWp8p/g==:117 a=GaPK54s0Se3oFqK5NkZy0g==:17
+ a=IkcTkHD0fZMA:10 a=NGcC8JguVDcA:10 a=x7bEGLp0ZPQA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=Da8U98TiO7q1upZEImrf:22 a=jHxIr1HyPKZ_Q5_91PL3:22
+ a=s_jWojCdVP8jdXr2cG4A:9 a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11792
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 impostorscore=10 priorityscore=1501 lowpriorityscore=10
+ adultscore=0 bulkscore=10 phishscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2605130000
+ definitions=main-2605200203
 
-Fuzzers use coverage information to guide generation of test cases
-towards new or interesting code paths. Syzkaller, specifically, makes
-use kcoverage (CONFIG_KCOV). Coverage information is not collected for
-kernel tasks unless annotated by kcov_remote_start and kcov_remote_stop.
-This patch annotates io-uring's work queue and sqpoll tasks.
+Add a folio_wake_writeback() wrapper for folio_wake_bit() for use in
+folio_end_writeback_no_dropbehind(), in preparation for moving the folio
+bit lock and wait queue code to a separate file.
 
-Signed-off-by: Robert Femmer <robert@fmmr.tech>
+No functional change.
+
+Signed-off-by: Tal Zussman <tz2294@columbia.edu>
 ---
- include/linux/io_uring_types.h |  4 ++++
- io_uring/io-wq.c               |  4 ++++
- io_uring/io_uring.c            |  3 +++
- io_uring/io_uring.h            | 24 ++++++++++++++++++++++++
- io_uring/sqpoll.c              |  4 ++++
- 5 files changed, 39 insertions(+)
+ mm/filemap.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 244392026c6d..b92b8e7169ea 100644
---- a/include/linux/io_uring_types.h
-+++ b/include/linux/io_uring_types.h
-@@ -504,6 +504,10 @@ struct io_ring_ctx {
- 	struct io_mapped_region		ring_region;
- 	/* used for optimised request parameter and wait argument passing  */
- 	struct io_mapped_region		param_region;
-+
-+#ifdef CONFIG_KCOV
-+	u64				kcov_handle;
-+#endif
- };
- 
- /*
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 8cc7b47d3089..16af75b1cfe0 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -639,6 +639,7 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
- 		/* handle a whole dependent link */
- 		do {
- 			struct io_wq_work *next_hashed, *linked;
-+			struct io_kiocb *req;
- 			unsigned int work_flags = atomic_read(&work->flags);
- 			unsigned int hash = __io_wq_is_hashed(work_flags)
- 				? __io_get_work_hash(work_flags)
-@@ -649,7 +650,10 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
- 			if (do_kill &&
- 			    (work_flags & IO_WQ_WORK_UNBOUND))
- 				atomic_or(IO_WQ_WORK_CANCEL, &work->flags);
-+			req = container_of(work, struct io_kiocb, work);
-+			io_kcov_remote_start(req->ctx);
- 			io_wq_submit_work(work);
-+			io_kcov_remote_stop(req->ctx);
- 			io_assign_current_work(worker, NULL);
- 
- 			linked = io_wq_free_work(work);
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 036145ee466c..f38b8eca6bbb 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -293,6 +293,9 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
- 	INIT_HLIST_HEAD(&ctx->cancelable_uring_cmd);
- 	io_napi_init(ctx);
- 	mutex_init(&ctx->mmap_lock);
-+#ifdef CONFIG_KCOV
-+	ctx->kcov_handle = current->kcov_handle;
-+#endif
- 
- 	return ctx;
- 
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index e612a66ee80e..881d43bd529c 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -7,6 +7,7 @@
- #include <linux/resume_user_mode.h>
- #include <linux/poll.h>
- #include <linux/io_uring_types.h>
-+#include <linux/kcov.h>
- #include <uapi/linux/eventpoll.h>
- #include "alloc_cache.h"
- #include "io-wq.h"
-@@ -581,4 +582,27 @@ static inline bool io_has_work(struct io_ring_ctx *ctx)
- 	return test_bit(IO_CHECK_CQ_OVERFLOW_BIT, &ctx->check_cq) ||
- 	       io_local_work_pending(ctx);
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 5aaba0d3e81d..567742fbaff0 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -1209,6 +1209,14 @@ static void folio_wake_bit(struct folio *folio, int bit_nr)
+ 	spin_unlock_irqrestore(&q->lock, flags);
  }
-+
-+#ifdef CONFIG_KCOV
-+static inline void io_kcov_remote_start(struct io_ring_ctx *ctx)
+ 
++/*
++ * Wake waiters on PG_writeback for @folio.
++ */
++static void folio_wake_writeback(struct folio *folio)
 +{
-+	if (ctx->kcov_handle)
-+		kcov_remote_start(ctx->kcov_handle);
++	folio_wake_bit(folio, PG_writeback);
 +}
 +
-+static inline void io_kcov_remote_stop(struct io_ring_ctx *ctx)
-+{
-+	if (ctx->kcov_handle)
-+		kcov_remote_stop();
-+}
-+#else
-+static inline void io_kcov_remote_start(struct io_ring_ctx *ctx)
-+{
-+}
-+
-+static inline void io_kcov_remote_stop(struct io_ring_ctx *ctx)
-+{
-+}
-+#endif
-+
- #endif
-diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
-index 46c12afec73e..8d2876e31acb 100644
---- a/io_uring/sqpoll.c
-+++ b/io_uring/sqpoll.c
-@@ -342,19 +342,23 @@ static int io_sq_thread(void *data)
+ /*
+  * A choice of three behaviors for folio_wait_bit_common():
+  */
+@@ -1664,7 +1672,7 @@ void folio_end_writeback_no_dropbehind(struct folio *folio)
+ 	}
  
- 		cap_entries = !list_is_singular(&sqd->ctx_list);
- 		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
-+			io_kcov_remote_start(ctx);
- 			int ret = __io_sq_thread(ctx, sqd, cap_entries, &ist);
+ 	if (__folio_end_writeback(folio))
+-		folio_wake_bit(folio, PG_writeback);
++		folio_wake_writeback(folio);
  
- 			if (!sqt_spin && (ret > 0 || !list_empty(&ctx->iopoll_list)))
- 				sqt_spin = true;
-+			io_kcov_remote_stop(ctx);
- 		}
- 		if (io_sq_tw(&retry_list, IORING_TW_CAP_ENTRIES_VALUE))
- 			sqt_spin = true;
- 
- 		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
-+			io_kcov_remote_start(ctx);
- 			if (io_napi(ctx)) {
- 				io_sq_start_worktime(&ist);
- 				io_napi_sqpoll_busy_poll(ctx);
- 			}
-+			io_kcov_remote_stop(ctx);
- 		}
- 
- 		io_sq_update_worktime(sqd, &ist);
+ 	acct_reclaim_writeback(folio);
+ }
+
 -- 
-2.54.0
+2.39.5
 
