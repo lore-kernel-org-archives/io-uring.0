@@ -1,179 +1,72 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723A23E316B
-	for <io-uring@vger.kernel.org>; Wed, 20 May 2026 13:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17573EDAA7;
+	Wed, 20 May 2026 14:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779284687; cv=none; b=skM4f0GGfBl0/OUIxfLFVsqMYCEYTG0NyyuOll2flTMcQCikZCRAckH1xS28bl3qoLI/5uwiV8z44CRwr5U8RLPOQ7GAjY/BIYF1+zDPQ28RnkPWcJMN/z9ALA0NrDloXzML9LQEao0yUoeZwtdgvRmZetbWX6kOx72lac4gkHw=
+	t=1779287507; cv=none; b=UgzV7sZe5Z50BtKAGU0+iOkGyO3Mqa158nnePYkZAAodoWDquUYaaG3spNkKiFxhHcq9tt4vsSfYnQWBruln+WIkIqxQAzq4YnO/femGs6rCRcX/MSLcJbL52bKb/c8En8i1a2VmHKsn48ZakdHeDLUO3nfssF0nZSPf6c5WV5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779284687; c=relaxed/simple;
-	bh=CBkBjWF2U9i1hAyuvHvFpgcIRwB887VXlj66qI6/pVk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=DAdg4kq3wRl+wG5gCLG8j1FBB5UrLVIGvwCnxQVT4KCcsjFRSZB7z30d2HY0Oo0e8m1o0unp/VZo2nSRgS+aBlKxT9p+yQ5qE5GwoIKbUvJYEGSA5T5SiiCFtdkdosDfX0fRO7TQyJUVm+vtk2S3CtYH6UFJNVyZ9cU4tkRQMIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nOAHALwQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=3WlxtjKH; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nOAHALwQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=3WlxtjKH; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1779287507; c=relaxed/simple;
+	bh=W6SayE5aVoIzZ3A++FC2ibv9iTntNnzWRBYYXewEc3o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=r4qEdxfq/FMKXwNM3sQ3wUEkDCJ7ZSHwjj+4aCQBnztJkfXBU+/P2MUrzTDWo9WIbUr0F2iFp7oVZtA0HtdNr4ZLj0vtF1qeObYJFXFZlgyR2H88WKy4sRZCpC+W4kgCtc1VvMt38/WAKUcyihR02HlQpdMjqy1wm9yGDHPfQG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUTse8DT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nOAHALwQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="3WlxtjKH";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nOAHALwQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="3WlxtjKH"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9FCFD67C46;
-	Wed, 20 May 2026 13:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1779284684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c1QvndRKG+wjMDMiVEpz2P3exRb1yxggYPS8pbhVSEc=;
-	b=nOAHALwQAyV1lVbapwaD5LKurCfEkwSJ34CVGJ67WLx8qmZFzh1rdAl6LzwuvTUTDt7CIm
-	3S00ATDzewCN8ohxellPCMsCtdifSKuvyysfSDuo6E1F7nUhC2BW6t8e9leg2DW5RYYvFh
-	hXEPxCfN9hb9+tr9kmmt5sLBP870SLo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1779284684;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c1QvndRKG+wjMDMiVEpz2P3exRb1yxggYPS8pbhVSEc=;
-	b=3WlxtjKHJ/HDIcyOc5G+oPIrjtWZIEKN7Aifb6oiY5PIzStSsOdgIZiRxVlKAxmsJlHweF
-	C+LSIS0TY92FrWDw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=nOAHALwQ;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=3WlxtjKH
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1779284684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c1QvndRKG+wjMDMiVEpz2P3exRb1yxggYPS8pbhVSEc=;
-	b=nOAHALwQAyV1lVbapwaD5LKurCfEkwSJ34CVGJ67WLx8qmZFzh1rdAl6LzwuvTUTDt7CIm
-	3S00ATDzewCN8ohxellPCMsCtdifSKuvyysfSDuo6E1F7nUhC2BW6t8e9leg2DW5RYYvFh
-	hXEPxCfN9hb9+tr9kmmt5sLBP870SLo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1779284684;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=c1QvndRKG+wjMDMiVEpz2P3exRb1yxggYPS8pbhVSEc=;
-	b=3WlxtjKHJ/HDIcyOc5G+oPIrjtWZIEKN7Aifb6oiY5PIzStSsOdgIZiRxVlKAxmsJlHweF
-	C+LSIS0TY92FrWDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 96C3F593AA;
-	Wed, 20 May 2026 13:44:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kmDJJMy6DWrXUAAAD6G6ig
-	(envelope-from <krisman@suse.de>); Wed, 20 May 2026 13:44:44 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: "Fengnan Chang" <changfengnan@bytedance.com>
-Cc: <axboe@kernel.dk>,  <io-uring@vger.kernel.org>,
-  <linux-kernel@vger.kernel.org>,  <peterz@infradead.org>,
-  <rostedt@goodmis.org>
-Subject: Re: [PATCH] io_uring/io-wq: avoid repeated task_work scans during
- teardown
-In-Reply-To: <20260520031221.83210-1-changfengnan@bytedance.com> (Fengnan
-	Chang's message of "Wed, 20 May 2026 11:12:21 +0800")
-References: <20260520031221.83210-1-changfengnan@bytedance.com>
-Date: Wed, 20 May 2026 15:44:36 +0200
-Message-ID: <87wlwynqkb.fsf@mailhost.krisman.be>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUTse8DT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F9E1F00893;
+	Wed, 20 May 2026 14:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1779287505;
+	bh=W6SayE5aVoIzZ3A++FC2ibv9iTntNnzWRBYYXewEc3o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=BUTse8DTj/xm6YiZ2kx7xXqMNuWAtOsjigQFCKMcavjbCqYqd9Y6irNRCB+NtjHsr
+	 Y3F6kMdFCKNxtnAAvh64kpI99n/EJVVYl8xeyTNSzi2F8UzUKeNmGEnXtWtSWo9EJA
+	 a79Lcs4lnyNPFW42zhp6BCpilhDc/oQ4dZMT1upC76BoAf1dJWoCC7kD0WeSbVuTCV
+	 5qJHmlAp5GOqR1pIj1OvSpwh3V87t5/p/5+Xc0Oo3LQj2QSTBmk3MnLZaL6YnRAeAR
+	 Hyw0utdUJAOb0SO7GN80wKygrCwy1jQ+0i5QUkZvvMue1cpLEOAmf1dozoQtfTKIx6
+	 lB+RBr21aaIQg==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	Pavel Begunkov <asml.silence@gmail.com>
+Cc: Sasha Levin <sashal@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Li Zetao <lizetao1@huawei.com>,
+	Robert Garcia <rob_garcia@163.com>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5.15.y] io_uring: prevent opcode speculation
+Date: Wed, 20 May 2026 10:31:38 -0400
+Message-ID: <stable-reply-0003-io-uring-opcode-5.15@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260520062833.2563847-1-rob_garcia@163.com>
+References: <20260520062833.2563847-1-rob_garcia@163.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Queue-Id: 9FCFD67C46
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
+Content-Transfer-Encoding: 8bit
 
-"Fengnan Chang" <changfengnan@bytedance.com> writes:
+> From: Pavel Begunkov <asml.silence@gmail.com>
+>
+> [ Upstream commit 1e988c3fe1264708f4f92109203ac5b1d65de50b ]
+>
+> sqe->opcode is used for different tables, make sure we santitise it
+> against speculations.
+[...]
+> [ Use req->opcode instead of opcode here. ]
+> Signed-off-by: Robert Garcia <rob_garcia@163.com>
 
-> We hit hard-lockup reports from iou-wrk threads stuck in
+Thanks for the backport. Upstream 1e988c3fe126 is currently queued or
+present on 6.6, 6.12, 6.18 and 7.0, but it is missing from both 5.15
+and 6.1 - we should not skip 6.1 when backporting a Cc:stable fix to
+5.15.
 
-It seems like a soft-lockup instead no?  From your description,
-eventually it solves itself, the task is just uninterruptible while
-contending on the spinlock.
+Could you send a matching backport for 6.1 as well? Once we have
+coverage from 6.1 onwards I'll queue both together.
 
-> + */
-> +struct callback_head *
-> +task_work_cancel_match_all(struct task_struct *task,
-> +			   bool (*match)(struct callback_head *, void *data),
-> +			   void *data)
-> +{
-> +	struct callback_head **pprev = &task->task_works;
-> +	struct callback_head *work, *next;
-> +	struct callback_head *head = NULL, **tail = &head;
-> +	unsigned long flags;
-> +
-> +	if (likely(!task_work_pending(task)))
-> +		return NULL;
-> +
-> +	raw_spin_lock_irqsave(&task->pi_lock, flags);
-> +	work = READ_ONCE(*pprev);
-> +	while (work && work != &work_exited) {
-> +		next = READ_ONCE(work->next);
-> +		if (!match(work, data)) {
-> +			pprev = &work->next;
-> +			work = next;
-> +			continue;
-> +		}
-> +
-> +		if (!try_cmpxchg(pprev, &work, next))
-> +			continue;
-
-
-IIUC, you could ignore the cmpxchg here because the following loop
-iteration on the caller would catch it and retry.  In this case, it no
-retry in io_wq_cancel_tw_create, which looks weird.  Did I miss something?
-
-> +
-> +		work->next = NULL;
-> +		*tail = work;
-> +		tail = &work->next;
-> +		work = next;
-> +	}
-> +	raw_spin_unlock_irqrestore(&task->pi_lock, flags);
-> +
-> +	return head;
-> +}
-> +
->  static bool task_work_func_match(struct callback_head *cb, void *data)
->  {
->  	return cb->func == data;
-
--- 
-Gabriel Krisman Bertazi
+--
+Thanks,
+Sasha
