@@ -1,115 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C892D30C606;
-	Sat, 23 May 2026 19:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593FC23D28C
+	for <io-uring@vger.kernel.org>; Sun, 24 May 2026 11:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779565389; cv=none; b=rubHpQB+2r/SRLmCleTOplK/txevwF3folcK+Lra66WIWxDSaNY4gPG/dVGIsT9CVuQDdABoshARVlsYHzrht/6kYGlD7aQxS/fAwDW9kk0sQ8zP0e7ZFIhQpZVM27moBpTI/BL6QHPn5JoMtUqAqSmL7Rri2SpHGyzQsgHEleI=
+	t=1779620962; cv=none; b=WI4teuq2xjQRr10Vwh49ApMFxW0T0KQjq/kRoX7cn9AFm6drY6+HAYkl5DvM+/JaYcne1jGpyzZ+FW3gial9MGbx6tBv0QHisTm2u2V1pXywr9LPnGsGS3pQxaY53C4RCoAxfhd7F4jvXtAD+gH2H7g9wUD0oEHkuZkOPRkk4Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779565389; c=relaxed/simple;
-	bh=D3zxq48jpNb8NeX8OBIi5fswzSbQEgmlY+KRsUrVG/o=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=asEtAFrckqqDcFDg6itGW9DzD0bHrX4SUHx4AuL9f8nGiXDWzQyQqmdX6ndj7xM6/8gRIJRM+XC8Au6sChjyUmC+Tbt/QaYMnut3iCOWYsnUXKY6/4Wa0wrebWHyB/n1GoF1PYnKvBM4ERuq7O0VvBN5zmnxq20F38hQlRPWGa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N1W7libw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1779620962; c=relaxed/simple;
+	bh=pC9uN0BdqaLrdzaSjwcspwTpA+xTB/Mlz+hDXW8QjIc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=vDp6yNfgz1o3VmiPxFksV+BFMoOO1XZ4Uu54xMfmN2Kld4E3V7Fiw5LJMpArnKx3ifmweUez4F/aCUDEmi1UQaCRavQvLcYLiC5oAsEzdIuwYnqqQ3EynmjtHPudvLVghYu1iCm3OKhe/hNr5Rt/IJeqsoezymlzS7AgSUQ9JK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gGH8kiQj; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N1W7libw"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 636C6C2BCB0;
-	Sat, 23 May 2026 19:43:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1779565389;
-	bh=D3zxq48jpNb8NeX8OBIi5fswzSbQEgmlY+KRsUrVG/o=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=N1W7libwE4pGw34rdpUaYygrGuVgH4XFm8AxUcVSxmj6nqnanNSxFh/uEz+Xvxfab
-	 /ouAj5rlypPe3VJNhi/k8FHRELxD35Rs/PapDF35s/pIK2yOBQlEDa9uej9bHhZASA
-	 yGObZxnEwTxKrBuQu+MUpt3Bml7vRUG1zDQJSOTnuR9eim9WFj9X2xz/cDIdXzHdp3
-	 ndtRItrgtK24O4qaxecV1luOdQvmAYr3jpFIekM+AyEhjsNUf5B+FYAQtiSHaqeyPB
-	 ok3SQGNyuZEOdRhuQJxm8jVWcC8jKtG1wgb/GzbIzMJM+tnokdV7FPiwj+hyNQOVvt
-	 dGJYiO73DRmBQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57B0DCD5BC6;
-	Sat, 23 May 2026 19:43:09 +0000 (UTC)
-From: Demi Marie Obenour via B4 Relay <devnull+demiobenour.gmail.com@kernel.org>
-Subject: [PATCH 0/3] AF_ALG: Remove support for AIO and old-style drivers
-Date: Sat, 23 May 2026 15:43:01 -0400
-Message-Id: <20260523-af-alg-harden-v1-0-c76755c3a5c5@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gGH8kiQj"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c80167f5716so3771562a12.2
+        for <io-uring@vger.kernel.org>; Sun, 24 May 2026 04:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1779620961; x=1780225761; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6c1z1yrRbK1lJKYRvmVq+VczYbzMwLJ1weWZUQ80ngg=;
+        b=gGH8kiQjhfh8VTskwyFZ30wT+PbG0S+JixtFAFlhE84Z0UicrJb7W0qO4CD4Z0iqaX
+         guCDQJcdxJkqeqrWOapoZ3jcWtdLTcWByyCjQNOAj8DXZDha1TQAq11u/OxlNkb8P3cK
+         VNE7KE2kq1cYnsxjXeZiWZ6+562uxNfm+aNrKdE5PlqMQ3I3yQCrZsOkCuyckpt5rtb0
+         fNkBiVdi8O+oZ3nV4rScbMR8gkaO9yUN9Qjer2bVb/SqKoh+WRGncOS+RKQfLdk63PS/
+         KPVnWhioSv9mvhNjbBvvxZKrDB4f86tnyRm3yAqTxoXvgpeYDYylTi9dEgtmKdfTFpZZ
+         kCLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779620961; x=1780225761;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6c1z1yrRbK1lJKYRvmVq+VczYbzMwLJ1weWZUQ80ngg=;
+        b=UIpFKdYu/jH/uRN1JsYWc4TxtyykldBKlp5K0vs/fT9pBcUc+RCcDVuXfBUElQqRhI
+         eQ3G9/RCX/JxoKpsk6j7zrM1Zg8VXW6UCZ/cjt50NH7XvohLXWME5KxHnellbp4XAHqc
+         Ec3Mz36dyfC45x5un+ElFwqIWH449je+72oYyiCGq1AxyoCjQbFA0vBokrEa2AaNx1xh
+         JG2nw7wjhZnm0xGcukGl2bojWkdn6r+yxB1Zmc727fZG4yZ9grH7vdtodzVs5p07aClc
+         kVDXDzRR4ISSN8K9FX6vHiL5zFTEkI3iZ6xvDWFK50rKeD4/IGHrM05pD3PffDbZyH2K
+         EgIA==
+X-Forwarded-Encrypted: i=1; AFNElJ/IyZgCgKjBSgang6+1sDz7ApOXFxGibLJ3CPw1kgs+lIE3nWZHRaI5i5kUy0vMq0Ku/heHHzLIeQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWxxOl1m5ONT27s47LTiIZi/G+CFJpvrKOzBnLbHF4mBsxyEEv
+	Z5DFB9rqTOk7gsZFOvcOTTZ3SZX824iwLhVV5opSvnPgvcLD4QL2S4WQbmwwZg==
+X-Gm-Gg: Acq92OH77FXxYEF+LOoB9aLpCBe/nMpyzOxuSChHR8uj8uBU6k0q+F6KebmmXLrfcEu
+	uq64RvKiiWgKVGJY6M2YstBhi4uMelsin3qnPAPRiGNRtV7j08Z8JbIiYCIAmt/0EecHD61Uyd0
+	wpTz1PBJrIBXKcWdn+gHvHMcgiMJX/UPwS5tHzktTrg5TxaB1r23m/FmQ3kR3TCpAYvZgNunhXe
+	wMfGbKm7Et/Cs4JokOXhkoY5Ibo1BZaE3vy2VFP4orUUO4mjIgAQuE5fzY8apbpZzfT9tCA310Y
+	aqUjV5KaTCE+XB4mAHBy9En1yhLGBxjj8yIYW3aCeqzoNOo7uNcVFPT0d0jiWUnL0aWQSr/GJFW
+	v+Zd7lXSNnRWAuqdc9rNh8w5m5uUEPKUc/0FaObeYz5ecPedK3o/2klWPsam3o+CexfAsiLOOMR
+	vG84CA1CoqJL3r9ufB+uZl9FFQZC8oaYksx0t8NOc=
+X-Received: by 2002:a05:6300:2109:b0:3a2:f402:50df with SMTP id adf61e73a8af0-3b328f70584mr11082075637.44.1779620960540;
+        Sun, 24 May 2026 04:09:20 -0700 (PDT)
+Received: from localhost.tail2c6877.ts.net ([49.175.46.83])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c85202902a6sm5438722a12.3.2026.05.24.04.09.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 May 2026 04:09:20 -0700 (PDT)
+From: Lim HyeonJun <shja0831@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org
+Cc: Lim HyeonJun <shja0831@gmail.com>
+Subject: [PATCH] io_uring/tctx: set ->io_uring before publishing the tctx node
+Date: Sun, 24 May 2026 20:08:53 +0900
+Message-ID: <20260524110853.115634-1-shja0831@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <2af95968-bcb3-4ed5-9242-3f8358e71f9e@kernel.dk>
+References: <2af95968-bcb3-4ed5-9242-3f8358e71f9e@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDUwMj3cQ03cScdN2MxKKU1DxdSwMDCxNLE1NDM1NjJaCegqLUtMwKsHn
- RsbW1AAl0ZOpfAAAA
-X-Change-ID: 20260502-af-alg-harden-900849451653
-To: Herbert Xu <herbert@gondor.apana.org.au>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Willem de Bruijn <willemb@google.com>, Jens Axboe <axboe@kernel.dk>, 
- Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>, 
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- James Clark <james.clark@linaro.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Eric Biggers <ebiggers@google.com>, 
- Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
- io-uring@vger.kernel.org, netdev@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-doc@vger.kernel.org, 
- Demi Marie Obenour <demiobenour@gmail.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1779565388; l=1545;
- i=demiobenour@gmail.com; s=20250731; h=from:subject:message-id;
- bh=D3zxq48jpNb8NeX8OBIi5fswzSbQEgmlY+KRsUrVG/o=;
- b=UWO/qocMd43s589G/tauUvyAgol1bxSgtpx423ChGfzN9f//3VW16eJhzkctofOPU6zoYSfaG
- lOI3O1+/rnwA0dZf4yBziamZeyECAINgeTNroGcSZIlvhNlXeYFNVWc
-X-Developer-Key: i=demiobenour@gmail.com; a=ed25519;
- pk=4iGY+ynEKxIfs+fIUK9EzsvZ44yGE0GvXLeLTPKKPhI=
-X-Endpoint-Received: by B4 Relay for demiobenour@gmail.com/20250731 with
- auth_id=473
-X-Original-From: Demi Marie Obenour <demiobenour@gmail.com>
-Reply-To: demiobenour@gmail.com
+Content-Transfer-Encoding: 8bit
 
-AF_ALG is a deprecated API only useful for compatibility with existing
-userspace.  It has had a lot of vulnerabilities, including the infamous
-CopyFail.
+io_register_iowq_max_workers() walks ctx->tctx_list under ctx->tctx_lock
+and dereferences each node's task->io_uring without a NULL check:
 
-Rip out support for offload drivers, which tend to be buggy.  Also rip
-out support for AIO, which actually bloats the entire socket subsystem.
+	list_for_each_entry(node, &ctx->tctx_list, ctx_node) {
+		tctx = node->task->io_uring;
+		if (WARN_ON_ONCE(!tctx->io_wq))
+			continue;
+		...
+	}
 
-Only compile-tested.
+__io_uring_add_tctx_node() installs the node into ctx->tctx_list (via
+io_tctx_install_node(), which does the list_add() under tctx_lock) and
+only assigns current->io_uring = tctx afterwards. A task doing its first
+io_uring operation on a shared ring therefore has a window in which its
+node is already visible on ctx->tctx_list while node->task->io_uring is
+still NULL. A concurrent IORING_REGISTER_IOWQ_MAX_WORKERS on the same
+ring reads that NULL and dereferences tctx->io_wq:
 
-Signed-off-by: Demi Marie Obenour <demiobenour@gmail.com>
+  KASAN: null-ptr-deref in range [0x0000000000000018-0x000000000000001f]
+  RIP: io_register_iowq_max_workers io_uring/register.c:423
+
+Publish current->io_uring = tctx before installing the node, so any node
+visible on ctx->tctx_list always has a valid task->io_uring. The
+tctx_lock taken in io_tctx_install_node() orders this store before the
+node becomes visible to other iterators. On the install/limits failure
+paths the freshly allocated tctx is freed, so clear current->io_uring
+there as well to avoid leaving a dangling pointer.
+
+The bug reproduces on an SMP+KASAN build with a plain (non-SQPOLL) ring
+shared across threads: a stream of fresh threads each do their first
+io_uring_enter() while two threads spam IORING_REGISTER_IOWQ_MAX_WORKERS;
+it GPFs within seconds.
+
+Fixes: 7880174e1e5e ("io_uring/tctx: clean up __io_uring_add_tctx_node() error handling")
+Signed-off-by: Lim HyeonJun <shja0831@gmail.com>
 ---
-Demi Marie Obenour (3):
-      net: Remove support for AIO on sockets
-      AF_ALG: Drop support for off-CPU cryptography
-      AF_ALG: Document that it is *always* slower
+ io_uring/tctx.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
- Documentation/crypto/userspace-if.rst          | 26 ++++++++--
- crypto/af_alg.c                                | 35 ++------------
- crypto/algif_aead.c                            | 43 ++++-------------
- crypto/algif_hash.c                            |  4 +-
- crypto/algif_rng.c                             |  4 +-
- crypto/algif_skcipher.c                        | 66 ++++++--------------------
- include/crypto/if_alg.h                        | 19 ++++++--
- include/linux/socket.h                         |  1 -
- io_uring/net.c                                 |  1 -
- net/compat.c                                   |  1 -
- net/socket.c                                   |  7 +--
- tools/perf/trace/beauty/include/linux/socket.h |  1 -
- 12 files changed, 70 insertions(+), 138 deletions(-)
----
-base-commit: 49e05bb00f2e8168695f7af4d694c39e1423e8a2
-change-id: 20260502-af-alg-harden-900849451653
-
-Best regards,
+diff --git a/io_uring/tctx.c b/io_uring/tctx.c
+index 6af62ca9baba..42b219b34aa8 100644
+--- a/io_uring/tctx.c
++++ b/io_uring/tctx.c
+@@ -139,12 +139,14 @@ static int io_tctx_install_node(struct io_ring_ctx *ctx,
+ int __io_uring_add_tctx_node(struct io_ring_ctx *ctx)
+ {
+ 	struct io_uring_task *tctx = current->io_uring;
++	bool new_tctx = false;
+ 	int ret;
+ 
+ 	if (unlikely(!tctx)) {
+ 		tctx = io_uring_alloc_task_context(current, ctx);
+ 		if (IS_ERR(tctx))
+ 			return PTR_ERR(tctx);
++		new_tctx = true;
+ 
+ 		if (data_race(ctx->int_flags) & IO_RING_F_IOWQ_LIMITS_SET) {
+ 			unsigned int limits[2];
+@@ -168,13 +170,15 @@ int __io_uring_add_tctx_node(struct io_ring_ctx *ctx)
+ 	if (tctx->io_wq)
+ 		io_wq_set_exit_on_idle(tctx->io_wq, false);
+ 
+-	ret = io_tctx_install_node(ctx, tctx);
+-	if (!ret) {
++	if (new_tctx)
+ 		current->io_uring = tctx;
++
++	ret = io_tctx_install_node(ctx, tctx);
++	if (!ret)
+ 		return 0;
+-	}
+-	if (!current->io_uring) {
+ err_free:
++	if (new_tctx) {
++		current->io_uring = NULL;
+ 		if (tctx->io_wq) {
+ 			io_wq_exit_start(tctx->io_wq);
+ 			io_wq_put_and_exit(tctx->io_wq);
 -- 
-Demi Marie Obenour <demiobenour@gmail.com>
-
+2.53.0
 
