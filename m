@@ -1,56 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB603955DB;
-	Sun, 24 May 2026 12:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E946674BE1
+	for <io-uring@vger.kernel.org>; Sun, 24 May 2026 18:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779624602; cv=none; b=t2OxVLVwI8I7RVCbm9Gne3SKu94mFwFCrwOgpLt7tvhfCkP2iOoOffjoO3ZifQZLhVlnbseje0yFLYD+9vyt7Q/ZHGm91wywnl5u8CzctXuRGyslux1Qp/mt52LigGYgrkRN+z/0JEZJULV9cqx7tb6v4yBXp7/4ZlOA7SaCGvQ=
+	t=1779646115; cv=none; b=KQgVApct1SttqcmlkWgyT8Z7n/BlPB0UMbwRraMRzkdZXJlEW93DrxFkn1U9cc76zQhKzTgZiaDz0ZnnK7zvKjhmNjJ9sdh7Ei0aiYA7GPjEHK7ANtEtaiELI528hXi37fr2Q3Ffzgs1sn/wybpsWXaF4MQSWISrJSdZHFezCeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779624602; c=relaxed/simple;
-	bh=IfzhtYOedGSjoatkdkGxhn7N/mpWTGdAGstC2y/P7Q4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h7e7OAkguxvuMtx5Hq9BAhhOOhAqr+ZIFzM21IAs68YIMn5q64u+aGa6trhePmME5EU2sdqO6s7eX/B9sajoNX/Z7PbRfSHsBjGeGhDPM9klLGHZTPXshBcTFvaE8P6KxboNaFt9X6NAXj/gSVe/jJJotQjs+93gEt6PDSX5kOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AY6UigMz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1779646115; c=relaxed/simple;
+	bh=sixVOBai2G511M/aKT+7XV1bRxqMVuqtdqmSyeHssxM=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=eV/MMQ2jhdrfraZ1QLz4OZB/6riuK4WqJQxk79KBEsv1B7Isrgs3ShgrtAtr7qFln7di+31h4gbTDp0hFse7nbC/jKPwx7gkbfQzr7ELYMSSIls+SgUxUhthrmrkrBA9esa8BPR6QLb3fqkylNP7DnsI2lfiYIUMnoe50cE/aXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=O8ej2CsF; arc=none smtp.client-ip=209.85.210.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AY6UigMz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C7E1F00A3A;
-	Sun, 24 May 2026 12:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779624599;
-	bh=B/QylLt9HVKlK8T1JVIaY7wYcc2y4/ntSZS0rGmUiwc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AY6UigMz/7YvehoynYgZnUaTyudH12tAoZWDzREIJf038fg7qLYIrfXCJKWOUeLC1
-	 KBYcOJD1ZvuUZ24e8Yu83z5hKRA31cn8qH0k+muuVc8LrqQLHrWQ2LToJCGBYicCiq
-	 0GaYP1YiHuAPLuGT0JoucPncIm2H/Hu7LU3iBlkEbuk3sOPxlXf5x0MCf3K3G1LWBt
-	 GpYtNLSIFe/O8UHO9/ysYQIlNdjRwi7xuVLSaIdUY0gg7foiMMHw7T5pyP534dSnlr
-	 L/HSHCCPvYwDoWTLjYQQsEvVP+PHAVcBn5fqLqEmugzxYxpsMCkSwmG5bNsk0bcUIW
-	 86lby+ZKLXVHQ==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org,
-	Pavel Begunkov <asml.silence@gmail.com>
-Cc: Sasha Levin <sashal@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Li Zetao <lizetao1@huawei.com>,
-	Robert Garcia <rob_garcia@163.com>,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.15.y] io_uring: prevent opcode speculation
-Date: Sun, 24 May 2026 08:09:55 -0400
-Message-ID: <20260524-stable-item010b-queued@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260520062833.2563847-1-rob_garcia@163.com>
-References: <20260520062833.2563847-1-rob_garcia@163.com>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="O8ej2CsF"
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7e61d3fb1c6so538914a34.3
+        for <io-uring@vger.kernel.org>; Sun, 24 May 2026 11:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1779646111; x=1780250911; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mdnr30vn3OUjkQmyBYEWBbbA8SEc1JM99uXDV5y5BgM=;
+        b=O8ej2CsFWpNUUzYwdmzUb5YbM0o+sWWLDHcEbWkQxxxbr5K5XRwfVEuIA8vGV7n2p1
+         2IpWWcpfVw4HmrBVMd8wiIg4bwhEParMrHTAVW/SeNAtpszDaZo5+bDeF6rBgCAw1xVV
+         Z2+CMEHKrkADBacsIAnoZIyqajnT5GoFNJ/1FzKXxhbh1q4F8p4z5IsGazDLzh2WwetU
+         5ITV1dJ7XOOAwcGBeLVlyN+uW+OdHxamwBNDNHAgsVR+AeSRqmUKRKYpaDMPDCHotsuZ
+         ej/NpSMSWjQzflfcZmFnqEWmCX3j6GmiW5pTQPsh+7jPX6nujqb3iSeSIfXJlD24eR0J
+         GQzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779646111; x=1780250911;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Mdnr30vn3OUjkQmyBYEWBbbA8SEc1JM99uXDV5y5BgM=;
+        b=kOrXaZTzLBdlLLLH4mvTjzecwN/fILtVzVyfN3gzqVqXe4adT/RzDE98e0HxARh3ZR
+         A2GcyC1vcDwJwtM7CD1awgmMKZ8R7uI+kliIMP8j0k6+bp6crLXT9L2ChVg8Ap0oPoM2
+         mO7cLrmbfkyGBL3bbYFef4K4v+btN1ZcvK+fjN/l6Bc1M7Bd37A42rf1PtygEkF5H6IF
+         cKkx35spoM9TQ3t1EKrLwzLMMOyM4mWxTPbXRQ/zQueHD2R9ZuxvHKAcg2m3W9BkuiUr
+         bnDs48Ur9iH2N3jcsIE+JGpDAGYjrSr5PMcPAe3/sJXB/Ftej84aMJxVVeQKD8hbhWXL
+         fRnA==
+X-Gm-Message-State: AOJu0YyqqpESxoVA5ZFOCca7ek4m4Am6sZuq6bpbeA0SJH059j2bmQSS
+	6eHxykAdp9OW3s6kDxQE/Yqx55sskpGv4IHYIfbs/rggR5OfyzBkW94qWpkTDeyz2A1dGDmzIZ6
+	fvcuF
+X-Gm-Gg: Acq92OGSwWIi3xnbC0DaerNpEC+4qBAlupCq0AXVUkw/8GbCujIuqP3cKKmqcPUcFbh
+	wxJQo+7Mh7hIAKXbjfOqzvk5f1W/9u/czjNGL+Am5KhxFDllda1hB7410AY4Tqu77hUvTbTjZsJ
+	rYEab8NU5Hqf5Fke+z7aUM0q6XVO/EfHV3xmgd6LtQSQYYhkbE/mVwnSZNhz0MwBrR/c7zMy4TA
+	3xsPIKvh7lH+iD6ij7spTb+tzccMaLPGLjPw8mOS/5iOHILpLyO8+p/zRnJl4OS/58atsM8QLRI
+	FmwOy0aGKDOysttcIvVmEz4MkAa2sGNA3hCmjVTLoAXZ8pMk48mF2AQJU4gmQ8+ZyapEMPe/LHv
+	7OoPVCxGGXTqqYQ9JX6nCXbOQX3zjIk1Jod0dDeO818GZRZvIzKzWnUdEl2oOX0rbd4ZbjOA8yx
+	vhVo9nlFOIvS/IyDemN2Ea+pVadFebPjP+0lO4Nz/2v+6SlXAQpikv8xik2DL+2Ll8CKMXsEqPd
+	NXg
+X-Received: by 2002:a05:6830:2b08:b0:7dc:d0e3:5bdd with SMTP id 46e09a7af769-7e5ff02a2cbmr8499079a34.19.1779646111569;
+        Sun, 24 May 2026 11:08:31 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e6065e7cddsm6044344a34.18.2026.05.24.11.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 May 2026 11:08:30 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Lim HyeonJun <shja0831@gmail.com>
+In-Reply-To: <20260524110853.115634-1-shja0831@gmail.com>
+References: <20260524110853.115634-1-shja0831@gmail.com>
+Subject: Re: [PATCH] io_uring/tctx: set ->io_uring before publishing the
+ tctx node
+Message-Id: <177964610881.307699.9664695678589599397.b4-ty@b4>
+Date: Sun, 24 May 2026 12:08:28 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-Queued for 5.15, thanks.
 
+On Sun, 24 May 2026 20:08:53 +0900, Lim HyeonJun wrote:
+> io_register_iowq_max_workers() walks ctx->tctx_list under ctx->tctx_lock
+> and dereferences each node's task->io_uring without a NULL check:
+> 
+> 	list_for_each_entry(node, &ctx->tctx_list, ctx_node) {
+> 		tctx = node->task->io_uring;
+> 		if (WARN_ON_ONCE(!tctx->io_wq))
+> 			continue;
+> 		...
+> 	}
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] io_uring/tctx: set ->io_uring before publishing the tctx node
+      commit: a88c02915d9c6160cfc7ab1b26ed64b2993e2b94
+
+Best regards,
 -- 
-Thanks,
-Sasha
+Jens Axboe
+
+
+
