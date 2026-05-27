@@ -1,22 +1,22 @@
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5AE226ED3C;
-	Wed, 27 May 2026 12:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D00C3E5596;
+	Wed, 27 May 2026 12:21:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779884418; cv=none; b=DdtT9P8x000GLIgdHC29ue7B1VrJEwwnlPqIHXF5CBQSHv4NQqSCKeWXRAMhwi4WUSdpsqXBLzYJvGEW1M2f5ANwcXcnGrTB3kEsyXN+/tgsQwLDHQPebuFlDJMw8zLqUh9bPS3csQ0i0BnPsRVo6wvI3viirjp7F37LMd+FmNc=
+	t=1779884512; cv=none; b=DhbiWV7hRNPOQI+iI5jZUPbb6txFVXcW85a+pQ68NpwILuWDQdwKPom2BQpJD6bexg0FFF1w6UwH79A++j5jHMOkYgLntczhnoHThpBVPelvVShdN+LRcu4UIkWnS/dCEYss4Xy2vwUVAFhFj1UEsAvqTQMelUYRKCHgb0bZIrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779884418; c=relaxed/simple;
-	bh=xTXKX/qTlg5b5HNDHvmaUjULBzl9mUn07rxWI0AlDEE=;
+	s=arc-20240116; t=1779884512; c=relaxed/simple;
+	bh=J+ZnLy/9G+pJ8wHavzj3Dl55mP+QyCB7v2erG5OZu6c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JqCsbyvLs+88qk6HVYn7An5rYqQgjI/0W9lA8zb0Pve3hvsR0RB3hN5FF8Q4HcKejUbnujbuRdOsoaKGun+08jixq93Vs65gYRwGVWY6EgKx8WTpiv1DI2LeUNjzLgj3bh+PCaNQp+KI2FiRYCoRJf7yOOCU1rLNVMDujm0x2i8=
+	 Content-Type:Content-Disposition:In-Reply-To; b=dRS0rzIzwRpy4UJDrAXbx4XuZXtp37yeIJQX0roNXZRFMhbNBqdmIfDWEebtkeUh+ri1T6wPgHrRR6Ax+8wdr0iuCLLgDTFcocnrPlJ9s8tcL4+r+RHJKHHWEVACzMfNB4zKAofHwKzHvnPgBUOpFo8S9CNQbIfGLSKiFmAMPa0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
 Received: by verein.lst.de (Postfix, from userid 2407)
-	id F307A68B05; Wed, 27 May 2026 14:20:13 +0200 (CEST)
-Date: Wed, 27 May 2026 14:20:13 +0200
+	id EDFD668BEB; Wed, 27 May 2026 14:21:48 +0200 (CEST)
+Date: Wed, 27 May 2026 14:21:48 +0200
 From: Christoph Hellwig <hch@lst.de>
 To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
 Cc: Christoph Hellwig <hch@lst.de>, Harry Yoo <harry@kernel.org>,
@@ -30,9 +30,9 @@ Cc: Christoph Hellwig <hch@lst.de>, Harry Yoo <harry@kernel.org>,
 	linux-mm@kvack.org, io-uring@vger.kernel.org,
 	kasan-dev@googlegroups.com, bpf@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: Re: [PATCH] mm/slab: improve kmem_cache_alloc_bulk
-Message-ID: <20260527122013.GA6765@lst.de>
-References: <20260527070239.2252948-1-hch@lst.de> <20260527070239.2252948-2-hch@lst.de> <f7f35169-f77d-4678-8797-a2ad00d89e6c@kernel.org>
+Subject: Re: improve the kmem_cache_alloc_bulk API
+Message-ID: <20260527122148.GA6838@lst.de>
+References: <20260527070239.2252948-1-hch@lst.de> <ee817070-cc7a-40d5-92a4-2bd8e9e65fbe@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -41,25 +41,22 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f7f35169-f77d-4678-8797-a2ad00d89e6c@kernel.org>
+In-Reply-To: <ee817070-cc7a-40d5-92a4-2bd8e9e65fbe@kernel.org>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On Wed, May 27, 2026 at 11:38:21AM +0200, Vlastimil Babka (SUSE) wrote:
-> On 5/27/26 09:02, Christoph Hellwig wrote:
-> > The kmem_cache_alloc_bulk return value is weird.  It returns the number
-> > of allocated objects, but that must always be 0 or the requested number
-> > based on the implementations and the handling in the callers, but that
-> > assumption is not actually documented anywhere, which confuses automated
-> > review tools.
+On Wed, May 27, 2026 at 11:11:31AM +0200, Vlastimil Babka (SUSE) wrote:
+> > value convention.  Fix that and add documentation.
 > > 
-> > Fix this by returning a bool if the allocation succeeded and adding a
-> > kerneldoc comment explaining the API.
-> > 
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > Note that the few comments explaining it mention that the gfp flags
+> > must allow "spinning".  That's not really a term used in the memory
+> > allocator, is this supposed to mean "block" or "sleep"?
 > 
-> Would 0 / -ENOMEM be more like what people would expect? I guess both that
-> and bool are better than the current API.
+> Page allocator now has alloc_pages_nolock() for when no spinning is
+> possible, and it uses ALLOC_TRYLOCK internally.
+> 
+> Slab has kmalloc_nolock() relying on that when it needs new pages.
 
-I find an errno return where the API could not return anything but the
-specific error code a bit odd.  But even that would be a lot better
-than the current version.
+The comment long predates that, and it isn't expressed using gfp flags,
+but by requiring separate functions so I somehow doubt that was meant.
+But I could also not see why it would not support GFP_ATOMIC /
+GFP_NOWAIT allocation, so I might just be confused.
