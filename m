@@ -1,104 +1,122 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96B82E36F8
-	for <io-uring@vger.kernel.org>; Tue,  2 Jun 2026 17:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5CD175A79
+	for <io-uring@vger.kernel.org>; Tue,  2 Jun 2026 20:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780420842; cv=none; b=rJnKfPbUI/OXEjc1yD4xqImHSjtooIIAT8OyeEqJMpF/llewGBBPAAEH/96oZ3/Ie5wXnFeMl8GdOflo7Gd2AJp7eBT6m28JujyiDW6A2eOO6g071a2VVLozmut34S/8fYkmKKlA9vW6ZdBckXuA+ZuddG58ToP9hyoVkJJKHK8=
+	t=1780430611; cv=none; b=FxHyghlRR5pwPAPUyJ5cJXKL10ATDS8h/VQq9Nab/zKkfVLyV6a3n9JSrdC6GRANkzZofmboMotaXXUibjVmjvs1s+fF7Wh8kRZW3cizZl16FzGoTu+BrFAHesgIH/R+XMxI7nvhNS85wN3r7e+12mb9cPbKsS+3VwVSOC0C7XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780420842; c=relaxed/simple;
-	bh=H+MoBAvkDRbRTAE1fwhgV8BRws1/74D55xE7GMKFkP4=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=bQzFOq0vFanux2niWxiMHV3fyvrT7XaeflHMXxA3O5/HHHaq7zQVZyEke6kNujykTNalXc1kSkdnITyf6my/7kejCjCD/n/Ct9o0OQUqywX4QCs1IyYHNjP16ClBRZS3DGNP44TjxdtU2Bzn2H47I3pa/RjuZ3vsPd4+Kc2eTTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=panmJ0VX; arc=none smtp.client-ip=209.85.160.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1780430611; c=relaxed/simple;
+	bh=H8om9NmZJXaIEx1Vmi26eCcpd0CSnDOckiSh1WGIL/k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S99LPYow3leG6v/C0LSMfNpD/hv5SzgW3X7t4Ayloufoq40brS8YOP0/fGVSkTJ3gMiHiZibpQps24hi3UtpCx2iHoAgfj/kMhy4F212Q8MWn37k1uGZk5GUCij94h9ItxsOVkqK0tI54eUPoOWtgLJj853ns0VB1NnZ32h23bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uD1b7mnO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=E4b63943; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uD1b7mnO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=E4b63943; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="panmJ0VX"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-43cce7db292so2137537fac.2
-        for <io-uring@vger.kernel.org>; Tue, 02 Jun 2026 10:20:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1780420837; x=1781025637; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=txzhxRKsiDelssTz8KZvZqcbEthxdCC0qzK2QC1DmHA=;
-        b=panmJ0VXfz8oAhmwBg2DJ3S5rmfwS4ONQxHAxx/WhL9EBQiFM8SAyVtyi1XiAHK08U
-         DNIp/rJFI72U785XSfpJX8IdkOnEt+CpgsB4DkfIrUJOMLRwTSfxcRzBJuS7DPlFB6yb
-         cnrNvXXleo4p3w9WGfpbvWAtCXqNxd9ngG4b5VNQZsb5Bjb2SjqNux4cBqK4Kh9AtKue
-         l+zIhkJH+nFRdCjp5Y6hRIO/IIVMv2IXan4FLkUv/HPlWMsSi/VI8wIvUJDZEtAjLxvd
-         FWhO34WsEdrbsFqgdtpOsmR0u0IXL1RaxqsjjIMuJKITOL3VB9Fodt6GZiH85+GOt7M9
-         84fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1780420837; x=1781025637;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=txzhxRKsiDelssTz8KZvZqcbEthxdCC0qzK2QC1DmHA=;
-        b=gc0jgmJ0vvx2i7O1+ZOpLitAnMUFxkZpU/tc02FbpYc7q8sMRUxjU+akTI8GA0fSWw
-         9V8szdctZ1xggW6lVRLzDGf54G1puLmO7Kvb7RD0Chpe5FFBwCYMn8/H3VGbVVHremE1
-         puDu5eg10aCxoD/LNoTtZ6s+db6qz8x5VExSCXHN1vFCa0Q/l0lDM2stjIXeUWmUKTaQ
-         FXjQTdhOHwU5kCzneBY/Y6V3zcwp30eimidGIhn9ltCPxFLuUisoB16ujEbtXZF+jpPH
-         oVMF1IlLoXvEQsoTqcUGDZbN46qqoqOvydlPE/ApPLwA+G48TH6XkqsUeqL6UJvfKk1E
-         j+Bw==
-X-Gm-Message-State: AOJu0YzLYaPaKwEyJUMmgyCUlThW+FF43E5HJn2e5stLuvM2DOvw4scs
-	1EnZOuvRht0YZ5Spd5aDmyvw5yv9nKgIchISsqzedhIJuAR0huE/SJ4PxxCNu7VnWans8nrCtuA
-	pMrOX
-X-Gm-Gg: Acq92OErd3LKofciYWaM05k1GGr8C6XhpeRX7GPukq++/PM1Wpc+I4Iv2DC/9AgKEVA
-	NbajqGFmZ1EH4GU5caBX1HHSn5Oi2pyTxBrseG0DePwjzl6YXbBJH/aFHkbbcACwXoxKjDBeZq3
-	B/vR7PI7jU7AJDBi/PIKIG90Rilw6Q3KVOYjj5ZjSZBJugpvZhfAM2k5xNvQ97FK+zIhl9VSFs7
-	FUjS36zP7DAwwyDqvdcKjMVEam16v2B2Vv3fKyM6+l3Qi3cvhapoXRTzNV+fO2YhV19Tm06VHDk
-	+GI7zEyyHU1HbUQKVc9jnpZSr2kRMPK3zDTwoCBjvg5evTGjxSH5ipNTJHQ3+NN1Hzr8UTwH4EF
-	o+zGh3c4YT+ZMe7SaebbGTmgxvS9yL1ZxwIdvp8UnoSfcdV+KYBnByTqnpHkSkswmtc0KlEkJdN
-	dM2WnhoGaByEV9j+4DZDy4dj2SBLbzEYiwqDRuZnT2JMJ6XebWb/NaYp5aYphz8yxP8b7aoUASi
-	IS7YX93mDiNBA==
-X-Received: by 2002:a05:6870:a797:b0:43a:ef08:6551 with SMTP id 586e51a60fabf-440da01e5bemr23864fac.5.1780420837409;
-        Tue, 02 Jun 2026 10:20:37 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-440d84c0ce2sm169246fac.16.2026.06.02.10.20.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2026 10:20:36 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <5f6ca3649e9e0bae8667db4357e28dd00cd07901.1780394491.git.asml.silence@gmail.com>
-References: <5f6ca3649e9e0bae8667db4357e28dd00cd07901.1780394491.git.asml.silence@gmail.com>
-Subject: Re: [PATCH 1/1] io_uring/bpf-ops: restrict ctx access to BPF
-Message-Id: <178042083663.560797.8108073756982087463.b4-ty@b4>
-Date: Tue, 02 Jun 2026 11:20:36 -0600
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uD1b7mnO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="E4b63943";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uD1b7mnO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="E4b63943"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BBA9A6AA7C;
+	Tue,  2 Jun 2026 20:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1780430608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Nx04XYNRaxN3FBRGiXr2vjB8O5Hdpp8SjFI+UstssoA=;
+	b=uD1b7mnO1Y391dvA+DpWEicxzarAPiO9ql72ufesk9M6bSI5AjAkSwZENuYEB6zLYZl6uT
+	bpf2N3zl4KV+89ah6Lgxp7qMvtPdf85iS4iRzFFkzzjHWZwZ2pTUaDKptdzSO+WqxGR+aM
+	74Dctsj55XeUw1pBwekt7Ab5bjGVFdU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1780430608;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Nx04XYNRaxN3FBRGiXr2vjB8O5Hdpp8SjFI+UstssoA=;
+	b=E4b63943xg/4y7Wt98hdICdmmqENeD7TWdv4v4G23rhcNdgSqDH3N6OqqN/pTHGd1Alpml
+	oOLYIJHSpjHjkPAg==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1780430608; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Nx04XYNRaxN3FBRGiXr2vjB8O5Hdpp8SjFI+UstssoA=;
+	b=uD1b7mnO1Y391dvA+DpWEicxzarAPiO9ql72ufesk9M6bSI5AjAkSwZENuYEB6zLYZl6uT
+	bpf2N3zl4KV+89ah6Lgxp7qMvtPdf85iS4iRzFFkzzjHWZwZ2pTUaDKptdzSO+WqxGR+aM
+	74Dctsj55XeUw1pBwekt7Ab5bjGVFdU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1780430608;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=Nx04XYNRaxN3FBRGiXr2vjB8O5Hdpp8SjFI+UstssoA=;
+	b=E4b63943xg/4y7Wt98hdICdmmqENeD7TWdv4v4G23rhcNdgSqDH3N6OqqN/pTHGd1Alpml
+	oOLYIJHSpjHjkPAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6A5E7779A7;
+	Tue,  2 Jun 2026 20:03:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id hrVkDhA3H2pDMgAAD6G6ig
+	(envelope-from <krisman@suse.de>); Tue, 02 Jun 2026 20:03:28 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: axboe@kernel.dk
+Cc: io-uring@vger.kernel.org,
+	Gabriel Krisman Bertazi <krisman@suse.de>
+Subject: [PATCH 0/3] trivial cleanups to net operations
+Date: Tue,  2 Jun 2026 16:03:12 -0400
+Message-ID: <20260602200315.1761983-1-krisman@suse.de>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: NO
+X-Spam-Score: -2.79
+X-Spamd-Result: default: False [-2.79 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.19)[-0.973];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCPT_COUNT_THREE(0.00)[3];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Level: 
 
 
-On Tue, 02 Jun 2026 11:08:25 +0100, Pavel Begunkov wrote:
-> BPF programs should have no need in looking into struct io_ring_ctx, if
-> anything, most of such cases would be anti patterns like looking up ring
-> indices directly via the context.
-> 
-> Replace it with a new empty structure, which is just an alias to struct
-> io_ring_ctx. It'll create a new BTF type and fail verification if a BPF
-> program tries to access it (beyond the first byte). It'll also give more
-> flexibility for the future, and otherwise it can be made aligned with
-> io_ring_ctx as before with struct groups if ever needed or extended in a
-> different way.
-> 
-> [...]
 
-Applied, thanks!
 
-[1/1] io_uring/bpf-ops: restrict ctx access to BPF
-      commit: ec02fe217fa66d79f8a65e8d28be9295c7f85093
+Gabriel Krisman Bertazi (3):
+  io_uring: Avoid msghdr on op_connect/op_bind async data
+  io_uring: Remove async_size for OP_LISTEN
+  io_uring: Drop wrong comment in OP_NOP
 
-Best regards,
+ io_uring/net.c   | 15 +++++++--------
+ io_uring/net.h   |  4 ++++
+ io_uring/nop.c   |  1 -
+ io_uring/opdef.c |  5 ++---
+ 4 files changed, 13 insertions(+), 12 deletions(-)
+
 -- 
-Jens Axboe
-
-
+2.54.0
 
