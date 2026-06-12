@@ -1,65 +1,65 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99B432938D
-	for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 15:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C261A33985
+	for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 16:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781277104; cv=none; b=BCYeVre/ZPoQW3PYNAOX1qwYzrs2Bc6jHQah5WY03p5BMpk3LILVRshUSAxjIr1DRMq2ixHjiyrsXXST/8iYqf5rqgQABn5PqZB0B4pqRYZe67iy9Cv47I4XmLKry68RinO9maLv4+chLjam+egzLP7pzisI7/7GBxEVequT7G0=
+	t=1781281628; cv=none; b=YGsEao57xbwAeOXTSp5TDC4RoHeQZuF1VJi8T7RSxx/WUBgzrBh1j7Ch72lLAvldTzMLFfc66IWxinkgkOc+uAIzC75VySx3ppXVp9uS0K11yk+lXjDqzv7bQmi9tWjgOECr23FpiduX0y4uw3D+4JupUw41u5J5leoK0iBKyfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781277104; c=relaxed/simple;
-	bh=05VO7IbwaJa2Hd9qb/ZhzxkiRafDwlt5NlHrvZ0LoTo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=bwumtDi+P/CNDkm8MrWweGhplz5TAf8j+cajGDjOg+Rd5GbB92JjWQ5EVyw73NFCZr0eDM/SdCvOW+ghvkxcH7lRiCM1hMsHjEPd03eMn0bNPSeE1nkszYPL4qf5CQBaDoIPwefIvHtyEWl2CWl8kXfWXT/sKpYW/jSjswhFMWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=WCF121hW; arc=none smtp.client-ip=209.85.210.49
+	s=arc-20240116; t=1781281628; c=relaxed/simple;
+	bh=q85fA0z8ZRnH+iKGZjgnPQ6WELKNUoE0mAq68NGwH2M=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=XURzhuSlzWaPBuIKhh09BfzgJbWhspXQ/hZ8Kmj7+ZoYuWMUa9SFxhHmr+ktM6Z9PfzE4O8hqD34ORRtwhj7MARo9Hmp1L+n44QSECOqAWBX1MBxAcOmGQESpj4PYCkhoyzcwX/nyZ0lwlN4fenEl782TFAyerGX1AGTg3PlUP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=veZzV8KG; arc=none smtp.client-ip=209.85.167.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="WCF121hW"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7e6f586a0d5so586880a34.0
-        for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 08:11:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="veZzV8KG"
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-4864a8e80bbso704117b6e.0
+        for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 09:27:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781277101; x=1781881901; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ihnplhl7iY7iqJQego0rnorT+cAGvn58KXxseGRCm5Y=;
-        b=WCF121hWq5o4lVWyudeSccfFGleqANV7uzr1He97XAYbFbPf9QjjNtZz5ieVdtjKsb
-         +Ltj3HGEOGsHL41ow3LAX6/Oc1yt+p/fN9onUSxQdf69Ts58N7QGSuIu2eR0D9wblGyX
-         0JS39M1+8wUV4GDGrzeUxpBUxUi8qDJvR+dtFgCEpaMM8+WJ9dV1dezcB10bWmiZRiSb
-         b4QrsNoSZoj5grvkzpB6/Gm1fH+u5/TCGsWQmbP5s6VUz/xwjb8mtdfAhBbUWJu7IzwP
-         E3xJSmpLYHSdRUSIQRm6ZBsX3pdvRqjHM9XifUgwRchVQrIzeOiQnaalcKp2UHiPEo26
-         vigg==
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781281626; x=1781886426; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=C2MDdSziVv1nFaimA2o7z7Te+TZ8eVtdz4atBPWXgG0=;
+        b=veZzV8KGaAK/dqEVhvl0mjljw7J31C6aSloWqPha+xN2l5GPZ5/c7OmNZhZHTb6NOk
+         t13sFjKsZcR533DxgiH6Y+nCEEd0WfgvEm7A21Z4L8mMplPgwaKVQ9W47PjBA3zR2XGx
+         p7c3PN4xjbK+d6qY5x8xxz4Xkb18FMjJFwQCD9TaDzklJ/y6NbLx3/XpgJtzNjzGcLOK
+         mCl1H69GmNpjIl77bi+YJsTLo6cuW+UsslGGfifwNaexqREo/J7f/02mSUJ46KYaoeHy
+         ciFbzZ5X3iG7BOTdl3g2+5hjMbci5IKqsXQYxJu8OR8r2S5D+xmvufUYlYTBrFCZW8Cx
+         1R1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781277101; x=1781881901;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ihnplhl7iY7iqJQego0rnorT+cAGvn58KXxseGRCm5Y=;
-        b=rGwExeShPCWFrpj+dBMgiyWMAo06VrFffH/PVekpq0TAo0wJg6/l4s9u3/oy74sT9V
-         RTxcyTgSUa68QHp03aGkO+WEKgpC4XzDSm0v/8OQPTsoMdOMWaO36jgdzDpTlm7WS0yC
-         iO2biWpDsCFvjLP3ydxG0lQpdZg/vMLTZ6gmYG4Ej3LUY/uGQicwKXfKfkh1y5EOhZZu
-         RvusG0uWipNGmqt+Di6yMZkl23xXXStPte4iyyRRf/p9HV8IiBdBsDrRFGy7ymv+HyPx
-         OhFXwXFPI4yMifFw5OhsLr9BZbXaWBCrsU07QlrcYtI3qQuDtdk1dU/4iAJcVjOj5WG/
-         adkQ==
-X-Gm-Message-State: AOJu0YxaOmIrTM+A1Ph8OO+YbVAta0705r7m2uinwIktMmhu6T7MJjKp
-	89VZWd4tGkIQqxi5EL06iljI/UryXvx9PPo2iMAnlC0Nm8Hgz67Tu3oQm7Mb9KS81w0=
-X-Gm-Gg: Acq92OHVpbJfxdLczaUvmcp0vUwshSJwP2AuH5fMV8NxQVk394mlhhGVqsUeqge5Ozh
-	KoP2DGzJMKxUz/Ay6qhxhIfkrDk5dZXjPS9kAKwLRc29jzpai4UKS4VQNwAl7sBB9k8cA+fVhCm
-	SBnZ41h9wg5nmwgxFPwL+DnCfpKobVtpumV/G1wTdXJU39R5ilGUXR1cpNOUy1GbXXrCDO/0m/M
-	YVnCAwYvkXnVrQyqcwUO/530/1Um+D0FPHdsbJyz32OSDhYCJId51HDZFpoAisa6GjypdaLg15K
-	yeIf5h4cxmjc8VVebdkaSJ745NBikyFq5DN5/Vv1CQlgWJSi9clL+OsUADzjHCD3+TN/nM228V4
-	5s4ZHMTtDlLGQgE5K6okMyhknq3Ng0Jwv4GWdSdNSbdUx137wvSjjb8sVJSUI8PjEPwTQEhiz2O
-	661Ue8w41H9x0wZkBH75A6Zce53SGa8vTpssHVlAUl1SuPtOM3ulVcr1oFViepgwhc7nf17fxHV
-	1+UirEOsw==
-X-Received: by 2002:a05:6830:7002:b0:7e6:e349:538e with SMTP id 46e09a7af769-7e78477f67emr2161951a34.19.1781277101495;
-        Fri, 12 Jun 2026 08:11:41 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781281626; x=1781886426;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C2MDdSziVv1nFaimA2o7z7Te+TZ8eVtdz4atBPWXgG0=;
+        b=SV2D42isFxLV6yMBkQM1Ev/kf/Gt0jkrkKEFqZEfcox1G3p7XNMnznYZI9h/66rSa6
+         EO/PVk7a3UNycZwGKnYRW86d0pN4JRupEa1ZkkZxsklGg6g1YLcmdmnVCqxwgcK/VF4z
+         r4g/05mOMDSz/M51ZN5zmO3aRvUQQbhjWE3hJaSmSJOoeOTX2tug96+cJ5DbRPIzJZtR
+         VmDWAQMdjXbB4fYZWDRfMnzzZqFOA8Soq8M/9Jun1u0Hno7GtxkyHlaeEkCKFWsmvKfQ
+         s1KShvbB962c25DKAq0m4qRq0ZiS6iXkPz6DUf9LEfMconQ10JmWVoGxi1R3WhZlosVq
+         vY5A==
+X-Gm-Message-State: AOJu0Yy2A1DTFJwgnpr4N7EXkgYWsaRw+nXQQXD1dCsZt6cZdEaRWO95
+	v1ZZ0Y924JdZL3hN4M9h3Z3RZpwRD3fTWLyHNgsDm2sg3DRBRtzwZ6JOcC6Uat0a53xTEAFzUpG
+	4vrKf9Os=
+X-Gm-Gg: Acq92OGqdtzZ4yraZDSZUC0E3QVWz9GaE2MATNSE0asjkE5vFBdmiTRc/NVAIP3S+Q7
+	8AeN/9YRvKQbFI7jR7Vw6RRWQ42DeSwkxAiIv1hwVaojT4laVjyS/nqMjPHdXzbD8f+QuSQLUQY
+	iD4Z7aC+zw+y/72MXH3MexG7vTbWVMF+rP7L0lHm4meuUUVeGitRK2tPrCC5p2JTnlQJR4f0gCp
+	YMHzQEwiKoa08JJQ/dm+NDMZiMlTwgzQsce+uEmZ/aKrhq5ikFARdE+ffRcwTAb3p9PvOMWcxrg
+	COA3AuPXDCGh/2HeK9raAPBJH5Q4fBa6etRW+9dDfqh798wrTTu++UTMa8l/cmwW+zbtzD4wiyU
+	LVTo00JzwN/xByR3ad+hluRmjjD0+nLirbtFflMXJ0CLJ+ka9G4+xkFpqiaMfMknK4VYI1K5xE/
+	uRvEkmK5HxYr103oQlMvjFxwEILdWBgfrLz8r2BkNI5vOfpiaUfrLY64fDOmwIqLbAjpNEs9YiN
+	q+MSr/lEQ==
+X-Received: by 2002:a05:6808:5147:b0:47c:be93:9212 with SMTP id 5614622812f47-4872f426d86mr2482043b6e.18.1781281625698;
+        Fri, 12 Jun 2026 09:27:05 -0700 (PDT)
 Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e78148a918sm2088564a34.7.2026.06.12.08.11.40
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4873157dc2asm1193880b6e.13.2026.06.12.09.27.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Jun 2026 08:11:41 -0700 (PDT)
-Message-ID: <9232ba9e-2ea5-4ed2-9043-15190e0f5d0e@kernel.dk>
-Date: Fri, 12 Jun 2026 09:11:40 -0600
+        Fri, 12 Jun 2026 09:27:04 -0700 (PDT)
+Message-ID: <98373ad8-4777-489c-9cef-1ff9227c63a4@kernel.dk>
+Date: Fri, 12 Jun 2026 10:27:03 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -67,51 +67,54 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] io_uring: switch local task_work to a mpscq
-From: Jens Axboe <axboe@kernel.dk>
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: io-uring@vger.kernel.org, dvyukov@google.com
-References: <20260611160553.1486640-1-axboe@kernel.dk>
- <20260611160553.1486640-3-axboe@kernel.dk>
- <CADUfDZrzwvY6UpBBhLj1JynuNf5bo140+LbMYDOvU13=od+nkQ@mail.gmail.com>
- <4be7a6db-44bc-4125-867e-9d22c2809f1c@kernel.dk>
- <CADUfDZr-MMYBaP-e+y9+xuRhuiunO2sBTUCmwZyd7AgT8sVtiQ@mail.gmail.com>
- <1af6602f-590e-4ca5-b034-b09b3f40a8d1@kernel.dk>
 Content-Language: en-US
-In-Reply-To: <1af6602f-590e-4ca5-b034-b09b3f40a8d1@kernel.dk>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [GIT PULL] io_uring fixes for 7.1-final
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 6/12/26 6:21 AM, Jens Axboe wrote:
-> On 6/11/26 11:24 PM, Caleb Sander Mateos wrote:
->> On Thu, Jun 11, 2026 at 7:23?PM Jens Axboe <axboe@kernel.dk> wrote:
->>>
->>> On 6/11/26 7:14 PM, Caleb Sander Mateos wrote:
->>>> This is great stuff! I had also observed these hotspots on a ublk
->>>> workload. Since incoming ublk requests post task work to the ublk
->>>> server's io_urings and completed ublk requests post task work to the
->>>> client's io_urings, there is significant cross-CPU contention on the
->>>> task work queues.
->>>
->>> Glad you like it! Once I post v2 tomorrow, perhaps you can try and run
->>> some tests with and without and see how it does for you?
->>
->> Haven't tested v2 yet, but v1 shows a 4% IOPS improvement on a ublk
->> 4-KB read workload. The workload has 8 CPUs (unpaired hypertwins)
->> running fio with io_uring submitting I/O to the ublk devices and 32
->> ublk server CPUs (paired hypertwins) servicing the requests, achieving
->> around 4M IOPS. Both the client and server CPUs look completely busy.
-> 
-> That's a pretty nice improvement! Would be curious to hear what v2 looks
-> like.
+Hi Linus,
 
-And here's some more stuff on top you might find interesting. For a
-6 NVMe drive test, it drops my task work usage from top-of-profiles
-to ~2%.
+Two small fixes for io_uring, that should go into the final 7.1 release,
+both heading to stable. This pull request contains:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git/log/?h=io_uring-tw-mpscq-batch
+- Tweak for an off-by-one in the CQ ring accounting for the min wait
+  support.
 
-The patches sit on top of the io_uring-tw-mpscq branch.
+- Don't truncate end buffer length for a bundle, as the transfer might
+  not happen. It's not required in the first place, as the completion
+  side handles this condition already.
+
+Please pull!
+
+
+The following changes since commit ed46f39c47eb5530a9c161481a2080d3a869cfaf:
+
+  io_uring/net: inherit IORING_CQE_F_BUF_MORE across bundle recv retries (2026-06-05 05:20:25 -0600)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.1-20260611
+
+for you to fetch changes up to 29fe1bd01b99714f3136f922230a643c2742cda9:
+
+  io_uring/wait: fix min_timeout behavior (2026-06-07 16:12:32 -0600)
+
+----------------------------------------------------------------
+io_uring-7.1-20260611
+
+----------------------------------------------------------------
+Christian A. Ehrhardt (1):
+      io_uring/wait: fix min_timeout behavior
+
+Jens Axboe (1):
+      io_uring/kbuf: don't truncate end buffer for bundles
+
+ io_uring/kbuf.c | 1 -
+ io_uring/wait.c | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
 -- 
 Jens Axboe
