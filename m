@@ -1,66 +1,66 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A737028F5
-	for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 02:21:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45E02D6E66
+	for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 02:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781230898; cv=none; b=g+f642MU/ZBSUKczmCyI9rMAme3wN8UzgO42c3vXVglQA8Tz5E/nnVapbD+fI9M8LDkZ7pGGyrFsIRyI8Vsopp4iEj8uBzNUkFv5emIaaTq0G/kSYJte5NQ22tkYs4p7YvgWFVc7ib1Sq175qs4XR5o4Syj85sWXTXrAOP4PCNA=
+	t=1781231016; cv=none; b=RFrCPBxuaAOtF+tJ0HJ4Y7ghZHWUzKtYw4tgwQ65WSVefl4/4PWwEHtSi8zu2HLoWg7/DIv9jkEXzsP434n+pHAc6ZPOnw0COM9aabYVR/EMAtDRYv59lXqm79bezewuX+P+0hG/hGrAw1IwLHUmpsyvkZVoX3/cW7vvse3keeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781230898; c=relaxed/simple;
-	bh=blzoFCioVl0BRG922OXTl/D0tfxEPLxNpZ+7NHngqGw=;
+	s=arc-20240116; t=1781231016; c=relaxed/simple;
+	bh=1MsqXddT4T/bDQPvlQEaUH5cXI6SOKf3ZfNbx8kSyAQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LreO5ovfYaWBb7iKnE5SigxYnGyHonu+AwODXiKkI/258ho2K/ctL2E25VenPNzVGa6GvWsi0x1F4/b21v0mlAuJyE5ZISNOfsi//2jfjkQgSIN8LjdcAxdIeTlBKlcfDfDmQQZ4TqToohNK/gHIpefOg54cegRG/gkw7uQhkbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=b9Jrmjd3; arc=none smtp.client-ip=209.85.210.52
+	 In-Reply-To:Content-Type; b=UfoKRAVBl4oBsrIfdTciHdVk8aAHE8wt+Uwen5DJQX5G9MDmG4OBL6zWdTvpGNbywSFiOzNk5L7U85CRLj63j2PLoopFhxdBra7tLXScIahR3sse7KpQXkSZ2kwmpKGqt17Efg8Z8LBd8DEEIJjSvTKVF35rlrvn3pIvykNhPGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=h9nGLD/p; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="b9Jrmjd3"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7e71198e0adso201674a34.2
-        for <io-uring@vger.kernel.org>; Thu, 11 Jun 2026 19:21:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="h9nGLD/p"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-486560db81cso530800b6e.0
+        for <io-uring@vger.kernel.org>; Thu, 11 Jun 2026 19:23:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781230893; x=1781835693; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781231013; x=1781835813; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=a5vpVkIs0tcHHQVLbxq3bQ+H56udG5kOy7m12UsKFcE=;
-        b=b9Jrmjd3OqfCp2vUdVpxdy7lqkWIXNaJD/qVe6k5Tb85mx3WBTssii6XZ1o+BrGHma
-         +FrxQW3//rSMDZ2cUUUjkJt7y2Dzz3rQ7Pv51TMrcSPVSJo7bLpQWYVHITNnVppkaNZM
-         TkuHR09uwf7jPx7K3JAbzGSF/Q20oVZ5yo9Z2gHqVhUZHyKnZRZg9bk6czagKIFWDPI4
-         4hezXR5sTEjnQnkx0wVkAk5+dAuO9l5+UbeY/lgoa6t3ux6/02cm170DCKz9hkcL3r1i
-         VSXNywZHMDmWMVvCLrAvxv/U7Hj3R+qx3h5mSrpYgIUkmmjaEhdv4Wl9N3zOtNNnnqp7
-         z6/g==
+        bh=RPDXcs2XCRoSRs6vYJdUbWGgbl+4bqE7yhXbLtBVKuo=;
+        b=h9nGLD/pthj/PAqgbMF7ztQBbF+qbuu7iVIEM+HspkMwnndtyPwdso9oqx9z3e9l88
+         F1MeZiYBngymZANhDQVrE32jQR4dBWOi8mms8kJKJlTST0yPOUhI5yNMoFgXZXsVDaon
+         PyKDt+4jh2m4AL1orfCAg80+ijopkrtfvabQs/IV5ifZpnr7xiZAv0L2n0IzEafbrIHJ
+         5JkvbOjDNXXzCJnfA1JyTG/ZzmMtSMGyovkKTWO2h5PJU0x+skRkTD59eKA0SUx8ehTw
+         e8wJ7ELYaL1RWbhYk3YJCF+QL5lNmUstWL8crXvoGNXt/FjguyEQu305rvudh5uBdd5R
+         EKBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781230893; x=1781835693;
+        d=1e100.net; s=20251104; t=1781231013; x=1781835813;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=a5vpVkIs0tcHHQVLbxq3bQ+H56udG5kOy7m12UsKFcE=;
-        b=K24E5Z/Hxv+8aqF64XO9xIUytbB3lLWIRFFOcxP5nP6Kznp9QyifpzJF6IkHzVwrSr
-         Hm8azmsK4PO+hlgVX/YKs9/4ASxokk7lFcVhnqJngOPGI99Huk+BfZreInu20a3pnrfR
-         cIRTcP0k/IKCa0I7yNPA7/ZTOOfGAmubhfPAUhp3cBhiuMksZM/dp5ezprYdf3ZVHfv6
-         cYxbavo8bvzlOr5mZHisx6EGyTS0X1aNZckYGFa6W2n52WFgEgraQ5hOUXgsqhnGzuer
-         496gSRro8SJYxuY+3pw0CNMDP057/JUhHW/X4a0fExqRzw9Tqt1l6t+ZXvC5Ckxu0m2E
-         UEOw==
-X-Gm-Message-State: AOJu0YwkD7JmxRGXDebIa1iiqKC+xCatf7a52pUDJ5Yfo0eHdkWd2QXz
-	Ty53GnLdY/7pKrupCtoX0eC5+7k0FKF0ilPBDYWsB5kDacDHCAJQoEVV5yrDtDL1EUo=
-X-Gm-Gg: Acq92OGRcxqdlc0dPyUIxNZLc1+MYvjmovitGRfAhZ53aVuJl4QxZJYnFpgJe1gbz3l
-	aFAF2RpkLUvmpJf8aksZxyn+T13XkrqZPF8J2MFjEsscvrXXJ5dMJ+HOXnZyu9qa87SEOgRRXPc
-	q9FEbU1OfgoujfnINVOhQHpret2ISGxpILMV53ZvH/vTwkrV8addaqVBJYVCdSeRXR1uxUvrFOl
-	gHT7YRorLDEDnPqzH4i2UcRyCqbio9VinLR6GSHY263N81CKhrPUiskMSnaOrnWELqHkwRaFJvm
-	oULgVvTePMnOmIFtSdSenDOq7Jx28gLolFCnv53/sGvmysxk6eVGr6MVL1OBv+ya1vXymjvvVuV
-	EuoqhFSwOnrBOpdAClahEDRACTKBysnMIg6FVjIXTJRON/XuHnYUI7esygBpxmIocnCgQJigkq4
-	kDkl5fWLv6ZKHGNF5oiIbAGhwvnofhp1EIiy+3HWuTIAQhB2bLQiOAQEg/kyYZvYFM925Pk+yBf
-	ZM/BiR2rQ==
-X-Received: by 2002:a05:6820:812:b0:69e:b788:36da with SMTP id 006d021491bc7-69edc71deaamr603225eaf.37.1781230893351;
-        Thu, 11 Jun 2026 19:21:33 -0700 (PDT)
+        bh=RPDXcs2XCRoSRs6vYJdUbWGgbl+4bqE7yhXbLtBVKuo=;
+        b=qffD9xxhxxyC1aIE2baqhIlfF01jIRbAui73x6ZUhv+sAJAWCacW/gDlMiPo3710fa
+         m4NPWs7t//Q4n04A2Ne/eGIEwidvaYvP6/4GHMPWE6W/hoXynwuNx9sqYFKXfHd8MYHv
+         t3shsoQwoSgBv29+Uvz4kBGRSn0PEX+2GkfjdlDPnEwbdodQENxSQBac3/5h+7sBzn78
+         +joYEUGWOIEwqy1KT9TKz3ESVpdolb/vzhMwYm4Lo8h2rofvOy/4yuf4u38T449b+sNi
+         mbBxngL9FICJ21RWWO9iWv+nLykwcGQHSM3nMfHQ7OrfC8sC569GvdFlrLSwakHehfLX
+         Mknw==
+X-Gm-Message-State: AOJu0YwiHybwalv9leGYBQr7btslO0GelF0ZAeDIJneVPV7DTjZ8S/2W
+	BAPzZ4zWzCMfsKKpgao+bnKxxsk+7JlhB4ZC9a7Hbq8WbEbqJTrml/zo6+T8nfhAG2Y=
+X-Gm-Gg: Acq92OEV4tRw/TgsKCPVB9ptVxhC9orH4sPd++W3m4sy4H1gHtn0vgkxYMEk6prYubN
+	6uLnmxu1MTn7XIESa96MrOjvqguof4H9AvCXeecENMVqGS9JTMamURxfeDAGp9cAGJ26kfmDTiy
+	FEvxLejJyroh1bCTGfQJf1gDVoIEwyOB2XjxbDJ2F3aMmlTKXVLIHzsi7qrMCHc7ldIDQCtR2XL
+	ghYOOS3dLeBQv2FHf36VIKLBSx60UePVspp0WtF7ROj1P6D4pb2Xp8fW0HmauPDPkrgjAfkSLK/
+	I7JJjzPasa5flqM0nH4LFJF9n5XhLdZXpAyu7/mJcNqUooY42kxcMXZZ7Iq4QgG/xLmi6ej/hcu
+	aEkJN/J3IHl1LzTo+Y1CN5/ZhqLk1WcYEmGBDYHabMKDHmzAaFztbh/M9qWATwjMT4w68cpTkQK
+	5krHqiu0zpLZ2+ALefRwoPt2K+KXdGbnlanIRLxXS3gKbtZu6dax+ZBPP4wb2yuYA8ptYKMUPwu
+	VLilnT9Bw==
+X-Received: by 2002:a05:6808:1813:b0:485:42f0:7eb9 with SMTP id 5614622812f47-4872f314ba6mr773765b6e.5.1781231013596;
+        Thu, 11 Jun 2026 19:23:33 -0700 (PDT)
 Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4426a449e79sm639059fac.0.2026.06.11.19.21.32
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-48731555591sm239577b6e.10.2026.06.11.19.23.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2026 19:21:32 -0700 (PDT)
-Message-ID: <85660b71-05ce-4a60-a34b-277851e74c1b@kernel.dk>
-Date: Thu, 11 Jun 2026 20:21:31 -0600
+        Thu, 11 Jun 2026 19:23:32 -0700 (PDT)
+Message-ID: <4be7a6db-44bc-4125-867e-9d22c2809f1c@kernel.dk>
+Date: Thu, 11 Jun 2026 20:23:31 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -68,131 +68,44 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] io_uring/mpscq: add lockless multi-producer,
- single-consumer FIFO queue
+Subject: Re: [PATCH 2/2] io_uring: switch local task_work to a mpscq
 To: Caleb Sander Mateos <csander@purestorage.com>
 Cc: io-uring@vger.kernel.org, dvyukov@google.com
 References: <20260611160553.1486640-1-axboe@kernel.dk>
- <20260611160553.1486640-2-axboe@kernel.dk>
- <CADUfDZpQuB=TsQT2aZFkwhsHBhXQnzowPJQa4Fs6z+PA558qcw@mail.gmail.com>
+ <20260611160553.1486640-3-axboe@kernel.dk>
+ <CADUfDZrzwvY6UpBBhLj1JynuNf5bo140+LbMYDOvU13=od+nkQ@mail.gmail.com>
 Content-Language: en-US
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CADUfDZpQuB=TsQT2aZFkwhsHBhXQnzowPJQa4Fs6z+PA558qcw@mail.gmail.com>
+In-Reply-To: <CADUfDZrzwvY6UpBBhLj1JynuNf5bo140+LbMYDOvU13=od+nkQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/11/26 7:13 PM, Caleb Sander Mateos wrote:
->> + * Push a node onto the queue. Safe against concurrent pushes from any context,
->> + * and against the (single) consumer. Returns the previous tail node, which is
->> + * &q->stub if and only if the queue was empty before this push.
->> + */
->> +static inline struct llist_node *mpscq_push(struct mpscq *q,
->> +                                           struct llist_node *node)
+On 6/11/26 7:14 PM, Caleb Sander Mateos wrote:
+> This is great stuff! I had also observed these hotspots on a ublk
+> workload. Since incoming ublk requests post task work to the ublk
+> server's io_urings and completed ublk requests post task work to the
+> client's io_urings, there is significant cross-CPU contention on the
+> task work queues.
+
+Glad you like it! Once I post v2 tomorrow, perhaps you can try and run
+some tests with and without and see how it does for you?
+
+>> @@ -185,55 +183,47 @@ void io_req_local_work_add(struct io_kiocb *req, unsigned flags)
+>>
+>>         guard(rcu)();
 > 
-> It seems odd to return the previous tail node. The pointer can't be
-> dereferenced, as the node could be popped and freed at any point. The
-> return value is only compared against &stub  to determine whether the
-> queue was empty. Seems like the interface would be simpler and avoid
-> leaking implementation details by just returning whether the queue was
-> empty before the push.
+> Is the RCU guard still required now that a work list element can't be
+> accessed after the consumer has popped it?
 
-That's not a bad idea, I'll take a look at that. I have a v2 of the
-series which converts the non-defer task_work as well, so need to send
-that out. Will do so tomorrow.
+It's actually not. Might need the :
 
->> +{
->> +       struct llist_node *prev;
->> +
->> +       node->next = NULL;
->> +       /*
->> +        * xchg() implies a full barrier, so the initialization of the
->> +        * entry (including ->next above) is visible before the node can
->> +        * be reached, either via ->tail or via ->next chasing from the
->> +        * head once the store below has linked it.
->> +        */
->> +       prev = xchg(&q->tail, node);
->> +       WRITE_ONCE(prev->next, node);
-> 
-> I think this needs to be a release-order store and the READ_ONCE()s in
-> mpscq_pop() need to be acquire-order loads. Since mpscq_pop() doesn't
-> necessarily load q->tail, there's no happens-before relationship
-> between pushing a node and popping it.
+	if (prev == &ctx->work_list.stub) {
+		io_ctx_mark_taskrun(ctx);
 
-Don't think that's necessary. The xchg() is fully ordered and hence acts
-as smp_mb() on both sides — so every init store propagates before the
-link store. A release on the link store would only add ordering for
-stores issued between the xchg and the link, but we have none of those.
+parts to just grab it in there, as lower down we'd still need it. But
+the task_work part itself should not. I'll make that change.
 
-For the consumer, every dereference of a node should be
-address-dependent on the READ_ONCE() that observed it.
-Address dependencies from marked loads are honored everywhere, for
-example alpha even has a read barrier there.
-
->> +       return prev;
->> +}
->> +
->> +/*
->> + * Pop the oldest node off the queue, or return NULL if no node is available.
->> + * NULL is returned both when the queue is empty and when a producer has
->> + * published a node via ->tail but hasn't linked it yet; use mpscq_empty() to
->> + * tell the two apart. Single consumer only, with headp being the consumer
->> + * cursor that mpscq_init() set up.
->> + */
->> +static inline struct llist_node *mpscq_pop(struct mpscq *q,
->> +                                          struct llist_node **headp)
->> +{
->> +       struct llist_node *head = *headp;
->> +       struct llist_node *next = READ_ONCE(head->next);
->> +
->> +       if (head == &q->stub) {
->> +               if (!next)
->> +                       return NULL;
->> +               *headp = next;
->> +               head = next;
->> +               next = READ_ONCE(head->next);
->> +       }
-> 
-> I would find it a bit clearer to avoid using "next" to refer to the
-> actual head in the stub case:
-> 
-> struct llist_node *head = *headp, *next;
-> if (head == &q->stub) {
->         head = READ_ONCE(head->next);
->         if (!head)
->                 return NULL;
->        *headp = head;
-> }
-> next = READ_ONCE(head->next);
-
-I'll see if I can make that part look neater, I agree with you here.
-
->> +       if (next) {
->> +               *headp = next;
->> +               return head;
->> +       }
->> +       /*
->> +        * 'head' is the last linked node, it can only be handed out once the
->> +        * stub has taken its place as the tail. If the cmpxchg fails, a
->> +        * producer has made a new node the tail but hasn't linked it to 'head'
-> 
-> nit: "but hasn't linked 'head' to it" since the pointer goes from head
-> to the new tail?
-
-Good catch, yes it should read from head to new tail.
-
->> +        * yet - bail and let the caller retry.
->> +        */
->> +       q->stub.next = NULL;
->> +       if (try_cmpxchg(&q->tail, &head, &q->stub)) {
->> +               *headp = &q->stub;
->> +               return head;
->> +       }
->> +       return NULL;
-> 
-> An early return if the try_cmpxchg() fails would reduce indentation of
-> the successful path.
-
-I deliberately wrote it that way, reads better to me...
+Thanks for the reviews!
 
 -- 
 Jens Axboe
