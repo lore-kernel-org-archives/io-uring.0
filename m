@@ -1,101 +1,122 @@
-Received: from mail-gw02.astralinux.ru (mail-gw02.astralinux.ru [93.188.205.243])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9433659F9;
-	Fri, 12 Jun 2026 08:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.188.205.243
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BDC38E8B9
+	for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 12:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781252273; cv=none; b=U/LVWVVyJecNhP7uttwDruk44+fNPOPExxoXdSBoprcJQi6/fZGTHJQN2nAGcwTCMUYgrgE+6S7OrUBoHI1F7j0Q4o1KbBCoadNtDlbLPo1Q5bzWni3w418BKEEbVG0tgA0zAP5/XlFwGHdpPlPpd62UnvDOgRtuNy1698ND89w=
+	t=1781266865; cv=none; b=mxU2OqOl4trOX5zv+xPhmbP2T0t/W3vCeVOQJOnAHghFlTmpDUWmhj0uC71dRNgupfVcuttE8aHKRJOJdP+y+yi09djG/vHWT4bo6jgrV+dhhzOCEdejIG97Zeud7B56d2msFJHLDezaQjDzp6rbpssa/oeTcKT2rNrVK/Zi56w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781252273; c=relaxed/simple;
-	bh=TxJTtvUFQGiGeIsHQ/Y8ukaeDA+u3Xj/pL//b+ibwEk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pyLbi8ETzkNgUpBZLynmQfrcv0VM5pDJ1/WTi4+1PTrdyy9PtN+FZ25RTvJv3e/SHC38YzLFipRg+65zaD7BQb6Bwb4ANKZSnQ0hTEbysNI5NO9OP13xJwwsglUGakyjtipb2xTdzwNb/pieBtyN7jV7EHXdXAJdUGdJYT8ocP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; dkim=pass (2048-bit key) header.d=astralinux.ru header.i=@astralinux.ru header.b=i//JWAfY; arc=none smtp.client-ip=93.188.205.243
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
+	s=arc-20240116; t=1781266865; c=relaxed/simple;
+	bh=i6JqW4MDixRyhjGSrWWsJh4qykQt1TXnXQaFW5g0UOA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dU0Tsc4Qznemo//FSCzVu8Vzh2MhMjktB2vBzOX2Ngz50Q0V+WHCBndjaOibpazEyi0pJ5FCqvaUjzNF6QvEU2qhdQEFO8JIutqbaGTP5tVFp5Xa++uWbno/CCoKIAaFgB+unxI82GKu4Rm5GB3dKsH/ufTlazv4zOhQLQojips=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=frCuEeeX; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=astralinux.ru header.i=@astralinux.ru header.b="i//JWAfY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=astralinux.ru;
-	s=mail; t=1781252257;
-	bh=TxJTtvUFQGiGeIsHQ/Y8ukaeDA+u3Xj/pL//b+ibwEk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=i//JWAfYarjzo/tMRnjWIgQ9/CvkPb551veH9RktaKftyuKyE7uDNpVPEduZci6xl
-	 UEMLNmhCy7tr0d/FOo5lvOwGjgTHjzJjrVAJ/nFaKINPq8e/wE0czstcZdNCF8MwYj
-	 0vRRGFxHZsuzUpYpQksNR1S5hbJYGMoa3yfFBP0ISH5vKoa9a2ASNBAKBzcS5KkMZ7
-	 OpE29ZP0Jv/2sp479LnbG3o6Oeg9yzoqIhfjPLaV94ZuRQPy2nrrDkRX13Mxd1WpiR
-	 nCVzqrVnX29LYM1oEFGIicZ3MQfcZ8FXeaNf24tx/sKL3PDeYzUI2Uhor1ug3RdzBD
-	 cs6uk/FOIBsIg==
-Received: from gca-msk-a-srv-ksmg01.astralinux.ru (localhost [127.0.0.1])
-	by mail-gw02.astralinux.ru (Postfix) with ESMTP id 737CA1F95A;
-	Fri, 12 Jun 2026 11:17:37 +0300 (MSK)
-Received: from new-mail.astralinux.ru (unknown [10.205.207.6])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-gw02.astralinux.ru (Postfix) with ESMTPS;
-	Fri, 12 Jun 2026 11:17:35 +0300 (MSK)
-Received: from rbta-msk-lt-156703.astralinux.ru (unknown [10.198.16.160])
-	by new-mail.astralinux.ru (Postfix) with ESMTPA id 4gcC724lH1zwQNq;
-	Fri, 12 Jun 2026 11:17:34 +0300 (MSK)
-From: Alexey Panov <apanov@astralinux.ru>
-To: Sasha Levin <sashal@kernel.org>
-Cc: Alexey Panov <apanov@astralinux.ru>,
-	stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Prithvi Tambewagh <activprithvi@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	lvc-project@linuxtesting.org,
-	Li Zetao <lizetao1@huawei.com>
-Subject: Re: [PATCH 5.10] io_uring: prevent opcode speculation
-Date: Fri, 12 Jun 2026 11:17:20 +0300
-Message-Id: <20260612081720.3632-1-apanov@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20260611-stable-reply-0106@kernel.org>
-References: <20260610172203.27999-1-apanov@astralinux.ru> <20260611-stable-reply-0106@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="frCuEeeX"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-440e2b605ddso213008fac.3
+        for <io-uring@vger.kernel.org>; Fri, 12 Jun 2026 05:21:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781266862; x=1781871662; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q5YfwvTgkVV9liuxUrun742toM+85ieMDdVaMhpjgfA=;
+        b=frCuEeeX2vWz1EWKqC4CZresjXHTsA0QjGd9yvolQspZnDUD3AznPSwX5+0Oom7u4F
+         ULigEQpAsl2WHzlCIBEYNr50iyHhwUiHPuNpgIrTWXKTI+z+oEqgmnEjsg0GC5klophD
+         PLCV8zG/FuqIOxTBRXwzb8wT7kHb1cXZGsPFxJYOp12jIpJ+uwiPdwhsQyd4zQT0pmW4
+         os5V9DqbJyRLRCV8Q2dCDuZ8r5MIakz9ESbRbFmik4Ve9WL/rHFLn3/UILBKKgSWQ+sz
+         gLYfGATRJXwng+Vt9wss7TWWPuZJyinUCvP/f1BQgxFbzoqsRgalfTZsq2+QX+6Wmg44
+         bKWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781266862; x=1781871662;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q5YfwvTgkVV9liuxUrun742toM+85ieMDdVaMhpjgfA=;
+        b=eI4PqOc7XX3JzI+ttWlMZ+eYKK5EPjOWPqu998x76OLjsVXRMFBloNOJ0mPtUnL7Yd
+         fh30amHBjQjTDBH19x24c4uiMZZo1d6sRvDSOQCrj3KtqdQAzduGEyYDioxKucrXD8q/
+         G3FLYsm5abWHoBx4JmY+z0XrRAhGPA/tFDA0Xnb9J9Tn+tTHkFEbHX60frV5XQdFO6Aq
+         5ER2e8FRswn4/3omzKqG5p9Ep8QlxPCVjEh8VrHW6p/EbDaY0JTiGbaiDECuApmC15GW
+         /7vnoXaylqoviysJfUc5L+kSdm8VfWXF42LlI7Zy0BNgwb3BSFD8ZNKvxqMlLQYm3Emf
+         8uXA==
+X-Gm-Message-State: AOJu0YyP8StK5TAXoifqyBzavKlPO4OnUMGuJNkY5WGNfBLsAu3J8kdr
+	ywynIv53OjSsKQ9L5bc1UXatiJ4R7itXqDQT8AinH/QkSamujj+ovhLZdGKbser9rv5O+JpkYpo
+	2CXvHtuo=
+X-Gm-Gg: Acq92OGsj3F7hu3E0ExgVUUaQ2c5Cdg6KZPHkH4muooxEGb/JX8dTbbUiitOrkMv0gR
+	Xt/aUU5c9zoM8NPPvTWXQk06T9Bs6Y/as5jWKJtdt4KrxHMaiHdId8/wkThLTTERy24cSWEt/Ca
+	ILRUQk7xCdch2NQg+4Ezeu/51/Ih86f4VvVuRF8UAH453f0EQxGpMs0Dmq5gu8j/GisGkEN9Ls2
+	UgnAgi7eHVAyFnfqT+b3YrujlmnuwLrVQ6C6a5MGbF9s7pUi0YloHkHu7u5H1UqiZ5tS8u0w11E
+	/Q1jXbiWenFmKQFb7nnrimUWXjJJIndVR5gxPqYc3Cv5SHLU5lm3co9WZW1dZbEctqNSQnQpC25
+	IeL1M4LlYkCfDxhsCVtuFTnmAC5hTMFES8pgtnByyxnn/rSeRyX/gSqLHC7QoTEC1ykUav2o/7F
+	jO7195GiqvUFxYed9Othtmj1P6uzEENr4X7X64UW98L3p1BOQxW3w64vu5bDmYZ/V4XcDZHGlsk
+	OFySgeXjQ==
+X-Received: by 2002:a05:6870:d410:b0:42f:f368:e025 with SMTP id 586e51a60fabf-4426dd8172emr1520044fac.10.1781266862459;
+        Fri, 12 Jun 2026 05:21:02 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4426b32624csm1648056fac.16.2026.06.12.05.21.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Jun 2026 05:21:01 -0700 (PDT)
+Message-ID: <1af6602f-590e-4ca5-b034-b09b3f40a8d1@kernel.dk>
+Date: Fri, 12 Jun 2026 06:21:00 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-KSMG-AntiPhishing: NotDetected
-X-KSMG-AntiSpam-Auth: dkim=none
-X-KSMG-AntiSpam-Envelope-From: apanov@astralinux.ru
-X-KSMG-AntiSpam-Info: LuaCore: 107 0.3.107 575e75fe8e3b9d45c142d144823c5de38605099e, {Tracking_internal2}, {Tracking_from_domain_doesnt_match_to}, new-mail.astralinux.ru:7.1.1;astralinux.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1, FromAlignment: s
-X-KSMG-AntiSpam-Interceptor-Info: scan successful
-X-KSMG-AntiSpam-Lua-Profiles: 203816 [Jun 11 2026]
-X-KSMG-AntiSpam-Method: none
-X-KSMG-AntiSpam-Rate: 0
-X-KSMG-AntiSpam-Status: not_detected
-X-KSMG-AntiSpam-Version: 6.1.1.22
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.1.0.7854, bases: 2026/06/12 03:36:00 #28231850
-X-KSMG-AntiVirus-Status: NotDetected, skipped
-X-KSMG-LinksScanning: NotDetected
-X-KSMG-Message-Action: skipped
-X-KSMG-Rule-ID: 1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] io_uring: switch local task_work to a mpscq
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: io-uring@vger.kernel.org, dvyukov@google.com
+References: <20260611160553.1486640-1-axboe@kernel.dk>
+ <20260611160553.1486640-3-axboe@kernel.dk>
+ <CADUfDZrzwvY6UpBBhLj1JynuNf5bo140+LbMYDOvU13=od+nkQ@mail.gmail.com>
+ <4be7a6db-44bc-4125-867e-9d22c2809f1c@kernel.dk>
+ <CADUfDZr-MMYBaP-e+y9+xuRhuiunO2sBTUCmwZyd7AgT8sVtiQ@mail.gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CADUfDZr-MMYBaP-e+y9+xuRhuiunO2sBTUCmwZyd7AgT8sVtiQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jun 11, 2026 at 11:26:24AM -0400, Sasha Levin wrote:
-> The 5.10 backport itself looks fine, but I can't take it on its own:
-> 1e988c3fe126 is still missing from 6.6.y and 6.12.y (it's present in
-> 7.0, 6.18, 6.1 and 5.15), and we don't add a fix to an older tree while
-> a newer one is missing it. Once 6.6.y and 6.12.y carry it, I'll queue
-> the 5.10 backport.
+On 6/11/26 11:24 PM, Caleb Sander Mateos wrote:
+> On Thu, Jun 11, 2026 at 7:23?PM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> On 6/11/26 7:14 PM, Caleb Sander Mateos wrote:
+>>> This is great stuff! I had also observed these hotspots on a ublk
+>>> workload. Since incoming ublk requests post task work to the ublk
+>>> server's io_urings and completed ublk requests post task work to the
+>>> client's io_urings, there is significant cross-CPU contention on the
+>>> task work queues.
+>>
+>> Glad you like it! Once I post v2 tomorrow, perhaps you can try and run
+>> some tests with and without and see how it does for you?
+> 
+> Haven't tested v2 yet, but v1 shows a 4% IOPS improvement on a ublk
+> 4-KB read workload. The workload has 8 CPUs (unpaired hypertwins)
+> running fio with io_uring submitting I/O to the ublk devices and 32
+> ublk server CPUs (paired hypertwins) servicing the requests, achieving
+> around 4M IOPS. Both the client and server CPUs look completely busy.
 
-Hi Sasha,
+That's a pretty nice improvement! Would be curious to hear what v2 looks
+like.
 
-Unless I am missing something, the fix is already present in both trees:
+> I can see clear reductions in __io_req_task_work_add() and
+> llist_reverse_order() (now gone) on both sets of CPUs, through the
+> cache misses popping task work items are now attributed to
+> __io_run_local_work() instead.
 
-  6.6.y:  b9826e3b26ec ("io_uring: prevent opcode speculation"),
-          included since v6.6.80
-  6.12.y: 506b9b5e8c2d ("io_uring: prevent opcode speculation"),
-          included since v6.12.17
+Right, llist_reverse_order() previously could have had the useful side
+effect of priming the cache. Sometimes that could be useful, if the
+task_work itself was basically just posting a CQE. Other times, when the
+task_work itself does actual work (eg socket recv), then it was just
+harmful. For the former case, we could potentially prefetch() next when
+popping. Not sure it's worth it though, though we could experiment with
+something along those lines.
 
-Both commits explicitly reference upstream commit 1e988c3fe126 and were
-committed on February 27, 2025.
-
-Could you please re-check and queue the 5.10 backport?
+-- 
+Jens Axboe
