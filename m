@@ -1,139 +1,93 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E36C2F83A2
-	for <io-uring@vger.kernel.org>; Sat, 13 Jun 2026 12:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD703E559B
+	for <io-uring@vger.kernel.org>; Sat, 13 Jun 2026 12:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781353356; cv=none; b=hbVendiOYpWQR7UYpj/BZ80meZVGMfbGpjjMcxjxcz0KKeoRIuqjhyqjL9KxiKJOt1WfrEYeiQFlTOal3bDEhPwVaCExHKgSaUJnq05WNQqECxJBOv5se15o5wujR6eMZuZpIWtJmgijWQK9pfJLOyKnENuY29R0f4XWQ3M27CU=
+	t=1781354203; cv=none; b=B8D8AJ/jAdhC1TUvPn4n2oSOF3MfnrA1lA4nhLXNlHfLCmcfxoU6rAHG84UFNVuIIKHVdJrw8oCDWjP+NxD8UiVUtBlA792N5TeP96oN1Su7/+7UrQTQeqkJAsYtUtkfCGFCFTBWd+FoCqpM2DKNq0c93Z3QpXakl13UFdGvCUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781353356; c=relaxed/simple;
-	bh=v1U6gx/00DWdtXH+gBgnGE0MFr2GSZhF45FzPucNJgQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P2ITfIciKKA8/Hv2l3BIaUj6Z0sFVw6t8b3XDJVJaaAilkyHUGTiW078oPAtoYx6LaeXKlF3UDYCQCdEKcveui5v/+n22OOead9NUxlIA/hPzR3RGssmPs/3j0nq07kvdJ21G2cMBg8XxLcBJv3mUtkFbXWGPpAa7ZUP4tSt1S0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=wIdsEN5X; arc=none smtp.client-ip=209.85.210.47
+	s=arc-20240116; t=1781354203; c=relaxed/simple;
+	bh=Mqr4VTFfD+uiSxX/ZwFIy9PiT8s1CYMech9hpCHOkBw=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=uco/BC868y/pi+NmxnjaXQ8eQTXmqT+K+D2gz1He6d4IyExsMr1tBAGgyxZViQIQiYx/PBB8Hn7jEzDCieAScuEMmJ4oX+Gj6xc2rdhXNg3UgtREiOrKMEi9dHmKFdroQB+28wGjsQofXW/y3nRTw3RdVPg5gW8G9IFTBhUctXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=MVF5VOtQ; arc=none smtp.client-ip=209.85.167.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="wIdsEN5X"
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7e6e2d54d3dso1055161a34.2
-        for <io-uring@vger.kernel.org>; Sat, 13 Jun 2026 05:22:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="MVF5VOtQ"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-48751bd4abeso67850b6e.0
+        for <io-uring@vger.kernel.org>; Sat, 13 Jun 2026 05:36:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781353353; x=1781958153; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KBxTw/W+Du/xLAfyinJSnLkU1q/MyUhiW447HryFSvg=;
-        b=wIdsEN5XNJz9gPiLXRMxXMIddlMPYH9QOb7oBhAZeawaoiiwNm74WaTbf+L2Yc7Lay
-         0HhHoOz9vEL+tQl9w6p5wHmgr117Zfw77hb8Y00uwA2X7I8u7rpNFhUVjJDtIxwJ+WrG
-         a2pupRDf7LiX6IZm7AXUDSOQOqTufR45sNhXUZXjo60iP6VJVniA5xQwkuGxxf1oMaS6
-         PEuppJXEvZSxlJvyTRNwmCPz2CyxqkMWwm7Y+VbKvRyEkEkzgRv8BFJXU4qXC11wqxqa
-         oR9vWLltH/M32IHvyULFBy8cUz06V5uuDuD/YM2dOpfG5P1ZWRuvhaqIf9AwbhiS9z9e
-         /V2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781353353; x=1781958153;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781354200; x=1781959000; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KBxTw/W+Du/xLAfyinJSnLkU1q/MyUhiW447HryFSvg=;
-        b=XFK0TGFRwwr0PkS2L1q80HNItKynVTLqk1ARdn0B4N26d2tsnRtvaAvV7EWMM1Z1Q5
-         82FoPpooyTnDErfQXakVKaIk+FO0f+Ba/pohKt6R4Y/qL7pFOnqS2j5y/sB8gJB7pEms
-         3FzVSiiXKsm01DYcgxh31QC5XkDNG2zcD859ue9jxDp9t/psoFOKhHuNY8CJsR1JUFIF
-         oZ7QRnDcrtslRsKNo3ylN+4HniLYQ96GIJzxwZ3Ucon2EAAacNUP1h9MRr4BDqAPmxcj
-         ShYY7i+D8/I2jYRKgzTetiYFIu15I02FESPwHy+cFDBADSRETFXL6CHWyi4zGa271IM8
-         hoLg==
-X-Gm-Message-State: AOJu0YyNfnUVpxF8yNtfshJ079/wDuvPwYIWYt2nCQTTI5Wn6XSBLnCq
-	RE5nO5BUZUvfy/VV38wMlwQAS9T4/3IFzKkI2OOLRnTes3sUwk0wdYNxnq+32J7uf5g=
-X-Gm-Gg: Acq92OFUmLjXsDJv83x1rBIYfZimaRfawmApbsSGrvBqB58pUsZZn9mtcAdHdxO+RYm
-	CEs8ce8yKpnKZiNQ+Qq+MJO2jYt/aag/0qhuzwFXTr8oMFWdjwPcoLLJr4e1f9uNUwoBMYMtvxZ
-	6SCmQB1vgU/cN3WBX3TI3tBb4sO1H5OU6l1vvZEUSVPuKzpvmmaLm45FRC9QB4lcb3MRV8mafOp
-	h1xk74SG+mIN/swK7nUk2anBU5YFAgpwFviM1fmYPIchnUOFaw+N2h9Mr/4nK8eP2Rv3yi7oqbz
-	a7f/BowwJfPEdp5Y8Q9ebRPtaoyGsZ6yoRm199gRhWGdDv130pk7ekvMa6GGRFvKeKkz1iM/2PC
-	6JJuQmjS3vKOYKJqVgilC/cZs0ObVx/A3i9Cd9W3UKr201qzxSm0VsypwubR6R4ldejutOP3UuE
-	qY2r5Yb3TrzSpR7wkLiTj0vNxPxChIGbF8XikyI3jLzEbOv6zfbWC3EDYiQcbfLzhZNZ4QjsALB
-	SlwXnAmaPkH7lpk5Uzx
-X-Received: by 2002:a05:6830:210d:b0:7e6:e1d2:3bd0 with SMTP id 46e09a7af769-7e7846f188emr4903902a34.10.1781353353380;
-        Sat, 13 Jun 2026 05:22:33 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e7816b3f4fsm4037647a34.14.2026.06.13.05.22.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Jun 2026 05:22:32 -0700 (PDT)
-Message-ID: <9c85aa11-8777-4412-95a3-3995ada98652@kernel.dk>
-Date: Sat, 13 Jun 2026 06:22:31 -0600
+        bh=YzPoA9f1CWp8bUUVQEWkuMYx3XnrAFEgAV70047V/mI=;
+        b=MVF5VOtQ1ffGvLwl3f/74nHR/JPxFrjTKsMSLO0U424Bhar4FnlUBJA93Wqeypx6wd
+         LSJyqEyWkwmorHXboKJSKSZBN5ruOL+ZCv/WyQYzpOfYE5V14NeHPFMcW7PJtQ3Ro7fE
+         yq8hWa7Y+Lgdbec2Mn+2r3T+Z20EJOtlQbpo+MSBOPhBmd+zf7xozFtb656mSyjjqS0v
+         Qljf7e9yOiML3VFIMmZRrIJ8RRPe1ld2r6HdGNb+XrzUSTILCDv8RKI62KEb4kThhHgA
+         8UgjHvg1MOuOxrtSR1vP9RjiF1PZpMMNwVa9o+tDaUH+n/LCBPFYqAhunDUG3uMeXBfj
+         IVGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781354200; x=1781959000;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YzPoA9f1CWp8bUUVQEWkuMYx3XnrAFEgAV70047V/mI=;
+        b=bmM54zWU1SItGzwWuyLK7OvdMKW3eXR8mHVE5gBeIwSf2khKFsVk4IXwmWW1KKNu8o
+         HcWIRvsxZmNdfpumEUD1SUiovX7mKBQTXwbMDUfyeUl+m5r8gAiFeECh5W7KsICe/C8k
+         RqdPwSJpyrYj7tlrQ8rvRjEK7Ha6hjc9lNYw+kczj2aNzzI+pVUi/629/EtOUpiWXwy8
+         w38WxAG76erAI39pDtNUTYpOvTo3uo8c4BG8z/U8FgRbD4ke5363wZ9vkor8uG3WuZJ4
+         myM1w4dmqzr0wyFC1fuwS9jmYy69x6wo/CNaLCBrconPxPaf8gAli0QOw+8vSIM/Swac
+         q1Bw==
+X-Gm-Message-State: AOJu0YyDS2uxbPH8bw2eKlTEXozXS8CbB9gFDcDBahCvIql1ycHwfRrH
+	lG94vogPXggtLyJh7rwPM1GPXOyQcfRI7v1oyNSZYQ9Y9Yd9URSihT8XvFW+nDRwuwuwm1oA3GP
+	vHFE8XMg=
+X-Gm-Gg: Acq92OG7WKA3AYzNPFv4jVB6SlQMfg43liE3ju3WezCvxcxDaapgK3QZgrEnfaE5ftb
+	Nu1AWdT6C+G8UvXr3VtEKE8xPKyWbiElY0G4h8hr+cJP5/9F+gXTMIG1WlsayQQWG2pJeiy08Nn
+	MZa58BGrgU06+G2lheoy6Z82hM3lDrLK/Mz14hlPWNDAOzjLACQULd99nHjSwoaE/XTyHHnhKUm
+	qNX5bKlF/O03T3GAb5h+pWzXVZvAi/IjosssqfUQp9RqlHSKt8mdwZrSV2OWXJyQV8zF4ReFi7X
+	UAlq40DkhT3WoMcmVquvZo/6Wo6UTP87SR0pkqW8uZUwQG3IOtpkdqubMHzeZzmC9ggYJ9yyHTL
+	NvatnUlKhXq6GyRX0Z8SAEBTXONavofZRVUjhYdfUNYi1giZP9acLd1jTzZ0htplhqvISo5BKan
+	CKv5ntTTjOkJ0XJudFWc5NiFF9zM3SkkP73do6xSs+RwD+7xhShtbuMmQo/pbGKSJqW1x/O3Lqh
+	wJb
+X-Received: by 2002:a05:6808:c3c8:b0:485:7c5a:63b5 with SMTP id 5614622812f47-4872f354248mr4394552b6e.4.1781354200553;
+        Sat, 13 Jun 2026 05:36:40 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-48731554fb9sm2641107b6e.12.2026.06.13.05.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Jun 2026 05:36:38 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <d89f3b89e77b09a18daa45476fd1a40f2ee253cd.1780930463.git.asml.silence@gmail.com>
+References: <d89f3b89e77b09a18daa45476fd1a40f2ee253cd.1780930463.git.asml.silence@gmail.com>
+Subject: Re: [PATCH 1/1] io_uring/bpf-ops: add a separate maintainer entry
+Message-Id: <178135419828.1909114.9524860031536892533.b4-ty@b4>
+Date: Sat, 13 Jun 2026 06:36:38 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/6] io_uring/mpscq: add lockless multi-producer,
- single-consumer FIFO queue
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: io-uring@vger.kernel.org, dvyukov@google.com, krisman@suse.de
-References: <20260612025125.1690253-1-axboe@kernel.dk>
- <20260612025125.1690253-3-axboe@kernel.dk>
- <CADUfDZoLTJ6mtQ5yaP83_K18N7eK3u72gkNSPrnhg-vjb=8p1Q@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CADUfDZoLTJ6mtQ5yaP83_K18N7eK3u72gkNSPrnhg-vjb=8p1Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On 6/12/26 8:40 PM, Caleb Sander Mateos wrote:
->> diff --git a/io_uring/mpscq.h b/io_uring/mpscq.h
->> new file mode 100644
->> index 000000000000..bc482d10e0f3
->> --- /dev/null
->> +++ b/io_uring/mpscq.h
->> @@ -0,0 +1,118 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +#ifndef IOU_MPSCQ_H
->> +#define IOU_MPSCQ_H
-> 
-> #include <linux/io_uring_types.h> so this header can compile on its own?
 
-Sure, we can do that.
+On Fri, 12 Jun 2026 18:36:22 +0100, Pavel Begunkov wrote:
+> Add a maintainer entry for io_uring bpf struct_ops related files.
 
->> +static inline struct llist_node *mpscq_pop(struct mpscq *q,
->> +                                          struct llist_node **headp)
->> +{
->> +       struct llist_node *head = *headp, *next;
->> +
->> +       if (head == &q->stub) {
->> +               head = READ_ONCE(head->next);
->> +               if (!head)
->> +                       return NULL;
->> +               *headp = head;
->> +       }
->> +       next = READ_ONCE(head->next);
->> +       if (next) {
->> +               *headp = next;
->> +               return head;
->> +       }
->> +       /*
->> +        * 'head' is the last linked node, it can only be handed out once the
->> +        * stub has taken its place as the tail. If the cmpxchg fails, a
->> +        * producer has made a new node the tail but hasn't linked 'head' to
->> +        * it yet - bail and let the caller retry.
->> +        */
->> +       q->stub.next = NULL;
-> 
-> I think this could be moved before *headp = head. That way it only
-> runs once each time the queue becomes nonempty rather than on every
-> attempt to switch tail back to &stub. And it would keep next =
-> READ_ONCE(head->next) and try_cmpxchg(&q->tail, &head, &q->stub))
-> closer together, reducing the window where the consumer could lose the
-> race to pop the last element.
+Applied, thanks!
 
-That's a nice observation! Yes, that looks correct to me, I'll fold it
-in.
+[1/1] io_uring/bpf-ops: add a separate maintainer entry
+      commit: d9b710f683dc68b5c0b7dd0c6c64aeb5d27a1ac4
 
-> Other that that,
-> Reviewed-by: Caleb Sander Mateos <csander@purestorage.com>
-
-Thanks!
-
+Best regards,
 -- 
 Jens Axboe
+
+
+
