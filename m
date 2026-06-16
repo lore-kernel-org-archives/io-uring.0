@@ -1,108 +1,96 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C883932DF
-	for <io-uring@vger.kernel.org>; Tue, 16 Jun 2026 20:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C011331EA5;
+	Tue, 16 Jun 2026 21:39:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781642169; cv=none; b=IFlsUQLpmx7QNP9nb5i0ppGbhdz2IiEMpEIuzjReD71fj3JwXAdmVJydw3x61t2ZSIfga7vna5tamc4bsDk1JMOwMfrXPp8y6dFQxXyJE/dXRRnoxlb/niJTYUooBATp0N3lj+XvRnlWOi2k0Qe/KaYdHpYhJ1I+R96SRtHobZQ=
+	t=1781645948; cv=none; b=QH6kwxupOycrpqmYlGU/6WHBSrfbTvVCttOfxqRHSxWPNjSbhAVw0OUkB9tJmX8eQwyB1fxazHfaIEUsC0PHeMpNOrzUZ/KVZYnqlpuFAJ7Zc8ZDyvHQOla4BQrLNgs2y1qQzoVkqpmvdwaDWa9idm/HOi10j5w4KZfsia9lVNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781642169; c=relaxed/simple;
-	bh=mxMKe0jgsxOJM/p9h7RtsXKKJZ4vpt/rgkLudw2LN4s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MhAuue1ybAdUb2l+K7IFMcTafKa67vljl1H+LlsMTVJtKk6SMJunrEr8q7iJwrwpjfaPvDtoSrg+e3/ntEd0kWH8p5/hWvSl7NNOpW3ZKMhNBllxCpoDq+sxYFmlZk0Fi/Zel1HjYsRb8CP5k9pL2RvCltNme1ec+nFRVRtEvAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=nE539p1K; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1781645948; c=relaxed/simple;
+	bh=HLoOrMjbK+z+X5ujtwxaVwvYR+POmIRsD3DRyUbVfUM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jKDnEeuoyjkxeuc85wbzPB3b+RPdjqJWwD7Jye4JmXW8Ykv+m1UdAAN1GPMcZckJ/Z0boRIP8jlMtj7aOG5spMYSVT51O6lXak0iRtmjD21xxAxhuDIOGbakZjMIyq6MBJZOGp5y60RrjLrqvTw/vTcAUhsD6RkVhh8th29frWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P17/C1s6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="nE539p1K"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7e6d37b7098so5132378a34.0
-        for <io-uring@vger.kernel.org>; Tue, 16 Jun 2026 13:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781642166; x=1782246966; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a2o1XTR7VeYkIhqu4UtENSoBuqpZfEyKyn3oza9yC94=;
-        b=nE539p1KlGa15vI841yfbah1dtZVYsMGZS7l7VyiOhXxdDuGdyeaLXrJ+lsI9GgIzC
-         hlN8xT7CDmPbxdA/hSHjsO1/rKq6mcNqDyrfSN9ZmYIcHrjBw7GbBVTJNWXb24JN3JkM
-         fZbeLNHsNTvmWZRBOy8G4RtvskHoFDlO8onGcHWflTJbtbjj2ZlNt2hoMK60xMvTTGUf
-         vG0549szZZKtEC8GVJS55dj8HqICEznt81kyxO9ao8QjVV7tpQedAU9/c7ysvjbgSB2x
-         uPO6GJUsZiko8ofHKNlqI1JpUbGk7NL6TiT+JXoLst/0/bjdlF+WsmCWiVR4ZpDyMC5V
-         s75Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781642166; x=1782246966;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a2o1XTR7VeYkIhqu4UtENSoBuqpZfEyKyn3oza9yC94=;
-        b=UGvCmJ0rySy1Bz/wwfAhnnG33DLAH/dEJaH/YpvYrGYIOzhnZ4novP928zWWJWlW98
-         F4+MmACwghJFWg4XmNSwK5lUHjYUIjqJuF2qBXMny8PlExvWPORg9wXlLfw6VsZ/yANJ
-         hEYxCcrxdZM2skfScXlXuYK+g2bMGA7Hh+VmdcwPqV+Ayq01poFj20oJrotG9ZP3LDsF
-         tRtHI0YREHxu3me+u8DJkKixFFqulw0C+kdwFYJkzUrUOJA16jgfpZWBjuFK6tnmhsQ0
-         mvx2nZ6hpWtYOWu/Uu5LhEKKyfhdIbo5KATq2zhbbrBwrW0quZpkDxlQHXPERnpa5uPv
-         gnIg==
-X-Forwarded-Encrypted: i=1; AFNElJ/oAJWeIjip8PRVtxFFe7Ia99qHcIjN7eXXTipxv4Rnga31NwGjwpiXdFXWUbz0wSbLLuowo2m9uw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUKx5eRr1rc3q3KAYbPrBAi1hJvAx1Xvrt9aVhI6MVO57xzwVr
-	TjzM5/eGDbpPiw4BgkV6lH+2e4ydkTaT91Rxk6ugevGI0ioSzgf7GezPkyJPsuhfaDA=
-X-Gm-Gg: Acq92OHFh5a2NkccQXXIbsqT7wW6q3DB2gqBXD7w56fkhdFmKkv8Ff+o3BsmGCZoUIA
-	Gop5XEg/COXViL32vqi0rfZg5/IFGezU68dUpp3HRw04RhoI2de1ZMD4CYJ+ueokkp6UMc9X2rx
-	Gmd1dt46G46ItAvj/NxqQ1XzD7dLCthfiyGKSxHhzcnSuLm/n99OG7rP73nY1bQYK2dATqDSNII
-	N1cDs4omVhqZPkTA+XucETdgIIm7ouf8ZittBEmhAO5wwtmChckfSCbuL/kp9udZ362WYFayiZT
-	5NVqA6JhRSuet0pRpQfzYy0V5uz8zSWbHuz+cwO4SI1kcxxD09ri2MJDQH0XZaGtpj4V0ryRn40
-	vbJBpXwtibr3qXX6RpSgmm72qB3l3ftapSa0xD2HAvrzkk2itawUlwrw2zUb2teafYRy1eMztUf
-	1zwhBY7OgPIhXOcf7KPrC19c6EuHGeoRpgcFl8WvOtyRM54lFKhDvfHJzX/KKd3Vxn7hOuseHOH
-	Elsg+Fyyg==
-X-Received: by 2002:a05:6830:3747:b0:7e6:fd45:9cbc with SMTP id 46e09a7af769-7e90b3b982dmr1104256a34.14.1781642166451;
-        Tue, 16 Jun 2026 13:36:06 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e79f6de65bsm7523821a34.19.2026.06.16.13.36.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 16 Jun 2026 13:36:05 -0700 (PDT)
-Message-ID: <fcfa9bc9-4f7d-478c-90a2-ec4efd4c7d43@kernel.dk>
-Date: Tue, 16 Jun 2026 14:36:04 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P17/C1s6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3828E1F000E9;
+	Tue, 16 Jun 2026 21:39:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781645947;
+	bh=dyL5yE80AtwhQSv+x6dkFVR/FidjONX2v1zz33fk1eQ=;
+	h=From:Date:Subject:To:Cc;
+	b=P17/C1s6PofQoj1S7mbspqZ0uvcEUyyQ/+2JBXiWoYlWfAEX5ymkYnuJ9o8/wHlQZ
+	 ZugPzn/GOfAS0UPWtzhas/ggNjntHVXFfhvuo8gPJ/A9b68LIo/RQ7dEIBXhnp7I45
+	 EQrRH67OqZVwn9jOFyVxI+1QXo9WijrqVIYUFwHPsVoFCVshsDNjTvoODQFavzuJw5
+	 G0bkxdAomNvocU1UHXCpGgUkcy/hmgdbiUUTYpS82iBghyl71VxZ6KHex+ykHtj/ds
+	 tpsDPsjG48n0kHox67Fz+CnSaIJZ9Ee/yT8Gg9A33ZG9nikPIOdt72KpzxqJS42h8S
+	 PkKJ3Z3dnz5Tw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 16 Jun 2026 14:39:02 -0700
+Subject: [PATCH] io_uring: Use system_dfl_wq instead of system_unbound_wq
+ to fix warning
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Landlock: LANDLOCK_ACCESS_FS_IOCTL_DEV bypass via io_uring
- IORING_OP_URING_CMD
-To: Bryam Vargas <hexlabsecurity@proton.me>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8?=
- =?UTF-8?Q?n?= <mic@digikod.net>
-Cc: =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
- Paul Moore <paul@paul-moore.com>, Keith Busch <kbusch@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- linux-security-module@vger.kernel.org, io-uring@vger.kernel.org,
- linux-block@vger.kernel.org, linux-nvme@lists.infradead.org,
- linux-kernel@vger.kernel.org
-References: <20260616201633.275067-1-hexlabsecurity@proton.me>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260616201633.275067-1-hexlabsecurity@proton.me>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260616-io_uring-fix-wq-warning-v1-1-cfc9d934eedb@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM3QpAQBCG4VvRHJtaapfciiQ/g3GwmPVXcu8Wh
+ 09933uBI2FykAUXCO3seLIeURhAM1S2J+TWG2IVG2UigzyVm7DtseMTjwWPSuzLRFNLKlGp0Rr
+ 8exbyi6+cF7/dVo/UrG8O7vsBqOQTu3sAAAA=
+X-Change-ID: 20260616-io_uring-fix-wq-warning-75ede0708655
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1289; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=HLoOrMjbK+z+X5ujtwxaVwvYR+POmIRsD3DRyUbVfUM=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFmGhypniF0sPlvxK+zK6+K8LOFFhz9nBs1Ic1DK5blQ+
+ 3Xp92SmjlIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRll6G/2HbunP1xS9USFnW
+ nKm7oDU10V1zSWT2j6CStlU7Xn7dqcTwh+fhnUXbVPli5j03rUv7d3d1sditZonve2s3vFwUnHN
+ 8FRMA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 6/16/26 2:16 PM, Bryam Vargas wrote:
-> Hello Micka?l, and Landlock / io_uring folks,
-> 
-> A task confined by a Landlock ruleset that grants READ_FILE/WRITE_FILE
-> on a block or NVMe character device but withholds
-> LANDLOCK_ACCESS_FS_IOCTL_DEV can still reach the device-command
-> surface through io_uring IORING_OP_URING_CMD with the IOCTL_DEV check
-> bypassed: the request enters the device-command handler (block
-> discard, or the NVMe char-device passthrough) where the equivalent
-> ioctl(2) is denied. The destructive completion and the NVMe-admin
-> surface follow from the code -- see Impact.
+Commit de7341ffe49e ("io_uring: switch normal task_work to a mpscq")
+added a use of system_unbound_wq, which is deprecated in favor of
+system_dfl_wq added by commit 128ea9f6ccfb ("workqueue: Add
+system_percpu_wq and system_dfl_wq"). An upcoming warning in the
+workqueue tree flags this with:
 
-I've said this before, but apparently it hasn't been received - this
-isn't an io_uring issue. If landlock is missing a hook, then that's on
-landlock and they should add it. Other security handlers already have
-that. Hence no need to broadcast this to a bunch of lists, it's strictly
-a landlock issue.
+  workqueue: work func io_tctx_fallback_work enqueued on deprecated workqueue. Use system_{percpu|dfl}_wq instead.
 
--- 
-Jens Axboe
+Switch to system_dfl_wq to clear up the warning.
+
+Fixes: de7341ffe49e ("io_uring: switch normal task_work to a mpscq")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ io_uring/tw.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/io_uring/tw.c b/io_uring/tw.c
+index e74372233f40..48a9d09ef582 100644
+--- a/io_uring/tw.c
++++ b/io_uring/tw.c
+@@ -55,7 +55,7 @@ static void io_fallback_tw(struct io_uring_task *tctx)
+ 	 * the queued work) stay around until the drain has run.
+ 	 */
+ 	get_task_struct(tctx->task);
+-	if (!queue_work(system_unbound_wq, &tctx->fallback_work))
++	if (!queue_work(system_dfl_wq, &tctx->fallback_work))
+ 		put_task_struct(tctx->task);
+ }
+ 
+
+---
+base-commit: d9b710f683dc68b5c0b7dd0c6c64aeb5d27a1ac4
+change-id: 20260616-io_uring-fix-wq-warning-75ede0708655
+
+Best regards,
+--  
+Cheers,
+Nathan
+
