@@ -1,105 +1,138 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDBD52E7F38
-	for <io-uring@vger.kernel.org>; Wed, 17 Jun 2026 15:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A6F4A3414
+	for <io-uring@vger.kernel.org>; Wed, 17 Jun 2026 15:42:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781708852; cv=none; b=brXNRhCg5pdrkAwIJvU5K43SxygjZRtInc9L60hD1bpbMTqvmnmBGsAYD7E5wTSpqjZlX6LGJd940S0aJ+PbTDGfUxcq/+r3/0tFxO7wTDPD0nxawd39hEDTL8gCEPvZwBiFPRrXORBf1PaIzgJZKatuDRRqX7gJDBu98JUygXI=
+	t=1781710935; cv=none; b=jTh0n8yIuyWPXXD20YVWUkwuJrtlu3Q/n1RZOSn+768QSBPkmhzqKgmUIR5mQ38iIjIIUnZu8pvCRwsP5Y+GqXtY1q7p59AR5ptHL5cqm4CfvnKnq6o/qphdHQotwc1aOLelMRppRhleAJ01/blyUXRGMTvLQzWRfKzXrkl7/Nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781708852; c=relaxed/simple;
-	bh=Hup6bQtV+sI6+eYnihssAlmn/NHHpxKAT0ZKeU40Brs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tgz+DMQ7eUD77sFTt8rK88EpVZq0OhH3OCS7QnQL+C+KP+9QLXGnyIqEL2agitiVgqW7bnFT2+4qZwsoRQqCfqLQbhGM6gmG6HkfNKZFWLhJ3r1vgM8XDNIFCDSspYk7GHtA+wEdF41Dj+al9XejmS92qKwFz3hJRsEM5qcdq4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=AjjFp2Ah; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1781710935; c=relaxed/simple;
+	bh=lZcNAoP08lGkD9cDTqavCunAxgdyt7NKehVIprEev0Q=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=P5D3gUPWCSVXYgVqp+HG8vDUdE6QHy2gaHFa5VyLJKYRC/U0rcGS+eRJgedRznBQe5DyG7SKjUn1d5lm4MAVV/HMyThGRT1oQEKOiSMc1EoNGgHFrv9VQbgfsxDCRQ1xQ7z+Wa5dqOgoMBikHp1mJ85rRqQUiT8XsKRNkxYIsZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=fs+TVfGL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dQZHZbVf; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=fW5moRPV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=lvwf5XOj; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="AjjFp2Ah"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7e6b5c374e5so1067747a34.0
-        for <io-uring@vger.kernel.org>; Wed, 17 Jun 2026 08:07:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1781708850; x=1782313650; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VTqgRSDM50GdObxPKaJS7hQCX2UQLatSq3fVImZdhC8=;
-        b=AjjFp2AhPDfsnKp3HRzjoa0dFZt/nSjQN/Az2qDw1I2fv6NUsR9pWk0cQNdMSNoR2C
-         KkubH6gX0Tk7KBORsJ/Y9Z9leyLgUD3pgMZFmkgu/BHrhQxT5xsyJS+UyDMDJtRWNdJJ
-         G8oSqNcEER7i98My2zV7Sr4E4p2uwSBTg4rzZBGl8+oyDgY/QW0mybsbtUXmtSeS+8KY
-         JMhscxM4bAWSKgbEuKwUolsxXLic4Q1j29jNbWaiRdrrb+nfutlCQ9eF9RBTGHKw/7Hp
-         yAi4gg0vxeoZPF8EEQQqqD2QOnUyMvGAaK74DuD7e39MVvJXanDfKQPLxw7+fQlzKalS
-         nvJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781708850; x=1782313650;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VTqgRSDM50GdObxPKaJS7hQCX2UQLatSq3fVImZdhC8=;
-        b=A2tRr+ROA5F2/MXRm7op8NJgf0ASEtKUaP8cUkCpn9stLsZfgENfZKObj1rf3ZYuaf
-         sAqablj725Rztly+tRXWz1oPEm84y+kMr8Rc6c9B+54QW7mjpfbbyTHW/aQRf5XxGcfn
-         E77a68Ko/7nZgReprwbuNl9LLurt87N3hL5OdgxPMShcMQPUq/bVdem7mMYCYiisbBGz
-         yFJGHIzHSJqQtOia6ojUwqnM5A7FkHjX3MK7qPJcPt0mAnb6lzSVvv2/hG+M7Bgd70Md
-         +ropifIr3uI4AmjwOEA3Vg69Ije9wBUm9Ncn7xubYb6DeJ++hzNOSvqMGCN02y89bi+c
-         vXAA==
-X-Forwarded-Encrypted: i=1; AFNElJ/PqOfj1Gtyc/f6eevzYS8LJ6EcF9fQcqs91nrfMkgNolk42F1SJ8YzJLgE/Ljxzm8pYxVPUkS+zA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0mnxKcByrqnCOLfR72Y79nY0t8rVhNTlB1T/v5MSbXo14Meuz
-	G+XEA45+dq56ypmmyNFXPKC3OVXu7CVpzT6rsKAMl2DUm7yqMp82vlc2C/AmMv0I4wlt6rlByCS
-	uMFjXz8E=
-X-Gm-Gg: Acq92OGgxaPAS0wlruv11J+l6SToGzO8x4uLK7dVqQIlf22PzWfIF30JqEK4NFxEzJ4
-	aXTANv4tc17LCHJkdaF4l4Mx65grdmuExqa4X1qQBhNZLhFOksFzl/fzZmnZ3kzTxutlg9y5fqg
-	scYQKGfMG6w5Jkf2l/qrPHxVsBGXfDOdGV6n5y97cKzSji7tx9Laedlehlxrc8MZun1QFtYLsAM
-	mX06MvFanKr1qeT5YB8WmyGiPvUiAiuqnF2pYlBfh62RW6SccbmZaz0+ALR5tD35NiHxhCvj8Zf
-	t7jxHH6fzCFjgcK85K8W+t8GTfGyxGEvD2qMxOkKmPYq5XaKDP9ymqs6WCE44HouLGWHgKN4+j8
-	v+S2d9YkPTPp4KnvwLWVNeQ9uc49XQwoXVuZg1qjKUHwDrKBSOmiH5KUkT7fXjKlIqyWlDxBdt/
-	e1SDpkXRV+hEgNsEVxbOdJH7MsoMmFVqSAKHctVEzcSm6KFfruIQ==
-X-Received: by 2002:a05:6830:380e:b0:7e6:50c4:e954 with SMTP id 46e09a7af769-7e90e107315mr2450645a34.11.1781708849876;
-        Wed, 17 Jun 2026 08:07:29 -0700 (PDT)
-Received: from [172.19.0.220] ([99.196.128.98])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e79f5a11efsm9482951a34.1.2026.06.17.08.07.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jun 2026 08:07:29 -0700 (PDT)
-Message-ID: <870ac7c0-a521-45b0-ab0b-fed5f97a319f@kernel.dk>
-Date: Wed, 17 Jun 2026 09:07:19 -0600
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="fs+TVfGL";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dQZHZbVf";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="fW5moRPV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="lvwf5XOj"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 5103E75CFB;
+	Wed, 17 Jun 2026 15:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1781710921; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9sN9Ok6hqDHaIQIEI6sGwocwIe7vR3RqH3aUMo5cNfM=;
+	b=fs+TVfGLtySDUp/pwogDOJVl4/A73br+D/+bur8MQViXYDIvDsYY/vVoq2jTXA3TIJWEBE
+	KuHaeJZSC5sz4fvlfsH9fYoWin9AuQwkl6//rZ0gULrwOLRpIbOhS/GVNR4aZtDdL3fvTv
+	X6VXaIjFMXn3w/ojbt/2rI6Xrj68FAQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1781710921;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9sN9Ok6hqDHaIQIEI6sGwocwIe7vR3RqH3aUMo5cNfM=;
+	b=dQZHZbVfSOWhQiRg5HyapsqguL1sQWKnZofW7YK2JOPNZzQ/m5BVTyBHhLjDSfXoO9yfmA
+	ZXkMXenj64kwH4CQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1781710917; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9sN9Ok6hqDHaIQIEI6sGwocwIe7vR3RqH3aUMo5cNfM=;
+	b=fW5moRPV/BLMgbfNRCyQeoOTrdbvApWoCpTplGsDZoFDSURUVMEqPFIDZuQTKtqlCLenW4
+	/r+p4XElBh54X1MLj3iLUr5pcGBUmbXZ69eosqVcjRiy7fo7W0BhGxu2gt0+OMAMtsO9bv
+	IhuFQv17oDEbr9ViP29Lf8N2J5XuAgw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1781710917;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9sN9Ok6hqDHaIQIEI6sGwocwIe7vR3RqH3aUMo5cNfM=;
+	b=lvwf5XOjM6fgyvps4P5yttxHJPkIpFyJbLVIuO3hJ5rumMkiEen45Y74i4+4ZPMnsmqV4Q
+	h6zLVsQGqsCVDsAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 012A9779A8;
+	Wed, 17 Jun 2026 15:41:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id WAa8L0TAMmoeagAAD6G6ig
+	(envelope-from <krisman@suse.de>); Wed, 17 Jun 2026 15:41:56 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Jens Axboe <axboe@kernel.dk>, Yang Xiuwei <yangxiuwei@kylinos.cn>
+Cc: io-uring@vger.kernel.org
+Subject: Re: [PATCH] io_uring/net: fix netmsg_cache iovec leak on BIND and
+ CONNECT
+In-Reply-To: <870ac7c0-a521-45b0-ab0b-fed5f97a319f@kernel.dk>
+References: <20260617025348.1301777-1-yangxiuwei@kylinos.cn>
+ <20260617033035.1373691-1-yangxiuwei@kylinos.cn>
+ <870ac7c0-a521-45b0-ab0b-fed5f97a319f@kernel.dk>
+Date: Wed, 17 Jun 2026 11:41:55 -0400
+Message-ID: <877bnxfa2k.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/net: fix netmsg_cache iovec leak on BIND and
- CONNECT
-To: Yang Xiuwei <yangxiuwei@kylinos.cn>
-Cc: krisman@suse.de, io-uring@vger.kernel.org
-References: <20260617025348.1301777-1-yangxiuwei@kylinos.cn>
- <20260617033035.1373691-1-yangxiuwei@kylinos.cn>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260617033035.1373691-1-yangxiuwei@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[kernel.dk:email,mailhost.krisman.be:mid,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Level: 
+X-Spam-Score: -4.30
 
-On 6/16/26 9:30 PM, Yang Xiuwei wrote:
-> Hi Jens,
-> 
-> Please drop this patch.
+Jens Axboe <axboe@kernel.dk> writes:
 
-Haven't picked it up, nothing to drop.
+> On 6/16/26 9:30 PM, Yang Xiuwei wrote:
+>> Hi Jens,
+>> 
+>> Please drop this patch.
+>
+> Haven't picked it up, nothing to drop.
+>
+>> After rebasing on the latest io_uring tree, I noticed that this issue
+>> has already been fixed upstream by:
+>> 
+>>   3979840cd858 ("io_uring/net: Avoid msghdr on op_connect/op_bind async data")
+>> 
+>> BIND and CONNECT no longer allocate async data from netmsg_cache via
+>> io_msg_alloc_async(). They now use struct sockaddr_storage directly, so
+>> the iovec leak path described in my patch no longer exists. My fix is
+>> also incorrect on the current code base.
+>
+> But then we should probably mark 3979840cd858 for stable, then? Gabriel,
+> can you take a look? Currently traveling...
 
-> After rebasing on the latest io_uring tree, I noticed that this issue
-> has already been fixed upstream by:
-> 
->   3979840cd858 ("io_uring/net: Avoid msghdr on op_connect/op_bind async data")
-> 
-> BIND and CONNECT no longer allocate async data from netmsg_cache via
-> io_msg_alloc_async(). They now use struct sockaddr_storage directly, so
-> the iovec leak path described in my patch no longer exists. My fix is
-> also incorrect on the current code base.
-
-But then we should probably mark 3979840cd858 for stable, then? Gabriel,
-can you take a look? Currently traveling...
+ack. will do.
 
 -- 
-Jens Axboe
+Gabriel Krisman Bertazi
