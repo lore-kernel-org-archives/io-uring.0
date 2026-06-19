@@ -1,133 +1,138 @@
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97B403BB682;
-	Fri, 19 Jun 2026 16:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A053314C5
+	for <io-uring@vger.kernel.org>; Fri, 19 Jun 2026 17:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781885262; cv=none; b=RPpZXFEG/sunr1v+mYhx5CjAE7wC39LZDaAjcARLbrqkl5gGG2Wvq8utdekver/ZwfWVftGvDjsiInSXteIGyyRp/XXwu8FELHMuo8Oo9i9J7LCOY63K4VSxySG3WT1oaXEAReF1jfYJkODR4Xowi7nn9TAPMVLupD9RRliZhuY=
+	t=1781888762; cv=none; b=jegUDmUYunUkCK31e5KpiklqEeoERIelH8GkTHG/iDFysNQM2IHIibW0GrnkzBL6WDjt6hP5HkFAKLE1NKqow+VI/IPnfVBI+YUfNwE9QQF/8gA7AkhAagRSemqC7L3QbwZf5NJtQVdLJqSVGXhjtQkBXHbP1ozsl38qdh5s/ck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781885262; c=relaxed/simple;
-	bh=fE67BqjDyTheSgqd4EZb5JKPlSAJ3XTJgI08s/KrHZQ=;
+	s=arc-20240116; t=1781888762; c=relaxed/simple;
+	bh=lsQZQW4+8JfVZE36IEIO6JU+y9pLFg1Od7D0L1ULxHg=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=c4Z6EFFpnyJJ6J/QDz9coebSmg0duKO5ijkIcP5gfEwgIo+7ZYAq5xF7z+FZLkaLtGC9QWQYzL3B9t7W0qaLvac020kloSK4b7Hmo4iPd1fcBGsGi/4lDb0u25/Pis7HmuLIpEGPt6ewRg4ZzYyQcDWBrmq/pMEIbCuIXOlIaEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=krisman.be; spf=pass smtp.mailfrom=krisman.be; dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b=iFvfCnfV; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=krisman.be
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=krisman.be
+	 MIME-Version:Content-Type; b=rpJfwDXqDTpHnNkLj6aUiE/efbNxk0Yxj2OHb8unKgAdwjHkajvOWPRBTSLUmbxUStJBEZi0cdHa+pGSDZ8UcCjreq4S4pGvJQxNbbnk80pxFobUx8bltMmYQAYx1xTGvRrU3/uPoQ1PJuCUdb1XEBTnyY40hWDNaGYL50d0Uqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=h6mFDwP2; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=cTji1GMq; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=h6mFDwP2; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=cTji1GMq; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b="iFvfCnfV"
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="h6mFDwP2";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="cTji1GMq";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="h6mFDwP2";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="cTji1GMq"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4ghjD66TF5z9tll;
-	Fri, 19 Jun 2026 18:07:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=krisman.be; s=MBO0001;
-	t=1781885255;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	by smtp-out1.suse.de (Postfix) with ESMTPS id B24D86DCA1;
+	Fri, 19 Jun 2026 17:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1781888758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=9yD4xHJw2ixlS54/w1wwmeUxIlbpa8OqFoDWj8fXiZY=;
-	b=iFvfCnfVzZyPln9esVpNbq5l7C+0oARS3Lvf8iWOzCduA+XDjoAKv6ubs39TTbv1XNUnJC
-	vHwsFy4eAjJ7eGfDeRKeiO6JaMG4xrOh2G2of6GTUYk8fUJkRlZVQX1Rswgrl4Q/2ykqGy
-	PSZTCPoJoNmjUJ/LNV396/zodn3QLAt1mPm2YKUuFBnDam9UMeQdrGRKC1D6vd8is+VShg
-	YhlSZOeLAR6hoVtWoJlzih55kcGxg5Gbxim6z+gZnvSKesO+vpZ8CyPNSvGgJ11M70ZBTk
-	4SREkuweUa1dE2Rc12DhDsBjwDQCnpsJukUt/BNQZrmQs1hKbppzDXTxpWxQQw==
-From: Gabriel Krisman Bertazi <gabriel@krisman.be>
-To: Cyber_black <Cyberblackk@proton.me>, "io-uring@vger.kernel.org"
+	bh=UhndOz+MFir7koa8jr8Zp9EFxnkyot+Q3cfaFJU/aDA=;
+	b=h6mFDwP28dhtoZr6TuSBeH32cHSNeL+AUCibIvCMVTshMlpo59Qkri+E9gThnHse4ZXa5l
+	PSeM9vyQe5IVOLYqJBK69lGfKo8Eft5SPff6xwPaZbveKnY8jCfycO4yVGoWTh1ycV1zHS
+	3MWBb9ITNUG9cCwVqxTvUJ0ODo9Bm/I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1781888758;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UhndOz+MFir7koa8jr8Zp9EFxnkyot+Q3cfaFJU/aDA=;
+	b=cTji1GMqP31QUUyoquDqFUrbrx1kICsY+T+ft4Xq3lqcMhJWIz5owXfLoAgATjqhvYhxEA
+	Mm6ZTUrD8Ty89cCw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1781888758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UhndOz+MFir7koa8jr8Zp9EFxnkyot+Q3cfaFJU/aDA=;
+	b=h6mFDwP28dhtoZr6TuSBeH32cHSNeL+AUCibIvCMVTshMlpo59Qkri+E9gThnHse4ZXa5l
+	PSeM9vyQe5IVOLYqJBK69lGfKo8Eft5SPff6xwPaZbveKnY8jCfycO4yVGoWTh1ycV1zHS
+	3MWBb9ITNUG9cCwVqxTvUJ0ODo9Bm/I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1781888758;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UhndOz+MFir7koa8jr8Zp9EFxnkyot+Q3cfaFJU/aDA=;
+	b=cTji1GMqP31QUUyoquDqFUrbrx1kICsY+T+ft4Xq3lqcMhJWIz5owXfLoAgATjqhvYhxEA
+	Mm6ZTUrD8Ty89cCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6F480779A8;
+	Fri, 19 Jun 2026 17:05:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id HfDkFPZ2NWo1NwAAD6G6ig
+	(envelope-from <krisman@suse.de>); Fri, 19 Jun 2026 17:05:58 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc: Jens Axboe <axboe@kernel.dk>, io-uring Mailing List
  <io-uring@vger.kernel.org>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "axboe@kernel.dk" <axboe@kernel.dk>, "stable@vger.kernel.org"
- <stable@vger.kernel.org>, "gregkh@linuxfoundation.org"
- <gregkh@linuxfoundation.org>
-Subject: Re: [BUG] io_uring: possible CQE32 overflow flush inconsistency in
- __io_cqring_overflow_flush()
-In-Reply-To: <6oAi5ghNgkCrElyHzHJrE8l3g7Dg7Uc9PpeZmbGD93Xic5x5MI54B1pehHhjiGrb5VB0icQvFaemtH-Pvb8bJkivv6qxD_NZUEvwyFkk62k=@proton.me>
-References: <6oAi5ghNgkCrElyHzHJrE8l3g7Dg7Uc9PpeZmbGD93Xic5x5MI54B1pehHhjiGrb5VB0icQvFaemtH-Pvb8bJkivv6qxD_NZUEvwyFkk62k=@proton.me>
-Date: Fri, 19 Jun 2026 12:07:30 -0400
-Message-ID: <87ik7eqzst.fsf@mailhost.krisman.be>
+Subject: Re: [RFC PATCH liburing] man: Convert manpages to markdown
+In-Reply-To: <4217902f-5b99-4592-aeea-9ac3804da325@gnuweeb.org>
+References: <20260618230524.4088053-1-krisman@suse.de>
+ <4217902f-5b99-4592-aeea-9ac3804da325@gnuweeb.org>
+Date: Fri, 19 Jun 2026 13:05:52 -0400
+Message-ID: <87eci2pij3.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_DN_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_THREE(0.00)[3]
+X-Spam-Level: 
 
-Cyber_black <Cyberblackk@proton.me> writes:
+Ammar Faizi <ammarfaizi2@gnuweeb.org> writes:
 
-> On Fri, Jun 19, 2026 at 04:49:32AM +0000, Greg KH wrote:> Please turn thi=
-s into a real patch that you have gregkh@linuxfoundation.org to verify it
->> resolves the issue so you get full credit for the fix.
+> On 6/19/26 6:05 AM, Gabriel Krisman Bertazi wrote:
+>> This has been discussed for a while due to the ongoing pain of writing
+>> groff.  Now that we just had a release, convert the manpages to markdown
+>> and add infrastructure to generate back the groff automatically during
+>> compilation.
 >
-> Hi Greg,
+> Wow, big changes:
 >
-> Apologies for the previous mail's format. The patch compiles cleanly
-> on arm64. My current environment does not support io_uring (ENOSYS)
-> so I was unable to run the liburing suite, but the fix itself is
-> straightforward.
-
-What's the context, was this sent against stable?  The issue exists
-in mainline.
-
-> From 522b70bdd3ac64c64dd21842cb5901e59a1fb058 Mon Sep 17 00:00:00 2001
-> From: Eneshan Erdogan Karaca <cyberblackk@proton.me>
-> Date: Fri, 19 Jun 2026 07:59:58 +0000
-> Subject: [PATCH] io_uring: fix cqe_size/is_cqe32 inconsistency in overflow
-> =C2=A0flush
-
-Ideally, send it as a patch to the list with [PATCH] so it doesn't vanish u=
-nder a [BUG]
-tag.
+>    399 files changed, 11719 insertions(+), 18975 deletions(-)
 >
-> When IORING_SETUP_CQE32 is set, Block A doubles cqe_size to handle
-> 32-byte CQEs. Block B then resets is_cqe32 to false so that
-> io_get_cqe_overflow() uses its own ctx flag check internally, but
-> fails to reset cqe_size. This leaves cqe_size=3D32 while a 16-byte
-> slot is allocated, causing memcpy() to write beyond the allocated
-> CQE slot.
+> Yeah, I agree that writing in GNU roff is more painful than writing in
+> markdown. Interesting patch.
 
-How was this found?  Do you have a syzbot or a trigger?  The fix looks
-good but the patch appears corrupted, with a bunch of NBSP.
+Yeah, this is gonna be shitty to review.  The conversion was done
+mostly automatically though, you can review Makefile for that.
+
+I'll split it up into manageable chunks.
 
 >
-> Fix this by also resetting cqe_size when is_cqe32 is cleared.
->
-> Signed-off-by: Eneshan Erdogan Karaca <cyberblackk@proton.me>
-> ---
-> =C2=A0io_uring/io_uring.c | 4 +++-
-> =C2=A01 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-> index 1ea2fca34a36..f9690291633a 100644
-> --- a/io_uring/io_uring.c
-> +++ b/io_uring/io_uring.c
-> @@ -543,8 +543,10 @@ static void __io_cqring_overflow_flush(struct io_rin=
-g_ctx *ctx, bool dying)
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 is_cqe32 =3D true;
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 cqe_size <<=3D 1;
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 }
-> - =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (ctx->flags & IORIN=
-G_SETUP_CQE32)
-> + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (ctx->flags & IORIN=
-G_SETUP_CQE32) {
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 is_cqe32 =3D false;
-> + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 cqe_size =3D sizeof(struct io_uring_cqe);
-> + =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 }
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if (!dying) {
-> =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 if (!io_get_cqe_overflow(ctx, &cqe, true, is_cqe32))
-> --
-> 2.34.1
->
-> Thanks,
-> Eneshan Erdogan Karaca
+> Can we also word-wrap the markdown files? It's easier to read them in
+> raw if they're word-wrapped as well.
 
---=20
+Let me see if I can get the right pandoc incantation.
+
+-- 
 Gabriel Krisman Bertazi
