@@ -1,87 +1,40 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66E1352014
-	for <io-uring@vger.kernel.org>; Mon, 22 Jun 2026 04:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B2B346ACD
+	for <io-uring@vger.kernel.org>; Mon, 22 Jun 2026 04:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782101229; cv=none; b=HRebDmGvOkAuyO+qIJOFCtEo1bn067PiThgmskbqVwZyY8fCKLA+o1jZZdCJTda6FuQqzyfyaqhC/MGrh4pqaIF7WkuKbs+Xm78xbSjAuqT28hZyyXlWkKzpTHUDY88K32mQBcdLCwhfB6ohi0qnBZYP1kjo3i1RB3BYZ/+SN8w=
+	t=1782103316; cv=none; b=K1VR3/ccj8Na9HRCulcYZYLYwffViHm0d9EZi6KCj+ffJUGZppQOJqqWsCRkQKOw23K6JdvVkpE/5Sf0Db0OMM8frqHVoIPJiUtjaOc/IebqYZamdP9FIvlet8wITBGmLSwQEmcwgQsa7Aqdzuk6cMAZ7/6wVyD5KSPfD33I2nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782101229; c=relaxed/simple;
-	bh=m2LLV+BA5spGIUzLab9tWQ1i0a9h7daxqjgqeVb30rU=;
+	s=arc-20240116; t=1782103316; c=relaxed/simple;
+	bh=wjf8fqze3+/0K/F+EzyayABkO69qoX1Qp2gt4bAu1XI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e8FswySvW4fe2WigvJDq2yhOKA+D/xf4CLlcvWwkHwq27QzV0MxpLyiobP0eLRRzl3JKS/st5Fj10yF8G+itSastOV8AjTUVePaoWtauHeYpCXBhHI1tX9rXve9dzVsDk2O3VAXJFFIPa5iRbnoaTDyskOwbrbzRV7txlkjh1no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RKNYTOPI; arc=none smtp.client-ip=91.218.175.180
+	 MIME-Version; b=jEolorkkD/W4Cv2tmtYjnCR5EJUkUHVm7hvX1FRqn3z5gvOKxnsU3tpXdhXIetEit5yEZkGJmPmIyoG+IjashgErm0x8q1ePzTl1fq6xf/3w/Bu5+NDe3cu5AnCGQFHsI3cGa99KtS3T0vVxmOE/pYmEnKN1exX/QopfDbN7bh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=om1iuvj2; arc=none smtp.client-ip=91.218.175.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RKNYTOPI"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="om1iuvj2"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782101224;
+	t=1782103313;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vFaoYZTJfRDH9hDuVHVBgZkR1flChQcp5jR5STw0K2M=;
-	b=RKNYTOPII31SLlFemAcWqWE/TeS/HQJl7crveXc7GdzZz5I+TjbXRbbkZaQSvN3TmVtVYT
-	nSSDvsZk7jNyt6B/E4YmD4cYyLjd5RE2oOf/Hiy1FZ2NcIRHyitOaBZNUaYo6dvHseOLCi
-	TzRgynUCXY7wguiC8GKfv0LXaYiHBGc=
+	bh=c79vspB2QRNnw0LWMRq4lM7IqPNNV4DH4/iJQU9Iass=;
+	b=om1iuvj2oy7tABnAvLEyDw+EI87L/++7ytv0a6lMtWOlzeQUqDWUwGIQo0sWOa8TrniHEg
+	vMuizXXn19yj2Fc1EX9f+2yfGkBcLKePOKOQuiJFH3i9JozQjfkN1ri/BCFicNKwkadLxR
+	m2CmeqpgqwEpLE24Xdocv7W2Y5bsf0Q=
 From: Kaitao Cheng <kaitao.cheng@linux.dev>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: David Howells <dhowells@redhat.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Philipp Stanner <phasta@kernel.org>,
-	linux-block@vger.kernel.org,
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-ntfs-dev@lists.sourceforge.net,
-	linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	audit@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linux-perf-users@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	kexec@lists.infradead.org,
-	live-patching@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rcu@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-mm@kvack.org,
-	virtualization@lists.linux.dev,
-	damon@lists.linux.dev,
-	llvm@lists.linux.dev,
 	Kaitao Cheng <chengkaitao@kylinos.cn>
-Subject: [PATCH v3 2/7] llist: Add mutable iterator variants
-Date: Mon, 22 Jun 2026 12:05:32 +0800
-Message-ID: <20260622040533.29824-3-kaitao.cheng@linux.dev>
+Subject: [PATCH v3 7/7] io_uring: Use mutable list iterators
+Date: Mon, 22 Jun 2026 12:41:02 +0800
+Message-ID: <20260622044102.32677-1-kaitao.cheng@linux.dev>
 In-Reply-To: <20260622040533.29824-1-kaitao.cheng@linux.dev>
 References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
 Precedence: bulk
@@ -95,150 +48,161 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-llist_for_each_safe() and llist_for_each_entry_safe() require callers to
-provide a temporary cursor even when the cursor is only needed by the
-iterator itself.  This makes call sites noisier than necessary for the
-common case where the loop body may remove the current entry but does
-not otherwise inspect the saved next pointer.
+The safe list iterators require callers to provide a temporary cursor
+even when the cursor is only used by the iterator itself.  The mutable
+iterator variants keep the same removal-safe traversal semantics while
+allowing those internal cursors to be hidden from the call sites.
 
-Add llist_for_each_mutable() and llist_for_each_entry_mutable() variants
-that support both forms.  Callers may omit the temporary cursor and let
-the helper create an internal unique cursor, or keep passing an explicit
-cursor when the loop needs to inspect or reset it.
+Convert io_uring users of list and hlist safe iterators to the new
+mutable helpers.  Drop the now-unused temporary cursor variables where
+the loop body does not inspect or reset them.
 
-Keep the existing safe helpers as compatibility wrappers so current users
-continue to build unchanged while new code can use the shorter mutable
-form.
+This is a mechanical cleanup with no intended change in traversal order
+or list mutation behavior.
 
 Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
 ---
- include/linux/llist.h | 81 ++++++++++++++++++++++++++++++++++---------
- 1 file changed, 65 insertions(+), 16 deletions(-)
+ io_uring/cancel.c    | 6 ++----
+ io_uring/poll.c      | 3 +--
+ io_uring/rw.c        | 4 ++--
+ io_uring/timeout.c   | 8 ++++----
+ io_uring/uring_cmd.c | 3 +--
+ 5 files changed, 10 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/llist.h b/include/linux/llist.h
-index 8846b7709669..1c6f12411d5e 100644
---- a/include/linux/llist.h
-+++ b/include/linux/llist.h
-@@ -49,6 +49,7 @@
-  */
+diff --git a/io_uring/cancel.c b/io_uring/cancel.c
+index 8c6fa6f367e4..2d5b27e64582 100644
+--- a/io_uring/cancel.c
++++ b/io_uring/cancel.c
+@@ -358,13 +358,12 @@ bool io_cancel_remove_all(struct io_ring_ctx *ctx, struct io_uring_task *tctx,
+ 			  struct hlist_head *list, bool cancel_all,
+ 			  bool (*cancel)(struct io_kiocb *))
+ {
+-	struct hlist_node *tmp;
+ 	struct io_kiocb *req;
+ 	bool found = false;
  
- #include <linux/atomic.h>
-+#include <linux/args.h>
- #include <linux/container_of.h>
- #include <linux/stddef.h>
- #include <linux/types.h>
-@@ -143,12 +144,33 @@ static inline bool llist_on_list(const struct llist_node *node)
- #define llist_for_each(pos, node)			\
- 	for ((pos) = (node); pos; (pos) = (pos)->next)
+ 	lockdep_assert_held(&ctx->uring_lock);
  
-+/*
-+ * llist_for_each_safe is an old interface, use llist_for_each_mutable instead.
-+ */
-+#define llist_for_each_safe(pos, n, node)			\
-+	for ((pos) = (node); (pos) && ((n) = (pos)->next, true); (pos) = (n))
-+
-+#define __llist_for_each_mutable_internal(pos, tmp, node)		\
-+	for (typeof(pos) tmp = ((pos) = (node)) ? (pos)->next : NULL;	\
-+	     (pos);							\
-+	     (pos) = tmp, tmp = (pos) ? (pos)->next : NULL)
-+
-+#define __llist_for_each_mutable1(pos, node)				\
-+	__llist_for_each_mutable_internal(pos, __UNIQUE_ID(next), node)
-+
-+#define __llist_for_each_mutable2(pos, next, node)			\
-+	llist_for_each_safe(pos, next, node)
-+
- /**
-- * llist_for_each_safe - iterate over some deleted entries of a lock-less list
-- *			 safe against removal of list entry
-+ * llist_for_each_mutable - iterate over some deleted entries of a lock-less list
-+ *			    safe against removal of list entry
-  * @pos:	the &struct llist_node to use as a loop cursor
-- * @n:		another &struct llist_node to use as temporary storage
-- * @node:	the first entry of deleted list entries
-+ * @...:	either (node) or (next, node)
-+ *
-+ * next:	another &struct llist_node to use as optional temporary storage.
-+ *		The temporary cursor is internal unless explicitly supplied by
-+ *		the caller.
-+ * node:	the first entry of deleted list entries
-  *
-  * In general, some entries of the lock-less list can be traversed
-  * safely only after being deleted from list, so start with an entry
-@@ -159,8 +181,9 @@ static inline bool llist_on_list(const struct llist_node *node)
-  * you want to traverse from the oldest to the newest, you must
-  * reverse the order by yourself before traversing.
-  */
--#define llist_for_each_safe(pos, n, node)			\
--	for ((pos) = (node); (pos) && ((n) = (pos)->next, true); (pos) = (n))
-+#define llist_for_each_mutable(pos, ...)				\
-+	CONCATENATE(__llist_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
-+		(pos, __VA_ARGS__)
+-	hlist_for_each_entry_safe(req, tmp, list, hash_node) {
++	hlist_for_each_entry_mutable(req, list, hash_node) {
+ 		if (!io_match_task_safe(req, tctx, cancel_all))
+ 			continue;
+ 		hlist_del_init(&req->hash_node);
+@@ -379,12 +378,11 @@ int io_cancel_remove(struct io_ring_ctx *ctx, struct io_cancel_data *cd,
+ 		     unsigned int issue_flags, struct hlist_head *list,
+ 		     bool (*cancel)(struct io_kiocb *))
+ {
+-	struct hlist_node *tmp;
+ 	struct io_kiocb *req;
+ 	int nr = 0;
  
- /**
-  * llist_for_each_entry - iterate over some deleted entries of lock-less list of given type
-@@ -182,13 +205,41 @@ static inline bool llist_on_list(const struct llist_node *node)
- 	     member_address_is_nonnull(pos, member);			\
- 	     (pos) = llist_entry((pos)->member.next, typeof(*(pos)), member))
+ 	io_ring_submit_lock(ctx, issue_flags);
+-	hlist_for_each_entry_safe(req, tmp, list, hash_node) {
++	hlist_for_each_entry_mutable(req, list, hash_node) {
+ 		if (!io_cancel_req_match(req, cd))
+ 			continue;
+ 		if (cancel(req))
+diff --git a/io_uring/poll.c b/io_uring/poll.c
+index 0204affdc308..2b8d15fe1227 100644
+--- a/io_uring/poll.c
++++ b/io_uring/poll.c
+@@ -734,7 +734,6 @@ __cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct io_uring_task *tc
+ 			       bool cancel_all)
+ {
+ 	unsigned nr_buckets = 1U << ctx->cancel_table.hash_bits;
+-	struct hlist_node *tmp;
+ 	struct io_kiocb *req;
+ 	bool found = false;
+ 	int i;
+@@ -744,7 +743,7 @@ __cold bool io_poll_remove_all(struct io_ring_ctx *ctx, struct io_uring_task *tc
+ 	for (i = 0; i < nr_buckets; i++) {
+ 		struct io_hash_bucket *hb = &ctx->cancel_table.hbs[i];
  
-+/*
-+ * llist_for_each_entry_safe is an old interface, use llist_for_each_entry_mutable instead.
-+ */
-+#define llist_for_each_entry_safe(pos, n, node, member)			       \
-+	for (pos = llist_entry((node), typeof(*pos), member);		       \
-+	     member_address_is_nonnull(pos, member) &&			       \
-+	        (n = llist_entry(pos->member.next, typeof(*n), member), true); \
-+	     pos = n)
-+
-+#define __llist_for_each_entry_mutable_internal(pos, tmp, node, member)	\
-+	for (typeof(pos) tmp = ((pos) = llist_entry((node), typeof(*pos), member), \
-+		member_address_is_nonnull(pos, member) ?			\
-+		llist_entry((pos)->member.next, typeof(*pos), member) : NULL);	\
-+	     member_address_is_nonnull(pos, member);				\
-+	     (pos) = tmp, tmp = member_address_is_nonnull(pos, member) ?	\
-+		llist_entry((pos)->member.next, typeof(*pos), member) : NULL)
-+
-+#define __llist_for_each_entry_mutable2(pos, node, member)			\
-+	__llist_for_each_entry_mutable_internal(pos, __UNIQUE_ID(next), node, member)
-+
-+#define __llist_for_each_entry_mutable3(pos, next, node, member)		\
-+	llist_for_each_entry_safe(pos, next, node, member)
-+
- /**
-- * llist_for_each_entry_safe - iterate over some deleted entries of lock-less list of given type
-- *			       safe against removal of list entry
-+ * llist_for_each_entry_mutable - iterate over some deleted entries of
-+ *				  lock-less list of given type safe against
-+ *				  removal of list entry
-  * @pos:	the type * to use as a loop cursor.
-- * @n:		another type * to use as temporary storage
-- * @node:	the first entry of deleted list entries.
-- * @member:	the name of the llist_node with the struct.
-+ * @...:	either (node, member) or (next, node, member)
-+ *
-+ * next:	another type * to use as optional temporary storage. The
-+ *		temporary cursor is internal unless explicitly supplied by the
-+ *		caller.
-+ * node:	the first entry of deleted list entries.
-+ * member:	the name of the llist_node with the struct.
-  *
-  * In general, some entries of the lock-less list can be traversed
-  * safely only after being removed from list, so start with an entry
-@@ -199,11 +250,9 @@ static inline bool llist_on_list(const struct llist_node *node)
-  * you want to traverse from the oldest to the newest, you must
-  * reverse the order by yourself before traversing.
-  */
--#define llist_for_each_entry_safe(pos, n, node, member)			       \
--	for (pos = llist_entry((node), typeof(*pos), member);		       \
--	     member_address_is_nonnull(pos, member) &&			       \
--	        (n = llist_entry(pos->member.next, typeof(*n), member), true); \
--	     pos = n)
-+#define llist_for_each_entry_mutable(pos, ...)				\
-+	CONCATENATE(__llist_for_each_entry_mutable,			\
-+		COUNT_ARGS(__VA_ARGS__))(pos, __VA_ARGS__)
+-		hlist_for_each_entry_safe(req, tmp, &hb->list, hash_node) {
++		hlist_for_each_entry_mutable(req, &hb->list, hash_node) {
+ 			if (io_match_task_safe(req, tctx, cancel_all)) {
+ 				hlist_del_init(&req->hash_node);
+ 				io_poll_cancel_req(req);
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 63b6519e498c..25b896269e87 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -1326,7 +1326,7 @@ int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin)
+ {
+ 	unsigned int poll_flags = 0;
+ 	DEFINE_IO_COMP_BATCH(iob);
+-	struct io_kiocb *req, *tmp;
++	struct io_kiocb *req;
+ 	int nr_events = 0;
  
- /**
-  * llist_empty - tests whether a lock-less list is empty
+ 	/*
+@@ -1372,7 +1372,7 @@ int io_do_iopoll(struct io_ring_ctx *ctx, bool force_nonspin)
+ 	if (!rq_list_empty(&iob.req_list))
+ 		iob.complete(&iob);
+ 
+-	list_for_each_entry_safe(req, tmp, &ctx->iopoll_list, iopoll_node) {
++	list_for_each_entry_mutable(req, &ctx->iopoll_list, iopoll_node) {
+ 		/* order with io_complete_rw_iopoll(), e.g. ->result updates */
+ 		if (!smp_load_acquire(&req->iopoll_completed))
+ 			continue;
+diff --git a/io_uring/timeout.c b/io_uring/timeout.c
+index c4dd26cf342d..63671231cb08 100644
+--- a/io_uring/timeout.c
++++ b/io_uring/timeout.c
+@@ -164,14 +164,14 @@ static void io_kill_timeout(struct io_kiocb *req, struct list_head *list)
+ 
+ __cold void io_flush_timeouts(struct io_ring_ctx *ctx)
+ {
+-	struct io_timeout *timeout, *tmp;
++	struct io_timeout *timeout;
+ 	LIST_HEAD(list);
+ 	u32 seq;
+ 
+ 	raw_spin_lock_irq(&ctx->timeout_lock);
+ 	seq = READ_ONCE(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts);
+ 
+-	list_for_each_entry_safe(timeout, tmp, &ctx->timeout_list, list) {
++	list_for_each_entry_mutable(timeout, &ctx->timeout_list, list) {
+ 		struct io_kiocb *req = cmd_to_io_kiocb(timeout);
+ 		u32 events_needed, events_got;
+ 
+@@ -733,7 +733,7 @@ static bool io_match_task(struct io_kiocb *head, struct io_uring_task *tctx,
+ __cold bool io_kill_timeouts(struct io_ring_ctx *ctx, struct io_uring_task *tctx,
+ 			     bool cancel_all)
+ {
+-	struct io_timeout *timeout, *tmp;
++	struct io_timeout *timeout;
+ 	LIST_HEAD(list);
+ 
+ 	/*
+@@ -742,7 +742,7 @@ __cold bool io_kill_timeouts(struct io_ring_ctx *ctx, struct io_uring_task *tctx
+ 	 */
+ 	spin_lock(&ctx->completion_lock);
+ 	raw_spin_lock_irq(&ctx->timeout_lock);
+-	list_for_each_entry_safe(timeout, tmp, &ctx->timeout_list, list) {
++	list_for_each_entry_mutable(timeout, &ctx->timeout_list, list) {
+ 		struct io_kiocb *req = cmd_to_io_kiocb(timeout);
+ 
+ 		if (io_match_task(req, tctx, cancel_all))
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 7b25dcd9d05f..ce6f4fe93b20 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -49,13 +49,12 @@ void io_uring_cmd_cleanup(struct io_kiocb *req)
+ bool io_uring_try_cancel_uring_cmd(struct io_ring_ctx *ctx,
+ 				   struct io_uring_task *tctx, bool cancel_all)
+ {
+-	struct hlist_node *tmp;
+ 	struct io_kiocb *req;
+ 	bool ret = false;
+ 
+ 	lockdep_assert_held(&ctx->uring_lock);
+ 
+-	hlist_for_each_entry_safe(req, tmp, &ctx->cancelable_uring_cmd,
++	hlist_for_each_entry_mutable(req, &ctx->cancelable_uring_cmd,
+ 			hash_node) {
+ 		struct io_uring_cmd *cmd = io_kiocb_to_cmd(req,
+ 				struct io_uring_cmd);
 -- 
 2.43.0
 
