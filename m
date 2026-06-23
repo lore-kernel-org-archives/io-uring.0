@@ -1,125 +1,171 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E183D3008
-	for <io-uring@vger.kernel.org>; Tue, 23 Jun 2026 11:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0ACC3D7D83
+	for <io-uring@vger.kernel.org>; Tue, 23 Jun 2026 15:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782212977; cv=none; b=NipVLWx+gga0+edD5XemkONI5ixhT+uSRZ+1w03zJy+ZllIbVsPFSguzwopSTnLyjPcTA++DXdCoyPD6PhNIasHTeeKS6qYb+3Z7qrvpCRh2SsnyMx/ilc4YBLlw/9h0irdp1+BE0lZdRXo5VkOoIS0jpuJjn71M2FsN+Da7NL4=
+	t=1782227494; cv=none; b=lWtTJgQI+L4h5GBvyd1AVQWIOQ0qPoJHY8/6uLhy6d1CBImNbw/if6Zt9htr8zwSmfh4SbtXAWqVE1NSbE+L0p0Lmzr5y1/V8okkIRLBoZPUlsrKA+BkMITE2xKpMcrJiUDjI5OQHtLoUs+tYBhFJG9oR/xzf5afOLjUX1iM1co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782212977; c=relaxed/simple;
-	bh=Xl8cH5r4DiHwX4Z4zIdYVYnfcPJGwMsvWT8iXVpTO1I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ImZl1JNyO3Vl6MdFI3l1+HyXFmyHIci55HxhZjngpCG+x3pSpGeZDig/YU2s4Rr5xn9/L/lh1caeBdZ5q7dQfifFQTLdRS165O+YeyGhfsvNyCk0A9o5Oib1DtKTum4X4dYiEc4qW+SRWeEWS3KG2xZJmFMS2kgu8wFKN6iJJOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=on8pQFKO; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782227494; c=relaxed/simple;
+	bh=KrE18r1pnujfuaglIDxCS1hhUuxePbDk+kE9eQnEvjg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=O4ISLMQxS5ug0g6AqZlVJTyLx8mOUWDqRoYuHiIkcYbb4Q5MtzfRmQIKv8IpdqvaKrh4SV5kh7nIbWn+9G/dNTGEQG8jt9F8aJ5+9GvSP5DSp3R3UoXA44lvYObBr0ZAZA0cqfOQtCVJAJgKvGC8eoQoJtDg+c3YnzEvay/To0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bSLK41f0; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=FIcYQtFd; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Ffw27Ijz; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=AFioEuWV; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="on8pQFKO"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c6c101aeafso34623975ad.0
-        for <io-uring@vger.kernel.org>; Tue, 23 Jun 2026 04:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782212975; x=1782817775; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l7Gkrm+MAaYW1+T2C8EgcjFTjwo2mLAidhxEQKtNchE=;
-        b=on8pQFKOVCQrFSjEEi8N3z0bDWfVm0WPQUYqRm0ajd9PD3dRZV8uU5GovpNRfc6StC
-         9Gd9Mk5MlgDCi+o123w5gHHQIMUKkKI7L0WpLWKIRagGKkrvzvivtknK3was+lWr6hCJ
-         TfhvKjRFkz2eBdSwjnGs2FnjFVOpYXNYpXlvNUd+LIbWlG0FUcfr1f66TRtRJmsHhdff
-         f/fSitg70OuFyl0G5AJ0CnYPj9NQqbnFcXFRAP1zao7BGxb36piSIJ9OorDXQb+TY4bR
-         JCafizw6vmhmzjCdWhC/oDtoB1hg5j5Vc1PG+mBi0UMQvFTtqffOAO+lxnJZ1Gvgqxqm
-         XFUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782212975; x=1782817775;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=l7Gkrm+MAaYW1+T2C8EgcjFTjwo2mLAidhxEQKtNchE=;
-        b=aiPP0mumPvY/tugJyZwsWD+mvbGals5CtN5KNjA2Kw6MXXnoSV4X6vPBrnX1gZuhw5
-         nBV9Zuep9LDhamxxGgno8WXeJoVpqI6EIpUqxEwDkcxoH+rVDmfy5Rl93mgDORkqEKUp
-         RJKB65+6gKwmFUm2fDTHRur4/uTPEwZ/4ppWsezvS2ez+FUHZ6yKCBWXTqfn4otrX16e
-         7qN9ifbBcEvykVUNglJZ22mq3eAszKjQEJ9lhUryAd1Qr68RaZRogAZpx5MweVY0lcRT
-         2oiNjnCbnhNzyWJ1buCZZW4oq2TDGc1gnUSh/Rzo8PbksuHi0Tdqu+1SQL7AiPp+VrN7
-         Ao4g==
-X-Gm-Message-State: AOJu0YzrKdDYAdHt1GGxeT0nCusD9Fc1ymuAFJdEsniIJ2Ih0qSfIdIN
-	J5oDzpWayunmCsxILrqN4h/B51WjLJMQPwukN2xNvvlYpUdS++ApWxQm
-X-Gm-Gg: AfdE7ckZMAmEKLBZbKrROilAkt40FLBpLs1/74k08TVu/vuRkBW1iyl4SbYyrxTNAHf
-	MgWQIf6uoIsRaeYUZj3PWEHPd1GnmE44UlnnyHiiaZ+mqwzf3A9BnzHO+TwnYjq8fH0lZTa7voi
-	mIn2LjF+s4QxG6RVKQpRF1Me/ZnxfVJF46cvydMuJ0uic/Fj2u6p3dZC0hnqK3izEjGA1oFPhjh
-	xu1fqIuIyWVeHo/fRpcPavWSDBdIdg8tY1nrYhcPLJEYxnIiXYLUrfq+2LvhPblb1US1RW+nFBT
-	4NIzPENsqdB+1uF6Zj1PLrDBbI5mX9pqH4KNt7/TyYTSGUVLPzfb8YxG6GW/grkDnGRIFluejTZ
-	B1zg56XHtbmd4wQvTJYTzAjMAVsNdUu5F5dWwAGGPqBwtBFb9D14zHgz5Cqognztc+GCisMBzO2
-	e7ddVyknDvKrvUhSlq8QiWwVbt5N9dpqX6ce+HwWS+VM8oyHVa105g0OUh/oCvJg8nEBTdBVkPs
-	jq3QfjK+R+05Y6pLGs9z39jfaLZBn0=
-X-Received: by 2002:a17:903:189:b0:2c6:9897:dbaa with SMTP id d9443c01a7336-2c7c99445d1mr18106965ad.3.1782212975292;
-        Tue, 23 Jun 2026 04:09:35 -0700 (PDT)
-Received: from prateek-Aspire-A515-57G.. ([182.77.73.131])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7436af558sm121843415ad.14.2026.06.23.04.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2026 04:09:34 -0700 (PDT)
-From: Prateek <kprateek283@gmail.com>
-To: gabriel@krisman.be
-Cc: io-uring@vger.kernel.org,
-	kprateek283@gmail.com
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bSLK41f0";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="FIcYQtFd";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Ffw27Ijz";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="AFioEuWV"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id AA5AA75B3E;
+	Tue, 23 Jun 2026 15:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782227490; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JUIdX+cuQxmf/QBPQGQf4EzL0EUySkrV1FzpCj/UfNE=;
+	b=bSLK41f0rxnmqtQ+/w6WQ2082btIAJZfXQ7VgHlu5PKnmVmj+JQncaP5U7oeCkEK3Pgtjs
+	hDvG6EQ9vJvJ6Bw3meQHW9BzeLFrzFzVnh43GLQ0iUeRxaak6gFhazlSepo9sULZUMQUTO
+	pz9QGTiiACRKr+uWzsh9LweflKYglUY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782227490;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JUIdX+cuQxmf/QBPQGQf4EzL0EUySkrV1FzpCj/UfNE=;
+	b=FIcYQtFd0S8oR6YF67FuNFNSt7eiL4hhhWry+Jd66qw/j8hFj90m0/+OLAfHAk6EulMrB0
+	vui1QlN10Kh0CNBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Ffw27Ijz;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=AFioEuWV
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782227489; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JUIdX+cuQxmf/QBPQGQf4EzL0EUySkrV1FzpCj/UfNE=;
+	b=Ffw27Ijz12J5UX23RhlJRP159NiwCpWnox/DJ9Q4rIrd03g+NK/vq4AhRZtjbYxv1VocOu
+	Lo7kCMD1otaKLHsoKJ2CylY11d2fLLiENjSvvme2Tjtb6tYest+ufjZ7GSSHgOYHmPOo4n
+	8ffM4v2ED171ikU0eM2X0ic+ZGxu/1M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782227489;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JUIdX+cuQxmf/QBPQGQf4EzL0EUySkrV1FzpCj/UfNE=;
+	b=AFioEuWVTEpo7gsfoHjcGnOB3XN5OA160eKJoDk8MtGJw3FTp59hN4wQECiDZRxLjrhynj
+	IY4hFbhB/rtnohCw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6DE9A779A8;
+	Tue, 23 Jun 2026 15:11:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id pnawDiGiOmpdWAAAD6G6ig
+	(envelope-from <krisman@suse.de>); Tue, 23 Jun 2026 15:11:29 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Prateek <kprateek283@gmail.com>
+Cc: io-uring@vger.kernel.org, kprateek283@gmail.com
 Subject: Re: [PATCH] setup: dynamically detect default huge page size
-Date: Tue, 23 Jun 2026 16:39:30 +0530
-Message-ID: <20260623110930.910263-1-kprateek283@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <87qzlyy0zd.fsf@mailhost.krisman.be>
+In-Reply-To: <20260623110930.910263-1-kprateek283@gmail.com>
+Organization: SUSE
 References: <87qzlyy0zd.fsf@mailhost.krisman.be>
+ <20260623110930.910263-1-kprateek283@gmail.com>
+Date: Tue, 23 Jun 2026 11:11:27 -0400
+Message-ID: <87jyrpuw9s.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Flag: NO
+X-Rspamd-Action: no action
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCPT_COUNT_THREE(0.00)[3];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,mailhost.krisman.be:mid,suse.de:dkim]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: AA5AA75B3E
+X-Spam-Score: -4.51
 
-Hi Gabriel,
+Prateek <kprateek283@gmail.com> writes:
 
-Thanks for the review.
-
-On Mon, Jun 22, 2026 at 16:49 Gabriel Krisman Bertazi wrote:
-> > +static size_t get_huge_page_size(void)
-> > +{
-> > +   static size_t hps;
+> Hi Gabriel,
 >
-> Please, initialize your static variables to makes it readable. I.e,
-> should be initialized it to 2MB.
-
-hps is left at 0 on purpose as a "not computed yet" flag -- same thing get_page_size() does in arch/aarch64/lib.h with cache_val. If I set hps = 2MB upfront, the first call just returns 2MB without ever reading /proc/meminfo, which defeats the point.
-
-> > +   size_t ret = 2 * 1024 * 1024; /* fallback: 2MB */
+> Thanks for the review.
 >
-> ret redundant with hps, could go away.
-
-The local ret is there so I only write to hps once at the end. If two threads race into this function, neither one sees a half-baked fallback value in hps. The race itself is harmless since both threads would compute the same result anyway.
-
-> > +       if (p + 13 <= end &&
-> > +           p[0]  == 'H' && p[1]  == 'u' && p[2]  == 'g' &&
-> > +           p[3]  == 'e' && p[4]  == 'p' && p[5]  == 'a' &&
-> > +           p[6]  == 'g' && p[7]  == 'e' && p[8]  == 's' &&
-> > +           p[9]  == 'i' && p[10] == 'z' && p[11] == 'e' &&
-> > +           p[12] == ':') {
+> On Mon, Jun 22, 2026 at 16:49 Gabriel Krisman Bertazi wrote:
+>> > +static size_t get_huge_page_size(void)
+>> > +{
+>> > +   static size_t hps;
+>>
+>> Please, initialize your static variables to makes it readable. I.e,
+>> should be initialized it to 2MB.
 >
-> This is unreadable.  It would be much better as a two line loop
-> iterating over two strings...  But then, why not create it a couple line
-> implementation of memcmp and atoi in arch/generic/lib.h instead?
+> hps is left at 0 on purpose as a "not computed yet" flag -- same thing
+> get_page_size() does in arch/aarch64/lib.h with cache_val. If I set
+> hps = 2MB upfront, the first call just returns 2MB without ever
+> reading /proc/meminfo, which defeats the point.
 
-Yeah, the char-by-char match is ugly, agreed. For v2 I'll add a __uring_memcmp in nolibc.c and shim it in lib.h behind #ifdef CONFIG_NOLIBC, same way memset/malloc/free are done today. arch/generic/lib.h only gets included on archs without nolibc support, so putting memcmp there wouldn't help x86/aarch64/riscv64 nolibc builds. nolibc.c + lib.h shim covers all configs. Then setup.c just calls memcmp(p, "Hugepagesize:", 13) -- normal builds use libc's memcmp, nolibc builds use the shim. I'll keep the digit parsing loop as-is since it's simple enough and pulling in atoi feels like overkill.
+Ah, of course.  Back to the original point, please initialize hps
+explicitly (to 0). Yeah, I know the compiler should do that for you in
+C99.  Still, make it explicit.
 
-> This function should go in arch/generic/lib.h too.  A hint is the
-> get_page_size is already there.
+>
+>> > +   size_t ret = 2 * 1024 * 1024; /* fallback: 2MB */
+>>
+>> ret redundant with hps, could go away.
+>
+> The local ret is there so I only write to hps once at the end. If two
+> threads race into this function, neither one sees a half-baked
+> fallback value in hps. The race itself is harmless since both threads
+> would compute the same result anyway.
 
-get_huge_page_size() only lives in setup.c and uses the __sys* wrappers from syscall.h, which work in all build configs. Unlike get_page_size() which is needed across multiple files, there's no reason to put this in the arch headers and duplicate it four times.
+No, it is redundant.  You don't need to have "half-baked" values in hps
+either. as you already use val to build your hugepage size.  ret is just an
+extra step that will vanish in compilation.
 
-> That said, we should be looking into something like the kernel's nolibc
-> instead of reinventing libc.
+There are many ways around it.  For instance:
 
-Agreed, worth looking into separately. This patch just fixes the immediate hugepage issue.
+unsigned long val = 0;
+...
+out:
+hps = (val)?: 2*1024*1024;  	/* fallback to 2 MB pages */
+return hps;
 
-Will send a v2 with the memcmp approach.
-
-Thanks,
-Prateek
+-- 
+Gabriel Krisman Bertazi
