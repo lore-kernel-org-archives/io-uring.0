@@ -1,120 +1,61 @@
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D803812EB
-	for <io-uring@vger.kernel.org>; Fri, 26 Jun 2026 16:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 160D03E0090;
+	Fri, 26 Jun 2026 16:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782490013; cv=none; b=Ey9xfP5OULe6ocM2YBy9xqTu+m4Le4SP0AqA8Otk9i4DobTAu2Y/mf0WNdEODZ8iIsVU7C0lF8HhPsPfhBg8TPz8WQ37VNFR5l3/9la7Z+Mofmd5h331AlT/itbsZnQNqn9iwnmo9mJJh2gavij6kTIsKMRNv1TIpmcXUky/Juw=
+	t=1782491616; cv=none; b=NOm0kHcYqNgngUZ2iR+acT1q3C/hU5v7MvqChA6aOn09HYNGTJXYvhetktzXVh1aF58SNDyFLFdUfhPNuZgAd0X1T3c9YyT3KtvUw7A7XTJQxQAFW6OSQMH9pBw4XMaKKx2z3F/tIhehKLz908WBWD3QNB/cnJnl5GBdB3tLGUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782490013; c=relaxed/simple;
-	bh=bVOuF33R62ZX1QAOrKpmStdEbSXJZuULIN38SLmlRg8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FeNXLwhJu9tkd3Z00/E0qvSrdek9kd9WS/RMtPdCETqzGa/QouqiHCbk/3Yr6JCKrqUEHBC3d1AfuVmrIUZtyxGmrz1N3PIehk4R9lbZqSSfB5pJPaJvdfc9n66a/JuKXJH0vSB7C0MQzVmlNTWJ6fTpEaCEDH1tYLCx/x+vKig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=0H8YGkRQ; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1782491616; c=relaxed/simple;
+	bh=Rhk02k9ingT/8ZPe7PqoOtst9gmLDAdkIVxuJ7zYApU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=odUntyqY2CEJMJAqIRRwvV6uhayqnlS9qZBc9M9Au8dcfLMgImUWlHgF5fCFgH2iuKIUOO+2wow4pzhuzlK+KCMMdpFFIPoQU1tm0JbfImgzQBv8BeDQAn9CzVYlDGKLD6Uz/Dyigsc7TTJbMu6RTcTjILpXHwKsxhskf42xXW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A/U+LTET; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="0H8YGkRQ"
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-44192448b56so426567fac.2
-        for <io-uring@vger.kernel.org>; Fri, 26 Jun 2026 09:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1782490011; x=1783094811; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GhJCeELsWcn0eKRZfQrcdhIMF5uPEapjOAil2qd1l+0=;
-        b=0H8YGkRQVSAQzgT55ZEGIO2yA6BhqEYDfbCnj5iugWjK6+zEWqIfyF5vnG/O59DG5U
-         b9LEEEhoHwh8Dryt0WHrOJpFjEkI6K6aPq/vMK89RyW6NVD2/J2j2rVPl5m0JdhD7wW4
-         fIAnfC5+KD/HwPC8fS7Jxh5ZF4dfaOENmBpHN8P3Zmax9TcW3hHMcUTho/qosopzATuA
-         qwQeyXU2uYRtDwEwl+w89Bo+z1RcolWuUct1NSwKhEE161yV5DciDNlygtwCSbxIgoup
-         48k7Ov75cUCnOM7h3RKnArDOe38FGHkuua7muhs9Rz8ZJ+sIuE828AejrkBFGY1pncyj
-         HrhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782490011; x=1783094811;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GhJCeELsWcn0eKRZfQrcdhIMF5uPEapjOAil2qd1l+0=;
-        b=pwpKSGZO54b9HG3MvLbvrfOtrL6/+4UnMKtL+Y8ra5Oc0No6OaD2E39/GonIBq3vEe
-         DR6E3qI2uZgfRQM0j2sPVJcGmd64lhKQib40dblbAu1rnSJNrNnHLOzAOehlNjumdymv
-         CTnZD/gWOrwOVYbhgECuviGCfWKJGrF9hUGtjaLMiq/MGwgUaAfmwbo95PI2is/iyO/y
-         c4Tr/OzR4lL+8LBZ8NK2TQ3R5fhfpCwcE4c72H5i/uXodB+LMP7CJOuxzQFAAdWcmI6k
-         +arLZutcrHDrxzHNZGWckQlH4JkksDed+hGoNPMKjTrnOMqhwH/749AMytm89G56fYWL
-         dlRg==
-X-Forwarded-Encrypted: i=1; AHgh+RpLua5NiJ3iKy2DQIqkOFv7FlfNDGw0YW1x0tVitVJnyXR+zoMAR2UkRSBQX0VnJSIoFYOYWBFW3g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywwa6NGpdXCc4cJRkhEKVw/PWJUCeg9s634OybQUNHKHndH/0DH
-	2uoHYJFsMNI/NjPQxHkACPqHEXGDKQ1pBD6ussThgDC9/GM0lYFnv6uBnsm+4IEjM0U=
-X-Gm-Gg: AfdE7clgqsn1DNP2B2P2pKiit8/vUHvvNnb+Ndb102tg1q+1iHIpcqn+8MoPEswl0iP
-	Sv8Vs59O+gS8bEaAg4EIrkf9YtG2jM4oo/gJTqecNMoMLWGc2xp54w90yalSzcbiTHaLVjhKOyi
-	1qtBYox9Xd9u3dU2XLcO/AugfkZhfFAwZMZAcfc+zzlMiPeLAmSsmMDcn+KyEAxQdaZ90Z1NEwq
-	Kxg9HzizGX9YLpdlDeizJ06X6SVYz3vjmyzZ2sh2uf2Twelj+uw/yhKnWimzLo+D9B3fVNjXYbU
-	hRVD8SH2HMRvbo28IM1Kdd67Ktq0Mq+hwdoqGEkBl0qxXEq2GHdOsG9+onUVZx27MHRnEDQYO6q
-	KxjpPqbF9tfgnQ3lt5GdrUFDCithe0/kvUFjOwAIdUMh5OC30rI05JkUhXBrPo7ZnFLdKw8RoU7
-	BcHPtvXkb5DjeA1LIeR8IpBVHDeTKUujGsb3ggqXSHJZdZTrwS0a1x2yvfrw1ar7heO3R77g==
-X-Received: by 2002:a05:6870:4692:b0:441:33a9:b8da with SMTP id 586e51a60fabf-44811cf8b03mr5792844fac.18.1782490010903;
-        Fri, 26 Jun 2026 09:06:50 -0700 (PDT)
-Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-448478f0d15sm770119fac.18.2026.06.26.09.06.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jun 2026 09:06:50 -0700 (PDT)
-Message-ID: <1932a509-4e27-485e-8e09-1da67e0082c8@kernel.dk>
-Date: Fri, 26 Jun 2026 10:06:49 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A/U+LTET"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 906751F000E9;
+	Fri, 26 Jun 2026 16:33:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782491615;
+	bh=Rhk02k9ingT/8ZPe7PqoOtst9gmLDAdkIVxuJ7zYApU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=A/U+LTETByNZCPLI1FoWzSLxwgOEkUgaznxQcC/328OSbGGHcvSdsy5vO0PUIr/1Z
+	 a8a4kP5HOcRo9Sk7Hqne3qpTRMry2Ge/s0WJpeI+adVormZqOInE/zEd+6WV4bziCD
+	 7HIhWaTWzIrms3HnPnyyzwAlrrfy2iKTeIE/BMy4l95U6fYoShj+Dj9ZpFgZNu5SAr
+	 l2qxWdr6xwSDnQN/YixAxavyiWyAp9xT2VrEBP2CKpxpxD6x//So7USrz76Vf2l9EN
+	 EBdGo6yDbfh2ofmOaFXOr7WQYsaoKGSmvvh91nZNhoT1Xat9d9mYRPxbphAZzOFp2m
+	 rYdUztwq4ZHBw==
+Date: Fri, 26 Jun 2026 10:33:34 -0600
+From: Keith Busch <kbusch@kernel.org>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Ben Carey <benjamin.james.carey3@gmail.com>, io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [BUG] RCU hang with io_uring nvme polling
+Message-ID: <aj6p3kZy1a8Mf68S@kbusch-mbp>
+References: <20260626150946.287781-1-benjamin.james.carey3@gmail.com>
+ <85d1f999-7778-4c74-9d72-b8ac8500de31@kernel.dk>
+ <aj6jQyJd3zmZFcwx@kbusch-mbp>
+ <1932a509-4e27-485e-8e09-1da67e0082c8@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] RCU hang with io_uring nvme polling
-To: Keith Busch <kbusch@kernel.org>
-Cc: Ben Carey <benjamin.james.carey3@gmail.com>, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260626150946.287781-1-benjamin.james.carey3@gmail.com>
- <85d1f999-7778-4c74-9d72-b8ac8500de31@kernel.dk>
- <aj6jQyJd3zmZFcwx@kbusch-mbp>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <aj6jQyJd3zmZFcwx@kbusch-mbp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1932a509-4e27-485e-8e09-1da67e0082c8@kernel.dk>
 
-On 6/26/26 10:05 AM, Keith Busch wrote:
-> On Fri, Jun 26, 2026 at 09:17:35AM -0600, Jens Axboe wrote:
->> On 6/26/26 9:09 AM, Ben Carey wrote:
->>> From a running QEMU image with the latest kernel:
->>> 1. Attach GDB to the running instance.
->>> 2. Enable io polling via sysfs (echo 1 > /sys/block/nvme0n1/queue/io_poll).
->>
->> That's not how that works at all. You need to setup poll queues on the
->> nvme driver side, using the nvme.poll_queues=XX kernel parameter, or if
->> using nvme as a module, load the module with poll_queues=XX where XX is
->> the number of poll queues. You're not doing any polled IO as-is, and the
->> above should also have dumped a dmesg message about how that does
->> absolutely nothing.
->>
->> That said, it should still work, just not doing polled IO. I'll take a
->> look sometime next week, OOO right now.
-> 
-> Yeah, the sysfs attribute does nothing, but Ben mentioned they had the
-> correct kernel command line:
-> 
->   BOOT_IMAGE=/vmlinuz-7.1.0-g3996771b8f75 root=/dev/mapper/ubuntu--vg-ubuntu--lv \
->     ro nvme.poll_queues=1 nokaslr
-> 
-> So they did enable polling, but the "echo" step is just confusing and
-> unnecessary.
-> 
-> I tried out the test, and there does appear to be a problem here, so I'm
-> looking into it.
+On Fri, Jun 26, 2026 at 10:06:49AM -0600, Jens Axboe wrote:
+> Ah good catch, I missed that. Should've grepped! In general, IO should
+> either get polled, or if the device is misbehaving, then timeouts will
+> catch it. That said, haven't looked at the actual report yet, will do
+> so next week (unless you beat me to it...?)
 
-Ah good catch, I missed that. Should've grepped! In general, IO should
-either get polled, or if the device is misbehaving, then timeouts will
-catch it. That said, haven't looked at the actual report yet, will do
-so next week (unless you beat me to it...?)
+I'll give it a shot!
 
--- 
-Jens Axboe
-
+The test has 1 polling queue with 2 jobs dispatching. One of the job's
+polled the completions for both. The other job is polling for no reason
+at all with nothing outstanding. The only thing that can break us out of
+that loop now is need_resched(), but that appears to never return true.
