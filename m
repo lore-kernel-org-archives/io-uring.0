@@ -1,136 +1,102 @@
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E23199D8
-	for <io-uring@vger.kernel.org>; Tue, 30 Jun 2026 23:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4D6322DB7
+	for <io-uring@vger.kernel.org>; Tue, 30 Jun 2026 23:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782862454; cv=none; b=cseL6EomEWS3dkhYRZNdlyfzRIjF+rErR8EijN+2JBKVSlXXJbrb6vFFc6fhMIHxisjPGYatGaYhunObquHTw08rco7BpI8OlYdSPBqAJSP4hswmkPdbjXwO25W/1WN/9iSZTbjIYkR4wGUKnUckiO4XrnVO5QniRJlcTYdCrek=
+	t=1782862505; cv=none; b=kJS+HZyVUmPpcsgCYgN+JojrEVx0TXDbEYSrz3ADKRmrRVz53RkGTqFqlJzZQOVNO6cUZ/WBGzI0P3vedhpuzfzq3JZXPF7N+IT8/iEEHTYDMfGM2VavHKts7aLoBlDA4f3ottRyFtjkf/Az8mvBG9QCIiGMNXYwQPWfY3B/pQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782862454; c=relaxed/simple;
-	bh=xJIEiQYY1BuUadpLctVjizr0+MN2AmeT6NKjP10+1xw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dtYyiNBPQ/1blsnoGn7Eil6pLycFsVon0ohfcGzBYfbUPLbStn2HDLfFvcSWsyFOwJ8cEBXJYYz4E8PT3jEMCH4D5N7yaOXivIL2ycR+SuXMHWai/DGDwRuSZYAi5oddCXoj+uLcV9IR60ec8uyy+OCUwF4XFizXwHPyqtYQ01U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=krOBstf8; arc=none smtp.client-ip=209.85.210.46
+	s=arc-20240116; t=1782862505; c=relaxed/simple;
+	bh=MUEYGjynnoFNYnjc03hd9My1Yh74tKixWgBnm/PfMFY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ZSWjx0w32LTSJqI69fZKP45atBLzUX2AQCqGf3875MewuGUf0FPFAo+zZu/b9gGC3kdwzrrr5V4Aw0+w8WFnqtK6OlcnKqt6aPWVBg15vQgcMmX8vFHv2pGEu50NV/md+QgkiBQ8AqL98XtSxlyPKpbi32p1Bgelj2uQ9qcwj7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=p+gF2srQ; arc=none smtp.client-ip=209.85.210.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="krOBstf8"
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7e9bb837fdbso39947a34.3
-        for <io-uring@vger.kernel.org>; Tue, 30 Jun 2026 16:34:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="p+gF2srQ"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e9b7dae39dso102820a34.0
+        for <io-uring@vger.kernel.org>; Tue, 30 Jun 2026 16:35:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1782862451; x=1783467251; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lan+fZPCJ8OKHMbASPxt5rlkSbv61YWFNs56HNVNP9s=;
-        b=krOBstf80vatnsVHr0Z5F0Kx5KnJ0aaee5hv1f18v7YcgdbU7pKAw/D1sc1vLiUV74
-         RLTv4PX6zVJz6F4sKrS8RR1+vSqD9ZWSKe8if5RmGc71EHdUvUGmdaTAhG2Ma2H1GfXN
-         8jkjjFJoX37wk2Bxx2L1ayFGX8oxOE2Byz3R+d8XHDaDWWHbbC0hMQZtbXGRO9nT9UFh
-         2knaeHWVYMCWguGz27PuS/vs0s4KYx6XkfCoA0c0oN+Oo0tDjhW2j/yMynYJ0v2KhSAT
-         EYMRIfOOUGSGuZ+/wlB5/D8GWy9xgnGWd1enkNAPipQXa7baCpMai5p7KTMF/jP60P6a
-         CDMg==
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1782862503; x=1783467303; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iXaNCuPOpbl2nMSg6eBIdqb5XNbhZ3AQF3inJGb727o=;
+        b=p+gF2srQkqXxCeGWrD0KLu3Wgr+7UG6nwgKm7F24UHB69uxiYsRFv9fe7LfnH0Z28v
+         3YWI2LEsQO5cOFJy5aFKbI51NVnN3Sl3YzKEarFz1vgeD1XI3AzWEdJRAn5T0erCKd+0
+         1rn++ocwXbFsyGwzZW70y8oiCmjF/K8tNTFc9c/XvgLYEYgDdnJEhVQpkQpw74q2f+CK
+         kCJsF3Hieat4rpBulBfunL/3CJvjGcPi6Duw0KJ2n2k8vOjmtXOO0+a4gqZ7034TX4dH
+         naW9CREh9GYhx9Ef8wnCWTlw5MsNTVlmPwrGZvS/FQ4AaB4MD5JSm9o1MVHfeJp54hzf
+         SFpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782862451; x=1783467251;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lan+fZPCJ8OKHMbASPxt5rlkSbv61YWFNs56HNVNP9s=;
-        b=P+65OnPqOjQWTTWSpeLU1YrmWnVLg56wJijZLlO4njhWAmm8qEBWePzksKQYIXfg1n
-         Ur63Dy+vvr6FzC2JqKMWdZ23OqwmIoWykptY6jCaEoA47kBBFdxJ3QVqlzz30IGZgYWD
-         FZ+KdVaNIaTaEsClOhxKzgqXtRwR1NwbfNUaUGfddp7GS6/qOwrEwsEio3IT94lYdMyw
-         DNuG4u0qmKwfLfCKQcv/44OUSaZeYYjxG580JVwDrd7bJJS1FGcJgeqBSsTqVLPAu783
-         rmfQbOm8nsVP7y106ZHL3Ak4xt42ZaYklHws96TIssDVYwoPto0vghS9j8IUPEpfKoPc
-         LNVw==
-X-Forwarded-Encrypted: i=1; AFNElJ9LA6jYKbsKPunI17XTv03bkwM1OStPdkhWc7X1DyOdfxxLXvE8L3Bg9bKfpMMNVtFQwJDFQlAivQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8sTKnsVkZTVD8iVd+B8d5IkZxcP/eJZKONYzo+qkCIzruEjkv
-	dLJXKhMNrwk0auVfGEOhyTn2fplZyBZ2P0Hc8UjPeqE70bjfATwDAyXmRRdsWnuZOEs=
-X-Gm-Gg: AfdE7cn18ir847NCmnoyFU+6nRFgCVo3mrrjllM86xATTjt2iqIGhNXQ9+lof39JaiC
-	jbEOQKNorhTI0tmZIsxGgoalwg3fbPLgt6GfjOlD+H04i3L6ljKoqK6GQndp1HbcF0Zxk+tKJC0
-	sXe0AQ40grlFcSglijHMNKUa5KhUM7lDcIdcg5bnSKNoKaZoPsqSf5P23iqcILVRSK+/vB3/nhQ
-	gyvy7+uiIBjv8RsvgGlFYr/fugChWjOQ1IPwMjeEMXiqHqUJYGD0zbDCc2j6ZKbiB66r/IJjiMe
-	yDHiFwV+Xmm2CMrDCY66aLjhns6NrNQjpv962ml+pHMUTqGTkHXn2CwuGOVrjD2zMK6iq8fjtZi
-	11lIUhor40TFNipZ+ZhLz3Qg2aXYqwFVryI5rM1zbjXOOgrY8QmaRntD8P2HHzAV8QT/9sjV6I8
-	6QoD2fFBNMKLwqx/0Y6KzpHjK7pbccTteTVcqgwj7wi91bsuvtYZ9NFHEmcQbdqxCeDNHEpSw=
-X-Received: by 2002:a05:6830:6d52:b0:7d7:4fc7:21a with SMTP id 46e09a7af769-7e9fbfffcaemr1728813a34.13.1782862451516;
-        Tue, 30 Jun 2026 16:34:11 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9ec2b8edbsm3516153a34.17.2026.06.30.16.34.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2026 16:34:10 -0700 (PDT)
-Message-ID: <91b6999b-9854-46bb-8e2b-c8e260581f4a@kernel.dk>
-Date: Tue, 30 Jun 2026 17:34:10 -0600
+        d=1e100.net; s=20251104; t=1782862503; x=1783467303;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iXaNCuPOpbl2nMSg6eBIdqb5XNbhZ3AQF3inJGb727o=;
+        b=k6SJEjnWmvSaairL3YNzX/KTVJu8fNdsp7QhC25cw5zw7UYOCgaQGnWtdkhu0KAa47
+         KYOJnvrZS8oy18bAcVaohVAr2bJOFanmhkkrsk9Ep082iu5w9tB+8q7seQIip0YfY8nb
+         ge6VcK1a2jQjRaeMQSJEryLuw4epDsz/cGJpkT95TveaHtR81a/cPs5/ZXIMAL6oVsRH
+         b9VFwY0xeSJ9ZVtZf5WWtNdDssEs1pnmSPWrH3yqoA8rofu1CT2MYo6nLZLJAj8abjlM
+         tl7ahiFn1x9nziAtxYsk5IzP6UzMST5Ok4yMxXsGDbRqJG16xOSLFLs9scUVrQjHAaSY
+         tPXQ==
+X-Gm-Message-State: AOJu0YxCtXkrchdA1R9I7uXuZwH40A0nhJxu4Kxblm4EyUrCVhbfw4we
+	6uns4oJPgMMWEkjEtSp9cEA7xqQAj71qzMi0iXb3v77eKb92shTELJm+Gd1WXh2jZh8=
+X-Gm-Gg: AfdE7clACwDoXRu5f3uU2nCLgGhOj22JWT5HWW0wb0cPQ0tEAIiYNGcbC5UWbjWNlPy
+	f2iBI2oLNPuIb4Xil0V8XIbZzifwj/ss3abBw/g9JkATqph47RLlXvHW1YkrQ+w2jmQioSltbC0
+	JocsNKwTXfiLLB+ru4nep8lIvGJ/EwnLkMI1iNlVsbDhNWsg+q1Qs/g7hMSG6SePfifjDLQAOw7
+	ZSBJosPmkw/dW/dLASbNxZrpuw7rE9tLMOJBss9r99B9hdHvEyfyWXf4J6BUa9fGWZIp7E12JLo
+	ME15Dc0PNJVz8diI43QsIzWVDRELRq3jN0GuCwGrrgjH2xaXCHG9UQMInDqZeCylIyA+gfRPV7q
+	bcRlaA4POanmUNCK7Vp3XzOqgP9mYfdDWJAsI2I0OO5C+AQob2AofsImdW535jMu1Z4y6bu+XBJ
+	S/l3HJXU3rrvSM3o9wtVsp9BcuwkUomMa6ggcNM0ZrdL58502qqi38uBM1nLBNMmdGjRXsWvMOT
+	8wU
+X-Received: by 2002:a05:6830:4901:b0:7e9:ebfe:a0a7 with SMTP id 46e09a7af769-7e9ec78be1fmr4659459a34.29.1782862502856;
+        Tue, 30 Jun 2026 16:35:02 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9ebf891e0sm3539517a34.4.2026.06.30.16.35.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2026 16:35:02 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Robert Femmer <robert@fmmr.tech>
+Cc: Dmitry Vyukov <dvyukov@google.com>, 
+ Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com, 
+ Jann Horn <jannh@google.com>
+In-Reply-To: <20260624090145.1715865-2-robert@fmmr.tech>
+References: <20260624090145.1715865-2-robert@fmmr.tech>
+Subject: Re: [PATCH v4] io_uring: annotate remote tasks for kcoverage
+Message-Id: <178286250200.176362.12773693148044387806.b4-ty@b4>
+Date: Tue, 30 Jun 2026 17:35:02 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] io_uring: annotate remote tasks for kcoverage
-To: Robert Femmer <robert@fmmr.tech>, io-uring@vger.kernel.org
-Cc: Dmitry Vyukov <dvyukov@google.com>,
- Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com,
- Jann Horn <jannh@google.com>
-References: <CAG48ez02Sio8ZENVK3gUWM+8j6NgG9LxtnDV=v+FSqsqs_KfnA@mail.gmail.com>
- <20260624090145.1715865-2-robert@fmmr.tech>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260624090145.1715865-2-robert@fmmr.tech>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On 6/24/26 3:01 AM, Robert Femmer wrote:
-> diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-> index 8cc7b47d3089..173299dfc9c2 100644
-> --- a/io_uring/io-wq.c
-> +++ b/io_uring/io-wq.c
-> @@ -19,6 +19,7 @@
->  #include <linux/mmu_context.h>
->  #include <linux/sched/sysctl.h>
->  #include <uapi/linux/io_uring.h>
-> +#include <linux/kcov.h>
->  
->  #include "io-wq.h"
->  #include "slist.h"
-> @@ -639,6 +640,7 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
->  		/* handle a whole dependent link */
->  		do {
->  			struct io_wq_work *next_hashed, *linked;
-> +			struct io_kiocb *req;
->  			unsigned int work_flags = atomic_read(&work->flags);
->  			unsigned int hash = __io_wq_is_hashed(work_flags)
->  				? __io_get_work_hash(work_flags)
 
-We try to, roughly, keep this in reverse xmas tree order. I've fixed it
-up.
+On Wed, 24 Jun 2026 11:01:46 +0200, Robert Femmer wrote:
+> Fuzzers use coverage information to guide generation of test cases
+> towards new or interesting code paths. Syzkaller, specifically, makes
+> use kcoverage (CONFIG_KCOV). Coverage information is not collected for
+> kernel tasks unless annotated by kcov_remote_start and kcov_remote_stop.
+> This patch annotates io-uring's work queue and sqpoll tasks.
+> 
+> 
+> [...]
 
-> diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
-> index 46c12afec73e..aafb640d3b2f 100644
-> --- a/io_uring/sqpoll.c
-> +++ b/io_uring/sqpoll.c
-> @@ -13,6 +13,7 @@
->  #include <linux/cpuset.h>
->  #include <linux/sched/cputime.h>
->  #include <linux/io_uring.h>
-> +#include <linux/kcov.h>
->  
->  #include <uapi/linux/io_uring.h>
->  
-> @@ -342,10 +343,12 @@ static int io_sq_thread(void *data)
->  
->  		cap_entries = !list_is_singular(&sqd->ctx_list);
->  		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
-> +			kcov_remote_start_common(ctx->kcov_handle);
->  			int ret = __io_sq_thread(ctx, sqd, cap_entries, &ist);
+Applied, thanks!
 
-Never code before variable declarations in the scope. I've also fixed
-that one up.
+[1/1] io_uring: annotate remote tasks for kcoverage
+      commit: c905736a46892e4776efc7f50888d67715d6ec08
 
-Also not sure what branch this was against, because it doesn't apply to
-any current one. Guessing something old? I had applied 2 hunks, fwiw.
-Please check the result!
-
+Best regards,
 -- 
 Jens Axboe
+
+
+
