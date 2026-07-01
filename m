@@ -1,102 +1,178 @@
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4D6322DB7
-	for <io-uring@vger.kernel.org>; Tue, 30 Jun 2026 23:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B583F3E1696
+	for <io-uring@vger.kernel.org>; Wed,  1 Jul 2026 08:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782862505; cv=none; b=kJS+HZyVUmPpcsgCYgN+JojrEVx0TXDbEYSrz3ADKRmrRVz53RkGTqFqlJzZQOVNO6cUZ/WBGzI0P3vedhpuzfzq3JZXPF7N+IT8/iEEHTYDMfGM2VavHKts7aLoBlDA4f3ottRyFtjkf/Az8mvBG9QCIiGMNXYwQPWfY3B/pQo=
+	t=1782893518; cv=none; b=FbeWpIC/Us+ncFDFEQKTWyH4ORhNRaxQs+y+lT6EY1lXtI9Blvc01FM4NleL8ADufg7wJVPwqP7XNrXKMFVyBe2bKk/64lTIteGsaz4v0QR1sisEHMpvf+gb7GGrXJAJW3IYw3KPFPhTIspa1QGAFEWgkBXvMvGLEH+c1W3l394=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782862505; c=relaxed/simple;
-	bh=MUEYGjynnoFNYnjc03hd9My1Yh74tKixWgBnm/PfMFY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ZSWjx0w32LTSJqI69fZKP45atBLzUX2AQCqGf3875MewuGUf0FPFAo+zZu/b9gGC3kdwzrrr5V4Aw0+w8WFnqtK6OlcnKqt6aPWVBg15vQgcMmX8vFHv2pGEu50NV/md+QgkiBQ8AqL98XtSxlyPKpbi32p1Bgelj2uQ9qcwj7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=p+gF2srQ; arc=none smtp.client-ip=209.85.210.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1782893518; c=relaxed/simple;
+	bh=8D3HGjKY4B2nWaRqyqClM3G4Q/AKoHTj919BBG9gMug=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DKgg4DHkAYblCMvtb82Hq+F6Icp0yxu2SJ3PvzQuX+zQb1aXTFHUdwTRB3ddVqyc6zOaqWiNJLyXSSi7AbF1LO3NvqPnMZfzwCyo5Fb4/3RrrcVMJHwCnfnSwTLJgn1NwTFLk/Xcfn5Z7l2B20UY3bhQKR5j64kj4xXlflnsdDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ToWtwRqb; arc=none smtp.client-ip=209.85.208.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="p+gF2srQ"
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e9b7dae39dso102820a34.0
-        for <io-uring@vger.kernel.org>; Tue, 30 Jun 2026 16:35:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ToWtwRqb"
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-39b349ae174so822161fa.1
+        for <io-uring@vger.kernel.org>; Wed, 01 Jul 2026 01:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1782862503; x=1783467303; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iXaNCuPOpbl2nMSg6eBIdqb5XNbhZ3AQF3inJGb727o=;
-        b=p+gF2srQkqXxCeGWrD0KLu3Wgr+7UG6nwgKm7F24UHB69uxiYsRFv9fe7LfnH0Z28v
-         3YWI2LEsQO5cOFJy5aFKbI51NVnN3Sl3YzKEarFz1vgeD1XI3AzWEdJRAn5T0erCKd+0
-         1rn++ocwXbFsyGwzZW70y8oiCmjF/K8tNTFc9c/XvgLYEYgDdnJEhVQpkQpw74q2f+CK
-         kCJsF3Hieat4rpBulBfunL/3CJvjGcPi6Duw0KJ2n2k8vOjmtXOO0+a4gqZ7034TX4dH
-         naW9CREh9GYhx9Ef8wnCWTlw5MsNTVlmPwrGZvS/FQ4AaB4MD5JSm9o1MVHfeJp54hzf
-         SFpg==
+        d=gmail.com; s=20251104; t=1782893509; x=1783498309; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2JRU5KzlpmqExlTSewb94kl93z3gGd+KqfKhU1JZClg=;
+        b=ToWtwRqbeNSjD/wnHJsZoLnWX7QjgzlE/0j2VD+/CaXm62MMM3Si1QDSfYj7TF3kbV
+         LNvohrVpJ3PjcIjzzxbj0nku6wlxr3vh3cbILZ63NSp40y9azmdDX3ScN+0lgTKgZ7YA
+         3gw/IhHDLQ26IFiP4mVkeembAmXgh+hjzjCd6jh9xrfqr8w/ngBcji/kk2Yo7j3VTwMK
+         2GxL41c5SpRxy46P1xB9k2GXvoWeOQYu9W2guboAy0HxFwpZFG6HoRlSvBlhClDZgqtF
+         h8veoYozhXjtfF+aY80spvTnghXFmOzhxbtRsIZNLC5syKOT6hQ8MINAXctbnZ5u2I4r
+         rRZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782862503; x=1783467303;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iXaNCuPOpbl2nMSg6eBIdqb5XNbhZ3AQF3inJGb727o=;
-        b=k6SJEjnWmvSaairL3YNzX/KTVJu8fNdsp7QhC25cw5zw7UYOCgaQGnWtdkhu0KAa47
-         KYOJnvrZS8oy18bAcVaohVAr2bJOFanmhkkrsk9Ep082iu5w9tB+8q7seQIip0YfY8nb
-         ge6VcK1a2jQjRaeMQSJEryLuw4epDsz/cGJpkT95TveaHtR81a/cPs5/ZXIMAL6oVsRH
-         b9VFwY0xeSJ9ZVtZf5WWtNdDssEs1pnmSPWrH3yqoA8rofu1CT2MYo6nLZLJAj8abjlM
-         tl7ahiFn1x9nziAtxYsk5IzP6UzMST5Ok4yMxXsGDbRqJG16xOSLFLs9scUVrQjHAaSY
-         tPXQ==
-X-Gm-Message-State: AOJu0YxCtXkrchdA1R9I7uXuZwH40A0nhJxu4Kxblm4EyUrCVhbfw4we
-	6uns4oJPgMMWEkjEtSp9cEA7xqQAj71qzMi0iXb3v77eKb92shTELJm+Gd1WXh2jZh8=
-X-Gm-Gg: AfdE7clACwDoXRu5f3uU2nCLgGhOj22JWT5HWW0wb0cPQ0tEAIiYNGcbC5UWbjWNlPy
-	f2iBI2oLNPuIb4Xil0V8XIbZzifwj/ss3abBw/g9JkATqph47RLlXvHW1YkrQ+w2jmQioSltbC0
-	JocsNKwTXfiLLB+ru4nep8lIvGJ/EwnLkMI1iNlVsbDhNWsg+q1Qs/g7hMSG6SePfifjDLQAOw7
-	ZSBJosPmkw/dW/dLASbNxZrpuw7rE9tLMOJBss9r99B9hdHvEyfyWXf4J6BUa9fGWZIp7E12JLo
-	ME15Dc0PNJVz8diI43QsIzWVDRELRq3jN0GuCwGrrgjH2xaXCHG9UQMInDqZeCylIyA+gfRPV7q
-	bcRlaA4POanmUNCK7Vp3XzOqgP9mYfdDWJAsI2I0OO5C+AQob2AofsImdW535jMu1Z4y6bu+XBJ
-	S/l3HJXU3rrvSM3o9wtVsp9BcuwkUomMa6ggcNM0ZrdL58502qqi38uBM1nLBNMmdGjRXsWvMOT
-	8wU
-X-Received: by 2002:a05:6830:4901:b0:7e9:ebfe:a0a7 with SMTP id 46e09a7af769-7e9ec78be1fmr4659459a34.29.1782862502856;
-        Tue, 30 Jun 2026 16:35:02 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7e9ebf891e0sm3539517a34.4.2026.06.30.16.35.02
+        d=1e100.net; s=20251104; t=1782893509; x=1783498309;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2JRU5KzlpmqExlTSewb94kl93z3gGd+KqfKhU1JZClg=;
+        b=cT083yt0XwzQWDcsux3NZPkmH2SGPBRhhyuK0hoNfWOSaYOqCUw9OAej+YalqiV00J
+         Y0ogRUT9M4zqfUzKwdc29XsWnzlSh/ETHti1j3+xWNyMog8HfPUGHTSK8bTwpBwdsaPA
+         mwH00qWJQBrQQyGxYE3D4+oV54RrQ+MZ7DAstGaI25IJy4/7zG0xcd1jbVzvzs5ZFa5J
+         latilLJc5JVrD1pVnf/yZ7tRAMnGLjyc4aj5nSZHtYT5BiIK7WKXNROV8Ta5YgcGrbQ1
+         0urlONll59KcXBoNv1fC39DuVxnLwV2QieVRXw/YpP6tCRMwUeLq1A5YfuaEVg7oLF07
+         ntRg==
+X-Gm-Message-State: AOJu0YzjvIr4SgAy+tvvfq/8fyTE6CLBfIu5z18GgE/A+4WsY63kY69o
+	LWqBKiykjlVBiAksKS/Ir+xrKQ4Dups3Hpa3NdkE2XPKnUOpjfZv+OK2
+X-Gm-Gg: AfdE7clrxCqDH0S0TVWnWh5FWYqZqnBF3d/gPZ1kIKLIZGQMh47dg6D4ZsGhszM0jX0
+	LrjdacEMIbmWybnyQ2XtV4tVms5tarp6MqKU0Qd2QqFO/PfriSSiwgad3xGetMyB13Exu8nEjzg
+	RXGYSMeTR7g+HRq5eBKNHorClfOsau6MvwP9yxWPHpD9VXyTL3ISGUYfDrthF8h1duxJ+PigBYf
+	9/OfHehGRV1q/QCZtSKp2Llar4ksY1hfPT0FfjvCMhlbz3qjDAkEq58oJ/xde+KAJ4D11gT2Bwu
+	rkWKj7TCnRDMEBHfTH7Sl+3XmJuJvV29hCK0ua5Ac+/f1tOPDp8kxZ7LnIINO70nct44fhtJO1G
+	3EiV2iLxsZ70Aui5088ugsJCeVm10/rvAJ4KNIUjQZlbQ60f6WBbowPegzVudq/d41OXfTwtBtv
+	5WD/TVQTdH7QFCLgLH9g1yNC0er1PYnzs=
+X-Received: by 2002:a2e:9296:0:b0:396:9630:5ed with SMTP id 38308e7fff4ca-39b340101afmr980441fa.15.1782893508329;
+        Wed, 01 Jul 2026 01:11:48 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:4f9:2a:1c13::2])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-39b2f6f9e63sm2727001fa.11.2026.07.01.01.11.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jun 2026 16:35:02 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Robert Femmer <robert@fmmr.tech>
-Cc: Dmitry Vyukov <dvyukov@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, kasan-dev@googlegroups.com, 
- Jann Horn <jannh@google.com>
-In-Reply-To: <20260624090145.1715865-2-robert@fmmr.tech>
-References: <20260624090145.1715865-2-robert@fmmr.tech>
-Subject: Re: [PATCH v4] io_uring: annotate remote tasks for kcoverage
-Message-Id: <178286250200.176362.12773693148044387806.b4-ty@b4>
-Date: Tue, 30 Jun 2026 17:35:02 -0600
+        Wed, 01 Jul 2026 01:11:47 -0700 (PDT)
+From: Melbin K Mathew <mlbnkm1@gmail.com>
+To: axboe@kernel.dk
+Cc: io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Melbin K Mathew <mlbnkm1@gmail.com>
+Subject: [PATCH io_uring] io_uring/msg_ring: reject CQE32 flag pass-through to normal rings
+Date: Wed,  1 Jul 2026 10:11:45 +0200
+Message-Id: <20260701081145.196730-1-mlbnkm1@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
 
+IORING_OP_MSG_RING with IORING_MSG_RING_FLAGS_PASS allows a sender to
+pass completion flags through sqe->file_index. If the sender sets
+IORING_CQE_F_32 in file_index, the target-side completion path treats
+it as a 32-byte CQE and writes big_cqe[0] and big_cqe[1] into the CQ
+ring regardless of whether the target ring was created with
+IORING_SETUP_CQE32 or IORING_SETUP_CQE_MIXED.
 
-On Wed, 24 Jun 2026 11:01:46 +0200, Robert Femmer wrote:
-> Fuzzers use coverage information to guide generation of test cases
-> towards new or interesting code paths. Syzkaller, specifically, makes
-> use kcoverage (CONFIG_KCOV). Coverage information is not collected for
-> kernel tasks unless annotated by kcov_remote_start and kcov_remote_stop.
-> This patch annotates io-uring's work queue and sqpoll tasks.
-> 
-> 
-> [...]
+On a normal 16-byte CQE ring, this writes 16 extra bytes (two u64
+big_cqe fields) into the next CQE slot in the ring buffer. This was
+confirmed by poisoning the adjacent slot with known values and observing
+them being overwritten after the pass-through, while the CQ tail
+advanced by only one slot.
 
-Applied, thanks!
+Add a helper io_msg_ring_cqe_flags() that validates the flags before
+they are forwarded, and use it in both the local and remote data paths.
+Reject with -EINVAL when IORING_CQE_F_32 is passed to a ring that does
+not support CQE32 or mixed CQE modes. In the remote path, this guard
+runs before the target request allocation to avoid a leak on error.
 
-[1/1] io_uring: annotate remote tasks for kcoverage
-      commit: c905736a46892e4776efc7f50888d67715d6ec08
+Fixes: cbeb47a7b5f0 ("io_uring/msg_ring: Pass custom flags to the cqe")
+Signed-off-by: Melbin K Mathew <mlbnkm1@gmail.com>
+---
+Notes:
+    Testing on Linux 7.2-rc1 with KASAN and UBSAN enabled:
 
-Best regards,
+    Unpatched kernel: MSG_RING with IORING_MSG_RING_FLAGS_PASS and
+    IORING_CQE_F_32 posts CQE_F_32 to a normal target ring. Target CQ
+    tail advances by one while the adjacent unpublished CQ slot is
+    overwritten (confirmed by poisoning the adjacent slot with known
+    values and observing them zeroed after the pass-through).
+
+    Patched kernel: sender receives -EINVAL. Target CQ tail does not
+    advance. Adjacent poisoned slot remains intact.
+
+    git apply --check: OK
+    checkpatch --strict: 0 errors, 0 warnings, 0 checks
+    make W=1 io_uring/msg_ring.o: clean
+
+ io_uring/msg_ring.c | 34 +++++++++++++++++++++++++++-------
+ 1 file changed, 27 insertions(+), 7 deletions(-)
+
+diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
+index 3ff9098573..3067c93439 100644
+--- a/io_uring/msg_ring.c
++++ b/io_uring/msg_ring.c
+@@ -93,19 +93,38 @@ static void io_msg_remote_post(struct io_ring_ctx *ctx, struct io_kiocb *req,
+ 	io_req_task_work_add_remote(req, IOU_F_TWQ_LAZY_WAKE);
+ }
+ 
++static int io_msg_ring_cqe_flags(struct io_ring_ctx *target_ctx,
++				 const struct io_msg *msg, u32 *flags)
++{
++	*flags = 0;
++
++	if (!(msg->flags & IORING_MSG_RING_FLAGS_PASS))
++		return 0;
++
++	*flags = msg->cqe_flags;
++	if ((*flags & IORING_CQE_F_32) &&
++	    !(target_ctx->flags & (IORING_SETUP_CQE32 |
++				   IORING_SETUP_CQE_MIXED)))
++		return -EINVAL;
++
++	return 0;
++}
++
+ static int io_msg_data_remote(struct io_ring_ctx *target_ctx,
+ 			      struct io_msg *msg)
+ {
+ 	struct io_kiocb *target;
+-	u32 flags = 0;
++	u32 flags;
++	int ret;
+ 
+-	target = kmem_cache_alloc(req_cachep, GFP_KERNEL | __GFP_NOWARN | __GFP_ZERO)  ;
++	ret = io_msg_ring_cqe_flags(target_ctx, msg, &flags);
++	if (ret)
++		return ret;
++
++	target = kmem_cache_alloc(req_cachep, GFP_KERNEL | __GFP_NOWARN | __GFP_ZERO);
+ 	if (unlikely(!target))
+ 		return -ENOMEM;
+ 
+-	if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
+-		flags = msg->cqe_flags;
+-
+ 	io_msg_remote_post(target_ctx, target, msg->len, flags, msg->user_data);
+ 	return 0;
+ }
+@@ -130,8 +149,9 @@ static int __io_msg_ring_data(struct io_ring_ctx *target_ctx,
+ 	if (io_msg_need_remote(target_ctx))
+ 		return io_msg_data_remote(target_ctx, msg);
+ 
+-	if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
+-		flags = msg->cqe_flags;
++	ret = io_msg_ring_cqe_flags(target_ctx, msg, &flags);
++	if (ret)
++		return ret;
+ 
+ 	ret = -EOVERFLOW;
+ 	if (target_ctx->flags & IORING_SETUP_IOPOLL) {
 -- 
-Jens Axboe
-
-
+2.39.5
 
