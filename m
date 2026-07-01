@@ -1,178 +1,161 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B583F3E1696
-	for <io-uring@vger.kernel.org>; Wed,  1 Jul 2026 08:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB7AA3955C9
+	for <io-uring@vger.kernel.org>; Wed,  1 Jul 2026 10:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782893518; cv=none; b=FbeWpIC/Us+ncFDFEQKTWyH4ORhNRaxQs+y+lT6EY1lXtI9Blvc01FM4NleL8ADufg7wJVPwqP7XNrXKMFVyBe2bKk/64lTIteGsaz4v0QR1sisEHMpvf+gb7GGrXJAJW3IYw3KPFPhTIspa1QGAFEWgkBXvMvGLEH+c1W3l394=
+	t=1782901957; cv=none; b=m9sXDB4hEvlL2PrBnuM0WSiWnCAozxbTnmJMTGgUTXFxJj6yW3FsZEX/514GIkoenHP/4uJ2xlWHXU9kgZU3lKcnARA7bUAzxokrMFDAHvlJO7AZcMfeTBAyDlfQ1WoO9Bs+thD+b1fd/WHN+/Li6ZRza2xpEaVt4WASujGDl1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782893518; c=relaxed/simple;
-	bh=8D3HGjKY4B2nWaRqyqClM3G4Q/AKoHTj919BBG9gMug=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DKgg4DHkAYblCMvtb82Hq+F6Icp0yxu2SJ3PvzQuX+zQb1aXTFHUdwTRB3ddVqyc6zOaqWiNJLyXSSi7AbF1LO3NvqPnMZfzwCyo5Fb4/3RrrcVMJHwCnfnSwTLJgn1NwTFLk/Xcfn5Z7l2B20UY3bhQKR5j64kj4xXlflnsdDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ToWtwRqb; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782901957; c=relaxed/simple;
+	bh=Sx6+JlfAn5W19pk1zI3jTEznpqqRqUhfOSneoirmGaY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=LY5P/sIXZceAEuF3J1L3Jf/thzJFdtv92GScHTPxv+jmOZKI+XR4RAgRfj0vsCAT7lxBsGiiRyHJrQHkH4Vzs4yVp+96xs2Yva5ezKtWHRJoB0I9qLmoq8LMsXtL1Omh9VmisNLQnE8rK3hQDZRi80KBZXc5vFUXGUDiD7ximIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=rAfNwZS5; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=wsDjaSwI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=S6gu8axZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ZyXr9wMI; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ToWtwRqb"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-39b349ae174so822161fa.1
-        for <io-uring@vger.kernel.org>; Wed, 01 Jul 2026 01:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782893509; x=1783498309; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2JRU5KzlpmqExlTSewb94kl93z3gGd+KqfKhU1JZClg=;
-        b=ToWtwRqbeNSjD/wnHJsZoLnWX7QjgzlE/0j2VD+/CaXm62MMM3Si1QDSfYj7TF3kbV
-         LNvohrVpJ3PjcIjzzxbj0nku6wlxr3vh3cbILZ63NSp40y9azmdDX3ScN+0lgTKgZ7YA
-         3gw/IhHDLQ26IFiP4mVkeembAmXgh+hjzjCd6jh9xrfqr8w/ngBcji/kk2Yo7j3VTwMK
-         2GxL41c5SpRxy46P1xB9k2GXvoWeOQYu9W2guboAy0HxFwpZFG6HoRlSvBlhClDZgqtF
-         h8veoYozhXjtfF+aY80spvTnghXFmOzhxbtRsIZNLC5syKOT6hQ8MINAXctbnZ5u2I4r
-         rRZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782893509; x=1783498309;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2JRU5KzlpmqExlTSewb94kl93z3gGd+KqfKhU1JZClg=;
-        b=cT083yt0XwzQWDcsux3NZPkmH2SGPBRhhyuK0hoNfWOSaYOqCUw9OAej+YalqiV00J
-         Y0ogRUT9M4zqfUzKwdc29XsWnzlSh/ETHti1j3+xWNyMog8HfPUGHTSK8bTwpBwdsaPA
-         mwH00qWJQBrQQyGxYE3D4+oV54RrQ+MZ7DAstGaI25IJy4/7zG0xcd1jbVzvzs5ZFa5J
-         latilLJc5JVrD1pVnf/yZ7tRAMnGLjyc4aj5nSZHtYT5BiIK7WKXNROV8Ta5YgcGrbQ1
-         0urlONll59KcXBoNv1fC39DuVxnLwV2QieVRXw/YpP6tCRMwUeLq1A5YfuaEVg7oLF07
-         ntRg==
-X-Gm-Message-State: AOJu0YzjvIr4SgAy+tvvfq/8fyTE6CLBfIu5z18GgE/A+4WsY63kY69o
-	LWqBKiykjlVBiAksKS/Ir+xrKQ4Dups3Hpa3NdkE2XPKnUOpjfZv+OK2
-X-Gm-Gg: AfdE7clrxCqDH0S0TVWnWh5FWYqZqnBF3d/gPZ1kIKLIZGQMh47dg6D4ZsGhszM0jX0
-	LrjdacEMIbmWybnyQ2XtV4tVms5tarp6MqKU0Qd2QqFO/PfriSSiwgad3xGetMyB13Exu8nEjzg
-	RXGYSMeTR7g+HRq5eBKNHorClfOsau6MvwP9yxWPHpD9VXyTL3ISGUYfDrthF8h1duxJ+PigBYf
-	9/OfHehGRV1q/QCZtSKp2Llar4ksY1hfPT0FfjvCMhlbz3qjDAkEq58oJ/xde+KAJ4D11gT2Bwu
-	rkWKj7TCnRDMEBHfTH7Sl+3XmJuJvV29hCK0ua5Ac+/f1tOPDp8kxZ7LnIINO70nct44fhtJO1G
-	3EiV2iLxsZ70Aui5088ugsJCeVm10/rvAJ4KNIUjQZlbQ60f6WBbowPegzVudq/d41OXfTwtBtv
-	5WD/TVQTdH7QFCLgLH9g1yNC0er1PYnzs=
-X-Received: by 2002:a2e:9296:0:b0:396:9630:5ed with SMTP id 38308e7fff4ca-39b340101afmr980441fa.15.1782893508329;
-        Wed, 01 Jul 2026 01:11:48 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:4f9:2a:1c13::2])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-39b2f6f9e63sm2727001fa.11.2026.07.01.01.11.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 01:11:47 -0700 (PDT)
-From: Melbin K Mathew <mlbnkm1@gmail.com>
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Melbin K Mathew <mlbnkm1@gmail.com>
-Subject: [PATCH io_uring] io_uring/msg_ring: reject CQE32 flag pass-through to normal rings
-Date: Wed,  1 Jul 2026 10:11:45 +0200
-Message-Id: <20260701081145.196730-1-mlbnkm1@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="rAfNwZS5";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="wsDjaSwI";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="S6gu8axZ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ZyXr9wMI"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id E41FC75B0D;
+	Wed,  1 Jul 2026 10:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782901954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vibzk79FE/avKUNujc0wgAmWphMagepxJGNVmuPbn40=;
+	b=rAfNwZS5LhwVADNpGyQEeT2tSxPDYCmWBgjJF/9zumxJHJsQrs10dMLPnsREBVw/dnrXAH
+	UfnGv/3lPYyMhuU8hZKL+hEd+ejQK/90q0YUM4zJ/HSnIQKJ4wm0k4uzIK+1U5T4HQc/6R
+	2CoahEBwx8G/cim7Oy3Daoe4BX+Ovt4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782901954;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vibzk79FE/avKUNujc0wgAmWphMagepxJGNVmuPbn40=;
+	b=wsDjaSwID6oY0x+tnmQTfHtpWVzoGzjK0zYU874WvoM4G8dZH9GLsnYQgaMT7IREwW7j+A
+	utmpCCX7fMmolJDQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=S6gu8axZ;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ZyXr9wMI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1782901953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vibzk79FE/avKUNujc0wgAmWphMagepxJGNVmuPbn40=;
+	b=S6gu8axZA9ns0PddA8stYAS88MWoUWl2yvuYoSHylNUXU43Vs0KxQlXO9rngR9cC04MTXI
+	p3KLDMxADJsOlcwHQPhI2fnZtl5YrEXi+/4VlbMxD8MDQDKp4xCO53hjqY9O9DBD176TLg
+	Hx0lBbr+cl4CtrAoc19XIwjqlyAgsB8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1782901953;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Vibzk79FE/avKUNujc0wgAmWphMagepxJGNVmuPbn40=;
+	b=ZyXr9wMIfZ6CGx9p45TPhUd6pjc9ORjc8k+Vyu/culQ8XkJyzmfbBelZcgY/GAQAVq8NAU
+	pcXKqe9M4nzDIXDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D01F5779AA;
+	Wed,  1 Jul 2026 10:32:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id +FYZMcHsRGqyUwAAD6G6ig
+	(envelope-from <krisman@suse.de>); Wed, 01 Jul 2026 10:32:33 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Yi Xie <xieyi@kylinos.cn>, axboe@kernel.dk
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, Yi Xie
+ <xieyi@kylinos.cn>
+Subject: Re: [PATCH] io_uring/rsrc: bound io_coalesce_buffer() page array
+ allocation
+In-Reply-To: <20260630071017.100436-1-xieyi@kylinos.cn>
+Organization: SUSE
+References: <20260630071017.100436-1-xieyi@kylinos.cn>
+Date: Wed, 01 Jul 2026 06:32:34 -0400
+Message-ID: <87cxx757b1.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Flag: NO
+X-Rspamd-Action: no action
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,mailhost.krisman.be:mid];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: E41FC75B0D
+X-Spam-Score: -4.51
 
-IORING_OP_MSG_RING with IORING_MSG_RING_FLAGS_PASS allows a sender to
-pass completion flags through sqe->file_index. If the sender sets
-IORING_CQE_F_32 in file_index, the target-side completion path treats
-it as a 32-byte CQE and writes big_cqe[0] and big_cqe[1] into the CQ
-ring regardless of whether the target ring was created with
-IORING_SETUP_CQE32 or IORING_SETUP_CQE_MIXED.
+Yi Xie <xieyi@kylinos.cn> writes:
 
-On a normal 16-byte CQE ring, this writes 16 extra bytes (two u64
-big_cqe fields) into the next CQE slot in the ring buffer. This was
-confirmed by poisoning the adjacent slot with known values and observing
-them being overwritten after the pass-through, while the CQ tail
-advanced by only one slot.
+> kvmalloc_objs() in io_coalesce_buffer() does not check for size overflow
+> when nr_folios is large.  Mirror the check used in memmap.c before
+> allocating the page pointer array.
+>
+> Signed-off-by: Yi Xie <xieyi@kylinos.cn>
 
-Add a helper io_msg_ring_cqe_flags() that validates the flags before
-they are forwarded, and use it in both the local and remote data paths.
-Reject with -EINVAL when IORING_CQE_F_32 is passed to a ring that does
-not support CQE32 or mixed CQE modes. In the remote path, this guard
-runs before the target request allocation to avoid a leak on error.
+Resending from yesterday as changing MUA is never harmless...
 
-Fixes: cbeb47a7b5f0 ("io_uring/msg_ring: Pass custom flags to the cqe")
-Signed-off-by: Melbin K Mathew <mlbnkm1@gmail.com>
----
-Notes:
-    Testing on Linux 7.2-rc1 with KASAN and UBSAN enabled:
+I don't think this can happen.
 
-    Unpatched kernel: MSG_RING with IORING_MSG_RING_FLAGS_PASS and
-    IORING_CQE_F_32 posts CQE_F_32 to a normal target ring. Target CQ
-    tail advances by one while the adjacent unpublished CQ slot is
-    overwritten (confirmed by poisoning the adjacent slot with known
-    values and observing them zeroed after the pass-through).
+nr_folios comes from nr_pages in io_check_coalesce_buffer, and must be
+less or equal to it.  But nr_pages is already checked in io_pin_pages,
+introduced by:
 
-    Patched kernel: sender receives -EINVAL. Target CQ tail does not
-    advance. Adjacent poisoned slot remains intact.
+  https://lore.kernel.org/io-uring/178216289049.99876.2987989144128669864.b4-ty@b4/T/#t
 
-    git apply --check: OK
-    checkpatch --strict: 0 errors, 0 warnings, 0 checks
-    make W=1 io_uring/msg_ring.o: clean
+> ---
+>  io_uring/rsrc.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+> index 8d0f2ee24e0c..f1f8d6dd102c 100644
+> --- a/io_uring/rsrc.c
+> +++ b/io_uring/rsrc.c
+> @@ -776,6 +776,8 @@ static bool io_coalesce_buffer(struct page ***pages, int *nr_pages,
+>  	unsigned i, j;
+>  
+>  	/* Store head pages only*/
+> +	if (nr_folios > INT_MAX / sizeof(struct page *))
+> +		return false;
+>  	new_array = kvmalloc_objs(struct page *, nr_folios);
+>  	if (!new_array)
+>  		return false;
+> -- 
+> 2.25.1
+>
 
- io_uring/msg_ring.c | 34 +++++++++++++++++++++++++++-------
- 1 file changed, 27 insertions(+), 7 deletions(-)
-
-diff --git a/io_uring/msg_ring.c b/io_uring/msg_ring.c
-index 3ff9098573..3067c93439 100644
---- a/io_uring/msg_ring.c
-+++ b/io_uring/msg_ring.c
-@@ -93,19 +93,38 @@ static void io_msg_remote_post(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 	io_req_task_work_add_remote(req, IOU_F_TWQ_LAZY_WAKE);
- }
- 
-+static int io_msg_ring_cqe_flags(struct io_ring_ctx *target_ctx,
-+				 const struct io_msg *msg, u32 *flags)
-+{
-+	*flags = 0;
-+
-+	if (!(msg->flags & IORING_MSG_RING_FLAGS_PASS))
-+		return 0;
-+
-+	*flags = msg->cqe_flags;
-+	if ((*flags & IORING_CQE_F_32) &&
-+	    !(target_ctx->flags & (IORING_SETUP_CQE32 |
-+				   IORING_SETUP_CQE_MIXED)))
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
- static int io_msg_data_remote(struct io_ring_ctx *target_ctx,
- 			      struct io_msg *msg)
- {
- 	struct io_kiocb *target;
--	u32 flags = 0;
-+	u32 flags;
-+	int ret;
- 
--	target = kmem_cache_alloc(req_cachep, GFP_KERNEL | __GFP_NOWARN | __GFP_ZERO)  ;
-+	ret = io_msg_ring_cqe_flags(target_ctx, msg, &flags);
-+	if (ret)
-+		return ret;
-+
-+	target = kmem_cache_alloc(req_cachep, GFP_KERNEL | __GFP_NOWARN | __GFP_ZERO);
- 	if (unlikely(!target))
- 		return -ENOMEM;
- 
--	if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
--		flags = msg->cqe_flags;
--
- 	io_msg_remote_post(target_ctx, target, msg->len, flags, msg->user_data);
- 	return 0;
- }
-@@ -130,8 +149,9 @@ static int __io_msg_ring_data(struct io_ring_ctx *target_ctx,
- 	if (io_msg_need_remote(target_ctx))
- 		return io_msg_data_remote(target_ctx, msg);
- 
--	if (msg->flags & IORING_MSG_RING_FLAGS_PASS)
--		flags = msg->cqe_flags;
-+	ret = io_msg_ring_cqe_flags(target_ctx, msg, &flags);
-+	if (ret)
-+		return ret;
- 
- 	ret = -EOVERFLOW;
- 	if (target_ctx->flags & IORING_SETUP_IOPOLL) {
 -- 
-2.39.5
-
+Gabriel Krisman Bertazi
