@@ -1,144 +1,94 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435FB78F2B
-	for <io-uring@vger.kernel.org>; Sun,  5 Jul 2026 23:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51272E0938
+	for <io-uring@vger.kernel.org>; Mon,  6 Jul 2026 03:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783295183; cv=none; b=O4f81LneOKVcT9f2yqdY/0xOdxBL26GxByAURvrvHcRN781ZvBzXfvrbYNFYMyxAVSsqS8a1s8Sqrrh5BUTSVVaI8BqpYB1N+QBQqjvG36PThKeZkWKguaE8z1BgWYaXro/4Zy3/rFYKFtYAXOqcYPYGV3gaBNig+twUT+0DHQQ=
+	t=1783307763; cv=none; b=MOlNtpCA5nbKEPkMuRANYI+j+EvEWMhlICrbdSCqlHLQtCdBeUAJJGw4UJ1FhgxFDBRIADzXMdCuMNVB9J6QudshtTZAFm9I0p2oqR3+j15Zxg6DsXwPEpQmHCm9yvdeSfSyd+s9yTBbvRyCV+Ni0mB87zEC0RWdUS5yeUkd4bQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783295183; c=relaxed/simple;
-	bh=rwiGUlXrzKU1WnDfytZuyAUkQvRMBBDHS4rt18BXk1g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CWv2MznsfMqB5XmifyQ3PxUDekMhbHfHd1rfaxbuiz6IIE5QodR1k+NKmTPj1JX2iubGg9YgmsTedBnpGb28YTdZbZgUVP5ZueCizK5tVJ5iCFgopxEW3ky123vEKSbdH8GCtPi8Ecb+jss6g0W9O7hT4nyNlNkV8wIlJ2UQV5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHTkX2vp; arc=none smtp.client-ip=209.85.216.54
+	s=arc-20240116; t=1783307763; c=relaxed/simple;
+	bh=2JrOu8ZYb7tHM+J8eIgn/teiRpLN+8jSh9WWl9nAN4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=cryyu5CLJ3HOlc3q80sUwdRmeR9R5hUbehOZWKWs4ncoB6fuL0xUUXF5x6nuN647KZRRhkC+J/UzUKyEbnnATYQG0tfx3DfqK8aF57tUPH/mdj09G8PSWzBT0tfFgudPGl/M1lAac+0kk2avMikb4LQPtYUxXM1PpooHBnKvC8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RdZRQ4ME; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHTkX2vp"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-385ea3ce80dso387107a91.2
-        for <io-uring@vger.kernel.org>; Sun, 05 Jul 2026 16:46:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RdZRQ4ME"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8ef7b7651ecso25641516d6.1
+        for <io-uring@vger.kernel.org>; Sun, 05 Jul 2026 20:16:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783295182; x=1783899982; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ww0dOKkmeJX/064KbajPe2nczUlwX/FWmPsoIooNcM=;
-        b=YHTkX2vpTgUY6ZaSUw1gVW38HtwXZCyrEPHv+TAbZ/ZW9v6GpYklQuMTjWLeFHM4bG
-         2P0m7Zxfyydvzxlqau5hA9TnvJNIsONcatrK+KcyIFPNVH3vJ8QVsJy1Qlkj5ZBGGGKc
-         QJKiHanhMVVnXYZwZuUIgVKtmGbrZxFYmpw4FtXRSW/cMCcQHM8woNz8eQcxTTicKIJV
-         8YgHglWdWxx3T7dhJCjxkCv0QJW4Pv32vLI7EoxSIbD5KvLi4RQCk3H+PYn78WthHqeH
-         F6uxwTsVv3DVyUmVJzoVVgadDuMPcfSu5aymajg2hmCDtWs8phCPcJ4hapBkrFFpp+Gg
-         K2fQ==
+        d=gmail.com; s=20251104; t=1783307761; x=1783912561; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b2Lmo0Z9LtR3itZCUsud8f61jOwZl96l9I13KLRvA0M=;
+        b=RdZRQ4MEbBQQVi6xoKDl1WBCkN8K/W8tThDDFj+V0V2WV67hjZKw3zbXYIHI5WVg99
+         RqGKBvz5xabhbMWyi8MKIpA/WeoahfPuTFOqEESK/E2RCmKYF6v0LD7DmNcPctutklaZ
+         jhDIBOp2TUPKrWBKQJPuTcbzMsvEofK+2dOLa7/Tqvw5gcalBUrdH93D1uC7gImrkJ/F
+         B49CHjS+uToKC6YVJsF3+VR2Icse0EjlYmrpefyvlXgdHXVyud07z978AlNONABr4Pwu
+         riZqFtIwvkWz4T/eQ+K7pn7R81uJCTEzDBQPtF0y6ihpgWT2vkCKIdIlTLWTDsbO2W3K
+         JBqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783295182; x=1783899982;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1ww0dOKkmeJX/064KbajPe2nczUlwX/FWmPsoIooNcM=;
-        b=g+9fUce9BqbgxFKDT4UKlJe9P5uc+Jyz/UN4XuJ3a8MQOBZUjwqjFdrMI5UGDguchv
-         ZNrtxwOhNTR46B2hojbC3sZqDmvAxZmxQ4Ty4R76nVA+4P45bKaOOIhRHy63EBowzhfQ
-         yvoEhHMah0FxP5UQoeBRRV2qVVK9TEGvz0bCbRRFvHDdW/H39q8+6iOHGUjhr+0/IjOO
-         TJlMYUQFejGl/xnR8uvjKQ8OaGIoRzoWRbUoqZ8UPt2KPBXyMC5vF0jmudLSMDPGicaK
-         QPDWylNai7iZNdfAYqovCDlyxZryGrrUQlcsEzmLLlqs2984RSyzSHNjaI+DrxyUNiR4
-         e1Bg==
-X-Forwarded-Encrypted: i=1; AHgh+RqutV2tmU9kRvO/o6u3/WNRY4jSTewVIlbUuUNQVNxRTFZyO06d5ev7jtG4BR6mqgHr1g731KH+Hw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6K156NR0ZmHAIeH10n8OaEmioxN3y4ruj6lUyPTWu/0g47PF9
-	0uMEq6/wnL+orAPERSl6ZwPySrJqxwUrcY/Tt3oHNOFnutNR5ACsrsQk
-X-Gm-Gg: AfdE7cmEHYwdExxwjn22Tn6t9xjjRHKgolYUIaZF10aphCM7fCaKA5kZbu2ea3d7PTX
-	lf/c40f49PLSUFAR/9ZTAJIDJyDMekwKFaoqr2sLy6jmaPDWmO1wzu3bViDfQ7Y2VkdgP/Dh1Ns
-	Xnqew6NDu6LrzQ/Hkeix17COvrGMcJ1fUZK6oyGkrFNlc3feaZfBEuoMNqEhYbgEXVxbEMfiAmw
-	ptQKjKIMRr4BnUwrJ/H84DljB7bGxWb8EKrJDGkZCRouhoLbCo4ROongIjzyyO0ZrkRPg/U3aub
-	hzyAlDgRdZz+ZsBBienAyC4wArMCDzC0XrmzwjrcC8q04M3cOnFCztKFadDRYzYsV1hHTSD6tt0
-	KI0wdaZ18CwS+9jOEMKGIzbm+qxD7b54DVfTwNuDdk3k99YCRVe79mtHOf6EXhm8ZiCwqD2WVSp
-	bFblS+VOAYMXd4sc/0dAhukVAmuwaZIYVj/caAm31AR5aYwB+sLWzu68Q=
-X-Received: by 2002:a17:90b:2e42:b0:381:720d:240 with SMTP id 98e67ed59e1d1-3828127f8f6mr7770740a91.14.1783295181617;
-        Sun, 05 Jul 2026 16:46:21 -0700 (PDT)
-Received: from naup-virtual-machine.localdomain ([140.113.139.102])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3812801eadasm3820671a91.10.2026.07.05.16.46.18
+        d=1e100.net; s=20251104; t=1783307761; x=1783912561;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b2Lmo0Z9LtR3itZCUsud8f61jOwZl96l9I13KLRvA0M=;
+        b=oLQD09iFADrRLAYugp4zTPmQJxlp9d2qE1ynAA2VJDPuJrGPWXEoje8nreR/ERDXcE
+         z1XMupG4o+e6VgQMltzaV/KKVtzsalDHqp5zpD4USD7VrsIojU+leF9g+EqN8vocrrvk
+         6IdclMx3Ml0e01b+0jfTJIB50ZzL/Vf63TA62mx9D+rTEJwsW7tPlL9qbN8OSjkhf8Mv
+         +w5kNNd/6R+KGlKESaWKneFa5yP5AF1XSLWSVJKpbAj4BYrdZrFSttiSJzX1oYdz6lWU
+         zMUSajPPhnAbs73nRQT8y205KJixbWfaL6A7GRF7Do3q2IWoSVcveWEWRP8SXH5Rzcdl
+         hvjw==
+X-Gm-Message-State: AOJu0YxEYzh1fqQZD0aeIAcvVkOe2aoQp6dM2YR6ysv35f1pPaHK9bOu
+	06lh+YFjKKI7215GRoD+/+aOf3hXFRqiu/WO8jKPOAPzJKJRfov529AFVzX44g==
+X-Gm-Gg: AfdE7clWm4aAcvC0ZisJ2Xc6VREa6aSKIeizXsgoDxXXpdwndGDb74pJ7Fc7NTVew83
+	FJhtROOzjWD07uzG5mIbnTlNFWCcf51VghC6msvleoMduUaOe76YkrVcsKkVX1AbxFidi1VQVU+
+	VusjXIGu3+qDa8+CiXNjrpXqkXZQ6uZYd0CCWkHXXK25YsRowkDbXwuCsgwPoAqKc3HZH7dEzPF
+	G589ravTyclIN2IZsEAFUL4GiIReLDPMJr4yNJx7iE/C4Ec5GjaQ1i2ZaKGvzqvDJ4TqXQ8Yrwj
+	94/TtPEtb7Ub/Yruo9AXErIZr5ajOX31he/UdgFDOv57TiqAzZcTCc9dWa+NYmkA1SeWfohVdGM
+	XZ5V+X2b4B3bLlj+4ubUmTketyW9A8M/kXtrFsQUakLT8+pISAHfoIktTEKq88N7gJvjUfZzN/L
+	CrPrVpQzzmAqkx4361PTeKJVAxDrthRBC6LQncVtbEPjWbHVM/Lq5ztqX4jbzh4cs/WH0oeUkpe
+	0mhgvDjrn2Ugbb21ohb
+X-Received: by 2002:a05:6214:5902:b0:8f1:fba2:d4aa with SMTP id 6a1803df08f44-8f5bce7ca6cmr177079776d6.16.1783307760406;
+        Sun, 05 Jul 2026 20:16:00 -0700 (PDT)
+Received: from fedora-laptop ([172.245.82.59])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8f46f013f05sm123047226d6.16.2026.07.05.20.15.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2026 16:46:20 -0700 (PDT)
-From: Hao-Yu Yang <naup96721@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: axboe@kernel.dk,
-	io-uring@vger.kernel.org,
-	Hao-Yu Yang <naup96721@gmail.com>
-Subject: [PATCH v1] io_uring: fix dangling iovec after provided-buffer bundle grow failure
-Date: Mon,  6 Jul 2026 07:45:34 +0800
-Message-Id: <20260705234534.768138-1-naup96721@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 05 Jul 2026 20:15:59 -0700 (PDT)
+Date: Sun, 5 Jul 2026 22:15:54 -0500
+From: Ming Lei <tom.leiming@gmail.com>
+To: io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Cc: linux-block@vger.kernel.org
+Subject: [ANNOUNCE] ioutgt: a generic userspace storage target on io_uring
+Message-ID: <aksd6ruHwN6bVVKe@fedora-laptop>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-When growing a provided-buffer bundle, the old cached iovec is freed
-before the new buffers have all been validated. If validation fails, the
-request still points at the freed iovec, which can be freed again during
-completion cleanup.
+Hi all,
 
-BUG: KASAN: double-free in io_vec_free+0x2c/0x90
-Freed by task 73:
- kfree+0x104/0x3b0
- io_vec_free+0x2c/0x90
- __io_submit_flush_completions+0xc03/0x1e40
- io_submit_sqes+0xdb5/0x2310
+I've been building `ioutgt`, a generic userspace storage target on
+io_uring (Rust, Linux >= 6.11); so far it implements NVMe-oF -- NVMe/TCP
+and NVMe/RDMA to an unmodified in-kernel nvme host, mirroring nvme target in
+userspace. 
 
-Allocated by task 73:
- io_ring_buffers_peek+0x559/0xc60
- io_buffers_select+0x1c1/0x460
- io_send+0x770/0x1050
+It's early, but it passes `xfstests(./check -g quick)` against kernel
+nvme-tcp & nvme-rdma with `ioutgt`.
 
-Fix this by deferring the free of the old cached iovec until validation
-has succeeded. On failure, free the newly allocated iovec and leave the
-request pointing at the original one.
+Single job fio test shows that its perf is very promising compared with
+kernel nvme target on mlx5, follows result in the repo:
 
-Fixes: 46800585ae04 ("io_uring/kbuf: validate ring provided buffer addresses with access_ok()")
-Signed-off-by: Hao-Yu Yang <naup96721@gmail.com>
----
- io_uring/kbuf.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+	https://github.com/io-target/ioutgt
 
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 3cd29477fff2..4055173e0c48 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -256,6 +256,7 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 	struct io_uring_buf_ring *br = bl->buf_ring;
- 	struct iovec *org_iovs = arg->iovs;
- 	struct iovec *iov = arg->iovs;
-+	struct iovec *old = NULL;
- 	int nr_iovs = arg->nr_iovs;
- 	__u16 nr_avail, tail, head;
- 	struct io_uring_buf *buf;
-@@ -288,7 +289,7 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		if (unlikely(!iov))
- 			return -ENOMEM;
- 		if (arg->mode & KBUF_MODE_FREE)
--			kfree(arg->iovs);
-+			old = arg->iovs;
- 		arg->iovs = iov;
- 		nr_iovs = nr_avail;
- 	} else if (nr_avail < nr_iovs) {
-@@ -318,6 +319,8 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		if (unlikely(!access_ok(iov->iov_base, len))) {
- 			if (arg->iovs != org_iovs)
- 				kfree(arg->iovs);
-+			/* hand the still-live cached vec back to the owner */
-+			arg->iovs = org_iovs;
- 			return -EFAULT;
- 		}
- 		iov++;
-@@ -330,6 +333,8 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		buf = io_ring_head_to_buf(br, ++head, bl->mask);
- 	} while (--nr_iovs);
- 
-+	kfree(old);
-+
- 	if (head == tail)
- 		req->flags |= REQ_F_BL_EMPTY;
- 
--- 
-2.34.1
+Feedback is welcome!
 
+
+Thanks,
+Ming
