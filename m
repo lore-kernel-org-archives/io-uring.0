@@ -1,64 +1,64 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F723C0633
-	for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 10:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218DE3B42C2
+	for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 10:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783766973; cv=none; b=evbJvNG6pgFfCnqTTpMkmgCreaeScvJ9PQo0qml/JgzTxs6cZy8W8kC8en8OnriJSLt2KXGHNb/I2/xDHyYfbiebGKOwVrPJHNSA8EHRETG2CjZT0EAct0ZolvO1/7g7J9/03wZBCmC+phn18uX14/UdsmPKcvw964bOwIskSFk=
+	t=1783766976; cv=none; b=S+99eEYtrHwW+mV5h7dRzSV7ubAeSSiULAOm6gs5F4D2S0bHpepvexEJ543LXPdnEZjTGzcBLwhY4KvI6N87DpsRmlm9I/sMXdQogdZL4DIitZm1SPaypYjkT2xLD9oxPax8of/q/z+L7t5oQV5jiTMP8gM0N5q1vKkxdLYc53U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783766973; c=relaxed/simple;
-	bh=OEvIyS+mKiIWCrKAbZR0LHE1ZtBrvPvlwVaplICVy9Y=;
+	s=arc-20240116; t=1783766976; c=relaxed/simple;
+	bh=7HjOuzYl0Kwv/Uj9+pP40neUmC14iMxe69XMp0zFQT8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OJy075F88D1+u1a6fgBMwRa9c9I/ptD19DEp/dnTokGUwMlWdyWYtOrGiyCZuneUMvTh0Vu5VLn39XLMmbhacVeNxiD8lltPG8QPEwhSRIReExCVdV6kh6gP71pzSfvzDq4AcxBUOaPE0HVRTjnO3njx0HuGniB3oo2pbyG4wkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k+CqBuhq; arc=none smtp.client-ip=209.85.218.48
+	 MIME-Version; b=P79JbxzQtFjY+JtoUeNz4Uo3LOPVov8RdobxXGrmrunI2cq0JJ06cHw5xXj8hWYH3S6QTNHex2UNwoWZugJKIK5VW2gf7App76swFpIWxbU7dpw6q2W1m+z4aiy7u1ARUnidapgyKw6dUns4cyjwKqpdcscuVd/iz6LTP6tDSrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GnFAXCD5; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k+CqBuhq"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c15c257a488so250225666b.3
-        for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 03:49:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GnFAXCD5"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c15f6d667bcso219747766b.2
+        for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 03:49:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783766960; x=1784371760; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783766970; x=1784371770; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qms3rEKyX2JB93BBm5Zfxr9oAEK8d+GwUbmaIMWOy7c=;
-        b=k+CqBuhqSEJcdv+cz8DkxGumbr/AeR3jAllYDJEBl3FLs1JxuUVQ0kqqjwkfekFQed
-         E/QRKBg6Azdu1Ouc0G/Zc1J+n/nm5VxyZKkIfuHaI/h9gpV082ZB9K1oeqs20XV1df/k
-         ZMKdkRoNmUUN0c9Z9UxqV93qDWheSxemNf6RQkujlOkqU4f9cEWYZOXXKOUOw4WobXWH
-         rqXVyrXZkhJZmJrNI0QcZxVT3fupdjnLlzmebZTxdeI46itJW1qlfI8O6l/vQxG7v1Br
-         D6+RKMU6M2060XDplQ5xSQPhP/AjbDT2yqGqr7YtmHBebMz3GYfoZDGMpGOuTZ1Kb2Q9
-         3x6g==
+        bh=Ixnja4szAAkUS0Icn/+Rw0wsrgzfEtWS0xW14eGn2yo=;
+        b=GnFAXCD5kmGle9kCDPajcUjJHfQj9G3QWXMVsq+xVvTOTDlBjaLuazS/hDzSxoYlPP
+         tRFMXbqOMkGIZlbEtHpfzUJXFqwEjD8Nmb9eshufRSREwGG4ROm8tC7wK+Q2G1WfoiSn
+         OFjWnVkimj+7RgmM1b+eDLnq/sY86/NEu/n0HEjG8AWZ4KUHddsEZTvjVrx3p4zWptIL
+         FOy59wgdeV3hz4I89V7PBZJAmxMgQUJ0Z73VqXHlbr2IcPXjaaVoKRt/U/gySPW/oBoH
+         YelY7kGPwwyIL1A5r060l0KSCL181I8m2w+yySh41Yv4G7P7sweE4EKsLx06FWE3xU5B
+         L3Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783766960; x=1784371760;
+        d=1e100.net; s=20251104; t=1783766970; x=1784371770;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qms3rEKyX2JB93BBm5Zfxr9oAEK8d+GwUbmaIMWOy7c=;
-        b=c5AgHLdfgIPLKFCCujPsa7dQh56g9mG22xuFzI0dff1lO//29TeIPFmq6goQt6A01x
-         jMw3MepqbV1gqYfeV2F370fX8aSR4HX96JR5GykL8xJE4weTt05vj+UwFJITM+HlXFEa
-         aVysiYGZgd91R8vEvlu2bFewOruH3HUn6R/vHjNvL0lzhQZqiU96yLYP2AmVY9JZSn/Z
-         y14+rA7ZcKmQl7MoB8vUO0rTKIOvIemVkHAJnkAUggxfohUolSqr64vvl4DlRr1Qr23t
-         jWM4XIF8vzbwdtuA24+e06DxVxtGhmbouRCQ9gEGBEl8TfXT69BGKK57d/brJQynhLwG
-         ZvMw==
-X-Forwarded-Encrypted: i=1; AHgh+RqQfIm6KSxJ7uzm2KfqEfW5Q5jvQoktLBfWF2Q+NuAbHR5yxlN/PzSQplzAPkMYdvkuUQ2v1Wpv6w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyobvRy5RbXcSuWJM3gQJ9BqLH7/eEs7da9zVdBYtLBmkIT/9LX
-	3hRC1En6lNUkSfbZUPk2o/UvoeZ5dpzTRAizS4biUPFUOXnqlyT1fzNi
-X-Gm-Gg: AfdE7ckRTWlO5lH0Hcs+tEdPSvaOSVuynLXF6BLP3TvC2xaYCum3Am6iW8+Xj1xKA5P
-	Hk6sUenFAJaA+B13f3tX5nuuvw1dFWL5tQ3makQnvxjFMOi7zGwLydavB7rvg3lK+E1gSUcZzpY
-	6iH9QLp55lVz6BTTxoqg5FqDwdGO5knEAuiwWmtz7fMd1CY4/Fj/U/nvHrH1Eyg0SA4KVAqaUik
-	vYPp692KCnXHeUasXgistNQLLbsXcU729fcl1G4VlW7zZt0l2RdezZo3oZsA7dWCFqmu8k5rb9R
-	7XY/2OlHAXR2fZPfQ/6rGPhY7tX+9+7WwWtVIEkjW+j9ohab6cafSwEkMgPdYgLRDgQe1zlWegC
-	Y78vYirxxY10hZFmDVs/Skq4ZMZAuzC5I1h1F0/ITRyS9lZ2D5WUtubHKJ18+EdvJnM6BInycce
-	VkSAySTzD/O2HMQdgBQge+D26aHIL4JzYX2AE1l8xXEMgTjPhxlnZHS3X68AxHrSA4UKO+Zr4dD
-	ifNC7vfNBfs6XD1MOqThc783XpRhsDDVudVRUQuna/ZXJixiFkqmlRm0ue5
-X-Received: by 2002:a17:907:97d4:b0:c15:efb1:9ff7 with SMTP id a640c23a62f3a-c161e91a30fmr84454466b.28.1783766960456;
-        Sat, 11 Jul 2026 03:49:20 -0700 (PDT)
+        bh=Ixnja4szAAkUS0Icn/+Rw0wsrgzfEtWS0xW14eGn2yo=;
+        b=eajVGiTiN7OE9l+9ouexzFbe9wt45lyMx14kOxnJueA/z/e1ZZ7p2RryQA1hpn9MHN
+         fsCaCOUDmHC6ELcT3V75bPKQW2zyqPpiR04vVlHW5y3hYLBkIIez0a1Oogh6B5FtlVIk
+         dRETx5IrS3ZDsnoAQXZgSrWj6mHOCgtDnZnSqQEfekXt4i+/3Q0h9kKiSP43w/48qZ6U
+         f68WVAiuumwQsTP3a5hr2/NhVMaxab4AkihFcpvjDRr8TmtXqg3289IaJQCitgEdT3ro
+         4Ct2cNhFzZS+LPSOJZBo9znrBGS9atZwDC7Ml3KZ9Kt9wlSEYpc+teh/NYtM6XiyfAsI
+         fA6Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqOodEyR3L6QaMt/Db22qanBxMdOXbg38zBt6+krs5eUKtkwKOotwc48pOqXdkHYTi+9BT/2kYV4g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGt4S5UD3qyyZeK+/zEVv2zHQ4Fj7tDonmmvC7qMdfJdpiHVuG
+	7XlJio5CFamAbenalF4ooiunw+dlZgx4anT5yl8aePyaL+SHhfQoRJzlI3TzTg==
+X-Gm-Gg: AfdE7cmA6wRlPAUDNQJHfDPq9oZi15xnMDAzb1tVOSXWtJ0hXpH6FzyK6tnJ4TInZf6
+	VE8MIxY/hiIVuZ/PnmaCHd18t5fKoO0aPUnkMIORVwcGBVPeNXfb09tixI3GgVYopWKU5ysVxdn
+	wasoFMGADXubExITyIBxV5Wd2H/RfaZF278YMQpmEiRoaQgejIN6TVCrB7yapBGxG5j6aJLdNs5
+	QR09DjJYdtguxezbtQJxBW0vVYL6FZ65ZuEjwHDvT56Jblrdx5Bnx8dJeMGU7LyZ0pRpC9nTZpD
+	WYSG6RgiSyujJe1Eb4jmfQ/1xxTrmlFh4zCdrS8qZSbkjeNuTU0w4XmXQfeW4kjY6wpY7Sh7ogg
+	EqZEKNKgQoTUurgxZ6Yp5mA91W/S6fNWR76WokIHG/BhRa/aiDTmgP8TFoxSJOZpSXj5f0m5hUq
+	0zmWPd0wl4gURJxg8Vydk2Ih0W6JPQHD2phjgCep+dA0JrxVEr5nmYtqbBrAKdr89B753+q+vmm
+	DOkvzWcv2A+JDC6AIBXrJ2IR/U47JqVaaX87Ew9ibnNbqAXXw==
+X-Received: by 2002:a17:907:1ca7:b0:c05:3c55:ee86 with SMTP id a640c23a62f3a-c161ea6ac83mr92370166b.46.1783766969870;
+        Sat, 11 Jul 2026 03:49:29 -0700 (PDT)
 Received: from 127.0.0.1localhost (82-132-222-132.dab.02.net. [82.132.222.132])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c15beb53b86sm609123166b.25.2026.07.11.03.49.16
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c15beb53b86sm609123166b.25.2026.07.11.03.49.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jul 2026 03:49:19 -0700 (PDT)
+        Sat, 11 Jul 2026 03:49:27 -0700 (PDT)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S . Miller" <davem@davemloft.net>,
@@ -69,9 +69,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	Jamal Hadi Salim <jhs@mojatatu.com>,
 	io-uring@vger.kernel.org,
 	asml.silence@gmail.com
-Subject: [RFC 04/10] io_uring/zcrx: prepare areas to be exported for tx
-Date: Sat, 11 Jul 2026 11:48:33 +0100
-Message-ID: <60d1b1b7b56986791e4975c79632c42d15c2e57f.1783614400.git.asml.silence@gmail.com>
+Subject: [RFC 06/10] io_uring/rsrc: extend buffer update
+Date: Sat, 11 Jul 2026 11:48:35 +0100
+Message-ID: <94bbb7f89178c18c9c783acd27d43f31956c5aa3.1783614400.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1783614400.git.asml.silence@gmail.com>
 References: <cover.1783614400.git.asml.silence@gmail.com>
@@ -83,243 +83,237 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We're going to piggy back tx on top of zcrx, for that we need a separate
-niov list without the pp field set and make sure net core can reference
-them via get_netmem, which pins the zcrx instance.
+We need to pass more information to buffer registration than we can fit
+into a single struct iovec. This patch allows users to optionally pass
+struct io_uring_regbuf_desc. Apart from having more space for future use
+cases, it also introduces registration types.
+
+Currently, the type can be either of IO_REGBUF_TYPE_UADDR, which mirrors
+the iovec path, or IO_REGBUF_TYPE_EMPTY for leaving a buffer table slot
+empty. The next patch introduces a dmabuf backed type, and can be useful
+for other extensions like splicing a list of user addresses (i.e.
+iovec[]), interoperability with zcrx, kernel allocated memory like was
+brough up by Cristoph. Note, the type only represents a registration
+option, which is distinct from how io_uring internally stores it.
+
+The flags field is not used yet but always useful to have, e.g. we can
+encode read-only / write-only restrictions using it.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- include/linux/io_uring/net.h | 10 ++++++
- io_uring/zcrx.c              | 65 +++++++++++++++++++++++++++++++++---
- io_uring/zcrx.h              | 10 ++++++
- net/core/skbuff.c            |  3 ++
- 4 files changed, 83 insertions(+), 5 deletions(-)
+ include/uapi/linux/io_uring.h | 27 +++++++++++++-
+ io_uring/rsrc.c               | 69 ++++++++++++++++++++++-------------
+ 2 files changed, 69 insertions(+), 27 deletions(-)
 
-diff --git a/include/linux/io_uring/net.h b/include/linux/io_uring/net.h
-index b58f39fed4d5..19f31f0d38d5 100644
---- a/include/linux/io_uring/net.h
-+++ b/include/linux/io_uring/net.h
-@@ -2,6 +2,8 @@
- #ifndef _LINUX_IO_URING_NET_H
- #define _LINUX_IO_URING_NET_H
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 909fb7aea638..98b259901185 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -790,13 +790,38 @@ struct io_uring_rsrc_update {
  
-+#include <net/netmem.h>
-+
- struct io_uring_cmd;
- 
- #if defined(CONFIG_IO_URING)
-@@ -15,4 +17,12 @@ static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd,
- }
- #endif
- 
-+#if defined(CONFIG_IO_URING_ZCRX)
-+void zcrx_ref_niov(struct net_iov *niov);
-+#else
-+static inline void zcrx_ref_niov(struct net_iov *niov)
-+{
-+}
-+#endif
-+
- #endif
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index f501fc75d7b6..28398f0d0014 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -9,6 +9,7 @@
- #include <linux/rtnetlink.h>
- #include <linux/skbuff_ref.h>
- #include <linux/anon_inodes.h>
-+#include <linux/io_uring/net.h>
- 
- #include <net/page_pool/helpers.h>
- #include <net/page_pool/memory_provider.h>
-@@ -100,6 +101,8 @@ static int io_populate_area_dma(struct io_zcrx_ifq *ifq,
- 
- 			if (net_mp_niov_set_dma_addr(niov, dma))
- 				return -EFAULT;
-+			if (net_mp_niov_set_dma_addr(&area->tx_niovs[niov_idx], dma))
-+				return -EFAULT;
- 			sg_len -= niov_size;
- 			dma += niov_size;
- 			niov_idx++;
-@@ -118,7 +121,7 @@ static void io_release_dmabuf(struct io_zcrx_mem *mem)
- 
- 	if (mem->sgt)
- 		dma_buf_unmap_attachment_unlocked(mem->attach, mem->sgt,
--						  DMA_FROM_DEVICE);
-+						  DMA_BIDIRECTIONAL);
- 	if (mem->attach)
- 		dma_buf_detach(mem->dmabuf, mem->attach);
- 	if (mem->dmabuf)
-@@ -162,7 +165,7 @@ static int io_import_dmabuf(struct io_zcrx_ifq *ifq,
- 		goto err;
- 	}
- 
--	mem->sgt = dma_buf_map_attachment_unlocked(mem->attach, DMA_FROM_DEVICE);
-+	mem->sgt = dma_buf_map_attachment_unlocked(mem->attach, DMA_BIDIRECTIONAL);
- 	if (IS_ERR(mem->sgt)) {
- 		ret = PTR_ERR(mem->sgt);
- 		mem->sgt = NULL;
-@@ -226,7 +229,7 @@ static int io_import_umem(struct io_zcrx_ifq *ifq,
- 
- 	if (ifq->dev) {
- 		ret = dma_map_sgtable(ifq->dev, &mem->page_sg_table,
--				      DMA_FROM_DEVICE, IO_DMA_ATTR);
-+				      DMA_BIDIRECTIONAL, IO_DMA_ATTR);
- 		if (ret < 0)
- 			goto out_err;
- 		mapped = true;
-@@ -247,7 +250,7 @@ static int io_import_umem(struct io_zcrx_ifq *ifq,
- out_err:
- 	if (mapped)
- 		dma_unmap_sgtable(ifq->dev, &mem->page_sg_table,
--				  DMA_FROM_DEVICE, IO_DMA_ATTR);
-+				  DMA_BIDIRECTIONAL, IO_DMA_ATTR);
- 	sg_free_table(&mem->page_sg_table);
- 	unpin_user_pages(pages, nr_pages);
- 	kvfree(pages);
-@@ -310,7 +313,7 @@ static void io_zcrx_unmap_area(struct io_zcrx_ifq *ifq,
- 		io_release_dmabuf(&area->mem);
- 	} else {
- 		dma_unmap_sgtable(ifq->dev, &area->mem.page_sg_table,
--				  DMA_FROM_DEVICE, IO_DMA_ATTR);
-+				  DMA_BIDIRECTIONAL, IO_DMA_ATTR);
- 	}
- }
- 
-@@ -494,6 +497,11 @@ static int io_zcrx_create_area(struct io_zcrx_ifq *ifq,
- 	if (!area->nia.niovs)
- 		goto err;
- 
-+	area->tx_niovs = kvmalloc_objs(area->tx_niovs[0], nr_iovs,
-+					GFP_KERNEL_ACCOUNT | __GFP_ZERO);
-+	if (!area->tx_niovs)
-+		goto err;
-+
- 	area->freelist = kvmalloc_array(nr_iovs, sizeof(area->freelist[0]),
- 					GFP_KERNEL_ACCOUNT | __GFP_ZERO);
- 	if (!area->freelist)
-@@ -510,6 +518,7 @@ static int io_zcrx_create_area(struct io_zcrx_ifq *ifq,
- 		net_iov_init(niov, &area->nia, NET_IOV_IOURING);
- 		area->freelist[i] = i;
- 		atomic_set(&area->user_refs[i], 0);
-+		net_iov_init(&area->tx_niovs[i], &area->nia, NET_IOV_IOURING);
- 	}
- 
- 	if (ifq->dev) {
-@@ -741,6 +750,13 @@ static const struct file_operations zcrx_box_fops = {
- 	.release	= zcrx_box_release,
+ struct io_uring_rsrc_update2 {
+ 	__u32 offset;
+-	__u32 resv;
++	__u32 flags;
+ 	__aligned_u64 data;
+ 	__aligned_u64 tags;
+ 	__u32 nr;
+ 	__u32 resv2;
  };
  
-+void zcrx_ref_niov(struct net_iov *niov)
-+{
-+	struct io_zcrx_ifq *ifq = io_zcrx_iov_to_area(niov)->ifq;
++/* struct io_uring_rsrc_update2::flags */
++enum io_uring_rsrc_reg_flags {
++	/*
++	 * Use the extended descriptor format for buffer updates,
++	 * see struct io_uring_regbuf_desc
++	 */
++	IORING_RSRC_UPDATE_EXTENDED		= 1U << 1,
++};
 +
-+	percpu_ref_get(&ifq->refs);
-+}
++/* Buffer registration type, passed in struct io_uring_regbuf_desc::type */
++enum io_uring_regbuf_type {
++	IO_REGBUF_TYPE_EMPTY,
++	IO_REGBUF_TYPE_UADDR,
 +
- static int zcrx_export(struct io_ring_ctx *ctx, struct io_zcrx_ifq *ifq,
- 		       struct zcrx_ctrl *ctrl, void __user *arg)
++	__IO_REGBUF_TYPE_MAX,
++};
++
++struct io_uring_regbuf_desc {
++	__u32 type; /* enum io_uring_regbuf_type */
++	__u32 flags;
++	__u64 size;
++	__u64 uaddr;
++	__u64 __resv[7];
++};
++
+ /* Skip updating fd indexes set to this value in the fd table */
+ #define IORING_REGISTER_FILES_SKIP	(-2)
+ 
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 8af371ba6c06..24fc3232a66a 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -27,11 +27,6 @@ struct io_rsrc_update {
+ 	u32				offset;
+ };
+ 
+-struct io_uring_regbuf_desc {
+-	__u64 uaddr;
+-	__u64 size;
+-};
+-
+ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
+ 						   struct io_uring_regbuf_desc *desc);
+ 
+@@ -90,9 +85,12 @@ static void io_iov_to_regbuf_desc(const struct iovec *iov,
+ 				  struct io_uring_regbuf_desc *desc)
  {
-@@ -1817,3 +1833,42 @@ int io_zcrx_recv(struct io_kiocb *req, struct io_zcrx_ifq *ifq,
- 	sock_rps_record_flow(sk);
- 	return io_zcrx_tcp_recvmsg(req, ifq, sk, flags, issue_flags, len);
+ 	*desc = (struct io_uring_regbuf_desc) {
++		.type = IO_REGBUF_TYPE_UADDR,
+ 		.uaddr = (u64)(uintptr_t)iov->iov_base,
+ 		.size = iov->iov_len,
+ 	};
++	if (!desc->uaddr)
++		desc->type = IO_REGBUF_TYPE_EMPTY;
  }
-+
-+int io_zcrx_fill_tx_skb(struct sk_buff *skb, struct io_zcrx_ifq *zcrx,
-+			struct iov_iter *from, size_t length)
-+{
-+	int i = skb_shinfo(skb)->nr_frags;
-+	unsigned niovs_emitted = 0;
-+	struct io_zcrx_area *area = zcrx->area;
-+	unsigned niov_size = 1U << zcrx->niov_shift;
-+
-+	if (i && skb_frags_readable(skb))
+ 
+ int __io_account_mem(struct user_struct *user, unsigned long nr_pages)
+@@ -323,6 +321,8 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
+ 		return -ENXIO;
+ 	if (up->offset + nr_args > ctx->file_table.data.nr)
+ 		return -EINVAL;
++	if (up->flags)
 +		return -EINVAL;
-+	length = min(length, iov_iter_count(from));
+ 
+ 	for (done = 0; done < nr_args; done++) {
+ 		u64 tag = 0;
+@@ -382,9 +382,8 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+ 				   struct io_uring_rsrc_update2 *up,
+ 				   unsigned int nr_args)
+ {
++	bool extended = up->flags & IORING_RSRC_UPDATE_EXTENDED;
+ 	u64 __user *tags = u64_to_user_ptr(up->tags);
+-	struct iovec fast_iov, *iov;
+-	struct iovec __user *uvec;
+ 	u64 user_data = up->data;
+ 	__u32 done;
+ 	int i, err;
+@@ -393,29 +392,49 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+ 		return -ENXIO;
+ 	if (up->offset + nr_args > ctx->buf_table.nr)
+ 		return -EINVAL;
++	if (up->flags & ~IORING_RSRC_UPDATE_EXTENDED)
++		return -EINVAL;
+ 
+ 	for (done = 0; done < nr_args; done++) {
+ 		struct io_uring_regbuf_desc desc;
+ 		struct io_rsrc_node *node;
+ 		u64 tag = 0;
+ 
+-		uvec = u64_to_user_ptr(user_data);
+-		iov = iovec_from_user(uvec, 1, 1, &fast_iov, io_is_compat(ctx));
+-		if (IS_ERR(iov)) {
+-			err = PTR_ERR(iov);
+-			break;
+-		}
+ 		if (tags && copy_from_user(&tag, &tags[done], sizeof(tag))) {
+ 			err = -EFAULT;
+ 			break;
+ 		}
+ 
+-		io_iov_to_regbuf_desc(iov, &desc);
++		if (extended) {
++			if (copy_from_user(&desc, u64_to_user_ptr(user_data),
++					   sizeof(desc))) {
++				err = -EFAULT;
++				break;
++			}
++			user_data += sizeof(desc);
++		} else {
++			struct iovec __user *uvec = u64_to_user_ptr(user_data);
++			struct iovec fast_iov, *iov;
 +
-+	while (length) {
-+		struct net_iov *niov;
-+		size_t offset, size, niov_off;
++			if (io_is_compat(ctx))
++				user_data += sizeof(struct compat_iovec);
++			else
++				user_data += sizeof(struct iovec);
 +
-+		if (i == MAX_SKB_FRAGS) {
-+			percpu_ref_get_many(&zcrx->refs, niovs_emitted);
-+			return -EMSGSIZE;
++			iov = iovec_from_user(uvec, 1, 1, &fast_iov, io_is_compat(ctx));
++			if (IS_ERR(iov)) {
++				err = PTR_ERR(iov);
++				break;
++			}
++			io_iov_to_regbuf_desc(iov, &desc);
 +		}
 +
-+		offset = (size_t)iter_iov_addr(from);
-+		niov = &area->tx_niovs[offset >> zcrx->niov_shift];
-+		niov_off = offset & (niov_size - 1);
-+		size = min(length, niov_size - niov_off);
-+		size = min(size, iter_iov_len(from));
+ 		node = io_sqe_buffer_register(ctx, &desc);
+ 		if (IS_ERR(node)) {
+ 			err = PTR_ERR(node);
+ 			break;
+ 		}
 +
-+		skb_add_rx_frag_netmem(skb, i, net_iov_to_netmem(niov), niov_off,
-+				       size, size);
-+		iov_iter_advance(from, size);
-+		length -= size;
-+		i++;
-+		niovs_emitted++;
-+	}
-+
-+	percpu_ref_get_many(&zcrx->refs, niovs_emitted);
-+	return 0;
-+}
-diff --git a/io_uring/zcrx.h b/io_uring/zcrx.h
-index 205b9b40c74d..406e0399bd7b 100644
---- a/io_uring/zcrx.h
-+++ b/io_uring/zcrx.h
-@@ -32,6 +32,7 @@ struct io_zcrx_area {
- 	struct net_iov_area	nia;
- 	struct io_zcrx_ifq	*ifq;
- 	atomic_t		*user_refs;
-+	struct net_iov		*tx_niovs;
- 
- 	bool			is_mapped;
- 	u16			area_id;
-@@ -96,6 +97,10 @@ int io_zcrx_recv(struct io_kiocb *req, struct io_zcrx_ifq *ifq,
- 		 unsigned issue_flags, unsigned int *len);
- struct io_mapped_region *io_zcrx_get_region(struct io_ring_ctx *ctx,
- 					    unsigned int id);
-+
-+int io_zcrx_fill_tx_skb(struct sk_buff *skb, struct io_zcrx_ifq *zcrx,
-+			 struct iov_iter *from, size_t length);
-+
- #else
- static inline int io_register_zcrx(struct io_ring_ctx *ctx,
- 				   struct io_uring_zcrx_ifq_reg __user *arg)
-@@ -124,6 +129,11 @@ static inline int io_zcrx_ctrl(struct io_ring_ctx *ctx,
- {
- 	return -EOPNOTSUPP;
+ 		if (tag) {
+ 			if (!node) {
+ 				err = -EINVAL;
+@@ -426,10 +445,6 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+ 		i = array_index_nospec(up->offset + done, ctx->buf_table.nr);
+ 		io_reset_rsrc_node(ctx, &ctx->buf_table, i);
+ 		ctx->buf_table.nodes[i] = node;
+-		if (io_is_compat(ctx))
+-			user_data += sizeof(struct compat_iovec);
+-		else
+-			user_data += sizeof(struct iovec);
+ 	}
+ 	return done ? done : err;
  }
-+static inline int io_zcrx_fill_tx_skb(struct sk_buff *skb, struct io_zcrx_ifq *zcrx,
-+					struct iov_iter *from, size_t length)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif
- 
- int io_recvzc(struct io_kiocb *req, unsigned int issue_flags);
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 18dabb4e9cfa..f871e3f2299b 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -92,6 +92,7 @@
- #include <linux/user_namespace.h>
- #include <linux/indirect_call_wrapper.h>
- #include <linux/textsearch.h>
-+#include <linux/io_uring/net.h>
- 
- #include "dev.h"
- #include "devmem.h"
-@@ -7476,6 +7477,8 @@ void __get_netmem(netmem_ref netmem)
- 
- 	if (net_is_devmem_iov(niov))
- 		net_devmem_get_net_iov(netmem_to_net_iov(netmem));
-+	else if (niov->type == NET_IOV_IOURING)
-+		zcrx_ref_niov(niov);
+@@ -464,7 +479,7 @@ int io_register_files_update(struct io_ring_ctx *ctx, void __user *arg,
+ 	memset(&up, 0, sizeof(up));
+ 	if (copy_from_user(&up, arg, sizeof(struct io_uring_rsrc_update)))
+ 		return -EFAULT;
+-	if (up.resv || up.resv2)
++	if (up.resv2)
+ 		return -EINVAL;
+ 	return __io_register_rsrc_update(ctx, IORING_RSRC_FILE, &up, nr_args);
  }
- EXPORT_SYMBOL(__get_netmem);
+@@ -478,7 +493,7 @@ int io_register_rsrc_update(struct io_ring_ctx *ctx, void __user *arg,
+ 		return -EINVAL;
+ 	if (copy_from_user(&up, arg, sizeof(up)))
+ 		return -EFAULT;
+-	if (!up.nr || up.resv || up.resv2)
++	if (!up.nr || up.resv2)
+ 		return -EINVAL;
+ 	return __io_register_rsrc_update(ctx, type, &up, up.nr);
+ }
+@@ -578,12 +593,9 @@ int io_files_update(struct io_kiocb *req, unsigned int issue_flags)
+ 	struct io_uring_rsrc_update2 up2;
+ 	int ret;
  
++	memset(&up2, 0, sizeof(up2));
+ 	up2.offset = up->offset;
+ 	up2.data = up->arg;
+-	up2.nr = 0;
+-	up2.tags = 0;
+-	up2.resv = 0;
+-	up2.resv2 = 0;
+ 
+ 	if (up->offset == IORING_FILE_INDEX_ALLOC) {
+ 		ret = io_files_update_with_index_alloc(req, issue_flags);
+@@ -882,8 +894,13 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
+ 	struct io_imu_folio_data data;
+ 	bool coalesced = false;
+ 
+-	if (!uaddr) {
+-		if (size)
++	if (desc->type >= __IO_REGBUF_TYPE_MAX)
++		return ERR_PTR(-EINVAL);
++	if (!mem_is_zero(&desc->__resv, sizeof(desc->__resv)))
++		return ERR_PTR(-EINVAL);
++
++	if (desc->type == IO_REGBUF_TYPE_EMPTY) {
++		if (uaddr || size)
+ 			return ERR_PTR(-EFAULT);
+ 		/* remove the buffer without installing a new one */
+ 		return NULL;
 -- 
 2.54.0
 
