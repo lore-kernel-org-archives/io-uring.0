@@ -1,70 +1,70 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9952773CA
-	for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 09:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD003803D0
+	for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 09:12:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783761140; cv=none; b=mqTcpk+/1Wf++sXKL+qbfbA01Df0tp2Pzavsxx97nz0GokLqzKY8Y5IvL5yq8glbn+EgMVGj2gKQg7uTkpUVO/8KXHLKivH2xuvu5Ve6/lABOZiIVPqHXsVEw1koCve3JFliZpaIRWd/8ut8vREB3aIV+AT/fkkd8Rtjpm2b1XY=
+	t=1783761145; cv=none; b=ftpVLlTCAzWKkfhn2OkMxPv+uJkTfw5MxCSn3xV3dvlnqVA7WfH30Qo1udAmEOUFmWUItogirgGu9Hgo6KjTsDuEmwA0htWart075MDJAtVI2xeVPj0boSwBK0EEeiBTCbp064eSPo6H7xTesH1B0ajHvD+6pcGTg6L3IrLfUM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783761140; c=relaxed/simple;
-	bh=E6cOOOK8JRaX4aDVdN1M0+1MtzS0eNCG8VJsAdIuLwg=;
+	s=arc-20240116; t=1783761145; c=relaxed/simple;
+	bh=vXLXGlirW74iLjcp76e+jYwoFmdKKciWzpMx5TOLBD4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e1Lsx4sY3JQCwKiRgR0bK5F6/4nEITvon8pnfwfOEL8uxPpAbYncIQ+aEZqHFCBXSGKgx26m34fhYMGZy4mivYe9pv5xdTl0kcTT0mDxHvCm79qy5VEWJ4Fi4AdqiGgEsNWdBsTEMlrFkp3XxWAa/EDW5FK4YJwQweuUWvPJc/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tJ6tL3bn; arc=none smtp.client-ip=209.85.208.45
+	 MIME-Version; b=mbKkFu6kwxN6MqmC8/0sCzaFd0sG6nCvYnSWxVcGu3EbP6xdGdStYWuXZHgZ2RNOvxIKklk83u7XZcS7HASL1iFpRd6VYayiOof4klpI1UBWlTbL43Aj8IIdUfSvze9I5aFkNWN6Y+kxQQh4qQ3Un4as7njhEDGsgWk+I+MmKyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krhIXwF2; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tJ6tL3bn"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-69c5fda04a8so1008343a12.1
-        for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 02:12:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krhIXwF2"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-69a5ecbbfb2so2616433a12.2
+        for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 02:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783761138; x=1784365938; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1783761143; x=1784365943; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=dvOpz0r7ZGyorI3Hc7NN1bB6/9+WhAP8KvikiSMDSlo=;
-        b=tJ6tL3bnChp+YcRF1+X3EyhkD4QJ9pVyVxIEJHm0a2KxMlMuNtG27CrnWcV7QPdt7H
-         E5ciJMTLWH+c83IR9EL0brFQwm9P7FkcLyEhlqSVTaEdXDcXwclbd8W9VGm08XQUryVs
-         nOB9rN0WTx8Ci4w+rVzcpTBKQxChyCVp605a+Ggc9+PJOg4WZTkZRBXJ/nMKIEWk3NQq
-         6jY2fuBpddH8aNHky9kJ648zPsHpmWhQZYYGE7cgBIAVIsgfO9dnf+r/MjKyjbv3NGej
-         KTSHgvJ+hlY3gFEAjOGpN11zkvN7FijRNkl5rbL4xQ8K4zTSH/hejrOeoiIrr0RHPKU7
-         IWQw==
+        bh=JRXQoFwCCrM5mcf0PRKuJdMsq0ptHmdatjnuBeJf1+Q=;
+        b=krhIXwF27MNiwbBs9Z2mLWO8S09IBRBRMf4FcyDJNfvl3QlBfvyDBI94LEvHNlgsNZ
+         d0kYOSNjajRfrvyHDix66UfiQO8iyr4f/anVWpFBjtt/ULfp64zbaARDngCC6MK8sPdS
+         M6atkAZMhhRbEGNKTwckUydqB7MvQiBaLgPVAjAHNojk979pnf2Tc5+eShN4C4fAnyt1
+         G/hxF8v4jVsF6XUxLuXUD5mOG6zlh1iBOfwZ/IUIOGjoMTg5nwIm6If1SMc84yL9y+cp
+         IBs3jfEA4+BdbssG0foIbuEA+0CTSPDxsBcnWpE2628Bl5R4lVwSFE812C8DRL3o4ZhT
+         +4jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783761138; x=1784365938;
+        d=1e100.net; s=20251104; t=1783761143; x=1784365943;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dvOpz0r7ZGyorI3Hc7NN1bB6/9+WhAP8KvikiSMDSlo=;
-        b=OwB4F9VtVNCuwhy2KPCUBAhbGMib3VUATN5HaxA2PdDgRdzhLpX2sV6Lwe2A54ZUyb
-         kmiaOIGAcyfewNk87J7hgYUzgA51Xi7zJIwbWCqmOd4HVXbl58yfucgrqB+cE2Qc5fq4
-         36m38X8rfenjbfoH7wyw21mLiLaaYy7ZORtR+vVRxYObjzp9rOVw8Vsvsm3Cb7fQWwyu
-         A6S5mvyo19gweACx150/JvS+IJurdKgjrrAMaOE/V18od/622ygS9KPXwInAgLmo9x9V
-         DP0/SvFMzU3Lhl1Vug7UTR0T2a2UI5wI3eJbhr+CNGVZwJsuprlrItCGGcForPUGm/pp
-         sxrw==
-X-Gm-Message-State: AOJu0YxOJhSF95uDusYhLpjVBQ76wZ3q6sJT3RzWz/CO5uWcG0z3HWNG
-	bVV+ANPpuURFaCkOnleQVF0zmGAU/nOzOKssGJw9MrYfF3bUmq0SRnq2OPGMZg==
-X-Gm-Gg: AfdE7cmboYrIkpvHrwlokp4+KN8pA40i1DusGOodhliNbkeIxf8Me5xtBpPRZ3XKfNf
-	EMsZuyHTzRNSl0YqYraM+22LIsGDt1woDPAS9vlAoZKUWxdlZhM1c/ed1BqWkGNNwoqfxwMSOMH
-	E8/9hwjBTVrhkm2Zsivw24z5UZt8eJ8Am/oCgWHE6Tx0omsJtm0hxhAYxxdg1AogW6ieaJyM1PV
-	2stu3EpSKJZBJy/OYxRHe9zLCsX6vVJqJ4ZxS2Ridk34VhEHDqW5MlXgB6Vq6hNn5ldyRnHVAre
-	p2IeTvARqKp4p2I7qpypjVgcYXCMUHwVivOOc+pmU++F1MSp6wpEtC/R477hA8NtCAviyaUK0v3
-	CiT4M01Hw2h4Ps+/5jjE9C3iM6xteQJiDtu7e9GlOU5msfI8Y+/bbrpFltAJsySk82r1YZ4wLZR
-	jI/azSbC9+3lngHAQB51Yb6+4bfZpyHLKRy97kEz8ZCfAd/E6E1UDORfKVYdop2/PbI66HVaXqj
-	zz5WIH/qrgjDxTWn/qREqs+3Z1UZydxZxA6VUoXNtuoHpE=
-X-Received: by 2002:a05:6402:2695:b0:697:d475:9692 with SMTP id 4fb4d7f45d1cf-69c5efaf7a0mr1144254a12.11.1783761137561;
-        Sat, 11 Jul 2026 02:12:17 -0700 (PDT)
+        bh=JRXQoFwCCrM5mcf0PRKuJdMsq0ptHmdatjnuBeJf1+Q=;
+        b=iQXWtjxFnDF9V+HgNogdCdgml7OrPL4q7G5Um8A9Nikl0d/IR8KiwnH6GvlO0kbdiY
+         MtnnNUm3dYodIgxRKInshYFRcw0I41FIQmSvxzCVCQSA/WyUz1EAuLiT0GgHE7aKMOfw
+         hwcRBJSoZTMU/jaaFpZSEI3XPMhWmvw9Q3VeCnx7u4zPSP8zj2t0Kh15sdCVHSHN96oB
+         /FFhyAuyyS056FXj2vWgdcPg+mt6MX9JgKpr4HopJbkYQfWplTL+wtftNQfay+En4y/P
+         BisZwxW/wWzKpDhPSwHmJbbAGc4ZsBcqTjWOdDKe3uVyEz0GB4kvAe06Yi/moHMAYL9s
+         0abw==
+X-Gm-Message-State: AOJu0Yzfh25kcNUkVZ2H05+dkfu0oJgXTR+9oHk3vsxPKLbGZATKd3Cs
+	u58Km9n6uFIyu5wuDtKdRaKNx3UGLrBC3pGLwOcMhuqSmaTRDPjRwXyeSV44gQ==
+X-Gm-Gg: AfdE7ck1C17uRdapVb4evzYmbRMaa1aSTzJqyuoZB1IvX8CWX43IGPy/C+cmwcP9d98
+	22HzVBa8fYlR4s87sJYqA6Vuppv2RSUwIObJMyhMEiF5Pm78QRHeE2+70rm5TdJM9E3/RYSTLDr
+	sG3uwNBgRThsCZnFZk7ZfnDSrZaz1WmTmS3I8FSAywyqTWPwqO4QbZKMsEAEAS5n6S6Z1mv9b6C
+	fF7jvCPg5od8DadlttPpOpCdCPB1AAI5joFo6aSKkzhtxFc0GKVQhcS7q/1QV1cSI132nV9JTr/
+	uCkiq9i/I2Q7yYdKo36AiWxzaXTcKIGj/hZ6ZUEg2JbrgnvjgIRJUFwQ9IahjHesZ08k2CQ+xxH
+	SveNT+kFtDZLkRfvPbH3H+76e+UQd8CuROS8xyT6ZTBvqy6RB7SpGH1cw5Tlhosk43qfLHcQR/j
+	Hwgn9Cujz5GGZu2zKTJR+XFYpqI4IhuZqZc0tNTfMb8/boyxbEU3lXEzxAoC6Frm1mcLXP8GgU5
+	aCRCFrWH02+eqkW+p/k8/bLegVpdLYfgbaH+wnmq3zP1XA=
+X-Received: by 2002:a05:6402:42cf:b0:698:3b7c:3b37 with SMTP id 4fb4d7f45d1cf-69c5f262ce7mr1192129a12.35.1783761142637;
+        Sat, 11 Jul 2026 02:12:22 -0700 (PDT)
 Received: from 127.0.0.1localhost (82-132-221-54.dab.02.net. [82.132.221.54])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69c60d47188sm681191a12.27.2026.07.11.02.12.13
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-69c60d47188sm681191a12.27.2026.07.11.02.12.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jul 2026 02:12:15 -0700 (PDT)
+        Sat, 11 Jul 2026 02:12:20 -0700 (PDT)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	netdev@vger.kernel.org
-Subject: [PATCH review-only 03/17] io_uring/zcrx: add RQ iterator
-Date: Sat, 11 Jul 2026 10:11:26 +0100
-Message-ID: <ee60806a753b75c2cbc6edaf8d0cb468e7b9d0cf.1783616211.git.asml.silence@gmail.com>
+Subject: [PATCH review-only 05/17] io_uring/zcrx: coalesce same-niov RQEs on refill
+Date: Sat, 11 Jul 2026 10:11:28 +0100
+Message-ID: <267af1e26c3b17fd9fa9b56e4b2316d7412546db.1783616211.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <cover.1783616211.git.asml.silence@gmail.com>
 References: <cover.1783616211.git.asml.silence@gmail.com>
@@ -76,77 +76,122 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a iterator structure and helper functions for the refill queue
-processing to avoid polluting io_zcrx_ring_refill() with extra state
-and logic once it's extended in following patches.
+With large rx piages I often see >10 sequential RQEs referring to the
+same niov. Instead of putting them one by one, count such RQEs during
+parsing and batch refcounting for the niov.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/zcrx.c | 32 ++++++++++++++++++++++++++------
- 1 file changed, 26 insertions(+), 6 deletions(-)
+ io_uring/zcrx.c | 56 +++++++++++++++++++++++++++++++------------------
+ 1 file changed, 36 insertions(+), 20 deletions(-)
 
 diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index c4a9a663eba4..45b178afbbc3 100644
+index 1b8d748b35e7..cb73dca3c1ee 100644
 --- a/io_uring/zcrx.c
 +++ b/io_uring/zcrx.c
-@@ -1088,6 +1088,10 @@ void io_unregister_zcrx(struct io_ring_ctx *ctx)
- 	xa_destroy(&ctx->zcrx_ctxs);
+@@ -359,16 +359,16 @@ static inline atomic_t *io_get_user_counter(struct net_iov *niov)
+ 	return &area->user_refs[net_iov_idx(niov)];
  }
  
-+struct zcrx_rq_iter {
-+	int rqes_left;
-+};
-+
- static inline u32 zcrx_rq_entries(struct zcrx_rq *rq)
+-static bool io_zcrx_put_niov_uref(struct net_iov *niov)
++static bool io_zcrx_put_niov_uref(struct net_iov *niov, unsigned refs)
  {
- 	u32 entries;
-@@ -1103,6 +1107,24 @@ static struct io_uring_zcrx_rqe *zcrx_next_rqe(struct zcrx_rq *rq, unsigned mask
- 	return &rq->rqes[idx];
+ 	atomic_t *uref = io_get_user_counter(niov);
+ 	int old;
+ 
+ 	old = atomic_read(uref);
+ 	do {
+-		if (unlikely(old == 0))
++		if (unlikely(old < refs))
+ 			return false;
+-	} while (!atomic_try_cmpxchg(uref, &old, old - 1));
++	} while (!atomic_try_cmpxchg(uref, &old, old - refs));
+ 
+ 	return true;
+ }
+@@ -1163,6 +1163,22 @@ static inline bool io_parse_rqe(struct io_uring_zcrx_rqe *rqe,
+ 	return true;
  }
  
-+static inline void zcrx_rq_iter_init(struct zcrx_rq_iter *it,
-+				     struct zcrx_rq *rq)
++static bool zcrx_put_refill_niov(struct net_iov *niov, struct page_pool *pp,
++				 unsigned refs)
 +{
-+	it->rqes_left = min_t(unsigned, zcrx_rq_entries(rq), ZCRX_REFILL_CAP);
-+}
++	netmem_ref netmem = net_iov_to_netmem(niov);
 +
-+static inline bool zcrx_rq_iter_next(struct zcrx_rq_iter *it,
-+				     struct zcrx_rq *rq,
-+				     struct io_uring_zcrx_rqe **rqe)
-+{
-+	it->rqes_left--;
-+	if (unlikely(it->rqes_left < 0))
++	if (!io_zcrx_put_niov_uref(niov, refs))
 +		return false;
-+
-+	*rqe = zcrx_next_rqe(rq, rq->nr_entries - 1);
++	if (page_pool_unref_netmem(netmem, refs) != 0)
++		return false;
++	if (unlikely(niov->desc.pp != pp)) {
++		io_zcrx_return_niov(niov);
++		return false;
++	}
 +	return true;
 +}
 +
- static inline bool io_parse_rqe(struct io_uring_zcrx_rqe *rqe,
- 				struct io_zcrx_ifq *ifq,
- 				struct net_iov **ret_niov)
-@@ -1131,17 +1153,15 @@ static unsigned io_zcrx_ring_refill(struct page_pool *pp,
+ static unsigned io_zcrx_ring_refill(struct page_pool *pp,
+ 				    struct io_zcrx_ifq *ifq,
  				    netmem_ref *netmems, unsigned to_alloc)
- {
+@@ -1170,34 +1186,34 @@ static unsigned io_zcrx_ring_refill(struct page_pool *pp,
  	struct zcrx_rq *rq = &ifq->rq;
--	unsigned int mask = rq->nr_entries - 1;
--	unsigned int rqes_left;
-+	struct io_uring_zcrx_rqe *rqe;
-+	struct zcrx_rq_iter it;
+ 	struct io_uring_zcrx_rqe *rqe;
+ 	struct zcrx_rq_iter it;
++	struct net_iov *niov = NULL;
++	unsigned niov_refs = 0;
  	unsigned allocated = 0;
  
  	guard(spinlock_bh)(&rq->lock);
  
--	rqes_left = zcrx_rq_entries(rq);
--	rqes_left = min_t(unsigned, rqes_left, ZCRX_REFILL_CAP);
-+	zcrx_rq_iter_init(&it, rq);
+ 	zcrx_rq_iter_init(&it, rq);
  
--	for (; rqes_left; rqes_left--) {
--		struct io_uring_zcrx_rqe *rqe = zcrx_next_rqe(rq, mask);
-+	while (zcrx_rq_iter_next(&it, rq, &rqe)) {
- 		struct net_iov *niov;
- 		netmem_ref netmem;
+-	while (zcrx_rq_iter_next(&it, rq, &rqe)) {
+-		struct net_iov *niov;
+-		netmem_ref netmem;
++	while (allocated < to_alloc - 1 && zcrx_rq_iter_next(&it, rq, &rqe)) {
++		struct net_iov *next_niov;
  
+-		if (!io_parse_rqe(rqe, ifq, &niov))
+-			continue;
+-		if (!io_zcrx_put_niov_uref(niov))
++		if (!io_parse_rqe(rqe, ifq, &next_niov))
+ 			continue;
+-
+-		netmem = net_iov_to_netmem(niov);
+-		if (!page_pool_unref_and_test(netmem))
+-			continue;
+-
+-		if (unlikely(niov->desc.pp != pp)) {
+-			io_zcrx_return_niov(niov);
++		if (niov == next_niov) {
++			niov_refs++;
+ 			continue;
+ 		}
++		if (niov && zcrx_put_refill_niov(niov, pp, niov_refs)) {
++			netmems[allocated] = net_iov_to_netmem(niov);
++			allocated++;
++		}
++		niov = next_niov;
++		niov_refs = 1;
++	}
+ 
+-		netmems[allocated] = netmem;
++	if (niov && zcrx_put_refill_niov(niov, pp, niov_refs)) {
++		netmems[allocated] = net_iov_to_netmem(niov);
+ 		allocated++;
+-		if (allocated >= to_alloc)
+-			break;
+ 	}
+ 
+ 	smp_store_release(&rq->ring->head, rq->cached_head);
+@@ -1401,7 +1417,7 @@ static void zcrx_return_buffers(netmem_ref *netmems, unsigned nr)
+ 		netmem_ref netmem = netmems[i];
+ 		struct net_iov *niov = netmem_to_net_iov(netmem);
+ 
+-		if (!io_zcrx_put_niov_uref(niov))
++		if (!io_zcrx_put_niov_uref(niov, 1))
+ 			continue;
+ 		if (!page_pool_unref_and_test(netmem))
+ 			continue;
 -- 
 2.54.0
 
