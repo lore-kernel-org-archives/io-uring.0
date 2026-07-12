@@ -1,63 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-10629.protonmail.ch (mail-10629.protonmail.ch [79.135.106.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7663CBE8F
-	for <io-uring@vger.kernel.org>; Sat, 11 Jul 2026 17:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738BB22AE48
+	for <io-uring@vger.kernel.org>; Sun, 12 Jul 2026 14:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.29
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783790063; cv=none; b=bvroBFdONJOmCP+4xWCXp4ryr4jbSVnmbhK11bjkCGzfJpPKvSYClrd6GUQUAJzAY2baDftNxcmD/TaveoXRi80AIZ7lbQoeioa1VWwR1IEN+3ju0NVvwYdnjssdn7bx8D5WRWKQojtUExxgQA3TUBBLQlw+B3Hgyt3p3xq4hdc=
+	t=1783866445; cv=none; b=CebTNmYY6Vizf36WGA578QbmAAmhqJMg5IrLhrswgG+0snKyMyEJTSS+KXSvtOKpQECl8NswaELZOhiwerHxrUS9yI2YABub4SfSutSx9sfHMotmnKLfB9Fp3P6rTINoGYaj6vjGeWsMMeyz7FGN7YoG8wCC2s7GRmkRFe5Ouqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783790063; c=relaxed/simple;
-	bh=LOvk5yShPDfIpiGnHXpaYX3BhZdKdAihwzZ7MBeVu48=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=QsyiWBPb3lw0XZ74PkS2ZOsq5UlP0h4D0z4iJZtRzcU0Ahy/NR0BxNTOYCRB5ENHGqNrJEltIo2xyIOJzWhssd87/MBjnADKx9pmeSU6ZEEaRAu4WIK9DaAofABnosiuPwMIE0PbssbgcPUPOIzaQkyuFoHyzJq0r0p1CWK6sz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JToILtqz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783866445; c=relaxed/simple;
+	bh=RFREUUJQmQWdgY0SFW5TvAzo56uLKZIPbzE5cvdGENI=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XNQbqTOkuh0ZcWKhPi76A9zvc6tmgaChVtNp+hr6Vwn66P3/ScAWJNnb/cSzuHRLReOdt0QjT9/HX1uhqS4tGVxTNZRmbHGudFkEgUkS5X0GJvNWIU8ITTWuoArXuHnvWp9mod1/X/pPx2mMgnK1OqT7mdcCddYi4yUspD3+pjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me; spf=pass smtp.mailfrom=proton.me; dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b=jfYd0wYg; arc=none smtp.client-ip=79.135.106.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=proton.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=proton.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JToILtqz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378BF1F00A3A;
-	Sat, 11 Jul 2026 17:14:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783790062;
-	bh=srtZcySPe39Wu77Pd3CURvKNflPuy4Cqp5a2KC6G93U=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=JToILtqzm6GEkpHdxAFIjccsYsOkdfx1B3EeydWgNGHM2zial1c8uZI5wYYFgaggY
-	 LVs4rgVmYGwI3HOvos8kaS9/ylAiq1iYGIgPj2Ul++DdWk934hmkI4jNiY8ROpPM3i
-	 KTrGPGeK9a1d3c19Iew13sYNKPrZU4Iw9lp3wUfs6S5Tjww2Lp1mCtcwv403/GMARU
-	 g8FV1Yx6+cHpfu708r+KUuXmgy7fZUsbg88qUw8QLj9IETis/PMAxwOe808zXDeffz
-	 Oin5y+4KcWYWGZojlHiXZzgeo1XJXoOka05al7l75WPfqymwRHExX0u31tMxDAgcRM
-	 km814qUf7RK5A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569853924A0A;
-	Sat, 11 Jul 2026 17:14:00 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring fixes for 7.2-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ebf34c44-2a7b-4656-a9ff-528660a070c5@kernel.dk>
-References: <ebf34c44-2a7b-4656-a9ff-528660a070c5@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ebf34c44-2a7b-4656-a9ff-528660a070c5@kernel.dk>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.2-20260710
-X-PR-Tracked-Commit-Id: f3176c8ac4217c88fe1147ab084c47092921ffc4
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 596d603126e4fe6857e5e39b6d5433c3f6ab5cdd
-Message-Id: <178379003884.1164209.6664329241613095167.pr-tracker-bot@kernel.org>
-Date: Sat, 11 Jul 2026 17:13:58 +0000
+	dkim=pass (2048-bit key) header.d=proton.me header.i=@proton.me header.b="jfYd0wYg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=proton.me;
+	s=qpyzhihmw5chjncwqtdyqhmbba.protonmail; t=1783866437; x=1784125637;
+	bh=RFREUUJQmQWdgY0SFW5TvAzo56uLKZIPbzE5cvdGENI=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=jfYd0wYgwkf8IPcuNbuXYsHEpCFY79IsZJSripv6YlxjTJbBTYDyOHvDsMBQyb1nx
+	 w4H4p4SK9qLEarUybRPE4MPPgyz7YFFUSXAI5JiW6z9+9DF2ur4czUD8GYG1iM4tgn
+	 AuPAZm3YHZFQyYh77lHv6W+A210rUKILKHHo8i8LQ/A9OKKq9EJgQw5wiP2sQFmkVu
+	 u7uc6QxXrcD8I0YqjuYsbmgk59OQtZ/U8epW//uD4xDUuHidzzTAOoCx7wW0ZTnKTs
+	 I104Z7LOWW664RsECzP0KI2kNz4rdtPkqlqeoafsBgA1oUzKw/BxNWuYqER2isbtXJ
+	 bTl3s5dQueAEA==
+Date: Sun, 12 Jul 2026 14:27:12 +0000
 To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>
+From: Jaeyeong Lee <iostreampy@proton.me>
+Cc: io-uring@vger.kernel.org
+Subject: [PATCH] io_uring/kbuf: free the replaced iovec after a successful grow
+Message-ID: <20260712142612.188695595-iostreampy@proton.me>
+Feedback-ID: 96968035:user:proton
+X-Pm-Message-ID: 7e470cc1af18254810af9362e774a5e38c4ba2bf
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The pull request you sent on Fri, 10 Jul 2026 22:30:17 -0600:
+The provided-buffer validation fix deferred freeing a cached iovec
+until validation completed. However, the deferred free uses arg->iovs.
+After a grow, that points to the newly allocated array. Without a grow,
+it points to the cached array that remains in use.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.2-20260710
+This leaves the caller with a dangling iovec in both cases and can
+result in repeated frees. Only free org_iovs when arg->iovs actually
+replaced it.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/596d603126e4fe6857e5e39b6d5433c3f6ab5cdd
+Fixes: cd053d788c3f ("io_uring: fix dangling iovec after provided-buffer bu=
+ndle grow failure")
+Assisted-by: Codex:gpt-5.3-codex-spark
+Signed-off-by: Jaeyeong Lee <iostreampy@proton.me>
+---
+ io_uring/kbuf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thank you!
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index b6b969b55e12..de0129bceaba 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -328,8 +328,8 @@ static int io_ring_buffers_peek(struct io_kiocb *req, s=
+truct buf_sel_arg *arg,
+ =09=09buf =3D io_ring_head_to_buf(br, ++head, bl->mask);
+ =09} while (--nr_iovs);
+=20
+-=09if (arg->mode & KBUF_MODE_FREE)
+-=09=09kfree(arg->iovs);
++=09if (arg->iovs !=3D org_iovs && (arg->mode & KBUF_MODE_FREE))
++=09=09kfree(org_iovs);
+=20
+ =09if (head =3D=3D tail)
+ =09=09req->flags |=3D REQ_F_BL_EMPTY;
+--=20
+2.43.0
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+
