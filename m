@@ -1,197 +1,201 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9391E5B68
-	for <io-uring@vger.kernel.org>; Wed, 15 Jul 2026 15:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784128206; cv=pass; b=lFLf8/IZNHEecQQpiYvURhSNt0GwqRSvyBoW25Sz7HNSvr3hwL2q8vN0ZYmVUzg88ZV5iYGeEzqqZV+yjyRcQEzjtUi8fyHyqI2i/Hg+jOssjkvC1MdO3sfMGn6R2XaG74zPNGBCg26JGr4/W20iW7r8T+TPdIz6iKDhbmp35Gg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784128206; c=relaxed/simple;
-	bh=AApLk3T1QRvp5S77GeKl2WzQsaHZbKUJIqjVeqxnPpE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PsiRp/yX5CBMSdobJle53L0lJ+yrbbp69m2A7wu69sRmPdlxaCWnsliaIS16lk8qTdZyjcuEj1mFinoMVArATB0JhrlWbweVZlucYTF1UBiK29hdWAopQ9+G4oF/cCKLJaJsWeWboyNJTkhY10vMW2Uto2xeG/vvjNzVj3FtAJ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=bTqDYvE6; arc=pass smtp.client-ip=209.85.167.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2EA3911C9
+	for <io-uring@vger.kernel.org>; Wed, 15 Jul 2026 15:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784129146; cv=none; b=lfvpSs4mE04bgI/zaU5CUSeit2b9e5ise+oYqF+QP9GbK1LkV0NsQ754XBywe/CqxMwfgU9d/0lfw4mTRE0dk2opuXDGR/nL1pJMc6NDz12IeaBUo7oHwMbG/6VcWQAj7kZqMXsWeqZrBtadnSUaGl0wCLsTOmLeF5sk3KFhLT0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784129146; c=relaxed/simple;
+	bh=0kOOyuLuTk0+y3jhU6qU0pLocN3+x2Y76cgGXgV91jg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AkGBSVEcWXJvQoinEtrdW5ZVWCvYRvJu66S050xIgq4GJ5c3k851JcnASMRmp7I8JiVDTZi+ynvXt6pTgVYzwImkfcZmx7MvAneWEAy4XrMilpMnIn3MGcW2L1Sz0MfN/IitW9eqzDp5YqiMAtKW/aTCVP08+95wjyoRiSLAtt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=amYDNnBi; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Gfmvio/1; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=amYDNnBi; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Gfmvio/1; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="bTqDYvE6"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-4a475bd9ff7so394931b6e.3
-        for <io-uring@vger.kernel.org>; Wed, 15 Jul 2026 08:10:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784128203; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UJMbi/sgGl7OmBZHgUKZZyKeOUImi9HNFwoLrN2sjUfrbLKT2yhEUDdYNNMAI0Byvb
-         BC4CixEpe4IGcsMM6Z9+TNbYOw4cOAPblZV6a7aogLoXDdUPZT5MDjSRpflxmtNZDDTs
-         3ZmnZP4F43L30RbsQX2r+tkT0ZDj5Hyz5dEsONrZ87Pc9oj2xt5YgJZcbZFSbU+KftrW
-         D8UbBB1RCi9LLOz7iP3jQDJyEyjB+NEiN9d12ONRHYq7g8t/gLk4rkyab5Ia7ZOERJKO
-         rHCQaf5t23Jn0O9Kd2wliusKOvD3bEa58S6W/+mGHU9PIIaJDYb4mXNNpflZvECTwZy1
-         VcBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TZ2ulk5BnGMrljY0mY/eB0CZBAruuucgqs2xAPoZmMQ=;
-        fh=8hHMXvtfZae1/tJGN232jA8/WTI28Ua+Gm/kfREn0Tw=;
-        b=I16uc9XyXa70F8jr+eZX+4vWFLR3OSJtXhrs5g5KptJqc6pmsXG/V1SkyQ3KCsf8sF
-         cuuOI6isdxM+bjBwkxPOekpZgJqjiAPMTJ0rzjFnOP6HUw5BL2C8HuTID13GomsSuLnv
-         44bbcKMuU/bjeSxfV1FPdY/DOs3hqbA52QFUfkzjGGEugxy6Pc+ZpdCHvbOMdgJckn3c
-         cUhh0AAS0peNp4d44pE7bi/tRSmrqIxO0H/akz8NI3wiw3rZcK8kx92StwKOqB+wLUBZ
-         T4us6sTAKBDFlPX6JNxTUeVmx6xsdIZPlzN2gceIAgmB68MfoIlk0uY1Y9XbStlmPeyh
-         5qCQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1784128203; x=1784733003; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TZ2ulk5BnGMrljY0mY/eB0CZBAruuucgqs2xAPoZmMQ=;
-        b=bTqDYvE65ONNfNXwCODYIxctdNorJkA+G/N6Kvk23MnWIKOkFWxRzXcrRWkyl09Egd
-         9mH/loyIaOqSL+kgVmxZjYltxjhlNjpo8G9cM3r6Z4UlQ6m5rtMmiL1CnTk9wh+wrA8r
-         VQjczyLx2V6BwaSMdERW68pIfg0vr1XybUeot2kSoDgwseMVqRFMinqgIvCvsCV3+kRE
-         AclVGSeHkgafeOI956qHpvhikqyjF8IN2rfica5QSNvjJ11/ACMDw1z/qs756ChyDVcU
-         J5ueU/wk6aUAgCTdeKTq/N/DJGd3XPEvI0KwsyLwWwp1HiqBi+Q0X/X8kLoMV3fN11aF
-         QdJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784128203; x=1784733003;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TZ2ulk5BnGMrljY0mY/eB0CZBAruuucgqs2xAPoZmMQ=;
-        b=BL/7Bx+q45rABNP/ZlYeDSDWzwKRzw/9YjWcaXEaDPaWm+TNaXDW7C9BEaIATm9m5P
-         B6rr/BOV64jF2IhblaKdR3J7DHzNwnHqDdggjACQ0Z5VOEczBqoo08AouwaaV3sLxQLD
-         kr4x/kIjbts39HHb5mNVW3EL+kMHBIXJztBtG0gok46PgrSbUkIjZuAYD1bsC6fZSQIJ
-         NRpPjhcbgt3HiM/ed6an1+jiEU9zZj3NQKqbsKN2HItAHdMfxL///7K7E3Yc6rkDUZA7
-         +QvXGqWBy90cuyLFxrZ/AV5Bk54El+clSpElstZ9WwPreF0+2N6LPsPqSzJMFBLIX9wb
-         jgLg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp2PdC+XYh5iJ11fGFjKWrOWcHaMuHY7mP4HKvlWCjNH4pXJhMUapC5slX95ehakizClog0YH1qJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOgD9Bp/6TQOydc16dTp1SBvRg0GGP1UndNMUdJi+YcIfZLDTG
-	zgiZBYKpkq6zfs2jG9xqqQ3uMrrmKa3U6KSTfYvqnFgHTH8OtvjbLrEiCAacdEi7h5U0tconGw1
-	w3pAGmVS7TsWvJQOIuMv8AavGKVT4qiGQhrTPUZ22Mw==
-X-Gm-Gg: AfdE7cnLThbOoBdV4Ro99NmCGRfXu+HKu4VlKts7fzcqO73bStOe8kN8p2755Bc1KkE
-	Z61TmW9tSDLNEJ762wDJoE3bxnrIMaI2QxrrxlGIyPzvkBTLk+v8fXRlzmmNi2R7TdZaWFjQjWU
-	DYQG8MnDb+6iVQtvkqKDoljj1SuzHDRADcTMkfLUXcuH3nnIi7AK7ttbOb5MJFqva9scvmylud7
-	lphX7nn7/01l6Ycrqsd8vRB8GW5FxGW1uflW3q6I/TNBbsQSFWgKRmK7KWfhoh79eXNDTh8
-X-Received: by 2002:a05:6808:124d:b0:496:10b0:2114 with SMTP id
- 5614622812f47-4a42afbeaeamr7021310b6e.8.1784128202504; Wed, 15 Jul 2026
- 08:10:02 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="amYDNnBi";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Gfmvio/1";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="amYDNnBi";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Gfmvio/1"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 269B078465;
+	Wed, 15 Jul 2026 15:25:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784129143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AiEoVQiA54eEhQAMav6LpsI+JGs3KPnSc/h4MfxJvUE=;
+	b=amYDNnBiIG2yuqZcEq1uNcK/FQOgMiEAF4rYn4zRmMV17Du/JJkltv1yKXt8zr7qyNdr89
+	j2MEE8m86eedz2ND5nf8be8EtIfiSM1r/RFktcEOAIR5NT5wzxDiLGRqFuXpSVs6ozvyir
+	JYC1GUix+MaBS3ibOwxsGkPypAkZZxI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784129143;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AiEoVQiA54eEhQAMav6LpsI+JGs3KPnSc/h4MfxJvUE=;
+	b=Gfmvio/133F7D18lUMQLQwqGODy30JbpSmze3bIwM0HIvJVeVMDLvlgaPcuEmX+xtrj6gs
+	VWIrA+PV/C714nCg==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=amYDNnBi;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="Gfmvio/1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784129143; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AiEoVQiA54eEhQAMav6LpsI+JGs3KPnSc/h4MfxJvUE=;
+	b=amYDNnBiIG2yuqZcEq1uNcK/FQOgMiEAF4rYn4zRmMV17Du/JJkltv1yKXt8zr7qyNdr89
+	j2MEE8m86eedz2ND5nf8be8EtIfiSM1r/RFktcEOAIR5NT5wzxDiLGRqFuXpSVs6ozvyir
+	JYC1GUix+MaBS3ibOwxsGkPypAkZZxI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784129143;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AiEoVQiA54eEhQAMav6LpsI+JGs3KPnSc/h4MfxJvUE=;
+	b=Gfmvio/133F7D18lUMQLQwqGODy30JbpSmze3bIwM0HIvJVeVMDLvlgaPcuEmX+xtrj6gs
+	VWIrA+PV/C714nCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D9FB5779AD;
+	Wed, 15 Jul 2026 15:25:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 52Q/KXamV2qmCgAAD6G6ig
+	(envelope-from <krisman@suse.de>); Wed, 15 Jul 2026 15:25:42 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc: Damien Le Moal <dlemoal@kernel.org>, io-uring@vger.kernel.org
+Subject: Re: [PATCH 4/5] man: add io_uring_prep_cmd_zone_reset_all.3 man page
+In-Reply-To: <20260715063947.2933606-5-hch@lst.de>
+Organization: SUSE
+References: <20260715063947.2933606-1-hch@lst.de>
+ <20260715063947.2933606-5-hch@lst.de>
+Date: Wed, 15 Jul 2026 11:25:32 -0400
+Message-ID: <8733xk46mr.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260715063947.2933606-1-hch@lst.de> <20260715063947.2933606-4-hch@lst.de>
-In-Reply-To: <20260715063947.2933606-4-hch@lst.de>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Wed, 15 Jul 2026 08:09:51 -0700
-X-Gm-Features: AUfX_mwZ-Z4CloFMnkcy93kyDgelTJkxVFEgol3cOlJWGEzrrX2-3U4fTm1w01Q
-Message-ID: <CADUfDZpOmBJvr=C_DmRzn6rWTincKZVCsjF9CorWG3MHYQok3w@mail.gmail.com>
-Subject: Re: [PATCH 3/5] liburiung: add io_uring_prep_cmd_zone_reset
-To: Christoph Hellwig <hch@lst.de>
-Cc: Jens Axboe <axboe@kernel.dk>, Damien Le Moal <dlemoal@kernel.org>, io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 269B078465
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
+X-Spam-Level: 
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[lst.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,mailhost.krisman.be:mid,suse.de:dkim];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 
-In commit message, "liburiung" -> "liburing"?
+Christoph Hellwig <hch@lst.de> writes:
 
-On Tue, Jul 14, 2026 at 11:44=E2=80=AFPM Christoph Hellwig <hch@lst.de> wro=
-te:
->
-> Add a helper for io_uring zone_reset_all commands.
+> Add doccumentation for the new zone reset all io_uring cmd.
 >
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > ---
->  configure              | 31 +++++++++++++++++++++++++++++++
->  src/include/liburing.h |  7 +++++++
->  src/liburing-ffi.map   |  5 +++++
->  3 files changed, 43 insertions(+)
+>  man/io_uring_prep_cmd_zone_reset_all.3 | 54 ++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>  create mode 100644 man/io_uring_prep_cmd_zone_reset_all.3
 >
-> diff --git a/configure b/configure
-> index b953eddd6ddc..8c5ca801f487 100755
-> --- a/configure
-> +++ b/configure
-> @@ -469,6 +469,21 @@ if compile_prog "" "" "discard command"; then
->  fi
->  print_config "discard command support" "$discard_cmd"
->
-> +##########################################
-> +# Check block zone_reset_all cmd support
-> +zone_reset_all_cmd=3D"no"
-> +cat > $TMPC << EOF
-> +#include <linux/blkdev.h>
-> +int main(void)
-> +{
-> +  return BLOCK_URING_CMD_ZONE_RESET_ALL;
-> +}
-> +EOF
-> +if compile_prog "" "" "zone_reset_all command"; then
-> +  zone_reset_all_cmd=3D"yes"
-> +fi
-> +print_config "zone_reset_all command support" "$zone_reset_all_cmd"
-> +
->  ##########################################
->  # Check idtype_t support
->  has_idtype_t=3D"no"
-> @@ -797,6 +812,22 @@ else cat >> $compat_h << EOF
->  EOF
->  fi
->
-> +if test "$zone_reset_all_cmd" !=3D "yes"; then
-> +cat >> $compat_h << EOF
-> +
-> +#include <linux/ioctl.h>
-> +
-> +#ifndef BLOCK_URING_CMD_ZONE_RESET_ALL
-> +#define BLOCK_URING_CMD_ZONE_RESET_ALL                 _IO(0x12, 1)
-> +#endif
-> +
-> +EOF
-> +else cat >> $compat_h << EOF
-> +#include <linux/blkdev.h>
-> +
-> +EOF
-> +fi
-> +
->  cat >> $compat_h << EOF
->  #endif
->  EOF
-> diff --git a/src/include/liburing.h b/src/include/liburing.h
-> index 0188937b0de4..214c7778d6a7 100644
-> --- a/src/include/liburing.h
-> +++ b/src/include/liburing.h
-> @@ -1685,6 +1685,13 @@ IOURINGINLINE void io_uring_prep_cmd_discard(struc=
-t io_uring_sqe *sqe,
->         sqe->addr3 =3D nbytes;
->  }
->
-> +IOURINGINLINE void io_uring_prep_cmd_zone_reset_all(struct io_uring_sqe =
-*sqe,
-> +                                                   int fd)
-> +       LIBURING_NOEXCEPT
-> +{
-> +       io_uring_prep_uring_cmd(sqe, BLOCK_URING_CMD_ZONE_RESET_ALL, fd);
-> +}
-> +
->  IOURINGINLINE void io_uring_prep_pipe(struct io_uring_sqe *sqe, int *fds=
-,
->                                       int pipe_flags)
->  {
-> diff --git a/src/liburing-ffi.map b/src/liburing-ffi.map
-> index bd7bc64416d3..fc9701b63907 100644
-> --- a/src/liburing-ffi.map
-> +++ b/src/liburing-ffi.map
-> @@ -275,3 +275,8 @@ LIBURING_2.15 {
->                 io_uring_register_zcrx_ctrl;
->                 io_uring_register_query;
->  } LIBURING_2.14;
-> +
-> +LIBURING_2.16 {
-> +       global:
-> +               io_uring_prep_cmd_zone_reset_all;
-> +} LIBURING_2.14;
+> diff --git a/man/io_uring_prep_cmd_zone_reset_all.3 b/man/io_uring_prep_cmd_zone_reset_all.3
+> new file mode 100644
+> index 000000000000..251a300c5ed1
+> --- /dev/null
+> +++ b/man/io_uring_prep_cmd_zone_reset_all.3
+> @@ -0,0 +1,54 @@
+> +.\" Copyright (C) 2026 Christoph Hellwig <hch@lst.de>
+> +.\"
+> +.\" SPDX-License-Identifier: LGPL-2.0-or-later
+> +.\"
+> +.TH io_uring_prep_cmd_zone_reset_all 3 "Jul 14, 2026" "liburing-2.8" "liburing Manual"
 
-Does this 2.14 not need to be incremented to 2.15?
+liburing-2.16
 
-Best,
-Caleb
+> +.SH NAME
+> +io_uring_prep_cmd_zone_reset_all \- prepare a zone_reset_all command
+> +.SH SYNOPSIS
+> +.nf
+> +.B #include <liburing.h>
+> +.PP
+> +.BI "void io_uring_prep_cmd_zone_reset_all(struct io_uring_sqe *" sqe ", int " fd ");"
+> +.fi
+> +.SH DESCRIPTION
+> +The
+> +.BR io_uring_prep_cmd_zone_reset_all (3)
+> +function prepares a zone_reset_all command request. The submission queue entry
+> +.I sqe
+> +is setup to reset all sequential write required zones on the block device
+> +pointed to by
+> +.IR fd .
+> +
+> +This command does not synchronize against concurrent file operations, including
+> +but not limited to reads, write, ioctls and other uring_cmds and only performs
+> +a best effort invalidation of the page cache for the device.  The user has
+> +to make sure that no other in-flight requests are modifying or reading the
+> +range(s). If that is the case, it might result in stale page cache and data
+> +inconsistencies.
+> +
+> +Available since Linux 7.TBD.
+> +
+> +.SH RETURN VALUE
+> +None
+> +.SH ERRORS
+> +The CQE
+> +.I res
+> +field will contain the result of the operation. On success, this field will be
+> +set to
+> +.B 0 .
+> +On error, a negative error value is returned. Note that where synchronous
+> +system calls will return
+> +.B -1
+> +on failure and set
+> +.I errno
+> +to the actual error value, io_uring never uses
+> +.IR errno .
+> +Instead it returns the negated
+> +.I errno
+> +directly in the CQE
+> +.I res
+> +field.
+> +.SH SEE ALSO
+> +.BR io_uring_get_sqe (3),
+> +.BR io_uring_submit (3),
+> -- 
+> 2.53.0
+>
+
+-- 
+Gabriel Krisman Bertazi
