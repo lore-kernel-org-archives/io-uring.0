@@ -1,246 +1,61 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C67521CA03
-	for <io-uring@vger.kernel.org>; Wed, 15 Jul 2026 06:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430C23CA4B3
+	for <io-uring@vger.kernel.org>; Wed, 15 Jul 2026 08:27:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784097606; cv=none; b=o+H4XjDaoyZUbARt0GNFevbvpsPA9xFfppamLCpRgCAGQK4MNgtkHFi7lODMIlqJSHQLv5L3DHICb7yF3Ox+mk2AtYge6/ppi75Hd0PEJpOrhF31rheBpw6aQjTOQfhegPKfPr6dtCYCNJMm8Xayl6jYPBJa+51j9Vkq0Zkm7jA=
+	t=1784104033; cv=none; b=TRZe1AsO2dTxHYg+Fp9YdMh2MAxsDjxWoGRNMicuSOYN0GPF9s99K1FEfMSNMDhpX9Qj1c8lpfZJDR34eBD4o9jSCbALDGDLGx8KCOXx8VRaKoegyvwp4gJDzBMDGu7SnY73EaIPosrgnFRJk6PCpYIduPTKFeIajqlpYesbpN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784097606; c=relaxed/simple;
-	bh=31wuuNokgsIysJjLickavFdzuRpBUkAjeUj8VQXtfU0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZgdSiNAlzsm+enh7qOnMmWJZyrX0j3hj8QBYJt6szavoEog5hh7czQP87u4OQAD/U8vVGqjtgXJAYeczWqNBcDhG9NLAFZ0vPaGVG+Zh37GLDxR+bu7mcqPlr7h79d9E39tOuTJeGbPwHpyJm1Iii8P7JbUy0CSG6aHKTJOH2Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Tu2UuiuE; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1784104033; c=relaxed/simple;
+	bh=vgwSbkmHkM6CS2yHuD34EkZIBeihw0zhW+GbgGlexJo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RkgwbdLs9XTn2cFQRGMnDnxYQ8gRFazJdUgiM8Ebtdiuvm+jvNnqChXgs11PLSiMsYxd19F2Gj74KKFoEE8dci5ZMeEp0ixq278gNi78VYFT5rZdaZJeigAOKUKx22SRwk4rQzMDkDyvhw1gQfL7Eh7AX9EbSsHgWrANtD4WX94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ePXnhlMz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Tu2UuiuE"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Y9u/pXe3NF+4fTSWEM78Xt2t8pQ5J9S9fSCK93nHVV0=; b=Tu2UuiuEXBOTFxRPUFlYIUe+BO
-	vl6IQNQD9Apj2nBisB+zJuiTmNF+tSVpnoIPywxXs/5E2nJQSIwh/mzngjcb916kXs8pvMSfK9d0P
-	Cm4ZIGSi40zzfapdKEfKwxCrt5MLGy1FKca7OLIJUvdg7lJ9+AJFuMSAiLccPmKhIdHt9Y3Nw4Tid
-	AhtJCyTpKyKOEixQEKQclRrAvEXcDfg5jgKRVRpg+/6G+RPmXoZGdhzTeecZyAvlaIqGVFx+ELA6w
-	CEXMBxSSysVihnILXXMtxzTTvBvbWTVHkZbA6IZ+l+T7BGQ9E13XohEmx4/Br+lrNvenDxaNGd3KA
-	KFOWnTDQ==;
-Received: from 2a02-8389-2301-9f00-3397-c9eb-6d8a-9179.cable.dynamic.v6.surfer.at ([2a02:8389:2301:9f00:3397:c9eb:6d8a:9179] helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wjtHo-0000000DvDi-249E;
-	Wed, 15 Jul 2026 06:40:04 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Damien Le Moal <dlemoal@kernel.org>,
-	io-uring@vger.kernel.org
-Subject: [PATCH 5/5] test: add zone_reset_all command test
-Date: Wed, 15 Jul 2026 08:39:32 +0200
-Message-ID: <20260715063947.2933606-6-hch@lst.de>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260715063947.2933606-1-hch@lst.de>
-References: <20260715063947.2933606-1-hch@lst.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ePXnhlMz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83AD51F000E9;
+	Wed, 15 Jul 2026 08:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784104031;
+	bh=8Z5lqC7Ze+PYPWaeQZ9ppo8UGQPyAn8LpuVaXKz2/qc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=ePXnhlMzuqYqrceaCJgZpu9nsG8ajtoyhkoAtsDctU3rmFgrSsKy60415P3rpmppr
+	 10Peg16w2NKKbkn5ukc1G3BLrp5s4xhdU9QKIq8ufaPJ2cp2bn8E0hiueTHrmdxn7E
+	 RIJs2nfVYgfZRD2W6t4s3v8ibpnF8akNPZ2eZiLzBuPht4ENPAGoYjf3oLpcnUgA2L
+	 1XkWQuPs4sj1Y7k3Ko4YxKnNtv9d8a0XINvZK0xboiD7rvPR4mI6rCRDlLHMjC1Ku0
+	 ZtSqzg5J+WPbpXVLyYtOqLfzejKcCW4uNAlSu79NH/8bNyh0nudQsgR36JtBfsZAVy
+	 BNcWzq6X2bX5w==
+Message-ID: <f4da4ec6-706a-4ede-a9bc-1b01719ebe2e@kernel.org>
+Date: Wed, 15 Jul 2026 17:27:08 +0900
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] configure: shorten the message for the discard
+ command
+To: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org
+References: <20260715063947.2933606-1-hch@lst.de>
+ <20260715063947.2933606-2-hch@lst.de>
+Content-Language: en-US
+From: Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20260715063947.2933606-2-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Basic sanity checking for the simply zone_reset_all command, mostly
-taken from the discard test.
+On 7/15/26 15:39, Christoph Hellwig wrote:
+> The current message is pretty long, drop the redundant io_uring.
+> This aligns it with the soon to be added zone_reset_all message.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- test/Makefile             |   1 +
- test/cmd-zone-reset-all.c | 164 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 165 insertions(+)
- create mode 100644 test/cmd-zone-reset-all.c
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 
-diff --git a/test/Makefile b/test/Makefile
-index d88a428774cc..8b276817d33c 100644
---- a/test/Makefile
-+++ b/test/Makefile
-@@ -90,6 +90,7 @@ test_srcs := \
- 	connect-rep.c \
- 	coredump.c \
- 	cmd-discard.c \
-+	cmd-zone-reset-all.c \
- 	cq-full.c \
- 	cq-overflow.c \
- 	cq-peek-batch.c \
-diff --git a/test/cmd-zone-reset-all.c b/test/cmd-zone-reset-all.c
-new file mode 100644
-index 000000000000..5d8fe4d5f380
---- /dev/null
-+++ b/test/cmd-zone-reset-all.c
-@@ -0,0 +1,164 @@
-+/* SPDX-License-Identifier: MIT */
-+
-+#include <stdio.h>
-+#include <assert.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <sys/ioctl.h>
-+#include <linux/fs.h>
-+
-+#include "liburing.h"
-+#include "helpers.h"
-+
-+static const char *filename;
-+
-+static int queue_zone_reset_all(struct io_uring *ring, int bdev_fd)
-+{
-+	struct io_uring_sqe *sqe;
-+	struct io_uring_cqe *cqe;
-+	int err;
-+
-+	sqe = io_uring_get_sqe(ring);
-+	assert(sqe != NULL);
-+	io_uring_prep_cmd_zone_reset_all(sqe, bdev_fd);
-+
-+	err = io_uring_submit_and_wait(ring, 1);
-+	if (err != 1) {
-+		fprintf(stderr, "io_uring_submit_and_wait failed %d\n", err);
-+		exit(1);
-+	}
-+
-+	err = io_uring_wait_cqe(ring, &cqe);
-+	if (err) {
-+		fprintf(stderr, "io_uring_wait_cqe failed %d\n", err);
-+		exit(1);
-+	}
-+
-+	err = cqe->res;
-+	io_uring_cqe_seen(ring, cqe);
-+	return err;
-+}
-+
-+
-+static int basic_cmd_test(struct io_uring *ring)
-+{
-+	int ret, fd;
-+
-+	fd = open(filename, O_DIRECT | O_RDWR | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = queue_zone_reset_all(ring, fd);
-+	if (ret) {
-+		if (ret == -EINVAL || ret == -EOPNOTSUPP) {
-+			printf("cmd not supported, skip\n");
-+			ret = T_EXIT_SKIP;
-+		} else {
-+			fprintf(stderr, "cmd_issue_verify fail ret %i\n", ret);
-+			fprintf(stderr, "cmd fail\n");
-+			ret = T_EXIT_FAIL;
-+		}
-+	}
-+
-+	close(fd);
-+	return ret;
-+}
-+
-+static int test_rdonly(struct io_uring *ring)
-+{
-+	int ret, fd;
-+	int ro;
-+
-+	fd = open(filename, O_DIRECT | O_RDONLY | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = queue_zone_reset_all(ring, fd);
-+	if (ret >= 0) {
-+		fprintf(stderr, "discarded with O_RDONLY %i\n", ret);
-+		return 1;
-+	}
-+	close(fd);
-+
-+	fd = open(filename, O_DIRECT | O_RDWR | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ro = 1;
-+	ret = ioctl(fd, BLKROSET, &ro);
-+	if (ret) {
-+		fprintf(stderr, "BLKROSET 1 failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = queue_zone_reset_all(ring, fd);
-+	if (ret >= 0) {
-+		fprintf(stderr, "discarded with O_RDONLY %i\n", ret);
-+		return 1;
-+	}
-+
-+	ro = 0;
-+	ret = ioctl(fd, BLKROSET, &ro);
-+	if (ret) {
-+		fprintf(stderr, "BLKROSET 0 failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+	close(fd);
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct io_uring ring;
-+	int fd, ret;
-+
-+	if (argc != 2)
-+		return T_EXIT_SKIP;
-+	filename = argv[1];
-+
-+	fd = open(filename, O_DIRECT | O_RDONLY | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+	close(fd);
-+
-+	ret = io_uring_queue_init(16, &ring, 0);
-+	if (ret) {
-+		fprintf(stderr, "queue init failed: %d\n", ret);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = basic_cmd_test(&ring);
-+	if (ret == T_EXIT_FAIL) {
-+		fprintf(stderr, "basic_cmd_test() failed\n");
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = test_rdonly(&ring);
-+	if (ret == T_EXIT_FAIL) {
-+		fprintf(stderr, "test_rdonly() failed\n");
-+		return T_EXIT_FAIL;
-+	}
-+
-+	if (ret != T_EXIT_SKIP)
-+		ret = T_EXIT_PASS;
-+
-+	io_uring_queue_exit(&ring);
-+	return ret;
-+}
 -- 
-2.53.0
-
+Damien Le Moal
+Western Digital Research
