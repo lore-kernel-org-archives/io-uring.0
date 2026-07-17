@@ -1,86 +1,86 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115B02F6565
-	for <io-uring@vger.kernel.org>; Fri, 17 Jul 2026 17:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E1A2F25F3
+	for <io-uring@vger.kernel.org>; Fri, 17 Jul 2026 17:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784307948; cv=none; b=JjOx4FUcUG3Cy2zJXRRQzq2/setqT6o6CusH4tnXkupkELhjchIbgDo8Vi2qmhQNXnG+c6z/DDoPstTezjV6Cr+CMU/gJLdzLSyaUMW3i8u54lDG39+XFOrNiIw6RAy2UI7wCfXg1QDrvZf67RZ93AI7YLYSbtMttyZY7YMWmUA=
+	t=1784307955; cv=none; b=eoidpHF/nfaA9JWf0Z320k9w8DbvPlFI61EdCfBTgZ/4b9HOkjqGPWBYU5uTjEw+nxWaHyHG7JceZ/aO51QHmYI/sAyF6rLMTn+GATUMP3kxGNcvSIa2S0FZ90l80fV1069l2joLrIk6/gOueJVVVp6OwEfjjICH5zWAbZyHjDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784307948; c=relaxed/simple;
-	bh=3ujNWZ5VkSnk0lQ6pxutjqp3P2rHpQZdizD8vh2M45U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dOfzbwK4GLIOg/tuMbTO9n7HpsUWwI1njnKB+eHVkGMTFB+uimQapcmbSdBcIfetROFZ5gR7CnEkqjEPJUsneOntzzknckIDKdxchTLZAsDNMLPdmk1VOajp7Gw3J4xgYBwApEJYgbg8sP/V1ezVb8k5LKegKLe76DbP+VVjsbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G00zH/Pd; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784307955; c=relaxed/simple;
+	bh=Q/fKa/Fwoh4jA9zred/8z3EueNZoSfzRyYYkPt/AVng=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=g5SBASUszJLWkCeipX4T7/PjwBhna/jdlF+SgpHSnltX2mcDvZxMT6XN3TiFfzmZeRw/dRFxR3fVLIzdwXyKRI0s+eKz43kdoT6bw1kBYz8aLkahGtWILhALZ5IIUXBzBJ2jXdk7+FhIPBLL8SZBbcU2v4Ws95bzxmXSZfXRm70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=HEN3xAei; arc=none smtp.client-ip=209.85.210.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G00zH/Pd"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4954c0833b4so4633095e9.1
-        for <io-uring@vger.kernel.org>; Fri, 17 Jul 2026 10:05:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="HEN3xAei"
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7eb4d532e65so3081540a34.0
+        for <io-uring@vger.kernel.org>; Fri, 17 Jul 2026 10:05:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784307945; x=1784912745; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xtYmWhwRFDnFf2xP6RqyCOzPERkNJJW/5vo0xJcn8Qs=;
-        b=G00zH/Pde7/2b5V1QlhKrpcXVAoaPSltm625DFKLbAFZy1DokyHRjgNWkXTQYDmCQZ
-         Z83xq3YHVnditS8nPaVPyVZ14zN6fWTzGy4sISlclWpPUqphnhHJhX0qfWl7KSh/BNl4
-         hik0+CoNqo/QCugdivq3051pkI4HZSxIK5aPNQcdzM7BoWE4x1pMOm/+aJ8UqxuQce+S
-         Q35rEDKJaROEU7Ppk9ns8HvWoiH9f5acXcyBeQiQlh6qcQiOxLKohCZRt0qiQ2zOxBGI
-         MjzfF6xJa8wU7IbwK0XrVJzjGxLRQ/KczHBlOaHsgdrd6sQgW0rSPvbZ2j92gaD90sXa
-         fAbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784307945; x=1784912745;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1784307950; x=1784912750; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xtYmWhwRFDnFf2xP6RqyCOzPERkNJJW/5vo0xJcn8Qs=;
-        b=D2aKSyVFge8EWk+xpagf2KaaSiYusZbnRWqDrFxcsq2dpwh8BDpO5jSLv9Hjc4VKjR
-         5YHyUItgHMtkaG0zYme4tJqMh1x62+SNuSGbRKgcNx36OXtqDYqkDwQdA692md+JI3K/
-         dqEwd5wjTrjtlMDCz9oZtALvCVzAP7pO4jMVRS0OAA5KuNOF1RK8bFV78+VL/BR4fWWD
-         7X7u7BGiQPnoED/Y87Ph2EVQTeLOyyvfGOyTm4GoclFOChjxNAgOruXU8KXViu6PTTQq
-         WGv00Lav45gHp1B4EOM/45dVnnCRZvVa1VkKzIP7LdgbuY0GlaON3KmLZEmAFUBV2kWp
-         Y/eg==
-X-Gm-Message-State: AOJu0YyMmw5f1qYQ/FO654t/P+V8c/9oJywYPcitumlfpY6/1EPWD2Jq
-	QlEsJzGTR8MfVDlrLYLPQKT8wp2X7tdNDLCTrtzkSloizHDVKnxkU8w/SdUS94kdk70=
-X-Gm-Gg: AfdE7cmqYEYG/wM2OjSUvvZxoQ+w5HCyOQsCmA792Kob+cVvy7uKJwwKzz72oVoN7FH
-	ay3DSuy7at+8uzjxV93/2yM+MO2fMwLusJzEAygT0RH4IVzU5XgeGpOt57aG1wf9njdV9IRRanL
-	Tw15xOdyeDsTlxzjhEdXTgK9kzkOInXjJjzcBqE9srOXME22ITBPyaE3ZzAGGUvavyzg/mjBqor
-	KO+Snlkw5eRxz2j1S8exKaFxL/FdKUMrE1i+ZHIsImf61nyRSFCnzjRvcKLPlFp3JzaebOTiqu6
-	mNtBWVga987YXgjTUlrQaMKHn4+sp49RqGBVUmUvI16CUUnv3Ij4klKilCjz37RmOJ7l4r04Xk6
-	4viLoog289SFGlChF3ddocQCszYpUUqZKpDDSa8Zyl5QTimmmT/H3O9oi0sR5qhBFFSHEnN8NGV
-	aHoy3ZEWeJQjXheG7t466NaWU23liEwjruePnBHHamLwP53x7JI4Q6gcEi9U8GZSpItlGPvpC7n
-	dXAwN75I00STovDnN0ayMZSL+6Gyh4Bv9b5mSJwgMur6Y/7gw==
-X-Received: by 2002:a05:600c:5943:b0:493:c4e1:40a6 with SMTP id 5b1f17b1804b1-4954a514619mr27893855e9.32.1784307945217;
-        Fri, 17 Jul 2026 10:05:45 -0700 (PDT)
-Received: from [172.29.218.251] (net203-139-071.mclink.it. [213.203.139.71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49548e0fcdbsm65416895e9.2.2026.07.17.10.05.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2026 10:05:44 -0700 (PDT)
-Message-ID: <4704d3ec-d392-48bc-99d7-33400fcd0000@gmail.com>
-Date: Fri, 17 Jul 2026 18:05:42 +0100
+        bh=b8I5WI5+T5DcLt3eSskdt1AQSIBgqqnsERlWCb+rDMQ=;
+        b=HEN3xAei2NJCs4Nvesgz5NJ5rCzTW45f8fUJFghjYd/i3i2eqrpIY/Lt/0JoyELD0i
+         14XfFz2TFxjxZUp/h/xvG+udn3isbJQIaKuWAmpZBY7YWSkBoCjzQlKfrAxf8zhQN7h3
+         7plcN965Q7s1G4qOWFiNaFD7rg6dcACWCOflSE1kLKSMsXRh0JvfWxQgyDl5q6gKIStx
+         +vbIGVD4CnM0FxA4LMVuMna/xRhYncWS1822iErQ6JwqJCbbrcgFRXtDlCyJiXeGvezv
+         DyznrGGxeLzcfnwkDLukNO2FCSaX4BklxV5137lW/Om+jEaJGqEwAhwsdnxD5J9AmDYH
+         hfYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784307950; x=1784912750;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=b8I5WI5+T5DcLt3eSskdt1AQSIBgqqnsERlWCb+rDMQ=;
+        b=FVsN1Dlo84yhvqeJLf9aMwHqFFXUsdm0Hc/HCkQi8C1JAZmlSxxB8C6IPGRuIZdkCQ
+         YvbIFc9w8JhdKp2L5ODxrRzET5uMxCFZWiedDr7843DOz/ZS6zi+04bwB8BBsnmFQxfM
+         ywaa4pRhNpOFH0YmZgOjS19BpmxH67XZq2HO3HhcoqnFtBzJ7hjl8iVyAPWm79iPVr9y
+         4f8xV96zWkyplRII6u9yatozC4appauy9NvDYrid8f+WwzfRJ8BZZkJi4mwBv92Gh2YM
+         v+BJNjxm80AHNMIcxQXN4u4Q36ZxMSAZd5e6NWxJTDiqKxkLdsZGOYnuH+yxKVOG5Oae
+         6Meg==
+X-Gm-Message-State: AOJu0YxzE8H/bu/4mMBsgEUAHbV8IG2eJRl/bzJ7Sw+6b+bM3J8UaqmS
+	i9KiuhJgtRbysZfm21yshO/1jpTCAKzOk4o/WGSzYkOJ276sBtwWMv6fM5AHLUccvoUdMgoFntz
+	eR42sCJg=
+X-Gm-Gg: AfdE7clR63qzkITF46RxLSg99i+1jfey3DyPrLgOxgtOU+TJMEKdwz4H/z8sbGSna12
+	juoIAoxxLr8hBTi+PncoMSHMBF6qJwVxlDFo/MMZF34QJ3+Wff9lB9jcknwC0FEkSZnk975rLMM
+	OR1/pcCsNtJBE+OzYL7LSMMPuknYEZdjNg55OWitb8X8QfvxposIM3B7PBcJBi0z/AkBd4fXMSt
+	6nPY6xjWRJfY7UwZysEH1lJfMROK4iiPAM+vlOIPnzxPdz8gsXw7HYhELlFFn16h/I5VXqCG7QW
+	pKBZCVLtieuoTjRmn5sMSbOZcmfXQPv+Mvn5S4U9pAAwGbAULHWAics0gK1SW+8ufjzp6LxZVbS
+	xdL1l1DobdOGsdbDH5g/Dj/btkPiWFMSXDZ7bzvpLR1Yy2T6It0beymoH1b1qdyC+QGR4ycH5QD
+	Tj9GdhVPPpQzSdHQq58tfvPXISdiVH4+YtW0UDMbBLOEFbtogThChPsw==
+X-Received: by 2002:a05:6830:2b24:b0:7e6:f083:130e with SMTP id 46e09a7af769-7eda0700a0bmr1717085a34.4.1784307950344;
+        Fri, 17 Jul 2026 10:05:50 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7edaf9f1076sm1630602a34.26.2026.07.17.10.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2026 10:05:49 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Pavel Begunkov <asml.silence@gmail.com>, 
+ Woraphat Khiaodaeng <worapat.kd2@gmail.com>
+Cc: io-uring@vger.kernel.org, security@kernel.org
+In-Reply-To: <20260717154537.129736-1-worapat.kd2@gmail.com>
+References: <20260717154537.129736-1-worapat.kd2@gmail.com>
+Subject: Re: [PATCH] io_uring/bpf-ops: reject re-registration of an
+ already-bound ops
+Message-Id: <178430794942.612136.17341597926456772378.b4-ty@b4>
+Date: Fri, 17 Jul 2026 11:05:49 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/bpf-ops: reject re-registration of an
- already-bound ops
-To: Woraphat Khiaodaeng <worapat.kd2@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, security@kernel.org
-References: <PAVEL_MESSAGE_ID> <20260717154537.129736-1-worapat.kd2@gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20260717154537.129736-1-worapat.kd2@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On 7/17/26 16:45, Woraphat Khiaodaeng wrote:
+
+On Fri, 17 Jul 2026 22:45:37 +0700, Woraphat Khiaodaeng wrote:
 > io_install_bpf() only rejects a second registration on the ctx side
 > (ctx->bpf_ops) and sets the per-map back-pointer ops->priv
 > unconditionally. The struct_ops link path never advances a map past
@@ -90,44 +90,16 @@ On 7/17/26 16:45, Woraphat Khiaodaeng wrote:
 > same ring_fd at a different io_ring_ctx between two BPF_LINK_CREATE
 > calls.
 > 
-> The second registration passes the ctx->bpf_ops check (the new ctx has
-> none) and overwrites ops->priv, orphaning the first ctx. Teardown
-> (io_eject_bpf()/bpf_io_unreg()) only reaches a ctx through ops->priv, so
-> the orphaned ctx is never torn down: its ctx->loop_step keeps pointing
-> into the struct_ops trampoline, which is freed once the map is gone. A
-> later io_uring_enter() on the orphaned ring then calls the dangling
-> ctx->loop_step from io_run_loop() -- a use-after-free of freed
-> executable memory, reachable by a task with CAP_BPF + CAP_PERFMON.
-> 
-> Reject registration when ops->priv is already set, as hid_bpf_reg()
-> does for its struct_ops.
-> 
-> Fixes: 98f37634b12b ("io_uring/bpf-ops: implement bpf ops registration")
-> Signed-off-by: Woraphat Khiaodaeng <worapat.kd2@gmail.com>
+> [...]
 
-Thanks for the patch. As mentioned, the patch is simple and
-should be safe to apply.
+Applied, thanks!
 
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+[1/1] io_uring/bpf-ops: reject re-registration of an already-bound ops
+      commit: 83d2280089bd45e5f782011275b5c7414d85cb2b
 
-> ---
->   io_uring/bpf-ops.c | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
-> index 5a50f0675..cf2bd068e 100644
-> --- a/io_uring/bpf-ops.c
-> +++ b/io_uring/bpf-ops.c
-> @@ -168,6 +168,8 @@ static int io_install_bpf(struct io_ring_ctx *ctx, struct io_uring_bpf_ops *ops)
->   
->   	if (ctx->bpf_ops)
->   		return -EBUSY;
-> +	if (ops->priv)
-> +		return -EBUSY;
->   	if (WARN_ON_ONCE(!ops->loop_step))
->   		return -EINVAL;
->   
-
+Best regards,
 -- 
-Pavel Begunkov
+Jens Axboe
+
+
 
