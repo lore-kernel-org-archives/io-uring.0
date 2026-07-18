@@ -1,307 +1,246 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF4C3BB48
-	for <io-uring@vger.kernel.org>; Sat, 18 Jul 2026 02:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5161A9B58
+	for <io-uring@vger.kernel.org>; Sat, 18 Jul 2026 13:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784341940; cv=none; b=GqKed1s6FYjxXHS4e6cAyUSZVL7mHt4xAFlKyHgD26Z32y61PvjhIQB16cCLBEkutm5PipY9UcoSyJyh3w6u+4k/7m2kg7eDBc6tCo6dMyAgQKYuCrr49FukHKS9gBEc1tXZrbZWWBfglwPKDmIEf97PY5uMifHkxB+7pSgcL1I=
+	t=1784383040; cv=none; b=QdhfOLrr1rGm57xZNvXp8rXKnQ1tFiifOv91TWE/rmFzLR3E+NzcOrQeXYngJeU3ntIOcds6jqbS8RbTb8gXUovzUVYkMuTToiMMEkftzOmPc24G9x+jPeNqdRhVNaBQN7cSZ96sRMNR1eakJi4y9E57pPHnHmxB8IrFMfkO0AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784341940; c=relaxed/simple;
-	bh=UBjifAaVdgaT4nCXd1LiSyxfY9xp/GZMgtvgu4cCe4o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pf1VnamAYxlxdZOwL4Z0hzAevIrg09z6iLpeaiWuLR+kKj60HFn2uT+imxit7AxSj8yLWaFp8rwDnxkP6wQvah5sZDTQzHVDDkvoBCeaei0SEB01DalBe7Zc9M+zeirDr4r6Xpu14firEPBSXarrvhQMxA8EW/FYxx5szGr1wG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=URxc2JVG; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1784383040; c=relaxed/simple;
+	bh=ijtvbZqc7roFlKzki1STkECadMTcktwJmuNR9/ytQKM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hZKWQaP+P97sdoPmg7eU5Pl2sk6CM9T/n5xxrgZ8HKGhzqgeEVaP3CrQ23HlUJN35wpKy7Q+waWiPVo0bSK5Q4l6BxRELoW9E45s6Sv8R5BkejhHpcTqjr2c21J8kk73QXcNSVhLJNfxILBlWGy7QGKW6JtYG/pFpIWkq2Y6Vo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G6B3UAmf; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="URxc2JVG"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38d489b6b71so8302292a91.0
-        for <io-uring@vger.kernel.org>; Fri, 17 Jul 2026 19:32:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G6B3UAmf"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cab973140bso107924335ad.3
+        for <io-uring@vger.kernel.org>; Sat, 18 Jul 2026 06:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784341939; x=1784946739; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6djaaK+pE6EqghcKFOgCVIbFFjhVtYMXvoV9CzqERQc=;
-        b=URxc2JVGQ9bW4xpTQWaChTDrfEp3ty/BTnG+4Grn0PfDI5j1BapQLNimjdl4dADmsn
-         wGhnifN1NrgWgGFokQoPOrAEfEkIo1iKGdcAonsAdDZLT0dlwvGq+Fl2dRdBgLD6Das+
-         brBzta+beggt+ExBLVbTYRQQvugNpozKb6YLwrYBHzEjEk6T0YLFE6jon3IEE8QDbp4J
-         05jAPt3Tt6bFC08FJwf0IJpMHKWCDMq8MfHKaep8sQEIv6C09KW0CI99ZBkHNIyJQh2Z
-         q7njmvcV8ISODcoB6snT7jkbyV53VBN8Kqn/K82zXgL7H5Ga2fOeTYX9Kb9UHlKXCzgG
-         H3Zg==
+        d=gmail.com; s=20251104; t=1784383038; x=1784987838; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=d4cQLSP/Wa+/IUt7M2pMIQks9lVvqgJjnfE+ck+z8y8=;
+        b=G6B3UAmfZu7LYE+DPWaK+BH+qjYHzG6n2y6Uz7pP9lDvqESIInh4PGv1ODKN3xpgTW
+         f2kuI1eKlHs2eCrWP0BmC1q6MGq1JJ287ly7AnzmHVvHrVVia//7LQ8mkLDi565IO6m2
+         l6iS0C9MxkHoAFkf020CGzLB2VfW92GBFWoQHNh+YkA5d2Xiwzu7XC++c2dJV7zdOOOr
+         K+oJUPVhEvkYepx9lp4WxCY99PV83Wbwo+drpLLmm31BAI/9CTZvVb7xdfnCjuLc7AUk
+         kKJuoCBjvzg8AbLyn3cAZeHiAloaFmWOBW5QNvJ+1JftWs4Lo4tVZ+w2Xqo9W5lIdyfA
+         yjUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784341939; x=1784946739;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6djaaK+pE6EqghcKFOgCVIbFFjhVtYMXvoV9CzqERQc=;
-        b=DWEsy4RNygzD/StoTYqbB/3by9YFL1m52yU/kO7WARBAhrE8jQLnQ1SNsW4Gbhx3DY
-         Ny5LKlHDTXRH0PIBXOvzPCBuH/w6rjLnQXzkt2dzdl0VSto7v+nFzQCL/g2obKxRfADf
-         CHXsHaMkLRzRhWQdKoiKLXy4eRWo8eU5ZzMcWJBnKlljxSCuPZMS6g5lNoCMmNY+Dxi1
-         XDzpawgQtMgsJiFbmq6FPRW1dds5FUuLil+ysHDngprrGGOPnOxFq/lV3WziZEq+sZBP
-         C91TueqBeC8u7DyfOAgQTbIcqAmI4kE54UV//gMU0KflEBq2joCDRmkoto7wKE3U7EUs
-         kp4g==
-X-Forwarded-Encrypted: i=1; AHgh+RrH48mi2vxZ53WjEz1+7LYPs1Mtl5CuAUbhtKj5J1Cso0sYUOJgBoHNRoWlKF6d37LdxpHswAcE5w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFgWFz+vG26SL+PtJs9p4N7rZojzCda7kXF0tfI6wud+c0nXBa
-	EVOoAUCjjtPLMgsrsRUAoHovetAKCQBFo3Q7ZOj2I2HBhwv+8TvPElFZ58VxHg==
-X-Gm-Gg: AfdE7cmWZT1/yu6FuUz6H8eUq7x8nES7j0okeuK6mzd4thOESj5skaugZYE8u5vLMrs
-	8n6Q0A0OBeHVvDHsPl28MeNOwxM2KH6EWKf4Eqm3/or6CMTOkoHb31KSEeVEctR9sC6P9xuWIjl
-	d75EHJNWzDMhy5NS2bcCFLSUIHz2U7umsE6x9SpvlRerBB3Nf/RTvlHq2ySCZtmu14K4YgQGAqv
-	X7UyDJFDpvgZd0nUrh1Lu/eUbKZ5249PzujuRJxaX0DJx69ag3rrPNMEeECY1sOdbLew7RMwcts
-	nNW/F0Z7xyXK8SvT27I9baJrKN8f+tpF7r5QF4KPUw9dhEIQQTrW2vcbzmCsZjt2+jb1i5VOpce
-	YDDwWsgQkybdz8rRxm1r76zyUkuZK+2hP1ugF+GeAPzsCLPcYF7YcNZeHvKpj8fScoDrRYH4V1A
-	12M8/WDc8iS1fjVfClXWqImNMsIZ8gURHnV6e79Q8xxOj9bhE+/nZt4lWsq10KJU3vbZ5EfHODi
-	rtNEKn38Q==
-X-Received: by 2002:a17:90b:5806:b0:381:f7a:2e0d with SMTP id 98e67ed59e1d1-38e4b585280mr5249679a91.33.1784341938431;
-        Fri, 17 Jul 2026 19:32:18 -0700 (PDT)
-Received: from DESKTOP-4AJO944.tail156a05.ts.net (ppp-49-237-35-39.revip6.asianet.co.th. [49.237.35.39])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce2de31a7sm9930014c88.15.2026.07.17.19.32.15
+        d=1e100.net; s=20251104; t=1784383038; x=1784987838;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=d4cQLSP/Wa+/IUt7M2pMIQks9lVvqgJjnfE+ck+z8y8=;
+        b=JWMlDINoV1qMbCDOdNa7/rFdZSiNAN8EqeENn3fS6W8Fm4hXOIp9mVvrZjmkn01wUA
+         c/nyATmTR+60j6ykA+pyBjbwirugtsK3j4+OZYji5Zv1AL12tNTlG4rQV+pNquX26tp3
+         N9JSdAGyXYDRQJ2o7Pr1lY30eJqNst2qLfHol+bRSZ2OP+/Z8Caj+TT+Mra2SdINBxXT
+         Sdt5xKpEo2om9D3uigUPgGxZdr3t+JErpGdn0MSkibYhKTBxVu4ms1vbJ8LZDgDUqVjH
+         skfu3J7T2S4BT7DVAADmns5UOn9MA94jfjeJCGTRkGVVna9wdFPkRrVPdcxt7UzXq8xp
+         NgbQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqMvHz7VycSS8vSW7vgfSakY1GqDYrlpmLSS07fGwlk6s9KBD4vlBwq8vp1heuSFju0/Tp+/Q/qhg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgOFfwIiybQMS7Co44aD66OX3evTbsAGuKhHyQ87nkl2Qz4EPi
+	b8K9l3zs+url0UzCCjLbo9JAVw/ZVtPznBWh1a1aA8jBWqf6DKYPcIqZ
+X-Gm-Gg: AfdE7cm3j0bhsNJisQR5KeiOb83CAq0JJrlqrSxyGAFyJDCE/NclLP3YDStNDHE1703
+	LtMeu0G+i4Bjbu090SnkpJxxw/bBnR0JV7d37lSP4dPh/CTW4jVv8lsCzGZHJqSaJ0TIA4J2pKr
+	V9urbd/D++zY92Uft7QM4EzMwwaM4i5Eg/ssdyyHXjGp1aT6LNaRS6Dq1doW91haOFJQm0c5PSm
+	svJGWBH6wO1SHg+QR53Z48vRgH+z+RmuRVi1832AvrwO1RspmslxjJh36+TnLpHyMOsTu9ivxhI
+	rE9B12iEl47YHG+M0zJfUJj77V9waYshONCtQ/2TRMQad17nmwPjg2fK2pgrDdIOSKSB3VDWY8Q
+	b1ApRcW+6Ig9WnluqBbpXI6HW89a8x6ErxLpk03R+SbPqK+IEZFWITYNdMEsGU6z3Q0tBwrz+eL
+	ewJEBoCFT/CJb4ToDbISlaJ9lagyEC
+X-Received: by 2002:a05:6a21:1506:b0:3c1:c6e:9360 with SMTP id adf61e73a8af0-3c3ad844369mr7623449637.32.1784383038242;
+        Sat, 18 Jul 2026 06:57:18 -0700 (PDT)
+Received: from vivek-LOQ-15IRX9 ([2401:4900:8ff9:29ed:7266:cb8f:1472:70bd])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31429f9bb62sm17333492eec.2.2026.07.18.06.57.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2026 19:32:17 -0700 (PDT)
-From: Woraphat Khiaodaeng <worapat.kd2@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	Gabriel Krisman Bertazi <krisman@suse.de>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
+        Sat, 18 Jul 2026 06:57:17 -0700 (PDT)
+From: Vivek Parikh <viv0411.parikh@gmail.com>
+To: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
+Cc: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	Paul Moore <paul@paul-moore.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	linux-security-module@vger.kernel.org,
 	io-uring@vger.kernel.org,
-	Woraphat Khiaodaeng <worapat.kd2@gmail.com>
-Subject: [PATCH] test: add io_uring bpf-ops double-registration regression test
-Date: Sat, 18 Jul 2026 09:30:41 +0700
-Message-ID: <20260718023041.1637-1-worapat.kd2@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <87pl0l7g9q.fsf@mailhost.krisman.be>
-References: <87pl0l7g9q.fsf@mailhost.krisman.be>
+	viv0411.parikh@gmail.com
+Subject: Landlock: LANDLOCK_ACCESS_FS_IOCTL_DEV is bypassable via io_uring IORING_OP_URING_CMD (confirmed on real NVMe hardware)
+Date: Sat, 18 Jul 2026 19:26:48 +0530
+Message-ID: <20260718135650.380643-1-viv0411.parikh@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Exercise the io_uring BPF struct_ops registration path fixed by the
-kernel commit "io_uring/bpf-ops: reject re-registration of an
-already-bound ops".
+Hi Mickaël,
 
-The same io_uring_bpf_ops struct_ops map is registered twice. Between the
-two BPF_LINK_CREATEs the ring_fd is repointed at a second ring, so the
-second registration targets a different io_ring_ctx whose ->bpf_ops is
-NULL and passes the per-ctx check; only the per-map ops->priv guard
-rejects it. The test verifies the second registration is refused with
--EBUSY. On a vulnerable kernel it is accepted, the first ctx is orphaned
-and its loop_step dangles into the freed struct_ops trampoline.
+Note: this was found with AI assistance, so I am treating it as public per
+Documentation/process/security-bugs.
 
-The test reuses the existing bpf test infrastructure and only checks the
-registration result; it never triggers the dangling call.
+While continuing the LSM-mediation audit I found that Landlock's
+LANDLOCK_ACCESS_FS_IOCTL_DEV right can be bypassed with io_uring's
+IORING_OP_URING_CMD. Unlike the mount_setattr(2) gap I reported earlier,
+this one is fully unprivileged and squarely inside Landlock's documented
+model. I have verified it on real NVMe hardware (output below).
 
-Signed-off-by: Woraphat Khiaodaeng <worapat.kd2@gmail.com>
----
- test/Makefile                   |   2 +-
- test/bpf-progs/double_reg.bpf.c |  16 ++++
- test/bpf_double_reg.c           | 158 ++++++++++++++++++++++++++++++++
- 3 files changed, 175 insertions(+), 1 deletion(-)
- create mode 100644 test/bpf-progs/double_reg.bpf.c
- create mode 100644 test/bpf_double_reg.c
+The mechanism
+-------------
+Landlock enforces IOCTL_DEV through the file_ioctl / file_ioctl_compat LSM
+hooks (security/landlock/fs.c: LSM_HOOK_INIT(file_ioctl, ...) /
+file_ioctl_compat -> hook_file_ioctl_common ->
+LANDLOCK_ACCESS_FS_IOCTL_DEV, security/landlock/fs.c:1854/1865).
 
-diff --git a/test/Makefile b/test/Makefile
-index d88a428..5f6794d 100644
---- a/test/Makefile
-+++ b/test/Makefile
-@@ -335,7 +335,7 @@ ifdef CONFIG_HAVE_CXX
- endif
- all_targets += sq-full-cpp.t
- 
--bpf_test_srcs := bpf_nops.c bpf_cp.c
-+bpf_test_srcs := bpf_nops.c bpf_cp.c bpf_double_reg.c
- bpf_progs := $(patsubst bpf_%.c, %.bpf.c, $(bpf_test_srcs))
- bpf_test_targets :=
- 
-diff --git a/test/bpf-progs/double_reg.bpf.c b/test/bpf-progs/double_reg.bpf.c
-new file mode 100644
-index 0000000..20617d0
---- /dev/null
-+++ b/test/bpf-progs/double_reg.bpf.c
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include "../bpf_defs.h"
-+
-+char LICENSE[] SEC("license") = "Dual BSD/GPL";
-+
-+/* Minimal loop_step: the test only exercises registration, never runs it. */
-+SEC("struct_ops.s/reg_loop_step")
-+int BPF_PROG(reg_loop_step, struct io_ring_ctx *ring, struct iou_loop_params *ls)
-+{
-+	return IOU_LOOP_STOP;
-+}
-+
-+SEC(".struct_ops.link")
-+struct io_uring_bpf_ops reg_ops = {
-+	.loop_step = (void *)reg_loop_step,
-+};
-diff --git a/test/bpf_double_reg.c b/test/bpf_double_reg.c
-new file mode 100644
-index 0000000..93c3f38
---- /dev/null
-+++ b/test/bpf_double_reg.c
-@@ -0,0 +1,158 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Regression test for the io_uring BPF struct_ops double-registration UAF.
-+ *
-+ * The same io_uring_bpf_ops struct_ops map is registered twice. Between the
-+ * two BPF_LINK_CREATEs the ring_fd is repointed at a second ring, so the
-+ * second registration targets a *different* io_ring_ctx whose ->bpf_ops is
-+ * NULL and thus passes the per-ctx guard in io_install_bpf(). Only the
-+ * per-map ops->priv guard rejects it. Without that guard the first ctx is
-+ * orphaned and its ctx->loop_step dangles into the freed struct_ops
-+ * trampoline (use-after-free, called from io_run_loop()).
-+ *
-+ * The test only checks that the second registration is refused with -EBUSY;
-+ * it never triggers the dangling call.
-+ */
-+#include <linux/stddef.h>
-+#include <errno.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <bpf/libbpf.h>
-+
-+#include "liburing.h"
-+#include "double_reg.skel.h"
-+#include "helpers.h"
-+
-+#ifndef __NR_io_uring_setup
-+#define __NR_io_uring_setup 425
-+#endif
-+
-+#define CQ_ENTRIES 8
-+#define SQ_ENTRIES 8
-+
-+static struct double_reg_bpf *skel;
-+
-+/* A bare io_ring_ctx fd is all the struct_ops .reg path needs (fget()). */
-+static int mk_ring(void)
-+{
-+	struct io_uring_params p;
-+
-+	memset(&p, 0, sizeof(p));
-+	p.cq_entries = CQ_ENTRIES;
-+	p.flags = IORING_SETUP_SINGLE_ISSUER |
-+		  IORING_SETUP_DEFER_TASKRUN |
-+		  IORING_SETUP_NO_SQARRAY |
-+		  IORING_SETUP_CQSIZE |
-+		  IORING_SETUP_SQ_REWIND;
-+	return (int)syscall(__NR_io_uring_setup, SQ_ENTRIES, &p);
-+}
-+
-+static int test_double_reg(void)
-+{
-+	struct bpf_link *link1, *link2;
-+	int ret, fd_a, fd_b, fd_keep;
-+
-+	fd_a = mk_ring();
-+	if (fd_a < 0) {
-+		if (fd_a == -EINVAL)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "io_uring_setup: %d\n", fd_a);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	skel = double_reg_bpf__open();
-+	if (!skel) {
-+		fprintf(stderr, "can't open skeleton\n");
-+		return T_EXIT_FAIL;
-+	}
-+	skel->struct_ops.reg_ops->ring_fd = fd_a;
-+
-+	ret = double_reg_bpf__load(skel);
-+	if (ret) {
-+		if (ret == -ESRCH) {
-+			printf("io_uring BPF ops are not supported\n");
-+			return T_EXIT_SKIP;
-+		}
-+		if (ret == -EPERM || ret == -EACCES) {
-+			printf("no permission to load struct_ops, skip\n");
-+			return T_EXIT_SKIP;
-+		}
-+		fprintf(stderr, "failed to load skeleton: %d\n", ret);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	/* reg #1: binds the ops to fd_a's ctx, ops->priv = ctxA */
-+	link1 = bpf_map__attach_struct_ops(skel->maps.reg_ops);
-+	if (!link1) {
-+		fprintf(stderr, "first attach failed: %d\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	/*
-+	 * Keep ctxA alive on another fd, then repoint fd_a at a brand new
-+	 * ring (ctxB). ops->ring_fd still holds the integer fd_a, which reg
-+	 * re-resolves with fget() on every call.
-+	 */
-+	fd_keep = dup(fd_a);
-+	if (fd_keep < 0) {
-+		perror("dup");
-+		ret = T_EXIT_FAIL;
-+		goto destroy1;
-+	}
-+	fd_b = mk_ring();
-+	if (fd_b < 0) {
-+		fprintf(stderr, "second io_uring_setup: %d\n", fd_b);
-+		ret = T_EXIT_FAIL;
-+		goto close_keep;
-+	}
-+	if (dup2(fd_b, fd_a) < 0) {
-+		perror("dup2");
-+		ret = T_EXIT_FAIL;
-+		goto close_b;
-+	}
-+
-+	/*
-+	 * reg #2: reg re-resolves fd_a to ctxB (->bpf_ops == NULL, passes the
-+	 * per-ctx check). It must be refused by the per-map ops->priv guard
-+	 * with -EBUSY. If it is accepted, ctxA is orphaned and the kernel is
-+	 * vulnerable.
-+	 */
-+	errno = 0;
-+	link2 = bpf_map__attach_struct_ops(skel->maps.reg_ops);
-+	if (link2) {
-+		fprintf(stderr, "second registration was accepted; ctxA is orphaned (vulnerable)\n");
-+		bpf_link__destroy(link2);
-+		ret = T_EXIT_FAIL;
-+	} else if (errno == EBUSY) {
-+		ret = T_EXIT_PASS;
-+	} else {
-+		fprintf(stderr, "second registration failed with %d (%s), expected EBUSY\n",
-+			errno, strerror(errno));
-+		ret = T_EXIT_FAIL;
-+	}
-+
-+close_b:
-+	close(fd_b);
-+close_keep:
-+	close(fd_keep);
-+destroy1:
-+	bpf_link__destroy(link1);
-+	close(fd_a);
-+	return ret;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int ret;
-+
-+	if (argc > 1)
-+		return T_EXIT_SKIP;
-+
-+	ret = test_double_reg();
-+
-+	if (skel)
-+		double_reg_bpf__destroy(skel);
-+	return ret;
-+}
--- 
-2.43.0
+io_uring's IORING_OP_URING_CMD dispatches driver passthrough commands
+through a *different* hook, security_uring_cmd(ioucmd)
+(io_uring/uring_cmd.c:249), before calling file->f_op->uring_cmd. Landlock
+implements no uring_cmd hook -- it has no io_uring hooks at all (only
+SELinux and Smack implement security_uring_cmd). So for the same device
+fd:
 
+  ioctl(devfd, CMD, arg)      -> security_file_ioctl -> Landlock: DENIED
+                                                        (IOCTL_DEV not granted)
+  IORING_OP_URING_CMD(devfd)  -> security_uring_cmd  -> Landlock: NO HOOK
+                                                        -> f_op->uring_cmd runs
+
+uring_cmd is the async twin of the device ioctl. NVMe makes the
+equivalence explicit (drivers/nvme/host/ioctl.c): the ioctl path handles
+NVME_IOCTL_ADMIN_CMD and the uring_cmd path handles NVME_URING_CMD_ADMIN
+-- the same admin/IO passthrough commands. Both the controller char dev
+(nvme_dev_uring_cmd, core.c:3841) and the namespace char dev /dev/ngX
+(nvme_ns_chr_uring_cmd, core.c:3946) implement ->uring_cmd, as do ublk
+and drivers/char/mem.c.
+
+Impact
+------
+A Landlock-sandboxed task that is denied IOCTL_DEV on a device but holds
+an fd to it (opened under a granted fs right, or inherited) can issue the
+equivalent device commands via IORING_OP_URING_CMD, defeating exactly what
+IOCTL_DEV exists to gate. On NVMe -- the most common storage device on
+Linux systems -- this means arbitrary admin passthrough: the same code
+path carries FORMAT NVM, SANITIZE, and firmware-download commands, not
+just reads/writes. The realistic scenario: a sandboxed storage workload
+is given an NVMe namespace fd for fast IO with the expectation "it can do
+IO but cannot send device-control commands" -- the expectation
+LANDLOCK_ACCESS_FS_IOCTL_DEV was added (ABI 5) to express. It is void.
+
+For ublk devices the gap is total: ublk's control plane is uring_cmd-only
+(no ioctl equivalent), so on ublk char devices IOCTL_DEV currently
+mediates nothing at all.
+
+Documentation/userspace-api/landlock.rst presents IOCTL_DEV as the control
+over device ioctls; a sandbox author reasonably expects withholding it to
+stop device control commands. io_uring is unprivileged, Landlock is
+unprivileged, and no capability is required anywhere.
+
+Affected versions
+-----------------
+This is not a regression -- it is a coverage gap that shipped with the
+IOCTL_DEV right. LANDLOCK_ACCESS_FS_IOCTL_DEV was added in v6.10
+(b25f7415eb41, May 2024); NVMe/ublk ->uring_cmd predate it (v6.0), so the
+first kernel to support IOCTL_DEV was already bypassable. It is present in
+every kernel from v6.10 through v7.2-rc3, including 6.12 LTS. (SELinux and
+Smack implement security_uring_cmd and are unaffected; Landlock and AppArmor
+do not, but only Landlock exposes IOCTL_DEV as a user-facing right.)
+
+For completeness on scope: exploitation requires a Landlock policy that
+handles IOCTL_DEV, a sandboxee that holds/opens a ->uring_cmd-capable device
+fd, and io_uring not otherwise blocked. Sandboxers that also seccomp-filter
+io_uring (e.g. Chromium) are not affected via this path; the exposure is for
+the growing set of tools that adopt IOCTL_DEV without blocking io_uring.
+
+Reproducer (confirmed on real hardware)
+---------------------------------------
+Three self-contained PoCs (raw io_uring, no liburing) are available on
+request; I am not inlining them.
+
+PoC 1 targets /dev/null (null_fops has no ->unlocked_ioctl but has
+.uring_cmd = uring_cmd_null) and needs no special hardware:
+
+  [*] Landlock enforced: READ/WRITE granted on /, IOCTL_DEV denied
+  [1] ioctl(/dev/null, dev-cmd) = -1 (Permission denied)  <- Landlock DENIED
+  [2] io_uring URING_CMD(/dev/null) res = 0 (OK)          <- Landlock did NOT mediate
+
+PoC 2 targets a real NVMe controller (/dev/nvme0, WD PC SN740) with
+IDENTIFY CONTROLLER (admin opcode 0x06, read-only), on
+7.0.0-27-generic:
+
+  [*] Landlock enforced: READ/WRITE granted on /, IOCTL_DEV denied
+  [1] ioctl(NVME_IOCTL_ADMIN_CMD identify) = -1 (Permission denied)  <- Landlock DENIED
+  [2] URING_CMD(NVME_URING_CMD_ADMIN identify) res = 0 (OK)
+      IDENTIFY data: vid=0xb715 model="WD PC SN740 SDDPMQD-512G-1101"
+
+The same PoC was also confirmed on AWS EC2 (Ubuntu 7.0.0-1008-aws, stock
+cloud image, default settings, real NVMe EBS volume):
+
+  [1] ioctl(NVME_IOCTL_ADMIN_CMD identify) = -1 (Permission denied)  <- Landlock DENIED
+  [2] URING_CMD(NVME_URING_CMD_ADMIN identify) res = 0 (OK)
+      IDENTIFY data: vid=0x0f1d model="Amazon Elastic Block Store"
+
+PoC 3 targets /dev/fuse (world-accessible, 0666) as a fully unprivileged
+user (fresh uid, no group memberships, Landlock ABI 8; also reproduced in
+a Docker container with seccomp relaxed). No fuse module parameter is
+needed for this signal: fuse_uring_cmd() (fs/fuse/dev_uring.c:1217) calls
+fuse_get_dev() *before* its enable_uring check, so a never-mounted fd
+returns -EPERM even with enable_uring=N (the default). The full
+queue-registration scenario does need enable_uring=1; NVMe and ublk have
+no such gate at all.
+
+  [*] Landlock enforced: READ/WRITE granted on /, IOCTL_DEV denied
+  [1] ioctl(/dev/fuse, FUSE_DEV_IOC_CLONE) = -1 (Permission denied)  <- Landlock DENIED
+  [2] URING_CMD(/dev/fuse, FUSE_IO_URING_CMD_REGISTER) res = -1 (EPERM)
+      <- reached fuse_uring_cmd; Landlock did NOT mediate
+
+  (-EPERM can only originate inside fuse_uring_cmd on a never-mounted
+   fd, proving the call passed security_uring_cmd into the driver.)
+
+The ioctl admin passthrough is denied while the identical admin command
+executes via io_uring. (Note: NVMe uring passthrough requires
+SQE128+CQE32, per nvme_uring_cmd_checks.)
+
+Mitigations / not affected
+--------------------------
+The bypass is neutralised anywhere io_uring cannot be reached:
+
+- kernel.io_uring_disabled = 2 makes io_uring_setup() return -EPERM for all
+  callers (io_uring_allowed(), io_uring/io_uring.c); value 1 restricts it to
+  io_uring_group / CAP_SYS_ADMIN. Where an admin has set either, this path is
+  blocked. This is a hardening knob, not a universal default: RHEL 9.3 / Rocky
+  9.3 ship io_uring *enabled* on the host (Red Hat documents the syscalls as
+  succeeding or returning EPERM per configuration).
+- Many container runtimes block the io_uring syscalls in their default seccomp
+  profile (e.g. Docker/Podman -> io_uring_setup fails with EPERM/ENOSYS inside
+  the container, verified with Docker 29 on Fedora 42), so a sandboxee confined
+  by such a runtime is protected. Likewise application sandboxers that
+  seccomp-filter io_uring (e.g. Chromium) are not affected via this path.
+  Additionally, on SELinux-enforcing hosts, containers without a relaxed label
+  are denied io_uring_setup by selinux_uring_allowed -- a second independent
+  gate (verified: the same container run fails with EACCES until
+  --security-opt label=disable is given).
+
+So the exposed population is: io_uring-enabled kernels (the desktop default,
+and RHEL/Rocky on a bare host) running a Landlock sandbox that handles
+IOCTL_DEV without an io_uring seccomp block.
+
+Fix direction
+-------------
+security_uring_cmd(ioucmd) gives the LSM the io_uring_cmd (and thus the
+struct file). Landlock should implement a uring_cmd hook that, for a
+device file, requires LANDLOCK_ACCESS_FS_IOCTL_DEV -- mirroring
+hook_file_ioctl. The uring_cmd command is driver-specific rather than a
+standard ioctl cmd number, so the is_masked_device_ioctl() allow-list
+(FIONREAD etc.) does not apply; the safe behavior is to require IOCTL_DEV
+for any uring_cmd on a device file. I am happy to prepare that patch
+(LSM_HOOK_INIT(uring_cmd, ...) + a tools/testing/selftests/landlock test)
+if you agree with the direction.
+
+CCing Jens and io-uring, as the io_uring side is involved (a new LSM hook
+consumer, no io_uring behavior change expected).
+
+Thanks,
+Vivek
