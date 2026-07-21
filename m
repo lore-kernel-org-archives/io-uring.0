@@ -1,63 +1,65 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9563C1402
-	for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 08:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 678AD3BCD19
+	for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 08:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784624124; cv=none; b=nvjVDVJTiNdx00N2TF6dgDV02e0pAEewDDx5WwBU53Qc+vCzB1Oy4fV7fRV7x/bvQhHW0gdRVxfkO1+Uy79ODHjFtYmwGl6EJu5dvi7vF0s9g0+GfgOmHr4/Aq/X0NeIt7T8814iLoOXIBjPw+b8jOtU7UnZpc2/+bQbAB7OiRo=
+	t=1784624130; cv=none; b=DwaBoBHIfRcTdpkmTuneY7Eh4hd/h5D6btgtMskKTMM3NHAHPF91i7a3BJzNUeT4hr6y4E9d9tiMkm+JCBNoRoIkx732PcOG5LWGSaHslNqpJUGQA4VabRfiASMF+IRABJsb+Zpz7z26XQEFDjmnyjpBW4+S+riZ1V+VlsmOCB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784624124; c=relaxed/simple;
-	bh=9v45zTVeTCX7fIaTjQSky2XyjxWftJs8YLfqZCwJ++k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bvwtw9SrbO6vqcJQV8OM82Oz3Hbw0vbWv35lLYLDM4t9OV23Olo2SJ4opaXGgiWkT23/MsBDeezT/pEcoWwaP8SETYt8j+BLLkEHG6wE0iIX8lqQBtce9rSsGhAglnsOf1kaAmrd6ROSoGdqLd92mX0hJOdvrC4yeBbTTjN5vgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gKqY95Ei; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1784624130; c=relaxed/simple;
+	bh=cIlzFVV17lhGmQM6KKNBYyZ6eM2SQ2wSCLVQHjUmyeU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oMN3idAJp+N1Axm3555EZWit9hliSUwwUEwWZyjBlfoD6+WZi38befyNvbSbNWCZlwHWnIjMJ15Cs6ZEesfW+8lC3PtyeyARZjieA49jSTtGqcK0hh9rdT5V8sjOTQ4Sxwja1qYkkAjVSB1ijU7F8/+v9PUwr8YQ7kgxeZvRK7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OWwsX4fs; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gKqY95Ei"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c9d1fff21edso7262026a12.1
-        for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 01:55:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWwsX4fs"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ccf2360620so69892315ad.3
+        for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 01:55:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784624121; x=1785228921; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DvFeyjLJ8AJSuF4p/D9KBNAj9grUIgBOggYUeLP/dVM=;
-        b=gKqY95EiR6hjrSnIVln9pht6Gh9eQF1Q3vnjxSPMY64eXN1mAHIy9xrv/8VEWDs6bQ
-         aMyZYoRuJW6aUjCpfF2BFNnHO1KqRZOV2yAhWLoa6SQ3pj9bUMemkGi7z6qrpftw9cPE
-         mTGbfitG9kO/ecCWZ3Loeqm6M+LD6GKBiaGgyHRvG5xePYQ4yI7IoMHDJVpFmns2F1QE
-         p24ICSBM1FIFCVOxVp2E+nUik9XnrBVVLwJ8SRX3cbV1muRFV/YdNCpTU9SQqSffxCfk
-         jl7nq1i0x8u06B8A0HzapnV2o97C1GIurSeyGrXH/c3BO+Cj0eMq1RhtdOzj1pr3eI/S
-         E+FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784624121; x=1785228921;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784624126; x=1785228926; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DvFeyjLJ8AJSuF4p/D9KBNAj9grUIgBOggYUeLP/dVM=;
-        b=G6EkTyUDGY+baD+glOJf/LFT/pQq2z9aWPfp2LMdprmkV4Uy/hCboEWR8TZc58wPeD
-         GY3iMGaZzMJT15g+MKXYmjjj71bo3//u++JsVNpNwsvOKzvyNrB04/91f677Qb0yJy42
-         yYOD6nqjxb5r0M7jfLKSyYWYwzerw+aVMCkmVSNiuJ68VMkVFlmS3ElN5eh9C809kOZx
-         Gopqey4YBRxl/kW9e36M5jIjuhsTWFPXy3TkVE93MAaWlEa3/6UIO/Wk1DWcCzFZjTie
-         OaMNhPLKfxBhwG3Tuz0ApYqqW2Qu10G8buHIU/IWmigQqEyvQ+gRWOWyvSOSoIGAvKgW
-         sIig==
-X-Forwarded-Encrypted: i=1; AHgh+RqEpfZeqKlFLNlZDaBrxkcxELwbQNRKIQxwy+UIR0d1hLqfJmBOOPdtAPPBgEsvYwBblTtLJ6+9SQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMUndjQcbsVn4vbh/MWV7HD9wttabXRDCGsl121OzrphDznCen
-	fUMxG4aOYx+Ex26NJg913sWUfE16rEsMp1HF1XZNEM312/G7q2pLZjnM
-X-Gm-Gg: AfdE7clzZEoC7HcnFdJGEahxvgR8NTR4zfLlmznp8nunw3xrd1BqERK4gsOtQBHGNIV
-	0NpKOz70HiIG8PfeJfm9seYv7Ny9hYUhFMYm/JyUGrSYs9WNQdLF3NbxQZbRtBbo0ESQt2cOyzG
-	M5pXZVXsMTYaQEdgJvWxCTGlME2uQbv3+HnDiekhUQHlXry0fNHMZRfGPi8Up3nvB3u2AxU4wqt
-	QpZlYvlU0LWE6d7oLWMJUXGIAvH9+kqEdJQeUK6eccDZn348tdKfHneOPhz0Pwmso/6Jky6D5my
-	sfXqV0YJNvfBud3fyO9z/WvVZLxTWJxfumFzVSOQFWCokVSMCeHJ/B6slBidxj0j/Ro8ZjO8MsT
-	Pth+72EP1mQ2D7WDh0HNQnT3O9pmXANlsJt3V0ElnOMfJacwOZG53F1ogtH/E2Wf6xcXhRAFxdH
-	ucvW55ozZIRC3e7EERpoIhuZ3LIL+h2Zr0J0TsWqkPHfkJXwIEyhqGJNLLNmu9xS6MTp+1+zhIQ
-	KmfVadM2cMFkfTiRKXSZijOJD56iRMWUBibsULmyHoNNV2HHesKN0XYVdmoSZ3NW0fvBHmVKEj7
-	0SJ0H9SkJA==
-X-Received: by 2002:a05:6a21:4c0e:b0:3c3:89cf:f43 with SMTP id adf61e73a8af0-3c3ad7aa401mr18624035637.30.1784624120976;
-        Tue, 21 Jul 2026 01:55:20 -0700 (PDT)
+        bh=MxEpS/0A/gZfqZZ27KAKwTrZ3NisDcQ5A3nZ7NEcBpE=;
+        b=OWwsX4fsiV3cImDlWRcNRoToiC/SYxrFTOMbDgg9Vv2svuDdRa++UFUFS5Vvm0fcO9
+         o8m9nxV740/an8QpEMmzhFLhakwGabXI7OkkvuWW/vJPOHH9eWiuz4JyJM4myjDYhNt5
+         Px9Ie9XTMDmCq0xvGy/fc7NXkPnNAobnE7UkS+R9aZrkyHOmbJY1xtlVAvhnf8+tSJ6H
+         jbrq8MGZ6BWcS/X7+sKPpr9NJNHLPmD8Vf6c8pCwD4feE0HdIOpBMo33sp1QoFvCl24g
+         LFRKuxc1OfeAeFuorzqNzjxSDI9vQdOVqHQ9N+DyvmPcuw2D/HcdLm+HhZVzc64Hl4H4
+         h0zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784624126; x=1785228926;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=MxEpS/0A/gZfqZZ27KAKwTrZ3NisDcQ5A3nZ7NEcBpE=;
+        b=m2wNY7Q6A1TTicA10Xbs6wyY+BriAQsCEc8L89XU9MNNeddL4AweuVdfqglYv7mOgo
+         B74K3dEjnuR7aRfZFXufOnN+WexTUjqcfXzR0YVTuVKabQiqlGhCBSUhZEUfATkRdtzh
+         GIp2DZeLT+6dRyAOJ3WKXLUq5jWP4kTNxnSkSq98NLoUbfgoWlDoERkeIIwCPjOdlOGt
+         fssPyESA/47/D+2VMSnf23d4TKn00pNQlnVuKFdWcys9eRSr5NQQTUvn2uA/7yyz0spG
+         T+J0khl/SPHpyGUXDYUKvELEX8jZlbrYbzsqB0Id3IuUfQfLWDzmwW6VgCNM/jAk/uWs
+         G3GA==
+X-Forwarded-Encrypted: i=1; AHgh+RrRYzJ4fYb70dLuuWvZ+mLqe64ejdXnhzE04nzT/LZrD3SuJhDbeA7O2isxpv8o3ZAv7DtLXsH3kw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyzNcU6woD6V3hsICacpvWdYaD+8TCMHEjAhErJWhJGO/SYUa0
+	K5aOCtTow5jzxTUA9hDegzPXR7vdHnEO5t+IkEcQTkanofLVJvl4SCcg
+X-Gm-Gg: AfdE7cmNms1GMSwBtWVixCGS1JB0Hi3ck2rr/GGgqnnaMI2kN94xHErLJSmNqneu6rC
+	zMgBsEjO4XO/LN8fuAe59ukaxuCqF53XNfmYGxoPOtzOucOtArXfyMC5Le6SV2qLKhzs+G462Rq
+	LOVqdXhwLg8HyUn0bPGIUe3RdBGdIrSkqSzxAHmUVR+ergsEOwLP6OQXIob2Yi0LoOZMRufIyNW
+	LySLd033TPKVG0H/0F3e9/dH1Bljw2/pMlmgoNqwL9Blp38V+g3hMo7MpxUArEl1py8c4MWOQ8p
+	OleEVI/V4T/zlo74Te3PYrhjiumJt3gZ3d/nNXWy3Ljh4gp635ZJxrgEI5k/PFaA3ZeKm5gFMFB
+	urpfJhaKcpkMZDh4y5DdNieXEVLms0C8DuTmOR7+3k+Jq2h/Vf2IOytNGMOIyHPQ87WYbtRFDdU
+	LeBP17zB1f2IAg1aldwe8CGdfewcYW13MRhd5mIdPwGEi1xdyy8MI2nKfEhVZrIHvjniWXdTOQc
+	OyhsFWXEi2OC1CyDBX5+aYhGZ/dPBYbKmL4RY2eukfhWiZF2+7fBZHdpLYDhbvjHJ+8jK6CU6Pi
+	7TgliUzSwg==
+X-Received: by 2002:a05:6a20:734b:b0:3bf:9e25:1a18 with SMTP id adf61e73a8af0-3c3ada905ecmr19143488637.52.1784624126350;
+        Tue, 21 Jul 2026 01:55:26 -0700 (PDT)
 Received: from cs-1047136853211-default.asia-southeast1-b.c.z168d0f9edf9bc766-tp.internal (8.99.126.34.bc.googleusercontent.com. [34.126.99.8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31429cf22b3sm45463137eec.0.2026.07.21.01.55.18
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31429cf22b3sm45463137eec.0.2026.07.21.01.55.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 01:55:20 -0700 (PDT)
+        Tue, 21 Jul 2026 01:55:25 -0700 (PDT)
 From: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Christian Brauner <brauner@kernel.org>,
@@ -67,10 +69,12 @@ Cc: Jan Kara <jack@suse.cz>,
 	linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
-Subject: [PATCH v2 0/2] io_uring: add fremovexattr and flistxattr support
-Date: Tue, 21 Jul 2026 08:54:56 +0000
-Message-ID: <20260721085458.2716-1-aditya.ansh182@gmail.com>
+Subject: [PATCH v2 1/2] fs: make file_listxattr and file_removexattr helpers non-static
+Date: Tue, 21 Jul 2026 08:54:57 +0000
+Message-ID: <20260721085458.2716-2-aditya.ansh182@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260721085458.2716-1-aditya.ansh182@gmail.com>
+References: <20260721085458.2716-1-aditya.ansh182@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -79,41 +83,69 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series completes io_uring's FD-based xattr operations by adding
-support for:
-- IORING_OP_FREMOVEXATTR
-- IORING_OP_FLISTXATTR
+In preparation for adding IORING_OP_FREMOVEXATTR and
+IORING_OP_FLISTXATTR support in io_uring, we need to invoke the VFS-layer
+helpers from within io_uring.
 
-This allows asynchronous xattr removal and listing. Support is restricted
-to FD-based operations on registered files to avoid path lookup overhead.
+Make the following helpers non-static and declare them in fs/internal.h:
+- file_listxattr()
+- file_removexattr()
 
-Corresponding test suite modifications have been integrated into the
-official liburing test suite (test/xattr.c) and verified to pass
-successfully. A corresponding liburing patch implementing these prep
-helpers, sanitizers, and test cases is following this kernel series.
+No functional change is introduced.
 
-- Patch 1 makes the necessary VFS-layer list/remove helpers non-static
-  and declares them in fs/internal.h.
-- Patch 2 implements the io_uring operational support (opcodes, opdefs,
-  preparation, and issue handlers) and invokes these exposed helpers.
+Signed-off-by: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
+---
+ fs/internal.h |  2 ++
+ fs/xattr.c    | 10 ++++------
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Changes since v1:
-- Omit path-based opcodes to prioritize optimal FD-based variants.
-- Limit exported VFS helpers to only file_listxattr and file_removexattr.
-- Rewrite standalone test program into a standard liburing testcase.
-
-Aditya Prakash Srivastava (2):
-  fs: make file_listxattr and file_removexattr helpers non-static
-  io_uring: add fremovexattr and flistxattr support
-
- fs/internal.h                       |  2 +
- fs/xattr.c                          | 10 ++--
- include/uapi/linux/io_uring.h       |  2 +
- io_uring/opdef.c                    | 18 +++++++
- io_uring/xattr.c                    | 74 +++++++++++++++++++++++++++++
- io_uring/xattr.h                    |  6 +++
- tools/include/uapi/linux/io_uring.h | 13 +++++
- 7 files changed, 119 insertions(+), 6 deletions(-)
-
+diff --git a/fs/internal.h b/fs/internal.h
+index 355d93f92208..ee86b24db79a 100644
+--- a/fs/internal.h
++++ b/fs/internal.h
+@@ -297,6 +297,8 @@ int filename_setxattr(int dfd, struct filename *filename,
+ 		      unsigned int lookup_flags, struct kernel_xattr_ctx *ctx);
+ int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx);
+ int import_xattr_name(struct xattr_name *kname, const char __user *name);
++ssize_t file_listxattr(struct file *f, char __user *list, size_t size);
++int file_removexattr(struct file *f, struct xattr_name *kname);
+ 
+ int may_write_xattr(struct mnt_idmap *idmap, struct inode *inode);
+ 
+diff --git a/fs/xattr.c b/fs/xattr.c
+index d58979115200..a3a7241846c3 100644
+--- a/fs/xattr.c
++++ b/fs/xattr.c
+@@ -953,17 +953,15 @@ listxattr(struct dentry *d, char __user *list, size_t size)
+ 	return error;
+ }
+ 
+-static
+ ssize_t file_listxattr(struct file *f, char __user *list, size_t size)
+ {
+ 	audit_file(f);
+ 	return listxattr(f->f_path.dentry, list, size);
+ }
+ 
+-static
+-ssize_t filename_listxattr(int dfd, struct filename *filename,
+-			   unsigned int lookup_flags,
+-			   char __user *list, size_t size)
++static ssize_t filename_listxattr(int dfd, struct filename *filename,
++				  unsigned int lookup_flags,
++				  char __user *list, size_t size)
+ {
+ 	struct path path;
+ 	ssize_t error;
+@@ -1036,7 +1034,7 @@ removexattr(struct mnt_idmap *idmap, struct dentry *d, const char *name)
+ 	return vfs_removexattr(idmap, d, name);
+ }
+ 
+-static int file_removexattr(struct file *f, struct xattr_name *kname)
++int file_removexattr(struct file *f, struct xattr_name *kname)
+ {
+ 	int error = mnt_want_write_file(f);
+ 
 -- 
 2.47.3
+
