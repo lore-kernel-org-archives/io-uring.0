@@ -1,159 +1,110 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B0F27380A
-	for <io-uring@vger.kernel.org>; Mon, 20 Jul 2026 15:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FB33BF67E
+	for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 08:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784561154; cv=none; b=MzamoPdeVAGfKOiUs2h4ehcX6SLP0kNXA8TY10GopfNudMHopWB4yzg5BTjU16vZu1dzhoeENbSdH/d85dlU//hJBK7GKrprMpH/egz/oN5mhoiGlbhIvDkOJhK54uJEkBKLkyr/V/+e1ZZV9A+w3PVaZXjejXc8dN+oIla50H8=
+	t=1784623679; cv=none; b=TSMnysDq0zwpPhjCj9SjDGPcaOYyyv2zD5NYTpKb5D+Tq+YfKxkImhgcoxtJW7qZTVDzrjA6teuDoIeFrBZbfU/PytHPBTPyy5SF36Roiw85C6XcJWO+1JjNTN94GSnIb7j+QVn6Q8wxb6C4dhjn04Pk+ajFeACUzPFBLS93qOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784561154; c=relaxed/simple;
-	bh=0cS3VyR4Z8ZEaGQjWxhK6zIOcvyGFbJqVuevUXNKV7k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=bm2c9urzm7066G8J3BQU3eEYuD/PhUb62LJPMkjdm10OcfunOcMoKAcfgu8e2v03xOC6OX2ok8dk+tbv3gGCdMIiQ9wl5dtQlNI/1YWQ3fDdSn8GM1gxjz5ONb+26XoDc2E7NY3oFG4cqS9Qj7+7JuQaYaHEf5t1WOYwul8rSa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QE4fe8WW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/ymXAw0O; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QE4fe8WW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/ymXAw0O; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1784623679; c=relaxed/simple;
+	bh=GfEQ+OwxXQ1nHICDvlfRs2eTprljHrRRY34VzbIVR1Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XtIOhGj40EHZ8rl3b04bLJ/25q1j2TL4pghXihOOCuXZ6zPZCcQVruLYgNjnrcVqXeKcL1XNuS0b/2pYzEVRWy/5UN4E1YZH9JsUqyn5CXgtTPQVL48IKfUm0GEjeG7M8QrBUuwpZdwcB6CEDBHcWTP6nW/wGTuph86U8OP1nJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NQjTxS2S; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QE4fe8WW";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/ymXAw0O";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QE4fe8WW";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/ymXAw0O"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B13897A024;
-	Mon, 20 Jul 2026 15:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1784561150; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vN9biC/t0CAhvU2zJIhYxFG/nqLPZ9deMWJFMTyfvq4=;
-	b=QE4fe8WWZ8TfW7POvCFkGLD85WhH1C6JJobcD26i0CroIHmVB2t5mVsOLzgS4MLis5Q+IN
-	YLKmzDLkl4AImLjSMWTqJ4+ix1wUkATM69pNSaV+7AZSylwkVZxL7H/UeyJW03VrMBys7C
-	v2yjK/R7AQpxWTF7amvLqwDKGNtxUng=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1784561150;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vN9biC/t0CAhvU2zJIhYxFG/nqLPZ9deMWJFMTyfvq4=;
-	b=/ymXAw0Od7u5OKZ09dS5dzbg23c8LqmzJzteEwKcB5eBalZyjVU/nFG2C+OQfkuL4Mcmjz
-	bwTmkcvlADC6J+AQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1784561150; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vN9biC/t0CAhvU2zJIhYxFG/nqLPZ9deMWJFMTyfvq4=;
-	b=QE4fe8WWZ8TfW7POvCFkGLD85WhH1C6JJobcD26i0CroIHmVB2t5mVsOLzgS4MLis5Q+IN
-	YLKmzDLkl4AImLjSMWTqJ4+ix1wUkATM69pNSaV+7AZSylwkVZxL7H/UeyJW03VrMBys7C
-	v2yjK/R7AQpxWTF7amvLqwDKGNtxUng=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1784561150;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vN9biC/t0CAhvU2zJIhYxFG/nqLPZ9deMWJFMTyfvq4=;
-	b=/ymXAw0Od7u5OKZ09dS5dzbg23c8LqmzJzteEwKcB5eBalZyjVU/nFG2C+OQfkuL4Mcmjz
-	bwTmkcvlADC6J+AQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6DF91779AA;
-	Mon, 20 Jul 2026 15:25:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qZLDE/49XmqBCQAAD6G6ig
-	(envelope-from <krisman@suse.de>); Mon, 20 Jul 2026 15:25:50 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>, Jens Axboe
- <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>, Alexander Viro
- <viro@zeniv.linux.org.uk>
-Cc: Jan Kara <jack@suse.cz>, io-uring@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, Aditya
- Prakash Srivastava <aditya.ansh182@gmail.com>
-Subject: Re: [PATCH 0/2] io_uring: add removexattr and listxattr support
-In-Reply-To: <20260720072213.2719-1-aditya.ansh182@gmail.com>
-Organization: SUSE
-References: <20260720072213.2719-1-aditya.ansh182@gmail.com>
-Date: Mon, 20 Jul 2026 11:25:48 -0400
-Message-ID: <87fr1d1y4j.fsf@mailhost.krisman.be>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NQjTxS2S"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-caf45fc5202so7731221a12.1
+        for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 01:47:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784623678; x=1785228478; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nV3q+eHhbCfmvIKYJNzhZ7doa4w8F1rofh6XZPW6Qlg=;
+        b=NQjTxS2S9mjydB0pyasom6b5emXFYMfM/RMIN//65Uhncd127sdURN6lLmcJLQbt/L
+         nC8d8de16dIeYoNEWoN3sILRC3dJiGGsi6mFIFwmKKLJlN7CdmYr2hjE3j68TZJhfITn
+         pGzF7OP/DZkQ4rGP9pWxFk57HzpFAWcBPxrNs6ASWKnTjsJTAS1/A564U59GZElDcuyl
+         Hd7eCKf+4NoLl2o1EJ8Qq46Xqvx2H64BqHDVGsXQFlkfVMxF5POzyrRaV0Z3zmX8Pyae
+         kcFd+JDCwAfsl8hrhgCSq2QJDY2+x+mN9PzdSzTMluRZBq+jTBqSD0q1iX4KDgmpUpIf
+         SLQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784623678; x=1785228478;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nV3q+eHhbCfmvIKYJNzhZ7doa4w8F1rofh6XZPW6Qlg=;
+        b=FbeUPFnfVBckq6UlURy4gaLyAWATyUUb1fZOcdx9eVICb1c4M5qEnIAPiCGboB88rd
+         fcZzWmlHWOtg+h+Ss/XCAs4Ci2Oan6lZRx7RTvrlvJ36GOLTW/axYgigPoTcuMfBLRkb
+         P4rWWmUeqOAmWM1ymAbAIMu09Xeh8kz8+6OMMh/XDhcePRTRPjdWwHeorAgrCWATPrt7
+         /Ijk/vgVinXxUhr5PdCK5erTsvzjlrjnrTj95HSBgbsJ+h+L1tDAzhLFXXkjGyJmoY5n
+         WhHJV1HIrMuJOxrHvm51W1/eLbr8Rp0SarJ5tgUJtTYJVipLzPCjmMEZfFAZd16yqbxA
+         Mamw==
+X-Gm-Message-State: AOJu0YwvqpEhsiri3jNt1hdRMJa5B/Dr/UA97G/CB2nIO1ThrF64HvAf
+	Loih4lp+zjIbo7bmPy+U7KBeelHeW9lE4MCfEkZkcVHA9mQ1nL+4bRJ9cwo1e5q5
+X-Gm-Gg: AfdE7clXIMdj86LJs1pwXx/ssmtn6yD5DdHLhNspmhS3mgEugqFk9UHelcKkJ8oFM4e
+	z1mG8HjlpM3dRpN4yEgYAvtdE5dxMfVVRHo0zBedIY0rkFOPuUfFhrdbky8MHnomOJoNT8AXIK/
+	2YltZz67XXEdkGQoASaQhK6jcgwzWOqmQoEaeLPrKazXVKb4ptjQr9UKkjE+r+VJNqAxkl2YGzM
+	OBOcUSSZ5AhqNKNf0mmKLhgfp63rVjoBA4mwJ3WaC95WDBoenllaFQchC33jyi8Yx2ejydKSjmN
+	ZTuyp7/Mziwt1ulsW0ygi7/p0bL4EHlKTW9YJftDrmeIlj7X83b0KFn4y+YYgc4iXOPTMmKkgW6
+	nCUTEcbN1maE/rCg0SZvWdluNDpHHwBwKfqbfNhN6Ug/XgryqaRlBsDLGZCQlOkTpcDZYyDANjg
+	doB2G6f2hzCWfIOsnChGCBf7oFCgbq2FLzyk6at94KuaoD0dU=
+X-Received: by 2002:a05:6a20:d52f:b0:3bf:aa1a:d2ef with SMTP id adf61e73a8af0-3c3ad938d60mr19800362637.56.1784623677775;
+        Tue, 21 Jul 2026 01:47:57 -0700 (PDT)
+Received: from localhost.localdomain ([125.20.165.194])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1ddeb6sm50740915eec.20.2026.07.21.01.47.55
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 21 Jul 2026 01:47:57 -0700 (PDT)
+From: Aayush7352 <aayushdixit924@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>,
+	linux-kernel@vger.kernel.org,
+	Aayush7352 <aayushdixit924@gmail.com>
+Subject: [PATCH] io_uring/kbuf: fix UAF in buffer selection when access_ok fails on expanded iovec
+Date: Tue, 21 Jul 2026 14:17:52 +0530
+Message-ID: <20260721084752.79346-1-aayushdixit924@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.dk,kernel.org,zeniv.linux.org.uk];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	HAS_ORG_HEADER(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.cz,vger.kernel.org,gmail.com];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,mailhost.krisman.be:mid]
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
 
-Aditya Prakash Srivastava <aditya.ansh182@gmail.com> writes:
+In io_ring_buffers_peek(), when the buffer ring is expanded
+(KBUF_MODE_EXPAND), arg->iovs is set to a newly kmalloced array.
+If access_ok() then fails on a buffer entry, the error path kfrees
+the new array but does not restore arg->iovs to the original value
+(org_iovs).  arg->iovs is left dangling and will be reused on retry,
+causing a use-after-free when the caller retries the buffer selection.
 
-> This series completes io_uring's xattr feature parity by adding support
-> for the remaining four xattr operations:
-> - IORING_OP_REMOVEXATTR
-> - IORING_OP_FREMOVEXATTR
-> - IORING_OP_LISTXATTR
-> - IORING_OP_FLISTXATTR
+Fix by restoring arg->iovs = org_iovs after the kfree on the error
+path, so the caller's state remains coherent on retry.
 
-It is much cheaper to open a fixed file and use the FD variant of these
-operations in io_uring that it is with a syscall.  Could we just live
-with IORING_OP_FLISTXATTR/IORING_OP_FREMOVEXATTR?
+Fixes: b3e0216c97e3 ("io_uring: add buffer ring support")
+Cc: io-uring@vger.kernel.org
+Signed-off-by: Aayush7352 <aayushdixit924@gmail.com>
+---
+ io_uring/kbuf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> Historically, applications looking to achieve zero-blocking metadata
-> management had to fall back to synchronous threads to list or prune
-> extended attributes. This is particularly problematic for highly secure
-> layered filesystems, active monitoring engines, or container runtimes
-> utilizing namespace isolation xattrs.
-
-Please drop the LLM explanation.  Why is this a problem for
-"highly-secure layered filesystems" in particular?  This enables xattr
-operations in an asynchronous fashion. period.
-
-> To support this cleanly and reuse existing optimal VFS-layer code paths:
-> - Patch 1 makes the necessary listxattr/removexattr VFS-layer helpers
->   non-static and exposes them in fs/internal.h.
-> - Patch 2 implements the io_uring operational support (opcodes, opdefs,
->   preparation, and issue handlers) and invokes these exposed helpers.
->
-> This approach ensures zero code duplication, robust filename handling,
-> and maintains design consistency across both subsystems.
->
-> Testing
-> =======
-> A self-contained test program is provided below
-
-Please turn it into a proper liburing testcase.
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index de0129bce..eab4de8a7 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -314,8 +314,10 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
+ 		iov->iov_base = u64_to_user_ptr(READ_ONCE(buf->addr));
+ 		iov->iov_len = len;
+ 		if (unlikely(!access_ok(iov->iov_base, len))) {
+-			if (arg->iovs != org_iovs)
++			if (arg->iovs != org_iovs) {
+ 				kfree(arg->iovs);
++				arg->iovs = org_iovs;
++			}
+ 			return -EFAULT;
+ 		}
+ 		iov++;
 -- 
-Gabriel Krisman Bertazi
+2.55.0
+
