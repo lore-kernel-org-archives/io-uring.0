@@ -1,69 +1,38 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953EA44D68A
-	for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 09:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 785BE3955D7
+	for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 10:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784627840; cv=none; b=G56LiN2n0n/QPcFmmTFtRT7VQQMtN2vEOlvrpiFAABkvdQB2EvPKFU/rSRERbZ9EknpnmW7LUKodwTYSqkDMPG9jBkXbSSuPawEpEk5TmApFD4ikIC4TdS6WL3XD6+kokqZdXDUDl5mUUkds4CgHh5ne+dOgx97HenBmnyYYunw=
+	t=1784628806; cv=none; b=AzYoEOq58vH6aWk3wS9xekllagB8OIvGoq53GqJoXjB/vwQXUwUltXXHjLOHIrMbnASPUfOqUwIRECdYGv4uZ3vnwBbYTpKHDHwNaa5rslu+pTX29tek+u0FFdVPwTvdLRfwiyj78oKgWPB6Pr+swIfxplwD9kNg+sVE1SgV/x4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784627840; c=relaxed/simple;
-	bh=pR5vKx+ifxyexrw8+sqWJetVzv0/JsCsCmISYtkw/Zc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aHpUoUe62K9ioKqjjuxkxEQewdlbwPP27MVZ81qbHEBhifRUFVGNwLLHClH5DP5vxUzz1WwGYsIlCTxJ7uWxY3Ct/MqZf1HqHIxIjsIY1K0bLl9OcoE2OaH1xBY7id9Lzx9JdUQUJFvnJb6ciqHhvgGYsemg+eic7l9daBO4jNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IyQ8CSJZ; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784628806; c=relaxed/simple;
+	bh=MCKsk/ph4Bu/AaJge/gmC3utTao7zKAG4C+0p9fGMEs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=B9SotYb9Wc7OUcFNd51r/PeQW20OZfakuvXOdkKnNpauJmGfsU8+x/QGXaDfLQVZ8Nx0GVAAr676jBgMXpWHvvn13ZUEpSxGEcYW5ZOdNE7WLLsIg4pge0ZJIp50rxNN2oOIdfexHL3ppTnflA9c7MW9BrDNYDJt9/9HQFOuxWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=EoRmzIY8; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IyQ8CSJZ"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-ca913a601fbso7477796a12.3
-        for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 02:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784627837; x=1785232637; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Vi8Y5Mae0eMxJXexF7C1mNZVoJhUCTDqrvtov6btneE=;
-        b=IyQ8CSJZeA35GEUxdtBIupbv0zSyEg3bChBc/R6eoJeq9823/yzJBl3i4WL/as8T3L
-         a2T67BOhg0vxam+igL1pgiJLJK0D6ENOh0AGewqeSKodjyOrWZQyrWlNA4qGyMnl6rPx
-         9LGBVRl4OyUVGCpTyQH9zQFS+g5GTpLaXX/5cGbLH/T1Y0kzzhcyKzdK00OGTCjJIg7E
-         2TLGiCPiVCuJUyDjKXmzH7fcaOik8f0in4CrskVzq5h4ahXuJrxHw2Axo/3a/yWbu7Hc
-         CFhgon756vDaTXvcGZ7ns/Fvzsx/2mx8Trq3SdvLDV3djunYRLGDKUvowwpqzeJehR+x
-         /xbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784627837; x=1785232637;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Vi8Y5Mae0eMxJXexF7C1mNZVoJhUCTDqrvtov6btneE=;
-        b=ZpWqnKMEhWcEWPuJGhWhYQIfgaBd0h9qKbjPuaXR6Dod+zq9cHeCMUHET9QJpIj17D
-         Akn/bpbS4Tr1j3VN6DRoYSFAzeQXGEvtUEEICYNH7dF6Ds25IkWNIjkJNrKPnyvYyZr/
-         W1r/TweHD3yN8kvacWxFdmfUGBUooBN9OTk04cS4n/d5BJYxQIMHtFP+uKpd6oB2d/U/
-         /p1L60BVSj1koD2wVeC7/1JJMl528ujJ8nBSe/OBlVDhxRZ9nRGle/82oE7bnVEeFqGQ
-         auEt1aDJzsNlb3SpOZMBWCQK4UjtTByBf8Mf37azbjXlxYgNtaSxTnT/m88Lwbb3675A
-         gj2w==
-X-Gm-Message-State: AOJu0Yzii1lLEkxyJ37qNZIaKyzJBs2UUud5c4YSdnHHS7IJcwV9rNSy
-	9ixFlRLTW9fzKyCfA3jhOmHPkwhCd8SibXmpqrWQxcIlcyqmmUJdEZDmQsbZac8N
-X-Gm-Gg: AfdE7clfX8k1zfooGkiKN9Tb1mLtD8/aVa5fGRrVMCnfe18sQNxwfrZX2DBRKs199IA
-	bmWdvSUbSR2/mR/fi+Ofjs6vzna08r/z6ynDzRZE7I8QmFmg1bNgNNhDkwASIt14VSncEvYmaVT
-	gJ+wKFwD9EiyCGx8pTOwcP6QyT+rScHFoHS0NXvubo1yIYGhs027QkHLbqmFQ+Wdx0DIBL9zRla
-	d3r7EW2CEHP5DWKSb0xuVbGVPY46NkMmN8N2dbUUb68DThaEDfxqeUy7XDh+fG7vvDBUc6WTtV7
-	8cswWmWQxRyXGr2MwFWarf3Zg+DoGQlLPdnLK36Lrbl9oe7BQ+PCgP6ZRiyCn5bjQVaGO3Hd7R9
-	Onr1DCEaIAQJlu9JE5Ts22LA0NA4hlseRHklVyf+TqYXD30o/LfiNgdiXfCvFvjSeTtjLatc2Df
-	apHMMhQiF5DDaLkUxs62/FNsrC9pdWfWTvsRqY
-X-Received: by 2002:a05:6a21:ec42:10b0:3c4:de3:816c with SMTP id adf61e73a8af0-3c40de381f5mr2669733637.37.1784627837591;
-        Tue, 21 Jul 2026 02:57:17 -0700 (PDT)
-Received: from localhost.localdomain ([125.20.165.194])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1bb770sm49460081eec.16.2026.07.21.02.57.14
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 21 Jul 2026 02:57:16 -0700 (PDT)
-From: Aayush7352 <aayushdixit924@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>,
-	linux-kernel@vger.kernel.org,
-	Aayush Dixit <aayushdixit924@gmail.com>
-Subject: [PATCH] io_uring/kbuf: fix UAF in buffer selection when access_ok fails on expanded iovec
-Date: Tue, 21 Jul 2026 15:27:11 +0530
-Message-ID: <20260721095711.80711-1-aayushdixit924@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="EoRmzIY8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=f1
+	3mGRp5shGTSuWuTB71OgARDKa9qthHKgETLZRVF2A=; b=EoRmzIY8gf2GMMhQFq
+	3a+udfLjumy1Ufnu49PPU4EYT8POnzHQh7X9pFKMsDb2EAcFKTGvtIUbmqRQUrfT
+	Cx8g3tpmlMyVgaeF1o0J9oSCUQpjwblSfZzLapH002fhes8VS8nadoquhq1Oyvsu
+	CVXSaAAl8pGl/zwZS/isOujoE=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgA3G481Rl9qg82wHA--.17273S2;
+	Tue, 21 Jul 2026 18:13:10 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org,
+	Zizhi Wo <wozizhi@huawei.com>,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH] io_uring: fix oversize cq.head distance in io_cqring_queued()
+Date: Tue, 21 Jul 2026 18:13:06 +0800
+Message-Id: <20260721101306.1187366-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,42 +40,57 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PCgvCgA3G481Rl9qg82wHA--.17273S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur15Zw43Gr13Kr45Wr4fAFb_yoW8WFy5pF
+	Wj9w15Xay0vry5ta4jvr48tFyfWan2ya1fJFWag34qyr1a9FnIgFy5KFy5CF17Gr97uryj
+	yrsIvrWqyr4DAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jj89NUUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6RYRoWpfRjYulAAA3w
 
-From: Aayush Dixit <aayushdixit924@gmail.com>
+The previous cq.head validation treats head past cached_cq_tail as an
+empty ring. When head is rewound so the unsigned distance exceeds
+cq_entries, we still used min() and reported a full ring.
 
-In io_ring_buffers_peek(), when the buffer ring is expanded
-(KBUF_MODE_EXPAND), arg->iovs is set to a newly kmalloced array.
-If access_ok() then fails on a buffer entry, the error path kfrees
-the new array but does not restore arg->iovs to the original value
-(org_iovs).  arg->iovs is left dangling and will be reused on retry,
-causing a use-after-free when the caller retries the buffer selection.
+Posting then fails into overflow without advancing cq.tail, and
+io_cqring_wait() keeps retrying on the overflow bit. A valid distance
+is only [0, cq_entries]; reject anything outside that range the same
+way as head-past-tail.
 
-Fix by restoring arg->iovs = org_iovs after the kfree on the error
-path, so the caller's state remains coherent on retry.
-
-Fixes: b3e0216c97e3 ("io_uring: add buffer ring support")
-Cc: io-uring@vger.kernel.org
-Signed-off-by: Aayush7352 <aayushdixit924@gmail.com>
+Fixes: f44d38a31f18 ("io_uring: validate user-controlled cq.head in io_cqe_cache_refill()")
+Assisted-by: Cursor:Composer
+Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
 ---
- io_uring/kbuf.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ io_uring/io_uring.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index de0129bce..eab4de8a7 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -314,8 +314,10 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		iov->iov_base = u64_to_user_ptr(READ_ONCE(buf->addr));
- 		iov->iov_len = len;
- 		if (unlikely(!access_ok(iov->iov_base, len))) {
--			if (arg->iovs != org_iovs)
-+			if (arg->iovs != org_iovs) {
- 				kfree(arg->iovs);
-+				arg->iovs = org_iovs;
-+			}
- 			return -EFAULT;
- 		}
- 		iov++;
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 1ea2fca34a36..da9f5971e0c9 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -688,16 +688,17 @@ static struct io_overflow_cqe *io_alloc_ocqe(struct io_ring_ctx *ctx,
+ }
+ 
+ /*
+- * Compute queued CQEs for free-space calculation, clamped to cq_entries.
++ * cq.head is controlled by userspace. Only a distance of [0, cq_entries] is
++ * valid; anything outside that range is a bogus head, treat as empty.
+  */
+ static unsigned int io_cqring_queued(struct io_ring_ctx *ctx)
+ {
+ 	struct io_rings *rings = io_get_rings(ctx);
+-	int diff;
++	unsigned int head = READ_ONCE(rings->cq.head);
++	unsigned int diff = ctx->cached_cq_tail - head;
+ 
+-	diff = (int)(ctx->cached_cq_tail - READ_ONCE(rings->cq.head));
+-	if (diff >= 0)
+-		return min((unsigned int)diff, ctx->cq_entries);
++	if (diff <= ctx->cq_entries)
++		return diff;
+ 	return 0;
+ }
+ 
 -- 
-2.55.0
+2.25.1
 
