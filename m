@@ -1,72 +1,69 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DAD3C0A08
-	for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 09:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953EA44D68A
+	for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 09:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784624847; cv=none; b=eSNBW2gLJmwNIYDIxOBmnYG4xDuwy8IOw77EU6DTG52S0Q0694t1XXnU2ERRQvDgXy5D8iG3wrLom4GxY0asdlHnKj04Mf91h5AKBrI6jsnELDThR6n4ab66+vNvDbLQBQhaMiHPYmQUW5X0WuLxNJ9iNd9bBH5lQ03UkcrovII=
+	t=1784627840; cv=none; b=G56LiN2n0n/QPcFmmTFtRT7VQQMtN2vEOlvrpiFAABkvdQB2EvPKFU/rSRERbZ9EknpnmW7LUKodwTYSqkDMPG9jBkXbSSuPawEpEk5TmApFD4ikIC4TdS6WL3XD6+kokqZdXDUDl5mUUkds4CgHh5ne+dOgx97HenBmnyYYunw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784624847; c=relaxed/simple;
-	bh=DW1uYazlN4mJBPODm5JZ+6Yv1hEQOcFIo84INv0ukAg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YXS/DK3wscTsEfjIjie5tEVRkqpBfWEhAmcpTfmTIibalq7ZHosGDKdvipV71IwSgu4mbE+FP5h7mHoi0/1X27bx14LE5XZfK6018upwxGOgv3kLwoiU7RVfBxaw0Ud1tn3Ti0vmu9iYEz6ckqkZn043pwmWtp9fEYJbZwqBtAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PsyhKgLU; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1784627840; c=relaxed/simple;
+	bh=pR5vKx+ifxyexrw8+sqWJetVzv0/JsCsCmISYtkw/Zc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aHpUoUe62K9ioKqjjuxkxEQewdlbwPP27MVZ81qbHEBhifRUFVGNwLLHClH5DP5vxUzz1WwGYsIlCTxJ7uWxY3Ct/MqZf1HqHIxIjsIY1K0bLl9OcoE2OaH1xBY7id9Lzx9JdUQUJFvnJb6ciqHhvgGYsemg+eic7l9daBO4jNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IyQ8CSJZ; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PsyhKgLU"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ca64c3ce5fso126878745ad.3
-        for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 02:07:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IyQ8CSJZ"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-ca913a601fbso7477796a12.3
+        for <io-uring@vger.kernel.org>; Tue, 21 Jul 2026 02:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784624845; x=1785229645; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1784627837; x=1785232637; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WOX8gQ7ioq0/VRHLmpPhZEI1mv1X14cl6AVZtJwxQac=;
-        b=PsyhKgLUchYTfj/zdhAEo/+9g4NhBNeehVS06pgMnJup28igpHN6KHVP9Ay+81hBL4
-         3WVY6q0ntvWILjAV73du2AW59OMkLGc1VaD7ngmxCFH7MplwBIonht72Dnve18JHLI95
-         AA02YH5CZqTXWOzwBEuZnDoc4ELpiHvh2PpqUvdbn7pHiC73cOy9TjwxHVzp5Cw2VZcF
-         rx8Nkc419Yki2yIhEAU/Y4tJV0+pGUq1dua7tmf84N/gwoWd9AXruL9w4nZqLExM1Bux
-         CjQYlaBjA5PxBLIQfzqaQJxOn9Vr+UVlAwFnND1VzXs2iQXwiVO0I+nbDp1+lexDk//q
-         42Lg==
+        bh=Vi8Y5Mae0eMxJXexF7C1mNZVoJhUCTDqrvtov6btneE=;
+        b=IyQ8CSJZeA35GEUxdtBIupbv0zSyEg3bChBc/R6eoJeq9823/yzJBl3i4WL/as8T3L
+         a2T67BOhg0vxam+igL1pgiJLJK0D6ENOh0AGewqeSKodjyOrWZQyrWlNA4qGyMnl6rPx
+         9LGBVRl4OyUVGCpTyQH9zQFS+g5GTpLaXX/5cGbLH/T1Y0kzzhcyKzdK00OGTCjJIg7E
+         2TLGiCPiVCuJUyDjKXmzH7fcaOik8f0in4CrskVzq5h4ahXuJrxHw2Axo/3a/yWbu7Hc
+         CFhgon756vDaTXvcGZ7ns/Fvzsx/2mx8Trq3SdvLDV3djunYRLGDKUvowwpqzeJehR+x
+         /xbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784624845; x=1785229645;
+        d=1e100.net; s=20251104; t=1784627837; x=1785232637;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WOX8gQ7ioq0/VRHLmpPhZEI1mv1X14cl6AVZtJwxQac=;
-        b=kcV9nNujdZj6t2r/OTG7mCWaIaAxLIP9vlZ7L1vWJ196iSYc+tyeK/GLEAAmKMdHcN
-         SOwCMkspsjjMZn73azgLz8rFyrITtZxjVAv/YH1Mu8xH2y+OM5h9QJ+DABK7AWGoyPpu
-         RdrBMBwhdcswJzsNsgZ11s8Ioz8hb2oVIuQTYlBTucEqaRDGk/Y3eQpjQrfkPZoZoQ6r
-         Pq5a8SJneB4GcM11hcwntlzcrscoIIcgSIsRkAr9Z2tpH08A+3BMMIQ9KkHM2AUu49Zx
-         WDqtO3evkLPxNGFnX2253gyUgjL0Ued28wL73OK1ozhMRX+DVlLenbCg4mtkPjDV+/rJ
-         f55Q==
-X-Forwarded-Encrypted: i=1; AHgh+RplXDqFyavSIfoPz8KuCtG3i0WCcake3GvFVkreUl71kXw+8VAmPqLl8EV3SC77cXqn97dGcMlUug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEsJPNRlrxvFfGoOy8VPriyC2+eKKsl/l1bWHyGJ7cLAOVVRt/
-	GovvKKG20Yenw0pNSa4iihJ59sqgPKC36bjT/lZhvEw+AkhHNmoHl+sm
-X-Gm-Gg: AR+sD12lqsgZmbrpFrKJdo8nzxvWyzzl0UoKiheLPjQRCWseAYFV9FzgJCp1bS3G2my
-	raRIoBqAAJ83vJoJXLJjtzkTRv3K+J5N9vy+6jNoRzTG8EPE4DSTngHIuRNOeIDHaUZvE7nP+8L
-	FHvEQuvl95+ohFjklzQQjsz+XUIFFTrly6JwDajmlasCpU7z8B/hCJSyw0X3jpECDprQEJOZxha
-	pDOrtfAblQ/nW8g9UgvPzEs1cazfPiqWQoxz1vYorguikC+ZU52UxULo5bk9fAbsXgdzrh+55Q9
-	QBcpw8LPVDTDi4HkyeA3Pa1Pt+nIpuP17HGsvjLwIzYRL3/k1W+FfLKYC6p13c8d6lcJK9nNV0e
-	Hn+EBLJ9qjcq1x/ZIh26WbMUizz7FiHp2Lorpqx719xGNTCRRFEYS9W/un0EUkhHhpdoR1dcSOn
-	uPERuBzfG7MhyTxIQhxA/k+nIN9P+svpDKQgRkMVUWGQWsrkbzF5qOyh734/T+hanYcC64LR+o2
-	cv5iqSyydUyv4lTGB5TMEQRCszN7gfTRi0uhTwjLqtmOxNHfBt0YpTRWwbjT/re4DCRk/IuBj+y
-	tAFRnoBlCJcIYVOS5s6h
-X-Received: by 2002:a17:902:dace:b0:2cc:5f9f:54ed with SMTP id d9443c01a7336-2cf34a0a1e8mr192487455ad.27.1784624845086;
-        Tue, 21 Jul 2026 02:07:25 -0700 (PDT)
-Received: from cs-1047136853211-default.asia-southeast1-b.c.z168d0f9edf9bc766-tp.internal (8.99.126.34.bc.googleusercontent.com. [34.126.99.8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1dd90fsm44206552eec.22.2026.07.21.02.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jul 2026 02:07:24 -0700 (PDT)
-From: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
-To: axboe@kernel.dk
-Cc: asml.silence@gmail.com,
-	io-uring@vger.kernel.org,
-	Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
-Subject: [PATCH] liburing: add fremovexattr and flistxattr support
-Date: Tue, 21 Jul 2026 09:06:59 +0000
-Message-ID: <20260721090659.2845-1-aditya.ansh182@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=Vi8Y5Mae0eMxJXexF7C1mNZVoJhUCTDqrvtov6btneE=;
+        b=ZpWqnKMEhWcEWPuJGhWhYQIfgaBd0h9qKbjPuaXR6Dod+zq9cHeCMUHET9QJpIj17D
+         Akn/bpbS4Tr1j3VN6DRoYSFAzeQXGEvtUEEICYNH7dF6Ds25IkWNIjkJNrKPnyvYyZr/
+         W1r/TweHD3yN8kvacWxFdmfUGBUooBN9OTk04cS4n/d5BJYxQIMHtFP+uKpd6oB2d/U/
+         /p1L60BVSj1koD2wVeC7/1JJMl528ujJ8nBSe/OBlVDhxRZ9nRGle/82oE7bnVEeFqGQ
+         auEt1aDJzsNlb3SpOZMBWCQK4UjtTByBf8Mf37azbjXlxYgNtaSxTnT/m88Lwbb3675A
+         gj2w==
+X-Gm-Message-State: AOJu0Yzii1lLEkxyJ37qNZIaKyzJBs2UUud5c4YSdnHHS7IJcwV9rNSy
+	9ixFlRLTW9fzKyCfA3jhOmHPkwhCd8SibXmpqrWQxcIlcyqmmUJdEZDmQsbZac8N
+X-Gm-Gg: AfdE7clfX8k1zfooGkiKN9Tb1mLtD8/aVa5fGRrVMCnfe18sQNxwfrZX2DBRKs199IA
+	bmWdvSUbSR2/mR/fi+Ofjs6vzna08r/z6ynDzRZE7I8QmFmg1bNgNNhDkwASIt14VSncEvYmaVT
+	gJ+wKFwD9EiyCGx8pTOwcP6QyT+rScHFoHS0NXvubo1yIYGhs027QkHLbqmFQ+Wdx0DIBL9zRla
+	d3r7EW2CEHP5DWKSb0xuVbGVPY46NkMmN8N2dbUUb68DThaEDfxqeUy7XDh+fG7vvDBUc6WTtV7
+	8cswWmWQxRyXGr2MwFWarf3Zg+DoGQlLPdnLK36Lrbl9oe7BQ+PCgP6ZRiyCn5bjQVaGO3Hd7R9
+	Onr1DCEaIAQJlu9JE5Ts22LA0NA4hlseRHklVyf+TqYXD30o/LfiNgdiXfCvFvjSeTtjLatc2Df
+	apHMMhQiF5DDaLkUxs62/FNsrC9pdWfWTvsRqY
+X-Received: by 2002:a05:6a21:ec42:10b0:3c4:de3:816c with SMTP id adf61e73a8af0-3c40de381f5mr2669733637.37.1784627837591;
+        Tue, 21 Jul 2026 02:57:17 -0700 (PDT)
+Received: from localhost.localdomain ([125.20.165.194])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3142a1bb770sm49460081eec.16.2026.07.21.02.57.14
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 21 Jul 2026 02:57:16 -0700 (PDT)
+From: Aayush7352 <aayushdixit924@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>,
+	linux-kernel@vger.kernel.org,
+	Aayush Dixit <aayushdixit924@gmail.com>
+Subject: [PATCH] io_uring/kbuf: fix UAF in buffer selection when access_ok fails on expanded iovec
+Date: Tue, 21 Jul 2026 15:27:11 +0530
+Message-ID: <20260721095711.80711-1-aayushdixit924@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -75,278 +72,41 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds support for the new IORING_OP_FREMOVEXATTR and
-IORING_OP_FLISTXATTR opcodes:
-- Add opcodes to src/include/liburing/io_uring.h
-- Register sanitizers in src/sanitize.c (updating static assert)
-- Implement inline prep functions in src/include/liburing.h:
-  - io_uring_prep_fremovexattr()
-  - io_uring_prep_flistxattr()
-- Add full functional and negative failure tests in test/xattr.c
+From: Aayush Dixit <aayushdixit924@gmail.com>
 
-Signed-off-by: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
+In io_ring_buffers_peek(), when the buffer ring is expanded
+(KBUF_MODE_EXPAND), arg->iovs is set to a newly kmalloced array.
+If access_ok() then fails on a buffer entry, the error path kfrees
+the new array but does not restore arg->iovs to the original value
+(org_iovs).  arg->iovs is left dangling and will be reused on retry,
+causing a use-after-free when the caller retries the buffer selection.
+
+Fix by restoring arg->iovs = org_iovs after the kfree on the error
+path, so the caller's state remains coherent on retry.
+
+Fixes: b3e0216c97e3 ("io_uring: add buffer ring support")
+Cc: io-uring@vger.kernel.org
+Signed-off-by: Aayush7352 <aayushdixit924@gmail.com>
 ---
- src/include/liburing.h          |  17 ++++
- src/include/liburing/io_uring.h |   2 +
- src/sanitize.c                  |   4 +-
- test/xattr.c                    | 173 ++++++++++++++++++++++++++++++++
- 4 files changed, 195 insertions(+), 1 deletion(-)
+ io_uring/kbuf.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/src/include/liburing.h b/src/include/liburing.h
-index 0188937b..f99f51fe 100644
---- a/src/include/liburing.h
-+++ b/src/include/liburing.h
-@@ -1513,6 +1513,23 @@ IOURINGINLINE void io_uring_prep_fsetxattr(struct io_uring_sqe *sqe, int fd,
- 	sqe->xattr_flags = flags;
- }
- 
-+IOURINGINLINE void io_uring_prep_fremovexattr(struct io_uring_sqe *sqe, int fd,
-+					      const char *name)
-+	LIBURING_NOEXCEPT
-+{
-+	io_uring_prep_rw(IORING_OP_FREMOVEXATTR, sqe, fd, name, 0, 0);
-+	sqe->xattr_flags = 0;
-+}
-+
-+IOURINGINLINE void io_uring_prep_flistxattr(struct io_uring_sqe *sqe, int fd,
-+					    char *list, unsigned int len)
-+	LIBURING_NOEXCEPT
-+{
-+	io_uring_prep_rw(IORING_OP_FLISTXATTR, sqe, fd, NULL, len,
-+				(__u64) (uintptr_t) list);
-+	sqe->xattr_flags = 0;
-+}
-+
- IOURINGINLINE void io_uring_prep_socket(struct io_uring_sqe *sqe, int domain,
- 					int type, int protocol,
- 					unsigned int flags)
-diff --git a/src/include/liburing/io_uring.h b/src/include/liburing/io_uring.h
-index b9ec1ebf..89480960 100644
---- a/src/include/liburing/io_uring.h
-+++ b/src/include/liburing/io_uring.h
-@@ -312,6 +312,8 @@ enum io_uring_op {
- 	IORING_OP_PIPE,
- 	IORING_OP_NOP128,
- 	IORING_OP_URING_CMD128,
-+	IORING_OP_FREMOVEXATTR,
-+	IORING_OP_FLISTXATTR,
- 
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
-diff --git a/src/sanitize.c b/src/sanitize.c
-index 37fb63e6..45f6f60c 100644
---- a/src/sanitize.c
-+++ b/src/sanitize.c
-@@ -121,8 +121,10 @@ static const sanitize_sqe_handler sanitize_handlers[IORING_OP_LAST] = {
- 	[IORING_OP_PIPE] = sanitize_sqe_addr,
- 	[IORING_OP_NOP128] = sanitize_sqe_nop,
- 	[IORING_OP_URING_CMD128] = sanitize_sqe_optval,
-+	[IORING_OP_FREMOVEXATTR] = sanitize_sqe_addr,
-+	[IORING_OP_FLISTXATTR] = sanitize_sqe_addr2,
- };
--_Static_assert(IORING_OP_URING_CMD128 + 1 == IORING_OP_LAST,
-+_Static_assert(IORING_OP_FLISTXATTR + 1 == IORING_OP_LAST,
- 	       "Need an implementation for all IORING_OP_* codes");
- 
- void liburing_sanitize_ring(struct io_uring *ring)
-diff --git a/test/xattr.c b/test/xattr.c
-index 6448e063..4b7338c8 100644
---- a/test/xattr.c
-+++ b/test/xattr.c
-@@ -173,6 +173,71 @@ static int io_uring_getxattr(struct io_uring *ring, const char *path,
- 	return ret;
- }
- 
-+/* Submit fremovexattr request. */
-+static int io_uring_fremovexattr(struct io_uring *ring, int fd, const char *name)
-+{
-+	struct io_uring_sqe *sqe;
-+	struct io_uring_cqe *cqe;
-+	int ret;
-+
-+	sqe = io_uring_get_sqe(ring);
-+	if (!sqe) {
-+		fprintf(stderr, "Error cannot get sqe\n");
-+		return -1;
-+	}
-+
-+	io_uring_prep_fremovexattr(sqe, fd, name);
-+
-+	ret = io_uring_submit(ring);
-+	if (ret != 1) {
-+		fprintf(stderr, "Error io_uring_submit_and_wait: ret=%d\n", ret);
-+		return -1;
-+	}
-+
-+	ret = io_uring_wait_cqe(ring, &cqe);
-+	if (ret) {
-+		fprintf(stderr, "Error io_uring_wait_cqe: ret=%d\n", ret);
-+		return -1;
-+	}
-+
-+	ret = cqe->res;
-+	io_uring_cqe_seen(ring, cqe);
-+	return ret;
-+}
-+
-+/* Submit flistxattr request. */
-+static int io_uring_flistxattr(struct io_uring *ring, int fd, char *list,
-+			       size_t size)
-+{
-+	struct io_uring_sqe *sqe;
-+	struct io_uring_cqe *cqe;
-+	int ret;
-+
-+	sqe = io_uring_get_sqe(ring);
-+	if (!sqe) {
-+		fprintf(stderr, "Error cannot get sqe\n");
-+		return -1;
-+	}
-+
-+	io_uring_prep_flistxattr(sqe, fd, list, size);
-+
-+	ret = io_uring_submit(ring);
-+	if (ret != 1) {
-+		fprintf(stderr, "Error io_uring_submit_and_wait: ret=%d\n", ret);
-+		return -1;
-+	}
-+
-+	ret = io_uring_wait_cqe(ring, &cqe);
-+	if (ret) {
-+		fprintf(stderr, "Error io_uring_wait_cqe: ret=%d\n", ret);
-+		return -1;
-+	}
-+
-+	ret = cqe->res;
-+	io_uring_cqe_seen(ring, cqe);
-+	return ret;
-+}
-+
- /* Test driver for fsetxattr and fgetxattr. */
- static int test_fxattr(void)
- {
-@@ -227,6 +292,104 @@ static int test_fxattr(void)
- 		goto Exit;
- 	}
- 
-+	/* Test flistxattr. */
-+	char list_buf[XATTR_SIZE];
-+	int list_len;
-+
-+	list_len = io_uring_flistxattr(&ring, fd, list_buf, XATTR_SIZE);
-+	if (list_len < 0) {
-+		fprintf(stderr, "Error: flistxattr failed with %d\n", list_len);
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	int found_key1 = 0, found_key2 = 0;
-+	char *p;
-+
-+	p = list_buf;
-+	while (p < list_buf + list_len) {
-+		if (strcmp(p, KEY1) == 0)
-+			found_key1 = 1;
-+		else if (strcmp(p, KEY2) == 0)
-+			found_key2 = 1;
-+		p += strlen(p) + 1;
-+	}
-+	if (!found_key1 || !found_key2) {
-+		fprintf(stderr, "Error: flistxattr did not return both keys\n");
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	/* Test fremovexattr for key1. */
-+	ret = io_uring_fremovexattr(&ring, fd, KEY1);
-+	if (ret < 0) {
-+		fprintf(stderr, "Error: fremovexattr on key1 failed with %d\n", ret);
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	/* Verify key1 is gone via fgetxattr. */
-+	ret = io_uring_fgetxattr(&ring, fd, KEY1, value, XATTR_SIZE);
-+	if (ret >= 0) {
-+		fprintf(stderr, "Error: fgetxattr key1 should have failed after fremovexattr\n");
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	/* Verify flistxattr now only has key2. */
-+	list_len = io_uring_flistxattr(&ring, fd, list_buf, XATTR_SIZE);
-+	if (list_len < 0) {
-+		fprintf(stderr, "Error: second flistxattr failed with %d\n", list_len);
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	found_key1 = 0; found_key2 = 0;
-+	p = list_buf;
-+	while (p < list_buf + list_len) {
-+		if (strcmp(p, KEY1) == 0)
-+			found_key1 = 1;
-+		else if (strcmp(p, KEY2) == 0)
-+			found_key2 = 1;
-+		p += strlen(p) + 1;
-+	}
-+	if (found_key1 || !found_key2) {
-+		fprintf(stderr, "Error: flistxattr unexpected keys after removing key1\n");
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	/* Test fremovexattr for key2. */
-+	ret = io_uring_fremovexattr(&ring, fd, KEY2);
-+	if (ret < 0) {
-+		fprintf(stderr, "Error: fremovexattr on key2 failed with %d\n", ret);
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	/* Verify both are gone from flistxattr. */
-+	list_len = io_uring_flistxattr(&ring, fd, list_buf, XATTR_SIZE);
-+	if (list_len < 0) {
-+		fprintf(stderr, "Error: third flistxattr failed with %d\n", list_len);
-+		rc = -1;
-+		goto Exit;
-+	}
-+
-+	found_key1 = 0; found_key2 = 0;
-+	p = list_buf;
-+	while (p < list_buf + list_len) {
-+		if (strcmp(p, KEY1) == 0)
-+			found_key1 = 1;
-+		else if (strcmp(p, KEY2) == 0)
-+			found_key2 = 1;
-+		p += strlen(p) + 1;
-+	}
-+	if (found_key1 || found_key2) {
-+		fprintf(stderr, "Error: flistxattr returned keys after removing all keys\n");
-+		rc = -1;
-+		goto Exit;
-+	}
-+
- 	/* Cleanup. */
- Exit:
- 	close(fd);
-@@ -331,6 +494,16 @@ static int test_failure_fxattr(void)
- 	if (io_uring_fgetxattr(&ring, fd, KEY1, value, 0) != 0)
- 		return 1;
- 
-+	/* Test list attributes failures. */
-+	if (io_uring_flistxattr(&ring, -1, value, XATTR_SIZE) >= 0)
-+		return 1;
-+
-+	/* Test remove attributes failures. */
-+	if (io_uring_fremovexattr(&ring, -1, KEY1) >= 0)
-+		return 1;
-+	if (io_uring_fremovexattr(&ring, fd, NULL) >= 0)
-+		return 1;
-+
- 	/* Cleanup. */
- 	close(fd);
- 	unlink(FILENAME);
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index de0129bce..eab4de8a7 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -314,8 +314,10 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
+ 		iov->iov_base = u64_to_user_ptr(READ_ONCE(buf->addr));
+ 		iov->iov_len = len;
+ 		if (unlikely(!access_ok(iov->iov_base, len))) {
+-			if (arg->iovs != org_iovs)
++			if (arg->iovs != org_iovs) {
+ 				kfree(arg->iovs);
++				arg->iovs = org_iovs;
++			}
+ 			return -EFAULT;
+ 		}
+ 		iov++;
 -- 
-2.47.3
+2.55.0
 
