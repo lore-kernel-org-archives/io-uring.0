@@ -1,104 +1,93 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1ECC8EB
-	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 13:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32ECE3546C2
+	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 13:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784727442; cv=none; b=UfjEdqJF2Sk7eIf9tvCQfwkMigDFyVAhHBA5XZk93ZLInkzD8Eu4P5YsN/689I1yVQ1j9EDYcQ8bTGg9AYYOunRZMfQOEMZ84kHBaYKcCdFvh8jEPqZNy3niVF+iawVsczt8koSW+ydF41Tfv0Qlg1YUaxW3t/y7ovbrYOrDFtM=
+	t=1784727464; cv=none; b=Lv/tskZcosfAvoE1eHVFyMdW24tLMtYUTCfyE4AQvyB7x1tpjT75nb0v5SognPyGeFXmNcnZj7lovomhR72Gi9UyTmJestygrNw05AH58/rIGAs0SnboW+gcR9rcYNwAv7TYYWgWFV0QGDoZPtMsPP0p1s/rwect3CpyxB9Sihc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784727442; c=relaxed/simple;
-	bh=B6DpiGoerm9m3DlKhnPY/JClD3wc4h1Lk9LkpF+0tDI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=DDkSXMoebxw6YMKgFAoX76aK5EOutC92P4ARLV2l5qo2dKxtNx4bX8HHq2a8PjtTLMA0cC69fI7TWnBwvB3nCYa1IBqLxB5952KtUZpj09JTtGu+6ozSvHwmp3RRWBWrLv3BJMCPyIR/AySPH41+iXJ17sM8tVie/FWrqSXFAKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=TEILQjwN; arc=none smtp.client-ip=209.85.210.48
+	s=arc-20240116; t=1784727464; c=relaxed/simple;
+	bh=RJvHchPobcsmC06bahci5r3mCA8ciWppAQIaovII7V8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gWDB4ysYIeHujfr2f616fQo2Ps/V8CWZwcQ3T8Aw2ohgcZucEKIF0CjzCkt+8Mzl4VM7tnOMoz1AXzr7ulcD9TG8+OH4jCT9zHHGif3fR9stTEmvmxM2z+jIxMVReMWv7TRIu5AHQTR5YfSH0c4jPy2POjYXc6cOSrRvGVdRtjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=YSAE4TWK; arc=none smtp.client-ip=209.85.161.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="TEILQjwN"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7e9f1f24cbcso3786545a34.0
-        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 06:37:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="YSAE4TWK"
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6aa9606ddadso518294eaf.0
+        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 06:37:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1784727440; x=1785332240; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oAPdTlgSNacIapUcDKLSVpf/yIfFiTTXS9eHbffFj4s=;
-        b=TEILQjwNrOiZHReGbFT9eY7JC4sY5CYfws1tnvEipU34pwlKjszYb6L2BpaGAzajeA
-         38d2EP5W79rqRC0vYtNCzLz7Ov9LcWuEgVIBC9qCJRXR5zZubWI3N2AcqzCBv1e+bsef
-         UQXUIgoK9AQ/N9J3jwmnm7ZUcxrVxBei5KkRL3vk1LV+RQ0XNYG/4RXTNw/GkuT6OXyR
-         BEmM0D1yBkjvueI3fmx4ELqn4udGBwK4MlHzIhe/rk3iF4RqA+hjx0BY4gcvOfGRYMDB
-         sxtzBwtewijuVgVtmmc/mIMiYo7EuYwj41IKd1+Fg8UkPCFz+abOF8nC1hs8HbP7Ul/U
-         39gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784727440; x=1785332240;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1784727462; x=1785332262; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oAPdTlgSNacIapUcDKLSVpf/yIfFiTTXS9eHbffFj4s=;
-        b=HEa4nnALmkz8VktGHsYfebodELlzBZeoXAgdE7mj17rIFpmH4FbG8/0hMqmWCiiKFX
-         8m+nF0y4s6eDLUHCdI79X9tcVT1VI3Ta6jTYyIkXwCvqgN4etTAuJfdIH3CZsf5wHeh2
-         PT4sng7zPL5s8lfhjy2VYV7Q3/v9nrgEUzPJASpjgQRFAN9phz6iF/S1RS3cxJaeotQ2
-         zkXbXGGu1KOlsTxjpu1KG4cvcG4SEpZufJqms30iVKq2zJPDVyt5B1hWAyeeL595vRYR
-         eaEohI7GpilSgu2WtR0zOUTf0Y5fFKiluUVx7L4STPNTEGW8PxQ3IUj65lzyahmd2UFy
-         eyYQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrG9DnoUHO4F2T9U9NthUp3Zz4iFAryMSZ0gjC/Qxwy0A4HEDGtlMCmM+bw3w6IcudckBtpipyYkg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrnR+B4MR+oroqeLoHjBEaoLLEp8rWaLyaj/GgQ9UqcVV0LhKZ
-	VlEFYUsFtDYRH5f4bDrBQXUmK6rqEdgIEyF6vuawlFVjb3MHxO2DPwOv+svfYoVnIKE=
-X-Gm-Gg: AR+sD1112GMCRqruJrh5cuF8aoyH5gsoIxTzS4pnhDH/q5JiglM8F6fy52K2N/LQi9r
-	Pric84pbtSD2rEgoT53teMmNkfo2atsUWEpGAglWQl6QbqWnrfwOIHbsG/AYR6nRTUpATxfIwvX
-	PjQuLpXtYAr+LEka4bX2KlmaCRygV9hGz/2d9VqAGRAH6DZYIDYnFsvSqTMG5poPrB77JVOJbyX
-	+T7KoI7RkhWBg02jY5g+SIDBSp1LWoP9BfKudnfTWSCWHrqSfvBVarJG7t3bv0TCFjANURwG2ia
-	dOUGEigIWTQpoBpJ3OsleNNRMM6vI7P1fFixxQdUv8bof1bkyW2TV/gi47IPLaXKnsOkeLmx2kb
-	8b+FWTXZnJY8teX+90Z2YdK+kp27SQitYiwkYmPOcaTh6D1F022m0KQq9l1GOgrYFmUF7V4FAxs
-	KqraSuUqMJelCIkvGuLH0Lm6NWkgqvichj7Qi4
-X-Received: by 2002:a05:6830:6e63:b0:7ed:ce16:7d72 with SMTP id 46e09a7af769-7ee22d3db82mr1681252a34.5.1784727439923;
-        Wed, 22 Jul 2026 06:37:19 -0700 (PDT)
-Received: from [127.0.0.1] ([99.196.129.101])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ee29db53fdsm1326508a34.4.2026.07.22.06.37.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 06:37:19 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Yitang Yang <yi1tang.yang@gmail.com>
-Cc: Gabriel Krisman Bertazi <krisman@suse.de>, io-uring@vger.kernel.org, 
- stable@vger.kernel.org
-In-Reply-To: <20260722124551.130563-1-yi1tang.yang@gmail.com>
-References: <20260722124551.130563-1-yi1tang.yang@gmail.com>
-Subject: Re: [PATCH v2] io_uring/rw: fix missing ERESTARTSYS conversion in
- read paths
-Message-Id: <178472743437.597590.12441381990712899617.b4-ty@b4>
-Date: Wed, 22 Jul 2026 07:37:14 -0600
+        bh=hCyltHX2ojoLIxBY6MxHYY7KIuNnjboGDeAzVREn8V4=;
+        b=YSAE4TWKrhLJQs38Kt2wli/k+AWUSka9peBMoF2iylva4sG236otpzEOobJMEIjtnG
+         INa/t7c/vdNb/wkg7XkX0bMdzQ6j1eHoQN3yY9GpqhmwnV8QBi4hV/Vt365rEdaek8Z8
+         kfkHoFX01vnyDOaFdzU2y8yx6arUiJK1/yj2L6HT8HN7Vfs1JClMURu9VZ3gwxGCvMCN
+         cserG2gf+S68KfsEvbQvkQohW9KGuoIxrvSrSEKJF/cT8nA5rIRoxCL0jm1Fy1yMCsyo
+         lf0RDOWF48fnTpOZTxr0TDE/BwGxyM1fiyQpSoAaWL7R/4wwgqcVpVWMF0qnnix43Qys
+         ggEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784727462; x=1785332262;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=hCyltHX2ojoLIxBY6MxHYY7KIuNnjboGDeAzVREn8V4=;
+        b=UZ5PQkDu1Nnv8Vde9v8qgJABdP4ijPSGTK8mgjsyGe3Cgs2XnmCJmKXyET32aHY2xS
+         P0XCpU+aXOq+LQo4LS+8FPMP++U6TP7c75tz/SMKhR7r6N7g15l/4IllxSX09b+rhKoB
+         EMO4yQLc+ry0uS5jME6pd3QjBAdAojD3mv9L0+73OCSo2rMsgxUi5oWuGm6DLQ4Lmgla
+         Vo7bT0LzkyQnJyRX6SRws8gQlnqpr7epov2Rr38WRfCXc8QClNmGxLcaIz+LEKMwwX7g
+         ont4LnbmI3TksYAaCYS+FYAf98c+8wzon+sUkMEsJZCg7CoolUhckU7QpkgK0FMqSYI7
+         ctpg==
+X-Forwarded-Encrypted: i=1; AHgh+Rq+6MtTpDSkUyOgxWrLXhjl3W903j0bT+VjQ3i+X95z75fROfDdwTHpmWrBEyebbKVeF3YdqWJTGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxF43rHx8euJI76d+jfqk5XiwhIr4l4WswKX6Cb/6uFg2+M6H99
+	BUyeNwf1vahMmWoSQgew46gUpFWWkE0mpr7PN06BZu1WFYOuSz7PiiQDPZYQ/dsUpvY=
+X-Gm-Gg: AR+sD13AOSf/u6DDkl9a3sBO/dHuxqBzhj0Ta0yo9GmlpPBo2hhcZj3Zs907S94mpeB
+	0uM7+82vn8v3TtKR77k4gtPsZ+sFseTs/c3jt0JHXz6MHqqrCk40rgc4cP6gqBMjOcR0Kzc1ivH
+	2YQ6xzrHQEcOWhKNSakb2JofWo6Ldj2Aqc8OX8dBJ6fOAqNlg9qog1W3DTypqgNNPlXv50dUosE
+	LPZLzFXeCNcSN2M1ThZG+WLcUGhJerjguoZFxspTbSM/zcIe6T7zMeMPmoEb0sLXwG70UH13Aen
+	FeS66Wh9vv2S80pfpmDXIfBukDE5ZCpd5P0BuNWLeKahQRq5CjODzuebTqGADhtqSNuob2H/4OM
+	B2nmUKc0x0i3D4bncfeAKp4ryl+RpWBuh84Dr/afAC+5jI2gk26Xv8C5D0ku6XOoT+CCuQqjM6e
+	hNop0+59NBHb2ZyPI+/jg1IX/jwM2wjA==
+X-Received: by 2002:a05:6820:4c17:b0:6a3:8023:f344 with SMTP id 006d021491bc7-6a5366d2840mr11308365eaf.2.1784727461936;
+        Wed, 22 Jul 2026 06:37:41 -0700 (PDT)
+Received: from [172.19.0.220] ([99.196.129.101])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6aa79301fe8sm1534595eaf.10.2026.07.22.06.37.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jul 2026 06:37:41 -0700 (PDT)
+Message-ID: <e54748e0-1dbd-433f-ab22-22e6a4495b05@kernel.dk>
+Date: Wed, 22 Jul 2026 07:37:32 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/rw: fix missing ERESTARTSYS conversion in read
+ paths
+To: Yitang Yang <yi1tang.yang@gmail.com>
+Cc: krisman@suse.de, io-uring@vger.kernel.org
+References: <20260720114116.21830-1-yi1tang.yang@gmail.com>
+ <902127f0-83b6-46d2-9e7e-71cee4d63016@kernel.dk>
+ <CADd-6Fxdk3Y2RyzvJAfA0i1Go5U-y=9__vCdy+FdzcOWwnK18w@mail.gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CADd-6Fxdk3Y2RyzvJAfA0i1Go5U-y=9__vCdy+FdzcOWwnK18w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
 
+On 7/22/26 6:36 AM, Yitang Yang wrote:
+> Thanks! I'll send a v2.
 
-On Wed, 22 Jul 2026 20:45:51 +0800, Yitang Yang wrote:
-> Both read and write may receive internal restart error codes from
-> the filesystem layer and should be converted to -EINTR. However,
-> when multishot read support was added, the error code normalization
-> was lost for both io_read() and io_read_mshot().
-> 
-> Extract the conversion into io_fixup_restart_res() and apply it
-> in all three locations: io_rw_done(), io_read(), and io_read_mshot().
-> 
-> [...]
+Thanks, applied it - can you send your test case as a liburing test/
+addition as well?
 
-Applied, thanks!
-
-[1/1] io_uring/rw: fix missing ERESTARTSYS conversion in read paths
-      commit: ab05caca123c6d0b41850b7c05b246e4dca4a770
-
-Best regards,
 -- 
 Jens Axboe
-
-
 
