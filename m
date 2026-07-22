@@ -1,93 +1,177 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32ECE3546C2
-	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 13:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E2D3451A7
+	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 13:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784727464; cv=none; b=Lv/tskZcosfAvoE1eHVFyMdW24tLMtYUTCfyE4AQvyB7x1tpjT75nb0v5SognPyGeFXmNcnZj7lovomhR72Gi9UyTmJestygrNw05AH58/rIGAs0SnboW+gcR9rcYNwAv7TYYWgWFV0QGDoZPtMsPP0p1s/rwect3CpyxB9Sihc=
+	t=1784727756; cv=none; b=KJRttvRR8ndvVt+Iol9g12Om3zE3m6EK91Nh+4BHcLRavzDTFmP+RSe19Vp+iv+IuNnmef4NJmzV46oGP2YU8PdhdeXgPe05HDkHPxo67DK+Nt6myGPoapAxqUDhk39HAYjXeKPpScveyVBWyD1tmvyyIEk/yCOk+3Ycu8Cxq8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784727464; c=relaxed/simple;
-	bh=RJvHchPobcsmC06bahci5r3mCA8ciWppAQIaovII7V8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gWDB4ysYIeHujfr2f616fQo2Ps/V8CWZwcQ3T8Aw2ohgcZucEKIF0CjzCkt+8Mzl4VM7tnOMoz1AXzr7ulcD9TG8+OH4jCT9zHHGif3fR9stTEmvmxM2z+jIxMVReMWv7TRIu5AHQTR5YfSH0c4jPy2POjYXc6cOSrRvGVdRtjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=YSAE4TWK; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1784727756; c=relaxed/simple;
+	bh=unnADqaTU1dRYfmFaX+uucXakN3LWRA8pDHDO/e1y74=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aiTriM8w/1ItElSnjbYH772z2vOX439iGHHIQQt1IDitws6XMW1+rDyi0WEgow6OnohWsR48DJKYP/HD+ihHRY22orFPKIMOE7WB/7WsIhosEjerSq8wK5A8bfEh/liA/yFcuK/qmY6J+Oi/F5eDHyyc9FI1+pKRk1cRSGvqXeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+LnQTHm; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="YSAE4TWK"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6aa9606ddadso518294eaf.0
-        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 06:37:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+LnQTHm"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-49558ce01afso30345795e9.1
+        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 06:42:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1784727462; x=1785332262; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hCyltHX2ojoLIxBY6MxHYY7KIuNnjboGDeAzVREn8V4=;
-        b=YSAE4TWKrhLJQs38Kt2wli/k+AWUSka9peBMoF2iylva4sG236otpzEOobJMEIjtnG
-         INa/t7c/vdNb/wkg7XkX0bMdzQ6j1eHoQN3yY9GpqhmwnV8QBi4hV/Vt365rEdaek8Z8
-         kfkHoFX01vnyDOaFdzU2y8yx6arUiJK1/yj2L6HT8HN7Vfs1JClMURu9VZ3gwxGCvMCN
-         cserG2gf+S68KfsEvbQvkQohW9KGuoIxrvSrSEKJF/cT8nA5rIRoxCL0jm1Fy1yMCsyo
-         lf0RDOWF48fnTpOZTxr0TDE/BwGxyM1fiyQpSoAaWL7R/4wwgqcVpVWMF0qnnix43Qys
-         ggEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784727462; x=1785332262;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784727753; x=1785332553; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=hCyltHX2ojoLIxBY6MxHYY7KIuNnjboGDeAzVREn8V4=;
-        b=UZ5PQkDu1Nnv8Vde9v8qgJABdP4ijPSGTK8mgjsyGe3Cgs2XnmCJmKXyET32aHY2xS
-         P0XCpU+aXOq+LQo4LS+8FPMP++U6TP7c75tz/SMKhR7r6N7g15l/4IllxSX09b+rhKoB
-         EMO4yQLc+ry0uS5jME6pd3QjBAdAojD3mv9L0+73OCSo2rMsgxUi5oWuGm6DLQ4Lmgla
-         Vo7bT0LzkyQnJyRX6SRws8gQlnqpr7epov2Rr38WRfCXc8QClNmGxLcaIz+LEKMwwX7g
-         ont4LnbmI3TksYAaCYS+FYAf98c+8wzon+sUkMEsJZCg7CoolUhckU7QpkgK0FMqSYI7
-         ctpg==
-X-Forwarded-Encrypted: i=1; AHgh+Rq+6MtTpDSkUyOgxWrLXhjl3W903j0bT+VjQ3i+X95z75fROfDdwTHpmWrBEyebbKVeF3YdqWJTGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxF43rHx8euJI76d+jfqk5XiwhIr4l4WswKX6Cb/6uFg2+M6H99
-	BUyeNwf1vahMmWoSQgew46gUpFWWkE0mpr7PN06BZu1WFYOuSz7PiiQDPZYQ/dsUpvY=
-X-Gm-Gg: AR+sD13AOSf/u6DDkl9a3sBO/dHuxqBzhj0Ta0yo9GmlpPBo2hhcZj3Zs907S94mpeB
-	0uM7+82vn8v3TtKR77k4gtPsZ+sFseTs/c3jt0JHXz6MHqqrCk40rgc4cP6gqBMjOcR0Kzc1ivH
-	2YQ6xzrHQEcOWhKNSakb2JofWo6Ldj2Aqc8OX8dBJ6fOAqNlg9qog1W3DTypqgNNPlXv50dUosE
-	LPZLzFXeCNcSN2M1ThZG+WLcUGhJerjguoZFxspTbSM/zcIe6T7zMeMPmoEb0sLXwG70UH13Aen
-	FeS66Wh9vv2S80pfpmDXIfBukDE5ZCpd5P0BuNWLeKahQRq5CjODzuebTqGADhtqSNuob2H/4OM
-	B2nmUKc0x0i3D4bncfeAKp4ryl+RpWBuh84Dr/afAC+5jI2gk26Xv8C5D0ku6XOoT+CCuQqjM6e
-	hNop0+59NBHb2ZyPI+/jg1IX/jwM2wjA==
-X-Received: by 2002:a05:6820:4c17:b0:6a3:8023:f344 with SMTP id 006d021491bc7-6a5366d2840mr11308365eaf.2.1784727461936;
-        Wed, 22 Jul 2026 06:37:41 -0700 (PDT)
-Received: from [172.19.0.220] ([99.196.129.101])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6aa79301fe8sm1534595eaf.10.2026.07.22.06.37.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2026 06:37:41 -0700 (PDT)
-Message-ID: <e54748e0-1dbd-433f-ab22-22e6a4495b05@kernel.dk>
-Date: Wed, 22 Jul 2026 07:37:32 -0600
+        bh=9Z26QFDyzqFkZ51F4bjWLHBoSU2djhcQ9bvuZ8iw9R0=;
+        b=i+LnQTHmaD4IvCZ3zb5jb/IkCBP3+yTOI5xzWaNDIgfCXOEf77ECamlS/lfuGUymRX
+         p/M0CUEtm5/Go8v/XPRebhyU5IdMIBvPCJpdAz19BNxd/07/rUKSegxzTh1mpESLCuqf
+         qitLMo1jzOlX8+BhPgZk71DGlUYh53h9NFaSuePMA/3UPqpNFPQZg36poNVfAdBRQoEK
+         KowxbYAxKU8GWdbX7maQmOO0NWFaYE1rhTXS/e9xHcLAhPPbPK8I/3o4XkliATo6PiBr
+         tlDpR6xFLGyRVOF+9uxHDpT/yM7nEzekymb0VZdSgPILI7WijZn45rVQCK6+cA5FNRtw
+         OpfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784727753; x=1785332553;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9Z26QFDyzqFkZ51F4bjWLHBoSU2djhcQ9bvuZ8iw9R0=;
+        b=OXOglPqjffhmmxksyuQffTYQBVeMNO1w/+slfX+G5OzfvgWZ7NWViEe+xmjCuhPPYL
+         Os79s4U8f0Hmdt4LqMbnV969Zg+YlkRtpbfySWlctTzRmYcr4HJDpn8Gi+dznv70U3lr
+         vToKhrutB6iLpofoL7+PRuphheJiqViVIgA57SdLofNWHmtERUaA+0pwwWKCXHOZeTi/
+         xrUggnJznCOsGNE6Qf/EHUbCbkMYvQxT6vClNhYm+FrzM8Ey3UnUAuaiZi4qv/6NoJ8a
+         mxH8uVQvtTQ/Pj/ySDOopNle8BSCbyjE9tiYZGRL3Np1loTjGgMhjNZIjiYEf9MqPE8/
+         9tnQ==
+X-Gm-Message-State: AOJu0Yy/Lhm8kGl0RGAI4Z/MSxRtQ3G0idOtUVom2pPSpwuBmV9im6Mg
+	kBtgXSvH9TaK+yehz25SoUpSf24IGJF8nAZqfHNcXtNbr66761Hb4ZVI4+5rRZ4l
+X-Gm-Gg: AR+sD10WsD/9G1RoRyMdWJ2g3/tWACK9vMnUlFaJ9NWDFaARtQ7ry+fQTI3vuUjZbZR
+	AyZUG3B7BnFIu/hak9LQdAXQsLbTueCDHwFwusoJmpBgUgCPwY4qcTnDVRE82RATSDZnFo2HiXG
+	deUQghtqDYiRMoY9tfY5xqMlxVK3BRY5zjrymyF7Pr/pv9SLFr18ImnNIcBgCNuYHLtLgnsWz0R
+	O2xPkL2e9Q4EWf7sNh5fV7mEfP1zoMsgtpFUDRaWPQUXbSqkExwdffWsjJs/qTKkbxnv8yqVHtj
+	JrIFRqksRbwm2idVYP0fFVNjXAv+F1tuQahFkMt/XvXKU3b3AdI3Mi3q92LozZpPah23U61O0+8
+	qr/6t61Q65UfAE2hUHm5fq0rilRmX7Be3MyeyR9e8Lqytn64iAjPfFlAPdInVl1nmoWg63Kjueo
+	nY7XoKNMsmsG3Ws4mqxYL6fnB8ASFfXXnbU4+7YgzvIXzxFkFnf69Bl9DKXkJeEviVZIux/A==
+X-Received: by 2002:a05:600c:4e8d:b0:495:54e9:c080 with SMTP id 5b1f17b1804b1-49554e9c2bbmr82960225e9.31.1784727752888;
+        Wed, 22 Jul 2026 06:42:32 -0700 (PDT)
+Received: from 127.net ([2620:10d:c092:600::1:c15])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a63fb10sm73403015e9.13.2026.07.22.06.42.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 06:42:32 -0700 (PDT)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	netdev@vger.kernel.org,
+	=?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>
+Subject: [PATCH io_uring-7.2 1/3] io_uring/zcrx: drop "notif" from stats struct names
+Date: Wed, 22 Jul 2026 14:42:15 +0100
+Message-ID: <6a39676b6f71b67d3f89c6ebab7a3739873834a3.1784726895.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <cover.1784726895.git.asml.silence@gmail.com>
+References: <cover.1784726895.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/rw: fix missing ERESTARTSYS conversion in read
- paths
-To: Yitang Yang <yi1tang.yang@gmail.com>
-Cc: krisman@suse.de, io-uring@vger.kernel.org
-References: <20260720114116.21830-1-yi1tang.yang@gmail.com>
- <902127f0-83b6-46d2-9e7e-71cee4d63016@kernel.dk>
- <CADd-6Fxdk3Y2RyzvJAfA0i1Go5U-y=9__vCdy+FdzcOWwnK18w@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CADd-6Fxdk3Y2RyzvJAfA0i1Go5U-y=9__vCdy+FdzcOWwnK18w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/22/26 6:36 AM, Yitang Yang wrote:
-> Thanks! I'll send a v2.
+Keep zcrx statistics generic and don't stick "notif" to its uapi
+definitions. Stats dosn't need to be bound to notification details,
+it makes it cleaner and more readable.
 
-Thanks, applied it - can you send your test case as a liburing test/
-addition as well?
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ include/uapi/linux/io_uring/query.h | 6 +++---
+ include/uapi/linux/io_uring/zcrx.h  | 4 ++--
+ io_uring/query.c                    | 4 ++--
+ io_uring/zcrx.c                     | 4 ++--
+ io_uring/zcrx.h                     | 2 +-
+ 5 files changed, 10 insertions(+), 10 deletions(-)
 
+diff --git a/include/uapi/linux/io_uring/query.h b/include/uapi/linux/io_uring/query.h
+index 1a68eca7c6b4..708bcdd585dd 100644
+--- a/include/uapi/linux/io_uring/query.h
++++ b/include/uapi/linux/io_uring/query.h
+@@ -66,10 +66,10 @@ struct io_uring_query_zcrx {
+ struct io_uring_query_zcrx_notif {
+ 	/* Bitmask of supported ZCRX_NOTIF_* flags */
+ 	__u32 notif_flags;
+-	/* Size of io_uring_zcrx_notif_stats */
+-	__u32 notif_stats_size;
++	/* Size of zcrx_stats */
++	__u32 stats_size;
+ 	/* Required alignment for the stats struct within the region (ie stats_offset) */
+-	__u32 notif_stats_off_alignment;
++	__u32 stats_off_alignment;
+ 	__u32 __resv1;
+ 	__u64 __resv2[4];
+ };
+diff --git a/include/uapi/linux/io_uring/zcrx.h b/include/uapi/linux/io_uring/zcrx.h
+index 15c05c45ce36..99e56ec26ead 100644
+--- a/include/uapi/linux/io_uring/zcrx.h
++++ b/include/uapi/linux/io_uring/zcrx.h
+@@ -76,11 +76,11 @@ enum zcrx_notification_type {
+ };
+ 
+ enum zcrx_notification_desc_flags {
+-	/* If set, stats_offset holds a valid offset to a notif_stats struct */
++	/* If set, stats_offset holds a valid offset to a zcrx_stats struct */
+ 	ZCRX_NOTIF_DESC_FLAG_STATS = 1 << 0,
+ };
+ 
+-struct zcrx_notif_stats {
++struct zcrx_stats {
+ 	__u64	copy_count;	/* cumulative copy-fallback CQEs */
+ 	__u64	copy_bytes;	/* cumulative bytes copied */
+ };
+diff --git a/io_uring/query.c b/io_uring/query.c
+index d529d94aa8f4..2e48fddd8d3a 100644
+--- a/io_uring/query.c
++++ b/io_uring/query.c
+@@ -50,8 +50,8 @@ static ssize_t io_query_zcrx_notif(union io_query_data *data)
+ 	struct io_uring_query_zcrx_notif *e = &data->zcrx_notif;
+ 
+ 	e->notif_flags = ZCRX_NOTIF_TYPE_MASK;
+-	e->notif_stats_size = sizeof(struct zcrx_notif_stats);
+-	e->notif_stats_off_alignment = __alignof__(struct zcrx_notif_stats);
++	e->stats_size = sizeof(struct zcrx_stats);
++	e->stats_off_alignment = __alignof__(struct zcrx_stats);
+ 	e->__resv1 = 0;
+ 	memset(&e->__resv2, 0, sizeof(e->__resv2));
+ 	return sizeof(*e);
+diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+index 49163f9c39df..53dcb5110719 100644
+--- a/io_uring/zcrx.c
++++ b/io_uring/zcrx.c
+@@ -863,12 +863,12 @@ static int zcrx_validate_notif_stats(struct io_zcrx_ifq *ifq,
+ 	used = reg->offsets.rqes +
+ 	       sizeof(struct io_uring_zcrx_rqe) * reg->rq_entries;
+ 
+-	if (!IS_ALIGNED(stats_off, __alignof__(struct zcrx_notif_stats)))
++	if (!IS_ALIGNED(stats_off, __alignof__(struct zcrx_stats)))
+ 		return -EINVAL;
+ 	if (stats_off < used)
+ 		return -ERANGE;
+ 	if (check_add_overflow(stats_off,
+-			       sizeof(struct zcrx_notif_stats),
++			       	sizeof(struct zcrx_stats),
+ 			       &end))
+ 		return -ERANGE;
+ 	if (end > io_region_size(&ifq->rq_region))
+diff --git a/io_uring/zcrx.h b/io_uring/zcrx.h
+index fa00900e479e..a8d301b6191f 100644
+--- a/io_uring/zcrx.h
++++ b/io_uring/zcrx.h
+@@ -80,7 +80,7 @@ struct io_zcrx_ifq {
+ 	u32				allowed_notif_mask;
+ 	u32				fired_notifs;
+ 	u64				notif_data;
+-	struct zcrx_notif_stats		*notif_stats;
++	struct zcrx_stats		*notif_stats;
+ };
+ 
+ #if defined(CONFIG_IO_URING_ZCRX)
 -- 
-Jens Axboe
+2.54.0
 
