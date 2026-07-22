@@ -1,114 +1,161 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37EE43A8739
-	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 19:37:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784749079; cv=pass; b=EyP8kw60EOzuRxvQd6ah9BNP0lRGI5m5SvMuM9LD204H/8eqZyAwmN6fH+iNt2hgwdDWYP0tXULxxi3dj4WcUT8mc2tup7FGCFAhrbyPP+iytA83dga7L10SlUcluKy9T/tZYb+A5tU8qwDeiEdAoRl6bRkntcI+GHhJ+7EFcxU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784749079; c=relaxed/simple;
-	bh=JQzdvO2/c6W6zyFtYE1jtZo85b0xGeOpk8OnYL3jNs0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kyt5G+HPfEpUv/SywKdaxUTIA5cB3WSJmklo0OpddKOvEIV3dt0l4ZW1Nm0U9yaEx/BQW6Afd2EJy4yqMCBRi1mPQl7mr8LXXjCGFanJYv4bXFFa86K0c0MeC3kzvizNyVE6CwZYvUGndreziM8P95Jj3uSxNsGvcbDmIz4QApc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m9F02x+Z; arc=pass smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFD14028E9
+	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 20:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784750417; cv=none; b=NK7o6oJDaB7ICMxXSGm2wvy//xV6pQ+k8MQ2dgCReevQeYh+2I1duNRiAT9YgleUJBpb92aMUePjdml2wm/aCzlByR0uQ8aS9MDue3Z2AHDT4X+aMScpJxV+uoQL54Jd64PqaYUZKuGlM5C+b71zXSJrxeLuGMNTM9dD6IZyLvo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784750417; c=relaxed/simple;
+	bh=pe8t491GCU7VOLA6KLIKq87fnUfyHDhm2CfwbjfL/dw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JVUKXsDaDNpyOr32BrqoOpEUWeb6LYzc3Xv0K2+BRupHthRLkmwF7+GIfCEg+ZDEyI944jghDtLuM22yweBUUzowTjGm+mNpK1T2RggYeFsAAHh57Co4/E00cFyWLrDEwk5DLE0G7LLGo0VL9dckVuUKLnoh3Ye+yrCIAfKfVyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lAfN34uO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qhx7xHFO; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=lAfN34uO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qhx7xHFO; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m9F02x+Z"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cab97c86bdso17135ad.1
-        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 12:37:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784749077; cv=none;
-        d=google.com; s=arc-20260327;
-        b=eBix67sDvqAEWHtmY9bovTo09Z35RcZ3sOKgnzWSaVINS1NiZI0t2ZBlNFjWwejr9w
-         gJw6ocGmQsIZf2VCRuMQxh1DLvfjK3PW19skD9/aOhjsY1y0sN9Fq/I/pFB4B7UZ6A2Q
-         zMwX2daQQe5GZO3pll9wY7lZlYB0n9+rp5gtC4Wrw/vpn01HJiXcw9P8fMcJQBRe0O4t
-         QPEm9LvxhiuWMxNEmTw7hvTuq1metd9qfF/4xqpoDRPTOv+DlgHWqkaziftHCQ6YWVmx
-         84jmwbt4WD5AmmUurvMprl/wEWEHE43JNydqZ1evT74PDMWvy6tOYw1RxH2Nbz6w26bl
-         hCHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JQzdvO2/c6W6zyFtYE1jtZo85b0xGeOpk8OnYL3jNs0=;
-        fh=dSlZPusUycofQjA4HtMTbFjCkinFQeCaTDaPmexJCCc=;
-        b=lFhdp3H8UtHZXXg5o4Bt1AlOgiLoug3voa9Icygww/Be2+3w3g2kTI7eZhHiv6+dOX
-         JStj6LUW7LquSRiRu/TpYe1FwfZpUp8QkrT9esAFHc7N3NrqVDmL97hFLifXjsswgexL
-         +tgCGjYC2rLTm3twO09RLfdLNDngJXeStG2S1NG6z/MllnG60Er18CQLwhz4+nhPbnxn
-         r1v3SSti2+F78UG1flZjh6CccRcPrVaQM+K0nYTY232PPrDzzI2aqw6DowHpeKtKYz+Y
-         Z0pk9KegDur2H76uWokQ24LevoSGQ1oh7pUed1QRkdhjN1ohKyOcaSu75/6FMmBHs8oO
-         mbYw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784749077; x=1785353877; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JQzdvO2/c6W6zyFtYE1jtZo85b0xGeOpk8OnYL3jNs0=;
-        b=m9F02x+Zsij3Cm1Yoz5t2A0G0qjRiIdpl2Jui/4FK4NKhEr+udoaHujkmIQfU5S218
-         bsDFwTuHWG+9HBiEA/dao+MaWgeNMJxIcoJs973afLCPezcZEU+GlOVGVi73roC4kd+g
-         qO4bcfb5O8ddKbg8SK513ORKjIgBM8cReQYr2i9hBTW5Jg8w2Sd+L1qc0THiCJNby/CM
-         +u3JKZXpXiTTWxG0SBeuj0297pm8a2y/YL6JLreuDLyvalkLXdfiaW+l9Ooes7NV49P7
-         aDo01oX9SOTnJuLa0PcDjgl54TakM/OO2SWH1QukNV5E2DM6DHc+h+y6ZOBVtvSbw1xk
-         3I7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784749077; x=1785353877;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JQzdvO2/c6W6zyFtYE1jtZo85b0xGeOpk8OnYL3jNs0=;
-        b=mwMS2Q9n5tktzoePkwN4AKxr+YGv7u4hshMyAXBHGfgKkz5utNJgVUiqK48xWglU52
-         e1+k764tBTZM0pjsO6zYqakddb2bgb+7sAbTUDYR8tBoujDji9rTlp0zb+HBUm+JhMlF
-         VqwXO/Jx+jfk91QTu3tAlKEftTnZQBTY/oPkQi0ArZUBeOi7oEdz2bWUNTKx4X59hX57
-         Pu7Za/eveKiC3uYBpr/EtY4laP1q0UaRpEDXUv7MDCS8uxT56wCjSsGnVjGzFOrEqNeY
-         4OTit9slFRCqLP7c1N4SvuXiC+RPK2BWo2WPYwzQotfxVTijIneqDYuS8/19E2NpDc1C
-         f5DQ==
-X-Gm-Message-State: AOJu0Yyh4tNfVmnu58jgJNl+3Ex/hcuJyLU4Dm7hZjPRKYkE2sqj/Qk6
-	MJDIBPKoTXVd+htekYxMQgqlxqzQiw5/74i2JZZTNh5OhWAUgXHdn0EykazS30pTSbKNVQGm8AR
-	Zfmdu1obb1sGXsQvIjEMJevoOwo7kG7kQzTYkEjJ0
-X-Gm-Gg: AR+sD12BH2P8LXLRMcYDKJIJVdomFz962XMOMKB9n3Esz4LAPFgddzrR0mbDhI/VFhR
-	xyvy59C/bq5gdBUmI1BFNnfhvXFzAxp1r2JjPFvIw5I5N/XXqvwPbwa1d62c+JXCG1sJrknXXMP
-	SMslxtUsVRz2rxIlnR8Aa1CD7PU3vOLmTQ/jnBNPj7NH0V0QVsXU7YcnYzjdHuOpcevKX0pLm64
-	i9giXHcVtKwQBGGm5gGmJ+KRbBU65B07eI47yDRwX5WZqxDZRUjCqHwR3qqbswphHQzX72lpnNX
-	AJSN4i1vEUQkgYMldXVO55XLI4o=
-X-Received: by 2002:a17:902:e802:b0:2cc:a859:d404 with SMTP id
- d9443c01a7336-2cfa55cd5d1mr863615ad.23.1784749076764; Wed, 22 Jul 2026
- 12:37:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lAfN34uO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qhx7xHFO";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="lAfN34uO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qhx7xHFO"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 1405B3E38;
+	Wed, 22 Jul 2026 20:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784750412; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pyN7+D+GGsF97Y5k/3aVaTFNSxVD/4ZhP6qJyHIlYsE=;
+	b=lAfN34uOceF7pu3v+tAEGDi7XnKeJm36qXeGroA6qWPrM4X6BunSBEA5t6iSd09oKWWqax
+	4CtVnkKay65SiBtMv9XSkrY5Rnf/i6o2YK272EXzDLRmaj1bzhkiQQcDCwOcNp9QiUiij1
+	3LVyhHspuduFZrtCicVN0nGPrjbCg/A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784750412;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pyN7+D+GGsF97Y5k/3aVaTFNSxVD/4ZhP6qJyHIlYsE=;
+	b=qhx7xHFOE/d/W25GL98Pg0/yvOyWXAIjAPxvr5Hq3HTT/q9M0Nf8Dw7toqf+yZZV/ormoW
+	nmPUM92uuu7/3+Cg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=lAfN34uO;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=qhx7xHFO
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784750412; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pyN7+D+GGsF97Y5k/3aVaTFNSxVD/4ZhP6qJyHIlYsE=;
+	b=lAfN34uOceF7pu3v+tAEGDi7XnKeJm36qXeGroA6qWPrM4X6BunSBEA5t6iSd09oKWWqax
+	4CtVnkKay65SiBtMv9XSkrY5Rnf/i6o2YK272EXzDLRmaj1bzhkiQQcDCwOcNp9QiUiij1
+	3LVyhHspuduFZrtCicVN0nGPrjbCg/A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784750412;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pyN7+D+GGsF97Y5k/3aVaTFNSxVD/4ZhP6qJyHIlYsE=;
+	b=qhx7xHFOE/d/W25GL98Pg0/yvOyWXAIjAPxvr5Hq3HTT/q9M0Nf8Dw7toqf+yZZV/ormoW
+	nmPUM92uuu7/3+Cg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B58B5779B0;
+	Wed, 22 Jul 2026 20:00:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id S0QhIEshYWreLgAAD6G6ig
+	(envelope-from <krisman@suse.de>); Wed, 22 Jul 2026 20:00:11 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org
+Subject: Re: [PATCH liburing 1/2] test/send_recvmsg: Preserve msghdr until
+ op_recvmsg completes
+In-Reply-To: <6f31dd5b-639e-4018-815b-0fa04a39b337@kernel.dk>
+Organization: SUSE
+References: <20260722181710.79099-1-krisman@suse.de>
+ <20260722181710.79099-2-krisman@suse.de>
+ <6f31dd5b-639e-4018-815b-0fa04a39b337@kernel.dk>
+Date: Wed, 22 Jul 2026 16:00:09 -0400
+Message-ID: <87fr1aeqwm.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1784726895.git.asml.silence@gmail.com> <f95ca6717da3c8d3649a1a7f0d883a563f545052.1784726895.git.asml.silence@gmail.com>
-In-Reply-To: <f95ca6717da3c8d3649a1a7f0d883a563f545052.1784726895.git.asml.silence@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 22 Jul 2026 12:37:44 -0700
-X-Gm-Features: AUfX_mzp4a2QkcqWlT4Ddz69fyMJJIoO4GRgGyV2Y13YRwziHrdNsQQhoVl1-hA
-Message-ID: <CAHS8izOhJN0YzQ8ybYm57Hd-Mu8PMc2a-NZ-K-N504LzEeTpfQ@mail.gmail.com>
-Subject: Re: [PATCH io_uring-7.2 3/3] io_uring/zcrx: rename notif to event
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org, 
-	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Spam-Score: -4.51
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 1405B3E38
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCPT_COUNT_TWO(0.00)[2];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[kernel.dk:email,mailhost.krisman.be:mid,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
 
-On Wed, Jul 22, 2026 at 6:51=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
+Jens Axboe <axboe@kernel.dk> writes:
+
+> On 7/22/26 12:17 PM, Gabriel Krisman Bertazi wrote:
+>> msghdr is allocated on the stack at recv_prep, which means it may go out
+>> of scope before the kernel has a chance to complete the operation.  This
+>> results in spurious test failures when we reach far enough into recv_fn
+>> to reuse the stack space before op_recvmsg executes.  I found it easily
+>> reproducible when compiling with '-O0 -g3' to avoid gcc from optimizing
+>> further local variables out of the stack.
 >
-> "Notification" is too long and the abbreviated version is used in
-> several places, which is inconsistent and more ambiguous for users.
-> Rename it to event, which is easier to keep consistent. To keep the
-> change small, only change uapi/ + do necessary fix ups, and the rest of
-> internals can be adjusted in the next release.
+> Hmm, but that should be fine as long as a) we submit in scope, and b)
+> we're not using SQPOLL, where it does need to remain consistent until
+> completion.
 >
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> And recv_prep() certainly submits before it returns, and we're not using
+> SQPOLL. So I'm curious what issue this is?? Same questions on patch 2.
 
-Probably a basic question, but isn't the stuff under uapi/ supposed to
-be a stable user api? Why is it not a concern that you're breaking
-current users with this change?
+Hm, I assumed it was submitted via iowq, which would explain this,
+because the execution in io_recvmsg() passes a pointer to the original
+memory:
 
---=20
-Thanks,
-Mina
+        ret = __sys_recvmsg_sock(sock, &kmsg->msg, sr->umsg,
+	    			 kmsg->uaddr, flags);
+
+and __sys_recvmsg_sock does write to it. which makes it clear the msghdr
+needs to live until completion.
+
+But honestly, whenever I try to probe to confirm the execution went
+through iowq, the timing gets off and I can't reproduce the corruption.
+
+I will take another look and see if I can explain better.
+
+> -- 
+> Jens Axboe
+
+-- 
+Gabriel Krisman Bertazi
