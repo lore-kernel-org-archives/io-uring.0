@@ -1,73 +1,69 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E2D3451A7
-	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 13:42:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5EA353A87
+	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 13:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784727756; cv=none; b=KJRttvRR8ndvVt+Iol9g12Om3zE3m6EK91Nh+4BHcLRavzDTFmP+RSe19Vp+iv+IuNnmef4NJmzV46oGP2YU8PdhdeXgPe05HDkHPxo67DK+Nt6myGPoapAxqUDhk39HAYjXeKPpScveyVBWyD1tmvyyIEk/yCOk+3Ycu8Cxq8s=
+	t=1784727756; cv=none; b=n4s/IgpVtkAAv9vsB2ecDn++yBt8mUKeICp9GbdfNraM9fhOuwC6jRuulOUA/RfaEyNPrJnXqKj2+nkD+I5bUX8K3kM7AfBE5WbVSr7UWk3/FyFDQRJuGdgda/ohhLpfsfjBs0acBvSIb9eDCac9lBeMG3hTovZryiy2eMLAftc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1784727756; c=relaxed/simple;
-	bh=unnADqaTU1dRYfmFaX+uucXakN3LWRA8pDHDO/e1y74=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aiTriM8w/1ItElSnjbYH772z2vOX439iGHHIQQt1IDitws6XMW1+rDyi0WEgow6OnohWsR48DJKYP/HD+ihHRY22orFPKIMOE7WB/7WsIhosEjerSq8wK5A8bfEh/liA/yFcuK/qmY6J+Oi/F5eDHyyc9FI1+pKRk1cRSGvqXeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i+LnQTHm; arc=none smtp.client-ip=209.85.128.48
+	bh=qWnVCFHEIQQwVG8uhmXw/dvzIi9AupAXMmD833qTb6E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D+ryeYQII4oSv2S7iuxHds25vvPa/f8xTcHlwR73mM7SMSChMdJrkoiWVnR/zNM8cMp3E3piWw6ASXLd+TyUeTzq3azRiGC+1xW+s78uDvJJdC/OSfwkapOnZLTumOOq9MFwwAwqaVdF5zX3OoIH3ddrQX6hosvVYnvl4esJw8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r6LYFZ24; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i+LnQTHm"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-49558ce01afso30345795e9.1
-        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 06:42:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r6LYFZ24"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4954a32cf1eso22847945e9.3
+        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 06:42:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784727753; x=1785332553; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9Z26QFDyzqFkZ51F4bjWLHBoSU2djhcQ9bvuZ8iw9R0=;
-        b=i+LnQTHmaD4IvCZ3zb5jb/IkCBP3+yTOI5xzWaNDIgfCXOEf77ECamlS/lfuGUymRX
-         p/M0CUEtm5/Go8v/XPRebhyU5IdMIBvPCJpdAz19BNxd/07/rUKSegxzTh1mpESLCuqf
-         qitLMo1jzOlX8+BhPgZk71DGlUYh53h9NFaSuePMA/3UPqpNFPQZg36poNVfAdBRQoEK
-         KowxbYAxKU8GWdbX7maQmOO0NWFaYE1rhTXS/e9xHcLAhPPbPK8I/3o4XkliATo6PiBr
-         tlDpR6xFLGyRVOF+9uxHDpT/yM7nEzekymb0VZdSgPILI7WijZn45rVQCK6+cA5FNRtw
-         OpfA==
+        d=gmail.com; s=20251104; t=1784727751; x=1785332551; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=keVf3FgJZB5UJkfkXGyU1cYZXcGd56IkuhMm4F3AyS0=;
+        b=r6LYFZ24qifmW5LZicUI3qSTOTteSWQAke3ZqLwiI2RHT5Fqk+iIN1jxBXfVl7S1BN
+         YVUllGnEKrRsexnkRBU4bEgPXd8/Uo4TrYfzwEle8YHjdhtdQyTOJvswuHWAJ/hpoair
+         QVFREXAwqllowMEiayxUHn5963O8dxUYQusVjNUxiOXtilwJhcyreBwUUyKAwoEkQb/P
+         xZP2QtfKCJKruF2gJX1rTScHkyPlzKx1EBVx/6GKyiLL+oEQkqPg073gEBOx0anDrhyu
+         Qj2jSAHriKOkPJusCeBinNKpIt4Iw3CstfKctDS4kmZ0hcVYJw6CN+7bglW8yA4Pxf/C
+         +ilQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784727753; x=1785332553;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9Z26QFDyzqFkZ51F4bjWLHBoSU2djhcQ9bvuZ8iw9R0=;
-        b=OXOglPqjffhmmxksyuQffTYQBVeMNO1w/+slfX+G5OzfvgWZ7NWViEe+xmjCuhPPYL
-         Os79s4U8f0Hmdt4LqMbnV969Zg+YlkRtpbfySWlctTzRmYcr4HJDpn8Gi+dznv70U3lr
-         vToKhrutB6iLpofoL7+PRuphheJiqViVIgA57SdLofNWHmtERUaA+0pwwWKCXHOZeTi/
-         xrUggnJznCOsGNE6Qf/EHUbCbkMYvQxT6vClNhYm+FrzM8Ey3UnUAuaiZi4qv/6NoJ8a
-         mxH8uVQvtTQ/Pj/ySDOopNle8BSCbyjE9tiYZGRL3Np1loTjGgMhjNZIjiYEf9MqPE8/
-         9tnQ==
-X-Gm-Message-State: AOJu0Yy/Lhm8kGl0RGAI4Z/MSxRtQ3G0idOtUVom2pPSpwuBmV9im6Mg
-	kBtgXSvH9TaK+yehz25SoUpSf24IGJF8nAZqfHNcXtNbr66761Hb4ZVI4+5rRZ4l
-X-Gm-Gg: AR+sD10WsD/9G1RoRyMdWJ2g3/tWACK9vMnUlFaJ9NWDFaARtQ7ry+fQTI3vuUjZbZR
-	AyZUG3B7BnFIu/hak9LQdAXQsLbTueCDHwFwusoJmpBgUgCPwY4qcTnDVRE82RATSDZnFo2HiXG
-	deUQghtqDYiRMoY9tfY5xqMlxVK3BRY5zjrymyF7Pr/pv9SLFr18ImnNIcBgCNuYHLtLgnsWz0R
-	O2xPkL2e9Q4EWf7sNh5fV7mEfP1zoMsgtpFUDRaWPQUXbSqkExwdffWsjJs/qTKkbxnv8yqVHtj
-	JrIFRqksRbwm2idVYP0fFVNjXAv+F1tuQahFkMt/XvXKU3b3AdI3Mi3q92LozZpPah23U61O0+8
-	qr/6t61Q65UfAE2hUHm5fq0rilRmX7Be3MyeyR9e8Lqytn64iAjPfFlAPdInVl1nmoWg63Kjueo
-	nY7XoKNMsmsG3Ws4mqxYL6fnB8ASFfXXnbU4+7YgzvIXzxFkFnf69Bl9DKXkJeEviVZIux/A==
-X-Received: by 2002:a05:600c:4e8d:b0:495:54e9:c080 with SMTP id 5b1f17b1804b1-49554e9c2bbmr82960225e9.31.1784727752888;
-        Wed, 22 Jul 2026 06:42:32 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784727751; x=1785332551;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=keVf3FgJZB5UJkfkXGyU1cYZXcGd56IkuhMm4F3AyS0=;
+        b=ScZjfWQV1nj0UWEpzdr14aBHZ7sgXMIYScf6MBWMyOBbyavV1Juxj6KA+AowvtZe/r
+         eumuOt+7PeKHsK4IAfQA8MvJTZcxTfk25jpgZF8gUbhLXbPttqdRPaZGn84R7c9joinq
+         1sr/YuI4CziEnruJnBt1vNXivze1dVB14zrFEiqlgR+PKtw6Bw4+JYv5C5oma7wFs5pZ
+         Y8pf73UAKX8aZFziO5y0ow2E79xhKUZO+Bota+SgSt3+1Yh+Ugsx+cFphA0DeEbLFBek
+         mHbgdRYndMnQ5TyDSHqHTAZCD1FTMGRqQAbxJy48n/NQ7Jl7pvfcBHBIm8nHlUCHIP+/
+         7KEQ==
+X-Gm-Message-State: AOJu0Yz7cQQOa03XE7k1DVPzR2l3mIPq2jJoxrDAl4k7fT2imqnawIqH
+	tPWL2jp1V/sWMC9tk6ZeYN8+LoDXGAAzNiiQZh0+R3PTRNHeJaUDS9SXqL/lQvfI
+X-Gm-Gg: AR+sD128a41ugDZDZpXziXy7BrfNbYNKoPDGsuycMcvx0IS2biDOH4JLBL6JDSQWLXn
+	DQAIf1cpYV1tf/NvVtYno4naaPKHlxhCzU2hkVAX9E7SAClEzoB0lDu4nlSIkGu/7MpLKdVfl5L
+	ftHJBrZJyzxKMQThjK/ZXlrex3euMyt03KK7JDxJvKFAn1t9dm0luhiPQVScjM0EuRQAW4QaMMQ
+	kxEWanOghWVx3pCH12TTz8WZKX7sQoZnT7PD6H3icqZJ3+aKCIqsKKTVhH/Yb4VEwgHH2ufD8/a
+	6dupFkACPmSA2eEc+PlnpW/HHlHrVC4j/381EwYpEN22CimZrtK+2cy2CuZIXdV1So7ODVq8wQp
+	GIp2rWGf/97NWRNIbYcGsbtD/KzgOCfWXsT8JZvORo5zLPJpA6BhyyrQwov5LBfBAMYVNhOFg3v
+	/4b9uv9H7+6NRh+Y5SzLpCLqKw4dUdSAsoa+8508hxv1234gfA5GsoZJyEZLQ=
+X-Received: by 2002:a05:600c:b90:b0:495:6f6b:fb75 with SMTP id 5b1f17b1804b1-4956f6bfb8dmr17230625e9.38.1784727751353;
+        Wed, 22 Jul 2026 06:42:31 -0700 (PDT)
 Received: from 127.net ([2620:10d:c092:600::1:c15])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a63fb10sm73403015e9.13.2026.07.22.06.42.31
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4956a63fb10sm73403015e9.13.2026.07.22.06.42.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 06:42:32 -0700 (PDT)
+        Wed, 22 Jul 2026 06:42:30 -0700 (PDT)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	netdev@vger.kernel.org,
 	=?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>
-Subject: [PATCH io_uring-7.2 1/3] io_uring/zcrx: drop "notif" from stats struct names
-Date: Wed, 22 Jul 2026 14:42:15 +0100
-Message-ID: <6a39676b6f71b67d3f89c6ebab7a3739873834a3.1784726895.git.asml.silence@gmail.com>
+Subject: [PATCH io_uring-7.2 0/3] fix up zcrx "notification" uapi naming
+Date: Wed, 22 Jul 2026 14:42:14 +0100
+Message-ID: <cover.1784726895.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <cover.1784726895.git.asml.silence@gmail.com>
-References: <cover.1784726895.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -76,102 +72,23 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Keep zcrx statistics generic and don't stick "notif" to its uapi
-definitions. Stats dosn't need to be bound to notification details,
-it makes it cleaner and more readable.
+There is a degree of inconsistency, nuisance and ambiguity in the naming
+of the zcrx "notification" API. Rename it to "events" and do other small
+adjustments while it's not released yet. The patch set only does
+renaming, there is no functional or ABI changes.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- include/uapi/linux/io_uring/query.h | 6 +++---
- include/uapi/linux/io_uring/zcrx.h  | 4 ++--
- io_uring/query.c                    | 4 ++--
- io_uring/zcrx.c                     | 4 ++--
- io_uring/zcrx.h                     | 2 +-
- 5 files changed, 10 insertions(+), 10 deletions(-)
+Pavel Begunkov (3):
+  io_uring/zcrx: drop "notif" from stats struct names
+  io_uring/zcrx: rename ZCRX_NOTIF_NO_BUFFERS
+  io_uring/zcrx: rename notif to event
 
-diff --git a/include/uapi/linux/io_uring/query.h b/include/uapi/linux/io_uring/query.h
-index 1a68eca7c6b4..708bcdd585dd 100644
---- a/include/uapi/linux/io_uring/query.h
-+++ b/include/uapi/linux/io_uring/query.h
-@@ -66,10 +66,10 @@ struct io_uring_query_zcrx {
- struct io_uring_query_zcrx_notif {
- 	/* Bitmask of supported ZCRX_NOTIF_* flags */
- 	__u32 notif_flags;
--	/* Size of io_uring_zcrx_notif_stats */
--	__u32 notif_stats_size;
-+	/* Size of zcrx_stats */
-+	__u32 stats_size;
- 	/* Required alignment for the stats struct within the region (ie stats_offset) */
--	__u32 notif_stats_off_alignment;
-+	__u32 stats_off_alignment;
- 	__u32 __resv1;
- 	__u64 __resv2[4];
- };
-diff --git a/include/uapi/linux/io_uring/zcrx.h b/include/uapi/linux/io_uring/zcrx.h
-index 15c05c45ce36..99e56ec26ead 100644
---- a/include/uapi/linux/io_uring/zcrx.h
-+++ b/include/uapi/linux/io_uring/zcrx.h
-@@ -76,11 +76,11 @@ enum zcrx_notification_type {
- };
- 
- enum zcrx_notification_desc_flags {
--	/* If set, stats_offset holds a valid offset to a notif_stats struct */
-+	/* If set, stats_offset holds a valid offset to a zcrx_stats struct */
- 	ZCRX_NOTIF_DESC_FLAG_STATS = 1 << 0,
- };
- 
--struct zcrx_notif_stats {
-+struct zcrx_stats {
- 	__u64	copy_count;	/* cumulative copy-fallback CQEs */
- 	__u64	copy_bytes;	/* cumulative bytes copied */
- };
-diff --git a/io_uring/query.c b/io_uring/query.c
-index d529d94aa8f4..2e48fddd8d3a 100644
---- a/io_uring/query.c
-+++ b/io_uring/query.c
-@@ -50,8 +50,8 @@ static ssize_t io_query_zcrx_notif(union io_query_data *data)
- 	struct io_uring_query_zcrx_notif *e = &data->zcrx_notif;
- 
- 	e->notif_flags = ZCRX_NOTIF_TYPE_MASK;
--	e->notif_stats_size = sizeof(struct zcrx_notif_stats);
--	e->notif_stats_off_alignment = __alignof__(struct zcrx_notif_stats);
-+	e->stats_size = sizeof(struct zcrx_stats);
-+	e->stats_off_alignment = __alignof__(struct zcrx_stats);
- 	e->__resv1 = 0;
- 	memset(&e->__resv2, 0, sizeof(e->__resv2));
- 	return sizeof(*e);
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index 49163f9c39df..53dcb5110719 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -863,12 +863,12 @@ static int zcrx_validate_notif_stats(struct io_zcrx_ifq *ifq,
- 	used = reg->offsets.rqes +
- 	       sizeof(struct io_uring_zcrx_rqe) * reg->rq_entries;
- 
--	if (!IS_ALIGNED(stats_off, __alignof__(struct zcrx_notif_stats)))
-+	if (!IS_ALIGNED(stats_off, __alignof__(struct zcrx_stats)))
- 		return -EINVAL;
- 	if (stats_off < used)
- 		return -ERANGE;
- 	if (check_add_overflow(stats_off,
--			       sizeof(struct zcrx_notif_stats),
-+			       	sizeof(struct zcrx_stats),
- 			       &end))
- 		return -ERANGE;
- 	if (end > io_region_size(&ifq->rq_region))
-diff --git a/io_uring/zcrx.h b/io_uring/zcrx.h
-index fa00900e479e..a8d301b6191f 100644
---- a/io_uring/zcrx.h
-+++ b/io_uring/zcrx.h
-@@ -80,7 +80,7 @@ struct io_zcrx_ifq {
- 	u32				allowed_notif_mask;
- 	u32				fired_notifs;
- 	u64				notif_data;
--	struct zcrx_notif_stats		*notif_stats;
-+	struct zcrx_stats		*notif_stats;
- };
- 
- #if defined(CONFIG_IO_URING_ZCRX)
+ include/uapi/linux/io_uring/query.h | 14 ++++++------
+ include/uapi/linux/io_uring/zcrx.h  | 32 +++++++++++++--------------
+ io_uring/query.c                    | 12 +++++-----
+ io_uring/zcrx.c                     | 34 ++++++++++++++---------------
+ io_uring/zcrx.h                     |  7 +++---
+ 5 files changed, 50 insertions(+), 49 deletions(-)
+
 -- 
 2.54.0
 
