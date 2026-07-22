@@ -1,133 +1,94 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C151828C854
-	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 10:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784716366; cv=none; b=eHmzeUvRMfpsjrrdTUY7PuNsGTKwwKmAdbSPHHhtljuCxga35RONLFv+x6StUBOwMAqLg6uUuqvlqdtZJrr9+8RkWmwPFLWZTmjOJPtj/aliCUCGNnvQt2Gi1XjVL3dkBT6jNKYbyN8jgKFLMD5G6XuBVg71x6d+u1ACJIitE8A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784716366; c=relaxed/simple;
-	bh=A0D/dFk7sg5e2+9ZXmd9skBcCE1bj0ll4q/I400gnXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uXGiWM1okp7nPTHyfZ2L0C2UfR1lXnHmjcCGKtkTZ2wUouNcXElrG4xLCm8kXnARkL4G5aaJJKiQVN/j1DsljhY0wkqZh+84Ceh/GxKhEGmKba/OKMwcr2IQbJO9Myg2WOvFqaPDh4rvz76xZSyx9uon1AZU5MbpBE45QERM9eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=VFsDnCcR; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EA12BEFF5
+	for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 12:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784723811; cv=pass; b=U1QIObUzC5R+Wzhvm6PEt5iwce1TMyNsvkrK3UFU9RNRwKi+xJ6qCdlidzadqLaTDLWRKwK/oDomUXSgv+kuOhUh66AXcGlPzU5DX3rGD79glwFO/E6xjO0Df3nfyr8YIKFDLqqrgY9jx7oAiZW4VNSyFQhzXPby/P2Avx85+4M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784723811; c=relaxed/simple;
+	bh=9Oe/z2U5VVq7TsjY7mXnV7BA2CP2F8KjPa1Hidk1kWI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QdnHoRzXbPs3s7z/R0fXQW2OL0qvyN652UVD9Z9N4uf4tNmLmC+Ra1uw2yAe65rr4vABOpdUZKEygRKIAmUw0NqcDps/3TSQP1SQSYv1gAi8wH8gvM6NY/quFPfucjG+bgRKj7BnsXDmnVI9xRjUgSkKXSNik/MMBURDaC1+Lvg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LzEIJ04s; arc=pass smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="VFsDnCcR"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6a31b9a492aso7772083eaf.1
-        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 03:32:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LzEIJ04s"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-69c1220bd51so15142634a12.3
+        for <io-uring@vger.kernel.org>; Wed, 22 Jul 2026 05:36:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784723808; cv=none;
+        d=google.com; s=arc-20260327;
+        b=nafPqH0NsWRYrA+jm7A1bKaqIoNNKIP+qkWIG4SMOQgwoHlV0tzYq7fUUTvsbm7h5i
+         +57TBBOhbOqxLekjlke2R3pie7sldGVsSPjviREoeTKVzkW1xe2MDHXOluGjWo11e637
+         Tv3i2ggxN9aRz6WrA+o8iAQdosRFzKuXKc9bIR/3AqPjQJRYz/XEmiO8HDMbS/QmRI0R
+         pV2BSOj+0i2NMzHgcy1FdtwqardVSZJ4Mzcsk8VqLC8orksQMpBUwvfiPTnhmpZP313v
+         zJ641RdPqSTKNplg5mWKksK2w537GHaAjoeXd0FCxLMc71htNXrikIpV9ucHL5PbehZK
+         55CA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=9Oe/z2U5VVq7TsjY7mXnV7BA2CP2F8KjPa1Hidk1kWI=;
+        fh=FmF192Sibvhgb1up8ehVqw35lNFr9teq9xcy/tHaCTY=;
+        b=DzoC4MksjpYqBDu+wkZQ7hlhWm4XvZ47dsOmFa9yqvOJMyL/UUxToADa3GZr4B8uf0
+         IfU/1hbr4iiXweYc+vbDmH/7E5kKPgw4fQv4Yf2KNEzpJbPg9iorWfa0luAMFMC7wRpM
+         I0sJ2kHvoZCDnxbBre9XX7F0eAm9OSRHytRR24rtTmwQoYZsW4m0nxxCYOs578PuO75O
+         zJLZcF6k0EO0eotCJePbBbhpPrsTKVGPNGsg7Wj2GIwp/WH/msJkOTfOqBi0fDEXIt7u
+         SNg+KZ+dRCBKwCaodCDOPzXk/l22MPUsdGMO5rXHrPfeFlJZ5C56sjBCcv8cp68IBTJj
+         7V9A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1784716362; x=1785321162; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1784723808; x=1785328608; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GLeihwkyuOSwZ0D77p/caa9cVB/Cpv97jWEzsyZiccU=;
-        b=VFsDnCcRSdp5OZG3WyqIA8OsvOWLb3otV5vQk9BwvzvlxpY8HjJZoF5j8cJuNcbbPQ
-         7s9Jkubn3qQxlkR2EgwqQM7TJxI/U2JuE08yinLotuGbRcUXjBmSO7KzgQ7J9VUZydfd
-         +ujKnKMsolvYkjW9Cw3pLmRG3YBtIPfzRrc5YGMwnkkMJQA0DnzCpa7SNkw/EOz8dw9w
-         YjY6SCrZhTL6hIweHP3w+3FLqVjwaXxMOupLMgkYbh2TODq2KOmMSvcIYQ8EpPdBlJyq
-         a/Z8pQ2877JAcY4I1wYl23TMM/4wp9ptWt949CdB//COmi2sDK7YGoPDNRNeI3QZc/ka
-         3F3g==
+        bh=9Oe/z2U5VVq7TsjY7mXnV7BA2CP2F8KjPa1Hidk1kWI=;
+        b=LzEIJ04s1HS+EtuiNqHuG/kWYfflqFIfC2sFsaOUd2XIvx0sm48Ks0v5y7IkN8HpIY
+         JlfnFR9RE7T3wC1gttzAs8hCS5re74TEA3dW9bWrugIpH+bVkqsABP2LSX7TVk4aB6vk
+         mf4i5QFBWFXBZ0RGNK7PCDUv+dIRxGZPbiA0/2hRNMPa9qdio/mfQsCeEt+mMI4ea13+
+         R4ouV/Tmbx2fUpkgQCzOXJ6n5Azi+Luo5O11D4BrjG4zjeNkqpFG3efr1vsIOEiHiaRu
+         LaZ12K/bEEff8/RKeUAyUhDTzGzUsmD/ycbRQQRIz/73FHVU/BscCIs+LrWq23d/v25B
+         Tb3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784716362; x=1785321162;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GLeihwkyuOSwZ0D77p/caa9cVB/Cpv97jWEzsyZiccU=;
-        b=NSxBdiZKq4teo+o2zbFp0Dl276r6O8sD+8bHoXiYaMVCXaLfv9Cx7fe8rVPQfC3aKu
-         FMEx1MuCuboFrjv5Cv90q5AJbi36VnHUkQ3xMurmvgrsrnx6VuAexrohoS2+zcSJFEhL
-         4kOHKkolNd3hCe7sBbpR5L/1KnXMm98tvfMs4gU1PXcVbb4tZsSnjDqJ3UM4ty/DfjtK
-         4T0UA5h4VRnQeNwAu6mtOiue8aULDFgG9l1Ak2uipWBrYIVIZJ9xX6eFURKOAa4kxAit
-         C9IXoNslTiOXUJ4nU5BZFfKo1Gr9CoYUL0v25Cql7p8jef5JLiNTQ5DknzKXXvi+M15a
-         PmHg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr9UdTsPdl0CiYLEiTRkyWeD7fSrdSD6Nbl/4Nn6i9rq/E+OoWKUyaPkw1h/2GMCFhP8o+VnQzQdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHfJVKo7mkR1vLIv2nVhj49VSH3UYKTGUraj8qsWgf2sFBgPrP
-	7AVM/B/vHmAOAM/1nXpOFo02UcbO80yUwoVH3gDeGHMSVXZ+x6Y1FVprDpKDEFh/Lt4=
-X-Gm-Gg: AR+sD10gBU6ORQKMFzS4igljzXtW0yRla4ogxpK5awZWshhE9a2sc7MQZv6MvMJ6Epi
-	cb18ac4sCpoXx2w/TDCfPmO0/KbfAph6oU252BqE/KKsghxDn2TlxioLVUFXUn3qrSGvuH7KOpI
-	x1dLxazxjPoPzBllTHKToimguO4ys7/E9mJBGaM+1vdm8G7nfKO39g4TtIiOfH6Q/cZAiUREofo
-	QEi3ics6WW83N1YVi0gOqt3TCcIdCbX/wdmfCwiKJ4TOAAz8YFAW0MgWjQAALFxuzaNnBMSH++e
-	HDjEIdS8VTNj2X/rnUX/VS1DpB2HOHOWlnZ4goCfjatD93WtEYZ0PPeB4YTi/ys02Rb3r5yefzD
-	4xaDzZxIBcqcMA3U7VW6x2Xa81r219qIjef/2vwaTlGvxOvMLxWx7ozruTwhHpgPVKaKCJa8zho
-	eAGblrnSQuzF13tFHEHWFQHwOoSd0d4ZquqwUhOamL66g3yR/FW7som/6Zkccm
-X-Received: by 2002:a05:6820:188b:b0:6a1:50eb:d504 with SMTP id 006d021491bc7-6a536a908d3mr11100486eaf.69.1784716362501;
-        Wed, 22 Jul 2026 03:32:42 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6aa79ef5a37sm1267679eaf.13.2026.07.22.03.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Jul 2026 03:32:42 -0700 (PDT)
-Message-ID: <902127f0-83b6-46d2-9e7e-71cee4d63016@kernel.dk>
-Date: Wed, 22 Jul 2026 04:32:40 -0600
+        d=1e100.net; s=20251104; t=1784723808; x=1785328608;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9Oe/z2U5VVq7TsjY7mXnV7BA2CP2F8KjPa1Hidk1kWI=;
+        b=U7uBaOhtU0jlljIxAC4o1YTl98PqaMF6wlAauz7Pj4ynZgekL66H7clBoZR+YLI9h1
+         wGvTos6AYftG0yqyUVKUZG1aO4zOmpMq0Uuswddy6wj2m3yH1Ae9C20wZrxFVO6FO0Tp
+         rJke6nFxC+w5+fKR1UHg35rTdehCkcXGP8oM7/PxzYqP0AxOW786a0ZuyW5Ohkghf32W
+         D0rA4hPN9Dt5CT0UqGvMcFTFhuoAc+iWRFWQXMWrf7NYWuctmwytVCB7Eeot0L6I4J3w
+         qM3zX9h0YOqj7Nm74N4RDOUsva5ygcJRLoOxIs3gvIvPuzhmsOzF9YUeIKBzfpaznigP
+         Lb8w==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3b0WwtzHR9jRC96D+lD5mnY9QYQuaWLOy4AFbddOgagf91bbzNtB9TlT/zreVHOyhwodM/MPm+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLs334fNgewrZXWc/QbfzyBpH0uOfyWN031nIgIqzH4FXEnjTX
+	XG8RR+REUYnsmRpwje2ifrC0FAM9E/MBVycPnZNZdgOrJQBES74DIdNJh25Jasb1uuwaZzI6pT3
+	KEUHPfeV4RgoWfn2r6CyUN7LprW/CFYI=
+X-Gm-Gg: AR+sD10lrHy2vOp9EOM7/i/x6JHsccnS0ylhbiOLqHJKIErawby0xc+POSO8aWRe8GS
+	g2NHrV1qdOzg0ilmdULr1KaaQbiJaZmMkGyWRsheSbuTjXtig+Y3YHD1Rr1h27ZMMF5rxEUKrXd
+	Fm7kzBnpWFmGbgnhRHvTfSCrYUmUn8Cp02YZE1zCdnj/eVWhaiiiGB10XLqrjKQIipEXg0YH7A+
+	jDPgIcwarkTRhe0iE3xsOmlCCeX7S/bXJ6TcxTLPzydUKiLv/OrIYwlqgnB6+KCgESM9meI
+X-Received: by 2002:a05:6402:454a:b0:69c:794d:48ba with SMTP id
+ 4fb4d7f45d1cf-69e65161367mr7289374a12.0.1784723807852; Wed, 22 Jul 2026
+ 05:36:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/rw: fix missing ERESTARTSYS conversion in read
- paths
-To: Yitang Yang <yi1tang.yang@gmail.com>
+References: <20260720114116.21830-1-yi1tang.yang@gmail.com> <902127f0-83b6-46d2-9e7e-71cee4d63016@kernel.dk>
+In-Reply-To: <902127f0-83b6-46d2-9e7e-71cee4d63016@kernel.dk>
+From: Yitang Yang <yi1tang.yang@gmail.com>
+Date: Wed, 22 Jul 2026 20:36:36 +0800
+X-Gm-Features: AUfX_myfA9GPubRg9Z7mgLfJi28nVa8ooiv3FGl4Uy3_2uu1Rr4vh2Hs4qMcGfo
+Message-ID: <CADd-6Fxdk3Y2RyzvJAfA0i1Go5U-y=9__vCdy+FdzcOWwnK18w@mail.gmail.com>
+Subject: Re: [PATCH] io_uring/rw: fix missing ERESTARTSYS conversion in read paths
+To: Jens Axboe <axboe@kernel.dk>
 Cc: krisman@suse.de, io-uring@vger.kernel.org
-References: <20260720114116.21830-1-yi1tang.yang@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260720114116.21830-1-yi1tang.yang@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 
-On 7/20/26 5:41 AM, Yitang Yang wrote:
-> Both read and write may receive internal restart error codes from
-> the filesystem layer and should be converted to -EINTR. However,
-> when multishot read support was added, the error code normalization
-> was lost for both io_read() and io_read_mshot().
-> 
-> Extract the conversion into io_fixup_restart_res() and apply it
-> in all three locations: io_rw_done(), io_read(), and io_read_mshot().
-
-Functionally this looks good, just a few cosmetic nits below.
-
-> Fixes: a08d195b586a ("io_uring/rw: split io_read() into a helper")
-> Signed-off-by: Yitang Yang <yi1tang.yang@gmail.com>
-
-And this one needs a Cc: stable@vger.kernel.org
-
-> @@ -625,19 +643,7 @@ static inline void io_rw_done(struct io_kiocb *req, ssize_t ret)
->  
->  	/* transform internal restart error codes */
->  	if (unlikely(ret < 0)) {
-> -		switch (ret) {
-> -		case -ERESTARTSYS:
-> -		case -ERESTARTNOINTR:
-> -		case -ERESTARTNOHAND:
-> -		case -ERESTART_RESTARTBLOCK:
-> -			/*
-> -			 * We can't just restart the syscall, since previously
-> -			 * submitted sqes may already be in progress. Just fail
-> -			 * this IO with EINTR.
-> -			 */
-> -			ret = -EINTR;
-> -			break;
-> -		}
-> +		ret = io_fixup_restart_res(ret);
->  	}
-
-No need for braces anymore on the 'if' statement, just drop those.
-
-> @@ -1034,6 +1040,8 @@ int io_read(struct io_kiocb *req, unsigned int issue_flags)
->  
->  	if (req->flags & REQ_F_BUFFERS_COMMIT)
->  		io_kbuf_recycle(req, sel.buf_list, issue_flags);
-> +
-> +	ret = io_fixup_restart_res(ret);
->  	return ret;
->  }
-
-return io_fixup_restart_res(ret);
-
--- 
-Jens Axboe
+Thanks! I'll send a v2.
