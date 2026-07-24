@@ -1,109 +1,94 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BF8F175A99
-	for <io-uring@vger.kernel.org>; Fri, 24 Jul 2026 01:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F79E6BB5B;
+	Fri, 24 Jul 2026 02:03:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784856321; cv=none; b=I3oqgx9xPdf6pH23Y4xhaCGJZaCzFOE6p64TEcGdFBV3fVe2TbxhZBStvD40rdGwVUR6/TDantb3nWYAr60/Lm8Aj6wgGGYRTYohmyNYrIoVinNjRwXzWvNGs45+A9+TlYo0z17v9QpDFLdQFTtBoTiLLy2WJRMfbdoZKWW9WMs=
+	t=1784858623; cv=none; b=inwpUuXCW+IM9ZlLf4TQwcphcii3mUentDPmd00tWTqRJJGb3KLawj2qFxPIniUM3Mf/UrrKxt+v+YCU0j1wh/usIU2TQcDQlsQgJGY51hTk/FK8hNzKdU8FU7ha9vQQK7WZIGqRRuRj2Va7YwVcHB/Nd4zWOarTZtDbP/uSBhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784856321; c=relaxed/simple;
-	bh=+4BV34k9mjeuyi1Dnusi7nvzDv3ZQHuY7Z9Q5DQto5s=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=GjW5KxAG9RFC/wwsLD1zBjZhzD+NgVs/F7Y4jGHcBytTZQ8EY5OoQLzzRyPZaNigslX8sx7d1JBhFzPTmRceK6suNdg5+x01hUTl++XJijr3SdoPT2PXRSqiw5HlueJl0yS7Lf7jLEfRfZSQ1/MnqLxISmnGL6mwyvo+qkrl/qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=kp7IOkFE; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1784858623; c=relaxed/simple;
+	bh=jdWqFwfSOPXfLcOiX7Epjzyk3iiJwSWPzkW6gg+Myc8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UAw8mUBwcN2yZQKnpg9ZKvPLSciSpAf8iq3z/OC91hQFukiVHV+cHq34PLPEL03UyPl7ua3lgz9BtuLM9J093iUO9PcMCedkcrp1E/Oh9aiPs4EUdG99n3cXiFIwBBk38pWkwP6w1da22pZPPGZqveHKClB5OJEaBRScZ0dc1XI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=O/SHLqjO; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="kp7IOkFE"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-81f36179dd5so11323597b3.2
-        for <io-uring@vger.kernel.org>; Thu, 23 Jul 2026 18:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1784856318; x=1785461118; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wg9jt7ilbpC+8aFBRGU7U3yonjzvRWqN31jTS78VK0I=;
-        b=kp7IOkFEC+zpXTVV5YNAgDPfOZQUediEjtvoq1E6r+VggZrRkrsE57FVvQt+Zea/WR
-         gSnVTcEpHaOVEDIpM6J3dXlI31kcKBJwLGOhmu17GpdUqxClf3aO6VrcutEz3Qqu6ZvV
-         rpxn58ibUDuKX1XybD0v02W6++cTkChYix+FHxn58LXaNhW0G7wTDJtZRlXScQfQV50o
-         JQzcidbqH1BOYOUCNs2jbrNVHzv+MTOPqq6vXUsV5dSHymUCZWkXrzVxBI8dWZCNfwwS
-         YDGwI31zxZJXZgU2JA8+rPDmvz8PC/8PWL+niww87mrA00u+Fw22XVRawnyOE0q6G8La
-         +BQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784856318; x=1785461118;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wg9jt7ilbpC+8aFBRGU7U3yonjzvRWqN31jTS78VK0I=;
-        b=sAq92FjUomkxQkJ6Xm+kSmd9FAVGaARBR02JAypEDVRJytwP93rHRAvOsUSlN1EPed
-         bVkjAzXTYnPsL9dwrTYyDcnQP53ko5r6Gtx/VvdzETIAQabnNxiXnM/pdein42ioEn6n
-         21OUF/SMa28OoJwomj/kSN/w74wuRX0XRguNjnEaGlCbYeQU6Yuu0BiHitNvbgP+m/JO
-         MAvvQ2sz0//sjvPI09MVJZ74u65+CejeuAZR4FuZsfmkO4Ne5liXSYXXqGo1seqryynJ
-         Lchn0IMi1Lbh8O5FxwkAU01j1t5cDFw/OO6DEt7LlVAn75knvLkA+gjNAZi/g0gHMy8x
-         XGkg==
-X-Gm-Message-State: AOJu0YyBaGBM6Hu5aX3Xts5JO74crXXHYM1WT7SYK9JpkqjUjXH8kWbP
-	WWhABQ+55cYxxcipGqzGmNA5n74XpMyjfIqk2EzCfBeyertfoRI2jkn50/yIuiOwDDo=
-X-Gm-Gg: AR+sD13P/bBp85XP5dJfV5COvHnyO8nMejdhBe7hQ5aTh5hkv0zpx89zMBvTvZSX2TA
-	VMhJ9VKoRzL6WmMN2rDyQKtkBAw1U/+Nzx1k+YEJj3EPa04EZF5LSOVFNhffapJMbrc50XgN6Z5
-	ChZhW4L1Sn0Y6ZbYYkDS4rnz6GoMmXOL8MHPPH3pPXnQUeRsKA0g4Whm+1K/LNVUFGydBC7QJbw
-	3oiun/pNPKegC1Rk0H2v9aNKXYwKXO1DNnnwmQ+/j6a/63lNqdYWU3rBLeB+wk/P46kVVn3zyfG
-	gBAz+Y5W4VT4lj+8X5xWR6mK7uQfmlHY9OWq9B+pCSqmfJjEaB1HtO4bJl0FxMJFTIp+H0ZEuwB
-	9KftvjtwhYtUU99TUqeQ2Tdu4nx+lJhqWnTds6l6AMIOYJZdo9iLaVUKGOc+S5j+vyjja+urlxe
-	y77BiDtQHlyXc44GtveojyfwzvCdDVdqgrHtkhMf8/dsYO9//IzSEGnIlOYVcAKs2DPQ==
-X-Received: by 2002:a05:690c:4b11:b0:80e:bd63:178d with SMTP id 00721157ae682-81f4c1635a3mr16034077b3.2.1784856318104;
-        Thu, 23 Jul 2026 18:25:18 -0700 (PDT)
-Received: from [127.0.0.1] ([50.168.186.2])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f33da0546sm36428617b3.27.2026.07.23.18.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2026 18:25:17 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-Cc: netdev@vger.kernel.org, 
- =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@meta.com>
-In-Reply-To: <cover.1784726895.git.asml.silence@gmail.com>
-References: <cover.1784726895.git.asml.silence@gmail.com>
-Subject: Re: [PATCH io_uring-7.2 0/3] fix up zcrx "notification" uapi
- naming
-Message-Id: <178485631736.1078734.694232566420857860.b4-ty@b4>
-Date: Thu, 23 Jul 2026 19:25:17 -0600
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="O/SHLqjO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version:
+	Content-Type; bh=VPRMTKwe/wO2jvaTw6rpDeo3SwkBRfJm/PnHUEnX6YI=;
+	b=O/SHLqjOuLUxBdqQWGSJBB/1iDp7FufeWmIgNBgBd8CT8hQ+GtFYIHjHWTLSOP
+	alJx7tYvo41jlMG3beamaQQuPQvl4WHsdv42FghloQrGmsrgM/ZL77Up9o/6oCfg
+	OXz7Eza/PhEdkOmJwLGVLryLSAHFDl0qqSiQmq9Bv5Z80=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgDXnznAx2Jqz24sIw--.40933S2;
+	Fri, 24 Jul 2026 10:02:42 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: csander@purestorage.com
+Cc: James.Bottomley@hansenpartnership.com,
+	martin.petersen@oracle.com,
+	rc@rexion.ai,
+	axboe@kernel.dk,
+	fujita.tomonori@lab.ntt.co.jp,
+	bvanassche@acm.org,
+	linux-scsi@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] scsi: bsg: fix TOCTOU in io_uring passthrough command setup
+Date: Fri, 24 Jul 2026 10:02:40 +0800
+Message-Id: <20260724020240.2938587-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CADUfDZpsTH7zU4gyVE11R9GxdadjbcrcGVX+btoEjRYS-tBiGQ@mail.gmail.com>
+References: <20260720032338.461681-1-yangxiuwei@kylinos.cn> <20260720032338.461681-2-yangxiuwei@kylinos.cn> <CADUfDZpAW261MhFJg434=4nZFMD7mV=LL7F-ZiAWPa7dYvGpcQ@mail.gmail.com> <20260724004907.2742329-1-yangxiuwei@kylinos.cn> <CADUfDZpsTH7zU4gyVE11R9GxdadjbcrcGVX+btoEjRYS-tBiGQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgDXnznAx2Jqz24sIw--.40933S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFyUKFykXF45uF13Xry5Jwb_yoW8Jw4fpF
+	Wjqw1rX34kuF47JrsrAFy8Zr4FyF1aq343Wrn8XF1xArWUZr1fuw1v93W0vFWxWr4xX34r
+	Zw4Uuw1UA3WxX37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRcdb5UUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwgJV5Wpix8LcIQAA3A
 
+Hi Caleb,
 
-On Wed, 22 Jul 2026 14:42:14 +0100, Pavel Begunkov wrote:
-> There is a degree of inconsistency, nuisance and ambiguity in the naming
-> of the zcrx "notification" API. Rename it to "events" and do other small
-> adjustments while it's not released yet. The patch set only does
-> renaming, there is no functional or ABI changes.
-> 
-> Pavel Begunkov (3):
->   io_uring/zcrx: drop "notif" from stats struct names
->   io_uring/zcrx: rename ZCRX_NOTIF_NO_BUFFERS
->   io_uring/zcrx: rename notif to event
-> 
-> [...]
+On Thu, Jul 23, 2026 at 06:10:27PM -0700, Caleb Sander Mateos wrote:
+> On Thu, Jul 23, 2026 at 5:50 PM Yang Xiuwei <yangxiuwei@kylinos.cn> wrote:
+> >
+> > max_response_len is similar here: we clamp with
+> > min(..., SCSI_SENSE_BUFFERSIZE), so it cannot overflow the sense
+> > buffer. Same idea for response.
+>
+> I don't think that's true. Without READ_ONCE(), the compiler can
+> assume no other thread will concurrently write cmd->max_response_len
+> (else it would be UB). So it's allowed to load it multiple times:
+> cmd->max_response_len ? min(cmd->max_response_len, SCSI_SENSE_BUFFERSIZE)
+>                       : SCSI_SENSE_BUFFERSIZE
+> becomes
+> cmd->max_response_len ? (cmd->max_response_len < SCSI_SENSE_BUFFERSIZE ?
+>                          cmd->max_response_len : SCSI_SENSE_BUFFERSIZE)
+>                       : SCSI_SENSE_BUFFERSIZE
+> And if cmd->max_response_len changes between the second and third
+> loads, this could definitely evaluate to a value greater than
+> SCSI_SENSE_BUFFERSIZE.
 
-Applied, thanks!
+IIUC Kernel min() is __careful_cmp() -> __careful_cmp_once(), which does:
 
-[1/3] io_uring/zcrx: drop "notif" from stats struct names
-      commit: af78c0020480aba3132fb9fa4db0fd1fb949feaa
-[2/3] io_uring/zcrx: rename ZCRX_NOTIF_NO_BUFFERS
-      commit: 201e30810223a40275f17c5e6ee410fa857b6b44
-[3/3] io_uring/zcrx: rename notif to event
-      commit: e366c15e1610ef11d0717ecd875ae63050282676
+  auto ux = (x); auto uy = (y);
+  (ux < uy) ? ux : uy;
 
-Best regards,
--- 
-Jens Axboe
+so cmd->max_response_len is only loaded once inside min(). The outer
+?: may load it again for the condition, but the value coming out of
+min() should still be <= SCSI_SENSE_BUFFERSIZE. Did I get that right?
 
-
+Thanks,
+Yang Xiuwei
 
