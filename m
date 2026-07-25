@@ -1,111 +1,183 @@
-Received: from mail-yx2-f2.google.com (mail-yx2-f2.google.com [74.125.224.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F452EEE8C
-	for <io-uring@vger.kernel.org>; Sat, 25 Jul 2026 10:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8BCA2F8EB5
+	for <io-uring@vger.kernel.org>; Sat, 25 Jul 2026 15:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784977037; cv=none; b=q6bdzpXjzDKkRgKiHnm9lR20KetsoF9Js8xJh+byXwR5wPIspolmCVwQeOszn7tbpX9R9iwZJQhikrQ/MjK/FuB5/hFrDM7nsPkYO8VcQpgyCauq5e33Ry4Fy254nhyMmiwzIReLmjrytdrS8ROow4KWXzfZXaDkq+hc7mwccB8=
+	t=1784992768; cv=none; b=bHhm5MoqKrjJFIQgtAnY37CFiHqbexHJTrCgKnl0wNoZWWLDwWL+tmqKrobXEMuWf8Udw+aGD+dQjqncn9Bk32tgQ56ilzZnZD6Gn/l7b42m1ynU1H/hU4XRuK8suUBgyeP/rC5DVE8WZ5jNNn/yKUZlVaRuUKzKxmjaM1x4tFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784977037; c=relaxed/simple;
-	bh=opocQP8/75Tnr6acLHAcO+HFzRI8+w2EfwgcW+DE3gk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=swDudEGsePBMsQo7HDO2fw+J3QnS2FwLoFpE/m2FCmq59PhSfx+ZYEYa+uTKNjUI70Hi0a7uWtygY2Z3Jsz1zeSYtaSUWLBqaMYMh7hMZqL4KU8B0GtNZ6x96ds/eJ/xyLcm/YLuDFb7ASPurEclp1qH9JKC3rAQi+/ZSHgDyNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=FoWc1t7d; arc=none smtp.client-ip=74.125.224.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1784992768; c=relaxed/simple;
+	bh=Hqv3F1djcLzAo9MDiOdGAro4PDCik3lCiqHwZjMccXA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IKCLDHX9XdQjPcECd5AZEEJC0ZuehCvqA+HI9YLrR5bx97HMxXRTv8dUMNnUJwGJIxB3gX7Ky91Z2nMVlp4Q1yQ6T8a/LD8IGwTeCMPgai5M3njfDUeYXqxm8T9GRVxftvtONvQ+kb81VyTA6z7EfU0flhOAYkVCwBZlEkqzPJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OTC9si2U; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="FoWc1t7d"
-Received: by mail-yx2-f2.google.com with SMTP id 00721157ae682-81c31ee9700so2691707b3.1
-        for <io-uring@vger.kernel.org>; Sat, 25 Jul 2026 03:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1784977033; x=1785581833; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=n3M5piIMo6U18b7y0I/vtDAh/xfSo5garlAfV2kj4EE=;
-        b=FoWc1t7dqzfi69OQuSyZfMHaMU0mJdlImTuQH+w1lyfzFg8N6upnQRCaaYsDbEq+OO
-         vEGYVva1Ey7RfPzaRB55CtElHVg+hWrQPn54tLyV71SbHXpn89ynVIk8eCQBQy81rZbP
-         lRl/+hy8T1PVmK8CGH8KhD2HEnNcyJRgY1HiR0a2TSGcBcVR5JtqFUSuVZRY5e72e8hH
-         ip18Yw90L8aifaEjEhs8BoPtq3QJYFzlXB6tpPG2I5meP2r0huiIK/Jx350rz3eAcsmk
-         m9RX26tXE8srFDIUx3m4Y7V8sTmpdo1/pfiQXm5pE0vpHyqENuPs/qIwE0MNTL/z/bBP
-         laVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784977033; x=1785581833;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=n3M5piIMo6U18b7y0I/vtDAh/xfSo5garlAfV2kj4EE=;
-        b=DI7m81NeNdU3tugxCDky/3IfTr5Ex5PUr6qdajLijmqHLXqaCNctU9BFLW2TgTkG7D
-         /ilJDhhRWmRtfpULJfDKi4nJcOmM6B2hzxyiCcRWrJB+cQxf2OzTSVHxOrZHjQgbrLv4
-         wIU86Qo5yAdqUV6uwwYYhen8mMNznNdOG+tm2BsiM6Am4flm9CmA3IV1+Yy8rCk7ebxd
-         0blQS6UMgEgU9F9BCcSLjqETNKxOgH/cR2e+cbvkX2XYi11a3QVMgC/DYGs67tX3vQ+U
-         FvYX7nYUHwOEspwOcWogDuuNbef94lPImdTRZz4VE3/oZC0LjnJrJr08MxsfNPxon2Rh
-         yMuw==
-X-Gm-Message-State: AOJu0Yyu5x/XGcdGnzCovfQr+3hok4VXim17x/E4vlDi/pVuMSCpsK6u
-	3P9eM4m0nvSlEX1nuProt6w0ndluvTKfL+5jdoyK1Sf9KazIsZ3214/BHN+u52B8k8w=
-X-Gm-Gg: AR+sD12upJsfJI+TlSglHmTpdKcyyKnjhyg0++AfiAwLhTF+e3rZYmbmasP26tKuZ9+
-	K82lOOE8Gm9scxybqHuSJ8m5rO6qakhWVNK7s5aR3w+MfCsC2ctVIr89OHrc0FVMxKGrmR6LXSO
-	TVIblC7hHLjrIYlpjJogfA1ULCwImHrZ6NAHI7vsHlY/CnnbjCIhoDAjqMF2Moi4fRQG+27O8mQ
-	1jKUsGJas/0TovmmxYla/RoK5eJcepdsM1ynVoRhGRS1fhdKXFjVEwmllEwfNwFSzP7sqDQwwV8
-	p4tSRM8+jkWZesHVgtAkqaguKvPdq8cb97tpkg7U5CY32dIxfF+vpaVtBeHNvh2Gv57KMFfojd2
-	icrS8g+a1hvgHdu/Entz6w8vOjG0otMs5KJoebphnUiUFFUUd5l9mpW2ruG9B9f+XpaYHF6MzDC
-	k6iruWaNLSn2C6iFJpRrb7f9t9ecGHx6IGW2ZXh6d+hZ1bF+nb4uMEO0A=
-X-Received: by 2002:a05:690c:6384:b0:81e:cfc2:c46e with SMTP id 00721157ae682-81f69e7878emr6404117b3.60.1784977033252;
-        Sat, 25 Jul 2026 03:57:13 -0700 (PDT)
-Received: from [127.0.0.1] ([12.11.118.66])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f657a076fsm10783967b3.12.2026.07.25.03.57.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jul 2026 03:57:12 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring Mailing List <io-uring@vger.kernel.org>, 
- Ammar Faizi <ammarfaizi2@openresty.com>
-Cc: Yichun Zhang <yichun@openresty.com>, 
- Changcheng Liu <changcheng.liu@aliyun.com>, 
- Christian Mazakas <christian.mazakas@gmail.com>, 
- Stefan Hajnoczi <stefanha@redhat.com>, Guillem Jover <guillem@hadrons.org>
-In-Reply-To: <20260724225905.747718-1-ammarfaizi2@openresty.com>
-References: <20260724225905.747718-1-ammarfaizi2@openresty.com>
-Subject: Re: [PATCH liburing 0/4] Upgrade to Clang 23 and git tree link
- update
-Message-Id: <178497703112.1414958.567921667205005096.b4-ty@b4>
-Date: Sat, 25 Jul 2026 04:57:11 -0600
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OTC9si2U"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784992761;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=aIRORT1kU38zV87IyK7DJhs0FHcTVCf+7F2mJTgH46U=;
+	b=OTC9si2UgiN4Xy74pvdhNXPfTUo5oa5Ab/ryrzqxJB+Ca+D1NUYLOJnrt501b+gjXTb+MM
+	WXSNYRPGUriPV1h6FrGJTpkub22E2ZzKNUGNZNCn/9yssHYFVBAHC5/pSr0WcJr3KDqEp4
+	ZQTnWx272ySyBRgaZJEVWUc7OqpwHnA=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-523-DBXaVzCgOKin7_KDTum_0g-1; Sat,
+ 25 Jul 2026 11:19:15 -0400
+X-MC-Unique: DBXaVzCgOKin7_KDTum_0g-1
+X-Mimecast-MFC-AGG-ID: DBXaVzCgOKin7_KDTum_0g_1784992753
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2A6421800587;
+	Sat, 25 Jul 2026 15:19:13 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.21])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 1EFBA1954229;
+	Sat, 25 Jul 2026 15:19:08 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sat, 25 Jul 2026 17:19:12 +0200 (CEST)
+Date: Sat, 25 Jul 2026 17:19:07 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Breno Leitao <leitao@debian.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	io-uring@vger.kernel.org, Alexey Gladkov <legion@kernel.org>
+Subject: Re: [PATCH 0/1] pipe: only enable the extra wake_up(rd_wait) when
+ epoll is actually used
+Message-ID: <amTT60nc1QNIyPfL@redhat.com>
+References: <amIqfCo25rLtM2U0@redhat.com>
+ <amIu5WWgTNkdvqIz@redhat.com>
+ <amNvebqiG2fH0W_L@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <amNvebqiG2fH0W_L@redhat.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
+On 07/24, Oleg Nesterov wrote:
+>
+> On 07/23, Oleg Nesterov wrote:
+> >
+> > OK, sashiko has some concerns
+> >
+> > 	https://sashiko.dev/#/patchset/amIqmbbZx3NlzUsX%40redhat.com
+>
+> Let me quote:
+>
+> 	Does skipping this wakeup for non-epoll consumers break io_uring?
+>
+> 	Applications polling pipes via io_uring do not attach an eventpoll context,
+> 	so pipe->epoll_usage will be false. If a writer writes to an empty pipe,
+> 	io_uring receives the wakeup.
+>
+> 	If the writer then writes a second chunk before the first is drained,
+> 	anon_pipe_write() observes was_empty == false and
+> 	pipe_get_epoll_usage() == false, skipping the waitqueue wakeup.
+>
+> 	Could this cause io_uring to miss events and hang permanently, waiting
+> 	for a CQE that will never be emitted for the new data?
+>
+> and I am starting to think sashiko is right (damn as always ;) and this
+> patch does affect/break io_uring.
+>
+> Jens, could you confirm? If yes, we need to update the comments in pipe.c
+> (I've attached 1/1 at the end, so that you can see what this patch does)
+...
+> It seems that IORING_OP_POLL_ADD / IORING_POLL_ADD_MULTI is edge-triggered
+> by default! Like EPOLL_CTL_ADD / EPOLLET.
 
-On Sat, 25 Jul 2026 05:59:01 +0700, Ammar Faizi wrote:
-> This series upgrades the Clang version used in the CI to 23, and also
-> fixes some new warnings that are now found in Clang 23:
-> 
->   iopoll.c:26:12: error: variable 'no_hybrid' set but not used [-Werror,-Wunused-but-set-global]
->   recvmsg-inc-tail.c:66:25: error: variable 'no_recv_mshot' set but not used [-Werror,-Wunused-but-set-global]
->   reg-wait.c:26:13: error: variable 'has_kernel_regions' set but not used [-Werror,-Wunused-but-set-global]
-> 
-> [...]
+Yes, sashiko is right. With some help from AI I wrote the simple test-case
 
-Applied, thanks!
+	#include <unistd.h>
+	#include <sys/mman.h>
+	#include <sys/epoll.h>
+	#include <sys/syscall.h>
+	#include <linux/io_uring.h>
+	#include <assert.h>
 
-[1/4] test: Remove unused global variables found by clang-23
-      commit: ca274ec7289fd4ea56f20651be1814b9614b2745
-[2/4] ci: Fix the wrong `cc_pkg` comparison
-      commit: 3a6320a6008afee1c8febf16a9aa1428084a146f
-[3/4] ci: Upgrade clang version to 23
-      commit: 4acaaeceb71cc5915cf11f9a2463c1467d460847
-[4/4] liburing{{,-ffi}.pc.in,.spec}: Replace dead git tree links with the new one
-      commit: b12a090919b400b401e5eb35be2065429fb6489e
+	int main(void)
+	{
+		struct io_uring_params p = {};
+		int fd, pfd[2];
 
-Best regards,
--- 
-Jens Axboe
+		pipe(pfd);
 
+		fd = syscall(SYS_io_uring_setup, 2, &p);
+		assert(fd >= 0);
 
+		void *ring = mmap(0, p.cq_off.cqes + p.cq_entries * sizeof(struct io_uring_cqe),
+				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQ_RING);
+		assert(ring != MAP_FAILED);
+		*(unsigned *)(ring + p.sq_off.array) = 0;
+		*(unsigned *)(ring + p.sq_off.tail) = 1;
+
+		struct io_uring_sqe *sqes = mmap(0, p.sq_entries * sizeof(*sqes),
+				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQES);
+		assert(sqes != MAP_FAILED);
+		sqes[0].opcode = IORING_OP_POLL_ADD;
+		sqes[0].fd = pfd[0];
+		sqes[0].len = IORING_POLL_ADD_MULTI;
+		sqes[0].poll32_events = EPOLLIN;
+
+		syscall(SYS_io_uring_enter, fd, 1, 0, 0, 0, 0);
+
+		unsigned *cq_head = ring + p.cq_off.head;
+		unsigned *cq_tail = ring + p.cq_off.tail;
+		for (int i = 0; i < 2; ++i) {
+			write(pfd[1], "", 1);
+			syscall(SYS_io_uring_enter, fd, 0, 0, IORING_ENTER_GETEVENTS, 0, 0);
+			assert(*cq_tail == ++*cq_head);
+		}
+
+		return 0;
+	}
+
+with this patch the 2nd assert(*cq_tail == ++*cq_head) fails.
+
+And just for the record, another one for epoll
+
+	#include <unistd.h>
+	#include <sys/epoll.h>
+	#include <assert.h>
+
+	int main(void)
+	{
+		int pfd[2], efd;
+		struct epoll_event evt = { .events = EPOLLIN | EPOLLET };
+
+		pipe(pfd);
+		efd = epoll_create1(0);
+		epoll_ctl(efd, EPOLL_CTL_ADD, pfd[0], &evt);
+
+		for (int i = 0; i < 2; ++i) {
+			write(pfd[1], "", 1);
+			assert(epoll_wait(efd, &evt, 1, 0) == 1);
+		}
+
+		return 0;
+	}
+
+I'll try to make V2 later.
+
+> And. io_poll_parse_events() doesn't set EPOLLET if IORING_POLL_ADD_LEVEL, but
+> how is it possible to use IORING_POLL_ADD_LEVEL? io_poll_add_prep() only allows
+> IORING_POLL_ADD_MULTI in flags? OK, I don't understand this code anyway...
+
+OK, I see: d59bd748db0a9 ("io_uring/poll: disable level triggered poll")
+
+Oleg.
 
