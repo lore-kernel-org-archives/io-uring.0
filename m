@@ -1,183 +1,293 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8BCA2F8EB5
-	for <io-uring@vger.kernel.org>; Sat, 25 Jul 2026 15:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D6F62BDC1C
+	for <io-uring@vger.kernel.org>; Sat, 25 Jul 2026 17:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784992768; cv=none; b=bHhm5MoqKrjJFIQgtAnY37CFiHqbexHJTrCgKnl0wNoZWWLDwWL+tmqKrobXEMuWf8Udw+aGD+dQjqncn9Bk32tgQ56ilzZnZD6Gn/l7b42m1ynU1H/hU4XRuK8suUBgyeP/rC5DVE8WZ5jNNn/yKUZlVaRuUKzKxmjaM1x4tFM=
+	t=1785001098; cv=none; b=MFX+qR9zPiYxUCLsppx06RJJvSTCDBGnVCbr8yfuyWv2pVIFcWEpztMzq5fBWy41OK4rhpUdepCkstojVQSpnxVJE6QfuVBdnV9oXaOkcQz5zsxcg3HJZYkBul0W/0Rm47i75aDoQH+UPVGNZZt7q6yfMSflhfEsM+juH5LlsXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784992768; c=relaxed/simple;
-	bh=Hqv3F1djcLzAo9MDiOdGAro4PDCik3lCiqHwZjMccXA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IKCLDHX9XdQjPcECd5AZEEJC0ZuehCvqA+HI9YLrR5bx97HMxXRTv8dUMNnUJwGJIxB3gX7Ky91Z2nMVlp4Q1yQ6T8a/LD8IGwTeCMPgai5M3njfDUeYXqxm8T9GRVxftvtONvQ+kb81VyTA6z7EfU0flhOAYkVCwBZlEkqzPJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OTC9si2U; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785001098; c=relaxed/simple;
+	bh=pTp18fyAAM/0sN10DjiOcE3NuT0ohGx2OknY4w/Sn/U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m+09U4+wl8A7SntiPX/gnCjhtMNTsL0Ti/STUQ7MuFqjBNrIhzzcnL7XzoHVp/mlzO5p6XfO50M2CihlJ/fcFqt7mQhN6xpInws1WK+D5CPdl66U5tCYtt9CjPkNA0pqJfVYtGgNqGAji1hpXvb/BTx6Ua5Jfd6jl6ZGX4sO1hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b8oaX60L; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OTC9si2U"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784992761;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aIRORT1kU38zV87IyK7DJhs0FHcTVCf+7F2mJTgH46U=;
-	b=OTC9si2UgiN4Xy74pvdhNXPfTUo5oa5Ab/ryrzqxJB+Ca+D1NUYLOJnrt501b+gjXTb+MM
-	WXSNYRPGUriPV1h6FrGJTpkub22E2ZzKNUGNZNCn/9yssHYFVBAHC5/pSr0WcJr3KDqEp4
-	ZQTnWx272ySyBRgaZJEVWUc7OqpwHnA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-523-DBXaVzCgOKin7_KDTum_0g-1; Sat,
- 25 Jul 2026 11:19:15 -0400
-X-MC-Unique: DBXaVzCgOKin7_KDTum_0g-1
-X-Mimecast-MFC-AGG-ID: DBXaVzCgOKin7_KDTum_0g_1784992753
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2A6421800587;
-	Sat, 25 Jul 2026 15:19:13 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.21])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 1EFBA1954229;
-	Sat, 25 Jul 2026 15:19:08 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sat, 25 Jul 2026 17:19:12 +0200 (CEST)
-Date: Sat, 25 Jul 2026 17:19:07 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Breno Leitao <leitao@debian.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	io-uring@vger.kernel.org, Alexey Gladkov <legion@kernel.org>
-Subject: Re: [PATCH 0/1] pipe: only enable the extra wake_up(rd_wait) when
- epoll is actually used
-Message-ID: <amTT60nc1QNIyPfL@redhat.com>
-References: <amIqfCo25rLtM2U0@redhat.com>
- <amIu5WWgTNkdvqIz@redhat.com>
- <amNvebqiG2fH0W_L@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b8oaX60L"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-81e9f7491ffso16341927b3.0
+        for <io-uring@vger.kernel.org>; Sat, 25 Jul 2026 10:38:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785001092; x=1785605892; darn=vger.kernel.org;
+        h=content-type:in-reply-to:autocrypt:from:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TsABodENPiu91UKwsowi36mSYBdIiGJTh+xQVG4w3D0=;
+        b=b8oaX60LDz+pZFmtR0hsYu8rr3OmDtJIOLInup+VSr/UVdasnkG5dUjmTiKAfYBPQ+
+         tmuo7OFlRlG5mh705zXeEWwVhJ6layShPihQBvgLDmtH3tEZtDsAJw5TOdbkLkI8AVqM
+         F70IFgM2kD1pe7j6nKiofRO+2+GZ7vIbhk9FT2C1fkkQM0n/1iXY1u14c/HzwSHKxhTa
+         SkiHf+8yna6bdFJeEopmmvTFst+iLj3e34uVoUhOIWI0P/j7ji91DFooVFtl9jgOTyxW
+         JZQjaGiMFFxSEzo0SplSEGdkQMntTMWsh3LeoaVprJxRddbMTBN8b/FfpGrOoYZ9cZ7g
+         NwLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785001092; x=1785605892;
+        h=content-type:in-reply-to:autocrypt:from:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TsABodENPiu91UKwsowi36mSYBdIiGJTh+xQVG4w3D0=;
+        b=RI+M+WBa59bDMsny6MLZqq2fMwIKbFlxqvo/OzaH07/2cuw+X38xyTnfVudeCVe095
+         wFuJQVF0y/6m+kPYg7iRdtDzg1sDkOk+y8Xdhrc79CW8rqYGeKJndBotP2nxFLJ7oEs8
+         OcP0ZKuZoxJRlzTWan0N6AxptNZbrFPEkxarnVwvamdpjUu5Dzo2HwblzbvfeJlUmj3Q
+         RN3nkfwPdeoAWBNQhjpW8JJJSriL2YxMoEbP8l7IHaNHw2VWZCfYtwqQ08h8iTwS4iNo
+         7HkTwKd5X1VDtJPiin2AGTtXPFzddEZ+nASTb/4BIl+cFhfwQRcc3nedJRORRCKmHZ9F
+         ByuQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrrZxVY5U6MneNcl8QAjKFe4kHsZ3u+9iO42DE2coXpkMpbt6P9ciho9Au/5hXSdHm8bN5v7Akzpw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0GGR7IizJHxPYfwSgLAxoErhC9uSeS+OwJU3J9xQKhZ4UA/fT
+	u1Wjwc80onD+EMSpqh3V1fhzHnnV2B/RaBx92ExBluGuMxl6T9HuQxsB
+X-Gm-Gg: AR+sD13iUxVE0Yz8ehq+cYtD7ZCrd3Sx/S6KpRNO3A/zGBmI/wnAkMeAOd7CoL0NVyo
+	ywTTv111muqLIVgnKiyuAjklEwo+dbb77s+tFe5iRrtj224VGjnP2b2h6swpafm5y9F1GrVXUJa
+	N5IJ2kSOhr7dxpNQqc2EqUrt2/uYygFKH/dp+/qHhEHTALrQXC9d72jJCMwKHPlf++xA1bVyJoL
+	IlZj5436/dnLYB42WT5SHjgnwIARljO8UbolL93nKtk6bNXwsR9KsnL47zKzZ8rvMou+rFHzGI7
+	E0cFxZAEa9bkSsUjX71aagHPPfJIcmTTB3YugU3U3P81cO+2+lpRCjK29FR1ChnWOzZ43Ug8xG/
+	LJCzFS/fvWEnVuwEUD9km17sH3F86HkbcedQOAxVoQU616NOVNSW3U4VFC58dk9iw94X0x+2lKA
+	F8aQME
+X-Received: by 2002:a05:690c:692:b0:7dd:3463:6872 with SMTP id 00721157ae682-81f69e2f21amr10154877b3.41.1785001091612;
+        Sat, 25 Jul 2026 10:38:11 -0700 (PDT)
+Received: from [10.138.10.6] ([185.98.168.14])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-81f6576ee52sm13270607b3.3.2026.07.25.10.38.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jul 2026 10:38:09 -0700 (PDT)
+Message-ID: <a7593240-bb61-4acd-b7ac-3d50b6efed0c@gmail.com>
+Date: Sat, 25 Jul 2026 13:38:02 -0400
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <amNvebqiG2fH0W_L@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] AF_ALG: Drop support for off-CPU cryptography
+To: Dominique Martinet <asmadeus@codewreck.org>,
+ Eric Biggers <ebiggers@kernel.org>
+Cc: Harald Freudenberger <freude@linux.ibm.com>, acme@kernel.org,
+ adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
+ ardb@kernel.org, axboe@kernel.dk, corbet@lwn.net, davem@davemloft.net,
+ edumazet@google.com, herbert@gondor.apana.org.au, horms@kernel.org,
+ io-uring@vger.kernel.org, irogers@google.com, james.clark@linaro.org,
+ jolsa@kernel.org, kuba@kernel.org, kuniyu@google.com,
+ linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, peterz@infradead.org,
+ skhan@linuxfoundation.org, willemb@google.com, linux-s390@vger.kernel.org
+References: <amRntEmCUK-8wXcw@codewreck.org>
+Content-Language: en-US
+From: Demi Marie Obenour <demiobenour@gmail.com>
+Autocrypt: addr=demiobenour@gmail.com; keydata=
+ xsFNBFp+A0oBEADffj6anl9/BHhUSxGTICeVl2tob7hPDdhHNgPR4C8xlYt5q49yB+l2nipd
+ aq+4Gk6FZfqC825TKl7eRpUjMriwle4r3R0ydSIGcy4M6eb0IcxmuPYfbWpr/si88QKgyGSV
+ Z7GeNW1UnzTdhYHuFlk8dBSmB1fzhEYEk0RcJqg4AKoq6/3/UorR+FaSuVwT7rqzGrTlscnT
+ DlPWgRzrQ3jssesI7sZLm82E3pJSgaUoCdCOlL7MMPCJwI8JpPlBedRpe9tfVyfu3euTPLPx
+ wcV3L/cfWPGSL4PofBtB8NUU6QwYiQ9Hzx4xOyn67zW73/G0Q2vPPRst8LBDqlxLjbtx/WLR
+ 6h3nBc3eyuZ+q62HS1pJ5EvUT1vjyJ1ySrqtUXWQ4XlZyoEFUfpJxJoN0A9HCxmHGVckzTRl
+ 5FMWo8TCniHynNXsBtDQbabt7aNEOaAJdE7to0AH3T/Bvwzcp0ZJtBk0EM6YeMLtotUut7h2
+ Bkg1b//r6bTBswMBXVJ5H44Qf0+eKeUg7whSC9qpYOzzrm7+0r9F5u3qF8ZTx55TJc2g656C
+ 9a1P1MYVysLvkLvS4H+crmxA/i08Tc1h+x9RRvqba4lSzZ6/Tmt60DPM5Sc4R0nSm9BBff0N
+ m0bSNRS8InXdO1Aq3362QKX2NOwcL5YaStwODNyZUqF7izjK4QARAQABzTxEZW1pIE1hcmll
+ IE9iZW5vdXIgKGxvdmVyIG9mIGNvZGluZykgPGRlbWlvYmVub3VyQGdtYWlsLmNvbT7CwXgE
+ EwECACIFAlp+A0oCGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJELKItV//nCLBhr8Q
+ AK/xrb4wyi71xII2hkFBpT59ObLN+32FQT7R3lbZRjVFjc6yMUjOb1H/hJVxx+yo5gsSj5LS
+ 9AwggioUSrcUKldfA/PKKai2mzTlUDxTcF3vKx6iMXKA6AqwAw4B57ZEJoMM6egm57TV19kz
+ PMc879NV2nc6+elaKl+/kbVeD3qvBuEwsTe2Do3HAAdrfUG/j9erwIk6gha/Hp9yZlCnPTX+
+ VK+xifQqt8RtMqS5R/S8z0msJMI/ajNU03kFjOpqrYziv6OZLJ5cuKb3bZU5aoaRQRDzkFIR
+ 6aqtFLTohTo20QywXwRa39uFaOT/0YMpNyel0kdOszFOykTEGI2u+kja35g9TkH90kkBTG+a
+ EWttIht0Hy6YFmwjcAxisSakBuHnHuMSOiyRQLu43ej2+mDWgItLZ48Mu0C3IG1seeQDjEYP
+ tqvyZ6bGkf2Vj+L6wLoLLIhRZxQOedqArIk/Sb2SzQYuxN44IDRt+3ZcDqsPppoKcxSyd1Ny
+ 2tpvjYJXlfKmOYLhTWs8nwlAlSHX/c/jz/ywwf7eSvGknToo1Y0VpRtoxMaKW1nvH0OeCSVJ
+ itfRP7YbiRVc2aNqWPCSgtqHAuVraBRbAFLKh9d2rKFB3BmynTUpc1BQLJP8+D5oNyb8Ts4x
+ Xd3iV/uD8JLGJfYZIR7oGWFLP4uZ3tkneDfYzsFNBFp+A0oBEAC9ynZI9LU+uJkMeEJeJyQ/
+ 8VFkCJQPQZEsIGzOTlPnwvVna0AS86n2Z+rK7R/usYs5iJCZ55/JISWd8xD57ue0eB47bcJv
+ VqGlObI2DEG8TwaW0O0duRhDgzMEL4t1KdRAepIESBEA/iPpI4gfUbVEIEQuqdqQyO4GAe+M
+ kD0Hy5JH/0qgFmbaSegNTdQg5iqYjRZ3ttiswalql1/iSyv1WYeC1OAs+2BLOAT2NEggSiVO
+ txEfgewsQtCWi8H1SoirakIfo45Hz0tk/Ad9ZWh2PvOGt97Ka85o4TLJxgJJqGEnqcFUZnJJ
+ riwoaRIS8N2C8/nEM53jb1sH0gYddMU3QxY7dYNLIUrRKQeNkF30dK7V6JRH7pleRlf+wQcN
+ fRAIUrNlatj9TxwivQrKnC9aIFFHEy/0mAgtrQShcMRmMgVlRoOA5B8RTulRLCmkafvwuhs6
+ dCxN0GNAORIVVFxjx9Vn7OqYPgwiofZ6SbEl0hgPyWBQvE85klFLZLoj7p+joDY1XNQztmfA
+ rnJ9x+YV4igjWImINAZSlmEcYtd+xy3Li/8oeYDAqrsnrOjb+WvGhCykJk4urBog2LNtcyCj
+ kTs7F+WeXGUo0NDhbd3Z6AyFfqeF7uJ3D5hlpX2nI9no/ugPrrTVoVZAgrrnNz0iZG2DVx46
+ x913pVKHl5mlYQARAQABwsFfBBgBAgAJBQJafgNKAhsMAAoJELKItV//nCLBwNIP/AiIHE8b
+ oIqReFQyaMzxq6lE4YZCZNj65B/nkDOvodSiwfwjjVVE2V3iEzxMHbgyTCGA67+Bo/d5aQGj
+ gn0TPtsGzelyQHipaUzEyrsceUGWYoKXYyVWKEfyh0cDfnd9diAm3VeNqchtcMpoehETH8fr
+ RHnJdBcjf112PzQSdKC6kqU0Q196c4Vp5HDOQfNiDnTf7gZSj0BraHOByy9LEDCLhQiCmr+2
+ E0rW4tBtDAn2HkT9uf32ZGqJCn1O+2uVfFhGu6vPE5qkqrbSE8TG+03H8ecU2q50zgHWPdHM
+ OBvy3EhzfAh2VmOSTcRK+tSUe/u3wdLRDPwv/DTzGI36Kgky9MsDC5gpIwNbOJP2G/q1wT1o
+ Gkw4IXfWv2ufWiXqJ+k7HEi2N1sree7Dy9KBCqb+ca1vFhYPDJfhP75I/VnzHVssZ/rYZ9+5
+ 1yDoUABoNdJNSGUYl+Yh9Pw9pE3Kt4EFzUlFZWbE4xKL/NPno+z4J9aWemLLszcYz/u3XnbO
+ vUSQHSrmfOzX3cV4yfmjM5lewgSstoxGyTx2M8enslgdXhPthZlDnTnOT+C+OTsh8+m5tos8
+ HQjaPM01MKBiAqdPgksm1wu2DrrwUi6ChRVTUBcj6+/9IJ81H2P2gJk3Ls3AVIxIffLoY34E
+ +MYSfkEjBz0E8CLOcAw7JIwAaeBT
+In-Reply-To: <amRntEmCUK-8wXcw@codewreck.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------Qav0WqtOq9GpvT00AbFXKs8Q"
 
-On 07/24, Oleg Nesterov wrote:
->
-> On 07/23, Oleg Nesterov wrote:
-> >
-> > OK, sashiko has some concerns
-> >
-> > 	https://sashiko.dev/#/patchset/amIqmbbZx3NlzUsX%40redhat.com
->
-> Let me quote:
->
-> 	Does skipping this wakeup for non-epoll consumers break io_uring?
->
-> 	Applications polling pipes via io_uring do not attach an eventpoll context,
-> 	so pipe->epoll_usage will be false. If a writer writes to an empty pipe,
-> 	io_uring receives the wakeup.
->
-> 	If the writer then writes a second chunk before the first is drained,
-> 	anon_pipe_write() observes was_empty == false and
-> 	pipe_get_epoll_usage() == false, skipping the waitqueue wakeup.
->
-> 	Could this cause io_uring to miss events and hang permanently, waiting
-> 	for a CQE that will never be emitted for the new data?
->
-> and I am starting to think sashiko is right (damn as always ;) and this
-> patch does affect/break io_uring.
->
-> Jens, could you confirm? If yes, we need to update the comments in pipe.c
-> (I've attached 1/1 at the end, so that you can see what this patch does)
-...
-> It seems that IORING_OP_POLL_ADD / IORING_POLL_ADD_MULTI is edge-triggered
-> by default! Like EPOLL_CTL_ADD / EPOLLET.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------Qav0WqtOq9GpvT00AbFXKs8Q
+Content-Type: multipart/mixed; boundary="------------9woazU20l50m9dxJk2VCDnaq";
+ protected-headers="v1"; hp="clear"
+Message-ID: <a7593240-bb61-4acd-b7ac-3d50b6efed0c@gmail.com>
+Date: Sat, 25 Jul 2026 13:38:02 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] AF_ALG: Drop support for off-CPU cryptography
+To: Dominique Martinet <asmadeus@codewreck.org>,
+ Eric Biggers <ebiggers@kernel.org>
+Cc: Harald Freudenberger <freude@linux.ibm.com>, acme@kernel.org,
+ adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
+ ardb@kernel.org, axboe@kernel.dk, corbet@lwn.net, davem@davemloft.net,
+ edumazet@google.com, herbert@gondor.apana.org.au, horms@kernel.org,
+ io-uring@vger.kernel.org, irogers@google.com, james.clark@linaro.org,
+ jolsa@kernel.org, kuba@kernel.org, kuniyu@google.com,
+ linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com, peterz@infradead.org,
+ skhan@linuxfoundation.org, willemb@google.com, linux-s390@vger.kernel.org
+References: <amRntEmCUK-8wXcw@codewreck.org>
+Content-Language: en-US
+From: Demi Marie Obenour <demiobenour@gmail.com>
+Autocrypt: addr=demiobenour@gmail.com; keydata=
+ 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
+ +MYSfkEjBz0E8CLOcAw7JIwAaeBT
+In-Reply-To: <amRntEmCUK-8wXcw@codewreck.org>
 
-Yes, sashiko is right. With some help from AI I wrote the simple test-case
+--------------9woazU20l50m9dxJk2VCDnaq
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-	#include <unistd.h>
-	#include <sys/mman.h>
-	#include <sys/epoll.h>
-	#include <sys/syscall.h>
-	#include <linux/io_uring.h>
-	#include <assert.h>
+On 7/25/26 03:37, Dominique Martinet wrote:
+> Thank you both for your time replying
+>=20
+> Eric Biggers wrote on Fri, Jul 24, 2026 at 06:09:51PM +0000:
+>> On Sat, Jul 25, 2026 at 01:32:12AM +0900, Dominique Martinet wrote:
+>>> There's not much I can do about the vendor's kernel I'm stuck with, b=
+ut
+>>> that doesn't make having encryption material not accessible to usersp=
+ace
+>>> useless as a concept;
+>>> forgetting about the sysctl for now, what are the alternatives API th=
+is
+>>> kind of implementations could be based on?
+>>>
+>>> I guess I should start looking at how tpm backed encryption works,
+>>> some other day, it's getting late here...
+>>
+>> First, we should remember that implementing hardware-bound keys via a
+>> standalone crypto engine is a dated approach.  Inline crypto engines a=
+nd
+>> CPUs, which work much better than and are much easier to use than lega=
+cy
+>> standalone crypto engines, can support hardware-bound keys as well.  T=
+he
+>> former is already supported, and is already being widely used, in the
+>> kernel via the hardware-wrapped inline crypto keys feature.  For the
+>> latter, see e.g. RISC-V High Assurance Cryptography.  In the CPU case =
+no
+>> UAPI is even needed; userspace can just use it directly.
+>=20
+> Thank you, this is exactly what I was asking about - my background isn'=
+t
+> crypto and ultimately whatever direction is implemented will depend on
+> $vendor and I'll just be following along, but I'll read up on this.
+>=20
+> "Inline crypto engine" seems to be a qualcomm marketing term, but from
+> looking at their doc the API seems to be PKCS#11 smart card?
+> Having worked on these for some other hardware I can't say I find it
+> easier to use than af alg, but it's definitely something that can be
+> worked out.
 
-	int main(void)
-	{
-		struct io_uring_params p = {};
-		int fd, pfd[2];
+The Qualcomm Inline Crypto Engine is a type of inline encryption
+hardware.  Inline encryption hardware is integrated in the I/O path,
+so using it doesn't involve any extra copies or interrupts.  The data
+goes from memory to crypto hardware to the I/O target, and from the
+I/O target to crypto hardware to memory.  The ciphertext is never
+written to memory.
 
-		pipe(pfd);
+In the case of the Qualcomm Inline Crypto Engine, the I/O target is
+the the storage device.  On Android, that's eMMC or UFS.  I would be
+very surprised if the Inline Crypto Engine was any slower than the
+storage device connected to it.
 
-		fd = syscall(SYS_io_uring_setup, 2, &p);
-		assert(fd >= 0);
+In Linux, inline storage encryption is exposed via the blk-crypto
+framework.  It works very well and is widely used on Android.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
 
-		void *ring = mmap(0, p.cq_off.cqes + p.cq_entries * sizeof(struct io_uring_cqe),
-				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQ_RING);
-		assert(ring != MAP_FAILED);
-		*(unsigned *)(ring + p.sq_off.array) = 0;
-		*(unsigned *)(ring + p.sq_off.tail) = 1;
+--------------9woazU20l50m9dxJk2VCDnaq--
 
-		struct io_uring_sqe *sqes = mmap(0, p.sq_entries * sizeof(*sqes),
-				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQES);
-		assert(sqes != MAP_FAILED);
-		sqes[0].opcode = IORING_OP_POLL_ADD;
-		sqes[0].fd = pfd[0];
-		sqes[0].len = IORING_POLL_ADD_MULTI;
-		sqes[0].poll32_events = EPOLLIN;
+--------------Qav0WqtOq9GpvT00AbFXKs8Q
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-		syscall(SYS_io_uring_enter, fd, 1, 0, 0, 0, 0);
+-----BEGIN PGP SIGNATURE-----
 
-		unsigned *cq_head = ring + p.cq_off.head;
-		unsigned *cq_tail = ring + p.cq_off.tail;
-		for (int i = 0; i < 2; ++i) {
-			write(pfd[1], "", 1);
-			syscall(SYS_io_uring_enter, fd, 0, 0, IORING_ENTER_GETEVENTS, 0, 0);
-			assert(*cq_tail == ++*cq_head);
-		}
+iQIzBAEBCgAdFiEEopQtqVJW1aeuo9/sszaHOrMp8lMFAmpk9HsACgkQszaHOrMp
+8lOjDA//WdudKCsYd4EOeGAM3aieLtjj76rGYztK+AN03rlrekbuRjKfdi5rGqvl
+CBJlSGsY/t3sI+l7RcGn6/UrExCEIHyn1T4ZZCuoing0/W5vQHKUs3HHy4rITs5L
+xjnIb07/dInn++O082yVF1n5YwLNLOmRApXFYwD6+aOFLM1wCuXrYKXWUdcTLRGg
+PGExszD2QPJKA329UZSfP/iM02svhONaGXioEyTAbJw7aIUErTWFMt90Di1z8Fj5
+51Fvkj0YawiQXNg3+YzSC6mJCeTWuZy8R5OEYc5BSDN4cakZyiaG2cedKGZNJMfB
+MAcCsNov4fqgpuFeglR5eibzZpy0a7Y2nj/LKQkjQeoHNloYm5XGFpHA0TL1ryLj
+gJNBn28DolzkwoOj3y5bcCx3wMNNujjh00yPmvaewmDMNDQuqcYTs+udikfc8lap
+GhIiR9zpctGfoYQFRbyoUw8MFN3I5CllKcMkqQtDtCIcgA+UL8NbqYSRIth90p2c
+WR0vpZHL1OdhlaVEo1PTNN5OWuThQPUoQCBc6/bQbb/bGAboZLKRRDiFfeIcREat
+6j8+oB6mLtGB8+vZVgKW/NaKjmRG0yxJ3i5vRA+IrXskQH6ya2yFpwVT8lTMnvOZ
+hz9A6o5cnQKH+mnhG3IUUAC0+KqM2dcBoNbyvzp7JUzpvkcy2no=
+=M8sN
+-----END PGP SIGNATURE-----
 
-		return 0;
-	}
-
-with this patch the 2nd assert(*cq_tail == ++*cq_head) fails.
-
-And just for the record, another one for epoll
-
-	#include <unistd.h>
-	#include <sys/epoll.h>
-	#include <assert.h>
-
-	int main(void)
-	{
-		int pfd[2], efd;
-		struct epoll_event evt = { .events = EPOLLIN | EPOLLET };
-
-		pipe(pfd);
-		efd = epoll_create1(0);
-		epoll_ctl(efd, EPOLL_CTL_ADD, pfd[0], &evt);
-
-		for (int i = 0; i < 2; ++i) {
-			write(pfd[1], "", 1);
-			assert(epoll_wait(efd, &evt, 1, 0) == 1);
-		}
-
-		return 0;
-	}
-
-I'll try to make V2 later.
-
-> And. io_poll_parse_events() doesn't set EPOLLET if IORING_POLL_ADD_LEVEL, but
-> how is it possible to use IORING_POLL_ADD_LEVEL? io_poll_add_prep() only allows
-> IORING_POLL_ADD_MULTI in flags? OK, I don't understand this code anyway...
-
-OK, I see: d59bd748db0a9 ("io_uring/poll: disable level triggered poll")
-
-Oleg.
-
+--------------Qav0WqtOq9GpvT00AbFXKs8Q--
