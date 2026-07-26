@@ -1,138 +1,108 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CF4378D68
-	for <io-uring@vger.kernel.org>; Sun, 26 Jul 2026 20:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785096663; cv=pass; b=F8EmSKTJkgTQ/Wg3fHs/5pGblFiuIf97TvMN1y1qqnYevEFmChaKQZ2mzhSuvSHI4kRWmgCvuSEc/qSg2tGsML4TjRKzXNPZvuqIWo9c0QXP0P8/Ns/BtgAqFNsZkpc03AzbD3JISQBOp84pV523eYIR3ZrM6VQBH+cMx9c78eo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785096663; c=relaxed/simple;
-	bh=kWd2ZlnaGIqOzhBDtr6CPo+wqxbzhTWntedFRzAihME=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pdLDemwrQuW51osbEC1x06+3PXYYcdg6LBcMB2kS29MkB0poGEXdbo6dGWYSaRKi0DCdK5g7vQNkY+F3R9TneWPy9tBxuM9z6xaEjcvANcLx29+9juk1BHFXtOmCGYBCgV93fFbzGPqnNKdy3PnsdI5BnaJj0QtOTDlNxbmDR2A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bWjNmrzf; arc=pass smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934303E44E8
+	for <io-uring@vger.kernel.org>; Sun, 26 Jul 2026 22:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785104844; cv=none; b=dJQjxFVumo6Hga3S9y3Vrm2CnKROdUcAUrxea+S3idFwUiFG3BnaZXbxW7NUcKexgPPU7B1ARvAzParEjDYRAjAQypvKUawv4jViQSNJtj7eSAnAo1gOTTk9RaoAs0nSMQbaKTVEkzUw2nBgFJXmEoewJAxvEswrJN+znwylvrI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785104844; c=relaxed/simple;
+	bh=oG/knSFdjzhxsmCGbrAhtRUtzdUqbxJUaXODKQRDvF0=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Cc:Content-Type; b=E05MtslmHH31iYijGY2UJJY8KCwHGuiu9fWxPB6mKhm3EfvkCy+Ncl2iZqIidRFvpQ2wlLElWJ0KNDBE9/DV6Lmd9mxvjIqr04w05icD6GD+EKPCTXQw2mauXmB+V+jtfU8AhgDz7SZqILwuXs7kNb/ZMDU+eCzZXLhD1F4uKAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=Mz6MAu/M; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bWjNmrzf"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso2892275a91.1
-        for <io-uring@vger.kernel.org>; Sun, 26 Jul 2026 13:11:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785096661; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VmjCpzgOEdO5h42tMqjD/xIq6twx2cOcRIuud7RnQTs8O4GEEvXy0AzJH6igdaIHoI
-         NnndUhs86+YbTfSbbdokFKmMWY8HVVLTBX0shyOT49Vq7+g89rl1G9O8FJP3g9MuJwOa
-         Qocp0Gv/zGwj82cC0FeccKFlrOM8N7opTDxN7jS9kZzREBreCcTZXFPFv82i/UrHGIp0
-         Cms+x4PsGOkse0UjvC7+lHG4eZmCXBfTOebFx4KU9XvQH1aii135TqK1KvamzMeSiQbi
-         jj24qstCUJJQJCEZD6wywbni7v6s0Cz8kgsI0ZCZ4sk6W9msViDWA0XYoZmYhyVf57MZ
-         G5EA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2+Bo0viCEB2m22FDhwGjICfsYsQ1DUFzTfnhxFo1SU0=;
-        fh=4z/nooOAijVAhEqXY/NV5mciwAD6Gul5G+aD7neq4dA=;
-        b=f7t6sha0RSRjPkglt5MR/ObtX5buYkoWVO2/BJn18iIp/ZT5TzxYNwWqkgp7EeSWb2
-         MNrPWjDU11UBFCk1W0FKzhn1OeIfRRzTZcatIipu7rzVlNDNxW7gzqMr/xhwwrEwRLHA
-         I54a9TIoGKdjTrjq9hFhWRVd8H53joN9UgR9f6bO172XS5ryX2OUK9ZO3ESpva/u3Jg0
-         VPLIzH6QLCusD2IT6Cyp8yCnjCN24h3z2aqQhhPnKOvcTuV3zVHssxbgIApIY13Efdww
-         2MJZeRWHDmznWF6xASFoqECZwKSWAa5C6jGnSkr5NJdgmzD1tYP4uIQgrkTey33I9HMD
-         S2oA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="Mz6MAu/M"
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-902e4af2d9dso31799316d6.0
+        for <io-uring@vger.kernel.org>; Sun, 26 Jul 2026 15:27:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785096661; x=1785701461; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2+Bo0viCEB2m22FDhwGjICfsYsQ1DUFzTfnhxFo1SU0=;
-        b=bWjNmrzfOcznBPitgGj/HS0xLXFm9c9EvME+U9Y38WewNosDqzxcptmAggNl6jtEYm
-         THi8L8kT7chED9bWcXg7+qUv/N7TMowQCnPZL3LwK7fkr6tym+6FhlhoxdYN4k1BD/Uf
-         9qaSxmxHi4Sjq3UYpbzBwI0DQFesqVWoJqU2jiPsnBPApLeCtmNo0OUMuH18+2f9+5LA
-         oo9hGHabcykOJDdvexQexzB4IBppCw9JBRQRZdnqM2zqJLAfzdlDvLn0nywYK8qtiGOj
-         x9pUhyT/uAItjv0TDjAWjuOVo5/1tolIctW/xUEQ+wdpDz9bPsJdIrkZuxbm8Nu+sMBL
-         pOOw==
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785104839; x=1785709639; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=uwlxafwo6x02l5VqlqsdBq3q4cfpbQHwvvNTffzRYMw=;
+        b=Mz6MAu/Msqo/hacpWp+tGuifZ+ZwRNWfxUUYz1oZHJpISaGXwLSfxL6Ews9KTDvvPj
+         RD4N2Le33H8f8bFY17T6vYTEPRci9nHCCYYRLa865CQRehJSTqW4IX1/sPgK8yIuTEtN
+         O40HUdOkPO223NTQbF/1j9KvsOtAEMdRbtaiZmj6yAuAzgiMgxdymtuu8Xc2QgCsDwxq
+         ihUiCEk8Efja20KbBAbFNOrAJRqEeEszUJ+eq8WtaPFGhgprUpGxrtAtjCWuwKPVHFHD
+         OVk9GQQZSV1Pgb+TrEuJqN2SdLkOyAm/ijvFfWfuOM5MmdXPxF+5dlzKE6sKiV5nSBiG
+         lnAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785096661; x=1785701461;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785104839; x=1785709639;
+        h=content-transfer-encoding:content-type:cc:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2+Bo0viCEB2m22FDhwGjICfsYsQ1DUFzTfnhxFo1SU0=;
-        b=LyE4r6e4aREE36HFW2Ra8wuNsVzpk/V6Qo8L5hnam2g3l+WrPnRAzE/wxoXEWJyH82
-         3y67HFtvpfskLvc/LLwuxh4CdVfSaV/aPDZvvPMFRt5rvJj9AYh6s4X9ZhQOJkHnRfU/
-         7IFV/XBH3edLCO3qzsEcl9uocItbTOFR8/+dQ8NzfwaDMUZXhiNHTGa/1nPu6ZRTvHqc
-         1lJXLfupGQ5MlPzk0rvfskjLjpjQ9pBoM67CIa72jILURBhrciHvEE5QJn7jTg8BgbpQ
-         JSO8pn0elDKHQbo5EHom/vEKMWZNRGuOfzeUbGuBs+awjau0bzY5tFNdAwGt7njEECMH
-         eSSg==
-X-Forwarded-Encrypted: i=1; AHgh+RqyRVH+oP8h6LyzqjFu3HVFbvarpairjnQwRVC0c/ML6OCVCbNjH7Ui/U3wxR7uECLukvVF3TAnlg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQNHKPyq4a8lB9H2wUFVK1HuisInW9CAlw2JVxUG/nJO932zuU
-	JxTwruDavaz2wy3JdqLDMp0PMpwpzZwFBM3p4MCXO5YBf4XqvYQxb//+GQ8KZ8S0ASicrTrqP8j
-	YjxhpLd5xWwFfLkFfZaFn/sTabDCIHrQ=
-X-Gm-Gg: AR+sD13TY/mpG3kGPBYlyPhQrpRTGCkI77p8uJ/z95BON8mJ2QnV4tnxMxPlQShiwhO
-	P/dH6oLfr9U5qrnOkKxlTixv2m6mI2fxsXSQa5Wyb1wIcDSoqsK87YDDOSDBBpEul3k6wCspTkO
-	/u1KfN1G4yE/QK0vqeeiINnzNweDvHmBiqwJFLOqSSoBk4US4+5B2LqDTrLdIpZu949hlekQ2j1
-	JFWjK63ShKNmnLNWBr6dOcUKzy7as7Malinv7g9OZERE2WSAr0VYhNNyA4X6YZLmMv5N70k
-X-Received: by 2002:a17:90b:384b:b0:38d:ef48:b04 with SMTP id
- 98e67ed59e1d1-38f294ea3c5mr6088330a91.10.1785096661118; Sun, 26 Jul 2026
- 13:11:01 -0700 (PDT)
+        bh=uwlxafwo6x02l5VqlqsdBq3q4cfpbQHwvvNTffzRYMw=;
+        b=LMGgTURL5LGAK4JjkFyp/hyPGkFjpbdMkYPi02lzqb0iJUSOt9BoqtfHvS96EOwkEI
+         +HDyHb5tj32xV6ysiNpkr0bENrAYIg8jvgCWjSbVGFTJxVgWWB1xrbX8xlgAzPTAIVzz
+         NH8jpK0dTJB0esgEjiw2vHOYoqGg5FVUdJX+ZSqSU5/+1ZFCGp+PKPByJflGLWr1ueUc
+         p6mMtZM7TiirrWyavubSbpsp3WaSpkPH8W1nMZ6t/+cFq6nbqgIAHOaHEwXuXFPKlcbr
+         /y0tMaQf14lgMbOkTyOO5vgURLcAwz/csEsOqXKS7yMkO6ReGsIpcUK/C0tCVyz38UB3
+         RZmg==
+X-Gm-Message-State: AOJu0Yyn/LT/+FX5o2+lfqW8MiYKmlbvhSLdaVJxHeCpYkIUJ2lmWHzr
+	1XnqbJRq0WV+EuaADNOrcCutgXUzB2p21G9UmnS3uL2aHTre0WG7OOw3WhmGxFk0JjBgQYpnaY/
+	9wK1sjP4R3Q==
+X-Gm-Gg: AR+sD10lOdm5K3fGSfrYgxm93eYPWdS/hGppXrhHEkAlbT2IIWcaAoTD6cyLMJRpKY9
+	xKKGWywJNROLu/vdxugVx+P3L8leFmFaAOfRD3F2To3TbX9778GhwRcqwi15sU/go6jyVMA/ckY
+	baJ/X0PJIrfjvb8R/QKaxWZXPp93CPmergShDFAzV5G4wBOoFQUIjZC+E6NwK661Pdu+XcQG/HU
+	Jt1wllJM+WeqJAEjmgURrTi9llZpxbtuVJ/rQrwp8ZjW6kyScxLb1QevlNM0TpS5QPHJberte1k
+	9gfql5flotlxeMMpJLxKEj2ZogPbQZ8L1vtDui2lQiuCnAkZE4RHnIc1WhEYb9RD8UmwTAJFXa8
+	ay7vUj1sBpAhvedr4GyCLIduERIX2zaG4KnS/OFv6ZOMXWiECcY8mvJOWQubxOHz1k5Kxr8mcTj
+	33CdqpDP4YCgCNg95l1XR6s4zji4zbz6EQVdwO6eFcXokaSEAgnyn4sOStYB+h
+X-Received: by 2002:ad4:5f0e:0:b0:901:9f0b:763a with SMTP id 6a1803df08f44-907ec6ec588mr74507016d6.25.1785104839083;
+        Sun, 26 Jul 2026 15:27:19 -0700 (PDT)
+Received: from [172.20.6.160] ([50.234.234.35])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-907e85241dbsm50745966d6.5.2026.07.26.15.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jul 2026 15:27:18 -0700 (PDT)
+Message-ID: <660d1bae-3e03-4ed7-b26b-86e22722e51c@kernel.dk>
+Date: Sun, 26 Jul 2026 16:27:17 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260523-af-alg-harden-v1-2-c76755c3a5c5@gmail.com>
- <20260603133312.12848-1-freude@linux.ibm.com> <amOGWwdjnJqyxH5L@codewreck.org>
- <20260724160034.GB2032@sol> <amOTjPW__CNZui3_@codewreck.org>
- <CAFLxGvy+ec3nQLrQtwFZgGELhT2pKBDnHdD0pMvEGh-Mf3rjgQ@mail.gmail.com>
- <20260725220443.GA41199@quark> <CAFLxGvyBGzfwh61F5YkYqctNPCQJCpFOwTtKfDs4L+iK8WJZpQ@mail.gmail.com>
- <20260726155024.GB1673@sol>
-In-Reply-To: <20260726155024.GB1673@sol>
-From: Richard Weinberger <richard.weinberger@gmail.com>
-Date: Sun, 26 Jul 2026 22:10:48 +0200
-X-Gm-Features: AUfX_mwZurnXooec2A3FqadK1K8O_igYrMZGYhDFbqwtbTaFK-ATjGnI_bmWgHQ
-Message-ID: <CAFLxGvzaAH+ZGr-OFo=Li1aOxgwBjjR76T7m1CjFaL-6w3KPPQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] AF_ALG: Drop support for off-CPU cryptography
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Dominique Martinet <asmadeus@codewreck.org>, demiobenour@gmail.com, 
-	Harald Freudenberger <freude@linux.ibm.com>, acme@kernel.org, adrian.hunter@intel.com, 
-	alexander.shishkin@linux.intel.com, ardb@kernel.org, axboe@kernel.dk, 
-	corbet@lwn.net, davem@davemloft.net, edumazet@google.com, 
-	herbert@gondor.apana.org.au, horms@kernel.org, io-uring@vger.kernel.org, 
-	irogers@google.com, james.clark@linaro.org, jolsa@kernel.org, kuba@kernel.org, 
-	kuniyu@google.com, linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, peterz@infradead.org, 
-	skhan@linuxfoundation.org, willemb@google.com, linux-s390@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring/net: initialize mshot_len for send
+Cc: Sung Keum <kambodi127@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jul 26, 2026 at 5:52=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
-wrote:
-> Then I would suggest that skcipher_bind() should check if the name is
-> "cbc(paes)", and if so use 0 instead of AF_ALG_CRYPTOAPI_MASK.  Please
-> go ahead and send a patch against mainline (for v7.2-rc6) if you're
-> interested.
+Commit:
 
-Patch sent.
+6a8afb9fff64 ("io_uring/net: allow multishot receive per-invocation cap")
 
-> On cryptodev/master (future 7.3) it should get an entry in the new
-> skcipher_allowlist as well: { "cbc(paes)", true }.  That would be a
-> separate patch.
+changed how io_mshot_prep_retry() set sr->len, and added the same
+initialization in io_mshot_prep_retry(). But it neglected to touch the
+send path, which may also uses the mshot retry path. Ensure that
+sr->mshot_len always gets initialized correctly.
 
-Do you mind a new field in struct af_alg_allowlist_entry which indicates
-that  AF_ALG_CRYPTOAPI_MASK should get bypassed?
+Fixes: 6a8afb9fff64 ("io_uring/net: allow multishot receive per-invocation cap")
+Cc: stable@vger.kernel.org
+Reported-by: Sung Keum <kambodi127@gmail.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-bool bypass_apimask;?
+---
 
-> With those it will keep working as root.  (And you mentioned in your
-> other email it's used only as root anyway.)
+diff --git a/io_uring/net.c b/io_uring/net.c
+index 00a7df803b99..a74d15f7b7d2 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -445,6 +445,7 @@ int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 		req->flags |= REQ_F_NOWAIT;
+ 	if (req->flags & REQ_F_BUFFER_SELECT)
+ 		sr->buf_group = req->buf_index;
++	sr->mshot_total_len = sr->mshot_len = 0;
+ 	if (sr->flags & IORING_RECVSEND_BUNDLE) {
+ 		if (req->opcode == IORING_OP_SENDMSG)
+ 			return -EINVAL;
+-- 
+Jens Axboe
 
-Agreed. While I don't know whether others out there using it in
-non-privileged mode,
-let's be conservative. If something breaks, users will speak up, I hope.
-
---=20
-Thanks,
-//richard
