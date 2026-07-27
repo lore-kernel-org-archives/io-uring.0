@@ -1,191 +1,95 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CD341D638
-	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 14:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFAD042F71B;
+	Mon, 27 Jul 2026 17:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785163633; cv=none; b=mQ14qHVnFZjF5pup29WJ967B0/kOwdeyN2kzwbZzxhC+Pf8W2GSONKkTOFb+MJLNWRHNnbwVDbtL+AaG3UiulgEjUmYvjsVo2UK1O8iXFRToiCnvZM7phZ1/zopKLuzGdakqZck0xiqnn89yIF700BfFWIOPrE2kYHOlWVDeJwg=
+	t=1785172821; cv=none; b=JZia0KVZUFCFp2G5bopAUCpJ8zBQOhMDOxBygjSJCaz+Tx3axVUf97aR5b6xl+tlk0Ij0W0WpoqXSQfcI9uXI/LKA4l5bjFnan3T8todh8LVH3myC3CHApFlrcwMn0jU0FcvOTqQUiKTJYfAG2NwsWKUJ0jgJr6zfAAUv6ZPsAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785163633; c=relaxed/simple;
-	bh=muPX7iuRvJbzKVBJEnGeSScT947qOmkM19xfGrWzKHU=;
+	s=arc-20240116; t=1785172821; c=relaxed/simple;
+	bh=iHVqW26uqMIGtwL7D6jwQT5OzT/Dmcvycs+bVve51TM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mX1f2qkf2zk4vY5JWSC55lyZbPIKRhyiq3ZDjyo606qiEUEXHd5Me5GJAMUf0o3dtJ86V9WJ5i9DnDjcANqox4uvPZ2a+yObRCeUzzUBoCRuOVNN/BOvEhSInAhnCKI+8VOSXOcWba6EahCBaS0HzNPf3eOk+oIs1Z2dz+Q9Lrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mbMI9lhK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5JkuAZea; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ulNUzruO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JYY/xZq2; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=R/j/JDg4AeFEwO0Hk+uY/CerdH5OnD53zEqVCRcPugZWqXiuipWrxl4OqgXmDq9IScvVmYsZ+eP5rOtCgVoeMUT1rqTt7NbBYFx+GaHrUlnw8ztrSE4DwcLPq5vZcfsobdbJ41xgG9OY8aef6DhgAWLw5Z8kiBGjUXb9HTXOFwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iH5r3gl3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mbMI9lhK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5JkuAZea";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ulNUzruO";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JYY/xZq2"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C67777B7AE;
-	Mon, 27 Jul 2026 14:47:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1785163625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
-	b=mbMI9lhKVkAT/kf+JZkT1WY3ihtKgC5SLatp+Glt+wGkagmxEEsmtOEtt4FMBbURML0vSa
-	csbMsaRjLoIBVPAG6ohyVSbUImXOLnFJfDNbJ3PBE+1o0639PLXELkydhkCZxRHw1AbWRw
-	aBayrDfNPOvI0vPJZFAMJT/666K3O3Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1785163625;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
-	b=5JkuAZeatsJOIvr1g4SjpaS4gWz4xRqhosYIyiPfl4Wc6P/Vix7BsG/tZ7Ly5h0iqGaXb/
-	oTVVksJY/7CHRkCw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=ulNUzruO;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="JYY/xZq2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1785163621; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
-	b=ulNUzruOckbNKaiYPunPv3yxSDceb5azkTFCwlnEOgnNPaZ9Bu9bRiAh8A7XTvBz1ile/v
-	L1H7KIFhYuGyGcgl1AR465the/+OavAcWUxsyT8y13R7GBpN4OA8sjQVWpPh4jeh4RZOTK
-	KxGEOrkc1OoH+uTgss+An2bKV9hzTXU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1785163621;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
-	b=JYY/xZq2OBu0FTp3nHxsrgmhRft5XcyozwKGl6EdL4csmmL22uIWyEn8apeDE4bBKMnV3v
-	aenD4cJiM0kCPVCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BD97F779B9;
-	Mon, 27 Jul 2026 14:47:01 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ry2cLWVvZ2ojVQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 27 Jul 2026 14:47:01 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 5C8ACA0BA1; Mon, 27 Jul 2026 16:46:53 +0200 (CEST)
-Date: Mon, 27 Jul 2026 16:46:53 +0200
-From: Jan Kara <jack@suse.cz>
-To: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, io-uring@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] fs: make file_listxattr and file_removexattr
- helpers non-static
-Message-ID: <dyyz25zraphwgpgyrfes7uunepxcsswok4z3qpnggivd3bjjzk@l3nwvj4utuib>
-References: <20260721103514.2716-1-aditya.ansh182@gmail.com>
- <20260721103514.2716-2-aditya.ansh182@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iH5r3gl3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00CFE1F000E9;
+	Mon, 27 Jul 2026 17:20:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785172807;
+	bh=UVccbVTzUoYV0KQWNuk0uyfzJqKVf1DPYNfNQhr1Nkw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=iH5r3gl34aaayTvPfEcv7gNRsA9jchZSuYSuwPNrFgrkNWRmMNmovv+NyzxNf6aQq
+	 shH9zFige9pcptY+jfid9o8v5U685oEy1TeVyBNfwV+yZxOvBBOgl6Q+hxsNGgyx3O
+	 rNjf45oeghZRTG9f3sHOiFX6pDRKi96uDnV2ePLjQiyvfN2Ih5RrHO1VoVzFoXzQs0
+	 NeXmWyRcTh5EfKOfZWtV/SfoiNhZT58VJaY6oUHSqLVaj6Z8jEny9bgUJtbr4LI0aX
+	 gJP8mbeE4IDJHv2P8/NZ7GU3ipfmfw5O2PAg8yOpY1gx6QpJ29Wp0Tl/S3KtcUrQOh
+	 kx8qDGfsYYcjg==
+Date: Mon, 27 Jul 2026 17:20:04 +0000
+From: Eric Biggers <ebiggers@kernel.org>
+To: Richard Weinberger <richard.weinberger@gmail.com>
+Cc: Dominique Martinet <asmadeus@codewreck.org>, demiobenour@gmail.com,
+	Harald Freudenberger <freude@linux.ibm.com>, acme@kernel.org,
+	adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
+	ardb@kernel.org, axboe@kernel.dk, corbet@lwn.net,
+	davem@davemloft.net, edumazet@google.com,
+	herbert@gondor.apana.org.au, horms@kernel.org,
+	io-uring@vger.kernel.org, irogers@google.com,
+	james.clark@linaro.org, jolsa@kernel.org, kuba@kernel.org,
+	kuniyu@google.com, linux-crypto@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+	mingo@redhat.com, namhyung@kernel.org, netdev@vger.kernel.org,
+	pabeni@redhat.com, peterz@infradead.org, skhan@linuxfoundation.org,
+	willemb@google.com, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 2/3] AF_ALG: Drop support for off-CPU cryptography
+Message-ID: <20260727172004.GA877700@google.com>
+References: <20260523-af-alg-harden-v1-2-c76755c3a5c5@gmail.com>
+ <20260603133312.12848-1-freude@linux.ibm.com>
+ <amOGWwdjnJqyxH5L@codewreck.org>
+ <20260724160034.GB2032@sol>
+ <amOTjPW__CNZui3_@codewreck.org>
+ <CAFLxGvy+ec3nQLrQtwFZgGELhT2pKBDnHdD0pMvEGh-Mf3rjgQ@mail.gmail.com>
+ <20260725220443.GA41199@quark>
+ <CAFLxGvyBGzfwh61F5YkYqctNPCQJCpFOwTtKfDs4L+iK8WJZpQ@mail.gmail.com>
+ <20260726155024.GB1673@sol>
+ <CAFLxGvzaAH+ZGr-OFo=Li1aOxgwBjjR76T7m1CjFaL-6w3KPPQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260721103514.2716-2-aditya.ansh182@gmail.com>
-X-Spamd-Result: default: False [-2.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_COUNT_THREE(0.00)[3];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
-X-Spam-Score: -2.51
-X-Spam-Level: 
-X-Rspamd-Queue-Id: C67777B7AE
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFLxGvzaAH+ZGr-OFo=Li1aOxgwBjjR76T7m1CjFaL-6w3KPPQ@mail.gmail.com>
 
-On Tue 21-07-26 10:35:13, Aditya Prakash Srivastava wrote:
-> In preparation for adding IORING_OP_FREMOVEXATTR and
-> IORING_OP_FLISTXATTR support in io_uring, we need to invoke the VFS-layer
-> helpers from within io_uring.
+On Sun, Jul 26, 2026 at 10:10:48PM +0200, Richard Weinberger wrote:
+> On Sun, Jul 26, 2026 at 5:52 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> > Then I would suggest that skcipher_bind() should check if the name is
+> > "cbc(paes)", and if so use 0 instead of AF_ALG_CRYPTOAPI_MASK.  Please
+> > go ahead and send a patch against mainline (for v7.2-rc6) if you're
+> > interested.
 > 
-> Make the following helpers non-static and declare them in fs/internal.h:
-> - file_listxattr()
-> - file_removexattr()
+> Patch sent.
 > 
-> No functional change is introduced.
+> > On cryptodev/master (future 7.3) it should get an entry in the new
+> > skcipher_allowlist as well: { "cbc(paes)", true }.  That would be a
+> > separate patch.
 > 
-> Signed-off-by: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
+> Do you mind a new field in struct af_alg_allowlist_entry which indicates
+> that  AF_ALG_CRYPTOAPI_MASK should get bypassed?
+> 
+> bool bypass_apimask;?
 
-Looks ok to me. Feel free to add:
+Let's wait and see if it's needed for another algorithm before
+generalizing this.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Note: if it does happen, the list definitions should start using
+designated initializers so that it's clear what the bools are.
+Alternatively, it could be a flags field with possible values
+AF_ALG_UNPRIVILEGED and AF_ALG_ALLOW_OFF_CPU.
 
-								Honza
-
-> ---
->  fs/internal.h | 2 ++
->  fs/xattr.c    | 3 +--
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/internal.h b/fs/internal.h
-> index 355d93f92208..ee86b24db79a 100644
-> --- a/fs/internal.h
-> +++ b/fs/internal.h
-> @@ -297,6 +297,8 @@ int filename_setxattr(int dfd, struct filename *filename,
->  		      unsigned int lookup_flags, struct kernel_xattr_ctx *ctx);
->  int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx);
->  int import_xattr_name(struct xattr_name *kname, const char __user *name);
-> +ssize_t file_listxattr(struct file *f, char __user *list, size_t size);
-> +int file_removexattr(struct file *f, struct xattr_name *kname);
->  
->  int may_write_xattr(struct mnt_idmap *idmap, struct inode *inode);
->  
-> diff --git a/fs/xattr.c b/fs/xattr.c
-> index d58979115200..31b8a5eeec1e 100644
-> --- a/fs/xattr.c
-> +++ b/fs/xattr.c
-> @@ -953,7 +953,6 @@ listxattr(struct dentry *d, char __user *list, size_t size)
->  	return error;
->  }
->  
-> -static
->  ssize_t file_listxattr(struct file *f, char __user *list, size_t size)
->  {
->  	audit_file(f);
-> @@ -1036,7 +1035,7 @@ removexattr(struct mnt_idmap *idmap, struct dentry *d, const char *name)
->  	return vfs_removexattr(idmap, d, name);
->  }
->  
-> -static int file_removexattr(struct file *f, struct xattr_name *kname)
-> +int file_removexattr(struct file *f, struct xattr_name *kname)
->  {
->  	int error = mnt_want_write_file(f);
->  
-> -- 
-> 2.47.3
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+- Eric
