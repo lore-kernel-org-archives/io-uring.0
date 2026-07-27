@@ -1,66 +1,58 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D240323416
-	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 11:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAF83FADFB
+	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 12:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785153029; cv=none; b=gVSUqZbyGNba/+/O337m+TpnywAFEcfyrt2R+X4ZwGvoTJayTgOuxy1f61lwQyi2X9AWEmonbzxrJ/tYlCrScVWFgTh/gqc/EpOvlGeE+A6/GqRaNLKkX4KbC8IWPdmhQoIo5oNqdCFf8W0fmMx6QX0KGCw/mbdpKay2lZiSBFc=
+	t=1785155031; cv=none; b=MfKjwORzKU35Wp9XmcRUC+wvntnzfrtmTpGVWYo3pfzQ3xpMV4X2Ixm3MvTwkwhPEKLArKF/xrvQibRMteqWlP+WquJbaG5IFBBybKitZXgFZ31O0f9S7H2gttgCkVSwDd9IYxdanLpwmISNgcAKgDvrvBwdiC/VH+xHq+eECEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785153029; c=relaxed/simple;
-	bh=PjwoEkzptfuBeVHS3ev/vrI9U9O1fOp7MhbTKPXSldA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FWabw6i/SUdzXAOp8etq2Is7a0zi86vqjZShQlkL8PoF9AYcuPnxqofrJCBJptN94+/hU0UdR339+zcMeQB6kZYmzlYOscDE4+ho92VmIYu3lhBS30VLth2M5TEPJrSjYSesHrbk1LsjaTi7SmJ8MEkPlweKXbazAkmgDAPO3PE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TskWDb/E; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1785155031; c=relaxed/simple;
+	bh=DUUtSrPmvnC24rpmZ/lujXJpOLjCH18gyESzMsgcE7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=MrxYco8hltKS99MP8956RbclS0QZUmjO/+T6RuYd6BgPes3g3Fzn/Gcs0rqG04Hnx1lzx+PvhnGCNFXWqiCgDx2AfxXfHSVmhNeUSA+9y36bC0mo7SbWx5sxWNxTGsnGc71P/aqKDoYrsJ6YOkFLAI73yTq9SQciMokD2SsTE/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YlDPWUMm; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TskWDb/E"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YlDPWUMm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785153027;
+	s=mimecast20190719; t=1785155029;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wffdKTFxlL1hXZHBK5IrHJWwhvTTyCkW7zVARYG64QI=;
-	b=TskWDb/EMNNn8Xw2AfiQiSkOFLAxP/QM2PY/4TiRquOHvhPjYRRVqZxkyljxycJUtWNRRU
-	c8iEIr1xo8fxHQVGUIxUFZDscDQiidZGdTsBtI8tUFR1bvJYamq9fW91s+09nfFj/ezeD6
-	KTtc4bQyA2M27HBDtft4Coyc58+Y/mg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=DUUtSrPmvnC24rpmZ/lujXJpOLjCH18gyESzMsgcE7c=;
+	b=YlDPWUMmd7bSXQNBOJuje5pAv63QRYGt7H3SrPT8IWpiS3Az4TL888jvvSf5RAeHHCFFLl
+	YkxXoV8lz0kLnZj3dF3fr8hKIeNFGV1GZOMnLiv69BJ3SRekgPZNIqZg5Z9l3w+ssPLpdu
+	kkByPlSzW/7rcIl716Fq/ZbQrGJzqw8=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-1cNczG41MIazlwQvg2ZPeg-1; Mon,
- 27 Jul 2026 07:50:25 -0400
-X-MC-Unique: 1cNczG41MIazlwQvg2ZPeg-1
-X-Mimecast-MFC-AGG-ID: 1cNczG41MIazlwQvg2ZPeg_1785153023
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-642-wFWNlJrFM7iDU5p8JYgBCQ-1; Mon,
+ 27 Jul 2026 08:23:44 -0400
+X-MC-Unique: wFWNlJrFM7iDU5p8JYgBCQ-1
+X-Mimecast-MFC-AGG-ID: wFWNlJrFM7iDU5p8JYgBCQ_1785155023
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1807C19540EC;
-	Mon, 27 Jul 2026 11:50:23 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C413E180ABF5;
+	Mon, 27 Jul 2026 12:23:40 +0000 (UTC)
 Received: from fedora (unknown [10.44.33.21])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 1820D1955F78;
-	Mon, 27 Jul 2026 11:50:18 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 65E1B1800480;
+	Mon, 27 Jul 2026 12:23:36 +0000 (UTC)
 Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 27 Jul 2026 13:50:22 +0200 (CEST)
-Date: Mon, 27 Jul 2026 13:50:17 +0200
+	oleg@redhat.com; Mon, 27 Jul 2026 14:23:40 +0200 (CEST)
+Date: Mon, 27 Jul 2026 14:23:34 +0200
 From: Oleg Nesterov <oleg@redhat.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Mateusz Guzik <mjguzik@gmail.com>,
+To: Breno Leitao <leitao@debian.org>,
 	Christian Brauner <brauner@kernel.org>,
-	Jens Axboe <axboe@kernel.dk>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	io-uring@vger.kernel.org, Alexey Gladkov <legion@kernel.org>
-Subject: Re: [PATCH 0/1] pipe: only enable the extra wake_up(rd_wait) when
- epoll is actually used
-Message-ID: <amdF-Ulltna5AV85@redhat.com>
-References: <amIqfCo25rLtM2U0@redhat.com>
- <amIu5WWgTNkdvqIz@redhat.com>
- <amNvebqiG2fH0W_L@redhat.com>
- <CAGudoHGiKYfF6L1yFy+QZgQaTt5ULnp6rgRaZE=6BANkpjrb7g@mail.gmail.com>
- <amN8ppPXRiUdiVKM@redhat.com>
- <amc4SXBOGmLbfmp3@gmail.com>
+	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Subject: [RFC PATCH v 0/1] pipe: only enable the extra wake_up(rd_wait) for
+ edge-triggered consumers
+Message-ID: <amdNxsTODR4MCl3R@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -69,35 +61,25 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <amc4SXBOGmLbfmp3@gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On 07/27, Breno Leitao wrote:
->
-> On Fri, Jul 24, 2026 at 04:54:30PM +0200, Oleg Nesterov wrote:
-> >
-> > __Perhaps__ pipe_poll() could check something like wait->_key & EPOLLET to
-> > detect both epoll/io_uring... Not sure, probably not, I'll try to check later.
->
-> I got the impression that pipe_poll() sees EPOLLET in wait->_key for
-> io_uring the same as for EPOLLET epoll. Since d59bd748db0a
-> ("io_uring/poll: disable level triggered poll").
->
-> io_poll_add_prep(), which is called before teh proper iouring command,
-> rejects IORING_POLL_ADD_LEVEL, so io_poll_parse_events() always ORs in
-> EPOLLET for IORING_OP_POLL_ADD.
->
-> The internal apoll path sets EPOLLET unconditionally too
-> (io_arm_apoll()), so every io_uring poll arming carries it.
->
-> Maybe this would work on the set side?
->
->         if ((filp->f_mode & FMODE_READ) && wait &&
->             (wait->_key & EPOLLET) &&
+Again, I am not sure this makes a lot of sense. But I'd like to know
+your opinion.
 
-This is exactly what I meant and what I did. I am writing the changelog,
-will send the patch soon today. Both test-cases I wrote pass, same for
-tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c
+Plus I'd like to have the review from sashiko ;)
+
+With or without this patch we need to update the comments to document
+that io_uring depends on ->pipe_usage too. And probably rename it to
+(say) ->et_poll.
+
+tools/testing/selftests/filesystems/epoll/epoll_wakeup_test.c passes.
+
+See also the test-cases in 1/1, they pass with this patch. And fail if
+I remove WRITE_ONCE(pipe->poll_usage, true) in pipe_poll().
 
 Oleg.
+---
+
+ fs/pipe.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
