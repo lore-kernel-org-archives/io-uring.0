@@ -1,221 +1,163 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from submarine.notk.org (submarine.notk.org [62.210.214.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94CE16FC5
-	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 18:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45B9345CCE;
+	Mon, 27 Jul 2026 23:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.210.214.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785178213; cv=none; b=EyaRwA8THzO4Ovhekb3gO9+5+j5d4eB8Is4h1r+DaYOrWsrc83dd9Tb4PD5RC4P5TwcGxhDv7wUGyDJqDw8qcHU7x30RuDAJRFL1nF0LkCDeiUEFJDPmHY/YnYuqrxyFVwncK3FMd4c9S2oNMYiFr5gqvp6MjBY5wpO3DuxILG4=
+	t=1785195653; cv=none; b=mmNvYj2m6dz/+6zKqUTf5vKsN0FZa0TPOpOQTWFQ5egzKK/VeZ1Cb0eY86/thMcFuofpUZxC5udVCVg4AJuvgMu0MUiauR4yIj7miABusRnOzQbWLJ/q8wZ1kQOWBzDmSHKTJa/RkvUxHPJfpC3sxYPHrSH57jJf2vuBKHoHzxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785178213; c=relaxed/simple;
-	bh=U3J/z/rltd9wyJnJ+Q+nQejkr0Bc2YdqlNaSA6PWzfo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=XPOBwvaU5OvUCxh5GjBAN3kVY4drj9pcQ9ntmDHbMiDDOedXtbmY2az89ZRpH/82mS0feyK5U/n8kpRwAlJgX+9BeBAktXU46LQNQqT2S+W9AbTsyZI1K0U9eezio/E671yPmojoncoqMKzSxBSMxHkzVmrvFvsTjkEzWRfJZFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=DeNWRMmu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=1LxJ+BSA; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=KqhmPOue; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=51yCmO6F; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1785195653; c=relaxed/simple;
+	bh=EAeQaVCZoyYBBbBb7GlL9KLXJcDEZbsSwPyFx4TdMZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fXqSIe/9pEFc3FX9Bjbgik7565ucQ8pYoYnIv3cCuUkQEAu4noyP4Oow+g8XmbNjktnLBFXrChovMvxtiBxSJOy4zGUIlUy9GHFNZOlIV0t1v52OwSxE4kCJ6nPyl+bVzN1WoAeAgfOYBeWJVGwYFj+JsMZUrXhDQps8P9tjQG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org; spf=pass smtp.mailfrom=codewreck.org; dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b=EEIsbV8Z; arc=none smtp.client-ip=62.210.214.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codewreck.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codewreck.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DeNWRMmu";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="1LxJ+BSA";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="KqhmPOue";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="51yCmO6F"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 5B9F87BF1F;
-	Mon, 27 Jul 2026 18:50:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785178205; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	dkim=pass (2048-bit key) header.d=codewreck.org header.i=@codewreck.org header.b="EEIsbV8Z"
+Received: from gaia.codewreck.org (localhost [127.0.0.1])
+	by submarine.notk.org (Postfix) with ESMTPS id 3332B14C2D6;
+	Tue, 28 Jul 2026 01:40:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org;
+	s=2; t=1785195637;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=JJfNK+u1b3MHo0h1U7oHlVZCtLOGMMqF8MCXLwh41Dc=;
-	b=DeNWRMmuQA4fb6NOmcTIoneUuAnmP7jNCCWKddWt1TpB5PCyLopDZwI1gw7b3jRGp7GFl5
-	KePBRqejGHb+zdiTEbZAe8YSo5v5Ozqkxh++q03xsJBu3h7VBYKTPuOKFYCRkxi2w4OpdQ
-	pZ1qtmw8QTmjRnDO1lR+Fh3bSxA+oCU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785178205;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JJfNK+u1b3MHo0h1U7oHlVZCtLOGMMqF8MCXLwh41Dc=;
-	b=1LxJ+BSAFQG4IwAhb3i6TykdZuKQb0nDI0NqldjOL1j/DKojjK3sYJ7+uMq2dAERHsUQmX
-	dZxpkZjdKGZBT3Bg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=KqhmPOue;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=51yCmO6F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785178201; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JJfNK+u1b3MHo0h1U7oHlVZCtLOGMMqF8MCXLwh41Dc=;
-	b=KqhmPOuemTjP7W8FgjlrTkq4KaIByjxhN//KaZgN8djJOqMrAVy/q9GJ8UTaTig0UcwZ+d
-	froIbIGY1pA0AATwaIX0r6IBpKDYiWLN5qJfNCZEBBYI6vh5iANbPS/9sLhJe+YJ4a7EtM
-	0A+Go8m1OrsfAr92UtL88NoQ1W54i1o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785178201;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JJfNK+u1b3MHo0h1U7oHlVZCtLOGMMqF8MCXLwh41Dc=;
-	b=51yCmO6F6ZGGewpPet37xKdRxEYIi9QFdWoRN92TeV5L5D+ygZfuD5ezrpdOkZ+D/cnZKj
-	fq8bqDD1fdoBGOAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1E3A3779B9;
-	Mon, 27 Jul 2026 18:50:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id J2TNNlioZ2qAOwAAD6G6ig
-	(envelope-from <krisman@suse.de>); Mon, 27 Jul 2026 18:50:00 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org
-Subject: Re: [PATCH liburing 1/2] test/send_recvmsg: Preserve msghdr until
- op_recvmsg completes
-In-Reply-To: <dc7df695-c891-4cf9-b124-d595a94facf3@kernel.dk>
-Organization: SUSE
-References: <20260722181710.79099-1-krisman@suse.de>
- <20260722181710.79099-2-krisman@suse.de>
- <6f31dd5b-639e-4018-815b-0fa04a39b337@kernel.dk>
- <87fr1aeqwm.fsf@mailhost.krisman.be> <87cxweepdj.fsf@mailhost.krisman.be>
- <87se55cmry.fsf@mailhost.krisman.be>
- <dc7df695-c891-4cf9-b124-d595a94facf3@kernel.dk>
-Date: Mon, 27 Jul 2026 14:49:55 -0400
-Message-ID: <87mrvcclnw.fsf@mailhost.krisman.be>
+	bh=lMlWo5how2yP2LkX157nvL7ML7A/giyuGrY1FbX3qag=;
+	b=EEIsbV8Zsc85N25iSg5NAjJ1Pn5rviuilE44H62DMYuVTaydPNt6SrcClH0GjyAWnvskaN
+	3MXQMbeOSm4bgfRN4PlXSj23BGYEJk9jfKt7MJfXFzVWe77ung/6s+WsHPL7Hsl9zgheF6
+	zDsnJEaqwtbDFPyNo+KsHENIlJ6Qn3j35SshIImCrq1JXbyn/DQbx2z5q7Rhp6VV7ze4eL
+	I7ThghcMwaGvXuOb0LAFyX4l3GIqgci4W5YKp7aSg2EdNQfqtgUZR551yUCXuOrgmevUHu
+	GM4xlJY2O6Fqq04lTPcTux5jy6cE+0KZk14Pqf8MXgnM5nklK3Q+IS+hxGv3bQ==
+Received: from localhost (gaia.codewreck.org [local])
+	by gaia.codewreck.org (OpenSMTPD) with ESMTPA id 4565e1af;
+	Mon, 27 Jul 2026 23:40:27 +0000 (UTC)
+Date: Tue, 28 Jul 2026 08:40:12 +0900
+From: Dominique Martinet <asmadeus@codewreck.org>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Demi Marie Obenour <demiobenour@gmail.com>,
+	Harald Freudenberger <freude@linux.ibm.com>, acme@kernel.org,
+	adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
+	ardb@kernel.org, axboe@kernel.dk, corbet@lwn.net,
+	davem@davemloft.net, edumazet@google.com,
+	herbert@gondor.apana.org.au, horms@kernel.org,
+	io-uring@vger.kernel.org, irogers@google.com,
+	james.clark@linaro.org, jolsa@kernel.org, kuba@kernel.org,
+	kuniyu@google.com, linux-crypto@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+	mingo@redhat.com, namhyung@kernel.org, netdev@vger.kernel.org,
+	pabeni@redhat.com, peterz@infradead.org, skhan@linuxfoundation.org,
+	willemb@google.com, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 2/3] AF_ALG: Drop support for off-CPU cryptography
+Message-ID: <amfsXHoeOH71b1Bs@codewreck.org>
+References: <0ccda05f-077c-4661-b852-e6bf9bf40be3@gmail.com>
+ <20260724180951.GA1572592@google.com>
+ <amRntEmCUK-8wXcw@codewreck.org>
+ <20260725174903.GA150173@quark>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 5B9F87BF1F
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260725174903.GA150173@quark>
 
-Jens Axboe <axboe@kernel.dk> writes:
-
-> On 7/26/26 6:13 PM, Gabriel Krisman Bertazi wrote:
->> Gabriel Krisman Bertazi <krisman@suse.de> writes:
-
->>>
->>> So, __sys_recvmsg_sock during the inline attempt throws -EAGAIN at
->>> first, which makes io_recv return IOU_RETRY, which punts to tw after
->>> the socket is ready.  By tracing, I can see the tw is executed only
->>> during the io_uring_enter from io_uring_wait_cqe, which is when
->>> __sys_recvmsg_sock touches sr->umsg pointing to an already out-of-scope
->>> stack variable.
->> 
->> Hello, do you disagree or did I miss anything?
+Eric Biggers wrote on Sat, Jul 25, 2026 at 10:49:03AM -0700:
+> > "Inline crypto engine" seems to be a qualcomm marketing term, but from
+> > looking at their doc the API seems to be PKCS#11 smart card?
+> > Having worked on these for some other hardware I can't say I find it
+> > easier to use than af alg, but it's definitely something that can be
+> > worked out.
+> 
+> I guess I should have written "inline encryption hardware", which is the
+> vendor-independent term we've been using in the kernel, just in case
+> anyone thinks "inline crypto engine" means the "Qualcomm Inline Crypto
+> Engine" specifically (but really, IMO they are just descriptive phrases
+> that mean the same thing).  There are many different hardware vendors
+> that have inline encryption hardware for UFS and/or eMMC.
 >
-> Still on vacation and sporadically available, just haven't had time to
-> look at it yet. I agree it looks fishy! I would encourage you to dig into
-> the kernel side and get to the bottom of it.
+> Their interface is quite simple and doesn't use PKCS#11 at all.  I don't
+> know where you're seeing anything about PKCS#11.
 
-AH, I thought you were back already. Sorry, please enjoy your time off,
-this is absolutely not time-sensitive.
+PKCS#11 is something I (wrongly) picked up from Qualcomm doc here:
+https://docs.qualcomm.com/doc/80-70018-11/topic/key-management.html#key-management
 
-But there is no mystery here. the explanation I shared in
-87cxweepdj.fsf@mailhost.krisman.be is correct. Here:
+But honestly I hadn't read up all that much, and I had been confused as
+the previous page talked about their inline crypto engine but this seems
+to be more general.
+It's been a busy weekend/week/month/year...
 
->>> So, __sys_recvmsg_sock during the inline attempt throws -EAGAIN at
->>> first, which makes io_recv return IOU_RETRY, which punts to tw after
->>> the socket is ready.  By tracing, I can see the tw is executed only
->>> during the io_uring_enter from io_uring_wait_cqe, which is when
->>> __sys_recvmsg_sock touches sr->umsg pointing to an already out-of-scope
->>> stack variable.
+> See also the documentation in Documentation/block/inline-encryption.rst
 
-IOW, the problem boils down to the fact recvmsg touches umsg deep inside
-the net/ code and io_uring does not submit in scope if the data is not
-ready.
+Thanks for this pointer as well; this is much more clear to me, and also
+seems to cover keys generated directly on hardware that are not
+accessible so it pretty much covers what we're doing manually as well
+(once I finally realized that this sits on the SoC side, not the
+UFS/eMMC side, as key generation didn't make sense there)
 
-In more detail, the initial -EAGAIN happens because the recv_fn thread
-raced with the send, there is no data in the socket, and the inline
-obviously cannot block in __skb_recv_udp. So we fall back from inline,
-arm the poll and sit on our hands waiting.  By the time the data arrives
-and the kernel retries, msg is out of scope.
+> > I was just curious about the double-take approach taken with these two patches:
+> >  crypto: af_alg - Drop support for off-CPU cryptography (this)
+> >  crypto: af_alg - Add af_alg_restrict sysctl, defaulting to 1 ([4])
+> > [4] https://lore.kernel.org/linux-crypto/20260622234803.6982-1-ebiggers@kernel.org/T/#u
+> > 
+> > I assume part of it was just that the whitelist wasn't ready yet when
+> > this patch was merged, but as far as I understand if the whitelist
+> > sysctl is implemented this is basically noop?
+> > (Well, I guess it'll allow code simplification over time, but these
+> > hopefully won't be backported to stable kernels too aggressively.. While
+> > I fully expect to see this "Drop support for off-CPU crypto" patch to
+> > show up in a couple of weeks in older stable trees; and for practical
+> > purposes I don't see much way around just reverting it for now)
+> 
+> Neither of these patches is tagged with 'Cc stable', and I don't expect
+> them to be backported to stable kernels soon.  That being said, it seems
+> the people using LLMs to find vulnerabilities haven't focused much on
+> drivers/crypto/ yet.  Once they do, well, they will of course find
+> vulnerabilities everywhere (accessible from unprivileged userspace via
+> AF_ALG), and when that happens there may be little choice.
 
-The exact corruption that *I* am observing in this test is that
-____sys_recvmsg writes 0 to the userspace-mapped msg->msg_controllen
-during ->issue() because, well, this is UDP and doesn't need ancillary
-msg_control. This behavior is documented in recvmsg(2).
+From my 9p maintainer hat I see plenty of patches without 'Cc stable'
+get backported every merge window, but this is a potential breakage so
+I guess it might not have made it (my patches merged in v7.2-rc1 (same
+time as this) were backported last week)
 
-In my failing builds, for instance, in the send_recvmsg.c test, once msg
-goes out of scope, the stack space collides with the pointer of (struct
-recv_data *rd) in the call do_recvmsg(). The difference is that with
--O0, gcc sticks it in the stack during the prologue of do_recvmsg(),
-instead of preserving the pointer in a register.  Then we have the first
-opportunity for the TW to run during the io_uring_wait_cqe. When it
-comes back, the stack was touched by the kernel, thinking it is touching
-&msg, and boom. With -O3, the stack layout changes and the kernel writes
-over other stack data that is no longer touched by the testcase.
+I generally agree with your assessement of vulnerabilities everywhere so
+would have expected it to make the cut, time will tell.
 
-msg_p below is a pointer to the  original stack variable during
-recv_prep. The type is struct msghdr*):
+> The addition of the af_alg_restrict sysctl (and the possibility of
+> userspace explicitly choosing to disable restrictions by setting
+> af_alg_restrict=0) doesn't necessarily mean that problematic
+> functionality should be, or should have been, moved under
+> af_alg_restrict=0 rather than removed outright.  It's just an option
+> that can be used if needed for compatibility reasons, if actual user
+> reports come in.  If something is not needed at all it can just be
+> dropped right away.  This actually happens way more often than people
+> might think, due to the immense amount of unnecessary functionality that
+> AF_ALG has: *many* crypto algorithms have been removed from AF_ALG over
+> the years without any complaints, since they were never used.
 
-(gdb) p &(msg_p->msg_controllen)
-$13 = (size_t *) 0x7ffff7d90c08
+Right, I can definitely relate to this, and it's hard to know who
+actually uses what especially when vendors add their own sauce on top of
+it and don't seem to bother about updating much...
 
-Which collides with
+> I'll also note that hardware crypto "decelerator" driver authors are
+> actually now *depending* on the drivers no longer being usable from
+> AF_ALG in mainline in order to argue for more relaxed driver inclusion
+> criteria.  I don't think they can have it both ways!
 
-(gdb) p &rd
-$14 = (struct recv_data **) 0x7ffff7d90c08
+FWIW I'm not affiliated with NXP or any SoC vendor (we're making
+embedded boards and providing an OS for it); I'm just bouncing around
+between a rock and a hard place trying to ensure my users can keep
+updating their kernel without losing access to their data :)
 
-Since msg_controllen is zeroed by the kernel, rd=0x0 and this causes a
-bad deref:
+The discussion has been enlightening anyway, and thanks to Richard I've
+seen a way forward if we get a backport (or even possibly even move
+forward with it ahead of stable), it's appreciated.
 
-if (rd->no_buf_add && (rd->buf_select || rd->buf_ring))
-
-In summary, the issue is that msg must live until completion which
-is what these patches fix.
-
-ButI see this contradicts the NOTES section of
-io_uring_prep_recvmsg():
-
-> As with any request that passes in data in a struct, that data must
-> remain valid until the request has been successfully submitted. It need
-> not remain valid until completion. Once a request has been submitted,
-> the in- kernel state is stable. Very early kernels (5.4 and earlier)
-> required state to be stable until the completion occurred. Applications
-> can test for this behavior by inspecting the IORING_FEAT_SUBMIT_STABLE
-> flag passed back
-
-Should I change that section of the manpage or do we want to ensure the
-stability of msg here (i.e. don't allow recvmsg to touch the msghdr
-coming from io_uring?)
-
-Either way, vacation takes priority :) see you soon.
-
+Thanks again,
 -- 
-Gabriel Krisman Bertazi
+Dominique Martinet
