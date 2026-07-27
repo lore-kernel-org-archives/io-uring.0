@@ -1,189 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E88F409132
-	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 12:28:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98322D63E5
+	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 14:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785155341; cv=none; b=Set2TsPJy741wDAZFtLBK6gOLrX9e4XF+GQIba1C9oACV7jm95AqKQTcDPvFGVgMQulmGqbtJh9pMV0xpxYzIjyUPtin79tIaOLX38nKs3jWFNkGtnEssAm+zsTJv42VagcxxjLJBH8lAJWldvV0a4El/e7yM6qcXKwQKSnMMdc=
+	t=1785161101; cv=none; b=E0aQQBiAs8PbiI5Lv26WtTLczhaQfe/WM/cjWGJrWRanvYii1Sa0qwOIXHGITcPnnRbj4LgVXzuSDIxX/gUyI7TKLXqwHtVnaFAbDhsrVvXkXuepPfU+GmBIUM0fTj3KsdJVGtTejujoReSTGsqcwpypuGruB6y8mQ+M2vjiYSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785155341; c=relaxed/simple;
-	bh=OnTHACUZXcWkKTlSXJLOAiN+Golk6o+k+/xUm4QrnrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nasig2tMpXxFwaSJy1ITEoObC7haj2X60O1q/2bCaS9H1bn2hXbfIKg7n/3atHfvwFmK0V2uyfPt2o4ilicAiYjznI2EiPO3WUyQ6KkaV864SQMt33fKvevPp4yIjoJDodYURXmfhWMXDC4GPIBpbXaW29apL9eB2IDCAPsD8kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NsdGDD95; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785161101; c=relaxed/simple;
+	bh=EXOdYXHw75zfxg+q7xHR2jjl9RPxb28uZH7EZmnrJUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
+	 Content-Type:References; b=qBCYI7Gfx/eoNgxZyh06boBJuEtkzLsulNhxJr0Y/4WbWcbmOhGSHZXiRUAZrq3f1MfEBHEOTvkOdB2klYxP3QCXS/D0wpnqJDOqgig1KG3UOdV/HscJD//+mbYGgHKMdfUJcCG7qk+9Ym4lEk+DNfXe9JfehQqFtrKAIRm3rjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Z6V+Q34o; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NsdGDD95"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785155339;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rFEBD3z/Lvl32+XITyTlZUIkkoCNEcsPSxA81f9O8xw=;
-	b=NsdGDD95cvNj5P8eKeNHu+RK0oztL/pj3Xx7oprpOweR+8ODuEqAc5dCWz4X5nrhYs0lR3
-	gIMqBfLcfjik5rzWzVT9iNNz+Ev/nHAuaoqND4NFFwB4v9A/MlsWuaTIYHFTGcZ9LfdvFt
-	gKC7G1UuhGYPQNykJssKxCF6Qb55pVc=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-634-OqLUHRt-MPmvvoAhWpe13w-1; Mon,
- 27 Jul 2026 08:28:55 -0400
-X-MC-Unique: OqLUHRt-MPmvvoAhWpe13w-1
-X-Mimecast-MFC-AGG-ID: OqLUHRt-MPmvvoAhWpe13w_1785155334
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2940C195DE24;
-	Mon, 27 Jul 2026 12:28:54 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.21])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 701D8180034F;
-	Mon, 27 Jul 2026 12:28:50 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 27 Jul 2026 14:28:53 +0200 (CEST)
-Date: Mon, 27 Jul 2026 14:28:48 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Breno Leitao <leitao@debian.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: [RFC PATCH v2 1/1] pipe: only enable the extra wake_up(rd_wait) for
- edge-triggered consumers
-Message-ID: <amdPACI3kw8PobPx@redhat.com>
-References: <amdNxsTODR4MCl3R@redhat.com>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Z6V+Q34o"
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260727140456epoutp01e9648586ca440e2f373ba258c7a1c06b~GKo8XktTJ2275522755epoutp01_
+	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 14:04:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260727140456epoutp01e9648586ca440e2f373ba258c7a1c06b~GKo8XktTJ2275522755epoutp01_
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1785161096;
+	bh=EXOdYXHw75zfxg+q7xHR2jjl9RPxb28uZH7EZmnrJUY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Z6V+Q34o6UyNSsRk8taTYssG7rU5X9UW36fT1sbdQlVGYOL0oEGCyc+VQzyucqcsw
+	 yLZcJd4S+pxkezUQpVa+WGeIY8qd3AzHgHrOTknFda76MIDIF4DbE49ZF3GxbqY0bu
+	 IsF3afBeukJv7KjWZdxSNd7B4JK9Cu+FpsxEVjKA=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20260727140456epcas5p15916393a49349d3d3df0c3fa14d9e7f4~GKo8LNJow1538715387epcas5p1A;
+	Mon, 27 Jul 2026 14:04:56 +0000 (GMT)
+Received: from epcas5p1.samsung.com (unknown [182.195.38.91]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4h80j33V6Sz3hhT4; Mon, 27 Jul
+	2026 14:04:55 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213~GKo7BN1LE1538715387epcas5p16;
+	Mon, 27 Jul 2026 14:04:54 +0000 (GMT)
+Received: from green245.gost (unknown [107.99.41.245]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260727140454epsmtip2bf7c3ffd4cc44357add109098da5a9de~GKo6i4ke_1710917109epsmtip2y;
+	Mon, 27 Jul 2026 14:04:54 +0000 (GMT)
+Date: Mon, 27 Jul 2026 19:34:43 +0530
+From: Nitesh Shetty <nj.shetty@samsung.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring <io-uring@vger.kernel.org>, Sung Keum <kambodi127@gmail.com>
+Subject: Re: [PATCH] io_uring/kbuf: cap buffer selection length at
+ MAX_RW_COUNT
+Message-ID: <20260727140443.hskeltnt75lx5r4m@green245.gost>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <aa826e79-ddc5-4a82-9863-a5edfdce709f@kernel.dk>
+X-CMS-MailID: 20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213
+References: <aa826e79-ddc5-4a82-9863-a5edfdce709f@kernel.dk>
+	<CGME20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213@epcas5p1.samsung.com>
+
+------U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_
+Content-Type: text/plain; charset="utf-8"; format="flowed"
 Content-Disposition: inline
-In-Reply-To: <amdNxsTODR4MCl3R@redhat.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-pipe_poll() unconditionally sets poll_usage on the first call, forcing
-anon_pipe_write() to wake up readers on every write even if the pipe was
-not empty. But this is only needed for edge-triggered consumers: epoll
-with EPOLLET and io_uring without (unsupported) IORING_POLL_ADD_LEVEL.
-poll() and select() users pay for it for no reason.
+On 26/07/26 04:28PM, Jens Axboe wrote:
+>io_ring_buffers_peek() builds an iovec array from provided buffers, and
+>that in turn can be handed off to a lower level provider. Be prudent and
+>cap the total size to MAX_RW_COUNT, which is the Linux default for how
+>much IO do to in a single call.
+>
+>No bugs here, but it's a good preventative measure to avoid truncation
+>issues.
+>
+>Signed-off-by: Jens Axboe <axboe@kernel.dk>
+>
+Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
 
-Change pipe_poll() to set ->pipe_usage only if wait->_key & EPOLLET is
-true, this check should catch both users.
-
-While at it, add READ_ONCE() in anon_pipe_write() to pair with WRITE_ONCE()
-in pipe_poll().
-
-Test-case for epoll:
-
-	#include <unistd.h>
-	#include <sys/epoll.h>
-	#include <assert.h>
-
-	int main(void)
-	{
-		int pfd[2], efd;
-		struct epoll_event evt = { .events = EPOLLIN | EPOLLET };
-
-		pipe(pfd);
-		efd = epoll_create1(0);
-		epoll_ctl(efd, EPOLL_CTL_ADD, pfd[0], &evt);
-
-		for (int i = 0; i < 2; ++i) {
-			write(pfd[1], "", 1);
-			assert(epoll_wait(efd, &evt, 1, 0) == 1);
-		}
-
-		return 0;
-	}
-
-Test-case for io_uring:
-
-	#include <unistd.h>
-	#include <sys/mman.h>
-	#include <sys/epoll.h>
-	#include <sys/syscall.h>
-	#include <linux/io_uring.h>
-	#include <assert.h>
-
-	int main(void)
-	{
-		struct io_uring_params p = {};
-		int fd, pfd[2];
-
-		pipe(pfd);
-
-		fd = syscall(SYS_io_uring_setup, 2, &p);
-		assert(fd >= 0);
-
-		void *ring = mmap(0, p.cq_off.cqes + p.cq_entries * sizeof(struct io_uring_cqe),
-				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQ_RING);
-		assert(ring != MAP_FAILED);
-		*(unsigned *)(ring + p.sq_off.tail) = 1;
-
-		struct io_uring_sqe *sqes = mmap(0, p.sq_entries * sizeof(*sqes),
-				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQES);
-		assert(sqes != MAP_FAILED);
-		sqes[0].opcode = IORING_OP_POLL_ADD;
-		sqes[0].fd = pfd[0];
-		sqes[0].len = IORING_POLL_ADD_MULTI;
-		sqes[0].poll32_events = EPOLLIN;
-
-		syscall(SYS_io_uring_enter, fd, 1, 0, 0, 0, 0);
-
-		unsigned *cq_head = ring + p.cq_off.head;
-		unsigned *cq_tail = ring + p.cq_off.tail;
-		for (int i = 0; i < 2; ++i) {
-			write(pfd[1], "", 1);
-			syscall(SYS_io_uring_enter, fd, 0, 0, IORING_ENTER_GETEVENTS, 0, 0);
-			assert(*cq_tail == ++*cq_head);
-		}
-
-		return 0;
-	}
-
-Signed-off-by: Oleg Nesterov <oleg@redhat.com>
----
- fs/pipe.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/fs/pipe.c b/fs/pipe.c
-index 429b0714ec57..98b1e2385103 100644
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@ -689,7 +689,7 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
- 	 * Epoll nonsensically wants a wakeup whether the pipe
- 	 * was already empty or not.
- 	 */
--	if (was_empty || pipe->poll_usage)
-+	if (was_empty || READ_ONCE(pipe->poll_usage))
- 		wake_up_interruptible_sync_poll(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
- 	kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
- 	if (wake_next_writer)
-@@ -752,7 +752,6 @@ static long pipe_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	}
- }
- 
--/* No kernel lock held - fine */
- static __poll_t
- pipe_poll(struct file *filp, poll_table *wait)
- {
-@@ -761,7 +760,9 @@ pipe_poll(struct file *filp, poll_table *wait)
- 	union pipe_index idx;
- 
- 	/* Epoll has some historical nasty semantics, this enables them */
--	if (unlikely(!READ_ONCE(pipe->poll_usage)))
-+	if ((filp->f_mode & FMODE_READ) &&
-+	    wait && (wait->_key & EPOLLET) &&
-+	    unlikely(!READ_ONCE(pipe->poll_usage)))
- 		WRITE_ONCE(pipe->poll_usage, true);
- 
- 	/*
--- 
-2.52.0
+------U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_
+Content-Type: text/plain; charset="utf-8"
 
 
+------U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_--
