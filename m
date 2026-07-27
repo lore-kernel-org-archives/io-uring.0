@@ -1,91 +1,191 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D98322D63E5
-	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 14:04:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CD341D638
+	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 14:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785161101; cv=none; b=E0aQQBiAs8PbiI5Lv26WtTLczhaQfe/WM/cjWGJrWRanvYii1Sa0qwOIXHGITcPnnRbj4LgVXzuSDIxX/gUyI7TKLXqwHtVnaFAbDhsrVvXkXuepPfU+GmBIUM0fTj3KsdJVGtTejujoReSTGsqcwpypuGruB6y8mQ+M2vjiYSA=
+	t=1785163633; cv=none; b=mQ14qHVnFZjF5pup29WJ967B0/kOwdeyN2kzwbZzxhC+Pf8W2GSONKkTOFb+MJLNWRHNnbwVDbtL+AaG3UiulgEjUmYvjsVo2UK1O8iXFRToiCnvZM7phZ1/zopKLuzGdakqZck0xiqnn89yIF700BfFWIOPrE2kYHOlWVDeJwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785161101; c=relaxed/simple;
-	bh=EXOdYXHw75zfxg+q7xHR2jjl9RPxb28uZH7EZmnrJUY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:In-Reply-To:
-	 Content-Type:References; b=qBCYI7Gfx/eoNgxZyh06boBJuEtkzLsulNhxJr0Y/4WbWcbmOhGSHZXiRUAZrq3f1MfEBHEOTvkOdB2klYxP3QCXS/D0wpnqJDOqgig1KG3UOdV/HscJD//+mbYGgHKMdfUJcCG7qk+9Ym4lEk+DNfXe9JfehQqFtrKAIRm3rjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Z6V+Q34o; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1785163633; c=relaxed/simple;
+	bh=muPX7iuRvJbzKVBJEnGeSScT947qOmkM19xfGrWzKHU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mX1f2qkf2zk4vY5JWSC55lyZbPIKRhyiq3ZDjyo606qiEUEXHd5Me5GJAMUf0o3dtJ86V9WJ5i9DnDjcANqox4uvPZ2a+yObRCeUzzUBoCRuOVNN/BOvEhSInAhnCKI+8VOSXOcWba6EahCBaS0HzNPf3eOk+oIs1Z2dz+Q9Lrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=mbMI9lhK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=5JkuAZea; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ulNUzruO; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JYY/xZq2; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Z6V+Q34o"
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260727140456epoutp01e9648586ca440e2f373ba258c7a1c06b~GKo8XktTJ2275522755epoutp01_
-	for <io-uring@vger.kernel.org>; Mon, 27 Jul 2026 14:04:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260727140456epoutp01e9648586ca440e2f373ba258c7a1c06b~GKo8XktTJ2275522755epoutp01_
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1785161096;
-	bh=EXOdYXHw75zfxg+q7xHR2jjl9RPxb28uZH7EZmnrJUY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Z6V+Q34o6UyNSsRk8taTYssG7rU5X9UW36fT1sbdQlVGYOL0oEGCyc+VQzyucqcsw
-	 yLZcJd4S+pxkezUQpVa+WGeIY8qd3AzHgHrOTknFda76MIDIF4DbE49ZF3GxbqY0bu
-	 IsF3afBeukJv7KjWZdxSNd7B4JK9Cu+FpsxEVjKA=
-Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260727140456epcas5p15916393a49349d3d3df0c3fa14d9e7f4~GKo8LNJow1538715387epcas5p1A;
-	Mon, 27 Jul 2026 14:04:56 +0000 (GMT)
-Received: from epcas5p1.samsung.com (unknown [182.195.38.91]) by
-	epsnrtp03.localdomain (Postfix) with ESMTP id 4h80j33V6Sz3hhT4; Mon, 27 Jul
-	2026 14:04:55 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213~GKo7BN1LE1538715387epcas5p16;
-	Mon, 27 Jul 2026 14:04:54 +0000 (GMT)
-Received: from green245.gost (unknown [107.99.41.245]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260727140454epsmtip2bf7c3ffd4cc44357add109098da5a9de~GKo6i4ke_1710917109epsmtip2y;
-	Mon, 27 Jul 2026 14:04:54 +0000 (GMT)
-Date: Mon, 27 Jul 2026 19:34:43 +0530
-From: Nitesh Shetty <nj.shetty@samsung.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring <io-uring@vger.kernel.org>, Sung Keum <kambodi127@gmail.com>
-Subject: Re: [PATCH] io_uring/kbuf: cap buffer selection length at
- MAX_RW_COUNT
-Message-ID: <20260727140443.hskeltnt75lx5r4m@green245.gost>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="mbMI9lhK";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="5JkuAZea";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ulNUzruO";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JYY/xZq2"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id C67777B7AE;
+	Mon, 27 Jul 2026 14:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1785163625; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
+	b=mbMI9lhKVkAT/kf+JZkT1WY3ihtKgC5SLatp+Glt+wGkagmxEEsmtOEtt4FMBbURML0vSa
+	csbMsaRjLoIBVPAG6ohyVSbUImXOLnFJfDNbJ3PBE+1o0639PLXELkydhkCZxRHw1AbWRw
+	aBayrDfNPOvI0vPJZFAMJT/666K3O3Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1785163625;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
+	b=5JkuAZeatsJOIvr1g4SjpaS4gWz4xRqhosYIyiPfl4Wc6P/Vix7BsG/tZ7Ly5h0iqGaXb/
+	oTVVksJY/7CHRkCw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=ulNUzruO;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="JYY/xZq2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1785163621; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
+	b=ulNUzruOckbNKaiYPunPv3yxSDceb5azkTFCwlnEOgnNPaZ9Bu9bRiAh8A7XTvBz1ile/v
+	L1H7KIFhYuGyGcgl1AR465the/+OavAcWUxsyT8y13R7GBpN4OA8sjQVWpPh4jeh4RZOTK
+	KxGEOrkc1OoH+uTgss+An2bKV9hzTXU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1785163621;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bmeje1d76LhZOkvFJIAbMG6Yy/XYcyJxHSnHhJv9R80=;
+	b=JYY/xZq2OBu0FTp3nHxsrgmhRft5XcyozwKGl6EdL4csmmL22uIWyEn8apeDE4bBKMnV3v
+	aenD4cJiM0kCPVCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BD97F779B9;
+	Mon, 27 Jul 2026 14:47:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ry2cLWVvZ2ojVQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Mon, 27 Jul 2026 14:47:01 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 5C8ACA0BA1; Mon, 27 Jul 2026 16:46:53 +0200 (CEST)
+Date: Mon, 27 Jul 2026 16:46:53 +0200
+From: Jan Kara <jack@suse.cz>
+To: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, io-uring@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] fs: make file_listxattr and file_removexattr
+ helpers non-static
+Message-ID: <dyyz25zraphwgpgyrfes7uunepxcsswok4z3qpnggivd3bjjzk@l3nwvj4utuib>
+References: <20260721103514.2716-1-aditya.ansh182@gmail.com>
+ <20260721103514.2716-2-aditya.ansh182@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <aa826e79-ddc5-4a82-9863-a5edfdce709f@kernel.dk>
-X-CMS-MailID: 20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213
-References: <aa826e79-ddc5-4a82-9863-a5edfdce709f@kernel.dk>
-	<CGME20260727140454epcas5p1a2306b5a87d2ff6d299e89b0af320213@epcas5p1.samsung.com>
-
-------U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_
-Content-Type: text/plain; charset="utf-8"; format="flowed"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20260721103514.2716-2-aditya.ansh182@gmail.com>
+X-Spamd-Result: default: False [-2.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Spam-Flag: NO
+X-Spam-Score: -2.51
+X-Spam-Level: 
+X-Rspamd-Queue-Id: C67777B7AE
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
 
-On 26/07/26 04:28PM, Jens Axboe wrote:
->io_ring_buffers_peek() builds an iovec array from provided buffers, and
->that in turn can be handed off to a lower level provider. Be prudent and
->cap the total size to MAX_RW_COUNT, which is the Linux default for how
->much IO do to in a single call.
->
->No bugs here, but it's a good preventative measure to avoid truncation
->issues.
->
->Signed-off-by: Jens Axboe <axboe@kernel.dk>
->
-Reviewed-by: Nitesh Shetty <nj.shetty@samsung.com>
+On Tue 21-07-26 10:35:13, Aditya Prakash Srivastava wrote:
+> In preparation for adding IORING_OP_FREMOVEXATTR and
+> IORING_OP_FLISTXATTR support in io_uring, we need to invoke the VFS-layer
+> helpers from within io_uring.
+> 
+> Make the following helpers non-static and declare them in fs/internal.h:
+> - file_listxattr()
+> - file_removexattr()
+> 
+> No functional change is introduced.
+> 
+> Signed-off-by: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
 
-------U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_
-Content-Type: text/plain; charset="utf-8"
+Looks ok to me. Feel free to add:
 
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-------U9Lis3DTxLv4QHEbRCenRB4HCArvGtQAFyS4Dv-9dse07Ud-=_743d_--
+								Honza
+
+> ---
+>  fs/internal.h | 2 ++
+>  fs/xattr.c    | 3 +--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/internal.h b/fs/internal.h
+> index 355d93f92208..ee86b24db79a 100644
+> --- a/fs/internal.h
+> +++ b/fs/internal.h
+> @@ -297,6 +297,8 @@ int filename_setxattr(int dfd, struct filename *filename,
+>  		      unsigned int lookup_flags, struct kernel_xattr_ctx *ctx);
+>  int setxattr_copy(const char __user *name, struct kernel_xattr_ctx *ctx);
+>  int import_xattr_name(struct xattr_name *kname, const char __user *name);
+> +ssize_t file_listxattr(struct file *f, char __user *list, size_t size);
+> +int file_removexattr(struct file *f, struct xattr_name *kname);
+>  
+>  int may_write_xattr(struct mnt_idmap *idmap, struct inode *inode);
+>  
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index d58979115200..31b8a5eeec1e 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -953,7 +953,6 @@ listxattr(struct dentry *d, char __user *list, size_t size)
+>  	return error;
+>  }
+>  
+> -static
+>  ssize_t file_listxattr(struct file *f, char __user *list, size_t size)
+>  {
+>  	audit_file(f);
+> @@ -1036,7 +1035,7 @@ removexattr(struct mnt_idmap *idmap, struct dentry *d, const char *name)
+>  	return vfs_removexattr(idmap, d, name);
+>  }
+>  
+> -static int file_removexattr(struct file *f, struct xattr_name *kname)
+> +int file_removexattr(struct file *f, struct xattr_name *kname)
+>  {
+>  	int error = mnt_want_write_file(f);
+>  
+> -- 
+> 2.47.3
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
