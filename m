@@ -1,78 +1,104 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503B03A6B81
-	for <io-uring@vger.kernel.org>; Tue, 28 Jul 2026 19:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9723F4734DF
+	for <io-uring@vger.kernel.org>; Tue, 28 Jul 2026 21:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785266122; cv=none; b=cb1YiBnsDHlJrCZWbxig6Kcm9rfUKmC1mZ5uiVvyr1XtLwHqKsD8eMA36oY8hrE2D7/3mnlbERBC4DPZOSRlciH+4n30oQ/ujP0TmLTrfcXrgUTg3qWzZk6tivK1cJIrZXNbC8JnEJArnoJPhVK1sJx0i5cCPDldV43aG9eLbXg=
+	t=1785274186; cv=none; b=Bi/6S+iefqAtkJsDxq8ude6/hFUj6XozSo+VCOv1j+2LFq+189zNPji/n7DvLKqHpa7KZv3Jiyml+bOGRd1U3LuIIk1f2M1BqL5XRALbJFkMmlgqVwn+n2EmOqnzpkgQy7+OW3Z8VbXFPeuNw2IiwI6OQyirXAdBcUkSjGkpg9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785266122; c=relaxed/simple;
-	bh=g91u38xN99MONpcrbIn5syL3q2ufwOt2rP0LwyuIxnY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mh8KPkM7RHv/aW1EDFv9UWNeKuaNhGvdIUlNa4Wi+5mGUhxhqDb5zymbbOUbT/2dvJC9aQAMweRpVA+EhV1/bhzeqLZDeD6eqdSLFYvmDdKe0qtbnh+dU9wMEsc44aaKQVQGmgY4crrjYYsKG1I2+LfEZ9HsC9JtmPcs/BrD0SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=cKynUxEC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=d2ppvs08; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=LSDaNk6/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fJkBrgaU; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1785274186; c=relaxed/simple;
+	bh=CET6fIyhDXB4SsmbGeWcS1QmjhZ3rtH8D7IEFfWbgAo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bpAGRXFslWX572LhFRpxi7N6P+gvUwroQoN6PcDVXKgkTXPnfvRxErAeHvJWv2nK2e3eUT5c6APkQqVZmyM44s+P9FIPLZELHidHFXxi0RdpmFbsutV0TtvtxFEHO08tP3zQJtmg3cO0miSFZiLIzHBllXVCwLzZwfSe4d+H93U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qMBb5V31; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="cKynUxEC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="d2ppvs08";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="LSDaNk6/";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fJkBrgaU"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 3E24A7C17B;
-	Tue, 28 Jul 2026 19:15:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785266115; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=Ds7mhuvVXaRCHBX/aoqYAMjx448HlrhwZPRVdULw3/k=;
-	b=cKynUxECIaxrPhb9wpgxtswO9qJVXkaYD5sqiW0BkY5olwl11m7HhsyFtEHcpGu2NLe9cG
-	6NxHgeHXbzgLnqa/vsvpZ2VdgrF8BC+j6hoFhYLRb3gkr4CxfycqQ8CUw9Agz3hfFWQVly
-	hk4QX4EXLRHwQXSuSM/gOKSJ6wDf1Ow=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785266115;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=Ds7mhuvVXaRCHBX/aoqYAMjx448HlrhwZPRVdULw3/k=;
-	b=d2ppvs08I4/R9AcySD4Gwo+vjhUP0kuv2eQc1txN46wvbdgNgl+S0ierSJVJzkg/nAMwYF
-	qqkh8fqSRICvRHCg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785266111; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=Ds7mhuvVXaRCHBX/aoqYAMjx448HlrhwZPRVdULw3/k=;
-	b=LSDaNk6/MeCrpdVXLzWVY3i9dB6gW9ZNAtutGZA5+5Ju877vbhJFaghEa0Z7c0H3ivLlnE
-	XB3Xjwg03gcIfByoVwYpbVGDdTQRRd5bCZ+606FnBZAf4FJSiOusEOfTHxD5D8qeg3xpQk
-	MQFXqXB2kL1xe7HtclAoGER98i7Lr+4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785266111;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=Ds7mhuvVXaRCHBX/aoqYAMjx448HlrhwZPRVdULw3/k=;
-	b=fJkBrgaUpMcueacNcZoxrPY3SJEVREc7rMZGfJb7RRF+FOizUJ9yTmFHUWZ4LVEIrBBt5m
-	K4dCtgNAf1Q6w4AA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id F250C779B1;
-	Tue, 28 Jul 2026 19:15:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4B/kMr7/aGoFKAAAD6G6ig
-	(envelope-from <krisman@suse.de>); Tue, 28 Jul 2026 19:15:10 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	Gabriel Krisman Bertazi <krisman@suse.de>,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/net: don't overconsume buffers when using MSG_TRUNC
-Date: Tue, 28 Jul 2026 15:14:54 -0400
-Message-ID: <20260728191454.1850326-1-krisman@suse.de>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qMBb5V31"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-47f9ab7ee38so232580f8f.2
+        for <io-uring@vger.kernel.org>; Tue, 28 Jul 2026 14:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785274182; x=1785878982; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=d4R1Ta7J5o9QlsZRJQtTe6q81OAsfZ4+yoYoEv/KCR0=;
+        b=qMBb5V31No+VVrXWa6/YoPtOEUqEb6mfu9gzVFH13R3w0NCz8Y6PV6QmkOHJpe764g
+         hchhqSRfvkhbk6pSPUGlPVC2LpIBO2VaYlUfDK+QHU96iu885tGO23s+xWZWXpXoMELp
+         wA+nM+vA6YDwOdxh2pgGCPvddaefN4hvdE84xjkFMYflf9trOkUHNAGJmOkT5SgGrbgZ
+         ZydIo4Y9S4IDMViyOb3prFzKvdrs/VCaulxX2xR1Qjiof8ugJKZN6v+qO//m0tp/ioGZ
+         uREA0LWPvM5bEWSrnxyxCcdspwrsTymQan+BEw8oLtiDd3RGI8+UiXnjRB/0KCI/+iJN
+         N1nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785274182; x=1785878982;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=d4R1Ta7J5o9QlsZRJQtTe6q81OAsfZ4+yoYoEv/KCR0=;
+        b=ckei1TUNkBp1ln/wAKsq60Dierd6hmOjolGUcq9Sdo10Ku9bBhpPPWiy96LkDzS/ie
+         /Wl/uk8fi3dMuTLAK2HQjrcg5Vj9IaigOSgqDcWscItg/j2mlIKzgAfXAHNf53J7PEpL
+         TOELU1hf1h9udt5RldSkn/T+DZ9e0myDrD01N5GdHIkiRTlmK2TBPMqNtCIl+1k4uBgJ
+         9lHR0duL1dbCYpwEpkIALRA1kYn7w331I7qndohUa50YHezzkaiKpAOP/hSlFjUzlM47
+         BEootaactF1IJ3UEa74QHM7aUu+zE66yYDcdyggQZsoxN908/wA46EGvGptXIWIYOiAm
+         sUAw==
+X-Forwarded-Encrypted: i=1; AHgh+Rpsq+uUxwqqVwIRp1SAkBL6e9BARaNuMSY0kcb8TAackzegnvPcnCf7oM1lHitV+YkWfAWruaBLFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YywIhALY9Hmh3uxpFSAz3xzYYYEtzCCN8nylXk2IVT1dfss2gWP
+	tTAHeTDzf3HXTCaVN7pFe9V3y8J97d4V9tZV2qhIeh9aC51VeG8VBtIQ
+X-Gm-Gg: AR+sD12fiukUKgrc5QMVGOtsj3Hqa2zUfP3he0zara0ySuvmgRHMSs7gMVcQ5HV/j3Z
+	COjS9VWqUGkNhE2XhEbrghbM6Gmx6eLnj9hbdV3Q19+SGuKlYNTD8XRf7Z9oEghTLGxnhlMTKLb
+	ufaZ4uNw/rKvyQjhlDPzzsc568pm+9XIu7FU3v3EHgILZcdiaM5siKJDSN5Av3ASJv7i6il2ya4
+	Y5zYN4hNIIhhNDZ+na+ng/4rFLdaRFze/MEwPmY5PijOpGWZ9gTmYAnPZM0em8ncJpezpg86e9l
+	Fac6VDTk/jzHu2lkwHwpKFxPQvT4YL73onpQwxUJrogfSBc9apQ3hnK00uwrAzWPV6jeVAatovR
+	SqUXRecHvvGjjFxuyjxYCrXi/mRMTcL2dAkitcyFRgRS+jynSa8w7UANOGfbICly6wfIw1X/R2t
+	QqB+hDqfbmmHUW5Ce0IuomRApiC4rp7XLf4yDhaKBcGE64U8cee9i9xY6eBtjTeNvZXF8OkH5Lz
+	zblMa91UuJiIEeC7w0=
+X-Received: by 2002:a5d:64e9:0:b0:47f:93be:dabd with SMTP id ffacd0b85a97d-47fb1f1013bmr4399028f8f.28.1785274181752;
+        Tue, 28 Jul 2026 14:29:41 -0700 (PDT)
+Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fb6ac44bcsm2245329f8f.11.2026.07.28.14.29.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 14:29:40 -0700 (PDT)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	Keith Busch <kbusch@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org
+Cc: asml.silence@gmail.com,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Nitesh Shetty <nj.shetty@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Tushar Gohad <tushar.gohad@intel.com>,
+	William Power <william.power@intel.com>,
+	Phil Cayton <phil.cayton@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	David Sterba <dsterba@suse.com>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	dm-devel@lists.linux.dev,
+	nvdimm@lists.linux.dev,
+	linux-btrfs@vger.kernel.org,
+	ceph-devel@vger.kernel.org
+Subject: [PATCH v4 00/14] Add dmabuf read/write via io_uring
+Date: Tue, 28 Jul 2026 22:29:12 +0100
+Message-ID: <cover.1785274111.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -80,183 +106,126 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
 
-When a recv/recvmsg is issued with MSG_TRUNC and the incoming packet is
-larger than the provided buffer, the net layer returns the full length
-of the packet rather than the number of bytes actually copied into the
-buffer.  As a result, io_uring advances more of the provided buffer ring
-than was actually filled.  Use the actual filled region size to consume
-the buffer, but still return the full size to preserve MSG_TRUNC
-semantics.
+The patch set allows to register a dmabuf to an io_uring instance for
+a specified file and use it with io_uring read / write requests. The
+infrastructure is not tied to io_uring and there could be more users
+in the future. A similar idea was attempted some years ago by Keith [1],
+from where I borrowed a good number of changes, and later was brough up
+by Tushar and Vishal.
 
-Take care with multishot, because that seems to already truncate the
-consumption based on the available payload size.
+It's an opt-in feature for files, and they need to implement a new
+file operation to use it. Only NVMe block devices are supported in this
+series. The user API is built on top of io_uring's "registered buffers",
+where a dmabuf is registered in a special way, but after it can be used
+as any other "registered buffer" with IORING_OP_{READ,WRITE}_FIXED
+requests. It's created via a new file operation and the resulted map is
+then passed through the I/O stack in a new iterator type. There is some
+additional infrastructure to glue it together, count requests, manage
+lifetime and implement invalidation.
 
-This was reported in https://github.com/axboe/liburing/issues/1619.
+Tushar, William, Phil as well as Kanchan, Anuj and Nitesh did a lot of
+testing and experimentation with different devices. Some earlier
+benchmarks by Anuj for IOMMU optimisations with udmabuf showed: 
 
-Fixes: ae98dbf43d75 ("io_uring/kbuf: add support for incremental buffer consumption")
-Cc: stable@vger.kernel.org
-Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
----
- io_uring/net.c | 38 +++++++++++++++++++++++++++++++-------
- 1 file changed, 31 insertions(+), 7 deletions(-)
+STRICT: before = 570 KIOPS, after = 5.01 MIOPS
+LAZY: before = 1.93 MIOPS, after = 5.01 MIOPS
+PASSTHROUGH: before = 5.01 MIOPS, after = 5.01 MIOPS
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index f192e6016c19..6be16aab21c1 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -883,7 +883,7 @@ int io_recvmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- static inline bool io_recv_finish(struct io_kiocb *req,
- 				  struct io_async_msghdr *kmsg,
- 				  struct io_br_sel *sel, bool mshot_finished,
--				  unsigned issue_flags)
-+				  unsigned issue_flags, size_t consumed)
- {
- 	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
- 	unsigned int cflags = 0;
-@@ -907,7 +907,7 @@ static inline bool io_recv_finish(struct io_kiocb *req,
- 	if (sr->flags & IORING_RECVSEND_BUNDLE) {
- 		size_t this_ret = sel->val - sr->done_io;
- 
--		cflags |= io_put_kbufs(req, this_ret, sel->buf_list, io_bundle_nbufs(kmsg, this_ret));
-+		cflags |= io_put_kbufs(req, consumed, sel->buf_list, io_bundle_nbufs(kmsg, consumed));
- 		if (sr->flags & IORING_RECV_RETRY)
- 			cflags = req->cqe.flags | (cflags & CQE_F_MASK);
- 		if (sr->mshot_len && sel->val >= sr->mshot_len)
-@@ -929,7 +929,7 @@ static inline bool io_recv_finish(struct io_kiocb *req,
- 			return false;
- 		}
- 	} else {
--		cflags |= io_put_kbuf(req, sel->val, sel->buf_list);
-+		cflags |= io_put_kbuf(req, consumed, sel->buf_list);
- 	}
- 
- 	/*
-@@ -1057,6 +1057,7 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 	int ret, min_ret = 0;
- 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
- 	bool mshot_finished = true;
-+	size_t len, consumed = 0;
- 
- 	sock = sock_from_file(req->file);
- 	if (unlikely(!sock))
-@@ -1072,9 +1073,8 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 
- retry_multishot:
- 	sel.buf_list = NULL;
-+	len = sr->len;
- 	if (io_do_buffer_select(req)) {
--		size_t len = sr->len;
--
- 		sel = io_buffer_select(req, &len, sr->buf_group, issue_flags);
- 		if (!sel.addr)
- 			return -ENOBUFS;
-@@ -1095,6 +1095,7 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 	if (req->flags & REQ_F_APOLL_MULTISHOT) {
- 		ret = io_recvmsg_multishot(sock, sr, kmsg, flags,
- 					   &mshot_finished);
-+		consumed = ret;
- 	} else {
- 		/* disable partial retry for recvmsg with cmsg attached */
- 		if (flags & MSG_WAITALL && !kmsg->msg.msg_controllen)
-@@ -1102,6 +1103,15 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 
- 		ret = __sys_recvmsg_sock(sock, &kmsg->msg, sr->umsg,
- 					 kmsg->uaddr, flags);
-+		/*
-+		 * With MSG_TRUNC, the net layer will return the full size of
-+		 * the packet, even if we only filled part of it in the buffers.
-+		 * Adjust the returned size to consume only the real part of the
-+		 * buffer.
-+		 */
-+		consumed = ret;
-+		if (ret > len)
-+			consumed = len;
- 	}
- 
- 	if (ret < min_ret) {
-@@ -1128,7 +1138,7 @@ int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
- 		io_kbuf_recycle(req, sel.buf_list, issue_flags);
- 
- 	sel.val = ret;
--	if (!io_recv_finish(req, kmsg, &sel, mshot_finished, issue_flags))
-+	if (!io_recv_finish(req, kmsg, &sel, mshot_finished, issue_flags, consumed))
- 		goto retry_multishot;
- 
- 	return sel.val;
-@@ -1216,6 +1226,7 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 	struct socket *sock;
- 	unsigned flags;
- 	int ret, min_ret = 0;
-+	size_t consumed = 0, len = 0;
- 	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
- 	bool mshot_finished;
- 
-@@ -1245,6 +1256,7 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 
- retry_multishot:
- 	sel.buf_list = NULL;
-+	len = sr->len;
- 	if (io_do_buffer_select(req)) {
- 		sel.val = sr->len;
- 		ret = io_recv_buf_select(req, kmsg, &sel, issue_flags);
-@@ -1252,6 +1264,7 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 			kmsg->msg.msg_inq = -1;
- 			goto out_free;
- 		}
-+		len = ret;
- 		sr->buf = NULL;
- 	}
- 
-@@ -1282,6 +1295,17 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 	}
- 
- 	mshot_finished = ret <= 0;
-+
-+	/*
-+	 * With MSG_TRUNC, the net layer will return the full size of
-+	 * the packet, even if we only filled part of it in the buffers.
-+	 * Adjust the returned size to consume only the real part of the
-+	 * buffer.
-+	 */
-+	consumed = ret;
-+	if (ret > len)
-+		consumed = len;
-+
- 	if (ret > 0)
- 		ret += sr->done_io;
- 	else if (sr->done_io)
-@@ -1290,7 +1314,7 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 		io_kbuf_recycle(req, sel.buf_list, issue_flags);
- 
- 	sel.val = ret;
--	if (!io_recv_finish(req, kmsg, &sel, mshot_finished, issue_flags))
-+	if (!io_recv_finish(req, kmsg, &sel, mshot_finished, issue_flags, consumed))
- 		goto retry_multishot;
- 
- 	return sel.val;
+# Patch set structure:
+- Patches 1-2 introduce internal API and infrastructure mediating
+  io_uring and target subsystem / devices
+- Patches 3-7: block layer support + prep patches
+- Patches 8-9 implement NVMe support
+- Patches 10-14 add io_uring support and uapi. Patch 14 specifically
+  enables dma-buf support, the rest are preparation patches.
+
+There are some liburing tests that can serve as an example:
+git: https://github.com/isilence/liburing.git rw-dmabuf-tests-v4
+url: https://github.com/isilence/liburing/tree/rw-dmabuf-tests-v4
+
+[1] https://lore.kernel.org/io-uring/20220805162444.3985535-1-kbusch@fb.com/
+
+v4: - Add sgl support from Anuj
+    - Move it under drivers/dma-buf/ and rename
+    - Fix mis-sized allocations
+    - Fix io_uring re-import mishandling
+    - Drop map before io_uring "task work"
+    - Move blk-mq callback to block_device_operations
+    - Convert bio flag to REQ_OP*
+    - Other small changes
+
+v3: https://lore.kernel.org/io-uring/cover.1777475843.git.asml.silence@gmail.com/
+    - Rework io_uring registration
+    - Move token/map infrastructure code out of blk-mq
+    - Simplify callbacks: remove a separate blk-mq table, which was
+      mostly just forwarding calls (to nvme).
+    - Don't skip dma sync depending on request direction
+    - Fix a couple of hangs
+    - Rename s/dma/dmabuf/
+    - Other small changes
+
+v2: - Don't pass raw dma addresses, wrap it into a driver specific object
+    - Split into two objects: token and map
+    - Implement move_notify
+
+Anuj Gupta (1):
+  nvme-pci: add SGL support for the dmabuf path
+
+Pavel Begunkov (13):
+  dma-buf: introduce initial file I/O infrastructure
+  iov_iter: add iterator type for dmabuf maps
+  block: rename bi_bvec_done
+  block: always adjust bi_offset on bio_advance_iter
+  block: move bvec init into __bio_clone
+  block: introduce dma map backed bio type
+  block: forward init_dma_buf_io_ctx to drivers
+  nvme-pci: implement dma_token backed requests
+  io_uring/rsrc: introduce buf registration structure
+  io_uring/rsrc: extend buffer update
+  io_uring/rsrc: add uncloneable regbuf flag
+  io_uring/rsrc: add regbuf import flags
+  io_uring/rsrc: add dmabuf backed registered buffers
+
+ Documentation/block/biovecs.rst |   8 +-
+ block/bio.c                     |  30 ++-
+ block/blk-merge.c               |  23 +-
+ block/blk-mq-dma.c              |   2 +-
+ block/blk.h                     |   2 +-
+ block/fops.c                    |  16 ++
+ drivers/block/loop.c            |   2 +-
+ drivers/block/zloop.c           |   2 +-
+ drivers/dma-buf/Makefile        |   2 +-
+ drivers/dma-buf/dma-buf-io.c    | 275 ++++++++++++++++++++
+ drivers/md/dm-io-rewind.c       |  16 +-
+ drivers/md/dm-pcache/segment.c  |   4 +-
+ drivers/nvdimm/btt.c            |   2 +-
+ drivers/nvme/host/core.c        |  12 +
+ drivers/nvme/host/nvme.h        |   2 +
+ drivers/nvme/host/pci.c         | 448 +++++++++++++++++++++++++++++++-
+ drivers/nvme/host/tcp.c         |   2 +-
+ fs/btrfs/misc.h                 |   2 +-
+ include/linux/bio.h             |  22 +-
+ include/linux/blk-mq.h          |   7 +
+ include/linux/blk_types.h       |  14 +-
+ include/linux/blkdev.h          |   2 +
+ include/linux/bvec.h            |  17 +-
+ include/linux/dma-buf-io.h      |  91 +++++++
+ include/linux/fs.h              |   2 +
+ include/linux/io_uring_types.h  |   5 +
+ include/linux/uio.h             |  11 +
+ include/uapi/linux/io_uring.h   |  31 ++-
+ io_uring/io_uring.c             |   3 +-
+ io_uring/net.c                  |   4 +-
+ io_uring/rsrc.c                 | 281 +++++++++++++++++---
+ io_uring/rsrc.h                 |  45 +++-
+ io_uring/rw.c                   |   6 +-
+ lib/iov_iter.c                  |  31 ++-
+ net/ceph/messenger.c            |   4 +-
+ 35 files changed, 1315 insertions(+), 111 deletions(-)
+ create mode 100644 drivers/dma-buf/dma-buf-io.c
+ create mode 100644 include/linux/dma-buf-io.h
+
 -- 
-2.55.0
+2.54.0
 
