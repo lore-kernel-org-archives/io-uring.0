@@ -1,152 +1,157 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DE94469836
-	for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 16:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785344013; cv=pass; b=h/fCO29nbg0ZduJjduFtdV4NGcyWsGLDc2UYqs4TyLWJqUnp2WKePltGywibsm8Ze9oayTd9efdnniETfkCupY5myJ8Yo7GEjRfzC1nUkdC8en/DFI2ElooqoW/r5j4VJ0t8NdBsJQ7r3Us0DR+sE8nGImD6recyUHzS1HDjxAc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785344013; c=relaxed/simple;
-	bh=/YYV8EJ3uAY8vVlHWLu4xPFSaaoxJidP5IaWXw3aYyM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qPK/ede2tgN+1tuX+5oa+I7nF5UvTSn7RtKGSLv80gx5Cw+klC8wmgOF8LRmGyKU6xkkgCAOBBvpCH0Fjy41rixy3k10JSnjfSLGv7alu2240KN7gJy+Y4BBY+KXj2Q1tgXukB+JeoE/3PnQCx1pR/4g0MtPF5qL9WsNSgO5sjU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bZnLVGTN; arc=pass smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A7D31ED80
+	for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 17:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785344875; cv=none; b=oMWIDW2gqfWeMYCInIKG5WW77Yn5wXZQWH7sLIQBWLunClzgBNcxf9iJvzhL6d9uB2vsrIzN0+CAwg0MunZTwSgyHeDrgRrCtPJ6QEPAlKCS7XyETAI5s7+TBQcKQiGRPWM1V8ViBV94nd6Rh2BPu5A/Ib5wJyJA1HLiWyXTT+0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785344875; c=relaxed/simple;
+	bh=bb14VU+mzqH5lBzRhhTvKjHyh5XA6yPZdb7hGKFeL+c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KbstyjKuc2aCdkNHgHpMNCjVInxPL4RDXVGDvZ/UsywHzt0AakpDxRZP0xrxKxdkY6c2Vp44GotyL6TGHOKIiMuXEw6hPpHoloAhS/pC0SFBpIMvmrFPRCW+Z9c2xkZDsctOTu282YVbesXkF6Z1XFaqmjO4wBBS/is+ajpzz9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jG5gBZCV; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bZnLVGTN"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-69fab5a852cso1789414a12.0
-        for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 09:53:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785344010; cv=none;
-        d=google.com; s=arc-20260327;
-        b=TLX0ZELW7oWAnvmnNQQo79Svx8hMpguYoL9uWktwJnea2Nw4Ch7TWiXCbDKaQ8ijzm
-         z5WIElFFT0QOe3eKYnjuuuOp85I5HlXZ8Ps1e88ivVNFe1QbTh9zf4bRDkpkM6AbmR9N
-         ZoYyu4e7cG19Kl9vZL6Wqbt5z8bvFUIsfM4Llj9oXBzqRbCMjSOnE1+Ey/G+hHQH3O5L
-         gP826HaXzap347c3bOAyOApCK/hPRE2GgJdK9jLLAxE/7bxMryTc746n30PXkAr/vvUG
-         Mn0J320f4I/m+I75qCPzKY/zZHRfDbtFiUQaRjxMb6VQPS6r66mtusrkmresbrIbXPI7
-         xfWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iRO7Ed4PohyaBZ/SmZ+npcgI12Qnh1MLhDgk3TF8jow=;
-        fh=uTLg6Bhfko3JxXcv3hpL9BSGmQB7Yb+xaPfxsU/Y4+k=;
-        b=mE0/bgvs/xTrWK21BZLifkI5x+UvNPdu5gDy6eAy7APUmiolRRdC0Tih0CgWZm3XyI
-         IvMziLTtuN7yeKAvqX8nMuDPZpODwClrUZwmaSAoPr74HHCkjyNaCC2KBow8sYuHO239
-         Y1WSAWPc10HHNFtRMVKpykQmtBGKHYy7HfECh2ADf+3WrfU8k2P8mfa9XwWsx5mefW4N
-         ZR+t4gSKPqCkCx/1sCJaNDOywLxgmmPZN16Huti4T1PIThMzPRhfZ7F44DGiqV+sF4QS
-         d9/yH7ZsvHQXNpTaZ0nvWvxZsdTmibtAcLTCre0AISIRunmZ2GRS2lCSJ/OLfviT5sfS
-         bmVQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jG5gBZCV"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4953de5be0aso8990815e9.0
+        for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 10:07:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785344010; x=1785948810; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=iRO7Ed4PohyaBZ/SmZ+npcgI12Qnh1MLhDgk3TF8jow=;
-        b=bZnLVGTN71+6rOGUEDOF2KKfsBoVzgPc+6KjOtUaxwoQVgAQmK+bgtKyqFpFZyFtJq
-         nJFEqB8j7YlMnW8bUNEzJRfJdekDJcM3xXyXgWJfL8WDAjIA3f+W8yZPcnNdDQX6YYPs
-         zt8TRyVY0NOcpOxJVRgxQ3PtjdnE21ULXhmra/XwVXzB7WWEeWKmgccKwMgl8IfnmX9e
-         NcmoVChs0wbWpUsGydeoisKkkxMd3DGcCAK/J5JcBvgO1tu0OLStdS8VZccIfwTe6wFB
-         My0l1BLssPp/A1RJ4FF3WmwVQ3SdB6FnYUo9UJmt9ZOwzK9HEYfhV0xxZNVb2TFtv0WA
-         WvJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785344010; x=1785948810;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1785344873; x=1785949673; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iRO7Ed4PohyaBZ/SmZ+npcgI12Qnh1MLhDgk3TF8jow=;
-        b=Hp1riJGtsSuJXRF3fiiQJgmCYGBRQgZ9Grm32Dki/CsU6WQpCdg3sFrE6kP7klip33
-         5JXqySdj0a0IHJLY8OCFwRPuNzAmtAq/xL2l4AK/pEFW4X164PJPhN2LxnlpZ8KXfK62
-         kZK1VGjZPxgjua3G+xiw4s8qKtU9FomnXh73zpckVr3IciqvmstH3Skdoqng2QfPOBGz
-         77EekhQaBAq2LoIpAqrJ0nqiaIywMxWDMvtaO6yZ/f4Uawnr5Tn7RxEQEiIozR1l/pGN
-         eyMo8zF2bVmpJmoub+2/WWx4yA3465O+Vdj/k7FpfK+vHtAPfhwEs0KI0DCy6hBPc6kV
-         nh6A==
-X-Forwarded-Encrypted: i=1; AHgh+Ro2p8xY4KIposUsxUnCl6C1j5R7lRc1AMXzh7hg8VG9LfLmzOqaC6hN3SsTB9ZTqCY8LEpt3RKDTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YydkzJpfq3IuzvMF8uwAc0KLAzo6FktkCyuRLkhxADyWBza/4ge
-	382UdhkaEYMhEd9kLTInkZ7vRjV4T3TDW/zgRCi/K2xtqObJxQUU/KmzmQjpL2JYiYwpSpQrgyO
-	vSRW4JBzpY4Sqq14hBoAu2xNk4jWiSw==
-X-Gm-Gg: AR+sD13I+uuJaP0a2GqPFg0e+v7eLp6qGE4VJM6fFtUgFG7FCqaIcNlR2Aq9GwsfFy5
-	3U/HLFsEJ5NJR6AW3G7afLHNTyOQc8GickE6Hh+FBAOGYE55MMe6O6ieDy6DRhBfO/C1cpQBB70
-	5uWazBEkekW57TjXkoEpsQ/dfDxwduMg7hGx2ojYNWdtQSJYX9/SEikrugQDCdRJoj4tJSg7+Ex
-	yi5onZzQpJ7T6GjIyXjDjMViIiD7G0IWrxzTpzVkb5lHgRt2ZQNfnU/ETU5C2A3O302y7zwWCAY
-	vh6/D6SyCLhzwO9FzYf5VucnJywJvkLXG/9wzzxQ44RfCsIZx58YaHd6e71e2fW6XCd1q79aFyE
-	2favSFmqPrhMLz427oQ==
-X-Received: by 2002:a05:6402:5018:b0:698:ae69:3992 with SMTP id
- 4fb4d7f45d1cf-6a0349ec697mr4404066a12.16.1785344009469; Wed, 29 Jul 2026
- 09:53:29 -0700 (PDT)
+        bh=G/vni40zmOCZ2HqBZcbw7mWmT4z7vqgKQwHadXTDKns=;
+        b=jG5gBZCVg9YZMIvvBVKJAS+fsmbzR4fWs0xG/oV0Z1s3GGiXEra3QIJSEqRBBnfqWV
+         VzlwGNlvQ3ZQL9qW0jJ4gumBXkwnnC1l+E56/dCnn+ckSSsg2uZ9GMRV+u+lypXoEGJR
+         IUPx2pJUEM2kFE2iyTGEqn2nO44y5wMgdBnYa5gbjCvoLWPJVKDsK/CHAaD8Z4TyIuo5
+         +61u3hiBCBC7sCvR/m5ewZe/YNO6I8tjAheDrYMzv1izbKWv4A0UJTbCfNwXenhy3CHs
+         hgRXz4D6KFvG+6Ap6A9ouFeSCB2ASZ4iiFq9ECMS+23VJeZf3nj7+CiPn48QVbQ+wlOj
+         alcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785344873; x=1785949673;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=G/vni40zmOCZ2HqBZcbw7mWmT4z7vqgKQwHadXTDKns=;
+        b=oeKyXQkyleUlhN6MBXWPIxPJphlTUeqTWX+Vuib/xXm4aT/SkPTyA74yXVQow4dWdI
+         cX9nps4jK8OyzRSLmZ4F6k5okwnaJXGdbUmfeUO2f+ldX7w/cR1unM7nJkMNlBt8qjEe
+         CWCqOnrGhFCY1sc/I71fTbpi89RvkaRb+hQXef6xGJ8PVR3moEDQg9at8i/pchvIyISN
+         SfV5wx31xUiJ6DiJ07unRNQ97cyzONth5/DxJJjKNnA1yMH9cMKLPm5ievJq/06S30Ye
+         rXAyt5SqdJqkrYsgL0MCuYvvxmCuUV1fKJ5I07TtpundGQG7o4KvEyirXdwT7m5O/Rq+
+         5W8Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqH2htrbLOKlBx4ozG/2quJdXgR1s5K23OxDzNT/cQByxmX6bIIH8HDY4M4d6a405oubhuAmfXkKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0vF1KjWF3W+Oy0G2H7BrUlC4XIJPzlym0oluetANSBa8AmyE5
+	LV2D1pstj94Fz50D/VgOQxqIlvEq0vlPETbEriItrsLs0IpCwg4iRc3W
+X-Gm-Gg: AR+sD13cpg+IRQn+BXS64car+zoeay5URpJZ5zNyOu3aokYkf9mKeRt7C7HS9Fr7YuC
+	VckrVEkF3KrxpjJ53TzOiPks7jph9QH5hP2IQMzRlbqT/XmgA2d5siUzoHoDQhLnkk2LSkjcWK4
+	AhPRQrn0Z1+zVT0AYXw+tYqc2ZcfaYs9MJQlTEPcYSNIhLnBHCzG2tIMSMaxBlXt3Jtkoy8ABvq
+	HjGNfannU1JKt91rh3nrveSJx504OrvQiYjYADAmcm6PcN8ooFxItO7fw27FeJDGgJE5XZilZ85
+	3Q/N3EUwP7y722DKKWsKAXg+vbXDVMgqbg0HMCt9Hkehb5utjLbY2lBWJOFVYk4FlAaOjzrKZCJ
+	JwMOYNTrXrkGxJbg2P5MYqEIJEVddyS5BaQMLZJoO9k96NXprX+mFHTwU1Xojw97yjyPSpqWfw+
+	VaYs5fTW+ul2HpjpO4sP+P9d90u1o3EOpUDlwJMd0V0Iew7Ajrj6p19bJVMPqQc9248hVtjMpyy
+	bO98+6m2aXBfNlHgETG3sRxRQur1vNlVRDT9gxxTvKeGnm8O/kJY1pFfaOvPbSSHCQiarlEZD/w
+	MlfAPVQjyy3X0ZtsU4c=
+X-Received: by 2002:a05:600c:630d:b0:495:5365:c0d2 with SMTP id 5b1f17b1804b1-496c6558b53mr99358535e9.14.1785344872559;
+        Wed, 29 Jul 2026 10:07:52 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:640])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4976bd6d226sm72029155e9.10.2026.07.29.10.07.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2026 10:07:51 -0700 (PDT)
+Message-ID: <bee0e036-3392-4a9f-9eb2-398d99319ac0@gmail.com>
+Date: Wed, 29 Jul 2026 18:07:43 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1785274111.git.asml.silence@gmail.com> <CGME20260728213020epcas5p1721e72ba5544abf0b61482da005120d9@epcas5p1.samsung.com>
- <26dcd0ae5c87a3ada5710b14b6894ef343cec6fe.1785274111.git.asml.silence@gmail.com>
- <583fdfb2-5368-467f-a388-6d388859c995@samsung.com> <0df2f832-e8a8-4fdd-a5b6-e08657c2891f@gmail.com>
-In-Reply-To: <0df2f832-e8a8-4fdd-a5b6-e08657c2891f@gmail.com>
-From: Anuj gupta <anuj1072538@gmail.com>
-Date: Wed, 29 Jul 2026 22:22:50 +0530
-X-Gm-Features: AUfX_mw2n1ETd8ASN5Vcu4oMSqcqp6oKyV0zFdoD8l7zvxibNrqO80gPOx-5lV8
-Message-ID: <CACzX3Atj+hJmF+Au1Yw5KMk--EHy_J=7Yof1aQNkUV0hCrdVEA@mail.gmail.com>
-Subject: Re: [PATCH v4 14/14] io_uring/rsrc: add dmabuf backed registered buffers
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: "Anuj Gupta/Anuj Gupta" <anuj20.g@samsung.com>, Jens Axboe <axboe@kernel.dk>, 
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
-	io-uring@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, Damien Le Moal <dlemoal@kernel.org>, Alasdair Kergon <agk@redhat.com>, 
-	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, 
-	Benjamin Marzinski <bmarzins@redhat.com>, David Sterba <dsterba@suse.com>, 
-	Ilya Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev, nvdimm@lists.linux.dev, 
-	linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 1/1] pipe: only enable the extra wake_up(rd_wait)
+ for edge-triggered consumers
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Breno Leitao <leitao@debian.org>, Christian Brauner <brauner@kernel.org>,
+ Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+ Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+References: <amdNxsTODR4MCl3R@redhat.com> <amdPACI3kw8PobPx@redhat.com>
+ <1bd5710b-29c8-4a8c-8f26-72d9e71c2321@gmail.com>
+ <amogeROg0Hthp7HD@redhat.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <amogeROg0Hthp7HD@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 29, 2026 at 7:37=E2=80=AFPM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
-> >> +static int io_import_dmabuf(struct io_kiocb *req,
-> >> +                       int ddir, struct iov_iter *iter,
-> >> +                       struct io_mapped_ubuf *imu,
-> >> +                       size_t len, size_t offset,
-> >> +                       unsigned issue_flags)
-> >> +{
-> >> +    struct io_regbuf_dma *db =3D imu->priv;
-> >> +    struct dma_buf_io_map *map;
-> >> +
-> >> +    if (!IS_ENABLED(CONFIG_DMA_SHARED_BUFFER))
-> >> +            return -EOPNOTSUPP;
-> >> +    if (!len)
-> >> +            return -EFAULT;
-> >> +    if (req->file !=3D db->target_file)
-> >> +            return -EBADF;
-> >> +
-> >> +    if (req->flags & REQ_F_DROP_DMABUF) {
-> >> +            map =3D req->dmabuf_map;
-> >> +            goto init_iter;
-> >> +    }
-> >
-> > O_DIRECT is checked only during registration; we should recheck
-> > (file->f_flags & O_DIRECT) per request.
->
-> Nobody should be able to clear O_DIRECT, unless I missed something?
-> And fwiw, io_uring wouldn't be the right place to do it.
->
+Hey Oleg,
 
-fcntl(fd, F_SETFL, flags & ~O_DIRECT) on an already registered, already
-open fd succeeds. The consequence is that subsequent I/Os switch to
-buffered I/O and cause silent data loss. Something on this path needs
-to reject this combination.
+On 7/29/26 16:47, Oleg Nesterov wrote:
+> Pavel, thanks for taking the look!
+> 
+> But let me ask a couple of questions to ensure I really understand you.
+> 
+> On 07/29, Pavel Begunkov wrote:
+>>
+>> On 7/27/26 13:28, Oleg Nesterov wrote:
+>>> pipe_poll() unconditionally sets poll_usage on the first call, forcing
+>>> anon_pipe_write() to wake up readers on every write even if the pipe was
+>>> not empty. But this is only needed for edge-triggered consumers: epoll
+>>> with EPOLLET and io_uring without (unsupported) IORING_POLL_ADD_LEVEL.
+>>> poll() and select() users pay for it for no reason.
+>>
+>> Sounds good, especially with prep patches you mentioned.
+> 
+> By prep patches you mean the
+> 
+> 	With or without this patch we need to update the comments to document
+> 	that io_uring depends on ->pipe_usage too. And probably rename it to
+> 	(say) ->et_poll.
+> 
+> note in "v2 0/1" ?
 
-> --
-> Pavel Begunkov
->
->
+Yep
+
+> If yes, I'll send this change as "v3 1/2", rediff this patch on top of it,
+> and make it "v3 2/2".
+
+I should've been clearer, no preference whether it's split into
+2 patches or not.
+
+>> The only note your problems are caused by IORING_OP_POLL_ADD, which
+>> is not that important comparing to other polled io_uring requests,
+>> and they also set EPOLLET while should be fine with level. Not
+>> asking to change anything, io_uring should just stop setting EPOLLET
+>> for them. And IIUC poll callback implementations don't care about
+>> EPOLLET, at least before this patch.
+> 
+> Sorry, I am a bit confused, could you add more details?
+
+TLDR, io_uring has something to improve internally after this patch
+lands.
+
+> In particular, I don't understand the "IUC poll callback implementations
+> don't care about EPOLLET, at least before this patch" part.
+
+I was saying that from a quick look I don't see any struct
+file_operations::poll implementation checking EPOLLET. And if so,
+it makes changing io_uring easier, only need to consider this
+patch.
+
+> Although it seems you agree that this patch should not break (change the
+> current behaviour of) io_uring, 
+
+Yes
+
+and right now this is my only concern.
+> Can you ack/nack my understanding?
+
+You got it all right
+
+-- 
+Pavel Begunkov
+
