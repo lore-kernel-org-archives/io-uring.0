@@ -1,69 +1,69 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E5A48EBEC
-	for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 13:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189134A2E3F
+	for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 13:43:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785332363; cv=none; b=s12+n0G9KP7Veuzb8Ge6Hyj0dEdU0Y1q4JN5KJvkKYWiBbLHXOgO0IX27rfRKLAHrGeihjT0HSgrB4gwsDcnZNxbl8EQyvwDJmu0FbXpqPl0MXZ/PNJzyEPlGW4saqiuiML09MMTNXBZZEflK8vpGJvTQ0kxm8pEdG8qE1+FzaQ=
+	t=1785332628; cv=none; b=W9f59RNHDOpy/k1EJLMezmQCwvl3W13NYQ0YtmcZInX3NXGOcj1V6QXUdro4Z3ETsTk1xzNB8x85mPFDK/ISvoModUgeOvkVp1USJr2stLww+rGZ6NDbkpT1SHuSzLLDO0Tn18QUGDniTgzltdDBZGDUO110tCnPSKvgiG06VKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785332363; c=relaxed/simple;
-	bh=uY3sUepmqssMOr1jNQvyXWE6qqQrkaRqI5lsNd3E8OM=;
+	s=arc-20240116; t=1785332628; c=relaxed/simple;
+	bh=eaGzEIkYl8mhH9FJsA+z0QYzoh5FgifdmAGDyRbtefg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sNNblE2mYxkbcx8QPEoszOp+rxWn+rO7e8A79oa/7S9rm9+wp8Uj3fZC8nbWJOJorshp7HBIEdoo2p6zKaB5iA6Q9unDMjgd0MpsEZaM5azONy6pFyclzkSyA51t/sGBpzt4Zzm+27xZqc9xxGdwf66h3svgtx5VfDtNFP/WOM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KGVPcDzP; arc=none smtp.client-ip=209.85.218.47
+	 In-Reply-To:Content-Type; b=S/6yhgEp6lhO++AA2brU0Z5cSzUvW5+q+XP3WJdLKanuItvlLo+4oree+LEz0VemN9GDx++RSN70JLmfBVtLdce/Xnx0272qypooV5rJtYLbNsx/pCQq1kSfpf2R+2c/3ZiW+x4LGmBVjd78dowCTJWboXRo8kqdLXY5J2mSa1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NkB6Ju3s; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KGVPcDzP"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c1f5208b38dso182342466b.0
-        for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 06:39:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NkB6Ju3s"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-69fe3cd5ee6so1589642a12.2
+        for <io-uring@vger.kernel.org>; Wed, 29 Jul 2026 06:43:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785332352; x=1785937152; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785332624; x=1785937424; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3aN3udKBcENjBD5UHxw3XhgPgHCGso1JhkYTFHwhTGI=;
-        b=KGVPcDzP8wQ2SyiaYgiEB/4+DEBMYVALsc3jCB2ht0eAjAMxzC7NXELzSBNNQc9MON
-         d+5UWFqymcPii4NKyLLs61jvxSrgM4urA7UkU2HBYDgPFjDRMUOonbQMxjRRz2fM1A1G
-         0KQEeIhH9kn1nef3qZipqo46Ff4aokfZS8yASW93kTavs5E/4t210s8/nqPmRCI2xWmQ
-         cfiUS6RP81gBjK/rG275PimVCBEjZw1hM2fIi52JuSxl+y5ssYS80UyMSVQF+j+qwWAN
-         5FmGmrGXBoIq6mhUzjQD+AoBX6TSFQp9EuI2mNAYYE4/W/exMXsXk9Ptt68mGWbQptup
-         dcHA==
+        bh=GoC91kED98vuJAvVTLdEFxjWPhyWXTYJuu42/1RW6zQ=;
+        b=NkB6Ju3sR6t/04LfYOcf1isKoRwj6gashzuQqgP16ZraPJFZ3CxthU7KB7CaDi06Uc
+         OV+KK3R27aibqPqauHrjVAclLEu3h2W3M44GUXpElW0GFsm5UFqCvsfPDqjBxpg63uYZ
+         DdC1vsuHvRFktDtlx5Sf6xPt4LJGvH2d7JI+99RmcX293mY8nN15zRfHQqPW5HCj5xe6
+         TRTuhPfI7+U7ybhMZvkcH543PUnWZXFT+26Zq1ln1U5nH7Qu6C2M8bLp6sUsjkHprbXN
+         ddgRUBujvrsDPmIv7uI7IdmFAg1DBQzp7jOr+ymhaWRkv2OB1OeAiGWdRf93WHwGf6te
+         Qsng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785332352; x=1785937152;
+        d=1e100.net; s=20251104; t=1785332624; x=1785937424;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3aN3udKBcENjBD5UHxw3XhgPgHCGso1JhkYTFHwhTGI=;
-        b=OWFmQH6obr7iKLxVfcyy5zknx+3sWYoaSW2F9W6shhU5ddO9lckTIu0l2DJqM5Dczy
-         +bJ9Q9DGyKEB1S93lFVtIIuh3izLDMtOAe9H+zwguU3TZwvKzqIM6ecSCwfQVvrern2F
-         WPVkNgn0v1XFhvWh9KN2eP7BrwC+WSolbsdfF+aa8RjL07scpTzMcGRsJIK13ucEM09O
-         fQ0m2xCYzzHnztBWxwGF74xfoV9+FXmyh0w+vXqL2pVuryT3Mc2FYbKX3q/mKlmeELrf
-         Adjr8Amji8vHBhoS4Bjz67HZyOWJ/Vi+ipQ2sAyqyZMYaTtFTwuWuim0mHjLxU25w9DA
-         ZhsQ==
-X-Forwarded-Encrypted: i=1; AHgh+RohprJu09SrL5HkEhtCV6KC+cAI+aYSHB1Z8vIWmRP1l6qTGtsRrvjOXuAWSMk4oI9ZLMrn0iF6Aw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIL+IKUnHNCW9Vb43d8W5zx6RdHVjzpVP1HEA4ZhU55PEvGcgx
-	s15/c/EPJUfTtbxtPwta4Z4UhjUKAvnAJ4/G4cToo8ptQM7czlVabHl8
-X-Gm-Gg: AR+sD10qH9uDkqoYGVisTkNLEkt7wOhBgQL2mIr7BUQTPBLFfKc7sGE6S0ui7bv6vB6
-	acNb5omMDJ/pVG0uNDYz76tE7MTeZkCcoNDZRUDyf8x0dwS/izSFaHtM5DDPlWYNr7/mlYp7xjF
-	jw0DwjLJeGpa9LF23H3payLHJhRV0ZZuePLq66JFx01z1ceBX2qTHkNrniQ4KkfTd9jSCouSMJN
-	bk9v/RsxwCk/NBeDNY7ZWhun9aWUM8ox9WqLU9BaKpoXG00tGsz/PAa5sTOlc3x/O72GF4uDIiQ
-	L7v10tu2GheW8BQxtJEXq2amXRQ5MWzlbTpKQvjmcL3a6ei/iqjPw+Je80evWgUPg5TTxMgUg10
-	emBMx3PsDjK/key7malKKCCAIuB5UM0vGCEtL5Gy4UL04AxbqPzLCogOzyr5oAe4xeOqHP6lIrs
-	U6c0yxSi/zM8875+JC6d4Ftyg23IbKViOjz6qpAReeyoRVEeRzqdEn0pJmXQbHf2Ut8EplYnZyK
-	CH9g9VRdrW4ICQhrZ36GLTqP/bTe0jTnaW5sjbvLH6tvpdJegaVFiNR4hEgeUYcAo2Rc3f2A8mM
-	T1E6+DROvw89Anarl7U=
-X-Received: by 2002:a17:906:f598:b0:c16:7b66:4932 with SMTP id a640c23a62f3a-c1f721bf58emr374209166b.64.1785332351629;
-        Wed, 29 Jul 2026 06:39:11 -0700 (PDT)
+        bh=GoC91kED98vuJAvVTLdEFxjWPhyWXTYJuu42/1RW6zQ=;
+        b=KeibEeaOcM4eeoGju08XlfgJ9FLrGrxswnpzcqc1JTNLp43tctjvMj0LAVaqYodnM9
+         PGCJvOS9RV/P5RvdYfBuQprrMmNZJZ7r/ljHZnD7ypuLDgvLZ/78ymn4nBA9Ps0S0b3/
+         TSOgyoop8W6w5IsX3iPsLk3lNlBO/2tI8QfqbXI7SAnHI4CUg92ay3EDdgiJQU7TcLh2
+         Pmjtt9w5hq7oGJoI0QOi5F3cH3YFEpn8OUsr4mD0kGqdbV77CSKRZYC9mZJM3hct6Xj4
+         BmsgqBrwF4wjDN/9ZNYyj4LaV/SNYZv6/ny938OrhBLBcwo0R1bRWpGo1D0kchev8Lzo
+         Fnew==
+X-Forwarded-Encrypted: i=1; AHgh+RpMQmyjbyenLTMsgdpixaestK/LEjznoq9B+oH0a33bwBZXC+PJiPk/1FHGmNPn5Ip4bMGuGRs79Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlR7yt9Yz9JmEIr2G8xZ89cCn2proWdb0SYvYx+eHHVpKee+DU
+	ivj09IPVHaD/OLEfC4E+380cnKnIuIg8phYyU3IMpLwhwu30oG3vVcdh
+X-Gm-Gg: AR+sD12+U75szeMJ/qWUdUC4OsouKHIJRTf18IVjr6xsAXKOs+h72Y92GxTUCHUnsu6
+	hEOnLl12y9bqZzYZaLXytCDLN65VEMBxu/+UkPhmcS8jsUlf7Or1wNKgEHsgXOyLwxLFJLNGA+r
+	5WPJWOqMfgbXF3bP+FbboZFwFoljTx/vzZQo9ZE4ifKthKtC87ogMkDG/d6ax8aP6O7/v5XDzQj
+	E03hNx1dSjRD2FHMFRdthbHbRwxGv/4XtcQGfYgVPOclV6k276FQ8zZzyh1nnNzy1BCGwEsqEla
+	pbGoT7Kk7B4lr8TavrmQ42wN2dXfnzoQDxspfr/lEH6ZJAGY1FJaZge4tp1z70P77KDs4vEVqU/
+	+JqQ45xnSMrRpwGLs3YD99BNPfKsKG2jt+oHB9lYjmHJ0G7udnMUwoi4Pp/i8Zu/0j9vUETbuZh
+	W4qKZ+GyKJPzlsa80mLOPSoBw3kKVdwyk11B0WrZbazeurJb29FkNfI214wu5J3OmX0jvqAzFbH
+	eNRRmevritU7d1kB7wjQ99W58o5QH8kVXT+ufEoHjMk15WLJu9zAo8tr5sStinMOA8AUp3uW+rj
+	D3778P7GdoBRAhpB2eA=
+X-Received: by 2002:a05:6402:24c8:b0:697:ecb4:b86c with SMTP id 4fb4d7f45d1cf-6a034a0b240mr2761963a12.2.1785332624180;
+        Wed, 29 Jul 2026 06:43:44 -0700 (PDT)
 Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:640])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1f83f4de5bsm118685466b.29.2026.07.29.06.39.10
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a050c49fb5sm868560a12.14.2026.07.29.06.43.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2026 06:39:10 -0700 (PDT)
-Message-ID: <dc72d46b-7b45-4beb-8e36-d810d2a94c28@gmail.com>
-Date: Wed, 29 Jul 2026 14:39:01 +0100
+        Wed, 29 Jul 2026 06:43:43 -0700 (PDT)
+Message-ID: <0df2f832-e8a8-4fdd-a5b6-e08657c2891f@gmail.com>
+Date: Wed, 29 Jul 2026 14:43:34 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,7 +71,8 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 11/14] io_uring/rsrc: extend buffer update
+Subject: Re: [PATCH v4 14/14] io_uring/rsrc: add dmabuf backed registered
+ buffers
 To: Anuj Gupta/Anuj Gupta <anuj20.g@samsung.com>, Jens Axboe
  <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
  Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
@@ -93,32 +94,130 @@ Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
  nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org,
  ceph-devel@vger.kernel.org
 References: <cover.1785274111.git.asml.silence@gmail.com>
- <CGME20260728213008epcas5p418dfc10b7ef786e162ade86d14430475@epcas5p4.samsung.com>
- <633d33d8e278999f55126794fce948343403494a.1785274111.git.asml.silence@gmail.com>
- <73317bf9-f7df-43f9-abc2-daa25a675485@samsung.com>
+ <CGME20260728213020epcas5p1721e72ba5544abf0b61482da005120d9@epcas5p1.samsung.com>
+ <26dcd0ae5c87a3ada5710b14b6894ef343cec6fe.1785274111.git.asml.silence@gmail.com>
+ <583fdfb2-5368-467f-a388-6d388859c995@samsung.com>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <73317bf9-f7df-43f9-abc2-daa25a675485@samsung.com>
+In-Reply-To: <583fdfb2-5368-467f-a388-6d388859c995@samsung.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/29/26 14:31, Anuj Gupta/Anuj Gupta wrote:
+On 7/29/26 14:30, Anuj Gupta/Anuj Gupta wrote:
 > On 7/29/2026 2:59 AM, Pavel Begunkov wrote:
->> @@ -882,8 +894,13 @@ static struct io_rsrc_node *io_sqe_buffer_register(struct io_ring_ctx *ctx,
->>    	struct io_imu_folio_data data;
->>    	bool coalesced = false;
->>    
->> -	if (!uaddr) {
->> -		if (size)
->> +	if (desc->type >= __IO_REGBUF_TYPE_MAX)
+>> +static struct io_rsrc_node *io_register_dmabuf(struct io_ring_ctx *ctx,
+>> +						struct io_uring_regbuf_desc *desc)
+>> +{
+>> +	struct io_rsrc_node *node = NULL;
+>> +	struct io_mapped_ubuf *imu = NULL;
+>> +	struct io_regbuf_dma *regbuf = NULL;
+>> +	struct file *target_file = NULL;
+>> +	struct dma_buf *dmabuf = NULL;
+>> +	int ret;
+>> +
+>> +	if (!IS_ENABLED(CONFIG_DMA_SHARED_BUFFER))
+>> +		return ERR_PTR(-EOPNOTSUPP);
+>> +	if (ctx->flags & IORING_SETUP_IOPOLL)
+>> +		return ERR_PTR(-EOPNOTSUPP);
+>> +	if (desc->uaddr || desc->size)
 >> +		return ERR_PTR(-EINVAL);
->> +	if (!mem_is_zero(&desc->__resv, sizeof(desc->__resv)))
->> +		return ERR_PTR(-EINVAL);
+>> +
+>> +	ret = -ENOMEM;
+>> +	node = io_rsrc_node_alloc(ctx, IORING_RSRC_BUFFER);
+>> +	if (!node)
+>> +		return ERR_PTR(-ENOMEM);
+>> +	imu = io_alloc_imu(ctx, 0);
+>> +	if (!imu)
+>> +		goto err;
+>> +	regbuf = kzalloc(sizeof(*regbuf), GFP_KERNEL);
+>> +	if (!regbuf)
+>> +		goto err;
+>> +
+>> +	ret = -EBADF;
+>> +	target_file = fget(desc->target_fd);
+>> +	if (!target_file)
+>> +		goto err;
+>> +
+>> +	dmabuf = dma_buf_get(desc->dmabuf_fd);
+>> +	if (IS_ERR(dmabuf)) {
+>> +		ret = PTR_ERR(dmabuf);
+>> +		dmabuf = NULL;
+>> +		goto err;
+>> +	}
+>> +	if (dmabuf->size > SZ_1G) {
+>> +		ret = -EINVAL;
+>> +		goto err;
+>> +	}
+>> +
+>> +	ret = dma_buf_io_ctx_create(target_file, &regbuf->ctx, dmabuf,
+>> +				    DMA_BIDIRECTIONAL);
+>> +	if (ret)
+>> +		goto err;
+>> +
+>> +	regbuf->target_file = target_file;
+>> +	imu->nr_bvecs = 1;
 > 
-> desc->flags  isn't validated here, unlike __resv. nonzero flags should
-> be rejected too?
+> There is no bvec backing a dmabuf imu - should this be 0?
 
-good catch
+Doesn't really matter as it's not used. It's 1 to say that
+it's just 1 contig segment, but I can just zero it to avoid
+confusion.
+
+> 
+>> +	imu->ubuf = 0;
+>> +	imu->len = dmabuf->size;
+>> +	imu->folio_shift = 0;
+>> +	imu->release = io_release_reg_dmabuf;
+>> +	imu->priv = regbuf;
+>> +	imu->flags = IO_REGBUF_F_DMABUF;
+>> +	imu->dir = IO_IMU_DEST | IO_IMU_SOURCE;
+>> +	refcount_set(&imu->refs, 1);
+>> +	node->buf = imu;
+>> +	dma_buf_put(dmabuf);
+>> +	return node;
+>> +err:
+>> +	kfree(regbuf);
+>> +	if (imu)
+>> +		io_free_imu(ctx, imu);
+>> +	if (node)
+>> +		io_cache_free(&ctx->node_cache, node);
+>> +	if (target_file)
+>> +		fput(target_file);
+>> +	if (dmabuf)
+>> +		dma_buf_put(dmabuf);
+>> +	return ERR_PTR(ret);
+>> +}
+>> +
+>> +
+> 
+> nit: extra newline here
+> 
+>> +static int io_import_dmabuf(struct io_kiocb *req,
+>> +			   int ddir, struct iov_iter *iter,
+>> +			   struct io_mapped_ubuf *imu,
+>> +			   size_t len, size_t offset,
+>> +			   unsigned issue_flags)
+>> +{
+>> +	struct io_regbuf_dma *db = imu->priv;
+>> +	struct dma_buf_io_map *map;
+>> +
+>> +	if (!IS_ENABLED(CONFIG_DMA_SHARED_BUFFER))
+>> +		return -EOPNOTSUPP;
+>> +	if (!len)
+>> +		return -EFAULT;
+>> +	if (req->file != db->target_file)
+>> +		return -EBADF;
+>> +
+>> +	if (req->flags & REQ_F_DROP_DMABUF) {
+>> +		map = req->dmabuf_map;
+>> +		goto init_iter;
+>> +	}
+> 
+> O_DIRECT is checked only during registration; we should recheck
+> (file->f_flags & O_DIRECT) per request.
+
+Nobody should be able to clear O_DIRECT, unless I missed something?
+And fwiw, io_uring wouldn't be the right place to do it.
 
 -- 
 Pavel Begunkov
