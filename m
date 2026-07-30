@@ -1,103 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C873A543F
-	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 18:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45ED1451994
+	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 19:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785437759; cv=none; b=JgT3PLzku+CvvT27QRu3oK8D0TIOeQQfE5SQNpfM885IybHBsZpuvvU0WSxOWzxHQnftdj1G65gcPmyjL7o8OkmPyOBDJ9m7poT8fY5M+91IFokHfN1g8inAGAqAxZenG225d4EubqA0fknKEBsG9Hm3SLrYhhbqVdUhXbL6kMg=
+	t=1785438689; cv=none; b=WZZm1NIzTnQWI7euLGtNe6x7vRMvmx7wUOT1+UPnui7YtKyaiEmL5ptmehsg9Ytn1YkyO9eUu6LE3HMhNB31jq2SFyqDa1+EHlbFTRVbqt+Uzarhir64lAZWlP6dOU0odFUbFpbSBjuvwdzvy9Y3dDwbn9VGC7yMSt5Y+iqTzMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785437759; c=relaxed/simple;
-	bh=dl1rKl8N+PfRnV2OM93Q8FD6tKPbkYfGbZqm8os4mK0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OFAQVUI2woe3SUbQShGF4BoG5PHR3zTKQd9U1uGrHPEdRyteXsb32004Nxu7cNJ8nGk3PT/pIYdWgVvlU2eBDNfCRkwi20Ulh7zjRsdJYKGsr8OV+ihCzz+9qBkury/0P5d+S7tAkr5/0X/q2pAXcRCFSEtYzonIKhe5Tcr4ihs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZHJzLPIO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785438689; c=relaxed/simple;
+	bh=cJ63BXZMNe1uR9WDgELx6Fj9oC9EAwfnNbOJJ077Vq0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Pb8BWCNRXSLO4teyOaXtObPKwEJAGu8zfurCYiAjxGl1WfQMZHYf7f27W44DAOda3Fd2l2eGxsNlZGyXxKmqwak59g+RrxpLHk+FTLYDQ9t9XCUIRqbqCdUGmDLZiCkhvi2XiLmGoOl4rYmgBskhpkncxW8i7+el+iObd2M1lAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=TXLjcIMX; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZHJzLPIO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785437757;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dl1rKl8N+PfRnV2OM93Q8FD6tKPbkYfGbZqm8os4mK0=;
-	b=ZHJzLPIOZhadQ6tp7HsVWjf6bL0qe9A4tQgnTe0DQOAsvsKOsAdgHHDC4NBubAVkUieRva
-	FXsmUdahDvkQ1TpfSbPo5O8vdxaun1OAu7Z7HaAm8jwbWF9gSwfPZT3AOYpLAwN72j8ZYC
-	a7pQSXTRVz28BWAh6zf3teoKQ5ddvbM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-265-31ZFZ1xBNoaWe5ptHafRVQ-1; Thu,
- 30 Jul 2026 14:55:51 -0400
-X-MC-Unique: 31ZFZ1xBNoaWe5ptHafRVQ-1
-X-Mimecast-MFC-AGG-ID: 31ZFZ1xBNoaWe5ptHafRVQ_1785437749
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 397C2195608E;
-	Thu, 30 Jul 2026 18:55:48 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.21])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 60299423;
-	Thu, 30 Jul 2026 18:55:42 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Thu, 30 Jul 2026 20:55:47 +0200 (CEST)
-Date: Thu, 30 Jul 2026 20:55:41 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Breno Leitao <leitao@debian.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait) for
- edge-triggered consumers
-Message-ID: <amueLRM-DrYbnjLn@redhat.com>
-References: <amtbpwrhlNGJ9OK6@redhat.com>
- <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="TXLjcIMX"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7e9d7464b71so119901a34.0
+        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 12:11:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785438683; x=1786043483; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=50+BRi1M80OADWMBtwF8+tIWW7M6cT13tg7MUfRqqQQ=;
+        b=TXLjcIMXo/Eh5AgN+poiFkHREYPmUBMuIhetTF1zjTzCUwPAY206t4/rH8HvKamkvO
+         069oKewsEUvLsIXuIWawcDLeNHYC/OsrAiRe9D0g1N23UtWpr5jgDIspCHUL0wQBXOWa
+         RgVA9BQPG6lJWb8ptaQF1/pRZGg2mvX3yrFr6ucRYfGOtTjSHXL2iasQIK+cajcySVMT
+         hIt/x5DGZt5s5qMIWIyNSH5+v3vdTO4NaC7gySXCidI7HAEnq3AnK1lzFG+kNKdQ8Tmg
+         rsv+4pPJ8p2aELeoRgV4XyZdTyOnXFnX2PdH/6dtQ+i4thd504aQse5J8Vn1HWw2WsUA
+         nc6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785438683; x=1786043483;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=50+BRi1M80OADWMBtwF8+tIWW7M6cT13tg7MUfRqqQQ=;
+        b=tOZggCSw0dChjCRHyBCrZT9Khj8W1bA8eRYAeLYgeo3sJX3K41ppSLzxFkMo3YWVtC
+         dC5f3Iof1hKoy7oQqbTOdUTGRPYSLefr+5OcPC60iZcOLXnZRjHfQv1zqkgrMz8V1P4s
+         3B45rFVfyCA+bK7oEx6ceZ5Hyd+ALAC7Z3s/bFFrnxgaVd8tJwi9MceXcG2+PbzLCguc
+         8ETh7TwOz7CGeFyTfYenwoE/cuqERTA2ZPdOssRyOq90ycu9OmrcbqNDa+aPi1aEjOU+
+         heg1mRyY47Ws1/beBt/OVMo2iE6I45GOVJ3hpivHvAJoc0M+sbDM76aVtzDngaBf542T
+         gG7A==
+X-Forwarded-Encrypted: i=1; AHgh+Rp17wWg0PL5MU5oF68iEGzcx+YSZ40BKVX4SlDUcV5xynsJGmrKGil13UaAqlpgzfUJeauYFeL+uQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzxXxSmR10viGPe5XCH/lvO4mkOKhRCihAyC7/l6xoNEio5IXc
+	bI187FZmNcP9K7rrA8KLD6KbGPN9488swRFM0/NIIppA4X7ZhLMFIVsaV+Kl4W5eeRY=
+X-Gm-Gg: AR+sD12O+VJVKGfbwWYJDgGjJ/wz4sUPPg+1Vt4BHGSAV1nDADA3YHK5puywDmGM+nC
+	ZQZXqOtjep52niO+QkPCoZ70l1NHQyng2Fl+arFnQVCVf+8MUufWTQ4buZnPn3nIQ1aA/QGlY+f
+	J3c8BtDhe464b1lMBMI2/xbnS15cJAGPySHFEnkyUREm7vjNuVY/7hw3xqaJbFcKGiW4WcwfP0d
+	TBEDyAhfhAJl7BOvI0mwLu/PA+LOhUTvYztEK1Uw/AolwM+gEN9zBMKi7MLFZqQNDjsRfPwuF2A
+	MpZx3dlFes92ZL8fzsXCH5vkYvd6u4XpItKGlvaS2pkqcS0JIyL5baWjfRNpTcDNqZ3ad3VkhCK
+	EkPW/oJdz+rmIQiqD2ISpg1JdF0cB5eOZhTL0iykHYch3kKdB4ozziueNMwrcz7j2jtCGP3dJF9
+	yk6pAzWobJWCujetLI8EDA2WGrOZ3VyejWsKZMHOoehcnBN/6D9ZpdnApz9uLZXMuAkMOS3M/Jg
+	zi3G5fb8P3YlRkWAlVBGgYZx8Hc1K8MuG0oiYwLS8CoBr4=
+X-Received: by 2002:a05:6830:488b:b0:7ec:553b:4964 with SMTP id 46e09a7af769-7f02c15619dmr3071607a34.24.1785438682818;
+        Thu, 30 Jul 2026 12:11:22 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f00d595321sm5403413a34.6.2026.07.30.12.11.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2026 12:11:21 -0700 (PDT)
+Message-ID: <be4367b4-5846-4595-99cd-204b8ad48293@kernel.dk>
+Date: Thu, 30 Jul 2026 13:11:19 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring: preserve task restrictions across exec
+To: =?UTF-8?B?7J206rec66+8?= <fyonglkm@gmail.com>, io-uring@vger.kernel.org
+Cc: stable@vger.kernel.org
+References: <CAPLyb-a7bWCq0GzyOcztLm3-7H0GOP64JynosfO9k+yHy7diPw@mail.gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CAPLyb-a7bWCq0GzyOcztLm3-7H0GOP64JynosfO9k+yHy7diPw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 07/30, Linus Torvalds wrote:
->
-> I like this patch mostly for the renaming, not because I think it
-> matters. I think "poll usage" was a mistake in naming and doesn't
-> explain the issue. That said, I'd go even further, and make it clear
-> that it's not about "poll" itself - which is fine, it's about "epoll",
-> which has that broken crazy bug where it calls something "edge
-> triggered" but then actually wants effectively level-triggered
-> behavior - wakeups when nothing actually changed, which is the
-> *opposite* of an edge.
+This patch is completely mangled, email too fwiw. Can you please send a
+text/plain variant? Thanks!
 
-I am not sure this is a "crazy bug". To me, epoll with EPOLLET works
-"as documented". Perhaps I am wrong, this predates the git history.
-
-I'd say the very idea of EPOLLET was wrong, but this doesn't matter:
-we have what we have.
-
-And this patch (mostly) tries to document what we have.
-
-> Pure garbage.
->
-> So the real name should be something like "epoll_pseudo_edgetrigger".
-> Because "et" isn't really helpful either.
-
-I'd agree with "pseudo" simply because I can hardly say how could we
-define "edgetrigger" in this particular case.
-
-But then we should name it "epoll_or_io_uring_pseudo_edgetrigger".
-See the test-cases, they demonstrate the same pattern.
-
-Oleg.
-
+-- 
+Jens Axboe
