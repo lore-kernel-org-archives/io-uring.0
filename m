@@ -1,309 +1,148 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18C2402B9E
-	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 10:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785408091; cv=none; b=XNU0UwsKZ/kf+Bu3sO2Xm58PcAlpKZwmpkmAnKSRzHiPbEQGaxF1AM3tXBJbNGaEEZQ7/vQEDY2NneoaYm9aG5CWXSVQfup//ZekA+5H8O0zKCnrtNmacuJGPx8btNI2iJb5pS4a+v+vjpQoycP2pZh+QW8jLBxnNncvmvlOSOg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785408091; c=relaxed/simple;
-	bh=YI6ZSEJMCkmbOdXDsgw8UJSCcnirbh1OoBjegKeFXiE=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hXHA6dotVZ6O5GgtI8qswojp6aNVA9jXpF5QOwOhzAoCnkzojNJif0kZVP2Wy6DiKVK5mbvoGeeZjiE4WAjvCW8XCzZXmE1IcInIfcas6Gui2nk4cCSBdAr4OZVdFoaRmtxwFsjUErnvhKCfgHf5rQA3Xs980xpiYbwClC1DZxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eLOgyeI6; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1649E38236C
+	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 10:42:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785408171; cv=pass; b=iwExXXbQaVMEpYYGBCdFhod5BVOsxsatOQABUXdJ3kVISr7mR1unm6We6gWa/07HzMLl/HiXqKQRfmbkJZeKwLNinpIYVU0my2G5xMMYnJyDRXlzypepVkwH5zNravXQvOxnZti7DOv2V+vq4PB2tXvMw0u2tWqNif8PGZjTvm0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785408171; c=relaxed/simple;
+	bh=W9y/o0fz9vmCM2PHGdXrf11+hHaWhgOC+/4OWUzaCds=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ujLIroJoRHSr4rMpxCHs6NNqF9c/OaLTho2qeLOV97b48N47CMhANc2nQACmIm6skxNVGp7F81ZplWuGATmJ8Y5zlhbU9LbtOQnH+40nGBYLpETCgLtNOftCl1rSwdWHeXJg8ZsTdBlSp+7cTr/5dUR7/Q23HxYc4JyJXp8gVv0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=McbHDMDT; arc=pass smtp.client-ip=209.85.208.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eLOgyeI6"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4954afac04bso21503355e9.0
-        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 03:41:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="McbHDMDT"
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-39c74722e27so7496861fa.0
+        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 03:42:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785408168; cv=none;
+        d=google.com; s=arc-20260327;
+        b=MWVQDqMl9c5oZiDmtg2BD0g6/rPPH/36f/EsNdq9psEWIZxvDINSvRoJfJHdibI1Sz
+         dxFdquES/7TEfu9xwjZRYL/JK8kK07v8c5LFlWquo5k1OF6y9vCF5CTq9kaC0oTjIHmY
+         UndCeZP0Xckx0CFoEB+4MPU2ahuxCgdNfVYMe1p1GpKRINvM5c3U0Tr6N8OojSm8bKjZ
+         Av6C4K636aYM9a9Dz/Hei+oNkGFzPkPI/HIyE49YtLlotwhG/MmS/Fr2gu5W6og0x1W+
+         wyZooqPYlSBoy89JLiox+v9EGqxExiW7yK5/AiwxtioLezSBpuFjZu5NDCBIX1pwee2H
+         SwAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=DvRPL0xNHt2yUHxmPNQXYSIsNFvCGztbkFOk+1WnSSU=;
+        fh=/1dZmVjN/52ytWU9CeN3f7G1pDGoHvKMQnp499OIxpQ=;
+        b=PEmdKP+xSv/R9HkrBe7mtwUavDBKmW39mE5fcPOk3noxN6yoj1ytq8Hs/tC1INA0Sk
+         Af3FTKsVihqSfsxbUo8yap8FJAAKm3tdDHVbDjgj9WVjMOyrc0DRasq/bYl5TS15ug/Q
+         FsboROwDpPmm9yh7x+cOjZF4ret0dU6Q0RcUmgeIcVp0EAmNg+A6iU8lwF63L4hx762w
+         E3g7T3AQf9yfDviNuv4sfh7AI03po9JLpOiUhTCfyA9uW1KYYLQvxbe4RvX9ZXcAm5Cp
+         xg9rTpxdefS7B734M63FuZgYvE6KtlzFXIoP8tQKxXEfcpTByaHcIm7YgmZShxJLKfxe
+         gwdg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785408087; x=1786012887; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IOL9N86L1OioG/3DjR3pD+pVPyZKRK8hcf21uMcbnBc=;
-        b=eLOgyeI6Hih9z+coyMJwuFVxKYVRboNV/Ze8Yn+LnGQy+gjQihbkTOp6E4AQbZc+qv
-         4WdaRu3k5SCwWzHUb26CxAQkL6Ecnqd3ceGDw5S5ro3mG/ouOTAcEtVpB8xIKKO3OBHc
-         p+XNb7apYnOxb4vGTNuZFkrvtRAhvS2px0SZftO9wXsX/IcDXud+Ux7WiYEawi8kxudj
-         Uv575oaO/NTVC8P8S+xvj9AsuCe+0fz4bmLNndO0m2X362ub2FRLiczl3jWC/DzpWy0c
-         iBA84IBkgOUIw3KuryHpMF/KsWeqj7+9iekZOXHOGCazTzTMwy6vtcAEug3k980rP0FA
-         0skw==
+        d=gmail.com; s=20251104; t=1785408168; x=1786012968; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=DvRPL0xNHt2yUHxmPNQXYSIsNFvCGztbkFOk+1WnSSU=;
+        b=McbHDMDTb8uhjBUHqKfRFZd1frVsppieQjuX6leZspoO6sLotgsuP83f7XxvDzCL/X
+         HTzXp22tNPcIsTI3DZYepcbkgWqwQWruWZ3ZHy2GmTTuomNmhWQ5S/Q9JFhr3iXMLBMQ
+         zT7LJyc6NB1E92mhoJ+IRNFDeMBeh70K74nmdL6/we9i3qy8t0GHkRMULfGXNN5SMupb
+         Spi6zupJ6lsgywV9iCbNcuk6iSz5JzDuVily4Sir4GsnHCD0/5GC+PrRxPPENVFkuEqG
+         M0U8Zeb+ae+YboHFYjzgdMapNF6k/xa4oWs7UkbjQoQV17qeL5Jf3tL8o+XM2ChW74il
+         QitA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785408087; x=1786012887;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IOL9N86L1OioG/3DjR3pD+pVPyZKRK8hcf21uMcbnBc=;
-        b=hjkNJ6I3tWa7Z0ps/FfTLgVyRgqy2jp3kplDyHTXDvz+zQsqgAo0UUTqqBwKQpvR7v
-         YJvyQ6ENxvzG+i0VTtjdmbC2DGVKWcLvGbThRtQ3T+bJg1q7iCRsuryD25JW8KP27kYW
-         8OXpehxuDBzY1bHof+7C20U25qlAC+FXberBIMy1XdOur4rXYRVriWJqMClKp3fXUaGM
-         VJVcCQuOr+KdiAUM5IVubfYFMkSBWcPHZORH2tSmsl1oKSMgJx4BtCsfqWOAo8PA0zCH
-         t3P2AcVkTLZdDxAlkzH3+vJOSHt6uTPAGSZ2zObAPPrr/t/Z9g9omTb1lhREjyGL/IWl
-         K/xw==
-X-Forwarded-Encrypted: i=1; AHgh+RoEr2cf8wAThr/UFYj3XG80isbO4QsuShsQ4xrCfURjTMEFE0DtSASHUAWLyHUNJj+OTiPv88HfcQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywoi41MIYdC4/R4TMhVXPVpB3BHwkOmdilirWSNliGl9ckGwyCi
-	WVD5I526qYUuX96ts0+ahvsmfj6tSJpXi5f+/2W5FZrqpthoPvUrq8v7
-X-Gm-Gg: AR+sD10h9qJ/2q2kP8Wv0B9n7+Ysq4jDmEW6r9wckMdhdJkc2XocNw3hMhXHaFGl0fj
-	M3nXLc0dCGH67LjSVxONdYBAV7Y1stEn2SQO4LKYcAyknb/zASMCpXalNz/jEaGtP9oVYFW186m
-	rBUUQQD2Edytii+DlN5Wq/QVsOxKfRdszYZAkxPTkzErf6L93CHyQncA9cPZgMDTuanaWmsvMWr
-	xC02RaPHZcNxdj805K9G1/0nP+8/5AXQau0jh+9uWvuSORob5UgxRl9je1SqdSmsR7ImylrhOjE
-	sbw7NmCc1OJoSb15j0WcnwixbornD7RWDnmdwnM+6w9n4Wnc8yHwufhUvhM6nXQY0SQvadshkQM
-	ykvXRbFuFVkypoTFuHPLRUQv6o9gh1JJeSXeo/l7Klqsqzxrkt51XB6/m7YaB7ndsRTO9CANCym
-	c84yMPk2+K8opCa8SbEwg/OV0idn/Ltai0TaDfNlw+vwv8LKj7Hdb6Q41ZNJwQCi1cdF6JDBUbE
-	l1K3LNPujPVaf62yrUNFxwtCFJF6pvh1bynonTY5+Mcds2iaj/mDV5WwT7KmDiPSNOWBe1AR4/e
-	Pa2ufIC3l1eGSX8MjSUO
-X-Received: by 2002:a05:600c:c494:b0:495:745e:7430 with SMTP id 5b1f17b1804b1-49800ea99fdmr23256155e9.20.1785408086793;
-        Thu, 30 Jul 2026 03:41:26 -0700 (PDT)
-Received: from ?IPV6:2620:10d:c096:325:77fd:1068:74c8:af87? ([2620:10d:c092:600::1:2f22])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fc89347bfsm4376944f8f.28.2026.07.30.03.41.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jul 2026 03:41:25 -0700 (PDT)
-Message-ID: <de4ec386-42ba-41c3-bcbe-1fe8b2f71ba9@gmail.com>
-Date: Thu, 30 Jul 2026 11:41:30 +0100
+        d=1e100.net; s=20251104; t=1785408168; x=1786012968;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=DvRPL0xNHt2yUHxmPNQXYSIsNFvCGztbkFOk+1WnSSU=;
+        b=dmAjO4vhwD6WiKr2Hpkp+DVWOVlbtT03iqFbBJWmDIwM1GQR/gyX/wPRYQ4vfU1a10
+         ppcKgHnaYtQQ0MQfrGdSnBIjN/V2vSGy1o66iO1ZeM9JoFzrk3K1ATk908NAJ+PUhX8V
+         bw0m7aI7o8OwjsRQA61WQR1X1rw+eECauOfhKmQoZKl9XMU9fPh0+0XFokzwrFT/6TPd
+         r8mRVoPoUaZD4BUg+JxVEiGkEXhMNTrl6BzCqbp8lyWTzlX/9OWWQni1jqV1LDocMoUd
+         aTmJNJAsIIDjqy17Uv7t1TrrE6vou9ZtjxBJhcEYefeuoq1d5BW/80on9G/rVb7B1PDx
+         a5rw==
+X-Forwarded-Encrypted: i=1; AHgh+RqrUmXkBw1SMiJFrkHo5RCLMoH/F7cgNjX2xiS/xiQhiOiaedRdW0F8aPw3wUTG164cXHStqZ1Bjw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5yHHb66JVwlGn2dnHcFTsk6mTTnMMqcshzTavW4zwWUDKmQQL
+	DSg0qTNAUQmoHvrIScV8MHAZ7W6GSLO4+OOLPnG6O2tTUItGHowIzH3YWT8a1OqEu1oH4uz63Ge
+	vQTPewsaoJtWzYP444wd7FTMlgfRSYa0=
+X-Gm-Gg: AR+sD11W7jdUVMLKj6fCb1Aj06zU5uPLFk0R5pqmX5cas+sSWpevzE13O/oH6d24gxU
+	7xYwzY8FrTwCcGAcqx8UDaMq4sI2MblKdBQqqT9GEIBBIf3EVm6s4SPlEYb2mzBwvBkVnSu2sn8
+	qJrcqSZmS4Bi97p6K1DvVyUJybi9rHdpPi4CoJnCPMPs44YA6eP66rFb3ntfiLev7RlDOIGdDet
+	keP9uCnGdDUZWORVtSz7v6hsgaX8H2uilDMR87i7h/MWd8wWQSh1WGIW2PO4PIsLPetl57FuUHx
+	UO/JNC0ozveOfpK8hh9nm0gbGZeXZlZdHT2SLPY5lso=
+X-Received: by 2002:a05:651c:502:b0:39a:fef1:ad7 with SMTP id
+ 38308e7fff4ca-39f706705camr3487351fa.21.1785408167726; Thu, 30 Jul 2026
+ 03:42:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Pavel Begunkov <asml.silence@gmail.com>
-Subject: Re: [PATCH v4 08/14] nvme-pci: implement dma_token backed requests
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
- Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>,
- William Power <william.power@intel.com>, Phil Cayton
- <phil.cayton@intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Damien Le Moal <dlemoal@kernel.org>, Alasdair Kergon <agk@redhat.com>,
- Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
- Benjamin Marzinski <bmarzins@redhat.com>,
- Vishal Verma <vishal.l.verma@intel.com>, David Sterba <dsterba@suse.com>,
- Ilya Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev,
- nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org,
- ceph-devel@vger.kernel.org
-References: <cover.1785274111.git.asml.silence@gmail.com>
- <19e5c945ea8114320c10f7951d19197d48b59249.1785274111.git.asml.silence@gmail.com>
- <CADUfDZpwF0jp2e=+c3w_NjWPbnQ858bkSD731M6+x27jzgcJiw@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CADUfDZpwF0jp2e=+c3w_NjWPbnQ858bkSD731M6+x27jzgcJiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Chengfeng Lin <lin2530632123@gmail.com>
+Date: Thu, 30 Jul 2026 18:42:34 +0800
+X-Gm-Features: AUfX_my2Ux3mXHCSLI9OEzNcBpvgABF6k1WnDjHJmIPPMenxP_myxBhVJEyBI4g
+Message-ID: <CANGjgdn=R_qyUdE=j9za+vkmqcxacbP-84OHXF4nZ4ho9qRyVg@mail.gmail.com>
+Subject: [REGRESSION] io_uring/futex: scalar wait/wake slowdown after 079afb081c42
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, Robert Morris <rtm@csail.mit.edu>, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 7/29/26 20:43, Caleb Sander Mateos wrote:
-> On Tue, Jul 28, 2026 at 2:35 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> Enable BIO_DMABUF_MAP backed requests. It creates a prp list for the
->> dmabuf when it's mapped, which is then used to initialise requests.
->>
->> Suggested-by: Keith Busch <kbusch@kernel.org>
->> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
->> ---
->>   drivers/nvme/host/core.c |  12 ++
->>   drivers/nvme/host/nvme.h |   2 +
->>   drivers/nvme/host/pci.c  | 259 +++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 273 insertions(+)
->>
->> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
->> index 453c1f0b2dd0..ce66a1843bec 100644
->> --- a/drivers/nvme/host/core.c
->> +++ b/drivers/nvme/host/core.c
->> @@ -2676,6 +2676,17 @@ static int nvme_report_zones(struct gendisk *disk, sector_t sector,
->>   #define nvme_report_zones      NULL
->>   #endif /* CONFIG_BLK_DEV_ZONED */
->>
->> +static int nvme_init_dma_buf_io_ctx(struct block_device *bdev,
->> +                                   struct dma_buf_io_ctx *ctx)
->> +{
->> +       struct nvme_ns *ns = bdev->bd_disk->private_data;
->> +       struct nvme_ctrl *ctrl = ns->ctrl;
->> +
->> +       if (!ctrl->ops->init_dma_buf_io_ctx)
->> +               return -EINVAL;
->> +       return ctrl->ops->init_dma_buf_io_ctx(ctrl, ctx);
->> +}
->> +
->>   const struct block_device_operations nvme_bdev_ops = {
->>          .owner          = THIS_MODULE,
->>          .ioctl          = nvme_ioctl,
->> @@ -2686,6 +2697,7 @@ const struct block_device_operations nvme_bdev_ops = {
->>          .get_unique_id  = nvme_get_unique_id,
->>          .report_zones   = nvme_report_zones,
->>          .pr_ops         = &nvme_pr_ops,
->> +       .init_dma_buf_io_ctx = nvme_init_dma_buf_io_ctx,
->>   };
->>
->>   static int nvme_wait_ready(struct nvme_ctrl *ctrl, u32 mask, u32 val,
->> diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
->> index 824651cc898d..034c31af8fec 100644
->> --- a/drivers/nvme/host/nvme.h
->> +++ b/drivers/nvme/host/nvme.h
->> @@ -652,6 +652,8 @@ struct nvme_ctrl_ops {
->>          int (*get_address)(struct nvme_ctrl *ctrl, char *buf, int size);
->>          void (*print_device_info)(struct nvme_ctrl *ctrl);
->>          bool (*supports_pci_p2pdma)(struct nvme_ctrl *ctrl);
->> +       int (*init_dma_buf_io_ctx)(struct nvme_ctrl *ctrl,
->> +                                  struct dma_buf_io_ctx *ctx);
->>          unsigned long (*get_virt_boundary)(struct nvme_ctrl *ctrl, bool is_admin);
->>   };
->>
->> diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
->> index 69932d640b53..f1b67c191892 100644
->> --- a/drivers/nvme/host/pci.c
->> +++ b/drivers/nvme/host/pci.c
->> @@ -27,6 +27,8 @@
->>   #include <linux/io-64-nonatomic-lo-hi.h>
->>   #include <linux/io-64-nonatomic-hi-lo.h>
->>   #include <linux/sed-opal.h>
->> +#include <linux/dma-buf-io.h>
->> +#include <linux/dma-resv.h>
->>
->>   #include "trace.h"
->>   #include "nvme.h"
->> @@ -393,6 +395,13 @@ struct nvme_queue {
->>          struct completion delete_done;
->>   };
->>
->> +struct nvme_dmabuf_map {
->> +       struct dma_buf_io_map base;
->> +       struct sg_table *sgt;
->> +       unsigned nr_entries;
->> +       dma_addr_t dma_list[];
->> +};
->> +
->>   /* bits for iod->flags */
->>   enum nvme_iod_flags {
->>          /* this command has been aborted by the timeout handler */
->> @@ -859,6 +868,138 @@ static void nvme_free_descriptors(struct request *req)
->>          }
->>   }
->>
->> +static inline struct nvme_dmabuf_map *
->> +to_nvme_dmabuf_map(struct dma_buf_io_map *map)
->> +{
->> +       return container_of(map, struct nvme_dmabuf_map, base);
->> +}
->> +
->> +static void nvme_dmabuf_map_sync_for_cpu(struct nvme_dev *nvme_dev,
->> +                                        struct request *req)
->> +{
->> +       struct device *dev = nvme_dev->dev;
->> +       enum dma_data_direction dma_dir;
->> +       struct bio *bio = req->bio;
->> +       struct nvme_dmabuf_map *map = to_nvme_dmabuf_map(bio->bi_dmabuf_map);
->> +       dma_addr_t *dma_list = map->dma_list;
->> +       unsigned offset = bio->bi_iter.bi_offset;
->> +       unsigned map_idx = offset / NVME_CTRL_PAGE_SIZE;
->> +       int length = blk_rq_payload_bytes(req) +
->> +                    (offset & (NVME_CTRL_PAGE_SIZE - 1));
->> +
->> +       dma_dir = rq_data_dir(req) == READ ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
->> +
->> +       while (length > 0) {
->> +               dma_sync_single_for_cpu(dev, dma_list[map_idx++],
->> +                                       NVME_CTRL_PAGE_SIZE, dma_dir);
->> +               length -= NVME_CTRL_PAGE_SIZE;
->> +       }
->> +}
->> +
->> +static void nvme_dmabuf_map_sync_for_device(struct nvme_dev *nvme_dev,
->> +                                           struct request *req)
->> +{
->> +       struct device *dev = nvme_dev->dev;
->> +       enum dma_data_direction dma_dir;
->> +       struct bio *bio = req->bio;
->> +       struct nvme_dmabuf_map *map = to_nvme_dmabuf_map(bio->bi_dmabuf_map);
->> +       dma_addr_t *dma_list = map->dma_list;
->> +       unsigned offset = bio->bi_iter.bi_offset;
->> +       unsigned map_idx = offset / NVME_CTRL_PAGE_SIZE;
->> +       int length = blk_rq_payload_bytes(req) +
->> +                    (offset & (NVME_CTRL_PAGE_SIZE - 1));
->> +
->> +       dma_dir = rq_data_dir(req) == READ ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
->> +
->> +       while (length > 0) {
->> +               dma_sync_single_for_device(dev, dma_list[map_idx++],
->> +                                          NVME_CTRL_PAGE_SIZE, dma_dir);
->> +               length -= NVME_CTRL_PAGE_SIZE;
->> +       }
->> +}
->> +
->> +static void nvme_rq_clean_dmabuf_map(struct nvme_dev *dev,
->> +                                     struct request *req)
->> +{
->> +       struct nvme_iod *iod = blk_mq_rq_to_pdu(req);
->> +
->> +       nvme_dmabuf_map_sync_for_cpu(dev, req);
->> +
->> +       if (!(iod->flags & IOD_SINGLE_SEGMENT))
->> +               nvme_free_descriptors(req);
->> +}
->> +
->> +static blk_status_t nvme_rq_setup_dmabuf_map(struct request *req,
->> +                                            struct nvme_queue *nvmeq)
->> +{
->> +       struct nvme_iod *iod = blk_mq_rq_to_pdu(req);
->> +       struct bio *bio = req->bio;
->> +       struct nvme_dmabuf_map *map = to_nvme_dmabuf_map(bio->bi_dmabuf_map);
->> +       unsigned bvec_done = bio->bi_iter.bi_offset;
->> +       unsigned map_idx = bvec_done / NVME_CTRL_PAGE_SIZE;
->> +       unsigned offset = bvec_done & (NVME_CTRL_PAGE_SIZE - 1);
->> +       int length = blk_rq_payload_bytes(req) - (NVME_CTRL_PAGE_SIZE - offset);
->> +       dma_addr_t *dma_list = map->dma_list;
->> +       u64 prp1_dma = dma_list[map_idx++] + offset;
->> +       u64 dma_addr, prp2_dma;
->> +       dma_addr_t prp_dma;
->> +       __le64 *prp_list;
->> +       unsigned i;
->> +
->> +       nvme_dmabuf_map_sync_for_device(nvmeq->dev, req);
->> +
->> +       if (length <= 0) {
->> +               prp2_dma = 0;
->> +               goto done;
->> +       }
->> +
->> +       if (length <= NVME_CTRL_PAGE_SIZE) {
->> +               prp2_dma = dma_list[map_idx];
->> +               goto done;
->> +       }
->> +
->> +       if (DIV_ROUND_UP(length, NVME_CTRL_PAGE_SIZE) <=
->> +           NVME_SMALL_POOL_SIZE / sizeof(__le64))
->> +               iod->flags |= IOD_SMALL_DESCRIPTOR;
->> +
->> +       prp_list = dma_pool_alloc(nvme_dma_pool(nvmeq, iod), GFP_ATOMIC,
->> +                       &prp_dma);
-> 
-> I wonder if it's possible to perform the PRP list page allocations and
-> initialization in nvme_dma_buf_io_map() instead of the I/O path. The
-> NVMe dma_pools are per-NUMA-node linked lists protected by spinlocks,
-> making them significant CPU hotspots. If the dmabuf registration set
-> up a contiguous DMA-coherent list of PRP entries for the pages of the
-> registered buffer, any command using the dmabuf and requiring at most
-> 1 PRP list page (i.e. length <= 2 MB) could just set its PRP list
-> pointer to an offset into the dmabuf's PRP list.
+Hi Jens,
 
-Possible to an extent, predecessor patches tried that, I left it for
-later to keep the series simpler. I guess chaining won't work in
-general case.
-I mentioned this to Kanchan, Anuj and Nitesh before, they were up to
-playing with nvme optimisations in general, and since sgl from Anuj
-is ready, maybe they already have a prototype somewhere for that.
+I tested 079afb081c42 against its direct parent on bare metal. In a narrow
+scalar io_uring futex wait/wake workload, the child was 9.27% slower. A
+separate 338-line standalone reproduced the result at 10.02%. All compared
+kernels actually ran with preempt=full.
 
--- 
-Pavel Begunkov
+#regzbot introduced: 079afb081c4288e94d5e4223d3eb6306d853c68b
+#regzbot title: io_uring scalar futex wait/wake slowdown
 
+This is a focused synthetic microbenchmark, not an application benchmark. It
+uses one raw-UAPI ring and 32 cacheline-separated private futex words on one
+pinned P-core. Each timed cycle submits 32 scalar IORING_OP_FUTEX_WAIT
+requests, then 32 scalar IORING_OP_FUTEX_WAKE requests, and drains exactly 64
+CQEs. Every wait must return 0 and every wake must return 1.
+
+I used a fresh boot for each point:
+
+  6a8118a77eec parent A -> 079afb081c42 child -> 6a8118a77eec parent B
+
+Each point had 3 warm-up rounds and 15 measured rounds. Every measured round
+ran 512 cycles, or 16,384 wait/wake pairs. The results in ns/pair were:
+
+  implementation   parent A    child    parent B    child vs midpoint
+  formal              180.079  196.647     179.856        +9.268%
+  standalone          180.171  197.856     179.502       +10.020%
+
+For the formal source, dropping the first measured round gave +9.269%. Parent
+drift was -0.124%, and the maximum CV was 0.169%. The standalone drop-first
+result was +9.996%, with -0.371% parent drift. All 90 scalar timing rows
+passed the CQE, result, timeout, overflow, outstanding-request, and CPU
+checks.
+
+An untimed child trace also hit io_futex_prep(), io_futex_wait(),
+io_futex_wake(), and io_futex_complete() with the expected request counts.
+
+A matched WAITV -> WAKE profile changed by only +1.385%, below my preregistered
+5% signal gate, so my claim is limited to scalar wait/wake.
+
+I understand that 079afb fixes the exit-time use-after-free by keeping pending
+private futex waits visible to cancellation before their mm state disappears.
+Scalar WAIT and WAKE both use io_futex_prep(), so in the child both sides of
+each measured pair execute the added tracking call. I am not suggesting a
+revert.
+
+Is this per-request cost an expected trade-off for the lifetime fix, or could
+the same exit/mm-lifetime guarantee be retained with cheaper tracking?
+
+Evidence bundle:
+
+  https://github.com/lcf0399/linux-regression-evidence/tree/65c8cbf86f40cbe759e3f7db1d29d152ba03a8f2/io-uring-futex-inflight-wait-wake
+
+Standalone reproducer:
+
+  https://github.com/lcf0399/linux-regression-evidence/tree/65c8cbf86f40cbe759e3f7db1d29d152ba03a8f2/io-uring-futex-inflight-wait-wake/reproducer
+
+Thanks,
+Chengfeng
