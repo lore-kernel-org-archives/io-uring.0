@@ -1,108 +1,239 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFCC38AC80
-	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 16:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4C435C69A
+	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 16:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785428711; cv=none; b=gdMOvx3QdkpZpgMox52xzVNoKwbjk2zxxBi3DUAL1zcMnbax0JsT+KFnVa51xqo/fEUQYVltybU5oofzMuX1qv5j8wJybA9HMcGxRo2/SNTj8OhpATrqsbH9HRl7LF7GFRrcZG5wrZwVIORBVBUDXG+HkkX0khRuFYjqL90uIko=
+	t=1785428903; cv=none; b=IFi7/q5h1zKpLXxmK1BLhNWH16BsjcBw/ZcHo6DDG50ISs+rRYuvyQinkBJGm7jUphW1yDOuMBwhwE2FNe8D3G9mVkZGGEw79cJVtyZHEVQAiQ3dGusiKY9bUFu/JqC9guNE3J7KLoHVNB4TaSm1XyiHw/NEwk7ILiGyMFXRp+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785428711; c=relaxed/simple;
-	bh=CWxVLNPMf30pt4+VlSY6EdX1cU2VxBfirKfTyTscMUA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R0grfpD05KOXmN0P7W+pkKIF86blNdHCV+/VIP2PuuzsjqPGz7+4DoNecsvZV3IkQWqfxgW1DR9l2pLuGZpqRkjImRlnIKLYzf4nffvPujIioAu0xZ9DGS9v5V+Tx4i7XsCYPE9ClcPE032ps5i/ULfGpqxfCtpKKsZBo7dMhTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=reimWQUr; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1785428903; c=relaxed/simple;
+	bh=94yg8Glm6wlqEV7/dURt9MeEZcqzC+ZT+f7IE2r22wI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CYzfW4ed5vZLe59s+ovNz1zX421L065C81SUkEZJuZwELq7jafnGBybKpAD7E+D0HmkJwKYq610GED/a4kCjyeP/pHMNaG32vtovFqatCnb2lz2NQFNkoSIRFV/KkFOWlbX+0Z4+MJGo70Xypabai3GJu+TZ3xk2YvhEbe4Dh44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IIGO7MHB; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="reimWQUr"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7eb63dbd229so784301a34.1
-        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 09:25:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IIGO7MHB"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8484f229529so68051b3a.2
+        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 09:28:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785428709; x=1786033509; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FCMCSSOZLCcsJg++A7AOf3GHD4mGUbbc8wGpe4AWlYQ=;
-        b=reimWQUr82xbVTT1L/4jtcE7nT4/00gXhZ5co4mKCiMzs2c4lf6vsAWxSzWceVZiKn
-         hnnuICguxlIxsXtkXc8Kv4RXJYq1/TMh698A1T3ctXb/KZ23ZsYMNxI/2RbhDKfFri4x
-         7tXkBFdYcfaJcO8xFjSTreyLWnY6foEUKyBQ3FFQqTXK9PLz/Ogqq7S+CR7AN4khY2qS
-         lgHD6IpstIOAngy7TGa863YiVPhxJumJLaAfcw06xpU88q8Jhi8aeDbXk03giuEMMfve
-         QA6olvevyN2sqgwnBPfiH8iNgGkzTiVXHPrBSTmK5BxtT4FPdszPJJtjr3BTMhOVnMxf
-         k+JQ==
+        d=gmail.com; s=20251104; t=1785428901; x=1786033701; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=5G1izmpJSwaJTisXe0Txgx3GyutlrVgUX4te5pBONao=;
+        b=IIGO7MHBofV6T5pbn8wEhgcHP/z4ZJp72eP3cT8rVG1TpdSpVdAbrx/v+/7wa3enXJ
+         7U9xsuolQDuMtkVyzzOhdsvisZ7/Q1wKGiX2R/24Qyo1B16s++8Z2TBL5RShhU1SiHQd
+         K2WrCXMd0awWqQnFq/5gKDuU3aDtOiI3exAHtjOg+OurdcAL5X1QKonleVf+4CkMs6q3
+         UGL2ge39W1qvwMNpJ5uFb9uDoFF2C2Dr/tGBc+CpUm0gE59jWWY/jqB2bUigLTZ2qo65
+         Fw9feXHnp7UJkvqoIDJ72fssQE6uTYiX3IvOhyP8zpwpQIThg4zvCc939jmPaMtPCIgh
+         rRNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785428709; x=1786033509;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1785428901; x=1786033701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FCMCSSOZLCcsJg++A7AOf3GHD4mGUbbc8wGpe4AWlYQ=;
-        b=egHp/mNAvHWgSEZJhhiWdH7BlTDCjesaOh9lv2iCHGlh7QfFyXic1eMFqVa8w2VdlQ
-         dBynO6CYUC9DLFPfUX9DK/8grHKvb6vhMMs32eaYDjz9Cwfm/a6OII7IVMHet9ImEHlX
-         +CJpHytK0MuDU4Egj9AieTlplLBZe8VYp34YTXbpxGgmdejPyNlrIvNNijAVtMMgJp80
-         eg0ALvnnfXhFP7Tct/DDUc3NjUa8AvGMu3ajtm3UoUvSkWnLcFFGK2o/KMOhDSPvF/o/
-         YAC/NJYQGVXpv3anLzNtprSR+E1AFn6f56w1o16azLL/+ZOtV/30jlESYcsVaUjWSzvz
-         B6Qg==
-X-Forwarded-Encrypted: i=1; AHgh+RruSSftn9q+qaYpKE3ZBz9T52DUy63/RxCuCUuyVzmlLwSZOTg/pU1mxVG9dMgpw8yQe9+nYx1rjQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9KMoEceCBqHneR5qXuGeCM1Uc9rnK+qvmHPLTSC3PBSbuKGeM
-	Ta91xaa+YIxrynK62l2ha/CZ6X8YZIZmxAwS57ItnsNtWaP6vrr6+B6+NTXTL+en4eo=
-X-Gm-Gg: AR+sD10MTBhT7L3iJPfvdjijcCA8GpBFxuq62URtIA4hqLDEjVYVdAkrIfMSJOu3gfm
-	qAtcKqsQrXi2mBB1f0MvkkA82TaAHhq0k95Yulg86+ZGbGlkGyBPtmZ6ldqIdKRwvlHgHJ7ERqY
-	mQIQ1CaR8WwQiq6PuXKbOoFlPBjr1Gr4OQq3uR4BTBru9VClM3i5wE5UDXLG4pAysD0TgrQtrIj
-	eMbrkRHWBIuanMhaoE4VDE+UG/PpfsSWnxc0YXjyE473zcNf8KO4r+T3dVgeE6GxmZz6hNaxGsZ
-	w+aBF8et2e9egrpCR5qyaqsoGKcthwlKkIDrKIV8ptIVCX/xgXTtgvxLn1H8yUwCAbf63B7Tmu1
-	h4OU9RqEgA/z/KNGysSBMswKjd9XQcR9LQXOcTmCwZhZSGNhhC3qRmUmOh/JN73HTft4KSqM6Ra
-	paJIRIcFOPYK5j2LnqXRikcsgBGrA192RUUZGmsB+HKgsZi7cAvjyVmxL+Wvxcdc5rorK2ZGMhA
-	zxrfD+UShkGl564drScAcE7fWGf3KR1gpztYIEonCfjlw==
-X-Received: by 2002:a05:6830:6b03:b0:7e9:b673:cbfd with SMTP id 46e09a7af769-7f0430f11f7mr708390a34.7.1785428708795;
-        Thu, 30 Jul 2026 09:25:08 -0700 (PDT)
-Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f00d5f4dfcsm5084595a34.10.2026.07.30.09.25.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Jul 2026 09:25:07 -0700 (PDT)
-Message-ID: <a50c6a4d-5c25-4cbb-baac-f622728f2693@kernel.dk>
-Date: Thu, 30 Jul 2026 10:25:06 -0600
+        bh=5G1izmpJSwaJTisXe0Txgx3GyutlrVgUX4te5pBONao=;
+        b=LZN6nbGBe6ecRu+isssCIX3B3WfWOm9uM3cdCcBsYddozaE7tld5ilh+ZITIYZwdOf
+         ogstE84sjaXL4ye7ayzMgV+WLRBFkJ4cKfzDISRb5JbC1BWpyB8qk/5YEhcxWcswPZ8E
+         fJ6k8hApvWDLZB7bShBT2OuY+bjOQl1TKvD41oE5EcKsneRMol+Y06qELoQ9Gnqb5Q8L
+         yw0m/PRsN5NQ5x8wfCYo7OmubAV7xlybkFGXbHxvybIOckEaBtR1xMH/qZkOvX+WdBkg
+         oDidgzxbjRVb2dFHhDKGVVxEGKPQ6h5DBERJXoBdA9nwXIzB7sTWAqwHed9KKrI6GjgZ
+         5zxA==
+X-Forwarded-Encrypted: i=1; AHgh+RrCqtJnXxXrvVTUDOtkvXuWZsrMx1tOJ5SRt/3Nz+liTdruUSOnwbZA1egXi4vCgUt6Oa8uUpsIqg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4C+rTtqA/1NHXBUhFXVh1maF2IF6Qsb6ZeQ7RuVXnUTHaHyE4
+	UsvX2084QIaPB4+wlZIHII07w1uE9wl8/CP9WBxoTzoieyaApjhc5uqA
+X-Gm-Gg: AR+sD13+f90TrdLxhU7vku8S4JkME5EATbtmGyjhAY2fxDYfWrmZLxAuGIfdbCit02D
+	ngpxwGq3iOl2kBhqaYm3KvhUhQ64bSNRruQRIFteNwK0KrCph7AohTXeqZo/4uDc7RWtlDwTJ+K
+	LeZhNIQ81QKhuTYznXdw0A4lX6S9YDPEMbckvkSAh0sT3SWXNPT7EVn4Beps4wpNQUeQ75tGAeK
+	ki3PJd+4ccoBUeuihZkUPbN61QuuFDQ6WHkNrMKyHpiwVz3OsV9inm1gpPJdGUsXw+b9tZxB7N/
+	yRs3xcPmy7lQsmo3RIThXpiLyTxKVulZxdMHRv2WoqoPOK0wb1RBZILVqb/IdoIu7fkSvbNSnsQ
+	X6S7sJRFqAQt4RmBIWO6tspeVg/VGVCH9GQj3FJ8q7410Pxqr1TCbfuYr0mRYgXQ5t+pJdsxmMo
+	mN8dyoRbGyoz8mh3llkMoNdLwLEWRUeO2IBwWtpCWMHSF5GWZFUCFaspxYtIJTfuPOj6lbLbI1x
+	ZmukqDPA0l4B24vqA8=
+X-Received: by 2002:a05:6a00:2341:b0:848:48e7:437b with SMTP id d2e1a72fcca58-84ebc46625dmr3159559b3a.69.1785428900932;
+        Thu, 30 Jul 2026 09:28:20 -0700 (PDT)
+Received: from LAPTOP-6GJJDDA7.tail156a05.ts.net ([49.228.123.165])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84ea02f9740sm3322851b3a.37.2026.07.30.09.28.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 09:28:20 -0700 (PDT)
+From: Woraphat Khiaodaeng <worapat.kd2@gmail.com>
+To: Pavel Begunkov <asml.silence@gmail.com>,
+	Jens Axboe <axboe@kernel.dk>
+Cc: David Wei <dw@davidwei.uk>,
+	io-uring@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Woraphat Khiaodaeng <worapat.kd2@gmail.com>
+Subject: [PATCH] io_uring/zcrx: don't clear master_ctx from the import path
+Date: Thu, 30 Jul 2026 16:27:41 +0000
+Message-ID: <20260730162741.1125-1-worapat.kd2@gmail.com>
+X-Mailer: git-send-email 2.45.4
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/6] io_uring/epoll: disallow adding an epoll file to an
- epoll context
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Xi Ruoyao <xry111@xry111.site>, io-uring@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, brauner@kernel.org,
- =?UTF-8?Q?Juan_Jos=C3=A9?= <soyjuanarbol@gmail.com>
-References: <20260514140817.623026-1-axboe@kernel.dk>
- <20260514140817.623026-7-axboe@kernel.dk>
- <605939add4dfb674bd7ab39ef8dbd3fd22e754e4.camel@xry111.site>
- <427b15c8-c168-4e2a-ac38-b00dc00400d3@kernel.dk>
- <CAHk-=wjeSgFEr3WSO1C1sPP+fy+Mt5_EL9WXW-s11BOhD_S5Ag@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wjeSgFEr3WSO1C1sPP+fy+Mt5_EL9WXW-s11BOhD_S5Ag@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/29/26 9:09 AM, Linus Torvalds wrote:
-> On Wed, 29 Jul 2026 at 03:54, Jens Axboe <axboe@kernel.dk> wrote:
->>
->> I think it's pretty simple - if libuv is using nesting already, then
->> we will have to revert this single commit before 7.2 release.
-> 
-> Yup. What a horrible interface epoll is, and now it's made io_uring
-> have any bugs it has. Oh well. Horrid or not, the first rule of kernel
-> fight club is that we beat ourselves up to keep compatibility.
+import_zcrx() attaches an existing ifq to another ring.  It never calls
+zcrx_set_ring_ctx() and so never takes the ->master_ctx reference, but
+its error path still passes @ctx to zcrx_unregister(), which clears
+->master_ctx and drops its percpu_ref whenever ifq->master_ctx == ctx.
 
-Exactly, no other recourse here than to just revert it. Unfortunately
-my io_uring-7.2 branch is from pre merging of the epoll changes, as those
-went in separately. Hence I can either prep a revert for you separately,
-or you can just revert cfa1539b24af yourself since you have the context
-as well. Let me know what you prefer!
+That condition is reachable.  A ring that registers an ifq with a
+non-zero event type_mask gets ->master_ctx pointed at itself, and
+nothing stops it from exporting that ifq with ZCRX_CTRL_EXPORT and
+importing the resulting fd back into the same ring.  Failing the import
+after the refcount bumps -- an argument page mapped PROT_READ makes the
+copy_to_user() in import_zcrx() return -EFAULT -- then clears the
+->master_ctx owned by the original registration, which is still live.
 
+Refcounts stay balanced and nothing is freed early, so there is no
+splat.  The ring silently stops receiving ZCRX_EVENT_ALLOC_FAIL and
+ZCRX_EVENT_COPY: zcrx_send_notif() returns early on a NULL
+->master_ctx, and ->master_ctx is only ever set on a freshly allocated
+ifq, so it cannot be restored without tearing the ring down.
+
+Pass NULL instead, matching zcrx_box_release() and the zcrx_export()
+error path.  io_register_zcrx() only gets away with passing @ctx
+because zcrx_set_ring_ctx() runs after its last goto err.
+
+Fixes: 00d91481279f ("io_uring/zcrx: share an ifq between rings")
+Signed-off-by: Woraphat Khiaodaeng <worapat.kd2@gmail.com>
+---
+
+Found by code inspection, then confirmed on v7.2-rc5 in a QEMU guest by
+adding a pr_info() to zcrx_set_ring_ctx() and zcrx_unregister_user().
+Writing A for the ring's io_ring_ctx:
+
+Before, the failed self-import clears the binding:
+
+  set_ring_ctx:    ctx=A           -> master_ctx = A
+  unregister_user: ctx=A master=A  -> CLEARING   (failed self-import)
+  unregister_user: ctx=A master=0                (ring teardown, nothing left)
+
+After, it survives and is released where it should be:
+
+  set_ring_ctx:    ctx=A           -> master_ctx = A
+  unregister_user: ctx=0 master=A                (failed self-import)
+  unregister_user: ctx=A master=A  -> CLEARING   (ring teardown)
+
+io_uring_register() returns -EFAULT either way.
+
+The reproducer below needs no hardware: ZCRX_REG_NODEV leaves ifq->dev
+NULL, so no net device and no DMA mapping are involved.  Plain syscalls,
+no liburing.  Run as root (CAP_NET_ADMIN).
+
+Reproducer:
+
+#define _GNU_SOURCE
+#include <errno.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <sys/syscall.h>
+#include <linux/io_uring.h>
+#include <linux/io_uring/zcrx.h>
+
+#define AREA_PAGES 64
+#define RING_BYTES (1024 * 1024)
+
+int main(void)
+{
+	struct io_uring_zcrx_ifq_reg reg, *ireg;
+	struct io_uring_zcrx_area_reg area_reg;
+	struct io_uring_region_desc region_reg;
+	struct zcrx_event_desc ev;
+	struct io_uring_params p;
+	struct zcrx_ctrl ctrl;
+	void *area, *ring, *ro;
+	long ps = sysconf(_SC_PAGESIZE);
+	int ringfd, boxfd, ret;
+
+	memset(&p, 0, sizeof(p));
+	p.flags = IORING_SETUP_DEFER_TASKRUN | IORING_SETUP_SINGLE_ISSUER |
+		  IORING_SETUP_CQE32;
+	ringfd = syscall(__NR_io_uring_setup, 8, &p);
+	if (ringfd < 0)
+		return perror("io_uring_setup"), 1;
+
+	area = mmap(NULL, AREA_PAGES * ps, PROT_READ | PROT_WRITE,
+		    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+	ring = mmap(NULL, RING_BYTES, PROT_READ | PROT_WRITE,
+		    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+
+	/* non-zero type_mask is what makes zcrx_set_ring_ctx() run */
+	memset(&ev, 0, sizeof(ev));
+	ev.user_data = 0x5a5a5a5a;
+	ev.type_mask = 1U << ZCRX_EVENT_COPY;
+
+	memset(&region_reg, 0, sizeof(region_reg));
+	region_reg.size = RING_BYTES;
+	region_reg.user_addr = (unsigned long)ring;
+	region_reg.flags = IORING_MEM_REGION_TYPE_USER;
+
+	memset(&area_reg, 0, sizeof(area_reg));
+	area_reg.addr = (unsigned long)area;
+	area_reg.len = AREA_PAGES * ps;
+
+	memset(&reg, 0, sizeof(reg));
+	reg.rq_entries = 64;
+	reg.flags = ZCRX_REG_NODEV;
+	reg.area_ptr = (unsigned long)&area_reg;
+	reg.region_ptr = (unsigned long)&region_reg;
+	reg.event_desc = (unsigned long)&ev;
+	ret = syscall(__NR_io_uring_register, ringfd,
+		      IORING_REGISTER_ZCRX_IFQ, &reg, 1);
+	if (ret)
+		return perror("register ifq"), 1;
+
+	memset(&ctrl, 0, sizeof(ctrl));
+	ctrl.zcrx_id = reg.zcrx_id;
+	ctrl.op = ZCRX_CTRL_EXPORT;
+	ret = syscall(__NR_io_uring_register, ringfd,
+		      IORING_REGISTER_ZCRX_CTRL, &ctrl, 0);
+	if (ret)
+		return perror("zcrx export"), 1;
+	boxfd = ctrl.zc_export.zcrx_fd;
+
+	/* import back into the same ring, with an unwritable argument page */
+	ro = mmap(NULL, ps, PROT_READ | PROT_WRITE,
+		  MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+	ireg = ro;
+	memset(ireg, 0, sizeof(*ireg));
+	ireg->flags = ZCRX_REG_IMPORT;
+	ireg->if_idx = boxfd;
+	mprotect(ro, ps, PROT_READ);
+
+	ret = syscall(__NR_io_uring_register, ringfd,
+		      IORING_REGISTER_ZCRX_IFQ, ro, 1);
+	printf("self-import: ret=%d errno=%d (%s)\n", ret, errno,
+	       strerror(errno));	/* -1 / EFAULT */
+	return 0;
+}
+
+ io_uring/zcrx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+index 76b9b0d54af9e..fea2b27272ec2 100644
+--- a/io_uring/zcrx.c
++++ b/io_uring/zcrx.c
+@@ -808,7 +808,8 @@ static int import_zcrx(struct io_ring_ctx *ctx,
+ 	scoped_guard(mutex, &ctx->mmap_lock)
+ 		xa_erase(&ctx->zcrx_ctxs, id);
+ err:
+-	zcrx_unregister(ifq, ctx);
++	/* the import path never took the ->master_ctx ref, don't drop it */
++	zcrx_unregister(ifq, NULL);
+ 	return ret;
+ }
+ 
+
+base-commit: 11028ab62899e4191e074ee364c712b77823a9c4
 -- 
-Jens Axboe
+2.45.4
 
