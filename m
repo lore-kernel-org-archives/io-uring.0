@@ -1,115 +1,95 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CA23D3305;
-	Thu, 30 Jul 2026 11:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5661342FCA8
+	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 14:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785411387; cv=none; b=nKRa0LR8pIVYIlZZPI4iCMqpqb/gsL1RsqoGSTsQAM/FWvza5ukSo82IjY4RxDSAJPcb7BguuCymvUN9QLBERdlDGCNZTRiKWFcaZKATWS1dzOggVEEayCSkeYKLYEVkR7SuRLLXQLLqDwfFFyuRG+kDShFoz192pFS4yVTdK1U=
+	t=1785420730; cv=none; b=u6Y1nxXzZ9Le3p8I2aPVV6kc9Hj1oWMq1F0/C6/bBcnjCgRvj6pgTQj3/sFtvOC5xY6iBbB7tS1F+ldQt9S9aMi56ffv9B9yimVzhwhV4igHaKlNVgcVaj97yoMZ6mms5/XdmdkXIFqN95TeMER/V3YAiAjPp0gHSXRTZ5Zv9mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785411387; c=relaxed/simple;
-	bh=zLysCEEqoEuWyM6opQgluK5L0ojRhH4UN4NK8AHNaik=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=MllZcHfvKioAX+u6vs9Lpgr61IP0sotV0y2UaC1N6kmPH/T6fu54VRnFkYyui3lp0SwlpcP3bN809a4eLzpg2wervCr3MokZril8s5mmN7/jaLNtsv/L3YgznaOMnX5BMVhSkpAN7qjKwOhbhtSYB/IxrEIuM1AADbnQYJHa/hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=G1m0nOj5; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1785420730; c=relaxed/simple;
+	bh=e0VdA06TjsVmax3Jqb13K3p5iSoDmpml5LluYvEAqzI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=HIab5wcDx4sg5l0JAIfZD91SAdVlL4VhvLp0VxP1HBG8Y8RWuOVI0r6Pdf6JxIrkqfoVb72S5XRCpVCutDY4BqNGSOkEEp+JD6rsAoAqQWFJXPau9boswEPmYsexnFCeZE5P83t+RmdxJX2lB0UM41ekCt1kezDi18EJupb5tD4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ccl5/cek; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="G1m0nOj5"
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260730113622epoutp01cd551f2ca3195d893edf957daba54315~HDjFDmUL01609216092epoutp01Y;
-	Thu, 30 Jul 2026 11:36:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260730113622epoutp01cd551f2ca3195d893edf957daba54315~HDjFDmUL01609216092epoutp01Y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1785411382;
-	bh=mERFm4283SSrRFHo9/1ATS072a+0UIQwbggX9r32jfU=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=G1m0nOj55iDA9Dd+o78RP1b6wsb5owePEsyB2HLZpWZ6TNjoaPNBKS3Bl9iVZZRQV
-	 leVdqeIcsnTbKQnqgOQLWCGR3KeuMAqMAHOvOQ5XtXOayIBD6utXS6XH8KTkELKZgr
-	 zEcrc4MUK5bcbMdqpy2eFgv3VLAU+aJAnTZlwZ/4=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
-	20260730113620epcas5p2cd2dd6e62a21b0504d36dfba298dab5e~HDjD3F8l_1787417874epcas5p2O;
-	Thu, 30 Jul 2026 11:36:20 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.38.88]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4h9nGC3jq9z6B9m4; Thu, 30 Jul
-	2026 11:36:19 +0000 (GMT)
-Received: from epsmtip1.samsung.com (unknown [182.195.34.30]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20260730113618epcas5p2fa034480e41d3e4e7b6c61c98a1ee498~HDjB8riTb1788217882epcas5p2K;
-	Thu, 30 Jul 2026 11:36:18 +0000 (GMT)
-Received: from [107.122.10.194] (unknown [107.122.10.194]) by
-	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20260730113614epsmtip13123c94af622f6e0e15c09cb30ff8023~HDi9_RAYA0540705407epsmtip1s;
-	Thu, 30 Jul 2026 11:36:14 +0000 (GMT)
-Message-ID: <09134617-6d9e-4963-9319-1855e88a4df9@samsung.com>
-Date: Thu, 30 Jul 2026 17:06:13 +0530
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ccl5/cek"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785420728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=5y4bQQi1jrzPqBlmyy5MgPN2WYUMYMqghCZfVFVwEMI=;
+	b=Ccl5/cek/sqy0dzke7orM+qDTLPk3QnzIWr4ePZppYbFBQ/JX3xxJOyEZQMHsqsxA68u2u
+	SSMc3F2vr4AgA5JZTcPj6fUxAiBlrg9H5Dvs4h61Oy+AKw0otpiCGUiMADgvIw3SIa3JN2
+	4awRQmmCXHiAVIOHUtKI1P1jjGdDWKc=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-661-woOGO1jNMPCIrsycvHt-bQ-1; Thu,
+ 30 Jul 2026 10:12:01 -0400
+X-MC-Unique: woOGO1jNMPCIrsycvHt-bQ-1
+X-Mimecast-MFC-AGG-ID: woOGO1jNMPCIrsycvHt-bQ_1785420718
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 78498180029F;
+	Thu, 30 Jul 2026 14:11:57 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.21])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 03CD4180044F;
+	Thu, 30 Jul 2026 14:11:52 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Thu, 30 Jul 2026 16:11:57 +0200 (CEST)
+Date: Thu, 30 Jul 2026 16:11:51 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Breno Leitao <leitao@debian.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Alexey Gladkov <legion@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait) for
+ edge-triggered consumers
+Message-ID: <amtbpwrhlNGJ9OK6@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 08/14] nvme-pci: implement dma_token backed requests
-To: Pavel Begunkov <asml.silence@gmail.com>, Caleb Sander Mateos
-	<csander@purestorage.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>, Christoph
-	Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, Alexander
-	Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>, Sumit Semwal
-	<sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?=
-	<christian.koenig@amd.com>, Nitesh Shetty <nj.shetty@samsung.com>, Kanchan
-	Joshi <joshi.k@samsung.com>, Jason Gunthorpe <jgg@nvidia.com>, Damien Le
-	Moal <dlemoal@kernel.org>, Alasdair Kergon <agk@redhat.com>, Mike Snitzer
-	<snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, Benjamin
-	Marzinski <bmarzins@redhat.com>, David Sterba <dsterba@suse.com>, Ilya
-	Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev,
-	nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org,
-	ceph-devel@vger.kernel.org
-Content-Language: en-US
-From: Anuj Gupta/Anuj Gupta <anuj20.g@samsung.com>
-In-Reply-To: <de4ec386-42ba-41c3-bcbe-1fe8b2f71ba9@gmail.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20260730113618epcas5p2fa034480e41d3e4e7b6c61c98a1ee498
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-542,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260730104131epcas5p4b52720519486f7ac774c317923a79c81
-References: <cover.1785274111.git.asml.silence@gmail.com>
-	<19e5c945ea8114320c10f7951d19197d48b59249.1785274111.git.asml.silence@gmail.com>
-	<CADUfDZpwF0jp2e=+c3w_NjWPbnQ858bkSD731M6+x27jzgcJiw@mail.gmail.com>
-	<CGME20260730104131epcas5p4b52720519486f7ac774c317923a79c81@epcas5p4.samsung.com>
-	<de4ec386-42ba-41c3-bcbe-1fe8b2f71ba9@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-On 7/30/2026 4:11 PM, Pavel Begunkov wrote:
->>
->> I wonder if it's possible to perform the PRP list page allocations and
->> initialization in nvme_dma_buf_io_map() instead of the I/O path. The
->> NVMe dma_pools are per-NUMA-node linked lists protected by spinlocks,
->> making them significant CPU hotspots. If the dmabuf registration set
->> up a contiguous DMA-coherent list of PRP entries for the pages of the
->> registered buffer, any command using the dmabuf and requiring at most
->> 1 PRP list page (i.e. length <= 2 MB) could just set its PRP list
->> pointer to an offset into the dmabuf's PRP list.
-> 
-> Possible to an extent, predecessor patches tried that, I left it for
-> later to keep the series simpler. I guess chaining won't work in
-> general case.
-> I mentioned this to Kanchan, Anuj and Nitesh before, they were up to
-> playing with nvme optimisations in general, and since sgl from Anuj
-> is ready, maybe they already have a prototype somewhere for that.
-> 
+Let me repeat, I do not think this patch can improve performance. In fact
+I only hope that none of (micro)benchmarks will suffer, they are often
+very sensitive to any changes in pipe.c
 
-Right, I have prototyped the PRP list optimisation before. I will send 
-it once the initial version of this series lands, to avoid adding new 
-review churn while the rest of the series is pretty settled.
-> -- 
-> Pavel Begunkov
+And yes, even if this patch is correct (I hope) it can expose the latent
+bugs that were hidden by the extra wakeup, like it happened in the past.
+
+But at least the comments should be updated: io_uring depends on poll_usage
+"nasty semantics" too and this is not obvious at all. And IMO, the EPOLLET
+check added by this patch acts as a documentation too.
+
+And if this patch does cause a regression... I think we need to learn who
+else depends on the extra wakeup and how; this is something we should know
+anyway.
+
+Changes since v2: renamed ->poll_usage to ->poll_et, and updated comments.
+
+See the tests in 1/1, both pass. And both fail if I remove
+WRITE_ONCE(pipe->poll_usage) in pipe_poll().
+
+Oleg.
+---
+
+ fs/pipe.c                 | 15 ++++++++-------
+ include/linux/pipe_fs_i.h |  4 ++--
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
