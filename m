@@ -1,84 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa2-f1.google.com (mail-oa2-f1.google.com [74.125.231.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB733B637A;
-	Fri, 31 Jul 2026 17:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B083750BC
+	for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 21:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785519779; cv=none; b=X7STuA+pKcCv/7P0OZGoigN6HpVgxUba9wWH6WLJePZUKu3S4jOk+D+ITOSDx4zZuNo0TJF3W0SsJBtlhIqSg4M/61QBk/0K8Rri7M2Bp0ve4irUhAmuFZOY6EDtPhTLq7GLo//WvuoyFxGhEI/gxfp50HOideY1veOpMvunheI=
+	t=1785534226; cv=none; b=KLCM9WJ1pdetvzp1t8iz88qXt0JxTOm8gYAIKy4ziFCk29fnRj28GMukjwBOzSWbKwzey+QYwTchBJUg7YjaWw7oYmzGYFoq6gms40jDh7VwEQF1OsI6ycdAaEuk5Ryb5FExyPblEDjQxfOG5qtPd0+UQiVSf+AjmUBz7sLnHB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785519779; c=relaxed/simple;
-	bh=o8j3ecwAlIaY5Vab1JFqVlLya9uoOW9Kq3ZMBXUyQ1E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JugdhWxfBZHMrakcPFYxSREu9O9xFeG4Q8LfH3PZwJlr7aTZzCvdn5iQXyiGEBqW7zvXivaXhusXqUHE/MZ/S4UWujZJSVj9NrE0rq3OrptdeWtVELqm5uw2DAJLVRrNN/l5yQZB8TF0/GtdyCjv/MvjD5NijaetYq+fO3w6Ld0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOtolFg1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785534226; c=relaxed/simple;
+	bh=4o/kMB5JHCUjyXYmZZFW9slHgUIDDr76xT34v1VnjYM=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Cc:Content-Type; b=Gw9WGUkv1MHADg4IYzL3p0TZZdfBEaLfAgAoTiWUFn+dJFpLlKXNSpYftl6525SWXApnV1L5lnjtOwGx7U7i4TPQHvaI+RwsJnIalVWlMzoqD28wF/SfpQG/O6jXKtW53F6e246Ti5acq4LieB0wGrpRqRvZNZ0GlJ9Cj69Wa0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=M3Br+cPT; arc=none smtp.client-ip=74.125.231.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOtolFg1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746BE1F00AC4;
-	Fri, 31 Jul 2026 17:42:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785519776;
-	bh=A6odpjQn0p/j7OXh2X4ejlqux8X5BDNkRDXPeBFsCdY=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=QOtolFg1mJLZ5Wd3nlt9KI7nWsTdZsHoHpouUgv7KLcPuiPcjsGAaGgfBJUs0rNaz
-	 g53me28GeV3bcEcDEuOphKCrtNaMFwfDAYo+U+dfwgVkBkwBHyQcMLWp2TRPCiuX3R
-	 xbfCbLJEvjuyhxsbSUSXOFy7D0B5o/4Cphfe4HPfQYZian6Vh8W7aHlRRU2AhOYyGK
-	 b5t6MrO6DuPoz51oHqK6XhGsMX/j/ga3S1ad+M3PlAqNojSd6IAAoLQC1kPzdS5UaP
-	 w5G2/8pvjkpFDkls5QNVn7GwbUXd+I1Cbkxj48covcOKw1CezFmBJEQ4czyzv2v+sw
-	 dN7N+Lba+ZxXA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 461D7CE11BE; Fri, 31 Jul 2026 10:42:56 -0700 (PDT)
-Date: Fri, 31 Jul 2026 10:42:56 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com,
-	io-uring@vger.kernel.org
-Subject: Re: [PATCH RFC 4/9] io-uring/rw: Use accessor for hrtimer_sleeper
- ->task field
-Message-ID: <4fb5df7f-7ac7-48b2-9eef-3960e6159c89@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <e76a426b-f65c-4357-b263-96506d877136@paulmck-laptop>
- <20260731004019.3530210-4-paulmck@kernel.org>
- <20683d73-32fe-4605-93e4-b02da0172e2c@kernel.dk>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="M3Br+cPT"
+Received: by mail-oa2-f1.google.com with SMTP id 586e51a60fabf-448a12ddfb4so223729fac.1
+        for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 14:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785534223; x=1786139023; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=mFVp7tZM8zXbE9T3d2ReLuBbWzPL0/a6nHoQc3EFRnM=;
+        b=M3Br+cPTfTGFeedfiZtKr31jJPFZNnunefiIZBJF0exKiS6qhwOUgmkASov2kjveli
+         FrgTGgs4UAXFXKrMliPNzqJRm/atEpzSRzNq21jmXgutL7QVOyrCdnxQLOpvCGiysreu
+         jBbE7LlPBe3xEX8dMZ1X1Nvi0uRPx8YbvXIFymvg9wnmVMoS4qpS5QWdCWtWvef/5b+n
+         FBHN6eVJGnvGmFbPxbNB25X8CCsdDMTN9pT/BLKUD9noBpAHmhmwMGGME38wy+pYSWpC
+         8+zm1tQ2xxLByb2SAWkcHuVwx1QakvMsbQVCWRcaEat0Z0EALiF+82bzkpWywq1ip/L5
+         u/TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785534223; x=1786139023;
+        h=content-transfer-encoding:content-type:cc:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mFVp7tZM8zXbE9T3d2ReLuBbWzPL0/a6nHoQc3EFRnM=;
+        b=YAva3woMP4+13eAkcxQXNbG9z83sFWWOOJAzwwCecAR27KEt9eCKYfoAhkaAuXBNM2
+         E0rTSh+cKpPN+XfIMkjp61D6JL1IDrau9pxHBoMIC5Iy+JW7Ed05tk2knv4yWvTpYNSy
+         ADGJBnMTFSQZMf5pCjTiHBESlk24g/LNckAhWR7OabG2YO2mcK58KMevSJH3a/98DuWq
+         g5HxHG5oHWtbwsxvlU8FnJjhTFhkf2T3SGUQ6wE2mSPuZCN35NTj96wC7nIJO1Hj3+9F
+         DNwPmQuoFPmpwHEF3ftq0doy3Qj58sT0Yj7HUWFsnxRDHrqFpZt0whVqBqebaNXhf1Zz
+         vUjw==
+X-Gm-Message-State: AOJu0Yz/8lMpooIE3S903TdJX6Snzc1rzMNVE635XKQvdO/HnYHkq4AU
+	hVFluwHfo6aQaX5UOIPhpXBkC8ic1dfY/+AvEmx0z2d4h80kltxnNPf/IenWo2PJTOciEO7ypqB
+	5O2rs37Azxt8l
+X-Gm-Gg: AR+sD11h7F/RtuzZlpMDQ6tIyE0qcOWRXDfyP7l6PbfiQ9eP1PoG0z6COx4SXORJtU+
+	YLI/G25lkXPNhuWySIDF8aKg6eTTUhHfMAcd8sqPi70vMLadx57w3eTYmcjaSho5BWGkgMK6wqV
+	HXQiWVL2qQFJL3g/kVEqCtUt14vr70tMINUsTlqXXw/1kEvsE3vAkk+6zyo23rZ9pNyw/1Cipx2
+	cOOU9lGgLc7eWxXYYmRl1CNC9CDs46316aBAwzoAQEDOCrVtbV5O+l+TyIVQ2DIbjlp5qX1bnkV
+	KjW69DcCHJ/ndg7rQjLIi0G8vN2SxZ91OiFks87EXyO4bq33SU4c3spZWinrVnxxIOCL5wPcowZ
+	LX1MtcOU0BCqYkIbbJOtB9UzBaGicsUZyATIuVJrln2MKN4hVDUsRZzZwtfIos69gaPNu7qP2Yz
+	xdfE53cuhHFS/3KxA2p8nb8HPUioBFWPs+whUdHt2gVzCrzrg0QjlnIFaFJ2OYgL5z+HmcpdyuL
+	No1z/jXOeuFJhRgTTWyhLdf2Z3H6o3qz7rFguyy9OltKQ==
+X-Received: by 2002:a05:6808:4f11:b0:497:df42:1de8 with SMTP id 5614622812f47-4af5dfee500mr3360162b6e.1.1785534222679;
+        Fri, 31 Jul 2026 14:43:42 -0700 (PDT)
+Received: from [192.168.1.102] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4af58d1112csm1608738b6e.5.2026.07.31.14.43.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jul 2026 14:43:41 -0700 (PDT)
+Message-ID: <39426415-ee12-47a4-b9ff-e4f475dcfcde@kernel.dk>
+Date: Fri, 31 Jul 2026 15:43:40 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20683d73-32fe-4605-93e4-b02da0172e2c@kernel.dk>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [GIT PULL] io_uring fixes for 7.2-rc6
+Cc: io-uring <io-uring@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 31, 2026 at 09:03:29AM -0600, Jens Axboe wrote:
-> On 7/30/26 6:40 PM, Paul E. McKenney wrote:
-> > The hrtimer_sleeper structure's ->task field is used as a flag to indicate
-> > that the associated hrtimer has expired.  This means that the hrtimer
-> > handler can be storing to this field while other code is loading from it
-> > to check for expiry.  Note that additional races appear for hrtimers that
-> > can be restarted, which could be argued to be a user error.  However, that
-> > is no reason to let the compiler introduce additional confusion, and to
-> > this end, the hrtimer_sleeper_task_get() was introduced, use of which also
-> > has the benefit of avoiding open-code access to hrtimer_sleeper innards.
-> > 
-> > Therefore, apply this accessor to the io_hybrid_iopoll_delay() function.
-> 
-> Seems fine to me, but for some reason you didn't CC all the people on
-> the series. Hence I don't know if each can stand on its own. A quick
-> grep tells me that, no, that is not the case, as
-> hrtimer_sleeper_task_get() isn't a thing in the tree right now.
-> 
-> That's a slight nudge to please don't do partial CCs, it's impossible to
-> tell without needing to dig further.
+Hi Linus,
 
-Good point, and apologies!
+A few fixes for io_uring that should go into the 7.2 kernel release.
+This pull request contains:
 
-However, in this case I would have overrun the CC limit.  Would it suffice
-to just add all the lists (in your case, "Cc: <io-uring@vger.kernel.org>")
-on all the commits?
+- Fix for a bug in how length caps are handled in multishot, and along
+  with it, a generic fix for avoiding these kinds of conversion issues
+  in the future.
 
-							Thanx, Paul
+- Ensure that task restrictions are always preserved across exec.
+
+- Revert of the io_uring controlled epoll restriction, which disallowed
+  nested contexts. Turns out that libuv is already using it like that,
+  so we cannot simply remove it, sadly.
+
+- Fix for a reference leak in the zcrx code.
+
+Please pull!
+
+
+The following changes since commit f5098b6bae761e346ebcd9da7f95622c04733cff:
+
+  Linux 7.2-rc5 (2026-07-26 14:45:48 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.2-20260731
+
+for you to fetch changes up to bc0e8faf90e776a2f1f3967a04e8091e6bdb4977:
+
+  io_uring: preserve task restrictions across exec (2026-07-30 14:40:22 -0600)
+
+----------------------------------------------------------------
+io_uring-7.2-20260731
+
+----------------------------------------------------------------
+Jens Axboe (3):
+      io_uring/net: initialize mshot_len for send
+      io_uring/kbuf: cap buffer selection length at MAX_RW_COUNT
+      Revert "io_uring/epoll: disallow adding an epoll file to an epoll context"
+
+Kyumin Lee (1):
+      io_uring: preserve task restrictions across exec
+
+Woraphat Khiaodaeng (1):
+      io_uring/zcrx: don't clear master_ctx from the import path
+
+ io_uring/cancel.c | 2 +-
+ io_uring/epoll.c  | 3 ---
+ io_uring/kbuf.c   | 5 ++++-
+ io_uring/net.c    | 1 +
+ io_uring/tctx.c   | 7 ++++++-
+ io_uring/tctx.h   | 1 +
+ io_uring/zcrx.c   | 3 ++-
+ 7 files changed, 15 insertions(+), 7 deletions(-)
+
+-- 
+Jens Axboe
+
