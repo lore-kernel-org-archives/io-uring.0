@@ -1,102 +1,110 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C1442DC76A
-	for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 20:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861B319F121
+	for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 00:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785444050; cv=none; b=H4Qb+Ga7M0de7OPCfhroCbJAeqLG/qxA8VtvFps+gUip4YdtMEEHhl1Gg39d9XFwXMcv7gzqFOUmQlGlVtKvoTsH9NZieUNrig9NIMyHdBZU3Ztf3Urr7SVDA0iDI8u571K1m38ZUsGUQaYM4/UVUJEln95MItPJOway2mK1pr4=
+	t=1785456879; cv=none; b=SN3MEB+VeNVxoYD0eN/Eg7ZO6cKchshD7IIsQYuTDsV7q2UiJkOL85m3WHOKCuYmZ6j+xan7CLVLW8MSBUjR6AqtWn4ah8poBxON2dbp2aUPc+wjdg2ALftceqeEj9bYgJHuigqfLJqVHSY3ALNLOBgCc7Lwd/nHyxEjA30WoY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785444050; c=relaxed/simple;
-	bh=aXLp3Xrbw0QFVyd/AfIAfjIOAOfO54b/lnpVPsBegwk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Te9+cgxTFfivKThfi+MPS0LE3oP05nsfB7C0O6Fze/MTWlkDU+MvqJv7i6OePTTj6klNNHBB8rUMXIM4+gUzxNcYxxoST57hXSfC4SRSPseMm/VVGBLuVfjlaFDu2oJnmKaDcWcA3fzVwE8CfI7xAR1EGinCtzDGYvRQmHTvSww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=q2YqROCf; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1785456879; c=relaxed/simple;
+	bh=MN7ge1T5lQ1JTVCub8CTaie64yF5EP52iawEc5weizk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ipW/4wMdXsKipMWy7cnEZIshy0/W/KiNe2YxhfOGJz4cxNyp2gSFoSPyhIyFF257/2/rCJnE3uHUMHRgsdteeHP1FUPc52GH3hDcg6rNWpdOJkLdAVv3AESQuzV1bEhThkGCVQBwrWBs6fkIh36SzO/6Cnb7O/NSX7O5yZp0hKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ZOtBtupa; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="q2YqROCf"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6acc15016f1so84172eaf.3
-        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 13:40:48 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ZOtBtupa"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c197f968b3cso47411666b.2
+        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 17:14:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785444047; x=1786048847; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jfLEApi7Y2h1IshU0PF3d8BF/sEF9vNF3m0PUhFH3Gk=;
-        b=q2YqROCfgyM/AgmToi72JnFsJCR5CmSk8KWgE0z801a4UOb5VWi2k7AryKvSi1EoZG
-         TRw7fT/46ElyXTmyb5S5y4dKXclsMIrNOwmZNcZhy+mHu8DbqaP8NCb8NOcSC4mEfmMb
-         4CTWkV4F+GBYu1anV9jiv+bBrrdemUgBLY2reFAoGn1BESGjLj7mTUXUA4/4TaNt7TZ5
-         w07YbLWWLRRog0Tbud9u453rp0i/ekiyhbR5QihyOUnK4Er7cDiYm3T1IRA3TbhTBXmA
-         B2hPqh4Q5sz5WJFO5UWLlKH7Q65yaFqgBTlA6VZ4Q3XxCjmkTW5kr8X00+iq7Qi/ZIkn
-         qZ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785444047; x=1786048847;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=linux-foundation.org; s=google; t=1785456876; x=1786061676; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jfLEApi7Y2h1IshU0PF3d8BF/sEF9vNF3m0PUhFH3Gk=;
-        b=iFWMn+T8vnkllwpdWq0QVlprRL11Dn4tnpaaH9H4tj4ftEWcZoNFtzB/9UrcO+akpx
-         B4en7X1X45AAp9POr77omvNaAGoy6uSkX26baS/JwZZEus4ApqDSVb2q5s3eINOPoeNy
-         tGuGhYlGzhGhHoa1rjplwhyH0nTSlGzlw+DzOhV7r4pAXOTRtH9Q9IxDKDTovu/nPM/0
-         X1y01r1SiNzvTMS4nsKJ0QfdjTnL7kaaktFsnmiOdPTVe21EJL+ilyliBT4JMM4qPp3I
-         lXeZKEBzUGISSBRHDsOTLydLbviMCfzPSYqW2oyOSQTIxZY+PxeqqY/lt4SCKdn97/Ni
-         IQRg==
-X-Gm-Message-State: AOJu0YyuRzZAm9tzEjicmhMKDIzHfMKXHQmtmUJkMDze4WdBCXMGcOaN
-	3W7E8jIusdutzFry/ob9MqsHA6JU+Z9ErwuwaTdJRRNmIEWQA9w4jeJyOloNQAE5Fme1GwypMXz
-	qQcEn001HbQ==
-X-Gm-Gg: AR+sD12G+V++e1czp/6tqxpQg80Yv/kKRSbm7a/FPYWt90ibvpk/G+55MxyF04UA7R9
-	WC4Az3EW2ZAAMO2aDcpehbcS4aG7gFTA/bDnSP4B/lMTd8eEey8Axsi9kUNxAqJ3QjONsJIGUhf
-	miNWO7Oyy8gIMMX0uB7qDFLQNL8QliQvtYVsBT5oBm9QL0e8fifiwz6oRN1s+ED68x4IwWaxFaM
-	0HedTSyJH4qNj6noJLW6fJGsRAIFxILEZV6RnLRmdHj410oD6UejBYntI0i4MXjZ37XlMzfscnZ
-	JkCySv2frvUKoWCRUKnQGqxE0lNSJaX+YjJ36WfhlUpeMHTvU+sg/aIOtzs6sLrfARQXhSjtEpQ
-	5DLV8y4GohgjO42PK84jbFrGuae5P7dqshVHCD7LaSaSGIFkDdSW4I01GGC0RPWzK7qpKHDAMrw
-	WKdTXufQ7IyCU5ercZGT3PeL3jMYI89LJT/CkeVL2AM6lzV4iR+HK3zg+cfUH/opPGZXa3O3t/L
-	PrlKqqq1CGO2lZY7LxsuZfDmqb478LxwKTaDG8fQA==
-X-Received: by 2002:a4a:ee08:0:b0:6aa:f37e:8d33 with SMTP id 006d021491bc7-6acbc11ee34mr2712052eaf.64.1785444047145;
-        Thu, 30 Jul 2026 13:40:47 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-458c257c411sm3075594fac.4.2026.07.30.13.40.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 13:40:46 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Kyumin Lee <fyonglkm@gmail.com>
-Cc: stable@vger.kernel.org
-In-Reply-To: <20260730192734.459247-1-fyonglkm@gmail.com>
-References: <20260730192734.459247-1-fyonglkm@gmail.com>
-Subject: Re: [PATCH v2] io_uring: preserve task restrictions across exec
-Message-Id: <178544404619.3239387.3359715670063842245.b4-ty@b4>
-Date: Thu, 30 Jul 2026 14:40:46 -0600
+        bh=QCTwPWTe36H8QlcoShrFPKk4L1n8utyt7k+WGp1VOEw=;
+        b=ZOtBtupaUbCW04/GtbWmNTvregWKAfS2cWfMyHVlOQCPVmYLvX2DKlw7w7K8hG8Qcv
+         NZ2BfhjMlwtvuV6nxX1xGvP57MNGviFan1pMOv6g3logA6HFrK545Y5VUbJwXW5L4QiK
+         4d4POFloQLj65KWjI1Pb09BuODx4KxuBPj+Kc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785456876; x=1786061676;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=QCTwPWTe36H8QlcoShrFPKk4L1n8utyt7k+WGp1VOEw=;
+        b=ctoAeeg8S4dqLLy1ZiiLPsHGax9qphgT/4uK35hs865GSrBO/0Qlht7vTiMnlVPQ6r
+         p9NU9y81GYKTIEtFGmTTmvzKzwDH0d2dhPlHPBo1JQhMEAiYVtzBa8App94tVFcMDXw7
+         I4Zmpp+oDTkPyv0W5vJ7n6JusCmSi14EdzqjPj0AkMtyRJqO4pl7pcrp/tfU2qm/Qbu3
+         fADrm1SW/Wfis2bRvF+vLkwMgbw5fCsNYhBllqIua540tItPgKcQ+Vvn9lIcB25S+/oe
+         wCTs/E6j1uMFrsru6VJjTeqZVME5ACSX7EkCy1nSDkDduy/7zGFUyt4/IE18gDeOYRpH
+         j91g==
+X-Forwarded-Encrypted: i=1; AHgh+RqzBq0uMqoaIc7wn2MuH+ImzKcC4ahO+SUBa5WPdK3OKe+w4ttd+falVHbP0yA2Tp5bz/zHY7XoQA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxicQiaXEqzrS1m+ra2D5apXAgOy4wOwIa36aveQOWxaj4kvgY5
+	5APCjkqQGGYI+4PobvGgOK/Djf1st7IVnG67m7q+F+XoyrleX82pt+brKlwsnUj+NHb2h6kXKwe
+	Q2jYAye4=
+X-Gm-Gg: AR+sD10t0h79WtNhN0nr8UWucnICTgPy0T8pNiVQnYxIdegl7VPxVFgqVLDu0BrsjS4
+	j551H1wLamfGILaBiGjiUx4iLEl7SrNz0sQSILCGY+ifUzAXEDHbr1X3ZxvXL9AOO09SfJy7Y0o
+	1M/L660+TjQ93XZ1QnQ6ygLbPwDZswqoNAp3mlYYTcA3tVPHLmlMVpW1OJFEL05qoErazHLNUmp
+	EPIbmm0EOMjhjzlYbOmyii53HxmHmC4CUJl9aRaWM84Cayx0S3bubHK/T1k61faZ0aeUHxlbJS4
+	LfDvtjsmn6/qL/7vfC3ZCi2sWlEaJKbdg26pRVbgDummTBiex0se2B7dt4Pds1CyH7CV+dn2wiQ
+	yfkq5heoXwHdTAf6NaeECSTBZhSLkdmqggf5PVpPKbQHDfo05WJmTITROdbzZIrUw33A3MaTo5S
+	AgZUW/ZZwpvl2LBWME+4YYXzwqGzjBWbZ6DMyJAljM68S9fOu9/fqsgQoHMl3TSox8/NdkxvAQu
+	lHjtgVYuCbKtGQBqHJKVS9J2Iemo2oi7/CG/w==
+X-Received: by 2002:a17:907:94d1:b0:c16:71b:7f02 with SMTP id a640c23a62f3a-c1fa58b4432mr249415566b.56.1785456875616;
+        Thu, 30 Jul 2026 17:14:35 -0700 (PDT)
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com. [209.85.218.47])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1fa85768ddsm119753266b.15.2026.07.30.17.14.33
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jul 2026 17:14:33 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c1c4c7ddaf6so45560266b.3
+        for <io-uring@vger.kernel.org>; Thu, 30 Jul 2026 17:14:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RoA+NGxOTgnbxArmC/lBlSnBnUCp7NsJL7DpsRTYT6cLYbHZF/RHKQPgiI4Zdxv/ACC2aU62f7RQQ==@vger.kernel.org
+X-Received: by 2002:a17:907:97d1:b0:c16:29eb:e81a with SMTP id
+ a640c23a62f3a-c1fa56df16dmr245684466b.29.1785456873638; Thu, 30 Jul 2026
+ 17:14:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+References: <amtbpwrhlNGJ9OK6@redhat.com> <amtbxpqJ3pZwyT8D@redhat.com>
+ <amteY30qxRuPzFh3@gmail.com> <amth6owVUdVOmyAL@redhat.com>
+ <CAGudoHE=GjMRKGbip8nRUm34VUud_YSqGZJrfr+Vz6Qu22Mdaw@mail.gmail.com> <amu1i8rzQ3hZ-vAu@redhat.com>
+In-Reply-To: <amu1i8rzQ3hZ-vAu@redhat.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Thu, 30 Jul 2026 17:14:16 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiUWQdiHbH9s4XKnYZwRs5vR1Azq83V4scN+N-w-VFRng@mail.gmail.com>
+X-Gm-Features: AUfX_mz5zon_kbqMfY60s241UG4SIgEzvMbb41Bh6TGn6yZhyVsZ-jzWpF_8les
+Message-ID: <CAHk-=wiUWQdiHbH9s4XKnYZwRs5vR1Azq83V4scN+N-w-VFRng@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] pipe: only enable the extra wake_up(rd_wait) for
+ edge-triggered consumers
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Mateusz Guzik <mjguzik@gmail.com>, Breno Leitao <leitao@debian.org>, 
+	Christian Brauner <brauner@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, 30 Jul 2026 at 13:35, Oleg Nesterov <oleg@redhat.com> wrote:
+>
+> Again, contrary to the current comments this is not Epoll-only...
 
-On Fri, 31 Jul 2026 04:27:34 +0900, Kyumin Lee wrote:
-> Per-task restrictions apply to all rings created by a task. Once installed,
-> they should not be dropped across exec.
-> 
-> For a task that has used io_uring, the exec cancellation path calls
-> __io_uring_free(). This frees both the task context and the per-task
-> restriction, so a ring created after exec is unrestricted.
-> 
-> [...]
+Sure it is. As far as we know, only epoll has ever *cared*.
 
-Applied, thanks!
+Yes, you can show the semantics with io_uring, but do you have a user
+application that actually cares?
 
-[1/1] io_uring: preserve task restrictions across exec
-      commit: bc0e8faf90e776a2f1f3967a04e8091e6bdb4977
+The only reason that ugly hack exists is because we did have that
+break user space. If we can get rid of th eugly hack for io_uring,
+that would only be a good thing.
 
-Best regards,
--- 
-Jens Axboe
+So this literally *should* be about only epoll unless you have a
+report that io_uring users are equally broken and use that
+shit-for-brains notion of edges that aren't edges that nobody sane
+should ever use.
 
-
-
+               Linus
