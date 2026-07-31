@@ -1,69 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4251A4307BC;
-	Fri, 31 Jul 2026 13:03:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5EE63BCD01
+	for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 14:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785503013; cv=none; b=K5axHk0oYge61eU6r8zNbV2YHGs+ut2seMAAQhNbUItahOfT1j3PluPzWj5DV1ZaZt2kW0yHnEKhvjAY3JSUFbiYH9oBmTeppX3+8cZdZm+jBb6rD8IZHOBS6xC5mXmIVNoeJowGkGh00lYV5UJUpPuhMc6IvUGas6yxJ6NnH04=
+	t=1785506862; cv=none; b=oPZQSa33ice6NeNrK4BcMDuijhO9tXt7k7mOaXWDMH4S2//0QDL0PTlW97z/hcgOg8wz4Ebk/e+6MorSn68troG+nzv+op7kOXJqAfAy2yygfdK3qffGLH/hy/tCEqui+Y5O7w6XZYk0AbwrGs8381mVtzFpBipNeA+hz/q1rvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785503013; c=relaxed/simple;
-	bh=eeA8ljEi176nac3Xia2CXqgFEjfxocrDt4d0PfokGzw=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=X2n7f8sQBlTMw89FHvG2cLZp+9495EPVco8lWe/Yai9lL+OSYCQDwv28F3d0jHBzEanaHpx/0lqF1b7b13KgPGG8MFaPSMllwVJJteOvsl5r7TDF6UNk3kC25jWtVSD2YKfIPBhzjX5I2628Vzd6p563xpMMUDod0gTwddslBUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IJlFXiXJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785506862; c=relaxed/simple;
+	bh=ZjvCaTm2EqthK1AMWFaApweT0SI1lxky39mY41z7+zM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ambSokSB4UlOsGg9tIEyr8CV0tN6y/htglbmTs4eXIGnSeXSFLntdm6dDR1Gx4Y5DbNI14PKRraRhYR1WKg6xsFVVmvwLgZkDc9Ip1Mf5AmurGxTGrGL0yKzJdh0AjMX9gyis8szBMmn4PTX54r63yFxWfn9BozMAmlCXRlEsZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O3mgPfYQ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IJlFXiXJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 415041F00A3F;
-	Fri, 31 Jul 2026 13:03:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785503011;
-	bh=eeA8ljEi176nac3Xia2CXqgFEjfxocrDt4d0PfokGzw=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=IJlFXiXJTPWqlSNY4Ouop40Vn4b+A5q6ohym4B9rYnbe3wxfDnsQJRPp6SVIrFOGT
-	 MyCgWVqGjS4+dOk22vfkiNJ3P1vEjZpW5qucWie99ORMCVLzExoA2F1dT2596j7EsB
-	 EjXDzMKmtRI/NHD/9ZX41VoPwA3zlHffmXY/qotTUJ6U/INTLWwoe9IBamDIqGEnC8
-	 8ylnIQQnwtCQGMEDA8n9G3zvyr38AXpSlg3fcmn68VV1WKbzI91jOFUQ/vApdplCzg
-	 64eOeXkovARN8/aW9YzcL51cDOuJ42YX0KQKUGkMBvlPRKbTzm2IppaQJCxiBU8FoP
-	 BYativFFBXNxg==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O3mgPfYQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785506859;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZjvCaTm2EqthK1AMWFaApweT0SI1lxky39mY41z7+zM=;
+	b=O3mgPfYQRkj04LjVZzhUdxEHyc9WYUMkFcwmWy6KLVwkMsmSX0qzSE1HjBziCe+fch9GZJ
+	IdCnR6bOc1kum1m55mXhIRtnpdS6CsclLJ3GgHoBmBa6rfEWMZV6UHGaLQE02lChPrp/R9
+	+X8jw82hkH5inCrUvezRUjdRjw9jsEA=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-681-sVugMoitNhKVUbEeoRwQUA-1; Fri,
+ 31 Jul 2026 10:07:35 -0400
+X-MC-Unique: sVugMoitNhKVUbEeoRwQUA-1
+X-Mimecast-MFC-AGG-ID: sVugMoitNhKVUbEeoRwQUA_1785506853
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AAE11194511F;
+	Fri, 31 Jul 2026 14:07:32 +0000 (UTC)
+Received: from fedora (unknown [10.44.33.21])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 7C91441C;
+	Fri, 31 Jul 2026 14:07:28 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Fri, 31 Jul 2026 16:07:32 +0200 (CEST)
+Date: Fri, 31 Jul 2026 16:07:26 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Breno Leitao <leitao@debian.org>, Mateusz Guzik <mjguzik@gmail.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Subject: Re: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait) for
+ edge-triggered consumers
+Message-ID: <amysHlZp6f6q498X@redhat.com>
+References: <amtbpwrhlNGJ9OK6@redhat.com>
+ <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
+ <amueLRM-DrYbnjLn@redhat.com>
+ <20260731-blechnapf-arten-blasorchester-4e05dd1b2c58@brauner>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait)
- for edge-triggered consumers
-From: Christian Brauner <brauner@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- Breno Leitao <leitao@debian.org>, Christian Brauner <brauner@kernel.org>, 
- Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
- Pavel Begunkov <asml.silence@gmail.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-In-Reply-To: <amueLRM-DrYbnjLn@redhat.com>
-References: <amtbpwrhlNGJ9OK6@redhat.com>
- <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
- <amueLRM-DrYbnjLn@redhat.com>
-Date: Fri, 31 Jul 2026 15:03:27 +0200
-Message-Id: <20260731-blechnapf-arten-blasorchester-4e05dd1b2c58@brauner>
-X-Mailer: b4 0.16-dev-af865
-X-Developer-Signature: v=1; a=openpgp-sha256; l=218; i=brauner@kernel.org;
- h=from:subject:message-id; bh=eeA8ljEi176nac3Xia2CXqgFEjfxocrDt4d0PfokGzw=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTlzFUIeJG2Mf7N0e6LixwfZC4QN9peFHxK8/7Xj/Fbn
- x2fWGwyo6OUhUGMi0FWTJHFod0kXG45T8Vmo0wNmDmsTCBDGLg4BWAi9V8YGT52LWc/8ua4hMZR
- hpPdeyrW71+5zHaB/ru0rz9Fd/lu6ZVg+O9y/Azf24zyg3s4/Mp9uxfbfc0UW2b9Lt3CKWbB76k
- VeuwA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260731-blechnapf-arten-blasorchester-4e05dd1b2c58@brauner>
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-> But then we should name it "epoll_or_io_uring_pseudo_edgetrigger".
-> See the test-cases, they demonstrate the same pattern.
+On 07/31, Christian Brauner wrote:
+>
+> > But then we should name it "epoll_or_io_uring_pseudo_edgetrigger".
+> > See the test-cases, they demonstrate the same pattern.
+>
+> Wouldn't pseudo_edgetrigger be sufficient? I think the comment as you
+> wrote it is ok.
 
-Wouldn't pseudo_edgetrigger be sufficient? I think the comment as you
-wrote it is ok.
+I agree with any naming ;) even if I personally don't think that "pseudo"
+make the purpose any clearer, but this is minor.
+
+It seems that Linus doesn't really like this patch "in general", lets wait
+for reply from him...
+
+Oleg.
 
