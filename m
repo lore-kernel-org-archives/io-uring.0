@@ -1,180 +1,126 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B4F47988C
-	for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 16:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE51459AE6
+	for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 16:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785514856; cv=none; b=tK8OhabpXb6HoxUMMfDqLEvrAGEAiO99hhrVMYUWH2OygX383l6e0wFvC92u2Dc1V6ABkJTAnLEKWr/YJiqUcFFWKFuFLRtbo+POCiJn3h15GuuocLMADYNFjJtTg/MMsyfHmEcLANAsK4MKkW7e3kNKP5F/O5aiAReHeso/hzQ=
+	t=1785515182; cv=none; b=UR4CS6JJVbdHSra0ityErfF03o9OpsgM7B+48W/8/lZgcvb7VDh7rcsjyfcQgOqhu4iiRPUBh5If00H44m2ADloYLVTkNcxe2bMZkdqWHdfsWRSMLH3qt5/b6LrMyklYC1z0yb9oPrPTwGdVWfRUd1G9JFSdUSWaRRH1gyaDAn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785514856; c=relaxed/simple;
-	bh=mN2iX8Z5zX5qtBCnaXzCxjsKWUiQDrZ48Y99zlVkxio=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QYpSloCor7zsAUgfT+lOBbkpG3swePLx+xPShmiz+RiKw31danMGh43xgUnKYFVEBew7+tCnhHV+PQI07h+yo5WkX2ol4aKhCZlbg3tEDrZk3eUmw+pDae6IpRMgFRpDLuyRTwStv4BWWD95bmZPRUBq1aKZ/iQXfP2m/3oDCTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pSj/VEdO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=aSJb6N4G; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Xi9hN4Kp; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=b6JpNAWz; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1785515182; c=relaxed/simple;
+	bh=8pT4GfINvG3duG6dP09F+hI4qE8C8BGPYMHMoX6nFho=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DQg/id/Z11wpMkPTcg9f30Hizu7Ck+h86ETAM4aTkol7NPJW5oElzaK5735S1PpYEA4nhkZq/f5B80d5VnD4oSrYNBFjgHM+ZIuIhXc8JRj/JtIsjCPpf6S6d54C5Xipd4A5uRg7SIsGys60yH6XXRGW5MMlg5CTGBz1Livqz00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=hf20twtD; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pSj/VEdO";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="aSJb6N4G";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Xi9hN4Kp";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="b6JpNAWz"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id AA2BC4149;
-	Fri, 31 Jul 2026 16:20:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785514846; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=MruqvTvGmsky1Hcwgom4mOLdCN1z/IAud4ovvSmFkMM=;
-	b=pSj/VEdOSpchcfuwnWVuH8olMuCI0wdLTiSFGeJDeZyFcuYX8VYx9VXKYd34FG1UE9Ts7m
-	AsFl4xp6YzGCZJLjmLNJmudd8dPxhSh7k/bKQdIRV3Cu67649Zfy4VnyIx8oF0BKr+xDfj
-	WiDaPWKCtLfxha2mpOaVUcMd2L93lW0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785514846;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=MruqvTvGmsky1Hcwgom4mOLdCN1z/IAud4ovvSmFkMM=;
-	b=aSJb6N4GDrXm71IsrLkcvCfjFaWRc8ZJjCkHP/f2grI5L6L5W3gbfQWDgg3p2J1KA1ApOw
-	PFj6XJjkrJsJEVCA==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785514842; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=MruqvTvGmsky1Hcwgom4mOLdCN1z/IAud4ovvSmFkMM=;
-	b=Xi9hN4KpLFQC8mvU1I6WjSvtY/vj0WLviZE8HZiDwmnZsmQeFr+z7j5NvKx1idMBQ9m/fp
-	Itv4BtEfyu6HXtKbpDNPMW8t+M4Z4Pe/BfqkTR8wpYN4K3iZfV1GWXNsYwrlUDF2hwk3u5
-	7mAqhTOnIXplh1puexP57PH/J+A/0jg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785514842;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=MruqvTvGmsky1Hcwgom4mOLdCN1z/IAud4ovvSmFkMM=;
-	b=b6JpNAWzBDOuLmccosr9WyJ1t17fnJwjbYhTg7HIUF0iW4ql1gQ0v7gNN8v8Nu9BcQa+t2
-	cprt47oD5f5RZOCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5A425779B0;
-	Fri, 31 Jul 2026 16:20:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0RUDClrLbGpiawAAD6G6ig
-	(envelope-from <krisman@suse.de>); Fri, 31 Jul 2026 16:20:42 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	Gabriel Krisman Bertazi <krisman@suse.de>
-Subject: [PATCH liburing] man: Fix FUTEX_WAIT/FUTEX_WAKE explanation
-Date: Fri, 31 Jul 2026 12:20:35 -0400
-Message-ID: <20260731162035.3882874-1-krisman@suse.de>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="hf20twtD"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c15c42a45adso319214066b.0
+        for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 09:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1785515175; x=1786119975; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NZgnNTfFrNH5Ao2efM12gnUM2kdkogYLn1f6O6OwYWw=;
+        b=hf20twtDvrB2foqGWmSdJQ3m6k493QFI3/p/o0k0L39+lLOdm9dJi1KzOdGIHEw5cO
+         Xlgw03B6ILxWLlB5Ghuy2FvapF5KSjTEY4HsdWw2DOTsTDbe1IfM9EFlJv46k0NLEepW
+         JW4MJ/3nYIwkRQ/imwYTc0v/BQZqqyFKNypGM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785515175; x=1786119975;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=NZgnNTfFrNH5Ao2efM12gnUM2kdkogYLn1f6O6OwYWw=;
+        b=Wq35y8k/sq6TO/6yAeLgHyr0L3drRAQxgp2nxx4PCZRRcLdDdKLM0fZHSOkHBexA/v
+         XQNLkYQ/3hDrDucOs/p++QF4UBcjOZrGqUmUzicF7+nXdeNDmmLU4VntBfUr/FfIaVje
+         IAPrXUEe4z5G/rbJ1GVEeFFvpZo12HONYLGoU/fK969Z5CXQMOw3v2EWBoFfPYCbalRR
+         pg8DGFARRcp3h5fwJuKUnk3rKu5dM6NwQY9oTDl7FLWeagtTvd6d9Po9pfEyfereguaX
+         6w6jEGzSpgWZM6KprSCiEjjwR0ffeyd7nReq5Tx8qFcmSbnb01oBEQ0KMmcWAGYG0fXR
+         b6Kg==
+X-Forwarded-Encrypted: i=1; AHgh+RpSgKeEopxPhSiUcfMAa8Cs6BwZ5s3YWx8q51IDvMN/zWN6iTU0B1w69Gntqc2PNuYuydUqf2Ubaw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiaEzDGz+ygqwXabtb7CMPRZj4d9jXk34uksICIw6XF14pAFt5
+	65bpIjuroWuRtc439H1OWVdgoguhVaw9lYGs8TzipcUzzwq42lHj2fEY8yV22t+krT4ba6rcnJO
+	sNR2+gQ0=
+X-Gm-Gg: AR+sD13w+J1HrhIaPvP6RlA32/wOHkwDOFSasmhgFQWQYu3ClhArqiffaRemd5kExZd
+	qe9J0Yk/8I19GTXOnOstrnmypAaMCuoPm2/RlbwCgvY13iegdYaw/BN/klwTh7RyKhzcs9Ty9eK
+	+qN1s4bDLPt06k6nV8Wu7/0CATUfxvG63PpFItCiY7ia/gQZOASB79H82Hv2xGDYrOQRUyyoKk4
+	215KO4O+p10eHNf9vq60LGlNu53uY7Rc0licZDx+5QlNc2AjRppumo3MwHv/Hb0HVWg6xgyCLy7
+	zh2fjOwb5lQGddTq/vI/0xpa9Q1GS3H+i5QBwXrghfY7By24Oj2YdIW7xeWdOI+R7Kl9lV8fxCV
+	AEG2T8+zRkovIcHfy8mgzjg3d5tMfnR5XdpeMTP+8c28efOxhii3N9vmCF0jsuD9x4GGg0mi9JG
+	nN5RuX90319N5AXNbcNlPiGWd6VJKr44TS4/zCjatLow8Z5dTfQZe0AH7NUb3rJuOCA67SY3vo4
+	nv4hBQDSxzrmRi2hlOxTtki7Pus0JTe++x5Ww==
+X-Received: by 2002:a17:906:f585:b0:c16:e0b:bd2d with SMTP id a640c23a62f3a-c1fd368311fmr156342466b.27.1785515175524;
+        Fri, 31 Jul 2026 09:26:15 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c5a0556sm2524806a12.5.2026.07.31.09.26.15
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jul 2026 09:26:15 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c1600d040e4so167866766b.1
+        for <io-uring@vger.kernel.org>; Fri, 31 Jul 2026 09:26:15 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rp9M2TvUSUpNM1Pljio7m1i4ZAagn6kGSNRPyAPdxfhHIGkupwP2ome1kxyVB7aliHTutRGZSmIOw==@vger.kernel.org
+X-Received: by 2002:a17:906:99ce:b0:c1c:1fbf:5d18 with SMTP id
+ a640c23a62f3a-c1fd316d100mr201595366b.3.1785515175103; Fri, 31 Jul 2026
+ 09:26:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid,suse.de:email];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
+References: <amtbpwrhlNGJ9OK6@redhat.com> <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
+ <amueLRM-DrYbnjLn@redhat.com> <20260731-blechnapf-arten-blasorchester-4e05dd1b2c58@brauner>
+ <amysHlZp6f6q498X@redhat.com>
+In-Reply-To: <amysHlZp6f6q498X@redhat.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 31 Jul 2026 09:25:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg_PtU66p4iuvzCz13P_cDCfKg2OOuV-v6wq19ua8LyvQ@mail.gmail.com>
+X-Gm-Features: AUfX_mxg27Kg07NK3K1byK9KwocM4glZNJ49A7mvHpifqZOMR1EOAwQNVrEvm6Y
+Message-ID: <CAHk-=wg_PtU66p4iuvzCz13P_cDCfKg2OOuV-v6wq19ua8LyvQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait) for
+ edge-triggered consumers
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Christian Brauner <brauner@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The description of the futex_wait parameters is incorrect when
-explaining the futex value.  Correct it and rewrite the rest of the
-futex operations description to make them clearer.
+On Fri, 31 Jul 2026 at 07:07, Oleg Nesterov <oleg@redhat.com> wrote:
+>
+> It seems that Linus doesn't really like this patch "in general", lets wait
+> for reply from him...
 
-Closes: https://github.com/axboe/liburing/issues/1625
-Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
----
- man/io_uring_enter.2 | 39 ++++++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 19 deletions(-)
+No, I like the patch, but I want the naming to be about the *reason* for it.
 
-diff --git a/man/io_uring_enter.2 b/man/io_uring_enter.2
-index 7b99335e..b2e93f43 100644
---- a/man/io_uring_enter.2
-+++ b/man/io_uring_enter.2
-@@ -1538,20 +1538,19 @@ system call.
- .I addr
- must hold a pointer to the futex,
- .I addr2
--must hold the value to which the futex has to be changed so this caller to
--.BR futex_wait (2)
--can be woken by a call to
--.BR futex_wake (2),
-+must hold the value of the futex word read by the application when
-+submitting the operation.  The kernel will only put the task to sleep
-+and wait on the futex if, at the time of queueing, the futex word still
-+matches this value.
- .I addr3
--must hold the bitmask of this
-+must hold a bitmask of this
- .BR futex_wait (2)
--caller.
--For a caller of
--.BR futex_wake (2)
--to wake a waiter additionally the bitmask of the waiter and waker must have
--at least one set bit in common.
-+caller, which will be used as a key by the kernel when
-+deciding which callers to wake up.
- .I fd
--must contain additional flags passed in.
-+may contain additional flags following the
-+.B futex2
-+interface flags.
- 
- Available since 6.7.
- 
-@@ -1561,17 +1560,19 @@ Issues the equivalent of the
- .BR futex_wake (2)
- system call.
- .I addr
--must hold a pointer to the futex,
-+must hold a pointer to the futex to be awaken,
- .I addr2
--must hold the maximum number of waiters waiting on this futex to wake,
-+must hold the maximum number of waiters to be awaken by this call,
- .I addr3
--must hold the bitmask of this
--.BR futex_wake (2)
--call.
--To wake a waiter additionally the bitmask of the waiter and waker must have
--at least one set bit in common.
-+must hold a bitmask identifying which callers to wake.
-+A waker will be waken if at least one bit of the bitmask matches,
-+subject to the limit of waiters set by
-+.IR addr2 .
- .I fd
--must contain additional flags passed in.
-+may contain additional flags following
-+the
-+.B futex2
-+interface flags.
- 
- Available since 6.7.
- 
--- 
-2.55.0
+The problem it tries to solve is literally that some people think
+"edge" means something completely %^@% different from reality. We had
+legacy epoll users that used edge-triggered events but wanted
+level-triggered semantics.
 
+So it got literally hacked up the minimal way possible.
+
+If we change this to be something that isn't the minimal way possible,
+we should do that *right*. we should make it clear that it's a hack
+for user space behavior where user space was simply asking for the
+wrong thing entirely, and it happened to work because we would send
+wakeups willy-nilly for everything, so even level things that didn't
+change at all ended up getting those "something changed".
+
+But "user space is doing crazy things" isn't an excuse for the kernel
+breaking user space, so thus that "we'll just continue to do our extra
+notifications if you use poll".
+
+You are now changing it. And what I disagree is that "change it to be
+something else than the minimal thing, but make the naming be bad and
+the explanations for the non-minimal thing be bad".
+
+My argument is that IF we change this area, we should damn well do it
+right, and document it, and make it very very clear that the *ONLY*
+reason this exists is a user space legacy bug that took advantage of
+legacy kernel behavior, and that we are papering this over.
+
+               Linus
