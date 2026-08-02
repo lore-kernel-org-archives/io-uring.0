@@ -1,319 +1,115 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7812386C12
-	for <io-uring@vger.kernel.org>; Sun,  2 Aug 2026 07:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEF33988F1
+	for <io-uring@vger.kernel.org>; Sun,  2 Aug 2026 14:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785656183; cv=none; b=VM/Oo5e0wDVbtahAkup+LM/FXHUPbWtIx08p+mVV835u2jU2wH1CihSUtNKkUMVjWqfHcYFpnxtlPFp9CuRXs2Ib4o68renVlohRkkCLsr4kJyJNKVe3t5l8QQl4FSV5uN3UbJhG7ETJSUa+2cnJXez9Si2Rwy+NzdfH8jXGWRo=
+	t=1785682605; cv=none; b=To+MyM0bjpBao9RXF5MXG7mGaa74EbwmBp7wdnCn8cnrFKFZWljVGGPGbQ8OofBOuHY+S84GJFksqAfy2TEhHSjWeNG+HUfE7YEBvn7ywmpBpMGN//9usj7EwcRZC9myUyQV46ramaS6ZwyXaXLxLv6bV1Cds//YBxkFu8TC4nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785656183; c=relaxed/simple;
-	bh=i0G+QSe+rEqjSiXLOrhIPMXcruhSgfqXHbCCwbIII3w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dlQzbONWaKSq6/8ucRpbP4FjrmYPACLazetzS5vRTWBFOPlcHK4UvgYS7k3wG3ivaBk8UXf/Opz8v9+BlN+JRpBxs+apQL1uC0C85SVSubzSTHJmc6qBto1e6GFqvS0gtSaiZMQTVeWlPDOXKzjd8AFa2acmEPMt+damSnKE8qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LrihRtG+; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785682605; c=relaxed/simple;
+	bh=SsD5RD1rz4sdDznzFOM1U1xnUevkaeft3eMuj1EjcB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kXXyCMlzoVJZKSHOzhutheH5TWcX5UnqpAM7CAWGZAQ5jXTb3uO54I0ups41ukotHRQq+a0YOEJUofPTRFK5NhOLtoKAhUD8za7+tuPrLW97QIJ7B9Og9bREigtjvWbge5+rPh0vYbZo6PhUiI1M5PjA7TeZBR5eAz6+niRwiZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CK1XWySL; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LrihRtG+"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38e42560ebcso1698900a91.1
-        for <io-uring@vger.kernel.org>; Sun, 02 Aug 2026 00:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785656181; x=1786260981; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UFDuvOjw6QzhXgiQmLV3vmIEEiB9ylNJEhhslAcVqTA=;
-        b=LrihRtG+rXoKs8qVOU26ssYNgrUP+RO1dL7JxWY9n/lFSchnl/Rw+c+jpdGQWrTMrt
-         9AtO1UEJdJVtaYitMgWdcZ4etGGA+Os23erRJs3+OdfgSw1rG0Vdcos/N2+TIg2UZXpK
-         94FBX8w5Z85pTLzfqBNf694NOTc1ELXxVeQWbiAaHuyA9JQSJMhX0ehYKistWeWWEwPI
-         i/tK/aLo5uarruOWZi+iSrzMrV7ilGug+P6+YY8w8VPC5wIu7RdmY9d9MShc/5jnkHh6
-         dTKhO3gcq3pt3177IvQK1ByVrPaL84RMIk5ddaZkjnd0LVB0s+9Oklmr7hbh2zqWB7wY
-         L3iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785656181; x=1786260981;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UFDuvOjw6QzhXgiQmLV3vmIEEiB9ylNJEhhslAcVqTA=;
-        b=D9h0d404yGEwyP1SFYB31ywI9uRMxtcFo5irR4iTo0BHvC6BQVaew8BShckYJRAlVj
-         xO1C/mIbHY7SxPHjjP/OZQ5rpipA+TbPhwYYoac52EUKB2RI7PZGch4w8l+KjxQM1EtP
-         ZFodCtSKOMOyHEoJqw6oFyvbjPj9F0rXwlYmftmTDVDTwBN/k9TXuh7zKQ1Hyq+AxTtJ
-         yRGiLo+NfbHzPIrekMt3YJmj7yyAJSId4224QeBOurOu5GwvejGT6BAC+JMkZ18LQa0M
-         kSakDFSZeJax1ndS/uZbC9osTfZtPQ+pGKm9ZVpgM3NilS8IB3x1xdeRwl4R1JgZlfoF
-         rK7A==
-X-Forwarded-Encrypted: i=1; AHgh+RoA7e6AtwuHXkuejcpquHtgvILv/Mzk/7TOsxs/4Wq4p3S4jx4OZJrM+XPXmrVsL8JFi0zdXkdhYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9MxGcE8nSp+SshWv2TPtAj5p7r9aGCOQ17UsEv5fo6cd2Ky4a
-	9bV3LnqGZsOGRfeIaMOgnMG0Eq4HFkYPpyDuEsuFYgWNYVPzqH92fIKapVPg1iSt
-X-Gm-Gg: AR+sD10cHGDqBtczkg8FsthFntOeH9KZEZVl89TZFjB2bXOf7QvdLgLau+EyrwrrVY5
-	yjmu4OnEO0zr1PfymeaXd+xm78w5BmIUyJPTWs9GPQpxzk+tFaKvIcp4iE707VUmvJJoQJZe0NO
-	gRIp9rO0dGLCXdDfeXy6eN48XzsGR8W5RTS5/17OlA3ysS/o67zpuyt2sVJkH/dwyLox2NFyDEm
-	xuIaXzsDX9UsifC0zPWYRDdBQTlcA0w00CKgoj/t+VU/nCUfNjkGcw5RPSyOGRuByXFOKGJNJJU
-	Kb0psvg351f7zWw7RTqHBpTGKYjsqSFDDbY9SSXCO3OQI0a/rfSkdpc9bfZVXLJ88LQpD7ZW61b
-	VrLSMzw2cMr/NFiHZxVYnukZx0DYNCeWqGFhrbnTucQ2XRMXl8e7YBmqmYQ1QJATj0H71s9oDUK
-	a7L4ZqcabdleGF1hWv77Hfnroru+v2hpswo5Ke3nPaXhcRd4JyOxyrb5Guu2qbuhXixJpJSA6h9
-	UexL+3ezYoYki4qqVZHJDsJ0KY7k1/lvs9ZiIKVAvzXFNA6mhCuhsHqSLpA
-X-Received: by 2002:a17:90b:17c5:b0:38e:7168:281 with SMTP id 98e67ed59e1d1-38fbc424a3dmr4963381a91.10.1785656180857;
-        Sun, 02 Aug 2026 00:36:20 -0700 (PDT)
-Received: from DESKTOP-4AJO944.tail156a05.ts.net (ppp-49-237-104-56.revip6.asianet.co.th. [49.237.104.56])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38fb2bac459sm1649732a91.4.2026.08.02.00.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 00:36:19 -0700 (PDT)
-From: Woraphat Khiaodaeng <worapat.kd2@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Woraphat Khiaodaeng <worapat.kd2@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/cmd: fix iovec leak when the async cmd is not recycled
-Date: Sun,  2 Aug 2026 14:35:18 +0700
-Message-ID: <20260802073518.419-1-worapat.kd2@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CK1XWySL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785682602;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IZQ9Zme5wQew44ai4+QZxeqarSEtAPFpGoxcQklaPAk=;
+	b=CK1XWySLFSQITD3eb0locRtRQSWON6hpuKTB5RCofPv8SJ654qCW3dPx34Xid/ClXM3U88
+	VzdyoS1MTLmcTaSiIywZbsYeAjmO/NKVCjVUpGI2g6oJcUkQ8MOwR2ueNvJEZS+p+r84m9
+	RGXLOqAdqEZXn1OUJKE72VrrWgHOUzU=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-660-3lZ48Y3fPmGKsBWwPy8yTQ-1; Sun,
+ 02 Aug 2026 10:56:39 -0400
+X-MC-Unique: 3lZ48Y3fPmGKsBWwPy8yTQ-1
+X-Mimecast-MFC-AGG-ID: 3lZ48Y3fPmGKsBWwPy8yTQ_1785682598
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A41991800345;
+	Sun,  2 Aug 2026 14:56:37 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.54])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 387841956044;
+	Sun,  2 Aug 2026 14:56:32 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sun,  2 Aug 2026 16:56:37 +0200 (CEST)
+Date: Sun, 2 Aug 2026 16:56:31 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Breno Leitao <leitao@debian.org>, Mateusz Guzik <mjguzik@gmail.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Subject: Re: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait) for
+ edge-triggered consumers
+Message-ID: <am9an4HWPGaxmbcK@redhat.com>
+References: <amtbpwrhlNGJ9OK6@redhat.com>
+ <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
+ <amueLRM-DrYbnjLn@redhat.com>
+ <20260731-blechnapf-arten-blasorchester-4e05dd1b2c58@brauner>
+ <amysHlZp6f6q498X@redhat.com>
+ <CAHk-=wg_PtU66p4iuvzCz13P_cDCfKg2OOuV-v6wq19ua8LyvQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg_PtU66p4iuvzCz13P_cDCfKg2OOuV-v6wq19ua8LyvQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-An io_async_cmd carries an iovec array in ->vec.iovec, allocated when the
-vec has to grow and kept across recycling through ctx->cmd_cache.  On two
-paths nothing frees it and io_clean_op()'s kfree(req->async_data) drops
-the io_async_cmd without it.
+On 07/31, Linus Torvalds wrote:
+>
+> My argument is that IF we change this area, we should damn well do it
+> right, and document it, and make it very very clear that the *ONLY*
+> reason this exists is a user space legacy bug that took advantage of
+> legacy kernel behavior, and that we are papering this over.
 
-io_req_uring_cleanup() clears the async data flags only when
-io_alloc_cache_put() succeeds, and the cache holds IO_ALLOC_CACHE_MAX ==
-128 entries, so once it is full the put fails and the vec is left behind.
-An NVMe passthrough workload gets there without doing anything unusual:
-nvme_uring_cmd_io() returns -EIOCBQUEUED, so the io_async_cmd stays
-attached for the lifetime of the command and the live object count tracks
-the queue depth.  Above 128 the puts start failing.
+OK, I'll rename poll_usage/poll_et to ->pseudo_edgetrigger as Christian
+suggests and update the comments as below:
 
-->cleanup is the last chance to free an inherited vec, since
-io_req_uring_cleanup() returns early for an io-wq issued command and is
-not called at all for one completed without ever being issued.  But
-io_clean_op() calls ->cleanup only if REQ_F_NEED_CLEANUP is set, and for
-uring_cmd that happens only where the vec has to grow, so a command
-reusing a large enough cached vec never sets it.  io_rw_alloc_async() and
-io_msg_alloc_async() flag an inherited vec for exactly this reason;
-io_uring_cmd_prep() does not.
+struct pipe_inode_info:
 
-Flag an inherited vec in io_uring_cmd_prep(), and free the vec when the
-cache put fails, as io_req_rw_cleanup() does.
+	@pseudo_edgetrigger: has an EPOLLET consumer, enable per-write wakeups
 
-The leak is invisible under KASAN, where io_alloc_cache_vec_kasan() frees
-the vec unconditionally.
+pipe_poll:
 
-Fixes: 3a4689ac109f ("io_uring/cmd: add iovec cache for commands")
-Cc: stable@vger.kernel.org
-Signed-off-by: Woraphat Khiaodaeng <worapat.kd2@gmail.com>
----
+	/*
+	 * Legacy epoll(EPOLLET) users depend on historical per-write wakeups,
+	 * see 3a34b13a88ca ("pipe: make pipe writes always wake up readers")
+	 * and the ->pseudo_edgetrigger check in anon_pipe_write().
+	 * Currently io_uring sets EPOLLET for multishot polls, so it gets the
+	 * same behaviour.
+	 */
+	if ((filp->f_mode & FMODE_READ) &&
+	    wait && (wait->_key & EPOLLET) &&
+	    unlikely(!READ_ONCE(pipe->pseudo_edgetrigger)))
+		WRITE_ONCE(pipe->pseudo_edgetrigger, true);
 
-Found by comparing the three users of struct iou_vec, then confirmed on
-v7.2-rc5 in a QEMU guest with kmemleak and CONFIG_KASAN=n.
+anon_pipe_write:
 
-On the design choice: net.c does not free on a failed put either, but its
-->cleanup is io_sendmsg_recvmsg_cleanup(), which calls
-io_netmsg_iovec_free(), so the comment there -- "Let normal cleanup path
-reap it if we fail adding to the cache" -- holds.  uring_cmd's ->cleanup
-only retries the put, so nothing reaps it.  Having ->cleanup free the vec
-unconditionally would work too, but it gives up recycling, hence freeing
-only on a failed put.  That leaves REQ_F_NEED_CLEANUP set so ->cleanup
-runs once more, which is harmless -- io_vec_free() returns early on a
-NULL ->iovec, and the second put may now succeed.
+	 * ->pseudo_edgetrigger enables per-write wakeups, see pipe_poll()
+	 */
+	if (was_empty || READ_ONCE(pipe->pseudo_edgetrigger))
+		wake_up_interruptible_sync_poll(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
 
-  no fix                  5360 unreferenced objects
-  cleanup hunk only       2432
-  both hunks                 0
+Will you agree? Or should I tweak the comments somehow to make it more clear
+that the only reason is a user space legacy bug?
 
-all of them reported as
-
-  unreferenced object 0xffff888006af5e00 (size 512):
-    comm "iou-wrk-70"
-      io_vec_realloc
-      io_import_reg_vec
-      io_mock_cmd
-      io_uring_cmd
-      io_wq_submit_work
-      io_worker_handle_work
-      io_wq_worker
-
-The middle row is the io-wq path.  With only the cleanup hunk, a command
-whose vec came from the cache already large enough never sets
-REQ_F_NEED_CLEANUP; io_req_uring_cleanup() had already returned early on
-IO_URING_F_UNLOCKED, so ->cleanup was never called and nothing ran at all.
-
-The reproducer drives IORING_MOCK_CMD_COPY_REGBUF and needs
-CONFIG_IO_URING_MOCK_FILE=y, CONFIG_DEBUG_KMEMLEAK=y and CONFIG_KASAN=n.
-
-IOSQE_ASYNC in the reproducer is load bearing, and not just to keep the
-cache full: it is what routes the command through io-wq and therefore
-through the IO_URING_F_UNLOCKED early return, i.e. the second path.
-Without it the mock command completes inline, the cache barely fills, and
-nothing leaks, so anyone reproducing this needs to keep it.
-
-nvme is not like that.  It completes from the device via
-nvme_uring_task_cb() -> io_uring_cmd_done32() with
-IO_URING_CMD_TASK_WORK_ISSUE_FLAGS, which is IO_URING_F_COMPLETE_DEFER
-(include/linux/io_uring/cmd.h:144), and the inline IOPOLL variant passes
-0.  Neither carries IO_URING_F_UNLOCKED, so nvme always runs
-io_req_uring_cleanup() in full and only ever hits the first path.
-
-To be clear about what is measured and what is not: the numbers above only
-exercise the io-wq route, through the mock file.  The only in-tree callers
-of io_uring_cmd_import_fixed_vec() are drivers/nvme/host/ioctl.c:495 and
-io_uring/mock_file.c:85, and the mock file is the one I could drive
-without hardware.
-
-The other two routes into the second path come from reading the code and
-I have not measured either:
-
- - a uring_cmd completed without ever being issued, where
-   io_req_uring_cleanup() is never called and IORING_OP_URING_CMD has no
-   ->fail handler to stand in for it.  Reachable from a submission
-   failure (io_submit_fail_init() -> io_queue_sqe_fallback() ->
-   io_req_defer_failed()), from a link member failed behind its head
-   (io_disarm_next() -> io_fail_links()), and from a drained request
-   cancelled when the ring goes away (io_cancel_defer_files() ->
-   io_req_task_queue_fail()).  None of these need a provider at all,
-   only a ring whose cmd_cache already holds an io_async_cmd with a vec.
- - nvme returning an error inline after a successful import, from
-   nvme_alloc_user_request() or nvme_map_user_request(), on a command
-   issued from io-wq.  That one is on real hardware, in an error path.
-
-Happy to follow up with a liburing test for this if that helps.
-
-Unrelated, but noticed while comparing: rw.c, net.c and uring_cmd.c now
-spell the same recycle-or-free dance three slightly different ways.  That
-looks like it wants a shared helper, but as a separate cleanup rather than
-mixed into a fix.
-
-Reproducer:
-
-#define _GNU_SOURCE
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/mman.h>
-#include <sys/syscall.h>
-#include <liburing.h>
-#include <linux/io_uring/mock_file.h>
-
-#define NSEGS		8	/* <= IO_VEC_CACHE_SOFT_CAP */
-#define INFLIGHT	400	/* > IO_ALLOC_CACHE_MAX */
-#define ROUNDS		20
-#define BUFSZ		(1 << 20)
-
-static int mock_create(struct io_uring *ring, int devfd)
-{
-	struct io_uring_mock_create mc = { .file_size = BUFSZ };
-	struct io_uring_sqe *sqe;
-	struct io_uring_cqe *cqe;
-	int ret;
-
-	sqe = io_uring_get_sqe(ring);
-	io_uring_prep_rw(IORING_OP_URING_CMD, sqe, devfd, NULL, 0, 0);
-	sqe->cmd_op = IORING_MOCK_MGR_CMD_CREATE;
-	sqe->addr = (unsigned long)&mc;
-	sqe->len = sizeof(mc);
-	io_uring_submit(ring);
-	if (io_uring_wait_cqe(ring, &cqe))
-		return -1;
-	ret = cqe->res;
-	io_uring_cqe_seen(ring, cqe);
-	return ret < 0 ? ret : (int)mc.out_fd;
-}
-
-int main(void)
-{
-	struct io_uring_sqe *sqe;
-	struct io_uring_cqe *cqe;
-	struct io_uring ring;
-	struct iovec iovs[NSEGS], reg;
-	unsigned char *buf;
-	int devfd, mockfd, ret, i, r;
-
-	devfd = open("/dev/io_uring_mock", O_RDWR);
-	if (devfd < 0)
-		return perror("open /dev/io_uring_mock"), 1;
-	if (io_uring_queue_init(1024, &ring, 0) < 0)
-		return 1;
-
-	buf = mmap(NULL, BUFSZ, PROT_READ | PROT_WRITE,
-		   MAP_ANONYMOUS | MAP_PRIVATE | MAP_POPULATE, -1, 0);
-	memset(buf, 0x5a, BUFSZ);
-	reg.iov_base = buf;
-	reg.iov_len = BUFSZ;
-	if (syscall(__NR_io_uring_register, ring.ring_fd,
-		    IORING_REGISTER_BUFFERS, &reg, 1))
-		return perror("register buffers"), 1;
-
-	mockfd = mock_create(&ring, devfd);
-	if (mockfd < 0)
-		return fprintf(stderr, "mock create failed\n"), 1;
-
-	for (i = 0; i < NSEGS; i++) {
-		iovs[i].iov_base = buf + i * 4096;
-		iovs[i].iov_len = 4096;
-	}
-
-	for (r = 0; r < ROUNDS; r++) {
-		for (i = 0; i < INFLIGHT; i++) {
-			sqe = io_uring_get_sqe(&ring);
-			if (!sqe)
-				break;
-			io_uring_prep_rw(IORING_OP_URING_CMD, sqe, mockfd,
-					 NULL, 0, 0);
-			sqe->cmd_op = IORING_MOCK_CMD_COPY_REGBUF;
-			sqe->addr = (unsigned long)iovs;
-			sqe->len = NSEGS;
-			sqe->addr3 = (unsigned long)buf;
-			sqe->buf_index = 0;
-			sqe->uring_cmd_flags = IORING_URING_CMD_FIXED;
-			sqe->flags |= IOSQE_ASYNC;
-		}
-		ret = io_uring_submit(&ring);
-		if (ret < 0)
-			break;
-		for (i = 0; i < ret; i++) {
-			if (io_uring_wait_cqe(&ring, &cqe))
-				break;
-			io_uring_cqe_seen(&ring, cqe);
-		}
-	}
-
-	io_uring_queue_exit(&ring);
-	puts("done; now: echo scan > /sys/kernel/debug/kmemleak");
-	return 0;
-}
-
- io_uring/uring_cmd.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index c14c22cff..7f33eba23 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -38,6 +38,8 @@ static void io_req_uring_cleanup(struct io_kiocb *req, unsigned int issue_flags)
- 	if (io_alloc_cache_put(&req->ctx->cmd_cache, ac)) {
- 		ioucmd->sqe = NULL;
- 		io_req_async_data_clear(req, REQ_F_NEED_CLEANUP);
-+	} else {
-+		io_vec_free(&ac->vec);
- 	}
- }
- 
-@@ -208,6 +210,8 @@ int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	ac = io_uring_alloc_async_data(&req->ctx->cmd_cache, req);
- 	if (!ac)
- 		return -ENOMEM;
-+	if (ac->vec.iovec)
-+		req->flags |= REQ_F_NEED_CLEANUP;
- 	ioucmd->sqe = sqe;
- 	return 0;
- }
--- 
-2.43.0
+Oleg.
 
