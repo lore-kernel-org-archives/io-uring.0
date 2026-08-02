@@ -1,134 +1,102 @@
-Received: from sender-of-o58.zoho.eu (sender-of-o58.zoho.eu [136.143.169.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7021A6835;
-	Sun,  2 Aug 2026 16:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.169.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785688251; cv=pass; b=DjAXnOGExFAkzVXOBjW1xSa4wGo4VE3MhVFTlwFP/KDhRqPUOJohpd9wYu+AwRxXcxQNVLX2U2DzfPLoEyXhr3NuLxuHpu37rIbxgFeJ6s/uyhtFBPx3o6xgNrfsdwgPJK5u1MkEb9Zjx3KLPSMUn7vGkaUxVTYwgBNbxt5TR8k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785688251; c=relaxed/simple;
-	bh=IIqcdcwsb7eDGa6O8l8DpR2MXh+6bFT1i6vAttWb1IA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bmmYwM/sLrAW4t2VocpL7lkN17D/4lJa+vF9Ded86DiLx6aatjep57jYoP741Q33LWWmFSIvbOm89J5ZvYPGHYRtSvMyShR4t4WlBE4bj+egIJuAQGun4Fd9gBQn107hmTYOdWPJZiB5NV8mFreU7e4ZqOmGr44TvImNF3e7ENE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com; spf=pass smtp.mailfrom=iusegentoo.com; dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b=bMQhJHBy; arc=pass smtp.client-ip=136.143.169.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=iusegentoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iusegentoo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EB43C0619
+	for <io-uring@vger.kernel.org>; Sun,  2 Aug 2026 16:54:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785689643; cv=none; b=ld1YVAEH8JT+xPJY+xsTTsXMS9qqh3hIJpLZRmkymL5tp1WXzNfBlm2hX+ogOOCMEnbxbd8r1GWsmXuURGozVJX5f+HESGS1RRYC8Iq6/uOxYdG7C1NQhnIOTndgLvp9LbCn6PBL6B2oGXNpLRkJJ1Oejdq1b9poI+GzbNmeHJ8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785689643; c=relaxed/simple;
+	bh=EJw+kTqGRkMI61bTiVUY9Hf2nYqFmqoxYK+qvW10i+s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EWjhaYgYOOZBZhGKMi96f6DIMsrGxXjXwlXF0ZxiiOVMtes/p2oANnXUag6PPmGwSwt5XP41wr16Whq/Z0XNLTF552QuQjbr8hAPGibTSvTsNzNTqEyniqTYGBAGE9x0Qrx9zsIvSrMeX1ju1XwUlOK7ZajrKWpNHRe2qc8ejfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ez3dR+UX; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iusegentoo.com header.i=ali@iusegentoo.com header.b="bMQhJHBy"
-ARC-Seal: i=1; a=rsa-sha256; t=1785688243; cv=none; 
-	d=zohomail.eu; s=zohoarc; 
-	b=gtsBCEDix2ghWbg4DMGRJgrlAb0Z93+qiA3AzdisWSGz+hsou/RMKeakqEGQ4meY48uFjQKeTajtyPEZIzESB/OAaJwyVKDmjVG3bOw0F9Y5wFx0M+LwVVZAt57TlJZ+GIZICNm5PM4u1RCrRIuvBd5CetFcsNAyAYkiw5KC5QY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-	t=1785688243; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=nU1Z95+gk9dRhafpeF1DEv/I8ORcf0JCmcJz2aOPaRo=; 
-	b=JM3WHkBY/nYzLF/TbsHnxaSQPqo654iVq43cSsaOphbeB3JJ1xj8MBu6DYH7KaXiY+9RoYfu13dQI2nzNRO46xN7g9NbkAWRe3QrQIMSNbV2Z1Ku9i4+XTlTOH7i+Ui/5QXQ0z7NpG0B9/x+bCXWsCkYPUTjM36GD7ruWvMiqAY=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-	dkim=pass  header.i=iusegentoo.com;
-	spf=pass  smtp.mailfrom=ali@iusegentoo.com;
-	dmarc=pass header.from=<ali@iusegentoo.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785688243;
-	s=zmail; d=iusegentoo.com; i=ali@iusegentoo.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=nU1Z95+gk9dRhafpeF1DEv/I8ORcf0JCmcJz2aOPaRo=;
-	b=bMQhJHByiFtHQr0jegHK5qOPZfeszs0lLCZfAvVyMrEJIz2xOJpBO6J8ljqOlpM2
-	AB/WVLi9TWD5yPfrTH6DU6NV5JgCpqPgTW8kSes3QTOnJ47lFYQKcEhCCfRHFoi3QNV
-	JhzoyOpL4vJKqXsFmc3gWwxitlnl0IkXBoPbEnDI=
-Received: by mx.zoho.eu with SMTPS id 1785688240959435.0495173337787;
-	Sun, 2 Aug 2026 18:30:40 +0200 (CEST)
-From: Ali Ahmet Memis <ali@iusegentoo.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/rsrc: fix folio size overflow in io_vec_fill_bvec()
-Date: Sun,  2 Aug 2026 16:30:30 +0000
-Message-ID: <20260802163030.51005-1-ali@iusegentoo.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ez3dR+UX"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6a0a4a8d251so2568569a12.1
+        for <io-uring@vger.kernel.org>; Sun, 02 Aug 2026 09:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1785689640; x=1786294440; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=v+ZFmCOwSHVd+Cbwlj51Z7I8+fcWBII2I+8HftB9n3k=;
+        b=ez3dR+UXspEQ+QUQNFKT+E0luRC73ilbCQUVaDaz/swDouJovnVLAARX+vczAEdvUP
+         QZNoUIX+jW1KHjfKCj9yDMP0Sp/lYZlJtS1dbjTiJSqGhsryJ452TkYoaHd9p1BtIdef
+         z6J71gxuE6PRrY9c/NXSTEQCgthbyHLOxbc3I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785689640; x=1786294440;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=v+ZFmCOwSHVd+Cbwlj51Z7I8+fcWBII2I+8HftB9n3k=;
+        b=dhjo73qZnVERQbHDZjXig6K3ETIdtS2IKPGT9kUs9eouFf3IOxb0fvbJ6kPvYxIJ12
+         n1Pj169mk/KemfC2rTiRIfEA90rTkpk85VwTSZJHo8DaPZqkEz9C01FT5ae65eUHWd6a
+         pP/8B775hD9B4FZjnbkMJ6fZZRSgRdFLvfkahEuaH3nIGLe7dglmEgcBTnCTgAGokBDo
+         tNhkh4O/mE8eJNcDHO3Oo4mhXcuXp9hDriImNszKGuHVd1GfwhOX+BNWV47FXj6FWxqD
+         mGZccvYzP6VOH6bAzjz0d2Dd6MY6KbDlcnGm5ltSqba2BuyK3Fs8Y/d4X8Jk1iUT8b6P
+         38uw==
+X-Forwarded-Encrypted: i=1; AHgh+RqEiqZMRd9LSmWyI/UfrSBox35Ileiby20TtSZm9XEZRG9ROxIj4ovhK3ZR20KeI4N466qfFTJ8Wg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsuiq4fCyIzq0Tvc3X2ucWw5QpEOGrgvCfKz2mOKK81ds0we6B
+	Aoo8j+si/sqLOAC+zG1hQpCK3i9AWaqHDQBKAg74SUpn/+yvGWN8BjSgz9cog96ZSuXCJEcPWP5
+	fUs24M3w=
+X-Gm-Gg: AR+sD12lrhJ3knIdoKZCrORIkKiwCvXMH6cHwFmJ+WMbrG3dOassKKo+CAuHjA+B4Wi
+	dl7NRJpgxn3XCXP82r/2k767fogfFmUrAv69+LbDVpjIKkcJtNIgek8e558fMBXoDNdSlnk52G2
+	S3O6NzZ+NrWE5bHcqsaMEwM01qnHx18caRuGcrGqG+cPPB+ob9zAKgXQ/9iYGjVPelg/MlQblLz
+	pKxnwKTQJ9dxyYdCb1bg8RASMZbuKBCRg/cPAXq1Ux4LObEEUOfNrl3WNT18QicSGMxZ0kYKxvZ
+	WCkXEHGiZcnk3JpCSP1Ztnpxc0BSJn7GdmvFcP6qY4bX+BrdeF6aQ7G3NC3kzxMRUEhOW+X/EuU
+	KJc7CgtRHinNeId003BdmlotmjcSpyv1lEYRuT3ILcbQaVFbYn4zO8733clwtsjC8YNW8vqOt8/
+	T/UeEyFM6Bh8Gde8Om2ysALBDkcQE2t54PzTs+6kjRIvZrdRiDZHMcUpZyBeyrZWvYCpsrUNR6u
+	wbplg4bua40ERMzpYqT2j3iqT+VVe+fALLaWg==
+X-Received: by 2002:a05:6402:44da:b0:69a:b38d:403c with SMTP id 4fb4d7f45d1cf-6a0a7c6b782mr4436818a12.7.1785689640135;
+        Sun, 02 Aug 2026 09:54:00 -0700 (PDT)
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c01f7b8sm4344218a12.0.2026.08.02.09.53.58
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Aug 2026 09:53:58 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c1c4db7ca93so341971166b.2
+        for <io-uring@vger.kernel.org>; Sun, 02 Aug 2026 09:53:58 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RqjIwa4SEztsjf4BzZK4rKP4vrPgN0U6QHegz8em4kj5oT8k8nRI/hdYMERvyytFaJs1Fjq9vLPaQ==@vger.kernel.org
+X-Received: by 2002:a17:906:369b:b0:c08:417e:3696 with SMTP id
+ a640c23a62f3a-c1fe7f3a249mr466563366b.20.1785689638268; Sun, 02 Aug 2026
+ 09:53:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+References: <amtbpwrhlNGJ9OK6@redhat.com> <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
+ <amueLRM-DrYbnjLn@redhat.com> <20260731-blechnapf-arten-blasorchester-4e05dd1b2c58@brauner>
+ <amysHlZp6f6q498X@redhat.com> <CAHk-=wg_PtU66p4iuvzCz13P_cDCfKg2OOuV-v6wq19ua8LyvQ@mail.gmail.com>
+ <am9an4HWPGaxmbcK@redhat.com>
+In-Reply-To: <am9an4HWPGaxmbcK@redhat.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Sun, 2 Aug 2026 09:53:42 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgpt2ePzDA7Gt4JHC8uzEsi6A-3V3uM1nZO062dF_ayMw@mail.gmail.com>
+X-Gm-Features: AUfX_mxTQvF14UVk0HG1pOG_w4PlWB0b4XtyzIl4-tkWu-7XIakPiTTRXj2tTxA
+Message-ID: <CAHk-=wgpt2ePzDA7Gt4JHC8uzEsi6A-3V3uM1nZO062dF_ayMw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait) for
+ edge-triggered consumers
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Christian Brauner <brauner@kernel.org>, Breno Leitao <leitao@debian.org>, 
+	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Jan Kara <jack@suse.cz>, Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-io_vec_fill_bvec() computes the folio size with a plain int 1:
+On Sun, 2 Aug 2026 at 07:56, Oleg Nesterov <oleg@redhat.com> wrote:
+>
+> Will you agree? Or should I tweak the comments somehow to make it more clear
+> that the only reason is a user space legacy bug?
 
-	unsigned long folio_size = 1 << imu->folio_shift;
+Those suggested changes look fine to me - together with just plain
+commentary about this whole thing in the commit log, which it wants
+anyway.
 
-imu->folio_shift is unsigned int and comes from folio_shift() of the
-folio backing the registered buffer, so it can be 32 or more on a 64 bit
-kernel. Shifting int 1 that far is undefined, and on x86 and arm64 the
-count is taken modulo 32, so a shift of 34 yields 4 rather than 16G.
-Every other folio_shift shift in this file already uses 1UL.
-
-The result is that the segment estimate and the fill loop disagree.
-io_estimate_bvec_size() sizes the bvec array with the real shift:
-
-	max_segs += (iov[i].iov_len >> shift) + 2;
-
-so a 1M iovec on a 16G folio is charged 2 segments, while
-io_vec_fill_bvec() then walks the same iovec in folio_size chunks of 4
-bytes and writes res_bvec[bvec_idx] a quarter of a million times, past
-the end of the array it was given. src_bvec is advanced once per
-iteration as well, so imu->bvec is read past its end at the same time.
-validate_fixed_range() only checks that the range is inside the
-registered buffer and does not bound the segment count.
-
-Reaching it needs a folio with a shift of at least 32, which means a
-gigantic hugetlb page: 16G on arm64 with 64K pages, where
-CONT_PMD_SHIFT is 34 and hugetlb_add_hstate(CONT_PMD_SHIFT - PAGE_SHIFT)
-registers that size, and likewise on powerpc. x86_64 tops out at 1G, so
-a shift of 30, which still fits in int and is unaffected.
-
-Use 1UL, as the rest of the file does.
-
-Fixes: 9ef4cbbcb4ac ("io_uring: add infra for importing vectored reg buffers")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ali Ahmet Memis <ali@iusegentoo.com>
----
-Found by reading, not from a crash. I do not have a machine that can hold
-a 16G gigantic page, so I have not run this path with a folio_shift of 34
-and the out of bounds write is derived rather than observed. What I did
-check in the tree:
-
-  - imu->folio_shift is set from folio_shift() of the coalesced folio in
-    io_check_coalesce_buffer(), so it is the real folio order plus
-    PAGE_SHIFT and is not clamped anywhere
-  - on arm64 with 64K pages ARM64_CONT_PMD_SHIFT is 5 and PMD_SHIFT is 29,
-    so CONT_PMD_SHIFT is 34, and arm64_hugetlb_init() calls
-    hugetlb_add_hstate(CONT_PMD_SHIFT - PAGE_SHIFT), which is order 18;
-    order 18 plus PAGE_SHIFT 16 gives folio_shift 34
-  - the four other folio_shift shifts in this file, at the folio_size
-    check in io_check_coalesce_buffer(), the bvec fill in
-    io_sqe_buffer_register(), and the folio_mask in io_import_fixed(),
-    all already use 1UL
-  - the only other variable shifts of a plain 1 in io_uring/ are on
-    ITER_DEST, ITER_SOURCE and rq_data_dir(), which are 0 or 1
-
-Happy to put together a forced folio_shift reproducer under KASAN if that
-would be more useful than the reasoning above.
-
- io_uring/rsrc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index 8d0f2ee24e0c..deb2a844f568 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -1477,7 +1477,7 @@ static int io_vec_fill_bvec(int ddir, struct iov_iter *iter,
- 				struct iovec *iovec, unsigned nr_iovs,
- 				struct iou_vec *vec)
- {
--	unsigned long folio_size = 1 << imu->folio_shift;
-+	unsigned long folio_size = 1UL << imu->folio_shift;
- 	unsigned long folio_mask = folio_size - 1;
- 	struct bio_vec *res_bvec = vec->bvec;
- 	size_t total_len = 0;
-
-base-commit: 2d2338c93da79b3bfe4b6099a931d9468d539952
--- 
-2.55.0
-
+            Linus
