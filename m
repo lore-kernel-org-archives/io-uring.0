@@ -1,102 +1,236 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EB43C0619
-	for <io-uring@vger.kernel.org>; Sun,  2 Aug 2026 16:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649D9411F90
+	for <io-uring@vger.kernel.org>; Mon,  3 Aug 2026 12:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785689643; cv=none; b=ld1YVAEH8JT+xPJY+xsTTsXMS9qqh3hIJpLZRmkymL5tp1WXzNfBlm2hX+ogOOCMEnbxbd8r1GWsmXuURGozVJX5f+HESGS1RRYC8Iq6/uOxYdG7C1NQhnIOTndgLvp9LbCn6PBL6B2oGXNpLRkJJ1Oejdq1b9poI+GzbNmeHJ8=
+	t=1785761216; cv=none; b=LYa84ltgFXrbb0hupwUieG6kbQywNBv24iTsvh3mgBAze3dWRowIVcni7+KhsUprk4S02djHdImmltKFYMTguqu8GO87WfzM2qPhEeKnFx/WpXZtvDmS1b5Ztma59e3uFlWKVZ1/4zKuiIyJwDmLL10VLgDNK7JP4gQf+I/8SqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785689643; c=relaxed/simple;
-	bh=EJw+kTqGRkMI61bTiVUY9Hf2nYqFmqoxYK+qvW10i+s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EWjhaYgYOOZBZhGKMi96f6DIMsrGxXjXwlXF0ZxiiOVMtes/p2oANnXUag6PPmGwSwt5XP41wr16Whq/Z0XNLTF552QuQjbr8hAPGibTSvTsNzNTqEyniqTYGBAGE9x0Qrx9zsIvSrMeX1ju1XwUlOK7ZajrKWpNHRe2qc8ejfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ez3dR+UX; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1785761216; c=relaxed/simple;
+	bh=5TCgU5zbyBLDg+DnZg8eCxnpYXT4Vv2vkwIQjgy7L6g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fxnyR32TvG9pZeIejmCNsXrOArge2RhcUSh1UFnm+N9DQCp9W8JCy9T2sB1Ez1j3jDDsgt1x62kHOgL5Ao8sLMoXXldDee9CyMqsyC6Uepgi3OxWmBXgG1Tq6m98T2hH3vTf5WQwPPFdBpBsJVfouvoCiKSuKRJb7cow8BgdhgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fnKLROYD; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ez3dR+UX"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6a0a4a8d251so2568569a12.1
-        for <io-uring@vger.kernel.org>; Sun, 02 Aug 2026 09:54:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1785689640; x=1786294440; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=v+ZFmCOwSHVd+Cbwlj51Z7I8+fcWBII2I+8HftB9n3k=;
-        b=ez3dR+UXspEQ+QUQNFKT+E0luRC73ilbCQUVaDaz/swDouJovnVLAARX+vczAEdvUP
-         QZNoUIX+jW1KHjfKCj9yDMP0Sp/lYZlJtS1dbjTiJSqGhsryJ452TkYoaHd9p1BtIdef
-         z6J71gxuE6PRrY9c/NXSTEQCgthbyHLOxbc3I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785689640; x=1786294440;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=v+ZFmCOwSHVd+Cbwlj51Z7I8+fcWBII2I+8HftB9n3k=;
-        b=dhjo73qZnVERQbHDZjXig6K3ETIdtS2IKPGT9kUs9eouFf3IOxb0fvbJ6kPvYxIJ12
-         n1Pj169mk/KemfC2rTiRIfEA90rTkpk85VwTSZJHo8DaPZqkEz9C01FT5ae65eUHWd6a
-         pP/8B775hD9B4FZjnbkMJ6fZZRSgRdFLvfkahEuaH3nIGLe7dglmEgcBTnCTgAGokBDo
-         tNhkh4O/mE8eJNcDHO3Oo4mhXcuXp9hDriImNszKGuHVd1GfwhOX+BNWV47FXj6FWxqD
-         mGZccvYzP6VOH6bAzjz0d2Dd6MY6KbDlcnGm5ltSqba2BuyK3Fs8Y/d4X8Jk1iUT8b6P
-         38uw==
-X-Forwarded-Encrypted: i=1; AHgh+RqEiqZMRd9LSmWyI/UfrSBox35Ileiby20TtSZm9XEZRG9ROxIj4ovhK3ZR20KeI4N466qfFTJ8Wg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsuiq4fCyIzq0Tvc3X2ucWw5QpEOGrgvCfKz2mOKK81ds0we6B
-	Aoo8j+si/sqLOAC+zG1hQpCK3i9AWaqHDQBKAg74SUpn/+yvGWN8BjSgz9cog96ZSuXCJEcPWP5
-	fUs24M3w=
-X-Gm-Gg: AR+sD12lrhJ3knIdoKZCrORIkKiwCvXMH6cHwFmJ+WMbrG3dOassKKo+CAuHjA+B4Wi
-	dl7NRJpgxn3XCXP82r/2k767fogfFmUrAv69+LbDVpjIKkcJtNIgek8e558fMBXoDNdSlnk52G2
-	S3O6NzZ+NrWE5bHcqsaMEwM01qnHx18caRuGcrGqG+cPPB+ob9zAKgXQ/9iYGjVPelg/MlQblLz
-	pKxnwKTQJ9dxyYdCb1bg8RASMZbuKBCRg/cPAXq1Ux4LObEEUOfNrl3WNT18QicSGMxZ0kYKxvZ
-	WCkXEHGiZcnk3JpCSP1Ztnpxc0BSJn7GdmvFcP6qY4bX+BrdeF6aQ7G3NC3kzxMRUEhOW+X/EuU
-	KJc7CgtRHinNeId003BdmlotmjcSpyv1lEYRuT3ILcbQaVFbYn4zO8733clwtsjC8YNW8vqOt8/
-	T/UeEyFM6Bh8Gde8Om2ysALBDkcQE2t54PzTs+6kjRIvZrdRiDZHMcUpZyBeyrZWvYCpsrUNR6u
-	wbplg4bua40ERMzpYqT2j3iqT+VVe+fALLaWg==
-X-Received: by 2002:a05:6402:44da:b0:69a:b38d:403c with SMTP id 4fb4d7f45d1cf-6a0a7c6b782mr4436818a12.7.1785689640135;
-        Sun, 02 Aug 2026 09:54:00 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a09c01f7b8sm4344218a12.0.2026.08.02.09.53.58
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Aug 2026 09:53:58 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c1c4db7ca93so341971166b.2
-        for <io-uring@vger.kernel.org>; Sun, 02 Aug 2026 09:53:58 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RqjIwa4SEztsjf4BzZK4rKP4vrPgN0U6QHegz8em4kj5oT8k8nRI/hdYMERvyytFaJs1Fjq9vLPaQ==@vger.kernel.org
-X-Received: by 2002:a17:906:369b:b0:c08:417e:3696 with SMTP id
- a640c23a62f3a-c1fe7f3a249mr466563366b.20.1785689638268; Sun, 02 Aug 2026
- 09:53:58 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fnKLROYD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785761214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=lQ5xQ35lK31BPQRUsnqePjDzH7l92VhsEt/1x8cX/6g=;
+	b=fnKLROYDiBJ8cSYdJf+kZ+RONbmAeaiZEgnW8NJ2KYNosDxK7iwnsPRR8aPwUXLf6NaBcc
+	FnjuRwakevPwKPyt53fc4ZtuxMrZlE2g5M0JgJ9noRg2xKsZoSfAcSLEQE9j/2mi2rlsRY
+	n3N6NYQllhBMlBipbjCEHTQs3epcdUY=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-589-NdRnfQLPNs6h-q9o-NN78g-1; Mon,
+ 03 Aug 2026 08:46:34 -0400
+X-MC-Unique: NdRnfQLPNs6h-q9o-NN78g-1
+X-Mimecast-MFC-AGG-ID: NdRnfQLPNs6h-q9o-NN78g_1785761192
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 78C74195608D;
+	Mon,  3 Aug 2026 12:46:31 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.54])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id BEDC41956087;
+	Mon,  3 Aug 2026 12:46:26 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Mon,  3 Aug 2026 14:46:31 +0200 (CEST)
+Date: Mon, 3 Aug 2026 14:46:25 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Breno Leitao <leitao@debian.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Pavel Begunkov <asml.silence@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
+Subject: [PATCH v4] pipe: only enable the extra wake_up(rd_wait) for EPOLLET
+ consumers
+Message-ID: <anCNoW-x0bcB2ggg@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <amtbpwrhlNGJ9OK6@redhat.com> <CAHk-=wi7EccGaeo2Q5mdcvcQJ8VX7tcJWW2fHkg6vfmHGGX8AA@mail.gmail.com>
- <amueLRM-DrYbnjLn@redhat.com> <20260731-blechnapf-arten-blasorchester-4e05dd1b2c58@brauner>
- <amysHlZp6f6q498X@redhat.com> <CAHk-=wg_PtU66p4iuvzCz13P_cDCfKg2OOuV-v6wq19ua8LyvQ@mail.gmail.com>
- <am9an4HWPGaxmbcK@redhat.com>
-In-Reply-To: <am9an4HWPGaxmbcK@redhat.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 2 Aug 2026 09:53:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgpt2ePzDA7Gt4JHC8uzEsi6A-3V3uM1nZO062dF_ayMw@mail.gmail.com>
-X-Gm-Features: AUfX_mxTQvF14UVk0HG1pOG_w4PlWB0b4XtyzIl4-tkWu-7XIakPiTTRXj2tTxA
-Message-ID: <CAHk-=wgpt2ePzDA7Gt4JHC8uzEsi6A-3V3uM1nZO062dF_ayMw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/1] pipe: only enable the extra wake_up(rd_wait) for
- edge-triggered consumers
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Christian Brauner <brauner@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Mateusz Guzik <mjguzik@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jan Kara <jack@suse.cz>, Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On Sun, 2 Aug 2026 at 07:56, Oleg Nesterov <oleg@redhat.com> wrote:
->
-> Will you agree? Or should I tweak the comments somehow to make it more clear
-> that the only reason is a user space legacy bug?
+pipe_poll() unconditionally sets ->poll_usage on the first call, forcing
+anon_pipe_write() to wake up readers on every write even if the pipe was
+not empty.
 
-Those suggested changes look fine to me - together with just plain
-commentary about this whole thing in the commit log, which it wants
-anyway.
+The reason is that some legacy epoll(EPOLLET) users depend on historical
+per-write wakeups, see commit 3a34b13a88ca ("pipe: make pipe writes always
+wake up readers").
 
-            Linus
+Test-case:
+
+	#include <unistd.h>
+	#include <sys/epoll.h>
+	#include <assert.h>
+
+	int main(void)
+	{
+		int pfd[2], efd;
+		struct epoll_event evt = { .events = EPOLLIN | EPOLLET };
+
+		pipe(pfd);
+		efd = epoll_create1(0);
+		epoll_ctl(efd, EPOLL_CTL_ADD, pfd[0], &evt);
+
+		for (int i = 0; i < 2; ++i) {
+			write(pfd[1], "", 1);
+			assert(epoll_wait(efd, &evt, 1, 0) == 1);
+		}
+
+		return 0;
+	}
+
+it fails if WRITE_ONCE(poll_usage, true) is removed from pipe_poll().
+However, without EPOLLET in .events, it does not need the extra wakeup
+and succeeds even if write() is called only once before the main loop.
+
+Currently io_uring without (unsupported) IORING_POLL_ADD_LEVEL always
+sets EPOLLET, and in IORING_POLL_ADD_MULTI mode it depends on per-write
+wakeups the same way:
+
+	#include <unistd.h>
+	#include <sys/mman.h>
+	#include <sys/epoll.h>
+	#include <sys/syscall.h>
+	#include <linux/io_uring.h>
+	#include <assert.h>
+
+	int main(void)
+	{
+		struct io_uring_params p = {};
+		int fd, pfd[2];
+
+		pipe(pfd);
+
+		fd = syscall(SYS_io_uring_setup, 2, &p);
+		assert(fd >= 0);
+
+		void *ring = mmap(0, p.cq_off.cqes + p.cq_entries * sizeof(struct io_uring_cqe),
+				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQ_RING);
+		assert(ring != MAP_FAILED);
+		*(unsigned *)(ring + p.sq_off.tail) = 1;
+
+		struct io_uring_sqe *sqes = mmap(0, p.sq_entries * sizeof(*sqes),
+				  PROT_READ | PROT_WRITE, MAP_SHARED, fd, IORING_OFF_SQES);
+		assert(sqes != MAP_FAILED);
+		sqes[0].opcode = IORING_OP_POLL_ADD;
+		sqes[0].fd = pfd[0];
+		sqes[0].len = IORING_POLL_ADD_MULTI;
+		sqes[0].poll32_events = EPOLLIN;
+
+		syscall(SYS_io_uring_enter, fd, 1, 0, 0, 0, 0);
+
+		unsigned *cq_head = ring + p.cq_off.head;
+		unsigned *cq_tail = ring + p.cq_off.tail;
+		for (int i = 0; i < 2; ++i) {
+			write(pfd[1], "", 1);
+			syscall(SYS_io_uring_enter, fd, 0, 0, IORING_ENTER_GETEVENTS, 0, 0);
+			assert(*cq_tail == ++*cq_head);
+		}
+
+		return 0;
+	}
+
+the 2nd assert() in the main loop fails without ->poll_usage == true.
+
+Rename ->poll_usage to ->pseudo_edgetrigger to make the purpose clearer,
+update the comments, and change pipe_poll() to set ->pseudo_edgetrigger
+only if wait->_key & EPOLLET is true. This check should catch both users,
+and this way poll/select and epoll without EPOLLET users will not pay for
+the extra wakeup.
+
+Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+---
+ fs/pipe.c                 | 20 +++++++++++++-------
+ include/linux/pipe_fs_i.h |  4 ++--
+ 2 files changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 429b0714ec57..84a81db39f8a 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -686,10 +686,9 @@ anon_pipe_write(struct kiocb *iocb, struct iov_iter *from)
+ 	 * how (for example) the GNU make jobserver uses small writes to
+ 	 * wake up pending jobs
+ 	 *
+-	 * Epoll nonsensically wants a wakeup whether the pipe
+-	 * was already empty or not.
++	 * ->pseudo_edgetrigger enables per-write wakeups, see pipe_poll()
+ 	 */
+-	if (was_empty || pipe->poll_usage)
++	if (was_empty || READ_ONCE(pipe->pseudo_edgetrigger))
+ 		wake_up_interruptible_sync_poll(&pipe->rd_wait, EPOLLIN | EPOLLRDNORM);
+ 	kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
+ 	if (wake_next_writer)
+@@ -752,7 +751,6 @@ static long pipe_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 	}
+ }
+ 
+-/* No kernel lock held - fine */
+ static __poll_t
+ pipe_poll(struct file *filp, poll_table *wait)
+ {
+@@ -760,9 +758,17 @@ pipe_poll(struct file *filp, poll_table *wait)
+ 	struct pipe_inode_info *pipe = filp->private_data;
+ 	union pipe_index idx;
+ 
+-	/* Epoll has some historical nasty semantics, this enables them */
+-	if (unlikely(!READ_ONCE(pipe->poll_usage)))
+-		WRITE_ONCE(pipe->poll_usage, true);
++	/*
++	 * Legacy epoll(EPOLLET) users depend on historical per-write wakeups,
++	 * see 3a34b13a88ca ("pipe: make pipe writes always wake up readers")
++	 * and the ->pseudo_edgetrigger check in anon_pipe_write().
++	 * Currently io_uring sets EPOLLET for multishot polls, so it gets the
++	 * same behaviour.
++	 */
++	if ((filp->f_mode & FMODE_READ) &&
++	    wait && (wait->_key & EPOLLET) &&
++	    unlikely(!READ_ONCE(pipe->pseudo_edgetrigger)))
++		WRITE_ONCE(pipe->pseudo_edgetrigger, true);
+ 
+ 	/*
+ 	 * Reading pipe state only -- no need for acquiring the semaphore.
+diff --git a/include/linux/pipe_fs_i.h b/include/linux/pipe_fs_i.h
+index 7f6a92ac9704..1acc76581af5 100644
+--- a/include/linux/pipe_fs_i.h
++++ b/include/linux/pipe_fs_i.h
+@@ -74,7 +74,7 @@ union pipe_index {
+  *	@files: number of struct file referring this pipe (protected by ->i_lock)
+  *	@r_counter: reader counter
+  *	@w_counter: writer counter
+- *	@poll_usage: is this pipe used for epoll, which has crazy wakeups?
++ *	@pseudo_edgetrigger: has an EPOLLET consumer, enable per-write wakeups
+  *	@fasync_readers: reader side fasync
+  *	@fasync_writers: writer side fasync
+  *	@bufs: the circular array of pipe buffers
+@@ -95,7 +95,7 @@ struct pipe_inode_info {
+ 	unsigned int files;
+ 	unsigned int r_counter;
+ 	unsigned int w_counter;
+-	bool poll_usage;
++	bool pseudo_edgetrigger;
+ #ifdef CONFIG_WATCH_QUEUE
+ 	bool note_loss;
+ #endif
+-- 
+2.52.0
+
+
