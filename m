@@ -1,75 +1,76 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BEC7433BC1
-	for <io-uring@vger.kernel.org>; Tue,  4 Aug 2026 13:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF47448BA6
+	for <io-uring@vger.kernel.org>; Tue,  4 Aug 2026 13:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785848441; cv=none; b=BiDoBqFe9we24Qa79atphlawAVH3VqF9J8ne1wthsBSl/T6FVBwESV6v21xwLWxDqEXO82+gXJb5RelaPh4eR3h4VaMhT7F8oDLxFQgRyA/dC/BGuNc7kzajkhlubSSRXNVEWosNmeaIrzykbAsObic52U3IANMETyneKS2nEek=
+	t=1785848447; cv=none; b=IGVBWpvAq60hJQfiV2Y7e8QqAOBB/aodPiyZIxGVHEKGDXtn4+B2fH67yLmNjDtM6cEs54BdhqrrcOuH5emUZby/mIcD7TIJarsOkxRqNWuoQd3NrZe9fllfL2KeLji6cdFF0QqDb2lLB0QZHKbDHPtGKUDkMb9ipJ+BvkhkacU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785848441; c=relaxed/simple;
-	bh=ZArUxw9bYziUeO9DjSFlEmrEHR19mhW9P1kY0G1JwDo=;
+	s=arc-20240116; t=1785848447; c=relaxed/simple;
+	bh=Jf/ulHB64njn4WmjKBUzNqvAIC1wFOlc2MREPr/01m8=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=A/giVPd5/0x6L1KeoEgq3rwRoHh1+SaeL4uO63eGktUx6ReVE4fibZb52MDtecmrTjJf6EdvXfTkzFZpMY/2ZQg4M1Mu/7f4Vj9ucnEwsv0HHh/XIaKm7A4k4JogesQs+1aD5qTwQZ2eosMIwmM3PnEGS03YuKY1mSNi7qdzwJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=riwzQ5Vx; arc=none smtp.client-ip=209.85.161.43
+	 MIME-Version:Content-Type; b=SUc85ZbiPQK7SM8fvZOusFv0w0T4Fz9MZGRu/IvePAq7KPr4IcbkYHWXgmyFnoWkmOMaJJtCwIvQtmQ6DKr0BS/CWHJRzIy6X0gWuh3Dqty5L/8vu+476Haap/2x0uoUYSYe/TK/+q2VDHv4QdLenHUisGUNbrnrwEmMJL4/11g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=U3K7XnS5; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="riwzQ5Vx"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6ae3faeb9c3so1679816eaf.1
-        for <io-uring@vger.kernel.org>; Tue, 04 Aug 2026 06:00:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="U3K7XnS5"
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6acb63301acso693142eaf.0
+        for <io-uring@vger.kernel.org>; Tue, 04 Aug 2026 06:00:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785848439; x=1786453239; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785848444; x=1786453244; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=esQztOvye8C0iC33tB1B7gy5m42vkTB8iGVGoL4MhN8=;
-        b=riwzQ5VxP+U2XzAKTSbMROM5RW1NlJ2ZiNX+ViQzMPjjNhMNzINesB0LUb4h4PoNn2
-         il5GIovQIB2uBX6mFBnYcuJW7g9gjli79fP0/erYrF8EWeI2tsMMruHvLkv9VVu0GulX
-         WxkJeJzm3rZhxGnhyJm7YHEVrX2UMF+tSLVaiYBIf5QsUgWE4l4gWK5WG9OmkRvAeqQZ
-         v7eFLIoS+GaX1dsbguBLQK+qV5rrmJVSmutwgQs0kct4csed3OWrrEs1d0biekYuFxeK
-         HJYfSSUCF0fCVkzfzum+EXc8mitiDZAYabmPLgK74rJbRHwI2s5o4lEZESu+/1damVM7
-         JxKA==
+        bh=CD2iqK/EPaClCBXLVXSOQDWirgcUGjlrzZ6ba7dIsAs=;
+        b=U3K7XnS5EJ+no7sDu2a42bUw0ACXEbrTji+Dv6eml/7SRTrgdzZAC7pbaUgUOLR3fP
+         p6Inr6QZ3HIkhwyAaS91TTsJquOZhWewDh8m/EYt0fWRrXyNW8DHocr0XDNBJp+8ljvD
+         m1AJa/2b0X6g6TjgtmpPOctCacwDrQyKUEGsa2cogSDkO7z1hKPmDUN5/OryZdzBp84s
+         wnLNjQcjhspxtpOqWiirUzk7wZ4360hW8T8Rri08wWJjwdcsTVRX1/TFJuccdK9sGTIT
+         cWp8MBTADuRBi9Ua8052pp6ta2KsCGie/WCHYjeylguXKbd+XyocaRfXt7PT2j/htljS
+         Aarw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785848439; x=1786453239;
+        d=1e100.net; s=20251104; t=1785848444; x=1786453244;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=esQztOvye8C0iC33tB1B7gy5m42vkTB8iGVGoL4MhN8=;
-        b=f9GW3PVB5zTgHoSfN/wA9HVRhx5BpHZohFej8/cPCGX6bo/+W1tie4ZcvhJ0cDWG9+
-         jGuFf7NcW8Vf4rKQMf1U1lA05W3vNxw4G7fsN1kgnfEK+piWsHrvuRLv5+1c3EOZMQd4
-         Rj6rRQlaKVOHptoK/gKF2AQ4C+Kb2zHig25BD4Iu+y8nbBQyQgp3fCMV5o6gS9Xz6OdG
-         /CtvbD5MZc7TSS/fiJbAyEXsg9ocKZXKeFRD6FqsGhmqhG0u3O1JKzdKE9JZ9Xz4tgx6
-         KbPGsOMfolQ+ameVFc3Y3uRFn7p3jsywlTp/j6WiHIeR2BdSluXfXdvCCAGvaGKXWMp8
-         8A+g==
-X-Forwarded-Encrypted: i=1; AHgh+RoC8eb6AdGPyChteYVrdojgEXEDcteTUCCAxCYA+iL9QrtNlqgbor7vlIYQMwK/+tv/xxy3ykfZRw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1jrtb9qXzDGhKO5q+EFIudoinZX8x9iWvO18DmNUTPmsSz/ym
-	VdhIup0yg52zgnwKa9sQurctTD6BLnSzYd4xMsfCwJNC1R1bYQBxFhF5DRkKIsln+w2BUQHaLb4
-	1ChQgdY3IYg==
-X-Gm-Gg: AR+sD12lPcFe8BeF0uBT/ZInJnO42fl0jg1+qbdgRqZ7Co81Gz58U6yPIW552e0zRCl
-	nl7lSaTaAebXVnMioJOou6gd+41sKRl/RBEHgk5nUZRbSNTWcyMgbleqonJrgHgYh4bFC7nUy5T
-	hjFevzn9jVGqZRVG+IvxlxY+Aq1CAmLhfd59yrGuPP9ei1PU5Z/AJ4LAJirGuMsKSdJGWyx5lRP
-	ZKNPDYIg2QMwsIw4ANiC76btpCCknu8DZv+G9OIiEvckvIE7rD3rsUFNNnD9hUEF6sunx2sJT4U
-	TWL7IX2Z82GZGjHnoNquhastyeQuwPokpgTLia4t49uGUxopnxh3VbxKcCj6xgg9DHhg27zY2Vi
-	lejyskS28AaaeFr2bZE78tYdukEFcpTPwEV6MhqID9OLPs0IOKeJs6VSAMCroRbLLObgI0Ch46Y
-	sv+VS408f4dgdm+zMCiLZAi/zhs4uSycOWkrH5KZ7JEBTOqIlu9lck52H957cipQpHAYZgM3DFC
-	7HbYkOUpaMnu90VOAjcQXTDpL85wIaoK2RF8wgbPg==
-X-Received: by 2002:a05:6820:2904:b0:6ac:b3b1:a5a4 with SMTP id 006d021491bc7-6ae42f5c8aamr21094013eaf.0.1785848438610;
-        Tue, 04 Aug 2026 06:00:38 -0700 (PDT)
+        bh=CD2iqK/EPaClCBXLVXSOQDWirgcUGjlrzZ6ba7dIsAs=;
+        b=Nd/hXJF22ksmwxQH4kf8ISql8+sXsT6IT9wnHDlEsDQCD2b/g2iLXtdSfmo9elS0Bf
+         9DSsLw3VYpVe0iVTaJKpRNnzhE7z89XYokKZSzhyf1mCyjj93ZTLaktsMfFynbY3YDyW
+         K6H4fhyRgCNJYevppYwkBB6B65p0w3B23elAYj+y4m3B9Q0y3xRE7OvCCrlCfmYNPJ+b
+         mYOjSn/OcjhOphQpnxu4WnNFWD6Pyor7VzF4HF9o2jpMlcTmREQwrXYXfw/paZysOvwE
+         y4Q4JsHPS7lE5ynHFb60TktWizhAh1at7/IqSI8scm0KqMuSEH4lgIsDaN9/SZkFEv6e
+         y34w==
+X-Forwarded-Encrypted: i=1; AHgh+RqQKOIlBtcl/lJs5x7ZoSPVawUO6AsWxKwX0PpgSndMJuFIR3QyGR7SqxvBj2zJsfEntJ9CTgjkkQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2xaZogfBkSJ6R+2VhNy2B6uCwZn5IIuOyDRGk7eehf5cK5cpJ
+	7s9yul2H+Fixw0RKG+sx/GMTb/lr4Uaymgf2RHFB1rjmZAMzg7R4fjhqOG1o55y2y5E=
+X-Gm-Gg: AR+sD132KnE7h08cl9CKt/k5nsYZn/dWoHUeS1xdJemVNZ0cZP/qtttrwBO/p4c+KOa
+	/WSY9nNyolsVz7fmIyE/dUldyVPKghXbHkH+NyIWjN5bks39gvds7MiXj/Qnk5HnrG05HROPfAp
+	l2G+y00Nxr3ksmaEwWz6HGImdHPuAnd66H7wOXhEPFwe1tk9WDok46z042b/7qpyN/oVKm+jvfe
+	NkwMpAou2xGU2AJqEpR9463btg3Nbu4z296pWEtgaEvckpGahG4k7GvplgCvabv7EASpl8r1MAs
+	RDBr/X25oaZ8LMDtIYmuk8807lDQnLgCdWg2qUnFA+v4zqUUI2ISrA/TNs6AHxNI6Hp+iDKsY3B
+	ArqQ/tBe/6mSFzhCvNHngsOvjxmVXEorGcKdIPOSMzEwE3OJy/q8/O01+AUdWEr/xDecq2v5ImR
+	UqOiYH//w/RKb4puQaGCu4GGgZcmsqxKouQFK0trLOci8U2wP5kEHrsAJ6rdfb3+JvC9klYjobo
+	t8QyNijhezLd8msyFXE7m8UCGo7AxUvB1o0GEoYk+jlI9p87GpJ
+X-Received: by 2002:a05:6820:4de4:b0:6aa:e7f9:fa68 with SMTP id 006d021491bc7-6ae828b8bfdmr4365672eaf.11.1785848439805;
+        Tue, 04 Aug 2026 06:00:39 -0700 (PDT)
 Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6ae93d61482sm61530eaf.7.2026.08.04.06.00.37
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6ae93d61482sm61530eaf.7.2026.08.04.06.00.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 06:00:37 -0700 (PDT)
+        Tue, 04 Aug 2026 06:00:39 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: Christoph Hellwig <hch@lst.de>
-Cc: Damien Le Moal <dlemoal@kernel.org>, linux-block@vger.kernel.org, 
- io-uring@vger.kernel.org
-In-Reply-To: <20260804125038.740388-1-hch@lst.de>
-References: <20260804125038.740388-1-hch@lst.de>
-Subject: Re: add a ZONE_RESET_ALL uring cmd v2 (resend)
-Message-Id: <178584843753.926496.12133768325371025674.b4-ty@b4>
-Date: Tue, 04 Aug 2026 07:00:37 -0600
+Cc: linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-aio@kvack.org, linux-kernel@vger.kernel.org, io-uring@vger.kernel.org, 
+ linux-mm@kvack.org, "Christian Brauner (Amutable)" <brauner@kernel.org>, 
+ Johannes Thumshirn <johannes.thumshirn@wdc.com>
+In-Reply-To: <20260804125524.740996-1-hch@lst.de>
+References: <20260804125524.740996-1-hch@lst.de>
+Subject: Re: [PATCH v2] block: split out a new blk_plug.h header
+Message-Id: <178584843869.926496.8137441533296046276.b4-ty@b4>
+Date: Tue, 04 Aug 2026 07:00:38 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -81,30 +82,20 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Tue, 04 Aug 2026 05:50:16 -0700, Christoph Hellwig wrote:
-> this series adds a new ZONE_RESET_ALL uring cmd, and cleans up the
-> io_uring discard support and the block layer zone management code a
-> little bit in preparation for that.
+On Tue, 04 Aug 2026 05:55:10 -0700, Christoph Hellwig wrote:
+> blkdev.h gets included in various places outside the block layer just
+> for struct blk_plug and related plugging functions.
 > 
-> This command is useful to speed up workloads that need to initialize a
-> large number (or even a small > 1 number) of disks.
+> Split blk_plug into a separate helper to reduce the amount of code
+> that needs to get rebuilt when blkdev.h changes and to slightly
+> reduce compile times.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/6] block: remove a dead return statement in blk_zone_plug_bio
-      commit: 858d0abdb890006af3eb81e53c438d69debf51b1
-[2/6] block: allow REQ_NOWAIT zone management commands
-      commit: 9451934953bf1a4cc8e88179082785f3de5e127a
-[3/6] block: remove blk_zone_wplug_handle_zone_mgmt
-      commit: f3dfaf68ea3691a388dcd4c86c249f4544cfa898
-[4/6] block: also reject zone open / close on conventional zones
-      commit: 13270876ce4eab47a218f31f0081885639011bb9
-[5/6] block: remove most blkdev_cmd_discard arguments
-      commit: b3c5f8d05e68963dea7c0cb9bc60e9e669b5c54e
-[6/6] block: implement async io_uring zone reset all
-      commit: ca8f6548e6f79761cba66ec8cb45bf026da8bf7d
+[1/1] block: split out a new blk_plug.h header
+      commit: 758b86f7bc8a2582d0783f3535854ea05d3ff97d
 
 Best regards,
 -- 
