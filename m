@@ -1,229 +1,257 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8BB3D9545
-	for <io-uring@vger.kernel.org>; Wed,  5 Aug 2026 10:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5496538F633
+	for <io-uring@vger.kernel.org>; Wed,  5 Aug 2026 18:52:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785927551; cv=none; b=G3up+Yhert2KPVgczMFkOYPczFiJdEYoak8JvTOKygfO6Q6uzyQnGbAWQ2dXL7BKZ6TWF6cid8vJkJH7HzUpCMHz36fDYaxyW5VdBhFjTK4j31zn1vpoBUtMLwC8+49XHVBKN1pQlKqNbo9fjBjReJsGd4vroWOYp00duNRqXoI=
+	t=1785955978; cv=none; b=mcYYbGl32MxBqel5Bcxi77lE/ooXUqEcB6gq/TVv4Tzqv50gIDtxg0w0CzM/8IQaJ86zdHUXSmCT9QDc3lhPDHYsPm0L9aZGv7ZTwJHxnDQDm+gWr8rBd2SOS/qU5PzKuPZzsou6dSx/b3+rVg4h5CeNSBUa+jDMOsSC9BhGUwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785927551; c=relaxed/simple;
-	bh=/1dtEFjUK+P0pvRVxCDasuHqjQBqBeraGQRhegPMj5o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B3uFgPGoYMM4dwS4rmiv1y+E16Dv5DI2UhqlIzwWHY6IuI9iK3ecUT8IFMe8w/it85rhMDd5DdCAR+oKhFJa3lvblQq86fTH0LD4d4sbp3J/Se7MePvfg31IKt5gAtaiPpouyiwqaglYlWJLZQnTXLhnjczXJZvTf0nS2K4W7zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZEXOh1K; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785955978; c=relaxed/simple;
+	bh=rbsn9P+gKA+o3Tr+4GZbwEkAXE8EOvtMyy4vULhfehM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qS5/AL1UD7SocdxjaY4PWXyaGBOv5O4y9RNbFgcfaKbKDrS9ERHIicVtEenOf25Sa60Xk+Jiw9u/yiXjVUFVc6A0QvRw4CgJi5l4hQQuvXw/aQKNpx9N6odr91VPaMva9f4qr7wa8TLYL2bpIM0pazbOla3EGnPH6hnSRoNDmw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TOjkINrl; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0nNnfzht; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=DrWZyvaZ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=lQNUxJCG; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZEXOh1K"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4955aa106b1so7636085e9.0
-        for <io-uring@vger.kernel.org>; Wed, 05 Aug 2026 03:59:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785927546; x=1786532346; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qChqnXEV/RUrII3F6FtB3OpL17H6S0GQj9i1G4DFOPk=;
-        b=SZEXOh1KpuYJfaF3im7hVoma9sONKG+vqzLlaf7ooZ3+DAVgQF2n8nHiu3IBzKzRRw
-         dp61JCqy4D2c2x5T+fFsho0Kc4LPfYzRhYnaRPQxTWRUmJNY2O3uEtNUJ9g0jtsQzB78
-         acwHo/V/p7Z+a/CycbdYZGZ0/BQXrBPXtv82DmWLOJ6CXmegiDSc5Vpr9pIheKRjGqMF
-         r+UcPmzDpbWcI8H13x2BkfrjOdsL8Xsy75IrRzcWKT2gi+twbWrzsVK/oIe0qJM2wJoa
-         yEryF/AJxdc6tNkssc5mLthTAMvFEWY1cWRMtRboKcJGJ7HfUeRlxV4Ne690/an9Vv8/
-         6wYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785927546; x=1786532346;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qChqnXEV/RUrII3F6FtB3OpL17H6S0GQj9i1G4DFOPk=;
-        b=RxQ/V406fE6TwCDLWWquiWg2KuBdO4JmdPqqMhlLr8MdjwrWPuaWTCvi9OLUk/qpzJ
-         z0tF6sqdjJ3uRwEhNCMpEBDyaFU113k+EPURCqGFIZspTqxJL/7ss/H38jp5vLRDnN78
-         yoZqN9BtU1aC+1JccI65T9SCOu0V5ADDAWNb2IcACqwUhhbegr0jZjQFUlOesjPiFO+l
-         1sdtjRI2NmbD/opXzYq2xVzn7VMVFQ7iWD2rRbqR4tKPdBGGsKTjrPx+Dz51cr/ts0ae
-         gYkSbAXggRaiWgRcap62qBh5qSFFyIo7INIReD+06/x2cfKK7Z14gB6q3a0HqhDmOlF6
-         5vlg==
-X-Forwarded-Encrypted: i=1; AHgh+Rq9AuDS0rVO/ZjUFJVL/ALttbTY9RFfbRqrgztxriMVvJttyslwf8z2UIwS2yhIQbUVr5PnW7JaQg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYoW6wC0I9dxHZ7UOOJWhP+wF52D95P7ZeToXz8lG9hfEEhLt3
-	AQScqOLAbdeY2EzZZjqASZdvcfT6NvWNAwX0JCb6kBMZWaCEO+CT76M3
-X-Gm-Gg: AR+sD12Y5pdBoxlfwpOe9JWWErB68O/RlFujOqBK0m/LBDzm788Vz/GH1k5ib2fhpuo
-	tBjoD2A9poRzd5s6HdhJqtr4cw8vQqcfYkx2txwRZxIqQwOjUat1allY8eoUAU9s0S0Lo3KRqo/
-	2F7zW5CAMRQBn6KU9i46m7kIdtiAb1PApIZuP95fzbT02imrMmp5zPxvzRb1p82gq4gDSAY5vt4
-	dgK9nWDGfwzrCBAjZREHPOi7ML83wzBgrMdwo16Z5Gr7kRG6u4FhN4XnwEYxTsvxiWlLR7eB5Bw
-	SQkPXBqPdHKhyij4jSX+vl3G3lucJziLHEs8+o7j09+F17X5XLqADXKPp0dtDXtqYuz8HXl1LrZ
-	rNt8FrtHkcb9Ylr/UwaWcu73gr6Sxz7XqLTD7PRgiamPH9CWjqsfub5D7OfNOuUaV150al0zz46
-	3nbNwCdx7Ilvk6YFg/n47iALRpPfUbuqW/I6dS8MM2lvuoDsKw5cI3DIoZyO7d6XG7V7rIFlMQw
-	cZu06m00UGXwyocIEqpJLBxxjtG9aJUZatmfNUyib2WkvZ7pSmMIcMPrrMo/OBkJmhLLFo+MWaN
-	/D7tmqkD1jw+wuxWoc83k/ZtniRxJ5iRsUeIKlLvoC6M8gDC
-X-Received: by 2002:a05:600c:4e94:b0:497:ff73:68d5 with SMTP id 5b1f17b1804b1-4994e6c5eafmr60022735e9.0.1785927545848;
-        Wed, 05 Aug 2026 03:59:05 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994e035900sm80665575e9.11.2026.08.05.03.59.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Aug 2026 03:59:05 -0700 (PDT)
-Message-ID: <8285ede8-bebb-403a-8a37-b9987cd37a8f@gmail.com>
-Date: Wed, 5 Aug 2026 11:59:10 +0100
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TOjkINrl";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0nNnfzht";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DrWZyvaZ";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="lQNUxJCG"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 806F13DF5;
+	Wed,  5 Aug 2026 18:52:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1785955969; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iyqb/xkjQRl1szGhu91z2+cUbF0QrEb83h4LOLyLHD0=;
+	b=TOjkINrlBPJ0cdInjfciG2bWiSbQT4ING2FvzSFhxBnSIohaUci7JHzlXTsuP1IoWOp3JG
+	AgDRfgbTmbmkEzVKu5LRf8QYU/WqHdpXByERa7edzR7Fpxj0ImqRlR5ISJ3JNrwTa47EdI
+	Kaas/is5axhDTKK0Y6974TE5B+fRpaM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1785955969;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iyqb/xkjQRl1szGhu91z2+cUbF0QrEb83h4LOLyLHD0=;
+	b=0nNnfzhtaDnLchIdtDs8fj4OxZJTdKtf8CRGo8JBmcW8tBc1gKWhPqeK90bS4QSDmf7Kci
+	qeF1hbI0LeN1a/Dw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1785955965; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iyqb/xkjQRl1szGhu91z2+cUbF0QrEb83h4LOLyLHD0=;
+	b=DrWZyvaZkmHT1haT2FWZq25JquG/gYGcmmCSQhY3oUdRhMunlVZc3Qejx+VBG52WPhhUBh
+	z5dpQ1WaLWJ9iP0LFKY22B6eNi025dQp0hW/+bTrTXzfSKi8O3uDCK1BZEJldiNnhKtwMT
+	y3ROJCLfjTbTYb9VKqbQe5YGALG9Kvw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1785955965;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=iyqb/xkjQRl1szGhu91z2+cUbF0QrEb83h4LOLyLHD0=;
+	b=lQNUxJCGZHlLFMGvxuzDZG10brSTCZ90wZsxswtSiOBtcu9yH48Nv4DhucrpDwmHJ02om+
+	MBOl6AWv1aoa/sDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 45235779C2;
+	Wed,  5 Aug 2026 18:52:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id t/G2BH2Gc2rwagAAD6G6ig
+	(envelope-from <krisman@suse.de>); Wed, 05 Aug 2026 18:52:45 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: axboe@kernel.dk
+Cc: io-uring@vger.kernel.org,
+	Gabriel Krisman Bertazi <krisman@suse.de>
+Subject: [PATCH liburing] man/io_uring_submit*.3: Point to error code documentation
+Date: Wed,  5 Aug 2026 14:52:37 -0400
+Message-ID: <20260805185237.371164-1-krisman@suse.de>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/14] dma-buf: introduce initial file I/O
- infrastructure
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Nitesh Shetty
- <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
- Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>,
- William Power <william.power@intel.com>, Phil Cayton
- <phil.cayton@intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Damien Le Moal <dlemoal@kernel.org>, Alasdair Kergon <agk@redhat.com>,
- Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
- Benjamin Marzinski <bmarzins@redhat.com>,
- Vishal Verma <vishal.l.verma@intel.com>, David Sterba <dsterba@suse.com>,
- Ilya Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev,
- nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org,
- ceph-devel@vger.kernel.org
-References: <cover.1785274111.git.asml.silence@gmail.com>
- <bc20381e8daf85ac58811c344325d8192cde9d1e.1785274111.git.asml.silence@gmail.com>
- <181b08be-04bc-4ae9-bb88-15321a82440f@amd.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <181b08be-04bc-4ae9-bb88-15321a82440f@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCPT_COUNT_THREE(0.00)[3];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
+X-Spam-Level: 
 
-On 8/5/26 09:27, Christian König wrote:
-...>> +struct dma_buf_io_fence {
->> +	struct dma_fence base;
->> +	spinlock_t lock;
->> +};
-> 
-> Upstream has change to allow embedding the spinlock into the dma_fence, so this structure here is most likely not necessary any more.
+There's an open issue in gh asking about the possible error codes
+returned by io_uring_submit.  Add pointers to io_uring_enter(2) in all
+io_uring_submit* variants where the error codes are explained in
+detail.  The minor exception are _wait_timeout, wait_and_reg and
+wait_min_timeout, where there are more error codes to be described.
 
-ok
+Closes: https://github.com/axboe/liburing/issues/1511
+Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
+---
+ man/io_uring_submit.3                      |  7 ++++++-
+ man/io_uring_submit_and_get_events.3       |  7 ++++++-
+ man/io_uring_submit_and_wait.3             |  7 ++++++-
+ man/io_uring_submit_and_wait_min_timeout.3 | 11 +++++++----
+ man/io_uring_submit_and_wait_reg.3         |  7 +++++--
+ man/io_uring_submit_and_wait_timeout.3     | 15 ++++++++++-----
+ 6 files changed, 40 insertions(+), 14 deletions(-)
 
->> +static const char *dma_buf_io_fence_drv_name(struct dma_fence *fence)
->> +{
->> +	/* default fence release kfree's the base pointer */
->> +	BUILD_BUG_ON(offsetof(struct dma_buf_io_fence, base));
->> +
->> +	return "dma-buf-io-ctx";
->> +}
-...>> +static void dma_buf_io_map_release_work(struct work_struct *work)
->> +{
->> +	struct dma_buf_io_map *map = container_of(work, struct dma_buf_io_map,
->> +						  release_work);
->> +	struct dma_buf_io_fence *fence = map->fence;
->> +	struct dma_buf_io_ctx *ctx = map->ctx;
->> +	struct dma_buf *dmabuf = ctx->dmabuf;
->> +
->> +	/* the release path must wait for fences */
->> +	if (WARN_ON_ONCE(refcount_read(&ctx->refs) == 0))
->> +		return;
-> 
-> Stuff like that is usually illegal.
-
-Should be fine, it's just a warning. The map holds a ctx
-reference so can't be 0. IIRC, it was synchronised a bit
-differently before. I can kill it, refcount_inc() has the
-same warning anyway.
-
-> And why are you using refcount directly instead of kref?
-
-Not sure it'd make much difference here.
-
-> 
->> +
->> +	/* Prevent from destoying the ctx while unmapping */
->> +	refcount_inc(&ctx->refs);
-> 
->> +
->> +	/*
->> +	 * There are no more requests using the map, we can signal the fence.
->> +	 * It should be done before taking the resv lock as someone could be
->> +	 * waiting for the fence while holding the lock.
->> +	 */
->> +	dma_fence_signal(&fence->base);
-> 
-> Signaling fences has a whole bunch of very strict rules associated with it. E.g. you can't alocate memory for example.
-> 
-> Are you sure you actually need and want a dma_fence here?
-
-Waiting for potentially a ton of IO synchronously on invalidate
-sounds like a bad idea though. Hmm.
-
->> +
->> +	dma_resv_lock(dmabuf->resv, NULL);
->> +	ctx->dev_ops->unmap(ctx, map);
->> +	dma_resv_unlock(dmabuf->resv);
->> +
->> +	dma_fence_put(&fence->base);
-> 
-> You should probably set map->fence to NULL after that.
-
-The map is freed two lines below, but I can add it as
-a defensive measure.
-
->> +	percpu_ref_exit(&map->refs);
->> +	kfree(map);
-
-...>> +struct dma_buf_io_map *dma_buf_io_create_map(struct dma_buf_io_ctx *ctx)
->> +{
->> +	struct dma_buf *dmabuf = ctx->dmabuf;
->> +	struct dma_buf_io_map *map;
->> +	long ret;
->> +
->> +retry:
->> +	/*
->> +	 * ->dmabuf_map() will be calling dma_buf_map_attachment(), for which
->> +	 * we'll need to wait for fences. Do a bit nicer and try to wait
->> +	 * without the resv lock first.
->> +	 */
-> 
-> Clear NAK to that. Always wait while holding the resv lock if you can!
-> 
-> It is absolutely not beneficial to do this outside of the lock and usually just hides problems instead and prevent fixing them.
-
-Ok
-
-...
->> +	ret = dma_resv_reserve_fences(dmabuf->resv, 1);
->> +	if (WARN_ON_ONCE(ret)) {
->> +		struct dma_fence *fence = &map->fence->base;
->> +
->> +		dma_fence_get(fence);
->> +		percpu_ref_kill(&map->refs);
->> +		dma_fence_wait(fence, false);
->> +		dma_fence_put(fence);
->> +		return;
->> +	}
->> +
->> +	dma_resv_add_fence(dmabuf->resv, &map->fence->base,
->> +			   DMA_RESV_USAGE_KERNEL);
-> 
-> That sequence is clearly incorrect!
-> 
-> The fence must be created after dma_resv_reserve_fences(), otherwise you definately have an illegal memory operation here.
-
-I'm not sure what you mean, can you elaborate? I only cared about
-pre-allocating it to avoid allocations here. We add / signal the fence
-only once, no reuse. The map is going to be killed here, and if we
-create a new map, it'll have its own fence.
-
-I can move the dma_fence_init() call here if that makes a difference?
-
+diff --git a/man/io_uring_submit.3 b/man/io_uring_submit.3
+index c7dbbed2..b78f0e63 100644
+--- a/man/io_uring_submit.3
++++ b/man/io_uring_submit.3
+@@ -33,6 +33,10 @@ about how many submission queue entries have been successfully submitted, while
+ using SQPOLL, the user must fall back to repeatedly submitting a single submission
+ queue entry. On failure it returns
+ .BR -errno .
++See
++.BR io_uring_enter (2)
++for details on the possible error codes returned by
++.BR io_uring_submit (3) .
+ .SH NOTES
+ For any request that passes in data in a struct, that data must remain
+ valid until the request has been successfully submitted. It need not remain
+@@ -48,4 +52,5 @@ mentioning this fact as well, if required for the given command.
+ .SH SEE ALSO
+ .BR io_uring_get_sqe (3),
+ .BR io_uring_submit_and_wait (3),
+-.BR io_uring_submit_and_wait_timeout (3)
++.BR io_uring_submit_and_wait_timeout (3),
++.BR io_uring_enter (2)
+diff --git a/man/io_uring_submit_and_get_events.3 b/man/io_uring_submit_and_get_events.3
+index 9e143d1d..a30d7966 100644
+--- a/man/io_uring_submit_and_get_events.3
++++ b/man/io_uring_submit_and_get_events.3
+@@ -26,6 +26,11 @@ On success
+ .BR io_uring_submit_and_get_events (3)
+ returns the number of submitted submission queue entries. On failure it returns
+ .BR -errno .
++See
++.BR io_uring_enter (2)
++for details on the possible error codes returned by
++.BR io_uring_submit_and_get_events (3) .
+ .SH SEE ALSO
+ .BR io_uring_submit (3),
+-.BR io_uring_get_events (3)
++.BR io_uring_get_events (3),
++.BR io_uring_enter (2)
+diff --git a/man/io_uring_submit_and_wait.3 b/man/io_uring_submit_and_wait.3
+index 2351f335..4a642875 100644
+--- a/man/io_uring_submit_and_wait.3
++++ b/man/io_uring_submit_and_wait.3
+@@ -37,8 +37,13 @@ On success
+ .BR io_uring_submit_and_wait (3)
+ returns the number of submitted submission queue entries. On failure it returns
+ .BR -errno .
++See
++.BR io_uring_enter (2)
++for details on the possible error codes returned by
++.BR io_uring_submit_and_wait (3) .
+ .SH SEE ALSO
+ .BR io_uring_queue_init_params (3),
+ .BR io_uring_get_sqe (3),
+ .BR io_uring_submit (3),
+-.BR io_uring_submit_and_wait_timeout (3)
++.BR io_uring_submit_and_wait_timeout (3),
++.BR io_uring_enter (2)
+diff --git a/man/io_uring_submit_and_wait_min_timeout.3 b/man/io_uring_submit_and_wait_min_timeout.3
+index 6a52806f..1812809f 100644
+--- a/man/io_uring_submit_and_wait_min_timeout.3
++++ b/man/io_uring_submit_and_wait_min_timeout.3
+@@ -106,14 +106,17 @@ returns the number of submitted submission queue entries. On failure it returns
+ If the kernel doesn't support this functionality,
+ .BR -EINVAL
+ will be returned. See note on the feature flag.
+-The most common failure case is not receiving a completion within the specified
+-timeout,
++See
++.BR io_uring_enter (2)
++for details on the other possible error codes.  In addition to those, this
++function can also return
+ .B -ETIME
+-is returned in this case.
++if a completion was not received within the specified timeframe.
+ .SH SEE ALSO
+ .BR io_uring_queue_init_params (3),
+ .BR io_uring_get_sqe (3),
+ .BR io_uring_submit (3),
+ .BR io_uring_submit_and_wait (3),
+ .BR io_uring_submit_and_wait_timeout (3),
+-.BR io_uring_wait_cqe (3)
++.BR io_uring_wait_cqe (3),
++.BR io_uring_enter (2)
+diff --git a/man/io_uring_submit_and_wait_reg.3 b/man/io_uring_submit_and_wait_reg.3
+index fc0bd76a..f82e432a 100644
+--- a/man/io_uring_submit_and_wait_reg.3
++++ b/man/io_uring_submit_and_wait_reg.3
+@@ -56,9 +56,12 @@ If the kernel doesn't support this functionality,
+ will be returned. If no events are submitted and the wait operation times
+ out, then
+ .BR -ETIME
+-will be returned.
++will be returned.  Otherwise, see
++.BR io_uring_enter (2)
++for details on the remaining possible error codes.
+ 
+ .SH SEE ALSO
+ .BR io_uring_register_region (3) ,
+ .BR io_uring_submit_and_wait_min_timeout (3) ,
+-.BR io_uring_submit_and_wait_timeout (3)
++.BR io_uring_submit_and_wait_timeout (3) ,
++.BR io_uring_enter (2)
+diff --git a/man/io_uring_submit_and_wait_timeout.3 b/man/io_uring_submit_and_wait_timeout.3
+index 74611766..20fe03ae 100644
+--- a/man/io_uring_submit_and_wait_timeout.3
++++ b/man/io_uring_submit_and_wait_timeout.3
+@@ -60,15 +60,20 @@ On success
+ .BR io_uring_submit_and_wait_timeout (3)
+ returns the number of submitted submission queue entries. On failure it returns
+ .BR -errno .
++See
++.BR io_uring_enter (2)
++for details on the possible error codes.  In addition to those, this
++function can also return
++.B -ETIME
++if a completion was not received within the specified timeframe, or
++.B -EAGAIN
++if the queue was full and it couldn't queue the timeout request.
+ Note that in earlier versions of the liburing library, the return value was 0
+ on success.
+-The most common failure case is not receiving a completion within the specified
+-timeout,
+-.B -ETIME
+-is returned in this case.
+ .SH SEE ALSO
+ .BR io_uring_queue_init_params (3),
+ .BR io_uring_get_sqe (3),
+ .BR io_uring_submit (3),
+ .BR io_uring_submit_and_wait (3),
+-.BR io_uring_wait_cqe (3)
++.BR io_uring_wait_cqe (3),
++.BR io_uring_enter (2)
 -- 
-Pavel Begunkov
+2.55.0
 
