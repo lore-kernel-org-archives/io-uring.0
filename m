@@ -1,109 +1,198 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D754E3DDDD1;
-	Thu,  6 Aug 2026 08:51:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E6B427FB2
+	for <io-uring@vger.kernel.org>; Thu,  6 Aug 2026 09:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786006300; cv=none; b=uTSpsNBiHbIkEBRJZtGSc3zS2QG+Jfb+JHu7ThkpYNSG/QGWpcbHEdnbe1Uufio6Um7hht+MSllqczfL7hxskK+WyDoQmJgz6xl0nfGXrT3GuOW1Ww9kR3y07onc1Z4s7zxjpNgwUFgRGoCLwAh7EVHFAODjX2XcG+Qp4iHn9ng=
+	t=1786007425; cv=none; b=HMzwMUyPYIHF9uBARFOYM/6W85kmEiYsvEK9mmg4bv7QHdtDsLnSkYreuxZsX5hy0OyuVKaIzhhnRF65kEwpVNdMPpbyGXMDgcbkKO+PZAkgOjGmDHyw2r/kM9fAaBazHUSxTbjoGL13ZH2A+Y5Sng4F+Ft1enDdI285zk3WKYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786006300; c=relaxed/simple;
-	bh=Im/Ms/iMEeJEid+fXr3LhiLKYI3NdybImUMBj7zpzG8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=o+7g38Ba4ftkO7k4Dl86iATFjbIfhQxJHDlw/QkPnPA7xvVZMR3WiW0L6dh84p2pjwVJukvRDjplpFSm+oTfUFvfLut/rAG5qanJc7sqiDNaQbcYiih928cu791m8AfNSpnrrkn0ds1jMMngCs4VjjwDdyFSqQftngT1HitqqhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=lRG4e1GF; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786007425; c=relaxed/simple;
+	bh=7G++yVM850WACl/SY6RzM4/AnpU60dkSeWAOSsjF/Ds=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GaE5pjwCWIbF6evRkgfOagNHXT38kQBO1gUzdNdrkAQOqUWG/uZa4LMVMe1AwQfkKVrb+cuGTzCQfbtgVZaukfXFXkYVEBOWoQr5ceHemTXSjMXv/MkuxUfa2MEOQu3gOoiDU1LfFw/TN5yYydjXQrn62VE0rYWVVFlajvcfONg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=QYPDehb7; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lRG4e1GF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=WG
-	wqu3iaLyjczKS1gm1uSbNl8hnv5+61oZ8Rzt0KTtI=; b=lRG4e1GFlI2BwBUho8
-	KXOYh37qfSqZ8HnUDfi/AV/INfITz3mAByIA6gjUYJ0gpNaaC8jBOe8SMWl3JG6x
-	XmWA4/rwoyTNKi42cTWx1w/AkfaqLCypn5psQsyG62zPvS727V8Rc2WwC+7eQ+ak
-	PR5UIE6ViofC4PxXXnZfezi4k=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wDXGqvjSnRqmYLmMA--.78S6;
-	Thu, 06 Aug 2026 16:50:53 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: Chris Mason <clm@fb.com>,
-	David Sterba <dsterba@suse.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Mark Harmstone <maharmstone@fb.com>,
-	Qu Wenruo <quwenruo.btrfs@gmx.com>,
-	linux-btrfs@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Subject: [PATCH v2 4/7] btrfs: use IO_URING_F_COMPAT for uring encoded iovec import
-Date: Thu,  6 Aug 2026 16:50:38 +0800
-Message-Id: <20260806085041.1410576-5-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260806085041.1410576-1-yangxiuwei@kylinos.cn>
-References: <20260806085041.1410576-1-yangxiuwei@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QYPDehb7"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-495757ccbc1so20473155e9.2
+        for <io-uring@vger.kernel.org>; Thu, 06 Aug 2026 02:10:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1786007420; x=1786612220; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=S4yMZH32nJIYDfBv8jXcdhwhM4mQya/pkJRPHRaGp/I=;
+        b=QYPDehb7OmdfNLaCntDGpdox9SD0fLWIgdR685XCsAYW7qrG2VRsauUpFBzFYJsK1X
+         JDXgArm+VqpyRhwVG0JvF4+Y0imJ1dkPwApwiXX7L8A2a1g6h1ynMCAg8g1Qu5LmemPV
+         pPJy0w/p6I3lMRQVkRnxzNFfhxtXv/FVklNJLeXrdcqUlZLKn0gp62B5mSBXFg+kIBjN
+         6DakEHd836hkF1SUWBrGOuH7mSZPTLvwTqSrUYBtyzINyTU87eBurrGVMitYyCZnLio2
+         7sP/mXpvChYhjKfcf631Hv0ryrxlHb4CnWfFAbTKlA+Aa/qcy6lFOXx7C9crzCiKZSgA
+         OoDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786007420; x=1786612220;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=S4yMZH32nJIYDfBv8jXcdhwhM4mQya/pkJRPHRaGp/I=;
+        b=k05L7AWmI/APAJ3Xo9FZCGlzlXLv/Or1RKbum07upfvg4nH+bRZyK3O8iBKwkzgjUr
+         P9vfycDSxOScBCdQbq9CUef/D713P4porecu3ludjcJfncHEDw+74ZMgdVnGFH/GnWVY
+         JqrtJVDLKHjp90geczac/bILCcpy8mO7k7C2QxwNUTKrlzHfpLzu8Jj19petaW6PK5ah
+         Nc4ZCWDJstZOQ8LIwVLEnuqiCHVq5yss+0OO6HmjvLsqnjBTvO5ezrs90W7mHElaQd5i
+         L1lkmrE54Dq6Bv5crIQQEThazVa93xFomLN7ecR8fhro9EBRmKHRdwfDAZc8jin23V3W
+         Z/4A==
+X-Forwarded-Encrypted: i=1; AHgh+RrDFquCru7klF8iePzcsS3o/HDM67vf6ReomS0AObQTXFea9UAp71M5wB2SFcHZFL13KaOglnZtRw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/ffjBmwLbb9/tTrcikLf9LOBH0S1TLSV0qdyXN2vxe/y3X2a8
+	DndOSjmfWCosmNqFwdqGfgEbihTT+6zHBniqj3EbGj3J/sLQy4K3xmdX20rP9M70oGo=
+X-Gm-Gg: AR+sD11m7vCpyy1+DoThfbAcGIgdScKgfJ/gDRLKB+uilq04Qjt8xGKYchIcG9EyYP/
+	RxLWYq6+MZawZk00qL+zKwAvImJQqUc1hw2q6KRBQlUOik7rbzRPr+udFumk5uhhZFFeRgC0mcl
+	e4ljaHNQFmQM+7lhCoNVYXYDQPIWcJrloMRonOFtjJ7sjbqQjkxfWy2ouK0yf2083vyU3Eb5fjd
+	HQYiNiyAxKKiwE775rKnd/oy34qtkARgUdpXka1pFWghUo2QCNz3OswrQb705tzKt6D2+sMSCNZ
+	OZCQF/1wmkzPyZ+UBP0XMxkieLDZCIBtlIl/2sh+tjSw9D0klgnE560xc5dF3d/1wzvRCVlOGjN
+	2ZQSlH1iVm2D5pDhZK3pPTLgBc/E0PYSP/ljSQv8A6yq2mLr3XTiQf4Tpq0nRphpqPX0sWBuNIY
+	Fi9PW6jRV9GRr+pdF7jIJlkeF42SV4nHoqLaqTqPKzkS3LT9zBtKDOcw==
+X-Received: by 2002:a05:600c:a597:b0:499:4d50:7230 with SMTP id 5b1f17b1804b1-4994e7d9c03mr109493145e9.18.1786007419802;
+        Thu, 06 Aug 2026 02:10:19 -0700 (PDT)
+Received: from [172.16.0.229] ([159.196.52.54])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31586401507sm25592325eec.9.2026.08.06.02.10.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2026 02:10:18 -0700 (PDT)
+Message-ID: <2f43370d-0319-479d-998e-8cf09c84675f@suse.com>
+Date: Thu, 6 Aug 2026 18:40:10 +0930
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/7] btrfs: unlock inode and extent in caller when
+ uring read extent fails
+To: Yang Xiuwei <yangxiuwei@kylinos.cn>, Chris Mason <clm@fb.com>,
+ David Sterba <dsterba@suse.com>, Andrew Morton <akpm@linux-foundation.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Mark Harmstone <maharmstone@fb.com>, Qu Wenruo <quwenruo.btrfs@gmx.com>,
+ linux-btrfs@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org
+References: <20260806085041.1410576-1-yangxiuwei@kylinos.cn>
+ <20260806085041.1410576-6-yangxiuwei@kylinos.cn>
+Content-Language: en-US
+From: Qu Wenruo <wqu@suse.com>
+Autocrypt: addr=wqu@suse.com; keydata=
+ xsBNBFnVga8BCACyhFP3ExcTIuB73jDIBA/vSoYcTyysFQzPvez64TUSCv1SgXEByR7fju3o
+ 8RfaWuHCnkkea5luuTZMqfgTXrun2dqNVYDNOV6RIVrc4YuG20yhC1epnV55fJCThqij0MRL
+ 1NxPKXIlEdHvN0Kov3CtWA+R1iNN0RCeVun7rmOrrjBK573aWC5sgP7YsBOLK79H3tmUtz6b
+ 9Imuj0ZyEsa76Xg9PX9Hn2myKj1hfWGS+5og9Va4hrwQC8ipjXik6NKR5GDV+hOZkktU81G5
+ gkQtGB9jOAYRs86QG/b7PtIlbd3+pppT0gaS+wvwMs8cuNG+Pu6KO1oC4jgdseFLu7NpABEB
+ AAHNGFF1IFdlbnJ1byA8d3F1QHN1c2UuY29tPsLAlAQTAQgAPgIbAwULCQgHAgYVCAkKCwIE
+ FgIDAQIeAQIXgBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJnEXVgBQkQ/lqxAAoJEMI9kfOh
+ Jf6o+jIH/2KhFmyOw4XWAYbnnijuYqb/obGae8HhcJO2KIGcxbsinK+KQFTSZnkFxnbsQ+VY
+ fvtWBHGt8WfHcNmfjdejmy9si2jyy8smQV2jiB60a8iqQXGmsrkuR+AM2V360oEbMF3gVvim
+ 2VSX2IiW9KERuhifjseNV1HLk0SHw5NnXiWh1THTqtvFFY+CwnLN2GqiMaSLF6gATW05/sEd
+ V17MdI1z4+WSk7D57FlLjp50F3ow2WJtXwG8yG8d6S40dytZpH9iFuk12Sbg7lrtQxPPOIEU
+ rpmZLfCNJJoZj603613w/M8EiZw6MohzikTWcFc55RLYJPBWQ+9puZtx1DopW2jOwE0EWdWB
+ rwEIAKpT62HgSzL9zwGe+WIUCMB+nOEjXAfvoUPUwk+YCEDcOdfkkM5FyBoJs8TCEuPXGXBO
+ Cl5P5B8OYYnkHkGWutAVlUTV8KESOIm/KJIA7jJA+Ss9VhMjtePfgWexw+P8itFRSRrrwyUf
+ E+0WcAevblUi45LjWWZgpg3A80tHP0iToOZ5MbdYk7YFBE29cDSleskfV80ZKxFv6koQocq0
+ vXzTfHvXNDELAuH7Ms/WJcdUzmPyBf3Oq6mKBBH8J6XZc9LjjNZwNbyvsHSrV5bgmu/THX2n
+ g/3be+iqf6OggCiy3I1NSMJ5KtR0q2H2Nx2Vqb1fYPOID8McMV9Ll6rh8S8AEQEAAcLAfAQY
+ AQgAJgIbDBYhBC3fcuWlpVuonapC4cI9kfOhJf6oBQJnEXWBBQkQ/lrSAAoJEMI9kfOhJf6o
+ cakH+QHwDszsoYvmrNq36MFGgvAHRjdlrHRBa4A1V1kzd4kOUokongcrOOgHY9yfglcvZqlJ
+ qfa4l+1oxs1BvCi29psteQTtw+memmcGruKi+YHD7793zNCMtAtYidDmQ2pWaLfqSaryjlzR
+ /3tBWMyvIeWZKURnZbBzWRREB7iWxEbZ014B3gICqZPDRwwitHpH8Om3eZr7ygZck6bBa4MU
+ o1XgbZcspyCGqu1xF/bMAY2iCDcq6ULKQceuKkbeQ8qxvt9hVxJC2W3lHq8dlK1pkHPDg9wO
+ JoAXek8MF37R8gpLoGWl41FIUb3hFiu3zhDDvslYM4BmzI18QgQTQnotJH8=
+In-Reply-To: <20260806085041.1410576-6-yangxiuwei@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDXGqvjSnRqmYLmMA--.78S6
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF4xKr1DCFy3tw1fZF13urg_yoW8Cr4Dpr
-	yYkr43JFWDArsFyrykAay09w18ursIkayDC34xAF1xJryYyryftr4xKas5KFy0yFWkA3WU
-	tryjvr90yw4qvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j53ktUUUUU=
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwg2FFmp0Su18iQAA3Q
 
-The uring encoded paths select args32 from IO_URING_F_COMPAT, but then
-call import_iovec() for the iovec array. import_iovec() keys off
-in_compat_syscall(), which is false when first issued from SQPOLL or
-io-wq, so a compat ring can misread the iovec list as native layout.
 
-Pass the same IO_URING_F_COMPAT flag into __import_iovec() instead.
 
-Fixes: 34310c442e17 ("btrfs: add io_uring command for encoded reads (ENCODED_READ ioctl)")
-Fixes: e32dcdb0af9f ("btrfs: add io_uring interface for encoded writes")
-Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
----
- fs/btrfs/ioctl.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+在 2026/8/6 18:20, Yang Xiuwei 写道:
+> btrfs_uring_read_extent() runs only after btrfs_encoded_read() has
+> taken the inode shared lock and the extent lock.  On failure it used to
+> unlock in out_fail, and a pages-array allocation failure returned
+> -ENOMEM without unlocking at all.
+> 
+> Unlock in the caller instead, matching the copy_to_user() error path.
+> out_fail only frees the local priv/pages allocations, and the pages
+> array failure joins that path.
+> 
+> Fixes: 34310c442e17 ("btrfs: add io_uring command for encoded reads (ENCODED_READ ioctl)")
+> Suggested-by: Qu Wenruo <quwenruo.btrfs@gmx.com>
+> Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
+> ---
+>   fs/btrfs/ioctl.c | 21 ++++++++++++---------
+>   1 file changed, 12 insertions(+), 9 deletions(-)
+> 
+> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
+> index 939c4a9d47b6..b576887469bb 100644
+> --- a/fs/btrfs/ioctl.c
+> +++ b/fs/btrfs/ioctl.c
+> @@ -4552,7 +4552,7 @@ static void btrfs_uring_read_finished(struct io_tw_req tw_req, io_tw_token_t tw)
+>   	size_t page_offset;
+>   	ssize_t ret;
+>   
+> -	/* The inode lock has already been acquired in btrfs_uring_read_extent.  */
+> +	/* The inode lock has already been acquired in btrfs_encoded_read(). */
+>   	btrfs_lockdep_inode_acquire(inode, i_rwsem);
+>   
+>   	if (priv->err) {
+> @@ -4618,7 +4618,6 @@ static int btrfs_uring_read_extent(struct kiocb *iocb, struct iov_iter *iter,
+>   				   struct iovec *iov, struct io_uring_cmd *cmd)
+>   {
+>   	struct btrfs_inode *inode = BTRFS_I(file_inode(iocb->ki_filp));
+> -	struct extent_io_tree *io_tree = &inode->io_tree;
+>   	struct page **pages = NULL;
+>   	struct btrfs_uring_priv *priv = NULL;
+>   	unsigned long nr_pages;
+> @@ -4626,8 +4625,10 @@ static int btrfs_uring_read_extent(struct kiocb *iocb, struct iov_iter *iter,
+>   
+>   	nr_pages = DIV_ROUND_UP(disk_io_size, PAGE_SIZE);
+>   	pages = kzalloc_objs(struct page *, nr_pages, GFP_NOFS);
+> -	if (!pages)
+> -		return -ENOMEM;
+> +	if (!pages) {
+> +		ret = -ENOMEM;
+> +		goto out_fail;
 
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index 39bd9788e895..939c4a9d47b6 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -4759,9 +4759,10 @@ static int btrfs_uring_encoded_read(struct io_uring_cmd *cmd, unsigned int issue
- 		}
- 
- 		data->iov = data->iovstack;
--		ret = import_iovec(ITER_DEST, data->args.iov, data->args.iovcnt,
--				   ARRAY_SIZE(data->iovstack), &data->iov,
--				   &data->iter);
-+		ret = __import_iovec(ITER_DEST, data->args.iov, data->args.iovcnt,
-+				     ARRAY_SIZE(data->iovstack), &data->iov,
-+				     &data->iter,
-+				     !!(issue_flags & IO_URING_F_COMPAT));
- 		if (ret < 0)
- 			goto out_acct;
- 
-@@ -4914,9 +4915,10 @@ static int btrfs_uring_encoded_write(struct io_uring_cmd *cmd, unsigned int issu
- 			goto out_acct;
- 
- 		data->iov = data->iovstack;
--		ret = import_iovec(ITER_SOURCE, data->args.iov, data->args.iovcnt,
--				   ARRAY_SIZE(data->iovstack), &data->iov,
--				   &data->iter);
-+		ret = __import_iovec(ITER_SOURCE, data->args.iov, data->args.iovcnt,
-+				     ARRAY_SIZE(data->iovstack), &data->iov,
-+				     &data->iter,
-+				     !!(issue_flags & IO_URING_F_COMPAT));
- 		if (ret < 0)
- 			goto out_acct;
- 
--- 
-2.25.1
+Why go to that label? We have nothing to release, the old return -ENOMEM 
+works completely fine now.
+
+Otherwise looks good to me.
+
+> +	}
+>   	ret = btrfs_alloc_page_array(nr_pages, pages, GFP_NOFS);
+>   	if (ret) {
+>   		ret = -ENOMEM;
+> @@ -4674,12 +4675,12 @@ static int btrfs_uring_read_extent(struct kiocb *iocb, struct iov_iter *iter,
+>   	return -EIOCBQUEUED;
+>   
+>   out_fail:
+> -	btrfs_unlock_extent(io_tree, start, lockend, &cached_state);
+> -	btrfs_inode_unlock(inode, BTRFS_ILOCK_SHARED);
+>   	kfree(priv);
+> -	for (int i = 0; i < nr_pages; i++) {
+> -		if (pages[i])
+> -			__free_page(pages[i]);
+> +	if (pages) {
+> +		for (int i = 0; i < nr_pages; i++) {
+> +			if (pages[i])
+> +				__free_page(pages[i]);
+> +		}
+>   	}
+>   	kfree(pages);
+>   	return ret;
+> @@ -4819,6 +4820,8 @@ static int btrfs_uring_encoded_read(struct io_uring_cmd *cmd, unsigned int issue
+>   					      data->iov, cmd);
+>   		if (ret == -EIOCBQUEUED)
+>   			goto out_acct;
+> +		btrfs_unlock_extent(io_tree, start, lockend, &cached_state);
+> +		btrfs_inode_unlock(inode, BTRFS_ILOCK_SHARED);
+>   	}
+>   
+>   out_free:
 
