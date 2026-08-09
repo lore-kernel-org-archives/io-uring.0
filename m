@@ -1,112 +1,132 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07089349CEE
-	for <io-uring@vger.kernel.org>; Sat,  8 Aug 2026 07:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D8E3FCC
+	for <io-uring@vger.kernel.org>; Sun,  9 Aug 2026 00:09:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786174985; cv=none; b=noGlhCsFSTz7q1dQCb8Ipra5U1ZaQTC961dlx9pOe/UUI9FMyRTJmBCzoyEregjRrzPPx2SoP435J+40qI6aJieKmBSpfDcxD9vLaaxgqLVn4uV6qwPeNEgROxh2F8LS4XTqI9X3bdr4DgEGxq4YY6/tEXAYZGydCLmCetesFZs=
+	t=1786234175; cv=none; b=hhWDA+VL4gfILiULEwZuwdIQqrlj8J1vpJny8eLhgjgSQuKrPNm3DZbWruXfpsaAc9gva+M2ZZGiXBdC6LVIyheGeJj2gSgr+QK/05kOmkadJomOuaG+WWw25zRwaoqZlgQEbycT+zUBRe71dLX7KdUgib8R9vSmJeb5lUp1lHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786174985; c=relaxed/simple;
-	bh=MfmnU8YNJLwpfs49CXSqe/TGoI8poFdoJ4O3as++6bY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RrynhtNIvrMqGGfKa7+PgjrJZYVQOaRqV98yOUF5tnRZkCEGfnuewGDXtJRBtqW0sNRL51R26mVtPaXWrjWk4/JnS2HDx0/+CwH01Nn6YN322yk6pG4HD5nbPqjAfqRlW7mt2d/sx6BZgyyh8CYtGk3gFW3eiSUpFqumFR8YKvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=furiosa.ai; spf=none smtp.mailfrom=furiosa.ai; dkim=pass (1024-bit key) header.d=furiosa.ai header.i=@furiosa.ai header.b=K+cTBR4P; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=furiosa.ai
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=furiosa.ai
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=furiosa.ai header.i=@furiosa.ai header.b="K+cTBR4P"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38dc69c74b8so273777a91.0
-        for <io-uring@vger.kernel.org>; Sat, 08 Aug 2026 00:43:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=furiosa.ai; s=google; t=1786174983; x=1786779783; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TtyMmNLD5kYHkR25F4J0okBlAhxZuviH4rvHbsosVac=;
-        b=K+cTBR4PSttFVR7cXfwdM7Wcxf96D26huTsvWdscq3LUH8CqSXMsQ4zHA39r+uKFCy
-         cOfUAJsoD8ByLh8RAzhBLMFgGVd3d/aCpALF65KxJuj8K07w/fyqhhGUc9iegk1sgxew
-         AMJ5nQbgQugiuw9/SzL5BwjWdFnqHA+HvAuyA=
+	s=arc-20240116; t=1786234175; c=relaxed/simple;
+	bh=/QeTaHNPwcCPmeumVZo79wex1aEfJNEMDkSe176uCyw=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=khpUsEibH++bTGtTeqckWSGYMfBtaGH126oXLoppZSuvvmrzW6TeFee1Rcm4BrfgER9iMbKlg9VGOoAr4HjYaXOk9gwhmzN7LHT0DkaSyTM1IKJ2qIbtdPCpATrC3HEm0LfNWeZtkoG8hhhxETx1j2Nuf68wsmHH7PECtoxXrE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-4a45b3f0bdfso997468b6e.1
+        for <io-uring@vger.kernel.org>; Sat, 08 Aug 2026 17:09:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786174983; x=1786779783;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TtyMmNLD5kYHkR25F4J0okBlAhxZuviH4rvHbsosVac=;
-        b=bca2OgFHymVP6YN8imGRke3v6pw3yjHmJ0AlZoNVvleuWDh66RnSRCPF/wNiaMJfFr
-         4AWZsVR0kPUPRAVvpig8Cwd7b9ELhMpRS86L7mBbShk9J1tgLHwjxaqhm5rQ0ZeWCUSW
-         Xg8dQlB5Yl/1QD8j6lXz6njJR2q/TR+Wqky71DSm++pMsgNfAyYCx5L6yar2DLawY1vU
-         LkcVqd8lkWQq9/899Jp0wWyFfzueMDsb7vuKYHzXr+a72cPdgw8nKbfbFgsRCeWREuoj
-         Zh5fz0JecPA4uaZZQCfAx1w6ZeSHlo+YazTO516WhSPyXrSQf6F3ehPcC2e3W3zdxcL5
-         KiLA==
-X-Forwarded-Encrypted: i=1; AHgh+RoMRHZ5YRniNHkUrRzlOFyMGpskoXyDTnIRAcPhWIgypM4AF19dRwmohkxwXPiQYVcK8oQTpIjN3Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ5i36/gM/RaKNvPQu958jkomPnzfBzCKkMsYigM5mvOXQVm4I
-	kBDSA0KwiJEw3lnsUr7TMkChMo5+5l7ORmvR2uS1K4oHMksJLqgA6CxKyErc4BF6pDKYOgH1Oad
-	+71et
-X-Gm-Gg: AR+sD1035R0ycLdsVlQiScTxJ3JS0rYk6Kylsfld0MDOzJG1GAzKa7zrS9F5He9C8bA
-	m3yPVQrrrZUDPvSkt3Mw9OgUKdmiVY0AedSMPTohzGm/QLTXXWoDB6qezZiu3xE7hSgtEvA8XIJ
-	LLcPlAhZBsQms/vWWow9JoZzj8NN5HP4wyAF6VMBIbkH95pJdFM88kbIHTjstOShCz2+i5wh4nK
-	TE+Y9sqq0g91XMqi+o83HdurrNJ1RcFMyVXfacpacKIm67kD/W1aWbxhh459JXITfQ/HZovN3vW
-	0jtrjRKV0ye7fdq+o3kc9PO3+B4tNWnzeXmjR93HMY3fdbQUu7B0igl9Vh6oVSvkX2CJE+YJnNK
-	N7VRaG/WOayDua1Z+kTmCYRU4cljMPwkqMQuwkw9y0WJtJT6nRdm88a+NTJ/ORnac0FSl+z5b5w
-	7VoV+WFT5MNQ1cPGIJX28n+ZnAEatTeR0tKIEPc9l2MhxxVAvT2sXtWm5AP/RkkQ9tmneHnZqQS
-	MEc+kpDUWKTMvnf/u0=
-X-Received: by 2002:a17:90b:4f4c:b0:380:540:d499 with SMTP id 98e67ed59e1d1-3903c5381e3mr26493795a91.6.1786174983338;
-        Sat, 08 Aug 2026 00:43:03 -0700 (PDT)
-Received: from localhost.localdomain ([61.83.209.48])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39086164982sm7523449a91.16.2026.08.08.00.42.58
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 08 Aug 2026 00:43:02 -0700 (PDT)
-From: Sidong Yang <sidong.yang@furiosa.ai>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Sidong Yang <sidong.yang@furiosa.ai>,
-	axboe@kernel.dk,
-	kbusch@kernel.org,
-	hch@lst.de,
-	sagi@grimberg.me,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-nvme@lists.infradead.org,
-	linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	linaro-mm-sig@lists.linaro.org,
-	viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	akpm@linux-foundation.org,
-	sumit.semwal@linaro.org,
-	christian.koenig@amd.com,
-	nj.shetty@samsung.com,
-	joshi.k@samsung.com,
-	anuj20.g@samsung.com,
-	tushar.gohad@intel.com,
-	william.power@intel.com,
-	phil.cayton@intel.com,
-	jgg@nvidia.com
-Subject: Re: [PATCH v5 01/16] dma-buf: introduce initial file I/O infrastructure
-Date: Sat,  8 Aug 2026 16:42:27 +0900
-Message-ID: <20260808074245.85757-1-sidong.yang@furiosa.ai>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <ff5dccf71e8c03d62797352c4bb5fbb7c6c759c8.1785596451.git.asml.silence@gmail.com>
-References: <cover.1785596451.git.asml.silence@gmail.com> <ff5dccf71e8c03d62797352c4bb5fbb7c6c759c8.1785596451.git.asml.silence@gmail.com>
+        d=1e100.net; s=20251104; t=1786234173; x=1786838973;
+        h=content-type:to:from:subject:message-id:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vInf9AVLd8ueP6fJlwsQOnMJLRVgfMo2meap1oZ1iJw=;
+        b=g/JzjqpUgSoP2tlJVf3zz9IVgr3BhqS894liMLON3IrD+EXaJW1qE8BZxjfqrUZ8It
+         uwS+DipFsmiNgIHdyrxbH1xu/PMYriBetmqFqLFlXscptSRXLIF/tCNEj3D4ex//xI1C
+         WkqAJABuXf4OoaKrCNHG7CvOmd9zsJxPZZ8BUqd4FprtRL4YbX0zAtb1O2cb4HXh06c/
+         BVb5xg/+g0i8BSFrAa40tDK/igx2nax9cf+4XGUrTvACkn1yviiOOrYUIulkBEscyOHf
+         xG6zVi1ky67P03ptcOmDzYaQUK7Hsssur8S0egYcoK1zYm65hO1B0PPw6k55LZusrHxQ
+         YctA==
+X-Forwarded-Encrypted: i=1; AHgh+RrEtjy4Ho4j0DdIVydLnM5kWvHb2k01lCamcaS/YzCUguLkO+XvQ+JPT+NA9s8CelAUfhBtujLoNA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5RgqSlnEEhvl0qM8VRcE95GXAuQeCyr3eqRR2hs+CIK7MuUOW
+	ubKRcHqBGeydz6nQ4+kTJArMngpcuh/E+PLioUtyqIMIVW888MwI+ktuxsHW/96srptY1oKb5Jn
+	d4dA+McIoB4ya5ydrF8NhRMFOTqSH64gXzly6EtVz05aj2TmBnfmC20dGDO8=
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6808:1785:b0:496:11f1:f2b3 with SMTP id
+ 5614622812f47-4b1a107dfc1mr9184879b6e.20.1786234173169; Sat, 08 Aug 2026
+ 17:09:33 -0700 (PDT)
+Date: Sat, 08 Aug 2026 17:09:33 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a77c53d.01d0871a.3a0d52.0077.GAE@google.com>
+Subject: [syzbot] [nfc?] kernel panic: kernel: panic_on_warn set ... (3)
+From: syzbot <syzbot+fe5ea83cdd7fc263f452@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, io-uring@vger.kernel.org, krzk@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 8/1/26 16:46, Pavel Begunkov wrote:
-> +	if (dma_resv_wait_timeout(dmabuf->resv, DMA_RESV_USAGE_KERNEL,
-> +				  true, 0) < 0) {
-> +		dma_resv_unlock(dmabuf->resv);
-> +		goto retry;
-> +	}
+Hello,
 
-Shouldn't this be <= 0? With a zero timeout dma_resv_wait_timeout()
-returns 0 for a still pending fence; only -ERESTARTSYS is negative.
+syzbot found the following issue on:
 
-Thanks,
-Sidong
+HEAD commit:    f9a2394a2348 Merge tag 'mm-hotfixes-stable-2026-08-06-18-4..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=11a1be49580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=30772517ee66ef58
+dashboard link: https://syzkaller.appspot.com/bug?extid=fe5ea83cdd7fc263f452
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ebec1b22682a/disk-f9a2394a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5c88db273365/vmlinux-f9a2394a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/43600cc1b90a/bzImage-f9a2394a.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fe5ea83cdd7fc263f452@syzkaller.appspotmail.com
+
+Kernel panic - not syncing: kernel: panic_on_warn set ...
+CPU: 0 UID: 0 PID: 7451 Comm: kworker/u8:11 Tainted: G             L      syzkaller #0 PREEMPT(full) 
+Tainted: [L]=SOFTLOCKUP
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/16/2026
+Workqueue: iou_exit io_ring_exit_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x100/0x190 lib/dump_stack.c:120
+ vpanic+0x552/0x970 kernel/panic.c:651
+ panic+0xd1/0xe0 kernel/panic.c:788
+ check_panic_on_warn kernel/panic.c:525 [inline]
+ check_panic_on_warn.cold+0x19/0x34 kernel/panic.c:520
+ __warn.cold+0x191/0x318 kernel/panic.c:1104
+ __report_bug+0x30f/0x440 lib/bug.c:254
+ report_bug+0xb2/0x220 lib/bug.c:286
+ handle_bug+0x16a/0x2a0 arch/x86/kernel/traps.c:436
+ exc_invalid_op+0x17/0x50 arch/x86/kernel/traps.c:490
+ asm_exc_invalid_op+0x1a/0x20 arch/x86/include/asm/idtentry.h:593
+RIP: 0010:io_ring_exit_work+0x479/0xd7a io_uring/io_uring.c:2365
+Code: 8e e8 ab 8c 44 01 48 8b 05 24 97 4b 0d 4c 8b 7c 24 38 31 ff 49 29 c7 4c 89 fe e8 f2 f2 d4 00 4d 85 ff 79 12 e8 48 f8 d4 00 90 <0f> 0b 90 48 c7 44 24 20 70 17 00 00 e8 36 f8 d4 00 48 8b 74 24 20
+RSP: 0018:ffffc900047b7aa0 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff888052290710 RCX: ffffffff81355b6e
+RDX: ffff888052140000 RSI: ffffffff81355b78 RDI: ffff888052140000
+RBP: ffffc900047b7c38 R08: 0000000000000007 R09: 0000000000000000
+R10: fffffffffffffffc R11: 0000000000000000 R12: ffff888052290000
+R13: dffffc0000000000 R14: 0000000052290700 R15: fffffffffffffffc
+ process_one_work+0xa23/0x1940 kernel/workqueue.c:3322
+ process_scheduled_works kernel/workqueue.c:3405 [inline]
+ worker_thread+0x5ef/0xe50 kernel/workqueue.c:3486
+ kthread+0x370/0x450 kernel/kthread.c:436
+ ret_from_fork+0x72b/0xd50 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
