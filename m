@@ -1,123 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47A93148D9;
-	Tue, 11 Aug 2026 07:01:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A851925B088
+	for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 13:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786431705; cv=none; b=FD04JIgkOngeE0CY6O5QloD8bBXAbeVNRRKe0f6hI7NW/bjTvjBwUEVooTXKMQnzIy+LxeML1xJeelodFiTSqadsGoEd0LgYIDhmjA2zBWMNPYcMwsu5bcPaEukV54adg8sFzi7KAwvwKIYPwFoRh2ONwqAqDrPb2TIm3+6Vdxs=
+	t=1786454197; cv=none; b=ksyvQ4anYwJaZdnhEajb9jiOKid/LDOQWh2njqe2XHGcnk0MnFo+dYSRU05wSp4dPYFd8WRMOoHCMsfKSZ8qXZGARZoNDTMnYXYBEdft8rNDt/0FgGrphDvrGpoKJ8j4Cqjb+CkcN/gq6ABu6VhAHtqmgD72OURNAR2GmaqZdws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786431705; c=relaxed/simple;
-	bh=H/iAh4jZ9gR0a94yGMvODTyjo/Zaug02f8QMbRczs+8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZvvQsgx7aFVcC8+wV9gT4g0AT/M6d/2mi6PktpViP2NVvDwcLQt1/nGpHktgPz2wyTTi45OBueiaFAsn1jHqt9p5fgO0txdHrYSiRQpjYpPWV5VlBX9Sl3ue+EySBUpnIHu8l2KmMXe5/OMQeavyfTjztejVualiF749h6BhHB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lzvOrkg8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1786454197; c=relaxed/simple;
+	bh=EV61FYb5D/7ZN7WKyu4faP8LVXNRQBmvH2wEtYT2LmY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LvXy+TCAlPo/miitGRQ0vMs/920ZyHZ8cHUdDxZYCEgo2XA8chZHf69hL9CBskNecNxYBxNm5LVCKwjxCb4qvtbaphVFImqh3b67nzz1Ag56zFZaheI9AxnJviI1BfBe+oL2egV04+qyWNdMQliLJdyNXLnbCJHp2KWJN6UBxas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gFj2Oo3i; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lzvOrkg8"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 70E4FC2BCC7;
-	Tue, 11 Aug 2026 07:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1786431705;
-	bh=H/iAh4jZ9gR0a94yGMvODTyjo/Zaug02f8QMbRczs+8=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=lzvOrkg8wdC7ziEWLF2JCJ86dlCdDMJW5klFdhsmJAiWqdRa3xQ0YHZHWb5lAEBGd
-	 c+yPCdpOg2l9rcWseXS1RWyjCVjQSuhXwf0QT2SuibMfIcnWVX4rHeFOFMVAxJUR13
-	 vpGcN7Xs+juHPu98M8eJtqJnNiXsfMA8UkQHbnZ0aKoZzXANkP6urShofPvdzn0kTM
-	 sDJhN754KQ731kLA0DdXum9+0mo8vObtWq53VNWUvs0TllFOfhd042hn4/ksO969Ag
-	 9xJr7g4VzLC2zC+xrGdOLc2oe2nS8szDv+BtwYJC9bT0ajcfQN92xQUwP9KXau4+Ks
-	 0vTJ0EscYtErQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 55DACC5B569;
-	Tue, 11 Aug 2026 07:01:45 +0000 (UTC)
-From: Vishnu Razdan via B4 Relay <devnull+vrazdan.openai.com@kernel.org>
-Date: Tue, 11 Aug 2026 00:01:27 -0700
-Subject: [PATCH] io_uring/io-wq: fix worker accounting when canceling
- creation callbacks
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gFj2Oo3i"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c167aa9500dso104624166b.3
+        for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 06:16:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786454194; x=1787058994; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Eytp0kWHTMpraBTsJPqytmrRy48FIzv9b11elB9I5zw=;
+        b=gFj2Oo3ih2LWB9sX0cOs8ZSvucFrigSyLmQI0TWju/RM/kfml1Ql1JheN6p1glvO8N
+         ghvzi735tveXrnStYtlDuqvDVxQKWV3iMEJwS/C6fSokLKo1Bh3N0bWtAdsByN0LZ6WS
+         U5mQBmRHFRs5FSwBBwFVKLyhuHZFMs7fSPTFdB+8IAGRqglaZo9RDDJSCNxuOZsN9msK
+         j47LdM4ayOpXbiqVfqhsG5DxNoBtUPYOhiT72gqXQ7h7R181ilzV5sKbjcAXlM/srOY6
+         uuk1Vot7Y+/s9g8tH8nX2ZBhyp/FuNxKvk2RZ1OnVO7vQWDV30GlL4EE4mTneoz3tqGA
+         K8Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786454194; x=1787058994;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Eytp0kWHTMpraBTsJPqytmrRy48FIzv9b11elB9I5zw=;
+        b=M90d0GxJ9aXsrOWAbodG5rSz6idXfoKomi1j/eJ5HyGLoSVKEsT83SgHibJUuziHTT
+         I1ExAP66MpdBP//tSEzFfMQ3ikNAqTelyHxhQ0Vo5Vr94cCi+Z3cdCKE1OJaNi8YyCfK
+         0nD+WZ/YQOoK6CZhzh5h9/0CLKrft2kfwfyn9lv0C27wPMiPwBdGQjpUMpvwkRF9qeGD
+         iQDAkRObol3iZGp7tIWokvAdNnRX4KTW8bj26hNUonEi8vHh/C/9eyUp4HEd49ZtVwqM
+         Wte5ynaJ1mbPwBV295awj24S1g8yqNBNKFHuu8ZqF41n4x/1T6eUFZAG3Ykmj+gy/mZS
+         gowg==
+X-Gm-Message-State: AOJu0YwQarowCVQtOWHwNneBXEfqu6Q9fGiFiY6IFh2tVRTrf5Jfz9lK
+	8QIYv5IuuFGH/PbodSCmkkA/arMM2mawQ5uF5juyEMRH8o5rMO4PRGqgmRcXRLsN
+X-Gm-Gg: AR+sD13cFDYNbEFOYkA2gA75a6ROxhM1Nke1iIE4bFPIniRmfiZRDhT3whEuHmxilCN
+	yBJ/Z3ViP9n74aT320+zCQFzZAmoay4ffEBwPQXhYrPQ/yohTeiKp8C7QsW7mwhK/AQsnxSpiSv
+	nuXU+zOLuzmrDZcX+KmZ5QaC7MUEkS5FiFEnuhuvrwSLYChVzGFP7/COSJPx8I7PBTaFkQHvXun
+	fIkxie8RVhQZP9UdiBOIZiUXubXBrLOVRbkxM0QwmPbvwbG+T3K4UD/nmRs42PUhpYPTsRftLEj
+	QMv2ILRErEs2wl0bWgYN35XNuMDTMVGDVh5Ur7LiHwPpFAG8Vw7VfYunvp70Rnw3ISBrr3753HG
+	04St/jQijuuMMiPUwFoyEXHpFyvGlXFfReKL1yjrHcJ/XyBE7rjJPwC9VIUmMT0SDOpQSNW0OUI
+	55M6lH8Uvo7qY06ep9ByHMj5KDKkWm5rHy4wvSHEc+sYj/1ix1ILta0reVyL35C9bhMR9cWi/J0
+	fO4GAb8iXVuPIgyDYDOWva/sDXY35HsOxhbvAf5KiGW0Zrf4Dxj06ab4P6iOVzrh8C4bZQP++UD
+	c4T7cOC6SY9rZkeQMahCdywfy/luq8kpu0G84p4=
+X-Received: by 2002:a17:907:d08e:b0:c1a:5d49:f99d with SMTP id a640c23a62f3a-c20ec8d8396mr17558566b.7.1786454193602;
+        Tue, 11 Aug 2026 06:16:33 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c20e431f414sm50782666b.36.2026.08.11.06.16.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Aug 2026 06:16:32 -0700 (PDT)
+Message-ID: <70b36cb8-bcb3-400f-a3f6-d038bff88723@gmail.com>
+Date: Tue, 11 Aug 2026 14:16:29 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260811-vrazdan-io-wq-b4-submit-v1-1-719ced16c921@openai.com>
-X-B4-Tracking: v=1; b=H4sIAMbIemoC/yWMwQ6CMBBEf4Xs2U1aUhX8FeOhLYusgQItRSLh3
- 231Nm/yZnYI5JkC3IodPK0ceHQJ5KkA22n3JOQmMZSivIhKCly9/jTaIY/4ntEoDNEMvGBta9W
- 0Up2vsoK0njy1vP2e748/J/NFdsl32TA6EBqvne1y1bOLGw6aXUqEUzQ9W8wSHMcXW9QkuKgAA
- AA=
-X-Change-ID: 20260810-vrazdan-io-wq-b4-submit-9c94df145718
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org, vrazdan@openai.com, 
- linux-kernel@vger.kernel.org, asml.silence@gmail.com
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786431705; l=2133;
- i=vrazdan@openai.com; s=io-wq-kernel-20260811; h=from:subject:message-id;
- bh=BudlQE+XkmRRoHQjFbXZv3L3ZO0exGygvlY2UfDjXFs=;
- b=4lcLmSMBawdC2cbRCMIWnW8jO7Buvnp6m/vN41G4Ry6tz6SLjDiF/C7Y6whPXEawgOZR141vw
- c8vhYriGRaFAEDOBT2Or9ASBGL71xG3wMEjxUHg1Fyzo8Bl/tGBGFLb
-X-Developer-Key: i=vrazdan@openai.com; a=ed25519;
- pk=45vHW8D/KId5RtsP3Qx7zMcNpgDwEvCnL5uAw0KzuS0=
-X-Endpoint-Received: by B4 Relay for
- vrazdan@openai.com/io-wq-kernel-20260811 with auth_id=937
-X-Original-From: Vishnu Razdan <vrazdan@openai.com>
-Reply-To: vrazdan@openai.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH io_uring 02/16] io_uring/zcrx: move RQ head/tail to
+ separate cache lines
+To: Mina Almasry <almasrymina@google.com>
+Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org
+References: <cover.1786108672.git.asml.silence@gmail.com>
+ <f769116a3f5267f06cb9a9a819d482ddea2e0852.1786108672.git.asml.silence@gmail.com>
+ <CAHS8izN4SAUCUQySd+VTbdayX-Stj+eYOqAof+Vhi=EsRb93_w@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izN4SAUCUQySd+VTbdayX-Stj+eYOqAof+Vhi=EsRb93_w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Vishnu Razdan <vrazdan@openai.com>
+On 8/10/26 18:35, Mina Almasry wrote:
+> On Fri, Aug 7, 2026 at 6:25 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> RQ head and tail are currently put into the same cache line, which can
+>> cause false sharing problems when refill is run on another CPU. Put them
+>> into separate cache lines.
+...>> +struct zcrx_rq_hdr {
+>> +       u32             head ____cacheline_aligned_in_smp;
+>> +       u32             tail ____cacheline_aligned_in_smp;
+>> +};
+>> +
+>>   struct zcrx_rq {
+>>          spinlock_t                      lock;
+>> -       struct io_uring                 *ring;
+>> +       struct zcrx_rq_hdr              *ring;
+> 
+> Is this not a problem in general for everything/most/a lot of using
+> struct io_uring? Should you make this change to struct io_uring
+> itself?
 
-create_worker_cb() reserves an io-wq worker slot only after its
-task-work callback runs. If the callback is canceled before then,
-io_worker_cancel_cb() still decrements acct->nr_workers. When an
-existing worker retires with its creation callback pending, that
-worker has already decremented the same account's worker count.
+No, io_uring headers are usually accessed by the same task,
+that's unlike zcrx where the consumer and the producer are
+two distinct entities.
 
-The resulting undercount permits worker creation beyond the account's
-configured limit. On an AST2600 OpenBMC system, an unchanged sensor
-daemon reached 4,291 threads with the original kernel. With an
-equivalent downstream fix, 25 passive samples under its normal
-workload showed 6-9 threads.
-
-Decrement nr_workers only when the canceled callback is not
-create_worker_cb(). Continuation callbacks still release their reserved
-slot, and both callback types retain the existing running-count,
-reference-count, and create-state cleanup.
-
-Fixes: 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
-Cc: stable@vger.kernel.org
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Vishnu Razdan <vrazdan@openai.com>
----
-Prevent unreserved worker-creation callbacks from decrementing the worker count.
----
- io_uring/io-wq.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 2e14880ee..fa403ed24 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -211,9 +211,12 @@ static void io_worker_cancel_cb(struct io_worker *worker)
- 	struct io_wq *wq = worker->wq;
- 
- 	atomic_dec(&acct->nr_running);
--	raw_spin_lock(&acct->workers_lock);
--	acct->nr_workers--;
--	raw_spin_unlock(&acct->workers_lock);
-+	/* create_worker_cb() has not reserved a worker slot yet. */
-+	if (worker->create_work.func != create_worker_cb) {
-+		raw_spin_lock(&acct->workers_lock);
-+		acct->nr_workers--;
-+		raw_spin_unlock(&acct->workers_lock);
-+	}
- 	io_worker_ref_put(wq);
- 	clear_bit_unlock(0, &worker->create_state);
- 	io_worker_release(worker);
-
----
-base-commit: d58772d8520c7ef247c4b95c9bd76d3a25da9ff5
-change-id: 20260810-vrazdan-io-wq-b4-submit-9c94df145718
-
-Best regards,
---  
-Vishnu Razdan <vrazdan@openai.com>
-
+-- 
+Pavel Begunkov
 
