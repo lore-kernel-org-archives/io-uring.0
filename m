@@ -1,135 +1,195 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692043148CF
-	for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 16:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786467505; cv=pass; b=h3zAF5Yh3nGveWAGosLRs+AuNoE8NC3G3VvSREziAcjMSTm4DBATHHsQhf0lZa8LybI63pPkWIh8OO9D8x53a+UWJzspOs0u4LDhq+Y1IDf3aPiJ9jO+4HUz/DfLIP6BPWFAVpi/Gkz8Nq+4nzAKRrR/zNJBBkOZQ4HkxEX/y40=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786467505; c=relaxed/simple;
-	bh=p1Idd0+BrPC57hxyNa+KXpmXW4ID+phoJh3HgUE0RFU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aMu82sYR61lrw73IsgCRk9Uem+DM4FFbOCJ6NSxC1i6CDWB8iF2oQWr18u0lmV5t/MaIy0UDJqLrqsNZ3ahFOxZh6T88UbkeAyzc9IURK++FBP9dKrUCu2SAT3Ercf3DTP/QMXNsJKO+3TyRiRQ/Wgz4rNov+S0Bh/NpKzVUOFY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XAOvMZ5K; arc=pass smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78801453A58;
+	Tue, 11 Aug 2026 17:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786467741; cv=none; b=jHpfnstE1/MJSQhza1eBFQ9NSYVNGe+xlg4LxyxNwuStzyzJ8KJT0Psjnt363jFvxNOYrAK0O0KbK5TNcqSVwZxOsJRtij3lUAAoYVk1k7qkCkML1ELv3ZT5XXbMa8mK1iiEpuPTHBc9P4ccRkSn2QkpmnjMA2/AMACI+RwVtJE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786467741; c=relaxed/simple;
+	bh=Q1f0cgOXGXYG6qPTCbWlU2o6pILyhcNNXH52p3zzE8I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=J5gpMJfFXKNJi2UNra08qezctaU0BF9qJWTzrnqtuCCTF0JVc9I9JLzZmUpaxYoopWz+8/KaryGJawFqHzPkIQcdmniHRq2wXbO5UIbxy0ZWMWCNUkXd8M3LYeIbvB7G7LittASvdKx57YuQR9RDVU9wQeEMl4IYgDWtehpiso4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WS8IWOA1; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rIjb8S6a; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YHPBBW1W; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nCqUiqmf; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XAOvMZ5K"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cab97c86bdso445ad.1
-        for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 09:58:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786467504; cv=none;
-        d=google.com; s=arc-20260327;
-        b=hB9xD1jHqEYOCHICRFwNZAwoPhk8JiKILGOnwnSApt9aAjX8X6p2jo/IWzlAJ9sFd1
-         vKJUoHqJDgrxn1Kns/Eo2b5LE6kX7BtYtAYwmWaAJ4PlxToWZgpN6Ktvkr1fP+Mq4I58
-         sSjJfV994asQ9gxZqnON2yOgIJM+z0L/UnwUuFKAtMpUhI7uEgjisfjYzCqOJbe51JB0
-         11vSnge7PHQQjzWCE6rlFUjzFWqnyoh8AZfT8x5Nj/U/T65+pFUFrQPaaCZDxe6bBDaa
-         7pcX108gT3A7ZlyNBAzJAw3kb9Nrksm6tm5PgRQaYRaBVBy2SbO5jtR80cs/XPvYqInw
-         kkYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=cWgS+W4qLbOvGJ4zW2GbJqzmR98EMaFrD9S8IoZvEKc=;
-        fh=tEbCYTGdYBSLy3ocCnuuDpq46a1zqKnpr0iHUtdXhhY=;
-        b=VTO0SEUxmRPhSLqgDGto8CmHQmSMbwleqzfQ38fUc5ghwFuO9+2g9kpnoKTHF+9OFK
-         Zw+F+jAaDWwQRlvkJXSvWPvo3VvTrBQRvFAjRe3ycPYHLcEA6TMeEdnXG2sQCZI3rg9f
-         TaDOL5PtR32GsginpO4NOix0sEFSUcWUoZts4LZRcbjAVwKGgBnrFHq0haLgqmAZO8wZ
-         c1XYgEmdyBR5tkYtkS2wXhAsjsluApdj61232JrAfwLA72UEVXD3DAyiH8pjWZXUw6k9
-         nKdn0bR7GOhtlzzET7mbclvHhIbucn3pomcAQH4N0TW/Z9H5XZQ9491fWsN2pC3qGmaf
-         0GEA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786467504; x=1787072304; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=cWgS+W4qLbOvGJ4zW2GbJqzmR98EMaFrD9S8IoZvEKc=;
-        b=XAOvMZ5Kbhp6huQetVKNpFWlCrRD7EfKhOe9Oyoy3r9pEnyGYmSHabjnBkVZmlgKBp
-         Nu9cciU6B0EOEl2lmoaPbZxWinpTK43isllxCT4j64o0Ah+1qtbfIbSfdLEccoXGN4hk
-         4Ge8tgr8KG8eNwn+TtLSVeoBgSyghYQYLG3QG4sER2MUjZpMgD/sU+XMKVSn8EW8+QDq
-         qP9sLNeiMSQI3/DcuQqaNz1lgByC+QPAMuPH0m5GNzny/Fzno96pdKR5h1IRk9HMnklG
-         ULcJRVr91grMw+kAYnCr1jNIRPjcxnALnpSS++oCrsB3Pel9ac+6Jel10YAwjFvg4z3e
-         1gKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786467504; x=1787072304;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cWgS+W4qLbOvGJ4zW2GbJqzmR98EMaFrD9S8IoZvEKc=;
-        b=jE+S3Z/VApXAS/J1PYkdPXZ7ixG8eG0g+0KRWwnpsqKbaks+Uw7EqJeS29h9ys0smq
-         0pD0zEbT7RGv0bTUFdbXk4e9cEBXRBJJsFaeFjigr6caSSb1hCvPKnT2TUD1ZhkdcIzO
-         da6jdVyf2SqvK7ZV9waKslmyZJ0senIlMtxprvvhKLMyRnsl8vYprp52zSGseqHk6PkE
-         K5isRgaNQn+OQIGYRkTbpnNz+1Vt/wnYxSnhHld/U0/4Wx95MZDBx34ErvbP/fguR3mx
-         m9uocBevnf6WUQP9xgofX/bOXL0t1qhPlXTiN6AWFAjezD4P2d+CCUjssvg69IErwVsk
-         ITpg==
-X-Gm-Message-State: AOJu0YzDDdQKkDh9BiuFqWrS/s3SIkcNhvMciWCokySLBjYCE3k5i0bP
-	n/DX7bJe1OndBq+PatNaAiuUu7GNswtLBhhzuG2KLnC1xRy+oLXTYqFTI1/daJ2lTvjSkFU4EIe
-	UJi5dEgcfaOEJpk9JW0jKIjqbdk2MZJckD9EErQIk1jJqLt3BLmB4xST0
-X-Gm-Gg: AR+sD12ZvUKn3qXuG9KWiRpBH5kH/eXKIN5G24VIFWyngx9mxg60cK4qqMZoFWcFU/k
-	BqE7P053J3QCpczcY105bgwRbjxVi/emNDyEXwYUMMMvPVBYWO0I6VldByjzeV2udSFldU8ohQH
-	9SdBaPJE7b5CtqCO6p51hobT9pP6rDmEX4xjiR6u/pvH9K16kpAqKqYV7nicl/t+UR/TB2ah7Ng
-	bmZEYGi+Levb6cqXIw2iAFnbIJbDPtfOlD8LwTucdYCQnyMp3u+uXgTwe6UrKqi3o4t1hfAWPYM
-	ilIPkKXo/2vwVKhAwJCn2Qqw2plIzMSqFxT6oYvLZzbv9d5lh1r+U84qpgfcXzBylwZ5JnDr6PL
-	IkxWOBXkiGQ==
-X-Received: by 2002:a17:902:e746:b0:2ce:b436:272a with SMTP id
- d9443c01a7336-2d3171a2d69mr5868425ad.3.1786467503059; Tue, 11 Aug 2026
- 09:58:23 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WS8IWOA1";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rIjb8S6a";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YHPBBW1W";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nCqUiqmf"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 59AE281DEE;
+	Tue, 11 Aug 2026 17:02:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1786467733; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
+	b=WS8IWOA1K0MKGVggnx2cIdJ6o2sVwtgxS3VlhyW9KET4w3krwZIvB1tJSQnDJFgDrwwbmB
+	ig4+hM1RPgEYi97mV5NU6yQ5IgaEkiLfPQYH5/fehezFKr4pD7DwfSO6zrXIMJ+3IwLJMY
+	0ZuemIr4L0D+/UMuF78TV2nuqPVWg5M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1786467733;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
+	b=rIjb8S6axgOX9Z5qfvTk+I94t4qfXs/L4Zf4G4y7zSYlm3d+LNtRr8AXjK+YQhLpqKDKqn
+	r9w4IGozQbbKRrAA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=YHPBBW1W;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=nCqUiqmf
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1786467729; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
+	b=YHPBBW1WAeoizBQIE+2VMdk16Uxd55VfwW8R1hIRWHSRhOGCA20pl1X1+Ob7wRd977PbjF
+	XTfprQHKrkglimzYSziI8RdRj+jbo7/XitmEZ0aJ1T4BYIovfuQPAzHOuHNrXZiRucSods
+	Cd9ZtxoQEPAjP12vi5uEk0eCR8HlnVE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1786467729;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
+	b=nCqUiqmf51dY0LZLYe4yFW07el4udHNxLkR9Y20L2kbYyTTTWSk9f36FRhyyTT8lWlmQdd
+	t0pgX1CdAw4OXPAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0C045779B2;
+	Tue, 11 Aug 2026 17:02:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id X4LrMZBVe2rdOQAAD6G6ig
+	(envelope-from <krisman@suse.de>); Tue, 11 Aug 2026 17:02:08 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Vishnu Razdan via B4 Relay <devnull+vrazdan.openai.com@kernel.org>,
+ axboe@kernel.dk
+Cc: io-uring@vger.kernel.org, vrazdan@openai.com,
+ linux-kernel@vger.kernel.org, asml.silence@gmail.com
+Subject: Re: [PATCH] io_uring/io-wq: fix worker accounting when canceling
+ creation callbacks
+In-Reply-To: <20260811-vrazdan-io-wq-b4-submit-v1-1-719ced16c921@openai.com>
+Organization: SUSE
+References: <20260811-vrazdan-io-wq-b4-submit-v1-1-719ced16c921@openai.com>
+Date: Tue, 11 Aug 2026 13:02:07 -0400
+Message-ID: <87mruspp4g.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1786108672.git.asml.silence@gmail.com> <f769116a3f5267f06cb9a9a819d482ddea2e0852.1786108672.git.asml.silence@gmail.com>
- <CAHS8izN4SAUCUQySd+VTbdayX-Stj+eYOqAof+Vhi=EsRb93_w@mail.gmail.com> <70b36cb8-bcb3-400f-a3f6-d038bff88723@gmail.com>
-In-Reply-To: <70b36cb8-bcb3-400f-a3f6-d038bff88723@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Tue, 11 Aug 2026 09:58:07 -0700
-X-Gm-Features: AUfX_mxQRJ5lJVMdC3KvfzaiGNzSb3bPiW1sF_ivLo0dSz182zuFZ-UONptoA2k
-Message-ID: <CAHS8izPWWk1wxwbfLHKQQrHA1vGURSf6A9cmWMskb6aSfNYVjw@mail.gmail.com>
-Subject: Re: [PATCH io_uring 02/16] io_uring/zcrx: move RQ head/tail to
- separate cache lines
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Spam-Score: -3.01
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 59AE281DEE
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	HAS_ORG_HEADER(0.00)[];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_TWO(0.00)[2];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,openai.com,gmail.com];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[vrazdan.openai.com];
+	DKIM_TRACE(0.00)[suse.de:+];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,mailhost.krisman.be:mid,openai.com:email,suse.de:email,suse.de:dkim]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
 
-On Tue, Aug 11, 2026 at 6:16=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
+Vishnu Razdan via B4 Relay <devnull+vrazdan.openai.com@kernel.org>
+writes:
+
+> From: Vishnu Razdan <vrazdan@openai.com>
 >
-> On 8/10/26 18:35, Mina Almasry wrote:
-> > On Fri, Aug 7, 2026 at 6:25=E2=80=AFAM Pavel Begunkov <asml.silence@gma=
-il.com> wrote:
-> >>
-> >> RQ head and tail are currently put into the same cache line, which can
-> >> cause false sharing problems when refill is run on another CPU. Put th=
-em
-> >> into separate cache lines.
-> ...>> +struct zcrx_rq_hdr {
-> >> +       u32             head ____cacheline_aligned_in_smp;
-> >> +       u32             tail ____cacheline_aligned_in_smp;
-> >> +};
-> >> +
-> >>   struct zcrx_rq {
-> >>          spinlock_t                      lock;
-> >> -       struct io_uring                 *ring;
-> >> +       struct zcrx_rq_hdr              *ring;
-> >
-> > Is this not a problem in general for everything/most/a lot of using
-> > struct io_uring? Should you make this change to struct io_uring
-> > itself?
+> create_worker_cb() reserves an io-wq worker slot only after its
+> task-work callback runs. If the callback is canceled before then,
+> io_worker_cancel_cb() still decrements acct->nr_workers. When an
+> existing worker retires with its creation callback pending, that
+> worker has already decremented the same account's worker count.
 >
-> No, io_uring headers are usually accessed by the same task,
-> that's unlike zcrx where the consumer and the producer are
-> two distinct entities.
+> The resulting undercount permits worker creation beyond the account's
+> configured limit. On an AST2600 OpenBMC system, an unchanged sensor
+> daemon reached 4,291 threads with the original kernel. With an
+> equivalent downstream fix, 25 passive samples under its normal
+> workload showed 6-9 threads.
+>
+> Decrement nr_workers only when the canceled callback is not
+> create_worker_cb(). Continuation callbacks still release their reserved
+> slot, and both callback types retain the existing running-count,
+> reference-count, and create-state cleanup.
+>
+> Fixes: 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
+> Cc: stable@vger.kernel.org
+> Assisted-by: Codex:gpt-5.6-sol
+> Signed-off-by: Vishnu Razdan <vrazdan@openai.com>
+> ---
+
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+
+> Prevent unreserved worker-creation callbacks from decrementing the worker count.
+> ---
+>  io_uring/io-wq.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+> index 2e14880ee..fa403ed24 100644
+> --- a/io_uring/io-wq.c
+> +++ b/io_uring/io-wq.c
+> @@ -211,9 +211,12 @@ static void io_worker_cancel_cb(struct io_worker *worker)
+>  	struct io_wq *wq = worker->wq;
+>  
+>  	atomic_dec(&acct->nr_running);
+> -	raw_spin_lock(&acct->workers_lock);
+> -	acct->nr_workers--;
+> -	raw_spin_unlock(&acct->workers_lock);
+> +	/* create_worker_cb() has not reserved a worker slot yet. */
+> +	if (worker->create_work.func != create_worker_cb) {
+> +		raw_spin_lock(&acct->workers_lock);
+> +		acct->nr_workers--;
+> +		raw_spin_unlock(&acct->workers_lock);
+> +	}
+>  	io_worker_ref_put(wq);
+>  	clear_bit_unlock(0, &worker->create_state);
+>  	io_worker_release(worker);
+>
+> ---
+> base-commit: d58772d8520c7ef247c4b95c9bd76d3a25da9ff5
+> change-id: 20260810-vrazdan-io-wq-b4-submit-9c94df145718
+>
+> Best regards,
+> --  
+> Vishnu Razdan <vrazdan@openai.com>
+>
 >
 
-K, thanks.
-
-Reviewed-by: Mina Almasry <almasrymina@google.com>
-
---=20
-Thanks,
-Mina
+-- 
+Gabriel Krisman Bertazi
