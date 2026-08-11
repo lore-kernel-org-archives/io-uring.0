@@ -1,195 +1,158 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78801453A58;
-	Tue, 11 Aug 2026 17:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D8144AB73
+	for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 20:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786467741; cv=none; b=jHpfnstE1/MJSQhza1eBFQ9NSYVNGe+xlg4LxyxNwuStzyzJ8KJT0Psjnt363jFvxNOYrAK0O0KbK5TNcqSVwZxOsJRtij3lUAAoYVk1k7qkCkML1ELv3ZT5XXbMa8mK1iiEpuPTHBc9P4ccRkSn2QkpmnjMA2/AMACI+RwVtJE=
+	t=1786480988; cv=none; b=aAQc2RhRL7p+BuTfwgOqqghDMoWcAXef7Gg8iYmWwVEcbqfNcl6YmgJwgHPn29GtdhFc0F74Smld65Kp0ACGb9O0/x/mE8Rhi8XPbrBgKg50q+FqTgBnvf+RzUfbcV1tx37yTpG63O08x7rw7N1y7ChhmYJYiH1YuSzxNYTieQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786467741; c=relaxed/simple;
-	bh=Q1f0cgOXGXYG6qPTCbWlU2o6pILyhcNNXH52p3zzE8I=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=J5gpMJfFXKNJi2UNra08qezctaU0BF9qJWTzrnqtuCCTF0JVc9I9JLzZmUpaxYoopWz+8/KaryGJawFqHzPkIQcdmniHRq2wXbO5UIbxy0ZWMWCNUkXd8M3LYeIbvB7G7LittASvdKx57YuQR9RDVU9wQeEMl4IYgDWtehpiso4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WS8IWOA1; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rIjb8S6a; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YHPBBW1W; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=nCqUiqmf; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1786480988; c=relaxed/simple;
+	bh=sHpa5fjeGnCP/yQZunKQW3d8rmujSYCW/f7sc+jrXRs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jeeAPgZWbgMd4fI8GSewNkBrogXfMUewEld3h8i1rMIrxEm+bAjN8C14Tht8PFarxxJlmFqm9B1SrFUUYe1cdavg86WRu2csjW26EkQ6QPUWzwNM6RJV8BY6lxBavcJnkxkvDtDnqS1QxMjxa/i4m3MfkutGmxAIzg7pqhRSUR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T1abMFk0; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WS8IWOA1";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rIjb8S6a";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YHPBBW1W";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="nCqUiqmf"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 59AE281DEE;
-	Tue, 11 Aug 2026 17:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786467733; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
-	b=WS8IWOA1K0MKGVggnx2cIdJ6o2sVwtgxS3VlhyW9KET4w3krwZIvB1tJSQnDJFgDrwwbmB
-	ig4+hM1RPgEYi97mV5NU6yQ5IgaEkiLfPQYH5/fehezFKr4pD7DwfSO6zrXIMJ+3IwLJMY
-	0ZuemIr4L0D+/UMuF78TV2nuqPVWg5M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786467733;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
-	b=rIjb8S6axgOX9Z5qfvTk+I94t4qfXs/L4Zf4G4y7zSYlm3d+LNtRr8AXjK+YQhLpqKDKqn
-	r9w4IGozQbbKRrAA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=YHPBBW1W;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=nCqUiqmf
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786467729; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
-	b=YHPBBW1WAeoizBQIE+2VMdk16Uxd55VfwW8R1hIRWHSRhOGCA20pl1X1+Ob7wRd977PbjF
-	XTfprQHKrkglimzYSziI8RdRj+jbo7/XitmEZ0aJ1T4BYIovfuQPAzHOuHNrXZiRucSods
-	Cd9ZtxoQEPAjP12vi5uEk0eCR8HlnVE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786467729;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N3Gqt/si4mRYiKG63MmncUsaa/Gp7USZUDAFYJlakdI=;
-	b=nCqUiqmf51dY0LZLYe4yFW07el4udHNxLkR9Y20L2kbYyTTTWSk9f36FRhyyTT8lWlmQdd
-	t0pgX1CdAw4OXPAQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0C045779B2;
-	Tue, 11 Aug 2026 17:02:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id X4LrMZBVe2rdOQAAD6G6ig
-	(envelope-from <krisman@suse.de>); Tue, 11 Aug 2026 17:02:08 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Vishnu Razdan via B4 Relay <devnull+vrazdan.openai.com@kernel.org>,
- axboe@kernel.dk
-Cc: io-uring@vger.kernel.org, vrazdan@openai.com,
- linux-kernel@vger.kernel.org, asml.silence@gmail.com
-Subject: Re: [PATCH] io_uring/io-wq: fix worker accounting when canceling
- creation callbacks
-In-Reply-To: <20260811-vrazdan-io-wq-b4-submit-v1-1-719ced16c921@openai.com>
-Organization: SUSE
-References: <20260811-vrazdan-io-wq-b4-submit-v1-1-719ced16c921@openai.com>
-Date: Tue, 11 Aug 2026 13:02:07 -0400
-Message-ID: <87mruspp4g.fsf@mailhost.krisman.be>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T1abMFk0"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47db714766aso902317f8f.0
+        for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 13:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786480986; x=1787085786; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=bYHzlD8AP97+5gPoTHx0Gjj8ze70RRZtR6DtOoDWTFc=;
+        b=T1abMFk0Stwcvs2j921kU1f3kL309hxjHbRVkWiBPfp0B8fPwpQsaXv26gvA0LiLlZ
+         BosDCc7V4z14TZzaGsE7nOTuS7x+YyXiGGoGpR3s7ue4GmfcIHYkS1SXz+atLyU4b5pU
+         5veYwx5OwsEPiVF+blAwC3LaU3GCCJ/2X7KNzUZIftyVEAOqEvk9Mo/qpA57UVweFgr1
+         cggSuCN/Mt/ImdqIkXCZv+dVKpDlDvltNrVvMicDQMsv8Okr5PIoueQeY7h3inWI4Lzg
+         PRTVVFtuwL0nTcmKwUAS0VWwQVMhLpLZLGE31oo6xsQNBtIZCHVEXk9r3We/mqKonhnC
+         /ujA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786480986; x=1787085786;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=bYHzlD8AP97+5gPoTHx0Gjj8ze70RRZtR6DtOoDWTFc=;
+        b=W4txPW8Sh5ubAnujMF9Pa5Ir1prBxZWSBWVvLnLO8ZY2CwQZsx9SAhEC+AmB5SYnss
+         ZC8bhmeKLTzefZA4wAIJ4BTVo4P4qVkdPKMPOb9Wtr+twXqywu2kewPVaRYLAgJfzASN
+         V+BeIYzHSznW77PZ5EVlvKB7JQvnluKoc1JCDgGF7XdkSBB7kkPZ+XOpz+isqxFTJSEv
+         DTZVy4NF3UsvoHMcMwyROWaO1n819+gkitq1Ts+MwFmEoP78nsLeyBCxyNIvIy+duH5V
+         qALDPaE563UH8y9JvMNYhi6Y58uv5Xo/15tFh3/MIso4ReD71bo5lydA04nl+bBmzKMt
+         Sckg==
+X-Gm-Message-State: AOJu0YyupebQNFMfN30LfJTZSdq7DQAP2IOaNT5a9E8h87GjeLXipj9H
+	GiUdYWk/HxFRro8r2c05aPDCbXEW1liY++lxDTING6NrgD0ycHmmBpP1
+X-Gm-Gg: AR+sD12Ar3N+b+6THYvtDL9Gw6wPgZyPJ8koYgSNzUbYafO0plipCV7I81poYU9E7SX
+	9+JW2QTtwJ7N1p2VowmR8l8Wn1uZk44I8UFwjjgR4dOyKk5rY74ZUQ0Gug625XLuvLFIrfB86Io
+	f8L24vDi4OEKCs+KlvkABBNjaTeDfMOo09mhVIklejxYk9Yx/cLVg46odQGxmF0VtDT3BgottGK
+	5Ps5RES1XAHxU26Se9+yJU6g6m+VxS+kfbuYr21uemRC7Hr+ojbX7ar17ySsl2smkp7weEFttMJ
+	i4Md3fPTQlnD4kGxIOyH2GtB61yWCjh9VRZNgKC+XTD9fEsTBKnzfTFPfxsqhhEO1HP699eKGCO
+	2JS7URKYlhj5I/4mUdFI1aZg+5BuroayuQ7FBcRK6rjeE7f4bzAkZty/UIOmgdBFUcBOvJ0cheh
+	KrnN1SdjSSpmQiJq4OtpWndwf6o2KhDDgi/ttIRE+xs2T9dgxPKaIZmjtPrEtS3hC7hvf1mZZYE
+	BwIZ+HpvB6Hqr4lQ/XQaaL2BASc9DMbSRM+yjKO3CzNGaF2flnnLHD/GKV5UwYt
+X-Received: by 2002:a05:6000:471d:b0:481:50ae:df9a with SMTP id ffacd0b85a97d-48150aedfe1mr1752584f8f.9.1786480985615;
+        Tue, 11 Aug 2026 13:43:05 -0700 (PDT)
+Received: from valmpani.valmpani (cgn-195-14-219-6.nc.de. [195.14.219.6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48150d72232sm1069253f8f.37.2026.08.11.13.43.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2026 13:43:04 -0700 (PDT)
+From: Vasileios Almpanis <vasilisalmpanis@gmail.com>
+Date: Tue, 11 Aug 2026 22:42:52 +0200
+Subject: [RFC PATCH] io_uring/cmd: don't skip completion for a non-armed
+ multishot uring_cmd
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Score: -3.01
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 59AE281DEE
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	HAS_ORG_HEADER(0.00)[];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_TWO(0.00)[2];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,openai.com,gmail.com];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[vrazdan.openai.com];
-	DKIM_TRACE(0.00)[suse.de:+];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,mailhost.krisman.be:mid,openai.com:email,suse.de:email,suse.de:dkim]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260811-io_uring-v1-1-1dc3dd50e0cd@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAEuJe2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDC0ND3cz8+NKizLx0XUMzS2Nj82RzEzNDcyWg8oKi1LTMCrBR0UpBbs4
+ gsQDHEGcPpViIbHFpUlZqcgnINKXaWgDGAS7KegAAAA==
+X-Change-ID: 20260811-io_uring-169337c74617
+To: Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ syzbot+a4ccdd7ebf452e4d4701@syzkaller.appspotmail.com, 
+ Vasileios Almpanis <vasilisalmpanis@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786480984; l=2985;
+ i=vasilisalmpanis@gmail.com; s=20260731; h=from:subject:message-id;
+ bh=sHpa5fjeGnCP/yQZunKQW3d8rmujSYCW/f7sc+jrXRs=;
+ b=nY7nDsC/IrTl/1kj140qwPTE61hVItgdLqqhD5PLa9YeZL0bgjxEvNehUB9JGifzb7wLLGcoX
+ ygcOadn7XKjD1L2KzpPa32b0fd9FSCPzYMlTsZLQ8bsjNO2FPA2a4Xv
+X-Developer-Key: i=vasilisalmpanis@gmail.com; a=ed25519;
+ pk=gn5Uo6yL8Tlpq5uATxA3nqoq+U8eWLRbjD+bOk0qSpU=
 
-Vishnu Razdan via B4 Relay <devnull+vrazdan.openai.com@kernel.org>
-writes:
+io_uring_cmd() treats any uring_cmd carrying IORING_URING_CMD_MULTISHOT
+that returns >= 0 as "multishot armed, completion deferred" and returns
+IOU_ISSUE_SKIP_COMPLETE, expecting the provider to complete the request
+later. But the flag is user-controlled and validated only against buffer
+select, not against provider capability. A ->uring_cmd() handler that
+does not implement multishot and returns a normal >= 0 result then has
+its request skipped and never completed, leaking the io_kiocb and its
+io_async_cmd:
 
-> From: Vishnu Razdan <vrazdan@openai.com>
->
-> create_worker_cb() reserves an io-wq worker slot only after its
-> task-work callback runs. If the callback is canceled before then,
-> io_worker_cancel_cb() still decrements acct->nr_workers. When an
-> existing worker retires with its creation callback pending, that
-> worker has already decremented the same account's worker count.
->
-> The resulting undercount permits worker creation beyond the account's
-> configured limit. On an AST2600 OpenBMC system, an unchanged sensor
-> daemon reached 4,291 threads with the original kernel. With an
-> equivalent downstream fix, 25 passive samples under its normal
-> workload showed 6-9 threads.
->
-> Decrement nr_workers only when the canceled callback is not
-> create_worker_cb(). Continuation callbacks still release their reserved
-> slot, and both callback types retain the existing running-count,
-> reference-count, and create-state cleanup.
->
-> Fixes: 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
-> Cc: stable@vger.kernel.org
-> Assisted-by: Codex:gpt-5.6-sol
-> Signed-off-by: Vishnu Razdan <vrazdan@openai.com>
-> ---
+  BUG: memory leak
+  unreferenced object (size 248):
+    kmem_cache_alloc_bulk_noprof+0x272/0x3f0
+    __io_alloc_req_refill+0x4a/0x150
+    io_submit_sqes.cold+0x16e/0x20b
+    __do_sys_io_uring_enter+0x56d/0xd60
 
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+syzbot hit this via ublk UBLK_U_CMD_ADD_DEV, but it is kernel-wide: the
+same leak reproduces with SOCKET_URING_OP_SIOCINQ on any socket fd, which
+returns the queued byte count and never inspects cmd->flags. No in-tree
+provider of multishot actually returns >= 0. Both io_cmd_poll_multishot()
+and ublk_handle_batch_fetch_cmd return -EIOCBQUEUED,
 
-> Prevent unreserved worker-creation callbacks from decrementing the worker count.
-> ---
->  io_uring/io-wq.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->
-> diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-> index 2e14880ee..fa403ed24 100644
-> --- a/io_uring/io-wq.c
-> +++ b/io_uring/io-wq.c
-> @@ -211,9 +211,12 @@ static void io_worker_cancel_cb(struct io_worker *worker)
->  	struct io_wq *wq = worker->wq;
->  
->  	atomic_dec(&acct->nr_running);
-> -	raw_spin_lock(&acct->workers_lock);
-> -	acct->nr_workers--;
-> -	raw_spin_unlock(&acct->workers_lock);
-> +	/* create_worker_cb() has not reserved a worker slot yet. */
-> +	if (worker->create_work.func != create_worker_cb) {
-> +		raw_spin_lock(&acct->workers_lock);
-> +		acct->nr_workers--;
-> +		raw_spin_unlock(&acct->workers_lock);
-> +	}
->  	io_worker_ref_put(wq);
->  	clear_bit_unlock(0, &worker->create_state);
->  	io_worker_release(worker);
->
-> ---
-> base-commit: d58772d8520c7ef247c4b95c9bd76d3a25da9ff5
-> change-id: 20260810-vrazdan-io-wq-b4-submit-9c94df145718
->
-> Best regards,
-> --  
-> Vishnu Razdan <vrazdan@openai.com>
->
->
+Only skip completion when the command is really multishot, i.e.
+REQ_F_APOLL_MULTISHOT is set. Otherwise fall through and complete the
+request normally with its result.
 
--- 
-Gabriel Krisman Bertazi
+Fixes: 620a50c92700 ("io_uring: uring_cmd: add multishot support")
+Reported-by: syzbot+a4ccdd7ebf452e4d4701@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=a4ccdd7ebf452e4d4701
+Tested-by: syzbot+a4ccdd7ebf452e4d4701@syzkaller.appspotmail.com
+Signed-off-by: Vasileios Almpanis <vasilisalmpanis@gmail.com>
+---
+Questions / Notes:
+- I put this in the core io_uring_cmd() rather than in provider specific
+  code because the leak is independent of the provider. From my research
+  so far no ->uring_cmd() rejects IORING_URING_CMD_MULTISHOT, they just
+  ignore it. The flag is only validated against buffer-select in
+  io_uring_cmd_prep(). So any handler that returns a plain >= 0 result
+  with the user-set flag leaks.
+- Instead of checking if it has been really armed should we just drop
+  the >= 0 check? The in-tree code that supports multishot returns
+  -EIOCBQUEUED from what I have seen so far.
+---
+ io_uring/uring_cmd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index c14c22cff49e..a2899a852879 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -269,7 +269,8 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ 	}
+ 
+ 	ret = file->f_op->uring_cmd(ioucmd, issue_flags);
+-	if (ioucmd->flags & IORING_URING_CMD_MULTISHOT) {
++	if ((ioucmd->flags & IORING_URING_CMD_MULTISHOT) &&
++	    (req->flags & REQ_F_APOLL_MULTISHOT)) {
+ 		if (ret >= 0)
+ 			return IOU_ISSUE_SKIP_COMPLETE;
+ 	}
+
+---
+base-commit: d58772d8520c7ef247c4b95c9bd76d3a25da9ff5
+change-id: 20260811-io_uring-169337c74617
+
+Best regards,
+--  
+Vasileios Almpanis <vasilisalmpanis@gmail.com>
+
