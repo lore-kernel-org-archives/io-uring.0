@@ -1,42 +1,42 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 723FC44C4FD
-	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 13:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20D244BC82
+	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 13:13:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786540382; cv=none; b=URR7b5d8CrSreNCIxCvSOkttU8noGmjAMhaeilHw3pH/2XbtyD9sUGo1eRtgEkaSguHd/NDMhObL64Xv1wawC7OjK4wnW4chushfq/LnGjnSWKvgKOlof+fFSsSEiu1QB6/PVbYBpDGMde1Vjx7i5s43BBOSGt4Vy9qTpAS8WAA=
+	t=1786540383; cv=none; b=DmnxIrWnBBmC8krNyHYrThfrdQ32++wLlYaGJ2JTIoKsUsqG4UT6nZdOr0y7GZbXa/n3QCPlDkjKKSomK+t5/hVl+4JYhC0U3HPwcHtMMSRrNPERbsHdWVJEmKlwxDjLzJlXCJoMmVKqim/KSj/CDpUNr01K736viXCUetv/EG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786540382; c=relaxed/simple;
-	bh=SE+/2vj4X8bPl9+0AL9S/WSArJYGo7Wwyr4z2rc9t68=;
+	s=arc-20240116; t=1786540383; c=relaxed/simple;
+	bh=cp3nZ0dviJMUm7oPxAT7N8tm9/evvCgXVFxyOFnW868=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dX+fr9DCQexBzQI/6/cnu49i0PVWxE44Io2Ueul+I0pQ6KbdpKDejHaXoH/T6GVLyQr1WcNEkDygdXu4yYrRSiyJ2wT/7UO2LqaFIAeQ/MDtyN3X2kcugJTkI9QbM25NYvgwvWvz6BPiqoBN/rXDCLA8f51y63yciW3S+w3spcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Cxkkb3iy; arc=none smtp.client-ip=198.137.202.133
+	 MIME-Version; b=OTA0ZDOwdRjtBLABBp0VQgswXQvlCqlbzu+gS7H0aWwjk4RSPsM7P7XvuWJ1DpNEJByyBG7O6jJ8Y13uuCiv6H77yZSrm/KiFaUEt4QL4QFv05MdNLRKSac8EzhRuqBDJf18MF7eNlX9pXMysttO+eiuCKojRI5QzTsKO5dME6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=UPMHyODx; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Cxkkb3iy"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UPMHyODx"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
 	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=Fic8VIvp8MsgJ4iE5MNw+G+vELMUXjzBDJPHM2UID/I=; b=Cxkkb3iyj9umA5JUVrmICty7FM
-	to5nxtbKreBiYsMCq5FoCMaugNN1ybe6barXVe+BJSFvRACxKJLSQi14n1jbRaOvChia+9k/XDIlN
-	xmXUM2Uou5l3f7JdMpYwCjCkxTdXrmbhpJ39hnZJyY9lpanwR52eKdlQ6EK8iBFXmuiYhhhpD9UmZ
-	hIylOl8SZ1s6lKMPp3SCfdqvsPJDlwzaWsdgVdBsjr7uTxMI+MbgjsqRHj9yONg4rZ5eowfONKT5J
-	OeI1+Ld2cW46BGdkHYEw9uOMLwYLkFqZCsiwYi/T7Z1wS/98up2ob5TJzwwAa6HWqVZoa7AhVRI2H
-	ml6eG7Eg==;
+	bh=slOin60mLr5SiRc3+4WGV4MCQwrUzfjh/msuv6cGL/Y=; b=UPMHyODx1aq88BgYUAfGIOsZUF
+	yt7pbXzy7drBTom/dEkLx/jxH39ej4t09P86+E7vUwImll7faAv4DlNNU3/eb3ggAXK7W6lVFoOx0
+	qh4RK6Dd2+9Zx9y/BXsdfGD3FFI6UuYktZZNtoRY9RDOmIyacOEZT2WCOy8pXpGzY6iwBEd6cy0yM
+	5B9HH60Ny3vJ6FFPCsxRACIoK9x9fB2/MhT1OAFqPJ0B8VWkDMwLiJxebxSSvXmDin3QCJtH0aS7L
+	8DXrZYP9Zj9Aaox/qUHb3/BbEJEAlgAhu+82PWvPFI1uKOWvX4WaOKGkXL3R728yy4BxNF4S2VEw3
+	IEWINQZw==;
 Received: from [66.186.210.122] (helo=localhost)
 	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wu8lQ-0000000GFoB-01Ms;
-	Wed, 12 Aug 2026 13:13:00 +0000
+	id 1wu8lR-0000000GFoJ-04kU;
+	Wed, 12 Aug 2026 13:13:01 +0000
 From: Christoph Hellwig <hch@lst.de>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: Damien Le Moal <dlemoal@kernel.org>,
 	io-uring@vger.kernel.org
-Subject: [PATCH 3/5] liburing: add io_uring_prep_cmd_zone_reset
-Date: Wed, 12 Aug 2026 07:12:50 -0600
-Message-ID: <20260812131255.258582-4-hch@lst.de>
+Subject: [PATCH 4/5] man: add io_uring_prep_cmd_zone_reset_all.3 man page
+Date: Wed, 12 Aug 2026 07:12:51 -0600
+Message-ID: <20260812131255.258582-5-hch@lst.de>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260812131255.258582-1-hch@lst.de>
 References: <20260812131255.258582-1-hch@lst.de>
@@ -49,96 +49,75 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Add a helper for io_uring zone_reset_all commands.
+Add documentation for the new zone reset all io_uring cmd.
 
 Signed-off-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
 ---
- configure              | 31 +++++++++++++++++++++++++++++++
- src/include/liburing.h |  7 +++++++
- src/liburing-ffi.map   |  5 +++++
- 3 files changed, 43 insertions(+)
+ man/io_uring_prep_cmd_zone_reset_all.3 | 54 ++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 man/io_uring_prep_cmd_zone_reset_all.3
 
-diff --git a/configure b/configure
-index b953eddd6ddc..8c5ca801f487 100755
---- a/configure
-+++ b/configure
-@@ -469,6 +469,21 @@ if compile_prog "" "" "discard command"; then
- fi
- print_config "discard command support" "$discard_cmd"
- 
-+##########################################
-+# Check block zone_reset_all cmd support
-+zone_reset_all_cmd="no"
-+cat > $TMPC << EOF
-+#include <linux/blkdev.h>
-+int main(void)
-+{
-+  return BLOCK_URING_CMD_ZONE_RESET_ALL;
-+}
-+EOF
-+if compile_prog "" "" "zone_reset_all command"; then
-+  zone_reset_all_cmd="yes"
-+fi
-+print_config "zone_reset_all command support" "$zone_reset_all_cmd"
+diff --git a/man/io_uring_prep_cmd_zone_reset_all.3 b/man/io_uring_prep_cmd_zone_reset_all.3
+new file mode 100644
+index 000000000000..9512fa6bbe73
+--- /dev/null
++++ b/man/io_uring_prep_cmd_zone_reset_all.3
+@@ -0,0 +1,54 @@
++.\" Copyright (C) 2026 Christoph Hellwig <hch@lst.de>
++.\"
++.\" SPDX-License-Identifier: LGPL-2.0-or-later
++.\"
++.TH io_uring_prep_cmd_zone_reset_all 3 "Aug 11, 2026" "liburing-2.16" "liburing Manual"
++.SH NAME
++io_uring_prep_cmd_zone_reset_all \- prepare a zone_reset_all command
++.SH SYNOPSIS
++.nf
++.B #include <liburing.h>
++.PP
++.BI "void io_uring_prep_cmd_zone_reset_all(struct io_uring_sqe *" sqe ", int " fd ");"
++.fi
++.SH DESCRIPTION
++The
++.BR io_uring_prep_cmd_zone_reset_all (3)
++function prepares a zone_reset_all command request. The submission queue entry
++.I sqe
++is setup to reset all sequential write required zones on the block device
++pointed to by
++.IR fd .
 +
- ##########################################
- # Check idtype_t support
- has_idtype_t="no"
-@@ -797,6 +812,22 @@ else cat >> $compat_h << EOF
- EOF
- fi
- 
-+if test "$zone_reset_all_cmd" != "yes"; then
-+cat >> $compat_h << EOF
++This command does not synchronize against concurrent file operations, including
++but not limited to reads, write, ioctls and other uring_cmds and only performs
++a best effort invalidation of the page cache for the device.  The user has
++to make sure that no other in-flight requests are modifying or reading the
++range(s). If that is the case, it might result in stale page cache and data
++inconsistencies.
 +
-+#include <linux/ioctl.h>
++Available since Linux 7.TBD.
 +
-+#ifndef BLOCK_URING_CMD_ZONE_RESET_ALL
-+#define BLOCK_URING_CMD_ZONE_RESET_ALL			_IO(0x12, 1)
-+#endif
-+
-+EOF
-+else cat >> $compat_h << EOF
-+#include <linux/blkdev.h>
-+
-+EOF
-+fi
-+
- cat >> $compat_h << EOF
- #endif
- EOF
-diff --git a/src/include/liburing.h b/src/include/liburing.h
-index 0188937b0de4..214c7778d6a7 100644
---- a/src/include/liburing.h
-+++ b/src/include/liburing.h
-@@ -1685,6 +1685,13 @@ IOURINGINLINE void io_uring_prep_cmd_discard(struct io_uring_sqe *sqe,
- 	sqe->addr3 = nbytes;
- }
- 
-+IOURINGINLINE void io_uring_prep_cmd_zone_reset_all(struct io_uring_sqe *sqe,
-+						    int fd)
-+	LIBURING_NOEXCEPT
-+{
-+	io_uring_prep_uring_cmd(sqe, BLOCK_URING_CMD_ZONE_RESET_ALL, fd);
-+}
-+
- IOURINGINLINE void io_uring_prep_pipe(struct io_uring_sqe *sqe, int *fds,
- 				      int pipe_flags)
- {
-diff --git a/src/liburing-ffi.map b/src/liburing-ffi.map
-index bd7bc64416d3..fc9701b63907 100644
---- a/src/liburing-ffi.map
-+++ b/src/liburing-ffi.map
-@@ -275,3 +275,8 @@ LIBURING_2.15 {
- 		io_uring_register_zcrx_ctrl;
- 		io_uring_register_query;
- } LIBURING_2.14;
-+
-+LIBURING_2.16 {
-+	global:
-+		io_uring_prep_cmd_zone_reset_all;
-+} LIBURING_2.14;
++.SH RETURN VALUE
++None
++.SH ERRORS
++The CQE
++.I res
++field will contain the result of the operation. On success, this field will be
++set to
++.B 0 .
++On error, a negative error value is returned. Note that where synchronous
++system calls will return
++.B -1
++on failure and set
++.I errno
++to the actual error value, io_uring never uses
++.IR errno .
++Instead it returns the negated
++.I errno
++directly in the CQE
++.I res
++field.
++.SH SEE ALSO
++.BR io_uring_get_sqe (3),
++.BR io_uring_submit (3),
 -- 
 2.53.0
 
