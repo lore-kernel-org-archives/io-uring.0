@@ -1,136 +1,104 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B7B37207D
-	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 15:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6837536F415
+	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 20:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786550158; cv=none; b=Ms2uobIg3PAyQoMH8AczWCHnnWGJZ/1Eh8nwQyLLnkse1/e8tAl8+BtwQXD6hpjo53Tu9qo+I0jeiomnJhIWGzj7GT8fxgBnJoppQe8iISNJqmjQR3FqvwBsZkeUhJdhBLuhjS4EcgqFIglw7hPc/U/mRHtrQjBB4cFxVVY7xrg=
+	t=1786566707; cv=none; b=iDqISFf6oecmG28UlV63KlhrvcDsRBpe+jV54ieykIyK4YBPgcN542d0b2FgmS7uYC/AMwLXiRAl6wo+S9dbXLN5KfguLBOh5U3IeWsSXMwvTk0yuQbhZ4eK+xqlWccobOHOy00wxDn7cdNhiLYhB1FjAmemguEXz9MZB4HRzAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786550158; c=relaxed/simple;
-	bh=I0hYxzm8ESCCUv9MREtI7X4Q+JtGw8cI7QyBai9qXrg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fvvb5is4bK/2qU+JoywJEMIAq/TLTeT0r0mYt3eX8aY3bgsBlqDIlkO6887N2I2oslw0++BqzZu5NXbO1pe7c4L5QVwbhqB0OrOR8EyVWFKZ9GgohJacrJVZcEp4p0iV8sJAMowF7KatTmXL9aIYSq2SeViadnfhh4Z/DqGhwNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id A6B5968CFE; Wed, 12 Aug 2026 17:50:08 +0200 (CEST)
-Date: Wed, 12 Aug 2026 17:50:07 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-	Damien Le Moal <dlemoal@kernel.org>, io-uring@vger.kernel.org
-Subject: Re: [PATCH 3/5] liburing: add io_uring_prep_cmd_zone_reset
-Message-ID: <20260812155007.GA10483@lst.de>
-References: <20260812131255.258582-1-hch@lst.de> <20260812131255.258582-4-hch@lst.de> <CADUfDZoGWymYvu43voXCFuO_1_bZwte=wFhKVUKfzmM9M7Dr3w@mail.gmail.com>
+	s=arc-20240116; t=1786566707; c=relaxed/simple;
+	bh=in0hqeed5AVxq+PUOrsZClUV+nf49uajE1f3xQd5+vY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=byqYwEPTLh/4oxD52ODwpy+wi8aPIuwbyCd9opoJdiacVBxU5PCevnwNcAlJKM9JzYODt7GQevS/5GRQdCyoN2o6hVPQ8tbRk326OEIihghNwxN/fskxPKdEJqRtRCTbLcFtmsSBdD5QSBICIWdPlMdEWR735Crm8lnWOtH8ATM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=bhyZCI6P; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="bhyZCI6P"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=/qOhfugf4rgGjgFLQbglb4MVW5O8ytwxggNeQikXEas=; b=bhyZCI6PdevAJptzB06/eBdMD3
+	EOzg3ASARCr0hbQMwHBhyeLwGWVVAol1aTSewol+HzmX04c9kWfF9WKtbQwHHFkCOxcs2iGBpXsLu
+	JIQwWigzt5VofTTk4CUT6nA7BdFmrFRkeuUH398HJ7IZPOsu6Yae2ASm3Xg+jvpH331Dlv/DwaN4H
+	CMqpt3rUWXq4Ee6vPE2YhwoDmSvVUim87aOEQswBw6MA90PgocLTfgm/F5YNH3ELaszUaPIDD4FI/
+	OpGKtdXf/SqwXyLNd6O0pan2uX9cNFzkoNin4F3IMr8lIdcJ7MXCP7gxPgh21iNJ7n8qmp8Anrv4F
+	SY/CnpkA==;
+Received: from [151.115.150.205] (port=52324 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1wuFc0-0000000BTh4-3qnc;
+	Wed, 12 Aug 2026 22:31:43 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: io-uring@vger.kernel.org
+Cc: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: [PATCH] io_uring/rsrc: reject overflowing regvec bvec byte counts
+Date: Wed, 12 Aug 2026 20:30:42 +0000
+Message-ID: <20260812203042.720348-1-Jeremy.Jean@oss.cyber.gouv.fr>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADUfDZoGWymYvu43voXCFuO_1_bZwte=wFhKVUKfzmM9M7Dr3w@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-On Wed, Aug 12, 2026 at 08:43:16AM -0700, Caleb Sander Mateos wrote:
-> On Wed, Aug 12, 2026 at 6:17 AM Christoph Hellwig <hch@lst.de> wrote:
-> >
-> > Add a helper for io_uring zone_reset_all commands.
-> >
-> > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
-> > ---
-> >  configure              | 31 +++++++++++++++++++++++++++++++
-> >  src/include/liburing.h |  7 +++++++
-> >  src/liburing-ffi.map   |  5 +++++
-> >  3 files changed, 43 insertions(+)
-> >
-> > diff --git a/configure b/configure
-> > index b953eddd6ddc..8c5ca801f487 100755
-> > --- a/configure
-> > +++ b/configure
-> > @@ -469,6 +469,21 @@ if compile_prog "" "" "discard command"; then
-> >  fi
-> >  print_config "discard command support" "$discard_cmd"
-> >
-> > +##########################################
-> > +# Check block zone_reset_all cmd support
-> > +zone_reset_all_cmd="no"
-> > +cat > $TMPC << EOF
-> > +#include <linux/blkdev.h>
-> > +int main(void)
-> > +{
-> > +  return BLOCK_URING_CMD_ZONE_RESET_ALL;
-> > +}
-> > +EOF
-> > +if compile_prog "" "" "zone_reset_all command"; then
-> > +  zone_reset_all_cmd="yes"
-> > +fi
-> > +print_config "zone_reset_all command support" "$zone_reset_all_cmd"
-> > +
-> >  ##########################################
-> >  # Check idtype_t support
-> >  has_idtype_t="no"
-> > @@ -797,6 +812,22 @@ else cat >> $compat_h << EOF
-> >  EOF
-> >  fi
-> >
-> > +if test "$zone_reset_all_cmd" != "yes"; then
-> > +cat >> $compat_h << EOF
-> > +
-> > +#include <linux/ioctl.h>
-> > +
-> > +#ifndef BLOCK_URING_CMD_ZONE_RESET_ALL
-> > +#define BLOCK_URING_CMD_ZONE_RESET_ALL                 _IO(0x12, 1)
-> > +#endif
-> > +
-> > +EOF
-> > +else cat >> $compat_h << EOF
-> > +#include <linux/blkdev.h>
-> > +
-> > +EOF
-> > +fi
-> > +
-> >  cat >> $compat_h << EOF
-> >  #endif
-> >  EOF
-> > diff --git a/src/include/liburing.h b/src/include/liburing.h
-> > index 0188937b0de4..214c7778d6a7 100644
-> > --- a/src/include/liburing.h
-> > +++ b/src/include/liburing.h
-> > @@ -1685,6 +1685,13 @@ IOURINGINLINE void io_uring_prep_cmd_discard(struct io_uring_sqe *sqe,
-> >         sqe->addr3 = nbytes;
-> >  }
-> >
-> > +IOURINGINLINE void io_uring_prep_cmd_zone_reset_all(struct io_uring_sqe *sqe,
-> > +                                                   int fd)
-> > +       LIBURING_NOEXCEPT
-> > +{
-> > +       io_uring_prep_uring_cmd(sqe, BLOCK_URING_CMD_ZONE_RESET_ALL, fd);
-> > +}
-> > +
-> >  IOURINGINLINE void io_uring_prep_pipe(struct io_uring_sqe *sqe, int *fds,
-> >                                       int pipe_flags)
-> >  {
-> > diff --git a/src/liburing-ffi.map b/src/liburing-ffi.map
-> > index bd7bc64416d3..fc9701b63907 100644
-> > --- a/src/liburing-ffi.map
-> > +++ b/src/liburing-ffi.map
-> > @@ -275,3 +275,8 @@ LIBURING_2.15 {
-> >                 io_uring_register_zcrx_ctrl;
-> >                 io_uring_register_query;
-> >  } LIBURING_2.14;
-> > +
-> > +LIBURING_2.16 {
-> > +       global:
-> > +               io_uring_prep_cmd_zone_reset_all;
-> > +} LIBURING_2.14;
-> 
-> Mentioned this on v1 too, but I think this should inherit from LIBURING_2.15.
+io_import_reg_vec() converts the estimated number of bio_vec entries
+into iovec-sized storage when struct bio_vec is larger than struct
+iovec. The conversion still multiplies nr_segs by sizeof(struct
+bio_vec) in size_t without checking for overflow.
 
-And I do remember it now that you mention it again, not sure why it
-splitted through sorry.
+On 32-bit kernels, a registered buffer large enough to make
+io_estimate_bvec_size() return 357913942 segments wraps the byte count
+from 0x100000008 to 8. io_vec_realloc() then reserves only the input
+iovecs plus one extra slot while io_vec_fill_bvec() writes the full
+bio_vec array.
+
+Check both the multiplication and the rounding addition before
+deriving the replacement iovec count.
+
+Fixes: b4e41050b212 ("io_uring/rsrc: raise registered buffer 1GB limit")
+Assisted-by: Codex:gpt-5
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+---
+ io_uring/rsrc.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 8d0f2ee24e0c..98dccefd801b 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -1653,8 +1653,12 @@ int io_import_reg_vec(int ddir, struct iov_iter *iter,
+ 	if (sizeof(struct bio_vec) > sizeof(struct iovec)) {
+ 		size_t bvec_bytes;
+ 
+-		bvec_bytes = nr_segs * sizeof(struct bio_vec);
+-		nr_segs = (bvec_bytes + sizeof(*iov) - 1) / sizeof(*iov);
++		if (check_mul_overflow((size_t)nr_segs, sizeof(struct bio_vec),
++				       &bvec_bytes) ||
++		    check_add_overflow(bvec_bytes, sizeof(*iov) - 1,
++				       &bvec_bytes))
++			return -EOVERFLOW;
++		nr_segs = bvec_bytes / sizeof(*iov);
+ 		nr_segs += nr_iovs;
+ 	}
+ 
+-- 
+2.47.3
+
