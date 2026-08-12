@@ -1,76 +1,198 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC8B44C652
-	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 13:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786540384; cv=none; b=Ml61IAofnpPjf4wu6KumaAl2WHa+d8p9lV3BW1iNLPv/FkfQrBOZVeqUQnx/dmMVS7k1LA5y1RmuwlCkE4bkVs7xSErQ3cKs8kCQGudG10yDmXl+83MY2NpTW63gSBhZLsl4GPyP5HWTyp0OD5bn4j+XIe6TGqihCGlwF//OYEE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786540384; c=relaxed/simple;
-	bh=+ZIC0vZuXY4WJI6yn5thLdYXZdodOx8LgMEuL4TQCVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Flawa2pd1dehAEFnQUSouDerhxSVnIOOZyM718W/lVU7Nb7qPxBcnbr7lF83DXZhEFPw9yU6vzyvhcuAo2IgCw5ZJb+sVPsN8xnvDjtrMSLdhkqy7w5gKBNsvqgzMwIpEioLFAY7P4NL1ZQmSrnUc3N2Jd/fghBLebJP/oOrIQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=BNV38n8T; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DC783321A7
+	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 15:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786549412; cv=pass; b=X2Q37d40bx67VQi0lQ8dgLKZDIIb4qA1+2IYe/Da2LjlJfIZgYgtYSSYTe3QT2mannsIbFKsa8odw+SchgIpsK4x2Eqjlq50xujdDjZZfwPGyHdAAciuEcim84q2PctnFV0Bu4PTUZQKNrYqQLN0hZz7kSMQwlhkMBDggBoYWEM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786549412; c=relaxed/simple;
+	bh=ScHDScDNMlJ5fTamuzPWs9wRccu7Wb8nIAYp3gFKnDg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pgI22zZtCN4HgMcbH6D7AVk3gf/N+zRM4aA/EZFb9t28qtZr8iZXIpP/15YXP8bev+8wgvsK6cppO6uN1LC1Cxv8PA8rUatvelUQ+3WRyKDpA4x+NcoDpvGkxZnkNRNbE79korS83xd40eMkPSIhOBPbLCRjTvlmdvzfkofQZvE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=broXVNHi; arc=pass smtp.client-ip=209.85.160.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="BNV38n8T"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=JtJ0BSvrVnUqK/EDj5EPk8LYdOQZY7LrKXGkCWdjAJU=; b=BNV38n8TYbrEPBA+PhQunkjD1+
-	HUQt1KieJuo7tdmQcdlwCWffGV8t5jx7jHPpZsOIv/1DM3TFT6FzCRRgiE45xgD6/WZzsDXdNXOu2
-	k376dQn4tPCGh55dT1vZjah0uxjVPCuEdh15kc9qFrJn8mNW7sAnHWBKI5DauYdqK3XCWF8wtnSGP
-	w+aVZsPRjnXopDAn/a3cMUgpug4cYpbh4UJFp8fHtFUyceyNcmC5FOcqEDU1wN75nC7jJh2iMPKfV
-	CmyiQ2cX6FdGcUZo26oJkRpRTuqPU+GhnG4Aq9pe6Y4aP94PFWEt3s00pUaLe4YdWUD+nKM88BwHo
-	wwQtr2Dw==;
-Received: from [66.186.210.122] (helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wu8lO-0000000GFny-3bPh;
-	Wed, 12 Aug 2026 13:12:58 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Damien Le Moal <dlemoal@kernel.org>,
-	io-uring@vger.kernel.org
-Subject: [PATCH 1/5] configure: shorten the message for the discard command
-Date: Wed, 12 Aug 2026 07:12:48 -0600
-Message-ID: <20260812131255.258582-2-hch@lst.de>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260812131255.258582-1-hch@lst.de>
-References: <20260812131255.258582-1-hch@lst.de>
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="broXVNHi"
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-455f99ad59fso99647fac.2
+        for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 08:43:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786549409; cv=none;
+        d=google.com; s=arc-20260327;
+        b=bSEnd2RMl0SMZnsnyViHSPGz0EAnV+JvPGu3d/6a0KfcKJfrEKZasDXSDqfC1N0FtA
+         IdsgtvrahZrRffp00vujVvGP3T60ngQycZ12zW5EUMGR2zPd2K/fdqRiSc7yRLTY0DqZ
+         H8dCS9FqeKUpZJ61v+0JwqRvWlP687xNfJoRJFKOfNZnQFxyDFD513f6BcVuUvhtutAy
+         RbMSsGQWMrmRv3ntXXs2EroafU1pt8aM+kFpGahnDwxLjNSySvpDve3LGpRXQxWGW7Zl
+         6OilJyQkFvVAjjbXEtzruOMx5Lej3KN4pVjfbwRRdRpXdw2er2mjHZamTHT6UrGcWiwt
+         O/kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sdsaaTXW9RzJN3MY3F/eQgCjMERzKMOmlE77UxLdPmA=;
+        fh=S+Rje72JXtiA3fSsIfDagYq93uXy3m0gSMBW1gR/Jv0=;
+        b=Xk6Or4gZOX5yx2sMOuc6P5o0fchX3oUf7SKCoUZOD69SmuFj+1XHo9Di7bzIlKild9
+         e1hmShR7cYtxvKbJamg3t0Zo3IvYQM+7CqOvTqOLIFuYkyzrVA0Wu/XTlTnnUHrZ8uTy
+         XC1ix7ouX+wOSouyxsewcKFV8G7sejrcNdGDUC3RHMbJ9H7bLtrlmxGa0RobJcPQvq+4
+         4gW2exul+IsIS7CmxUql6KE6ObQ2QOf0SxDl5zHqC+U3VkXRz83VHRu/n5VzkV3mWJFN
+         0KnyAyTJqIvLkvRZb/Z+X+b8NXTt8nVBotWIc1IoNs/JOYk3yUGrpqBCtqYt0cJtKmXb
+         mUwQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1786549409; x=1787154209; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=sdsaaTXW9RzJN3MY3F/eQgCjMERzKMOmlE77UxLdPmA=;
+        b=broXVNHifNzZHVxaXKR790F8gWscbc5s7/tP3LUyCtDMUEqsLCi8Pul+qhqIUHWjjK
+         jlhC2jTzLxEIdzp6MjfYJQ2kmeQjJVnEUME5y5+NVXp4igontoaosElYiTZeSzmwQ4yr
+         qhAFEINgeCcMGnY7WGAP0rgZCokkl05OqCT9O0F0gJT+z9iJrgS4Ck5POm1J1dYXfDgV
+         zqRXTd0ZWHFSVtqCNhnrLJM12gsk9mr4yUFIaNSETiXKC8WGoxxkPaShdi9AEIhlSsrM
+         I6wd3/h9h+EXxgklUR9U816a6MCgAuD5dLhjwU6fymQ5qBwGvLq8d4KmYpoRl6bQxDsH
+         kRDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786549409; x=1787154209;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sdsaaTXW9RzJN3MY3F/eQgCjMERzKMOmlE77UxLdPmA=;
+        b=ocHz4tGXlHxOXBdsLDEwHHD/rlp2MWLqPPqV96v10KXsT1ZXDba/D9I1XJR23B3aDz
+         ZY1ES/S824OIVxGk2s9fbobTYQga+zabqVOnQ0u1Oa0sUec/AR16Wx7v3zlTwD59AU07
+         G/c/Bn5PIKEsp6WxzXlsldzYwmugjyuexjPp09fWfh6We7rKRCC1UQRTjtKrdGIYfEYJ
+         YsW1m+KEGOwKneffJT+PkoSfxlDjpaOBcXgLe5aJ6W/nOdv34W3h4ohz0O8M5ezcN0v3
+         nIIRt/IL1/NtAPiMGmeBCeFKSy/+0aydDdtCy84/0EMWU5Y9G7mxok9LFI8JLXEp1am/
+         v5wg==
+X-Forwarded-Encrypted: i=1; AHgh+Rpt4MJuePKbAmwPWnY3eBe/MbbFz+unyvg8WT7A2Wz00PfiUZb587cQQC/0OejFU7WjADBL7re3tQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUCeS82v5L+buXQPEzXl7PHNASOpJd+xMpsqXxgEzU75R+pDt8
+	URcpx29+3H7AB712m2IhXxjdqhZyakC6wQtI0rM4qwFKGCh+XaiFESEqae2VXjIDcyeuWyAz4Z/
+	iRGMqwSto7TFWXgZcHLjT27of2SyPQTTeIev7lU4Jfg==
+X-Gm-Gg: AR+sD138cnHboYv9lFdWsy+JT9MUi1XjxRahxABbVS0IG7nsxNxIN/JjoIal/lUiPOx
+	4qPJvL6mJLNKkiqX6Zk821uWD6gFwDQXTgWM1M1e6/t115PZTntU5rhAl1n98PlWWrBJ+HJp9AY
+	s1iw60lrwv9GiDSuu2J39PZg9lCnVjqUw1qF6Zi54W5qEUBEkLJ50Yq9kGNbt3Y27z2jZ4RjYt4
+	4GebZpUoqMzD+9W1yHi5rGHR4C2avlTEPuj7obtG4CdJ+7lVnK7pQ9eCus3JonYGnyAAZXCFCyH
+	PlGsQOinMlIWPgFwMHvIEnm9ZmhFp2ibOjII1QC7s8UiAg==
+X-Received: by 2002:a05:6870:334b:b0:43b:5127:7511 with SMTP id
+ 586e51a60fabf-45e3ecc7b35mr3001141fac.4.1786549409199; Wed, 12 Aug 2026
+ 08:43:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20260812131255.258582-1-hch@lst.de> <20260812131255.258582-4-hch@lst.de>
+In-Reply-To: <20260812131255.258582-4-hch@lst.de>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Wed, 12 Aug 2026 08:43:16 -0700
+X-Gm-Features: AUfX_mxpKDAu-AfHc-jWmhysyidWziOSX6tW06gUXwKBkGLLDguAFbcFWZIs9LE
+Message-ID: <CADUfDZoGWymYvu43voXCFuO_1_bZwte=wFhKVUKfzmM9M7Dr3w@mail.gmail.com>
+Subject: Re: [PATCH 3/5] liburing: add io_uring_prep_cmd_zone_reset
+To: Christoph Hellwig <hch@lst.de>
+Cc: Jens Axboe <axboe@kernel.dk>, Damien Le Moal <dlemoal@kernel.org>, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The current message is pretty long, drop the redundant io_uring.
-This aligns it with the soon to be added zone_reset_all message.
+On Wed, Aug 12, 2026 at 6:17=E2=80=AFAM Christoph Hellwig <hch@lst.de> wrot=
+e:
+>
+> Add a helper for io_uring zone_reset_all commands.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+> ---
+>  configure              | 31 +++++++++++++++++++++++++++++++
+>  src/include/liburing.h |  7 +++++++
+>  src/liburing-ffi.map   |  5 +++++
+>  3 files changed, 43 insertions(+)
+>
+> diff --git a/configure b/configure
+> index b953eddd6ddc..8c5ca801f487 100755
+> --- a/configure
+> +++ b/configure
+> @@ -469,6 +469,21 @@ if compile_prog "" "" "discard command"; then
+>  fi
+>  print_config "discard command support" "$discard_cmd"
+>
+> +##########################################
+> +# Check block zone_reset_all cmd support
+> +zone_reset_all_cmd=3D"no"
+> +cat > $TMPC << EOF
+> +#include <linux/blkdev.h>
+> +int main(void)
+> +{
+> +  return BLOCK_URING_CMD_ZONE_RESET_ALL;
+> +}
+> +EOF
+> +if compile_prog "" "" "zone_reset_all command"; then
+> +  zone_reset_all_cmd=3D"yes"
+> +fi
+> +print_config "zone_reset_all command support" "$zone_reset_all_cmd"
+> +
+>  ##########################################
+>  # Check idtype_t support
+>  has_idtype_t=3D"no"
+> @@ -797,6 +812,22 @@ else cat >> $compat_h << EOF
+>  EOF
+>  fi
+>
+> +if test "$zone_reset_all_cmd" !=3D "yes"; then
+> +cat >> $compat_h << EOF
+> +
+> +#include <linux/ioctl.h>
+> +
+> +#ifndef BLOCK_URING_CMD_ZONE_RESET_ALL
+> +#define BLOCK_URING_CMD_ZONE_RESET_ALL                 _IO(0x12, 1)
+> +#endif
+> +
+> +EOF
+> +else cat >> $compat_h << EOF
+> +#include <linux/blkdev.h>
+> +
+> +EOF
+> +fi
+> +
+>  cat >> $compat_h << EOF
+>  #endif
+>  EOF
+> diff --git a/src/include/liburing.h b/src/include/liburing.h
+> index 0188937b0de4..214c7778d6a7 100644
+> --- a/src/include/liburing.h
+> +++ b/src/include/liburing.h
+> @@ -1685,6 +1685,13 @@ IOURINGINLINE void io_uring_prep_cmd_discard(struc=
+t io_uring_sqe *sqe,
+>         sqe->addr3 =3D nbytes;
+>  }
+>
+> +IOURINGINLINE void io_uring_prep_cmd_zone_reset_all(struct io_uring_sqe =
+*sqe,
+> +                                                   int fd)
+> +       LIBURING_NOEXCEPT
+> +{
+> +       io_uring_prep_uring_cmd(sqe, BLOCK_URING_CMD_ZONE_RESET_ALL, fd);
+> +}
+> +
+>  IOURINGINLINE void io_uring_prep_pipe(struct io_uring_sqe *sqe, int *fds=
+,
+>                                       int pipe_flags)
+>  {
+> diff --git a/src/liburing-ffi.map b/src/liburing-ffi.map
+> index bd7bc64416d3..fc9701b63907 100644
+> --- a/src/liburing-ffi.map
+> +++ b/src/liburing-ffi.map
+> @@ -275,3 +275,8 @@ LIBURING_2.15 {
+>                 io_uring_register_zcrx_ctrl;
+>                 io_uring_register_query;
+>  } LIBURING_2.14;
+> +
+> +LIBURING_2.16 {
+> +       global:
+> +               io_uring_prep_cmd_zone_reset_all;
+> +} LIBURING_2.14;
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
----
- configure | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Mentioned this on v1 too, but I think this should inherit from LIBURING_2.1=
+5.
 
-diff --git a/configure b/configure
-index 39c377c9bf8b..b953eddd6ddc 100755
---- a/configure
-+++ b/configure
-@@ -467,7 +467,7 @@ EOF
- if compile_prog "" "" "discard command"; then
-   discard_cmd="yes"
- fi
--print_config "io_uring discard command support" "$discard_cmd"
-+print_config "discard command support" "$discard_cmd"
- 
- ##########################################
- # Check idtype_t support
--- 
-2.53.0
-
+Best,
+Caleb
