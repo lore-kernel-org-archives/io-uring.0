@@ -1,81 +1,55 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E677035CBCB;
-	Wed, 12 Aug 2026 07:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBC444C64B
+	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 13:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786520833; cv=none; b=EXimphR5rAQ01hs6ohYrUcJu2iywjMiagr1OkcfacI2pcqogjt9BkbeZgytaLt7pUQ5Z98Qfo57QwUmwuI22PcIZspNvYSmnbk+OIEBGM6yxIbwHoNItEPvXEOZDJp4tNqpgWRFFRWuVqOEbnLFFn/BaUW254CSVt40z8qgZKjk=
+	t=1786540382; cv=none; b=NqV8m3ros4IVuEuF5VDugjqdBP9/oUDgSkJV+jiEDCmwI1fFy24N/1zKE4I3Jxa1s4b5AF+UHbCftfWoD5hkMSflJXmHEsMJNzIsp4/HYfIORoRdFduIkolwGvmKsxqzq0SpNgUSzC1OmZxDuGiQdf6jHDFkSbi7oIwBM22xIoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786520833; c=relaxed/simple;
-	bh=YAO7/Z3FwVPhLTDNo6IBHCdZaFTioqw4FGAPksXEaOQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=FvPTDpUxQVYGgoodM3TRu6q37QP5eBzuYymdeIfxPgQTI/i1lpyM9++zYWvflWRWm1WEDpRd4bT+DKwx4DxRLut//EZEI3+lM/boFiOG0CYWuFwcyZUW6ISj+iuC81J6cLMXT/9DIsEfpPYjTj/C9AEbxVJAc6Fwpq5OldnwRDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KwlJFuTw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786540382; c=relaxed/simple;
+	bh=Kp4yXPaLqA1SpI9hKYCcfBVpz4fwCl1y8X0YmfiC2TM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VV77ASBOHxHYDRykK6jghyEDjR3UHUQN9VErzBTyBgY2wL4jjU/K1osLiUKGu/8c2nTFetOHIiNva7Jzwo7Q1S3fGyryKmBVJTn6epyNMK4aFFTBGVlurXWOyAX+epgrzDzbDZ42AHyPXm8ydSb5eA+dH9w/MpM3yi8koD8xlqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=d32czKLM; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KwlJFuTw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17FEA1F00ADF;
-	Wed, 12 Aug 2026 07:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786520831;
-	bh=7+4xqBQZFNKYLiBulFqJHuUElTToD0WrY6Nfi/ICEro=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date;
-	b=KwlJFuTw0uvX78gDZDSkAh9GYTHB/ga2dPLBWo43THKZKQgH1nZfdqwBjB+WRBQgs
-	 edVNte8LHVJw8GqtJd92PgeVYYqT9FwvYM2VaKENRwvMNRkx95MOiC2Ik+Bs7OSTQ3
-	 DOmv3I8qQo7+3aV11potFs97CQaYAbeF93h/xXsGBRo9dSO/Ax8ffJhPuT/AdXkRZa
-	 VRFze7ys/oCQwCmIrIU/12oZJ0n/BVz0EifHWk+PpY/+JbPIEZ1vqmkimSqlr7X+Mp
-	 quBXu44O4CXKgOWGvKFmXXWzcuG0n6f/AQga18PN2oX817S97Aqy5Hpoa3F80t73pu
-	 x9bACNiqEEAxA==
-From: Christian Brauner <brauner@kernel.org>
-To: Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
- Linus Torvalds <torvalds@linux-foundation.org>, 
- Mateusz Guzik <mjguzik@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>, 
- Oleg Nesterov <oleg@redhat.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- Alexey Gladkov <legion@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org
-In-Reply-To: <anCNoW-x0bcB2ggg@redhat.com>
-References: <anCNoW-x0bcB2ggg@redhat.com>
-Subject: Re: [PATCH v4] pipe: only enable the extra wake_up(rd_wait) for
- EPOLLET consumers
-Message-Id: <20260812-frust-wiegt-gewirbelt-988f24d646be@brauner>
-Date: Wed, 12 Aug 2026 09:46:59 +0200
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="d32czKLM"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=YxPfFZ1D1WVO9hvZ+3/PEPD3FwOsIm1hL/ovfbxq8+s=; b=d32czKLMN8GWRxCm9KBLU2xuOs
+	d4sOkWQsm+jUhbwBt2j6Hc6Rc3CCLm3iGr+Un5PuJHmFfugzujAInhoKIIyyPwNH3oDA7pyAsDNjj
+	CSQxc43aZLlK4NSOodQtj4Nlpvbhp+Jd2kXEWGF3oYDEVHlrVbLN3Me95m7+Kq6NllGxvKQHwecqH
+	qHVP91dArtij4LGU824JMu9sZvfqRHf78BRySdlxBQ54vuawOnyU5llWdsSH3rVtg0JbCV52dssdP
+	1iO/o/oxGx/Ly/2YBtp4RREFlRk7NO+stuMYjX6knA6SgyCkoGAYEV9CKszMxVCk8EDrCzHuWHI1P
+	1bc2VO6A==;
+Received: from [66.186.210.122] (helo=localhost)
+	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wu8lO-0000000GFnR-0Gas;
+	Wed, 12 Aug 2026 13:12:58 +0000
+From: Christoph Hellwig <hch@lst.de>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Damien Le Moal <dlemoal@kernel.org>,
+	io-uring@vger.kernel.org
+Subject: support ZONE_RESET_ALL in liburing v2
+Date: Wed, 12 Aug 2026 07:12:47 -0600
+Message-ID: <20260812131255.258582-1-hch@lst.de>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.17-dev-362b8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=918; i=brauner@kernel.org;
- h=from:subject:message-id; bh=YAO7/Z3FwVPhLTDNo6IBHCdZaFTioqw4FGAPksXEaOQ=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWTVqPyZ8fqfRkz3CduJZVk5ik8y4//3nX+TItidNMes4
- rKcmlJSRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwETeezP8r0iZuHjybJ6nGzoN
- Q502V4s7HDqkNkkrReI+m0hGbbazPiPDpv/5buuS/qrbKroem5EWn8394KLY3pTvSTPatH5Zql7
- hAwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-On Mon, 03 Aug 2026 14:46:25 +0200, Oleg Nesterov wrote:
-> pipe: only enable the extra wake_up(rd_wait) for EPOLLET consumers
+Hi Jens,
 
-Applied to the vfs-7.3.misc branch of the vfs/vfs.git tree.
-Patches in the vfs-7.3.misc branch should appear in linux-next soon.
+this is the liburing support for the just submitted ZONE_RESET_ALL uring
+cmd support.  Also a few fixup for the discard support that stood model.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.3.misc
-
-[1/1] pipe: only enable the extra wake_up(rd_wait) for EPOLLET consumers
-      https://git.kernel.org/vfs/vfs/c/07c3efe20e24
-
+Changes since v1:
+ - misc spelling fixes
