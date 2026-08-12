@@ -1,158 +1,163 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D8144AB73
-	for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 20:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B05530C14A
+	for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 00:22:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786480988; cv=none; b=aAQc2RhRL7p+BuTfwgOqqghDMoWcAXef7Gg8iYmWwVEcbqfNcl6YmgJwgHPn29GtdhFc0F74Smld65Kp0ACGb9O0/x/mE8Rhi8XPbrBgKg50q+FqTgBnvf+RzUfbcV1tx37yTpG63O08x7rw7N1y7ChhmYJYiH1YuSzxNYTieQo=
+	t=1786494158; cv=none; b=pBrvlrCuN6plyjpG3Y6BAhw/bVxLp3hmBDgw47ohQtBOoVCSClp6C+rSor8T5+7nA9jmkYZ+By9nXQZSOy3ppe+cKUtNdJIuiSfbOQjhzhk4CVZFQCMne2Y7EK9L7wYTsKQ1SdL9RuoxKfMsJ5aK7JPksekN9PmkUGbTGzFRImc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786480988; c=relaxed/simple;
-	bh=sHpa5fjeGnCP/yQZunKQW3d8rmujSYCW/f7sc+jrXRs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jeeAPgZWbgMd4fI8GSewNkBrogXfMUewEld3h8i1rMIrxEm+bAjN8C14Tht8PFarxxJlmFqm9B1SrFUUYe1cdavg86WRu2csjW26EkQ6QPUWzwNM6RJV8BY6lxBavcJnkxkvDtDnqS1QxMjxa/i4m3MfkutGmxAIzg7pqhRSUR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T1abMFk0; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T1abMFk0"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47db714766aso902317f8f.0
-        for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 13:43:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786480986; x=1787085786; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=bYHzlD8AP97+5gPoTHx0Gjj8ze70RRZtR6DtOoDWTFc=;
-        b=T1abMFk0Stwcvs2j921kU1f3kL309hxjHbRVkWiBPfp0B8fPwpQsaXv26gvA0LiLlZ
-         BosDCc7V4z14TZzaGsE7nOTuS7x+YyXiGGoGpR3s7ue4GmfcIHYkS1SXz+atLyU4b5pU
-         5veYwx5OwsEPiVF+blAwC3LaU3GCCJ/2X7KNzUZIftyVEAOqEvk9Mo/qpA57UVweFgr1
-         cggSuCN/Mt/ImdqIkXCZv+dVKpDlDvltNrVvMicDQMsv8Okr5PIoueQeY7h3inWI4Lzg
-         PRTVVFtuwL0nTcmKwUAS0VWwQVMhLpLZLGE31oo6xsQNBtIZCHVEXk9r3We/mqKonhnC
-         /ujA==
+	s=arc-20240116; t=1786494158; c=relaxed/simple;
+	bh=208QMu+OsTyZ3BSoitdxeWdPz87VNPqm5tyxEbhVBCU=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=kpLhBGEauHTj04R8UPisISI4j0EKF7OydbHlrCiUwwmamvwLtRXFUZFT4KeNAV8O2RCFxdQJWpCqdSbLQ2chiYnpzgbxBC4ixMGisYA7miTumZFCjiscT0JQFDjsfegxFbbCmYxyB9l8mU3SbJc3oVSs8ad9Q2VILdxn+2JPx3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-49ce04870f8so292937b6e.0
+        for <io-uring@vger.kernel.org>; Tue, 11 Aug 2026 17:22:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786480986; x=1787085786;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=bYHzlD8AP97+5gPoTHx0Gjj8ze70RRZtR6DtOoDWTFc=;
-        b=W4txPW8Sh5ubAnujMF9Pa5Ir1prBxZWSBWVvLnLO8ZY2CwQZsx9SAhEC+AmB5SYnss
-         ZC8bhmeKLTzefZA4wAIJ4BTVo4P4qVkdPKMPOb9Wtr+twXqywu2kewPVaRYLAgJfzASN
-         V+BeIYzHSznW77PZ5EVlvKB7JQvnluKoc1JCDgGF7XdkSBB7kkPZ+XOpz+isqxFTJSEv
-         DTZVy4NF3UsvoHMcMwyROWaO1n819+gkitq1Ts+MwFmEoP78nsLeyBCxyNIvIy+duH5V
-         qALDPaE563UH8y9JvMNYhi6Y58uv5Xo/15tFh3/MIso4ReD71bo5lydA04nl+bBmzKMt
-         Sckg==
-X-Gm-Message-State: AOJu0YyupebQNFMfN30LfJTZSdq7DQAP2IOaNT5a9E8h87GjeLXipj9H
-	GiUdYWk/HxFRro8r2c05aPDCbXEW1liY++lxDTING6NrgD0ycHmmBpP1
-X-Gm-Gg: AR+sD12Ar3N+b+6THYvtDL9Gw6wPgZyPJ8koYgSNzUbYafO0plipCV7I81poYU9E7SX
-	9+JW2QTtwJ7N1p2VowmR8l8Wn1uZk44I8UFwjjgR4dOyKk5rY74ZUQ0Gug625XLuvLFIrfB86Io
-	f8L24vDi4OEKCs+KlvkABBNjaTeDfMOo09mhVIklejxYk9Yx/cLVg46odQGxmF0VtDT3BgottGK
-	5Ps5RES1XAHxU26Se9+yJU6g6m+VxS+kfbuYr21uemRC7Hr+ojbX7ar17ySsl2smkp7weEFttMJ
-	i4Md3fPTQlnD4kGxIOyH2GtB61yWCjh9VRZNgKC+XTD9fEsTBKnzfTFPfxsqhhEO1HP699eKGCO
-	2JS7URKYlhj5I/4mUdFI1aZg+5BuroayuQ7FBcRK6rjeE7f4bzAkZty/UIOmgdBFUcBOvJ0cheh
-	KrnN1SdjSSpmQiJq4OtpWndwf6o2KhDDgi/ttIRE+xs2T9dgxPKaIZmjtPrEtS3hC7hvf1mZZYE
-	BwIZ+HpvB6Hqr4lQ/XQaaL2BASc9DMbSRM+yjKO3CzNGaF2flnnLHD/GKV5UwYt
-X-Received: by 2002:a05:6000:471d:b0:481:50ae:df9a with SMTP id ffacd0b85a97d-48150aedfe1mr1752584f8f.9.1786480985615;
-        Tue, 11 Aug 2026 13:43:05 -0700 (PDT)
-Received: from valmpani.valmpani (cgn-195-14-219-6.nc.de. [195.14.219.6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48150d72232sm1069253f8f.37.2026.08.11.13.43.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 13:43:04 -0700 (PDT)
-From: Vasileios Almpanis <vasilisalmpanis@gmail.com>
-Date: Tue, 11 Aug 2026 22:42:52 +0200
-Subject: [RFC PATCH] io_uring/cmd: don't skip completion for a non-armed
- multishot uring_cmd
+        d=1e100.net; s=20251104; t=1786494155; x=1787098955;
+        h=content-type:to:from:subject:message-id:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nMAcU0Te/6B7srJdAbN55W1Loj4vijaSz1wl3sGVswY=;
+        b=jIu5Nu2kmMxDjuUYJ5we0zU6kdeq1B46DDtY4hRO2cDdj7InM+yM+IKjmsHVKfNIjO
+         3R+kBixpyLog67QWkyu1mFVk5sA9o1Wf4BqEaGrHF3fdHw3bZkQcOdV19eBH2mj6cshU
+         oKz5llhnU6dqhXgEvJ6+2ueWiu8pcC/hFgzvM9vJSkPvXx2508v+2kpxHGIEY126TtVS
+         HbS7VYY7aZQZIuUSEG0grwBFUoCsu4seBR0Eu/ib0ZgvrAdcGQ/5ozvEl2o5wfiWuUDz
+         F8XrhP6cM6+4ZnsTCv0YPye9Xc43L3q6cIZjV9042RpzBzA3dnO3o8ICSzCEVJzFvDSY
+         QK5A==
+X-Forwarded-Encrypted: i=1; AHgh+Rqx25wD2MvKDA9D3AtPOsaADgG0Bqk1hO3efo62GGUbiTt25GcsP3pNxmWtKNXXnDnt6QlEDyK0qQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2D8khFq7w/6aXYuqIQ3o/oIUrgux5ls1iVAMIn3dq3XtaebBC
+	hQMfDCY5eOHpjM20w1j+oOXN7jfi+Rip8sX1vPf87zmzV1TcKFzjnKYPlx1fL/5KzIIq9Rty9x2
+	1x4abYsVOteUQAY9ykMnIPTFX1TqllRMopoXxZ/nUXpI/9IgJs/hITFlVRho=
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260811-io_uring-v1-1-1dc3dd50e0cd@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAEuJe2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDC0ND3cz8+NKizLx0XUMzS2Nj82RzEzNDcyWg8oKi1LTMCrBR0UpBbs4
- gsQDHEGcPpViIbHFpUlZqcgnINKXaWgDGAS7KegAAAA==
-X-Change-ID: 20260811-io_uring-169337c74617
-To: Jens Axboe <axboe@kernel.dk>, Ming Lei <ming.lei@redhat.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
- syzbot+a4ccdd7ebf452e4d4701@syzkaller.appspotmail.com, 
- Vasileios Almpanis <vasilisalmpanis@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786480984; l=2985;
- i=vasilisalmpanis@gmail.com; s=20260731; h=from:subject:message-id;
- bh=sHpa5fjeGnCP/yQZunKQW3d8rmujSYCW/f7sc+jrXRs=;
- b=nY7nDsC/IrTl/1kj140qwPTE61hVItgdLqqhD5PLa9YeZL0bgjxEvNehUB9JGifzb7wLLGcoX
- ygcOadn7XKjD1L2KzpPa32b0fd9FSCPzYMlTsZLQ8bsjNO2FPA2a4Xv
-X-Developer-Key: i=vasilisalmpanis@gmail.com; a=ed25519;
- pk=gn5Uo6yL8Tlpq5uATxA3nqoq+U8eWLRbjD+bOk0qSpU=
+X-Received: by 2002:a05:6808:2389:b0:497:d1e7:5e90 with SMTP id
+ 5614622812f47-4b210bb5798mr1075518b6e.18.1786494155514; Tue, 11 Aug 2026
+ 17:22:35 -0700 (PDT)
+Date: Tue, 11 Aug 2026 17:22:35 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a7bbccb.ac361c09.22ff0a.0048.GAE@google.com>
+Subject: [syzbot] [io-uring?] [net?] WARNING: refcount bug in zcrx_unregister_user
+From: syzbot <syzbot+a43f81e0646c5bbd2b88@syzkaller.appspotmail.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-io_uring_cmd() treats any uring_cmd carrying IORING_URING_CMD_MULTISHOT
-that returns >= 0 as "multishot armed, completion deferred" and returns
-IOU_ISSUE_SKIP_COMPLETE, expecting the provider to complete the request
-later. But the flag is user-controlled and validated only against buffer
-select, not against provider capability. A ->uring_cmd() handler that
-does not implement multishot and returns a normal >= 0 result then has
-its request skipped and never completed, leaking the io_kiocb and its
-io_async_cmd:
+Hello,
 
-  BUG: memory leak
-  unreferenced object (size 248):
-    kmem_cache_alloc_bulk_noprof+0x272/0x3f0
-    __io_alloc_req_refill+0x4a/0x150
-    io_submit_sqes.cold+0x16e/0x20b
-    __do_sys_io_uring_enter+0x56d/0xd60
+syzbot found the following issue on:
 
-syzbot hit this via ublk UBLK_U_CMD_ADD_DEV, but it is kernel-wide: the
-same leak reproduces with SOCKET_URING_OP_SIOCINQ on any socket fd, which
-returns the queued byte count and never inspects cmd->flags. No in-tree
-provider of multishot actually returns >= 0. Both io_cmd_poll_multishot()
-and ublk_handle_batch_fetch_cmd return -EIOCBQUEUED,
+HEAD commit:    ea2bff00da89 Add linux-next specific files for 20260806
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10e27e49580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b2f9169913eb6d73
+dashboard link: https://syzkaller.appspot.com/bug?extid=a43f81e0646c5bbd2b88
+compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10d92132580000
 
-Only skip completion when the command is really multishot, i.e.
-REQ_F_APOLL_MULTISHOT is set. Otherwise fall through and complete the
-request normally with its result.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/473ce49245bc/disk-ea2bff00.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4d5bfcd186f5/vmlinux-ea2bff00.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/281694927321/bzImage-ea2bff00.xz
 
-Fixes: 620a50c92700 ("io_uring: uring_cmd: add multishot support")
-Reported-by: syzbot+a4ccdd7ebf452e4d4701@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=a4ccdd7ebf452e4d4701
-Tested-by: syzbot+a4ccdd7ebf452e4d4701@syzkaller.appspotmail.com
-Signed-off-by: Vasileios Almpanis <vasilisalmpanis@gmail.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a43f81e0646c5bbd2b88@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+refcount_t: decrement hit 0; leaking memory.
+WARNING: lib/refcount.c:31 at refcount_warn_saturate+0x70/0x110 lib/refcount.c:31, CPU#0: syz.0.17/5808
+Modules linked in:
+CPU: 0 UID: 0 PID: 5808 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/24/2026
+RIP: 0010:refcount_warn_saturate+0x70/0x110 lib/refcount.c:31
+Code: c6 c0 fe 36 8f e8 90 e5 ee fc 83 fb 01 7e 22 83 fb 02 74 39 83 fb 03 74 47 83 fb 04 75 68 e8 f7 df ee fc 48 8d 3d b0 16 8b 0b <67> 48 0f b9 3a eb 66 85 db 74 3e 83 fb 01 75 4c e8 db df ee fc 48
+RSP: 0018:ffffc900032d78c8 EFLAGS: 00010293
+RAX: ffffffff84d8a429 RBX: 0000000000000004 RCX: ffff888032abddc0
+RDX: 0000000000000000 RSI: ffffffff8f36fec0 RDI: ffffffff9063bae0
+RBP: ffffc900032d7a10 R08: ffff888032abddc0 R09: 0000000000000005
+R10: 0000000000000004 R11: 0000000000000000 R12: ffff8880353d2700
+R13: dffffc0000000000 R14: ffff8880353d2744 R15: 0000000000000001
+FS:  00005555674e4500(0000) GS:ffff888124f12000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000200000002020 CR3: 0000000079e90000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ __refcount_dec include/linux/refcount.h:461 [inline]
+ refcount_dec include/linux/refcount.h:476 [inline]
+ ref_tracker_free+0x706/0x830 lib/ref_tracker.c:303
+ netdev_tracker_free include/linux/netdevice.h:4545 [inline]
+ netdev_put include/linux/netdevice.h:4562 [inline]
+ io_close_queue io_uring/zcrx.c:582 [inline]
+ zcrx_unregister_user+0x2d8/0x430 io_uring/zcrx.c:681
+ zcrx_unregister io_uring/zcrx.c:688 [inline]
+ io_register_zcrx+0x875/0xc00 io_uring/zcrx.c:1021
+ __io_uring_register io_uring/register.c:942 [inline]
+ __do_sys_io_uring_register io_uring/register.c:1040 [inline]
+ __se_sys_io_uring_register+0xc23/0x1ab0 io_uring/register.c:1017
+ do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+ do_syscall_64+0x166/0x510 arch/x86/entry/syscall_64.c:84
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fa6a959e0d9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe56af7168 EFLAGS: 00000246 ORIG_RAX: 00000000000001ab
+RAX: ffffffffffffffda RBX: 00007fa6a9825fa0 RCX: 00007fa6a959e0d9
+RDX: 0000200000000100 RSI: 0000000000000020 RDI: 0000000000000003
+RBP: 00007fa6a9635024 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fa6a9825fac R14: 00007fa6a9825fa0 R15: 00007fa6a9825fa0
+ </TASK>
+----------------
+Code disassembly (best guess), 5 bytes skipped:
+   0:	e8 90 e5 ee fc       	call   0xfceee595
+   5:	83 fb 01             	cmp    $0x1,%ebx
+   8:	7e 22                	jle    0x2c
+   a:	83 fb 02             	cmp    $0x2,%ebx
+   d:	74 39                	je     0x48
+   f:	83 fb 03             	cmp    $0x3,%ebx
+  12:	74 47                	je     0x5b
+  14:	83 fb 04             	cmp    $0x4,%ebx
+  17:	75 68                	jne    0x81
+  19:	e8 f7 df ee fc       	call   0xfceee015
+  1e:	48 8d 3d b0 16 8b 0b 	lea    0xb8b16b0(%rip),%rdi        # 0xb8b16d5
+* 25:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
+  2a:	eb 66                	jmp    0x92
+  2c:	85 db                	test   %ebx,%ebx
+  2e:	74 3e                	je     0x6e
+  30:	83 fb 01             	cmp    $0x1,%ebx
+  33:	75 4c                	jne    0x81
+  35:	e8 db df ee fc       	call   0xfceee015
+  3a:	48                   	rex.W
+
+
 ---
-Questions / Notes:
-- I put this in the core io_uring_cmd() rather than in provider specific
-  code because the leak is independent of the provider. From my research
-  so far no ->uring_cmd() rejects IORING_URING_CMD_MULTISHOT, they just
-  ignore it. The flag is only validated against buffer-select in
-  io_uring_cmd_prep(). So any handler that returns a plain >= 0 result
-  with the user-set flag leaks.
-- Instead of checking if it has been really armed should we just drop
-  the >= 0 check? The in-tree code that supports multishot returns
-  -EIOCBQUEUED from what I have seen so far.
----
- io_uring/uring_cmd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index c14c22cff49e..a2899a852879 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -269,7 +269,8 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
- 	}
- 
- 	ret = file->f_op->uring_cmd(ioucmd, issue_flags);
--	if (ioucmd->flags & IORING_URING_CMD_MULTISHOT) {
-+	if ((ioucmd->flags & IORING_URING_CMD_MULTISHOT) &&
-+	    (req->flags & REQ_F_APOLL_MULTISHOT)) {
- 		if (ret >= 0)
- 			return IOU_ISSUE_SKIP_COMPLETE;
- 	}
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
----
-base-commit: d58772d8520c7ef247c4b95c9bd76d3a25da9ff5
-change-id: 20260811-io_uring-169337c74617
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Best regards,
---  
-Vasileios Almpanis <vasilisalmpanis@gmail.com>
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
