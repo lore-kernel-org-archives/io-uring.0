@@ -1,240 +1,105 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A292EACEF
-	for <io-uring@vger.kernel.org>; Thu, 13 Aug 2026 00:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AAF3368B1
+	for <io-uring@vger.kernel.org>; Thu, 13 Aug 2026 02:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786581652; cv=none; b=EGMB89pNJvfnt2hVDUsBaun0CRbz8+6oO22yxSaXqO01r1WjJQYK9odRPPblf33vFveH7RHSQgWyHrZ7/GqbKlNKR6d2ouL1zRFQvToCuXUae8tGJzoLJsSiiHbOLiZ03cs2YyInB2DuRBZgf+taLG9n9FlhtTwX8Pgux6GblFQ=
+	t=1786587076; cv=none; b=fhWe/bCmbyo6tBgj7h2ihXrDTropAfEAncevgtUsFpTeCMJUu0mPc3XoKrqR6Lzj2eAoP7lgHY2hqnP//wMIRfDIQN9Bpc5eQnzn8GTlASEYIPat3CWCiIAdcLyqcy1fXorltotXkVhVvCnIL+Hc5sFpJkZ4Aq72mbog+rjcS64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786581652; c=relaxed/simple;
-	bh=7scyib0t1HAuqgDF1JoaofIBvWirrY3/qIX72gWFijY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rbfMR8yRgagM3AbiKnERPzhanJEJ0f8yMs1GZ1quQbLee/FClj2IkYg1rwP72HpvWzAxMjjUZhH5iU4AWLfHUOiia6mKiDFvZmid/dRiD4MRyet8VGfk4dCSeGh+M5Oqio33Z6NTIEXyFLVTljoOAMCA2WnODEDbhPksy81H4Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YDrxmRz3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=/RwMiXPz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=iTsH58+e; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=z1opHDWe; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1786587076; c=relaxed/simple;
+	bh=ozbVlMco6G0HKydbqafwUtC5muWneq4nR6i4hM+YrtY=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=YFsyPPTSANYTZRIPLU5GjVbO6XBMUhHGX+agXN9sTpR1WC6BMeIF2R6k74KDrbGxEUXk16vYWnuysCLYUkTQ4U4ldaZYdzRaBPbiS3pNGlVRl/VNzfWYtA1YF4WxtLNztE8q+dIMnC21A0wzEVLpTjd8IRpNqm7P+xMPxOHIRZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=w10uSAzT; arc=none smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YDrxmRz3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="/RwMiXPz";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="iTsH58+e";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="z1opHDWe"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DDCA63E64;
-	Thu, 13 Aug 2026 00:40:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786581645; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FMkO/jFLhGdGw8P/kpzrE6cT60xng4W4PJqr9CfgFkk=;
-	b=YDrxmRz3zZPIGMhlJs9sBG00zPLN6tflVI5TKhZxghiojiWV6RmgwFlBSJZcEEHhperq+g
-	V3ovmE4RaRDaFftNOubuEO5DNaklV3DaatHBXLJOHIOK2P8YWVTkgJUsCC1ZD8RSRqMwAz
-	Esv6HzE4+2cUpwm0+/GyuQ+d943ONz4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786581645;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FMkO/jFLhGdGw8P/kpzrE6cT60xng4W4PJqr9CfgFkk=;
-	b=/RwMiXPzS/HnAVmSLF9e+7xbYnLwx4nYrLMgTiBd5NeIw2d90yNlao0jZLSKJLHFspzTRv
-	70lwpMSgKE4LXQAQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786581640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FMkO/jFLhGdGw8P/kpzrE6cT60xng4W4PJqr9CfgFkk=;
-	b=iTsH58+eYMyG+w1q9YzfFacMXY9T7hyLfA7nuENVxaqj7htxx7OOQSFASOqakJ++gCdB19
-	AW3hGB/S6bXYhaKfnIW5vMEEVN+KwXJuC3mGtBLdyQ1u6pdUxNYFKKHo3bZl8FbbSm6P/3
-	j7xSkuaOvl0IIU/flf1OQ1qo2Rzfv5c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786581640;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FMkO/jFLhGdGw8P/kpzrE6cT60xng4W4PJqr9CfgFkk=;
-	b=z1opHDWePh0v8ErIEdCjWcKeTEQ1Q1CSf2rIJpuKQAfMGBVCU0XKN+/Wr2I3xF5y+8qF5K
-	YVtUirth9BzQovDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 88E6B77B3D;
-	Thu, 13 Aug 2026 00:40:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id s8viFIgSfWq4UgAAD6G6ig
-	(envelope-from <krisman@suse.de>); Thu, 13 Aug 2026 00:40:40 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	Gabriel Krisman Bertazi <krisman@suse.de>
-Subject: [PATCH 2/3] io_uring/net: Drop custom iov copy in io_msg_copy_hdr
-Date: Wed, 12 Aug 2026 20:40:21 -0400
-Message-ID: <20260813004022.3514537-3-krisman@suse.de>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260813004022.3514537-1-krisman@suse.de>
-References: <20260813004022.3514537-1-krisman@suse.de>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="w10uSAzT"
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-4a45b3f0becso902044b6e.1
+        for <io-uring@vger.kernel.org>; Wed, 12 Aug 2026 19:11:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786587073; x=1787191873; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cOFyW24OzrwCZ7wijAUBn2BiweeS9JGKEL/3pUHzZRQ=;
+        b=w10uSAzTfCqyy6lDOmBf64Fo8kmClKdg0qvFz0vMhGoC+O/CtbJ61Rls9JkTPp0JtZ
+         kQBqKcXrBawGhluR3d93n8ANAvfqpZojGAlc5C5PzaP+dvLrByuWKzJgyv8XMITKvnUS
+         W4WXYN0Sdj2HyksYY27rzbojo2ta4dgLAoGZkZv8aS9V2X1SIWuHyCLBSY+GGQLR1Ryc
+         jliHq/p+TgxeUPKQs3Z2gPJkQnHH7EONxPzveZhoXSERWzte7f6PYKVcIbOpnB+B0Rre
+         S+9pm2rKlGvRhdP1dfpi+J6ypinVGNRVPbuF7npGzRJ+rHmU8p5eQWUobEnwpdlmWOTe
+         hufQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786587073; x=1787191873;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:to:from:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cOFyW24OzrwCZ7wijAUBn2BiweeS9JGKEL/3pUHzZRQ=;
+        b=FCk9erRBAUJKXwboz8E7nB1pTPWTfyu9zK0kSjSSejtMEdyRwopJKduPceXrWu2hBY
+         6UIfN1kIH4uzWuzQShINMNAGITi8KB4z4H7YcmxfdTjb8zlSZsP5xk9DpScx2R6pRho0
+         AnuN8citj7uYpxnxKhfNNX5y9FY9pWrbAGvH6Qh2eFINBdeNZ/VdcZtS3VjvRNAlSYyy
+         AzoeyAP14wuI+DSwYlVY3WQvwDr0ITb6bxbWXVWQxerE6eQ00Kaj6cm135sYArvcxI55
+         N5fFGBeN3wtyeyBPGPblqkb66bbBgalOCbYzU1walmVji3T3Uo0yUbXo7XbAui2GwEyd
+         UBPg==
+X-Gm-Message-State: AOJu0YxCT1rHMH3HaEVrhxgicZnxBAj/Vpbw0wITCqBjP8jvcCTTKC/G
+	5eEur2wayBvsn+z9hd9EzNILg5rIrpb2FADCNa1zpyFMtC3DL94V+PZfXCvi7wUNfrA=
+X-Gm-Gg: AR+sD12vYJqZ+0yFVus4jeh2VFfIq4imeJNk/SjCLtnTu12o8MplltJNKrR9HMwNiFU
+	iWKnYlA+s4MApc1tID8LOVKkgiw4WcP/6M+PG8Dvg4mSymm0jQfb3XjWUNQ48KDyF6ir6VNGuS8
+	oKGvlXc1sfOqnHXm3AncMzTr4+R737mHNG7nkgHD+uIOIKkOqd37b+Sburj5pazZLedWu17V2YV
+	EDB3xBJA4EVGg0baAuXmy5XzWL5wxq60Yl16CSVdjtwrw+U2QJN8c87A5eFoAiMziFcA8tdpXbC
+	LVyvUmhEnwljdV04PRjjXtlW+OKavsJOHIXbFmxHAG8BWJ6oLlhX2IwJNpJZLvMLb7JQ5Zsdwsi
+	w9nubwXXsvTsuBnsKTOr+7M/TQtW8KKxRiQxVLy2tdb7oqaFEMYpvNSVVwEjq96FUDxbWitGw55
+	m6QkzKXhoclchGKlrX8z1C2UZUY3U1OfvH9MEaW50wL2Se4A1OUrtkpDKd49GlFHE9W37bBMYT4
+	jyAOnZSfxPnLf3iOYMw8QrC3cXY97HWWM2X0dBWhw==
+X-Received: by 2002:a05:6808:524b:b0:489:a387:1e29 with SMTP id 5614622812f47-4b22799e765mr2664247b6e.20.1786587072579;
+        Wed, 12 Aug 2026 19:11:12 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b22cd187e2sm454073b6e.6.2026.08.12.19.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2026 19:11:11 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, 
+ =?utf-8?q?J=C3=A9r=C3=A9my_Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+In-Reply-To: <20260812203042.720348-1-Jeremy.Jean@oss.cyber.gouv.fr>
+References: <20260812203042.720348-1-Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: Re: [PATCH] io_uring/rsrc: reject overflowing regvec bvec byte
+ counts
+Message-Id: <178658707155.307023.12210617485137487141.b4-ty@b4>
+Date: Wed, 12 Aug 2026 20:11:11 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -6.80
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-6.80 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.997];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_TLS_ALL(0.00)[]
+X-Mailer: b4 0.15.2
 
-Similar to commit f4eaf8eda89e ("io_uring/rsrc: Drop io_copy_iov in
-favor of iovec API"), avoid the custom copy of a single iovec and just
-rely on the iovec api.  This lets the compat and native paths share the
-buffer-select length lookup
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
----
- io_uring/net.c | 69 ++++++++++++++------------------------------------
- 1 file changed, 19 insertions(+), 50 deletions(-)
+On Wed, 12 Aug 2026 20:30:42 +0000, Jérémy Jean wrote:
+> io_import_reg_vec() converts the estimated number of bio_vec entries
+> into iovec-sized storage when struct bio_vec is larger than struct
+> iovec. The conversion still multiplies nr_segs by sizeof(struct
+> bio_vec) in size_t without checking for overflow.
+> 
+> On 32-bit kernels, a registered buffer large enough to make
+> io_estimate_bvec_size() return 357913942 segments wraps the byte count
+> from 0x100000008 to 8. io_vec_realloc() then reserves only the input
+> iovecs plus one extra slot while io_vec_fill_bvec() writes the full
+> bio_vec array.
+> 
+> [...]
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index a74d15f7b7d2..f476399e1d63 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -236,39 +236,6 @@ static int io_net_import_vec(struct io_kiocb *req, struct io_async_msghdr *iomsg
- 	return 0;
- }
- 
--static int io_compat_msg_copy_hdr(struct io_kiocb *req,
--				  struct io_async_msghdr *iomsg,
--				  struct compat_msghdr *msg, int ddir,
--				  struct sockaddr __user **save_addr)
--{
--	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
--	struct compat_iovec __user *uiov;
--	int ret;
--
--	if (copy_from_user(msg, sr->umsg_compat, sizeof(*msg)))
--		return -EFAULT;
--
--	ret = __get_compat_msghdr(&iomsg->msg, msg, save_addr);
--	if (ret)
--		return ret;
--
--	uiov = compat_ptr(msg->msg_iov);
--	if (req->flags & REQ_F_BUFFER_SELECT) {
--		if (msg->msg_iovlen == 0) {
--			sr->len = 0;
--		} else if (msg->msg_iovlen > 1) {
--			return -EINVAL;
--		} else {
--			struct compat_iovec tmp_iov;
--
--			if (copy_from_user(&tmp_iov, uiov, sizeof(tmp_iov)))
--				return -EFAULT;
--			sr->len = tmp_iov.iov_len;
--		}
--	}
--	return 0;
--}
--
- static int io_copy_msghdr_from_user(struct user_msghdr *msg,
- 				    struct user_msghdr __user *umsg)
- {
-@@ -292,7 +259,6 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 			   struct sockaddr __user **save_addr)
- {
- 	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
--	struct user_msghdr __user *umsg = sr->umsg;
- 	int ret;
- 
- 	iomsg->msg.msg_name = &iomsg->addr;
-@@ -301,7 +267,10 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 	if (io_is_compat(req->ctx)) {
- 		struct compat_msghdr cmsg;
- 
--		ret = io_compat_msg_copy_hdr(req, iomsg, &cmsg, ddir, save_addr);
-+		if (copy_from_user(&cmsg, sr->umsg_compat, sizeof(cmsg)))
-+			return -EFAULT;
-+
-+		ret = __get_compat_msghdr(&iomsg->msg, &cmsg, save_addr);
- 		if (ret)
- 			return ret;
- 
-@@ -310,18 +279,17 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 		msg->msg_controllen = cmsg.msg_controllen;
- 		msg->msg_iov = compat_ptr(cmsg.msg_iov);
- 		msg->msg_iovlen = cmsg.msg_iovlen;
--		return 0;
--	}
--
--	ret = io_copy_msghdr_from_user(msg, umsg);
--	if (unlikely(ret))
--		return ret;
-+	} else {
-+		ret = io_copy_msghdr_from_user(msg, sr->umsg);
-+		if (unlikely(ret))
-+			return ret;
- 
--	msg->msg_flags = 0;
-+		msg->msg_flags = 0;
- 
--	ret = __copy_msghdr(&iomsg->msg, msg, save_addr);
--	if (ret)
--		return ret;
-+		ret = __copy_msghdr(&iomsg->msg, msg, save_addr);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (req->flags & REQ_F_BUFFER_SELECT) {
- 		if (msg->msg_iovlen == 0) {
-@@ -329,12 +297,13 @@ static int io_msg_copy_hdr(struct io_kiocb *req, struct io_async_msghdr *iomsg,
- 		} else if (msg->msg_iovlen > 1) {
- 			return -EINVAL;
- 		} else {
--			struct iovec __user *uiov = msg->msg_iov;
--			struct iovec tmp_iov;
-+			struct iovec fast_iov, *iov;
- 
--			if (copy_from_user(&tmp_iov, uiov, sizeof(tmp_iov)))
--				return -EFAULT;
--			sr->len = tmp_iov.iov_len;
-+			iov = iovec_from_user(msg->msg_iov, 1, 1, &fast_iov,
-+					      io_is_compat(req->ctx));
-+			if (IS_ERR(iov))
-+				return PTR_ERR(iov);
-+			sr->len = iov->iov_len;
- 		}
- 	}
- 	return 0;
+Applied, thanks!
+
+[1/1] io_uring/rsrc: reject overflowing regvec bvec byte counts
+      commit: 6ca662cc71df7eb4eaf1b4bcb07cd3f188ad19f2
+
+Best regards,
 -- 
-2.55.0
+Jens Axboe
+
+
 
