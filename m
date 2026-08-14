@@ -1,88 +1,86 @@
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED8A38D3E6;
-	Fri, 14 Aug 2026 16:41:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4898345EB4;
+	Fri, 14 Aug 2026 16:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786725684; cv=none; b=ZykcOjsfJRc6sHwBm6Q0bQHD6dGwwigHpwokXsmPJshzN1Fjk/BbtrE+UcTLT2SCd+XM26h8QkJYJgogKMSr1N3d7GaMgSjk5ogGmjt6p+7NbZ5+rtdfwwYx4J1jR2YOQfvnarGwD1OCI0rsv8ukRLmzB1PP3N5XXAG96VEcvWo=
+	t=1786726270; cv=none; b=MSpEjfBlov/Nmk5Y1i/8t26UCjG+ZXbQi6zIpfqc+iZ4zWCVlxPlCBVC0d4U9sZXxSq2ZGOzuBAYca3FxM2E15bi81Kg5HvpZ1u82I54zdyScU247dnvFC34VJKE2xSuY79kewTQqqiLMw5OmXLftqTg/ua5U1iUAqC3E7TI+LI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786725684; c=relaxed/simple;
-	bh=wKHVuBmK80CZXjMfoeQmwCagH32D3H4+YndHxjn6bZ4=;
+	s=arc-20240116; t=1786726270; c=relaxed/simple;
+	bh=NaKJn8LtWDEyX2zV6MXZMcBZ0OF2tFH1w7dLB9b1y4s=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Dk1zIJ9rDcddyOfCI7dl/H4x/xcU6okxE2bYfiiOvHXhoCfJo9iZlucWGQgHlsb0ohAULUUaBLDKhIUKCVeGSE14UnnzwZ8EteoivZuHbQg1Ysm4RCK/CMNAhC2VtFnLowZy2i+CpIWvHmNd/2o+ZCNUGB8J4i4JndbHQOVCZEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=DVOT1zQH; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=aKwzdoAK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uMBh3hQD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5FxqU5XW; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version:Content-Type; b=ZG3k+YXHizR1CJUXd1hsVx/E21SeQaFHsCQu/ofVv1yTof2qV5lZH3C45BavBv7MBeL64acTiX1h9uDyq9hlA6Z/wbFgr4xEUnFUni7iSHyl9/bKd005hwT8WAm5XhjHrggkEaCxSEw1W5cez69HSBVKd/wt0WZE8sq+3lrfrSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vt8XaQVB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0hEel8kI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ilz82rGV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7ZcXcUIA; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="DVOT1zQH";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="aKwzdoAK";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uMBh3hQD";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5FxqU5XW"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vt8XaQVB";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0hEel8kI";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ilz82rGV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7ZcXcUIA"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 4636941BB;
-	Fri, 14 Aug 2026 16:40:03 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 6399B420A;
+	Fri, 14 Aug 2026 16:50:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786725607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1786726262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MTNxmZeLae1qCDpLUYCtBOoaN5t3TnHzAI6P1ElnhL8=;
-	b=DVOT1zQHiKB5TCefthhWFXRbZ44qI20UDJO5dnpQwx+cijVax+nHNOQcQYl0oZxtQSR7OB
-	xt+Zeugek2CP8att2o7ZuXUMnJ1aQQTMIvUl8PXowEPB+j1w6JvNXjsrzTtTj4BbXkpHNK
-	EODU54xXWQZBtgr+q5+c9InQNji6ZPo=
+	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
+	b=vt8XaQVBZSfmbnhH/BcjdEHZnMzuYdhx9nTfoLJJMh/4pCWJ5HqjWtWBur+xv1t6reYzLa
+	Q0+mhaMt63CMgqF4uF+s87uvkx8jVF76WK1nR+XsAcY+w/JmnDkEasASEpXxJfORxDqmL7
+	OxkXzamCyYbuYs6Epaada0lkBpOD9QU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786725607;
+	s=susede2_ed25519; t=1786726262;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MTNxmZeLae1qCDpLUYCtBOoaN5t3TnHzAI6P1ElnhL8=;
-	b=aKwzdoAKctxwcGzB4l7hUluMJujCFNIwCYHHQgb7f5efCULdYkhBKPgS9/BmhEb32ptq7y
-	p/x6Bp48OroXmLBQ==
+	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
+	b=0hEel8kIEvZ9q7j33G58BsruYI3AafVfdb+urLZSDka1EUwrhLAf77Oia5iseqw+3UboJZ
+	zEm3lXlpJN8wIyAQ==
 Authentication-Results: smtp-out2.suse.de;
-	none
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ilz82rGV;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=7ZcXcUIA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786725603; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1786726258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MTNxmZeLae1qCDpLUYCtBOoaN5t3TnHzAI6P1ElnhL8=;
-	b=uMBh3hQD65OZ/3UQSTJZMnsq5Uk6K773OfeVXaBMNY/AyItxmYp1CUFYHOuJQAl8Swhyrr
-	ML61CqlHnOeJlfaR5d6DZ4Y1754ns204H/7L9vvpuC5t1nXxZY7LNJBNPx5718voXDy0Fj
-	/9hxGxJ7GNqJKYPFqckLOfX/fGL4q/o=
+	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
+	b=ilz82rGVuO2dKuao9NFzEL0JsE0V2VV6J/KHOfD1LwTOQhopk21PK7BerMZSsU9BtCvJlu
+	fFVcnezdlnoz7AhhDa1vOpXKoO58LaJElvUBoFnMWqt8aHDk7yDPtNSRjHEYdeLC1vbtLj
+	ZRxr5N7Q9tc+arM7E8NQdwknosCCrh0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786725603;
+	s=susede2_ed25519; t=1786726258;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=MTNxmZeLae1qCDpLUYCtBOoaN5t3TnHzAI6P1ElnhL8=;
-	b=5FxqU5XWbRms+OVR6ymp4qoQK59LlPTuURCr9sUaARuEpAzxrskxzlMVeZVB93Jir0Bb4Y
-	8TAyLVfvjml/uNAg==
+	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
+	b=7ZcXcUIAVgchKn39n1bWjHaIhtATq4Q2D87du0EYnOzqzbfapiH8u1YrqbfpHUfFQ4vQcb
+	q0jzW6tJViWevpCA==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 08F3478492;
-	Fri, 14 Aug 2026 16:40:02 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 12B467849E;
+	Fri, 14 Aug 2026 16:50:57 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kKoYN+JEf2p8AwAAD6G6ig
-	(envelope-from <krisman@suse.de>); Fri, 14 Aug 2026 16:40:02 +0000
+	id UrNyOXFHf2pGDQAAD6G6ig
+	(envelope-from <krisman@suse.de>); Fri, 14 Aug 2026 16:50:57 +0000
 From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>, Jens Axboe
- <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>, Alexander Viro
- <viro@zeniv.linux.org.uk>
-Cc: Jan Kara <jack@suse.cz>, io-uring@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, Aditya
- Prakash Srivastava <aditya.ansh182@gmail.com>
-Subject: Re: [PATCH v3 2/2] io_uring: add fremovexattr and flistxattr support
-In-Reply-To: <20260721103514.2716-3-aditya.ansh182@gmail.com>
+To: Sidong Yang <sidong.yang@furiosa.ai>, io-uring@vger.kernel.org
+Cc: Sidong Yang <sidong.yang@furiosa.ai>, Pavel Begunkov
+ <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] io_uring/bpf-ops: wake up the loop task on eject
+In-Reply-To: <20260814030421.61216-1-sidong.yang@furiosa.ai>
 Organization: SUSE
-References: <20260721103514.2716-1-aditya.ansh182@gmail.com>
- <20260721103514.2716-3-aditya.ansh182@gmail.com>
-Date: Fri, 14 Aug 2026 12:39:57 -0400
-Message-ID: <87v79c4pwi.fsf@mailhost.krisman.be>
+References: <20260814030421.61216-1-sidong.yang@furiosa.ai>
+Date: Fri, 14 Aug 2026 12:50:52 -0400
+Message-ID: <87se4g4peb.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -90,239 +88,88 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Score: -2.80
+X-Spam-Score: -3.01
 X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.80 / 50.00];
+X-Rspamd-Action: no action
+X-Rspamd-Queue-Id: 6399B420A
+X-Spamd-Result: default: False [-3.01 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	SUSPICIOUS_RECIPS(1.50)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.cz,vger.kernel.org,gmail.com];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.dk,kernel.org,zeniv.linux.org.uk];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
+	MX_GOOD(-0.01)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,mailhost.krisman.be:mid]
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	HAS_ORG_HEADER(0.00)[];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_TWO(0.00)[2];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[furiosa.ai,gmail.com,kernel.dk,vger.kernel.org];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[furiosa.ai:email,mailhost.krisman.be:mid,suse.de:email,suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Flag: NO
 
-Aditya Prakash Srivastava <aditya.ansh182@gmail.com> writes:
+Sidong Yang <sidong.yang@furiosa.ai> writes:
 
-> Add support for IORING_OP_FREMOVEXATTR and IORING_OP_FLISTXATTR. This
-> enables xattr listing and removal operations to be executed in an
-> asynchronous fashion.
+> io_eject_bpf() clears ctx->loop_step while a loop may be sleeping in
+> io_loop_wait(), which releases ->uring_lock before schedule(). Nothing
+> wakes the submitter task after the BPF ops are unregistered through link
+> destruction or ring teardown, so the task stays blocked in
+> io_uring_enter() until an unrelated CQE event or signal arrives.
 >
-> Signed-off-by: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>
+> Since BPF ops require IORING_SETUP_DEFER_TASKRUN, only
+> ctx->submitter_task can run the loop, so wake it directly. The loop
+> rechecks loop_step after waking up and exits with -EFAULT. A spurious
+> wakeup is harmless because io_loop_wait() rechecks the wait condition
+> before sleeping again.
+>
+> Fixes: 98f37634b12b ("io_uring/bpf-ops: implement bpf ops registration")
+> Signed-off-by: Sidong Yang <sidong.yang@furiosa.ai>
 
-Jens has made a point about avoiding new commands just punting to the wq
-at [1].[1] https://github.com/axboe/liburing/issues/1492#issuecomment-4683773809
+Makes sense, feel free to add:
 
-In this case, we have an immediate issue for inline submission with
-acquiring the mount and the inode lock and there is no callbacks so we
-are not really in good shape to work around it.  Beyond that...
-
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
 > ---
->  include/uapi/linux/io_uring.h       |  2 +
->  io_uring/opdef.c                    | 18 +++++++
->  io_uring/xattr.c                    | 74 +++++++++++++++++++++++++++++
->  io_uring/xattr.h                    |  6 +++
->  tools/include/uapi/linux/io_uring.h | 13 +++++
->  5 files changed, 113 insertions(+)
+>  io_uring/bpf-ops.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-> index 909fb7aea638..805f1e31f492 100644
-> --- a/include/uapi/linux/io_uring.h
-> +++ b/include/uapi/linux/io_uring.h
-> @@ -318,6 +318,8 @@ enum io_uring_op {
->  	IORING_OP_PIPE,
->  	IORING_OP_NOP128,
->  	IORING_OP_URING_CMD128,
-> +	IORING_OP_FREMOVEXATTR,
-> +	IORING_OP_FLISTXATTR,
->  
->  	/* this goes last, obviously */
->  	IORING_OP_LAST,
-> diff --git a/io_uring/opdef.c b/io_uring/opdef.c
-> index 4e58eb1344ea..25d9229d8fc0 100644
-> --- a/io_uring/opdef.c
-> +++ b/io_uring/opdef.c
-> @@ -591,6 +591,16 @@ const struct io_issue_def io_issue_defs[] = {
->  		.prep			= io_uring_cmd_prep,
->  		.issue			= io_uring_cmd,
->  	},
-> +	[IORING_OP_FREMOVEXATTR] = {
-> +		.needs_file		= 1,
-> +		.prep			= io_fremovexattr_prep,
-> +		.issue			= io_fremovexattr,
-> +	},
-> +	[IORING_OP_FLISTXATTR] = {
-> +		.needs_file		= 1,
-> +		.prep			= io_flistxattr_prep,
-> +		.issue			= io_flistxattr,
-> +	},
->  };
->  
->  const struct io_cold_def io_cold_defs[] = {
-> @@ -849,6 +859,14 @@ const struct io_cold_def io_cold_defs[] = {
->  		.sqe_copy		= io_uring_cmd_sqe_copy,
->  		.cleanup		= io_uring_cmd_cleanup,
->  	},
-> +	[IORING_OP_FREMOVEXATTR] = {
-> +		.name			= "FREMOVEXATTR",
-> +		.cleanup		= io_xattr_cleanup,
-> +	},
-> +	[IORING_OP_FLISTXATTR] = {
-> +		.name			= "FLISTXATTR",
-> +		.cleanup		= io_xattr_cleanup,
-> +	},
->  };
->  
->  const char *io_uring_get_opcode(u8 opcode)
-> diff --git a/io_uring/xattr.c b/io_uring/xattr.c
-> index 5303df3f247f..9b410f91ef43 100644
-> --- a/io_uring/xattr.c
-> +++ b/io_uring/xattr.c
-> @@ -195,3 +195,77 @@ int io_setxattr(struct io_kiocb *req, unsigned int issue_flags)
->  	io_xattr_finish(req, ret);
->  	return IOU_COMPLETE;
+> diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
+> index 5a50f0675fe5..87148dbd3b3e 100644
+> --- a/io_uring/bpf-ops.c
+> +++ b/io_uring/bpf-ops.c
+> @@ -210,6 +210,13 @@ static void io_eject_bpf(struct io_ring_ctx *ctx)
+>  	ops->priv = NULL;
+>  	ctx->bpf_ops = NULL;
+>  	ctx->loop_step = NULL;
+> +	/*
+> +	 * A loop may be sleeping in io_loop_wait() with ->uring_lock
+> +	 * released. It'll see loop_step == NULL after waking up, but
+> +	 * nothing wakes it otherwise.
+> +	 */
+> +	if (ctx->submitter_task)
+> +		wake_up_state(ctx->submitter_task, TASK_INTERRUPTIBLE);
 >  }
-> +
-> +int io_fremovexattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-> +{
-> +	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
-> +	const char __user *name;
-> +	int ret;
-> +
-> +	INIT_DELAYED_FILENAME(&ix->filename);
-> +	name = u64_to_user_ptr(READ_ONCE(sqe->addr));
-> +
-> +	if (READ_ONCE(sqe->addr2) || READ_ONCE(sqe->len) || READ_ONCE(sqe->xattr_flags))
-> +		return -EINVAL;
-
-There are more fields to be rejected here, check the latest patches from
-Yi Xie such as cc609376e9a4 ("io_uring/fs: check unused sqe fields for
-unlinkat").
-
-> +
-> +	ix->ctx.kname = kmalloc_obj(*ix->ctx.kname);
-> +	if (!ix->ctx.kname)
-> +		return -ENOMEM;
-> +
-> +	ret = import_xattr_name(ix->ctx.kname, name);
-> +	if (ret) {
-> +		kfree(ix->ctx.kname);
-> +		return ret;
-> +	}
-> +
-> +	req->flags |= REQ_F_NEED_CLEANUP;
-> +	req->flags |= REQ_F_FORCE_ASYNC;
-
-This will cause the cleanup to call io_xattr_cleanup, which does kfree
-on ix->ctx.kvalue, which is never initialized.  If it has garbage from a
-previous command in the kiocb cmd space, you can craft a corruption or,
-more likely, a crash.
-
-
-> +	return 0;
-> +}
-> +
-> +int io_fremovexattr(struct io_kiocb *req, unsigned int issue_flags)
-> +{
-> +	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
-> +	int ret;
-> +
-> +	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
-> +
-> +	ret = file_removexattr(req->file, ix->ctx.kname);
-> +	io_xattr_finish(req, ret);
-> +	return IOU_COMPLETE;
-> +}
-> +
-> +int io_flistxattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-> +{
-> +	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
-> +
-> +	INIT_DELAYED_FILENAME(&ix->filename);
-> +	ix->ctx.kname = NULL;
-> +	ix->ctx.kvalue = NULL;
-> +
-> +	if (READ_ONCE(sqe->addr))
-> +		return -EINVAL;
-> +
-> +	ix->ctx.value = u64_to_user_ptr(READ_ONCE(sqe->addr2));
-> +	ix->ctx.size = READ_ONCE(sqe->len);
-> +	ix->ctx.flags = READ_ONCE(sqe->xattr_flags);
-> +
-> +	if (ix->ctx.flags)
-> +		return -EINVAL;
-> +
-> +	req->flags |= REQ_F_NEED_CLEANUP;
-> +	req->flags |= REQ_F_FORCE_ASYNC;
-> +	return 0;
-> +}
-> +
-> +int io_flistxattr(struct io_kiocb *req, unsigned int issue_flags)
-> +{
-> +	struct io_xattr *ix = io_kiocb_to_cmd(req, struct io_xattr);
-> +	int ret;
-> +
-> +	WARN_ON_ONCE(issue_flags & IO_URING_F_NONBLOCK);
-> +
-> +	ret = file_listxattr(req->file, ix->ctx.value, ix->ctx.size);
-> +	io_xattr_finish(req, ret);
-> +	return IOU_COMPLETE;
-> +}
-> diff --git a/io_uring/xattr.h b/io_uring/xattr.h
-> index 9b459d2ae90c..d2487b49a5d2 100644
-> --- a/io_uring/xattr.h
-> +++ b/io_uring/xattr.h
-> @@ -13,3 +13,9 @@ int io_fgetxattr(struct io_kiocb *req, unsigned int issue_flags);
 >  
->  int io_getxattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
->  int io_getxattr(struct io_kiocb *req, unsigned int issue_flags);
-> +
-> +int io_fremovexattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
-> +int io_fremovexattr(struct io_kiocb *req, unsigned int issue_flags);
-> +
-> +int io_flistxattr_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
-> +int io_flistxattr(struct io_kiocb *req, unsigned int issue_flags);
-> diff --git a/tools/include/uapi/linux/io_uring.h b/tools/include/uapi/linux/io_uring.h
-> index f1c16f817742..79bf7c22009d 100644
-> --- a/tools/include/uapi/linux/io_uring.h
-> +++ b/tools/include/uapi/linux/io_uring.h
-> @@ -253,6 +253,19 @@ enum io_uring_op {
->  	IORING_OP_FUTEX_WAIT,
->  	IORING_OP_FUTEX_WAKE,
->  	IORING_OP_FUTEX_WAITV,
-> +	IORING_OP_FIXED_FD_INSTALL,
-> +	IORING_OP_FTRUNCATE,
-> +	IORING_OP_BIND,
-> +	IORING_OP_LISTEN,
-> +	IORING_OP_RECV_ZC,
-> +	IORING_OP_EPOLL_WAIT,
-> +	IORING_OP_READV_FIXED,
-> +	IORING_OP_WRITEV_FIXED,
-> +	IORING_OP_PIPE,
-> +	IORING_OP_NOP128,
-> +	IORING_OP_URING_CMD128,
-> +	IORING_OP_FREMOVEXATTR,
-> +	IORING_OP_FLISTXATTR,
-
-I'd rather these (minus the xattr ones) go in a separate fix patch ahead of
-the series...
+>  static void bpf_io_unreg(void *kdata, struct bpf_link *link)
+> -- 
+> 2.53.0
+>
 
 -- 
 Gabriel Krisman Bertazi
