@@ -1,162 +1,119 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4898345EB4;
-	Fri, 14 Aug 2026 16:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0C238B131
+	for <io-uring@vger.kernel.org>; Sat, 15 Aug 2026 10:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786726270; cv=none; b=MSpEjfBlov/Nmk5Y1i/8t26UCjG+ZXbQi6zIpfqc+iZ4zWCVlxPlCBVC0d4U9sZXxSq2ZGOzuBAYca3FxM2E15bi81Kg5HvpZ1u82I54zdyScU247dnvFC34VJKE2xSuY79kewTQqqiLMw5OmXLftqTg/ua5U1iUAqC3E7TI+LI=
+	t=1786789617; cv=none; b=C5IFybkbeAY4Z9LutRxQpPajKmk03CmE0rKaz+UFX4kM5R4VvGhgF0fBCVlPAEkjTTTSFzSgTNR7m2ommJHMdGelkHu7iHK4zLL3yH3RW8HEEvXRHAr+bM4fkQSTPq0dFknhAAA/pjOVh6g8sMWxTJWH+g80Mbe70UpTlTJ/NMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786726270; c=relaxed/simple;
-	bh=NaKJn8LtWDEyX2zV6MXZMcBZ0OF2tFH1w7dLB9b1y4s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ZG3k+YXHizR1CJUXd1hsVx/E21SeQaFHsCQu/ofVv1yTof2qV5lZH3C45BavBv7MBeL64acTiX1h9uDyq9hlA6Z/wbFgr4xEUnFUni7iSHyl9/bKd005hwT8WAm5XhjHrggkEaCxSEw1W5cez69HSBVKd/wt0WZE8sq+3lrfrSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=vt8XaQVB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0hEel8kI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ilz82rGV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7ZcXcUIA; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1786789617; c=relaxed/simple;
+	bh=zvfg1aMBcL7aeIVRRxcfIP0e06KZv6Y19r5yBA73lWU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DsZur6AbHYDmYty+CMxNi4RhvB0nfKovoKrcmHBwMCftjVW6OOI5CIZlvNFPVngADZUdE3VE7Bcn+Wg8ymXgzhtwIP+K1HeSzcOQ0oQcXojs7LblGGgcN7EkwoZmQY4z9pJLVR0/Zpa/nmi3tWwi3h87z/oTNbj6Q6hxr/DdDwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vs1+9eCm; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="vt8XaQVB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0hEel8kI";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ilz82rGV";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7ZcXcUIA"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 6399B420A;
-	Fri, 14 Aug 2026 16:50:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786726262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
-	b=vt8XaQVBZSfmbnhH/BcjdEHZnMzuYdhx9nTfoLJJMh/4pCWJ5HqjWtWBur+xv1t6reYzLa
-	Q0+mhaMt63CMgqF4uF+s87uvkx8jVF76WK1nR+XsAcY+w/JmnDkEasASEpXxJfORxDqmL7
-	OxkXzamCyYbuYs6Epaada0lkBpOD9QU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786726262;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
-	b=0hEel8kIEvZ9q7j33G58BsruYI3AafVfdb+urLZSDka1EUwrhLAf77Oia5iseqw+3UboJZ
-	zEm3lXlpJN8wIyAQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ilz82rGV;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=7ZcXcUIA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786726258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
-	b=ilz82rGVuO2dKuao9NFzEL0JsE0V2VV6J/KHOfD1LwTOQhopk21PK7BerMZSsU9BtCvJlu
-	fFVcnezdlnoz7AhhDa1vOpXKoO58LaJElvUBoFnMWqt8aHDk7yDPtNSRjHEYdeLC1vbtLj
-	ZRxr5N7Q9tc+arM7E8NQdwknosCCrh0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786726258;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hernqaU0AnFSaJqE+6NRb0db39ENFV0twInGAuDN8so=;
-	b=7ZcXcUIAVgchKn39n1bWjHaIhtATq4Q2D87du0EYnOzqzbfapiH8u1YrqbfpHUfFQ4vQcb
-	q0jzW6tJViWevpCA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 12B467849E;
-	Fri, 14 Aug 2026 16:50:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id UrNyOXFHf2pGDQAAD6G6ig
-	(envelope-from <krisman@suse.de>); Fri, 14 Aug 2026 16:50:57 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Sidong Yang <sidong.yang@furiosa.ai>, io-uring@vger.kernel.org
-Cc: Sidong Yang <sidong.yang@furiosa.ai>, Pavel Begunkov
- <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] io_uring/bpf-ops: wake up the loop task on eject
-In-Reply-To: <20260814030421.61216-1-sidong.yang@furiosa.ai>
-Organization: SUSE
-References: <20260814030421.61216-1-sidong.yang@furiosa.ai>
-Date: Fri, 14 Aug 2026 12:50:52 -0400
-Message-ID: <87se4g4peb.fsf@mailhost.krisman.be>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vs1+9eCm"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-49554ebb87dso17484595e9.3
+        for <io-uring@vger.kernel.org>; Sat, 15 Aug 2026 03:26:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786789614; x=1787394414; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5LwofxgwMbfokzic1LQKB96aMSrs/A5ouH+Ep8Gghec=;
+        b=Vs1+9eCmJ7mDa/4iyK1WrQaifKAPpTCuvgg2MVNLFMpEGRKZoyESomJkOO7CcBSvu4
+         DXqgYsSJHcyUaktZQtlTUP5ObXtS4XKrekvnFCm9GF3ox0z5zUgaElpWXcJGB1rkOBhC
+         b8lAPDs8+OuBdUsyVyp085QXRxVt13wlrl3HCTB2hfZfZzeErMyHbA/njnDsl3uLaHnk
+         F0ZG4kARTeICqZ32aAmUcY+90mIDBlaTBrhN5QaFy6YO5G5dtae/zIMr4HwjqhVRGncs
+         M4AozHiEmwkt2U0L6hhmPt6gzKIDOdM24pcgVzlGFQpZ/KN5HIcNPNpzQvEBUYabGnF8
+         FpNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786789614; x=1787394414;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5LwofxgwMbfokzic1LQKB96aMSrs/A5ouH+Ep8Gghec=;
+        b=WFRUAPoqQMOoWUli4r5t36rsK5shxGU99Wu8HarMEei75ud1aZJFrQ0tTmeN6Px2+j
+         kHbT+gkRgLImWh+eygXx0rao7eItm0D/3jtdnPDmTY9HXiMPV/KeqKJix/rKZh6Aq8y+
+         mpgdIPCmQjGryNdON7A9FetzdefXcUQQf/Moz1Zc7ZIQHYihlzyjfMeVMiMdm0hzKxsy
+         /OyBsyv0MBbEVEa4eQe7bFF2YRMgKmuogGSNRXXBo0QmhkU4iv3VxGblui05Az5NI6tz
+         EhNT7R/RvPqECNBj6RzNH95QDizpm0X/hwTzPnThq0gMQ58Pe9c+J7z9oxPDw5N2hAeW
+         TMPw==
+X-Forwarded-Encrypted: i=1; AHgh+RpivrcjZIRndJbjPu5y3WYQAEw2o/EDS4GykkEMfYZupd/qppkRqOb6oEIIFBWwc6o/erB1oYS5nA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxwp0Y6OW6SnwY7332pvPqO7M5IparRBDe+OguDYRz/5AKJDdd8
+	fDtjsl5swYbFl1vd0hZkDKXKsLl+AgOaopLmrbM9bE9EP6qe9A/RD5XlL+ipGQ==
+X-Gm-Gg: AR+sD120kFYs0cDUSlnnihVhyO1scJ9PanTMaKIHq2na3M3r2OJLoQg/2KWQCcF6qgL
+	4BE7388DeqJ/86rfDx1vRkrx2LDsN7oineRqIqq3jMXI+2+GUaf4FOo4K9eTKkdMqnDgyD3vF5N
+	XNFAZuB8fMjHrYUxeF92HmhzPMqQ5W6SHnv/dX28e+BQxUFGKGvUNxGkFy2/JxHOb2WQBrBarm2
+	n06ZwSErJob7/NBT7ggMLcJILRHEGQ7Fvb7YFa/pP2ewsEHniRAlRv5Sq153K5QUtmcDa6LKi+P
+	6wkt32Mnwnty6BdnSDNIZ5K45KPhVI1D7ZSikjQjXUkrnsz807jefIgna1tWqrC0Xozxeos4F28
+	hpPU8VwpXsmQaXYUT2YArzPV7px/J3P1zq9iGfWJZDEzhclXO4J1DC+g3v1/6brKnCwnjjQGUCK
+	ZU7awnOn2s/qovYIr38/pBAV+KqadZhYv/r2TlPR5c2Np6x6nc5zBmPyIfzd4EXZ/rt9h8jGeqY
+	X3QzbwOz1ZkIKUAkXc0m1gHLJvxOD6ZyKVZlMMeczoRZxpl0WqCrjuxeHkvM6QAN9d5b8+Ez9FF
+	IDgViA+nCLt31Erwmbp+W3WREPN1g9guDcwxxbY=
+X-Received: by 2002:a7b:cbd3:0:b0:493:cefc:d113 with SMTP id 5b1f17b1804b1-4998794c02emr116543425e9.5.1786789614006;
+        Sat, 15 Aug 2026 03:26:54 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49987b1a31esm139109285e9.2.2026.08.15.03.26.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 15 Aug 2026 03:26:53 -0700 (PDT)
+Message-ID: <bfb153e0-d3f5-433a-963c-da71c1dc4850@gmail.com>
+Date: Sat, 15 Aug 2026 11:26:50 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Score: -3.01
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 6399B420A
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	HAS_ORG_HEADER(0.00)[];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_TWO(0.00)[2];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[furiosa.ai,gmail.com,kernel.dk,vger.kernel.org];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[furiosa.ai:email,mailhost.krisman.be:mid,suse.de:email,suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/bpf-ops: wake up the loop task on eject
+To: Sidong Yang <sidong.yang@furiosa.ai>, io-uring@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
+References: <20260814030421.61216-1-sidong.yang@furiosa.ai>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20260814030421.61216-1-sidong.yang@furiosa.ai>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Sidong Yang <sidong.yang@furiosa.ai> writes:
-
+On 8/14/26 04:04, Sidong Yang wrote:
 > io_eject_bpf() clears ctx->loop_step while a loop may be sleeping in
 > io_loop_wait(), which releases ->uring_lock before schedule(). Nothing
 > wakes the submitter task after the BPF ops are unregistered through link
 > destruction or ring teardown, so the task stays blocked in
 > io_uring_enter() until an unrelated CQE event or signal arrives.
->
+
+If there is nothing to wake it up after bpf removal, it wouldn't
+be woken up without it either, it's a mess up on the user's
+side. What's the use case? Especially since you wouldn't
+normally be removing it from another thread in the current form
+of the interface.
+
 > Since BPF ops require IORING_SETUP_DEFER_TASKRUN, only
 > ctx->submitter_task can run the loop, so wake it directly. The loop
 > rechecks loop_step after waking up and exits with -EFAULT. A spurious
 > wakeup is harmless because io_loop_wait() rechecks the wait condition
 > before sleeping again.
->
+> 
 > Fixes: 98f37634b12b ("io_uring/bpf-ops: implement bpf ops registration")
 > Signed-off-by: Sidong Yang <sidong.yang@furiosa.ai>
-
-Makes sense, feel free to add:
-
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
-
 > ---
->  io_uring/bpf-ops.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
+>   io_uring/bpf-ops.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
 > diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
 > index 5a50f0675fe5..87148dbd3b3e 100644
 > --- a/io_uring/bpf-ops.c
 > +++ b/io_uring/bpf-ops.c
 > @@ -210,6 +210,13 @@ static void io_eject_bpf(struct io_ring_ctx *ctx)
->  	ops->priv = NULL;
->  	ctx->bpf_ops = NULL;
->  	ctx->loop_step = NULL;
+>   	ops->priv = NULL;
+>   	ctx->bpf_ops = NULL;
+>   	ctx->loop_step = NULL;
 > +	/*
 > +	 * A loop may be sleeping in io_loop_wait() with ->uring_lock
 > +	 * released. It'll see loop_step == NULL after waking up, but
@@ -164,12 +121,10 @@ Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 > +	 */
 > +	if (ctx->submitter_task)
 > +		wake_up_state(ctx->submitter_task, TASK_INTERRUPTIBLE);
->  }
->  
->  static void bpf_io_unreg(void *kdata, struct bpf_link *link)
-> -- 
-> 2.53.0
->
+>   }
+>   
+>   static void bpf_io_unreg(void *kdata, struct bpf_link *link)
 
 -- 
-Gabriel Krisman Bertazi
+Pavel Begunkov
+
