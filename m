@@ -1,93 +1,73 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633AF4B049F
-	for <io-uring@vger.kernel.org>; Sun, 16 Aug 2026 00:01:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 065734B049B
+	for <io-uring@vger.kernel.org>; Sun, 16 Aug 2026 00:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786838499; cv=none; b=PQDQBSRh1MyMvzvv2ChD4KKlq/afRf0itnjjTNQRJDqswlgtFld7yw1L/yGclyMkKba6GyLohnFG3gTJMTYVP+29o7n69Q6cNoWkprteXcN5t4ssw+hv6AJP+alKlxHENR3nGCEFV0X7ATuGJ2aEZhr80246NbjuGVxr2XxmYNI=
+	t=1786838533; cv=none; b=Z+t6N7AuRh4whiUAwq4EfDGNheJ+63gqWR7B69KipTvt25X50w3WqcCrW3d3/CAJhZiLFN9rMvdpS/I51Au0Byy/5FEUeMdf56Y1z9u2sPxWuegY/27ZE13CWnTbTJ+OaY/nSJjA9ODHh9ozf4Fee5GXc3zRwaAp4VGQHvMMpTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786838499; c=relaxed/simple;
-	bh=GLv7MLH1JWc+5XrUg1Z1RvY7w8aG92a4ZA0fo54R1DI=;
+	s=arc-20240116; t=1786838533; c=relaxed/simple;
+	bh=GqUttSagT4ETj1wE3DkT68QO8u/FiAGPxorQrZjqAZQ=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=KUBJYTuHl5G0fswrJrZFwhR8GAsssWbishK0Ug9VUKLyagtMzX/WqUl2y/SShghLu9q57ibrfNcKXss2SoJYAWvpvDiWQ33+QvF1p2eCU3tpj1xs5zWtgcDQBnbNFfj5eBdA4EPSrsBuE1ONK9MxtCUHZy1SP/n1FbzVbcsKRi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=qDO2y/Ef; arc=none smtp.client-ip=209.85.160.44
+	 MIME-Version:Content-Type; b=vGQjG4qyhGTHXVPEAex92j/QfyXQUHtfi3sOcFfAA8vf7VIi47ymZmtJxqrzTlzjmWNiVEgHLUDKvh3SQ8KO5QoB1IOKpagU+WtCUyWDX2RkCWb7VcSYdfWTs+AcfQz1G2H784nQnUQD1aHNHsVMxZJdrJRVz2/OlhP+z6KAm1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=qGQS2/D+; arc=none smtp.client-ip=209.85.167.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="qDO2y/Ef"
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-4472500e25fso1356457fac.1
-        for <io-uring@vger.kernel.org>; Sat, 15 Aug 2026 17:01:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="qGQS2/D+"
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-4a46a53abc9so1287446b6e.3
+        for <io-uring@vger.kernel.org>; Sat, 15 Aug 2026 17:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786838496; x=1787443296; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786838531; x=1787443331; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZPPcb+6L1tSSLsANqwKI7loeM1EwHu96h0gKbDhNEvI=;
-        b=qDO2y/EfO1t3CC7NC3XoESwjR8/JgFZ75ERzn4KAiUkKS4Oq4LyMLiMaVem3HyPUzC
-         aiNiTPv18jaYEhX6LQAYyQDYxeVvX13XDEd7o06Ae1cG82j1gRfcc5nKchSIyjf/xPO/
-         BDRjJknqIe9XGJl1u9HX3s/6rqC6VjQ8vJpAeZWMllAOjnAM9EW082zCSHUFnbzqI5Gv
-         dNPjKNg/FBcOzL4s92Bh5XGc8MBeo7x4edRS9J9uOaROxmsszLVgYjfDmT2Wm0m4URBz
-         cFeCpY3XBU/f0+RUjPeaUofSMUmLfA5JewUZ8Bkh3heeQ1qmygZORMw4+uvO42ImRYcJ
-         wJGA==
+        bh=yU6MEPXheXo92aZKy9P8ENbJdYjOQPQih9fC5PvmOhM=;
+        b=qGQS2/D+cnQiGxrXOhHIgmqXKk8Mc/Ja0i5mC3GYd5PuaLuwGZs7zfrQUoWv3h/QAT
+         pls4a9O/Ea5YeslcR+gkhWFiZBtpwd0ynDs203Az8iV00SnosxOf/fIbmP5T03giq8It
+         8dNrm9zCueIiOxtggsjoARhf+A+PQCrjRKRrAmRoVfADmhRwUicPm1iy2bcfqR8amRMq
+         YID5q61DGgoZIUt58KGCgRF+MySlpgKJErC6+7XGRTLE+BubQ/d7ioZTcFXaPtsvVOSJ
+         Cl1Wr48BsMU+7mZSzy7gSSvyEEzlsxyhUPVidunIbPLLjCPfaNbHrhto8STpKmtEoUJp
+         3Qmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786838496; x=1787443296;
+        d=1e100.net; s=20251104; t=1786838531; x=1787443331;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZPPcb+6L1tSSLsANqwKI7loeM1EwHu96h0gKbDhNEvI=;
-        b=qcU2tfJ+xC04rXsu1p2tJ/+dZUEvOz9cnAobwnOF4M+NZwf7LRi2eop8IHwIu8DupI
-         +ydTNy47+oycsX9r8Dw1XAsubQXY9dcABEQ0SalU5MwlnwAfcQfyfy8r4qHeBUgFH2Aa
-         emEbeFHoXvnQXI7QvKauSBbNGdxVST8P1BZ8d9vp7YzkSBVClzvu1zk1LysmX4lRYK7l
-         /BlsO2j17LNn3et2jY1F9TJnoE+jQQ6xEaOcJbt52VyEic8e69dro/r+1rn5Pyn46rhQ
-         3bQSFnp/hd/iUG/MJqfQsPGEpUUZ4MQf8sVGdpHowW+tMYCk8iMdBNMljkDoV7LmKxmR
-         9iEA==
-X-Forwarded-Encrypted: i=1; AHgh+RqgjSNjnFH2pcDeWKxjaqSM1sjKgkGGW1KVi+YLr3nBylmPO+iobG4ana9/AqmZhb4vYLYdFcd7wQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq5OK8Bl1mM+7AqMiGhVTBzY+CnBf/OeqE/+blgDmOnYxZ3ZWm
-	O8fDAIeUSElelj7Qsw12qipwr+CZ9EsizDDE9rJAmMkGorU7FOzTKTs13HJgwaWNdM4=
-X-Gm-Gg: AR+sD11dxGBQRTYTnwfSZC2S3ZItwwbCULnk+/W2XXsyyBfHtGGKrNWyUOqDIQpmwFV
-	DfV3gde6JW5eBP+GKdHhjB0Ms2GAfTiJpi6CKpPVUls2K4MzIErsdxovtsIfFEXwKz5gQbK0jaF
-	yE9tdnBKt6h4RLXwviBNbN0LaLtBILvHEUfasQ5LPnoKi+XJApFiujcfBvfQ5ROWJlL2It5Tjym
-	jy8Rf6xAam6NwtA9OOkrh5v2qDlCMVtZp7J35/bSnFPQLOcsxLGosQwPwdx75AR+tzP3Fa/0pQX
-	fDTY1Z6vG73Cn6hsn29Xjww+/bykzW8l9YpFnk+YmJcCCwG6BEsygvqgyB707cSPGpXiMdcPg0N
-	qnRBEKnNUIl94VVvJ31iN5HMjRo+t/T8y+ipcBGwXACkmHAaxpGK9Fmnd3RmI25RSlYdON8VsIK
-	FeN2k3n+l70SPEQQWnoMzkSt7QoChuNJBwelvA8sa9A4X1eYqxElwyvRbBDvoT39+m2MqbOlv3l
-	xeQRpwPKGwHQyx9Pnli38Rm136sLNaRo66YVKpYCw==
-X-Received: by 2002:a05:6808:23d4:b0:4a4:ddde:5207 with SMTP id 5614622812f47-4b24198f27dmr12801839b6e.8.1786838496365;
-        Sat, 15 Aug 2026 17:01:36 -0700 (PDT)
+        bh=yU6MEPXheXo92aZKy9P8ENbJdYjOQPQih9fC5PvmOhM=;
+        b=JKDIT04YYY/WIlmmtQFqTzkIFDuQBk39gX3F3Z0Ay1VL39EclQbJoHiu+CDX1gbge5
+         IizPYHo1TcguLw4WK0KxnyjFtkS3/e55rX+D5gBRIY/A03SIE8sHCkP51qfVM/UUZdqg
+         /YyblmYVPQbx1Zdtb3m0eFaJlc3Dn9olRmIE3zata55IwtoR/OlgErXlPjJUY7fhlwHL
+         AlYl5DPLVEyWzS0vfWmgmeGjOPRABfZ6rUaYBZYQQLn8QkcBoVq19M63IHTC+S37xI7U
+         bh1panHyEnbK7FvHgGWm+aLceOrPHa1PmxRNa64pr5HZQSoGNjw87jDny2HLIO1RQege
+         Cr/w==
+X-Gm-Message-State: AOJu0YywztAZaPygUhcdO0dcCtlMQIe0TBuMDzZ/Ek8asVX2sAsiUdca
+	AmeocNYuJiApKFzkmCuRPEiDw7IpV7CrfSOnTMvJV9b7zvTlwyb9GqDmTSlBFu8z9AD1CZBN7GH
+	vMMsl35pKCg==
+X-Gm-Gg: AR+sD10wOrP0Cf+2nsdZV8xKWWPlVsk+eb85xFc6j6/LQaRrcx9GazGMDMx11LCe9jF
+	FCJ/KhFAYenzhfoDXdAQmz6JtKAia5OgYp5p5GrCoX0j+3pGg00JKPp2IxeBa5x5oD2r3Ijj2Sv
+	++xiK4xq9tHdV+jliwzCZcOfBNCwQXRYzol7oVZ+NyXegQpaPdycO7HSnTtYrRUjVx7im6pROJu
+	fgpnGspOpd4V46cXVHtYwfWnsusrGiU5kG+NVMJ0Y2aw3oMqvbIi2w88skTOnZbq+JRZwWCIBvp
+	UqnrvegXCXEbt+3p0NwUOIOuAUQljmEIGq086D7DtAPK1ReqDCNaPsADuIVUuF11vXB3qwmgkeZ
+	JFX613mBedCI6y066kGqh+d6Nl1CosfC4Y9AxKeT5h0Ts6st0IUAZw2fwvxC/dwI2NJcUGe+yeV
+	AQY0VL5gjYmNs4jkMIauMkEQXKq39lGs2Yibh23pDwUeV1n+wy7BKkLI0JKwmVQHn/maF+B9zqF
+	m5wNcZOwyhTJ5VY9uuKmWtgAQW1YTtle62UN70oKX8XEnA9jv5X
+X-Received: by 2002:a05:6808:538c:b0:49b:dcb8:e2b5 with SMTP id 5614622812f47-4b241e678c6mr14731442b6e.19.1786838530882;
+        Sat, 15 Aug 2026 17:02:10 -0700 (PDT)
 Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b24d92462dsm4347729b6e.5.2026.08.15.17.01.15
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b24d92462dsm4347729b6e.5.2026.08.15.17.02.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 17:01:17 -0700 (PDT)
+        Sat, 15 Aug 2026 17:02:06 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
-To: Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
- Sagi Grimberg <sagi@grimberg.me>, linux-block@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
- linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linaro-mm-sig@lists.linaro.org, Pavel Begunkov <asml.silence@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Sumit Semwal <sumit.semwal@linaro.org>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>, 
- Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>, 
- William Power <william.power@intel.com>, 
- Phil Cayton <phil.cayton@intel.com>, Damien Le Moal <dlemoal@kernel.org>, 
- Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
- Mikulas Patocka <mpatocka@redhat.com>, 
- Benjamin Marzinski <bmarzins@redhat.com>, 
- Vishal Verma <vishal.l.verma@intel.com>, David Sterba <dsterba@suse.com>, 
- Ilya Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev, 
- nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org, 
- ceph-devel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-In-Reply-To: <cover.1785596451.git.asml.silence@gmail.com>
-References: <cover.1785596451.git.asml.silence@gmail.com>
-Subject: Re: (subset) [PATCH v5 00/16] Add dmabuf read/write via io_uring
-Message-Id: <178683847578.1984298.10059277109543676478.b4-ty@b4>
-Date: Sat, 15 Aug 2026 18:01:15 -0600
+To: Gabriel Krisman Bertazi <krisman@suse.de>
+Cc: io-uring@vger.kernel.org
+In-Reply-To: <20260813004022.3514537-1-krisman@suse.de>
+References: <20260813004022.3514537-1-krisman@suse.de>
+Subject: Re: [PATCH 0/3] Continue iovec api clean up
+Message-Id: <178683852578.1984298.7346721851188850884.b4-ty@b4>
+Date: Sat, 15 Aug 2026 18:02:05 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -99,22 +79,28 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Sat, 01 Aug 2026 16:46:12 +0100, Pavel Begunkov wrote:
-> The patch set allows to register a dmabuf to an io_uring instance for
-> a specified file and use it with io_uring read / write requests. The
-> infrastructure is not tied to io_uring and there could be more users
-> in the future. A similar idea was attempted some years ago by Keith [1]
-> (from where I borrowed a good number of changes). Later it was brough
-> back up to life by Tushar and Vishal.
+On Wed, 12 Aug 2026 20:40:19 -0400, Gabriel Krisman Bertazi wrote:
+> I found the first patch in an old branch and took the opportunity to
+> find another (i think the last) case where the same pattern of directly
+> copying the iov existed.
+> 
+> Tested with liburing.
+> 
+> Gabriel Krisman Bertazi (3):
+>   io_uring/rw: Drop custom iov copy in io_iov_buffer_select_prep
+>   io_uring/net: Drop custom iov copy in io_msg_copy_hdr
+>   io_uring/net: Drop ddir argument from io_msg_copy_hdr
 > 
 > [...]
 
 Applied, thanks!
 
-[05/16] block: move bvec init into __bio_clone
-        commit: e228404b05c8293f6a1286856e49ba3e55da1933
-[06/16] block: introduce bio_iov_iter_set()
-        commit: 8b8755e00847da1027fe6624277e43d289e2300e
+[1/3] io_uring/rw: Drop custom iov copy in io_iov_buffer_select_prep
+      commit: 0ca89205857c43e02cea3ee2a342e7d3c0c8a421
+[2/3] io_uring/net: Drop custom iov copy in io_msg_copy_hdr
+      commit: 5ec4f12a0b01597f9a55e01618849e3a8ac46cc2
+[3/3] io_uring/net: Drop ddir argument from io_msg_copy_hdr
+      commit: b76d6b068e693a1bea1df9cc5af16893c39b5bd5
 
 Best regards,
 -- 
