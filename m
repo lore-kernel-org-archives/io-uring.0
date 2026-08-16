@@ -1,76 +1,93 @@
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6430F4B0481
-	for <io-uring@vger.kernel.org>; Sun, 16 Aug 2026 00:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633AF4B049F
+	for <io-uring@vger.kernel.org>; Sun, 16 Aug 2026 00:01:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786838470; cv=none; b=JhU8fe8rEmxpkkCDqhdOJxDYdD6jitqV9fC4Tg4kQXzGSMwKTXVtgeQ9uMUoveGHoOiNVKYivlBiu0QB2GxXZUXR6Z8t9X3z2DXhyiUnHO37pbQXfromEwDMLbLpZZQZwVH/+4bJVLskDyo+vY/drzKo8cJ9lpb0mGDl6/5Ue/A=
+	t=1786838499; cv=none; b=PQDQBSRh1MyMvzvv2ChD4KKlq/afRf0itnjjTNQRJDqswlgtFld7yw1L/yGclyMkKba6GyLohnFG3gTJMTYVP+29o7n69Q6cNoWkprteXcN5t4ssw+hv6AJP+alKlxHENR3nGCEFV0X7ATuGJ2aEZhr80246NbjuGVxr2XxmYNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786838470; c=relaxed/simple;
-	bh=6bnHVJopE3wzGGHQ5c7zdl8TF0aztoHK26Sn7dRAMNM=;
+	s=arc-20240116; t=1786838499; c=relaxed/simple;
+	bh=GLv7MLH1JWc+5XrUg1Z1RvY7w8aG92a4ZA0fo54R1DI=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=VwgSdq9lr3Svu2PvoxX58fDYWdMkBq46B15TlBeH4TcMSp3efvO5pFneNYamoDbpxOlc2NziPJ7KOSQK/JnZ3cj8/QXzwtEa5C6Ie86Hm0JiyjV3pmKju7sfunt1W138qyaugjU+CJl9f0YN4w13xZ11io/ey4IPoTCLHKALxY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=02o0cbY+; arc=none smtp.client-ip=209.85.210.51
+	 MIME-Version:Content-Type; b=KUBJYTuHl5G0fswrJrZFwhR8GAsssWbishK0Ug9VUKLyagtMzX/WqUl2y/SShghLu9q57ibrfNcKXss2SoJYAWvpvDiWQ33+QvF1p2eCU3tpj1xs5zWtgcDQBnbNFfj5eBdA4EPSrsBuE1ONK9MxtCUHZy1SP/n1FbzVbcsKRi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=qDO2y/Ef; arc=none smtp.client-ip=209.85.160.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="02o0cbY+"
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7f3ff92cf4aso320439a34.1
-        for <io-uring@vger.kernel.org>; Sat, 15 Aug 2026 17:01:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="qDO2y/Ef"
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-4472500e25fso1356457fac.1
+        for <io-uring@vger.kernel.org>; Sat, 15 Aug 2026 17:01:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786838467; x=1787443267; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786838496; x=1787443296; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6ZgqbqCfZYpSomXp/sEGeXCqrHIJkO1ngVp9b5m2Rtk=;
-        b=02o0cbY+lTu6LcgHz9L72sdH4lEFP3GK6V1hf7X5ITi1qeleDiJVooD6Bv+8syAvfM
-         GjnYaVfJVTnOEeTPPnKDGYoRqJVafp+rH0PnlRbHUOS0D82EmCqMgKCrw9y1heQAew9x
-         q+Aj3nRfqmMuHKmjFTUZIZnkzoJod1bpOEvU5DZ91kaj/61tVzixwosePuZR9PCTXEhA
-         k3ZxuFsqVo8uG8jraY2E0nrkYFhaJTpUpaL9w/P2eHEencYstyBE/xX6cHVAl2GT2wQW
-         ZAnwT7pSYJPGpS5Vt6/35dQ425g3LGQkMjKAir4UYGQ0LvVznGeJjxNghCKBpaLIPLX0
-         nVlA==
+        bh=ZPPcb+6L1tSSLsANqwKI7loeM1EwHu96h0gKbDhNEvI=;
+        b=qDO2y/EfO1t3CC7NC3XoESwjR8/JgFZ75ERzn4KAiUkKS4Oq4LyMLiMaVem3HyPUzC
+         aiNiTPv18jaYEhX6LQAYyQDYxeVvX13XDEd7o06Ae1cG82j1gRfcc5nKchSIyjf/xPO/
+         BDRjJknqIe9XGJl1u9HX3s/6rqC6VjQ8vJpAeZWMllAOjnAM9EW082zCSHUFnbzqI5Gv
+         dNPjKNg/FBcOzL4s92Bh5XGc8MBeo7x4edRS9J9uOaROxmsszLVgYjfDmT2Wm0m4URBz
+         cFeCpY3XBU/f0+RUjPeaUofSMUmLfA5JewUZ8Bkh3heeQ1qmygZORMw4+uvO42ImRYcJ
+         wJGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786838467; x=1787443267;
+        d=1e100.net; s=20251104; t=1786838496; x=1787443296;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6ZgqbqCfZYpSomXp/sEGeXCqrHIJkO1ngVp9b5m2Rtk=;
-        b=dv6W8jEprRcxE8PYXt4O7eikjUp1EPJ/7mFT4sPHhNhLpythYFVTgBNiftaCvMMjcx
-         1JDbDTAJPBaabssXjzsydjIPw4Wpt44g/VQ4TLsLJctDLqdioS3Lsqg9P7+l8kXmGDPW
-         Grk5OuLkfLvu9l7D0gjhsT+mY9iuhlfAkeuzyIIBe4ABuPoi8sUv9jR/fqA0Ir2bucuH
-         OzZnjOZN7ocAZr6Hw5V42HZMXOSUHz12HYL3x4A/La3vCI7mk3lR+KKrn167X2FcYnh5
-         7FrmLe2ujmDRQodPpwV//BvnIyEWqPNHOdBR40Hl4MdKfh00KZnCp9g5jQ8Aabn2kvjL
-         qOtA==
-X-Forwarded-Encrypted: i=1; AHgh+RpufuuEpMOIXJAxPEx5s+mU8Yad/9Xvh4/qsVSc/LKd9iqETebbfhnUKbqRhlLISoTEAuv7/TRcLg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7nqNPXeSVBfAXE6kVeE8zIazoNQcDeqjL+ssj+3NBBydkayJ+
-	BEjLUM+Ea8GMCf4NBxUMmuqByZtd+2XkHBiJKJRH2WN6Nrmo/ryNLqdOCz6ACPqCpnc=
-X-Gm-Gg: AR+sD121EDxlO/IKGMLLFY5Ce3IS/KH8jkbQGHKLD5a4SH0mOauWeggn1NLyi+NP/DA
-	l82SFcMArx8UdBv3hlgEgzpFxDVztyQ/xMsAQSSjzjU+VvbQ+kVNStQk5ZOob5IrfZQxocLha99
-	OCPCj9WaSy7UcfCXbWrg4b6zZloGYLjCK2sjUbIWotbpnAwZgJCHT83bLM21a1vVoXxa4n4ZS4n
-	fuDaRlnZZH3GHoTkSSma3okQn9XHucqXJXJYe8AOxE9m+FU4mn2vsuKihPQ0ijYgSNoKA+f+rtG
-	sQdVA3SCzX10O6zBdABp7CvslueKCP1bOt7GvIX5GyPRw/4vWDs2XQbldWfJDc9ta1DR/9+CjST
-	SlP1lyGOsmP6+3TvJzxtufoEAv0+XSdzyzLG67qAd7aEvrcJjEigisQRF2QN1VRXpNfZzoNOTWz
-	nO4d6Xg6k9nyKzvludNBp7jSeONjyIFUdh0n+lV9g3lulSPEaaX0c6Zz1skd9y7fQzbGQ3RQcYV
-	4rCS+q3OIpNcVAStSNeKEYFpjkRADIqKo43LvtuYg==
-X-Received: by 2002:a05:6830:11c2:b0:7f3:ff22:d8 with SMTP id 46e09a7af769-7f3ff2257admr3373780a34.9.1786838467321;
-        Sat, 15 Aug 2026 17:01:07 -0700 (PDT)
+        bh=ZPPcb+6L1tSSLsANqwKI7loeM1EwHu96h0gKbDhNEvI=;
+        b=qcU2tfJ+xC04rXsu1p2tJ/+dZUEvOz9cnAobwnOF4M+NZwf7LRi2eop8IHwIu8DupI
+         +ydTNy47+oycsX9r8Dw1XAsubQXY9dcABEQ0SalU5MwlnwAfcQfyfy8r4qHeBUgFH2Aa
+         emEbeFHoXvnQXI7QvKauSBbNGdxVST8P1BZ8d9vp7YzkSBVClzvu1zk1LysmX4lRYK7l
+         /BlsO2j17LNn3et2jY1F9TJnoE+jQQ6xEaOcJbt52VyEic8e69dro/r+1rn5Pyn46rhQ
+         3bQSFnp/hd/iUG/MJqfQsPGEpUUZ4MQf8sVGdpHowW+tMYCk8iMdBNMljkDoV7LmKxmR
+         9iEA==
+X-Forwarded-Encrypted: i=1; AHgh+RqgjSNjnFH2pcDeWKxjaqSM1sjKgkGGW1KVi+YLr3nBylmPO+iobG4ana9/AqmZhb4vYLYdFcd7wQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq5OK8Bl1mM+7AqMiGhVTBzY+CnBf/OeqE/+blgDmOnYxZ3ZWm
+	O8fDAIeUSElelj7Qsw12qipwr+CZ9EsizDDE9rJAmMkGorU7FOzTKTs13HJgwaWNdM4=
+X-Gm-Gg: AR+sD11dxGBQRTYTnwfSZC2S3ZItwwbCULnk+/W2XXsyyBfHtGGKrNWyUOqDIQpmwFV
+	DfV3gde6JW5eBP+GKdHhjB0Ms2GAfTiJpi6CKpPVUls2K4MzIErsdxovtsIfFEXwKz5gQbK0jaF
+	yE9tdnBKt6h4RLXwviBNbN0LaLtBILvHEUfasQ5LPnoKi+XJApFiujcfBvfQ5ROWJlL2It5Tjym
+	jy8Rf6xAam6NwtA9OOkrh5v2qDlCMVtZp7J35/bSnFPQLOcsxLGosQwPwdx75AR+tzP3Fa/0pQX
+	fDTY1Z6vG73Cn6hsn29Xjww+/bykzW8l9YpFnk+YmJcCCwG6BEsygvqgyB707cSPGpXiMdcPg0N
+	qnRBEKnNUIl94VVvJ31iN5HMjRo+t/T8y+ipcBGwXACkmHAaxpGK9Fmnd3RmI25RSlYdON8VsIK
+	FeN2k3n+l70SPEQQWnoMzkSt7QoChuNJBwelvA8sa9A4X1eYqxElwyvRbBDvoT39+m2MqbOlv3l
+	xeQRpwPKGwHQyx9Pnli38Rm136sLNaRo66YVKpYCw==
+X-Received: by 2002:a05:6808:23d4:b0:4a4:ddde:5207 with SMTP id 5614622812f47-4b24198f27dmr12801839b6e.8.1786838496365;
+        Sat, 15 Aug 2026 17:01:36 -0700 (PDT)
 Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f3e86285e4sm4599713a34.16.2026.08.15.17.01.05
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b24d92462dsm4347729b6e.5.2026.08.15.17.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 17:01:06 -0700 (PDT)
+        Sat, 15 Aug 2026 17:01:17 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
-To: Ali Ahmet Memis <ali@iusegentoo.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, 
- Gabriel Krisman Bertazi <krisman@suse.de>, io-uring@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20260806180044.275543-1-ali@iusegentoo.com>
-References: <20260806180044.275543-1-ali@iusegentoo.com>
-Subject: Re: [PATCH] io_uring/memmap: account the pages a compound region
- really uses
-Message-Id: <178683846555.1984124.1583533999449071565.b4-ty@b4>
-Date: Sat, 15 Aug 2026 18:01:05 -0600
+To: Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+ Sagi Grimberg <sagi@grimberg.me>, linux-block@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
+ linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org, 
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linaro-mm-sig@lists.linaro.org, Pavel Begunkov <asml.silence@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>, 
+ Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>, 
+ William Power <william.power@intel.com>, 
+ Phil Cayton <phil.cayton@intel.com>, Damien Le Moal <dlemoal@kernel.org>, 
+ Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+ Mikulas Patocka <mpatocka@redhat.com>, 
+ Benjamin Marzinski <bmarzins@redhat.com>, 
+ Vishal Verma <vishal.l.verma@intel.com>, David Sterba <dsterba@suse.com>, 
+ Ilya Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev, 
+ nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org, 
+ ceph-devel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+In-Reply-To: <cover.1785596451.git.asml.silence@gmail.com>
+References: <cover.1785596451.git.asml.silence@gmail.com>
+Subject: Re: (subset) [PATCH v5 00/16] Add dmabuf read/write via io_uring
+Message-Id: <178683847578.1984298.10059277109543676478.b4-ty@b4>
+Date: Sat, 15 Aug 2026 18:01:15 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -82,21 +99,22 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Thu, 06 Aug 2026 18:00:44 +0000, Ali Ahmet Memis wrote:
-> io_mem_alloc_compound() allocates get_order(size) pages, which rounds a
-> region size that is not a power of two up to the next order. The pages
-> past the region are part of the same allocation and cannot be used for
-> anything else, but io_create_region() accounts reg->size >> PAGE_SHIFT,
-> so they are never charged against RLIMIT_MEMLOCK. For a ring with 4096
-> SQ entries and the default CQ size the region is 37 pages while the
-> allocation is 64.
+On Sat, 01 Aug 2026 16:46:12 +0100, Pavel Begunkov wrote:
+> The patch set allows to register a dmabuf to an io_uring instance for
+> a specified file and use it with io_uring read / write requests. The
+> infrastructure is not tied to io_uring and there could be more users
+> in the future. A similar idea was attempted some years ago by Keith [1]
+> (from where I borrowed a good number of changes). Later it was brough
+> back up to life by Tushar and Vishal.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] io_uring/memmap: account the pages a compound region really uses
-      commit: f12f0234cc14886bcfd53ffb7c8df4216dad51f1
+[05/16] block: move bvec init into __bio_clone
+        commit: e228404b05c8293f6a1286856e49ba3e55da1933
+[06/16] block: introduce bio_iov_iter_set()
+        commit: 8b8755e00847da1027fe6624277e43d289e2300e
 
 Best regards,
 -- 
