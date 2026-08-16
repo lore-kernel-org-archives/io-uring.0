@@ -1,109 +1,289 @@
-Received: from mail-oo2-f0.google.com (mail-oo2-f0.google.com [74.125.231.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6690F4B04A5
-	for <io-uring@vger.kernel.org>; Sun, 16 Aug 2026 00:05:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C9F3115A2;
+	Sun, 16 Aug 2026 07:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786838726; cv=none; b=cj8+GMcaWdElCbeYYuMlZZv3DBgqUK5W58uB7QUV+h8ApJ20LyI0Y6SdOyDgK6kDQP3x6q+kRHF/g4BEuPsxc+QBnOa0e3EQC+uuNa7Ol/9AJw2X5rwmlqOVXLw8zmxLj67/tUhyb+d9Q/5WAOr5888f6m7teEhVr0PBx2pLW/w=
+	t=1786864330; cv=none; b=Qw61LB5hifxhQHaMOksQwBC5jkbMhZyLpiM9PxPq3oqsqnzgkaxg1y3majUu7XalYApMfFXaL5qx0jrz7+OqD344AGvsCA9ks66kiXHN8udfHET9NgvF6aOZA59bNFwLNu0Y9DcZEkt4deOXyzUtmK3MisAegVHUxacCC+FH98Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786838726; c=relaxed/simple;
-	bh=0vaqpP2SKBEfiAR/ANqZ00XYWypSe5/SvJ86pzl9LRA=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=PNxp/0IkEjjU64UY+7b0WAEXoJ1EtU6Q1ktgB5ig4wkFiGdPZUuJ3RLOC4Piqa/o96582wUPyT8jnhCfMYqEyCR8Drg+ujjl6gDYGLCQYxL0DS/VFoSDVMmuQ6L+HNJRMyccEtScuZWs3vrvo9MR0WBYtijDwsOMq9diLbqm+PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=dKDi1p3d; arc=none smtp.client-ip=74.125.231.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1786864330; c=relaxed/simple;
+	bh=l236z4PZV3vWThmllv5i+5t5UIhmBnhsjE00e+deaaw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XHO1ofzxCvBxP4maCtmUQ+kfwBL9usG5UENHpRuoWmiCqsJOPhlmIN6lQ3jr3U9G/j6A0FzP2nl0LPAxAV/7DGIE0kUjD6Sh13YyWE6jgAoJMmNvsQ6axdgah2PsqA6phtR+a/EdP46NyTXFXoyN/blfVOqzpxjczhkuPMKSluM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cUllZLPB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="dKDi1p3d"
-Received: by mail-oo2-f0.google.com with SMTP id 006d021491bc7-6aae022f9c5so658337eaf.0
-        for <io-uring@vger.kernel.org>; Sat, 15 Aug 2026 17:05:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786838723; x=1787443523; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=aAhIwxQ229u2Ayph98kNvxqO5ITqkI4HNFKP5tZ4JQ8=;
-        b=dKDi1p3dwelZpVk+N8vwz6l9yMZ/V8KS2y3Vt8AYNARYEqO4fjaOFMFSsxS1l5Qp1y
-         z+QgsIdcRtxfEkWibBZaAkRgrL1ZOkhbJ428xhytpK85cunnVwlcqHHONHKSxl0Iwzoa
-         l45iDDf2hqnnbJA4ud7YhaB9Li7ZbUfxjs1AjKAhNFf+xz8q2jkbK1TY0r9qTbcUCnVd
-         2a99NNswZmZFOoHAnyo9HvBAkuENqnvVnVZkG3Fda5tbodJ/Ok2n0VVAKr9uAf1I4CaI
-         l8jACD4aOhg4Pr9xjfKfBgz+uXmynx21dSJb+twBAwpkV3IYIWqvfHwlBO3/RPGVUWxj
-         Vzog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786838723; x=1787443523;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aAhIwxQ229u2Ayph98kNvxqO5ITqkI4HNFKP5tZ4JQ8=;
-        b=ssgKifD2pZ0VOvT+weO/yfprV9A294SDSiVzLATP6P0d+m/ZxrhFbA1hLCHHrMWZfG
-         7n1oypxNs8DNurSRyAKZZCfcFsyumCXv0EkWOknhsGcOITbjMVG1k6eVMZHOCRTsi9TU
-         JEaOLi3+88fz/IVq7juojJB/o7ene3KIrgGMlQLxe3jNye5revkrqGAnAWmiGv2x1SHQ
-         cV1WRIgAt+K4SGb+Xme3OJLt6EhWyJrqcLOmh6auOzEKJpqal1BFqzIVY0++TwBfGpcR
-         Y6u7aat5p+u0TXKaZ+a8Zu4Ipvn9eCDbIofMgijEummQzii2lpIFEmzwIpsQIGt5wOVB
-         a3Wg==
-X-Gm-Message-State: AOJu0YywSUqZyu12mBQ/TMrccsnPuL0bqyJbnkeivuOK6gvcS8Hb2z+k
-	lBu7jbziSFKtxfFkEC6GW7sA445JG9z1wnRfAwnDlNOiMullaXKyNJzGevpA/7L07iqm8In6+9A
-	GvItCxdtL2nTa
-X-Gm-Gg: AR+sD12on7J2gzK3a0MfcQiqfxDI7D54M5+Nsr4/PNfO5PJK9YI0gyhoC8DXWVm3Sb/
-	kAftOtdy9uaqKhWMbvE9xE+pR6YS6MVeYgf5tZvyAaIP1uYvJc/fUWFnzYPQQzgQh7KKUvuC1Bu
-	TTVA42YuG+cuUxZc7HnPtG1bew4I2yVMLXMxLf4z1aJiwn3vBKdDKiyGoj7GcZolPkNqG6Z/b73
-	yf3tvSSh7yoIdXKVomIuPaBzKZfPd9wwnbORO3s0vjJyu+RrAICk3G/XEdT3mbjnTqvb2JwbwIt
-	iKTK8APkRZMpGKIQj4bP4PulCNWx7kAjg5ML088toOsZXTzagNqFfhC64DEfqyOxltr0LrlAnun
-	pbDJYmyqgDusdwws9EZN9NAv7MIAmYAeBjb2oJvsgPdW89vwDvOPNdXgdh/91jGBIfaYoFS8T3P
-	4svsg5wz+XaWXXZ6dIBY9ZZMJHqD74emWgoFqnB7niF30BwSYz5p5eXoDtu0VazqIQXAu0GNU1W
-	L8oFEGKhS38avtyRlbs+g+4cjktuZbBwVMhusq18tqGVJk=
-X-Received: by 2002:a05:6820:809:b0:6ac:a175:fe7e with SMTP id 006d021491bc7-6b0d6889e26mr13578079eaf.25.1786838723243;
-        Sat, 15 Aug 2026 17:05:23 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-45e8f976bfesm6135237fac.8.2026.08.15.17.05.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Aug 2026 17:05:22 -0700 (PDT)
-Message-ID: <95f7cd18-530f-4787-8696-344c18244781@kernel.dk>
-Date: Sat, 15 Aug 2026 18:05:21 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cUllZLPB"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 85E60C2BCF4;
+	Sun, 16 Aug 2026 07:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1786864329;
+	bh=l236z4PZV3vWThmllv5i+5t5UIhmBnhsjE00e+deaaw=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=cUllZLPBwAUzo88sz5iI+6yvDSa/SHpNLJabqgZDh1nT8AeD3Bgr6WVAdGEAJ8Z7p
+	 ozNvG529o0xTYWlkt4k0hS32ijiWDVb5UJkqH08B3gqM2USJSmsm273xQlWRzKYQIr
+	 32sp9RLWJgNxB5fg5g5uAPDZwzJK/XCp8wXRPc/++UngD98mNAluNZEbV1+m00f+Ei
+	 ANMw/N5fptk5tyjybmxTA1Pi/Iun3MuOD232QaqzLbDLtJMZ/ivfs0dLSiTPGhPIKK
+	 ciDXSeOcjSRvSGQSv0lMB/HgotHnpZERJwINf6ML1zjXLlNH2dfoLnX2IT/U6rYX6G
+	 3Zgi6NvYtML8g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72036C5DF6A;
+	Sun, 16 Aug 2026 07:12:09 +0000 (UTC)
+From: Marina via B4 Relay <devnull+dejamarina.proton.me@kernel.org>
+Date: Sun, 16 Aug 2026 00:07:52 -0700
+Subject: [PATCH] io_uring: keep memlock accounting while regions are mapped
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: io-uring <io-uring@vger.kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring fix for 7.2-final
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260816-io-uring-retained-mmap-accounting-v1-1-44e5eedd7ad3@proton.me>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2NQQqDQAwAvyI5G3DV1tKviIe4G20OZiWrpSD+3
+ bXHYWDmgMQmnOBdHGD8lSRRM7iyAP8hnRklZIa6qp/Vyz1QIu4mOqPxRqIccFloRfI+7rrdYpx
+ G34XOubYhyJ3VeJLf/9EP53kBH1oyBXMAAAA=
+X-Change-ID: 20260815-io-uring-retained-mmap-accounting-bfbc7d71143a
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786864329; l=6570;
+ i=dejamarina@proton.me; s=20260815; h=from:subject:message-id;
+ bh=qLxBrYf50g+OuYx8yDSRrA0uFWQ9y5dYnjPSpqE9LhI=;
+ b=2blRtHRgT88h3GXM3GwULtN5byYgsdYom2/LO8aAj5mV0dB1zwiWmIDofva2TfeJ13MY7qGi+
+ If0tmApTLVGDhnPxvM4KJW5mU1OzaYhHmV6Wl33cp/t5ZA3ubuCrS5k
+X-Developer-Key: i=dejamarina@proton.me; a=ed25519;
+ pk=o6FEADjBmL41WCfiAGLN0AkjAW72humn8TYGV/+V8cw=
+X-Endpoint-Received: by B4 Relay for dejamarina@proton.me/20260815 with
+ auth_id=953
+X-Original-From: Marina <dejamarina@proton.me>
+Reply-To: dejamarina@proton.me
 
-Hi Linus,
+From: Marina <dejamarina@proton.me>
 
-Just a single fix for a potential issue on 32-bit x86 with PAE. Please
-pull!
+io_uring unaccounts kernel-allocated SQ/CQ and SQE regions when resize
+replaces them, even if existing VMAs still retain their pages. Repeating
+mmap and resize can therefore retain memory beyond RLIMIT_MEMLOCK.
 
+Move each charge to a refcounted record owned by the active region and its
+MMU or NOMMU mappings. Release it after both the region and final VMA are
+gone. Keep direct accounting for user-provided regions, which cannot be
+mapped through the io_uring file.
 
-The following changes since commit bc0e8faf90e776a2f1f3967a04e8091e6bdb4977:
+Accounting stays region-granular, so a partial mapping retains the complete
+region charge.
 
-  io_uring: preserve task restrictions across exec (2026-07-30 14:40:22 -0600)
+Fixes: 79cfe9e59c2a ("io_uring/register: add IORING_REGISTER_RESIZE_RINGS")
+Signed-off-by: Marina <dejamarina@proton.me>
+---
+ include/linux/io_uring_types.h |   3 ++
+ io_uring/memmap.c              | 108 ++++++++++++++++++++++++++++++++++++++---
+ 2 files changed, 105 insertions(+), 6 deletions(-)
 
-are available in the Git repository at:
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 87151a5b62c1..6feb7ee3440f 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -94,11 +94,14 @@ struct io_hash_table {
+ 	unsigned		hash_bits;
+ };
+ 
++struct io_region_account;
++
+ struct io_mapped_region {
+ 	struct page		**pages;
+ 	void			*ptr;
+ 	unsigned		nr_pages;
+ 	unsigned		flags;
++	struct io_region_account	*account;
+ };
+ 
+ /*
+diff --git a/io_uring/memmap.c b/io_uring/memmap.c
+index 23e8a85111bc..ca28a9429c16 100644
+--- a/io_uring/memmap.c
++++ b/io_uring/memmap.c
+@@ -4,6 +4,8 @@
+ #include <linux/errno.h>
+ #include <linux/mm.h>
+ #include <linux/mman.h>
++#include <linux/refcount.h>
++#include <linux/sched/user.h>
+ #include <linux/slab.h>
+ #include <linux/vmalloc.h>
+ #include <linux/io_uring.h>
+@@ -88,6 +90,52 @@ enum {
+ 	IO_REGION_F_SINGLE_REF			= 4,
+ };
+ 
++struct io_region_account {
++	refcount_t refs;
++	struct user_struct *user;
++	unsigned long nr_pages;
++};
++
++static struct io_region_account *
++io_region_account_alloc(struct user_struct *user, unsigned long nr_pages)
++{
++	struct io_region_account *account;
++	int ret;
++
++	if (!user)
++		return NULL;
++
++	account = kmalloc_obj(*account, GFP_KERNEL_ACCOUNT);
++	if (!account)
++		return ERR_PTR(-ENOMEM);
++
++	ret = __io_account_mem(user, nr_pages);
++	if (ret) {
++		kfree(account);
++		return ERR_PTR(ret);
++	}
++
++	refcount_set(&account->refs, 1);
++	account->user = get_uid(user);
++	account->nr_pages = nr_pages;
++	return account;
++}
++
++static void io_region_account_get(struct io_region_account *account)
++{
++	if (account)
++		refcount_inc(&account->refs);
++}
++
++static void io_region_account_put(struct io_region_account *account)
++{
++	if (account && refcount_dec_and_test(&account->refs)) {
++		__io_unaccount_mem(account->user, account->nr_pages);
++		free_uid(account->user);
++		kfree(account);
++	}
++}
++
+ void io_free_region(struct user_struct *user, struct io_mapped_region *mr)
+ {
+ 	if (mr->pages) {
+@@ -105,8 +153,12 @@ void io_free_region(struct user_struct *user, struct io_mapped_region *mr)
+ 	}
+ 	if ((mr->flags & IO_REGION_F_VMAP) && mr->ptr)
+ 		vunmap(mr->ptr);
+-	if (mr->nr_pages && user)
++	if (mr->account) {
++		WARN_ON_ONCE(mr->account->user != user);
++		io_region_account_put(mr->account);
++	} else if (mr->nr_pages && user) {
+ 		__io_unaccount_mem(user, mr->nr_pages);
++	}
+ 
+ 	memset(mr, 0, sizeof(*mr));
+ }
+@@ -188,7 +240,8 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
+ 	int nr_pages, ret;
+ 	u64 end;
+ 
+-	if (WARN_ON_ONCE(mr->pages || mr->ptr || mr->nr_pages))
++	if (WARN_ON_ONCE(mr->pages || mr->ptr || mr->nr_pages ||
++			 mr->account))
+ 		return -EFAULT;
+ 	if (memchr_inv(&reg->__resv, 0, sizeof(reg->__resv)))
+ 		return -EINVAL;
+@@ -207,10 +260,23 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
+ 		return -EOVERFLOW;
+ 
+ 	nr_pages = reg->size >> PAGE_SHIFT;
+-	if (ctx->user) {
+-		ret = __io_account_mem(ctx->user, nr_pages);
+-		if (ret)
++	if (reg->flags & IORING_MEM_REGION_TYPE_USER) {
++		if (ctx->user) {
++			ret = __io_account_mem(ctx->user, nr_pages);
++			if (ret)
++				return ret;
++		}
++	} else {
++		/*
++		 * Kernel-allocated pages can outlive their active region through
++		 * userspace mappings.
++		 */
++		mr->account = io_region_account_alloc(ctx->user, nr_pages);
++		if (IS_ERR(mr->account)) {
++			ret = PTR_ERR(mr->account);
++			mr->account = NULL;
+ 			return ret;
++		}
+ 	}
+ 	mr->nr_pages = nr_pages;
+ 
+@@ -281,15 +347,41 @@ static void *io_uring_validate_mmap_request(struct file *file, loff_t pgoff)
+ 
+ #ifdef CONFIG_MMU
+ 
++static void io_region_vm_open(struct vm_area_struct *vma)
++{
++	io_region_account_get(vma->vm_private_data);
++}
++
++static void io_region_vm_close(struct vm_area_struct *vma)
++{
++	io_region_account_put(vma->vm_private_data);
++}
++
++static const struct vm_operations_struct io_region_vm_ops = {
++	.open = io_region_vm_open,
++	.close = io_region_vm_close,
++};
++
+ static int io_region_mmap(struct io_ring_ctx *ctx,
+ 			  struct io_mapped_region *mr,
+ 			  struct vm_area_struct *vma,
+ 			  unsigned max_pages)
+ {
+ 	unsigned long nr_pages = min(mr->nr_pages, max_pages);
++	int ret;
+ 
+ 	vm_flags_set(vma, VM_DONTEXPAND);
+-	return vm_insert_pages(vma, vma->vm_start, mr->pages, &nr_pages);
++	ret = vm_insert_pages(vma, vma->vm_start, mr->pages, &nr_pages);
++	if (!ret && mr->account) {
++		/*
++		 * Accounting deliberately remains at region granularity when
++		 * this VMA maps only part of the region.
++		 */
++		vma->vm_private_data = mr->account;
++		vma->vm_ops = &io_region_vm_ops;
++		vma->vm_ops->open(vma);
++	}
++	return ret;
+ }
+ 
+ __cold int io_uring_mmap(struct file *file, struct vm_area_struct *vma)
+@@ -379,6 +471,8 @@ static void io_uring_nommu_vm_close(struct vm_area_struct *vma)
+ 
+ 	for (index = vma->vm_start; index < vma->vm_end; index += PAGE_SIZE)
+ 		put_page(virt_to_page((void *) index));
++
++	io_region_account_put(vma->vm_private_data);
+ }
+ 
+ static const struct vm_operations_struct io_uring_nommu_vm_ops = {
+@@ -411,6 +505,8 @@ int io_uring_mmap(struct file *file, struct vm_area_struct *vma)
+ 	for (i = 0; i < region->nr_pages; i++)
+ 		get_page(region->pages[i]);
+ 
++	vma->vm_private_data = region->account;
++	io_region_account_get(region->account);
+ 	vma->vm_ops = &io_uring_nommu_vm_ops;
+ 	return 0;
+ }
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.2-20260815
+---
+base-commit: a5161661ae99f497affa83a5b8654e457cda6267
+change-id: 20260815-io-uring-retained-mmap-accounting-bfbc7d71143a
 
-for you to fetch changes up to 6ca662cc71df7eb4eaf1b4bcb07cd3f188ad19f2:
-
-  io_uring/rsrc: reject overflowing regvec bvec byte counts (2026-08-12 19:53:35 -0600)
-
-----------------------------------------------------------------
-io_uring-7.2-20260815
-
-----------------------------------------------------------------
-Jérémy Jean (1):
-      io_uring/rsrc: reject overflowing regvec bvec byte counts
-
- io_uring/rsrc.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
+Best regards,
 -- 
-Jens Axboe
+Marina <dejamarina@proton.me>
+
 
