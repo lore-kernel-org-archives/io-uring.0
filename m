@@ -1,42 +1,45 @@
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 359B33A9628
-	for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 08:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E33F3C10B3
+	for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 08:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786955323; cv=none; b=N9HC7PPaX6x2kdPVaiagGzO2atLtASzdavmWErNJ0XPq/eWe9ElHlADbdOk7hZHCNcQnjRtVrbdejjgTc8ANIOmTBmm1z9udSGQmA2MUaqjIH8UcDOIbQqmdGHoYsVIGiJaAhDg4CEpg3Ju+gahHEmI9HSJhKy+XQxsCmy+SR4I=
+	t=1786955326; cv=none; b=av1TPDSw7LPgR4dmnf0OjqgsVh3mYsJyUaCwQ7pp+IrU7t37zjCKzwzR5Bi5cZHnJNaev7wJpqZN59IVqxyJS7/V9w0HD7wSDHCy7lXgql2TKPyhXm7W0BpqL/GlJ6TerVGKlnUGFRqY6W+ACKCJlacRFN1wE/73ZsHiRIULNLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786955323; c=relaxed/simple;
-	bh=FQNFErR+txJw5xssLGW7x/YcsyUwfZDtGOOxMqlhbaM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YKy7/mRby3O8xIcyYcJMqTbSTGkr2eJW7fUb18gFeD/vThQpAk2MzusFcf+/UEt4Y13soGOAg+M01SRe9zYjRD6WHEhjHwPmjyCfpKzEv/k9bNAHmsCpJzC0hKLNir1fxC9HQLJDFQnQcdOdQNp90B4OIstl5slI6GeRTB70/NI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=x9oFDSPz; arc=none smtp.client-ip=198.137.202.133
+	s=arc-20240116; t=1786955326; c=relaxed/simple;
+	bh=+ZIC0vZuXY4WJI6yn5thLdYXZdodOx8LgMEuL4TQCVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BlHvWS/zg2gRwt1tiufYfurWY6fNGln71ZnEcZMEih5rne24veg5x40C9lWHy2edHfGJHvcyfkb0D34nacqBi9DDnvUOB5FikpJ9BG7Vm9k9WTDw9A3ZwkyiGyKQFwIjmLIrk1F8tuHpsrvogCn50ozQZbq0lHiO3LWg9H0yNYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=xOp/K3Md; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="x9oFDSPz"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="xOp/K3Md"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=j7614uadggDG1XDY5uOvn/8LD5YSjLbRDdgGoSA2j3w=; b=x9oFDSPzlNMIRf094313gJ/ccs
-	F0WrAAoORWLTHDMQmxi25FGTqEvmQhQhHzF+mxliq9junQjPn4kNcg8NIdMByfcNczvhpWmFMqa+W
-	D80+DtTwhE6RRHlj9pkmZCnO77TFL10PJ68c2gECzHk+XlqLxZcVdT3I2RZZtAbhBn4IcvN/CHuV+
-	9ppCXmtvbH2HJJ+8HKxMXFKbsdNnP82XuN5lV5bHbIL8LPmFtOhg0/2gsVv2knqrp2ovxDVmcyV0b
-	1fQrol5QF9XmEKz9gBxOulVdk2yt6J+1942zkNzeLW3DE6wijjuKMROkcFPhN9cJu6TqxgcMW9lCf
-	PGQWcAxw==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=JtJ0BSvrVnUqK/EDj5EPk8LYdOQZY7LrKXGkCWdjAJU=; b=xOp/K3MdjW8pPKOq4hevE8JCrq
+	7ZG/osfHSMYomrc7A9Kykcp5Fv4SjsYJlkVw+2JQ8Tgns86HhihfPwAKE2D2u6GvyPFuIjrAH1Ejs
+	FLwm98JeC49Z7YCyUXIO0z+Qx1J1f2cvxaURxO/YJUFtB2AxLSZpt2YgpEzDXaXUt+Va2yVt9MNs4
+	OuvJh7g83lQT70+D31Rwv+SXAH0+WFTkub7FMQ7wscgSlXEYNGop9tXaUbLnp4lJn6ZhVEvOCvTj2
+	rPb3CPEYESpjkUYASHJ4mNSLhn3ZCqV1KxE32hChqIOb2rSCzodhgOnkqSV0zanB0NQ66Gl19H/LA
+	lGlhOLZA==;
 Received: from 2a02-8389-2301-9f00-d9b3-9099-237f-e1a3.cable.dynamic.v6.surfer.at ([2a02:8389:2301:9f00:d9b3:9099:237f:e1a3] helo=localhost)
 	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wvsi0-00000005gzs-40bc;
-	Mon, 17 Aug 2026 08:28:41 +0000
+	id 1wvsi3-00000005h0Q-3TbO;
+	Mon, 17 Aug 2026 08:28:44 +0000
 From: Christoph Hellwig <hch@lst.de>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: Damien Le Moal <dlemoal@kernel.org>,
 	io-uring@vger.kernel.org
-Subject: support ZONE_RESET_ALL in liburing v3
-Date: Mon, 17 Aug 2026 10:28:27 +0200
-Message-ID: <20260817082837.762276-1-hch@lst.de>
+Subject: [PATCH 1/5] configure: shorten the message for the discard command
+Date: Mon, 17 Aug 2026 10:28:28 +0200
+Message-ID: <20260817082837.762276-2-hch@lst.de>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260817082837.762276-1-hch@lst.de>
+References: <20260817082837.762276-1-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -46,13 +49,28 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-Hi Jens,
+The current message is pretty long, drop the redundant io_uring.
+This aligns it with the soon to be added zone_reset_all message.
 
-this is the liburing support for the just submitted ZONE_RESET_ALL uring
-cmd support.  Also a few fixup for the discard support that stood model.
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+---
+ configure | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes since v2:
- - fix inheritance in the shared library map file
+diff --git a/configure b/configure
+index 39c377c9bf8b..b953eddd6ddc 100755
+--- a/configure
++++ b/configure
+@@ -467,7 +467,7 @@ EOF
+ if compile_prog "" "" "discard command"; then
+   discard_cmd="yes"
+ fi
+-print_config "io_uring discard command support" "$discard_cmd"
++print_config "discard command support" "$discard_cmd"
+ 
+ ##########################################
+ # Check idtype_t support
+-- 
+2.53.0
 
-Changes since v1:
- - misc spelling fixes
