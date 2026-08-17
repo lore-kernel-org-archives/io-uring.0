@@ -1,123 +1,106 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D7C3B3C19
-	for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 18:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C513A8747
+	for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 18:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786990466; cv=none; b=rf+RET7T7/yRGpmgJKVLYMa/JJZXes35+uODeZGQ0FoUu8waFTkMBbkBzrs+C88bCzNvIuM4HlqVfWR8x2PirvybTLBEl5mx8dFAG51W4oMkCjAPMuXCYDUsAKfMC4v2RCxgGKG6bBtk5u40fDUwmeKsKKmC4Ipop2mUHwFg490=
+	t=1786990955; cv=none; b=qSypmnV+PIc7o3EAMaf9zdxCRJ8Er6U/l63neUXI/NLNmNqOxtDHIv27E7u+wrQJFcVNpryRthpjj8i5jwFoqQqZXWawq2RLb9N9G4Xog5YsL5/M6use2gP89W+JSlD0mHXgl1fTiMJExYa3tSLtiahpLy38s72AFWJNbhl0Bd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786990466; c=relaxed/simple;
-	bh=ao9m2sLvbtNitvCpUq+Gv1OifNM6AgmqBnJ0gntYEVQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UPED9WPDw0G65f21PnZ8jdm6KGq3YiMD0YIm4cLbYiAX+BJJH3qOHrKhlqEiKP9ugBnOC5/89jEXBY5igl3jydvp+uVLVe9ewxvEA6XflRWciwV4bTLhXipj4zm/NtriM37sNmNv7E5BRmDm5jkpV7fBF7fyWosS8nNQRUSTZC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qFP9GyxO; arc=none smtp.client-ip=209.85.160.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+	s=arc-20240116; t=1786990955; c=relaxed/simple;
+	bh=mEwyIhf4fHxStvWiRuLK6jlKpmk90wun6bWSJ+wSYbE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=EVGWfdwqrVIB/CuEh0sM2a1ddMweSdxfCsrFaxvFx6ZwYpOIiLlRlyOXLxRchGFHAcDrC6i6NuVXQUzy4Zeo546ipkvJ5X8XEpbPqgPbfK+O5ppDVkUvvrZHaJxnSSv3+26GOill4p3mUGQCv685qH+QuwxPXKgpNFAp7QfdtGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=j1favINr; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qFP9GyxO"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-51c08df8513so20513481cf.3
-        for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 11:14:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="j1favINr"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7e9ecb1e13cso3716669a34.3
+        for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 11:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1786990461; x=1787595261; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=AhYnEHSrQOfQP14QlDp7s2GCgdzZ6d9RZ1i39j+Wq9Y=;
-        b=qFP9GyxOxrsgDi9Ctm40p+jaZqUb550Lcko2pdBHJ+4wYoE5/a6vePAzZXeFWEueB5
-         fuEOv0e8g5XFVYL0TbH+nRizrdb/Zb/LZtSbJW+CarMf14qyWoHobOqW3jTFD3su55d3
-         YxEXd3okmktpe4Z8jPz6YSpF2f1KfONocVBQJKRUeAjPQ140vD7Y38omVgVlmb0HH979
-         QpfATP3XoTkSdbjrht8v1vclheWTCAswY5svcWc+29mKiCDBNXt10VcKUxZfjPapozq+
-         lMpP1GP9XQVmuyYjI+Ume/BAapqzL5YU7HyLvU6Zu0xTtVuMaJp/ZIJyZsF91UwIIuvH
-         bhvQ==
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786990948; x=1787595748; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=a609jsIH11q7QddM1Rl43b89b7a3MQ3DoqcOI+aK73c=;
+        b=j1favINrPUAHdNjvD4XnCqB+999WY4YkLCecQd4ehT5jkod6N0QEvWYTXM8QC+877w
+         76PcmOZLxWjsIKp3sljDh8Yt1Sps/3/7MzyX8OfWWjQ1XtDbir5WPQpJFqy0Z7+G940/
+         AviZPHcHCjPnFCismOHjoM2af2+tbk/uh1BZlQZeXXnJErJ0fS2FPy0g0pwBMBS2eDY2
+         WBN55mqpiC9p25dlJf/47C2Leh0nqRmmt5bdnd3NZCGOLm/X7poPydO3osi32qi6Mi/T
+         07sM7Ne7eqU8uEOCkIxBxIZJtyfwFB9/3DczeMcgq4kWxm2awuNVSecH0ugQlRe1EsRd
+         nz9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786990461; x=1787595261;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1786990948; x=1787595748;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AhYnEHSrQOfQP14QlDp7s2GCgdzZ6d9RZ1i39j+Wq9Y=;
-        b=ks5idPsSchBNHqBSD6m5fJ/1TAaz+1DIHQNnSPWZzyZGdpxsf0DynzDsNfSMFelOhy
-         3fQmoousqbCsZbjO6mGoUmc3U0PCTOlep+ERYMdREQMFnRBksRNzWj0PNYtKrbmyh65W
-         CYh6kVBKkwC0UrimDFeYpwWIptKPWGEruUV6WgK+iDdaKafVXI1W4qFLI7Lf2fthss4V
-         BVTyU6OvpmcIRyEOmdz3ySJFWnXvLibaMO5DkMhuI+1ObbxcmEmpqymJJk4ZUoLMnfIz
-         eXZwrLNNOn/EaC93mtr5j5XtWlM2XAL8iwKtEMWuvkhirzFIsxEf/DG65gFSo9HJGJmv
-         KHUA==
-X-Forwarded-Encrypted: i=1; AHgh+RqU079AN73Nqnqrxs/yReYbb1H6p+3x/YG+Z9d7BZFrRmBf6ogECFy3Vd2b2nvf8tLVUwohn0qALQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YygE9LUSL9EJY+j77oU+FSp4ghr6CK/ysQT192uLjaC/rR2Mqqx
-	4w94Q/jiKKeCIyGbvMHZFKwoTSJ81XZicLA1gnfzzo1ARYfu9rg05LBYBT9oLk/30A==
-X-Gm-Gg: AR+sD138/I+1bf8wydatWmWRhl+3BG+dJkuSmneHOvfjZmbfp4yjRthfdyhypnU8XWa
-	uuqgzeGE1g/p4AMGORzNrQp6D+Qt0yRC/fhSmyY6SO2z3flrpqngSjFDl9MuZNdega44SZVZSnl
-	X4V9OXBC1xREnWhkuuoK2WdUfqKtUMmuSNECgEhqRpWLsIpkAFln5D9zXl2HClOcZ2ifRWjBezE
-	ulFFL5ser1KFNmNM/bt69/mHGClkfOqRMiDiLsLjVuX61qya7LCTcPOSEeHKGD7n/FTLk3zTA7X
-	zqPBtAPVixKa17rC1UXGTn+wdPqK9S1q2z1cbS1tP2MNbahvMzJpe3M5daTKj7hg8CHckdRxW2n
-	7hH48qeguFyyG195T4x1Sbs2AW3osM3AJbfjtVm8yKircvvwLvEiHIie7dV1Q3egp1UhS2IUj8i
-	mohib2XlKPdfLlAGuDOZbdzhKCbkT2Cu7tacd5HF6sJ4gAtRHwDQO/dpZ41S86Yjhe1U9zABETr
-	2ytRNfmrLofmdmJFHjBestbN6wn/iJyFkNITttlVTk=
-X-Received: by 2002:a05:622a:2445:b0:528:3d62:16c8 with SMTP id d75a77b69052e-52d854a46f0mr317463501cf.31.1786990460710;
-        Mon, 17 Aug 2026 11:14:20 -0700 (PDT)
-Received: from rowland.harvard.edu ([2607:fb60:1011:2006:2008:aeb7:73d7:d8ff])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c4580f7ebsm14450746d6.5.2026.08.17.11.14.18
+        bh=a609jsIH11q7QddM1Rl43b89b7a3MQ3DoqcOI+aK73c=;
+        b=j4AXcgmLYfTS4DcU9hFvnPKRFIs7xcaWOBiLSmsvfhhGXa2LoHo52UEm3fOT9sMVZk
+         cfgy+pxFzv1Iid2024IdsKvi1uP7PqZvEdvkqJ2e7FbjcxSJakX7wXiusvuO4kYnqJkv
+         FcX0Vm9RhZH4A+YpWILoW2cZeKcrzo7IUwqdPhq2sW0kdxkBQKCJ/1xKcqc8ARAMHM/Q
+         Yy70FJfSnvf78NWf/wjy/c4cRQHiMfxvMv4fxgIS7juGuZNx52MjCSnRZu6gvmTjDBzf
+         dmAvU2nYysAMCwvEpWUwgjoyhp9nEz9QHtEuAmvJ6rjsyC0HTlxXAXzSNqHhgrBOtgHN
+         BRfQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr9FfPVEJyv4GQ7/QROxIiDTRuZps7Rk4I7AEjECAyM5AOckHzGG0TviHzr9A8KwHX9pGA6BBLFQA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4iCw6VGdNNqYbl+tlIGbFwU1VnZOXasPtyyWtY9m/px96MZCA
+	FPu4pO2qptIGvkEqp9xGcvpKbC2tYuJj1bH8Ox3iEbP7S5rtIaDr6Q3BB8lfYy/In0OVxqUb44d
+	EdeJ1n/53lA==
+X-Gm-Gg: AR+sD13HsxNG7waFDJgbyAo26PGsf49VHoo7P7VS5653lVI3VPzy27zmTCPHnGmv83Y
+	L8W0XQmylH8U5OWOtoyNhdBYOpxPkMLVnhcWSn2xnYag/YWbHQM3R52KCXimVhM5dweSf6AKTGF
+	0sZXs17q+5sLsPP1K6qNSXNJAjrsOXajc39JOwkZKPMfS45rzC7eBglL2D0IqVk50uGolCpsm+3
+	0UyI34DY2sfm30kE2hBG9FjwB2d1bipNWyIuQ7OX6wwR1NyIVThIcMYxLKDWgoaVEofzO5c+QCa
+	BrhK4t3upDJRNXGQmOmMgaa/aZrfLRiY7pWQYuu1QBpWPk1r8p4XEdOj5MQnK7yZnx4XcAweG9O
+	g4tAEMQPbQYmVorXDx/qeFeU+e/QQ1c/8ibOQEtoXugw5s/86+edwIgJsMvYCK4N1HHAT6+4+jr
+	cXKjTZfRE2JyvSdmLhXbD6LanpxsTADSYlXzaePUhwSi1XR5e6YpO0n4gc1kMJE4r72WFc04YO+
+	oMZRSTFrCLghIpsC1ey8NcCnG5eUmzzIoyGU9lC2Q==
+X-Received: by 2002:a05:6830:6ad3:b0:7e9:df18:c53a with SMTP id 46e09a7af769-7f3de7fe78bmr28323235a34.14.1786990948591;
+        Mon, 17 Aug 2026 11:22:28 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f41c0b6c50sm1987282a34.18.2026.08.17.11.22.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 11:14:19 -0700 (PDT)
-Date: Mon, 17 Aug 2026 14:14:17 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: syzbot <syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com>,
-	asml.silence@gmail.com, axboe@kernel.dk, brauner@kernel.org,
-	io-uring@vger.kernel.org, jack@suse.cz, kartikey406@gmail.com,
-	kees@kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, mjguzik@gmail.com, nogikh@google.com,
-	syzbot@kernel.org, syzbot@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com,
-	syzkaller-upstream-moderation@googlegroups.com,
-	torvalds@ppc970.osdl.org, viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ep_open
-Message-ID: <16741050-a3e2-4193-bfca-232a615a1311@rowland.harvard.edu>
-References: <34e65096-8827-470c-9a88-8c643cccef22@rowland.harvard.edu>
- <6a8338ea.dbb3a75c.20434b.006a.GAE@google.com>
+        Mon, 17 Aug 2026 11:22:27 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Damien Le Moal <dlemoal@kernel.org>, io-uring@vger.kernel.org
+In-Reply-To: <20260817082837.762276-2-hch@lst.de>
+References: <20260817082837.762276-2-hch@lst.de>
+Subject: Re: [PATCH 1/5] configure: shorten the message for the discard
+ command
+Message-Id: <178699094701.2982107.15892124818004029047.b4-ty@b4>
+Date: Mon, 17 Aug 2026 12:22:27 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6a8338ea.dbb3a75c.20434b.006a.GAE@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On Mon, Aug 17, 2026 at 09:38:02AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-> 
-> Reported-by: syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com
-> Tested-by: syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com
-> 
-> Tested on:
-> 
-> commit:         8d3ae592 Linux 7.2
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v7.2
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16a91a25580000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=c44651ea7dd2f307
-> dashboard link: https://syzkaller.appspot.com/bug?extid=df9e891bf8ea586f846b
-> compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=15790679580000
-> 
-> Note: testing is done by a robot and is best-effort only.
 
-Greg:
+On Mon, 17 Aug 2026 10:28:28 +0200, Christoph Hellwig wrote:
+> The current message is pretty long, drop the redundant io_uring.
+> This aligns it with the soon to be added zone_reset_all message.
 
-Has this patch ever been queued?
+Applied, thanks!
 
-https://lore.kernel.org/linux-usb/ee41fbfd-f368-4a06-95d6-ae9b4267fd82@mail.kernel.org/
+[1/5] configure: shorten the message for the discard command
+      commit: 16390826c1ffe9e989c4b8e922d8aeec30cbe030
+[2/5] man: fixups for io_uring_prep_cmd_discard.3
+      commit: 96980531859b99fc21feda893c49750879e8c6c1
+[3/5] liburing: add io_uring_prep_cmd_zone_reset
+      commit: fae20287f440d59b12a1626ef9d7dc15f7764933
+[4/5] man: add io_uring_prep_cmd_zone_reset_all.3 man page
+      commit: 9d179918fcd060494c680f42eba525e9c656e766
+[5/5] test: add zone_reset_all command test
+      commit: 6bfe0f9180f95d23b0c7e9724d2d0c84972141a4
 
-Looks like you can add syzbot's Tested-by: tag, as well as my Acked-by:.
+Best regards,
+-- 
+Jens Axboe
 
-Note that a different patch to fix the same problem was submitted here:
 
-https://lore.kernel.org/linux-usb/20260731230603.4637-1-kartikey406@gmail.com/
 
-IMO the first patch above is superior.
-
-Alan Stern
