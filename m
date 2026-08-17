@@ -1,131 +1,115 @@
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f11.google.com (mail-oi2-f11.google.com [74.125.231.203])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAB33F3265;
-	Mon, 17 Aug 2026 14:09:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C962E8DEA
+	for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 15:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.203
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786975799; cv=none; b=cPC/F6WNT7c5GCLs/etoAeq5vFseLzRDD5keZ4TlasYMG1LU5V9OvxOOEd/2bOaBxaTf/b8eUQavkp1iMXmaeSweTzw4gfbGWoUaws0+eRLrQVHrkFSQNm2H5noT/PNqUBAlSMRN6NxvOwsDVlsRXXrw+BdUKL+Zq4R2nsf6DXM=
+	t=1786979052; cv=none; b=T9AXeS5w9lhz1o6Mq1DnIUAlifgQjSjvdmQg9M+HAUNuo9/j0f5LXMIYa08uzf/UaEMGm+qO95Je8T7jbp+obXCxLO+wZe3ImxKva3cIuITaAS9znsSVjw+n3zAbqHm9xMdpe08MhR/+wVb96ulDquVknBfttw5CHHfkCDJnBYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786975799; c=relaxed/simple;
-	bh=OYquvGJzVtBPWDzClVGI5qYTrrmHWqFP/6vQd9+ufwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HA+hNqhBiDZ8VIlrM1LYncjVGil5vjWrlxaJf3zwI3LV02MiQXaNN9BHxprykGSFJCG6sUvg7UPmod1VLH8gQykM5IC7gcYmr7b6X1Tcss3e2QHPiy4G79qrGpL+JIl5n6LnvRI1TU/ybzbDePhOLN9VBQ+tUxLGBlzAO+gPt5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=QF5NNs0t; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kBDkLToo; arc=none smtp.client-ip=202.12.124.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
+	s=arc-20240116; t=1786979052; c=relaxed/simple;
+	bh=Ur+cKiVbAh3ZsrGizOKH+9+i3VfuiVrSQMhUYBEr/Ao=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Vd7SXKzQMq9xpfpY0pfr0/JAkNzyvUP8CZogPL1rkQgrkV0/4FRVwv0zY643ErU5NgM7T2uyQfu2V+vo4aL/K3FTib3LSb+o3H+qhlUBRWOigW/UGm+NhRchMmuW19RwLq0e9o5GvBPbIDF3kgVvBCyEBvnM0hLrg4GdPaQWlTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=C4geTbvj; arc=none smtp.client-ip=74.125.231.203
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="QF5NNs0t";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kBDkLToo"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 66A267A015E;
-	Mon, 17 Aug 2026 10:09:56 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Mon, 17 Aug 2026 10:09:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1786975796; x=1787062196; bh=vzZNttFZ9M
-	PKmCoEpqflrK0pVGpNWTranp1FJupATn4=; b=QF5NNs0tGLBA0DAy6QCe1c2xA0
-	6tkOHrxGR8dFDpE8IdKePvPvlgDHYyle8XlFdOEMToUVSUfiVCVj2wRDRLFh3p7D
-	nHKVN9aAuUt9gGts5u3gZz5hXDifTkbsvWwUAKnlV9G2cxVnMNDARpYqccALJ39s
-	/wD6FwXv4Vs0/qolkGNyQaUyCHb8PIkXxWc9qdymuWPiyZfmhhvOADgrl3YkmkI9
-	N1FEN7WVg7XS6QMrg+f6rD9ntTNj60bibcoV4bACszwozBJ0YUifP8YWZCr8TkaX
-	XykBRRHBRfllFesE8a0I8LVFpBZwD5pkFYkr3b4izNzBvn0tEmaNtPa1iIiQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1786975796; x=1787062196; bh=vzZNttFZ9MPKmCoEpqflrK0pVGpNWTranp1
-	FJupATn4=; b=kBDkLTooB9JBioIKVaqXg/suLnhR7h58dEZlipbfp4cu70sa+0d
-	DtVRQKJAWpTppsiaxrV8K361obnNQRq5nEkfvNERKrkX6GgLBTeDHqJUP2iBNmmi
-	PolcPq7S2rXk+WfZzENSgDyHbkTuoFCwthkWv4Oy7BAmgIlAEucjR8TZkwHbXryT
-	QKGcqP6zeAtQRj3YBfgeAXqSeij+3EXQcnGhGwVEOvonkBMuCPCf5gHXAVxZfvr9
-	KIFbrMT7UT7TF6jS+D7Q/zmak8oZ/mawlGp7jFPLZVBbGC7otPRvz0dneLYMEmSv
-	dhCAQfEKtkEw2DMCYOBves+aUzwVgG1xF8A==
-X-ME-Sender: <xms:NBaDamnaWvYmLHbG_nFD88D4pgNm-Ijhns9ZgpoGDK1JMUtR7koSJw>
-    <xme:NBaDaqY7gWOAA5Fsfv4VgFBgc50tYOUJ-n6duhKoM0vKar9xtYlbYWFhX4U_8b1Px
-    sVeW8xGKMhHqX3n_rZNUBpPG6NEKkl1qZ14a7X9d8Idj_Ra17TrL08>
-X-ME-Received: <xmr:NBaDapHCS94yFlY2W9PlLbA5L_exMIJowFQeXZNRkDJjGVlowZlBAPUDkSgjfyp9w9udW_OcRhoB2RCQjm_M6YIjfza2rIo>
-X-ME-Proxy-Cause: dmFkZTE/cexVpZyXM078OQGgY8/s1GF5OZVfiKMaJzfhw/kFmWdRl+VhOlU3DhKQibHNb9
-    +JQttjj8ucNTgPIRFyJZ6c0El5RXx0Hqh3kP1OAkFWfaoihMSLdGDDvYveHwrKHvQlBk6d
-    XpGn6wsbZ+wD5VqmR+SAvFSxZXCPeNXJW/6orEaAoDNuh6DrzfHCQKwn45cB1fsMSr/9r0
-    PlrVc6Lt9w0MLF8YEcaZx76FcwM0ncb+XLwFsLFr/A5LNdKsn2XVoN/a0tCZ9Ez018ifwg
-    XlLnont+26Xgd9OcTGC5G4uPzpJRjYnoveiUfB8q5uHpfMLOSMjclDecIOs8yiVIT3t/f6
-    Uy9E5A4buCoK+kRKGWAHjFZpFZNIWrcVla0YBBZJkccDvOMRdSAXX3kXTy30vNCs6mL0w7
-    x+yCjdfDweivd8I0bzlDIc8/RbhS42uEyLeM/tr2lHAIhY6MrPbW6cWXUIKI3MuJimvjSj
-    Nv+Z+SRjDYHaREOahPIlZ9hwch4uv8uaXyLTAwG+Gk+wEucV7HQ+a4zA+GGzbhiAzlt8IR
-    P25W2yVNcHE6RPh0jBxBFIlHztsMbhIgHNbeUqPS7tuG79t7u5yfsXrGlPQYpOsqOh6pu4
-    DD8UPiE0eUhgLp92G4f7ydovh2jCVQjWjvi750DciNsAvFUVUjODmJ+WjqBg
-X-ME-Proxy: <xmx:NBaDahYfMQNKxREB4T1RpUwhuEZDoPmVW6yvAVaei3Olyd-WG6KMSw>
-    <xmx:NBaDalzYPZbaJ1vyLPC6dVTLtVPgBOXpZ8jJTqUCvHg6H3iUE69yig>
-    <xmx:NBaDarQ-ip6_GcvIQ5azY7795M1zH4fI4l68yfUJFTa94c5o6W-_Eg>
-    <xmx:NBaDaqLT4i5xpf6NwfJibjp_6oqNQaMAwbv6KXeZTIABkdcGI3zUVA>
-    <xmx:NBaDanfwDD2spKEyyETxQVKTm9vl0xmGH0gqZ4Ur-bO3NypVr3JL_Plu>
-Feedback-ID: i80b64ba7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 17 Aug 2026 10:09:55 -0400 (EDT)
-Date: Mon, 17 Aug 2026 09:09:54 -0500
-From: Juanlu Herrero <juanlu@fastmail.com>
-To: David Wei <dw@davidwei.uk>
-Cc: netdev@vger.kernel.org, io-uring@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kuba@kernel.org, 
-	asml.silence@gmail.com, pabeni@redhat.com, shuah@kernel.org
-Subject: Re: [PATCH net-next v5 5/6] selftests: net: add multithread server
- support to iou-zcrx
-Message-ID: <aoMWDiA1NnyqxoB7@jlhe0197-mac>
-References: <20260814012348.46958-1-juanlu@fastmail.com>
- <20260814012348.46958-6-juanlu@fastmail.com>
- <34915029-869a-4a5a-9bde-060a9a6eec20@davidwei.uk>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="C4geTbvj"
+Received: by mail-oi2-f11.google.com with SMTP id 5614622812f47-4b25c60f07cso893131b6e.1
+        for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 08:04:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1786979049; x=1787583849; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=hzh00wSs4akcYyh6M7Ta6jCsY96mvygh9fJXvzCpDIs=;
+        b=C4geTbvjmQxH2B2kAfKmRe8Z0qFErpeI/SbkffYWpwIiJPX/UxwqUZgQOGh2wSu9cq
+         z0YisZnJEZanj1Lvs8r7k1PRcJ2jj84p4lSwHw3nTm8fRWu5MyaC1cGePxw/0awlkIKt
+         fSlRTMdhcUt3C9PwrnlqH3zddCtUH+qt1vwsVZK+HeCAED8zDhf6hMm7cpnGLxRHa6MO
+         EsR3Syic1aNMahrnNYj9WqQMiSiHbTf/bvCsyxL648gJLB9JUqKVsORWze3ExIUVwp+a
+         ttXMP2AL6qiAIBxZmibSYoUoUafwn+ts77+p8kynYNRwVOcxCr3wJk7rTWtwxVY0ll3n
+         cjZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786979049; x=1787583849;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=hzh00wSs4akcYyh6M7Ta6jCsY96mvygh9fJXvzCpDIs=;
+        b=KDgS6xso82YspvxbYRoAnpukk7n3bYxIBlqY7WEoloX8In4PtMw9iHoOW20yzmFjby
+         7Okp4RgDBnyKUY168CcKoUtC7ByJeeZIxp8xGptJXUvS13RiNZC2hnA5eJhiSTwfWqmU
+         DCqttzgAYNN351t0D87ViPI+uwP7TbJrzxOp97sEg0L7CDIpcuaP8C/3/W1lua7DUm0J
+         kmBw8KP9oZO2st65O4iVcps2Z7d5FYJRx7g7UtplUUFiXO8AaQROgqqoWgMWFoZP9k+u
+         55I62tru9qiL8CNuxDwRwOsr4yxCtesWjn/THyJyGpTopEV+RVRFhRxCN7izh822l1/v
+         Mlsw==
+X-Forwarded-Encrypted: i=1; AHgh+RrMP7rpK0hzGpb4HZf5vorTeFy8oNlHkIhsLYxbUhwYtDSvt3wBvDYZSFbgDYv4m043Lj77jf95jQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5YPKi6+7jwzUT0dW/VZ0dHrsLcNPVPstMPFQeV/eeS3Q7bd30
+	otY0r33r2cXVxWRTdGar7Eom3I6VuC1pNPjKGTmFeBnBFhMjeRiUsKPXGQjIDjVfAZM=
+X-Gm-Gg: AR+sD13vfrw/k+FbDysHeTiuXsdqFR58IwXfo1NCMaSksIVGovmJPxTsdg82unphU/T
+	RwR9ULFkIyKAyZjuabk405TJDleO+NZ5g+9uu2XuB7oVrie+EYdfOnaNo6DYpLKvlLQweco/cw3
+	+2xwGZpE3kHQDZjRO5WOcUFTWMFw0i2BLvZuP1+7tz4gaYhOQMSuvCCPZF731MlHfwDyzeN1wBc
+	eDB5lTU1E9cZ6qR6PTkLUCduK+QHC8mHylomfv5IL0/WSeF9Nh3oTVk9jA0wGGafTw3j04ga4QK
+	5RPCEzte0W9oK/Ya+PGtSaqifxNKztHSfKqXUJec//zmt7qjLaB/OkHAhjYqMaZgUhZWOc331Fj
+	X+xJKRD3njGasLvud7FIQkH4/VY7euXFecqpDFRoNVdCfhBLAKUv2aCsPRiRFdmdKBwXzf+XKrg
+	AM5CkTtLfJoA9YCKvHOAiFExqFM1w3mqxH8XXTa2ynOnLfxWNEpb1fesuVY+Q11Sc04YxmgpXBm
+	8xZOjT5F9hIAS6dbFnyCosAdt1rlwZlzBp2jTd3pTT3sOs=
+X-Received: by 2002:a05:6808:238b:b0:48b:1e49:24a8 with SMTP id 5614622812f47-4b241cbe2e6mr24394079b6e.11.1786979049030;
+        Mon, 17 Aug 2026 08:04:09 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b290a3d048sm1165264b6e.1.2026.08.17.08.04.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Aug 2026 08:04:08 -0700 (PDT)
+Message-ID: <7c6ce54c-ec12-4754-a36e-d5550f8337b0@kernel.dk>
+Date: Mon, 17 Aug 2026 09:04:06 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34915029-869a-4a5a-9bde-060a9a6eec20@davidwei.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ep_open
+To: syzbot <syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com>,
+ asml.silence@gmail.com, brauner@kernel.org, gregkh@linuxfoundation.org,
+ io-uring@vger.kernel.org, jack@suse.cz, kartikey406@gmail.com,
+ kees@kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ mjguzik@gmail.com, nogikh@google.com, stern@rowland.harvard.edu,
+ syzbot@kernel.org, syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com,
+ syzkaller-upstream-moderation@googlegroups.com, torvalds@ppc970.osdl.org,
+ viro@zeniv.linux.org.uk
+References: <6a830fab.dbb3a75c.20434b.005d.GAE@google.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <6a830fab.dbb3a75c.20434b.005d.GAE@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 14, 2026 at 08:50:29AM -0600, David Wei wrote:
-> On 2026-08-13 18:23, Juanlu Herrero wrote:
-> > Run the iou-zcrx server as N worker threads, each owning one receive
-> > queue with its own io_uring and zero-copy receive (zcrx) ifq, so the
-> > test can exercise multi-queue zero-copy receive.
-> > 
-> > The main thread owns the listening socket, accepts connections, and
-> > dispatches each to the worker owning the queue it landed on by matching
-> > SO_INCOMING_NAPI_ID against per-queue NAPI IDs.
-> > 
-> > Assisted-by: Claude:claude-opus-4-8
-> > Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
-> > ---
-> >   .../testing/selftests/drivers/net/hw/Makefile |   5 +-
-> >   .../selftests/drivers/net/hw/iou-zcrx.c       | 262 +++++++++++++-----
-> >   2 files changed, 195 insertions(+), 72 deletions(-)
-> > 
-> [...]
-> > diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> > index f793a6c04e412..008d3f4b76263 100644
-> > --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> > +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> [...]
-> > @@ -289,12 +279,13 @@ static void process_recvzc(struct thread_ctx *ctx, struct io_uring_cqe *cqe)
-> >   		error(1, 0, "recvzc(): %d", cqe->res);
-> >   	if (cfg_oneshot) {
-> > -		if (cqe->res == 0 && cqe->flags == 0 && cfg_oneshot_recvs) {
-> > -			add_recvzc_oneshot(ctx, ctx->connfd, page_size);
-> > -			cfg_oneshot_recvs--;
-> > +		if (cqe->res == 0 && cqe->flags == 0 &&
-> > +		    ctx->oneshot_recvs[conn_idx]) {
-> > +			add_recvzc_oneshot(ctx, conn_idx, page_size);
-> > +			ctx->oneshot_recvs[conn_idx]--;
+On 8/17/26 7:42 AM, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
-> This needs an early return. Sorry the bug was pre-existing but I just
-> noticed it.
+> commit aa00f67adc2c0d6439f81b5a81ff181377c47a7e
+> Author: Jens Axboe <axboe@kernel.dk>
+> Date:   Tue Oct 22 19:47:00 2024 +0000
+> 
+>     io_uring: add support for fixed wait regions
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10e60679580000
+> start commit:   9a143525f62b Merge tag 'ata-7.2-rc7' of git://git.kernel.o..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=12e60679580000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14e60679580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c44651ea7dd2f307
+> dashboard link: https://syzkaller.appspot.com/bug?extid=df9e891bf8ea586f846b
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120defb9580000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16323fb9580000
+> 
+> Reported-by: syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com
+> Fixes: aa00f67adc2c ("io_uring: add support for fixed wait regions")
 
-ack, I will fix that in v6.
+That looks like nonsense, I strongly suspect it's a race and hence your
+bisection ends up being mostly useless as it sends you in random directions.
 
-Best,
-Juanlu
+-- 
+Jens Axboe
+
