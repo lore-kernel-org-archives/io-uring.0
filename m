@@ -1,63 +1,89 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D86442066DE
-	for <io-uring@vger.kernel.org>; Sun, 16 Aug 2026 17:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51DF76026;
+	Mon, 17 Aug 2026 01:40:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786901360; cv=none; b=kgDG4T6K5W9lfB2lC1DgzZF2+wUqqwiUHQyE81SRP0HbhQlgayoQ49Dc0GlY+tPb5UaY1uda2R8vb4LoPzYMAFKlMyJ7WYvpt90mQq1GuE2tkIQpQwIspWxnZNvaQPigd+6nuAAAArcfE0v4ONEDNIoeT0TX6mjeX/lKbnb0wVw=
+	t=1786930857; cv=none; b=ZIvxuRCTpTvEvQWR+XSscKqvvGOI/UZa6jeyieL9NhMHFcf8QgfBeBjBnzXmxE15zBNapq6gjVMpBSOPM26CweYP7aFSVJioXl6v/Yzlekf1yCdaNo+twpwz74BuNyB73+2YLKPAyC2KgKCKxkYHcuCV/Q0KLr9WjzQKSILHVWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786901360; c=relaxed/simple;
-	bh=qAO2fLjeayR8lXoUhIMrUbAu1/NHIhCHYis11e1dmHA=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=M2q3+ZGTS1zBjEDihPz5l8yQyDJb6tgqrXB4EmOUPSVig5yLKtJhSPT542CBw+wR8YB4Zm/YEToe4+P4QP/scRj+jqpu3d3jTy6ejQ2CdYyH4akS65l/chKtS5PAsXl+0HB/KJ8hAhsuVaQMG73RTFmGVuQ0EvY95lgTuacdAhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XK2dfHKz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786930857; c=relaxed/simple;
+	bh=fsrFasTqjrh5yXlh31yAOvm51YJc8y6RjYKthPPQ76k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Iu6x39DsC5R506U7MlGqs3pzhXoKfwCucDO9Ly828Htwmk8psSnDw9gtmkmaXr8esQissQpRlnRN/5BQaPdzSapM0v0ae4mZ5vLDzklVpn1N3wW3D8lwAm0T7/vAwJ0lH8CW+u+jB8ZGF0zP2XYd247X0fIXUEy7/1BrpoWAyh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XFV4aqOU; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XK2dfHKz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B83C1F000E9;
-	Sun, 16 Aug 2026 17:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786901359;
-	bh=GEpriJ747izfNwdquTSRMSPljwhIFQVPr42ClqPnBec=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=XK2dfHKzkgtlb68EXvJk1dBdZYTx36p+4UO2ui+03NtlRPGtTk1qCDAF9HzWCY2xd
-	 oBkbOCBGe9kN0GuN7iwmdU/Ade2ctbASt1By5nHfhSv9si+2yneLFDuk6O9ITsynzV
-	 zO+ty2tSEBpsLBDyhjC5EHWNBiKut94n5HZVZnJGP2Qc5GmHeOwiQRmbyzWmzurS9L
-	 HYFqCh19CAZV2Jt2WMyRYfK3aFV3cRRuKpEOBN5wLgKLVFkAxgTtYbH/jhAPFS4+Zi
-	 3zm+7H9E/ChPupAbMJ+zEoy3CDp6vbeIVqe6qSqQ5AF4QVxyjcf8QB3l39ZJ1pqEc5
-	 kg28KQ8OKWnRQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93C303924FCC;
-	Sun, 16 Aug 2026 17:28:33 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring fix for 7.2-final
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <95f7cd18-530f-4787-8696-344c18244781@kernel.dk>
-References: <95f7cd18-530f-4787-8696-344c18244781@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <95f7cd18-530f-4787-8696-344c18244781@kernel.dk>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.2-20260815
-X-PR-Tracked-Commit-Id: 6ca662cc71df7eb4eaf1b4bcb07cd3f188ad19f2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0bae94aab8208b7107a2dda5de6ce046466663fd
-Message-Id: <178690131204.334594.14248478909046829173.pr-tracker-bot@kernel.org>
-Date: Sun, 16 Aug 2026 17:28:32 +0000
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XFV4aqOU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=dg
+	dJ1FfQ3kBEMkjlqJ0aXGgYodXmUYCRWyfW4sy2SXg=; b=XFV4aqOUQ/GLoH6FMb
+	zK7j/nzbi+F8KRn5AAU78+BPttjnPEIrE4UjR0O6lH0nw3r/vkYlfzQ2TQWHIIgl
+	SJ1R0+0wf5tcVhcpN6vvEwBtZYc+ucLg2p731mkuBkxQdW2kWTsz47lCTnByWsZ3
+	cnOKDtGtOfZOSvfekMMT4kmBc=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgDH5w5yZoJqQVejLg--.13488S2;
+	Mon, 17 Aug 2026 09:40:03 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: James.Bottomley@HansenPartnership.com,
+	martin.petersen@oracle.com
+Cc: axboe@kernel.dk,
+	bvanassche@acm.org,
+	csander@purestorage.com,
+	fujita.tomonori@lab.ntt.co.jp,
+	io-uring@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	rc@rexion.ai,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH v3 0/2] scsi: bsg: io_uring passthrough TOCTOU and mapping
+Date: Mon, 17 Aug 2026 09:39:57 +0800
+Message-Id: <20260817013959.165425-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgDH5w5yZoJqQVejLg--.13488S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFW7KF1UKw4xtw1UXF4rAFb_yoWDArb_Cr
+	yDCFyrGw40qF4UCayIkF1Svryqy3yrJF1FgF95trW3Ww13J3ZxXFsxGrZ3XrnxX3Z3Xr13
+	Jw1rX3Z2yrn8tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUboKuUUUUUU==
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6hTxgmqCZnT6kgAA3f
 
-The pull request you sent on Sat, 15 Aug 2026 18:05:21 -0600:
+Hi,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.2-20260815
+Two patches for the BSG io_uring passthrough path.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0bae94aab8208b7107a2dda5de6ce046466663fd
+1/2: fix TOCTOU on the shared SQE.
 
-Thank you!
+Builds on Rahul Chandelkar's earlier TOCTOU patches:
+Link: https://lore.kernel.org/r/20260527105931.3950913-1-rc@rexion.ai
+Link: https://lore.kernel.org/r/20260527191817.142769-1-rc@rexion.ai
+
+2/2: IO_URING_F_NONBLOCK only needs BLK_MQ_REQ_NOWAIT for request
+allocation. Map user buffers with GFP_KERNEL.
+
+Changes in v3:
+- Reword 1/2 commit message.
+Link: https://lore.kernel.org/r/20260727014117.1742202-1-yangxiuwei@kylinos.cn
+
+Changes in v2:
+- Also READ_ONCE max_response_len (Caleb).
+Link: https://lore.kernel.org/r/20260720032338.461681-1-yangxiuwei@kylinos.cn
+
+Rahul Chandelkar (1):
+  scsi: bsg: fix TOCTOU in io_uring passthrough command setup
+
+Yang Xiuwei (1):
+  scsi: bsg: map io_uring user buffers with GFP_KERNEL
+
+ drivers/scsi/scsi_bsg.c | 51 +++++++++++++++++++++++------------------
+ 1 file changed, 29 insertions(+), 22 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.25.1
+
