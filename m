@@ -1,247 +1,82 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8C33B442B
-	for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 08:28:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B21C4439F8F
+	for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 13:42:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786955337; cv=none; b=WX40udnWlSc6F8Zav3YyXJp78dCf92F5lgWfkm+LRYcQOnHdhgmXxbxkYcNzgARddiOfiu3M5nqCnbV2R+uR4LSYy7LwT9EIbn7OkRNwzL1KS86d3vdo/1lGmFBUtNYLWCT2UiC3cWvtSl7DgaNFUL9iezTJl2+Fv3OFnAG9KbE=
+	t=1786974128; cv=none; b=dfSX7Kcj+rA5UKKUak7pii1T6g4RURILo6ZtQSpl24uEQZhcXq3rlOWTiXbl2sdxLwUPv1VQUXxpB5wsp9zw5y6usRzsBGgVsmGl4iLCLtB/Po1JuDtEhTWj7OWgHixkk5dCiXMr2EIvSBRIOZpuFXXPSi/HPx2U877Po1FUioM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786955337; c=relaxed/simple;
-	bh=b3l8KIK5UNz4UAmgpBwB5g5BAxZXm5OFPNc3szoeSl8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LVnrf1fiIop4xulGkkVFcx2IOYejfcTVoX9GdJHkhzg2rQB8OUaHDovbCkY3u+KG/q4g4/JmogwgbgmhUUX+zEBXQ4IJAsgRPvGH/Ec4irGbgz9b2cC/KLAuNsKThxQjwHSWRf36MlDVUaEPMiA+SXJXubRpPYBoqToe3mq15Ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fgsjSQFJ; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fgsjSQFJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=RtP5PQjEN9H2f1Heg1oF2HikcTJ0qrJD80RUCwZ8Tac=; b=fgsjSQFJvEe+F1SSsXtCorpTm1
-	lyQQuIzm7BJd+WWe+StiqB+594UyTKkN7OD1W3MH5wp60//zhN8U4EX1i1tgfh68fGdpxs+7jLRMY
-	L/r2q7oBgcy0BqO1IvpAhk1yQ2/cZFMMswMbd1WUVCmPpXKpqnBsecrjaRcDKOSSkvHOShi+LNfXZ
-	5plr7eMTOA1tluMIrLeyH6RzQGKvHpYdRjCCceX608hC2z6yg+/x9TEJigffDUumwnwqjOKhm+AbL
-	Tj7jFJ2QtceeUSu6zo0dvWhEmG/NEWc4bH0Q8D0kqooqAhCe4ce5nv2ZCwwnAl3Yz28SSVtdsmLqg
-	U9UWAqGA==;
-Received: from 2a02-8389-2301-9f00-d9b3-9099-237f-e1a3.cable.dynamic.v6.surfer.at ([2a02:8389:2301:9f00:d9b3:9099:237f:e1a3] helo=localhost)
-	by bombadil.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wvsiF-00000005h1W-18rX;
-	Mon, 17 Aug 2026 08:28:55 +0000
-From: Christoph Hellwig <hch@lst.de>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Damien Le Moal <dlemoal@kernel.org>,
-	io-uring@vger.kernel.org
-Subject: [PATCH 5/5] test: add zone_reset_all command test
-Date: Mon, 17 Aug 2026 10:28:32 +0200
-Message-ID: <20260817082837.762276-6-hch@lst.de>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260817082837.762276-1-hch@lst.de>
-References: <20260817082837.762276-1-hch@lst.de>
+	s=arc-20240116; t=1786974128; c=relaxed/simple;
+	bh=aX6C4I6qSjoQMxeJ+OPzLeCTstwwhUCCr4q0NmAXO+4=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=aZQXn9s4pGVHbvLMV54cLd9nHQXf/qegLF8ttINi+WWjfIdDK4OVW/S7AwnJX4kiFxiJXhNm03ynA2HCZVIsBP+MxhQUgWHr1QHnufOtJyvbTShoEKwYbQOMcFCXChVT22M42aoxN+SD4JYHdBUJH5cgNFl2HfdF4VcA+ItF2tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-7ee1e335245so3478144a34.1
+        for <io-uring@vger.kernel.org>; Mon, 17 Aug 2026 06:42:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786974123; x=1787578923;
+        h=content-type:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=6OqqhA80wtcU3IsPjUZveXdR6cUhDI1A/Qh9dqHqO8Q=;
+        b=iDActCCsPJZXiXsPXSaBn5mJkSkBit4xWeX22CZi2M7VIFFq70sprrja4qIGW31FsW
+         2itIw5vXAke9KtgeWouIAfLUrk9p3UdgWWn0Z6nlaDshX5tuYUu1Ds1SbGo8ZWf/Mmvf
+         OgVcQZrQ3L1EmdkGdKIIzqXskfoHpF8+heUGrJUpYvSIAcqJyWNjcME4J7OwJi7HCN5J
+         Peuyl9POLKOG9P3SO5Mctxj4N7FLEvbTs4qNO92RUHpKJpAmKxHHBjP5X0kioKqtUVTp
+         AOG7jr1jmNa1SNABm4ClXd9rv1EO7XBTGDLBGL7moP6UTY83xV5Xp2TjbKOd5lDreARf
+         HM3Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqpkptG0CkdYuMZg2r9moZZW+mWtTINSSPraX33J7YjnqRY2tY21CFG2jSHhN9CSfGUFWSQqkc1RA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCah6I1qpntHhRCJRxFnCB9OMzUJjTaj52cCBaX4uYCAcJAoVJ
+	3YYpzQXNbCfjCs0LN8WhOiRmmggfGAaF/D88dEe1q8IBk1nHYSrAXMbOYSg/Faqk/fpY6rXuzVI
+	/ZwIVUW3P+r9+C01Oxc1GUmaQ9c/3cwQIuR6jpcWQzeWPGnKACRf4YY0p/VY=
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Received: by 2002:a05:6820:f07:b0:6ae:55f6:2cdb with SMTP id
+ 006d021491bc7-6b0d5fca98bmr22016036eaf.1.1786974123322; Mon, 17 Aug 2026
+ 06:42:03 -0700 (PDT)
+Date: Mon, 17 Aug 2026 06:42:03 -0700
+In-Reply-To: <6a6bfa43.1b55b669.19788.0016.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a830fab.dbb3a75c.20434b.005d.GAE@google.com>
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ep_open
+From: syzbot <syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, brauner@kernel.org, 
+	gregkh@linuxfoundation.org, io-uring@vger.kernel.org, jack@suse.cz, 
+	kartikey406@gmail.com, kees@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mjguzik@gmail.com, nogikh@google.com, 
+	stern@rowland.harvard.edu, syzbot@kernel.org, syzbot@lists.linux.dev, 
+	syzkaller-bugs@googlegroups.com, 
+	syzkaller-upstream-moderation@googlegroups.com, torvalds@ppc970.osdl.org, 
+	viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 
-Basic sanity checking for the zone_reset_all command, mostly taken from
-the discard test.
+syzbot has bisected this issue to:
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
----
- test/Makefile             |   1 +
- test/cmd-zone-reset-all.c | 164 ++++++++++++++++++++++++++++++++++++++
- 2 files changed, 165 insertions(+)
- create mode 100644 test/cmd-zone-reset-all.c
+commit aa00f67adc2c0d6439f81b5a81ff181377c47a7e
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Tue Oct 22 19:47:00 2024 +0000
 
-diff --git a/test/Makefile b/test/Makefile
-index d88a428774cc..8b276817d33c 100644
---- a/test/Makefile
-+++ b/test/Makefile
-@@ -90,6 +90,7 @@ test_srcs := \
- 	connect-rep.c \
- 	coredump.c \
- 	cmd-discard.c \
-+	cmd-zone-reset-all.c \
- 	cq-full.c \
- 	cq-overflow.c \
- 	cq-peek-batch.c \
-diff --git a/test/cmd-zone-reset-all.c b/test/cmd-zone-reset-all.c
-new file mode 100644
-index 000000000000..5d8fe4d5f380
---- /dev/null
-+++ b/test/cmd-zone-reset-all.c
-@@ -0,0 +1,164 @@
-+/* SPDX-License-Identifier: MIT */
-+
-+#include <stdio.h>
-+#include <assert.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <sys/ioctl.h>
-+#include <linux/fs.h>
-+
-+#include "liburing.h"
-+#include "helpers.h"
-+
-+static const char *filename;
-+
-+static int queue_zone_reset_all(struct io_uring *ring, int bdev_fd)
-+{
-+	struct io_uring_sqe *sqe;
-+	struct io_uring_cqe *cqe;
-+	int err;
-+
-+	sqe = io_uring_get_sqe(ring);
-+	assert(sqe != NULL);
-+	io_uring_prep_cmd_zone_reset_all(sqe, bdev_fd);
-+
-+	err = io_uring_submit_and_wait(ring, 1);
-+	if (err != 1) {
-+		fprintf(stderr, "io_uring_submit_and_wait failed %d\n", err);
-+		exit(1);
-+	}
-+
-+	err = io_uring_wait_cqe(ring, &cqe);
-+	if (err) {
-+		fprintf(stderr, "io_uring_wait_cqe failed %d\n", err);
-+		exit(1);
-+	}
-+
-+	err = cqe->res;
-+	io_uring_cqe_seen(ring, cqe);
-+	return err;
-+}
-+
-+
-+static int basic_cmd_test(struct io_uring *ring)
-+{
-+	int ret, fd;
-+
-+	fd = open(filename, O_DIRECT | O_RDWR | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = queue_zone_reset_all(ring, fd);
-+	if (ret) {
-+		if (ret == -EINVAL || ret == -EOPNOTSUPP) {
-+			printf("cmd not supported, skip\n");
-+			ret = T_EXIT_SKIP;
-+		} else {
-+			fprintf(stderr, "cmd_issue_verify fail ret %i\n", ret);
-+			fprintf(stderr, "cmd fail\n");
-+			ret = T_EXIT_FAIL;
-+		}
-+	}
-+
-+	close(fd);
-+	return ret;
-+}
-+
-+static int test_rdonly(struct io_uring *ring)
-+{
-+	int ret, fd;
-+	int ro;
-+
-+	fd = open(filename, O_DIRECT | O_RDONLY | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = queue_zone_reset_all(ring, fd);
-+	if (ret >= 0) {
-+		fprintf(stderr, "discarded with O_RDONLY %i\n", ret);
-+		return 1;
-+	}
-+	close(fd);
-+
-+	fd = open(filename, O_DIRECT | O_RDWR | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ro = 1;
-+	ret = ioctl(fd, BLKROSET, &ro);
-+	if (ret) {
-+		fprintf(stderr, "BLKROSET 1 failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = queue_zone_reset_all(ring, fd);
-+	if (ret >= 0) {
-+		fprintf(stderr, "discarded with O_RDONLY %i\n", ret);
-+		return 1;
-+	}
-+
-+	ro = 0;
-+	ret = ioctl(fd, BLKROSET, &ro);
-+	if (ret) {
-+		fprintf(stderr, "BLKROSET 0 failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+	close(fd);
-+	return 0;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct io_uring ring;
-+	int fd, ret;
-+
-+	if (argc != 2)
-+		return T_EXIT_SKIP;
-+	filename = argv[1];
-+
-+	fd = open(filename, O_DIRECT | O_RDONLY | O_EXCL);
-+	if (fd < 0) {
-+		if (errno == EINVAL || errno == EBUSY)
-+			return T_EXIT_SKIP;
-+		fprintf(stderr, "open failed %i\n", errno);
-+		return T_EXIT_FAIL;
-+	}
-+	close(fd);
-+
-+	ret = io_uring_queue_init(16, &ring, 0);
-+	if (ret) {
-+		fprintf(stderr, "queue init failed: %d\n", ret);
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = basic_cmd_test(&ring);
-+	if (ret == T_EXIT_FAIL) {
-+		fprintf(stderr, "basic_cmd_test() failed\n");
-+		return T_EXIT_FAIL;
-+	}
-+
-+	ret = test_rdonly(&ring);
-+	if (ret == T_EXIT_FAIL) {
-+		fprintf(stderr, "test_rdonly() failed\n");
-+		return T_EXIT_FAIL;
-+	}
-+
-+	if (ret != T_EXIT_SKIP)
-+		ret = T_EXIT_PASS;
-+
-+	io_uring_queue_exit(&ring);
-+	return ret;
-+}
--- 
-2.53.0
+    io_uring: add support for fixed wait regions
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10e60679580000
+start commit:   9a143525f62b Merge tag 'ata-7.2-rc7' of git://git.kernel.o..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12e60679580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14e60679580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c44651ea7dd2f307
+dashboard link: https://syzkaller.appspot.com/bug?extid=df9e891bf8ea586f846b
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120defb9580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16323fb9580000
+
+Reported-by: syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com
+Fixes: aa00f67adc2c ("io_uring: add support for fixed wait regions")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
