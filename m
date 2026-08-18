@@ -1,131 +1,117 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E8E445629D;
-	Tue, 18 Aug 2026 10:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8F82836A6
+	for <io-uring@vger.kernel.org>; Tue, 18 Aug 2026 15:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787049255; cv=none; b=RyO0K8d0h9Oww31HiBJ5VTcPzwNrgrSffR8nJQ7mrok9XCUKvEFZhEtwHwik3cAM2gfM7q+jj7bxQefd4yMdK5MbzoyiUxlVezuKC0Bml7bkwb2KPhiG42UnoTtvuwud/G+Ko0rIHpfPxxrFMq7yg42hHRZCrGgSFhCt342eDT4=
+	t=1787067444; cv=none; b=Umo/orh8CXnWf9OhaHh3TSUTcT9CoSAtvHRSnBYnIINe8SGRZHhUcW9qFasIdXTAaV0rx087O8f9oPkBzkp2ytXns+hWNhV1al9pZeamIGmxwa/mm6iKnztkxa+e4i52gChKku4Eaz2keMMvdAEVlLcNJ3hfFQVZJk8gWEwSpM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787049255; c=relaxed/simple;
-	bh=CdsGXzuS5WYUffl0vEgL+7KXN1SZOZo+DZQ4sjpdEVc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=osIArw2ZR4p1MOrNDQb6AMmtT0XoNHduhAKZ/ifR6FRNUWuagfPsVVUp1NWa54MFrB+8VXC0BM41v4kDUom9948vDt4CKAJfeDUf8fM5j8CqNwh6InOSGOgkK6BQQ6glJpL0m1YfunP/GNOXhSuWeFuH2yEROKPRCoFYfYpzfuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=lR8jYMvj; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1787067444; c=relaxed/simple;
+	bh=aZqZYi18fHUjbAUY/ZshE0O4WseDB0xSTbF69cVs//I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jg1PeGIUnq5yB9+1moGLoD57x17ALds1CHAI81QCmX37AABEdbaTkYoyaGx2tHykQWlr2GgIvtjJBk7KqS1+zUNgzfG46IZpUlJaFBOdYmdnz7XfwpvcDu22513TxgSk3qvo1EkFtHiLxL2WaWHOnG1cYu37/RIHplZpR23O020=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=AMQmWGyx; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lR8jYMvj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=ld
-	PS+i+oSLCLJZksf+v7DOeHEUeYfNNTYd9ktbe5PX0=; b=lR8jYMvj8mnbz0rvf9
-	rrSBahExCOxesiZRqVwvWtzHr26K/HS0GrAhz8mZ9482qkEB10S/F21ZH6ejwtfH
-	Fwxn1I2XhKtsHlUnX53a1YeSLSJPNwQVGtpUTThMJcwMesCU0M/i9gClybky9zFb
-	pULw3UpEsFSt71HY46p6/E/W8=
-Received: from localhost (unknown [])
-	by gzga-smtp-mtada-g1-1 (Coremail) with SMTP id _____wAHZRoSNYRqYKrWPg--.62509S2;
-	Tue, 18 Aug 2026 18:33:55 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	asml.silence@gmail.com,
-	gganji11@naver.com,
-	Hui Su <sh_def@163.com>,
-	stable@vger.kernel.org
-Subject: [PATCH 2/2] io_uring/waitid: avoid siginfo copy during ring teardown
-Date: Tue, 18 Aug 2026 18:33:37 +0800
-Message-ID: <20260818103336.1922818-3-sh_def@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260818103336.1922818-2-sh_def@163.com>
-References: <20260818103336.1922818-2-sh_def@163.com>
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="AMQmWGyx"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-51a868b6962so47275721cf.2
+        for <io-uring@vger.kernel.org>; Tue, 18 Aug 2026 08:37:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1787067440; x=1787672240; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=mLqAQEw3rXL8/MZPDsV2OgUVMCATzjFwzJYqncXsPSY=;
+        b=AMQmWGyx347uGH0U47KSiGXYsKMPw1r/0VxBo798W6+wjZHoeQWaE4v3/R55bmaVyq
+         TpEW6G0xzdiL4YP/Y+EIvPalQGVmN2hCNhPI3zLPyatdqhPiehBtugCNK2j7cytHVJEl
+         ErrsSqBvC8RPq4Jo2z0uhEnprP6WXz+rkV4/pPWU034JPKOoYMnZidZwI/5EmOwF2xVk
+         6u4Io8BtGgUxWDnrf+NFHpwE7nlE/D80T8uH/vHhi/CYu5mnbFgE+Pau/YZQMlS6e7y4
+         9j0pZCt7r5aV/LwXrEt3THRmSTxWHdG86PLZ2QHafJibKo+oZw+yH8Kb+B44vbyhGrBM
+         iI3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787067440; x=1787672240;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mLqAQEw3rXL8/MZPDsV2OgUVMCATzjFwzJYqncXsPSY=;
+        b=CQLPA8r5r4Mlt5KEIuN1aDxH+cvMW1s/D0oQZ7iT3apQuqcA2H7rVwfuCJEglP0qWh
+         fMOGiV0gYMS8qbdwkuv+/anq1kkMGF3GPRBS/H1aGzTLXfv0ea/yeMKTHfMJP/nCQmLh
+         AKXeJWKpTKqESUhBeCL0l2C2KNkUscPV4/t00KgjdcDQ4IqlwLxctlNZYc57PgFDBZt1
+         tb4/cwAKCYu2Fn3iWeIiOB4EOkD+Adz0iTi0FBxdLF7Fhu3yl5ZkwT4JHihJgXaz7T59
+         KQ25I63Y2WpxZYhqvxDcWQvsQmGK+sNaVvpgw94y0h4yheeFhtcHaIE3sywk1VAvbnyQ
+         LZHw==
+X-Forwarded-Encrypted: i=1; AHgh+RrElP7/gPlkWGX1Vm7LKMacB5snoRKyAV1ACnvcajtDf31VXQeRsohKpVcHdwGgdmPHlLsOQFkzUQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy57DlrSwwaPNcpobBTIGFRdcBTqEz+S6p+3x/q+gh32WQmIP/
+	/gjuXfu1zVAcC/u8sdsIJltC5MEDSmZqVwRylifgM61JMouybq2fRwU3wJab14j4fw==
+X-Gm-Gg: AR+sD12d+tR3XuyLhcRYHxP3uxw6egBLVjgiEQ/ep1+GGy41P2tR27FjRbau8wPmmuU
+	nKd3c6Qlceof1QLXpKVPdCFq6tKCVvLEoOppiABtj7C8x0txCd1k3D7CnAL1Q+OjPNp6D3Zb2Wv
+	6zRrkXpwPAiSfh9AeLdL1mVZsd1SwrLe+XzFb0iNYEtOG+eCMLZ8a+9piUhVtE2p4Wotgioab7L
+	orX73+YbCer48H4munjA8py6+yTIIHcuaEEvYGLrcLjzA2cIeQpB6hYZb6GXlu1YGXhvYW+Z8bd
+	6KkPP8j01ROeUwG9TW41yiftnwa7tFx4wfLWUdPTkLphsB8kKU1XwK9yC9h91iO7/2uA/M3/pDH
+	lvwfhSvuYzWhjPo+whMNjqJtV2MvB1f3HWq+Jb/xoIjGmWhUFrvBlw84axXNFqC4prYYw3+gAWo
+	kDgGgT58TZ+2xut3mMIA02T6OMnCYj4JQ56EcHjQWc4wlLFhej17ScKeYVzadJXxg=
+X-Received: by 2002:ac8:5911:0:b0:52d:354c:5b91 with SMTP id d75a77b69052e-52d853e367dmr373102671cf.16.1787067440100;
+        Tue, 18 Aug 2026 08:37:20 -0700 (PDT)
+Received: from rowland.harvard.edu ([2601:19b:d01:d210::dfd8])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-52db62175b1sm44141481cf.19.2026.08.18.08.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 08:37:19 -0700 (PDT)
+Date: Tue, 18 Aug 2026 11:37:16 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: syzbot <syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com>,
+	asml.silence@gmail.com, axboe@kernel.dk, brauner@kernel.org,
+	io-uring@vger.kernel.org, jack@suse.cz, kartikey406@gmail.com,
+	kees@kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, mjguzik@gmail.com, nogikh@google.com,
+	syzbot@kernel.org, syzbot@lists.linux.dev,
+	syzkaller-bugs@googlegroups.com,
+	syzkaller-upstream-moderation@googlegroups.com,
+	torvalds@ppc970.osdl.org, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ep_open
+Message-ID: <6232f9c1-8b07-42b9-8660-ad514702ae1c@rowland.harvard.edu>
+References: <34e65096-8827-470c-9a88-8c643cccef22@rowland.harvard.edu>
+ <6a8338ea.dbb3a75c.20434b.006a.GAE@google.com>
+ <16741050-a3e2-4193-bfca-232a615a1311@rowland.harvard.edu>
+ <2026081849-flatbed-unashamed-a52d@gregkh>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAHZRoSNYRqYKrWPg--.62509S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGF1kGF48GF4Uury3tr1fJFb_yoW5Ww1fpF
-	ZrCrW5GF15XFy3Ka1vqFy8AF1fZ395Ar4xJ343G3ZrJryUAw1qqF48KFyFgFW3AF4kAFsI
-	qr4vyrsxWr1jyrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEb18DUUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbC6hMNbGqENRPujAAA3y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2026081849-flatbed-unashamed-a52d@gregkh>
 
-During ring teardown, io_ring_exit_work() cancels outstanding requests
-from a kworker with a NULL tctx. The waitid cancellation path eventually
-reaches io_waitid_finish(), which copies the stored siginfo to the
-userspace pointer supplied with the request.
+On Tue, Aug 18, 2026 at 09:42:34AM +0200, Greg KH wrote:
+> On Mon, Aug 17, 2026 at 02:14:17PM -0400, Alan Stern wrote:
+> > Greg:
+> > 
+> > Has this patch ever been queued?
+> > 
+> > https://lore.kernel.org/linux-usb/ee41fbfd-f368-4a06-95d6-ae9b4267fd82@mail.kernel.org/
+> 
+> No because it looks like there are competing patches here as you point
+> out.
+> 
+> > Looks like you can add syzbot's Tested-by: tag, as well as my Acked-by:.
+> > 
+> > Note that a different patch to fix the same problem was submitted here:
+> > 
+> > https://lore.kernel.org/linux-usb/20260731230603.4637-1-kartikey406@gmail.com/
+> > 
+> > IMO the first patch above is superior.
+> 
+> So Aleksandr's patch should be applied and not Deepanshu's?
 
-Ring-wide teardown does not run in the task context that submitted the
-request, so it must not access that task's userspace pointer. Depending
-on the address and mm state, the copy may fail with -EFAULT, but the
-uaccess itself is inappropriate from the teardown kworker.
+That's my recommendation.  You can take a quick look at the two patches 
+and see what you think.
 
-Use a no-copy cancellation callback when io_waitid_remove_all() is
-called without an owning task context. Complete the request with
--ECANCELED while releasing the waitid state without touching siginfo.
+We haven't heard back from Deepanshu.  Aleksandr doesn't seem to have 
+strong feelings either way.
 
-Keep the existing siginfo handling for explicit async cancellation and
-task-scoped cancellation.
-
-Fixes: f31ecf671ddc ("io_uring: add IORING_OP_WAITID support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hui Su <sh_def@163.com>
----
- io_uring/waitid.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/io_uring/waitid.c b/io_uring/waitid.c
-index 7a23befd2579..1211f905a9db 100644
---- a/io_uring/waitid.c
-+++ b/io_uring/waitid.c
-@@ -146,7 +146,7 @@ static void io_waitid_complete(struct io_kiocb *req, int ret, bool copy_si)
- 	io_req_set_res(req, ret, 0);
- }
- 
--static bool __io_waitid_cancel(struct io_kiocb *req)
-+static bool __io_waitid_cancel(struct io_kiocb *req, bool copy_si)
- {
- 	struct io_waitid *iw = io_kiocb_to_cmd(req, struct io_waitid);
- 
-@@ -162,21 +162,32 @@ static bool __io_waitid_cancel(struct io_kiocb *req)
- 	if (atomic_fetch_inc(&iw->refs) & IO_WAITID_REF_MASK)
- 		return false;
- 
--	io_waitid_complete(req, -ECANCELED, true);
-+	io_waitid_complete(req, -ECANCELED, copy_si);
- 	io_req_queue_tw_complete(req, -ECANCELED);
- 	return true;
- }
- 
-+static bool io_waitid_cancel_cb(struct io_kiocb *req)
-+{
-+	return __io_waitid_cancel(req, true);
-+}
-+
-+static bool io_waitid_cancel_nocopy_cb(struct io_kiocb *req)
-+{
-+	return __io_waitid_cancel(req, false);
-+}
-+
- int io_waitid_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd,
- 		     unsigned int issue_flags)
- {
--	return io_cancel_remove(ctx, cd, issue_flags, &ctx->waitid_list, __io_waitid_cancel);
-+	return io_cancel_remove(ctx, cd, issue_flags, &ctx->waitid_list, io_waitid_cancel_cb);
- }
- 
- bool io_waitid_remove_all(struct io_ring_ctx *ctx, struct io_uring_task *tctx,
- 			  bool cancel_all)
- {
--	return io_cancel_remove_all(ctx, tctx, &ctx->waitid_list, cancel_all, __io_waitid_cancel);
-+	return io_cancel_remove_all(ctx, tctx, &ctx->waitid_list, cancel_all,
-+				       tctx ? io_waitid_cancel_cb : io_waitid_cancel_nocopy_cb);
- }
- 
- static inline bool io_waitid_drop_issue_ref(struct io_kiocb *req)
--- 
-2.54.0
-
+Alan Stern
