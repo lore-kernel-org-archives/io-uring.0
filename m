@@ -1,117 +1,122 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8F82836A6
-	for <io-uring@vger.kernel.org>; Tue, 18 Aug 2026 15:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9498208D0;
+	Wed, 19 Aug 2026 02:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787067444; cv=none; b=Umo/orh8CXnWf9OhaHh3TSUTcT9CoSAtvHRSnBYnIINe8SGRZHhUcW9qFasIdXTAaV0rx087O8f9oPkBzkp2ytXns+hWNhV1al9pZeamIGmxwa/mm6iKnztkxa+e4i52gChKku4Eaz2keMMvdAEVlLcNJ3hfFQVZJk8gWEwSpM4=
+	t=1787108119; cv=none; b=bZTZGoThinSPONTf67G9Y4kgPVOdxqjGfUbiuFCUi3igsL9hvQZdDGNGSob+plcfbPkL6lt39WnzQhZUTW4crVs2YGyBbiYo1NYI5AT3JaSTmSxn+aLCGDeFTedDOMPt/2ToTwd2hhRT8z2ObAm9MwdgxZi9krJNJzRHdw1Z8hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787067444; c=relaxed/simple;
-	bh=aZqZYi18fHUjbAUY/ZshE0O4WseDB0xSTbF69cVs//I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jg1PeGIUnq5yB9+1moGLoD57x17ALds1CHAI81QCmX37AABEdbaTkYoyaGx2tHykQWlr2GgIvtjJBk7KqS1+zUNgzfG46IZpUlJaFBOdYmdnz7XfwpvcDu22513TxgSk3qvo1EkFtHiLxL2WaWHOnG1cYu37/RIHplZpR23O020=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=AMQmWGyx; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+	s=arc-20240116; t=1787108119; c=relaxed/simple;
+	bh=znnZbSer3Gl6m1nbz1sbn1IPZHtdo7O1ofXJWYCSqZM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RCdhswvmr0998ZIq4h+hLMgy1Bhe1BPD3SsO+bALBBVjN/ZGJa4zaMd8RO2Dq2i4jyerJx3pP0WbbbPkguESulc5jvig3peP6ylD2a/I6ShiV7DAFscESjEFAAlLlYqOqEik/uYswFKw/6R1kg/smAMtFVqBbx3TohfFoKOpZdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=CLFZeOaR; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="AMQmWGyx"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-51a868b6962so47275721cf.2
-        for <io-uring@vger.kernel.org>; Tue, 18 Aug 2026 08:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1787067440; x=1787672240; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mLqAQEw3rXL8/MZPDsV2OgUVMCATzjFwzJYqncXsPSY=;
-        b=AMQmWGyx347uGH0U47KSiGXYsKMPw1r/0VxBo798W6+wjZHoeQWaE4v3/R55bmaVyq
-         TpEW6G0xzdiL4YP/Y+EIvPalQGVmN2hCNhPI3zLPyatdqhPiehBtugCNK2j7cytHVJEl
-         ErrsSqBvC8RPq4Jo2z0uhEnprP6WXz+rkV4/pPWU034JPKOoYMnZidZwI/5EmOwF2xVk
-         6u4Io8BtGgUxWDnrf+NFHpwE7nlE/D80T8uH/vHhi/CYu5mnbFgE+Pau/YZQMlS6e7y4
-         9j0pZCt7r5aV/LwXrEt3THRmSTxWHdG86PLZ2QHafJibKo+oZw+yH8Kb+B44vbyhGrBM
-         iI3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787067440; x=1787672240;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mLqAQEw3rXL8/MZPDsV2OgUVMCATzjFwzJYqncXsPSY=;
-        b=CQLPA8r5r4Mlt5KEIuN1aDxH+cvMW1s/D0oQZ7iT3apQuqcA2H7rVwfuCJEglP0qWh
-         fMOGiV0gYMS8qbdwkuv+/anq1kkMGF3GPRBS/H1aGzTLXfv0ea/yeMKTHfMJP/nCQmLh
-         AKXeJWKpTKqESUhBeCL0l2C2KNkUscPV4/t00KgjdcDQ4IqlwLxctlNZYc57PgFDBZt1
-         tb4/cwAKCYu2Fn3iWeIiOB4EOkD+Adz0iTi0FBxdLF7Fhu3yl5ZkwT4JHihJgXaz7T59
-         KQ25I63Y2WpxZYhqvxDcWQvsQmGK+sNaVvpgw94y0h4yheeFhtcHaIE3sywk1VAvbnyQ
-         LZHw==
-X-Forwarded-Encrypted: i=1; AHgh+RrElP7/gPlkWGX1Vm7LKMacB5snoRKyAV1ACnvcajtDf31VXQeRsohKpVcHdwGgdmPHlLsOQFkzUQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy57DlrSwwaPNcpobBTIGFRdcBTqEz+S6p+3x/q+gh32WQmIP/
-	/gjuXfu1zVAcC/u8sdsIJltC5MEDSmZqVwRylifgM61JMouybq2fRwU3wJab14j4fw==
-X-Gm-Gg: AR+sD12d+tR3XuyLhcRYHxP3uxw6egBLVjgiEQ/ep1+GGy41P2tR27FjRbau8wPmmuU
-	nKd3c6Qlceof1QLXpKVPdCFq6tKCVvLEoOppiABtj7C8x0txCd1k3D7CnAL1Q+OjPNp6D3Zb2Wv
-	6zRrkXpwPAiSfh9AeLdL1mVZsd1SwrLe+XzFb0iNYEtOG+eCMLZ8a+9piUhVtE2p4Wotgioab7L
-	orX73+YbCer48H4munjA8py6+yTIIHcuaEEvYGLrcLjzA2cIeQpB6hYZb6GXlu1YGXhvYW+Z8bd
-	6KkPP8j01ROeUwG9TW41yiftnwa7tFx4wfLWUdPTkLphsB8kKU1XwK9yC9h91iO7/2uA/M3/pDH
-	lvwfhSvuYzWhjPo+whMNjqJtV2MvB1f3HWq+Jb/xoIjGmWhUFrvBlw84axXNFqC4prYYw3+gAWo
-	kDgGgT58TZ+2xut3mMIA02T6OMnCYj4JQ56EcHjQWc4wlLFhej17ScKeYVzadJXxg=
-X-Received: by 2002:ac8:5911:0:b0:52d:354c:5b91 with SMTP id d75a77b69052e-52d853e367dmr373102671cf.16.1787067440100;
-        Tue, 18 Aug 2026 08:37:20 -0700 (PDT)
-Received: from rowland.harvard.edu ([2601:19b:d01:d210::dfd8])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-52db62175b1sm44141481cf.19.2026.08.18.08.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 08:37:19 -0700 (PDT)
-Date: Tue, 18 Aug 2026 11:37:16 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: syzbot <syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com>,
-	asml.silence@gmail.com, axboe@kernel.dk, brauner@kernel.org,
-	io-uring@vger.kernel.org, jack@suse.cz, kartikey406@gmail.com,
-	kees@kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, mjguzik@gmail.com, nogikh@google.com,
-	syzbot@kernel.org, syzbot@lists.linux.dev,
-	syzkaller-bugs@googlegroups.com,
-	syzkaller-upstream-moderation@googlegroups.com,
-	torvalds@ppc970.osdl.org, viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ep_open
-Message-ID: <6232f9c1-8b07-42b9-8660-ad514702ae1c@rowland.harvard.edu>
-References: <34e65096-8827-470c-9a88-8c643cccef22@rowland.harvard.edu>
- <6a8338ea.dbb3a75c.20434b.006a.GAE@google.com>
- <16741050-a3e2-4193-bfca-232a615a1311@rowland.harvard.edu>
- <2026081849-flatbed-unashamed-a52d@gregkh>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="CLFZeOaR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=d0
+	DkPMnng1za6OeXdqOUkqxnNlYbzmJYo2xv/SwQru4=; b=CLFZeOaRlOQwW1pMzl
+	aeCHNEG2LSOclQf+SuibFt+Y39dFhClPk7xob9MwZavqr39JSW64HNZ5qbG4cU3O
+	cIyyqYM6KNud81ZOfHcHa1cz4+j9WoI5KSTdNwcw92NXU9O555nELJgR72K+slca
+	J5qyj0kzAe5KVnGqgKY67rsJg=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp2 (Coremail) with SMTP id PSgvCgAnxADwGoVqdX4FMA--.6093S2;
+	Wed, 19 Aug 2026 10:54:44 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: clm@fb.com,
+	dsterba@suse.com
+Cc: quwenruo.btrfs@gmx.com,
+	linux-btrfs@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	Yang Xiuwei <yangxiuwei@kylinos.cn>
+Subject: [PATCH v3 0/5] btrfs: fix io_uring encoded IO cleanup
+Date: Wed, 19 Aug 2026 10:54:31 +0800
+Message-Id: <20260819025436.1949152-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2026081849-flatbed-unashamed-a52d@gregkh>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PSgvCgAnxADwGoVqdX4FMA--.6093S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kw4xKry5XFW7tr1UXF1xuFg_yoW5Jryxpr
+	W3WF43JrWDA348tF4kKa15GryrXws7Ja17J39aqw4xAa45AF9ayr4IkasYgryDXFyrJay8
+	XFyYqFWqk34DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UdcTLUUUUU=
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwha-UGqFGvbN-wAA3K
 
-On Tue, Aug 18, 2026 at 09:42:34AM +0200, Greg KH wrote:
-> On Mon, Aug 17, 2026 at 02:14:17PM -0400, Alan Stern wrote:
-> > Greg:
-> > 
-> > Has this patch ever been queued?
-> > 
-> > https://lore.kernel.org/linux-usb/ee41fbfd-f368-4a06-95d6-ae9b4267fd82@mail.kernel.org/
-> 
-> No because it looks like there are competing patches here as you point
-> out.
-> 
-> > Looks like you can add syzbot's Tested-by: tag, as well as my Acked-by:.
-> > 
-> > Note that a different patch to fix the same problem was submitted here:
-> > 
-> > https://lore.kernel.org/linux-usb/20260731230603.4637-1-kartikey406@gmail.com/
-> > 
-> > IMO the first patch above is superior.
-> 
-> So Aleksandr's patch should be applied and not Deepanshu's?
+Hi,
 
-That's my recommendation.  You can take a quick look at the two patches 
-and see what you think.
+Fixes for the io_uring ENCODED_READ / ENCODED_WRITE cleanup paths.
 
-We haven't heard back from Deepanshu.  Aleksandr doesn't seem to have 
-strong feelings either way.
+1. Always return -EIOCBQUEUED after endio so the caller and
+   btrfs_uring_read_finished() do not both clean up.
 
-Alan Stern
+   Link: https://lore.kernel.org/linux-btrfs/20260630091609.3414-1-samsun1006219@gmail.com/
+
+2. btrfs_uring_read_extent() failure skipped kfree(data->iov).
+
+3. Unlock inode/extent in the caller on read-extent failure.
+
+4. Do not stash encoded data in the cmd PDU across -EAGAIN.
+
+5. Drop the unused REISSUE restore.
+
+v2 also exported __import_iovec() and passed IO_URING_F_COMPAT.
+That is not a bug with the current io_uring thread setup:
+create_io_thread() copies TS_COMPAT, so import_iovec() already
+sees compat iovecs. Passing the flag explicitly would still be a
+cleanup, but this series does not take it.
+
+Testing:
+- xfstests btrfs/333 passed.
+- kmemleak after dropping the ring on NONBLOCK encoded write/read:
+
+  unreferenced object (size 512):
+    comm "btrfs_uring_eag"
+    __kmalloc_cache_noprof+0x38f/0x4a0
+    btrfs_uring_encoded_write+0x78d/0x1790 [btrfs]
+    btrfs_uring_cmd+0x142/0x1d0 [btrfs]
+    io_uring_cmd+0x296/0x5e0
+
+  unreferenced object (size 512):
+    comm "btrfs_uring_eag"
+    __kmalloc_cache_noprof+0x38f/0x4a0
+    btrfs_uring_encoded_read+0x89a/0x12b0 [btrfs]
+    btrfs_uring_cmd+0x173/0x1d0 [btrfs]
+    io_uring_cmd+0x296/0x5e0
+
+  After 4/5 the same repro is clean.
+
+Changes in v3:
+- Drop the __import_iovec / IO_URING_F_COMPAT patches. 
+- 3/5: drop a leftover goto out_fail from v2.
+
+Changes in v2:
+- unlock in the caller (Qu Wenruo)
+- address further error-path issues raised on the v1 review
+- export __import_iovec(); use IO_URING_F_COMPAT
+- no PDU stash across -EAGAIN; drop REISSUE helpers
+
+v2: https://lore.kernel.org/linux-btrfs/20260806085041.1410576-1-yangxiuwei@kylinos.cn/
+v1: https://lore.kernel.org/linux-btrfs/20260805021135.1896609-1-yangxiuwei@kylinos.cn/
+
+Yang Xiuwei (5):
+  btrfs: always return -EIOCBQUEUED after btrfs_uring_read_extent_endio
+  btrfs: free iov when btrfs_uring_read_extent fails
+  btrfs: unlock inode and extent in caller when uring read extent fails
+  btrfs: don't stash uring encoded data across -EAGAIN
+  btrfs: drop unused uring encoded IO REISSUE stash helpers
+
+ fs/btrfs/inode.c |  7 +++----
+ fs/btrfs/ioctl.c | 39 ++++++++++++++-------------------------
+ 2 files changed, 17 insertions(+), 29 deletions(-)
+
+-- 
+2.25.1
+
