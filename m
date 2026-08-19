@@ -1,103 +1,92 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3473BED78;
-	Wed, 19 Aug 2026 02:55:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F66448D05;
+	Wed, 19 Aug 2026 12:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787108128; cv=none; b=LXON+sdW5XFUA6TkP57NOR0fGVvo0CA4NKd4UGWDq1LjOHmeG9d52+FY86pwV/spZTbuYHE7XWWSGNi8MJLbhqiXOzbGt8kVm6OZO+EjfsJy7lVqwTY5Xc0/Kd7X57bNwLpfR0nkpORVDSd4NFUMoy/nN2KAFdadmTL20nBF4V4=
+	t=1787142421; cv=none; b=tTMpuRXboCPCZ22xyqKCAeUgslTOXfDlLum/CkT04yZMIfXhEq69KDgwEwFgS3wghjy8j/Zwm0R5FW/kE3RY9GqoeSB52WPKpZNGovyeDmbVmmlhwd57rzLzZFTzh5qtAdM+k/Qpwo9TIJ9tBslfFT0xwXRb8vHe+RHiHosBEz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787108128; c=relaxed/simple;
-	bh=D5JuQ7vJqVz7NRi1nj/PV7wjmCra2OgrrADeOP3VOcg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CDv2zYqM/IXBv6iLtgMg802O+75OjFe2bdxLQCLV3k6gLyRAWbrT3h2wXQNZaIQ3TrZpwNCWCvcn9RgLbwnkpC/T7zhtRFdu0gHVohjcGzNJby12LOy0yMPm9IpsE7G6M+RmEAg7Gh8/mjfkqsX/RZrkpuW0N+iDkxhKeoUdcKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=A/trw8lJ; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1787142421; c=relaxed/simple;
+	bh=xvy76afzqrjZfTVLB4UNNNQtHgPbZ45FXx+pRWkQAaI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OSPRZcvW+j/+yo49sGajovEvhyC/0SfGvZimrKqEroe6aVOi2TPctAcbN7xy2dIp2i1Wl16Y4TErBN9PiwDdPpSNkltpvaMmh9wX4RCXpyWQ3cdkBIgrt2yRFgJS0djLfIlre1uz5p/QAixAuGaF8psNdQ6HRmTCs8IjnaDdB8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Ni1zrXGo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="A/trw8lJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=vJ
-	e25sw0PPC+oy1P/xAvly2o9RIIwnxGHexg4HkzKgg=; b=A/trw8lJUEIEE1XftH
-	iYTEQf3ereoJmDU0AoVfhY+QxlcF1td3h4311uXPC3g8BpKpYjVZv/7DHDf+6wSs
-	BlHI3vmJPMpBlOl71A/PK8yvzYwFrvp0vVR46+aJNPFl+woxiqq8dHVXWJ4pWL0g
-	gKFoqxqCuBM9Uzt62RQibXgB8=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgAnxADwGoVqdX4FMA--.6093S3;
-	Wed, 19 Aug 2026 10:54:53 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: clm@fb.com,
-	dsterba@suse.com
-Cc: quwenruo.btrfs@gmx.com,
-	linux-btrfs@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>,
-	Yue Sun <samsun1006219@gmail.com>,
-	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH v3 1/5] btrfs: always return -EIOCBQUEUED after btrfs_uring_read_extent_endio
-Date: Wed, 19 Aug 2026 10:54:32 +0800
-Message-Id: <20260819025436.1949152-2-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260819025436.1949152-1-yangxiuwei@kylinos.cn>
-References: <20260819025436.1949152-1-yangxiuwei@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ni1zrXGo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D95EF1F00A3A;
+	Wed, 19 Aug 2026 12:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1787142420;
+	bh=XPbX6PsQGH85lxvob7JhlQFhog6YchHNLpyShfsHTtY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Ni1zrXGotEMmjhh/Ax69CVpU5xlqZorAQzkKy7V6RBu0otLdZKSZ9LILqzNOz6IzK
+	 Tx+6gQx5XVqpJYM008OgTCfpjw1i6pl+XVsp44fu1pu0ExAL9ljO9aFvHH5PYvCchU
+	 KHLqzb7QlgtlyGd7nErM3UvTNK/ylEgTsAotpjko=
+Date: Wed, 19 Aug 2026 14:26:54 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+df9e891bf8ea586f846b@syzkaller.appspotmail.com>,
+	asml.silence@gmail.com, axboe@kernel.dk, brauner@kernel.org,
+	io-uring@vger.kernel.org, jack@suse.cz, kartikey406@gmail.com,
+	kees@kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, mjguzik@gmail.com, nogikh@google.com,
+	syzbot@kernel.org, syzbot@lists.linux.dev,
+	syzkaller-bugs@googlegroups.com,
+	syzkaller-upstream-moderation@googlegroups.com,
+	torvalds@ppc970.osdl.org, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ep_open
+Message-ID: <2026081906-possible-seltzer-6db9@gregkh>
+References: <34e65096-8827-470c-9a88-8c643cccef22@rowland.harvard.edu>
+ <6a8338ea.dbb3a75c.20434b.006a.GAE@google.com>
+ <16741050-a3e2-4193-bfca-232a615a1311@rowland.harvard.edu>
+ <2026081849-flatbed-unashamed-a52d@gregkh>
+ <6232f9c1-8b07-42b9-8660-ad514702ae1c@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgAnxADwGoVqdX4FMA--.6093S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF4rCw13KF43JryDAw1xGrg_yoW8Ww4Dpr
-	1DAFy5Gw4DJ3yvvFWkKa1qgFySyan7JFZrXFZYk3y3A3W7tFnIvryIkFyYqr1qqr97GrWY
-	vrWY9ryDu3W7AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UKjgsUUUUU=
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbCwh3BUmqFGv3OvwAA31
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6232f9c1-8b07-42b9-8660-ad514702ae1c@rowland.harvard.edu>
 
-If all bios finish before btrfs_encoded_read_regular_fill_pages()
-returns, it calls btrfs_uring_read_extent_endio() and previously
-returned the I/O status.  A negative errno then made
-btrfs_uring_read_extent() unlock and free while
-btrfs_uring_read_finished() did the same again.
+On Tue, Aug 18, 2026 at 11:37:16AM -0400, Alan Stern wrote:
+> On Tue, Aug 18, 2026 at 09:42:34AM +0200, Greg KH wrote:
+> > On Mon, Aug 17, 2026 at 02:14:17PM -0400, Alan Stern wrote:
+> > > Greg:
+> > > 
+> > > Has this patch ever been queued?
+> > > 
+> > > https://lore.kernel.org/linux-usb/ee41fbfd-f368-4a06-95d6-ae9b4267fd82@mail.kernel.org/
+> > 
+> > No because it looks like there are competing patches here as you point
+> > out.
+> > 
+> > > Looks like you can add syzbot's Tested-by: tag, as well as my Acked-by:.
+> > > 
+> > > Note that a different patch to fix the same problem was submitted here:
+> > > 
+> > > https://lore.kernel.org/linux-usb/20260731230603.4637-1-kartikey406@gmail.com/
+> > > 
+> > > IMO the first patch above is superior.
+> > 
+> > So Aleksandr's patch should be applied and not Deepanshu's?
+> 
+> That's my recommendation.  You can take a quick look at the two patches 
+> and see what you think.
+> 
+> We haven't heard back from Deepanshu.  Aleksandr doesn't seem to have 
+> strong feelings either way.
 
-Return -EIOCBQUEUED so only the deferred path cleans up.
+Aleksandr's patch is much more simple, and relies on the reference
+counting logic in the inode itself, instead of "hand rolling" it like
+Deepanshu's does.
 
-Reported-by: Yue Sun <samsun1006219@gmail.com>
-Closes: https://lore.kernel.org/linux-btrfs/20260630091609.3414-1-samsun1006219@gmail.com/
-Suggested-by: Jens Axboe <axboe@kernel.dk>
-Fixes: 34310c442e17 ("btrfs: add io_uring command for encoded reads (ENCODED_READ ioctl)")
-Signed-off-by: Yang Xiuwei <yangxiuwei@kylinos.cn>
----
- fs/btrfs/inode.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+I'll take it after -rc1 is out.  As this is a syzbot-only type of thing,
+there's no rush here.
 
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index 2534cd9284d5..953fd85d6437 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -9592,7 +9592,6 @@ int btrfs_encoded_read_regular_fill_pages(struct btrfs_inode *inode,
- 	struct completion sync_reads;
- 	unsigned long i = 0;
- 	struct btrfs_bio *bbio;
--	int ret;
- 
- 	/*
- 	 * Fast path for synchronous reads which completes in this call, io_uring
-@@ -9639,10 +9638,10 @@ int btrfs_encoded_read_regular_fill_pages(struct btrfs_inode *inode,
- 
- 	if (uring_ctx) {
- 		if (refcount_dec_and_test(&priv->pending_refs)) {
--			ret = blk_status_to_errno(READ_ONCE(priv->status));
--			btrfs_uring_read_extent_endio(uring_ctx, ret);
-+			int err = blk_status_to_errno(READ_ONCE(priv->status));
-+
-+			btrfs_uring_read_extent_endio(uring_ctx, err);
- 			kfree(priv);
--			return ret;
- 		}
- 
- 		return -EIOCBQUEUED;
--- 
-2.25.1
+thanks,
 
+greg k-h
