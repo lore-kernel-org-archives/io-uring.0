@@ -1,165 +1,131 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD727426436;
-	Mon, 24 Aug 2026 13:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670F6357CFC;
+	Tue, 25 Aug 2026 16:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787577860; cv=none; b=mJXc6c5qVc2143OQYv6DBpFGPbCmjQdAfiBZIZIwYuXc4cHf+klB/lqjpR5ZkSN8etI6rIwCECD3p9mYD1ra+nO+2Xv1HIRqZPDdhVQ6W7hHdrNI0SN1BwY4XYXK8edGXRaBzYcN/u9Za/Pg5HHy3zMxEFAs7HB5BRQU5z83Of0=
+	t=1787676794; cv=none; b=decM5bxYNYEN/tZ+an4cNkUz88jrpBInqhnknIxnySW29ISQUeZdLU7V4qrxUQ/UC8K3V2XgKhUZ/wCPs9JDbWweyZj6ezxuzUT6Y54FbhcDNg+iMhFHbpQbgX5FBRZJRmWR+29+PbvJkK1D0BddD5FLF7PQJ+jnzPsbMZayhgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787577860; c=relaxed/simple;
-	bh=KaQnsdE6H06P8oE6V/KnERQMPaPGiIIg/0UB0AGAcu0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=nzMrqd6CCDw0P7WIuy12qdRnPrmzLDTqpIDgUaeE5opidfbwjtMM0lYx0Ck/F7lcrD9l8xpVnvqt6PbMtfj/oXwLHWcEFYwIce2dwF1wlw9tsLFLDEfSeJ4qmd0IV/6XS82h2wPKuLD39m9srLX9dXDSWzLkh2wtcbzl8glwiQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=TydSa9rv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DzsQZsRV; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=IBHyS1aL; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2Z1h2mK5; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1787676794; c=relaxed/simple;
+	bh=+1w877Is4LscSJhePxSfNtkgYNPcZ3dI1MzNgaouPUA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc:
+	 In-Reply-To:References; b=ftCOn6Ef/Y+0iN2rOkhtAsGUGS2q7q4M0dgR0pF22Kn4mO6Yx0A6nUbmuVwnfZFRWnSvkrtujijUN3+UQsPJpcHlmhAk3Kdm/1KnYUoEcYLG5AzeEuvO/DNAZr69pu4/fy1xrjwv0d/KFXiiR/J0E2CeKh6HTT6AvMCcWXjax6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jeiY/C+Z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="TydSa9rv";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DzsQZsRV";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="IBHyS1aL";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2Z1h2mK5"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id D93711F795;
-	Mon, 24 Aug 2026 13:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1787577849; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tmlYurk9glRoMkGr8JuVJLc/yGmp5DspqaHQBCgIxwQ=;
-	b=TydSa9rvu6aqmntB8lnGh3MnS5EsFR+yWgomVf9JC9c9HUnFE8MUQHPnzJXwhL25wV0oMB
-	T5Qe2na7+7hoj8D7agncgAEnfoY/KIbXnfufuTZ1XC+9r/jaTc+KMPRIVgQXiMiDcKdcNg
-	jr9hZlHV7xbuFCQZY4GUQ3ZMFH6kbUA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1787577849;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tmlYurk9glRoMkGr8JuVJLc/yGmp5DspqaHQBCgIxwQ=;
-	b=DzsQZsRVHKbwO/OTKQcrE45O5TVIwBAgSL3viA1ikoGJAqqOCqVf9T1lh16ywEQN+X/IAH
-	pXDE55D5EaWZquDQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1787577844; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tmlYurk9glRoMkGr8JuVJLc/yGmp5DspqaHQBCgIxwQ=;
-	b=IBHyS1aLQjJV2JGROGIPJ5LiO0kb00F5ewsCGR0cT4p/4KPn+VKOG+amoccyIWsNy369e1
-	gXRj/l9ye/QugYWHuqOFU7O95gYTgovHNYS0RLPVG18ZOo4SYuycjqAj4bPL67k0So549x
-	4R5m44k4Wx2jhlOG9kQBqOcqoimvIsM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1787577844;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tmlYurk9glRoMkGr8JuVJLc/yGmp5DspqaHQBCgIxwQ=;
-	b=2Z1h2mK5+xGg2emN/zQJr5icH2Rxhwgn2vS02D+543Y5Ayg4czLRukFOpD15PD7SaI2cvf
-	4xDTW7EYOVhp4IDw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6A56313331;
-	Mon, 24 Aug 2026 13:24:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id p8aSBvRFjGrXVgAAD6G6ig
-	(envelope-from <krisman@suse.de>); Mon, 24 Aug 2026 13:24:04 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Laxman Acharya <acharyalaxman8848@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, Laxman Acharya Padhya
- <acharyalaxman8848@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] io_uring/query: cap user size passed to
- copy_struct_to_user
-In-Reply-To: <20260821103317.91437-1-acharyalaxman8848@gmail.com>
-Organization: SUSE
-References: <20260821103317.91437-1-acharyalaxman8848@gmail.com>
-Date: Mon, 24 Aug 2026 09:24:01 -0400
-Message-ID: <87wltfslce.fsf@mailhost.krisman.be>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jeiY/C+Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3032C2BCB8;
+	Tue, 25 Aug 2026 16:53:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1787676794;
+	bh=+1w877Is4LscSJhePxSfNtkgYNPcZ3dI1MzNgaouPUA=;
+	h=From:Date:Subject:To:Cc:In-Reply-To:References:Reply-To:From;
+	b=jeiY/C+ZHtC73FpGCwl7KuA2mfKZAqcp8yCtBYExAUP5qGHtQuN1g/I4TvXQEgJZa
+	 Cfbv/RfvMyRcxNvJIdnVo5dbjn3gIIvCtEJe3tGPt7njZFpS7xxubD7zLSzuBpNAWr
+	 JYJJpLV9PiAdNUxakPe8xL6lTKZHakE1gns8mLIDsaYH+FdVMZxr35piJdX7R/r45R
+	 EB9AmHDGCCeoSjaUAmc/qXp6UtJzR7aAw3XAsi36hh67Wttehzcf22jdhq0/lKCLyR
+	 bclEK65/d2tBgwSCN6+WQ/JIa3Pw7nieQ/hjxc3RpIWgeRGS9secdt13N/fOyD2KDV
+	 vLiA3wnMlVX9g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF188C61DBD;
+	Tue, 25 Aug 2026 16:53:13 +0000 (UTC)
+From: Vishnu Razdan via B4 Relay <devnull+vrazdan.openai.com@kernel.org>
+Date: Tue, 25 Aug 2026 09:52:03 -0700
+Subject: [PATCH 6.6.y] io_uring/io-wq: fix worker accounting when canceling
+ creation callbacks
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org];
-	FREEMAIL_TO(0.00)[gmail.com,kernel.dk];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260825-stable-io-wq-6-6-y-v1-1-c9f890168485@openai.com>
+X-B4-Tracking: v=1; b=H4sIADLIjWoC/y2MSw7CMAxEr1J5jasS1IC4CuoiMS4NQinE5VNVv
+ TtOQLOap5m3gHAKLHCsFkj8ChLGqGW7qYAGFy+M4awdTGNsczAtyuT8TemI7wdazYzeGdr11JK
+ hPejxnrgPnyI9ga1tPUP3w/L0V6YpC/PQO2H0yUUaMvqrCy1mWNcvDve2R6EAAAA=
+X-Change-ID: 20260825-stable-io-wq-6-6-y-ba2c3fc5c2c7
+To: stable@vger.kernel.org
+Cc: asml.silence@gmail.com, vrazdan@openai.com, krisman@suse.de, 
+ axboe@kernel.dk, io-uring@vger.kernel.org, gregkh@linuxfoundation.org
+In-Reply-To: <2026082423-fineness-promotion-9ac5@gregkh>
+References: <2026082423-fineness-promotion-9ac5@gregkh>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787676793; l=2337;
+ i=vrazdan@openai.com; s=io-wq-kernel-20260811; h=from:subject:message-id;
+ bh=VKXeGsfnMBFtjlWVBZ3PVT5X6resbdE+aaVqCUQBHaw=;
+ b=cMPsI3bfyS4J/eutD9UJRVgZ7c6ppKcOg/mj1NypZn98YswYPv5cx12ROriVJTjkccI9/sHfg
+ 8xb7wxVT+LyAHcnstiJ0GFff2huUiw1h6vfl+7GmbHBxx4T3qJFW798
+X-Developer-Key: i=vrazdan@openai.com; a=ed25519;
+ pk=45vHW8D/KId5RtsP3Qx7zMcNpgDwEvCnL5uAw0KzuS0=
+X-Endpoint-Received: by B4 Relay for
+ vrazdan@openai.com/io-wq-kernel-20260811 with auth_id=937
+X-Original-From: Vishnu Razdan <vrazdan@openai.com>
+Reply-To: vrazdan@openai.com
 
-Laxman Acharya <acharyalaxman8848@gmail.com> writes:
+From: Vishnu Razdan <vrazdan@openai.com>
 
-> From: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
->
-> io_handle_query_entry() clamps hdr.size for the inbound copy_from_user()
-> but keeps the original user value as usize. copy_struct_to_user() uses
-> that usize and, when it is larger than the kernel result, clear_user()s
-> the trailing bytes.
->
-> As hdr.size is a __u32, a query can request nearly 4 GiB of zeroing,
-> including on the error path where res_size stays 0. The interface is
-> reachable without a ring via IORING_REGISTER_QUERY.
->
-> Reject sizes larger than PAGE_SIZE, as recommended for copy_struct_*
-> interfaces.
->
-> Fixes: c265ae75f900 ("io_uring: introduce io_uring querying")
-> Cc: stable@vger.kernel.org # 6.18+
-> Signed-off-by: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+commit 297b5ccea4acacaa47c150f043bce695202afbf1 upstream.
 
-Looks good. feel free to add:
+create_worker_cb() reserves an io-wq worker slot only after its
+task-work callback runs. If the callback is canceled before then,
+io_worker_cancel_cb() still decrements acct->nr_workers. When an
+existing worker retires with its creation callback pending, that
+worker has already decremented the same account's worker count.
 
+The resulting undercount permits worker creation beyond the account's
+configured limit. On an AST2600 OpenBMC system, an unchanged sensor
+daemon reached 4,291 threads with the original kernel. With an
+equivalent downstream fix, 25 passive samples under its normal
+workload showed 6-9 threads.
+
+Decrement nr_workers only when the canceled callback is not
+create_worker_cb(). Continuation callbacks still release their reserved
+slot, and both callback types retain the existing running-count,
+reference-count, and create-state cleanup.
+
+[ Backport: retain the existing wq->lock protecting worker accounting. ]
+
+Fixes: 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
+Cc: stable@vger.kernel.org
+Assisted-by: Codex:gpt-5.6-sol
 Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+Link: https://patch.msgid.link/20260811-vrazdan-io-wq-b4-submit-v1-1-719ced16c921@openai.com
+Signed-off-by: Vishnu Razdan <vrazdan@openai.com>
+---
+Stable backport for linux-6.6.y.
+---
+ io_uring/io-wq.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-> ---
->  io_uring/query.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/io_uring/query.c b/io_uring/query.c
-> index 88a325736992..f2b5e19e5af6 100644
-> --- a/io_uring/query.c
-> +++ b/io_uring/query.c
-> @@ -76,6 +76,9 @@ static int io_handle_query_entry(union io_query_data *data, void __user *uhdr,
->  
->  	if (copy_from_user(&hdr, uhdr, sizeof(hdr)))
->  		return -EFAULT;
-> +	/* copy_struct_to_user() zeros up to usize bytes */
-> +	if (hdr.size > PAGE_SIZE)
-> +		return -E2BIG;
->  	usize = hdr.size;
->  	hdr.size = min(hdr.size, IO_MAX_QUERY_SIZE);
->  	udata = u64_to_user_ptr(hdr.query_data);
-> -- 
-> 2.51.2
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 37725c5031b4c2..a20be1a43aafcf 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -193,9 +193,12 @@ static void io_worker_cancel_cb(struct io_worker *worker)
+ 	struct io_wq *wq = worker->wq;
+ 
+ 	atomic_dec(&acct->nr_running);
+-	raw_spin_lock(&wq->lock);
+-	acct->nr_workers--;
+-	raw_spin_unlock(&wq->lock);
++	/* create_worker_cb() has not reserved a worker slot yet. */
++	if (worker->create_work.func != create_worker_cb) {
++		raw_spin_lock(&wq->lock);
++		acct->nr_workers--;
++		raw_spin_unlock(&wq->lock);
++	}
+ 	io_worker_ref_put(wq);
+ 	clear_bit_unlock(0, &worker->create_state);
+ 	io_worker_release(worker);
 
--- 
-Gabriel Krisman Bertazi
+---
+base-commit: dc6160265ffc795a1832bc1424f58291d152c7bb
+change-id: 20260825-stable-io-wq-6-6-y-ba2c3fc5c2c7
+
+Best regards,
+--  
+Vishnu Razdan <vrazdan@openai.com>
+
+
