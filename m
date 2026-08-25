@@ -1,132 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C49382F1A;
-	Tue, 25 Aug 2026 16:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA8D442B0B
+	for <io-uring@vger.kernel.org>; Tue, 25 Aug 2026 17:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787676853; cv=none; b=X5/rajGkMsDmo+VMWZGl/93hnoMKw0z88ZP/c63QnbMo/OkC1WK2Tc0KIwwpDfo4wvTX5zNUn4nvUdmMwARaXJfRtBwjw4BXCCZCS7ansR0KQOmaWBRzTZMN5ONigknujRPZ4a+rav3yjDcJraNybQ5daRljNwhBS+kEVJur25I=
+	t=1787680379; cv=none; b=UuAxBKGNfhDkkgZwx600zPz4fXDFblyKUNxdoEeLpTJtrsA7SpFdZEBAZCGRiM1/f0WGa/YoQdbwLxLUJ6t+VEV0VnqRj+zOIlOHn9zK0HMZpMxc/xyuRfJKRo5ZbHBsO8BHfUQq3eQxD9A0HdvEESUjo2pIbGX+KPQiCN9KY+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787676853; c=relaxed/simple;
-	bh=iWGLle4lAtKcqmeruwFiTJsHYI1BI3ExERc4qJzsjaw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc:
-	 In-Reply-To:References; b=a5zE4Z4M9Cz2u3s1Ja3dxpIl6S3470zeFAELk3LYv6ATs+24eqqFMRkeeyXtlZNnHvO0mBH0N4UXH7DZCh3N6aPdbdL9KcXs6fvw7RhyJbHI/ql8uId8qdFe/R1BgVzXa/h7XemHyAeT4TLvrLlcxmF479IKH1e0bH2zV6fg2YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lLecFhm1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1787680379; c=relaxed/simple;
+	bh=600ujPlfXVj1neFneB1ayr5PWYKjRheWsQwctxB22BA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WV3v5YX0Y2rOu/YbivS+UMoL1/B7edAY0UyPBSXbWA1MUzkPblqfOg437Ao7aCJe3DN8M6emy/T5uEHZDfNQ/qmhCbSrzPlbvyMKo95arehV7xucNEKJWkcL2wwAf0q3s4NkWxZtcnvTzLK4qpFhVT4yP+x/L/Vl55IEri+dMis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=Yu821kg8; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lLecFhm1"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F4207C2BCB8;
-	Tue, 25 Aug 2026 16:54:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1787676853;
-	bh=iWGLle4lAtKcqmeruwFiTJsHYI1BI3ExERc4qJzsjaw=;
-	h=From:Date:Subject:To:Cc:In-Reply-To:References:Reply-To:From;
-	b=lLecFhm1n1Dok1laBgYrk24b0DinkSYf/k+2Fd+BoFoBsv+2dVJJP09EqW5KFgRGv
-	 5tPrC5yLpm+o0OQ7X0g2DMoI8g0x2eqxkmM+Jw9rOTJaM1j4TlygOD4yAdOpcZZ3GZ
-	 73Laosg1hsOsY7Dj0XQtfUEoEixFNIIynToPjrX0xcTLKfvqM0CY+roPV2iGlQzyNC
-	 JdfmptMetqYQaE/7H+wndN1xiwZuZsoJfC4+wFuD3QANU4fvaOG5aJJYp6BhnbNxL3
-	 xi6Me1zmkMNUUzrwBvcDxNjCEw+CifiFXk4lGTQIiuXd8HzJqzQwJ07pl5W1vZyyDo
-	 BN/t3bcwi92PA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2235C61DBD;
-	Tue, 25 Aug 2026 16:54:12 +0000 (UTC)
-From: Vishnu Razdan via B4 Relay <devnull+vrazdan.openai.com@kernel.org>
-Date: Tue, 25 Aug 2026 09:54:10 -0700
-Subject: [PATCH 5.15.y] io_uring/io-wq: fix worker accounting when
- canceling creation callbacks
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="Yu821kg8"
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-455ee8f529dso73877fac.1
+        for <io-uring@vger.kernel.org>; Tue, 25 Aug 2026 10:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1787680376; x=1788285176; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=k9q1W24juDM89S16rr95JMNcB1mXlCHAJ6sYvr2j45M=;
+        b=Yu821kg8ulXf6GnbCeWjjexJArA+ekbD3nykFt94gfHfzb6Xj7PXZuV14xjvhKX55N
+         ZMf3EHjFhjXZYbqZeu1+DiQk2nVoNlEgurvHKWg4H95bkqGIZxAlXyMuikRJMBfdK6un
+         /YMbh9xsS63DojrNfggFrdI4a7kKgTh94AL3PRIKmhZb+9fO9uRlEHXi5GLtTD1Jf+q4
+         /gdgDqearkJGjB2Gup09Fwen+gLt0PQwbh4zDasrwhEVt7q5qehk1YJPa+T4br0Lt8Ql
+         8GdqBBRz2MXZQYnRBMAUjYk06WhYpaQ//MH8LrBbSJBwZmKS2+gFMhKKEVD8x34vgAea
+         wnIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787680376; x=1788285176;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=k9q1W24juDM89S16rr95JMNcB1mXlCHAJ6sYvr2j45M=;
+        b=Aqczxx1ngTJLWACj50gIKZFaccGM+17yf4Bmg1UM+6UEPBAYoj6T7dnMaW0c81uKrD
+         qvTaCFBuJiGV6ZTNVO4MYnwnIyImLjSJNq+qXsa6zpPLwg2N2iR2v0/qgq2mCWI8ph9u
+         rjpXMAgm4gZnKlfO6BaeTlKFQkD5DYhDUCg34Lew99+kMhgAGzN4kFt7PjmJICgBtdCX
+         STfr0iOKM7P8fwtdt3J5NdKf0ZRnJhw6RJ/r73SVfKXh72ZBrJ9w3gWKy+OWYWA3ye06
+         ppxICuNTkm/DifbfMwZoXOwjQJ7BxbuqhEv6pdjTTMignL/4dzAYdQZPVnQjZD5x0nSr
+         lTkw==
+X-Gm-Message-State: AFuF++kY9DfaI06jxTI+7mnHE+6a5w6PfIYjpv2531y8PkVQs+sUcLWY
+	f539Adk404CYyqodV8VGAi97ozpNiC8AHG69AIRFCUH/zOd1ki9/X7x66wy3lahA9X8=
+X-Gm-Gg: AR+sD11h/wpIex3IKtnZEtnPOQujk39ZT6C9gwJmurEWGZWSU4U2Gwz783igPzsZ0dK
+	omBnSszFICCVNRPmkzB4Cvf/YDFuXUGtvQEpkNsl6oJAk2zwVN0NGPxTjcUz+7juDOR5cfS1Flv
+	VoozayUXW8xulVkTsOBEy2ksr73tGXYeGawEDD9W3q807roWSH64OQjF+HOYasK2evG8YJ+Mcl1
+	roNKkgjm2PvBUUypRbH0sjKHTSMqVCh8aQL8CDGRWSbCZrKQC00yvTaUhAcgqUm6txSEuhY5P9s
+	B980PlOsrTFAIoYpCC8lw3QYV0oCeQ4bCOXB8DualI9hF9YzzE5iFzwTILMrqKVBwVyMvVY/k2w
+	lBAB6iHYHf1ZtHpmtd/e6H7TPTG2WJATUyqYxDFT9Kx4YiG6l/FULNlflX5D5Q6ydndR4UmjwS6
+	mnaRmTemZMUTUaiCT3GjzGhfqFY4QdjQP54eyIqUhlm8yNc1kjKSNDKQxFq2eqGk3JZa/eSfOeO
+	NIoEuuxqeCherHrVkFT9cX6RArUJyC0vkMJSlI0P/G0kdM29daH8sT6
+X-Received: by 2002:a05:6820:7085:20b0:6b1:31f:b0b0 with SMTP id 006d021491bc7-6b1a037461cmr485086eaf.6.1787680376185;
+        Tue, 25 Aug 2026 10:52:56 -0700 (PDT)
+Received: from [192.168.1.102] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b1a0139d2fsm181000eaf.6.2026.08.25.10.52.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Aug 2026 10:52:55 -0700 (PDT)
+Message-ID: <29d8d38f-cf2c-4216-96fd-546254c48332@kernel.dk>
+Date: Tue, 25 Aug 2026 11:52:54 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring: keep memlock accounting while regions are
+ mapped
+To: dejamarina@proton.me
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260816-io-uring-retained-mmap-accounting-v1-1-44e5eedd7ad3@proton.me>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20260816-io-uring-retained-mmap-accounting-v1-1-44e5eedd7ad3@proton.me>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260825-stable-io-wq-5-15-y-v1-1-a37209dc29ed@openai.com>
-X-B4-Tracking: v=1; b=H4sIALHIjWoC/y2Myw6CMBBFf4XM2iG0yVjirxgX0zpKjSnawQch/
- LsFXJ6Te88EKjmKwqGaIMs7auxTAbOrIHScroLxXBhsY/dNawl1YH8vtsfPEwkN4YjsHFPLwTo
- iKM9Hlkv8rtUjUG2oHuG0eX35m4RhSS5LzyroM6fQLeofX+3Whnn+AdtsDWWkAAAA
-X-Change-ID: 20260825-stable-io-wq-5-15-y-a77a58ac2755
-To: stable@vger.kernel.org
-Cc: io-uring@vger.kernel.org, vrazdan@openai.com, asml.silence@gmail.com, 
- axboe@kernel.dk, krisman@suse.de, gregkh@linuxfoundation.org
-In-Reply-To: <2026082424-reflux-strut-f1e1@gregkh>
-References: <2026082424-reflux-strut-f1e1@gregkh>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787676852; l=2384;
- i=vrazdan@openai.com; s=io-wq-kernel-20260811; h=from:subject:message-id;
- bh=Tl/OzY3FNyX7xHdZQwqDkXPChdqaGTeIOqQGm/x/EIA=;
- b=0rivWzHQH5EB0zgdQXfXfJw4rzcv1hvXzZaCw62QHak+jai5mTckSbMfDl9K691WBYrVe6X15
- HdrDk8KXUubAR4HCsI/RhJ1y+FSXNHI0doARSgDVETVENRHhNhZJRe3
-X-Developer-Key: i=vrazdan@openai.com; a=ed25519;
- pk=45vHW8D/KId5RtsP3Qx7zMcNpgDwEvCnL5uAw0KzuS0=
-X-Endpoint-Received: by B4 Relay for
- vrazdan@openai.com/io-wq-kernel-20260811 with auth_id=937
-X-Original-From: Vishnu Razdan <vrazdan@openai.com>
-Reply-To: vrazdan@openai.com
 
-From: Vishnu Razdan <vrazdan@openai.com>
+On 8/16/26 1:07 AM, Marina via B4 Relay wrote:
+> From: Marina <dejamarina@proton.me>
+> 
+> io_uring unaccounts kernel-allocated SQ/CQ and SQE regions when resize
+> replaces them, even if existing VMAs still retain their pages. Repeating
+> mmap and resize can therefore retain memory beyond RLIMIT_MEMLOCK.
+> 
+> Move each charge to a refcounted record owned by the active region and its
+> MMU or NOMMU mappings. Release it after both the region and final VMA are
+> gone. Keep direct accounting for user-provided regions, which cannot be
+> mapped through the io_uring file.
+> 
+> Accounting stays region-granular, so a partial mapping retains the complete
+> region charge.
 
-commit 297b5ccea4acacaa47c150f043bce695202afbf1 upstream.
+Patch doesn't apply to the current tree at all. Please send an updated
+one, if needed.
 
-create_worker_cb() reserves an io-wq worker slot only after its
-task-work callback runs. If the callback is canceled before then,
-io_worker_cancel_cb() still decrements acct->nr_workers. When an
-existing worker retires with its creation callback pending, that
-worker has already decremented the same account's worker count.
-
-The resulting undercount permits worker creation beyond the account's
-configured limit. On an AST2600 OpenBMC system, an unchanged sensor
-daemon reached 4,291 threads with the original kernel. With an
-equivalent downstream fix, 25 passive samples under its normal
-workload showed 6-9 threads.
-
-Decrement nr_workers only when the canceled callback is not
-create_worker_cb(). Continuation callbacks still release their reserved
-slot, and both callback types retain the existing running-count,
-reference-count, and create-state cleanup.
-
-[ Backport: retain the existing worker->wqe->lock protecting worker
-  accounting. ]
-
-Fixes: 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
-Cc: stable@vger.kernel.org
-Assisted-by: Codex:gpt-5.6-sol
-Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
-Link: https://patch.msgid.link/20260811-vrazdan-io-wq-b4-submit-v1-1-719ced16c921@openai.com
-Signed-off-by: Vishnu Razdan <vrazdan@openai.com>
----
-Stable backport for linux-5.15.y.
----
- io_uring/io-wq.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index edcb5af514b53e..f57743d911b4cd 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -195,9 +195,12 @@ static void io_worker_cancel_cb(struct io_worker *worker)
- 	struct io_wq *wq = wqe->wq;
- 
- 	atomic_dec(&acct->nr_running);
--	raw_spin_lock(&worker->wqe->lock);
--	acct->nr_workers--;
--	raw_spin_unlock(&worker->wqe->lock);
-+	/* create_worker_cb() has not reserved a worker slot yet. */
-+	if (worker->create_work.func != create_worker_cb) {
-+		raw_spin_lock(&worker->wqe->lock);
-+		acct->nr_workers--;
-+		raw_spin_unlock(&worker->wqe->lock);
-+	}
- 	io_worker_ref_put(wq);
- 	clear_bit_unlock(0, &worker->create_state);
- 	io_worker_release(worker);
-
----
-base-commit: 945fa863f02cf8b1638546907f72dd0fc4d6ba85
-change-id: 20260825-stable-io-wq-5-15-y-a77a58ac2755
-
-Best regards,
---  
-Vishnu Razdan <vrazdan@openai.com>
-
+-- 
+Jens Axboe
 
