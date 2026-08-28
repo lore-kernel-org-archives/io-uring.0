@@ -1,86 +1,107 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A89284693
-	for <io-uring@vger.kernel.org>; Fri, 28 Aug 2026 18:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 483613CD8CC
+	for <io-uring@vger.kernel.org>; Fri, 28 Aug 2026 21:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787943501; cv=none; b=AyNksfJX4W1flqnUcJGYJfIW5wcN/cOLugoh11XUOaw/8n2in8tIpsYCML2d/vbq8TZhW8UllabW+EU7CXrm8Z3KVilcrnbPDAyJDf7coA8ngY9zgRPJveEPfq8nx7Cq5mGYA2+OeYyGVpb07ts3qxEb+hqHsyTMeHoaWKboKZA=
+	t=1787952510; cv=none; b=rnJWzOCB6bqyvNnSHKhwwZVSn1h4Bls2ET0K1sqyan16jwBOsgz/oDrZacUDgDY17kJDy6XBlxORjbNFcUWpM6eXyFKuDk9wke5u3JpQF9jvfOSqChSkLcxrJByETb/AhQ0ewwUC06MVuGfzB3bmwxCIiE0Wt1FOhPnPyrKnEfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787943501; c=relaxed/simple;
-	bh=Ba0SJ5o/8kpr/XOQTU3zZSW3vPeQM50tchGGH3tXePU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MqGMh4EVmrMBx6FReWeTmcv3lRG95lPqZc1v75LHzytoRxTDxZslystW5yb2lJtb/wPxv5IJdRDSYwqAQ6SqOHjIvh+UT4IKpRkczGVJ1SxBGRzkBUfIonhaWKt6n9FmT36Mkc4uETwTtpVyV7QPxjrK2gEFbulcTcfuPBUBhBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A9kaLJ/7; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787952510; c=relaxed/simple;
+	bh=wwF1QrJ8qZhesTiBjZuluWkFm3OsIC+OC1LQAfo3HlA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Po0QTQt9N3jISlBc77Ax70UqO94nqFHI3gYzFfb9H49hmLg98XTnMI3NjJRbVxSNjo81gWoDbP5RJFl7KYx8Ry034XTCbHVcperzzCEsjrEJZD4pcCdRmJhXKZuu7J+iNsqi6PgHPRjPx5ULq02gyILumO6mc1+wakR/vv2mvH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=F45U8XH3; arc=none smtp.client-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A9kaLJ/7"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cc1e1ff659bso1234211a12.0
-        for <io-uring@vger.kernel.org>; Fri, 28 Aug 2026 11:58:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="F45U8XH3"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7f4e6b5bd30so2023059a34.0
+        for <io-uring@vger.kernel.org>; Fri, 28 Aug 2026 14:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787943500; x=1788548300; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1787952506; x=1788557306; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Ba0SJ5o/8kpr/XOQTU3zZSW3vPeQM50tchGGH3tXePU=;
-        b=A9kaLJ/7RJCJUzV8io5K9LCazQAAftyMaQqplBvaB52LL5rpZ2wSWonvUq4FekiRDw
-         lQanrluCRuSRdl0ph0v5bAZ2NFCpwYD6beHTK3gG7DucuM7WwIW90mtOBNaEuxgcZ/o+
-         aR6Liym2FfecbuMgBM5A7jDVvyIjBWuF/W2EHgcG5IWPCmZtnWmv3ZYIH+N/+v9tbCCM
-         dgtQbzCg0/n7F3plOGdYk8y9VW79/XkjC3sOj0JRQkhQ8YxNDGJdTPtDSSxpVyeOZ/Tb
-         1Fg9ca9kq5Xt/aqnMCypM1UPdCnizo8/dXru5Bx6IwShPax9sAc1oJyVEKb3oVZvI1am
-         Xzrg==
+        bh=JUcd6jIJi2fwLSrrj76EzV96ccKOdrOlXWrb/T2K1w8=;
+        b=F45U8XH39ALlZtZDTI6qNc71fYkDFoM9CDqu3AJ3WzBssbdl4qsBQtaoqcsqGQawfX
+         fu26TqfLkiqISXJx76sNaaks5mUTrRpai9UFBEl33we7ZbfThQvEESuTUFPA8q/Tm8vu
+         ETgO2WaV4DJcuZU13PPbfyVzUXBrYUDXiTCVK/BIplAZRtcf2Cy5LHz7kLVrj4e/l91C
+         MFSZ4DlUIXnYysPm5/B/S1c+6mVtWZ51UNWvjUTrcYIGj9SQDOCEEeeas9/Cm62os9WD
+         AW1lgAithWk7f4ytRHaARhTvl0eXvL7RWyipwH2j/PELtT4ENKuvbsekO46L/MGbpFo7
+         /mYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787943500; x=1788548300;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ba0SJ5o/8kpr/XOQTU3zZSW3vPeQM50tchGGH3tXePU=;
-        b=jgRWFLGybiImQ81G2XJKnjfwbtgn4tLSBL4TUnPYS8BdonVYBWvSBu7vF0eXiAwmoq
-         JtXqFE4+6vEr26VxceN9RTrMgpd5djH43qsQDcgsOBEyKUXs5plSVS9sd/Z1IODH4GPn
-         J2tHILh9xwlVm1SQ9BpfXZqXwGUPXpcm2WPz9cVebXl40gjpPBTz/5pBHe/zFcLx0Xrq
-         frzTt6inNaBVTeoPrf18LAmXI6Gez+yHqLGqJ4ITTYJE0ly5IfPXWaMIM4YV+Pd3+/8z
-         9Y0oM2y6ATImkqcyZcQYq1QzlsOV1y2IUHj7hqTiCcD9eDgbEyPrv2LJQ5Kah0D3A4El
-         IJ4Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrkC03Lv395NN9C+nKz3yYZFxS9HTbL62p0QqO5X3CbGERBp8j0BrW41V1R/ehhRsumPqnjSMCC8g==@vger.kernel.org
-X-Gm-Message-State: AFuF++n/6UOnbaCj8Z/ePHKtOcj+uOd42JnGE4EnIMqg1Lr8KgRMO3M/
-	xCbunlN6nDlKqWi8bWOGhWRrG/cr1LAn3sBW+zYFRdke5vLscoE+RAGSUxXi7kvKl9E=
-X-Gm-Gg: AR+sD13X1XH+mUxzccqnGSoDoqzWYuwfeggumq5VvqvAbr694EYO5HcmqQer9IXwlQM
-	psplXG8E2RcJRCek96W7MNoZr5OzMKaAr9ktGr30aBaDPMccJEe1xjAhPL9/fQz7rlDJRY1ZxYu
-	ZNOH8D83e4saxE6Umb1e16zE8hdlPHXl7miBU37OWXdWQj+gT4MyQkE3zdiuBAROrUiFeFsoQyl
-	By5AXLxRxfp/v6VoIYb9k+/UBt8BNCndjLOMtTsvP2sKcbSu96+RdYiabGBunUH0cIMZLsCx9ju
-	Zalv3Mplqw450JyZ6xN3bq83G7JU36XRAsC1y2L9HCdD7VB/qQds3i2LT8QvJ17o1oP9xtbnuF2
-	NPtWtt5WDEg6p+eOxWvLkIAMjXVHeVR2TatSZ/CEUVnfZE4S7XBwco+NN1RmV7g3CsEbgmHkJ00
-	i8NtTrFL7dUVfi58hziNqtOv3VHXeFSn3r2nRIuL82bGhN4d/XAPqwo/s/d8PeRwgvLl+Qfkdiq
-	bhytUaPMmwrThQ1aWNLqqJRhFr6J0B/j0tr8ofcEoENDOxQVQRi0iB9JIGAzFiHNkUcpPTUcLSA
-	FtNjtYboSAnEcr3DDSYapHInLJ99
-X-Received: by 2002:a05:6a21:9995:b0:3d1:66cb:d49 with SMTP id adf61e73a8af0-3d266681dfamr14619275637.4.1787943499568;
-        Fri, 28 Aug 2026 11:58:19 -0700 (PDT)
-Received: from fedora ([2401:4900:8f63:c6e3:e917:5b1e:932:cf63])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f995e60sm7839103eec.22.2026.08.28.11.58.17
+        d=1e100.net; s=20251104; t=1787952506; x=1788557306;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=JUcd6jIJi2fwLSrrj76EzV96ccKOdrOlXWrb/T2K1w8=;
+        b=RBvEAJx3MnW8J3HHx3EodPKSZewqnI6xArsdwH2cd3hz+/GYTzo10uNbgLN45SG/fc
+         shZy2A0Ac+8mJEm0ybNkZsG+UxJmlNnaK+hIspC/ZQFIJOp435cCmkwjxr/zj/1gN3h4
+         VctEmuoF1+1WgKAbwr23PiyA9xuC733J1CMXlt02O7aHpng1fus6mOnZshRaW/sJMjSK
+         yZv2O0mADSjIkAv6PXenqgQiwm0FglF6IRghUTuzjGkfYY/qKwrG8zwmuiss3etHdHzK
+         qJUT3v5FGxC5ZMj728ZqrK/gzOLTa9yPrzga0+F5WMYVF6OynBn2aQcX8E26922S5v7G
+         KW+g==
+X-Gm-Message-State: AFuF++lyUmoEt9nvMRZlefVmh/Eaoax5UTm/HNcbjNzkXpEKjHKQC7Z6
+	5slKCuhgCUBkpEu+5qy4nyFn3eNJB3TemlcezdBPLbE/gzeGi5mM5J4QqBIQ7J6NCd+k5eHJHOk
+	7eTck3fc=
+X-Gm-Gg: AR+sD11RM04GuM+jgUcUTsHj7okGICjYapB+riwrj+f4p8A6PFWGdkrGC7K5t3tm3+u
+	wn9rijwvaRI2/Ym6k2iCnqVwYRjyRdtnXseuiHREetMXd5/KyB1AIlL3XVGv2AQjubvgUEuiU5M
+	qCRiidPu7Y4YJa7VwEkP+luVU4oVPVsskLJ77YtT2kzQ5vqspWAy8Te0Ih4imw0VbAoNAhMTWLN
+	ZDi23CSA5dQYyJ0g3et711A0csUF269FCoucnLe4BYSln/x7XeiPATTDHxoyaqB3mrBA2BP5XKg
+	NjoPKASnEcL6y3gDDWTNaMCe0frq0+SeKknyLJx+w5bpg703H+QqkCqV4ayOyHITl5MJEyWn9cc
+	L3d8bd4TeMiqK4mAAaBxhRYvLA4rY/JS1BWXXe/uhotkssZEi//QCvO2bQnj4b5ntS4WGA9fd+R
+	fx/HiQmQBTs7MyqFSoipKJ0XfzgeOE2ds/pgPVWC80Rp9Bm98IsvJMohzq8QHANZ/e/KmdCNtks
+	ZUtdVqkHAY4hHIgDGObGqJX3yyd6IC34ElWAvo40Q==
+X-Received: by 2002:a05:6820:f1aa:b0:6b1:cb99:81db with SMTP id 006d021491bc7-6b3073a8230mr2204609eaf.4.1787952505766;
+        Fri, 28 Aug 2026 14:28:25 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b1ce2f7004sm2762416eaf.12.2026.08.28.14.28.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Aug 2026 11:58:19 -0700 (PDT)
-From: Prateek <kprateek283@gmail.com>
-To: axboe@kernel.dk
-Cc: krisman@suse.de,
-	io-uring@vger.kernel.org
+        Fri, 28 Aug 2026 14:28:24 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: gabriel@krisman.be, Prateek <kprateek283@gmail.com>
+Cc: io-uring@vger.kernel.org
+In-Reply-To: <20260623154305.1115403-1-kprateek283@gmail.com>
+References: <20260623154305.1115403-1-kprateek283@gmail.com>
 Subject: Re: [PATCH v2] setup: dynamically detect default huge page size
-Date: Sat, 29 Aug 2026 00:28:09 +0530
-Message-ID: <20260828185809.62998-1-kprateek283@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <87v7aqhi0h.fsf@mailhost.krisman.be>
-References: <87v7aqhi0h.fsf@mailhost.krisman.be>
+Message-Id: <178795250472.1487722.5706318598659843685.b4-ty@b4>
+Date: Fri, 28 Aug 2026 15:28:24 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-Hi Jens,
 
-Just a gentle ping on this v2 patch. Gabriel gave it his Reviewed-by a while back, so I wanted to see if it looks good to you to pull in.
+On Tue, 23 Jun 2026 21:13:05 +0530, Prateek wrote:
+>     Replaces the hardcoded 2MB huge page size with dynamic detection by
+>     parsing /proc/meminfo. This fixes no-mmap allocation failures on
+>     architectures with different default huge page sizes (like ARM64
+>     which often uses 512MB) or x86 systems configured for 1GB pages.
+> 
+>     - Safely parses /proc/meminfo without allocating memory.
+>     - Adds a __uring_memcmp shim for CONFIG_NOLIBC builds, allowing
+>       setup.c to use standard memcmp for the Hugepagesize: match.
+>     - Drops the MAP_HUGE_2MB mmap flag to allow the kernel to correctly
+>       apply the system's default huge page size.
+>     - Falls back safely to 2MB if /proc/meminfo is unreadable.
+> 
+> [...]
 
-Thanks,
-Prateek
+Applied, thanks!
+
+[1/1] setup: dynamically detect default huge page size
+      commit: ae61c975e168d78a9d10c6d332d2f0a4839a8b71
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
