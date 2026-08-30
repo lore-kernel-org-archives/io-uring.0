@@ -1,63 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7001A38F9
-	for <io-uring@vger.kernel.org>; Sat, 29 Aug 2026 01:13:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85223B5F5D
+	for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 17:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787966034; cv=none; b=ak899zl2s84ePzogjtJHmALCZ8ubcKPIXsd5MuH01Fn02pTABlAmW8155k8xnFjaBWwrxxXTU3hiNuzvqQEzLRNjcKjwk3OJsc3omdeA00RGqTFT2fNjiaYsaEVpkOOX3OrnLra2Sk/2P+1m8d7Dz/WD2DtWnFYVJOq25wBYgRo=
+	t=1788111514; cv=none; b=YY+CJ8pqWdoY1uWLiEAIXbMO/ZjtpSzTTOqeoqw0V7tE5SNx3JIMRStu8D64FK/2CDVvLZwwBBJFa+hTjBC8KFtunnzR6nsmn++uA6hFrplE/muGhhZo9qRK/yuQMUWhIrWcSzkP1zu/666DMrKNBU3foaCYZfKArmnPkUD/EuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787966034; c=relaxed/simple;
-	bh=57nGk7Xxu4dkv5B5wJxy0JfJBM3Hyp5G2f0CDvrlg2k=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=AE2j+s8NhM3ebL2XqdNOUWbTKzR8obpQiJTZpgdQKbzR8sVthn5qEJi9XWRaWvcWhzMfm3xjfBxG2lecbcnO5+urLhs4J7FnctNa5kHKRLHtfqYvt/pCSdqxX993URT+3E0xYzRZN13Q8MMyQ3EQX9b6P9RH+0lakWfEnADU7nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJna+s/J; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJna+s/J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AE11F000E9;
-	Sat, 29 Aug 2026 01:13:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787966033;
-	bh=Q8qTLTs7YI6RG3Du3Eqimvdpt77VoJpNzjOtntaq0/0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=hJna+s/JNK4MUT8M/QUqL6E8E7V1HQLAM0wRW43IAvaWbZWUPV96sIjeQsXdHx4Tr
-	 VrjOCV4pRXMCAJ3BL4llAMSUuNAW/7VB+wpczn9WTBpCtqf1MU6JRJrbq3NEVglgFM
-	 1+7B7Y2GyRvBaRWPIh98c9+mxNGlMANaDVtsZfU7gkVXzIv+AXhGRKdp0UTBiNQbfL
-	 Y59VnB3k7qmpZNCVaVr+SpcS6+5tO61eGrBWSJBk+XZoP4CqdTTZoABDcwTIEEr43N
-	 4O0lE8iRlNRUBS2QCs+VWsvx9wsb688DETlv2+jN0r16wbmbTUhj2xC5TEYRB9+dTw
-	 DLQiaYiVtTSfA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0B83380AA69;
-	Sat, 29 Aug 2026 01:12:58 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring fixes for 7.3-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <97f27939-a322-42be-906d-d9ef485f0ecd@kernel.dk>
-References: <97f27939-a322-42be-906d-d9ef485f0ecd@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <97f27939-a322-42be-906d-d9ef485f0ecd@kernel.dk>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.3-20260828
-X-PR-Tracked-Commit-Id: 2cf20c4e0f72d523b8673053e7120d092ff1f074
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cf72cbb39da84b6f02f90c07f33b102fc10b16f0
-Message-Id: <178796597750.2866694.11617461721546040784.pr-tracker-bot@kernel.org>
-Date: Sat, 29 Aug 2026 01:12:57 +0000
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>
+	s=arc-20240116; t=1788111514; c=relaxed/simple;
+	bh=G8uudVDlmu6OBfesgS6iZ9rS4NwZkdL34dsSJd7B7bI=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=Kgppa/5RJqAjVFVFAiTvhkDQdlgRcXUQO8RVqC5qxYeZ4VErxw+bwc3hRhS+888L9q+uHT3zhwoxUEZ/G8F5wapbUWd4qZg/46WUwYwJ66b8FIKYTsu3CsEfUW+hGd/i4tz/Osc03feyhA9jRF/JazJnzA1MFG9M6dmXvhg2/oY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-485ebc5706cso5880163b6e.0
+        for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 10:38:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788111511; x=1788716311;
+        h=content-type:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=5VNzQWRFLebN1X6lVK2IUMMclgAeM+X4+PsLzs0+xtk=;
+        b=EViinEaMyw1lF+Myti3cryTkFELUxsXpXP0cUNNADb67aX9Ex9fwALzoiDr85uhyUU
+         kLCd7pWzLXJTr19IUMZWw7cpjoALjYWS8aHbHdA8VZ/iWYLPDNoL0NYmg2H7A/D+ILih
+         9EF1IcdMdVEZo2f7W8J0XfehRFO4UiQEBhTvOLbBo0wbgb95d7mc4qDXUlAU03I/GYsL
+         31BLc1gudjJ558pfJKyxllN09lpAmLOoNfiCGRhcPYtj1xjl5SjPDP1rDsmQ+uIZX6Sa
+         x9iS5jqVO9WnK9ERBBhX38sN02dE99wgcHMEHUK4DWiPLaF6jdaZVTfKai6L+GbIcPRm
+         xDQg==
+X-Forwarded-Encrypted: i=1; AHgh+RpTD9MxNVuKIAKe7s6LwYe1k/O60zZ7N7kMGZ54/Anxe/Z43pMBSQxukwVQhDhfxmmCMlN17yfp0A==@vger.kernel.org
+X-Gm-Message-State: AFuF++mgIytW+9eGaFovCbJgoafI4wAErEne4lSQEucuYhlWDVRMoPEj
+	30h+5v0z7kSzMBvur9Tup88Dg7e/LOiHFxVD8VNs0NdV5WufihyeQv7b2L/0QGZbG1tagQ/Y94O
+	TYh45/6/Q8SRtDmzP6z8SsIptTaj/pjl0c6b+3s20pvtSCXGc216unkouxqQ=
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-Received: by 2002:a05:6808:c145:b0:4b2:8d83:436e with SMTP id
+ 5614622812f47-4b59e7b66f2mr3077637b6e.8.1788111511597; Sun, 30 Aug 2026
+ 10:38:31 -0700 (PDT)
+Date: Sun, 30 Aug 2026 10:38:31 -0700
+In-Reply-To: <6a77c53d.01d0871a.3a0d52.0077.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6a946a97.1d9ded08.62e62.0120.GAE@google.com>
+Subject: Re: [syzbot] [bluetooth?] kernel panic: kernel: panic_on_warn set ... (3)
+From: syzbot <syzbot+fe5ea83cdd7fc263f452@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, io-uring@vger.kernel.org, krzk@kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The pull request you sent on Fri, 28 Aug 2026 15:30:42 -0600:
+syzbot has found a reproducer for the following issue on:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.3-20260828
+HEAD commit:    08dbfad3f504 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14f47379580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5e4e3a0e188a497e
+dashboard link: https://syzkaller.appspot.com/bug?extid=fe5ea83cdd7fc263f452
+compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c2a379580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16181e25580000
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cf72cbb39da84b6f02f90c07f33b102fc10b16f0
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ddff5719ec3b/disk-08dbfad3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4b5e39b20fa5/vmlinux-08dbfad3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/eb1f70eed57f/bzImage-08dbfad3.xz
 
-Thank you!
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fe5ea83cdd7fc263f452@syzkaller.appspotmail.com
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+ <TASK>
+ process_one_work kernel/workqueue.c:3387 [inline]
+ process_scheduled_works+0xc3d/0x1630 kernel/workqueue.c:3470
+ worker_thread+0xa47/0xfb0 kernel/workqueue.c:3551
+ kthread+0x38b/0x480 kernel/kthread.c:436
+ ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Kernel panic - not syncing: kernel: panic_on_warn set ...
+CPU: 1 UID: 0 PID: 5905 Comm: kworker/u9:5 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/24/2026
+Workqueue: hci5 hci_conn_timeout
+Call Trace:
+ <TASK>
+ vpanic+0x56d/0xa60 kernel/panic.c:651
+ panic+0xc5/0xd0 kernel/panic.c:788
+ check_panic_on_warn kernel/panic.c:525 [inline]
+ __warn+0x315/0x4c0 kernel/panic.c:1104
+ __report_bug+0x276/0x570 lib/bug.c:254
+ report_bug+0x16b/0x220 lib/bug.c:286
+ handle_bug+0x9c/0x200 arch/x86/kernel/traps.c:436
+ exc_invalid_op+0x1a/0x50 arch/x86/kernel/traps.c:490
+ asm_exc_invalid_op+0x1a/0x20 arch/x86/include/asm/idtentry.h:593
+RIP: 0010:hci_conn_timeout+0xff/0x2c0 net/bluetooth/hci_conn.c:641
+Code: 48 89 df e8 e3 f5 09 00 eb 07 e8 ac 50 f1 f6 b0 13 0f b6 f0 48 89 df 5b 41 5c 41 5e 41 5f 5d e9 d7 9f fe ff e8 92 50 f1 f6 90 <0f> 0b 90 eb 8c 44 89 f9 80 e1 07 80 c1 03 38 c1 0f 8c 31 ff ff ff
+RSP: 0018:ffffc90003097ab0 EFLAGS: 00010293
+RAX: ffffffff8ad6630e RBX: ffff888079288000 RCX: ffff88802f728000
+RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 0000000000000000
+RBP: 00000000ffffffff R08: ffff888079288013 R09: 1ffff1100f251002
+R10: dffffc0000000000 R11: ffffed100f251003 R12: dffffc0000000000
+R13: ffffffff818f95da R14: ffff888079288a50 R15: ffff888079288010
+ process_one_work kernel/workqueue.c:3387 [inline]
+ process_scheduled_works+0xc3d/0x1630 kernel/workqueue.c:3470
+ worker_thread+0xa47/0xfb0 kernel/workqueue.c:3551
+ kthread+0x38b/0x480 kernel/kthread.c:436
+ ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
