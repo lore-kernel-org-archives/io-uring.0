@@ -1,121 +1,144 @@
-Received: from mail-oi1-f208.google.com (mail-oi1-f208.google.com [209.85.167.208])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85223B5F5D
-	for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 17:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47655306B1B
+	for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 19:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788111514; cv=none; b=YY+CJ8pqWdoY1uWLiEAIXbMO/ZjtpSzTTOqeoqw0V7tE5SNx3JIMRStu8D64FK/2CDVvLZwwBBJFa+hTjBC8KFtunnzR6nsmn++uA6hFrplE/muGhhZo9qRK/yuQMUWhIrWcSzkP1zu/666DMrKNBU3foaCYZfKArmnPkUD/EuM=
+	t=1788116854; cv=none; b=jTgnFar4gwP2mtRkA1G/nwWMWo7kYo6psemR68u7cCRzB8G2OeDFeZkOnk9pU50tfKYENH5dKLeaNj+IZCJ4BAPpKxQ14HvNo1B6KPtmvpVZW9h3PoqCzvOaK/FVSHHXMkNoKdZ+Ld84XgOM3jC4S7AsVrTxMR3+G1XF5pB2LMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788111514; c=relaxed/simple;
-	bh=G8uudVDlmu6OBfesgS6iZ9rS4NwZkdL34dsSJd7B7bI=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=Kgppa/5RJqAjVFVFAiTvhkDQdlgRcXUQO8RVqC5qxYeZ4VErxw+bwc3hRhS+888L9q+uHT3zhwoxUEZ/G8F5wapbUWd4qZg/46WUwYwJ66b8FIKYTsu3CsEfUW+hGd/i4tz/Osc03feyhA9jRF/JazJnzA1MFG9M6dmXvhg2/oY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f208.google.com with SMTP id 5614622812f47-485ebc5706cso5880163b6e.0
-        for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 10:38:32 -0700 (PDT)
+	s=arc-20240116; t=1788116854; c=relaxed/simple;
+	bh=UAP+WV+IFofygBiyPmq+Bb+SASH5CvpOwDr59qLwPik=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=T+GHZIQo4uX9U1culaEhTkWrbvT931/qO9P47zden241ooWW7JRrOIofHI9+2uf1+JTf7O6cRZalliocPeNYW0QCoUPUVPLOD9isDUNJeJ7yjk2aueSsPZZgZGzQ4VL/b54AB/B52TUzTCWj7ofysmAcIJq7ujK7qNWQrRaQkOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QDP8lHzo; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QDP8lHzo"
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3964e480f76so3389565a91.1
+        for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 12:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788116849; x=1788721649; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Ix3X1jKRamQQtcZbUM8iTm49g5yElaf+reQBINXWBgc=;
+        b=QDP8lHzoUTIQYWDbFwXq/mtNx+3CfVbojWs1J0erttn6GOOn/jja4SEvKtt9ljdpl+
+         xmIyTLboE23PA/LiYL+gjm0okYj7418vxIYsNEkMYpog4IzFMFIhlV7XNJiQyGOqD2p1
+         nITzF4AiT6B6lgEmWpINjcGlYErIYO36RPGFXMLAPYfrnviqe2jCvjdjhAKDBCsPk0hd
+         hpHwmqZ0tCivYEm8bTlWzWFCC82o2/iaAZZLER/kEfN8BBalZ3PBUtO63Wp7gTQ+EZhD
+         mqnvrMJfnGG0/U86HEpoPMgNYfw3ZOyGBILEI1i0+csfpOdNyw5Pa6/4vIhakR1BBUEu
+         m8eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788111511; x=1788716311;
-        h=content-type:to:from:subject:message-id:in-reply-to:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=5VNzQWRFLebN1X6lVK2IUMMclgAeM+X4+PsLzs0+xtk=;
-        b=EViinEaMyw1lF+Myti3cryTkFELUxsXpXP0cUNNADb67aX9Ex9fwALzoiDr85uhyUU
-         kLCd7pWzLXJTr19IUMZWw7cpjoALjYWS8aHbHdA8VZ/iWYLPDNoL0NYmg2H7A/D+ILih
-         9EF1IcdMdVEZo2f7W8J0XfehRFO4UiQEBhTvOLbBo0wbgb95d7mc4qDXUlAU03I/GYsL
-         31BLc1gudjJ558pfJKyxllN09lpAmLOoNfiCGRhcPYtj1xjl5SjPDP1rDsmQ+uIZX6Sa
-         x9iS5jqVO9WnK9ERBBhX38sN02dE99wgcHMEHUK4DWiPLaF6jdaZVTfKai6L+GbIcPRm
-         xDQg==
-X-Forwarded-Encrypted: i=1; AHgh+RpTD9MxNVuKIAKe7s6LwYe1k/O60zZ7N7kMGZ54/Anxe/Z43pMBSQxukwVQhDhfxmmCMlN17yfp0A==@vger.kernel.org
-X-Gm-Message-State: AFuF++mgIytW+9eGaFovCbJgoafI4wAErEne4lSQEucuYhlWDVRMoPEj
-	30h+5v0z7kSzMBvur9Tup88Dg7e/LOiHFxVD8VNs0NdV5WufihyeQv7b2L/0QGZbG1tagQ/Y94O
-	TYh45/6/Q8SRtDmzP6z8SsIptTaj/pjl0c6b+3s20pvtSCXGc216unkouxqQ=
+        d=1e100.net; s=20251104; t=1788116849; x=1788721649;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Ix3X1jKRamQQtcZbUM8iTm49g5yElaf+reQBINXWBgc=;
+        b=RxHskT+XcEebiEUgRqTgoyFW95KSe+KKgzz410FwWQw7550Ddl1OL2thZtWBhchPYF
+         Bgb0de2FVlqAhP4S+KQKodO2AyRhsZXGB2Q/S+vYv0O6kFfq03f737WtDEzsOuAG8bu4
+         I3o5XD6439bvcxS3a8BkKcUKV+dsJis7I2t1YVIyZhbh0LIsiV4xbgZukxtJXZhYkBmK
+         T4m8UUy0UoAQaGAzi8Tmupy4gW24ZlLDRSN1AG+TgW+lf3CgZ5ppJLDgZNrDVoHJsdyG
+         LdYgYlm92+YQx1q75/6/2PT+OwNDzEUO0n6eyNBABv/NZhlIwNwdh4n6ZPivIe6mKVZp
+         QgmQ==
+X-Gm-Message-State: AFuF++k8XM/bh6eSbcklvdfaQuMuf/ttHiw3+8KpJ4eUykka9p5zpCgh
+	CyEWQM6q+Gwx+do3DM0+EOT17pO32mU9+Z4Bn3qI2Cq4wrcDos/hceMw
+X-Gm-Gg: AYBFou1yyGvZGTiBWe6rPgKdSCtkrb0+3Hng3sgmw9VFu9TPGrADHhddaIos9LwoF28
+	JeBiOtZqynQHj8UXaojmZrvjnHND/xtAotzyo5WpNFDSOizBapxyBsR/Q7iyEp6WNTudqG0WtEd
+	EE/SiSOqF0o0kMkAiPIKGQOQWYk5d69+OiLlPA06B9CyFVBq3jGh8RlC4aHf2yRVC2KkiH5b8R3
+	Y4DZp3uZevv0pFahpBtSp/n1BShRGaLktuRJ3+5OVejnM6L3TnIyGvu0dBDBynZIulgeuWR/end
+	+ki0E8l6R0L++il0kaoXj0+hebaZ4iUy8RPCl/+xCMQOxmktQYHPXF9n/lRXeaCk3jkD6CWt7H4
+	9jV3J1a6PEBLzgirpG6oZuxQH9EBfU6ExFALnFqm8OZkYdpY3akwlGdsUyeMqzWJagjDPii4ydO
+	W1QoOw3Q6or9l3UROt8mzKmhIxPJNRSJ2IqmsNa1GMEoolkpVKwbA9f0xmx0a23TkCw6sZtIVXn
+	pz7mWCJ
+X-Received: by 2002:a17:90b:2b90:b0:38a:c3f:3b87 with SMTP id 98e67ed59e1d1-396d0fce294mr36544130a91.12.1788116848637;
+        Sun, 30 Aug 2026 12:07:28 -0700 (PDT)
+Received: from kernel-vm.. ([117.28.251.176])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396b1ac3cbbsm17111627a91.17.2026.08.30.12.07.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Aug 2026 12:07:28 -0700 (PDT)
+From: Chengfeng Lin <lin2530632123@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	regressions@lists.linux.dev
+Subject: Re: [PATCH for-next] io_uring/futex: use GFP_KERNEL_ACCOUNT for futex data allocation
+Date: Sun, 30 Aug 2026 19:07:15 +0000
+Message-ID: <20260830190717.1509012-1-lin2530632123@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <d8fd1498-fe73-4f48-9213-6b18ec698a3d@kernel.dk>
+References: <d8fd1498-fe73-4f48-9213-6b18ec698a3d@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:c145:b0:4b2:8d83:436e with SMTP id
- 5614622812f47-4b59e7b66f2mr3077637b6e.8.1788111511597; Sun, 30 Aug 2026
- 10:38:31 -0700 (PDT)
-Date: Sun, 30 Aug 2026 10:38:31 -0700
-In-Reply-To: <6a77c53d.01d0871a.3a0d52.0077.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6a946a97.1d9ded08.62e62.0120.GAE@google.com>
-Subject: Re: [syzbot] [bluetooth?] kernel panic: kernel: panic_on_warn set ... (3)
-From: syzbot <syzbot+fe5ea83cdd7fc263f452@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, io-uring@vger.kernel.org, krzk@kernel.org, 
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	luiz.dentz@gmail.com, marcel@holtmann.org, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-syzbot has found a reproducer for the following issue on:
+Hi Jens,
 
-HEAD commit:    08dbfad3f504 Merge tag 'for-linus' of git://git.kernel.org..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14f47379580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5e4e3a0e188a497e
-dashboard link: https://syzkaller.appspot.com/bug?extid=fe5ea83cdd7fc263f452
-compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c2a379580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16181e25580000
+I tested 6e0d71c288fd against its direct parent on bare metal. In a narrow
+io_uring futex WAITV -> WAKE workload, the child was 8.09% slower. A
+separate 424-line standalone reproducer showed a 6.49% slowdown. A matched
+scalar WAIT -> WAKE control changed by -0.55%. All compared kernels actually
+ran with preempt=full.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ddff5719ec3b/disk-08dbfad3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/4b5e39b20fa5/vmlinux-08dbfad3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/eb1f70eed57f/bzImage-08dbfad3.xz
+The test system was a Core i7-12700KF with 32 GiB RAM. The workload was pinned
+to P-core CPU 2, with the governor and EPP set to performance, Turbo disabled,
+and GCC 15.2.0.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fe5ea83cdd7fc263f452@syzkaller.appspotmail.com
+#regzbot introduced: 6e0d71c288fdcf5866f5d0c6cde850a091cc3c55
+#regzbot title: io_uring futex WAITV accounted-allocation slowdown
 
- <TASK>
- process_one_work kernel/workqueue.c:3387 [inline]
- process_scheduled_works+0xc3d/0x1630 kernel/workqueue.c:3470
- worker_thread+0xa47/0xfb0 kernel/workqueue.c:3551
- kthread+0x38b/0x480 kernel/kthread.c:436
- ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Kernel panic - not syncing: kernel: panic_on_warn set ...
-CPU: 1 UID: 0 PID: 5905 Comm: kworker/u9:5 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/24/2026
-Workqueue: hci5 hci_conn_timeout
-Call Trace:
- <TASK>
- vpanic+0x56d/0xa60 kernel/panic.c:651
- panic+0xc5/0xd0 kernel/panic.c:788
- check_panic_on_warn kernel/panic.c:525 [inline]
- __warn+0x315/0x4c0 kernel/panic.c:1104
- __report_bug+0x276/0x570 lib/bug.c:254
- report_bug+0x16b/0x220 lib/bug.c:286
- handle_bug+0x9c/0x200 arch/x86/kernel/traps.c:436
- exc_invalid_op+0x1a/0x50 arch/x86/kernel/traps.c:490
- asm_exc_invalid_op+0x1a/0x20 arch/x86/include/asm/idtentry.h:593
-RIP: 0010:hci_conn_timeout+0xff/0x2c0 net/bluetooth/hci_conn.c:641
-Code: 48 89 df e8 e3 f5 09 00 eb 07 e8 ac 50 f1 f6 b0 13 0f b6 f0 48 89 df 5b 41 5c 41 5e 41 5f 5d e9 d7 9f fe ff e8 92 50 f1 f6 90 <0f> 0b 90 eb 8c 44 89 f9 80 e1 07 80 c1 03 38 c1 0f 8c 31 ff ff ff
-RSP: 0018:ffffc90003097ab0 EFLAGS: 00010293
-RAX: ffffffff8ad6630e RBX: ffff888079288000 RCX: ffff88802f728000
-RDX: 0000000000000000 RSI: 00000000ffffffff RDI: 0000000000000000
-RBP: 00000000ffffffff R08: ffff888079288013 R09: 1ffff1100f251002
-R10: dffffc0000000000 R11: ffffed100f251003 R12: dffffc0000000000
-R13: ffffffff818f95da R14: ffff888079288a50 R15: ffff888079288010
- process_one_work kernel/workqueue.c:3387 [inline]
- process_scheduled_works+0xc3d/0x1630 kernel/workqueue.c:3470
- worker_thread+0xa47/0xfb0 kernel/workqueue.c:3551
- kthread+0x38b/0x480 kernel/kthread.c:436
- ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+This is a focused synthetic microbenchmark, not an application benchmark. It
+uses one raw-UAPI ring and eight independent wait vectors. Each vector has
+eight cacheline-separated private futex words. A timed cycle submits eight
+IORING_OP_FUTEX_WAITV requests, wakes element 3 in every vector, and validates
+all 16 CQEs. An untimed wake then verifies that the seven remaining waiters in
+each vector were removed.
 
+I used a fresh boot for each point:
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+  816095894c0f parent A -> 6e0d71c288fd child -> 816095894c0f parent B
+
+Each point had 3 warm-up rounds and 15 measured rounds. Every measured round
+ran 512 cycles, or 4,096 WAITV/wake pairs. Results in ns/pair were:
+
+  implementation   parent A     child   parent B   child vs midpoint
+  formal             1045.687  1128.704   1042.755        +8.091%
+  standalone         1040.270  1110.916   1046.198        +6.488%
+
+The formal drop-first result was +8.080%, parent drift was -0.280%, and the
+maximum CV was 0.151%. The standalone drop-first result was +6.511%, with
++0.570% parent drift. All 90 WAITV timing rows passed the CQE, returned-value,
+overflow, residual-waiter, and CPU checks. Untimed child traces also hit
+io_futexv_prep(), io_futexv_wait(), io_futexv_complete(), and the wake path
+with the expected request counts.
+
+The exact source change is only GFP_KERNEL -> GFP_KERNEL_ACCOUNT for the
+per-WAITV data allocation. I understand the memcg-accounting purpose and am
+not suggesting a revert.
+
+As a separate current-baseline diagnostic, I compared unmodified v7.2 against
+a direct child changing only this allocation back to GFP_KERNEL. The
+no-account child was 8.12% and 9.00% faster in the formal and standalone WAITV
+tests, while the scalar control changed by +0.09%. These values use a different
+baseline and are not combined with the direct-parent results above.
+
+Is this per-WAITV cost an expected accounting trade-off, or could the same
+memcg accounting be retained with lower per-request overhead?
+
+Evidence bundle:
+
+  https://github.com/lcf0399/linux-regression-evidence/tree/25ed417f566fc83b942e1787a0b53d555ccec291/io-uring-futex-waitv-accounted-allocation
+
+Standalone reproducer:
+
+  https://github.com/lcf0399/linux-regression-evidence/tree/25ed417f566fc83b942e1787a0b53d555ccec291/io-uring-futex-waitv-accounted-allocation/reproducer
+
+Thanks,
+Chengfeng
