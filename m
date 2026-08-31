@@ -1,144 +1,122 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47655306B1B
-	for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 19:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA7847253F
+	for <io-uring@vger.kernel.org>; Mon, 31 Aug 2026 15:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788116854; cv=none; b=jTgnFar4gwP2mtRkA1G/nwWMWo7kYo6psemR68u7cCRzB8G2OeDFeZkOnk9pU50tfKYENH5dKLeaNj+IZCJ4BAPpKxQ14HvNo1B6KPtmvpVZW9h3PoqCzvOaK/FVSHHXMkNoKdZ+Ld84XgOM3jC4S7AsVrTxMR3+G1XF5pB2LMA=
+	t=1788191086; cv=none; b=k8zhVSvEj7+ihzhg+tcJAQLFfYg4HxTSXouIm1FCOI7Q03oPDKEDGmVZO/Q3tjiwF+lTAOrEYjkODSDrTTUeLzgFYiqI/I0nVTyvRYDXlHloMdzcSJu1TO45ytSPYWPgkFJaIpmbzhkMAQolgtCMUjHmZdKHzKsCfNIsowiUHFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788116854; c=relaxed/simple;
-	bh=UAP+WV+IFofygBiyPmq+Bb+SASH5CvpOwDr59qLwPik=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T+GHZIQo4uX9U1culaEhTkWrbvT931/qO9P47zden241ooWW7JRrOIofHI9+2uf1+JTf7O6cRZalliocPeNYW0QCoUPUVPLOD9isDUNJeJ7yjk2aueSsPZZgZGzQ4VL/b54AB/B52TUzTCWj7ofysmAcIJq7ujK7qNWQrRaQkOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QDP8lHzo; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788191086; c=relaxed/simple;
+	bh=edxrMdAH1sxr8ZP203TMN6KpgTCINL02FHuT98QfzBE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H0p9qBQw8BiNdjJFQPxiI3AxSVYkxLh9TgnEFabZJAyPXRufCt/OzzknrJK/mFDNlJrjf/NTbDhQQtWrlKcRW4MZ2dVzUcXWPhswG41IudVFhdBHmscCzxp4wfsX8xfdfd088FU4dYpHqHXcaN0dz5SquURWldRFtgh2OOZCni4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MQZ7cRqa; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5s2Ioxdb; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eGCFttcn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=oGW6Sl/I; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QDP8lHzo"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3964e480f76so3389565a91.1
-        for <io-uring@vger.kernel.org>; Sun, 30 Aug 2026 12:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788116849; x=1788721649; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ix3X1jKRamQQtcZbUM8iTm49g5yElaf+reQBINXWBgc=;
-        b=QDP8lHzoUTIQYWDbFwXq/mtNx+3CfVbojWs1J0erttn6GOOn/jja4SEvKtt9ljdpl+
-         xmIyTLboE23PA/LiYL+gjm0okYj7418vxIYsNEkMYpog4IzFMFIhlV7XNJiQyGOqD2p1
-         nITzF4AiT6B6lgEmWpINjcGlYErIYO36RPGFXMLAPYfrnviqe2jCvjdjhAKDBCsPk0hd
-         hpHwmqZ0tCivYEm8bTlWzWFCC82o2/iaAZZLER/kEfN8BBalZ3PBUtO63Wp7gTQ+EZhD
-         mqnvrMJfnGG0/U86HEpoPMgNYfw3ZOyGBILEI1i0+csfpOdNyw5Pa6/4vIhakR1BBUEu
-         m8eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788116849; x=1788721649;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ix3X1jKRamQQtcZbUM8iTm49g5yElaf+reQBINXWBgc=;
-        b=RxHskT+XcEebiEUgRqTgoyFW95KSe+KKgzz410FwWQw7550Ddl1OL2thZtWBhchPYF
-         Bgb0de2FVlqAhP4S+KQKodO2AyRhsZXGB2Q/S+vYv0O6kFfq03f737WtDEzsOuAG8bu4
-         I3o5XD6439bvcxS3a8BkKcUKV+dsJis7I2t1YVIyZhbh0LIsiV4xbgZukxtJXZhYkBmK
-         T4m8UUy0UoAQaGAzi8Tmupy4gW24ZlLDRSN1AG+TgW+lf3CgZ5ppJLDgZNrDVoHJsdyG
-         LdYgYlm92+YQx1q75/6/2PT+OwNDzEUO0n6eyNBABv/NZhlIwNwdh4n6ZPivIe6mKVZp
-         QgmQ==
-X-Gm-Message-State: AFuF++k8XM/bh6eSbcklvdfaQuMuf/ttHiw3+8KpJ4eUykka9p5zpCgh
-	CyEWQM6q+Gwx+do3DM0+EOT17pO32mU9+Z4Bn3qI2Cq4wrcDos/hceMw
-X-Gm-Gg: AYBFou1yyGvZGTiBWe6rPgKdSCtkrb0+3Hng3sgmw9VFu9TPGrADHhddaIos9LwoF28
-	JeBiOtZqynQHj8UXaojmZrvjnHND/xtAotzyo5WpNFDSOizBapxyBsR/Q7iyEp6WNTudqG0WtEd
-	EE/SiSOqF0o0kMkAiPIKGQOQWYk5d69+OiLlPA06B9CyFVBq3jGh8RlC4aHf2yRVC2KkiH5b8R3
-	Y4DZp3uZevv0pFahpBtSp/n1BShRGaLktuRJ3+5OVejnM6L3TnIyGvu0dBDBynZIulgeuWR/end
-	+ki0E8l6R0L++il0kaoXj0+hebaZ4iUy8RPCl/+xCMQOxmktQYHPXF9n/lRXeaCk3jkD6CWt7H4
-	9jV3J1a6PEBLzgirpG6oZuxQH9EBfU6ExFALnFqm8OZkYdpY3akwlGdsUyeMqzWJagjDPii4ydO
-	W1QoOw3Q6or9l3UROt8mzKmhIxPJNRSJ2IqmsNa1GMEoolkpVKwbA9f0xmx0a23TkCw6sZtIVXn
-	pz7mWCJ
-X-Received: by 2002:a17:90b:2b90:b0:38a:c3f:3b87 with SMTP id 98e67ed59e1d1-396d0fce294mr36544130a91.12.1788116848637;
-        Sun, 30 Aug 2026 12:07:28 -0700 (PDT)
-Received: from kernel-vm.. ([117.28.251.176])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396b1ac3cbbsm17111627a91.17.2026.08.30.12.07.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2026 12:07:28 -0700 (PDT)
-From: Chengfeng Lin <lin2530632123@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MQZ7cRqa";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5s2Ioxdb";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eGCFttcn";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="oGW6Sl/I"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4F72B21CCD;
+	Mon, 31 Aug 2026 15:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1788191078; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=o6atVfhv9pQoO4hJZp/jpA4BZLEhvoEHnwBwWL7caws=;
+	b=MQZ7cRqaNJUtpiz9TY1A8wcNNxlZa3HYbpqhV09w7K+ZiQ3/egd4+nF99eVfl/4pVNsvdT
+	mn9LvWhl+QZ6NlPp+Y0+ZAWZdqH6CV2IqlqkDiy3Oo3+slzsW63AoNgpKCj5DA+LNZuJ77
+	IkU9qgv11NUhu8LuFLmzZS1a9uwLu7s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1788191078;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=o6atVfhv9pQoO4hJZp/jpA4BZLEhvoEHnwBwWL7caws=;
+	b=5s2IoxdbFU4aGKhzvFPSSK15p/aE52jlgvYXrnAVKShjlO1a33aeyP7SbqwxSsO3yw28+K
+	Lez7J3nhb0afAgDQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1788191074; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=o6atVfhv9pQoO4hJZp/jpA4BZLEhvoEHnwBwWL7caws=;
+	b=eGCFttcnKJVtLTgc8M0Z6AT8BQAYSAC8igwdu4vzqGQ37ALU7dbbfV08GbV4p+/PDA8ZkW
+	bwO4cBH7FscAJ9e5SgAXxVtKmKuvffAl6X+HTyTtC63SgiDWz3g5PILxLe87W1EOOnOmCy
+	WgD+X/o8JFHeiEPsynIfhlcEcyHiJ3U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1788191074;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=o6atVfhv9pQoO4hJZp/jpA4BZLEhvoEHnwBwWL7caws=;
+	b=oGW6Sl/IWn1RORn554plzUWa+i6r3PeobVBGL1AdaJhA/iLwwJmbb+UPcwLF/NuMIKNSsb
+	OSs/1SWKfEYf6cDQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8E68713694;
+	Mon, 31 Aug 2026 15:44:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id BgmkA2GhlWpZSAAAD6G6ig
+	(envelope-from <krisman@suse.de>); Mon, 31 Aug 2026 15:44:33 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: axboe@kernel.dk
 Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev
-Subject: Re: [PATCH for-next] io_uring/futex: use GFP_KERNEL_ACCOUNT for futex data allocation
-Date: Sun, 30 Aug 2026 19:07:15 +0000
-Message-ID: <20260830190717.1509012-1-lin2530632123@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <d8fd1498-fe73-4f48-9213-6b18ec698a3d@kernel.dk>
-References: <d8fd1498-fe73-4f48-9213-6b18ec698a3d@kernel.dk>
+	Gabriel Krisman Bertazi <krisman@suse.de>
+Subject: [RESEND PATCH liburing 0/2] man page improvements
+Date: Mon, 31 Aug 2026 12:44:24 -0300
+Message-ID: <20260831154426.115944-1-krisman@suse.de>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spam-Score: -2.80
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-0.996];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
 
-Hi Jens,
+A couple fixes to documentation requested on github issues I sent a while ago.
 
-I tested 6e0d71c288fd against its direct parent on bare metal. In a narrow
-io_uring futex WAITV -> WAKE workload, the child was 8.09% slower. A
-separate 424-line standalone reproducer showed a 6.49% slowdown. A matched
-scalar WAIT -> WAKE control changed by -0.55%. All compared kernels actually
-ran with preempt=full.
+Gabriel Krisman Bertazi (2):
+  man: Fix FUTEX_WAIT/FUTEX_WAKE explanation
+  man/io_uring_submit*.3: Point to error code documentation
 
-The test system was a Core i7-12700KF with 32 GiB RAM. The workload was pinned
-to P-core CPU 2, with the governor and EPP set to performance, Turbo disabled,
-and GCC 15.2.0.
+ man/io_uring_enter.2                       | 39 +++++++++++-----------
+ man/io_uring_submit.3                      |  7 +++-
+ man/io_uring_submit_and_get_events.3       |  7 +++-
+ man/io_uring_submit_and_wait.3             |  7 +++-
+ man/io_uring_submit_and_wait_min_timeout.3 | 11 +++---
+ man/io_uring_submit_and_wait_reg.3         |  7 ++--
+ man/io_uring_submit_and_wait_timeout.3     | 15 ++++++---
+ 7 files changed, 60 insertions(+), 33 deletions(-)
 
-#regzbot introduced: 6e0d71c288fdcf5866f5d0c6cde850a091cc3c55
-#regzbot title: io_uring futex WAITV accounted-allocation slowdown
+-- 
+2.55.0
 
-This is a focused synthetic microbenchmark, not an application benchmark. It
-uses one raw-UAPI ring and eight independent wait vectors. Each vector has
-eight cacheline-separated private futex words. A timed cycle submits eight
-IORING_OP_FUTEX_WAITV requests, wakes element 3 in every vector, and validates
-all 16 CQEs. An untimed wake then verifies that the seven remaining waiters in
-each vector were removed.
-
-I used a fresh boot for each point:
-
-  816095894c0f parent A -> 6e0d71c288fd child -> 816095894c0f parent B
-
-Each point had 3 warm-up rounds and 15 measured rounds. Every measured round
-ran 512 cycles, or 4,096 WAITV/wake pairs. Results in ns/pair were:
-
-  implementation   parent A     child   parent B   child vs midpoint
-  formal             1045.687  1128.704   1042.755        +8.091%
-  standalone         1040.270  1110.916   1046.198        +6.488%
-
-The formal drop-first result was +8.080%, parent drift was -0.280%, and the
-maximum CV was 0.151%. The standalone drop-first result was +6.511%, with
-+0.570% parent drift. All 90 WAITV timing rows passed the CQE, returned-value,
-overflow, residual-waiter, and CPU checks. Untimed child traces also hit
-io_futexv_prep(), io_futexv_wait(), io_futexv_complete(), and the wake path
-with the expected request counts.
-
-The exact source change is only GFP_KERNEL -> GFP_KERNEL_ACCOUNT for the
-per-WAITV data allocation. I understand the memcg-accounting purpose and am
-not suggesting a revert.
-
-As a separate current-baseline diagnostic, I compared unmodified v7.2 against
-a direct child changing only this allocation back to GFP_KERNEL. The
-no-account child was 8.12% and 9.00% faster in the formal and standalone WAITV
-tests, while the scalar control changed by +0.09%. These values use a different
-baseline and are not combined with the direct-parent results above.
-
-Is this per-WAITV cost an expected accounting trade-off, or could the same
-memcg accounting be retained with lower per-request overhead?
-
-Evidence bundle:
-
-  https://github.com/lcf0399/linux-regression-evidence/tree/25ed417f566fc83b942e1787a0b53d555ccec291/io-uring-futex-waitv-accounted-allocation
-
-Standalone reproducer:
-
-  https://github.com/lcf0399/linux-regression-evidence/tree/25ed417f566fc83b942e1787a0b53d555ccec291/io-uring-futex-waitv-accounted-allocation/reproducer
-
-Thanks,
-Chengfeng
