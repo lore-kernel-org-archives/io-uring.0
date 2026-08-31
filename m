@@ -1,77 +1,47 @@
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8C5B474268
-	for <io-uring@vger.kernel.org>; Mon, 31 Aug 2026 15:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82E384746A5
+	for <io-uring@vger.kernel.org>; Mon, 31 Aug 2026 15:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788191562; cv=none; b=iJwfpnPsvvSOxpf/q0lsg/gY0OjLFv/m7v/hcCVjh50kPXkfV77guWrTjEjhJWvsadRaS11pNXirqevwk16xHz2ukPKseWBKBUO2sjgQtw26iXGYBUFXfrfKjSiA1xLoi2Y+5NibUx+nWtj+njPURDwjvwhrE+Uh/8cLzsmmjQM=
+	t=1788191575; cv=none; b=DHpocskPTEASBrD/r6KkBzJU7HEh+p4958wCqNLUJkgp344t+QzqknQuZz36OOx8BGEi1WfJwinzksC5ftM19Qz4o9KNZ6kVseQ7Gp001BqLaH4B9d+e9CTM9N6uNzl7i0WfFzNsy7XuIqhmwsjhfFJwieKVt9/glPVXSnhBo5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788191562; c=relaxed/simple;
-	bh=5E2+QXF6dB9TLkd5MsgcERpaUw98IIXAT1Kxgxwnb+I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CudIXihaKTVpt+fLkl4gIgyBbinQIofcVM8f7gq++3WtHeGZROnN1sBQck6AeljP6s+1laCOIOLdpCthIMbRvShwz1tC7u2MASqiClZ8jCWfApGb3H3m0HPD++bjZyjheL+KpCB9z66zTC0u0RoJ/jjO+VsofQNOQKiKRGYUotM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=dUz9rBVS; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=AuKhDceB; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nibcEPtc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=QoLDTP3C; arc=none smtp.client-ip=195.135.223.131
+	s=arc-20240116; t=1788191575; c=relaxed/simple;
+	bh=vfrCXhXMb2devZWvKLJnOMFXKhOSMYIQdcHZWswjbnc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RxLpdVhClGi+Jt/jiHOfMq6AYkCoONb+nw7s36wCcpU7OG2xdcabVVjrpVBBxcc541VnX5jRqyVXWRuozYp5WxASEAsj9kyfcTvax3Tw7je03U8Vy/aHCK+LRiwaqpeqia0dgF5ul2gtR/rzryXUzQMGeTjXMEPwnUz1McgmL3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="dUz9rBVS";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="AuKhDceB";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nibcEPtc";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="QoLDTP3C"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9125D1FD45;
-	Mon, 31 Aug 2026 15:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788191554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=83ml9LYG9zDL1uBpu5lxY5P4OlgPWkVQwPsHloXDfgA=;
-	b=dUz9rBVSi2+RCNMENdEIFzsiwm9XNMzMhrAoo+tV0rn5RqroJiZtbxj5Z6oQTlwB7swsmF
-	Y2td6o97CuhQW6xXatyiioehGIV+b05EljM+3uOxLZuSc+ICM9bsh/du+gbB3ZB8iZIGBA
-	r/rBghyWcVU6XIwUYtvpWPFoQ1TDCtw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788191554;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=83ml9LYG9zDL1uBpu5lxY5P4OlgPWkVQwPsHloXDfgA=;
-	b=AuKhDceBPr7qHMNCewD6q992Z6yodaG7Q/oVpn737eY5uuQSgIhCreCqqEagNGYb0Ai1X7
-	NpJ1vh4YvvMNz6Cg==
+	by smtp-out2.suse.de (Postfix) with ESMTPS id AF4B91FD84;
+	Mon, 31 Aug 2026 15:52:52 +0000 (UTC)
 Authentication-Results: smtp-out2.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788191550; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=83ml9LYG9zDL1uBpu5lxY5P4OlgPWkVQwPsHloXDfgA=;
-	b=nibcEPtc1wF+Fz4q9oeKZfezKIMtVuUpcrdL0XlJGH0d5gvGqlhmkxfV6fNr9hPfWHF5BX
-	cmuBJvG88qZKRGfxxkM5D9A0iMCflkl8GdtTo7eDjV8G9byQsrjJEQMi6FVzXVZNCwwfFP
-	BZ1JbH3TFRIeN1N9ZPlxWeUk/1HP0f8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788191550;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=83ml9LYG9zDL1uBpu5lxY5P4OlgPWkVQwPsHloXDfgA=;
-	b=QoLDTP3CI+v8qlFZnvhGrIQu/XQPomK+zjs/NsTwsDzQb/ff0BPsBMCS1djL9uaq9LO8Vg
-	BDxv7Ak49ILjIlAw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CADF913694;
-	Mon, 31 Aug 2026 15:52:29 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DB72713685;
+	Mon, 31 Aug 2026 15:52:51 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id wFJIDT2jlWomUAAAD6G6ig
-	(envelope-from <krisman@suse.de>); Mon, 31 Aug 2026 15:52:29 +0000
+	id OAPPKFOjlWrHUAAAD6G6ig
+	(envelope-from <krisman@suse.de>); Mon, 31 Aug 2026 15:52:51 +0000
 From: Gabriel Krisman Bertazi <krisman@suse.de>
 To: axboe@kernel.dk
 Cc: io-uring@vger.kernel.org,
 	Gabriel Krisman Bertazi <krisman@suse.de>
-Subject: [RESEND PATCH liburing 0/2] couple of fixes to tests
-Date: Mon, 31 Aug 2026 12:52:20 -0300
-Message-ID: <20260831155222.121857-1-krisman@suse.de>
+Subject: [RESEND PATCH liburing 2/2] test/iopoll: Fix clang CI build failure
+Date: Mon, 31 Aug 2026 12:52:22 -0300
+Message-ID: <20260831155222.121857-3-krisman@suse.de>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260831155222.121857-1-krisman@suse.de>
+References: <20260831155222.121857-1-krisman@suse.de>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -79,42 +49,60 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Score: -2.80
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Queue-Id: AF4B91FD84
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
 X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.996];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[]
+X-Spam-Score: -4.00
+X-Spam-Level: 
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
 
-Two unrelated fixes that I sent a while ago.  Jiri Slaby reported iowait
-sporadic failures and while patch 1 doesn't fix all of them, it makes the test
-much more reliable.  Patch 2 is a trivial fix to CI builds.
+Clang CI builds in liburing repo do -Werror,-Wunused-but-set-global when
+building with clang.  commit c5eead26 ("test/iopoll: fix over-eager
+no_hybrid check") left a lingering variable that was not used, and clang
+got smart enough to find for it, causing the build to fail for every
+commit ever since.
 
+https://github.com/axboe/liburing/actions/runs/30404555586/job/90427017716
+https://github.com/axboe/liburing/actions/runs/30404555586/job/90427017742
 
-Gabriel Krisman Bertazi (2):
-  test/iowait.t: Skip if system is not quiesced for too long
-  test/iopoll: Fix clang CI build failure
+Fixes: c5eead26 ("test/iopoll: fix over-eager no_hybrid check")
+Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
+---
+ test/iopoll.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
- test/iopoll.c |  5 +----
- test/iowait.c | 26 ++++++++++++++++++++------
- 2 files changed, 21 insertions(+), 10 deletions(-)
-
+diff --git a/test/iopoll.c b/test/iopoll.c
+index 98230657..d68fde10 100644
+--- a/test/iopoll.c
++++ b/test/iopoll.c
+@@ -23,7 +23,6 @@
+ static struct iovec *vecs;
+ static int no_buf_select;
+ static int no_iopoll;
+-static int no_hybrid;
+ 
+ static int provide_buffers(struct io_uring *ring)
+ {
+@@ -372,10 +371,8 @@ static int test_io(const char *file, int write, int sqthread, int fixed,
+ 		return 0;
+ 	}
+ 	if (ret != T_SETUP_OK) {
+-		if (ring_flags & IORING_SETUP_HYBRID_IOPOLL) {
+-			no_hybrid = 1;
++		if (ring_flags & IORING_SETUP_HYBRID_IOPOLL)
+ 			return 0;
+-		}
+ 		fprintf(stderr, "ring create failed: %d\n", ret);
+ 		return 1;
+ 	}
 -- 
 2.55.0
 
