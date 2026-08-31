@@ -1,67 +1,68 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15FE39BFE7
-	for <io-uring@vger.kernel.org>; Mon, 31 Aug 2026 18:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43BF537F8C4
+	for <io-uring@vger.kernel.org>; Mon, 31 Aug 2026 23:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788199803; cv=none; b=oXmYOsOnMJ4L7XxyRvqd4cI5jAyj8R/THmd0W6k/9hYaO2MQnWM8xBnsFGsiM+AGOc97crlTKt3YFhCmhbvkopGqdb1Eir9D1ZD+kCkTMCV7REkcrIG3rme0ANaltWwTBnuJNRyjZ/A3UkZJCC2ZPdzh2SjAWm05w3mf9Ff44So=
+	t=1788217224; cv=none; b=h1SP/t8OdfusE4aj5dyxAE5G+l0LQXRQYDnb8koLqtS4lKRMQPqcEoh0sNsobcb6qx8D0toB8RFxg0xOlKYv65mQN63DS7gEFJGJVmj0ML0A7Q/8MQmTEdmYCso8G4lh79KrGGa4kfGuPxy68rVz4GvfbNkNQiSMizyFykTO5LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788199803; c=relaxed/simple;
-	bh=OUMY53HyrTCqQnkA8KrBjrrWVSQyECdBkTmSBNMfXJo=;
+	s=arc-20240116; t=1788217224; c=relaxed/simple;
+	bh=dvr2ATG+s1MnkZGDuLGYBa2Ow4Nl8oVMxBHVSEzZVzs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E0sxnZljFqKYA4QYmBzm80MRhpfC16yyPOhVsRz5u2pgEPHWwmWTJm5ZEwNJHVzT6Kq2HfZ2zzPMKRB4tdXwf1kkjgP2YcwWKwH6STimdGZ0WwQrgNDAJGouRZ6rq6ek1mVnD6qzcU0Gd2bUyOnMkAZWb31V9ajAG1ZBE2XhpWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=dzGFFAQ6; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	 In-Reply-To:Content-Type; b=owUuMyiD+m/unSn2h83c8dTIUPKlQc0fnJXjDSzYb9T49o1OkqIPuItIOFj96zXFEelH+tlqthg/KqeEW602zTtwysqCISnl3F5xNdAlBUk/5jTjh1xRUUbhBC3DxPLuIUxXiYJO1BHQjuQAZ2Z34wb7oSdZBgcfTArVV0KkaJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=amj4gj7j; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="dzGFFAQ6"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-383b4a3755fso69323a91.3
-        for <io-uring@vger.kernel.org>; Mon, 31 Aug 2026 11:10:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="amj4gj7j"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-4af173320f9so159242b6e.2
+        for <io-uring@vger.kernel.org>; Mon, 31 Aug 2026 16:00:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1788199801; x=1788804601; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1788217211; x=1788822011; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uFdfHylOXjETtPhdnLAsv7jcCEOZVeZCY1hqt4pQN3M=;
-        b=dzGFFAQ6IENy3JO1WHK87RhnC4ljyMffWkW0uckANcchjKJ0bu1uHlWtMQxL400Qv6
-         qywLnMyeqrZ0wQ+z8JKTEc/HcqynjvBFPOfXWpq+fK0JJUdbMiZnKimx9Oj2MKhCNmfZ
-         a6VoXI61bVr5LZTwDUxchBqxJUcoeXDYKzjdjY1pj6EcIM8sPac9sHtJ61pNqWVoJTxK
-         XBUyvOUXxD9LtZ/26kla1d1omN6d+egphBu9cT1XzWKEPe2hFwlMaMuhz8UEAO6Phy1L
-         CRXkBixUvrO1RKI02WxY5+IQaNhyqEQI/+23Cw5jQET04cGwPw13Ig1kBrtFBKqHnhlg
-         yDbA==
+        bh=qlB7ckFtH9A/qdjbPDaBlhw7dKBv8Xyo1HgBq+MosRk=;
+        b=amj4gj7j+22uHGdPNLD1fBLeCLV6NSlErdom07UcX6OK4Q3RQwDBQTJmoq2QTfcoIv
+         Iotbwo04ak7fJbzd6tx6MkaJLHLltj6F+w4m1jc0Uulozh48B7RXepmM2TxqJ18JJyQB
+         /sCyEZroJvVGbVTfMsY0I77O5BJnSsQM+EfZoIq+N/6zOeUFKYzrGxjCgcTr5SrerztG
+         H+LtnaGc3D/aU+Or8RrfLdCoVvPcHo+zYOHdwslY1DsKo67Mk0SMN7TfYCYPCgeAEAQo
+         7IqF8dU1xPedl0FeV/yrBz3Xvc8/vlA48wNOtt+o0KgkMStO4zXPAmsRXK4zPQJV9Fol
+         dOhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788199801; x=1788804601;
+        d=1e100.net; s=20251104; t=1788217211; x=1788822011;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=uFdfHylOXjETtPhdnLAsv7jcCEOZVeZCY1hqt4pQN3M=;
-        b=Zb1xzBk6LDNQwASdhei7Zzg2luvtPiKgLgIm27K9/CqaRyeyfgL0DnTf/xsIWGeEG9
-         HXxBgBD5A7oXsFoM+N1oUCTcxhU73qhfRNiQ0DoBL7ymXNmdwgJwyEEEC6Rcr07T1Oj4
-         e5KVkYDJkun/2CktCDOVqaW4dMfX0PiiRO3NCu0I5iF9vKNElGYccLXqlckIbbvQcqEc
-         UWQN2uk7M4H+95CITt6ynPYaXR5Dt4/6MQ9bSD1ZFid8OgpCl5jxKNq0ZCtM+rSbc544
-         dpMUJIsoH2ZKZz7Vpd/dE/KsnyxRaxx5M4kEJsDKGUPkpZa9uy8Wmjj7TKWq+Qy6UAOi
-         veqg==
-X-Gm-Message-State: AFuF++lFuFPQ8UgKLMECHazQ8Srm94AoQg7gQ0mlSGbV7C/QLpmDFDl6
-	yCD+Opl6U0dX31237tlRLo8116kK4+6akp2EPpfBXJYPioQYeVmoJuaVVUoLKzBELOE=
-X-Gm-Gg: AYBFou0Gcqi/yAQCk/GoAq5tuCYhfwUMP458Gu5xZG+CopYONofXE9sRJlY01xKMfVV
-	N+Ar9V764Lib8AkaqUAp1A9J98AUEugig4in4pBRg9EMhVkH7exuifg9Rfe8usZ4eHDf52ggjyc
-	UqVSTO7yJB/Ud2t/zsYDjHlkBlg0bN9vIbtj6LeMWWlZAt+xwz2ngLqLqaY1Fg7JB3hK2eulUrB
-	tVFym9KcSGV2ZTWJnPrnu540zvgua31JvYI60CkEkMGgPznYmd0Y8iAYGufYsCTBUEakQdEUMwV
-	iMLX2mFG/Gld7WBYi5OzaFy6DJgP05eGiKg4xmHJkVd4iV5ZvGLsKPVFDmecYF53GbjLarJDCBQ
-	wdcPcDyX0zyk07VIctRhH7glf+7y+783MQo5rVjGffbpzp4XnHbK7UWfGSHm+Dr16RWINjpDxcz
-	zeqY/Wr1l7gD4KihZxw84qrAOatfSjsYYMzq+vw55+NF5MkVTY5hGdbGnVOu5EoJtCzclz3MV4K
-	ewhj/UkHdTzMZWDsaF+9U515uDUbozi4JRKZ45KRwFu8Nm0I+Vo6Ju6jwODiA==
-X-Received: by 2002:a17:90b:5102:b0:38e:70d5:b12d with SMTP id 98e67ed59e1d1-396d0ea862fmr45975458a91.6.1788199798914;
-        Mon, 31 Aug 2026 11:09:58 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::7:1753])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-142e0de4de3sm41695477c88.12.2026.08.31.11.09.57
+        bh=qlB7ckFtH9A/qdjbPDaBlhw7dKBv8Xyo1HgBq+MosRk=;
+        b=O1aSOc83NVr0TJUO9rCUKKvV5N/1WXad90il3huNliAMXErNAdkCudo5gT7/dIpNTR
+         EZsTjGelU33gtDRdI5WH0TBDjUqo1zVscSa7asC3QOEObhn2TVbjGIx/NkSfuafl+Qkm
+         0BNv30q1ShjLbd7bQAgSJIdjjvY5xr0hiAxWECTB93MCkNi5gHlVWEWwsB8f+CZXSaGw
+         PDgzC2STL3ozkq20K43sckevmiU9+SuBnobbq8LWviqPqDhJZRoT+C6o2+2apY7sssiO
+         kSA11Uc6Tmixtkf702ck6E+ldcKcTCpNnzNEzF3P0+cfuzEKCt+pjUqT3e45jS5xjmnf
+         vXtA==
+X-Gm-Message-State: AFuF++l9UAgxbQGVe2Kp+pYP2JYQtGzS5iA12V3JvneaqrtEjA+3YgQz
+	ny4IBN4M4f5p2Xj1Wsxnx3o3zx33vi3iE4+UNgQpERg6q8a1+1Kct+4Bx4JCuflWIoTpjZ8Bhci
+	Tzoig/zM=
+X-Gm-Gg: AR+sD11mi2fBDnH6hVtfXnK5ggdBO0AKI3vcSh6sCaDJCggxvuwnJFC38sErqDxTAyK
+	i4pF8QkPRUcWNwhaK/gaWAyX4Pq3k9+xUZT3Mg9zDD/KKQo7GXjRy6YJHfKXKGBpsLL3wAP/rWr
+	6dUccdZJRgz/k2ICAXDh5mJw90L/zkppRSAZmR3+iop4Um+MP3UtaaB8qzFA4HuqsIOCjTxdSVq
+	EOMsauaAmlbYsz6W9qZHl3yQ1fyoGL9i3L2YGyi9TMdKWr4mwGIL4hihNca1OMQhpsmzySVEBQ/
+	o/rYhQZwEvGnuqkEIVO8077OadVFGT/Zvch0C2iejuTpcdfQzVbnhgbhMYbTCNNIaNsBCZBk0d1
+	GJ+TdohLnlbM5lP0F/3uxYjAu21pcFU5QL9wneumj+xrm4BvzdivweiypZUiKbCJv73cvYKk7Sj
+	gMOLcFXLtLfKfpCZGFej3Uc7yxF5j3/lvh3c9FcRDit6hie+CO1e6mUH8hoxSf6JfpwZMkVamaz
+	RdXcB4tqbO46WZqqA==
+X-Received: by 2002:a05:6808:250c:b0:495:ff85:d33d with SMTP id 5614622812f47-4b3982a99f4mr26356085b6e.12.1788217211268;
+        Mon, 31 Aug 2026 16:00:11 -0700 (PDT)
+Received: from [172.19.1.143] ([99.196.128.151])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b3a19949c1sm9650140b6e.10.2026.08.31.16.00.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Aug 2026 11:09:58 -0700 (PDT)
-Message-ID: <4388edf9-7248-48e6-876d-daf3bff39e7c@davidwei.uk>
-Date: Mon, 31 Aug 2026 11:09:57 -0700
+        Mon, 31 Aug 2026 16:00:10 -0700 (PDT)
+Message-ID: <626ca0d4-804f-43a0-bdce-d09f366b482e@kernel.dk>
+Date: Mon, 31 Aug 2026 17:00:00 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -69,42 +70,30 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v6 2/6] selftests: net: remove unused variable in
- process_recvzc()
-To: Juanlu Herrero <juanlu@fastmail.com>, netdev@vger.kernel.org
-Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
- pabeni@redhat.com, shuah@kernel.org
-References: <20260831-iou-zcrx-v6-0-02d1d012f0fd@fastmail.com>
- <20260831-iou-zcrx-v6-2-02d1d012f0fd@fastmail.com>
+Subject: Re: [RESEND PATCH liburing 2/2] test/iopoll: Fix clang CI build
+ failure
+To: Gabriel Krisman Bertazi <krisman@suse.de>
+Cc: io-uring@vger.kernel.org
+References: <20260831155222.121857-1-krisman@suse.de>
+ <20260831155222.121857-3-krisman@suse.de>
 Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20260831-iou-zcrx-v6-2-02d1d012f0fd@fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20260831155222.121857-3-krisman@suse.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 2026-08-31 10:34, Juanlu Herrero wrote:
-> Remove the unused `sqe` variable in preparation for the multiqueue rss
-> selftest changes to process_recvzc() in the following commits.
+On 8/31/26 9:52 AM, Gabriel Krisman Bertazi wrote:
+> Clang CI builds in liburing repo do -Werror,-Wunused-but-set-global when
+> building with clang.  commit c5eead26 ("test/iopoll: fix over-eager
+> no_hybrid check") left a lingering variable that was not used, and clang
+> got smart enough to find for it, causing the build to fail for every
+> commit ever since.
 > 
-> Assisted-by: Claude:claude-opus-4-8
-> Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
-> ---
->   tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 1 -
->   1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> index df6b62204343..c6dbd0ad5368 100644
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> @@ -269,7 +269,6 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
->   	unsigned rq_mask = rq_ring.ring_entries - 1;
->   	struct io_uring_zcrx_cqe *rcqe;
->   	struct io_uring_zcrx_rqe *rqe;
-> -	struct io_uring_sqe *sqe;
->   	uint64_t mask;
->   	char *data;
->   	ssize_t n;
-> 
+> https://github.com/axboe/liburing/actions/runs/30404555586/job/90427017716
+> https://github.com/axboe/liburing/actions/runs/30404555586/job/90427017742
 
-Reviewed-by: David Wei <dw@davidwei.uk>
+What's this against? Doesn't apply.
+
+-- 
+Jens Axboe
+
