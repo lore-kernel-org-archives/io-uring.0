@@ -1,67 +1,69 @@
-Received: from mail-pj1-f98.google.com (mail-pj1-f98.google.com [209.85.216.98])
+Received: from mail-qt1-f228.google.com (mail-qt1-f228.google.com [209.85.160.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053A930FF31
-	for <io-uring@vger.kernel.org>; Wed,  2 Sep 2026 22:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45092443AB4
+	for <io-uring@vger.kernel.org>; Wed,  2 Sep 2026 22:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788389840; cv=none; b=YIaNgCBkpa+Fnq8Lbw2KBmXMyH4WLyTsp88rnzC7U1BWUKKCUXils3XKwCNolDOpNhcur6jcLY7VLTuzIeivpgrIvf4PzJ56Ss02wT1mEJoVk5d2j9QhEnydKFzKAbmEuxQC8jEaqWznI0POzjWpiIJ8S4RiQHFlWPUUXTXvY+U=
+	t=1788389843; cv=none; b=MwmzigCwG/MQROb+G3VL0fQ2FKgxZIioNDkBNGS0ObEPbJFgxLH9UdzmcV5yVF6trwS8mEpPZBDoy7RdUj4iP+kjVSKeKnizwVbC29D+nmBh2+7ShQxs5WFF/5yUd4USLnoq6kdlTVMUSRBrzMnx04M0GnPKoVCjrVPN3ekknec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788389840; c=relaxed/simple;
-	bh=o1vlXcLANFy7ZzKd9CG3z8Rv1Gnisjb6ZUbt68YBI0M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u5X2pedQzkRFkEOmxPHT0Jf/LIBZtSTejplCmkFx7bMykDEL40MoOjEPcG+qqVMh9A9X6X/7fuWFDyrDykxWIj0MeNRw27UKCzLgWbDQoDnpOVGiSM1uj4JSE9wqirSoqV9AJfCxOrDjRhLQlGnXJSNTmvX6gbd3Xcmq3/IN2MQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=J9cUgpDH; arc=none smtp.client-ip=209.85.216.98
+	s=arc-20240116; t=1788389843; c=relaxed/simple;
+	bh=rtX2yJ0PMTizZR3crUtJBoZuw5bByxWSzKfV5xRCwj0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tc57hJw/CXXDS5JFKb+nGuX9gZKOpfoUJMpq8PfuGuK3y+V5uOK3AVT26lE94RMkmvbcO+j78WOR3XpXL9EqG+wb28VvV7ywh1MtOXb1Tk4o2gxV+TSTZ45MS0qXNxtgCi5YlAZGuvSOUwB4FsnXRHHVh7dx6XjGAYfCPfDteDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=cGBlCymC; arc=none smtp.client-ip=209.85.160.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="J9cUgpDH"
-Received: by mail-pj1-f98.google.com with SMTP id 98e67ed59e1d1-398a29be161so282201a91.1
-        for <io-uring@vger.kernel.org>; Wed, 02 Sep 2026 15:57:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="cGBlCymC"
+Received: by mail-qt1-f228.google.com with SMTP id d75a77b69052e-52d2dbc8c33so3282651cf.2
+        for <io-uring@vger.kernel.org>; Wed, 02 Sep 2026 15:57:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1788389834; x=1788994634; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TXye3s8M7BBJFOvpLi+6gbf2riGSXQocruinG92HPCg=;
-        b=J9cUgpDHOI/FpeFFt2dKxL1oyBGP8FA9jN2/7Zm9Chy534yn8+XfnFl5PQXD3eSOJx
-         q3G6+Be1xOa/okr2QjeJsRwENV5LXQbt5uGYH6qC3/va1Qqje6R0JNj1peeF5coC3WIL
-         2lnHfmN7f2UMmkfoCQOt4wKlOKcghCIIo3/swP7BtMpTu6Le3ggGWxMlP/rPgOBvBnom
-         SlOoNbx5nXDOeJQ9tRIcMPKtUOno25STK+nHPQWvnJfK96lj987pxEgJWOqvhJmv9K2m
-         9c8paPzcb3bmOqEGOUi7c1knEjMBaIQ+WM1YsbwIrzaTgmiwaMCx2KcZkwAtUnQfe0p3
-         JZng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788389834; x=1788994634;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=purestorage.com; s=google2022; t=1788389835; x=1788994635; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TXye3s8M7BBJFOvpLi+6gbf2riGSXQocruinG92HPCg=;
-        b=ZlCvr4RfY+IqU24RmCYPGSbNgVOt6cuEW/NjpYVS2ZHcZXfx1C5EP32U5aeUbXb4J8
-         2+8csAL0RColE669RsUIjh5jos4E2jL72Og8cDMPlaWpaSnhnKs1BVlAWvIY5Na4YjUk
-         2hBb7q3Ig0mUvEBnZWV6uOd1FZyC5gkuHlUg/t/DcBDH4dyZw86pS0yBUciAYox3bKQ4
-         grzN5eFnScJAS8OCVTFjDJ2g0tD4K0FjsE5Rx+tPoABVG/gzE08ZuOBGCuqVp2uLKQ2i
-         Sur0pnrvT0OJ/BVb9xjcsuXNMmuI24vhto7LQcNTcAJHghxxHipQuMS6UEgMmsHbFwW5
-         J2uA==
-X-Forwarded-Encrypted: i=1; AKwUvByBKcx3wQG7vYzLto1r4QpNl1WxtJUED3PnUEI6Skl95UUVrm7SALFpBWwTS3ZHM9m2jtsYZMqEFw==@vger.kernel.org
-X-Gm-Message-State: AFuF++mYjsOQcpjUcC/u2vtAW4a5JL3o+UohZt9NfP5pYrHgFD4jis1D
-	4mtoRmX+6AfyY1ZDczRe1plN5hIiLS8+ET4En01Ed2/9YDq8Xwci/NpRESXuA9Zd0m7M37CoPjp
-	xXOihviW/ce73M5DcPQIchTozLqSUcufCoGqf
-X-Gm-Gg: AYBFou1xgRSzmWhMnSMWdZVyt0T9YJlNZodGS7p85ZwSkUqSXjFyWwfq9VJBMJEV4Gx
-	crIViRrtGaGF2OsmCIfys3bFSVKdoaata/5he35k+yLFOO/bUEFRc/t8jevb4Nswn4jkARy4QjV
-	4OTo+JBhIvZu20qK48Nuq2SgCya+HaKBDJu9OxpDYvm06LHAQqUeitkb8g4Z3K5EYMb8gXZmCZS
-	EDCYoWeZaMfU6CFRSpPdORc7+EVMl9Mc/9+CzIDwP6vwW2WTyeYDlhJGIPls69l0a1OdBFOLati
-	VQ5RHgMz2GBlimBsjWiKydxXOUUgm3KWao5EwH0skxOyi8PP7LZbp0by+rKZnoN8jDuYm7kXY2r
-	5EidyWgePIGSI9UJuwTzMLQQHeqPxRIkW
-X-Received: by 2002:a17:90b:39ae:b0:381:77cd:38ca with SMTP id 98e67ed59e1d1-39aee1b3eebmr7025118a91.4.1788389834421;
+        bh=KUYT2j/8GNxf6la1oNmocjOMbToIkSTfNNWKQ6vs8go=;
+        b=cGBlCymClNcaO7J0TSkxvoHABuXK4GSb37DKMVkuH6MGrCM1cu6GgHO9q3mno1OE41
+         rLb7Wvhwi3pZHvYqJSaNi8roWJfvkQnBR0VldC8gZS9CHP0yClqTy5i8cqoHytkcvrfb
+         BWMXJezyDJwWeQrePMVKaw5/515/Ar5yZofmP//Zsb0oakdFRLEA+VtrR8k0tw830z1+
+         vKV51v6Eu/0jbRRFB0tkK7VdzbnFFx006yUj72GHPEV3QHUhn18TOyR6280gwXtkv2XH
+         IFNFMnRkp+NSbFTSlFeneA7KLVirakbEg8IZNoMdy56v8cF+gMGWnIFo7g1lOXBQd841
+         XbYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788389835; x=1788994635;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KUYT2j/8GNxf6la1oNmocjOMbToIkSTfNNWKQ6vs8go=;
+        b=l61/NvfLDX6uvoGbGmDQUfOCM4BDhML2LjjXN9Tv9WPPGcrZfaWR46TK4HV29sKNTt
+         c7weLT4lzEL9wN3quxQ8AKof8XgZ5/RrRAuS6mlJAEn+0bxzjEls50rF3yOfLz6cbTEr
+         RjHwB2DnmK2z0JTEOU375Xlq3JV2Yv2HVHZ7xeeA80GN29SOQgtu/gN15m9K3u8W9s7T
+         5h8xLpfaJUvZ2AbNNajOEUiOxreQjhsijawkSiqziZzzzfk93IoIQ3h8ON+PcA5Ql6jA
+         SE0Rfl/QXFTdr6SxwjYtWSAX/Cmyz0vNn/p/3JxRd+Bb4HD2wudqAKWIoLAf+KeIaXkE
+         Tjkw==
+X-Forwarded-Encrypted: i=1; AKwUvBxthAcxDSpEET1IK+c+lenv7x5nW4Aw3wx3IKD41paKYPwFmk6hXQ6TEO5/tazXygac0LVN4BfJdg==@vger.kernel.org
+X-Gm-Message-State: AFuF++mkWdwQW0EKWa9wZzR8Y3pkKg7uufs+aLPpcDR4VS79fHnIHP/5
+	sw+9P8Dezn+Jz4d9TfDpODSWex4n/Gcq1/iernotpPVXRDsVQwpOlpV8qne7PUcCp2ewlcBbPHd
+	IAbfWdFwOA1UZGlK7CShakr28UJcIPqNibuLvbgSCWGZ6/00gkR/3
+X-Gm-Gg: AYBFou31R3V34W4lngUWTYrGdom0IsOyJHHgF2R4D0O+cdknFWT6XSDEfgN9m0gd7si
+	R0nMapgAsfr/TEN7ErxlUHEwcpPPtIjZvYHMQdqhJRvVtdJi17y4lo2SO+BAWk7bpeSd5cCLBqo
+	sHQT78rFQGJ5KNZV/bthuaGvtnNB7P+UXvMqTxZxaQFYbDdvITQlhIr5y95YIjWlFwf76y1s/Nv
+	Z3CdffG7xFQG2FqwbAjofHwgoge+XyXdwnhEsj8MXTWE984HSCOiqJ51MwNtRFt8nT/evX7Ku2Z
+	U0kEfzyQPVJyRsa2MHspdavs1GEESvqrP4Gx3/HF2qxxwl8jinwOcPVLsI8KgglTPI7+Y+U6uKc
+	OMdhN/DqZC1HyQ+4s
+X-Received: by 2002:a05:622a:283:b0:52b:4ec6:52c1 with SMTP id d75a77b69052e-53036ce96afmr58594011cf.3.1788389834170;
         Wed, 02 Sep 2026 15:57:14 -0700 (PDT)
-Received: from c7-smtp-2026.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-39b0e6550bbsm187875a91.7.2026.09.02.15.57.13
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id d75a77b69052e-5303319dea6sm377761cf.19.2026.09.02.15.57.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 02 Sep 2026 15:57:14 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (bond0.slc5-n17m28-k8s.dev.purestorage.com [IPv6:2620:125:9025:20::a31:41f])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 564F54001C;
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 7C5CD40420;
 	Wed,  2 Sep 2026 16:57:13 -0600 (MDT)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 46D07E40404; Wed,  2 Sep 2026 16:57:13 -0600 (MDT)
+	id 70CBDE40404; Wed,  2 Sep 2026 16:57:13 -0600 (MDT)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Keith Busch <kbusch@kernel.org>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -72,10 +74,12 @@ Cc: Joanne Koong <joannelkoong@gmail.com>,
 	io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v2 0/2] io_uring passthru: set result on blk-mq request completion
-Date: Wed,  2 Sep 2026 16:57:06 -0600
-Message-ID: <20260902225708.2379840-1-csander@purestorage.com>
+Subject: [PATCH v2 1/2] io_uring/cmd: split io_uring_cmd_set_res() from io_uring_cmd_done()
+Date: Wed,  2 Sep 2026 16:57:07 -0600
+Message-ID: <20260902225708.2379840-2-csander@purestorage.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260902225708.2379840-1-csander@purestorage.com>
+References: <20260902225708.2379840-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -84,31 +88,154 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-io_uring NVMe passthru currently receives the NVMe status and result in
-the blk-mq request completion callback nvme_uring_cmd_end_io() but
-doesn't post the io_uring CQE until the io_uring task work callback
-nvme_uring_task_cb(). The status and result must be plumbed through
-struct nvme_uring_cmd_pdu, taking up 16 bytes of the 32 available.
+In preparation for setting the io_uring NVMe passthru CQE results from
+the blk-mq request completion rather than the task work callback, split
+out functions io_uring_cmd_set_res{,32}() from __io_uring_cmd_done().
+io_uring_cmd_done{,32}() now call io_uring_cmd_set_res{,32}() and then
+__io_uring_cmd_done(). This allows __io_uring_cmd_done() to be made
+CQE-size-agnostic, with 3 fewer arguments.
 
-Store the status and result on the io_uring request in
-nvme_uring_cmd_end_io() instead of nvme_uring_task_cb() so it doesn't
-need to be passed through struct nvme_uring_cmd_pdu.
-
-v2:
-- Keep io_uring_cmd_done{,32}() wrappers to reduce changes in uring_cmd
-  implementations (Joanne)
-
-v1: https://lore.kernel.org/io-uring/20260827185722.3234622-1-csander@purestorage.com/
-
-Caleb Sander Mateos (2):
-  io_uring/cmd: split io_uring_cmd_set_res() from io_uring_cmd_done()
-  nvme/ioctl: call io_uring_cmd_set_res32() in ->end_io()
-
- drivers/nvme/host/ioctl.c    | 19 +++++++++----------
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+---
  include/linux/io_uring/cmd.h | 23 +++++++++++++++++------
  io_uring/uring_cmd.c         | 33 ++++++++++++++++++---------------
- 3 files changed, 44 insertions(+), 31 deletions(-)
+ 2 files changed, 35 insertions(+), 21 deletions(-)
 
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index 331dcbefe72f..67f2ef700c43 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -50,19 +50,21 @@ int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 				  const struct iovec __user *uvec,
+ 				  size_t uvec_segs,
+ 				  int ddir, struct iov_iter *iter,
+ 				  unsigned issue_flags);
+ 
++void io_uring_cmd_set_res(struct io_uring_cmd *, s32 ret);
++void io_uring_cmd_set_res32(struct io_uring_cmd *, s32 ret, u64 res2);
++
+ /*
+  * Completes the request, i.e. posts an io_uring CQE and deallocates @ioucmd
+  * and the corresponding io_uring request.
+  *
+  * Note: the caller should never hard code @issue_flags and is only allowed
+  * to pass the mask provided by the core io_uring code.
+  */
+-void __io_uring_cmd_done(struct io_uring_cmd *cmd, s32 ret, u64 res2,
+-			 unsigned issue_flags, bool is_cqe32);
++void __io_uring_cmd_done(struct io_uring_cmd *, unsigned issue_flags);
+ 
+ void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+ 			    io_req_tw_func_t task_work_cb,
+ 			    unsigned flags);
+ 
+@@ -105,12 +107,19 @@ static inline int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 						int ddir, struct iov_iter *iter,
+ 						unsigned issue_flags)
+ {
+ 	return -EOPNOTSUPP;
+ }
+-static inline void __io_uring_cmd_done(struct io_uring_cmd *cmd, s32 ret,
+-		u64 ret2, unsigned issue_flags, bool is_cqe32)
++static inline void io_uring_cmd_set_res(struct io_uring_cmd *cmd, s32 ret)
++{
++}
++static inline void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s32 ret,
++					  u64 res2)
++{
++}
++static inline void __io_uring_cmd_done(struct io_uring_cmd *cmd,
++				       unsigned issue_flags)
+ {
+ }
+ static inline void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+ 			    io_req_tw_func_t task_work_cb, unsigned flags)
+ {
+@@ -171,17 +180,19 @@ static inline void *io_uring_cmd_ctx_handle(struct io_uring_cmd *cmd)
+ }
+ 
+ static inline void io_uring_cmd_done(struct io_uring_cmd *ioucmd, s32 ret,
+ 				     unsigned issue_flags)
+ {
+-	return __io_uring_cmd_done(ioucmd, ret, 0, issue_flags, false);
++	io_uring_cmd_set_res(ioucmd, ret);
++	__io_uring_cmd_done(ioucmd, issue_flags);
+ }
+ 
+ static inline void io_uring_cmd_done32(struct io_uring_cmd *ioucmd, s32 ret,
+ 				       u64 res2, unsigned issue_flags)
+ {
+-	return __io_uring_cmd_done(ioucmd, ret, res2, issue_flags, true);
++	io_uring_cmd_set_res32(ioucmd, ret, res2);
++	__io_uring_cmd_done(ioucmd, issue_flags);
+ }
+ 
+ int io_buffer_register_bvec(struct io_uring_cmd *cmd, struct request *rq,
+ 			    void (*release)(void *), unsigned int index,
+ 			    unsigned int issue_flags);
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 726a659f38c3..917b32a921e6 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -136,40 +136,43 @@ void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+ 	req->io_task_work.func = task_work_cb;
+ 	__io_req_task_work_add(req, flags);
+ }
+ EXPORT_SYMBOL_GPL(__io_uring_cmd_do_in_task);
+ 
+-static inline void io_req_set_cqe32_extra(struct io_kiocb *req,
+-					  u64 extra1, u64 extra2)
++void io_uring_cmd_set_res(struct io_uring_cmd *cmd, s32 ret)
+ {
+-	req->big_cqe.extra1 = extra1;
+-	req->big_cqe.extra2 = extra2;
++	struct io_kiocb *req = cmd_to_io_kiocb(cmd);
++
++	if (ret < 0)
++		req_set_fail(req);
++	io_req_set_res(req, ret, 0);
+ }
++EXPORT_SYMBOL_GPL(io_uring_cmd_set_res);
++
++void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s32 ret, u64 res2)
++{
++	struct io_kiocb *req = cmd_to_io_kiocb(cmd);
++
++	if (ret < 0)
++		req_set_fail(req);
++	io_req_set_res32(req, ret, 0, res2, 0);
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_set_res32);
+ 
+ /*
+  * Called by consumers of io_uring_cmd, if they originally returned
+  * -EIOCBQUEUED upon receiving the command.
+  */
+-void __io_uring_cmd_done(struct io_uring_cmd *ioucmd, s32 ret, u64 res2,
+-		       unsigned issue_flags, bool is_cqe32)
++void __io_uring_cmd_done(struct io_uring_cmd *ioucmd, unsigned issue_flags)
+ {
+ 	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
+ 
+ 	if (WARN_ON_ONCE(req->flags & REQ_F_APOLL_MULTISHOT))
+ 		return;
+ 
+ 	io_uring_cmd_del_cancelable(ioucmd, issue_flags);
+ 
+-	if (ret < 0)
+-		req_set_fail(req);
+-
+-	io_req_set_res(req, ret, 0);
+-	if (is_cqe32) {
+-		if (req->ctx->flags & IORING_SETUP_CQE_MIXED)
+-			req->cqe.flags |= IORING_CQE_F_32;
+-		io_req_set_cqe32_extra(req, res2, 0);
+-	}
+ 	io_req_uring_cleanup(req, issue_flags);
+ 	if (req->flags & REQ_F_IOPOLL) {
+ 		/* order with io_do_iopoll() checking ->iopoll_completed */
+ 		smp_store_release(&req->iopoll_completed, 1);
+ 	} else if (issue_flags & IO_URING_F_COMPLETE_DEFER) {
 -- 
 2.55.0
 
