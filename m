@@ -1,169 +1,265 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB75E4195C8;
-	Wed,  2 Sep 2026 23:01:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F3243F8D7;
+	Wed,  2 Sep 2026 23:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788390075; cv=none; b=dxZbziUjEjvGG9KR6tLtlqx5+gECFAizHPrUipiHr+7FDOWrgDK17GJY0PXrgg642LyZo7J/czw8mdUlpYigsOwwnzAc0RaqE0+9x5wZR5XA5EkWCZ/6uTJLsDCvXs3oIyv73lRLRDQFUgGrYo0HgD1Gdec0G5H9lJntSah8f4A=
+	t=1788392306; cv=none; b=rnNxL13FaCSNIYrqtqAOybR/NSl6XPqgRGHm0Bb/wasOMip/yWc9wjhWn4mDfAPXHydVRX5AwoinlFPpAr2t4QEGx8DzKrs5xXxp8oXTAnblYajUrDOXhIJjVmPT6bOjSq9q6mQQLj2/nusHBiYk7ZrafrIQ60uOGmF88MrgQbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788390075; c=relaxed/simple;
-	bh=Jb726CQwB7FUTQYyG3EUVFK9PY2m2B5Jdn2aq4KroFk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qgr89/dVhnT9VWhKIPuJr5BKUh7aCP59nYyPK7zt4+pjT1LxbXQ2v4DvSyOW6aYYAbiVaU2FkQ5YVgYKVjVoDss8l5mYH4DYE/rdMZCVfcwUDQKUnPZGeO7yM2UIspsGUQ4CbhGGg+KmxYecNyUU+HGn9pceS1xqp01NcUulPTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hepmowgQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=lAT/FCRu; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=U1f3QS/S; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=CVSoFHV4; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1788392306; c=relaxed/simple;
+	bh=3gEZG7ZyjjTaRhEhht1pVtnGcwv4aePP9Nw7+rrR+eA=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gzJLBMAZiOhsGaBcLRL2btTpR0tpJ1QWCyySkgNjaHqjysAJTX7s1NDrpSpdXduqWcd/z2HOXnXrCAoW15c1r43aCQm8/rRwODKLIiaADt0IlF5WIPGABiPygBu2U67SQhuBzput+IG3zd/GZvIuhBptdGXwEdDYZ88zyP3Xz4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C7begmVa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hepmowgQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="lAT/FCRu";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="U1f3QS/S";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="CVSoFHV4"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 070C521D82;
-	Wed,  2 Sep 2026 23:00:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788390061; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qysi34Kn5KsSAFGVHgjIJNUVTwBXBlCr+X9G2rei06M=;
-	b=hepmowgQgl6WeDaL+KRiyWuXMBfF5kFPyU37ToKAi38eSvINrECmu42b34I/S40AEm4wSn
-	mDgeIiqlXDecaAWbgC2nTofF5YyOF1UWBvvTHWnGgloKefmfdwFXWsDVVXD/3xAya8nYX9
-	oRBhGqGBAgshfPy7Evt3DYq1vdtekRg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788390061;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qysi34Kn5KsSAFGVHgjIJNUVTwBXBlCr+X9G2rei06M=;
-	b=lAT/FCRu9gBejoc9QDABYbgVJOZEee6fU66yQDcvm5GQZCc5sleuYt2w0xl64j67Wb8U1Q
-	FnK8su1rQO6qBiBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788390057; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qysi34Kn5KsSAFGVHgjIJNUVTwBXBlCr+X9G2rei06M=;
-	b=U1f3QS/S14JHKaRulrGlQCLYshIA5CvWHOzUAdj3UJZva8Y4sr2YJLzRm3xAOuRrgGJNiN
-	5yNqMF9lAX1RWsyp4hzzA6I8bgg2yTEF0PynVTUDzsBAg02SAGu430gd8RUF9/hPxWcyMY
-	JbCuxVxFJFwwkWt6n1fF4tzPFCMhEj0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788390057;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qysi34Kn5KsSAFGVHgjIJNUVTwBXBlCr+X9G2rei06M=;
-	b=CVSoFHV42XULbzjdX3nyhWjzu22VjGhNJna0U8U9Y9Fd0RHlX7SjUkFIOPJXOUkax0Unyi
-	qSOriFaBrZb1mHDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 44E7D136E6;
-	Wed,  2 Sep 2026 23:00:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id XE07OaeqmGquCgAAD6G6ig
-	(envelope-from <krisman@suse.de>); Wed, 02 Sep 2026 23:00:55 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	Gabriel Krisman Bertazi <krisman@suse.de>,
-	stable@vger.kernel.org
-Subject: [PATCH 1/2] io_uring/net: let io_recv_buf_select return the length of the buffer region
-Date: Wed,  2 Sep 2026 20:00:40 -0300
-Message-ID: <20260902230041.1320658-2-krisman@suse.de>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260902230041.1320658-1-krisman@suse.de>
-References: <20260902230041.1320658-1-krisman@suse.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C7begmVa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EAF91F000E9;
+	Wed,  2 Sep 2026 23:38:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788392296;
+	bh=9y7HvndFoQNLpPcVQzwylt2nEHOL61PE4Kqk8A9XuNg=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=C7begmVa2yJ3fFp2/Mm6+fGI4jv9et0W1GApkBMvnPPZHv1+ssVDsEHYcJwZT6qMk
+	 ZnAper7jBIAxVwkOpPHFhzcPNcmTCAmcnMNaYRUWznAn2Wvi8GWEjfpCNMTjkUXPHc
+	 KMZVfK1W5RZjO3ofdtmoU53ntVdBKtUuTQezz8b6llS4KyKdxsJQYKkDNi2dKaPXWg
+	 hKEMrHefPu01wdBdkZkxM3LXVDvh4RNwc6s59rRMUH2JK3jNtksYwoFZix+hx9bLJg
+	 5OUY3QkUQe2wFZQcCSWPXmiPj6IoKb5EO46ZJ3mXoD/hO/+tJsbco1Nt6FNIEzh+vy
+	 IosYCEYC5qGaA==
+Subject: Re: [net-next,v6,4/6] selftests: net: add multithread client support
+ to iou-zcrx
+From: netdev-bot+sashiko@kernel.org
+To: juanlu@fastmail.com
+Cc: dw@davidwei.uk, netdev@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kuba@kernel.org, asml.silence@gmail.com, pabeni@redhat.com, shuah@kernel.org
+Date: Wed, 02 Sep 2026 23:38:15 +0000
+Message-ID: <178839229576.3394541.5652719733200698350@kernel.org>
+In-Reply-To: <20260831-iou-zcrx-v6-4-02d1d012f0fd@fastmail.com>
+References: <20260831-iou-zcrx-v6-4-02d1d012f0fd@fastmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Score: -6.80
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-6.80 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.997];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_TLS_ALL(0.00)[]
 
-In preparation to using this field as an upper limit to truncation,
-return the size of the allocated region.
+Thank you for your contribution! Sashiko AI review found 4 potential
+issue(s) to consider:
 
-Fixes: ae98dbf43d75 ("io_uring/kbuf: add support for incremental buffer consumption")
-Cc: stable@vger.kernel.org
-Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
----
- io_uring/net.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+Critical: 0 · High: 0 · Medium: 2 (1) · Low: 2
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index fbe719d86c46..647156c9331a 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -1108,6 +1108,7 @@ static int io_recv_buf_select(struct io_kiocb *req, struct io_async_msghdr *kmsg
- 			      struct io_br_sel *sel, unsigned int issue_flags)
- {
- 	struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-+	size_t len;
- 	int ret;
- 
- 	/*
-@@ -1153,13 +1154,14 @@ static int io_recv_buf_select(struct io_kiocb *req, struct io_async_msghdr *kmsg
- 		/* special case 1 vec, can be a fast path */
- 		if (ret == 1) {
- 			sr->buf = arg.iovs[0].iov_base;
--			sr->len = arg.iovs[0].iov_len;
-+			len = sr->len = arg.iovs[0].iov_len;
- 			goto map_ubuf;
- 		}
- 		iov_iter_init(&kmsg->msg.msg_iter, ITER_DEST, arg.iovs, ret,
--				arg.out_len);
-+			      arg.out_len);
-+		len = arg.out_len;
- 	} else {
--		size_t len = sel->val;
-+		len = sel->val;
- 
- 		*sel = io_buffer_select(req, &len, sr->buf_group, issue_flags);
- 		if (!sel->addr)
-@@ -1173,7 +1175,7 @@ static int io_recv_buf_select(struct io_kiocb *req, struct io_async_msghdr *kmsg
- 			return ret;
- 	}
- 
--	return 0;
-+	return len;
- }
- 
- int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+- [Medium] run_client() creates cfg_num_threads * cfg_num_threads worker
+  threads/TCP connections instead of cfg_num_threads, contradicting both…
+- [Medium] At this commit the multi-connection client has no counterpart
+  on the receive side of the same binary: run_server() (iou-zcrx.c:339)…
+- [Low] The new -t option is parsed with strtoul() into the signed int
+  cfg_num_threads (iou-zcrx.c:499) with no syntax, range, or non-zero…
+- [Low] At this commit no case in iou-zcrx.py (the only in-tree consumer
+  of the iou-zcrx binary) passes -t, so the newly added multithreaded…
+
+Pre-existing issues:
+- [Medium] client_worker() (iou-zcrx.c:384) walks `payload[sent]` for
+  cfg_send_size bytes, but payload is allocated with a fixed size of…
+
+--
+
+selftests: net: add multithread client support to iou-zcrx
+
+This adds pthreads to the iou-zcrx client so several connections can be
+made at once, and a new -t option to pick how many threads are used
+(default 1).  The Makefile now links iou-zcrx against -lpthread.
+
+A few questions about the new client code below.
+
+> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> index 9b62fd0703e61..f793a6c04e412 100644
+> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+
+[ ... ]
+
+> @@ -85,6 +86,7 @@ static int cfg_send_size = SEND_SIZE;
+>  static struct sockaddr_in6 cfg_addr;
+>  static unsigned int cfg_rx_buf_len;
+>  static bool cfg_dry_run;
+> +static int cfg_num_threads = 1;
+>  
+>  static char *payload;
+>  
+> @@ -379,7 +381,7 @@ static void run_server(void)
+>  		error(1, 0, "test failed\n");
+>  }
+>  
+> -static void run_client(void)
+> +static void *client_worker(void *arg)
+>  {
+>  	ssize_t to_send = cfg_send_size;
+>  	ssize_t sent = 0;
+
+[Severity: Medium]
+This is a pre-existing issue and is not introduced by this patch, since the
+code was only renamed from run_client() to client_worker() here, but can
+client_worker() read past the end of payload[]?
+
+payload is allocated with a fixed size in main():
+
+	if (posix_memalign((void **)&payload, page_size, SEND_SIZE))
+
+while the loop in client_worker() walks cfg_send_size bytes:
+
+	ssize_t to_send = cfg_send_size;
+	...
+	while (to_send) {
+		void *src = &payload[sent];
+
+		chunk = min_t(ssize_t, cfg_payload_len, to_send);
+		res = send(fd, src, chunk, 0);
+
+and cfg_send_size comes straight from -z with no comparison against
+SEND_SIZE:
+
+		case 'z':
+			cfg_send_size = strtoul(optarg, NULL, 0);
+
+With -z larger than SEND_SIZE (512 * 4096), does &payload[sent] end up past
+the allocation, and are those out-of-bounds bytes then handed to send()?
+process_recvzc() looks to have the mirror-image indexing on
+payload[ctx->received + i].  No in-tree caller currently passes such a
+value (iou-zcrx.py uses -z 16384), and this patch only increases the number
+of threads that would perform the same read.
+
+> @@ -405,12 +407,36 @@ static void run_client(void)
+>  	}
+>  
+>  	close(fd);
+> +	return NULL;
+> +}
+> +
+> +static void run_client(void)
+> +{
+> +	int total_conns = cfg_num_threads * cfg_num_threads;
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+[Severity: Medium]
+Is squaring the thread count here intentional?  The changelog says:
+
+    Introduce the -t option to control the number of threads (default 1)
+
+and the usage string added by this patch says -t<num_threads>, but
+total_conns is cfg_num_threads * cfg_num_threads and is then used as the
+calloc() element count and as the bound of both the pthread_create() and
+pthread_join() loops in run_client().
+
+So -t 2 gives 4 threads and 4 connections, -t 4 gives 16, and -t 8 gives
+64; only the default of 1 matches the documented meaning.  Each worker
+opens its own socket, so thread stacks and file descriptors also grow
+quadratically with a value the help text presents as a plain thread count.
+
+There is no comment explaining the squaring, and the later server patch in
+this series treats -t as a literal thread/queue count:
+
+	ctxs = calloc(cfg_num_threads, sizeof(*ctxs));
+	...
+	pthread_barrier_init(&setup_done, NULL, cfg_num_threads + 1);
+
+At the end of the series (4a6d87a68298) run_client() still has
+total_conns = cfg_num_threads * cfg_num_threads and the usage string still
+reads -t<num_threads>, so the two halves of the same option keep disagreeing.
+Could the squaring be dropped, or the option documented as the per-side
+value it actually is?
+
+> +	pthread_t *threads;
+> +	int i, ret;
+> +
+> +	threads = calloc(total_conns, sizeof(*threads));
+> +	if (!threads)
+> +		error(1, 0, "calloc()");
+> +
+> +	for (i = 0; i < total_conns; i++) {
+> +		ret = pthread_create(&threads[i], NULL, client_worker, NULL);
+> +		if (ret)
+> +			error(1, ret, "pthread_create()");
+> +	}
+
+[Severity: Medium]
+At this commit, can the server side of the same binary service more than
+one of these connections?
+
+run_server() builds a single struct thread_ctx and posts exactly one accept:
+
+	add_accept(&ctx, fd);
+
+and process_accept() aborts on the second completion:
+
+	if (ctx->connfd)
+		error(1, 0, "Unexpected second connection");
+
+Verification also uses a single ctx->received cursor into the global
+payload, which only tracks one stream.  With -t greater than 1, do the
+extra connections sit in the backlog while the server exits on the first
+stream's EOF, leaving the remaining client_worker() threads to fail in
+send() or block until the server timeout?
+
+The receive side gains multi-connection support in the next patch of this
+series ("selftests: net: add multithread server support to iou-zcrx"),
+where run_server() spawns cfg_num_threads workers, accepts until
+accepted < total_conns, dispatches each connfd into ctxs[idx].connfds[],
+and drops the "Unexpected second connection" abort.  Would it be worth
+ordering the server patch first so the tree is never in a state where
+-t > 1 cannot complete?
+
+> +
+> +	for (i = 0; i < total_conns; i++)
+> +		pthread_join(threads[i], NULL);
+> +
+> +	free(threads);
+>  }
+
+[Severity: Low]
+This isn't a bug, but at this commit no case in iou-zcrx.py passes -t, so
+the new pthread_create()/pthread_join() loops in run_client() only ever run
+with the default cfg_num_threads == 1 and the multithreaded path is not
+exercised by the shipped suite.  Coverage arrives later in the series: at
+4a6d87a68298 test_zcrx builds both command lines with -t {cfg.num_threads},
+and the rss_multiqueue variant sets cfg.num_threads = 2.
+
+>  
+>  static void usage(const char *filepath)
+>  {
+>  	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
+> -		    "-l<payload_size> -i<ifname> -q<rxq_id>", filepath);
+> +		    "-l<payload_size> -i<ifname> -q<rxq_id> -t<num_threads>",
+> +		    filepath);
+>  }
+
+[ ... ]
+
+> @@ -469,6 +495,9 @@ static void parse_opts(int argc, char **argv)
+>  		case 'd':
+>  			cfg_dry_run = true;
+>  			break;
+> +		case 't':
+> +			cfg_num_threads = strtoul(optarg, NULL, 0);
+> +			break;
+
+[Severity: Low]
+This isn't a bug, but -t is stored with strtoul() into the signed int
+cfg_num_threads with no non-zero or range check, and run_client() then
+evaluates cfg_num_threads * cfg_num_threads in int arithmetic before using
+it as a calloc() count and loop bound.
+
+-t 0 and -t 65536 (65536 * 65536 wraps to 0 in int) both create no threads
+and let the client exit successfully without sending anything, -t 4294967295
+narrows to -1, values at or above 46341 overflow the signed multiplication,
+and -t 1000 asks for a million threads.
+
+Note the rest of the file parses its numeric options the same unvalidated
+way (-p, -l, -q, -o, -z, -x), so a small sanity check on -t alone would
+still be an improvement if the squaring stays.
+
 -- 
-2.55.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260831-iou-zcrx-v6-0-02d1d012f0fd%40fastmail.com
