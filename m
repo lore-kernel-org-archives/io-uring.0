@@ -1,75 +1,75 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528BF4B0C9A
-	for <io-uring@vger.kernel.org>; Wed,  2 Sep 2026 22:41:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE75F4AFE09
+	for <io-uring@vger.kernel.org>; Wed,  2 Sep 2026 22:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788388895; cv=none; b=TKSkGWFuzQQt4xq+TNjKpoMPQSK1SYL0ClyVrraPZMow7kAgDN01yvVeSBLowS4R+geHz+xPTvq1MAKhurR8+DmDkLvfA9J/XH5di9JLCWL36QqD7QNvyCxso1TJBicg7dMoM8syU7mx3Wyi0i6dDgUJQkOasRKvTTls9R0JbOg=
+	t=1788388922; cv=none; b=g70mHmYubQLTY2nm6rCIbpJkncYA13fmglEqc+HQKILYP0zL0Poh8jXI+iZVkhFvCsRSzVV9HG5Q+jo4J8hc8BBlqugjX8F/gTQMc/9un78u0mOtJOTAVyPJkbrClK9VpDN1c4iX26T/g9RXbW8rSwLXmXTP2pDDdcYx8Bhn9A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788388895; c=relaxed/simple;
-	bh=XUOAMYkxnKfwQcAn7EQZZXUoyiwi/O/pJRIyIhXSWys=;
+	s=arc-20240116; t=1788388922; c=relaxed/simple;
+	bh=J8UBHzfFwYm3BVIYlynoze/y6tinKIDzOO8DXUOUzjw=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Eu7Mc3yecELCPs3MBTLaNRZxrkg6fvgQNzxyPcZSCHq4QZnQCw2jJ8tXbH7ObkmZ+lnT8GFulVUWrJm1HTZyGF+OxLqCgy9z+UNrK/X4WGvsX+PYTKAbl35aMcfu+2UN8K8mXeYGXUCvP4v17WC1QYbz2r8d+eih1oPJeDVg8LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=pfSA8b20; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hTaVQCRn; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=dhitXCHn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=durtZfBY; arc=none smtp.client-ip=195.135.223.130
+	 MIME-Version:Content-Type; b=kK8jaaz9hsjLc5vws2BDiEU4zEl8mHWSxDmB14Wm+k61nHnVLp5wga+3jooPdnUxZOHDDxu7yOPXBtl+CYMMkhaXi47uFpynndEL5doZVbz4Ihu3/f+9dqANxX4BYHyJa0p/Ve1DxEauC82RJ1zI0H9XLgk8KkcFqNVAidefQ0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=PyakWI26; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pBkaaihM; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=losQW4fF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rgCsVabc; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="pfSA8b20";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hTaVQCRn";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="dhitXCHn";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="durtZfBY"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PyakWI26";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pBkaaihM";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="losQW4fF";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rgCsVabc"
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7E70121D62;
-	Wed,  2 Sep 2026 22:41:20 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 1A4A91FAB1;
+	Wed,  2 Sep 2026 22:41:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788388884; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1788388905; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vZAQLpEqi5pK7+tx+m3Nmv84bnUTO8ibxpjlJsEANeE=;
-	b=pfSA8b20Ke9LzfL5BArjTSNz40qdVLRvNmMmyhMoMOb9Q24cUHhLYL7lMjo5g0WLCWFxNB
-	eCQLOyB8ISwuEclCXCrVWCIhhCNvgtM2HNc4lGo4qoTOncFYn665B2ihkLpEhHH0AcH1Kh
-	JpsMg98O8tR0LYxvtuHrqPpR01Ll9pE=
+	bh=G4BXTeuwXuB50gyleE+gvE5rU5OPpGWaSYOx/TRoMO4=;
+	b=PyakWI26AzWlJNtcHn+cNTlaR+kO6JdTgEGpOSUjJXXg9Z0sXoYqLruU0sGPLe4s0YolUV
+	A5fC9onye5W+AwpXfHcM/HIICYGOB1AxVazwwFa4+O7g4GbHEHi3ygdqirm4jHSl4qNBqw
+	AZbn4O6b2joG0XZ5pbfMUUvnrp1wgVM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788388884;
+	s=susede2_ed25519; t=1788388905;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vZAQLpEqi5pK7+tx+m3Nmv84bnUTO8ibxpjlJsEANeE=;
-	b=hTaVQCRn7TADvb1HF3OWRCypFuvV3ejLo8MOB6YgZAyTjL7fH0QJY1s7EqwdNqKHxizSGc
-	ob3za2p5mobX/gDA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=dhitXCHn;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=durtZfBY
+	bh=G4BXTeuwXuB50gyleE+gvE5rU5OPpGWaSYOx/TRoMO4=;
+	b=pBkaaihMFLp+/bGuDuSG8oYXz2o9VI86Qpced2DrmmpYOIqAAo7Jn6EZf3eti07U38OHyl
+	tbLxLSj1b2LW2fBg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=losQW4fF;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=rgCsVabc
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788388880; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1788388901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vZAQLpEqi5pK7+tx+m3Nmv84bnUTO8ibxpjlJsEANeE=;
-	b=dhitXCHnYwuGXRqPTMgY8A25w+h16+nddINt6W9POFtnC6aUi94E50uskoScG4AWtlVI8v
-	+XaeKYthS5QHXsqfcvAizcXbDkjQmT7zVD24QPenoh3+ldIXIQWPqQc8N4B7ExJ1zUixTt
-	dcKVqGw4gEbiS4kZfHS0EAS1hz/CI8Q=
+	bh=G4BXTeuwXuB50gyleE+gvE5rU5OPpGWaSYOx/TRoMO4=;
+	b=losQW4fFVOdP9pv86v3JDHAkX9T8cIsASeZASy7LIM+fD2aMPG4KnryfGm36M0mePfKB4L
+	BwY2iwtTzZBZ0s9lGzeIw4e2CXXhgHpTXBtN+jCi9xamXsA+bx30ExlmcD1eEQUsvbe72G
+	R1+5pMLbn81ShoMyHhNamfU4RmDiGE0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788388880;
+	s=susede2_ed25519; t=1788388901;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=vZAQLpEqi5pK7+tx+m3Nmv84bnUTO8ibxpjlJsEANeE=;
-	b=durtZfBYBFUazgS2e5mUJxJwEqPGy0Hs8nLlsqoF34g1Fu8dhXZWBYCyMg++rtWNv+dojV
-	g+ZoTmbcu4a1QeDw==
+	bh=G4BXTeuwXuB50gyleE+gvE5rU5OPpGWaSYOx/TRoMO4=;
+	b=rgCsVabcqorWxAx5dawTQvgLfa34HKfz9IyPAIvnZG+wuGSRxoxr+vQbiAd5Qaefe+poU6
+	2Wj8pFbBVM6sm1AQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C1CA9136E6;
-	Wed,  2 Sep 2026 22:41:19 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 796FD136E6;
+	Wed,  2 Sep 2026 22:41:40 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id N+QrHQ+mmGp7dgAAD6G6ig
-	(envelope-from <krisman@suse.de>); Wed, 02 Sep 2026 22:41:19 +0000
+	id FJz8DySmmGqodgAAD6G6ig
+	(envelope-from <krisman@suse.de>); Wed, 02 Sep 2026 22:41:40 +0000
 From: Gabriel Krisman Bertazi <krisman@suse.de>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org
@@ -78,8 +78,8 @@ In-Reply-To: <79a23f41-0263-435e-91c7-477d742c95f9@kernel.dk>
 Organization: SUSE
 References: <20260902172717.1073059-1-krisman@suse.de>
  <79a23f41-0263-435e-91c7-477d742c95f9@kernel.dk>
-Date: Wed, 02 Sep 2026 19:41:16 -0300
-Message-ID: <87v78n5l9v.fsf@mailhost.krisman.be>
+Date: Wed, 02 Sep 2026 19:41:37 -0300
+Message-ID: <87tso75l9a.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -87,11 +87,10 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Score: -4.51
-X-Rspamd-Queue-Id: 7E70121D62
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Level: 
 X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 1A4A91FAB1
 X-Spamd-Result: default: False [-4.51 / 50.00];
 	BAYES_HAM(-3.00)[99.99%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
@@ -114,10 +113,11 @@ X-Spamd-Result: default: False [-4.51 / 50.00];
 	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	RCVD_COUNT_TWO(0.00)[2];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[kernel.dk:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,kernel.dk:email];
 	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
 	DKIM_TRACE(0.00)[suse.de:+]
 X-Spam-Flag: NO
+X-Spam-Score: -4.51
 
 Jens Axboe <axboe@kernel.dk> writes:
 
@@ -136,7 +136,7 @@ Because recycling is good for the world :)
 
 It is a cleanup.  A todo in my list is recycling objects as much as we
 can. for instance, in the generic cleanup path we could be recycling for
-various objects.  I'll send it as a larger series.
+various objects.  I'll send those as part of a larger series.
 
 -- 
 Gabriel Krisman Bertazi
