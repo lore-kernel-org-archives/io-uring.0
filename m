@@ -1,175 +1,107 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10A173655E0
-	for <io-uring@vger.kernel.org>; Wed,  2 Sep 2026 02:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788315977; cv=none; b=gVofs6mxP3xjPLdpTfVK/yAwI8rUJlcFO9oRJc6fXtGK4lrM8lj0Mavttp7TrO3Xg0ebktHlnbTrL2aDzjRva8Mqv7BM1xh+oJlV1km/NEo681Ld8XixQ1rUpUUHsXKoJ7o4LUTHUdnMgDD8D+Wbf5VLuhI3R4VGbZ9H4HNvfJs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788315977; c=relaxed/simple;
-	bh=IZmZlvs0yOgGUeyXvD/ZCuE8dv8pSbahU+m/BiYNON8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P9lY+YTVp7O85WFmcGZhbbKf8m2rKFe2yUByRsazYNRHePEkP6glNVkYPpoX3/zVCGEBo5AV4XOz/4moIq+IaodATGQDg7PAFYKXGA9c/mAcR4TYScyHgJD8WHD50XBbYTKraocbc6pr9pP8t5aNtG1Hjz4XvluhZvav/wd/JzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KKl1W4ik; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 265D748C8D7
+	for <io-uring@vger.kernel.org>; Wed,  2 Sep 2026 13:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788356423; cv=pass; b=VvMSjuv+pglpFgoc4dBX5mLP3idSDJ54B0GjRwxNTWUACI82u0xiBW1LgQujS3u02oipIE6q8fNYpjAN8Kx4SdzlPed8hzrEU0nHIGL13M50KnNPGbWTxI9/1XOfHrWDLUFz7DAuK9FNETLrcyi9VBJhVxemmURJfIgTmt0T9Yw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788356423; c=relaxed/simple;
+	bh=t00JTA5JI17KHSj4FG9gzzx0ktA1h2Ge/6wt8hj4nsM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F4GItXWS9m+xcwFUf+aKSGF8BXk4lvN/CaiJO67GP/B9SKitl/g59CRnYt9zsud1pTjChk2/aInTifpXa882zO+tn5UmV2tbqx2yf5N+2lYEdAAHVXHnCPPsPyMbjaoT841vHHV7V2oPY8RJhuvk5r7kqLUvpiLhMIbWoVTcecI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHb8yMFo; arc=pass smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KKl1W4ik"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8485b358552so505454b3a.2
-        for <io-uring@vger.kernel.org>; Tue, 01 Sep 2026 19:26:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHb8yMFo"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2d71d1cc8b2so9184205ad.1
+        for <io-uring@vger.kernel.org>; Wed, 02 Sep 2026 06:40:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788356420; cv=none;
+        d=google.com; s=arc-20260327;
+        b=H0LKE12Yi+Pk4RlCg3nhxIWV3gT+xAqzPhGHZZC3rjypMNDptDROfIyAnN9mxWVEpG
+         d2PrQcDc4JcY3IZx+AgKvvMJl26PIDCLl5fT0RmLCOt+K0QphW/cAAjmL4UGaJfp+zzE
+         mtR4iYdsCxdqQPDBMvjv27IueEcY8Dun/km2mer6BV46YsWsnYVpgGWBpGb+4b77U5H6
+         OBcENgJSQrllbPlqsglZ8ZEUdD6Z2LUb1ox5T7+JOaWD6TraBoJZ/TwiYamkkn2QZQ/h
+         tScD0aanSMOjPZO8Q5PZhXoNe1O5OXGxHfMNEU8un/JbFzXLwt1twuvgimQbCo6O26Im
+         gStg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=t00JTA5JI17KHSj4FG9gzzx0ktA1h2Ge/6wt8hj4nsM=;
+        fh=oepqAuWi9lWLVilK2+JOzqp52FT1ueWomAHQnOjyhfg=;
+        b=gM1Cbh6mCF1VT2Pi3bQFtSQweCgIVRbOne2A9og8yGbXIQgggbLFJg6GZRTW5AV4mD
+         aMm+/dIhNhvgF/gcfj9w02w4lPNPMgN4DKZRU7CUSkpUp1edatRMPZ0j/+tKIWxTY/ka
+         7ikm0Tabu2OiJDyQmI3SwDNeAMwxi6tQs0IEDUl8EJJlY3blZupBRV7aL40xgkgo4tvi
+         oaJNJJ8E9FRHZv+lo0tD44HFi1wXDt01MNR0m13LfGesOVw6oZ6eOHhzHKgo/aKNRHK8
+         3Cx83IpgkV0ohiB4aJ/Mpk+0OWwcyn2BPMSW+uWiNdlhBai/JDU76FHv3TaJuA9ikdfF
+         Noqw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788315975; x=1788920775; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Xx1JaFVwC4kXUUhQCfu4rODzl50O3heMJpCp/C+SDcQ=;
-        b=KKl1W4ikN3PIGBIIQ4mj7Tcek98MBpZHaGKZ/7M/OkFkiBZhi8VqoaBPRtdFb5+yDM
-         gU2QSNGrmND1kVb7InGJ0fOZVBTaBhIjKZQdIeFsaa3ZVJKjh0XEm4z1lthiHNWoS0Cu
-         uKKqOdbldo0LVRYCi4jlbo/Vmf+D9c+7Dq+yXORTvKs6n+mn0nPladPgT07hdxEZCTyl
-         EgUUs0eZs9oWWB9tbZYj5ofymAIUmZWu3dTxh0+gdupgRsbIiu1ZyCuFVWO488jwoacl
-         YlN8sCeCkNbaq3+XlFbf/qocU//JOcuGR2ipn+5TR49M6fPQpPf5ziMilcWQyyzOmUrM
-         zIKA==
+        d=gmail.com; s=20251104; t=1788356420; x=1788961220; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=t00JTA5JI17KHSj4FG9gzzx0ktA1h2Ge/6wt8hj4nsM=;
+        b=NHb8yMFoBqqCwpylVvR55G8aD0dbxTFv539qhxaCQPx5IiDblhOEJyqJfK1EclGx1H
+         +KYw9GDrodDkOPUI3tS/7Siw3mv1tulmmlw129cL9sFTAKsplB5rpqa/h3/WbMBNhlnd
+         fHRHIQrN7TepLeufFHgr96mmQ3VEtQsQLq+Y/HsojjA6dK5oKqjlHk3UYYOcNpyFJKf9
+         Xa5o0EAuAzxRM1Go8fpAworzQLP5APLJSN0HVM7iWi1sdGYC9eY4qJh/jiNhA6GwjNJS
+         cHlrd1uogj0MrFg1atTF7yV12PpkcMdrI/ilI3nR/Snd9zhzannUNfZpVxAzoARhFXzb
+         mPjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788315975; x=1788920775;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Xx1JaFVwC4kXUUhQCfu4rODzl50O3heMJpCp/C+SDcQ=;
-        b=KgtI2NeIqLi8MDpBff4mwCDcC3Bcq/+NVq7lBSE+8oyRCcG+pL9TnoZt+Po4ixuWh1
-         rzw8JTX4lZBa/C9fEuhMb74Gge7cyYWL2jFj6Bp86YQI3HzTpZqF8WaGwNnf9JjlUSLV
-         24D/IAMuFhKo+iwejfguamxyx1lQrLw634/1ejhWKxztoS6zgx17xH4tj4miNGb4YbXD
-         nRdUC5vsaS4+oIseVE9dExH/GqWPRqEGkRmEq3RRkR+K1v/L85+kqn+lARAt6Bigo8gv
-         TsAeP5VoVKY8+GuIv2znuQhlVXkuDZDROPd93aT+KKn3+Tc0woLSrjQAXzXb5KmLRxCM
-         RmFg==
-X-Gm-Message-State: AFuF++k2MvyEpmYmusvAAdVZ4yx+Ga/k5CGaNULB8x/mhJfZ4g57OR09
-	q61yn+E3lZFBn2QRtiFczQpTHIH837EjBgTyxGpfBufSI0NG6ikaE5BGRV+fqo6Z
-X-Gm-Gg: AYBFou2gVGrdm0qKo8ZnxrL4fUWMIcc6ZwJ3id61G3fi/k/1fLd0X97FxPOwqOtuyEF
-	EYLaEivioJNQ1/7elR5QDwBN5OFCFZThQPH/Bjh2T3zvcc7/HpAeNf237vrEu8V3mQye1XLxthp
-	+Ddsaxc0qHLJJiCehpN4hV/taUkoHo+wV7P4ZVDBAMX7n7aoYHSYjoKK/iJzyUSYICkPnDLOcvl
-	scPX1ztqAefMJ1yW09AKqMB1haZmGlyzo1oSr0el7L3ZI7hpYBDeIGAAkncOWV1ybUNs5oqTYrT
-	EttsP2IWnfiGgPfC3iP7Jc6vul44tsaM8ybINR0a1JUABcMlOP1WRj6h7LTtIXFjBi02SWOyt2E
-	vAlg5HqHuEYkYFz/fe4n8Na6bKmOzVJscH6MTWhhAzf8UqAT0yYe0z2xspOUFGLJFmJbcNIyHx4
-	36sC31gv+Zw4oegwlEw8cU+S9Jo9OFmm2/s0arF5od3M7mavkrJXhrap7DelO/avk+k2qgV+4fQ
-	cT/ykuoBRgx7TL7OcsmJdyheg==
-X-Received: by 2002:a05:6a00:138a:b0:85c:3922:25d5 with SMTP id d2e1a72fcca58-85ed3f6e681mr2761201b3a.21.1788315975016;
-        Tue, 01 Sep 2026 19:26:15 -0700 (PDT)
-Received: from localhost.localdomain ([117.88.121.70])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-85dc11fae83sm568560b3a.59.2026.09.01.19.26.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 19:26:14 -0700 (PDT)
-From: Aohan Mei <ljp1205831794@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: axboe@kernel.dk,
-	Aohan Mei <henrymei@tencent.com>,
-	TencentOS Corvus AI <corvus@tencent.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/net: commit all consumed buffers on bundle recv retry
-Date: Wed,  2 Sep 2026 10:25:47 +0800
-Message-ID: <20260902022552.1890610-1-ljp1205831794@gmail.com>
-X-Mailer: git-send-email 2.43.7
+        d=1e100.net; s=20251104; t=1788356420; x=1788961220;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=t00JTA5JI17KHSj4FG9gzzx0ktA1h2Ge/6wt8hj4nsM=;
+        b=GpnxRxFjylH0686pKm0KoTYs3qI89kd7C6biNFCPE/tu/+XjtcJXjdquAKRDLEYWq2
+         DH9xcft8mtJaT5Xqg3e0oEueebX3IW/PW0s4jYiZlQULwVcOl+RdLWPE0Verx4mhYMoM
+         xplq33Jy+ixqjOgj+Yaoh8eB46WnfbQhshtf8cjSns6Qbx505dZ+o2Uhsebz1CQkBkeQ
+         zqd3Yu4EPOt73SgaA51p/65OKFJC0GLLmlh2fISJzQlOQftfCYecjtMwzrjF5jWE37Y1
+         GH45rGhHQl1s5oqm4wi9u6Zy/VFzDKNQxhHNz52vbX384EigtAsCxtSOhEsfQBA+Q3hE
+         XwOQ==
+X-Forwarded-Encrypted: i=1; AKwUvBygV8pkOW1JGi2ToCQljww5Zh3seojNBFhRgL8hcgURhvgxg0GqQXfArhwiavxOFXa0avhue9z/AA==@vger.kernel.org
+X-Gm-Message-State: AFuF++m2aX5epcJlLMDi0wD1z3595xfFgMqbBSdq2xa1VWAkqvzDgiFC
+	KIJRCG99AIwNR8Mf33ZZS/XxNZHjlqTtLWNxiTUA5iLqyyenWmu6csQDSnbKtmQkbsNmOEfmzLt
+	WbNflMhGrbYpXYfp/UxVWzL87YuB/4LE=
+X-Gm-Gg: AYBFou17B8UsQe48AUDT9W/nr/yyvlN0MfOWTw4tWKrBj+ipUVpDYTGtiQS7cbeJzVJ
+	A9iTSC52XgLeCjvetJMOqmnlrWkcytQwU16DqfGPRiT8sKIZ1Eg5weOTEGMoaL1TE7a7sAebOnl
+	U2ws1NcwjE7zu8bTNtj7cY6Vbf+A5aA/Vib1IBd+LMN+ZtXVmVzXuk4+4tf9+JOxFnRCqW0YovU
+	lEZq4S4voXrYkSYZS7jtsTOIx7TLj2snyCSdYTTJF4WlubIn/2qawRa48fAN3g44eqmx0CKeHrs
+	2V/zFxtvwz/oQc3NtnDbvj5I14JQgNQObJsGmKEOK6KxSm1QxD0pkNds1pp55G3cfuVIvmMBJnU
+	3
+X-Received: by 2002:a17:903:3810:b0:2c6:90ec:f601 with SMTP id
+ d9443c01a7336-2daec5e6457mr50995905ad.8.1788356420282; Wed, 02 Sep 2026
+ 06:40:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260624073921.11037-1-harshal24.chavan@gmail.com>
+ <20260624124019.4521-1-harshal24.chavan@gmail.com> <87fr2auzq3.fsf@mailhost.krisman.be>
+ <CADCAkb6wuR7vT3chfFtBL0qma+gx-2mJM7v+JJLS00W3oyb5dg@mail.gmail.com> <CADCAkb63_kAa0b09GAQApBqi9-oUR03beQajkSMKL6Q4bkpWWg@mail.gmail.com>
+In-Reply-To: <CADCAkb63_kAa0b09GAQApBqi9-oUR03beQajkSMKL6Q4bkpWWg@mail.gmail.com>
+From: Harshal Chavan <harshal24.chavan@gmail.com>
+Date: Wed, 2 Sep 2026 19:10:07 +0530
+X-Gm-Features: AcwNN1VUjqEwRgnK6GyRmJMkrEFmdiPSGjgCIvG4yM_VLNIiC17js23pm59iOGU
+Message-ID: <CADCAkb6s_M--WheFHQny=iGWx9WKpk9bpsjkxaHMszxUCPtR9A@mail.gmail.com>
+Subject: Re: [PATCH v6] io_uring/register: add IORING_REGISTER_CLONE_FILES opcode
+To: Gabriel Krisman Bertazi <krisman@suse.de>, axboe@kernel.dk
+Cc: gregkh@linuxfoundation.org, gustavoars@kernel.org, 
+	io-uring@vger.kernel.org, kees@kernel.org, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Aohan Mei <henrymei@tencent.com>
+Hi Jens,
 
-For a bundle receive (IORING_RECVSEND_BUNDLE) using a provided
-buffer ring, the initial issue peeks N buffers and defers the
-commit via REQ_F_BUFFERS_COMMIT. If MSG_WAITALL (or a short read
-on a streaming socket) yields a partial result,
-io_net_kbuf_recyle() commits only the buffers covering that first
-partial round and clears REQ_F_BUFFERS_COMMIT. On subsequent poll
-armed retries, sel.buf_list is reset to NULL while
-REQ_F_BUFFER_RING prevents re-selection, so neither the retry
-rounds nor the final io_recv_finish() -> io_put_kbufs() ever
-commit the remaining buffers that have already been written to.
+Just a gentle ping
+As a quick refresher: Gabriel reviewed the recent changes.
+We are just waiting for your high-level thoughts regarding the overall approach.
 
-This leaves bl->head accounting for only the first partial round
-rather than all consumed buffers. Buffers that already hold
-received data stay visible in the ring and are handed out again
-to later requests, corrupting or dropping application data.
-
-Defer the commit entirely: do not commit in io_net_kbuf_recyle(),
-keeping REQ_F_BUFFERS_COMMIT set for the final completion; recover
-the buffer list on retry so the final commit has it available; and
-derive the number of committed buffers from the total received
-bytes rather than the final round, so a short last read cannot
-under-count.
-
-Fixes: 41b70df5b38b ("io_uring/net: commit partial buffers on retry")
-Reported-by: TencentOS Corvus AI <corvus@tencent.com>
-Cc: stable@vger.kernel.org
-Assisted-by: CodeBuddy:Kimi-K3
-Signed-off-by: Aohan Mei <henrymei@tencent.com>
----
- io_uring/kbuf.c | 4 ++--
- io_uring/kbuf.h | 2 ++
- io_uring/net.c  | 7 ++++---
- 3 files changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 7c309173dd19..c4bae8f00173 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -76,8 +76,8 @@ bool io_kbuf_commit(struct io_kiocb *req,
- 	return true;
- }
- 
--static inline struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
--							unsigned int bgid)
-+struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
-+					  unsigned int bgid)
- {
- 	lockdep_assert_held(&ctx->uring_lock);
- 
-diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-index 401773e1ef80..7079f2dec9e0 100644
---- a/io_uring/kbuf.h
-+++ b/io_uring/kbuf.h
-@@ -71,6 +71,8 @@ struct io_br_sel io_buffer_select(struct io_kiocb *req, size_t *len,
- 				  unsigned buf_group, unsigned int issue_flags);
- int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		      struct io_br_sel *sel, unsigned int issue_flags);
-+struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
-+					  unsigned int bgid);
- int io_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
- 		    struct io_br_sel *sel);
- void io_destroy_buffers(struct io_ring_ctx *ctx);
-diff --git a/io_uring/net.c b/io_uring/net.c
-index fbe719d86c46..bff4514c0100 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -483,8 +483,6 @@ static int io_net_kbuf_recyle(struct io_kiocb *req, struct io_buffer_list *bl,
- 			      struct io_async_msghdr *kmsg, int len)
- {
- 	req->flags |= REQ_F_BL_NO_RECYCLE;
--	if (req->flags & REQ_F_BUFFERS_COMMIT)
--		io_kbuf_commit(req, bl, len, io_bundle_nbufs(kmsg, len));
- 	return IOU_RETRY;
- }
- 
-@@ -877,7 +875,8 @@ static inline bool io_recv_finish(struct io_kiocb *req,
- 	if (sr->flags & IORING_RECVSEND_BUNDLE) {
- 		size_t this_ret = sel->val - sr->done_io;
- 
--		cflags |= io_put_kbufs(req, this_ret, sel->buf_list, io_bundle_nbufs(kmsg, this_ret));
-+		cflags |= io_put_kbufs(req, this_ret, sel->buf_list,
-+				       io_bundle_nbufs(kmsg, sel->val));
- 		if (sr->flags & IORING_RECV_RETRY)
- 			cflags = req->cqe.flags | (cflags & CQE_F_MASK);
- 		if (sr->mshot_len && sel->val >= sr->mshot_len)
-@@ -1221,6 +1220,8 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 			goto out_free;
- 		}
- 		sr->buf = NULL;
-+	} else if (req->flags & REQ_F_BUFFER_RING) {
-+		sel.buf_list = io_buffer_get_list(req->ctx, sr->buf_group);
- 	}
- 
- 	kmsg->msg.msg_flags = 0;
--- 
-2.43.7
-
+Thanks,
+Harshal
