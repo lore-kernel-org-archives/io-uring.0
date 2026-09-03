@@ -1,48 +1,46 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CAF31F984;
-	Thu,  3 Sep 2026 03:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDB233688F;
+	Thu,  3 Sep 2026 03:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788405043; cv=none; b=APytfFxInXop2r1PkBQmJuVLd1q/ifKybdlP0dVK3gpMJnRVxIw8QRF6VQEBg4m08zvQ6wblNq9dwzITgym/pKgA++dA1kyI9qMMxxkMeS8ncO+V56uY3fssCQZUe1IGKkCw9eNneGdURg2AWKo5XAktdIYc7Ctr3OrfJYYlicM=
+	t=1788406772; cv=none; b=p33d3hSvuPP7XHwFQPMQCOLZXteQdjNztVxknWAnpiQ/9f5q2es36wsaoaNymnB69yNd4o26ZN1ZpHW+4nUEjPGCLdhhaF9Cqw1LgNRKNyl3+Ty4BuJ6WszPxYQ5Y00wmW4mgfjLGaJWofuDuRM9HaoFYShZmVfaZC8iSzX5TzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788405043; c=relaxed/simple;
-	bh=V5ar/mTbt6WcF4MhpPLBe+BTyzngPSMw2s0RcyPoOak=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tcV8rXprMH8aW2tYuz03JewTjFi3uW6muFkUzg1HGGlw8wQV4iIZq656gJbBAVvOGOzOx2jjDzOj6OVgU6fWaN/1VRaAiALI0Aww2p7DtdsCwhilinTjZ/7zYntrGGcgUcDF6SUtEMXO3BDDXZ0UIh4C5iK75tnnkE5/iae583s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tv5BpOOs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788406772; c=relaxed/simple;
+	bh=jPxnNaewyQ3zKCPYBENwz+kSC8U8o0nePsKRoR9zp9Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ge5CRdG3tL2tpxFVpnVgqQ9rZl5hH7yHv7a1PlhMObiJ9a25Am8XPXFwVatRTobuXgXDMF39enNYS/icox0MqW31RkDMgLZypLmNLscV0IYdvGbCwcT/XmRgSHrPmTdD5LA9EZgMzLR7Ps+aY6higZngFghF2w0pHibqaJGsSbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eONIKg6S; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tv5BpOOs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82E71F000E9;
-	Thu,  3 Sep 2026 03:10:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eONIKg6S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 428591F000E9;
+	Thu,  3 Sep 2026 03:39:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788405040;
-	bh=C1WxTIrO/5DqW7m07LK+X1npwcnswb77jDwrlm+LuaE=;
+	s=k20260515; t=1788406771;
+	bh=82kzWHSOmd1x9WxILriZ8d9rAVq0omjkDFX8jZgoX9Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Tv5BpOOsNgoiK/YATz226P/GV6ARTttPv60cfWZ6MP2HuHSH0QM75GIAm9ULA9e4P
-	 W4eoVwuBcWXKvBKY6Up32ZZRgOavZT+BX2p5ny5WwJPGAWxUCjsVtv4aZL8LJqbjHd
-	 41ciMSvsrzB5479LTiw0ats5I/Gu+tquC0E/FXOMQ72uQUrphhugMkgt81J3ARj8LQ
-	 3A43pqFknVdV5+U3fyZt38nbYCrE7ZfI3VNSgMMS4J0AUwHTKuUjD+ynU7W/feHR2D
-	 VnH3tD9fKjNECi0bbfJ0JZjlFwUesJEBDUB8h++8FOk758h2UYJM4qo3HXE6gCP9ez
-	 wwuYBeqD5JumQ==
-From: "Martin K. Petersen (Oracle)" <mkp@kernel.org>
-To: James.Bottomley@HansenPartnership.com,
-	"Martin K. Petersen" <mkp@kernel.org>,
-	Yang Xiuwei <yangxiuwei@kylinos.cn>
-Cc: axboe@kernel.dk,
-	bvanassche@acm.org,
-	csander@purestorage.com,
-	fujita.tomonori@lab.ntt.co.jp,
-	io-uring@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	rc@rexion.ai
-Subject: Re: [PATCH v4 0/3] scsi: bsg: io_uring passthrough fixes
-Date: Wed,  2 Sep 2026 23:10:17 -0400
-Message-ID: <178840472605.670675.14991842842016414580.b4-ty@b4>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260817080730.967879-1-yangxiuwei@kylinos.cn>
-References: <20260817080730.967879-1-yangxiuwei@kylinos.cn>
+	b=eONIKg6Sy7XT7apHckYDaImtFaAXwLZ7R1M3Vg1SvKSZJOL/cZDAQzn/UJ7TBBQuO
+	 mL9F5FmBRIl7I4r27Zfh5JluDquRGqtOIV3Rgut5mnI6ZtYfgoFvvxNMV5aXN+QFLg
+	 SKUs2wcr88BUtb3C/6W4G9e5LubFegnD3JfR1H/VVf+lllAI6bpmYCAXMiakquQYcF
+	 OdxMpCXrn56leHv0cp1yErAKP57SzZg5LGUcljRPGJ85YMSu7yx/I4/sQPUQd3Eb9J
+	 XK1oeHF7fM/Fk3ra9MJcIzAmQ9yNPlaJWryRD+icDy6uKKzix08lxPZqiieGb6hdco
+	 EmXIWiPWPubcQ==
+From: Kees Cook <kees@kernel.org>
+To: Christian Brauner <brauner@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>
+Cc: Kees Cook <kees@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kusaram Devineni <kusaram@devineni.in>,
+	Jens Axboe <axboe@kernel.dk>,
+	linux-kernel@vger.kernel.org,
+	io-uring@vger.kernel.org
+Subject: Re: [PATCH v2] signalfd: don't dequeue the forced fatal signals
+Date: Wed,  2 Sep 2026 20:39:29 -0700
+Message-Id: <178840676820.2647250.10962752052192481814.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <adO3HG8bvwRPcmte@redhat.com>
+References: <adO3HG8bvwRPcmte@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -52,24 +50,24 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Mon, 17 Aug 2026 16:07:27 +0800, Yang Xiuwei wrote:
-
-> Three patches for the BSG io_uring passthrough path.
+On Mon, 06 Apr 2026 15:37:32 +0200, Oleg Nesterov wrote:
+> These signals should act like SIGKILL, in that userspace must never dequeue
+> them. But as Kusaram explains, io_uring-driven signalfd_read_iter() called
+> from get_signal() -> task_work_run() paths can do this before get_signal()
+> has a chance to dequeue such a signal and notice SA_IMMUTABLE.
 > 
-> 1/3: cap sense copy to max_response_len (and stop stuffing that
-> limit into scmd->sense_len). Noted by sashiko on v3:
-> Link: https://lore.kernel.org/linux-scsi/20260817015247.B9CF61F000E9@smtp.kernel.org/
-> 
-> 2/3: fix TOCTOU on the shared SQE.
+> Change signalfd_poll() and signalfd_dequeue() to add pending SA_IMMUTABLE
+> signals to ctx->sigmask.
 > 
 > [...]
 
-Applied to 7.3/scsi-fixes, thanks!
+Applied to for-next/hardening, thanks!
 
-[1/3] scsi: bsg: cap io_uring sense copy to max_response_len
-      https://git.kernel.org/mkp/scsi/c/ece06de72673
-[2/3] scsi: bsg: fix TOCTOU in io_uring passthrough command setup
-      https://git.kernel.org/mkp/scsi/c/4b3c5965fca9
+[1/1] signalfd: don't dequeue the forced fatal signals
+      https://git.kernel.org/kees/c/37eadcb919b0
+
+Take care,
 
 -- 
-Martin K. Petersen
+Kees Cook
+
