@@ -1,231 +1,255 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FB54BC022;
-	Thu,  3 Sep 2026 14:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788447332; cv=none; b=tkzOF87gjYwchdIrpuOnMtKr8G2yyLvDlMqTlo0UhfIPdgaUUv6zsKLJF6qM8jTKNbBLzwMUFKw7V+RlFA844fU0WWTVYRUYyqv0rb54sEPeBXOIRK89wx/dyt4cvo8oUEiS8MrN8v4+Ya5pOtSoZ10futJck3+Nt1GVqRCR47I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788447332; c=relaxed/simple;
-	bh=dMAVsBKsZQ7Ik69y/mvFH6kBKvXIlz1hQPHV8YuEXVE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KHANwkosFPeY4BJc4SpC2Tdxk11nOGpbtwKzCG25T68yM9R6lEZXO/52qnhbSG79wo5Ny0pvLE7grevp2h8aQ5JkgVQDRiCJ3gj3eP4LlNhN6Wh/C7KeR3Vyj1pDXq+4N9iZtqvnlIWxXQbCCsaVb7FbwJTixwbv3xCvKgpdxeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=s5fDDOH/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=FtsB/wZA; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ALDL6KUu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=LjHNPKsr; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C2274B2033
+	for <io-uring@vger.kernel.org>; Thu,  3 Sep 2026 17:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788456900; cv=pass; b=qsjOa9Q+ZWkV1tjMSXVeVaBUrehXnknyYwehqqd/KPYTNIXUuTuV3dSltCbspmODOjbPNAm3FUkVylRveM/siKbSu7Kjq3pIqH9VMuGVjFMq605njPzoQNL3h0xgaIohWEi5NEIpP3V6qpkKdkFet15qsFGgGFtoEg11v2G7lfk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788456900; c=relaxed/simple;
+	bh=B9D9nkqnvXNFHSQVP2bm3NFHJ383vXnuevpuXGgUI8g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=niNDgWkPnVXHcLLMe1aZ7v+evPS2gacJW7Y4A5yPp4HYzmxQLGh4vvj9xlh70nP3H7v9WTQs5Q0SGnlMKgDMveI/gUxlgpsBU17ESzl2JDu0JBOpnlKVE5L7LeT9zoerzxWettGDoyT+oIItZfkz+CB7ouEe7LPyIAvOEq85eR0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=YnRtbn3F; arc=pass smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="s5fDDOH/";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="FtsB/wZA";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ALDL6KUu";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="LjHNPKsr"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 3BC5B1FB75;
-	Thu,  3 Sep 2026 14:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788447319; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
-	b=s5fDDOH/CRuRHIc4OZuZqrbAcHSMlNS2p88e04exkBQ5yaibKC5sFI+R6Vk0JRl7U+lMxa
-	iwtVbfvmGqfPOuruwwEW5EaNrtzjDgDYQzEFtt8WlCjyeES0hnZtcQ6bThJJm6FToJu16l
-	a28+zBkQuoRP67q8Yg8xyhgF2WfXcds=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788447319;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
-	b=FtsB/wZAMY5oob7JwCjJv+FhiUwecqszK+uoyIiY44MwgI8vNGlzqht9EyR2uwbVBVAtyM
-	F2L45CF6EyB4GJDA==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ALDL6KUu;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=LjHNPKsr
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1788447315; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
-	b=ALDL6KUub4ChAr93EzfllCpbBa/bmdO4/Siqkuqm30KFTS17ktwjsPuZtFNlzxK/oM8fHT
-	NdtmxhIk3AZud+syZbdfjYSnl/jwmmtR95kdRnvycraFQoA2UBMeFlAtTKtw15BxgUCHqY
-	5yAvvtZuzeK/fV5W6DhCVBOEXBdz2iA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1788447315;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
-	b=LjHNPKsrVSoliqlCO/vsZc+BjLalIUt38bgAOCFL0FlSlWbrNVRC4jkV5i++QMLQGEhy5j
-	K5QDQGZEZp+ZO3Dw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 62C58136D9;
-	Thu,  3 Sep 2026 14:55:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id p/C2K1GKmWqkLwAAD6G6ig
-	(envelope-from <krisman@suse.de>); Thu, 03 Sep 2026 14:55:13 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Aohan Mei <ljp1205831794@gmail.com>, io-uring@vger.kernel.org
-Cc: axboe@kernel.dk, Aohan Mei <henrymei@tencent.com>, TencentOS Corvus AI
- <corvus@tencent.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] io_uring/net: commit all consumed buffers on bundle
- recv retry
-In-Reply-To: <20260902022552.1890610-1-ljp1205831794@gmail.com>
-Organization: SUSE
-References: <20260902022552.1890610-1-ljp1205831794@gmail.com>
-Date: Thu, 03 Sep 2026 11:55:06 -0300
-Message-ID: <87o6ee5qr9.fsf@mailhost.krisman.be>
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="YnRtbn3F"
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-46ac1963663so8407fac.0
+        for <io-uring@vger.kernel.org>; Thu, 03 Sep 2026 10:34:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788456896; cv=none;
+        d=google.com; s=arc-20260327;
+        b=b1fXi8asAjZMU9ntv1lZHXs0sgGAF/pUa0Eol5tglMeiSmLkdC4FPiPlGzgOvF1fOd
+         aQLpp71sPNkEDcsG+VkcFDKfDNNBOOoAljZw86rkeW4wCu5XlhBYKLrhU2svrzjH+FKk
+         vI4V3t/cDtHTyv3pW7+qdLz5hgzSZVUIFfhKUj+4qlZEeIaQ9VWz1b6dBKcDyvG+OGPg
+         WW+HrkUJrCM7KKbx9T6YZ9s7VocwXkqRQ/m6rpOO/24q+3b9Uwf3BC5VY9VcrokO+A9I
+         zqZFtvaG8FsWUz10PcJuxw8bWl5F+kLsUP3VXa9NPhNeknj0mjX+3n92+xfnfDZ5Cal5
+         r5Jw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7ewABu/OdmOVe+HOqk4r9aZ2OhRinVo0iIDSSoR7VOc=;
+        fh=sMNWdlGpdqRkTb4s/W3Ezb5cDGz20kizZyvND55MMjk=;
+        b=AyxPSkJXy5I8uc2IRgOeXst626VEELurEx/Ig4g/77f38ina6m1YWZapCHf7XiiVfy
+         B5IvM81JG2lJReGpM3T7bhKUZ4nJ6imgMWZmj1NXt+6pDW06zGbZViX3YoHvBLB5grfp
+         BM2/dzIEH9toa/Wti5/0X0ld9wO9jxfc23ArffX+d36M81gpxcptzyMKrxKt4H3x9gQe
+         l4g3X4v/WCvmppB7TijPxJBRWHYdCu0jXKLaX4t/Q3YGZ4WfhJkm6jPfSV51MqzWa95g
+         sjkhBnDs6/6dO+5hcCFGFbM+yPGJBYH/zN1b23b5bi7P/31wqQObzypxy9pzjyaw73HJ
+         rLcQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1788456896; x=1789061696; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7ewABu/OdmOVe+HOqk4r9aZ2OhRinVo0iIDSSoR7VOc=;
+        b=YnRtbn3FqkEDew5AzNRRJhmWvAZjKlSR84zzZti7ZEOVCxkhho7DbCyrG3zxAP6kQK
+         oysxkt7VjOeVhQuEJ7WHoR92tGH8avHd0sDstvl1qHcf4OWnb1j+Cs8mMBZp/yFVyLYd
+         6vTpi6YqyknNqZDORDHTCZ7Y6sdos5OpiboduROiAxZq14Nk3FGcu2jWJMNK7rotU4Gg
+         CQYjqphl0iLhHRoExpTwI2rMwzrctYBtrxSdJJdd+HEBfgVL50/aUQBpOg5aHf+fU2eH
+         mPUQ6Ja0bjAcBQBzHhorQDyrqdttbxdgs7+qtjNOAoDrgJwbJ/eTrTR6UetggWyMBAQE
+         rt9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788456896; x=1789061696;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7ewABu/OdmOVe+HOqk4r9aZ2OhRinVo0iIDSSoR7VOc=;
+        b=ECVpXXDr87ekOzjkllC7ZEzCW10ePD5ovrBJE4Ocl18uOq1hLveW7oB0p4uwPAqPJh
+         Tua8yGTfpThDcJByAOKnHvhmCuWO7+NqLxxZ4Rpx+2LRVpA4izjonhMDmG8LsOGpjAeJ
+         I6UHt1aPn4M8rHczQ3FsN4ktRILilsc7sg9T197GVUD/QGagwMzL1kFmjXtMehI2gSL8
+         ndt2k2OjiGO2/+qBdq1aVoXmmXYfUOTwSH5/waXMMw6+ern2fUj1n2Mw2xz8NYTXXNxB
+         f9o5FK03H5DbUknTZNnMikvi/lXcF7kuS7Sce5GV770XdY1TypI3jsElItcWX9OHU9kg
+         9Qiw==
+X-Forwarded-Encrypted: i=1; AKwUvBzdGEwrWRcvhXjGNvtVqypLfyu/24qM2YUzdSFI88aM/aAStKugjTwnicAw9o5Gh51//kLALYBpPw==@vger.kernel.org
+X-Gm-Message-State: AFuF++nyTqRBMJGsSjA0EGmwHMrYsC4uFj9xt0z1yuZXj0Ufm6eqV/wE
+	c6jLqsHsxg+uHz4gHcjR2VWdZIn5vmNTTUTs7pevbYShTzZNTaL01M09kkMOzaF2ne9Xl+5xfd7
+	zjUrA1MszG7xNaRk1snQgqbaJ1tDg9YsApQE2T2y5pQ==
+X-Gm-Gg: AYBFou1PWmc9j9I42j9mopnxOC7Di0o0ZX//dXQltp0WIOjOABnkn0QOpPYOeNtbPrN
+	HQOzPvhw1HsNXnpo8wjIvajMsgqpjgHFtHV/eN/BMdij9hcKMH7+KlNERimKGd3xp3gKXCTK6II
+	8WLMuJH/fOTbxjn7QDZ5zhX2cmutjQkvL2Nd2v0Tj5PcCq6lkhvRmHPDkDAmaVm8mUQWrOFeiJI
+	RNg4RfB2CIl5vRVyPk53qVwG0ug3YheTI65eReCJPOx+okoUAxRodXShhijhCpjF8hfJaCM+CEd
+	nCON105ysM5wwD2GoSpc/l8n3Ek8uVnuiyeo7fC3uzDY
+X-Received: by 2002:a05:6808:30a6:b0:4b5:8402:958d with SMTP id
+ 5614622812f47-4b6bfbcfc9amr6567061b6e.5.1788456895883; Thu, 03 Sep 2026
+ 10:34:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 3BC5B1FB75
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
+References: <20260902225708.2379840-1-csander@purestorage.com>
+ <20260902225708.2379840-2-csander@purestorage.com> <CACVXFVOKGOEmefHmZpsBX-7uxGjzbaJiueYMvka8TDjccOuFjg@mail.gmail.com>
+In-Reply-To: <CACVXFVOKGOEmefHmZpsBX-7uxGjzbaJiueYMvka8TDjccOuFjg@mail.gmail.com>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Thu, 3 Sep 2026 10:34:43 -0700
+X-Gm-Features: AcwNN1W9WnICv9pGfNodLq9yLwaSICnIyXjRpvwIb40wmKIKgI6KwpbmnVrMA7k
+Message-ID: <CADUfDZqFLMS08wq0bJWQwKpJL5k9ty1bruVFQFcV6juFVB-9AQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] io_uring/cmd: split io_uring_cmd_set_res() from io_uring_cmd_done()
+To: Ming Lei <tom.leiming@gmail.com>
+Cc: Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>, 
+	Sagi Grimberg <sagi@grimberg.me>, Joanne Koong <joannelkoong@gmail.com>, 
+	linux-nvme@lists.infradead.org, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Aohan Mei <ljp1205831794@gmail.com> writes:
-
-> From: Aohan Mei <henrymei@tencent.com>
+On Wed, Sep 2, 2026 at 6:02=E2=80=AFPM Ming Lei <tom.leiming@gmail.com> wro=
+te:
 >
-> For a bundle receive (IORING_RECVSEND_BUNDLE) using a provided
-> buffer ring, the initial issue peeks N buffers and defers the
-> commit via REQ_F_BUFFERS_COMMIT. If MSG_WAITALL (or a short read
-> on a streaming socket) yields a partial result,
-> io_net_kbuf_recyle() commits only the buffers covering that first
-> partial round and clears REQ_F_BUFFERS_COMMIT. On subsequent poll
-> armed retries, sel.buf_list is reset to NULL while
-> REQ_F_BUFFER_RING prevents re-selection, so neither the retry
-> rounds nor the final io_recv_finish() -> io_put_kbufs() ever
-> commit the remaining buffers that have already been written to.
+> On Wed, Sep 2, 2026 at 6:05=E2=80=AFPM Caleb Sander Mateos
+> <csander@purestorage.com> wrote:
+> >
+> > In preparation for setting the io_uring NVMe passthru CQE results from
+> > the blk-mq request completion rather than the task work callback, split
+> > out functions io_uring_cmd_set_res{,32}() from __io_uring_cmd_done().
+> > io_uring_cmd_done{,32}() now call io_uring_cmd_set_res{,32}() and then
+> > __io_uring_cmd_done(). This allows __io_uring_cmd_done() to be made
+> > CQE-size-agnostic, with 3 fewer arguments.
+> >
+> > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+> > ---
+> >  include/linux/io_uring/cmd.h | 23 +++++++++++++++++------
+> >  io_uring/uring_cmd.c         | 33 ++++++++++++++++++---------------
+> >  2 files changed, 35 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.=
+h
+> > index 331dcbefe72f..67f2ef700c43 100644
+> > --- a/include/linux/io_uring/cmd.h
+> > +++ b/include/linux/io_uring/cmd.h
+> > @@ -50,19 +50,21 @@ int io_uring_cmd_import_fixed_vec(struct io_uring_c=
+md *ioucmd,
+> >                                   const struct iovec __user *uvec,
+> >                                   size_t uvec_segs,
+> >                                   int ddir, struct iov_iter *iter,
+> >                                   unsigned issue_flags);
+> >
+> > +void io_uring_cmd_set_res(struct io_uring_cmd *, s32 ret);
+> > +void io_uring_cmd_set_res32(struct io_uring_cmd *, s32 ret, u64 res2);
+> > +
+> >  /*
+> >   * Completes the request, i.e. posts an io_uring CQE and deallocates @=
+ioucmd
+> >   * and the corresponding io_uring request.
+> >   *
+> >   * Note: the caller should never hard code @issue_flags and is only al=
+lowed
+> >   * to pass the mask provided by the core io_uring code.
+> >   */
+> > -void __io_uring_cmd_done(struct io_uring_cmd *cmd, s32 ret, u64 res2,
+> > -                        unsigned issue_flags, bool is_cqe32);
+> > +void __io_uring_cmd_done(struct io_uring_cmd *, unsigned issue_flags);
+> >
+> >  void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+> >                             io_req_tw_func_t task_work_cb,
+> >                             unsigned flags);
+> >
+> > @@ -105,12 +107,19 @@ static inline int io_uring_cmd_import_fixed_vec(s=
+truct io_uring_cmd *ioucmd,
+> >                                                 int ddir, struct iov_it=
+er *iter,
+> >                                                 unsigned issue_flags)
+> >  {
+> >         return -EOPNOTSUPP;
+> >  }
+> > -static inline void __io_uring_cmd_done(struct io_uring_cmd *cmd, s32 r=
+et,
+> > -               u64 ret2, unsigned issue_flags, bool is_cqe32)
+> > +static inline void io_uring_cmd_set_res(struct io_uring_cmd *cmd, s32 =
+ret)
+> > +{
+> > +}
+> > +static inline void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s3=
+2 ret,
+> > +                                         u64 res2)
+> > +{
+> > +}
+> > +static inline void __io_uring_cmd_done(struct io_uring_cmd *cmd,
+> > +                                      unsigned issue_flags)
+> >  {
+> >  }
+> >  static inline void __io_uring_cmd_do_in_task(struct io_uring_cmd *iouc=
+md,
+> >                             io_req_tw_func_t task_work_cb, unsigned fla=
+gs)
+> >  {
+> > @@ -171,17 +180,19 @@ static inline void *io_uring_cmd_ctx_handle(struc=
+t io_uring_cmd *cmd)
+> >  }
+> >
+> >  static inline void io_uring_cmd_done(struct io_uring_cmd *ioucmd, s32 =
+ret,
+> >                                      unsigned issue_flags)
+> >  {
+> > -       return __io_uring_cmd_done(ioucmd, ret, 0, issue_flags, false);
+> > +       io_uring_cmd_set_res(ioucmd, ret);
+> > +       __io_uring_cmd_done(ioucmd, issue_flags);
+> >  }
+> >
+> >  static inline void io_uring_cmd_done32(struct io_uring_cmd *ioucmd, s3=
+2 ret,
+> >                                        u64 res2, unsigned issue_flags)
+> >  {
+> > -       return __io_uring_cmd_done(ioucmd, ret, res2, issue_flags, true=
+);
+> > +       io_uring_cmd_set_res32(ioucmd, ret, res2);
+> > +       __io_uring_cmd_done(ioucmd, issue_flags);
+> >  }
+> >
+> >  int io_buffer_register_bvec(struct io_uring_cmd *cmd, struct request *=
+rq,
+> >                             void (*release)(void *), unsigned int index=
+,
+> >                             unsigned int issue_flags);
+> > diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> > index 726a659f38c3..917b32a921e6 100644
+> > --- a/io_uring/uring_cmd.c
+> > +++ b/io_uring/uring_cmd.c
+> > @@ -136,40 +136,43 @@ void __io_uring_cmd_do_in_task(struct io_uring_cm=
+d *ioucmd,
+> >         req->io_task_work.func =3D task_work_cb;
+> >         __io_req_task_work_add(req, flags);
+> >  }
+> >  EXPORT_SYMBOL_GPL(__io_uring_cmd_do_in_task);
+> >
+> > -static inline void io_req_set_cqe32_extra(struct io_kiocb *req,
+> > -                                         u64 extra1, u64 extra2)
+> > +void io_uring_cmd_set_res(struct io_uring_cmd *cmd, s32 ret)
+> >  {
+> > -       req->big_cqe.extra1 =3D extra1;
+> > -       req->big_cqe.extra2 =3D extra2;
+> > +       struct io_kiocb *req =3D cmd_to_io_kiocb(cmd);
+> > +
+> > +       if (ret < 0)
+> > +               req_set_fail(req);
+> > +       io_req_set_res(req, ret, 0);
+> >  }
+> > +EXPORT_SYMBOL_GPL(io_uring_cmd_set_res);
+> > +
+> > +void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s32 ret, u64 res=
+2)
+> > +{
+> > +       struct io_kiocb *req =3D cmd_to_io_kiocb(cmd);
+> > +
+> > +       if (ret < 0)
+> > +               req_set_fail(req);
+> > +       io_req_set_res32(req, ret, 0, res2, 0);
+> > +}
+> > +EXPORT_SYMBOL_GPL(io_uring_cmd_set_res32);
 >
-> This leaves bl->head accounting for only the first partial round
-> rather than all consumed buffers. Buffers that already hold
-> received data stay visible in the ring and are handed out again
-> to later requests, corrupting or dropping application data.
->
-> Defer the commit entirely: do not commit in io_net_kbuf_recyle(),
-> keeping REQ_F_BUFFERS_COMMIT set for the final completion; recover
-> the buffer list on retry so the final commit has it available; and
-> derive the number of committed buffers from the total received
-> bytes rather than the final round, so a short last read cannot
-> under-count.
->
-> Fixes: 41b70df5b38b ("io_uring/net: commit partial buffers on retry")
-> Reported-by: TencentOS Corvus AI <corvus@tencent.com>
-> Cc: stable@vger.kernel.org
-> Assisted-by: CodeBuddy:Kimi-K3
-> Signed-off-by: Aohan Mei <henrymei@tencent.com>
-> ---
->  io_uring/kbuf.c | 4 ++--
->  io_uring/kbuf.h | 2 ++
->  io_uring/net.c  | 7 ++++---
->  3 files changed, 8 insertions(+), 5 deletions(-)
->
-> diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-> index 7c309173dd19..c4bae8f00173 100644
-> --- a/io_uring/kbuf.c
-> +++ b/io_uring/kbuf.c
-> @@ -76,8 +76,8 @@ bool io_kbuf_commit(struct io_kiocb *req,
->  	return true;
->  }
->  
-> -static inline struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
-> -							unsigned int bgid)
-> +struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
-> +					  unsigned int bgid)
->  {
->  	lockdep_assert_held(&ctx->uring_lock);
->  
-> diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
-> index 401773e1ef80..7079f2dec9e0 100644
-> --- a/io_uring/kbuf.h
-> +++ b/io_uring/kbuf.h
-> @@ -71,6 +71,8 @@ struct io_br_sel io_buffer_select(struct io_kiocb *req, size_t *len,
->  				  unsigned buf_group, unsigned int issue_flags);
->  int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
->  		      struct io_br_sel *sel, unsigned int issue_flags);
-> +struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
-> +					  unsigned int bgid);
->  int io_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
->  		    struct io_br_sel *sel);
->  void io_destroy_buffers(struct io_ring_ctx *ctx);
-> diff --git a/io_uring/net.c b/io_uring/net.c
-> index fbe719d86c46..bff4514c0100 100644
-> --- a/io_uring/net.c
-> +++ b/io_uring/net.c
-> @@ -483,8 +483,6 @@ static int io_net_kbuf_recyle(struct io_kiocb *req, struct io_buffer_list *bl,
->  			      struct io_async_msghdr *kmsg, int len)
->  {
->  	req->flags |= REQ_F_BL_NO_RECYCLE;
-> -	if (req->flags & REQ_F_BUFFERS_COMMIT)
-> -		io_kbuf_commit(req, bl, len, io_bundle_nbufs(kmsg, len));
->  	return IOU_RETRY;
->  }
+> Both the two helpers can be inline, can't they?
 
-Hi Aohan,
+I also wanted to do that, but req_set_*() are defined in
+io_uring/io_uring.h, an io_uring-private header, whereas
+include/linux/io_uring/cmd.h is a public header. Perhaps the inline
+functions could be moved to include/linux/io_uring_types.h or
+include/linux/io_uring.h. If not, I think we'll have to rely on LTO to
+inline these calls. I'd be curious to hear Jens's thoughts.
 
-This looks fishy.  This function no longer commits and recycling is now
-basically a nop. but io_send also relies on it.  Doesn't it break the
-commit for io_send on a short write?
-
-
->  
-> @@ -877,7 +875,8 @@ static inline bool io_recv_finish(struct io_kiocb *req,
->  	if (sr->flags & IORING_RECVSEND_BUNDLE) {
->  		size_t this_ret = sel->val - sr->done_io;
->  
-> -		cflags |= io_put_kbufs(req, this_ret, sel->buf_list, io_bundle_nbufs(kmsg, this_ret));
-> +		cflags |= io_put_kbufs(req, this_ret, sel->buf_list,
-> +				       io_bundle_nbufs(kmsg, sel->val));
->  		if (sr->flags & IORING_RECV_RETRY)
->  			cflags = req->cqe.flags | (cflags & CQE_F_MASK);
->  		if (sr->mshot_len && sel->val >= sr->mshot_len)
-> @@ -1221,6 +1220,8 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
->  			goto out_free;
->  		}
->  		sr->buf = NULL;
-> +	} else if (req->flags & REQ_F_BUFFER_RING) {
-> +		sel.buf_list = io_buffer_get_list(req->ctx, sr->buf_group);
-
-I'm not sure, but during a retry, you can drop the ctx lock.  are you
-guaranteed to get the same buffer you had before?
-
--- 
-Gabriel Krisman Bertazi
+Best,
+Caleb
