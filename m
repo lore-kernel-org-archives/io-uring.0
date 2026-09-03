@@ -1,127 +1,231 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBBA436361
-	for <io-uring@vger.kernel.org>; Thu,  3 Sep 2026 11:06:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FB54BC022;
+	Thu,  3 Sep 2026 14:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788433579; cv=none; b=cKkcTB6OKsmA/IoqdebtAlAwO2yHWiIZUxHojNcCSLWC556Kf0XEoI7+k1jvUEeXJQxeGxaSZZ6DsYtmCvAFcr9M3qtRKCNwMOLYUJvEGO/lbmUEfZy14mOOKuNmxQ07fzUz36gHNGHV94tT+B+xJQZFpqpDl/FeffYYAiiA1jg=
+	t=1788447332; cv=none; b=tkzOF87gjYwchdIrpuOnMtKr8G2yyLvDlMqTlo0UhfIPdgaUUv6zsKLJF6qM8jTKNbBLzwMUFKw7V+RlFA844fU0WWTVYRUYyqv0rb54sEPeBXOIRK89wx/dyt4cvo8oUEiS8MrN8v4+Ya5pOtSoZ10futJck3+Nt1GVqRCR47I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788433579; c=relaxed/simple;
-	bh=kRMsU1aQi5RSNYArF5IobHP4IFwCbZNZ+oBFJRRILgc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EuGxXBmyWTHaDvhs3j6MeSA1xacCVCaXDeIXAcaYbZEvHfHFnbZ69ZA4Vw+zX3F+3L5LYqF9TRcWSp3v0/ndQF+KHazQf7bBdZ7qBeBizFFLkbd8fi0mhPDwexVXNhUW2kWlva98+0vAn6vlL5pYg2Vhzgz3cqn/z1ki+j0rYoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sp214kcz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z6ETwcpX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1788447332; c=relaxed/simple;
+	bh=dMAVsBKsZQ7Ik69y/mvFH6kBKvXIlz1hQPHV8YuEXVE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=KHANwkosFPeY4BJc4SpC2Tdxk11nOGpbtwKzCG25T68yM9R6lEZXO/52qnhbSG79wo5Ny0pvLE7grevp2h8aQ5JkgVQDRiCJ3gj3eP4LlNhN6Wh/C7KeR3Vyj1pDXq+4N9iZtqvnlIWxXQbCCsaVb7FbwJTixwbv3xCvKgpdxeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=s5fDDOH/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=FtsB/wZA; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ALDL6KUu; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=LjHNPKsr; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sp214kcz";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z6ETwcpX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788433576;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="s5fDDOH/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="FtsB/wZA";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ALDL6KUu";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="LjHNPKsr"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 3BC5B1FB75;
+	Thu,  3 Sep 2026 14:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1788447319; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=kaaI8EpfE53Tx/bzWzG0YZdIemiUc49MwXJ5O8jhTbw=;
-	b=Sp214kcz0vpAyUF/Vg+Yt6h+aUjZEJDRUFT4Jp1rOn4WopZM6XtIrBuXf34XG7XHAetigh
-	mG3Em6mmooLONq5Ow8Bql/c/diA0xuR3++L5xshad4BkC8Lm7ff0re6wUHVt0GcMvCyyOD
-	gHZNue30K2wSS81PhI3E1MrcrL5jwXw=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-711-xHioDw0VM9y79gIxO2VNkw-1; Thu, 03 Sep 2026 07:06:15 -0400
-X-MC-Unique: xHioDw0VM9y79gIxO2VNkw-1
-X-Mimecast-MFC-AGG-ID: xHioDw0VM9y79gIxO2VNkw_1788433574
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-49cd83ca361so23989095e9.1
-        for <io-uring@vger.kernel.org>; Thu, 03 Sep 2026 04:06:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1788433574; x=1789038374; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kaaI8EpfE53Tx/bzWzG0YZdIemiUc49MwXJ5O8jhTbw=;
-        b=Z6ETwcpXFXpVuftUIu5lqa1Nw9d3+HKr8k5V2XeQzBEDJy/4vK7ZaWM2v11nmT960b
-         R0/Sv9i/aICk1OPcE+pvhOngAGGY0a+iHfsAVqEs2H5QNohaBb1gyduTF83i6upt1F2a
-         +fX9h35xHfkP9D0F2r7wBORLwa5wcRSZNr1NUD00AwQ/qk/gcNOzHNzAjXfX/FHCtOL9
-         BVt7HOyM4P+94Z36otHWh4fdr63Ses0NvN4YEasQ0fxZGEvivcw9qm82zfv0agZJhl53
-         kKpfL9PaEgFi55geU+tDx34B/ErQASkmY098RMGoaxFbyVU4odwcrBKmH6lwPc5oZ/dU
-         tgFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788433574; x=1789038374;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kaaI8EpfE53Tx/bzWzG0YZdIemiUc49MwXJ5O8jhTbw=;
-        b=hkD1tomeqPo0EIbF9X9QJpX8Ew3tJQNoKKbRNc2VrITdtvVjzWEp8/eZq3i0zvbr07
-         v68L9DbAFDYZQ8ijIhuljdGViPEHGpsMm8sdFzf69tj10UuAgMj/FT70JXn5ElbW+5X5
-         ReSyYoV/elYCGP8cSDy71GrnpX87qVQM2NnLjlbWUxOb4knkn6LM2Pey34/2OGMgr53+
-         Pjkplojxsy66WoM9Vv59ZWlN2NhGEIZGze+oukLhREGVKTJhCBptXTF6kUJZdVeGLpig
-         Okvk57bTaBzz+zug3Pr+ttlqYIpBLsP7gb8Rctnmx9gUUXHCcmIKDJ1g8jtzx+gVk2oz
-         QNYw==
-X-Forwarded-Encrypted: i=1; AKwUvByZqsPaCNmaUVDkv+7LYcWuqewAibDoTKtmteHLyMCXT28pFccYWEfXCl8dQ5QfmIeHkCB6BWly2A==@vger.kernel.org
-X-Gm-Message-State: AFuF++knCpWdkRBw3EhjkBPcUtktxH17R5qnd5e725gjrq8WNtRjsAxC
-	EOPIQhQ8C2tB8rsLZOsDNS56hRVjp5Pky8vPuLZySBHgUJjD67YntaCqnpctVAjvC5lddq0hB/4
-	DIn+V32cL5/fTly+5nqy6a+HPCmzF2w9D4vt9J2nQZrJjajuM3vX/sjdJF4Pe
-X-Gm-Gg: AYBFou2AHAIwjO7hLILLYvAefXjMj4DvA+zRPJHW5MmA0WuW5nZkTVF2SFiVXycvQeW
-	nV4zs2CbTu9O13JR03LzLhoGQlm0yhM4vuRhkQ83ABTbiIaxoJ24g65IZDik8sbdh5aSQYaQky1
-	W/b8J35gWU5bHo9TP9wuyQ+qahPUAWv2Gphr3BJNAP5WkN1pBmZmam54e3mDNcHHLFycFyVAO5h
-	mFtPlZ4cL8q1y/oXrvnrPrC9x9hVSeMUeKvqfbMvqca9FeTWMGN1S5tIHOaCOVjSAD1vpH6vrCz
-	8FhgqrOJ/Ya90aBkaOxC2chJtBCQ0vljB8CPMRy2xizwBYfEA6XVVT0ItPZHrRCCe4h0tPveThx
-	NoGATbclenBiXXAh/D3sYcD2CqdHgGwlmYDTdk/U0D+kCkxZbAEI3Vy2w5HpY39qdc7zlFBmVqA
-	==
-X-Received: by 2002:a05:600c:83c4:b0:499:8ff5:8ecc with SMTP id 5b1f17b1804b1-49ce58268afmr210656645e9.15.1788433573961;
-        Thu, 03 Sep 2026 04:06:13 -0700 (PDT)
-X-Received: by 2002:a05:600c:83c4:b0:499:8ff5:8ecc with SMTP id 5b1f17b1804b1-49ce58268afmr210655435e9.15.1788433573513;
-        Thu, 03 Sep 2026 04:06:13 -0700 (PDT)
-Received: from [192.168.188.218] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48448e80798sm12414481f8f.13.2026.09.03.04.06.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 04:06:12 -0700 (PDT)
-Message-ID: <1cf3f4de-bec8-4559-a4b2-1d946ead0f69@redhat.com>
-Date: Thu, 3 Sep 2026 13:06:11 +0200
+	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
+	b=s5fDDOH/CRuRHIc4OZuZqrbAcHSMlNS2p88e04exkBQ5yaibKC5sFI+R6Vk0JRl7U+lMxa
+	iwtVbfvmGqfPOuruwwEW5EaNrtzjDgDYQzEFtt8WlCjyeES0hnZtcQ6bThJJm6FToJu16l
+	a28+zBkQuoRP67q8Yg8xyhgF2WfXcds=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1788447319;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
+	b=FtsB/wZAMY5oob7JwCjJv+FhiUwecqszK+uoyIiY44MwgI8vNGlzqht9EyR2uwbVBVAtyM
+	F2L45CF6EyB4GJDA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ALDL6KUu;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=LjHNPKsr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1788447315; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
+	b=ALDL6KUub4ChAr93EzfllCpbBa/bmdO4/Siqkuqm30KFTS17ktwjsPuZtFNlzxK/oM8fHT
+	NdtmxhIk3AZud+syZbdfjYSnl/jwmmtR95kdRnvycraFQoA2UBMeFlAtTKtw15BxgUCHqY
+	5yAvvtZuzeK/fV5W6DhCVBOEXBdz2iA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1788447315;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ouYq8jEG/YnOzue8Ui4hUUZcZuiA7sjGHnKRkO31T/k=;
+	b=LjHNPKsrVSoliqlCO/vsZc+BjLalIUt38bgAOCFL0FlSlWbrNVRC4jkV5i++QMLQGEhy5j
+	K5QDQGZEZp+ZO3Dw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 62C58136D9;
+	Thu,  3 Sep 2026 14:55:13 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id p/C2K1GKmWqkLwAAD6G6ig
+	(envelope-from <krisman@suse.de>); Thu, 03 Sep 2026 14:55:13 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Aohan Mei <ljp1205831794@gmail.com>, io-uring@vger.kernel.org
+Cc: axboe@kernel.dk, Aohan Mei <henrymei@tencent.com>, TencentOS Corvus AI
+ <corvus@tencent.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] io_uring/net: commit all consumed buffers on bundle
+ recv retry
+In-Reply-To: <20260902022552.1890610-1-ljp1205831794@gmail.com>
+Organization: SUSE
+References: <20260902022552.1890610-1-ljp1205831794@gmail.com>
+Date: Thu, 03 Sep 2026 11:55:06 -0300
+Message-ID: <87o6ee5qr9.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [net-next,v6,5/6] selftests: net: add multithread server support
- to iou-zcrx
-To: netdev-bot+sashiko@kernel.org, juanlu@fastmail.com
-Cc: dw@davidwei.uk, netdev@vger.kernel.org, io-uring@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kuba@kernel.org, asml.silence@gmail.com, shuah@kernel.org
-References: <20260831-iou-zcrx-v6-5-02d1d012f0fd@fastmail.com>
- <178839229706.3394541.1555608492152892136@kernel.org>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <178839229706.3394541.1555608492152892136@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 3BC5B1FB75
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Flag: NO
+X-Spam-Score: -4.51
+
+Aohan Mei <ljp1205831794@gmail.com> writes:
+
+> From: Aohan Mei <henrymei@tencent.com>
+>
+> For a bundle receive (IORING_RECVSEND_BUNDLE) using a provided
+> buffer ring, the initial issue peeks N buffers and defers the
+> commit via REQ_F_BUFFERS_COMMIT. If MSG_WAITALL (or a short read
+> on a streaming socket) yields a partial result,
+> io_net_kbuf_recyle() commits only the buffers covering that first
+> partial round and clears REQ_F_BUFFERS_COMMIT. On subsequent poll
+> armed retries, sel.buf_list is reset to NULL while
+> REQ_F_BUFFER_RING prevents re-selection, so neither the retry
+> rounds nor the final io_recv_finish() -> io_put_kbufs() ever
+> commit the remaining buffers that have already been written to.
+>
+> This leaves bl->head accounting for only the first partial round
+> rather than all consumed buffers. Buffers that already hold
+> received data stay visible in the ring and are handed out again
+> to later requests, corrupting or dropping application data.
+>
+> Defer the commit entirely: do not commit in io_net_kbuf_recyle(),
+> keeping REQ_F_BUFFERS_COMMIT set for the final completion; recover
+> the buffer list on retry so the final commit has it available; and
+> derive the number of committed buffers from the total received
+> bytes rather than the final round, so a short last read cannot
+> under-count.
+>
+> Fixes: 41b70df5b38b ("io_uring/net: commit partial buffers on retry")
+> Reported-by: TencentOS Corvus AI <corvus@tencent.com>
+> Cc: stable@vger.kernel.org
+> Assisted-by: CodeBuddy:Kimi-K3
+> Signed-off-by: Aohan Mei <henrymei@tencent.com>
+> ---
+>  io_uring/kbuf.c | 4 ++--
+>  io_uring/kbuf.h | 2 ++
+>  io_uring/net.c  | 7 ++++---
+>  3 files changed, 8 insertions(+), 5 deletions(-)
+>
+> diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+> index 7c309173dd19..c4bae8f00173 100644
+> --- a/io_uring/kbuf.c
+> +++ b/io_uring/kbuf.c
+> @@ -76,8 +76,8 @@ bool io_kbuf_commit(struct io_kiocb *req,
+>  	return true;
+>  }
+>  
+> -static inline struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
+> -							unsigned int bgid)
+> +struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
+> +					  unsigned int bgid)
+>  {
+>  	lockdep_assert_held(&ctx->uring_lock);
+>  
+> diff --git a/io_uring/kbuf.h b/io_uring/kbuf.h
+> index 401773e1ef80..7079f2dec9e0 100644
+> --- a/io_uring/kbuf.h
+> +++ b/io_uring/kbuf.h
+> @@ -71,6 +71,8 @@ struct io_br_sel io_buffer_select(struct io_kiocb *req, size_t *len,
+>  				  unsigned buf_group, unsigned int issue_flags);
+>  int io_buffers_select(struct io_kiocb *req, struct buf_sel_arg *arg,
+>  		      struct io_br_sel *sel, unsigned int issue_flags);
+> +struct io_buffer_list *io_buffer_get_list(struct io_ring_ctx *ctx,
+> +					  unsigned int bgid);
+>  int io_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
+>  		    struct io_br_sel *sel);
+>  void io_destroy_buffers(struct io_ring_ctx *ctx);
+> diff --git a/io_uring/net.c b/io_uring/net.c
+> index fbe719d86c46..bff4514c0100 100644
+> --- a/io_uring/net.c
+> +++ b/io_uring/net.c
+> @@ -483,8 +483,6 @@ static int io_net_kbuf_recyle(struct io_kiocb *req, struct io_buffer_list *bl,
+>  			      struct io_async_msghdr *kmsg, int len)
+>  {
+>  	req->flags |= REQ_F_BL_NO_RECYCLE;
+> -	if (req->flags & REQ_F_BUFFERS_COMMIT)
+> -		io_kbuf_commit(req, bl, len, io_bundle_nbufs(kmsg, len));
+>  	return IOU_RETRY;
+>  }
+
+Hi Aohan,
+
+This looks fishy.  This function no longer commits and recycling is now
+basically a nop. but io_send also relies on it.  Doesn't it break the
+commit for io_send on a short write?
 
 
+>  
+> @@ -877,7 +875,8 @@ static inline bool io_recv_finish(struct io_kiocb *req,
+>  	if (sr->flags & IORING_RECVSEND_BUNDLE) {
+>  		size_t this_ret = sel->val - sr->done_io;
+>  
+> -		cflags |= io_put_kbufs(req, this_ret, sel->buf_list, io_bundle_nbufs(kmsg, this_ret));
+> +		cflags |= io_put_kbufs(req, this_ret, sel->buf_list,
+> +				       io_bundle_nbufs(kmsg, sel->val));
+>  		if (sr->flags & IORING_RECV_RETRY)
+>  			cflags = req->cqe.flags | (cflags & CQE_F_MASK);
+>  		if (sr->mshot_len && sel->val >= sr->mshot_len)
+> @@ -1221,6 +1220,8 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
+>  			goto out_free;
+>  		}
+>  		sr->buf = NULL;
+> +	} else if (req->flags & REQ_F_BUFFER_RING) {
+> +		sel.buf_list = io_buffer_get_list(req->ctx, sr->buf_group);
 
-On 9/3/26 1:38 AM, netdev-bot+sashiko@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 6 potential
-> issue(s) to consider:
-> 
-> Critical: 0 · High: 1 · Medium: 2 (3) · Low: 3
-> 
-> - [High] listen() is now executed before the workers have registered
->   their zcrx ifqs, breaking the ordering that two existing in-tree tests…
-> - [Medium] A worker thread that is dispatched zero connections reports
->   success without receiving or verifying a single byte.
-> - [Medium] The new CQ sizing removes the implicit bound that kept the
->   zcrx refill-queue producer inside one ring.
+I'm not sure, but during a retry, you can drop the ctx lock.  are you
+guaranteed to get the same buffer you had before?
 
-My understanding is that the above 3 concerns may affect tests stability
-and should be addressed before merging.
-
-Thanks,
-
-Paolo
-
+-- 
+Gabriel Krisman Bertazi
