@@ -1,131 +1,213 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-oo2-f8.google.com (mail-oo2-f8.google.com [74.125.231.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761451DB92C;
-	Mon,  7 Sep 2026 17:55:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8039848F013
+	for <io-uring@vger.kernel.org>; Tue,  8 Sep 2026 22:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788803729; cv=none; b=IfQymx+iuqNK1yyckmStysTNKrxYrbzF3U/Imzuqph58xN2A8XlyjIH4PBbMY0Io8sEQv48q12Vz1x/1oK6tZAw21ZBwBkn+gAgrmMISG0vvxtvWx/BdDFod/lE+gMpxYCkyC/yoXfBNr2an3dcQLTm/xjJ9biq2nONWn6KABTA=
+	t=1788905329; cv=none; b=Ftt40EHToYqo2SnUCh/3imYABFFe0cSAKk3yOeZIobry842kc0keDYDA4qFrsFvR18ChKkrMLPm98ZVs0O9LQkcyJElZnQXdLhnZEIny4AXbGLQOjqg6GUTG8jDNj+TnkPB13cVrQcZqLnoDiVpggLwKo8dzj54z/3RKldNlLHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788803729; c=relaxed/simple;
-	bh=6jTBPYflqa1vQJOqwx2yKV2RJaT9JQdKeHZXgs+UPOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NMRlyM5XnGlY/KZcNTSy0dGXT6LkgcCwumzszt4WowWEqaY3ls+CcEy4a+Qa8S5hV7gi2O/JHLOK26TJKkqEiovdp5kjZyqr/6ZwlpEJO5PkD9bySpukRFfUpKPh9wH7t2b6eeSsfDCqUyX0AVrUXvdnURxJbVeOtSUcPxJNexs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ZasPcsQf; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=uY5m+261; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=3DEMEvRj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=q8bBMGvE; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ZasPcsQf";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="uY5m+261";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="3DEMEvRj";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="q8bBMGvE"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 4CB9D21A71;
-	Mon,  7 Sep 2026 17:55:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1788803722;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GNB42et+DrFCAGYzSNyzYY2C1hLrWEIuF5SqSH8bPV8=;
-	b=ZasPcsQfY5WcJsSttjQUnQbtr2mDq1XJn0JZi9M+zD5OWhXww6GqLT5MKb9CLB8cgOv+vR
-	UlCF2nPOaW5Lr+O4gIVm8mfuEc4pEfYeTxUtmmApx4AZHRMhTyQpfm+tg1iz3sHSkV/wmV
-	5z70L5CmP9d2jY7Lr3Pc/qim5SzoRoE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1788803722;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GNB42et+DrFCAGYzSNyzYY2C1hLrWEIuF5SqSH8bPV8=;
-	b=uY5m+2614PexWWqYJxhb3C1FC9dtb2czdVQygWxIFLBUzKeO+0uagCsS+7jnXjEAY1YXpv
-	VUPsTEHlpoZGx0DQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1788803718;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GNB42et+DrFCAGYzSNyzYY2C1hLrWEIuF5SqSH8bPV8=;
-	b=3DEMEvRjWwQr2+FA17lRa4o+R7irKG6md4c+K0K4Y9pvW36Aw/XIrhUbABeJxGVBmVqQtE
-	jfs4YatkWhCejVy3qI0pIBuvo3x6cVStdftE7iSVqjAbX51xxRW3XVO9I+JRtRaot/prb3
-	4BrPvBpnTyUUPhMxoIoA+IEFpZl0vMg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1788803718;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GNB42et+DrFCAGYzSNyzYY2C1hLrWEIuF5SqSH8bPV8=;
-	b=q8bBMGvEFBdbanz+DlOzxl07EIROrRfGU/Z+7lFIE/j4Iw0zozZtJjGXHWDOKLP45XVnis
-	hxUBBPFzwmvZd6BA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2BFB81339B;
-	Mon,  7 Sep 2026 17:55:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id lEKJCob6nmqqbwAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Mon, 07 Sep 2026 17:55:18 +0000
-Date: Mon, 7 Sep 2026 19:55:12 +0200
-From: David Sterba <dsterba@suse.cz>
-To: Yang Xiuwei <yangxiuwei@kylinos.cn>
-Cc: clm@fb.com, dsterba@suse.com, quwenruo.btrfs@gmx.com,
-	linux-btrfs@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] btrfs: fix io_uring encoded IO cleanup
-Message-ID: <20260907175512.GZ9053@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20260819025436.1949152-1-yangxiuwei@kylinos.cn>
- <20260901020921.3261749-1-yangxiuwei@kylinos.cn>
+	s=arc-20240116; t=1788905329; c=relaxed/simple;
+	bh=kL1be+1n2xXuZeI05oshAxLXJ35j1Dn4wAKqPBd1L3w=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NcPtDrf6JlKmwJH9vQ04q7Xvn6P9P4q5oHh0PTgdrLJrMtOpgLHz/KvzTEOCPigIOSc4NW2tJUyDI3upTFH5FiMmCz1xrmYfNNnnazDAFw8ENl0Ss+Ns2hvWRCWk+q/7pmfctKjnhDyBbGiVt38kurtRLWrMDEm2K5bKjxWTnNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=74.125.231.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo2-f8.google.com with SMTP id 006d021491bc7-6b1bf394d3bso708307eaf.0
+        for <io-uring@vger.kernel.org>; Tue, 08 Sep 2026 15:08:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788905326; x=1789510126;
+        h=content-type:to:from:subject:message-id:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6kzJLngJ9sIpOAhXA1n2+iUvn4oLCSr6EXvDZpAJyHQ=;
+        b=tYsR0W9wvsp77X6LHTsCXXrVCN0OxY+Ts4HIcbxSbFEOEaiHAZT7ujtg4NTkL9KL0P
+         85qxEz3AtVQ4TrY1fClBHI2ZqtV5TwWz/RAD2e2QqB7uQaIMKdAtQt7Exz82wrdxxJkl
+         nqmpmpEjkvIZIv0N2VooB04qXfSsjSSlaGxwLdMqRs4GWwy+qNCyweJWpx/Ne35XzBn8
+         yFqwCXHfkU3+x50CG4EdSIvGdQ105bONmwXfT2qtwkpXLkv3R4SsG9cHueToQ8qqaj/h
+         ER+iSstQNSjSYOD44kVUmBk8GNDLC6lW9zfCGpH04xdlYnRSvP9LffTrybhimhpN4n8o
+         eFzg==
+X-Forwarded-Encrypted: i=1; AKwUvBw1RLYTZUiutuUS+063HzuNEcLdsCA1W54/VAs48nVOBtiwXbfi39MlhBVd/hrQseWj6GGwdz4+kg==@vger.kernel.org
+X-Gm-Message-State: AFuF++kkKmUe87Ur7QpvYoTegTio8q8ZhjR2Gn0TACE96OByRPcqvoSm
+	hdWKt3pd6JsXvcZLztdIxhQU/BzZ+f/65rVIDLTSyQ8OtuowhJWQUnVyBB1lFMUJj/t8QAogFwv
+	XGoVB+Gj4GTJ42dMzmRRBhVVmtXUUBE886i1Ep5eQjJemU+rsVBgVSfh3rwQ=
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260901020921.3261749-1-yangxiuwei@kylinos.cn>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Level: 
-X-Spam-Score: -4.00
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[fb.com,suse.com,gmx.com,vger.kernel.org];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_EQ_ENVFROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[twin.jikos.cz:mid,suse.cz:replyto];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[]
+X-Received: by 2002:a05:6820:200f:b0:6b9:7d9e:5708 with SMTP id
+ 006d021491bc7-6bdc949e3b9mr2550901eaf.3.1788905326349; Tue, 08 Sep 2026
+ 15:08:46 -0700 (PDT)
+Date: Tue, 08 Sep 2026 15:08:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6aa0876e.f81106d8.285f0a.0005.GAE@google.com>
+Subject: [syzbot] [io-uring?] [ext4?] INFO: task hung in io_write
+From: syzbot <syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, io-uring@vger.kernel.org, linux-ext4@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 01, 2026 at 10:09:21AM +0800, Yang Xiuwei wrote:
-> Hi,
-> 
-> On Wed, Aug 19, 2026, Yang Xiuwei wrote:
-> > Fixes for the io_uring ENCODED_READ / ENCODED_WRITE cleanup paths.
-> 
-> Gentle ping on this v3 series.
+Hello,
 
-I did a quick review and added it to linux-next for testing. Sashiko
-does not have comments to your patchset but still points out some
-existing problems, but this should not block this patchset. I'll have
-another look and add it to for-next soonish.
+syzbot found the following issue on:
+
+HEAD commit:    28924df2a08f Merge tag 'perf-tools-fixes-for-v7.3-2026-09-..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13842af9580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e909ffe6b35dddb7
+dashboard link: https://syzkaller.appspot.com/bug?extid=2eb3d983669d3e49d4fa
+compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160d1749580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13993af9580000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/d900f083ada3/non_bootable_disk-28924df2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/309bf243aefc/vmlinux-28924df2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5baa1c49144e/bzImage-28924df2.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/7dba324ffac0/mount_1.gz
+  fsck result: OK (log: https://syzkaller.appspot.com/x/fsck.log?x=15842af9580000)
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com
+
+INFO: task iou-wrk-5725:5730 blocked for more than 143 seconds.
+      Not tainted syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:iou-wrk-5725    state:D stack:22112 pid:5730  tgid:5724  ppid:5438   task_flags:0x404050 flags:0x00080002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5526 [inline]
+ __schedule+0x17db/0x58f0 kernel/sched/core.c:7276
+ __schedule_loop kernel/sched/core.c:7353 [inline]
+ schedule+0x164/0x2b0 kernel/sched/core.c:7368
+ percpu_rwsem_wait+0x326/0x490 kernel/locking/percpu-rwsem.c:164
+ __percpu_down_read+0xee/0x130 kernel/locking/percpu-rwsem.c:180
+ percpu_down_read_internal include/linux/percpu-rwsem.h:67 [inline]
+ percpu_down_read_freezable include/linux/percpu-rwsem.h:83 [inline]
+ __sb_start_write include/linux/fs/super.h:19 [inline]
+ sb_start_write include/linux/fs/super.h:125 [inline]
+ kiocb_start_write include/linux/fs.h:2787 [inline]
+ io_kiocb_start_write io_uring/rw.c:1109 [inline]
+ io_write+0x120c/0x1680 io_uring/rw.c:1163
+ __io_issue_sqe+0x188/0x4d0 io_uring/io_uring.c:1386
+ io_issue_sqe+0x16d/0x1020 io_uring/io_uring.c:1409
+ io_wq_submit_work+0x7ab/0xc90 io_uring/io_uring.c:1525
+ io_worker_handle_work+0x7a1/0x1140 io_uring/io-wq.c:659
+ io_wq_worker+0x452/0xf10 io_uring/io-wq.c:714
+ ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+Showing all locks held in the system:
+locks held by kworker/u4:1/13: 2, last CPU#0:
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+locks held by khungtaskd/26: 1, last CPU#0:
+ #0: ffffffff8ed5c760 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #0: ffffffff8ed5c760 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #0: ffffffff8ed5c760 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x2e/0x180 kernel/locking/lockdep.c:6871
+locks held by kworker/u4:2/37: 3, last CPU#0:
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #2: ffff888051872258 (&devlink->lock_key#4){+.+.}-{4:4}, at: nsim_dev_trap_report_work+0x57/0xb40 drivers/net/netdevsim/dev.c:834
+locks held by kworker/u4:3/43: 2, on CPU#0:
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+locks held by kworker/u4:7/187: 4, last CPU#0:
+ #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #2: ffff88801fc3bb20 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2d/0x160 kernel/sched/core.c:677
+ #3: ffff88801fc24408 (psi_seq){-.-.}-{0:0}, at: psi_task_switch+0x57/0x7d0 kernel/sched/psi.c:933
+locks held by getty/5086: 2, on CPU#0:
+ #0: ffff88803ee570a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
+ #1: ffffc90000d202e8 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x45a/0x1360 drivers/tty/n_tty.c:2211
+locks held by kworker/0:10/5721: 3, last CPU#0:
+ #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
+ #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
+ #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
+ #2: ffff88801fc26118 (&base->lock){-.-.}-{2:2}, at: lock_timer_base kernel/time/timer.c:1004 [inline]
+ #2: ffff88801fc26118 (&base->lock){-.-.}-{2:2}, at: __mod_timer+0x1a9/0xed0 kernel/time/timer.c:1085
+locks held by syz.0.23/5725: 2, on CPU#0:
+ #0: ffff88801d025220 (&bdev->bd_fsfreeze_mutex){+.+.}-{4:4}, at: bdev_freeze+0x33/0x2f0 block/bdev.c:304
+ #1: ffff888048fa4460 (sb_writers#4){++++}-{0:0}, at: sb_wait_write fs/super.c:2043 [inline]
+ #1: ffff888048fa4460 (sb_writers#4){++++}-{0:0}, at: freeze_super+0x4f4/0x11c0 fs/super.c:2307
+locks held by iou-wrk-5725/5730: 1, on CPU#0:
+ #0: ffff888048fa4460 (sb_writers#4){++++}-{0:0}, at: __io_issue_sqe+0x188/0x4d0 io_uring/io_uring.c:1386
+
+=============================================
+
+NMI backtrace for cpu 0
+CPU: 0 UID: 0 PID: 26 Comm: khungtaskd Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ nmi_cpu_backtrace+0x274/0x2d0 lib/nmi_backtrace.c:123
+ nmi_trigger_cpumask_backtrace+0x17d/0x390 lib/nmi_backtrace.c:66
+ trigger_all_cpu_backtrace include/linux/nmi.h:164 [inline]
+ __sys_info lib/sys_info.c:157 [inline]
+ sys_info+0x135/0x170 lib/sys_info.c:165
+ check_hung_uninterruptible_tasks kernel/hung_task.c:353 [inline]
+ watchdog+0xfd7/0x1030 kernel/hung_task.c:561
+ kthread+0x38b/0x480 kernel/kthread.c:436
+ ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
