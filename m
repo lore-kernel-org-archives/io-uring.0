@@ -1,68 +1,68 @@
-Received: from mail-ua1-f98.google.com (mail-ua1-f98.google.com [209.85.222.98])
+Received: from mail-qk1-f228.google.com (mail-qk1-f228.google.com [209.85.222.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC5648EC84
-	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 22:29:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F52485922
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 22:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788992955; cv=none; b=tTBVXYHsVzawl2XPIfHK+/wcUoQaIMTOdt8o6dUwcRBk/Tff7dPhYrVXxMtaRFGx9Bc6raTuB7GaBZFT2jp0E4js7zEeG5JOJ/b2H3vg8w6PGxWXmnJM4u4WHQ+DN5zmloHv+ODYGCLGwHLHeAxIgL9uoR8pG2P0v0CEOVqqCqU=
+	t=1788992958; cv=none; b=g+gPdEFOvzZAIaU9FQhnWTmhZVahFEluGK4q6paSrF8AuyIPX4iakFdWs5C1bN3ggqHumMLHQcoLSF85n7u2GcirH0mu53MRZK79DJqQmE9MvLZoniXxjUoeXy68pETAtzZz/oruj+NcfgnDgfp5/UkbfSHOx2vUp1zp4/uK/t4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788992955; c=relaxed/simple;
-	bh=sLx20K+qsQCJyEhfpGSQLav0qN/DYI0usp+NjaEikj4=;
+	s=arc-20240116; t=1788992958; c=relaxed/simple;
+	bh=B911PpGVigFDT/lyg40PRj0j9/EeMB1ax4L+zlh+iVQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lQLz2dTZ/Cb9x/Z6MXB+/WsP0X+GjkRPuQdvHl0sKb1leB851ruH9n7lTWzZ44xjqlR11nDWz/WXoUNM+nEP1pzARTCz9GJMAVS7DvBjMInGjjQZec9a11cVbysDZEywPiC8e+nt3WgDudMwSx1e4dljaVTa/VUPQ4dOQHpx3Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=KsbjO2R7; arc=none smtp.client-ip=209.85.222.98
+	 MIME-Version; b=jmIVA523ISnvPdvz3oXX2UXTwP5bq30des8tlyzyC187tp0I2He47oswHIUOwHrWLnaMj+5aYLLDKrCXejz6gyTxbcTnoJ0Lztq3fK+adrAwUhZV77fCb1AM0KNjGKM2kGqOvSHWJ8KFGOjOJ9wga2mA4qoI3MAU92WhxHqLj3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=apqMWr8y; arc=none smtp.client-ip=209.85.222.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="KsbjO2R7"
-Received: by mail-ua1-f98.google.com with SMTP id a1e0cc1a2514c-97cc53a6dc4so29871241.0
-        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 15:29:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="apqMWr8y"
+Received: by mail-qk1-f228.google.com with SMTP id af79cd13be357-92e68aec5f7so7106185a.3
+        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 15:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1788992944; x=1789597744; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=bsGabQTCyGBOnewN0WNVIraAhvd9VdUc8vuvn8dczvo=;
-        b=KsbjO2R7+0OPuTjY3C0ERl15E9eo9zWNKvSfvZRhnCNfUd90OlEj7rfh4C7rB4rkP0
-         2cCEevAEmeEkCHuG9+rH8yckFQWVsVRgXN9OnrAhOgtYBNNGdATsAg/IkLstcw/SGAr1
-         rqq3GIM50w1PHJo9I9Rtt2WP6nCdfGXhmodTLpi5Crkb7eVcMZOPWeak6oGP4RfzVq5L
-         ax0VGJ/en1AF94r5bTaJ53CMkMrvPonSGJwfF5k+i0VsPl1Kh+YWdRMj/REhPXNWtEmv
-         yUlUNDeMHRDe+IPYSGtsyJy04SXbHxk2d66uwJmLcXRCJhF0QNzkTyZj/sLvHq8A0SfV
-         M8eA==
+        bh=SaILBiW8UVywRg2XqjSRQl5ll5pe+zqen2OGZ/aVaeY=;
+        b=apqMWr8y1QBmToJJeRZK+n/Q15/jkVnTxyLCjlN3RF4ozMIBzobUxoXqUrnjYF7CDK
+         dSp/1OJc+tPjgV9r5TDfEG8A02MQh3xkbsEDBfA3YUJH/QOkkH9lgXUaVqD3X+uRvfbY
+         JX8DxUvPk4OrX5aMOA2pOV9RYnXIlc2/j9euHcDsfkFDAfAUUEYkDBZRn9A9y09g7YK+
+         Ca+bna2H7ALrQNLLLU/q9GKtY28TImhEHRDqe+sPQhlAapFIBymueDBcFQ8t5I6FcYuT
+         dFTiU9W6LyGSTyM2aSGOR5wBfjul9sAZeQ0N7+9UZ2iBxnnSgb2q0ReE9Bp7ckqMUWcK
+         U6Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1788992944; x=1789597744;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bsGabQTCyGBOnewN0WNVIraAhvd9VdUc8vuvn8dczvo=;
-        b=XCb5Ck2TeJMsrfEaJKTY3kLZMXqpVRl09bCGFYrouSTkXCysqwMxZjbOjBtAahBRYu
-         7xIjzf5JFVuVXr3ri6Hh+WKK/t5Ntam/8j6HvZhRxbX80qfhXVm5VVsmjBJlVq4tyXfh
-         FwCV0i1vgui55c3EtiN5hZQ4cdSWhF4/2ogPBSy45U2YGWSjT8XoXlRmcbYK8P4R/8R1
-         K8vbm+v7AfvLJbJaUBjVkNYLw3zxM503FWmehZP+DwGnonAyQ8ojEAFzk+uyJjcGBEBC
-         l2buqwT2qd5+cNOj8PjrYTvP1LKCM1UseByK6lLZtlJtL5tGtAPSbFwRwJa8XrAqCSbP
-         5aRA==
-X-Gm-Message-State: AFuF++lzL0haJolA67LwIQFfeq4kzJkZ6S/5BLOgjQVWfl3MEX94+SRe
-	6wG1eWHKrokNZNQtSW8h25aD3g/gqdPWcabRsLrVX3he46TdATVn+uoDqNIlkLuiyAqDUrsYrtH
-	quXdDfX1ajxmRm5ZrOoETNHKNjqkWWOJ5eaWF
-X-Gm-Gg: AYBFou0ipkyJKjf9zMYTGyBRE7w1PTHb5y1rky9X6QWFAINhxTM4XdTsFxykoJpycBR
-	qLsZZLbROPFd9fzy0emrNZ+n0z7crSuCzRMhF3+1/RyYImQ9nVyKicvfga0Fp5sHKsxX28HR0Iv
-	5titTZxtjtatjgm1ohcdbFnwsJqPUvA0kR3yHVH29wOky1HRGo0jML+9be9sr6/+F4izh43hye4
-	0Nk0TmsR6hVrd9TnTw8WTRWE2PK6TW+th5lPr61iFjh8nKKNXT26rihkh8MTrkT1QgaCLBjefeo
-	f2VpqpQHGanmG5NdelAiZXnJ6y1WTeBGc+TXeFUzvqtsQeG0NBwoZk3+v/she1lvp/MZSjwxAJd
-	+fs6USRY/CgZ/T6iyS79gG/xfFeijb0HB
-X-Received: by 2002:a67:ebd5:0:b0:790:563:8d1b with SMTP id ada2fe7eead31-79005639f22mr1285898137.0.1788992944076;
+        bh=SaILBiW8UVywRg2XqjSRQl5ll5pe+zqen2OGZ/aVaeY=;
+        b=TA3XkXAVhUvDeY/4FgKm2ajoc18CWAF5qbHqSsnNPDS8VRZwcU3m9DPgWhV2xK28b5
+         9twC9dztaBSCknLpcSUHL90Who+d0sWrLi+FI8tA0nlm5Cgqu989ZHyWInADF1Azgt/p
+         CFj1B2oHurVLgCZc0i9k51aubLvJLIeDAWQ1AbpexjB3oQxi+xhHrBv+chZ9nXFwZTXQ
+         3o+1rG7EuE+q+yskd9HWbAiADLAo2iq5Ak6EaE6FWlX20mhJDMv9YPFuQaO0WFnsoNVa
+         rHsp1uSsU79Mf57zGzhhKmnN0slDGbrRJyN8boyKlohZWVFkZpMud2qJV7HFSDtdYZrf
+         g+5g==
+X-Gm-Message-State: AFuF++nANx8yxnA7HgeiYtirT6770Q2ymhqNNZP/wDPI3ye/uYgYy+UQ
+	qDsfJHXy10C0ytfRFZuLJLJv1JbF8ppD2P0Qco0leKWInRWszGzQtMbx8ncfU+mCS3zJH+yaLXA
+	S+pckkQH0kGlJr0CVhbZowFAiLImdwgwJY3Ili9itJEs1b0SLGLxF
+X-Gm-Gg: AYBFou0Z110n9e+Y1DdzBApWmFs4Fi1jYrkQEU7NLB4N6/2NG53U9Y8Ksj64oyNrxvA
+	kN4YlviVlzk9m7Sf66IyEhr1nHYoZMgqsZo8GGiae+cGfhiZcz6Z4A+FcNZ7U0We9vHPp/Cc7Ep
+	OmkGp856fPweWr29yMPVomoOhkCo3SAg0FJwhoT7pjd3n7GRyKHLDgp3tBpEtZ+PsRMbOLkApOc
+	mUppgcOpeB8840YcOBXqIvpasYBG6cg5NUJOJS2IjPlG6kEYf2AusW7Tm558e7QlNpQOAUarBzb
+	Gr4FY39//O9erHkd/TiUSn242KywHPgNSI7rqK28T6Kq+9zKU4sudU3Xd7p2keQveKqlxNVjGtk
+	Yu8me0lyGPaJEKdLNRw==
+X-Received: by 2002:a05:620a:e85:b0:939:94c4:b799 with SMTP id af79cd13be357-93994c4b856mr1986140585a.5.1788992944190;
         Wed, 09 Sep 2026 15:29:04 -0700 (PDT)
-Received: from c7-smtp-2026.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id a1e0cc1a2514c-9808e9758adsm5500843241.0.2026.09.09.15.29.03
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id af79cd13be357-939981ed680sm140542785a.3.2026.09.09.15.29.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 09 Sep 2026 15:29:04 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (bond0.slc5-n17m28-k8s.dev.purestorage.com [IPv6:2620:125:9025:20::a31:41f])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 4F0D6402BA;
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 8F14E402A4;
 	Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 4C79CE40322; Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
+	id 8CB61E40322; Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Keith Busch <kbusch@kernel.org>,
@@ -73,9 +73,9 @@ Cc: io-uring@vger.kernel.org,
 	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 3/6] blk-integrity: pass iov_iter to blk_rq_integrity_map_user()
-Date: Wed,  9 Sep 2026 16:28:33 -0600
-Message-ID: <20260909222836.2475352-4-csander@purestorage.com>
+Subject: [PATCH 5/6] io_uring/cmd: support fixed buffer for metadata
+Date: Wed,  9 Sep 2026 16:28:35 -0600
+Message-ID: <20260909222836.2475352-6-csander@purestorage.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260909222836.2475352-1-csander@purestorage.com>
 References: <20260909222836.2475352-1-csander@purestorage.com>
@@ -87,298 +87,283 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To allow blk_rq_integrity_map_user() to accept an io_uring registered
-buffer (represented as a ITER_BVEC iov_iter), take the buffer as an
-iov_iter argument. Move the conversion from a user address-length pair
-into an iov_iter to the caller.
+Allow a "metadata" io_uring fixed buffer to be imported by uring_cmds in
+addition to the existing data buffer node. NVMe passthrough requests
+will use the new buffer node for their metadata buffers if requested.
 
-Since a non-ITER_UBUF iov_iter could be passed in the future,
-iov_iter_extract_pages() in bio_integrity_map_user() won't necessarily
-pin the pages. Condition the page unpins on iov_iter_extract_will_pin().
-Add a BIP_PAGE_PINNED bit to bip_flags to track if the pages are pinned.
+Provide a function io_uring_cmd_import_fixed_metadata() analogous to
+io_uring_cmd_import_fixed() that initializes an iov_iter for a user
+address range contained within a fixed buffer. The buffer node is stored
+in previously unused space in struct io_uring_cmd so it can be reused if
+imported multiple times and released once the uring_cmd completes.
+
+Whereas a fixed data buffer is indicated by io_uring_sqe's
+uring_cmd_flags bit IORING_URING_CMD_FIXED and buf_index, how the fixed
+metadata buffer is specified is left up to the uring_cmd implementation.
+
+io_get_buf_node() is split out of io_find_buf_node() and moved to rsrc.h
+so it can be reused for the metadata buffer. io_import_fixed() is made
+extern so it can be called from uring_cmd.c, and io_rsrc_node is passed
+instead of io_mapped_ubuf so uring_cmd.c doesn't have to reach into
+io_rsrc_node.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- block/bio-integrity.c         | 43 +++++++++++++++++++++++------------
- block/blk-integrity.c         |  7 ++----
- drivers/nvme/host/ioctl.c     |  6 ++++-
- include/linux/bio-integrity.h |  1 +
- include/linux/blk-integrity.h |  6 ++---
- 5 files changed, 38 insertions(+), 25 deletions(-)
+ include/linux/io_uring/cmd.h | 12 +++++++++++-
+ io_uring/rsrc.c              | 28 +++++++++++-----------------
+ io_uring/rsrc.h              | 17 +++++++++++++++++
+ io_uring/uring_cmd.c         | 30 +++++++++++++++++++++++++++++-
+ 4 files changed, 68 insertions(+), 19 deletions(-)
 
-diff --git a/block/bio-integrity.c b/block/bio-integrity.c
-index 8ba8bfa41f8a..3a5554d3ea2f 100644
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -187,11 +187,12 @@ static void bio_integrity_uncopy_user(struct bio_integrity_payload *bip)
- 
- 	iov_iter_bvec(&orig_iter, ITER_DEST, orig_bvecs, orig_nr_vecs, bytes);
- 	ret = copy_to_iter(bvec_virt(bounce_bvec), bytes, &orig_iter);
- 	WARN_ON_ONCE(ret != bytes);
- 
--	bio_integrity_unpin_bvec(orig_bvecs, orig_nr_vecs);
-+	if (bip->bip_flags & BIP_PAGE_PINNED)
-+		bio_integrity_unpin_bvec(orig_bvecs, orig_nr_vecs);
- }
- 
- /**
-  * bio_integrity_unmap_user - Unmap user integrity payload
-  * @bio:	bio containing bip to be unmapped
-@@ -207,11 +208,12 @@ void bio_integrity_unmap_user(struct bio *bio)
- 			bio_integrity_uncopy_user(bip);
- 		kfree(bvec_virt(bip->bip_vec));
- 		return;
- 	}
- 
--	bio_integrity_unpin_bvec(bip->bip_vec, bip->bip_max_vcnt);
-+	if (bip->bip_flags & BIP_PAGE_PINNED)
-+		bio_integrity_unpin_bvec(bip->bip_vec, bip->bip_max_vcnt);
- }
- 
- /**
-  * bio_integrity_add_page - Attach integrity metadata
-  * @bio:	bio to update
-@@ -257,11 +259,11 @@ int bio_integrity_add_page(struct bio *bio, struct page *page,
- 	return len;
- }
- EXPORT_SYMBOL(bio_integrity_add_page);
- 
- static int bio_integrity_copy_user(struct bio *bio, struct bio_vec *bvec,
--				   int nr_vecs, unsigned int len)
-+				   int nr_vecs, unsigned int len, bool pinned)
- {
- 	bool write = op_is_write(bio_op(bio));
- 	struct bio_integrity_payload *bip;
- 	struct iov_iter iter;
- 	void *buf;
-@@ -292,14 +294,18 @@ static int bio_integrity_copy_user(struct bio *bio, struct bio_vec *bvec,
- 	if (IS_ERR(bip)) {
- 		ret = PTR_ERR(bip);
- 		goto free_buf;
- 	}
- 
--	if (write)
--		bio_integrity_unpin_bvec(bvec, nr_vecs);
--	else
-+	if (write) {
-+		if (pinned)
-+			bio_integrity_unpin_bvec(bvec, nr_vecs);
-+	} else {
- 		memcpy(&bip->bip_vec[1], bvec, nr_vecs * sizeof(*bvec));
-+		if (pinned)
-+			bip->bip_flags |= BIP_PAGE_PINNED;
-+	}
- 
- 	ret = bio_integrity_add_page(bio, virt_to_page(buf), len,
- 				     offset_in_page(buf));
- 	WARN_ON_ONCE(ret != len);
- 	bip->bip_flags |= BIP_COPY_USER;
-@@ -308,27 +314,29 @@ static int bio_integrity_copy_user(struct bio *bio, struct bio_vec *bvec,
- 	kfree(buf);
- 	return ret;
- }
- 
- static int bio_integrity_init_user(struct bio *bio, struct bio_vec *bvec,
--				   int nr_vecs, unsigned int len)
-+				   int nr_vecs, unsigned int len, bool pinned)
- {
- 	struct bio_integrity_payload *bip;
- 
- 	bip = bio_integrity_alloc(bio, GFP_KERNEL, nr_vecs);
- 	if (IS_ERR(bip))
- 		return PTR_ERR(bip);
- 
- 	memcpy(bip->bip_vec, bvec, nr_vecs * sizeof(*bvec));
- 	bip->bip_iter.bi_size = len;
- 	bip->bip_vcnt = nr_vecs;
-+	if (pinned)
-+		bip->bip_flags |= BIP_PAGE_PINNED;
- 	return 0;
- }
- 
- static unsigned int bvec_from_pages(struct bio_vec *bvec, struct page **pages,
- 				    int nr_vecs, ssize_t bytes, ssize_t offset,
--				    bool *is_p2p)
-+				    bool *is_p2p, bool pinned)
- {
- 	unsigned int nr_bvecs = 0;
- 	int i, j;
- 
- 	for (i = 0; i < nr_vecs; i = j) {
-@@ -340,11 +348,12 @@ static unsigned int bvec_from_pages(struct bio_vec *bvec, struct page **pages,
- 			size_t next = min_t(size_t, PAGE_SIZE, bytes);
- 
- 			if (page_folio(pages[j]) != folio ||
- 			    pages[j] != pages[j - 1] + 1)
- 				break;
--			unpin_user_page(pages[j]);
-+			if (pinned)
-+				unpin_user_page(pages[j]);
- 			size += next;
- 			bytes -= next;
- 		}
- 
- 		if (is_pci_p2pdma_page(pages[i]))
-@@ -361,10 +370,11 @@ static unsigned int bvec_from_pages(struct bio_vec *bvec, struct page **pages,
- int bio_integrity_map_user(struct bio *bio, struct iov_iter *iter)
- {
- 	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
- 	struct page *stack_pages[UIO_FASTIOV], **pages = stack_pages;
- 	struct bio_vec stack_vec[UIO_FASTIOV], *bvec = stack_vec;
-+	bool pinned = iov_iter_extract_will_pin(iter);
- 	iov_iter_extraction_t extraction_flags = 0;
- 	size_t offset, bytes = iter->count;
- 	bool copy, is_p2p = false;
- 	unsigned int nr_bvecs;
- 	int ret, nr_vecs;
-@@ -397,12 +407,12 @@ int bio_integrity_map_user(struct bio *bio, struct iov_iter *iter)
- 
- 	/*
- 	 * Handle partial pinning. This can happen when pin_user_pages_fast()
- 	 * returns fewer pages than requested.
- 	 */
--	if (user_backed_iter(iter) && unlikely(ret != bytes)) {
--		if (ret > 0) {
-+	if (unlikely(ret != bytes)) {
-+		if (pinned && ret > 0) {
- 			int npinned = DIV_ROUND_UP(offset + ret, PAGE_SIZE);
- 			int i;
- 
- 			for (i = 0; i < npinned; i++)
- 				unpin_user_page(pages[i]);
-@@ -412,31 +422,34 @@ int bio_integrity_map_user(struct bio *bio, struct iov_iter *iter)
- 		ret = -EFAULT;
- 		goto free_bvec;
- 	}
- 
- 	nr_bvecs = bvec_from_pages(bvec, pages, nr_vecs, bytes, offset,
--				   &is_p2p);
-+				   &is_p2p, pinned);
- 	if (pages != stack_pages)
- 		kvfree(pages);
- 	if (nr_bvecs > queue_max_integrity_segments(q))
- 		copy = true;
- 	if (is_p2p)
- 		bio->bi_opf |= REQ_NOMERGE;
- 
- 	if (copy)
--		ret = bio_integrity_copy_user(bio, bvec, nr_bvecs, bytes);
-+		ret = bio_integrity_copy_user(bio, bvec, nr_bvecs, bytes,
-+					      pinned);
- 	else
--		ret = bio_integrity_init_user(bio, bvec, nr_bvecs, bytes);
-+		ret = bio_integrity_init_user(bio, bvec, nr_bvecs, bytes,
-+					      pinned);
- 	if (ret)
- 		goto release_pages;
- 	if (bvec != stack_vec)
- 		kfree(bvec);
- 
- 	return 0;
- 
- release_pages:
--	bio_integrity_unpin_bvec(bvec, nr_bvecs);
-+	if (pinned)
-+		bio_integrity_unpin_bvec(bvec, nr_bvecs);
- free_bvec:
- 	if (bvec != stack_vec)
- 		kfree(bvec);
- 	return ret;
- }
-diff --git a/block/blk-integrity.c b/block/blk-integrity.c
-index 964eebbee14d..6977bfd96927 100644
---- a/block/blk-integrity.c
-+++ b/block/blk-integrity.c
-@@ -118,18 +118,15 @@ int blk_get_meta_cap(struct block_device *bdev, unsigned int cmd,
- out:
- 	return copy_struct_to_user(argp, usize, &meta_cap, sizeof(meta_cap),
- 				   NULL);
- }
- 
--int blk_rq_integrity_map_user(struct request *rq, void __user *ubuf,
--			      ssize_t bytes)
-+int blk_rq_integrity_map_user(struct request *rq, struct iov_iter *iter)
- {
- 	int ret;
--	struct iov_iter iter;
- 
--	iov_iter_ubuf(&iter, rq_data_dir(rq), ubuf, bytes);
--	ret = bio_integrity_map_user(rq->bio, &iter);
-+	ret = bio_integrity_map_user(rq->bio, iter);
- 	if (ret)
- 		return ret;
- 
- 	rq->nr_integrity_segments = blk_rq_count_integrity_sg(rq->q, rq->bio);
- 	rq->cmd_flags |= REQ_INTEGRITY;
-diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
-index 748a4cbf7e90..e69c49c334a0 100644
---- a/drivers/nvme/host/ioctl.c
-+++ b/drivers/nvme/host/ioctl.c
-@@ -175,11 +175,15 @@ static int nvme_map_user_request(struct request *req, u64 ubuffer,
- 				0, rq_data_dir(req));
- 	if (ret)
- 		return ret;
- 
- 	if (has_metadata) {
--		ret = blk_rq_integrity_map_user(req, meta_buffer, meta_len);
-+		struct iov_iter meta_iter;
-+
-+		iov_iter_ubuf(&meta_iter, rq_data_dir(req), meta_buffer,
-+			      meta_len);
-+		ret = blk_rq_integrity_map_user(req, &meta_iter);
- 		if (ret)
- 			goto out_unmap;
- 	}
- 
- 	return ret;
-diff --git a/include/linux/bio-integrity.h b/include/linux/bio-integrity.h
-index 0ea2a8bf7efb..740acb8c1077 100644
---- a/include/linux/bio-integrity.h
-+++ b/include/linux/bio-integrity.h
-@@ -12,10 +12,11 @@ enum bip_flags {
- 	BIP_COPY_USER		= 1 << 4, /* Kernel bounce buffer in use */
- 	BIP_CHECK_GUARD		= 1 << 5, /* guard check */
- 	BIP_CHECK_REFTAG	= 1 << 6, /* reftag check */
- 	BIP_CHECK_APPTAG	= 1 << 7, /* apptag check */
- 
-+	BIP_PAGE_PINNED		= 1 << 14, /* pages need to be unpinned */
- 	BIP_MEMPOOL		= 1 << 15, /* buffer backed by mempool */
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index 2e4368d611ee..6df5f3bf5628 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -16,11 +16,11 @@ struct io_uring_cmd {
+ 	struct file	*file;
+ 	const struct io_uring_sqe *sqe;
+ 	u32		cmd_op;
+ 	u32		flags;
+ 	u8		pdu[32]; /* available inline for free use */
+-	u8		unused[8];
++	struct io_rsrc_node *metadata_node;
  };
  
- /* flags that require generate/verify action. */
- #define BIP_CHECK_FLAGS (BIP_CHECK_GUARD | BIP_CHECK_REFTAG | BIP_CHECK_APPTAG)
-diff --git a/include/linux/blk-integrity.h b/include/linux/blk-integrity.h
-index b1b530613c34..8b655ac165e8 100644
---- a/include/linux/blk-integrity.h
-+++ b/include/linux/blk-integrity.h
-@@ -28,12 +28,11 @@ static inline bool queue_limits_stack_integrity_bdev(struct queue_limits *t,
+ #define io_uring_sqe128_cmd(sqe, type)	({					\
+ 	BUILD_BUG_ON(sizeof(type) > ((2 * sizeof(struct io_uring_sqe)) -	\
+ 				     offsetof(struct io_uring_sqe, cmd)));	\
+@@ -68,10 +68,14 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 				  const struct iovec __user *uvec,
+ 				  size_t uvec_segs,
+ 				  int ddir, struct iov_iter *iter,
+ 				  unsigned issue_flags);
++int io_uring_cmd_import_fixed_metadata(struct io_uring_cmd *ioucmd,
++				       u16 buf_index, u64 ubuf, size_t len,
++				       int ddir, struct iov_iter *iter,
++				       unsigned int issue_flags);
  
- #ifdef CONFIG_BLK_DEV_INTEGRITY
- int blk_rq_map_integrity_sg(struct request *, struct scatterlist *);
- 
- int blk_rq_count_integrity_sg(struct request_queue *, struct bio *);
--int blk_rq_integrity_map_user(struct request *rq, void __user *ubuf,
--			      ssize_t bytes);
-+int blk_rq_integrity_map_user(struct request *rq, struct iov_iter *iter);
- int blk_get_meta_cap(struct block_device *bdev, unsigned int cmd,
- 		     struct logical_block_metadata_cap __user *argp);
- bool blk_rq_integrity_dma_map_iter_start(struct request *req,
- 		struct device *dma_dev,  struct dma_iova_state *state,
- 		struct blk_dma_iter *iter);
-@@ -116,12 +115,11 @@ static inline int blk_rq_map_integrity_sg(struct request *q,
- 					  struct scatterlist *s)
+ /*
+  * Completes the request, i.e. posts an io_uring CQE and deallocates @ioucmd
+  * and the corresponding io_uring request.
+  *
+@@ -125,10 +129,16 @@ static inline int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 						int ddir, struct iov_iter *iter,
+ 						unsigned issue_flags)
  {
+ 	return -EOPNOTSUPP;
+ }
++static inline int io_uring_cmd_import_fixed_metadata(
++	struct io_uring_cmd *ioucmd, u16 buf_index, u64 ubuf, size_t len,
++	int ddir, struct iov_iter *iter, unsigned int issue_flags)
++{
++	return -EOPNOTSUPP;
++}
+ static inline void __io_uring_cmd_done(struct io_uring_cmd *cmd,
+ 				       unsigned issue_flags)
+ {
+ }
+ static inline void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 174f74cbbf60..4bd69803c470 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -1134,14 +1134,14 @@ static int io_import_kbuf(int ddir, struct iov_iter *iter,
+ 	iov_iter_bvec(iter, ddir, imu->bvec, imu->nr_bvecs, count);
+ 	iov_iter_advance(iter, offset);
  	return 0;
  }
- static inline int blk_rq_integrity_map_user(struct request *rq,
--					    void __user *ubuf,
--					    ssize_t bytes)
-+					    struct iov_iter *iter)
+ 
+-static int io_import_fixed(int ddir, struct iov_iter *iter,
+-			   struct io_mapped_ubuf *imu,
+-			   u64 buf_addr, size_t len)
++int io_import_fixed(int ddir, struct iov_iter *iter, struct io_rsrc_node *node,
++		    u64 buf_addr, size_t len)
  {
- 	return -EINVAL;
++	struct io_mapped_ubuf *imu = node->buf;
+ 	const struct bio_vec *bvec;
+ 	size_t folio_mask;
+ 	unsigned nr_segs;
+ 	size_t offset;
+ 	int ret;
+@@ -1189,28 +1189,22 @@ static int io_import_fixed(int ddir, struct iov_iter *iter,
  }
- static inline bool blk_rq_integrity_dma_map_iter_start(struct request *req,
- 		struct device *dma_dev,  struct dma_iova_state *state,
+ 
+ inline struct io_rsrc_node *io_find_buf_node(struct io_kiocb *req,
+ 					     unsigned issue_flags)
+ {
+-	struct io_ring_ctx *ctx = req->ctx;
+ 	struct io_rsrc_node *node;
+ 
+ 	if (req->flags & REQ_F_BUF_NODE)
+ 		return req->buf_node;
+-	req->flags |= REQ_F_BUF_NODE;
+ 
+-	io_ring_submit_lock(ctx, issue_flags);
+-	node = io_rsrc_node_lookup(&ctx->buf_table, req->buf_index);
+-	if (node) {
+-		node->refs++;
+-		req->buf_node = node;
+-		io_ring_submit_unlock(ctx, issue_flags);
+-		return node;
+-	}
+-	req->flags &= ~REQ_F_BUF_NODE;
+-	io_ring_submit_unlock(ctx, issue_flags);
+-	return NULL;
++	node = io_get_buf_node(req, req->buf_index, issue_flags);
++	if (!node)
++		return NULL;
++
++	req->flags |= REQ_F_BUF_NODE;
++	req->buf_node = node;
++	return node;
+ }
+ 
+ int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
+ 			u64 buf_addr, size_t len, int ddir,
+ 			unsigned issue_flags)
+@@ -1218,11 +1212,11 @@ int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
+ 	struct io_rsrc_node *node;
+ 
+ 	node = io_find_buf_node(req, issue_flags);
+ 	if (!node)
+ 		return -EFAULT;
+-	return io_import_fixed(ddir, iter, node->buf, buf_addr, len);
++	return io_import_fixed(ddir, iter, node, buf_addr, len);
+ }
+ 
+ static int io_buffer_acct_cloned_hpages(struct io_ring_ctx *ctx,
+ 					struct io_mapped_ubuf *imu)
+ {
+diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
+index eacfdb70f203..277e2007803d 100644
+--- a/io_uring/rsrc.h
++++ b/io_uring/rsrc.h
+@@ -4,10 +4,11 @@
+ 
+ #include <linux/bvec.h>
+ #include <linux/io_uring_types.h>
+ #include <linux/lockdep.h>
+ #include <linux/uio.h>
++#include "io_uring.h"
+ 
+ #define IO_VEC_CACHE_SOFT_CAP		256
+ 
+ enum {
+ 	IORING_RSRC_FILE		= 0,
+@@ -64,10 +65,12 @@ void io_free_rsrc_node(struct io_ring_ctx *ctx, struct io_rsrc_node *node);
+ void io_rsrc_data_free(struct io_ring_ctx *ctx, struct io_rsrc_data *data);
+ int io_rsrc_data_alloc(struct io_rsrc_data *data, unsigned nr);
+ 
+ struct io_rsrc_node *io_find_buf_node(struct io_kiocb *req,
+ 				      unsigned issue_flags);
++int io_import_fixed(int ddir, struct iov_iter *iter, struct io_rsrc_node *node,
++		    u64 buf_addr, size_t len);
+ int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
+ 			u64 buf_addr, size_t len, int ddir,
+ 			unsigned issue_flags);
+ int io_import_reg_vec(int ddir, struct iov_iter *iter,
+ 			struct io_kiocb *req, struct iou_vec *vec,
+@@ -100,10 +103,24 @@ static inline struct io_rsrc_node *io_rsrc_node_lookup(struct io_rsrc_data *data
+ 	if (index < data->nr)
+ 		return data->nodes[array_index_nospec(index, data->nr)];
+ 	return NULL;
+ }
+ 
++static inline struct io_rsrc_node *
++io_get_buf_node(const struct io_kiocb *req, u16 buf_index, unsigned issue_flags)
++{
++	struct io_ring_ctx *ctx = req->ctx;
++	struct io_rsrc_node *node;
++
++	io_ring_submit_lock(ctx, issue_flags);
++	node = io_rsrc_node_lookup(&ctx->buf_table, buf_index);
++	if (node)
++		node->refs++;
++	io_ring_submit_unlock(ctx, issue_flags);
++	return node;
++}
++
+ static inline void io_put_rsrc_node(struct io_ring_ctx *ctx, struct io_rsrc_node *node)
+ {
+ 	lockdep_assert_held(&ctx->uring_lock);
+ 	if (!--node->refs)
+ 		io_free_rsrc_node(ctx, node);
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 3d5d8b5f4ebb..e4b384094392 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -25,19 +25,25 @@ void io_cmd_cache_free(const void *entry)
+ 
+ static void io_req_uring_cleanup(struct io_kiocb *req, unsigned int issue_flags)
+ {
+ 	struct io_uring_cmd *ioucmd = io_kiocb_to_cmd(req, struct io_uring_cmd);
+ 	struct io_async_cmd *ac = req->async_data;
++	struct io_ring_ctx *ctx = req->ctx;
+ 
+ 	if (issue_flags & IO_URING_F_UNLOCKED)
+ 		return;
+ 
++	if (ioucmd->metadata_node) {
++		io_put_rsrc_node(ctx, ioucmd->metadata_node);
++		ioucmd->metadata_node = NULL;
++	}
++
+ 	io_alloc_cache_vec_kasan(&ac->vec);
+ 	if (ac->vec.nr > IO_VEC_CACHE_SOFT_CAP)
+ 		io_vec_free(&ac->vec);
+ 
+-	if (io_alloc_cache_put(&req->ctx->cmd_cache, ac)) {
++	if (io_alloc_cache_put(&ctx->cmd_cache, ac)) {
+ 		ioucmd->sqe = NULL;
+ 		io_req_async_data_clear(req, REQ_F_NEED_CLEANUP);
+ 	} else {
+ 		io_vec_free(&ac->vec);
+ 	}
+@@ -194,10 +200,11 @@ int io_uring_cmd_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+ 	if (!ac)
+ 		return -ENOMEM;
+ 	if (ac->vec.iovec)
+ 		req->flags |= REQ_F_NEED_CLEANUP;
+ 	ioucmd->sqe = sqe;
++	ioucmd->metadata_node = NULL;
+ 	return 0;
+ }
+ 
+ /*
+  * IORING_SETUP_SQE128 contexts allocate twice the normal SQE size for each
+@@ -303,10 +310,31 @@ int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 	return io_import_reg_vec(ddir, iter, req, &ac->vec, uvec_segs,
+ 				 issue_flags);
+ }
+ EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed_vec);
+ 
++int io_uring_cmd_import_fixed_metadata(struct io_uring_cmd *ioucmd,
++				       u16 buf_index, u64 ubuf, size_t len,
++				       int ddir, struct iov_iter *iter,
++				       unsigned int issue_flags)
++{
++	struct io_rsrc_node *buf_node = ioucmd->metadata_node;
++
++	if (!buf_node) {
++		struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
++
++		buf_node = io_get_buf_node(req, buf_index, issue_flags);
++		if (!buf_node)
++			return -EFAULT;
++
++		req->flags |= REQ_F_NEED_CLEANUP;
++		ioucmd->metadata_node = buf_node;
++	}
++	return io_import_fixed(ddir, iter, buf_node, ubuf, len);
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed_metadata);
++
+ void io_uring_cmd_issue_blocking(struct io_uring_cmd *ioucmd)
+ {
+ 	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
+ 
+ 	io_queue_iowq(req);
 -- 
 2.55.0
 
