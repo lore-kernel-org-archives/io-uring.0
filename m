@@ -1,213 +1,181 @@
-Received: from mail-oo2-f8.google.com (mail-oo2-f8.google.com [74.125.231.136])
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8039848F013
-	for <io-uring@vger.kernel.org>; Tue,  8 Sep 2026 22:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBADF3B1B4
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 01:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788905329; cv=none; b=Ftt40EHToYqo2SnUCh/3imYABFFe0cSAKk3yOeZIobry842kc0keDYDA4qFrsFvR18ChKkrMLPm98ZVs0O9LQkcyJElZnQXdLhnZEIny4AXbGLQOjqg6GUTG8jDNj+TnkPB13cVrQcZqLnoDiVpggLwKo8dzj54z/3RKldNlLHs=
+	t=1788916160; cv=none; b=T0FKLla+Jxb8fWHVW6iQMDLDeK2WYJNffnBFiStkMVeHzxy+sZP9X21QjbcR0WGd8DKzrDjOo4hgnl5dsAibWromoReTNwmv0D4gs7I7B+MU1nGpZufEMbGcMo4G7HI9ayNL3Z+r/A5Q3hqcPAThpSg3HQQFuObWYXXP4OZ4OGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788905329; c=relaxed/simple;
-	bh=kL1be+1n2xXuZeI05oshAxLXJ35j1Dn4wAKqPBd1L3w=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NcPtDrf6JlKmwJH9vQ04q7Xvn6P9P4q5oHh0PTgdrLJrMtOpgLHz/KvzTEOCPigIOSc4NW2tJUyDI3upTFH5FiMmCz1xrmYfNNnnazDAFw8ENl0Ss+Ns2hvWRCWk+q/7pmfctKjnhDyBbGiVt38kurtRLWrMDEm2K5bKjxWTnNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=74.125.231.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo2-f8.google.com with SMTP id 006d021491bc7-6b1bf394d3bso708307eaf.0
-        for <io-uring@vger.kernel.org>; Tue, 08 Sep 2026 15:08:47 -0700 (PDT)
+	s=arc-20240116; t=1788916160; c=relaxed/simple;
+	bh=gXHIURS8uzHDyphzIvg+HUiTWpMD73ienyahsCb1Zs4=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=VsUQIrjLrkdtU8LKEDeAULPGlJxmdopj6toVSXKpgrQ5l3zOYvNYtTtVwUASXAFF2e6YqpHmPLU1lNuJdI11I/MEVVMXsPvBdGrGgdbZYgkxyqzIu3yff+7w5GL3AB3eTDu1oeSW8IUfNOcJEcQBgEnn0uNOl14Zs0paAVOinFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=d7KsUpy8; arc=none smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="d7KsUpy8"
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-4b28d9537bcso3627717b6e.0
+        for <io-uring@vger.kernel.org>; Tue, 08 Sep 2026 18:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1788916154; x=1789520954; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Wi1Z/fFU3Xj9zHEsPg9TH255ZjqWv+BiKQ7g+JBjtCU=;
+        b=d7KsUpy8NSc78geDMREHCLU8YF54lDSv3BVNjLZNPNnTi5SxGqYNrMVE3Ikna5YH1y
+         r+Vqg+bwxOpH/z1ExpN5MLCT9TLHOSfvS1DbnBF2OmHYOlDTD/8+qRm/LuWWH0AEukJ6
+         EeE5LPopWHravq+3zGqTtJ6nARZApDUQJvafxVyI8WtCI6oj0PKW/lswI/8KYnOXdm5N
+         p3MED2MfWNhHSX72w7/FsATrl8kDX+zCl1vqoFGH47VhF4StWnFtDSvyjSxGbz5bqypG
+         U1RaJKscF+dcwxgy4RpueWXmTwhTcxLGT6NvwfXYxwwaszAVbVLgZMgrMgKRfmrpo2ww
+         2DNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788905326; x=1789510126;
-        h=content-type:to:from:subject:message-id:date:mime-version
+        d=1e100.net; s=20251104; t=1788916154; x=1789520954;
+        h=content-transfer-encoding:content-type:subject:from:to
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6kzJLngJ9sIpOAhXA1n2+iUvn4oLCSr6EXvDZpAJyHQ=;
-        b=tYsR0W9wvsp77X6LHTsCXXrVCN0OxY+Ts4HIcbxSbFEOEaiHAZT7ujtg4NTkL9KL0P
-         85qxEz3AtVQ4TrY1fClBHI2ZqtV5TwWz/RAD2e2QqB7uQaIMKdAtQt7Exz82wrdxxJkl
-         nqmpmpEjkvIZIv0N2VooB04qXfSsjSSlaGxwLdMqRs4GWwy+qNCyweJWpx/Ne35XzBn8
-         yFqwCXHfkU3+x50CG4EdSIvGdQ105bONmwXfT2qtwkpXLkv3R4SsG9cHueToQ8qqaj/h
-         ER+iSstQNSjSYOD44kVUmBk8GNDLC6lW9zfCGpH04xdlYnRSvP9LffTrybhimhpN4n8o
-         eFzg==
-X-Forwarded-Encrypted: i=1; AKwUvBw1RLYTZUiutuUS+063HzuNEcLdsCA1W54/VAs48nVOBtiwXbfi39MlhBVd/hrQseWj6GGwdz4+kg==@vger.kernel.org
-X-Gm-Message-State: AFuF++kkKmUe87Ur7QpvYoTegTio8q8ZhjR2Gn0TACE96OByRPcqvoSm
-	hdWKt3pd6JsXvcZLztdIxhQU/BzZ+f/65rVIDLTSyQ8OtuowhJWQUnVyBB1lFMUJj/t8QAogFwv
-	XGoVB+Gj4GTJ42dMzmRRBhVVmtXUUBE886i1Ep5eQjJemU+rsVBgVSfh3rwQ=
+        bh=Wi1Z/fFU3Xj9zHEsPg9TH255ZjqWv+BiKQ7g+JBjtCU=;
+        b=GYmIO4kxx5CwvrvQiWl0DNAoCToZGAvtu9ILEWNQwgcbHin3oVgDIPYELsjiGkvOY1
+         ZjGydxInzSwEDBYohclkWR6RvMETk3W0pFEUYE/BcYLB1yEXQSudJQLPeJ2pimCKu+4o
+         1d0T2tCNdnVpft4uJpD65l5+KUte5eR0rXfpm4n/shLq3DQ1BDKQaSYhcyFtMC4obT56
+         OYgw4fUnPC5XA8vEwMrd7KtYsY3kQjjzlBbXtXikKd1ZIoNfSD67PN904A4QAIjJH7vV
+         YabPqQeV0EXNTRHFxrEll0Z8VExHg3TzyrauqBF9cssQKUVM049zqwHTX4/CHHbRSnni
+         iAdw==
+X-Gm-Message-State: AFuF++nAL6QxeTn0qCR+qEBvAz1a9a858PvTJWRA4wk/bpkC3ct69Tbb
+	BS9syQBi0RHbiO81xQAXOdT0X9ewsh/K9NHQTBNWJrdNitWhXwcaR2PbYRmYY3rYBh7xImt/449
+	edlmDVRE=
+X-Gm-Gg: AYBFou05vjpmrmfSaUwUGk0ZAWls+pVuFVB2hG8DCqbVZ/A8wq5lp8gmXYPyCV9q3Vr
+	g1C5JNN0dJHEQRN9erE/uoVm8Ux0tkpdsHC9q6Bti3l9nr7+CbcLDP7N6yaHrZZ2GUb1KHVOzTe
+	Ak144tbOL+QXGTkm/WivX8pnldR6+ZmrDFTUfhimxEHUvcNjAVuHIbswBRWpODH8TR2cXgqcZR2
+	2/p5u6QqnhPB5zNJtNiEJKVoM4sFk8qkL19kMNIHwBM0jGzuH++SNepUzjkA/dl0IIb1ThzY+uQ
+	+wIzQde40Zewcl6UQeSdLSar4EuUz/p7BX2/Fvkoa/kAVwSIKDU/q5ekw7F8F8fhHCexdIN6/SX
+	FaPdY259zogS+DepIe5UDByzLDb3nSYTH8v9pjtdgRdum0zYFYj88KzG8v4d6oSECn8xS4tMvX6
+	CEuXFRcdVADLB4xjyP22SVxDNbe2K0bjLvD0BsH67LUuvpxxxYI9Winkb9bW9gcLmsOB4EBUjrd
+	pvXQP0CJm2Ojr2+6yW2t7MrZjdCJI+yVpxMuPbYwDdW3t300eI7byHEiQ==
+X-Received: by 2002:a05:6808:c2b7:b0:495:f697:92d9 with SMTP id 5614622812f47-4b7dcb8fa95mr14754632b6e.7.1788916153964;
+        Tue, 08 Sep 2026 18:09:13 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-475523d1dc5sm14057832fac.2.2026.09.08.18.09.11
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2026 18:09:12 -0700 (PDT)
+Message-ID: <30fdc8f9-f50e-46b6-b876-20e4f59c744f@kernel.dk>
+Date: Tue, 8 Sep 2026 19:09:11 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:200f:b0:6b9:7d9e:5708 with SMTP id
- 006d021491bc7-6bdc949e3b9mr2550901eaf.3.1788905326349; Tue, 08 Sep 2026
- 15:08:46 -0700 (PDT)
-Date: Tue, 08 Sep 2026 15:08:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6aa0876e.f81106d8.285f0a.0005.GAE@google.com>
-Subject: [syzbot] [io-uring?] [ext4?] INFO: task hung in io_write
-From: syzbot <syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, io-uring@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring/rw: end write accounting from ->ki_complete
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+Commit b000145e9907 moved both the fsnotify calls and the write
+accounting out of the kiocb completion handler and into the
+io_req_rw_complete() task_work. However, only the fsnotify part actually
+needed to move as it may sleep. Ending the write accounting is just a
+percpu_up_read() on the superblock writers sem.
 
-syzbot found the following issue on:
+Deferring it is a problem, because it makes dropping SB_FREEZE_WRITE
+protection depend on the ring owner getting to running task_work. But
+the task may be blocked in freeze_super(), causing it to never get to
+that:
 
-HEAD commit:    28924df2a08f Merge tag 'perf-tools-fixes-for-v7.3-2026-09-..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13842af9580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e909ffe6b35dddb7
-dashboard link: https://syzkaller.appspot.com/bug?extid=2eb3d983669d3e49d4fa
-compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=160d1749580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13993af9580000
+  task                             io-wq worker
+  --------------------------------------------------------------
+  io_write()
+    io_kiocb_start_write()         (takes sb_writers, hidden from
+                                    lockdep by __sb_writers_release)
+    write_iter() -> -EIOCBQUEUED
+  ioctl(FS_IOC_SHUTDOWN)
+    bdev_freeze()
+      freeze_super()
+        percpu_down_write()        <- waits for the reader above
+                                   io_write()
+                                     kiocb_start_write()
+                                       percpu_down_read()  <- queued
+                                                              behind the
+                                                              writer
+  <bio completes>
+    io_complete_rw()
+      queues io_req_rw_complete()  <- never runs, task is in D state
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/d900f083ada3/non_bootable_disk-28924df2.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/309bf243aefc/vmlinux-28924df2.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5baa1c49144e/bzImage-28924df2.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/7dba324ffac0/mount_1.gz
-  fsck result: OK (log: https://syzkaller.appspot.com/x/fsck.log?x=15842af9580000)
+End the write from io_complete_rw() instead, and leave only the fsnotify
+calls in task_work.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
 Reported-by: syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com
-
-INFO: task iou-wrk-5725:5730 blocked for more than 143 seconds.
-      Not tainted syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:iou-wrk-5725    state:D stack:22112 pid:5730  tgid:5724  ppid:5438   task_flags:0x404050 flags:0x00080002
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5526 [inline]
- __schedule+0x17db/0x58f0 kernel/sched/core.c:7276
- __schedule_loop kernel/sched/core.c:7353 [inline]
- schedule+0x164/0x2b0 kernel/sched/core.c:7368
- percpu_rwsem_wait+0x326/0x490 kernel/locking/percpu-rwsem.c:164
- __percpu_down_read+0xee/0x130 kernel/locking/percpu-rwsem.c:180
- percpu_down_read_internal include/linux/percpu-rwsem.h:67 [inline]
- percpu_down_read_freezable include/linux/percpu-rwsem.h:83 [inline]
- __sb_start_write include/linux/fs/super.h:19 [inline]
- sb_start_write include/linux/fs/super.h:125 [inline]
- kiocb_start_write include/linux/fs.h:2787 [inline]
- io_kiocb_start_write io_uring/rw.c:1109 [inline]
- io_write+0x120c/0x1680 io_uring/rw.c:1163
- __io_issue_sqe+0x188/0x4d0 io_uring/io_uring.c:1386
- io_issue_sqe+0x16d/0x1020 io_uring/io_uring.c:1409
- io_wq_submit_work+0x7ab/0xc90 io_uring/io_uring.c:1525
- io_worker_handle_work+0x7a1/0x1140 io_uring/io-wq.c:659
- io_wq_worker+0x452/0xf10 io_uring/io-wq.c:714
- ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-
-Showing all locks held in the system:
-locks held by kworker/u4:1/13: 2, last CPU#0:
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #1: ffffc9000026fc40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
-locks held by khungtaskd/26: 1, last CPU#0:
- #0: ffffffff8ed5c760 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #0: ffffffff8ed5c760 (rcu_read_lock){....}-{1:3}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #0: ffffffff8ed5c760 (rcu_read_lock){....}-{1:3}, at: debug_show_all_locks+0x2e/0x180 kernel/locking/lockdep.c:6871
-locks held by kworker/u4:2/37: 3, last CPU#0:
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #1: ffffc900003f7c40 ((work_completion)(&(&nsim_dev->trap_data->trap_report_dw)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #2: ffff888051872258 (&devlink->lock_key#4){+.+.}-{4:4}, at: nsim_dev_trap_report_work+0x57/0xb40 drivers/net/netdevsim/dev.c:834
-locks held by kworker/u4:3/43: 2, on CPU#0:
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #0: ffff88801b094140 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #1: ffffc90000877c40 ((work_completion)(&(&kfence_timer)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
-locks held by kworker/u4:7/187: 4, last CPU#0:
- #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #0: ffff88803fa20140 ((wq_completion)bat_events){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #1: ffffc900019dfc40 ((work_completion)(&(&forw_packet_aggr->delayed_work)->work)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #2: ffff88801fc3bb20 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x2d/0x160 kernel/sched/core.c:677
- #3: ffff88801fc24408 (psi_seq){-.-.}-{0:0}, at: psi_task_switch+0x57/0x7d0 kernel/sched/psi.c:933
-locks held by getty/5086: 2, on CPU#0:
- #0: ffff88803ee570a0 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x25/0x70 drivers/tty/tty_ldisc.c:243
- #1: ffffc90000d202e8 (&ldata->atomic_read_lock){+.+.}-{4:4}, at: n_tty_read+0x45a/0x1360 drivers/tty/n_tty.c:2211
-locks held by kworker/0:10/5721: 3, last CPU#0:
- #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #0: ffff88801b0a8940 ((wq_completion)events){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: rcu_lock_acquire include/linux/rcupdate.h:309 [inline]
- #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
- #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3361 [inline]
- #1: ffffc900052f7c40 ((work_completion)(&adapter->watchdog_task)){+.+.}-{0:0}, at: process_scheduled_works+0x97a/0x1630 kernel/workqueue.c:3479
- #2: ffff88801fc26118 (&base->lock){-.-.}-{2:2}, at: lock_timer_base kernel/time/timer.c:1004 [inline]
- #2: ffff88801fc26118 (&base->lock){-.-.}-{2:2}, at: __mod_timer+0x1a9/0xed0 kernel/time/timer.c:1085
-locks held by syz.0.23/5725: 2, on CPU#0:
- #0: ffff88801d025220 (&bdev->bd_fsfreeze_mutex){+.+.}-{4:4}, at: bdev_freeze+0x33/0x2f0 block/bdev.c:304
- #1: ffff888048fa4460 (sb_writers#4){++++}-{0:0}, at: sb_wait_write fs/super.c:2043 [inline]
- #1: ffff888048fa4460 (sb_writers#4){++++}-{0:0}, at: freeze_super+0x4f4/0x11c0 fs/super.c:2307
-locks held by iou-wrk-5725/5730: 1, on CPU#0:
- #0: ffff888048fa4460 (sb_writers#4){++++}-{0:0}, at: __io_issue_sqe+0x188/0x4d0 io_uring/io_uring.c:1386
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 UID: 0 PID: 26 Comm: khungtaskd Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- nmi_cpu_backtrace+0x274/0x2d0 lib/nmi_backtrace.c:123
- nmi_trigger_cpumask_backtrace+0x17d/0x390 lib/nmi_backtrace.c:66
- trigger_all_cpu_backtrace include/linux/nmi.h:164 [inline]
- __sys_info lib/sys_info.c:157 [inline]
- sys_info+0x135/0x170 lib/sys_info.c:165
- check_hung_uninterruptible_tasks kernel/hung_task.c:353 [inline]
- watchdog+0xfd7/0x1030 kernel/hung_task.c:561
- kthread+0x38b/0x480 kernel/kthread.c:436
- ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
- </TASK>
-
+Cc: stable@vger.kernel.org
+Fixes: b000145e9907 ("io_uring/rw: defer fsnotify calls to task context")
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/io_uring/rw.c b/io_uring/rw.c
+index 95106dd1d7eb..3e22f294bdf2 100644
+--- a/io_uring/rw.c
++++ b/io_uring/rw.c
+@@ -517,20 +517,25 @@ static void io_req_end_write(struct io_kiocb *req)
+ 	}
+ }
+ 
+-/*
+- * Trigger the notifications after having done some IO, and finish the write
+- * accounting, if any.
+- */
+-static void io_req_io_end(struct io_kiocb *req)
++/* Trigger the notifications after having done some IO. */
++static void io_req_io_notify(struct io_kiocb *req)
+ {
+ 	struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
+ 
+-	if (rw->kiocb.ki_flags & IOCB_WRITE) {
+-		io_req_end_write(req);
++	if (rw->kiocb.ki_flags & IOCB_WRITE)
+ 		fsnotify_modify(req->file);
+-	} else {
++	else
+ 		fsnotify_access(req->file);
+-	}
++}
++
++/* Finish write accounting and notify, for inline completions only. */
++static void io_req_io_end(struct io_kiocb *req)
++{
++	struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
++
++	if (rw->kiocb.ki_flags & IOCB_WRITE)
++		io_req_end_write(req);
++	io_req_io_notify(req);
+ }
+ 
+ static void __io_complete_rw_common(struct io_kiocb *req, long res)
+@@ -563,7 +568,7 @@ void io_req_rw_complete(struct io_tw_req tw_req, io_tw_token_t tw)
+ {
+ 	struct io_kiocb *req = tw_req.req;
+ 
+-	io_req_io_end(req);
++	io_req_io_notify(req);
+ 
+ 	if (req->flags & (REQ_F_BUFFER_SELECTED|REQ_F_BUFFER_RING))
+ 		req->cqe.flags |= io_put_kbuf(req, max(req->cqe.res, 0), NULL);
+@@ -577,6 +582,10 @@ static void io_complete_rw(struct kiocb *kiocb, long res)
+ 	struct io_rw *rw = container_of(kiocb, struct io_rw, kiocb);
+ 	struct io_kiocb *req = cmd_to_io_kiocb(rw);
+ 
++	/* ring owner may block in freeze_super() before task_work runs */
++	if (kiocb->ki_flags & IOCB_WRITE)
++		io_req_end_write(req);
++
+ 	__io_complete_rw_common(req, res);
+ 	io_req_set_res(req, io_fixup_rw_res(req, res), 0);
+ 	req->io_task_work.func = io_req_rw_complete;
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+-- 
+Jens Axboe
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
