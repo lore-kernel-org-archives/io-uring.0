@@ -1,68 +1,68 @@
-Received: from mail-oa1-f99.google.com (mail-oa1-f99.google.com [209.85.160.99])
+Received: from mail-pj1-f97.google.com (mail-pj1-f97.google.com [209.85.216.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391DE4825D5
-	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 22:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA79848EC66
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 22:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788992958; cv=none; b=CU3R72utkwgn6sjjzKjgQTjTdQfPBzaOcspgSN0GB42aD7ETkYXZLIijd0PWTi6Ni3zDQ59HLIsGwsgRtN3LqwJ3RzjMqlOE+5iwwPuw28RkGyiucJFI2jxIODjDijxKVbnTXIRr7egf/9s+W6lYKOJk+p92GxgSCyRL5PhjIOA=
+	t=1788992962; cv=none; b=JdLwTyz3BiP9/gpVtoJDZrdcOEtIVmhOPeCX5kpv4fFYaD9SHljUjy5it1WsiS7gg2k9BZi0A8hECKuHwAH1pyRxuwVjvyRUcJrjkSMpE+q8ktNrBxdXZwSxNHuLg1EdGxtcsq/8DXn49MloiTXW9N6fBOapQb3QAng4Jx+M3OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788992958; c=relaxed/simple;
-	bh=ZsRCPU0J121h1w/y85vunBI0gv6iQjmpHXlh3qUdYlg=;
+	s=arc-20240116; t=1788992962; c=relaxed/simple;
+	bh=Y6jx5aTPCjcHCvNdP8/O5bbbCvk9DUcwaVIqR2GXaWs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QdmF8kf3VmTEKxr0xcAubu95K/p/KXfypoe+D5nlNT18s52fLKp0KvokwFFmXNRVfdryMeDl38f6LZJQnakzpLZZvQs/QbpUvE6+eczoX2F2vP/13drcR+fTgGjuJN0XakUciXTsEr9L5q3C8c10J+vxNnFRnVj/kURCIeKAQ9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=LMnDcxSW; arc=none smtp.client-ip=209.85.160.99
+	 MIME-Version; b=n3ZL7sT8QJBnJEhgFlDlobhQ4y1GV7hJHJtOSJG+zPtNGdz3fgqfN7P3vKlzZp5CTvlWyBlvhjvlVAEqT6pzxtHwnx2f4SrvLXM2IOs+UY4X3DJFqJGKY6LE1hJ1p1OTQbORmcPkGnmNlNzjeuB6R3/6wpC1AMgOQ/Dlz+m93XY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=U3zYG8FG; arc=none smtp.client-ip=209.85.216.97
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="LMnDcxSW"
-Received: by mail-oa1-f99.google.com with SMTP id 586e51a60fabf-46b08568bc4so157621fac.3
-        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 15:29:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="U3zYG8FG"
+Received: by mail-pj1-f97.google.com with SMTP id 98e67ed59e1d1-384c94c9423so187666a91.2
+        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 15:29:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1788992944; x=1789597744; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ImWYQroYLYn1yUntaG3yDyG9poZ7C84uz/cQieFkqu0=;
-        b=LMnDcxSWOPQs3Iluim5mr8nhBkssXls8io+aEc8xhd83PNawOi0+HS6tnL3fvPYHaF
-         Z0iCc+OYZyTwjDW/F7qqK6yJag2bT21rnE2ASpUB/iZ8TmQjXU/O46v3sSrqcT04NA1E
-         dtwypgDV+a3DHU9lUzP0dckuysAdmbq7A/WKjXl5/lKNWkcZBNVY4gyAjX6sEGR6jkpk
-         jCrxkSHb80WRk0Bti8ABy1rfmvmoOn3W9Uw0g44odA4sEEH6c8PkWTw6ii23hZSiGNJc
-         7pi6YE71ax6Tib3PdUBqj7Cmr7GDnTAkUbGvx7YnJjbSUa9v40Tb0IwmJD7QzcVmYCUY
-         gwDw==
+        bh=l/XCD1uvPOJyUiPbDDQ58GyUdQGYRiCCBtvMcX3nnGY=;
+        b=U3zYG8FGJozjx9rGIndZZqS+MVtMIeRoO/iKFGLw9gpeFcDeX42e98DT19YD+B1Pt/
+         AMkfyg4isW06WQlhf2REXSWlrAlKgGKw2yMDxuoX1sUX4EBLRnypR3e8mMv4ui3puay2
+         ClLvJC+wCSefPB5m/UjhgxwP3RFA35/09ruGxKnCm6GZZhEZZnSbrdG9EA4dxzmpMYdv
+         SWuMrc2a/PlPOGbWpcnUiUMwW/YMsTt7K6bM4V3wBOy0VHDl9W+81CZl/yMnv+yJhnEN
+         GromVttp92g68II/uSWS0Q59q6WyKNLxw3yNWWFhlZxf2u6O56XHn97qo/mAsyfWUPSW
+         s63g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20251104; t=1788992944; x=1789597744;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ImWYQroYLYn1yUntaG3yDyG9poZ7C84uz/cQieFkqu0=;
-        b=cDxkkDa8Lnu4qybOc8BsaCRANpPmrF7v5KtQynTjK03DFJe7MLLwN9tw8hAdpVUMIu
-         sl/fT+4NDBVBg4sDl52IYPNJHL9nu+qJ3malcgXUZHEA/Az2noxA67dFmnXKkaaD/Ter
-         Zu7y3Iew72Yxr8UAiLQU0FxV0dzZ+vVd9Le7FAZsBK1x2WWhRzfKpJ6ozGnk/qX+9RGf
-         oX6pMaVnf9WFGsyrFZKznc1W6oZ0DvbGTEwr4kd/FR0RDwZ2hsvaxqpiW9je/jQa4auS
-         +iOXqecdPaDx3lnMuAQwDtSethxr1cgRj+advSR9+SmNqzmOiknATK5DZbC3mGFTKlb3
-         s5kg==
-X-Gm-Message-State: AFuF++ltEnnDUN4B/mGgTb4dThhiQaSneiBiUWGOkLm7x1S4oURkKmM6
-	/mNhTctqIGJgbLFF/G8QyA038Sb/FiyVD+LC8oVxWdDKVOOmjHtRFXQ2K93aP4ndd7Jy/prueoV
-	dlW6ntVdoifvY1NgAcnG53lhAVwJmMw1r5KCH
-X-Gm-Gg: AYBFou1tKymW5WpoVEfdOHsWDUZIhMkAXSdFm98WpUdT7Vo0JltpW9nm21LMRZLJnDE
-	A1ThevFu0E4HqM5TaZ+BVlCCLjSIGZkS2oWb3VPonoC9newxfOUYHtreTGJMkA3X3LPUvdj1gbq
-	WCWo8Ke+c4yx8cr3A8jlAP7OTAj0VM/56Khb61zf03q5CC0QCn4vLT13gsKxvy9FCWbcUZH4xRR
-	Hv0VlvWnL03ika3RsGtQDgiWbg/IT6fAk2enWYkUT1/2mrilXTsG/UfggXQb+wf9Kjn4DwIP+jY
-	Tfab2UIh+TZOlGwZmeOnoup3vL0XvCQXP6zg/md0NN2EWTRZCCG0Gb3MdzG74qY5kej7g/lxvGm
-	3I9NQWECnuIFk8DwbH5IXg9gzk4r/u8JW
-X-Received: by 2002:a05:6830:f89:b0:7ee:363d:ce16 with SMTP id 46e09a7af769-7fb76e3cd73mr16877278a34.0.1788992944121;
+        bh=l/XCD1uvPOJyUiPbDDQ58GyUdQGYRiCCBtvMcX3nnGY=;
+        b=md0qWdT96eKI4ZLp+uW+xUChu6OcfHDynxBmYvOLGQZNKPQGdSgRZrCKeGu/0FtVS4
+         5S+HwbSUoqssrp8IedJeheufraRVEacNBVDt6qMBpOJRoidhzryPYVvfBskfi5YBYAZL
+         V29xTlMX1wYTYDxixscu+fXNHVCv6NdPrAMNI6vBeI09skj0lMvoJBaq2WqUZdfKRMSw
+         gkiaTikNQUcYIRjBC+peBHRzXT6UjJqt6kyHDImlEL4zizCdzxYDFcmqnH2dximASOil
+         FNIODUBi68o4kSs1g4fAbmAkzRCeMNBC8CXYEQVB9XP3q1iP41isxnQ2cDkpVSnDDFpN
+         WHCQ==
+X-Gm-Message-State: AFuF++nZu9W41Il7XBvio9XIzEnE5hjpgHHz5gQQQnwc4aa9/gWOgxD+
+	cgSBaOwOTY846y9D+7zhn4gbe4um3E8JBoRPD9iDHLYQL96OKBy063pw5+6Vecd4qUyzVzd72Ql
+	KhnzT3IuIxLNndujGT+O0PfFGg96upCIA/L3C
+X-Gm-Gg: AYBFou1XfR5Zg1QWH4cwMhe1qHC9ka6nKr+0geyVbqmViAegidURQAooMjFFYX/2sTu
+	qslCdOS/mZDi/9QXgZ9AyY9jFfHv+wupUPztR5UG9rQs3dXxc4CJDGltYcG78g2jCdintF2lZdV
+	buQgWsuB9lcRwxY5cd0b+AyPa/NrLo70gtMUza/PuS70DbeXwQV73dF1Oo4vQ82hs16bdtRBu73
+	c0GyMgozZ5NbQb6VGH/7xc+lvo5EThjXTFrmeppDPgKnuZntOsl48bhoLATs2Zkvy2QkR2En8AI
+	nDMnMhR7DvhArM0sDbjOTdfGHSAa8Ps9rhcbUDRJ+r9zo8CyAtSLnwh5BWUQFAk5S9Tu0UEZMEP
+	ZYpO8xYj4bTFVgqZyg6WxuZ5NkrdMJ17t
+X-Received: by 2002:a17:90b:4c03:b0:398:bac7:72d0 with SMTP id 98e67ed59e1d1-39b3d86acf2mr28286214a91.5.1788992944093;
         Wed, 09 Sep 2026 15:29:04 -0700 (PDT)
 Received: from c7-smtp-2026.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id 46e09a7af769-7f9f6aa689fsm2773280a34.5.2026.09.09.15.29.04
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-39d77406179sm490126a91.5.2026.09.09.15.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 09 Sep 2026 15:29:04 -0700 (PDT)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id AFA1C402BE;
+Received: from dev-csander.dev.purestorage.com (bond0.slc5-n17m28-k8s.dev.purestorage.com [IPv6:2620:125:9025:20::a31:41f])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 6EFA1401CC;
 	Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id AD682E40322; Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
+	id 6C2CBE40322; Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Jens Axboe <axboe@kernel.dk>,
 	Keith Busch <kbusch@kernel.org>,
@@ -73,9 +73,9 @@ Cc: io-uring@vger.kernel.org,
 	linux-block@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 6/6] nvme/ioctl: support fixed buffer for metadata
-Date: Wed,  9 Sep 2026 16:28:36 -0600
-Message-ID: <20260909222836.2475352-7-csander@purestorage.com>
+Subject: [PATCH 4/6] nvme/ioctl: pass iov_iter to nvme_map_user_request()
+Date: Wed,  9 Sep 2026 16:28:34 -0600
+Message-ID: <20260909222836.2475352-5-csander@purestorage.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260909222836.2475352-1-csander@purestorage.com>
 References: <20260909222836.2475352-1-csander@purestorage.com>
@@ -87,106 +87,158 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-io_uring NVMe passthrough supports using a "fixed" (registered) buffer
-for data, but not metadata. On high-IOPS workloads, the pinning and
-unpinning overhead for the metadata pages is significant and could be
-avoided if fixed metadata buffers were supported.
-
-Define a NVME_URING_CMD_FIXED_METADATA bit for the nvme_uring_cmd's
-flags field (which is currently required to be 0) to indicate that the
-metadata buffer belongs to a fixed buffer registered with the io_uring.
-The metadata fixed buffer index is specified in a metadata_buf_index
-field replacing the existing rsvd1 in nvme_uring_cmd.
-
-If NVME_URING_CMD_FIXED_METADATA is set, the metadata iov_iter is
-obtained from io_uring_cmd_import_fixed_metadata() instead of
-iov_iter_ubuf().
+To allow nvme_map_user_request() to accept an io_uring registered buffer
+(represented as a ITER_BVEC iov_iter) for the metadata buffer, pass it
+as an iov_iter argument. Move the conversions from user address-length
+pairs into iov_iters to the callers. A NULL iov_iter pointer represents
+no metadata buffer.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- drivers/nvme/host/ioctl.c       | 21 ++++++++++++++++-----
- include/uapi/linux/nvme_ioctl.h |  5 ++++-
- 2 files changed, 20 insertions(+), 6 deletions(-)
+ drivers/nvme/host/ioctl.c | 46 +++++++++++++++++++++++----------------
+ 1 file changed, 27 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
-index 8e722184ecf1..4da8cf92c2e0 100644
+index e69c49c334a0..8e722184ecf1 100644
 --- a/drivers/nvme/host/ioctl.c
 +++ b/drivers/nvme/host/ioctl.c
-@@ -488,21 +488,22 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
- 	struct iov_iter iter, meta_iter;
- 	struct iov_iter *map_iter = NULL, *map_meta_iter = NULL;
+@@ -152,21 +152,20 @@ static struct request *nvme_alloc_user_request(struct request_queue *q,
+ 	nvme_req(req)->flags |= NVME_REQ_USERCMD;
+ 	return req;
+ }
+ 
+ static int nvme_map_user_request(struct request *req, u64 ubuffer,
+-		unsigned bufflen, void __user *meta_buffer, unsigned meta_len,
+-		struct iov_iter *iter, unsigned int flags)
++		unsigned bufflen, struct iov_iter *iter,
++		struct iov_iter *meta_iter, unsigned int flags)
+ {
+ 	struct request_queue *q = req->q;
+ 	struct nvme_ns *ns = q->queuedata;
+ 	struct block_device *bdev = ns ? ns->disk->part0 : NULL;
+ 	bool supports_metadata = bdev && blk_get_integrity(bdev->bd_disk);
+-	bool has_metadata = meta_buffer && meta_len;
+ 	int ret;
+ 
+-	if (has_metadata && !supports_metadata)
++	if (meta_iter && !supports_metadata)
+ 		return -EINVAL;
+ 
+ 	if (iter)
+ 		ret = blk_rq_map_user_iov(q, req, NULL, iter, GFP_KERNEL);
+ 	else
+@@ -174,16 +173,12 @@ static int nvme_map_user_request(struct request *req, u64 ubuffer,
+ 				bufflen, GFP_KERNEL, flags & NVME_IOCTL_VEC, 0,
+ 				0, rq_data_dir(req));
+ 	if (ret)
+ 		return ret;
+ 
+-	if (has_metadata) {
+-		struct iov_iter meta_iter;
+-
+-		iov_iter_ubuf(&meta_iter, rq_data_dir(req), meta_buffer,
+-			      meta_len);
+-		ret = blk_rq_integrity_map_user(req, &meta_iter);
++	if (meta_iter) {
++		ret = blk_rq_integrity_map_user(req, meta_iter);
+ 		if (ret)
+ 			goto out_unmap;
+ 	}
+ 
+ 	return ret;
+@@ -210,12 +205,20 @@ static int nvme_submit_user_cmd(struct request_queue *q,
+ 	if (IS_ERR(req))
+ 		return PTR_ERR(req);
+ 
+ 	req->timeout = timeout;
+ 	if (ubuffer && bufflen) {
+-		ret = nvme_map_user_request(req, ubuffer, bufflen, meta_buffer,
+-				meta_len, NULL, flags);
++		struct iov_iter meta_iter;
++		struct iov_iter *map_meta_iter = NULL;
++
++		if (meta_buffer && meta_len) {
++			iov_iter_ubuf(&meta_iter, rq_data_dir(req), meta_buffer,
++				      meta_len);
++			map_meta_iter = &meta_iter;
++		}
++		ret = nvme_map_user_request(req, ubuffer, bufflen, NULL,
++					    map_meta_iter, flags);
+ 		if (ret)
+ 			goto out_free_req;
+ 	}
+ 
+ 	bio = req->bio;
+@@ -480,18 +483,19 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 	const struct nvme_uring_cmd *cmd = io_uring_sqe128_cmd(ioucmd->sqe,
+ 							       struct nvme_uring_cmd);
+ 	struct request_queue *q = ns ? ns->queue : ctrl->admin_q;
+ 	bool open_for_write = ioucmd->file->f_mode & FMODE_WRITE;
+ 	struct nvme_command c;
+-	struct iov_iter iter;
+-	struct iov_iter *map_iter = NULL;
++	struct iov_iter iter, meta_iter;
++	struct iov_iter *map_iter = NULL, *map_meta_iter = NULL;
  	struct request *req;
  	blk_opf_t rq_flags = 0;
  	blk_mq_req_flags_t blk_flags = 0;
-+	u8 flags = READ_ONCE(cmd->flags);
  	u32 metadata_len, data_len;
  	u64 metadata, addr;
  	u32 timeout_ms;
- 	int ddir;
++	int ddir;
  	int ret;
  
--	c.common.opcode = READ_ONCE(cmd->opcode);
--	c.common.flags = READ_ONCE(cmd->flags);
--	if (c.common.flags)
-+	if (flags & ~NVME_URING_CMD_FIXED_METADATA)
- 		return -EINVAL;
+ 	c.common.opcode = READ_ONCE(cmd->opcode);
+ 	c.common.flags = READ_ONCE(cmd->flags);
+ 	if (c.common.flags)
+@@ -520,13 +524,12 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 	addr = READ_ONCE(cmd->addr);
+ 	data_len = READ_ONCE(cmd->data_len);
+ 	metadata_len = READ_ONCE(cmd->metadata_len);
+ 	timeout_ms = READ_ONCE(cmd->timeout_ms);
  
-+	c.common.opcode = READ_ONCE(cmd->opcode);
-+	c.common.flags = 0;
- 	c.common.command_id = 0;
- 	c.common.nsid = cpu_to_le32(cmd->nsid);
- 	if (!nvme_validate_passthru_nsid(ctrl, ns, le32_to_cpu(c.common.nsid)))
- 		return -EINVAL;
- 
-@@ -539,12 +540,22 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
++	ddir = nvme_is_write(&c) ? WRITE : READ;
+ 	if (data_len && (ioucmd->flags & IORING_URING_CMD_FIXED)) {
+-		int ddir = nvme_is_write(&c) ? WRITE : READ;
+-
+ 		if (vec)
+ 			ret = io_uring_cmd_import_fixed_vec(ioucmd,
+ 					u64_to_user_ptr(addr), data_len,
+ 					ddir, &iter, issue_flags);
+ 		else
+@@ -535,10 +538,15 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 		if (ret < 0)
  			return ret;
  
  		map_iter = &iter;
  	}
- 	if (data_len && metadata && metadata_len) {
--		iov_iter_ubuf(&meta_iter, ddir, nvme_to_user_ptr(metadata),
--			      metadata_len);
-+		if (flags & NVME_URING_CMD_FIXED_METADATA) {
-+			u16 buf_index = READ_ONCE(cmd->metadata_buf_index);
-+
-+			ret = io_uring_cmd_import_fixed_metadata(
-+				ioucmd, buf_index, metadata, metadata_len, ddir,
-+				&meta_iter, issue_flags);
-+			if (ret < 0)
-+				return ret;
-+		} else {
-+			iov_iter_ubuf(&meta_iter, ddir, nvme_to_user_ptr(metadata),
-+				      metadata_len);
-+		}
- 		map_meta_iter = &meta_iter;
- 	}
++	if (data_len && metadata && metadata_len) {
++		iov_iter_ubuf(&meta_iter, ddir, nvme_to_user_ptr(metadata),
++			      metadata_len);
++		map_meta_iter = &meta_iter;
++	}
  
  	if (issue_flags & IO_URING_F_NONBLOCK) {
  		rq_flags |= REQ_NOWAIT;
-diff --git a/include/uapi/linux/nvme_ioctl.h b/include/uapi/linux/nvme_ioctl.h
-index 2f76cba67166..93973f636b48 100644
---- a/include/uapi/linux/nvme_ioctl.h
-+++ b/include/uapi/linux/nvme_ioctl.h
-@@ -68,15 +68,18 @@ struct nvme_passthru_cmd64 {
- 	__u32	timeout_ms;
- 	__u32   rsvd2;
- 	__u64	result;
- };
+ 		blk_flags = BLK_MQ_REQ_NOWAIT;
+ 	}
+@@ -549,13 +557,13 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 	if (IS_ERR(req))
+ 		return PTR_ERR(req);
+ 	req->timeout = timeout_ms ? msecs_to_jiffies(timeout_ms) : 0;
  
-+/* struct nvme_uring_cmd flags field bits */
-+#define NVME_URING_CMD_FIXED_METADATA (1U << 0)
-+
- /* same as struct nvme_passthru_cmd64, minus the 8b result field */
- struct nvme_uring_cmd {
- 	__u8	opcode;
- 	__u8	flags;
--	__u16	rsvd1;
-+	__u16	metadata_buf_index;
- 	__u32	nsid;
- 	__u32	cdw2;
- 	__u32	cdw3;
- 	__u64	metadata;
- 	__u64	addr;
+ 	if (data_len) {
+-		ret = nvme_map_user_request(req, addr, data_len,
+-			nvme_to_user_ptr(metadata), metadata_len,
+-			map_iter, vec ? NVME_IOCTL_VEC : 0);
++		ret = nvme_map_user_request(req, addr, data_len, map_iter,
++					    map_meta_iter,
++					    vec ? NVME_IOCTL_VEC : 0);
+ 		if (ret)
+ 			goto out_free_req;
+ 	}
+ 
+ 	/* to free bio on completion, as req->bio will be null at that time */
 -- 
 2.55.0
 
