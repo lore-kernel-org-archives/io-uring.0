@@ -1,190 +1,198 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f99.google.com (mail-pj1-f99.google.com [209.85.216.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63633D3D18;
-	Wed,  9 Sep 2026 19:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFCED48EC9A
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 22:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788983506; cv=none; b=FjiMNHU6rbRbB7BD/4YEEnDcVzyxZMbCVD9RlbdcQRpskPIcCQYAIJqsQvWxeMCzHaGJw+VEzIxc1PQgPfNpTPh/E+l55b7f1TqXupHDpjJQA2hEuvnLzvXBIl9jQYudz7iIo6xp3D2RnWRzstzlNCH77iBiAtS7JO8popL73Lw=
+	t=1788992957; cv=none; b=kfAQQtXc8GZ27tJVdPqUuiAhfU6IZ7G2oNwGd0dJU/C6a3wtqHBDZzbKw8YnBEDb9BG1hsqz6kOi2YQMVChQpsGnucui5d481QcLBQ17j3Qm4bQU9jisDshK0DOVLS9mI+k5y2fy0JnEcY/AX0fGimmo9AcpOHqfe3bugZBbkYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788983506; c=relaxed/simple;
-	bh=bb5BYgKa09OW6lhhuFRqBlw0NXbM/PKnsSXjhp92tdg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HHA1u1R45oLv2Tg171QWC/092oUpfL/svBk4LG5mLjF4M501Q1nUHB7mNivdFUHYPSDW+9+0LQS9wgpM8Sr4Ghktzllocs5lhIqVSQni2t/TWZ+d1pU8dByNfxt2fMuqBudrDtnuxhElqmV2HtAqKoikbCuCBJJ5hDoqKj0J+Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=iKkzZ0GA; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VCUdXAc5; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
+	s=arc-20240116; t=1788992957; c=relaxed/simple;
+	bh=OdVOZ5O8bsyIlL1MZXztJGFmGTxDsLLSFGFWiYbuuh4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IHQgJBzupS9HDoio9fyqZSXn9BTdxdbLw1Fa0ZYspiyWtLiX0bKSYiMp0rLnVdLGO4BTwk0lGQaOFOhhgLp+y69UoJcEb4HOMpmG6DmAVXoM9hZpFV7AWQz7eFTXlYkbK9lZbeqLnisjhnDY3WToUaTPTmcJg+6XGNEUlqiD6Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=US7gi+ib; arc=none smtp.client-ip=209.85.216.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="iKkzZ0GA";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VCUdXAc5"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 8418D1D00067;
-	Wed,  9 Sep 2026 15:51:42 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Wed, 09 Sep 2026 15:51:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1788983502;
-	 x=1789069902; bh=zoVUj5F+8FVqGG22Q1uCXrQ58eGyDtPNSPzvgjqr55k=; b=
-	iKkzZ0GAa0tVpMJLSOh2lOPXkLWsxrh9U2OTl1ZMajYtCfbsgJrXtRs6zjDS0ZoN
-	7z5ESUatQacKIHQDngIe9sOlInIwpiCQiesR/2hnEN5rAkVh1PGEFPWxnjQTu5Ah
-	sRgVTXWbtqh3WuLDcSoMiiorPg8Wh19sLIq5PJTqarzTdVX7RGl8O8XvEAg1uuXX
-	DcKcdhV9OlOpgFuEMdqaChlIRXJI0dLBj41fsIqxyoibNQibMgQWPfEJrJIti9xu
-	vAKd1FpIa6wC0AxbXzMbPF1FLAX4q5laDy1G1sbl8AEgn5YASaRssx6+VYhUreNT
-	BpcZlFnr6FDh93dkn6JR+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1788983502; x=
-	1789069902; bh=zoVUj5F+8FVqGG22Q1uCXrQ58eGyDtPNSPzvgjqr55k=; b=V
-	CUdXAc5+khVbRGY1tm6UYOBJwBgGaRGM7QxpkVBV1sdXkVTLahHtGJGZ/Qmi2C1s
-	H3wUWl1Se5qlu7NrUw2/jkFiudcHaEslxcZS8q7f/ML37mLUGPNRqS63s0JZV46O
-	Qs9vMKKG+iz8+Rncn8L4+1Ywl869zl4Qb4cyARJzGuc20+sRfa2VYjzOxr095Ki0
-	XXrJ+TZBW7fHgvyELdPAXB/H+bhW7F3LwmMBwU4H7/PZPVujzXnPkbevK7HK3nRm
-	HBy/8sseMuEpMiEfghz3TEo+KEAiDNfxHkAg+fPjP3Y5LYdI8krZaaegtCdoxJCd
-	ePWoRmX7v99xEA2dXk46g==
-X-ME-Sender: <xms:zrihajOIlwLs8-bHHEl3qXkpSS3QMu3LYRAzvKZ-__hFu-aLOTUoUQ>
-    <xme:zrihamLgWMqh4_DxfEG8PDGzonXpeMElTayjopw_SXs_NaGQ_Ef-LgXrUz1iVAK_i
-    REDHXYHbFkM6FEYcDYShkLRxmr9nTrgEqIgKhiAHMHNxjb7elmpBPGc>
-X-ME-Received: <xmr:zrihat1XQmGFK-INhyeBArImlPDqhjDFdR9aKCkp_CF4-6qQNjCEUALGQm94njbT>
-X-ME-Proxy-Cause: dmFkZTErJXQT89xdNSpbfG162S52xmEnv9hkTSgvQMpTW0DT7OWpo1xulYU1WJr+H/t/6c
-    YxU8mCV7tzNTPWCtrK+C0aefe9D+fIiG8Zwe3e5360Kmzo6PwgnF4zLkhYIqtiFcLHNz8k
-    8kG/AdTFqH4mn1i25MWHJD6Y7FW4VS4FnquBG5AbU1b3tpmwsfwuSnobwaN1Xelf708tGu
-    KesOufeEfTmdIFrM5T122D4yfOMT2EDLVwpbyJSpx2lsVxxQ6YIaPR83tP7tJog5tFdC3x
-    3PPTA3Dgs+0xXrQrjzcZsH/7nbizYjypIVUt9+dLhSQqBsJNdG+VtoaGxFw6+6Yqq+Abit
-    T7QBif/3DwoCkHLfp8iQFZzwHyixolWPR9ssTSv60r72xXIvGY1KF0jZ5A5UST654bSvYf
-    zknMdCeL8/rsARrlz631r4oTVDutf9kvWSjxR3GYXJEW/yuQ1FRBwYUBTc/SDs3ByKt5YW
-    lNxrGbrjtY81iSjb6e4Mpq0wAyQY3TFsRjmX8PZZy0fxXZoXkhDSXMvPJNsrd88Q9897qa
-    yW5ihAsgCsI2pli9iVSnnkVvWuhG+rwQw/SDpK7dkpvA5XjrYQHZCfTmxyLRlPqpE7+8ZX
-    uv1GJ6pHixu5VYXnddqI0FVGeyBGkxQ/jYdB3EDsTbzMaUUJl4JARkPhngDw
-X-ME-Proxy: <xmx:zrihaiV9ZAwjNnuLAdq-z_J4Jrxj89qbg6asZhQ5dk83ZwjabvqwDg>
-    <xmx:zrihanPKovp2jKiGUZ2NQ1pZgZr-HsBR5dPRwLa9vCLs2M8j3-GilA>
-    <xmx:zrihat1XHEy_YV1bnc-Yk-DbXJ2nKCczj3A2oIadMwqzidT3CamPyg>
-    <xmx:zrihajQSiVSxBlG-9ug7AIE1KlFUB8TxVpu0ItJhvV9kvhCgdNmtbw>
-    <xmx:zrihai2LQNuTNJJK6GDiqfASbC4vtyRk8g8Q90Wuo4ANhZ0dcDnAuIP6>
-Feedback-ID: i80b64ba7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Sep 2026 15:51:41 -0400 (EDT)
-From: Juanlu Herrero <juanlu@fastmail.com>
-Date: Wed, 09 Sep 2026 14:51:28 -0500
-Subject: [PATCH net-next v7 6/6] selftests: net: add rss_multiqueue test
- variant to iou-zcrx
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="US7gi+ib"
+Received: by mail-pj1-f99.google.com with SMTP id 98e67ed59e1d1-384c94c9423so187664a91.2
+        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 15:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=purestorage.com; s=google2022; t=1788992944; x=1789597744; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=tubVMf7ZqCGq+soHl3bfDL6vCCu/4h0yxEEMGvUD99M=;
+        b=US7gi+ib679tUwmyt5JgXnZ8F5gwTnEUKsksikAtRJxhWl5jgigBZ269pc+7Ut8i0g
+         pKmb8pp7tyIG7P8ci/9dtwX1T0O6m5MSp2Ujg3MVuvwdlIIhagbU0c/eLkt2flXk8Z26
+         iad9EmMoJ4ijNW+3r3BEKQn6pqv/9GnfS1V5xBr/hI+UMIfUcc4It9nENG5iSz7S8iHn
+         rEzAhtOxzAUPSsopeYNytUTxvQNiByCLNePEknkjRJAtmmdR344Ei7R58gxIWlStwUEB
+         CEeSezQivzHAenRG2D/jTcJWuhawqs5MAl/PFFn/Ng6SJn9/ikBYTaA22eoRu3JJATre
+         jnOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788992944; x=1789597744;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tubVMf7ZqCGq+soHl3bfDL6vCCu/4h0yxEEMGvUD99M=;
+        b=QCodnkBnIWz+peU8UJIBq26KVNr/clUd3msPAekF46PoeLBoQcNy2yvuCL21468/n2
+         Nlils2OXKcri5k1/vcIIsU8ixIB4dch2gQX/JMjOdtJjmMd/nVaX+v2B3MWvgWj2WOwE
+         iq/oCkGmZjMBCZDeEXccX60VZ9zpV7bxHEezMzXRPFDS1tCyJc5sffffCmOZ0/V5WvBj
+         LmfswS5hmBNT50PlexOtAJqc4fX0exwhUInhdh3/Wf/kSBvESx5nm4I68ZUkEq8fw23+
+         YMmQqcfjNVltBpTcmezXzPX86InBRU+HLeBX6KJ8ydUxzLlPeUG7HdBEL33ZGvxczo1C
+         nQvQ==
+X-Gm-Message-State: AFuF++msudTozvC4UL13mWZTjEpIPGUQ81qGdTHDimkHZf0vpxYq0D51
+	or1AsNkm6eOYtcoLMsRC71HtU+UhkQn4hgpPxdpsB5DcOMI/K5V6Ltlwq87ETiZNugnGIljhK15
+	VmSm5Gwcf8d2a26biQdmN5bBMU7JmvZgNpbSKUlqhMqN33C0uyYWW
+X-Gm-Gg: AYBFou28nUajok8Io7PPEpMPJsXYinaDOCoxG0/JGL1KoO0ViWy/yYz6IZPNtClN3qZ
+	UTam7uc+ztoaM98RjyShbye6G586+oHNycoJyym2d28rx2AYK0DKRgJRbWd3carQ5vWZev/ER+H
+	wsJhF39yOU6N1/CLImV4eBugtgFjmvVe0q+puiFbxdIwcHIZ5kMFhZuWIN+hsjC7lTSp4ERnDlb
+	h6yTQV8kCVy/bg/fDBubDtQu5LUcm9ckaHxdqQT0LZAfp73HDGEqYlbv//2h81e6lVZnmQnhNn2
+	6YHPJxUXxtqSvoRK+EDZbvffWTjEdiDdrEbAOXhMxat1mnJFjFNHlaTc65g7OI3dlwAXnN0w+VQ
+	Oy9XYLJT5pgsexOmRKw==
+X-Received: by 2002:a17:90b:3a48:b0:38e:480b:99a5 with SMTP id 98e67ed59e1d1-39b3d5e53d5mr26180113a91.2.1788992943993;
+        Wed, 09 Sep 2026 15:29:03 -0700 (PDT)
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-39cd207d69csm504304a91.3.2026.09.09.15.29.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2026 15:29:03 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 2CF4E402B4;
+	Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id 2A37BE40322; Wed,  9 Sep 2026 16:29:03 -0600 (MDT)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	Keith Busch <kbusch@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>
+Cc: io-uring@vger.kernel.org,
+	linux-nvme@lists.infradead.org,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH 2/6] nvme/ioctl: remove struct nvme_uring_data
+Date: Wed,  9 Sep 2026 16:28:32 -0600
+Message-ID: <20260909222836.2475352-3-csander@purestorage.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260909222836.2475352-1-csander@purestorage.com>
+References: <20260909222836.2475352-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260909-iou-zcrx-v7-6-6b5d48a2a922@fastmail.com>
-References: <20260909-iou-zcrx-v7-0-6b5d48a2a922@fastmail.com>
-In-Reply-To: <20260909-iou-zcrx-v7-0-6b5d48a2a922@fastmail.com>
-To: dw@davidwei.uk, netdev@vger.kernel.org
-Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com, 
- pabeni@redhat.com, shuah@kernel.org, juanlu@fastmail.com
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3662; i=juanlu@fastmail.com;
- h=from:subject:message-id; bh=bb5BYgKa09OW6lhhuFRqBlw0NXbM/PKnsSXjhp92tdg=;
- b=owGbwMvMwCWW/91SPSt7w03G02pJDFkLdxx9oXFTMcwwr7cl9K1X3hIDtc89t/1UTrAn2ybtX
- X7z5csXHRNZGMS4GCzFFFk8Xoq0aEytaLyrGiEIM4eVCWSItEgDAxCwMPDlJuaVGukY6ZlqG+oZ
- GukY6BgzcHEKwFRL1TAyLH3RE96s6iDLuUyvcLrBX+UZD6N/ri3jt1p4tn/Z6ZY5powMWz6cbzw
- muPPF4gkhatcWyjMYt3zud81eZLJu09IV4u22TAA=
-X-Developer-Key: i=juanlu@fastmail.com; a=openpgp;
- fpr=48E9148428957881DD2558116FF739276A6BB0D9
+Content-Transfer-Encoding: 8bit
 
-Add a rss_multiqueue Python test variant that exercises multi-queue
-zero-copy receive on a single listening socket.
+This struct is only used once as a local variable type. Make the fields
+separate local variables and remove the struct type to shave some lines.
 
-Assisted-by: Claude:claude-opus-4-8
-Reviewed-by: David Wei <dw@davidwei.uk>
-Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- tools/testing/selftests/drivers/net/hw/iou-zcrx.py | 50 +++++++++++++++++++++-
- 1 file changed, 48 insertions(+), 2 deletions(-)
+ drivers/nvme/host/ioctl.c | 36 +++++++++++++++---------------------
+ 1 file changed, 15 insertions(+), 21 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-index b7a225fe4bea..c833535d8a03 100755
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-@@ -30,6 +30,13 @@ def create_rss_ctx(cfg):
-     return int(values)
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index 3aa5d2f2dfbb..748a4cbf7e90 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -406,18 +406,10 @@ static int nvme_user_cmd64(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 	}
  
+ 	return status;
+ }
  
-+def create_rss_ctx_multi(cfg, start, count):
-+    """Create an RSS context spanning count queues from start, return its ID."""
-+    output = ethtool(f"-X {cfg.ifname} context new start {start} equal {count}").stdout
-+    values = re.search(r'New RSS context is (\d+)', output).group(1)
-+    return int(values)
-+
-+
- def set_flow_rule(cfg):
-     output = ethtool(f"-N {cfg.ifname} flow-type tcp6 dst-port {cfg.port} action {cfg.target}").stdout
-     values = re.search(r'ID (\d+)', output).group(1)
-@@ -127,17 +134,56 @@ def _require_ntuple(cfg):
-         defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
+-struct nvme_uring_data {
+-	__u64	metadata;
+-	__u64	addr;
+-	__u32	data_len;
+-	__u32	metadata_len;
+-	__u32	timeout_ms;
+-};
+-
+ /*
+  * This overlays struct io_uring_cmd pdu.
+  * Expect build errors if this grows larger than that.
+  */
+ struct nvme_uring_cmd_pdu {
+@@ -483,17 +475,19 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 	struct nvme_uring_cmd_pdu *pdu = nvme_uring_cmd_pdu(ioucmd);
+ 	const struct nvme_uring_cmd *cmd = io_uring_sqe128_cmd(ioucmd->sqe,
+ 							       struct nvme_uring_cmd);
+ 	struct request_queue *q = ns ? ns->queue : ctrl->admin_q;
+ 	bool open_for_write = ioucmd->file->f_mode & FMODE_WRITE;
+-	struct nvme_uring_data d;
+ 	struct nvme_command c;
+ 	struct iov_iter iter;
+ 	struct iov_iter *map_iter = NULL;
+ 	struct request *req;
+ 	blk_opf_t rq_flags = 0;
+ 	blk_mq_req_flags_t blk_flags = 0;
++	u32 metadata_len, data_len;
++	u64 metadata, addr;
++	u32 timeout_ms;
+ 	int ret;
  
+ 	c.common.opcode = READ_ONCE(cmd->opcode);
+ 	c.common.flags = READ_ONCE(cmd->flags);
+ 	if (c.common.flags)
+@@ -516,25 +510,25 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 	c.common.cdw15 = cpu_to_le32(READ_ONCE(cmd->cdw15));
  
-+def rss_multiqueue(cfg):
-+    """Steer the test flow to a multi-queue RSS context for multi-thread zcrx."""
-+    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    channels = channels['combined-count']
-+    if channels < 3:
-+        raise KsftSkipEx('Test requires NETIF with at least 3 combined channels')
-+
-+    rings = cfg.ethnl.rings_get({'header': {'dev-index': cfg.ifindex}})
-+    rx_rings = rings['rx']
-+    hds_thresh = rings.get('hds-thresh', 0)
-+
-+    cfg.ethnl.rings_set({'header': {'dev-index': cfg.ifindex},
-+                         'tcp-data-split': 'enabled',
-+                         'hds-thresh': 0,
-+                         'rx': 64})
-+    defer(cfg.ethnl.rings_set, {'header': {'dev-index': cfg.ifindex},
-+                                'tcp-data-split': 'unknown',
-+                                'hds-thresh': hds_thresh,
-+                                'rx': rx_rings})
-+    defer(mp_clear_wait, cfg)
-+
-+    cfg.num_threads = 2
-+    cfg.target = channels - cfg.num_threads
-+    ethtool(f"-X {cfg.ifname} equal {cfg.target}")
-+    defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    rss_ctx_id = create_rss_ctx_multi(cfg, cfg.target, cfg.num_threads)
-+    defer(ethtool, f"-X {cfg.ifname} delete context {rss_ctx_id}")
-+
-+    flow_rule_id = set_flow_rule_rss(cfg, rss_ctx_id)
-+    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
-+
-+
- @ksft_variants([
-     KsftNamedVariant("single", single),
-     KsftNamedVariant("rss", rss),
-+    KsftNamedVariant("rss_multiqueue", rss_multiqueue),
- ])
- def test_zcrx(cfg, setup) -> None:
-     cfg.require_ipver('6')
-     _require_ntuple(cfg)
+ 	if (!nvme_cmd_allowed(ctrl, ns, &c, 0, open_for_write))
+ 		return -EACCES;
  
-+    cfg.num_threads = 1
-+
-     setup(cfg)
--    rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target}"
--    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
-+
-+    rx_cmd = (f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} "
-+              f"-q {cfg.target} -t {cfg.num_threads}")
-+    tx_cmd = (f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} "
-+              f"-l 12840 -t {cfg.num_threads}")
-     with bkg(rx_cmd, exit_wait=True):
-         wait_port_listen(cfg.port, proto="tcp")
-         cmd(tx_cmd, host=cfg.remote)
-
+-	d.metadata = READ_ONCE(cmd->metadata);
+-	d.addr = READ_ONCE(cmd->addr);
+-	d.data_len = READ_ONCE(cmd->data_len);
+-	d.metadata_len = READ_ONCE(cmd->metadata_len);
+-	d.timeout_ms = READ_ONCE(cmd->timeout_ms);
++	metadata = READ_ONCE(cmd->metadata);
++	addr = READ_ONCE(cmd->addr);
++	data_len = READ_ONCE(cmd->data_len);
++	metadata_len = READ_ONCE(cmd->metadata_len);
++	timeout_ms = READ_ONCE(cmd->timeout_ms);
+ 
+-	if (d.data_len && (ioucmd->flags & IORING_URING_CMD_FIXED)) {
++	if (data_len && (ioucmd->flags & IORING_URING_CMD_FIXED)) {
+ 		int ddir = nvme_is_write(&c) ? WRITE : READ;
+ 
+ 		if (vec)
+ 			ret = io_uring_cmd_import_fixed_vec(ioucmd,
+-					u64_to_user_ptr(d.addr), d.data_len,
++					u64_to_user_ptr(addr), data_len,
+ 					ddir, &iter, issue_flags);
+ 		else
+-			ret = io_uring_cmd_import_fixed(d.addr, d.data_len,
++			ret = io_uring_cmd_import_fixed(addr, data_len,
+ 					ddir, &iter, ioucmd, issue_flags);
+ 		if (ret < 0)
+ 			return ret;
+ 
+ 		map_iter = &iter;
+@@ -548,15 +542,15 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 		rq_flags |= REQ_POLLED;
+ 
+ 	req = nvme_alloc_user_request(q, &c, rq_flags, blk_flags);
+ 	if (IS_ERR(req))
+ 		return PTR_ERR(req);
+-	req->timeout = d.timeout_ms ? msecs_to_jiffies(d.timeout_ms) : 0;
++	req->timeout = timeout_ms ? msecs_to_jiffies(timeout_ms) : 0;
+ 
+-	if (d.data_len) {
+-		ret = nvme_map_user_request(req, d.addr, d.data_len,
+-			nvme_to_user_ptr(d.metadata), d.metadata_len,
++	if (data_len) {
++		ret = nvme_map_user_request(req, addr, data_len,
++			nvme_to_user_ptr(metadata), metadata_len,
+ 			map_iter, vec ? NVME_IOCTL_VEC : 0);
+ 		if (ret)
+ 			goto out_free_req;
+ 	}
+ 
 -- 
-2.50.1
+2.55.0
 
