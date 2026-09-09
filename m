@@ -1,228 +1,416 @@
-Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E572525DB0D
-	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 01:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6052E736A
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 01:35:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788916602; cv=none; b=FtXdZ3JKyXyNgFd1dLKp6ZA2odY/iii6+Nq9OMKJfmuSVxi0FsxqoKf+zftk/R84wMG1YdGCz30GB1lAJrHCs3lG8m4Gu73im0AsEvppG+QT+fBR0FU1xam7xCoHuZA+TPh54oh76VqthPc37KfZPh8itmfbEzISMOBmviJslyc=
+	t=1788917707; cv=none; b=cUk0rCRhnWjkYtJz5SSXW/Y8cKRHvY/iDuS/91tayjBCkS3UlvYum275cObDdtASldjxUmN3fOgsUTKgy4DXiPsb4QNkVvWu1rjxBV3nEKoxFAp9Q5cmQDFYBvE+WGQwauFaRfMAYFVchikFN0rxswOpHLwd9HL70h1tzRGs6vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788916602; c=relaxed/simple;
-	bh=5/Un1IxFAdJByas32cSABPNnaMvt9aSfdfZ2C0N9xLA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZFCyZl9D4gVpARxxa7lfw05JR1IkGkYY6ABGPZw1sTBfCBY1Wiw967SfplBl0Rugr3jcGu8Bzz8zs8+gk4q9Aveu5MWjjj49vHITg1o7RLenls2/lE5+jN3eMh7+sP5lw8L1PxqXyWsrdH0pPL8MGAghfRDfgI/3XhAqKHtKFHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=QBOW2RXc; arc=none smtp.client-ip=74.125.231.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="QBOW2RXc"
-Received: by mail-oi2-f12.google.com with SMTP id 5614622812f47-4b37a30eae7so465128b6e.3
-        for <io-uring@vger.kernel.org>; Tue, 08 Sep 2026 18:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1788916600; x=1789521400; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Hmw9mHUujeHSHQsiGBgyx28Z2MxCV5kUwvQrLiZ0yQ8=;
-        b=QBOW2RXcNAJqQkato3nghKBmpkRO3iKfIMrjSTWjPJQIpwsW9ArBfj1OrxbNmMAkBb
-         Ee/BXADmE7xOoJ8DZGA3kJRP9BF4kQ1Yhhu6E+FpJoigk5RW3Fzf575oeBebpIT/abmD
-         PvqUAfsjVFhccfxucaDKBK+G9YaRU8SMoJSEB/1iviMYY8pCz7Mu6//V7r0rGYlVmrjh
-         VEIVzHXD0mCq6EsnfV+OWCY7mMcVECl85OZpsmP6dsGtekTftrAhoh4nC/J59sC+Lqwm
-         c1yU8zyj9HJuibMPCUSQUperhg+2r+2sOaRXh0gUPcFjExx/K8+0Sl1DnB8HVY4TZ1QK
-         a1Ug==
+	s=arc-20240116; t=1788917707; c=relaxed/simple;
+	bh=vapUdV5gzgngbs8089WSEIZruB8kDUF5VC4+dNnQoxQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=t6pHYzIL/R+jBeCoYX78RTAz/t/1WmwklWkLde/Da8K3oXDAvfF0JO0292ZfvuhoPByqfvhqaFrb8t559in33B9rmDV/8rdl399MDZG0Rbt6mgAEy2ebe+bAl5LZw5sCxj6LZljzPP3zhYoGwq+EF/ARWXY4NHc5MVIb2AggTo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-7e9e2db9914so6434308a34.1
+        for <io-uring@vger.kernel.org>; Tue, 08 Sep 2026 18:35:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788916600; x=1789521400;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Hmw9mHUujeHSHQsiGBgyx28Z2MxCV5kUwvQrLiZ0yQ8=;
-        b=sJNb1XU5+/qsABFNcIwfjf2VkmLI6/+w1VXB1TXjJjqVSiMR89wxEIMIt9bkHPY5/v
-         c4YTxzeNFnpMdObRtddFYR9myHG+ZoVihOdpDQ0/oa9fKz75uuBz2ZxL0woyRHluteUW
-         zBTh0r4cl2weqbTFss9T62vs4cdCiEezSnfqn/Zzf36EDEZ9dlUtJjg8vMHEN7vF9SJz
-         HTGhSnp/KClAOzWl0Ncc48JC9YtdVq6vDqnE8aL4RJEMWTK/ovxpvbsNGDkLp+53IcXp
-         Muilnn26j2MMOeIEnE1sKMUMatWJUvhqkV/mAdDKZ2EuZQoLGqQqyxj9TSvjU8x+aNL2
-         kgEw==
-X-Forwarded-Encrypted: i=1; AKwUvBzBPsJgW3FMdh/SOpD1tFycOIgSZvcSHQcYaugbMyAasTsyPjRH+tL/ASbHBEhzKE1rrKikGttTJQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++meD8GF8FbzQgDY69g1ZAYfy9xsOt01NfFvSZ1P1k2BVy71LF8y
-	33dC+mnU9Ivv4JtrR/pma5yGkgmCGsXFpSPKs0llQI9Ll2wsa3I6FjznLYJp4PWufnc=
-X-Gm-Gg: AYBFou1liuKK7/AsyEo5JFDt2SvOFs099m5FTeCEVMrPdFbIxDG+cCKq75GBIDoAByb
-	lXpMNSxL3Rt7d1EQA+sjO6LQVqvguKroKMldU1Htl8Q00oF3vaFrH9mXyAKbYlNAagl1ZtFRaCB
-	5Jd6/hHubXmXry3FA/Pv70PEs3nOrvdVgQSfDMJQz81MRWtDPkiw+VW0LcXzrBMPxEg1eRWBvEP
-	LduYs42xB50loTv9B9N45rSSmqPUXGJ0YzoElWn4uFpMEm7QcwmSEJPdlVAKITpzC4gEbxpeipE
-	UFqsgduEgV2xllhD7DFg0uYWTGUhebg/q+OBpI6bNQpEeR2A6Xpak5n8+VAbvRUZgJLpx/btZLE
-	LOCIFntKkfoAdGojG39raFvE87j53Yp1Uscd629xCZtiya0sK3GuAuitjrH44AHOGJjg5uq7OkR
-	WneePMJ9TDhjcA+OhG56l3Im7cFpXPY+4c2iZqub91R+vZad2hVogbp4UefzGoff2fvKJzmqbY7
-	CA/1J/YxbC+TBO62U1Shdt6IvUPzOqjCm0tmktYjbz4H9Sk+vIOx0xNPQ==
-X-Received: by 2002:a05:6808:199b:b0:4b3:7a14:6b25 with SMTP id 5614622812f47-4c0250d649emr3573933b6e.14.1788916599799;
-        Tue, 08 Sep 2026 18:16:39 -0700 (PDT)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b971675a96sm15488974b6e.11.2026.09.08.18.16.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Sep 2026 18:16:38 -0700 (PDT)
-Message-ID: <c21acbbb-6558-48d4-9379-c1a952acf1e4@kernel.dk>
-Date: Tue, 8 Sep 2026 19:16:37 -0600
+        d=1e100.net; s=20251104; t=1788917703; x=1789522503;
+        h=content-transfer-encoding:content-type:to:from:subject:message-id
+         :in-reply-to:date:mime-version:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Ca7dxSy0O0OEKe5CD/ouCxIzifgipuK4mY8gWXwt5g4=;
+        b=hl5Dat2NHbjn6XPVhpbau/PRWX02eKE+ZpQuyOYRq8vyv3/jclaZ1YDBstGh477rSX
+         Lzk4R0nBLklI6dK0QO+zmtw5UMveUSYHpnaVkrzkBcoZjV5nyhmBc7qQctZeCnq5YZbv
+         o3zb6uBk0cSjKJ4rmSscj5h4d6LlSiCKZhIqqUXDQiaCdxGOIPQ7rrfV74+lca17RYMq
+         c5Cn98UAq45lneZO36bSE3MDe3Et3QKLZT8xoyiyuSHSai0nCDWCQLwMcJ7OaPSDsLGS
+         i2aoCHxUabAmJmNZ64jjW3eqg4RYbSwO97rUTUMJ1V9UcdHhDbyn1Y83F2oe1lSphc6g
+         bjPg==
+X-Forwarded-Encrypted: i=1; AKwUvBwbgkrXZCjY5INUMl94kiuiYSGYf4WIrJ2v+i+v7OG8zaRW+AO2bbk3JjXRjcHJtT4YcM/nQNwrxQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++nmh4Qt8C5R4FSjaH6vYsG3WPxZxMbNeCmOmNoQh6willw3vEYj
+	jZk87p5Z1yRdbkgUR9+65gTTCjQzVuXes0/85SyV0fCw6V+nLkvCRyOMzbbntd9Y9kANEesRdTA
+	+roLrbI9th8eFd0igKY2oH3S/wBdFPmtUsrxtXVm5VZ/3q9b151eqF0Vjg7M=
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] io_uring/cmd: split io_uring_cmd_set_res() from
- io_uring_cmd_done()
-To: Caleb Sander Mateos <csander@purestorage.com>,
- Ming Lei <tom.leiming@gmail.com>
-Cc: Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
- Sagi Grimberg <sagi@grimberg.me>, Joanne Koong <joannelkoong@gmail.com>,
- linux-nvme@lists.infradead.org, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260902225708.2379840-1-csander@purestorage.com>
- <20260902225708.2379840-2-csander@purestorage.com>
- <CACVXFVOKGOEmefHmZpsBX-7uxGjzbaJiueYMvka8TDjccOuFjg@mail.gmail.com>
- <CADUfDZqFLMS08wq0bJWQwKpJL5k9ty1bruVFQFcV6juFVB-9AQ@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CADUfDZqFLMS08wq0bJWQwKpJL5k9ty1bruVFQFcV6juFVB-9AQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6820:308d:b0:6b0:ab1f:ebf8 with SMTP id
+ 006d021491bc7-6b57f711793mr14612847eaf.0.1788917703678; Tue, 08 Sep 2026
+ 18:35:03 -0700 (PDT)
+Date: Tue, 08 Sep 2026 18:35:03 -0700
+In-Reply-To: <31ab7ab6-2cf5-4fcb-a6cb-05fab461e742@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6aa0b7c7.f614420e.2bf292.0011.GAE@google.com>
+Subject: Re: [syzbot] [io-uring?] [ext4?] INFO: task hung in io_write
+From: syzbot <syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, io-uring@vger.kernel.org, linux-ext4@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/3/26 11:34 AM, Caleb Sander Mateos wrote:
-> On Wed, Sep 2, 2026 at 6:02?PM Ming Lei <tom.leiming@gmail.com> wrote:
->>
->> On Wed, Sep 2, 2026 at 6:05?PM Caleb Sander Mateos
->> <csander@purestorage.com> wrote:
->>>
->>> In preparation for setting the io_uring NVMe passthru CQE results from
->>> the blk-mq request completion rather than the task work callback, split
->>> out functions io_uring_cmd_set_res{,32}() from __io_uring_cmd_done().
->>> io_uring_cmd_done{,32}() now call io_uring_cmd_set_res{,32}() and then
->>> __io_uring_cmd_done(). This allows __io_uring_cmd_done() to be made
->>> CQE-size-agnostic, with 3 fewer arguments.
->>>
->>> Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
->>> ---
->>>  include/linux/io_uring/cmd.h | 23 +++++++++++++++++------
->>>  io_uring/uring_cmd.c         | 33 ++++++++++++++++++---------------
->>>  2 files changed, 35 insertions(+), 21 deletions(-)
->>>
->>> diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
->>> index 331dcbefe72f..67f2ef700c43 100644
->>> --- a/include/linux/io_uring/cmd.h
->>> +++ b/include/linux/io_uring/cmd.h
->>> @@ -50,19 +50,21 @@ int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
->>>                                   const struct iovec __user *uvec,
->>>                                   size_t uvec_segs,
->>>                                   int ddir, struct iov_iter *iter,
->>>                                   unsigned issue_flags);
->>>
->>> +void io_uring_cmd_set_res(struct io_uring_cmd *, s32 ret);
->>> +void io_uring_cmd_set_res32(struct io_uring_cmd *, s32 ret, u64 res2);
->>> +
->>>  /*
->>>   * Completes the request, i.e. posts an io_uring CQE and deallocates @ioucmd
->>>   * and the corresponding io_uring request.
->>>   *
->>>   * Note: the caller should never hard code @issue_flags and is only allowed
->>>   * to pass the mask provided by the core io_uring code.
->>>   */
->>> -void __io_uring_cmd_done(struct io_uring_cmd *cmd, s32 ret, u64 res2,
->>> -                        unsigned issue_flags, bool is_cqe32);
->>> +void __io_uring_cmd_done(struct io_uring_cmd *, unsigned issue_flags);
->>>
->>>  void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
->>>                             io_req_tw_func_t task_work_cb,
->>>                             unsigned flags);
->>>
->>> @@ -105,12 +107,19 @@ static inline int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
->>>                                                 int ddir, struct iov_iter *iter,
->>>                                                 unsigned issue_flags)
->>>  {
->>>         return -EOPNOTSUPP;
->>>  }
->>> -static inline void __io_uring_cmd_done(struct io_uring_cmd *cmd, s32 ret,
->>> -               u64 ret2, unsigned issue_flags, bool is_cqe32)
->>> +static inline void io_uring_cmd_set_res(struct io_uring_cmd *cmd, s32 ret)
->>> +{
->>> +}
->>> +static inline void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s32 ret,
->>> +                                         u64 res2)
->>> +{
->>> +}
->>> +static inline void __io_uring_cmd_done(struct io_uring_cmd *cmd,
->>> +                                      unsigned issue_flags)
->>>  {
->>>  }
->>>  static inline void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
->>>                             io_req_tw_func_t task_work_cb, unsigned flags)
->>>  {
->>> @@ -171,17 +180,19 @@ static inline void *io_uring_cmd_ctx_handle(struct io_uring_cmd *cmd)
->>>  }
->>>
->>>  static inline void io_uring_cmd_done(struct io_uring_cmd *ioucmd, s32 ret,
->>>                                      unsigned issue_flags)
->>>  {
->>> -       return __io_uring_cmd_done(ioucmd, ret, 0, issue_flags, false);
->>> +       io_uring_cmd_set_res(ioucmd, ret);
->>> +       __io_uring_cmd_done(ioucmd, issue_flags);
->>>  }
->>>
->>>  static inline void io_uring_cmd_done32(struct io_uring_cmd *ioucmd, s32 ret,
->>>                                        u64 res2, unsigned issue_flags)
->>>  {
->>> -       return __io_uring_cmd_done(ioucmd, ret, res2, issue_flags, true);
->>> +       io_uring_cmd_set_res32(ioucmd, ret, res2);
->>> +       __io_uring_cmd_done(ioucmd, issue_flags);
->>>  }
->>>
->>>  int io_buffer_register_bvec(struct io_uring_cmd *cmd, struct request *rq,
->>>                             void (*release)(void *), unsigned int index,
->>>                             unsigned int issue_flags);
->>> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
->>> index 726a659f38c3..917b32a921e6 100644
->>> --- a/io_uring/uring_cmd.c
->>> +++ b/io_uring/uring_cmd.c
->>> @@ -136,40 +136,43 @@ void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
->>>         req->io_task_work.func = task_work_cb;
->>>         __io_req_task_work_add(req, flags);
->>>  }
->>>  EXPORT_SYMBOL_GPL(__io_uring_cmd_do_in_task);
->>>
->>> -static inline void io_req_set_cqe32_extra(struct io_kiocb *req,
->>> -                                         u64 extra1, u64 extra2)
->>> +void io_uring_cmd_set_res(struct io_uring_cmd *cmd, s32 ret)
->>>  {
->>> -       req->big_cqe.extra1 = extra1;
->>> -       req->big_cqe.extra2 = extra2;
->>> +       struct io_kiocb *req = cmd_to_io_kiocb(cmd);
->>> +
->>> +       if (ret < 0)
->>> +               req_set_fail(req);
->>> +       io_req_set_res(req, ret, 0);
->>>  }
->>> +EXPORT_SYMBOL_GPL(io_uring_cmd_set_res);
->>> +
->>> +void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s32 ret, u64 res2)
->>> +{
->>> +       struct io_kiocb *req = cmd_to_io_kiocb(cmd);
->>> +
->>> +       if (ret < 0)
->>> +               req_set_fail(req);
->>> +       io_req_set_res32(req, ret, 0, res2, 0);
->>> +}
->>> +EXPORT_SYMBOL_GPL(io_uring_cmd_set_res32);
->>
->> Both the two helpers can be inline, can't they?
-> 
-> I also wanted to do that, but req_set_*() are defined in
-> io_uring/io_uring.h, an io_uring-private header, whereas
-> include/linux/io_uring/cmd.h is a public header. Perhaps the inline
-> functions could be moved to include/linux/io_uring_types.h or
-> include/linux/io_uring.h. If not, I think we'll have to rely on LTO to
-> inline these calls. I'd be curious to hear Jens's thoughts.
+Hello,
 
-Let's just move them to io_uring.h instead.
+syzbot tried to test the proposed patch but the build/boot failed:
 
--- 
-Jens Axboe
+t
+[    9.311884][    T1] ntfs3: Read-only LZX/Xpress compression included
+[    9.324965][    T1] jffs2: version 2.2. (NAND) (SUMMARY)  =C2=A9 2001-20=
+06 Red Hat, Inc.
+[    9.339487][    T1] romfs: ROMFS MTD (C) 2007 Red Hat, Inc.
+[    9.354547][    T1] QNX4 filesystem 0.2.3 registered.
+[    9.358628][    T1] qnx6: QNX6 filesystem 1.0.0 registered.
+[    9.374595][    T1] fuse: init (API version 7.45)
+[    9.386259][    T1] orangefs_debugfs_init: called with debug mask: :none=
+: :0:
+[    9.405773][    T1] orangefs_init: module version upstream loaded
+[    9.411433][    T1] JFS: nTxBlock =3D 6145, nTxLock =3D 49167
+[    9.432378][    T1] SGI XFS with ACLs, security attributes, realtime, sc=
+rub, repair, quota, no debug enabled
+[    9.460589][    T1] 9p: Installing v9fs 9p2000 file system support
+[    9.474863][    T1] NILFS version 2 loaded
+[    9.478065][    T1] befs: version: 0.9.3
+[    9.481916][    T1] ocfs2: Registered cluster interface o2cb
+[    9.505141][    T1] ocfs2: Registered cluster interface user
+[    9.511060][    T1] OCFS2 User DLM kernel interface loaded
+[    9.555232][    T1] gfs2: GFS2 installed
+[    9.587926][    T1] ceph: loaded (mds proto 32)
+[    9.609192][    T1] NET: Registered PF_ALG protocol family
+[    9.613568][    T1] async_tx: api initialized (async)
+[    9.634473][    T1] Key type asymmetric registered
+[    9.638422][    T1] Asymmetric key parser 'x509' registered
+[    9.643521][    T1] Asymmetric key parser 'pkcs8' registered
+[    9.654318][    T1] Key type pkcs7_test registered
+[    9.665499][    T1] Block layer SCSI generic (bsg) driver version 0.4 lo=
+aded (major 239)
+[    9.676502][    T1] io scheduler mq-deadline registered
+[    9.694302][    T1] io scheduler kyber registered
+[    9.698347][    T1] io scheduler bfq registered
+[    9.703715][    T1] raid6: skipped pq benchmark and selected avx512x4
+[    9.803123][    T1] ACPI: \_SB_.GSIE: Enabled at IRQ 20
+[    9.844760][    T1] pcieport 0000:00:04.0: PME: Signaling with IRQ 25
+[    9.855822][    T1] pcieport 0000:00:04.0: AER: enabled with IRQ 26
+[    9.888231][    T1] input: Power Button as /devices/platform/LNXPWRBN:00=
+/input/input0
+[    9.907560][    T1] ACPI: button: Power Button [PWRF]
+[   10.781900][    T1] ioatdma: Intel(R) QuickData Technology Driver 5.00
+[   10.871170][    T1] ACPI: \_SB_.GSIF: Enabled at IRQ 21
+[   10.969004][    T1] ACPI: \_SB_.GSIH: Enabled at IRQ 23
+[   12.148632][    T1] N_HDLC line discipline registered with maxframe=3D40=
+96
+[   12.165434][    T1] Serial: 8250/16550 driver, 4 ports, IRQ sharing enab=
+led
+[   12.190821][    T1] 00:03: ttyS0 at I/O 0x3f8 (irq =3D 4, base_baud =3D =
+115200) is a 16550A
+[   12.338747][    T1] Non-volatile memory driver v1.3
+[   12.377313][    T1] usbcore: registered new interface driver xillyusb
+[   12.393087][    T1] ACPI: bus type drm_connector registered
+[   12.432983][    T1] [drm] Initialized vgem 1.0.0 for vgem on minor 0
+[   12.445520][    T1] usbcore: registered new interface driver udl
+[   12.455961][    T1] [drm] pci: virtio-vga detected at 0000:00:01.0
+[   12.460653][    T1] virtio-pci 0000:00:01.0: vgaarb: deactivate vga cons=
+ole
+[   12.515474][    T1] Console: switching to colour dummy device 80x25
+[   12.523215][    T1] [drm] features: -virgl +edid -resource_blob -host_vi=
+sible
+[   12.523225][    T1] [drm] features: -context_init -blob_alignment
+[   12.542435][    T1] [drm] number of scanouts: 1
+[   12.545813][    T1] [drm] number of cap sets: 0
+[   12.554747][    T1] ------------[ cut here ]------------
+[   12.558333][    T1] [PLANE:36:plane-1] pixel format with alpha exposed b=
+ut blend mode not setup
+[   12.558342][    T1] WARNING: drivers/gpu/drm/drm_mode_config.c:873 at dr=
+m_mode_config_validate+0x1c6a/0x1e60, CPU#0: swapper/0/1
+[   12.573118][    T1] Modules linked in:
+[   12.576385][    T1] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted syz=
+kaller #0 PREEMPT(full)=20
+[   12.582807][    T1] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), =
+BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[   12.590090][    T1] RIP: 0010:drm_mode_config_validate+0x1cab/0x1e60
+[   12.594850][    T1] Code: 0f 85 ae 00 00 00 4d 8d 77 10 8b 6d 00 4c 89 f=
+0 48 c1 e8 03 80 3c 18 00 74 08 4c 89 f7 e8 bd a5 a3 fc 49 8b 16 4c 89 ef 8=
+9 ee <67> 48 0f b9 3a eb 05 e8 c9 54 32 fc 49 bd 00 00 00 00 00 fc ff df
+[   12.608988][    T1] RSP: 0000:ffffc900001af450 EFLAGS: 00010246
+[   12.613447][    T1] RAX: 1ffff11000029408 RBX: dffffc0000000000 RCX: fff=
+f88801ceb0000
+[   12.619368][    T1] RDX: ffff88801f5db780 RSI: 0000000000000024 RDI: fff=
+fffff9085b000
+[   12.625154][    T1] RBP: 0000000000000024 R08: ffffffff8ec2b347 R09: 1ff=
+ffffff1d85668
+[   12.631012][    T1] R10: dffffc0000000000 R11: fffffbfff1d85669 R12: dff=
+ffc0000000000
+[   12.636862][    T1] R13: ffffffff9085b000 R14: ffff88800014a040 R15: fff=
+f88800014a030
+[   12.642683][    T1] FS:  0000000000000000(0000) GS:ffff88808c2e6000(0000=
+) knlGS:0000000000000000
+[   12.649778][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   12.654807][    T1] CR2: ffff88801af19000 CR3: 000000000eb46000 CR4: 000=
+0000000352ef0
+[   12.660778][    T1] Call Trace:
+[   12.663243][    T1]  <TASK>
+[   12.665510][    T1]  ? __pfx_autoremove_wake_function+0x10/0x10
+[   12.669917][    T1]  drm_dev_register+0x7c/0xd80
+[   12.673383][    T1]  virtio_gpu_probe+0x1cb/0x290
+[   12.677087][    T1]  virtio_dev_probe+0xdf6/0x10c0
+[   12.680755][    T1]  ? up_write+0x19d/0x4a0
+[   12.684009][    T1]  ? __pfx_virtio_dev_probe+0x10/0x10
+[   12.687928][    T1]  ? driver_sysfs_add+0x1fe/0x210
+[   12.691505][    T1]  ? __pfx_virtio_dev_probe+0x10/0x10
+[   12.695595][    T1]  really_probe+0x254/0xae0
+[   12.698866][    T1]  __driver_probe_device+0x1e8/0x360
+[   12.702663][    T1]  driver_probe_device+0x4f/0x240
+[   12.706350][    T1]  __driver_attach+0x339/0x600
+[   12.709736][    T1]  bus_for_each_dev+0x23b/0x2c0
+[   12.713247][    T1]  ? __pfx___driver_attach+0x10/0x10
+[   12.717330][    T1]  ? __pfx_bus_for_each_dev+0x10/0x10
+[   12.721241][    T1]  ? do_raw_spin_unlock+0x4d/0x200
+[   12.724984][    T1]  bus_add_driver+0x345/0x670
+[   12.728449][    T1]  driver_register+0x23a/0x320
+[   12.732054][    T1]  ? __pfx_virtio_gpu_driver_init+0x10/0x10
+[   12.736511][    T1]  virtio_gpu_driver_init+0x96/0x110
+[   12.740363][    T1]  do_one_initcall+0x250/0x870
+[   12.743753][    T1]  ? __pfx_virtio_gpu_driver_init+0x10/0x10
+[   12.747725][    T1]  ? __pfx_do_one_initcall+0x10/0x10
+[   12.750854][    T1]  ? __pfx___schedule+0x10/0x10
+[   12.754246][    T1]  ? irqentry_exit+0x218/0x910
+[   12.757543][    T1]  ? lockdep_hardirqs_on+0x7b/0x110
+[   12.760932][    T1]  ? irqentry_exit+0x218/0x910
+[   12.764435][    T1]  ? trace_irq_disable+0x3b/0x140
+[   12.767922][    T1]  ? parameq+0x37/0x170
+[   12.770899][    T1]  ? next_arg+0x4a0/0x5e0
+[   12.773885][    T1]  ? parameq+0x14d/0x170
+[   12.776877][    T1]  ? parse_args+0x9c3/0xad0
+[   12.779988][    T1]  ? rcu_is_watching+0x16/0xb0
+[   12.783393][    T1]  do_initcall_level+0x10a/0x1a0
+[   12.787027][    T1]  ? kernel_init+0x22/0x1d0
+[   12.790245][    T1]  do_initcalls+0x59/0xa0
+[   12.793486][    T1]  kernel_init_freeable+0x29d/0x3e0
+[   12.796995][    T1]  ? __pfx_kernel_init+0x10/0x10
+[   12.800223][    T1]  kernel_init+0x22/0x1d0
+[   12.803175][    T1]  ? __pfx_kernel_init+0x10/0x10
+[   12.806784][    T1]  ret_from_fork+0x514/0xb70
+[   12.809992][    T1]  ? __pfx_ret_from_fork+0x10/0x10
+[   12.813663][    T1]  ? __switch_to+0xc89/0x1420
+[   12.817141][    T1]  ? __pfx_kernel_init+0x10/0x10
+[   12.820600][    T1]  ret_from_fork_asm+0x1a/0x30
+[   12.824086][    T1]  </TASK>
+[   12.826409][    T1] Kernel panic - not syncing: kernel: panic_on_warn se=
+t ...
+[   12.831660][    T1] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted syz=
+kaller #0 PREEMPT(full)=20
+[   12.836273][    T1] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), =
+BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[   12.836273][    T1] Call Trace:
+[   12.836273][    T1]  <TASK>
+[   12.836273][    T1]  vpanic+0x56d/0xa60
+[   12.836273][    T1]  ? __pfx__printk+0x10/0x10
+[   12.836273][    T1]  ? __pfx_vpanic+0x10/0x10
+[   12.836273][    T1]  ? is_bpf_text_address+0x292/0x2b0
+[   12.836273][    T1]  ? is_bpf_text_address+0x26/0x2b0
+[   12.836273][    T1]  panic+0xc5/0xd0
+[   12.836273][    T1]  ? __pfx_panic+0x10/0x10
+[   12.836273][    T1]  ? ret_from_fork_asm+0x1a/0x30
+[   12.836273][    T1]  __warn+0x315/0x4c0
+[   12.836273][    T1]  ? drm_mode_config_validate+0x1c6a/0x1e60
+[   12.836273][    T1]  ? drm_mode_config_validate+0x1c6a/0x1e60
+[   12.836273][    T1]  __report_bug+0x276/0x570
+[   12.836273][    T1]  ? blocking_notifier_chain_register+0x50/0xc0
+[   12.836273][    T1]  ? drm_mode_config_validate+0x1c6a/0x1e60
+[   12.836273][    T1]  ? __pfx___report_bug+0x10/0x10
+[   12.836273][    T1]  ? blocking_notifier_chain_register+0x6b/0xc0
+[   12.836273][    T1]  report_bug_entry+0x19b/0x290
+[   12.836273][    T1]  ? drm_mode_config_validate+0x1cab/0x1e60
+[   12.836273][    T1]  ? drm_mode_config_validate+0x1cb0/0x1e60
+[   12.836273][    T1]  handle_bug+0xce/0x200
+[   12.836273][    T1]  exc_invalid_op+0x1a/0x50
+[   12.836273][    T1]  asm_exc_invalid_op+0x1a/0x20
+[   12.836273][    T1] RIP: 0010:drm_mode_config_validate+0x1cab/0x1e60
+[   12.836273][    T1] Code: 0f 85 ae 00 00 00 4d 8d 77 10 8b 6d 00 4c 89 f=
+0 48 c1 e8 03 80 3c 18 00 74 08 4c 89 f7 e8 bd a5 a3 fc 49 8b 16 4c 89 ef 8=
+9 ee <67> 48 0f b9 3a eb 05 e8 c9 54 32 fc 49 bd 00 00 00 00 00 fc ff df
+[   12.836273][    T1] RSP: 0000:ffffc900001af450 EFLAGS: 00010246
+[   12.836273][    T1] RAX: 1ffff11000029408 RBX: dffffc0000000000 RCX: fff=
+f88801ceb0000
+[   12.836273][    T1] RDX: ffff88801f5db780 RSI: 0000000000000024 RDI: fff=
+fffff9085b000
+[   12.836273][    T1] RBP: 0000000000000024 R08: ffffffff8ec2b347 R09: 1ff=
+ffffff1d85668
+[   12.836273][    T1] R10: dffffc0000000000 R11: fffffbfff1d85669 R12: dff=
+ffc0000000000
+[   12.836273][    T1] R13: ffffffff9085b000 R14: ffff88800014a040 R15: fff=
+f88800014a030
+[   12.836273][    T1]  ? __pfx_autoremove_wake_function+0x10/0x10
+[   12.836273][    T1]  drm_dev_register+0x7c/0xd80
+[   12.836273][    T1]  virtio_gpu_probe+0x1cb/0x290
+[   12.836273][    T1]  virtio_dev_probe+0xdf6/0x10c0
+[   12.836273][    T1]  ? up_write+0x19d/0x4a0
+[   12.836273][    T1]  ? __pfx_virtio_dev_probe+0x10/0x10
+[   12.836273][    T1]  ? driver_sysfs_add+0x1fe/0x210
+[   12.836273][    T1]  ? __pfx_virtio_dev_probe+0x10/0x10
+[   12.836273][    T1]  really_probe+0x254/0xae0
+[   12.836273][    T1]  __driver_probe_device+0x1e8/0x360
+[   12.836273][    T1]  driver_probe_device+0x4f/0x240
+[   12.836273][    T1]  __driver_attach+0x339/0x600
+[   12.836273][    T1]  bus_for_each_dev+0x23b/0x2c0
+[   12.836273][    T1]  ? __pfx___driver_attach+0x10/0x10
+[   12.836273][    T1]  ? __pfx_bus_for_each_dev+0x10/0x10
+[   12.836273][    T1]  ? do_raw_spin_unlock+0x4d/0x200
+[   12.836273][    T1]  bus_add_driver+0x345/0x670
+[   12.836273][    T1]  driver_register+0x23a/0x320
+[   12.836273][    T1]  ? __pfx_virtio_gpu_driver_init+0x10/0x10
+[   12.836273][    T1]  virtio_gpu_driver_init+0x96/0x110
+[   12.836273][    T1]  do_one_initcall+0x250/0x870
+[   12.836273][    T1]  ? __pfx_virtio_gpu_driver_init+0x10/0x10
+[   12.836273][    T1]  ? __pfx_do_one_initcall+0x10/0x10
+[   12.836273][    T1]  ? __pfx___schedule+0x10/0x10
+[   12.836273][    T1]  ? irqentry_exit+0x218/0x910
+[   12.836273][    T1]  ? lockdep_hardirqs_on+0x7b/0x110
+[   12.836273][    T1]  ? irqentry_exit+0x218/0x910
+[   12.836273][    T1]  ? trace_irq_disable+0x3b/0x140
+[   12.836273][    T1]  ? parameq+0x37/0x170
+[   12.836273][    T1]  ? next_arg+0x4a0/0x5e0
+[   12.836273][    T1]  ? parameq+0x14d/0x170
+[   12.836273][    T1]  ? parse_args+0x9c3/0xad0
+[   12.836273][    T1]  ? rcu_is_watching+0x16/0xb0
+[   12.836273][    T1]  do_initcall_level+0x10a/0x1a0
+[   12.836273][    T1]  ? kernel_init+0x22/0x1d0
+[   12.836273][    T1]  do_initcalls+0x59/0xa0
+[   12.836273][    T1]  kernel_init_freeable+0x29d/0x3e0
+[   12.836273][    T1]  ? __pfx_kernel_init+0x10/0x10
+[   12.836273][    T1]  kernel_init+0x22/0x1d0
+[   12.836273][    T1]  ? __pfx_kernel_init+0x10/0x10
+[   12.836273][    T1]  ret_from_fork+0x514/0xb70
+[   12.836273][    T1]  ? __pfx_ret_from_fork+0x10/0x10
+[   12.836273][    T1]  ? __switch_to+0xc89/0x1420
+[   12.836273][    T1]  ? __pfx_kernel_init+0x10/0x10
+[   12.836273][    T1]  ret_from_fork_asm+0x1a/0x30
+[   12.836273][    T1]  </TASK>
+[   12.836273][    T1] Kernel Offset: disabled
+[   12.836273][    T1] Rebooting in 86400 seconds..
+
+
+syzkaller build log:
+go env (err=3D<nil>)
+AR=3D'ar'
+CC=3D'gcc'
+CGO_CFLAGS=3D'-O2 -g'
+CGO_CPPFLAGS=3D''
+CGO_CXXFLAGS=3D'-O2 -g'
+CGO_ENABLED=3D'1'
+CGO_FFLAGS=3D'-O2 -g'
+CGO_LDFLAGS=3D'-O2 -g'
+CXX=3D'g++'
+GCCGO=3D'gccgo'
+GO111MODULE=3D'auto'
+GOAMD64=3D'v1'
+GOARCH=3D'amd64'
+GOAUTH=3D'netrc'
+GOBIN=3D''
+GOCACHE=3D'/syzkaller/.cache/go-build'
+GOCACHEPROG=3D''
+GODEBUG=3D''
+GOENV=3D'/syzkaller/.config/go/env'
+GOEXE=3D''
+GOEXPERIMENT=3D''
+GOFIPS140=3D'off'
+GOFLAGS=3D''
+GOGCCFLAGS=3D'-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=3D0=
+ -ffile-prefix-map=3D/tmp/go-build2134465290=3D/tmp/go-build -gno-record-gc=
+c-switches'
+GOHOSTARCH=3D'amd64'
+GOHOSTOS=3D'linux'
+GOINSECURE=3D''
+GOMOD=3D'/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mo=
+d'
+GOMODCACHE=3D'/syzkaller/jobs/linux/gopath/pkg/mod'
+GONOPROXY=3D''
+GONOSUMDB=3D''
+GOOS=3D'linux'
+GOPATH=3D'/syzkaller/jobs/linux/gopath'
+GOPRIVATE=3D''
+GOPROXY=3D'https://proxy.golang.org,direct'
+GOROOT=3D'/usr/local/go'
+GOSUMDB=3D'sum.golang.org'
+GOTELEMETRY=3D'local'
+GOTELEMETRYDIR=3D'/syzkaller/.config/go/telemetry'
+GOTMPDIR=3D''
+GOTOOLCHAIN=3D'auto'
+GOTOOLDIR=3D'/usr/local/go/pkg/tool/linux_amd64'
+GOVCS=3D''
+GOVERSION=3D'go1.26.0'
+GOWORK=3D''
+PKG_CONFIG=3D'pkg-config'
+
+git status (err=3D<nil>)
+HEAD detached at 680aa3e19b5
+nothing to commit, working tree clean
+
+
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+go list -f '{{.Stale}}' -ldflags=3D"-s -w -X github.com/google/syzkaller/pr=
+og.GitRevision=3D680aa3e19b52574eca8bcba3c41aa18235367abe -X github.com/goo=
+gle/syzkaller/prog.gitRevisionDate=3D20260907-094615"  ./sys/syz-sysgen | g=
+rep -q false || go install -ldflags=3D"-s -w -X github.com/google/syzkaller=
+/prog.GitRevision=3D680aa3e19b52574eca8bcba3c41aa18235367abe -X github.com/=
+google/syzkaller/prog.gitRevisionDate=3D20260907-094615"  ./sys/syz-sysgen
+make .descriptions
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+bin/syz-sysgen
+touch .descriptions
+GOOS=3Dlinux GOARCH=3Damd64 go build -ldflags=3D"-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3D680aa3e19b52574eca8bcba3c41aa18235367abe -X g=
+ithub.com/google/syzkaller/prog.gitRevisionDate=3D20260907-094615"  -o ./bi=
+n/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
+mkdir -p ./bin/linux_amd64
+g++ -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wfr=
+ame-larger-than=3D16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-forma=
+t-overflow -Wno-unused-but-set-variable -Wno-unused-command-line-argument -=
+static-pie -std=3Dc++17 -I. -Iexecutor/_include   -DGOOS_linux=3D1 -DGOARCH=
+_amd64=3D1 \
+	-DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"680aa3e19b52574eca8bcba3c41aa18235=
+367abe\"
+go: downloading google.golang.org/grpc v1.83.1
+go: downloading go.opentelemetry.io/contrib/detectors/gcp v1.44.0
+go: downloading github.com/GoogleCloudPlatform/opentelemetry-operations-go/=
+detectors/gcp v1.33.0
+go: downloading github.com/klauspost/compress v1.18.7
+go: downloading github.com/spiffe/go-spiffe/v2 v2.7.0
+/usr/bin/ld: /tmp/ccpIPst8.o: in function `Connection::Connect(char const*,=
+ char const*)':
+executor.cc:(.text._ZN10Connection7ConnectEPKcS1_[_ZN10Connection7ConnectEP=
+KcS1_]+0x386): warning: Using 'gethostbyname' in statically linked applicat=
+ions requires at runtime the shared libraries from the glibc version used f=
+or linking
+./tools/check-syzos.sh 2>/dev/null
+
+
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=3D161cf125580000
+
+
+Tested on:
+
+commit:         2cf20c4e io_uring/waitid: avoid siginfo copy during ri..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.g=
+it io_uring-7.3
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3D780bb9a5c10069a=
+1
+dashboard link: https://syzkaller.appspot.com/bug?extid=3D2eb3d983669d3e49d=
+4fa
+compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-=
+1~exp1~20260613092250.77), Debian LLD 22.1.8
+
+Note: no patches were applied.
