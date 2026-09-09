@@ -1,40 +1,67 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D730D525A73;
-	Wed,  9 Sep 2026 10:42:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA74B503BF9
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 11:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788950534; cv=none; b=or6hW3V5zGC/syhGotVlgR2WljrFLjc+f0NS3g+87TPfcT9qAJQAeVSF40ZWLvb/K51wULc6eAUC5bJ9ZaL5kbGcJ+MpRHlc5pOoY2n7kjyaaYjFAgbi/vbV+TvMmya4q92k4bJ5veP2ZS7P4qHMiYFsnVnTapG4dA5e/Z16aDA=
+	t=1788951767; cv=none; b=h253nCBpRenyintmMNqM5EbMtkEWv9lYoBrQc7PYd7ACwfvV653FY/yZHCVJGKxeFliQTsdOCuNOX3eJojz8OhgZvQF9drvCey5tQgARu+n7q+z3WL27BfY+Hm00T4vYvw51X12q8079+mdyCT1DYPRB2cwVDyJ+EJQHIb3zjVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788950534; c=relaxed/simple;
-	bh=5iEeWKRYyo6JZkZ1jkGVssH+/FqxevdetEgt2YPW2R4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=P8sdcsNRjVJZVhtm3CAwczudzPHhLUxUTD1zBG2uIra920qp9XXuvROMmal7D9UAEx3MCg0EN8JzF8QtbPZbXlO8ubmzIvU0pdyPQYjAkqIld6GnhpXM2syi1Tr49I1gx0tgtROgzTgvMyJj9+eQiw+manug/3iqraTfMx+bg2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 198dd5c6ac3b11f19a56ed5b684f684d-20260909
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:96be5b24-559b-471a-a709-41308b3f524f,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:7db8b62,CLOUDID:7fbbb0f849b9254f6c5f92ebe1516e05,BulkI
-	D:nil,BulkQuantity:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0|15|50|99,
-	EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
-	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 198dd5c6ac3b11f19a56ed5b684f684d-20260909
-X-User: liwang@kylinos.cn
-Received: from [10.42.16.85] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <liwang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1215083401; Wed, 09 Sep 2026 18:42:05 +0800
-Message-ID: <6aed7ecf-d125-40d1-a82d-1a7f62049605@kylinos.cn>
-Date: Wed, 9 Sep 2026 18:42:03 +0800
+	s=arc-20240116; t=1788951767; c=relaxed/simple;
+	bh=/KNkqL8brsMMGc5Cqzr5HLntXTDWrBVEovCUk8D0+MM=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:References:
+	 In-Reply-To:Content-Type; b=u2AFXtiyq5d+Ln7+86i12XU5dacUQxo6dNOuBbUparGj+uTeB5a/oeeJhtVlR9cH/277hLiMBej+yXGfsQMbs2BTep/ptTer4wQEiSUcLUZ7p0UqJPEF7J6yZqUroOVv4bvCvWwpa3tdTq9rQXJOam+nzpry71Twgb4fN5MJ3Gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=PzDW+lfQ; arc=none smtp.client-ip=74.125.231.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="PzDW+lfQ"
+Received: by mail-oo2-f43.google.com with SMTP id 46e09a7af769-7f4f0cfb29cso30874a34.1
+        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 04:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1788951759; x=1789556559; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:to:subject:from:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=tZczqCxuq41VAhV724eZUITtJnRnt+MmYaUhid2/07k=;
+        b=PzDW+lfQBEpFLI8b75gyc8ue8zKJWHtomeWlbHdeq4HAMqHCoKFuGr2SlvSm5fbzmZ
+         QGesMF1rCd1eZFev4EkwM0Jaa+wHFrgTqy0ArZg6nVwk2i8GmbB7YNzadI+0HU3lvKVs
+         wlO6yy5tO6WKyIVHs4/Tl0GQtbmh6eSE8dfgiPjuKeurD4+SKBt+19vgQwNU7amlT8ex
+         D4AH5wWZnEO+kS3AmwIr3euIUABBC2RAz2wRNCEcjilcjB5SmpYuqLULDRp2/7VdzgVl
+         L8PzfX1VmcKGPmKau4tuYT6rktk0eMA68OJHdb84YwIIvIOF5Ts4TQRWCo3hSxjVmBct
+         BDNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788951759; x=1789556559;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=tZczqCxuq41VAhV724eZUITtJnRnt+MmYaUhid2/07k=;
+        b=sSwiUKcfygAohJCEPuy7Ds1Yhq8akVfFo/K7EKhZS7lEPyOkaNm79JnccrVfPcR49t
+         7a4CDchFyrL1vZBBKWBq+P+t4WcN+8WigyjlV7dr0NakOpwkJ/LZo+rFVeRHQ3lc7n4X
+         mDs0TlcHqq1O+hIIKAgbEHNnfkQa2paX4fuftxiXR8L2NWhhTyOJjjUZeqsTLSq3y+d1
+         Q9l65sLofAqYHH7Z4BrOQRQ2wVMqVGoBQCdF3qSMLmyfzKGR4+1Z/SOkvX8ocyzEge7K
+         R19rDS87LLnlxuS59KLQG0hSRewu//+mz1Gn0EZIyVH4HwIcIAaRPvJGP0iffW/UF8X9
+         hr4Q==
+X-Forwarded-Encrypted: i=1; AKwUvByTSQ78GthR8VXTX/CJFhbFEziEbesZWijM44SD3i/bLe3Zesz9z0Zj8aUFmqyuh1CghJbfW+vPTw==@vger.kernel.org
+X-Gm-Message-State: AFuF++kL90RvAS55RPqAJWv6tol0NVoMNbqP7Tn4tiCC9S8CaI3XTjdE
+	o6sDP5bEanwB0vV5NFJ/UX9i5fKbDF4RXT0LNG//lQ2zuO55t+uYuvN+cIATKXG5jMo=
+X-Gm-Gg: AYBFou0g8+VjnJR+J6zrfY7EHOxSN2O4HiXZnURd2xK8hSAXTgDXCs1A5uQyWX+O1Mc
+	ZCiNUGX1BP7WDj2dOi+CGCSh0KntxBbqMdirtHVv53IJ5IWYmenX4GPhD+YNLI1jvLuVA+vuD/4
+	fH2xLqI9OOcbFeRusRqt3V6+BzIc/37j5jyR/h/PkQg7fLNeuneXdmK5tKBmNyPiFBzhPv4luzB
+	JEQoOZJR40NOD5VpPpGdZkJX2YxeS37xwnW8PVbzuAa5zHzTJ8j6eyx7FkfuUMx4DW5GgDOP0zE
+	5l+8A4GsRlPOQbQ53Oevapz9kqTjyARcaIZc9KtnqdAsh4CaCB7wGefpyrhXFcCP5JSjS3hGTKK
+	RNz0/sf9bcMqXJtyOPZqOeLkknfO2xo4BtwA5h87p+RSxgS9XPkjCYFcaVzSXpLDOXON4hrcq5E
+	mWCCCpOt27v3Mt0jgCE7UiUU3Lx+u1eOqb+LE9AtGLwPxRAddMHyOmhyL51RZx3znx041yenitY
+	y6Skj/sO+HPLoodz5Fz/tBl+aDDixr5cXzi3mxozLoqUqJjRmdOkAqiWw==
+X-Received: by 2002:a05:6830:6404:b0:7f7:f55a:4bcc with SMTP id 46e09a7af769-8020ee08c65mr696250a34.8.1788951759157;
+        Wed, 09 Sep 2026 04:02:39 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7fa888f614dsm15905601a34.15.2026.09.09.04.02.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2026 04:02:37 -0700 (PDT)
+Message-ID: <fdc957c4-2b98-4b76-9bce-06e4d27c233b@kernel.dk>
+Date: Wed, 9 Sep 2026 05:02:35 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -42,51 +69,20 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] misc: fgds: enable GPU-NVMe direct I/O via POSIX and
- io_uring
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mengmeng Zhao <zhaomengmeng@kylinos.cn>
-References: <20260908131545.105987-1-liwang@kylinos.cn>
- <2026090913-landline-encroach-c544@gregkh>
-Content-Language: en-GB
-From: Li Wang <liwang@kylinos.cn>
-In-Reply-To: <2026090913-landline-encroach-c544@gregkh>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: Re: [syzbot] [io-uring?] [ext4?] INFO: task hung in io_write
+To: syzbot <syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com>,
+ io-uring@vger.kernel.org, linux-ext4@vger.kernel.org,
+ linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <6aa0876e.f81106d8.285f0a.0005.GAE@google.com>
+ <31ab7ab6-2cf5-4fcb-a6cb-05fab461e742@kernel.dk>
+Content-Language: en-US
+In-Reply-To: <31ab7ab6-2cf5-4fcb-a6cb-05fab461e742@kernel.dk>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Greg,
-  Thanks for the review!
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git io_uring-7.3
 
-> 
-> That's not really needed in a changelog text, it could be in the 0/X
-> patch :)
-> 
-Sorry for the clutter. I will move most of them into the 0/X patch in v2.
+-- 
+Jens Axboe
 
-> Anyway, you didn't cc: the io_uring list, why?
-> 
-`scripts/get_maintainer.pl` didn't output the io_uring mailing list, likely 
-because this patch doesn't directly touch the io_uring codebase itself. It only 
-enables remapping GPU memory buffers to CPU virtual addresses, which can then be 
-consumed via standard io_uring APIs.
-
-I've added io-uring@vger.kernel.org to CC for this reply and will keep it in v2.
-
-> 
-> Nor why "fgds" is the name, that's going to be hard to remember, does it
-> stand for something?
-> 
-"FGDS" stands for Fast GPUDirect Storage. GPUDirect Storage (GDS) is NVIDIA's 
-technology enabling direct I/O between GPU memory and files on NVMe, 
-widely used in LLM workloads to bypass CPU overhead.
-
-If "FGDS" feels unintuitive, please let us know if you have a better alternative.
-
-We will address the rest of the code comments in the v2 patch series soon.
-
-Thanks,
-Li Wang
