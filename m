@@ -1,74 +1,82 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-oo1-f98.google.com (mail-oo1-f98.google.com [209.85.161.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06E957C73B
-	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 14:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD09572689
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 15:59:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788963044; cv=none; b=cLrHt31lkt8IIGVdvuHhqVeZwQ/ZsWie5eEdLM8P3gFKR6F8NQG2LDQoqgf58zAUeND1rTxgVrpn3B2w6UEII8T1sQ+YfqW9s/Vu09RfaW/PHzON9fSmKooXEAXIgmC4Xfs+M29ZN05+nEGiTMzLJNN1c65x+A3uqgrXh+Yo+Qw=
+	t=1788969570; cv=none; b=YeYx30Nj2LZaJWty/PXkJ2QJLEVTej2PTwHGZV8diBEEvmk7VjPA8it88WzIOThkyyPrHPyOClBc87dLtTxaYtm0PFYvC25G4bfc+H5UEthrk/dpuZrhdpSLENYX84YW9vptwfZfFe0PDBv9LirXnbETAH7pzszWl8yW6Mp3jm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788963044; c=relaxed/simple;
-	bh=vxjwuEhsoW8yHsheIG3MSVpcHVM+rf2iCLljipPWTDM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EUg2vLim4wdHmTBKzfXjgGl9doYN6GSwpW/8x+DEc4aMx2JncTG/JpTyPtx8SP6OuJn/rdw9wFI/ZwXrePgAJlYCj3Ooz7/O6hQK6lMirPqrCXoJds+OyW3RHCUss2DMeaOocxyZeMr9f9gWC83BN/Q//cIdcJ6cAOXWL9VHY8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=ReZCWAT+; arc=none smtp.client-ip=74.125.231.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1788969570; c=relaxed/simple;
+	bh=bIFo61AQRBepA+eZgKggLjcuui2wl34B52fZnjPCxM0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qAhSc2q0BKYHiRG6N5/UeGWxzYYDMBlIqGrQhVG6FoO8SqB7xmGVDFEckLUfmyGcG8AbWsfGZau5pC0VKEtGzB4XWJ916HObURoZrMLDSEjl/0ixyXwaDX0SISaIR8VA0Tyj8qhFYu+FIpkNwpFxODO4dMjgLTes2YLJV+o4k0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=A2T/ZGnn; arc=none smtp.client-ip=209.85.161.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="ReZCWAT+"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466cc9ab667so268189fac.0
-        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 07:10:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="A2T/ZGnn"
+Received: by mail-oo1-f98.google.com with SMTP id 006d021491bc7-6b137c4ec76so10578eaf.1
+        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 08:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1788963040; x=1789567840; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SN4bIFfM62VV7sUmVsxrc3nyc1CuoB6PmtfW+NV+gpA=;
-        b=ReZCWAT+K8xcEE8oSvpy+ixl2zhYGm0Z41GKMT3Y/gr3pYjJC29sTLKL4SB3/bYukJ
-         9sH3PV4Z3P0mw8SPSOv/bw8Hh0EJsKnIJ5RTJiIjaIcdikLKncWQnSwBZ4sRA9h/+erv
-         6xyv+8l84Q9mphKnYMjL4XwEl2xr51owaK//yJGL3Dmm4mUx6g+5nwbt1G/5CkGrAw7y
-         wJY7bAy9MB6d5CvuO+igWH56fM+OWhs85V7rkCuwaPtYvb+3agvkV9QaBtA8wotesGCh
-         ZHcx1VXhNWQxaGL1alu0scJYRYRr93+4nGINlXe2Kll4e9hwY+kNLijf7qnV8bKR5uIv
-         pNzA==
+        d=purestorage.com; s=google2022; t=1788969567; x=1789574367; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=P1kymuGqdAzFhcYg4rZW0qBDuOZo6IIQ9a977MAFPAo=;
+        b=A2T/ZGnnxGqJ6GTSOUlKs7K6sXeddlqWt5r2kJLmeMVNW4/sCk6qBInoaEeOFR2lAX
+         kP2yk4SbgyKj39DIYyPtmeZcyyI6kg0hvVEu3yLGEIkO8MZCb5CrWXdaqR12ipkaugb7
+         AASZ8H47TZJEd75Yb8CZlk19XF8KKk0tE8K2t2KIecac2GUr7yHaxLmK6H9kNqf3BIUw
+         Qf38pmG073c7S463+uAOBWWj6h3SeFnCG1M5eJSLhYa5BhHkq9G7/zaw14FV+K3EUgPB
+         Gt5Ydw+tlibgTUTQuKYzqLYlFAxiJIj5fR7C5bxlbl9egT0mmgSAXMSQT3/TCjqndSqR
+         8xNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788963040; x=1789567840;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SN4bIFfM62VV7sUmVsxrc3nyc1CuoB6PmtfW+NV+gpA=;
-        b=NfJFSgfwx1ijTQavGTUMe/xJFb33gDI4xKqOmq7DVwSgtjZIp3ARs3F0tGRJEUldG2
-         b4nN5snI3g3pAGF8Cj9uGnRNv3sSS8lyLZumhh6Phbepw9jaH2/4pF45SlSH12RBeBxF
-         0AjDehAGHxU7zFmWnxTtgEoKyZXyx7DQw+4aUuhnuulE7i7EdLnsDwadH/FkvIvz5XUV
-         bLjjli/BGOK4sQToRRcXy9fvWC8o0TUHecUbbsKGTCUWgOqB0nBEQipQI0AeEHXhByXV
-         n1lPI0TTgG7evrP2yVTkWYkTRtahDHQxX5TeuTigmHvk+HRmkrlsR0FU6eZe40TqSdLH
-         NJYQ==
-X-Gm-Message-State: AFuF++lDigFr3KLrN9FbqnMoNFCseGZ99xYBmxhV8JWl0H4Gvo/i7Oyi
-	bnTJDM+YVSvWuKL5u/k4ScZGG+Dy25pZGdc3JB+VAFStxyk6XoYR/CBNuJ9+MDIJz+TFBpp+/Tp
-	ZX+fTea4=
-X-Gm-Gg: AYBFou0QTmwEWHFxLUBJSpz2MeSU0Gaz8k5U1ZGFLHgj66eUhVdjAQSGo08UuZnmRK8
-	qL7PCOahgrY29gslOurG3b31gzjmB0bQrtUNZtRxlOtX8ePtXeSIs0rjtWYm+22rNRbmeUb9113
-	LH1ZfM7GJ6j8Giuma/AVeJ/X+QI2d0/nm+YbB/aAW2sefA1DdHjnxPKtyUSi3p5jeueC64aJ3k1
-	VAAVhwW4aMJa86YbqbasEUQPlVmgWr6/mi9T9wqPeROgJ8jlVrDMAiWpAfRraCdA6Dc8b0hebVE
-	35zF3YqnBetY6ZAJ0xCK4AZ7RspDjvi9Xdik4C6T/YOF99Two0Y/cybqt09whWUXZhrxAzdn7S9
-	8KVdNMxvcx25TpoDvimrfEmkD0kyD2dVIwBXBzl1SeR8L5JuG/5pxqP9ZiiQZM42zyeHS1xNtdY
-	8vq5AVIjksopgopknIMUbHiMXfa/1t47hzAJavXvHo4d2unLcwFnK+n+i7ZGoc/dHQo4dz577Ms
-	Ol7a+yVUCYVGtD8swrGz/KrSZvw2SNxmQjeDsOklh+g
-X-Received: by 2002:a05:6870:e0d3:b0:475:a153:2dc0 with SMTP id 586e51a60fabf-47c51926187mr570751fac.22.1788963040435;
-        Wed, 09 Sep 2026 07:10:40 -0700 (PDT)
-Received: from m2max ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47a7585b25esm5406514fac.11.2026.09.09.07.10.37
+        d=1e100.net; s=20251104; t=1788969567; x=1789574367;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=P1kymuGqdAzFhcYg4rZW0qBDuOZo6IIQ9a977MAFPAo=;
+        b=RzEW56PVp0ilqQGd/hJCOhdI85AOhcV/ZhkrdGmMdKTP/0CXb0SJ3sGXurMTOxORkx
+         z23vRMctEbMccvPpsO9eKjWsDyZCORGKGg2s9yNDlS95yAkYDCaAnbm/AswySRSTKhUY
+         Mpasyk4XWTvqV36XgTQdrklJkodhevy4x9SWXfxJQfP2PsCadFfZkhNrnU+uUC1YBaCB
+         s8gNEUKZlLbypviHbNjYxnBTM7HeRlRXMGT7Z2OXKJIBvewxdLnXupslQanJC7Ipok+o
+         ZMFL9MvHiW3xvyaSRrnIfioO8HanpR+EhHfaOef7AtBmLsn4cJ1Q53bly0V7/xCHfGdS
+         JnrQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwVGqApc0Fqxn0rRooUQAmDBj12ljwkNNyUJ8b7MWF9u30x8f8mJxHGQgcNI/uEXPuKChp2l5DVpQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++n6Ftk2+Rxra786QVvimCNgWKsRq/cyDjjHXW4mpb0RchmsAPIe
+	ZSSPxblSQIF+biEnvcYYyM6GDTdNxcNt088kzxT9EgrPkNNh18uOpH5JJp1OZaqLIOq01/tJLYR
+	3+u0KhfqWvxEfHTDdtvj+lNp7ri1ZiGE9kfXVUUGKb2wS+EB1ldnO
+X-Gm-Gg: AYBFou3i3se8p72Fc+7uGrO1gjRptraSPPWUEer5sGZHzamKwcPo5cbtccK9pKjI+YH
+	5aTkOBkPAuX03DE+Z36Fom+Afz2oa46ruGcRmxX2O0mdlCqxmLg2WUzhRRFUvkx+MjxSxxV+A0j
+	nao9fs37K95USzLm8xU6244PR1Yjyn/u0e1xWv0YEgmW/j9TSR44g7MjWQeZmcfu7XJDAMQtFjV
+	8wup9WS6oyrl9JuSfWG29EcyjqF9zVdmtQDW7DXtEffo2cr2HTWxF46wZG4ujbEpp5EXMWcLTPP
+	wVKCATlw31HtwzVFu0dvxc/cIm5RWiHUormk1kPb4ClYeBLOxHHVpA+A/yFvoyffJ7tqXNriGaB
+	noi8ADAp4ByqPZBho
+X-Received: by 2002:a05:6830:d0b:b0:7e6:6f9f:7445 with SMTP id 46e09a7af769-80273409dafmr51350a34.3.1788969567419;
+        Wed, 09 Sep 2026 08:59:27 -0700 (PDT)
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id 46e09a7af769-7faf7de412asm2209894a34.7.2026.09.09.08.59.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 07:10:38 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org
-Cc: juanlu@fastmail.com,
-	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 7/7] io_uring/io-wq: put the request file before posting a completion
-Date: Wed,  9 Sep 2026 08:06:17 -0600
-Message-ID: <20260909141010.21064-8-axboe@kernel.dk>
+        Wed, 09 Sep 2026 08:59:27 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (bond0.slc5-n17m28-k8s.dev.purestorage.com [IPv6:2620:125:9025:20::a31:41f])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id E67B7401FD;
+	Wed,  9 Sep 2026 09:59:26 -0600 (MDT)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id DC4EAE4026F; Wed,  9 Sep 2026 09:59:26 -0600 (MDT)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	Keith Busch <kbusch@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>
+Cc: Joanne Koong <joannelkoong@gmail.com>,
+	Ming Lei <tom.leiming@gmail.com>,
+	io-uring@vger.kernel.org,
+	linux-nvme@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH v3 0/3] io_uring passthru: set result on blk-mq request completion
+Date: Wed,  9 Sep 2026 09:58:45 -0600
+Message-ID: <20260909155848.2069290-1-csander@purestorage.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260909141010.21064-1-axboe@kernel.dk>
-References: <20260909141010.21064-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -77,74 +85,40 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Once io-wq is done with the request, put any potential file that request
-had pinned upfront. This ensures any file references are fully put by
-the time io-wq posts a completion. For registered files we don't need to
-worry about this, as these are canceled/dropped earlier.
+io_uring NVMe passthru currently receives the NVMe status and result in
+the blk-mq request completion callback nvme_uring_cmd_end_io() but
+doesn't post the io_uring CQE until the io_uring task work callback
+nvme_uring_task_cb(). The status and result must be plumbed through
+struct nvme_uring_cmd_pdu, taking up 16 bytes of the 32 available.
 
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
----
- io_uring/io_uring.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+Store the status and result on the io_uring request in
+nvme_uring_cmd_end_io() instead of nvme_uring_task_cb() so it doesn't
+need to be passed through struct nvme_uring_cmd_pdu.
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 32adb2d26d17..b5dc55bba195 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -907,6 +907,24 @@ bool io_req_post_cqe32(struct io_kiocb *req, struct io_uring_cqe cqe[2])
- 	return posted;
- }
- 
-+/*
-+ * Drop any io-wq request with a file upfront, otherwise it gets deferred to
-+ * much later post CQE posting.
-+ */
-+static void io_req_put_file_iowq(struct io_kiocb *req, bool sync)
-+{
-+	struct file *file = req->file;
-+
-+	if (!file || (req->flags & (REQ_F_FIXED_FILE | REQ_F_REISSUE)))
-+		return;
-+
-+	WRITE_ONCE(req->file, NULL);
-+	if (sync)
-+		__fput_sync(file);
-+	else
-+		fput(file);
-+}
-+
- static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
- {
- 	struct io_ring_ctx *ctx = req->ctx;
-@@ -919,6 +937,8 @@ static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
- 	if (WARN_ON_ONCE(!(issue_flags & IO_URING_F_IOWQ)))
- 		return;
- 
-+	io_req_put_file_iowq(req, true);
-+
- 	/*
- 	 * Handle special CQ sync cases via task_work. DEFER_TASKRUN requires
- 	 * the submitter task context, IOPOLL protects with uring_lock.
-@@ -1480,6 +1500,7 @@ void io_wq_submit_work(struct io_wq_work *work)
- 	/* either cancelled or io-wq is dying, so don't touch tctx->iowq */
- 	if (atomic_read(&work->flags) & IO_WQ_WORK_CANCEL) {
- fail:
-+		io_req_put_file_iowq(req, false);
- 		io_req_task_queue_fail(req, err);
- 		return;
- 	}
-@@ -1555,8 +1576,10 @@ void io_wq_submit_work(struct io_wq_work *work)
- 	} while (1);
- 
- 	/* avoid locking problems by failing it from a clean context */
--	if (ret)
-+	if (ret) {
-+		io_req_put_file_iowq(req, true);
- 		io_req_task_queue_fail(req, ret);
-+	}
- }
- 
- inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
+v3:
+- Inline io_uring_cmd_set_res*() (Ming, Jens)
+- Document that io_uring_cmd_set_res*() must be called before
+  __io_uring_cmd_done() (Joanne)
+- Add Reviewed-by tag (Joanne)
+
+v2: https://lore.kernel.org/io-uring/20260902225708.2379840-1-csander@purestorage.com/
+- Keep io_uring_cmd_done{,32}() wrappers to reduce changes in uring_cmd
+  implementations (Joanne)
+
+v1: https://lore.kernel.org/io-uring/20260827185722.3234622-1-csander@purestorage.com/
+
+Caleb Sander Mateos (3):
+  io_uring: move req_set_*() to public header
+  io_uring/cmd: split io_uring_cmd_set_res() from io_uring_cmd_done()
+  nvme/ioctl: call io_uring_cmd_set_res32() in ->end_io()
+
+ drivers/nvme/host/ioctl.c    | 19 +++++++++----------
+ include/linux/io_uring.h     | 32 ++++++++++++++++++++++++++++++++
+ include/linux/io_uring/cmd.h | 34 ++++++++++++++++++++++++++++------
+ io_uring/io_uring.h          | 31 -------------------------------
+ io_uring/uring_cmd.c         | 19 +------------------
+ 5 files changed, 70 insertions(+), 65 deletions(-)
+
 -- 
 2.55.0
 
