@@ -1,72 +1,89 @@
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A922550DB1
-	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 12:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5680B5650F4;
+	Wed,  9 Sep 2026 13:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788955988; cv=none; b=HTx+TOwLMzt/yGMkksp7oe8fF8axwSIX+ZLAxYnu05/O+tvMRNmdzcSOMpHSn4osUur9juN8l0elRCq+P4Mu5mjOqTJ78fgwzwf+IEP726SRBFyxxJlhf2lWmuUXs4EVFDHeUyJXItf41/LfB9lhjPOkj27G+xDlb0RlO4bbCUs=
+	t=1788960968; cv=none; b=jotLBf59vhj7ruvWKObv3y5s4QMc53ZhbpLK1DiV9OuswVDr5+mGdOaQlaagy7rT+W+qiDeE8I/F0Kcfq2/oGsBEHqVsm6yOd5Od+UMs0+eM+QDtgkEZsjy7zH9pcv6x83ARzjIMNpQ9feDhblNkifAvNZYQq+Cx1NaaXmez5oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788955988; c=relaxed/simple;
-	bh=YgpBxgo5YofLBw4A7X3QhxHUmNkjqC1fwunjTx+7hIY=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=fjY4Ygs14lkL5r58a8H6/ydwALkw2MLfdpJi4xafUi4hgGA05zbSaBqC4UOVAOrSr+TtagF4JSYgpW39gHNr1XHWofP8T7EFQNzamQLEbRFnryBGkjlgswqbuoDdtiELYhIR8W4cz1j8TkXJf32XXdyh/JHMm8GVd0Rxn7UmbjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-6a313ec13ceso7023121eaf.2
-        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 05:13:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788955982; x=1789560782;
-        h=content-type:to:from:subject:message-id:in-reply-to:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=UvYP6Qzj931TtA4FMiDKHWlI/21Br1rJ1AJggB3Ijk0=;
-        b=g4/7aAdzyY9O5szIEWQ+QC2yTeerUktPIcoNrVyFbaLziOKlMTpHEqMOI8E/bk/1j8
-         lMRocawd2ZfqNeBiDw+uWSV4WZ0N1RfYPWmsUvU0PWiJlTGPUgtLeBN7Cl1w4mEHmANw
-         u5//sow1t2MqKQbG9boeDDsKIUEgfLTO32guF1gEkjWGo76UbpE1sX0pGLMPJ2+7VlU6
-         wD1pHjGuy2L+XPx/1L8X2ZpvJmUQgE987sBO03o1StGZPr+Qq9g+5gCWvuCHKug7zUZb
-         t7OGS7v08CY1jRDSTwuklSe1im0kACzc4uvjh0KqT4IVv7NqlX/+KFHfzQjVvazU6zGK
-         rgSg==
-X-Forwarded-Encrypted: i=1; AKwUvByR64yoj2kUmr3MVC7fmm6q56emIZyETT47Ehg5sxA/YdDMBrESFkb1i9r4SS1Gm1S7QuTkocisPQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++nRGu2pVd4HagGsKNmVa2O+borH8VjaMBjeyC5Q/AT5Ldeiv7SS
-	ARKMklNp/sA0LziBCN5a5bm6LlDSggdvXcGzSf/EGVEVM7vET6B4UkrY0NUBE4/GpHFv97z3wAy
-	nCUbQUD0t7gQnYzLQdAwXwqNOSeZYzWyX206PvvTq+Bax44BQWFB8RrGvZQo=
+	s=arc-20240116; t=1788960968; c=relaxed/simple;
+	bh=UKFB77CAlNqkAbTNPoe0QFjLaAHPO6A4bFJtevGcw50=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DmlN2ECEi9xJiGiAPY+H39F1eDPeu/g434rCLrdokQysRjo1f1Dogtl2f6UIzNOFCBHdQ8Inc1cl1m8VyQ5aL2LM9CipLFyDsGWd+/I/AgtM9x6s3awvbJ6xmjaliZww3IlLwkSv0Xd3/8QERVCZpLSY4wx0MxP8O3aDGKMxnEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2PJImAPi; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2PJImAPi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B87A1F00A3A;
+	Wed,  9 Sep 2026 13:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1788960966;
+	bh=WnpS2yGxKI44jYHhvDpX+wa+5acQMRQRU+9l/6MzidY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=2PJImAPiXTNHRQ7hP2x3oYT0BLtP1K511PRmOlIgApf57TwmUNurL976ZqzkF7JMQ
+	 zy4BCLjinkulIlTgqoBJgyVxudGDsCtY59l8Qa1OWHGGCsPRBhZgpNIXk6vmFDs6Rg
+	 YxtEK2boO7fMsSbWTfcTPazN2t+BJk3gev9PCSB0=
+Date: Wed, 9 Sep 2026 15:35:59 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Li Wang <liwang@kylinos.cn>
+Cc: Arnd Bergmann <arnd@arndb.de>, Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mengmeng Zhao <zhaomengmeng@kylinos.cn>
+Subject: Re: [RFC PATCH] misc: fgds: enable GPU-NVMe direct I/O via POSIX and
+ io_uring
+Message-ID: <2026090924-corsage-shout-833d@gregkh>
+References: <20260908131545.105987-1-liwang@kylinos.cn>
+ <2026090913-landline-encroach-c544@gregkh>
+ <6aed7ecf-d125-40d1-a82d-1a7f62049605@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:3106:b0:6b1:39b1:80ee with SMTP id
- 006d021491bc7-6bee53998d1mr631749eaf.24.1788955982411; Wed, 09 Sep 2026
- 05:13:02 -0700 (PDT)
-Date: Wed, 09 Sep 2026 05:13:02 -0700
-In-Reply-To: <05177a9e-111c-4595-a7ef-d3de398f0a85@kernel.dk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6aa14d4e.f2639fcc.29487d.0003.GAE@google.com>
-Subject: Re: [syzbot] [io-uring?] [ext4?] INFO: task hung in io_write
-From: syzbot <syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, io-uring@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6aed7ecf-d125-40d1-a82d-1a7f62049605@kylinos.cn>
 
-Hello,
+On Wed, Sep 09, 2026 at 06:42:03PM +0800, Li Wang wrote:
+> Hi Greg,
+>   Thanks for the review!
+> 
+> > 
+> > That's not really needed in a changelog text, it could be in the 0/X
+> > patch :)
+> > 
+> Sorry for the clutter. I will move most of them into the 0/X patch in v2.
+> 
+> > Anyway, you didn't cc: the io_uring list, why?
+> > 
+> `scripts/get_maintainer.pl` didn't output the io_uring mailing list, likely 
+> because this patch doesn't directly touch the io_uring codebase itself. It only 
+> enables remapping GPU memory buffers to CPU virtual addresses, which can then be 
+> consumed via standard io_uring APIs.
+> 
+> I've added io-uring@vger.kernel.org to CC for this reply and will keep it in v2.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Great, as you are using that as the api, there might be some parts that
+will need to be reviewed by them.
 
-Reported-by: syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com
-Tested-by: syzbot+2eb3d983669d3e49d4fa@syzkaller.appspotmail.com
+> > Nor why "fgds" is the name, that's going to be hard to remember, does it
+> > stand for something?
+> > 
+> "FGDS" stands for Fast GPUDirect Storage. GPUDirect Storage (GDS) is NVIDIA's 
+> technology enabling direct I/O between GPU memory and files on NVMe, 
+> widely used in LLM workloads to bypass CPU overhead.
 
-Tested on:
+That's nvidia's specific solution, but this works on other devices,
+right?  Or just for that one platform?
 
-commit:         57ab5080 io_uring/io-wq: don't trigger hung task for s..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git syztest
-console output: https://syzkaller.appspot.com/x/log.txt?x=127b7af9580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=679ea3cb74b430f3
-dashboard link: https://syzkaller.appspot.com/bug?extid=2eb3d983669d3e49d4fa
-compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+And you are using this as a "bypass" for the normal accel subsystem,
+shouldn't this be part of that subsystem instead of a custom user/kernel
+api like you are creating here?
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+thanks,
+
+greg k-h
