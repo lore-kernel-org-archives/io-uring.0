@@ -1,71 +1,71 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D4257C72A
-	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 14:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06E957C73B
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 14:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788963041; cv=none; b=BFhl8psfgZAWZtorrWlVVIhmkD79VVpsbdOruuIkc9eXC9oDM35XbyDcky8TtTRy6b57JewhV8O1AvE0WUlwdylMTw82oGzGzN9QbZmhtC+YboHlXy2zCXs8wXNawmwGfGs9Pho+2PR7tY0Tbxyx79gPOW/tgsFfdBKJaHtzVvk=
+	t=1788963044; cv=none; b=cLrHt31lkt8IIGVdvuHhqVeZwQ/ZsWie5eEdLM8P3gFKR6F8NQG2LDQoqgf58zAUeND1rTxgVrpn3B2w6UEII8T1sQ+YfqW9s/Vu09RfaW/PHzON9fSmKooXEAXIgmC4Xfs+M29ZN05+nEGiTMzLJNN1c65x+A3uqgrXh+Yo+Qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788963041; c=relaxed/simple;
-	bh=gj4QX4R/Eo4TFpo9/vY8O6DSsgDd6rFdAguJL3YCba0=;
+	s=arc-20240116; t=1788963044; c=relaxed/simple;
+	bh=vxjwuEhsoW8yHsheIG3MSVpcHVM+rf2iCLljipPWTDM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D5JAp6M5aZYqdAV5jb/A7vJb/PPFReBkLKFLEU23TziiY9XvuD0j1F3Q9amVxlobsbaOhJ36fvCq+2ZlVJfxVkTiVHZWV3BZrk0JOnBbOFnLA4toaTtjrmesm4MreYPPPjU+vihpbtw1eypJ+5vL7JRCv6qWqwiKDB9L5dGPSXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=PArsjIki; arc=none smtp.client-ip=209.85.160.52
+	 MIME-Version; b=EUg2vLim4wdHmTBKzfXjgGl9doYN6GSwpW/8x+DEc4aMx2JncTG/JpTyPtx8SP6OuJn/rdw9wFI/ZwXrePgAJlYCj3Ooz7/O6hQK6lMirPqrCXoJds+OyW3RHCUss2DMeaOocxyZeMr9f9gWC83BN/Q//cIdcJ6cAOXWL9VHY8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=ReZCWAT+; arc=none smtp.client-ip=74.125.231.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="PArsjIki"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-43b7e186a0cso3151371fac.0
-        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 07:10:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="ReZCWAT+"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466cc9ab667so268189fac.0
+        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 07:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1788963038; x=1789567838; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1788963040; x=1789567840; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=S3zQwxx5Tco32EyQn+PtsdLeuLR0i+7QJ8jY547nns0=;
-        b=PArsjIkimIl7RRi7aAWP9XdVjnxbeMUIxbLNdhsPCqHlkgh5DAeFG5N4E2kEasHBkd
-         3Lty/WfmI2OdHvNNd4GRTPqm9YWMEBxICYBpHcvajI1iXJT2FlodqxBMrbUn8StJj2oO
-         jDlG6AM5IutaFx1CqVa5XN3midga1mTXe4LMX7RWlk20NAy4tLfO3aypsSei0l0XONaL
-         xmfd7pZSREAQhZ/icLAY1kQdK4nvb2EpPqGoJuYUzDERXmqqMqdWWmjFmLolYCISoxcM
-         AH9Bp73btNcCv9BOndeoPI9pu1xdzsIDQ8832O9qKbBalN6HZgS4B8p0M1tQQkbgSYpg
-         tASA==
+        bh=SN4bIFfM62VV7sUmVsxrc3nyc1CuoB6PmtfW+NV+gpA=;
+        b=ReZCWAT+K8xcEE8oSvpy+ixl2zhYGm0Z41GKMT3Y/gr3pYjJC29sTLKL4SB3/bYukJ
+         9sH3PV4Z3P0mw8SPSOv/bw8Hh0EJsKnIJ5RTJiIjaIcdikLKncWQnSwBZ4sRA9h/+erv
+         6xyv+8l84Q9mphKnYMjL4XwEl2xr51owaK//yJGL3Dmm4mUx6g+5nwbt1G/5CkGrAw7y
+         wJY7bAy9MB6d5CvuO+igWH56fM+OWhs85V7rkCuwaPtYvb+3agvkV9QaBtA8wotesGCh
+         ZHcx1VXhNWQxaGL1alu0scJYRYRr93+4nGINlXe2Kll4e9hwY+kNLijf7qnV8bKR5uIv
+         pNzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788963038; x=1789567838;
+        d=1e100.net; s=20251104; t=1788963040; x=1789567840;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=S3zQwxx5Tco32EyQn+PtsdLeuLR0i+7QJ8jY547nns0=;
-        b=CCMUB0RSDLmZ87H8gJMvlLocmGMqXeicHSs/OBTxvRJ/zk5BEJqV6bbtc3j+h85Mj5
-         rWtdVcWYYmSyiR3NNtDcXYchqAWt/h6SUgHBWV4kEpOlQVdUOmqQRPEsqc66YgP5RGsi
-         jRhmUT5LH+QoQmxFIC5nh/7u3vdFcn0grxLIGynqykCMWJ+Lr/XtBvd6YWnTXTAwYIyo
-         zDAPVdWY1vY2hg8jOzs5hkR13NeTZoVIEhR2GfLM75xU/OvYFEF75LqBsuM5yzUdpybu
-         brhCiXvO5Lq137IvSBu/XoYwFFwTqsjBBdADrVyxDclN/o5q1C7A937Xy8lMVW1o+LsW
-         8o1A==
-X-Gm-Message-State: AFuF++nynC7v5zeiSc6hLKYax892q3fWDo2oLR6mYX/X+xJTl0NB1lhV
-	4N/vQb+mJpNE0tXm5Kk//V1UN1qySMwiGdwe2nKOAxR9WicMDJ3yQSopL420IC5loPv9ygTTYmE
-	ASoPV20Q=
-X-Gm-Gg: AYBFou3Bo9EainK7xYUWTF2U/z4SbUVyoqvoUAE1zIxtWqiodyNBLoKntAQ4HmYaYLI
-	mi+zTFd7VagG2bW+YGdackJRf44uJMuGH4C6Lfa1thcC+C90TtmgNVDqoSOiiR9QEwjzIltzAyT
-	tTHG3zw/2B+40/PScBlBmwgfgQuXoVb0u1ChFXfeywu2WBjUBjohu/R1KS+eG/34zhhJalrPwS4
-	EwYE9rYF9QqQYwpL4pNymvYs3Q1wxMUWNMEn+7mVbmPel5j092Yywbu75Sxef/pIqEJCNNmsU2s
-	S1vyDBTSOI3n5J/GGoYs1Ji2octbCDo7vBSdNsCO4Mwak1iOpgr+wB9HNbDLbsz1lyeNbzuMuoy
-	jZC+kXWcg+z872VxnTFvoLv52NkMDfxmwMb8jJwut0S1IQ+sG/9xzWIm4ArXH4R2yb2DgSp/6//
-	dWN9KFn0UvhG3MG3Ks4N04vq9xvRBUtn4Pu+i5r8z+GlgKlZL/WeiLFQ7Z6zNG4YrWItQQOt8xG
-	UkYRix1FbOgRcyhdAj7IOOywNtvi8xlM4DnLiAhPOwE
-X-Received: by 2002:a05:6870:c389:b0:475:a112:1277 with SMTP id 586e51a60fabf-475a1124b65mr16757302fac.36.1788963037815;
-        Wed, 09 Sep 2026 07:10:37 -0700 (PDT)
+        bh=SN4bIFfM62VV7sUmVsxrc3nyc1CuoB6PmtfW+NV+gpA=;
+        b=NfJFSgfwx1ijTQavGTUMe/xJFb33gDI4xKqOmq7DVwSgtjZIp3ARs3F0tGRJEUldG2
+         b4nN5snI3g3pAGF8Cj9uGnRNv3sSS8lyLZumhh6Phbepw9jaH2/4pF45SlSH12RBeBxF
+         0AjDehAGHxU7zFmWnxTtgEoKyZXyx7DQw+4aUuhnuulE7i7EdLnsDwadH/FkvIvz5XUV
+         bLjjli/BGOK4sQToRRcXy9fvWC8o0TUHecUbbsKGTCUWgOqB0nBEQipQI0AeEHXhByXV
+         n1lPI0TTgG7evrP2yVTkWYkTRtahDHQxX5TeuTigmHvk+HRmkrlsR0FU6eZe40TqSdLH
+         NJYQ==
+X-Gm-Message-State: AFuF++lDigFr3KLrN9FbqnMoNFCseGZ99xYBmxhV8JWl0H4Gvo/i7Oyi
+	bnTJDM+YVSvWuKL5u/k4ScZGG+Dy25pZGdc3JB+VAFStxyk6XoYR/CBNuJ9+MDIJz+TFBpp+/Tp
+	ZX+fTea4=
+X-Gm-Gg: AYBFou0QTmwEWHFxLUBJSpz2MeSU0Gaz8k5U1ZGFLHgj66eUhVdjAQSGo08UuZnmRK8
+	qL7PCOahgrY29gslOurG3b31gzjmB0bQrtUNZtRxlOtX8ePtXeSIs0rjtWYm+22rNRbmeUb9113
+	LH1ZfM7GJ6j8Giuma/AVeJ/X+QI2d0/nm+YbB/aAW2sefA1DdHjnxPKtyUSi3p5jeueC64aJ3k1
+	VAAVhwW4aMJa86YbqbasEUQPlVmgWr6/mi9T9wqPeROgJ8jlVrDMAiWpAfRraCdA6Dc8b0hebVE
+	35zF3YqnBetY6ZAJ0xCK4AZ7RspDjvi9Xdik4C6T/YOF99Two0Y/cybqt09whWUXZhrxAzdn7S9
+	8KVdNMxvcx25TpoDvimrfEmkD0kyD2dVIwBXBzl1SeR8L5JuG/5pxqP9ZiiQZM42zyeHS1xNtdY
+	8vq5AVIjksopgopknIMUbHiMXfa/1t47hzAJavXvHo4d2unLcwFnK+n+i7ZGoc/dHQo4dz577Ms
+	Ol7a+yVUCYVGtD8swrGz/KrSZvw2SNxmQjeDsOklh+g
+X-Received: by 2002:a05:6870:e0d3:b0:475:a153:2dc0 with SMTP id 586e51a60fabf-47c51926187mr570751fac.22.1788963040435;
+        Wed, 09 Sep 2026 07:10:40 -0700 (PDT)
 Received: from m2max ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47a7585b25esm5406514fac.11.2026.09.09.07.10.34
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47a7585b25esm5406514fac.11.2026.09.09.07.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 07:10:35 -0700 (PDT)
+        Wed, 09 Sep 2026 07:10:38 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: juanlu@fastmail.com,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 6/7] io_uring: wait for in-flight requests on ring release
-Date: Wed,  9 Sep 2026 08:06:16 -0600
-Message-ID: <20260909141010.21064-7-axboe@kernel.dk>
+Subject: [PATCH 7/7] io_uring/io-wq: put the request file before posting a completion
+Date: Wed,  9 Sep 2026 08:06:17 -0600
+Message-ID: <20260909141010.21064-8-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260909141010.21064-1-axboe@kernel.dk>
 References: <20260909141010.21064-1-axboe@kernel.dk>
@@ -77,109 +77,74 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-With cancelations now run at release time, what's left in-flight on
-the ring afterwards is mostly I/O that has already been issued to a
-device and just needs to finish. Until that happens, the files from
-those requests pin the files they were using. Wait for those.
+Once io-wq is done with the request, put any potential file that request
+had pinned upfront. This ensures any file references are fully put by
+the time io-wq posts a completion. For registered files we don't need to
+worry about this, as these are canceled/dropped earlier.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 74 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 73 insertions(+), 1 deletion(-)
+ io_uring/io_uring.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 0acdece3c196..32adb2d26d17 100644
+index 32adb2d26d17..b5dc55bba195 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -2343,6 +2343,76 @@ static __cold void io_ring_ctx_cancel(struct io_ring_ctx *ctx)
- 	io_req_caches_free(ctx);
+@@ -907,6 +907,24 @@ bool io_req_post_cqe32(struct io_kiocb *req, struct io_uring_cqe cqe[2])
+ 	return posted;
  }
  
-+/* Number of requests that should be waited for */
-+static __cold unsigned int io_ring_ctx_inflight(struct io_ring_ctx *ctx)
-+{
-+	guard(mutex)(&ctx->uring_lock);
-+	__io_req_caches_free(ctx);
-+	return ctx->nr_req_allocated - ctx->nr_notifs;
-+}
-+
 +/*
-+ * Run task_work completions for current. Only do so if the io_uring callback
-+ * itself can get pruned first, otherwise we risk recursing.
++ * Drop any io-wq request with a file upfront, otherwise it gets deferred to
++ * much later post CQE posting.
 + */
-+static __cold bool io_ring_run_own_completions(struct io_uring_task *tctx)
++static void io_req_put_file_iowq(struct io_kiocb *req, bool sync)
 +{
-+	unsigned int count = 0;
++	struct file *file = req->file;
 +
-+	if (!tctx || mpscq_empty(&tctx->task_list))
-+		return true;
-+	if (!task_work_cancel(current, &tctx->task_work))
-+		return false;
-+	tctx_task_work_run(tctx, UINT_MAX, &count);
-+	return true;
-+}
-+
-+/*
-+ * Requests may remain after cancelations have been run, as not all requests
-+ * are cancelable. Storage I/O is an example. Wait for those so that once
-+ * close(2) returns, files pinned by these requests have been released.
-+ */
-+static __cold void io_ring_ctx_wait_inflight(struct io_ring_ctx *ctx)
-+{
-+	struct io_uring_task *tctx = current->io_uring;
-+	bool ran_own = true;
-+
-+	if (current->flags & (PF_KTHREAD | PF_EXITING))
-+		return;
-+	if (tctx && atomic_read(&tctx->in_cancel))
++	if (!file || (req->flags & (REQ_F_FIXED_FILE | REQ_F_REISSUE)))
 +		return;
 +
-+	while (io_ring_ctx_inflight(ctx) && !fatal_signal_pending(current)) {
-+		unsigned int state;
-+
-+		if (test_thread_flag(TIF_NOTIFY_SIGNAL)) {
-+			clear_notify_signal();
-+			if (task_work_pending(current))
-+				set_notify_resume(current);
-+		}
-+		state = TASK_INTERRUPTIBLE;
-+		if (signal_pending(current))
-+			state = TASK_KILLABLE;
-+		set_current_state(state | TASK_FREEZABLE);
-+		/* don't sleep on work that's already there and that we can run */
-+		if (ran_own && ((tctx && !mpscq_empty(&tctx->task_list)) ||
-+		    io_local_work_pending(ctx)))
-+			__set_current_state(TASK_RUNNING);
-+		else
-+			schedule_timeout(1);
-+
-+		/* completions may be queued behind us */
-+		if (!io_ring_run_own_completions(tctx)) {
-+			if (!ran_own)
-+				break;
-+			ran_own = false;
-+		} else {
-+			ran_own = true;
-+		}
-+		io_ring_ctx_cancel(ctx);
-+	}
++	WRITE_ONCE(req->file, NULL);
++	if (sync)
++		__fput_sync(file);
++	else
++		fput(file);
 +}
 +
- static __cold void io_ring_exit_work(struct work_struct *work)
+ static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
  {
- 	struct io_ring_ctx *ctx = container_of(work, struct io_ring_ctx, exit_work);
-@@ -2433,8 +2503,10 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
- 	 * out, and for requests owned by the task closing the ring, this
- 	 * ensures any held files are put before close(2) returns.
- 	 */
--	if (!(current->flags & PF_IO_WORKER))
-+	if (!(current->flags & PF_IO_WORKER)) {
- 		io_ring_ctx_cancel(ctx);
-+		io_ring_ctx_wait_inflight(ctx);
-+	}
+ 	struct io_ring_ctx *ctx = req->ctx;
+@@ -919,6 +937,8 @@ static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
+ 	if (WARN_ON_ONCE(!(issue_flags & IO_URING_F_IOWQ)))
+ 		return;
  
- 	INIT_WORK(&ctx->exit_work, io_ring_exit_work);
++	io_req_put_file_iowq(req, true);
++
  	/*
+ 	 * Handle special CQ sync cases via task_work. DEFER_TASKRUN requires
+ 	 * the submitter task context, IOPOLL protects with uring_lock.
+@@ -1480,6 +1500,7 @@ void io_wq_submit_work(struct io_wq_work *work)
+ 	/* either cancelled or io-wq is dying, so don't touch tctx->iowq */
+ 	if (atomic_read(&work->flags) & IO_WQ_WORK_CANCEL) {
+ fail:
++		io_req_put_file_iowq(req, false);
+ 		io_req_task_queue_fail(req, err);
+ 		return;
+ 	}
+@@ -1555,8 +1576,10 @@ void io_wq_submit_work(struct io_wq_work *work)
+ 	} while (1);
+ 
+ 	/* avoid locking problems by failing it from a clean context */
+-	if (ret)
++	if (ret) {
++		io_req_put_file_iowq(req, true);
+ 		io_req_task_queue_fail(req, ret);
++	}
+ }
+ 
+ inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
 -- 
 2.55.0
 
