@@ -1,200 +1,173 @@
-Received: from mail-ot1-f97.google.com (mail-ot1-f97.google.com [209.85.210.97])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AD157269C
-	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 15:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C20457D23E
+	for <io-uring@vger.kernel.org>; Wed,  9 Sep 2026 16:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788969571; cv=none; b=BAVswEwDC2J2amL+WDbf1LDPeRQQ5ZP/e5ZFFJylxNmbCXv4cDDA8lUGFzaw68QWCC6Uhxp6htRkvO1n3HA6KAEUdLuBlYGjkBrtqb/fcUAfBSWMYofZlgh/ZXjAzp4Wd0kYj+dr4bTWmEKOhE2zy3v9Ei9vW267w1ShhsZKBnc=
+	t=1788970626; cv=none; b=BIWb72MLZ5N1graiXhWKlbwc1W3eSx4pvAYPwFT1rO5dplYL7EIOE2jpUYYROqIunIB+nI8mna5HPkaAzoaJWlhKoEpUzn56q/n3mv5XjTgYoIfyJEvtVZSOpZcqMp9x9iQ3MpD7idnPStzmyiSiywLlCxkE96ppPT80wobEI3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788969571; c=relaxed/simple;
-	bh=x4R/agt9BWJVrIxWFEFa9NxgnNC2q3t9C5fIuG37CcY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hGp5FKYQ2h1B0yNbvL98Dmqky31BnM5RhUdbUH7l+mn4irJLxyvqj0Gx2z9rzmOGgRKypB8SEZrPtdmGiE0x5UHTFMJfKRcrXhFQymwCPiT8UmX1VUTu0Ax/c8fhn1ulqWDP9X5XRN1e6qotKCv569LUFJrQb2caZoFzZgrZe+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=KKaeVf5j; arc=none smtp.client-ip=209.85.210.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
+	s=arc-20240116; t=1788970626; c=relaxed/simple;
+	bh=eFHDOCUvG6RJkKxnP7GoyTwndFgmCvaMrkqn3U9uemE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XUvExnj3da4QTaCnv09LoCy8BmrfUJxcV3GiOIKZLrdB/vuIpKIxC/vuypD/RNWyPBDKoKK1NIIiHErz0zLWFPhvkloIuAzTTO89AQnIqnwNHxrX/VvlBQGinqrOp/n0/9qcUgA+G3p4aaaFN25OibKe/BcJWUeT72HFuC8DDf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K1whdm1Z; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="KKaeVf5j"
-Received: by mail-ot1-f97.google.com with SMTP id 46e09a7af769-7eb62dbe747so76428a34.2
-        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 08:59:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K1whdm1Z"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-4b28df1f600so4532570b6e.2
+        for <io-uring@vger.kernel.org>; Wed, 09 Sep 2026 09:17:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1788969567; x=1789574367; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BpyMKG/NmuIVEN51AvPLm78UGTP27UIsJPJty8qt2D8=;
-        b=KKaeVf5jAHHwDNiB+FHt2LMGQQ2fJqnq9dZe+hayEybKu8rjKHFiIDPycz6iS3tQbv
-         cfq7QcCJWi/ybltr+3Z2U4BlD6r5aqmeYQfWVgj6flqgwrWH48n6tN2fE7rdmsHvgtrd
-         Togkw7j0CJ5ZxRBVLPNPw7yhSlWjGVg9JoeJ1IiVnkeHJMXg+pht7PrLtbSNLASZyCVb
-         zdhQ+nLFJ+KQDgUF51io+RildPYl99BIN32QWnY7PpcO8P2j31vTyuk1J77vuw0Y2NUY
-         P/2KQoKE2Kwzs8eSgihu+1k830PcJMYLH7bl5GzU2YXKb0lqmzTi0toHvJt5JKQpfHTq
-         WPpQ==
+        d=gmail.com; s=20251104; t=1788970623; x=1789575423; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fshKvEEVhGFc5VFLl5TyLUM9DH0VS/1zTeCkHq9ANIQ=;
+        b=K1whdm1ZS+gonRbBoAHFC94DNJfuOZqjjRn9l5S9ut3rEPZWEHf8apT56NeHM6X7sn
+         HFAwomhnpw/VOedeIYsIQ3VYzYv8EYdT86Xrt8HOMH/7BLAEgHUN6WTFLoRn1Frl6+fi
+         aZb+h7/qu7glTMZ3SVu7j2Eeh60kck1ezT0mtmwIx6IArkegZT/rW3/IcMLHpZsm7oOJ
+         dQXCU+Gn84Aq00YwUlgNFrQ452ih1Yn88z7DG2UjwF6laHUFOWhRRzeNXNf1uuN2vhat
+         RjABQJitvE7lwcdSOujeJshyA5AQhHNRKrDnVpEBjVvAkmMXd8+gLpsdDZJDi3KqDIHl
+         SBag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788969567; x=1789574367;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BpyMKG/NmuIVEN51AvPLm78UGTP27UIsJPJty8qt2D8=;
-        b=M2y0/kbzHabPkOUlxEX0mNxWWbTeSgPcP1kem2DO+folVCpri9nISEdDVgGgW+Ot+r
-         z6691IBXeqLaXU26R5IUt0Ilgc0lH8AKi/9WFmSoNeM6lQBL7VtrXHT9HMa5xOjdUAD+
-         j0OuyWDmOxRnqBZQkJaySp6OL/bIigfniGqPpCz07ObmvrfmpipqeIFD+oVonYVGY0wa
-         iexbo/UdsML/bBJWJOXbZ150t1Tnf83GWo7KtoBE8n9xnEuWeu425bOmUTfK10nqOsIq
-         QhrXwPGATeqUyNAg/roR3z71SBBmzg6qnxTiUB7JTxg8Er4MnCOfA/STQHENuxopkHXS
-         Cibw==
-X-Forwarded-Encrypted: i=1; AKwUvByv3LmZsRUZk1djuVapGrhFO8R+PO5SlOfWnEKK1kwwHEbQdUG6a5i/nBNMFo93/Ry9NhrQI4SA5w==@vger.kernel.org
-X-Gm-Message-State: AFuF++mxmZEw9avR4i4ETJ+Sgfu6/a7Hx6pNlS3V5esybTArOgdI0eDN
-	3j1BUpIxwhr//B8chyWmixW2OORTJ1F70WaXR1UlrsWZLnygjQhFIOkvaYIl2aeMeAfIjbDcdqW
-	/dWQv4F9AB2GwTw35pqQUtCMbU8n4jzJBXmhr
-X-Gm-Gg: AYBFou2a3EiNA8fXvrdGmlL/vD6qObBJG7T+z3YwG9LbgSsngEUeuUirQ0VWxPXxDF0
-	feMmd7DD4eZI9BtQfTVdMpwdUqT99Ka/ESPGSeYETzgWFaX/GmO0MmhUbLcUzqdTMBmUAyHAKRn
-	jA7RsgXo4CgTXRPLpW8ALTkUhDrfwvU491+tMGMWbRGzPAbBfOe5IURIDA0XKMxgj7dx272jB+k
-	atMeeQsxYWR5W5NvCL11P6AbwZkYawf8v4ZZuBce1Ay6POrDHdNNizQDL6STsDsjyV7WY0stZCz
-	atU+6lv2RY0Dl6TDqiPb4QzmGrKmhVfBS8cCjYUrDVdyXcfHOegfGO+94O9R9n65ugb2cFF8R7t
-	GhJpxsTJVxcvrTIoorvACGs+xxM4rqFHV
-X-Received: by 2002:a05:6830:3495:b0:801:b3e8:25ab with SMTP id 46e09a7af769-801b3e8a6c8mr1961931a34.2.1788969567461;
-        Wed, 09 Sep 2026 08:59:27 -0700 (PDT)
-Received: from c7-smtp-2026.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id 46e09a7af769-7f9f1b0f661sm2564948a34.0.2026.09.09.08.59.27
+        d=1e100.net; s=20251104; t=1788970623; x=1789575423;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fshKvEEVhGFc5VFLl5TyLUM9DH0VS/1zTeCkHq9ANIQ=;
+        b=Ai//b4CJXBIOmsLVKMdtD1axvZMH60p2FgztFBqBwZAwcZC/LySTD5nQj5G9b2jhT4
+         VEgmYp8UCNn70/5vL7JIwKyZYPjEZQ0L2aXP0yjw7NArefcQyPEAud59KRBa7j6iNbaG
+         BnKviP82d5+M7sLMjLDvlf4zrfM7zMyVkwf7+11KLwS5nyTYXFFUvjAKJK43PwwF1OyT
+         s/Vaqq2fE3LxGdH2xkeIiAGu1PgK24DKD7jBRsV6I+UHfYUb+h+Uf6s8ClN3m1VWlSDP
+         8Q3IR7HFxczy12yTSbIy7PXndJYY4tZj+5F5Q3Zjt39ewGENi6KbiIrFY1ETFy6vPt0O
+         cRhg==
+X-Forwarded-Encrypted: i=1; AKwUvBy1Kf0yEHNnUVXREcVgCcEeWibgRIu8PIq7lEznmA26WaTnkPzGC/f+XW2M0U+bNxAgu4PeyTGbkA==@vger.kernel.org
+X-Gm-Message-State: AFuF++ncKtM75EQdpi850Lu6V4VyV17auCtzcIJnvvJX7hUtk2nTGnxf
+	0xsUAIZrDvEAIsi/G+I1y1JCfpzWWbVyR/Ib4FUWqDXMC3P0DTMdYzWx
+X-Gm-Gg: AYBFou07ZpO7v9w3wQbMcs56evNWDmnch3zvVNFwgLSkaonZ6hzONW82aal+YcA4DBD
+	+sSbE3PWoQHa+WoVcbcj72xxjYloZ8Z6BFB90V8Unyfz99mMlcn7mBKELmkSugjGa7uMX4RiPQ+
+	Q/l1RAzsNOzkd4o4yKXaFcz4f6WQmdWEYcC/9tkevJ7ZXMnRN+++sHzIodlp5P4TQCjYVRzNmRX
+	/FeHAQ/ANGGh4/nACQGn5WIfVmxBCZPShTed2xFubYULy4f2rWTjn+PpEuMbAqksD0i9CwbPy4i
+	IXODKPRbIOzs7yBfhI9AqHfS9k9iWf+J175mYqDeRWQuoWyTTKxkqMCLlegodlUG9fQ5QWwAww1
+	cwakPtEONnqAKKUoqyS5S+PAXIk2jNMqljkTwlkFckOmuYJmKeHJxshYyLvIhwul7zeAcR/ztGM
+	EYeNjjXeHxDtB2Q4ju5HkqUG/yLrnZMFjl/ZwBkSFbq4+ZicNDfkoHcSWiIdzJVbaD1a6rhd7Hu
+	/SafGBsv6ss4mXrEcPx
+X-Received: by 2002:a05:6808:bc4:b0:4a4:adaf:5570 with SMTP id 5614622812f47-4b95fb4f59bmr23974245b6e.4.1788970622954;
+        Wed, 09 Sep 2026 09:17:02 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:6::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b971240f68sm16753189b6e.8.2026.09.09.09.17.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 08:59:27 -0700 (PDT)
-X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (bond0.slc5-n17m28-k8s.dev.purestorage.com [IPv6:2620:125:9025:20::a31:41f])
-	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 0CDF7402A9;
-	Wed,  9 Sep 2026 09:59:27 -0600 (MDT)
-Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 09997E4026F; Wed,  9 Sep 2026 09:59:27 -0600 (MDT)
-From: Caleb Sander Mateos <csander@purestorage.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	Keith Busch <kbusch@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Sagi Grimberg <sagi@grimberg.me>
-Cc: Joanne Koong <joannelkoong@gmail.com>,
-	Ming Lei <tom.leiming@gmail.com>,
-	io-uring@vger.kernel.org,
-	linux-nvme@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v3 1/3] io_uring: move req_set_*() to public header
-Date: Wed,  9 Sep 2026 09:58:46 -0600
-Message-ID: <20260909155848.2069290-2-csander@purestorage.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260909155848.2069290-1-csander@purestorage.com>
-References: <20260909155848.2069290-1-csander@purestorage.com>
+        Wed, 09 Sep 2026 09:17:01 -0700 (PDT)
+Date: Wed, 9 Sep 2026 09:16:58 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: netdev-bot+sashiko@kernel.org
+Cc: juanlu@fastmail.com, dw@davidwei.uk, netdev@vger.kernel.org,
+	io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kuba@kernel.org,
+	asml.silence@gmail.com, pabeni@redhat.com, shuah@kernel.org
+Subject: Re: [net-next,v6,5/6] selftests: net: add multithread server support
+ to iou-zcrx
+Message-ID: <aqGGevrEG5+iZosZ@devvm29614.prn0.facebook.com>
+References: <20260831-iou-zcrx-v6-5-02d1d012f0fd@fastmail.com>
+ <178839229706.3394541.1555608492152892136@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178839229706.3394541.1555608492152892136@kernel.org>
 
-In preparation for using req_set_fail(), req_set_res(), and
-req_set_res32() in include/linux/io_uring/cmd.h, move them from the
-private header io_uring/io_uring.h to include/linux/io_uring.h.
+On Wed, Sep 02, 2026 at 11:38:17PM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 6 potential
+> issue(s) to consider:
+> 
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
----
- include/linux/io_uring.h | 32 ++++++++++++++++++++++++++++++++
- io_uring/io_uring.h      | 31 -------------------------------
- 2 files changed, 32 insertions(+), 31 deletions(-)
+[...]
 
-diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-index d1aa4edfc2a5..505caa99c621 100644
---- a/include/linux/io_uring.h
-+++ b/include/linux/io_uring.h
-@@ -1,13 +1,45 @@
- /* SPDX-License-Identifier: GPL-2.0-or-later */
- #ifndef _LINUX_IO_URING_H
- #define _LINUX_IO_URING_H
- 
-+#include <linux/io_uring_types.h>
- #include <linux/sched.h>
- #include <linux/xarray.h>
- #include <uapi/linux/io_uring.h>
- 
-+static inline void req_set_fail(struct io_kiocb *req)
-+{
-+	req->flags |= REQ_F_FAIL;
-+	if (req->flags & REQ_F_CQE_SKIP) {
-+		req->flags &= ~REQ_F_CQE_SKIP;
-+		req->flags |= REQ_F_SKIP_LINK_CQES;
-+	}
-+}
-+
-+static inline void io_req_set_res(struct io_kiocb *req, s32 res, u32 cflags)
-+{
-+	req->cqe.res = res;
-+	req->cqe.flags = cflags;
-+}
-+
-+static inline u32 ctx_cqe32_flags(struct io_ring_ctx *ctx)
-+{
-+	if (ctx->flags & IORING_SETUP_CQE_MIXED)
-+		return IORING_CQE_F_32;
-+	return 0;
-+}
-+
-+static inline void io_req_set_res32(struct io_kiocb *req, s32 res, u32 cflags,
-+				    __u64 extra1, __u64 extra2)
-+{
-+	req->cqe.res = res;
-+	req->cqe.flags = cflags | ctx_cqe32_flags(req->ctx);
-+	req->big_cqe.extra1 = extra1;
-+	req->big_cqe.extra2 = extra2;
-+}
-+
- #if defined(CONFIG_IO_URING)
- void __io_uring_cancel(bool cancel_all);
- void __io_uring_free(struct task_struct *tsk);
- void io_uring_unreg_ringfd(void);
- const char *io_uring_get_opcode(u8 opcode);
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 896aab1ed026..109261722ca7 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -316,41 +316,10 @@ static __always_inline bool io_fill_cqe_req(struct io_ring_ctx *ctx,
- 	if (trace_io_uring_complete_enabled())
- 		trace_call__io_uring_complete(req->ctx, req, cqe);
- 	return true;
- }
- 
--static inline void req_set_fail(struct io_kiocb *req)
--{
--	req->flags |= REQ_F_FAIL;
--	if (req->flags & REQ_F_CQE_SKIP) {
--		req->flags &= ~REQ_F_CQE_SKIP;
--		req->flags |= REQ_F_SKIP_LINK_CQES;
--	}
--}
--
--static inline void io_req_set_res(struct io_kiocb *req, s32 res, u32 cflags)
--{
--	req->cqe.res = res;
--	req->cqe.flags = cflags;
--}
--
--static inline u32 ctx_cqe32_flags(struct io_ring_ctx *ctx)
--{
--	if (ctx->flags & IORING_SETUP_CQE_MIXED)
--		return IORING_CQE_F_32;
--	return 0;
--}
--
--static inline void io_req_set_res32(struct io_kiocb *req, s32 res, u32 cflags,
--				    __u64 extra1, __u64 extra2)
--{
--	req->cqe.res = res;
--	req->cqe.flags = cflags | ctx_cqe32_flags(req->ctx);
--	req->big_cqe.extra1 = extra1;
--	req->big_cqe.extra2 = extra2;
--}
--
- static inline void *io_uring_alloc_async_data(struct io_alloc_cache *cache,
- 					      struct io_kiocb *req)
- {
- 	if (cache) {
- 		req->async_data = io_cache_alloc(cache, GFP_KERNEL);
--- 
-2.55.0
+> > @@ -356,29 +444,68 @@ static void run_server(void)
+> >  	if (ret < 0)
+> >  		error(1, 0, "bind()");
+> >  
+> > -	flags |= IORING_SETUP_COOP_TASKRUN;
+> > -	flags |= IORING_SETUP_SINGLE_ISSUER;
+> > -	flags |= IORING_SETUP_DEFER_TASKRUN;
+> > -	flags |= IORING_SETUP_SUBMIT_ALL;
+> > -	flags |= IORING_SETUP_CQE32;
+> > +	pthread_barrier_init(&setup_done, NULL, cfg_num_threads + 1);
+> > +	pthread_barrier_init(&dispatch_done, NULL, cfg_num_threads + 1);
+> > +
+> > +	for (i = 0; i < cfg_num_threads; i++) {
+> > +		ctxs[i].queue_id = cfg_queue_id + i;
+> > +		ctxs[i].setup_done = &setup_done;
+> > +		ctxs[i].dispatch_done = &dispatch_done;
+> > +	}
+> >  
+> > -	io_uring_queue_init(512, &ctx.ring, flags);
+> > +	for (i = 0; i < cfg_num_threads; i++) {
+> > +		ret = pthread_create(&threads[i], NULL,
+> > +				     server_worker, &ctxs[i]);
+> > +		if (ret)
+> > +			error(1, ret, "pthread_create()");
+> > +	}
+> >  
+> > -	setup_zcrx(&ctx);
+> >  	if (cfg_dry_run)
+> > -		return;
+> > +		goto join;
+> >  
+> >  	if (listen(fd, 1024) < 0)
+> >  		error(1, 0, "listen()");
+> >  
+> > -	add_accept(&ctx, fd);
+> > +	pthread_barrier_wait(&setup_done);
+> 
+> [Severity: High]
+> Is the listen() intentionally moved before the workers have registered
+> their ifqs? The main thread creates the threads, calls listen(), and only
+> then waits on setup_done, while the workers reach that barrier after
+> io_uring_queue_init_params() plus setup_zcrx(), i.e. after
+> io_uring_register_ifq() has restarted the device RX queue.
+> 
+> Before the patch the sequence was serialized in one thread:
+> 
+> 	io_uring_queue_init(512, &ctx.ring, flags);
+> 	setup_zcrx(&ctx);
+> 	...
+> 	listen(fd, 1024);
+> 
+> so the port only became visible once the memory provider was installed.
+> 
+> Two existing tests depend on that ordering. wait_port_listen() in
+> net/lib/py/utils.py polls every 5 ms, so it can now return while
+> registration is still in flight:
+> 
+> iou-zcrx.py:test_zcrx_large_chunks() {
+> 	wait_port_listen(cfg.port, proto="tcp")
+> 
+> 	check_iou_rx_buf_len(cfg, rx_buf_len)
+> }
+> 
+> check_iou_rx_buf_len() raises "Expected 1 io-uring page pool, found 0",
+> and nk_qlease.py:test_destroy() does queue_get() plus
+> ksft_in("io-uring", queue_info) immediately after wait_port_listen() with
+> no sleep.
+> 
+> Beyond the harness races, data delivered into the queue before the
+> provider exists is serviced by the copy fallback rather than zero copy,
+> and the queue restart during registration can drop in-flight frames.
+> 
+> Would moving listen() below pthread_barrier_wait(&setup_done) restore the
+> previous guarantee?
 
+Just a heads up that I tested this on BRCM and did find this listen()
+ordering issue to cause genuine (but flaky) regression for
+nk_qlease.test_destroy. Moving the listen() to after wait(setup_done)
+indeed fixed it.
+
+Best,
+Bobby
