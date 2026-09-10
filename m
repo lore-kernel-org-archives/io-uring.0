@@ -1,104 +1,174 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96084A68B7
-	for <io-uring@vger.kernel.org>; Thu, 10 Sep 2026 15:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F074AB1A3;
+	Thu, 10 Sep 2026 16:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789053533; cv=none; b=s8M6ZWrOhsfSUmxxQ985gAl9tWiaUyoofwRx8o/mnnHeLe7P5fuXBrZ96nDhzcIDASkLwJikS1/+jAlncrwI8Da/eEGUvL6YACzx1FunkIRYGaGaEnY+MKlHgOrMEUwcI7aHSTxU9FQ+qulJ1VX6i1+4mBkmJl12epSCrsg3vm0=
+	t=1789056510; cv=none; b=IhWmtJodWH8NqjxB/aZPOp5Ix7dYqamS7z9ZXtJv9bi7MUEqERqYGNK/K7snax1a5wFTl75G01+bIN5GEXS3CFgwJgZAgTV1vMCVISqcdB51S+o5ns6LzzTmvl0ZexofHA2w/WJjpHo/Eej9Ojv5K/8ruOYnfkg6a+jSVQ3tB3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789053533; c=relaxed/simple;
-	bh=HIb/06Jk9WjGMhhCovFPC0lXAsOCuv91M0tkoBFaR48=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=TboNFZIHFRWAGabIzDBr4XYmltWRATLCTaeJF2iMDiiM00cveaofjzGonC2UH8vXOpGT9eVzQCv9XyeUQPZW7iGrZN1VklIhzwUgnPLAc51csGPhrVPkT50YIWAk2pT33FQnAXQX8/9FnNtFJsvaqwBV+EW5c38syD6Il/w3VTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=djj5xuWN; arc=none smtp.client-ip=74.125.231.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1789056510; c=relaxed/simple;
+	bh=zyFacImy6dVsY8eSfeNz3dqxONfRK7TdrWM8Y6tilCA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=iARfSEJzw9FxueLZU2lN3saUguYOwY50SS+SILpxbByVWNOllaoYqcVHUn5aoZULdIiRYOfmjhaeT3Q5bGV15k/pi/r70rdcixhfxscB+qcHaSnMMQH6EW6k/UILSGsuuAvoz7u7+8NGat+g8b6YmPU48cJHKXNI2xlIckmAu3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BUwxsHGo; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=KdFv8eb5; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=O5s54NKK; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=bJUKOY3t; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="djj5xuWN"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4b37dcfe9b2so1234687b6e.2
-        for <io-uring@vger.kernel.org>; Thu, 10 Sep 2026 08:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789053524; x=1789658324; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=c6uCI0kPj41Ea5xqcJQ70nLd1MG31FKPBm6VZYpP/pU=;
-        b=djj5xuWNmgJJEZryajnW6aMCfN4Kh6JNej5P2ffNYImifGCNln5l4nBpxqWyruT2Qo
-         Nw8qafhCfxsggD6pmJA9tah5CCCsQH8AEQiPHVbOeitdk3JRVInVkwv858wiMvm3u4X1
-         uUtK48Ifr4bfSl4Qs2HGTfghkxRbur+V7nonA8s58IHvSSxFMQ5vHGUCpQU70CitXPC3
-         ISfope2Vk/ha7Hd+4kZBg4426c3VSEl9Obj5QTniLPG7lj4AHK681+8oOdFXs4rnvaXU
-         MnhQD85Ds4hrWKFgz8uFwUnR3Q1v/kjxSfphXhDlfxRlhiW6Ha5YtnpsNOvBF3VCYLD3
-         zp/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789053524; x=1789658324;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=c6uCI0kPj41Ea5xqcJQ70nLd1MG31FKPBm6VZYpP/pU=;
-        b=qPz1z7/z8CCiSMbrPlDA+m1bno4iV1fAkkosRq/VEE3vTpy7cospjotliRSbCK+OQV
-         RrPLhvMapt6aMGHE2ipJ9/3sPuShFWOEqCegj0J6aEASbxzum4Ua3wvlIH0FqHxyBD8B
-         7iwh2vehir1Q30jZ61dokCkp2FMl31ZhujN8NmmVZTDxSSv3tzfQP5VeJsD9dbZxzb/1
-         bEuyzlGxI6cfsPNta4WkMp+C3FJKsG+TKAYNP3lxL0OPL9Pa0BpvTFZx6Ntvb/kU92jV
-         on9ezCfLi3LJJontHCCdlHc7uEQpWRqVhBOkNBc8FE1KmyOlKApxRvb5S4FMhrwZNN73
-         XEBQ==
-X-Gm-Message-State: AFuF++k4DL+TsZJH6oZezFm+u9kU7dLlv7gFcCjMEyMzRB9W7OWngkrp
-	NJNU+9eZvOMLJKiUIFgshkXBiwCENjm55a76y8aHmw/ry0yVRG86uUD2blBIIbbUfxtoFXqAci0
-	3q+Px9ps=
-X-Gm-Gg: AYBFou3J7D3v0jy4e1Kl5g+rECO2pynys0Kb3a5+LEX8n/dURaBa0GyeaNoLwYoiVC2
-	Omj7Zkmf+9i3FkWRu7HlXiMG3ONJdAhiPIEbaRmFY8rdpq52NHhZgDKEtxRircJYWNRY1ydU+9k
-	0LVUbM4KxsRNt9+0bHmbnfqZ/RfFRRaTzjBJjSaogWdkCzxU/sWjwFKz9tWfTZp5KAyeCfMGTvl
-	NlrWfZhBxkzlt/5qC6PV6BD4/PBFpOpBkE45grIzqrEoEfutmOaWNoSk48V4h1GsPPqY2McSsMF
-	Cx0AfW4NtmoCh+OuMF4HXKd/jaudmRdRCglB9aLoTFil3TNrT+9JsAsA29K1zY+58qmBpW0m7sU
-	bju7JnuEtKDQAC0ydM513cu7ZvYWgnLSU/g9IlRjQ3/MGIn0J3md933ft1sQ486cJPhpCkpnHJD
-	7UGdCFw+lrKRYFr/X9ee4sCFGBNUI0/LFMIK6/Qt5zeaWCjLxJfUBpVKef2VyIjFG8laYTWXW2x
-	FQYz7hKEixvMoOyhDAUJMU0vV7+er3xaMN4eTJIjqQ/CoHJhSjD
-X-Received: by 2002:a05:6808:5287:b0:4a3:f4b7:cbdf with SMTP id 5614622812f47-4c0252d6ba1mr14278855b6e.15.1789053523873;
-        Thu, 10 Sep 2026 08:18:43 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b970d1cf26sm19089338b6e.4.2026.09.10.08.18.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 08:18:43 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Gabriel Krisman Bertazi <krisman@suse.de>
-Cc: io-uring@vger.kernel.org
-In-Reply-To: <20260902230041.1320658-1-krisman@suse.de>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BUwxsHGo";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="KdFv8eb5";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="O5s54NKK";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="bJUKOY3t"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0997F21DA0;
+	Thu, 10 Sep 2026 16:08:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1789056503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FU/zfc7RTWvPZ5sCPnZppWS8jymqeQRKXPAX0nmCrA=;
+	b=BUwxsHGoxkKXQkkm1a06javwncYKKdiJuWhCEJMelXpWe3K9i74t1j3fRkH70lsynfIdaM
+	hc6/QxNGowwZA4HPC9iqg/VqkM2EYvYVVQVFdSmjqT0NpTHb2XqWFItsO4dY7T2u+QGJzQ
+	DHhwbVi9/rSghaTKj7b7pGY4wHCJjsI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1789056503;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FU/zfc7RTWvPZ5sCPnZppWS8jymqeQRKXPAX0nmCrA=;
+	b=KdFv8eb5SIhR6BWWzpyU66s0fYLv7+XSdt5sz/71xtNyjMFHqDhLS7VEKxmCi8RyHRKlYl
+	WGIZgERN2NzvEhDA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=O5s54NKK;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=bJUKOY3t
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1789056499; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FU/zfc7RTWvPZ5sCPnZppWS8jymqeQRKXPAX0nmCrA=;
+	b=O5s54NKKrCRsTS/UylFaE4WtqIlspl0J7U7a0oTnhWUDBC9CrKfn/QM48Mc2ar3R4t0oGO
+	Vc3xYKNlyoGmNLC7GusohPysVGv1ZC+RIr2LJstrCHL+u19yYtutwPT8ENm1q3MH01ebpY
+	JC0eaWCut2QnxYv712ZQWcQZmIiQQYI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1789056499;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FU/zfc7RTWvPZ5sCPnZppWS8jymqeQRKXPAX0nmCrA=;
+	b=bJUKOY3t//KxaT5s7v532mwSfyOoMfcqODUIY2Ih+GFFSlvdqnHjKURQdZspGRW8e7gsi5
+	Wr5zpIoPS2cogEDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 536311326D;
+	Thu, 10 Sep 2026 16:08:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 9IGuAvLVomqBOgAAD6G6ig
+	(envelope-from <krisman@suse.de>); Thu, 10 Sep 2026 16:08:18 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] io_uring/net: don't overconsume buffers when using
+ MSG_TRUNC
+In-Reply-To: <0f5e8693-dcba-4fa8-87d1-570ac08e2d83@kernel.dk>
+Organization: SUSE
 References: <20260902230041.1320658-1-krisman@suse.de>
-Subject: Re: [PATCH 0/2] Fix return with MSG_TUNC overtruncating buffers
-Message-Id: <178905352269.347131.16818497457647827595.b4-ty@b4>
-Date: Thu, 10 Sep 2026 09:18:42 -0600
+ <20260902230041.1320658-3-krisman@suse.de>
+ <0f5e8693-dcba-4fa8-87d1-570ac08e2d83@kernel.dk>
+Date: Thu, 10 Sep 2026 13:08:15 -0300
+Message-ID: <87a4pp2iog.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Type: text/plain
+X-Spam-Score: -4.51
+X-Rspamd-Queue-Id: 0997F21DA0
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	HAS_ORG_HEADER(0.00)[];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[msgid.link:url,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,mailhost.krisman.be:mid,suse.de:dkim,suse.de:email,kernel.dk:email];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	URIBL_BLOCKED(0.00)[suse.de:dkim,suse.de:email,msgid.link:url,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,kernel.dk:email,mailhost.krisman.be:mid];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Flag: NO
+
+Jens Axboe <axboe@kernel.dk> writes:
+
+>> When a recv/recvmsg is issued with MSG_TRUNC and the incoming packet is
+>> larger than the provided buffer, the net layer returns the full length
+>> of the packet rather than the number of bytes actually copied into the
+>> buffer.  As a result, io_uring advances more of the provided buffer ring
+>> than was actually filled.  Use the actual filled region size to consume
+>> the buffer, but still return the full size to preserve MSG_TRUNC
+>> semantics.
+>>
+>> Take care with multishot, because that seems to already truncate the
+>> consumption based on the available payload size.
+>>
+>> This was reported in https://github.com/axboe/liburing/issues/1619.
+>>
+>> Fixes: ae98dbf43d75 ("io_uring/kbuf: add support for incremental buffer consumption")
+>> Cc: stable@vger.kernel.org
+>> Link: https://patch.msgid.link/20260728191454.1850326-1-krisman@suse.de
+>> Signed-off-by: Gabriel Krisman Bertazi <krisman@suse.de>
+>> ---
+>>  io_uring/net.c | 38 +++++++++++++++++++++++++++++++-------
+>>  1 file changed, 31 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/io_uring/net.c b/io_uring/net.c
+>> index 647156c9331a..f8110dc9f860 100644
+>> --- a/io_uring/net.c
+>> +++ b/io_uring/net.c
+>> @@ -853,7 +853,7 @@ int io_recvmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
+>>  static inline bool io_recv_finish(struct io_kiocb *req,
+>>                                   struct io_async_msghdr *kmsg,
+>>                                   struct io_br_sel *sel, bool mshot_finished,
+>> -                                 unsigned issue_flags)
+>> +                                 unsigned issue_flags, size_t consumed)
+>>  {
+>
+> Not sure this is correct. If consumed is a size_t, then the comparison
+> between ret > len is an unsigned comparison, and every error will then
+> get clamped?
+>
+> Will need something like this folded in.
+
+Indeed. thanks for catching it.
+
+I'm folding your fix up in the v3, modulo a compilation error.  It only
+changes the error path, the bug is still fixed on 7.3 with your patch
+folded in.  Any suggestions on how to test this error path for liburing?
+I got a test for the bug, but testing ret<0 means failing the socket.
 
 
-On Wed, 02 Sep 2026 20:00:39 -0300, Gabriel Krisman Bertazi wrote:
-> Jens,
-> 
-> This is an attempt to fix the issue reported at [1].  It works by
-> splitting the return size (which can be the full size of the packet)
-> from the value actually commited in the buffer.  Please, let me know
-> your thoughts.  Patch 1 is a small preparation and patch 2 has the fix.
-> 
-> [...]
-
-Applied, thanks!
-
-[1/2] io_uring/net: let io_recv_buf_select return the length of the buffer region
-      (no commit info)
-[2/2] io_uring/net: don't overconsume buffers when using MSG_TRUNC
-      (no commit info)
-
-Best regards,
 -- 
-Jens Axboe
-
-
-
+Gabriel Krisman Bertazi
