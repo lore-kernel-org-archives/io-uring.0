@@ -1,183 +1,104 @@
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012048.outbound.protection.outlook.com [40.107.209.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3B63988E0;
-	Thu, 10 Sep 2026 08:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029343; cv=fail; b=E3yyKFiUiYSnoEEvC5NFT+yE13GtyH2Rwu8DuZfaXcEepgnBgLRzCgkvWz7DsGpt5YNnjdnU6C4V8Lcp2AiF/6Cu9SKwsn9qkU9W7U2YLqE80GTZsMQE1axoZnF8Nv/9NEY1YfIz9UdnfqHh/PnY8ZrGKTd2tVxtXiwR6pEZdcw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029343; c=relaxed/simple;
-	bh=LYXD4e6XWZVgbnH93/wKDsvIi/CT77QLDIGdLjPaRms=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=tO+F1gHd5tq7yLPIYrhZfxSqRIJ475KW3WJdk64+qeTW84AVqCjS04pkfI3x0qo5/GGWHi2PcjtEnicyCYZ1ShtrPI1aSpgkfJ2cU320hNFHwrpxwQsg1pA5d42Oi+Uf9aYq3cbfe6H/jfTaL8a9HNyBqDxFQBxPySwc1eWo+08=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=pQrmAdN7; arc=fail smtp.client-ip=40.107.209.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5723492E40
+	for <io-uring@vger.kernel.org>; Thu, 10 Sep 2026 15:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789053533; cv=none; b=gkzW0LVqrggetzBHibbKje5TEn5t7nNfPoloqeQrGMHZRqjeQ3qUJqv5bYqf2baENZws3ibaKSuCnpoDquds1PZ2ADL2HceUt+5SP9kiJh3uNt1DWkLIpMcBBtTi+DKzVVzBGwsO1bbU8f7/Tn3eoHbYB6UnRQxQMv+ZNx/2dn4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789053533; c=relaxed/simple;
+	bh=nmlVxuCmJvwgWzZmLtvEnd6MUk27wZGVvMDVW+s6btM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=hIPEAY1y4IMJfn4CK8f3s47n1TuOJ5Ra3IV6jdvNkHRySmR92NnYuTd1eRlDCmYIbsV6PVHkeFp/NzR6i9FglRd8V8vIRi1k0yYBHBlj0YdI2opfuLENAmZo3N+tV5qosvDrODPqT4rx3FrSn/jeSp32vr1i3mwVI2VCqf/TZDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=mriNDERv; arc=none smtp.client-ip=74.125.231.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="pQrmAdN7"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ACMCcFY267vJwZwBhJlMr7wsGEKoM0DsjXBEyjuT4PqluvjkoYufoN7KRXPsol/TE75GG1ocuYdQk47f5Tr9VwI6Qvs15LL4uWcouTdg7HkX8WPlLG4Y1ptGYAW8gq07Fd+AabGGxxOATx9tvKVQ7C60mLGUk5byJ3NoQRyXJ7Jmijx2wqGF0CGXNORnWSgSoopdrBjyn8ji5bsXcCOhLHZGSNlZq8V2+ZL6feHVknzr+EUHG8ykCOcla0PZIKP3838ELRoavDW1kp668N5UTVzFgBIT8o/yJ9gLrZpWTuavb08JoUXHmcUa8SgyULZDa9n73PuNJpD/MgFoZU/4Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WWeo9uHc51MT3Ua2y309PF83bFN1X9+EsWqi+WbE8Uw=;
- b=M+aAR8HBjuOcdd/jM3zuS2AD+sPOHDh5pqX4HoQMiRRme2xnI6k7LeVZjEx1j6x/gyBIMsZifEbEQ+M9Nw5/hML+Rep1dZtmYtbWeieafPA6Jko95SaZK6hnEQ6xoYWCQSR9sQSSsZZowJCurvAHYSK3KxvTfNkihtlYxSuUBpofDbu08vmCEOqhJzUoFUoA5VJvuYIChOdADglem89dpxPVzOW9kXmtOpPQSa18/2f9OM2FPWDnOc1/8YLXShtOrFV5hgx+fLJGnlqPi3QFA1HPEohtF9QuvjrQZQCwyxOplAzcuFSOjrhEvCpV86jxZbMEgX7WjM3JOprL47QBcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WWeo9uHc51MT3Ua2y309PF83bFN1X9+EsWqi+WbE8Uw=;
- b=pQrmAdN73o82RdbmM/zWYyYvkQ9Q208h4coShmOAfY2NBELxOCgGCCWF49esuaAZtYHv8m9XP9B1X8ZP5A5jlOJ/uxEe4FWynWk/Q0EBmEARCF0QHX7Xz9Ux5IW23Gy8npdiSLLhmcF/QWUkW1+WcG6AQXfPysC80RJgCmrqmpA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by CH3PR12MB8188.namprd12.prod.outlook.com (2603:10b6:610:120::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.7; Thu, 10 Sep
- 2026 08:35:37 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::ce69:cfae:774d:a65c%3]) with mapi id 15.21.0406.005; Thu, 10 Sep 2026
- 08:35:37 +0000
-Message-ID: <4cfdbbf6-2bd6-4d38-98ae-957e9db9d883@amd.com>
-Date: Thu, 10 Sep 2026 10:35:33 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] misc: fgds: enable GPU-NVMe direct I/O via POSIX and
- io_uring
-To: Li Wang <liwang@kylinos.cn>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Sumit Semwal <sumit.semwal@linaro.org>,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mengmeng Zhao <zhaomengmeng@kylinos.cn>
-References: <20260908131545.105987-1-liwang@kylinos.cn>
- <2026090913-landline-encroach-c544@gregkh>
- <6aed7ecf-d125-40d1-a82d-1a7f62049605@kylinos.cn>
- <2026090924-corsage-shout-833d@gregkh>
- <33c9db65-fa30-4d34-9026-98144ce1ed95@amd.com>
- <9447bb67-96e9-43b3-87c8-db231051fa2d@kylinos.cn>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <9447bb67-96e9-43b3-87c8-db231051fa2d@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0432.namprd13.prod.outlook.com
- (2603:10b6:208:2c3::17) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="mriNDERv"
+Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4bf948737e1so1189738b6e.2
+        for <io-uring@vger.kernel.org>; Thu, 10 Sep 2026 08:18:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789053525; x=1789658325; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=i5FCwCz8I5I3vnms5aLJ0rTuKe9JHgwTVrTlpHQrQos=;
+        b=mriNDERvuhBpRVL+3ruZSUxk255Sh6HuqlsnslwAKAsFkNXfguA5YKtnQAqkk9yp0x
+         +n4xsuwo+nMijfPvvlq2saMlJkXJaGWBa7pySsYEwslvOkfFKlcWETDmlFC2t/T1haUv
+         ZEsX0jUYoPPTz+0NeVJwmBP+fWl2GzXLBRiZZtqJZOiQYto+SVBak8WVTOlysVwuubb0
+         +xczuabAA/yv4P5zlt4kT4flBMJywK/3QPN5/McJb7Deyk4H9uAhrYjqka7BHiaiyBeq
+         I5MKx/ZQm1E7X7zXM0z/qW4PRqNLtZ/9QV8AhPez5WrysU+hmY+vs7yw4mmKy3ij3ata
+         NhLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789053525; x=1789658325;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=i5FCwCz8I5I3vnms5aLJ0rTuKe9JHgwTVrTlpHQrQos=;
+        b=onQ/MKe4Te5qlCjC5NVwaXWifa7SbYT0s+lJhYPQyJEZ1EnxpsdU2JdatiFQ+eXj3c
+         q/nJ4RrVatprNjFNbnePCo+gZuMBgd+bGephEpfDus4L6iTnN5g3LhyYUfUDA8V6uovr
+         BWK01PLChymq+9zarJwFZdpELVOLa12pDholLw2BWawPoHqja3HiO+a7/o7mZ8VzV3pz
+         4SyPjPlyBJpEHA3itPG5nbJLiAs2vhUYOoTCa0qoTAtl6iznwkRiAYdNxpZFhFWIvrtJ
+         fW+7GaW/THm1hb866SH0v67RJqaFPaVALsFQJkvsMrbb0QMOLBBCxdcqOwv13k/dEIHJ
+         gNrw==
+X-Forwarded-Encrypted: i=1; AKwUvBxy/RLii7zGw7+5Sa4uW1xjThGqSKXAc4OhGfAiml5adtE/TvNiBesW7ntRpDDHfE6gWozY6hCX2w==@vger.kernel.org
+X-Gm-Message-State: AFuF++lzdKXmQtRh88eVQrIS9cAumL1wKevxPq5N8BqpDaPlNu3y5IHr
+	ZPm4CsgYeFd6oe9XX3c7pBQA2PfmNCVvEwkjViX4vcoluVIbSYjbGWDl9HVR9BrUwKo=
+X-Gm-Gg: AYBFou3rcnR96RtEOvj9twLdJnuj4pcJqrPbIBDbvtvQIALPS6eLveELMoaIAQ4ra1y
+	pK8yFFkvBw2a+ajUJ/idRQJiuQ47SSPFaIxCTj7A2ZomXqPtunWMmmrkJFly2Vi7og1szN3qNcE
+	hd9L63sX3Nar9VGfNUFSbbj8xA9ukPxpCXkbyBnC4IF/HoE0TzE1wDRYYqg7d0q1xzPqbHJMhIi
+	isHp5HBQv+REii/Dnwn8KWvqLfpL/a1DZsnxoO/bK7eJdU1e92KE4dggQVA5hK35PxGNqQJKBLn
+	hvZyW6jJwuqMlrxQr9hfSXR8X6vTrWDQlQ0565/hQ3yB6C9QjCQVcn5yAo9YEs6/Ey9JJVVzy/F
+	QvrDDqNYbayUs1JFrUBbM0f1MsbixU6hux4lbxL26eqMSnKFsCLOF/7Q5I8eHwMbP2SK9Um6jZS
+	PtnIBOLWvBWdC12mAW0IIUd6cc2XGCru0SSRP9/QvOSzew6o+oQQnY3JXVqkzNPtoOmON4mBmVe
+	1goBKEzpLeiecEK28TC2mSHxQ0exigFcsstTIEGWHpZhdEtr0I=
+X-Received: by 2002:a05:6808:30a4:b0:495:eb86:6e8f with SMTP id 5614622812f47-4c142e28f2dmr9206435b6e.14.1789053525074;
+        Thu, 10 Sep 2026 08:18:45 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b970d1cf26sm19089338b6e.4.2026.09.10.08.18.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 08:18:44 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: sashiko-bot@kernel.org, io-uring@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20260902210200.2336720-1-csander@purestorage.com>
+References: <20260902210200.2336720-1-csander@purestorage.com>
+Subject: Re: [PATCH] io_uring/rw: keep CQE flags on iopoll requests when
+ adding kbuf flags
+Message-Id: <178905352403.347131.15633574006083255030.b4-ty@b4>
+Date: Thu, 10 Sep 2026 09:18:44 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|CH3PR12MB8188:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc093c3b-ab02-46a0-a4d3-08df0f167d12
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|23010399003|1800799024|6133799003|10067099003|56012099006|11063799006|4143699003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	YsxIBc6iK/XKrxn1uItHZb3LmKz7KZ9U8rto6pFxYaf/IDhyseJKvwDfLlK7XwEIL9tYR45MyRXUrkEZWs2/Znps/Lp7wSvcP6IltejNj7IpfwWKhuTox79QBx3BacK/vvBVYlPJw2v2lWVvY24DaD5eGkS09nYaE+/EducF5OMUGL0qeqZpC9t9ol04dhqdjjckCO2k8jqr6oy3ZsLZd8QBObIxbOKhlIhYAAP9BegAjZoK0x7t+LP+EMcVFWooTuOCB2ryNL7Apm6USVRqTyQtnCFDDkkp3djC63tb67iTyMZ8fnIiEjHgVU0vVYE9JYrHX7tRVxHwuenA8wCTQBZBe9SUCMTUKogOpaeKKWYppbdWZJ32rjG6Lx+yAZkPlo5629S6m2g9r5IB/mf8qZBdRWCX5gAkyzJU9o5GkLGgk0k7cdbiUFajVMCq9lpDHHAlz8CiPDZBBIf20vlbeCROvIWZk7BfzLN6qzLdtHA7hxunURYczez4ktdkw6G62QQhayowsSmJYH8TP3dH/+94STULGfhifAEzXVTxZRQJq7SDvB7WF6z83DMrP1xbcwrrLAnPS+DCTSrkzvQX5bgeprlwGSkCezIWN8I/5KG+i+TOCv8qLvGe/S4XLr0vh/tisRkSnW/waYGl3M7q8qutcRt4JUxwWFeLJeuCENQ=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(23010399003)(1800799024)(6133799003)(10067099003)(56012099006)(11063799006)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?c0JpV0lZdlNIL1F0OGJRTGhodEFHSHZWUytxaWs2emdweUFMYjh2R3djcWhs?=
- =?utf-8?B?cFpsYVVoQ0VoUG9VVWlBRWZaYnpCcnczOVZUb1JZdGV0ckpLSUcreVM2cXBz?=
- =?utf-8?B?dVNOSXhlVzJONEZ4cWw3dkRlRlVrZFc2SCtiM2lCd21tdnpqZjVPT2t2SzFj?=
- =?utf-8?B?SHd2VXQ4V2l5TzIyb2FGRWlsYndXaTgyOWNxZTcvWEN1N2E1R2FzUDlQSzBs?=
- =?utf-8?B?WWJOc1AwcDdtNGtVRXNOakxjTkFrdTFhbko1bXFDNitaMjR1Tk9ZbkloTmJG?=
- =?utf-8?B?SWFDSGFpTmJWVGxPanNFQURZeEQ4NmFReUpBNWRXSU5MMnpUS01UTmRXaEJU?=
- =?utf-8?B?bGV5L0I2QXFhVUkzd3AwdU9LZ3g2V0ozMUh6TldiZ3o3K0NqbHprd21KWGY1?=
- =?utf-8?B?RUNHTnpIakoxWEZIQUI4TW5HOTkzNFU5KzEzWUlPTHJpWkhvNEdMTFlyWUts?=
- =?utf-8?B?TU9RN1d3ZWx0NTllcjNOUUcxQzBIc2s1WmxEaitNc2lhRlF0aC8wejVLS0Fr?=
- =?utf-8?B?cmRUWHlySEVSVFNiSXVpRjVmRFVOODZpNTRLa3BTc0doS1Z5eGFaTWM1TnJr?=
- =?utf-8?B?WnJZc3BINi9Mc0tWOTVMZnk1UGhaWTd6ZjhjK1hIcktrbUZxUWZrRnR1bFJl?=
- =?utf-8?B?MkZoWDZaejJxeTh3MjhQMU5xczEzUjBTaVNmQlEvS2VnRDVnYXh6bEgxSXQ3?=
- =?utf-8?B?dXJERTVEQlh2REFhaXNzTFBOZ3RGanJGL25lUnhyLysxMDh2dmczaGxRQ3RF?=
- =?utf-8?B?ZW9mRkFCalZ1ZnlOVUFTOXJlZmZsWFR2cXQyQnlPRG51T2loSEpBaXNOTmNI?=
- =?utf-8?B?VHhYYU9TeVFnNU4zUnVPSDBEQ1EySE5udnBuNyt0WWkvYUd6VEJOdUlXaTlW?=
- =?utf-8?B?SGhkYXQ2SFV0Mkk1WkNsWGE1eTZCb0JESnQwQnYyMXZ0T2VRb2NPS0drejRG?=
- =?utf-8?B?cHZQUVdQNUlkanNEalV2Ly8rVzFpbXZUTzlkM3JsckgwT3ZWc2FOUGNZMkFQ?=
- =?utf-8?B?UnRraWZGOUo1bzRQZ0JQWXlMdWpHWXBld0FHMHExd0VJWTgzYVY0enNIend0?=
- =?utf-8?B?djNrZ1lZb01jRzUwb0ZSYnJWd2pOSWxJWjlZNXBGS2tlUGJvWU5MZHNOaDl6?=
- =?utf-8?B?QWE0NUpiOGxlaUxQYlNRWmpOb25ETUpPZ0s4MnZwQVY3elhYTmFYbFpHMkty?=
- =?utf-8?B?NGN3UUFBNFRjUWQxUUZYaGFldjA4c3RXTzk3bGxXeTk1Tm5FaFdKVEFXOXBY?=
- =?utf-8?B?N0F6Smx1dTVOUlk4N2FyTW9OdFNncWQrZTY1aitVWm9wYTFXMTlMcVI1c1l3?=
- =?utf-8?B?SzZQdnN5VzJLVkJnZWUzYjg2bHJWUXJXdGxQTlF2alhGRDhRZWZ5RDdqK2pl?=
- =?utf-8?B?ZWpNRklXclpZbnoyUk5XalF3Tnc1QjB3OWE5blhKdWlqaWFGWkVZcWRvb1NR?=
- =?utf-8?B?c1ZMeXJaUFZnS0RFQlJMTmtKazU0U1ljbUtOanQzbnNEelNUS1B5bjEwbUM1?=
- =?utf-8?B?QVYvRFpiSWNVM29PRjhuWFA4b1c5Zm9wNUlXTmM1T251dm1PVnRRNWY1MWZE?=
- =?utf-8?B?MktxWlo5NndnSWxJRG1kRHNTdTJ1U0NtZ3lOd3c5UnBvc2F3Mzhldm1zSXQ2?=
- =?utf-8?B?YzF3SlF4eEtmSUNXUHE3K1h3bUhmN0Z4TllqUHU3VXF2UkNGakpDZFJRRlA3?=
- =?utf-8?B?Q0NvcXhtRzBsWmRSSWovdmRRNWtxanhEMFgza0trZEZsWUNEN1U0NDNCaGNO?=
- =?utf-8?B?eGxwT1JTRjZ6d2hKSFFIY2VVRGRsUmJPZUNVSElLNVp3aktPNkgxT2s4Y3hz?=
- =?utf-8?B?Zm5NUXBSK09FVXlpbWRuQjdIejlUZHdqUEgvdENNczV1TWxIRnM1S0RsTldY?=
- =?utf-8?B?WlNUbDU3dWttd2lQakdhV2Zzc3RTOHdpc3RWSmR5amFTREZhcVVoUFlzSzZw?=
- =?utf-8?B?TmM1Wlh5U1NxdWN4aDhYNXZQbzNMME4xMXVNOXpwbU9xYUNSeGM1a05qRURH?=
- =?utf-8?B?YnlWZkh5dlFMeXk4VjVVTGNKamRWTEg1Y0dvQjEvRkJ6aHozTFFOM0RUaW9B?=
- =?utf-8?B?dmpJOWp0L3E3dGIrWEt4UUxkUWVhSERIZkxvNFFEOHdGNy9XcU4ybXlObzc2?=
- =?utf-8?B?cS90TWpMbzJnVjJoLzE0SHhQT0FpMk5RNWN2NE5TL0FwZWF4S3VELzhJT2k1?=
- =?utf-8?B?c2NkNjhpWWpaaTcycmx4Y2N3bWNYb2hlc29xTTZrRjM4cTJNK0FhN2lIUUMy?=
- =?utf-8?B?bk5OdWhBQ25RL2ZTZnBhSjNkQ0xENGNIWk96QWNnUlVpSVAyeTRpdTU0OVJx?=
- =?utf-8?Q?Yb/IFYOIj/u59LfjkF?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc093c3b-ab02-46a0-a4d3-08df0f167d12
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2026 08:35:37.3824
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oWJs7I1VF3jPn1FUL8nfHyksehhTBO6y44FUsZSE7F4/iMU47k+/5ryc2P6NyQlm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8188
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On 9/10/26 05:57, Li Wang wrote:
-...
->> AMD came up with something similar, but all those approaches are so fundamentally broken that we didn't even considered upstreaming it.
->>> And you are using this as a "bypass" for the normal accel subsystem,
->>> shouldn't this be part of that subsystem instead of a custom user/kernel
->>> api like you are creating here?
->>
->> As far as I know there is a patch set under review and even already partially merged which enables exactly that functionality as general feature for DMA-buf which is vendor independent and should at least in theory work with all drivers.
->>
->> I'm really surprised that somebody is still working on the vendor specific stuff.
-> As you pointed out, every vendor has been inventing their own way and interfaces to support GDS,
-> introducing custom kernel modules and proprietary UAPI interfaces, with varying performance that
-> leaves developers heavily frustrated. Apologies for not making this clear enough in our commit
-> messages, which understandably caused some confusion. We merely borrowed the name "GDS" to describe
-> the functional purpose of fgds.
-> 
-> In fact, we believe fgds offers four key advantages:
-> (1) GPU platform independence;
-> (2) POSIX/io_uring interface compatibility;
-> (3) Higher performance than GDS;
-> (4) Minimal kernel footprint and UAPI footprint
-> 
-> Regarding (1), (2), and (3), please allow me to briefly explain the design mechanism of fgds:
-> fgds turns a GPU memory buffer into a POSIX/io_uring-compatible user-space virtual address via
-> three main steps:
-> 
-> Step 1: Utilizing ZONE_DEVICE support, we remap the GPU memory exposed via PCIe BAR into struct pages
-> using devm_memremap_pages();
-> 
-> Step 2: Utilizing dma-buf support, the GPU memory buffer is exported as a dma-buf file descriptor (fd).
-> Using this fd as a bridge, we look up the corresponding DMA addresses for the GPU memory buffer inside
-> the kernel;
-> 
-> Step 3: Through mmap, we insert the struct pages corresponding to the GPU memory buffer into the userspace
-> VMA, mapping their physical/DMA addresses directly. The virtual address returned by mmap can then be directly
-> passed into standard POSIX or io_uring interfaces.
 
-Well long story short what you do here is completely broken.
+On Wed, 02 Sep 2026 15:01:59 -0600, Caleb Sander Mateos wrote:
+> io_do_iopoll() assigns the result of io_put_kbuf() to the request's CQE
+> flags upon completion. This overwrites any CQE flags that may have been
+> set by the opcode-specific layer. (For example, if __io_uring_cmd_done()
+> had set IORING_CQE_F_32, it would be cleared.) Switch the = to an |= so
+> the kbuf flags are added to the existing CQE flags rather than replacing
+> them. io_req_rw_complete() does the same with the io_put_kbuf() result.
+> 
+> [...]
 
-Approaches like those have been suggested before and we added both documentation as well as code to prevent such hacks from working.
+Applied, thanks!
 
-Please see Pavel Begunkov patch set on the LKML which adds DMA-buf support to io_uring for how to do it correctly. Just google for "Add dmabuf read/write via io_uring".
+[1/1] io_uring/rw: keep CQE flags on iopoll requests when adding kbuf flags
+      (no commit info)
 
-Regards,
-Christian.
+Best regards,
+-- 
+Jens Axboe
+
+
+
