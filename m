@@ -1,71 +1,71 @@
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6A4493D37
-	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4AA749E5D1
+	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:48:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141708; cv=none; b=QWj5CnrGZfkLVlbT3cSvTJQ6tEnBcIhvKRBd5Nq5yn3jwojsWlchzyvoFGRAr6wKmYeijFsaNFG9COSzMUMWn5Vg1zKRYV2MKPRUGyqQkooLm6PLe5uHtsXxVCHb7IEZ6FyBhuE/p+Fcp981mBpT5Nj069NHUaJf6gu+pmqFaDw=
+	t=1789141709; cv=none; b=TCrpXM3vhTc4iDJwOj+jxI0W+GeS4g1qkxjqz2DA1VGKoRxWaRJpKSxUh6Lc4U7w3gl3vSkOKQTELaKMeYh3z4CURUtkRyzirbjoy0UdI26ekqXAoPraQBJUWUctsATgs8Nh7Bx5MqVSsLivIfbw1wIVMaP3dRgYwbffE+caGqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141708; c=relaxed/simple;
-	bh=+vG/XNCka29iGBZ7Npl7VlEeURi/pbocinaTbBpYTa8=;
+	s=arc-20240116; t=1789141709; c=relaxed/simple;
+	bh=OYvoE0poGRFPY0Lowd3hYwvh/QD65dRzyC+uPftCno8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RbdVqPPAoBqNrmCuk8HBatE+0ysDjz85upWdrDDmfSp1AYj9S8kC9zP9g/TICn1gvaX26GsX3EJ+jrOnX8fdjulveIzpOE8DKD2fr5dYLyLymrxVTZ/M6+L3j4S606W7DZXFWbQ7CWYUKlyLqqgeH0pQ3+D0yBFsSLRQ/7X6W0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=LS4/i5Ja; arc=none smtp.client-ip=209.85.210.42
+	 MIME-Version; b=TmdPe+7EroWbO0ahyIPYj4xrF95u8DtQjuLOeSnnKJ/+QxtrGslCxv+EoKbwV825MTy/c5NGBSC01tFQU3xknxp7zB5hjlBJ51o0a70SEHXDo03Fq+L87WlJVFKtWQE+wqdILTBz4xPtR5ep2zKDYzVUavgW4T2lbGSCuDwbxig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=WIcp3bDU; arc=none smtp.client-ip=209.85.210.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="LS4/i5Ja"
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-801b48c329eso567479a34.3
-        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:48:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="WIcp3bDU"
+Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-8016ab5f277so1053001a34.3
+        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141705; x=1789746505; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141706; x=1789746506; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CNmMMXa35LsfZV184CPi/h2/xUGWnnYnc43ODYGG+NM=;
-        b=LS4/i5JaBHLcC1SjmmGdpvlVS8Ki+1J3Szf5ZGVE/r7Zq7WYquo5xMIIoHmnB/vHk4
-         9GVdEdI4hXId1T312aNs75WVqQZJY/Y9Zy9tKsmknrf0p9oiSx1owSGJuprGgdPj0iC6
-         5+pBEW3BMqvZJYAfk66/I2L1ybA4YsSy0oHTRvBcJ+8UMTViq3+93Z7raoT1C4UEGQ9X
-         bMgEwK9TA1/OW6BTqN6dObTJdAZWn/t8Zl7K7dDl6bhPY2xW11b/CIK52zoFzSYVXcFu
-         0biknEe4gdsfK9xWbBEviSkHlATO0bY09cwLBrxOHXp7WrELJln9Rl7sk08oJkYrI2ib
-         IUAQ==
+        bh=tncm4oNxaDv4gSkEZuE7ucOJhSRMP5NYPbtJDKLEKTw=;
+        b=WIcp3bDUasn1iDpTytkc4ucRDc9SbaDxqRCjOhk0RvA08pBC+WtpAbqqYC1531jwDv
+         lbBQVEEs2KLcq6KEooJw8y9f8t7c41UaFcFQM2ypEp+RhlVdp8vUjDZeeOqJ8cU3DO6l
+         i8IyoXTBzoFA7a0rWAcs20EC3AiIjKnHlNmMhyDqib2ne+D6J0t1FVObfuoytLUAbLXb
+         r4qX4IlQmmwT1VXM9IKWvaQAA5NIMiXzuqL9J9m+eu8fHbuT5a4a7v1VQ7qmCFdCS2mf
+         i+UlKZBhIvP4hy5Uo83NHFWVNWwlM+kvCTBjGHtuT/+N6mc/b1ZPHeAfjbFwAdpITgHp
+         UiAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789141705; x=1789746505;
+        d=1e100.net; s=20251104; t=1789141706; x=1789746506;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CNmMMXa35LsfZV184CPi/h2/xUGWnnYnc43ODYGG+NM=;
-        b=RP+Ym6Dqc4K4eFch3BIv152IZCwXtYsbCM0YTPTff+eiyJ++p9rogqOynDM6KfY2sC
-         sSNtHahtT6zwmj7sA6ssAaqfvjCUQc6DS/Qt4WpbsnU7lTq50bjwRsH4+dHnfTMKe7La
-         HlIOwV20Wbd3RtT76dlmjtUBv0+uHjKIk8G0vQ2pZe1KYY8J4KHdTfe3nccpRf+e2rcR
-         UBSsQv4Vf9KIxIJphoVhNNTYzjUBlhdiOCJbcud8cZfTqPMtiNsNp5kRyryo6lK3F9+4
-         PrXSaT7gsINW0W4YPD4toJeLPs4yTSj26MpWcuGX77VhsTiG/N8aOvRVciJM1K6NT9y4
-         +H/w==
-X-Gm-Message-State: AFuF++mb2Ic3MbQ2kaPQUX+U4nYG1oAyqCMTC32n134UGvzktv9OHc8X
-	1e+NkdYFi0dFZD+TnMakh4tep7O72z1S8iOmAU16dc9raEoZWPtc51RnN/TiRTmG4LC0LDz8Y9E
-	Ags9qEhY=
-X-Gm-Gg: AYBFou1i4BheqQCEyE8On58w+IHOOU5yQ9GxspUHajEjps+LVJV58Q9SrqdwwzYIXHP
-	2mEHDWot8HFClOmP9Jga8vnGcz5UJihTjgE2/8KGWHQhZOyoX2m+gSVwgoTeQChdgLAbaUAk1PQ
-	uxKcZm7So73zp8sz6H9pMwaFU+NJrrNslWJjwWU1x0ITAWbPqHvbFL17y0Unag4JLQJ7u6e2dD/
-	EMn1N7KFEd5RKR2SH7HJIPmo0huyD7wdvCqEAh589X+F/0RkbvarZQ1tYKb8zODH2Vg7+hej6Pe
-	SE9eW7ZU24KTYXlg3xeChMg/1O1VsKRgzuNR8zeeYelAtFzbSsWGbnsTx4RVlPWV/QgqL4YVOqU
-	Mi0L3PlfG5HIRIJXrwDEpthvb4qGs1NrTWOe1eQRQEh+8bU0Va/YoBhMAyIJ4Z4Vu257p9KiF2P
-	jXbo0AYCVvkB8TbYjIWfyp/Xw+OwHaPbYpg/7OSrV7xejXhVWmWieUWAUHrb/4eC0/EdaOpTIRN
-	aCYhRYw9kOqzIR5aHkSnnn4lLxBpTwgHughg4uHR4M=
-X-Received: by 2002:a05:6830:2785:b0:7fb:547f:98bc with SMTP id 46e09a7af769-803ff55ef3fmr3920700a34.5.1789141705065;
-        Fri, 11 Sep 2026 08:48:25 -0700 (PDT)
+        bh=tncm4oNxaDv4gSkEZuE7ucOJhSRMP5NYPbtJDKLEKTw=;
+        b=cIAU6hpJF7zgmPytOgha8JIYqzfLEdLEUxXOOHn2/1GZhdSgNS6m/w9ilKqXHnTD4L
+         j4KXIAP2dVRj87NVRxMJhFwNTGiIUGKCbSQHbT/z4c3UpB3EwxYUf47wPyIt/U4Lpc/h
+         bdtnn3O86qd7fCrDp5t/TclADhoWwVmezLhk1fhjEznY0EcqtBgVgd0rAoIEkfG4n5Fs
+         jeMbel4zi13urUrNrlinI+YoDsBTIKRxkweIoXYKnhbozSASmFcdyC2oa1hJ9Gx+DuR5
+         uuH1NBUvoBnishxP/q2Ghoa+U63Zk7i0Iw2hmIop2euvTNUTv3DRevEG3O9OpPPJAkr8
+         YRQQ==
+X-Gm-Message-State: AFuF++lg5qzGzi9hdhXU63xp3vxtJljC2HeEeu8WDyVYhF9tnhJXoPUj
+	Mc/ZE6CwE6ZgSF9PsRjnZay7p1v9tqCXQQABHwwpiPuY/9qC2AyIm2niUEh38XicJGKu9nX9me0
+	Gpy5ZrUs=
+X-Gm-Gg: AYBFou0tr8kV9thBXnMCshCNlbDab7EBnLbX6HxPGg5b/jSr2OaLb4T9mprIdk/twFl
+	i8SXg9j5gnEsy5wC1hKZUTvTyImU/oTBnFDYWgCwVLnmhcHL8BqnaL6cWlAwuO5olEkZoB0/Epe
+	KJk+yJ3CmeKbcmXJkDFZAuxItssv9s/Z6N07K+Z4VFW/K09YYRkZ+7XL2fqo0ESDGh6gYHau3ht
+	PPZ40P4SbQcv4h/kdHNHjIo9luOv25mtGyKIs/ufi8YFL6mn1TOriEdVsNnmLUtaeSvJK1XnGgb
+	St+3CHpeY/4/IhzQDBKCffRMMsiNfuTg2YCR4Sh3yj9xlUgH24eIpZS83iWbadZ91/2jW4LvNL5
+	s/N3ll5U7lQAK5CJPYOdi0OEcTxFq74rFOj+Z7qGJsUJg4WM6W6ORqEnAlUN2lNMwouUVk6okbO
+	Z+VNPC3Rdwg5SreGZJMy4P4sORSD+9xphS6CuuQhvNb0H2CghPdfX7fyqGKulkf7jF0H4V6YmWF
+	iDmVyzZdGMkj6IL7LO3GQvUIBx6haiZSNlkvphV01o=
+X-Received: by 2002:a05:6830:4492:b0:7fa:5c49:524d with SMTP id 46e09a7af769-803fda9dc6emr3843022a34.20.1789141706356;
+        Fri, 11 Sep 2026 08:48:26 -0700 (PDT)
 Received: from m2max ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f6d1ca4bsm2629478a34.23.2026.09.11.08.48.24
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f6d1ca4bsm2629478a34.23.2026.09.11.08.48.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 08:48:24 -0700 (PDT)
+        Fri, 11 Sep 2026 08:48:25 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: juanlu@fastmail.com,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 09/10] io_uring: drop registered files and buffers at release time
-Date: Fri, 11 Sep 2026 09:45:33 -0600
-Message-ID: <20260911154811.646705-10-axboe@kernel.dk>
+Subject: [PATCH 10/10] io_uring: wait for in-flight requests on ring release
+Date: Fri, 11 Sep 2026 09:45:34 -0600
+Message-ID: <20260911154811.646705-11-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260911154811.646705-1-axboe@kernel.dk>
 References: <20260911154811.646705-1-axboe@kernel.dk>
@@ -77,43 +77,108 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Registered file and buffer tables are only torn down from
-io_ring_ctx_free(), which only runs when all requests have completed and
-the ctx refs have hit zero. Before this, every registered file remains
-open.
-
-The resource nodes are reference counted and any request using a
-registered file or buffer holds its own reference to the node, so this
-only releases what is actually unused. The rest follow as those requests
-complete or get canceled.
+With cancelations now run at release time, what's left in-flight on
+the ring afterwards is mostly I/O that has already been issued to a
+device and just needs to finish. Until that happens, the files from
+those requests pin the files they were using. Wait for those.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ io_uring/io_uring.c | 74 ++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 73 insertions(+), 1 deletion(-)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index eb8a3626c684..977c8c510b85 100644
+index 977c8c510b85..b52e0106fa27 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -2196,8 +2196,6 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
- 	io_sq_thread_finish(ctx);
+@@ -2382,6 +2382,76 @@ static __cold void io_ring_ctx_cancel(struct io_ring_ctx *ctx)
+ 	io_req_caches_free(ctx);
+ }
  
- 	mutex_lock(&ctx->uring_lock);
--	io_sqe_buffers_unregister(ctx);
--	io_sqe_files_unregister(ctx);
- 	io_unregister_zcrx(ctx);
- 	io_cqring_overflow_kill(ctx);
- 	io_eventfd_unregister(ctx);
-@@ -2463,6 +2461,9 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
- 	xa_for_each(&ctx->personalities, index, creds)
- 		io_unregister_personality(ctx, index);
- 	io_terminate_zcrx(ctx);
-+	/* Drop these now, rather than async, to unpin the files */
-+	io_sqe_buffers_unregister(ctx);
-+	io_sqe_files_unregister(ctx);
- 	mutex_unlock(&ctx->uring_lock);
++/* Number of requests that should be waited for */
++static __cold unsigned int io_ring_ctx_inflight(struct io_ring_ctx *ctx)
++{
++	guard(mutex)(&ctx->uring_lock);
++	__io_req_caches_free(ctx);
++	return ctx->nr_req_allocated - ctx->nr_notifs;
++}
++
++/*
++ * Run task_work completions for current. Only do so if the io_uring callback
++ * itself can get pruned first, otherwise we risk recursing.
++ */
++static __cold bool io_ring_run_own_completions(struct io_uring_task *tctx)
++{
++	unsigned int count = 0;
++
++	if (!tctx || mpscq_empty(&tctx->task_list))
++		return true;
++	if (!task_work_cancel(current, &tctx->task_work))
++		return false;
++	tctx_task_work_run(tctx, UINT_MAX, &count);
++	return true;
++}
++
++/*
++ * Requests may remain after cancelations have been run, as not all requests
++ * are cancelable. Storage I/O is an example. Wait for those so that once
++ * close(2) returns, files pinned by these requests have been released.
++ */
++static __cold void io_ring_ctx_wait_inflight(struct io_ring_ctx *ctx)
++{
++	struct io_uring_task *tctx = current->io_uring;
++	bool ran_own = true;
++
++	if (current->flags & (PF_KTHREAD | PF_EXITING))
++		return;
++	if (tctx && atomic_read(&tctx->in_cancel))
++		return;
++
++	while (io_ring_ctx_inflight(ctx) && !fatal_signal_pending(current)) {
++		unsigned int state;
++
++		if (test_thread_flag(TIF_NOTIFY_SIGNAL)) {
++			clear_notify_signal();
++			if (task_work_pending(current))
++				set_notify_resume(current);
++		}
++		state = TASK_INTERRUPTIBLE;
++		if (signal_pending(current))
++			state = TASK_KILLABLE;
++		set_current_state(state | TASK_FREEZABLE);
++		/* don't sleep on work that's already there and that we can run */
++		if (ran_own && ((tctx && !mpscq_empty(&tctx->task_list)) ||
++		    io_local_work_pending(ctx)))
++			__set_current_state(TASK_RUNNING);
++		else
++			schedule_timeout(1);
++
++		/* completions may be queued behind us */
++		if (!io_ring_run_own_completions(tctx)) {
++			if (!ran_own)
++				break;
++			ran_own = false;
++		} else {
++			ran_own = true;
++		}
++		io_ring_ctx_cancel(ctx);
++	}
++}
++
+ static __cold void io_ring_exit_work(struct work_struct *work)
+ {
+ 	struct io_ring_ctx *ctx = container_of(work, struct io_ring_ctx, exit_work);
+@@ -2472,8 +2542,10 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
+ 	 * out, and for requests owned by the task closing the ring, this
+ 	 * ensures any held files are put before close(2) returns.
+ 	 */
+-	if (!(current->flags & PF_IO_WORKER))
++	if (!(current->flags & PF_IO_WORKER)) {
+ 		io_ring_ctx_cancel(ctx);
++		io_ring_ctx_wait_inflight(ctx);
++	}
  
+ 	INIT_WORK(&ctx->exit_work, io_ring_exit_work);
  	/*
 -- 
 2.55.0
