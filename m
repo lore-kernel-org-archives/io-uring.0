@@ -1,69 +1,74 @@
-Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
+Received: from mail-oo2-f29.google.com (mail-oo2-f29.google.com [74.125.231.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD9249BD87
-	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B7D499F36
+	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141697; cv=none; b=pvvg5xn+tiAGycJW0SH7L6wfqQ9vwt+hftOKEBACEpiNyvTG6zmsTSMlXXq7w5uTpdbh3l7mVGsxbrryJLxXOJUdZ/SohU0bc7tZJmAbgO7MAgyb6kS8zXnHxUA/5jM4UzSjcb4N7FV10k5dZp5eKw04+JyolQX0ci76sA2CAOE=
+	t=1789141698; cv=none; b=R/cUt+7ubdAJJDiZEUF0bB9ygW6LBhaF3qTd4iyp9BIu1B3lPsnz7V4UTJGI2aWowk1MMgyf2ly0evPcvpNfcX0o+6zo5SWYN1rUFuH0Tv9P3HTHMSU5OntSNUkq8ZsSS4qGuBq60kY99VzcJdaJ3akLPFTKT6tnF41aRf3cwAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141697; c=relaxed/simple;
-	bh=h8UvNijHDei4W7OVAZ9wSOVbX6CTDc+9T2UTD3X77Zg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m9dyYnIcAqpFZC75aM/tDf7cyBdelmb2GvSNgPFqAzQBlXzS9w6/dqCEPByG24VpqmtxEmNJpt+WbnFBjMFucG48spazT8HRlh8iQ9ldjwu6PuDYZOi4IX28aFXrzE+GhT7sfA8PQsPL5T2xnJDf0t2MqRBoBgjqQDJXmlH5EMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=HO5Wk0YN; arc=none smtp.client-ip=74.125.231.170
+	s=arc-20240116; t=1789141698; c=relaxed/simple;
+	bh=NAAFPzaGmuQKEpro8Gsqs7LpdQtnlT9CBecDcpT4K88=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=k/vWSDX/8BXbJtT10atKImeNTDx5kBc+9jD9besJ1gW9mY6h3IWtXjnKBfO50p0lzosM9Te1MvcIxQa+Cyoko5eGEMebFOv++6I5wBL70D99UQOxadPHCod5VMn7rYq1JazHDySR20foSqgv/HQ1TCljGrVfVIB9YdJvwajCd80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=Guj9hWQr; arc=none smtp.client-ip=74.125.231.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="HO5Wk0YN"
-Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6c197ff1f53so305484eaf.1
-        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:48:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="Guj9hWQr"
+Received: by mail-oo2-f29.google.com with SMTP id 46e09a7af769-7fcc35eeb48so729449a34.1
+        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:48:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141694; x=1789746494; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FuoX0oXU3i7p/Bzl5apZzG4UGQo8EkGX2i7Id7LK66w=;
-        b=HO5Wk0YN+OzSLvs03L7FHfG35Zr/QPQ6+JzpTcSCFy5LcvsdO2gNvVpspvkhyYPTij
-         qkO800LqjHn+E/xdX0qklzFZDl8FeZ9JG/qNysgMk+9+pDZziotAiNbfvK0P10w4mJ+y
-         h1E6FGopMFx42w5794KGx3LL/+Ha6dWl1/GGJO7qHA55ZWXzlE+q6XUkYeh2K+24if0N
-         gVi0AYcPOQ0U2LOGL/lKLClHSFSVx4sepPoq+94QqGaoPT0AQgTttiAolY/YjT6h5Pxx
-         4a41hxASscitHv2MxAqoogx1u0qyqfoBK4uIBeK46RP4N68DJ7f8hmA244B9jC6ecOKc
-         09Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789141694; x=1789746494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141695; x=1789746495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FuoX0oXU3i7p/Bzl5apZzG4UGQo8EkGX2i7Id7LK66w=;
-        b=ZPbYY3A+hgV+JLnI3vtcerCfg6a+01hM+aUs7mpZQj2T+IVCjqcYPhG7fCYAIfD07G
-         UPrL7zfjMdAISqaWGBxtkgrQfgbWgPAJg9r+xsMQ1spVThTkA6jaCkITW0c9VPRvBpsp
-         Hgx7ebMh0QwR0SQmyOv9gjdT8B3lbehhhf51mAbmuxInq9z52HbHr3ejmY22v0GaM7/0
-         9Lkzv8J08W4kGKbhugoEjI+zlXKeEBaKkoFwgOgYY2yiaGxlLYuuC41f3NJZ0gOttXOA
-         bOMj6jeIZTQ7ySnf1X6qpsOEHU8inqGlRzJTW0bSawBd2Dt/DgjelOip9IVBzVm5M56E
-         VwlQ==
-X-Gm-Message-State: AFuF++mPjjAALCZdPzd6vwbLaTSKwCJeay9Jr37Oh7Evc9NEOVFCwjlJ
-	gyvlCD7/5l+QmhzB6YLRxj/DqHVsEbAxH+MDcp3cGf2RE1lJLZjSInI9FXlIM+uNP8k2OTl0p7Z
-	SSWKdYtM=
-X-Gm-Gg: AYBFou0bhqmMPb7xV+xdBSeqtVu9mBdb1jNUH9MCIPmfTYaXmJfMgZj5jiafIaij2Md
-	ofF8XFV5Dk+lZSWdwUDPGW90Avp0llYzNSE2cdoZzwisLMlGpSb4AHgNTVnvPr6XUeg6YJaiqNG
-	oOfDIyTQ50c9WPDchAxfwIPBIFOVJGfvJXuoVY2RtYHmX5SPS2mKpAP4+QHZhtHJ8vIXZOwpxTV
-	iPqUErxNjtoGHsBHiSz9FjtLEQP5S1V38dopLObFZ9iz3HYv+WDMxNeR+AA2R92S5nWdnCU17mL
-	cxT8+g7RLUtoP1PLDVyX9aMN05Ygy8/zDMxTtbY/EMZG6fTioxKcUHvmsXFPM74bxJd59JXzBI6
-	81kRd4ihO0uBUxSTgG7wk+72js14/LnBDb2aY/g+Dy2uRtdx5llXQOx+kKTHrVXsrC+Xes/Q9PQ
-	HBjF2krFF4Xyj/fMqfr0fENFROFT5j/VRdBxGn8KFC6tPY9OgJq7B3P7mVOp7fYDZflvHJqPBSB
-	kYTMQMErsg3fHP4zKx4QDM/0Hfd5IkmnzQbL8gQCdTy
-X-Received: by 2002:a05:6820:1c88:b0:6b1:b375:481 with SMTP id 006d021491bc7-6c0b5df59aemr5519755eaf.0.1789141694280;
-        Fri, 11 Sep 2026 08:48:14 -0700 (PDT)
+        bh=q9/xNmnBkQVRIiG7EKjaAK5gjKVX2Jitj24zxBWOK9I=;
+        b=Guj9hWQrP9XNAS+d1+PKIyl8OQZvAkI1IVmkdGPB3kNbhyxH2WRvuqB8MlFS5sCKk7
+         0CPbQRNEkk+0bAL4lFbNokciZ9hBPQi1aeCbTArXWyiEPP/V7VAZ3rX1I11AF3atnVbf
+         VYUs5wNgNGXUvOVxnFuzrCkG1Y7iZlvWXr2rnM0jQKQEJvDj5eJRLkiGK2YZVbMTM39v
+         dfVcDU+mEjOWzhkuEPbdnnBxO7+co1lFYAo5GtlL8GJUWYGQTSG5c/OYMqaGp3kQUfo8
+         RH9jhvty9gTivtVBBl6WLl4FofDVxMYGqui1sLbadF+4P8yWp7gtt5oBBHIXAbEMJ3Yp
+         l0/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789141695; x=1789746495;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=q9/xNmnBkQVRIiG7EKjaAK5gjKVX2Jitj24zxBWOK9I=;
+        b=iEjAknDofKtxKtnHXNyjZQUluyJVqHeTqsdaYUszslox/yig4pUUHAQ1r3OkOlm9WZ
+         vZOkxoXv7sP1/0MkLKhjZVqNNbN43aWVcItNx/KP9jihNa4b/JLWv3c74ML2VX8x4ixx
+         h83DUM84e1N+nk5KtzJ/aZPtMN1UyCWFFk4OTWCLp2CG7dDf90vhdcg0+tnGXzTW/xXu
+         fiCEYkLllZVnMM+/R7u1ClHqZ97pb+0C6bmiW39UydKoSlKjTzefQy29i9qhc3LMS8EL
+         fkCW3K4KiUUnjxudNNEyAF9PD8S2oQIshzj11XJrEnXW2rSwmQ/cJiGzQsffWe7iyK8W
+         nhfw==
+X-Gm-Message-State: AFuF++mTOlB59KAacvJSqOvhZomMW6Qb0XaGNPIJ8HVtskY/m4jcJHPb
+	TwtP277n3nzpQ6pWuFPHV0XcRfR+MNXcitXahrJvrJEB6fadrP6efRsFbk7M/jUYNBYPeXK8Gl8
+	Bif0eXIs=
+X-Gm-Gg: AYBFou1u8NjbxibeJk0HpcVWCxVSlx4xpv1CX7X9twKidQp+bj+CCbyX1bPtN3SUeTP
+	NXTC/JllqZY2JW3WoY+pIKRJsYIyQqiUnZ0n2MsdlG75yh475gisg4GbrvzRqUzTWCrNUQIfTXd
+	8ZXuhH137hiniaOaxf3JdR/KVBk+H/JToaGJF0a4XqixWnfHG8Ug8qQgpWSwWksRBOo0tbCXq/m
+	lI6gCtD9dvb1U7AHn8HPq1dDtkf+8irjK6IaiQDGJZRerL29wAQ4LVkKp678Xm98EI1GyGWzVSL
+	6muprjd8fBRM/AS0eJ3t2dERjqiaXaOc1RNxgkcbKogBLpMb24dB9fvg2/w4Y+89Ox4uAQAnpfh
+	GvLBXgwBOOeNhUfaT9jn+Az5kg+FwqJqSvMuRivDa9J1tb+h8QSLM6BKOzalGvrs9DkWet1YHk/
+	wev/CvGksu2bamUoXidJknanf+IdHSO7hKFr6dBGJZBSffQlGstUojpzu3PsH5kb8Cihm28cQpD
+	ZCLQ2zLvE6aiO9wZUn0ORawPTiL+IZBhtqLu3phuG0=
+X-Received: by 2002:a05:6830:412a:b0:7f4:d59a:1c62 with SMTP id 46e09a7af769-803fe9fd144mr6518237a34.11.1789141695207;
+        Fri, 11 Sep 2026 08:48:15 -0700 (PDT)
 Received: from m2max ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f6d1ca4bsm2629478a34.23.2026.09.11.08.48.13
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f6d1ca4bsm2629478a34.23.2026.09.11.08.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 08:48:13 -0700 (PDT)
+        Fri, 11 Sep 2026 08:48:14 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Cc: juanlu@fastmail.com
-Subject: [PATCHSET v2] Cancel requests at ring close time
-Date: Fri, 11 Sep 2026 09:45:24 -0600
-Message-ID: <20260911154811.646705-1-axboe@kernel.dk>
+Cc: juanlu@fastmail.com,
+	Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 01/10] io_uring/io-wq: put the request file before posting a completion
+Date: Fri, 11 Sep 2026 09:45:25 -0600
+Message-ID: <20260911154811.646705-2-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260911154811.646705-1-axboe@kernel.dk>
+References: <20260911154811.646705-1-axboe@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -72,28 +77,74 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Once io-wq is done with the request, put any potential file that request
+had pinned upfront. This ensures any file references are fully put by
+the time io-wq posts a completion. Registered files are held by the
+resource node and don't need this.
 
-For v1, see here:
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ io_uring/io_uring.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-https://lore.kernel.org/io-uring/20260909141010.21064-1-axboe@kernel.dk/
-
-And for the current tree, go here:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git/log/?h=io_uring-exit-cancel.7
-
-Changes since v1:
-- Reorder the series so the fixes for the current tree come first,
-  then the exit/release cancelation changes on top
-- Add fix for io-wq completions that finish asynchronously (eg a
-  direct read completing via ->ki_complete), ensuring CQE posting and
-  file putting are sane.
-- Ditto for IOPOLL completions reaped from io_do_iopoll()
-- Put request files synchronously before posting the CQEs in the batch
-  flush, fixing an issue with SQPOLL.
-- Don't clear REQ_F_REFCOUNT from the completion path, a linked timeout
-  can still take a reference on the request until it's disarmed
-
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 61053421d809..f96dd2d8c6b1 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -907,6 +907,24 @@ bool io_req_post_cqe32(struct io_kiocb *req, struct io_uring_cqe cqe[2])
+ 	return posted;
+ }
+ 
++/*
++ * Drop any io-wq request with a file upfront, otherwise it gets deferred to
++ * much later post CQE posting.
++ */
++static void io_req_put_file_iowq(struct io_kiocb *req, bool sync)
++{
++	struct file *file = req->file;
++
++	if (!file || (req->flags & (REQ_F_FIXED_FILE | REQ_F_REISSUE)))
++		return;
++
++	WRITE_ONCE(req->file, NULL);
++	if (sync)
++		__fput_sync(file);
++	else
++		fput(file);
++}
++
+ static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
+ {
+ 	struct io_ring_ctx *ctx = req->ctx;
+@@ -919,6 +937,8 @@ static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
+ 	if (WARN_ON_ONCE(!(issue_flags & IO_URING_F_IOWQ)))
+ 		return;
+ 
++	io_req_put_file_iowq(req, true);
++
+ 	/*
+ 	 * Handle special CQ sync cases via task_work. DEFER_TASKRUN requires
+ 	 * the submitter task context, IOPOLL protects with uring_lock.
+@@ -1480,6 +1500,7 @@ void io_wq_submit_work(struct io_wq_work *work)
+ 	/* either cancelled or io-wq is dying, so don't touch tctx->iowq */
+ 	if (atomic_read(&work->flags) & IO_WQ_WORK_CANCEL) {
+ fail:
++		io_req_put_file_iowq(req, false);
+ 		io_req_task_queue_fail(req, err);
+ 		return;
+ 	}
+@@ -1555,8 +1576,10 @@ void io_wq_submit_work(struct io_wq_work *work)
+ 	} while (1);
+ 
+ 	/* avoid locking problems by failing it from a clean context */
+-	if (ret)
++	if (ret) {
++		io_req_put_file_iowq(req, true);
+ 		io_req_task_queue_fail(req, ret);
++	}
+ }
+ 
+ inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
 -- 
-Jens Axboe
+2.55.0
 
