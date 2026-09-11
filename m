@@ -1,64 +1,64 @@
-Received: from mail-oo2-f17.google.com (mail-oo2-f17.google.com [74.125.231.145])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9701948EC76
-	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76E7492531
+	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141331; cv=none; b=O8fOo6yxTrverlyWNk4P4ZJ4yu2j7yg9G4Vekb5C0MBVBCgqPuiWVPKBj5+lnOqi4eP4potUQLV7VJuG2id0423OuE6co7faG/OYwDqylgUPjSwg6QTW6y1cqQsM+s0d02clvhmDEHge57a+rA6OR64QTvMRzt2LgAOsmjXkIgQ=
+	t=1789141331; cv=none; b=bjYtm4wWKI48p/wF8z4vIYEg3RzgXjdeeGLUXjt9LDAdja0OVexmeo6ykf/d79QLDLm0Y40PC8Tsrxwg4zIYSNWiGbTaK6IxggXzb5IwXh/tFkLwasXXvMZJP4ElmsSecDDIrOqqbfSrgBlOuC9wyASG1t94vfNiGSJEtqqQecI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789141331; c=relaxed/simple;
-	bh=yVh0rVZ6GS3pgp+sdjQXZ5uUZjKAgLGO2BaRo77OYf8=;
+	bh=3cOzorvOxRrM2357Kv03cIHM3KvIHiOeSsYnysFbQ18=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=H8/lHF/vE8cm2TpJjuGDGXtqgJjdQvqTfgc6GKvuXM9hGPP1Oi9y5ZsQgIDvO2Oy9dbUJfdKDEzdI4NED/Bj0jh+5oxISB47eWGeSnNSivvQb7NlfzRzlNeoc2Pm3d0SCu2V9EnVYx23T3kVR/x9mGIbQmxGTYxrQd/Xvhf03+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=etXEfYo4; arc=none smtp.client-ip=74.125.231.145
+	 MIME-Version; b=d8ReoOheiwu4IdO/yub2RJg6qwnuLE2m3NasAi6a13EFTvBeKVVjo1aS6t4evG12fAxyBstR8QbdzSwD/Y97Tt+ZkDa4MuCuP4TawE+3qqJ9rUPSnhyFjN+y/SBIHGYfRh4TYpdVlFfb9SAqBClA9bf9jTBX5XfNlj8UqqnqfIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=f2eYMXof; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="etXEfYo4"
-Received: by mail-oo2-f17.google.com with SMTP id 006d021491bc7-6b1ae739df3so278583eaf.0
-        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:42:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="f2eYMXof"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7f48c750afcso1100808a34.0
+        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:42:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141326; x=1789746126; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141327; x=1789746127; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=1mwNlgJ0Ok5ZgfwwPHL43bLSQUr6PFWje+Owka8lGt4=;
-        b=etXEfYo43ilZ0Limel5MTE5uqsKiY6bHcXxumueRC/YW9U9CxektBF0U17It0a09JP
-         PAPM7sWXepSlegDfCq+i97pcOwiLqhZyR6DkOcQjOOZi+XKj0owWjAdTImbARkugJ5ZK
-         R5hyQwOeql6VaThMSBTBV2c7/AktgWy9nx5oeurr0FezoWPiLP936OYM/pNLf9JQGrtX
-         w+bpQuDK2HR/dlQxUH11zuT4N2XxpwMi+wduJ/bEgYbYEoM76EaGIB8yz4j265YeoGTr
-         haPAmJo79uzkeQjCB8IzeZgjA2hu8EY8kP46igWqTBJgpM0jWd9522Bbbub7/5b73qPq
-         gIhA==
+        bh=0vHIYEHJqme0gI4jLTtintEZJNWn/ID2vfmcQE7LyaU=;
+        b=f2eYMXoftvJtz0vfLTfqNO1EESRZFXkbbiyBBu5RKsswHkgIIXH/RmfzSjNDdbEkRp
+         F/02xB2agpO5uabIwtYoH7iypBMTMbCS3v/C2q2cchAw7OiP3cKxzaoOtDfBWarrtzUM
+         DX8lUpuIzsyZPARK7GwEdUWtISe1C5P7V6w2Vo1oWuwa/dZGMRL5srddUd0r7BZ/tgt2
+         3ipw5X8HJC93VlgMnOKBUY0V6/g4oaAGcEqYrEZqC4baaqE/9vOy8MczJzCTSb8P0AGz
+         NqadnBu5dYqC+ZeWT1AqCuorqo44nunkhaMaL/Z9E6+rbTLUpPOXuSMygEjsdwL1k7lL
+         eWsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789141326; x=1789746126;
+        d=1e100.net; s=20251104; t=1789141327; x=1789746127;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1mwNlgJ0Ok5ZgfwwPHL43bLSQUr6PFWje+Owka8lGt4=;
-        b=EbsbGJwShCKlRRY/PdS82cZT5Rt0XLBA8IXBTUUoS9ZGSAehmyQ8WUOarZ38bU8NrS
-         fza8RY3OXciiZY0sbca6yTPa0fpGSSPsiDaE/tr3R+eKm//TN31KbCMYpReU625Os5+b
-         MgFEMpNsYANvLmvrxUhw7RJYnGTDWalTtz84Wbf7yAFKgXFlPoTzbRF2I5rcmLMX5D+d
-         mWAF4J9vHtYJTt5eV9MRJHBrMRcKfpPm0eelPkBZH3At5sUTe18ZjHRSzlMqZFIAn0oK
-         mcMb88Je96Q7UO0+lQIf6Y+Z2lHyIrBrsSm0Lfkecr3eId7046zC3IkWF/2uRXqKVmxi
-         f8fQ==
-X-Gm-Message-State: AFuF++ku5yLxzc58ZyqJBFp014hUHNc+dr0zR1BqRCJNHcTjzR/Rgj3k
-	HGSXNIKh5Bx1bMwYY6BBretYs4j4AOlJJXTz40eBjrq9JbQMSQU9f8wC9eRVZ/5l4a9cTVufqTx
-	ByOIlo7g=
-X-Gm-Gg: AYBFou24cnXzCJuzot+f5FNoN26rlEA7AMFSxHf9sc2QFwnE86koSogjk/qScHtqCko
-	4GZYT8ruEN+pA5tWIXa3R2rifqTBg+GmE/t8zSxt/sde3qb0xWVobrQGttCA/KcI2Yxkh0kUOZT
-	AXb4+i7lip/GVv+Koagm0U1p2WRAG02nEtPjFWCvj97D6UYRbF7IDIfBMEwtC0A3et4JHa5Y/rC
-	MlSUDWJJlNEjjpPMSF7kp/dem8xYfUFKiE1IzYxCe2bttUwG+vw8htIO8vYTJqf3Nczt7rLK65R
-	b17KBeHiitv2x08uKUewHS6ytZU0csbTQ0KVn08KSRP1t/egxr2L70W+atrot0dQNrIrqvo3QQS
-	RwFR/Mc5KGmk0DuZpLDyx2hdxyYQJ3rRW7FUt9DE1uZo8lyXMSyUwX1RVfhuYqBpFvlNXfOyHtk
-	XIdU5jIrWZ/cKN/PsDbCKZfDToujkjeDvYizY+gk030t2n/MyF4q9DKgBJmeHmGVdb2w0kQ5j3i
-	krCmOgybpxdI7EEEibyhgOy3kX0tqKlQhRxAe+0A7M=
-X-Received: by 2002:a05:6820:c0d9:20b0:6b5:ec3f:497d with SMTP id 006d021491bc7-6c0a8a27f9dmr1999129eaf.24.1789141326313;
-        Fri, 11 Sep 2026 08:42:06 -0700 (PDT)
+        bh=0vHIYEHJqme0gI4jLTtintEZJNWn/ID2vfmcQE7LyaU=;
+        b=IdM/8AxdlNB2GaTIhm9p18CohptjAi+35k0LhKBqyyCKJ2k/S1tMP8+qHsiZLaNPXz
+         CYG/SrneaOVf3prq3VFmYdBil/FTL/hjVIwDc6ekiFJoEYQ1KeAvP16a70Q6eyguBU2c
+         V3M0daU+y/VJnZTxJ/++iFN4I5DF02jbmUl2/Y1DNpaZhu/E04hsQke7js4watBHznkP
+         AgsTvrxaQ0xQO/ga4hfZFAjWMO4yKFEZMw2zgHzlAWuBTfQ4anJtMMb9uLU/9B+V33VY
+         OCx/GHHoOpfGlCFHpnuqjwyq7LYwioRNtIIkMAuWeMqUJhhU2PnIppeIEWMgd1xq7KxW
+         y2OA==
+X-Gm-Message-State: AFuF++neBr/oMg83E2nVo6fEnM4CEzJ/QnN7uZn+LaKtGxoW58wR78pn
+	84nmPhSJLzblbzcBoUYCHouuXVy8hwTh3GB3gA/o7LPEB8hW9Ycw/BcNIxCkr4rdqS4NQAU/AS+
+	pePai5GM=
+X-Gm-Gg: AYBFou3OMe10fUoyXYxkyizJtDdWxbYvYf8+eRGy4bNEfCbt3SzsOPuvXzFpXLMFrrC
+	z5KqjpYECquq0tvCbT02+Tzk70GRTdU5O/3y+376rTULbIeDrlfbSdqIrdBnHsSjGaDSkJkOHFW
+	SLV3t77ttJR+kQ2fGyk3VtQ7IqaukSQctFQ+pLtV/R8MUsC+xY+fKaQpu1SgWAy22eowUc7YH3N
+	aNlui4uXuLcdVIQMXKkTo82gE4jtN6pyz+eYRMIwAGIxbl5mIhbKqasoLlraoWy29ciyrywsAc1
+	Qy8xAR7kMaOnPE5QPc3rpGAzv5a/prDsYJUuSx9kkz54M93+ZseqtD8pXed/hTIqYvxI779Fa6p
+	5xNuwxLpqrne0NcYlgKFDmg/yKtnCQdaEqPmTHcA7Tpu4YbnulhDPaIuOE6EI/Ouu1IUdTCprLl
+	HHz9cvgul3jLtjpm4tryJb9sv8G24ncqN8viHfRbqFENIP4hGEOGlicuJ6DpPMXucLRYFwGidZM
+	V/FXtpkux7aPTl7u1ZAPGHHQUwJuPWdihQgik5dEVPO
+X-Received: by 2002:a05:6820:c0d4:10b0:6be:d716:524d with SMTP id 006d021491bc7-6c0bcea90bcmr2738418eaf.64.1789141327530;
+        Fri, 11 Sep 2026 08:42:07 -0700 (PDT)
 Received: from m2max ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c09690af1dsm2802199eaf.1.2026.09.11.08.42.05
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c09690af1dsm2802199eaf.1.2026.09.11.08.42.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 08:42:05 -0700 (PDT)
+        Fri, 11 Sep 2026 08:42:06 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org,
@@ -67,9 +67,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	mingo@redhat.com,
 	peterz@infradead.org,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 08/15] io_uring: split io_uring_enter() and io_submit_sqes() into helpers
-Date: Fri, 11 Sep 2026 09:40:58 -0600
-Message-ID: <20260911154148.644489-9-axboe@kernel.dk>
+Subject: [PATCH 09/15] io_uring: keep the submission plug on the io_submit_sqes() stack
+Date: Fri, 11 Sep 2026 09:40:59 -0600
+Message-ID: <20260911154148.644489-10-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260911154148.644489-1-axboe@kernel.dk>
 References: <20260911154148.644489-1-axboe@kernel.dk>
@@ -81,244 +81,89 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move the tail of io_submit_sqes() into io_submit_sqes_end(), and split
-the IORING_ENTER_GETEVENTS handling out of io_uring_enter() into
-io_uring_enter_finish() and io_uring_getevents(). A later patch needs
-to resume io_uring_enter() from a different task than the one that
-started the syscall.
+The submission plug is embedded in the ring's submit state, which only
+works while a single task runs the whole batch. With a submitter
+identity handoff another task finishes the batch, and the block layer
+caches current->plug across sleeps. Put the plug on the stack of
+io_submit_sqes() instead, it stays with the task that started it.
 
 No functional changes in this patch.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 179 ++++++++++++++++++++++++++++----------------
- 1 file changed, 116 insertions(+), 63 deletions(-)
+ include/linux/io_uring_types.h |  3 ++-
+ io_uring/io_uring.c            | 10 +++++++---
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 50a4a0ad222f..0b0d73688b8c 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -298,7 +298,8 @@ struct io_submit_state {
+ 	bool			need_plug;
+ 	bool			cq_flush;
+ 	unsigned short		submit_nr;
+-	struct blk_plug		plug;
++	/* the submitting task's plug, lives on its stack */
++	struct blk_plug		*plug;
+ };
+ 
+ struct io_alloc_cache {
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 61053421d809..b09221e239c0 100644
+index b09221e239c0..100ade1eee3e 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -2010,12 +2010,31 @@ static bool io_get_sqe(struct io_ring_ctx *ctx, const struct io_uring_sqe **sqe)
- 	return true;
+@@ -1810,7 +1810,7 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
+ 		if (state->need_plug && def->plug) {
+ 			state->plug_started = true;
+ 			state->need_plug = false;
+-			blk_start_plug_nr_ios(&state->plug, state->submit_nr);
++			blk_start_plug_nr_ios(state->plug, state->submit_nr);
+ 		}
+ 	}
+ 
+@@ -1938,13 +1938,14 @@ static void io_submit_state_end(struct io_ring_ctx *ctx)
+ 	/* flush only after queuing links as they can generate completions */
+ 	io_submit_flush_completions(ctx);
+ 	if (state->plug_started)
+-		blk_finish_plug(&state->plug);
++		blk_finish_plug(state->plug);
  }
  
-+static int io_submit_sqes_end(struct io_ring_ctx *ctx, unsigned int entries,
-+			      unsigned int left)
-+	__must_hold(&ctx->uring_lock)
-+{
-+	int ret = entries;
-+
-+	if (unlikely(left)) {
-+		ret -= left;
-+		/* try again if it submitted nothing and can't allocate a req */
-+		if (!ret && io_req_cache_empty(ctx))
-+			ret = -EAGAIN;
-+		current->io_uring->cached_refs += left;
-+	}
-+
-+	io_submit_state_end(ctx);
-+	 /* Commit SQ ring head once we've consumed and submitted all SQEs */
-+	io_commit_sqring(ctx);
-+	return ret;
-+}
-+
- int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
- 	__must_hold(&ctx->uring_lock)
+ /*
+  * Start submission side cache.
+  */
+ static void io_submit_state_start(struct io_submit_state *state,
++				  struct blk_plug *plug,
+ 				  unsigned int max_ios)
+ {
+ 	state->plug_started = false;
+@@ -1952,6 +1953,8 @@ static void io_submit_state_start(struct io_submit_state *state,
+ 	state->submit_nr = max_ios;
+ 	/* set only head, no need to init link_last in advance */
+ 	state->link.head = NULL;
++	/* on the submitter's stack, the block layer caches current->plug */
++	state->plug = plug;
+ }
+ 
+ static void io_commit_sqring(struct io_ring_ctx *ctx)
+@@ -2035,6 +2038,7 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
  {
  	unsigned int entries;
  	unsigned int left;
--	int ret;
++	struct blk_plug plug;
  
  	if (ctx->flags & IORING_SETUP_SQ_REWIND)
  		entries = ctx->sq_entries;
-@@ -2026,7 +2045,7 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
- 	if (unlikely(!entries))
- 		return 0;
+@@ -2047,7 +2051,7 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
  
--	ret = left = entries;
-+	left = entries;
+ 	left = entries;
  	io_get_task_refs(left);
- 	io_submit_state_start(&ctx->submit_state, left);
+-	io_submit_state_start(&ctx->submit_state, left);
++	io_submit_state_start(&ctx->submit_state, &plug, left);
  
-@@ -2052,18 +2071,7 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
- 		}
- 	} while (--left);
- 
--	if (unlikely(left)) {
--		ret -= left;
--		/* try again if it submitted nothing and can't allocate a req */
--		if (!ret && io_req_cache_empty(ctx))
--			ret = -EAGAIN;
--		current->io_uring->cached_refs += left;
--	}
--
--	io_submit_state_end(ctx);
--	 /* Commit SQ ring head once we've consumed and submitted all SQEs */
--	io_commit_sqring(ctx);
--	return ret;
-+	return io_submit_sqes_end(ctx, entries, left);
- }
- 
- static void io_rings_free(struct io_ring_ctx *ctx)
-@@ -2583,6 +2591,94 @@ struct file *io_uring_ctx_get_file(unsigned int fd, bool registered)
- }
- 
- 
-+static int io_iopoll_getevents(struct io_ring_ctx *ctx, u32 min_complete,
-+			       u32 flags, const void __user *argp, size_t argsz)
-+	__must_hold(&ctx->uring_lock)
-+{
-+	int ret;
-+
-+	ret = io_validate_ext_arg(ctx, flags, argp, argsz);
-+	if (likely(!ret))
-+		return io_iopoll_check(ctx, min_complete);
-+	return ret;
-+}
-+
-+static int io_wait_getevents(struct io_ring_ctx *ctx, u32 min_complete,
-+			     u32 flags, const void __user *argp, size_t argsz)
-+{
-+	struct ext_arg ext_arg = { .argsz = argsz };
-+	int ret;
-+
-+	ret = io_get_ext_arg(ctx, flags, argp, &ext_arg);
-+	if (likely(!ret))
-+		return io_cqring_wait(ctx, min_complete, flags, &ext_arg);
-+	return ret;
-+}
-+
-+static int io_getevents_ret(struct io_ring_ctx *ctx, int ret, int ret2)
-+{
-+	if (ret)
-+		return ret;
-+	/*
-+	 * EBADR indicates that one or more CQE were dropped. Once the user has
-+	 * been informed we can clear the bit as they are obviously ok with
-+	 * those drops.
-+	 */
-+	if (unlikely(ret2 == -EBADR))
-+		clear_bit(IO_CHECK_CQ_DROPPED_BIT, &ctx->check_cq);
-+	return ret2;
-+}
-+
-+static int io_uring_getevents(struct io_ring_ctx *ctx, int ret,
-+			      u32 min_complete, u32 flags,
-+			      const void __user *argp, size_t argsz)
-+{
-+	int ret2;
-+
-+	if (ctx->int_flags & IO_RING_F_SYSCALL_IOPOLL) {
-+		/*
-+		 * We disallow the app entering submit/complete with polling,
-+		 * but we still need to lock the ring to prevent racing with
-+		 * polled issue that got punted to a workqueue.
-+		 */
-+		mutex_lock(&ctx->uring_lock);
-+		ret2 = io_iopoll_getevents(ctx, min_complete, flags, argp,
-+					   argsz);
-+		mutex_unlock(&ctx->uring_lock);
-+	} else {
-+		ret2 = io_wait_getevents(ctx, min_complete, flags, argp, argsz);
-+	}
-+	return io_getevents_ret(ctx, ret, ret2);
-+}
-+
-+/* Finish an io_uring_enter() call that submitted and holds the uring_lock */
-+static int io_uring_enter_finish(struct io_ring_ctx *ctx, int ret, u32 min_complete,
-+			  u32 flags, const void __user *argp, size_t argsz)
-+{
-+	int ret2;
-+
-+	if (!(flags & IORING_ENTER_GETEVENTS)) {
-+		mutex_unlock(&ctx->uring_lock);
-+		return ret;
-+	}
-+
-+	if (ctx->int_flags & IO_RING_F_SYSCALL_IOPOLL) {
-+		ret2 = io_iopoll_getevents(ctx, min_complete, flags, argp,
-+					   argsz);
-+		mutex_unlock(&ctx->uring_lock);
-+	} else {
-+		/*
-+		 * Ignore errors, we'll soon call io_cqring_wait() and it
-+		 * should handle ownership problems if any.
-+		 */
-+		if (ctx->flags & IORING_SETUP_DEFER_TASKRUN)
-+			(void)io_run_local_work_locked(ctx, min_complete);
-+		mutex_unlock(&ctx->uring_lock);
-+		ret2 = io_wait_getevents(ctx, min_complete, flags, argp, argsz);
-+	}
-+	return io_getevents_ret(ctx, ret, ret2);
-+}
-+
- SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
- 		u32, min_complete, u32, flags, const void __user *, argp,
- 		size_t, argsz)
-@@ -2639,57 +2735,14 @@ SYSCALL_DEFINE6(io_uring_enter, unsigned int, fd, u32, to_submit,
- 			mutex_unlock(&ctx->uring_lock);
- 			goto out;
- 		}
--		if (flags & IORING_ENTER_GETEVENTS) {
--			if (ctx->int_flags & IO_RING_F_SYSCALL_IOPOLL)
--				goto iopoll_locked;
--			/*
--			 * Ignore errors, we'll soon call io_cqring_wait() and
--			 * it should handle ownership problems if any.
--			 */
--			if (ctx->flags & IORING_SETUP_DEFER_TASKRUN)
--				(void)io_run_local_work_locked(ctx, min_complete);
--		}
--		mutex_unlock(&ctx->uring_lock);
-+		ret = io_uring_enter_finish(ctx, ret, min_complete, flags,
-+					    argp, argsz);
-+		goto out;
- 	}
- 
--	if (flags & IORING_ENTER_GETEVENTS) {
--		int ret2;
--
--		if (ctx->int_flags & IO_RING_F_SYSCALL_IOPOLL) {
--			/*
--			 * We disallow the app entering submit/complete with
--			 * polling, but we still need to lock the ring to
--			 * prevent racing with polled issue that got punted to
--			 * a workqueue.
--			 */
--			mutex_lock(&ctx->uring_lock);
--iopoll_locked:
--			ret2 = io_validate_ext_arg(ctx, flags, argp, argsz);
--			if (likely(!ret2))
--				ret2 = io_iopoll_check(ctx, min_complete);
--			mutex_unlock(&ctx->uring_lock);
--		} else {
--			struct ext_arg ext_arg = { .argsz = argsz };
--
--			ret2 = io_get_ext_arg(ctx, flags, argp, &ext_arg);
--			if (likely(!ret2))
--				ret2 = io_cqring_wait(ctx, min_complete, flags,
--						      &ext_arg);
--		}
--
--		if (!ret) {
--			ret = ret2;
--
--			/*
--			 * EBADR indicates that one or more CQE were dropped.
--			 * Once the user has been informed we can clear the bit
--			 * as they are obviously ok with those drops.
--			 */
--			if (unlikely(ret2 == -EBADR))
--				clear_bit(IO_CHECK_CQ_DROPPED_BIT,
--					  &ctx->check_cq);
--		}
--	}
-+	if (flags & IORING_ENTER_GETEVENTS)
-+		ret = io_uring_getevents(ctx, ret, min_complete, flags, argp,
-+					 argsz);
- out:
- 	if (!(flags & IORING_ENTER_REGISTERED_RING))
- 		fput(file);
+ 	do {
+ 		const struct io_uring_sqe *sqe;
 -- 
 2.55.0
 
