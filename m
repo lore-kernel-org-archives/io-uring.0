@@ -1,102 +1,171 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1C634908C0
-	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B843DC4B3;
+	Fri, 11 Sep 2026 16:33:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789142152; cv=none; b=A6wKnXQvnoRRlonDsyCHNFfjybfCAO+CixuP/WkQl3s1znJhqvYslPqF3ETjttB5I7uxjLiIINUn4lf/0M/NEKEsJwPbL0x8N0imhPzpEnHrPOLjj7wivixULbxVdNBB4+Q4QRpZyiT9Nl6syy0pw/0u5LGbAGW5SZv7fY/ZaAw=
+	t=1789144440; cv=none; b=H+VOfJAi9GeUVAED15Qp08skk3CbpsQHCe2EX/iPUJxH/3AX2LMVN3IhVOPodMvTOFcHyfNNdMR23w80OqdDhVg0klhkH3EOYgSHK5VVz3hUmlHeJAKXs7cDMN5I+X4vxEVy2hgW8VW5riF2UMQyH6aCX2l1NzqNaVEjDnKJK4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789142152; c=relaxed/simple;
-	bh=8nM+GmBzGntH+3kOs1PPNBx1jMv7LwAWc/7uGLUaP8I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DYlHi9Tlm9gpj48NPPRPW9PxBG59SUbDs3E13iCMJnLO6Jy411sX6NgSeUob3/g5IzYWWWqoAmCs7LktzvyPb1okTJu3j5LMxDQNZGobU+Un3mheXLSt1QxPWo2s2k/rzmnAeZctHcqnewpMCcpCtZvBk3ZUNGgwsZZZHxiz+Nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=BBh/JCCC; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1789144440; c=relaxed/simple;
+	bh=TnNDaPbUeOFv+s+5IEjku1D26sM+Attn0rJ1BMok/Pw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=rgr6NTSfpGjAAJgq8Pre/k53vSlUh9AYdhDjMJW4Kr02Djv/1mzRuLj/Y/mqZD7x9ChHQfTXvcfrDrIJUJ1LLw6D7TFtsr4AhXE8hkuNiKipRHkvzrLYBCRaBRfAAt2PhprQPtPQYXCC2anTb/8tpPkGmrYqEbzFxy5LxezBj5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Hu7P6cGT; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=easVLzsI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=o9aIEcBn; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=zs3EhgNF; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="BBh/JCCC"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4b381337e1fso1309590b6e.1
-        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789142148; x=1789746948; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mY3mJsu9HnEYIUkDsYXuRTX7CMGRl76Y0CJF/rnIbRs=;
-        b=BBh/JCCC1kbCjsAOrpWjtnAZNMhnqz/S6JMu7rMVxv57hq/WSgTfxSRQzzX4wGfobA
-         JIokX9U7dNHq4rrB2yJJC5QAsffXzxLlSN4Or1m09T7A5fPu1+F8x84zahBZYsE4IKea
-         8OZ8K+XgpbnVPxAozhx/s+jGc9x6d4yTQZ4smGzKxTYghTvY17h/JEFJCBc+QZ3ktKPp
-         UJ+3pZX0db2TtKAFz65vi55yeoJi8lKwUie8oMRop9KdbvyuGsYkbR47E2/Z1pgHJExw
-         BA/AJhrA4rKXBYeVA9eaJbQTnK2pDBAwNj67SSwnTxdBnwNGa1vWAkhDMp1UMHIxuuDB
-         Wo+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789142148; x=1789746948;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mY3mJsu9HnEYIUkDsYXuRTX7CMGRl76Y0CJF/rnIbRs=;
-        b=b7/qDkElOcgQ0BcfUAxlhLAf7yQ5IqQRfZgnO0AMnF5ZnznQYL2n+Zu8EnpwW+i1Ar
-         IZoqy6vrLevWDIoFDOdd76AMm3YYy8IHoXLboBVZNoJDjpRSa39PLQRt/T2TuZ2cS4jz
-         aO0/KbwmusTI4v+iKFAKuT5RD30FVmhuaL9vk319wPUmIZ6XKW7hYyu4yOYW8jqbiYlr
-         A82yLCyZ9nPAc9AZT/UXpQIqSMySMr9y4yqUdI6rIV6mrU37F4AnmgX/QPac/FvaNPwT
-         EBnkXkaI18mx+9CBG4ASTzXua2pM9kCpHyGIk+ETRVZ89bq4YwHU0zGOmszB/A8CsYxW
-         3PmA==
-X-Gm-Message-State: AFuF++lk4vJcFN/dvAd+6FfD/w/uvTTOYL4YuOp0/zTtWojC186dA5Ej
-	yQkaFUQPJv/22B5Ja7cvVYblXHLxjaJkP5QuPBqyBGzcI7iq2wVkadfvNvrkNMjHqlM=
-X-Gm-Gg: AYBFou1fPa/J8aSN2B+qHt9KnBgQmK30owvW+vwVW7T99Av1ZBo+RwLHqqVIYBaOCTj
-	nD4RhlTEK5QXU6yRLb2hHi0N6LNTqe+lm6A/vras24LLxoacDDpUMYH25mH8rdPB46XjqEwAssG
-	pnrMKo1KqjnmdM7O3qlYov71pf2pk1JwQtrtQ6X7/jvDOKPVgukSWpqC5h0CwnGOCvGqBQKbJii
-	IMRH1ZyyqFconAnB+s5ZjSqo8iI06uk9freUpIuW0BNt+rU5fJYk2xFMLlNkeZ/F6YYGkAbjZg5
-	pazvoAhjhYJSgJi5GkcTnDjmh17qIYyEszo9xRXnvkMf2vx6UbS/zKcH9Xl9Qe5JR/sUZvXBhO4
-	2s1bfixti2Ncrnz15D7hiVW3+nMx1fy/nQkawdsZhQdHlOgNElKNPx4R4R0t/1p3pSv1cdJC0Mm
-	u+22MEFbnbrAh8wS0SRALrIUKlHhxmEiflm9ReVnBSYscT95z4e1YCi1JOanlIoE4q+vOoBVyeh
-	XcyPk8ef2tP3jXo04/6ZeSeyLZehaVy5Cn58Fs1OfTXa4PF06QLFbo=
-X-Received: by 2002:a05:6820:f00b:b0:6c1:d6a4:9268 with SMTP id 006d021491bc7-6c1d6b3fe38mr785366eaf.5.1789142147951;
-        Fri, 11 Sep 2026 08:55:47 -0700 (PDT)
-Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c09a31f6b6sm3457138eaf.11.2026.09.11.08.55.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 08:55:47 -0700 (PDT)
-Message-ID: <962249a0-f5fd-447b-a52b-f5bef28f600f@kernel.dk>
-Date: Fri, 11 Sep 2026 09:55:46 -0600
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Hu7P6cGT";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="easVLzsI";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="o9aIEcBn";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="zs3EhgNF"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 658F121D4C;
+	Fri, 11 Sep 2026 16:33:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1789144430; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p/UJqNfydeXO6VFPzh2hLVIkw0b4mCxKVWY6mrleRz8=;
+	b=Hu7P6cGTctWN2Gn0H5o5jpYrXzT39PP1hcuVDJ/RxbvGB/fkYN6VckU5UZF4PptTFIog6g
+	M73dki3lqZVyVd+OTfA+KmvW2GFYuulZ8ZIE+W53yv2MAjxV1///WDiYxSJ0tHsgn2uqg+
+	IRaiQWPEADsAcDq2OQooSuVVOp0wb58=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1789144430;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p/UJqNfydeXO6VFPzh2hLVIkw0b4mCxKVWY6mrleRz8=;
+	b=easVLzsIAKR2bafPwZO7d5SK4XN5sHiJX88vJWeTOKi3bvrAT4k09ER9rqHTYEJmrYFpzh
+	mhhv+YKn+Ias20Bw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=o9aIEcBn;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=zs3EhgNF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1789144426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p/UJqNfydeXO6VFPzh2hLVIkw0b4mCxKVWY6mrleRz8=;
+	b=o9aIEcBnjQh55QfyQzcjYT8+NEMksn9Q3FS04/9xSLhglvsAj9OUuoAIi//yoDdP1oFOEM
+	CNcNvMfT5vfKZtSECaI90pmvxtAM3EqYszBl6KR0vtWcO/E92Hz4CUlaOUlkpk3xJZ94Hm
+	f2K5kAPXKDHEiIdFQPxmRuvAfUuA7DE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1789144426;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=p/UJqNfydeXO6VFPzh2hLVIkw0b4mCxKVWY6mrleRz8=;
+	b=zs3EhgNFc18HLWJPNXJeEqlctbUfUvM2nXMSQkBkgraOAlh3ibNfBc8Cear/teDKBLfN/o
+	PNx/HAjTA/ZjlDBg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9E473132D3;
+	Fri, 11 Sep 2026 16:33:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Ng/3GGktpGqJeQAAD6G6ig
+	(envelope-from <krisman@suse.de>); Fri, 11 Sep 2026 16:33:45 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Jann Horn <jannh@google.com>, Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, Dominik Maier
+ <dmnk+artist@google.com>, stable+noautosel@kernel.org, Jann Horn
+ <jannh@google.com>
+Subject: Re: [PATCH] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ
+ array slot
+In-Reply-To: <20260911-uring-fdinfo-tighten-v1-1-47c62a154aca@google.com>
+Organization: SUSE
+References: <20260911-uring-fdinfo-tighten-v1-1-47c62a154aca@google.com>
+Date: Fri, 11 Sep 2026 13:33:42 -0300
+Message-ID: <87y0d721eh.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ array
- slot
-To: Jann Horn <jannh@google.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- Dominik Maier <dmnk+artist@google.com>, stable+noautosel@kernel.org
-References: <20260911-uring-fdinfo-tighten-v1-1-47c62a154aca@google.com>
- <CAG48ez1dbEXQgvvAxchiiakym7KJntGFJ3f_obfnDwFouYZQnQ@mail.gmail.com>
- <5a656a9a-afff-4309-9007-2fcb6d3ae1f8@kernel.dk>
- <CAG48ez2J-MwLCS1NHV1+Yu12JpxiiL7_qfN6+37CAdeVZ8wJRQ@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAG48ez2J-MwLCS1NHV1+Yu12JpxiiL7_qfN6+37CAdeVZ8wJRQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Spam-Score: -3.01
+X-Rspamd-Queue-Id: 658F121D4C
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[artist,noautosel];
+	RCVD_TLS_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Flag: NO
 
-On 9/11/26 9:52 AM, Jann Horn wrote:
-> On Fri, Sep 11, 2026 at 5:50?PM Jens Axboe <axboe@kernel.dk> wrote:
->> I did spot that as well, thanks for finishing it. Your fdinfo idea keeps
->> on giving, at least this one doesn't really matter :-)
-> 
-> Ugh, yes. I hope it is at least somewhat useful for debugging, and
-> doesn't _just_ cause lots of bugs?
+Jann Horn <jannh@google.com> writes:
 
-Lots of bugs was earlier, and to be fair this one is caused by the more
-recent addition of the mixed size CQEs. Everything is under the main
-lock these days anyway, so it's more logic bugs like this one rather
-than races, etc. I just like blaming you (a little bit), but in practice
-it's not your fault.
+>
+> diff --git a/io_uring/fdinfo.c b/io_uring/fdinfo.c
+> index 3ae4804765b9..0b656a6c8428 100644
+> --- a/io_uring/fdinfo.c
+> +++ b/io_uring/fdinfo.c
+> @@ -155,9 +155,11 @@ static void __io_uring_show_fdinfo(struct io_ring_ctx *ctx, struct seq_file *m)
+>  	for (i = 0; i < cq_entries; i++) {
+>  		struct io_uring_cqe *cqe;
+>  		bool cqe32 = false;
+> +		bool is_last_cqarray_slot = (cq_head == cq_mask);
+>  
+>  		cqe = &r->cqes[(cq_head & cq_mask)];
+> -		if (cqe->flags & IORING_CQE_F_32 || ctx->flags & IORING_SETUP_CQE32)
+> +		if ((cqe->flags & IORING_CQE_F_32 || ctx->flags & IORING_SETUP_CQE32) &&
+> +		    !is_last_cqarray_slot)
+
+Could we have a small comment here explaining we can't just trust
+IORING_CQE_F_32 for the last slot?  it is very non-obvious to me from
+the code. Something as simple as (if I got it right):
+
+/* userspace can manipulate IORING_CQE_F_32 which is usually harmless,
+ * except in the last CQ slot.  Ignore the flag only for that slot to avoid
+ * reading memory out-of-bounds.
+ */
+
+Either way,
+
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
+
+Thanks,
+
+>  			cqe32 = true;
+>  		seq_printf(m, "%5u: user_data:%llu, res:%d, flags:%x",
+>  			   cq_head & cq_mask, cqe->user_data, cqe->res,
+>
+> ---
+> base-commit: 50d05c7c76c96b90462f24debacca971d2e86713
+> change-id: 20260910-uring-fdinfo-tighten-1b1c18945305
+>
+> Best regards,
+> --  
+> Jann Horn <jannh@google.com>
+>
 
 -- 
-Jens Axboe
+Gabriel Krisman Bertazi
