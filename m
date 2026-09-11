@@ -1,264 +1,178 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CA0368263
-	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 17:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789148611; cv=pass; b=MKtVWMH3nrvc/L94gPSIgDylw/vn8OHKtQJjDiXH4sZFmgyyFWSvQ2BouMfzfxKvHsDuEGEyb0WvDRo2ORfTpm1j0CaBuwY3fRgRYilVGyeK6YdJwno3c1dKL7WlFpovV8kY/BwYIZy1xn1NtoQyLpHDBxRNGxSoB9fVDR7Cs7o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789148611; c=relaxed/simple;
-	bh=FjAxvxeArT6oGSMgJeJbHTSWRefCPbjzTtOgKthZtsY=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=sTOhGL2aFF3Ig+NLlakh5qjGT/X/xg4fiQrfyJX2BqeskkZqGaCJuTuui9ak9hxes5w9ywrv5wBfL9c+yC2eizYSX3GORZX+hpyGeg//kYOMq2dFvfDDwSKRsaH13hfHsfkWVIVId82qoKW/LQ0AqjqodVoF4xTrWu5W7I5jjfc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CQmtgcwE; arc=pass smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6524ACC9B
+	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 17:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789149121; cv=none; b=Elr3VuL6kLE24darcRkIQWQqlLoZ7KU3PRQoEL66WX7vSmRmDzqyBAZ60MeHDrq4OVpP77qIhx74mdQsOnA1UkO6hoF2L/zJrqrm1HxBNRBbPH6oVL6++veggzSBUJrEmCrlmaQ6rJ1kt+uUj/vxIQvdm+xolC3g1mvtbE2iu4Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789149121; c=relaxed/simple;
+	bh=k3OTarJevq2L9zcrC5c0odON51Ym9WgieNS16JhSSvE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aR7kLNKcrAo26Hg0hFuCKQBrXcKBLXgdx4kDCGhidzSUGH6xemO4Hxf/WbbWZ86cuC26hUBufqwD6IXOAyXXx1B1RsKwMYXjFMguO7leFzsABX5iA81tK0yD7cWKltw2H6MbpUsJGjFIqrtMAYLfrkj11NfwcYOlx06AnVilJVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=hYHJGu/2; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CQmtgcwE"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d6ff390a6cso20825ad.1
-        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 10:43:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789148609; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kOfrTY89ohSIPI9iPpS9/+f1bjmWLJJnvPStTpLM/+Ya+znrKfe8cS9I5WQtZ1R+t7
-         c+4HC/v/EMU4UDQyA4kolxrXjr9Mzf9+3X4xJsVRBMQalm2DyfamnnMPcq78NyR7Nq5p
-         6yjCL0JpU3eq4lSZ1P8h3KA2bFXTDJ5mfsjJu9m8I/mWPGw+rT7Tge9+WBlvfwrwZcBU
-         1Gcyf1ogX/mPZwymjkJ1xt+7LLa+xLSeAV5J9NMF7iqrn2+aCCUDcGDVKqfhs546nBcK
-         B1Q9ppNHo7OMLqNUpF22s88hjtTA3ylh60577TkaNZ3wTf53p3+YZjNBMXQNvFpW+LAa
-         SHPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=r5WUKHjjmdQ6lLL56J9wrBm7xGwf/SHC1lNhlHRvsuE=;
-        fh=xmkdoZlihVGLn/6rxcfCrEBzSCvx2mzQ/YwrfuBgL/w=;
-        b=HCpCecJu1SIbhbXhlVuxQl6UogbWkMztkqqagM2aOUPv67UMkdWXiy1KUmQlD+0hGd
-         esgSdWdTTnJrz/fji51mwlHTNcH9l45YuBxyjDog0H3EZeenPDBv3pR1ZtwoW3LZyRsE
-         gN81ofOcwo28eIog5iD+CaAKbygXP0Kviu9PpR0wUz1/fmjWB3MlQxWcjmF24hlRmk15
-         /N+/8SdVOh9D+Fa4JwTxSOm2dbKhhIOxzyPUXPqjXvp/MECOL/a3MwBbFPQXgA5ThDQe
-         Nhk2a/fDivHqsi8c6nnFBNQ4G8X2Y3K0c8/QtgCfIHfl/BGw6GDmaXwO4Y2L8BE4Ux4w
-         Hp0Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="hYHJGu/2"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7e9fc3de7ceso829232a34.1
+        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 10:51:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789148609; x=1789753409; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=r5WUKHjjmdQ6lLL56J9wrBm7xGwf/SHC1lNhlHRvsuE=;
-        b=CQmtgcwEXtjJw/b/O33kch8EFg1Q4NIzOGw0ebbcIRIqFjL73yx4GBtxM+wM9Tkwk6
-         BNnqUwrV9VvA+e6CtDE4sdTPPo6YVrUYFETIYJH1+MHQYdoFPukaN8g2mdrV7nUUbpYZ
-         EmcGm5SqdMLqSa9s9jrks/ByvrqtTh/L/yWp2iczr1oNBSf2jGjz5vhfQd6PKLREiLLj
-         woQ1UaCl0384imXlbxSHksqbvcauPLnXUWvbyDYPmIAFK+BKWWYoEmLNY2E81Cp8SOh+
-         qV0p0ycozpVtfN5CWZuB1WKwvMLQ8IPLvnJc6Mg1JNdgQ8GJAT+0ahhHx8R1eit0yxDP
-         ZF5Q==
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789149117; x=1789753917; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9olr04AtyTbiPDIyx9X9sacFZEY3X0bYJ7/A2XJEuFA=;
+        b=hYHJGu/2ziX4bBkGiewO5v1bBnuOmCJ2LEW/2wTKOMcv9ON1YAFGMVMyg0rID03hSb
+         7VsedsnO/sxN3bQU9bDxp5mMYsASr66mWUEr/Bt2w1rPaHsNgAzSzTVbHK04CGjgEpjc
+         uoG6dGpnUFQ1wStLJVDj27M8ZPQhSLKGccd9bzEqaCGr9jA31BFsYE3jgi2jQqrNGENc
+         RiZ1uZqNsspWmBSqpvyWfw+nfl6JQUyTMk9P9kW5WJYqBGWtWWofkC+6Z7dM+oISpyNp
+         nGEtgqNWZDEbUyPo25IKhBLjFedxj6eXDoUkyV5MYjkopPW56tls6bi3DpjzcJFiBSo5
+         SXtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789148609; x=1789753409;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=r5WUKHjjmdQ6lLL56J9wrBm7xGwf/SHC1lNhlHRvsuE=;
-        b=oZzZ89B7KPxB6NiLPl2PfNRX4605ddW8EL/wQ7Wen7PPY8+8fhF5HxyPSyFmI9Yjzb
-         fbeeyf2J1h/nVCw26w0c/Sxj2bHkRC+YHkUIX5M1iOqg0bws5T4HgpQI5awQu+SIQEmB
-         zUaHqZOdLUpz1zGbbttHB4ZEBYgwpTg1kKsadfq8C10GPz3zIOtlm0wVYTIUxrFUIghd
-         Un0aBh+WpB4qD80DQ2vIA0rABsL2+chI1bPRvYuzuz4gCBV0AVlDaskfHkX4RvCLEJWQ
-         JhqBdlAQK2Z0TH1RG3vrUSNMHBNINMyn1iQmXbOG2zUMsIKLegNgv3umMJXP5XzbW/Q0
-         DV9A==
-X-Forwarded-Encrypted: i=1; AKwUvBzYy9jGGl1u3sCoUyZ2rmsmxyKaQuTztz8P2otQX4ZxJid3L/U83cCej65oBFD3wMoFOTKZrtWL5Q==@vger.kernel.org
-X-Gm-Message-State: AFuF++nA8qAKqAwCfq0p0+2l8gmooPjjR5aXGkygWxXKm3un4LZywISG
-	0Fxni8/5eaSmsVLOZ0ZBmaAhfsPxdujnE2aJDwS4E4cDFrgGe8NFJ7EsidJyy1AqqRlQaFVAwOK
-	BC61uKQlZf8WN/x4kEQKxAI2XREeeXRC0e7klOChGVc7vFO1/3441/gUpZUY=
-X-Gm-Gg: AYBFou2HJT5dkBJeWgutB0KntxPtQtOYtYYVhDDNarjTin7txehkaFmXlkQaAfsEqUd
-	kR/448uXA97kLG2kSTOyTVM/JIuYmLuK8RtUgb1GAKFgfVloISNgslfU6AMGisZA4gBnCCjQyAr
-	XzosFQOw/d2piXNDyuUx0K8vnbgsiiXJ/LtNGAA8D++6pZ0aeMexcZbkXBixWKnX8Pziq5nz2NE
-	/hThn1Thos2O0CwkwbKYBEklcj7JMVVGlFrVd/L/LweDyV+WjHMjqsY8aoZzeWI1BPqh0SV9fN2
-	JyvroRBhybzd2+Zi/mt2LfVOmNUhDrePQ2QJC7wjlbrJLMRVvpzcLL4TNsXGDAWEoF9EOCSt6W4
-	RDY3D1URZ/UhDm6bO+ldF+K99d73xWCKTFJUpfAFAXw==
-X-Received: by 2002:a17:903:90f:b0:2cf:4353:f117 with SMTP id
- d9443c01a7336-2dd47920cc3mr593535ad.0.1789148608672; Fri, 11 Sep 2026
- 10:43:28 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1789149117; x=1789753917;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9olr04AtyTbiPDIyx9X9sacFZEY3X0bYJ7/A2XJEuFA=;
+        b=pOC/YESO2qY76oRILRmeizheN3S35XsbcxVzZgCmI/42Rl0+pGZs2ATmlyqK5Tjr5L
+         rzpxfYaO7BaX2EczQbvwEzLrwE1a4wy6XkTH1K7xs0sR1peZ9xKA81eb9D5GoC90QFeh
+         8P5fvb4bgI1J/Ll25EUDKbargt+PNUoJqRu4PBYSfGcyKi3mCuTj60KELkX4zfoIXWD2
+         oATk2msCjkaagr3rcKwBZTZ99KhZVeDV4fhLx3juGo7lWzesiH42SK8815+jonUZZkrT
+         Glez9/1OoBXpKnkhYtwUZKWpEeM177H+vf+QmQcdWJY0OSSOTwZ1BxueRiv3qm6WdcHS
+         9k2w==
+X-Forwarded-Encrypted: i=1; AKwUvBy86uPgIh4aakqGNvluGQ7yixypFU2pS3ZYIlyZ2JK+ZPHoCanvBV8AlqL+Srk51VI8o074GJT+8g==@vger.kernel.org
+X-Gm-Message-State: AFuF++mZUH4MB+45cmYQBDnctqCFU7q9mCC48jOLGS6F6qThH2lHXkNP
+	QFErfT/t7pFqB+ZHrjtu58893Doa2UeMi992JB0lv4u3ge5Yh+oJ86YcCP69n6aJxoA=
+X-Gm-Gg: AYBFou3pG+nck2OiqUDvBXTjjamxwvUmJNEGnsBxVeYm5iCqc3Lp8nZDYhFCK2qG1qv
+	MJ8LGI7cTc+Tkus5D0GQVEfsQ/CABltvngfupfX73C+SKe+rLwIRt5cK44TD0GZdQMEnZOTNQtO
+	DEchH9gCJ8TuL6xg3iA6TPdx/h/jx2XqSPEsV+Jt0ZxVgwGn9CVdsW5K8BHOj3bXzauasMCNxa4
+	pDHnXC2LWnKGpEX/1dCO+nBwpd7Gp26aQZucpqaHzRcYRWt3gVzxa719+TrWaHZR1R44Hymojxh
+	msRsR527O+kI062y9mcUBawrQ+mpdPvWH5klEw6U08Rw47ARS/7yiu0F8PkJ6+I+1RAQJNc2kBA
+	bI0w+7RVEuKrSNL/VixJXlmrq1RjTSZp3k9oct4VXrgYgxbfHxTSoMvWpVn0RMBlohnXQLq9vDv
+	8rVngO7G9ts1o0gu8njNpiF2g0ivb05TpNG3gpgFMhHxzvXWyyg3z3exFW4ZJ2sZxLusRSn9nu8
+	f7rX00aIt4iWDW7S5ELa7qCoS0oOxKnZmD6MzdSLM/v/Hjgdc016O6z
+X-Received: by 2002:a05:6830:6abc:b0:7fa:ab72:9dfa with SMTP id 46e09a7af769-803ff447bcdmr4271484a34.18.1789149117393;
+        Fri, 11 Sep 2026 10:51:57 -0700 (PDT)
+Received: from [192.168.1.102] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f670d850sm3108041a34.17.2026.09.11.10.51.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Sep 2026 10:51:56 -0700 (PDT)
+Message-ID: <54310fb2-d4b0-4b97-bc07-68e27e462b29@kernel.dk>
+Date: Fri, 11 Sep 2026 11:51:55 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Jann Horn <jannh@google.com>
-Date: Fri, 11 Sep 2026 19:42:50 +0200
-X-Gm-Features: AcwNN1UEsmAp1ZpjAO5SabZLRYOJVSonFCV3Y-4hFZyv2l_DuysDWBG1-5bTn4o
-Message-ID: <CAG48ez0XjVSR=M--UBauTm8sJuc+ZbhKzaPa3a6wrSVHyoKevw@mail.gmail.com>
-Subject: [BUG] lookup_user_key() calls commit_creds() (hitting BUG_ON() when
- called from io_uring through AF_ALG setsockopt; BPF probably also affected)
-To: David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org, 
-	Roberto Sassu <roberto.sassu@huawei.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
-	linux-crypto@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, 
-	io-uring <io-uring@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 00/15] io_uring: thread identity handoff for blocking
+ inline issue
+To: Gabriel Krisman Bertazi <krisman@suse.de>, io-uring@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ tglx@kernel.org, mingo@redhat.com, peterz@infradead.org
+References: <20260911154148.644489-1-axboe@kernel.dk>
+ <87tsnv1ynh.fsf@mailhost.krisman.be>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <87tsnv1ynh.fsf@mailhost.krisman.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-When lookup_user_key() is called on a special keyring ID
-(KEY_SPEC_*_KEYRING), it can end up calling commit_creds() on several
-codepaths:
+On 9/11/26 11:33 AM, Gabriel Krisman Bertazi wrote:
+> Jens Axboe <axboe@kernel.dk> writes:
+> 
+>> Hi,
+>>
+>> io_uring issues requests inline with IO_URING_F_NONBLOCK and punts to
+>> io-wq when that isn't possible. For a range of opcodes it isn't possible
+>> at all, as there's no nonblocking path in the kernel for them: fsync,
+>> statx, openat, the *at family, xattr, fadvise, splice, etc. Those are
+>> punted unconditionally, and the punt costs a thread wakeup, a context
+>> switch and a task_work completion round trip per request. io_uring HAS
+>> to be cautious to prevent accidental blocking in the kernel, even if the
+>> operations predominantly never block. Sad story. Examples of that are
+>> things like an fdatasync that doesn't block, statx that hits dcache,
+>> openat for O_TMPFILE, etc. All of those would've completed inline just
+>> fine, but io_uring just cannot rely on that.
+>>
+>> This series issues those requests inline in blocking mode instead, and
+>> only pays for the offload if the request actually blocks. But by the
+>> time it blocks, the submitter is deep in the kernel with the request on
+>> its stack, so the work can't be moved to another thread. What we can
+>> move is the identity. If the submitting task blocks, an idle io-wq
+>> worker takes over its user visible identity (tid, signal state,
+>> credentials, scheduling attributes, cgroup, user register state),
+>> finishes the io_uring_enter() call and returns to userspace as the
+>> submitter. The original task finishes the request as an
+>> io-wq worker and joins the pool. Userspace is none the wiser, hopefully,
+>> the same tid came back from the syscall, it's just on a different
+>> task_struct. Folks that have been around a while may remember earlier
+>> attempts at this about 20 years ago.
+> 
+> This is both really cool and seems like very dangerous thing :) Count me
 
-lookup_user_key
-  install_thread_keyring [KEY_SPEC_THREAD_KEYRING + KEY_LOOKUP_CREATE]
-    commit_creds
-  install_process_keyring [KEY_SPEC_PROCESS_KEYRING + KEY_LOOKUP_CREATE]
-    commit_creds
-  join_session_keyring [KEY_SPEC_SESSION_KEYRING + KEY_LOOKUP_CREATE]
-    commit_creds
-  install_session_keyring [KEY_SPEC_SESSION_KEYRING]
-    commit_creds
+Oh yeah, it's definitely crazy and deeply an RFC.
 
-commit_creds() is only allowed when the process does not have
-overridden credentials. commit_creds() also requires that no
-non-refcounted pointers obtained from current_cred() are live in any
-callers.
+> amazed.  I worry this impersonating method will become as tricky as the
+> kthread impersonating model that you replaced with the user workers,
+> though.  I haven't looked at your patches yet, but I wonder how you
+> handle other tasks that have a reference to your task_struct.
 
-lookup_user_key() is used by lots of keyctl operations, where it can
-make sense to refer to special keyring IDs; but it is also used by
-other subsystems (such as AF_ALG, nvdimm, fscrypt, BPF, ...) to look
-up user-specified key IDs. In that case, special keyring IDs don't
-make sense (because they refer to keyrings, not individual
-cryptographic keys), and calling commit_creds() is unsafe.
+That one was different, because these are normal threads, not kthreads.
+They are created similarly to if you did pthread_create() in userspace,
+this is what io-wq workers are already. So it's mostly as safe as io-wq
+already is, by design, which is why the PF_IO_WORKER work happened and
+why kthreads haven't been used since back in the early 5.x days.
 
-It would be nice if we could ensure that commit_creds() can only be
-called when KEY_LOOKUP_CREATE is set (which is only used for special
-key IDs); maybe we could replace the
-install_session_keyring(user_session) call with something that just
-grabs a reference to the session keyring and returns it?
+So I don't think there's too much to worry about on the security front,
+it's mostly a "this will confuse the application" kind of thing because
+something has been missed. And yes that is no good either, but it's not
+a security concern. That's VERY different from the kthread case, where
+if you missed some kind of personality, then congrats you're now running
+with fully elevated privileges.
 
-I made a reproducer for the lookup_user_key() call in AF_ALG, but I
-think several other callers of lookup_user_key() are probably also
-affected, like bpf_lookup_user_key() and nvdimm_lookup_user_key().
+> I was actually working something much simpler to improve this problem,
+> which still require subsystems to cooperate, but largely reduces issue:
+> 
+> My idea was to reuse the non_block_count which already exists in
+> task_struct preserved for every kernel config that has io_uring.  We we
+> scope the inline path with it.  We then provide new mutex, semaphore
+> callers that will check the flag and fail refusing to sleep, similar to
+> a try_lock.  The new callers are required because we want subsystems to
+> opt-in the behavior, properly clean after themselves, and return
+> EWOULDBLOCK.  This is why we need to clean blocking paths in io_uring.
+> sched throws a WARN_ON if we schedule out with the counter> 0, making it
+> easy to find issues.
 
-bpf_lookup_user_key() will probably require separate fixing; it seems
-to be intentionally designed to be able to look up and create special
-key IDs, but is part of the generic_kfunc_set kfunc set, which can
-probably run in some contexts with overridden creds, like in arbitrary
-LSM hooks. That seems inherently broken.
+I think that would be a tough sell, mostly because of how many locking
+primitives we have and how widely they are used, and how difficult (or
+impossible) it is to introduce error paths for code that previously had
+none. That alone would make it a non-starter for me. Let alone is that
+it'd be a continual whack-a-mole kind of work, it'll never be fully
+done.
 
-Reproducer
-==========
-As an example, when I use io_uring with ->personality to indirectly
-call setsockopt(af_alg_sock, SOL_ALG, ALG_SET_KEY_BY_KEY_SERIAL,
-&KEY_SPEC_SESSION_KEYRING, sizeof(int)), the kernel will go down the
-following call graph.
+> It has the downside of still requiring fixes to every path and we need
+> to handle every new case that comes by, but it is much cleaner than
+> plumbing a nonblock flag several layers down the stack across each
+> subsystem or having subsystem-specific details in io_uring, which is
+> what we have today.  On the upper side, it is much less complex than
+> your approach. It also allow us to just back off during memory
+> allocations that would block, solving the memory allocations anywhere in
+> the submission path, not only inside ->issue(), which we discussed
+> recently on discord.
 
-sys_io_uring_enter
-  io_submit_sqes
-    io_submit_sqe
-      io_init_req
-        [set REQ_F_CREDS if sqe->personality is set]
-      io_queue_sqe
-        io_issue_sqe
-          __io_issue_sqe
-            override_creds [if REQ_F_CREDS is set and creds differ]
-            io_uring_cmd
-              io_uring_cmd_sock
-                io_uring_cmd_setsockopt
-                  do_sock_setsockopt
-                    alg_setsockopt
-                      alg_setkey_by_key_serial
-                        lookup_key
-                          lookup_user_key
-                            install_session_keyring
-                              commit_creds
-                                BUG_ON(task->cred != old)
-            revert_creds
+I think you'll find it'll be a lot MORE complicated than my approach!
+Backing out error handling is going to be impossible in some cases,
+think file systems for example. How would those cases be handled?
 
-Running this reproducer:
+> I'll give a try to this series and report back.
 
-#define _GNU_SOURCE
-#include <err.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/mman.h>
-#include <sys/socket.h>
-#include <sys/syscall.h>
-#include <linux/if_alg.h>
-#include <linux/io_uring.h>
-#include <linux/keyctl.h>
+Thanks!
 
-#define SYSCHK(x) ({          \
-  typeof(x) __res = (x);      \
-  if (__res == (typeof(x))-1) \
-    err(1, "SYSCHK(" #x ")"); \
-  __res;                      \
-})
-
-int main(void) {
-  int alg_sock = SYSCHK(socket(AF_ALG, SOCK_SEQPACKET, 0));
-  struct sockaddr_alg addr = {
-    .salg_family = AF_ALG,
-    .salg_type = "hash",
-    .salg_name = "sha1"
-  };
-  SYSCHK(bind(alg_sock, (struct sockaddr *)&addr, sizeof(addr)));
-
-  struct io_uring_params params = { .flags = IORING_SETUP_NO_SQARRAY };
-  int uring_fd = SYSCHK(syscall(__NR_io_uring_setup, /*entries=*/4, &params));
-
-  // let io_uring grab a reference to the current creds
-  int personality = SYSCHK(syscall(__NR_io_uring_register, uring_fd,
-IORING_REGISTER_PERSONALITY, NULL, 0));
-  // change our creds so that the io_uring personality is different
-from current creds
-  SYSCHK(syscall(__NR_keyctl, KEYCTL_GET_KEYRING_ID,
-KEY_SPEC_SESSION_KEYRING, 0, 0, 0));
-
-  char *ring_region = SYSCHK(mmap(NULL, 0x1000, PROT_READ|PROT_WRITE,
-MAP_SHARED, uring_fd, IORING_OFF_CQ_RING));
-  struct io_uring_sqe *sqes = SYSCHK(mmap(NULL, 0x1000,
-PROT_READ|PROT_WRITE, MAP_SHARED, uring_fd, IORING_OFF_SQES));
-
-  int key_serial = KEY_SPEC_SESSION_KEYRING;
-  sqes[0] = (struct io_uring_sqe) {
-    .opcode = IORING_OP_URING_CMD,
-    .fd = alg_sock,
-    .personality = personality,
-
-    /* specific to uring_cmd */
-    .cmd_op = SOCKET_URING_OP_SETSOCKOPT,
-    .optname = ALG_SET_KEY_BY_KEY_SERIAL,
-    .optval = (unsigned long)&key_serial,
-    .optlen = sizeof(key_serial),
-    .level = SOL_ALG,
-  };
-  (*(unsigned int *)(ring_region + params.sq_off.tail))++;
-
-  int submitted = SYSCHK(syscall(__NR_io_uring_enter, uring_fd,
-                                   /*to_submit=*/1, /*min_complete=*/1,
-                                   /*flags=*/0, /*sig=*/NULL, /*sigsz=*/0));
-  printf("submitted %d and completed\n", submitted);
-}
-
-
-I get this splat:
-
-[  543.190354][  T111] kernel BUG at kernel/cred.c:376!
-[...]
-[  543.196705][  T111] Call Trace:
-[...]
-[  543.197319][  T111]  lookup_user_key+0x261/0xbe0
-[...]
-[  543.197869][  T111]  alg_setkey_by_key_serial+0xbc/0x300
-[  543.198153][  T111]  alg_setsockopt+0x1a2/0x2a0
-[...]
-[  543.198610][  T111]  do_sock_setsockopt+0x103/0x130
-[  543.198863][  T111]  io_uring_cmd_sock+0x257/0x8b0
-[...]
-[  543.199608][  T111]  io_uring_cmd+0x1f3/0x2a0
-[...]
-[  543.200103][  T111]  __io_issue_sqe+0xd8/0x2a0
-[  543.200335][  T111]  io_issue_sqe+0xde/0x8c0
-[...]
-[  543.201100][  T111]  io_submit_sqes+0x7a6/0x1060
-[  543.201380][  T111]  __se_sys_io_uring_enter+0x218/0xf40
-[...]
-[  543.202158][  T111]  __x64_sys_io_uring_enter+0x82/0xa0
-[...]
-[  543.202780][  T111]  x64_sys_call+0x175f/0x2600
-[  543.203086][  T111]  do_syscall_64+0xbe/0x360
-[  543.203348][  T111]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+-- 
+Jens Axboe
