@@ -1,64 +1,64 @@
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD9E489867
-	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6605E48C405
+	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:42:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141327; cv=none; b=ewQavUENBMFPPHI519QPgJwrAHa5slzX06YcVt0dBkYaSuuKtCRLsKFzb8JMJ74n1uLic9letg4G6aW4tQa0/DXJQlEzsH43JJDBhGBmjz5Y+CMiyosmYa/v5QZpnwyW3jNLlqN1D8928NkebJsSptfEwCIuYikTLTtaMHZqsOI=
+	t=1789141329; cv=none; b=nW6Usf1tvfzPWKy0/dkTTF3szy6dfDiN7pUfklcMxelrMc92Dz7pQI0kz2GL27dCWZ9yR0FVjSgpRUvKW3mobMoNm595AaLDNIy9jb0kukCyMjVOIXMtNDt/8kSQTTVxQ20aaCHejg2rgVKConeY3dVfLnTTenOvJzRAnnZyL8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141327; c=relaxed/simple;
-	bh=0NwaKUmf44Ot+C4Vhin0K2ohE4gDm+QbMEeRlNNgATA=;
+	s=arc-20240116; t=1789141329; c=relaxed/simple;
+	bh=rrWhPwLXUMHPMn9y2nXl5b0RAfyzWV0Gp95H7S6fUlo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eUUlLjQzz46oicempmRyBoVMzeMo8iAXPWj4BM1AEKjbgE0pQJcVHS7bYgTkp3IbxCuMtgpyKqkZgZGHO4z5R9Tq9R+KUZlvM1NPsM54IFN/uyjaQWFUgtz56QnLDvGQmoAi6ITQ/ww6wiwhn0zhugVb6ImCbJdVSijdPxnKRLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=g3tLiZG9; arc=none smtp.client-ip=209.85.210.54
+	 MIME-Version; b=OTWUMsobaTX+GsfbDUR2jQjGCwadmuP3W2GNE2Ix3MqEwYQD0JQ23gDVDc86PEpsfmaZ0SASrvK2ChOj8d1MmdYZo0c6YriMd4BEI897xUwNZdKf0c6wXjKUET9TPU09PGqLSm9+eQz1wcNX4UHnXUoiN8aOEWrVWZpTnimra4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=AUg+VxdR; arc=none smtp.client-ip=74.125.231.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="g3tLiZG9"
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-805453b1c0cso41513a34.1
-        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:42:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="AUg+VxdR"
+Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6b1ae6c9b81so170107eaf.1
+        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141324; x=1789746124; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141325; x=1789746125; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=26NN2voef8YBl9mHMwb0pP++w/F7eMXxYYY8spi7/jc=;
-        b=g3tLiZG9SIvwMgDaxYDCMXEg0m2r3sJqQ575QFWcccwf/+OP9S1ZkyTTDcBZ/GEeqc
-         22T1hHUq7pVox3RSQf8p+jzX+ypj7E+ZgbYIlpQ/UvWonFGKC6qN6ydshnJTBrwK/DQ4
-         IZcytgIsQHRVwafwNR7ULW8gKzl2NdfXAXjW5oFFaNWWUBenUu+2+Di/uEIQUhYtBJdH
-         AsIACc1hFpYvv3bBqGhVuPl/jW+T86XefpKVdlgM01if0B3YcLaiIPzTCZTjhORT6aCW
-         Tbs3BqGhwkfvp6iIeVdghIRzK670dVENUyFY0gfdmQq8X5a7cUcNLX1zHbonW1n69zrQ
-         FORQ==
+        bh=rIQRpDFpvkA6v5lh/5UPtLNtecnKXIQ2k9kxGqhZIEM=;
+        b=AUg+VxdRZ5Hk5lqCCpEItfNbMJEzk2c033f4UtKsH0LxJoQgZ3drmpiKGBYTuIDvUY
+         y+HI+lhlKRqjF63pFHC4xbD10fUb2JmsGC36TYjCy25eQuF8i5UFM4S1FzB7ARR9wVKf
+         bgqoU/bF6ouoEX9gNCoc7rrMxHGCdRmnQJAnFtpZwq5wqx7Z7B7xnyn977q3rPLWl9cM
+         70QDGB0M4AK9RXaDTT7AY4lmc0kN3r0Nj7JACMitn7ZkJE53RGbmme6e5wISoBBxIxLx
+         o+fu/VoOzdcQG+aFbyW1dZ3AHWwu+OsfF7dRkQICCLvCSD2guOwSyq5hf20Dr1G/twk1
+         zptw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789141324; x=1789746124;
+        d=1e100.net; s=20251104; t=1789141325; x=1789746125;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=26NN2voef8YBl9mHMwb0pP++w/F7eMXxYYY8spi7/jc=;
-        b=DQWiLop431i/z4UoJ4MgxHJxehgGuwIm0nP4l279OMeSmizVd0CbBkTOXlWHqi4bNI
-         xIGwFEI8/Hfh0lplEuEeBs5HrVd5wg104r1j7++7r0pmt0R6SGqWFW7wXg9C2nEuPECh
-         DdoJGVfgLEm6BD+GHcoyDN6eXN1rUJp6N3VyOAeh0gaKbfG4XsWx/JX/i8ldRyY9/khr
-         M37iTem3oSTAcJSBeopdznn9t56yM/esVeJ6abynCURiOlwziGXedN21XTgv+bMg1jwW
-         AwvqpOe/ofh11aUM8wqpSHtxQpC6ssM9fIKwQfzEWX2wSmuI3yn7mH/L7miWpZTrWJ8y
-         l0Qw==
-X-Gm-Message-State: AFuF++mjurEzMayVcajk41bLsY00zuebp/6TC2tEV73aWsDCzkF+J/Rq
-	VWmavv1ICChkIiNCYre23LXmo0o5602ZEvWWKaLHSokfmWEJS+ICp2StfWGuJYw3nQhjkpMbfcm
-	L9pAQxAA=
-X-Gm-Gg: AYBFou2wk3L1Znu5H7LWgmFmDwTLTh6DJDwz8ZWa3SqaXPG1LW/vafsUan2BoK/eI1I
-	tYozjAi6eXte4mPeukfvnJNJSJ9mKJPxfF6jfUBpv8FTtS+fuHzdUyvmTSevZgz35rQRANw62j9
-	JJB/SIeL7Yydh62ufPNg/qQBfj1JZYYrS7Jzcg6a9HpYbuXNJlxJuGlM6zy+Q1tiXwX024dbq9B
-	2OUs4k1eyN452kIhU7e53JEcUPGzQjxWuTNmcSZAU96Rid/8YfrXrPgZl/54CUT5F3m0oVguPIR
-	3PgdhB0bX7ndSZD8hiIVF1zeT1l8IIqrCwNE70fVu14xrGG3+IYrLBLaJqwItDs/2HTgYZAHXqw
-	mryb9KHUu94waVkSCyvMSfLzAT7zK5MJslYeMia2iGtriFme6kGmh/grwmauGf07twDTCNT9vPL
-	qOTBkw9G9oFS8oJJdE0aYnK93325894IyMdz5Xt6vCHRNiNbIKUERqX7hOyiFd/RnojXvEIq3O2
-	LSQUlb1QHBCR10gc3NT7tKmyDCUdthe70VHEtbe0OYT
-X-Received: by 2002:a05:6820:2903:b0:6ba:3635:7ffd with SMTP id 006d021491bc7-6c0bde5bcd5mr3300243eaf.64.1789141323624;
-        Fri, 11 Sep 2026 08:42:03 -0700 (PDT)
+        bh=rIQRpDFpvkA6v5lh/5UPtLNtecnKXIQ2k9kxGqhZIEM=;
+        b=fobRvJS/UsRd5NmM09g8/WNo3RaPBuNJR6iAeNkMRgorrdg3zw/BEsGunb+DhLvDJb
+         PRvBKjNh04I7+HUw0faQyOhT4m4dEjQLksKBH4By9Xb/035tiqGoEg/0ikVhieGrarP0
+         OiFE9NVRQEIPaGfAP5OovkWC6pFNy17j8Rmfu5loSASZhV/VnOlVC4zWB3NRgzQwrHxK
+         GnsXhdjKFluOHVnYjzvluvCWgqjxe/ANUou6cLgSzTZlz99m+gSTHedoAODAY//WlsFr
+         W6j1FZE+7c4cWZBOkseuEp0yHWKQfavIc7wqOo0FlXK6HkWeCiIePJtaUGO8JMzfKIjW
+         1cDQ==
+X-Gm-Message-State: AFuF++lu4ZDCPe7Xi6BE+RhLvW54ylIn3x1zf7dlFPLFRhT4nklk5hba
+	WhIYp9W57SfR0UfR3rXEkyDw+fxoLBLnqx+YQcn4S6gpdmW7AJ1wkr5SSpe65dT6qG+cDMDXfZp
+	CsQNrd8A=
+X-Gm-Gg: AYBFou3durUx/vmfzpAlXT/tVJ0D6iQq9bEPEsynWK0fwTwW4Syyw0QUpS5+Abkhvqg
+	ddp+3DzrHI6aul9CUFKgoIY16nfpCDXrhoMCMjy5y7sD4ZXBUHSIV60lc0bJTnXKUnZnLf458Dt
+	lc7R7wk8X+R671rouTfHAaiqn0r1Oc0lkAbgJYx4xBdH9tPbag0JA5pHoUAjD408kEzz1XC0nm9
+	fcgtDSwCTybm/AxrXr7iVGbhvT8XdOut3berHxzBGDRbUq+h0/c55ZBIHm5jffPpoB2IpqRtb3v
+	iJgAlcOGvIinzOTzO/czbzpZO6Fc7bhWU9oba913eNLP66knNejLvQH1ApeBkxmLRLVDAs5EQSn
+	aFLejvOv93KoQv1gKWq9yNA4D9BtxYU5/RtiCyFGhoPQDGQC0+vNxgsGeIHAH63diLxclHzwTKb
+	yluVwdb0pleg9bUN+ahw/j2k8R8gPw8E009InMfklp+x8E0P8Jj3BT5+BnNyx3/qePZQNDnXWuX
+	IDY8nfrXzBaTFuIJuDTc0pgfnlpdn8zareIsXL7LSY=
+X-Received: by 2002:a05:6820:190a:b0:6b5:ec3f:4985 with SMTP id 006d021491bc7-6c0a99f860cmr2369093eaf.32.1789141324900;
+        Fri, 11 Sep 2026 08:42:04 -0700 (PDT)
 Received: from m2max ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c09690af1dsm2802199eaf.1.2026.09.11.08.42.02
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c09690af1dsm2802199eaf.1.2026.09.11.08.42.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 08:42:02 -0700 (PDT)
+        Fri, 11 Sep 2026 08:42:04 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org,
@@ -67,9 +67,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	mingo@redhat.com,
 	peterz@infradead.org,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 06/15] io_uring: keep the tctx nodes on a list
-Date: Fri, 11 Sep 2026 09:40:56 -0600
-Message-ID: <20260911154148.644489-7-axboe@kernel.dk>
+Subject: [PATCH 07/15] io_uring: add uring_lock section depth tracking and blockable opdef flag
+Date: Fri, 11 Sep 2026 09:40:57 -0600
+Message-ID: <20260911154148.644489-8-axboe@kernel.dk>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260911154148.644489-1-axboe@kernel.dk>
 References: <20260911154148.644489-1-axboe@kernel.dk>
@@ -81,87 +81,288 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-tctx->xa is indexed by the ring pointer, which makes it a deep and
-sparse xarray. Iterating it with xa_for_each() is expensive, 12 usec
-for a single entry in testing. Keep the nodes on a list as well and
-walk that instead, lookups by ring stay in the xarray.
+Prep patch for issuing requests inline in blocking mode and catching the
+sleep when it happens, rather than punting to io-wq upfront because an
+operation may block.
+
+If a request blocks inline, uring_lock must be dropped on behalf of the
+sleeping task, which is only safe outside the sections that rely on the
+lock being held. Track those with a depth counter in
+io_ring_submit_lock() and io_ring_submit_unlock().
+
+Add a "blockable" flag to io_issue_def for opcodes whose issue path can
+cope with blocking inline: read/write, the forced async fs ops, open,
+close and splice/tee. uring_cmd is excluded for now, drivers may bind
+state to the submitting task.
+
+No functional changes in this patch.
 
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- include/linux/io_uring_types.h |  2 ++
- io_uring/tctx.c                | 10 ++++++----
- io_uring/tctx.h                |  2 ++
- 3 files changed, 10 insertions(+), 4 deletions(-)
+ include/linux/io_uring_types.h |  5 +++++
+ io_uring/io_uring.h            |  3 +++
+ io_uring/opdef.c               | 29 +++++++++++++++++++++++++++++
+ io_uring/opdef.h               |  2 ++
+ 4 files changed, 39 insertions(+)
 
 diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-index 39629ee77b91..4af3d579ead6 100644
+index 4af3d579ead6..50a4a0ad222f 100644
 --- a/include/linux/io_uring_types.h
 +++ b/include/linux/io_uring_types.h
-@@ -153,6 +153,8 @@ struct io_uring_task {
- 	struct file			*registered_rings[IO_RINGFD_REG_MAX];
+@@ -352,6 +352,11 @@ struct io_ring_ctx {
+ 	/* submission data */
+ 	struct {
+ 		struct mutex		uring_lock;
++		/*
++		 * io_ring_submit_lock() nesting depth, non-zero means the
++		 * issue path relies on the lock being held.
++		 */
++		unsigned int		submit_lock_depth;
  
- 	struct xarray			xa;
-+	/* the nodes in ->xa, for walking without the xarray lookup cost */
-+	struct list_head		node_list;
- 	struct wait_queue_head		wait;
- 	atomic_t			in_cancel;
- 	atomic_t			inflight_tracked;
-diff --git a/io_uring/tctx.c b/io_uring/tctx.c
-index 466b7300e208..737dfad4a976 100644
---- a/io_uring/tctx.c
-+++ b/io_uring/tctx.c
-@@ -105,6 +105,7 @@ __cold struct io_uring_task *io_uring_alloc_task_context(struct task_struct *tas
- 
- 	tctx->task = task;
- 	xa_init(&tctx->xa);
-+	INIT_LIST_HEAD(&tctx->node_list);
- 	init_waitqueue_head(&tctx->wait);
- 	atomic_set(&tctx->in_cancel, 0);
- 	atomic_set(&tctx->inflight_tracked, 0);
-@@ -135,6 +136,7 @@ static int io_tctx_install_node(struct io_ring_ctx *ctx,
- 		kfree(node);
- 		return ret;
- 	}
-+	list_add(&node->tctx_link, &tctx->node_list);
- 
- 	mutex_lock(&ctx->tctx_lock);
- 	list_add(&node->ctx_node, &ctx->tctx_list);
-@@ -227,6 +229,7 @@ __cold void io_uring_del_tctx_node(unsigned long index)
- 
- 	WARN_ON_ONCE(current != node->task);
- 	WARN_ON_ONCE(list_empty(&node->ctx_node));
-+	list_del(&node->tctx_link);
- 
- 	mutex_lock(&node->ctx->tctx_lock);
- 	list_del(&node->ctx_node);
-@@ -243,11 +246,10 @@ __cold void io_uring_del_tctx_node(unsigned long index)
- __cold void io_uring_clean_tctx(struct io_uring_task *tctx)
+ 		/*
+ 		 * Ring buffer of indices into array of io_uring_sqe, which is
+diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
+index 896aab1ed026..870bb4dcc415 100644
+--- a/io_uring/io_uring.h
++++ b/io_uring/io_uring.h
+@@ -393,6 +393,8 @@ static inline void io_ring_submit_unlock(struct io_ring_ctx *ctx,
+ 					 unsigned issue_flags)
  {
- 	struct io_wq *wq = tctx->io_wq;
--	struct io_tctx_node *node;
--	unsigned long index;
-+	struct io_tctx_node *node, *tmp;
+ 	lockdep_assert_held(&ctx->uring_lock);
++	lockdep_assert(ctx->submit_lock_depth > 0);
++	ctx->submit_lock_depth--;
+ 	if (unlikely(issue_flags & IO_URING_F_UNLOCKED))
+ 		mutex_unlock(&ctx->uring_lock);
+ }
+@@ -409,6 +411,7 @@ static inline void io_ring_submit_lock(struct io_ring_ctx *ctx,
+ 	if (unlikely(issue_flags & IO_URING_F_UNLOCKED))
+ 		mutex_lock(&ctx->uring_lock);
+ 	lockdep_assert_held(&ctx->uring_lock);
++	ctx->submit_lock_depth++;
+ }
  
--	xa_for_each(&tctx->xa, index, node) {
--		io_uring_del_tctx_node(index);
-+	list_for_each_entry_safe(node, tmp, &tctx->node_list, tctx_link) {
-+		io_uring_del_tctx_node((unsigned long)node->ctx);
- 		cond_resched();
- 	}
- 	if (wq) {
-diff --git a/io_uring/tctx.h b/io_uring/tctx.h
-index 76ad1ad4594e..9a139816ce4f 100644
---- a/io_uring/tctx.h
-+++ b/io_uring/tctx.h
-@@ -2,6 +2,8 @@
+ static inline void io_commit_cqring(struct io_ring_ctx *ctx)
+diff --git a/io_uring/opdef.c b/io_uring/opdef.c
+index cf3aa2242cd7..fa07a2b94536 100644
+--- a/io_uring/opdef.c
++++ b/io_uring/opdef.c
+@@ -69,6 +69,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.iopoll			= 1,
+ 		.vectored		= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_readv,
+ 		.issue			= io_read,
+ 	},
+@@ -83,12 +84,14 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.iopoll			= 1,
+ 		.vectored		= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_writev,
+ 		.issue			= io_write,
+ 	},
+ 	[IORING_OP_FSYNC] = {
+ 		.needs_file		= 1,
+ 		.audit_skip		= 1,
++		.blockable		= 1,
+ 		.prep			= io_fsync_prep,
+ 		.issue			= io_fsync,
+ 	},
+@@ -101,6 +104,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.ioprio			= 1,
+ 		.iopoll			= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_read_fixed,
+ 		.issue			= io_read_fixed,
+ 	},
+@@ -114,6 +118,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.ioprio			= 1,
+ 		.iopoll			= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_write_fixed,
+ 		.issue			= io_write_fixed,
+ 	},
+@@ -132,6 +137,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 	[IORING_OP_SYNC_FILE_RANGE] = {
+ 		.needs_file		= 1,
+ 		.audit_skip		= 1,
++		.blockable		= 1,
+ 		.prep			= io_sfr_prep,
+ 		.issue			= io_sync_file_range,
+ 	},
+@@ -215,16 +221,19 @@ const struct io_issue_def io_issue_defs[] = {
+ 	[IORING_OP_FALLOCATE] = {
+ 		.needs_file		= 1,
+ 		.hash_reg_file          = 1,
++		.blockable		= 1,
+ 		.prep			= io_fallocate_prep,
+ 		.issue			= io_fallocate,
+ 	},
+ 	[IORING_OP_OPENAT] = {
+ 		.filter_pdu_size	= sizeof_field(struct io_uring_bpf_ctx, open),
++		.blockable		= 1,
+ 		.prep			= io_openat_prep,
+ 		.issue			= io_openat,
+ 		.filter_populate	= io_openat_bpf_populate,
+ 	},
+ 	[IORING_OP_CLOSE] = {
++		.blockable		= 1,
+ 		.prep			= io_close_prep,
+ 		.issue			= io_close,
+ 	},
+@@ -236,6 +245,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 	},
+ 	[IORING_OP_STATX] = {
+ 		.audit_skip		= 1,
++		.blockable		= 1,
+ 		.prep			= io_statx_prep,
+ 		.issue			= io_statx,
+ 	},
+@@ -249,6 +259,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.ioprio			= 1,
+ 		.iopoll			= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_read,
+ 		.issue			= io_read,
+ 	},
+@@ -262,17 +273,20 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.ioprio			= 1,
+ 		.iopoll			= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_write,
+ 		.issue			= io_write,
+ 	},
+ 	[IORING_OP_FADVISE] = {
+ 		.needs_file		= 1,
+ 		.audit_skip		= 1,
++		.blockable		= 1,
+ 		.prep			= io_fadvise_prep,
+ 		.issue			= io_fadvise,
+ 	},
+ 	[IORING_OP_MADVISE] = {
+ 		.audit_skip		= 1,
++		.blockable		= 1,
+ 		.prep			= io_madvise_prep,
+ 		.issue			= io_madvise,
+ 	},
+@@ -308,6 +322,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 	},
+ 	[IORING_OP_OPENAT2] = {
+ 		.filter_pdu_size	= sizeof_field(struct io_uring_bpf_ctx, open),
++		.blockable		= 1,
+ 		.prep			= io_openat2_prep,
+ 		.issue			= io_openat2,
+ 		.filter_populate	= io_openat_bpf_populate,
+@@ -327,6 +342,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.hash_reg_file		= 1,
+ 		.unbound_nonreg_file	= 1,
+ 		.audit_skip		= 1,
++		.blockable		= 1,
+ 		.prep			= io_splice_prep,
+ 		.issue			= io_splice,
+ 	},
+@@ -347,6 +363,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.hash_reg_file		= 1,
+ 		.unbound_nonreg_file	= 1,
+ 		.audit_skip		= 1,
++		.blockable		= 1,
+ 		.prep			= io_tee_prep,
+ 		.issue			= io_tee,
+ 	},
+@@ -360,22 +377,27 @@ const struct io_issue_def io_issue_defs[] = {
+ #endif
+ 	},
+ 	[IORING_OP_RENAMEAT] = {
++		.blockable		= 1,
+ 		.prep			= io_renameat_prep,
+ 		.issue			= io_renameat,
+ 	},
+ 	[IORING_OP_UNLINKAT] = {
++		.blockable		= 1,
+ 		.prep			= io_unlinkat_prep,
+ 		.issue			= io_unlinkat,
+ 	},
+ 	[IORING_OP_MKDIRAT] = {
++		.blockable		= 1,
+ 		.prep			= io_mkdirat_prep,
+ 		.issue			= io_mkdirat,
+ 	},
+ 	[IORING_OP_SYMLINKAT] = {
++		.blockable		= 1,
+ 		.prep			= io_symlinkat_prep,
+ 		.issue			= io_symlinkat,
+ 	},
+ 	[IORING_OP_LINKAT] = {
++		.blockable		= 1,
+ 		.prep			= io_linkat_prep,
+ 		.issue			= io_linkat,
+ 	},
+@@ -387,19 +409,23 @@ const struct io_issue_def io_issue_defs[] = {
+ 	},
+ 	[IORING_OP_FSETXATTR] = {
+ 		.needs_file = 1,
++		.blockable		= 1,
+ 		.prep			= io_fsetxattr_prep,
+ 		.issue			= io_fsetxattr,
+ 	},
+ 	[IORING_OP_SETXATTR] = {
++		.blockable		= 1,
+ 		.prep			= io_setxattr_prep,
+ 		.issue			= io_setxattr,
+ 	},
+ 	[IORING_OP_FGETXATTR] = {
+ 		.needs_file = 1,
++		.blockable		= 1,
+ 		.prep			= io_fgetxattr_prep,
+ 		.issue			= io_fgetxattr,
+ 	},
+ 	[IORING_OP_GETXATTR] = {
++		.blockable		= 1,
+ 		.prep			= io_getxattr_prep,
+ 		.issue			= io_getxattr,
+ 	},
+@@ -497,6 +523,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 	[IORING_OP_FTRUNCATE] = {
+ 		.needs_file		= 1,
+ 		.hash_reg_file		= 1,
++		.blockable		= 1,
+ 		.prep			= io_ftruncate_prep,
+ 		.issue			= io_ftruncate,
+ 	},
+@@ -553,6 +580,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.iopoll			= 1,
+ 		.vectored		= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_readv_fixed,
+ 		.issue			= io_read,
+ 	},
+@@ -567,6 +595,7 @@ const struct io_issue_def io_issue_defs[] = {
+ 		.iopoll			= 1,
+ 		.vectored		= 1,
+ 		.async_size		= sizeof(struct io_async_rw),
++		.blockable		= 1,
+ 		.prep			= io_prep_writev_fixed,
+ 		.issue			= io_write,
+ 	},
+diff --git a/io_uring/opdef.h b/io_uring/opdef.h
+index 667f981e63b0..45c2f77cf782 100644
+--- a/io_uring/opdef.h
++++ b/io_uring/opdef.h
+@@ -29,6 +29,8 @@ struct io_issue_def {
+ 	unsigned		vectored : 1;
+ 	/* set to 1 if this opcode uses 128b sqes in a mixed sq */
+ 	unsigned		is_128 : 1;
++	/* issue path is safe to run inline in blocking mode */
++	unsigned		blockable : 1;
  
- struct io_tctx_node {
- 	struct list_head	ctx_node;
-+	/* on tctx->node_list, only ever touched by the owning task */
-+	struct list_head	tctx_link;
- 	struct task_struct	*task;
- 	struct io_ring_ctx	*ctx;
- };
+ 	/* size of async data needed, if any */
+ 	unsigned short		async_size;
 -- 
 2.55.0
 
