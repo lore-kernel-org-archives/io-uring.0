@@ -1,120 +1,104 @@
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDC9372661
-	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141851; cv=none; b=Ro2UfaHoHzmWgwM2Zjc9UJgLsXBcxo2Pjtfx3TrWgGsNeX3tVXlR2w8QJbJTbF0SExjhVf7V0lmNQ930Dn9XXXMczUAhVzv+wGzL8YTfHBAIdPBdalG2x+oYG6636TxsFjuTvKJUbKC770E44V0uKMLtZhwDgdhXY9Qje40+LnM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141851; c=relaxed/simple;
-	bh=lFx27efnX9UzeSOWHfI7BNXGclv+O1lU7S+eE3R4UoU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PerfAWvl29KziOzeyMtP0scNpvYjcvgxUrjRpGyK8iNwZEyxhk9nGkT2xSPnwB9iYH+GnLpIDtH7S7TQLdIyji99FFCg4a5ojPBJUlhGfj+UsMjm2AOWUM3koyuFa7rm6MqTSMasptXtDYfOXgRscs97zYS6NAhOVmhchzyljLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=yqzZP/C6; arc=none smtp.client-ip=209.85.167.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A104B48F031
+	for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 15:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789141997; cv=pass; b=St5ZaGnAvHADWo/jBVehaFQ1AEqy2CC9AM5G4KBMpnxGApG9j9/0PiuuunvXmulTyvuhAi+oaXJfo7he4vd7BMrn49tL4H9KvtvTKjFUXq80/FuLAWxpjH7ILwI7rbQkHwbd1ddlMJpyMOS7mQzwAXzFrvOEh2jG+d2wAABOFfU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789141997; c=relaxed/simple;
+	bh=Isnr+k3W8HxLA6E/Gz/qk3n08kGP4pNs8ypyyBdSk9E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hmRc+Iiu6AGI+RpwDOY+AX2CUxSsq9XlLuSqjzj6QDsAFCiHUCp2oZpBp/Mu6zULnXItCiyU6ctqXCmNuPQhCkaI6W0NKgpM8su4VRcY+nVaardjEUuWUqpUxNtamg0XQ2epOYG4Outo1Fy+LJjXMg00dPjngnYFjSJS9s7KmTU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dtU1p42f; arc=pass smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="yqzZP/C6"
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-4b21f09ec76so974922b6e.0
-        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:50:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dtU1p42f"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff3aca06so10425ad.0
+        for <io-uring@vger.kernel.org>; Fri, 11 Sep 2026 08:53:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789141995; cv=none;
+        d=google.com; s=arc-20260327;
+        b=FQAoWkFDJqkR3fZdip9w5hEYhG/Dq1zztdAu26typL2NRVvXneIZfBOr6nHZ+9eeMu
+         5aa1J5hafH3PB02zhsR1PWldBcjjC8phNLsiP7vV57T+y3dGZg60spHmG7TH3osSlG5c
+         rC9EwvCMO3m+YvbCKjn6MOvtgFiylOPBKUcEsi0Q3mVEXJGnfIe6xczbsevYYpBbpG+Z
+         1m9rinpnWRFWZg5E75/zfjQ7+uH062qGK1TiCNcqjY3BPg7Ou9CzD00xd3IHWwrSVg5C
+         jzKjTR7kaaImB24V+HbaJKmQZHNPrB+E71yofLoTon3nH+UeEkTC92X0CvuWmJ1D0keK
+         zHZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Isnr+k3W8HxLA6E/Gz/qk3n08kGP4pNs8ypyyBdSk9E=;
+        fh=Io+e6O+83hdfP9SZuz9KVbmES+pej7kUHYBry9Liwl8=;
+        b=iE16mb387jWux9FTuJqIAe0sIGP08bgXX3k/lUI5hxKKG7FtJOSpGxv/xiTefP01VH
+         y6egzMOhXGo50WwwdfGh+URFsITigiOFkergX0zJie8JSpy+FLRqACzxywaXimfxXkG4
+         aMahzTTOwwmxUhEzW3SyCQ3HC3P/y9HV+M9TsgZWBpnpShpJOfg8BGJ7o+RRyMUsezDZ
+         zvYfgP6ED2LOTfjxqfrrdfORNAZ5OwOBNm6SljBirKUSYHYD+GbDStFT0nhxkeHNq5AM
+         P66SUhowAcoOjqxJVGxclE2oo2Iv6I9SvncTmLvbBZdhFNWqw/VG0KUAvdiIYlxcTzZI
+         ME8A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1789141848; x=1789746648; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+RXdz1vIBd9o1nlraikrE27tDySEqddQpbtBN4SlMmQ=;
-        b=yqzZP/C6cRAKfE5s6hwlEYpICR1hHE4gmlyFODsckOT8j3SkCuof3+rh8JG/qq5Emc
-         Ej8WCAdAhSF2uvnewDBvPtyoNgqdjxkonkgLreTzCisLecRWmW5Vmzk4rJuHxOKBY897
-         h0XSbZii7izvMVOL8WZq1oZELy1gWqqRo3RN4BsOk5Zuoi+AFCYKCpN5cVjwd8TcPS8j
-         7OEkB5t62L2CKV23j9J73lvxfPULnZumQSIL0NqXp0pYIgWpHj3Ueiy2iRjLgRDieAFY
-         iIKkyIKhfXbf5WFddn5lYs6D3OmrD736JelIyZ1ofxgrCTzaf0sUSpMKkWN+tKzwJ2tZ
-         PAMg==
+        d=google.com; s=20251104; t=1789141995; x=1789746795; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Isnr+k3W8HxLA6E/Gz/qk3n08kGP4pNs8ypyyBdSk9E=;
+        b=dtU1p42fcC5IxTqlB9Qc3t1SnG6cNz5EegmwpuJXs5RZ5XKQPVZkUjiscDCWgZ8ih/
+         MKWJJHjh0VoC4QcS9gNPrQUryy4zUGVt+R3gtUzIWG6hLRHoQyvz411jcMJ9FKl3Dz6/
+         tCvLqL4LrDA0nymZrBlvFEIhNQCfwvahukJu6KgD0mugJa7IQ3V2ZPSGu8PU7THy193L
+         5pwRMN4FOWh+WtTx256m0m5hd1tZx0oJctILsmLFl594HSaUsI+ZSMpi2nf3JxMm39D6
+         wIYRPKGizx+WKFEMZlbHLdMR7CKQqIEGdzrDBVEoUhJkkYScsIoj6Y/CzasfrwNHKF9s
+         aroA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789141848; x=1789746648;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=+RXdz1vIBd9o1nlraikrE27tDySEqddQpbtBN4SlMmQ=;
-        b=ctOERBrzOTj11o1edZ5qauIwstpjtoZVlWZkfqFtAEHwxRYS7yf37XBr2nwDz46TmA
-         ctV9olPGCFU80ezZPcE9C4ZcJ2wRkE3/p6ciVyYXKzI+7NoGpGrb7ez4gZlQIWMHqYHQ
-         UhOVTjh5VIDCX2eHWd9oJb+2JDLzvkrqP7z/6IMmMQ4Vh4sP+ud3WU5jz3loMLG0njvp
-         sSA028aklzyRTpL3XkADPk3kBmzSic2krv1l4c2W7RDrYgGvocoPEiJ7NJWehVnb71uD
-         ENBVsufpcQN/V4JFmovZwpZ4zSm03DDzfij42GisC5yPkbxbNBk1GZEDrqpnw5T+XtYB
-         Y5Aw==
-X-Gm-Message-State: AFuF++lt7srJksBO6eqTzmK4KoaZ1/s2TKL+7r/bTKqDZHn5JtaTf6pp
-	HQrrJ8wwBunzfArj7iFcYitldA31Crbqet18mpRdMNv4bM6nznzHXUbas+czk26lg2M=
-X-Gm-Gg: AYBFou2Uqw9i8VAFU0b+sT1dkHyJeVn6EtsUW06S2OtZwXUiJGBWRTmIH/vMqIutSwm
-	gMEdQRBJolbQT3WlQqn1MSgUT7T7y9+rfFbT8LGVfMCDSzkP6qLhokXCbFiFcu0ngDkB825gj00
-	GFkF0/Ck64Gk48wrtFay38HTf3N7Fr88K6U1gC0EeY2SrvSH8p7VSyzmsDr9jcGPB6Vr3eEM+KJ
-	/aHcucIl23o1oNiYvyFErpVTLmeO0GDURpRb821/GrtMggMU8ZKexM/SV0WIyqzTb8jLkXDo08i
-	o4565wD+OH3Zbf1x1NfKEjggFkFWX/EOa4zVUivMgn5+juPPJdF78PB7JY9kzTUK5u0SUiUJMyd
-	RYdUJCWaZQpUqjOGEirq0bhqX8CE96Bl5bjU6Q3980r8qXK4JtoM50dF6T1h2x/ludLI7mfg+Gv
-	ioK4ezjFXMMLVGJy5fMn9yoFXXuYPy3nSY5rUv6T150evgA7PZGQ46YicH5WpzUsqlJGgiyuI0u
-	OZJ+sepb5SDZAvc3wYRrWZ+J2P/pwfXcBcf2sC7mF++ydvGUu4abJe7
-X-Received: by 2002:a05:6808:2e4f:b0:4ab:3210:b31a with SMTP id 5614622812f47-4c31d66761cmr3843900b6e.14.1789141848604;
-        Fri, 11 Sep 2026 08:50:48 -0700 (PDT)
-Received: from [192.168.1.102] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4c331bc937bsm2418504b6e.11.2026.09.11.08.50.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 08:50:47 -0700 (PDT)
-Message-ID: <5a656a9a-afff-4309-9007-2fcb6d3ae1f8@kernel.dk>
-Date: Fri, 11 Sep 2026 09:50:46 -0600
+        d=1e100.net; s=20251104; t=1789141995; x=1789746795;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Isnr+k3W8HxLA6E/Gz/qk3n08kGP4pNs8ypyyBdSk9E=;
+        b=C8moVWyuqYPNP3h7xItSiTQJezQRgrh+FrCr+0+MfAbv4w7oHuyFaLoy7B6PbnDLF6
+         /UUSkD73kqfZGMpDRBjzinycU0gqe6OjNuuOGmEyzSAnOj5KDPF8DUU/a5v3t59IzZ4G
+         AIaGkJDlMlgb2LwQeExK1ao0j3P17astMIfmQkdQwpNzlJSXn9ZGWalmKTIw1dCk9TBT
+         TKrf5uuEQfZHeh6Hfw92KGEzLFbfi4/TxOSLad8PlpeG92+py69zynGxXcG+kUD2P/tO
+         QFVDiN07cfKW3a8FFcBVpHwK3f6reOfN7NG+LhIHhrknqoz/iCQtG6nLoUaQvLSP+BGm
+         VOvA==
+X-Gm-Message-State: AFuF++kIfwTI+arcZGfn1RgCj4amOS71CA8sAMR4UDDnEVbE3EjnwdhX
+	uI1Q7YVRjHx+Dktz5ybzDTQnKQOtb/URyrC9xQyGahCfwFMjZMjXlfVR1eEOr5rocr5RhRI+4PA
+	dapsjQon5PEAqhYEs/Sw1YkNmlgu4J8xxlBOx6Nom
+X-Gm-Gg: AYBFou1lRQKo06Mun4w5ukF/utjQ6NK5lUzT6Z4UBqDQzELEWHl4Nq8YOBB9580iv4p
+	9Wj6RYH8QmYsRcROn2ida3yYo1KcUaivXol9oCfZUQ6fLIBB+QsaTl+5Y3+Zu+LnCRA0Lc27gu9
+	Ekc/Qff+k5H5ufgiiM9x+YakUuDlJC+hR0ZzutFlzVDh5cC4/Os1qTZD7ihdh5k6DVX9tKq9RGr
+	U/POPW5JsacRkk9mRvANPLfcFSWhZs/BrgBcr0SDywHM6gS+z5WqC1ddIsQhxAFqCLgV4GVpA66
+	/i6XrCb7TWbytRS0d7Lu/0trlQEATaTpxw/iLp4Q7A4M9qP55tE9r5Zb5Lk+daGVIT16ieGg8b3
+	3n7xGU0Kih1Q4aMW/94cZLg/XieRuMD9Ngqbok46408dwYk+EKH1e
+X-Received: by 2002:a17:902:cecd:b0:2d7:2a35:d14 with SMTP id
+ d9443c01a7336-2dd2f56c2acmr4256765ad.11.1789141994232; Fri, 11 Sep 2026
+ 08:53:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ array
- slot
-To: Jann Horn <jannh@google.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- Dominik Maier <dmnk+artist@google.com>, stable+noautosel@kernel.org
 References: <20260911-uring-fdinfo-tighten-v1-1-47c62a154aca@google.com>
- <CAG48ez1dbEXQgvvAxchiiakym7KJntGFJ3f_obfnDwFouYZQnQ@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAG48ez1dbEXQgvvAxchiiakym7KJntGFJ3f_obfnDwFouYZQnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ <CAG48ez1dbEXQgvvAxchiiakym7KJntGFJ3f_obfnDwFouYZQnQ@mail.gmail.com> <5a656a9a-afff-4309-9007-2fcb6d3ae1f8@kernel.dk>
+In-Reply-To: <5a656a9a-afff-4309-9007-2fcb6d3ae1f8@kernel.dk>
+From: Jann Horn <jannh@google.com>
+Date: Fri, 11 Sep 2026 17:52:37 +0200
+X-Gm-Features: AcwNN1X5POQcXKEYTUYARlopKaBVUQhEVDC4xGhc1P6zKPSFd5VbX0gIb_i24Zw
+Message-ID: <CAG48ez2J-MwLCS1NHV1+Yu12JpxiiL7_qfN6+37CAdeVZ8wJRQ@mail.gmail.com>
+Subject: Re: [PATCH] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ array slot
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Dominik Maier <dmnk+artist@google.com>, stable+noautosel@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/11/26 9:44 AM, Jann Horn wrote:
-> On Fri, Sep 11, 2026 at 5:35?PM Jann Horn <jannh@google.com> wrote:
->> A cqe32 entry spans two CQ array slots, so the last CQ array slot can't
->> contain a cqe32 entry. If the CQ tail points at the last CQ array slot and
->> the kernel wants to write a cqe32 entry, it uses io_fill_nop_cqe() to pad
->> the last CQ array slot with a dummy entry and make the tail wrap around.
->>
->> However, malicious userspace can directly set IORING_CQE_F_32 on the last
->> CQ array slot, causing __io_uring_show_fdinfo() to read the second cqe32
->> half from beyond the CQ array. Change __io_uring_show_fdinfo() to
->> explicitly ignore the IORING_CQE_F_32 flag in this case.
->>
->> This is not a real bugfix, just tightening the code a bit, because:
->>
->> 1. the number of CQE slots is always a power of 2, see io_uring_fill_params
->> 2. the ring_region region consists of:
->>     - a 64-byte header
->>     - pow(2, N) CQE slots (each 0x10 bytes)
->>     - optionally, the SQ array
->> 3. the ring_region size must be page-aligned because it is shared memory
->>
->> Together, these properties imply that the last CQE slot can't be close
->> before the end of a page, so the "out-of-bounds" data is
-> 
-> Oops, sorry, somehow I forgot to complete that sentence, that was
-> supposed to be:
-> 
-> Together, these properties imply that the last CQE slot can't be close
-> before the end of a page, so the "out-of-bounds" data is in memory
-> that is anyway accessible to userspace.
+On Fri, Sep 11, 2026 at 5:50=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
+> I did spot that as well, thanks for finishing it. Your fdinfo idea keeps
+> on giving, at least this one doesn't really matter :-)
 
-I did spot that as well, thanks for finishing it. Your fdinfo idea keeps
-on giving, at least this one doesn't really matter :-)
-
--- 
-Jens Axboe
+Ugh, yes. I hope it is at least somewhat useful for debugging, and
+doesn't _just_ cause lots of bugs?
