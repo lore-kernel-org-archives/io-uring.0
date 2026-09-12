@@ -1,69 +1,69 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E46472091
-	for <io-uring@vger.kernel.org>; Sat, 12 Sep 2026 12:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1353E3DB31A
+	for <io-uring@vger.kernel.org>; Sat, 12 Sep 2026 12:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789217120; cv=none; b=nemzik8FNhLwAWPerwkjekU+3E8/PsgY+EAFBCxniOo5F/1jOcOCp0U7VtILwUcGbf28kdNMIWspRI7HJ+UVXsTuGYzWDK9FMr9vs03ayFgLPvE3UpGCb7V8/S32GcRgZwgiN1r1TDUbBfrd9cLMh9pSDhH1Z2BxUCI3b7KzJR8=
+	t=1789217866; cv=none; b=B6cPYNxSdPQg8WUqX0kr6nd/Z0Ih9E8KFxqyNI/ap9TNQVUxm0M5pLLYCdKhy39A2JdW8n2HvdWehDPQ1RZJNvuaUV5gGFmZUsEka4w349ZS9yXxStlBkgZNFlbIHGaR5phnazgBYXtd/r7uPSAVr4WCDsaAjxFz7t3jIh5no+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789217120; c=relaxed/simple;
-	bh=p9H5fJ0qznjbd7WwkOCCZHtdV2j8uNOzcKohs1KM2HI=;
+	s=arc-20240116; t=1789217866; c=relaxed/simple;
+	bh=6N0ifHQ8O4u0BOZ6EF0w79HnCW/yPo/3nI3uyCXuO9A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EM4c2MGXMaL8/AZmel0kWrTTrSiDTM/G9Cbp7cj7XowmqP6LGE3vFpCG+oEk4yjGpwrUmLgsv7iPedlWayh2Es9VgeLgDg6Ubb/3DqChTVsjj29SgJPRMGXQrrGjQuhowYq/Lt9eTHhuGwIjNKg96s5exKhvREy3pUHx0IbsXK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TYGxXM71; arc=none smtp.client-ip=74.125.225.140
+	 In-Reply-To:Content-Type; b=VJeGuVutu+NEDnPvE/AgsTmWHpj+W7D3sVLC0GXMgvKd3gCgBHntO2RpMIk8rTHYP8ivHLfZUZQkWNJdG1WsEtgMdRifvC2/vCWYerdAoxsHSSpEaKl8c50KtOHAvc5GIZ3BSNMmJWbbJuFJMI58PSjwq3OYDOEOl2n+WcOJx/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EbjKGRPl; arc=none smtp.client-ip=74.125.225.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TYGxXM71"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd38e0e5dso8760125e9.2
-        for <io-uring@vger.kernel.org>; Sat, 12 Sep 2026 05:45:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EbjKGRPl"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6350f88so229100f8f.2
+        for <io-uring@vger.kernel.org>; Sat, 12 Sep 2026 05:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789217116; x=1789821916; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789217863; x=1789822663; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DnLavuIU3PeT29b0R+tsLZa/nqbV4NGKsHKuPzpckLg=;
-        b=TYGxXM71DZHjLh/Rq+9HcXxkLFjtrbsrxxrp8GJVKX9v3d8viBPMuSsfYI7H+1yUoB
-         P5f5ynRhjCrlMvHrco2IhASIwqEgsmCFtyj1QgnNVCW70TjLDsN0g5/fkuqYEDyedC/7
-         iEw3V3Cc7WvEYmGocV1xGhp3h85C8T1KyfgzwFDNvO3ZQgV3rxOav9QiSdA+QsJAmu8x
-         VVf3ACsBz+5JazTqf5/PMzcNuiW79TUaJgSA286iuHwvwRCiHjWquG/epviTgRJA6eow
-         6Y54GwKte6yQgmV7UXDZv612iCll+R0Bxs6bdsWjLM5hN7v45rjAW3kQkIysQmkhYsdE
-         YUFg==
+        bh=fAOw7eoVc0zYvL/f6e+XZRwdegk97u7KcjQYPN92otE=;
+        b=EbjKGRPljO2qrPEBnoEgqtDd0zQR2r+b3aOlfB3jgvjj/jbfwJIrJQ/YRGqeY1ghsY
+         8R+xMJzvmtU2vUoJgWCVLu3zb/Si657b8n2c9b/2fvU1Rjvl1Qo2syKdJ5MtwsU97aHr
+         JR0/hflFEuGPvsfbVLaFsNkvbhYrfgrgTqjTfuLpevFO8i4fQAk0T6JI95zVtLxGvKRW
+         5D9+WCEMSJYDHpBsGWwjOjB3CaRaoOMio/XI2tsfyi4PWplk2/n+kcXATlHyAq+fEKqV
+         SZo3UrNg/gcthiubYF3MfmZGXIb3f2UnBhSrMpz1o07zsIMs79YhTc9n5SXdQi1W5E7B
+         m8qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789217116; x=1789821916;
+        d=1e100.net; s=20251104; t=1789217863; x=1789822663;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DnLavuIU3PeT29b0R+tsLZa/nqbV4NGKsHKuPzpckLg=;
-        b=r8y3IbxCVlBPR+pKlRt12o/Hm9+RE91/pLGSrr7feYLkh6Ih/MxhBaDLyOBheble5L
-         YcZ0Zybij2SKA+AZz2kZQacwp7AnQ2CsuJH84e22GfJ+P3Dmsg39/oqYRc4FSmEJpAW2
-         +hrOpJuLVJa8e/6wTeQqJorWEZGI5/gnUjrcUOQTjNAw3hE9iRuo+FRCcqji1jgNOXCx
-         YyhIOapXKUBS8NmUGpJYwfs0MUS2a2PTuBW1M0DJNw8rFluIf/jhBbhR021/32UyGPsV
-         y2kSYAs5ZzlQpr95s+oEubtyrlwLVDn3k5jXIrYDaE81z4NKWtrivudH1TciYEsrPK3K
-         EM9Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwZ6K9r72mbdfOkRLwJLOXc98iBUm7+7zpuZeAa6MprR92HmyPvKb7oUwMqGq5Vq54QIhARcipepQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++np1kYOnWsrBQW/LYloB5fmg5sFxsvYr6Y2qEWiDbdsdyp23ZpO
-	XmZb1SdUeyz0n1zroMPbdJNFeIfCs8qHwXjYH5PQEsreJiV6kpE674ew
-X-Gm-Gg: AYBFou27nGg5aml6A9b1rGXJWbVymr409qwBdN9AFI69VOLifwFQzQYucfNN7zZJ0me
-	LRYfPFZ51lIurSYAUKf5TNe41tju0sb/OKXsKbqrKsXfh6ac3PaAzYTzLCNUX13CRWdmJHa3L4v
-	pNnYEhK1VWRM1vbHOXQ0S9G8eAoK7TWF5HGRdz3UJLPr6o+sSJBd7+VJ1SyinrmxJL2dmLzvWbL
-	Z3QhqJfFA/ue83qRLePFS1bP2bhVs7tIvnYtDnGTpJneBq2/WeoBMIaMOEod32okn/vhBq5IRxK
-	LfWPLCHRhIko0XrIHms8vr9cRaJ7/aVGG+b0rdWGDkxdc9jgJM6Pxa6I2f4YPjFg+fbGOgoL5hU
-	T4txQvT0a332GpoFVs96nGdQkBsN2zHwCzoke0z67OOLwGvahreP2gT+FjrLGGMHZZdpuawY1y/
-	jOfKt9SbiKl3yC4wEkvNHh3f0Wwp78ypjf22Xy3NqMitoPhv131NEPKeb+1lhlOoq8GfvypXkil
-	6raEoMOw0+Ik1iTtDxaJVDAi/MIc3c1jBOCb+8EVHkMeN7YVG356THOrZ/KPAxJF+j4iF0WXGJk
-	ye8u1GRfFBb5XcCbiyJjEDzKnfkp
-X-Received: by 2002:a05:600c:4693:b0:498:943:ccc0 with SMTP id 5b1f17b1804b1-49e619bec89mr188946025e9.6.1789217115992;
-        Sat, 12 Sep 2026 05:45:15 -0700 (PDT)
+        bh=fAOw7eoVc0zYvL/f6e+XZRwdegk97u7KcjQYPN92otE=;
+        b=tUHnO/qxu0YYPQL6nFylnUhNwr1Zgol3Hm4tc/Wyr4vNmPeQTvg/dbRyXDcHnjpD+Z
+         47watJRJgH3pwME4qvXhkCDakpx8z3Fbp0fSri3dMGmfzaZbFXFfebXvE+McyI4zaZsh
+         T2ZlRFAdffhpkl7YYGkswPZEIE54fdrsP23Q3NW/xuvKqS3/YUvC46+xv0bt3Z+xVmJ4
+         AQMOSxcQzg2KEsiOSbl1GdQU9nZycRhjQ8KymWDDqzotlk9Zq9czZY4QfuRTgWt1qw1U
+         dQXVVCA6veP5mi7REiiRsH67l/bE9xQaQDyZYLFy8XhCA1GibaFEzJRPDfGZu6hJM5Mp
+         zHzg==
+X-Forwarded-Encrypted: i=1; AKwUvByegubi4kowXKal3SSPmWjqBCBMwEvocaP1qrv4ZCToYUcw7sPWTAFT8htqcwrVfmlds/sMzH5FXg==@vger.kernel.org
+X-Gm-Message-State: AFuF++me1kHRnxCWALhdXb61LSn7iDe3Y1XFRE+DderGnaSuH1xMDI1o
+	KWBuaETIYWH7C+23YW/9ldbC8sJbAQHm08fbU58i+tF2s5xLAg9fY5GW
+X-Gm-Gg: AYBFou1O4VsxlOK1v5QupbEyeYNKSuK6U/Kc9GENbAFunZEQ1/NGXl8VLvJ4rRowE8g
+	cZ0mpQQviSkUYuChf3b3fZdiRZlt+M7+9lNagKMkOoKzkLeJwveKsw952l2y8wSxtGiMG6zQ5H/
+	ejK52ikdYSVdCnfydwr5f1gZtbIzp8YqIgM+BTneMdJM9o2Mu80BdyuaGB27haFtvzNf8/ob9RL
+	hwKPa1jh5u/ko+DXYrtP1sKRpPtnq0z6MU943OP3/ICTDFPILEW8I+NRAwaYNcNq0NArYx4+fdL
+	2jSbHaZTtdtzYdAzPzv8Hu6rCNC6OK0HQ276TPAHXFQPiuH1OP+n7dyG8cCwdGC3/xGfGcB81Rp
+	uwQlhwCgUYzmgGEwgJZNqImjaHPC3MgOl2FSpbgnDpn1WOfLwzn3ey/FhQPxJE/WJIahSobT7lq
+	fSR5c8zNwGvUkfhwEjZw7B5n5Ggf31WTIPkSIeq3Ic1zjpsSWwDg9/0sBw7NCLXZew0CWlckbfj
+	geN3UUbYRi2zeWytrUnpL5GOmt8/jXbYQnbyr0XFnXnvs6YHJp6v6g/piRHk7cUd+i91mg8x/CF
+	ZGQPo8lQXLHC79blEC5iItwTMXI=
+X-Received: by 2002:a05:600c:6812:b0:49d:1d7e:4085 with SMTP id 5b1f17b1804b1-49e6cbec30dmr21535245e9.22.1789217862965;
+        Sat, 12 Sep 2026 05:57:42 -0700 (PDT)
 Received: from [10.192.161.217] (82-132-213-27.dab.02.net. [82.132.213.27])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e60adaee4sm226373935e9.14.2026.09.12.05.45.14
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb32e7f5sm12751635f8f.9.2026.09.12.05.57.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Sep 2026 05:45:15 -0700 (PDT)
-Message-ID: <7b126162-f412-41d8-8002-6b31d2795f51@gmail.com>
-Date: Sat, 12 Sep 2026 13:45:11 +0100
+        Sat, 12 Sep 2026 05:57:42 -0700 (PDT)
+Message-ID: <0c787163-dd07-4389-b9d5-916b8753f388@gmail.com>
+Date: Sat, 12 Sep 2026 13:57:37 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,51 +71,61 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH] misc: fgds: enable GPU-NVMe direct I/O via POSIX and
- io_uring
-To: Li Wang <liwang@kylinos.cn>, =?UTF-8?Q?Christian_K=C3=B6nig?=
- <christian.koenig@amd.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Sumit Semwal <sumit.semwal@linaro.org>,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linaro-mm-sig@lists.linaro.org, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mengmeng Zhao <zhaomengmeng@kylinos.cn>
-References: <20260908131545.105987-1-liwang@kylinos.cn>
- <2026090913-landline-encroach-c544@gregkh>
- <6aed7ecf-d125-40d1-a82d-1a7f62049605@kylinos.cn>
- <2026090924-corsage-shout-833d@gregkh>
- <33c9db65-fa30-4d34-9026-98144ce1ed95@amd.com>
- <9447bb67-96e9-43b3-87c8-db231051fa2d@kylinos.cn>
+Subject: Re: [PATCH v5 00/16] Add dmabuf read/write via io_uring
+To: Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+ Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
+ Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>,
+ William Power <william.power@intel.com>, Phil Cayton
+ <phil.cayton@intel.com>, Damien Le Moal <dlemoal@kernel.org>,
+ Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+ Mikulas Patocka <mpatocka@redhat.com>,
+ Benjamin Marzinski <bmarzins@redhat.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, David Sterba <dsterba@suse.com>,
+ Ilya Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev,
+ nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org,
+ ceph-devel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+References: <cover.1785596451.git.asml.silence@gmail.com>
+ <178907372259.484803.15807864431748251506.b4-ty@b4>
+ <eb469580-509a-4895-a819-e7f3e4fa0b0a@kernel.dk>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <9447bb67-96e9-43b3-87c8-db231051fa2d@kylinos.cn>
+In-Reply-To: <eb469580-509a-4895-a819-e7f3e4fa0b0a@kernel.dk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/10/26 04:57, Li Wang wrote:
-> Hi Christian,
-> 
->>>>> Nor why "fgds" is the name, that's going to be hard to remember, does it
->>>>> stand for something?
->>>>>
->>>> "FGDS" stands for Fast GPUDirect Storage. GPUDirect Storage (GDS) is NVIDIA's
->>>> technology enabling direct I/O between GPU memory and files on NVMe,
->>>> widely used in LLM workloads to bypass CPU overhead.
->>>
->>> That's nvidia's specific solution, but this works on other devices,
->>> right?  Or just for that one platform?
+On 9/10/26 21:58, Jens Axboe wrote:
+> On 9/10/26 2:55 PM, Jens Axboe wrote:
 >>
->> That was nvidia's specific and very hacky out of tree solution
-> Exactly, I completely agree with your viewpoint. In fact, we previously conducted
-> a deep analysis of NVIDIA's GDS implementation code, which was also one of the
-> motivations for us to develop fgds.
+>> On Sat, 01 Aug 2026 16:46:12 +0100, Pavel Begunkov wrote:
+>>> The patch set allows to register a dmabuf to an io_uring instance for
+>>> a specified file and use it with io_uring read / write requests. The
+>>> infrastructure is not tied to io_uring and there could be more users
+>>> in the future. A similar idea was attempted some years ago by Keith [1]
+>>> (from where I borrowed a good number of changes). Later it was brough
+>>> back up to life by Tushar and Vishal.
+>>>
+>>> [...]
+>>
+>> Applied, thanks!
 > 
-> Please allow me to introduce NVIDIA's GDS implementation briefly:
-> NVIDIA introduced two kernel modules: one module called nvidia-fs, and the other module
-> is a customized NVMe driver replacing the Linux kernel's default NVMe driver.
-> nvidia-fs creates a device file for every NVIDIA GPU on the machine: /dev/nvidia-fs<gpu-id>.
+> Eh no it is not applied, was just looking at the series locally and I
+> guess it got added to the b4 ty pile.
+> 
+> I am, however, wondering if we'll see a v6 of this soon? I had some
+> comments on the nvme dma mapping, that can be improved, but I'd rather
+> defer that to post getting this included.
 
-I'm not an nvidia expert, but IIRC they switched to P2PDMA, which
-is supported by the upstream nvme driver.
+Working on it
 
 -- 
 Pavel Begunkov
