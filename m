@@ -1,87 +1,87 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2375743E06D;
-	Tue, 15 Sep 2026 17:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8353D409272;
+	Tue, 15 Sep 2026 18:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789494885; cv=none; b=nYntDHNwWW2uxREsdMr4OYMv4QzIWONwxIhRMPeTpA7C2wnajGO8wfd2iEosFr2kk/7m+NEBxe6Q9LE6IeRPYzajWtFn5u09BnRgoS8YV3z806vXEsJi8xjdjg5BmUyWMjc0ELKsHhcE5zWO1HS1Uo5MGvaiyePi8pmD1ROET2Y=
+	t=1789496454; cv=none; b=ooSIgDPcQbpCkglp2fZABGBQ3tqFcNBCqDbnb2B+CeJUE4TFEtHcttJ8/eaNDOMo1BcB1PlfOvkaS/gHPyRO1pW1COuT2lxg5YuESn4Dn/Eawz4ePhWQ+FavqeRibgB44XLQIgB9NeaG5CHOxBJJmbsNFHJtM1qJX9pTnzSy2ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789494885; c=relaxed/simple;
-	bh=RXdDfsnAh9Y43xO6IL2AwU46pCgw5t7h8LAJLpZUCjk=;
+	s=arc-20240116; t=1789496454; c=relaxed/simple;
+	bh=bUmrp4GMLhXBGeleLZrHVx7c+JGCTJyLNnPC/BQsLzE=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=pVJhBJE8YwR9BpWuMvFV+58alUv+uokKFTfTL31Meh3hV1G3tnjHTsNEWTa4tEca3VQo1W1wkywjrUkItoUG4hbOV6B+Uqf/n5Tj+y4ZjZpqpuuFcwql5BG3fPW5SQLGWFSxUWyRiITKNQVgqvVQIF0jrz2FaVRkLLs3x8Bahs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=gDRUkfY7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Ta8bvRZh; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ObkFmigW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qRqZz2Io; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version:Content-Type; b=pLilLhSxGb4WTCYz8LaLzhsDSyadW/Bvs0UtyUQ9XHcmcQn7BE1avho+4mi96cBg6NopR/upb48a+yObZHw/LuM75MhbVa3Aq+UYmZwmfQP04iLgLYcox8U+ZvtV6zpRS0+SjPezxG5koaGu+8OwjhMHISJ2yyJWP3ww9RTX5pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=iXeHV6TB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=vvWIZq4b; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AczWsRjm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=+V7M2w5K; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="gDRUkfY7";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Ta8bvRZh";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ObkFmigW";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qRqZz2Io"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="iXeHV6TB";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="vvWIZq4b";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="AczWsRjm";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="+V7M2w5K"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 897401FE4E;
-	Tue, 15 Sep 2026 17:54:32 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id A148221D55;
+	Tue, 15 Sep 2026 18:20:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1789494876; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1789496439; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6I57sMoGsWFZJnjcjpdh+dKELHk2w1kaprJaon8kb8w=;
-	b=gDRUkfY7oq1zbo4VHNgPTGHD9D3znxB5EcqB5LM4x9yKwnZa+3pKSbBY0vXyj8xs3V3xLT
-	egsU1uAVpEc451vDzawJ6xvnpr/DoxZ0TSrH7l5ypNag3juAqgu8lc1qTx+VL5qlHwWmP7
-	pZYMr8CpAi7Y5tvMM3qrcG72tsKzAmo=
+	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
+	b=iXeHV6TBSmL9A6lMnYEyc2pDyim17mGDAIpsaYmOf0w9bgOc3TVoIWlPEDzqSNFrn1OFYZ
+	wsye4NzqKKlJ7KaHmmWPe4W4d6jIMyaj5ubduVwHqV8leFp4oOsmhIzljPbfWd+IungLwg
+	D/kly99MUmcgMVdD6OqahuQbphpU64M=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1789494876;
+	s=susede2_ed25519; t=1789496439;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6I57sMoGsWFZJnjcjpdh+dKELHk2w1kaprJaon8kb8w=;
-	b=Ta8bvRZh+t0WthXlsIkF3NEfTT2fdd3369aVhRpBQ8/hvHJriu80jneUOwhd4cKUXzEX/k
-	r8sxqwHowtVVQ/BA==
-Authentication-Results: smtp-out2.suse.de;
+	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
+	b=vvWIZq4bcidZiZ9beD4pKcfg9O5PH6nd0O/PnotI09pEQLYKCmu4l8i0pr0M7y+yDQ3+iK
+	gfJOcErAqAPU0RBQ==
+Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1789494872; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1789496435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6I57sMoGsWFZJnjcjpdh+dKELHk2w1kaprJaon8kb8w=;
-	b=ObkFmigWsKjZ22AJq0y88/y1gYD7FydJx2sy3uASM25tGd0aC6WQnn50Xyy07UlCxyGsuJ
-	dDBWkfnw6hG/Qy02nlcxntWFaJg3tGkMPITXc7VmbVZNZsmY+mW365k/kAs5/jT3WXThg8
-	pIqx1W7IA+eZw0Q/J8sITRT3yUbHBQA=
+	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
+	b=AczWsRjmuPaS5wvUMta/0QT8Vd+XnpRW8vzkd2pRbrFmjl8ii39XEV9H6UjS/npER7x1yh
+	l3JPOJpnK9mifa9QEnjiVgIFStx/H9h7HDkem9SBEkgOZsooWMyuH9wy4qNIfO5T6y/hO1
+	rKJwvFr9e6EYU7xCnwgZg0GyNhxOfYU=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1789494872;
+	s=susede2_ed25519; t=1789496435;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6I57sMoGsWFZJnjcjpdh+dKELHk2w1kaprJaon8kb8w=;
-	b=qRqZz2IoWiygzEW/51RGsU1YPtNjDRYpfrc4aQP4TBRI2tJ9hZDM/+zY2AzfJRETIzw49K
-	Ww2nuej4pWX/RVDg==
+	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
+	b=+V7M2w5KV1obVNkkCrtmW1nyDYDMyOctOF2m30q4pSGzYgvhF4D9x2YPbjMxN/FfE6V8Pq
+	Ok1+nScUzm66hRAQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BEE7813693;
-	Tue, 15 Sep 2026 17:54:31 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0660713432;
+	Tue, 15 Sep 2026 18:20:34 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id vz5dE1eGqWrIEAAAD6G6ig
-	(envelope-from <krisman@suse.de>); Tue, 15 Sep 2026 17:54:31 +0000
+	id mpBZI3KMqWqeKwAAD6G6ig
+	(envelope-from <krisman@suse.de>); Tue, 15 Sep 2026 18:20:34 +0000
 From: Gabriel Krisman Bertazi <krisman@suse.de>
 To: Uzair Beg <uzairbeg11@gmail.com>, io-uring@vger.kernel.org
 Cc: axboe@kernel.dk, asml.silence@gmail.com, Chengfeng Lin
  <lin2530632123@gmail.com>, linux-kernel@vger.kernel.org, Uzair Beg
  <uzairbeg11@gmail.com>
-Subject: Re: [RFC PATCH 1/3] io_uring/rsrc: allocate io_rsrc_node from a
- dedicated kmem_cache
-In-Reply-To: <20260914092049.130079-2-uzairbeg11@gmail.com>
+Subject: Re: [RFC PATCH 3/3] io_uring/rsrc: prefill the node cache when a
+ file table is registered empty
+In-Reply-To: <20260914092049.130079-4-uzairbeg11@gmail.com>
 Organization: SUSE
 References: <20260914092049.130079-1-uzairbeg11@gmail.com>
- <20260914092049.130079-2-uzairbeg11@gmail.com>
-Date: Tue, 15 Sep 2026 14:54:29 -0300
-Message-ID: <87jyom1ju2.fsf@mailhost.krisman.be>
+ <20260914092049.130079-4-uzairbeg11@gmail.com>
+Date: Tue, 15 Sep 2026 15:20:28 -0300
+Message-ID: <87fqza1imr.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -89,8 +89,9 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Score: -2.80
 X-Spam-Level: 
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 X-Spamd-Result: default: False [-2.80 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -114,79 +115,184 @@ X-Spamd-Result: default: False [-2.80 / 50.00];
 	RCVD_COUNT_TWO(0.00)[2];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,mailhost.krisman.be:mid]
-X-Spam-Flag: NO
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mailhost.krisman.be:mid,imap1.dmz-prg2.suse.org:helo]
 
 Uzair Beg <uzairbeg11@gmail.com> writes:
 
-> io_rsrc_node allocations come from the generic kmalloc-32 bucket via
-> io_cache_alloc_new(). On a first fill of a sparse fixed file table the
-> per-ring node cache is empty by construction, since io_reset_rsrc_node()
-> returns early on a NULL slot and nothing is freed back, so every install
-> takes an allocator round trip.
+> Registering a sparse fixed file table allocates no nodes at
+> registration time; each node is allocated later, on the install path,
+> where MSG_RING SEND_FD pays for it. Bare-metal measurement of the
+> 4,096-slot first fill shows the cost is not the allocator call
+> (bulk refill was neutral) nor fresh slab pages (priming the slab was
+> neutral), but the per-object SLUB allocation path itself. The only way
+> to take it off the install path is to not allocate there.
 >
-> Add an optional kmem_cache to io_alloc_cache and use it for the node
-> cache. The slab pointer defaults to NULL, so other io_alloc_cache users
-> are unchanged and imu_cache keeps using kmalloc, its element size being
-> variable. All three free paths honour the slab.
+> When a sparse table of N slots is registered, grow the per-ring node
+> cache to min(N, IO_ALLOC_CACHE_PREFILL_MAX) and bulk-fill it, so the
+> subsequent installs hit the cache. Prefill is best-effort: on any
+> failure the cache is left in a valid state (a successfully grown
+> pointer array is retained) and registration proceeds unchanged.
+> Non-sparse registrations are untouched, since they allocate every node
+> inline anyway.
+
+I'm unconvinced this is the right approach.  This is only relevant for
+initialization overhead: once the ring is in operation, the overhead is
+gone because nodes are recycled.  So this will really benefit
+short-lived applications that create large tables, something that I
+suspect is rare outside of artificial benchmarks.  On the other hand,
+people are creating sparse but arbitrarily large tables.  Does it make
+sense to pre-allocated up to 192KB in memory for short-lived
+applications that might use only a couple of those nodes?
+
+> On the reported 4,096-slot first fill this is 9.8% faster than
+> unpatched. Because the enlarged cache also retains nodes released by
+> FILES_UPDATE, a same-ring remove-and-refill of 4,096 files is 18.8%
+> faster. The cost is moved to registration rather than removed: a
+> one-shot register-then-fill is unchanged overall, and a program that
+> registers many slots and installs few pays for nodes it never uses.
+> Whether that trade is acceptable, or should be behind a registration
+> flag, is the question this patch is intended to raise.
 >
-> On its own this is neutral on the reported workload. It exists so that
-> the following patches can use kmem_cache_alloc_bulk(), which has no
-> equivalent for plain kmalloc.
+> The stash loop from the bulk refill path is factored into a helper so
+> both callers share it.
 >
 > Reported-by: Chengfeng Lin <lin2530632123@gmail.com>
 > Closes: https://lore.kernel.org/io-uring/CANGjgdmt0FQ=offsdfn+wEaDxbOFoAa6bi92X_vEo4S6aCZ56A@mail.gmail.com/
 > Tested-by: Chengfeng Lin <lin2530632123@gmail.com>
+> Co-developed-by: Chengfeng Lin <lin2530632123@gmail.com>
+> Signed-off-by: Chengfeng Lin <lin2530632123@gmail.com>
 > Signed-off-by: Uzair Beg <uzairbeg11@gmail.com>
 > ---
->  include/linux/io_uring_types.h |  1 +
->  io_uring/alloc_cache.c         | 14 +++++++++++---
->  io_uring/alloc_cache.h         |  8 ++++++--
->  io_uring/io_uring.c            |  5 +++++
->  io_uring/io_uring.h            |  1 +
->  io_uring/rsrc.c                |  2 ++
->  6 files changed, 26 insertions(+), 5 deletions(-)
+>  io_uring/alloc_cache.c | 58 ++++++++++++++++++++++++++++++++++--------
+>  io_uring/alloc_cache.h |  2 ++
+>  io_uring/rsrc.c        |  4 +++
+>  3 files changed, 54 insertions(+), 10 deletions(-)
 >
-> diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
-> index c2ea6280901..e8d5a585a60 100644
-> --- a/include/linux/io_uring_types.h
-> +++ b/include/linux/io_uring_types.h
-> @@ -253,6 +253,7 @@ struct io_alloc_cache {
->  	unsigned int		max_cached;
->  	unsigned int		elem_size;
->  	unsigned int		init_clear;
-> +	struct kmem_cache	*slab;
->  };
-
-Not opposed to having a slab, but I actually think it is
-unnecessary.  see patch 2.  If we do that, we actually should delete the
-async_size parameter in the opdef, since it is now redundant.  But
-see comments in patch 2.
-
->  
->  struct io_ring_ctx {
 > diff --git a/io_uring/alloc_cache.c b/io_uring/alloc_cache.c
-> index 58423888b73..a44b82a80f1 100644
+> index cba0e6c5d66..2c6e09313d2 100644
 > --- a/io_uring/alloc_cache.c
 > +++ b/io_uring/alloc_cache.c
-> @@ -10,8 +10,12 @@ void io_alloc_cache_free(struct io_alloc_cache *cache,
->  	if (!cache->entries)
->  		return;
+> @@ -38,6 +38,22 @@ bool io_alloc_cache_init(struct io_alloc_cache *cache,
+>  	return false;
+>  }
 >  
-> -	while ((entry = io_alloc_cache_get(cache)) != NULL)
-> -		free(entry);
-> +	while ((entry = io_alloc_cache_get(cache)) != NULL) {
-> +		if (cache->slab)
-> +			kmem_cache_free(cache->slab, entry);
-> +		else
-> +			free(entry);
+> +static void io_cache_stash(struct io_alloc_cache *cache, void **slot,
+> +			   unsigned int nr)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < nr; i++) {
+> +		if (cache->init_clear)
+> +			memset(slot[i], 0, cache->init_clear);
+> +		if (unlikely(!kasan_mempool_poison_object(slot[i])))
+> +			break;
+> +		cache->nr_cached++;
 > +	}
-
-FWIW, this is exactly why we have the (*free) callback, you should have a function
-for your specific type used as a callback that does the kmem_cache_free
-so you don't need the if/else here.
-
-But for a simple kmem_cache_free, kfree works just fine.
+> +	for (; i < nr; i++)
+> +		kmem_cache_free(cache->slab, slot[i]);
+> +}
+> +
+>  void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
+>  {
+>  	void *obj;
+> @@ -45,7 +61,7 @@ void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
+>  	if (cache->slab) {
+>  		unsigned int room = cache->max_cached - cache->nr_cached;
+>  		void **slot = &cache->entries[cache->nr_cached];
+> -		unsigned int batch, got, i;
+> +		unsigned int batch, got;
+>  
+>  		if (unlikely(!room))
+>  			return kmem_cache_alloc(cache->slab, gfp);
+> @@ -57,15 +73,7 @@ void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
+>  
+>  		/* return one object, stash the rest in the cache */
+>  		obj = slot[got - 1];
+> -		for (i = 0; i < got - 1; i++) {
+> -			if (cache->init_clear)
+> -				memset(slot[i], 0, cache->init_clear);
+> -			if (unlikely(!kasan_mempool_poison_object(slot[i])))
+> -				break;
+> -			cache->nr_cached++;
+> -		}
+> -		for (; i < got - 1; i++)
+> -			kmem_cache_free(cache->slab, slot[i]);
+> +		io_cache_stash(cache, slot, got - 1);
+>  	} else {
+>  		obj = kmalloc(cache->elem_size, gfp);
+>  	}
+> @@ -73,3 +81,33 @@ void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
+>  		memset(obj, 0, cache->init_clear);
+>  	return obj;
+>  }
+> +
+> +void io_alloc_cache_prefill(struct io_alloc_cache *cache, unsigned int nr)
+> +{
+> +	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;
+> +	unsigned int got;
+> +	void **entries;
+> +
+> +	if (!cache->slab || !cache->entries)
+> +		return;
+> +
+> +	nr = min_t(unsigned int, nr, IO_ALLOC_CACHE_PREFILL_MAX);
+> +	if (nr <= cache->nr_cached)
+> +		return;
+> +
+> +	if (nr > cache->max_cached) {
+> +		entries = kvmalloc_array(nr, sizeof(void *), gfp);
+> +		if (!entries)
+> +			return;
+> +		memcpy(entries, cache->entries,
+> +		       cache->nr_cached * sizeof(void *));
+> +		kvfree(cache->entries);
+> +		cache->entries = entries;
+> +		cache->max_cached = nr;
+> +	}
+> +
+> +	got = kmem_cache_alloc_bulk(cache->slab, gfp, nr - cache->nr_cached,
+> +				    &cache->entries[cache->nr_cached]);
+> +	if (got)
+> +		io_cache_stash(cache, &cache->entries[cache->nr_cached], got);
+> +}
+> diff --git a/io_uring/alloc_cache.h b/io_uring/alloc_cache.h
+> index 82d552c7517..ca6af52dd7d 100644
+> --- a/io_uring/alloc_cache.h
+> +++ b/io_uring/alloc_cache.h
+> @@ -8,6 +8,7 @@
+>   */
+>  #define IO_ALLOC_CACHE_MAX	128
+>  #define IO_ALLOC_CACHE_REFILL	32
+> +#define IO_ALLOC_CACHE_PREFILL_MAX	4096
+>  
+>  void io_alloc_cache_free(struct io_alloc_cache *cache,
+>  			 void (*free)(const void *));
+> @@ -16,6 +17,7 @@ bool io_alloc_cache_init(struct io_alloc_cache *cache,
+>  			 unsigned int init_bytes);
+>  
+>  void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp);
+> +void io_alloc_cache_prefill(struct io_alloc_cache *cache, unsigned int nr);
+>  
+>  static inline bool io_alloc_cache_put(struct io_alloc_cache *cache,
+>  				      void *entry)
+> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+> index 6413682ebe4..b7f78b6b514 100644
+> --- a/io_uring/rsrc.c
+> +++ b/io_uring/rsrc.c
+> @@ -560,6 +560,10 @@ int io_sqe_files_register(struct io_ring_ctx *ctx, void __user *arg,
+>  	if (!io_alloc_file_tables(ctx, &ctx->file_table, nr_args))
+>  		return -ENOMEM;
+>  
+> +	/* sparse table: nodes are installed later, so cache them now */
+> +	if (!fds)
+> +		io_alloc_cache_prefill(&ctx->node_cache, nr_args);
+> +
+>  	for (i = 0; i < nr_args; i++) {
+>  		struct io_rsrc_node *node;
+>  		u64 tag = 0;
+> -- 
+> 2.43.0
+>
 
 -- 
 Gabriel Krisman Bertazi
