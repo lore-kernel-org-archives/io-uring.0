@@ -1,65 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4F03D6487;
-	Tue, 15 Sep 2026 12:21:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0983F3D75D1
+	for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 15:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789474882; cv=none; b=PQ47Z/OH83XVNBE7JgH4SqkXbLMTFUMvOB0CjaFmGnDWos43ZARwThFKssGk6A+1I4zQxY7kFs/GQ9LlE+PGaiiC/yuI3bKTlMv1HgBl4VScr4by1CXAVpeSbrDhUONKATxwY1tZ5gZjS160DYDVqwnqIzbD/SepqTIzW6G5uDU=
+	t=1789484578; cv=none; b=kEIQfNre4n2zo+Ozotw/Vu+MxKlOL/2RQXeEqdwmEUx4njSDYrDcD1BvO13QRB56Dl21tl1PMLvW+ZPY/ZOqr2iMD4+5zotH4ZQh5F1lV/9aWy3h9iZIIVhVXHfoayRoFH8rKgD7DVAlc5m3u1y+a0CykxcuqFoi6vOAWnL5Fs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789474882; c=relaxed/simple;
-	bh=Uc7cO5xoe1cQZMzNgyouoEulYOfR9Lrcdm/hjSDUACk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WOfWwbfAJVt7D5wIOPAeyHKCnEk9WxUUhVtjoCViYBzz5QYG1M3GqvyyjvzgvY2ak2g/RXyboVl1l/3FA2kfwLwPeMR5PAfnZfdve5So+yTNCG5iFrOqf6EFE7aovcJouU55fxd12gr0HlAj1lHoRgpOSEwC4Sso8VS7y9RH5GU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RifjIpqw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789484578; c=relaxed/simple;
+	bh=yL9gjDzcdbDEXhuKZE8yM1jk8TwvDCeRrm+Vd8ZiE5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R2gGYmqXajZALwyJ1sJ7/aFlXZFuo59afgu27gU9eTH0wo4zQNSD6Sar2TQyAqMYyOjbLD/7MV6hzLUQMiWXB3YwSp4vTuYaqVqdBuu9eQntpAcQys69JZABY91L4C/CddX8bYUhidMwypsodMqFzGOa8yZnWChwZqrhPaXYQh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P8aj+hkZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RifjIpqw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789A61F00893;
-	Tue, 15 Sep 2026 12:21:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789474881;
-	bh=Uc7cO5xoe1cQZMzNgyouoEulYOfR9Lrcdm/hjSDUACk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RifjIpqwJ9OqsSvNVf8dpgAPRIXNtpH+2TvjVYCOe9JUquNlggyFFXGJ0dnsaYmCg
-	 GQ9XosyxDDx8GSMITHICVAvNL+LxNcmxvQMQP7A3d1sqIXZ9RcF7rJNLS5wAMhcPOo
-	 SPow9eKiSuj2zKpRt8Cuw1b4X6SN6EeInZhqMldrk5L5hldvpE4fVZKWhOZYYZiNwJ
-	 uht3jZCMYXSw+Eavv2okVbNxYC6NRCTmed+SaIPKeRXggq0abWEv5pETdDXtyZFTxL
-	 +PtN1edDe9OuMct6IEevtSb0WL7MUHUyK38VC8DLpI0Q9G8uZMCxYp4zSbGdcMEgO3
-	 kB54THZRs52CQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC POC 46/50] xen/gntdev-dmabuf: stop putting the
- descriptor back on failure
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Brauner" <brauner@kernel.org>, "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: linux-gpio@vger.kernel.org, bpf@vger.kernel.org, "Oleg Nesterov" <oleg@redhat.com>, "Jann
- Horn" <jannh@google.com>, linux-mm@kvack.org, linux-openrisc@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-hyperv@vger.kernel.org, virtualization@lists.linux.dev, sparclinux@vger.kernel.org, kvm@vger.kernel.org, linux-mips@vger.kernel.org, linux-alpha@vger.kernel.org, dri-devel@lists.freedesktop.org, "Peter
- Zijlstra" <peterz@infradead.org>, io-uring@vger.kernel.org, "David Airlie" <airlied@redhat.com>,
- =?utf-8?b?Q2hyaXN0aWFuIEJyYXVuZXIgKEFtdXRhYmxlKQ==?= <brauner@kernel.org>, linux-m68k@lists.linux-m68k.org, linux-arm-kernel@lists.infradead.org, "Ingo
- Molnar" <mingo@redhat.com>, linux-um@lists.infradead.org, linux-sh@vger.kernel.org, "Jan
- Kara" <jack@suse.cz>, "Alexander Viro" <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org, "Jens
- Axboe" <axboe@kernel.dk>, linuxppc-dev@lists.ozlabs.org, linux-snps-arc@lists.infradead.org, "Eugenio
- Perez" <eperezma@redhat.com>, kexec@lists.infradead.org, linux-parisc@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-hexagon@vger.kernel.org, "Michael
- S. Tsirkin" <mst@redhat.com>, linux-csky@vger.kernel.org
-In-Reply-To: <20260915-work-fd-reserve-unify-folded-v1-46-4d5217d6b246@kernel.org>
-References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
- <20260915-work-fd-reserve-unify-folded-v1-46-4d5217d6b246@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 12:21:19 +0000
-Message-Id: <20260915122119.789A61F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P8aj+hkZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1789484575;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YHyk6+IrqQOJoNBANVy6H3eTJp4wkRbqnNOpZl37PNY=;
+	b=P8aj+hkZGxxcFPiS8ZW1YNQCT/8MK0dowL+F1UA6R93chrS7XufgqIKUF77vxnYXqgAAAb
+	rxFsVWpn/Tm2J0BABwjS5lPiDmz5Mx8+bzb5f62a0vIyKuje+WyS0F0KUw8/SIfPRR3pC1
+	fplzoJT73zGer3ck6uYzSH9qo2ybeiI=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-628-t8xWsI1wOhS3uKw5owlbRQ-1; Tue,
+ 15 Sep 2026 11:02:51 -0400
+X-MC-Unique: t8xWsI1wOhS3uKw5owlbRQ-1
+X-Mimecast-MFC-AGG-ID: t8xWsI1wOhS3uKw5owlbRQ_1789484569
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 52A711955E91;
+	Tue, 15 Sep 2026 15:02:48 +0000 (UTC)
+Received: from fedora (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id D9361195604C;
+	Tue, 15 Sep 2026 15:02:44 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Tue, 15 Sep 2026 17:02:48 +0200 (CEST)
+Date: Tue, 15 Sep 2026 17:02:43 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+	io-uring@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 2/6] fork: refuse new threads while a coredump is in
+ progress
+Message-ID: <aqleExxTBcHsonQe@redhat.com>
+References: <20260915-work-coredump-fixes-v1-0-f354ca41780c@kernel.org>
+ <20260915-work-coredump-fixes-v1-2-f354ca41780c@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260915-work-coredump-fixes-v1-2-f354ca41780c@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-> Rely on the fd exit path machinery.
->=20
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+On 09/15, Christian Brauner wrote:
+>
+> Say a SQPOLL thread is a member of a thread-group that coredumps.
+> The coredump code uses zap_process() and sends SIGKILL. The SQPOLL
+> thread uses io_sqd_handle_event() and calls get_signal(). It removes
+> SIGKILL from the pending set and returns. The SQPOLL thread breaks out
+> of the loop and drains its own task work.
+>
+> Any pending io_req_task_submit() with REQ_F_FORCE_ASYNC creates a new
+> worker when no other worker is free. So it ends up calling
+> create_io_thread() from a thread whose fatal signal is gone. That means
+> copy_process() allows the creation.
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+Hmm, thats bad ;)
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915-work-fd-re=
-serve-unify-folded-v1-0-4d5217d6b246@kernel.org?part=3D46
+But then ...
+
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -2491,8 +2491,8 @@ __latent_entropy struct task_struct *copy_process(
+>  		goto bad_fork_core_free;
+>  	}
+>
+> -	/* Let kill terminate clone/fork in the middle */
+> -	if (fatal_signal_pending(current)) {
+> +	/* Let kill or a coredump in progress terminate clone/fork */
+> +	if (fatal_signal_pending(current) || current->signal->core_state) {
+>  		retval = -EINTR;
+>  		goto bad_fork_core_free;
+
+this change is not enough? Don't we have a similar race with exec?
+
+de_thread() kills all other threads and counts them too. Shouldn't it
+also check signal->group_exec_task ?
+
+Oleg.
 
