@@ -1,132 +1,208 @@
-Received: from mail-ed2-f39.google.com (mail-ed2-f39.google.com [74.125.228.103])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B30F439F98
-	for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 19:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AA04483BF
+	for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 19:44:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789499362; cv=none; b=GCm2qo/Gzm8uoCeSJVuLyTrNniIGeiC3rgvnf7UsPtKsao09XBHq1nhnIDDnbA9ten1oDomtMLK2ta93tZ/dTNt1TNZnhfwDRMa7l+4LtIwYWw+uWmgP+W4g5zG+o7Je9Ncn1Xb+YE3eDBUGGIDf83/mXBvqQ/P7EucC4xbxm7o=
+	t=1789501463; cv=none; b=IhaW3olJFxP9sAkWH4LATc+BDIZmLrQhlJ3uxlMqqxlVhi7SW6t/B688O8NDVsRkNSk8nO08pSQB96qZas2Nc+vYDu7MtsB6WJvjC9hCMuH9ttsMa8UbB5sPR7BmucXua0zhpPbwp8xxoUT+GLBxSKRUYcU8BNncbgISgeOXqi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789499362; c=relaxed/simple;
-	bh=AGk4y8oFpNibhByHKIxcRS7KnQx6z20Q8VC6dFl1tNo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ueEXYuHZE8K9zaXgJuqxna6HtsXXaNQaJ2vMrGXlxtD3DTTYOrQP/Y2aXuuXTHli6vOGbKWxIxf0FZU6j67WVx46D5/ywYiv7/lAWUaQTxvH4NTXHH6VGNTFHOpWMX1EAWY/ogwn4Jkm/iOVD1cOGyNBn7xNptbJUQnXQUA41o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=CSrtt9Un; arc=none smtp.client-ip=74.125.228.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1789501463; c=relaxed/simple;
+	bh=zqUVI9XN9qRlnoJmqgh8WL98vi1FNO+xnJ6FWXvEmQM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Kn9lYMsuZXMGSVkURK4NFycqYFk5GjeLI2kz54KkqUGhP21cWMKj07dUzzqc+yIS4MA43+AuXvP/RGNl8sddP/Nx2TBu2IU/VcvW3CHQeXls1xTQVkOrrXZjq4YNAPt9SMKe4AUTHkJqZQAGkV/PssTSwRsYwq/6Z/g4gIVNNUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=F7IhcNyf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ejZOv59j; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=xxxNCAXy; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=JCOb1tYI; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="CSrtt9Un"
-Received: by mail-ed2-f39.google.com with SMTP id 4fb4d7f45d1cf-6aa0ee64afdso275825a12.0
-        for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 12:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1789499357; x=1790104157; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XFFk9jJtDswBQpA8QWIooO6lLG4HdlvPT/LqykRjG+U=;
-        b=CSrtt9Unpbm2RA3J8D1Piu8PqBvT7/aa/KZ5CE3c3D++Q65F+8LC8PQhJ+YAQkLRZF
-         FOCbEfcedihMauvO8i4QEZYDfsgCMc/AU6Y/5BuRF/k4i643ZbHqsUyNas20hZQzkd2E
-         0RZUaMtkje/C5faG2xlXImdyEwn4T014v7tJM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789499357; x=1790104157;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=XFFk9jJtDswBQpA8QWIooO6lLG4HdlvPT/LqykRjG+U=;
-        b=zn0dbX3t0cPEYYKXqRSI//qox9Pr10fdotxaOV75pd80LAkd12SwZwFc61S0WjdUF0
-         yh/O6gXlLQGUiNvHMHG13w6Ln1YYmLxs0ZXumz+9fg+HgFbwN9AePz1s64avv90zFm+p
-         0xjvuLurkrAodc2dwy9VbhHcf/jXptJ39rWGXP1+cUbfGBPJxIOzSPUqG2fgvDQLuKbt
-         CWXEq0DY73MHhRJtA1CHUMBRuzqGq/IGaeEXRBzwu/OhLrSRJB+DLijzD0LonUFjtW7N
-         tQ9p30V3thjHikjxeCi+Vt3yuNjSYUMKcbjeJu5slKSV6YWEiwjt8ozri4uW6j1Ct58Y
-         3YTA==
-X-Forwarded-Encrypted: i=1; AKwUvBy3eyaTojLjmUi0ETBVhnG/CAxBsZHrU1DAFsE6OjELE/QGouMdicIWmjnzPM3dnFkcvrkyI2HRRA==@vger.kernel.org
-X-Gm-Message-State: AFuF++l+/6c8YGh3gIvcOzQE4hUCJ92rYhrRyTA0b75iE3KpTDbxXEiD
-	Td7QK5XhIfdlpbHkS3PvKTPtVuBN6S1HIZGPFXGLpwlrqkYNGxPioSxy3ncYZ4xAL3pesZIbuTW
-	I9ImVDas=
-X-Gm-Gg: AYBFou2xdk7rsD3KgBm6rvWnLOvpkN9KNnngGGT4M05mRU64WfCAkdifn+X3iMblDRg
-	+IDx139cuCk5aw5YVa/Zxbr6KNrKP4XsA6hscslhrL21aFgC8bXDxglgeQhcfPRVU/uuiyys9yA
-	JzIa5H+cAmC1+fpbETM1JIy4LafvScTRfQVgOgFkBAt/AAUUkrANCIomAjeWwNx8pvONCu91jr0
-	ZJkagbI3SiwRN3XAZmQTNn4VTAGNYWxbYGWjIyPeL5z0IOsOs9vcEUITcZzzITksaWPtWWB1Y9j
-	VSW9JLMIzfIbiII2QuarHP5ez3YWFYMULUlPYgstrAiJAOySV4BomFPlph2uDLXvb0YfA2PZr7v
-	aOesNNSH3IKCL98EuqtS1x/jS/I59TdeC/NZsJn1OKFaNagRzpW9D2J1etRm5JPOLcw2rCK05TI
-	1XctEGWtUSNd7s+8ozJ7nc00J44lP1StlWIHpCIiu0VdvPS2GDSDbiRTdOV0j2WTa+Wa93iFNoK
-	QvKo37B2AJwoqLfuspe2evDXqOoQD4UWIQBUsZq7MPCk7hJs0c=
-X-Received: by 2002:a05:6402:a5ca:20b0:6aa:13a8:beea with SMTP id 4fb4d7f45d1cf-6aa13a8c5abmr2284784a12.21.1789499357228;
-        Tue, 15 Sep 2026 12:09:17 -0700 (PDT)
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com. [74.125.228.140])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aa1d2b0899sm139272a12.31.2026.09.15.12.09.16
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2026 12:09:16 -0700 (PDT)
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254fa663bfso33744666b.1
-        for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 12:09:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzTNo03t/wY9jgHZJrAkRvuJ8A0keRZtfpAE99awHMP/pblUNYOvfN/dC2vZeutqFj4dA1ksfD9TA==@vger.kernel.org
-X-Received: by 2002:a17:906:7309:b0:c25:47a4:fedc with SMTP id
- a640c23a62f3a-c29b839a057mr1176039766b.2.1789499355710; Tue, 15 Sep 2026
- 12:09:15 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="F7IhcNyf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ejZOv59j";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="xxxNCAXy";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="JCOb1tYI"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id BE7B71FE1D;
+	Tue, 15 Sep 2026 19:44:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1789501455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZrZGj1dRirEoshytMHM/4TTl+GGWEXpc5EDiy04m10s=;
+	b=F7IhcNyftmH/coLw9VbDGCRGEbaPmxWqv1RUJTNBdMQda89bm79sVfNFQiE67qoIan0TGL
+	qXtz7bzusV27R1RCXJn3FtvHRfrDD0GnHXMeevNegdL/4L4Zo5TtaO4PFuX7I12e/p5EXY
+	8jVDUmGqxiNxO9DiMvKcIAA19MQ8wDY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1789501455;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZrZGj1dRirEoshytMHM/4TTl+GGWEXpc5EDiy04m10s=;
+	b=ejZOv59jqdCRqlUj5ph38nyEcQfOcsk9VMrgHjvXg907N7F7Jo60DO/J80xRTOpFs+6OG6
+	UXD3pQg1TanSf0CQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=xxxNCAXy;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=JCOb1tYI
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1789501450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZrZGj1dRirEoshytMHM/4TTl+GGWEXpc5EDiy04m10s=;
+	b=xxxNCAXyySeGCTqgMuQHEenwsdGx5BTsT96zuISqrhyDdDl2pBadciJV13R5dsB+C/FtFK
+	/gS2eWVCL0yHUW/X6A+JFUxYwsF2uVLjXOqactD3sVHVYrgNrsPCL46j6ldzVmgrCYyRwW
+	9My4sxn/h1iuIjxG7BUFbAVoaINkKyQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1789501450;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZrZGj1dRirEoshytMHM/4TTl+GGWEXpc5EDiy04m10s=;
+	b=JCOb1tYItnkljG71GOpyAq9YcuSgavKfhY8Ap3xDQD6F1M/fXfnvSfDWSwtWYGgswMWHSb
+	jUp5k+XSj3YxbrAg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D662D13693;
+	Tue, 15 Sep 2026 19:44:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id c50YFAmgqWplAQAAD6G6ig
+	(envelope-from <krisman@suse.de>); Tue, 15 Sep 2026 19:44:09 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc: juanlu@fastmail.com
+Subject: Re: [PATCH 01/10] io_uring/io-wq: put the request file before
+ posting a completion
+In-Reply-To: <20260911154811.646705-2-axboe@kernel.dk>
+Organization: SUSE
+References: <20260911154811.646705-1-axboe@kernel.dk>
+ <20260911154811.646705-2-axboe@kernel.dk>
+Date: Tue, 15 Sep 2026 16:44:07 -0300
+Message-ID: <87cxue1erc.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
- <CAG48ez1RsdT=O=-0city3vjgWhDvY424KtTmrCJntWy5ds3HBQ@mail.gmail.com>
-In-Reply-To: <CAG48ez1RsdT=O=-0city3vjgWhDvY424KtTmrCJntWy5ds3HBQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 15 Sep 2026 12:08:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi3Kkqgfg6zUTHpQoZNL2VOB4vYqpi6RX0WNO++29UtyQ@mail.gmail.com>
-X-Gm-Features: AcwNN1VCm0LMG7z3Jned014oJh6WBcf4uOx0OBk98_hrtHKbrhcQiMMJ_A-fmB0
-Message-ID: <CAHk-=wi3Kkqgfg6zUTHpQoZNL2VOB4vYqpi6RX0WNO++29UtyQ@mail.gmail.com>
-Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
-To: Jann Horn <jannh@google.com>
-Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
-	netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, 
-	David Airlie <airlied@redhat.com>, virtualization@lists.linux.dev, kvm@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-hyperv@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Spam-Score: -4.51
+X-Rspamd-Queue-Id: BE7B71FE1D
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[fastmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[fastmail.com];
+	RCPT_COUNT_THREE(0.00)[3];
+	FROM_EQ_ENVFROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:email];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Flag: NO
 
-On Tue, 15 Sept 2026 at 10:52, Jann Horn <jannh@google.com> wrote:
+Jens Axboe <axboe@kernel.dk> writes:
+
+> Once io-wq is done with the request, put any potential file that request
+> had pinned upfront. This ensures any file references are fully put by
+> the time io-wq posts a completion. Registered files are held by the
+> resource node and don't need this.
 >
-> Is this mainly about stuff like "we installed a file descriptor and
-> then the following put_user() failed"? Because if so, I think a nicer
-> fix would be to have a policy of "if userspace provides unwritable
-> memory to a syscall, just keep going and pretend the access worked",
-> and maybe have a sysctl that kills the process when this happens to
-> emphasize that userspace should not be doing this.
+> Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> ---
+>  io_uring/io_uring.c | 25 ++++++++++++++++++++++++-
+>  1 file changed, 24 insertions(+), 1 deletion(-)
+>
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index 61053421d809..f96dd2d8c6b1 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -907,6 +907,24 @@ bool io_req_post_cqe32(struct io_kiocb *req, struct io_uring_cqe cqe[2])
+>  	return posted;
+>  }
+>  
+> +/*
+> + * Drop any io-wq request with a file upfront, otherwise it gets deferred to
+> + * much later post CQE posting.
+> + */
+> +static void io_req_put_file_iowq(struct io_kiocb *req, bool sync)
+> +{
+> +	struct file *file = req->file;
+> +
+> +	if (!file || (req->flags & (REQ_F_FIXED_FILE | REQ_F_REISSUE)))
+> +		return;
+> +
+> +	WRITE_ONCE(req->file, NULL);
+> +	if (sync)
+> +		__fput_sync(file);
+> +	else
+> +		fput(file);
 
-We've done that before, where we just ignore put_user() errors and the
-user gets whatever the user gets.
+Why do you need an async fput on the error path?  I'm missing why it
+necessary.  Also, isn't that gonna cause the same sort of delay until
+the task work or delayed work is executed?
 
-It is maybe not optimal, but it's fine. You can find quite a lot of
-unchecked put_user() calls with a pattern like
+Other than that:
 
-        git grep '^[[:space:]]*put_user(.*);'
+Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
 
-and some of them are in core code - see the two in kernel/fork.c, for example.
 
-One of them says "if userspace has not set up a proper pointer then
-tough luck". The other one doesn't even bother with a comment.
+> +}
+> +
+>  static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
+>  {
+>  	struct io_ring_ctx *ctx = req->ctx;
+> @@ -919,6 +937,8 @@ static void io_req_complete_post(struct io_kiocb *req, unsigned issue_flags)
+>  	if (WARN_ON_ONCE(!(issue_flags & IO_URING_F_IOWQ)))
+>  		return;
+>  
+> +	io_req_put_file_iowq(req, true);
+> +
+>  	/*
+>  	 * Handle special CQ sync cases via task_work. DEFER_TASKRUN requires
+>  	 * the submitter task context, IOPOLL protects with uring_lock.
+> @@ -1480,6 +1500,7 @@ void io_wq_submit_work(struct io_wq_work *work)
+>  	/* either cancelled or io-wq is dying, so don't touch tctx->iowq */
+>  	if (atomic_read(&work->flags) & IO_WQ_WORK_CANCEL) {
+>  fail:
+> +		io_req_put_file_iowq(req, false);
+>  		io_req_task_queue_fail(req, err);
+>  		return;
+>  	}
+> @@ -1555,8 +1576,10 @@ void io_wq_submit_work(struct io_wq_work *work)
+>  	} while (1);
+>  
+>  	/* avoid locking problems by failing it from a clean context */
+> -	if (ret)
+> +	if (ret) {
+> +		io_req_put_file_iowq(req, true);
+>  		io_req_task_queue_fail(req, ret);
+> +	}
+>  }
+>  
+>  inline struct file *io_file_get_fixed(struct io_kiocb *req, int fd,
+> -- 
+> 2.55.0
+>
 
-The scheduler has two cases too, although one of them is admittedly
-for another error case.
-
-So yes, saying "if you pass bogus arguments, you get what you get" is
-a valid model. It's perhaps not the *preferred* model, but it's not
-wrong.
-
-It *would* be wrong to take code that already has error handling and
-remove the error handling, though.
-
-                  Linus
+-- 
+Gabriel Krisman Bertazi
