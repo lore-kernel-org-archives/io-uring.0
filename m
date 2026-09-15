@@ -1,298 +1,132 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-ed2-f39.google.com (mail-ed2-f39.google.com [74.125.228.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8353D409272;
-	Tue, 15 Sep 2026 18:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B30F439F98
+	for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 19:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.103
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789496454; cv=none; b=ooSIgDPcQbpCkglp2fZABGBQ3tqFcNBCqDbnb2B+CeJUE4TFEtHcttJ8/eaNDOMo1BcB1PlfOvkaS/gHPyRO1pW1COuT2lxg5YuESn4Dn/Eawz4ePhWQ+FavqeRibgB44XLQIgB9NeaG5CHOxBJJmbsNFHJtM1qJX9pTnzSy2ew=
+	t=1789499362; cv=none; b=GCm2qo/Gzm8uoCeSJVuLyTrNniIGeiC3rgvnf7UsPtKsao09XBHq1nhnIDDnbA9ten1oDomtMLK2ta93tZ/dTNt1TNZnhfwDRMa7l+4LtIwYWw+uWmgP+W4g5zG+o7Je9Ncn1Xb+YE3eDBUGGIDf83/mXBvqQ/P7EucC4xbxm7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789496454; c=relaxed/simple;
-	bh=bUmrp4GMLhXBGeleLZrHVx7c+JGCTJyLNnPC/BQsLzE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=pLilLhSxGb4WTCYz8LaLzhsDSyadW/Bvs0UtyUQ9XHcmcQn7BE1avho+4mi96cBg6NopR/upb48a+yObZHw/LuM75MhbVa3Aq+UYmZwmfQP04iLgLYcox8U+ZvtV6zpRS0+SjPezxG5koaGu+8OwjhMHISJ2yyJWP3ww9RTX5pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=iXeHV6TB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=vvWIZq4b; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AczWsRjm; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=+V7M2w5K; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1789499362; c=relaxed/simple;
+	bh=AGk4y8oFpNibhByHKIxcRS7KnQx6z20Q8VC6dFl1tNo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ueEXYuHZE8K9zaXgJuqxna6HtsXXaNQaJ2vMrGXlxtD3DTTYOrQP/Y2aXuuXTHli6vOGbKWxIxf0FZU6j67WVx46D5/ywYiv7/lAWUaQTxvH4NTXHH6VGNTFHOpWMX1EAWY/ogwn4Jkm/iOVD1cOGyNBn7xNptbJUQnXQUA41o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=CSrtt9Un; arc=none smtp.client-ip=74.125.228.103
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="iXeHV6TB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="vvWIZq4b";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="AczWsRjm";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="+V7M2w5K"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A148221D55;
-	Tue, 15 Sep 2026 18:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1789496439; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
-	b=iXeHV6TBSmL9A6lMnYEyc2pDyim17mGDAIpsaYmOf0w9bgOc3TVoIWlPEDzqSNFrn1OFYZ
-	wsye4NzqKKlJ7KaHmmWPe4W4d6jIMyaj5ubduVwHqV8leFp4oOsmhIzljPbfWd+IungLwg
-	D/kly99MUmcgMVdD6OqahuQbphpU64M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1789496439;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
-	b=vvWIZq4bcidZiZ9beD4pKcfg9O5PH6nd0O/PnotI09pEQLYKCmu4l8i0pr0M7y+yDQ3+iK
-	gfJOcErAqAPU0RBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1789496435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
-	b=AczWsRjmuPaS5wvUMta/0QT8Vd+XnpRW8vzkd2pRbrFmjl8ii39XEV9H6UjS/npER7x1yh
-	l3JPOJpnK9mifa9QEnjiVgIFStx/H9h7HDkem9SBEkgOZsooWMyuH9wy4qNIfO5T6y/hO1
-	rKJwvFr9e6EYU7xCnwgZg0GyNhxOfYU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1789496435;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5NTtuDsAp7E0C/BNPsxexNUQFN9km0Q5v2MuuXnv6ss=;
-	b=+V7M2w5KV1obVNkkCrtmW1nyDYDMyOctOF2m30q4pSGzYgvhF4D9x2YPbjMxN/FfE6V8Pq
-	Ok1+nScUzm66hRAQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0660713432;
-	Tue, 15 Sep 2026 18:20:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id mpBZI3KMqWqeKwAAD6G6ig
-	(envelope-from <krisman@suse.de>); Tue, 15 Sep 2026 18:20:34 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Uzair Beg <uzairbeg11@gmail.com>, io-uring@vger.kernel.org
-Cc: axboe@kernel.dk, asml.silence@gmail.com, Chengfeng Lin
- <lin2530632123@gmail.com>, linux-kernel@vger.kernel.org, Uzair Beg
- <uzairbeg11@gmail.com>
-Subject: Re: [RFC PATCH 3/3] io_uring/rsrc: prefill the node cache when a
- file table is registered empty
-In-Reply-To: <20260914092049.130079-4-uzairbeg11@gmail.com>
-Organization: SUSE
-References: <20260914092049.130079-1-uzairbeg11@gmail.com>
- <20260914092049.130079-4-uzairbeg11@gmail.com>
-Date: Tue, 15 Sep 2026 15:20:28 -0300
-Message-ID: <87fqza1imr.fsf@mailhost.krisman.be>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="CSrtt9Un"
+Received: by mail-ed2-f39.google.com with SMTP id 4fb4d7f45d1cf-6aa0ee64afdso275825a12.0
+        for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 12:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1789499357; x=1790104157; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=XFFk9jJtDswBQpA8QWIooO6lLG4HdlvPT/LqykRjG+U=;
+        b=CSrtt9Unpbm2RA3J8D1Piu8PqBvT7/aa/KZ5CE3c3D++Q65F+8LC8PQhJ+YAQkLRZF
+         FOCbEfcedihMauvO8i4QEZYDfsgCMc/AU6Y/5BuRF/k4i643ZbHqsUyNas20hZQzkd2E
+         0RZUaMtkje/C5faG2xlXImdyEwn4T014v7tJM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789499357; x=1790104157;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=XFFk9jJtDswBQpA8QWIooO6lLG4HdlvPT/LqykRjG+U=;
+        b=zn0dbX3t0cPEYYKXqRSI//qox9Pr10fdotxaOV75pd80LAkd12SwZwFc61S0WjdUF0
+         yh/O6gXlLQGUiNvHMHG13w6Ln1YYmLxs0ZXumz+9fg+HgFbwN9AePz1s64avv90zFm+p
+         0xjvuLurkrAodc2dwy9VbhHcf/jXptJ39rWGXP1+cUbfGBPJxIOzSPUqG2fgvDQLuKbt
+         CWXEq0DY73MHhRJtA1CHUMBRuzqGq/IGaeEXRBzwu/OhLrSRJB+DLijzD0LonUFjtW7N
+         tQ9p30V3thjHikjxeCi+Vt3yuNjSYUMKcbjeJu5slKSV6YWEiwjt8ozri4uW6j1Ct58Y
+         3YTA==
+X-Forwarded-Encrypted: i=1; AKwUvBy3eyaTojLjmUi0ETBVhnG/CAxBsZHrU1DAFsE6OjELE/QGouMdicIWmjnzPM3dnFkcvrkyI2HRRA==@vger.kernel.org
+X-Gm-Message-State: AFuF++l+/6c8YGh3gIvcOzQE4hUCJ92rYhrRyTA0b75iE3KpTDbxXEiD
+	Td7QK5XhIfdlpbHkS3PvKTPtVuBN6S1HIZGPFXGLpwlrqkYNGxPioSxy3ncYZ4xAL3pesZIbuTW
+	I9ImVDas=
+X-Gm-Gg: AYBFou2xdk7rsD3KgBm6rvWnLOvpkN9KNnngGGT4M05mRU64WfCAkdifn+X3iMblDRg
+	+IDx139cuCk5aw5YVa/Zxbr6KNrKP4XsA6hscslhrL21aFgC8bXDxglgeQhcfPRVU/uuiyys9yA
+	JzIa5H+cAmC1+fpbETM1JIy4LafvScTRfQVgOgFkBAt/AAUUkrANCIomAjeWwNx8pvONCu91jr0
+	ZJkagbI3SiwRN3XAZmQTNn4VTAGNYWxbYGWjIyPeL5z0IOsOs9vcEUITcZzzITksaWPtWWB1Y9j
+	VSW9JLMIzfIbiII2QuarHP5ez3YWFYMULUlPYgstrAiJAOySV4BomFPlph2uDLXvb0YfA2PZr7v
+	aOesNNSH3IKCL98EuqtS1x/jS/I59TdeC/NZsJn1OKFaNagRzpW9D2J1etRm5JPOLcw2rCK05TI
+	1XctEGWtUSNd7s+8ozJ7nc00J44lP1StlWIHpCIiu0VdvPS2GDSDbiRTdOV0j2WTa+Wa93iFNoK
+	QvKo37B2AJwoqLfuspe2evDXqOoQD4UWIQBUsZq7MPCk7hJs0c=
+X-Received: by 2002:a05:6402:a5ca:20b0:6aa:13a8:beea with SMTP id 4fb4d7f45d1cf-6aa13a8c5abmr2284784a12.21.1789499357228;
+        Tue, 15 Sep 2026 12:09:17 -0700 (PDT)
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com. [74.125.228.140])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aa1d2b0899sm139272a12.31.2026.09.15.12.09.16
+        for <io-uring@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2026 12:09:16 -0700 (PDT)
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254fa663bfso33744666b.1
+        for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 12:09:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzTNo03t/wY9jgHZJrAkRvuJ8A0keRZtfpAE99awHMP/pblUNYOvfN/dC2vZeutqFj4dA1ksfD9TA==@vger.kernel.org
+X-Received: by 2002:a17:906:7309:b0:c25:47a4:fedc with SMTP id
+ a640c23a62f3a-c29b839a057mr1176039766b.2.1789499355710; Tue, 15 Sep 2026
+ 12:09:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Level: 
-X-Spam-Score: -2.80
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	MISSING_XM_UA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.dk,gmail.com,vger.kernel.org];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mailhost.krisman.be:mid,imap1.dmz-prg2.suse.org:helo]
+References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
+ <CAG48ez1RsdT=O=-0city3vjgWhDvY424KtTmrCJntWy5ds3HBQ@mail.gmail.com>
+In-Reply-To: <CAG48ez1RsdT=O=-0city3vjgWhDvY424KtTmrCJntWy5ds3HBQ@mail.gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 15 Sep 2026 12:08:57 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi3Kkqgfg6zUTHpQoZNL2VOB4vYqpi6RX0WNO++29UtyQ@mail.gmail.com>
+X-Gm-Features: AcwNN1VCm0LMG7z3Jned014oJh6WBcf4uOx0OBk98_hrtHKbrhcQiMMJ_A-fmB0
+Message-ID: <CAHk-=wi3Kkqgfg6zUTHpQoZNL2VOB4vYqpi6RX0WNO++29UtyQ@mail.gmail.com>
+Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
+To: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
+	netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, 
+	David Airlie <airlied@redhat.com>, virtualization@lists.linux.dev, kvm@vger.kernel.org, 
+	kexec@lists.infradead.org, linux-hyperv@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Uzair Beg <uzairbeg11@gmail.com> writes:
+On Tue, 15 Sept 2026 at 10:52, Jann Horn <jannh@google.com> wrote:
+>
+> Is this mainly about stuff like "we installed a file descriptor and
+> then the following put_user() failed"? Because if so, I think a nicer
+> fix would be to have a policy of "if userspace provides unwritable
+> memory to a syscall, just keep going and pretend the access worked",
+> and maybe have a sysctl that kills the process when this happens to
+> emphasize that userspace should not be doing this.
 
-> Registering a sparse fixed file table allocates no nodes at
-> registration time; each node is allocated later, on the install path,
-> where MSG_RING SEND_FD pays for it. Bare-metal measurement of the
-> 4,096-slot first fill shows the cost is not the allocator call
-> (bulk refill was neutral) nor fresh slab pages (priming the slab was
-> neutral), but the per-object SLUB allocation path itself. The only way
-> to take it off the install path is to not allocate there.
->
-> When a sparse table of N slots is registered, grow the per-ring node
-> cache to min(N, IO_ALLOC_CACHE_PREFILL_MAX) and bulk-fill it, so the
-> subsequent installs hit the cache. Prefill is best-effort: on any
-> failure the cache is left in a valid state (a successfully grown
-> pointer array is retained) and registration proceeds unchanged.
-> Non-sparse registrations are untouched, since they allocate every node
-> inline anyway.
+We've done that before, where we just ignore put_user() errors and the
+user gets whatever the user gets.
 
-I'm unconvinced this is the right approach.  This is only relevant for
-initialization overhead: once the ring is in operation, the overhead is
-gone because nodes are recycled.  So this will really benefit
-short-lived applications that create large tables, something that I
-suspect is rare outside of artificial benchmarks.  On the other hand,
-people are creating sparse but arbitrarily large tables.  Does it make
-sense to pre-allocated up to 192KB in memory for short-lived
-applications that might use only a couple of those nodes?
+It is maybe not optimal, but it's fine. You can find quite a lot of
+unchecked put_user() calls with a pattern like
 
-> On the reported 4,096-slot first fill this is 9.8% faster than
-> unpatched. Because the enlarged cache also retains nodes released by
-> FILES_UPDATE, a same-ring remove-and-refill of 4,096 files is 18.8%
-> faster. The cost is moved to registration rather than removed: a
-> one-shot register-then-fill is unchanged overall, and a program that
-> registers many slots and installs few pays for nodes it never uses.
-> Whether that trade is acceptable, or should be behind a registration
-> flag, is the question this patch is intended to raise.
->
-> The stash loop from the bulk refill path is factored into a helper so
-> both callers share it.
->
-> Reported-by: Chengfeng Lin <lin2530632123@gmail.com>
-> Closes: https://lore.kernel.org/io-uring/CANGjgdmt0FQ=offsdfn+wEaDxbOFoAa6bi92X_vEo4S6aCZ56A@mail.gmail.com/
-> Tested-by: Chengfeng Lin <lin2530632123@gmail.com>
-> Co-developed-by: Chengfeng Lin <lin2530632123@gmail.com>
-> Signed-off-by: Chengfeng Lin <lin2530632123@gmail.com>
-> Signed-off-by: Uzair Beg <uzairbeg11@gmail.com>
-> ---
->  io_uring/alloc_cache.c | 58 ++++++++++++++++++++++++++++++++++--------
->  io_uring/alloc_cache.h |  2 ++
->  io_uring/rsrc.c        |  4 +++
->  3 files changed, 54 insertions(+), 10 deletions(-)
->
-> diff --git a/io_uring/alloc_cache.c b/io_uring/alloc_cache.c
-> index cba0e6c5d66..2c6e09313d2 100644
-> --- a/io_uring/alloc_cache.c
-> +++ b/io_uring/alloc_cache.c
-> @@ -38,6 +38,22 @@ bool io_alloc_cache_init(struct io_alloc_cache *cache,
->  	return false;
->  }
->  
-> +static void io_cache_stash(struct io_alloc_cache *cache, void **slot,
-> +			   unsigned int nr)
-> +{
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < nr; i++) {
-> +		if (cache->init_clear)
-> +			memset(slot[i], 0, cache->init_clear);
-> +		if (unlikely(!kasan_mempool_poison_object(slot[i])))
-> +			break;
-> +		cache->nr_cached++;
-> +	}
-> +	for (; i < nr; i++)
-> +		kmem_cache_free(cache->slab, slot[i]);
-> +}
-> +
->  void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
->  {
->  	void *obj;
-> @@ -45,7 +61,7 @@ void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
->  	if (cache->slab) {
->  		unsigned int room = cache->max_cached - cache->nr_cached;
->  		void **slot = &cache->entries[cache->nr_cached];
-> -		unsigned int batch, got, i;
-> +		unsigned int batch, got;
->  
->  		if (unlikely(!room))
->  			return kmem_cache_alloc(cache->slab, gfp);
-> @@ -57,15 +73,7 @@ void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
->  
->  		/* return one object, stash the rest in the cache */
->  		obj = slot[got - 1];
-> -		for (i = 0; i < got - 1; i++) {
-> -			if (cache->init_clear)
-> -				memset(slot[i], 0, cache->init_clear);
-> -			if (unlikely(!kasan_mempool_poison_object(slot[i])))
-> -				break;
-> -			cache->nr_cached++;
-> -		}
-> -		for (; i < got - 1; i++)
-> -			kmem_cache_free(cache->slab, slot[i]);
-> +		io_cache_stash(cache, slot, got - 1);
->  	} else {
->  		obj = kmalloc(cache->elem_size, gfp);
->  	}
-> @@ -73,3 +81,33 @@ void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp)
->  		memset(obj, 0, cache->init_clear);
->  	return obj;
->  }
-> +
-> +void io_alloc_cache_prefill(struct io_alloc_cache *cache, unsigned int nr)
-> +{
-> +	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;
-> +	unsigned int got;
-> +	void **entries;
-> +
-> +	if (!cache->slab || !cache->entries)
-> +		return;
-> +
-> +	nr = min_t(unsigned int, nr, IO_ALLOC_CACHE_PREFILL_MAX);
-> +	if (nr <= cache->nr_cached)
-> +		return;
-> +
-> +	if (nr > cache->max_cached) {
-> +		entries = kvmalloc_array(nr, sizeof(void *), gfp);
-> +		if (!entries)
-> +			return;
-> +		memcpy(entries, cache->entries,
-> +		       cache->nr_cached * sizeof(void *));
-> +		kvfree(cache->entries);
-> +		cache->entries = entries;
-> +		cache->max_cached = nr;
-> +	}
-> +
-> +	got = kmem_cache_alloc_bulk(cache->slab, gfp, nr - cache->nr_cached,
-> +				    &cache->entries[cache->nr_cached]);
-> +	if (got)
-> +		io_cache_stash(cache, &cache->entries[cache->nr_cached], got);
-> +}
-> diff --git a/io_uring/alloc_cache.h b/io_uring/alloc_cache.h
-> index 82d552c7517..ca6af52dd7d 100644
-> --- a/io_uring/alloc_cache.h
-> +++ b/io_uring/alloc_cache.h
-> @@ -8,6 +8,7 @@
->   */
->  #define IO_ALLOC_CACHE_MAX	128
->  #define IO_ALLOC_CACHE_REFILL	32
-> +#define IO_ALLOC_CACHE_PREFILL_MAX	4096
->  
->  void io_alloc_cache_free(struct io_alloc_cache *cache,
->  			 void (*free)(const void *));
-> @@ -16,6 +17,7 @@ bool io_alloc_cache_init(struct io_alloc_cache *cache,
->  			 unsigned int init_bytes);
->  
->  void *io_cache_alloc_new(struct io_alloc_cache *cache, gfp_t gfp);
-> +void io_alloc_cache_prefill(struct io_alloc_cache *cache, unsigned int nr);
->  
->  static inline bool io_alloc_cache_put(struct io_alloc_cache *cache,
->  				      void *entry)
-> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-> index 6413682ebe4..b7f78b6b514 100644
-> --- a/io_uring/rsrc.c
-> +++ b/io_uring/rsrc.c
-> @@ -560,6 +560,10 @@ int io_sqe_files_register(struct io_ring_ctx *ctx, void __user *arg,
->  	if (!io_alloc_file_tables(ctx, &ctx->file_table, nr_args))
->  		return -ENOMEM;
->  
-> +	/* sparse table: nodes are installed later, so cache them now */
-> +	if (!fds)
-> +		io_alloc_cache_prefill(&ctx->node_cache, nr_args);
-> +
->  	for (i = 0; i < nr_args; i++) {
->  		struct io_rsrc_node *node;
->  		u64 tag = 0;
-> -- 
-> 2.43.0
->
+        git grep '^[[:space:]]*put_user(.*);'
 
--- 
-Gabriel Krisman Bertazi
+and some of them are in core code - see the two in kernel/fork.c, for example.
+
+One of them says "if userspace has not set up a proper pointer then
+tough luck". The other one doesn't even bother with a comment.
+
+The scheduler has two cases too, although one of them is admittedly
+for another error case.
+
+So yes, saying "if you pass bogus arguments, you get what you get" is
+a valid model. It's perhaps not the *preferred* model, but it's not
+wrong.
+
+It *would* be wrong to take code that already has error handling and
+remove the error handling, though.
+
+                  Linus
