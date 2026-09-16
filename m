@@ -1,113 +1,83 @@
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0264247604A
-	for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 23:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16178404BE3;
+	Wed, 16 Sep 2026 07:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789513356; cv=none; b=iAxQVWV6si1aboZuKgJX6w5dQxN1FMwQUEPP/bEdCdpOlrm5TR9Qd+1JcNsULbMzoSY5ZrYTS/+M3SzAHC2hkL0KxFLtSNiiPOsibnyzh7FFBZiRc6s1YyE41KYXVS7zY2Z4W38dY56Rw7CuiJCM6VDGmj9gt+h/a1uydtT9J4g=
+	t=1789542618; cv=none; b=K38diUVL614ge1960I66gxJrCS8ArwcadhKgbWgc0JoeQK8ZZW/x56DQt3sOVKJI/t6ZoHvgvMoyKW5qhbR2UkwnnTYFEDCbCiSugUEzy/VnUcXf6ifjSPBNMh7td5Cy7FGf8n4a7jZHt83rdE+6CbDbvFTiu6BJx6yRe86OE7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789513356; c=relaxed/simple;
-	bh=ITz7hBythv5OWTbmQ9c4e1mzRPysX2+YTMbCrseTj6Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=maLRk0ihyobsuQetQytuyGYEfBsdd5PDA1p67MJYWTgaMtQ62Ade7o5Po4CemvDnEfRpygYEjU9onwNF2K1/0Z69MZKysw+N7eA6F47Hqm/r9ss9SVjPwp2LU7VgfHWgFrSMah/CBFEeQnk+MyLSGZc4Qzc6CcW5gJQ4TEqJJWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=fnUP1NX/; arc=none smtp.client-ip=74.125.229.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1789542618; c=relaxed/simple;
+	bh=TbkgiRjWeQ8a0xpMBTTJK/KlAo0wUUGLv0byzFa/anY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=maegKj806eAP7zNa/awQgawtiLuCg4C//pqdq3NX71oYTywYUnxXTdiscCN7oUVZlXSRUl0dEEapa6VFvuxpBqbribxgk+7hF7AMc54dsy7oNNyoI9SZfPGWjxrOw6uk/Ms9LMwCgxpb/Glw/sUca16Q1m0lHqd67+tbWDSxkro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K7SwAZ5T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="fnUP1NX/"
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f1744fso433203e87.2
-        for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 16:02:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1789513352; x=1790118152; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7NEEN5klK6sYQ7k8fj+V0z2WeSFVNwjy5fJJIdfiMPQ=;
-        b=fnUP1NX/ZyLjWCZ2QnAx7dHYR2DNRK6NijEf/3+aKFLFlGaJmlRbL7tJ2lILNJunmC
-         lTm7vktQfRMszesuuHtjyTbQJdOtxgeU7+WjotxXixoPGr17PstIXuV8mXUqgMOOif51
-         M/pUwxB0H3dpSRHTputp2AZ6jBNX0Lap3jrtg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789513352; x=1790118152;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=7NEEN5klK6sYQ7k8fj+V0z2WeSFVNwjy5fJJIdfiMPQ=;
-        b=Cir6XWtiiiiz6557iOXd2KmEICOyJoeQ0/GK25ftgzcaKJXoRAqKUjc0o6U+9fXNsP
-         +vBagJ2XWk5zKuUBy0BdfUbCEIzgsYqNhgUsZg6yjgTlUlXN17EtuIPizZgygsrEhm4s
-         yAiztINaWyod2WdNFYLULJA/lYYClAvDOXvdLFdvMifhV+NZoC55NvLR3HkHYA7KRpve
-         5cvI9d9DB15p+oGqIOrQiVHaooI4sbNjVvkOyGxbkQddORF484BSqRrIdsUym5XpvHg+
-         g4Lp0sKI6szXyfvuY0i4dgtOQz5xr9DehmhtN63nWMUgnoSThYLnjOEg472E6+JtQsV1
-         /P5Q==
-X-Forwarded-Encrypted: i=1; AKwUvByxyT9mh14zxMX5lnJmk5PPilzlvIPNDIM1L1Ikn6HqMLadVS8dzUEKnEausqm9PRzJWOKqkTqrVA==@vger.kernel.org
-X-Gm-Message-State: AFuF++kvPJzI0RyLlvSWWD+qg6gTcpPMNgsqo5iGAGDZhhxrL7u5MEEs
-	AxF5QYpISrY36WeBaPoqTOF7+aeCZusl0YzLhSSuHjUqZNbqL2UAXhRQ5KugdTYuyBFE1a5i3gf
-	h/03t2OKnsQ==
-X-Gm-Gg: AYBFou09TDtBSfglwOUz4KYgi1OWZxu6RY8v+Ih1K4S0Y7+L4mYxHTzm3gMhNwYchEv
-	KvZ/G1QVcr/4gJ3W76ToTwFWZeOlDs6dBkyet4PDaDls/uB8HmYqSict2epT1kIkGX7UC9ts6jp
-	bGbAxNTrQFhs26lo6S13k13MpIqUx/kjF9C/r8zW6TCSd6xcjaKhmzRtVs0zV73B6smuB1g2o9X
-	XbOzcbT9ZvE4eeIaF7mxY0/n0zMUhcHhQx4CNtAplKnRIoUJb8s/xLag+aBqlczPm07YP9RKiCA
-	wHP97zILRp1HD/NtFGs3oJ9kELpZI0DdlyJWRxXsxzepCN5zoLlFgl5mqB8tTRGzi3Eib+nQ7Lg
-	BwU3lFY47ztmUubxOfPBJDV5CdpImUNkAlifnLSBZClxOT2I2Ro6+gaUrsahuJi0Yj7uiAjejYa
-	Dpa2kfrB4NrueCDerxDucGlEASqX3WbI0B5pje0xoK5bgWjFAMqlokZ3YSIhBGHrhg7a+k/J6pH
-	zav8VylG3CT/YuwYeJhtlKQlo0lpK8jOUKWQMwbpxuWacZAZYzeLz8BFtVW
-X-Received: by 2002:a05:6512:2398:b0:5b6:177f:b86e with SMTP id 2adb3069b0e04-5b8b6615f1amr41537e87.19.1789513351828;
-        Tue, 15 Sep 2026 16:02:31 -0700 (PDT)
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com. [74.125.229.204])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8b57e0bd1sm292652e87.59.2026.09.15.16.02.31
-        for <io-uring@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2026 16:02:31 -0700 (PDT)
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f17452so244696e87.3
-        for <io-uring@vger.kernel.org>; Tue, 15 Sep 2026 16:02:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBw2OV9xGeVkdVIIuO1rRLzn8E7eSUPz2gjv9VMTQ9OAQLbGGucwkNSRLuNMANt7wtoGrhdAL6cqRg==@vger.kernel.org
-X-Received: by 2002:a05:6402:5d1:b0:6a9:a6c0:e5ef with SMTP id
- 4fb4d7f45d1cf-6aa2244ef06mr218172a12.37.1789512913950; Tue, 15 Sep 2026
- 15:55:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7SwAZ5T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165081F000FF;
+	Wed, 16 Sep 2026 07:09:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789542593;
+	bh=p2gx8+1v2YG2nXZ5rZ43ZGOVbgNWYwB+4lHcBSPfXX4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=K7SwAZ5TQox94KhnzDZgdWak9JeascnEJT6tgsdFitx13oH/yvHVurs3emFIQIidi
+	 xcR0gIE20GLza50nMYtjBg//0e7WD22sTKu3OHciVTO0Egw6dpfNvS97BoC4LpWgvN
+	 ZD0aZmUahuws0zfu0FGKie6dskhpn2wDFZH1gLvxR0Y/XLP3PDKD59Q3XEFPNj3iGd
+	 l3nMpo+kKycUGKylVUc5DFObZlUBNTgMifgw32kRkszA3iFJ9ppTn7CES9cJYrH1JE
+	 XD/gyr3hXov/6xjsaqqL1FGY+8ZmWmmW0Gqlh80XrHJbwZzvXyNf+hmB3sQ+DilGUR
+	 S0XyD3cx8I3Gw==
+Date: Wed, 16 Sep 2026 09:09:41 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jann Horn <jannh@google.com>, 
+	Jan Kara <jack@suse.cz>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org, Jens Axboe <axboe@kernel.dk>, 
+	io-uring@vger.kernel.org, netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	bpf@vger.kernel.org, David Airlie <airlied@redhat.com>, 
+	virtualization@lists.linux.dev, kvm@vger.kernel.org, kexec@lists.infradead.org, 
+	linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
+Message-ID: <20260916-seilbahn-heimvorteil-edelmut-bad3637b3a95@brauner>
+References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
+ <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
- <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com> <CACSVV028AdnTYa6OKDeoJYCau58uTkKMgEdqTn7crNSV8QZxOA@mail.gmail.com>
-In-Reply-To: <CACSVV028AdnTYa6OKDeoJYCau58uTkKMgEdqTn7crNSV8QZxOA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 15 Sep 2026 15:54:57 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjhJF91TCO0Zqeuf+caG2tQZ4AzbLr2qFmRmnMM4dbh4g@mail.gmail.com>
-X-Gm-Features: AcwNN1Wx2MaYDtFtmeOlL6MnzYY7doY_FEPpziKatTBWbLOeKsjmritQ5JuAL3M
-Message-ID: <CAHk-=wjhJF91TCO0Zqeuf+caG2tQZ4AzbLr2qFmRmnMM4dbh4g@mail.gmail.com>
-Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
-To: rob.clark@oss.qualcomm.com
-Cc: Christian Brauner <brauner@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Jann Horn <jannh@google.com>, Jan Kara <jack@suse.cz>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
-	netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, 
-	David Airlie <airlied@redhat.com>, virtualization@lists.linux.dev, kvm@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-hyperv@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com>
 
-On Tue, 15 Sept 2026 at 15:21, Rob Clark <rob.clark@oss.qualcomm.com> wrote:
->
-> With fd's it is more than just about error rollback.. exposing an fd
-> to userspace mid-way thru an ioctl is an easy security bug to write..
+On Tue, Sep 15, 2026 at 09:02:31AM -0700, Linus Torvalds wrote:
+> On Tue, 15 Sept 2026 at 04:31, Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > TL;DR, this lets arch code handle fd install and cleanup. fd_prepare()
+> > allocates a descriptor like get_unused_fd_flags() does and records it in
+> > a slot on the task. fd_stage() attaches the file to that slot and
+> > returns the number.
+> 
+> Honestly, I am *not* a fan. At all.
 
-That isn't very common code. It's something that is done by a few
-strange cases, and yes, those cases should just do it right.
+I'm really glad that you don't like it! I hate it too.
 
-But "those few cases should do it right" does not mean "make a whole
-new subsystem for this thing that makes a simple "open" actually be
-slower and stranger".
+To quote back from the cover letter:
 
-             Linus
+> The idea in this series is old-ish and really never let go of me and so
+> I wanted to at least dump it onto the list once even if it's just for
+> illustrative purposes.
+
+I think the cleanup-based solution we've added a couple of releases ago
+is the better appraoch. Which is why I chose it over this.
+
+But this install-on-the-way-out idea has been brought up quite a few
+times as the "better approach". I never really believed it would work
+nicely. Now we have an implementation on the list that we can point to
+and we can move on from this.
