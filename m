@@ -1,66 +1,66 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DE94D6C2D
-	for <io-uring@vger.kernel.org>; Thu, 17 Sep 2026 12:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB964F797E
+	for <io-uring@vger.kernel.org>; Thu, 17 Sep 2026 12:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789647770; cv=none; b=czhAAOKuphHut/VVhjED7MeWMdV8UHb4HdyM3yJOFG/JQ6/mk+nXykRFkc178Ws50qKY7eZNSemm5OfiPY+eyOC7JM4WMyIblAG73zH4VCn7kNraQ0BiJiVRtK6dblmjjeQ4P6RnYRW3A5G6HZ0E4pvPo9USsPI7pOG6prBrHb0=
+	t=1789648202; cv=none; b=KApuptFL1LSe3r60vkhz4wqySDJjd+teQ2rjFsJLiORQdtCtpYODzbVSixBF4g63+IVZQ1ze+rlP3eBmlo5pDoeAEYfOcmgLtYaOaJzqGVAHRfxYHCipvP/F4dNXWOzudjyy3PGq3tPo46m2z85kd2xna8k5OCBnHBbpk028g6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789647770; c=relaxed/simple;
-	bh=OJmskDiFOgBotmQnXQAOWrnTyjAq3r/ZPkOzXCktDOc=;
+	s=arc-20240116; t=1789648202; c=relaxed/simple;
+	bh=NiBLOa+Ivz/MGMdtQtUORvBhVtPqCwg0j5rxwwVjFZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gC2Adv2aiRP+AWD9KeF0vPmAPNzEHI37t8eGCIkncPk45alNS2L5Aji3CI+DWxClXrRu3slazlfC+oB93eDtSaifZLvQ5wJSZhloIi7eTgllJ14UPe6AT+6NwCe7Mb5WY5JGg5c7vrA5bsvFFy3m118ScmtONJUmZ8YuI01zxXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8MWUiGW; arc=none smtp.client-ip=74.125.225.141
+	 MIME-Version:Content-Type; b=BVmjMo+7AGQfQ2LRSeNAoSczvP5Y83AvmeSdHO7rsHCnD9GyN9opNq9/WV/wDgydEuaYelpGVNN8rzaBOyI41y9tVMwPqAs2chPbVqojZVBO4LugLhbFO2CMWjvcDkoF6dns4rb9mvL7B1dyiFhwsWD/SykB5ATSe4Jb8X56/Vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gU+5HCb6; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8MWUiGW"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49ccfd61ecaso7274935e9.3
-        for <io-uring@vger.kernel.org>; Thu, 17 Sep 2026 05:22:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gU+5HCb6"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d37b5so4893635e9.2
+        for <io-uring@vger.kernel.org>; Thu, 17 Sep 2026 05:29:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789647757; x=1790252557; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789648180; x=1790252980; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=p0zmU2W+3BnffNO8O4v0JPRgPOvlhktXL05mpLnU1xo=;
-        b=W8MWUiGWkLnPE3LZwZMs+M6hjewk3bifMXlRxyzDreqvti1vU2oOe8kuHIJilh+a4j
-         avmi0gE2ouNHVuMutBqsR46ibWdW2hMSUIg+O7ewEblQDSqXn5oywiAzmcEOAAbnHJh9
-         CowIX7j0Z9oM0FI7AJhmCimPMAgxALlDijVAFCnLuHoqmAoi4nozpd09gBGC/BiDrVMP
-         v8CWYPOQj7wYPLWd3xvspz5rrIP7ZmsQlXq/fr57voEYreoEfZ0jpBHODcwFTuLtahTp
-         5Ork4vvRYVxbjDbbXem88rlm5er/r+K8QtAMln4o0OqF8zBcjtvMGd0fo9MP/8kOij+L
-         7TVA==
+        bh=Dtz+Uqi8FvhezfQGwgUreP+CufNocr9p+NqbDN0Xcok=;
+        b=gU+5HCb6NEhmBQLVaLIqnXzYCbuW3y+9zP3j/sbrylZD7lHYyFw9pFNkQiORNKn2+9
+         ecpocjM18AVXqhmb2SxpKUeXm8j+Y5YY0eqe95Ju9PSzoqQDNVvagBBBRiHmAyaNxoSO
+         yrF2knA4eFqyBkfUVMqfIAaC170alJV/Ke3NfGe5vcT8LsMUz1AkGiyw4nqOt58DrBeH
+         edFMUx8EXzNK34fToowfRsGPhAcUCtwcD78tvPUV2sxZL80o7IO0qH+1j5wD8x1fouxk
+         3I6nNpgWk3sZfc3RW+iF7VrURE/zt9+KM6ybjY5XT/davL5nsM4B5Uuztt8JxBvsRJbA
+         86GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789647757; x=1790252557;
+        d=1e100.net; s=20260707; t=1789648180; x=1790252980;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=p0zmU2W+3BnffNO8O4v0JPRgPOvlhktXL05mpLnU1xo=;
-        b=BST74MmnKoCQu86YIRiR4PfPi5mV6aQaYfTH/IOoZztBsgP698jYl6KbqRYzhhWyg2
-         jsI1s8LB+Utdrv+NYjc7XAGgo404Ig6p0Z+emRnHP99+8P++1fK1dl/KRNggLIZ7z65m
-         WK+3em0iiClJqZBmi2XHlZMJlyqN36o9mkdeKRFWpCl59SeBbIxwYRszfzmhJ3EuxQZ/
-         s2l5B7FPiowgIRYh/QkPpx/qHcXojfT5r8QPNLZYyjwdIQ/DX0gN6ZaTG4q+Nm1M2srX
-         9dAQwtQFcpL9Zkd2XXeNYtE/UOHMZEu1ZgwT+sdhtKZ1vovypfSp4f8DUpm+P2QJ/2Dg
-         c74A==
-X-Forwarded-Encrypted: i=1; AKwUvByGHPvLyLSn9Qc1AGPmpQ5QCUnx1j4oI2pBGEsVaxjFIE9l8H9ahhNGOHpMR4yMg4PDGBaqYWq0dA==@vger.kernel.org
-X-Gm-Message-State: AFuF++mco7kr2oKDzuAxkdLO8k5QXDEY7SgEKlfM6YO51JTg16v2kXkR
-	tPY4AJOPK+pZfwN8zzDn8Gzoggme2nalVzzKEDG+ZI877sY7HPhepf++
-X-Gm-Gg: AYBFou1VmN6ILqJY1q4a3nUhKAo40RHWb0nMeVNKP6Jyj9dD/M8QN8BAlfyCE/ktBNr
-	BxjVVt05wyQoE0RYX/DxBXizosJVGxAq/XUk8bx8gZhzOAT09/u0hMW5BvL/U3j2vW7MSsjNUq8
-	P9Amxmg49HqqVowTeYVYQyYruJ/CY8P6CPuDdLwUDcjivwooJ+gHWHKvlrIx4nG5f2yiF6e7TNs
-	9N1ts3YJR3DXpybdIjY86c76x2Kc69IjLsSNDV6WYsmDzLGl8K94i902Aj5rzI/T5Kdf2MnNNpd
-	yawLGlOkKnIDGKohGeL4XPytBDBdNbVQoN32JDrAyYQjAiHiSmDC20o4SpcmgUHjhJCzfp0BRgo
-	F90WmpeBIA4IbtrovHGWDUDHKuqrfzeH25zmncQYys5Yu2PNiepUhf0Xs7uL4aNsvBrEYmv2UnE
-	r0I7w4YFnsVMkm89oaBLv2QGf+7zB0niM4AiYmVlSoKPrHxBH0ibImrLRX8pER8VVg1gnzzt+Ja
-	XLybZ7liOPRXN/2ilpyTIScNHLkCdo7mtGE
-X-Received: by 2002:a05:600c:4ed4:b0:49c:de80:b833 with SMTP id 5b1f17b1804b1-49eac462571mr73688225e9.2.1789647756735;
-        Thu, 17 Sep 2026 05:22:36 -0700 (PDT)
+        bh=Dtz+Uqi8FvhezfQGwgUreP+CufNocr9p+NqbDN0Xcok=;
+        b=mgQDOI5ryaqK7wqQDJtMFMGUNo9DlsX+2EovwqfkaTFh8c0zMPAFzsoiZshzuXYyLG
+         7cjc3l91JC/ZrFb8hmCDHIk1B9/OM4zG33X9enxxySWZlXUKpE6B40cdLbxrktDVgOn2
+         rZuSu/AzsqBDq1LayoDPOFEm6yZ5IV++//RkgKBIb60IXyU8IkpD+NCBx2lCaZe6KlKm
+         8hySdwdOk+dfMJlX/OsfQvT6yxxT81TGdz+k6HLwTS0N3BmzQSXy/yEbOvIa5n1VBSCz
+         dgUvoQNlnxuum8JPGvpI2712Gcmo2KQHtSME8C0AnVVjgW07MAoBd/yBmqzKjdg3XVXA
+         6pbA==
+X-Forwarded-Encrypted: i=1; AKwUvBxVd3FmluduY7+G68XmX/4C23IRRHZrM7MB6ZeoIFKbpv+wRWbTwUy8m4E3pzkOQO0UTHciD/QouQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++mVM48UA+UG/fZI/aLaaiZtUPe7wCLaQZTT+lTAmmW2wWh79i39
+	LAl/UBuQWTLAxX9A5B0c5sUodEI9mB20nsV1TFEQz9Kyny/ZITrdwecc
+X-Gm-Gg: AYBFou1JWALqt+/5Inh7SJdRkSO233+QUh2Dmun37QaIMQmvgL65iT/jHxc9nE/Bl0h
+	P96kapwRELHpFopBDBwHm4uqVoMqLIMjAnNPeRzizqTY9W9gdlAHhVmqFK6DnIe+2az0FP15lyo
+	rjFcAnUf9erEAMQh3hrSpKEXFoi8SN8g//jkJLOjg3HT4IsiT6+SI/96ustmnkB4+hPPQ8qSaB0
+	I75HIBegwvQ79ghr1Oo1yRiiK3grinz+g1NgkwqNHDLOeQJyCT2NTPTihbPWyWRmcFitUJ4imYd
+	q3soFifNq8asxVJb/MVOsGXepMKDP1HfpkNa4FAltynv/Z7DPAkwuCqVQYzzKoN+9YFbZGGlHGF
+	aCNr0Em+CYCLR/v7o4xwtSPdNf/lgi2ugqkITKB09K2mqHMmAPxhYXQEiglXpKW8Zxg4Yg9W+hR
+	iHK8LxnGeNETJMCsogS7bylx/rCP2Oj0/CuqOBRfoprOYgsAoVFc8/sJLttalKAH+EuBVrFTr8C
+	zDjwcC5w8fudYdvm7HPylIYQFsK+MRB3E9o
+X-Received: by 2002:a7b:c35a:0:b0:49f:bcb7:8e9 with SMTP id 5b1f17b1804b1-49fbcb70a1bmr64001725e9.9.1789648179633;
+        Thu, 17 Sep 2026 05:29:39 -0700 (PDT)
 Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bef7678sm15969081f8f.2.2026.09.17.05.22.35
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fbd1ce79csm82621135e9.0.2026.09.17.05.29.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 05:22:36 -0700 (PDT)
-Date: Thu, 17 Sep 2026 13:22:31 +0100
+        Thu, 17 Sep 2026 05:29:39 -0700 (PDT)
+Date: Thu, 17 Sep 2026 13:29:37 +0100
 From: David Laight <david.laight.linux@gmail.com>
 To: Christian Brauner <brauner@kernel.org>
 Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
@@ -70,12 +70,12 @@ Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
  linux-media@vger.kernel.org, wine-devel@list.winehq.org,
  linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org,
  linux-mm@kvack.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] file: declare the FD_PREPARE() variable with
- __cleanup() directly
-Message-ID: <20260917132231.26314015@pumpkin>
-In-Reply-To: <20260917-work-file-fd_prepare-v1-2-b87534ca49f3@kernel.org>
+Subject: Re: [PATCH 4/4] file: make struct fd_prepare const and kill its err
+ field
+Message-ID: <20260917132937.5a15904e@pumpkin>
+In-Reply-To: <20260917-work-file-fd_prepare-v1-4-b87534ca49f3@kernel.org>
 References: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
-	<20260917-work-file-fd_prepare-v1-2-b87534ca49f3@kernel.org>
+	<20260917-work-file-fd_prepare-v1-4-b87534ca49f3@kernel.org>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
@@ -86,59 +86,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 17 Sep 2026 11:09:43 +0200
+On Thu, 17 Sep 2026 11:09:45 +0200
 Christian Brauner <brauner@kernel.org> wrote:
 
-> The whole CLASS_INIT() detour isn't needed. Use __cleanup() directly and
-> give the destructor a private name.
-
-It also makes the code enormously easier to read.
-
-David
-
+> FD_PREPARE() releases the fd as soon as the file expression fails. The
+> fd either holds the descriptor or the error. The separate field is
+> redundant. Make fd and file plain members and struct fd_prepare simpler.
 > 
-> No functional changes.
+> Callers of FD_PREPARE() get a const pointer to the guard. Simplify all
+> users as they can now easily access the trivial struct.
 > 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
->  include/linux/file.h | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/file.h b/include/linux/file.h
-> index 2b864f457211..926cc58d0b7f 100644
-> --- a/include/linux/file.h
-> +++ b/include/linux/file.h
-> @@ -146,9 +146,6 @@ struct fd_prepare {
->  	struct file *__file; /* do not access directly */
->  };
->  
-> -/* Typedef for fd_prepare cleanup guards. */
-> -typedef struct fd_prepare class_fd_prepare_t;
-> -
->  /*
->   * Accessors for fd_prepare class members.
->   * _Generic() is used for zero-cost type safety.
-> @@ -160,7 +157,7 @@ typedef struct fd_prepare class_fd_prepare_t;
->  	(_Generic((_fdf), struct fd_prepare: (_fdf).__file))
->  
->  /* Do not use directly. */
-> -static __always_inline void class_fd_prepare_destructor(const struct fd_prepare *fdf)
-> +static __always_inline void __fd_prepare_cleanup(const struct fd_prepare *fdf)
->  {
->  	if (unlikely(fdf->__fd >= 0)) {
->  		put_unused_fd(fdf->__fd);
-> @@ -199,10 +196,10 @@ static __always_inline struct fd_prepare __fd_prepare(int fd, struct file *file)
+...
+> @@ -191,35 +175,39 @@ static __always_inline struct fd_prepare __fd_prepare(int fd, struct file *file)
+>   * was allocated. If fd_publish() was called the fd and file are
+>   * published and cleanup becomes a nop.
+>   *
+> - * @_fdf: name of struct fd_prepare variable to define
+> + * @_fdf: name of the const struct fd_prepare pointer to define
+>   * @_fd_flags: flags for get_unused_fd_flags()
 >   * @_file_owned: struct file to take ownership of (can be expression)
 >   */
->  #define FD_PREPARE(_fdf, _fd_flags, _file_owned)			\
-> -	CLASS_INIT(fd_prepare, _fdf, ({					\
-> +	struct fd_prepare _fdf __cleanup(__fd_prepare_cleanup) = ({	\
+> -#define FD_PREPARE(_fdf, _fd_flags, _file_owned)			\
+> -	struct fd_prepare _fdf __cleanup(__fd_prepare_cleanup) = ({	\
+> +#define __FD_PREPARE(_guard, _fdf, _fd_flags, _file_owned)		\
+> +	struct fd_prepare _guard __cleanup(__fd_prepare_cleanup) = ({	\
 >  		int __fd = get_unused_fd_flags(_fd_flags);		\
 >  		__fd_prepare(__fd, __fd < 0 ? NULL : (_file_owned));	\
-> -	}))
-> +	})
->  
->  /* Do not use directly. */
->  static __always_inline int __fd_publish(struct fd_prepare *fdf)
-> 
+> -	})
+> +	});								\
+> +	const struct fd_prepare *const _fdf = &_guard
 
+Since the struct is only written by its initialiser, can't it just
+be 'const' ?
+
+David
