@@ -1,122 +1,124 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB964F797E
-	for <io-uring@vger.kernel.org>; Thu, 17 Sep 2026 12:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9AC59D605;
+	Thu, 17 Sep 2026 16:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789648202; cv=none; b=KApuptFL1LSe3r60vkhz4wqySDJjd+teQ2rjFsJLiORQdtCtpYODzbVSixBF4g63+IVZQ1ze+rlP3eBmlo5pDoeAEYfOcmgLtYaOaJzqGVAHRfxYHCipvP/F4dNXWOzudjyy3PGq3tPo46m2z85kd2xna8k5OCBnHBbpk028g6E=
+	t=1789662844; cv=none; b=IJhflYOTAnV+9MU8S1gLJsbW+54d+67q1jU0yPw6tU3DoVPa/36WY/FyfpjnKVnz1cbZ+KC7K5CsN8WxDYRKiH+hPgWLITwjOviOvbtZMhU9fgOu03dEntO5o3iXs2ysu8ADIiL8Ahq3QJ8PH6bwCuX0mXnfSaLeA4JgtX+uNVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789648202; c=relaxed/simple;
-	bh=NiBLOa+Ivz/MGMdtQtUORvBhVtPqCwg0j5rxwwVjFZI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BVmjMo+7AGQfQ2LRSeNAoSczvP5Y83AvmeSdHO7rsHCnD9GyN9opNq9/WV/wDgydEuaYelpGVNN8rzaBOyI41y9tVMwPqAs2chPbVqojZVBO4LugLhbFO2CMWjvcDkoF6dns4rb9mvL7B1dyiFhwsWD/SykB5ATSe4Jb8X56/Vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gU+5HCb6; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789662844; c=relaxed/simple;
+	bh=CjOISCKmtsymM0NxmM27RvcIwZJWN4Y8O6fHPpTHVYI=;
+	h=Date:From:To:CC:Subject:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=cIu9PJ06PyZegk5YUKxG1xx4FSgpe7lSGvgqMBgAcW2WCXjAsPdTYkNGZ+7MgA3nTkMto/aoWHM1f8mRUpWbCKKiRGmxmFoYaXDzqeEqsx7TgzVuo95yV5f6zXxLVvY8VZfDNK9KSiOqhwPYY9SU7uplqlhkU0/rOCrL9eIe88o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=fDZgu8kR; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=x233iRfU; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gU+5HCb6"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d37b5so4893635e9.2
-        for <io-uring@vger.kernel.org>; Thu, 17 Sep 2026 05:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789648180; x=1790252980; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Dtz+Uqi8FvhezfQGwgUreP+CufNocr9p+NqbDN0Xcok=;
-        b=gU+5HCb6NEhmBQLVaLIqnXzYCbuW3y+9zP3j/sbrylZD7lHYyFw9pFNkQiORNKn2+9
-         ecpocjM18AVXqhmb2SxpKUeXm8j+Y5YY0eqe95Ju9PSzoqQDNVvagBBBRiHmAyaNxoSO
-         yrF2knA4eFqyBkfUVMqfIAaC170alJV/Ke3NfGe5vcT8LsMUz1AkGiyw4nqOt58DrBeH
-         edFMUx8EXzNK34fToowfRsGPhAcUCtwcD78tvPUV2sxZL80o7IO0qH+1j5wD8x1fouxk
-         3I6nNpgWk3sZfc3RW+iF7VrURE/zt9+KM6ybjY5XT/davL5nsM4B5Uuztt8JxBvsRJbA
-         86GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789648180; x=1790252980;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Dtz+Uqi8FvhezfQGwgUreP+CufNocr9p+NqbDN0Xcok=;
-        b=mgQDOI5ryaqK7wqQDJtMFMGUNo9DlsX+2EovwqfkaTFh8c0zMPAFzsoiZshzuXYyLG
-         7cjc3l91JC/ZrFb8hmCDHIk1B9/OM4zG33X9enxxySWZlXUKpE6B40cdLbxrktDVgOn2
-         rZuSu/AzsqBDq1LayoDPOFEm6yZ5IV++//RkgKBIb60IXyU8IkpD+NCBx2lCaZe6KlKm
-         8hySdwdOk+dfMJlX/OsfQvT6yxxT81TGdz+k6HLwTS0N3BmzQSXy/yEbOvIa5n1VBSCz
-         dgUvoQNlnxuum8JPGvpI2712Gcmo2KQHtSME8C0AnVVjgW07MAoBd/yBmqzKjdg3XVXA
-         6pbA==
-X-Forwarded-Encrypted: i=1; AKwUvBxVd3FmluduY7+G68XmX/4C23IRRHZrM7MB6ZeoIFKbpv+wRWbTwUy8m4E3pzkOQO0UTHciD/QouQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++mVM48UA+UG/fZI/aLaaiZtUPe7wCLaQZTT+lTAmmW2wWh79i39
-	LAl/UBuQWTLAxX9A5B0c5sUodEI9mB20nsV1TFEQz9Kyny/ZITrdwecc
-X-Gm-Gg: AYBFou1JWALqt+/5Inh7SJdRkSO233+QUh2Dmun37QaIMQmvgL65iT/jHxc9nE/Bl0h
-	P96kapwRELHpFopBDBwHm4uqVoMqLIMjAnNPeRzizqTY9W9gdlAHhVmqFK6DnIe+2az0FP15lyo
-	rjFcAnUf9erEAMQh3hrSpKEXFoi8SN8g//jkJLOjg3HT4IsiT6+SI/96ustmnkB4+hPPQ8qSaB0
-	I75HIBegwvQ79ghr1Oo1yRiiK3grinz+g1NgkwqNHDLOeQJyCT2NTPTihbPWyWRmcFitUJ4imYd
-	q3soFifNq8asxVJb/MVOsGXepMKDP1HfpkNa4FAltynv/Z7DPAkwuCqVQYzzKoN+9YFbZGGlHGF
-	aCNr0Em+CYCLR/v7o4xwtSPdNf/lgi2ugqkITKB09K2mqHMmAPxhYXQEiglXpKW8Zxg4Yg9W+hR
-	iHK8LxnGeNETJMCsogS7bylx/rCP2Oj0/CuqOBRfoprOYgsAoVFc8/sJLttalKAH+EuBVrFTr8C
-	zDjwcC5w8fudYdvm7HPylIYQFsK+MRB3E9o
-X-Received: by 2002:a7b:c35a:0:b0:49f:bcb7:8e9 with SMTP id 5b1f17b1804b1-49fbcb70a1bmr64001725e9.9.1789648179633;
-        Thu, 17 Sep 2026 05:29:39 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fbd1ce79csm82621135e9.0.2026.09.17.05.29.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 05:29:39 -0700 (PDT)
-Date: Thu, 17 Sep 2026 13:29:37 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>, linuxppc-dev@lists.ozlabs.org,
- linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-media@vger.kernel.org, wine-devel@list.winehq.org,
- linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org,
- linux-mm@kvack.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/4] file: make struct fd_prepare const and kill its err
- field
-Message-ID: <20260917132937.5a15904e@pumpkin>
-In-Reply-To: <20260917-work-file-fd_prepare-v1-4-b87534ca49f3@kernel.org>
-References: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
-	<20260917-work-file-fd_prepare-v1-4-b87534ca49f3@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="fDZgu8kR";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="x233iRfU"
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1789662808; bh=QFdjS+vJrDLwqH4oMbfhGUP
+	HwfINklrDgbElv6JofZk=; b=fDZgu8kRWaAN4Zqu+tG6VI5oux1eBHXI2Ogjf70ktXJ8jC/fm4
+	wu0lVFNDQIBSXVh9X5r1s9KOslrL+p6OpbhD/MIss1elNlqwqY6GGKkLB/J+Uc8Ai7XZtdhz18a
+	pAd7rDXV346c61lYwm6rdmlBE6DDL+J3r12WxSJK185IbhpCtTmnGBqt+6xKYe1mTO0YcxdcWKA
+	ZlK+9rZIvD/ovpUMp6M4+oJ6N3BoeuNfJzA8tljsNH/SG7KwLMf++rkVYzqH6o18fhckCmqt20O
+	LoWHecgXVxFfVgrFZuimUqk8My/sBix0ELNJyLJumvTAIlrPW3q/t6QlTbua4Z2L8Sg==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=Message-ID:Subject:To:From:Date; t=1789662808; bh=QFdjS+vJrDLwqH4oMbfhGUP
+	HwfINklrDgbElv6JofZk=; b=x233iRfU6OhN0H0aU9yM3bAupMtolHGlZLwGIyOludR063+hBv
+	BhwyeQrFP+s3pd1CSSXvp1iVC3O4QkiU6PBA==;
+Date: Thu, 17 Sep 2026 17:33:28 +0100
+From: Bradley Morgan <brads@mainlining.org>
+To: brauner@kernel.org
+CC: axboe@kernel.dk, io-uring@vger.kernel.org, jack@suse.cz,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, mingo@redhat.com,
+ neil@brown.name, oleg@redhat.com, peterz@infradead.org,
+ stable@vger.kernel.org, viro@zeniv.linux.org.uk
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v2_1/7=5D_fork=3A_refuse_new_threads?=
+ =?US-ASCII?Q?_while_a_coredump_or_an_exec_is_in_progress?=
+In-Reply-To: <20260917-work-coredump-fixes-v2-1-f3787fcda051@kernel.org>
+Message-ID: <DE006398-EA21-4849-8EF4-4ACD66AC329F@mainlining.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 17 Sep 2026 11:09:45 +0200
-Christian Brauner <brauner@kernel.org> wrote:
-
-> FD_PREPARE() releases the fd as soon as the file expression fails. The
-> fd either holds the descriptor or the error. The separate field is
-> redundant. Make fd and file plain members and struct fd_prepare simpler.
+On 17 September 2026 10:17:28 BST, Christian Brauner <brauner@kernel.org>
+wrote:
+>Say a SQPOLL thread is a member of a thread-group that coredumps.
+>The coredump code uses zap_process() and sends SIGKILL. The SQPOLL
+>thread uses io_sqd_handle_event() and calls get_signal(). It removes
+>SIGKILL from the pending set and returns. The SQPOLL thread breaks out
+>of the loop and drains its own task work.
+>
+>Any pending io_req_task_submit() with REQ_F_FORCE_ASYNC creates a new
+>worker when no other worker is free. So it ends up calling
+>create_io_thread() from a thread whose fatal signal is gone. That means
+>copy_process() allows the creation. It's also possible for an exiting
+>io-wq worker to push new work onto the SQPOLL thread.
+>
+>zap_threads() counts the number of coredumping threads. The coredump
+>client waits in coredump_wait_inactive() until all threads in the
+>thread-group are parked. The new thread exits right away because the
+>workqueue is going down. It inherited PF_SIGNALED from its creator so
+>it links itself onto core_state->tasks in coredump_task_exit(). The
+>problem is that it then decrements "threads_remaining" even though
+>zap_process() never actually counted the new thread. So the count goes
+>to zero too early. So either the coredump misses the thread or it dumps
+>a thread that is still alive.
+>
+>The same race exists during exec. de_thread() zaps the other threads
+>the same way and counts them in signal->notify_count, and a zapped user
+>worker that has already dequeued its SIGKILL can still clone while
+>de_thread() waits for that count. And once de_thread() has cleared
+>signal->group_exec_task the exec'ing thread itself runs task work in
+>io_uring_task_cancel() and a pending create_worker_cb() creates a
+>thread after the group was made single-threaded.
+>
+>Close all of that in copy_process(). Refuse to create a thread while:
+>
+>(1) SIGNAL_GROUP_EXIT is set (set together with core_state by
+>zap_process()
+>(2) signal->group_exec_task is set
+>(3) while current is in execve
+>
+>Conditions (1) and (2) are handled with siglock help which means
+>copy_process() and zap_process() synchronize on it. create_io_thread()
+>treats the failure as a failed task creation and doesn't retry.
+>
+>Fixes: 3bfe6106693b ("io-wq: fork worker threads from original task")
+>Cc: stable@vger.kernel.org
+>Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+>---
+> kernel/fork.c | 6 ++++--
+> 1 file changed, 4 insertions(+), 2 deletions(-)
+>
+>diff --git a/kernel/fork.c b/kernel/fork.c
+>index 10be4a0ecb3f..6cd167a2b27b 100644
+>--- a/kernel/fork.c
+>+++ b/kernel/fork.c
+>@@ -2491,8 +2491,10 @@ __latent_entropy struct task_struct *copy_process(
+> 		goto bad_fork_core_free;
+> 	}
 > 
-> Callers of FD_PREPARE() get a const pointer to the guard. Simplify all
-> users as they can now easily access the trivial struct.
-> 
-...
-> @@ -191,35 +175,39 @@ static __always_inline struct fd_prepare __fd_prepare(int fd, struct file *file)
->   * was allocated. If fd_publish() was called the fd and file are
->   * published and cleanup becomes a nop.
->   *
-> - * @_fdf: name of struct fd_prepare variable to define
-> + * @_fdf: name of the const struct fd_prepare pointer to define
->   * @_fd_flags: flags for get_unused_fd_flags()
->   * @_file_owned: struct file to take ownership of (can be expression)
->   */
-> -#define FD_PREPARE(_fdf, _fd_flags, _file_owned)			\
-> -	struct fd_prepare _fdf __cleanup(__fd_prepare_cleanup) = ({	\
-> +#define __FD_PREPARE(_guard, _fdf, _fd_flags, _file_owned)		\
-> +	struct fd_prepare _guard __cleanup(__fd_prepare_cleanup) = ({	\
->  		int __fd = get_unused_fd_flags(_fd_flags);		\
->  		__fd_prepare(__fd, __fd < 0 ? NULL : (_file_owned));	\
-> -	})
-> +	});								\
-> +	const struct fd_prepare *const _fdf = &_guard
+>-	/* Let kill terminate clone/fork in the middle */
+>-	if (fatal_signal_pending(current)) {
+>+	/* Let kill or a group exit, exec or coredump abort clone/fork */
+>+	if (fatal_signal_pending(current) ||
+>+	    (current->signal->flags & SIGNAL_GROUP_EXIT) ||
+>+	   
 
-Since the struct is only written by its initialiser, can't it just
-be 'const' ?
+Hi! This LGTM, thanks for the patch. 
 
-David
+Reviewed-by: Bradley Morgan <brads@mainlining.org>
+
+ 
+
+--- Thanks!
+https://lore.kernel.org/all/EE579805-42F2-4C58-B752-F28779EEB717@grrlz.net/
