@@ -1,80 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EDB3C1D62;
-	Fri, 18 Sep 2026 14:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4A24A689B
+	for <io-uring@vger.kernel.org>; Fri, 18 Sep 2026 14:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789741788; cv=none; b=KgIwRm5qjyk4tvvddgwez07pKcpRwjShcLKUGg9al3XXKY9DUHw+JXcWA/RQl17U3uRzuspa1TP040O5wKbPMYB/MHLysqCGHX10F9dulO//SvEqybKwGCE8oOWpmZtqjrRW0LZW99NAW/qRbJpHwOc8F02XMXT/vdvCbepBK9E=
+	t=1789743354; cv=none; b=pbZFbDJSjprtVlyk76Zo+dFi8e8Gx9gYg9ceXSVitebvZ+vzdDn2GpYJ2nHhUaUVy0pUwDJFOvccNH13EZCqnNC0dNLWI51LcBK3/X1fVtUMMlhbRDpcSL27wHXk9MqJZIiDEcAYhneIX0E5IMzebIrHx3rGD/MGzejZxaSj0B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789741788; c=relaxed/simple;
-	bh=xNDIe4xQhd6rDetWv6az1RvXDpleYlAx/7+sFXaDpY0=;
+	s=arc-20240116; t=1789743354; c=relaxed/simple;
+	bh=SEltdDyfocBjIbVQfU9Lz5DYNVbfP/4uaiY3W6LZcdk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kpkoSxU8lFkbpBE7OEgrNbf0R1wZ/RQnzuCEiLhsGTmdy8NUfVjmeILQRkWXgrBSMnxs+7aO7DvLvaXhW6Ax6coXXiwR8vbA5SDvge+ZNeUjdgfNMh9AI8OMVc0ZIlxATMXmTlHCWL1fgRKVRTVD9JA/BVErzjbYz7+o0bA5K6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=niy30VT4; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=aC99CcKUY4N+rZ6E7r2hnYkA6Si0sAVGEs/+xRbN44HsrPylyJids1miMBQ8QPGg4UMMWgKe8X4e7wq2ZFVt6iOOOxtT7hhjRIyhsbKqKT1T72adbYYROoJJzhSU+sZEvFR5qayZt5uSnXqiYgcyTjsecdF5YwHH25Zm07dOjAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dss5sRPT; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="niy30VT4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28B521F000FF;
-	Fri, 18 Sep 2026 14:29:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789741786;
-	bh=C3spve4byqYzWkhtX7Z1uSwfKm3Dog4UDZegAdsYF48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=niy30VT4DpS3IqJE3lE2Y38gqFkVE24N7haV1aSclNsAlIay2KKYOxlSYTspkkKe8
-	 /oSj6ITWVBwXnyYHbckgRQdDTisYbCE0wzuyBwPxWfanIu5FxNvrSm+lqNBJyCURL0
-	 HYLuktP6BDmXqLR7kL3FXIapydJQvdHSUWIYAurv4EKg4/i0HBfEXVX7mzKi8nLfA5
-	 8O5nDFCa2ycK2jLsOjwY7bZTygYhMbKDlstsJx2oyBQnEXZIsTjf4H7XEEvCSEliYo
-	 QYxVYcc/9gVGUkb3Jbq8vWklRjnbyAwuRpDOFxF9+979ek2oywaWuWTD8Mja64awcl
-	 0FhnLa2vmlUmw==
-Date: Fri, 18 Sep 2026 16:29:41 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, NeilBrown <neil@brown.name>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org, 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dss5sRPT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1789743351;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=193Eukm5kz/lh19QRcN0hlB5xjOPp1QwF8rk3uoxO/g=;
+	b=dss5sRPTVf/awXGvJTH9LgqpD8cV8gZ0KNlhuWBjj6NXAWhuk3V+VYGnBD5fHMHH9ZPuOF
+	6U+E3wdrL513R5V6AQkpppVmoWHE6ypoKrAp0thgLbqgFGYanvGiFUoP1Y4WKK8G2vZSKI
+	0l1brpJFwZfyE3TnFEDUyT9BwD+BzfQ=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-342-2AFqT8aRN9WgKt31jB8-4Q-1; Fri,
+ 18 Sep 2026 10:55:47 -0400
+X-MC-Unique: 2AFqT8aRN9WgKt31jB8-4Q-1
+X-Mimecast-MFC-AGG-ID: 2AFqT8aRN9WgKt31jB8-4Q_1789743345
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 49CBC1935DC9;
+	Fri, 18 Sep 2026 14:55:45 +0000 (UTC)
+Received: from fedora (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 61DD01956095;
+	Fri, 18 Sep 2026 14:55:41 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Fri, 18 Sep 2026 16:55:44 +0200 (CEST)
+Date: Fri, 18 Sep 2026 16:55:39 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
 	io-uring@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 1/7] fork: refuse new threads while a coredump or an
- exec is in progress
-Message-ID: <20260918-elstern-potenzieren-marotten-71ebd0744753@brauner>
+Subject: Re: [PATCH v2 5/7] io-wq: order the exit bit against worker creation
+ task work
+Message-ID: <aq1Q652euXxJVf36@redhat.com>
 References: <20260917-work-coredump-fixes-v2-0-f3787fcda051@kernel.org>
- <20260917-work-coredump-fixes-v2-1-f3787fcda051@kernel.org>
- <aq0VLTyxNatFmLOK@redhat.com>
- <20260918-irrsinn-pickt-vermummen-d7167c397398@brauner>
- <20260918-disput-maden-parkdeck-2bc22dd90398@brauner>
- <aq0_lvHDViIpX_Mu@redhat.com>
+ <20260917-work-coredump-fixes-v2-5-f3787fcda051@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aq0_lvHDViIpX_Mu@redhat.com>
+In-Reply-To: <20260917-work-coredump-fixes-v2-5-f3787fcda051@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Fri, Sep 18, 2026 at 03:41:42PM +0200, Oleg Nesterov wrote:
-> On 09/18, Christian Brauner wrote:
-> >
-> > I think this works but they also need to check ->in_execve as the
-> > exec'ing thread is obviously never signaled:
-> >
-> > @@ -2709,6 +2707,10 @@ struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node)
-> >                 .user_worker    = 1,
-> >         };
-> >
-> > +       /* A creator past its fatal signal or in execve gets no thread. */
-> > +       if ((current->flags & PF_SIGNALED) || current->in_execve)
-> > +               return ERR_PTR(-EINTR);
-> 
-> Ah, I forgot to mention...
-> 
-> Can we shift io_uring_task_cancel() up, after setting bprm->point_of_no_return
-> but before de_thread() ?
-> 
-> I know nothing about io_uring, not sure this would be enough...
+On 09/17, Christian Brauner wrote:
+>
+> --- a/io_uring/io-wq.c
+> +++ b/io_uring/io-wq.c
+> @@ -1324,6 +1324,8 @@ static bool io_task_work_match(struct callback_head *cb, void *data)
+>  void io_wq_exit_start(struct io_wq *wq)
+>  {
+>  	set_bit(IO_WQ_BIT_EXIT, &wq->state);
+> +	/* Pairs with task_work_add() in io_queue_worker_create(). */
+> +	smp_mb__after_atomic();
+>  }
 
-From my reading of this code it works.
-The cancel runs task work and any create_worker_cb() queued before the
-exec can still create an io-wq worker. If that happens before
-de_thread(), that worker just becomes a sibling that de_thread() kills
-and waits for. After the cancel nothing new can be queued.
+Acked-by: Oleg Nesterov <oleg@redhat.com>
+
