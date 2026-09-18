@@ -1,83 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4A24A689B
-	for <io-uring@vger.kernel.org>; Fri, 18 Sep 2026 14:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD174F30DC;
+	Fri, 18 Sep 2026 15:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789743354; cv=none; b=pbZFbDJSjprtVlyk76Zo+dFi8e8Gx9gYg9ceXSVitebvZ+vzdDn2GpYJ2nHhUaUVy0pUwDJFOvccNH13EZCqnNC0dNLWI51LcBK3/X1fVtUMMlhbRDpcSL27wHXk9MqJZIiDEcAYhneIX0E5IMzebIrHx3rGD/MGzejZxaSj0B8=
+	t=1789743661; cv=none; b=twcsZMn78Kj0Gt/29ohbfB98bgp66neCewsyYzBhe69rORbloRK64AobSflzcUaZR31zN0RUmiSrEIWA51QkOTVNqVUYH0Ce5Vyr+4F3hpbs/AziF+rv5SwGJ26375iQP184PQy0+ADbjGFbaMSof+vcKj7unuxR630/q5D/NNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789743354; c=relaxed/simple;
-	bh=SEltdDyfocBjIbVQfU9Lz5DYNVbfP/4uaiY3W6LZcdk=;
+	s=arc-20240116; t=1789743661; c=relaxed/simple;
+	bh=kwAce/U4/lhY0aCQXvEsOHRNbCkH1p1okIQpMdOtSXY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aC99CcKUY4N+rZ6E7r2hnYkA6Si0sAVGEs/+xRbN44HsrPylyJids1miMBQ8QPGg4UMMWgKe8X4e7wq2ZFVt6iOOOxtT7hhjRIyhsbKqKT1T72adbYYROoJJzhSU+sZEvFR5qayZt5uSnXqiYgcyTjsecdF5YwHH25Zm07dOjAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dss5sRPT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=S0iEkYxVWBdG+mPjNsu517UV35Ern9wTq+jwlRWi3662o80DwIkmWE3K/Gj2ZCax3JUN+gPLxDyZJEghqNUCLsSB61wgV9wDwjqlJjW8QyOxhObAbosk4vhUgBkMk+ZgYUKfOSGtDxzCfStL4nUQhaw24xUgiahVt+DsXs6y4VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3tj+2SR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dss5sRPT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789743351;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=193Eukm5kz/lh19QRcN0hlB5xjOPp1QwF8rk3uoxO/g=;
-	b=dss5sRPTVf/awXGvJTH9LgqpD8cV8gZ0KNlhuWBjj6NXAWhuk3V+VYGnBD5fHMHH9ZPuOF
-	6U+E3wdrL513R5V6AQkpppVmoWHE6ypoKrAp0thgLbqgFGYanvGiFUoP1Y4WKK8G2vZSKI
-	0l1brpJFwZfyE3TnFEDUyT9BwD+BzfQ=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-342-2AFqT8aRN9WgKt31jB8-4Q-1; Fri,
- 18 Sep 2026 10:55:47 -0400
-X-MC-Unique: 2AFqT8aRN9WgKt31jB8-4Q-1
-X-Mimecast-MFC-AGG-ID: 2AFqT8aRN9WgKt31jB8-4Q_1789743345
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 49CBC1935DC9;
-	Fri, 18 Sep 2026 14:55:45 +0000 (UTC)
-Received: from fedora (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 61DD01956095;
-	Fri, 18 Sep 2026 14:55:41 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Fri, 18 Sep 2026 16:55:44 +0200 (CEST)
-Date: Fri, 18 Sep 2026 16:55:39 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3tj+2SR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E77A1F000FF;
+	Fri, 18 Sep 2026 15:00:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789743660;
+	bh=m0lbIXYPWHNxCUA+ixIepaYl5/92+XFxrovY+YXT0Oc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=h3tj+2SRLdyyyh8u6EmUdZLxGnTCejPhtW7liS54uyDqfHII8uZGPJSjRKYeJknSC
+	 VcNwzzno0SonxatCkgMXDqtQ1GFAQEcHr6e5okErY/GhfEbhJZA+JVa0nf671uAmth
+	 3KmGDUSKIDQN6TFK6rx5Z7uBikGnd4JWH9oYOVdHNIEJLfjqCG/mByc8vHg/Cgv9mV
+	 d7D80DVQzaNDziO+TBHvSre0qgy1ldT2XNELzipdrmjj0qAAhSzKVTJqT0T2agG4N7
+	 v745yVxJlJVC7B/4Uj7vPZ3BntThlPrIkclP8BybCFg5P1sm4G0wOPjtHgsx5nuePv
+	 TIwGlDUdXinbA==
+Date: Fri, 18 Sep 2026 17:00:50 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-fsdevel@vger.kernel.org, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, NeilBrown <neil@brown.name>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org, 
 	io-uring@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2 5/7] io-wq: order the exit bit against worker creation
- task work
-Message-ID: <aq1Q652euXxJVf36@redhat.com>
+Subject: Re: [PATCH v2 1/7] fork: refuse new threads while a coredump or an
+ exec is in progress
+Message-ID: <20260918-oliven-lebst-wohltat-c633868711f1@brauner>
 References: <20260917-work-coredump-fixes-v2-0-f3787fcda051@kernel.org>
- <20260917-work-coredump-fixes-v2-5-f3787fcda051@kernel.org>
+ <20260917-work-coredump-fixes-v2-1-f3787fcda051@kernel.org>
+ <aq0VLTyxNatFmLOK@redhat.com>
+ <20260918-irrsinn-pickt-vermummen-d7167c397398@brauner>
+ <20260918-disput-maden-parkdeck-2bc22dd90398@brauner>
+ <aq0_lvHDViIpX_Mu@redhat.com>
+ <20260918-elstern-potenzieren-marotten-71ebd0744753@brauner>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260917-work-coredump-fixes-v2-5-f3787fcda051@kernel.org>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+In-Reply-To: <20260918-elstern-potenzieren-marotten-71ebd0744753@brauner>
 
-On 09/17, Christian Brauner wrote:
->
-> --- a/io_uring/io-wq.c
-> +++ b/io_uring/io-wq.c
-> @@ -1324,6 +1324,8 @@ static bool io_task_work_match(struct callback_head *cb, void *data)
->  void io_wq_exit_start(struct io_wq *wq)
->  {
->  	set_bit(IO_WQ_BIT_EXIT, &wq->state);
-> +	/* Pairs with task_work_add() in io_queue_worker_create(). */
-> +	smp_mb__after_atomic();
->  }
+On Fri, Sep 18, 2026 at 04:29:41PM +0200, Christian Brauner wrote:
+> On Fri, Sep 18, 2026 at 03:41:42PM +0200, Oleg Nesterov wrote:
+> > On 09/18, Christian Brauner wrote:
+> > >
+> > > I think this works but they also need to check ->in_execve as the
+> > > exec'ing thread is obviously never signaled:
+> > >
+> > > @@ -2709,6 +2707,10 @@ struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node)
+> > >                 .user_worker    = 1,
+> > >         };
+> > >
+> > > +       /* A creator past its fatal signal or in execve gets no thread. */
+> > > +       if ((current->flags & PF_SIGNALED) || current->in_execve)
+> > > +               return ERR_PTR(-EINTR);
+> > 
+> > Ah, I forgot to mention...
+> > 
+> > Can we shift io_uring_task_cancel() up, after setting bprm->point_of_no_return
+> > but before de_thread() ?
+> > 
+> > I know nothing about io_uring, not sure this would be enough...
+> 
+> From my reading of this code it works.
+> The cancel runs task work and any create_worker_cb() queued before the
+> exec can still create an io-wq worker. If that happens before
+> de_thread(), that worker just becomes a sibling that de_thread() kills
+> and waits for. After the cancel nothing new can be queued.
 
-Acked-by: Oleg Nesterov <oleg@redhat.com>
+Right, one more thing to think about with this...
 
+zap_process() skips every thread that has PF_POSTCOREDUMP set.
+do_exit() sets PF_POSTCOREDUMP in synchronize_group_exit() and calls
+io_uring_files_cancel() right after that.
+
+That runs task work, create_worker_cb() runs and creates a new io-wq
+worker. If a thread started a coredump rgith before that worker gets
+created from a thread with PF_POSTCOREDUMP set which zap_processes()
+doesn't see. So two ways of fixing this:
+
+(1) mask off PF_POSTCOREDUMP in copy_process() -> probably the wrong
+    place
+(2) key on PF_SIGNALED | PF_POSTCOREDUMP
+
+I think (2) is probably correct:
+
+diff --git a/kernel/fork.c b/kernel/fork.c
+index a28fd3976cc0..94a652d933c8 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -2707,8 +2707,8 @@ struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node)
+                .user_worker    = 1,
+        };
+
+-       /* A creator past its fatal signal gets no thread. */
+-       if (current->flags & PF_SIGNALED)
++       /* A creator past its fatal signal or its coredump point gets no thread. */
++       if (current->flags & (PF_SIGNALED | PF_POSTCOREDUMP))
+                return ERR_PTR(-EINTR);
+
+        return copy_process(NULL, 0, node, &args);
+
+Better ideas?
