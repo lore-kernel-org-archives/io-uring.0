@@ -1,69 +1,43 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from out-utut-a192.jellyfish.systems (out-utut-a192.jellyfish.systems [198.177.127.192])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014674825C6
-	for <io-uring@vger.kernel.org>; Sat, 19 Sep 2026 11:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69D9445AFF
+	for <io-uring@vger.kernel.org>; Sat, 19 Sep 2026 12:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.177.127.192
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789817130; cv=none; b=fnyiTjWC9y0ny21qKuZye0v+fxOzpEcOovkWTGuTWfy2pR+An8KlE8nt/8L/rkwcCoCg+1rOVjSbQ2E7Gcj86z9EstsDZm9ziKRNhlV1qHscZPYnFxTY4HECv6zG7eDkdgK8iJVNz8mFEIa2k8hN1tpZQTsnnx+wxVCBXevjZIs=
+	t=1789819231; cv=none; b=LtWNDkeXjjGV7EL0Hc5ncBidcgs5EMTZi/B5FE8OilTqziYqtN+s8P10xizEzJL81bhVxuWD5eZa9z2k+2xjLREDqEwuKZp+NgPVqTZtQITYEtUF/R44TDprC/cKh9AQLyUE1CADzahQNX4jZfIuhB25RFEUxFbaecPW+a+OVyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789817130; c=relaxed/simple;
-	bh=rE9OUi7jrnVlYKHWopy5VH5lUwuqtjviy/zKmYm+HAE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tCh/QPSf6yLkIxtZIUvBB8NIIW4hu51vaOZZ/UlZkix8KZLtoSI5AEDd53smN/p2MZ8PuQk2L8bfVdLzD3XjPeAAMzWT357L7lkp/MgLAbVGoLtrf0bm13qcoqySAYHUCC9O3hQh88cBYjw4gb0sk1HOfmxGdMRivRlNyiozx5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kZ35ng/C; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789819231; c=relaxed/simple;
+	bh=f7+N5Mw41j1FixVmJ3MmZMbK4GIbQEHzQ88FfsA0TCk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OXsmGiKB39DAJPheQ0ZgY4NFvxct8EWO4Q2/F/BHa0aZi96jOnmgZ8G5pNgtHRsQYs9MFHrlugV6B+wX+H8PtK6El0dK2uKFAgXYGlKO1Trq7HDTWKEIVvnxlqnO0Un+2Uc3hU/qQ3R3q7//FykKCvqLwXYT3Qxv7Zljwdjs1ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=RACwx+kQ; arc=none smtp.client-ip=198.177.127.192
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kZ35ng/C"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccd66bb4so1441740a91.1
-        for <io-uring@vger.kernel.org>; Sat, 19 Sep 2026 04:25:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789817124; x=1790421924; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jGkK4uRxk6Nr5v3Tq2POt0GXdP4fUGbJEIfY/ItE10k=;
-        b=kZ35ng/CB+WCoHReloczVtYgXePbusg9q71J0/HeVomyS9vZA9ffi27HOzv3S19PEw
-         rikVswL6zQciNS4taaHJyE7WHtf/DQhmFgzXnQ5cH3JptxBmzby07lYOzj1fLsPzQfF1
-         DKhzBENQhKMRTJmdIHrff96XxeczK9TTD2HGeSEH3uxrXqcHqFcyD6/5hi3+zqCnc5MA
-         O9B3jyq9/tnAM9WlMidBeNqzzkR6TsYl4swq10DU7QBHIlvkhv/+xqdvDRVbfBqbKbpQ
-         SsHf1nNxqigD65gIDbkFfmF9wb+lLL7Kji0U+OUcAtU/Zg/IByjEgvAdBd/xq/JmYVDF
-         XO7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789817124; x=1790421924;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jGkK4uRxk6Nr5v3Tq2POt0GXdP4fUGbJEIfY/ItE10k=;
-        b=Y+gZBxRaPqK3zg/LPfMEACcJwPzwOiPfOzDiTaQ08xyDv3hlJ/JTFZjRD+C0bQmPht
-         nkWHHlJ/WhwatYj02Sd4BlDQDaF8Fkh8F1LqjQ6+z63dJHMzLUKQZ3UT7/piwtoPiaBy
-         7BTpGM6RtgKYZyAnHPpa7MrLev8RFO9fHDnvrF7b3XhBQJ/DG5MS6om/t8KYy1lzMf4S
-         YrRUGez73hO9kad8aRItyjHPKXsoAhEEHjPNx5BEcA/H8St4dfgP8q1NG7/w0bGcEVvR
-         tuQUr/kYEVCZed56OJQBEhnXUN3X0sk1KIP90TqDr1GebXRABS+BtLZXSC+GRJXw8w0h
-         dKdg==
-X-Gm-Message-State: AFuF++lN7cSmgdHbWm+5N78cX5v3n4jvS62Oj2PXiY2e1oYaW5qZvJKw
-	TEWTgRLfWEvLf9UwrsAlegGbyuzoXigmvHF7mqzuAWWIZLTtrzOPFo3M
-X-Gm-Gg: AYBFou2tRIsiuGDddlMHFrL/KWj+7NXyAPWLL+IHp34PvBeHGaBNe3SQp9Qz8Wk3gLk
-	yjd/hwYzr44Vi3ATPqGd1G1AvEkHsIeZ0BDzXzOHbOk2AYyU1sY6IU47Ghyq4JbZ5sDPwvw567u
-	LvBtY6GAGLUNwRjjkQmcqy7TjfeWdgnSZDcJdDGtr0cjsDrlIZVs3Wu35p0C9LQJfCMpJY/EIth
-	khq1h7sn+q9RL4g3sy7nhnScJu3BRx6AeFMW2bfShRCpOyXFo7jTm3SYD8lK6TRANPnbgk3/TEn
-	NxcGY+QABz/BcLB0mxK8L383COeIbq0rlSQLu5nK2U1+WkiRq7mzmcY0gfPGSbcIP1rhCDVd1Zg
-	8lJWw6EtjwCX4Q+NWW2TN3vWEba2V8pdKOeCkzQ0FW3O7rGtRHbdrijMCWhJNHkRUhl22KxqXWI
-	o7MKVBCd95xVl93e41MTgRUBLgILdkUURjJ6b4baJ+gt36KZjprPhebgYFb31Y6tJ/+IrTid5po
-	gyPGKUKPPAN95Pajwz9lFSKEZUgarUn452C0m4gBbu49t1k+CfslnBJWQY0EtoWnEbOwx73zLFC
-	t5ga21VNfw==
-X-Received: by 2002:a17:90b:5690:b0:398:bee5:61d6 with SMTP id 98e67ed59e1d1-39e54cfabf6mr9792500a91.24.1789817124232;
-        Sat, 19 Sep 2026 04:25:24 -0700 (PDT)
-Received: from phui-2.c.googlers.com.com (78.123.83.34.bc.googleusercontent.com. [34.83.123.78])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c164c18sm4238694a91.1.2026.09.19.04.25.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 04:25:23 -0700 (PDT)
-From: Hui Peng <benquike@gmail.com>
-To: axboe@kernel.dk
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] io_uring/bpf_filter: Set src->bpf_filters_cow in io_bpf_filter_clone()
-Date: Sat, 19 Sep 2026 11:25:23 +0000
-Message-ID: <20260919112523.3872581-1-benquike@gmail.com>
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="RACwx+kQ"
+Received: from fedora (unknown [39.144.124.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hn7ND3tw5z8sX2;
+	Sat, 19 Sep 2026 12:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1789819214;
+	bh=KVsvi7SM4RdXJxPjujXwMMnGGEmu7MIi6djOHkP9z9k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=RACwx+kQ3SvaWXqSabgSYizhQWJITYQ/9/oCpGQ6IxC1Wbf+CdU/Al403tXO+zu5f
+	 5N8ZYzguVUJIowIM3vygW2UMwcVp4e+oz3h0iW63u2BAVC4kitFQs+vyD4iz5TedH0
+	 x0C0L5ImVpPghAoXrYBe+UMbZ8VHvgRRcFQbbP7Fwl4vhsGKtgISHCQF5w2ovxAaGQ
+	 7c+F9sA/z2t29GXasjGv1w0J11VHzROYk7xgYJ9wg61Nt0d8bgSE5QmsTMLdlCiQPQ
+	 xlskg822VHKb6jFTaXrvUqtcaMKedznEntC/28q59rtZimIZ4F3DMANkGsKHtV1Ebb
+	 ORqsB93OQ5k8A==
+From: Tianyi Chen <hi@tychen.cc>
+To: io-uring@vger.kernel.org
+Cc: axboe@kernel.dk
+Subject: [PATCH liburing] test: cover blocking tty I/O on poll-ready files
+Date: Sat, 19 Sep 2026 19:59:48 +0800
+Message-ID: <20260919115948.1269869-2-hi@tychen.cc>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,58 +45,334 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-When io_bpf_filter_clone() clones a struct io_bpf_filters table from a
-source restriction set to a destination restriction set, it increments
-src->bpf_filters->refs and sets dst->bpf_filters_cow = true, but forgets
-to set src->bpf_filters_cow = true.
+Exercise a packet-mode tty read with a competing reader, using normal
+and registered descriptors, and a write larger than the available tty
+buffer. Bound submission latency and release blocked I/O so a regression
+fails without leaving the test stuck.
 
-As a result, subsequent IORING_REGISTER_BPF_FILTER registrations on an
-io_uring instance or task holding the source restriction set bypass
-copy-on-write and mutate the shared io_bpf_filters table in place,
-corrupting the BPF filter rules of already-cloned rings.
+Also check that blocking tty multishot reads complete once, while
+O_NONBLOCK tty reads retain multishot behavior.
 
-Fix this by setting src->bpf_filters_cow = true alongside
-dst->bpf_filters_cow = true in io_bpf_filter_clone().
+Link: https://github.com/axboe/liburing/issues/1623
 
-Fixes: ed82f35b926b ("io_uring: allow registration of per-task restrictions")
 Assisted-by: LLM
-Signed-off-by: Hui Peng <benquike@gmail.com>
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
-v2: Resend as plain text. v1 went out as PGP/MIME, which I now
-understand is not wanted on the lists - apologies for the noise. Also
-add a Fixes: tag and the Assisted-by: LLM tag.
+ test/Makefile        |   1 +
+ test/rw-poll-ready.c | 290 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 291 insertions(+)
+ create mode 100644 test/rw-poll-ready.c
 
-io_bpf_filter_clone(), the bpf_filters_cow flag and its only consumer in
-io_register_bpf_filter() were all added together by ed82f35b926b
-("io_uring: allow registration of per-task restrictions"), first
-released in v7.0-rc1, so that is the tag. Note d42eb05e60fe
-("io_uring: add support for BPF filtering for opcode restrictions")
-created bpf_filter.c and has a later author date because of a rebase,
-but it predates ed82f35b926b in the history and contains neither
-io_bpf_filter_clone() nor bpf_filters_cow.
+diff --git a/test/Makefile b/test/Makefile
+index 8b27681..3bf197d 100644
+--- a/test/Makefile
++++ b/test/Makefile
+@@ -246,6 +246,7 @@ test_srcs := \
+ 	ring-query.c \
+ 	rsrc_tags.c \
+ 	rw_merge_test.c \
++	rw-poll-ready.c \
+ 	self.c \
+ 	recvsend_bundle.c \
+ 	recvsend_bundle-inc.c \
+diff --git a/test/rw-poll-ready.c b/test/rw-poll-ready.c
+new file mode 100644
+index 0000000..da9601a
+--- /dev/null
++++ b/test/rw-poll-ready.c
+@@ -0,0 +1,290 @@
++/* SPDX-License-Identifier: MIT */
++/* Poll-ready blocking tty reads and writes must not block the submitter. */
++#include <fcntl.h>
++#include <pthread.h>
++#include <sched.h>
++#include <stdatomic.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <sys/ioctl.h>
++#include <sys/resource.h>
++#include <termios.h>
++#include <time.h>
++#include <unistd.h>
++
++#include "liburing.h"
++#include "helpers.h"
++
++struct reader {
++	int fd;
++	atomic_int started;
++	int ret;
++};
++
++static void *consume(void *arg)
++{
++	struct reader *r = arg;
++	char byte;
++
++	setpriority(PRIO_PROCESS, 0, 19);
++	atomic_store(&r->started, 1);
++	r->ret = read(r->fd, &byte, 1);
++	return NULL;
++}
++
++static void *release_readers(void *arg)
++{
++	int fd = *(int *)arg;
++
++	usleep(1000000);
++	if (write(fd, "xx", 2) != 2)
++		perror("release readers");
++	return NULL;
++}
++
++static long elapsed_ms(struct timespec *start, struct timespec *end)
++{
++	return (end->tv_sec - start->tv_sec) * 1000 +
++		(end->tv_nsec - start->tv_nsec) / 1000000;
++}
++
++static int wait_completions(struct io_uring *ring, int len)
++{
++	unsigned int seen = 0;
++	int i;
++
++	for (i = 0; i < 2; i++) {
++		struct __kernel_timespec wait = { .tv_sec = 2 };
++		struct io_uring_cqe *cqe;
++		int ret = io_uring_wait_cqe_timeout(ring, &cqe, &wait);
++
++		if (ret)
++			return T_EXIT_FAIL;
++		if (cqe->user_data == 1) {
++			if (cqe->res > len || (cqe->res < 0 &&
++			    cqe->res != -ECANCELED && cqe->res != -EINTR))
++				return T_EXIT_FAIL;
++		} else if (cqe->user_data != 2 ||
++			   (cqe->res != -ETIME && cqe->res != -ECANCELED &&
++			    cqe->res != -ENOENT)) {
++			return T_EXIT_FAIL;
++		}
++		seen |= 1U << cqe->user_data;
++		io_uring_cqe_seen(ring, cqe);
++	}
++	return seen == 6 ? T_EXIT_PASS : T_EXIT_FAIL;
++}
++
++static int test(int fixed)
++{
++	struct __kernel_timespec timeout = { .tv_nsec = 100000000 };
++	struct io_uring ring;
++	struct io_uring_sqe *sqe;
++	struct timespec start, end;
++	struct reader reader = { .started = 0 };
++	pthread_t consumer, release;
++	char buf[8];
++	int master, slave, one = 1, ret, failed = 0;
++
++	master = posix_openpt(O_RDWR | O_NOCTTY);
++	if (master < 0 || grantpt(master) || unlockpt(master))
++		return T_EXIT_FAIL;
++	slave = open(ptsname(master), O_RDWR | O_NOCTTY);
++	if (slave < 0 || ioctl(master, TIOCPKT, &one))
++		return T_EXIT_FAIL;
++	ret = t_create_ring(8, &ring, 0);
++	if (ret == T_SETUP_SKIP)
++		return T_EXIT_SKIP;
++	if (ret != T_SETUP_OK)
++		return T_EXIT_FAIL;
++	if (fixed && io_uring_register_files(&ring, &master, 1))
++		return T_EXIT_FAIL;
++
++	reader.fd = master;
++	if (pthread_create(&consumer, NULL, consume, &reader))
++		return T_EXIT_FAIL;
++	while (!atomic_load(&reader.started))
++		usleep(1000);
++	/* Let the competing read acquire the tty read lock. */
++	usleep(20000);
++	if (pthread_create(&release, NULL, release_readers, &slave))
++		return T_EXIT_FAIL;
++	if (tcflush(slave, TCIFLUSH))
++		return T_EXIT_FAIL;
++
++	sqe = io_uring_get_sqe(&ring);
++	io_uring_prep_read(sqe, fixed ? 0 : master, buf, sizeof(buf), 0);
++	sqe->flags = IOSQE_IO_LINK | (fixed ? IOSQE_FIXED_FILE : 0);
++	sqe->user_data = 1;
++	sqe = io_uring_get_sqe(&ring);
++	io_uring_prep_link_timeout(sqe, &timeout, 0);
++	sqe->user_data = 2;
++	clock_gettime(CLOCK_MONOTONIC, &start);
++	ret = io_uring_submit(&ring);
++	clock_gettime(CLOCK_MONOTONIC, &end);
++	if (ret != 2 || elapsed_ms(&start, &end) > 500) {
++		fprintf(stderr, "fixed=%d: submit returned %d after %ld ms\n",
++			fixed, ret, elapsed_ms(&start, &end));
++		failed = 1;
++	}
++	failed |= wait_completions(&ring, sizeof(buf));
++	pthread_join(release, NULL);
++	pthread_join(consumer, NULL);
++	if (reader.ret != 1) {
++		fprintf(stderr, "consumer: %d\n", reader.ret);
++		failed = 1;
++	}
++	io_uring_queue_exit(&ring);
++	close(slave);
++	close(master);
++	return failed ? T_EXIT_FAIL : T_EXIT_PASS;
++}
++
++struct drain {
++	int fd;
++	atomic_int done;
++};
++
++static void *drain_output(void *arg)
++{
++	struct drain *d = arg;
++	char buf[4096];
++
++	usleep(1000000);
++	while (!atomic_load(&d->done)) {
++		if (read(d->fd, buf, sizeof(buf)) < 0 && errno != EAGAIN)
++			break;
++		usleep(1000);
++	}
++	return NULL;
++}
++
++static int test_write(void)
++{
++	struct __kernel_timespec timeout = { .tv_nsec = 100000000 };
++	struct io_uring ring;
++	struct io_uring_sqe *sqe;
++	struct timespec start, end;
++	struct drain drain = { .done = 0 };
++	pthread_t reader;
++	char buf[65536] = { 0 };
++	int master, slave, ret, failed = 0;
++
++	master = posix_openpt(O_RDWR | O_NOCTTY | O_NONBLOCK);
++	if (master < 0 || grantpt(master) || unlockpt(master))
++		return T_EXIT_FAIL;
++	slave = open(ptsname(master), O_RDWR | O_NOCTTY);
++	if (slave < 0 || io_uring_queue_init(8, &ring, 0))
++		return T_EXIT_FAIL;
++	drain.fd = master;
++	if (pthread_create(&reader, NULL, drain_output, &drain))
++		return T_EXIT_FAIL;
++	sqe = io_uring_get_sqe(&ring);
++	io_uring_prep_write(sqe, slave, buf, sizeof(buf), 0);
++	sqe->flags = IOSQE_IO_LINK;
++	sqe->user_data = 1;
++	sqe = io_uring_get_sqe(&ring);
++	io_uring_prep_link_timeout(sqe, &timeout, 0);
++	sqe->user_data = 2;
++	clock_gettime(CLOCK_MONOTONIC, &start);
++	ret = io_uring_submit(&ring);
++	clock_gettime(CLOCK_MONOTONIC, &end);
++	if (ret != 2 || elapsed_ms(&start, &end) > 500) {
++		fprintf(stderr, "write submit returned %d after %ld ms\n",
++			ret, elapsed_ms(&start, &end));
++		failed = 1;
++	}
++	failed |= wait_completions(&ring, sizeof(buf));
++	atomic_store(&drain.done, 1);
++	pthread_join(reader, NULL);
++	io_uring_queue_exit(&ring);
++	close(slave);
++	close(master);
++	return failed ? T_EXIT_FAIL : T_EXIT_PASS;
++}
++
++static int test_multishot(int nonblock)
++{
++	struct __kernel_timespec timeout = { .tv_sec = 2 };
++	struct io_uring_buf_ring *br;
++	struct io_uring ring;
++	struct io_uring_sqe *sqe;
++	struct io_uring_cqe *cqe;
++	char buf[2][8];
++	int master, slave, ret, failed;
++
++	master = posix_openpt(O_RDWR | O_NOCTTY | (nonblock ? O_NONBLOCK : 0));
++	if (master < 0 || grantpt(master) || unlockpt(master))
++		return T_EXIT_FAIL;
++	slave = open(ptsname(master), O_RDWR | O_NOCTTY);
++	if (slave < 0)
++		return T_EXIT_FAIL;
++	if (io_uring_queue_init(8, &ring, 0))
++		return T_EXIT_FAIL;
++	br = io_uring_setup_buf_ring(&ring, 2, 1, 0, &ret);
++	if (!br)
++		return ret == -EINVAL ? T_EXIT_SKIP : T_EXIT_FAIL;
++	io_uring_buf_ring_add(br, buf[0], sizeof(buf[0]), 0, 1, 0);
++	io_uring_buf_ring_add(br, buf[1], sizeof(buf[1]), 1, 1, 1);
++	io_uring_buf_ring_advance(br, 2);
++	if (write(slave, "a", 1) != 1)
++		return T_EXIT_FAIL;
++	sqe = io_uring_get_sqe(&ring);
++	io_uring_prep_read_multishot(sqe, master, 0, 0, 1);
++	sqe->user_data = 1;
++	if (io_uring_submit(&ring) != 1)
++		return T_EXIT_FAIL;
++	ret = io_uring_wait_cqe_timeout(&ring, &cqe, &timeout);
++	if (ret)
++		return T_EXIT_FAIL;
++	failed = cqe->res != 1 || !(cqe->flags & IORING_CQE_F_BUFFER) ||
++		 !!(cqe->flags & IORING_CQE_F_MORE) != nonblock;
++	if (failed)
++		fprintf(stderr, "multishot nonblock=%d: res=%d flags=%u\n",
++			nonblock, cqe->res, cqe->flags);
++	io_uring_cqe_seen(&ring, cqe);
++	if (nonblock) {
++		sqe = io_uring_get_sqe(&ring);
++		io_uring_prep_cancel64(sqe, 1, 0);
++		if (io_uring_submit_and_wait(&ring, 2) != 1)
++			failed = 1;
++	}
++	io_uring_free_buf_ring(&ring, br, 2, 1);
++	io_uring_queue_exit(&ring);
++	close(slave);
++	close(master);
++	return failed ? T_EXIT_FAIL : T_EXIT_PASS;
++}
++
++int main(int argc, char *argv[])
++{
++	cpu_set_t cpus;
++	int cpu, ret;
++
++	if (argc > 1)
++		return T_EXIT_SKIP;
++	alarm(15);
++	/* Keep the awakened reader behind the submitter until it sleeps. */
++	if (sched_getaffinity(0, sizeof(cpus), &cpus))
++		return T_EXIT_FAIL;
++	for (cpu = 0; cpu < CPU_SETSIZE; cpu++)
++		if (CPU_ISSET(cpu, &cpus))
++			break;
++	CPU_ZERO(&cpus);
++	CPU_SET(cpu, &cpus);
++	if (sched_setaffinity(0, sizeof(cpus), &cpus))
++		return T_EXIT_FAIL;
++	ret = test(0);
++	if (ret)
++		return ret;
++	ret = test(1);
++	if (ret)
++		return ret;
++	ret = test_multishot(0);
++	if (ret)
++		return ret;
++	ret = test_multishot(1);
++	if (ret)
++		return ret;
++	return test_write();
++}
+-- 
+2.55.0
 
-To be clear about severity: this is a restriction-bypass / filter-set
-corruption issue, not a memory-safety one. The refcount is taken
-correctly and there is no use-after-free; the problem is purely that the
-source side of the clone is never marked COW, so a later
-IORING_REGISTER_BPF_FILTER on the source mutates the table that the
-cloned ring is still using.
-
-Found by code inspection; build tested only, no reproducer.
-
- io_uring/bpf_filter.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/io_uring/bpf_filter.c b/io_uring/bpf_filter.c
-index c0037632b7af..4a21511c4811 100644
---- a/io_uring/bpf_filter.c
-+++ b/io_uring/bpf_filter.c
-@@ -253,6 +253,7 @@ void io_bpf_filter_clone(struct io_restriction *dst, struct io_restriction *src)
- 	 * If the src filter is going away, just ignore it.
- 	 */
- 	if (refcount_inc_not_zero(&src->bpf_filters->refs)) {
-+		src->bpf_filters_cow = true;
- 		dst->bpf_filters = src->bpf_filters;
- 		dst->bpf_filters_cow = true;
- 	}
