@@ -1,69 +1,69 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C9C38DC4C
-	for <io-uring@vger.kernel.org>; Sat, 19 Sep 2026 20:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C403345EA3
+	for <io-uring@vger.kernel.org>; Sat, 19 Sep 2026 22:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789850119; cv=none; b=Ar3TAeZI50p5Kv0v8DgWIZ6IH6wEik9EK5pQYYUp6lOCo8ELWcBSb+tFjQ1n5TdyXutOQPlbBHNur/SW8kzpKVa6MDgwDXlOfo3hRQDPW5FR+I0W7Mb/hWUrDV36U73xw0Fbdap1CtA5kwEVrLPy/MXF+4e3NYcN65sY4NXaDog=
+	t=1789856249; cv=none; b=dudHXbOGaOYrXNyvQE7ZE1BktmFkwIMbNWU8kmpKonDz46N90g+u44aGISU/jPLIzK9qCb04C5ISVejp6cYOfqMlz7w0nB90mhF1WIiJhIIMcjZfZFnFj9yxLmVIc5rl7LWLU5ihA6IKLgR+iyybbdc0kzbrX5oh57hEL+x4j4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789850119; c=relaxed/simple;
-	bh=e6wD7xFzVvw/e4rUR3XRB7YG+VlFC7z+p8pa3TXX5jo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HRC5wBAChpHmldMCB23kwJpjiFDObmmOWS8l4EZB4inSEKJ4XpAyfFjXsn+DKvvwBFE/qDA+oqykQrpeeVSkazZMJqstDYTTQ0UiV7/ExrsUJhNZel/xwNqYxCEIJGwN+Sit+vs66/bH76O8eUFv3QmmMHaMtDGBruIcLl0MVkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Aa3uMmXG; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1789856249; c=relaxed/simple;
+	bh=QyHI2b8vUjfsZshB7ZA4R+b8UOgMbtTR6vWVwk9K8Bw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jxl60+x59GEqrpnBZRHfxpLgD8wn2pbU3bRLdwfeR/oNeebIjQRvPp5dEk1ZtCkDPvi/7+QbrP5fzl+b2PYfdOO8uA6kiIocgVVNA/b+WGRkyOVsESqKDvJTwykdfUVl5A1hBkCzF58WplimwbtwTupNFIQtrhFtNjFJ5k5hrN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TrVWu2kK; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aa3uMmXG"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396cccbba92so1687353a91.0
-        for <io-uring@vger.kernel.org>; Sat, 19 Sep 2026 13:35:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TrVWu2kK"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d8fdc579daso21129155ad.1
+        for <io-uring@vger.kernel.org>; Sat, 19 Sep 2026 15:17:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789850118; x=1790454918; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789856247; x=1790461047; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FPAFUSgkjduYMM+Kn550R7KXHA2uXtMffwRhKL77s5g=;
-        b=Aa3uMmXGqKq7G++XGZI2E6u/Zhwy+0Fa3YGHtHDS9vCWKkQoyXXf2hp4nb2+n3D99l
-         2MScpsQ3wTQ+RTnVoqVJEYThBoK/uwoyaaEnDyxKui940bO8nuvJVDRIYBAUtUTQbnIE
-         WMTfISZjXmmKOTMnIilD1NAXxPV6WysZ8YbT8adsxo8+l6X+A6ADrAsoU2XeLQEn9Eu9
-         5ylghV+a2glkFzTX7LxC54Rtx3R0OYSs2vYomG9wY2CSiQHu7cK0HE9TGjz/dxqeWbtz
-         osE08dcj5XVHSW+2KmwlT6eoFiR5xN5wPPL+Vo67q76B4chlAxoRokQ5NNslpQJCVvfZ
-         ApTw==
+        bh=gTQzb9hcxrg8y0CPqmDSwjH9nAbj97Ik48As79CZ6M8=;
+        b=TrVWu2kKo2NNhxx0yPNCs1SsW40TgKofnczlS4AvhnAuQ6XLY77/CsQmJjSrw2p7OB
+         Yu/dVZPrTR5rInpogl9c/toHhuPXcQ5mqEtx4a4Tu/wa0YZH9NqZJ7XyW88Mo/i/31Sd
+         tlhvkvNmBlRdyRskAlif0tbEl6BYqBnax8r6onBPsFRuqNZJ9hUURecbHQFFsUXELgbQ
+         jCg4lJByxk1PzWK8CPzIHehQRCY1lsxdDoxUwaI/Y6+DCcbbIEWVY/Rr6tzmiKg1FeZ9
+         Raki0blG7VQNbASkSY6NUTzuW1BYZHOgk/g/MpBWmfTNi062qc9gghmS/OzIYdjf9QuD
+         d4bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789850118; x=1790454918;
+        d=1e100.net; s=20260707; t=1789856247; x=1790461047;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FPAFUSgkjduYMM+Kn550R7KXHA2uXtMffwRhKL77s5g=;
-        b=pPxPwGlBMlm6xAH8U1XrEZ0HikNx5qBTSpn5SoJnL6Y0AalpSF5FmVTLadCilh4fNw
-         EBmBzRLjX7VZVLVjWXHGuvyBYIfZ/Idl/mDBf9g9bMEFffcCn+f8mmBThEacCTDveOnx
-         XNJF5O80lHhZDSx0DsSBDW2NzgIQeMSPG1LuNZDxfeAMc2KcOCATFgmSqSx7u3f8+b95
-         VPUUDk7v1QF5+peNnvDWZwITCljMhIKIaRgqbM2PhEGjgCx0dx6okykUa8Y+LO905R+l
-         epkMFpIGP+Zp23UYnFMQR04QNukCqpgoSUHy1LJjsr6BrhCkGHkEkYOSU8VH4KLQ+OIW
-         RfoQ==
-X-Gm-Message-State: AFuF++llfDV1YgP0hy1KbgHEh0JNUNTB6lZYANs/lqX0YeKChIM9SVXn
-	85YrKW8znH+4X87ztDybd0aCWwIv5jT51ugvhcNPE+nLeCJuFS+/gOad
-X-Gm-Gg: AYBFou0qdmeHJevzED4UyJNG5J5A/aznY+vLqIGo7YDW697FazOG4dctpd5jIg1rdvf
-	KRaNsMrIJiqGPlIe83GdPn7hxKS3sMnPjT7LTOPt1FBCNo2qcG3DgMx/LMtkZOXWNMuzZYG8Maj
-	EBKpjKUo95waz+/Gj2D19EWNwQU2j8b9R8T3AOM/lPsVDg074Ld+8z98Vi9TDNayP8iBuhfxmOK
-	x/3yMSgWUs5oTjP9V0rkHA4kR90qZoIt/FV6C20gkM58FuqtSsZvCNcNdiYYJewFrbUeMYMk3hx
-	s+fzUqXlOHx4jHfsFEzZtr7d2Rrpl3ua9qgSv5t/1PZyZq9ievN9X9rqWvo/P71HZrWfGYGDsmy
-	fjOagjuOqPPfsUjhMzF9CrqZ60IktgDmxhBXLWPGxTlrDQcUX6m4TXTirug+6qZangNK0URPuN5
-	JKV4NO++rHMx5bT0Dch2OZaadQfuNnnmb4v+zk4DBXdf2XgKTROPWXjYYv737WP9A8J75vog41M
-	4EsK8Ty3pQW00NwXh4uglV88+xrKPXekikOAwfh3t6hbtRLFWxnCXRxpe6mzaLQilS5pAOFpehy
-	dZfour8AVg==
-X-Received: by 2002:a17:90b:2243:b0:398:9be9:ab92 with SMTP id 98e67ed59e1d1-39e54d56e0fmr11169300a91.23.1789850117666;
-        Sat, 19 Sep 2026 13:35:17 -0700 (PDT)
+        bh=gTQzb9hcxrg8y0CPqmDSwjH9nAbj97Ik48As79CZ6M8=;
+        b=FX/H2cWHtw/9Q0uBBNTBqoNP26gxjHTYEDXKCq3cWRXfvpyCZl8oGa25sAkyYH07uH
+         qvGmbgBNUw1lxMO6wZDN6abV+4c9H8+Cz/x/3T/KunfFa+0FjvMklM4YV6VlTKpP4v00
+         TYL5NyIl5w5n8jHtpjJdMxCieKp2XvoWgRH3BwmQb3zNgX2YUl+1Rb6QoGtRWCHRJwOW
+         LZSlpXiuFtPEr+Yq09vYMBMZgdvfFPf0t8e+8sHgtYAttxdv5vscHLVvU5/I48qoOYHc
+         EF3UrD4in4iU4L5h7zvUnoz0N5qUbdLOcj2MVKfCKfaKOcpCptrXncVe5W2qqoTPDr8o
+         5KaA==
+X-Gm-Message-State: AFuF++n+ENGWQ60/G01M+kyKUmk00bLdEUEm1Ey7CTzaCs5qC/tdI87h
+	8GpcZQPpoXz4LUyeDmEtZZZnnaJyqx9hjx9kpcuXGwlNUCWJpfa5mYCC
+X-Gm-Gg: AYBFou0Ub29Tg73Z59dmvSF9g8DObfI2wZJN8VgmWRAoVZsXtiCuVLIC8TCn0rel4Yf
+	tu6niPbv52AJyaSEmwqN0b/jlRfN1UpTqw4RPNpaZoQqOl0z7nNiaGaOo3Jj+l4pgwUI7/4hx3B
+	iuaT0mpVNCM9zcf6WfzY1i9KGnQQTcmOT0gcANU1jE98n9jUhFXvOgfMKq0jS0Mf+N0rUIE2D8V
+	1W3wJGeAyV5kyjPB+CdIQ0zqlV3CjYr094S2YbowslVxlDPo5jM3e+FMcqR3+uN5bhPfjNjEh/v
+	MFtXv/NM6W7HAXLNAQGo9O4soYe5ka+yyVE+BwVUGBuJol/H6fgDGn+vaTV7YSRwtfS54KLeoka
+	Cfn4VxITuZXD341N7s2jfM9J2P3VbGMTs9MtRl4u9+aTWfJLl8wR9VclgjCfILfZ74Xi7O7XCq8
+	6a+qFLWKOkEQQtm+WEj47WikcnCn/aBhbAj4utFd+22eIToZs0iC2gMn2KUi2kCCN84wjOBe5S6
+	ZnCHyormkcuA0pb/Mv/sAdjkCwgpO89vsFbrpE7q45JRRdyrrWjVPA3TTldFE1VKAJYYFzePaKL
+	1ynFbAmaLQ==
+X-Received: by 2002:a17:90a:6090:b0:39e:6d82:dca with SMTP id 98e67ed59e1d1-39e6d822139mr3123163a91.30.1789856247537;
+        Sat, 19 Sep 2026 15:17:27 -0700 (PDT)
 Received: from phui-2.c.googlers.com.com (78.123.83.34.bc.googleusercontent.com. [34.83.123.78])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c6dd585sm5655907a91.0.2026.09.19.13.35.16
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c615f05sm6424373a91.15.2026.09.19.15.17.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 13:35:17 -0700 (PDT)
+        Sat, 19 Sep 2026 15:17:26 -0700 (PDT)
 From: Hui Peng <benquike@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
+To: axboe@kernel.dk
 Cc: io-uring@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] io_uring: fix CQ tail over-commit and CQE32 index corruption in io_cqe_cache_refill()
-Date: Sat, 19 Sep 2026 20:35:16 +0000
-Message-ID: <20260919203516.2581409-1-benquike@gmail.com>
+Subject: [PATCH] io_uring: fix cloned compound buffer accounting and R_DISABLED restriction bypass
+Date: Sat, 19 Sep 2026 22:17:25 +0000
+Message-ID: <20260919221725.3706704-1-benquike@gmail.com>
 X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
@@ -73,77 +73,134 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-io_cqe_cache_refill() has three issues when handling 32-byte CQEs on
-IORING_SETUP_CQE32 and IORING_SETUP_CQE_MIXED rings:
+Fix two issues in io_uring buffer registration and restriction
+enforcement:
 
-1. When cqe32 is true and off + 1 == ctx->cq_entries,
-   io_cqe_cache_refill() posts a 16-byte dummy IORING_CQE_F_SKIP CQE via
-   io_fill_nop_cqe(ctx, off) even on pure IORING_SETUP_CQE32 rings
-   (where IORING_SETUP_CQE_MIXED is not set). On a pure CQE32 ring,
-   ctx->cq_entries is the number of 32-byte CQEs and rings->cqes is
-   indexed by (off << 1), so writing a 16-byte skip CQE at
-   &rings->cqes[off] corrupts the middle of the CQ ring and misaligns
-   all subsequent CQEs. Restrict the wrap-around skip CQE to
-   IORING_SETUP_CQE_MIXED rings.
+1. In io_uring/rsrc.c, when registered compound buffers are cloned
+   across rings via IORING_REGISTER_BUFFERS2 /
+   IORING_RSRC_REGISTER_SPARSE, unaccounting on release can underflow
+   mm->pinned_vm and user->locked_vm if head pages are unaccounted
+   multiple times or against a different accounting context. Track per-
+   imu accounting ownership cleanly.
+2. In io_uring/register.c, enforce IO_RING_F_REG_RESTRICTED on rings
+   created with IORING_SETUP_R_DISABLED so restricted opcodes cannot be
+   invoked before restrictions are registered and enabled.
 
-2. On an IORING_SETUP_CQE_MIXED ring, when off + 1 == ctx->cq_entries
-   and only 1 free CQ slot remains (ctx->cq_entries - io_cqring_queued()
-   == 1), io_fill_nop_cqe(ctx, off) consumes that last slot and
-   increments ctx->cached_cq_tail, after which free == 0 causes
-   io_cqe_cache_refill() to return false without updating
-   ctx->cqe_cached. Check that at least 2 free CQ slots exist before
-   posting the dummy skip CQE.
-
-3. On pure IORING_SETUP_CQE32 rings, len is in 32-byte CQE units prior
-   to `len <<= 1`, so `len < (cqe32 + 1)` falsely requires 2 free
-   32-byte CQEs instead of 1. Check `!len` before scaling `off` and
-   `len` on IORING_SETUP_CQE32 rings, and in io_fill_cqe_aux() zero
-   cqe->big_cqe[0..1] whenever IORING_SETUP_CQE32 is set on the ring.
-
-Fixes: e26dca67fde1 ("io_uring: add support for IORING_SETUP_CQE_MIXED")
+Fixes: 735729844819 ("io_uring: move rsrc related data, core, and commands")
+Fixes: c43203154d8a ("io_uring/register: move io_uring_register(2) related code to register.c")
 Assisted-by: LLM
 Signed-off-by: Hui Peng <benquike@gmail.com>
 ---
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -733,7 +733,10 @@ bool io_cqe_cache_refill(struct io_ring_ctx *ctx, bool overflow, bool cqe32)
- 	 * Post dummy CQE if a 32b CQE is needed and there's only room for a
- 	 * 16b CQE before the ring wraps.
- 	 */
--	if (cqe32 && off + 1 == ctx->cq_entries) {
-+	if (cqe32 && (ctx->flags & IORING_SETUP_CQE_MIXED) &&
-+	    off + 1 == ctx->cq_entries) {
-+		if (ctx->cq_entries - io_cqring_queued(ctx) < 2)
-+			return false;
- 		if (!io_fill_nop_cqe(ctx, off))
- 			return false;
- 		off = 0;
-@@ -742,12 +745,13 @@ bool io_cqe_cache_refill(struct io_ring_ctx *ctx, bool overflow, bool cqe32)
- 	free = ctx->cq_entries - io_cqring_queued(ctx);
- 	/* we need a contiguous range, limit based on the current array offset */
- 	len = min(free, ctx->cq_entries - off);
--	if (len < (cqe32 + 1))
--		return false;
--
- 	if (ctx->flags & IORING_SETUP_CQE32) {
-+		if (!len)
-+			return false;
- 		off <<= 1;
- 		len <<= 1;
-+	} else if (len < (cqe32 + 1)) {
-+		return false;
+diff --git a/io_uring/register.c b/io_uring/register.c
+index 02bc103bcc9d..ad6f2a3c98a0 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -764,7 +764,7 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
+ 	if (ctx->submitter_task && ctx->submitter_task != current)
+ 		return -EEXIST;
+ 
+-	if ((ctx->int_flags & IO_RING_F_REG_RESTRICTED) && !(ctx->flags & IORING_SETUP_R_DISABLED)) {
++	if (ctx->int_flags & IO_RING_F_REG_RESTRICTED) {
+ 		opcode = array_index_nospec(opcode, IORING_REGISTER_LAST);
+ 		if (!test_bit(opcode, ctx->restrictions.register_op))
+ 			return -EACCES;
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 51b46e624ddd..1efaf29514e8 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -174,8 +174,8 @@ static void io_free_imu(struct io_ring_ctx *ctx, struct io_mapped_ubuf *imu)
+ 		kvfree(imu);
+ }
+ 
+-static unsigned long io_buffer_unaccount_pages(struct io_ring_ctx *ctx,
+-					       struct io_mapped_ubuf *imu)
++static unsigned long io_imu_unaccount_hpages(struct io_ring_ctx *ctx,
++					     struct io_mapped_ubuf *imu)
+ {
+ 	struct page *seen = NULL;
+ 	unsigned long acct = 0;
+@@ -188,17 +188,14 @@ static unsigned long io_buffer_unaccount_pages(struct io_ring_ctx *ctx,
+ 		struct page *page = imu->bvec[i].bv_page;
+ 		struct page *hpage;
+ 
+-		if (!PageCompound(page)) {
+-			acct++;
++		if (!PageCompound(page))
+ 			continue;
+-		}
+ 
+ 		hpage = compound_head(page);
+ 		if (hpage == seen)
+ 			continue;
+ 		seen = hpage;
+ 
+-		/* Unaccount on last reference */
+ 		if (hpage_acct_unref(ctx, hpage))
+ 			acct += page_size(hpage) >> PAGE_SHIFT;
+ 		cond_resched();
+@@ -207,18 +204,38 @@ static unsigned long io_buffer_unaccount_pages(struct io_ring_ctx *ctx,
+ 	return acct;
+ }
+ 
++static unsigned long io_imu_unaccount_reg_pages(struct io_ring_ctx *ctx,
++						struct io_mapped_ubuf *imu)
++{
++	unsigned long acct = 0;
++	int i;
++
++	if (imu->flags & IO_REGBUF_F_KBUF || !ctx->user)
++		return 0;
++
++	for (i = 0; i < imu->nr_bvecs; i++) {
++		if (!PageCompound(imu->bvec[i].bv_page))
++			acct++;
++	}
++	return acct;
++}
++
+ static void io_buffer_unmap(struct io_ring_ctx *ctx, struct io_mapped_ubuf *imu)
+ {
+-	unsigned long acct_pages = 0;
++	unsigned long acct_pages;
+ 
+-	/* Always decrement, so it works for cloned buffers too */
+-	acct_pages = io_buffer_unaccount_pages(ctx, imu);
++	/* Compound hpages are accounted per-ring in ctx->hpage_acct */
++	acct_pages = io_imu_unaccount_hpages(ctx, imu);
+ 
+ 	if (unlikely(refcount_read(&imu->refs) > 1)) {
+-		if (!refcount_dec_and_test(&imu->refs))
++		if (!refcount_dec_and_test(&imu->refs)) {
++			if (acct_pages)
++				io_unaccount_mem(ctx->user, ctx->mm_account, acct_pages);
+ 			return;
++		}
  	}
  
- 	ctx->cqe_cached = &rings->cqes[off];
-@@ -781,7 +785,7 @@ static bool io_fill_cqe_aux(struct io_ring_ctx *ctx, u64 user_data, s32 res,
- 		WRITE_ONCE(cqe->res, res);
- 		WRITE_ONCE(cqe->flags, cflags);
++	acct_pages += io_imu_unaccount_reg_pages(ctx, imu);
+ 	if (acct_pages)
+ 		io_unaccount_mem(ctx->user, ctx->mm_account, acct_pages);
+ 	imu->release(imu->priv);
+@@ -1280,6 +1297,7 @@ static int io_buffer_acct_cloned_hpages(struct io_ring_ctx *ctx,
+ 					struct io_mapped_ubuf *imu)
+ {
+ 	struct page *seen = NULL;
++	unsigned long acct = 0;
+ 	int i, ret = 0;
  
--		if (cqe32) {
-+		if (cqe32 || (ctx->flags & IORING_SETUP_CQE32)) {
- 			WRITE_ONCE(cqe->big_cqe[0], 0);
- 			WRITE_ONCE(cqe->big_cqe[1], 0);
- 		}
--- 
-2.43.0
+ 	if (imu->flags & IO_REGBUF_F_KBUF || !ctx->user)
+@@ -1302,10 +1320,14 @@ static int io_buffer_acct_cloned_hpages(struct io_ring_ctx *ctx,
+ 		ret = hpage_acct_ref(ctx, hpage, &acct_new);
+ 		if (ret)
+ 			break;
++		if (acct_new)
++			acct += page_size(hpage) >> PAGE_SHIFT;
+ 
+ 		cond_resched();
+ 	}
+ 
++	if (!ret && acct)
++		ret = io_account_mem(ctx->user, ctx->mm_account, acct);
+ 	if (!ret)
+ 		return 0;
+ 
