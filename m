@@ -1,177 +1,245 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664763C3F5C;
-	Mon, 21 Sep 2026 12:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF02E49F132
+	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 13:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789994988; cv=none; b=i7KmAez+dpM1N7Pu+MkOs/zF2icLg3lvjNX5ga06WpH9xdvJGUtxFrYSe1FfBg+cr4VIG9j3uVLtKVf9xz0WFjXItmOKTKbRKkbauhaZxTye36aKFcpKb33q1k+WLzvnJ6fq+D1L9FJqtQItqIbAbnfGfRncijcyLb0bdW2JujU=
+	t=1789997962; cv=none; b=ZbQwtyQUv1F184B7spKjLx3PWN7Gw+idWszhfoAQ+w0rUuyOVUxvJ89U3xWsIK8mLlhu35ddw06BTOH+TfQkHlgA/cSmpSs/2fnMttXna5nKBZcDPrZcPefl5/cANYrrsH3YzNyN5FwezpBsoiv/aU1VIrX1XuFQdpwjrKgQZYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789994988; c=relaxed/simple;
-	bh=GrGJO3m9j49Co+pGdq//2esF7gHhdq16xTas6Rwiprk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oBFxA4hg85G0UGYLZZRoPyBe6g/aMm0zluVUlSCERkZYuf7s191i5yZzxGRRDtDDDG2Onv3MdqvP3Qm5Ebx1NE3mCV1t9sTjCPB2OfZv9iIWY/LEa63QjgMNWCmBI4QBTAL4Y1CT3QxyYaoW9ffXTe4UxVNlg2BSyQFxMqMqZmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=my5aeO1U; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HcPl4ODx; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BtZLNI8c; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IM+48rP5; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1789997962; c=relaxed/simple;
+	bh=RpITgNHybG/246G0ps7WuEPofE3/AsGe6jzoxiwBDiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C/VdkTXYBtOgM44egmitYpzJfQJ6kB+p7x3EOUoIkvTMUS212LEWr+/Mpk4w3U5DvcWDm7d6M8iHY6OVJc4GpTP3T8PrjYGyRh28Tzuim1ZARd8fRe0+vVgRR31V73hlQ3X59w8HEHm/Yta7Qxpx2c32es/ZdBZpG/sZrTaiZNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3wRD9Wi; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="my5aeO1U";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HcPl4ODx";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BtZLNI8c";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IM+48rP5"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 5658D21AA2;
-	Mon, 21 Sep 2026 12:49:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1789994981;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D6ydRcSAeF+DH0s85zWIWWyZ8vFTJT74/Uc1TvApogs=;
-	b=my5aeO1UQMs5O7m155UzVI1Qhzb3C7CgxTwsL4ysHuQMFBIKjkERf8StfJWVhSp8HuEI39
-	F9UBLq2O1vDsMu/UtwUKa5RKUd87SIK5qKXojVCBzXc71th6ZA7jU375XZYU2MMmHl4dQA
-	q1+yJkVLmiX3Xtg9PNKQq562ARV3xKA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1789994981;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D6ydRcSAeF+DH0s85zWIWWyZ8vFTJT74/Uc1TvApogs=;
-	b=HcPl4ODxeYeDNu0ZqosCbobWEFhPFnUYizE5Jl6Q5vTxlfVEf1DVJDlw1EO7+8qRXJgX+o
-	gaPkT2G4QCUYd1Cg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=BtZLNI8c;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=IM+48rP5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1789994977;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D6ydRcSAeF+DH0s85zWIWWyZ8vFTJT74/Uc1TvApogs=;
-	b=BtZLNI8cnSMBuDBrxGjE1YgxWtpsjgqYrqVSBZoFwSqIaSLC+jQj5tUBUtJjCRrjq3uFj4
-	JBhWmcbo8cglD7j9lnU/dm9Gh/YBOlxdjTIWkGbdjtcS0jhvL+j9N7C6EiEjCc/f3xZ0zT
-	ZiwI11aHIIdMedrMvsnzfssM25rUG0Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1789994977;
-	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-	 cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D6ydRcSAeF+DH0s85zWIWWyZ8vFTJT74/Uc1TvApogs=;
-	b=IM+48rP5uK6VMZABDThq+i3PWGUrC57dO1d/JZR2VnCpnx7TWFJjkUwkxU/XlSa0c6rcRx
-	Bdgs5E85YgV7U1DA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 297871368D;
-	Mon, 21 Sep 2026 12:49:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kCruAeEnsWriVQAAD6G6ig
-	(envelope-from <dsterba@suse.cz>); Mon, 21 Sep 2026 12:49:37 +0000
-Date: Mon, 21 Sep 2026 14:49:27 +0200
-From: David Sterba <dsterba@suse.cz>
-To: Yang Xiuwei <yangxiuwei@kylinos.cn>
-Cc: clm@fb.com, dsterba@suse.com, quwenruo.btrfs@gmx.com,
-	linux-btrfs@vger.kernel.org, io-uring@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] btrfs: fix io_uring encoded IO cleanup
-Message-ID: <20260921124927.GC54722@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20260819025436.1949152-1-yangxiuwei@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3wRD9Wi"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d3931so22492165e9.3
+        for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 06:39:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789997958; x=1790602758; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=s6kgf6V3xUR//WctRXY84w9DzTYgF20+bN2plXCsnYg=;
+        b=b3wRD9WirKCPL4Rg/i0tRlCv9DfDFw76Fkn8bSuoEOYwXlKwyp4M/HkSqQT4R+NFLs
+         LP5xWfAhW6h5eN4akZzg1Yj2U39vyvsIakRq5dt3XJ5AG7i+UIYy/UH22FSY+TguyOic
+         dFpyfnR8/PGOQXD3q3lMyCBwPOBvNDLBJsOXxQQ1YCtpQwp9hr/T5FIt0tVvUyz2CR9A
+         dvEJBgcFIen7xsFGEhmSNaMXE6BWzbDveZESODj25mwBBnEWyKO4ba3ZRSQzIDKyBHzg
+         yfmD5yaoTqAyNe8l8jWKfeyplSULONot57+sYXpaRugqtP2SE+NUZ7LNvctgr03PtfNz
+         wKQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789997958; x=1790602758;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=s6kgf6V3xUR//WctRXY84w9DzTYgF20+bN2plXCsnYg=;
+        b=t/L8Py6Z7aR/pUDcrJaod9P3RpeHh4xz4Gyvu6SoTRxhnGhXnEH7G80+pWVCJ9KXAp
+         /GURqj0+6yHeHd1Flc2EL5dbyOoEemocIkwy5pcO1n7eASfRaFIHzZbusQ7MogInHUG/
+         q6Ocm/tr20vZ2dlRa3kC2AvrsrR6bHL0POQKmdwrMzXKvsReLwM3bIE1Qc7p107MLzYx
+         Pdk4wj+gMMdGR+pWmjlOl24XSNUklqXdwBtcZTtGYo+Pi07GoX9ygqcXmgb8dcAKt78M
+         rubiPFv1PRoQm7K4Us9NxFsQjTynDPa7u2ebHWKamjgP1N3nVLupSes3G/H9UAE7sBeV
+         v3Jw==
+X-Forwarded-Encrypted: i=1; AKwUvByDmyTk6i+4jpK6XoJwmuhhTeD3+ZFIedNCaeYwqPnvEyP29AhEw5bjYW62t9a9TeWTogja55iFVg==@vger.kernel.org
+X-Gm-Message-State: AFuF++kA2QlNw2KJI6vtVjxxVgqoG1SrI2E/jexk0oaBjr1LZOs3aIV+
+	OH5z1Lr8hFN9e/UXPDATPk/wLYwlkycdehYHXNveJ+HA3LF/wFA7uTLH
+X-Gm-Gg: AYBFou0s6a+nKvJs0oAmJDIydGSkYVLng1H9E6/1awux8Fyrx6l34LteKsPwJa4TbaQ
+	phR/sgHDh58CPwdL2DeFraiOWRTMIJADYLNG+lrK5cwmWa6PQB5iCmQ6sxjW8oNytxCRrBTYcZv
+	NAMZZiJsELPDHEXQrqnvw38gtV85CHA2iizOaeBxD9EZdxj/bDZ4OKaxoyJW0+2r0lJgSbiITWH
+	QUzjOZE1tR6ZE2E73Uxkx9sAcxvP3sF8OVSar0u+Vl3+MXk2c2iKIb6hVgzeeqTVt0FB+EHWaBP
+	/tyx9GQAVYj+rcAdN0+zs0+kbyNXA1IebVoLf46ptQMR8HAIp+vYgcP7XUBZ1FZRwPigy7iaVGk
+	hRqYPnvMUMVdYw4C/c7kc3illNNk1R+oTMkQ8q0KuVmhrgvAlRTgMGhwsqIL5Kx2w1M8UG+NA/p
+	FVE+QIMgc6oyIx0x+oiY7MTbStHJxN7k4kSFrDcg/xh8kigWPtihaXXThBd1eP4f1znYAp5d2M9
+	rH69g4LyA8Vr/NtohgpyntPnEi5IVw5QQyV959n5KwRX5vz6PXcp3h3wvYbhUH6UtuSPy5tZjQF
+	JS6nPS1D2+jmLxup1tJzVcHTiXpCIA==
+X-Received: by 2002:a05:600c:1989:b0:49e:8184:f617 with SMTP id 5b1f17b1804b1-49fc573610cmr163288645e9.22.1789997957649;
+        Mon, 21 Sep 2026 06:39:17 -0700 (PDT)
+Received: from 127.0.0.1localhost (82-132-213-26.dab.02.net. [82.132.213.26])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc585920fsm617171605e9.4.2026.09.21.06.39.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 06:39:16 -0700 (PDT)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: linux-block@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	Christoph Hellwig <hch@lst.de>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Keith Busch <kbusch@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Nitesh Shetty <nj.shetty@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Tushar Gohad <tushar.gohad@intel.com>,
+	William Power <william.power@intel.com>,
+	Phil Cayton <phil.cayton@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	dm-devel@lists.linux.dev
+Subject: [PATCH v6 00/13] Add dmabuf read/write via io_uring
+Date: Mon, 21 Sep 2026 14:38:44 +0100
+Message-ID: <cover.1789997898.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260819025436.1949152-1-yangxiuwei@kylinos.cn>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Score: -4.21
-X-Rspamd-Queue-Id: 5658D21AA2
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.21 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	HAS_REPLYTO(0.30)[dsterba@suse.cz];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:replyto,twin.jikos.cz:mid,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmx.com];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[fb.com,suse.com,gmx.com,vger.kernel.org];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	REPLYTO_ADDR_EQ_FROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 19, 2026 at 10:54:31AM +0800, Yang Xiuwei wrote:
-> Hi,
-> 
-> Fixes for the io_uring ENCODED_READ / ENCODED_WRITE cleanup paths.
-> 
-> 1. Always return -EIOCBQUEUED after endio so the caller and
->    btrfs_uring_read_finished() do not both clean up.
-> 
->    Link: https://lore.kernel.org/linux-btrfs/20260630091609.3414-1-samsun1006219@gmail.com/
-> 
-> 2. btrfs_uring_read_extent() failure skipped kfree(data->iov).
-> 
-> 3. Unlock inode/extent in the caller on read-extent failure.
-> 
-> 4. Do not stash encoded data in the cmd PDU across -EAGAIN.
-> 
-> 5. Drop the unused REISSUE restore.
-> 
-> v2 also exported __import_iovec() and passed IO_URING_F_COMPAT.
-> That is not a bug with the current io_uring thread setup:
-> create_io_thread() copies TS_COMPAT, so import_iovec() already
-> sees compat iovecs. Passing the flag explicitly would still be a
-> cleanup, but this series does not take it.
-> 
-> Testing:
-> - xfstests btrfs/333 passed.
-> - kmemleak after dropping the ring on NONBLOCK encoded write/read:
-> 
->   unreferenced object (size 512):
->     comm "btrfs_uring_eag"
->     __kmalloc_cache_noprof+0x38f/0x4a0
->     btrfs_uring_encoded_write+0x78d/0x1790 [btrfs]
->     btrfs_uring_cmd+0x142/0x1d0 [btrfs]
->     io_uring_cmd+0x296/0x5e0
-> 
->   unreferenced object (size 512):
->     comm "btrfs_uring_eag"
->     __kmalloc_cache_noprof+0x38f/0x4a0
->     btrfs_uring_encoded_read+0x89a/0x12b0 [btrfs]
->     btrfs_uring_cmd+0x173/0x1d0 [btrfs]
->     io_uring_cmd+0x296/0x5e0
-> 
->   After 4/5 the same repro is clean.
-> 
-> Changes in v3:
-> - Drop the __import_iovec / IO_URING_F_COMPAT patches. 
-> - 3/5: drop a leftover goto out_fail from v2.
+The patch set allows to register a dmabuf to an io_uring instance for
+a specified file and use it with io_uring read / write requests. The
+infrastructure is not tied to io_uring and there could be more users
+in the future. A similar idea was attempted some years ago by Keith [1],
+from where I borrowed a number of changes. Later it was brough back up
+to life by Tushar and Vishal.
 
-Added to for-next, thanks.
+It's an opt-in feature for files, and they need to implement a new
+file operation to use it. Only NVMe block devices are supported in this
+series. The user API is built on top of io_uring's "registered buffers",
+where a dmabuf is registered in a special way, but after it can be used
+as any other "registered buffer" with IORING_OP_{READ,WRITE}_FIXED
+requests. It's created via a new file operation and the resulted map is
+then passed through the I/O stack in a new iterator type. There is some
+additional infrastructure to glue it together, count requests, manage
+lifetime and implement invalidation.
 
-IORING_URING_CMD_REISSUE is now only used in block layer code.
+Tushar, William, Phil did a lot of testing and experimentation on various
+devices with previous versions of the patch set, and I've received lots
+of help from Anuj, Kanchan and Nitesh with investigations, testing, and
+patching. Earlier benchmarks by Anuj for IOMMU optimisations with udmabuf
+showed:
+
+STRICT: before = 570 KIOPS, after = 5.01 MIOPS
+LAZY: before = 1.93 MIOPS, after = 5.01 MIOPS
+PASSTHROUGH: before = 5.01 MIOPS, after = 5.01 MIOPS
+
+# Patch set structure:
+- Patches 1-2 introduce internal API and infrastructure mediating
+  io_uring and target subsystem / devices
+- Patches 3-5: block layer support + prep patches
+- Patches 6-8 implement NVMe support
+- Patches 9-13 add io_uring support and uapi.
+
+There are some liburing tests that can serve as an example:
+git: https://github.com/isilence/liburing.git rw-dmabuf-tests-v5
+url: https://github.com/isilence/liburing/tree/rw-dmabuf-tests-v5
+
+The patches are based on Jens' for-next. Also available as a branch:
+git: https://github.com/isilence/linux.git rw-dmabuf-v6
+url: https://github.com/isilence/linux/tree/rw-dmabuf-v6
+
+[1] https://lore.kernel.org/io-uring/20220805162444.3985535-1-kbusch@fb.com/
+
+v6: - remove fences and wait on invalidation synchronously
+    - report all map requests are detached earlier, outside of wq
+    - handle nvme removal
+    - gate nvme_free_descriptors() on iod->nr_descriptors 
+    - fix error handling in nvme_rq_setup_dmabuf_map() 
+    - fix iov_iter_alignment()
+    - relax the 1G io_uring registered dma-buf limit
+    - fix type overflow issue in bio split
+    - allocate struct dma_buf_io_ctx inside the dma-buf-io code
+    - harden block checks against dma-buf + buffered io
+
+v5: - Reject dma-buf with buffered IO for raw bdev
+    - Add lim->max_segments bio splitting
+    - Add bio_iov_iter_set() helper
+    - Fix io_uring uapi validation
+    - Other minor changes
+    NVMe:
+    - Rename nvme_pci_sgl_set_data() to nvme_pci_dma_iter_set_sgl(), split 
+      into its own prep patch.
+    - Convert segment walk loops to do-while.
+    - Drop adjacent segment coalescing logic.
+    - Drop first_dma/first_len from nvme_pci_dmabuf_sgl_nents()
+    - Remove entries > NVME_MAX_SEGS bailout; moving to the block layer.
+    - Factor SGL vs PRP decision making into a helper.
+
+v4: - https://lore.kernel.org/all/cover.1785274111.git.asml.silence@gmail.com/
+    - Add sgl support from Anuj
+    - Move it under drivers/dma-buf/ and rename
+    - Fix mis-sized allocations
+    - Fix io_uring re-import mishandling
+    - Drop map before io_uring "task work"
+    - Move blk-mq callback to block_device_operations
+    - Convert bio flag to REQ_OP*
+    - Other small changes
+
+v3: https://lore.kernel.org/io-uring/cover.1777475843.git.asml.silence@gmail.com/
+    - Rework io_uring registration
+    - Move token/map infrastructure code out of blk-mq
+    - Simplify callbacks: remove a separate blk-mq table, which was
+      mostly just forwarding calls (to nvme).
+    - Don't skip dma sync depending on request direction
+    - Fix a couple of hangs
+    - Rename s/dma/dmabuf/
+    - Other small changes
+
+v2: - Don't pass raw dma addresses, wrap it into a driver specific object
+    - Split into two objects: token and map
+    - Implement move_notify
+
+Anuj Gupta (2):
+  nvme-pci: rename nvme_pci_sgl_set_data to nvme_pci_dma_iter_set_sgl
+  nvme-pci: add SGL support for the dmabuf path
+
+Pavel Begunkov (11):
+  dma-buf: introduce initial file I/O infrastructure
+  iov_iter: add iterator type for dmabuf maps
+  block: always adjust bi_offset on bio_advance_iter
+  block: introduce dma map backed bio type
+  block: add dma-buf support for raw bdev
+  nvme-pci: implement dma-buf backed requests
+  io_uring/rsrc: introduce buf registration structure
+  io_uring/rsrc: extend buffer update
+  io_uring/rsrc: add uncloneable regbuf flag
+  io_uring/rsrc: add regbuf import flags
+  io_uring/rsrc: add dmabuf backed registered buffers
+
+ block/bio.c                    |  15 +-
+ block/blk-merge.c              |  45 +++
+ block/fops.c                   |  24 +-
+ drivers/dma-buf/Makefile       |   2 +-
+ drivers/dma-buf/dma-buf-io.c   | 219 +++++++++++++++
+ drivers/md/dm-io-rewind.c      |   6 +-
+ drivers/nvme/host/core.c       |  12 +
+ drivers/nvme/host/nvme.h       |   2 +
+ drivers/nvme/host/pci.c        | 484 ++++++++++++++++++++++++++++++++-
+ include/linux/bio.h            |  21 +-
+ include/linux/blk-mq.h         |   7 +
+ include/linux/blk_types.h      |  14 +-
+ include/linux/blkdev.h         |   2 +
+ include/linux/bvec.h           |   3 +-
+ include/linux/dma-buf-io.h     | 113 ++++++++
+ include/linux/fs.h             |   2 +
+ include/linux/io_uring_types.h |   5 +
+ include/linux/uio.h            |  11 +
+ include/uapi/linux/io_uring.h  |  31 ++-
+ io_uring/io_uring.c            |   3 +-
+ io_uring/rsrc.c                | 274 ++++++++++++++++---
+ io_uring/rsrc.h                |  45 ++-
+ io_uring/rw.c                  |   6 +-
+ lib/iov_iter.c                 |  29 +-
+ 24 files changed, 1295 insertions(+), 80 deletions(-)
+ create mode 100644 drivers/dma-buf/dma-buf-io.c
+ create mode 100644 include/linux/dma-buf-io.h
+
+-- 
+2.54.0
+
