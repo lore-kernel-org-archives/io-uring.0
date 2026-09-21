@@ -1,183 +1,86 @@
-Received: from mail-ed2-f35.google.com (mail-ed2-f35.google.com [74.125.228.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3364A3859
-	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 14:00:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5938426D3F
+	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 14:14:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789999240; cv=none; b=r/HR3PJ+1gnkcKNaH6OIVkkFMT+x5RK+xXYCTFvtRUYadNKEqCX/i4DAmNeYqLQbF8R8IeYXlqw6TBv7M7lL1OFqHPubfoz1v9RUO6m90tDCEE62sPJzCUmqJP46FhQWWBDLTJ7Vr944tIE8t+ZTC9y8ul1/KX8/JJRYgMS5fzk=
+	t=1790000063; cv=none; b=OAzQKOEP+ZAtztSVRa1yn0QzHs65nIYL1wNMIWARSnwhPCjzXM3cK7rkxPdT/I5EUkaHeocGlXaJnkNa+FmnaJBYorqi1PynF9hipyfWR7UwKpWsyRrkcMBeUUAdcTV01jyGP7WrSMe9qZOtLaUIvBnVkGHsah43Z4Sz96CveW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789999240; c=relaxed/simple;
-	bh=OeyvfHgi0AM3S4WMT38BkWK6VSxmsJwFB/n9ks+exd0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b+4mNXwGoJhMVU3LmgiQBlBDXVRJnCtMENKzfliObenM9xWTvQ8mC3V5/5JBUbDfTcpzwDiAlOonOPo3TId88kqIRj/3ebuIbKxsS7rTVRx545yWm/oB37pc1noxoK8EuOu3XBMAWGPno7x2xyRQhu04PEXNxmaAT/JJ8SaIGQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fy3lm4mW; arc=none smtp.client-ip=74.125.228.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790000063; c=relaxed/simple;
+	bh=bO3eqdk+KhsgCeaaCoHMrCMXw1pX4k1IkldDHTIa6L8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ExwcXGixMKcp1Zgg+/QrH45TY2DHBi8MDspzFVg3uupZgECA5UQPhwAQO577LsQgvgPk1sAxgEokeXafRt8wa/8ahfegE6N8Sq/RFz/F5Y9fJXDCVJHbcExLkIzPHIeK5BK6vcNHPzzdbEq+P+zcr48IVycUEXelYxqPTr0gO5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LOH6U4Iz; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fy3lm4mW"
-Received: by mail-ed2-f35.google.com with SMTP id 4fb4d7f45d1cf-6aa13e194easo4693195a12.1
-        for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 07:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789999236; x=1790604036; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YF4hTPZsf1CzF+RjsRJpL1NqJMDoLq3jkvr85glNVqI=;
-        b=fy3lm4mWVVfxCbiB/3/idnBoWiGR7Ak2D36Mzxp6PBr2+Q8laVBrWpIRYVMTFrcp/0
-         jFF0hAEuenju7k/fW2j0/C1Jli1UP8WnHH/Of94Gvk1sgDsM7fWI2uyyOZHUsjkVJJPb
-         0JtH6BP+SVZlH0HMjkU4m57nlQhEUE2RAVPRXvprm0BKQC1hQgaD4/dvBt4EOAFUDnL8
-         rpAJY91Fcg/OygM5CEK/CUumLCPykTEC3z5vkEPe3zTfIl3UWEN1JSUp6/FvaR+dRraE
-         jovk046obSWMIph957RrWPJMVfeJ6kFVMrFj0Hqvcqs0jI8QC8TubZvfnFnAJXJHjE1h
-         Ikjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789999236; x=1790604036;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YF4hTPZsf1CzF+RjsRJpL1NqJMDoLq3jkvr85glNVqI=;
-        b=HXKtbe4WIzPYvBqbqs4LOOYEC9xO5+vZ6FtV/927jlijGBVtLtlV0sTLJeGkCuQWVO
-         y7BTesm8lihuog/yPXYz35SkdBFRzV3b35gzR8DpNb8bM58/FaEUw8gcmdyPMzUwc3UO
-         oHISMGe/LHfcOlrN9xyRdk1SePAp3cdCvbTE61s8FQetavYwuxQpxkAkSIugVqlFbLjV
-         MsK0FVP/iMnO9Qf9Z9DZdA1M2gqoG3Gm2my8Uzi3TkumrUiuZZNerrCfSCOb8EICw9hz
-         1E3zGXp+O1sG+Ed8NUfqF6XQ/8z+B6fNEDw2v4EFgYBoPXoL2Zig6ZGBbNifT7NObOlW
-         LCqg==
-X-Forwarded-Encrypted: i=1; AKwUvBwYW5VJem/XFWeO2py/jf3D6NbjRD9bzK89Wo4byBu2QHhkj7S4gCfRbN/om8JL1xiWmGGlmcdCTw==@vger.kernel.org
-X-Gm-Message-State: AFuF++mPEa2Vg+0ccFU26QO3KqjoCuXIHg0Yo9qV48I2WUvuITzqX5ZC
-	ADMer7t3cBZDnjzZSx6E7By2xCFjn4c/35fL+F2dL+9cw/CdkNVdUm6E
-X-Gm-Gg: AYBFou1xEb5pmzqJ6PAh06xgIX1tvWgdB0cB3kf4CkEKmm61MYKoK9gQMvdiRfcHdPC
-	hPZtxE7J/0M8HNVbB9VTODAAB+TemWpMRc4GLJ7K6APfu3Eo+8P+5gydR/lmSOI8MfZ/uMy1Tv7
-	Ghlpsr9+qoYHSGhZHpLs6/R282wW91Xih5E2K9m4LCzh+pvE96zK+nZQi+0cA1/5mYjp279ocbL
-	s1BjpzFR62JS9Wj1yG8yMzjzlfQnBDvyqGOwyQBNtgezMrRltwtHakKN3Ue3v8vuwuMk97pTZrn
-	UDN4n+79nKMteMUGEN4Xl1SNj6nwkQcJfa2bb8xjmp9V/rKDXzORebxXLi248+nBAtU8kC0RjhL
-	QZm8zllYvaqX3vwS0Qf1xeuXIgt84c8EQsC2XLwugSswf9h86+DwhLNjAScg1IsphPK/Ik1qVjK
-	C3zR4MFztH1KHKVUBNpC/fz4mkmS5xRXjsof8fqJqUTJD00KNdPr8MmKNOqX82ph1c4JXD84x7d
-	ZZwuKdcpnBX9sMniR8v0EufL70Cf3Je1auAmV1T/EdXlEMf7wqBOPHxXVdhWQMQFAul4PnDPPcj
-	v240zAKRDLWJgEIfokjHlpyp2g==
-X-Received: by 2002:a05:6402:210f:b0:6a9:aead:4e98 with SMTP id 4fb4d7f45d1cf-6aa577f5cfdmr8223981a12.1.1789999236010;
-        Mon, 21 Sep 2026 07:00:36 -0700 (PDT)
-Received: from [10.54.182.141] (82-132-213-26.dab.02.net. [82.132.213.26])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aa67e1a45esm4427483a12.25.2026.09.21.07.00.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2026 07:00:35 -0700 (PDT)
-Message-ID: <14db93d0-b41b-43c6-8934-82d10cc50168@gmail.com>
-Date: Mon, 21 Sep 2026 15:00:27 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LOH6U4Iz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790000060;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=moO88O+F0fAZ0OS5+T5zgKqHROvYfe+dUtWbWvUTEmQ=;
+	b=LOH6U4IzaGsJ+Z1CifQ6jWGkw31I/iT+ldOZTC+fDpuRPDi7k+joDwMYxwaYXvtvOLBp4i
+	qGlJXHKi3gsC2O0WIgvr2+1XUlYODNNxeZhX67/yxBoAJfG7/Vxz7xy8NyzwU2i3t8ka98
+	RqP5qDQlrUWFVLgpTScBfRwdT/gn2vg=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-538-PCjHSjL8OHGda3XrwctxBg-1; Mon,
+ 21 Sep 2026 10:14:19 -0400
+X-MC-Unique: PCjHSjL8OHGda3XrwctxBg-1
+X-Mimecast-MFC-AGG-ID: PCjHSjL8OHGda3XrwctxBg_1790000057
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9953D18011EA;
+	Mon, 21 Sep 2026 14:14:16 +0000 (UTC)
+Received: from fedora (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 397C219539A7;
+	Mon, 21 Sep 2026 14:14:12 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Mon, 21 Sep 2026 16:14:16 +0200 (CEST)
+Date: Mon, 21 Sep 2026 16:14:10 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Chris Mason <mason@kernel.org>, linux-fsdevel@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
+	io-uring@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3 09/17] ptrace: refuse to change the signal mask of a
+ user worker
+Message-ID: <arE7soBASlufuPaI@redhat.com>
+References: <20260921-work-coredump-fixes-v3-0-8e4adb1619e6@kernel.org>
+ <20260921-work-coredump-fixes-v3-9-8e4adb1619e6@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Linaro-mm-sig] Re: [PATCH v4 01/14] dma-buf: introduce initial
- file I/O infrastructure
-To: Matthew Brost <matthew.brost@intel.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- Sumit Semwal <sumit.semwal@linaro.org>, Nitesh Shetty
- <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
- Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>,
- William Power <william.power@intel.com>, Phil Cayton
- <phil.cayton@intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Damien Le Moal <dlemoal@kernel.org>, Alasdair Kergon <agk@redhat.com>,
- Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
- Benjamin Marzinski <bmarzins@redhat.com>,
- Vishal Verma <vishal.l.verma@intel.com>, David Sterba <dsterba@suse.com>,
- Ilya Dryomov <idryomov@gmail.com>, dm-devel@lists.linux.dev,
- nvdimm@lists.linux.dev, linux-btrfs@vger.kernel.org,
- ceph-devel@vger.kernel.org
-References: <cover.1785274111.git.asml.silence@gmail.com>
- <bc20381e8daf85ac58811c344325d8192cde9d1e.1785274111.git.asml.silence@gmail.com>
- <181b08be-04bc-4ae9-bb88-15321a82440f@amd.com>
- <anPlbjhpPmj2VZxm@gsse-cloud1.jf.intel.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <anPlbjhpPmj2VZxm@gsse-cloud1.jf.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260921-work-coredump-fixes-v3-9-8e4adb1619e6@kernel.org>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 8/6/26 02:37, Matthew Brost wrote:
-> On Wed, Aug 05, 2026 at 10:27:49AM +0200, Christian König wrote:
->> On 7/28/26 23:29, Pavel Begunkov wrote:
-...>>> +	/*
->>> +	 * There are no more requests using the map, we can signal the fence.
->>> +	 * It should be done before taking the resv lock as someone could be
->>> +	 * waiting for the fence while holding the lock.
->>> +	 */
->>> +	dma_fence_signal(&fence->base);
->>
->> Signaling fences has a whole bunch of very strict rules associated with it. E.g. you can't alocate memory for example.
->>
-> 
-> Yes, and the rules around signaling fences from worker threads become
-> interesting as well. In practice, the entire workqueue (or any work item
-> scheduled on that workqueue) effectively becomes part of the fence
-> signaling and reclaim path.
-> 
->> Are you sure you actually need and want a dma_fence here?
->>
->>> +
->>> +	dma_resv_lock(dmabuf->resv, NULL);
-> 
-> So this is illegal because code is allowed to hold dma-resv locks while
-> waiting on dma-fences. See dma_resv_lockdep / __dma_fence_might_wait /
-> dma_fence_begin_signalling.
-> 
->>> +	ctx->dev_ops->unmap(ctx, map);
->>> +	dma_resv_unlock(dmabuf->resv);
->>> +
->>> +	dma_fence_put(&fence->base);
->>
->> You should probably set map->fence to NULL after that.
->>
->>> +	percpu_ref_exit(&map->refs);
->>> +	kfree(map);
->>> +
->>> +	if (refcount_dec_and_test(&ctx->refs)) {
->>> +		/*
->>> +		 * Destruction needs to wait for I/O and dma fences. Defer it to
->>> +		 * simplify locking.
->>> +		 */
->>> +		INIT_WORK(&ctx->release_work, dma_buf_io_ctx_destroy_work);
->>> +		queue_work(system_wq, &ctx->release_work);
->>> +	}
->>> +}
->>> +
->>> +static void dma_buf_io_map_refs_release(struct percpu_ref *ref)
->>> +{
->>> +	struct dma_buf_io_map *map = container_of(ref, struct dma_buf_io_map, refs);
->>> +
->>> +	/* might sleep, use a worker */
->>> +	INIT_WORK(&map->release_work, dma_buf_io_map_release_work);
->>> +	queue_work(system_wq, &map->release_work);
-> 
-> You can't guarantee that a GFP_KERNEL allocation won't be performed from
-> a system worker thread, so you can't safely signal a fence from one. The
-> pathological case is when all threads in system_wq are running work
-> items that perform GFP_KERNEL allocations, enter reclaim, and then wait
-> on a fence that is signaled by another work item queued on system_wq.
-> Since all worker threads are occupied, the signaling work item cannot be
-> scheduled, resulting in a deadlock. We actually hit this exact deadlock
-> early in Xe.
-> 
-> So, as Christian says, think carefully about whether you really need a
-> dma-fence here. If you do, then you need to play by the rules.
+On 09/21, Christian Brauner wrote:
+>
+> --- a/kernel/ptrace.c
+> +++ b/kernel/ptrace.c
+> @@ -1227,6 +1227,12 @@ int ptrace_request(struct task_struct *child, long request,
+>  	case PTRACE_SETSIGMASK: {
+>  		sigset_t new_set;
+>
+> +		/* A user worker only ever takes SIGKILL and SIGSTOP. */
+> +		if (child->flags & PF_USER_WORKER) {
+> +			ret = -EPERM;
+> +			break;
+> +		}
 
-I started with moving it out of wq, which was a good idea anyway,
-but as mentioned in another email, in the end I just got rid of
-fences as I believe Christian was suggesting / hinting on. I cc'ed
-you on v6 if you'd be curious.
-
--- 
-Pavel Begunkov
+Acked-by: Oleg Nesterov <oleg@redhat.com>
 
