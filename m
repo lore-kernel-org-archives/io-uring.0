@@ -1,49 +1,49 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD764A3F3A
-	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 14:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA0B4A4406
+	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 14:29:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790000784; cv=none; b=PPnpH0ExYtY6EdxLI0IRRjGXUlKz+ozeenKKA6j2iE6JfpzVbCHn2vnxM75lgBiDYM9UllsSEJEZA6EYIxAYKAnT9ZsHvgrdTJskTuH+pnIt4XS8gzjd4XYAvyOg1Ff+LPOBzxXetg3eWPn0ju5EPU85toTrziWuWLftMfJumMc=
+	t=1790000963; cv=none; b=WYUWM9ySn2DfskIPwD0adHDbigVWiOjiEMrMGn09wU1MhrNb4pv83aBMhf7E6g8EW4Sr0BfVuuYMTe/kXhZp5KxlgkTjfocVY3qJfOIemNUKcYUiRKrX0kK/TF91U0nX2qy3f144ZtBpbEFRUrCewOeg615l3g8mRXhD8qmndgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790000784; c=relaxed/simple;
-	bh=MyEXqmotfUt4yA1+Hy68CC39XSg+h8EY6D6AQC+ntwk=;
+	s=arc-20240116; t=1790000963; c=relaxed/simple;
+	bh=vEzudWF0GxwUVOeYAYeKieAjXnCT/L2r+RjOFHt8wK0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IYUXVjzYzrO9m4q04C1HWmVm5q4fBQYZXNOuDRRlYLaGissy2WVJ/HrNNKnrCnyrpigLkW37j+0VdGODoQQRh1psASmRGOMla3Aw6To2RMC0hq3xZBx2XYWZHuFPCoUrVCEaeHbb89fiMcV1CO/ZOHgPZcv5vgxzcfWzr4EWNvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NnUcfUbY; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ceu7/eo4YtjDmTfFoDGkYnCnj4UCuvcUF+P6Zfd2b6FOBYp6HfeFt9a3VEsuCFoICBF5sMcufcSHzGBgWMbDUYr9OERI2+U7+seW69H4NDcY9r3pbsZohc6NCJNQ3hd9/GS3UYL3viUBxjWowwqr65Ygt2a+lU3AhfUmyPDajuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ctOwyx2d; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NnUcfUbY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ctOwyx2d"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790000781;
+	s=mimecast20190719; t=1790000961;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+pcLJlj5TIE0odij7lPFRE58kbHckgF1Zqih4BUaQQ8=;
-	b=NnUcfUbYrAdUlQ2OB6A+tnSnSIfM0d9/bfEDSbNGckENS2my0FEYEuo6API0Ekb5EklLtL
-	mgvTpNtnHj+z3lny4WVi8HxN2PUMIlm+5d6rtjW5TKqMXx2sVe6oq22HMt+/2C+5+5n3zi
-	PzAAK/TvPgRmi9vti29WhJTxbESwi04=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	bh=XtrGPJYqrgm8GjMEcC9ZPfIvGFNMVcDzHftdMMzdcwQ=;
+	b=ctOwyx2d98xq8+PYOmdS00VPXyMBSH7zqqrIQ5nFpBmgmBjrP9W0CfYYsRFGnHTcZrHh0t
+	VzjDrve0j/YVEZS+oKl2SEPc1Q8PI3lmc3OE060/xrHT4H12KInGqAgo3CNLa9tZdSTmlP
+	U8icVA/n3cge/xJx4pH/4p8POx+4s1Y=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-48-zIc0_6r3NoSA_cJqD0Vc_A-1; Mon,
- 21 Sep 2026 10:26:18 -0400
-X-MC-Unique: zIc0_6r3NoSA_cJqD0Vc_A-1
-X-Mimecast-MFC-AGG-ID: zIc0_6r3NoSA_cJqD0Vc_A_1790000776
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-10-5rPfoTMHPbmai33uCsAHrQ-1; Mon,
+ 21 Sep 2026 10:29:14 -0400
+X-MC-Unique: 5rPfoTMHPbmai33uCsAHrQ-1
+X-Mimecast-MFC-AGG-ID: 5rPfoTMHPbmai33uCsAHrQ_1790000950
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 422C11953994;
-	Mon, 21 Sep 2026 14:26:15 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 43C62185126D;
+	Mon, 21 Sep 2026 14:29:10 +0000 (UTC)
 Received: from fedora (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 5D11B41D;
-	Mon, 21 Sep 2026 14:26:11 +0000 (UTC)
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 37FF61800446;
+	Mon, 21 Sep 2026 14:29:06 +0000 (UTC)
 Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 21 Sep 2026 16:26:14 +0200 (CEST)
-Date: Mon, 21 Sep 2026 16:26:09 +0200
+	oleg@redhat.com; Mon, 21 Sep 2026 16:29:09 +0200 (CEST)
+Date: Mon, 21 Sep 2026 16:29:05 +0200
 From: Oleg Nesterov <oleg@redhat.com>
 To: Christian Brauner <brauner@kernel.org>
 Cc: Chris Mason <mason@kernel.org>, linux-fsdevel@vger.kernel.org,
@@ -51,12 +51,12 @@ Cc: Chris Mason <mason@kernel.org>, linux-fsdevel@vger.kernel.org,
 	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
 	NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-	io-uring@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 14/17] fork: don't create io threads once
- PF_POSTCOREDUMP is set
-Message-ID: <arE-gZw53CqPTRXP@redhat.com>
+	io-uring@vger.kernel.org
+Subject: Re: [PATCH v3 15/17] fork: use SIG_KERNEL_ONLY_MASK for the user
+ worker signal mask
+Message-ID: <arE_MRAFmuvWsM82@redhat.com>
 References: <20260921-work-coredump-fixes-v3-0-8e4adb1619e6@kernel.org>
- <20260921-work-coredump-fixes-v3-14-8e4adb1619e6@kernel.org>
+ <20260921-work-coredump-fixes-v3-15-8e4adb1619e6@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -65,29 +65,25 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260921-work-coredump-fixes-v3-14-8e4adb1619e6@kernel.org>
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+In-Reply-To: <20260921-work-coredump-fixes-v3-15-8e4adb1619e6@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
 On 09/21, Christian Brauner wrote:
 >
-> Refuse to create an io thread when the creator has PF_POSTCOREDUMP.
-> That costs nothing. io_uring_files_cancel() raises IO_WQ_BIT_EXIT
-> before it runs any task work, so a worker created from there only ever
-> gets to exit again, and io_should_retry_thread() doesn't retry -EINTR.
-
-Thanks for this note in the changelog,
-
 > --- a/kernel/fork.c
 > +++ b/kernel/fork.c
-> @@ -2706,8 +2706,8 @@ struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node)
->  		.user_worker	= 1,
->  	};
->
-> -	/* A creator past its fatal signal gets no thread. */
-> -	if (current->flags & PF_SIGNALED)
-> +	/* A creator past its fatal signal or its coredump point gets no thread. */
-> +	if (current->flags & (PF_SIGNALED | PF_POSTCOREDUMP))
->  		return ERR_PTR(-EINTR);
+> @@ -2146,12 +2146,9 @@ __latent_entropy struct task_struct *copy_process(
+>  	if (args->kthread)
+>  		p->flags |= PF_KTHREAD;
+>  	if (args->user_worker) {
+> -		/*
+> -		 * Mark us a user worker, and block any signal that isn't
+> -		 * fatal or STOP
+> -		 */
+> +		/* A user worker takes only the signals nobody can block. */
+>  		p->flags |= PF_USER_WORKER;
+> -		siginitsetinv(&p->blocked, sigmask(SIGKILL)|sigmask(SIGSTOP));
+> +		siginitsetinv(&p->blocked, SIG_KERNEL_ONLY_MASK);
 
 Acked-by: Oleg Nesterov <oleg@redhat.com>
 
