@@ -1,143 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91684B4893
-	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 16:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF8C4BEE27
+	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 16:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790007396; cv=none; b=AQy/2Kdc6l0gDqIPqeSF2o7/E0jvAmUN041m7/Lj+jw+lc3j3aC7KwuE9bEQJXFrb5dt2i9N8vjtiiUXpE2Fc7/NKDZLJli3ZUrJfituRMAOfyUnW6bGIz3mflFz16nbKPWvVsShElsz6O4yyZXaKDYEuZYXxvKF2bav1YeXzao=
+	t=1790009145; cv=none; b=ZVMImy+sS3p/ot54Lny76Nueo79UhcVfwZhl+OpkpXGu5S5no/TohbiP913xdx5MN8YFilvQCK4pryonN9Ei13+7BeshxQl1bhLyDz4GhGAkAGqBOjk15BQNwWNIv9rxFGxfShC9zcJgS5M8r8P1i3cHqjAnIs/AF4KWJS1uos0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790007396; c=relaxed/simple;
-	bh=zX3Y+Hl4A7s17CiC//iSg8LfnMHq7LM6R9NWd2f2AH4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sH3gM4CoHpVLwpvrjObsLAsC63KvM9OzWoeC2YYB7LNbBGJNc7iYkQCeIlpTIKwZD/FeAy5DIsQpitDb1haEQlgnr08QR1B3eK0jasBN7q0r/qiglhASSQTsJ+IWGbnDZdb5g+K465txfLlNaWEGyrVDTCVSlFx8bQWCjXHDP9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SI48cIF8; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790009145; c=relaxed/simple;
+	bh=JAY84BF3kiv4SehvHOx1+RbIx//U4zBMwgXIV1UQ22I=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=VYcKwjR+QgWZSraQFKvTQqD+16pt05eZbUxFNETi7lTAm8UgGTRZBhEJY/hyK+mrPIYhe26t47jTCWf73jb9rQ8AiyoeGvUTPStyqS1hRzcEK2ikmFzHNGaRJpFLjO+RaOutKK1NPoRzkA6vMPmjZWpF/LP9cl2I2Db86MHwNFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=0479bZRE; arc=none smtp.client-ip=74.125.231.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SI48cIF8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790007393;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a7FXFbQgnyVFHazdwMvEWtM/nOP8qDBJcZZSaid5hmo=;
-	b=SI48cIF8jJn8FoZzZkbvK9xbtWhyCtuxlLS94dgfBNlKB3YXEjbigKH4pmIlbvOTB7ZWJZ
-	Rn1Ux6iJyyFzN4Ntbuse4ZDdRypXj2Kcr8g5Ht+sRhUVE06Kxq0YJW6QX/dHY9ZLMSCW+9
-	VvvS1h2UhxW0cyBOMfXIV9zNUbTI2eM=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-663-dsFLz2KPPiuUUHBpXd39VQ-1; Mon,
- 21 Sep 2026 12:16:32 -0400
-X-MC-Unique: dsFLz2KPPiuUUHBpXd39VQ-1
-X-Mimecast-MFC-AGG-ID: dsFLz2KPPiuUUHBpXd39VQ_1790007390
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D4736197702B;
-	Mon, 21 Sep 2026 16:16:29 +0000 (UTC)
-Received: from fedora (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 3C3211956041;
-	Mon, 21 Sep 2026 16:16:25 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 21 Sep 2026 18:16:29 +0200 (CEST)
-Date: Mon, 21 Sep 2026 18:16:24 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Chris Mason <mason@kernel.org>, linux-fsdevel@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-	io-uring@vger.kernel.org
-Subject: Re: [PATCH v3 16/17] signal: enforce the user worker signal mask in
- __set_task_blocked()
-Message-ID: <arFYWLJ8yzpS325k@redhat.com>
-References: <20260921-work-coredump-fixes-v3-0-8e4adb1619e6@kernel.org>
- <20260921-work-coredump-fixes-v3-16-8e4adb1619e6@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="0479bZRE"
+Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4b37a2c0356so1775217b6e.2
+        for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 09:45:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790009141; x=1790613941; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=myMNJlHREsp2N+3GOX8EU//XKOBcaC2cTYeiE4RcwcU=;
+        b=0479bZREiXVBYxQNMmRItGEsnaeESNIpJgzVU8IVjoYIXZu3MFnjs61vtgZj4u1h9a
+         RYheFDolZIoPhHXfbdtgfqjBR20oDfh1slDtIvsYD3ANh4LRrTJaxymtFtSpweQiO9dL
+         GMPav4HYKDuzsUZNAtvq2Df1czOgugMGe7GoLJoRurwf9aydMfKkd1jOd12Q/Hutwpqm
+         ayr1qfxk9b5Xven3mjhyTKRv0uI+dcw0+D8OZxVx7IfyifMkx4hTpeE5eHgHrlkVLy3S
+         EiDDKaS1Hugvu1P07nZNfrAjGqRtqjPu8XGuRCNm0zMZ3/ub0BiWtGkRVmLI1kkEd3Dp
+         gX4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790009141; x=1790613941;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=myMNJlHREsp2N+3GOX8EU//XKOBcaC2cTYeiE4RcwcU=;
+        b=0/GxqKEVguzY4SPecHrugcO9+EzEV0wUJKaems72JYbXrT8/1hZA6JLsz8NRA2sDVV
+         lbZfOdKxNJayS407tbvVnoBbsYoON7hDWv+wG7SqRF8iGkmwwcrtZKCN6wnqfzYDLNSF
+         xxk5TVF7PxC5TM7qNDo92xkRtZaQYwIZu4SB5ONnYfU6onzxmqrV77mwUelXpNMrMncX
+         xKVR8o3D+sdW7QL7HWGnWQ/+fLL1bwoQjrAAEKqbKyQ/V+S1hQJh13J6wvUJdz0yCO4E
+         QSWTkzo5wz9iVU458Ja5a/bUEYGjxvqK2ckfao/uMQU0MuHw0tUTD89cTxqTRWIcTHuJ
+         LMKg==
+X-Gm-Message-State: AFuF++k2kLn65n024nJ1bofNssCj0P+w31itlYph7Ox9U8qikgubay86
+	u1V2OZNNL/4D+aMLeFh0yxD3O3agJmCI04CmxyAxvvU8i4IcQHcYAKnc+yjGWevvE8U=
+X-Gm-Gg: AYBFou3OOYq5oElvgxY+Qj1kkY03wicTbwuI93B8jom6vTwzfu/+R4voJx8B1AmB5/j
+	geK3eyUiQfi5dQoYafgs4KaDA3FS0AF6LYYy/iT7exEAQvyWwrFe1qeNjKx6lii2IXTUKAYsilb
+	k8LmfWKpeOpi6E7QRONtEaYZ03ulUFs/FARqYYXzVRATp9HxTqRFw4ElPRR4TyCORqU5sMNLuR8
+	xV8YoHXYqsKoNe0X15iOSFFLY6DbTJTq4FTK5AA5P7Izng/3qMlJMR3yHZErGQj2IwUVcL0AjSC
+	Yinl17LPIeITmdrPYRhKW0Zyv4JT85AFlGzoIH/c7WIzQvbdvqMZ4dTAnGCwU0oM+UyPr9igIn5
+	y+4Wtd4gN/QDAbu78hyt5oSbcn4VjLu/9jrUiGVdwNvO2jgPmhvk8g6VJSOj8+tgYJMG+YfHnpH
+	RQaWTIcQkEYN0rcz1KHhoDl8rhLjKzSHZANzpme+teNwWiFN94S6lvxqB/lKHnUk4W33CpQTrXz
+	n3RRI95TA11fvcjsz6ND4S8UA==
+X-Received: by 2002:a05:6808:1705:b0:4b9:e65b:8c36 with SMTP id 5614622812f47-4ccf8408b97mr10078224b6e.36.1790009141011;
+        Mon, 21 Sep 2026 09:45:41 -0700 (PDT)
+Received: from [172.19.0.10] ([99.196.129.128])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4d423d08773sm443470b6e.12.2026.09.21.09.45.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 09:45:40 -0700 (PDT)
+Message-ID: <de0221c0-80e7-499b-b46c-66a2adc78db9@kernel.dk>
+Date: Mon, 21 Sep 2026 10:45:26 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260921-work-coredump-fixes-v3-16-8e4adb1619e6@kernel.org>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ
+ array slot
+From: Jens Axboe <axboe@kernel.dk>
+To: Jann Horn <jannh@google.com>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Dominik Maier <dmnk+artist@google.com>, stable+noautosel@kernel.org,
+ Gabriel Krisman Bertazi <krisman@suse.de>
+References: <20260911-uring-fdinfo-tighten-v2-1-fa24d517035e@google.com>
+ <178914981183.662923.3814591941846027409.b4-ty@b4>
+Content-Language: en-US
+In-Reply-To: <178914981183.662923.3814591941846027409.b4-ty@b4>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 09/21, Christian Brauner wrote:
->
-> The in-kernel sigprocmask() users block more signals for a critical
-> section and restore the saved mask afterwards. cifs used to do that in
-> __smb_send_rqst() and ocfs2 in ocfs2_block_signals(). Both were
-> reachable from an io-wq worker. Both only add SIGKILL and SIGSTOP to the
-> user workers's and then put the fork-time mask back.
+On 9/11/26 12:03 PM, Jens Axboe wrote:
+> 
+> On Fri, 11 Sep 2026 19:56:13 +0200, Jann Horn wrote:
+>> A cqe32 entry spans two CQ array slots, so the last CQ array slot can't
+>> contain a cqe32 entry. If the CQ tail points at the last CQ array slot and
+>> the kernel wants to write a cqe32 entry, it uses io_fill_nop_cqe() to pad
+>> the last CQ array slot with a dummy entry and make the tail wrap around.
+>>
+>> However, malicious userspace can directly set IORING_CQE_F_32 on the last
+>> CQ array slot, causing __io_uring_show_fdinfo() to read the second cqe32
+>> half from beyond the CQ array. Change __io_uring_show_fdinfo() to
+>> explicitly ignore the IORING_CQE_F_32 flag in this case.
+>>
+>> [...]
+> 
+> Applied, thanks!
+> 
+> [1/1] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ array slot
+>       commit: ab394388d05977f369e8e8d1beceae47fc3c5e72
 
-Ooh, this reminds me... see below.
+Back at it, and wanted to move this to 7.4, as there's no point
+expediting it for 7.3. While doing so, I took another look. And
+cq_head is the raw ring counter, not a masked index. Hence I think:
 
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -3212,6 +3212,16 @@ long do_no_restart_syscall(struct restart_block *param)
->
->  static void __set_task_blocked(struct task_struct *tsk, const sigset_t *newset)
->  {
-> +	sigset_t floor, floored;
-> +
-> +	/* A user worker never unblocks anything but SIGKILL and SIGSTOP. */
-> +	if (unlikely(tsk->flags & PF_USER_WORKER)) {
-> +		siginitsetinv(&floor, SIG_KERNEL_ONLY_MASK);
-> +		sigorsets(&floored, newset, &floor);
-> +		WARN_ON_ONCE(!sigequalsets(&floored, newset));
-> +		newset = &floored;
-> +	}
+bool is_last_cqarray_slot = (cq_head == cq_mask);
 
-OK, Acked-by: Oleg Nesterov <oleg@redhat.com>
+this is incorrect, as it won't work past the very first run around the
+ring. I fixed it up as:
 
-although to me something like a more simple version
+bool is_last_cqarray_slot = (cq_head & cq_mask) == cq_mask;
 
-	/* A user worker never unblocks anything but SIGKILL and SIGSTOP. */
-	if (unlikely(tsk->flags & PF_USER_WORKER)) {
-		sigset_t xxx;
-		siginitsetinv(&xxx, SIG_KERNEL_ONLY_MASK);
-		if (WARN_ON_ONCE(has_pending_signals(&xxx, newset)))
-			return;
-	}
+Just a heads up! Let me know if you disagree or want to send a v3
+instead.
 
-makes more sense. But this is minor.
-
-In fact I think that __set_task_blocked() should simply do
-
-	if (WARN_ON_ONCE(tsk->flags & PF_USER_WORKER))
-		return;
-
-but yes, we can't do this right now, we have in-kernel abusers of sigprocmask().
-
-IMO, they should be changed to not rely on sigprocmask(). Lets look at
-ocfs2_delete_inode() for example,
-
-	/* We want to block signals in delete_inode as the lock and
-	 * messaging paths may return us -ERESTARTSYS. Which would
-	 * cause us to exit early, resulting in inodes being orphaned
-	 * forever. */
-	ocfs2_block_signals(&oldset);
-
-ocfs2_block_signals() blocks everything including SIGKILL and SIGSTOP.
-I guess to protect against signal_wake_up / TIF_SIGPENDING ?
-
-But this can only help in the single-threaded case. And PF_USER_WORKER's
-are never single-threaded.
-
-Blocking SIGSTOP can't protect from SIGSTOP if another thread dequeues
-SIGSTOP or another sig_kernel_stop() signal. This another thread will do
-do_signal_stop() -> signal_wake_up().
-
-Same for SIGKILL...
-
-In short, I agree with this patch, but mostly because of WARN_ON_ONCE()
-it adds.
-
-Oleg.
-
+-- 
+Jens Axboe
