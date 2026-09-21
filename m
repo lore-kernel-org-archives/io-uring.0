@@ -1,67 +1,68 @@
 Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191D14BD34F
-	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 16:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D35074BEE42
+	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 16:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790006966; cv=none; b=BY7mlF61SnVTmsimYuTzAjRAoBIqglMaSaz1VdtWNqdylqfDnqu7wPofTl6JSyEquyeQA5eN/Kj166bTxyWPQmBsivcdMJo/9pnkXLFitMxbHUnvO1SiMxpx4keU4Lamg7znLbP4bMAYPCJS87A2xR0E/3pODzWMa9gdJPV0edM=
+	t=1790007055; cv=none; b=NMNI/52Y1kRXHOmU0FASaZv+sCYOl6gcEky56QbAU/FrbGsnUBrX/8SROxeCCdFMTMUWvpOMewNGOPTy0pmZlYolZcCgRLstsiBHA9E9G1VZwiMXf3q2AvmGDxWwCLYXAtnd8ssO7O7SqlSHggdWqJZ3qVCU+o5zRFOyN9Wvl00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790006966; c=relaxed/simple;
-	bh=3LMw4T4W608eHVe74i57LLlCeTrnVHo2JK/BD0br1xE=;
+	s=arc-20240116; t=1790007055; c=relaxed/simple;
+	bh=KxRGP42jnNZFDQR6TcrefeTptXs4HoXgzM9QUv4IjDg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pujW1EeQXX09W46Uhd2JUbFETZBRSPmzVNytj30MJRqQGMSeLCkSI/4hveL3TP+AOzlTrOAGV2IEC08HrZgalT2rDV9I63qP/KJo6yHloJCpHBAMKoh1gcFrlvck5pbwbPI4+Wf5SKkIPwQaeu+8FOsgbmxWNQt9W+e93kalqR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=K0YMifBW; arc=none smtp.client-ip=74.125.231.205
+	 In-Reply-To:Content-Type; b=rbGe32bvJNa6e7ri2KrUq6ewKUuxAWgx8yQk8soQ1MNS1cu9rSX6Ioh1gUP/Kxaj14VGUvXTFWkF187QazEAfWBTGk2KMk3A0lr2ewKmCaCn0oiH8MEK30t6lxFiyIlR5RXP5wk7gGsHNS1o+n9ATh++AMszQVtQfVC6iOKqA+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=DnYor2U6; arc=none smtp.client-ip=74.125.231.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="K0YMifBW"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4bb359e6878so1168827b6e.0
-        for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 09:09:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="DnYor2U6"
+Received: by mail-oi2-f13.google.com with SMTP id 46e09a7af769-80a71781323so1413091a34.1
+        for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 09:10:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790006962; x=1790611762; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790007052; x=1790611852; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rtkQcjEvwfbB2YWb57GKh9JqxleBPJHBXHu8WM179d0=;
-        b=K0YMifBWaKbotJyEtC9no77bBo06p37eXqiaMnQRdmD+wqvUeY8SKUAtQhOwpksbeI
-         WmUCB9iJ3RHR3HXDDx0nC5vxqd8Or0MiMZyQCyDCWubN/oyxEQ/xskfDOs3zM6eFWMoO
-         KwhVIvoN0jSVivggG9bnQsEH1ynEUKL+uZxfZQ5Yy+oe2GPOPox8I4z09sSRDSzsMyuk
-         LG+v1XzuT1BQzVp2JCztsd8xlQ9UJU/dbSRVDSJjnjg/Flprb31ERGR5Ob0HGOXFvSUV
-         t5GxEYLMs4OT6DdPYCTgx+H7RCLMELdN93uYZd1fnxKQlHlo/F1nDvchQkvXfLQEQzaz
-         ih1A==
+        bh=1u6rjc+Rr+SwD8BBU712UPTVOpOR/jX0N+MPWo4iqcc=;
+        b=DnYor2U6SZltoQ4N3X902xPvhztB7Y+RnSETd+D6axeO9NYwjBYJgJAS9GwZ6IU5zc
+         8t8nPqGQCcwQ01KFgUAyWyGohaFgpC6+Tm9YLQRReBu6FnUQStjVez7EDXtvszDOJywl
+         D2aAQ+hQFrHkA5CGmD9hQaAfn3ryIWAtxOkrGqOfy1MmuJeya7WBzeTOEaf6rkcLTDON
+         NvNKWMf1qnmsmLZJoWqbnbwjBG/gpeO8gYiTAUJNaVXmUk2I4K2QX4kfY7FwkEEDPFiP
+         c1aSLn2WYxcQIpZvxCtkxkDzj3aDxjJlr5vFdDpnBUhBFcLa/z6l0wLM0ry8HlVQLw0M
+         2lSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790006962; x=1790611762;
+        d=1e100.net; s=20260707; t=1790007052; x=1790611852;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=rtkQcjEvwfbB2YWb57GKh9JqxleBPJHBXHu8WM179d0=;
-        b=veHpZ/KpYbGZo3iOL2RAWiAO4PrJWqfOyAPTjsIW/LyU5t+W/aXV1H9i5+QVGSVo9t
-         ByjWMl9Y/NhxgDhpDdtFqs/pK2tlksnFj9BncCD+DJ6/9VEkcgRIDJNC3krw7DmzMqWP
-         1Kv4t9nVvwsqdcVDGmBkn2W3DjwgVSCDg3GXJ+h10MJhDrx2CFpgQ8J9aRPMi+V5YM8g
-         ktaFHNc2KUZayB0NjLV4aYxNPcMUqb6bdXS70iiAjnuiwdYg1lS6HbEM6g/wqSR1hhgB
-         rVmHbNKES/E43wb2r8eq6cFE8bx0ytlhJ49obblD/YBHhXQnpDRQGazB830KFTcXQ8c3
-         HThA==
-X-Gm-Message-State: AFuF++llPlTXSz+5UTUVBDjWYcnmZUDOCTDuhz/lhET9E1epRYSHFEqr
-	5l6x5lpVX21otyTL1DqF6VYktvahBhxOd8sD3bKOD/z7sG5ow98WxrUxhnAkKr992m8=
-X-Gm-Gg: AYBFou0E3sxqIP3n1ybUT9l8LCK8lw69eNxDMJDuE0b5Yn3PA/nlz1t8U4Jdi2P/tvn
-	WAg0bhCxts7Af7VHc/QsQTSPp70wABV+015ZQwnY/FlDWKjQkFRPWOzHDFYcVBc7qGUt6ZTnsDi
-	HHIlwVnKmsMDk8LynTPkQk7SMhyKcn6RTWK9JM3bPgDifKjO0NlBCQgjQ0XadlIFP//SdIG8MWx
-	r88rpK8/P7zz+f16pm6E0ASqVS1okOr5cg2DTIgMmb2md+dUFb7VWi2+nrKrNvfEp5hAjVEMB+O
-	cWtKCkmUzNnOj1kMVZ6Q6/hY5H9Ju2qxh9I9lNNsB/Dw9zUaqkPjDn4Ovy5+8n42ISsuXN7TAmk
-	DdGYrKHZ67XqvIdVtr/YW1MgtfCVsdU0vrNm56OXEBgJt8zj2lLTib2PR+0CyuMEZhZ65sPpY2D
-	NdTeN17uospBAwYWvvKVedxw34v9PzkyyIe97J35RiZNqEhS3CuzjN9cEHHnUGY46EJeiRVuwVo
-	UKRaZTjxzAvf/TXdWKSuwcJ3Q==
-X-Received: by 2002:a05:6808:c2b6:b0:4c4:6b5c:30c3 with SMTP id 5614622812f47-4ccf25b39ddmr10875999b6e.0.1790006962306;
-        Mon, 21 Sep 2026 09:09:22 -0700 (PDT)
+        bh=1u6rjc+Rr+SwD8BBU712UPTVOpOR/jX0N+MPWo4iqcc=;
+        b=KJY6SV1v6xnnWKoF1+8TixjDh9Q+948nMehrfi1EgYxjINzsRcSUkIls0ipEsOr8SH
+         pXHkMppiwgFvPCpfu6AEx046H0namvrfTbNlWs9p3yvISoepqHFc8lJP8+j0WcC3YSbE
+         fvcTzR8DRSXCfOeQ7qZGpqZbzrDtSkuG2Yp8t/VoGp/bgrt2AhVo9fWAXzPg3mDDmsUk
+         72XE08EfcIuvgjaVBYF6/0X3vioNOW5leCXxDYavofC9ljnCGcMU23meJVzcT7nvPtme
+         +XGjgK7CHQkPPiFk4l7XwBOO5UVEAxuQo6O+QhKo8LO6rHv3J9S2HMQSArB2Wm6HFHYO
+         STtw==
+X-Gm-Message-State: AFuF++kX5nLlZljQ9h78ADmaNlo50GxvkmCMz6pCyYeTaZRgEDwafu/v
+	E8EHy3yEpqcqZX1gAhsAMkVWp1+pgiNv3SX3sHfa3EQGY3TxxVYxG3ZGUwSGRnvxg6CQYaCenul
+	cOj+VRGxXqQ==
+X-Gm-Gg: AYBFou1LrMLt7pNoXVMFyg8SNW/xfoxXsiSbxJCTKZ7ZCDB8rhj47r7XMb/8aKZ9D7R
+	Fii3EDaF6MrVzJQDXlmmZfWZCGt0TCjoCTg11SMBpltvGCcdOGgcCzSD6u1wUs3XhjteX7qeGHo
+	GiuLxJH0NLEeI8+MCMo0aneUhKbUCOuUDtD21JpGxuAA96A5wMFnst68ht2LSj1MNTo+ky6oQP8
+	6TtNTNFT9oO4G2ghJad20TaVQ5Rrca+SXJbpeTp5RKcndTa17GMCYvgIYHnoBjNmFrjhKICxSWm
+	DMTcgkwDWHgKy1M7TFLMQsxy02ia6TWI3T5W0WdlfWU09Hvq52UM4hS1V8KTuKibYWC98CEqnPy
+	sakBEGg7SDx0gMZaX/WhOXTCKnKdnr4FYuLrVMmbkXbg8F06RhZ7BWhlS0ErABPk8+Yz2WSenxh
+	juQESs8W4MSSSkHRWobNN1AhCQgq8OV04DOVV+hfVKWb1e6eyo38dxv3JgEOSuYA/EHCQkA1qVj
+	SlY/Re1Y0dXuKui1L5nCrfwHQc6N6hwAfU=
+X-Received: by 2002:a05:6830:412a:b0:801:6bec:ff18 with SMTP id 46e09a7af769-80ddfd6c36fmr11244293a34.2.1790007052481;
+        Mon, 21 Sep 2026 09:10:52 -0700 (PDT)
 Received: from [172.19.0.10] ([99.196.129.128])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4d423d091d0sm401953b6e.13.2026.09.21.09.09.13
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81475bbc475sm405170a34.8.2026.09.21.09.10.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2026 09:09:20 -0700 (PDT)
-Message-ID: <60200f9e-0b37-4f8d-a309-65fd817eaa53@kernel.dk>
-Date: Mon, 21 Sep 2026 10:09:07 -0600
+        Mon, 21 Sep 2026 09:10:51 -0700 (PDT)
+Message-ID: <cbdf1ef2-7fe0-4cd9-8ce4-3235478e536b@kernel.dk>
+Date: Mon, 21 Sep 2026 10:10:35 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -69,41 +70,50 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] io_uring/bpf_filter: Set src->bpf_filters_cow in
- io_bpf_filter_clone()
+Subject: Re: [PATCH] io_uring: fix CQ tail over-commit and CQE32 index
+ corruption in io_cqe_cache_refill()
 To: Hui Peng <benquike@gmail.com>
 Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260919112523.3872581-1-benquike@gmail.com>
+References: <20260919203516.2581409-1-benquike@gmail.com>
 Content-Language: en-US
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260919112523.3872581-1-benquike@gmail.com>
+In-Reply-To: <20260919203516.2581409-1-benquike@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 9/19/26 5:25 AM, Hui Peng wrote:
-> When io_bpf_filter_clone() clones a struct io_bpf_filters table from a
-> source restriction set to a destination restriction set, it increments
-> src->bpf_filters->refs and sets dst->bpf_filters_cow = true, but forgets
-> to set src->bpf_filters_cow = true.
+On 9/19/26 2:35 PM, Hui Peng wrote:
+> io_cqe_cache_refill() has three issues when handling 32-byte CQEs on
+> IORING_SETUP_CQE32 and IORING_SETUP_CQE_MIXED rings:
+
+Don't combine fixes, send 3 separate patches.
+
+> 1. When cqe32 is true and off + 1 == ctx->cq_entries,
+>    io_cqe_cache_refill() posts a 16-byte dummy IORING_CQE_F_SKIP CQE via
+>    io_fill_nop_cqe(ctx, off) even on pure IORING_SETUP_CQE32 rings
+>    (where IORING_SETUP_CQE_MIXED is not set). On a pure CQE32 ring,
+>    ctx->cq_entries is the number of 32-byte CQEs and rings->cqes is
+>    indexed by (off << 1), so writing a 16-byte skip CQE at
+>    &rings->cqes[off] corrupts the middle of the CQ ring and misaligns
+>    all subsequent CQEs. Restrict the wrap-around skip CQE to
+>    IORING_SETUP_CQE_MIXED rings.
 > 
-> As a result, subsequent IORING_REGISTER_BPF_FILTER registrations on an
-> io_uring instance or task holding the source restriction set bypass
-> copy-on-write and mutate the shared io_bpf_filters table in place,
-> corrupting the BPF filter rules of already-cloned rings.
-> 
-> Fix this by setting src->bpf_filters_cow = true alongside
-> dst->bpf_filters_cow = true in io_bpf_filter_clone().
+> 2. On an IORING_SETUP_CQE_MIXED ring, when off + 1 == ctx->cq_entries
+>    and only 1 free CQ slot remains (ctx->cq_entries - io_cqring_queued()
+>    == 1), io_fill_nop_cqe(ctx, off) consumes that last slot and
+>    increments ctx->cached_cq_tail, after which free == 0 causes
+>    io_cqe_cache_refill() to return false without updating
+>    ctx->cqe_cached. Check that at least 2 free CQ slots exist before
+>    posting the dummy skip CQE.
 
-This one looks fine. But:
+These two look fine.
 
-> Found by code inspection; build tested only, no reproducer.
+> 3. On pure IORING_SETUP_CQE32 rings, len is in 32-byte CQE units prior
+>    to `len <<= 1`, so `len < (cqe32 + 1)` falsely requires 2 free
+>    32-byte CQEs instead of 1. Check `!len` before scaling `off` and
+>    `len` on IORING_SETUP_CQE32 rings, and in io_fill_cqe_aux() zero
+>    cqe->big_cqe[0..1] whenever IORING_SETUP_CQE32 is set on the ring.
 
-run the test suite. As far as I can tell from your patches, "code inspection"
-simply means an LLM looked at it for you. Do you even look at the code? It's
-clear it hasn't been run.
-
-In the future, don't send patches without having tested them. And tell your
-LLM to refrain from both the overly verbose and alarmist writing.
+This part looks wrong.
 
 -- 
 Jens Axboe
