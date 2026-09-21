@@ -1,141 +1,153 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD784D4895
-	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 16:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790009278; cv=pass; b=a+MzMjPIv0BBZttaeKK+V2qAtHa3xtdGN/Ud/IQMOZ1iTG1PAUis5XTYne5mZ/z+JhOZZ8puBpW0o8AaujkPig8x9FIgKLPZWuxpCIPh9vYtcYW2w77ZA00W7hflzK+7NNkk/asERteJ63Oi8RKbRoDtRNMg2Hh2Tx5+fpkySfA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790009278; c=relaxed/simple;
-	bh=RwZnQQhFtAM7evdQmSZFlOB9sFdlZveU2LX6vUMde7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kYNSSwWCoXRx8NOfZwINchCGIEfjmS7lw1qnCGmsgZbwc2W0VpwU/NsddaHcF3Erwilc8U+hIHIMV413LpMX3IldP2h/A5bvRksZ0ooJ1jK2ImP+9cbijzMveP2X3u/VTOGAD6aXgCUL8Bxs8SvR+4F6ceBXmHfuXrEgdXsAiJE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s42svd9T; arc=pass smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A450489865
+	for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 17:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790012170; cv=none; b=PGiuO7aLqeL9jaVDdbWcI30SnqUtIpXUHzdom8oQ533zJqikR8/f2/X69j9DUkigoXS+PC+6ettymM8acEayyQpE6MSR+1XMUTl5oyGXYuQ0T6qrVqQueJ6gE1ktxLwp5wtlkYnP/7HDz13VCbDgZXnoYlFvpzkHT6Ino78z6FU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790012170; c=relaxed/simple;
+	bh=2V1x5bmrpF/vhKpiH5mf0dEr4dZwjgAvoqn4u93zAfs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n/38Ixkq+stQScEJSmJwxexPts07OcCfozNT8P94GYWCJtCfQQmG9Kcdp+HjEBNwrqvOFVSFbt4kztEccFWf9O+Ouf4mjq557IItAMR4j405ZyUtI9FalBwX/O4wYCo0VXqPIa4YkhcF8tEasV9CFNnmpBpb1Ac9bGSzzdBTHAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=AC7tKe1Q; arc=none smtp.client-ip=209.85.167.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s42svd9T"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2db33db4de9so185ad.0
-        for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 09:47:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790009276; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kZYpTG5K0rHxZvug5FssncqTX1uyzRWsF7/JfPZ5UTqhl38teWah9CIhliJlIAmu8Z
-         tvnf9kBacgFW1nECOc1gbMZ489LJ9yc15odxC1pSJcV9B5Af5hEO1sR1BsgXcE22M6mo
-         GMHaDZlq2y96mZytGDP8A5RXaWmsSLF4RtB4z01jClnsJYtMtQzu7XP28iKhDU88MZFO
-         QVPZNjAPLmwBbt1l+fm4+rghFyzf9Hh6kMoKGchoy02KUXmmixiGrFCOxYoUcOvQdh8L
-         udb/v+QfDoKdUgG0oLcaP67qGbISK47F8lQtPI63VOcyY0Hz/hSPlJiJJd9m0dZCNfut
-         80Sg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j0vE4kZPOKuoqChBoEWd7u0oHqRVqQKnzo9W4sUzGbY=;
-        fh=0+ZX3m2TVtMrxiBBsot1L2KZO+7emVzzCbmOmJ8D4Yg=;
-        b=JCvXk78II80uJ6I7dXnOuQlhEloohL9HzFnNS3ybLEEelcc9OaHtJu8Z920uqeU3kq
-         vQYlXTSas3JDEPHNuf8WciEPmaIn3hLJgbm58ZhesoHlycmQDSd2Q2li37nAGKjB/n8J
-         Cr2ri1rrWO30Be57HWg7+GlWfIvr2+NDQpA9rLK9wQUqESKwqGKYFjkGCmZRGjIPsY9f
-         5cklupGTniRPK+ILlLMPUy+2Otwt7NQXuS61DTNA40RZQR/ZuQX0l0HsRcG+HEN+riS0
-         wsqSiefWS414zFCXcOkmnYcS9qn/yoKqjJ4ajnJzbXBPlyPYrfC+zsPsRI7f2zY/1lnk
-         zHeA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="AC7tKe1Q"
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-4b1ba286f6bso71324b6e.1
+        for <io-uring@vger.kernel.org>; Mon, 21 Sep 2026 10:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790009276; x=1790614076; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=j0vE4kZPOKuoqChBoEWd7u0oHqRVqQKnzo9W4sUzGbY=;
-        b=s42svd9TYqpSfHg2EF2dWwjc5WXqzhEyla1skLnFXnxRT0QFqfiEGThIW4Ruvn17ct
-         T/CoOkyJV4jUeDiy783GJ8/KCX9rrQ7E27WRrRUMjaeM7P5jrkD469PsT+yRaEJm0jRS
-         ArKZZpYMXi7IifTwSvJMZPyV/3encSQ9yVCVBXD/cFaTHg/prt9E6hkyIo0APYJHPKBc
-         kkv7laT3dc/ThaeYmxDvr/pkrjQGZK5m3BGv7wGI0TF4TxwNhYByB4ZV+dnbeBXfsfVx
-         q5PvzH8nmTffXl+kMY4dapaYhSYeTt/aBZR1uIElvgumo1NsKIawdvgh3BhGVxDt81CH
-         pjiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790009276; x=1790614076;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790012167; x=1790616967; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=j0vE4kZPOKuoqChBoEWd7u0oHqRVqQKnzo9W4sUzGbY=;
-        b=YJTtqM4JC/5n3tEYNUKFiUUrgVmjVEAIp5vRjPhAbObTQ3efIc7ptw4ldEuPTv8lrB
-         8WL/GaRzJkF0QBdfwXU4SAAWCkJdQKp6AdNyCZxD8stnY0WCDRwEYi4zueHFiQdrhgh8
-         fS4njnhm2/w0nW6jEYyO0zFyNWtU2hS3099apfWNNkHHkfTob8fHnM8S4Xu7rhCLNZnn
-         Q0pZlXSk/7GCmJ+HS4QlFxiZ+hxtYBbYPar+GpQ3D1qhHABsIMga31Uj9hF3nrvYpE4e
-         dYz0h6QFyothcC89Su+kfmLOilLIISxkMwBEMS5BoL1atksJvNyCDh792iq8tA0qT/QF
-         V2Dw==
-X-Gm-Message-State: AFuF++lbaf1VRrZ0/ALfGh1dChbdUVTtrKWXtYD2pHUiPUG5f84JcIA4
-	ndh6nuvsyxonP0vPe91Aucp4U2W62FKdJtOoOO42Kj9SgIRtuh/WQRwbm4KfO1M17PL9BLqS3xr
-	tPzPerfXbdx1K+n9vmaXMaVk5lxAvmDoqWnQJ6+a2
-X-Gm-Gg: AYBFou3MnwjS69mLPKj1C7nQq46inu08XhguXdPLPED2hl5QGawwt/SMtYkb7sHq0xq
-	XnWWhYV8+9oT50mScypP4VilemhmcBzPhBQV0Vk94O5eFfB3yrAhIemTbIPTZS+vG6RlpjIEofB
-	iot0wUwhZgiDoDDAgVPo9rdE4gU1Q8wrfBY5t56n4CN9JhODRv9F+CXgOeurHpXtJM3O88kYId5
-	eudAsQabTV/uoywbb7zADaLu9Qdi3KYElwCoFJcRah8QaYQEBAzoebFraXuy5OE0W1Pxklf5rgL
-	vMD6g0dQVx4AQO9ZTQLda00aHH8ZYNvArEMU1QkhdtW1/8o6VLJBOipEBM3GnABFRSq35DHTcgQ
-	qmha0DBWaX4K3QDynfjBym9xgGE57eU4+LdSQvMor
-X-Received: by 2002:a17:903:1a10:b0:2cf:9ec1:ea6e with SMTP id
- d9443c01a7336-2ddc1703951mr12870035ad.8.1790009275675; Mon, 21 Sep 2026
- 09:47:55 -0700 (PDT)
+        bh=aQXqx3kypLayD7YI2GHlSyGrESOzJpPnn3LvqeJEGpM=;
+        b=AC7tKe1Q/9V2Rd/33TeRhjX9pCRBrlMy/dNS9t6QHvY4n/dp0aM4oINNlupZENQlQ9
+         2Vh4Mm9lg7fvpN5hqqDx4b1iysrWXA3rniaooDeC4LQSOOAAEB+w/CZgyrpppGzHw+qb
+         OQySTBc15aMAh1d7injCkSsZlfnqLeel9bd0dhqvuipFG5bZEr4ppLgE3JtGXybKurhR
+         ngaKX2aAAbUAt5oa/WT7BaWqbewKMjW23B3Wa93fIc6/78TNYaQCs3hMMDY60zVwTDSq
+         X0R2uPVLuhAAgZaMwLp/qT5jqAXNhdX4yleztl8TWXEU/EiVvY1ukIBZRz370TCIjyXx
+         /32Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790012167; x=1790616967;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aQXqx3kypLayD7YI2GHlSyGrESOzJpPnn3LvqeJEGpM=;
+        b=aVFbCpvZlUbwwXEIjAN/iZu60V/ODGxeit1SydAlub2eRlXoYQh5nWMdxGL4mFf2uC
+         8ZH8Few6RTm2ZuUZeQK5JCVcPhFSfTOaxypOHxn+hQsnwEVa5raRYm3PfpshELP504Wk
+         QP6f9zsBw3Cl8TNEi2nOgx1UhJu8+GF1vmpUZj+fsMTCBDYfx7ZwHhnIi3yP7mN7vCLc
+         K04XaoaFjgrOAU9F49iAozJIWujrEQ03+QIkUKTrfmkeVJu22MOs6SK4YuETaPmYKb8t
+         j9SpvFFLv3vKwcD0lgWFfahcrmm0ZPW2gJ8EnTM8v0EcDA6x8fnQUb1qTuhcexLvrmik
+         hmZQ==
+X-Gm-Message-State: AFuF++kTIajoftbyGBsYQ9pfrZ8XeWyiYrVYiSu3iBqWL4hhrAV3tWH8
+	n2TrvPBgNiEclP7Mkq7LbeUiF5mBlrgQaajQHO7HNCG/EVicSse9XWIPo08vWNFpJis=
+X-Gm-Gg: AYBFou2xp88kK1HrG9WN0x1ms1fkjf0ezHFlpCjurFt9LqGznodvL4Q84wtAmaXbSUB
+	6S5KyThDIFJIvgB0+htiY/3pnnRGDaBPWICknjRqBeBGzqjwUdbX1PsHZ49U75uk2BtciwmxOFQ
+	tpdchBmwUPKRBZj14xVNyiwB/kLxwSX/hAZL9SSRpCxI+7ZmSjDU5xX84/ByQ9pPeLAVPmx/14d
+	xYKob/ju6TrVqmE8yenjqsG9ieXvFLGk5juex3Ci1rFmh4H5b55HMJfmYwpHOZAs+RUteKoBCih
+	PnYcCDPdKAfCnh4SqT7dcIfzhqXS1p2kaCwIf5k8ebPcAplv8tLya9yv2QWZ48u197h58LPnQvH
+	nFM0uQyu/i5Eua2QVgTqL26aDTXa9BuAjJmFesj4Y+l3+lL2K/d5KbB7W14UtTj8Y/fffsxDy4L
+	FhBtJmldOMZFzX32f7AcSVs+qzsZvYa+A45fuJQ12M6Ruv+1vuNewy0P6rmT0tdpEVa/QzWrbmT
+	rTtvRFAsF9mvO3JMbwOzRkYuQ==
+X-Received: by 2002:a05:6808:150b:b0:4af:aaca:7be3 with SMTP id 5614622812f47-4d43708da96mr333033b6e.12.1790012166717;
+        Mon, 21 Sep 2026 10:36:06 -0700 (PDT)
+Received: from [172.19.0.10] ([99.196.129.128])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4d422effcf3sm704029b6e.6.2026.09.21.10.35.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 10:36:05 -0700 (PDT)
+Message-ID: <9ca64fc2-c1b3-4978-8610-0c844ee6238a@kernel.dk>
+Date: Mon, 21 Sep 2026 11:35:52 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260911-uring-fdinfo-tighten-v2-1-fa24d517035e@google.com>
- <178914981183.662923.3814591941846027409.b4-ty@b4> <de0221c0-80e7-499b-b46c-66a2adc78db9@kernel.dk>
-In-Reply-To: <de0221c0-80e7-499b-b46c-66a2adc78db9@kernel.dk>
-From: Jann Horn <jannh@google.com>
-Date: Mon, 21 Sep 2026 18:47:18 +0200
-X-Gm-Features: AcwNN1WR8IhxT4hGSiQT8g1ydMaTBIgMm469wwiCUSFeC3f7b2SE2WiOkoQQuW4
-Message-ID: <CAG48ez3bX03GfFK_HJpMP8ZWEZ0x7Q8qtaMbL9=z5ZyeqqtmnQ@mail.gmail.com>
-Subject: Re: [PATCH v2] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ
- array slot
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Dominik Maier <dmnk+artist@google.com>, stable+noautosel@kernel.org, 
-	Gabriel Krisman Bertazi <krisman@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 00/15] io_uring: thread identity handoff for blocking
+ inline issue
+To: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: io-uring@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, tglx@kernel.org, mingo@redhat.com,
+ peterz@infradead.org, Oleg Nesterov <oleg@redhat.com>
+References: <20260911154148.644489-1-axboe@kernel.dk>
+ <87a4pdami2.fsf@email.froward.int.ebiederm.org>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <87a4pdami2.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 21, 2026 at 6:45=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
-> On 9/11/26 12:03 PM, Jens Axboe wrote:
-> > On Fri, 11 Sep 2026 19:56:13 +0200, Jann Horn wrote:
-> >> A cqe32 entry spans two CQ array slots, so the last CQ array slot can'=
-t
-> >> contain a cqe32 entry. If the CQ tail points at the last CQ array slot=
- and
-> >> the kernel wants to write a cqe32 entry, it uses io_fill_nop_cqe() to =
-pad
-> >> the last CQ array slot with a dummy entry and make the tail wrap aroun=
-d.
-> >>
-> >> However, malicious userspace can directly set IORING_CQE_F_32 on the l=
-ast
-> >> CQ array slot, causing __io_uring_show_fdinfo() to read the second cqe=
-32
-> >> half from beyond the CQ array. Change __io_uring_show_fdinfo() to
-> >> explicitly ignore the IORING_CQE_F_32 flag in this case.
-> >>
-> >> [...]
-> >
-> > Applied, thanks!
-> >
-> > [1/1] io_uring/fdinfo: ignore IORING_CQE_F_32 in last CQ array slot
-> >       commit: ab394388d05977f369e8e8d1beceae47fc3c5e72
->
-> Back at it, and wanted to move this to 7.4, as there's no point
-> expediting it for 7.3. While doing so, I took another look. And
-> cq_head is the raw ring counter, not a masked index. Hence I think:
->
-> bool is_last_cqarray_slot =3D (cq_head =3D=3D cq_mask);
->
-> this is incorrect, as it won't work past the very first run around the
-> ring. I fixed it up as:
->
-> bool is_last_cqarray_slot =3D (cq_head & cq_mask) =3D=3D cq_mask;
->
-> Just a heads up! Let me know if you disagree or want to send a v3
-> instead.
+On 9/18/26 10:33 PM, Eric W. Biederman wrote:
+> Jens Axboe <axboe@kernel.dk> writes:
+> 
+>> Hi,
+>>
+>> io_uring issues requests inline with IO_URING_F_NONBLOCK and punts to
+>> io-wq when that isn't possible. For a range of opcodes it isn't possible
+>> at all, as there's no nonblocking path in the kernel for them: fsync,
+>> statx, openat, the *at family, xattr, fadvise, splice, etc. Those are
+>> punted unconditionally, and the punt costs a thread wakeup, a context
+>> switch and a task_work completion round trip per request. io_uring HAS
+>> to be cautious to prevent accidental blocking in the kernel, even if the
+>> operations predominantly never block. Sad story. Examples of that are
+>> things like an fdatasync that doesn't block, statx that hits dcache,
+>> openat for O_TMPFILE, etc. All of those would've completed inline just
+>> fine, but io_uring just cannot rely on that.
+>>
+>> This series issues those requests inline in blocking mode instead, and
+>> only pays for the offload if the request actually blocks. But by the
+>> time it blocks, the submitter is deep in the kernel with the request on
+>> its stack, so the work can't be moved to another thread. What we can
+>> move is the identity. If the submitting task blocks, an idle io-wq
+>> worker takes over its user visible identity (tid, signal state,
+>> credentials, scheduling attributes, cgroup, user register state),
+>> finishes the io_uring_enter() call and returns to userspace as the
+>> submitter. The original task finishes the request as an
+>> io-wq worker and joins the pool. Userspace is none the wiser, hopefully,
+>> the same tid came back from the syscall, it's just on a different
+>> task_struct. Folks that have been around a while may remember earlier
+>> attempts at this about 20 years ago.
+> 
+> I don't see anything immediately wrong, but I suspect I am just
+> not looking hard enough.
+> 
+> In my time working with the kernel I have never seen anyone actually get
+> this kind of thing correct.
+> 
+> The handoff that we do during exec has a bug with posix timers that
+> I think is 23 years old that we just caught, and still hasn't been
+> merged to Linus.
+> 
+> There was the old daemonize call that got it wrong so often I added
+> kthreadd.
 
-Ah, bleh, of course, my bad. Thanks for catching that!
+I agree entirely with you, which is why this is (deeply) and RFC and I
+mostly pulled it to (some notion of) completion so I could run some
+testing and see how it performs.
+
+> Maybe you want something like the old solaris doors, or vfork.
+> Perform a synchronous task switch to this other thread, and call this
+> function in the other thread.  Then block waiting on the other thread
+> until the other thread blocks, or the function you called finishes.
+> 
+> Is there a reason you didn't try and do it that way?
+> Just a synchronous switch to and from a thread in your thread pool?
+> 
+> You aren't changing the mm so I really doubt changing the stack pointer
+> and a registers will be that expensive.
+
+And replies like this are also why I wanted to get it out, because I
+think it's a problem worth solving, and it's the best way to solicit
+ideas. I think there's some potential in your suggestion, let me try and
+dig at it a little bit and experiment...
+
+I'll be back with more details.
+
+-- 
+Jens Axboe
