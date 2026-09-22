@@ -1,62 +1,48 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A576841A921
-	for <io-uring@vger.kernel.org>; Tue, 22 Sep 2026 12:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9F3559313;
+	Tue, 22 Sep 2026 13:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790081756; cv=none; b=oe3Zyij4L9KaD0oCWaZf3VlnRov8jhKG3uQnf4Hbr8cTPhPXQcQOViWXLMcQbzaitcgVUIztVpQ39UHlxF2POtd0Ibl/q8IgrJS0eGYfwbvnpZ3UfVtojXJb1I4wF6hE1EmayF6muhF59kCDd/aB1mMytOwhELrnyCITwcFbxGI=
+	t=1790082984; cv=none; b=RkRel2pQ7pcqzzIzPS5Ql2INBZS6an/7RjYo13ejtQhfNznXhdD1TF6q+rxdjfY5zb/PyeUv4poI6kpzufhbUI6fdMUOy8ckvZqgI+IueVv20pfLJV06a5Kc7lxBUs7ifu5si/TxuWni3Ll0dEaHQGVIYi3Yfa/IStL/yX0z2jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790081756; c=relaxed/simple;
-	bh=ubxku8kcwK9zep0RugzAUAMfdFzxf1SrVF+xee3tIEU=;
+	s=arc-20240116; t=1790082984; c=relaxed/simple;
+	bh=Y8SIGh6YdZZ1CNW2JjI2lgNP0I2lOTxj/HFJcJxssAM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NpIo/JRjQVo5a/Y/hyjt75n0zgygDj3dczZFNabdi3dDXxhZfaSrvz/sMKjbTsLBz/kpTXSugBZv88NLVuoxetA7wrvGYaT7hlJhQ4V0tH8r1XU13YjdiwEjCab+HVkpZgthPB561Xsmmx/9ytBTo615l7/wSmIBfPR848jR7VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dNojPstL; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dNojPstL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790081753;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q+Q202Ulk36gGraSq8aGSjuKZeytZD98yewc/uwH6yE=;
-	b=dNojPstLO2j0ctNTsv6SO+9aqgJ5u2DOFZk+fl1ruI8NZW4ZrNUOjyNRFKX/b5PoZzUVUo
-	XELytVRiqxosA0BpRvNWlFEnb3J1ri++UoKsKGYPT7/TumSnhkbN3/WJbwQSriXgurMIYR
-	uXTSTyjE+ssZ7HW/l4+O+QF3g4cVNWo=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-537-Cetgdzf5PD-aejzMw1bNew-1; Tue,
- 22 Sep 2026 08:55:50 -0400
-X-MC-Unique: Cetgdzf5PD-aejzMw1bNew-1
-X-Mimecast-MFC-AGG-ID: Cetgdzf5PD-aejzMw1bNew_1790081748
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0AC7D1802171;
-	Tue, 22 Sep 2026 12:55:47 +0000 (UTC)
-Received: from fedora (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 545E21956042;
-	Tue, 22 Sep 2026 12:55:43 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Tue, 22 Sep 2026 14:55:46 +0200 (CEST)
-Date: Tue, 22 Sep 2026 14:55:41 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Chris Mason <mason@kernel.org>, linux-fsdevel@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
-	io-uring@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3 02/17] signal: only SIGKILL and the freezers interrupt
- a coredumping task
-Message-ID: <arJ6zZuI59BJnXpl@redhat.com>
-References: <20260921-work-coredump-fixes-v3-0-8e4adb1619e6@kernel.org>
- <20260921-work-coredump-fixes-v3-2-8e4adb1619e6@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nA5t0XLtI/BfQMu4lTKsMcWtjoIdoHf8t0ONQqVF0J9ANWZqHCDL1OAnY0kKz+06jI9GxDlUreTIl862OH0a1MvbiVmF4QZmDs08Q1pAiaASUWicQSteJ1qMLzhdbZo3jbrz7qdMusiKHASpsJTuIU0CdRwGxOaZ41Emsr8gejQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id A774668C4E; Tue, 22 Sep 2026 15:16:11 +0200 (CEST)
+Date: Tue, 22 Sep 2026 15:16:10 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+	Christoph Hellwig <hch@lst.de>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jens Axboe <axboe@kernel.dk>, Nitesh Shetty <nj.shetty@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Tushar Gohad <tushar.gohad@intel.com>,
+	William Power <william.power@intel.com>,
+	Phil Cayton <phil.cayton@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>, dm-devel@lists.linux.dev
+Subject: Re: [PATCH v6 04/13] block: introduce dma map backed bio type
+Message-ID: <20260922131610.GA30468@lst.de>
+References: <cover.1789997898.git.asml.silence@gmail.com> <a3ee719abc440ca139f1a945fdaf43a45f0c6b57.1789997898.git.asml.silence@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -65,60 +51,18 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260921-work-coredump-fixes-v3-2-8e4adb1619e6@kernel.org>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+In-Reply-To: <a3ee719abc440ca139f1a945fdaf43a45f0c6b57.1789997898.git.asml.silence@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-On 09/21, Christian Brauner wrote:
->
-> For quite a while now coredump has allowed either SIGKILL or freezing to
-> interrupt an ongoing coredump. Since we seem to like it complicated
-> "freezing" can mean a lot of things:
->
-> (1) Power Management induced freezing
-> (2) cgroup v1 freezer controller induced freezing
-> (3) cgroup v2 freezer controller induced freezing
+On Mon, Sep 21, 2026 at 02:38:48PM +0100, Pavel Begunkov wrote:
+> Premapped buffers don't require a generic bio_vec since these have
+> already been dma mapped. Repurpose the bi_io_vec space to strore dmabuf
 
-All of them do signal_wake_up() which sets TIF_SIGPENDING
-However, zap_threads() clears this flag.
+s/strore/store/
 
-With the recent changes including your PF_NO_NOTIFY_SIGNAL and
-05/17 "signal: don't retarget shared signals in a dying thread group",
-what else can make signal_pending() true? Apart from SIGKILL.
+Can you please expland on the splitting considerations a bit?  Preferably
+both in a comment for the details, and in the commit log for how we
+arrived at them and why they are fine for now?
 
-So perhaps we can simply do _something_ like
-
-	--- x/fs/coredump.c
-	+++ x/fs/coredump.c
-	@@ -508,7 +508,8 @@ static int zap_threads(struct task_struc
-		int nr = -EAGAIN;
-	 
-		spin_lock_irq(&tsk->sighand->siglock);
-	-	if (!(signal->flags & SIGNAL_GROUP_EXIT) && !signal->group_exec_task) {
-	+	if (!(signal->flags & SIGNAL_GROUP_EXIT) && !signal->group_exec_task
-	+	    && !freezing(tsk) && !(tsk->jobctl & JOBCTL_TRAP_FREEZE)) {
-			/* Allow SIGKILL, see prepare_signal() */
-			signal->core_state = core_state;
-			nr = zap_process(signal, exit_code);
-	@@ -583,7 +584,7 @@ static bool dump_interrupted(void)
-		 * but then we need to teach dump_write() to restart and clear
-		 * TIF_SIGPENDING.
-		 */
-	-	return fatal_signal_pending(current) || freezing(current);
-	+	return signal_pending(current);
-	 }
-	 
-	 static void wait_for_dump_helpers(struct file *file)
-
-?
-
-At first glance the change in dump_interrupted() makes sense anyway.
-For example, dumping to pipe can't tolerate signal_pendin() == true.
-
-What do you think?
-
-> Fixes: 403bad72b67d ("coredump: only SIGKILL should interrupt the coredumping task")
-
-Well, I think we should blame 76f969e8948d ("cgroup: cgroup v2 freezer")
-
-Oleg.
+Otherwise looks good.
 
