@@ -1,151 +1,298 @@
-Received: from mail-oo2-f40.google.com (mail-oo2-f40.google.com [74.125.231.168])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C1A443A91
-	for <io-uring@vger.kernel.org>; Wed, 23 Sep 2026 21:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.168
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8974369D7D;
+	Wed, 23 Sep 2026 23:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790198127; cv=none; b=lrV8BHu7zjtSdzIWDfHw7CNhkEd4E7W6ZSJB3SvlR2hOK0govubhTLZIzp/iCkwvZzhh5bKbyzZBYC8SAz43acb2BWmyegylDTIlld2MOass6BLFyTOzL6NvAzzkwT1+GXE5OBymm01F93O8yiJiy5TcqW9uHIsyxQyTl60x3VQ=
+	t=1790207191; cv=none; b=rTyDQq9vWO9J1LEXHO5imxliJmhsWD9WjC+cxVWHQkB5g2UIAAdgL6DL5j3dE3voTpHYCKCPcL7/Jjv53IE4TWCrMK4M/8mqBpRzk9zzr+4xBssePbCzI1yhiW/D0ezjS/R3U0zNjB1oROXZ2E5zKC9RVJd5ae8Y0onx4ZuahrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790198127; c=relaxed/simple;
-	bh=QZ+gkZx8tRSal+D98Z1zyd1nQU4mdy4IUssMdZlDIBw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WhDUL6inZ48VAZuNHu3obunsi4m6Rzb6mEZlTQdAoXzhHqwNduI1BUNt2uuMBj2nb1TOWkT0xD3MqXvPf92rYi50B9Djj0GC7nVE+HJhHdf99K/ak+yofz40In74GqV2bUtdzFNTOoeKP1csEIUpsy2Z6LAfALTolYWowA0f/ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=VLCTEytW; arc=none smtp.client-ip=74.125.231.168
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1790207191; c=relaxed/simple;
+	bh=AWydxPzmRb1CohhTYoZZq3OqoUHv1pUxxzBpLjcMG/A=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uGUpmelsMbnjmXlqyn4ynXcJSe5LLJzBtJPZZ0yYjpoa2IKoyG4Jn8RrQ1gwjz612Y0AO0Y3u7KfJIrODEy6kS7sThnUbqUr2Zjjy8YctQ4wl5czdMb4CA4OF+C85gkk4cVvlzuzy2EO6oEx+q+x1WWVrndpH7l/sOAYXkS6Qgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mQ7993uz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="VLCTEytW"
-Received: by mail-oo2-f40.google.com with SMTP id 006d021491bc7-6c72bd8a02fso689153eaf.0
-        for <io-uring@vger.kernel.org>; Wed, 23 Sep 2026 14:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790198120; x=1790802920; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Kg7IwIlD1kntpf1eauWWXgt0Gca3DfH40H5I52PyjHc=;
-        b=VLCTEytWTxlNSWyPtsXbL/hkKWe3414ZIt+qUX8h+VGRlg2cVoZ+FLKD5xJxQmU9HJ
-         vqIr7FF5Kt129NXwnU9xMiaXKjhzfSprXpqN4XvDPNBothmAezjFF2vP3cIUcTNyC8OF
-         9IyNMjGkN91Eb72z8J9naSKB/aeJn5vn1Y1b5z/CV2rcYmdJ8JyftUoAAqAniaVzI4yf
-         mUDQ5bnz7qloApdSvkk9C1SOedk+gieh/8NuGDrzXUgr9lY13wm5qRkKL+TL7c6Lbd6v
-         r2zP2gjmCgtx6Bw2JEDz1cKVpKzk1cxUrOo7B2xcXh2yq2Kb/Tnizh0lCzo4ehZ/vXWg
-         /wEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790198120; x=1790802920;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Kg7IwIlD1kntpf1eauWWXgt0Gca3DfH40H5I52PyjHc=;
-        b=j03OTIiM9UA10q5PDWOa2z4oF/Zj7cuUGkC6dFaJ84l+W0C5nU1C/Ks0woHzOY9R0H
-         t2WtrMGVP67gYXFrTxFw8cE+VJxruD4OblPA/77IjtnF5tUFFAbuHLTz0txT21MJlO3Y
-         Z7g8RfPl4CqM/KTOC48rG8uGXit8RaAwlo/IN2ebG1HkzYZh3TH4QaA5AqnoP56kiJGR
-         RHAnxdVta95jV9iDnExwFgp/W88zYf6favEAkvUlKA+pR6X8+DngNndMUoRp4CNvxxux
-         kXHKVp7fl2HJ+C8bQpjHBozJceiwg60s1kdcADkncphneRHnvEaAogLqY8Gii7VRDGY1
-         N+Zw==
-X-Gm-Message-State: AFuF++nR/WhKgw+JzNCIBVnV5AoxjCNGzEhSgO0o6fRQ2nz5ywH+QRLc
-	5Xg/EDQ1UPNy/IOHuKxiW8ItoVsh8Mu0erLjIB8I7sbXy8crlrQsxSUnwtq4LiaRyBE=
-X-Gm-Gg: AYBFou2lA/eSe8rHV1yvQqKmok/9KgFu4CQ9Z1ifdAoL6b3W+muXGo40WayhtQYvYA0
-	HosmkPs+Y9xINXhy0UQOKSohYecBMTsdV62zuAgTQeA6m+FFLG39MPRPMWXo+Ge1XrEf81/32gy
-	kifZdMUknqz1U2faP2d+7PXjIWDU4DQSz9FVLeC1ulv7wz2xrxUI9j4VI5g755EFDmBquX2k8TK
-	dQHh9mBDFSPifBwdeMY9k8LMOT6743T0iYWvW++s4K86nxaAdbx1Uji3FHKbs12juXvpK7FLMSI
-	9bLfbq2eMZj/U6oFrWoqkhlStbo+FIowOSVZKSc+a7S/Lspvlexr+eSug1t485zmT+CutKUD7R/
-	4PjWBmgioNUlPLUjFPWlCaLZiAaILgJdZPb9qcgIiyHgL2DdxJ5yjA1BMApT6ayxPeQ3PS9pi5i
-	GlGTK405SkHWSexq5vT8LClO7LUgo0zTLD6Wa8tI/Xd/TF98Mu5o8WiHF5aq5Fi5l12+sBMi614
-	L4npuubHi/TnDd3sc0+yMP5inKDKoXT0vCM/yWhNN30DKpAgY2rg2Q=
-X-Received: by 2002:a05:6820:61a:b0:6c9:80d8:a205 with SMTP id 006d021491bc7-6d4415b5912mr500249eaf.66.1790198120452;
-        Wed, 23 Sep 2026 14:15:20 -0700 (PDT)
-Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-491ee3c96a6sm321113fac.17.2026.09.23.14.15.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 14:15:19 -0700 (PDT)
-Message-ID: <6ceb9e88-c209-4b4a-963b-385199d91e11@kernel.dk>
-Date: Wed, 23 Sep 2026 15:15:18 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mQ7993uz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D2D51F000FF;
+	Wed, 23 Sep 2026 23:46:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790207189;
+	bh=hF/pDuqLUfEL4enlyWMhBbX6DHx3mD9gHwLhe/KnO64=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=mQ7993uz7Z5EeKhewJMrqV/FZFcDta1hvhYsAOg5VuMqcYzgJQ5EHR0wsR4e2qOq/
+	 0vdC27Bn3ipjjzHUIakbCNVwgnIdQzAe1JZzJx8v8zkVP6q+Yswt3loi11mjLTrTlu
+	 boDdnacKEzaNjRplsPVbWFqtE46a1vf0W192cCmCe6Hmu9tc1hFGGcbVd/rfC6fS4q
+	 pkt2Q/pqWLbjhx4KQSyv075dvl6JgbgW6hxngHzB+UAslwNRGvnsMFVunOdRs/ZXy4
+	 hCPh6YOIq9BkbxQnr0H+HBIE1kgkL+stR51daDte7VqraVw+9hvBUy6HSJAOf9Rsbc
+	 pVsQY5VEqAUcA==
+Subject:
+ Re: [PATCH net-next 1/3] net: netmem: add net_iov_area freelist helpers
+From: netdev-bot+sashiko@kernel.org
+To: sdf.kernel@gmail.com
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, hawk@kernel.org,
+ ilias.apalodimas@linaro.org, asml.silence@gmail.com, axboe@kernel.dk,
+ sdf@fomichev.me, bobbyeshleman@meta.com, almasrymina@google.com,
+ kaiyuanz@google.com, linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
+Date: Wed, 23 Sep 2026 23:46:27 +0000
+Message-ID: <179020718794.2160803.10755922661656548396@kernel.org>
+In-Reply-To: <20260922204348.717198-2-sdf@fomichev.me>
+References: <20260922204348.717198-2-sdf@fomichev.me>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] io_uring/lock: Keep spinlock release before wake_up()
-To: Gabriel Krisman Bertazi <krisman@suse.de>,
- Xiaochuan Li <chuanx2070@163.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <20260919123021.21318-1-chuanx2070@163.com>
- <20260923161622.25737-1-chuanx2070@163.com>
- <87v77vzn6j.fsf@mailhost.krisman.be>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <87v77vzn6j.fsf@mailhost.krisman.be>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 9/23/26 3:13 PM, Gabriel Krisman Bertazi wrote:
-> Xiaochuan Li <chuanx2070@163.com> writes:
-> 
->> When CONFIG_PREEMPT_RT enable, raw_spin_lock() will preempt_disable()
-> 
-> The subject prefix is wrong.  It should be "io_uring/io-wq".
-> 
-> Also, It might be that I just didn't find it, but was there a v1 of this
-> patch?  I can't find it on the list.
+Thank you for your contribution! Sashiko AI review found 1 potential
+issue(s) to consider.
 
-There should be a v1 and a v2, off the same thread.
+Critical: 0 · High: 0 · Medium: 1 (1) · Low: 0
 
->> which will trigger:
->> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
->> in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 985654, name: iou-wrk-983605
->> preempt_count: 1, expected: 0
->> RCU nest depth: 0, expected: 0
->> CPU: 3 PID: 985654 Comm: iou-wrk-983605 Tainted: G        O  6.1.83-rt28-g19631eb82f21
->> stack:0        ppid:977479 flags:0x00000008
->> tgid:977553 prio:120 preempt:0x100000001 rcu_read_lock_nesting:0
->> used_cpu 3 wake_cpu 3 on_cpu 3 on_rq 1 migrate_dis 0
->> arrive:17423426040675 queued:0 prev_sum:33955300 sum_exec:33955300
->> Call trace:
->>  dump_backtrace.part.0+0xdc/0xec
->>  show_stack+0x1c/0x30
->>  dump_stack_lvl+0xac/0xc4
->>  dump_stack+0x14/0x30
->>  __might_resched+0x13c/0x170
->>  rt_spin_lock+0x34/0xc0
->>  __wake_up_common_lock+0x68/0xd0
->>  __wake_up+0x1c/0x24
->>  io_worker_handle_work+0x5b0/0x600
->>  io_wqe_worker+0xf4/0x310
->>  ret_from_fork+0x10/0x20
->>
->> Signed-off-by: Xiaochuan Li <chuanx2070@163.com>
->> ---
->> Changes in v2:
->> io_uring/io-wq: fix lockdep warning by deferring hash wake up outside acct->lock
->>
->> The stall wake up path in io_get_next_work() holds acct->lock while
->> calling wake_up() on the hash wait queue, which creates lock ordering
->> acct->lock -> hash->wait.lock and triggers lockdep circular dependency
->> warning.
->>
->> The previous approach of temporarily dropping and retaking acct->lock
->> is racy and juggles the lock unnecessarily. Instead, add a need_wake
->> output flag to io_get_next_work() and defer the wake_up() to the outer
->> worker loop, after acct->lock has been released.
-> 
-> what previous approach?
-> 
->>
->> This preserves the calling convention that io_get_next_work() returns
->> with acct->lock held, removes the lock inversion, and avoids any racy
->> sleeper checks outside of the lock. Drop the wq_has_sleeper check as
->> bare wake_up is safe and the optimization is not worth the complexity.
-> 
-> Either way, these paragraphs should be part of the commit message. By
-> putting them after the ---, they get dropped at commit-time.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-I rewrote most of the commit message when applying, fwiw. You can find
-it in my tree.
+- [Medium] net/core/devmem.h: the refactor moves `spinlock_t
+  freelist_lock` from the tail of `struct net_devmem_dmabuf_binding`…
+
+Pre-existing issues:
+- [Medium] In `net_devmem_bind_dmabuf()` (net/core/devmem.c) the per-sg-
+  entry population loop advances `niov_idx` over the whole mapped…
+
+--
+
+net: netmem: add net_iov_area freelist helpers
+
+This moves the bounded LIFO freelist that io_uring zcrx and devmem each
+maintained into struct net_iov_area, and adds net_iov_area_pop() and
+net_iov_area_push() helpers. The freelist now stores u32 indices instead of
+pointers, and devmem rejects areas with more than U32_MAX entries before
+narrowing num_niovs to u32.
+
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index bccacd21b6c37..da885d95ea63b 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+> @@ -101,10 +101,15 @@ struct net_iov {
+>  struct net_iov_area {
+>  	/* Array of net_iovs for this area. */
+>  	struct net_iov *niovs;
+> -	size_t num_niovs;
+> +
+> +	/* Stack of free net_iov indices. */
+> +	u32 *freelist;
+>  
+>  	/* Offset into the dma-buf where this chunk starts.  */
+>  	unsigned long base_virtual;
+> +
+> +	u32 num_niovs;
+> +	u32 free_count;
+>  };
+>  
+>  static inline struct net_iov_area *net_iov_owner(const struct net_iov *niov)
+> @@ -117,6 +122,27 @@ static inline unsigned int net_iov_idx(const struct net_iov *niov)
+>  	return niov - net_iov_owner(niov)->niovs;
+>  }
+>  
+> +static inline struct net_iov *net_iov_area_pop(struct net_iov_area *area)
+> +{
+> +	u32 idx;
+> +
+> +	if (unlikely(!area->free_count))
+> +		return NULL;
+> +
+> +	idx = area->freelist[--area->free_count];
+> +	return &area->niovs[idx];
+> +}
+> +
+> +static inline void net_iov_area_push(struct net_iov_area *area,
+> +				     struct net_iov *niov)
+> +{
+> +	if (WARN_ON_ONCE(net_iov_owner(niov) != area ||
+> +			 area->free_count >= area->num_niovs))
+> +		return;
+> +
+> +	area->freelist[area->free_count++] = net_iov_idx(niov);
+> +}
+> +
+
+[ ... io_uring/zcrx.c, io_uring/zcrx.h snipped ... ]
+
+> diff --git a/net/core/devmem.c b/net/core/devmem.c
+> index a9d86b5a55885..c1c1872b88de2 100644
+> --- a/net/core/devmem.c
+> +++ b/net/core/devmem.c
+
+[ ... ]
+
+> @@ -67,12 +67,10 @@ net_devmem_alloc_dmabuf_bulk(struct net_devmem_dmabuf_binding *binding,
+>  
+>  	spin_lock_bh(&binding->freelist_lock);
+>  
+> -	count = min_t(size_t, count, binding->free_count);
+> -	for (i = 0; i < count; i++) {
+> -		struct net_iov *niov = binding->freelist[--binding->free_count];
+> -
+> -		netmems[i] = net_iov_to_netmem(niov);
+> -	}
+> +	count = min(count, binding->area.free_count);
+> +	for (i = 0; i < count; i++)
+> +		netmems[i] =
+> +			net_iov_to_netmem(net_iov_area_pop(&binding->area));
+>  
+>  	spin_unlock_bh(&binding->freelist_lock);
+>  
+> @@ -84,12 +82,7 @@ void net_devmem_free_dmabuf(struct net_iov *niov)
+>  	struct net_devmem_dmabuf_binding *binding = net_devmem_iov_binding(niov);
+>  
+>  	spin_lock_bh(&binding->freelist_lock);
+> -	if (WARN_ON_ONCE(binding->free_count >= binding->area.num_niovs)) {
+> -		spin_unlock_bh(&binding->freelist_lock);
+> -		return;
+> -	}
+> -
+> -	binding->freelist[binding->free_count++] = niov;
+> +	net_iov_area_push(&binding->area, niov);
+>  	spin_unlock_bh(&binding->freelist_lock);
+>  }
+
+[ ... ]
+
+> @@ -279,7 +279,7 @@ net_devmem_bind_dmabuf(struct net_device *dev, void *vdev,
+>  			if (direction == DMA_TO_DEVICE)
+>  				binding->tx_vec[niov_idx] = niov;
+>  			else
+> -				binding->freelist[binding->free_count++] = niov;
+> +				net_iov_area_push(&binding->area, niov);
+>  			dma_addr += niov_size;
+>  		}
+>  	}
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but the conversion makes the
+population loop in net_devmem_bind_dmabuf() look better validated than it
+actually is.
+
+The freelist store is now bounds-checked inside net_iov_area_push(), which
+warns and drops the entry when free_count reaches num_niovs. The two
+sibling writes in the very same iteration are still unbounded:
+
+	nr_niovs = len >> niov_shift;
+	for (i = 0; i < nr_niovs; i++, niov_idx++) {
+		niov = &binding->area.niovs[niov_idx];
+		net_iov_init(niov, &binding->area, NET_IOV_DMABUF);
+		if (net_mp_niov_set_dma_addr(niov, dma_addr)) {
+			...
+		}
+		if (direction == DMA_TO_DEVICE)
+			binding->tx_vec[niov_idx] = niov;
+		else
+			net_iov_area_push(&binding->area, niov);
+
+niov_idx accumulates across every sg entry and is never compared against
+binding->area.num_niovs, which is derived only from
+dmabuf->size >> niov_shift. The loop checks per-entry alignment
+(IS_ALIGNED(dma_addr, niov_size), IS_ALIGNED(len, niov_size)) but never that
+the summed sg length equals dmabuf->size.
+
+Can area.niovs[] and tx_vec[] be written past their ends if an exporter's
+mapped sg_table covers more bytes than dmabuf->size?
+
+In the other direction, if the mapping is shorter than dmabuf->size, can the
+tail of tx_vec be dereferenced as struct net_iov *? It is allocated with
+kvmalloc_objs() and never zeroed:
+
+	binding->tx_vec = kvmalloc_objs(struct net_iov *,
+					binding->area.num_niovs);
+
+I could not construct this with an in-tree exporter (udmabuf, dma-heaps and
+DRM PRIME all map exactly the object size), and I did not find an explicit
+dma-buf API guarantee that the mapped sg length equals dmabuf->size either.
+Would it be worth bounding niov_idx against area.num_niovs, or zeroing
+tx_vec, while the push side is being touched here?
+
+This is still the case at the end of the series (3ee6ae62e2d2): the later
+patch "net: devmem: use memory provider helpers for net_iovs" zeroes
+area.niovs but leaves tx_vec unzeroed and niov_idx unbounded.
+
+> diff --git a/net/core/devmem.h b/net/core/devmem.h
+> index f71d9a2bcb3d3..5edb763b89b26 100644
+> --- a/net/core/devmem.h
+> +++ b/net/core/devmem.h
+> @@ -17,6 +17,9 @@ struct netlink_ext_ack;
+>  
+>  struct net_devmem_dmabuf_binding {
+>  	struct net_iov_area area;
+> +	/* Protects area.freelist and area.free_count. */
+> +	spinlock_t freelist_lock;
+> +
+>  	struct dma_buf *dmabuf;
+>  	struct dma_buf_attachment *attachment;
+>  	struct sg_table *sgt;
+> @@ -57,10 +60,6 @@ struct net_devmem_dmabuf_binding {
+>  	/* rxq's this binding is active on. */
+>  	struct xarray bound_rxqs;
+>  
+> -	spinlock_t freelist_lock ____cacheline_aligned_in_smp;
+> -	size_t free_count;
+> -	struct net_iov **freelist;
+> -
+
+[Severity: Medium]
+The ____cacheline_aligned_in_smp annotation on freelist_lock is dropped
+here, and the lock moves from the tail of the binding to right after the
+embedded struct net_iov_area. Was that intentional?
+
+With the new area layout (niovs at 0, freelist at 8, base_virtual at 16,
+num_niovs at 24, free_count at 28) the write-hot lock word and free_count
+end up in the same 64-byte line as the read-mostly area.niovs and
+area.base_virtual.
+
+The writers dirty that line on every allocation and release:
+
+net/core/devmem.c:net_devmem_alloc_dmabuf_bulk() {
+	spin_lock_bh(&binding->freelist_lock);
+	count = min(count, binding->area.free_count);
+	...
+}
+
+net/core/devmem.c:net_devmem_free_dmabuf() {
+	spin_lock_bh(&binding->freelist_lock);
+	net_iov_area_push(&binding->area, niov);
+	...
+}
+
+while the receive path reads the same line per fragment, via
+net_iov_idx() -> net_iov_owner(niov)->niovs and
+net_devmem_iov_virtual_addr() -> net_iov_owner(niov)->base_virtual.
+
+In the common devmem setup, where page pool refill/release runs on a
+different core than the recvmsg() consumer, does this re-introduce the false
+sharing the removed annotation was there to prevent?
+
+The commit message says:
+
+    Keep devmem's area adjacent to its lock.
+
+but it does not mention removing the SMP cacheline isolation, and no numbers
+are given. Annotating freelist_lock (or the lock plus free_count pair)
+____cacheline_aligned_in_smp again would keep the refactor intact.
+
+I checked the end of the series (3ee6ae62e2d2) and net/core/devmem.h still
+declares the lock right after the area with no ____cacheline_aligned_in_smp,
+so nothing later restores it.
+
+>  	/* ID of this binding. Globally unique to all bindings currently
+>  	 * active.
+>  	 */
 
 -- 
-Jens Axboe
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922204348.717198-1-sdf%40fomichev.me
