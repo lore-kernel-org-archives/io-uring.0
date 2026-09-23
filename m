@@ -1,79 +1,142 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDD23C73CC;
-	Wed, 23 Sep 2026 04:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86848415F06
+	for <io-uring@vger.kernel.org>; Wed, 23 Sep 2026 06:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790139317; cv=none; b=ik0GAqjK/Jd68GcxXSnR4Jj/M9zLMMwLfERUMG1lFkqHEWLLL/OEMDl3r3717PU1XMubxXxcqS3fAw7u/gTKmnoh9pdWiPKrKsUtDDEDfXEDvi4PPK+D0QwvbByYuS/giQJiDGS4XpDZTLb1heRFzLeTGh2EZhjdmc7bL6Snmcw=
+	t=1790145815; cv=none; b=Ud2/HOoVRp8w6kEg9QusmuN6bcQMvzO/2hChtPGQQaw337VPJac6t15ctWeLNpqrfZYUDrcW4aeI2+zemR/JB+rz5SL+kYvwQXQsDmWUr4qtRQPP+0L/keg7S1hmrZiW3J1P7C1ps8bdCGHFZ0UV29kXmc/xCU8zk9J1E7vkxWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790139317; c=relaxed/simple;
-	bh=Qs19OWKtYjUAEmVURvXm80xgS1L3ZM2WRz5g0LPu/o0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kctbwbDCL8M+FQa6X9aZh4IF6GItBhmTojST5XdtUiCIVT5dahUVcLTDxmLZmMDe2raQyazm1KhqZ3F3JB1OwJnlPv2Wks8yAhunpC8LYpadkcepk20Q9OEwpmbmF1C4KhVMfxMjDekfghUKFaxXjG1DWIxbUA5QUeWOgryyLAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id B955768BFE; Wed, 23 Sep 2026 06:55:05 +0200 (CEST)
-Date: Wed, 23 Sep 2026 06:55:05 +0200
-From: Christoph Hellwig <hch@lst.de>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-	io-uring@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Jens Axboe <axboe@kernel.dk>, Nitesh Shetty <nj.shetty@samsung.com>,
-	Kanchan Joshi <joshi.k@samsung.com>,
-	Anuj Gupta <anuj20.g@samsung.com>,
-	Tushar Gohad <tushar.gohad@intel.com>,
-	William Power <william.power@intel.com>,
-	Phil Cayton <phil.cayton@intel.com>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>, dm-devel@lists.linux.dev
-Subject: Re: [PATCH v6 06/13] nvme-pci: implement dma-buf backed requests
-Message-ID: <20260923045505.GB26231@lst.de>
-References: <cover.1789997898.git.asml.silence@gmail.com> <e80c3b1e0de004eaca6c51a2a86115ac9ed36381.1789997898.git.asml.silence@gmail.com> <20260922132016.GA30684@lst.de> <d39a6dd7-cb5a-43d6-8dcb-16eb9fc95b4d@gmail.com>
+	s=arc-20240116; t=1790145815; c=relaxed/simple;
+	bh=xR1/NeQX09LWnchhSJVuQ4BnNu/6StOlNDyMewUEQSI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JFPkQpcfYKNEj6pot9t1B2P+iHS3OIHm86Nihpd82CYIzGIMswBB5XcoG1errWxEwXTwu7v/o6nnSgMtbu18B5uJBZT7FyykatEFREY6IAyHYmEEBl63HL5huu7uvaj0oPZvUgBtumGqZJQPSF5+Srp1ybfpTBPUxkmjSxKeljw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YaLM412a; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YaLM412a"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff2f2c4eso1292535ad.1
+        for <io-uring@vger.kernel.org>; Tue, 22 Sep 2026 23:43:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790145807; x=1790750607; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FQdfqiVzHOdi7EyeynQ0dghVkDzzyRlpExwCwSwjPJw=;
+        b=YaLM412a/JQIxO5NQM3h0M9A+YSeGws8quxmpM+0heun6ScE/o9z4hdL8ftXQXjjsR
+         6LgDcMhlYxc7Bv9upgmAbGscjwaaRojGRAtu2CzW/IAk8WDiA8PcK2SDDRbh9zRLjTM0
+         EjTRzvTouq7TikSkxa1jdC+NvBNqlY7ztMnDB2PBETw2846FstH+fCqpn3Dq/KWVjG0c
+         weHaX+eHQQhg/+GourQ187dlul4ZjCmvT2b+b/3a9BO3q+CcwPr8Mc9enQ+zFebX90wo
+         A8O+7zEONZfw13VDHxWrY6kOh/sSxNrTqL2GB2orSsFVvcWV0OcjgLlFOEHxBiKlB4pt
+         K4ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790145807; x=1790750607;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FQdfqiVzHOdi7EyeynQ0dghVkDzzyRlpExwCwSwjPJw=;
+        b=MdKQY1Z7W7gu5qWl0dz0RZBVSqrO4PxNqv1+pLDDqJtV0oi6RpUh4Oo5xcOwVEN7ZK
+         gMZQxj0cBw1TFasX/flUTvPrL2u+mPN8/8KKzMcnDlf4tmhHxdV7nukuXmdyk834L+jp
+         uncwRrBpW7UgKderFsBiA7UmDXEcmcqTwiOfensdtZLPfyV+yuyAI+NvuzqT8DJK3ds2
+         v+g0picGUoM8u5dIJt64KV6zo+fe9IzmFGejWKjUVYXz2IBnhm3Q29niO/q+rN1F7ktU
+         gGdlqNX6oxBUS+3ydw1iF13ZQa3XuEjnV6CFRoUj/CTnP8P5mDzmXpmyDvJvGv5yZsO2
+         RDDQ==
+X-Forwarded-Encrypted: i=1; AKwUvBypNJ2r3VQBxGOobh5xLX0HPN2CR2zXBQCnSAFP1dxaDk3AqPanr2bWDhxwniMB3mNIed/5sO494g==@vger.kernel.org
+X-Gm-Message-State: AFuF++kBl/y1b6k5g8DDMrBaiEUOC3D0oq84Ubzzq3Gf2SxUr/T4xdsC
+	Of2mYVggch6e9E26OasqB7AOM8En8IMyPK4I9BY1BQCzeXgphXnuIo++uGZZvETqzT8=
+X-Gm-Gg: AYBFou07dJNu4dkrOgFD++u1V2v8MzMtokYbPvWtLPimomCQeyy/xF8xq/0mIuQIn02
+	fZ6M5bpfk43pmCblXm0lVxPu4rKNUTr1Z5J4JJp5H4QmKOkYwWllEFj866JKHrbj3Nxp2bAfaRH
+	lxam37xlemNa8MrcFabqqIBjF+y9c/XJu57jbKDSiYvIyvUV7PLGDKC5HoaPx4TDi+R1WMmhJNd
+	PgBV5SDeaSbzIZn9oV2ZtcUjmrarKs1QtbBwWuBcVxZzocBKpUtTo7H8/FFcAtnFsnbIfNI+oS2
+	cZDbsecAYQXaRNwZg2f/NpMBQveGfhUp8gc4XvDBPugaT71SF+GNEUS0aEXTcAy6TbHUDjC67jT
+	UcRIPwz6krC+au/sJEb0C2AoE1qdLt9j9zn6NWMoQL1rXgAAgAiujfOMsM6baNpcyuNdCnpQNoz
+	2Y5puwyzi+eZme9yACB9EvblpbPvEStO0snyS6D9RtvyWkjGAhwEEuINMK+xN7aANg1g==
+X-Received: by 2002:a17:90b:564d:b0:39e:4546:fb1e with SMTP id 98e67ed59e1d1-3a07e7e4d13mr2618891a91.4.1790145807481;
+        Tue, 22 Sep 2026 23:43:27 -0700 (PDT)
+Received: from archlinux ([138.199.21.232])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07dc32086sm3227338a91.13.2026.09.22.23.43.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 23:43:27 -0700 (PDT)
+From: Chen Xiaokun <shinnkka1@gmail.com>
+To: stable@vger.kernel.org
+Cc: sashal@kernel.org,
+	axboe@kernel.dk,
+	asml.silence@gmail.com,
+	felix.moessbauer@siemens.com,
+	gregkh@linuxfoundation.org,
+	io-uring@vger.kernel.org,
+	Chen Xiaokun <shinnkka1@gmail.com>
+Subject: [PATCH 6.1.y v2] io_uring/io-wq: Fix memory leak in io_wq_create() on success path
+Date: Wed, 23 Sep 2026 14:43:15 +0800
+Message-ID: <20260923064315.195997-1-shinnkka1@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d39a6dd7-cb5a-43d6-8dcb-16eb9fc95b4d@gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 22, 2026 at 02:37:08PM +0100, Pavel Begunkov wrote:
->> Sashiko had a few comments, which I think are correct - if we use
->> dma_map_sg to map the data, we need to use the sync_sg APIs to
->> transfer ownership.  That only matters on non-coherent architectures
->> with MMU, but we need to get it right.
->
-> I've seen that and fixed everything locally that should be fixed,
-> apart from the sync. I wonder what we can do about that? I can
-> somehow replace it with the sg variant for now, but sync'ing the
-> entire possibly multi-GB mapping for, let's say, a 512B I/O, sounds
-> not wise.
+[ This is a stable-only patch for 6.1.y ]
 
-If we'd want to fix this for real we'd need to add an offset to the
-sync by sg methods.  Or move away from scatterlists in dma-buf, given
-that they are a horrible API.  All of these are bigger projects,
-though.  So for now I think you'd want to do the sync all, and have
-the people who run high-performance io_uring code on non-coherent
-platforms suffer.
+Commit 657ca82526d0 ("io_uring/io-wq: inherit cpuset of cgroup in io
+worker") was backported from upstream commit 84eacf177faa to 6.1.y.
 
-> And I can think of another place that does mix sync_single
-> with sgs.
+In linux-6.1.y, this backport introduced a temporary allowed_mask 
+variable in io_wq_create().  It is correctly freed on the error path,
+but is not freed on the success path.  As a result, every successful
+call to io_wq_create() leaks cpumask_size() bytes of memory.
 
-Which one?
+This is a 6.1-specific backport issue caused by the differences in the
+io-wq implementation, so the fix only applies to 6.1.y.
+
+Fixes: 657ca82526d0 ("io_uring/io-wq: inherit cpuset of cgroup in io worker")
+Signed-off-by: Chen Xiaokun <shinnkka1@gmail.com>
+
+---
+Hi Greg, Sasha, and io-uring maintainers,
+
+This patch is specific to 6.1.y.  Commit 657ca82526d0 was a manual
+backport of upstream commit 84eacf177faa ("io_uring/io-wq: inherit
+cpuset of cgroup in io worker").  Due to significant differences in
+the io-wq implementation between 6.1 and later kernels, the upstream
+change had to be adapted for 6.1.
+
+Later stable kernels do not contain this 6.1-specific backported
+implementation of io_wq_create(), and therefore do not contain the
+leaked allowed_mask.  The corresponding upstream implementation also
+does not have this allocation.
+
+Therefore, this fix is only applicable to 6.1.y and should not be
+backported to other stable kernel series.
+
+upstream patch: https://lore.kernel.org/all/20240910171157.166423-3-felix.moessbauer@siemens.com/
+backport patch: https://lore.kernel.org/all/20240911162316.516725-3-felix.moessbauer@siemens.com/
+
+Could you please queue it for 6.1.y?
+
+Thanks,
+Chen Xiaokun
+
+Changes since v1:
+- Reword the commit message (clarify that this is a 6.1-specific backport patch)
+- No functional changes
+
+ io_uring/io-wq.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 0c3de2fead81..f1bc212309c8 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -1221,6 +1221,7 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
+ 	wq->task = get_task_struct(data->task);
+ 	atomic_set(&wq->worker_refs, 1);
+ 	init_completion(&wq->worker_done);
++	free_cpumask_var(allowed_mask);
+ 	return wq;
+ err:
+ 	io_wq_put_hash(data->hash);
+-- 
+2.55.0
 
