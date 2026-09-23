@@ -1,127 +1,70 @@
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A0C2701D9;
-	Wed, 23 Sep 2026 01:24:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A01394EA6;
+	Wed, 23 Sep 2026 04:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790126686; cv=none; b=SV2fZrkMzIlDZPbAkPCkLFYjivZ8hEvK28SMwDNmhOOrcOoDWb+t4aKojlqDUbRTtQXJ8hJRU3i5PY9+S+XYBVTcdLKy+tpi2crdlO47gAWFTJE5CPDSZdDS6Yhohtz27OfhJDgrveTH8T3UrVWU81RJCK94uniZ9fRYnSpeUas=
+	t=1790139112; cv=none; b=owjZCm1jxSFsOapW7gm9xQ0uag21JDAm4oRphMCg7HkVQKBLGlQCj5m9bdky29k3oFCKbRpaXlpJhjfUY2hS8/4YU+r2NNHEMR/IeWAf1ESn7YI+7CiB7XM1bVqAlYElFI9DQkJ7+Oy7UBI3WBxU0lKYPPJP8Fq9FjvHA9G2bvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790126686; c=relaxed/simple;
-	bh=b3c5Ia1AWvjLt2to6fKpPfhbksG3n/HircdG9CPUJUM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=la9vGnnJCs9ayDa1ikW804zRErzV0Ycd8IBp0+meIm8SSfriE/+kZnsTbjah/+Nr20rPAKEeSTIVtgOzWpt/gCmmH5fIY8mAfZAxpcVUglGMlzZAhIojbRTqSlxU/fDnH2qmLD5iqcNt0Sm+7/oYUAkF3ke1IAEkvk9kDZuoj44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=pHjVGAtd; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="pHjVGAtd"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ncO+0ljpVZ+Qg+Yo2lC5Wdk3yJUYrQn60Hlf5stdXf0=;
-	b=pHjVGAtdbR3hqFEjfMvq9yoZdMSr7L/w4FZpjabNO6oFPCuWFxZ9U1lleHYGdlE7zfv1U6H8k
-	4L88GHX3ZMHBZoxVK78ZFGYPLgmgxxCB7qZadsif8LuCqInBkfSW3Zo2i3hLyrqn7xog/tZNUty
-	WBABx0iJw0gfJ3KOBEnYFLM=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hqJr66PxqzKm8V;
-	Wed, 23 Sep 2026 09:13:26 +0800 (CST)
-Received: from dggpemr500006.china.huawei.com (unknown [7.185.36.185])
-	by mail.maildlp.com (Postfix) with ESMTPS id 627A04057A;
-	Wed, 23 Sep 2026 09:24:33 +0800 (CST)
-Received: from localhost.localdomain (10.50.85.180) by
- dggpemr500006.china.huawei.com (7.185.36.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 23 Sep 2026 09:24:32 +0800
-From: Yao Kai <yaokai34@huawei.com>
-To: <asml.silence@gmail.com>
-CC: <axboe@kernel.dk>, <io-uring@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <liuyongqiang13@huawei.com>,
-	<yaokai34@huawei.com>
-Subject: [PATCH v2] io_uring: initialize task context before running the BPF loop
-Date: Wed, 23 Sep 2026 09:43:10 +0800
-Message-ID: <20260923014310.591292-1-yaokai34@huawei.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <d6d9cb28-50f1-474c-ba11-d634fcaad394@gmail.com>
-References: <d6d9cb28-50f1-474c-ba11-d634fcaad394@gmail.com>
+	s=arc-20240116; t=1790139112; c=relaxed/simple;
+	bh=pu/mpkCqXSxgYN59HbS0UJuN1/RXNva8bBq3n7KmNpk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eYpUjT/ADjUXOO/flICe8sIq7/ZPYA0r6ARmRJ+65JQiRquhb9dE8cQcwRE3iTvE+i7Xscco0KcavzHiJY+a1lKu6RYTSQj1cPuOKMJZKMrCZAoGRRhrp0npunvKxVMIZxnWofiUj/lfv0VgRpEeb6fidBfUTYIfv6XTLcebCVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 2B01F68BFE; Wed, 23 Sep 2026 06:51:44 +0200 (CEST)
+Date: Wed, 23 Sep 2026 06:51:43 +0200
+From: Christoph Hellwig <hch@lst.de>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Christoph Hellwig <hch@lst.de>, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+	linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jens Axboe <axboe@kernel.dk>, Nitesh Shetty <nj.shetty@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Tushar Gohad <tushar.gohad@intel.com>,
+	William Power <william.power@intel.com>,
+	Phil Cayton <phil.cayton@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>, dm-devel@lists.linux.dev
+Subject: Re: [PATCH v6 04/13] block: introduce dma map backed bio type
+Message-ID: <20260923045143.GA26231@lst.de>
+References: <cover.1789997898.git.asml.silence@gmail.com> <a3ee719abc440ca139f1a945fdaf43a45f0c6b57.1789997898.git.asml.silence@gmail.com> <20260922131610.GA30468@lst.de> <cce62c72-278a-44d1-9cf7-e0beb0b72688@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- dggpemr500006.china.huawei.com (7.185.36.185)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cce62c72-278a-44d1-9cf7-e0beb0b72688@gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
-Submitting SQEs through an io_uring BPF loop can trigger a NULL pointer
-dereference in io_submit_sqes(), as shown by the following arm64 report:
+On Tue, Sep 22, 2026 at 02:54:25PM +0100, Pavel Begunkov wrote:
+>>
+>> Can you please expland on the splitting considerations a bit?  Preferably
+>> both in a comment for the details, and in the commit log for how we
+>> arrived at them and why they are fine for now?
+>
+> I'll add something to the commit log, but not sure which specific
+> details in comments you mean. Do you want me to expand the comment
+> above limiting the number of segments? Maybe I should add there that
+> it's stricter than necessary and might cause more splitting than
+> necessary? This one:
 
-  [ 2049.380301] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-  [ 2049.388788] pc : io_submit_sqes+0x48/0x6c4
-  [ 2049.389153] lr : bpf_io_uring_submit_sqes+0x10/0x1c
-  [ 2049.396310] Call trace:
-  [ 2049.396531]  io_submit_sqes+0x48/0x6c4 (P)
-  [ 2049.396893]  bpf_io_uring_submit_sqes+0x10/0x1c
-  [ 2049.397293]  bpf_prog_1a2a95cb199202b5+0x3c/0x68
-  [ 2049.397699]  bpf__io_uring_bpf_ops_loop_step+0x5c/0x94
-  [ 2049.398149]  io_run_loop+0x70/0x2e4
-  [ 2049.398461]  __arm64_sys_io_uring_enter+0xf0/0x710
-  [ 2049.398882]  invoke_syscall+0x54/0x10c
-  [ 2049.399414]  el0_svc_common.constprop.0+0x40/0xe0
-  [ 2049.399829]  do_el0_svc+0x1c/0x28
-  [ 2049.400125]  el0_svc+0x38/0x1d0
-  [ 2049.400409]  el0t_64_sync_handler+0xa0/0xe4
-  [ 2049.400779]  el0t_64_sync+0x198/0x19c
-
-io_uring_enter() dispatches to io_run_loop() before reaching the normal
-submission path's io_uring_add_tctx_node() call. The loop only checks
-whether the caller is allowed to run task work; it does not initialize
-current->io_uring or associate the task with the ring. A BPF call to
-bpf_io_uring_submit_sqes() then reaches io_get_task_refs(), which assumes
-that current->io_uring is valid.
-
-A ring created with IORING_SETUP_R_DISABLED, IORING_SETUP_SINGLE_ISSUER
-and IORING_SETUP_DEFER_TASKRUN can be enabled by a different task that
-has never used io_uring. Enabling the ring makes that task the submitter
-without allocating its io_uring task context. Its first BPF-driven
-submission of a pending SQE can therefore cause a kernel Oops.
-
-Call io_uring_add_tctx_node() in io_run_loop() before invoking the loop
-and propagate any initialization error. Do this before acquiring
-uring_lock, since task context setup may acquire the same mutex. This
-also establishes the task-to-ring association used for cancellation.
-
-Fixes: 033af2b3eb19 ("io_uring: introduce callback driven main loop")
-Signed-off-by: Yao Kai <yaokai34@huawei.com>
----
- io_uring/loop.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/io_uring/loop.c b/io_uring/loop.c
-index bbbb6ef14e6a..3d472b7827fa 100644
---- a/io_uring/loop.c
-+++ b/io_uring/loop.c
-@@ -2,6 +2,7 @@
- #include "io_uring.h"
- #include "wait.h"
- #include "loop.h"
-+#include "tctx.h"
- 
- static inline int io_loop_nr_cqes(const struct io_ring_ctx *ctx,
- 				  const struct iou_loop_params *lp)
-@@ -81,6 +82,10 @@ int io_run_loop(struct io_ring_ctx *ctx)
- {
- 	int ret;
- 
-+	ret = io_uring_add_tctx_node(ctx);
-+	if (unlikely(ret))
-+		return ret;
-+
- 	if (!io_allowed_run_tw(ctx))
- 		return -EEXIST;
- 
--- 
-2.43.0
+Yes, explain why we apply a relatively arbitrary limit not fully
+exploiting the hardware capabilities, and why we thing that is okay.
 
