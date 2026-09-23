@@ -1,106 +1,151 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8441E3B27D1
-	for <io-uring@vger.kernel.org>; Wed, 23 Sep 2026 16:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9155A3E3141;
+	Wed, 23 Sep 2026 17:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790182371; cv=none; b=WcD2KeJ3V2QQZiiQ60abtj2M2rrnR4JFikSAUVh4bWnot/MJgpEVT1apgWRPNJlRFF7+WRvmL80PV/gY//8MFTKbJvQBCgyJNkHLhNhNk85PVcSdRKydlVm1Pq4LkvLlBV2moHfTckrwXFiJjdkVxrPYdzn87lpKPL/jYP6mS/8=
+	t=1790184190; cv=none; b=GS/SMNXNhQ59JyFQ8qKy4OqSxuRdl8j2GxNNlEIa+1pi3/fNjawz0+oZhXlF+ULqI6KvWBKSNweAzptjN6FqeqAiOFysSNoesKzOSJvDsAKCXsW3aDzvggY42cpDg4vxv3ichb+JKwUsZolmieNZuyPA/r8bDAm06lWPrd5g250=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790182371; c=relaxed/simple;
-	bh=ZsB+iNtZ996/IRzwqCCTAIPrmIEIkRV+EK4V1lIlZc8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gdJLFj8KyvhboBLKWHlldNhpagVrHvHiTA9EQ11h2xZ2zazoiq7/c0YTO4ZWFDf2LuqD3sKhgYnPAm/JcOXq63yM961srHJtQB6SxWMERZAQZi/LZMN3wXTNR2UP69XsI8lET42apKHqulQxtCU6IItnN0rJqHCWa0TK6qzdrRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=aIUt7wJj; arc=none smtp.client-ip=209.85.210.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1790184190; c=relaxed/simple;
+	bh=zVqDY3QHhz61/o9oOsjPRhH1RXoSoxjW5AYr4k5N2a0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Qfrj/Bk9OjUhoHKQPtF0fr++x5kQTzm164t1ttnXm4eeZ23+8gXFH7gaaCKb21X7FcJLmfVikf8KMANTe1crYazWHHVFCiu8vL6ReDYMB+ZrFxudfI/jxPl/5v/uYDCSrGvxvkrDiCXb/4ZxrmrqKq8/YY4mUR1gCxIo96n9d5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=kLUT1bIw; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="aIUt7wJj"
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-805010cbdebso41381a34.1
-        for <io-uring@vger.kernel.org>; Wed, 23 Sep 2026 09:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790182368; x=1790787168; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YIExK7C+1gjxck9oYfNX38MM4fuWrgyse7e3gdiUnPQ=;
-        b=aIUt7wJj/574RO80uOCIXCo5gUmXk5OmBl4YJDmIQD6OS2Q9Hkc28nKs+tCiO+CG/A
-         Db8oleF4h+0WTG/4UVcOqtDOGuSWI+XV1qMDztrXPaom0sz/+jbgQUzn1WS3OvtarSPj
-         V2S0enXCVm6mL0kDLTdMLz3iuROVUlRWcJKauPd7rdx0l4h96rtmW0GbH+ai5/EpHBps
-         Cuu7Fop1DN0QP8lddkZZfbkJoEowTKRd9gvNvf/2AxSRyH87DL1CMZo8eTyjGf99bHiq
-         mEGzNlZ6A1jKvP6hpIepESanRGok1ytupdIn6LsnKH7fIi1rozCvaR4JAiT8B5cApiO9
-         THdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790182368; x=1790787168;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=YIExK7C+1gjxck9oYfNX38MM4fuWrgyse7e3gdiUnPQ=;
-        b=cYqcg0N1p1yRAw9Jf+ECykuGjpAIPjGiDbi1qucji1tQPkU1FKTEoU3DFRvxkgDw7I
-         G3xuW05HwJ7Ao662ixN7tnrupwGUIJdO59YZl8ohenwdB++Pm+0tAc2jOmGKZzDvnnAv
-         j3gTsqIPUCeKogsk7oL3LJiLjwmYLnEKeyz/0eKBUjhQk6OvYDzCkCJKHZSWwh/zU0nU
-         4oZxYCgQRqO3AxTX0RRA1yu9gsucL+eCVOFI5uYg+VdvrGlWP1K2RjAamC3KAjet4fDk
-         hs3V2MVkiVnVngJNMcmmxj1oAWtoInPklnEQRNEcxef8m1h7eFLfSQzZsHtuH3RlFnks
-         17IQ==
-X-Gm-Message-State: AFuF++lbJBi71rkPaHhpqLgzc9dWa90+aqbQ6pQrBj3m1I71bFYe6stF
-	g8g7UL5MkOUbd0nCHivOIqVGUUXI4KT34jAhA/V3++nxvSb72x6VX+zINIfJltQ1gj8t29HnIuz
-	BnuxFvME=
-X-Gm-Gg: AYBFou2VrWo2dJO4ZTy6BzZVuRoDCtIe2tvPKkqANstiabsrhZNvilJrNbtFCKxY5H3
-	Ucd2y226zfLtGrZJT8fIeO9Nq/n9aKJ63HC4lSnCgZUxebSawAoBQSbkM8dGw3td2KCC7tN4mRB
-	IKqzxv7XDUUQN6xw1eYbkRq9mT+7BIe6V1kjuCnmu7DCf16Wd+Bt3p/y4Fcn5YwkXoj044fk2Wl
-	9DgCPePKLpMnjzi4e0Ld4ynLsp61zJFSvUsL66d8sAITYuMwuoYeC8EJUtIS38GPqoaTolx7LNS
-	4UMOklpBfh40pvt5QQWEWHr8fFSq15eGd9s0D8k4U8N4S+3vFo7YWS1xXAtDIICe8WBFMGSvM1/
-	QGVaa2tcc8hOh5VIR5OzRkXxBmLrp5jIUxP+F3vz6zKbcWiJebyrV+xhoHfS9jHWlzhwUeBC66e
-	Nb1eze/AUMZ6zWM7ABuQE4eDn+agFezC1HbANdeetrDGBeNtWoFLeV/YDYpURPEuvOrbkm1GBtq
-	I7k6Lj0lxhJ/Wp1UzqVfZEC8+dkH8yvK7oI0FqAgzWR6g0HCEEVkaw=
-X-Received: by 2002:a4a:ee06:0:b0:6bf:ebd9:6cb4 with SMTP id 006d021491bc7-6d157d8a169mr5153217eaf.8.1790182368245;
-        Wed, 23 Sep 2026 09:52:48 -0700 (PDT)
-Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4908efd9a67sm2238154fac.17.2026.09.23.09.52.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 09:52:47 -0700 (PDT)
-Message-ID: <35640d8a-4a6e-4e86-b553-5d5bdcba6e1c@kernel.dk>
-Date: Wed, 23 Sep 2026 10:52:46 -0600
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kLUT1bIw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Qm
+	jvDmH7U0nEx2P2zYXk+jYlzUqQoozGJXETiQk5K7g=; b=kLUT1bIwDkZXh3np2k
+	Mbw4UZ54q8gJW7QsfbPDC9O+cqobhvtNT63mSXAlcxuITzcWJfoK1s6bH4wtA7jz
+	lzvwuOnYu9kQndkaz27vWX0XnY6D26QUXuIdNr8b22hgDcQOURqScP/4g10SCJPj
+	VW3U77h6tGKKVpTiaoBnIGu68=
+Received: from cason-VMware-Virtual-Platform.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnz0NjCrRqQKRpAQ--.63117S2;
+	Thu, 24 Sep 2026 01:20:35 +0800 (CST)
+From: Xiaochuan Li <chuanx2070@163.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Xiaochuan Li <chuanx2070@163.com>
+Subject: [PATCH v3] io_uring/lock: Keep spinlock release before wake_up()
+Date: Thu, 24 Sep 2026 01:20:32 +0800
+Message-ID: <20260923172032.11057-1-chuanx2070@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260923164849.135000-1-chuanx2070@163.com>
+References: <20260923164849.135000-1-chuanx2070@163.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] io_uring/lock: Keep spinlock release before wake_up()
-To: Xiaochuan Li <chuanx2070@163.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <20260919123021.21318-1-chuanx2070@163.com>
- <20260923161622.25737-1-chuanx2070@163.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260923161622.25737-1-chuanx2070@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnz0NjCrRqQKRpAQ--.63117S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF18GFWDCFyUKryUZF45trb_yoW5CrW3pF
+	W3K34rtFW8XFyq93y7AF1jy342kw4qgw48Grs5G34rArW5XrnIva1ktF4F9F45WrZ7Cry5
+	uF48trWa9a18ZwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U9_-QUUUUU=
+X-CM-SenderInfo: pfkxt0j0sqlii6rwjhhfrp/xtbC7gRjRmq0CmSFlQAA3v
 
-On 9/23/26 10:16 AM, Xiaochuan Li wrote:
-> @@ -574,9 +575,8 @@ static struct io_wq_work *io_get_next_work(struct io_wq_acct *acct,
->  		unstalled = io_wait_on_hash(wq, stall_hash);
->  		raw_spin_lock(&acct->lock);
->  		if (unstalled) {
-> +			*need_wake = true;
->  			clear_bit(IO_ACCT_STALLED_BIT, &acct->flags);
-> -			if (wq_has_sleeper(&wq->hash->wait))
-> -				wake_up(&wq->hash->wait);
->  		}
->  	}
+When CONFIG_PREEMPT_RT enable, raw_spin_lock() will preempt_disable()
+-> raw_spin_lock()
+-> wake_up()
+  ...
+  -> spin_lock_irqsave()
 
-*need_wake = wq_has_sleeper(&wq->hash->wait);
+which will trigger:
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 985654, name: iou-wrk-983605
+preempt_count: 1, expected: 0
+RCU nest depth: 0, expected: 0
+CPU: 3 PID: 985654 Comm: iou-wrk-983605 Tainted: G        O  6.1.83-rt28-g19631eb82f21
+stack:0        ppid:977479 flags:0x00000008
+tgid:977553 prio:120 preempt:0x100000001 rcu_read_lock_nesting:0
+used_cpu 3 wake_cpu 3 on_cpu 3 on_rq 1 migrate_dis 0
+arrive:17423426040675 queued:0 prev_sum:33955300 sum_exec:33955300
+Call trace:
+ dump_backtrace.part.0+0xdc/0xec
+ show_stack+0x1c/0x30
+ dump_stack_lvl+0xac/0xc4
+ dump_stack+0x14/0x30
+ __might_resched+0x13c/0x170
+ rt_spin_lock+0x34/0xc0
+ __wake_up_common_lock+0x68/0xd0
+ __wake_up+0x1c/0x24
+ io_worker_handle_work+0x5b0/0x600
+ io_wqe_worker+0xf4/0x310
+ ret_from_fork+0x10/0x20
 
-? And probably retain the sme ordering with the bit clear.
+Signed-off-by: Xiaochuan Li <chuanx2070@163.com>
+---
+Changes in v3:
+- Defer wake_up() after releasing acct->lock, add need_wake flag
+- keep need_wake from wq_has_sleeper() in the same order
 
-Apart from that, I think it looks fine. The lock shuffling is somewhat
-annoying and inefficient, an unfortunate side effect of the raw vs
-normal spinlocks.
+The v1 patch didn't show up on lore.kernel.org
 
+Link: [https://lore.kernel.org/io-uring/20260923164849.135000-1-chuanx2070@163.com/T/#t]
+
+ io_uring/io-wq.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 2ca223e47d41..2dadde0ca395 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -526,7 +526,8 @@ static bool io_wait_on_hash(struct io_wq *wq, unsigned int hash)
+ }
+ 
+ static struct io_wq_work *io_get_next_work(struct io_wq_acct *acct,
+-					   struct io_wq *wq)
++					   struct io_wq *wq,
++					   bool *need_wake)
+ 	__must_hold(acct->lock)
+ {
+ 	struct io_wq_work_node *node, *prev;
+@@ -575,8 +576,7 @@ static struct io_wq_work *io_get_next_work(struct io_wq_acct *acct,
+ 		raw_spin_lock(&acct->lock);
+ 		if (unstalled) {
+ 			clear_bit(IO_ACCT_STALLED_BIT, &acct->flags);
+-			if (wq_has_sleeper(&wq->hash->wait))
+-				wake_up(&wq->hash->wait);
++			*need_wake = wq_has_sleeper(&wq->hash->wait);
+ 		}
+ 	}
+ 
+@@ -607,6 +607,7 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
+ 
+ 	do {
+ 		struct io_wq_work *work;
++		bool need_wake = false;
+ 
+ 		/*
+ 		 * If we got some work, mark us as busy. If we didn't, but
+@@ -615,7 +616,7 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
+ 		 * can't make progress, any work completion or insertion will
+ 		 * clear the stalled flag.
+ 		 */
+-		work = io_get_next_work(acct, wq);
++		work = io_get_next_work(acct, wq, &need_wake);
+ 		if (work) {
+ 			/*
+ 			 * Make sure cancelation can find this, even before
+@@ -631,6 +632,9 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
+ 
+ 		raw_spin_unlock(&acct->lock);
+ 
++		if (need_wake)
++			wake_up(&wq->hash->wait);
++
+ 		if (!work)
+ 			break;
+ 
+
+base-commit: a8c591ed6b672915e0be57843f943a2a723aff40
 -- 
-Jens Axboe
+2.43.0
+
