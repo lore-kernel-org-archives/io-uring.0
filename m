@@ -1,92 +1,135 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63EFB126BE1
-	for <io-uring@vger.kernel.org>; Wed, 23 Sep 2026 17:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8443A9D94;
+	Wed, 23 Sep 2026 21:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790185042; cv=none; b=sB2SJVd/tZv8whRJipbk8fJLL8Pm0e1Kci2BbH0eItKvL1PaH4Lx3C0f9fZNZSxS0gvtyPJibfU14MO5PMXOhEeBTQGWGTExCoHOX8ieKStRd6qbC9NxIcN2J/pwG+8AocvWhoc+HVH15HWx27Y811k8s3MGXI4pCDfF6nw5tH4=
+	t=1790198004; cv=none; b=Rrs0mD1WSQNz8WqMJenf8wAZs+HIBApdZajqsM70gB91YB/qGhdphJWnRTY43TIp8lL8DEA+Qfy3KXsYnzuUZ+ZWG7zadu0h5C5CaQvbiOmFmekzKeV/NWGbzLHcx4AxhslZKvcRxdMylfX7zRanGm9N6m5OqwjZr9OMH98Zlz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790185042; c=relaxed/simple;
-	bh=L8YBuTzxCFsGJDiFQSbZ8ONNMAwnyDJH3HxExyU4ry0=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RFN1n9URtqtnwipiQIIR0a/4s0ppQMw2/nzmAuZRlvvVnILugDYid8Tr4gqXsbmbrcq4xVWvO8WsKPOAthxwD4TruWArDkupFz3oq4CAPMIZE19Budmqj/vmpxH/iECGl8qAvtVndKBaUs7nLtqvH4ULGyV66P7DvncF61HA1x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=MgcjuyG3; arc=none smtp.client-ip=74.125.231.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1790198004; c=relaxed/simple;
+	bh=f26yBWKPhUC5Yr8NHxGW7wg+gXToXZfatnJiXYTGNZA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=mgU+ygasbHKw4hmE8gRJdGkIv5iSfxD/9L8Vn17YzVrP8dkTXIYY6610TGG88qKSmLcBwzip27RoQuAiZdZlRjFWvIyESBXLIsW0pUPqyUEurG+ubxkeEtD6xByG4BKg4VIBzXHuh9zL3KSIrbMNb57o63Eo2OwxDCHKMKrGK1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MnvRTkqW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Dl/V74wd; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mzekgCNl; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=NjVaDN2T; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="MgcjuyG3"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-47be948a50fso879216fac.0
-        for <io-uring@vger.kernel.org>; Wed, 23 Sep 2026 10:37:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790185039; x=1790789839; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TVQsj4jaJtoAVqzXpmw/AEBGK5pSmcp7fERfpMGZybE=;
-        b=MgcjuyG3luTlDrR9MeADP166C6+9+dZ1A1UiHLlqSbqqqYKCUJXYoP7pRMCt7GPvCa
-         2VytWarGDRgbis57Pd4iH0JMt7HWlkuiBliOb169dUvSdq364RBQPHdF925yIo/uWUch
-         /TqwY7kdLFvh642Y/Uzhaut6e9SU3QClIv50nLcGsWmofuXm5dREbC0GBdw80MqUJLvd
-         5wyfXFsFrnEHV1T5GqScIeuPh5eNAn6x0IQ0K3+TfJk057mGHFqSE9/OlLXJyuQY0aoV
-         3WheAeKWaZKhnIAqiqcwVilsJitGrTG0iHVtHz9qW8xITRWA9xR6mlAjQR/wA/SNCvKo
-         o48g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790185039; x=1790789839;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TVQsj4jaJtoAVqzXpmw/AEBGK5pSmcp7fERfpMGZybE=;
-        b=BnHJKVrgE2D6Ro3ff5p2DUci2Jgz+UkoVqZK/39YOvlbxYx3KTe22OIeVlThVhT6to
-         Nih0WpKJKG0xuKEEvECnWMAeBtN6tXLRH+I3GJGZMqpYTjkBkQWysnv/8gN28rcanrV3
-         bGj0n/me4YblfueLNxzr5RwCO3Rlm7grEGzU6hdaHx8dd9JKkaxOnjVn0jQ7I6AbXnKR
-         CIUdPHwVngYZ9dmPjEZxPlFkttbfJ31w1Vt1tWtfDgplDcJkfiTlVdl2HWaDJgG7f7PK
-         0vHcij3tDdRh1qHO+BJ387ZPF+6D5saCDkutF0syRLB29DmyZDLsQ5sEct3PkLjMfSlB
-         XRww==
-X-Gm-Message-State: AFuF++mpNMOjaLbDenWX32mQ7wDen2jjXczlGnnDZemoftrL81Q2fN59
-	30PPnNJeWWLlkzMIenRVE2ez6w/qj5YBCRNiWM9rctNZDugyJKaeyhl0XnHQ3dUQ7dc=
-X-Gm-Gg: AYBFou2B3/N2sPEapb3+eU23qe308sxOXaVgUFqXmy47GcRPjdon32OdjAS2BWT0AZM
-	mM6P5SlWuXjDr6ppfJYCtxzKlMPtf1PjxPyyajCErrtR507XR1xgbbpOlVrvOrTViBK5/rmz4Xx
-	lnJfTD1G0a5UU4jHj+XBkXCwSEC6TZW/agScBiAXZvj/xpKSojNK0BBsWEFpjN824jB2FmCcMbM
-	Jr413NTzxiQnKO3wC+Ho1DAG55e3Bqc9+4e/leab6v8VuuNJC4bZIJyX8lnnxuYsBpPm0OdyhM9
-	Jag2k6+82ZnXKWiMRSMa96+pBl0pAren99/J5rJXAJN5sjkreXAeezMWe2L/+sBqnPWtIMYHL7i
-	oXI8/qfVlp94xnk8xQwNGo/nGPbxikNYABxwXMFv3nG0hvbsXAT5N+9DtWr17KygvljnPtkkptr
-	8rGR4PYX2kfy9GspfXXksqqOktwumBmDMr82/XMR+DmOvFyBtRu+z+HtWdx8WnH768qmhR4eWrG
-	lFltq8FDOHBAVl5pJAoRGq320PV+TwUQtQ9R4QQapJgOHTI2P8bm7T/yt8TWfwkJA==
-X-Received: by 2002:a4a:e904:0:b0:6bd:7732:adc6 with SMTP id 006d021491bc7-6d2cf849ec3mr3167012eaf.17.1790185039103;
-        Wed, 23 Sep 2026 10:37:19 -0700 (PDT)
-Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d2ce763f72sm3440756eaf.7.2026.09.23.10.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 10:37:18 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Xiaochuan Li <chuanx2070@163.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-In-Reply-To: <20260923172032.11057-1-chuanx2070@163.com>
-References: <20260923172032.11057-1-chuanx2070@163.com>
-Subject: Re: [PATCH v3] io_uring/lock: Keep spinlock release before
- wake_up()
-Message-Id: <179018503811.141390.8170241609331802900.b4-ty@b4>
-Date: Wed, 23 Sep 2026 11:37:18 -0600
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MnvRTkqW";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Dl/V74wd";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mzekgCNl";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="NjVaDN2T"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D802F1FFD1;
+	Wed, 23 Sep 2026 21:13:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790197995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SpUcPJ99ISR+VxiGOE3cGzwgcfucGxbMMh923SWRrWk=;
+	b=MnvRTkqWt8Vy/9sFxMRxAZ882uzD1AjI9IqWd4kDOwltpSvOFYqOFMFkiVAqUj/2uFvACD
+	KsFHbvWGjEfi+jH8qZTkVkXNsd+pEwxMBwktw9PRmElXxqk5eaop9tKrVOxH5vHfdmyC+4
+	liuKFG5YzC42O9z+ofTcAhpeHRRMJYM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790197995;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SpUcPJ99ISR+VxiGOE3cGzwgcfucGxbMMh923SWRrWk=;
+	b=Dl/V74wdvHOc/2X6g6E+cfazHYMo/8nC1G1NR8q8TAT6zD8rf7E3kSIs7YPGCnGg+uTT5V
+	6S7w3w7z3fhYeiDA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=mzekgCNl;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=NjVaDN2T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790197990; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SpUcPJ99ISR+VxiGOE3cGzwgcfucGxbMMh923SWRrWk=;
+	b=mzekgCNl0taczhRWA5De+d8zcp3uxwoFmrqy4qOC4MwH3lsT/T1jOo29yObXlCCw0zQybS
+	s2c6pdwE+hTuKTm66cGzANek14jISCNv8V3C379rZ/GRZg0HX1IvnxPutRIdOFvNryD0TU
+	Y33JmGLOBKMrALE8rfWCvFF14e2i3mA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790197990;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SpUcPJ99ISR+VxiGOE3cGzwgcfucGxbMMh923SWRrWk=;
+	b=NjVaDN2TEF5XK/c89M5VqW6bbEHHt/K6phxDBaM6i8P7nSF7GRz5yQLihAcAYSExHcEjho
+	x8/hhFnuRpF+vHCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 484EA13354;
+	Wed, 23 Sep 2026 21:13:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 0VwcOOVAtGorGAAAD6G6ig
+	(envelope-from <krisman@suse.de>); Wed, 23 Sep 2026 21:13:10 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Xiaochuan Li <chuanx2070@163.com>, Jens Axboe <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, Sebastian
+ Andrzej Siewior <bigeasy@linutronix.de>, Xiaochuan Li <chuanx2070@163.com>
+Subject: Re: [PATCH v2] io_uring/lock: Keep spinlock release before wake_up()
+In-Reply-To: <20260923161622.25737-1-chuanx2070@163.com>
+Organization: SUSE
+References: <20260919123021.21318-1-chuanx2070@163.com>
+ <20260923161622.25737-1-chuanx2070@163.com>
+Date: Wed, 23 Sep 2026 17:13:08 -0400
+Message-ID: <87v77vzn6j.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Type: text/plain
+X-Spam-Score: -4.51
+X-Rspamd-Queue-Id: D802F1FFD1
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-4.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FREEMAIL_TO(0.00)[163.com,kernel.dk];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[163.com];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linutronix.de,163.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,mailhost.krisman.be:mid,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spam-Flag: NO
 
+Xiaochuan Li <chuanx2070@163.com> writes:
 
-On Thu, 24 Sep 2026 01:20:32 +0800, Xiaochuan Li wrote:
 > When CONFIG_PREEMPT_RT enable, raw_spin_lock() will preempt_disable()
-> -> raw_spin_lock()
-> -> wake_up()
->   ...
->   -> spin_lock_irqsave()
-> 
+
+The subject prefix is wrong.  It should be "io_uring/io-wq".
+
+Also, It might be that I just didn't find it, but was there a v1 of this
+patch?  I can't find it on the list.
+
 > which will trigger:
 > BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
 > in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 985654, name: iou-wrk-983605
@@ -109,17 +152,32 @@ On Thu, 24 Sep 2026 01:20:32 +0800, Xiaochuan Li wrote:
 >  io_worker_handle_work+0x5b0/0x600
 >  io_wqe_worker+0xf4/0x310
 >  ret_from_fork+0x10/0x20
-> 
-> [...]
+>
+> Signed-off-by: Xiaochuan Li <chuanx2070@163.com>
+> ---
+> Changes in v2:
+> io_uring/io-wq: fix lockdep warning by deferring hash wake up outside acct->lock
+>
+> The stall wake up path in io_get_next_work() holds acct->lock while
+> calling wake_up() on the hash wait queue, which creates lock ordering
+> acct->lock -> hash->wait.lock and triggers lockdep circular dependency
+> warning.
+>
+> The previous approach of temporarily dropping and retaking acct->lock
+> is racy and juggles the lock unnecessarily. Instead, add a need_wake
+> output flag to io_get_next_work() and defer the wake_up() to the outer
+> worker loop, after acct->lock has been released.
 
-Applied, thanks!
+what previous approach?
 
-[1/1] io_uring/lock: Keep spinlock release before wake_up()
-      commit: 8dc68de64261e599631aa7ed6cdf3aec07c7ae3d
+>
+> This preserves the calling convention that io_get_next_work() returns
+> with acct->lock held, removes the lock inversion, and avoids any racy
+> sleeper checks outside of the lock. Drop the wq_has_sleeper check as
+> bare wake_up is safe and the optimization is not worth the complexity.
 
-Best regards,
+Either way, these paragraphs should be part of the commit message. By
+putting them after the ---, they get dropped at commit-time.
+
 -- 
-Jens Axboe
-
-
-
+Gabriel Krisman Bertazi
