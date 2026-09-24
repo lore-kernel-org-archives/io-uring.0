@@ -1,123 +1,132 @@
-Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy2-f43.google.com (mail-dy2-f43.google.com [74.125.229.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77284BC010;
-	Thu, 24 Sep 2026 20:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B03F443C34
+	for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 22:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790283217; cv=none; b=jg9YtOrkACADWmU3LJy0+L1i419rDz4zXwdCyeoa8wdGkt7Y1XNJ8dTAOvl5ukLqdgTslAzaS9H8dwe+NROgE0uf95Vj6HX3juteQrPn2KXArchXn07VtTRxPrD6I+8BDVpwy5Ba8SpUnvnQHpG41ZQoFIIZsUx+ciP3n43ZqnA=
+	t=1790290797; cv=none; b=JD/nnuMIPRjXpy0EoCZuOUkyIsmtZAGTfrD1kuai7i7Z71jZm6E4KEG1pivo2rxS0nZ7DKlc17GXhQCKpdzJ2XeIgRh1XOmNKNwDDYVOUd1X17PIZHZqmOmF382lgraIs5/8ibxqH6JEoOGqSnAD02xR78XMTySUehPVisdaf+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790283217; c=relaxed/simple;
-	bh=PP6huQE6i0Cw71fIBSGOIjwOvUShfn7NEj4Oci31DIg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=imsDwmg3xUqMDdwt/kVqXKyT8f7DdKOARxAkg9s8dqkvEFSstmCH/ggm3TzdYC/QkOLUwVUEMeBGPgZ5oKAXX26rW7QH7OMsNGMdHSMp4xoQqID5acbXtbBppJR+efCWh+bUvrAM6e0VbiimrnZCVCj90JQ5Qe+5lxx3/uMFvl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=EgF5U1qR; arc=none smtp.client-ip=51.159.188.251
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
+	s=arc-20240116; t=1790290797; c=relaxed/simple;
+	bh=pJS20lYE7XpUn2yFrnpiOdX+vGhq2WQcLhWqRTWScEo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LNOzlgn3sij84jyAIIz2S6nhZX1pAIMSGEc+/6AChcwbEEwQmpad0NpylNKaER/X5l8/lU+oP70wtvUzjmCnLTWFsdysCZSqAcsFiJD/BgPKKnTlyZlmpGwCAOIJu0944Gc4Xgy1a1D+2b0m5kligMxLkuNFsIh52rm0tgMj0Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=oilmx+V6; arc=none smtp.client-ip=74.125.229.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="EgF5U1qR"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Reply-To:Sender:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=7Mf0AHVyhRsT7RC43GpKt8LCS8CINuxBAYo22Aqq6K8=; b=EgF5U1qRc+2MV/W3Ms8CKHPxEV
-	WGNiAnF4CeB8Yw8g/yB8RJ9jjWxzYHNadYPum0wUrAOOn+PQ7VFtKgvniWjqBdewJa8uNf4CLlpVk
-	YwXw6TN78MbOIhkzp5jiBQ+ZbNZNzW+o5J1f4QrF1XIe1045Z4Gdheb9r2NlV6IGPfjP9bqf0jVka
-	S1jzLyqIeuvg5fX+IxJvedw94kZrCnA8ANwcdj7+4dwRYCQibXXk3HiL/5FbvOQ/jp21VseqRIzPS
-	lm0dnD2xU0XXjorAA/6NTG9SB2kdZZbYWoYBodH/Sq+IVHPTKw35gtUIdqMQOgfYNSEICKAcnIXNG
-	kQIT+71A==;
-Received: from [151.115.150.205] (port=42744 helo=gepetto..)
-	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.100.1)
-	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
-	id 1x9qRc-0000000Ga2g-1VSZ;
-	Thu, 24 Sep 2026 22:53:28 +0200
-From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
-Subject: [PATCH] io_uring/sqpoll: pin task across task-work publication
-Date: Thu, 24 Sep 2026 20:50:57 +0000
-Message-ID: <20260924205056.3759980-2-Jeremy.Jean@oss.cyber.gouv.fr>
-X-Mailer: git-send-email 2.47.3
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="oilmx+V6"
+Received: by mail-dy2-f43.google.com with SMTP id 5a478bee46e88-33e46a156f4so134832eec.0
+        for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 15:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790290793; x=1790895593; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uZKY5d3/Dytyzq83xaE0ybg0ezdV/AE3RMLYgKKHzPQ=;
+        b=oilmx+V6M2Cpr0FGNXxL5euQpJ23gaVOdE7tku7DCR5I4TrmRr4F+GT1Sv7XfBB4W8
+         Are6So0xlhA9mJIbzS0WaTWaODWagfInWGW5/cvzeEFjqoD6f+4Tk97qrovIYfGsXqVt
+         nwguhSbcYjHskwxpntVhwIKS0nB65jEuKbegtFDDKJee3UbM6/UccS5muTG5q8T6wbTt
+         I40jCbRt5f2LwZeAPeJpQznbCOrnKMEIJg3artRZxnMaoVaMMjxlurH8+QLMJEbQbXsh
+         ywvNRSmfRZ4AdZPC3MEtMIJy/BmHttum4rxNTsFgc+nPLjDo0+fb4LHrneF8ujxfNTQF
+         bdrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790290793; x=1790895593;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uZKY5d3/Dytyzq83xaE0ybg0ezdV/AE3RMLYgKKHzPQ=;
+        b=ZcUFZxopsxX1iSyMvOjiromhuHMRwSz5EjEBvH7RaXMHOu/GVe5meoAXf3e9kkWJIg
+         IbpEJQT0saYMVRyRieUQ+Kwpa2y7zCZXqvjVPLYcGmHqOcxsAnK8TTuCAI7OYBx+HDyw
+         FdMFsXbXTSbJYstsjStPoYjjxYMQCX//PZY290hVqikHcHTNWIQKoWokTpdisuinX3CG
+         6d+HuYi6rkj246Rjy7kuKlSobY58K3SBXbDOpj9ain3vbbkhgPprftAzEfOBnSqCIEp/
+         H3Rnt5qJvxhodVRjx94B97Z0zJP22xYfRGDSRD9zjENFSwAkuX6ddPPaJaE0nKj+LJIU
+         +PXQ==
+X-Gm-Message-State: AFuF++kAVIzieBvaFmSZLq9Izpd0NG7O9pxtoFG1I6k5aJMTJgMAZI4n
+	3SQxEJnndOzW9EjWca3h4jwGg7lE/hqWYuWggXYYoyfCzt/ggeCdzcCIGCvjCf9chI0=
+X-Gm-Gg: AYBFou37dbrbiqmFcvu+9Io1RqdA1Kf3aEewydq9RaUrnHuA4UfiB0/Uch1Th09mnmh
+	wiyQX+Jj7Cy84/AvIRYGV9BTA0fTDBnrPuaSCpI+QgtGpFUbmGVo6RFAatvB3LECfT7IQIHNf9J
+	O5jbKIy0P2kRQfqcs+Q9BDWL6LOZYG3PkeDs0wL+uUXnnjS2o+JP6zvntwbFVV5A9ljV+wkgu4P
+	AUwnuyWgPfimnLDOiyrWa7hkebuc287NQj43WHqkibRmC855jrtbD6uULVF2mAbZ3o8YtXGheAP
+	+jtcyQo0iy3+lUp4DtGInrrikp90FB5+6t0R33qasaECUO2H/IIOJ+1Fd1iC7rXNLqsubr6dOqa
+	/Az6lj+3YOPoBIebpqMwTP6Pv1GAFN3JcSzaLfBiycSHSJa8Cj/qsHNwngrr1OXRv4Hf5HNgumN
+	2TdIV6vXevos5B+cAPIDnLRG84l9DH6tJzp5sQpb0at0mMUCKUZHKX1E05j3rYOD2QLYcFl/6wA
+	aEDYjf0TLnRsVTRr4eQnvKiYaDP/+xsV1cS9Cdjl4vfeiu2bqrEOQI=
+X-Received: by 2002:a05:693c:66cd:20b0:33b:d8b2:8fba with SMTP id 5a478bee46e88-34002be4d40mr2933698eec.7.1790290792990;
+        Thu, 24 Sep 2026 15:59:52 -0700 (PDT)
+Received: from [172.16.11.208] ([4.39.28.114])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3414407d18fsm1457174eec.10.2026.09.24.15.59.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 15:59:52 -0700 (PDT)
+Message-ID: <096d996d-3028-41ea-bf0c-f7eef1281fcb@kernel.dk>
+Date: Thu, 24 Sep 2026 16:59:50 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/sqpoll: pin task across task-work publication
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260924205056.3759980-2-Jeremy.Jean@oss.cyber.gouv.fr>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20260924205056.3759980-2-Jeremy.Jean@oss.cyber.gouv.fr>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
-X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
-X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 7bit
 
-SQPOLL can consume a request immediately after mpscq_push(). If this
-drops the final ring reference, ctx and tctx may be freed before
-io_req_normal_work_add() finishes using them. KASAN reports:
+On 9/24/26 2:50 PM, J?r?my Jean wrote:
+> SQPOLL can consume a request immediately after mpscq_push(). If this
+> drops the final ring reference, ctx and tctx may be freed before
+> io_req_normal_work_add() finishes using them. KASAN reports:
+> 
+>   BUG: KASAN: slab-use-after-free in io_req_normal_work_add+0x439/0x510
+>   Read of size 4 at addr ff11000000ca0000 by task repro/55
+>   (...)
+>   BUG: KASAN: slab-use-after-free in queue_work_on+0x25/0x70
+>   Write of size 8 at addr ff11000000c3bd00 by task repro/55
+> 
+> Handle SQPOLL before publication. Pin tctx->task, publish the request,
+> then use only the pinned task so the publication tail cannot dereference
+> freed contexts.
+> 
+> Fixes: af5d68f8892f ("io_uring/sqpoll: manage task_work privately")
 
-  BUG: KASAN: slab-use-after-free in io_req_normal_work_add+0x439/0x510
-  Read of size 4 at addr ff11000000ca0000 by task repro/55
-  (...)
-  BUG: KASAN: slab-use-after-free in queue_work_on+0x25/0x70
-  Write of size 8 at addr ff11000000c3bd00 by task repro/55
+Was going to say this isn't correct, as the mpscq is newer than that.
+But I suppose this already existed before that, with the previous switch
+to private task work for SQPOLL? I'll dig into that a bit...
 
-Handle SQPOLL before publication. Pin tctx->task, publish the request,
-then use only the pinned task so the publication tail cannot dereference
-freed contexts.
+> diff --git a/io_uring/tw.c b/io_uring/tw.c
+> index f573bcc3af6a..2e37a3fd7a33 100644
+> --- a/io_uring/tw.c
+> +++ b/io_uring/tw.c
+> @@ -210,6 +210,19 @@ void io_req_normal_work_add(struct io_kiocb *req)
+>  	struct io_uring_task *tctx = req->tctx;
+>  	struct io_ring_ctx *ctx = req->ctx;
+>  
+> +	/* SQPOLL may consume and retire the request immediately after push. */
+> +	if (ctx->flags & IORING_SETUP_SQPOLL) {
+> +		struct task_struct *task = tctx->task;
+> +		bool first;
+> +
+> +		get_task_struct(task);
+> +		first = mpscq_push(&tctx->task_list, &req->io_task_work.node);
+> +		if (first)
+> +			__set_notify_signal(task);
+> +		put_task_struct(task);
+> +		return;
+> +	}
 
-Fixes: af5d68f8892f ("io_uring/sqpoll: manage task_work privately")
-Assisted-by: LLM
-Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
----
- io_uring/tw.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+There's no point in having a 'first' variable. LLM's love bools...
 
-diff --git a/io_uring/tw.c b/io_uring/tw.c
-index f573bcc3af6a..2e37a3fd7a33 100644
---- a/io_uring/tw.c
-+++ b/io_uring/tw.c
-@@ -210,6 +210,19 @@ void io_req_normal_work_add(struct io_kiocb *req)
- 	struct io_uring_task *tctx = req->tctx;
- 	struct io_ring_ctx *ctx = req->ctx;
- 
-+	/* SQPOLL may consume and retire the request immediately after push. */
-+	if (ctx->flags & IORING_SETUP_SQPOLL) {
-+		struct task_struct *task = tctx->task;
-+		bool first;
-+
-+		get_task_struct(task);
-+		first = mpscq_push(&tctx->task_list, &req->io_task_work.node);
-+		if (first)
-+			__set_notify_signal(task);
-+		put_task_struct(task);
-+		return;
-+	}
-+
- 	/* tw run already pending, nothing else to do */
- 	if (!mpscq_push(&tctx->task_list, &req->io_task_work.node))
- 		return;
-@@ -221,12 +234,6 @@ void io_req_normal_work_add(struct io_kiocb *req)
- 	if (ctx->flags & IORING_SETUP_TASKRUN_FLAG)
- 		atomic_or(IORING_SQ_TASKRUN, &ctx->rings->sq_flags);
- 
--	/* SQPOLL doesn't need the task_work added, it'll run it itself */
--	if (ctx->flags & IORING_SETUP_SQPOLL) {
--		__set_notify_signal(tctx->task);
--		return;
--	}
--
- 	if (likely(!task_work_add(tctx->task, &tctx->task_work, ctx->notify_method)))
- 		return;
- 
+		if (mpscq_push(&tctx->task_list, &req->io_task_work.node))
+			__set_notify_signal(task);
+
+would be better.
+
 -- 
-2.47.3
-
+Jens Axboe
