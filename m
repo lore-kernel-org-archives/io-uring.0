@@ -1,113 +1,180 @@
-Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243B8357CF8
-	for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 14:19:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790259571; cv=none; b=j2Itw3tlUQak5/ufowBq5S31oOXagfLQ2rvK95Z3pBiFAWp5zi/GbJAXSq+ibDAtt8lVfUs4fIycOfbJ/za/lBoJYUItIWFWB2NtdSl8IKsIF1cFfX7/HV5TOifYSeYvCep8YtpYIsSthvK/qpQIQv6ySsC2C9MLx/WUJlR03BI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790259571; c=relaxed/simple;
-	bh=TWdASb3MyAf7mGzhM1GabLO0eutszFmZKdYoyrSrb/g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gHVd0Sd6eOlSWpzDk/jtPi2kie1RgdtrBVLitZM23qlJUuw8vNmYaheCsEaRTOq4nAGhEx1t4uPzCpAlg7vJfzNJZewLFefpJeavlpfZ8ViNw6zGBSzFUbG5KSliN40+I46fp70eoeIQwTV/baZBJupkVV8Nrk90vZGtmC21cdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=xUsYOoK3; arc=none smtp.client-ip=74.125.229.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76D849D5BF
+	for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 15:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790262141; cv=pass; b=HxJJgoWEAp+GPWtyk/t/uVf/B51rGAmuMkr/ggvOwuEnx4q0djE8pX/n1VFC6e8CN8D8cRXhsNvZYgwLDn9eLYi7K2Q75rxRuBKXqil3LSqg1n16My92zFpSsp/ZwlhLt0Btbtn17pUNiamWdPbyLoxuzPKoLU1glbux6K0Sp1Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790262141; c=relaxed/simple;
+	bh=ShNN69DhaJyHp2DOgt/K2M0XTHi/ubdDgTbCqzMNj2E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VOzWVZNN6o2gRFka26ahyBzu4qFDS17EXT2nEJZJMz3rZ5g/0yYM5ZhMoqgItSYN6CyS0BqV7n/j/GvPXFA8txtAzRthmpitCE82jEg0aH4kCELxQMsCa5E+iq7hR6+2yH16rzwO/DRg7sbaa+WgTpMDMM9Jp8qWHEhxK3/WyP0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NS8IdrKZ; arc=pass smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="xUsYOoK3"
-Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-328664e051fso2373632eec.1
-        for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 07:19:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NS8IdrKZ"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6aae147ef9dso541a12.0
+        for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 08:02:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790262138; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gJd8OpzItz7AI7xZs46wsjgAMp5xscSlwNW2BXw1uZjg7MaKm611cmG8eaxg1sw7dO
+         ekwd99O8jOIbuaDg5DltKQ65pWb/KeIC2Fy0eW6RMldGNmy4COH3zBp8B0FujEoAX0l4
+         OebWFhNgJEtuEuIIOlhYzrkM8PgMypevwei5pRiyi2DeBVvBJkdTC1mkDEL5Vm657YhB
+         6E07+d3+2Z0Al49JSi/e1Dz/JkTeJS6+KHJbSOTna/08vHtX5e2BOEjcfJhiOEUP31Ps
+         va1UnBfN4fjtC9SlrE4i06Ky1mt5l+mi5s628cxmn3Yu9zwQvDrpPCwfTHTPwK2gGXOK
+         kwEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5ZR1ILn9TYPBwHk6m2pP3jOeJW2/wKuJF/ueaZTjeaY=;
+        fh=QaMCO0UgALMBqdVtRAO5CMOf7ZHpKuzzb4JfEBGG4x0=;
+        b=E3PnoOsi8wP5uk0T3n9h1JNrrPYSAcby5occM9QEtFvto9C0YyQiQukv5VKDK7y5MM
+         E6RQsLcT6vEYfsvZWmu2yDfEmdTN7ayhnDBwRuX3WNDsoXzFxjHVJOW7smDPxErk/oOD
+         y9m04xPr+ji8z52R291olD22InWo73M2XZnVaIGfatk+jSsB31xnZpIwE9S1ELs+YI0k
+         /xIuaKLuV7ADdkxB5+O3jjHBrDT8+Qc46tEw9HQI9YdpgDKsz0wWuWY0TptqkauwjD5k
+         k/QWhIgeDO1Mf0zQIBincmnfjJ4KvyhdI1hitkaUDlUdA5cidr+UKmhQ0CiMlXprzTfY
+         1Y3A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790259565; x=1790864365; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=l5t+RkrxBW/tPG0f8s8vACvjj/UzJW53i35clI9VtqY=;
-        b=xUsYOoK3GAHlCcY3Apa/Z4b/UYuwhAOdAh4pYHuimBtUMwFObIHfZeSd8GtmaKBqyh
-         VNScnMR2fSPIqEpCCsYjigBiLXBr3g1EaT0YYmCUJ4KugsX006BE9dQJ47nv65UnYuGd
-         9sjuAXkibl6VRbaC70Z9QvL9h5eTrdkmTQvuNMfN5fYSNJgMJHRE93sGNB2ht3MowNpV
-         Suq0BxBNGDyVxFPwsC7EovxYj9CmxjJds6rXnn123huZXZcJItEZV6HJZgxfykBJaFFQ
-         kSUADyZ8D5ee3nUtzdtxg/8ktkfurjEmH0H0PaUUuonLrNto10o8WGMyGdjPXsR2ITdv
-         cHVg==
+        d=google.com; s=20251104; t=1790262138; x=1790866938; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5ZR1ILn9TYPBwHk6m2pP3jOeJW2/wKuJF/ueaZTjeaY=;
+        b=NS8IdrKZgZidd/QpJbi/QcgDVNY3tt3WV8wv08VhUXql6HTO/VfH+wjnpNvyjJZkzK
+         gRrkgTtBFJgc9BryrLZcUdx5yxZ73/CUS6i0TLPj2MKXbvTuo3lWVnSwAh0LwssIJI55
+         8wki8zgeegOsHKatZgPpmbPSJRwiIJaQOd34aNpUCEvjxGxceuQJ1a8ecgOFGpAGBteZ
+         LXtg6bZ3sP5lT94lNwMFL4xWv0/8tA6kQespdg5qzuOxknUOA6jpZpstyfVS/7S6EbCW
+         IwnblL8KVnuX/vQ2e853fZx9hcv5K9HGGFPUir3kfEGCpd1C5WUqTKtqkDHt9eldXI3C
+         HMfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790259565; x=1790864365;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=l5t+RkrxBW/tPG0f8s8vACvjj/UzJW53i35clI9VtqY=;
-        b=XeDxRHgkFjJvrz09B9wyrLwEKxtk/nwjioKH7ixrDilGng5bA4oy351tP6UTJ8dtlv
-         gOzECV1+aIiZz06CARYs+RstE96RocqhAalTuZ52O8Syz3cBVwOo10d0t6Cl67BRncqJ
-         hxrYzvWrCc781sdQZGOo1oaUBTP6S1rsvlG5TEN0d+vVEo4fqF+I2VCzufaJr7Zbnsvg
-         4FaQb15YqpcZ7wnGmjGfEQ3h6KDRdGuvI9Y9nl+6ytKqrgLTKfJO2q6fLcynwCeJbs2f
-         lsGMZVowZJB0/6UwMX0AAL2lze7CONaaq2HzfbIoW5/YDEkoZvU8iX9h8lCEda8nPfGl
-         qArQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxu9WExPxkdISjSUY0y8OOb9zGfC4NmJ5r0aEedWXyRBRKvkQui1eImzaT6FluEPdQgjSYDG5XQnA==@vger.kernel.org
-X-Gm-Message-State: AFuF++kky7DLEagziWh8FsyZJ/JYGv7xkVg0juONFSfscAKuhbzdEFQK
-	1DvNaVp8UUthl9PIo7sTA4iCMo5qIne2rgG1IeEeU4t4YcSorYamSMPzUUUvD9miaTQ=
-X-Gm-Gg: AYBFou1GiAQZGUSrpo1q5dn9Kp72MEGnoXh3x6riLq2LYDhRIXS4EzuY0GG7iLAMFr7
-	cTqJuRZi0SgHQzwONsEIjSRXhuuGimx6s8s+nI+rOWcixsdVxXMq5am0ob3PaicMgaFyuZrQhmf
-	0D2BGc21PC03z6GHHHWrVOtHAPy0DPWC5nB6dQJM2mrZvauhEXiz6QaimyPKTqqhYRtMEiFYeC1
-	3oCByL01MHcOhubk0HxcHuXbwy0x1wVuVq6B0vQm0CSoGUG42eJESllirtmpx/06DMhRY1MDoR9
-	hERH9QQjmwSjR8UUy1iJ3WfTiSdzyUbIjyVYAus9M8f84sDN5lQyrNQnV0JdKe/pdWpFms1yjKQ
-	r9CUcRmPyU4d4QYGTjFkRQggHflXzcsYmNgHPh0uiSlX5PXQq/ItQXRkveK/sHUT1vpzFpquLZ5
-	KKzURre9/KBNSCX5rid8HX8ioakcIpclrVBxrZprcENljp1dzRLn5HsxYCqCutEDaasSN+g5hYl
-	dVUiGad7cPoHbJWD1+AwNuMootnOmo9vxi4QkU2oU9TTKXRte7Iq+WeUQ==
-X-Received: by 2002:a05:693c:87c7:20b0:33b:f566:eca9 with SMTP id 5a478bee46e88-34001c1401fmr2175061eec.11.1790259563746;
-        Thu, 24 Sep 2026 07:19:23 -0700 (PDT)
-Received: from [192.168.1.125] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e9684ed70sm12529265eec.19.2026.09.24.07.19.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 07:19:23 -0700 (PDT)
-Message-ID: <e1fb70aa-cc4c-4ed5-809a-e8babd52dacf@kernel.dk>
-Date: Thu, 24 Sep 2026 08:19:22 -0600
+        d=1e100.net; s=20260707; t=1790262138; x=1790866938;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5ZR1ILn9TYPBwHk6m2pP3jOeJW2/wKuJF/ueaZTjeaY=;
+        b=F5x+4w6Dl4Csi5V/4CASV/P4Vy2+jWxVUGMcLwScu8bXZoJ41tprJ4DvMCF/HtvCuw
+         pn7/iohlIreCI3r2hjA3qL6MjlM37h2Xm5f14WwyLSfI/+7ehfCe4YLsTm1/iWh7FhBW
+         IUxmrsacFPArGL4obuO19S9u7nD8Ghj1NQ3o9RVcgVu3A/92vOceKwa89vo188vkBtSD
+         6gExYJuc+HSJRhAJ6XE5xouEN8SDnM47Oh5dkOTWY5R08WgOrf2CmnPabo2VqCJfEnkU
+         HZzdASXmLryMh4lsSUG5nzf9RTU+FCgQ9P0v1Lt+72q/y4BsUEbmYXxxfIR0cfsOXt0K
+         UEJg==
+X-Forwarded-Encrypted: i=1; AKwUvBwyk9J5UCR1BkOgR4Fp4o4ToK61PGlSVdlR9CaVARWhqwyc6vvEX3nJQc+KTb8g3pXcPGwLmugbGA==@vger.kernel.org
+X-Gm-Message-State: AFuF++k4Nd2OgwZ7Ob0UN+AmwMOzUa89/c6DlDsIi894P9Zp42Ql0C8h
+	cFucIYAcQkVwzRgVz9VnJTMe0GqzpGfyR94uYN/uQXWQdWQvu/9zgnjDU0rtt78kPogJZBukRQz
+	mh2ZTRPvuHVFd7tQn2kRBHf8vWv3N28D2zASVWcDY
+X-Gm-Gg: AYBFou2DTM6Z60mBPBjYqyM2A3q8Zlr6CJ7IT0B4xhL/p5PisRWIqXqa5rHxouqtRyT
+	jV07QLyIfJ8oytcKEJge2ZGyLZnqg0gJa1WC/NvHF/yOUrMoRMI0lTNQLzj3AjzsG6Ip/eJ3HC6
+	wYdKPqqsNR/HJI7fMc/UfyIx4q3mrlyxyD1JLS7KYBQQiaLpZ4FLvE4Kk5XjNUxLV6lcki87/4s
+	zN8vUzzsWYJVBU5vj2neAujPu5Pz8/EuPX8OD6gyMN2OgQezI0SQE/gQyCtBug5Le0mUqbTnciJ
+	n+w6m7XjpoKF3FOwyP9I2xKMAdO4VQbrzfTI9cOEMXHBCjLvF92yK3EPazE1U/HUmehnZPAk07W
+	+lI7bGA==
+X-Received: by 2002:aa7:df03:0:b0:6a6:32f6:2841 with SMTP id
+ 4fb4d7f45d1cf-6aac7cd8562mr60719a12.14.1790262136510; Thu, 24 Sep 2026
+ 08:02:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 12/17] exec: cancel io_uring requests before
- de_thread()
-To: Christian Brauner <brauner@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
- Chris Mason <mason@kernel.org>, linux-fsdevel@vger.kernel.org
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
- NeilBrown <neil@brown.name>, Ingo Molnar <mingo@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, linux-mm@kvack.org,
- io-uring@vger.kernel.org, stable@vger.kernel.org
-References: <20260921-work-coredump-fixes-v3-0-8e4adb1619e6@kernel.org>
- <20260921-work-coredump-fixes-v3-12-8e4adb1619e6@kernel.org>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260921-work-coredump-fixes-v3-12-8e4adb1619e6@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260922204348.717198-1-sdf@fomichev.me> <20260922204348.717198-2-sdf@fomichev.me>
+In-Reply-To: <20260922204348.717198-2-sdf@fomichev.me>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 24 Sep 2026 08:02:04 -0700
+X-Gm-Features: AclHuK-Rw22mmYVrW2dkDQdq_DFu4D5I5rl1QgSsMEN2Zfe2L0z7rCIa7BiKQQE
+Message-ID: <CAHS8izPwLBCJXM_0Df8P6S-FVwAq+TaRKn3uTh1h=33Ffj8VmQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/3] net: netmem: add net_iov_area freelist helpers
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, hawk@kernel.org, 
+	ilias.apalodimas@linaro.org, asml.silence@gmail.com, axboe@kernel.dk, 
+	sdf@fomichev.me, bobbyeshleman@meta.com, kaiyuanz@google.com, 
+	linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/21/26 7:45 AM, Christian Brauner wrote:
-> begin_new_exec() cancels the exec'ing thread's io_uring requests after
-> de_thread() made it the only thread in the thread-group. Now
-> io_uring_task_cancel() runs task work after. If it runs a
-> create_worker_cb() item then a io-wq queued on the thread before the
-> exec creates a new io-wq worker thread.
-> 
-> Said thread joins the thread-group which de_thread() just took down. The
-> io-iwq sticks around until it notices that its workqueue is dying. But
-> code after de_thread() relies on being single-threaded.
-> 
-> Move io_uring_task_cancel() before de_thread() but behind the point of
-> no return. Any worker created during task work run from
-> io_uring_task_cancel() is just a sibling thread that de_thread() will
-> take down and reap.
-> 
-> Once io_uring_task_cancel() returned the thread has neither a task
-> context nor a workqueue left so nothing can add a thread behind
-> de_thread()'s back anymore.
+On Tue, Sep 22, 2026 at 1:43=E2=80=AFPM Stanislav Fomichev <sdf.kernel@gmai=
+l.com> wrote:
+>
+> io_uring zero-copy receive and devmem both maintain a bounded LIFO for
+> net_iovs in a contiguous area. Store the freelist in struct net_iov_area
+> and provide common push and pop helpers.
+>
+> Leave synchronization to area owners. Keep devmem's area adjacent to its
 
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
+This could be a follow up change, but I think synchronization should
+be provided by the netmem/niov infra, rather than the area owners. TBH
+the infra providing an unsynchronized data structure and letting the
+area owner use it and shoot themselves in the foot feels error prone.
+For now we could use a comment.
 
--- 
-Jens Axboe
+I also think we should not provide _push and_pop functions, rather we
+should provide _push_bulk() and _pop_bulk(), and the caller can decide
+to only push and pop 1 at a time if they need to. The reason is that
+in allocation paths, we almost always want to alloc in bulk. If the
+infra had the lock it could lock once and alloc a bulk.
 
+The free path is more nuanced. I think _push_bulk() is actually not
+currently that useful, because page_pool_put_netmem_bulk() ends up
+internally looping over individual calls to __page_pool_put_page(). It
+seems like there is a very low hanging fruit optimization possible
+here where we change things such that page_pool_put_netmem_bulk()
+actually does free the entire bulk at once, and if the pp is using a
+memory provider, it uses push _push_bulk() to free the entire stack of
+netmems with 1 lock acquire.
+
+But these can be future optimizations, so,
+
+Reviewed-by: Mina Almasry <almasrymina@google.com>
+
+> lock. Use u32 indices and counts, which halves devmem's freelist storage
+> on 64-bit systems. Reject devmem areas with more than U32_MAX entries
+> before narrowing the count. With 4 KiB chunks, the limit is almost 16 TiB=
+.
+>
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> ---
+>  include/net/netmem.h | 28 ++++++++++++++++++++++++++-
+>  io_uring/zcrx.c      | 25 +++++++++---------------
+>  io_uring/zcrx.h      |  4 ----
+>  net/core/devmem.c    | 46 ++++++++++++++++++++++----------------------
+>  net/core/devmem.h    |  7 +++----
+>  5 files changed, 62 insertions(+), 48 deletions(-)
+>
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index bccacd21b6c3..da885d95ea63 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+> @@ -101,10 +101,15 @@ struct net_iov {
+>  struct net_iov_area {
+>         /* Array of net_iovs for this area. */
+>         struct net_iov *niovs;
+> -       size_t num_niovs;
+> +
+> +       /* Stack of free net_iov indices. */
+> +       u32 *freelist;
+>
+>         /* Offset into the dma-buf where this chunk starts.  */
+>         unsigned long base_virtual;
+> +
+> +       u32 num_niovs;
+> +       u32 free_count;
+
+Why not keep num_niovs a size_t and make free_count a size_t as well
+(so that essentially we can support anything up to SIZE_T_MAX - if
+that exists - num entries)? Do we gain anything by converting these to
+u32? I know in practice in really doens't make a difference, but since
+struct dma_buf->size is a size_t and that's usually the type we use
+for memory sizes we should use it unless we see a reason not to. Tbh I
+don't think the size of the freelist array is a big deal?
+
+
+--=20
+Thanks,
+Mina
