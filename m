@@ -1,145 +1,125 @@
-Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BF546AA8B
-	for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 18:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616304AE8DF
+	for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 19:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790273367; cv=pass; b=Lcogh692vfR0Gyrtt7kDLaV3+mP1tunRv9X/qp1wQYwckMGaHRPS7GHKl61oRfZXeJ/+bfnNDbVJ7oBU2vG+p5HoSQopjxKUe7YANJz4xqvbneqKio74jprmWIr3i9CNgyPqfEky7aWh5NjN1oQDBL859keIhYRjRyrC4FSsAtk=
+	t=1790278020; cv=pass; b=lMuPEbhf2YqV5jklyLCtx2ntz2cNlM76HJ28dqiLC03vUCztLSRP7+KJidC4Eo7HhsfnLH53lWlFKpp8z8IgMSls+wrPgsuwXVFlgsNMlQLhfmPx4KbhAuM5aCVT//kdrqipUpfbBu97H8rltG977k6pUZKuWtpOoQ3lmKaTr60=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790273367; c=relaxed/simple;
-	bh=2EkFOHbtczJ25xIy9v+cbiIrZHbSfV+/ZFifSdlSvm0=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Kue+AnzZLFC5jpAAsDMF5RSxLbMBRk+2j9RxpM/oJJTS4J/XnWLeoOyH46bv9XeLGaMMQkOXGO4rq+2rAQOxG/xFN+C6nIF3T4pfvDnqarPK46m65K7Md4iu80sDg3VWv0KSPcGTrVRStrg6jUt5vBVqcy1tWx4z7pIksc1zB6o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NcFtfn/+; arc=pass smtp.client-ip=74.125.231.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790278020; c=relaxed/simple;
+	bh=yYxa5cHYFz+o6mtZX1mc8GmR4S70HG0QuP15znE6Z74=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A8bCAJ0jTRMLs4T+jCCkfOhRaJWlF7A6ten436Giazbjrx2PzjTNbTtfiYrnMiybY9rRLEndjOS/rRNHYH2MUYNKviOAeVGISLXnela3zvFa5R0he4ipKx+BLKbwp4+bgSU8P9iXvLG1Fd/KSsDRPBrBEZSmssU/jFKJM/7FEwk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PMLUZbty; arc=pass smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NcFtfn/+"
-Received: by mail-oo2-f39.google.com with SMTP id 006d021491bc7-6b1ae6b200fso107298eaf.1
-        for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 11:09:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790273364; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PMLUZbty"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6aae147ef9dso2648a12.0
+        for <io-uring@vger.kernel.org>; Thu, 24 Sep 2026 12:26:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790278012; cv=none;
         d=google.com; s=arc-20260327;
-        b=nYeNFLVgQh0yw1abfDoKfpm1opeirkAODnWoxxWaSQrFGQoTrvfKbGPExw9h3gpQ2o
-         Cza+UwRB9rUZ3JN7fgT2IMO2dTn9Osog9/y6gIqT5RgmE78hnxMXsPR+7qAHxdwFKU/I
-         HCSnYTESs80v6tWc9idVDAn/TiVbbco7QUIIM+wI20n0rFPrLC+WZeGlsndqOv7zJvAP
-         SoG59/BsWhWVLxqC31mxTWIT59H+QhOV/F+biMimbwMB6Gwak4BG25fgYxb8vBaQAUNY
-         5gOIndbZIcLQbFon17rtxQvDAQIR0PuGC89m1nbNjyGt+0ygG1bem+xSviKnkwQzfpzA
-         NvqA==
+        b=GraWFpt1aUWP5pPg/+0YZB9XvwChlSOyE+E0rEnl1VY/AYpTqfu8YvHr2MENMSCr1e
+         v019W/PQPDKDZxcB2KKrLR5HbuwNFIgnEoOzaPTrujzdQNmpv+mWbClyJNDGq6bgTwHr
+         Vun8vFLqqPJOzz6zsgJfCri1fkd9K4FgbAPFufHSFUQcKu004WnOiBrx/8lI1RWRebtj
+         nGDPz1AX8RW2AevoinFESBQby2OLVI0fu9yPyME+hYnZc+K0KeT6eJUNHCjBgxlXz1Rx
+         C8kRAJaD/QDx4mhk1szKambFVK1mawkK8HX+hR+coZSArwS1YLmn+eW6aS5OpZ1J0iom
+         1GHw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=2EkFOHbtczJ25xIy9v+cbiIrZHbSfV+/ZFifSdlSvm0=;
-        fh=36jcj/+NZwuQxJoODN+AsVleiqrdJeCtrpNeL3thujc=;
-        b=Nys16QtP3h0THVD2CeCfYONWlsHb0+dRxBB58GAWHNxuo/k62AFba4JXZmPmdp78tz
-         NG8uKd/fehJNTq6WZsmquMAJbV9I3gJJE601ZBggpRk4Oo5qAd3YOvCZh4BYTlXZdg/A
-         k2+8vs+hufcpDUZNlKM0rlscysVTYG2mUd4nRdUgNyhC509onm4RiwlDHflkpRVLD3cI
-         1IW50qNrN9+2EtuwS0Sz2fNkwlgYXkIET0KEGzg/kbyLV+jRjjQXnB34R/VTy1C4leKr
-         2aFjuZ12n/f8xUR3fm2X4jb9OIWegq4mN60vUpi+9K45FWLZH7mc9phqrNePjYmuxwPj
-         nH/A==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yYxa5cHYFz+o6mtZX1mc8GmR4S70HG0QuP15znE6Z74=;
+        fh=LDjm8y4fPN1Fl+eApd+BA8tl+lnO6tI/hZhr7fBqkV8=;
+        b=dyDQ2FAwOIb55QJT95dBNf8l/hnBB6fEwV9vAkzpqf4Ik2znRs4mjkeF87pOitrpxk
+         1T7sbVNHbYS4+CGi4c0WPEbW4A3W+nDyJHKVhaJgUwciyjCQ3OZsjHputCR/w33KH64N
+         g4zC3jTG6BrsKBOtUr/R8ESG+LLYMWMHzpCJUI0UTk6567/EG3rhTemd2nDbZ4u7Gjv4
+         NBZiZi+MxuQ/IB1LmuHURHaAO3tYo6dHmeJ1Y7u+luApO3sIjD639BOYTM2IE4wwaKqa
+         bKovWBddzP0N9CEFJv3ZzCX7NMW9QGwgCtxAXLQ6GzioiMisN16368kP6eYP8XYdQI82
+         1g3g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790273364; x=1790878164; darn=vger.kernel.org;
-        h=content-type:to:subject:message-id:date:from:mime-version:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=2EkFOHbtczJ25xIy9v+cbiIrZHbSfV+/ZFifSdlSvm0=;
-        b=NcFtfn/+Jxow3K8bNArOLLr2cZfJRbIwMl5c3X9CCd0ZoZKr8ewqPuaGDrWd3KYxy8
-         cmEw+McSe0AJDtPWEgwk8QPc0kKa8vu/cFc5H++CJQCvQ+5g7DtFieAYF95XVbkkIbqB
-         9gL7vEhSU70muCzUk1G/JbXMhZFjwVQ0iHAMjPdTVUieZ17K27timh4xLI7NTIWAJi3V
-         z7S67DCYz3f3jSQn1aGKHiexsUzI765s+SchzKD7rD1I/r6PoGHGc98MFfaEQaylU9Uj
-         Hh2D8gtoGqjR0m435lhP21R2aaCqCxEKLd193EhK4pK6ChAtAub2cTqLWUE/qR2Vwt+9
-         Nd/A==
+        d=google.com; s=20251104; t=1790278012; x=1790882812; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=yYxa5cHYFz+o6mtZX1mc8GmR4S70HG0QuP15znE6Z74=;
+        b=PMLUZbtyMNWUwugoImgCOMKYy5drlDBLGOaShjfC/ebqZbWFtlVhF2WNYIxkuhyRHj
+         b7+7qaK/fsYJplVuBlHNsJPlmCidJNrvRr9FGQn8K/qeK2n7syyBT/bL5dNvDmUTZ0YR
+         YdU3JkQNWjg6grRbdgJowTfaKOL5lG/2TK0pOtJkWGV3ACSuEwAIIVYxX8PREVJzSIQJ
+         TYa4OlNAyW22ep5AfpuNx69ddQAd79jJZ1QvezgJ4+X6/z9gkIhzfkYk8DAZqp0wkXES
+         qBt6JEIb6kuK9BaOqt1fZOYXK+FW45QnYjPpKMKi/YbtdLismBZgwtkhYl+wNv2/aRY2
+         ZPIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790273364; x=1790878164;
-        h=content-type:to:subject:message-id:date:from:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790278012; x=1790882812;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2EkFOHbtczJ25xIy9v+cbiIrZHbSfV+/ZFifSdlSvm0=;
-        b=ZtyTcQqs+/1lw9ELJxL63NGeRKf3ejFYd5npIvGyN6eKjrgPl5u9rJWHJkNIHFN5C2
-         z3F1wDDUgz3rYqHV2QsQBfxqmjxADcEUMRQtdJeRp3r5M9dV00sgcesAiV6NyWaCMpET
-         gIIdeyYFLokSOSffd1vCpSSpifokA37bQt+Qb081uD/BducWtT8wbgoTuenyZaTTcIVN
-         ZAQzkgo6X5L2suMx+Hy00mPrz4M1tYpe2QTq/aED+Bw8kshk/sp0MmO7+qLpsM6eV2sJ
-         GNfWagJ9dCCNjOeYFBxlyN5qLskG1J1+Q9yNSKI+tR4g0GzcAoamvWLvxtiGG3t7YGmp
-         SkUg==
-X-Gm-Message-State: AFuF++nEADEQGHG1aXg/7n61huKY+TX/QY1p8KXThGIsTiD12F7noc7B
-	zFNSCMSh3TeBymoF13xqUwvYGSDLvYb6QD17kGefc07ZHpVRlPhHaA+Mo5iAuwbfPP2yZfpQ9j4
-	+TLauk2kivUvhiL6vKietYY6AVD4UI9CirSpPquM=
-X-Gm-Gg: AYBFou3W47aqVJlhFnWWordFVmdYNIKkp65f5/LWIg2lFM/hd8vBwRDF0YNiIfodsHh
-	8LmR4+UCk5kPpITje4ANZB4DGjXN7Bw2iqELX9sA+fAgovum8luHoO5avHBY0arRPWGNzOfOYxR
-	eHpEtD5DXzBdTZZGFIoYr1dXsQehD++8QLDKA3tKnTLk4fVggfKCkBBo8lLGK9cZOP4eKhYPGRJ
-	HOGZQyDC8OuHU/HDWbp07DMl2uRqWFW2s4WRMIpuS+CEc0bgkD3p3tTBrHQktYrl7/UUKZUjM9S
-	HASW53Yl45yOa0RWH53oPWL26x3mKvO+GVdneAWeIZgo5TZ05BEM6fkN1zAg1FAxQd+UZrHhgys
-	NGV9+1TYNNX7V202SDwBW4Q==
-X-Received: by 2002:a4a:e911:0:b0:6cd:3fcc:96cd with SMTP id
- 006d021491bc7-6d440727618mr2876058eaf.75.1790273364474; Thu, 24 Sep 2026
- 11:09:24 -0700 (PDT)
+        bh=yYxa5cHYFz+o6mtZX1mc8GmR4S70HG0QuP15znE6Z74=;
+        b=LI0aTOBwF07WvCKZVk09NDp8hXii3E8VfD4YHTFWDwE7HAum3hepjXavDZiRn+9V+l
+         GYMqBm7X66KT2YVfBbnAZhZNU1+pJboih5xkTNKVlEGrXo4usUtyIyMC9LWREJY0dTZX
+         b+MgY0LoAVXepqeLD86QGPyZE9CMvplCSb6xKjpiE+7UwZksEeFqesDHxc6HvkMhY2Os
+         TjogIV8Vr0p57U52np+34Ou+q3t0ydBr4q982dArHf19TUV9ZWX99tUi3P+mI/ep3tik
+         t3BXk0QLNkpi77vDkaCzYRHR8zwLOQrvaI6vCT6w18hQjmLxiDI3USLRSXyoDvb+mh2F
+         uEKg==
+X-Forwarded-Encrypted: i=1; AKwUvBw5eiAx6ibfhRecGXzvDBSo0DVsuiDVzoPj+j+sQG5JeW5PjSSWRAoClfGlV4yeOQFr4nQN+bFvoQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++kECtoRVxVTJDzZvWiemhsNMl5vFB2KFcmw4yUifz4CISnuAOOE
+	aj60d48jxufYabQetTs92nL/io9Z8iroc7kSHIpXAST+tgbZtviSMUOB59Sq1YUvX+yxL/+lzEJ
+	4l30PPMIyHlRQmWVagx+b3I2Qmo9uVfI46ELojDnv
+X-Gm-Gg: AYBFou0uf1R8dqMshpOKI9Z6HrndJgTaCvWVXcy3mh0fRphmXVi+OtWlpG5GaPBzd5W
+	T0vBfHWFSwcyLx+CE2BG/ZeXFT0MRLtJ9OQ7EWvYNPQ+B+EsP8b07fOTwo0rEajnJIzcWFjkDzO
+	FQQlqOB04HRzBYavGcXoi+ivzs1RjIPePstJ/xF7MiKzAvAywjHmJE0egJ/2EYBjgzAaGTruMJO
+	N80cbgBMDB68QYZeZsWItV+LicOiKWZuU6TxofyMHqgR8S2k7e2AElMjZjgezfevo30mn/lApp1
+	kqNJG0kuwkhB18AaWO4PCLrTJvquS7Q0ouEmhD9XbT3T5pVsGLiChuTlLus5Xqr6JK2c5P7GPlP
+	/N6b3KhUEYKI=
+X-Received: by 2002:a05:6402:32a:b0:6a6:7385:3eac with SMTP id
+ 4fb4d7f45d1cf-6aae505dec3mr6769a12.11.1790278011541; Thu, 24 Sep 2026
+ 12:26:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: David Kahurani <k.kahurani@gmail.com>
-Date: Thu, 24 Sep 2026 21:10:17 +0300
-X-Gm-Features: AclHuK-UFtDLQMsV18Y4wTPBabatIQ__XOC0_s6nwPVOifgFG4IFCTOuHeX7SZM
-Message-ID: <CAAZOf26tZiTZLsh1717muAospPb95HHAcxqLq0_qmL850+-oPg@mail.gmail.com>
-Subject: Other user-space threading issues
-To: io-uring <io-uring@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>, 
-	linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, tglx@kernel.org
+References: <20260922204348.717198-1-sdf@fomichev.me> <20260922204348.717198-4-sdf@fomichev.me>
+In-Reply-To: <20260922204348.717198-4-sdf@fomichev.me>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 24 Sep 2026 12:26:40 -0700
+X-Gm-Features: AclHuK8Infx3n3fxQpi6yWw-iI-ks1OfMwPCy13lk8MO82P-g6diXI4rh_Dls7s
+Message-ID: <CAHS8izPTz6g8MR6_1v3cu7OEwZhokS7oz6qbi7tU_ZG=yeGz5Q@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/3] net: devmem: decode DMA addresses for TX
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, hawk@kernel.org, 
+	ilias.apalodimas@linaro.org, asml.silence@gmail.com, axboe@kernel.dk, 
+	sdf@fomichev.me, bobbyeshleman@meta.com, kaiyuanz@google.com, 
+	linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Just replying to this :
-https://lwn.net/ml/all/20260911154148.644489-2-axboe@kernel.dk/ but
-because this thread is locked on lwn.net I will do it right here :-)
+On Tue, Sep 22, 2026 at 1:43=E2=80=AFPM Stanislav Fomichev <sdf.kernel@gmai=
+l.com> wrote:
+>
+> On 32-bit architectures where dma_addr_t is wider than unsigned long,
+> page_pool_set_dma_addr_netmem() stores page-aligned DMA addresses shifted
+> by PAGE_SHIFT. The net_iov branch of __skb_frag_dma_map() adds byte offse=
+ts
+> to the encoded value, so the NIC is programmed with an invalid DMA addres=
+s.
+> This can trigger an IOMMU fault or DMA from unintended memory.
+>
+> Consolidate DMA address encoding, decoding, and representability checks i=
+n
+> netmem helpers. Use the common decoder from the page pool and net_iov TX
+> paths so both interpret stored addresses consistently.
+>
+> Fixes: bd61848900bf ("net: devmem: Implement TX path")
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
 
-...............
+Reviewed-by: Mina Almasry <almasrymina@google.com>
 
-
-I know you do ask for this and this not part of the review to the
-patchset it responds to. However, I think this is important enough to
-append here. At least for FYI purposes.
-
-io-uring uses a file model and a file model, from the looks of it( not
-something I have a lot of experience with), seems very leniet in it's
-security model especially from a user-space perspective. For instance,
-there's no way to restrict a process from reading data that belongs to
-another process, if the socket is shared. This is obviously something
-that is probably common across all files. In other words, a shared
-file could possibly be generally said to be, insecure. I don't know
-for sure.
-
-io-uring has file_table construct and a buffer concept. These are
-additional concepts to a filesystem file's private_data. At the same
-time, these objects and members of io-uring will get shared when the
-file is shared across processes.
-
-The above obviously introduces additional security and possibly
-*memory* concerns. If one process for instance setups up an io-uring
-and add somes files into the file table, then the ring gets shared
-with another process, then and now this second process has access to
-the contents of the file_table and possibly files that the first
-process didn't share with it. In fact, the second process can now even
-close files that were opened the by first process and then saved to
-the file_table. Just essentially putting, the second process now
-essentially has total control over files that belong to the first
-process. This and vice versa.
-
-The same thing applies to buffers. In fact, just going with the
-scenario above, whereby we have a first process and a second process
-and the first process configures buffers then shares the ring. The
-second process can for instance, add buffers to the head of the buffer
-list and each time the first process grabs a buffer from the
-buffer_list then this buffer belongs to the second process; the kernel
-doesn't know this and proceeds to write to the buffer and eventually
-the second process can now watch what is happening in the first
-process and the first process is denied access to it's data,
-effectively. This could be a bug even in a normal / ordinary consumer
-operations where there's no malicious users at all.
-
-At the very least, the above are at least issues that are mostly
-fairly inconsequential and probably ill described but, still, I am yet
-to come across io-uring code that works around these problem(s).
-
-Anyways
-
-..................
+--=20
+Thanks,
+Mina
