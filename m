@@ -1,69 +1,69 @@
 Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FC6489FB0
-	for <io-uring@vger.kernel.org>; Fri, 25 Sep 2026 11:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686FA49BD85
+	for <io-uring@vger.kernel.org>; Fri, 25 Sep 2026 11:42:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790334726; cv=none; b=RmOorCWNBGOotvFIMNCkU8oY5YUphaBP5nthFiiWeri6M/srmglthsChYJn6zsPiid4x3z7hxoj4qgeWpMj/abt4AzjFZVEGHVCNe331QPsYEdSact2FtIXHnGq8r1/0jt9hp2b81Z8Tel5NP+lNNk1aSghwPuzz41MYEcUd5Ho=
+	t=1790336562; cv=none; b=VkIkAHVEX+ifcqEuK71TSogxzTrHIdeCaZOyA5QMalvPg/C2hzul0m17cD7tzGTdpa0vi2Gtj4yhn6rFUBqQZUwiP3D7RcBB5/Lx7wMHLR04LIeBGQ3GDIdTjmDJznglOVvTU9o7BBdpRuB+RWtEA94PSiWghNEHI1UhlOQZik8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790334726; c=relaxed/simple;
-	bh=GuW7eXEh2gVczNln7jtlJt8uCjI8l0C1PzUKgYCAbxY=;
+	s=arc-20240116; t=1790336562; c=relaxed/simple;
+	bh=rBJnsaVCHfaOL/WHv+pHL3sj4oETCI/VZTPPqHKVDRU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F9n8rhx2BwAz6gqRe8AdqmJsX5uaLeQt08XyBbtBaDqp3b2Szsd+BGKW5st69Kp/dfFps7fASGD9B6bAQx0y6OKFQTzbYdeyUosJ7qcBp6jE/7LhRotAKLviTyyC9GKJxXGXVAoKPE5+cxDpLRggVg0xrCCJShpdOfEGnn8OnVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YmX9Rq0s; arc=none smtp.client-ip=74.125.225.140
+	 In-Reply-To:Content-Type; b=mnVw0jZDjWd4m17WFiD4Yid8KYOEYhByhhPvVAKHzAa7Uex5NXjui/x+y9YnRkz7XZRXfMM5uXPVCVfLTizfjbE/UhRnX2k+TjEmycMe92OEJl3ycDjYn5dq3GdzpOVeX9brCCiXx+ug3phd7v0/UbxDpXaqL9wcLP8NxrLTjRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wo02HaYP; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YmX9Rq0s"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd38e0e5dso10019315e9.2
-        for <io-uring@vger.kernel.org>; Fri, 25 Sep 2026 04:12:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wo02HaYP"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d37b6so4483905e9.0
+        for <io-uring@vger.kernel.org>; Fri, 25 Sep 2026 04:42:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790334723; x=1790939523; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790336559; x=1790941359; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QUYgotJhZ6LNOKd9OKnwgJyVznPrlzbQCA8QrOOaWH4=;
-        b=YmX9Rq0sXPA2AUzkrD21A/2+kmiQUlAynaMsf08bZzRFzX1Bp+FV4Fs9H7rdvhqbE5
-         LinO2fYd+h1FbNWPb0R0Yn9rztwgKcd9EST3I+XWfJjn+Kw7MNQj2Jv2VxbJmgPLWd1H
-         5+lgwA+7wKlEi3mVK9+LkKEUzLDR6pfywrnZGYYSEdqwz4R/qMMpE1GANHsg1WrRGZA/
-         fpbsNIzC/7m4/CgqWVqZdR/5YLx98R9LNZnEh0uQqpElEGR/lEstMmPH5WmBHbC20nlj
-         ETlbOBZYWuM1kLnAyvwEkLUU8u7eJqitNz15nwIBet8/NlnnUjx5kmmoNJsLiJTn/roO
-         kD1g==
+        bh=ivBplz0pPix7WscLWvh29/mI0h6ugzDIMPQk1yJ2WUw=;
+        b=Wo02HaYPw8gr2wfBPe2GBXKKieIYrT21mArXUtRiRfJo0Niz7rzXN8HnqPJfCp2nEW
+         Yd8J6Q5TgpBD92lq/Lvd9BKUhFVH/phZTfuTbHSfNBTSzGQ3OSxYqXZMXnwfEpJpwPi8
+         vtCwNRWoVKavYWIU38uGKG1v578BZXXqqKLYYrr9v6ZXyhbkFw82FxdYf6nLl3otTxtk
+         2EybzJiYQNbWP6CFcVhx04X/7BT3i3J01Vgzx6L/kxczIBKYfp+3U1nlj0/+9bjQiEPv
+         fV3HPAPYKlSg0fD7ywsJhRhogBvBQUzVO4VRKaI0+lyaF9HuOMzh0H+N+H+3FPwKzNK4
+         q9Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790334723; x=1790939523;
+        d=1e100.net; s=20260707; t=1790336559; x=1790941359;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QUYgotJhZ6LNOKd9OKnwgJyVznPrlzbQCA8QrOOaWH4=;
-        b=g2TyT/9tfNM1jF9tgKsYTKP63hxidvBqww4rJj1rrwQN53b6x0jcmwRvMs7F1d+MWb
-         ktP4D3IuQiwB2ealy5aDQ+fox3+T6thMkhooDxHMUrS9ShGSFSa6cyu9Y8QLvA9r7Oj2
-         HotUb2SjJYag48INAv+HAQ9YJgZn4gy0mxFYMuFA7PW08VmA41zq1B2jzFo51t0v124t
-         l3SJmGt2wdybIB0P4B0Ia7zXc6066hN0OSpJ3fNyrxsGF94+AscqA+5KpIWBQOYQUamy
-         Ix6dIjcrUDy8dOAFpR3zuKdFub6tSRFPY0Dl4ygm1o4iaeu5prtwvaTBw65ercmDvDv3
-         IVtA==
-X-Forwarded-Encrypted: i=1; AKwUvBx7hgt5OasYmtVRPcy2C/FjVDU2uzG7l71ekXJJi3tzStrmFD5r2SZsDaXX4S6teYrDzQugHZu9Uw==@vger.kernel.org
-X-Gm-Message-State: AFuF++k8076HdacDR5KhvlbALbquC2vbk+Uxa5uhUo5O2inGiWYMxNSN
-	Y2S2al37o1NoezV098X4hkH30WhYLmCy6P0AOVTe7SlsA20b4L/ag3zq
-X-Gm-Gg: AYBFou3xE+atIhKDLtLhkjFLbwKslKF+ZMj3qGYbZF/uCCqzT8+i5TC4nmE7dEzXXgg
-	m7A1jk1iT+mFBry0QQGlaBP2PxbbIbT0clfLBZJXQswFns1D7B+G9z/02It7HjbwKi7P3ZPbhjb
-	5M4PgURwuVSXug96PPn7bqxkihPnsRbeKPsyEJFgRxa65ZwEXFy6i/q0RySIiOOtP2LhpvlfWQl
-	haMvNr/8Y4AKiZfDF9WjhkXWa1ntpT+DP5oUniF+NzCgUwd3G1ljKM3I3r/Wh+qmwGDbhQERPty
-	mf5XGT2yjhx/jPWtC6pMstj0dr6We5B2dmapxfwotzUEIXyzw2/iIbNvBHoAeTnU+dt0Lhvds8a
-	YqI1JTIEUdBQI3K3wLjq7YQtqb8ITa9P5S7fr0ELTHBviUK3lseJekiRhlkyasRJmWYC8eP17EK
-	mfVzO6WGuoL6uxoZcdoQ+FyL6R7pt4uPL5OcdJ6QSpv66AsKMtdm5qZP3qOlJRmUnnvtL24TCN5
-	QuU8SxvQRzsuF6+qyxLKjS5uVJ7DBpovKqGDNYILB4wHkmBayvhBAPb/dAV2hnXELFc20vHk3Wb
-	Rk3lMNDqPtjNEehz48PRyP5M/L7mQ6dGvBO69ijhohtoOU4i
-X-Received: by 2002:a05:600c:6207:b0:49f:bd3c:bc20 with SMTP id 5b1f17b1804b1-49fe66ff476mr101883265e9.27.1790334722519;
-        Fri, 25 Sep 2026 04:12:02 -0700 (PDT)
+        bh=ivBplz0pPix7WscLWvh29/mI0h6ugzDIMPQk1yJ2WUw=;
+        b=vMEZeO5Jgn4wjZwshGsYKQyBtVepuxZKUjLYqHA071ZsKHi46N/1NzAMbuBneFhmG1
+         3DMuNggfPYHobv9zigudZZ3kXdhqRO8a3Nitj7dTJPa2MjXsk6MtSiOuiqT3XAWHS+bz
+         Yo7ueCq8XrD8sLRafjTVfu62EyDazdtxVPVX5F3brpyOiuu7qBUS/2sL6uh8iSfg5Qmb
+         x4hCy2+mNfOg1eBVe6sqV4+NLVEcs18vCy/JqP3AmBkVGKQIvVOlIzGoCLptoMT6tP8m
+         Uic93JdaRoJM+FlGLj6Z3M47HBfGi5aUNie1HNCALuAjwEI9lxwUmlZ66s4DynRajN+j
+         miMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzeIMMXC18d2vYIvSwm2ladur9GzrpHwxYPdlP0xuBKoVfdti21Afd1c9eHsZmZBc0oUj+bs/lhMw==@vger.kernel.org
+X-Gm-Message-State: AFuF++n6LofV1h9DVARfmxkXccWYiSGKM95lhzTSwS1XnzOPAPX01zQR
+	ef3VcBFN6+OsCbKMCvpWWlUZBaV4qXcjwlyOtKm1i16FdAE9OEz6C3lE
+X-Gm-Gg: AYBFou07r7++4756mP2PdbnHznzgsqkNxR0IJ+CGwLP3TDzJaB8qW7H/JcPd9npc1NW
+	2fHGYJvMqRsPRAwbT8PIafIYmNPTKcDrQYs0eYdPxECQbKz6TuF95ARlYtFcfZGeTbcHrTyelPC
+	Shoh7/kFZzcuPlV2B5w8vr7HM6CgLnDoJLwH6sgwUD28V/XzTB3L6vTV0viE6EgkAQ726793H6p
+	bvuzbqrE8zPRlUVGfdQWyYpxCdpv66+wbOc8St7PYwsdopXnaCwY6n8oqNNwwBuh0Ms7TIejzWt
+	KMQpxPMJIwib63Ximlt3Z/B/wqIUQqgint2ePVK3VMiiP1BWY7+e/NimOEJrhdlQMFhJz9aG/G3
+	soq3k7J2Qfrxl4FuMF0fBoOP1mZMqVOtXfuBU+809hswp0er48jjeGmNj93WV76HEx23PW7Wx46
+	xD7hPSKoVB5hNbo9x1VS4oU34XEWvvXGZ6larEbKNLfh1aEwM9kCaA5U45Eifv9n7ABOH2NQGsC
+	MpbercNPv2ZKH9IjVXTdfSzk5fwTbPjaFmP9Pzc/3F1PY8DoF9jXRiLZeNWQeVubyHwOdXEC0C+
+	H2PpdKekPYFlQQqZJwhfUBUP4Alcr8v28MflIE41yBvLKQLL
+X-Received: by 2002:a05:600c:37c9:b0:49f:c2ef:cfb9 with SMTP id 5b1f17b1804b1-49fe66c897cmr87889265e9.4.1790336558641;
+        Fri, 25 Sep 2026 04:42:38 -0700 (PDT)
 Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ff0658747sm58978745e9.1.2026.09.25.04.12.00
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a34a638sm6221839f8f.9.2026.09.25.04.42.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Sep 2026 04:12:01 -0700 (PDT)
-Message-ID: <b00ad4a2-d317-4d75-95b1-7d2195c069a9@gmail.com>
-Date: Fri, 25 Sep 2026 12:11:56 +0100
+        Fri, 25 Sep 2026 04:42:37 -0700 (PDT)
+Message-ID: <8d1c634d-f481-4c10-a773-c4cab414f6c5@gmail.com>
+Date: Fri, 25 Sep 2026 12:42:34 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -73,8 +73,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH net-next 1/3] net: netmem: add net_iov_area freelist
  helpers
-To: Mina Almasry <almasrymina@google.com>
-Cc: Stanislav Fomichev <sdf.kernel@gmail.com>, netdev@vger.kernel.org,
+To: Stanislav Fomichev <sdf.kernel@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
  pabeni@redhat.com, horms@kernel.org, hawk@kernel.org,
  ilias.apalodimas@linaro.org, axboe@kernel.dk, sdf@fomichev.me,
@@ -84,16 +84,15 @@ References: <20260922204348.717198-1-sdf@fomichev.me>
  <20260922204348.717198-2-sdf@fomichev.me>
  <CAHS8izPwLBCJXM_0Df8P6S-FVwAq+TaRKn3uTh1h=33Ffj8VmQ@mail.gmail.com>
  <f566591a-cef3-459f-a39e-86addb0c5d7e@gmail.com>
- <CAHS8izOwo2NZGaxtxaMcjDu1APY7ERLjsHN4B_Oucqs4jZafqw@mail.gmail.com>
+ <arVTvlvKsBRNG2aQ@devvm7509.cco0.facebook.com>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAHS8izOwo2NZGaxtxaMcjDu1APY7ERLjsHN4B_Oucqs4jZafqw@mail.gmail.com>
+In-Reply-To: <arVTvlvKsBRNG2aQ@devvm7509.cco0.facebook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/24/26 17:46, Mina Almasry wrote:
-> On Thu, Sep 24, 2026 at 8:41 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
+On 9/24/26 17:48, Stanislav Fomichev wrote:
+> On 09/24, Pavel Begunkov wrote:
 >> On 9/24/26 16:02, Mina Almasry wrote:
 >>> On Tue, Sep 22, 2026 at 1:43 PM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
 >>>>
@@ -112,16 +111,29 @@ On 9/24/26 17:46, Mina Almasry wrote:
 >> I don't think we want it. The duplication is minor, but I'm not set
 >> on the per area index array approach, and it'd make changing it
 >> more difficult.
->>
 > 
-> What is 'it'? I'm guessing you don't want the freelist array put in
-> the net_iov_area at all then? Because even that change will make
-> replacing the freelist array hard to swap? Or are you objecting to
-> just letting the netmem functions do the locking
-I meant this consolidation / patch. Yes, it adds more friction
-but I don't see much benefit. And I can guess why Stan didn't
-include locking, zcrx takes it for additional sync and keeps
-one lock for all areas.
+> Do you want me to not touch iou in this patch at all? Or are you talking
+> about potential future synchronization part?
+
+Sorry, I should've more specific. I meant that I don't think trying to
+consolidate it at all makes much sense, and I'd just drop this patch.
+> I don't see how this is making changing it more difficult, the freelist is
+> now behind push/pop which you can freely change, and both UAPIs benefit
+> from a faster/better freelist.
+
+There are several reasons. If there is any mismatch in how it's done
+b/w io_uring and devmem it'd need to be split back, and then having it
+in struct net_iov_area for devmem only wouldn't make sense. E.g.
+Packaging of {area/offset} pair if converted to a ifq global list might
+differ. And it moves one part of buffer management to another tree, and
+there was already a precedent of patches being blocked for no technical
+reasons; I'd rather minimise cross-tree changes. Synchronisation might
+also be a bit difficult, zcrx uses it to protect more than just the
+freelist modifications, patterns like lock(zcrx_area->common_area.lock)
+in the zcrx code is usually not a great idea. In general, I just think
+the upside is smaller comparing to losing the development flexibility,
+it's not it makes it faster, nor the current code is tricky or complex.
+Hope it explains it.
 
 -- 
 Pavel Begunkov
