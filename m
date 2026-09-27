@@ -1,170 +1,162 @@
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE123BED4A
-	for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 07:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484463C09F7;
+	Sun, 27 Sep 2026 09:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790495004; cv=none; b=ALP3NP4zpV57Zpa0WsfXDF7tz61p5UBey44+5RskUndaCy37kUmaOPZkz2h1h/IfdfA8wfiyZXFGGoit7CfU8/lTmSpBlO3wTzz5TkEmgG/CZpNa6cC08KTXpA+Wq0LPjyLECW5PxHaEtvQmAjlq0seu7jkTcIojThfO3EAG6Tc=
+	t=1790502538; cv=none; b=ucTSZtwFSyX2dmEBabjl/2W82MJVKE/zqBaLmbAG1Diig1+9iP7BOKK2SR6OFXKYb92og6PgynGU12BJH34Q3UGUGEhoB+MmVpndZIzBoY79iKa6RSEx3zMtx0/C9k7h0u+Fl5c8uTHWODaX+/TszfYu/Ps83yB07JD8pC2zJ+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790495004; c=relaxed/simple;
-	bh=ZbJO8Gtrr3QowEw+MFdg2SPLU/ydrrRt2AYrsm/huDQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AQNrEIbZYyNuUmCZwgQ6oNeWvkFIRM+bTgrNIe9HjyQDaODFiZoi6OOEMy+TgnUm9BbiTGhD80UPWJfP1KOOBnSX32tGMGHxYh21guDWhBlfwaQfUZlUSlkWVGux7x6SfNuF5f9XCOuAG14GjLUv6qUNBEQ6uhpw68RmkBzaxw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech; spf=pass smtp.mailfrom=lolli.tech; dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b=ZkSjVc6J; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=OIKR+Ycz; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lolli.tech
+	s=arc-20240116; t=1790502538; c=relaxed/simple;
+	bh=0N09YfjQnytfrMmqji3ExZ4+D2Biz5G2uK3SgMkwFnI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ukCvYm99I4LAuwgpazA2JH58UvIva5ShaDSV6Ctkpz+D+rQetHkPmxJgpyr7BqeqHxN/2MR5diwHOHj5I67kvYgg6qHKJYxLql3DLDxh8RjwgGkkrGORFgRxVSCOnvZupUcJDdZyzgdUCjG+UPyvcuaEs0c8pCTCEeQ6Ptz3zz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JaHG2EPc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b="ZkSjVc6J";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="OIKR+Ycz"
-DKIM-Signature: a=rsa-sha256; b=ZkSjVc6JvujELKTTw8Rg505Q85zmMnPqB6GGGRZnZ6Rz4u2Gh/vUaRWBrizCO0NOCvKTf/3Ews8Y7ByeGH23NoM+1lhaW4wtJJ1U0uoXJ5TYwbk0BWOMTIU/cBg4QT+QCIoC+ydXFUZCMi07eAiw1UXH9B673oZuOoKiy0DpmajQbtN/49WUT2HiEBEEjjpJ9yMM7VXPF0J2QcHOHgxF2Esm9jGJtRZ35UG8o1Wzj/bqK/74qNPzNyzX94aOKYR6b0W6wxWLRO6rcZcbfSOMPEEMzhy9JGHU/CxBtbFd2P4VbMvwIAzzRlWxwrpEqbH7Jhq86tu5yIVgnij4MWFkag==; s=purelymail3; d=lolli.tech; v=1; bh=ZbJO8Gtrr3QowEw+MFdg2SPLU/ydrrRt2AYrsm/huDQ=; h=Received:From:To:Subject:Date;
-DKIM-Signature: a=rsa-sha256; b=OIKR+Yczu5cgkTudlEkr7RCHcU5fOL0v+kFFZRWRW5/ocNhJC6rRhP9TTnxTFDZnT0IbwEGgIVIHOXl7Sfx7qS7kpDzO0R3Th8D2WmUvZTka04YkfJ3hia6xsfmUXO82ehvtx/dTLIXJPeotqSceth5EaPZpONblmf1DLzsEUDWD2/fS68cMqKZK9UAu5a+lYvjNW0UJzBWUR5V6VJeVSlqHPnAY3ePzJcGXCLnS2SvpWczhilAW41pMJuBZFJajApSxWyQKtGDNmIzt68j6pe7pH6KSDZiLnQ1zKMuEzsOldqHZzND9YWa1PTNrKBVA8etGEWT/h9iFn4eKjv1O0g==; s=purelymail3; d=purelymail.com; v=1; bh=ZbJO8Gtrr3QowEw+MFdg2SPLU/ydrrRt2AYrsm/huDQ=; h=Feedback-ID:Received:From:To:Subject:Date;
-Feedback-ID: 1437734:55302:null:purelymail
-X-Pm-Original-To: io-uring@vger.kernel.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1801541329;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Sun, 27 Sep 2026 07:43:08 +0000 (UTC)
-From: lollipopkit <a@lolli.tech>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Willem de Bruijn <willemb@google.com>,
-	io-uring@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lollipopkit <a@lolli.tech>,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/cmd_net: end TX_TIMESTAMP multishot when the CQ is full
-Date: Sun, 27 Sep 2026 15:42:06 +0800
-Message-ID: <20260927074206.65427-1-a@lolli.tech>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JaHG2EPc"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 97ABFC2BCB3;
+	Sun, 27 Sep 2026 09:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1790502537;
+	bh=0N09YfjQnytfrMmqji3ExZ4+D2Biz5G2uK3SgMkwFnI=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=JaHG2EPc2JDja1JrDblw01EeC6ifrHk4Qe6H+OIqITBVjCASUWn3wPXXsaFpAAi8g
+	 rSYedDMguEc9sEtUagUtu4wf0NHfFJc94fIs07m9U+LGqJw0X713yP/AW5arCOqsPM
+	 NLdMSHcIf6cj9ltm0inIta+dD0PqbYZOXtwWqGs6XmXX+FYqZdj1hRuRHUFzlLWmQ8
+	 43VBMyYqicixTRfVWjHSyergkX6QRUkeIsXh7JmaYbWXpZh2gE2KTXtUPiGGxNUh+G
+	 X/EVkwHw4i27rU6TTjACnfkd9NngtZ83ghCzkkR+VpaLY161lKlUdrMmUOLX2cMiJW
+	 T8xk6upSCGzjg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BFB3C9832F;
+	Sun, 27 Sep 2026 09:48:57 +0000 (UTC)
+From: Henrik Ma Johansson via B4 Relay <devnull+dahankzter.gmail.com@kernel.org>
+Subject: [PATCH RFC] io_uring: add IORING_OP_COPY_FILE_RANGE
+Date: Sun, 27 Sep 2026 11:48:56 +0200
+Message-Id: <20260927-cfr-rfc-v1-0-5b9ddbe0490f@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDSyNz3eS0It2itGRd41RDY7PE5MQ0M5NUJaDqgqLUtMwKsEnRSkFuzkq
+ xEMHi0qSs1OQSkBlKtbUAphQPf3AAAAA=
+X-Change-ID: 20260927-cfr-rfc-3e136acaf64e
+To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Henrik Ma Johansson <dahankzter@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4464;
+ i=dahankzter@gmail.com; h=from:subject:message-id;
+ bh=0N09YfjQnytfrMmqji3ExZ4+D2Biz5G2uK3SgMkwFnI=;
+ b=owGbwMvMwCXG83nVLZlv8sKMp9WSGLJ2POt4o3KH8QV/mvbRZTFcFw6aCWq6XFtS69Ancfv2h
+ 4iHi67XdZSyMIhxMciKKbJcqnFdeI7hRq5jyocEmDmsTCBDGLg4BWAi/cYM/93M/p6NSuZmWRvu
+ wHSkLmUe9zunf81fmoTmbIuSZFaaLMLwP1/voLGa6OIfj60OcpUkMHTdMlqxkS+tb7OM1yfWPVP
+ msQIA
+X-Developer-Key: i=dahankzter@gmail.com; a=openpgp;
+ fpr=D27C45A1CE00D86D4164F0600CF3AADA1CF61F13
+X-Endpoint-Received: by B4 Relay for dahankzter@gmail.com/default with
+ auth_id=1067
+X-Original-From: Henrik Ma Johansson <dahankzter@gmail.com>
+Reply-To: dahankzter@gmail.com
 
-SOCKET_URING_OP_TX_TIMESTAMP arms an EPOLLERR apoll multishot and, on
-each error queue edge, posts one 32 byte aux CQE per timestamp skb. Aux
-CQEs have no overflow backing, so io_uring_cmd_post_mshot_cqe32() fails
-once the CQ ring is full. The loop then stops, splices the unprocessed
-skbs back onto sk_error_queue and returns -EAGAIN.
+Hi,
 
--EAGAIN is IOU_RETRY, so the request goes idle until the next poll
-event. io_arm_apoll() forces EPOLLET and draining the CQ does not re-run
-the command, so the spliced-back timestamps stay queued until an
-unrelated later timestamp produces a new edge.
+This adds IORING_OP_COPY_FILE_RANGE, a thin io_uring front end for
+vfs_copy_file_range(). A liburing helper, man page and test follow
+separately.
 
-End the multishot when a CQE cannot be posted, as multishot poll and
-recv already do. There is no partial result to report, so complete with
--ENOBUFS: no CQ space is left for the timestamp CQEs. This command does
-not use provided buffers, so the value cannot be confused with a buffer
-ring running empty. The terminal CQE still reaches userspace because
-request completions can go to the overflow list. The application sees a
-CQE without IORING_CQE_F_MORE, which it already has to handle, and the
-first issue of the re-armed request delivers the queued timestamps.
+Why not splice: copy_file_range lets the filesystem choose how to copy.
+XFS and Btrfs share extents (reflink); NFS, CIFS and Ceph copy server
+side. IORING_OP_SPLICE needs a pipe on one end, so today's io_uring
+alternative is two linked splices through a pipe, which always moves
+every byte. It has been asked for in liburing issues #831 and #1383.
 
-A timestamp that cannot be extracted keeps its current behaviour.
+4 GiB copy + fsync, virtme-ng guest (relative numbers only):
 
-This was found with LLM assistance while reviewing io_uring multishot
-handlers for the pattern behind a RECV_ZC stall reported earlier (see
-Link), and confirmed with a reproducer on v7.3-rc2 and an A/B run of
-this patch.
+                  this op            two linked splices
+  xfs             0.010 s, 0 MiB     3.17 s, 4+ GiB written
+  btrfs           0.010 s, 0 MiB     2.29 s, 4.0 GiB written
+  ext4            3.27 s             3.22 s   (no reflink; both copy)
 
-Fixes: 9e4ed359b8ef ("io_uring/netcmd: add tx timestamping cmd support")
-Link: https://lore.kernel.org/all/010001a0cd914529-23df2f94-bbe0-49cd-ae5d-=
-05922356fa12-000000@email.amazonses.com/
-Cc: stable@vger.kernel.org
-Assisted-by: Codex:gpt-6-sol
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: lollipopkit <a@lolli.tech>
+On loopback NFSv4.2 the copies show up as nfsd COPY operations.
+
+Semantics are the syscall's: the SQE is packed like splice, -1 offsets
+use and advance f_pos, and all checks are vfs_copy_file_range()'s, so
+there are no fs/ changes. The length is clamped to MAX_RW_COUNT since
+cqe->res is 32 bits.
+
+There's no nonblocking path, so it's always punted to io-wq, like
+splice, fallocate and ftruncate. This is not a throughput win: for
+cheap reflinks it is 1.6x (xfs) and 1.2x (btrfs) slower than a
+synchronous call in my runs, because of the punt.
+
+The point is what the punt buys a userspace runtime. Thread-per-core
+runtimes (I'm working on glommio) keep a per-shard blocking thread for
+syscalls the ring can't express, and copy_file_range is one of the last
+runtime-internal users of it, so user work queues behind runtime copies.
+Modelling that with 30 queued 16 MiB copies and a probe task:
+
+                  probe wait, p50     p90
+  thread pool     51-83 ms            52-87 ms
+  this op         28-40 us            45 us - 0.6 ms
+
+Userspace could split its queues instead (Seastar did), but on the ring
+the copy also links with open/fsync/close, completes on the same CQ,
+works with fixed files and can be cancelled: queued copies get
+-ECANCELED, a running byte copy stops early with a short count. One
+caveat: io-wq workers inherit a pinned submitter's CPU mask, which shows
+up as ~3 ms tails, so pinned runtimes want IORING_REGISTER_IOWQ_AFF.
+
+Questions I'd like opinions on:
+
+ 1. Should a short copy break an IOSQE_IO_LINK chain (as read/write/
+    splice do, and as this patch does), or only errors? EOF on the
+    source gives a short count in normal use.
+ 2. audit_skip: set as for the other data transfer ops, since the
+    syscall is in no audit class. Right for an op that can allocate
+    blocks?
+ 3. How should this fit with the thread identity handoff RFC? The issue
+    path works inline or from io-wq unchanged; cheap reflinks look like
+    a good fit for blocking inline issue, long byte copies less so.
+ 4. Only -ERESTARTSYS is mapped to -EINTR (as in net.c). Would you
+    rather reuse rw.c's io_fixup_restart_res()?
+
+Testing: the liburing test passes on xfs, btrfs, ext4, tmpfs and
+NFSv4.2, on release and KASAN+lockdep kernels, and checks error parity
+with copy_file_range(2). No new failures in the liburing suite. Base:
+for-7.4/io_uring at 8dc68de64261.
+
+AI assistance (Documentation/process/generated-content.rst): the patch,
+test, man page, benchmarks and this letter were drafted with an LLM
+(Claude) in a long interactive session: prior-art research, design,
+implementation, and running the tests and benchmarks above. I reviewed
+all of it, and I'm responsible for it.
+
+This is my first time submitting a patch to the kernel and while I have
+been coding a long time this is still a major milestone. I got the idea
+to implement copy_file_range when I was working on glommio that uses
+io_uring heavily. We are currently using a thread pool for this and it
+works but it kept nagging me in the back of my head until finally I
+decided to give it a try.
+
 ---
-Reproduction and validation (measured on this revision):
-- Loopback, one process, software timestamps, CQE32 ring with 16 CQ
-  entries, a burst of 200 SO_TIMESTAMPING sends. The filling edge
-  delivers exactly 16 CQEs. With no further sends nothing more arrives,
-  although the application drains the ring and keeps entering io_uring;
-  more timestamped sends release them.
-  A burst smaller than the ring leaves nothing over and does not stall.
-- A/B in a KVM guest on axboe/io_uring-7.3 (a3bdf68feecc) + this patch,
-  with the new return behind a test-only runtime switch so both arms run
-  the same binary, 10 runs per arm, identical numbers on every run:
-    switch off (upstream behaviour): 10/10 stalled, 184 timestamps left
-      queued, no terminal CQE
-    switch on (this patch): 10/10 terminal CQE with res -ENOBUFS; after
-      re-arming, the queued timestamps were delivered
+Henrik Ma Johansson (1):
+      io_uring: add support for copy_file_range
 
- io_uring/cmd_net.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ include/uapi/linux/io_uring.h |  1 +
+ io_uring/opdef.c              | 11 ++++++++
+ io_uring/splice.c             | 58 +++++++++++++++++++++++++++++++++++++++++++
+ io_uring/splice.h             |  3 +++
+ 4 files changed, 73 insertions(+)
+---
+base-commit: 8dc68de64261e599631aa7ed6cdf3aec07c7ae3d
+change-id: 20260927-cfr-rfc-3e136acaf64e
 
-diff --git a/io_uring/cmd_net.c b/io_uring/cmd_net.c
-index 7cd411fc4f33..90d4ec7cc761 100644
---- a/io_uring/cmd_net.c
-+++ b/io_uring/cmd_net.c
-@@ -69,8 +69,8 @@ static inline int io_uring_cmd_setsockopt(struct socket *=
-sock,
- =09=09=09=09  optlen);
- }
-=20
--static bool io_process_timestamp_skb(struct io_uring_cmd *cmd, struct sock=
- *sk,
--=09=09=09=09     struct sk_buff *skb, unsigned issue_flags)
-+static int io_process_timestamp_skb(struct io_uring_cmd *cmd, struct sock =
-*sk,
-+=09=09=09=09    struct sk_buff *skb, unsigned int issue_flags)
- {
- =09struct sock_exterr_skb *serr =3D SKB_EXT_ERR(skb);
- =09struct io_uring_cqe cqe[2];
-@@ -83,7 +83,7 @@ static bool io_process_timestamp_skb(struct io_uring_cmd =
-*cmd, struct sock *sk,
-=20
- =09ret =3D skb_get_tx_timestamp(skb, sk, &ts);
- =09if (ret < 0)
--=09=09return false;
-+=09=09return ret;
-=20
- =09tskey =3D serr->ee.ee_data;
- =09tstype =3D serr->ee.ee_info;
-@@ -98,7 +98,9 @@ static bool io_process_timestamp_skb(struct io_uring_cmd =
-*cmd, struct sock *sk,
- =09iots =3D (struct io_timespec *)&cqe[1];
- =09iots->tv_sec =3D ts.tv_sec;
- =09iots->tv_nsec =3D ts.tv_nsec;
--=09return io_uring_cmd_post_mshot_cqe32(cmd, issue_flags, cqe);
-+=09if (!io_uring_cmd_post_mshot_cqe32(cmd, issue_flags, cqe))
-+=09=09return -ENOBUFS;
-+=09return 0;
- }
-=20
- static int io_uring_cmd_timestamp(struct socket *sock,
-@@ -135,7 +137,8 @@ static int io_uring_cmd_timestamp(struct socket *sock,
- =09=09skb =3D skb_peek(&list);
- =09=09if (!skb)
- =09=09=09break;
--=09=09if (!io_process_timestamp_skb(cmd, sk, skb, issue_flags))
-+=09=09ret =3D io_process_timestamp_skb(cmd, sk, skb, issue_flags);
-+=09=09if (ret)
- =09=09=09break;
- =09=09__skb_dequeue(&list);
- =09=09consume_skb(skb);
-@@ -145,6 +148,12 @@ static int io_uring_cmd_timestamp(struct socket *sock,
- =09=09scoped_guard(spinlock_irqsave, &q->lock)
- =09=09=09skb_queue_splice(&list, q);
- =09}
-+=09/*
-+=09 * Aux CQEs cannot overflow and the poll is edge triggered, so nothing
-+=09 * re-runs the command once the CQ drains. End the multishot instead.
-+=09 */
-+=09if (ret =3D=3D -ENOBUFS)
-+=09=09return -ENOBUFS;
- =09return -EAGAIN;
- }
-=20
+Best regards,
+--  
+Henrik Ma Johansson <dahankzter@gmail.com>
 
-base-commit: a3bdf68feecc57af5c11fb599f860ac9790ffad9
---=20
-2.54.0
 
