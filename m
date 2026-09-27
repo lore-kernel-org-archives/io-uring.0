@@ -1,69 +1,69 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92C24137B2
-	for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 18:21:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE4B2E2663
+	for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 19:03:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790533269; cv=none; b=jtOfGdcZTneH4hFvBRDYKM8Pg846wBkzVd42WpytT0i8qWTwPUS+vAHPT7FSpH+oKtxTsYLtlIXr8gzxcQ15QdqoqZWEf48BTo4Q/Gq0oxR6FiHC92giVPPI6pxH9RLUg/FRwMT6jnZKJKUaLU9p49zRb5t63L07WL9v/W5MqH0=
+	t=1790535819; cv=none; b=iIYmnVMHIK2/uAK1uA+RR9mVty4DkME8+0WJ6Joj0LD4+zIlkx0S1FKFCvwJ5zlO+h+bcVLZZIhasUZcsokoEi7/Apd1U9HI5ai44ctlFKGE6D+f+YsLBJALrUUs2rg493LKNv9oMEiq6ppNHOlMS/jH5F0A3fvbCIBMHRqF1Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790533269; c=relaxed/simple;
-	bh=4YOrl/IUsekq59nwBYHthtg6XHJ8tNkyhaHdzuM8Rx4=;
+	s=arc-20240116; t=1790535819; c=relaxed/simple;
+	bh=iww9Rrw/7xVmPZYqt+U+P9KcHpNhKk1XEZ9j0Zir8vA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GdYK+YsIh9bdoSu3wlD14XjrSHtn6txbhgw5LswJ3gYeqSEVjL9SDTQC55CEUAZ1rScYDgsovEpsbwVRpk/lVO6UPsCUJVdPBtzZYdkTkiEQ5zKdmUxhr0ztiGbbll6dshZI6R1xw+Ixts2YCwhe69g15qkMjpmKS0pDCTT1GYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bRJV58aM; arc=none smtp.client-ip=74.125.225.141
+	 In-Reply-To:Content-Type; b=crmu8eqRfeKUnY/gDgTyehK34H8AsGlAvmNbKo9MmUqpRngC7vSxYEiSD7g012jKV3JERCIZSDu+UJkSmNLv+Bb7nD/9g18xdLe7Z0cO/eLFtTMLgobVry27a7FRMiW6ukvi8lX/pV29oxfDbRbWArD3ogBCAOY6wm4w2bezXoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=snNZyDmN; arc=none smtp.client-ip=74.125.225.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bRJV58aM"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e6b885ef8so12728345e9.1
-        for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 11:21:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="snNZyDmN"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-4887d06c669so1795532f8f.3
+        for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 12:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790533266; x=1791138066; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790535816; x=1791140616; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=F4pCtdS0O2A3/bCUoBgVtLu5+xYbTigEwA3u5CZgM14=;
-        b=bRJV58aMF3AGG7XcYJkLSsBAUMlOgvDRO9jmlokvzCWVcyPGr6apYzRKjIP4GCHfGW
-         yHsGWkq9oewS35dom9EYD46LOICO+RKNXTcx++pJaqpX3fCVhrhdjeJ+EnBuAljP2HRR
-         T9hg3Ll9Vfb07ma8iSht7yikqTYmaDyO/euAETPJ/go/QCORlvgfEVSQBFDzoejFf9yA
-         CXdZmxTOMEjOFipgPwcMrK5ka/XAd3VL0YuHNXrZyGKj2yZbCaiZxI+sCdd7zLfdNxZv
-         WEBvfNxRFSeXjV+SNjNKpdixAkq4aie5+1OtyuxXqUQhOwnRmDtLemeGkMSXLYH63ak6
-         CR6g==
+        bh=hyA13uQBPobSZN7QEDfmz9E3dETz4qLP4md8sLtn8EE=;
+        b=snNZyDmN31vH2iWiTXD1dogUrWuUcObLz/Egz0tuCZ42V76I5nrwJuAaE2Fw9R/89N
+         FBDrSSBtHJcKk2ACMWA9bO3AYJ70k12dGtBIQW2ahbm3PgzLAyWWzGvZ3GJilIdVHgE6
+         mQvBjppBfXrpHpAjzZXoWmyFUdfi+aDwYtYvRQEMzOTgIxJ5ygIVLmdi+b7IjpG6yy8p
+         aGuObClTT/kPyCXoofYznF5SbSqh+5MfkGUfL++y4YqPCy6R5XjSGtb6Ufm8Fg8bTLu2
+         VdFyOMKuCI81gHHxAXqE7Rm/Lzwt8CYssabJUX/bovswdrZ/8QPv2MZLpblR0QXtaVdJ
+         tw7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790533266; x=1791138066;
+        d=1e100.net; s=20260707; t=1790535816; x=1791140616;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=F4pCtdS0O2A3/bCUoBgVtLu5+xYbTigEwA3u5CZgM14=;
-        b=tBWCEeFUnmt2/TuMBvfX6FMXgoaQEyi6yawHfJpYEq3MLPg7nPCcNgZOhO8+PjZ9+Q
-         0GXa/clKfgHybtINDYcxe4KqQuhnmQ4ReFZdOjyxXvw2qR4JKn9+5tO2XT9+r0KxAkhn
-         7tJW1pvVuyOuY68e5XW2cs2V552tl8UJAuAFarlmL1LhhDmrqFAfaIufPIc3/2bXN49Q
-         hGnlMt1QP3xLTa5pRAZR6xIO51Tg8wQta6s2J/xr3ruDWowyo9HF/T6mD8sl8HongkW5
-         +DsszBbR59nAIMvaUAp6GoWIK9qi/4PuYOLNKy//aZ05k0RhSVHNSzGnNndR6A7RmEjf
-         ocXA==
-X-Forwarded-Encrypted: i=1; AKwUvBwITr+/3JtZ5DsEDzcRznKKmI1zdctReb3Po9YbK3cwglRVPWsVSk6s+aHGQ6WtyczYPu+QKfJQ6A==@vger.kernel.org
-X-Gm-Message-State: AFuF++lF9yQqCKDTO4Um1Myu27gn8lIAojlllodnpsNOLwRSjqv6VKn+
-	9eoPtRFIVZrM4lv0sVsq/Ka03oMw9+xCh6NPaW/zK0QWzsAzzBjVNTHm
-X-Gm-Gg: AYBFou0+jWQAN8f9TEBEw5nB46Q+h5ROx26S76spwyHIsTOvCPMo1u7OHidFm8dtkT3
-	fo6B9YrNuwO2cn9R2+orcztfuDwNSXM0PDZaZjFXLgNkLpx7n5TDPIIZy3xbhCdGFMJsI18h2+T
-	19cwhyzUVysgozsMQMKXFEp66hseEsw5D5EI9IsNOcNTaTmQ0SnNU0PM/m9BawQlPDTFopGY4J5
-	LFqLBJFFOctuCga5EO2P4or/B8AOVMqXXVDKZ/rslMoQmfimVDxFXfDXDU1kgt8SUL0H9QVjDrM
-	SAjK/0phTbyAYADMmb8O/JJLhO+FFDe1y2idJHnnwK98eyWHFYJMQ31cxSIahGspCtuPw/Q9XWj
-	jxzeb3+7rHel9Fn/QTM2MejRVTy/RjHmsJkqIx6u25aF/fPtUWI1t9vEwyO/tFguZePlDJF7Xx8
-	sbrkdaox/GTU+21RsSy1vogIwn8OeQW/g6ZRB5PbatuWDzCGZxGESzasu1fuO20RspbzXP0LWA6
-	kjaVNCbzDCu0kGNroHOtY9ZH2wQcc1zDzwj1oecs8GpbhEgkO46t/GGp7p8LTaImKKMdIoq7zUc
-	MrFobfW5cyTIfujvC0VsEwugq0SqlZJckRU3RpFD4pza+sAO
-X-Received: by 2002:a05:600c:4ecf:b0:4a0:108:3b54 with SMTP id 5b1f17b1804b1-4a001e8c316mr30649455e9.32.1790533265719;
-        Sun, 27 Sep 2026 11:21:05 -0700 (PDT)
+        bh=hyA13uQBPobSZN7QEDfmz9E3dETz4qLP4md8sLtn8EE=;
+        b=NKWFFiqKe6BZqh6ZnHJK6HLAxhNGsDioyHKN8ed4NaJp0LggFH8k6eUuzwm1JWK5Hw
+         LQ7CFeCMGG12iHNVCXcy+MhuAvtX7A1mf3R+i6dnSpGe/wBFFIPI3tT1LVMgRIo+FEF5
+         DrQtp37l6U77Xbxg6GcO6hZrVsBe+LaQruT0JVCej35glmI61NOIkFBd0596Gx32Inpg
+         zpy10n3re+yn4V02qM+BqeTa3ByounmXC7wAt/FHzN4gzLc6FnlsF2Ee5iOZUOAxx9Zp
+         z7ool9fcMmWA3PjxTb0EAbf0BMWpt1FWHOijvD/TA4L5XN8SNrvhFqyZCVUbFcoJumwq
+         gs2Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxsaHLUgdo5YdmD0mfLT6PAxNZY14KtJEjXtBOBFROYGr/YbHX7/kBKQnSQKmnGTNJs+BFC4Y9jWg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKakh9Q/OevXbEDngb4OWOp//1cS6hY+7MSgXub4q+8pvbJbYCZ
+	AQ2ji9iT/PG0wOHZErpoRG40Oi44HGhW4xKXzx2xw6UumlNs2FaJ1jGj
+X-Gm-Gg: AYBFou2oHhRoP+oduHbOwy8kIofGHxt2FVpLRNP2MdR1qhd6NqcZBihBrgjloFRe/JS
+	Sw+VF9AhfVGk9QqiH6bVteo90gaVahGOVCynO7GxFNQQZM7RhFXmcwlSKqNMljEjWODSnBZxYg3
+	hPhP3bYSKzdjYDSYc4NkCGB2NqOc4RIWemGQLtC/JCJ/pMbX/8IEpcVPT1xyd+dXdn/aoaPY9Q9
+	WZeqAe5ZYItf4PaebXhD8Cg3JxDNNF+OfXNKxDU0Y2hNUwfio2n2KCf79mvUoZIbu5OXzk8Ckn8
+	Y0RCX6AwINXOAlnXYbWbOXeiAVoKN+STr7K7aZOwBZy9YSHksfzhUrWYjH5IgXZG5v7baXl+9JA
+	gB+kPPoR/ubJF0ENJIrtosgSDysVtnjGcaSpDJUdaQGPeNZU2I/pqVenYDsJPxoe/eNKAFWqMFW
+	RaqV5KKjT3m3sYATgGHH5jT7HGceypo+wZv0b3ISsS+zv8ShNF3nxZqgMr7f2tPHzin8mgj0x8Y
+	QvgUHjic/Oli9jpzthdqJddqpQzbHKGHJuN6TI+9OUXYCJfwye8UnmT8FAyTrT+Z0iZAfZHCjiJ
+	XfAYqCEmXD/SOcpf01jckqrMGdPGPZsjmNCf7dv8+rwIqIig9YifTH6UhMM=
+X-Received: by 2002:a5d:5f08:0:b0:488:89af:e95b with SMTP id ffacd0b85a97d-48889afec11mr7503670f8f.8.1790535816106;
+        Sun, 27 Sep 2026 12:03:36 -0700 (PDT)
 Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fef60da94sm160803085e9.4.2026.09.27.11.21.03
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a349a0esm30979151f8f.10.2026.09.27.12.03.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Sep 2026 11:21:05 -0700 (PDT)
-Message-ID: <4bd67243-eccc-4c4d-896e-e88770b1967f@gmail.com>
-Date: Sun, 27 Sep 2026 19:21:02 +0100
+        Sun, 27 Sep 2026 12:03:35 -0700 (PDT)
+Message-ID: <5b65f83b-d30b-414c-bb71-197f72feb367@gmail.com>
+Date: Sun, 27 Sep 2026 20:03:34 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,60 +71,38 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 3/3] net: devmem: decode DMA addresses for TX
-To: Stanislav Fomichev <sdf.kernel@gmail.com>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, hawk@kernel.org,
- ilias.apalodimas@linaro.org, axboe@kernel.dk, sdf@fomichev.me,
- bobbyeshleman@meta.com, almasrymina@google.com, kaiyuanz@google.com,
- linux-kernel@vger.kernel.org, io-uring@vger.kernel.org
-References: <20260922204348.717198-1-sdf@fomichev.me>
- <20260922204348.717198-4-sdf@fomichev.me>
+Subject: Re: [PATCH] io_uring/zcrx: requeue multishot receives stopped by a
+ local resource
+To: Junyuan Feng <a@lollipopkit.com>, axboe@kernel.dk
+Cc: dw@davidwei.uk, io-uring@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <010001a0cd914529-23df2f94-bbe0-49cd-ae5d-05922356fa12-000000@email.amazonses.com>
 Content-Language: en-US
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20260922204348.717198-4-sdf@fomichev.me>
+In-Reply-To: <010001a0cd914529-23df2f94-bbe0-49cd-ae5d-05922356fa12-000000@email.amazonses.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/22/26 21:43, Stanislav Fomichev wrote:
-> On 32-bit architectures where dma_addr_t is wider than unsigned long,
-> page_pool_set_dma_addr_netmem() stores page-aligned DMA addresses shifted
-> by PAGE_SHIFT. The net_iov branch of __skb_frag_dma_map() adds byte offsets
-> to the encoded value, so the NIC is programmed with an invalid DMA address.
-> This can trigger an IOMMU fault or DMA from unintended memory.
+On 9/23/26 10:20, Junyuan Feng wrote:
+> A multishot RECV_ZC can go idle with unread TCP data when a receiver-local
+> resource runs out. An empty copy-fallback niov freelist returns -ENOMEM;
+> a full CQ returns -ENOSPC. After partial progress the stop reason is
+> lost: io_zcrx_copy_chunk() and io_zcrx_recv_skb() report the copied
+> bytes, and tcp_read_sock() drops an error from a later call once earlier
+> data was consumed. The edge-triggered request is then not requeued, so
+> it cannot consume the remaining data until another socket event arrives.
 > 
-> Consolidate DMA address encoding, decoding, and representability checks in
-> netmem helpers. Use the common decoder from the page pool and net_iov TX
-> paths so both interpret stored addresses consistently.
-> 
-> Fixes: bd61848900bf ("net: devmem: Implement TX path")
-> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
-> ---
->   include/linux/skbuff.h          |  7 +++++--
->   include/net/netmem.h            | 27 +++++++++++++++++++++++++++
->   include/net/page_pool/helpers.h | 10 +---------
->   net/core/page_pool_priv.h       | 14 ++------------
->   4 files changed, 35 insertions(+), 23 deletions(-)
-> 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 421f6fc45451..3740d4b15b70 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -3833,9 +3833,12 @@ static inline dma_addr_t __skb_frag_dma_map(struct device *dev,
->   					    size_t offset, size_t size,
->   					    enum dma_data_direction dir)
->   {
-> +	dma_addr_t addr;
-> +
->   	if (skb_frag_is_net_iov(frag)) {
-> -		return netmem_to_net_iov(frag->netmem)->desc.dma_addr +
-> -		       offset + frag->offset;
-> +		addr = netmem_dma_addr_decode(
-> +			netmem_get_dma_addr(frag->netmem));
-> +		return addr + offset + frag->offset;
-Looks like just page_pool_get_dma_addr_netmem(). Just a note, but it'd
-be nice to rename netmem_get_dma_addr() into something less confusing
-as well.
+> Record in io_zcrx_recv_skb() when a walk stops before consuming the
+> length it was offered, and requeue if the pass still returned data. The
+> failed chunk is first on the next pass. The resource is usually still
+> exhausted by then, so that pass fails at once and ends the request with
+> an error CQE, which the application must handle by re-arming. The
+> request does not spin, and the stall becomes a visible error. Keep the
+> existing skb limit and SOCK_DONE handling.
+
+Looks good
+
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
 -- 
 Pavel Begunkov
