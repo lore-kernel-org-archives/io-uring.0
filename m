@@ -1,143 +1,170 @@
-Received: from mail-oo2-f38.google.com (mail-oo2-f38.google.com [74.125.231.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9923B634E
-	for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 02:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE123BED4A
+	for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 07:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790477247; cv=none; b=upp7l5rkd9duz94Vjyu3vx17CpomQchEjIyPM5ykN8PXG2hqxtoTuxg6g/kz7rS5uXnJ9VgYGYSSK6BTL2fRWIqT4xupHAI80xru7rjCGhsUxf+yubCcPUBEbbqU1XfBO0XKTRAmguicD/LohEuU4f18RxV2iPY0vxvob6Jzzg4=
+	t=1790495004; cv=none; b=ALP3NP4zpV57Zpa0WsfXDF7tz61p5UBey44+5RskUndaCy37kUmaOPZkz2h1h/IfdfA8wfiyZXFGGoit7CfU8/lTmSpBlO3wTzz5TkEmgG/CZpNa6cC08KTXpA+Wq0LPjyLECW5PxHaEtvQmAjlq0seu7jkTcIojThfO3EAG6Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790477247; c=relaxed/simple;
-	bh=sw1FsZk3EXWJSZs1rgYit1v3sgrB+52CTgcM/JeRkS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=niA+BM+rs/6dZU3HwI5zmj4cpnfXBqmDYKyzhsxvklwDDI22nh9aYgtVZvLKNTynmg1fURt80EAUOdFnv7FuE1AQ5khSPeLUSMd1yQXM3TsAhlEIKYjL0KZSQNfpwaGIOrvqSuMLnaQITKHF1hL53kKvNi7zOgNePONegWe2XZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NXmw60ZT; arc=none smtp.client-ip=74.125.231.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790495004; c=relaxed/simple;
+	bh=ZbJO8Gtrr3QowEw+MFdg2SPLU/ydrrRt2AYrsm/huDQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AQNrEIbZYyNuUmCZwgQ6oNeWvkFIRM+bTgrNIe9HjyQDaODFiZoi6OOEMy+TgnUm9BbiTGhD80UPWJfP1KOOBnSX32tGMGHxYh21guDWhBlfwaQfUZlUSlkWVGux7x6SfNuF5f9XCOuAG14GjLUv6qUNBEQ6uhpw68RmkBzaxw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech; spf=pass smtp.mailfrom=lolli.tech; dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b=ZkSjVc6J; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=OIKR+Ycz; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lolli.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NXmw60ZT"
-Received: by mail-oo2-f38.google.com with SMTP id 46e09a7af769-7f4f0d37f9dso909044a34.1
-        for <io-uring@vger.kernel.org>; Sat, 26 Sep 2026 19:47:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790477244; x=1791082044; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GBbvPJsBSWZjdVvkKhQVMvVffAad735JPJh2cGJmwo0=;
-        b=NXmw60ZTkPfjTHSYZrdrUztbze+i2DL8ptGE4+KxgnOiIbPFij0M8+LYt+V0S1femP
-         /tPrBLsbArNSZrqykexvoWsY26DIFWYaL75LpIlnYze4pFfH7ebgXX1St69zLkDR/Pk8
-         zw77sIrTOX6klrfopFPEQXpewLIP1Z6z+8au+ChTS2ODwAZzBJdPD62v2h0ZFJsBVctb
-         +lwmksB2ucwrB0oSNvqrD2oMloXSsKdo6d4UrEsCn5VSTq0H1fB+qUznMql3ixyppsMm
-         tGAYBMX+KOXVEnOBNtPVqFAzXElMeFmyiKdgRTbzvzd+vDdoWasCXJcGVKxpdJtK6jh3
-         cHug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790477244; x=1791082044;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GBbvPJsBSWZjdVvkKhQVMvVffAad735JPJh2cGJmwo0=;
-        b=afIyk5ia5wCHj/1TFP3lPuMB/b+6GwpmPDMgPQY95bc9dGW5rMclvDaCx7Y/hqm4S8
-         7wg0+11qfoAK8C6xU3qUdp8E4IKbV1hdl8PBo/28ruDRXsWtmlnXmKvQUu+ZFE5ZzbfU
-         e9Lfq17sdH0xIfcDi/8IeWoEz+tc3byTQtlFSLkstw2hDIz1wdPJmRiR12bgawypp9Ca
-         PYNY2PaBcB0r7bPACRL/y7z29q0khKwgHDrE5EA1Ytjwiu7SLYVi90LlXV8gGCkq8QZh
-         GEpYShzhfyLGXUOlhkB/HWakezG0pFsyVXTVPzY1boEkaIq2ya3f8bLmmgMxhEopJgPA
-         tqNQ==
-X-Gm-Message-State: AFuF++nKVurR9KaM84drwzpjkAZbaBavfKNLmupjWVmKDsgxgvmpT3q0
-	+3DxzY8IDwKiIyKb6UVBkusbPB5Wy5AFbK310rfKnUoGdfIvTh1ZSbjSvZDlXg==
-X-Gm-Gg: AYBFou19yY6VgmbYPkbR3XabGbvWnUSY4lmRhFS8VeV6TCWERrKq4fQyrykiEbXfbrQ
-	mf3CqZQacf8TD+ltTFPSV1VKuJod27OWa0gTMFRrigcpw8/APsgT65mSvo7BF/aFBkmpBJsngis
-	VpVvZErx4VXb4vpNoZW+bqnTq+D3Y1wvSvMRtglcWeaZXod+I6YU/toiKx+kx/x/+1mLbuvdYF6
-	0czsar5Va4q4vwyYTqrDT5DCLWxDHj3FmR9KhJ0nWlsP6mXbRsYLU+ulgV/LbsISXZSaNwdfEWd
-	hH+g8mS8GWRRsqK5jFB4wJnegukK24hFkE15FO56zQpjtVuN1TRUyfKo3xm7oFBx8EbxIZrFpta
-	kY3rlHq35Qfb2Zv2xd403kt8jE4zEzIPollgklGnwdynvE9z3Th3XNbpXDQfETjqptrWtSI+fQb
-	US6rkKNaBv67xJyEuMDlA1CNCOuqjhBLhyk2lioHYsoUV1nodIo0Fx3qdihY55Ny+5apcIZxgUg
-	6XgcYQ8M5sRrchUJR6CX2Ky3o/RoPQMhBTainfw2RPXy02fYBnyE60KMi4bNsJzwpPBUQSqV5Ch
-	15h9t7FFPIFgF0k=
-X-Received: by 2002:a05:6830:6686:b0:7f4:edd8:b7eb with SMTP id 46e09a7af769-81780d976d8mr11093358a34.6.1790477243868;
-        Sat, 26 Sep 2026 19:47:23 -0700 (PDT)
-Received: from fedora-laptop ([172.245.82.59])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-818e33f6714sm6626099a34.0.2026.09.26.19.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 26 Sep 2026 19:47:23 -0700 (PDT)
-Date: Sat, 26 Sep 2026 21:47:17 -0500
-From: Ming Lei <tom.leiming@gmail.com>
+	dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b="ZkSjVc6J";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="OIKR+Ycz"
+DKIM-Signature: a=rsa-sha256; b=ZkSjVc6JvujELKTTw8Rg505Q85zmMnPqB6GGGRZnZ6Rz4u2Gh/vUaRWBrizCO0NOCvKTf/3Ews8Y7ByeGH23NoM+1lhaW4wtJJ1U0uoXJ5TYwbk0BWOMTIU/cBg4QT+QCIoC+ydXFUZCMi07eAiw1UXH9B673oZuOoKiy0DpmajQbtN/49WUT2HiEBEEjjpJ9yMM7VXPF0J2QcHOHgxF2Esm9jGJtRZ35UG8o1Wzj/bqK/74qNPzNyzX94aOKYR6b0W6wxWLRO6rcZcbfSOMPEEMzhy9JGHU/CxBtbFd2P4VbMvwIAzzRlWxwrpEqbH7Jhq86tu5yIVgnij4MWFkag==; s=purelymail3; d=lolli.tech; v=1; bh=ZbJO8Gtrr3QowEw+MFdg2SPLU/ydrrRt2AYrsm/huDQ=; h=Received:From:To:Subject:Date;
+DKIM-Signature: a=rsa-sha256; b=OIKR+Yczu5cgkTudlEkr7RCHcU5fOL0v+kFFZRWRW5/ocNhJC6rRhP9TTnxTFDZnT0IbwEGgIVIHOXl7Sfx7qS7kpDzO0R3Th8D2WmUvZTka04YkfJ3hia6xsfmUXO82ehvtx/dTLIXJPeotqSceth5EaPZpONblmf1DLzsEUDWD2/fS68cMqKZK9UAu5a+lYvjNW0UJzBWUR5V6VJeVSlqHPnAY3ePzJcGXCLnS2SvpWczhilAW41pMJuBZFJajApSxWyQKtGDNmIzt68j6pe7pH6KSDZiLnQ1zKMuEzsOldqHZzND9YWa1PTNrKBVA8etGEWT/h9iFn4eKjv1O0g==; s=purelymail3; d=purelymail.com; v=1; bh=ZbJO8Gtrr3QowEw+MFdg2SPLU/ydrrRt2AYrsm/huDQ=; h=Feedback-ID:Received:From:To:Subject:Date;
+Feedback-ID: 1437734:55302:null:purelymail
+X-Pm-Original-To: io-uring@vger.kernel.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1801541329;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Sun, 27 Sep 2026 07:43:08 +0000 (UTC)
+From: lollipopkit <a@lolli.tech>
 To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, tglx@kernel.org, mingo@redhat.com,
-	peterz@infradead.org
-Subject: Re: [RFC PATCH 00/15] io_uring: thread identity handoff for blocking
- inline issue
-Message-ID: <ariDteQPQ7BGtZZW@fedora-laptop>
-References: <20260911154148.644489-1-axboe@kernel.dk>
- <arfs_kX_gkH1o_S-@fedora-laptop>
- <0367c089-a2da-42ad-ae9f-fc61dd220d1a@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	io-uring@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lollipopkit <a@lolli.tech>,
+	stable@vger.kernel.org
+Subject: [PATCH] io_uring/cmd_net: end TX_TIMESTAMP multishot when the CQ is full
+Date: Sun, 27 Sep 2026 15:42:06 +0800
+Message-ID: <20260927074206.65427-1-a@lolli.tech>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0367c089-a2da-42ad-ae9f-fc61dd220d1a@kernel.dk>
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Content-Type: text/plain; charset=UTF-8
 
-On Sat, Sep 26, 2026 at 04:06:02PM -0600, Jens Axboe wrote:
-> On 9/26/26 10:04 AM, Ming Lei wrote:
-> > On Fri, Sep 11, 2026 at 09:40:50AM -0600, Jens Axboe wrote:
-> >> Hi,
-> >>
-> > 
-> > ...
-> > 
-> >>
-> >> This is obviously an RFC, in terms of what I'd love people to take a
-> >> closer look at:
-> >>
-> >> - The scheduler hook and the identity move itself, kernel/thread_handoff.c.
-> >>   Is the set of refused states complete enough, and is moving
-> >>   thread group leadership this way (the leader must stay first on
-> >>   ->thread_head, like de_thread() keeps it) acceptable / kosher.
-> >> - The x86 and arm64 register state handling. x86 refuses AMX users,
-> >>   and arm64 refuses SME.
-> >> - Whether anyone relies on a task's user identity staying on one
-> >>   task_struct in ways not covered above in the series.
-> > 
-> > This way may break ublk server given 'task_struct *' can be changed
-> > because the server issues blocking OP(fallocate, ...), then the
-> > `current` check in ublk_dispatch_req() can be hit.
-> 
-> Yep, which is why is isn't enabled there.
+SOCKET_URING_OP_TX_TIMESTAMP arms an EPOLLERR apoll multishot and, on
+each error queue edge, posts one 32 byte aux CQE per timestamp skb. Aux
+CQEs have no overflow backing, so io_uring_cmd_post_mshot_cqe32() fails
+once the CQ ring is full. The loop then stops, splices the unprocessed
+skbs back onto sk_error_queue and returns -EAGAIN.
 
-If you mean .blockable isn't set for IORING_OP_URING_CMD, it can't avoid
-this issue, because io->task crosses IORING_OP_URING_CMD, and one
-io-uring(fallocate) changes ublk server's `task_struct *`. It can be
-solved in ublk driver by storing and checking tid.
+-EAGAIN is IOU_RETRY, so the request goes idle until the next poll
+event. io_arm_apoll() forces EPOLLET and draining the CQ does not re-run
+the command, so the spliced-back timestamps stay queued until an
+unrelated later timestamp produces a new edge.
 
-The usage is similar with prctl(PR_IO_FLUSHER).
+End the multishot when a CQE cannot be posted, as multishot poll and
+recv already do. There is no partial result to report, so complete with
+-ENOBUFS: no CQ space is left for the timestamp CQEs. This command does
+not use provided buffers, so the value cannot be confused with a buffer
+ring running empty. The terminal CQE still reaches userspace because
+request completions can go to the overflow list. The application sees a
+CQE without IORING_CQE_F_MORE, which it already has to handle, and the
+first issue of the re-armed request delivers the queued timestamps.
 
-> Known gaps are LSM state kept in the task rather than the cred, and
-> PR_SET_IO_FLUSHER. Neither moves, and not moving them can only ever
-> restrict.
+A timestamp that cannot be extracted keeps its current behaviour.
 
-A spare forked before PR_SET_IO_FLUSHER lacks the flags, so the user
-thread loses them after the handoff, for good, since later spares are
-forked from the new task.
+This was found with LLM assistance while reviewing io_uring multishot
+handlers for the pattern behind a RECV_ZC stall reported earlier (see
+Link), and confirmed with a reproducer on v7.3-rc2 and an A/B run of
+this patch.
 
-> 
-> > Also there is risk in 'task_struct *' keyed bpf task storage.
-> > 
-> > task_work queuing could become tricky too.
-> 
-> Like the above, the series does attempt to handle that.
+Fixes: 9e4ed359b8ef ("io_uring/netcmd: add tx timestamping cmd support")
+Link: https://lore.kernel.org/all/010001a0cd914529-23df2f94-bbe0-49cd-ae5d-=
+05922356fa12-000000@email.amazonses.com/
+Cc: stable@vger.kernel.org
+Assisted-by: Codex:gpt-6-sol
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: lollipopkit <a@lolli.tech>
+---
+Reproduction and validation (measured on this revision):
+- Loopback, one process, software timestamps, CQE32 ring with 16 CQ
+  entries, a burst of 200 SO_TIMESTAMPING sends. The filling edge
+  delivers exactly 16 CQEs. With no further sends nothing more arrives,
+  although the application drains the ring and keeps entering io_uring;
+  more timestamped sends release them.
+  A burst smaller than the ring leaves nothing over and does not stall.
+- A/B in a KVM guest on axboe/io_uring-7.3 (a3bdf68feecc) + this patch,
+  with the new return behind a test-only runtime switch so both arms run
+  the same binary, 10 runs per arm, identical numbers on every run:
+    switch off (upstream behaviour): 10/10 stalled, 184 timestamps left
+      queued, no terminal CQE
+    switch on (this patch): 10/10 terminal CQE with res -ENOBUFS; after
+      re-arming, the queued timestamps were delivered
 
-I meant kernel tw uses instead of io-uring's, one example:
+ io_uring/cmd_net.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-With CLOSE + FSYNC in one io_uring_enter(), the CLOSE isn't blocked and its
-CQE is posted before the syscall returns, but ____fput stays queued on the old
-submitter until the FSYNC completes because of handoff, so the app still sees
-the file open.
+diff --git a/io_uring/cmd_net.c b/io_uring/cmd_net.c
+index 7cd411fc4f33..90d4ec7cc761 100644
+--- a/io_uring/cmd_net.c
++++ b/io_uring/cmd_net.c
+@@ -69,8 +69,8 @@ static inline int io_uring_cmd_setsockopt(struct socket *=
+sock,
+ =09=09=09=09  optlen);
+ }
+=20
+-static bool io_process_timestamp_skb(struct io_uring_cmd *cmd, struct sock=
+ *sk,
+-=09=09=09=09     struct sk_buff *skb, unsigned issue_flags)
++static int io_process_timestamp_skb(struct io_uring_cmd *cmd, struct sock =
+*sk,
++=09=09=09=09    struct sk_buff *skb, unsigned int issue_flags)
+ {
+ =09struct sock_exterr_skb *serr =3D SKB_EXT_ERR(skb);
+ =09struct io_uring_cqe cqe[2];
+@@ -83,7 +83,7 @@ static bool io_process_timestamp_skb(struct io_uring_cmd =
+*cmd, struct sock *sk,
+=20
+ =09ret =3D skb_get_tx_timestamp(skb, sk, &ts);
+ =09if (ret < 0)
+-=09=09return false;
++=09=09return ret;
+=20
+ =09tskey =3D serr->ee.ee_data;
+ =09tstype =3D serr->ee.ee_info;
+@@ -98,7 +98,9 @@ static bool io_process_timestamp_skb(struct io_uring_cmd =
+*cmd, struct sock *sk,
+ =09iots =3D (struct io_timespec *)&cqe[1];
+ =09iots->tv_sec =3D ts.tv_sec;
+ =09iots->tv_nsec =3D ts.tv_nsec;
+-=09return io_uring_cmd_post_mshot_cqe32(cmd, issue_flags, cqe);
++=09if (!io_uring_cmd_post_mshot_cqe32(cmd, issue_flags, cqe))
++=09=09return -ENOBUFS;
++=09return 0;
+ }
+=20
+ static int io_uring_cmd_timestamp(struct socket *sock,
+@@ -135,7 +137,8 @@ static int io_uring_cmd_timestamp(struct socket *sock,
+ =09=09skb =3D skb_peek(&list);
+ =09=09if (!skb)
+ =09=09=09break;
+-=09=09if (!io_process_timestamp_skb(cmd, sk, skb, issue_flags))
++=09=09ret =3D io_process_timestamp_skb(cmd, sk, skb, issue_flags);
++=09=09if (ret)
+ =09=09=09break;
+ =09=09__skb_dequeue(&list);
+ =09=09consume_skb(skb);
+@@ -145,6 +148,12 @@ static int io_uring_cmd_timestamp(struct socket *sock,
+ =09=09scoped_guard(spinlock_irqsave, &q->lock)
+ =09=09=09skb_queue_splice(&list, q);
+ =09}
++=09/*
++=09 * Aux CQEs cannot overflow and the poll is edge triggered, so nothing
++=09 * re-runs the command once the CQ drains. End the multishot instead.
++=09 */
++=09if (ret =3D=3D -ENOBUFS)
++=09=09return -ENOBUFS;
+ =09return -EAGAIN;
+ }
+=20
 
+base-commit: a3bdf68feecc57af5c11fb599f860ac9790ffad9
+--=20
+2.54.0
 
-Thanks,
-Ming
