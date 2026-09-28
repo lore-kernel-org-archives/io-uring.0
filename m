@@ -1,75 +1,78 @@
-Received: from mail-dy2-f43.google.com (mail-dy2-f43.google.com [74.125.229.43])
+Received: from mail-dl2-f12.google.com (mail-dl2-f12.google.com [74.125.229.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 026E14DE72D
-	for <io-uring@vger.kernel.org>; Mon, 28 Sep 2026 14:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D360D4DDB53
+	for <io-uring@vger.kernel.org>; Mon, 28 Sep 2026 14:31:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790605890; cv=none; b=bRv1ABso16vvroqExgNbVIvw0BEc49aa7hTxdBDMIcGIzJFDxUF0ZS+3ybcJYrw+ujS6ssoWRf/U1eZNmjbRgCwxuHeKXte1r/Cdg2M1L6eTTHkfoC+TnZUTSfE2fgfeyf0fI6YPYVWd0mGokpj0oDuKxIGWcFdmd0YSaN/tXxc=
+	t=1790605894; cv=none; b=IRubDzx7WBLWCiuL6UNsq+3/sdhdnbwbX1SIZSNmVK9vL5+sdDzMUcEHeC/wFegg9XU+WaHjrCe+dxbFlV48f8ZN1WPIkUiGTyAUcQ8T1NLSCsv09pwkw5hL22D7ATuBynv4gJrnw3ZEstSOSkv+80soxPduEpl34eJ8KPa4Nbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790605890; c=relaxed/simple;
-	bh=ttRLp5uZBBXIDZVrjCp1/B/OT2B3HDt+3d9o6TVjSxE=;
+	s=arc-20240116; t=1790605894; c=relaxed/simple;
+	bh=D3TXq3ux30ZNnfK6lC/HKLzji/G3Th4nc3cSemt7ugs=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=TG233MsHmsVuy7W1Zr/a9UAt/vYasJZDn6fJqS3fC2IESe7hv35w1cxVAX/VJVcwz5OuAyiEHwWGrGoRoBS/o7//lVT3uh2XQy7pK52jJaiWCvD6elX2YSuzSaaPpE79LiDGyT1pd9vEHMOqKoIcw1u7AHnJ3BYwdxIk4yRK8tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=qqYb1UvO; arc=none smtp.client-ip=74.125.229.43
+	 MIME-Version:Content-Type; b=rKUOaLVjXHU4pJD4e1SlpcBacVHfEsZgcu++Ho0QWWlchZpnnwqYMY/LmFl69Nm5RbHj4FMVyXcsQ/TiIPMs4eu4DH/9WOh49HFaLag3WZdaHKUBnTWNbH4tNz2kZ/RpVbxwmlsY4dS9t/sCkF9c7Ykab4Sc5COCcwRs1C3F97o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=00aMNaGV; arc=none smtp.client-ip=74.125.229.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="qqYb1UvO"
-Received: by mail-dy2-f43.google.com with SMTP id 5a478bee46e88-33e46a15703so2915412eec.0
-        for <io-uring@vger.kernel.org>; Mon, 28 Sep 2026 07:31:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="00aMNaGV"
+Received: by mail-dl2-f12.google.com with SMTP id a92af1059eb24-142dd025d07so2578021c88.2
+        for <io-uring@vger.kernel.org>; Mon, 28 Sep 2026 07:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790605882; x=1791210682; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790605884; x=1791210684; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XjEI2w0L+wVlxSuDV0P7eMrDPKELPiH3pO+YDTZIuR4=;
-        b=qqYb1UvOav6ON2Tm6Jdyf4QtwtcGCedQo9NPZ1CyLJZdGQ8RSPh+SKJ/Ol3y640Jzl
-         n3EFeR+r8Uc8AoTH40AIF7WSL32TrzmlG1ag3QCHmaft08K4X/sE7AVEj60mE1IeDGaY
-         suHmAP2B8BLFHRXXNLUaH9ZsSzyU7hbUOR1BxnkwZZxlHg1NdUiv5LsutrnLfWCQ4bOt
-         5jaqS1qofe+fUPKf4Te820VNyrslRxCYlDpM1gU0PLNXaSHknBUI92F9SpKKnst4rTXM
-         G0Rpl/UBrDffGPazA9HbRKjcwhxOhhwdmjTiRrkjjNQ/yz9VHydQxixJSsjlPrbKn1X5
-         PanQ==
+        bh=1z8ZKhhaN5u9NWisVj47vzqbZOwB7wmqGzyey1IEdyo=;
+        b=00aMNaGVqCsBfl/3kMvAjybg2Vic0g0YqY2HqJTRC6Q2Th1V1wJyLgQVmlOTsHSDb4
+         AKEa80v6S0UlWvhwrEY82BLapMF+5Lt1A5A+ucnzCQAC0zGPeXaSy2uKZs78+Kvt8pbJ
+         fb9dtu2ZNG5ZEXe45PgSkKfJUHoNqg0qNF+s0ydacdGlcQwxHxeXErNaukIeHKexvMTG
+         eHgw5rO0e0o9+rL0OTSHkc+AragEgST6rVHV5cjXDeZl3DiEfvBAMulO8gXjf9B1CAu/
+         3ZxYr/g+YMDSYPSIqm2NenDTIKVTHTZCOGsNI7Xm/h0BD9eeaVRiqZuKwvGBXlyROsd+
+         bMRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790605882; x=1791210682;
+        d=1e100.net; s=20260707; t=1790605884; x=1791210684;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XjEI2w0L+wVlxSuDV0P7eMrDPKELPiH3pO+YDTZIuR4=;
-        b=E3R8x3IsF48StaDmeTHFsBRWHcCojwSt+jmXoWnaHyn751DrPeQmxhgVcfCM2TGEPb
-         wJZYIKJ2+o1X2Hc6mL9k+V6tnzUYby/wBwwiLI3uon0eiz7pPQJOCajdnPOS9LNgbmfF
-         7pp9aYuLixWfjsfM8hIZCelsYaLDxBZrfTSq9irn0IuveDyfxXI9rhrMgQ7hbYOu/K0Y
-         5VNzX6geoWXiooDVhEG2bAcrQRMrFzMneITYu0vT3U5ROrZ8a8rCVAuSoyz6DQzKwC7I
-         u74/D+Ufztyq5py8LY8BIM9mergRFiY8TxYmA/x6zhbliAw9LczjbZnMhCm4fbnEd9Cn
-         J/IA==
-X-Forwarded-Encrypted: i=1; AKwUvBzwNDflXKqpPMbYPBUVf1SsQs093/nUlzU22XvCMwGfsfcsFq37eUz1pWW6pDq0OdwER8ok2Xpn0A==@vger.kernel.org
-X-Gm-Message-State: AFuF++lqbtMl7WVF9HtuLfIXvdtn4iCNdhheVAo0xedCa1bm0U6jC6Gj
-	WsVZf0bAaCD1WdT6hA9WC1wMwpyXG84Fgn4ObL6qtSpxVfHeR22za2DBUT7es4b1Szg=
-X-Gm-Gg: AYBFou1NN4HhidiFuPy8FgT2YG+ww5sZoenWy89cdj30ibAUYvb/jRlCSQnSvyvakG7
-	yNgg37A96e4Ia6V/KZIPJ50PGHx3uROKH9jHSUHrycrEIIf1pdRnnhyYwxYDiC4n5MXpWlCYDol
-	GHtfcMxwk76/G24raA5vZyukicMf2Fb/KEMXCaNldbeWQnd2g6alApJWGZlAeZzDhBh8L/ffk4H
-	ErSQb968Cg43yStKRvpyp1AxuBBIadeZszCls6i7OsLM5q9XoG70KqEioHo0MZAyffDkI62W7KP
-	hniIsGt/VOW72JKbYyEMdiwYC8KdjC7mRM3zE5ZsqY6TZtPpqkrmwX/BJdTzCsIvcdXJhP4w3eO
-	aWuDnpR1V2vxUM0mG80qB9wP5tcijpPxKUdhZf6W5/q1zoh0bStGYVjDmKnPJ7jOUCoA6zFhi3M
-	n8+mJR+3hrObrJ+jF0culvAS1nOY1vL8vUTx8tkuFfRPuBCJd2yVl8hS9KvMzEuiFy4Rfhlv+Sd
-	nE91C77M+iJpTVxD4A+ZjdBotn+ekwVv/eq1MWsutAA/Jx7poWZpLXqfQ==
-X-Received: by 2002:a05:7022:6889:b0:141:517e:52ef with SMTP id a92af1059eb24-146ce492c9fmr13591875c88.17.1790605881108;
-        Mon, 28 Sep 2026 07:31:21 -0700 (PDT)
+        bh=1z8ZKhhaN5u9NWisVj47vzqbZOwB7wmqGzyey1IEdyo=;
+        b=RP7/wCjmLMu8AoxQtxOhJkBj7Y1H1aB8u1LR4W6lnYHFkN7JN73YgGb3JJFohYzEup
+         b0W7L6EsnggDYlfrpP23og5OiPCIcrww1Wf6JHgrY8oeOegk1xrJ0S3Z6I5KxPAcsiLs
+         3ke97d1wNCMRhaIZOfQ7eg8ml+TFnMOSKT4HeLG59++15D3IZfSrdfE9rBU/sdNDZ6qV
+         FiHb1fPIVEjpYaRhhW4lsIdp798rSDE4QVDX4Y+49IKtM7rOVRrlfKH8E1BhyV1zrSVL
+         FYqbVdLIDOohtmMLirUmsxBcYs41Hqn2DGOW/5wDYSrhSsWoAk+iex/D9acInadymgzi
+         +71w==
+X-Forwarded-Encrypted: i=1; AKwUvBy95QjY/fqTQm2heN61/ff69/JhNDRkvadYvnMH4VEY8fgP/Dg5Aifaf7lngJJpVyxlcp26iVJcLw==@vger.kernel.org
+X-Gm-Message-State: AFuF++kt+V0bBDDKuyyU6B4DU7VmWNmBym7TXeZV+68Dum279wrD/d5a
+	4ucuu0ih+UhLXJsvhW3XlL1gH0LmH+9wGXQvCMf6Usyb+vUNrs6AhBqXIRQqGtwQO2Q0CB7DlGp
+	+GQqSTiY=
+X-Gm-Gg: AYBFou2Xvpt1lKaJmw0qEdLNCUShdxE50GAf9+IJdvYKdaEvenYSIjJrh7iv9tcneEY
+	lgSZ54iyw4lx9ph2f1Yz7ONvMj82BlXw7tjvmm82l7ejNwAUUw+daGqbquE2LaUPJUyDj6A1HjH
+	sytms8AbjSPcVhPrXfZvK4tRr/IYBei9SoVpAfXpHVxTbDZH6qdS5FhI2e/BOryy1QlV+a7xmez
+	HIiMwbczHAg1diPl3sL+WwZpMWURszciSi3rf9wyHwTyG+dRCnHm1NZhDy7FXI+TMmsbAScQbPa
+	kCBOyKwPNWtjMx6ZcGRkrQLOucipGC+Bo1KcuaVFQdmrO06PvBWoI4HmB0dXE0AGwNfoIZVF1Eq
+	69naQ04SZBs3W/9PFJEXLMgztc5C77T9CX5hZwAeJMXYTq0/kIuvtQ+0wgmJ9xogcvqbhwrCwS1
+	RaTFetWmFPImTY3wDAyOyy8vd2ix6yLZ2xxaULYjPtlaCE+rOU+jADv6s+8ItOmevShvbgU+OIN
+	FwKNq3DR+m9/WwrEqA86uSze5zcg3OWQrB6RERbfzViKD+5d3+ozpjtVA==
+X-Received: by 2002:a05:701b:2616:b0:144:edc5:32d5 with SMTP id a92af1059eb24-146cfec8ddcmr8983096c88.22.1790605882718;
+        Mon, 28 Sep 2026 07:31:22 -0700 (PDT)
 Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-145ad9e097fsm28616577c88.13.2026.09.28.07.31.19
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-145ad9e097fsm28616577c88.13.2026.09.28.07.31.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2026 07:31:20 -0700 (PDT)
+        Mon, 28 Sep 2026 07:31:21 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
-To: asml.silence@gmail.com, Junyuan Feng <a@lollipopkit.com>
-Cc: dw@davidwei.uk, io-uring@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-In-Reply-To: <010001a0cd914529-23df2f94-bbe0-49cd-ae5d-05922356fa12-000000@email.amazonses.com>
-References: <010001a0cd914529-23df2f94-bbe0-49cd-ae5d-05922356fa12-000000@email.amazonses.com>
-Subject: Re: [PATCH] io_uring/zcrx: requeue multishot receives stopped by a
- local resource
-Message-Id: <179060587969.984285.7352315513863005103.b4-ty@b4>
-Date: Mon, 28 Sep 2026 08:31:19 -0600
+To: lollipopkit <a@lolli.tech>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, 
+ Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org
+In-Reply-To: <20260927074206.65427-1-a@lolli.tech>
+References: <20260927074206.65427-1-a@lolli.tech>
+Subject: Re: [PATCH] io_uring/cmd_net: end TX_TIMESTAMP multishot when the
+ CQ is full
+Message-Id: <179060588158.984285.6234217255544312653.b4-ty@b4>
+Date: Mon, 28 Sep 2026 08:31:21 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -81,21 +84,24 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Wed, 23 Sep 2026 09:20:44 +0000, Junyuan Feng wrote:
-> A multishot RECV_ZC can go idle with unread TCP data when a receiver-local
-> resource runs out. An empty copy-fallback niov freelist returns -ENOMEM;
-> a full CQ returns -ENOSPC. After partial progress the stop reason is
-> lost: io_zcrx_copy_chunk() and io_zcrx_recv_skb() report the copied
-> bytes, and tcp_read_sock() drops an error from a later call once earlier
-> data was consumed. The edge-triggered request is then not requeued, so
-> it cannot consume the remaining data until another socket event arrives.
+On Sun, 27 Sep 2026 15:42:06 +0800, lollipopkit wrote:
+> SOCKET_URING_OP_TX_TIMESTAMP arms an EPOLLERR apoll multishot and, on
+> each error queue edge, posts one 32 byte aux CQE per timestamp skb. Aux
+> CQEs have no overflow backing, so io_uring_cmd_post_mshot_cqe32() fails
+> once the CQ ring is full. The loop then stops, splices the unprocessed
+> skbs back onto sk_error_queue and returns -EAGAIN.
+> 
+> -EAGAIN is IOU_RETRY, so the request goes idle until the next poll
+> event. io_arm_apoll() forces EPOLLET and draining the CQ does not re-run
+> the command, so the spliced-back timestamps stay queued until an
+> unrelated later timestamp produces a new edge.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] io_uring/zcrx: requeue multishot receives stopped by a local resource
-      commit: 98ad5b63f5041dc354a6e694f4a9436f74e0681b
+[1/1] io_uring/cmd_net: end TX_TIMESTAMP multishot when the CQ is full
+      commit: 3a3d93070c5ec8b8049d57025987ba313420bda9
 
 Best regards,
 -- 
