@@ -1,128 +1,91 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18806231829
-	for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 19:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA5335201A;
+	Mon, 28 Sep 2026 07:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790536583; cv=none; b=et+1kS/6y4Acwn3KT3yd3cNtVwmXyAJz4fyrq9aNEzEBO/zZb9hX3HTyC5PS88tB0zTo4BdJHfFWXrbkOf3/dC/1i5Hrf65H9I84+tWlzBsBo+Yw5NmiWbG/SreUWOrTVxkIwJhKzHh90pq1dP8q7u2hr8B7weVFSF3pTThYDB0=
+	t=1790579391; cv=none; b=hmVWEI/2U+FJXf89wjGbmMbLUF8NKzoL70JGfjHb11urWsV2XKhrDLGAXw+mgjxktDOq1mFSnOf7L5ko65dfL9RS8fI2TG1XXhXcF+w3XnB49/0ahadtTBV91J1s6X3ZS/lh9KcCMxG7uLKNJJXdp6Be5nFWPB7KXtTSqxqI2a4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790536583; c=relaxed/simple;
-	bh=T0JUWRzx57iOTA1KZI2poUKNYg5hQ2DvWkFi/iwU020=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WER0TISgLm2tpd457K8CzxrokZtDszsqeErevGSf5pU2UfuPwzDNX//7Kgq2BZoBgYVo2kUZbe2IpDgSYNVbMG6RyrNKjUobx6I+y7rNw7Lko+e5sfCPEeDpJqHoXo5pIuSHhZIwYLWuNH3itxApjwAGvkj7DhhxF1MrQAvLVAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PgFPX2Sh; arc=none smtp.client-ip=74.125.225.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790579391; c=relaxed/simple;
+	bh=0+CDN6dzcgdp9lBMqp1P+zMf6tSyXnXDPvlzSbvBIhQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CJ3GJMfgIEfppNFPhYg2dLpmB1MWfQMlz5+rwW4B1Qvi45KtWKVme80kSrhbcjmN68dw5RjmGitCYwDW+sZVc5OK+twM5Rcx/islWUodBo01MAguvG0ZVW/CxjejUMSVr6uKsTpPbuKLhtAcSECV31qFPB/gC2JeHSTovGy1S7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fwEJF9wn; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PgFPX2Sh"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e6b885ef8so12821585e9.1
-        for <io-uring@vger.kernel.org>; Sun, 27 Sep 2026 12:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790536579; x=1791141379; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LP3SPyinwD8fn1a8RK+gsX1s+9bGZ+MpdPQLG7wq3ns=;
-        b=PgFPX2Shy2UiLP3eP0qxk5y+ogjxxsN45w/3pj7qsPUMaAepJftHkpsF/A5scnCqo6
-         baf+x7GXYXBP/jC10fV9HhDhK09eM8eIhCsihJeGu3qKWHSiCdBADEtMpEikX766TFX3
-         8EPGOkQ7TUoWmv3APZpnNVmB8ObG9UwhAGc18iG1ngdOktZaeXug8b0pjns1JrGX4V0R
-         FkzfnmizYZCPjLajLYfc8GtngirIrZF05Q7L7gQkHl/QXld/SjK1vr/eMhSY58t4aF2t
-         zv4IplIyXiOXXi9/2ptTlYDCCaVEXGonuTFN7IMIuNwBpyX20OnugSwGzS9sbqm2Gr7S
-         28YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790536579; x=1791141379;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=LP3SPyinwD8fn1a8RK+gsX1s+9bGZ+MpdPQLG7wq3ns=;
-        b=Xe2e5VkAODi7DzBvuNzvp9wOmwTbBTCF8JbFwV0jXxq2oIoXFoi3SUcMjazAq6TLZO
-         xPpJ/WnKXqC3UYQem2rBGERT4DyERPy/1hNne1wFNZbwIBa1GA+DN9yxeAhRFOMApV36
-         RCATNAoS+70G6RTL2CeaLPVSY8EHDu7wNetdhDJRmDDpbbeCrMl12b8rFFFQue6RrvXm
-         vNkffCh4Lqk3XDMeltyONvs97KocRrOZn/E+71uQ6bUA03DyB24l6bUHZsu039Zg0ufu
-         TJLUKiHiiSgIrv0DWm3+yuEfXijZiCGEMTLOjp8L2c3wSWwQIW5U/zKaG8DIT92fvrZY
-         QLgw==
-X-Forwarded-Encrypted: i=1; AKwUvByZ12NSKMmPyQUkam0uEe+80g4S4P2H4yFcH/xoxbKUG/Kpiq1anr+/3uJ/J36ZHFczmP6Az3Oc2A==@vger.kernel.org
-X-Gm-Message-State: AFuF++nRqkV9GkiQQ44SEIRlcScj6afImBGkeLzqaSOdHgTZfuYfFdbD
-	L2L7k5w10LkQSoithrnDg6c8UYgMWoYnjw4MjeudlVMlkTL+G+N5ti9F
-X-Gm-Gg: AYBFou3eBviS3ks8mHh+jBp6li5St0QCEUcyAsYx+xSG6bCE7uKvO2+PhmE4nyppJwR
-	Qqm67c0sLO4Yfnr3dtEijPIfk6s1utkRL6alRdLANbzNqYuKXrJUsXYpPHNpbFOPLNij/1/VBo/
-	JsGA5VTtQyktrj3y2uaCnm99qWVmtKA8puo6xkW+Om6EdgsDbf0zGHpBO547vrDfX4KnA5YPmyA
-	uhCbhuCFvlGbfcTzsHdcuEt0A5FzUGgU83CeJ90EwLEfT2UZiYHlTBjZUfIaTZtmMaky2irSbJ3
-	OgRifMjT8SgpUF2VoFfN6tZBzW7E+xo8id1Djl7yqNeK0qvS45sq3dwAKtRo3S6qiRHbqWhmiyx
-	lfTQJJAN/C0rtBDbAcgJ2UQecmBczRV/+oNxHVNy4izcq2zNfoRTebvQ+vATUdRJNjUmheZP3Q+
-	RPg0TAjjc/Yh/QTIBNsdeinlGPF0Q+KR9QbklWvBtbTqQuQ7+At3BONTjtmrvBXjxY8R+gFdLdL
-	CWi9kSkD/U0GC0NL9TxR7gNvDJy1zVghcyvR/aY1DdTUI4xTn0S/hpmcphBF8WjuYnyrjdN8Px1
-	dpxA2qVpRPHlsyVTFX0Z1stTUZRPXYRkCBxQQH+xqGP0wShF
-X-Received: by 2002:a05:600c:468d:b0:49f:f9d1:e618 with SMTP id 5b1f17b1804b1-49ff9d1e6b1mr76692205e9.17.1790536579591;
-        Sun, 27 Sep 2026 12:16:19 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a0018e6dcbsm75325005e9.6.2026.09.27.12.16.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 27 Sep 2026 12:16:18 -0700 (PDT)
-Message-ID: <e2e61157-896f-46a2-8c85-8e64b4cdb004@gmail.com>
-Date: Sun, 27 Sep 2026 20:16:16 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fwEJF9wn"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=FI418+vuJtoGFxa3rzsQVxQZHnk+1rPelhdCwOGpt44=; b=fwEJF9wnbqrSw3HUY0P/cssmnu
+	3EfLDJ+a1Zt0iTdAkoVd29HGRl83tyC9vRjbOIVj/+fJJ9nzwt+avN+f4Gk2WhkudcARiBQjqnpDE
+	9BTXDUTicYMbgOFCY+PJ569mooQeKXHzh6sVQ7033YdHo+qyIsXAESNofj4fOibxW39Qa+wX311Ux
+	A5ulv+5jQfoIpX7lZyW46qK9b82lvyUPyN6oHOzRIbxDv5MbnQ35MOHdtkIaiZe2oP2obUy6Vo/vx
+	FVVR7X67bQlIY1uLPLBy+iVX2SWSMF3AOTzyfR67mZCpzMJNq/Xh+uzkbGUxpf3JhdPmxDGZyYsng
+	2/FDOKvw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1xB5UU-00000001ARL-1Kir;
+	Mon, 28 Sep 2026 07:09:34 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id D7C33300478; Mon, 28 Sep 2026 09:09:32 +0200 (CEST)
+Date: Mon, 28 Sep 2026 09:09:32 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Jann Horn <jannh@google.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Darren Hart <dvhart@infradead.org>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+	kernel list <linux-kernel@vger.kernel.org>,
+	Jens Axboe <axboe@kernel.dk>, io-uring <io-uring@vger.kernel.org>
+Subject: Re: [BUG] FUT_OFF_MMSHARED futex waiters can outlive mm_struct
+ (because of futex_requeue() and maybe io_uring)
+Message-ID: <20260928070932.GP4120091@noisy.programming.kicks-ass.net>
+References: <CAG48ez0dLBpc3QtbAhMMVNHwHL94iHh2G+h-=BVFR4dDuzZr1g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/cmd_net: end TX_TIMESTAMP multishot when the CQ
- is full
-To: lollipopkit <a@lolli.tech>, Jens Axboe <axboe@kernel.dk>
-Cc: Willem de Bruijn <willemb@google.com>, io-uring@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20260927074206.65427-1-a@lolli.tech>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20260927074206.65427-1-a@lolli.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez0dLBpc3QtbAhMMVNHwHL94iHh2G+h-=BVFR4dDuzZr1g@mail.gmail.com>
 
-On 9/27/26 08:42, lollipopkit wrote:
-> SOCKET_URING_OP_TX_TIMESTAMP arms an EPOLLERR apoll multishot and, on
-> each error queue edge, posts one 32 byte aux CQE per timestamp skb. Aux
-> CQEs have no overflow backing, so io_uring_cmd_post_mshot_cqe32() fails
-> once the CQ ring is full. The loop then stops, splices the unprocessed
-> skbs back onto sk_error_queue and returns -EAGAIN.
-...>   static int io_uring_cmd_timestamp(struct socket *sock,
-> @@ -135,7 +137,8 @@ static int io_uring_cmd_timestamp(struct socket *sock,
->   		skb = skb_peek(&list);
->   		if (!skb)
->   			break;
-> -		if (!io_process_timestamp_skb(cmd, sk, skb, issue_flags))
-> +		ret = io_process_timestamp_skb(cmd, sk, skb, issue_flags);
-> +		if (ret)
->   			break;
->   		__skb_dequeue(&list);
->   		consume_skb(skb);
-> @@ -145,6 +148,12 @@ static int io_uring_cmd_timestamp(struct socket *sock,
->   		scoped_guard(spinlock_irqsave, &q->lock)
->   			skb_queue_splice(&list, q);
->   	}
-> +	/*
-> +	 * Aux CQEs cannot overflow and the poll is edge triggered, so nothing
-> +	 * re-runs the command once the CQ drains. End the multishot instead.
-> +	 */
-> +	if (ret == -ENOBUFS)
-> +		return -ENOBUFS;
-
-I'd make it a 3-state return instead of relying on
-skb_get_tx_timestamp() not returning specific error codes, but it
-should be fine for now.
-
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
-
->   	return -EAGAIN;
->   }
->   
+On Thu, Sep 24, 2026 at 09:26:45PM +0200, Jann Horn wrote:
+> == Summary ==
+> FUT_OFF_MMSHARED futex waiters can outlive the mm_struct that the
+> futex_key refers to because of futex_requeue() [tested] and probably
+> also via io_uring [untested].
 > 
-> base-commit: a3bdf68feecc57af5c11fb599f860ac9790ffad9
+> This doesn't have much practical impact, I think at most it could:
+> 1. cause missed wakeups for non-private futexes in anonymous memory
+> 2. allow unrelated processes to guess addresses of FUT_OFF_MMSHARED futexes.
+> 
+> I propose we handle FUT_OFF_MMSHARED like FUT_OFF_INODE and put a
+> unique 64-bit ID into struct futex_mm_data, which can be used in futex
+> keys. That should address both futex_requeue() and io_uring. If that
+> sounds good, I'd be happy to write a patch.
 
--- 
-Pavel Begunkov
+Whee, you do find the best problems :-)
 
+> == Fixing it ==
+> I see two approaches to fixing this:
+> 
+> 1. Put a unique 64-bit ID into struct futex_mm_data, which can be used
+> in futex keys, similar to how FUT_OFF_INODE is already handled with
+> get_inode_sequence_number(). That should address both futex_requeue()
+> and io_uring.
+> 2. Ensure that FUT_OFF_MMSHARED waiters can't wait on another
+> mm_struct by blocking attempts to requeue FUT_OFF_INODE waiters onto a
+> FUT_OFF_MMSHARED key. For io_uring, make io_req_track_inflight()
+> unconditional.
+> 
+> I like option 1 because it also avoids feeding a kernel pointer into a
+> hash function together with user input, which probably creates a
+> timing side channel leak of mm_struct pointers.
+
+I agree that option 1 is the sanest. Please write that patch.
