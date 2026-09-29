@@ -1,164 +1,136 @@
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl2-f42.google.com (mail-dl2-f42.google.com [74.125.229.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338AA35AC01
-	for <io-uring@vger.kernel.org>; Tue, 29 Sep 2026 04:55:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837283DC871
+	for <io-uring@vger.kernel.org>; Tue, 29 Sep 2026 12:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790657718; cv=none; b=goEiJtDdqBVrjB5g93yOr30f/VUD0qXHhuM24zxgSkPk4adLnczhWCCqMFznpVW/WbJz9wcjbjJlLLoGJq5X9in2sPlPo5qujOGwCMRKXe7Q6Xj2zzpF3lv1BFOYrOZYlBZNryY/l1sPh5F8qWjAYLDYAUFUwz6kbiV9uQE/shs=
+	t=1790686480; cv=none; b=V8czFPAMpP3lusbEoGwjFVDnuJKuERf6QlOFmtZCTc2VNhj8YqIluvrRN8iRmxl0934N9EFVn86fVFXDZfZ5BfWydiTkgnOLhBFmmNbA9aD+ZdTJf8DJqjKkPjgprAVYIJPbSzjlMtknEUMe/Lqz+0yrYoykK4n544qe7wG5xmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790657718; c=relaxed/simple;
-	bh=DQy9kMeP46ETkmDAA5NHAlK2UZeyCZDRJAADxhAESiE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RWEnu4zCD3MXj+Ep/DglnmMe8sZ/wEyFcMfpcIDuPPgqja10T6S/KKocrxqi+DC6d0ukZvvYtAzbHvNGOHSnFta9e37cfe8y5Dx8C8k8qvg1pVP0ouF31Sp7Cv16doXg1HayB3nNBBDWgHPAio9fLYaDXSWRAqpdMIo7/BkZ3hU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech; spf=pass smtp.mailfrom=lolli.tech; dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b=RLXnHLDl; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=3rZUOArk; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lolli.tech
+	s=arc-20240116; t=1790686480; c=relaxed/simple;
+	bh=h8MSdA30r/pqySn5KePwySX3F3ZhhYfmFbCquovlpsg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=NiiXGA5UUIoUGGD0RLA72mgRReN+Iy+s3ZgcXtRv0POpv0TJV9Xi48vxnJYWxCXfEh4LCQr1eMgpAr/z8RCB2xBG3uX5wD67FcP1tBDiOhIqiMJAnIFpswwIr10ccsDNk55Rg3Zeg9auNvcfIIPMRwDyX8DLcGuniK2vnp+jJDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=Cgw+i++F; arc=none smtp.client-ip=74.125.229.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b="RLXnHLDl";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="3rZUOArk"
-DKIM-Signature: a=rsa-sha256; b=RLXnHLDlVdsRyqYcSA6XB+bss/sVXboUDxzKw9R2b9MhnTg/SzsRXAF9uE2cPO9BCYV0eZiaQYEZmuMoypBlL+V7ZgWu7ZCT0qr+FeBcIczl+PH2UyLSuetMSqo9lvZPXArnYJOg2uybOA9+xZs4F0aNxrVjdU4hA2C04VmRpUdyol/msIPH6LaLhTIcoNyWRoc3ED+hARUQFocmS+mJEH6EiQvGrc0xvBdf4Uy6Zz36EQMZu8BHEM1Sjlb9Yh/JP/t4iUKpPgmVsL+IIgVUvSU/HYAdZZ0ByJ+ADyRR+GlPuWaWDtfp523a6EwuAwY5casUH5TUdqnsbJlnoiWHNA==; s=purelymail3; d=lolli.tech; v=1; bh=DQy9kMeP46ETkmDAA5NHAlK2UZeyCZDRJAADxhAESiE=; h=Received:From:To:Subject:Date;
-DKIM-Signature: a=rsa-sha256; b=3rZUOArkBleziwM4FQ5wYPYkk6gZZRmDmiigk8AaEVHGOW1vSpyHccBfFu9ChDwyzy+yq+U04Zt/c4fM6VC3g/5KhNwVqDxQB/tGmsq/nJKFhrhlFBGNtRiGpHhAXsO8/ZrWDeFHfbsk2pwUEd98YIjqc3qXODeKgo8Yi95+G6hTzkfaZk9+fy/oX/hIBdgi6ByndPkdlU7lIQ9eAhVF3OK77RSOwly5jgJNCs39pgsKOdK9Whei8NF0V7SXP8wfzet8hSzAakQBgi9KUuniC6jrvELhuJG3Vi5/5pjp/ElLmZDHihuXblJWryYXheBy/CKZMLxITNxsNbg4mUI4kA==; s=purelymail3; d=purelymail.com; v=1; bh=DQy9kMeP46ETkmDAA5NHAlK2UZeyCZDRJAADxhAESiE=; h=Feedback-ID:Received:From:To:Subject:Date;
-Feedback-ID: 1437734:55302:null:purelymail
-X-Pm-Original-To: io-uring@vger.kernel.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1755747678;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Tue, 29 Sep 2026 04:55:08 +0000 (UTC)
-From: lollipopkit <a@lolli.tech>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	io-uring@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lollipopkit <a@lolli.tech>,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/cmd_net: drop unextractable TX_TIMESTAMP skbs instead of requeueing
-Date: Tue, 29 Sep 2026 12:54:33 +0800
-Message-ID: <20260929045433.59435-1-a@lolli.tech>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="Cgw+i++F"
+Received: by mail-dl2-f42.google.com with SMTP id a92af1059eb24-1438cb9b3a3so2869701c88.2
+        for <io-uring@vger.kernel.org>; Tue, 29 Sep 2026 05:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790686477; x=1791291277; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:from
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=3VgRpQg8jay1LWo0ovstuPGBOtsVhOtVC2Vcme8oHaA=;
+        b=Cgw+i++FBAcUNzK2zlDuj3FWTNcCC/PJIa6D0mDZx8lUz+Eh+MFiiVHX6McqtByatY
+         9eqHaglsankuU6aKnUr2PWbqec01jLsGzTiDqrt6DRGMvbc8XXw3zVeFzXmZLcgSKUMN
+         /IEdgNvTCGLwVgCrO0ebS1vMomJRdU8Ys8XbxWefAIIhBUByba5LWoA27lEEqddc4Cod
+         FGMxceUe7pIs7CcQQxH5Ftq8R+HzM2AHjy+bH6HdcrQ2oceQFc8EfxiJToQr8+Ck+qUa
+         hF7jULDBlbqG/htqwf4+U4ue4QiOYcOjx6nsi72p7xDQafBELrs7Vq59Zuz5ebWL42h8
+         aP0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790686478; x=1791291278;
+        h=content-transfer-encoding:content-type:cc:to:subject:from
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3VgRpQg8jay1LWo0ovstuPGBOtsVhOtVC2Vcme8oHaA=;
+        b=DhzRlK7USkM8du3FxGJx2UNI53uwgdlEbh86JDHtc4gYmUq9x7SvbsHbX7U3YLAtU3
+         fjQsqpCXvoyzwYkAO7nCarDK1b96UJUYOzQYPpIFvnqKA1+8K/KhqCKqoLwKDk25YE9q
+         btYB9d8W7dNL2Yw3kOh7iTpc8yrVodxANv1K8WBx8uAOfGtmcDKafszbHUUaoC1ezf+Q
+         79d3+tOB9AZtklL+uIFhgwzRofwbN2SuFJgQQwFM1P4IOjBME2Dl5eGrRqILsvuVFPti
+         xd84iT1SJnORAgC7bo2YJV4OuplbFPsPEg8Yjkfa3S1+21oteRW8XXoWzchq8HK6EtAN
+         oNoA==
+X-Gm-Message-State: AFuF++mlaQiih9DHoM5GT5faIe32A/cl5WTGLDU286Ktr0mMcyEW/WXF
+	qqfv3RViPoQlsSuFNaTYCwtlnTyms5/7KnzmZodz5gqHYgNko2amuRieW2o3S5L5ra4um2s6BEP
+	p8Qru67c=
+X-Gm-Gg: AYBFou35fWERQP3lNGS/VChjFTcXEv4DRtF8p7U7SRS1gCPko9iX38b1PbD85YALtwY
+	SfaqFBDzBqyvt7lnTkEzxaKoBa57f23S6Vxm3LZNGCOQWZ+LmAqdGhX6+0aEj1rq+wUS2BGNali
+	kh3Q9jw+p8zzhiLjp0Wl1KRfD/dcrcLxYPYfZot2xIhOz8SrXHRWaf0ds2Ap2cQboD0L4UEsxnU
+	FG+gHeIX1ktSumwog0tsWmTpdwrKCNK1P+F+Eb1NnHRTnsNTOeRYqpqlbcYDElftyOVlp+WpbZU
+	gd+l3n8ARvy+onRalaeXdfV17VjQSHt6Y/yUvoVuTJQ6924jmsDBEme2yV0zwa+1paUd3oJXBOq
+	KsYggBrVovJ/b+iG1G85MJu1GGNuebZ/UG4AKUUanNRCrYByvDUtTmK+ll7WAj1T8E37zLBhMYh
+	cGhsTzbGUhAdvwnJ2gQODBbqa43EdOu70i88+IB8pVzZn7bkozaJq0H3cCIASxKaklXYETnoWKs
+	PGTYzCcceAgPdjjJwB8HZpV3nGRp6uspdqDfKgSFB6/7FCJrpfYALFwvsA=
+X-Received: by 2002:a05:701b:231b:b0:14a:5284:1bf7 with SMTP id a92af1059eb24-14a52841df9mr5632666c88.14.1790686477439;
+        Tue, 29 Sep 2026 05:54:37 -0700 (PDT)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-145acc47ab8sm39701167c88.6.2026.09.29.05.54.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2026 05:54:36 -0700 (PDT)
+Message-ID: <c489d5c0-24dc-4bd2-974f-e1f8f55cf6e8@kernel.dk>
+Date: Tue, 29 Sep 2026 06:54:36 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring: fix task_work add use-after-free with SQPOLL
+To: io-uring <io-uring@vger.kernel.org>
+Cc: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>
 Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-SOCKET_URING_OP_TX_TIMESTAMP selects error-queue skbs with
-skb_has_tx_timestamp() but extracts the timestamp with
-skb_get_tx_timestamp().  The two use different checks and can disagree:
-a skb the walk accepted can be rejected with -ENOENT forever.  When
-that happens the processing loop stops and skb_queue_splice() puts the
-unprocessed skbs back onto the HEAD of sk_error_queue.  The rejected
-skb is selected first on every following run, fails again, and blocks
-every skb behind it: new timestamps keep arriving and keep re-running
-the command, but nothing is ever delivered again.
+For SQPOLL, the sqpoll thread runs task_work off its own list and
+doesn't need to be told about it, so it can pop and complete a request
+as soon as mpscq_push() has published it. If that was the last request
+holding the ring alive, io_ring_exit_work() then frees the ctx, stops
+the thread, and with it the tctx, while io_req_normal_work_add() is
+still looking at both after the push:
 
-The disagreement is reachable without a race.  With
-SOF_TIMESTAMPING_BIND_PHC the walk never looks at sk_bind_phc, but
-skb_get_tx_timestamp() converts the hardware timestamp through
-ptp_convert_timestamp(), which returns 0 when no virtual clock matches
-sk_bind_phc (for example when the vclock was destroyed after the
-socket bound to it).  ktime_to_timespec64_cond() then fails and the
-extractor returns -ENOENT permanently.  Any skb with a non-zero
-hwtstamp is selected while SOF_TIMESTAMPING_RAW_HARDWARE is set, so a
-single such skb blocks even the software timestamps queued behind it.
+  BUG: KASAN: slab-use-after-free in io_req_normal_work_add+0x439/0x510
+  Read of size 4 at addr ff11000000ca0000 by task repro/55
+  (...)
+  BUG: KASAN: slab-use-after-free in queue_work_on+0x25/0x70
+  Write of size 8 at addr ff11000000c3bd00 by task repro/55
 
-Measured on real hardware, an I219-V (e1000e), using
-/sys/class/ptp/ptpN/n_vclocks to create and destroy the vclock the
-socket was bound to: 22 error-queue skbs generated (16 software + 6
-hardware).  Of the 21 extractor calls, 20 failed with -ENOENT and the
-one that succeeded delivered 1 software timestamp; deliveries then
-froze while 8 further sends kept re-running the command, and the
-remaining 21 skbs (15 software + 6 hardware) sat in the error queue.
-Both control arms (vclock kept alive; no BIND_PHC) delivered
-everything.
+Hold an RCU read lock across the add, like io_req_local_work_add() already
+does, and have io_ring_exit_work() wait for a grace period for SQPOLL rings
+as well before freeing the ctx.
 
-With this patch applied on top of the CQ-full fix ("io_uring/cmd_net:
-end TX_TIMESTAMP multishot when the CQ is full"), A/B tested in a KVM
-guest from a single kernel binary, with the new behaviour behind a
-test-only runtime switch (the switch is test scaffolding and is not
-part of this patch).  The guest needs no special hardware: QEMU's igb
-model emulates hardware TX timestamping (TSYNCTXCTL/TXSTMPL/TXSTMPH)
-and the igb driver registers a PTP clock, so the guest reproduces the
-same failure the same way.  The two arms are separate runs with their
-own sockets and sends; the device holds one pending hardware
-timestamp, so how many of the 16 sends get a hardware skb varies per
-run (12 and 8 here).  Switch off: 28 skbs generated (16 software + 12
-hardware), deliveries froze at 1 and the remaining 27 (15 software +
-12 hardware) sat in the error queue.  Switch on: 24 skbs generated (16
-software + 8 hardware); all 16 software timestamps were delivered, the
-8 hardware skbs the extractor rejected with -ENOENT were dropped, and
-the error queue drained.
+Reported-by: J?r?my Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+Link: https://lore.kernel.org/io-uring/20260924205056.3759980-2-Jeremy.Jean@oss.cyber.gouv.fr/
+Fixes: af5d68f8892f ("io_uring/sqpoll: manage task_work privately")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-recvmsg(MSG_ERRQUEUE) already treats such a skb as skippable:
-sock_recv_errqueue() dequeues it, returns the error message without a
-timestamp, and frees it.  Do the same here and keep the deliverable
-timestamps moving: drop the skb the extractor rejected and continue
-with the rest of the list.  The CQE-full case keeps its
-requeue-and-end-multishot behaviour.
-
-Fixes: 9e4ed359b8ef ("io_uring/netcmd: add tx timestamping cmd support")
-Cc: stable@vger.kernel.org # needs the CQ-full fix above
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: lollipopkit <a@lolli.tech>
 ---
-This applies on top of axboe/for-next (3769bc31a5b7).  The CQ-full fix
-is 3a3d93070c5e in io_uring-7.3; the two touch adjacent lines of the
-same loop, hence the stable note.
 
-Reproducer: a single-file liburing program that runs the three arms
-(destroyed vclock, live vclock, no BIND_PHC) against any NIC with
-hardware TX timestamps, plus a KVM guest setup using QEMU's igb model.
-Happy to post it or turn it into a selftest if that is useful.
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 2cb9b58d04dd..c2ce83c7c1f1 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2405,8 +2405,8 @@ static __cold void io_ring_exit_work(struct work_struct *work)
+ 	spin_lock(&ctx->completion_lock);
+ 	spin_unlock(&ctx->completion_lock);
+ 
+-	/* pairs with RCU read section in io_req_local_work_add() */
+-	if (ctx->flags & IORING_SETUP_DEFER_TASKRUN)
++	/* pairs with the RCU read sections in the task_work add paths */
++	if (ctx->flags & (IORING_SETUP_DEFER_TASKRUN | IORING_SETUP_SQPOLL))
+ 		synchronize_rcu();
+ 
+ 	io_ring_ctx_free(ctx);
+diff --git a/io_uring/tw.c b/io_uring/tw.c
+index f573bcc3af6a..f9affd68dd26 100644
+--- a/io_uring/tw.c
++++ b/io_uring/tw.c
+@@ -210,6 +210,9 @@ void io_req_normal_work_add(struct io_kiocb *req)
+ 	struct io_uring_task *tctx = req->tctx;
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 
++	/* SQPOLL can retire the request on push, see io_ring_exit_work() */
++	guard(rcu)();
++
+ 	/* tw run already pending, nothing else to do */
+ 	if (!mpscq_push(&tctx->task_list, &req->io_task_work.node))
+ 		return;
 
-One behaviour change worth calling out: skb_has_tx_timestamp() and
-skb_get_tx_timestamp() read sk_tsflags independently, so a concurrent
-setsockopt(SO_TIMESTAMPING) can also make the extractor reject a skb
-the walk selected.  Before this patch that skb was delivered on a later
-run; now it is dropped, as recvmsg(MSG_ERRQUEUE) would.  With a thread
-switching sk_tsflags about 800k times against 20000 sends on loopback,
-this patch dropped 320 such timestamps.  Reading sk_tsflags once per
-run and passing it to both helpers removes that case (0 rejections, 0
-lost in the same test); it changes both helpers' signatures in
-net/socket.c, so I left it out of this fix.  I can send it as a
-preceding patch if you prefer the two together.
-
- io_uring/cmd_net.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/io_uring/cmd_net.c b/io_uring/cmd_net.c
-index 90d4ec7cc761..406fbe8b7d52 100644
---- a/io_uring/cmd_net.c
-+++ b/io_uring/cmd_net.c
-@@ -138,6 +138,21 @@ static int io_uring_cmd_timestamp(struct socket *sock,
- =09=09if (!skb)
- =09=09=09break;
- =09=09ret =3D io_process_timestamp_skb(cmd, sk, skb, issue_flags);
-+=09=09if (ret && ret !=3D -ENOBUFS) {
-+=09=09=09/*
-+=09=09=09 * The walk selected this skb, but skb_get_tx_timestamp()
-+=09=09=09 * cannot extract a timestamp from it: the two use
-+=09=09=09 * different checks.  Splicing it back would put it at
-+=09=09=09 * the head of sk_error_queue, where every later run
-+=09=09=09 * selects it first and fails on it again, so nothing
-+=09=09=09 * behind it is ever delivered.  recvmsg(MSG_ERRQUEUE)
-+=09=09=09 * frees such a skb without reporting a timestamp; drop
-+=09=09=09 * it here as well.
-+=09=09=09 */
-+=09=09=09__skb_dequeue(&list);
-+=09=09=09kfree_skb(skb);
-+=09=09=09continue;
-+=09=09}
- =09=09if (ret)
- =09=09=09break;
- =09=09__skb_dequeue(&list);
-
-base-commit: 3769bc31a5b79ec406df085592fd9dc14ce7df12
---=20
-2.54.0
+-- 
+Jens Axboe
 
