@@ -1,171 +1,164 @@
-Received: from mail-oo2-f41.google.com (mail-oo2-f41.google.com [74.125.231.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF16248F72
-	for <io-uring@vger.kernel.org>; Tue, 29 Sep 2026 01:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790644556; cv=pass; b=F2EAPIhL9LMejCMuDoYjeKMf0RQLdPHdLQg1R0M/cMFJwbqW5wXEBtFgIQiKkqv01sPhEk3PbaOcFYjZ3Yz7iFdvxod+PwDmOLOsTO5wemvDvKJgIwdCnd5ZtvBinVggXVdsPDxZ44YKjRnmG4mgHF1Yvc6MnO8ekgysBLYX4Mo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790644556; c=relaxed/simple;
-	bh=6KsV4rDAdDxcusMqf5nBXP8iJDyqcK6OlXAetdFDhjI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r+PCk3g9DyN6woiZpGG2RSWSLIQPFYbAj0u2Dsuz23wZ4Mtg6rJZU+GTSndVLIfnW2Eyrx/++OHZxj7Mlhqd7mQB+TndQegN/J8bsxkmYXUYpqvaiVLPc8/J2IVhcUMM5q0vlFl4B4uIzJTX5MjeTj8EOyF/fBjkGjcrCP2apQk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=WLLPde6Q; arc=pass smtp.client-ip=74.125.231.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 338AA35AC01
+	for <io-uring@vger.kernel.org>; Tue, 29 Sep 2026 04:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790657718; cv=none; b=goEiJtDdqBVrjB5g93yOr30f/VUD0qXHhuM24zxgSkPk4adLnczhWCCqMFznpVW/WbJz9wcjbjJlLLoGJq5X9in2sPlPo5qujOGwCMRKXe7Q6Xj2zzpF3lv1BFOYrOZYlBZNryY/l1sPh5F8qWjAYLDYAUFUwz6kbiV9uQE/shs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790657718; c=relaxed/simple;
+	bh=DQy9kMeP46ETkmDAA5NHAlK2UZeyCZDRJAADxhAESiE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RWEnu4zCD3MXj+Ep/DglnmMe8sZ/wEyFcMfpcIDuPPgqja10T6S/KKocrxqi+DC6d0ukZvvYtAzbHvNGOHSnFta9e37cfe8y5Dx8C8k8qvg1pVP0ouF31Sp7Cv16doXg1HayB3nNBBDWgHPAio9fLYaDXSWRAqpdMIo7/BkZ3hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech; spf=pass smtp.mailfrom=lolli.tech; dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b=RLXnHLDl; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=3rZUOArk; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lolli.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lolli.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="WLLPde6Q"
-Received: by mail-oo2-f41.google.com with SMTP id 46e09a7af769-7f4bdf2e95fso645811a34.0
-        for <io-uring@vger.kernel.org>; Mon, 28 Sep 2026 18:15:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790644552; cv=none;
-        d=google.com; s=arc-20260327;
-        b=CqPKXQUYrxJpXnQB3NWGZdcw19sqqxH/B9KgPzcN9RUM9odH+E18v9HsEElgE3owih
-         R9rsEoolIv3jayi0MGDz8JxPCBjWhAeOGR2+0sgAGrH+GfzNbpVu/+/ajR+ocaFnR2yk
-         s99mSxJvnCg251L1Haqcl5bXfa3S1lH8Bzpp05j8xP+amvf72MxGgva07xRoduoxOXk3
-         cT6lK88amQdHP5wHtwLUMjLbBKTclIpSqyxpefrjXVQEKqIMu2EMFaIDC7UvRITWQnjK
-         HrW5r7OUyiizf6MMH7/q0FXEIrvy8BzQglsawUo7hfY+4Ix6obfUpll9r67wursHUrCo
-         IPkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5pLeu4YqgZECtiedNQxbKwtzen0HMS5vwbUNTX6n4u0=;
-        fh=hJROiCKSsobYXvBWdsx9vCl8rg+UD/eNGzQ3u1bvhKE=;
-        b=ZJh4BqpyNYzQ4W6vxoEdK8jAk03maSYpDvLcOPDfHSKdciIxsER9IMmH7hFqPOQC3U
-         1A5KZq+77uEv0t0j+f5sS21OMloN/uNvLFxNE+Hpy1x9CGTSymtOs5gTLch93rOm5p+h
-         eqCTbt+62Rd1RVdv6uWOTxuKgDoNa0M1+bOwBD0w3wNr1fRKzTgZAutM1jELzNv/uLf0
-         Vxk2iDUiyHjzOiIksbLzH/3ZCVEOKIXhUa7mgjkM3QfN612Exz0Ga7pwtiBJYvVKHyeR
-         zUb+QYhlSGPWuY7KFxukPSVEFyrc9DkXnzRGGRNyJ8/kzbztVg8HaLg//kIRjmnMphvS
-         KIQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1790644552; x=1791249352; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5pLeu4YqgZECtiedNQxbKwtzen0HMS5vwbUNTX6n4u0=;
-        b=WLLPde6QqrGEQ7TlZnh6GBtwyEECzYPwNnwovqyCfe1nP6Rtl6cWfxOeP3v27T7+P3
-         JO0RswXenQ3JCaWZLyrCZkHn/AqJHIeWnIVkVqqK7Bh4ONqjh6AJ3ZMIxqKxOF8tTBYs
-         DGVx/ZdRRA3ng/3HZmmZD/Ugj2AGjzLyF8HdvvxasSWEujXdLZ4nUmvCXCRYa3RE0yRC
-         URNtGEhe5UkwBmRgEecwiBRJ1kmnjqbw95t4pkc/S9muhj+DYZzBdnsaKKtNyIfLwjLH
-         1D/kEnjt7dUyOT5ifyQp6U/0PPYcmijYeqVcAiqlt9Id3+2ViYXJFnlMm7rxBisMolUG
-         LaVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790644552; x=1791249352;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5pLeu4YqgZECtiedNQxbKwtzen0HMS5vwbUNTX6n4u0=;
-        b=IyREQh1+bAF+3ZeevHLxTdBI6JRNtkXpWFPOL6/zpiU5KHg41ms1KEyu3ioZkweUvi
-         +nepGAp1u4oxW5GHLcPA/zIFm79y3vBokx7/6S6rCAm3C/3kJfNweuRDeSpwHo3tjG8s
-         +DvGwloBkTzuEra5eME3DT2oIRvztLHH7eokuSXmPcWSh1SzH4L7xHSzPS/BqotAiDYR
-         Uv2NOb0EU9y9xN7yJGkqova54qST3IUwnJmyi2oavTQ16OirDjn93wxH7mgw6pRY5u/R
-         KfPiN8kGPG7sG/s2VWdxYIRBTkx9dCZEUy7FFcSLyhwLstqzYBPqSlsbhzINQN8bPCMv
-         O9jg==
-X-Gm-Message-State: AFq9FYLJlLvoYYHK3w3kA6bq9Hb8rb2zKHgDTNbB2k+3RY3DUxhxHyiA
-	Y4Bww9hJH46TN8gh6AQxFPxVCJYXlcLuxiil6WszKQFdUe1BsQqep5o/Tz/BUcoHEF4BCb1HA7N
-	Ssc2xCcVDElI2R8mKqAX3igoFJ3wYZHCwFBT/ETTITfuen+6a23nliZo=
-X-Gm-Gg: AYBFou2TT4rLMjhxmvPb8bb1lCe3eQe6UlZn958XrJaHVxLEb8q3DlMJaojLIHZAB7R
-	cqFSp8BZCdURFV7s9uz4ep0G/OnXT0fPob72o1Ol4/WVOpLu7yYsm48rC8UnzAzJwHofG+n3ko4
-	gsQR5a3tT5GmpBme3bY9ZzVGAI0LEWKRWe3+0bbhr6paf5KFWL7EFkTy4pMyy9HJQKN45zAynuN
-	GpxvupzhiRFIpzy0O+pICeFmhrHHqR8qUIXmD6C6kXq+ItHf72rRrTMcy5oqfn3greh6f25fAeQ
-	mg4jDuPRx+4i0HkmDYuWWWPeeXZ+FYc46rDgnLr0vpxVl6E0IVsC/Y8=
-X-Received: by 2002:a05:6870:f114:b0:47d:4630:5998 with SMTP id
- 586e51a60fabf-4930a82b841mr16313646fac.4.1790644552340; Mon, 28 Sep 2026
- 18:15:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=lolli.tech header.i=@lolli.tech header.b="RLXnHLDl";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="3rZUOArk"
+DKIM-Signature: a=rsa-sha256; b=RLXnHLDlVdsRyqYcSA6XB+bss/sVXboUDxzKw9R2b9MhnTg/SzsRXAF9uE2cPO9BCYV0eZiaQYEZmuMoypBlL+V7ZgWu7ZCT0qr+FeBcIczl+PH2UyLSuetMSqo9lvZPXArnYJOg2uybOA9+xZs4F0aNxrVjdU4hA2C04VmRpUdyol/msIPH6LaLhTIcoNyWRoc3ED+hARUQFocmS+mJEH6EiQvGrc0xvBdf4Uy6Zz36EQMZu8BHEM1Sjlb9Yh/JP/t4iUKpPgmVsL+IIgVUvSU/HYAdZZ0ByJ+ADyRR+GlPuWaWDtfp523a6EwuAwY5casUH5TUdqnsbJlnoiWHNA==; s=purelymail3; d=lolli.tech; v=1; bh=DQy9kMeP46ETkmDAA5NHAlK2UZeyCZDRJAADxhAESiE=; h=Received:From:To:Subject:Date;
+DKIM-Signature: a=rsa-sha256; b=3rZUOArkBleziwM4FQ5wYPYkk6gZZRmDmiigk8AaEVHGOW1vSpyHccBfFu9ChDwyzy+yq+U04Zt/c4fM6VC3g/5KhNwVqDxQB/tGmsq/nJKFhrhlFBGNtRiGpHhAXsO8/ZrWDeFHfbsk2pwUEd98YIjqc3qXODeKgo8Yi95+G6hTzkfaZk9+fy/oX/hIBdgi6ByndPkdlU7lIQ9eAhVF3OK77RSOwly5jgJNCs39pgsKOdK9Whei8NF0V7SXP8wfzet8hSzAakQBgi9KUuniC6jrvELhuJG3Vi5/5pjp/ElLmZDHihuXblJWryYXheBy/CKZMLxITNxsNbg4mUI4kA==; s=purelymail3; d=purelymail.com; v=1; bh=DQy9kMeP46ETkmDAA5NHAlK2UZeyCZDRJAADxhAESiE=; h=Feedback-ID:Received:From:To:Subject:Date;
+Feedback-ID: 1437734:55302:null:purelymail
+X-Pm-Original-To: io-uring@vger.kernel.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1755747678;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Tue, 29 Sep 2026 04:55:08 +0000 (UTC)
+From: lollipopkit <a@lolli.tech>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	io-uring@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lollipopkit <a@lolli.tech>,
+	stable@vger.kernel.org
+Subject: [PATCH] io_uring/cmd_net: drop unextractable TX_TIMESTAMP skbs instead of requeueing
+Date: Tue, 29 Sep 2026 12:54:33 +0800
+Message-ID: <20260929045433.59435-1-a@lolli.tech>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909222836.2475352-1-csander@purestorage.com>
-In-Reply-To: <20260909222836.2475352-1-csander@purestorage.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Mon, 28 Sep 2026 18:15:41 -0700
-X-Gm-Features: AclHuK9y1BkUmfj2CwBKzqVvJvr4htN1Ij_BtBFRlnLw9fnPEz3avSjdBXHF6AQ
-Message-ID: <CADUfDZorm3WsYxvKQkqr1DVAps=ejF7M4U5PLD4O-94GzmYt1g@mail.gmail.com>
-Subject: Re: [PATCH 0/6] io_uring/nvme: support fixed buffer for metadata
-To: Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-	Sagi Grimberg <sagi@grimberg.me>
-Cc: io-uring@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Content-Type: text/plain; charset=UTF-8
 
-Hi, any feedback on this series?
+SOCKET_URING_OP_TX_TIMESTAMP selects error-queue skbs with
+skb_has_tx_timestamp() but extracts the timestamp with
+skb_get_tx_timestamp().  The two use different checks and can disagree:
+a skb the walk accepted can be rejected with -ENOENT forever.  When
+that happens the processing loop stops and skb_queue_splice() puts the
+unprocessed skbs back onto the HEAD of sk_error_queue.  The rejected
+skb is selected first on every following run, fails again, and blocks
+every skb behind it: new timestamps keep arriving and keep re-running
+the command, but nothing is ever delivered again.
 
-On a 4 KB io_uring NVMe passthru read workload with metadata, we
-measure 14% of the CPU time spent under iov_iter_extract_pages()
-(called from bio_integrity_map_user()) and bio_integrity_unmap_user().
-Using io_uring registered buffers for the metadata avoids this
-significant overhead.
+The disagreement is reachable without a race.  With
+SOF_TIMESTAMPING_BIND_PHC the walk never looks at sk_bind_phc, but
+skb_get_tx_timestamp() converts the hardware timestamp through
+ptp_convert_timestamp(), which returns 0 when no virtual clock matches
+sk_bind_phc (for example when the vclock was destroyed after the
+socket bound to it).  ktime_to_timespec64_cond() then fails and the
+extractor returns -ENOENT permanently.  Any skb with a non-zero
+hwtstamp is selected while SOF_TIMESTAMPING_RAW_HARDWARE is set, so a
+single such skb blocks even the software timestamps queued behind it.
 
-Thanks,
-Caleb
+Measured on real hardware, an I219-V (e1000e), using
+/sys/class/ptp/ptpN/n_vclocks to create and destroy the vclock the
+socket was bound to: 22 error-queue skbs generated (16 software + 6
+hardware).  Of the 21 extractor calls, 20 failed with -ENOENT and the
+one that succeeded delivered 1 software timestamp; deliveries then
+froze while 8 further sends kept re-running the command, and the
+remaining 21 skbs (15 software + 6 hardware) sat in the error queue.
+Both control arms (vclock kept alive; no BIND_PHC) delivered
+everything.
 
-On Wed, Sep 9, 2026 at 3:29=E2=80=AFPM Caleb Sander Mateos
-<csander@purestorage.com> wrote:
->
-> io_uring NVMe passthrough supports using a "fixed" (registered) buffer
-> for data, but not metadata. On high-IOPS workloads, the pinning and
-> unpinning overhead for the metadata pages is significant and could be
-> avoided if fixed metadata buffers were supported.
->
-> This patch series adds the necessary plumbing to allow NVMe passthrough
-> commands to use fixed buffers for their metadata. The metadata and data
-> fixed buffer indices can be specified (or omitted) independently.
-> Supporting separate fixed buffers is important as metadata buffers are
-> often stored in separate memory from the corresponding data buffers. For
-> ublk zero-copy I/Os, sharing a buffer index would be impossible as the
-> data buffer is a kernel registered buffer while the metadata buffer is a
-> userspace registered buffer.
->
-> My main question is which layer the metadata fixed buffer should belong
-> to: core io_uring, io_uring_cmd, or NVMe passthrough? In this initial
-> implementation, the io_uring_cmd layer stores the metadata buffer node
-> and the NVMe passthrough layer defines the UAPI.
->
-> The main argument for moving the implementation to a more generic layer
-> would be to reuse it for other io_uring request types. For example,
-> IORING_RW_ATTR_FLAG_PI could also benefit from a fixed metadata buffer
-> option, though this series doesn't implement it yet.
->
-> On the other hand, core io_uring_sqe and io_kiocb space is very limited,
-> so it may be undesirable to dedicate it for a somewhat niche use case.
-> The metadata buffer node storage could be pushed to the NVMe passthrough
-> layer after my in-flight series [1] to reclaim nvme_uring_cmd_pdu space.
-> However, managing request-scoped resources from a ->uring_cmd()
-> implementation is a pain, as the same request can call ->uring_cmd()
-> multiple times and may or may not complete when ->uring_cmd() returns,
-> depending on the ->uring_cmd() return value. io_req_uring_cleanup(), in
-> contrast, provides a single cleanup path for all uring_cmds.
->
-> [1]: https://lore.kernel.org/io-uring/20260909155848.2069290-1-csander@pu=
-restorage.com/T/
->
-> Caleb Sander Mateos (6):
->   bio-integrity: remove dead bio_integrity_copy_user() error path
->   nvme/ioctl: remove struct nvme_uring_data
->   blk-integrity: pass iov_iter to blk_rq_integrity_map_user()
->   nvme/ioctl: pass iov_iter to nvme_map_user_request()
->   io_uring/cmd: support fixed buffer for metadata
->   nvme/ioctl: support fixed buffer for metadata
->
->  block/bio-integrity.c           | 51 ++++++++++--------
->  block/blk-integrity.c           |  7 +--
->  drivers/nvme/host/ioctl.c       | 91 +++++++++++++++++++--------------
->  include/linux/bio-integrity.h   |  1 +
->  include/linux/blk-integrity.h   |  6 +--
->  include/linux/io_uring/cmd.h    | 12 ++++-
->  include/uapi/linux/nvme_ioctl.h |  5 +-
->  io_uring/rsrc.c                 | 28 ++++------
->  io_uring/rsrc.h                 | 17 ++++++
->  io_uring/uring_cmd.c            | 30 ++++++++++-
->  10 files changed, 160 insertions(+), 88 deletions(-)
->
-> --
-> 2.55.0
->
+With this patch applied on top of the CQ-full fix ("io_uring/cmd_net:
+end TX_TIMESTAMP multishot when the CQ is full"), A/B tested in a KVM
+guest from a single kernel binary, with the new behaviour behind a
+test-only runtime switch (the switch is test scaffolding and is not
+part of this patch).  The guest needs no special hardware: QEMU's igb
+model emulates hardware TX timestamping (TSYNCTXCTL/TXSTMPL/TXSTMPH)
+and the igb driver registers a PTP clock, so the guest reproduces the
+same failure the same way.  The two arms are separate runs with their
+own sockets and sends; the device holds one pending hardware
+timestamp, so how many of the 16 sends get a hardware skb varies per
+run (12 and 8 here).  Switch off: 28 skbs generated (16 software + 12
+hardware), deliveries froze at 1 and the remaining 27 (15 software +
+12 hardware) sat in the error queue.  Switch on: 24 skbs generated (16
+software + 8 hardware); all 16 software timestamps were delivered, the
+8 hardware skbs the extractor rejected with -ENOENT were dropped, and
+the error queue drained.
+
+recvmsg(MSG_ERRQUEUE) already treats such a skb as skippable:
+sock_recv_errqueue() dequeues it, returns the error message without a
+timestamp, and frees it.  Do the same here and keep the deliverable
+timestamps moving: drop the skb the extractor rejected and continue
+with the rest of the list.  The CQE-full case keeps its
+requeue-and-end-multishot behaviour.
+
+Fixes: 9e4ed359b8ef ("io_uring/netcmd: add tx timestamping cmd support")
+Cc: stable@vger.kernel.org # needs the CQ-full fix above
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: lollipopkit <a@lolli.tech>
+---
+This applies on top of axboe/for-next (3769bc31a5b7).  The CQ-full fix
+is 3a3d93070c5e in io_uring-7.3; the two touch adjacent lines of the
+same loop, hence the stable note.
+
+Reproducer: a single-file liburing program that runs the three arms
+(destroyed vclock, live vclock, no BIND_PHC) against any NIC with
+hardware TX timestamps, plus a KVM guest setup using QEMU's igb model.
+Happy to post it or turn it into a selftest if that is useful.
+
+One behaviour change worth calling out: skb_has_tx_timestamp() and
+skb_get_tx_timestamp() read sk_tsflags independently, so a concurrent
+setsockopt(SO_TIMESTAMPING) can also make the extractor reject a skb
+the walk selected.  Before this patch that skb was delivered on a later
+run; now it is dropped, as recvmsg(MSG_ERRQUEUE) would.  With a thread
+switching sk_tsflags about 800k times against 20000 sends on loopback,
+this patch dropped 320 such timestamps.  Reading sk_tsflags once per
+run and passing it to both helpers removes that case (0 rejections, 0
+lost in the same test); it changes both helpers' signatures in
+net/socket.c, so I left it out of this fix.  I can send it as a
+preceding patch if you prefer the two together.
+
+ io_uring/cmd_net.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/io_uring/cmd_net.c b/io_uring/cmd_net.c
+index 90d4ec7cc761..406fbe8b7d52 100644
+--- a/io_uring/cmd_net.c
++++ b/io_uring/cmd_net.c
+@@ -138,6 +138,21 @@ static int io_uring_cmd_timestamp(struct socket *sock,
+ =09=09if (!skb)
+ =09=09=09break;
+ =09=09ret =3D io_process_timestamp_skb(cmd, sk, skb, issue_flags);
++=09=09if (ret && ret !=3D -ENOBUFS) {
++=09=09=09/*
++=09=09=09 * The walk selected this skb, but skb_get_tx_timestamp()
++=09=09=09 * cannot extract a timestamp from it: the two use
++=09=09=09 * different checks.  Splicing it back would put it at
++=09=09=09 * the head of sk_error_queue, where every later run
++=09=09=09 * selects it first and fails on it again, so nothing
++=09=09=09 * behind it is ever delivered.  recvmsg(MSG_ERRQUEUE)
++=09=09=09 * frees such a skb without reporting a timestamp; drop
++=09=09=09 * it here as well.
++=09=09=09 */
++=09=09=09__skb_dequeue(&list);
++=09=09=09kfree_skb(skb);
++=09=09=09continue;
++=09=09}
+ =09=09if (ret)
+ =09=09=09break;
+ =09=09__skb_dequeue(&list);
+
+base-commit: 3769bc31a5b79ec406df085592fd9dc14ce7df12
+--=20
+2.54.0
+
