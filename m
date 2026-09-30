@@ -1,121 +1,118 @@
-Received: from mail-244119.protonmail.ch (mail-244119.protonmail.ch [109.224.244.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f38.google.com (mail-yx2-f38.google.com [74.125.224.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7DB4A92DC;
-	Wed, 30 Sep 2026 13:15:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8324F30D1
+	for <io-uring@vger.kernel.org>; Wed, 30 Sep 2026 14:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790774167; cv=none; b=Qe+gqcrK1MXnPJuBpmJ6VvIrnUFwkVHNnKjypV561xXg+UtOnpOsJTOOK4Bfpf4LcCie5De2Q7LZMa5fD3YB7MsMOApeJmM61Ckz9E6jMEOOBQZqAfth4E97ueEyn2YTD3fdp9L06zgSBD11lvJUJ5e+GNB5TTjBtieCEBrQRS0=
+	t=1790778264; cv=none; b=nj5ID87U4fwUvASrSdoQSVnkWEUTX4/ePsdDNyWKxjqV+FV+JAWtRQ9cFWHUL85sLQSxUrKpFc3tEAlr5nns78W4Fguly/oSnuBJg4Z0bzk/bu4AGWATRHdP8dLbLTCO7oEOMzMHz9okwwm0MzxL31o1HHcmdZLbajvWHP/fi+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790774167; c=relaxed/simple;
-	bh=+nmyDT/vAE14pe2SdVMro9kS9KpIlW/SlKFd40pNJ6s=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eKfqvBUMQnUgzbPxLyFFwYz/KdvaNudyW+s3ZfXO0a0gcsfHT6BX7aOSCeQIXE9XlDqWTopXwliqKAN+J53J73vVnJMVjQ9FOnj5KqzLCpFgyh5hTThyTJFOvn1b9sGt3bp+GpiLX1rFZ3AlkNKoWKw66JJ7J5nsMniRq6pr/Os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pgray.dev; spf=pass smtp.mailfrom=pgray.dev; dkim=pass (2048-bit key) header.d=pgray.dev header.i=@pgray.dev header.b=p63pyT4o; arc=none smtp.client-ip=109.224.244.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pgray.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pgray.dev
+	s=arc-20240116; t=1790778264; c=relaxed/simple;
+	bh=IYJIMNtdJcCr4u6cOiHPBOmN0vaj7VFV7Qc18iDIhTc=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=UeJkloUZO6sPAAOrWUKN1b9yWuzHiUFYRtEmG3YrZBxPNWgv7jEqB0kCVgkFlDRTTEfgg0uZr/FqKdG5V9eOQqAgSmbqHylMlLHrysExCJj3qgx7/bpG/jJzo8MSOjH4T7OhymNSVlaiDEIkmaq7PM5iAXN3yaNVhPUJIeL9vSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gctlW0aB; arc=none smtp.client-ip=74.125.224.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pgray.dev header.i=@pgray.dev header.b="p63pyT4o"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pgray.dev;
-	s=protonmail2; t=1790774140; x=1791033340;
-	bh=K/KpVE2vwajq4KerKHo5R/x4bY2UmBRcyxLx2loGpsA=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=p63pyT4oXLZgb23oSNbCSL3T48AZ79tj4ZoELgp4efT9S/5igxFA7NqDajGO8PSBz
-	 7reyI0l1q39+TGE3u/SgWxQXZoFjK4GY6+rd/xSS0NeX+sTOq16ga9c+Z9t2GF+uef
-	 PKUqUlbmBv/MunYklx9iWjCjgjpj8kj05LZiDt/LYbxIM4AnMvWey/qtGr/5GQ2JZK
-	 ntGs1XCBY5+j9WpLI0dfACafR1JwJjHwjjJ0tfQRrL/GrsV654ufZ2IWLDJfFmObyb
-	 LB0+8IqF/Wqii0naVOVXCkNRAJQCKNGFidA+tbm8SswJJV/chbGTmfJLfjidJ0JT/3
-	 zcLN/8/QYpMaA==
-Date: Wed, 30 Sep 2026 13:15:35 +0000
-To: Jens Axboe <axboe@kernel.dk>
-From: pgray <hi@pgray.dev>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, pgray <hi@pgray.dev>
-Subject: [PATCH] io_uring/tw: avoid local task work starvation
-Message-ID: <20260930131446.90741-1-hi@pgray.dev>
-Feedback-ID: 11681129:user:proton
-X-Pm-Message-ID: e3b567c6afaee7ebe3930a8ff423919bbc2174ea
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gctlW0aB"
+Received: by mail-yx2-f38.google.com with SMTP id 956f58d0204a3-6768036283dso654578d50.0
+        for <io-uring@vger.kernel.org>; Wed, 30 Sep 2026 07:24:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790778253; x=1791383053; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=VSBcqx9koa8CG47lz1u32c2OePWRmcPOrAz/9TDxhs4=;
+        b=gctlW0aBm4DLTLgSxnEHcWgiUl429uuP6GkZ1zsXBUrorWGOk3IvMZLNoWLUCTmPe5
+         EHoxCT7Gri9p/hMd2O2WXit4LgM3E+bUJ3JiYNvuuZFKqG7DK6FwGLDP7kYhfGt85E4k
+         R7Fifqx9zWevLeyGv63jc6PR399/An8qleoVSrkdWAbaLwvsGjkiQaJG7i8V11GCzBED
+         9+LYHmDQEa3gbrg7mOohtHu+GgvzP1h6flB/0DTxyi4lVT9Ya0EETjTac7XbE7wjf/QV
+         zWds7vuSOafFahbeolJxAJMChIvxkMayHd8RJ2l6X7YyGY8p9WArV03uZy648Kr73aev
+         jiBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790778253; x=1791383053;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=VSBcqx9koa8CG47lz1u32c2OePWRmcPOrAz/9TDxhs4=;
+        b=h+dpfXO7/IV0n8jzaSPLk2UZay0j4QOcXIS58j3IoxKo9mBA+39hbOmuWzDv2Og/y4
+         arf4zaWEMhyzIQSC6omkDnPVi74S/ssAmue7N+caUNcWZ2jTntZBFvk75oMe9M/PPo+r
+         XwYwr2sUgj1m/ELfavHYB9Z0aWQ+fyb8smkHDb7xJZUwsGUMAkfjKZ3mJCpYQ0lg7ifI
+         DMb7I4vefgS/qaU+qS9Nhz5tMQ+fadpxqphQ8X0o7lJDSMb2jtj3jbVBLRd61pJ4ntSY
+         ulQxuxRz+PCLzg6CBi6E4OAPTr9kNVduQCH+jFkiT7dLcgEroNnQ5z5UTfirrhESHi7w
+         n4Rw==
+X-Forwarded-Encrypted: i=1; AKwUvBwT9VGdFwEfD5Yni2r/uKSXoyVodvR+ZLXZi0eZH096tYq+aNIANYDd8+bt9qkmZ3RH3rIybGXokQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLKOYMsaTH8DXaYmFTzC2+IbPfA0UFliVH0dWZtAffbL6IIurER
+	+YgfBc09ntMir9qxFeGZ79indViSiNxKm1K33KGKoBevcVYA6uscDGP5
+X-Gm-Gg: AYBFou1TwLHvR5QXptx0VK9MdW6/hctTwNSRPvoAzMNQPPC58f/RlHPGvd5Ig5kEQ7R
+	gleUmecttzbVlFdBpMT8hN2o0MNaWW/e3WvmYY3I/boEpqxARdhCdnvLNuQtTGQKhs4Os+uQf/k
+	AvsYOWzSoqgENyxZrqX4TWObedJsdkBB035wuW0kiC8AgCQP9rLSePrPU/AOyLCetadF1POMMYq
+	c7jjVn22W1lHBzwu7XyJ+iMVwEmL7aqOoCT4whoOPFqIutxxRIPO8EkLrLRZTEhwwQxGJFoGeKp
+	ZIyFjOrhHfpAAgQCfHqbSgzxS6HJEqOaqk4jTXcG0Gsi5XGNXo0JZTjEDIJ69fCc0oVBBslo1YJ
+	HbaQvj1cevcs4TbrkbdxiWMExX7teKa/Jjj857KZYC+hPMNmUpmSQQKSUMeOShycZxrgTCqGE1j
+	uvdauMx6Ru/5K78glOu1l1U2onpo77kTdsHygZGpK/QWrBtaAWuuVLMq3ZT1p4YPII0waHXegSS
+	HWfgJEup7IFV7I6KB3lC/fi6Xt+5hlpYVP5eIOMPsl60CxT4B5N
+X-Received: by 2002:a53:d014:0:b0:66f:c1bc:880c with SMTP id 956f58d0204a3-6768349e783mr477179d50.101.1790778253013;
+        Wed, 30 Sep 2026 07:24:13 -0700 (PDT)
+Received: from gmail.com (111.46.245.35.bc.googleusercontent.com. [35.245.46.111])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6768152d0a8sm719338d50.14.2026.09.30.07.24.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2026 07:24:12 -0700 (PDT)
+Date: Wed, 30 Sep 2026 10:24:11 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: lollipopkit <a@lolli.tech>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Jens Axboe <axboe@kernel.dk>, 
+ Pavel Begunkov <asml.silence@gmail.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ io-uring@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.276ffa719c8ac@gmail.com>
+In-Reply-To: <20260929153426.90278d054c98-a@lolli.tech>
+References: <20260929045433.59435-1-a@lolli.tech>
+ <willemdebruijn.kernel.570e0a646f4@gmail.com>
+ <20260929153426.90278d054c98-a@lolli.tech>
+Subject: Re: [PATCH] io_uring/cmd_net: drop unextractable TX_TIMESTAMP skbs
+ instead of requeueing
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-IO_LOCAL_TW_DEFAULT_MAX (20) is too small for massive backlogs
+lollipopkit wrote:
+> On Tue, 29 Sep 2026 11:06:26 -0400, Willem de Bruijn wrote:
+> > lollipopkit wrote:
+> >> Assisted-by: Claude:claude-opus-5-5
+> >> Signed-off-by: lollipopkit <a@lolli.tech>
+> >
+> > Is this a real name?
+> >
+> > https://docs.kernel.org/process/submitting-patches.html#sign-your-work-the-developer-s-certificate-of-origin
+> >
+> > "a known identity (sorry, no anonymous contributions.)"
+> 
+> It is not my legal name. It is the handle I have used publicly for
+> years, including on GitHub (https://github.com/lollipopkit), and it is
+> the identity I sign all my kernel work with. My understanding is that
+> this is what d4563201f33a ("Documentation: simplify and clarify DCO
+> contribution example language") intended by "known identity".
+> The earlier CQ-full fix (3a3d93070c5e) went in under the same name.
+> 
+> If that is not sufficient for this tree, let me know what you need.
 
-this patch fixes by:
-* not counting passive completions against budget
-* add a ceiling of 512: IO_LOCAL_TW_COMPL_MAX
-* clearing IORING_SQ_TASKRUN when local queue empty
+The commit you mention did remove the explicit reference to pseudonyms.
 
-Link: https://github.com/axboe/liburing/issues/1645
-Fixes: f46b9cdb22f7 ("io_uring: limit local tw done")
+I don't know whether a github handle counts as "something we could check
+back with" or where exactly the line gets drawn.
 
-Signed-off-by: pgray <hi@pgray.dev>
----
- io_uring/tw.c | 21 ++++++++++++++++-----
- 1 file changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/io_uring/tw.c b/io_uring/tw.c
-index f573bcc3af6a..236ed01fcfaa 100644
---- a/io_uring/tw.c
-+++ b/io_uring/tw.c
-@@ -16,6 +16,8 @@
- #include "wait.h"
- #include "mpscq.h"
-=20
-+#define IO_LOCAL_TW_COMPL_MAX=09=09512
-+
- static void ctx_flush_and_put(struct io_ring_ctx *ctx, io_tw_token_t tw)
- {
- =09if (!ctx)
-@@ -287,17 +289,23 @@ static int __io_run_local_work_loop(struct io_ring_ct=
-x *ctx,
- =09=09=09=09    int events)
- {
- =09int ret =3D 0;
-+=09int nr_events =3D 0;
-=20
--=09while (ret < events) {
-+=09while (nr_events < events && ret < IO_LOCAL_TW_COMPL_MAX) {
- =09=09struct llist_node *node =3D mpscq_pop(&ctx->work_list, &ctx->work_he=
-ad);
- =09=09struct io_kiocb *req;
-=20
- =09=09if (!node)
- =09=09=09break;
- =09=09req =3D container_of(node, struct io_kiocb, io_task_work.node);
--=09=09INDIRECT_CALL_2(req->io_task_work.func,
--=09=09=09=09io_poll_task_func, io_req_rw_complete,
--=09=09=09=09(struct io_tw_req){req}, tw);
-+=09=09if (req->io_task_work.func =3D=3D io_req_task_complete) {
-+=09=09=09io_req_task_complete((struct io_tw_req){req}, tw);
-+=09=09} else {
-+=09=09=09INDIRECT_CALL_2(req->io_task_work.func,
-+=09=09=09=09=09io_poll_task_func, io_req_rw_complete,
-+=09=09=09=09=09(struct io_tw_req){req}, tw);
-+=09=09=09nr_events++;
-+=09=09}
- =09=09ret++;
- =09}
-=20
-@@ -342,8 +350,11 @@ int io_run_local_work_locked(struct io_ring_ctx *ctx, =
-int min_events)
- {
- =09struct io_tw_state ts =3D {};
-=20
--=09if (!io_local_work_pending(ctx))
-+=09if (!io_local_work_pending(ctx)) {
-+=09=09if (ctx->flags & IORING_SETUP_TASKRUN_FLAG)
-+=09=09=09atomic_andnot(IORING_SQ_TASKRUN, &ctx->rings->sq_flags);
- =09=09return 0;
-+=09}
- =09return __io_run_local_work(ctx, ts, min_events,
- =09=09=09=09=09max(IO_LOCAL_TW_DEFAULT_MAX, min_events));
- }
---=20
-2.55.0
-
-
+If anything, this does seem an outlier compared to other sign offs.
