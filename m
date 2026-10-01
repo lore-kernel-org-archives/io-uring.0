@@ -1,51 +1,95 @@
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D551A43F08C;
-	Thu,  1 Oct 2026 15:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4441E51AFE8;
+	Thu,  1 Oct 2026 15:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790868990; cv=none; b=Dwv+gB39mt2TIbLqqzvPMQUM964Nmb1lPY3W7caXr0pO/PDDdwhPsGwi/gqcFRAD4PB5jyKs8AvEUvYS7EEg5BAiMLUtjojPi7LzZo1Ra0r/kPzvIsR07Hi/eCT8HvGK9P4ZrroHJ+VYLDJoxnon2B5jmecLIgzCJeY1n40wSHk=
+	t=1790869260; cv=none; b=gv+Zo9CuaKBA8agD1hkPuYQRbEr+Q55IFZ9bemtqob32/2Kn9lTZWEmc2RAf8jacgYuTLqu+7oCdj59pXHqUKrd15DT0MiXob1pZqExfZ+Kp7sXF2P+7C0o44zqKHyoOtyoTVuTkJSpxGQEmGA+BZCwpmssXopjZHsl2mNt3cGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790868990; c=relaxed/simple;
-	bh=yJ/LhFqPl8CjtIlZHtaborY4hBzMtXGYUhD5qs/EPWw=;
+	s=arc-20240116; t=1790869260; c=relaxed/simple;
+	bh=Uzu7G2Y6SDQ8/H5FugtB+YXz+u2acsxQFw1bVNcucGw=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=r63lRGq4Vem65k0nh0O1zajhMwae6nBmemfP0ajBzatd1k3GUImcrHXGVn4mtT0XXZo/qbqZNTbL21Pl9A0BDKcRnO7y0HMZV+Dlxygiz1KVo4IOSCINP4C6l1OExaRBuy4VU0RLanPQYT1Xfu+2Odqo9OV5KTN3/uUsuynRKA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=krisman.be; spf=pass smtp.mailfrom=krisman.be; dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b=f9KGlwlK; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=krisman.be
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=krisman.be
+	 MIME-Version:Content-Type; b=b15n6uSUVtg+g3KcGvmZnK7fmhlan+2wbRHClI8dggIyztuMUoIfMVJ6FLsBSFOrsLzxfDMPrTYE0JylEiGsU1TvGAehE3TCjw8fgIohwkgoV8JXSSlbKOImh7iBCJIBNg7LKB+0qgG+SNh82Skq99nmN4WI2pO517rAX1UkQLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mMvPP6ko; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=yMXjK4F0; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=GsYNvxNw; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=H8/xUoxx; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b="f9KGlwlK"
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mMvPP6ko";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="yMXjK4F0";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="GsYNvxNw";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="H8/xUoxx"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4hwbc71KyJzKpDS;
-	Thu, 01 Oct 2026 17:36:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=krisman.be; s=MBO0001;
-	t=1790868983;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 898971FB10;
+	Thu,  1 Oct 2026 15:40:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790869251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Vi1fnMnSyEd4oeHJPdGtovvWeng1BWn+XwgU/ARKPko=;
-	b=f9KGlwlKfy0bPgY5BN8KxY8ZAPZSu9BzZ4bvpdhaVzgHViPw0+QCcGVLbOAx2w1iP+2lGp
-	Y27P7t+lazC6sq6dh76mvxdNnqHgG16LaeIxCSGcXiRnNnUnkgDeX6QclTchHs2fZdcFu4
-	C+O0/yJyI8CzJQoZLWYvunWr4GPFB7jThDmIj34HOUuOBNnykhhHiTyak57AwKIv+6qZG0
-	Dvqz47m+2rWiugbDVx3jX2Ui4CjH5YkxujlDjeRRkelwGcU9o/JFO5BkaQn8Cdac+pDTVZ
-	QJkln+qldQTv63IhmL1DsxhLyTQ4FwpU087AP4yd4vzrszjpWJGAyysFUjeypA==
-From: Gabriel Krisman Bertazi <gabriel@krisman.be>
-To: =?utf-8?Q?=C3=96mer?= Mete Kaya <omermetekaya0@gmail.com>,
- axboe@kernel.dk
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- =?utf-8?Q?=C3=96mer?= Mete Kaya
- <omermetekaya0@gmail.com>
-Subject: Re: [PATCH] io_uring: fix out-of-bounds bvec access in
- io_vec_fill_kern_bvec
-In-Reply-To: <20261001143003.755790-1-omermetekaya0@gmail.com>
-References: <20261001143003.755790-1-omermetekaya0@gmail.com>
-Date: Thu, 01 Oct 2026 11:36:18 -0400
-Message-ID: <87se2pwhzh.fsf@mailhost.krisman.be>
+	bh=Uzu7G2Y6SDQ8/H5FugtB+YXz+u2acsxQFw1bVNcucGw=;
+	b=mMvPP6koTtVQDIJZTFf4mnAZoCPoylMOJPnXbfG9O0hwdirKD9jRablxJ8g/SObakGc1/8
+	ia3J3/Pkruu0AtEjg7r4RQI683FlKyg4ttEacfdVvfOGTFo54fuNwdSY8FVxEqjUUSbqBw
+	Ui6Nn8BPf5CFX9RyHu27zqDfcDVLzag=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790869251;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Uzu7G2Y6SDQ8/H5FugtB+YXz+u2acsxQFw1bVNcucGw=;
+	b=yMXjK4F0GttHmfk7MTpMVmFvyn7cT39bE/byKoz0a2qCL+Oy1SHQmZiDwQP0X495p+EDab
+	oHQoZ+zxm0+9P6Cg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=GsYNvxNw;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="H8/xUoxx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1790869247; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Uzu7G2Y6SDQ8/H5FugtB+YXz+u2acsxQFw1bVNcucGw=;
+	b=GsYNvxNwc8mMqmYjnTEAz//kHHcVIY9OlS076NgudN/8qDOqSgrJMImAj8ePs5ArtnTMPx
+	AGFl7bpu8REBaRYB5fs0AHC4I+xUKlO+FXITI1//rGMD5Yw9gVNUzuPGz5TJHyCQO4qnbu
+	bbF3N8/YTDoOiIUgYHHUzp313n3Yui0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1790869247;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Uzu7G2Y6SDQ8/H5FugtB+YXz+u2acsxQFw1bVNcucGw=;
+	b=H8/xUoxxs20thTxyQ3HQMmV5h+PzRyUpg8F6ar5Sp5VhvWh6a1RXtfT9JTONP6JBzq2hY9
+	8Y5pspR5/wM1frBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 26E8213B80;
+	Thu,  1 Oct 2026 15:40:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id rQXaJ/5+vmqXQAAAD6G6ig
+	(envelope-from <krisman@suse.de>); Thu, 01 Oct 2026 15:40:46 +0000
+From: Gabriel Krisman Bertazi <krisman@suse.de>
+To: Aditya Prakash Srivastava <aditya.ansh182@gmail.com>, Caleb Sander
+ Mateos <csander@purestorage.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Christian Brauner <brauner@kernel.org>,
+ Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+ io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] tools: sync io_uring.h UAPI header
+In-Reply-To: <CAK5ssPOAZ=PGDMjsihKCx87Gw+UBpc0J=NB+pOo8PbSBdzSpgw@mail.gmail.com>
+Organization: SUSE
+References: <20260918090010.1688-1-aditya.ansh182@gmail.com>
+ <20260918090010.1688-2-aditya.ansh182@gmail.com>
+ <CADUfDZorK-i+eOEpGkVFf_vJhqLUKfBX9n_rkiWtbcyoMHT8uw@mail.gmail.com>
+ <CAK5ssPOAZ=PGDMjsihKCx87Gw+UBpc0J=NB+pOo8PbSBdzSpgw@mail.gmail.com>
+Date: Thu, 01 Oct 2026 11:40:29 -0400
+Message-ID: <87pkxtwhsi.fsf@mailhost.krisman.be>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -54,59 +98,63 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 898971FB10
+X-Rspamd-Action: no action
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_TO(0.00)[gmail.com,purestorage.com];
+	HAS_ORG_HEADER(0.00)[];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	TAGGED_RCPT(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim]
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Spam-Level: 
 
-=C3=96mer Mete Kaya <omermetekaya0@gmail.com> writes:
+Aditya Prakash Srivastava <aditya.ansh182@gmail.com> writes:
 
-> for_each_mp_bvec() dereferences src_bvec[bi_idx] in the loop condition
-> before the body is entered, with no guard against bi_idx reaching
-> imu->nr_bvecs. iov_kern_bvec_size() stops iterating when i reaches
-> imu->nr_bvecs even if bi_size is still non-zero, so the fill loop can
-> walk past the end of the bvec array and overrun res_bvec[].
+> On Fri, Sep 18, 2026 at 10:20=E2=80=AFPM Caleb Sander Mateos
+> <csander@purestorage.com> wrote:
+>>
+>> Can you drop the tab character and just use a space between the words?
+>>
+>> Best,
+>> Caleb
+>>
+> Thanks Caleb, will fix that to use a single space in the next revision.
 >
-> Open-code the loop with an explicit bi_idx < imu->nr_bvecs check before
-> the dereference, matching the termination condition in
-> iov_kern_bvec_size().
-
-Do you have a reproducer?  This should be checked in iov_kern_bvec_size.
-We make sure it doesn't go through imu->len which should match bv_len,
-IIUC.
-
+> Hi Jens, Gabriel,
 >
-> Fixes: 1045afae4b88 ("io_uring: support vectored kernel fixed buffer")
-> Signed-off-by: =C3=96mer Mete Kaya <omermetekaya0@gmail.com>
-> ---
->  io_uring/rsrc.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-> index 51b46e624..3d29a0c7b 100644
-> --- a/io_uring/rsrc.c
-> +++ b/io_uring/rsrc.c
-> @@ -1614,8 +1614,13 @@ static int io_vec_fill_kern_bvec(int ddir, struct =
-iov_iter *iter,
->  		struct bio_vec bv;
->
->  		bvec_iter_advance(src_bvec, &bi, offset);
-> -		for_each_mp_bvec(bv, src_bvec, bi, bi)
-> +		while (bi.bi_size) {
+> If there are no other comments or concerns with the patch series, I
+> can send v5 with Caleb's formatting fix addressed. If there are further
+> changes needed, I can pick them up in v5 along with Caleb's space
+> suggestion.
 
-bi.bi_size is the first condition of for_each_mp_bvec.  Do you really
-need an open coded loop?  If there is an issue, can we just add the
-check below?
-
-> +			if (bi.bi_idx >=3D imu->nr_bvecs)
-> +				return -EFAULT;
-
-> +			bv =3D mp_bvec_iter_bvec(src_bvec, bi);
->  			res_bvec[res_idx++] =3D bv;
-> +			bvec_iter_advance_single(src_bvec, &bi, bv.bv_len);
-> +		}
->  		total_len +=3D iov_len;
->  	}
->  	iov_iter_bvec(iter, ddir, res_bvec, res_idx, total_len);
-> --
-> 2.55.0
->
+I don't have further comments. As I mentioned in a previous review, Jens
+pointed out pushing to the io-wq is not the best design, but we don't
+have the infrastructure to do it in a different way yet.
 
 --=20
 Gabriel Krisman Bertazi
