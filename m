@@ -1,151 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF85F4BB29B;
-	Fri,  2 Oct 2026 13:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B2E2F39C2
+	for <io-uring@vger.kernel.org>; Fri,  2 Oct 2026 14:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790949424; cv=none; b=rxjzcEHTaxieJsTywRYfVCvuRGITEcypW9jOcn7Y0i7ejR1jKG2gcqhY3owsit2u2aBJfIc3WL4xc+RpUCwB3szAEvrLQXkDn4wP52MXQeCho+n1yW9Q6YEjMA6t33wFt5e2uOJxh8Jt5O3MKY6h2H9J4XzqN8NIIKQkeFMvIAs=
+	t=1790952513; cv=none; b=rr1j0kQfBpnZ0fdCvTxVevcGOcmsN9xN3STmvvRH2wQSD0F89QK5hKN8SzUTMrzYTmXS9Pcb6VtsDZ4eLkB1EdzGbyXwleKobxWApbmme/EiupObgeZqIzefqzsDpk02KsVjZ8YOxxWUxqjMyawx0aRLzHJz1Mhkwy4ib/s969w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790949424; c=relaxed/simple;
-	bh=2zF+Sfj9s5Ein+P0ya4+ac7E4LQ7ElkPTHjYS8Xz644=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=q8dkj5fichZ9v0zMWMVYhc0T7C/XV+r7ka4oqJzKBn3kCGi+Cxoo0gLy7oiqH7/l7SWKU5NY7Jm92nWdmsM2gbfx2vrJHOjwnX9Q96MH06ofkcE1ynCBPCr3O2yFf5MLnBLYx2DLv8SXJaud/SUBiNx2i6p56KiVsxLqPEjZQzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H+CSu43R; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1790952513; c=relaxed/simple;
+	bh=Oi0Zo7VyQ5RvjbAKhZDXsZLm8sHKxTLi5fgJUxeSatY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=P9flGsLKBHfc4dtYJIYREuRNKhgfCAaxUKJw211gzHjcJz+27pgnIOXYHxMgMF2OSZ69RWUZzJPuypZfjvDXUgDgv1D8oZZcw2bG4X+gP8EI+B0nI/aPmD/24aJ5i9hbPQNu1COVdbzaReFUnYa+vbmZ3jDS5EdhY9cyeIOxfZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=BzkwFQIu; arc=none smtp.client-ip=74.125.231.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H+CSu43R"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D693C2BCF6;
-	Fri,  2 Oct 2026 13:57:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1790949424;
-	bh=2zF+Sfj9s5Ein+P0ya4+ac7E4LQ7ElkPTHjYS8Xz644=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=H+CSu43RNbl4xL0e3yGhk482g5Hebuq+VWgFVSWZ2PDJVgZjZiZRxsh8o1ce9hcoW
-	 2TnCEmxm4WGX9YwVIah2fYkOsBBI6Z0mpfRtyyo6bX55VNd8/qKGLPSmgakT1MqwhT
-	 jiwNPsWXrFVpth+KlKQ5btnNU6Fr6slb7RdbNOaORItcQ5hisje3uNZc9EKG9pH021
-	 L4PPExmMBDWQewyciqJQAm5zSA0eZIObF7I/cQVmkaDWoO7ablqHD7+QyYJxp/HmRu
-	 zGlO6nN8y7JbB5otpCf9HxYzj5o7GGYL+vuOQG/h1AbdtOd+rrZpSUPLJAtxgKDn7D
-	 LESEE3HriRURg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A020CA5FD4;
-	Fri,  2 Oct 2026 13:57:04 +0000 (UTC)
-From: Miguel Garcia via B4 Relay <devnull+miguelgarciaroman8.gmail.com@kernel.org>
-Date: Fri, 02 Oct 2026 15:56:57 +0200
-Subject: [PATCH] io_uring/rw: commit the ring buffer when a read is queued
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="BzkwFQIu"
+Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6def0527340so722341eaf.0
+        for <io-uring@vger.kernel.org>; Fri, 02 Oct 2026 07:48:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790952508; x=1791557308; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=HayPz1S7+qNV1DiQMWraL67OyFTT8PrrA3ZAOdQDzXA=;
+        b=BzkwFQIu2K/c7JeET8RDuG8PZVlgT82ahzpU+bGtjTronRe2yC/ZDVeAtci2speWqw
+         zQ7JpYRfX3hJHbc5wkk+mRho0DLLVqK5EekiAeA3g8y9Hr+4ITIpWAYDcAhAjennNQi6
+         AWI+9gzWGRJBUpv2jiepeHND6qul7ZDU9sPQmDYFWs/Q0/5LEd+T50UWtl7kvxCqDwZF
+         IOsM1EsC09XUrRxAM+vXhklGqkCJv5iyF2HdjATGA7KlhrP6G9+HpNuRGgRG5Jj9D4U7
+         Jy0Q3Dl3uCOhu17OsM6QrsTixmz+gW2xMEYdLFkX2snbm3utTc3Jjxp75ueuBRd+NWSU
+         wQMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790952508; x=1791557308;
+        h=content-transfer-encoding:content-type:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HayPz1S7+qNV1DiQMWraL67OyFTT8PrrA3ZAOdQDzXA=;
+        b=cri6tq6Zu0+mTVOW5E9L3nPVTnBCrDr52Y8/rem5tu2yNHrogfelV5E7izR5nZW1lP
+         6S1YnVNtNy52hTNKnQgV+OTvffNIl2nkQHv5KY9/b1WH5wA2Mkh3wtPLyMMunh0Uoeus
+         if4rfbMG4Y5oM8swT48U7zZsFFd5KpiIuYXV3vexNxPfYVF/EQ5RBhzYfglfh0PSNNoO
+         QBnCfbNElaVvAdp7tqXsRRPrkyiMKMlB6f1L6ScyKA8QjL8lQQCEUm0iucABAev7wg9k
+         8FN2BC1mJdO7kr9msP2dpGDVCDe/DULRCT0Q5wcygAT18yT4osLFZ2YjJ34g7Ud6qOJp
+         dOGg==
+X-Gm-Message-State: AFuF++l4XFa9JBqo6p65obEUvwsf/nSUojxLkL+J2lS4Jc1SzcEWVP7N
+	YMxeSk5lXyj9sVJQ9HxJAcW8pqsISkK2z4wDupSpedOQWLMxOJI90PTujuFMHTl9zBSPeQf1hSc
+	IXufYr9g=
+X-Gm-Gg: AYBFou1IPzGrI+Cg7Bkqr0MOxxHs+xeki5Sn/c2IFo943HWt9O1yZsi89muPeEvjH/O
+	krX8T4LDHfZ3wirhk8n95jrX1ytFsQioJFzOBUlWJD042aD0CrCsT/GtOllolKBhlFdGTnkGv+Y
+	dmWBvDKwx/TsPaMEiqNCU+oQlqr8cvW+xW8xM0TaOJc/4sQ5dDxkV7qIh5oG+2181eElKvYs0Vo
+	gohjPbkXpEcdwV+yXYqJo4wsR80ackLw7XkXeP78hLmmxg2PYNCH+OkXAjd6O/LYphNgBf16ZgV
+	W+rgMvIYAYfYFGf914nzC2QAf4bNwh0dk8ZbMsRyhSh1hIQATIsuVIwHyJkGfeLhi1Sa13gTR04
+	sIdCeNWgWulOXGwMQe8ydgpUNbA5TrHiWzlIDGSdnnFewC6ZCSkjIIuTvpqFY7ugjH/gYScdyP6
+	+ED3Cv/aiw0SiS1/oAgk9qp/KNDSfyjbNuLvqK6h5ePMMYFbRuxSjVGlQdcHCWOVup5yhpbkDu1
+	M/CU4yNgTCET0HQbQgnq0ICwD+bDZfCXQELpmL3Jv0CuoUFFhmDUSnj5RhuL2ZjjA==
+X-Received: by 2002:a05:6820:a50c:b0:6dc:16e5:d37c with SMTP id 006d021491bc7-6df35b3c0d4mr1728902eaf.85.1790952508007;
+        Fri, 02 Oct 2026 07:48:28 -0700 (PDT)
+Received: from [192.168.2.38] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-822792a169fsm3609962a34.4.2026.10.02.07.48.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Oct 2026 07:48:27 -0700 (PDT)
+Message-ID: <0fc0ef2e-93aa-4b18-9816-4f47a77f74ab@kernel.dk>
+Date: Fri, 2 Oct 2026 08:48:26 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: io-uring <io-uring@vger.kernel.org>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [GIT PULL] io_uring fixes for 7.3-rc6
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261002-codex-io-uring-eiocbqueued-v1-1-3fb159b33a47@gmail.com>
-X-B4-Tracking: v=1; b=H4sIACm4v2oC/x3MQQqDMBAF0KvIrB2IKSr2KsWFmXx1NkmbEBHEu
- ze4fJt3UUZSZHo3FyUcmjWGiq5tSPYlbGD11WSNHTpjLEv0OFkjl6RhY2gU9yso8CzTOPS9e41
- WHNXgm7Dq+eSf+b7/EU0/cGwAAAA=
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Miguel Garcia <miguelgarciaroman8@gmail.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1790949423; l=3676;
- i=miguelgarciaroman8@gmail.com; s=default; h=from:subject:message-id;
- bh=v57nh9u23dqRQyIlqtlCgf6++EGJa5Mea4ZnWbGP4a4=;
- b=jQegJ5VAriYKw7EOa0I+F4x5Z+3MQ2xzVA1w5ntmnOMbgxKil73hpDK4c274vKo/SwCav2SRC
- szR3lvcKiPpAQXdCoZgkc5wP2cuS0NtxxhMYULY0N+zDp0mFaROJGDP
-X-Developer-Key: i=miguelgarciaroman8@gmail.com; a=ed25519;
- pk=EtrxRdQ/icT1qmJwjNNAVoBUhKKWwrhU2m6QT/xu6bM=
-X-Endpoint-Received: by B4 Relay for miguelgarciaroman8@gmail.com/default
- with auth_id=1101
-X-Original-From: Miguel Garcia <miguelgarciaroman8@gmail.com>
-Reply-To: miguelgarciaroman8@gmail.com
 
-From: Miguel Garcia <miguelgarciaroman8@gmail.com>
+Hi Linus,
 
-io_read() recycles a provided buffer ring on every negative return
-while REQ_F_BUFFERS_COMMIT is set. -EIOCBQUEUED is one of those
-returns. IOU_ISSUE_SKIP_COMPLETE is defined as -EIOCBQUEUED, and
-io_issue_sqe() turns that into success and leaves the request in
-flight. The queued read still writes the user address chosen at
-buffer selection.
+A set of io_uring fixes for this week. It's really a collection of
+things from the last few weeks, just various life things have got them
+bundled up for this week. This pull request contains:
 
-For a pollable file issued under uring_lock, io_should_commit() is
-false, so recycle clears REQ_F_BUFFER_RING and REQ_F_BUFFERS_COMMIT
-without moving the ring head. io_req_rw_complete() then skips
-io_put_kbuf(). The CQE is posted without IORING_CQE_F_BUFFER, and a
-later IOSQE_BUFFER_SELECT takes the same slot while the first read
-is still in flight.
+- Fix a task_work add use-after-free with SQPOLL, where the sqpoll
+  thread could pop and complete the last request while
+  io_req_normal_work_add() was still looking at them after the mpscq
+  push. Use the same approach as DEFER_TASKRUN to protect from that,
+  holding an RCU read lock across the add, and have exit wait for an RCU
+  grace period for SQPOLL rings as well.
 
-FUSE reaches this from a user mount. fuse_file_operations supplies
-both .poll and .read_iter. A daemon that negotiates FUSE_ASYNC_DIO,
-reports a non-zero size, opens with FOPEN_DIRECT_IO, and answers
-FUSE_POLL with -ENOSYS or POLLIN makes io_file_supports_nowait()
-succeed. fuse_direct_IO() returns -EIOCBQUEUED for an async kiocb
-and keeps the user pages pinned.
+- CQE32 ring fixes: correct the free entry check for 32b CQEs, zero the
+  big_cqe for aux CQEs, and only post the dummy skip CQE on CQE_MIXED
+  rings
 
-Commit the selected length before returning IOU_ISSUE_SKIP_COMPLETE
-and leave REQ_F_BUFFER_RING set, so completion still reports the
-buffer id. io_req_rw_complete() passes a NULL buffer list, so
-dropping the recycle alone leaves the head unchanged. The list
-pointer is stack-local, so the issue path has to commit before it
-returns. The committed length is rw->len, the same length
-io_ring_buffer_select() commits when io_should_commit() is true.
-Non-pollable and IO_URING_F_UNLOCKED issues have already cleared
-REQ_F_BUFFERS_COMMIT. -EAGAIN still recycles.
+- Mark the source filter table as COW when cloning bpf filters, so
+  registering another filter on the source doesn't modify the shared
+  table in place
 
-Commit d8e1dec2f860 ("io_uring/rw: recycle buffers manually for
-non-mshot reads") made io_read() recycle provided buffers on every
-negative return, including -EIOCBQUEUED.
+- Initialize the task context before running the BPF loop
 
-Grok, a coding assistant, found this by reading io_read() and
-fuse_direct_IO() and drafted the change. Debian gcc 12.2.0 built
-io_uring/rw.o and the kernel image. QEMU TCG booted both images.
-On the unpatched image two buffered reads shared one address, the
-ring head stayed 0, and both CQEs lacked IORING_CQE_F_BUFFER. With
-this change the head moved to 1 while the first read was still
-queued, that CQE carried the buffer id, and the second read returned
--ENOBUFS.
+- Requeue zcrx multishot receives stopped by a local resource
 
-Fixes: d8e1dec2f860 ("io_uring/rw: recycle buffers manually for non-mshot reads")
-Cc: stable@vger.kernel.org # 6.18+
-Assisted-by: LLM
-Signed-off-by: Miguel Garcia <miguelgarciaroman8@gmail.com>
----
- io_uring/rw.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ - End a TX_TIMESTAMP multishot cmd when the CQ is full (lollipopkit)
 
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index 0c9494fd21be..a40263d21afe 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -1034,6 +1034,21 @@ int io_read(struct io_kiocb *req, unsigned int issue_flags)
- 	if (ret >= 0)
- 		return kiocb_done(req, ret, &sel, issue_flags);
- 
-+	/*
-+	 * -EIOCBQUEUED leaves the kiocb in flight on the selected user
-+	 * address. Commit the ring buffer here. Completion reports the
-+	 * id with a NULL list. Error returns still recycle below.
-+	 */
-+	if (ret == IOU_ISSUE_SKIP_COMPLETE) {
-+		if ((req->flags & REQ_F_BUFFERS_COMMIT) && sel.buf_list) {
-+			struct io_rw *rw = io_kiocb_to_cmd(req, struct io_rw);
-+
-+			if (!io_kbuf_commit(req, sel.buf_list, rw->len, 1))
-+				req->flags |= REQ_F_BUF_MORE;
-+		}
-+		return io_fixup_restart_res(ret);
-+	}
-+
- 	if (req->flags & REQ_F_BUFFERS_COMMIT)
- 		io_kbuf_recycle(req, sel.buf_list, issue_flags);
- 
+Please pull!
 
----
-base-commit: 648611ee6ed0d27f8b43b7b5863facc3ec94c31b
-change-id: 20261002-codex-io-uring-eiocbqueued-c97655b372cb
 
-Best regards,
+The following changes since commit 47ccc3f1c615a46c25cbf7f3ae60df30b40eb2e6:
+
+  io_uring/rw: keep CQE flags on iopoll requests when adding kbuf flags (2026-09-09 09:59:02 -0600)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.3-20261002
+
+for you to fetch changes up to a92193c91e8839fe5fc209616ea95465ae4b919d:
+
+  io_uring: fix task_work add use-after-free with SQPOLL (2026-09-29 06:52:39 -0600)
+
+----------------------------------------------------------------
+io_uring-7.3-20261002
+
+----------------------------------------------------------------
+Hui Peng (4):
+      io_uring/bpf_filter: mark source as COW when cloning filters
+      io_uring: only post the dummy skip CQE on CQE_MIXED rings
+      io_uring: fix free entry check for 32b CQEs on CQE32 rings
+      io_uring: zero big_cqe for aux CQEs on CQE32 rings
+
+Jens Axboe (1):
+      io_uring: fix task_work add use-after-free with SQPOLL
+
+Junyuan Feng (1):
+      io_uring/zcrx: requeue multishot receives stopped by a local resource
+
+Yao Kai (1):
+      io_uring: initialize task context before running the BPF loop
+
+lollipopkit (1):
+      io_uring/cmd_net: end TX_TIMESTAMP multishot when the CQ is full
+
+ io_uring/bpf_filter.c |  1 +
+ io_uring/cmd_net.c    | 19 ++++++++++++++-----
+ io_uring/io_uring.c   | 16 +++++++++-------
+ io_uring/loop.c       |  5 +++++
+ io_uring/tw.c         |  3 +++
+ io_uring/zcrx.c       |  9 +++++++--
+ 6 files changed, 39 insertions(+), 14 deletions(-)
+
 -- 
-Miguel Garcia <miguelgarciaroman8@gmail.com>
-
+Jens Axboe
 
