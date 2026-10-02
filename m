@@ -1,105 +1,230 @@
-Received: from mail-oo2-f35.google.com (mail-oo2-f35.google.com [74.125.231.163])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E983E3158
-	for <io-uring@vger.kernel.org>; Fri,  2 Oct 2026 14:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EE6223328;
+	Fri,  2 Oct 2026 19:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790953097; cv=none; b=GhjMDANkQg2FmtQJvbtrVHW52gH/6Lf/vFR83BStA6Q9uK8pDW1VhLi2M6YfAvf03ajgpQiAgZtdWaonVGSbj3JCrHuPAclXWmx+ffI+oHrkiSB1v9aGAyJczcF/WXIvmGyp9ofQShDcNj91euIOmXYgIJK8cMzgBi3YDYYkoPg=
+	t=1790967634; cv=none; b=j8wrQ2B2Qr8rDztEHn+RPxt01QwHSTDB4JCkRBnCutA2rsadIt7px0iwOJs0F39M9Fa13cmRKOLKguFHfJOEZXdEIztqSQDASDg87TTBmJ5GfcM9+rkScUb7QTWNdB5kR1D0I/nUB+Z6+c/cL59G4RlTI5oliyiF3F/Kj9vUxAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790953097; c=relaxed/simple;
-	bh=JFdEDO7BbhNdAAOffGyLCj3da0YdfoH8L35xaZiX5f8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=gjiVZYwdiSisIrkVfUa3taTKoOzP+ZpmXXAJo3sTzpCB7fNHmDM48rjYypK+1RNgSVU7UZyF1fa7f9ZYkG9Pr/pr9gRU8ZpYPJOa47T1KjVJQLltTtx69Rd+W+YCshAvsNDXZ8odXHfQyiS/sTgrxJwf2/aTRwfcd5aaJYrtCeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=bcSSrTlw; arc=none smtp.client-ip=74.125.231.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1790967634; c=relaxed/simple;
+	bh=PEbJLvy7CrYN1hf9iYQ+ysoXfJ8bNcfDcQxuv4rB2lg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Yz3XI57f7p8zsGrD+Xu4G9CxjXyrvCkOeyrZL3yffQBSQqQD2zsOStEepnsC/KE8m2fM4Ivneilp5vs1+n3PvnfaQeBrKogXLc/3wng2f9ygHHTkXlQyolhGuazbENL29u44eD9Krwnge99krZb+autawRW+aTil1dqJw6ppxkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YxZ782g1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="bcSSrTlw"
-Received: by mail-oo2-f35.google.com with SMTP id 006d021491bc7-6dd4ce68e4cso1454550eaf.2
-        for <io-uring@vger.kernel.org>; Fri, 02 Oct 2026 07:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790953094; x=1791557894; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8CfKy23CAsxmzAyk3IRCXSKSPIwOrCPeolO+SYZHN/Q=;
-        b=bcSSrTlwut1raL9YU4EnmQwDPvE/jgSzkrSviilqYCOBPNyCMr9xOdT5MELYe/iOSR
-         ldDDIXj3m8IWwYcifdy2gseABpsYvORXSTITWwgFBCjVlnGrG0LqZMIMgCHL3uRi8TXZ
-         w68+ewR/CAZRm/RNcskJLwjcD7Veg8OSnryYtCyHLnuDQt3jwyVM6/HzlLaDnqegXfhb
-         KCuDM5YArWbyViZdbylXlfqQUnmcgTvKiqSiQ6O+l0XWMWVOZrN+40UylOsd8XShs0PR
-         B7iGHXu36bwHCsuTYGnDcMCYLrqKQD0e5g5eqMwxGpPiJqF9/S4TjwbYqvE1rWxUChIZ
-         azJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790953094; x=1791557894;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8CfKy23CAsxmzAyk3IRCXSKSPIwOrCPeolO+SYZHN/Q=;
-        b=dMdo188NqfTZxRgbbu37r/ZhLrtgz2V6gB36OD2cEg87XRwZemzrj95RvVpv1DcgDA
-         FosM9SGo70Y6X8pb7fZZ2cs8kyF766c65+1h+ZMG3m95utF/4JrpYBeQqvFiM3TFR/9Q
-         kWAhWp3ubjT2AHolxJZV3g865cMfjlrf3QCchu93PEgbliL0vNm91rugipO/3a7afOO/
-         0SkuiLZ6KEHXhQ2dV5qfp2w+AU26ihO6wC6kdjgFNCj1j18kwpDemBWE6noyZopisRmW
-         7hlK5LUJaR+BKHTIqs+6wK+fG2ZMAN+9JqEdHiH/M7UMhgDuKx6XWs10cI0buuh6h13R
-         tgEw==
-X-Gm-Message-State: AFuF++nHs4ux6ycf60QLsIxpiqiXlK4IBild+AvrpBG0xNyP+mKUJjrZ
-	o78m1OqHR3raML8xJwiLJ/3wRQR8zcWOf8M5d2xfvI20+6hW0QljpWQ/SeYc6u6BX622AkI7qcJ
-	CkPer70A=
-X-Gm-Gg: AYBFou3QIc3lH7Hi/M7fGhPnvucQjT/6w5U5blMf9CG/O/qrJymfsQ9ZE6mhik5s+UL
-	4lVNwlv4aj7OP3KjiI86Q7d+lfjt09UHIS3B+v1BwIz8s7mhyQ0ZePFfkDduuUFyoZ4s7HVrBTv
-	0T5N6DPqSQtUilamM+X3xbSp7ZoHvDv+rL9Uw0U0o3hbJZPZ+EdZoiZSqXDDjFhfY0M4xApfhEV
-	scrTTgQ45BjGS6Xcy+BFaeTogV2aYSJLF4pAPJmZ0tKrdWM1dKqXoiLgiyNXXl1FWp9LtTk4i9q
-	NG3FK153t/pQ6ca+4xYj6sUkl4oMB1uDxW/RRR8LfZVUrJ9+FaRn3Nbrp3TDvee7eXahHHNzI/A
-	Ek4tVAFYzGI35DiXcfLvr27hr5B/sGQznd+Dy3OSqFldWTaYLFFvyh+/q6XTOzooU5Zhkizd4+B
-	I/tEVd9qpxKAxPLtTb0+GkZOWYPQk1j/Ks8cl5FKhi1kd+fypneMVvLXh06xEhyQiXnomVGyoHJ
-	DJ7K6AIrhNjjBovuceDuu9Dk++Bo977y+129Rxz7h0hhW5vaIOkVQk=
-X-Received: by 2002:a05:6820:4c84:b0:6df:224:2b48 with SMTP id 006d021491bc7-6df2f4f9587mr2369568eaf.10.1790953094043;
-        Fri, 02 Oct 2026 07:58:14 -0700 (PDT)
-Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-82279d738bbsm3089722a34.15.2026.10.02.07.58.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 07:58:13 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, David Wei <dw@davidwei.uk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20261001181752.537767-1-dw@davidwei.uk>
-References: <20261001181752.537767-1-dw@davidwei.uk>
-Subject: Re: [PATCH] io_uring/memmap: fix non-compound alloc fallback with
- memcg accounting
-Message-Id: <179095309317.42551.8653165171642480328.b4-ty@b4>
-Date: Fri, 02 Oct 2026 08:58:13 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YxZ782g1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A01321F000FF;
+	Fri,  2 Oct 2026 19:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790967633;
+	bh=Gcl/f7moFApWo3jqJXdkRteP30YDcjxwYvzQVuzmbj4=;
+	h=From:To:Cc:Subject:Date;
+	b=YxZ782g1CNQTsuUl9y3aigokBAb+oTzvb60oKfr9yAjE4mX7SFOmKq4MYxZOh4e9W
+	 XVf9EzYxllCIsiSKqGctvl7kBgkFuey+xsOpzy8vcO2ibO5m32HmdT1M7R35jJR37e
+	 w/Oba24+G+rSeVoESdLh8XsIgozwQGiTYb7a3E7XHNcrgDK5cylrWnpTOecgeJwP/P
+	 DwgeQ/q6eTHXaXu5LJ+NHeeDtRtY8ub0BgB9Y099dw80D7KyPUdlslLBl8D+wsedPa
+	 g1Kl5Y0wZrVCd9VkUdwRQibtxtJty4wK/t+s1I2SthgksK+ehtF+s2OquVE/eaOM9k
+	 Zt4/aq5PlJlIw==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Alexander Duyck <alexanderduyck@fb.com>,
+	kernel-team@meta.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	io-uring@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	"Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	David Wei <dw@davidwei.uk>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mina Almasry <almasrymina@google.com>
+Subject: [RFC net-next 00/15] xsk: Zero copy through page-pool memory providers
+Date: Fri,  2 Oct 2026 21:00:01 +0200
+Message-ID: <20261002190018.696925-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Hi!
+
+Here's an RFC for you all to enjoy with your favorite Friday
+$BEVERAGE.
+
+AF_XDP zero copy needs a second receive allocator in every driver.
+The driver takes xdp_buff_xsk objects from the XSK buffer pool beside
+its page_pool path and owns their lifetime. Drivers built around
+page_pool and the queue management API, which already support devmem
+and io_uring zero-copy receive, have to duplicate their receive path.
+
+This series makes UMEM a page-pool memory provider instead. Each
+aligned 4 KiB chunk is a NET_IOV_XSK net_iov. Binding a zero-copy
+socket installs the provider on the queue through the queue
+management API. The driver keeps its page_pool allocation, DMA sync,
+recycling and refill code. The provider consumes FILL, drops invalid
+and repeated addresses, and owns RX need-wakeup.
+
+An XSKMAP redirect publishes the UMEM address when every buffer of the
+frame belongs to the socket's provider. XDP_PASS and other redirect
+targets copy into page-backed memory first. TX is unchanged; drivers
+read socket TX descriptors directly.
+
+Core changes:
+
+ - MP_CAP_READABLE and MP_CAP_FRAG. A readable provider may back
+   header and regular pools, and XDP may run on its buffers. devmem
+   and io_uring set MP_CAP_FRAG and keep their behavior.
+ - Providers request RX headroom through the queue configuration.
+ - Readable net_iov areas. netmem_address() resolves provider memory
+   with a load and a shift, without an indirect call.
+ - A refill-completion callback. The XSK provider keeps NAPI scheduled
+   while FILL has entries, and sets NEED_WAKEUP when FILL is empty.
+ - Batched page-pool release for objects handed to userspace.
+ - xdp_buff carries the netmem and a pointer to kernel-owned shared
+   info, so fragment metadata never lives in user-writable UMEM. It
+   grows from 56 to 64 bytes on 64-bit.
+
+Differences from classic zero copy:
+
+ - 4 KiB pages and aligned 4 KiB chunks only. Other layouts fail to
+   bind with -EOPNOTSUPP, but can be supported in the future.
+ - Generic XDP and CPUMAP cannot deliver to a provider-backed socket.
+
+Classic zero copy is unchanged. This does not propose converting
+existing drivers; it is for page_pool drivers without zero copy.
+
+fbnic is the only driver user, +640/-122 for RX and TX. I have bnxt
+working with AF_XDP, plus some performance patches/fixes for the
+AF_XDP core on top of this -- but let's start with these patches.
+
+Patches 1-2 fix bugs in net-next that the series hits. They are
+carried here so the series can be tested on its own.
+
+ 1. "xdp: Size zero-copy skb heads by their contents". XDP_PASS of a
+    zero-copy buffer copies it into an skb whose head is sized by the
+    XSK frame size, which leaves no room for skb_shared_info. A frame
+    that fills its buffer overwrites skb_shared_info. Provider
+    buffers take this path on XDP_PASS, which the usual AF_XDP
+    program returns when no socket is bound to the queue. Reproduced
+    on fbnic in QEMU.
+
+ 2. "eth: fbnic: Report the logical XDP RX queue". fbnic reports
+    queue 0 in rx_queue_index for every queue. AF_XDP drops frames
+    whose queue differs from the socket's, and the usual program
+    looks up its socket by that index, so zero copy works on queue 0
+    only.
+
+Feedback wanted on:
+
+ 0. General thoughts on extending the page pool provider.
+ 1. Does refill_done belong in page_pool, or should finite providers
+    keep NAPI scheduled some other way?
+ 2. PP_FLAG_ALLOW_UNREADABLE_NETMEM is how a pool picks up any
+    provider, readable or not. A driver that only wants AF_XDP must
+    set it, and then passes the core checks for devmem and io_uring
+    too if it supports header split. Drivers that set the flag today
+    may also split buffers, for example mlx5 through
+    page_pool_fragment_netmem(). Only QCFG_RX_HEADROOM keeps the
+    unsplittable XSK provider away from them. Split the flag, or let
+    drivers declare support for unsplittable providers?
+ 3. Is growing xdp_buff by 8 bytes acceptable?
+ 4. How should userspace learn the chunk constraints before bind?
+
+This is a way to move code from the drivers to the core, reducing the
+work for driver developers.
+
+I hope to see you at LPC next week! Particular the netdev and bpf MC,
+and the AF_XDP BoF on Monday.
 
 
-On Thu, 01 Oct 2026 11:17:52 -0700, David Wei wrote:
-> io_region_allocate_pages() first tries io_mem_alloc_compound(). If that
-> fails, it uses alloc_pages_bulk_node() to allocate separate pages.
-> 
-> The bulk allocator does not support memcg accounting. __GFP_ACCOUNT is
-> unconditionally supplied, so when memcg_kmem_online() is true, it only
-> allocates one page. For a multi-page request, io_uring treats this short
-> result as failure and returns ENOMEM, even when the memcg has enough
-> space for all pages.
-> 
-> [...]
+Björn
 
-Applied, thanks!
+Björn Töpel (15):
+  xdp: Size zero-copy skb heads by their contents
+  eth: fbnic: Report the logical XDP RX queue
+  net: Add memory provider capabilities
+  net: Let memory providers set RX buffer headroom
+  page_pool: Extend memory provider operations
+  xdp: Track non-page netmem in receive buffers
+  xsk: Keep the DMA mapping in the buffer pool
+  xsk: Handle a detached FILL ring in RX wakeup
+  xsk: Add a page-pool memory provider for UMEM
+  xsk: Add RX helpers for page-pool drivers
+  xdp: Copy provider buffers on pass and redirect
+  xsk: Receive provider UMEM without copying
+  eth: fbnic: Support AF_XDP zero-copy receive
+  eth: fbnic: Support AF_XDP zero-copy transmit
+  Documentation: xsk: Document page-pool zero copy
 
-[1/1] io_uring/memmap: fix non-compound alloc fallback with memcg accounting
-      commit: 68477e4c562e3ec1333f64e010d75b3a257e7997
+ Documentation/networking/af_xdp.rst           |  65 ++
+ Documentation/networking/netmem.rst           |   7 +-
+ .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |   5 +
+ .../net/ethernet/meta/fbnic/fbnic_netdev.c    | 164 ++++-
+ .../net/ethernet/meta/fbnic/fbnic_netdev.h    |   4 +
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 561 ++++++++++++---
+ drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |  24 +
+ include/net/netdev_queues.h                   |   6 +
+ include/net/netmem.h                          |  32 +-
+ include/net/page_pool/helpers.h               |  62 +-
+ include/net/page_pool/memory_provider.h       |  39 +-
+ include/net/page_pool/types.h                 |   8 +-
+ include/net/xdp.h                             |  64 +-
+ include/net/xdp_sock.h                        |  10 +
+ include/net/xdp_sock_drv.h                    |  58 +-
+ include/net/xsk_buff_pool.h                   |   7 +-
+ io_uring/zcrx.c                               |   4 +-
+ net/core/dev.c                                |   4 +-
+ net/core/dev.h                                |   5 +
+ net/core/devmem.c                             |   7 +-
+ net/core/filter.c                             |  28 +-
+ net/core/netdev_config.c                      |   2 +
+ net/core/netdev_rx_queue.c                    |  61 +-
+ net/core/page_pool.c                          |  72 +-
+ net/core/xdp.c                                | 112 ++-
+ net/ethtool/rings.c                           |  18 +-
+ net/xdp/Kconfig                               |   1 +
+ net/xdp/xsk.c                                 | 253 ++++++-
+ net/xdp/xsk.h                                 |  58 ++
+ net/xdp/xsk_buff_pool.c                       | 667 +++++++++++++++++-
+ 30 files changed, 2164 insertions(+), 244 deletions(-)
 
-Best regards,
+
+base-commit: 071876fd50482a68603a9460d80dd6dd58827ee1
 -- 
-Jens Axboe
-
-
+2.55.0
 
