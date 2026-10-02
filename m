@@ -1,163 +1,105 @@
-Received: from mail-oa2-f34.google.com (mail-oa2-f34.google.com [74.125.231.98])
+Received: from mail-oo2-f35.google.com (mail-oo2-f35.google.com [74.125.231.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2D82D0C92
-	for <io-uring@vger.kernel.org>; Fri,  2 Oct 2026 14:55:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E983E3158
+	for <io-uring@vger.kernel.org>; Fri,  2 Oct 2026 14:58:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790952954; cv=none; b=udeUP4YReFb2uBgdKYCr1Lu6dj52x1ePGqqNwB3qiqM+J4xLDNCqTu41aC/rhrNe+EWGli8g+CTTwwHZIEcrgqFVPeUCLGAhSXE8pDCN6Yw7ZHRaWFb+bH6I7pYSeUNQxo/19ZWtvR0ZBBkUrZFg8Ct5lYhSbI1XLUXWLIjlN6s=
+	t=1790953097; cv=none; b=GhjMDANkQg2FmtQJvbtrVHW52gH/6Lf/vFR83BStA6Q9uK8pDW1VhLi2M6YfAvf03ajgpQiAgZtdWaonVGSbj3JCrHuPAclXWmx+ffI+oHrkiSB1v9aGAyJczcF/WXIvmGyp9ofQShDcNj91euIOmXYgIJK8cMzgBi3YDYYkoPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790952954; c=relaxed/simple;
-	bh=mWawWoT/4zGtCooTZRrFjQzDVEsQ87rz1F1yEWua8Jw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nyYphG5GtpzbJTKOXbUNHwaTTWFw8129n+uX4nMVhq31zIO8blED28iuRZFKvsJAL2HB8NNuPVzNSfSOLul9AWg+ebAfaZ4t1+OWY1ytaqhFeLr5k4xFbUAYMssK/essDyagymne8QGv/A7+Y830GPVVa8qVDEaLEo6167B1XV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=WIcj47sU; arc=none smtp.client-ip=74.125.231.98
+	s=arc-20240116; t=1790953097; c=relaxed/simple;
+	bh=JFdEDO7BbhNdAAOffGyLCj3da0YdfoH8L35xaZiX5f8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=gjiVZYwdiSisIrkVfUa3taTKoOzP+ZpmXXAJo3sTzpCB7fNHmDM48rjYypK+1RNgSVU7UZyF1fa7f9ZYkG9Pr/pr9gRU8ZpYPJOa47T1KjVJQLltTtx69Rd+W+YCshAvsNDXZ8odXHfQyiS/sTgrxJwf2/aTRwfcd5aaJYrtCeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=bcSSrTlw; arc=none smtp.client-ip=74.125.231.163
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="WIcj47sU"
-Received: by mail-oa2-f34.google.com with SMTP id 586e51a60fabf-49df0f3a690so749210fac.3
-        for <io-uring@vger.kernel.org>; Fri, 02 Oct 2026 07:55:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="bcSSrTlw"
+Received: by mail-oo2-f35.google.com with SMTP id 006d021491bc7-6dd4ce68e4cso1454550eaf.2
+        for <io-uring@vger.kernel.org>; Fri, 02 Oct 2026 07:58:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790952951; x=1791557751; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+aS1nFHs1o26b9G5lmQi2V+h1cf11SB88eiBbPfTjO4=;
-        b=WIcj47sUpRFBtqjA0GLnqxuCUFXZM9zyHz5gg4gBKWQx6HMuiZ8lRfhKIY5HE+sUxw
-         RpzuxqokkIjOVEwQHyhZuDe1L1h3wvnOH4kwi9sJKMQ3sscQhA17KGS44KU1BvOxwmEy
-         npKm3GOYK8Q5K9UC9C08WBbCqLi0bnZKYG1dVyKcFpruoSnNhfoMyX0o4fZcyTzpUHUa
-         adcU3ZG6vU4pclmuuG2KHBidl33DCRFxIQ+wQQPXr4lMNI65bVyn9U2fdGIEtg5GjXu2
-         /mxjwVwp2qBKTIsPlp4kDQ0ktwYC6DxO1Q7o6az586tuKp1kmv0KruFNwtEdPnq+op93
-         kTGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790952951; x=1791557751;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1790953094; x=1791557894; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+aS1nFHs1o26b9G5lmQi2V+h1cf11SB88eiBbPfTjO4=;
-        b=0PL8Y6dxtUmB+4RvJrzlF3Uj5JcLX7lzfwlmSSfwvaBLJNsvPGwh436vY/zwjMGkob
-         3h+y+bY7N1+G3fDvMCTsDqNVFPd/an0LBJs2+aTousdMy+u4KOf5cRZls51yJUQhbVFm
-         9y/cj/eArCT7tmWjhrsOqmOW/W4X4shgzohMjZ4U6tSkwmXMBafUD+RAJ21sj5tpRYS5
-         NbDJDS2y6+pZoSiBrOGVJgnumsD7LXBONlNvYVchP4XMWZTQbdvHQSstcT60cTJZ9uor
-         EWc6dmBV/Z5qOceRz4iYMKGzyqXImN9Ug59LHmflIoOre5BB4Aqxdehd71ekI9pTlMxr
-         tSsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwfIz5BUeRDnkAo1bNfya7x6YoxG6riPXTxgv2H9dKSGVbVEaZYa85uhVWUZxDO2U775g2RKO0GNQ==@vger.kernel.org
-X-Gm-Message-State: AFuF++lPYwyy4qfekiGlgLjuD8qzNgHLvn2NziuY8IF+Kpu0TDbF4IDm
-	cBS3ofCX1KX7EzKmnfc/m6I0HEl3mzx4v3NXV7J7V2V8DhocSriiK0V0HQHEEyDrNHM=
-X-Gm-Gg: AYBFou1xYE+NNQJKWmYob0cG+fOMc6tnyKtfzvj006BhdJQ5TPpTfd/qO3G6+H4SfTU
-	7MlogQyJObij7BBkb4RthEBGsC/CAD4nBSzrQqKF/lEeAExDMvf3jUvFh2FqNduROUdS7v2F5Og
-	jeHcnVuNoQdU66zW33j6d+VvSB8tD1pK3BKLlJQBWK5DHMGanp5VBRRduZDZMIW6ssvTwKKNPoM
-	a9hX+nDhuqHNI66cCp1aW5hHlkhNdJ5gm+EUv6ATJe335HvmQf0a7YmLvCOHwBIrKsF1GCDhV7/
-	Xs50FzT4//MCkffsraYh3YMlRVGzPnQGH7MRMfNFFtgAnAl1mxtFQelf9Elcy+YBGicK5vr+/20
-	IcLjXYvxx3KnvNSu+86qC1wGFtSTjd0GxCWP+4svuWjxXqVz9nmoQiaglMXwP7vlTtzgXNQf4Ip
-	SqUVG5LnE5REVd0BmksUfoxM1iYSBRn2ilx+Yx/lvZ8yQXjpz/imdRyNkgx6VrGLb1DHeYYykTT
-	+RsfgiW1cuMuBzRKk9orkOs+AoNDDcrU/jLsjKsl6lzm7xqFirc6Fg=
-X-Received: by 2002:a05:6808:1828:b0:4f3:68d6:f12c with SMTP id 5614622812f47-4f528de5ecfmr2380933b6e.24.1790952950725;
-        Fri, 02 Oct 2026 07:55:50 -0700 (PDT)
+        bh=8CfKy23CAsxmzAyk3IRCXSKSPIwOrCPeolO+SYZHN/Q=;
+        b=bcSSrTlwut1raL9YU4EnmQwDPvE/jgSzkrSviilqYCOBPNyCMr9xOdT5MELYe/iOSR
+         ldDDIXj3m8IWwYcifdy2gseABpsYvORXSTITWwgFBCjVlnGrG0LqZMIMgCHL3uRi8TXZ
+         w68+ewR/CAZRm/RNcskJLwjcD7Veg8OSnryYtCyHLnuDQt3jwyVM6/HzlLaDnqegXfhb
+         KCuDM5YArWbyViZdbylXlfqQUnmcgTvKiqSiQ6O+l0XWMWVOZrN+40UylOsd8XShs0PR
+         B7iGHXu36bwHCsuTYGnDcMCYLrqKQD0e5g5eqMwxGpPiJqF9/S4TjwbYqvE1rWxUChIZ
+         azJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790953094; x=1791557894;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8CfKy23CAsxmzAyk3IRCXSKSPIwOrCPeolO+SYZHN/Q=;
+        b=dMdo188NqfTZxRgbbu37r/ZhLrtgz2V6gB36OD2cEg87XRwZemzrj95RvVpv1DcgDA
+         FosM9SGo70Y6X8pb7fZZ2cs8kyF766c65+1h+ZMG3m95utF/4JrpYBeQqvFiM3TFR/9Q
+         kWAhWp3ubjT2AHolxJZV3g865cMfjlrf3QCchu93PEgbliL0vNm91rugipO/3a7afOO/
+         0SkuiLZ6KEHXhQ2dV5qfp2w+AU26ihO6wC6kdjgFNCj1j18kwpDemBWE6noyZopisRmW
+         7hlK5LUJaR+BKHTIqs+6wK+fG2ZMAN+9JqEdHiH/M7UMhgDuKx6XWs10cI0buuh6h13R
+         tgEw==
+X-Gm-Message-State: AFuF++nHs4ux6ycf60QLsIxpiqiXlK4IBild+AvrpBG0xNyP+mKUJjrZ
+	o78m1OqHR3raML8xJwiLJ/3wRQR8zcWOf8M5d2xfvI20+6hW0QljpWQ/SeYc6u6BX622AkI7qcJ
+	CkPer70A=
+X-Gm-Gg: AYBFou3QIc3lH7Hi/M7fGhPnvucQjT/6w5U5blMf9CG/O/qrJymfsQ9ZE6mhik5s+UL
+	4lVNwlv4aj7OP3KjiI86Q7d+lfjt09UHIS3B+v1BwIz8s7mhyQ0ZePFfkDduuUFyoZ4s7HVrBTv
+	0T5N6DPqSQtUilamM+X3xbSp7ZoHvDv+rL9Uw0U0o3hbJZPZ+EdZoiZSqXDDjFhfY0M4xApfhEV
+	scrTTgQ45BjGS6Xcy+BFaeTogV2aYSJLF4pAPJmZ0tKrdWM1dKqXoiLgiyNXXl1FWp9LtTk4i9q
+	NG3FK153t/pQ6ca+4xYj6sUkl4oMB1uDxW/RRR8LfZVUrJ9+FaRn3Nbrp3TDvee7eXahHHNzI/A
+	Ek4tVAFYzGI35DiXcfLvr27hr5B/sGQznd+Dy3OSqFldWTaYLFFvyh+/q6XTOzooU5Zhkizd4+B
+	I/tEVd9qpxKAxPLtTb0+GkZOWYPQk1j/Ks8cl5FKhi1kd+fypneMVvLXh06xEhyQiXnomVGyoHJ
+	DJ7K6AIrhNjjBovuceDuu9Dk++Bo977y+129Rxz7h0hhW5vaIOkVQk=
+X-Received: by 2002:a05:6820:4c84:b0:6df:224:2b48 with SMTP id 006d021491bc7-6df2f4f9587mr2369568eaf.10.1790953094043;
+        Fri, 02 Oct 2026 07:58:14 -0700 (PDT)
 Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4f5243d47absm1998187b6e.8.2026.10.02.07.55.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 07:55:50 -0700 (PDT)
-Message-ID: <ff775d61-d0fc-4ce7-a3a2-91789570ce45@kernel.dk>
-Date: Fri, 2 Oct 2026 08:55:49 -0600
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-82279d738bbsm3089722a34.15.2026.10.02.07.58.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Oct 2026 07:58:13 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, David Wei <dw@davidwei.uk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20261001181752.537767-1-dw@davidwei.uk>
+References: <20261001181752.537767-1-dw@davidwei.uk>
+Subject: Re: [PATCH] io_uring/memmap: fix non-compound alloc fallback with
+ memcg accounting
+Message-Id: <179095309317.42551.8653165171642480328.b4-ty@b4>
+Date: Fri, 02 Oct 2026 08:58:13 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring: fix out-of-bounds bvec access in
- io_vec_fill_kern_bvec
-To: Ming Lei <tom.leiming@gmail.com>, =?UTF-8?Q?=C3=96mer_Mete_Kaya?=
- <omermetekaya0@gmail.com>
-Cc: Gabriel Krisman Bertazi <gabriel@krisman.be>, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261001143003.755790-1-omermetekaya0@gmail.com>
- <87se2pwhzh.fsf@mailhost.krisman.be>
- <20874bd2-f827-4ef8-9855-dc8aaec874fa@gmail.com>
- <CACVXFVMrjhACs9mQMkJJxYXsTyh=a1ZHUmg1i9hK2+TZdwbXFQ@mail.gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CACVXFVMrjhACs9mQMkJJxYXsTyh=a1ZHUmg1i9hK2+TZdwbXFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On 10/2/26 12:04 AM, Ming Lei wrote:
-> On Thu, Oct 1, 2026 at 2:55?PM ?mer Mete Kaya <omermetekaya0@gmail.com> wrote:
->>
->>
->>
->> On 10/1/26 18:36, Gabriel Krisman Bertazi wrote:
->>> ?mer Mete Kaya <omermetekaya0@gmail.com> writes:
->>>
->>>> for_each_mp_bvec() dereferences src_bvec[bi_idx] in the loop condition
->>>> before the body is entered, with no guard against bi_idx reaching
->>>> imu->nr_bvecs. iov_kern_bvec_size() stops iterating when i reaches
->>>> imu->nr_bvecs even if bi_size is still non-zero, so the fill loop can
->>>> walk past the end of the bvec array and overrun res_bvec[].
->>>>
->>>> Open-code the loop with an explicit bi_idx < imu->nr_bvecs check before
->>>> the dereference, matching the termination condition in
->>>> iov_kern_bvec_size().
->>>
->>> Do you have a reproducer?  This should be checked in iov_kern_bvec_size.
->>> We make sure it doesn't go through imu->len which should match bv_len,
->>> IIUC.
->>
->> Yes I checked more and looks like the *bug* is unreachable via existing
->> in-tree callers.>>
->>>> Fixes: 1045afae4b88 ("io_uring: support vectored kernel fixed buffer")
->>
->> It doesnt fix something broken actually, more like a defensive refactoring.
->>
->>>> Signed-off-by: ?mer Mete Kaya <omermetekaya0@gmail.com>
->>>> ---
->>>>  io_uring/rsrc.c | 7 ++++++-
->>>>  1 file changed, 6 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
->>>> index 51b46e624..3d29a0c7b 100644
->>>> --- a/io_uring/rsrc.c
->>>> +++ b/io_uring/rsrc.c
->>>> @@ -1614,8 +1614,13 @@ static int io_vec_fill_kern_bvec(int ddir, struct iov_iter *iter,
->>>>              struct bio_vec bv;
->>>>
->>>>              bvec_iter_advance(src_bvec, &bi, offset);
->>>> -            for_each_mp_bvec(bv, src_bvec, bi, bi)
->>>> +            while (bi.bi_size) {
->>>
->>> bi.bi_size is the first condition of for_each_mp_bvec.  Do you really
->>> need an open coded loop?  If there is an issue, can we just add the
->>> check below?
->>
->> mp_bvec_iter_bvec() is called in the for-loop condition not the body:
->>
->>     for (iter = (start);
->>         (iter).bi_size &&
->>             ((bvl = mp_bvec_iter_bvec((bio_vec), (iter))), 1); <-***
->>         bvec_iter_advance_single(...))
->>
->> src_bvec[bi_idx] is dereferenced before the loop body is entered.
->> A check inside the body executes after the out-of-bounds read has
->> already occurred. The open-coded loop is the way to check bi_idx
->> before the dereference. The question is "should the kernel be defensive
->> itself or trust the callers?". If you find these kinds of defensive
->> controls unnecessary, happy to withdraw the patch instead of releasing v2.
+
+On Thu, 01 Oct 2026 11:17:52 -0700, David Wei wrote:
+> io_region_allocate_pages() first tries io_mem_alloc_compound(). If that
+> fails, it uses alloc_pages_bulk_node() to allocate separate pages.
 > 
-> bio/bvec iterator is written in this way from begining.
+> The bulk allocator does not support memcg accounting. __GFP_ACCOUNT is
+> unconditionally supplied, so when memcg_kmem_online() is true, it only
+> allocates one page. For a multi-page request, io_uring treats this short
+> result as failure and returns ENOMEM, even when the memcg has enough
+> space for all pages.
 > 
-> So it looks you should work on improving the iterator helper, instead
-> of open code for the single user only.
+> [...]
 
-Indeed, it's a generic helper. If there's a potential issue in that
-helper, then that is where the fix should go - not having users
-open-code the iteration.
+Applied, thanks!
 
-So please take a look at the root cause instead, I'll ignore this patch.
+[1/1] io_uring/memmap: fix non-compound alloc fallback with memcg accounting
+      commit: 68477e4c562e3ec1333f64e010d75b3a257e7997
 
+Best regards,
 -- 
 Jens Axboe
+
+
+
