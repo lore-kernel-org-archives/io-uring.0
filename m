@@ -1,150 +1,175 @@
-Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
+Received: from mail-oo2-f40.google.com (mail-oo2-f40.google.com [74.125.231.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B736248F006
-	for <io-uring@vger.kernel.org>; Thu,  1 Oct 2026 19:59:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790884780; cv=none; b=Qda5pySKE6Krh8ycqoGVOytruEDzn8pbZy2ZT9xjsZ6PXdkXDHCvAw4BQnZ837rt/QkQiQYXGrSEQLvwEb+tzM02vd7yl6YZ4htfwEBiKGsYyZoV6qclb6ND0cYreN+qiZEZQf/kV9cspSbgKZEzm33F9tIi+6ZH7oef5UdPz30=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790884780; c=relaxed/simple;
-	bh=NsnC98lLEmPtzcI5SMcnYMNXlik1DQeccKtACiMtII8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hrp9AI2U5HQcLpK6P+XI+DK43HO7UjN+rTBarSrqc7IKWPb3vw+IlEjl5mL8wXcxYGpAPkzw4D7iWRyotW9ahlz59WonrTjrNMl0O6AcKGieXTDk051voK7IJ21nGQMloj3UMr3zv1SrQEEWafIc5EkHYjoc/0FiEd2SLpvcIyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=KqD23dGv; arc=none smtp.client-ip=74.125.229.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94FB36EAB8
+	for <io-uring@vger.kernel.org>; Fri,  2 Oct 2026 06:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.168
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790921076; cv=pass; b=KUyXtun2k0eT0Rb+BAsoRuon17WlqQjWUXakqxXBKM6Le7TnHL7EN2/pYGW0J3NNQGkFcq8FZ6ruuVHAvFj0BpLjPuiPzbzIaeOlSwwOeo4wXJ1eUUJqaJ8/5qaLjL8Uhff51qnKyHqotR5kiB9GFO3o9g0NDCqtL8SV3gMbjm8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790921076; c=relaxed/simple;
+	bh=O4p10DvGJtAEkmkiTAv3pxmj0FlZKDktqwxkxncemtY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HB417RFpie3ngMW6K1LcMlxwpHvb3DKYbWC5LvLmUM4qejTY7nPF9XfcqD6oVIHs5lIkwurelWxpvGi4elO4ax37dAhUBT6OScrpbqMoD5GckEKGjt75EUsdeCZForK0iejwhyy7ihmTl9bj8OmU235/Wf7USILPEPwyHMUuGd0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K6mbzwVR; arc=pass smtp.client-ip=74.125.231.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="KqD23dGv"
-Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-33be7dfcfc1so8757219eec.1
-        for <io-uring@vger.kernel.org>; Thu, 01 Oct 2026 12:59:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K6mbzwVR"
+Received: by mail-oo2-f40.google.com with SMTP id 006d021491bc7-6dfd65cc5ebso18996eaf.0
+        for <io-uring@vger.kernel.org>; Thu, 01 Oct 2026 23:04:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790921074; cv=none;
+        d=google.com; s=arc-20260327;
+        b=QwqvZNnQMKp3kLzRjWs9wlKLh0jPzzl9BM8Uh2YR0Wapx71HNsbolX90JN8tORgsa8
+         ZLTVouMoTfoOy7rO2+NAKYTQQhjRB2r2M57KDyhxbXhTBG2qk59uqtu6gTn5TW6IHY7W
+         IHrZXuVk4AEkIm20MGay0zAGe67dojQAUfxsXVztofearKz4IEJ0QJnL5tHXIulMknqn
+         tCQxgFPEJ2Zt9T3S/k/xTKkSc5SyM42Q6TWLWm26hPILrm/GCoKX9wXKupexJBY8tjV6
+         cwPH/N23zo5PALWrUPwpZd0U8+COF3R0anV9vY2Fkdqb5NnrUvQ98keiivoTLes0VgJ0
+         Gi+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UM2JzAgkGD7BHOZnHMq8unejo4FpCXzpYWfXmWGl2mQ=;
+        fh=AehLoUzC8LgTDnuu/DqYei7Ago40Rv0v938CeV6GWu8=;
+        b=N0JbtySZLhKnI+J7/w3/pzGscLQotj1VUB/OdsoTw2igjfbmAQMQDlKSqXKL3r8tBc
+         l/OuUGDxg25BB3pzUlvUhXkYEQapsW8mvsLbpLah4GTxuXyqVfx/U8h2dwehPZyIBY6J
+         1as63NGMFlis8x0zAhVdOXcedvyAqBVnwBkD2hKQG7UERqDaNLYScII8CMzrBekp8QM8
+         jE0qPwCqbbZ7k1S6k+HtRZ+RkH/BnqEljJhi6MfgILTOfotfxS4opeGPfih0sHRQmvSq
+         +b/QBN615Tnm9mjy67A8tTgEsKbrbTbHUbflPq5PH27EALrslB+RIYcLC/TTFqCwYWpV
+         adNw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1790884778; x=1791489578; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OlXZfN2jIHCSSReMxEXaJOTvyPeL6Xzu27uw/Bz4HZA=;
-        b=KqD23dGvULJkKYgH9Bah96o7VukM4ffhkL5rSvi512UNtjD96q9L3j143Sl6xdDDWc
-         F6lWoHJ9DT6m5PcwdmJmh+VZxzIvLaXwvjTOIY+LpZ4I6Y7w1cawfYNPINrPXCAbVQYi
-         ZatCOiQbFIbSsxy6fYjkB1Y+DvEkDUJkp5EiHbwj21osPDOBGXsm54aj11GAUTR7cou1
-         rZwowTiE3FqbEDHUxzg/eAZ2Vt/tT//qZlTgEWDTgberYqpBxBTk83EF2rPwpaQWvvMb
-         8ny0sAw9ATrgABsMxOGeO8EU6E3bxZl8+l52WT9BXQvlgnjKIL7nSMiEce9ZlMxbn0BQ
-         wR1Q==
+        d=gmail.com; s=20251104; t=1790921074; x=1791525874; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=UM2JzAgkGD7BHOZnHMq8unejo4FpCXzpYWfXmWGl2mQ=;
+        b=K6mbzwVRrveB30sOj45FGnFHwUyDTJrsP2ZAh+YZ57ydee7xIW6UvOooKvWgoF2QNp
+         nHiTsgggVsRXSfmBXCAqrcn5MOa2NxjfDaQrrRpWVpR2jVtSDPXDVe7vg08dwAXZqiTb
+         PkJluYyqPwiNse+V2GASy6W+awv5Q30aw49lLu0i3co/g4Wbtc0Y/0sCx/AQ/zkj2yzt
+         AYHo7D6Ma3sBG1ORQNvHNo7l6f6K4KcMhiphbpijovIk6ncuOBfR7Y+dd83fAbl0BfC0
+         zOe82Y1mupoZzIVpEijMbAJInmXRDXFA7RGD004UQnjVSzsWEVabIOuOeccBQf6GuRXE
+         qQLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790884778; x=1791489578;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=OlXZfN2jIHCSSReMxEXaJOTvyPeL6Xzu27uw/Bz4HZA=;
-        b=TNKnU8jiUNE8YEPVXKVSkHjR47h/IpTnvd5JjCEXBD5/ha/GTlbgp3sm9gHu9fpU38
-         XBm4g3fa32UU2iBPjeuTW22/+iC4IOuQWWIsmzZ2ZIh95l6HtvX9CH6yT2StcsTBOL5W
-         ijGPe1U6znkVeD/jwVW92gD31C3+qFTqtAGvEuh/MvbgPTuRoYUmYY1Pl8XqdJAtu7lu
-         TYY5V89GC+YLiyp4cl6MFKlxtJmL7WhHxg+isdQNMDS3JcWIW8hEljKeTTwK+SFXoDNt
-         cHsRz17CABR26HAfWSN6+Is0kEmZsorFxlJxUZ7AEB2hPWn2tpBbXg8DtRuKVy5YzIm8
-         vY8A==
-X-Forwarded-Encrypted: i=1; AKwUvBxhNJoZFzFay6QhEk0XMNODcUnay+w0t8lRhR6lqALXYnWZnkl204hJS5h9jDFGSlYtFXZr/boXRw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIvQjDXfqV99jZWLe/7Cnx1Ghul8b5zf3SczCYmB9ScV3L2JRKR
-	2q6olFIUNiViHZDMwMtRT3O2a0/52fjXMQz/QaMozYg5VhuC/txxkcR1NJSNsgEXpx+1WQdkJGa
-	4dEMV
-X-Gm-Gg: AYBFou21hvpON2hKD7SsEh99I+/ZJ6DWLoIRA1KLsYIcjR/WC1HF05tGQe1M5ymrbJH
-	aCzJXCJqO9Fm7LUs89OOMPCj9RBv+HbvUMRHtaQnf7FzdXPDRdMBqeo9m2oqfI5lCAzBAkNjY94
-	bYJ0tnSSNM3meYQTsNgLIKtggbgFd1gsxhc6v2q4GhAigG8+9Kt4qUcnxHQ4c0S6wyAAmZ5461r
-	UBDAl9uuezTWz0jlftMvyDbdRuCpT8fd8arOhwsQ2GbEtGi0fdB58UttbxSSkiL2Eu4CBamVUGb
-	nWsZ+bS91hRqquAqSDnvA7J5rv1GE0wrDovwrQY8HhOkfSmugHLLa2tMMgkHXHWLEZ32RKa77Pl
-	TW/lrB4NW24yh2PwEO7oqajQ68L3e6Dqy4K8Ldk2TctNIVI3RKs0ZR0s5tYqLIjpygvo6HZmytG
-	mwQ10HdP9tiODSUh9pAaFh/JeGvuIQlilpVAUfXV7Cv4TjwRpGnBoEHhGtcKMDK4POCRKxZX82u
-	goWyfCO64dR/SCqY6sY8TcpbV0bQq2ub36ezpfZELDJwGyCJmJigvR1XZsU/q5p2gzTD3hgpA==
-X-Received: by 2002:a05:7301:6f0e:b0:34d:109a:de8c with SMTP id 5a478bee46e88-34f2185404fmr319569eec.23.1790884777703;
-        Thu, 01 Oct 2026 12:59:37 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::5:9c83])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34f14f308fdsm630098eec.8.2026.10.01.12.59.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Oct 2026 12:59:37 -0700 (PDT)
-Message-ID: <d94ffe5e-1725-472b-899d-1a2c20845af6@davidwei.uk>
-Date: Thu, 1 Oct 2026 12:59:35 -0700
+        d=1e100.net; s=20260707; t=1790921074; x=1791525874;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UM2JzAgkGD7BHOZnHMq8unejo4FpCXzpYWfXmWGl2mQ=;
+        b=wbatxp+hSXzA1xK5YreIDTe6VY4DZcelvYZADfGhHjoK13Lbp4DR7qFnGZ6XAf0aPc
+         hSy5VDRNfiimgb/aJPxe7PuyqX+ozbtxdonqwOSzM/DKD3JCejEEAs9gVVZ9ArXgL+Q9
+         MVVsaKHcoRJM2R0PKj/DKG2+bYM2EWCm4PjyFpeVHw2Xa5LrXqD1cdrokbzkiyMltC8j
+         ZuTzdQFa5mvBTTHoxv1sq3KSG7I/xNVOk3G/eh1KHRJiUwWfru2FSRdkN9Kbhgy/EF7i
+         oiL7HY6KEPlHA7a9k+9AEvNGZDuuyCIFVGR3pvucO4QhZlwZpPSoo1t21GQjqzHBilA/
+         oR9g==
+X-Forwarded-Encrypted: i=1; AKwUvByeNKffM/jC8Z/hQYyRWoBDokWWlFv7ucpNqZ7SZ7BJwzNnfucWSTIhZWVmSd76xYGhjs3fKlff3g==@vger.kernel.org
+X-Gm-Message-State: AFuF++k5o5Pg8hnwsAqHiVRLev5lnSCWl45XKaKREpUI/FDcxfb1WGRu
+	lThSyNFQYcazGCJmcMeOyc3cMJdHvh2d04bctDNwjJ0Wa0853Ak23IsR4hbpbqTuwsTgvMXABp1
+	TS/CH9MJcrCW0vlMJXcu9gpke59go0xmnqw==
+X-Gm-Gg: AYBFou0O3EKXjHAPWkGn00hwibzsZthyt7wF/mtzMPXupNfxB7oHcPPRvad9quYHoVI
+	KFxa/MeTUGG85uHBqJMga2abXRLkvxaFp3jQlWfOkQi9hH1AqCnZVBj0ORa/vUxAQxN5IjJlEIL
+	+P106evFkx7CMoH7jVWmrHp1AVy3VnqgszPxWBMpXD8HAIy42lQm7jOT0QoeCgQ1XsqeWhw33G2
+	cpGnKchoKwrVuCyk/MG/MwiBb1Ov/KRQ1KjgZscnTVQ7bptK0PZYak5R49tOKpwbaoJEjy/OeIs
+	gQ5AH6TKyvm7M4MH4NxpaXWSZQuEJ7gox3YCna56MEsJ52bjpOJ8/ceEtbXQBbJEbS0IEKme3fk
+	FpT0fIZYgoPjm6lfGGb/l4X+19HTRZSit1fR0LSP8FYijnwODSRS6yiU=
+X-Received: by 2002:a05:6820:201a:b0:6d7:a13d:fd88 with SMTP id
+ 006d021491bc7-6df2f9f956fmr1350599eaf.5.1790921073726; Thu, 01 Oct 2026
+ 23:04:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/memmap: fix non-compound alloc fallback with
- memcg accounting
-To: Gabriel Krisman Bertazi <gabriel@krisman.be>, io-uring@vger.kernel.org
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>
-References: <20261001181752.537767-1-dw@davidwei.uk>
- <87h5j5w8sb.fsf@mailhost.krisman.be>
-Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <87h5j5w8sb.fsf@mailhost.krisman.be>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20261001143003.755790-1-omermetekaya0@gmail.com>
+ <87se2pwhzh.fsf@mailhost.krisman.be> <20874bd2-f827-4ef8-9855-dc8aaec874fa@gmail.com>
+In-Reply-To: <20874bd2-f827-4ef8-9855-dc8aaec874fa@gmail.com>
+From: Ming Lei <tom.leiming@gmail.com>
+Date: Fri, 2 Oct 2026 01:04:22 -0500
+X-Gm-Features: AclHuK-2gZQmIhwRNDJtA7gikD9hOOnuFgkdKl3Un0Ewa3PUIIoqG4O6oFR_xWQ
+Message-ID: <CACVXFVMrjhACs9mQMkJJxYXsTyh=a1ZHUmg1i9hK2+TZdwbXFQ@mail.gmail.com>
+Subject: Re: [PATCH] io_uring: fix out-of-bounds bvec access in io_vec_fill_kern_bvec
+To: =?UTF-8?Q?=C3=96mer_Mete_Kaya?= <omermetekaya0@gmail.com>
+Cc: Gabriel Krisman Bertazi <gabriel@krisman.be>, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-10-01 11:55, Gabriel Krisman Bertazi wrote:
-> David Wei <dw@davidwei.uk> writes:
-> 
->> io_region_allocate_pages() first tries io_mem_alloc_compound(). If that
->> fails, it uses alloc_pages_bulk_node() to allocate separate pages.
->>
->> The bulk allocator does not support memcg accounting. __GFP_ACCOUNT is
->> unconditionally supplied, so when memcg_kmem_online() is true, it only
->> allocates one page. For a multi-page request, io_uring treats this short
->> result as failure and returns ENOMEM, even when the memcg has enough
->> space for all pages.
->>
->> When this happens, fill the rest of the request with order 0 allocations
->> via alloc_page(), which support memcg accounting. This maintains the
->> existing fast path, while fixing the incorrect ENOMEM return when memcg
->> is used.
->>
->> Signed-off-by: David Wei <dw@davidwei.uk>
->> ---
->>   io_uring/memmap.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/io_uring/memmap.c b/io_uring/memmap.c
->> index cb3db32e8255..cc8ac129a0c7 100644
->> --- a/io_uring/memmap.c
->> +++ b/io_uring/memmap.c
->> @@ -183,6 +183,7 @@ static int io_region_allocate_pages(struct io_mapped_region *mr,
->>   	size_t size = io_region_size(mr);
->>   	unsigned long nr_allocated;
->>   	struct page **pages;
->> +	struct page *page;
->>   
->>   	pages = kvmalloc_objs(*pages, mr->nr_pages, gfp);
->>   	if (!pages)
->> @@ -195,6 +196,13 @@ static int io_region_allocate_pages(struct io_mapped_region *mr,
->>   
->>   	nr_allocated = alloc_pages_bulk_node(gfp, NUMA_NO_NODE,
->>   					     mr->nr_pages, pages);
->> +	while (nr_allocated < mr->nr_pages) {
->> +		page = alloc_page(gfp);
->> +		if (!page)
->> +			break;
->> +
->> +		pages[nr_allocated++] = page;
->> +	}
-> 
-> FWIW, I looked at this recently and really think this should be the
-> alloc_pages_bulk_/kmem_alloc_bulk* actual semantics.  But that is a
-> bigger sell and I only found io_uring would actually benefit from it.
-> 
-> Feel free to add:
-> 
-> Reviewed-by: Gabriel Krisman Bertazi <krisman@suse.de>
-> 
-> Perhaps also
-> 
-> Fixes: 1e21df691ffa ("io_uring/memmap: implement kernel allocated regions")
+On Thu, Oct 1, 2026 at 2:55=E2=80=AFPM =C3=96mer Mete Kaya <omermetekaya0@g=
+mail.com> wrote:
+>
+>
+>
+> On 10/1/26 18:36, Gabriel Krisman Bertazi wrote:
+> > =C3=96mer Mete Kaya <omermetekaya0@gmail.com> writes:
+> >
+> >> for_each_mp_bvec() dereferences src_bvec[bi_idx] in the loop condition
+> >> before the body is entered, with no guard against bi_idx reaching
+> >> imu->nr_bvecs. iov_kern_bvec_size() stops iterating when i reaches
+> >> imu->nr_bvecs even if bi_size is still non-zero, so the fill loop can
+> >> walk past the end of the bvec array and overrun res_bvec[].
+> >>
+> >> Open-code the loop with an explicit bi_idx < imu->nr_bvecs check befor=
+e
+> >> the dereference, matching the termination condition in
+> >> iov_kern_bvec_size().
+> >
+> > Do you have a reproducer?  This should be checked in iov_kern_bvec_size=
+.
+> > We make sure it doesn't go through imu->len which should match bv_len,
+> > IIUC.
+>
+> Yes I checked more and looks like the *bug* is unreachable via existing
+> in-tree callers.>>
+> >> Fixes: 1045afae4b88 ("io_uring: support vectored kernel fixed buffer")
+>
+> It doesnt fix something broken actually, more like a defensive refactorin=
+g.
+>
+> >> Signed-off-by: =C3=96mer Mete Kaya <omermetekaya0@gmail.com>
+> >> ---
+> >>  io_uring/rsrc.c | 7 ++++++-
+> >>  1 file changed, 6 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+> >> index 51b46e624..3d29a0c7b 100644
+> >> --- a/io_uring/rsrc.c
+> >> +++ b/io_uring/rsrc.c
+> >> @@ -1614,8 +1614,13 @@ static int io_vec_fill_kern_bvec(int ddir, stru=
+ct iov_iter *iter,
+> >>              struct bio_vec bv;
+> >>
+> >>              bvec_iter_advance(src_bvec, &bi, offset);
+> >> -            for_each_mp_bvec(bv, src_bvec, bi, bi)
+> >> +            while (bi.bi_size) {
+> >
+> > bi.bi_size is the first condition of for_each_mp_bvec.  Do you really
+> > need an open coded loop?  If there is an issue, can we just add the
+> > check below?
+>
+> mp_bvec_iter_bvec() is called in the for-loop condition not the body:
+>
+>     for (iter =3D (start);
+>         (iter).bi_size &&
+>             ((bvl =3D mp_bvec_iter_bvec((bio_vec), (iter))), 1); <-***
+>         bvec_iter_advance_single(...))
+>
+> src_bvec[bi_idx] is dereferenced before the loop body is entered.
+> A check inside the body executes after the out-of-bounds read has
+> already occurred. The open-coded loop is the way to check bi_idx
+> before the dereference. The question is "should the kernel be defensive
+> itself or trust the callers?". If you find these kinds of defensive
+> controls unnecessary, happy to withdraw the patch instead of releasing v2=
+.
 
-Hi Gabriel, thanks for your review. Yes, I had also considered changing
-alloc_pages_bulk_*(), but as you said that is a much bigger uplift. I
-thought I'd go for a smaller surgical fix first, unless there was an
-appetite for the larger change from maintainers.
+bio/bvec iterator is written in this way from begining.
 
-Sorry for missing the Fixes tag. I'll add it if this requires another
-spin, otherwise Jens please add it when you apply.
+So it looks you should work on improving the iterator helper, instead of op=
+en
+code for the single user only.
+
+
+Thanks,
+Ming Lei
