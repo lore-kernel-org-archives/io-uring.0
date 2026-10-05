@@ -1,65 +1,65 @@
-Received: from mail-pj2-f5.google.com (mail-pj2-f5.google.com [74.125.227.133])
+Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5491A3D0923
-	for <io-uring@vger.kernel.org>; Mon,  5 Oct 2026 16:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333B54C33D8
+	for <io-uring@vger.kernel.org>; Mon,  5 Oct 2026 16:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791217871; cv=none; b=E1g3Z9N6gQkblUB9sFkiIXazFDrcMs+nFhQxEG0vAmdm/z36lsF8RyP/G/xSPFxiSHzZZcKWHuHrfIi3U05gYCL7PBy8xgFSjuOMzTpR4yXgxP5UYBLK15O5auEUn00WdjiDKiBffAwuPrbSuY+lsLlJZa9OGK7jEfB6+VNHH5U=
+	t=1791219082; cv=none; b=ckFZ2b4uXzCJ22mGbt1UmefnYbNbjbNSgIdBwagr+gDpAg7moa3eO+2lI8AkWKD4KY+a8dqRHu3PgbttD0ovS/NQyPDQYJ8EOfRc1ScFfvBoqKJgQICiMJQzgitP1XQkc5OUrbSAXGpSLBT8dPy/2l//boDdcmIgmGLfRzPHNKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791217871; c=relaxed/simple;
-	bh=LLznkjl7L/oRXQDR7/Cn3RKXbnI7gnk1ng2ouRFn0a0=;
+	s=arc-20240116; t=1791219082; c=relaxed/simple;
+	bh=ZtOtfI8xTZljtzEITNuddg7KMK3dN7NLgg7QIotbHg0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KAiZULQm6hmtEh6lbVdZ292db+Vo9qheFI3gRIc/qVlVDvnsu6kjoa8IVZTDoTisqmbJ60KrOItJjuePR9gT3R1VVXV4lpjU50EYd/pTVQV2gZFcsBMXuSyT5Gko4mgDBxl0mGFT+qiE2Po6BNc4pbjF8Y2dhPBikb7tzYPGsxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YMuc3yUo; arc=none smtp.client-ip=74.125.227.133
+	 Content-Type:Content-Disposition:In-Reply-To; b=oQvUvsoQTcvJSJa41N7ECWbyw8DYjKvsRiV7vFVBBqmtpW+B2HdTZYdkO3nmp12mW6Ufz4viSeNqTGZj0Ku2iClD8HYEEIY2yRjTNqozB04tiCmo15C4HWkeccsfE7qV40As7nefK5vn8ZwtJcVDimEFgAcJDqLbiuU9hsiZto4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jYBEAguj; arc=none smtp.client-ip=74.125.227.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YMuc3yUo"
-Received: by mail-pj2-f5.google.com with SMTP id 98e67ed59e1d1-3a7a8e9a874so144607a91.1
-        for <io-uring@vger.kernel.org>; Mon, 05 Oct 2026 09:31:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYBEAguj"
+Received: by mail-pj2-f8.google.com with SMTP id 98e67ed59e1d1-398b9f722abso1144288a91.0
+        for <io-uring@vger.kernel.org>; Mon, 05 Oct 2026 09:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791217869; x=1791822669; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791219080; x=1791823880; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CRS5M1v6OmgHLfpoTm3iDWMYDPJHjQX4zt7LojDK+3M=;
-        b=YMuc3yUo2WhuAIz2J3/4sZRuY46Mde6P2et8/RQRpyc33KXWPa7LkLVWqTyQIzZuKr
-         z5gcFmqmSXbqU1AxhWJqmOc57Uzbj4vOK2ABsQQuB34JItKxEy6ivgs85JICfaLOhaPT
-         HgiDytYH5cKyamrW06cek1VD2LNZAilEdQYlEG9zg507FVYURA10QbOaKZK2rW8FaFBo
-         RrvDH2LyjultsCphFMJKVB73jNZVcVo+LZbLHBxbRS9z+UzmUigjDYi+dLH5kPmvpphS
-         WLuZWP+YY9wbkJN45EjlrAmG5X/SERRP8tjFTdazrAP+XHsqP2St8OJG3V6xx3v2TIo7
-         Q5sQ==
+        bh=b4mkDJheIxHRdMD7TqVn4ykGrzx67Q/w28iQIL9i/AE=;
+        b=jYBEAguj/HXC2O9ml4GkNN/+9pMpbTf40fb8JKLkjR7FD8OKSyr70p61oJulOnjdra
+         kQaMEQjqyv7sgrI2g2fg6PPmcYTR8lSmBlH090Iui9CcaC+IW37lvow5Ppb4NrXhAkO2
+         IUUbQTvR8oSRFHXnBVOn4p7dae5R/an/Hk/XbBVSAfbNwhQWqhTg9eyVfwJuFg/U1L7j
+         TW4UrRlz0bYBlxFVVvbKXXheqRt+HGKxQJJjuqIluT7hvwbwkHHQEyKPKJCKrRlbR9jh
+         fqoadKhkTSprHmHkHPhqDaUgY3EKNIo4K78uf9PO/TOVsW6IOOw9qLPh+UHkye4inhDv
+         KQvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791217869; x=1791822669;
+        d=1e100.net; s=20260707; t=1791219080; x=1791823880;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :content-type:mime-version:references:message-id:subject:cc:to:from
          :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to:content-type;
-        bh=CRS5M1v6OmgHLfpoTm3iDWMYDPJHjQX4zt7LojDK+3M=;
-        b=WOydH8NFg1ncUEv8xssf8CpDFnCyD/qjjytC6fK98XEDeGX5YJRX66AO+JH5Qoi4ZB
-         lUB5hyOaN/xOlzmUrJytc2Kvb06+Yf1oMhhHTHgEslNW9tXYsQ8UJMl86BLdi/oqTHDk
-         +bv6XvgpY0ktMz9XZsS+3vEQUcqf5yIMkFpoA8yr3Hy3dedlWI4OSH5A8Qf0hpqiuJQc
-         eZVB2RUV+sacOVQ2zK3kX7ZpJUYQVS7RUg4aDc06fujKt7qZ69/Nk0PGYsaoLD6glk0R
-         K6rSh5CsdlguX8NnVaQWdelaHhQR7J2plESPEQStXdmbb6XqOwU2zYLC+DFFC/NNB+lC
-         bgaw==
-X-Forwarded-Encrypted: i=1; AKwUvBxkGIFD6t5gPnnNqvkSfzAGlRvn1m2MUCmcD668zKIKF98mvxjVcu3KEAeW/fCylN+mkMdcGMgDjA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJsp32pozGyc/tE1jErFWiMyZjTXBY67uC7OvP1ZFjhQ6kMyp0O
-	QRy8OVj/YwkonsWjFPaW+HxL5rhgCt8ZNqusTQun5aL73yaUV/XCMDtK
-X-Gm-Gg: AYBFou04Xr0izulRHqexFKUjWlvICfYirfars7RyTmy1UD3GRRX6mGKtwdnoPUaqVPn
-	j8KCHgkXelmYxQAfHCKlOCKGBCbwj2dkWN599j/qrA42KmUA/G+zgWC7ZW45U8zp6iiEznNAUxh
-	PtbxOXjYLJ6NWI4yEY1tNG5sidAnyKHDubMz5ckuNILR2lNjTcVxnzZ1glLxaif0qxZ3G160xlx
-	B71Bdn4tIGWORc9J5wuWfePGNTOxsewsdz3jtEuaGWJ4JxnJbWqnDddsHL012KfvEI+mJ1byPFP
-	qsLpMq47WGmrqQ8hNIs4ow6AG8IHObptHkxMBBSZvfV36cLdJr//mVJuMIRynlKCZ28rGKZWqpH
-	hbNEH2ksLHc22RXk2GNnBx8VbxiaXWfXSQ9mAc3k1nfz+4uttM4ZuZB3I+nUcz/cDUxJpg/T678
-	oH71gK8njJqyqpudBGaBUVVXhUbRrH99qubQCqiOwawky8caaYlDOGFo1+iQgUKaWB
-X-Received: by 2002:a17:90b:3841:b0:3a7:250:386d with SMTP id 98e67ed59e1d1-3a8543a46c7mr87773a91.35.1791217869283;
-        Mon, 05 Oct 2026 09:31:09 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:56::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a853ce0832sm160511a91.12.2026.10.05.09.31.08
+        bh=b4mkDJheIxHRdMD7TqVn4ykGrzx67Q/w28iQIL9i/AE=;
+        b=gAHcOai8X9AhxyHQyUJRUv/Lzhf3hUodicmHC+yDjln/GqOtFd1GkLCAeGHoflHjoY
+         yrrq1IeeiXO1zUJtgKXvEbBeVC3ftGHtU6dLN3Go/vvN5CNo6IbVVPQcwRnZYn3pp0UA
+         IL88wYQhE11tCFtzoGGEkw3N6Yqlm3ckZFwofIrGmucUII1OQ1nT3ZI7yTA/PFa9Rttk
+         g5N3ZTeUpHwO8baNQeoeSEDxL9CZUt63NncdFiogzLTUEhv9px38e6zkEtZhcY0lqDHK
+         5OSE0ezZagafzqGvru+W7hSuK0G5FNCXvLSPPLVHNH7Wa++2d7zqHK/6Ia1kYfoCONja
+         A+7g==
+X-Forwarded-Encrypted: i=1; AKwUvBxCpeZZnvLpf1YZX6TyxSHM9odRizxwfiPfTmK/8CRuqhInRLdp33sWrVldATr5M94vncSgJ8akDQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYISeM4XP+/fABhhtWtEurzekx3cbrxIGKrRZIF7korupna/VBbP
+	67iD8xhQ9REWr/I4dw+2i6/xl5+8zn9dqy9Nt7a9sHCPS5mArUFdi5V4
+X-Gm-Gg: AYBFou3izVGtY7+FsZ2o/YoDctFdDA4H4gPjElfS/r2sFfc2NUEwiGD4QJJT2FeHD/q
+	3f7rPnRTdChJQh7+nk1EUp/cBy3VKHlPv9uxy6eZzhD++hab3hTvC9ZR8XZrZ1qTyyVOlD1swZd
+	GKOXP2SeocP0yvzOoHgl9rcvWMGbQAbdj2v33h6jpeLafvlPoD3Q9byFv/VhbKu3WC+tjGmFeS6
+	yTlclYnv95VUq5oDSlA6aSIuT8AEPBZHcZx1mD9gY+459ZpUFLyfo0cwPX+k07Tm80dc/v/sjrw
+	zyOIdqWXmE2G3VHRuPk99wQTc0Yq1eGNd/IfSVc1c01dj9Xa1+oXbEzi0twMjO489/dmqnKgiBG
+	ZLDAkVDPAKNo/EMQ5ilLvPoNRam9WrdR0gCUeCfjw+iVpVpXV3pt/6lIIIAytadR0o7RYQU4Ec7
+	DUR7UX1DAHY4Kanttkxqf/9OtYQIFw8DuLqWYZE6F6VR29hLh4vFNZefPIDru9PNw=
+X-Received: by 2002:a17:90b:2ec3:b0:3a6:fec5:c184 with SMTP id 98e67ed59e1d1-3a6fec5d190mr6627900a91.7.1791219080418;
+        Mon, 05 Oct 2026 09:51:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:1::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a851525bffsm261628a91.0.2026.10.05.09.51.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 09:31:08 -0700 (PDT)
-Date: Mon, 5 Oct 2026 09:26:46 -0700
+        Mon, 05 Oct 2026 09:51:20 -0700 (PDT)
+Date: Mon, 5 Oct 2026 09:51:15 -0700
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
@@ -82,10 +82,10 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>,
 	David Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
 	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Mina Almasry <almasrymina@google.com>
-Subject: Re: [RFC net-next 03/15] net: Add memory provider capabilities
-Message-ID: <asPPqXsmAygSdO94@devvm7509.cco0.facebook.com>
+Subject: Re: [RFC net-next 05/15] page_pool: Extend memory provider operations
+Message-ID: <asPUZ8DPllHd6Yu9@devvm7509.cco0.facebook.com>
 References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-4-bjorn@kernel.org>
+ <20261002190018.696925-6-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -95,204 +95,103 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261002190018.696925-4-bjorn@kernel.org>
+In-Reply-To: <20261002190018.696925-6-bjorn@kernel.org>
 
 On 10/02, Björn Töpel wrote:
-> The current memory providers, devmem and io_uring zero-copy RX, give
-> memory that the CPU cannot read. The core allows them only on queues
-> with header-data split on, a zero header-split threshold, and no XDP
-> program. AF_XDP needs a provider that the CPU can read and that
-> works with XDP.
+> The current memory providers give memory that the CPU cannot read,
+> and they can always refill. An AF_XDP provider is different. The CPU
+> can read its memory, it has only the buffers that userspace puts in
+> the FILL ring, and its buffers go back to userspace instead of being
+> freed. It needs four things from page_pool:
 > 
-> Add a capability field to the provider operations, with
-> MP_CAP_READABLE as the first flag. Apply the header-split and XDP
-> rules only to providers without it. A queue with an AF_XDP buffer
-> pool still rejects other providers, but it accepts the provider made
-> from that same pool.
+> - A CPU address for each net_iov. A provider can set the address of
+>   the first net_iov in its net_iov_area and the size each net_iov
+>   covers. netmem_address() then computes the address without a call
+>   into the provider; drivers call it for every packet. A
+>   net_iov_area without an address stays unreadable.
+>   page_pool_is_unreadable() is false for a readable provider.
 > 
-> Provider memory can become free while a queue is restarted, and no
-> device event reports it. After a restart, and after a failed restart
-> is rolled back, schedule the queue's NAPI if the queue has a
-> provider, so the driver tries to refill.
+> - A way to say that the refill is not done. The new refill_done
+>   callback tells the driver whether it may stop refilling. A
+>   provider that still has buffers returns false, and the driver
+>   keeps NAPI scheduled.
+> 
+> - A way to give up a buffer without freeing it. Add a batched call
+>   that ends page_pool ownership of buffers that leave through the
+>   provider, for example to userspace. It clears the page_pool link,
+>   so a later page pool can take the buffer. Add the matching batched
+>   call that sets the link, and a DMA sync helper for drivers that
+>   post a buffer again directly.
+> 
+> - No buffer splitting, because a split buffer has several owners.
+>   Add MP_CAP_FRAG. page_pool refuses fragment allocation from a
+>   provider without it.
+> 
+> devmem and io_uring set MP_CAP_FRAG and keep their fragment
+> behaviour. Their refill paths now use the batched call that sets the
+> link.
 > 
 > Signed-off-by: Björn Töpel <bjorn@kernel.org>
 > ---
->  Documentation/networking/netmem.rst     |  7 ++-
->  include/net/page_pool/memory_provider.h | 11 +++++
->  include/net/page_pool/types.h           |  7 +--
->  net/core/dev.c                          |  4 +-
->  net/core/netdev_rx_queue.c              | 57 ++++++++++++++++++++-----
->  net/ethtool/rings.c                     | 18 +++-----
->  net/xdp/xsk_buff_pool.c                 |  3 +-
->  7 files changed, 78 insertions(+), 29 deletions(-)
+>  include/net/netmem.h                    | 31 ++++++++++-
+>  include/net/page_pool/helpers.h         | 62 +++++++++++++++++++++-
+>  include/net/page_pool/memory_provider.h | 28 +++++-----
+>  io_uring/zcrx.c                         |  4 +-
+>  net/core/devmem.c                       |  7 ++-
+>  net/core/page_pool.c                    | 68 ++++++++++++++++++++-----
+>  6 files changed, 165 insertions(+), 35 deletions(-)
 > 
-> diff --git a/Documentation/networking/netmem.rst b/Documentation/networking/netmem.rst
-> index 217869d1108d..aacd185843ac 100644
-> --- a/Documentation/networking/netmem.rst
-> +++ b/Documentation/networking/netmem.rst
-> @@ -48,8 +48,11 @@ Driver RX Requirements
->     - PP_FLAG_DMA_SYNC_DEV: netmem dma addr is not necessarily dma-syncable
->       by the driver. The driver must delegate the dma syncing to the page_pool,
->       which knows when dma-syncing is (or is not) appropriate.
-> -   - PP_FLAG_ALLOW_UNREADABLE_NETMEM. The driver must specify this flag iff
-> -     tcp-data-split is enabled.
-> +   - PP_FLAG_ALLOW_UNREADABLE_NETMEM. This opts the page pool into the memory
-> +     provider configured on its RX queue. For a provider without
-> +     MP_CAP_READABLE, the driver must specify it only for a payload pool
-> +     with tcp-data-split enabled. A readable provider may also back a
-> +     regular or header pool.
+> diff --git a/include/net/netmem.h b/include/net/netmem.h
+> index cc97611632dc..e6dff0b01581 100644
+> --- a/include/net/netmem.h
+> +++ b/include/net/netmem.h
+> @@ -105,6 +105,12 @@ struct net_iov_area {
 >  
->  5. The driver must not assume the netmem is readable and/or backed by pages.
->     The netmem returned by the page_pool may be unreadable, in which case
-> diff --git a/include/net/page_pool/memory_provider.h b/include/net/page_pool/memory_provider.h
-> index 255ce4cfd975..d18ec079ffe2 100644
-> --- a/include/net/page_pool/memory_provider.h
-> +++ b/include/net/page_pool/memory_provider.h
-> @@ -9,6 +9,15 @@ struct netdev_rx_queue;
->  struct netlink_ext_ack;
->  struct sk_buff;
->  
-> +/**
-> + * enum mp_caps - memory provider capabilities
-> + * @MP_CAP_READABLE: The CPU can access provider buffers. They may back
-> + *	header and regular page pools, and XDP programs may run on them.
-> + */
-> +enum mp_caps {
-> +	MP_CAP_READABLE		= BIT(0),
-> +};
-> +
->  struct memory_provider_ops {
->  	netmem_ref (*alloc_netmems)(struct page_pool *pool, gfp_t gfp);
->  	bool (*release_netmem)(struct page_pool *pool, netmem_ref netmem);
-> @@ -17,11 +26,13 @@ struct memory_provider_ops {
->  	int (*nl_fill)(void *mp_priv, struct sk_buff *rsp,
->  		       struct netdev_rx_queue *rxq);
->  	void (*uninstall)(void *mp_priv, struct netdev_rx_queue *rxq);
-> +	u32 caps;
->  };
->  
->  bool net_mp_niov_set_dma_addr(struct net_iov *niov, dma_addr_t addr);
->  void net_mp_niov_set_page_pool(struct page_pool *pool, struct net_iov *niov);
->  void net_mp_niov_clear_page_pool(struct net_iov *niov);
-> +bool netif_mp_lacks_cap(struct net_device *dev, u32 cap);
->  
->  int netif_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
->  		      const struct pp_memory_provider_params *p,
-> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
-> index 03da138722f5..a96376613dda 100644
-> --- a/include/net/page_pool/types.h
-> +++ b/include/net/page_pool/types.h
-> @@ -22,9 +22,10 @@
->  					*/
->  #define PP_FLAG_SYSTEM_POOL	BIT(2) /* Global system page_pool */
->  
-> -/* Allow unreadable (net_iov backed) netmem in this page_pool. Drivers setting
-> - * this must be able to support unreadable netmem, where netmem_address() would
-> - * return NULL. This flag should not be set for header page_pools.
-> +/* Allow memory-provider (net_iov backed) netmem in this page_pool. Drivers
-> + * setting this must honor the provider's capabilities. Unless the provider has
-> + * MP_CAP_READABLE, netmem_address() returns NULL, and the flag must not be set
-> + * for a header page_pool.
->   *
->   * If the driver sets PP_FLAG_ALLOW_UNREADABLE_NETMEM, it should also set
->   * page_pool_params.slow.queue_idx.
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 5ac08da8b9d7..12b532c09a9c 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -10423,7 +10423,7 @@ int netif_xdp_propagate(struct net_device *dev, struct netdev_bpf *bpf)
->  		return -EBUSY;
->  	}
->  
-> -	if (dev_get_min_mp_channel_count(dev)) {
-> +	if (netif_mp_lacks_cap(dev, MP_CAP_READABLE)) {
->  		NL_SET_ERR_MSG(bpf->extack, "unable to propagate XDP to device using memory provider");
->  		return -EBUSY;
->  	}
-> @@ -10499,7 +10499,7 @@ static int dev_xdp_install(struct net_device *dev, enum bpf_xdp_mode mode,
->  		return -EBUSY;
->  	}
->  
-> -	if (dev_get_min_mp_channel_count(dev)) {
-> +	if (netif_mp_lacks_cap(dev, MP_CAP_READABLE)) {
->  		NL_SET_ERR_MSG(extack, "unable to install XDP to device using memory provider");
->  		return -EBUSY;
->  	}
-> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-> index 00a7011eb4d5..610e31d1a717 100644
-> --- a/net/core/netdev_rx_queue.c
-> +++ b/net/core/netdev_rx_queue.c
-> @@ -82,8 +82,12 @@ __netif_get_rx_queue_lease(struct net_device **dev, unsigned int *rxq_idx,
->  /* See also page_pool_is_unreadable() */
->  bool netif_rxq_has_unreadable_mp(struct net_device *dev, unsigned int rxq_idx)
->  {
-> -	if (rxq_idx < dev->real_num_rx_queues)
-> -		return __netif_get_rx_queue(dev, rxq_idx)->mp_params.mp_ops;
-> +	const struct memory_provider_ops *ops;
-> +
-> +	if (rxq_idx < dev->real_num_rx_queues) {
-> +		ops = __netif_get_rx_queue(dev, rxq_idx)->mp_params.mp_ops;
-> +		return ops && !(ops->caps & MP_CAP_READABLE);
-> +	}
->  	return false;
->  }
->  EXPORT_SYMBOL(netif_rxq_has_unreadable_mp);
-> @@ -95,6 +99,32 @@ bool netif_rxq_has_mp(struct net_device *dev, unsigned int rxq_idx)
->  	return false;
->  }
->  
-> +/* Return true if an installed memory provider lacks @cap. */
-> +bool netif_mp_lacks_cap(struct net_device *dev, u32 cap)
-> +{
-> +	const struct memory_provider_ops *ops;
-> +	int i;
-> +
-> +	netdev_assert_locked_ops_compat(dev);
-> +
-> +	for (i = dev->real_num_rx_queues - 1; i >= 0; i--) {
-> +		ops = dev->_rx[i].mp_params.mp_ops;
-> +		if (ops && (ops->caps & cap) != cap)
-> +			return true;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +/* Provider memory may become available while the queue is replaced,
-> + * without a device event to report it.
-> + */
-> +static void netdev_rx_queue_kick(struct netdev_rx_queue *rxq)
-> +{
-> +	if (rxq->mp_params.mp_ops && rxq->napi)
-> +		napi_schedule(rxq->napi);
-> +}
-> +
->  static int netdev_rx_queue_reconfig(struct net_device *dev,
->  				    unsigned int rxq_idx,
->  				    struct netdev_queue_config *qcfg_old,
 
 [..]
 
-> @@ -142,6 +172,8 @@ static int netdev_rx_queue_reconfig(struct net_device *dev,
->  	}
->  
->  	qops->ndo_queue_mem_free(dev, old_mem);
-> +	if (netif_running(dev))
-> +		netdev_rx_queue_kick(rxq);
->  
->  	kvfree(old_mem);
->  	kvfree(new_mem);
-> @@ -165,6 +197,11 @@ static int netdev_rx_queue_reconfig(struct net_device *dev,
->  
->  err_free_new_queue_mem:
->  	qops->ndo_queue_mem_free(dev, new_mem);
-> +	/* Freeing the replacement can hand provider memory back to the old
-> +	 * queue, which still runs unless the rollback failed.
-> +	 */
-> +	if (err != -ENETDOWN && netif_running(dev))
-> +		netdev_rx_queue_kick(rxq);
->  
->  err_free_old_mem:
->  	kvfree(old_mem);
+>  	/* Offset into the dma-buf where this chunk starts.  */
+>  	unsigned long base_virtual;
 
-These are separate fixes?
+Will send a patch to drop this one, don't think we use it anymore..
+
+[..]
+
+> +	/* CPU address of the first net_iov's memory, or NULL when the CPU
+> +	 * cannot read the area. Each net_iov covers 1 << @niov_shift bytes.
+> +	 */
+> +	void *vaddr;
+
+Who is setting this? Somewhere in another patch? Can we keep it here?
+
+> +	u8 niov_shift;
+
+If we need niov_shift at area level, let's move the one from binding here?
+Then the existing callers can do binding->area.niov_shift.
+
+>  };
+>  
+>  static inline struct net_iov_area *net_iov_owner(const struct net_iov *niov)
+> @@ -117,6 +123,23 @@ static inline unsigned int net_iov_idx(const struct net_iov *niov)
+>  	return niov - net_iov_owner(niov)->niovs;
+>  }
+>  
+> +static inline bool net_iov_is_readable(const struct net_iov *niov)
+> +{
+> +	return net_iov_owner(niov)->vaddr;
+> +}
+> +
+> +static inline void *net_iov_address(const struct net_iov *niov)
+> +{
+> +	const struct net_iov_area *area = net_iov_owner(niov);
+> +	unsigned long off;
+> +
+> +	if (!area->vaddr)
+> +		return NULL;
+> +
+> +	off = (unsigned long)net_iov_idx(niov) << area->niov_shift;
+> +	return area->vaddr + off;
+
+Or, alternatively, store dma_base in area and do:
+
+return niov->dma_addr - area.dma_base + vadd ?
