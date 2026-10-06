@@ -1,329 +1,293 @@
-Received: from mail-pj2-f4.google.com (mail-pj2-f4.google.com [74.125.227.132])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DECFE4D6C5C
-	for <io-uring@vger.kernel.org>; Mon,  5 Oct 2026 17:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91EA345CC9
+	for <io-uring@vger.kernel.org>; Tue,  6 Oct 2026 12:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791222691; cv=none; b=u8CWXoBrBHRmkZkz8hiL39la89JbgnF8UPCHWuCxvDhTAZgu/YaWbY2BO/GKlln/aG7DgnhSDa9RmTGp2ojUGgOkqb/02i4d8xf5+x1nURLsK2FJGsWgtUtCEnBeqLzkuFVWc+r3BHY7PA+lPEy2v4dcTBhg0LYUgCJ1X0cY75U=
+	t=1791291482; cv=none; b=aooVnOcoWch2aZXWu0b9000ATPrNh2tYCe9cbszmF0G5ctKygxb9LVZllRaa1O78sNaxkMUwYKNfBfPsduQZ1pW37e1/tnr7PSIshEttHWSRhHGkIKVcJwX7++cq5w1ZAUuX1wW2D3kJ4NxIrcvAk4N5qugq+qgQa7a2TpUmDQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791222691; c=relaxed/simple;
-	bh=qTjClDFPsIOczWsIZMvAm2JlV3P09bYn+CtG/Fzce3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p7JO4qy+8p8ZNTFN2ANbtzueS+o/XbKjCVxs394nTMmXAJxW/cFfDcTtqN6wJKBK3tMvJNaimgnaRoVyKCa3bHYCEC57DJYMOeL13D/LxPYTnrwA2cbqRzZ2NUwnkazMzQzW17XmEpYsoctq9oDa30mcyLq0kvgyQqRVRFA/9JU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tNG6fIh9; arc=none smtp.client-ip=74.125.227.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791291482; c=relaxed/simple;
+	bh=S1AWXPdMqP9fWMAPIjgH6HcU79AG0t2hd0D9Pa/LaTc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YwJiidoPdrm4Xd6mO+1zuzRsXQLw9W/89TfgdOgxVJ/ta6rdlFNi5OEe1Sfy8Fzq8eSlYTj0ow5NZOdwFXNdM7ull5cK6GPT2LUskyT4/UdGc2VakCoClliv0mjvlhoQr6TnjIast4SdMxf7s0QYTDtCC/+d9oaBGNTK0LRqfLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu; spf=pass smtp.mailfrom=cs.unc.edu; dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b=gEkB92Ir; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tNG6fIh9"
-Received: by mail-pj2-f4.google.com with SMTP id 98e67ed59e1d1-3a834ff6565so130314a91.0
-        for <io-uring@vger.kernel.org>; Mon, 05 Oct 2026 10:51:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b="gEkB92Ir"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c2e4df2e26fso68378266b.2
+        for <io-uring@vger.kernel.org>; Tue, 06 Oct 2026 05:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791222687; x=1791827487; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A2s9btviDXFgkFzalpgxtIgBWXpEQE8bYrYjAqj6skg=;
-        b=tNG6fIh9wwutYa2HLOMDia8JQn7cOItxft2wsh1Nvtaxo6uyYA1IfGumA6WVOV3EwA
-         lDG3RGm2tfjZzvHCFrL8e+0sb7A2ZHjQwDzLreEjeBEj4Mhq8V01rKXpc30+SRiK52Sr
-         4Eurtci5I8xb6AgqnelOxnm6sTYnOObvWcgZi1XfVfAfPSFDI8fRj0LF64HLs3ONGjBT
-         YW0/2GombaHpIM0yYDkAVU0sKvf+JThwjbXlBvwY/VxjyBV7CqW+rep08UbDb0eK+YOa
-         qFXJa6AcM0krdmnWxV+mKEMEflLwsYmfeE6yroTa6ZmeLL1PATyT2/zD+L6EDpG6+nhj
-         WABA==
+        d=cs.unc.edu; s=google; t=1791291478; x=1791896278; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6GyRcaTB2G6/+iSdmqu+Ru7NPglY3iZB2zj/8sP57oc=;
+        b=gEkB92IrIq211U3Hk0ZhGzyxOK0qUK0xZTjHKG7QypkfVvN6SMz+1OLVkeip2GO2/C
+         gYbBKhsWmVzWSQ7M8e/G5OyiD9ViDboAn+QqdOoos0BhobA9T5JJy6l7GxfG8ECKNiMH
+         IHtNQAZrPIwkmEdbnaZq24ITNIEy6oCLKZe79lfqkDbpp3mKnpWn7MeLoOvtkrGNjSkB
+         Vv2m3HXRqy4m71UqvKzxRlCzC+yHwVkcTCPidi31yjX8srzpAEktySJfh1UC8tPjIrDM
+         J5jhU/SKdfmoVbVDKSeKwfMf1RQZgkNXMOMbK2roGyT64xTBAGOdcccLFq13aIxJhluN
+         KTqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791222687; x=1791827487;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=A2s9btviDXFgkFzalpgxtIgBWXpEQE8bYrYjAqj6skg=;
-        b=aKO/IQ3MuaOTUk06F4oKlqzGKVyfYzmtNE6pCv0V1ROc+DySvsk9AxQPDZbuXEfjel
-         iwfgAFLymmgDVWsJwtmoh2f7KrLXN5mhqSEryOhHb73D5CssMoIQpQGRj5gfIWDbHfOu
-         Zm6tbiXgzvhmaXqf6p4W4KQnJ3ALsbHssXEoB66VtBYMixQn2ef6/DqYfofBSU3RmrPQ
-         yhRmG6I3UvO/qglyfleemwaKZjZ04oez1xMuuClEUGKnFdH2TK6LhB8JswsJk5IrbAig
-         zhCaawhfmq3s5mrL/goNKBCCtbntGzzt5b6hzp+LkrbuD7ij6VKCy3VTz6wJcA72Qq3L
-         PQ4g==
-X-Forwarded-Encrypted: i=1; AKwUvBxf0tA4OamnLmviopEBuwd532XfAW0IUZsSNsE98BATKJke8bI89GKG5Khp5aa46VnoynLglgSWfw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIN+764ekMjqJRT0MNm8aFTqTRG+dseEA8X4MHtfzivbqMu+cRB
-	F6P2b/6XjFZx4CX9qpSfYkF9TZ4PPYJwIwZcl5DcqCneGdus5BX2twv8
-X-Gm-Gg: AYBFou2L+OCHUxd5J3+kWDrFbK2O8F/ejdT3LtxvQ1rVqWRIKl26eNL6+7SxST9j+eN
-	O18LS9v3WGrPl2BU4ZYwq4iJjsYCSP/9vFByO+FPNlpgT0RdSW/6HSePlHJXBsPlISPEwVkMb1T
-	hXoRFS/wzvBuKiI7uETnewZ3iZEAaH7JMG44zYSqAEfPhK5Wblhhx67h+duqWp+ODrusZ/KwYNw
-	hACnzFkTpDJI7N6N9Fg1Mjom4e0O/k+ycKzA8oCeQgJToXwSqm1F0U7q0x/bxHf8Y/pREzauIZP
-	G3H1PWxb6mniHaKg5Kv0BRvnvr0MFh/xbN5ECYtktAVBymjQVBn/tQrMJtfjHjTgMsbDgI4KBJq
-	jxGBvnOOgz1tHmJa0gUc97spEAQ4BsmVS2XdMg4NT00aCdN95XjWPbUK3khohSvGbFAzZf70OyK
-	Jua2VbsX9Dzna10N4LnQidqvNdtslfr4gVOOBaaQivYrwDAVmKFFz4qZ6Ru0VsYHUJPp1umZOCT
-	kI=
-X-Received: by 2002:a17:90a:ad7:b0:3a6:d850:bf16 with SMTP id 98e67ed59e1d1-3a8541509e6mr118029a91.23.1791222687218;
-        Mon, 05 Oct 2026 10:51:27 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:42::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a7ad87874esm5891628a91.0.2026.10.05.10.51.26
+        d=1e100.net; s=20260707; t=1791291478; x=1791896278;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6GyRcaTB2G6/+iSdmqu+Ru7NPglY3iZB2zj/8sP57oc=;
+        b=24CulCT9PrDUSlVkRwnWjEvfjtEwxP535r28qqeENSqFvU3V+Nhd0eLTVWXutfqQL1
+         r+m3bReRhrE+b1lK7dE6o4XnSUbXcRXYb2jQCPK/PZk0BAk3axlLYcYqGELDqv5wQYZu
+         Xm/vj3FPFxyKy8JXtHr45A8BQ793OtXBSnHwYY01hAUvJgAIT5wEv/gu5p2HTAZu+gQy
+         Ywbvjpgz/YGjuWKXT7UpczBQSKUUFHbvEP7d10UDEHpeLIuatJicDRgGrYU+JhU+OP+b
+         5O1TUQzBaaGWz1xqLKvVdssF0IVoIA4ERdlrgjuqTADSSmU+yjfNUG1/nB5XV4x3CMR6
+         Lp5g==
+X-Forwarded-Encrypted: i=1; AKwUvBxV/MKBdA9sMnavtYtpyZxA2yz8Bo8taXkIZYy9Qe35QXCCnLfVfyG1K5yfIDLih+j9Ho8Kw0VkmA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYK4qU3AQ8iiJPiLkwAtz4eabgMAgJK+3bgCPeHcvoJFd43NOkyR
+	pmVapLygsOztGjF3VYq8JaWFLtoY76BZoy5ftg3etB20SA8+ORdFIkYcyYuZVCWXyQ==
+X-Gm-Gg: AYBFou3ZFhnzA57XCu1zAFE9R07C38EPYkW615ysupM4mLdp95I4t2vjU1g+XUhI7+N
+	AxvPviZMubu1gxq1ozuihVc3DTtcG3mdrty/9Cqd5hP6wWq8KocNQsbDBpJqzns+tVjuDC++V8v
+	0h0NmEkKacNDDDkE+hQTzZomD6vJHILyGefeHmuATqFlnfas50nIb/2l0Po+PGXYmKLocyGn8qo
+	4F+E2GztpmPEHp+qnLsU6t19jWSNvpdCgi+kQDpwyzzDpL3qD9rL7VfUl9An4OPaavlROmNbXEF
+	0ytHNFF1a0gFFxu3jKuuJs1HEbtufheqbBQGMqIV6+gxSv9NFxdn/eHaozCJTmu2rvk2t+4JdDk
+	DRagzcwqMWubl2u9gOgBRKXmFs7MbzP2t4Ls5Ktf2pf0Cz3zPR42qZGIUtSEKTNG6JbI7OrhAtZ
+	gqv+jCoHYrs4YtkfqKla9G0Mi0mpZPp/VT0rfTCnsV/QqykvxVodAtt1te2EfQO9B0pU3j4cdR5
+	8eBSjH/EzAOr7mAawa9Ng==
+X-Received: by 2002:a17:907:2da4:b0:c2e:2fb6:ff37 with SMTP id a640c23a62f3a-c3169fb09ffmr141582266b.21.1791291477565;
+        Tue, 06 Oct 2026 05:57:57 -0700 (PDT)
+Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c31562da31esm201740666b.38.2026.10.06.05.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 10:51:26 -0700 (PDT)
-Date: Mon, 5 Oct 2026 10:51:21 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>, kernel-team@meta.com, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	io-uring@vger.kernel.org, "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, 
-	Weiming Shi <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
-	David Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Mina Almasry <almasrymina@google.com>
-Subject: Re: [RFC net-next 13/15] eth: fbnic: Support AF_XDP zero-copy receive
-Message-ID: <asPhAnm830qFxGMv@devvm7509.cco0.facebook.com>
-References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-14-bjorn@kernel.org>
+        Tue, 06 Oct 2026 05:57:57 -0700 (PDT)
+From: hengyul@cs.unc.edu
+To: Jens Axboe <axboe@kernel.dk>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	io-uring@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hengyu Liang <hengyul@cs.unc.edu>,
+	stable@vger.kernel.org
+Subject: [PATCH] io_uring: do not charge the SQ/CQ rings to RLIMIT_MEMLOCK
+Date: Tue,  6 Oct 2026 08:57:32 -0400
+Message-ID: <20261006125732.3425762-1-hengyul@cs.unc.edu>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20261002190018.696925-14-bjorn@kernel.org>
 
-On 10/02, Björn Töpel wrote:
-> fbnic gets RX buffers from page_pool. Use the XSK buffer pool as the
-> RX queue's page-pool memory provider, so allocation, DMA sync,
-> recycling and refill stay in page_pool. Only aligned 4 KiB UMEM
-> chunks are supported.
-> 
-> Each UMEM frame on the header queue must hold one packet. Raise the
-> header-split threshold to at least 3072 bytes, more than half of a
-> 4 KiB page, so the device finishes the frame after one header. Cap
-> it to the space left in the frame after the headroom. An MTU above
-> the threshold needs a socket with XDP_USE_SG and an XDP program with
-> frags support. With XDP_USE_SG, the payload queue also uses UMEM
-> frames, and the device uses each frame for one descriptor only.
-> Without it, the payload queue uses a normal page pool. If the device
-> does not finish a provider frame after one descriptor, drop the
-> packet.
-> 
-> The BDQ refill loop now alternates header and payload buffers on all
-> queues, so two rings that share one finite provider stay balanced.
-> It keeps NAPI scheduled while the provider still has buffers.
-> 
-> Provider frames are never split, so they get no fragment bias. A
-> redirected frame can be recycled before its old BDQ slot is cleaned,
-> and a stale bias would corrupt the new allocation.
-> 
-> The headroom comes from the queue configuration. It must be at least
-> XDP_PACKET_HEADROOM, a multiple of 128 bytes, and fit the hardware
-> field; otherwise queue validation fails. MTU, ring parameter and XDP
-> program changes that do not fit an active provider are rejected.
-> 
-> fbnic did not support XDP_REDIRECT. Add it, with xdp_do_flush(), and
-> advertise it. This also enables copy-mode AF_XDP and the other
-> redirect targets on fbnic. Do not advertise AF_XDP zero copy until
-> TX support is added.
-> 
-> Signed-off-by: Björn Töpel <bjorn@kernel.org>
-> ---
->  .../net/ethernet/meta/fbnic/fbnic_ethtool.c   |   5 +
->  .../net/ethernet/meta/fbnic/fbnic_netdev.c    | 140 ++++++-
->  .../net/ethernet/meta/fbnic/fbnic_netdev.h    |   4 +
->  drivers/net/ethernet/meta/fbnic/fbnic_txrx.c  | 350 +++++++++++++-----
->  drivers/net/ethernet/meta/fbnic/fbnic_txrx.h  |   6 +
->  5 files changed, 402 insertions(+), 103 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-> index e774740fcb5d..188abe0ead14 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_ethtool.c
-> @@ -385,6 +385,11 @@ fbnic_set_ringparam(struct net_device *netdev, struct ethtool_ringparam *ring,
->  		return -EINVAL;
->  	}
->  
-> +	err = fbnic_xsk_validate(fbn, fbn->xdp_prog, netdev->mtu,
-> +				 kernel_ring->hds_thresh, extack);
-> +	if (err)
-> +		return err;
-> +
->  	if (!netif_running(netdev)) {
->  		fbnic_set_rings(fbn, ring, kernel_ring);
->  		return 0;
-> diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> index 8a6703afca38..038e91ef14e4 100644
-> --- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> +++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-> @@ -5,6 +5,8 @@
->  #include <linux/ipv6.h>
->  #include <linux/types.h>
->  #include <net/netdev_queues.h>
-> +#include <net/netdev_rx_queue.h>
-> +#include <net/xdp_sock_drv.h>
->  
->  #include "fbnic.h"
->  #include "fbnic_netdev.h"
-> @@ -276,6 +278,8 @@ static int fbnic_set_mac(struct net_device *netdev, void *p)
->  static int fbnic_change_mtu(struct net_device *dev, int new_mtu)
->  {
->  	struct fbnic_net *fbn = netdev_priv(dev);
-> +	struct netlink_ext_ack extack = {};
-> +	int err;
->  
->  	if (fbnic_check_split_frames(fbn->xdp_prog, new_mtu, fbn->hds_thresh)) {
->  		dev_err(&dev->dev,
-> @@ -285,6 +289,15 @@ static int fbnic_change_mtu(struct net_device *dev, int new_mtu)
->  		return -EINVAL;
->  	}
->  
-> +	err = fbnic_xsk_validate(fbn, fbn->xdp_prog, new_mtu,
-> +				 fbn->hds_thresh, &extack);
-> +	if (err) {
-> +		if (extack._msg)
-> +			netdev_err(dev, "%s\n", extack._msg);
-> +
-> +		return err;
-> +	}
-> +
->  	WRITE_ONCE(dev->mtu, new_mtu);
->  
->  	return 0;
-> @@ -534,26 +547,123 @@ bool fbnic_check_split_frames(struct bpf_prog *prog, unsigned int mtu,
->  	return mtu + ETH_HLEN > hds_thresh;
->  }
->  
-> +u32 fbnic_xsk_hds_thresh(u32 headroom, u32 hds_thresh)
-> +{
-> +	u32 max_hds;
-> +
-> +	/* Reserve more than half a device page for each header so the device
-> +	 * retires the provider frame after one descriptor.
-> +	 */
-> +	static_assert(2 * FBNIC_XSK_HDS_THRESH > FBNIC_BD_PAGE_SIZE);
-> +
-> +	max_hds = FBNIC_BD_PAGE_SIZE - headroom - FBNIC_RX_TROOM -
-> +		  FBNIC_RX_PAD;
-> +
-> +	return min(max_t(u32, hds_thresh, FBNIC_XSK_HDS_THRESH), max_hds);
-> +}
-> +
-> +static int fbnic_xsk_validate_frames(struct xsk_buff_pool *pool,
-> +				     struct bpf_prog *prog,
-> +				     unsigned int mtu, u32 hds_thresh,
-> +				     struct netlink_ext_ack *extack)
-> +{
-> +	u32 xsk_hds_thresh;
-> +
-> +	xsk_hds_thresh = fbnic_xsk_hds_thresh(xsk_pool_get_headroom(pool),
-> +					      hds_thresh);
-> +
-> +	if (mtu + ETH_HLEN <= xsk_hds_thresh)
-> +		return 0;
-> +
-> +	if (!xsk_pool_uses_sg(pool)) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "AF_XDP zero-copy socket requires XDP_USE_SG");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (fbnic_check_split_frames(prog, mtu, xsk_hds_thresh)) {
-> +		NL_SET_ERR_MSG_MOD(extack,
-> +				   "AF_XDP zero-copy socket requires XDP frags");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +int fbnic_xsk_validate(struct fbnic_net *fbn, struct bpf_prog *prog,
-> +		       unsigned int mtu, u32 hds_thresh,
-> +		       struct netlink_ext_ack *extack)
-> +{
-> +	struct net_device *netdev = fbn->netdev;
-> +	struct xsk_buff_pool *pool;
-> +	unsigned int qid;
-> +	int err;
-> +
-> +	for (qid = 0; qid < fbn->num_rx_queues; qid++) {
-> +		pool = xsk_get_pool_from_rxq(netdev, qid);
-> +		if (!pool)
-> +			continue;
-> +
-> +		err = fbnic_xsk_validate_frames(pool, prog, mtu, hds_thresh,
-> +						extack);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int fbnic_xsk_setup_pool(struct net_device *netdev,
-> +				struct xsk_buff_pool *pool, u16 queue_id,
-> +				struct netlink_ext_ack *extack)
-> +{
-> +	struct fbnic_net *fbn = netdev_priv(netdev);
-> +	int err;
-> +
-> +	if (queue_id >= fbn->num_rx_queues)
-> +		return -EINVAL;
-> +
-> +	if (!pool)
-> +		return xsk_pool_setup_page_pool(netdev, NULL, queue_id, extack);
-> +
-> +	err = fbnic_xsk_validate_frames(pool, fbn->xdp_prog, netdev->mtu,
-> +					fbn->hds_thresh, extack);
-> +	if (err)
-> +		return err;
-> +
-> +	return xsk_pool_setup_page_pool(netdev, pool, queue_id, extack);
-> +}
-> +
->  static int fbnic_bpf(struct net_device *netdev, struct netdev_bpf *bpf)
->  {
->  	struct bpf_prog *prog = bpf->prog, *prev_prog;
->  	struct fbnic_net *fbn = netdev_priv(netdev);
-> +	int err;
->  
-> -	if (bpf->command != XDP_SETUP_PROG)
-> +	switch (bpf->command) {
-> +	case XDP_SETUP_PROG:
-> +		if (fbnic_check_split_frames(prog, netdev->mtu,
-> +					     fbn->hds_thresh)) {
-> +			NL_SET_ERR_MSG_MOD(bpf->extack,
-> +					   "MTU too high, or HDS threshold is too low for single buffer XDP");
-> +			return -EOPNOTSUPP;
-> +		}
-> +
-> +		err = fbnic_xsk_validate(fbn, prog, netdev->mtu,
-> +					 fbn->hds_thresh, bpf->extack);
-> +		if (err)
-> +			return err;
-> +
-> +		prev_prog = xchg(&fbn->xdp_prog, prog);
-> +		if (prev_prog)
-> +			bpf_prog_put(prev_prog);
-> +		return 0;
+From: Hengyu Liang <hengyul@cs.unc.edu>
 
-[..]
+Commit 8078486e1d53 ("io_uring: use region api for SQ") and commit
+81a4058e0cd0 ("io_uring: use region api for CQ") made io_uring_setup()
+allocate the rings with io_create_region().
 
-> +	case XDP_SETUP_XSK_POOL:
-> +		return fbnic_xsk_setup_pool(netdev, bpf->xsk.pool,
-> +					    bpf->xsk.queue_id, bpf->extack);
+However, io_create_region() charges the memory to RLIMIT_MEMLOCK, and
+the rings had been exempt from that limit since commit 26bfa89e25f4
+("io_uring: place ring SQ/CQ arrays under memcg memory limits"). As of
+now, a user without CAP_IPC_LOCK gets ENOMEM from io_uring_setup() when
+their rings exceed the limit, which is 8 MiB by default. PostgreSQL
+developers have already hit this in their io_uring tests [1].
 
-Is there a good reason to ask drivers to call us back with
-xsk_pool_setup_page_pool? For the PP mode, maybe we should add new
-XSK_VALIDATE_POOL or something? So most of that fbnic_xsk_setup_pool stays
-in core?
+The issue can be reproduced with a simple liburing program, run as an
+unprivileged user:
 
-I guess I'm mentally trying to have a clear separation between
-pp vs non-pp modes. Even that whole xsk_buff_pool might be legacy non-pp
-artifact? New drivers shouldn't bother with it? Or is it too much?
+    #include <liburing.h>
+    #include <stdio.h>
+
+    int main(void)
+    {
+            static struct io_uring ring[64];
+            int i;
+
+            for (i = 0; i < 64; i++)
+                    if (io_uring_queue_init(4096, &ring[i], 0) < 0)
+                            break;
+            printf("%d rings\n", i);
+            return 0;
+    }
+
+Before those commits (v6.13), it prints "64 rings". After those commits
+(v6.14), it prints "21 rings".
+
+This patch makes io_create_region() take the user to charge, and passes
+no user for the SQ/CQ rings.
+
+Link: https://www.postgresql.org/message-id/flat/667f7dcf-404b-4898-a426-57ca6e0617f6@gmail.com [1]
+Fixes: 8078486e1d53 ("io_uring: use region api for SQ")
+Fixes: 81a4058e0cd0 ("io_uring: use region api for CQ")
+Cc: stable@vger.kernel.org
+Signed-off-by: Hengyu Liang <hengyul@cs.unc.edu>
+---
+ io_uring/io_uring.c | 10 ++++++----
+ io_uring/kbuf.c     |  2 +-
+ io_uring/memmap.c   | 10 +++++-----
+ io_uring/memmap.h   |  2 +-
+ io_uring/register.c | 12 +++++++-----
+ io_uring/zcrx.c     |  2 +-
+ 6 files changed, 21 insertions(+), 17 deletions(-)
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 61053421d809..26890f4de206 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2068,8 +2068,9 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+ 
+ static void io_rings_free(struct io_ring_ctx *ctx)
+ {
+-	io_free_region(ctx->user, &ctx->sq_region);
+-	io_free_region(ctx->user, &ctx->ring_region);
++	/* ring memory is not charged to RLIMIT_MEMLOCK, hence no user */
++	io_free_region(NULL, &ctx->sq_region);
++	io_free_region(NULL, &ctx->ring_region);
+ 	ctx->rings = NULL;
+ 	RCU_INIT_POINTER(ctx->rings_rcu, NULL);
+ 	ctx->sq_sqes = NULL;
+@@ -2733,7 +2734,8 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
+ 		rd.user_addr = p->cq_off.user_addr;
+ 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
+ 	}
+-	ret = io_create_region(ctx, &ctx->ring_region, &rd, IORING_OFF_CQ_RING);
++	/* ring memory is not charged to RLIMIT_MEMLOCK, hence no user */
++	ret = io_create_region(NULL, &ctx->ring_region, &rd, IORING_OFF_CQ_RING);
+ 	if (ret)
+ 		return ret;
+ 	ctx->rings = rings = io_region_get_ptr(&ctx->ring_region);
+@@ -2747,7 +2749,7 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
+ 		rd.user_addr = p->sq_off.user_addr;
+ 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
+ 	}
+-	ret = io_create_region(ctx, &ctx->sq_region, &rd, IORING_OFF_SQES);
++	ret = io_create_region(NULL, &ctx->sq_region, &rd, IORING_OFF_SQES);
+ 	if (ret) {
+ 		io_rings_free(ctx);
+ 		return ret;
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index 7c309173dd19..7c59ab9cfc8b 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -676,7 +676,7 @@ int io_register_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg)
+ 		rd.user_addr = reg.ring_addr;
+ 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
+ 	}
+-	ret = io_create_region(ctx, &bl->region, &rd, mmap_offset);
++	ret = io_create_region(ctx->user, &bl->region, &rd, mmap_offset);
+ 	if (ret)
+ 		goto fail;
+ 	br = io_region_get_ptr(&bl->region);
+diff --git a/io_uring/memmap.c b/io_uring/memmap.c
+index 48c0eb012412..d4d716946971 100644
+--- a/io_uring/memmap.c
++++ b/io_uring/memmap.c
+@@ -204,7 +204,7 @@ static int io_region_allocate_pages(struct io_mapped_region *mr,
+ 	return 0;
+ }
+ 
+-int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
++int io_create_region(struct user_struct *user, struct io_mapped_region *mr,
+ 		     struct io_uring_region_desc *reg,
+ 		     unsigned long mmap_offset)
+ {
+@@ -230,8 +230,8 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
+ 		return -EOVERFLOW;
+ 
+ 	nr_pages = reg->size >> PAGE_SHIFT;
+-	if (ctx->user) {
+-		ret = __io_account_mem(ctx->user, nr_pages);
++	if (user) {
++		ret = __io_account_mem(user, nr_pages);
+ 		if (ret)
+ 			return ret;
+ 	}
+@@ -240,7 +240,7 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
+ 	if (reg->flags & IORING_MEM_REGION_TYPE_USER)
+ 		ret = io_region_pin_pages(mr, reg);
+ 	else
+-		ret = io_region_allocate_pages(mr, reg, mmap_offset, ctx->user);
++		ret = io_region_allocate_pages(mr, reg, mmap_offset, user);
+ 	if (ret)
+ 		goto out_free;
+ 
+@@ -249,7 +249,7 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
+ 		goto out_free;
+ 	return 0;
+ out_free:
+-	io_free_region(ctx->user, mr);
++	io_free_region(user, mr);
+ 	return ret;
+ }
+ 
+diff --git a/io_uring/memmap.h b/io_uring/memmap.h
+index f4cfbb6b9a1f..0714bb5a9616 100644
+--- a/io_uring/memmap.h
++++ b/io_uring/memmap.h
+@@ -18,7 +18,7 @@ unsigned long io_uring_get_unmapped_area(struct file *file, unsigned long addr,
+ int io_uring_mmap(struct file *file, struct vm_area_struct *vma);
+ 
+ void io_free_region(struct user_struct *user, struct io_mapped_region *mr);
+-int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
++int io_create_region(struct user_struct *user, struct io_mapped_region *mr,
+ 		     struct io_uring_region_desc *reg,
+ 		     unsigned long mmap_offset);
+ 
+diff --git a/io_uring/register.c b/io_uring/register.c
+index 02bc103bcc9d..d11a53d68431 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -480,8 +480,9 @@ struct io_ring_ctx_rings {
+ static void io_register_free_rings(struct io_ring_ctx *ctx,
+ 				   struct io_ring_ctx_rings *r)
+ {
+-	io_free_region(ctx->user, &r->sq_region);
+-	io_free_region(ctx->user, &r->ring_region);
++	/* ring memory is not charged to RLIMIT_MEMLOCK, hence no user */
++	io_free_region(NULL, &r->sq_region);
++	io_free_region(NULL, &r->ring_region);
+ }
+ 
+ #define swap_old(ctx, o, n, field)		\
+@@ -529,7 +530,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 		rd.user_addr = p->cq_off.user_addr;
+ 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
+ 	}
+-	ret = io_create_region(ctx, &n.ring_region, &rd, IORING_OFF_CQ_RING);
++	ret = io_create_region(NULL, &n.ring_region, &rd, IORING_OFF_CQ_RING);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -559,7 +560,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 		rd.user_addr = p->sq_off.user_addr;
+ 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
+ 	}
+-	ret = io_create_region(ctx, &n.sq_region, &rd, IORING_OFF_SQES);
++	ret = io_create_region(NULL, &n.sq_region, &rd, IORING_OFF_SQES);
+ 	if (ret) {
+ 		io_register_free_rings(ctx, &n);
+ 		return ret;
+@@ -730,7 +731,8 @@ static int io_register_mem_region(struct io_ring_ctx *ctx, void __user *uarg)
+ 	    !(ctx->flags & IORING_SETUP_R_DISABLED))
+ 		return -EINVAL;
+ 
+-	ret = io_create_region(ctx, &region, &rd, IORING_MAP_OFF_PARAM_REGION);
++	ret = io_create_region(ctx->user, &region, &rd,
++			       IORING_MAP_OFF_PARAM_REGION);
+ 	if (ret)
+ 		return ret;
+ 	if (copy_to_user(rd_uptr, &rd, sizeof(rd))) {
+diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+index 86d580d4410d..62cabfdf0206 100644
+--- a/io_uring/zcrx.c
++++ b/io_uring/zcrx.c
+@@ -431,7 +431,7 @@ static int io_allocate_rbuf_ring(struct io_ring_ctx *ctx,
+ 	mmap_offset = IORING_MAP_OFF_ZCRX_REGION;
+ 	mmap_offset += (u64)id << IORING_OFF_ZCRX_SHIFT;
+ 
+-	ret = io_create_region(ctx, &ifq->rq_region, rd, mmap_offset);
++	ret = io_create_region(ctx->user, &ifq->rq_region, rd, mmap_offset);
+ 	if (ret < 0)
+ 		return ret;
+ 
+-- 
+2.53.0
+
