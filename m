@@ -1,264 +1,260 @@
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CB5E48A8A7
-	for <io-uring@vger.kernel.org>; Tue,  6 Oct 2026 14:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760C0322A
+	for <io-uring@vger.kernel.org>; Wed,  7 Oct 2026 01:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791298777; cv=none; b=uW1jeINH0neBgMdmB7slY13fuQd3daM5ujnsYtInmtq6vIbDOV8wvqedPcoTyz/aPuWgrEm7G6bFFW7NshFmhCgxwOlkqp20iBx0pzunzogcWZNjSS5SGoWOoRB1OmxDdlnO9WHw017ZLQrSk5yjr0sSqcxLf5QdDAptEaLsVrY=
+	t=1791336735; cv=none; b=ELEmFcBxNlyhMSwWggQCc1js7IIba+u4H3YsglRUGwSzU+I+o8BYvkfaBABLqP81fYx3hgudTcIGQD6danB3QNlGA0JF/9w3CINvsjhtqSgIAw7NHbNpvplKy0TVRiuAM2n9uAZ2L0DdFK4y7O+Qjit4DzBCADlX0atX50vXh6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791298777; c=relaxed/simple;
-	bh=a2pGJgyenrOQBcUgU4+aMvSHZwkv/cIvXJyf0CX0F6c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c6taAbgogEq2JeHaE9Jc8ODkNSlP/XtvGkFfedYc5hCQQ87JZad5eLAERJUObpUDdAooFkbuCIopwl8aAk7bBtC+PM7MZOBIFxAE0QtLMCU8Jji1gkSfCG4kGRbEqWCW+EQAxsyTo8r+dALnHYTfKWSCvJc/AuJ7U+bi56U9mQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=VVZUX6Bx; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1791336735; c=relaxed/simple;
+	bh=QiaXich+youzrooQKoppxmyMfy3XmwjU4ozTtqYqLIo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pB70WoIksshvtRl6SrWmh89yOGNnR5jatZ6iu9BhufS5atpd2PMVZK/wlr2fku7zBrNOosmc+MomWyH7ylxpHsuiJ+UK6TCucIx41ww6llUgsva9w2KifKV/U8oGJfD1AV/qujgniv6+VrG5jzk/TLDdDCWvEiHqH9wDbXG7WFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=btfPN0Bq; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="VVZUX6Bx"
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-4949f037131so411015fac.3
-        for <io-uring@vger.kernel.org>; Tue, 06 Oct 2026 07:59:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="btfPN0Bq"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4998b5a63e2so33208955e9.1
+        for <io-uring@vger.kernel.org>; Tue, 06 Oct 2026 18:32:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791298773; x=1791903573; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=4tI0LY/5mH9k6I/X/x+R0S0p1KLDmL/lVZOe8khheaM=;
-        b=VVZUX6BxrOH5ap4dVh95/WwdcKxlHK4sNY/3R9hnWFh37bX7WVPtrnoq6WFJDL8iHH
-         fa0S56URHS+G1ucb62rrjPE6RPKkKnzDIRPPsbF8DfFzsJUy6p03MZuzCX2eRBOzO0hO
-         DmyrZEIFohvvKxz9/caN8mTIpVFZKtxs0/FH6ed8uVn/sHEhlBiEwvcH3g4XOH+df3nY
-         4owhplpdcdwy0ISvrsyHXJ4dPn50FCzFwz9KeBI5054dhr0YaLs5ajsgR70jaFxVhFzJ
-         NQgHJ7eSXOj3xupfMQLUcGCFoIRlPufWX47YQUkzfJfmwoX9xQaWwjUX9ASNAP8dnbq1
-         Q9Tg==
+        d=gmail.com; s=20251104; t=1791336733; x=1791941533; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=hvzB42gUMiV/KR6lqPvi8GnnActkQyAM+I4+Sj3I6TM=;
+        b=btfPN0BqGEmD7+CM3Z1lZhknO6acCyjQ+VgZeeOd4DvRnGUobYDjvgpNg3w0x5z7fC
+         PeEC/BNaKpfHGg9K3gHJrHaLN5eivJ06o/hUqyzTxX3rvMGCpaacU+uaYkiHrM5L/0iQ
+         WgfpeYy2N5ZUF/LeqjETRpkWeqq8iRCSC7+OCkcbBAweU93AIhhcQ+A0Dc5E8v1vjyQc
+         7gJbEfCpSgKY8Xuj9dyaONqXPRH7wrYoob1BSdrPHaFEE8fbP8PSOGtgfrfu9rcudWkS
+         +H59848huFe8LeXHoz4eoyG6BzAmjma+Oauz47CXbX1xp0QEbaXNUWLplL3+Cd9y73cv
+         kMZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791298773; x=1791903573;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1791336733; x=1791941533;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4tI0LY/5mH9k6I/X/x+R0S0p1KLDmL/lVZOe8khheaM=;
-        b=GtZr9rw+Qd/2qw4N+IuEP7VfEs+mree5ws8J5VOWpN20Z0rglGZPRD+IwtJJVgJwKW
-         zr7V9Lr29uDYEqZDEgro/aL5BPFbCMmzMCQTWebFjI+KrAMG/4pSiNA5PLN7ewSOqHID
-         a2OjAsrQ/e/gKPjgx6kZ/48E9IuuHAN1WWQYsxuLGOltEuBHcUz6fegNAJDDVPwOS8eO
-         3iNhKoOmbLLMLkr7avjgNsiqNgE5DzHwvRw0t4oNfaWyhtbHGkcqBJbvU5zj3a0jFiZ8
-         OCWV0z6QxsMpZIZAtF+/4GwXVZEDIpXNFEjCEWNchbbD8dABR51FQKq6MEWiM7INFPOj
-         GFqg==
-X-Forwarded-Encrypted: i=1; AKwUvBwn1YfmQd+hIn1mZ71SDyHVUFnYhIwK+YGnIxiVy7iw8UK0UDNCE4oUrI55+8W1Ih0FbrxMV6px3g==@vger.kernel.org
-X-Gm-Message-State: AFuF++lHKpUgEp212F3Z5VaHl7gu8N4TDLIEydEZHn+4S6W7D8o9ADZH
-	22CjyJjip1qn9oc1KWeGgbPC9/F5i20LAbEJi9bEfeqnOq7aqXqMf+ElLqvvMPbvUXU=
-X-Gm-Gg: AYBFou2u0DRz/lJ0DhOVJkYDdJx479r7c4zR05pIsFfA0gw+Qz26IrWvWgohV90zex4
-	Whhs34hofCYEB7ZVVDH/DyuO7B1DKhQNCK4fUO0a0jKW1LRX4QwX8yxlWTGjhe6WVst4rPQzllY
-	e6JeN/koawgVvVVbr7gp851g3P4yM7ni9oUhTOmAYogd0eqQFMr3lhe6QGIMM4ajo/PsKOH9f91
-	wGuEwlhI9phBRl6gl7bBLvEjenO6/gE1VjBp4ZTo1MS9a8U7/p44WmK0cPKdAtMFwuKZoTE6LGU
-	ZkKGki03QrMVwcCVhgpGI9RUsrMEGmNgJTTbk44yMNexY9DYNk/7ZnsGQXgOYWVyAQ2pXi+DE7S
-	V3t8ddZrC2AuyTXEj1YSz4XuyA6YEAtWru3KCoD2GFO03d954fatJ0zjJP8ut5LckBmQIN8cuJM
-	MkLEcWsu1QVrXAqwWwF5LtIXJQ+vlpWnQteW1lfySIoPWL4x+GPoKVrQEiuYPNnyFIv2upJlgz2
-	RMwVCH9Hkhs0VfuJhRU1qGEWM87KyKKNfUct92OxpCdZY6HRVg3h1AQu4L/OFtplvWSw84GlKuN
-	raO0LVLcigoObGkfVzAvd/o6
-X-Received: by 2002:a05:6871:110:b0:498:f70a:b54e with SMTP id 586e51a60fabf-4a240515209mr1399607fac.43.1791298773492;
-        Tue, 06 Oct 2026 07:59:33 -0700 (PDT)
-Received: from [10.0.0.192] ([72.170.223.115])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-49e16f00b5asm13145180fac.14.2026.10.06.07.59.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Oct 2026 07:59:32 -0700 (PDT)
-Message-ID: <01d75013-9eae-4ec6-93b5-cc1b2b83b791@kernel.dk>
-Date: Tue, 6 Oct 2026 08:59:22 -0600
+        bh=hvzB42gUMiV/KR6lqPvi8GnnActkQyAM+I4+Sj3I6TM=;
+        b=USFITb3rvY32+AGWLpvAZqDD0EFtZy2SMagMZqUWsRWmHADsm+Lnj/roFnsiZOsEdN
+         ONyX4xu/YiXMUqrdzgdROKUvDkdwVvU8aTZe4uBWPUvxwThfBCi8JdFq1rGMWHo5Idk6
+         wGazcDJXiSR5MBEeZtIIQbVABvoJgPc1CE4fu8JfdXNqoxhq7Da8zk8nIOa5UO75mSic
+         CgsKp74NH1pivZhusCK1gCodxT5nNsraAw2ciPobbDf0ZU3777cGeu81ebIbURX90vbk
+         EmNSNreFniI0hF1+J8JLNfMAapFi3ghL+UHCIRqmIb5Zvt6jZkwzohaQT6c48nGZ2zlc
+         DVJA==
+X-Forwarded-Encrypted: i=1; AKwUvBxy5hnX4H5geuWrJElF+8W+4BTsxH6b8P6KP9TKQyCtcxECsTgc3oP6FCF5OkyCePn7msKgrEtEvQ==@vger.kernel.org
+X-Gm-Message-State: AFuF++lXK7fV+EJglnuqgNqC8NzXi+pZ83OBXOgkpAS2gSL6N3SBG/j/
+	FMVkiTs2W2uXQbUPAnjCOUzPsNsyL1Uzi8llRBgbXCdXjp7A+xDECg9V
+X-Gm-Gg: AYBFou0DPbuNPXNg5t7ok0K83TWH1u9OOyJlbAFpF2lUPELS26+EHRyJJspQD7CHkFI
+	0RRCVexr1z9YjamsAV2cB40KUgEySkfm/v6Ol0rJnJSeSAoIlC0f2/XmYkMii/v6v+q4WvTh+we
+	ZkDPXmeb8XQRJGzLZUjWdOyGJ0Eq4tU8acih5/F8a2ecE37pURHVRxK52+s95JWLfjjZvSn6moy
+	eMqTdIx2AZcz1PBxdH5LffWLyKxwK/y13A86rFYQlcYOSPMShK2/zF8FYQIYEs4nZayptWS9Ccd
+	/wIU90uMtZ9zTJeTM3SJtX5UMD6CJ6mxN3G+RdzE9avMrE2dUwSPo22xtCBvw/b2O6PfobWaNMf
+	9WhKrNThS7wWfXtbiJEpKU+1DcYiGM46Pu3hFQFeKHV8len/emNpM+CEqmKbLvzTWLfdvbD/Jsd
+	7hpApfpEdWoViEOcBT1HN+OZqZQW/Yct4dZoDpUc9f0/yaxnMai0Cv3fNKzFmWqevvnPHSkA3zi
+	l3JUlAIQP9/vEiAQ12PHHGLQMEshx0hGPVK/f8BZLswPxxtHH/YVLM40ZsOxnge8iao+XhmnOcq
+X-Received: by 2002:a05:600c:3f16:b0:4a0:23f:8b0d with SMTP id 5b1f17b1804b1-4a1800d3f2emr7099925e9.2.1791336732453;
+        Tue, 06 Oct 2026 18:32:12 -0700 (PDT)
+Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a17f6538b7sm21183615e9.13.2026.10.06.18.32.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2026 18:32:11 -0700 (PDT)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: linux-block@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org,
+	linux-nvme@lists.infradead.org,
+	linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	Christoph Hellwig <hch@lst.de>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Keith Busch <kbusch@kernel.org>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Nitesh Shetty <nj.shetty@samsung.com>,
+	Kanchan Joshi <joshi.k@samsung.com>,
+	Anuj Gupta <anuj20.g@samsung.com>,
+	Tushar Gohad <tushar.gohad@intel.com>,
+	William Power <william.power@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	dm-devel@lists.linux.dev
+Subject: [PATCH v8 00/13] Add dmabuf read/write via io_uring
+Date: Wed,  7 Oct 2026 02:31:43 +0100
+Message-ID: <cover.1791336002.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring: do not charge the SQ/CQ rings to RLIMIT_MEMLOCK
-To: hengyul@cs.unc.edu, Pavel Begunkov <asml.silence@gmail.com>,
- io-uring@vger.kernel.org
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20261006125732.3425762-1-hengyul@cs.unc.edu>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20261006125732.3425762-1-hengyul@cs.unc.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/6/26 6:57 AM, hengyul@cs.unc.edu wrote:
-> From: Hengyu Liang <hengyul@cs.unc.edu>
-> 
-> Commit 8078486e1d53 ("io_uring: use region api for SQ") and commit
-> 81a4058e0cd0 ("io_uring: use region api for CQ") made io_uring_setup()
-> allocate the rings with io_create_region().
-> 
-> However, io_create_region() charges the memory to RLIMIT_MEMLOCK, and
-> the rings had been exempt from that limit since commit 26bfa89e25f4
-> ("io_uring: place ring SQ/CQ arrays under memcg memory limits"). As of
-> now, a user without CAP_IPC_LOCK gets ENOMEM from io_uring_setup() when
-> their rings exceed the limit, which is 8 MiB by default. PostgreSQL
-> developers have already hit this in their io_uring tests [1].
-> 
-> The issue can be reproduced with a simple liburing program, run as an
-> unprivileged user:
-> 
->     #include <liburing.h>
->     #include <stdio.h>
-> 
->     int main(void)
->     {
->             static struct io_uring ring[64];
->             int i;
-> 
->             for (i = 0; i < 64; i++)
->                     if (io_uring_queue_init(4096, &ring[i], 0) < 0)
->                             break;
->             printf("%d rings\n", i);
->             return 0;
->     }
-> 
-> Before those commits (v6.13), it prints "64 rings". After those commits
-> (v6.14), it prints "21 rings".
-> 
-> This patch makes io_create_region() take the user to charge, and passes
-> no user for the SQ/CQ rings.
+The patch set allows to register a dmabuf to an io_uring instance for
+a specified file and use it with io_uring read / write requests. The
+infrastructure is not tied to io_uring and there could be more users
+in the future. A similar idea was attempted some years ago by Keith [1],
+from where I borrowed a number of changes. Later it was brough back up
+to life by Tushar and Vishal.
 
-Agree that this is a bug, stricter accounting may break use cases.
-However, I think we can solve this simpler, and actually kill more code.
-How about something like the below instead? Only apply accounting to
-user backed memory, which is how it used to work too. Would be great if
-you could take a look and also run your test case against it.
+It's an opt-in feature for files, and they need to implement a new
+file operation to use it. Only NVMe block devices are supported in this
+series. The user API is built on top of io_uring's "registered buffers",
+where a dmabuf is registered in a special way, but after it can be used
+as any other "registered buffer" with IORING_OP_{READ,WRITE}_FIXED
+requests. It's created via a new file operation and the resulted map is
+then passed through the I/O stack in a new iterator type. There is some
+additional infrastructure to glue it together, count requests, manage
+lifetime and implement invalidation.
 
-diff --git a/io_uring/memmap.c b/io_uring/memmap.c
-index 48c0eb012412..da2328b52b38 100644
---- a/io_uring/memmap.c
-+++ b/io_uring/memmap.c
-@@ -16,10 +16,8 @@
- #include "zcrx.h"
- 
- static bool io_mem_alloc_compound(struct page **pages, int nr_pages,
--				  size_t size, gfp_t gfp,
--				  struct user_struct *user)
-+				  size_t size, gfp_t gfp)
- {
--	unsigned long nr_compound, extra;
- 	struct page *page;
- 	int i, order;
- 
-@@ -29,22 +27,9 @@ static bool io_mem_alloc_compound(struct page **pages, int nr_pages,
- 	else if (order)
- 		gfp |= __GFP_COMP;
- 
--	/*
--	 * get_order() rounds a non power of two size up, so the allocation
--	 * can hold more pages than the region exposes. Account those too,
--	 * and leave the compound allocation alone if they do not fit.
--	 */
--	nr_compound = 1UL << order;
--	extra = nr_compound - nr_pages;
--	if (extra && user && __io_account_mem(user, extra))
--		return false;
--
- 	page = alloc_pages(gfp, order);
--	if (!page) {
--		if (extra && user)
--			__io_unaccount_mem(user, extra);
-+	if (!page)
- 		return false;
--	}
- 
- 	for (i = 0; i < nr_pages; i++)
- 		pages[i] = page + i;
-@@ -120,15 +105,8 @@ void io_free_region(struct user_struct *user, struct io_mapped_region *mr)
- 	}
- 	if ((mr->flags & IO_REGION_F_VMAP) && mr->ptr)
- 		vunmap(mr->ptr);
--	if (mr->nr_pages && user) {
--		unsigned long nr_accounted = mr->nr_pages;
--
--		/* a compound region was accounted for the whole allocation */
--		if (mr->flags & IO_REGION_F_SINGLE_REF)
--			nr_accounted = 1UL << get_order(io_region_size(mr));
--
--		__io_unaccount_mem(user, nr_accounted);
--	}
-+	if ((mr->flags & IO_REGION_F_USER_PROVIDED) && user)
-+		__io_unaccount_mem(user, mr->nr_pages);
- 
- 	memset(mr, 0, sizeof(*mr));
- }
-@@ -154,11 +132,12 @@ static int io_region_init_ptr(struct io_mapped_region *mr)
- }
- 
- static int io_region_pin_pages(struct io_mapped_region *mr,
--			       struct io_uring_region_desc *reg)
-+			       struct io_uring_region_desc *reg,
-+			       struct user_struct *user)
- {
- 	size_t size = io_region_size(mr);
- 	struct page **pages;
--	int nr_pages;
-+	int nr_pages, ret;
- 
- 	pages = io_pin_pages(reg->user_addr, size, &nr_pages);
- 	if (IS_ERR(pages))
-@@ -166,6 +145,16 @@ static int io_region_pin_pages(struct io_mapped_region *mr,
- 	if (WARN_ON_ONCE(nr_pages != mr->nr_pages))
- 		return -EFAULT;
- 
-+	/* pinned user memory is what RLIMIT_MEMLOCK is for */
-+	if (user) {
-+		ret = __io_account_mem(user, nr_pages);
-+		if (ret) {
-+			unpin_user_pages(pages, nr_pages);
-+			kvfree(pages);
-+			return ret;
-+		}
-+	}
-+
- 	mr->pages = pages;
- 	mr->flags |= IO_REGION_F_USER_PROVIDED;
- 	return 0;
-@@ -173,8 +162,7 @@ static int io_region_pin_pages(struct io_mapped_region *mr,
- 
- static int io_region_allocate_pages(struct io_mapped_region *mr,
- 				    struct io_uring_region_desc *reg,
--				    unsigned long mmap_offset,
--				    struct user_struct *user)
-+				    unsigned long mmap_offset)
- {
- 	gfp_t gfp = GFP_KERNEL_ACCOUNT | __GFP_ZERO | __GFP_NOWARN;
- 	size_t size = io_region_size(mr);
-@@ -185,7 +173,7 @@ static int io_region_allocate_pages(struct io_mapped_region *mr,
- 	if (!pages)
- 		return -ENOMEM;
- 
--	if (io_mem_alloc_compound(pages, mr->nr_pages, size, gfp, user)) {
-+	if (io_mem_alloc_compound(pages, mr->nr_pages, size, gfp)) {
- 		mr->flags |= IO_REGION_F_SINGLE_REF;
- 		goto done;
- 	}
-@@ -230,17 +218,16 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
- 		return -EOVERFLOW;
- 
- 	nr_pages = reg->size >> PAGE_SHIFT;
--	if (ctx->user) {
--		ret = __io_account_mem(ctx->user, nr_pages);
--		if (ret)
--			return ret;
--	}
- 	mr->nr_pages = nr_pages;
- 
-+	/*
-+	 * Only pinned user memory counts against RLIMIT_MEMLOCK, kernel
-+	 * allocated regions are memcg accounted through GFP_KERNEL_ACCOUNT.
-+	 */
- 	if (reg->flags & IORING_MEM_REGION_TYPE_USER)
--		ret = io_region_pin_pages(mr, reg);
-+		ret = io_region_pin_pages(mr, reg, ctx->user);
- 	else
--		ret = io_region_allocate_pages(mr, reg, mmap_offset, ctx->user);
-+		ret = io_region_allocate_pages(mr, reg, mmap_offset);
- 	if (ret)
- 		goto out_free;
- 
+Tushar, William, Phil did a lot of testing and experimentation on various
+devices with previous versions of the patch set, and I've received lots
+of help from Anuj, Kanchan and Nitesh with investigations, testing, and
+patching. Earlier benchmarks by Anuj for IOMMU optimisations with udmabuf
+showed:
+
+STRICT: before = 570 KIOPS, after = 5.01 MIOPS
+LAZY: before = 1.93 MIOPS, after = 5.01 MIOPS
+PASSTHROUGH: before = 5.01 MIOPS, after = 5.01 MIOPS
+
+# Patch set structure:
+- Patches 1-2 introduce internal API and infrastructure mediating
+  io_uring and target subsystem / devices
+- Patches 3-5: block layer support + prep patches
+- Patches 6-8 implement NVMe support
+- Patches 9-13 add io_uring support and uapi.
+
+There are some liburing tests that can serve as an example:
+git: https://github.com/isilence/liburing.git rw-dmabuf-tests-v8
+url: https://github.com/isilence/liburing/tree/rw-dmabuf-tests-v8
+
+The patches are based on Jens' for-next. Also available as a branch:
+git: https://github.com/isilence/linux.git rw-dmabuf-v8
+url: https://github.com/isilence/linux/tree/rw-dmabuf-v8
+
+[1] https://lore.kernel.org/io-uring/20220805162444.3985535-1-kbusch@fb.com/
+
+v8: - fix blkdev_buffered_write() returning 0
+    - fix kvmalloc-kfree mismatch
+    - fix invalidation hang
+    - remove cpu dma sync as unnecessary for dev-to-dev transfers
+    - move nvme dma-buf code into a new file
+    - tighten dma-buf [re]export around io_uring issue
+    - simplify dma-buf-io locking/sync as proposed by Matthew Brost
+
+v7: - refcount *_io_ctx 
+    - wait rcu grace period for ctx->map before freeing maps
+    - increment map counters under dma resv lock
+    - more comments about bio splitting
+    - make ->unmap responsible for freeing maps to match ->map
+    - replace dma_sync_single* with full table sync
+    - detach dma-buf on nvme reset after cancel nvme_cancel_tagset
+
+v6: - remove fences and wait on invalidation synchronously
+    - report all map requests are detached earlier, outside of wq
+    - handle nvme removal
+    - gate nvme_free_descriptors() on iod->nr_descriptors 
+    - fix error handling in nvme_rq_setup_dmabuf_map() 
+    - fix iov_iter_alignment()
+    - relax the 1G io_uring registered dma-buf limit
+    - fix type overflow issue in bio split
+    - allocate struct dma_buf_io_ctx inside the dma-buf-io code
+    - harden block checks against dma-buf + buffered io
+
+v5: - Reject dma-buf with buffered IO for raw bdev
+    - Add lim->max_segments bio splitting
+    - Add bio_iov_iter_set() helper
+    - Fix io_uring uapi validation
+    - Other minor changes
+    NVMe:
+    - Rename nvme_pci_sgl_set_data() to nvme_pci_dma_iter_set_sgl(), split 
+      into its own prep patch.
+    - Convert segment walk loops to do-while.
+    - Drop adjacent segment coalescing logic.
+    - Drop first_dma/first_len from nvme_pci_dmabuf_sgl_nents()
+    - Remove entries > NVME_MAX_SEGS bailout; moving to the block layer.
+    - Factor SGL vs PRP decision making into a helper.
+
+v4: - https://lore.kernel.org/all/cover.1785274111.git.asml.silence@gmail.com/
+    - Add sgl support from Anuj
+    - Move it under drivers/dma-buf/ and rename
+    - Fix mis-sized allocations
+    - Fix io_uring re-import mishandling
+    - Drop map before io_uring "task work"
+    - Move blk-mq callback to block_device_operations
+    - Convert bio flag to REQ_OP*
+    - Other small changes
+
+v3: https://lore.kernel.org/io-uring/cover.1777475843.git.asml.silence@gmail.com/
+    - Rework io_uring registration
+    - Move token/map infrastructure code out of blk-mq
+    - Simplify callbacks: remove a separate blk-mq table, which was
+      mostly just forwarding calls (to nvme).
+    - Don't skip dma sync depending on request direction
+    - Fix a couple of hangs
+    - Rename s/dma/dmabuf/
+    - Other small changes
+
+v2: - Don't pass raw dma addresses, wrap it into a driver specific object
+    - Split into two objects: token and map
+    - Implement move_notify
+
+Anuj Gupta (2):
+  nvme-pci: rename nvme_pci_sgl_set_data to nvme_pci_dma_iter_set_sgl
+  nvme-pci: add SGL support for the dmabuf path
+
+Pavel Begunkov (11):
+  block: always adjust bi_offset on bio_advance_iter
+  block: introduce dma map backed bio type
+  block: add dma-buf support for raw bdev
+  nvme-pci: implement dma-buf backed requests
+  nvme seaparate file
+  nvme sgl fixup
+  io_uring/rsrc: introduce buf registration structure
+  io_uring/rsrc: extend buffer update
+  io_uring/rsrc: add uncloneable regbuf flag
+  io_uring/rsrc: add regbuf import flags
+  io_uring/rsrc: add dmabuf backed registered buffers
+
+ block/bio.c                    |  15 +-
+ block/blk-merge.c              |  50 +++++++
+ block/fops.c                   |  24 +++-
+ drivers/md/dm-io-rewind.c      |   6 +-
+ drivers/nvme/host/Makefile     |   1 +
+ drivers/nvme/host/core.c       |  12 ++
+ drivers/nvme/host/nvme.h       |   2 +
+ drivers/nvme/host/pci-dmabuf.c | 164 ++++++++++++++++++++++
+ drivers/nvme/host/pci-dmabuf.h |  73 ++++++++++
+ drivers/nvme/host/pci.c        | 249 ++++++++++++++++++++++++++++++++-
+ include/linux/bio.h            |  21 +--
+ include/linux/blk-mq.h         |   7 +
+ include/linux/blk_types.h      |  14 +-
+ include/linux/blkdev.h         |   2 +
+ include/linux/bvec.h           |   3 +-
+ include/linux/io_uring_types.h |   5 +
+ include/uapi/linux/io_uring.h  |  31 +++-
+ io_uring/Makefile              |   1 +
+ io_uring/dma-buf.c             |  68 +++++++++
+ io_uring/dma-buf.h             |  67 +++++++++
+ io_uring/rsrc.c                | 172 +++++++++++++++++------
+ io_uring/rsrc.h                |  32 ++++-
+ io_uring/rw.c                  |  33 +++--
+ 23 files changed, 974 insertions(+), 78 deletions(-)
+ create mode 100644 drivers/nvme/host/pci-dmabuf.c
+ create mode 100644 drivers/nvme/host/pci-dmabuf.h
+ create mode 100644 io_uring/dma-buf.c
+ create mode 100644 io_uring/dma-buf.h
+
 -- 
-Jens Axboe
+2.54.0
+
