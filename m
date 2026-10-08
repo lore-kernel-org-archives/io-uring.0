@@ -1,318 +1,120 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972FF34D3B9
-	for <io-uring@vger.kernel.org>; Thu,  8 Oct 2026 17:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C7B3C1404
+	for <io-uring@vger.kernel.org>; Thu,  8 Oct 2026 19:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791479257; cv=none; b=UAhRJgQQ0+A5iJTRekcfVw4VthaxJkGrf0aT15e60IAHn5OkRPMfKbH66RyWm04WnIPFVhhMdI1L+vhBcQ/pRS6TguXl9XvtqbAlQFtjL4RQuIOWgsxWfT9Fq+gSBlXU1luWSuVNuc0RWfwHc/stpFPvlFUCvLcVAsfGfjAKDmI=
+	t=1791486678; cv=none; b=SdAADlg6+D8ap+8ED3b+LQIL2JJ/v+E0D0raVQE3PVjc5rVspH9TPyGEoL8J3daIwq0T/UsS3jfZQ1Y9MUrMvE5LMJHwQglv8+vUt8CBfXSTQ1b6MTQcXqJrsjMlhNjj4rGB8m9E5CDn4wms5vFD1VJOsQHkITJiDK7P0EnrIUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791479257; c=relaxed/simple;
-	bh=33Dvrf0ZV/aeuPuGesAW054aTSxFK3HRoP4sd6PhIN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jH1Wk1InS0IOchYcFriFFjpP56fWeZVdYhf9BXfOw6g4gpIekOx9U0+QCN5yrB7xRJ8mL8Qt7w5gJPcm7i30bu8qSCcH8j8SB9s5RO0W2LOsvlzM1o2blo1w80+5Nuje5B4KcivaQhF2tn9UKzyYpLVuF7Hml08JGHQNe1u0Xok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu; spf=pass smtp.mailfrom=cs.unc.edu; dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b=cEJKLbhP; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
+	s=arc-20240116; t=1791486678; c=relaxed/simple;
+	bh=MFI73bLJzYuC3bslZx/bwltYUGd/9Km+EomyS/QsF6I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hMOFc+FEE9Ih9GKg73yZeGtKzZi4Y7Sju9z3LPWYAXIDZVqhIho07fRKCiy4v+ZpRvS3tZKJ+FsLRtNfs0HpNGGd54SUWX97ASbAP88o/aEFBuudqEJeoAC+6P59ytO6n26/bO9YEQjp6fxaQ5oqk//WOMoZGDpL0f+yzwgXq4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=sYnEyek+; arc=none smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b="cEJKLbhP"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-917b78dfe30so46372476d6.0
-        for <io-uring@vger.kernel.org>; Thu, 08 Oct 2026 10:07:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="sYnEyek+"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-35115b52125so4476890eec.1
+        for <io-uring@vger.kernel.org>; Thu, 08 Oct 2026 12:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.unc.edu; s=google; t=1791479253; x=1792084053; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=f5WQDUZlUdSGdBUBDUPyXWWv5kxzk6a1Q3FrCFwJ0JQ=;
-        b=cEJKLbhPGMEc7J44uDLc0uqN8gtz+OafpVIyEfDM+sn8cAjFBhLiPHe7SPpXz6VFB3
-         N4Z6x89hYi1zoH+bb2okzDjXYB5Asv2qvo6AMySAAzGzBmt18KpdZCOBpq3F1BKBsSVL
-         PmFCddyIO1r9g9wgOYlKa5Lg5GSAJO7daxSnKYJ6rvvD+3twZPlRPyoLhdQZltSpAgH2
-         oKlYvZAT52HHEuM9Z9EOg3rsVBjOOq704sEPtDwoGJ2PblCPTLyjP2c5+lgoZyS1Bgay
-         IhkvNTCXf2ltUD5vo226fvbvB1lSq/l7w7Tlbf5OyhU+jXaPm7ROPv2OkHkzrlR7V9+q
-         6pag==
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791486674; x=1792091474; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nShr7nk4H6rZOzPK1tKDbu27hRY+4XFOH8yhDaWQWyM=;
+        b=sYnEyek+TRmHxzqqEBt20pXRpW6MO3qFYPBvZLUI+uXtzegKNqFWihSrQj2pq4x9aU
+         eMqB3m3qubnJ2nY5dQwDpzjXxJEM6Nv9W6HwdW6ijEXQk/+xkhe20KFmryzPMOT7u8TA
+         rlvOmIPm07YU/2qJtDPHp+InLtUGuWypYsXn7vIKBHnEPnrCMpq6KPG7W2Tk56/aKvJp
+         OHSb1ovmY6rTMFfDWLbo7JGCDimlKhJd/Zh0DPq2rcTT/qAuLzzWHzbjk1KZnimQ374A
+         5A+ji3/KCYJqqstR4lcHw8mXNW4eTQs5LlblTCY7SAyHlpkkJupR/D1piSuzFAywpnwO
+         2Low==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791479253; x=1792084053;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=f5WQDUZlUdSGdBUBDUPyXWWv5kxzk6a1Q3FrCFwJ0JQ=;
-        b=B50BRDMYxdShqIHJsZGWuRw2xrVpsFOXpNVOPQa5twzFs54htpPAhKNeqzyXUkVz9e
-         x61z91Oy9lEbs7g7O/tQfho7Pn/Gv/3zDrv+kdikZLsbLYNu84LHWRgmPloupGEG21dC
-         MOHwIcuOl0UpPev6xpR28RlO+X/pCEL3vCaCZ9d1EgjmPita1V4V9YM1UOAuDTfQO7MX
-         SXM9RavrBF+OVlsWRt1DmxOik6Sk8WYkULNuea8YO8arvSUQ72nt0gr3H4aMqSHXSeKv
-         v9DNbUAjphrWLIhzQzsf8+SuK3YElu2IuK7nAbTLs7ieza1tMV394X4w7vmSaRbISWOz
-         84zw==
-X-Forwarded-Encrypted: i=1; AKwUvBzSk/Krrlyek90mfWUIAGVnCz3wIocGgC0EbIHjxir0n+bxtQ4LoFZ0cuMTI5MgrZEIvd3mBO137A==@vger.kernel.org
-X-Gm-Message-State: AFuF++km3umxVFqNpQzYDWmdalwwIA530QGpAQ/ZyT+jebqMra2+VkLW
-	VnihKNOSBQ6fbmjKjmKyAA6sn+k3QGr44+iEHKnJ9i0VYkYyIDnGvddfRSvvfizkd3/REP1y4CM
-	+ttrgwg==
-X-Gm-Gg: AYBFou2hCIFmsiIO+zZOiXEPirjH8v0ztDzsJqGCGOwWFzk3BpP7XWYhgsgZrbgtc1W
-	VhRP8xnCplivoF1L5NkxpP2VjxWHW81yGOwXSEiw99gLWRjvOA1gwWcJpOx0SWMqKwJLjDYdvtk
-	QX6mQbOBahI88kBCS3mSG2c1xjs17j0qyLth71a5hACDSSdHgwt2Ouppfi4d7HXPQ5B+P+pPpGD
-	UswrEln5ri2eyC3/0vKV6QLYy/tmWbKKOnPE5HjHvMyGh3rKPDADOErO+W377JbLYVzZFPTi/gL
-	yKJQm2AYPFCpkYdbPR28drBMDoB1ccg7eN3bT+rkhhSuhGMXWFQt4kXOKWBWHu+G2DWY6zHJQVh
-	N7AAbfM1FRdC2YKEo4vNLmrYBSQ2lagvfPUVZ9GFRq48Cy35rxBGUu2jgsWG2q1B9E7x2hxk2kG
-	2i39kg/VZ+8EUagGwxCn90g84cRj6Rivib4yFk+SZW3lGUqCUcB+NSLTirF9eSbNGByUVEVlZ0t
-	4bqQsXA7B+L9DVf6KS5NPf1sNlm5C8Q
-X-Received: by 2002:a05:6214:20ea:b0:912:517b:40f4 with SMTP id 6a1803df08f44-91997853ae4mr117201566d6.38.1791479253136;
-        Thu, 08 Oct 2026 10:07:33 -0700 (PDT)
-Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91b51b54ddesm1067326d6.9.2026.10.08.10.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 10:07:32 -0700 (PDT)
-From: Hengyu Liang <hengyul@cs.unc.edu>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	David Wei <dw@davidwei.uk>,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH] io_uring: do not charge user provided SQ/CQ rings to RLIMIT_MEMLOCK
-Date: Thu,  8 Oct 2026 13:06:11 -0400
-Message-ID: <20261008170611.1285778-1-hengyul@cs.unc.edu>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <b5a33433-b0b9-4231-9998-23e2a2202091@kernel.dk>
-References: <b5a33433-b0b9-4231-9998-23e2a2202091@kernel.dk>
+        d=1e100.net; s=20260707; t=1791486674; x=1792091474;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nShr7nk4H6rZOzPK1tKDbu27hRY+4XFOH8yhDaWQWyM=;
+        b=BxcoE2Kn/aHKtpRQx0g0rnzvCf85bxFsHEVUnI0vnjUChzO6r3aiMovZGDS+t78yQD
+         lyPrB9O6YyyubvA89EAA5ceIcVbQCUTLKdzzw22TWROi0RdUL3kBpWHEncRLFTj/2beh
+         HJrfmxz0edq0J4cKASzFqfklak3rvzvg3ltHhoUBNxDRaNxCkFTCwoGZwYQDqNfuqNBE
+         2dx8A75C433BLiVQFM1O6azorS8zU4qwTb52PzI97QWySC1aV77snSaXqfqJByuNPHR8
+         zegxFrhfqfXBEWPpypPwnW0PSN+vQ1shzfDOcGc7CpUZugnWwv7n6WTQlI+WOzaKslR5
+         w3qw==
+X-Forwarded-Encrypted: i=1; AKwUvBxKAUTQ8L+tmqc0lHkqrwudKErzwf5ckcF3g8R0Xy47EBU59MYTP9CbJOO8kWqk8Amlkbt6nZMD8Q==@vger.kernel.org
+X-Gm-Message-State: AFuF++kbdVy+Qe2LT+2+adf9iMNW0KhQpNijmRU+s/3vgj/1Jqt65Y+M
+	bhlzY+SSG0Ur8RV8mM2D2pm62bsZ4iXWLSHZkbEcSxZ2OLzU5uAE3bNcNU769Ua5DIs=
+X-Gm-Gg: AYBFou239/zrXGVNlLtZvCTamGK0UMV2VW39+X/2QM77B4ujch8BVCEEcPc/BI7zH94
+	D+JytopSCFmg+iXfTEf3FnqsXw0aIRuAU9VSa7TynA3nLJpIy9wDV3z0rP6vOpFs/yvi2KQOU9G
+	gqu55yZuY4Qg8aPwRP4bdyTnP1cV0SAEwnI9rs82awV7fZ+deG+9eko8w9FwL1EctSuHL7oWx0Z
+	lEIJepauT1Ry2U+Uv/KxUAChN6mlwWFWCOftSN8z4iWxx9rZjNyrOmpm68hjC/i3zpmUpJK1Mv/
+	klEaHJmZRV76Lka2w3+Om95g6yVrSvvAGV37NRbag4GIXw618EcjGMY2I426c26q3mAagseHvh9
+	JYh8TvsmKBeh+LlHltkHNNh4G5wXTSyuOR9wthDoYB92kdN0YnUg1j+bYF/zNyib3U2mxrXpNrs
+	6PR7UpqhawqwiOkmKKHXQ/mbRSVAHaWt+Hzf25ZYb7a1fzs6hhaWy6UCsWPML9s4zeQjOrnfobX
+	uTCmCCCAUXak/IVGoKpgRB130uUuiE9sjRT73LFTi6qeONe16Thx21uCQ==
+X-Received: by 2002:a05:7301:9c87:b0:353:5d25:1de7 with SMTP id 5a478bee46e88-3535d252333mr1169990eec.33.1791486673390;
+        Thu, 08 Oct 2026 12:11:13 -0700 (PDT)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cad9e53sm21393eec.22.2026.10.08.12.11.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Oct 2026 12:11:12 -0700 (PDT)
+Message-ID: <3b9d9c06-c6e8-4166-87d9-c7c220ad0b58@kernel.dk>
+Date: Thu, 8 Oct 2026 13:11:11 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring: do not charge user provided SQ/CQ rings to
+ RLIMIT_MEMLOCK
+To: Hengyu Liang <hengyul@cs.unc.edu>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org
+References: <b5a33433-b0b9-4231-9998-23e2a2202091@kernel.dk>
+ <20261008170611.1285778-1-hengyul@cs.unc.edu>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261008170611.1285778-1-hengyul@cs.unc.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Commit 8078486e1d53 ("io_uring: use region api for SQ") and commit
-81a4058e0cd0 ("io_uring: use region api for CQ") made io_uring_setup()
-create the rings with io_create_region().
+On 10/8/26 11:06 AM, Hengyu Liang wrote:
+> This goes on top of io_uring-7.3 (c746673517c6), as discussed in [2].
+> 
+> Tested on that branch as a user without CAP_IPC_LOCK and the default
+> 8 MiB limit:
+> 
+>                                                   before  after
+>   program above                                       21     64
+>   the same with io_uring_queue_init()                 64     64
+>   30 processes x 142 NO_MMAP rings of 64 entries       7     30
+> 
+> The last row is what 30 PostgreSQL 18 clusters with default settings
+> create. The number is how many of them got all their rings.
+> 
+> The per-user locked_vm count stays balanced over ring create, close and
+> resize. Provided buffer rings and IORING_REGISTER_MEM_REGION regions on
+> user memory are charged as before. Every liburing test gives the same
+> result with and without the patch.
+> 
+> Not changed here: provided buffer rings on user memory, which is what
+> io_uring_setup_buf_ring() registers, were not charged in v6.13 either
+> (64 of 64 rings of 32768 entries then, 16 now). I can send a patch for
+> those as well if you want them handled the same way.
 
-However, io_create_region() charges user provided memory to
-RLIMIT_MEMLOCK, and the rings of an IORING_SETUP_NO_MMAP ring were not
-charged before those commits. As of now, a user without CAP_IPC_LOCK
-gets ENOMEM from io_uring_queue_init_mem() when their rings exceed the
-limit, which is 8 MiB by default. PostgreSQL 18 creates its rings with
-this function [1].
+Honestly, after taking a closer look at this, I think we're better off
+with your original patch and one on top for pbuf rings. Please check:
 
-The issue can be reproduced with a simple liburing program, run as an
-unprivileged user:
+https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git/log/?h=io_uring-7.3
 
-    #include <liburing.h>
-    #include <stdio.h>
-    #include <sys/mman.h>
+for the top 2 commits. If you can re-test one more time, that'd be
+great...
 
-    int main(void)
-    {
-            static struct io_uring ring[64];
-            char *mem = mmap(NULL, 64 << 20, PROT_READ | PROT_WRITE,
-                             MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-            int i;
-
-            for (i = 0; i < 64; i++) {
-                    struct io_uring_params p = { };
-
-                    if (io_uring_queue_init_mem(4096, &ring[i], &p,
-                                                mem + (i << 20),
-                                                1 << 20) < 0)
-                            break;
-            }
-            printf("%d rings\n", i);
-            return 0;
-    }
-
-Before those commits (v6.13), it prints "64 rings". After those commits
-(v6.14), it prints "21 rings".
-
-This patch makes io_create_region() take the user to charge, like
-io_free_region() does, and passes no user for the SQ/CQ rings.
-
-Link: https://github.com/postgres/postgres/blob/REL_18_STABLE/src/backend/storage/aio/method_io_uring.c [1]
-Fixes: 8078486e1d53 ("io_uring: use region api for SQ")
-Fixes: 81a4058e0cd0 ("io_uring: use region api for CQ")
-Cc: stable@vger.kernel.org
-Signed-off-by: Hengyu Liang <hengyul@cs.unc.edu>
----
-This goes on top of io_uring-7.3 (c746673517c6), as discussed in [2].
-
-Tested on that branch as a user without CAP_IPC_LOCK and the default
-8 MiB limit:
-
-                                                  before  after
-  program above                                       21     64
-  the same with io_uring_queue_init()                 64     64
-  30 processes x 142 NO_MMAP rings of 64 entries       7     30
-
-The last row is what 30 PostgreSQL 18 clusters with default settings
-create. The number is how many of them got all their rings.
-
-The per-user locked_vm count stays balanced over ring create, close and
-resize. Provided buffer rings and IORING_REGISTER_MEM_REGION regions on
-user memory are charged as before. Every liburing test gives the same
-result with and without the patch.
-
-Not changed here: provided buffer rings on user memory, which is what
-io_uring_setup_buf_ring() registers, were not charged in v6.13 either
-(64 of 64 rings of 32768 entries then, 16 now). I can send a patch for
-those as well if you want them handled the same way.
-
-[2] https://lore.kernel.org/io-uring/b5a33433-b0b9-4231-9998-23e2a2202091@kernel.dk/
-
- io_uring/io_uring.c |  8 ++++----
- io_uring/kbuf.c     |  2 +-
- io_uring/memmap.c   |  7 ++++---
- io_uring/memmap.h   |  2 +-
- io_uring/register.c | 10 +++++-----
- io_uring/zcrx.c     |  2 +-
- 6 files changed, 16 insertions(+), 15 deletions(-)
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index c2ce83c7c1f1..2a16369894d4 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2070,8 +2070,8 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
- 
- static void io_rings_free(struct io_ring_ctx *ctx)
- {
--	io_free_region(ctx->user, &ctx->sq_region);
--	io_free_region(ctx->user, &ctx->ring_region);
-+	io_free_region(NULL, &ctx->sq_region);
-+	io_free_region(NULL, &ctx->ring_region);
- 	ctx->rings = NULL;
- 	RCU_INIT_POINTER(ctx->rings_rcu, NULL);
- 	ctx->sq_sqes = NULL;
-@@ -2735,7 +2735,7 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
- 		rd.user_addr = p->cq_off.user_addr;
- 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
- 	}
--	ret = io_create_region(ctx, &ctx->ring_region, &rd, IORING_OFF_CQ_RING);
-+	ret = io_create_region(NULL, &ctx->ring_region, &rd, IORING_OFF_CQ_RING);
- 	if (ret)
- 		return ret;
- 	ctx->rings = rings = io_region_get_ptr(&ctx->ring_region);
-@@ -2749,7 +2749,7 @@ static __cold int io_allocate_scq_urings(struct io_ring_ctx *ctx,
- 		rd.user_addr = p->sq_off.user_addr;
- 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
- 	}
--	ret = io_create_region(ctx, &ctx->sq_region, &rd, IORING_OFF_SQES);
-+	ret = io_create_region(NULL, &ctx->sq_region, &rd, IORING_OFF_SQES);
- 	if (ret) {
- 		io_rings_free(ctx);
- 		return ret;
-diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
-index 7c309173dd19..7c59ab9cfc8b 100644
---- a/io_uring/kbuf.c
-+++ b/io_uring/kbuf.c
-@@ -676,7 +676,7 @@ int io_register_pbuf_ring(struct io_ring_ctx *ctx, void __user *arg)
- 		rd.user_addr = reg.ring_addr;
- 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
- 	}
--	ret = io_create_region(ctx, &bl->region, &rd, mmap_offset);
-+	ret = io_create_region(ctx->user, &bl->region, &rd, mmap_offset);
- 	if (ret)
- 		goto fail;
- 	br = io_region_get_ptr(&bl->region);
-diff --git a/io_uring/memmap.c b/io_uring/memmap.c
-index da2328b52b38..51afe5d40b1d 100644
---- a/io_uring/memmap.c
-+++ b/io_uring/memmap.c
-@@ -192,7 +192,7 @@ static int io_region_allocate_pages(struct io_mapped_region *mr,
- 	return 0;
- }
- 
--int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
-+int io_create_region(struct user_struct *user, struct io_mapped_region *mr,
- 		     struct io_uring_region_desc *reg,
- 		     unsigned long mmap_offset)
- {
-@@ -223,9 +223,10 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
- 	/*
- 	 * Only pinned user memory counts against RLIMIT_MEMLOCK, kernel
- 	 * allocated regions are memcg accounted through GFP_KERNEL_ACCOUNT.
-+	 * The SQ/CQ rings are never charged, their callers pass a NULL user.
- 	 */
- 	if (reg->flags & IORING_MEM_REGION_TYPE_USER)
--		ret = io_region_pin_pages(mr, reg, ctx->user);
-+		ret = io_region_pin_pages(mr, reg, user);
- 	else
- 		ret = io_region_allocate_pages(mr, reg, mmap_offset);
- 	if (ret)
-@@ -236,7 +237,7 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
- 		goto out_free;
- 	return 0;
- out_free:
--	io_free_region(ctx->user, mr);
-+	io_free_region(user, mr);
- 	return ret;
- }
- 
-diff --git a/io_uring/memmap.h b/io_uring/memmap.h
-index f4cfbb6b9a1f..0714bb5a9616 100644
---- a/io_uring/memmap.h
-+++ b/io_uring/memmap.h
-@@ -18,7 +18,7 @@ unsigned long io_uring_get_unmapped_area(struct file *file, unsigned long addr,
- int io_uring_mmap(struct file *file, struct vm_area_struct *vma);
- 
- void io_free_region(struct user_struct *user, struct io_mapped_region *mr);
--int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
-+int io_create_region(struct user_struct *user, struct io_mapped_region *mr,
- 		     struct io_uring_region_desc *reg,
- 		     unsigned long mmap_offset);
- 
-diff --git a/io_uring/register.c b/io_uring/register.c
-index 02bc103bcc9d..d79971c57ace 100644
---- a/io_uring/register.c
-+++ b/io_uring/register.c
-@@ -480,8 +480,8 @@ struct io_ring_ctx_rings {
- static void io_register_free_rings(struct io_ring_ctx *ctx,
- 				   struct io_ring_ctx_rings *r)
- {
--	io_free_region(ctx->user, &r->sq_region);
--	io_free_region(ctx->user, &r->ring_region);
-+	io_free_region(NULL, &r->sq_region);
-+	io_free_region(NULL, &r->ring_region);
- }
- 
- #define swap_old(ctx, o, n, field)		\
-@@ -529,7 +529,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
- 		rd.user_addr = p->cq_off.user_addr;
- 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
- 	}
--	ret = io_create_region(ctx, &n.ring_region, &rd, IORING_OFF_CQ_RING);
-+	ret = io_create_region(NULL, &n.ring_region, &rd, IORING_OFF_CQ_RING);
- 	if (ret)
- 		return ret;
- 
-@@ -559,7 +559,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
- 		rd.user_addr = p->sq_off.user_addr;
- 		rd.flags |= IORING_MEM_REGION_TYPE_USER;
- 	}
--	ret = io_create_region(ctx, &n.sq_region, &rd, IORING_OFF_SQES);
-+	ret = io_create_region(NULL, &n.sq_region, &rd, IORING_OFF_SQES);
- 	if (ret) {
- 		io_register_free_rings(ctx, &n);
- 		return ret;
-@@ -730,7 +730,7 @@ static int io_register_mem_region(struct io_ring_ctx *ctx, void __user *uarg)
- 	    !(ctx->flags & IORING_SETUP_R_DISABLED))
- 		return -EINVAL;
- 
--	ret = io_create_region(ctx, &region, &rd, IORING_MAP_OFF_PARAM_REGION);
-+	ret = io_create_region(ctx->user, &region, &rd, IORING_MAP_OFF_PARAM_REGION);
- 	if (ret)
- 		return ret;
- 	if (copy_to_user(rd_uptr, &rd, sizeof(rd))) {
-diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
-index beb35077f3ce..939885985333 100644
---- a/io_uring/zcrx.c
-+++ b/io_uring/zcrx.c
-@@ -432,7 +432,7 @@ static int io_allocate_rbuf_ring(struct io_ring_ctx *ctx,
- 	mmap_offset = IORING_MAP_OFF_ZCRX_REGION;
- 	mmap_offset += (u64)id << IORING_OFF_ZCRX_SHIFT;
- 
--	ret = io_create_region(ctx, &ifq->rq_region, rd, mmap_offset);
-+	ret = io_create_region(ctx->user, &ifq->rq_region, rd, mmap_offset);
- 	if (ret < 0)
- 		return ret;
- 
-
-base-commit: c746673517c6ce9f5400cc0ea23e10ef5382eddb
 -- 
-2.53.0
-
+Jens Axboe
