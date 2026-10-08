@@ -1,69 +1,68 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122FA4B8274
-	for <io-uring@vger.kernel.org>; Thu,  8 Oct 2026 14:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9784D6C4C
+	for <io-uring@vger.kernel.org>; Thu,  8 Oct 2026 14:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791470602; cv=none; b=ErEZbl4Rb1RtldR3cPws8rLNCS1vgjhcmRY4+0XdVp3JptQGbbP4u1hTYsuwXMA+gr5pOlAt0S0cmkj+AGhJzhjVGdahqCJN4OudFxHyWVG+w+g6nvSBWN0XwArO4X/BtzvoglvpPkSskDkPB7sP6Ptz1/HNR4NMGFBAZpys3kY=
+	t=1791471287; cv=none; b=vBe/vUZKZTM5WIol7/xbW9xtD3uxd6QV9uO2ZvKf8uX37kqAj3b3M8lnKaJp4N/vNS5JVLh6yTdy/xc3Ye88F/wQBIpuTwTD+0xUhHRrjb4LVUW+8H7GjdW3onOZVkMIhX7qFDm64GThb15rLMh8KcV7wAoT3MuMqFwgHWNhAGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791470602; c=relaxed/simple;
-	bh=bVSz5b56bkzLjbvZW0ZLHPuGtjffYa78eWvGcdS66xM=;
+	s=arc-20240116; t=1791471287; c=relaxed/simple;
+	bh=mTVYvKeNxH9x54GqxZX8L5n+NY3oJiIMt9Q4M8B7Qjs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p6egv28TVu4X0iLh+CQGX0amqP5k1pGNkpiq8jglHGsYrDUFUebmKL1+jDfadvoJjJzaSlHqgRRXyY1ApoHvpD8WaaZFdwZk7+ewq0ZshPq74SGr5gyYkcNJmIow+7kgTy6BuNXAfaJSd+uBgFjsC73VZSJRfU92FebfKh2KzKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fj9gfpeB; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 In-Reply-To:Content-Type; b=q8onSHPi/AuPH8U5iXm6G1rEKy3URI136ajaq60oTirdt8WR8hLZMyVeNbI12wcAcItwMy9pfZemfiKNzvKehfz82pHeV6HB1GYobBOSuI2304hfv1dvzo3icUgjzntTabjAfPXYeBIBK26Q4O+y56NsA2vIPUpteLbC4VP10p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=nVIVnaOp; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fj9gfpeB"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-48870973bddso563311f8f.1
-        for <io-uring@vger.kernel.org>; Thu, 08 Oct 2026 07:43:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="nVIVnaOp"
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4f488ba6e90so1362256b6e.3
+        for <io-uring@vger.kernel.org>; Thu, 08 Oct 2026 07:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791470595; x=1792075395; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791471275; x=1792076075; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=njenST8z+MlCZJXnP+cCIOtU5L3jm/Pu2Fkh+12SdlQ=;
-        b=Fj9gfpeBbMrhhd0fZvS6MBSCZAqK7a3Hg7/wEwYoa/XQr25FSdqUhn5v0t+9DDzSBM
-         gRGX2oqqqW+OTrtzobfz2Y6r/BD5cRsKoXNqzmu8rz+c7sJMZSP8UdRKVFU51rnIcRVF
-         A8zV9e/mOEqhY3t3EgxzQxmTTxQmhVDzavLUrRYHBdeeiouRU5rXLakCrRX0fSCQLyLx
-         a1AuSfLh2GFbUI6X8gQ17JKmbOBI4JZwLJwVCuBaER3Wqsp8nv6Yo8mJVzEENC7NcCa/
-         c/5gtN8y763uHwpGzyRMPt9l7j6joXAmWaVttLhGICK0DsHplSE6XBjLFeYNAsJx554Q
-         8i0g==
+        bh=LCGr+lVw0FZ4ggSWHdBUJKRxZZGinYin+dhCyqmG9ss=;
+        b=nVIVnaOpAPtXCj+1nYNm4rsGPofGyGUnoErHzJzzrrhhm1u0s9ARoT2Xj0LRuQgxre
+         B+YHsRCba4yGnI4t0Y2Q61ktU7jjhpCWbsgmvhF6ehNjlp8SvP/UX+hP+pXyFf3UlLIa
+         Bp5MPQQhQ3S7pqOAUCUUpzUQZIEJ2+iIGP98r1XjlQVZ4kq3LB3v+hkGPXJCOyqbOSNb
+         ypeRYlxGCmHI4MzA42at88zLK4XprTzFgm8tAIU/D1+DyfR1h4R7xPAJS30uh1PPO7FB
+         ZXPuzRETpIVTGAGMut9tU+84GqcHvQ8dShRQWfI0NIdL9tjx08Vb5XmHe7Pp52IBR4rn
+         kicA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791470595; x=1792075395;
+        d=1e100.net; s=20260707; t=1791471275; x=1792076075;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=njenST8z+MlCZJXnP+cCIOtU5L3jm/Pu2Fkh+12SdlQ=;
-        b=wdHTYk56XR1lYHTfTCnb01yPgt6BIgPKjsRRSmkWQTOrVliUTkOQwfNMrK9YXYQ9Up
-         EHi8NL8vFY4n5UsZ8KyrVqB3PrkMxMgDTO1vX+NBbTx2rvl+WP9k2EqsWN1hSAyBSAgr
-         2WtTocDXn0kJLZUgMiY2cxpQFu23QccMtdHInHZiqwx5sVTfigKORAefQI5DvXUUuFZt
-         lceFY0Q9kL1vsfaXgbIoOTY5qojWCHmoz+e4UFbCdqi8MOI0afJs7J0saOonKcHdNKSM
-         3VANo+6ljqdM7669C8FGcMllSkCYJt5a9E/Xg+SbjYXPtDdwBA0pKS7sI2obuBW5xyQM
-         xszw==
-X-Forwarded-Encrypted: i=1; AKwUvBwmIinS+mH4yYoyB8XD/dxM6jAjFKWc4fhIr8Zb8f+jUQquUyc4pqboxjc9XSy4fYxBIKMYfAYR7A==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIRY/GGSukf2hGCeffb9Xz90/8yRHE4p8bocMK1UVGvpENnNY8w
-	6s06dI3FgoDcaqPcrXmW1h23Prut/v2RC4WbwbYF/sKNynaYMkltff8x8urGKA==
-X-Gm-Gg: AYBFou0y+BD3OKT+pS8hhMPshIrDJHXpXSDeie8hA8Nmufced3/EO9guysnPTMDXOtY
-	uew0QLYdSiolBkooRFWFVtTh5DPUIi3mRjeI0b+fZd0Za5qqHWcDnF9BbpGXKOxzjS8VTBB46o9
-	7inWxKPGIyxEde4fQOEnb+/Vd9UKoWbTOR61HbvjkqFCuTFCYeZZrG7dZcbZUYD4P7AmslbtwLB
-	vx0G/tx1AGyqvIIOYxgB1NtwqhO1t7P9xCKMe8anstRBNtfesy5pl8AnDZNOWia5e+yKrnjxhsO
-	2Dpj0WoTEhC56f1DAHMH2EsBoKoVjOCOtC0/1AE9D/KGuw9kjq1/+Ej1TNLeQ1Eks/1EURlQGLG
-	IY8nuU4QNwwLn6g0mH3baJu+3NUajh1ZbKEwCSlKyIoVEJ12g7GDTM0F2nlnK3Efo/XmzHLF4he
-	TLKDMf4IR/jjdX66lpKKBYf1XPEDID+zUYZ6TvIkpSgxXR2Gl33Kmg5/hD1CaMFxTQT2ZCUeWZ7
-	rLPd0Pf8GQokNEumZ5A5gSa4V2s0enNkunBAZ1Jbz3R/tL6sHrCsAFmOiq9Yjl7Ht5mKDhC/4Dz
-	H9rRAcqEGdS6QjFT+L1WGyaj7SHy
-X-Received: by 2002:a05:6000:46c7:b0:488:8347:a110 with SMTP id ffacd0b85a97d-48c7ee936a3mr3668082f8f.7.1791470595152;
-        Thu, 08 Oct 2026 07:43:15 -0700 (PDT)
-Received: from [10.54.182.141] (82-132-212-209.dab.02.net. [82.132.212.209])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1ffd2sm11381000f8f.34.2026.10.08.07.43.13
+        bh=LCGr+lVw0FZ4ggSWHdBUJKRxZZGinYin+dhCyqmG9ss=;
+        b=mkLhmm2EEUcOpB1mJ19QBiSWZpoSr8BEruaGRLeCojtQjAqYPA8s9Vl2FWqIY5CNtR
+         MzXjDKB8br4ekhyhdhGulH4p4N479tZokXfJk51H3WRDvs6I8J+AqzC37+cCOCbKt7Sx
+         AGRBNyk11TdSFhA2To/B/pY+EJ+HMNLI5LKitDne6xoGXglcvGWiGpSsVTXAs57BLBKE
+         TF9oLefGIlgSZMBrgJne83z2UNUGDfomEgBk+32W79Hml+/rbhXaLedP0AhDZT/SAzpm
+         ywRQlSHKlqmWUw2CsoT75GPoT8MYU/6jYmeLOIIXVIf7VujbszCIkmEPYkjDlmugpMaU
+         yQPg==
+X-Forwarded-Encrypted: i=1; AKwUvByOypgR7Lqa39kkd1KXTZsoJByKcVstmSKZI4QgwAXQ2jAY5Ez45HyOg4r716WH2DPf2HXiIitQxA==@vger.kernel.org
+X-Gm-Message-State: AFuF++ma85iD9W39tCnwBsl2xPD7LGygzA6d6dr56Axgkrohbp0vvdAv
+	b6O7pB73uRTtnzP+uKkq15TnWNs5K1sw6MPW670kkohcN0pNnu5D8BhqA/2GZlv+jI4=
+X-Gm-Gg: AYBFou0GmvAHM8QH2wxVg90TrquhQGnJlBn+Epaibj80CiHX218HWyVpnBHMigd7IZz
+	p+8Qa49uIMfPYLvA4ylK17upgRzD8a2WN0u8q7HVUTYazIoF3MYabluYhm+lK4o0rgwC6fk5OLn
+	KfylVeFkxIJVcxCfrJDBrbXy50LL0pVp3YBlbYUjmGpuALSwm3pfZYra/lSLYxJLoHn2sGf/I8R
+	FV2dBhgizJhjtag9tljxGIknhYBVjYLM4k6n54WDFDpLrmz2orSK+uA6cIextawYerk6PxsgQQq
+	njNbjX9pJ4v/Bgyu/xsYj/QjRdoCm/p9n022luab0rplFANxT3Y3kbbs6oi7rW5qr4WPg38thFu
+	iBiw7BiiIvBIEIypk/eJEd8b413GcU+aoodvmzk6EGkezqjYJwbiw+OYWqR4Duqa6KMSCXXZCj/
+	nPk66zop70se6FF4kQJ2ZSyB/ZBrGcN4bLhJ5v85xeEfH5+dVRzm+jgniMtQ3xvXanP5NvFKciB
+	58MtLZZWvGvz8eCLwCDYiQ/TTrOnynvrGiRNMtVUJIFowRniq2tiig=
+X-Received: by 2002:a05:6808:c213:b0:4e7:a6e3:7338 with SMTP id 5614622812f47-4fc452489e3mr5378129b6e.17.1791471275421;
+        Thu, 08 Oct 2026 07:54:35 -0700 (PDT)
+Received: from [192.168.2.38] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4fc49656fbfsm5760405b6e.15.2026.10.08.07.54.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Oct 2026 07:43:14 -0700 (PDT)
-Message-ID: <20b406ac-94ec-4b0f-a307-08082092ae08@gmail.com>
-Date: Thu, 8 Oct 2026 15:43:05 +0100
+        Thu, 08 Oct 2026 07:54:34 -0700 (PDT)
+Message-ID: <b5a33433-b0b9-4231-9998-23e2a2202091@kernel.dk>
+Date: Thu, 8 Oct 2026 08:54:33 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,69 +70,62 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/cmd_net: prevent infinite retry loop on
- unextractable timestamp skb
-To: Bui Viet Dung <dungvn2345@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: Willem de Bruijn <willemb@google.com>, lollipopkit <a@lolli.tech>,
- io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20261008050745.498415-1-dungvn2345@gmail.com>
+Subject: Re: [PATCH 2/2] io_uring/memmap: only charge pinned user memory to
+ RLIMIT_MEMLOCK
+To: Hengyu Liang <hengyul@cs.unc.edu>
+Cc: dw@davidwei.uk, io-uring@vger.kernel.org, stable@vger.kernel.org
+References: <20261007213903.445430-3-axboe@kernel.dk>
+ <20261008045733.773725-1-hengyul@cs.unc.edu>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20261008050745.498415-1-dungvn2345@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261008045733.773725-1-hengyul@cs.unc.edu>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/8/26 06:07, Bui Viet Dung wrote:
-> In io_uring_cmd_timestamp(), the skb processing loop terminates whenever
-> io_process_timestamp_skb() returns a non-zero value. If the failure is
-> due to a full CQ ring (-ENOBUFS), the loop stops and returns -ENOBUFS,
-> ending the multishot command so userspace can drain the CQ.
+On 10/7/26 10:57 PM, Hengyu Liang wrote:
+> On 10/7/26 3:38 PM, Jens Axboe wrote:
+>> Charge RLIMIT_MEMLOCK only for regions backed by pinned user memory, which
+>> is what the limit is for, and leave kernel allocations to memcg. User
+>> provided ring memory keeps being charged, it is pinned.
 > 
-> However, if io_process_timestamp_skb() fails because
-> skb_get_tx_timestamp() returns a negative error (such as -ENOENT when a
-> timestamp cannot be extracted due to changed socket options or absent
-> hardware timestamp data), ret is not -ENOBUFS. The unhandled skb is
-> then spliced back onto the head of sk->sk_error_queue and the function
-> returns -EAGAIN.
+> Sorry for the late reply, and thanks for picking this up.
 > 
-> Because -EAGAIN leaves the multishot apoll armed on EPOLLERR, and the
-> unextractable skb remains in sk_error_queue asserting EPOLLERR,
-> io_uring_cmd_timestamp() is immediately re-invoked on the same skb.
-> This results in an infinite busy-loop consuming 100% CPU and completely
-> blocking progress on any subsequent valid timestamp packets queued behind
-> it.
+> I tested both patches on top of v7.3-rc4. The test case from my patch
+> prints "64 rings" again, kernel allocated buffer rings are fixed as well,
+> the per-user locked_vm count is balanced after ring create, close and
+> resize, and the liburing tests give the same results as before, except
+> that read-before-exit.t passes again with the default limit.
 > 
-> Only break out of the processing loop when CQ space is exhausted
-> (ret == -ENOBUFS). For skbs where timestamp extraction fails, dequeue and
-> consume the invalid skb matching the behavior of sock_recv_errqueue(),
-> allowing the queue to make forward progress.
-> 
-> The issue was discovered via manual code audit of io_uring/cmd_net.c
-> and review of the error handling paths in TX_TIMESTAMP command.
-> 
-> Fixes: 9e4ed359b8ef ("io_uring/netcmd: add tx timestamping cmd support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Bui Viet Dung <dungvn2345@gmail.com>
-> ---
->   io_uring/cmd_net.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/io_uring/cmd_net.c b/io_uring/cmd_net.c
-> index 90d4ec7cc761..a5a1b8b66b1f 100644
-> --- a/io_uring/cmd_net.c
-> +++ b/io_uring/cmd_net.c
-> @@ -138,7 +138,7 @@ static int io_uring_cmd_timestamp(struct socket *sock,
->   		if (!skb)
->   			break;
->   		ret = io_process_timestamp_skb(cmd, sk, skb, issue_flags);
-> -		if (ret)
-> +		if (ret == -ENOBUFS)
->   			break;
+> Tested-by: Hengyu Liang <hengyul@cs.unc.edu>
 
-Sounds fine since there are only timestamp skbs in this list, do
-you have a test case?
+Thanks for testing!
+
+> One case is not restored. v6.13 did not charge rings created with
+> IORING_SETUP_NO_MMAP either. Number of rings created out of 64, as an
+> unprivileged user with the default 8 MiB limit, 4096 entries each:
+> 
+>                                      v6.13  v7.3-rc4  this series
+>   io_uring_queue_init()                 64        16           64
+>   io_uring_queue_init_mem()             64        21           21
+> 
+> PostgreSQL 18 is in the second row. It puts its rings into shared memory
+> with io_uring_queue_init_mem() whenever liburing has it [1], so I expect
+> the failure they reported to stay. I have not run PostgreSQL itself.
+> 
+> Would you take a patch on top that leaves the SQ/CQ rings uncharged for
+> user memory too, as in v6.13? I can send one, or test whatever you prefer.
+
+Yes for sure, please feel free to send a patch we can apply on top.
+>
+> Also, kernel allocated IORING_REGISTER_MEM_REGION regions are no longer
+> charged. They have been charged since they were added in v6.14. With the
+> series a user with an 8 MiB limit can register a 512 MiB one.
+> 
+> [1] https://github.com/postgres/postgres/blob/REL_18_STABLE/src/backend/storage/aio/method_io_uring.c
+
+We should still account IORING_MEM_REGION_TYPE_USER, anything that isn't
+memcg accounted. I'll take a closer look, but if that isn't the case,
+then yes that also needs a followup.
 
 -- 
-Pavel Begunkov
-
+Jens Axboe
