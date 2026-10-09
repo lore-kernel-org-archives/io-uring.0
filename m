@@ -1,100 +1,128 @@
-Received: from mail-106113.protonmail.ch (mail-106113.protonmail.ch [79.135.106.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CF14457AF
-	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 13:38:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0EE4E0216
+	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 14:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791553124; cv=none; b=mMlDRGvsT+R0kP2oPWDDSPVtkiga4YUffH7cOU82BNEzKNSqWu/Un7sw9YxcKFFAFY9w1WsxGCOuwNoFQ7FWTiq7NelXaLw0LOzpDzKpsB6dskwOZqDyl44TJ8PCMbF6hjgv6HLFWqW1h5/SNrH/T45fEblJqdGL4vDLiqPn/no=
+	t=1791556271; cv=none; b=GmFodvWGmty20BgsuNIm1aG0B1U6O1gU+N1ZuOod5imzfFAuOH8pxoJ4RRvO9R5bWw4JZyi0YSiZDWt6aUlvVKqdgpBuX07ABK3EnjSgXGBl9hct1qyrNiHStwN2qcVIMceuTg0hOTUsjW7GUwaD7tTGg12fsn14R0dUkAbrHZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791553124; c=relaxed/simple;
-	bh=GEjd/qW90wDrkNGcZj8QPQSEb0am6CGFCm7z0bXS1/o=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AVS754s6pln3/RwgKV858EBMXkJo48LfmzVCIoSNmr1vG3HyEOpyuaVVUVXZeD+TNJvQWojGybrph3WlN36RDfpQaYGCYM+7Uj84kmEDqnmxBGFwnZmLFcRePFNrxiCLuXjmeUKVd2d/Eb8bZ33MqNkLr85n6cVsM8dkY4ic+Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runtimeverification.com; spf=pass smtp.mailfrom=runtimeverification.com; dkim=pass (2048-bit key) header.d=runtimeverification.com header.i=@runtimeverification.com header.b=LjSpmE4p; arc=none smtp.client-ip=79.135.106.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runtimeverification.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runtimeverification.com
+	s=arc-20240116; t=1791556271; c=relaxed/simple;
+	bh=8HN9dpiTOxbNQy5jyHc9eD+FO3LGEXONxOXuTYwbqtU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=ppAYL/XMKxGPRZpLAgLGk377qWZSJ0mcAFD0nIXstz604LyMHGf4kOG+dnB/WwuZoqdJmgXe0Ft96Dkqrbx/nFU9QDrlrLCoqgoMbrsFxDtZ2H/emQCyt4fkPkTBM3SXWb9moWUlCwr4h8xUlza1X7N6oUJgRyaI9LYWq7FQR5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=iWLWNOYT; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runtimeverification.com header.i=@runtimeverification.com header.b="LjSpmE4p"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="iWLWNOYT"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-3515f9a5d25so3347364eec.0
+        for <io-uring@vger.kernel.org>; Fri, 09 Oct 2026 07:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=runtimeverification.com; s=protonmail; t=1791553112; x=1791812312;
-	bh=u95xk4ByT0KOla+zRFNafUMHZYZpARYMpRVIx6gGvxk=;
-	h=From:To:Cc:Subject:Date:Message-Id:From:To:Cc:Date:Subject:
-	 Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-	b=LjSpmE4p9ox2cnyqR9ueOIIUZ6o8mPB6Du2gYiYYQFqtNiKLfyrWOgrIYsPUuwBjV
-	 B5RzGihLJ2ARs3p+oIGkf9EWi2UNr2XBIQTUQaxzGlgaDsIQ1zKeiCfMLJLXIUAEhu
-	 hTTLc3xXCp7HKI06EBVCy19B8I0EZ0r+iU6ppO1GcRDzhRDIw8HW/sps7hslShGqz5
-	 3MTEyxi8y/Rn8h/y5XUJyaKtP+5UyMh/eYOXJXwqPfull6nUa6fB8XOsWwst28HN0r
-	 QKBVTPxLqYM1d+N5cixmrGq9rdcA993EcpqG+R/3SjK8gEy2uwy2IjWdUb2XSIqMaG
-	 t9eHzPqWFyLjw==
-X-Pm-Submission-Id: 4j1ScN26WYz2ScsK
-From: Natasha Klaus <natalie.klaus@runtimeverification.com>
-To: io-uring@vger.kernel.org
-Cc: axboe@kernel.dk,
-	Natasha Klaus <natalie.klaus@runtimeverification.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/net: populate CONNECT filter fields for 24-byte sockaddr_in6
-Date: Fri,  9 Oct 2026 16:38:07 +0300
-Message-Id: <20261009133807.730724-1-natalie.klaus@runtimeverification.com>
-X-Mailer: git-send-email 2.34.1
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791556267; x=1792161067; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nXbzjrHDowmjytwjBBFJiq8VXsAFcUvN5YKwmyv2rUs=;
+        b=iWLWNOYTd8869GHPdyC3y5tgAwvgzYUBHgbMTF8c2NoWJ88Exw14Y/EdtI1t+Gc2T0
+         BLD0lpy7YOHfqhR8qAymJS1OebzVOZis3ZUHJWGul1xXBg0Va1ESspfxzLO68M65i4jW
+         gnonOt7KD3jrAq4PXuMfo4H1krdZbxneS3YKZIkIuIWBwDewq02Eadq+YCt0iq1ZjSuI
+         38nfL0hu0TSV0MkekFslJwrDAbCG9n3t7vy2pSTsPy/WfuZibumEvDU3NzXoIqOgmTwk
+         ayi43UiSfC/27mhRH+bPZrk1uchoaS/mAZIAf4lxG/chE8Sp+A7qtQ/ffHgOvzfSxj0J
+         zFBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791556267; x=1792161067;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nXbzjrHDowmjytwjBBFJiq8VXsAFcUvN5YKwmyv2rUs=;
+        b=1Bo8RN5LOZW1lX83AUgnamZNXcILLFMajtkl510uK3udT0zm+gRDfWprSNElX853C+
+         gsiYApsWNAOt7+fow1hwEg75uYMkx9lqRbjjk6DrlH74KpQ689woGEN/sim31ipLKAlP
+         pYp5/VHLrMa1Zjp6+TPjcCO8u/LboLWbTZyVFjnHy2/VIEizO9mqgt6xgTR4rQDl5inY
+         imrE9sDCFugbUeUM84w4RjyVpVQothZD21Lzy7tmVrZig0VQA/m/Vao4C2qNIc2Gm5Qu
+         cPwqeqnEX1w3DEjtcCc0wzbFNgdPT32tbG9BnGBD44NPWnKt1Q7D/HqZN1EfZLgVIuw8
+         TywA==
+X-Forwarded-Encrypted: i=1; AKwUvBwf0SCBDDpOk2CHxIO14QH8aYl2MyQci7FdlUjsbTxQETTIIVivF1fNHVBhc6N5yXTHGQR3YhvBsA==@vger.kernel.org
+X-Gm-Message-State: AFuF++nFzyt9g5ZeMnoOQEEfrtPayf8zWfpMav3KiiryveB5+XSYznbC
+	uocAg5PdAUo4N9AAo60W3Ik2NEaPBCfq/WKgBIhjAyUPy6GlWHQZ+yCMqfa7YWIuBN0=
+X-Gm-Gg: AYBFou2imu7rs+i0PE7tZU06QW7qVfAznnTyC91uYNZZvLVxTkV8yRqVAtmKjB3pHuX
+	/2jqNXWUdxqKGqlHokVXMG9uYeqZSdgfa7Px2EGxiLcPrEKz9/tTYQ5+ImwiCzu/GtKR4WpDB2E
+	4B7/E0Ca2cdmI47h/z4m4cGP8HfqOGZI5eARPSSKHC05oI68RsDTLP89Tix/7FW/Eh5HCZBz3VQ
+	8xNnujThHQ9KFpQAhkgfUlfMuBg46DMB0PWUwRluKuaQ1rprRBISVAc7n+HEgbg5f1qX+e02EhY
+	7d3ODadbNEgfes5JipbKniOU3srt0dL08UaYEY2ykl4px9o/dac2UgK699b25jiaTKsqxPuIusf
+	l58qs913YLf+E2q8xUcQ6nHbFYULqW2/muGQBSdyAq/lZib5c5GxWi54ww5jBwXTl0QsG4JdFUm
+	gvDuBE30fa6JShBYpVODl7+l3Y2kFCB2TipImSPTOgyQT8W0g3xVrXj0Y3sc+lxmRtXKuVBMlKt
+	QQ2J+LvK1Q+jnp6Z2ZLo7gh3MbcTzmmTX4qU3gUkSQMrdXyJzuIpza1ZxsrZtI+FEU1pLHMd7Zd
+X-Received: by 2002:a05:7300:8806:b0:34e:f5c3:96a with SMTP id 5a478bee46e88-3537e0a9a67mr3478504eec.39.1791556267141;
+        Fri, 09 Oct 2026 07:31:07 -0700 (PDT)
+Received: from [10.61.8.29] ([155.98.132.5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-353814b556esm6789499eec.18.2026.10.09.07.31.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Oct 2026 07:31:05 -0700 (PDT)
+Message-ID: <9c0da57e-401b-4dc6-9bb0-76eeddff7c18@kernel.dk>
+Date: Fri, 9 Oct 2026 08:31:04 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/register: don't exempt disabled rings from task
+ restrictions
+To: gvozdet@gmail.com, io-uring@vger.kernel.org
+References: <20261009-iouring-task-restrict-fix-v1-1-a49daf55a12c@gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261009-iouring-task-restrict-fix-v1-1-a49daf55a12c@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-io_connect_bpf_populate() fills connect.port and connect.v6_addr for
-AF_INET6 only when addr_len >= sizeof(struct sockaddr_in6), i.e. 28
-bytes.
+On 10/8/26 5:08 PM, Eugene Gvozdetsky via B4 Relay wrote:
+> From: Eugene Gvozdetsky <gvozdet@gmail.com>
+> 
+> A ring created with IORING_SETUP_R_DISABLED is exempt from its register
+> restrictions until it is enabled. This lets the creator register the
+> restrictions and then enable the ring with IORING_REGISTER_ENABLE_RINGS,
+> whether or not that opcode is in the allowed set.
+> 
+> Since commit ed82f35b926b ("io_uring: allow registration of per-task
+> restrictions"), a ring also inherits restrictions from the task that
+> creates it, and the same exemption applies to those. A task whose
+> register opcodes are restricted can therefore create a disabled ring,
+> issue any register opcode on it, and then enable it.
+> 
+> Mark rings whose restrictions were inherited from the task, and keep
+> checking register opcodes for them while the ring is disabled. Enabling
+> such a ring now requires IORING_REGISTER_ENABLE_RINGS to be in the
+> task's allowed set. Per-ring restrictions registered on a disabled ring
+> work as before.
 
-The IPv6 connect paths accept SIN6_LEN_RFC2133 (24 bytes), which
-already holds sin6_port and sin6_addr. io_connect() passes addr_len to
-the socket layer unchanged.
+I think you want something like the below on top, setting the
+inheritance only when it's true. Going to fold that in, let me know if
+you object
 
-At addr_len 24 the filter sees family AF_INET6 with port and address
-zero, while the kernel connects to the real destination. A filter that
-denies an IPv6 port or address is bypassed. Denying connect.port == P
-rejects [::1]:P with -EACCES at addr_len 28 but connects at addr_len 24.
-
-Use SIN6_LEN_RFC2133 as the threshold. sin6_scope_id stays zero when
-absent.
-
-The threshold mismatch was found by an AI coding assistant (Claude Code)
-comparing this hook against the net/ipv6 length checks on my
-instructions; it also drafted the reproducer and this patch. I verified
-the bypass and the fix in a VM on 7.3-rc6 and that 7.2 has the same
-code.
-
-Fixes: 899bea8248ce ("io_uring/net: allow filtering on IORING_OP_CONNECT")
-Cc: stable@vger.kernel.org # 7.2
-Signed-off-by: Natasha Klaus <natalie.klaus@runtimeverification.com>
----
- io_uring/net.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 050ed274170a..f5f4f3ce6ef3 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -7,6 +7,7 @@
- #include <linux/un.h>
- #include <linux/compat.h>
- #include <net/compat.h>
-+#include <net/ipv6.h>
- #include <linux/io_uring.h>
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 6feaf09bbe8e..c994157173a2 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2957,13 +2957,13 @@ static void io_ctx_restriction_clone(struct io_ring_ctx *ctx,
+ 	struct io_restriction *dst = &ctx->restrictions;
  
- #include <uapi/linux/io_uring.h>
-@@ -1741,7 +1742,8 @@ void io_connect_bpf_populate(struct io_uring_bpf_ctx *bctx, struct io_kiocb *req
- 	case AF_INET6: {
- 		struct sockaddr_in6 *sin6 = (struct sockaddr_in6 *)ss;
+ 	io_restriction_clone(dst, src);
+-	ctx->int_flags |= IO_RING_F_RESTRICT_INHERITED;
+ 	if (dst->bpf_filters)
+ 		WRITE_ONCE(ctx->bpf_filters, dst->bpf_filters->filters);
+ 	if (dst->op_registered)
+ 		ctx->int_flags |= IO_RING_F_OP_RESTRICTED;
+ 	if (dst->reg_registered)
+-		ctx->int_flags |= IO_RING_F_REG_RESTRICTED;
++		ctx->int_flags |= IO_RING_F_REG_RESTRICTED |
++				  IO_RING_F_RESTRICT_INHERITED;
+ }
  
--		if (conn->addr_len < (int)sizeof(*sin6))
-+		/* The IPv6 stack accepts SIN6_LEN_RFC2133; port and addr are in it. */
-+		if (conn->addr_len < SIN6_LEN_RFC2133)
- 			break;
- 		bctx->connect.port = sin6->sin6_port;
- 		memcpy(bctx->connect.v6_addr, &sin6->sin6_addr,
+ static __cold int io_uring_create(struct io_ctx_config *config)
+
 -- 
-2.34.1
-
+Jens Axboe
