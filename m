@@ -1,72 +1,74 @@
-Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB69125AA
-	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 14:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C78542AF1D
+	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 14:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791556425; cv=none; b=TiOTOHVfYftfuX9ZHuoBX0RhfSIYp41wKk8qo/94vIiYfNoQByfiqlrf075SWio65zGFvnYho61ZXixB/3q1Z7CF45HLksXrtVLZfcx/rONNHV1HRDFbzLgSYon6NOy7YTLW3D5ugWt8sVkPZXEdVNyPsRnhSKTUlop9WT+dr4g=
+	t=1791556429; cv=none; b=AI1RoQ6ltRfjvRT0WeKGsLYjfI92eDf+JJzREbrDEpdsMpZGXdYNASVz333w5zQHLXiZHyUho60Mofm+VJqKURZJUnb1xuFFAFW8AIiWjTCuGVkUJlm6IIGyLirKSSJOr/28STMI8mO3uZg24cat7geWlwvhYUNqRSAXympD8yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791556425; c=relaxed/simple;
-	bh=PMrJ+PfRLd+U02kdR6362NlSjwr7TggK4kaDLqi4XXU=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=u8zaTr+5fOWYA+2sH4zz5gIj8m2+VYmNcVs9mOhc1lpA6rMpLq2aoV6+hfZPEM7VVaVcOKGYUHdCIr4AMUo+Xg7kdWVEY/0u3lPwzBxrRLXBa2DRteG5kFlbXL6syrzOjvaUsnFW+4XNox5h4/b/lw1mHzxMsdjHh0kfYkcZlt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=MhfXBXj6; arc=none smtp.client-ip=74.125.82.174
+	s=arc-20240116; t=1791556429; c=relaxed/simple;
+	bh=EJiXm8Dsks2gupnzl0q0HhcnmSRuHBlBWdlylLjcnp0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=YPNKOy0ywExG0q+jdQjWG/jt5/CEb3FNgwbmv6xZ8bAsz7wHDsm82IRxxmfb46uAZcu044e9g6sBePtBr4uI6rsusIHyXEUFSWFpRvWGt21B9XEnyyW57UvsPXlp79mksdUR7f17eVGlN2Rvp8gv9JP8hVPlUboQfdBd7SADheE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=zX1mcR7h; arc=none smtp.client-ip=74.125.82.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="MhfXBXj6"
-Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-33bf40b0c8bso5170379eec.0
-        for <io-uring@vger.kernel.org>; Fri, 09 Oct 2026 07:33:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="zX1mcR7h"
+Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-30b6dad2382so9604246eec.0
+        for <io-uring@vger.kernel.org>; Fri, 09 Oct 2026 07:33:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791556422; x=1792161222; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791556427; x=1792161227; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:to:from:from:to:cc:subject:date
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vFbM89QzEemXOL2UYiE7laOt3nLQ/WNN7aPcOJTBl6E=;
-        b=MhfXBXj6TQR8dM8Dzsbwi8oajEos6Rq++jInps1no5OLcBG6/qzAWfqtBjkoqLYOSN
-         D2GaYXrNl+pJgDOGDGlgWmT8hJ794kqSZHrYHRPEkBJzHCs8WbxSOhTlyJnRUfQM0v7z
-         zm4RcpFaW4p2xUmmxl/OWW+zj6zh8jas0TepWu5vgF0y/gUNlA92+ePpOyn9/OM9G7sQ
-         3HM+oSOl3uImNG397FcnMfoGCD+jHE+dYY08nVzFEeQe9rG817anP3dKFI4krnx+a1dR
-         ss6ew7vDMq1Q8NccMQ3ILR5bK8zLxHh3NcabYyF3lsCALPENTMV6XAhRyzYAf5xmaILi
-         Hglg==
+        bh=BmVCNkG8K6lMWvkOR5yLGM5dHZ5EXwHVBaE9Y4/+eeg=;
+        b=zX1mcR7hUXZtG+wnRdwWiw5ltq8CJ/FzijDIZ394BtSI6fL6cZpC2xiF+biZZiWObr
+         2eH6lIp3lZH7fpP87uDt/xhxFFwwvM9E1NDZfShEFpJamHOhoQnl8tEYEthr+zs15y8a
+         C0+3ynZ67KnyIcswG06/lEbVXJw0HQKpr1rYHiI0SV1AK/eelAleYTWCHD1Bw68WkDC4
+         6/wh1XPudM7NlGcWQM/8uKVTY1TA79LknR22QIEI/FU7K0ikYieNttKDHjNoUX3fVHY7
+         9xkGJ48kc0ONBTW5rKnaqUgy6zCH949mQKV/VnBUUikWGFId6UQgdW32Pen509jmOXBa
+         s/5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791556422; x=1792161222;
+        d=1e100.net; s=20260707; t=1791556427; x=1792161227;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:to:from:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vFbM89QzEemXOL2UYiE7laOt3nLQ/WNN7aPcOJTBl6E=;
-        b=XylGbxt9tlQGSGwG0A3F2ZPoRM9ZIrgwrjz0Zz4jTXoVwF/lpF+9f7iz1rU/rj9rTm
-         aKrUeGAbQZcE1hUU4+C+nTc7lik4cVyUaTmgQqxoF58OrP+YMlRO5sdDbIaRYv7VS89y
-         38KErI/QBQvvu217X4knacai2MKCec6B1+VbM+lItIuZ91MI+r4aEnEYI/CF8/bYtJld
-         Wbb42T4wCsethT+EqMWNcgH+IDi9lhyfNFWw9ck4Ysg0LelrqNYETjcQzZW1KKOyM4sk
-         bM98xLqWDp1mGFo6WOcfPwmyxGfcAR/h9NTQzsyARzpKYYd+MFMfAe6jC206v4WQhZGB
-         SEtw==
-X-Gm-Message-State: AFq9FYKsocEskMR2pBJBocFqXAoaugsVyXqoXk8Bi2ZZBswv9SUJJEwT
-	5rMjFCIVA0OJKbdZAWGp3yqm3YlzjTKl6rLM5XzYlMzhjfyAARGrDiPws9QHOwgA18x/sja73Nw
-	O7OKxYhU=
-X-Gm-Gg: AYBFou2mVn2+K4D+2FeToNfSgpDcUCMME1Z2lRbcbAy9D6B4SzX3DWweoc4u76K12L0
-	XgaoAr2+qIz8Hx3HTI4fL+pb8rIGU/1OBCr5ptOFZ2hPvHDftturvsX6cMNxOdBi4DnQOYPf6I9
-	CXYIdpYgCHKRWH4/rFCv3uiF4lK9Aqq8fieJZBIH9un/gDOsd1deuEGKdkAB2FrHbHJFmnFBxpO
-	P8kflBTFCJ3AZSH12aKHZKuvr7UGG2oNc0CS2wPiwU0JYsSF+qoOp3bIzUap5/Gq6cwNTo4+w+c
-	sDOshwPR/hTw2epyH6RmCvf6BY8hiFXyVg5B6Dmc4eZhZobqJ0Z3S5C0d/1Aaqx+7KspoBEApJz
-	4mGw3AIDGOEBux8w9vNS/0IKHpUqYc1FHDSaCsAo5HsExUzamUFjn/SQWa8mW0mYl2J9nEzOb2m
-	QBWx0247G2DPAfBuIexWNP2jXCkK0WI8Rv9LB9iq0yrht6vTh2GJ6gtT5FuodiHpF7OskBGmu2V
-	KKVZH3J2qNMeAv3gQLVlrB176Fz1BcNMj2KyukPVNJEFjCrJZ/Kn8YHxMV9foFKV789/o10K9E=
-X-Received: by 2002:a05:7301:430a:b0:351:7444:8bfd with SMTP id 5a478bee46e88-3537e13815emr2696196eec.39.1791556422230;
-        Fri, 09 Oct 2026 07:33:42 -0700 (PDT)
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BmVCNkG8K6lMWvkOR5yLGM5dHZ5EXwHVBaE9Y4/+eeg=;
+        b=QwgsMpx7YzF2XYi/HLMKC7xnEkVOUENvNLGsaDrNyMIXh01DYJUTRBRiFBf35G877o
+         r9rPtQaxQwLm5cAi4BRl1aKY62U7Z6bqfgR1C8oCesthBoxP4nZ3oiwSrVyWYmUzV0eL
+         YSKkWXkq1zwB36agl/wQOU5/iGI4Tfv+UIbwzbxHOF8EaZ+IYaAmaVrWx/L5Ct0to1os
+         pxS4+Z1jKUD2qf9X6GDQOLVyb3GW5XxOq7ve1dlHZ0D+otiwfMVvwZXoco62ztnF9wuo
+         aM4P7/NevwA/rKHcStmvWG9Lnw7RnU+tfSbe1CQnTI1Ke4YDr9RgORPdYLh748yWKUKY
+         /NEw==
+X-Gm-Message-State: AFuF++l9iEk/53xZmeDEUfE3KHl9h0XEGCoIV9U2OFQDxnFEqkKhhNXS
+	qi5pm5FYvL4S+oXISp5FWz8xZc/8sJIRleBOxS9wsoqnBCuEayJVGL6VYJL4QhL+szQ=
+X-Gm-Gg: AYBFou1WtD63IFVHYasiOc3t1lFtrJJEEpIljuo/XbgjsFRMlB1U5c6PMQk4LVDw2sJ
+	bHG5Yv7tV1G8JvdhGxM7fSFDvQ+q0GItQ8C65DdKv7Rea1urN2q/6NKmOISlZ14H/ejgKUptuxy
+	OeMVqVlFOa1Hk1MnMKbSyQA+8MfdfSq8bxNylYPF+IeE/HPRXpJGInoWEj166vQn4vlCxA9B4UL
+	sUwwonUAwDvuJ/7VWhn2+FPDFkBH48gUmUaHAUMtqaOu9wIcz3F6sxFeoakYKJjtcjmryHJ03WN
+	UYGkqbHyHLYpgYNK6X8WwWB47rXm2tHBhiMakltAH0k6NDz78h/u+j6Ijb62E/xPRE9Zf9Q94Wa
+	lN4BSBmJx1KjohtOBAq5fWs7YkSHaw1Kjdp70lRQq2JO3WY7FYUCju4rsJpoSHMu8Gpzbe0hfK6
+	hWLbGBtab7gSF1En0sLIdggUiqEJQZwZCjur3/XI9YU3nFIeYtp0S4fg+crYUVGbuI+aS4FgQ+F
+	wbqAU7kS4JahL5lc3v8No1iBM/RifdUpqgH/XH2LqnjWSxmHlDqvoJXOwhAlfeNzSgfWW4uhv4=
+X-Received: by 2002:a05:7301:1929:b0:355:81bc:567f with SMTP id 5a478bee46e88-35581bc5872mr1019837eec.25.1791556425727;
+        Fri, 09 Oct 2026 07:33:45 -0700 (PDT)
 Received: from xps16.local ([155.98.132.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb1e05esm8003444eec.25.2026.10.09.07.33.36
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb1e05esm8003444eec.25.2026.10.09.07.33.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 07:33:36 -0700 (PDT)
+        Fri, 09 Oct 2026 07:33:42 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Eugene Gvozdetsky <gvozdet@gmail.com>
-In-Reply-To: <20261009-iouring-task-restrict-fix-v1-1-a49daf55a12c@gmail.com>
-References: <20261009-iouring-task-restrict-fix-v1-1-a49daf55a12c@gmail.com>
-Subject: Re: [PATCH] io_uring/register: don't exempt disabled rings from
- task restrictions
-Message-Id: <179155641635.219229.11431241640736819805.b4-ty@b4>
-Date: Fri, 09 Oct 2026 08:33:36 -0600
+To: io-uring@vger.kernel.org, 
+ Natasha Klaus <natalie.klaus@runtimeverification.com>
+Cc: stable@vger.kernel.org
+In-Reply-To: <20261009133807.730724-1-natalie.klaus@runtimeverification.com>
+References: <20261009133807.730724-1-natalie.klaus@runtimeverification.com>
+Subject: Re: [PATCH] io_uring/net: populate CONNECT filter fields for
+ 24-byte sockaddr_in6
+Message-Id: <179155642237.219229.1342920568325633046.b4-ty@b4>
+Date: Fri, 09 Oct 2026 08:33:42 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -78,24 +80,21 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Fri, 09 Oct 2026 01:08:49 +0200, Eugene Gvozdetsky wrote:
-> A ring created with IORING_SETUP_R_DISABLED is exempt from its register
-> restrictions until it is enabled. This lets the creator register the
-> restrictions and then enable the ring with IORING_REGISTER_ENABLE_RINGS,
-> whether or not that opcode is in the allowed set.
+On Fri, 09 Oct 2026 16:38:07 +0300, Natasha Klaus wrote:
+> io_connect_bpf_populate() fills connect.port and connect.v6_addr for
+> AF_INET6 only when addr_len >= sizeof(struct sockaddr_in6), i.e. 28
+> bytes.
 > 
-> Since commit ed82f35b926b ("io_uring: allow registration of per-task
-> restrictions"), a ring also inherits restrictions from the task that
-> creates it, and the same exemption applies to those. A task whose
-> register opcodes are restricted can therefore create a disabled ring,
-> issue any register opcode on it, and then enable it.
+> The IPv6 connect paths accept SIN6_LEN_RFC2133 (24 bytes), which
+> already holds sin6_port and sin6_addr. io_connect() passes addr_len to
+> the socket layer unchanged.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] io_uring/register: don't exempt disabled rings from task restrictions
-      commit: 6da8f402e362b2f546e2efb7167fc9597aef6faf
+[1/1] io_uring/net: populate CONNECT filter fields for 24-byte sockaddr_in6
+      commit: aa5d5f8e502318e783545ba5d04bb40130b83e20
 
 Best regards,
 -- 
