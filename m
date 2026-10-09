@@ -1,116 +1,161 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F443B0591
-	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 04:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1BC4CC631
+	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 11:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791519334; cv=none; b=Txs1XfN+tbKj0Pqh9k3P7T8Q/8Pw/qYEiK/wKVS0rRilMLiJUjJ4SpznO6r8ZhxzP/KkeXflDUeH4aL/gQMFRHF0EH0kn0pItphMBuK+WpjQifnhDiAsKIuYVzfDtOICc8l9zPOCtNDe4bG/gb7VYoajC4TTCILQZm/jr7oWi6k=
+	t=1791545048; cv=none; b=YFu23ito0NUyzjZ7qnz4hWL7WGgfUjT0wrO6LFdcrmdPQXE7TK6GUK3YA6eDG124plfhSR5ReNt06BJFVE60rvI7CpnM2vbwuwZsUj7RIBOCw9I8oTwMwJsdLaeM077wGrHDuEk5Vf7AIcHpCQ8blYPNo2Ae3RrdQzVdfSg0tug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791519334; c=relaxed/simple;
-	bh=obDhGb5RLj9PYZ2eyCinsmiE9t59PJFY5sRh7w8PNpU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ovIzN5ZgsfaXuIaGeHMV6JRkrfWgGdNxQrUCwmzguv1DF9xxEtcFtK2AhnncUAENJkzhDCloV0WnhKheHHUg/nRzM/h4dOWZtaCvIAvviq2hec3DY9yYaiiwqXUHIQM8pZx+mSeA0N9Mu0PPPLYj4+0LWR8zWvKk/VdEM3GVsS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu; spf=pass smtp.mailfrom=cs.unc.edu; dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b=kZpnoeZP; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
+	s=arc-20240116; t=1791545048; c=relaxed/simple;
+	bh=V38vhjeTzp3k5ITMNDV6z39rmdMCvkYnm7NSfqrDfZc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cFDCId5g6fvA0C9zjBi5xJ4w6+ZRcv1nVDVtZOs6idcLQgHHdmgbjylXoD4DOl5vnoIPjEr2e9cHlA3Oxb4PJ7sBIFnTf+giUqzKtK+bgHBETiTr3p0P+vGn+4ZVyX4hb02xMlhQ8n/mWiIXd6Ra9eT2FOI355OA8GkXm62AHPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GwTlLord; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b="kZpnoeZP"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93e515769d3so335781785a.3
-        for <io-uring@vger.kernel.org>; Thu, 08 Oct 2026 21:15:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GwTlLord"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a17baef589so30263645e9.0
+        for <io-uring@vger.kernel.org>; Fri, 09 Oct 2026 04:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cs.unc.edu; s=google; t=1791519319; x=1792124119; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GnWq/2eDeNny1MK29b1wAOjSKjT1sD+08M0tNeVnBUM=;
-        b=kZpnoeZPlcvKM0n9ji/eQOOihiVhLVb5lnDDkenAEGA2XoYdXbHy9WCxh5xn7CHsgu
-         FoVXGD0WEgKcg8pT5pQwBYqyGT25XPl/ejMgHN9mIp/2UGkumZUz5woaEWJR4Y5vi7WQ
-         U8QUwch5VMisthQTiBIGfnsSfzgpHVuhdDGas09I+JGCyg4aWI7jLhoeGQeLez0kdCOw
-         rxBF775qHoZoj3yTp9SvgCRZFdLuZUSMy8KmeR50pHOdpZWKnM7/Imp3mD2Z674WoZkW
-         sxCzQt6RzRLEr8bfJ5XcSxV3upYwloV81lExbTX9FnzavZDS7/5+y+K+co8FAPTht86J
-         BKig==
+        d=gmail.com; s=20251104; t=1791545038; x=1792149838; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=l0FDlo5X9NOcg3UrYdd8gMV7/2rytUnITD56A6AkawM=;
+        b=GwTlLorduSK1NpYlzvs3WNkPYiWfIiRvgHsi6RKgfw6N9HA+hJJBE1rF4Dk7HeksZY
+         vNh6Q3qzFbq9PDY/dS+CaPLTC36BMQhidW3ULEY9WfVvgood/8r1rBbE1wmk+mRWlZfm
+         1qRE/IWyzcEzjlm001veLq3ldAC7aHGqTEU6yQ1PRDfWJDzC1+EcTInuwyo/K3dbfQjx
+         mrn6OMJPVdZOi9BCOOCt2k9wfRrdQWyrnL+FHVq8TiFM3imY7IQo2Sf9bzuflkjPXjQe
+         foHChqp/Ps3XZA1DXyr1dXZUB4T4H6IwS7qa1a7xHg8ANHPiuArSDsTW8G1hPs89J5hT
+         J1Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791519319; x=1792124119;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GnWq/2eDeNny1MK29b1wAOjSKjT1sD+08M0tNeVnBUM=;
-        b=BCPPv+Fr4ZBeKi787KdwBiHei5SxspKM+6yjDpt3ZQADK94x0VNm64g8eqVKDgi3Vq
-         CSUvuxvbimPB8M8r3rG+gv1NMlHMruavwGP2sfjuxlvQrsMfw0sPyCbrFKCX0Mom9X2T
-         k9DO4ZBY0VjHAjDgQMCTVpSf0izepEFfbFQSlbVXGXMEPcMiER52a+14qF4Ifwbo9vbc
-         AWkNLvXDBQvTUsOfmRfKIHXn1ANwzLwKHc/2BDEJIf3Y7gbewJ7ZqJ8yvc8pkJnBiyDc
-         EgRO2mgxt1roLGCTU/GqCQ+FnKUSqFzPcPSgVq73UxdmLGkPvCvVBzwHcw5Yg5wFLeiR
-         +idw==
-X-Forwarded-Encrypted: i=1; AKwUvBw0EIyCyyV8jUOuZUlOuKmNsN3CYUWAOH02/o9rDItOrIZxwOx26lrqquwgxHygQxTOcPuiJM2kGA==@vger.kernel.org
-X-Gm-Message-State: AFuF++mE1oqsaO+iQnVo3yS6PfRI1QMx4Rv9lsiCF0n0Ed3cRE48KFJN
-	a1pPw9Ma+5CeQht4xlvQWf2a2GsJhCzPadefrLycOjZTy/Rz9Ct6mRcHQxuqxrGeYw==
-X-Gm-Gg: AYBFou2SjLLOHvw7Z4RBB8Y9ZpQAzad97JsM3he7opA2iNbQSaJDT6ljc6srrDwpn/i
-	UlExrCqKvg2l8vfzD9GVI0aFN5teYCjLnjQbyeKOXwQyIGn7hKLsdNuoiXDbPetwm5IdEBgfK2Q
-	r0exDuXStNj0Qh2aa8JIj/ZV9jQSkTkVVvIMCUnX7UIOwnXCGiMjJVqYuVbsfhB1KQlhifNxDWA
-	cX6FUysiDTROyjDMx5X59fUnFgXbvilrCyGd/3ABAqaDBmRGSH3tMGCyFVBJmTTODvtrspicqlN
-	BqYJoUiwh1pGChMGC+S7viLWahNE2mkzCo71ykfzk1hlf1QFABqdeoJjgT4t9W5N++VP7FBZULg
-	6vou6SD3V2KEbwDUkixjCCZAiNOfc1TdrdP3wukb4i+LB+C0c8oMKau7dNgH8mcQJ3uCfM925kA
-	RUlXy5L0IFOYCn59FUfJeiZeI4YPFUBMx0X3QUm3YznwrbzcHNMqgz+rI3OKH4QsJbLRSYr4ezi
-	92bdnzEGKU2juGHn4cL2Q==
-X-Received: by 2002:a05:620a:17a3:b0:93e:84e5:3c66 with SMTP id af79cd13be357-93ebd21ffd0mr104850285a.40.1791519319093;
-        Thu, 08 Oct 2026 21:15:19 -0700 (PDT)
-Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb98906c3sm96184185a.26.2026.10.08.21.15.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Oct 2026 21:15:18 -0700 (PDT)
-From: Hengyu Liang <hengyul@cs.unc.edu>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	David Wei <dw@davidwei.uk>,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH] io_uring: do not charge user provided SQ/CQ rings to RLIMIT_MEMLOCK
-Date: Fri,  9 Oct 2026 00:14:55 -0400
-Message-ID: <20261009041455.1974346-1-hengyul@cs.unc.edu>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <3b9d9c06-c6e8-4166-87d9-c7c220ad0b58@kernel.dk>
-References: <3b9d9c06-c6e8-4166-87d9-c7c220ad0b58@kernel.dk>
+        d=1e100.net; s=20260707; t=1791545038; x=1792149838;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=l0FDlo5X9NOcg3UrYdd8gMV7/2rytUnITD56A6AkawM=;
+        b=p+W+/EcCJNTsW4J7NGSYvM4U+5pg4Ni8oOHjxNL7HN4vkApFycINFa5hFhPHYX1x9b
+         L1i9rFNRxLuxGAr6BlKZ/QUrIgS+SiXS+37UfPwabbL1j2Ojr4CArVqcPca7z2NJL2s2
+         GwPOcyYdnUGNU33z1QCDfsTbHmdhRX+PQDG+CUBqk0A+6rWF5jPSTUOEDdcvyytiQ+cH
+         E9cOlovwBB4nYXptYHsBpHsI+4WoLCiMlclRD0XYxT5mSaqKA2iUGQbfmOXuXX/+hLxd
+         lghp+SKhXEaz0eU7b3fQSMaEqUSeYwLhG6m17yu8RK/jAsrfFt6FDiPk5hNRCo46nTPr
+         Dt1w==
+X-Forwarded-Encrypted: i=1; AKwUvBxsp1kpoqZjw68W3qX8KdeznNdGjOdnOEiv0HIFvoqT3s7fzgddV97vJW7Agsesy0/XP6h2SKcMQg==@vger.kernel.org
+X-Gm-Message-State: AFuF++nx5SWnlCOe28TeJV6MCAb2mKrv3IosUmVJPP8C5L5J4XshDvzz
+	QbgGSKgYn4Kl52bO8gMtddtm5nlj4QzHnCaU6aszvhVQSrjldoA+XyHa
+X-Gm-Gg: AYBFou2d9ibkWhjfhoyXmLYaBaauy4DfFLtj5S9EwclTOoKYXzIQC92J9jQAuJtTrPX
+	OO4oO/eKE9qgCYgBiMVeLuPKo0hw+ASXUcaKJXhvPUOEgAvEyySxiSsG+IfiRwRvW3UNVnLi6Jh
+	De44vNSNaEvh9hawsLxQHtsFMIuzeax1ZEd4NTJGnmf3psY5fkXZ+5xjRNx9/1Ip2Y1zeuQer04
+	Ka3qeSjuxhGgVIdIR/qFJaSEdBXqtTIZsni6fOLfAC6TD6sw9gz8XnNUkXc95GtOqlsQH7mAJkO
+	D4FrJ414FlZeWSX7kp+W1bzL3EFIzwQnMGVAfQC6DeocJaZqnBafX0bIUbJyGCIG6YjvUSD7zvi
+	eHuf3mFIaDNoS70Ohtg0Tm86F6ZHKPug0l04Be+yljvbWqS7XItTEbcXimK3GW1w/a5Mo6iMpD9
+	T07vsSqU1Xr9/mlM/RbB773wrbYeLCgPpl5cjGY9lUj17wK0gh1XhLCUkQH8yJOj/Fc4arEY/1p
+	kJNQU//xTicVshgkTwcjWQ5Fpj6Xy66zSl76nDS9ZbpowKF27rWhyjDUMvyyOr3SEXGJl6slJEY
+	scUmvpaQ7FsvF+ZuHH+iR8MNAWmSNXfFAjHAqCM9G5Z5Iwf0
+X-Received: by 2002:a05:600c:524c:b0:4a1:825a:5726 with SMTP id 5b1f17b1804b1-4a18e4aeaffmr31536085e9.31.1791545037794;
+        Fri, 09 Oct 2026 04:23:57 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be8c669sm58317575e9.5.2026.10.09.04.23.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Oct 2026 04:23:56 -0700 (PDT)
+Message-ID: <bed0a0c0-1706-441b-926a-fe568dea313f@gmail.com>
+Date: Fri, 9 Oct 2026 12:23:54 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring: do not charge user provided SQ/CQ rings to
+ RLIMIT_MEMLOCK
+To: Hengyu Liang <hengyul@cs.unc.edu>, Jens Axboe <axboe@kernel.dk>
+Cc: David Wei <dw@davidwei.uk>, io-uring@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <b5a33433-b0b9-4231-9998-23e2a2202091@kernel.dk>
+ <20261008170611.1285778-1-hengyul@cs.unc.edu>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20261008170611.1285778-1-hengyul@cs.unc.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 10/8/26 1:11 PM, Jens Axboe wrote:
-> Honestly, after taking a closer look at this, I think we're better off
-> with your original patch and one on top for pbuf rings. Please check:
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git/log/?h=io_uring-7.3
->
-> for the top 2 commits. If you can re-test one more time, that'd be
-> great...
+On 10/8/26 18:06, Hengyu Liang wrote:
+> Commit 8078486e1d53 ("io_uring: use region api for SQ") and commit
+> 81a4058e0cd0 ("io_uring: use region api for CQ") made io_uring_setup()
+> create the rings with io_create_region().
+> 
+> However, io_create_region() charges user provided memory to
+> RLIMIT_MEMLOCK, and the rings of an IORING_SETUP_NO_MMAP ring were not
+> charged before those commits. As of now, a user without CAP_IPC_LOCK
+> gets ENOMEM from io_uring_queue_init_mem() when their rings exceed the
+> limit, which is 8 MiB by default. PostgreSQL 18 creates its rings with
+> this function [1].
 
-That works for me, and the two commits look good.
+That patch you mentioned 26bfa89e25f4 ("io_uring: place ring SQ/CQ
+arrays under memcg memory limits") has always been a delayed time bomb,
+though memlock is quite a nasty limit. Makes me wonder if there is a
+way to migrate it to cgroups completely.
 
-I tested io_uring-7.3 at 9f0c88b7f884 as a user without CAP_IPC_LOCK and
-the default 8 MiB limit. Number of objects created out of 64, with 4096
-entries per ring and 32768 entries per buffer ring:
 
-                                        v6.13  v7.3-rc4  9f0c88b7f884
-  rings, io_uring_queue_init()             64        16            64
-  rings, io_uring_queue_init_mem()         64        21            64
-  buffer rings, IOU_PBUF_RING_MMAP         64        15            64
-  buffer rings, user memory                64        15            64
+...> The issue can be reproduced with a simple liburing program, run as an
+> unprivileged user:
+> 
+> [2] https://lore.kernel.org/io-uring/b5a33433-b0b9-4231-9998-23e2a2202091@kernel.dk/
+> 
+>   io_uring/io_uring.c |  8 ++++----
+>   io_uring/kbuf.c     |  2 +-
+>   io_uring/memmap.c   |  7 ++++---
+>   io_uring/memmap.h   |  2 +-
+>   io_uring/register.c | 10 +++++-----
+>   io_uring/zcrx.c     |  2 +-
+>   6 files changed, 16 insertions(+), 15 deletions(-)
+> 
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index c2ce83c7c1f1..2a16369894d4 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -2070,8 +2070,8 @@ int io_submit_sqes(struct io_ring_ctx *ctx, unsigned int nr)
+>   
+>   static void io_rings_free(struct io_ring_ctx *ctx)
+>   {
+> -	io_free_region(ctx->user, &ctx->sq_region);
+> -	io_free_region(ctx->user, &ctx->ring_region);
 
-30 processes with 142 NO_MMAP rings of 64 entries each, which is what 30
-PostgreSQL 18 clusters with default settings create, all get their rings.
-On v7.3-rc4 7 of them do.
+1. It's not perfect to make all these changes for a fix because of
+backporting. Let's simplify it, add a wrapper and use the "__" version
+only where needed.
 
-The per-user locked_vm count stays balanced over ring create, close and
-resize and over buffer ring register and unregister. Registered buffers
-and IORING_REGISTER_MEM_REGION regions are charged and refused past the
-limit as before. Every liburing test gives the same result as on the
-previous tip of the branch (c746673517c6).
+__io_create_region(ctx, bool account, ...) {
+	if (!ctx->user)
+		account = false;
+	...
+}
+io_create_region(ctx, ...) {
+	return __io_create_region(ctx, true, ...);
+}
 
-For the buffer ring patch:
+2. The need to match alloc and free arguments has a high chance to
+eventually blow up. It'd be better to turn it into a flag.
 
-Tested-by: Hengyu Liang <hengyul@cs.unc.edu>
+__io_create_region() {
+	if (account) {
+		...
+		mr->flags |= IO_REGION_F_ACCOUNTED;
+	}
+}
+
+io_free_region() {
+	if ((mr->flags & IO_REGION_F_ACCOUNTED)) {
+		WARN_ON_ONCE(!user);
+		unaccount(user);
+	}
+}
+
+-- 
+Pavel Begunkov
+
