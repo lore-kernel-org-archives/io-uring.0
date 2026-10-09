@@ -1,111 +1,82 @@
-Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA5A3431F8
-	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 14:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F7D38F94F;
+	Fri,  9 Oct 2026 14:54:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791556431; cv=none; b=Jg0+gqgY0rfhRj+J+JhfmRwK9dVhWzZoHwYDKAHtkGAXtSc5sBL0r0PhjcHLDsgrU5CH9T/ZZODwv3OzMjlyMiQMdWH1OhBy4jHml09bCEvixMTG//O97DYDnmpE+93jJLy9ZYiqL6uPcLyeX5X8rHqbFopJFA8Wm0Xsgj5n0d4=
+	t=1791557665; cv=none; b=Rtyo+65lwBUD6V4J1ZnfzGFiG14DQr9sawMv+AFAEPsWdovGK8AiNa1uVk5+C1ux0FunFcv114OcYSm1OAYhTw+5BwPbItKzlJyov12MKaeEKZZLhXtkZ6ozUuVm83lUDCRnxJ6CTrlMcxIg/sTJ8Ok9WIfND9cj1gkxvu4pXzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791556431; c=relaxed/simple;
-	bh=xv6zzbRXfWNmHN3kY9ySRTd8niMhVJ+PZQRMETxvjvQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Lvu6+j07cZpRHvGVF1+uUHuujHjUH57xTL9t31G0PKipOkh+QVvfHbtv33a44la1q3N4s4raqAv8U8WG0Fl8gcDRGSbk5yq/W/wkNSKNV4wa4pLTLUhob8kSoaWwzywmoDQ3AhUGsnyTJoyVPVefQh2wIaJknv9lHP5mONthbOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=MxvDta6J; arc=none smtp.client-ip=74.125.82.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1791557665; c=relaxed/simple;
+	bh=mjLRswS6bYNfNkqCUU3C/HEsiq7eO6CnV8GdKO2vuFs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=UkTd9sdMVEN572eX7nqVwTeKgJCw8B720gSixBu719Qs0J9TYSeWh0HezwPqk/MYT91tHTrm9IsUv3t0f2wU8MOtW1FdS2FPdiKTatv43g1v32JzR04XcOd4kG4r3405JuAjumO/eHbNbngQ3vM1/5HHV7BTboKzwKk2CVUjzIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N453kPhc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="MxvDta6J"
-Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-351767ef18cso3528085eec.1
-        for <io-uring@vger.kernel.org>; Fri, 09 Oct 2026 07:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791556429; x=1792161229; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GzAOi+95u4YgETIpz8cOgOaDACFlaO5G9IG8/tN+Sec=;
-        b=MxvDta6JyZthODVU2DTgsdtEcL5J0yg6i3zBSPToGTf8rvilZOlffAlF9MEcK+MssX
-         GPq7nhc7NPlinUsulGetb0IIi8671RGSDJDi6qzPyzGgHnHt5uJ/raB/AtnHsPMEeG20
-         uwZ/fslLZ4FRlsJMwbX58PFKpyRmZPsa6b8eSMx8emUATt5/SiwgdMewCVqmFrAroewH
-         7LJ3cP8EktLYUtSMrNDEUEY8mENU5E3D+1wW8MtGj1XjmcLhxLH9UceCL8c7g8Mpqse1
-         d5z+9w4EiVtD2t2facH8aFPNA+M3me9CSm7Ph7W4rjV46/jrUSLnY3zqgBWAXQ/6Cxuu
-         WwRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791556429; x=1792161229;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GzAOi+95u4YgETIpz8cOgOaDACFlaO5G9IG8/tN+Sec=;
-        b=v0f5MQcfiMjv4E1NakVHItHl/syo5bca8C3UO2eiUJmblCsLlOBzv3NQD1ivbdlRqH
-         vW8JIu0qnaOaZFQFlHgv0JoevSjpc2vFgkmSN8wOFJU7sdvC/+2Tw9ckZ4uz9BhV05jc
-         spNN8U2RqgDiEWtjAO+cpcG2UuIYKXE7Sz8i819eGcBN8azjVP0To/OslUksAMwgipJ2
-         1nLz9BydsU+suCH2+wH8zh+cKgt11RJc7K1pMHGXvwCOA/GZ1ptFnhivSwWu2llYmqYb
-         pBBJbvr7iDAUS7N86guGRNPEt5GdYFu7Z/sRA+HzSr83rSthddOyh6SWJua/PWIWd0U3
-         Llng==
-X-Forwarded-Encrypted: i=1; AKwUvBxxo0+ynK3CMSdc/oS1uFA5dquKZMkvIUzj28FackmX0agR6Zt9TXEeamesGCQnPwG/RGRMN5lhdA==@vger.kernel.org
-X-Gm-Message-State: AFuF++mFb6xLu2+y0kd1FX/o5MGp2eXE/pdLHSOCno7thSpjB0mWbm2Y
-	PU2XriUek1QrINfZwN/MVjM07mh75k7LWzEHzoaD0UtEe58iowsbD6DwWhYwdCdBQWI=
-X-Gm-Gg: AYBFou2UBMo+vWCluGymYt7XlYkHwPN9GnW0qdPQFaS0cQzMzG4dwMVSYfiKhpofJyi
-	guqPvnx2hLm5dJvBI5UCMCH5XxxiFDvLKi/1vH2iBVCaFCf5nFEIplbl+ZRpLgRADmL5tnizZpp
-	7bUaCZggf5t47WZkUU9+rnw0l6ri24dhHEhGanoqQtQ7s059b3RbiCrmI2ccbmH9J0ikq2YRRBj
-	vVrc1qWN+ZOUlvpj3v1pfKABXmUTi/CSMjIb52+axRiXPfixKwU4N5c70i9RMoHjgOqXTS2w0+f
-	ViCrvdRa1fNi/GlVu8+DK2wSSbjEmZjRHiHxOi3gEeEAxO3Egj/mFwNBWG5K/3VXuZ/5NGnFUDv
-	u2qwKdUAfCsrJlvcS1JSIb3LCBFfxS1dqLL5d7yLwZw3gyvUH7hjAYHdcJ7yD3UEWDofhy6wVYX
-	EcMsqvzonZI8spU2HkwFMpT08SGNEyYFykm4y3PQDLiGGQesC3FJ9cpSNFxYAtK/xujzeyLsSGC
-	TWSjqV8ISdJZ5gQJg/T95VS9cDXsWGkNMShisEXUJVrx6/mtTqep5Wb77p87X7TEuntvCavA9c=
-X-Received: by 2002:a05:693c:26c7:b0:351:73cf:80d2 with SMTP id 5a478bee46e88-3537df8b001mr2961994eec.11.1791556428814;
-        Fri, 09 Oct 2026 07:33:48 -0700 (PDT)
-Received: from xps16.local ([155.98.132.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3537cb1e05esm8003444eec.25.2026.10.09.07.33.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 07:33:47 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: "Cen Zhang (Microsoft)" <cenzhang@linux.microsoft.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org, 
- linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
- AutonomousCodeSecurity@microsoft.com, tgopinath@linux.microsoft.com, 
- kys@microsoft.com
-In-Reply-To: <20261008191602.45101-1-cenzhang@linux.microsoft.com>
-References: <20261008191602.45101-1-cenzhang@linux.microsoft.com>
-Subject: Re: [PATCH] io_uring/cancel: don't spin on local work the task
- can't run
-Message-Id: <179155642662.219229.2527920169574410888.b4-ty@b4>
-Date: Fri, 09 Oct 2026 08:33:46 -0600
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N453kPhc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D700B1F00893;
+	Fri,  9 Oct 2026 14:54:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791557664;
+	bh=mjLRswS6bYNfNkqCUU3C/HEsiq7eO6CnV8GdKO2vuFs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=N453kPhcceyGWefpyyMkh8h9XNCBS2zyx62fLFCZRLojtnDUsuAvNuscHX53gFm3s
+	 IM1CCByH5Tjo8ZftWEx2BWhhWgfCQiJf6R/N1J5CNQtEIkPYX0fuTCQEY+96lpkm/V
+	 LysX3sYmqrMmYl/WoitGXFB9HBGQ2JhmyBkQAyMgkgNIKvli4t6LSjnGOxcqPBlLeK
+	 yoa4+nK87WviVIJbuBSYG/hc7yw83vA0zitOFAt8XRHSasbv0q9CqQSBVesQ57fRXi
+	 5dGc/vpGcRPbgap7ZChLUq9K+QwoakuIsoGHYItI0pyBE0OP/LM6BygspXkHlvq//v
+	 0ACTE6QqbckhA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Mina Almasry <almasrymina@google.com>, Luigi Rizzo <lrizzo@google.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jonathan Corbet
+ <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Alexander Duyck <alexanderduyck@fb.com>,
+ kernel-team@meta.com, Andrew Lunn <andrew+netdev@lunn.ch>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Pavel
+ Begunkov <asml.silence@gmail.com>, Jens Axboe <axboe@kernel.dk>, Andrii
+ Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, io-uring@vger.kernel.org,
+ "Mike Marciniszyn (Meta)" <mike.marciniszyn@gmail.com>, Weiming Shi
+ <bestswngs@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, David
+ Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC net-next 03/15] net: Add memory provider capabilities
+In-Reply-To: <CAHS8izP1vXB9ro7coamL7MUvTJu0kWzej71T2o5y_GYpJzFB+w@mail.gmail.com>
+References: <20261002190018.696925-1-bjorn@kernel.org>
+ <20261002190018.696925-4-bjorn@kernel.org>
+ <CAHS8izP1vXB9ro7coamL7MUvTJu0kWzej71T2o5y_GYpJzFB+w@mail.gmail.com>
+Date: Fri, 09 Oct 2026 16:54:21 +0200
+Message-ID: <87zewmq602.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Mina Almasry <almasrymina@google.com> writes:
+
+[...]
+
+> Thanks,
+> Mina
+
+Mina (back from LPC, sorry about the delay...)!
+
+Thanks for spending time on the series! I'll try to address all your
+comments! Need to think about the napi kicking a bit more...
 
 
-On Thu, 08 Oct 2026 15:16:02 -0400, Cen Zhang (Microsoft) wrote:
-> io_uring_cancel_generic() refuses to sleep while any ring on the exiting
-> task's tctx has local work pending. It assumes the task is that ring's
-> submitter and that the next io_uring_try_cancel_requests() pass will run
-> the work. This does not hold for a ring that was still
-> IORING_SETUP_R_DISABLED when the task got its tctx node from
-> io_uring_create() or io_ringfd_register(). The submitter is set later by
-> IORING_REGISTER_ENABLE_RINGS, possibly from another task, and only the
-> submitter may run local work on an IORING_SETUP_DEFER_TASKRUN ring. To
-> the exiting task the work stays pending forever, the loop never reaches
-> schedule(), and the task trips the WARN_ON_ONCE() once and then spins in
-> do_exit().
-> 
-> [...]
-
-Applied, thanks!
-
-[1/1] io_uring/cancel: don't spin on local work the task can't run
-      commit: fddcf4c5321b3ea5f72166c3fd36a9d1c34f80c7
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+Bj=C3=B6rn
