@@ -1,128 +1,116 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9013BFE4C
-	for <io-uring@vger.kernel.org>; Thu,  8 Oct 2026 23:21:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791501667; cv=pass; b=R3EFjlh3cwRUfk9gA7RuwrgNE0/TKImqbkjiyee5Ms0m4y0yKbJaczSzVlnUCKBUNcdJwS98CZpwb6ITDsma43y01VWWu0r3CzttJ5jibzE73pYKTRM3J0pWM4cltg31nV/rOCuIjHRoTGcUpKUPDbAjfidnVvB0ZJX/3h5XoMI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791501667; c=relaxed/simple;
-	bh=iOPXpz2hYSa7f/K56PPGBIt0889qKAPqpOv97irhDwA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ZgFiaRIMIeWFqKWKre1t+WIzrGucIwg1SSCTuecotxbxL0/KJZkZFE3tJuOvpN5+Z3QeFlAqoErSGk+X+RtRnj3FHMOFwQFY4shc+9eHAekijuQUHM3FztssKMWJtoxGX2nJVdsMjsgr/FxsyrzxbxqcubGkl1eXcSpB4fjkDjU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1x+39aa; arc=pass smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F443B0591
+	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 04:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791519334; cv=none; b=Txs1XfN+tbKj0Pqh9k3P7T8Q/8Pw/qYEiK/wKVS0rRilMLiJUjJ4SpznO6r8ZhxzP/KkeXflDUeH4aL/gQMFRHF0EH0kn0pItphMBuK+WpjQifnhDiAsKIuYVzfDtOICc8l9zPOCtNDe4bG/gb7VYoajC4TTCILQZm/jr7oWi6k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791519334; c=relaxed/simple;
+	bh=obDhGb5RLj9PYZ2eyCinsmiE9t59PJFY5sRh7w8PNpU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ovIzN5ZgsfaXuIaGeHMV6JRkrfWgGdNxQrUCwmzguv1DF9xxEtcFtK2AhnncUAENJkzhDCloV0WnhKheHHUg/nRzM/h4dOWZtaCvIAvviq2hec3DY9yYaiiwqXUHIQM8pZx+mSeA0N9Mu0PPPLYj4+0LWR8zWvKk/VdEM3GVsS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu; spf=pass smtp.mailfrom=cs.unc.edu; dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b=kZpnoeZP; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cs.unc.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cs.unc.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1x+39aa"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-8258ac98bc2so4568371a34.3
-        for <io-uring@vger.kernel.org>; Thu, 08 Oct 2026 16:21:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791501665; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Gthff/nrAfLBISgaxNKo8sV3kvMLx/go4/NZs9cPn2S/3JedoV+1hpzTRmoUedZc9O
-         6AkTgQ9Dt5K7beKNTBoyq2i3cIUjy9JFoVysSrnPLUkkYOG5U6xVyVNYUGNPMA3XtRm3
-         WBjomWaaDE+9bnjnY2VmFEtYKqljoTEpS7Ai1NY+kU5dUo3l2MevrbTmSNegE6Gad5eR
-         DDKLqhHtmSZETXvKWHDSNZnpqz0Oz2ZnFUDnzUFAjqtCl0t8Csb6E/vq7yYlQkd7+tRJ
-         goM5DHUcnlcpaXD0FZ6r2+lxUNCsxEuRtzPtFbdn70eJqtUZs5OzXPEa5L5YS4uoI7km
-         7K6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=CYDh8h0Kh5ZwMO1xcMsV77KQODdkBTwWicEx9ndsYd0=;
-        fh=WR+hP0CuMafQvKPT06McXrBFnHzj5eybKzLq1YqhV68=;
-        b=QgBl6euRyJWNnkMlNGR2JfITjnIzvtKvrIFq8+OAfwAl20ygJgG0aGjd8hf+TomnAn
-         Swb+eIQKGiy47MWXDpUEPy0uhHLaKyQ6OxytnbNAPcycFPDzDcw7QmnxDs1XZrlcmIdr
-         elOBJ5IK1bwvPC7na3T7edP0A8PeiJLGeTm4JAboaA0Lqp/Vc+T9M+lTaO5i+W6wfCwk
-         LtVGoj3y+KoXiAtBLi/aA7rs1n4OvJHbywCyNaG58OseRpFVObXl3oRqoM+eLYWM7cZy
-         Sdi2M+UYGchK6SWDKYLCnRb+en2SZ8jcGyMLY6eNMIOu8irOmBEbd9bvpVfLRI+qgRMj
-         RwyA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=cs.unc.edu header.i=@cs.unc.edu header.b="kZpnoeZP"
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93e515769d3so335781785a.3
+        for <io-uring@vger.kernel.org>; Thu, 08 Oct 2026 21:15:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791501665; x=1792106465; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CYDh8h0Kh5ZwMO1xcMsV77KQODdkBTwWicEx9ndsYd0=;
-        b=g1x+39aaipH/4zgn1F4anxnDe25tYdGreQlzshvMWID2BmqcxygmIkGlPCd1o/8Ddv
-         8wwt+OgA6OmRQunp9dOik9uox/CBRXgNa/GMGyf4ngXfnKrugO7qTQeWV10ndoRgJJuD
-         zRI3Nrj903Eubo+Vx1RK1ej9H+H1zRngIW4y6Y2H81qcatfyRTOqX/WM98FRP1rRnP7e
-         RyTtqVDrB89pCvOscZRzGnCKSD7uNwR7tSspVtAjSGO5tDL9mURxYngwTHL0pCxNbhP1
-         DzgsA8jo04yx/0msV3GMpTpSl6bGCRZMaZkMllAB3t8aNERk6neu5fKhrOLOf2BzydrG
-         PTmw==
+        d=cs.unc.edu; s=google; t=1791519319; x=1792124119; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GnWq/2eDeNny1MK29b1wAOjSKjT1sD+08M0tNeVnBUM=;
+        b=kZpnoeZPlcvKM0n9ji/eQOOihiVhLVb5lnDDkenAEGA2XoYdXbHy9WCxh5xn7CHsgu
+         FoVXGD0WEgKcg8pT5pQwBYqyGT25XPl/ejMgHN9mIp/2UGkumZUz5woaEWJR4Y5vi7WQ
+         U8QUwch5VMisthQTiBIGfnsSfzgpHVuhdDGas09I+JGCyg4aWI7jLhoeGQeLez0kdCOw
+         rxBF775qHoZoj3yTp9SvgCRZFdLuZUSMy8KmeR50pHOdpZWKnM7/Imp3mD2Z674WoZkW
+         sxCzQt6RzRLEr8bfJ5XcSxV3upYwloV81lExbTX9FnzavZDS7/5+y+K+co8FAPTht86J
+         BKig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791501665; x=1792106465;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=CYDh8h0Kh5ZwMO1xcMsV77KQODdkBTwWicEx9ndsYd0=;
-        b=C9CNudsIMkswEIGLXrTtWO0PSENBAw1qWEZCcsd7UPJK1PhwLgkxvey4oB98W10Aew
-         HWmelAQfuklhSUaeQXFXJw5PhVaxFUAinaxtRIFnI45m6YU7aMIqYjhqN4yUk8HxyrTL
-         exGLeBvzhcs5UamWiuexuPjEKAPLxCRc7PMMBgrMAKQZifCCQ70VvoEWAyVOmb52vj9S
-         2SYh+SqGPTIm70BFYo+oUNd1HckBLdTEL3XjQ8/+JiE9RHdeIrWmCidO2wyNVgH9fwg+
-         tTxP4WB6fbYPvO7zY4ZIXGJR0aOx9F+KWCKbbBKmYiHRnSzu3RihwzvbsndSZUK/LtFb
-         avQg==
-X-Gm-Message-State: AFuF++mCYOHYiQg71AOTZiSdqYVJ8ISTXugVtLsZR+E901478N6YIwlP
-	RRBAVGB5VC7d/nuH1fK4lEYZVz0Nhrdowhax1CYhVYbmBRPUYyCM/JmXXX5h3qEfAQB7+QUjFzy
-	Ymnvs2gf+11PUj9i1FEgxORU9t7g39AE8U/5n
-X-Gm-Gg: AYBFou2Yic9sLSxtqUDmt5lSj491F2eo4L2lFMdy7FwP335fdlauNvOg/1LpW3y9HMZ
-	Fii1oW6lYy1Xyis61M4YBiges0iCquSRMpILP2tELYfonu7ZKvxj6KNdhyYu5/4f66TdQy0tcFH
-	He8IOzvFgW9xV8D0y23hNbByfB36ZDoOBtdGWntyhS0mxeVmmz/gqoTjoYFwSLldwC4XO6k+JNm
-	OE/mJFG7M1aozmuXYGfSwT3g8GXQP6OMKSSHHUPPoApqSVfwtM3GM5TTzD1LSbOTvd/pe1hiaUa
-	Jb3OWX2X8ilJYadLbKfFYNLK1Uk9NC5b9dPi2hQ6H6wSAFaoOtozivUs
-X-Received: by 2002:a05:6830:67d6:b0:81a:aa47:3d5b with SMTP id
- 46e09a7af769-82ad00b299bmr7823152a34.28.1791501665135; Thu, 08 Oct 2026
- 16:21:05 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791519319; x=1792124119;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GnWq/2eDeNny1MK29b1wAOjSKjT1sD+08M0tNeVnBUM=;
+        b=BCPPv+Fr4ZBeKi787KdwBiHei5SxspKM+6yjDpt3ZQADK94x0VNm64g8eqVKDgi3Vq
+         CSUvuxvbimPB8M8r3rG+gv1NMlHMruavwGP2sfjuxlvQrsMfw0sPyCbrFKCX0Mom9X2T
+         k9DO4ZBY0VjHAjDgQMCTVpSf0izepEFfbFQSlbVXGXMEPcMiER52a+14qF4Ifwbo9vbc
+         AWkNLvXDBQvTUsOfmRfKIHXn1ANwzLwKHc/2BDEJIf3Y7gbewJ7ZqJ8yvc8pkJnBiyDc
+         EgRO2mgxt1roLGCTU/GqCQ+FnKUSqFzPcPSgVq73UxdmLGkPvCvVBzwHcw5Yg5wFLeiR
+         +idw==
+X-Forwarded-Encrypted: i=1; AKwUvBw0EIyCyyV8jUOuZUlOuKmNsN3CYUWAOH02/o9rDItOrIZxwOx26lrqquwgxHygQxTOcPuiJM2kGA==@vger.kernel.org
+X-Gm-Message-State: AFuF++mE1oqsaO+iQnVo3yS6PfRI1QMx4Rv9lsiCF0n0Ed3cRE48KFJN
+	a1pPw9Ma+5CeQht4xlvQWf2a2GsJhCzPadefrLycOjZTy/Rz9Ct6mRcHQxuqxrGeYw==
+X-Gm-Gg: AYBFou2SjLLOHvw7Z4RBB8Y9ZpQAzad97JsM3he7opA2iNbQSaJDT6ljc6srrDwpn/i
+	UlExrCqKvg2l8vfzD9GVI0aFN5teYCjLnjQbyeKOXwQyIGn7hKLsdNuoiXDbPetwm5IdEBgfK2Q
+	r0exDuXStNj0Qh2aa8JIj/ZV9jQSkTkVVvIMCUnX7UIOwnXCGiMjJVqYuVbsfhB1KQlhifNxDWA
+	cX6FUysiDTROyjDMx5X59fUnFgXbvilrCyGd/3ABAqaDBmRGSH3tMGCyFVBJmTTODvtrspicqlN
+	BqYJoUiwh1pGChMGC+S7viLWahNE2mkzCo71ykfzk1hlf1QFABqdeoJjgT4t9W5N++VP7FBZULg
+	6vou6SD3V2KEbwDUkixjCCZAiNOfc1TdrdP3wukb4i+LB+C0c8oMKau7dNgH8mcQJ3uCfM925kA
+	RUlXy5L0IFOYCn59FUfJeiZeI4YPFUBMx0X3QUm3YznwrbzcHNMqgz+rI3OKH4QsJbLRSYr4ezi
+	92bdnzEGKU2juGHn4cL2Q==
+X-Received: by 2002:a05:620a:17a3:b0:93e:84e5:3c66 with SMTP id af79cd13be357-93ebd21ffd0mr104850285a.40.1791519319093;
+        Thu, 08 Oct 2026 21:15:19 -0700 (PDT)
+Received: from cobra01.cs.unc.edu (cobra01.cs.unc.edu. [152.2.130.143])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93eb98906c3sm96184185a.26.2026.10.08.21.15.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 21:15:18 -0700 (PDT)
+From: Hengyu Liang <hengyul@cs.unc.edu>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>,
+	David Wei <dw@davidwei.uk>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: Re: [PATCH] io_uring: do not charge user provided SQ/CQ rings to RLIMIT_MEMLOCK
+Date: Fri,  9 Oct 2026 00:14:55 -0400
+Message-ID: <20261009041455.1974346-1-hengyul@cs.unc.edu>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <3b9d9c06-c6e8-4166-87d9-c7c220ad0b58@kernel.dk>
+References: <3b9d9c06-c6e8-4166-87d9-c7c220ad0b58@kernel.dk>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Eugene Gvozdetsky <gvozdet@gmail.com>
-Date: Fri, 9 Oct 2026 01:20:55 +0200
-X-Gm-Features: AclHuK8M3xCjtFcMn7RAHVuzkkomCCsk-2Yqd7b6t-o0ORGbVaUlk3UTmg8eljM
-Message-ID: <CADx8=FLXawk5eeEUTUiMKKYh_61QaQ3V1CeEfYJ1xv+pwze3AQ@mail.gmail.com>
-Subject: Using task-level io_uring restrictions in container runtimes
-To: io-uring@vger.kernel.org
-Cc: axboe@kernel.dk, brauner@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi,
+On 10/8/26 1:11 PM, Jens Axboe wrote:
+> Honestly, after taking a closer look at this, I think we're better off
+> with your original patch and one on top for pbuf rings. Please check:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git/log/?h=io_uring-7.3
+>
+> for the top 2 commits. If you can re-test one more time, that'd be
+> great...
 
-I'm prototyping support for the 7.0 task-level io_uring restrictions in
-an OCI container runtime (youki), and proposing a matching field for the
-OCI runtime spec:
+That works for me, and the two commits look good.
 
-  https://github.com/opencontainers/runtime-spec/issues/1323
+I tested io_uring-7.3 at 9f0c88b7f884 as a user without CAP_IPC_LOCK and
+the default 8 MiB limit. Number of objects created out of 64, with 4096
+entries per ring and 32768 entries per buffer ring:
 
-The runtime applies a policy built only from cBPF filters (an allow
-filter per permitted opcode, then IO_URING_BPF_FILTER_DENY_REST, plus a
-socket family filter) in the container's init, before seccomp and before
-capabilities are dropped. I avoided IORING_REGISTER_RESTRICTIONS for the
-runtime policy: it also denies SQE flags that aren't listed, and it can
-be registered only once per task, so the workload couldn't restrict
-itself further. BPF filters stack.
+                                        v6.13  v7.3-rc4  9f0c88b7f884
+  rings, io_uring_queue_init()             64        16            64
+  rings, io_uring_queue_init_mem()         64        21            64
+  buffer rings, IOU_PBUF_RING_MMAP         64        15            64
+  buffer rings, user memory                64        15            64
 
-Two questions before I take this further:
+30 processes with 142 NO_MMAP rings of 64 entries each, which is what 30
+PostgreSQL 18 clusters with default settings create, all get their rings.
+On v7.3-rc4 7 of them do.
 
-1. Is BPF-only the intended way for a container runtime to use this, or
-   would you rather see the opcode allowlist used for the outer policy?
+The per-user locked_vm count stays balanced over ring create, close and
+resize and over buffer ring register and unregister. Registered buffers
+and IORING_REGISTER_MEM_REGION regions are charged and refused past the
+limit as before. Every liburing test gives the same result as on the
+previous tip of the branch (c746673517c6).
 
-2. On 7.0, restrictions are dropped on exec once the task has used
-   io_uring (fixed by bc0e8faf90e7, tagged for 7.1+). Ubuntu 26.04
-   carries the fix since 7.0.0-39. For runtimes this means a version
-   check is not enough to know the policy holds. Is a runtime self-test
-   (restrict, use a ring, exec, check) reasonable, or is there a better
-   way to detect a kernel with the fix?
+For the buffer ring patch:
 
-I also wrote a liburing test for the exec case (fails on 7.0, passes on
-7.2.9), which I'll send as a PR.
-
-While testing I also found that task register restrictions are skipped
-on rings created with IORING_SETUP_R_DISABLED; the fix is here:
-
-  https://lore.kernel.org/r/20261009-iouring-task-restrict-fix-v1-1-a49daf55a12c@gmail.com
-
-Test notes and scenarios: https://github.com/gvozdetsky/iouring-lab
-
-Thanks,
-Eugene
+Tested-by: Hengyu Liang <hengyul@cs.unc.edu>
