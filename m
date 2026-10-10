@@ -1,128 +1,310 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FCC4EC672
-	for <io-uring@vger.kernel.org>; Fri,  9 Oct 2026 16:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55EA3C8700
+	for <io-uring@vger.kernel.org>; Sat, 10 Oct 2026 23:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791563786; cv=pass; b=jggueueCKsqdaSlXJ0jJOSP+jywmEzpcLfiQMJrE6TiLanJMAoq3PMnSe0HvwI0pu7HbamYzMLBvglRk8E4uh0H8ZJGXxKlBwWF+Gxk78+iQKfHH/o0b/R70pXLEA9s5e6VJSlY3xHA88MiJ7QEAobLjfwAXBDgEVtvpGgHv2EA=
+	t=1791674306; cv=pass; b=RWPIxGIBSzvO7paLKft1DJwVTXtrEIZuOihlW1rywvCYvE1XPAzrz4uiobebzr+XcL6fiwp02no2v7+eij0u6nErr8HmRH5tDgZ64aYztMCXS4s8//OEQ+8vTTwQVRRSj3v+8LtMs6WOcDfkEiOidsuTvOLE3braSyBK/OADcuE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791563786; c=relaxed/simple;
-	bh=lX0tsF2q3YdDjvQZqnA44IvPaNuhxZo+PRXzkTKRxuU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BFrcxWvPCVoFovIoKtTLPBQodA9WIjc95mxFh6bzIkX6XyXIPme/X+VfNGjnTWU7ztl5iu8HO3HKquajTtt4tSqDo1dh4gDhFgJ0ksS2ccfMojMVP+oP/gmec7a69/KRnp/OWBkonayCJ+TqkWa02MCLMgZorsZwJRJx3YrPGAE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U2rcV6/x; arc=pass smtp.client-ip=209.85.161.43
+	s=arc-20240116; t=1791674306; c=relaxed/simple;
+	bh=355EGaUJYFZp6jfpqSYkvIRp6cHIUjGi7YkRprB+maw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ac00d2lRRLbPj3SwsbHdrc27xIFTLDGeBnub1DiL+OEzLXdef+KH1k84yhKB6n4ETBadvx71uICaCIyLWQidmSfNWkQIAfdHeIt7+5/cP+tqpUXsgHnu4vCikTJkSvyooHF1h2ePnqYMgwO76QcTaBTdUAy665ttxkP07Q6wt4M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FRiOoL60; arc=pass smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U2rcV6/x"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6d290b10a35so20047eaf.2
-        for <io-uring@vger.kernel.org>; Fri, 09 Oct 2026 09:36:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791563780; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FRiOoL60"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c2e36c3478aso115859566b.0
+        for <io-uring@vger.kernel.org>; Sat, 10 Oct 2026 16:18:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791674303; cv=none;
         d=google.com; s=arc-20260327;
-        b=Q19LgN35EoKVLXCdSPul9PvdkUOt6iD4lCAwJOvrKZOP9NLdAWkF5v/mZbxH/08y2z
-         w68DcwLwOga8VgvYYjYWcx/a8I6MtQfai18BTgt2DK1huiR13Alx922XvvKsRhURJ0th
-         7R7+IkdB/LDWBH5OMiLReerb+kg3zyNzYrKZoE7uHFYOxBkw4ZbnP77FoaNCxocUmQ+U
-         I5DIFvyE90aXcusgQItbVoNXRPM88LK3J2jzX3PmAdi+kLUmdB74sB0JsedUeSYxB3sP
-         3iooLXyA1C1Egu+OHpTn0Vv1+GmGEyPKt6YZZQdljqoFCRC3wRRFLitK2FMS9ss6FB98
-         iuxw==
+        b=q/WVtusTvcjncLwmx65o636BnAybP3U5PjuFBx1rY/Kxm9uMWxWWYIIB8fTu0WbK04
+         rJhHK/tvoLauxRun0PzbDPz461ogMFq1m3bCuMRyW7IAByQ82RSVwC3gBEwLwsJkh9yK
+         LYP+/mKKdW02i7H0241++gsUDfsxdhrrRQ0xZHcdR1zyWlhzU3E3EqxiE/PfVc98W247
+         nZTaVm/9E17T/PiRwNhDh9sBZpNSun7gRydLyfFnh8WQqshKjDdGcUTgTChwexGRf8zi
+         lajhsk31ERLK8eS6C4iDXIK+pN27UKSduurywm1mO4EOQ/SJZsndD+p8LKdGafVoRSs4
+         Zbkg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1uyHjjKmtNFnZbUjWXycg4dD6BHAPM/N7wxrJDTWwM4=;
-        fh=uVf5YuuU/F+B1YHA8skKqx1mQhSL53yKZ8/hH98wKNM=;
-        b=aV+Ixe4TsWikU53jK+1LsmkVtnEmWVhLDe71lQDoPA+/a5FSFFn6HelXfHWqE1Z7Hl
-         zaoNCQ02KZVkIlgrs022f94uBBJOic/X5UeeeNJu8mKTg2WpTTx5QewheIAwJVNjohEL
-         lHe97F+kwu1Bx1eGZ5a1TDJz+3TjPxAbdzJrgoxzp1hG7e+ViM/3L/usdANRMvh1RS8B
-         InZDo8lRk4gAgHysNFn+YfGTl2Aj6rYNDlwi5JthCpxP90cU3WLvVNpJRaZXvOGHdbih
-         ghrcc4IB8Kyc69A0kGw1dIaHn1DzDbOjnO9gNLW23siEwKjkEiY7EWowM4OPst8JrlYC
-         QrJw==;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=/r4ycoL5XfheLLaA5R+/7a/5lId96HKcGHX0fF2Fjio=;
+        fh=gqtBSSkh2l3QyyTbypYdFLTfPohIjR/IUhshfZ7kS6o=;
+        b=fmbEY45jdWEJQ8oLoZqex0iRBgfW/t8Di03MenSbv6QYZWaYA+AHNLS89zfr8IZrvm
+         /6fRxUOo0UMe5i40oZEOjNMdO0L+s4ryBVUpA/l2pnX+YAzLgu3kDtfNhQprK8dKXcik
+         LqoIgGzEGVEubYOIyIFrxy0ZcR4XvNLWRSui7ofLbFemyWZC8pGQQu3bxop8y/wHuCik
+         yCvGZtGGDT0qGoGpPSV/L0wxDTI0Hvm1WcKMcOL1opiROlg6T287pNetH/tIaWhR7Pvw
+         h1kZBcY75f8uTUsrVHceSxlRWmkC4/cEK97cRITakvAmwnlxzfHD81j7oATxaULWJ4IE
+         9xiA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791563780; x=1792168580; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=1uyHjjKmtNFnZbUjWXycg4dD6BHAPM/N7wxrJDTWwM4=;
-        b=U2rcV6/xcEY+pEhOzdMWu5YekoCE4vEkZYnQGdz5rZOraaPlxR10PP+9/A7I96h3xl
-         gJ5KwtbTp7AXu5LBcpYQs5Oq93UIA76S6/eXe4jn8Ufe2dgb2POmbtN6F+ULrgU6EoxQ
-         IeTOiiwslcQNPu6t0zYfOpVIP6MJZtyccIJkLjUJkRi6fXU+2z0yTkR3s8AKfVwjG3y+
-         T5Wschel/dXqI0ezIc0fBvuYZNq/AkuYzNILqs1VyXmR5+lfRHSbudPp9owCsRczSlPW
-         jEqbyXVjJQnLnGHmg1irECN8xfLwO1czur1sI0RrQ1O/k9qbArBLC7EhI2TNVq9so2Xe
-         jCmQ==
+        d=gmail.com; s=20251104; t=1791674303; x=1792279103; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/r4ycoL5XfheLLaA5R+/7a/5lId96HKcGHX0fF2Fjio=;
+        b=FRiOoL60ig2HK+mClImRndM4XVIM6Vqj0R0K+0P+/jDRVBlQ/ds6EsW2KMPLg+QjQt
+         Qzd4h7talT7GAUzoOsbWuceo0ptGVqEiDSTVcg/ZL6SLgkKNPLFGZH4EPEPwlhXqmoz6
+         NBQyghecWuMmaFn4mKehCmA0bAAVTye5ZEpnjGw3i8SmTG7Bu/Bd0klXcPd6gAmMUXBL
+         RCGxEl+VbmlxnWObWrvMxHF36M5w+1Fre2jobszYGl6R2Rf0HdQBoTPRTeWbeE4/QC8s
+         1pQeOeVyyIwgkjt3hLnmQiCePmho7L/BuBONWRuVvtbghblCqCW7QRrzEhVxulIiw2cn
+         fuxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791563780; x=1792168580;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1uyHjjKmtNFnZbUjWXycg4dD6BHAPM/N7wxrJDTWwM4=;
-        b=SCrVoPkrefd+DpzqjutcBndIXD73uk7rRdSuDWWfNuUzZpKFDvetsmbU4OZi2xRHCT
-         QMEd6WbfKp1WUtBz5dJaiy/br1yO3fUNu356frjE0TlOfFwDkgVCtN8r7EhhbWdhO+TA
-         SRMtW+xcPJXzsUti1k8LLnPWhfkbjpmIo3YYz/m5VqbWxg7Lewf7gi++JVRCveWcOicB
-         5S0+MZs9S4B2Lc5MycHdvV76vPctBLWj25mJ/YOlWL67AfTSu92oOGsX0AESowBniw5Z
-         husIiMPgsY5lrAEp7J1cZ3uAsb6JPwde44eiRha4owR9IBY07A7JN052GFUGjJqHmB6H
-         zK7A==
-X-Gm-Message-State: AFuF++l0CZEWrDFaXLF0pFRlO3WgnUtwRN1NIiLrMxkAwJiYPcbFQbk2
-	+YgV2qmqtKPqcO/vPzwWIa98OR7ziOHMABwIv8y84hnybb4u0Km1vAvKlSL3bpOg6Uq7qmv47Zo
-	zcmurqUgHBXUCfPZ6Fs4Eq1CefO5m/2s=
-X-Gm-Gg: AYBFou30BnAp2pug4lHzZXXAu0hp6r34AdWfLRYqYK708VnAcHy7bl/i7ouzdLSCVo/
-	sNICz9QtvVTlViYRqbYXVGtA6oWyJ1RJIpqEKOjNKID50il8v3XGNK0w8zmw68ucT9uLVsUWAni
-	g+hquFez2upiP+VG87RH7ukPwmKe5cPDSaLKzkWSuVzae7+z4pXutd1e6eIo3ZbfI1VSlf82pak
-	/NYFOYS903OOEI3K9/a0UrbJiOiSM8L1GjufUNU0Sw9lwHM25f47w3+JLRT55wkVWIxGZOMUS4L
-	88ovWadN6O4gEwXJEiHkaLiiY+JDMqKSkvjhmPXd6SxuhkN2uiEH9Q==
-X-Received: by 2002:a05:6820:818d:b0:6d7:c2d2:3baa with SMTP id
- 006d021491bc7-6ef02d89becmr1585832eaf.0.1791563780558; Fri, 09 Oct 2026
- 09:36:20 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791674303; x=1792279103;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=/r4ycoL5XfheLLaA5R+/7a/5lId96HKcGHX0fF2Fjio=;
+        b=mEP8KY0zpYuwST7HDHkzsr12Hwkwd4LSz4mZU6TQYhScc5uQ0rCtEnqvUDrVb6kSJ5
+         bDhuUCvp7QtjClUYZGhYIecbIM9+kzxfjttsnWnu8jKh6fhjnhZXGmQgPlPEY2FraxfV
+         DUrgGp15UunZZT0ZEmuIFnkyE0PKeEZkiOxMYpEU7cJfarEm2fyyNw3GzJ9G/aXlruWb
+         6iTig0A1P6g6nVdXA9nuXYHJD+ZndhzyzH41nxJi7avt9Hd2ZI+6i4/oATr1jJwET4RL
+         C/DwYin2/slIqQVHlIyKTgolL8B6EechiOLjjvWuv3NDiPrLQ+gI75V1jQVIEE5mBgWs
+         Pwew==
+X-Forwarded-Encrypted: i=1; AKwUvBwdqy5w3BcKi5NBQ1KqvYvQy6tBch/moAyso7dyjma8eBaoXOygSXhUtpObdnag6QvJFx7cq0eDJg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLi0LaFEOlARTZM0juvmLuTdbJ8kDGykJjbFriFhdfF/NGrpLyr
+	Clca+OzAwa0PWkReYhMFGKngKsWrZK1YWhyA9r/L3thTMpb/B8iB3syEYEo2Sc1+MaXAjUMFn2K
+	yH7eYVGPuujYpB2tZGMpXT1F4AMYAFxc=
+X-Gm-Gg: AYBFou18UbqoOvbCcUjE67a8byJ5FNnr3nqzriqK9BJdetptDldNih3LQ7NDo1LLTez
+	JR0SJbJdXsnNsCbJqQXZJx5kUQIDqCuCZyrqBLL9bU/rvaxXITL5R9oeBYm5eNufhRtBr/yo5rU
+	/AJXO/paMRDzVGZ+Qcn/b7JONURhtiMVAvQgdL0otRA31Tq1uIfpA6EcauPEoJcYZgBkRK4GsCY
+	57EMm1RKZfdzAD+h1oge31ehMnBmJnkA1K5Hz2+GToATmV7p/opk4x08607w7kHwEYWj0BVR9R9
+	NwKfkxz1ySiTexlAwSpbN+GlcJshf9ekEyDqAdNtGGFaPRpXt0dXjWKyqnZ/55khpjNYqmOunCf
+	AtSx3JQbl9vHVoNH9xXhLnJbFfF8u99NQdutb0jd2JeYGQA==
+X-Received: by 2002:a17:906:c142:b0:c21:9870:c4f7 with SMTP id
+ a640c23a62f3a-c31aa029203mr562427066b.20.1791674302874; Sat, 10 Oct 2026
+ 16:18:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20261009-iouring-task-restrict-fix-v1-1-a49daf55a12c@gmail.com> <179155641635.219229.11431241640736819805.b4-ty@b4>
-In-Reply-To: <179155641635.219229.11431241640736819805.b4-ty@b4>
-From: Eugene Gvozdetsky <gvozdet@gmail.com>
-Date: Fri, 9 Oct 2026 18:36:09 +0200
-X-Gm-Features: AclHuK9FRLKrIXdlNZ3dDP1364AR2m4VT5OKsQe73nSkIxYPEZV8zv8SqdyQv-E
-Message-ID: <CADx8=FLUHGutCRP-6yxAoTOOQm+ozUodjf+7FO-6OqbxKt9nDA@mail.gmail.com>
-Subject: Re: [PATCH] io_uring/register: don't exempt disabled rings from task restrictions
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org
+From: Eugene Siegel <elzeigel@gmail.com>
+Date: Sat, 10 Oct 2026 19:18:10 -0400
+X-Gm-Features: AclHuK9Guq-V0L3VJ_CEXxIk0the-6HfwbRa7Dk_Yxlhnb03THqA0y82XVl_pC4
+Message-ID: <CALkdYjXcbwUW0=Eb52Fu1X+kLyVxVYZC0D3iEL-E+BmH6C7FkQ@mail.gmail.com>
+Subject: Re: [syzbot] [io-uring?] WARNING in io_wq_put_and_exit (2)
+To: syzbot+b0d54b9e81de55179e47@syzkaller.appspotmail.com, 
+	io-uring@vger.kernel.org
+Cc: "axboe@kernel.dk" <axboe@kernel.dk>, "tom.leiming@gmail.com" <tom.leiming@gmail.com>, linux-block@vger.kernel.org, 
+	linux-kernel@vger.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-No objection, that's better. Thanks!
+Hi (hope I'm cc'ing the right people),
 
-=D0=BF=D1=82, 9 =D0=BE=D0=BA=D1=82. 2026=E2=80=AF=D0=B3. =D0=B2 16:33, Jens=
- Axboe <axboe@kernel.dk>:
->
->
-> On Fri, 09 Oct 2026 01:08:49 +0200, Eugene Gvozdetsky wrote:
-> > A ring created with IORING_SETUP_R_DISABLED is exempt from its register
-> > restrictions until it is enabled. This lets the creator register the
-> > restrictions and then enable the ring with IORING_REGISTER_ENABLE_RINGS=
-,
-> > whether or not that opcode is in the allowed set.
-> >
-> > Since commit ed82f35b926b ("io_uring: allow registration of per-task
-> > restrictions"), a ring also inherits restrictions from the task that
-> > creates it, and the same exemption applies to those. A task whose
-> > register opcodes are restricted can therefore create a disabled ring,
-> > issue any register opcode on it, and then enable it.
-> >
-> > [...]
->
-> Applied, thanks!
->
-> [1/1] io_uring/register: don't exempt disabled rings from task restrictio=
-ns
->       commit: 6da8f402e362b2f546e2efb7167fc9597aef6faf
->
-> Best regards,
-> --
-> Jens Axboe
->
->
->
+Using an LLM and a deterministic hypervisor, I was able to reproduce
+one instance of this
+happening that occurs sometimes with a process submitting
+UBLK_U_CMD_START_DEV and being
+killed or exiting shortly after. It leaves an unkillable process around.
+
+The process did the following:
+
+1. open /dev/ublk-control
+2. io_uring_setup
+3. send UBLK_U_CMD_ADD_DEV with 1 queue of depth 4
+4. SET_PARAMS
+
+The process did not send UBLK_U_IO_FETCH_REQ. This way the queues are not ready.
+
+5. send UBLK_U_CMD_START_DEV, since it will block, it will get queued. A worker
+   will spawn here in the idle state.
+6. do_exit is called. io_wq_put_and_exit will set IO_WQ_BIT_EXIT and later calls
+   io_wq_exit_workers which will wake workers with
+__set_notify_signal. Then this thread will
+   wait in wait_for_completion_timeout.
+7. io_wq_worker will get_signal while still idle and exit the loop because the
+   IO_WQ_BIT_EXIT bit is set. Then, io_worker_handle_work is called.
+There is work on
+   the queue and this worker thread will call ublk_ctrl_start_dev.
+This will call
+   ublk_wait_dev_ready_and_lock which needs ublk_dev_ready to return
+true. Because the
+   process did not send UBLK_U_IO_FETCH_REQ, this will always be false
+so it will keep
+   waiting.
+8. no progress is made, so the trace happens after IO_URING_EXIT_WAIT_MAX.
+
+This race depends on the worker being idle and not having run earlier.
+If the worker has
+already run the item on the queue, then it would be waiting in
+ublk_wait_dev_ready_and_lock
+and return -EINTR instead.
+
+I think this is just one instance of this bug, there might be
+unrelated instances also
+in io_wq_put_and_exit.
+
+LLM-generated test case (7.3-rc6 (3857c2fe5449), KASAN, 1 CPU, needs
+root and CONFIG_BLK_DEV_UBLK) below. Note this will leave unkillable
+process on machine. If you run with an argument of 400, see dmesg to
+observe the WARNING.
+
+```
+// io_uring worker shutdown hangs behind ublk START_DEV.
+//
+// A child process adds a ublk device, queues UBLK_U_CMD_START_DEV through
+// io_uring and exits straight away, before the io_uring worker has picked the
+// request up. Exit signals the worker once; the worker consumes the signal in
+// its main loop, then runs the still-queued request and sleeps in
+// ublk_wait_dev_ready_and_lock() for a device that can never become ready.
+// The child never finishes exiting; after 5 minutes the kernel prints
+//   WARNING: io_uring/io-wq.c:... at io_wq_put_and_exit
+//
+// Needs root, CONFIG_BLK_DEV_UBLK, CONFIG_IO_URING. No kernel change. Timing:
+// the child must reach exit before the worker runs. Pinning to one CPU and
+// running as SCHED_FIFO (see child()) makes that ordering deterministic.
+//
+// Usage: repro [wait-seconds]   (default 20; use 400 to see the WARNING too)
+#define _GNU_SOURCE
+#include <errno.h>
+#include <fcntl.h>
+#include <linux/io_uring.h>
+#include <linux/ublk_cmd.h>
+#include <sched.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <sys/syscall.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+static int ring_fd;
+static unsigned *sq_tail, *sq_mask, *sq_array, *cq_head, *cq_mask;
+static struct io_uring_sqe *sqes; // 128-byte entries (IORING_SETUP_SQE128)
+static struct io_uring_cqe *cqes;
+
+static void die(const char *m)
+{
+perror(m);
+_exit(1);
+}
+
+static void ring_init(void)
+{
+struct io_uring_params p = { .flags = IORING_SETUP_SQE128 };
+
+ring_fd = syscall(SYS_io_uring_setup, 8, &p);
+if (ring_fd < 0)
+die("io_uring_setup");
+size_t sq_sz = p.sq_off.array + p.sq_entries * sizeof(unsigned);
+size_t cq_sz = p.cq_off.cqes + p.cq_entries * sizeof(struct io_uring_cqe);
+char *sq = mmap(0, sq_sz, PROT_READ | PROT_WRITE, MAP_SHARED |
+MAP_POPULATE, ring_fd, IORING_OFF_SQ_RING);
+char *cq = mmap(0, cq_sz, PROT_READ | PROT_WRITE, MAP_SHARED |
+MAP_POPULATE, ring_fd, IORING_OFF_CQ_RING);
+sqes = mmap(0, p.sq_entries * 128, PROT_READ | PROT_WRITE, MAP_SHARED
+| MAP_POPULATE, ring_fd, IORING_OFF_SQES);
+if (sq == MAP_FAILED || cq == MAP_FAILED || (void *)sqes == MAP_FAILED)
+die("mmap ring");
+sq_tail = (unsigned *)(sq + p.sq_off.tail);
+sq_mask = (unsigned *)(sq + p.sq_off.ring_mask);
+sq_array = (unsigned *)(sq + p.sq_off.array);
+cq_head = (unsigned *)(cq + p.cq_off.head);
+cq_mask = (unsigned *)(cq + p.cq_off.ring_mask);
+cqes = (struct io_uring_cqe *)(cq + p.cq_off.cqes);
+}
+
+// Put one ublk control command in the submission ring; if wait, submit it and
+// return its result.
+static int ctrl(int ctl_fd, unsigned op, struct ublksrv_ctrl_cmd *c, int wait)
+{
+unsigned idx = *sq_tail & *sq_mask;
+struct io_uring_sqe *sqe = (void *)((char *)sqes + idx * 128);
+
+memset(sqe, 0, 128);
+sqe->opcode = IORING_OP_URING_CMD;
+sqe->fd = ctl_fd;
+sqe->cmd_op = op;
+memcpy(sqe->cmd, c, sizeof(*c));
+sq_array[idx] = idx;
+__atomic_store_n(sq_tail, *sq_tail + 1, __ATOMIC_RELEASE);
+if (!wait)
+return 0;
+if (syscall(SYS_io_uring_enter, ring_fd, 1, 1, IORING_ENTER_GETEVENTS,
+NULL, 0) < 0)
+die("io_uring_enter");
+int res = cqes[*cq_head & *cq_mask].res;
+__atomic_store_n(cq_head, *cq_head + 1, __ATOMIC_RELEASE);
+return res;
+}
+
+static void child(void)
+{
+// Run as SCHED_FIFO. The io_uring worker is created as a thread of this
+// process and inherits the policy and priority; a FIFO task is not
+// preempted by a wakeup of an equal-priority one. So when START_DEV is
+// queued the worker stays runnable-but-waiting until this task blocks,
+// which is inside exit. Without this the worker may preempt us right at
+// the wakeup, reach the ublk wait first, and be interrupted normally.
+struct sched_param sp = { .sched_priority = 1 };
+if (sched_setscheduler(0, SCHED_FIFO, &sp))
+perror("sched_setscheduler(SCHED_FIFO)");
+int ctl = open("/dev/ublk-control", O_RDWR);
+
+if (ctl < 0)
+die("open /dev/ublk-control");
+ring_init();
+
+struct ublksrv_ctrl_dev_info info = { .nr_hw_queues = 1, .queue_depth
+= 4, .max_io_buf_bytes = 1 << 20, .dev_id = -1 };
+struct ublksrv_ctrl_cmd c = { .dev_id = -1, .queue_id = -1, .len =
+sizeof(info), .addr = (unsigned long)&info };
+int r = ctrl(ctl, UBLK_U_CMD_ADD_DEV, &c, 1);
+printf("ADD_DEV: %d (dev_id %u)\n", r, info.dev_id);
+
+struct ublk_params prm = { .len = sizeof(prm), .types = UBLK_PARAM_TYPE_BASIC,
+.basic = { .logical_bs_shift = 9, .physical_bs_shift = 12,
+.io_opt_shift = 12, .io_min_shift = 9, .max_sectors = 8, .dev_sectors
+= 1 << 16 } };
+c = (struct ublksrv_ctrl_cmd){ .dev_id = info.dev_id, .queue_id = -1,
+.len = sizeof(prm), .addr = (unsigned long)&prm };
+printf("SET_PARAMS: %d\n", ctrl(ctl, UBLK_U_CMD_SET_PARAMS, &c, 1));
+fflush(stdout);
+
+// Queue START_DEV (ublk control commands always go to an io_uring worker)
+// and exit at once: nothing here blocks, so on one CPU the worker has not
+// run yet when the exit starts.
+c = (struct ublksrv_ctrl_cmd){ .dev_id = info.dev_id, .queue_id = -1 };
+c.data[0] = getpid();
+ctrl(ctl, UBLK_U_CMD_START_DEV, &c, 0);
+syscall(SYS_io_uring_enter, ring_fd, 1, 0, 0, NULL, 0);
+syscall(SYS_exit_group, 0);
+}
+
+int main(int argc, char **argv)
+{
+int wait_s = argc > 1 ? atoi(argv[1]) : 20, st, i;
+cpu_set_t one;
+char cmd[320];
+
+CPU_ZERO(&one);
+CPU_SET(0, &one);
+sched_setaffinity(0, sizeof(one), &one);
+pid_t pid = fork();
+if (!pid) {
+child();
+_exit(0);
+}
+for (i = 0; i < wait_s; i++) {
+if (waitpid(pid, &st, WNOHANG) == pid) {
+printf("child exited normally after %d s: NOT reproduced\n", i);
+return 0;
+}
+sleep(1);
+}
+printf("child %d still not reaped after %d s: REPRODUCED (stuck in
+exit)\n", pid, wait_s);
+fflush(stdout);
+snprintf(cmd, sizeof(cmd),
+"for t in /proc/%d/task/*; do echo \"-- $t $(cat $t/comm)\"; head -6
+$t/stack; done; "
+"dmesg | grep -A3 'WARNING: .*io-wq' | head -5",
+pid);
+return system(cmd) != 0;
+}
+```
+
+Eugene Siegel
