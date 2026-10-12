@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E08836B93C;
-	Mon, 12 Oct 2026 13:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAD3418353;
+	Mon, 12 Oct 2026 14:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791813189; cv=none; b=sYSl9tBj9/tFlGVGIf9Ddp3a7bGs5n58STUxKUOo+w0BFn+p7wZJMEdRvRzaje+b8s2c98fdsm0tVeh8raUD9+w0YoVMYSS3UDIzkXwawafZf9GiVfAxNwOxR7NJqmGJuZbgAi8DERNw5PBqLSOXmeh+txi3rDfGLbHtrID34eU=
+	t=1791814378; cv=none; b=jMXPnpBZ83XQ3PbVAPm1z42vwuUGsTnG2JZit+RYNuoTut4dPW31S3LsqShC71/QslmQhi/tXytlvEVBHpgulAfBAhUn+4HyHmz7HhCqX2DbjwuacwPUprVGn2IQmAt6e9tfPxN+XGIpoOQ1wKP098gggW863hRHe1xFLT9eSBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791813189; c=relaxed/simple;
-	bh=ty92T9DIYoaFJgqiIsGaVgwgaRXfKBk//M0JGEOokgE=;
+	s=arc-20240116; t=1791814378; c=relaxed/simple;
+	bh=2RJ4HPmBZNcpkWoZbXPtJ7mrUpVAX499W0ndI01jdT8=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=B2TGPfALLfF8cd5fC0lFhFgxL//Ctz1AYkhvrkB641wH8Oc6Ps3YbaoOQfULFZ1w9HnDWlpzYAFxJ8AARfXTvWcAcSkeyFmWXcpQywTwG7o9XaKzBQlVVN/NDp2vdOfVeHl1JDSY8MA7QrUvRWSw0qgUJ2UHvfiBbnJyWvKyO+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YCTIHzqn; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=GIaMKedaoSWGR+VWLpZMaAnW/jPpwf2NBh0/iZJcKi02WFNLvHxmAxxn7sAzIZr/XDEOiTG17fnutaHvw+GjKcN8WBKgx7U5uFfbqNqN6D7dIEkrcNjk8pwTsrmhLlNOqK+BROUp1cIA5m96Xz0LoaifH4ZBf4dwt2jwd6GP+kI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Raj/wj1d; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YCTIHzqn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1016A1F0089B;
-	Mon, 12 Oct 2026 13:53:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Raj/wj1d"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF93E1F0089F;
+	Mon, 12 Oct 2026 14:12:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791813187;
-	bh=GzKb4Ad7HkW8BrqEc5W4LYKOWUBVf/CLkGtUNjDmfbw=;
+	s=k20260515; t=1791814376;
+	bh=QH4R+MXlZktJnQ9gXtfrNIn8C2oUJYsTrp0hNj3REYQ=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=YCTIHzqn72vjsJTW7DN54VLFkp+SEk1NrFctnxBpEBhPFVs1HjRsyb9z09WjCjrMh
-	 aIoy/knzExgia6fSnVS8REcAs7frk82ybWlSfWazq6e1yDWXN5jeUbuBn1OwfktQA7
-	 o6t4F1aYgYCLlP+onpjLne7b/QjTo1lwpS0M1myBXo/sE2AcXHT52K+21IRe9bFzzw
-	 0iopNBZLcIOSnmljYjCoVkScRrjYEZuAsYBE9/xzbNCluVoivBsZzaQ2ivuxSh/uVq
-	 zxuoNspDBYnkuswY5N9ZLp46OSPjz6wtLVmLY7UKlKMPBYXvDOhS+fTXRtvEv19TVP
-	 PeUOn3kF4SnVA==
+	b=Raj/wj1dyfGFTt33LIR1X3CPI64HfWpaHxFyDhHgvoQoGrHVRVaXOUUG1AfnFhyth
+	 VGD57dZkUumcCgZXB1mmDyHk2vzxkB01XDCC7vGqOSp5kvqYPPbmTpYh0wztpdFDm6
+	 IoH95i0PaLqyN2lx7c++hq94g1+dcI5IVT7+LLZT6kINPuXBqReUfgJA9EHVzn4dx2
+	 QW0+KyyMnn5o+bMOWpvZ8X1xH12SbPjPDYPDYBJreMETATwU2tiwD4qWdR6spnZzlm
+	 ndYwfQCTz3M9K/NOF0ABv5empEWCPdgcj76+opmy+yojOWJVro+ltkN8RjvxLacxs+
+	 8F7AbWDE+yUTw==
 From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 To: Stanislav Fomichev <sdf.kernel@gmail.com>
 Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
@@ -51,13 +51,13 @@ Cc: Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski
  Wei <dw@davidwei.uk>, Alexander Lobakin <aleksander.lobakin@intel.com>,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Mina Almasry
  <almasrymina@google.com>
-Subject: Re: [RFC net-next 05/15] page_pool: Extend memory provider operations
-In-Reply-To: <asPUZ8DPllHd6Yu9@devvm7509.cco0.facebook.com>
+Subject: Re: [RFC net-next 06/15] xdp: Track non-page netmem in receive buffers
+In-Reply-To: <asPXa7k-_drxXiI0@devvm7509.cco0.facebook.com>
 References: <20261002190018.696925-1-bjorn@kernel.org>
- <20261002190018.696925-6-bjorn@kernel.org>
- <asPUZ8DPllHd6Yu9@devvm7509.cco0.facebook.com>
-Date: Mon, 12 Oct 2026 15:53:05 +0200
-Message-ID: <877bjnc9fi.fsf@all.your.base.are.belong.to.us>
+ <20261002190018.696925-7-bjorn@kernel.org>
+ <asPXa7k-_drxXiI0@devvm7509.cco0.facebook.com>
+Date: Mon, 12 Oct 2026 16:12:53 +0200
+Message-ID: <8733ubc8ii.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,113 +70,153 @@ Content-Transfer-Encoding: quoted-printable
 Stanislav Fomichev <sdf.kernel@gmail.com> writes:
 
 > On 10/02, Bj=C3=B6rn T=C3=B6pel wrote:
->> The current memory providers give memory that the CPU cannot read,
->> and they can always refill. An AF_XDP provider is different. The CPU
->> can read its memory, it has only the buffers that userspace puts in
->> the FILL ring, and its buffers go back to userspace instead of being
->> freed. It needs four things from page_pool:
+>> A page-pool memory provider can give net_iov buffers, and
+>> virt_to_page() does not work for them. An xdp_buff holds only the
+>> data pointer, so code that returns or converts a buffer cannot find
+>> its net_iov.
 >>=20
->> - A CPU address for each net_iov. A provider can set the address of
->>   the first net_iov in its net_iov_area and the size each net_iov
->>   covers. netmem_address() then computes the address without a call
->>   into the provider; drivers call it for every packet. A
->>   net_iov_area without an address stays unreadable.
->>   page_pool_is_unreadable() is false for a readable provider.
+>> Add NET_IOV_XSK, the net_iov type for AF_XDP. Add the internal flag
+>> XDP_FLAGS_HAS_NETMEM. When it is set, the xdp_buff holds a netmem
+>> reference in the union with the devmap TX queue, which only devmap
+>> egress uses. The flag is cleared when flags are copied to an skb or
+>> an xdp_frame. xdp_convert_buff_to_frame() sends such a buffer to the
+>> zero-copy copy path.
 >>=20
->> - A way to say that the refill is not done. The new refill_done
->>   callback tells the driver whether it may stop refilling. A
->>   provider that still has buffers returns false, and the driver
->>   keeps NAPI scheduled.
+>> A fragment from a readable net_iov area no longer marks the buffer's
+>> fragments as unreadable. The skb layer still treats every net_iov as
+>> unreadable, so such a buffer must be copied before it becomes an
+>> skb. Later patches in this series do that.
 >>=20
->> - A way to give up a buffer without freeing it. Add a batched call
->>   that ends page_pool ownership of buffers that leave through the
->>   provider, for example to userspace. It clears the page_pool link,
->>   so a later page pool can take the buffer. Add the matching batched
->>   call that sets the link, and a DMA sync helper for drivers that
->>   post a buffer again directly.
+>> skb_shared_info holds kernel pointers, so it cannot be in UMEM,
+>> which userspace can write. A netmem xdp_buff points to a
+>> skb_shared_info that the RX queue keeps in kernel memory instead.
+>> xdp_init_buff_from_netmem() sets this up. Page-backed buffers still
+>> use their tailroom.
 >>=20
->> - No buffer splitting, because a split buffer has several owners.
->>   Add MP_CAP_FRAG. page_pool refuses fragment allocation from a
->>   provider without it.
->>=20
->> devmem and io_uring set MP_CAP_FRAG and keep their fragment
->> behaviour. Their refill paths now use the batched call that sets the
->> link.
+>> On 64-bit, struct xdp_buff grows from 56 to 64 bytes. struct
+>> xdp_buff_xsk stays at 128 bytes on x86-64. Where the largest
+>> alignment is 8 bytes, as on s390, it grows from 120 to 128 bytes, so
+>> a pool needs 8 more bytes per UMEM chunk. Only helpers that need the
+>> netmem or the fragment info test the new flag. Page-backed receive
+>> and return paths do not.
 >>=20
 >> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
 >> ---
->>  include/net/netmem.h                    | 31 ++++++++++-
->>  include/net/page_pool/helpers.h         | 62 +++++++++++++++++++++-
->>  include/net/page_pool/memory_provider.h | 28 +++++-----
->>  io_uring/zcrx.c                         |  4 +-
->>  net/core/devmem.c                       |  7 ++-
->>  net/core/page_pool.c                    | 68 ++++++++++++++++++++-----
->>  6 files changed, 165 insertions(+), 35 deletions(-)
+>>  include/net/netmem.h |  1 +
+>>  include/net/xdp.h    | 56 ++++++++++++++++++++++++++++++++++++++++----
+>>  2 files changed, 52 insertions(+), 5 deletions(-)
 >>=20
 >> diff --git a/include/net/netmem.h b/include/net/netmem.h
->> index cc97611632dc..e6dff0b01581 100644
+>> index e6dff0b01581..76e4fe878863 100644
 >> --- a/include/net/netmem.h
 >> +++ b/include/net/netmem.h
->> @@ -105,6 +105,12 @@ struct net_iov_area {
+>> @@ -68,6 +68,7 @@ DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
+>>  enum net_iov_type {
+>>  	NET_IOV_DMABUF,
+>>  	NET_IOV_IOURING,
+>> +	NET_IOV_XSK,
+>>  };
 >>=20=20
+>>  /* A memory descriptor representing abstract networking I/O vectors,
+>> diff --git a/include/net/xdp.h b/include/net/xdp.h
+>> index 07231adfb5f8..80931490ca3a 100644
+>> --- a/include/net/xdp.h
+>> +++ b/include/net/xdp.h
+>> @@ -11,6 +11,7 @@
+>>  #include <linux/netdevice.h>
+>>  #include <linux/skbuff.h> /* skb_shared_info */
+>>=20=20
+>> +#include <net/netmem.h>
+>>  #include <net/page_pool/types.h>
+>>=20=20
+>>  /**
+>> @@ -81,6 +82,8 @@ enum xdp_buff_flags {
+>>  	 * XDP program is not attached.
+>>  	 */
+>>  	XDP_FLAGS_FRAGS_UNREADABLE	=3D BIT(2),
+>> +	/* The txq/netmem union contains a receive netmem reference. */
+>> +	XDP_FLAGS_HAS_NETMEM		=3D BIT(3),
+>>  };
+>>=20=20
+>>  struct xdp_buff {
+>> @@ -89,7 +92,12 @@ struct xdp_buff {
+>>  	void *data_meta;
+>>  	void *data_hard_start;
+>>  	struct xdp_rxq_info *rxq;
+>> -	struct xdp_txq_info *txq;
+>> +	union {
+>> +		/* Valid for DEVMAP egress programs. */
+>> +		struct xdp_txq_info *txq;
+>> +		/* Valid for receive buffers backed by non-page netmem. */
+>> +		netmem_ref netmem;
+>> +	};
+>>=20=20
+>>  	union {
+>>  		struct {
+>> @@ -104,6 +112,8 @@ struct xdp_buff {
+>>  		u64 frame_sz_flags_init;
+>>  #endif
+>>  	};
+>> +	/* Kernel-owned fragment metadata for non-page netmem. */
+>> +	struct skb_shared_info *sinfo;
+>>  };
+>>=20=20
+>>  static __always_inline void xdp_reinit_buff(struct xdp_buff *xdp)
+>> @@ -138,7 +148,7 @@ static __always_inline void xdp_buff_set_frag_unread=
+able(struct xdp_buff *xdp)
+>>=20=20
+>>  static __always_inline u32 xdp_buff_get_skb_flags(const struct xdp_buff=
+ *xdp)
+>>  {
+>> -	return xdp->flags;
+>> +	return xdp->flags & ~XDP_FLAGS_HAS_NETMEM;
+>>  }
+>>=20=20
+>>  static __always_inline void xdp_buff_clear_frag_pfmemalloc(struct xdp_b=
+uff *xdp)
+>> @@ -150,6 +160,10 @@ static __always_inline void
+>>  xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *=
+rxq)
+>>  {
+>>  	xdp->rxq =3D rxq;
+>> +	/* Do not initialize the txq/netmem union here. DEVMAP generic XDP
+>> +	 * sets txq before this helper is called; receive drivers set netmem
+>> +	 * explicitly.
+>> +	 */
+>>=20=20
+>>  #ifdef __LITTLE_ENDIAN
+>>  	/*
+>> @@ -176,6 +190,33 @@ xdp_prepare_buff(struct xdp_buff *xdp, unsigned cha=
+r *hard_start,
+>>  	xdp->data_meta =3D meta_valid ? data : data + 1;
+>>  }
+>>=20=20
+>> +static __always_inline bool xdp_buff_has_netmem(const struct xdp_buff *=
+xdp)
+>> +{
+>> +	return !!(xdp->flags & XDP_FLAGS_HAS_NETMEM);
+>> +}
+>> +
 >
 > [..]
 >
->>  	/* Offset into the dma-buf where this chunk starts.  */
->>  	unsigned long base_virtual;
->
-> Will send a patch to drop this one, don't think we use it anymore..
-
-Ok!
-
->> +	/* CPU address of the first net_iov's memory, or NULL when the CPU
->> +	 * cannot read the area. Each net_iov covers 1 << @niov_shift bytes.
->> +	 */
->> +	void *vaddr;
->
-> Who is setting this? Somewhere in another patch? Can we keep it here?
-
-xp_pp_create() sets vaddr in patch 9. I'll move that closer.
-
->> +	u8 niov_shift;
->
-> If we need niov_shift at area level, let's move the one from binding here?
-> Then the existing callers can do binding->area.niov_shift.
-
-Good! I'll consolidate the binding's shift (and rebase on your
-base_virtual cleanup)
-
->>  };
->>=20=20
->>  static inline struct net_iov_area *net_iov_owner(const struct net_iov *=
-niov)
->> @@ -117,6 +123,23 @@ static inline unsigned int net_iov_idx(const struct=
- net_iov *niov)
->>  	return niov - net_iov_owner(niov)->niovs;
->>  }
->>=20=20
->> +static inline bool net_iov_is_readable(const struct net_iov *niov)
+>> +static __always_inline netmem_ref
+>> +xdp_buff_get_netmem(const struct xdp_buff *xdp)
 >> +{
->> +	return net_iov_owner(niov)->vaddr;
+>> +	if (xdp_buff_has_netmem(xdp))
+>> +		return xdp->netmem;
+>> +
+>> +	return virt_to_netmem(xdp->data);
 >> +}
->> +
->> +static inline void *net_iov_address(const struct net_iov *niov)
->> +{
->> +	const struct net_iov_area *area =3D net_iov_owner(niov);
->> +	unsigned long off;
->> +
->> +	if (!area->vaddr)
->> +		return NULL;
->> +
->> +	off =3D (unsigned long)net_iov_idx(niov) << area->niov_shift;
->> +	return area->vaddr + off;
 >
-> Or, alternatively, store dma_base in area and do:
+> You keep adding methods that are not used in the patch where they are add=
+ed.
+> I keep getting confused :-p
 >
-> return niov->dma_addr - area.dma_base + vadd ?
+> For virt_to_netmem, maybe a meta question: does xsk pool need a treatment
+> similar to the socket path? Where we did s/page/netmem_ref/ ? Then might
+> be less reasons to special case?
 
-UMEM pages don't have to have contiguous DMA addresses, so I'd keep the
-index-based CPU offset.
-
-
-Bj=C3=B6rn
+Fair point! I'll move the helpers with their users and see what
+netmem_ref can unify. UMEM still needs the saved descriptor for
+returning buffers and kernel-owned fragment info...
