@@ -1,63 +1,61 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EAFC348C77
-	for <io-uring@vger.kernel.org>; Sun, 11 Oct 2026 18:17:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F5B463B70;
+	Mon, 12 Oct 2026 08:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791742680; cv=none; b=pi96kgAtYQD/Gw6LEJwIUpxh+kIwSdiuIpSKQgSQF1NIz4l6i34LLnmply4zyHt0VzkN6hrb/eXVePqNObNxB9bexBc2Axl3dKxTUonKyYl0d95x22iJgTq2+7vw9CHQ51t2jp6lRX2C4QMeu1UcAu+jtJLRvyrVhCGs7igpAzo=
+	t=1791794302; cv=none; b=l5XKuc6PbJ/m886zw4v8druGXtjlIPrmrQziFj21bazKKLEefcScjeephkEnyLmaroidb7fd865qSqVYdSMOg2M+XzwplzV2dpqdubrzHOUup/ZmtJoV0eLdvG0gcWTkTwcgrZwhxiEl/oL1JAIcKwEyKmTAkZey4QayVNNybpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791742680; c=relaxed/simple;
-	bh=oE1+Z5KRtVGQ+nyqyQHX/nTCsrNpOnxUCimcSWpJZNY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=n7rORXaVQCbearfI8mJBCiOvPG/PjVTmtK/3xD2qAdsWQxdzjBwxE4WGY+77gdm6mlyuV+VYod8mI7ayNctG0km8wJHVLzoG500CT9AxnqIl4Rf76iiuvW55GvwHm1RUKpQKdcy9HW5niJMr0GZnfeK/I8n4F//vGc4ZpXW1o+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZ7mx+bL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791794302; c=relaxed/simple;
+	bh=U4oZOfnrsXMb2aDcBOPGWeqKCs3s2J2sj1ogGFyRWYM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NECf/95lqttwNM9nYYcsOWQruKiXuLMW09VzBGIrjwgezTUWHMclnda7HiTQ164gjsSQGeZFZXflG4yBieonj1Fgj8ACb4w6XyGK3de6Rr4YUMJ/EwLu5noi/ZTs5SIvSQ+D1rl/p2kFwqoY91aLmLL3pOXfRDDd9XFPL9r004o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NtN4VaGF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZ7mx+bL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0539F1F0089B;
-	Sun, 11 Oct 2026 18:17:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NtN4VaGF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F001F0089B;
+	Mon, 12 Oct 2026 08:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791742679;
-	bh=UWOm07RqX/2pIn6xvTnQK0MmmpDE6hRgUiVhbtnkGK4=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=PZ7mx+bLRmqukEjqC/sdJG3hOwlwSH7PE7m8km6BwzzTFVStqEy8NcbuB8TbR7kG7
-	 q0nQ7DyVDc5aB51+yWEtHui6SNsByJVV5kUvYYVvacyLeOBcx6dYUss6vRqSNFnDJM
-	 AAfJxu1rdBm8ZaEm3JoXo+ivdz4XQC7t0dGyDxhQcNxKlAUbr/kW2FTPNKn+qQD1vs
-	 YbN5C6w4jFR/AL1AlPq3HmXzBAMfbFCx6k2qzTPjFWR88vbCE+Vf4oV1U+eNgvBAMJ
-	 SHU+k4orShsQmYT7g+P9bOpMjriJj0bWT+N8eaHlvO9mCBvDU4Q7XxPvGXV/vVbobX
-	 6/wt3Ea+iecrg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F15E438119D3;
-	Sun, 11 Oct 2026 18:17:58 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring fixes for 7.3-rc7
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <51650716-bd0c-4349-92ff-01020abf6fac@kernel.dk>
-References: <51650716-bd0c-4349-92ff-01020abf6fac@kernel.dk>
-X-PR-Tracked-List-Id: <io-uring.vger.kernel.org>
-X-PR-Tracked-Message-Id: <51650716-bd0c-4349-92ff-01020abf6fac@kernel.dk>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.3-20261010
-X-PR-Tracked-Commit-Id: fddcf4c5321b3ea5f72166c3fd36a9d1c34f80c7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b7c0316c1a062dbadd0d62f1b796dd3264915242
-Message-Id: <179174267746.2129915.10559563327610561187.pr-tracker-bot@kernel.org>
-Date: Sun, 11 Oct 2026 18:17:57 +0000
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>
+	s=k20260515; t=1791794301;
+	bh=x9zvxnIICACLcOApJlxFMv8hmiS24+iILCoavuVBq6I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NtN4VaGF/XotmxrLZl8cc1AMZmWTyZKhiLhbbnzyrjaKUGYutE14DInHVHFxfRzLW
+	 f6ZiSan3kfrnO5F63TOItaobuj2VrxFTBhcj1ne/LT6rrFAL6cjpvRQknn8JYer0qS
+	 Q8PQ4NztTAlVdGLJgW02D9NJCX8/rXUp6gdOtfQEiFjrnAsrkmyoRqtozrb2oSjfN1
+	 PMZUPAV8VD5/sOFTLh8L3ijUuoJBqgaLODI40Gqcd9sJ1/2EQPFDEVI7abIw9zfufU
+	 9CEgmLFQvtiKNtpCANd3K2l22iA6jIFC44rcrLmYE7jzb4Qul6nKhuecAQ0DKqvAnh
+	 hp4lXBnppndxQ==
+Date: Mon, 12 Oct 2026 10:38:16 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Pavel Begunkov <asml.silence@gmail.com>, 
+	io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] io_uring/io-wq: don't call try_to_wake_up() twice in
+ io_wq_worker_wake()
+Message-ID: <20261012-liberal-gejammer-gebilde-ef1ce6dba9c5@brauner>
+References: <asunjCm5Ovj_YDSp@redhat.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <asunjCm5Ovj_YDSp@redhat.com>
 
-The pull request you sent on Sun, 11 Oct 2026 07:11:25 -0600:
+On Sun, Oct 11, 2026 at 05:13:16PM +0200, Oleg Nesterov wrote:
+> io_wq_worker_wake() does an unconditional wake_up_process(). This means
+> that __set_notify_signal() makes no real sense. Change it to use
+> set_tsk_thread_flag(TIF_NOTIFY_SIGNAL) instead to avoid test_and_set_bit()
+> and another wake_up_state(TASK_INTERRUPTIBLE) if NOTIFY_SIGNAL was not set.
+> 
+> Perhaps io_wq_worker_wake() can rely on __set_notify_signal() solely, but I
+> don't understand this code enough and this patch doesn't change the current
+> behaviour.
+> 
+> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+> ---
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/io_uring-7.3-20261010
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b7c0316c1a062dbadd0d62f1b796dd3264915242
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Christian Brauner (Amutable) <brauner@kernel.org>
