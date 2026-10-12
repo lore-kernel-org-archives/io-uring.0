@@ -1,161 +1,107 @@
-Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12D73932F7;
-	Mon, 12 Oct 2026 18:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.76.82.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159BB38F24D
+	for <io-uring@vger.kernel.org>; Mon, 12 Oct 2026 18:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791830831; cv=none; b=dVBzBXcPE4+9VIbZJN8m1yPx+VhHVgAkwYbZ98JTwGnsLREA9wLESo+mkjdJLUQaTH0TDETLGOIphnwFVG3k7BFvr6F4jo9otkCujS+UdldfoTHflihSqYPHkloDoyOsKV6QVj6u6mDI2Imf8tk81ilLCibBGdD48+WwEiDP4Io=
+	t=1791831080; cv=none; b=XxvgHxGezPqvMTqMJKNvwpckPbR10bHKC0iGvrKIVcbUAOMpqnX9nS1csk1ZM4Yznnp7hNbpWMVxghiU5/9BL0ywzQiBpFxOfN80um2UnJBd39ZxFssU6xnxM8PdXZriJfFg8yxBQs/a1iDREnpJQn94dY1urH/WOsKgeJaoRA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791830831; c=relaxed/simple;
-	bh=9RZm/CwGW9+O0CItM/ov6oKoaq82uM5RDC3NSRttRR0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ljWZ01X7cf9Jz4xjo6YfwTLRhaY+Ms8l7NVgaiiYPc1wXfQZTm0e+hjBQU1Cx5Gy2N3jCo9xogveaLl/J57EH362gA4d+TiJv5bBoK036KX8mpCIvvxw/bQ6cTM5vQtYkd9dTjDMbaTpU3AelRfLfOy8m03jjR1vm2ja6cP9+fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org; spf=pass smtp.mailfrom=samba.org; dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b=a3FHqesN; arc=none smtp.client-ip=144.76.82.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
+	s=arc-20240116; t=1791831080; c=relaxed/simple;
+	bh=8mK/2QEUVVgC/6SIjsn5gSOcjpiYDhr0wY9DKzdO1Z4=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LCnA5IVuDhjao9TUV8nKb6vJ2XknNBiRPE4x3Xso+BiXGo+oMOHIGuWllgDGPvtc0jnfmb8qauxtu6sjD/dV/X/mWgvf6CpY/1uBi00yfLQRRA3jqgx8S1a4DULpbaT9klGkli30aeolWSdwxExBdN+7ig4qNGXFl38doPmR/HU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=J2uA/vPZ; arc=none smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (3072-bit key) header.d=samba.org header.i=@samba.org header.b="a3FHqesN"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
-	s=42; h=Message-ID:Date:Cc:To:From;
-	bh=PbzpHddRgwUHkHtoUFDezWwH1DUtK44tX+LY/8eTDfw=; b=a3FHqesNH4EDunY4Jp/QBTRjyd
-	6WzoGWPIDi4GdnrEnqGL5BF12kXdy5QtUc7e4Zzi4kzkb5u7SqET+3lNJmRu2fuKblsEoNicWVRHD
-	PrxQ8lMyp3aKxjjTMF5dw9O8gsq3Ivo/wZPynNYGw+szLJrVElrZY6n3yZxbcd1uCQCPLdTcQG6Pp
-	KBLSGLv9wKxe+99xPbXIfIHv0G1b07GFgL0R23Pq6QMDxnx7/F69bFElbkH6ULXzUGnnuKZMSufuv
-	9LZ29qV5+tYkyVtH3mpO9a6OG5Io/z1uNvtRIhMKkbK4mhpC9+M5hAFofKQnKEZk5nwGSzso2El32
-	nw7LiGPkmgdNvnwtqy/cmLfkpt9ZLAIuWBMvSUwZ5Rb6PA2ghVMGDg6ZsR7vz3lpsXQJOr1LG7gnp
-	s3Cpg9xasg0/llRmuZXljOMWDEZeIUDFddIyyc7Shdua3+SR46eipzjHz9XWp4n8gEkndZ5nQ/S1b
-	ABX3PXf1hNvnyfzbPlrg4M8r;
-Received: from [127.0.0.2] (localhost [127.0.0.1])
-	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
-	(Exim)
-	id 1xGL3A-00000001M3P-0RxE;
-	Mon, 12 Oct 2026 18:47:04 +0000
-From: Stefan Metzmacher <metze@samba.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: metze@samba.org,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	io-uring@vger.kernel.org,
-	linux-api@vger.kernel.org
-Subject: [PATCH] fs: add RWF_DIRECT for preadv2/pwritev2/io_uring to set IOCB_DIRECT per io
-Date: Mon, 12 Oct 2026 20:46:42 +0200
-Message-ID: <20261012184642.558349-1-metze@samba.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="J2uA/vPZ"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-15756f82e8aso3427526c88.1
+        for <io-uring@vger.kernel.org>; Mon, 12 Oct 2026 11:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791831077; x=1792435877; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=AWMMWMvOn9l0Ln0vvnUcFHP4wKSdIdXYASt3zibxoLw=;
+        b=J2uA/vPZBASdR/HSe/mHu1uf9Rnmw59p8wQYIB9lla2V+XpqBn1Skd4aWc6RfHv9gy
+         BvxOV0Ad8OlSercDFS6TlxXsP/CD9BTWwRlx6ujgpvpMgSGveDBu/r/HUHyCbVruSkbo
+         yG22h1SV+09JbrTw9rjzozLt1dZDtUAtBeswV4kN6tsdmJJuOKaWRwtoJkFYiWoxohoC
+         QP8JGk8COs8dX+9ELs0xIBsvkQwFCGxwl6x84HR1T8klRRxPQX/Wl+4GRqdFJiYHDyDz
+         60I7aFZot5ZrtHB7AKfXWwudnVocv1sAMFDgSfI9v65xsMdTlyRC5mrdSs+wdlDdb/gh
+         BUZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791831077; x=1792435877;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AWMMWMvOn9l0Ln0vvnUcFHP4wKSdIdXYASt3zibxoLw=;
+        b=Yydk7yY/A1nZ/nVzNd2upvNhWMA74vS6YC2VY0C2HOJqo/FDTdklC/wHBArW/nZBdN
+         jm6SSngywMdgO9CqE5Ozig+tQKOhcTVYJ9nCTZ2H72gMpKPntrpx2x9k3e6aKhq/BAhv
+         hiqRVE32NRlmVW/ICRhl5BDqQduGU/eFyAzDNsa9NdWn7/kOqvMlYNVR02msjwZTGEt+
+         5N0LMc+Ns6TQTtT1cp5DRen6D9rPWWcGKh3CMcFzC1V/anTdMi6FSzDWp1znBgUpJacD
+         n65M1UjGUUQ+/aAtILhjg+LFuPyBFk6ODTRSRIrkzwVzQx/VtxrP9950Ba23tG/MDajZ
+         eB+g==
+X-Forwarded-Encrypted: i=1; AKwUvBxg8fQ/554pXXGNSIuvrDDf1fx64HgWEpDE6Ty/qQzrtMbHteDAKZJa/tIAHqKMQGLzHPWxcx5TQg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIX9gLXX43VFzKkIYdftZRLUgJOuMe6f5q93QjdUUXwtA9RjnrU
+	NoBylLLM68mjBEtMmXpFZX5EVWQ70MpanZJUxWVNd2+cGP5pG1iil069EIznKOXs0mA=
+X-Gm-Gg: AYBFou3yTH2FfkVmliqb/LnJtc0/Uje45ac9Q73IMCqWVCFJjvvzVcy4lplaWaEos5t
+	+pv3BPr+gw8dKeVtYc1kXqFeMyc3IG3/dRM6CcWGw7uBNTpGScPxZZlnElZh7IGXTX5TcwkrULk
+	AGrtI2ArWS1zhmoPJBSXHHcnoyBXJwbQxRzayjKUEa7maK4OdtdzXmSYtEMmogor4U5lx0mFUBr
+	dVwhny9jqHu7qCF3grF/q8tdT0tZb2AqlCe0I5HsrHNvYjUsGWC6eKr5wcHT5oGbobYkaGHgd2e
+	TlpR1LCVlRLBAqDilUc/5az4aFr1Tu5ScA8Fuhpdb57vymizqlBnHm5Ep+EUlBoivEp7G6WK2fS
+	IdaEHe9ohT+JyUTeaEqOpaKs2YbwBfyPtcZbtIQ43S3g1xIcmV9nXta/CFVdfPx5sO8l8qemN5l
+	BMJ3zO4NJlGTMBL3iSmdys7DCsMrhL8TWD8zsyP20d9lrpEiLF4pZCKsjZxp1gNUOBkEEB/eNpF
+	upYa0jA7/Bc+ABcSEPPeKAwROrhb53WTt3To+wtxTlNpTRbv8OOM0j6HA==
+X-Received: by 2002:a05:701b:205b:20b0:148:ece:8cc3 with SMTP id a92af1059eb24-16a1555cfb3mr13553259c88.24.1791831076829;
+        Mon, 12 Oct 2026 11:51:16 -0700 (PDT)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-169a2f17feasm41738221c88.9.2026.10.12.11.51.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2026 11:51:16 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Christian Brauner <brauner@kernel.org>, 
+ Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <asunjCm5Ovj_YDSp@redhat.com>
+References: <asunjCm5Ovj_YDSp@redhat.com>
+Subject: Re: [PATCH] io_uring/io-wq: don't call try_to_wake_up() twice in
+ io_wq_worker_wake()
+Message-Id: <179183107606.215281.10642628466917425900.b4-ty@b4>
+Date: Mon, 12 Oct 2026 12:51:16 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-It's useful to control this per io request instead of using O_DIRECT
-for the file descriptor.
 
-E.g. the SMB2_READFLAG_READ_UNBUFFERED and SMB2_WRITEFLAG_WRITE_UNBUFFERED
-are also available per io request and this allows Samba to map then
-to RWF_DIRECT.
+On Sun, 11 Oct 2026 17:13:16 +0200, Oleg Nesterov wrote:
+> io_wq_worker_wake() does an unconditional wake_up_process(). This means
+> that __set_notify_signal() makes no real sense. Change it to use
+> set_tsk_thread_flag(TIF_NOTIFY_SIGNAL) instead to avoid test_and_set_bit()
+> and another wake_up_state(TASK_INTERRUPTIBLE) if NOTIFY_SIGNAL was not set.
+> 
+> Perhaps io_wq_worker_wake() can rely on __set_notify_signal() solely, but I
+> don't understand this code enough and this patch doesn't change the current
+> behaviour.
+> 
+> [...]
 
-kiocb_set_rw_flags() requires FMODE_CAN_ODIRECT (same check open()
-does for O_DIRECT) and returns -EOPNOTSUPP otherwise, matching the
-convention already used by RWF_NOWAIT/RWF_ATOMIC/RWF_DONTCACHE just
-above it in the same function for "this flag isn't supported on this file".
+Applied, thanks!
 
-IOCB_DIRECT predates RWF_DIRECT used a kernel-internal value,
-but now IOCB_DIRECT is aligned with RWF_DIRECT the same way
-commit ce71bfea207b ("fs: align IOCB_* flags with RWF_* flags")
-already aligned the other shared flags.
+[1/1] io_uring/io-wq: don't call try_to_wake_up() twice in io_wq_worker_wake()
+      commit: e889b0e4cafddb3d68c3595dc01b7128fd35fbef
 
-The man-page.git will get something like this for man/man2/readv.2:
-
-  RWF_DIRECT (since Linux XXX)
-    Provide  a  per-I/O equivalent of the O_DIRECT open(2) flag.
-    This allows a single preadv2() or pwritev2() call to bypass the
-    page cache without the file descriptor having been opened with
-    O_DIRECT.  Unlike enabling O_DIRECT with the fcntl(2) F_SETFL
-    operation, this does not change the file status flags of
-    the open file description, so other I/O on the same file
-    descriptor, or on any file descriptor referring to the same
-    open file description (see dup(2)), is not affected.
-    If the underlying file or block device does not support
-    O_DIRECT, the call fails; see ERRORS.  As with O_DIRECT open(2),
-    the memory buffer, the file offset, and the I/O length
-    generally need to be aligned to the logical block size of
-    the underlying storage.
-
-man/man2/io_submit.2 will also get updated and liburing
-in man/io_uring_prep_readv2.3 and man/io_uring_prep_writev2.3
-
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: io-uring@vger.kernel.org
-Cc: linux-api@vger.kernel.org
-Signed-off-by: Stefan Metzmacher <metze@samba.org>
----
- include/linux/fs.h      | 10 ++++++++--
- include/uapi/linux/fs.h |  5 ++++-
- 2 files changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 83d41d9f1130..40d013a49378 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -344,10 +344,11 @@ struct readahead_control;
- #define IOCB_ATOMIC		(__force int) RWF_ATOMIC
- #define IOCB_DONTCACHE		(__force int) RWF_DONTCACHE
- #define IOCB_NOSIGNAL		(__force int) RWF_NOSIGNAL
-+#define IOCB_DIRECT		(__force int) RWF_DIRECT
- 
- /* non-RWF related bits - start at 16 */
-+#define IOCB_NON_RWF_MASK	(~0xffff)
- #define IOCB_EVENTFD		(1 << 16)
--#define IOCB_DIRECT		(1 << 17)
- #define IOCB_WRITE		(1 << 18)
- /* iocb->ki_waitq is valid */
- #define IOCB_WAITQ		(1 << 19)
-@@ -3453,7 +3454,7 @@ static inline int kiocb_set_rw_flags(struct kiocb *ki, rwf_t flags,
- 	int kiocb_flags = 0;
- 
- 	/* make sure there's no overlap between RWF and private IOCB flags */
--	BUILD_BUG_ON((__force int) RWF_SUPPORTED & IOCB_EVENTFD);
-+	BUILD_BUG_ON((__force int) RWF_SUPPORTED & IOCB_NON_RWF_MASK);
- 
- 	if (!flags)
- 		return 0;
-@@ -3480,6 +3481,11 @@ static inline int kiocb_set_rw_flags(struct kiocb *ki, rwf_t flags,
- 		if (IS_DAX(ki->ki_filp->f_mapping->host))
- 			return -EOPNOTSUPP;
- 	}
-+	if (flags & RWF_DIRECT) {
-+		/* file system must support it, same as O_DIRECT */
-+		if (!(ki->ki_filp->f_mode & FMODE_CAN_ODIRECT))
-+			return -EOPNOTSUPP;
-+	}
- 	kiocb_flags |= (__force int) (flags & RWF_SUPPORTED);
- 	if (flags & RWF_SYNC)
- 		kiocb_flags |= IOCB_DSYNC;
-diff --git a/include/uapi/linux/fs.h b/include/uapi/linux/fs.h
-index a46c33692aa2..3aa5fd73d391 100644
---- a/include/uapi/linux/fs.h
-+++ b/include/uapi/linux/fs.h
-@@ -451,10 +451,13 @@ typedef int __bitwise __kernel_rwf_t;
- /* prevent pipe and socket writes from raising SIGPIPE */
- #define RWF_NOSIGNAL	((__force __kernel_rwf_t)0x00000100)
- 
-+/* per-IO O_DIRECT */
-+#define RWF_DIRECT	((__force __kernel_rwf_t)0x00000200)
-+
- /* mask of flags supported by the kernel */
- #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
- 			 RWF_APPEND | RWF_NOAPPEND | RWF_ATOMIC |\
--			 RWF_DONTCACHE | RWF_NOSIGNAL)
-+			 RWF_DONTCACHE | RWF_NOSIGNAL | RWF_DIRECT)
- 
- #define PROCFS_IOCTL_MAGIC 'f'
- 
+Best regards,
 -- 
-2.43.0
+Jens Axboe
+
+
 
