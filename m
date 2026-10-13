@@ -1,68 +1,69 @@
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C6953D0B0
-	for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 19:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50DB545DAA
+	for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 20:02:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791919011; cv=none; b=bRmQ5AX++tWj+poXgOE8ZE035u4AhSpIl9PHQiV2hpJtJAZtPD9N/1xnMc3JxJDhCKdDgcFQVaxgcT91eZDQEjgx1GHTLa+YO1V+Sc2+M0pkuo4X3mebFfklQuVaXlsZ1PXpU5o5CplF3MSd2gR57laDHB/70l+YhmgJlDOYook=
+	t=1791921772; cv=none; b=RDxmk/MuZypBsh2H/KiEuJwFwlTePTTh+t2ZgDl2XEJEy/bBJPVgDjCLZZbPDgQ/X8tZlifFD1Nq02tIIcxcnKB8yrYbVApSzd5Nko4Kepfs8yBMnFvEeBRR4QrRVSCHZTM7+2PNwuyIJVPJwnblODSXAOheRGTmCAv3tvl1dKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791919011; c=relaxed/simple;
-	bh=NZKCsIl+eMG9fGsQjejtk9lf0m8MqeFHKmqySR38f9M=;
+	s=arc-20240116; t=1791921772; c=relaxed/simple;
+	bh=5OmzUIP8dmoGXLqtWjV2SDzvrm+zBkTDLpjN5AcCB6g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PuV3Jg1qOqrAR+tiWH88OGznQ4cNKNac4dM1zqA/Rxih/qeMWjuhXdgEnGYN1x4Sam0afYk/Cv7hZyJz/p09XhC7y7cx21Ugd63SMAo9LxyScNkpuyox4m3GZy0pmzk3zjWZzjpcmwXVvsBO8LpVdy+h2fEfqT5rK4gEEb6D6Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=tLLiJs/f; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	 In-Reply-To:Content-Type; b=UNiCtkvEPJvDLOCttCZbfWnVuwlY6G2miCKLr6HE2EeiY8ShaNZLEIsllMlQPmIn679K9yRUovMunrHwx1NYu6fm+/CtQ7KmvGr80g8mB1OJ4Y8K5Ss8LaZKFGRaYk30lOMEZJl3ipYqc+r1EtGqnzEYfsI00Lg4PQM9hz0QKZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hJf3PxDN; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="tLLiJs/f"
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6df93f00f4dso124376eaf.2
-        for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 12:16:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hJf3PxDN"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4a1698ea378so28093285e9.2
+        for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 13:02:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791919007; x=1792523807; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1791921768; x=1792526568; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9LMVzPqyuXj5ApWA2StVi76ci1CLBOXVU23pBi3Y7Tc=;
-        b=tLLiJs/fgjv16ZNdmzoHeA22l8fBTqjwKXQSZAxFHG0QrydUpQBIParCFiBt38o5bi
-         avBRxV7jzLlj1drEnH/C3aXXSrHbUvPukcZ0And3v0BpdgM2GhAoN/0UrJ0pxULVV/4R
-         0XJQckApncG0TFCW/WEefYFgNlswkWIv3OcnZxOph1q6iMbTiH1LettNuCThs+CovbvD
-         VDZs5MkJF2NF1h3FCJCmQ5ZqLfHKpHq71NftsCusCH5YgvB9EHiwuTPFaJ42dGJJjVwe
-         ALp1pTu1Zln74/r2cr1RCK4vy3EAGIG43BlFHNUY3zZYK32SrDiZAqpgCXr3kjiglDRT
-         jh5A==
+        bh=ht3KL+dVHT63kyImKLUa9SErnOvImt82gs/Vf44c6SY=;
+        b=hJf3PxDN4i6ZpsKL2RdjcwzOTsxpJNzzmvONtwiGent2HSuMTbvCA/ErZzO6rsrI4o
+         fDJFZhbpOZehvFgsi6t+o1TCN3mTCJLCRM/gI/fd0Rep5AhyMflANAxrT89Vtn4NYrR2
+         GZok6c3wcIMdliMvyGLNyJbo9XAcsFwmJMPruDMBB9q1uRaozVCLvb+722hn4fGUQ/xJ
+         lhivSigzIf16XS8SAFInn5e2TgMYXDgEFWNjS5PXDqsxiqbyKl0FYl6WPvD9rL1zBvUY
+         pIfJVNz7f4RkYuT0Et8lCvOsX2ZIx5S4s2VJWHrWadTEo2JcTjFz0Ko2MR3X7/OWcS7S
+         h/NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791919007; x=1792523807;
+        d=1e100.net; s=20260707; t=1791921768; x=1792526568;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=9LMVzPqyuXj5ApWA2StVi76ci1CLBOXVU23pBi3Y7Tc=;
-        b=LZXfKtmddrhvihgWyIokH3BAaJCmRfl9Ekq//AhEB1VInBbEhdpTaEpaR9OVvpwTSH
-         g2vmaJBE0HYhVyMbITz1tDYjN/Igjl3ODuvx719k/SRw9TiWr4sPjqTIYiQ9v89PElOJ
-         ddx/VTkwJDioK8PohhulCLBJYpI46bYkPw8ev2zzaBYu/6OTQ6SGHGGqYA8tOM7DthMN
-         u9kApjSxfTTOMVmFYNg/AVrGUAhZLZV0GbwzJ6+IIt/3gX2jYO1oDiy5RaSiW9JxRVid
-         afKLFsyCWrowhlYW3uau2ospVEpPDN8c629WtxH+vP0BCIP0FffKlWj8DvlwKZSEtXZD
-         8E8A==
-X-Forwarded-Encrypted: i=1; AKwUvBzfxh3GwEBtt4s54d39QR/hielOiw/rZn7Yai/7JEUkKKAxGdPbLeLTYvOVf0HxBrRTXv2yHQaRTA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKq/TwwJqECXtI4YHxY63ok0Ktf+fPGOEAmtiqGcrkFmD/SmLss
-	VwOfmi5rMpTrb7DpZDddqI3ohebcxTNwAUK/0BIMjqNHvsHp15UpcQ+IGWDj015YJCE=
-X-Gm-Gg: AYBFou2qgN1oBjdhsEDFpTxxENgUw7UMsRdwJ5dgyAtVpp8l6cSctko1O+TDzz0h/oI
-	KkbTPEhpfQmgRHGdSi1ugGLoQbAwS0kgAKybhPvnXhE8AQe/wrspewkiWsyTcN10lhCfbPzLODQ
-	yUtV2o8mZq+rA8P/kCItKsQxS3f3tJXMZmb+iQdmYIe1BRoUfq8gljOPGRffmF1RDMlWQgA2w2P
-	MubCIuhQBf8Q3PmwREhirpDIn7FvAtm+nOzCOkXuOY1ei8Ee6Vbl0ISTZqkOHkeDcPNgFkJ0o2/
-	icJKNei+xP7Rpo7OJFgh5n0DaDoSyGZy+Ee77aRG7zWAvrPTW6uEAab2rJeTes29ckKT9FMrJg4
-	1TJXV9ArBqzUQyBeSxvJ+rCC86XdWvv0JiG1b/K7gcVVKPWks2kHOnEgkav+xkdllLgzz/iDbbE
-	kYPF2CTWiwQwF/ylt6UXhH+d0Z5dsi8c+h5McWZZSR3HHKP9mi6sCrjBU+IJCx7JbaWpfdoGL1g
-	yeVIstN51V8MYZbSTNVx1wDDoXJs2duFw9PgWjtujienzZyWmN1FYmcJg==
-X-Received: by 2002:a05:6820:c8f:b0:6e2:2dcf:2cd4 with SMTP id 006d021491bc7-6ef0eec73fdmr9825677eaf.16.1791919007140;
-        Tue, 13 Oct 2026 12:16:47 -0700 (PDT)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6ef023a1c1dsm12597782eaf.10.2026.10.13.12.16.44
+        bh=ht3KL+dVHT63kyImKLUa9SErnOvImt82gs/Vf44c6SY=;
+        b=LPn7aVvIuvrblvv5KPuv0eAQEH64jFUksSnpHvE+wZAxWvWMAuvmil6sEAzgGQ/dK9
+         mgwLmXCiUCgwru9TNiblgDcsLJ8chYOypBJVxw4eT0idwgZLAa7Ij1z9rWm1I2T2FbBy
+         6uKNv+2raXsP+smrTbvYItXOmLtD2FrErwoLZMM4WnA0tGgfcPQo8f35Iqu+phKpBmQw
+         wQVFGGPXgRAkyfLZgX2UQtijZb+HwgnzLmW7Y8X0/zcd9PHxLNqM0A6phPUY77To79t0
+         zKVT7p9t8KhPgRsbPVgDhJt8g0nSy8Mm7mfCBeRZNOalJX97LPeJgniVFqaiT+briosV
+         y0/A==
+X-Forwarded-Encrypted: i=1; AKwUvBwnxzx+wcTJjxL9PzyVt430Yl9s6Oc5uk10LMaKBokV3yAY4R02AzLgqEpVCTTxhH/j6TFsm9srqg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLSx3TcpwTcViq3RF97Mejiz65s93v/HZbxX2DgfxvSAo0A0Ns1
+	BBiE02NM6oPGTp1M+tlrhwYA6sGwHGvMReZ5aB6hSvElYIPf8WndQHeX
+X-Gm-Gg: AYBFou2LGTCsr1cnAjRKgyklSJywlSUBhk3m3QDkg/+m0EUWxWIDFsQGDpG9vlrGLoM
+	vR3JF1cev3eq3xoqt6B4fnj7RI9KnNI2GPhQgJjdBTj5kKSYnCIbZTgeee4/DmIoix0ZppRaYO5
+	P360vfLegZY4qot/MorPSzfgRZdrmTym4dz/DxQNZa7iTnB41+6WS7LiiEIQ2yU7UJ4QIARf4KL
+	Tsa9xpFZs45WIjH0nX3zCX9/phM9O2sPYN5mKzQcXJpHG6MljwAATipjloWJKFg+wZgxUB3E58r
+	A49tlsXEytQGte5iyzbDnuMTs5apc0uBqKkwvMDULo85CZAg3w0qL8ADGg9Irm2qTp1KwkrLMlA
+	xuwExGwaZlmrHiLsZYkCHviGXMKOwUQr7dMFuyIwQ+xCDwF9nVj4PkTX8fTMiWDOVQZEz1OcosW
+	9xMfRfWjcjeoOhnPP/DXjk7cVRWPNWpXe8sT5siYKZ6E+n00V7w+VhGF0Lz7RSDzyinINR5GCS1
+	Xh8e6eRrL6LO9wvp7xzkWEtoB9+TcDQ6Y2UcXi0y8omuP9Y63qXZ0tbj+MSCrHSuszDN/g5JlBw
+	NXtGWifLyBmpQq1cfFGLJrYEDihyf95a05GGRvbfvxD3hYRuUd1ek6Qkrd8=
+X-Received: by 2002:a05:600c:46cc:b0:4a0:8b1:f5c with SMTP id 5b1f17b1804b1-4a18e4b583fmr268480065e9.22.1791921767928;
+        Tue, 13 Oct 2026 13:02:47 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18bead84esm384426465e9.13.2026.10.13.13.02.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2026 12:16:46 -0700 (PDT)
-Message-ID: <baae166a-4464-4065-a642-348034cda28a@kernel.dk>
-Date: Tue, 13 Oct 2026 13:16:43 -0600
+        Tue, 13 Oct 2026 13:02:47 -0700 (PDT)
+Message-ID: <63fa3e64-44a8-4539-960c-946cebc8fce5@gmail.com>
+Date: Tue, 13 Oct 2026 21:02:39 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,50 +71,78 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 00/13] Add dmabuf read/write via io_uring
-To: Christoph Hellwig <hch@lst.de>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>,
+Subject: Re: [PATCH v9 01/13] dma-buf: introduce initial file I/O
+ infrastructure
+To: Matthew Brost <matthew.brost@intel.com>
+Cc: linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linaro-mm-sig@lists.linaro.org, linux-nvme@lists.infradead.org,
+ linux-fsdevel@vger.kernel.org, io-uring@vger.kernel.org,
+ Christoph Hellwig <hch@lst.de>, Sumit Semwal <sumit.semwal@linaro.org>,
  =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
  Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
  Alexander Viro <viro@zeniv.linux.org.uk>,
  Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Jens Axboe <axboe@kernel.dk>,
  Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
  Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>,
- William Power <william.power@intel.com>,
- Matthew Brost <matthew.brost@intel.com>, Alasdair Kergon <agk@redhat.com>,
+ William Power <william.power@intel.com>, Alasdair Kergon <agk@redhat.com>,
  Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
  Benjamin Marzinski <bmarzins@redhat.com>, dm-devel@lists.linux.dev
 References: <cover.1791336930.git.asml.silence@gmail.com>
- <d00e43fa-8f5b-4a8b-8b83-421d637ba519@kernel.dk>
- <20261013141046.GA12680@lst.de>
+ <b44df9fed6e346110c504ee312bb0083c7e75574.1791336930.git.asml.silence@gmail.com>
+ <aszbv7TgDOPHBEem@gsse-cloud1.jf.intel.com>
 Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20261013141046.GA12680@lst.de>
-Content-Type: text/plain; charset=UTF-8
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <aszbv7TgDOPHBEem@gsse-cloud1.jf.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/13/26 8:10 AM, Christoph Hellwig wrote:
-> On Mon, Oct 12, 2026 at 02:21:41PM -0600, Jens Axboe wrote:
->> I've queued this series up for some testing, in a separate branch. JFYI.
+On 10/12/26 14:08, Matthew Brost wrote:
+> On Wed, Oct 07, 2026 at 02:42:44AM +0100, Pavel Begunkov wrote:
+>> The goal is to be able to natively use dma-buf in the read-write / IO
+>> path. This patch adds basic building blocks serving as a glue and API
+>> between drivers and upper layer subsystems providing the uAPI. Later
+>> patches implement it for NVMe raw block devices and expose it to the
+>> user space via io_uring.
+>>
+>> There are two main objects. struct dma_buf_io_ctx and struct
+>> dma_buf_io_map. The ctx is used during initial registration and serves
+>> as an interface between the upper layer user like io_uring and to the
+>> importer subsystem / driver. The map represents the actual dma map
+>> established for the target device[s] with dma_buf_map_attachment() and
+>> stored in a device specific format. The context is created via a new
+>> file operation ->init_dma_buf_io_ctx.
+>>
+>> The ctx-map separation exists to facilitate map invalidation (see
+>> dma_buf_io_invalidate_mappings()). A ctx can create
+>> multiple maps during its lifetime, but there can only be no more than
+>> one (active) map attached to it. Invalidation drops the active map
+>> if present, and any new I/O request will try to create a new one.
+>>
+>> The primary task of dma_buf_io_map is to count requests using it
+>> and wait for their completion when we want to destroy the DMA map.
+>>
+>> [un]mapping and any work with dma addresses is delegated to the
+>> importer driver via an ops table stored in the ctx, see struct
+>> dma_buf_io_ops. Only the target driver / subsystem knows about devices
+>> it wants to use the dma-buf with, especially in case of multi-device
+>> filesystems or stacking in the future.
+>>
 > 
-> More testing it obviously good.  I've been waiting for addressing
-> of the Sashiko comments on the nvme patches before doing more ACKs,
-> and while I can't really judge the code those in the dma-buf code
-> also look somewhat serious.  So it would be useful to get them addressed
-> and the series reposted.  Same for folding in the PI vs dmabuf fix
-> from Anuj, although making the combination work would of course be
-> even better.
+> Full disclosure Pavel incorporated some of my ideas wrt to locking
+> cleanup which I shared off the list.
+> 
+> So I can't in fairness give an RB but:
+> Acked-by: Matthew Brost <matthew.brost@intel.com>
+> 
+> For the series - I can give this and I have pulled to code + have Xe
+> nvme + IGT setup showing this working:
+> 
+> Tested-by: Matthew Brost <matthew.brost@intel.com>
 
-Agree on both of those (sashiko and folding the PI fix), but it's been
-forever and let's at least get some testing done. As mentioned, it's in
-a separate branch, easy to update. But if we were to have any hope of
-making 7.4 and also not missing yet another release, then it would
-basically have to happen asap.
+Thanks for the suggestions and testing!
 
 -- 
-Jens Axboe
+Pavel Begunkov
+
