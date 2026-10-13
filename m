@@ -1,119 +1,117 @@
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4624E8DEC
-	for <io-uring@vger.kernel.org>; Mon, 12 Oct 2026 20:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1B8A489874
+	for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 05:08:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791836509; cv=none; b=kcGEjwaVLC3z41wiHrn1p5nU1RhRYN9DVofqN48LbYSfdi36FMHkUtYfb8Y7LywFuJaeWiX72poofe/119tpz37PGQoR5L9j/b/MxNSwesxS5rtWd/VOBJL+c6bbGT9zAOAnZ3poaidSXll++3+VsFyzknkwX0HFvySphuY/jnU=
+	t=1791868097; cv=none; b=rVR6B5UdyCd6Iuv1gcqcv0ilNQlCmZdchPe8QSAPqCBRESyhQBC5++lIRj4gUiII8MRTk2g9tmyLfabfh7ceEm2CiQi4H/jZ64v3ch+oRmiMaYdRVYFKNLCnYyOtk0ggxwlLt+pzaA0h3Dlb/gsqaaphMW/U9kDu4BN5XoZKLls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791836509; c=relaxed/simple;
-	bh=lli5ii/H/rCG9APVq9ZvpYJJiJuxiuQfHiO8zLh8fqI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oRGo8sYY9PyZ/SZKuql2RVxK6uvEQy7zGV2YOz1HJGX5H+/z8hEZo3M59wu1b6Hu0ggUhVBM0fsV9E65Mf9HqXSEaERGF2fd/sjibKY+2lBJKwefuRZ635bO1AwYtBDswZLBk8EdLcIkEXiQJEZxL5YuTcCFFe6QGHsNa3kzZ0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=gD/J06PY; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1791868097; c=relaxed/simple;
+	bh=PxKJxAVT8ZV2k62tddqpwmMf9x3R049yuGI5FocTb98=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=lZs+o5NHqWpk0V6a9R1C2/W5iIL3VPMQ64JKx7c10CxH4u+C6cPGkW0yKQJWOM/yP/3R1v27BqTxYZVmClT6nDmkf7t4f2efJA239r6WbsRev+K2oXOHuZwavz23faBpalQpxTuhNCqgRlx26uM2fJ8t30ad86ICCABW3hWu5fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=GWJFiL1n; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="gD/J06PY"
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-825487fb37bso1440913a34.3
-        for <io-uring@vger.kernel.org>; Mon, 12 Oct 2026 13:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791836507; x=1792441307; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Z6hOwSLR8cfh8cDplIOaHfJc8wiTVy6P5jX2Jl3fTgI=;
-        b=gD/J06PYlcBk+mVRnraTNFIXOIJVOIGTOcTB1oa30DcyYN2svFooHy20btUglxMoyH
-         AEOEeaajtTdi16bz5YWVjnfOIhGw8pVwnpsgsnTmLwBCp6fdLqzotYGAPbVvezyD9W+V
-         xG5wVMa//0oST81G134fFyrpHC8Gj/W5sjwx121/kXfuHOXI8q9lU8Ml08zM+CI93n0h
-         9wT1MNs+CaI4/JUokTfBkMQRgSBMQPPgE2uLjHbdYK9i+QbIcFR1s4m5uUZrh2kKzDR0
-         GK5CNrF8M2H7zwCjmjdqP6theBogcsc4ctAS9pEtv1tFd6RJ4wv2meY2w4x4esC3M2tG
-         hEKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791836507; x=1792441307;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Z6hOwSLR8cfh8cDplIOaHfJc8wiTVy6P5jX2Jl3fTgI=;
-        b=BeOQT2TpzRH/r6j28sjez5OVrPi4j6q3QmbkAZLyOwvaB06kdXFr3H7vojn4LJ4/7D
-         CZWU0fNkN7oU3zq5FyY6qfO455avWhgR8y3jQyTa5JrysBpPdATLblOSv4o/a8nWHelN
-         yHQJG+sZcx5TV4Ono4tKVMtzKeDIKSKd5LofZe2A3byd2Kr57OcUrdMGOkstu+3HScNg
-         5bjaHz8y4+Is1s1kFBpeNQorbFtJHcdFxxIyeVo3TebL/28cmsQPzVFNozAIOgt7IUlL
-         jPXHu8dUzhTcDJBMzgLPEYalQ7/EHIuO9xOVxgSW83HkJp7hPxFpa2RfhcUqBZdBkZp6
-         mVLQ==
-X-Forwarded-Encrypted: i=1; AKwUvByA4qelymXmZRb11Ka+7zGmeUI36Q6aUoOkTZtu5j6Afm0fZZqSw2ckr95sKv2R8BYPPmIazbpE0Q==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJpIcuiUbrv7ryV0qJpa/ZkAVim3k9h6zXMv2M7EG4OsLG1ggAt
-	LKz42weWdMwCysAxnSndwdhJRBKY03ylvq7IH1JyemRDYGAVgJk+D+c+7jdMhxgdlpw=
-X-Gm-Gg: AYBFou21FOpyNndQbghX+OXZBbRkbjK8QWkbvg8w7lY0QFPeIgjxnuPl76qp6Vtlddn
-	HEzgiJS+4p1r++cSpvfEVs8VAwZfox4S4f3R1keLVqiUSksIt4wzRxqKGRlRUeI+bt0A+OeDbdY
-	3Q56N2U2il06Nzp4nAWdxynPyKlHkcNWjpY7pFUm/Kvz3c0z7cz0KDskLMJM6VGYHXpuqeALELb
-	kBwV7KJr5n75XOgngDo2Lg64wLLpSDM+Qw35h/CetRr0+2lsnxLr+cJ8ke1za3fm3iBIqwxk/y8
-	BylhI0JNWbvpEpM9EeuMmizVkeSWnjNJEoveDVkQlvxGCHuZ2wo8vcvawYb/xucfrC90oIP5j3d
-	eGEJbsCZ9/SHQPjxpLabHtioCL13wMMrezLLpZ0wMgto4BJI9iLcDUC+Ffs3DGK69tMgcr2JNHZ
-	1mYqqbbpt/ISTnPzFIYEzJT0i//NgHaVK7qu+hmfpxITJwk0cbNSBH0wmGdDHKKu7BK7oVoBqwP
-	yirOVGTOkV7a7fcWhzeKtiSSiFVKRTTBRKFRzJ4qJiKXvGil0FPmaWGDA==
-X-Received: by 2002:a05:6808:f88:b0:4d7:17d5:6c9b with SMTP id 5614622812f47-50c40a3e034mr9500602b6e.9.1791836506735;
-        Mon, 12 Oct 2026 13:21:46 -0700 (PDT)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-50c167544b5sm12396143b6e.3.2026.10.12.13.21.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Oct 2026 13:21:45 -0700 (PDT)
-Message-ID: <d00e43fa-8f5b-4a8b-8b83-421d637ba519@kernel.dk>
-Date: Mon, 12 Oct 2026 14:21:41 -0600
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="GWJFiL1n"
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20261013050808epoutp0319ab2ddc54035ca4e0dfb8a014b45693~d-oheqBlj1557515575epoutp03-
+	for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 05:08:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20261013050808epoutp0319ab2ddc54035ca4e0dfb8a014b45693~d-oheqBlj1557515575epoutp03-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1791868088;
+	bh=THJxaWnF5FzDDKJspqdxJBm/POp1h+fVWGjbIIHr+a4=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=GWJFiL1n785igSoqecsf0BB9cYedtetwos0z8n4JjHtWysz5JozDpfUeMyP3LQ8oj
+	 LKvJf84v8t0jyxYzlVKGavaAb7kH+RadR5KG/oWC+CD3q3BpcY8k9zF+PBHDVy27GN
+	 BLv93Kk5Kj5gopM8EoWE4V+OBUkwiHfWtfKsfKRk=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
+	20261013050808epcas5p2382f7017d47301be86b92c5fae2be794~d-ohQu57m2964229642epcas5p2P;
+	Tue, 13 Oct 2026 05:08:08 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.93]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4j3j5g0wq1z6B9m7; Tue, 13 Oct
+	2026 05:08:07 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20261013050806epcas5p3634b06c8d362752032afe1cd1acf0781~d-of4dic70173901739epcas5p3K;
+	Tue, 13 Oct 2026 05:08:06 +0000 (GMT)
+Received: from localhost.localdomain (unknown [107.99.41.245]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20261013050805epsmtip2d243470071a5eaadbf1fcf36a8d74b35~d-oe7jHCO1564415644epsmtip2V;
+	Tue, 13 Oct 2026 05:08:05 +0000 (GMT)
+From: Anuj Gupta <anuj20.g@samsung.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, hch@infradead.org,
+	martin.petersen@oracle.com
+Cc: linux-block@vger.kernel.org, io-uring@vger.kernel.org, Anuj Gupta
+	<anuj20.g@samsung.com>
+Subject: [PATCH] block: reject dma-buf I/O on integrity checksum devices
+Date: Tue, 13 Oct 2026 10:37:23 +0530
+Message-Id: <20261013050723.55577-1-anuj20.g@samsung.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 00/13] Add dmabuf read/write via io_uring
-To: Pavel Begunkov <asml.silence@gmail.com>, linux-block@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>,
- Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>,
- Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>,
- William Power <william.power@intel.com>,
- Matthew Brost <matthew.brost@intel.com>, Alasdair Kergon <agk@redhat.com>,
- Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>,
- Benjamin Marzinski <bmarzins@redhat.com>, dm-devel@lists.linux.dev
-References: <cover.1791336930.git.asml.silence@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cover.1791336930.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20261013050806epcas5p3634b06c8d362752032afe1cd1acf0781
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-542,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20261013050806epcas5p3634b06c8d362752032afe1cd1acf0781
+References: <CGME20261013050806epcas5p3634b06c8d362752032afe1cd1acf0781@epcas5p3.samsung.com>
 
-On 10/6/26 7:42 PM, Pavel Begunkov wrote:
-> The patch set allows to register a dmabuf to an io_uring instance for
-> a specified file and use it with io_uring read / write requests. The
-> infrastructure is not tied to io_uring and there could be more users
-> in the future. A similar idea was attempted some years ago by Keith [1],
-> from where I borrowed a number of changes. Later it was brough back up
-> to life by Tushar and Vishal.
-> 
-> It's an opt-in feature for files, and they need to implement a new
-> file operation to use it. Only NVMe block devices are supported in this
-> series. The user API is built on top of io_uring's "registered buffers",
-> where a dmabuf is registered in a special way, but after it can be used
-> as any other "registered buffer" with IORING_OP_{READ,WRITE}_FIXED
-> requests. It's created via a new file operation and the resulted map is
-> then passed through the I/O stack in a new iterator type. There is some
-> additional infrastructure to glue it together, count requests, manage
-> lifetime and implement invalidation.
+A dma-buf bio stores its map in the union with bi_io_vec, which integrity
+checksum generation and verification walk as a bvec array. Combining the
+two can cause invalid memory access.
 
-I've queued this series up for some testing, in a separate branch. JFYI.
+Reject dma-buf registration and I/O submission on devices with integrity
+checksums.
 
+Fixes: 738881239a91 ("block: add dma-buf support for raw bdev")
+Link: https://lore.kernel.org/all/bbb87d6b-b7a3-487a-8be4-27f3f9ce4a1b@samsung.com/
+Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
+---
+ block/blk-mq.c | 6 ++++++
+ block/fops.c   | 2 ++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index a26a11c73ee3..7fff1305b492 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -3138,6 +3138,12 @@ void blk_mq_submit_bio(struct bio *bio)
+ 		goto queue_exit;
+ 	}
+ 
++	if (unlikely(op_is_dmabuf(bio->bi_opf) &&
++		     bdev_has_integrity_csum(bio->bi_bdev))) {
++		bio_endio_status(bio, BLK_STS_NOTSUPP);
++		goto queue_exit;
++	}
++
+ 	if ((bio->bi_opf & REQ_POLLED) && !blk_mq_can_poll(q)) {
+ 		bio_endio_status(bio, BLK_STS_NOTSUPP);
+ 		goto queue_exit;
+diff --git a/block/fops.c b/block/fops.c
+index aeb91465c4c5..49ae0302f123 100644
+--- a/block/fops.c
++++ b/block/fops.c
+@@ -944,6 +944,8 @@ static int blkdev_init_dma_buf_io_ctx(struct file *file,
+ 		return -EINVAL;
+ 	if (!disk->fops->init_dma_buf_io_ctx)
+ 		return -EOPNOTSUPP;
++	if (bdev_has_integrity_csum(bdev))
++		return -EOPNOTSUPP;
+ 	return disk->fops->init_dma_buf_io_ctx(bdev, ctx);
+ }
+ 
 -- 
-Jens Axboe
+2.25.1
+
