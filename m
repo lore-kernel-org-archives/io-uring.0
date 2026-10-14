@@ -1,141 +1,147 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1224F4758
-	for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 13:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C85E5427FA;
+	Wed, 14 Oct 2026 14:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791985403; cv=none; b=eSnyewTk2oPC38elDQLywLGOMqZkho2eSWMf+eUGG3RV9WWj/WXLKIfXKyJ0en581ljhQtkuZGbYEy1PxcrrFQqNfJc3AtIyD7kU76JcPEe3xB/QN2vdAORkaogfdzWgsP0t6gfS8Ti8iS6aGWA0ovOvC/ccqk4j7hU0Xy7ce+0=
+	t=1791987294; cv=none; b=RgvCFJfSFRvdvI3cKpTPdsYF9DDsPXJdV2fT/tRKLYFslqnFFQRiwtZ0NIKSUrgsPtPWmkOVzDmg53tmN4i95gShCSqD9ghrXq7ECnQoTV1PEOBLtLQFiibZTnCyZj/ucMt66OtdhFUIJuyzoTPA0lNg59nQgdIiI7zI90LIFRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791985403; c=relaxed/simple;
-	bh=W4/9IswMV+nhf+i4xgS+WWcxFQT9qKFQQYu/KCal4N4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=fQXvJX5Xr+m6dph7z65HYrJDxeYYUMLLtHjSWtVSYG+n1JspSmgL9Q5rE6kzpSGHyoPLGGyhzjXYCV+uA3DuhXw/iHzwRwlY8obdD1e9kOyvxd9WH7yWYyhqjKYj1fjn8L+MtQuS7N9Cu3NE4xNW7xAgVGqfM0cJPBlxZP0UBDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=kLROKmT2; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1791987294; c=relaxed/simple;
+	bh=LDLT23fIL3Vnuqvwb6RQ16bO8CIzq4ggp+SHdh/yJ08=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZKPTf4odAy4m8s59GpFbb8hwdVrEdwbIRXsH6HijJeBTwl+VF9is5zP5r91LrzKJ4MJm/iJfpv8dMu8ceylMjFKpkVaLoRmKPW+R4r+xchrq/usl5loKl9YPOIOjclyDjU8lNw0dEsbEVojMQy1fA34O0RfCLzRk3S8h5Kp8JxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=fkLRL1VY; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="kLROKmT2"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6df1eeb43feso1747145eaf.1
-        for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 06:43:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1791985400; x=1792590200; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/UfknVFgwY+ADn2+7Gfp8pJoPMV5PqQ31vPcFrLztQY=;
-        b=kLROKmT26XaiJ9Jhx/wSfPTgmiYMtcIZKIZZ4NvhjUUlLz+jhC/LMtiEpZk9Lz+n7a
-         5eBxNA/8dAK3Op6v28cXcfBdC6igqgkunU1dLbToiMNS0ffL8LwwDoUYkxMAOGcBmz9f
-         MOh64iVsLhij/9aexdZmjFZar8Z/kXuJtHhwrJIGodFii7WHY5ThNjfG34lGyYY++nIh
-         PHzfSrECEsmCq7q1ESdsNl09xl3zIKuJo0eZctV4Wm+y4rHG5oh3UMVFLjqsb3BHFPkj
-         i6PuBYLGJR4U2dwTAmvmkhsj9ChAfhLVVW7ZEveleh3DTB22nU+MJi8/vA9UPT9Qu0z2
-         oOSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791985400; x=1792590200;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/UfknVFgwY+ADn2+7Gfp8pJoPMV5PqQ31vPcFrLztQY=;
-        b=CHmdnMbkpd18sRxFRxegrewIP24Q25okX4VgurE1IyTmxCN9pdZCDbXo7Va8wLXILn
-         BLY1TMAD+dZD2aEDb1XSJrpc+AEyRFrKuQevmx+cHkAT+I70Yxx2HbQ9Xbqp6pnVV1yV
-         Z3hb2XNzoXIjnTr3iHggzjtSBsz/MF6PjWnJC2YIhLrTRQhUWKUim1AZFHyUjkGOsIKb
-         iV3UTd7sjy/uoqrLn8PH5lrZm3CdWPmMpe5JeCCqg077xrVtMx1bQko/HpIvu2yD7zTc
-         Fv0BMfcDse+UpjL54FkDPHYtrFGv79ldXMDYw3bilUgo4qCL0IHBBzaRTXpVi83jNzFn
-         UKdw==
-X-Forwarded-Encrypted: i=1; AKwUvBx7Ojfgako9GfqzKB/vUcJ3gpFVW3bjWDEMeKlWHBwTkSByleZkEPOgArSi5pKqmeglCq8qQvPrag==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLoIC8wOY6mWkjAa/q4/Vogu163DgHL5W5wUk0BKAFhPCNLWdw6
-	SxT1GZxzceStebNVlq0W704Y+pOl+HU7Z6pzMdUiwBWdkBcjyRbY5Tw55OoUw/J4mYw=
-X-Gm-Gg: AYBFou1G+h5sQ4+cz/pO6W1l2J6PxsBJ80zinbII23PqhRYCnad2dzPveK2coanHsaQ
-	D9mz41Y2Wa+JIHG9pRkAryibblhvqOiMoYnSF1wVIc/LdsthiHRtpM4nDWpDX6JcO0SXNEng6kI
-	D3D36ojKS81/fbvIDfZkb6EymweIZZByeEPLsuSEEVuhOs7lV4X7BTfKsLfz4KZiDI/goCLjvS1
-	jlmJlrH7H/zWOjsc+EKGFxvB1g7PaK9spIUSGHuVvkIimLkCbaCZs0n65ILlXYlV0DrDW3QD8ky
-	QNUGQHmco3+P/Ds4e1oLgXDhc6U3j24Zw0J5wh04q7ulGQYBEFSNdGG5+TkW15kQLRex2DV+Z4L
-	ftfhZ+tABq77IvsDx54ii2mHHAS+C8v32RGyPq5bS3Z4JAg2+gruCdoz1IddH5LR614lTCYS62a
-	KgzsQZqBvXvWoU0DRtvFVZdmBA9255jvDS/cEJO5b5Qy3rHWcuSAkSKTCGqeTzo+CYUpuex5NjC
-	yMvggFwQOu07CRUT9fMesLLHAZs0mfYEehPPhImpZ7A1C95ECwR7KoyCg==
-X-Received: by 2002:a05:6820:1c8d:b0:6fd:3c3e:3c66 with SMTP id 006d021491bc7-6fd3c3e3e7fmr1002063eaf.3.1791985400251;
-        Wed, 14 Oct 2026 06:43:20 -0700 (PDT)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a6dfb4e92asm2073695fac.6.2026.10.14.06.43.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 06:43:19 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: linux-block@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
- linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org, 
- io-uring@vger.kernel.org, Christoph Hellwig <hch@lst.de>, 
- Sumit Semwal <sumit.semwal@linaro.org>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Keith Busch <kbusch@kernel.org>, Sagi Grimberg <sagi@grimberg.me>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Nitesh Shetty <nj.shetty@samsung.com>, Kanchan Joshi <joshi.k@samsung.com>, 
- Anuj Gupta <anuj20.g@samsung.com>, Tushar Gohad <tushar.gohad@intel.com>, 
- William Power <william.power@intel.com>, 
- Matthew Brost <matthew.brost@intel.com>, Alasdair Kergon <agk@redhat.com>, 
- Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, 
- Benjamin Marzinski <bmarzins@redhat.com>, dm-devel@lists.linux.dev
-In-Reply-To: <cover.1791975048.git.asml.silence@gmail.com>
-References: <cover.1791975048.git.asml.silence@gmail.com>
-Subject: Re: [PATCH v11 00/13] Add dmabuf read/write via io_uring
-Message-Id: <179198539824.583283.3195125120949504062.b4-ty@b4>
-Date: Wed, 14 Oct 2026 07:43:18 -0600
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="fkLRL1VY"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 018FE1570;
+	Wed, 14 Oct 2026 07:14:43 -0700 (PDT)
+Received: from [10.0.128.106] (e127648.arm.com [10.0.128.106])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFC683F673;
+	Wed, 14 Oct 2026 07:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791987286; bh=LDLT23fIL3Vnuqvwb6RQ16bO8CIzq4ggp+SHdh/yJ08=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fkLRL1VY54gikhsUiI2B08JovTDr16GKwY4ByahW05VMCnBzsHhuJUdNA8Qpmt6L9
+	 R2a7DU+O2weDRvhgsrZP0d1vwfAZeQ5xF0qw3/Eea/A0dSLkx1QJYRpM5v1ZjDvaKt
+	 Mz0lvPcL+Qp1BGaRFvwt+SLyL4opFDRo9U5qc+kw=
+Message-ID: <48eb633d-9fbe-4299-8d10-e7686acf5a3f@arm.com>
+Date: Wed, 14 Oct 2026 15:14:41 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] sched/cputime: Preserve iowait accounting across
+ waking interrupts in dyntick-idle
+To: Wei Gao <wegao@suse.com>, Frederic Weisbecker <frederic@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Thomas Gleixner <tglx@kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>, Jens Axboe <axboe@kernel.dk>,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261014015258.13967-1-wegao@suse.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20261014015258.13967-1-wegao@suse.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
 
-
-On Wed, 14 Oct 2026 12:01:58 +0100, Pavel Begunkov wrote:
-> The patch set allows to register a dmabuf to an io_uring instance for
-> a specified file and use it with io_uring read / write requests. The
-> infrastructure is not tied to io_uring and there could be more users
-> in the future. A similar idea was attempted some years ago by Keith [1],
-> from where I borrowed a number of changes. Later it was brough back up
-> to life by Tushar and Vishal.
+On 10/14/26 02:52, Wei Gao wrote:
+> In liburing's test suite, the test/iowait.t test case intermittently fails
+> with:
+>     iowait diff too small: 48
+>     test 1 failed
+> on tickless systems where IRQ time accounting (CONFIG_IRQ_TIME_ACCOUNTING)
+> is not enabled.
 > 
-> [...]
+> Commit 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
+> optimized dyntick-idle cputime accounting by avoiding pausing idle
+> accounting on IRQ entry when IRQ time accounting is disabled.
+> 
+> However, this causes iowait time to be erroneously accounted as
+> CPUTIME_IDLE if the task waiting for I/O is woken up inside the interrupt
+> handler (such as the 1-second timeout hrtimer in liburing's test/iowait.t):
+> 
+> 1. In test/iowait.t, a read request is submitted on an empty pipe and
+>    io_uring_wait_cqe_timeout() is called with a 1-second timeout. Because
+>    current->in_iowait is set, rq->nr_iowait on the CPU is incremented
+>    to 1. When the CPU enters tickless idle, the periodic scheduler tick
+>    is stopped.
+> 2. When the 1-second timeout expires, the hrtimer interrupt fires.
+>    Because irqtime is disabled, kcpustat_irq_enter() does not pause idle
+>    accounting.
+> 3. Inside the interrupt handler, io_cqring_timer_wakeup() calls
+>    wake_up_process(). In ttwu_do_activate(), waking up the task immediately
+>    decrements rq->nr_iowait from 1 to 0 before the CPU has exited idle.
+> 4. When the CPU returns from the interrupt and calls tick_nohz_idle_exit()
+>    -> kcpustat_idle_stop() to settle the elapsed tickless idle duration,
+>    it checks:
+>        iowait = nr_iowait_cpu(smp_processor_id()) > 0;
+>    Because rq->nr_iowait was already decremented by ttwu_do_activate(),
+>    this evaluates to false. As a result, the entire 1-second idle duration
+>    spent waiting for I/O is credited to CPUTIME_IDLE instead of
+>    CPUTIME_IOWAIT, causing diff < 50 and failing the test.
 
-Applied, thanks!
+So reading the test, the reason this doesn't fail constantly (on a non-isolated
+machine) is the massive margins?
+It pins the io_uring_wait_cqe_timeout() to CPU0 with either in_iowait=1 or
+in_iowait=0.
+It then asserts after 1s that CPU0 got: 
+a) for in_iowait=0 at most +10 iowait units (<10% CPU time)
+b) for in_iowait=1 at least +50 iowait units (>50% CPU time)
+So a) would fail on too many unrelated iowaits, b) would fail on unrelated
+runnable tasks.
 
-[01/13] dma-buf: introduce initial file I/O infrastructure
-        commit: 0d3120db2cbe0a8793650e19f0923968a406ca2e
-[02/13] iov_iter: add iterator type for dmabuf maps
-        commit: aeb3bb52052b3548b3acf0cc5606dbb5babb228b
-[03/13] block: always adjust bi_offset on bio_advance_iter
-        commit: 801503b9a66f7c2423b5e495d8e77e0f4447e5d4
-[04/13] block: introduce dma map backed bio type
-        commit: d88e44f43e939e6ac0ca8302c6f3c957b33aa5fe
-[05/13] block: add dma-buf support for raw bdev
-        commit: 839231d193932ca0d592c2859669066f7c43731c
-[06/13] nvme-pci: rename nvme_pci_sgl_set_data to nvme_pci_dma_iter_set_sgl
-        commit: a03648e2efda070322cd4066abf4dff15be093c4
-[07/13] nvme-pci: implement dma-buf backed requests
-        commit: ce5e386c110815e3a29e3ba27d97575c28589c39
-[08/13] nvme-pci: add SGL support for the dmabuf path
-        commit: d5c8cfd41d2575c65c3f1d543017949e578a92d3
-[09/13] io_uring/rsrc: introduce buf registration structure
-        commit: 727a66ad21b013555eedfd84559cd4707717463c
-[10/13] io_uring/rsrc: extend buffer update
-        commit: a5819c456b716fa8bcb7792b942ab02b15e07fc5
-[11/13] io_uring/rsrc: add uncloneable regbuf flag
-        commit: 13b1690bb4767d3f1c847baf71a704c5f2da99e2
-[12/13] io_uring/rsrc: add regbuf import flags
-        commit: d218f3e381908da0e68429f3a4b764e666564c60
-[13/13] io_uring/rsrc: add dmabuf backed registered buffers
-        commit: 62e4bf5b25d4458cf8aa9dece9022359f39f2294
+I don't think validating the per-task in_iowait setting via the CPU aggregate
+is really feasible FWIW.
 
-Best regards,
--- 
-Jens Axboe
-
-
+> 
+> Fix this by checking nr_iowait_cpu() in kcpustat_irq_enter(). If the CPU is
+> currently in iowait, pause and settle the elapsed time to CPUTIME_IOWAIT
+> before the interrupt handler runs. On kcpustat_irq_exit(), resume
+> accounting if it was paused.
+> 
+> Fixes: 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
+> Signed-off-by: Wei Gao <wegao@suse.com>
+> ---
+>  kernel/sched/cputime.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+> index 06bddaa738e5..e8b56433c61c 100644
+> --- a/kernel/sched/cputime.c
+> +++ b/kernel/sched/cputime.c
+> @@ -496,7 +496,8 @@ void kcpustat_irq_enter(u64 now)
+>  	struct kernel_cpustat *kc = kcpustat_this_cpu;
+>  
+>  	if (!vtime_generic_enabled_this_cpu() &&
+> -	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
+> +	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu() ||
+> +	     nr_iowait_cpu(smp_processor_id()) > 0))
+>  		kcpustat_idle_stop(kc, now);
+>  }
+>  
+> @@ -510,9 +511,13 @@ void kcpustat_irq_exit(u64 now)
+>  	 * need to pause nohz accounting. Resume nohz accounting as long
+>  	 * as the irqtime config is enabled to handle case where irqtime
+>  	 * accounting got runtime disabled in the middle of an IRQ.
+> +	 *
+> +	 * Also resume accounting if it was paused on IRQ enter due to
+> +	 * iowait.
+>  	 */
+>  	if (!vtime_generic_enabled_this_cpu() &&
+> -	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu()))
+> +	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu() ||
+> +	     !kc->idle_elapse))
+>  		kcpustat_idle_start(kc, now);
+>  }
+>  
 
