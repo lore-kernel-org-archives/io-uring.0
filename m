@@ -1,157 +1,115 @@
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65FCE52CCF2
-	for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 22:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5158725CC57
+	for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 01:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791931061; cv=none; b=qaW17RVr62XH46erBCnMYq4DV0WLQGjGVuo09WHeV3V5tzzdk1yK1IB0zdwLPQ6xMnQ2k3ytDNDmOuPteB5pvWYyPNJ3V0ha8ai2/ZDhp/eqr9pnAC0MU6NTlPPKN4l0LCk9CPtb8CjCsikDeJgKhqsu3/mDXW42cWJ6IrHM6bg=
+	t=1791940461; cv=none; b=ObjrRVh+XZLNHitqro/2s2Ay/dqjhfyv5cjyueYsV9dm1O4dussub1k5UHI2yEJEVI2Emolwj9MC3EJjoOEYhmsIxVJNJvZumfu+VNGJZ2rC+15x5MVfO2Jt694Sy3gUT2olsdYTMfB6MBklMFgwbTgoke3yWLMbn4v+/TwLv1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791931061; c=relaxed/simple;
-	bh=4XvU5aUK/OdhJN2WdfPwhyvpjo9S7NxkqaEpAtbL/qY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=hroVER/JwLgCxkZKnFKZhySF+rFViRadY5MRc8/SEjrqSXz7wcN77lX0ZFUH3MuMJUNuc936b6WiNc97/OOTjo4+lpMLXwdZF2RZDHH0ey2n9l/H3hXnuiawajq/BMvR2NYYqcIdI01QphelDSocpv5CBTkOSrEXpi1MYKoG/Q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=L/cPnyQK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xcX60cI8; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
+	s=arc-20240116; t=1791940461; c=relaxed/simple;
+	bh=73ZSkgvDAc/tEb38F0TL0h/qQE1nmehsX+W+85TKIlA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VW4DdOO3/UCAXHEReZtSHvMs44+f92debkQT83C7kFoBCh81wYqfv67tz2/HDlOvewRrd2PZRfcWWTkI8hXxrODFN3xFdSYnm9sRWr604pEUyG3E5DqL/nyq+EkGilmZf6JFWp290qoA3ao4CoM4f7eWEyiERbPGrNRCZ0fWSiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CO6NDMK4; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="L/cPnyQK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xcX60cI8"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 9F124140017B
-	for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 18:37:38 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Tue, 13 Oct 2026 18:37:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm2; t=1791931058; x=1792017458; bh=oJ
-	fB7fbIofmtvN3C6uday0xkoE0Q8pgtxwAHK6ogrPg=; b=L/cPnyQKij92t/R5Gl
-	DssEPf1EdvqmAddBMQna2vROuDg+Nkqp+hXcuriJRiimY14H2eVqONVpif5EVJCp
-	/XG5z0/2SHvHDVROuXixg3AGMPuGbgEqEmg4NPkXuJwPE0aBrQUaNoZkgd5f42uC
-	6PC1/fjgG2PVSMGuuuNb/bfndniTr8RqvYkMSNNBxiydQ1qoY+KWyyrkpyNSuIsE
-	z+a/gItXebPUzqAEuLwHzEN1ckXEDiy3x2Okn1QqdGeLdrk1s7cykbb4cKxP7ABz
-	G9l02gX5htiGNRD5HQZ0FjHGrvPaI0QGseMSMVZuCs5/LCL2vjjPER3RvGLWFYvM
-	zcbw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1791931058; x=1792017458; bh=oJfB7fbIofmtvN3C6uday0xkoE0Q
-	8pgtxwAHK6ogrPg=; b=xcX60cI8jX50aYQXKXR2sA4n5eP7Eh9w+0QHrmulj6B3
-	63aipDfl3nyoZzbPWS48gXEjTlMxXKLDd7z11kOcRbst5WbFcWluziD4CeHr7ok5
-	z7Ek4uRnB33HwiSu33CGj0/5iiokFzNu6fRCFQy/tviNsyVUhS1VUJYzyaEXhfCb
-	7znZWNncqbydIy0Mif1HFHrfFYdKqg+Ffs7qiwD1qeYA/m6RsLq2KC4hmtmV6bmC
-	8/FTyWHAl68KEt25hl/jVU6gc6d+liJ1xRnEdmVr23Cp1Lmb1NABMYpai+qHb/lG
-	XfspK+3z0HNYSHHVLkIVNcw3i+uHj62Yg9JKmPlB0g==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=sign d=fastmail.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1791931058; d=fastmail.com;
-	mf=PGp1YW5sdUBmYXN0bWFpbC5jb20+;
-	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
-	s=fm2:rsa-sha256:sChqgLLkkC99HHykRA3GUaabx+Y7Ad4XCMBcIfDrC1hjSdi
-	nO6UbZiddvWDc+md/gpXINo5unuwUox1btMUW6p+bvyszWTq+haaN5D2tPGvkujJ
-	SnRnjKkxURSezAZNEDuriveeKPaO6Pzr6cnF4++p+aI+mE4MB7KR6t2/Er9RWUiH
-	QxVjJoWlNl8MYDedVYPmGgI8yOGXzml8ExulAI2tbZ6WY+O1TMWt0lOdACH+CVsO
-	ojsMSvTlHoJvFQeav2G5OXknNnF/szsVG2q/BkWCcapZ69O+PaBKyNNYgCFCfV3W
-	08llK/eqT9tmhCEbE5ho18vjfUmoEAeIgqfBkqg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=mi-m=1; hc=10;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,message-id,mime-version,subject,to;
-Message-Instance: m=1; h=sha256:IhEcLzFycOdfR2PMruEX6zJuXAqEdvj3z1u6C3VbPPg=:4XvU5aUK/OdhJN2WdfPwhyvpjo9S7NxkqaEpAtbL/qY=;
-X-ME-Sender: <xms:srLOap48rx259eoMNGBrNgp9l2YrWDgWpwGh1-yOUk_aP7-bhEnzYQ>
-    <xme:srLOaobtW391vQar8HTe2ExS3gTVjdAbm77a8TySRiGyGIN96Ii4Q6NLo2_KjBXz-
-    pxMZ5mjqJcOEuZy-MfRh0EjQ3dgWCgzkxAflUST7EnoTmV-9R1rKGwe>
-X-ME-Received: <xmr:srLOaghDKDIeLKcN3PWDrg3N7cJLg9KVTulX1XdoYOcHj5eQw-y4zZ-Nb8gbyP2n3IFpzmfcagJPL8JVgIg>
-X-ME-Proxy-Cause: dmFkZTFDSwAOX/nmGgfCWNy8XIQ8gdeNCmGW2diXrSJHDLXEG/zVFtX6KeMKLe+yU8RsCZ
-    SSF/Xx7Jzsd5AsR1A+G1b6KCcUeqp+6ern+2RxiDRmgK7aX87neUBcQ/9tQxGJo3MjRrM6
-    gNiilKrOoB6xAVN6wHev4bHGJNva/r701qoiDveKc+OmX6fTZPei2DA6TFCqVJk5pSGfoB
-    eQax4BR7VkcDujz8e/UWwPa7uP1U551ukEIo2pA+0jYjR1UfwOLhla1iQhigNpyCfLAWhV
-    yFmjismpY4IpXxU486lxvGiOECmNUZgBdfJrEIOrLLOKRSD0PZXMbFSIk+mVRbM6HI7UFE
-    iLQG5vW5h5383l8Ledj7szZA7KTHw7wEPqS7cAqo760nuHbsHgCvmxIhdhS0oTGdpvx13D
-    ZM7wLbKRLybf+IDY3cliNcFmjQXaWwDu+4W22MV2VrTFB71kvXtoZ0zC1QEnBbPOJWoihL
-    nsDA6fC5FRP8Cu6ISJlpfpxYehovhAQlFshEOoaIRXc8T94ZK4si4lCg4uPEEQRVpHR6Pu
-    kPZs9doHRGovMfo7lmhwO+CmET4EouSUxnX9RIP85KldUojbzG4aopuommL0GE/NyN1Qba
-    m7OC5msKymx9A6vz8hLj/PjxTTk6Q2PlqBR7mfpIeR2JdRbklJ3wehevbu1w
-X-ME-Proxy: <xmx:srLOah8UukaBl0tQfoNjX8Me59aeW_cfy5ZTcAOmYKSHGKt2CLZevg>
-    <xmx:srLOajqzGxDwqGnaizULCY7eiHC1E2Z_EtBffYvzI5xr5UPbN9Q0jA>
-    <xmx:srLOahWtujtev0qaRfJGJGRVibqBd7r52iPBHFCVkXOKyXoR9x40DA>
-    <xmx:srLOaqDqGzQBmC7vm1YJ31eDORQlMwAFZezA7wTqNxSLo_xzkZYYsw>
-    <xmx:srLOan-NXTJkVPc6V5sScy31-wShJxpX2aI-KAiVAuuDd32Di_kHunvU>
-Feedback-ID: i80b64ba7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 Oct 2026 18:37:38 -0400 (EDT)
-From: Juanlu Herrero <juanlu@fastmail.com>
-Date: Tue, 13 Oct 2026 15:37:20 -0700
-Subject: [PATCH] io_uring/poll: avoid retry wakeup loss when dropping
- ownership
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CO6NDMK4"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4956869750eso25648865e9.2
+        for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 18:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791940458; x=1792545258; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+IRGY42o0foxKofOSIE21b7k7cypUKnC6DpjmgjMdLE=;
+        b=CO6NDMK43wiKPojMSSW1HF3u0mstSOPLyi8tY2H6Nlsljlo52qgIGTdCQYd2TL7+b9
+         0nakKlqYTz44tcHOFJpxhjHfMVl+4m3Jl/UYlZoBjPZtDeulxXD+VE5ySnVdsfl56Ofp
+         XhJK0xsaB5+DAFWrKMAMs/7OlBTinUNtsf2WZONpIWqvpMUP7q0PzAcidAEIKgbEnqVS
+         EfIn2Y64MePjoMFqN41bru7prUO2rfNHlCmoW4STOySXfFl5McK/pJO06QSCUM1T9aC6
+         7+wfEPHVoCS77Tvrt62ToQMUweDdvEDpkDcvMZvBpWJUn9JPERbPkiT0IjiFPbDCZ46P
+         DEdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791940458; x=1792545258;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+IRGY42o0foxKofOSIE21b7k7cypUKnC6DpjmgjMdLE=;
+        b=WhbEa56nAj5W0+EfHj75I8MMHghxNyU/r4CT9LEod+AxVuA7TGTz+q+ej7Pr35t/jq
+         OGk8U8sPX5Ackfgv7Kn3831/W708DSnGk5u9BaSe8ayPoVqGsZ6qV6SVqgt5CNSW9MeZ
+         k3I4FWsUaChBor/dxkD9mJMPKYJvtMqrjgzqWzc/f03UVTxnpG0H9tkrped962YcQW/U
+         cOdQdW4Bt4KXg8XxzBU4gdjhOVmFynbNNF0d557HkfGb+cA6aKg3L5w6DsRgFZAwmEzL
+         GaWXDiRH8ZV8SM8WZZr2NVExyOmlrd4Jj8ozEuz41y10geRhVtADi4rfUKTt3h/gNx25
+         Pz+Q==
+X-Forwarded-Encrypted: i=1; AKwUvBx/6UesFwDBPkzD5a2Gvs8vR4/5ltg8PV9UR7nt9nHIC6sLIePBSRABKv3nxKfjJKNxiWVU1gUS7Q==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKw/1hedhDZ+3jL7U9sqkuBlKHADbQttrzHNTdCz/OMM8pHE82u
+	H0F+kSq03RneBBQPEdpolp0DPWqAttgYY3Lz2WVd48sNI8YACwh53dFv
+X-Gm-Gg: AYBFou09tWBdjj/Ok1yTvKNByKbt/lo8RS9AU3lQD17acChh85OPvc7XJx0DVeG0NNW
+	zP+notdqGonNZzbo3YbVJKW0z40zqg0vTtW4YObZez5kHAdD2t0Uw1T2VSEOWcbqrTqmtxyTtM7
+	7375xqIQlaZ7+xwoWIt1iSyvJwfVDL9Ox6nhup5mEU0/GoDW3X8yU0gnOkilMLOL6gyJCej0NRJ
+	GsVPJ3zXhmCjSVJPcAKT/4BXAS2+UUWcy+PYfMNPgR9a1WlNODYMdvEdpJKQIf0yQFSavrjhRtt
+	a+jmd+ev+2dd0oQMhSZWcqiSUrZj5+inpFFJ5YuDt8QmB02SgKujbc9LRo+zxXPVJjZmq/NlZ2K
+	xCg4fanpAAsfFdu2Rm2OBksMtDcEcnujVEroFZrm5EJO/6sGF385mHsKjGEM5z5ShuxNBnCYtQy
+	SvCWQEtcznSvS3l8GiNXHOGY+ITZDH1dGtbBZVTCZAhgaut6beW5NcXEMx72j3vHsRl6SxRXpdr
+	9AxtVwenLEC/CsesJSun4yFBCV2ew1zfs1ZMGtKa5utgtw1CV+T2kn4RdCmN6Z2M6y2aj1xuoY1
+	Le9J6iX85nP0k96xzEE6LbhroyprvcGypkK6/Z7tzOf1BrGB
+X-Received: by 2002:a05:600c:3111:b0:4a1:811c:8069 with SMTP id 5b1f17b1804b1-4a18e49d640mr279688285e9.8.1791940458506;
+        Tue, 13 Oct 2026 18:14:18 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1b748cbfdsm4389935e9.0.2026.10.13.18.14.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Oct 2026 18:14:17 -0700 (PDT)
+Message-ID: <86ae9136-3413-45b2-99b0-fbe404ef1b39@gmail.com>
+Date: Wed, 14 Oct 2026 02:14:16 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/cmd_net: prevent infinite retry loop on
+ unextractable timestamp skb
+To: Bui Viet Dung <dungvn2345@gmail.com>, Jens Axboe <axboe@kernel.dk>
+Cc: Willem de Bruijn <willemb@google.com>, lollipopkit <a@lolli.tech>,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20b406ac-94ec-4b0f-a307-08082092ae08@gmail.com>
+ <6ac7afc4.cf15ae49.1a8a2a.2a55@mx.google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <6ac7afc4.cf15ae49.1a8a2a.2a55@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261013-pu-cmpxchg-v1-1-4ddc10fd8a03@fastmail.com>
-X-B4-Tracking: v=1; b=H4sIAJ+yzmoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzNDA0Nj3YJS3eTcgorkjHRdy0RzgySLFNPkFMs0JaCGgqLUtMwKsGHRsbW
- 1AHDzBdlcAAAA
-To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc: stable@vger.kernel.org, Juanlu Herrero <juanlu@fastmail.com>, 
- Anand Natarajan <anand@meta.com>
-X-Mailer: b4 0.13.0
 
-If a wakeup sets IO_POLL_RETRY_FLAG between the owning task consuming
-the existing instance of IO_POLL_RETRY_FLAG and the loop check
-of io_poll_check_events(), then we stall on processing the request
-until an unrelated wakeup comes along.
+n 10/8/26 15:59, Bui Viet Dung wrote:
+> On Thu, Oct 8, 2026 at 3:43 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>> Sounds fine since there are only timestamp skbs in this list, do
+>> you have a test case?
+> 
+> Hi Pavel,
+> 
+> Thanks for the review.
+> 
+> The issue was spotted during code inspection of the error handling path
+> in io_uring_cmd_timestamp(): specifically when skb_get_tx_timestamp() returns
+> a negative error (e.g. -ENOENT due to missing PHC bindings with
+> SOF_TIMESTAMPING_BIND_PHC or unavailable timestamp data). Since the
+> multishot apoll remains armed on EPOLLERR and the unhandled skb is spliced
+> back onto the head of sk_error_queue, it immediately re-triggers the command
+> in a tight busy-loop.
+> 
+> Below is a standalone test program demonstrating the TX_TIMESTAMP command
+> setup and execution with CQE32:
 
-Using atomic_cmpxchg instead of atomic_sub_return to guarantee both the
-count v and poll_refs are 0 and no wake-ups are missed.
+Did you actually reproduce it? This program doesn't for me, nor does
+fault injection. Taking a look at the code, io_uring_cmd_timestamp()
+returns -EAGAIN, and the request will wait for the next wake up in the
+polling code. There are bits to improve, but that's not an infinite loop.
 
-Cc: stable@vger.kernel.org
-Fixes: a26a35e9019f ("io_uring: make poll refs more robust")
-Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
-Assisted-by: LLM
-Suggested-by: Anand Natarajan <anand@meta.com>
----
-Validated that the stalls disappeared after applying the fix to a small
-zcrx testing script + bpftrace using nodev on 7.1 with a VM dropping
-from ~50 stalls to 0. 
-
-https://gist.github.com/jlhe97/cf5affffe75e709ba1627e5e0e6405a1/
-
-Similarly, A/B tested on hw using 2 machines containing bnxt NICs 
-for zcrx and set the needed ethtool flags/rules. Over 10 minute runs the
-patch dropped from 127 stalls to 0.
----
- io_uring/poll.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 5447a7c24dce6..44765eafa00dc 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -330,7 +330,8 @@ static int io_poll_check_events(struct io_kiocb *req, io_tw_token_t tw)
- 		 * Release all references, retry if someone tried to restart
- 		 * task_work while we were executing it.
- 		 */
--	} while (atomic_sub_return(v, &req->poll_refs) & IO_POLL_REF_MASK);
-+		v &= IO_POLL_REF_MASK;
-+	} while (atomic_cmpxchg(&req->poll_refs, v, 0) != v);
- 
- 	io_napi_add(req);
- 	return IOU_POLL_NO_ACTION;
-
----
-base-commit: e889b0e4cafddb3d68c3595dc01b7128fd35fbef
-change-id: 20261013-pu-cmpxchg-9a70b8d5cd9f
-
-Best regards,
 -- 
-Juanlu Herrero
+Pavel Begunkov
 
