@@ -1,144 +1,123 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6622264A7;
-	Wed, 14 Oct 2026 12:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732BA374A0D
+	for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 13:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791982233; cv=none; b=kzaQsdb8k33Re/hgOANJaMvI6j5LM49KgAPuVIxja0HsXW9CsH60Pl6WnYXg23m2dyOwVSntfwGSFB61i/RMmUjUQ5HDwjQFIyFDrOr2+ybctJRbFPX08DSN+6yW2lk4Evrw2nRnT6sIJjk1gOl5NtqmWf/mPiPPoO1joCTdRPQ=
+	t=1791983224; cv=none; b=VvNlC63kgXEuzhnXwzA/PGFVTsM0ciwEmupnHQs4uKACv4GmWv+bO37iHWG/BcJ2DXbSfk3sYI9IZHHnFdDEFX+ACpm24hs2dVwrGcUFlxFKdrFWzVLWRrvnWrlnrdsCb7EigtXJUdlXRxImm2WnJOSOercvsmoQ0dvV46vAymg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791982233; c=relaxed/simple;
-	bh=bgiFu0sGxQoiEuvk8HoG3W6bGFni+KGMvGFgg73mU3I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aYsymLR8VwJXJ61DWtCaa3A2Yrz0xnX7R62Yq0i/tNtkJZOtTs2gk5uEm7KuGX77sVtvsmuwO8Rv8x6glfmKZoRyPXiRHPRYHdYA5Cc4RgRnGhlTJz4Vf1LsxBLC9CYwy9Ej63IWTgbBJrPB+z7GDYhD7901zriE/LFrYokn0Tg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Q7ZUZX/6; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1791983224; c=relaxed/simple;
+	bh=OySODPiskWWvzQQMx1Yq/HwVMV7iyUkBWw0BjUbVY6s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hf6HwEg8TNyAi7Hc7egPff6d35w0PenDrEE2886PY5gl4OA2Tz/txaVb01NlderWb0KBy/9Xh+3WD2CaGb/IKJvSxHBDgH2Q3vizYcSLHPLSdUYtp3YaffLmgG/2/CT4rxzkOCukeP81lF8MzRvCBHfwqTECirQMGqPW+hHQDks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LttP+57Q; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Q7ZUZX/6"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=tSsrfwv3XYOUoqKLasClhmhnPY9YIfSnY1a1of3xT0Y=; b=Q7ZUZX/6ijEmASKNFKPOgbkHBJ
-	vEepA8gWzYzR2NSK6D8eUMR/4L1OVoALjwhXfAGAqjm15LDtUrEua5HWtY1JRcD1lC8VkyZOjukz6
-	wCMNUZAm+xHPkGBxBlhVJwIEWzg0y5ZtDwyO7wzRhCD/+i+ARQLgHrrihEbvrBdM4mnvdv1LO3+Tn
-	zHN3YnNbRKJNziogtRMVETMaC11ccSGlze2/6N41uVaOr3lqoYFhdX516OloGIHD1jpQVJDO3pr3G
-	XyrD4OVXF1C7RJLkDbjSop0t0fNTMdP39PLVKb+jKcyHOplZgTSaGznCeMX50phP1+zxLwORZWCf8
-	bakExnZA==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1xGyQJ-00000003eL6-1Zok;
-	Wed, 14 Oct 2026 12:49:35 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id E9751300890; Wed, 14 Oct 2026 14:49:34 +0200 (CEST)
-Date: Wed, 14 Oct 2026 14:49:34 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Wei Gao <wegao@suse.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] sched/cputime: Preserve iowait accounting across
- waking interrupts in dyntick-idle
-Message-ID: <20261014124934.GE4121339@noisy.programming.kicks-ass.net>
-References: <20261014015258.13967-1-wegao@suse.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LttP+57Q"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-49fbb2acc90so35378515e9.2
+        for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 06:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791983222; x=1792588022; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=k5Xx2GBklmLYql9VZXZ+CeE2dU9lwoFm77pkgYHcd38=;
+        b=LttP+57QkPAzmVVgUvRW/Pp91UXzLM8OE6jaXUaXULC9NYjzeL97NCoVyX/bypkvRk
+         peQUYRfnh5Y7MVpWP9KRooCb+/mVQrAcK3pfdPbFtHqN7CieKU5nDRqxKJs4KaykY5Mp
+         47FHCnhxBfn95ZlIQUM5t5uirtgnxgVmEnAsTSU8pPnjLE6qTS4hZ3q7rZwFqBphpimm
+         LGq0XY1fMplM7a0KAexltkifQNpAVK1FaCAC4DdwrUBEjs104BAMvmB6DmZ+xRfXWIk2
+         z3vVscEpYOosS5Z8V4hkMt6vyU+dMBCChD6MxSCniSCY6yv2aP/zXSFRlHwh6OdTiP4w
+         tZAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791983222; x=1792588022;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=k5Xx2GBklmLYql9VZXZ+CeE2dU9lwoFm77pkgYHcd38=;
+        b=S+/eWYFsZwukopL32Wg+2SdtnR5rPicTP2IDIVwSh2/6ryRSHIBdlVcfCmYMA9QCKc
+         LbiQ36dWuDDkiOFoOVzTf++kyqgrDi1+LzX/Ym7/tyZtZpU2mDbDPfkXZSUGU3g+dZf0
+         bCslRlK+EdIky2pHz4umWsC1c9B7UajsSmHlgVqJLeTOfz9s7i+kRRVrx6Eakx+Oruuy
+         Xy6U+/uTq9PDqNrTm5PKd8nIJEpHVlltg70fB1s8I9OSQdlqf/9HdjO3Z0MyT1o85oTl
+         1kJWJ/MuuGv5tVDLnSPpWbHIG3HWRyZLOvOLH4CHfjv7vBMfciiCRA0cYz6i1PfHtTBH
+         hdIA==
+X-Forwarded-Encrypted: i=1; AKwUvByQfVvJogkGqG6xHtFXSlNDGlntIrjSGfe2tBOfrbF3bcib9oUMChZ/r0KADhTtUQHs4o5GfOE70A==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJl25S/kzOIPjv2V261ZK3OOO7F7iFWMZhvt5vRZziYpESz/1v0
+	kAMft0j37VRK500EOyosIH8Qw8omEnBoW+Pq3VFvh4G6qWVkpU6qW2Cw
+X-Gm-Gg: AYBFou0Xjp6m6e07hIygDqpVO1Dqzzj57fDDjHqqLIfL2WO1j11c+eni8gBxqpUXNV7
+	bSi5asEabTvJH1/qNj3iT5xxsbFDe6W5yIkLKY/IN1XvJEoFJjXjqJFyaoEZ3fOJE9K2fXbe8Ge
+	iFuWKhdXM/a84PSS5wD0jMVSr9T5YKv2bjqR4SIZFCk8zdJLisjYS6ikWTq+jR02+Ndyo/OsdkG
+	tthAXTMUvBGwUk2v0zMAVYSWiJ2qtaMcgo94tre7qV/Up0gi7bxw7e9667YOdUNlxYlEil4eYa5
+	On0EFTTqB02xeJA4ONBbbdGBhpdbp9dURyLPU7QPixE8gSePpzXk7jaU5WVnoAGEsxHQrgRI+7L
+	8rFlsc7pe8EthJYLI5N7YuofizjiV/kc9HGXt9Y9nUlj73S7iTCzaZq2SHNsHL0VBfQye/GvOej
+	xja2UAQiT3bN7J7GkOHsnpaff31Zb7jpeRVX/evWU4Vpv5zi38ZE/i/1LA6IY/pwyBf2Ev94lll
+	izey+gZ0lB8U3k9A5aOdvMp2YojzJ5pUy9ikE86dkLaUnEk17JTqaSkQ3bJaaDppSSCs0vuWAT/
+	ope56lG9PBN0s6TuY+RzAl6r5nbSwBQZmQGtbiyLXPA8yIpphA==
+X-Received: by 2002:a05:600c:6994:b0:49c:dada:30b7 with SMTP id 5b1f17b1804b1-4a18e446f3bmr313643615e9.2.1791983221508;
+        Wed, 14 Oct 2026 06:07:01 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1b3602990sm52779585e9.0.2026.10.14.06.07.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Oct 2026 06:07:00 -0700 (PDT)
+Message-ID: <8d0e7d1e-086b-413a-87de-20e21f519daa@gmail.com>
+Date: Wed, 14 Oct 2026 14:06:59 +0100
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261014015258.13967-1-wegao@suse.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 01/13] dma-buf: introduce initial file I/O
+ infrastructure
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ linux-block@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+ linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+ io-uring@vger.kernel.org, dm-devel@lists.linux.dev
+References: <cover.1791975048.git.asml.silence@gmail.com>
+ <49e24334953262e85d5616c9afde88c680e4f3a3.1791975048.git.asml.silence@gmail.com>
+ <b461d367-8965-4798-b7ac-cffd4301cd1b@amd.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <b461d367-8965-4798-b7ac-cffd4301cd1b@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 14, 2026 at 01:52:58AM +0000, Wei Gao wrote:
-> In liburing's test suite, the test/iowait.t test case intermittently fails
-> with:
->     iowait diff too small: 48
->     test 1 failed
-> on tickless systems where IRQ time accounting (CONFIG_IRQ_TIME_ACCOUNTING)
-> is not enabled.
+On 10/14/26 13:30, Christian König wrote:
+> On 10/14/26 13:01, Pavel Begunkov wrote:
+...>> +static void dma_buf_io_kill_map(struct dma_buf_io_ctx *ctx)
+>> +{
+>> +	struct dma_buf_io_map *map;
+>> +
+>> +	dma_resv_assert_held(ctx->dmabuf->resv);
+>> +
+>> +	map = rcu_dereference_protected(ctx->map,
+>> +				dma_resv_held(ctx->dmabuf->resv));
+>> +	if (!map)
+>> +		return;
+>> +
+>> +	rcu_assign_pointer(ctx->map, NULL);
+>> +	percpu_ref_kill(&map->refs);
+>> +	/* make sure the map is not visible via ctx->map */
+>> +	synchronize_rcu_expedited();
+>> +	wait_for_completion(&map->drained);
+>> +	dma_buf_io_map_release(map);
+>> +}
+>> +
+>> +int dma_buf_io_init_map(struct dma_buf_io_ctx *ctx, struct dma_buf_io_map *map,
+>> +			struct sg_table *sgt)
 > 
-> Commit 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
-> optimized dyntick-idle cputime accounting by avoiding pausing idle
-> accounting on IRQ entry when IRQ time accounting is disabled.
-> 
-> However, this causes iowait time to be erroneously accounted as
-> CPUTIME_IDLE if the task waiting for I/O is woken up inside the interrupt
-> handler (such as the 1-second timeout hrtimer in liburing's test/iowait.t):
-> 
-> 1. In test/iowait.t, a read request is submitted on an empty pipe and
->    io_uring_wait_cqe_timeout() is called with a 1-second timeout. Because
->    current->in_iowait is set, rq->nr_iowait on the CPU is incremented
->    to 1. When the CPU enters tickless idle, the periodic scheduler tick
->    is stopped.
-> 2. When the 1-second timeout expires, the hrtimer interrupt fires.
->    Because irqtime is disabled, kcpustat_irq_enter() does not pause idle
->    accounting.
-> 3. Inside the interrupt handler, io_cqring_timer_wakeup() calls
->    wake_up_process(). In ttwu_do_activate(), waking up the task immediately
->    decrements rq->nr_iowait from 1 to 0 before the CPU has exited idle.
-> 4. When the CPU returns from the interrupt and calls tick_nohz_idle_exit()
->    -> kcpustat_idle_stop() to settle the elapsed tickless idle duration,
->    it checks:
->        iowait = nr_iowait_cpu(smp_processor_id()) > 0;
->    Because rq->nr_iowait was already decremented by ttwu_do_activate(),
->    this evaluates to false. As a result, the entire 1-second idle duration
->    spent waiting for I/O is credited to CPUTIME_IDLE instead of
->    CPUTIME_IOWAIT, causing diff < 50 and failing the test.
-> 
-> Fix this by checking nr_iowait_cpu() in kcpustat_irq_enter(). If the CPU is
-> currently in iowait, pause and settle the elapsed time to CPUTIME_IOWAIT
-> before the interrupt handler runs. On kcpustat_irq_exit(), resume
-> accounting if it was paused.
+> You somehow forgotten the kerneldoc I asked for here.
 
-Using nr_iowait_cpu() is fundamentally never a fix. It is rolling a dice
-and liking random numbers. See the comment that goes with that function.
+Ah yes, missed that function. I'll add it but perhaps in a separate
+patch, if you don't mind, depending whether we queue it for 7.4.
 
-> Fixes: 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
-> Signed-off-by: Wei Gao <wegao@suse.com>
-> ---
->  kernel/sched/cputime.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-> index 06bddaa738e5..e8b56433c61c 100644
-> --- a/kernel/sched/cputime.c
-> +++ b/kernel/sched/cputime.c
-> @@ -496,7 +496,8 @@ void kcpustat_irq_enter(u64 now)
->  	struct kernel_cpustat *kc = kcpustat_this_cpu;
->  
->  	if (!vtime_generic_enabled_this_cpu() &&
-> -	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
-> +	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu() ||
-> +	     nr_iowait_cpu(smp_processor_id()) > 0))
->  		kcpustat_idle_stop(kc, now);
->  }
->  
-> @@ -510,9 +511,13 @@ void kcpustat_irq_exit(u64 now)
->  	 * need to pause nohz accounting. Resume nohz accounting as long
->  	 * as the irqtime config is enabled to handle case where irqtime
->  	 * accounting got runtime disabled in the middle of an IRQ.
-> +	 *
-> +	 * Also resume accounting if it was paused on IRQ enter due to
-> +	 * iowait.
->  	 */
->  	if (!vtime_generic_enabled_this_cpu() &&
-> -	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu()))
-> +	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu() ||
-> +	     !kc->idle_elapse))
->  		kcpustat_idle_start(kc, now);
->  }
->  
-> -- 
-> 2.55.0
-> 
+> Apart from that still looks good, but I had only time to skim over it.
+-- 
+Pavel Begunkov
+
