@@ -1,115 +1,166 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5158725CC57
-	for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 01:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823902D876B
+	for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 01:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791940461; cv=none; b=ObjrRVh+XZLNHitqro/2s2Ay/dqjhfyv5cjyueYsV9dm1O4dussub1k5UHI2yEJEVI2Emolwj9MC3EJjoOEYhmsIxVJNJvZumfu+VNGJZ2rC+15x5MVfO2Jt694Sy3gUT2olsdYTMfB6MBklMFgwbTgoke3yWLMbn4v+/TwLv1E=
+	t=1791942838; cv=none; b=PXRyxZhOyPmu82LabrtaCWNVsm+kM+mcfU3vLyxS7+K9fU+c9P2qi4Sia2YeJYrN5l85X6EOhnls+8OqhjxuTIPokH8aFG1RC3w4Vto8b6TNzxD+tr5LhkPS/QLBlivQML0DhHrxAjZ1V/tFlwpc5GGeIOn0DK5tGAWpDDqJmN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791940461; c=relaxed/simple;
-	bh=73ZSkgvDAc/tEb38F0TL0h/qQE1nmehsX+W+85TKIlA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VW4DdOO3/UCAXHEReZtSHvMs44+f92debkQT83C7kFoBCh81wYqfv67tz2/HDlOvewRrd2PZRfcWWTkI8hXxrODFN3xFdSYnm9sRWr604pEUyG3E5DqL/nyq+EkGilmZf6JFWp290qoA3ao4CoM4f7eWEyiERbPGrNRCZ0fWSiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CO6NDMK4; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791942838; c=relaxed/simple;
+	bh=etzMKFfxyaLbRaq/gDzTndGUtAYGsuuIZao4GHbqgps=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=daOPnBC5Gs8JneRUX+tRObuDpsFOHI0k9at49tJcBt5suz1N9Sbex6OtOu8V2cgr0TetYhHfj+bTAgS932FXR1PhM9pXxcH8SOBVNXzxMjGcQLaNZaGSoJzH8SHpBZQ5+vGnoH49KQbzkxhDaPIQgMJiwUkTJd4jy6M7TohvWLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Ng993Nf0; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CO6NDMK4"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4956869750eso25648865e9.2
-        for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 18:14:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Ng993Nf0"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-49d05d51553so2679975e9.2
+        for <io-uring@vger.kernel.org>; Tue, 13 Oct 2026 18:53:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791940458; x=1792545258; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+IRGY42o0foxKofOSIE21b7k7cypUKnC6DpjmgjMdLE=;
-        b=CO6NDMK43wiKPojMSSW1HF3u0mstSOPLyi8tY2H6Nlsljlo52qgIGTdCQYd2TL7+b9
-         0nakKlqYTz44tcHOFJpxhjHfMVl+4m3Jl/UYlZoBjPZtDeulxXD+VE5ySnVdsfl56Ofp
-         XhJK0xsaB5+DAFWrKMAMs/7OlBTinUNtsf2WZONpIWqvpMUP7q0PzAcidAEIKgbEnqVS
-         EfIn2Y64MePjoMFqN41bru7prUO2rfNHlCmoW4STOySXfFl5McK/pJO06QSCUM1T9aC6
-         7+wfEPHVoCS77Tvrt62ToQMUweDdvEDpkDcvMZvBpWJUn9JPERbPkiT0IjiFPbDCZ46P
-         DEdw==
+        d=suse.com; s=google; t=1791942834; x=1792547634; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=q7gohh3C0jcN6dr3Ss+1kwQpdA+0WCudV85EOEZosuw=;
+        b=Ng993Nf0WUvmyTmfVIKWAs6ecuvJ9QdDY97lTjrfIl/Rj/QaaQaNRVNObepxP1jzqk
+         /n+W40RwImKIN78o/zftXddwDgSaXDoTl66g08EHTSmHyG65c0/lWZ+P6D9NKYYZj7Xb
+         +G2jk3oVImpQ/s3QpJckxyASP74fcfJqNEQuX78rQg//HeFXs7P+qxZ0/B1RDVfpTTqo
+         s7R91/Bvp2/hqoYDOwAB1vbM5+NIqIAKxn4gHULzehsFwpunbmRGJddezStObscgtSuN
+         MkMJrZsyjMaYAGuukFxXAksFNxOdCfk625ud6iF8wG4qySEJdwN8JIURVg3nqQUhOPU9
+         LasQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791940458; x=1792545258;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1791942834; x=1792547634;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+IRGY42o0foxKofOSIE21b7k7cypUKnC6DpjmgjMdLE=;
-        b=WhbEa56nAj5W0+EfHj75I8MMHghxNyU/r4CT9LEod+AxVuA7TGTz+q+ej7Pr35t/jq
-         OGk8U8sPX5Ackfgv7Kn3831/W708DSnGk5u9BaSe8ayPoVqGsZ6qV6SVqgt5CNSW9MeZ
-         k3I4FWsUaChBor/dxkD9mJMPKYJvtMqrjgzqWzc/f03UVTxnpG0H9tkrped962YcQW/U
-         cOdQdW4Bt4KXg8XxzBU4gdjhOVmFynbNNF0d557HkfGb+cA6aKg3L5w6DsRgFZAwmEzL
-         GaWXDiRH8ZV8SM8WZZr2NVExyOmlrd4Jj8ozEuz41y10geRhVtADi4rfUKTt3h/gNx25
-         Pz+Q==
-X-Forwarded-Encrypted: i=1; AKwUvBx/6UesFwDBPkzD5a2Gvs8vR4/5ltg8PV9UR7nt9nHIC6sLIePBSRABKv3nxKfjJKNxiWVU1gUS7Q==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKw/1hedhDZ+3jL7U9sqkuBlKHADbQttrzHNTdCz/OMM8pHE82u
-	H0F+kSq03RneBBQPEdpolp0DPWqAttgYY3Lz2WVd48sNI8YACwh53dFv
-X-Gm-Gg: AYBFou09tWBdjj/Ok1yTvKNByKbt/lo8RS9AU3lQD17acChh85OPvc7XJx0DVeG0NNW
-	zP+notdqGonNZzbo3YbVJKW0z40zqg0vTtW4YObZez5kHAdD2t0Uw1T2VSEOWcbqrTqmtxyTtM7
-	7375xqIQlaZ7+xwoWIt1iSyvJwfVDL9Ox6nhup5mEU0/GoDW3X8yU0gnOkilMLOL6gyJCej0NRJ
-	GsVPJ3zXhmCjSVJPcAKT/4BXAS2+UUWcy+PYfMNPgR9a1WlNODYMdvEdpJKQIf0yQFSavrjhRtt
-	a+jmd+ev+2dd0oQMhSZWcqiSUrZj5+inpFFJ5YuDt8QmB02SgKujbc9LRo+zxXPVJjZmq/NlZ2K
-	xCg4fanpAAsfFdu2Rm2OBksMtDcEcnujVEroFZrm5EJO/6sGF385mHsKjGEM5z5ShuxNBnCYtQy
-	SvCWQEtcznSvS3l8GiNXHOGY+ITZDH1dGtbBZVTCZAhgaut6beW5NcXEMx72j3vHsRl6SxRXpdr
-	9AxtVwenLEC/CsesJSun4yFBCV2ew1zfs1ZMGtKa5utgtw1CV+T2kn4RdCmN6Z2M6y2aj1xuoY1
-	Le9J6iX85nP0k96xzEE6LbhroyprvcGypkK6/Z7tzOf1BrGB
-X-Received: by 2002:a05:600c:3111:b0:4a1:811c:8069 with SMTP id 5b1f17b1804b1-4a18e49d640mr279688285e9.8.1791940458506;
-        Tue, 13 Oct 2026 18:14:18 -0700 (PDT)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1b748cbfdsm4389935e9.0.2026.10.13.18.14.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2026 18:14:17 -0700 (PDT)
-Message-ID: <86ae9136-3413-45b2-99b0-fbe404ef1b39@gmail.com>
-Date: Wed, 14 Oct 2026 02:14:16 +0100
+        bh=q7gohh3C0jcN6dr3Ss+1kwQpdA+0WCudV85EOEZosuw=;
+        b=MwRGNV0aUE5dbFaxSUrfNU+b621ue+8Zlj4RrktdMELuMINIRthIhPS1J4gOQXZyDH
+         +B9VKv2CMnmGnw4FcL+Oziy8WrrqbRSw+uaMqmwIvUlj3+o2Fko1I7CU5T9vqPSFdL7V
+         7WiwpfAU4dJA1rOXbEzbvhD11lbFIvCSs5LtCMe8w/O/uG6BFVDxtzzFYmyHXnFr8OnI
+         NHnTqKDfrW29Qo/G18T6LW74K62hpQz93ZM443PlsKhNEVqbHQ6bEjFpLGPfKmgfXs5p
+         SiG7lsFXrdOerZunBtnvx6P9vjmTrE3SAQIpgojXjiKNyFKsq11WTnBDzeZBDMjifA9l
+         eePA==
+X-Forwarded-Encrypted: i=1; AKwUvBy1F5k6VqSZSGAvg0gfSOShCfBs0lqJBOn+rZqUIJqnTr8Uy7zQFHFyfDh0v3YS4Ohs2P95wKxqWA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKMFDEVWvl8omIMbdt7Ya83uCEKPqyZpMNTQ3hDhjkjbZ9QN+9c
+	uVjL7EJ0Fm4+I1K/5Rskg306osNh5xlqsWzLVSiT8wSVjU026YeWem3W2oLfZAZItA==
+X-Gm-Gg: AYBFou3pGuwdPVPIAMPccyCovkQe4TaiDT27uAK2Ar1t8YvGq3aXFlQjq57yqJQNSwZ
+	4IV1pYbPYlPesvLFrkZXS1DteGEGWXVXSPzOchE3QsNTD6fL7l144wkGXWAF2/aSM9VcFPza82T
+	x/6ih7J3Rn6PrXwW1KDvxyr04J3kpZS9MwFcgjUYtpXdDoIZQKobm194+KtzLXGDU5bwpEa86L0
+	ekhiEPw6TIyU8lSMbRvYTvTmsz7ki8JFhCEuTXWCY5m71nG2yYsjDTuKHxEkj0zptuE3Lqfoy27
+	E2F9K2ImhYO2wlikH9A8o9B+YnSExd0qSGmrAq61X2P2aGBnMy+VdKL5JMNggGPmX0EB7ntj4pt
+	3i6AXm7SZ02uPYd2dieJQ6APqWpJ2siA0DVWH3L9+Bh5PEbWQTvUDx8UiV6qcoe/jAmSDB3+q+z
+	GHWLW4pIsi8soWE7yreq+25bAVASGb6Iky/AgKo/rZqUblYOAooD4mUQ2j/Q7/ggsnM9RyAQLtq
+	LLBve6ss7XOaT+LAePofhliTLoHXaPzea6xJffWRt6PViYUhznvDhM=
+X-Received: by 2002:a05:600c:3f0c:b0:4a1:6517:ccf1 with SMTP id 5b1f17b1804b1-4a18e47a844mr298659345e9.9.1791942833797;
+        Tue, 13 Oct 2026 18:53:53 -0700 (PDT)
+Received: from localhost ([2a07:de40:b240:0:2ad6:ed42:2ad6:ed42])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4a1b2e9791csm19754185e9.1.2026.10.13.18.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2026 18:53:53 -0700 (PDT)
+From: Wei Gao <wegao@suse.com>
+To: Frederic Weisbecker <frederic@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Thomas Gleixner <tglx@kernel.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wei Gao <wegao@suse.com>
+Subject: [PATCH v1] sched/cputime: Preserve iowait accounting across waking interrupts in dyntick-idle
+Date: Wed, 14 Oct 2026 01:52:58 +0000
+Message-ID: <20261014015258.13967-1-wegao@suse.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/cmd_net: prevent infinite retry loop on
- unextractable timestamp skb
-To: Bui Viet Dung <dungvn2345@gmail.com>, Jens Axboe <axboe@kernel.dk>
-Cc: Willem de Bruijn <willemb@google.com>, lollipopkit <a@lolli.tech>,
- io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20b406ac-94ec-4b0f-a307-08082092ae08@gmail.com>
- <6ac7afc4.cf15ae49.1a8a2a.2a55@mx.google.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <6ac7afc4.cf15ae49.1a8a2a.2a55@mx.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-n 10/8/26 15:59, Bui Viet Dung wrote:
-> On Thu, Oct 8, 2026 at 3:43 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
->> Sounds fine since there are only timestamp skbs in this list, do
->> you have a test case?
-> 
-> Hi Pavel,
-> 
-> Thanks for the review.
-> 
-> The issue was spotted during code inspection of the error handling path
-> in io_uring_cmd_timestamp(): specifically when skb_get_tx_timestamp() returns
-> a negative error (e.g. -ENOENT due to missing PHC bindings with
-> SOF_TIMESTAMPING_BIND_PHC or unavailable timestamp data). Since the
-> multishot apoll remains armed on EPOLLERR and the unhandled skb is spliced
-> back onto the head of sk_error_queue, it immediately re-triggers the command
-> in a tight busy-loop.
-> 
-> Below is a standalone test program demonstrating the TX_TIMESTAMP command
-> setup and execution with CQE32:
+In liburing's test suite, the test/iowait.t test case intermittently fails
+with:
+    iowait diff too small: 48
+    test 1 failed
+on tickless systems where IRQ time accounting (CONFIG_IRQ_TIME_ACCOUNTING)
+is not enabled.
 
-Did you actually reproduce it? This program doesn't for me, nor does
-fault injection. Taking a look at the code, io_uring_cmd_timestamp()
-returns -EAGAIN, and the request will wait for the next wake up in the
-polling code. There are bits to improve, but that's not an infinite loop.
+Commit 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
+optimized dyntick-idle cputime accounting by avoiding pausing idle
+accounting on IRQ entry when IRQ time accounting is disabled.
 
+However, this causes iowait time to be erroneously accounted as
+CPUTIME_IDLE if the task waiting for I/O is woken up inside the interrupt
+handler (such as the 1-second timeout hrtimer in liburing's test/iowait.t):
+
+1. In test/iowait.t, a read request is submitted on an empty pipe and
+   io_uring_wait_cqe_timeout() is called with a 1-second timeout. Because
+   current->in_iowait is set, rq->nr_iowait on the CPU is incremented
+   to 1. When the CPU enters tickless idle, the periodic scheduler tick
+   is stopped.
+2. When the 1-second timeout expires, the hrtimer interrupt fires.
+   Because irqtime is disabled, kcpustat_irq_enter() does not pause idle
+   accounting.
+3. Inside the interrupt handler, io_cqring_timer_wakeup() calls
+   wake_up_process(). In ttwu_do_activate(), waking up the task immediately
+   decrements rq->nr_iowait from 1 to 0 before the CPU has exited idle.
+4. When the CPU returns from the interrupt and calls tick_nohz_idle_exit()
+   -> kcpustat_idle_stop() to settle the elapsed tickless idle duration,
+   it checks:
+       iowait = nr_iowait_cpu(smp_processor_id()) > 0;
+   Because rq->nr_iowait was already decremented by ttwu_do_activate(),
+   this evaluates to false. As a result, the entire 1-second idle duration
+   spent waiting for I/O is credited to CPUTIME_IDLE instead of
+   CPUTIME_IOWAIT, causing diff < 50 and failing the test.
+
+Fix this by checking nr_iowait_cpu() in kcpustat_irq_enter(). If the CPU is
+currently in iowait, pause and settle the elapsed time to CPUTIME_IOWAIT
+before the interrupt handler runs. On kcpustat_irq_exit(), resume
+accounting if it was paused.
+
+Fixes: 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
+Signed-off-by: Wei Gao <wegao@suse.com>
+---
+ kernel/sched/cputime.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 06bddaa738e5..e8b56433c61c 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -496,7 +496,8 @@ void kcpustat_irq_enter(u64 now)
+ 	struct kernel_cpustat *kc = kcpustat_this_cpu;
+ 
+ 	if (!vtime_generic_enabled_this_cpu() &&
+-	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
++	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu() ||
++	     nr_iowait_cpu(smp_processor_id()) > 0))
+ 		kcpustat_idle_stop(kc, now);
+ }
+ 
+@@ -510,9 +511,13 @@ void kcpustat_irq_exit(u64 now)
+ 	 * need to pause nohz accounting. Resume nohz accounting as long
+ 	 * as the irqtime config is enabled to handle case where irqtime
+ 	 * accounting got runtime disabled in the middle of an IRQ.
++	 *
++	 * Also resume accounting if it was paused on IRQ enter due to
++	 * iowait.
+ 	 */
+ 	if (!vtime_generic_enabled_this_cpu() &&
+-	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu()))
++	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu() ||
++	     !kc->idle_elapse))
+ 		kcpustat_idle_start(kc, now);
+ }
+ 
 -- 
-Pavel Begunkov
+2.55.0
 
