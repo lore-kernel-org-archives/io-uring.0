@@ -1,221 +1,129 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B774119F7
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8473D58B6DB
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 20:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092757; cv=none; b=jcw4gah1gAvHTEQmA0t7/PIkBj8CTWbxFG5bIERn5FnZW+iaGTJtez6y2QHLPMoEga+wjYJb1gavFTSl4NLbnE1Ff5gQgokkVNQEYl7+Udq4KNiIVXEPbwT5LpuEJKYyX7kzZshHr4UnhT0TwXyEiOA4ipXIJFehmCE+l9G5vRw=
+	t=1792096104; cv=none; b=snPHJ2+1nfeUErg8nYuhE5lk0W7UOzJQvhYPVgHPkUTYlYjT7iTuHajFZWBcn0wY0stINGuflyVWhYSsYhDvZQzx15n9J2R+fvhCW53pEmmvvxR02aaIua6TMFC/VSs3XUgpgCHeo5m1+K39i1ouPa4yDS2nNjPbVpuJ1XIPMxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092757; c=relaxed/simple;
-	bh=awPBS09rR7L5Nw8cDANPo2/Zl/+LnAfGL2Qcs47Fggw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BdP68PVmu+sXbzGi0SuRUeXoZrftXJz+y0mcNpmExLCOB65SXTDr8KUatTIw+uJMUy7u+kLFCUzBI916Aguy5uiIAOm9BFO1j47NjpmkmKwjo2ZtJwYPEQwmblps6TdPBVxrRTArGGFWRR4EV4qRPoULYOQ6aA26e6uPMcac+CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=JB5NPqBh; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
+	s=arc-20240116; t=1792096104; c=relaxed/simple;
+	bh=P29UiiTgc5TSOtwFzZpweRAhTmA3GJ0e5AFL5rH+cDo=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=I+CYH6NkfQTqWffCdazmZKUtPtWo+X4kliDcg87RaMBakWCewFCrSgOnfjDZ4q2tttbPBQRo7lGv1c8JGNPTD8ReE6P/8yIlUpJ+I07mdEa23RBGhe39tIwf/J4bufBwctIUr2TNny2xFf1vGXQkmYZEZhYIe1WkQjhh7htUH5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=fYear0+L; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="JB5NPqBh"
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-917a6dccc60so4034586d6.0
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:32:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="fYear0+L"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-4a6f2825dd6so664878fac.2
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 13:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092755; x=1792697555; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BZutOX6m8+NxIbVhC43ysCGcpt7XNqks5o6Fl2lBslY=;
-        b=JB5NPqBhjADe2+SvfmgUQquSDeF/BKqftlcf1Qd47z3ul7U+EPyuYpfmX+ERNDqjpM
-         DiYefL34bPkMrUh0jb2nOE3gJ6/+1MAVUX7yWFgB6FfjQJfGoSlWur3xCBt3vqAMFpaK
-         ACTGMhpKOPAZ3eisLP7/OZg1x9xVNlU8wFBg1k8+M7GXvaxPzL3BRW7RRLDUxnyicST/
-         RatxGlkgEyP4h5pJNn4ehr6FBczDcHeMYmvJe4KQca7YtFSJ9Y/3E2oK2Wgy/LLaV71x
-         GyPtF88+SF93djMxnC0GeCpgIOcjhsm50HEXedHKLNihV+c3hQbc1JR/yzcztsUKjaP7
-         aW6Q==
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792096095; x=1792700895; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ZX5pknan4ntH1HZcthR+WjdFklE/WRtaGozrIikDxnw=;
+        b=fYear0+LJ72xmu6NwczXrcBCMXeSiqTcmvgdSswakpGwJypTWurWrquQtxgqHFu+Xz
+         HjbLWxwQRRRiB9uLNzqsSKb3r05VxBevs3ZmYn/zVT0KpZVUMQaY1cyLFX62rWGt+VxP
+         rLxh4RxjBrULYNpeSJ2YqYtUp03tscJJsbbDCGzO3vgZzKGWBl+1U9oZ6C+iKVGOZok6
+         shYcvWyM8XKXpoCnJGM3+1GA2GQ6ONLZJEKKFd16BrGaroyNZpEThkKjyszuC4WPycnZ
+         nwYFlDgIhDajDvA7x91WfdfT9XLypfTrAmvVz31hhiWBp/Mu1BlwKi+FIJM4qfUjg3dv
+         IP3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092755; x=1792697555;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1792096095; x=1792700895;
+        h=content-transfer-encoding:content-type:subject:from:cc:to
+         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=BZutOX6m8+NxIbVhC43ysCGcpt7XNqks5o6Fl2lBslY=;
-        b=y5/yae+D79T0+D7Y8DT9KX0i/6ImSEZlNaF6LLLADX0r91LfpnoDqwq7E6wKM3U1DX
-         2WtQlC64FpacM2ctQW/1DpPwc4GikY3yC0I+jMnD5ZOgx2vVjjUkFKTxC3lEKC/nvaeZ
-         nHytMtLfPsXsEX7t23e2spcv4Uazu0mov9V5aP3dDIgvGbnE1+EsoMDnC30TjZ/4rihB
-         sFxscaKzahDG62FDBHzg47jaojL+UTBiQBTxJZI+8iBYynCqBPxTrQnUVTgSxqVMhNpb
-         GP4Z1M7miBtfz2fH2OL61qE881uz3OSqzud9TtuA+sUFlCWJGBLnfZOUJfIpSRTkt59Q
-         MZJQ==
-X-Gm-Message-State: AFq9FYIczZ+r7jc/LDDIIrxsSEmCJnAbK864RviUKzL4tIs6e6+LQExr
-	RWmxI0IRAqBX8jTkWg+4MMxlZENkIsfJ3MK0s2A4DUVyLO4ZRbJwWmIM3YZbQCISCEM=
-X-Gm-Gg: AYBFou2dqXTqDyRmagHpbYnuegJaychnYJnO1AEZhZQS0GLsh82sUXzXeIGd98unOOu
-	CfvxpHz2f4Mil6xzsr98qGX+zWPA5jEWE/ZCyGodG9gUKnWxTL18zY2OpVTPf5X5UuWb1FAKkoi
-	Opwh9B24TReqB5MF5b1XPrN3gTFiFRLioaHa8L6vn0DqPwnu3dhF5GhQsjyakxubpPr9WMU2gJ4
-	xfkD8aJmiwTRJXnFT/L7IJakZ99r/nBq1Mwq3joE269YBtgS3ntTybB9VeBhFiPgm9gCm1qBq5B
-	f3jlRc3Sue/VwTC8rvmTirqf1IyFleNpJ2VbQRWb1AMhbePI3EtMU/h9XPtfcHyC7vV7IuNk0ov
-	p66q5LyAXHIoPXh7eJz0lTOMpnQ3IlgnjDmzzD0Z6z+6/x8TwtisHZTjhqyACoTmg/cGEdyWji2
-	GyAQL3NPawGKS2gOHouw+aupZUHkSyAdMPTTZzCW0kt5TIbwSGSd1t1S6edR2K/a2GHT7sAmiv5
-	wO4OOmNwOP3wS3N
-X-Received: by 2002:a05:6214:20a4:b0:919:89f4:64f9 with SMTP id 6a1803df08f44-91bc96b0727mr19089226d6.27.1792092755175;
-        Thu, 15 Oct 2026 12:32:35 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.255])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcc47bccasm2264276d6.20.2026.10.15.12.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:32:34 -0700 (PDT)
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:31:07 +0000
-Subject: [PATCH 43/43] io_uring: look up the file before queueing to io-wq
+        bh=ZX5pknan4ntH1HZcthR+WjdFklE/WRtaGozrIikDxnw=;
+        b=EYLVinm5fxnPMnpRjagFQqD5JKXrXJjjAZJ92T2kd/SPmaFcf8XwmOWegnT2/+UeN6
+         jjpt8LAXqBpC+bPwklILZXmz87LspfDo6SHdVJPk8tvM15RX26Db0JOlJTdAJ7CCCnY9
+         /Z2UKieXG11Msfn2v0q6jCwDaZky+lhwce5/iXL2ZqS50YVrfOSNIPuN26S8fl6UYRVg
+         gxrxmFaf1N5ApQWF679HDvYzhWVPmw2VW6BasHNV2C12FSn80vSl7Xfhzumm0zVGAurw
+         x6JwjcxiuzdH0cQ9v2MhOmjCcqas8ymaDGGErhNoRHlYhxF4ECZexSuPidU9SBF2YHtn
+         KuLw==
+X-Gm-Message-State: AFq9FYLIA3hvzYsfUarojNyje3n2fHvCTZYZ9b9LW+FlfSWwooJuRUOE
+	cYAi03tTMvwR4b4KIbBzm8bQD3icS2L18b5anvXHNkyEYyFzob2wapj7aJWQe3aSbLMwfGFVkGQ
+	0kGU1z+U=
+X-Gm-Gg: AYBFou02ExtAiHvc7pSMP5hAKZDTS0Z+5MeTz7W3/aJ35f6IMkUYfgIjmQkyG3fRDsp
+	HfDTN0sMf98kydmj+8KOwf9BVzSiLDhkyIQld3MFBVXbabOWjkfVc9Df10KwiZQXOb7ZcNb8KoZ
+	T65X6LxXYh0r2F+rzqD64OPYkHQ8F52wOqaQJzyIDQp8G9ts56GAuqny5op0OgjxRuua4yBVL1i
+	XKxLGE2Ufo5nIO2DpDZ5Qw6zayRmr1NRjjoJfGwKMerEvirxHIVCbCPp683atr1Qh8kGDEQzuFS
+	LAewP6VNs3GGHbprLfaiuD4x08N/UkgyuBxbGwJ+EnDISw1FqcEQeXsQMTN7BceR5qztRA9kMH2
+	GjRGkpUR6HkK2Hxv3551/Y602EZBw/kFEdI+zkkqcF+z2rWhpQoE1Zg1XeHEKHuPkHeCMt9te54
+	wk+5DTeWhv7XEjKnjgLv4Z3a2BLSi9Xoi9xM7hW9LZuxKo+1ZwBoBdK5TFC3SfzIaGadzx9y3Kc
+	AHvJpLYcoCHOLqXd15vaIcRk1kBTtuThLfzfnMoiYgt0e7GTj8q6xgZEQ==
+X-Received: by 2002:a05:6870:21d0:b0:4a7:20fa:b5da with SMTP id 586e51a60fabf-4a720fac5cemr1579120fac.24.1792096094620;
+        Thu, 15 Oct 2026 13:28:14 -0700 (PDT)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a73b6e4a79sm16537fac.13.2026.10.15.13.28.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2026 13:28:13 -0700 (PDT)
+Message-ID: <3897c06d-6a6f-4099-956b-627aca3c236c@kernel.dk>
+Date: Thu, 15 Oct 2026 14:28:12 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: io-uring <io-uring@vger.kernel.org>
+Cc: Josef Bacik <josef@toxicpanda.com>
+From: Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] io_uring/timeout: don't put a sequence target behind the last
+ flush
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-43-c1556f5d7bf5@toxicpanda.com>
-References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
-In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092660; l=5272;
- i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=awPBS09rR7L5Nw8cDANPo2/Zl/+LnAfGL2Qcs47Fggw=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
- JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QGQbo6pAEjtYwBnmgWHkpdQ25A1grGIA405L4qoRy3nH1/9Pum/9QmoPqW9LrNYqFg/578caYjA
- b35jw2DU7bAg=
-X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
- fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-io_prep_async_work() decides by the file of a request what kind of work
-it is for io-wq. I/O on regular files and block devices is bounded work,
-limited to min(SQ entries, 4 * CPUs) workers, for anything else that may
-block indefinitely the limit is RLIMIT_NPROC. Writes to a regular file
-are hashed by the inode, so that they are run one after the other instead
-of having a bunch of workers fight for the inode lock.
+io_timeout_fn() and io_kill_timeout() bump ->cq_timeouts when a timeout
+fires, but its CQE is only posted later from task_work. Until then the
+sequence io_timeout() computes is one below the last flush per fired
+timeout. Now that ->cq_last_tm_flush is kept while sequence timeouts are
+pending, a timeout armed in that window with a small offset gets a target
+behind the base. Its distance from the base wraps, and it's never
+completed by events, only by its timer. With DEFER_TASKRUN that window
+is as wide as the application makes it, as submission runs before the
+local task_work.
 
-Since the file is only assigned when a request is issued, a request that
-is queued without an attempt to issue it, REQ_F_FORCE_ASYNC, doesn't have
-one at that point. io_prep_async_work() takes that for "not a regular
-file or block device":
+Nothing but those in flight CQEs separates the two, so use the last
+flush as the base for the target when the sequence is behind it.
 
-- Reads and writes end up as unbound work. 32 reads with IOSQE_ASYNC from
-  a slow block device on a ring with 4 SQ entries get 32 workers, not 4.
-- Writes aren't hashed. Four buffered writes to one file get four
-  workers, three of which do nothing but wait for the lock.
+Fixes: c6c0b3eba88c ("io_uring/timeout: don't skip over reached sequences")
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 
-The late assignment is for the benefit of links, where a request may use
-a fixed file that one of its predecessors installs. By the time a request
-gets to io_queue_iowq() these are done, it is as good as issued. Assign
-the file there.
-
-io_assign_file() moves up and is forced inline. With a third caller the
-compiler may stop inlining it, and every request that is issued would
-pay for a call.
-
-IORING_OP_SPLICE is left as it is, unbound and not hashed. The file of
-the request is where it writes to, which says nothing about how long it
-takes: a splice from an empty pipe or a socket into a regular file waits
-for its input. As bounded work, four of these on a ring with 4 SQ entries
-keep all other bounded work of the task from running, and as hashed work
-one of them blocks all writes to that file.
-
-REQ_F_FORCE_ASYNC is not only set for IOSQE_ASYNC. What changes, and
-brings back what was the case before the file assignment was deferred:
-
-- Requests with IOSQE_ASYNC or IOSQE_IO_DRAIN, and all requests that are
-  submitted while a drain is active: reads and writes on regular files
-  and block devices count against the limit for bounded workers, including
-  the one set with IORING_REGISTER_IOWQ_MAX_WORKERS, so fewer of them run
-  at the same time.
-- Of these, writes to one regular file are run one at a time, unless they
-  are O_DIRECT and the filesystem has FOP_DIO_PARALLEL_WRITE. On a ring
-  with IORING_SETUP_IOPOLL that goes for reads as well.
-- IORING_OP_FALLOCATE and IORING_OP_FTRUNCATE, which always go to io-wq,
-  are run one at a time per file, and in turn with these writes.
-- The descriptor or the fixed file slot is looked up when the request is
-  queued, not when a worker gets around to it, so closing or replacing it
-  in between no longer has an effect on the request.
-
-Fixes: 6bf9c47a3989 ("io_uring: defer file assignment")
-Assisted-by: LLM
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/io_uring.c | 43 +++++++++++++++++++++++++++++--------------
- 1 file changed, 29 insertions(+), 14 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 2fa720160e8f..e6569c204917 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -407,17 +407,46 @@ static void io_prep_async_link(struct io_kiocb *req)
+diff --git a/io_uring/timeout.c b/io_uring/timeout.c
+index b219dfdf7af5..e52ba4ad53cb 100644
+--- a/io_uring/timeout.c
++++ b/io_uring/timeout.c
+@@ -690,7 +690,6 @@ int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
  	}
- }
  
-+/* Called for every request that is issued: keep it inline */
-+static __always_inline bool io_assign_file(struct io_kiocb *req,
-+					   const struct io_issue_def *def,
-+					   unsigned int issue_flags)
-+{
-+	if (req->file || !def->needs_file)
-+		return true;
-+
-+	if (req->flags & REQ_F_FIXED_FILE)
-+		req->file = io_file_get_fixed(req, req->cqe.fd, issue_flags);
-+	else
-+		req->file = io_file_get_normal(req, req->cqe.fd);
-+
-+	return !!req->file;
-+}
-+
- void io_queue_iowq(struct io_kiocb *req)
- {
- 	struct io_uring_task *tctx = req->tctx;
+ 	tail = data_race(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts);
+-	timeout->target_seq = tail + off;
  
- 	BUG_ON(!tctx);
-+	lockdep_assert_held(&req->ctx->uring_lock);
- 
- 	if ((current->flags & PF_KTHREAD) || !tctx->io_wq) {
- 		io_req_task_queue_fail(req, -ECANCELED);
- 		return;
- 	}
+ 	/*
+ 	 * Update the last seq here in case io_flush_timeouts() hasn't, it only
+@@ -704,6 +703,15 @@ int io_timeout(struct io_kiocb *req, unsigned int issue_flags)
+ 		ctx->cq_last_tm_flush = tail;
+ 	base = ctx->cq_last_tm_flush;
  
 +	/*
-+	 * The file is looked up as late as possible, as it may be the result
-+	 * of an earlier request of the link. This one is up now, and what kind
-+	 * of work it is depends on the file. If that fails, leave the error
-+	 * handling to the worker.
-+	 *
-+	 * Not for a splice: whatever it writes to, it may wait for its input
-+	 * for ever. It has to remain unbound work that isn't hashed.
++	 * A fired timeout bumps ->cq_timeouts before its CQE is posted, which
++	 * leaves the sequence behind the last flush until it is. Nothing else
++	 * separates the two then, so count from the flush.
 +	 */
-+	if (req->opcode != IORING_OP_SPLICE)
-+		io_assign_file(req, &io_issue_defs[req->opcode], 0);
++	if ((s32)(tail - base) < 0)
++		tail = base;
++	timeout->target_seq = tail + off;
 +
- 	/* init ->work of the whole link before punting */
- 	io_prep_async_link(req);
- 
-@@ -1397,20 +1426,6 @@ static __cold void io_drain_req(struct io_kiocb *req)
- 		ctx->int_flags &= ~IO_RING_F_DRAIN_ACTIVE;
- }
- 
--static bool io_assign_file(struct io_kiocb *req, const struct io_issue_def *def,
--			   unsigned int issue_flags)
--{
--	if (req->file || !def->needs_file)
--		return true;
--
--	if (req->flags & REQ_F_FIXED_FILE)
--		req->file = io_file_get_fixed(req, req->cqe.fd, issue_flags);
--	else
--		req->file = io_file_get_normal(req, req->cqe.fd);
--
--	return !!req->file;
--}
--
- #define REQ_ISSUE_SLOW_FLAGS	(REQ_F_CREDS | REQ_F_ARM_LTIMEOUT)
- 
- static inline int __io_issue_sqe(struct io_kiocb *req,
+ 	/*
+ 	 * Insertion sort, ensuring the first entry in the list is always
+ 	 * the one we need first.
 
 -- 
-2.55.0
+Jens Axboe
 
