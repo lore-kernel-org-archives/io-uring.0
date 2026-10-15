@@ -1,67 +1,67 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4D54A2076
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74264A2E1F
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092707; cv=none; b=S1lkw0kyb95hRSOO4W7WFktJGtkoOpvLvcUR6bq/+L17t0kHSVeCuWsEt7NRgyK56QmZ6Ap3nC32LhXudqKZQM3B2f1e+f6S65qGICJzDTm/+JtAKuddGLOuWiy2nyu9Yhu/S9cGL1dw990CB39G3r4I9jXslUSkV8yKUxP8pSc=
+	t=1792092709; cv=none; b=EFV0yqe9HvcOJRWP9Jaf+3K+rd69r0fkfdT0WFUR9DmyYsqJyMKGlbt170k1FLMlPoSxKeCwMo8ND16AstjiHwwhZzGWlFTdlsd9ME6Tiy7OAgHew+NJ8/sc0BZ7eTD2Ur/6qHiW9b8b7RfTvMWp2hjWF2SWVvPfdoZ33k1C1CY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092707; c=relaxed/simple;
-	bh=azJSccmjZy7C27Yi0/btOc5sifCt/3Ks9aQqJ+VFU1s=;
+	s=arc-20240116; t=1792092709; c=relaxed/simple;
+	bh=BkxHHi+uYOvmeMoAsoak569DbKwyPDdSz3/JBWqnWn0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bmVezI4HO3mayduYfJfuu4n0m4Q+YA27LE0hAmz5EkOpewIdTlYTLArhgAYD0CMdxV7JYy7KxuBu6Q6YZIDjkQDCI6qdGhoCL79mc+V633gQh+WF5lw3puX+QVDZbRxibtVKfKnOby7w6I9HOlbdk5U2C3t+c3ww8UfBNwQriAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=MvEkt8H7; arc=none smtp.client-ip=209.85.222.181
+	 In-Reply-To:To:Cc; b=WPZjUX45Y4jgEHuVUevJC12rmYCCcFjDf7HPBQqT7LDqbWdrl4VPe06O4w3bWf4onFMOMbaSptfpB37bSz0Wm3inM1VYDQ5qJoV+sUyBdeZqMnShWMQD8zvXFCKLy4NPfM3+DKDNOu9BuuzJn3OBrrWcIOhAEA2lgn0mnSR1onY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=JmNuOB0z; arc=none smtp.client-ip=209.85.222.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="MvEkt8H7"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-93e64d52949so537101885a.1
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="JmNuOB0z"
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-93e6fb35f91so535498085a.2
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092705; x=1792697505; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092707; x=1792697507; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QEJcVCayZ3MifdH1lBBPlpSSN48QF6OPQ0R+vrG9M8U=;
-        b=MvEkt8H7YZxUHS1F5fG+qdL8X7OImoyCyBad9aI2/nZkUgx6CN9oTHzBlHQtqQI2i/
-         7wK21WJuUrGWd/eFP05IoziYaZ/Z8ZC6Rg2+dR18yhjqZE/QIgjaVXOoQFg8/C5R6Ies
-         XF66+OiaT3fQIakh1LF/l9bB/bfXINvW8pWMzbhzvXfQrbyOz4iVlEizUNhZyu/gJ73j
-         XlTSaPfOdI1LBTcQuPin4PGbJ+sBQ4EsbLaNm8ZsUU1Dk8sH/N/xZ7OEIaiFOm6EZqR6
-         YgOuv3t9Zo9ytjAGyQ6Xn035/kOqEtKn8NobYATHYtp2PIlE+ZBa2Y9T8uOOMxdLktkf
-         Tb+A==
+        bh=0rTg4i5i4W3B7Gi8M95yBHplDLn3sfQ2/3IIh92SEMo=;
+        b=JmNuOB0zoo2uNcfB+2nFWR2i6sW+gDxyPEOuewby0ZEZLIFfa5dEA+FRDVYxS8+j7k
+         6ZkoFnirBuNJ0PUBWLA0In7h4KF32U8OY0mhC/iN3P66SkwcH6FC88YtOrSA84gR/IF0
+         rOfvHrauDfMXUsfIfbSylv3ZGeGWGO36SlBMszUyRi3m1k0gD3S0xPw+kA1rK+G4nHc0
+         TCg1ME63uUpu9rDg7VnDB5+DHWxVS4sVjniRaxRuhkb9tBm1fYccrx/zeuARTDEfYFW9
+         /KeklcX4zx9L4aGI5dFdldFaVBPymfLYHGn3i2cOFy2MeB+JUSKWSIWEISVRqYFvBkBM
+         XCeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092705; x=1792697505;
+        d=1e100.net; s=20260707; t=1792092707; x=1792697507;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=QEJcVCayZ3MifdH1lBBPlpSSN48QF6OPQ0R+vrG9M8U=;
-        b=PC9VCNwjz17empGQgL8uuPhXG9KgCVyVbN780CFngZ6Jav2Uf4B8ypE6g2Nfm9FNlR
-         JetfwXIdKX0F9HrxMh17npBN9vRDHZ4D8cZ5Y+8SLsyB0h2LpCO5u344r945ZHnP5jGr
-         BHteuNcavXHO7R8LTSTBaPQY47LKsmR1yRIU+amBtRT7HY3eiWeT2v2OP9TDMT3eTyeW
-         j0XnLAr2hk2KT33K5tSWVTTt35ZVUcj2YyDED3NaHCTDNV13/V8FZ8Y4nZKuQKj4DQHG
-         BntLh3qayrn/f41PZ7pBqA6rallRLznUzyXeT+3Km8NBWli8TSyuBIhEh13ACfgqlVFu
-         4dOg==
-X-Gm-Message-State: AFq9FYL/4ccLVQKAm9tJkwFJQUH5rSuoBtvEUTKbYiBhkJGTTLPcg06K
-	QHFQBJmHuOnefAwd5Dbg76jawo9RYdSPHjTDj3Y73L/kvdzwvy1cEfSxmt0IuFXzM0g=
-X-Gm-Gg: AYBFou0ymcSAxRJlfZwL/5LyvBX5aJbAHl7IXNYQ+asogvY/Qgi8wwItFxkrrH53kS+
-	KgxeXpLs0lbgcikTSI3mK5KGNCBr0GJC0wyr7aDn10eiPv7b3QsmqHkqxVkmR7qT30G+yAJoj9R
-	blsc8SpaTUw/3qNcZ6rEfpgWX2gkyI1AG9WF1A/0hXQbPcW+S7rjbjx4f2XGGlo9t0UOm6+622E
-	sf1AecGj2QACRnOqAzfqVNuoLKlC0yJT68Lydq/vl2O8gn32Oo8MahRQHQeFWXv2FBbneXBHrEz
-	iaqHNiBZr/FVf34vPr17kdzXSUiKY2xsgyemCt2y5uDXeJ9i430O/r4f6fxNhqKZTI7PI39J5sZ
-	XmGSnA7D+I0MyE7Gqs1QoDNAN8YaE5sYA0V98+07K27yG0YOudhFdlZEH4o4lnlW5c7i2k3Q2Iv
-	FpnzIQVQC2+Nl0SzAwy5Z0lh2YIO5p5x5OEXdWN6klMjDqnAETNSaaYcOFa2UJRAuzphvELNg8y
-	yO3ScNT12DLICOX/0lxDSztby0=
-X-Received: by 2002:a05:620a:440e:b0:93e:9834:3863 with SMTP id af79cd13be357-93ebd22a0d3mr3291285485a.15.1792092704916;
-        Thu, 15 Oct 2026 12:31:44 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.240])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcbb5a794sm3377416d6.39.2026.10.15.12.31.43
+        bh=0rTg4i5i4W3B7Gi8M95yBHplDLn3sfQ2/3IIh92SEMo=;
+        b=TEgj3V2RAvnsvUBTqtrHmanUGkHB5gMolfbzCkhyzPPGZUPGsCxaVk7WykXctpEvKB
+         K+Djnfjo5u4eItL2Hqq8hZ9E+D03eNvbecXggaeIIdWdPuWKwLD5bSOL6CvZsT/mBQUH
+         WY5niaEO9dNYzD0vRba74dcuUJD1bYzkISg96QkhPtvO1I2as6yGDy215x0kYNlyaELi
+         nYHUOmkknTM/JiLcbssU6HOgVS1zUIMjU5Fe5xpolPNJL84uA8MsreWU1vJlpLSHG56p
+         lSjkpN4lIVJW89G0gLvINklCnQJt/yFw7NydQtB4BbBWVCELVgJZMFkj6iSjRT5dGVYh
+         PYiQ==
+X-Gm-Message-State: AFq9FYL7PcA3Zp8+l8f+LQL6izKYaOt9FVAEZ1xCouc+kcVlcu8nv7jS
+	SePtjwLaxDSus33W8abmpRiRgK2HbQeh9coPG3R0JOcXeThfAesNT3ijd0xP97m3Byk=
+X-Gm-Gg: AYBFou3f8MWjPq+bzCedZ2HS9zIeAXZVo1kHE3DJbsd0EI8MBi9gO536624X400qWdl
+	DYA9SUDj1Mm4mQsZHKaHmzJ2Oiuw9ynfBy5fQ2uhLrv6XVl9uiePQHCJz/b3rdu6NDVEbeKbhd7
+	Q+dp2eY868pX1CYm1Cj/L3Sn/zUeG0s5nrw++BFfX1FaOS3GWP10vvEnSny/hrnRu3ABdkp6qVV
+	w1QeAvRUQUF5HVdQo+8sBvfkKw9mpI+8WmPT80yQWCy6PUXmzwW4S3619Vm6Kv94+KRh4n0Qv02
+	AtSPyLAxFHsfMFXrAB1yOCFHvuhj12hvv41vqwOCVGdPL596vWkmuvPJkybPZe88O3swF3ZiqPs
+	OiXjRhe22Q+F3rJw+DcMu+CEroNG4UuSUL7218aXB0P09kNSdZUmclevCobVmimlooBTYvJZKJa
+	OeYoVAZSzqs5XbGvVvA3EKcifakjy0oXtQXWoYoUk4/Jj0hv+l2Iq8iku/i5NhzuMOO3M82PgIk
+	4UPGoypBEIf2WY=
+X-Received: by 2002:a05:620a:2a10:b0:93e:c12c:9dc7 with SMTP id af79cd13be357-93ec12ca028mr3302029085a.71.1792092706653;
+        Thu, 15 Oct 2026 12:31:46 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.249])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcbae1e06sm3460076d6.27.2026.10.15.12.31.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:43 -0700 (PDT)
+        Thu, 15 Oct 2026 12:31:46 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:42 +0000
-Subject: [PATCH 18/43] io_uring/cancel: let CANCEL_ALL find parked requests
+Date: Thu, 15 Oct 2026 19:30:43 +0000
+Subject: [PATCH 19/43] io_uring: wake ring pollers for local task_work
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,102 +70,124 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-18-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-19-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=3478;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=3866;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=azJSccmjZy7C27Yi0/btOc5sifCt/3Ks9aQqJ+VFU1s=;
+ bh=BkxHHi+uYOvmeMoAsoak569DbKwyPDdSz3/JBWqnWn0=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QNpGKXceM2DiFA5rrSk+1oNzyw6v2yZwnqjZ/nSpscXLjL/2ksAUGOOG7Z+FGbGW79Tg2yWKih1
- LKsSWf1ohUQw=
+ QK18UjAmoVijSHr9VBdOIh3QwdAMSQrkwyogMYzCa9HSXICvBHNlfsd+n3FJTjGlIB2Gs5Q+kXE
+ A9rKHY9Hs/gA=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-A cancellation with IORING_ASYNC_CANCEL_ALL or _ANY goes on until it finds
-nothing more. A request may stay where it was found for a while after it
-has been cancelled, so each one that matches is stamped with the sequence
-number of the cancellation, and is skipped from then on.
+With IORING_SETUP_DEFER_TASKRUN completions are queued as local work, and
+only become CQEs when the submitter enters the kernel to wait for events.
+For an application that finds out via poll() or epoll on the ring fd when
+it is time to do that, io_uring_poll() reports EPOLLIN if local work is
+pending.
 
-io_cancel_cb() does so for io-wq work as well. There is no need to:
-pending work is taken off the list, and the workers are looked at once per
-call. And it does harm. A request that is run by io-wq may be parked
-while it still is the current work of the worker: poll gets armed for it,
-or it is put on ->futex_list or ->waitid_list.
+That only helps if the work is there at the time of the call. When
+DEFER_TASKRUN was added, io_req_local_work_add() did io_cqring_wake(),
+which took care of tasks sleeping in poll() as well. Then polling got a
+wait queue of its own, ->poll_wq, and the wake up in
+io_req_local_work_add() was replaced by waking the submitter directly.
+Since then ->poll_wq is only woken when CQEs are committed, which for
+such a ring is done by the very task that is waiting to be told to:
 
-  io-wq worker                       io_try_cancel()
-  io_wq_submit_work()
-    io_arm_poll_handler()
-      io_poll_add_hash()
-                                       io_async_cancel_one()
-                                         io_cancel_cb()
-                                           stamps the request
-                                         sets IO_WQ_WORK_CANCEL
-                                         = -EALREADY
-                                       io_poll_cancel()
-                                         skips the request
-                                       = -ENOENT
-  io_assign_current_work(NULL)
+  submitter                           completion
+  poll(ring_fd)
+    io_uring_poll()  // nothing yet
+    schedule()
+                                      io_req_local_work_add()
+                                        // ->cq_wait_nr: nobody waits
+  // sleeps on
 
-The flag comes too late for the worker to see it, and the search that
-would have found the request takes it for done. The cancellation returns,
-and the request stays.
+Wake ->poll_wq when the first entry is put on the work list. Like for the
+eventfd, that must not be done right away if the work is queued from a
+wake up handler, as the chain of wake ups could get back to the wait
+queue whose lock is held. Use an RCU callback in that case, with a
+reference to the ring.
 
-With a multishot poll, IOSQE_ASYNC, and IORING_OP_ASYNC_CANCEL with
-IORING_ASYNC_CANCEL_ALL up to 63us later, that happens to 4 of 1,000
-requests (4 CPUs, KVM).
-
-Take the stamp off again if the work matches. If the request is found
-on one of the lists it gets a new one, and io_cancel_cb() doesn't match it
-a second time.
-
-__io_async_cancel() tries the io-wq of the caller twice. So far the stamp
-has kept it from counting work that is running there the second time.
-Skip it instead, so that the number that is returned stays the same.
-
-Fixes: 8e29da69fead ("io_uring: add support for IORING_ASYNC_CANCEL_ALL")
+Fixes: 130bd686d9be ("io_uring: waitqueue-less cq waiting")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/cancel.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ include/linux/io_uring_types.h |  3 +++
+ io_uring/tw.c                  | 34 ++++++++++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-diff --git a/io_uring/cancel.c b/io_uring/cancel.c
-index 14d6ccf57668..6f7a6cf356c2 100644
---- a/io_uring/cancel.c
-+++ b/io_uring/cancel.c
-@@ -72,7 +72,16 @@ static bool io_cancel_cb(struct io_wq_work *work, void *data)
- 	struct io_kiocb *req = container_of(work, struct io_kiocb, work);
- 	struct io_cancel_data *cd = data;
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index 50970b382a9a..3e00012cbfd4 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -520,6 +520,9 @@ struct io_ring_ctx {
+ 	u32				iowq_limits[2];
  
--	return io_cancel_req_match(req, cd);
-+	if (!io_cancel_req_match(req, cd))
-+		return false;
-+	/*
-+	 * Pending work is gone once it has matched. Work that is running may
-+	 * park the request where the same cancellation looks next. Don't make
-+	 * it skip the request as one that it has dealt with.
-+	 */
-+	if (cd->flags & (IORING_ASYNC_CANCEL_ALL | IORING_ASYNC_CANCEL_ANY))
-+		req->cancel_seq_set = false;
-+	return true;
+ 	struct callback_head		poll_wq_task_work;
++	/* deferred ->poll_wq wake up for local task_work */
++	struct rcu_head			poll_wq_rcu;
++	atomic_t			poll_wq_rcu_pending;
+ 	struct list_head		defer_list;
+ 	unsigned			nr_drained;
+ 
+diff --git a/io_uring/tw.c b/io_uring/tw.c
+index 98e3b1bc61b4..0b5066f97224 100644
+--- a/io_uring/tw.c
++++ b/io_uring/tw.c
+@@ -148,6 +148,37 @@ static void io_ctx_mark_taskrun(struct io_ring_ctx *ctx)
+ 	}
  }
  
- static int io_async_cancel_one(struct io_uring_task *tctx,
-@@ -198,6 +207,9 @@ static int __io_async_cancel(struct io_cancel_data *cd,
- 	mutex_lock(&ctx->tctx_lock);
- 	ret = -ENOENT;
- 	list_for_each_entry(node, &ctx->tctx_list, ctx_node) {
-+		/* has been done above, don't count what is running there */
-+		if (all && node->task->io_uring == tctx)
-+			continue;
- 		ret = io_async_cancel_one(node->task->io_uring, cd);
- 		if (ret != -ENOENT) {
- 			if (!all)
++static void io_poll_wq_wake_rcu(struct rcu_head *rcu)
++{
++	struct io_ring_ctx *ctx = container_of(rcu, struct io_ring_ctx,
++					       poll_wq_rcu);
++
++	atomic_set(&ctx->poll_wq_rcu_pending, 0);
++	io_poll_wq_wake(ctx);
++	percpu_ref_put(&ctx->refs);
++}
++
++/*
++ * io_uring_poll() reports pending local work as EPOLLIN, as it takes a trip to
++ * the kernel to turn it into CQEs. Let those know who are asleep already.
++ */
++static void io_local_work_wake_poll(struct io_ring_ctx *ctx, unsigned int flags)
++{
++	if (!(flags & IOU_F_TWQ_IN_WAKE)) {
++		io_poll_wq_wake(ctx);
++		return;
++	}
++	/*
++	 * Called from a wake up handler with some wait queue lock held, this
++	 * one could lead back to it. Do it from a clean context.
++	 */
++	if (!wq_has_sleeper(&ctx->poll_wq) ||
++	    atomic_xchg(&ctx->poll_wq_rcu_pending, 1))
++		return;
++	percpu_ref_get(&ctx->refs);
++	call_rcu_hurry(&ctx->poll_wq_rcu, io_poll_wq_wake_rcu);
++}
++
+ void io_req_local_work_add(struct io_kiocb *req, unsigned flags)
+ {
+ 	struct io_ring_ctx *ctx = req->ctx;
+@@ -174,6 +205,9 @@ void io_req_local_work_add(struct io_kiocb *req, unsigned flags)
+ 		io_ctx_mark_taskrun(ctx);
+ 		if (data_race(ctx->int_flags) & IO_RING_F_HAS_EVFD)
+ 			io_eventfd_signal(ctx, false, flags & IOU_F_TWQ_IN_WAKE);
++		/* whoever sets the flag wakes ->poll_wq afterwards */
++		if (data_race(ctx->int_flags) & IO_RING_F_POLL_ACTIVATED)
++			io_local_work_wake_poll(ctx, flags);
+ 	}
+ 
+ 	/*
 
 -- 
 2.55.0
