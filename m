@@ -1,67 +1,67 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2BB424D64
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142A2288C96
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092689; cv=none; b=ZIKVYgooeLpxfnqLbQeoGfOVliXT6sUOYltwxKfc3olkn2VMKlWgDDWb6+7J8+tL4Ra3W3tGfd8jh0oh8BJaeNnLP1ndVVMjTBe0KX4LD+SN7QBwfhOnajf5lXzgS/WhLnQubyjL0GXriNREzm53E7ulcGvAzxkK4DK23tpIMbQ=
+	t=1792092691; cv=none; b=ZnxI7VaUqTTZ1mvX5xemthBVlwO1DkGndHIOGJ1ggLrD4G/pm3bIaZqpUg/u+qR5tdi4dq3SVRcKt4rOI40sRdb8Y5dCOOd3hBVBOkeOpXu483gFD5667RgRMgdyv7+JZrybPHarhbfGHSTj03nvwmNHu2HpVhT6OwKhLtMDQ6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092689; c=relaxed/simple;
-	bh=hYWR6NUTY/NeznlVjjVPM0fb6vqYchIG5rroOeN7FXk=;
+	s=arc-20240116; t=1792092691; c=relaxed/simple;
+	bh=i1LfJ/0zsV+ReE3cmri3G3mbNaJQM2euLn2agM2CCmo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BGSGXrw117HmRansm4beeDHJEYEl8KpDJH58rKgNTd0JndGiyxcGpWNWC5LqKYLvW9fYBDTmxK0y/JMgOw6BXQZTAyrkSsm3G1iI+gFjVxTRA0E+eRwOtx9R9pJeFieY3mghH0ZbV780xk/0qy30K+mqMf/Z0XSP+oiw9F4FO3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=lpKPU6bR; arc=none smtp.client-ip=209.85.219.54
+	 In-Reply-To:To:Cc; b=i/DseZu5NRf+KcL8VyJlDlq0mOwbmXS32q9cAEMJ9YrInODOW2NDp2rTNjFZDrG9eRTwql3STORpoHdKvUIPCL/FB9ywbCjHnJ8CvDeb7DEqpi/QmXotSZKDrbfKFTH/rIaCBrc94ah9CzUR3hjjKB49M2pDdzrkVcoTJx1cfYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=E5WpTfRv; arc=none smtp.client-ip=209.85.160.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="lpKPU6bR"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-91b8b456dbeso47204126d6.2
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="E5WpTfRv"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-5338f65913dso20131951cf.2
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092687; x=1792697487; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092689; x=1792697489; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=xjA9DH+gg/W+oy30QoXCWOcbVBuNjWgs2dDmab5FI6o=;
-        b=lpKPU6bRmYszZDX2i+z6dMMulRe601YoVt6dYLTJhEi+920riraFIR0m/BTY7sGM/e
-         APGpzojW8tz5Lu1b3nN+Ev31cz/Jr46RfcbNUF8CqOb06gRAVwuKzcaFJjF6T89TRBlm
-         2dy0+lwqvYCg9EfGxj10uVa+hQGB2FCL/cLrdZF6Y7L0lyauymMiIqKxoNB4Mq/7Vkc5
-         pBQV8Nrzb8bZyhgDWnJRA3GQOz/K+XdkNF73MOBvi048X1jCWcX6k1O5/DkxZdiiQl6a
-         y22dlLoQX+DqXVr3bgznmqW8NTPLfCJ9Ar/mPqRHQj8R/RIKW30dEOwwTiLBS2tdQQOA
-         CgFQ==
+        bh=8Nbg685FjMGt7IjmUA15YsBYP7Upia0Zit7BoeycG98=;
+        b=E5WpTfRvftlA7PeMSuZcPR8z9Ptiz3u3We3gF5GyLH2fhcc8Y4JZInGc5I6UZcOg3G
+         AyOvR9RSs4pBwfG04JRw7UQTJ9eZGvVq5aVleWEbcIad9MeHDTIbOiXAxXhtQQ0kHJKf
+         /02IFIeOu6NxZNbdn9pDZBqjcz9o8tQ0T948ThRJ1KdIgVgAq0Dj5QVd6agqmrvsjew+
+         z/fastmlLvw4q5rXysx/rrf02obwKabBJuzyuhDk9rKamL4xBARcEbxqraG4xLeJFUp1
+         +G/Q2Q+dX9i+lSwxu6WS43XHeLMmg3svZrezl8sOlNoXwfaysuG1lA41XCmY6DpENs2s
+         KMeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092687; x=1792697487;
+        d=1e100.net; s=20260707; t=1792092689; x=1792697489;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xjA9DH+gg/W+oy30QoXCWOcbVBuNjWgs2dDmab5FI6o=;
-        b=0Fy0onzd2Yva2V1ysv+KGVSIE00FYLl7PRih/lbsY1ssOqAqHWaGmt87AweketxEp5
-         Po2Ni44MDI/Kk0kMsn/JG7AKZiGz79cqlFp8fQPzK1gGx/fgnNP0YqQK8kC13GHYUYdQ
-         1X5Y7FXFI5kskzHpbQzQTVZnfqjxnDpG0mk6HByI//HUEF+MKq/9jVwLO0jhqg+xeggt
-         Pd30dEdDoClxblESK7lrCuJtzLM9Wt7AeDlcfC/JtEzuYz105B4nCVtHGL2ElwNVKi1e
-         Ibeo0/DeJsmDyvhuYnRBlJbusdgqBaQGcD8RC/dHYsNmi8upaLY7Q3wXjFVWOOhHBD+f
-         OAaQ==
-X-Gm-Message-State: AFq9FYK306a/+N+FHt4FtygVwKi3bOm2ZvIZl1cfzcLBF09tWb2oD0X6
-	Zog61W1yiSuMBf27FOY4svvX68knzlhZqxbmE5WO+nrN/Iv6XlrXZYf8sQCWpfntCMU=
-X-Gm-Gg: AYBFou2lyiYnfZ42pe1WS77h8YLeXCEpTJwQvdMUHamU5rK9e6xMWUhPgrdMcqCdt2X
-	jc572VJGWA1KS3a9sjbK3hCBJgWAw2UqLTIZX7h+4G9L6Symd3gBxqFpofy2amwOLisnyavpOgF
-	tB1PdxeE8djOOVVeVB4DGHH7mxQgHzag100i4j3sldzSQA5CzMwHSW9DqrNX8X9wslmOBPD08h9
-	YFKCKN2Z3GjTfPyYDE4GlsH5IwSo2cKxckNYdFeSCmcptSYneJ/Ez9dH+1w9egyHSW1pphr+umG
-	D3F66ZoqecPPDSw6g6VoZUtwSwKWHctPBPMuGA59jTkrsZT4kkiNKH3cIZuY2tJpDy6fTOEhgEW
-	Z8RYKSRdBuFjoV4FKgUPAz9ePWgstpDxlVcL3UpPlfmifuJERFGQ8eNTC0PriVIx/ABa9e6MUUx
-	LMiz8q5ZHT/14qM0ra8rlnpqBbDRrsOiVktmmJKXZh5DkFQeBI9r76tTPdWpdTvG3+eTvM2kOdY
-	NqKeLx8SJzbNMM=
-X-Received: by 2002:a05:620a:170f:b0:93e:5769:e307 with SMTP id af79cd13be357-93ebd1dff26mr3581654485a.22.1792092686821;
-        Thu, 15 Oct 2026 12:31:26 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.240])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a0d0718sm15001085a.5.2026.10.15.12.31.26
+        bh=8Nbg685FjMGt7IjmUA15YsBYP7Upia0Zit7BoeycG98=;
+        b=KI7gEICbjR/mhNjmORFMH831S0u6iJSH29SjQAqyIEf8LfvFRORun6vJVxdqN65W88
+         bSgVd7hNtzOpH8TpkBKgJVHAt0coX8of21eGhaZYZSjZxTlDZ6BPXQq2U1Pl5NH+Vuwc
+         sm+NxXYYa3EdeqM7A3FsJw4GYEVhmmwHQP5Xnuo1RvUcXqH4Vig2OR8MsjZ5TARuXNWT
+         MhiJXQtsGg060ZxrjLkFwgB46P29xrV4OrkY9reXcLXaI4B/ikn+iZ0OB8U08y7ipMf7
+         qKNRnLwjJ+P5+Sa/ndOdlFIl1LsnZoV+iR78dRvs12hZ1/ZOqrJ/oSIzFvxMzys3xfk1
+         sN5Q==
+X-Gm-Message-State: AFq9FYKa55yQe/qxQjtfvRERP+4S0wqqYtt6S9Ti/VBk+hVy7h4kDPcm
+	pAC2VlwFIvgkCYRfGT2T6KCehJ1wFYy8Kz82clJ6Dpe4ermTh4uBOzvrunwO8niyrdY=
+X-Gm-Gg: AYBFou36ZYRIAHdt+RI7OSDG3Pjtj5jPUUkTAqr2LyZWCHDAqup5/yTQ08NqdH98Z79
+	xkJsioh9IfFKeSo50icy6xrKDi61YivofkEFI0Fb4YEtlmrm5DFw2dThWQzuYU0V97rsChI4ods
+	fTl6qXpOtfHsvE7tYyGDoDBSkUBQbMq2bqM63yuZTj3juPIpWQQg+XWIIFoI3xUA7N8cIR/YjtY
+	dGa1mrRoej2fZlg5yo+Qw161dnaKhfEgMI/4Mo46lEJ+dw+VYwjzXH2pJLUm+J3/XhQWNtMVzJh
+	JKNVI1OUuTXDRftrmst10YzizAgtuixiUxrXSqf9Q/dM9Ic09+UdjtyWzxOAwQHX7Xuo0te0s4V
+	0quKgvEWIrlsn/9l6uqLXLEa3/oY1x4a9iB+AoCLg6UhEIHHatq3REKCpEYQ9AjW2ke9rGWu1Nf
+	7HXgR50mVmXO/Hu/DzpTEmaEs6iV67yPxvd5AbyLZAuXYZcsSuDAgvAEDGMhqIZm7RvNFHO0vaS
+	yaCBDo38wfUhPM=
+X-Received: by 2002:a05:622a:5294:b0:533:3868:1f79 with SMTP id d75a77b69052e-5359fdb667dmr322299211cf.45.1792092688926;
+        Thu, 15 Oct 2026 12:31:28 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.253])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcbade61csm3377536d6.26.2026.10.15.12.31.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:26 -0700 (PDT)
+        Thu, 15 Oct 2026 12:31:28 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:33 +0000
-Subject: [PATCH 09/43] io_uring/mpscq: disable preemption while pushing
+Date: Thu, 15 Oct 2026 19:30:34 +0000
+Subject: [PATCH 10/43] io_uring/io-wq: don't go to sleep on pending work
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,101 +70,99 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-9-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-10-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=3733;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=3219;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=hYWR6NUTY/NeznlVjjVPM0fb6vqYchIG5rroOeN7FXk=;
+ bh=i1LfJ/0zsV+ReE3cmri3G3mbNaJQM2euLn2agM2CCmo=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QJTNw/11MFiYY9YqrmFkHxfeK6lleu03HRF22NJbcKmpCNhM1wuSMwATa3CBkSp+Hu8mqxAIuCf
- yLL6HcrUr6wg=
+ QA3JlPgLPKwcGNoIAHfE20Ty0l7fcYEHPxk1386s9lMfdBDZMsPLV3/yHXVQA4jnpbIMA+f0O2W
+ 814/JqZz43gQ=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-A push makes the node the new tail, and then links it to its predecessor.
-In between the queue isn't empty, but mpscq_pop() can't get at the node.
-The consumers deal with that by trying again, with a cond_resched() in
-the loop to give a preempted producer the chance to finish.
+io_wq_enqueue() wakes a worker off the free list. If there is none it
+creates one, unless ->nr_running says that a worker is running. That
+relies on whoever takes ->nr_running to zero to check for pending work,
+which io_wq_dec_running() no longer does for a worker without
+->cur_work, on the grounds that an idle worker is either woken right
+away or someone else has created a worker. Neither has to be the case:
 
-cond_resched() doesn't do that if the consumer has a higher priority than
-the producer and both have to use the same CPU:
+worker A (idle)          worker B (idle)          io_wq_enqueue()
+                         woken for work 1
+woken (e.g. timeout)     takes work 1
+work list is empty
+                                                  queues work 2
+                                                  B is first on the free
+                                                  list: wake_up_process(B)
+                         leaves the free list
+                         work 1 blocks
+                           nr_running 2 -> 1
+schedule_timeout()
+  nr_running 1 -> 0
+  ->cur_work == NULL
 
-  producer (SCHED_OTHER)              consumer (SCHED_FIFO), same CPU
-  io_req_local_work_add()
-    mpscq_push()
-      prev = xchg(&q->tail, node)
-  <preempted>                         io_cqring_wait()
-                                        __io_run_local_work()
-                                      again:
-                                          cond_resched()  // nothing to do
-                                          mpscq_pop()     // NULL
-                                          // work pending, no events yet
-                                          goto again
+Work 2 isn't looked at until work 1 is done or A's idle timeout fires,
+five seconds later. ->cur_work is also NULL while a worker blocks on
+->uring_lock in io_wq_free_work(), with the same result if it was the
+only one running.
 
-The producer can be any task that is able to queue task_work for the
-ring: an io-wq worker, or somebody who sends a message with
-IORING_OP_MSG_RING. The consumer spins, holding ->uring_lock, until the
-scheduler takes pity on the fair class, which takes about a second with
-the default settings of the fair server, and forever without it. The
-loops in tctx_task_work_run() and io_cancel_local_task_work() have the
-same problem.
+Let the idle worker leave ->nr_running by itself before it takes its last
+look at the work list. Both that and queueing work are done under
+acct->lock, so either the worker sees the work, or the enqueue side sees
+that it can't count on this worker. This doesn't bring back the request
+for a new worker which the check was meant to avoid, and as idle workers
+don't get to io_wq_dec_running() any more, the check can go.
 
-Don't allow preemption between the two steps. That bounds the time the
-window is open on the CPU of the producer by what interrupts take, and a
-consumer that waits for that is on another CPU. The cost is a
-preempt_disable()/preempt_enable() pair per push.
-
-Fixes: 50cb44bd0d5f ("io_uring/mpscq: add lockless multi-producer, single-consumer FIFO queue")
+Fixes: 8343cae362e1 ("io_uring/io-wq: ignore non-busy worker going to sleep")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/mpscq.h | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ io_uring/io-wq.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/io_uring/mpscq.h b/io_uring/mpscq.h
-index f910526766fd..da9474497cc8 100644
---- a/io_uring/mpscq.h
-+++ b/io_uring/mpscq.h
-@@ -25,9 +25,10 @@
-  * its predecessor. In between, the tail end of the queue is not yet reachable
-  * from the head. mpscq_pop() detects this and returns NULL, while mpscq_empty()
-  * reports false. The consumer must not treat such a NULL as "queue empty" - it
-- * should retry later. The window is two instructions wide, but a producer can
-- * be preempted inside it, so the consumer must not spin on it while holding
-- * resources the producer might need to make progress.
-+ * should retry later. The window is two instructions wide and the producer
-+ * can't be preempted inside it, but it can be interrupted, so the consumer must
-+ * not spin on it while holding resources the producer might need to make
-+ * progress.
-  *
-  * The consumer side only supports a single consumer at a time, callers must
-  * provide their own serialization for it. The stub node is what allows the
-@@ -69,6 +70,12 @@ static inline bool mpscq_push(struct mpscq *q, struct llist_node *node)
- 	struct llist_node *prev;
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index a5b3d2ba48bf..a3a650813629 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -467,11 +467,9 @@ static void io_wq_dec_running(struct io_worker *worker)
  
- 	node->next = NULL;
-+	/*
-+	 * All the consumer can do about a node that isn't linked yet is to try
-+	 * again. If it is what preempted us, and we don't get to run as long
-+	 * as it does, that never ends.
-+	 */
-+	preempt_disable();
- 	/*
- 	 * xchg() implies a full barrier, so the initialization of the
- 	 * entry (including ->next above) is visible before the node can
-@@ -77,6 +84,7 @@ static inline bool mpscq_push(struct mpscq *q, struct llist_node *node)
- 	 */
- 	prev = xchg(&q->tail, node);
- 	WRITE_ONCE(prev->next, node);
-+	preempt_enable();
- 	return prev == &q->stub;
- }
- 
+ 	if (!atomic_dec_and_test(&acct->nr_running))
+ 		return;
+-	if (!worker->cur_work)
+-		return;
+ 	if (!io_acct_run_queue(acct))
+ 		return;
+-	if (io_wq_hash_defer(worker->cur_work, acct)) {
++	if (worker->cur_work && io_wq_hash_defer(worker->cur_work, acct)) {
+ 		raw_spin_unlock(&acct->lock);
+ 		return;
+ 	}
+@@ -751,6 +749,19 @@ static int io_wq_worker(void *data)
+ 		raw_spin_unlock(&acct->workers_lock);
+ 		if (io_run_task_work())
+ 			continue;
++		/*
++		 * io_wq_enqueue() leaves new work to us for as long as we are
++		 * accounted as running. Get out of ->nr_running before taking
++		 * the last look at the work list, rather than when scheduling
++		 * out. No need to ask for another worker then, we can do it.
++		 */
++		clear_bit(IO_WORKER_F_RUNNING, &worker->flags);
++		atomic_dec(&acct->nr_running);
++		if (io_acct_run_queue(acct)) {
++			io_wq_worker_running(current);
++			io_worker_handle_work(acct, worker);
++			continue;
++		}
+ 		ret = schedule_timeout(WORKER_IDLE_TIMEOUT);
+ 		if (signal_pending(current)) {
+ 			struct ksignal ksig;
 
 -- 
 2.55.0
