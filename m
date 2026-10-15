@@ -1,68 +1,68 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA9548F001
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A19D48F001
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092700; cv=none; b=RhN4UvPWEm1/YIwAszP97AH2zlCpt6oKrm/MhnDHcSUqG46wKrFjnYjC53gkItSAuivSxiPp3hYQQkCrN528fLPHkkNy6hvHwihXmpw/+MoWVKlhZfQkvb/QeqCue3G9cnocxx7HBWODkaJ58jlMah8NXwwgJ4QY3AsMG4eB6GA=
+	t=1792092702; cv=none; b=Ecyz4X/9IysnouSxmazG+y50CyjaDNPML7PmPBTVXcMrT9VgOcVLOtes+a0mMAzW/OlFV5kwWea1REIigQEsInpIBhOiZES4JOmikmKoWZjpbpLziKBmjRkTH+NUreUpFUaU+8+/uk/m4IdSwrcQLNKCKuNEGViMlVMq/MbPyNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092700; c=relaxed/simple;
-	bh=HGBK0llTSj+tf+c9fHJdkguh957hwuICmRyXKwuVB+E=;
+	s=arc-20240116; t=1792092702; c=relaxed/simple;
+	bh=G0FttVnjy2nSY/e+tG/IPCee2xbfRLfvL8EfTSi+kCY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=staTTp4S35yZsnK1fGlT+fWmNpLb0wJVjsM1oMB9k9ejRBPuxPtPKgx6Q7TwFlowVoqRSsApSrU22vIL/YaFhAhDFNFavO1AYI1H54gx5FXke5W+qiU6UiQHBbFzg+Ih6+HmPgflvuxOpjIdeFOaujn5BquzERzsVo+MsuyrV+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=aSxWI/Jz; arc=none smtp.client-ip=209.85.160.174
+	 In-Reply-To:To:Cc; b=ZaZrqrYMd7sO5VFGEkMNae/ZgAbsvgpmftL7uJRXwJjJNqEqCDb6CiFRk+kEZDK62/OzdlEVVaxsW8T27wEXkK83QjuE4LVqhP1fjsqOCS6YR4kECA1OrEoXa96ze+3Ss5PVD5YAouzUUzLFE1GDmumvMX8aM0F1szoCkNpRLfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=D55iyf9o; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="aSxWI/Jz"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-533778ab0bdso63994741cf.3
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="D55iyf9o"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-917997ab0d9so66414576d6.3
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092698; x=1792697498; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092700; x=1792697500; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mPdh0GZSVxpcQOBUgnIeUgj6niHmJJ8A6jXGrVV/UAY=;
-        b=aSxWI/JzXBApcnCtSk2/wWjLvkP2kHVoi+YEoYWupgk1F2kaVoxpt0JR4EzJxDZsOX
-         Dm/fOE8ejqfAZ5PZDLhm4fkLILy9tCWzszjzH44Ao8udb2oYg7imRlECdU3WQOO4g6lF
-         cJBpdIF8Qk0aPpGTz55d0nu1UkWYOUUT+HAKpicCmkhzzg53yNgE6C073yvCxQY/Jmmj
-         P/3tbDCq+es99AFbCujVMsaH0SAioVaq51bUViQtfLj3asgZJxqjiieYEEfetBqnmPPr
-         /cc7ujKfHLFHe4xVUkfrThLQYnj89iemkmS9Y+oECcdyK7cDgJxZ81ZCtBHdt+YvUvir
-         4SfA==
+        bh=Eose+N114zn/g+bj7VaPJ27IyLQh+I9OAYEi+aNKTnw=;
+        b=D55iyf9ooxm5/t5YBS2W0ecHrGnAuFPAcakjryxt3+UH7rRLEJFNuUc/8UmLpko+2s
+         D/bm1qbOJVogs20GqAWIHr5IcuUD/YJqdTkjguY+DeFZ9reLcf+Mizo0snY5nDjPjDq+
+         Z5HQMD1ivkIT3q79S8pvONF/AELDt8iJWJkUsgYD0zr2RaaCZPP8AJbFy47x6DK799Ew
+         T0FnqTErbHJj1CapmjlV0zetXP9f6knru7vfPfBARWDoQB2VciiIZVVqgz5G61V2r7ZQ
+         VaxoaJaxqRIcPPC69CZx6BrG1ihSK6D8QEhRWd9TnDnIhn6QlllstzRFYiBIuKXJXiXV
+         f6UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092698; x=1792697498;
+        d=1e100.net; s=20260707; t=1792092700; x=1792697500;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=mPdh0GZSVxpcQOBUgnIeUgj6niHmJJ8A6jXGrVV/UAY=;
-        b=0/k6vDwM6TxkOUuQLbWb4V0Grts81PVz4VEyVktiJbPvUEKeFgRLca71iG1jsffpE4
-         bIfVvFC9Cd5sNTkU9Hp9hjcuxdEIebQTALjoXL4ld+y/dFyfsWIg4MFacsk3B9NVBykh
-         aJ9i1elpUA7C4Srk/Eo7dN3OUmbzqzij/XY7mLHezReNcUMcZvLUeH/RfJZqOlyIbboM
-         /SrY8iJlKHMO1KYXpOnq8dfJ6CRWu00XmYvGVswlM3YVIUKjIzYLgNYksCr+fX5jZggE
-         TGCSPk/eV77p0P7QmMd4bhrAyxkvFpFtdCzhxiOeqnNE99INUfdvozAf/8nMA8NoQLjO
-         lYyQ==
-X-Gm-Message-State: AFq9FYK2cX9BT12smB8I/Vn7Y/XvuhUANnFF7Uq1my29x6xHNsLtVLAe
-	W84yua4slWTGJ6OxkeXKXeZacSMoe0DzDw/uEkdrBN/Sny32Rl42QRSFCPOWfgiGCuQ=
-X-Gm-Gg: AYBFou2cUOaMOLf/HYkJ80UjYrA08bc5mYGNmxWOeiKAPAo2cpyEVDIPgkj/OfkEEng
-	VeRW0U2sbJH+EKngSC5P/EkXYkCuvyLSUPR5kxbu2O85P/FLYmpjhbsmNO2lrqFtZ+CF62Xz6dY
-	N4rWih0rRQks1sn2zgLfbhOZ6NS+QMdNEoe0Wn8oSQBqqs5+VowdGr1XFVbD8SNJnw1k5st7/Cl
-	nx8ptzEAuXJeAivVNhpx+qeR4MS4yXA+bJsdjF4cj7oe4MjLjUVinSOXlFohbXcROyhBGD14NWz
-	s+4WB9bv5skj/+3RFutrAwkFKdJDI6wcjH9cm8RNdJh1GbN11jRYV+yNLj4jbZ65AAfJ4dnnhwK
-	8A/hO1KvzwGRm3DlJiLaN87+FfjpDkyuSDrAqS5Q26BJh1wpvOTLSUOhyzHuEuCCA0xaT4JMOB+
-	XSSPlFSuullVaTDq2qD0FrRmU51Nx9Pz3IJIZ6mo8ScF/SC1XcRZ2USL0qhmUTxceQE6W4n72PE
-	jbc0lq2evdvwKUA
-X-Received: by 2002:a05:622a:1804:b0:535:a5f8:a5c4 with SMTP id d75a77b69052e-535a5f8b53amr327593481cf.68.1792092698077;
-        Thu, 15 Oct 2026 12:31:38 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.254])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5362aaaec01sm1354011cf.31.2026.10.15.12.31.37
+        bh=Eose+N114zn/g+bj7VaPJ27IyLQh+I9OAYEi+aNKTnw=;
+        b=ASLsdti5eOiNW6GLbGWHOYryPqwQzDrJPsxq6NvDWWPoNETpKqYthm3H9v0FMTQYJH
+         ayFibUhOKzQS8/ENA4mRQ2KOn2wBuETm0ez9bt9ihWxJqhnco4f2SdcPTYA5s4PU4dFc
+         nnHcOafdfdl3oAfvd8ax7NkkPDSdR4xow6AY4Panh2epVPAKjieUGtAZ9k4Xvx0acDMA
+         zDkdLUCjx9pj/aVErO3ep207uxrsv3/3mHwcwxSWfXtzDljaKkFnFmoPRSk+PG6xZPLV
+         NpEEdQKfkqXb66v7gS2ricw+cvxubhS7HVB/8rndzpwfMCyWhUBSHnDdGosFH6omM5sT
+         dRpQ==
+X-Gm-Message-State: AFq9FYK7Wo5W/dzzNmqFBKtz2zkx8iy/FSi4Sza5d3G/XpYeHfTYeBAG
+	873spoIh9QXkuGLHV48RFWXBkA5maSnif5oA8Y4c4Uqtg5/4sxtC0ieYw+ki0aKHk/c=
+X-Gm-Gg: AYBFou3bML4ud+IrZbNpIKTsPYlS/DTukZTUdsrP8UhZ1eEuPghr7BcG3Duvao/Do5b
+	Co5HyRzqHOonMqlFyk8QELWvOS/YRDNITcyjkeCtdfDhb3IeHvRne30OdN7jy7fhLKJ+oRdAv0f
+	iz7aq1U+fTEhlnvQ7sR/o8v4iezNouCPqlB+svB2Kr9xn6iIvozDnWijpqzlF4yfufBJaNjfIC4
+	Vjf7Eo3RXoOyHhoPnJwyccPsiafuUlOUP/0pDlVmVUbGBXLc9H0fT1TlLSBp39eLeSzjvKre6Fb
+	bWJX0buJvd9Ff/c8fd0H0l/73invm0X2cN1Y2QTNIn6uU8eLKq77kHXb3/7QoEuSFCObal7rrNS
+	9U89/Nyp8gDZK92CSRP7w//O9PiKmCGH9jbEu4saQCVNmcgZHzO2FyXZaiAjmEU0S2IMsTroO9/
+	QFARvOp6t6H1d1RgxipByb00efosYKu0AuQxCRzvlRvAtCaRGm24Sg1dgIAbPTECawPMVA1NKT6
+	HLy/QjUtxGX0mE=
+X-Received: by 2002:a05:620a:1726:b0:93e:7ec5:1832 with SMTP id af79cd13be357-93ebd1dff54mr3355051085a.23.1792092700013;
+        Thu, 15 Oct 2026 12:31:40 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.253])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcb8b6323sm3727606d6.6.2026.10.15.12.31.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:37 -0700 (PDT)
+        Thu, 15 Oct 2026 12:31:39 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:39 +0000
-Subject: [PATCH 15/43] io_uring: don't lose a cancel as io-wq parks a
- request
+Date: Thu, 15 Oct 2026 19:30:40 +0000
+Subject: [PATCH 16/43] io_uring/cancel: don't forget that the work was
+ running
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,133 +71,116 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-15-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-16-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=4557;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=3559;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=HGBK0llTSj+tf+c9fHJdkguh957hwuICmRyXKwuVB+E=;
+ bh=G0FttVnjy2nSY/e+tG/IPCee2xbfRLfvL8EfTSi+kCY=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QGikyKTMZbS3EqgRnE1yoqxhg9tQ8hFy3L8MHcYmFGj8GJPyFrTjdmrz67N7nEWUl5ybiQvqX9S
- oo5LwV2XXkQk=
+ QH9YC5B+dIbdtC3MK4LgLIHmPIXE+oBMQ0XvKcPn8tw8pFsViPdGf7esxu29q/HI/n/JenlgyON
+ rnbPu6kI83w4=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-IORING_OP_FUTEX_WAIT, IORING_OP_FUTEX_WAITV and IORING_OP_WAITID don't
-block. They put the request on a list of the ring, where a wake up or a
-cancellation finds it, and return IOU_ISSUE_SKIP_COMPLETE. They do so as
-well if they are run by io-wq, e.g. because of IOSQE_ASYNC.
+If the request to be cancelled is being run by io-wq,
+io_async_cancel_one() flags the work, signals the worker and returns
+-EALREADY. Since commit ccbf726171b7 ("io_uring: perform poll removal even
+if async work removal is successful") io_try_cancel() goes on regardless,
+as poll may be armed for the request. If it isn't, and nothing else turns
+up, the result is the -ENOENT of the last search.
 
-io_wq_submit_work() looks at IO_WQ_WORK_CANCEL once, before it issues the
-request. Somebody who wants to cancel the request after that, and before
-it is on the list, finds it running:
+__io_async_cancel() makes up for that. On -ENOENT it tries the io-wq of
+every task that uses the ring, and that of the caller is one of them. So
+the work is found a second time, and the result is -EALREADY after all.
 
-  io-wq worker                          io_try_cancel()
-  io_wq_submit_work()
-    IO_WQ_WORK_CANCEL isn't set
-                                        io_async_cancel_one()
-                                          sets IO_WQ_WORK_CANCEL
-                                          signals the worker
-                                          = -EALREADY
-                                        ...
-                                        io_futex_cancel() = -ENOENT
-                                        ...
-    io_futex_wait()
-      adds the request to ->futex_list
-    = IOU_ISSUE_SKIP_COMPLETE
+Unless the worker is done with it by then. If the work is flagged before
+io_wq_submit_work() looks at IO_WQ_WORK_CANCEL, all the worker does is to
+queue the request to be failed by task work. Then it isn't anywhere to be
+found until the task work has run, and
 
-Nobody looks at the flag again. IORING_OP_ASYNC_CANCEL returns -EALREADY
-and the request stays.
+ - IORING_REGISTER_SYNC_CANCEL returns -ENOENT,
+ - IORING_OP_ASYNC_CANCEL completes with -ENOENT,
 
-It is the problem that "io_uring/poll: don't lose a cancel as io-wq arms
-poll" deals with for poll.
+for a request that they have just cancelled, and that completes with
+-ECANCELED.
 
-Look at the flag once the request is on the list, and cancel it if it is
-set. The lists are searched and the requests are added with ->uring_lock
-held, and the flag is set before the search. So either the search finds
-the request, or it came first and the flag is seen.
+With a read of an empty pipe, IOSQE_ASYNC, and a sync cancel right behind
+it, 1 to 3 of 1,000,000 calls return -ENOENT, and 50 to 110 with
+IORING_SETUP_DEFER_TASKRUN (4 CPUs, KVM). Nothing is written to the pipe,
+and all of these reads end with -ECANCELED.
 
-What the canceller is told doesn't change, see the other patch, also for
-IORING_ASYNC_CANCEL_ALL and _ANY.
+Remember that the work was found. IORING_OP_ASYNC_CANCEL completes with
+-EALREADY, as it does if the worker is a bit slower. For
+IORING_REGISTER_SYNC_CANCEL it means to try again, which ends with 0.
 
-Fixes: 194bb58c6090 ("io_uring: add support for futex wake and wait")
-Fixes: 8f350194d5cf ("io_uring: add support for vectored futex waits")
-Fixes: f31ecf671ddc ("io_uring: add IORING_OP_WAITID support")
+The result of a linked timeout, which calls io_try_cancel() by itself,
+and the number that is returned for IORING_ASYNC_CANCEL_ALL and _ANY don't
+change.
+
+Fixes: ccbf726171b7 ("io_uring: perform poll removal even if async work removal is successful")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/futex.c    |  4 ++++
- io_uring/io_uring.h | 17 +++++++++++++++++
- io_uring/waitid.c   |  2 ++
- 3 files changed, 23 insertions(+)
+ io_uring/cancel.c | 13 ++++++++++++-
+ io_uring/cancel.h |  2 ++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/io_uring/futex.c b/io_uring/futex.c
-index eaee14242a3a..64909a2a8c88 100644
---- a/io_uring/futex.c
-+++ b/io_uring/futex.c
-@@ -283,6 +283,8 @@ int io_futexv_wait(struct io_kiocb *req, unsigned int issue_flags)
- 		 */
- 		__set_current_state(TASK_RUNNING);
- 		hlist_add_head(&req->hash_node, &ctx->futex_list);
-+		if (io_wq_cancel_seen(req, issue_flags))
-+			__io_futex_cancel(req);
- 	} else {
- 		iof->futexv_unqueued = 1;
- 		if (woken != -1)
-@@ -323,6 +325,8 @@ int io_futex_wait(struct io_kiocb *req, unsigned int issue_flags)
- 			       &ifd->q, NULL, NULL);
- 	if (!ret) {
- 		hlist_add_head(&req->hash_node, &ctx->futex_list);
-+		if (io_wq_cancel_seen(req, issue_flags))
-+			__io_futex_cancel(req);
- 		io_ring_submit_unlock(ctx, issue_flags);
+diff --git a/io_uring/cancel.c b/io_uring/cancel.c
+index 64eb4a993c00..290ce804c868 100644
+--- a/io_uring/cancel.c
++++ b/io_uring/cancel.c
+@@ -117,6 +117,8 @@ int io_try_cancel(struct io_uring_task *tctx, struct io_cancel_data *cd,
+ 	 */
+ 	if (!ret)
+ 		return 0;
++	if (ret == -EALREADY)
++		cd->running = true;
  
- 		return IOU_ISSUE_SKIP_COMPLETE;
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index c7b340e5d0a8..36d0d67fcb9f 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -381,6 +381,23 @@ static inline void io_ring_submit_lock(struct io_ring_ctx *ctx,
- 	lockdep_assert_held(&ctx->uring_lock);
+ 	ret = io_poll_cancel(ctx, cd, issue_flags);
+ 	if (ret != -ENOENT)
+@@ -180,6 +182,7 @@ static int __io_async_cancel(struct io_cancel_data *cd,
+ 	struct io_tctx_node *node;
+ 	int ret, nr = 0;
+ 
++	cd->running = false;
+ 	do {
+ 		ret = io_try_cancel(tctx, cd, issue_flags);
+ 		if (ret == -ENOENT)
+@@ -204,7 +207,15 @@ static int __io_async_cancel(struct io_cancel_data *cd,
+ 	}
+ 	mutex_unlock(&ctx->tctx_lock);
+ 	io_ring_submit_unlock(ctx, issue_flags);
+-	return all ? nr : ret;
++	if (all)
++		return nr;
++	/*
++	 * The worker may be done with the work that was found running, and
++	 * flagged, above. That isn't the same as not having found it.
++	 */
++	if (ret == -ENOENT && cd->running)
++		ret = -EALREADY;
++	return ret;
  }
  
-+/*
-+ * For a handler that is run by io-wq and parks the request on a list where
-+ * cancellations find it, rather than completing it. Whoever tried to cancel
-+ * the request before that found it running. It has flagged the work item,
-+ * has searched the list in vain, and won't come back. To be called with
-+ * ->uring_lock held, which the search needs as well, once the request is on
-+ * the list: if the search came first, the flag is visible.
-+ */
-+static inline bool io_wq_cancel_seen(struct io_kiocb *req,
-+				     unsigned int issue_flags)
-+{
-+	lockdep_assert_held(&req->ctx->uring_lock);
-+
-+	return (issue_flags & IO_URING_F_IOWQ) &&
-+	       (atomic_read(&req->work.flags) & IO_WQ_WORK_CANCEL);
-+}
-+
- static inline void io_commit_cqring(struct io_ring_ctx *ctx)
- {
- 	/* order cqe stores with ring update */
-diff --git a/io_uring/waitid.c b/io_uring/waitid.c
-index a91491650440..2ba2369681d0 100644
---- a/io_uring/waitid.c
-+++ b/io_uring/waitid.c
-@@ -349,6 +349,8 @@ int io_waitid(struct io_kiocb *req, unsigned int issue_flags)
- 		 * a waitqueue callback, or if someone cancels it.
- 		 */
- 		if (!io_waitid_drop_issue_ref(req)) {
-+			if (io_wq_cancel_seen(req, issue_flags))
-+				__io_waitid_cancel(req, true);
- 			io_ring_submit_unlock(ctx, issue_flags);
- 			return IOU_ISSUE_SKIP_COMPLETE;
- 		}
+ int io_async_cancel(struct io_kiocb *req, unsigned int issue_flags)
+diff --git a/io_uring/cancel.h b/io_uring/cancel.h
+index e49713a1bc66..484fa5e7ffaa 100644
+--- a/io_uring/cancel.h
++++ b/io_uring/cancel.h
+@@ -11,6 +11,8 @@ struct io_cancel_data {
+ 	u8 opcode;
+ 	u32 flags;
+ 	int seq;
++	/* io_try_cancel() has found it being run by io-wq, and flagged it */
++	bool running;
+ };
+ 
+ int io_async_cancel_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe);
 
 -- 
 2.55.0
