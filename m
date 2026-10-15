@@ -1,67 +1,67 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7E750AC19
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8877F4FE2F7
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092715; cv=none; b=eod+Comn2A3haqbn6pU3OWdzIghVh/59ES6LH6waCPy5xG2hFkKOgRmK9TdYOtc4nIybZby6wU+AC/Vv7dvg3rbw/K3D5MaezlpMpmQJ87IaRb/wgwrxv5H8G74QcjsgwVQjtKMFec00e0cnEDNsD79sxdO96W13ef5+DQI9z4Y=
+	t=1792092718; cv=none; b=H1jEz/513r0hIk8/AlzVLgodjrg6tZZJrXcuToHsoJeCSP1InqnrqiosPOpxnzR7W7gev/6pbIfbNTLI0ph14Xx56PvvwjHBB6Zu5YVSVG6/YZMQrYEITCtdJf9sioZDzjGvdD/QhH5BcW86xSW/RWvtNrpcxOWKvsgLzOAZXqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092715; c=relaxed/simple;
-	bh=fjM7fZZIC9JGUNipy2NpFkudgYs64fMwD3sWkxCJwcg=;
+	s=arc-20240116; t=1792092718; c=relaxed/simple;
+	bh=N9mIc7CXpS/6Uy4IOsUfh2cS8MXUykK58zJiGUcIKsE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Zu8HNHqJFeughnqb1Op5YkqIITNb0v1A+CZTSToMYjIiBKKIY7iDckrTbSAeZkTUfaFjSqkKUz+i5rzzc/8M94UJ5On7P0y6brzNggZhCvvOhCPTL/gdK6tsDheea03MW74nNk5w/JxOUp6Uh+SmnBlA7IEKYM9WaOGNq4svlJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=cm9qbK9o; arc=none smtp.client-ip=209.85.222.180
+	 In-Reply-To:To:Cc; b=eFVXK9nRZq5mZxq3pRMQNQ0/nDNLysJodkITshttFkUtNudqHRAR99e4lxcfZ0OxJp3MVh3LNXWp3whMTbkZJfWYqrk/x4HUzDFVhiDlFj4lMQwBo7jOAmmyktlC4xJ0lXjhKT4uSKG2Ub+byZ8HURPT6fAzNsoqtzZ+34aqnIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=Gt4t96Wi; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="cm9qbK9o"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-93e762768f3so619059285a.0
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="Gt4t96Wi"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-53606d2351aso19017971cf.3
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092713; x=1792697513; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092715; x=1792697515; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vH7UPYPQtwgJkiadiY1llgqtg2FFOdh2O0dLYrA597E=;
-        b=cm9qbK9ofHgOoHeqqRuQAl9YGjvo93pjHxSev9Uq37mVjsL+RWd5M+pDcW9QrKQEg/
-         t5zV/8kzs6KbHxRrDRNjUYSnyXwAh2b5QI6oIW889omInP/OI6kNjp/0K2/pW+qBTdgk
-         AhMrFbJ+5ThPQ/inBXwszA/4Y+7NnfvgAPh8b4pAKb54NGDI16bj1HYl+JhGf0Ig2H9v
-         0LM+oQNq7Cj7FC/cNFSiYbw6j6IegiyeSQfCVoDj92LU41sJg6NL6cVQglfSjVErfiTA
-         Wk5F8B+9IH3rI4mOMvIUXPT9inU5Fr9sbG7VtHDcKL2iKOZafZrHVH14ecVZcn7Ty17g
-         AeRg==
+        bh=1W/HrILCJm67Eq1HvhIRQ3rwRMChvsKve2iBptgc5qo=;
+        b=Gt4t96Wi1xkjQ2IAnpaM77l5NG1IpEbIdKVLg6VDomWThlBaijJ+ykW9Y1mgcQj4hh
+         IWwcOZmtbcUUeXXHrYMgN+riAtO+4zaCjw4F4nKvwec1l2RnVMNCnVCOvXZ/63L/BaFq
+         KT3TZk0tRea3mC+UC0crQb6d+d35HQnrKVMMiORVUEr0xAI3UlfnTkoNwd0BMrPWXCGW
+         oe/S8uQ3RRSh7GvBFt4s7UG5e8gYmbY+Uaq2BXLYUW+vTYkdD22h+ASSjMvI/k2qznXp
+         ThiCndreEWIhEfXOntq5jrboortYv1GZmwj1Kw+y0dH3r4ydmWbL8uV+7QeGJm+wMQch
+         /1iQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092713; x=1792697513;
+        d=1e100.net; s=20260707; t=1792092715; x=1792697515;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vH7UPYPQtwgJkiadiY1llgqtg2FFOdh2O0dLYrA597E=;
-        b=ShO2u5gCM6LHXLtocTgn9VICfIq6KK0clYVwDtjIkdRn1mbDrvSlJUkIdkcmlMeAqp
-         1kdByNaZo5WWPftWTAlwDoI3rJtOkqzMtMPJ5Nuqx0qg8eVuzPfO1Yqm3DY0FfXYspMB
-         BvkVqeB+YJxT4jP3/+Ug+aIZhyrO7vZpOyroVj3C2Xv/dUjzYFKa4Ydac6hW30aJidiT
-         cVFPYnuG5bTltNY1C72CEaG3+Nuv+hP60ZxSwqqRmuKl3Yy6vimX+UA7Wmyri7GJUlKU
-         1p1oo46KzPfiW+BF+eQlVAPU2HmVx2VcA1sr5rddHlUXIZwxcdZT4uTX6me/Oiqlz4DN
-         oc0Q==
-X-Gm-Message-State: AFq9FYKWP+6h7cmQDObIU6uAKBMlH8UibJwx8X8Ybisb53jfaRZb5/mA
-	OCr8bJ1xfapTTJbfxYqEdeWNlTpwu2Z4VqKtPzMY8mt36N4WO4ZCpl+/cttcSp5gngg=
-X-Gm-Gg: AYBFou2owmtwMLq0ks0jNMDws4ImAf/x1IsKoXhc7ENPhRTmQIOofd680LhhhyfYlce
-	IanL31r8E83/k/PDECEYB3yR1ZMyNCov4ZcyRATDoSBAERRRhaE3sLx9BDbNA29SRpU44+1lx1w
-	L5emZJHppxV3z9mbCNFWG3kPhDmM3xAEtf1rooRje3Em+BHIB3x17wofN63YDKvZSAITkEWr+rs
-	zRl8w23fvUh5Py5Vvl8STfVKq/0Arx295++/5EhSgPLS9sGfqjQbmLxffTYjlog7qXHEozDW1e5
-	xc6oAuCxRLaHq+kV2Frl8d7C0WfbYqudfkKugblsynTZAgRYdGVth/9ya5y3Ox8+Nt0NxKNk0Lb
-	FDYNBWH7K5C3z1mZUIt1fhK7gQjTY+21xNJ2z7zpg2jaUA6Yss78Mf88t9FBuQpM2xZjeC+f5J7
-	V7OSuVTB+HSBMDFUOw3qYYScqtfDie82nSixzZhEHgyAPqq0cSvCWywInRMBbJovRng7nD6VUBS
-	mAnFHROYIadOMnI
-X-Received: by 2002:a05:620a:26a4:b0:93c:88ab:3482 with SMTP id af79cd13be357-93ebd20d065mr3307771185a.29.1792092712876;
-        Thu, 15 Oct 2026 12:31:52 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.241])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a16b5e4sm13113285a.14.2026.10.15.12.31.52
+        bh=1W/HrILCJm67Eq1HvhIRQ3rwRMChvsKve2iBptgc5qo=;
+        b=zbDf9ujxvZ6McLQMcHveNSzN7YE2gFzvWI9jOZ3AxYtZTQLvfeIPY0rtKR/fy0XiTO
+         7pN4Ui6THJSK/M249BkPQHUK4nX0iBvVymtE9o68bF4cBUsYAIi2/4s8Rx58UmaNKaQX
+         yObZSqFDTzO0cIS4slQHtp3AFZa0lHabtnnH1EztFU2EsaCLxI5F1QPAqvi8dSYsLKEh
+         l70wuGaiPbnobCXd275XTDRM/7kpJ5mukibMnN3HgOZEX89nS8WXjJ8Tjb6mFInm5EFX
+         p4BwTn1J6WRHzSzjLT4uyObSWxEyF7U8KImQedGlJ/N77aaUeB/XxQSY+WiDzYvO1IM7
+         jrhg==
+X-Gm-Message-State: AFq9FYJpErraBDORYqnQxTmH4pJOsuJOmQadT7tV1rhnr8p/yF8oQTNK
+	e9QMAJUWo7kWG21T9ygjvw9c70cxFnuyhbSWsrxS9sW6iAywS80Ii/K1/xjTxj6xwtg=
+X-Gm-Gg: AYBFou1J1fXgGQH6d596qqXgI7H8TgtjxM9nGUH9QWTBS0K4w1fY9X/q2bf23YqdrLk
+	wGn/tEvw5Ee5gPiyhGm38CKYXD4a/ctmjlNFSjIV0HzR5wRn92dePrnvPKy5L7w2p4dywgjQYOH
+	5+/pbDxv33q/QZEOxmsqtwXpam1AgcztuZrGBWEaOqHP/cJYr8EL+kY/osEE3AvBNYG/3Sf2p7J
+	UIgc8y0LL84SDnNGyo+3eFicPHJd9hZAN/mizhm6UYoGwZgKZxsvaJ2dT/SpOiw2Y96bv5ps/oW
+	WwQngzQpGtVVC/n80lJ7tOSkPp5AAHJvXwkCZ8xv4C9dtvPgD9PABtMdHl3nWR/Owt9fWp8DAHV
+	58bOMuLojNarwo2NBnoTKJsEOg/RsLYEozPw1rOOoOUvjGESFO/+dE7/4CvzKhh376QMtWmi96Y
+	K3rOToi9JmfAJVUt2SV6eYg6xiE1cz8Zis629b22njQJntsRy3JO5VRHRqiCSA8yqBDVfcj/WKf
+	b7FzxsFH57T448=
+X-Received: by 2002:a05:622a:17c8:b0:535:84e7:5a76 with SMTP id d75a77b69052e-5359fe13048mr294268281cf.59.1792092715199;
+        Thu, 15 Oct 2026 12:31:55 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.249])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5362a9c273esm1499451cf.20.2026.10.15.12.31.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:52 -0700 (PDT)
+        Thu, 15 Oct 2026 12:31:54 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:46 +0000
-Subject: [PATCH 22/43] io_uring/futex: allocate private hash before waiting
+Date: Thu, 15 Oct 2026 19:30:47 +0000
+Subject: [PATCH 23/43] io_uring: drop the CQE cache if a refill fails
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -70,114 +70,68 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-22-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-23-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
+Cc: io-uring@vger.kernel.org, Leonid Ovchinnikov <teiny.work@gmail.com>, 
+ Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092659; l=3339;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092659; l=1928;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=fjM7fZZIC9JGUNipy2NpFkudgYs64fMwD3sWkxCJwcg=;
+ bh=N9mIc7CXpS/6Uy4IOsUfh2cS8MXUykK58zJiGUcIKsE=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QOh4Ved0oFmwERmtKdUixOJGDC4nTwgkqSQAamScda6Q4jX1s08xzt2B2SDGqKmHcYcZ1Ewhc5c
- W4OWi8b6w5gk=
+ QIoXKFq4B/fUPukYSvrOpFPaTRlsOQvc6nLLja9NvYGybwOFF3A6njlJasJm6jFzBa2FHX8/jxH
+ BWKu3ecSi4wE=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-The futex code relies on there being no private futex waiters by the time
-the first private hash of a mm is installed: __futex_pivot_hash() moves
-the waiters from the previous private hash to the new one, but it does not
-look for them in the global hash which is used as long as there is no
-private hash. That is why every clone(CLONE_VM) allocates it up front: a
-task which is alone in its mm cannot block in futex_wait() and create a
-thread or invoke prctl(PR_FUTEX_HASH) at the same time.
+->cqe_cached and ->cqe_sentinel delimit the CQ entries which can be
+handed out without looking at the ring. io_get_cqe_overflow() only calls
+io_cqe_cache_refill() if that range is too small. Without
+IORING_SETUP_CQE_MIXED too small means empty. With it, a 32b CQE needs
+two entries, and one may be left. If the refill then fails, the entry
+stays in the cache, and the next 16b CQE gets it without any checks.
 
-IORING_OP_FUTEX_WAIT and IORING_OP_FUTEX_WAITV do not block the submitter
-though:
+That CQE overtakes the 32b one, which went to the overflow list. The test
+for IO_CHECK_CQ_OVERFLOW_BIT, which is there to prevent that, is part of
+the refill:
 
-  io_uring_enter()
-    io_futex_wait()
-      futex_wait_setup()	// no private hash: queued in the global hash
-  pthread_create()
-    futex_hash_allocate_default()
-      __futex_pivot_hash()	// first private hash, nothing is moved
-				futex(FUTEX_WAKE_PRIVATE)
-				  futex_hash()	// private hash: no waiter
+  CQ ring with 4 entries, head == 0
+  16b CQE, 32b CQE       tail == 3, one entry cached
+  32b CQE                no room, the CQE overflows
+  16b CQE                written to entry 3, ahead of the 32b CQE
 
-The wakeup is lost and the request only completes when it is cancelled.
-prctl(PR_FUTEX_HASH, PR_FUTEX_HASH_SET_SLOTS, n) instead of
-pthread_create() has the same effect.
+Forget about the rest of the cache when it is refilled.
 
-Allocate the default private hash when a wait request on a private futex
-is prepared, which happens in the context of the submitter. This is a RCU
-protected pointer check once the hash exists. A failure to allocate it
-fails the request with -ENOMEM.
-
-Fixes: 80367ad01d93 ("futex: Add basic infrastructure for local task local hash")
+Fixes: e26dca67fde1 ("io_uring: add support for IORING_SETUP_CQE_MIXED")
+Reported-by: Leonid Ovchinnikov <teiny.work@gmail.com>
+Closes: https://lore.kernel.org/io-uring/CAECZYD5OMD9vMTzjteFMMP40Dn+SWKj9SFj=43U6uO3XMnxJbw@mail.gmail.com/
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/futex.c | 28 ++++++++++++++++++++++++----
- 1 file changed, 24 insertions(+), 4 deletions(-)
+ io_uring/io_uring.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/io_uring/futex.c b/io_uring/futex.c
-index 64909a2a8c88..9203998654ff 100644
---- a/io_uring/futex.c
-+++ b/io_uring/futex.c
-@@ -152,6 +152,24 @@ int io_futex_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	return 0;
- }
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index a5fd1845a1d5..01187f00943a 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -729,6 +729,13 @@ bool io_cqe_cache_refill(struct io_ring_ctx *ctx, bool overflow, bool cqe32)
+ 	if (!overflow && (ctx->check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT)))
+ 		return false;
  
-+/*
-+ * A wait on a private futex does not block the submitter. Even a single
-+ * threaded task can go on and have the mm private hash installed by clone()
-+ * or prctl(), which does not pick up waiters from the global hash. Make
-+ * sure the private hash exists before the first waiter is queued.
-+ */
-+static int io_futex_prep_private(struct io_kiocb *req)
-+{
-+	int ret = futex_hash_allocate_default();
++	/*
++	 * A single entry may be left if a 32b CQE is asked for. It must not be
++	 * handed out later on if this fails, as the CQE is going to overflow.
++	 */
++	ctx->cqe_cached = NULL;
++	ctx->cqe_sentinel = NULL;
 +
-+	if (unlikely(ret))
-+		return ret;
-+
-+	/* inflight tracking only needed for mm private hash */
-+	io_req_track_inflight(req);
-+	return 0;
-+}
-+
- int io_futex_wait_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- {
- 	struct io_futex *iof = io_kiocb_to_cmd(req, struct io_futex);
-@@ -161,9 +179,8 @@ int io_futex_wait_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 	if (unlikely(ret))
- 		return ret;
- 
--	/* inflight tracking only needed for mm private hash */
- 	if (!(iof->futex_flags & FLAGS_SHARED))
--		io_req_track_inflight(req);
-+		return io_futex_prep_private(req);
- 	return 0;
- }
- 
-@@ -213,10 +230,13 @@ int io_futexv_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		return ret;
- 	}
- 
--	/* inflight tracking only needed for mm private hash */
- 	for (i = 0; i < iof->futex_nr; i++) {
- 		if (!(ifd->futexv[i].w.flags & FLAGS_SHARED)) {
--			io_req_track_inflight(req);
-+			ret = io_futex_prep_private(req);
-+			if (ret) {
-+				kfree(ifd);
-+				return ret;
-+			}
- 			break;
- 		}
- 	}
+ 	/*
+ 	 * Post dummy CQE if a 32b CQE is needed and there's only room for a
+ 	 * 16b CQE before the ring wraps.
 
 -- 
 2.55.0
