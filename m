@@ -1,66 +1,67 @@
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF29A502D50
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 20:29:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE97B58E2D5
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 20:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792096144; cv=none; b=LQAOpltvfsmJY7bdD5+uMr1gHppU6/+2IiilXsUpqfwK6RZEWtYqBQGTUcMjJM1F33ul9IJftdkvUh+6u+dA06AaTdyEgb1ZPwGHe30wgOp9Ed0+xMJO1SQcunZbtOlX0y19JJiNU7Lig3Uk5YMNF94bB7lIXlHolYEkZsPGPXc=
+	t=1792096208; cv=none; b=Va/j0JAvpawRx87gdGkhxQNVcevWtvFMS5tjlEg5bHJqSmOeLwhBDso9Dp3TLG2q2ma37K4MKF19M0c2SCfv3PP0yzirdn5jfK/JIqfvPLfVvp2CU0sIKT9pXzl74TB/BZhBUAxnHssMT4/74Hdv6ZuRNQT1t+5fKmClj3/DyMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792096144; c=relaxed/simple;
-	bh=KDB/Yb3W6ngSXYPAsBExqxlp0nf1qFjv2yaefrZZOZY=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=tbGqhzKXD6TbxnswSZnCpnQGIsfPWQ0F3YhJoZTlY+WbDbQ9IyJN+VJ9qsiK/DnmelrzYa2zM0Pv6DtxwESgHpaTyk9z2uZOhTW3HR6ydjUCXLJRPhm8LGAXruDvtoExdJjOkI8zQ89JbKVwSV1kWd/Zs6VqE/vz+wvez/lVMjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=psUNTuzI; arc=none smtp.client-ip=209.85.167.182
+	s=arc-20240116; t=1792096208; c=relaxed/simple;
+	bh=ygPHMn3FOGfSzz94RmoD6C5HYCPIRe/ZrEkE2VJK1ew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NRsEP1MRLA2er3xg/Xlf76q19yv+ApznyZ5vzkx6bHAzQrk62/jloQAEObMX4ivqo8PFFXnj3rVdoGA7g90bx4oBhUO6jB5v9sfIOJd/IqGk/PbguXAc1FDwg/ds9VYLIN6biQtaMc7O8RUMzB4ALxMuzQw7mhci9zaPflR8bUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=f9elU4nW; arc=none smtp.client-ip=209.85.161.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="psUNTuzI"
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-504ae5941faso1159930b6e.3
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 13:29:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="f9elU4nW"
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-6de1ca1b05aso3791390eaf.0
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 13:30:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792096142; x=1792700942; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=9+iGTNdlsL2Gzoa2lCWPPsfh+IFvJrl2BTZ78ZAlNRY=;
-        b=psUNTuzIrCS9aq6H2IUHraUI/niJwSv3QcdP019XY2t8jIeTINfNlhmuAsUdaqTWcQ
-         X/9mTf6MgAKOI0ZBj+BpMW5WeN61sasovSk4teLzHv5hbhFqgWlWwVWsy1HTSyixGLm2
-         WFPzkSVsuhIkVpVdQ0EzK2BE5+X8bg5Bm7nwcOG0u0n9Sp42QFZBHi26WFjw6MqtExfJ
-         23+foai4Odzo0QM6HJW2PlCgykIMThklOrXQh1IEfCLVHKC3ikfbkEXNgAEDwyQotujK
-         6c94UhKsAYOlsdI6Kin1HeZJ5Bw9UwRNltMtfCbJBu6h0kDyQeJ82nE/9GX0k+gnmiPj
-         oMhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792096142; x=1792700942;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792096206; x=1792701006; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9+iGTNdlsL2Gzoa2lCWPPsfh+IFvJrl2BTZ78ZAlNRY=;
-        b=CNCoitwiM5uc31O+TqwSrKl5x4qi0sjfMTmklDQZosrxTl/WGyvprMffWByhlBUOek
-         R14WZ4YaNrqwzrqMtOwPMGPZMKglKoEf7UE2uElPgxHDxDYO9MEqgER6HpHe8zSdSwov
-         nJ2sRPaGguFkv0ZNoVnvo6cbDZ2ozk0Zn+5vNDkqjiOmPQa6WjkIabRknAAKdvWO6rqc
-         GUq9qPeJ1bP0DI87JRjERC1xZGq0gQakZ83/N5oA+quIZe+rdNgPaFF4+AbXa0IOIAbU
-         jXQnU+k+M0xbB4rxkh1LjZdWyzVSIkVt7kgjcDCai34P1MglebDmG7eLODInFIBiAa2S
-         OH7Q==
-X-Gm-Message-State: AFq9FYJ8GDFKM0xsRJlhD3Jl7axuR+BTTbHILHSi0Befwct3KVQ5hEdj
-	rhcnFlY078/4OA08ntW94lk0HVwUPDXqrCA+2PA/k5C7GUhInlGulIFex/S0QkDrXOET9bUr8zK
-	wT99cDJY=
-X-Gm-Gg: AYBFou01bWUH0wZXjjRY/gzAcodc/JhD3D5Su1iTm1X6H19ntXVoHCIwhYa/TdrcxFg
-	Xpts6fPS/J9+UqrDQ8iDFXifDKv6qcEhbSX9qmTpJsw07ohLOuf2PXLh/8T+n1OVloOtR0lFKHb
-	FEAZv4tJ/zr/f7Mim0B2O0+L6FAjuEIrPxC4ZiWn/mJRdOErN1vKiQ4trQLgAHH7gIPKw+UuEzd
-	AEQSpk9BG7JmQJZi7uUvy1241+zHpYwvJAwWWsNV0EDydefyAKjedCYiplBOQ3G+nj/4G8U26er
-	hGw/XoE8WkiQPcbh9jfWfzqDAMBRSY8A//WWJv1FiqaXnj4sIiIy7uD4uUvTjrl3hAbQEEGNz9n
-	eCkhYcK6AN7K95bsyMjhVpEmb4MZvO4AtnNAPpgQgnHsmAQWX2tdeBfPAfAyf9Srwyn+mAxEnX2
-	WOaJjHB3iOrYPXqqWOscp/W9dhJ+L/e4GtEJczGssJeQJY5s4EOirCQwfBcJGi9OZq1FqozSCEA
-	x0s9oO4mO0FjGTj+vME9mJ9uzIakeC3adUVE7tE2tfKGH+Ou5k+9JK4Ww==
-X-Received: by 2002:a05:6808:1983:b0:4f9:595:b80c with SMTP id 5614622812f47-50c56bf8a1bmr21323638b6e.41.1792096141688;
-        Thu, 15 Oct 2026 13:29:01 -0700 (PDT)
+        bh=4AIbma4tjuLRzJ4ycI85jwstBKmCUvxBUVyzwWqKymA=;
+        b=f9elU4nW9xuWqGLRkiZUDcaPWkFSaKVH2cPnwTtFfY6a6D9VIwY3BxsrSzhzbyn+vV
+         B2kcgnQuvIhboiljP643duxuteojOVqCi6+ESQuudbzA6UVFJrhWw9pdc38Z0BL9ijOw
+         Xtu4bQDkfeBCGEbCRdUkRvlQORFMbSCIh50HFG3kChX5rdss7UH01sLKTDaSp2sZhFFS
+         Vqje2m1qe826e/pHmCfy5/P+rqSvdyPTwpBUwcRVjJYs+RUejayBcCh9x1nmCK18HQZL
+         McM4eXbIgu+aRHDpCn1nBVqM00EO4wIf4lwPzZeyd4dO8g5WyMdlimqU0OM4O7y9Sfz1
+         MUWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792096206; x=1792701006;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=4AIbma4tjuLRzJ4ycI85jwstBKmCUvxBUVyzwWqKymA=;
+        b=Dq05qlRLZiAzCtSnPE4lEUcSbtOpJnx8xOqmIvllq2Dq7TiF+0zm+EByQ0RYiWrloC
+         vmJOQ0o9dBu73UiXPa8bbx2CJ9rbc7+TpJ2Er16B9f0gCsQi2QbZjEBWz7azlBD4CBXg
+         2cf37jVpqdsrSkdlOXar51V1vN27/14VhuUoYBWypPQFkPfAN9fo6VkrRUVs37pjYdMs
+         MnvaPriCJtgUZ+/uP3CwoRc3jThB8SHXJDElzri0lMOQnUYFynAlmlA2rXM5hG25DkHc
+         QMxNaGqzGfDEqyu5XyUD5CzsXrFtk9zwgY9YSKLfbFUT9XR8aOF1p3MzfkbE8Z/pvpKe
+         JL0g==
+X-Gm-Message-State: AFq9FYIhsYVaeAJfd0OloC6t0mZjLuICL+Mv4V1uobSIhQ0nsfOSXOaD
+	AaAOevp1MAyZjGQ/EPK9y6kh5OSSz74hHD5i51le/rtnoFn4Ea48oUJSIIKzJEMm1nM=
+X-Gm-Gg: AYBFou2aeIunUk2/ea+iu0JcMvleFrPxPWbb7/gX4oEcGt8S9FFMxjvoVs8GTPUsYwo
+	k4gDuFt4hmAHbGcng31wTA1m1KP6l8gG/8Ug5uZpyjcEgwGdk/6PYx9QWqu7HUCrm/ayiRAq1RS
+	QlTiiOkYT3eN5rFtCj6MpdEc9s4loUr9fwbO0oBxS5RQTNYlGSt8/kARO8ui66bFXLAU38STgna
+	jgOGR8bzyNyGVkrCmW47YOlw7tk0IVqAZEKphrUiKj2hK0VOnToU1HytU3DHKyB4MpW3nmmCsVz
+	9aT5QAZMy2zszwHQHDAjU84B4gcmQp8Ec3FQECu1ZZ8nKSdMjoFScfjKUGKSJD+BUnMGr2wkYzG
+	vyWgPfHCz5JYm779+cLCm+Z4amIurAQKlHOfyq0lNmGVi0UfZFr4vIGQkBVlmGU/3a9vBBCQimy
+	4RautMQi1Jv+Qvl77LMNenvTUw0sUX9SEoRhVQC8nZJoko81dyqvElk3+TXDAvQbMzTNPfOOrGq
+	/zT7w091Jbg1sQ=
+X-Received: by 2002:a05:6820:2203:b0:6d7:4af6:e292 with SMTP id 006d021491bc7-6ef08e7d1a0mr14833642eaf.2.1792096205509;
+        Thu, 15 Oct 2026 13:30:05 -0700 (PDT)
 Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a73b7741desm14498fac.17.2026.10.15.13.28.57
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-701833928f6sm293627eaf.0.2026.10.15.13.30.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 13:28:58 -0700 (PDT)
-Message-ID: <45b1937b-5468-48fb-9b75-a606d4ef46c4@kernel.dk>
-Date: Thu, 15 Oct 2026 14:28:57 -0600
+        Thu, 15 Oct 2026 13:30:03 -0700 (PDT)
+Message-ID: <91914979-5692-4bc0-a693-ace5aff83710@kernel.dk>
+Date: Thu, 15 Oct 2026 14:30:02 -0600
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -68,59 +69,102 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/43] io_uring: Fix hangs, lost wake ups, missed cancels
+ and ring corner cases
+To: Josef Bacik <josef@toxicpanda.com>
+Cc: io-uring@vger.kernel.org, Leonid Ovchinnikov <teiny.work@gmail.com>
+References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 Content-Language: en-US
-To: io-uring <io-uring@vger.kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>
 From: Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH] io_uring/timeout: don't flush with the sequence behind the
- last flush
+In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-io_flush_timeouts() measures the events since the last flush as the
-distance of the current sequence from ->cq_last_tm_flush. A fired
-timeout bumps ->cq_timeouts before its CQE is posted, so until it is
-the sequence can be behind the last flush, and the distance wraps:
+On 10/15/26 1:30 PM, Josef Bacik wrote:
+> Hello,
+> 
+> We've been running a large LLM driven audit of the kernel, and these are
+> the io_uring fixes that came out of it.  Some of them were found by writing
+> models of the task_work, poll, io-wq and CQ code and running those through
+> a model checker, the rest by reading the code and then writing a reproducer.
+> It's a lot of patches, sorry about that.  They're standalone fixes, I put
+> them in one series so I didn't send you 43 separate emails, so take whatever
+> subset you like.  The ones that belong together are 7 and 8 (the same lost
+> wake up in two places), 14, 15 and 18 (the same lost cancel, 15 and 18 close
+> what 14 says it leaves open), and 25-27, which touch the same two loops in
+> the resize code.
+> 
+> Patches 1 and 2 are memory safety, a use after free in waitid and a write
+> through LIST_POISON2 in the futexv completion.  Patches 3-9 are tasks that
+> hang or spin in the kernel.  None of them need any privilege, other than 9
+> which takes a SCHED_FIFO task, and with 3, 5 and 6 the task can't be killed.
+> 10-12 are io-wq leaving work sitting there with nobody to run it.  13-18 are
+> cancellations that miss their request or report the wrong thing.  19-22 are
+> wake ups that the application never gets.  23-28 are the mixed size CQE/SQE
+> and ring resize corner cases, 29-34 are timeouts and waits, and 35-39 are
+> small things all over the place.
+> 
+> Patches 40-43 are at the end on purpose.  They fix real problems, but they
+> change something that somebody could be relying on, so I'd understand if you
+> want these done differently.  40 stops honouring MSG_WAITALL for receives
+> into incremental buffer rings and bundles, since the retry writes into
+> buffers that the ring hands to the next request.  41 fails an ABS update of
+> a multishot timeout with -EINVAL.  42 makes the linked timeout of a futex or
+> waitid request complete with -ETIME like all the others instead of 1, and
+> liburing's waitid.t checks for that 1, so it needs a liburing change to go
+> with it.  43 goes back to looking up the file of an IOSQE_ASYNC request
+> when it's queued, so that io-wq can tell bounded from unbounded work and
+> hash the writes.  There are smaller visible changes further up, 3 returns
+> to userspace if the overflow list can't be flushed, 22 allocates the private
+> futex hash at prep time and can fail with -ENOMEM, and 25 and 27 fail a
+> resize with -EOVERFLOW rather than tear a 32b CQE or a 128b SQE in two.
+> 
+> These were found on 7.3-rc5, and the numbers in the changelogs are from
+> there.  After rebasing onto for-next I ran the reproducers again, for-next
+> against for-next plus the series, same config, in TCG guests.  30 of the 43
+> reproduce on the unmodified for-next and are gone with the series.  1, 7, 8,
+> 9 and 11 only reproduce with a delay patched into the window, same delay on
+> both sides.  10 and 12 I can only show in the model, and 25, 33, 34, 36 and
+> 38 are from reading the code.  17 needs a 32-bit kernel, that one I ran on
+> rc5 but not again on for-next.  I didn't want to post the reproducers along
+> with the series, but I'm happy to send them to anybody who wants them.
+> 
+> I ran the liburing tests (d5b6007) the same way.  Of the 257 for-next passes
+> 240, skips 16, and send-zerocopy.t times out because TCG is slow.  With the
+> series the only difference is waitid.t, which is patch 42, see above.
+> iowait.t fails every now and then on both.
+> 
+> Every patch builds on its own with W=1.  A matrix of exit, thread exit, exec
+> and ring close against 21 kinds of pending request on plain, DEFER_TASKRUN
+> and SQPOLL rings gives the same results with and without the series, other
+> than the hangs that 4 fixes.  KASAN and kmemleak had nothing to say, and
+> lockdep only tripped the assert in signal_wake_up_state() once, for a ring
+> with SQPOLL and exec, which plain 7.3-rc5 does as well.
+> 
+> That matrix did find one thing that's not ours.  On for-next, with or
+> without this series, a task that submits an IORING_OP_TIMEOUT with
+> IOSQE_ASYNC and calls exit_group() right away gets stuck in
+> io_uring_cancel_generic() for good in 2 to 27 percent of the attempts, and it
+> can't be killed.  7.3-rc5 doesn't do that.  I haven't dug into it, my guess
+> is that the worker arms the timeout after the exiting task has counted the
+> armed timeouts, and then nothing wakes it up.  I can send the test for that
+> as well.
+> 
+> A few of these are close to things that are already on the list.  Patch 23
+> is the fix for what Leonid reported in September [1].  Patch 40 is the same
+> bug that Aohan posted a patch for [2], that one defers the commit rather
+> than giving up on the retry and doesn't cover incremental buffers.  We also
+> had a fix for the poll retry flag, I dropped it as Juanlu has since posted
+> one [3], for what it's worth we hit the same thing.
+> 
+> This is based on your for-next as of Wednesday.  It applies to
+> for-7.4/io_uring as well, except for patch 8, which needs commit
+> fddcf4c5321b ("io_uring/cancel: don't spin on local work the task can't
+> run").  I didn't add Cc: stable to anything, they all have Fixes tags.
+> Thanks,
 
-  last flush: seq 100, cq_last_tm_flush = 100
-  Y: IORING_OP_TIMEOUT, off 50, target_seq 150
-  pure timeout A fires, cq_timeouts = 1
-  task_work posts A's CQE, cached_cq_tail = 101
-  pure timeout B fires before the flush, cq_timeouts = 2
-  io_flush_timeouts(): seq = 99, events_got = 0xffffffff
-
-Y, and every sequence timeout behind it, is ended with -ETIME although
-no event happened. Two timeouts expiring close together is all it takes,
-a completion with IOSQE_CQE_SKIP_SUCCESS after a single one does it too.
-
-Nothing but those in flight CQEs separates the two, so count from the
-last flush when the sequence is behind it, as io_timeout() does.
-
-Fixes: f010505b78a4 ("io_uring: flush timeouts that should already have expired")
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-
----
-
-diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index e52ba4ad53cb..c92d1363df81 100644
---- a/io_uring/timeout.c
-+++ b/io_uring/timeout.c
-@@ -171,6 +171,14 @@ __cold void io_flush_timeouts(struct io_ring_ctx *ctx)
- 	raw_spin_lock_irq(&ctx->timeout_lock);
- 	seq = READ_ONCE(ctx->cached_cq_tail) - atomic_read(&ctx->cq_timeouts);
- 
-+	/*
-+	 * A fired timeout bumps ->cq_timeouts before its CQE is posted, which
-+	 * leaves the sequence behind the last flush until it is. No event has
-+	 * happened then, see io_timeout().
-+	 */
-+	if ((s32)(seq - ctx->cq_last_tm_flush) < 0)
-+		seq = ctx->cq_last_tm_flush;
-+
- 	list_for_each_entry_safe(timeout, tmp, &ctx->timeout_list, list) {
- 		struct io_kiocb *req = cmd_to_io_kiocb(timeout);
- 		u32 events_needed, events_got;
+All good fixes, fiddled a few incorrect Fixes tags and added a follow-up
+fix for one of them. Queued up!
 
 -- 
 Jens Axboe
-
