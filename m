@@ -1,68 +1,67 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171DB48F001
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0CC55C1AA
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092720; cv=none; b=FG/Dz3miKwWdJ+2PGwaHsszhg0cKydUTRcvgv3FOjw37jVDanu4iTPFNzL2Dgy25KOFoAjaa9+HDW2+pbdHLwgvvNlnMpXknp+aX7gyYXcwsw8Rxy4JisnE30A5L0mPfeLIep+oeubH9BbkdKc7wJw3imJdAys+4G/9LBZdNMoY=
+	t=1792092724; cv=none; b=GHibJc30AUFQl862J9b31ZKvTGJpbU6wUIcurZple35fcnUSp+ibMBude6R7uy24idKXFC87Q7EFIUbiriRJjgCGEJlMydnzYtpknFtvtZ1cQes1GKzrt1yrpu0fh5FIUlv/EF3TwyLUqUTDcakdxBLibPDRN09+UDqzEt1usBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092720; c=relaxed/simple;
-	bh=vnBRpOVrqT/n5rXyXXZHIWQ31BZzmdXyRlqCl0tlTg4=;
+	s=arc-20240116; t=1792092724; c=relaxed/simple;
+	bh=l5jbllSffkZja87ivdyNl1y+ORs7ysnvKp+68gP2A/A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Jt3lqBCvgtbu8ea+ghY156hJdGi/HuJWf8wvLKwdOeTDB2uC9dW4Wz1lSZLbTSZjXq7D+O9Zb9bbkddilA3dqFdEvhnsyVbn5Re7bCqXwAyRx1jnbJo7f24SjmMQqssOwBvjII7ium7yaDDOA7o2Wz3JuqkD8EtXVZ1G43aYkq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=bYWnpxO8; arc=none smtp.client-ip=209.85.160.172
+	 In-Reply-To:To:Cc; b=YgxM59dCFWoHPDDHhbWScQ5FBEsroO/O9v8GBGVxDd3+vSsSqrqNVaciRiE3VfLxRMEDz9qnl3MDMUVo8dbmjPKccrmTw8l366ye77eMjQ9Qo8YOW3K35eS5f0Whs5oftvVVtJOPowjDd7e5dgCSk9E+2x7PFq3rOSyDi4YheLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=bHL1ctfW; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="bYWnpxO8"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-5350c1b9e0dso21440071cf.0
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="bHL1ctfW"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-53504882980so66582581cf.2
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:32:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092718; x=1792697518; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092722; x=1792697522; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=f6XBdjPmuJZpYvrZ6TEGVBoOfjY2UPtqxeN0SL+X3hs=;
-        b=bYWnpxO8Xwi2DeuuMX2DLFTOAuEOnN3PTYK/StFPakLoRajdCv9nPOpTICDCewAlUE
-         1XR+QW3sZTaijJMtjAG6Q9WUhMO+K1L1IPibXRwdSnoGfGRKfgEvl/+XgJc376EnJ/mo
-         gst+4OYHfLGQLmEq1WTblYKLzfdEScugEhT8dg1nlpwULYQwiZUP0j3iACWtRzvGrbgW
-         lbMsMUOVS0TEtZbLqmnpDg+i2dwRJKWVvEJAliiJgMEj1xDBDk/qw3rNGsFW1ZFFwejz
-         r0VBbaKcOUKNh8t1y09J5O0CGhzR0nqI8YM58CSDynewJkw/OetNaIiFyC79PAc0k3NU
-         ZJuQ==
+        bh=0ZXWkhkO0GuHPLHyNOS8u6lC0SQSdanwm92zcb2aBF4=;
+        b=bHL1ctfW5zk3vgfNseiYdxv+Zs1FD1nuf/l0r3WDyqaXwLiv1IIoBtCflkl4W3oRjj
+         nPmhIm7bf3YLBXmJzTvYVnI3PSzY3/lrvrO4d+8XFAe8QKJ7xAlxvURdZsEpmS5BfViE
+         q4HrRTIw9uVLMWqyFWa1YJINpzSnrfYlp++ku9JiZ9KYWhvRKIDXdInucPljdOJkEuZL
+         1eHFMTOGFi/U/hyqf5B153j8VQzUcOoM2IcNZAoImUk1dXGHWdIOOniUDqeHlEKGkvmI
+         bp77zetmYMcPLkpm+DGDGGaAJDxrIFflDeV0Yk6dZRpU+WMofvjrvlP1kGgEmxwdC7GK
+         Od7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092718; x=1792697518;
+        d=1e100.net; s=20260707; t=1792092722; x=1792697522;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=f6XBdjPmuJZpYvrZ6TEGVBoOfjY2UPtqxeN0SL+X3hs=;
-        b=AmVHH99tI81FLrs1lC8cWuOWCISNCZ2Us9gpbbrOvmtCnDDMkoPnWkPxYRvfHP1FSL
-         RTQLw4SowBMduBmKySmdabdajBHD3jWGIsXcqiOrtW7gpdwVrMb866nk4MwuM+rreqeH
-         nmF3lZ8VptpjzbsaEOdqnbaDGlDpgg4cyEXzKSe/AmQRzNLukYjyhJ+CXG+BO5x+5fR1
-         gTM2pwS4zms+ylNhbmX4Xlc+E0pH5rshHsplRL8hwYeyfhavarKL9trFpqwEEtUvKqZV
-         SEju+02IfiPeZ1OKOG7+aAxIrJkNJ6r/fZ/0eIGmHWzkhystyQmEupIeNI5P+TdfJGHb
-         IXvA==
-X-Gm-Message-State: AFq9FYJ4v3jVx5o7jkB7tKdyPcYADHrdPZkWRSlytcUPhy1fSPT6K6vX
-	TJhxNuBjsX2rGXC1qQetRtnQfQGcNFjOoFTXwTjskx1TkAWn5iYVYhzHeipiVDxf8n5Y5Mjxnoj
-	goOGx
-X-Gm-Gg: AYBFou0wIiDS2Sdb714UUa9gqXfq30aTVBLb2sxBK1EGz/3p4uQGaUpWlChVKHaz+dC
-	LDIjbyWYE8zw0fMDaxMGLzKOnDLjypIzAGqIYBITW7KpnkiWzI5UG2QizcXLAy1UZXaI9zTQd4m
-	L2LMvXJnbOSWp6UVS7NAPVCfzMSOsfJUMMH0HW9IKOL/JFqIZVrkPqHLPdicykkdNDA79l6H9wj
-	mSbZMsPr2u3AhPvxONXslb9lxLex/gnuiyY7yaG3fCM9wco1NJpZnxJsgde7ojryIGnA5U0BIgl
-	zH3CB57YmpBZZlDIG4Vf2TmH2HS5PLBZO5brqwC4t0P3TbB2sZfRea2WWgJyV11uzc1nHNHr7Bs
-	mGllHmhBOUKgMNqMbOJNWWJB9uZTCz5CnhMaSu4gk2h4+dsYK9FmZnGKAixmbP1/6sL/bl4DCfY
-	MlWqfK3+qez/5D6dlBbDEXOdJZjxI/Pqalx6lB1vFanWL2I5TLuwypnSl55c6nHaEqKG5OxLf1R
-	q2IOue4/iZ72jk=
-X-Received: by 2002:a05:622a:598c:b0:535:922:ff3 with SMTP id d75a77b69052e-5359fb87d6fmr330555871cf.48.1792092717958;
-        Thu, 15 Oct 2026 12:31:57 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.241])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5362a75472esm1731641cf.4.2026.10.15.12.31.57
+        bh=0ZXWkhkO0GuHPLHyNOS8u6lC0SQSdanwm92zcb2aBF4=;
+        b=MEm/qnjjw1KO9sg/jxb7t7YSP54LZMMZ4ugYijCd8Jpi3xS/ZnT6oGXj4pkImQN+FH
+         14Yj70szEFFIKGemoU8JzGqTIUUH+72wTvY0bDW0x9xO4TFQRcQs+0Y/iCGstOj4yRqI
+         vStFQhW8PB6bVVSZyE64XKtjwb+L4GFRxgkPoZpa8OMqTUzZyA/8lg9dq4yyH4ZOLZu+
+         fjpLSwMkqaIVhW/wX6Mvl46CU+ez0ADdaDVtpidsJBvBX7gBvyUL1RWYxIHaczpJFNDi
+         U08pM6V5R5r3e8cj/wNJ54fGVrMTmJ8E18wasiP0sd+zhyg7TfMl2G9aOpr8QpKgXgL7
+         n3rQ==
+X-Gm-Message-State: AFq9FYIIcQVCynuTuWcqdHwNIYc3Y9sEmhnmwuxBHtp68G+G1nANCOcj
+	xviFuAUEY+RCtjIQ7ankPbY4ao2gao9NEoNz8u61vJkk+ddXCl03Ht6A9Jc2sGXFSig=
+X-Gm-Gg: AYBFou2Em0CdwJ6H6X9r7uuk+RszZHmj6UgixH8wh3PXPam4BQ6Cf+GEBKl/XDKrsfV
+	FBqxaAv95GSkO/k3AeRZJvkmUjhGJdxGk32LbTdylI9BtT3Zo4Kv+Ex1w28m3xJ02LjpxpqFFxm
+	w+AN+/oOXGv1mwh2Mqvl/ZwssX1bcMzTvrbF7Vbhr+12+f5xOXR0WuFa6dNKdMM+EipV8OkSrF6
+	/KtW88iZkjuOzMRBa527CGNTpnwgNmJZKDTT9ryiyHwHINhw86zGAyK07eO2c+KL3+ikpB9AiWW
+	6hY5tcBfXQ52X+qQ1sVAseaewrciC6NonKkqr4MMO587EtKwe7cHmN8bZVKNElTv6udGCwLTkBS
+	pKde8EwR8AvCwSTA+OMTthl383aE8DA+cSexv5r8mFJSLgFEDdFqQd9ivHkCYHi1lGQCZBPm0e2
+	hIj8I433S92F7vCaN90cwesI0LrGld91CLuLJG0LnqaL8L19HIR9wK8aIs3YMWDyzsDulwTvg/m
+	BVLnHBVScrpNQNdbOg5O1RsTJY=
+X-Received: by 2002:ac8:5d8b:0:b0:535:859c:b6ff with SMTP id d75a77b69052e-5359fac6320mr336634361cf.20.1792092721607;
+        Thu, 15 Oct 2026 12:32:01 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.254])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5362aa19a3asm1404191cf.24.2026.10.15.12.32.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:57 -0700 (PDT)
+        Thu, 15 Oct 2026 12:32:01 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:48 +0000
-Subject: [PATCH 24/43] io_uring: don't split 128b SQEs at the SQPOLL cap
+Date: Thu, 15 Oct 2026 19:30:50 +0000
+Subject: [PATCH 26/43] io_uring/register: handle index wrap when resizing
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,83 +70,67 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-24-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-26-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092659; l=2544;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092659; l=1781;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=vnBRpOVrqT/n5rXyXXZHIWQ31BZzmdXyRlqCl0tlTg4=;
+ bh=l5jbllSffkZja87ivdyNl1y+ORs7ysnvKp+68gP2A/A=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QOHRMEhNCFDWi4TJ4aR1sERWAQNdTSxSpFN91FDfhz4z2hXG53sDaNjleKpPl7yWVAgIxcSJl8j
- WU6esQo+ClgU=
+ QDX2XKrKfGoiRAxgVySO8CiCOxOvI1y4fgQrumYK4uYs1EoTyy2s3lGXnZN/mLNIfwqc8B1tBAY
+ iqbDWsmCfBgc=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-If an SQPOLL thread serves more than one ring, __io_sq_thread() submits
-no more than IORING_SQPOLL_CAP_ENTRIES_VALUE entries per ring and round,
-for fairness. On a ring with IORING_SETUP_SQE_MIXED the cap may fall
-between the two entries of a 128b SQE. io_init_req() finds that just one
-entry is left of what it was asked to submit and fails the request with
--EINVAL, although the second entry is sitting in the SQ ring.
+The ring heads and tails are free running 32-bit counters.
+io_register_resize_rings() takes that into account when it checks whether
+the pending entries fit into the new rings, but then copies them with
 
-In the next round the second entry is taken for an SQE of its own, so on
-top of the failed request the application gets whatever its payload
-amounts to when it is read as an SQE.
+	for (i = old_head; i < tail; i++)
 
-The application has done nothing wrong, and it can't know where the cap
-is going to be applied. For SQPOLL, let the request have its second entry
-if the SQ ring holds it, in excess of the number of entries that were to
-be submitted.
+If the tail has wrapped and the head hasn't, that copies nothing. The new
+rings get the old head and tail, so the application finds whatever is in
+the freshly allocated memory, zeroes, in place of the CQEs it hasn't
+reaped yet, or the kernel in place of the SQEs that have not been
+submitted yet. A ring that completes a million requests per second gets
+there after little more than an hour.
 
-Fixes: 1cba30bf9fdd ("io_uring: add support for IORING_SETUP_SQE_MIXED")
+Loop until the tail is reached, the number of iterations has been bounded
+by the size of the new ring at that point.
+
+Fixes: 79cfe9e59c2a ("io_uring/register: add IORING_REGISTER_RESIZE_RINGS")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/io_uring.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ io_uring/register.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 01187f00943a..7092efc22dd2 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -1818,17 +1818,27 @@ static int io_init_req(struct io_ring_ctx *ctx, struct io_kiocb *req,
- 		 * A 128b op on a non-128b SQ requires mixed SQE support as
- 		 * well as 2 contiguous entries.
- 		 */
--		if (!(ctx->flags & IORING_SETUP_SQE_MIXED) || *left < 2 ||
-+		if (!(ctx->flags & IORING_SETUP_SQE_MIXED) ||
- 		    (unsigned)(sqe - ctx->sq_sqes) >= ctx->sq_entries - 1)
- 			return io_init_fail_req(req, -EINVAL);
-+		if (*left >= 2) {
-+			/*
-+			 * A 128b operation on a mixed SQ uses two entries, so
-+			 * we have to increment the head and cached refs, and
-+			 * decrement what's left.
-+			 */
-+			current->io_uring->cached_refs++;
-+			(*left)--;
-+		} else if (!(ctx->flags & IORING_SETUP_SQPOLL) ||
-+			   !__io_sqring_entries(ctx)) {
-+			return io_init_fail_req(req, -EINVAL);
-+		}
- 		/*
--		 * A 128b operation on a mixed SQ uses two entries, so we have
--		 * to increment the head and cached refs, and decrement what's
--		 * left.
-+		 * else: the SQPOLL thread caps the number of entries it submits
-+		 * in one go, which is none of the application's business. Take
-+		 * the 2nd entry on top.
- 		 */
--		current->io_uring->cached_refs++;
- 		ctx->cached_sq_head++;
--		(*left)--;
- 	}
+diff --git a/io_uring/register.c b/io_uring/register.c
+index d7e9963ab9b0..bce4473dc2dd 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -604,7 +604,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 	old_head = READ_ONCE(o.rings->sq.head);
+ 	if (tail - old_head > p->sq_entries)
+ 		goto overflow;
+-	for (i = old_head; i < tail; i++) {
++	for (i = old_head; i != tail; i++) {
+ 		unsigned int dst, src;
+ 		size_t sq_size;
  
- 	if (unlikely(sqe_flags & ~SQE_COMMON_FLAGS)) {
+@@ -641,7 +641,7 @@ static int io_register_resize_rings(struct io_ring_ctx *ctx, void __user *arg)
+ 		ret = -EOVERFLOW;
+ 		goto out;
+ 	}
+-	for (i = old_head; i < tail; i++) {
++	for (i = old_head; i != tail; i++) {
+ 		unsigned index, dst_mask, src_mask;
+ 		size_t cq_size;
+ 
 
 -- 
 2.55.0
