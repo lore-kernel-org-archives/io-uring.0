@@ -1,70 +1,70 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80BD830EF86
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 02:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AF62F39B5
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 02:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792031321; cv=none; b=YyQ9F5I9+AjmZe5lJ9ljrJbmONYcFGfiVfJ7iqrtZ7vpqTo7fLG9/CBtpEzp7HznPslunO17z+SfAA3cxTjROdOIr0QAYn5U+OdvW2upU0lUE9XlwxPmhepNe6jBgz/BfrO5AQDFmTslQsVyDWYwevoCPvP1zCRR/GntiSJoOHI=
+	t=1792032039; cv=none; b=btV1pQH1yjsgmMqRucgnuovOB2SaVU0M/NGEAZOMZcXxhp35eWA1KlLxnb6OiimB86KXwbCeqOEq5vwg80gnbY/PyAEjNl+AcPK7kMZkxztSmSR/qDNJroAVFKc9DKY2nnWRJmmkb2lsk2DYM0Q5eAHTa6l6PlD8YA1FmJfpKGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792031321; c=relaxed/simple;
-	bh=D8kqw460aVqAXVxDDxXCj1ESFmCPAvjMk5GS3hAyqw4=;
+	s=arc-20240116; t=1792032039; c=relaxed/simple;
+	bh=FCFqIUr5heuDZNwG08SPXGC/g2fvuFyx/JS7ppBVR0I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tEwLbGYTteFMbCw/MRu6PB0z4CJK34xDFkxxAoK3Z3rq1abjNUkboZ2tGGCTmy2dyQNeR205JBe0/OMGlrs07f0+DUQ/qa2UyKMCJYtgdxtwh19j07O+APXFCMa/bN2iwXZpLH7Gzk4pneLT0fZ6rSvD89hyOunBn/jwaMYmf3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=D7sxjFEz; arc=none smtp.client-ip=209.85.221.44
+	 Content-Type:Content-Disposition:In-Reply-To; b=JSFileFyHdbUPypU8h7RSeQynI9fJRQczq4RxoynsuZaROm/U24YkFzmY2YcJ+8b77KpsqZU+rmd2Ly5Au+Vrt1Gwf1Z89AL65KJyiOYEluj1C87VeIT6/aENCNwl6ftxr530NN301tzGOKVUDu2GPeI79tIqvBQvnpORLs40SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Tgh4eK2Z; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="D7sxjFEz"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48af27fe287so1063432f8f.0
-        for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 19:28:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Tgh4eK2Z"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48de6a62a4cso1848162f8f.2
+        for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 19:40:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1792031317; x=1792636117; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1792032036; x=1792636836; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=vFK7bW+ch1AnYKr5eaZ3F6vsFcFiDVJtqAQR0MXM7VE=;
-        b=D7sxjFEzzTR54Fap9UTXMo0lC8Rx3cKcr9uxvKxiKA3Y7YuAhXqquuYVC5Z+u0uHQx
-         5X+c3OtobWLoiKUBOyAfV0Z3o9JsPiedmJz5DK7+gqUcKY4oo594AePD3Ju26l5NifuY
-         SEG38vNIpYJ2P7Wrjp6zHtLoqJ26OSxehoeOMHARffXcsn/L7koX2XRbnYGWuG3umUE8
-         2YDW1oY0lww7Ak2/Y4EDXvrqTmkfWC8Be5xd9RasEOf1WHEpdidLxIP1Ea8NkaKUO9yg
-         dcd7lp+39axT/cEtAdabLdNukkWQdoYHtFDzawtYCEzzUvHMp08PB95mchYbMLpEBv5M
-         J1UQ==
+        bh=JEItkXykfQ51k8AnQA9MCb40y60hqHTN5XUgh4Tpq+I=;
+        b=Tgh4eK2ZmDX5xg7z4mnU2G2A75C1G+wMVJ4IXidAaMzZwNojeBFMFt0fUM7Q209lm5
+         GknCX7HphpBgIr3yQ0ojftGnogFE+GcC2097L1KRo8VTAYH8zyp7kdIx/sSAeMyupTnA
+         4Jn48ZM79rKkOQ7lQrsGI6uG4YxN6wyVnzK9Q+iSG52F68MIq/bNyyEQL/jDXRMrRxsL
+         vO9AvFrSME/AX1wDcU5p7HwMDhJ3iuyyXf2YPBqOiFi17OddhqonV+tpwr4zVgMkkg1s
+         jQzpcH8/GLL+7xFivsubXdgJAwwNyp39DDCo20JvKqfP6bUP0xqCATE18v4NRMctUclx
+         8Jag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792031317; x=1792636117;
+        d=1e100.net; s=20260707; t=1792032036; x=1792636836;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=vFK7bW+ch1AnYKr5eaZ3F6vsFcFiDVJtqAQR0MXM7VE=;
-        b=gf/1UT7fG7GMtgorhR4k5WqTFVN/ULKVgI39Cg3hapODTYABIfMlm1if2SAiHJh6IN
-         2lp/lzjKexlsE7nTGyUHCGzz855oOrGgsznY3A6rfSMarMWZIwQtaTFrLXy96CpQirH6
-         8pcU9XSsol51M1gqjok0nOpAItqHUxt+bggQXlMyqal/VqEGRCwEHfFl+OW7ycAaMdWf
-         jI+bidNmFnUt+LGdGRsHeLo2cIb0nyBYK2BF4ZZ/68Vd2f/nOXdZ05LrifSlNeDiad11
-         6eHAURimfRhVfkeEUaBb5FKGfs3DXl5jbSjl87/fpECj0/MIJuRA5M/RLJBLMwLES7VJ
-         tEjQ==
-X-Forwarded-Encrypted: i=1; AKwUvByfbSb+6IPkkZaOKdFGWM2KsR7zIRfBsqpo2v/gVd8U9wuHkZ1vKV/hcFGVyh9GaIbxNU7xJrogKg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLQyM8BTLZwU/b1wyCoFB4CDXHKv4/5bxrZ+VnQSDjHfJCKHjiw
-	CZBGECWK7m0IyQ1im/cgmYEwOijF4xK2TyecPZARgj6eTlWKhT536poN5DUMjjW0hg==
-X-Gm-Gg: AYBFou0Y+iJUVZwpw9f08EpG+uF7LxRdCv1FmbN2FGOK6hKNGcoNPrUt1ifezov05+P
-	MnERDHPLQaXAE5BOEEgjn/1Q2FNtEgJjwgaCazBpGfbroB84gPkvyAcsFDHYVl0MjavSgJVdVPA
-	tCYp4K/u+FjNegoA7wNxq4qeIMj8ka4gDrvceQTBar8anM9tSSrRnMG+TDOK/yphO9QEFjoSoN/
-	+NBq9jw77De28Hl2FhajKa4Md31iQ2egdKRRQSOwUaz3g7Vsg96EKaN1AR5YtkmkBb80AjCNj3N
-	CPfyBRHLYXKQPazyt+Xh5vCfxvsCROOd+F13FEbLvilL9AYTDpH7lTTInNjOmF5vxpmiV+sn7CN
-	TrX4ceYjyl9H8ZbA3AEQB7eQbhZOjoivSsRHpqrRxJjGzR3fqgS9iRPJrEgnPabjG0TyB5cbZfC
-	EZtJV4z5N7ciKi8jN+aOI7Hk9jMvDju9gh1Zgoel34mjihMBnJRawkK7XXB2zUdlkpLGAanNat1
-	S7jYPEBVPwpsdbfx7RBh4FjukdUBwb3O8wz7o7MayDdOkCrgM/IGXwnoGCFAVGYdMRrfC2qVmQs
-	A8YTmqg=
-X-Received: by 2002:a05:6000:4550:b0:48c:4d74:d7d2 with SMTP id ffacd0b85a97d-48dba9db092mr24942282f8f.12.1792031316622;
-        Wed, 14 Oct 2026 19:28:36 -0700 (PDT)
+        bh=JEItkXykfQ51k8AnQA9MCb40y60hqHTN5XUgh4Tpq+I=;
+        b=G0Npm6oieHhVUIB2SX13FCX2s/BocBMVt7RDEZ9aDRo1lC88ts8ByZorLH6nfY83h2
+         OwwJlMBzv6yLRfwfuKikh74K1b3tAMULSHpIA+kDe8h2vAJIuvGC1fdHagX5sAtGS1YB
+         TFZYUta42W9dpvwpbA98HER3zMwBipT5G+G5sCyE/hLV4XZ1EWXd8r/5U5MfUV+bNex4
+         igsZ43dcUJxXj/Gcmzsrwk7LUKGo8uB+E4k9jqAOn4Hh/fE8+lZoOT2EvYOY4MnRsiXE
+         jW+jNAn9r5NKuTOcfo9r5oWFzZt4iAXLoQsS3lv0qvBEwZhxR21/GH1Pi7Ae5Fy7dExj
+         nufA==
+X-Forwarded-Encrypted: i=1; AKwUvBwgl8H32AjA5r2T3AjaNq4HEbWKSAyzHkHHAcTH1SUUlRtRR2ZfC0Zp6EHWwocgro3YY6vz1sS3iA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJky3jPMWN0zqLejiqtJtPJbD2B5uJUYKPPIuzI6/vrifhL2Xuw
+	MCkBdR35hebMvEFX1Iiv5NxGN7me0CzFH86FmcP+X2mPf16MMf3rRPIm4R2rE7zP7g==
+X-Gm-Gg: AYBFou2jasIRiAbC7ajt2hwAs5kbyWlR1eX9It0mEuQry3vgR1DV2/koZxfTP8Uh42y
+	bDiDSP20jqlJ5v5m67ekJIuEP4xq2P+XJsF951Gay2l99fPW5ZCuECQtJF0YOZtTrYyiGiqq9QH
+	sb45DuD34YD+u7r4Fn30WIRdYqZsTV4v2OYpVZLxDNosDPGIMrP4fvMRxaShNmwdNyRTe1d/2Ch
+	JYMLAyBfq2qAy1BwW0b9qgYCiNF5j4omSuzREFH+UBpcxMv8RZcsdOvreemN4zgHbh6Cwa3SDY8
+	b3UcPwiPGrx5wXQ5A1lx5F+F5yBOAi6VQtB0EpNYmga866CaIob4X+Anf9IRkIvVfuAIl+xqRsL
+	6yCBt7k0EOwRJCQg6wRUAoem93P9BZSKlzEIIedtnC+tSb3TG02PGkw9ck2HvyAxGd8bzOzsmSk
+	DwPXFZeQBBw+Ca8kGINAjFK4GCObOn/jc8JBZPlDKbDE/Cw1uATT9+JDyudVSXAt0V0UQ3yx9/q
+	yiHsmQRusT5pIHe9oEdPah8mAz63WABlsBF+KJtk5hYXDGgLVUxucNZ3b2hujhlcfhrOQ4C
+X-Received: by 2002:a05:6000:24c4:b0:48b:1c:d6e1 with SMTP id ffacd0b85a97d-48dbace386bmr34023314f8f.43.1792032035872;
+        Wed, 14 Oct 2026 19:40:35 -0700 (PDT)
 Received: from autotest-wegao.qe.prg2.suse.org ([2a07:de40:b240:0:2ad6:ed42:2ad6:ed42])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0bd1843sm15748786f8f.56.2026.10.14.19.28.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0bc6b82sm16078538f8f.51.2026.10.14.19.40.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 19:28:36 -0700 (PDT)
-Date: Thu, 15 Oct 2026 02:28:34 +0000
+        Wed, 14 Oct 2026 19:40:35 -0700 (PDT)
+Date: Thu, 15 Oct 2026 02:40:32 +0000
 From: Wei Gao <wegao@suse.com>
-To: Peter Zijlstra <peterz@infradead.org>
+To: Christian Loehle <christian.loehle@arm.com>
 Cc: Frederic Weisbecker <frederic@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Thomas Gleixner <tglx@kernel.org>,
@@ -77,9 +77,9 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1] sched/cputime: Preserve iowait accounting across
  waking interrupts in dyntick-idle
-Message-ID: <atA6UsI1CldllKSP@autotest-wegao.qe.prg2.suse.org>
+Message-ID: <atA9IDcejbSs03Zs@autotest-wegao.qe.prg2.suse.org>
 References: <20261014015258.13967-1-wegao@suse.com>
- <20261014124934.GE4121339@noisy.programming.kicks-ass.net>
+ <48eb633d-9fbe-4299-8d10-e7686acf5a3f@arm.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -88,10 +88,10 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261014124934.GE4121339@noisy.programming.kicks-ass.net>
+In-Reply-To: <48eb633d-9fbe-4299-8d10-e7686acf5a3f@arm.com>
 
-On Wed, Oct 14, 2026 at 02:49:34PM +0200, Peter Zijlstra wrote:
-> On Wed, Oct 14, 2026 at 01:52:58AM +0000, Wei Gao wrote:
+On Wed, Oct 14, 2026 at 03:14:41PM +0100, Christian Loehle wrote:
+> On 10/14/26 02:52, Wei Gao wrote:
 > > In liburing's test suite, the test/iowait.t test case intermittently fails
 > > with:
 > >     iowait diff too small: 48
@@ -126,21 +126,28 @@ On Wed, Oct 14, 2026 at 02:49:34PM +0200, Peter Zijlstra wrote:
 > >    this evaluates to false. As a result, the entire 1-second idle duration
 > >    spent waiting for I/O is credited to CPUTIME_IDLE instead of
 > >    CPUTIME_IOWAIT, causing diff < 50 and failing the test.
+> 
+> So reading the test, the reason this doesn't fail constantly (on a non-isolated
+> machine) is the massive margins?
+Margins should help, but this case has more chance to failing after
+recent kernel change. It does help track kernel behaviro.
+> It pins the io_uring_wait_cqe_timeout() to CPU0 with either in_iowait=1 or
+> in_iowait=0.
+> It then asserts after 1s that CPU0 got: 
+> a) for in_iowait=0 at most +10 iowait units (<10% CPU time)
+> b) for in_iowait=1 at least +50 iowait units (>50% CPU time)
+> So a) would fail on too many unrelated iowaits, b) would fail on unrelated
+> runnable tasks.
+> 
+> I don't think validating the per-task in_iowait setting via the CPU aggregate
+> is really feasible FWIW.
+> 
 > > 
 > > Fix this by checking nr_iowait_cpu() in kcpustat_irq_enter(). If the CPU is
 > > currently in iowait, pause and settle the elapsed time to CPUTIME_IOWAIT
 > > before the interrupt handler runs. On kcpustat_irq_exit(), resume
 > > accounting if it was paused.
-> 
-> Using nr_iowait_cpu() is fundamentally never a fix. It is rolling a dice
-> and liking random numbers. See the comment that goes with that function.
-> 
-Thanks for such quick feedback. I see your point since per-CPU iowait accounting on SMP 
-is fundamentally flawed. It doesn't make sense to create any more patches for 
-current iowait accounting.
-
-For iowait.t test i guess need revalue it or simply skipped it.
-
+> > 
 > > Fixes: 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
 > > Signed-off-by: Wei Gao <wegao@suse.com>
 > > ---
@@ -176,6 +183,4 @@ For iowait.t test i guess need revalue it or simply skipped it.
 > >  		kcpustat_idle_start(kc, now);
 > >  }
 > >  
-> > -- 
-> > 2.55.0
-> > 
+> 
