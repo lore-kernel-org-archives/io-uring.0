@@ -1,68 +1,68 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E664A3D3E
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB5A49EC5F
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092697; cv=none; b=qCBSQnenGYZfmie43+s1sYdJVkHeb6FYUrZW8+JCAqhpfY4BuqeFt3WTg4778kF4fdXXbsY8x0ebBO6jTJDouSohs69VO/soRyEdXfZqXR0adKburVRZA/xBBatlAeRBjPy0XjhgOiz0Ti9rfHZ5t1qgFkWdLapaUcWA19ximM0=
+	t=1792092698; cv=none; b=GvfOrca6WOe+naSDd0cbkF90zlNTyL1/ca5rKAo8S3UJrNOuyikO7eFd/eHuulY82egrpLiLkkVIN7qeL78BzY69+Rcz/oHEdzYiNbO1q8NbMH0pnrxePjiC621NIuoApDo+1TR2QQK8hiHJ1OHcfqAudjz14LAoXtklHV43Dfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092697; c=relaxed/simple;
-	bh=kYXNsv9z57Fmi3y1fJB1lCUt/61dXso6MHOBJ9gD0Zk=;
+	s=arc-20240116; t=1792092698; c=relaxed/simple;
+	bh=YgsPdJxz6AbftVrQYJwafgyFDrrFMBbZNrYiO4LLmZs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EU3HFiR8zsFkKa7t3HnVCitXwB+E61n1kXij+DzoGNzNvA1reiZ5G/2iS2y7fvDp7Sj7VDldSezY0UAKqDw3UWv66CvrU0B1jfaLtF7GEDj6e2ds/DyNx0t+YYy+odkow7MyOeakuIIdyOWSKsiAu/ZTymteh7NQ6VSo2DRiJVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=RpSEptaA; arc=none smtp.client-ip=209.85.222.174
+	 In-Reply-To:To:Cc; b=cTm1GkJTGNMT1DekcQgoM7cFXWRgZadI6pkrHwTRN6Coqw/lghMLtoZLcu+qSgGafWK8iRMImrhnXOKVdWjTio+/oSNlIgS+tIz37GKumCDvWoe0LHOBjUxIwDgLdQdvePYgknOU18A9uTT4DjKwYx4F5fJWOjlSyIpFfls5RTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=GvKunSNp; arc=none smtp.client-ip=209.85.219.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="RpSEptaA"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-93a40a9a01aso44397285a.0
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="GvKunSNp"
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-917866225aaso77279106d6.1
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092695; x=1792697495; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092696; x=1792697496; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+II0PZhjaYDCZccgaXJafJfs4gtJQVd7dEattcoRflA=;
-        b=RpSEptaA9wpYv/Z9d5MtTvS2KwVpWtVhnT1E+7jhHf0wkzd+hisONQCpSPJvXcp+Su
-         5rxyIhOJeU4T8tJofAu5k4MCypZnXGmP8igogW2/ZgAh9NqJGQ57DyheGPHkiJeZbYAJ
-         wW4vgaVh1CuGOeo7ly89py2M7IFkxR6fLZVmXWwzE9wEHcZGJZRscSBparpVrVXLyW4+
-         OMJ3DbKPe8eCJBg702uKNOZXpyiURG5kcq6u5DzfJ1l+bIfjOpO572evvRgNt+2FhNOD
-         iHMNsCmCi9Dx5cdgDzEjwBme4SgqzLXkOEG7kGIluqNo0K5u1KMvzZZNMJCm8/mokKdX
-         WJJQ==
+        bh=aU5/h7fhaucXw4me09fMy1Rhzia45FBX3SoiAKUTaVk=;
+        b=GvKunSNp5ammy5TiHK4FaVfzQKWVrxKzfAWJBBkYE/HP8JlPoiD+66xsseCNeg2f32
+         ErFt6tEckEve0NfNts6KgIu8sywp58D/nNW9V9b9X4Ae4LQLcDFUEk6MGNLGVhuZwQoG
+         tS8K4tKrFI7nwphINIAS3PvUdpOcij0t+vNlbbVKzgVMCEP8nlwy2HZSAakcD7hEZZW0
+         UcLh/vLBZtC2KOFYmz5GbqYbvj73HPu8XX+wwh20Dy8lZBRlv6m+KM08tdmY9R5Vv0uF
+         hMzrgrnHr6Il5dG71DmoJAd/1MTojpWn6EG5jWrxy93mOc7mu50eBwaqtAF1c+EK2RYB
+         urbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092695; x=1792697495;
+        d=1e100.net; s=20260707; t=1792092696; x=1792697496;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+II0PZhjaYDCZccgaXJafJfs4gtJQVd7dEattcoRflA=;
-        b=ogFH/y6RcAgI2Hcm4tPP6O+bUFU7Cz/wSHF9qq6Q1UPMDwMBijl5nL8HZEj/bO+ttL
-         VGnumVu/sesysl3YGDAYffpKRJUfxFN/8Hx05pgSjj4u875vGwdu8dxmRviD3U7vWjE3
-         NRlKyQf8/mLM7K7389WMOqKGEt1e2AXorkQ6dbeL/JlzyC0Sgt+dw8tpsWtmRTCUFbmI
-         ttbCe9I+ggG2PRLkXgl2e9iFHJkN9SBJuY/WuZk9rufLt3aiaIya5gD/k5+RtKn7BoH2
-         dWshGA+/MJAhRzMaYvstFEMk5KH3AOh1e6KXtH6DC8+LzFCuTkZLhu37RgmxF2ANQUoz
-         4aqw==
-X-Gm-Message-State: AFq9FYIdRWQr6NBBZlC40kI0+9YLHUplr9RpmczUvAtIY60VDk1oqLie
-	aSYvYmnqoXPow2YK90JCLthZTZ9ZJkT6MpcGXkh3Q5JwDTLw3yZ7yWz8UdgzckQuMN4=
-X-Gm-Gg: AYBFou2jqdvirBMm1Knfa1BzxwEsMo4PzHyP1u0cUMsAUgVbwe9atfjeGqzgXB9e7tK
-	wPgd2CZaKl3FpCWqORJTjam8fRAQqtfuKjpJmTWyNE0vVtxmzx1F61mjSK87nLPtDqJ4MwypBhJ
-	LWhlbiUh7eGcgeoUA+o0FwM/jjXBCuxYFTuV3UQHVSqQdOsxy98Q4YV3qDKjm7qn4TCBlbTP7YZ
-	AJpod6183Jkq+iOLDTplHpz6ylvSGd3Up01ba2D38ABJXfOMIC67KB+ONPCh5ug3FLB9on2a9mJ
-	n9enNbNBIB0OrkZfYhyhIUxNtr+sftSxqLnjeYYzFTegd87mxk0IKC4liTFPfDZLMwJRubVqfuS
-	ms6+ZqcSZpr/lpE7Br0/yx5jnR+yu+n/C+0UQKybc1Iw7OqiRviEcUvtCJh5vnB9Z0xmy2pv/CM
-	F63uqHw2mo1YC2LF2LqdGgrERQgSpkK1lyfbbvRgFUSl98tUPQfAf+n3w62w9ZDO+acugW8g3du
-	OOt07IeMOQ4i7Y=
-X-Received: by 2002:a05:620a:d94:b0:93f:231:9ff with SMTP id af79cd13be357-93f17f5dddfmr196143285a.27.1792092694535;
-        Thu, 15 Oct 2026 12:31:34 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.254])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a16c21esm13098785a.16.2026.10.15.12.31.33
+        bh=aU5/h7fhaucXw4me09fMy1Rhzia45FBX3SoiAKUTaVk=;
+        b=FmF7C5YYi6ONbwIc73fFucNur+TpbTN8oKyUUZtE3m9fjF7k9y9FNxJFiVhKRzzjal
+         cBnWZaNSh+XV7zuXTJYDmCPARMNd2LgG22EmIDdMnQFQxFY83/wc1OqezRuKWXQj5tFr
+         lLctSUYN0GfxB1HrlCm7Rod1nNKaNQiglQzxs/e3hk7Fmhs1QoBrfnj9BdJUqaOYDToX
+         d3/MinEb8tXFBaAVhep/pe7L64sE7afHvccxxPlT3FFNuIndEpdsN9p5NfudrTpZfa/p
+         0LnboAsDmzj/MwhZd9haI//dfO/PDUZRHo+eSIOZ6xxM3sZcryaekmuKs6X7qu+dIDMq
+         qgcw==
+X-Gm-Message-State: AFq9FYLPdJ4JX5SDKDK+CKOjHkibordAC74gREFh5+iQCTzKDnpnygn1
+	D0YTXqlsU7RHfeu9OVMqPEYJ0hM0zkfUtsNu6IKphforTMTjbBu8tWSDQHV077EosKI=
+X-Gm-Gg: AYBFou0ZPcYQ0XUxdU2ZqvHprP8FFJNQyRFMkUIVZLPhiKrkBMSdAmRNNgoFvPPKMU9
+	0LWvS6qFOerUxZk09AjfHStQPnCGHwPy91W3XpnVBp63FHaOZND0hgioK/5WPJlDmS66BY8hgw8
+	xoX+wC/pn4g/Fl8ib+tbYalZZc771nY0qD85KJIKXnqOSZI0FWn2eji4pD/ZKwjwtHqigvEbh71
+	9lPQPZ0ZonDgCeM5+28Y83/iJM/IlRl2BWyr1MEZISNAR8Tl5ccPfGyHFpq1DxNKkg8lNr4lG0R
+	eroPBSbjnXK0jQa8ls7JP8Pic0PtYISROqq/kApXztV3Oezepo2fONqjnoeUV6lN/BPsp7+RnzV
+	mYAGNSklggv8YlfTfBcm/yxNJJOjBaOJJXup3Nf8bq+xfAc2JgEx6RXQU+4QuCkpEacB5gXqmCx
+	TKFPF9kipS1APK0h4JBuBGBRgBJapv/JHgemCyvl4Qzs6n3NRVF76zJciV7KQgGPrZXEVtSzvAu
+	J9x+9I0j9clnhK//CnbocB+Ow==
+X-Received: by 2002:a05:620a:4709:b0:93b:d7a0:d9e3 with SMTP id af79cd13be357-93ebd259161mr3418844985a.61.1792092696320;
+        Thu, 15 Oct 2026 12:31:36 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.245])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a1916b7sm12532585a.26.2026.10.15.12.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:33 -0700 (PDT)
+        Thu, 15 Oct 2026 12:31:35 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:37 +0000
-Subject: [PATCH 13/43] io_uring/io-wq: let cancel find picked up hashed
- work
+Date: Thu, 15 Oct 2026 19:30:38 +0000
+Subject: [PATCH 14/43] io_uring/poll: don't lose a cancel as io-wq arms
+ poll
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,130 +71,116 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-13-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-14-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=4090;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=4279;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=kYXNsv9z57Fmi3y1fJB1lCUt/61dXso6MHOBJ9gD0Zk=;
+ bh=YgsPdJxz6AbftVrQYJwafgyFDrrFMBbZNrYiO4LLmZs=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QJde+Iwyx+sUyPpr3LmlZCyKHUF597ftHcEpdo2+7KYOk7q+rgu6cn7epme2NepYA52u+rCWvKn
- Vx7YF9XSNBw4=
+ QAE2fruRXRmy5pFtXr+eFPzaNkQMqPmfPiLYEtLZXjPvVIykNzGhv5b9pj8dXmzAPlDm/+p/1/d
+ lRo29NkfiNwY=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-io_get_next_work() takes all the work items that share a hash off the
-work list in one go, and the worker runs them one after the other. Only
-the one it is working on is visible as ->cur_work. The others are neither
-on the list nor current, so io_wq_cancel_cb() can't find them.
+A request on a pollable file that was forced to io-wq is issued without
+blocking there. If that ends in -EAGAIN, io_wq_submit_work() arms poll
+for it and returns. It looks at IO_WQ_WORK_CANCEL once, before it issues
+the request.
 
-IORING_OP_ASYNC_CANCEL and IORING_REGISTER_SYNC_CANCEL return -ENOENT for
-a request that has not even been started, e.g. a buffered write queued
-behind another write to the same file that is blocked, and the request is
-carried out. The cancellation done for a task or ring that goes away gets
-there in the end, as it keeps trying, but it has to wait for each item to
-become current.
+Somebody who wants to cancel the request in between finds it running:
 
-Keep a pointer to the remainder of the chain next to ->cur_work, and have
-io_wq_worker_cancel() look at it. The items on it belong to the worker,
-which needs ->lock to move on to the next one. Matching work is flagged
-with IO_WQ_WORK_CANCEL and fails with -ECANCELED when its turn comes. The
-worker isn't signalled for it, that would interrupt the unrelated work it
-is busy with. As the request isn't gone yet, it is reported like running
-work, with -EALREADY.
+  io-wq worker                          io_try_cancel()
+  io_wq_submit_work()
+    IO_WQ_WORK_CANCEL isn't set
+    io_issue_sqe() = -EAGAIN
+                                        io_async_cancel_one()
+                                          sets IO_WQ_WORK_CANCEL
+                                          signals the worker
+                                          = -EALREADY
+                                        io_poll_cancel() = -ENOENT
+                                        ...
+                                        = -ENOENT
+    io_arm_poll_handler() = IO_APOLL_OK
+    return
 
-Fixes: 86f3cd1b589a ("io-wq: handle hashed writes in chains")
+Nobody looks at the flag again, and the signal doesn't matter to a
+worker that doesn't sleep. The request is armed as if nothing had
+happened:
+
+ - a linked timeout completes with -ENOENT, and the request it was
+   meant to limit waits for as long as it takes.
+ - IORING_OP_ASYNC_CANCEL returns -EALREADY, and the request stays.
+ - IORING_REGISTER_SYNC_CANCEL waits for the request to complete if it
+   gets -EALREADY. Since commit 5623eb1ed035 ("io_uring/tctx: add
+   separate lock for list of tctx's in ctx") it doesn't sleep but spins,
+   so its next attempt finds the armed poll.
+
+The same goes for a multishot poll, recv or accept that is armed from
+io-wq.
+
+With a read of an empty pipe, IOSQE_ASYNC, and a linked timeout of 5ms
+or a cancel in the same submission, in a guest that is slow enough (TCG,
+KASAN), the request is lost in 21 of 24 rounds of 40 or 100 attempts.
+
+While it arms poll from io-wq, __io_arm_poll_handler() owns the request.
+Look at the flag once the request is in the hash table. The table is
+searched and the request is added with ->uring_lock held, and the flag is
+set before the search. So either the search finds the request, or it
+came first and the flag is seen. With the request marked as cancelled, the
+task work that is queued, right away or because ownership can't be
+released, fails it with -ECANCELED.
+
+What the canceller is told doesn't change. In this window a linked timeout
+still completes with -ENOENT rather than -ETIME, a cancel request with
+-EALREADY, and one with IORING_ASYNC_CANCEL_ALL or _ANY with a count that
+doesn't include the request. But the request is cancelled, so what is new
+is a request that completes with -ECANCELED after such a result.
+
+This doesn't help in two cases:
+
+ - IORING_ASYNC_CANCEL_ALL and _ANY, if the work is flagged after the
+   test added here, while io-wq still has it as the current work of the
+   worker. io_cancel_cb() stamps it with the sequence of the cancel, so the
+   search of the hash table on behalf of the same cancel takes it for
+   done and skips it.
+ - requests that are parked elsewhere by io-wq, like IORING_OP_FUTEX_WAIT
+   and IORING_OP_WAITID. They have the same problem.
+
+Fixes: 90fa02883f06 ("io_uring: implement async hybrid mode for pollable requests")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/io-wq.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+ io_uring/poll.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 31c7d6fc426b..dfdc78612783 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -56,6 +56,8 @@ struct io_worker {
- 	struct io_wq_acct *acct;
+diff --git a/io_uring/poll.c b/io_uring/poll.c
+index 5447a7c24dce..577ae978bfc9 100644
+--- a/io_uring/poll.c
++++ b/io_uring/poll.c
+@@ -617,6 +617,18 @@ static int __io_arm_poll_handler(struct io_kiocb *req,
  
- 	struct io_wq_work *cur_work;
-+	/* rest of the hashed chain ->cur_work was taken off the list with */
-+	struct io_wq_work *next_work;
- 	raw_spinlock_t lock;
+ 	io_poll_add_hash(req, issue_flags);
  
- 	struct completion ref_done;
-@@ -581,6 +583,17 @@ static struct io_wq_work *io_get_next_work(struct io_wq_acct *acct,
- 	return NULL;
- }
- 
-+static void __io_assign_current_work(struct io_worker *worker,
-+				     struct io_wq_work *work)
-+{
-+	raw_spin_lock(&worker->lock);
-+	worker->cur_work = work;
-+	/* stays valid while in between two items of a chain */
-+	if (work)
-+		worker->next_work = wq_next_work(work);
-+	raw_spin_unlock(&worker->lock);
-+}
-+
- static void io_assign_current_work(struct io_worker *worker,
- 				   struct io_wq_work *work)
- {
-@@ -589,9 +602,7 @@ static void io_assign_current_work(struct io_worker *worker,
- 		cond_resched();
- 	}
- 
--	raw_spin_lock(&worker->lock);
--	worker->cur_work = work;
--	raw_spin_unlock(&worker->lock);
-+	__io_assign_current_work(worker, work);
- }
- 
- /*
-@@ -623,9 +634,7 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
- 			 * work list, but isn't yet discoverable as the
- 			 * current work item for this worker.
- 			 */
--			raw_spin_lock(&worker->lock);
--			worker->cur_work = work;
--			raw_spin_unlock(&worker->lock);
-+			__io_assign_current_work(worker, work);
- 		}
- 
- 		raw_spin_unlock(&acct->lock);
-@@ -1179,6 +1188,7 @@ static bool __io_wq_worker_cancel(struct io_worker *worker,
- static bool io_wq_worker_cancel(struct io_worker *worker, void *data)
- {
- 	struct io_cb_cancel_data *match = data;
-+	struct io_wq_work *work;
- 
- 	/*
- 	 * Hold the lock to avoid ->cur_work going out of scope, caller
-@@ -1187,6 +1197,19 @@ static bool io_wq_worker_cancel(struct io_worker *worker, void *data)
- 	raw_spin_lock(&worker->lock);
- 	if (__io_wq_worker_cancel(worker, match, worker->cur_work))
- 		match->nr_running++;
 +	/*
-+	 * Hashed work is taken off the work list a chain at a time, what the
-+	 * worker hasn't started yet can only be found here. It doesn't move on
-+	 * without the lock. Just mark the work, it fails once it is its turn.
++	 * Whoever tried to cancel the request while io-wq was running it has
++	 * flagged the work item. If it searched the hash table before the
++	 * request got there it found nothing, and it won't come back. Both
++	 * the search and the insertion are done with ->uring_lock held, and
++	 * the flag is set before the search. If the search came first,
++	 * the flag is visible by now.
 +	 */
-+	for (work = worker->next_work; work; work = wq_next_work(work)) {
-+		if (match->nr_running && !match->cancel_all)
-+			break;
-+		if (match->fn(work, match->data)) {
-+			atomic_or(IO_WQ_WORK_CANCEL, &work->flags);
-+			match->nr_running++;
-+		}
-+	}
- 	raw_spin_unlock(&worker->lock);
- 
- 	return match->nr_running && !match->cancel_all;
++	if (ipt->owning &&
++	    (atomic_read(&req->work.flags) & IO_WQ_WORK_CANCEL))
++		io_poll_mark_cancelled(req);
++
+ 	if (mask && (poll->events & EPOLLET) &&
+ 	    io_poll_can_finish_inline(req, ipt)) {
+ 		__io_poll_execute(req, mask, 0);
 
 -- 
 2.55.0
