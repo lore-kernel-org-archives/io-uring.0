@@ -1,69 +1,67 @@
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E340E4CC293
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:32:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD8C04A4839
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092754; cv=none; b=JuPiBrw6QRjwG8Ip+R7I8ueob80cOoRlzgnIXFNIc3W1IMuGMrFrbtaYN5XnKVyzRNnTI8ArzwIw1CYuBvSA+UoZ1YehScLlbt74Z+cNu4cea17PvYPrplzBOQEMn5B4fGnsPfwOR+G0muRk7btmbLXY5XLqiSiofL+Tiu600Qw=
+	t=1792092755; cv=none; b=JJ0aXerWc/VcrPj8p/mz4iNEjfxtAsUwk9RLCHE1w5Ml9M0cihToqcZ8a9den9mSpElqplcNscXxOlAnWSFBPq4aOkDgvl24Aot6HAACHtUfyAsjLhAqI91yuN1gEWceAqJglYnge9q1MaT5g5lbU9qoVve65OGFWM+JWNPgRSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092754; c=relaxed/simple;
-	bh=5WVKOi1B6P+cI4AselyU7KIMpTfkSJXy6MvbeKE+0Rc=;
+	s=arc-20240116; t=1792092755; c=relaxed/simple;
+	bh=Ihx+E0BU7CCDEhcvDOUEwSMhSj33KCOFwzjd4iN3u/4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HQvel1kKd5JlbGE5IW2elw+A1QID2WAcvAxN7rDWx+iJU1Okm5cnYMmgYG8q0Q5O9M80QvSVTdcxPgms+RKeqYkq1rq+nI1aozxbajQxZ3/14l/TuFIXjoav7hZtgcVfacHoU9ooKPT0rtanYBEmhWHcayEQbAu8F/ov+PFahXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=YC5Y9yue; arc=none smtp.client-ip=209.85.222.175
+	 In-Reply-To:To:Cc; b=nhhRY+jD9zrwKQnlgYYb2iG6G2LH2+28nPLRgvGXtMskJLsLXIbmEjfi3hldESeQxx56x1Xmm4ES89QDk7NNH4cPUl7LDVuoBiarDFdxVYLn/8eLWqsjIUqxKvZ8sZ7LLNwE5ThS5aGyXphgbO6ca2FWnyHRV1fAp6o/lwAXoAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=L6s5dj4K; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="YC5Y9yue"
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-93e515769d3so484559785a.3
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:32:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="L6s5dj4K"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-533972e0cccso63999921cf.0
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:32:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092752; x=1792697552; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092753; x=1792697553; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8z+feyns4q8hROoDZt7JKrgvA/JsHrNE6c6J8jbRSkc=;
-        b=YC5Y9yueWTfcbnYCXDRkSor2azng7wqiwlVw68T7RKoTl/84/hZfdI1GxN9RYLB8k2
-         kZsCVCb70fOEUmFEHMa4vTS0ePehkgi1/QDlNzPgv7YTseW6MqAEWf1j+GCAAh/3LD1S
-         ElBni8AWHDKG8Wr3rushmuKb11W5duoTOJ2WdJsBGxNTYfXLo89idkShPJbYE0DSKVFC
-         GYf0ccMkSNICpty207chBbgcvL+UR7u3iePbU3Mf1Ila7ZQ5IgYMrXOG3M7t5kBU0H99
-         k11Wz+v2w6Gg05tCHI1aRWMuEKbx+XRxlDPYuGTtZMNOUIiWj3UkSDVHlLeqTuukg9PC
-         f9vg==
+        bh=fUNH9yBsm16P8gIXLVqy2nE5rFnf3wCaKx6CjEnHAVA=;
+        b=L6s5dj4K6+eddXD4an7C3WefO45zf+QyRvBJWsgYo9LqPOTE2SWZ+V8LuUg4U1EB97
+         AU8OFXxBj8Ay3QGlQlY+5G0cgl3ck7WTaJukf/83jMKC4OLn7T9CGQ3ni9ptkwxrlBqQ
+         9e8HKseQ0+EpZwK1ChLs3qKZyZTVqq6HK2EoNjx1sQ8U6RvGMjfeqo8msQYWj8FPoiLi
+         /oaQZExEl2X64CDCYGTN4vgAhiHuL9zn0lnZk4l7ReQh8tVwBtCFqTfN4Mx3uptOtD8u
+         apM7wtmLHNw5sTYnNb3t/BlnMvtfIBsTcepfnSjlC+bWD+bBQhZz7kbDTTj+Q7TcNPNI
+         oOoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092752; x=1792697552;
+        d=1e100.net; s=20260707; t=1792092753; x=1792697553;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8z+feyns4q8hROoDZt7JKrgvA/JsHrNE6c6J8jbRSkc=;
-        b=05KHLMQU9Db032cFF8qoqaCi7hfDI4ZUxByjZ3i9o02Cw8ELBZOdI4x+MSQk7U35w5
-         vQFYk1ED/qWz/jJ4gODS2bNcxCkFJtMfmSVKcttx84t+qF5Bq3zXfOuQ5MqpuuW6t3/d
-         tomlgOuwnOoUirekyP7n+CSCB4vIfujlIAVnPI2IW8QAl0w+ELIEOjsYIdrZrSKCmJRg
-         mHzprxcrFpclo5cibrdKzuix51kcPgFpDsDHdlwmIwaRTNitDq3x7RwnbHPEfxCdSKS8
-         7WG8m8b2y/KbBCV+Ldc+EFYvHAS2+ZA4hFE08zVz/RdPwgVbq3K1phPqZgPyAFykKFxF
-         6lOw==
-X-Gm-Message-State: AFq9FYJN5Q3+D6zrU1Xxz11zBFhRTi3G9hMbyHZsLG7BYUFUTTlVFyKi
-	2Ztq1FhgckqDWoAot6IuLyrnnQT+wuQmw/Mje6hrWv5YDHMBxAj0iyG/qHGQBWwd0hSOItYspXc
-	eurhY
-X-Gm-Gg: AYBFou2nm4pm1b7SebdpQy2b2XlZ/xgHAjfmA6VEjCDNOc3CuwSpQa3U4pUtAh9pgWP
-	bQEl2iOCVpo/R5asFcCwPGyCH/ZF3EgaZF+Dkqx7qyYbXe/RQClQZYOnPmxLPI10ca5vOkW5gtC
-	MLugnLBabcgrqvXj0idMYI+PEM/752U/IUEjPyukZtfSd5b7lgUkF7BFfDCf+mVjwoE3KzkyyCr
-	dmFO+2NWXR8P3ocZp9g734PUdFuyo5IYaWhLUSBErxcBbCj6rcKkZh6+9qZZoKbxs9IGcYRijAX
-	z9SDA0nohQey19otNFM5yD6/GvRelyY0gmuCCezNKmurYmUzqABbQxb+R8vOgWjoRpEnVu05v7n
-	FSL/0dZ0soQlTVYysdylwztlu+GGKIJ6PJtoSBVcL5fCGyCh4J5nd3Cc1WX3wZDkMVUyCq6zeLz
-	qR1V0dKbzYXut/Xj21xjWerkRuv1t0SUP7D2muvSBXBc3oyjPbRL0cca76PBbrDg32v+BprrdRB
-	s7IyvLO4PUjYIY=
-X-Received: by 2002:a05:620a:3721:b0:93f:1936:b1fc with SMTP id af79cd13be357-93f1936b9eamr105986285a.78.1792092751704;
-        Thu, 15 Oct 2026 12:32:31 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.254])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a1b694csm12259385a.40.2026.10.15.12.32.31
+        bh=fUNH9yBsm16P8gIXLVqy2nE5rFnf3wCaKx6CjEnHAVA=;
+        b=j4RPXM247OZdkD0rkiy4ehal/Gf61XpjHM5SPqbrIR5vtFKawfSHzdGM0MzGBt/Rdv
+         KHn1Kggke/I/6QmUqxBQrkVqJzb2h2kYwuwe3ZiizV/9LshC+6S47kuocpIjnL3JyOaS
+         Saas67dULC0f+LlMTlVNkDvizIkt0+cMahB8+q56TbTGYB3EIZSVfjir+gFxbb+CxrRY
+         HcQYKdjGGOKIdFBqQQETQwti058/wJBEdvGRbW6+rj4FPz+mTGaqoK9TxhgZ9bYj9IiK
+         lhcEh3lY76pV3i+tVUzK2UAVIRrmye+h6ABvPeU48h5fqHzfo/SAk5TvwNF2ODc+iZFt
+         BU8Q==
+X-Gm-Message-State: AFq9FYLJ8HuYdTmusgcuZMVfTspPSCc2x2crcsHeNnqRnlpQ7M0x8HO3
+	ewBVcGh91WClMaMIaO6VWMXY89rlHxPJMLTJA66OVs1Yf2LtbwbUAvyN6IL1Wm47R+Y=
+X-Gm-Gg: AYBFou0K9o9sXvbAVjltEAxSo+bhfLHj670DboPprIHFGjE8YGYvTLCAv5M8lKx1b36
+	OejxL9PmekXh/CL3eS/CAVt5ZywCqmIqbfvho6f2JasO6CFHDVun0VMZGMAG0Cg5DNMtCHBAkQ+
+	KQEVGZq4vywYqAtCGN/7KV36tt49OJhpPCrlIWfDOL5YenZwYYM1BHLl4JWrtUptlnFw0QlEE8Q
+	GegmlxMRulLixhWkAE1nKt5tf9SA2WOvPu11cf84o6/gkrIlPkmzLBE2ocWi1QdGLYA3gzQCfpY
+	qWHdEbFZO7GuiiVjwQsFneMCq9I533TBuxhzoRNtzoyd9/i9T9xe6Sg+5ij6AJDWBKNbyu0VLbu
+	WdsZQI8SjVBjheHjyU52BWUkxORuYWwy7SCNt1AvRxlZq27qhtsUmJYP7cBnN1Ef01GJqIe9a6M
+	lccDMudVIm8BbcKagsWulpmCO5eyo3M2l0cFA2/yDbYwlrMm6Z9LOIsgatLLV2Mwyqu2nul8ArD
+	irJ/McApG7d3C8D
+X-Received: by 2002:ac8:59c6:0:b0:533:415f:4290 with SMTP id d75a77b69052e-5359face2f6mr328988941cf.25.1792092753550;
+        Thu, 15 Oct 2026 12:32:33 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.244])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcbb1af26sm3402496d6.33.2026.10.15.12.32.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:32:31 -0700 (PDT)
+        Thu, 15 Oct 2026 12:32:33 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:31:05 +0000
-Subject: [PATCH 41/43] io_uring/timeout: no ABS update of multishot
- timeouts
+Date: Thu, 15 Oct 2026 19:31:06 +0000
+Subject: [PATCH 42/43] io_uring/timeout: don't end a linked timeout with 1
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -72,109 +70,63 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-41-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-42-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092660; l=3051;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092660; l=1481;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=5WVKOi1B6P+cI4AselyU7KIMpTfkSJXy6MvbeKE+0Rc=;
+ bh=Ihx+E0BU7CCDEhcvDOUEwSMhSj33KCOFwzjd4iN3u/4=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QLHvSRcbam4bbmLK5tyI9hrdaxykr0dpLoYcCiv2Nx3IzKwqjthKsMfjtM3lM2PEwEbZD1ekjVA
- MwLmlz8RkZAs=
+ QJSRs2TOO1ddM1EGDfAcItxOvhKMNICzEyRuqsWzH/e/fXCmlKMhnIwm00dzC2jVcderYhhMW+a
+ x+7y8qdApmgo=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-IORING_TIMEOUT_MULTISHOT can't be combined with IORING_TIMEOUT_ABS, prep
-rejects that, as the request is armed again with the same value each time
-it fires. IORING_TIMEOUT_UPDATE doesn't check and takes an absolute time
-for a multishot timeout. The first expiry is as asked for, but
-io_timeout_complete() then arms the timer with ->mode of the original
-request, i.e. it uses the absolute time as the interval. With
-CLOCK_MONOTONIC the next expiry is an uptime away, with CLOCK_REALTIME
-more than fifty years.
+A linked timeout that fires cancels the request it is linked to, and
+completes with -ETIME if that worked out:
 
-Fail such an update with -EINVAL, and do so before the timeout is
-touched.
+	ret = io_try_cancel(req->tctx, &cd, 0);
+	...
+	io_req_set_res(req, ret ?: -ETIME, 0);
 
-Fixes: ea97f6c8558e ("io_uring: add support for multishot timeouts")
+io_try_cancel() returns 0 or an error, except for requests that are parked
+on ->futex_list or ->waitid_list. io_futex_cancel() and io_waitid_cancel()
+return the number of requests that they have cancelled, and
+io_try_cancel() hands it on.
+
+So the linked timeout of an IORING_OP_FUTEX_WAIT, IORING_OP_FUTEX_WAITV or
+IORING_OP_WAITID that it has cancelled completes with 1, each time.
+
+The waitid test of liburing checks for that 1, and has to be changed to
+expect -ETIME, which is what the linked timeout of any other request
+completes with.
+
+Fixes: f31ecf671ddc ("io_uring: add IORING_OP_WAITID support")
+Fixes: 194bb58c6090 ("io_uring: add support for futex wake and wait")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/timeout.c | 38 ++++++++++++++++++++++++++------------
- 1 file changed, 26 insertions(+), 12 deletions(-)
+ io_uring/timeout.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/io_uring/timeout.c b/io_uring/timeout.c
-index 90d440a75f28..1cf59c494769 100644
+index 1cf59c494769..b219dfdf7af5 100644
 --- a/io_uring/timeout.c
 +++ b/io_uring/timeout.c
-@@ -321,22 +321,29 @@ static enum hrtimer_restart io_timeout_fn(struct hrtimer *timer)
- 	return HRTIMER_NORESTART;
- }
+@@ -393,6 +393,9 @@ static void io_req_task_link_timeout(struct io_tw_req tw_req, io_tw_token_t tw)
+ 			};
  
--static struct io_kiocb *io_timeout_extract(struct io_ring_ctx *ctx,
--					   struct io_cancel_data *cd)
-+static struct io_kiocb *io_timeout_find(struct io_ring_ctx *ctx,
-+					struct io_cancel_data *cd)
- 	__must_hold(&ctx->timeout_lock)
- {
- 	struct io_timeout *timeout;
--	struct io_timeout_data *io;
--	struct io_kiocb *req = NULL;
- 
- 	list_for_each_entry(timeout, &ctx->timeout_list, list) {
--		struct io_kiocb *tmp = cmd_to_io_kiocb(timeout);
-+		struct io_kiocb *req = cmd_to_io_kiocb(timeout);
- 
--		if (io_cancel_req_match(tmp, cd)) {
--			req = tmp;
--			break;
--		}
-+		if (io_cancel_req_match(req, cd))
-+			return req;
- 	}
-+	return NULL;
-+}
-+
-+static struct io_kiocb *io_timeout_extract(struct io_ring_ctx *ctx,
-+					   struct io_cancel_data *cd)
-+	__must_hold(&ctx->timeout_lock)
-+{
-+	struct io_kiocb *req = io_timeout_find(ctx, cd);
-+	struct io_timeout *timeout;
-+	struct io_timeout_data *io;
-+
- 	if (!req)
- 		return ERR_PTR(-ENOENT);
- 
-@@ -470,14 +477,21 @@ static int io_timeout_update(struct io_ring_ctx *ctx, __u64 user_data,
- 	__must_hold(&ctx->timeout_lock)
- {
- 	struct io_cancel_data cd = { .ctx = ctx, .data = user_data, };
--	struct io_kiocb *req = io_timeout_extract(ctx, &cd);
-+	struct io_kiocb *req = io_timeout_find(ctx, &cd);
- 	struct io_timeout *timeout = io_kiocb_to_cmd(req, struct io_timeout);
- 	struct io_timeout_data *data;
- 
--	if (IS_ERR(req))
--		return PTR_ERR(req);
-+	if (!req)
-+		return -ENOENT;
- 
- 	data = req->async_data;
-+	/* multishot requests only make sense with rel values */
-+	if ((data->flags & IORING_TIMEOUT_MULTISHOT) && mode == HRTIMER_MODE_ABS)
-+		return -EINVAL;
-+
-+	req = io_timeout_extract(ctx, &cd);
-+	if (IS_ERR(req))
-+		return PTR_ERR(req);
- 	/* for a multishot request this isn't a sequence, keep the repeats */
- 	if (!(data->flags & IORING_TIMEOUT_MULTISHOT))
- 		timeout->off = 0; /* noseq */
+ 			ret = io_try_cancel(req->tctx, &cd, 0);
++			/* a number of requests for futex and waitid */
++			if (ret > 0)
++				ret = 0;
+ 		} else {
+ 			ret = -ECANCELED;
+ 		}
 
 -- 
 2.55.0
