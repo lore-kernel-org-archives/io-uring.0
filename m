@@ -1,68 +1,68 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB6F4A3D3E
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98F119B3CB
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092693; cv=none; b=RmQG/lcHkKDgm8IJLkbp/cn+eF5kHHpsy2zAIz4fMGwowvJQUxs4aHeJuGbODCj2He2MWQqx7qNx1EHYRsFGXKGWmHbp7A4m96vNLKq4SLcxmtuGyYowbkJSbaB7kLtUlSYtTcXDsS9nbFNOVoAjZSZ9RHxeGA7+rgsnfWfZSIM=
+	t=1792092694; cv=none; b=WyJomfSjrM2W6JFtMMI+obrGFeoltv4BxOmR6UALSXEdcE1TBFbmhWUPLW+u7ZdtN58GPlKrLkO4iHb62/cxn31skrg8QQMAvNxl1xhQjGbv5nnsO2AprJiBPAoXEYllhlhIICoHkEk5VTApSNeoxkHFYXTYaPQWHTomkGsHup8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092693; c=relaxed/simple;
-	bh=xLC6cO9/i9EaVhhkveQ8Ns5Ch+POaLwDPXVcmiGDJIs=;
+	s=arc-20240116; t=1792092694; c=relaxed/simple;
+	bh=SdwAIonmihyGKnS/gOkvjE+VhEBVj5nzBV7lkIQCzp4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PQLYsZQtf80emQOW6JkC+fDPNCMG7zA7CwNtuV1+yTmn1McFS7lB4iOSa/3tS4zJWTNo4OJvPXHKL6fRL18/YugwYIXDGEBd8uRWygTtnb2DDKETjKAUKuPY7D49p7UP7U41+Bzx9Ry7nl8XC/ensVeHGDzYPRpdlv1qMUKBG2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=nDiQguOD; arc=none smtp.client-ip=209.85.219.51
+	 In-Reply-To:To:Cc; b=bUjcDPZ0M7qiqV4WBTJQEuMciKjEWm1D3EmPUwjENTH+lIKexnl6iSJa24vNNUbZSO5ZSx/9wX4v34Tv3YMjhPy++BX0/zB75+d/KmDpSlfuBGxiD0UxKfoiaTaWBKqR0M4UCydMAlc8xyHJ7RJQj2ou+cn7EFtWCtuExJ+jEi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=XfJz+7gf; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="nDiQguOD"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-917997ab0d9so66413336d6.3
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="XfJz+7gf"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-93e635220b4so553926485a.1
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092691; x=1792697491; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092692; x=1792697492; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nvR0Z3b+MVDb+o+kmydCYHqhDPi+NhQhScgqftE0E70=;
-        b=nDiQguODFflpZJ+MGMl3kU4vV+hE7YjFbdizO2bIKScoz8BABjLZVLa/SxZz0j5zLg
-         s98YDmh0g/yb/Om9goQd/57rTjCY/KBj9TJlBW6lxehs7wICV2nYViseEfCNuKf1e11d
-         qYALFHT7b+joM97uPur1oxGVjZ7ntDzX2lPtlSoyVxh5PFJ1itJ9q+LunbgDJOQoPfsJ
-         WHxLhL1QGc5KnXa93neaIrQtJD+KOpAu/dlvuAaIMvUPBM2d9H0q3sc8S+kxkMqgxd8b
-         uhVpirdkuE27tSmbsLoT5izPXqqGLtzG94A+cRCeya+keV0Z0vX5wCfMNJRbWYTz+jqc
-         zTYQ==
+        bh=qntZVLB7a9OgCT5twdnlwpk6Go9Hpd1HSnyBxxpl3Lo=;
+        b=XfJz+7gfZxxYQBIpLypU9qJE3yFeTSKHgTSOBie6MyAaB6PtaIYRdCIGvQ9eYgWD01
+         IuYN68wAHzExqe23iH37fDnTB8enteYmnNTDeaEuRm328cTNbxoPgIcarnnMvtkKx3Mn
+         qoT2w6HYOw6/rROPSi6B0B00jopwYqQDEIfdtnT7hU8hpRd8dzaqMbBmpTb1iEJyWHPE
+         f1Dfttp5HdcKnl0d3Prex/d0O8L6FqNhtNI0adJaJU9DmpPgU9rYLJabHOmWJZiYBBt6
+         fc52fik4PhcyindllvMdtynbdTJOUJQjk176xlfwhzQ5zKG9tMrfgYbzo5MPuZBPEn9T
+         AiJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092691; x=1792697491;
+        d=1e100.net; s=20260707; t=1792092692; x=1792697492;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nvR0Z3b+MVDb+o+kmydCYHqhDPi+NhQhScgqftE0E70=;
-        b=U021+1OT0zucvADT+GM8loEZEYbzgDwcdSrZm/nup9j3FTmcyd/DEF02fjzfo4d78l
-         q11LR0EM6rdIkdMWCO5iYXAfPS6fxFqenWaBG9ZY19ZHu6pBh/EbB2bI12/4HAdkJtQ9
-         TUFcUhEJWrdrmNuAv7FthChCZBNqXC79YW8PDFW3m3AuuvFOqJ5E/XT38G5zVkyab9tr
-         13q2BT/REL6RMt9AGuMssHybmNj9erltzUsN4E5sA1BBvH6wvbsGaViSHg7YaMmv1Bj1
-         2bj2BjZhA8JMr9WldSPYokp6ENrxfBXSCrJNxOL2olrpXEr0GxxuNjteARoQNQw9pUHA
-         ivyA==
-X-Gm-Message-State: AFq9FYI2evpenEPFNqM+E8A6EXLg2PtQr6J06Tza1bsUIaTpDvoASesT
-	fFQd83FCtQxekgBQVN8lII0aoLa04QqAUC3TrYDWFmvWRFH8RkfbGPndDviziwCcGfA=
-X-Gm-Gg: AYBFou12umUE82MdoY2LT5pccvtN5b6Pz6rBoNznU8E5apOTSQI0iZiQj/lJPXi5x9z
-	buS0eY1selefmBD9OuhjJvriTQfDEU3ySgTqGkiljQ9hddhhL+Jc98asWqsCm22ObgyYj+Jogpn
-	Kx4XBnKupyKm3NmPgSv4vLqfZhlxdrtBFea+Y1IVly3iv81RllUgOOKEHrL1Wx39s7Fa1fjil83
-	RkdbuJUBMLEwAxEprr2OnmuYU8RmF83NoMMKjzoxqZm09C7UKVjehTXCbCDyxYxZ0lLQ6tEFePY
-	yM9vq7LQsFqaUzMXWMG3n6ij9YNaEzpmfiFDp08kG1btj5EH+12XlmKNL3WJFb5IyRRNjyAU/Qv
-	8vl1ryesoGOfYCkSkEDElXlzE57gnKFGAIYIPI03ga2XxvflYvSHK6G7r1LBhYC6FBr8208RviZ
-	yNgMWCoFMXQZss7Z8GD4y6vsmwhsQ5YA+32quOsEcZVwk4pbI7yNB8/MQGHNorFO4oxrfvbmn84
-	/xlkoc1hbKvVds=
-X-Received: by 2002:a05:6214:762:b0:91b:82a6:d2f2 with SMTP id 6a1803df08f44-91b82a6d8d8mr214112766d6.11.1792092690515;
-        Thu, 15 Oct 2026 12:31:30 -0700 (PDT)
+        bh=qntZVLB7a9OgCT5twdnlwpk6Go9Hpd1HSnyBxxpl3Lo=;
+        b=qxVbsvoB+cGkQlMbUAjobC4knTDbCNvTi53EKxbXc7XNX0ZxCZUvLE2HYsO6x4LNN4
+         4VynpwQzULgctBZr0CUPQKuNZc2sqxeSEy4iCfgTCdwwsMIs6BPheAqgpGSt18EnTDVV
+         afTdnwj25vMS4jIfxTMiXLAHmJ6XF8yiH1NnEloYbmTKVeS60lxUsZ57CetwTuc4j9vy
+         X86sdbfkHXiTsA1Dq4d4/xIO0UtgqyLzRi4Q4q8yyXkHdeYWQFiDEjXVvMwvgWr/QP1b
+         1QxBRmQsFY567+yAfgMDEfy8qTY3DDJ4neieuZ2ScZ433/C8V98k0yIuFrU6wJJEKFfB
+         HFzA==
+X-Gm-Message-State: AFq9FYIdU7BUE+b+RdY/VIIy3CLjYvRos34ypn1DA7ADFEP/VnTLjfsK
+	gQbaC8hOw06EAjCUgXWS4ysKv2Cud6WxCMMECrbUqxytGgOEmiZ861+GHGBQArxjug9K5uDvVz2
+	DeQHz
+X-Gm-Gg: AYBFou2i50qLTisGLR6p1ZZUNZBehHELwpQvFrePp3ByMLvCUtmKIm0Jx+BVCE5Ftrg
+	6NY87qRYYrhxOnqjeGCTpAcZGY5XIpkF8j1mCj8z2Hubj3RSRcv7hzhp3FTkYRFxYInlELGiDh6
+	Eew06C1cM+e7Jw2KMpRie59kVfqHUjDaHRD8k2t2KDn+5A8ycl5iP0IFhkPIPJMkKQydytOci6S
+	EZx6xP/H0wLuetFjyFjloQX2ap3sMYzfqTLT05voOnghR6xeVm2wGeLenzi3HOEu0g8Eq8cOwxP
+	Mw0f7OR8FqBSMw4ELLsmRRNtFEXK6b8/GYu52GK6FGj2Jy5ZFCVrQBOqqdYWSvCglcE2NHMyPMu
+	mDvyT87aLsLBmk4xMqgq8Y3HAeAG2x5cERJxT02zyDrLgpz41WevrWI05RLLMEy4iOdJoTAQKD4
+	lOvdTrlic6bzJL9lL2E8oXIaJGuH5WFBiVeVZeiPmE7xwxzt8xZWctDGzxkePrQbSshLolCiCvY
+	5X7XfVBLpyTMEg=
+X-Received: by 2002:a05:620a:438a:b0:93e:a8c5:1340 with SMTP id af79cd13be357-93ebd25394emr3293442285a.34.1792092692477;
+        Thu, 15 Oct 2026 12:31:32 -0700 (PDT)
 Received: from toxicpanda.com ([153.61.196.254])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcbaae645sm3468536d6.21.2026.10.15.12.31.29
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a1a990fsm11953385a.35.2026.10.15.12.31.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:29 -0700 (PDT)
+        Thu, 15 Oct 2026 12:31:31 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:35 +0000
-Subject: [PATCH 11/43] io_uring/io-wq: don't strand work when a worker
- exits
+Date: Thu, 15 Oct 2026 19:30:36 +0000
+Subject: [PATCH 12/43] io_uring/io-wq: don't exit with a creation pending
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,117 +71,86 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-11-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-12-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=3862;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092658; l=2923;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=xLC6cO9/i9EaVhhkveQ8Ns5Ch+POaLwDPXVcmiGDJIs=;
+ bh=SdwAIonmihyGKnS/gOkvjE+VhEBVj5nzBV7lkIQCzp4=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QNw3GxUzAolJM+Vr9PCk6Z3kSyjJVX4p3iq21aAvUJ3mlBaUu8cs+yWUqIGvnasp2KvnlKh6ZAT
- feeE6kPoxKQQ=
+ QM96iGWBjlxCOFZJW2rmMJmhYQixl4/U9NczmHGT0l1BjqNks+8z7MAXsMyiUMmx08wI6+sHndt
+ SrOtEIKVDqQk=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-A worker exits if its idle timeout fired and it isn't the last one, if
-its affinity was changed, or if the wq is marked exit-on-idle. It decides
-so after it found the work list empty, and until io_worker_exit() is
-through it stays on the free list and in ->nr_running:
+A worker that is the last one to go to sleep while work is pending asks
+for another worker. io_wq_dec_running() bumps ->nr_running on behalf of
+the new worker and queues create_worker_cb() as task_work for the owner
+of the io-wq. Until that has run, everybody else takes it that a worker
+is running which is going to look after the work list: io_wq_enqueue()
+doesn't create one, and other workers that go to sleep don't find
+themselves to be the last.
 
-worker                                io_wq_enqueue()
-io_acct_run_queue() == false
-                                      queues work
-                                      io_acct_activate_free_worker()
-                                        wake_up_process(worker)
-                                      // found one, nothing to create
-acct->nr_workers--
-break
+If the worker that made the request exits, io_worker_exit() cancels the
+task_work, and io_worker_cancel_cb() drops ->nr_running without a look at
+the work list:
+
+worker A                   worker B                 io_wq_enqueue()
+blocks, work is pending
+  nr_running++
+  queues create_worker_cb()
+wakes, handles the work
+idle timeout, decides to exit
+                           picks up work 1
+                                                    queues work 2
+                                                    B is on the free list
+                                                    still: wakes B
+                           work 1 blocks
+                             nr_running 2 -> 1
 io_worker_exit()
+  io_worker_cancel_cb()
+    nr_running 1 -> 0
 
-Nobody is going to look at the work. If other workers exist, it has to
-wait until one of them finishes what it is blocked on or hits its idle
-timeout. If not, which is possible for the affinity and the exit-on-idle
-case, it sits there until something else is queued. For exit-on-idle it
-takes a task that closes its last ring and sets up a new one while the
-workers are on their way out.
+Work 2 has to wait for work 1, although there is room for more workers.
+It takes an owner that doesn't get around to run its task_work for the
+time of the idle timeout, less if the worker exits because its affinity
+was changed or the io-wq is marked exit-on-idle.
 
-Make the worker take itself off the free list when it gives up its
-->nr_workers slot, then leave ->nr_running, and only then take the final
-look at the work list. That look and queueing work are both done under
-acct->lock, so either the worker sees the work and stays, or the enqueue
-side sees that the worker is gone and wakes or creates another one. If it
-wants to stay and finds that its slot has been taken, a worker has been
-created in its place, which is going to look at the work list, and it can
-leave after all.
+Let the worker stay around until its request has been dealt with. Only
+the worker itself sets ->create_state, so it can't be set behind its
+back once it has decided to leave.
 
-Fixes: 38aa434ab933 ("io_uring/io-wq: add exit-on-idle state")
-Fixes: 05c5f4ee4da7 ("io-wq: get rid of FIXED worker flag")
+Fixes: 1d5f5ea7cb7d ("io-wq: remove worker to owner tw dependency")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/io-wq.c | 36 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+ io_uring/io-wq.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index a3a650813629..89b598b724c4 100644
+index 89b598b724c4..31c7d6fc426b 100644
 --- a/io_uring/io-wq.c
 +++ b/io_uring/io-wq.c
-@@ -703,6 +703,35 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
- 	} while (1);
- }
- 
-+/*
-+ * The worker has decided to exit, and has given up its ->nr_workers slot and
-+ * its place on the free list. io_wq_enqueue() may have picked it from that
-+ * list, or seen it running, after it last looked at the work list. Leave
-+ * ->nr_running as well and check again. Returns false if the worker has to
-+ * stay.
-+ */
-+static bool io_worker_retire(struct io_wq_acct *acct, struct io_worker *worker)
-+{
-+	/* turns io_wq_dec_running() and the scheduler hooks into no-ops */
-+	clear_bit(IO_WORKER_F_UP, &worker->flags);
-+	atomic_dec(&acct->nr_running);
-+	if (!io_acct_run_queue(acct))
-+		return true;
-+	raw_spin_unlock(&acct->lock);
-+
-+	raw_spin_lock(&acct->workers_lock);
-+	if (acct->nr_workers >= acct->max_workers) {
-+		/* a worker was created in our place, the work is its business */
-+		raw_spin_unlock(&acct->workers_lock);
-+		return true;
-+	}
-+	acct->nr_workers++;
-+	raw_spin_unlock(&acct->workers_lock);
-+	atomic_inc(&acct->nr_running);
-+	set_bit(IO_WORKER_F_UP, &worker->flags);
-+	return false;
-+}
-+
- static int io_wq_worker(void *data)
- {
- 	struct io_worker *worker = data;
-@@ -740,9 +769,14 @@ static int io_wq_worker(void *data)
- 		if ((last_timeout && (exit_mask || acct->nr_workers > 1)) ||
- 		    test_bit(IO_WQ_BIT_EXIT_ON_IDLE, &wq->state)) {
+@@ -765,9 +765,13 @@ static int io_wq_worker(void *data)
+ 		 * idle-exit, drop the worker as well. This is used to avoid
+ 		 * keeping io-wq workers around for tasks that no longer have
+ 		 * any active io_uring instances.
++		 * Not as long as a request of ours for another worker is
++		 * pending, though. It is accounted as a running worker, which
++		 * others rely on, and io_worker_exit() would cancel it.
+ 		 */
+-		if ((last_timeout && (exit_mask || acct->nr_workers > 1)) ||
+-		    test_bit(IO_WQ_BIT_EXIT_ON_IDLE, &wq->state)) {
++		if (((last_timeout && (exit_mask || acct->nr_workers > 1)) ||
++		     test_bit(IO_WQ_BIT_EXIT_ON_IDLE, &wq->state)) &&
++		    !test_bit(0, &worker->create_state)) {
  			acct->nr_workers--;
-+			if (test_and_clear_bit(IO_WORKER_F_FREE, &worker->flags))
-+				hlist_nulls_del_init_rcu(&worker->nulls_node);
- 			raw_spin_unlock(&acct->workers_lock);
- 			__set_current_state(TASK_RUNNING);
--			break;
-+			if (io_worker_retire(acct, worker))
-+				break;
-+			last_timeout = false;
-+			continue;
- 		}
- 		last_timeout = false;
- 		__io_worker_idle(acct, worker);
+ 			if (test_and_clear_bit(IO_WORKER_F_FREE, &worker->flags))
+ 				hlist_nulls_del_init_rcu(&worker->nulls_node);
 
 -- 
 2.55.0
