@@ -1,68 +1,67 @@
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9EA3F7895
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545A72E06ED
+	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 19:31:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792092677; cv=none; b=kihiYgASLOw8GpALgb9kiVoRJDtwatm9cliWo0XkhWYDepqXS7wu2TZUAhExXsoXdnDfoTQ6VEaVaNUaBA+U0J68EnxuehY+tq6rMICJmlpYn1rkzbFF4oayReTzLmjcqRHADFuwKaAl0FkUMdleaXMop2NrKNqHtUeoSVYPUv0=
+	t=1792092679; cv=none; b=InW6N0woYdxctPVgHsVyz6YhVINrOn+iQaBFH0u/79e+h1jed8+dqDdje5RqLcffIWCVB6RIHfO2+PthSDwpfrwhvmzgZRPhjLw/yO3rigkZxUp2zgwfA1lRkwWmgWE2LVohKYLhZJNMWQ9GQ4UjX8eLScQ4D0luzqIh2/cLr8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792092677; c=relaxed/simple;
-	bh=rzg3cpWmttmXe+lpJPc12/X3DQPWSNDiPoZJA6AcxjM=;
+	s=arc-20240116; t=1792092679; c=relaxed/simple;
+	bh=ialkj54Wqe0R8xV3gTDDXWkhZF0fXKJVZyQUUH1phXY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DbpMEaF4bimf9sKcwXNMcni407xRD9F4GyFx5bfUeIoTj11MPpw+tyGd8IvsYFGULAfZodVsIKOs7kZu2rub1huf/ztEOhOU0GDTQf6tN8jZEvmC8TiNS1+OnUsz8ZnGfS88Twt+zvNPz226QE2trMFD6iMdZv0vMlKeeIertDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=gAJ6SZTR; arc=none smtp.client-ip=209.85.219.46
+	 In-Reply-To:To:Cc; b=EwxRtPOVc9llqlvx6NjcZAwqDH6kfU0ty8ygPppI4fBA5xcI2xYB81VIUV11p5dsLGQ12c6n5Qw1A2zyGio8mqQQsyELeFJ0gbJ66taZTtrhCXs4qFHbQrEFTZ+1fgRnzu/PYIacVO2UBjWMgKiTgg3tCo7gwx71pfM3cbS8oy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=C0KKZnto; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="gAJ6SZTR"
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-917a6dccc60so4022806d6.0
-        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="C0KKZnto"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-93e7457349eso171523685a.1
+        for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 12:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1792092675; x=1792697475; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1792092677; x=1792697477; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6Nn+i0Mp+g1rfJ7U0UGMOdjUkIo3+jMqcRlB1ae15Dw=;
-        b=gAJ6SZTRIVkQ2nHgVhqhpFVolFucLz2MXEDHPm2l7Wfs7jUX4crG0SpW/2WYMLaBxq
-         Ti5ctOlQOW8NilAERXz+JVbd5WId19QAkWjWp7qrg6Q2KU7oTRE79SDRJmZg9zyhO/Ys
-         Co1pCmZxC98eqksnGLADHrETeuO/n1YRI8Ev3vLIJzaJtbsLZl9cUNT7LpS7ianQCY2T
-         riwxNW5N/p2UYQ+6St3GbIRZICy/YNV2aZ5bt1cUOEhWzQxTQlFHjp4Vm3in/eoKrPt7
-         SZB9pMrycapn1eJ4EIufNRXU7Vo/X64bqoVWuhA1kC5F7JlNdXBsEQ5Y9E58Sn9SE4di
-         /XHA==
+        bh=IC7Ig3DOtsdvdKP+GjjBvvSjWN7V7EFFkKY219wJPD0=;
+        b=C0KKZntoJ2kU28HhSjqZrioZldMtuxwAX2DBoDZUDwHFyUCJ13DYVBP1jsF91aChmH
+         HU/AOaKAndTWqMA5tfR4xrrtwkHjyrabX1wYXVZEblkGu10Z+j7vLbHMu24rp1QYEIB5
+         xfMQugWBDtzbgmvI9/70y4jclf8d8CGAG85BOVmtxsAehjCqNOp5tQaWpfb1zvjOf8VX
+         2p7rzF1CERtzD0KCEOMzrykWCaQSiU7XGyZbl0RcI0MbbtE1HKCVm8AtbTod7cNZ9/6o
+         2KHzCb7riTnT4bbqBYJR6h22e/cefb1lS5u6Y8QwnuWKeOTI9+wYydXwkQSQyjjb9Dsg
+         QFYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792092675; x=1792697475;
+        d=1e100.net; s=20260707; t=1792092677; x=1792697477;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6Nn+i0Mp+g1rfJ7U0UGMOdjUkIo3+jMqcRlB1ae15Dw=;
-        b=KCbC7oGNnbgRIVp8TF6FGxy/q4U/aO2pQrZ05GjMBSgXXY//4l6/Er9gyoCJFykZsV
-         XtT0cEzWvecKFT9UBnI1Whf/rKP1GbeCfTdSyZH9u/8PBPrGkTfMafsRtcCjG5wgEZCJ
-         G2KaV687OMQoY8arP5nZCMQPwU455ykIsQCF+pXLN91OT7bKeYf3H8e2Yydq+DUiwLNF
-         jPD62a6JuE9QzstD6aCSVepUh6ZQJSwtQoVaaqqygUQHVynybF77AUhbNVnPZ9svpwDb
-         68+lJgncISoXXDG/SxEk8kTL/1cKn9Tx7LGpjji663Z4OjC/wpwifhOFv/QhL87VQAaz
-         tDPg==
-X-Gm-Message-State: AFq9FYK0KJv1kMkrW6w6IWw0ek7RjtXPw5IOnPlPVWvdKbAFb1M2OD3O
-	LhLHD3vhw7OnBprKMtskPa7NXplgqYIuDY8Zc2P5bJlXstq5TOeQ/akbO+K/fRNB4WARq1ZdWVg
-	k9qIQ
-X-Gm-Gg: AYBFou1VGDq4lAMFc9hqogzeo52Go2nhda+rJBce4xONZYwwyaAmkXoAz7H66dIQ4nH
-	ocgmoPerCRPyLhDW23z02tEpZi7tfpZJTlwMNKRAHBkTrJnULLgPdLnDRhRuLH+rNZHwihxA5GZ
-	Cp7w5rYYhA0boevFoNGcyPO7hmSE82CUvGhabzxSDsTM+3KLiXBGgeDnBHLMKIBAPzC7I7vZpp+
-	vhWcCEEfj4DGV47Zwk1jxd6ED8XO8itUkvX+UX/25//2W6KiFhptcG+Htc88eew2DbRqEu85THy
-	CS3uOp0rn5+gafUqUtePUWD0g+daWka1i5e5qV3yZy32yfkD+YTLqO7cDVlVAXLrT/hKbWymtjg
-	CSA9fjv/XPKZzd3P7xI05ERCt3vL9IVSCBLPRqRMBaDxtwCykbktVh/5I+tsCxWvFGHvUEXGd1h
-	sBtSFAMUSezRke8IuxcSEafxtMqEqwopKjzZ4258rhT0i2hH07AgJt+V9YsWOEyW9VaEdUaRK83
-	h0aJJxAD9HxtsY=
-X-Received: by 2002:a05:6214:628:b0:914:40f4:d4b9 with SMTP id 6a1803df08f44-91bc91d3159mr19437296d6.12.1792092675442;
-        Thu, 15 Oct 2026 12:31:15 -0700 (PDT)
-Received: from toxicpanda.com ([153.61.196.241])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-91bcbb5a794sm3367686d6.39.2026.10.15.12.31.14
+        bh=IC7Ig3DOtsdvdKP+GjjBvvSjWN7V7EFFkKY219wJPD0=;
+        b=LZxOblIHCYpjba9LVlZmdYm7ZYUl9/YH9Oc6HYPNJ+a3wx80BTVExDfJwAAsnh1V0k
+         8XetrgtM6sXh/iy36epHKSFr9Fk+3KuByzl5GZed5XzZttcJiChOGHq3yVET3s4bp+jR
+         /R+U1aeNguNjAa5Mw/SH487005Nz+MuyuQ9IXPY2RKREPT0874XEgYGrAAGoAT3PBuWg
+         zMy7kv64NNW1AAJwTEZ3i5Kg+MHBa8Y54sORpP2lsffkiobvzs9TNpmS+EJt4NEuCqBS
+         P5lYD/qn/Q2D2LosscbQaKHDLBMheIJLkOWBVeWKIoPdSST45HxRkO2YGsTQvhh7fzKm
+         hkWQ==
+X-Gm-Message-State: AFq9FYLUQGv7pR5CJtpVvKUE6LI1SHaZKfQXpBVutitecj4A4mnRXsaY
+	vTfOwyvPfIeD1rnSXjGvtkf07nJwpRQ8LZ7zwqD4BbFzPqzNDVAqQTXrZveBTytuHlI=
+X-Gm-Gg: AYBFou0pZGXyWzYUTqzoZxQuZYwz7b2xhBS29QggSZmdNq7BIaqkjoJulNkuDuMKkU4
+	BmK+NrEoAeYnCJ/EyjD9DdAB1001jtQwkgiX9xWTHzh9vUOHNLGHND31depCX3FSf7wL8Vuvsa7
+	JO/3PBHAm0xWQB2rp3ylXs7pHEENzZCFIE4sOtbMV8TAAq5/XEOsVB2/A0M4miKqpmNK7qijeBA
+	Fw8xij3nOkrBWMzzAu+XHEb2Xalww2fS8FRJvDMiyqPmJFFWXsh4vzycj87PajZa4zbsVl/jbnr
+	1QOHHQVVO4W5jVp7op5L+iMvAWqhgqrcqi7Ob9tZP9p9c+8S3W0Pb7YtxBhZi1k8hAg9dxiTcXh
+	/WnVfLdfd+BDQ0pIxDvNELyTJF0qaLKdSvNCVQvhXvCX9E+rc10CCyYxG0/q73kb4lya09L+0rM
+	mO+flwW3UjUHBDpw1PkYqMyrKNxff6mhaAuk09wxFv4H2EejJ65Rq0GNfTpe/G8UAbxqL96n+HS
+	EUk0y398t8MWqKw
+X-Received: by 2002:a05:620a:880b:b0:93e:795c:9d07 with SMTP id af79cd13be357-93ebd259754mr3186726485a.35.1792092677026;
+        Thu, 15 Oct 2026 12:31:17 -0700 (PDT)
+Received: from toxicpanda.com ([153.61.196.248])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93f1a0cf9a0sm14756385a.2.2026.10.15.12.31.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 12:31:14 -0700 (PDT)
+        Thu, 15 Oct 2026 12:31:16 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 15 Oct 2026 19:30:27 +0000
-Subject: [PATCH 03/43] io_uring/wait: don't spin on a stuck overflow list
+Date: Thu, 15 Oct 2026 19:30:28 +0000
+Subject: [PATCH 04/43] io_uring/io-wq: don't lose the signal that ends work
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -71,79 +70,90 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20261015-b4-io-uring-fixes-v1-3-c1556f5d7bf5@toxicpanda.com>
+Message-Id: <20261015-b4-io-uring-fixes-v1-4-c1556f5d7bf5@toxicpanda.com>
 References: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 In-Reply-To: <20261015-b4-io-uring-fixes-v1-0-c1556f5d7bf5@toxicpanda.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1792092657; l=2324;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1792092657; l=2870;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=rzg3cpWmttmXe+lpJPc12/X3DQPWSNDiPoZJA6AcxjM=;
+ bh=ialkj54Wqe0R8xV3gTDDXWkhZF0fXKJVZyQUUH1phXY=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QKwNwPLyWE7FqZt6WQEQzDJBmKdhhs9KhO1WXVj8LWi9b0L+93XKLW0+5+hIKZePYZmCvBJmlUn
- rqgaxpi6ZnAU=
+ QNt39fqQH8opadzcdZXfpgZrV2KgeTmEZWXbvsdk1ztsknyNfygRWR0SPlxiXFBrFm4sDC7qVNw
+ aIPDtaEe+KAo=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-As long as IO_CHECK_CQ_OVERFLOW_BIT is set, io_cqring_wait_schedule()
-returns right away, before it gets to look at signals or arms the timeout,
-for io_cqring_wait() to flush the overflow list. If that doesn't empty the
-list, and the CQ ring doesn't hold the number of events the caller wants,
-the loop starts over, with the same result. The task spins in the kernel,
-and can't be killed.
+When a thread exits, only its tracked requests are cancelled. Then its
+io-wq is torn down. io_wq_exit_workers() signals every worker, to get it
+out of an interruptible sleep, and waits for all of them to exit. Before
+they do, they go through the work that is left. Unbounded work is
+cancelled. Bounded work is run, as it is expected to end by itself.
 
-The assumption is that this can't happen: if CQEs can't be flushed, the
-ring is full, and min_events is capped to the size of the ring. But:
+Not all of it does. An open has no file yet, so it counts as bounded, and
+the open of a FIFO waits for the other end. That is what the signal is for.
+But the workers are signalled once, and a worker that hasn't started the
+work by then loses the signal:
 
-- With IORING_SETUP_CQE_MIXED a 32b CQE needs two contiguous entries. It
-  is stuck on the list if a single one is free, and then the ring holds
-  less than cq_entries events. A single threaded application that asks
-  for as many events as the ring has entries never gets out of
-  io_uring_enter().
+  io_wq_exit_workers()               io_worker_handle_work()
+    io_wq_worker_wake()
+      set TIF_NOTIFY_SIGNAL
+                                       io_assign_current_work()
+                                         io_run_task_work()
+                                           clear TIF_NOTIFY_SIGNAL
+                                       io_wq_submit_work()
+                                         fifo_open()
+                                           wait_for_partner()
+    wait_for_completion_timeout()
 
-- Whether the ring is full is up to the CQ head, which the application
-  can write to. While one thread waits for events on an empty ring,
-  another one can move the head back so that the ring looks full and
-  have a CQE overflow. The waiter can't be stopped any more, not even by
-  SIGKILL.
+The thread never gets out of do_exit():
 
-Only the application can make room in the CQ ring. Return to it if the
-list could not be flushed.
+  IORING_OP_OPENAT of a FIFO without a writer, IOSQE_ASYNC
+  exit of the thread that has submitted it
 
-Fixes: 3fcf19d592d5 ("io_uring: parse check_cq out of wq waiting")
+hangs in more than 9 of 10 attempts (4 CPUs, KVM), until the process is
+killed.
+
+Set TIF_NOTIFY_SIGNAL for bounded work that is started with IO_WQ_BIT_EXIT
+set. The bit is set before the workers are signalled, and it is tested
+after the flag has been cleared, with clear_notify_signal() providing the
+barrier. So either the flag stays, or the bit is seen.
+
+Work that is started while the io-wq exits is treated like work that is
+being run at that time: it isn't interrupted unless it waits
+interruptibly.
+
+Fixes: afcc4015d1bf ("io-wq: provide an io_wq_put_and_exit() helper")
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- io_uring/wait.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ io_uring/io-wq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/wait.c b/io_uring/wait.c
-index a48523c2f356..e03b40d9c141 100644
---- a/io_uring/wait.c
-+++ b/io_uring/wait.c
-@@ -291,9 +291,18 @@ int io_cqring_wait(struct io_ring_ctx *ctx, int min_events, u32 flags,
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 97523ccc7a71..433c003a83e5 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -655,9 +655,15 @@ static void io_worker_handle_work(struct io_wq_acct *acct,
  
- 		check_cq = READ_ONCE(ctx->check_cq);
- 		if (unlikely(check_cq)) {
--			/* let the caller flush overflows, retry */
--			if (check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
-+			if (check_cq & BIT(IO_CHECK_CQ_OVERFLOW_BIT)) {
- 				io_cqring_do_overflow_flush(ctx);
-+				/*
-+				 * No room for what has overflown. It takes the
-+				 * application to change that, so return to it.
-+				 */
-+				if (test_bit(IO_CHECK_CQ_OVERFLOW_BIT,
-+					     &ctx->check_cq)) {
-+					ret = 0;
-+					break;
-+				}
-+			}
- 			if (check_cq & BIT(IO_CHECK_CQ_DROPPED_BIT)) {
- 				ret = -EBADR;
- 				break;
+ 			next_hashed = wq_next_work(work);
+ 
+-			if (do_kill &&
+-			    (work_flags & IO_WQ_WORK_UNBOUND))
++			/*
++			 * io_wq_exit_workers() signals us once, so that we
++			 * don't sleep for ever. If that was before this work
++			 * became the current one, the signal is gone.
++			 */
++			if (do_kill && (work_flags & IO_WQ_WORK_UNBOUND))
+ 				atomic_or(IO_WQ_WORK_CANCEL, &work->flags);
++			else if (do_kill)
++				set_notify_signal(current);
+ 			req = container_of(work, struct io_kiocb, work);
+ 			kcov_remote_start_common(req->ctx->kcov_handle);
+ 			io_wq_submit_work(work);
 
 -- 
 2.55.0
