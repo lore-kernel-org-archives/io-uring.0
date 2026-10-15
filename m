@@ -1,70 +1,41 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AF62F39B5
-	for <io-uring@vger.kernel.org>; Thu, 15 Oct 2026 02:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475C4474267;
+	Thu, 15 Oct 2026 07:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792032039; cv=none; b=btV1pQH1yjsgmMqRucgnuovOB2SaVU0M/NGEAZOMZcXxhp35eWA1KlLxnb6OiimB86KXwbCeqOEq5vwg80gnbY/PyAEjNl+AcPK7kMZkxztSmSR/qDNJroAVFKc9DKY2nnWRJmmkb2lsk2DYM0Q5eAHTa6l6PlD8YA1FmJfpKGo=
+	t=1792049725; cv=none; b=eLCIGbEkwizzs5YZ9WJRA5L3l/8g7C15D53aFexkwcE1+LCYraC4fav8mZqRBPd1a7+I37oiDS+CPgYcSS5oqnpKSYIxk/eCR4QOO5o1AnSCYCoVmaLDg8Hgr7reVE565dh9P9YQs/uP5zejOtp6W+qcEEpeEQyUhS7/OAyZzng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792032039; c=relaxed/simple;
-	bh=FCFqIUr5heuDZNwG08SPXGC/g2fvuFyx/JS7ppBVR0I=;
+	s=arc-20240116; t=1792049725; c=relaxed/simple;
+	bh=c++F9Vf3fUz0CQyruYpb7PPYSc/ojoTaqlIFyYHysRw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JSFileFyHdbUPypU8h7RSeQynI9fJRQczq4RxoynsuZaROm/U24YkFzmY2YcJ+8b77KpsqZU+rmd2Ly5Au+Vrt1Gwf1Z89AL65KJyiOYEluj1C87VeIT6/aENCNwl6ftxr530NN301tzGOKVUDu2GPeI79tIqvBQvnpORLs40SU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Tgh4eK2Z; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=aDD3giUckWlMybfYirtebM4+uRWJEkAJzKiCg3JgROYizy8cqK3dHSh3r3lkUaW8PwIfB95qGxBDTUEvTnl+iCl7VLDL4C5aNuX5trXQQTHvLKPeBAf8eeSMkNqQ/m4FjdMfsqfLVvltdfIot/k8MgLD9CZE+7+uuUwbHq83mwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SBOg7fFc; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Tgh4eK2Z"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-48de6a62a4cso1848162f8f.2
-        for <io-uring@vger.kernel.org>; Wed, 14 Oct 2026 19:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1792032036; x=1792636836; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JEItkXykfQ51k8AnQA9MCb40y60hqHTN5XUgh4Tpq+I=;
-        b=Tgh4eK2ZmDX5xg7z4mnU2G2A75C1G+wMVJ4IXidAaMzZwNojeBFMFt0fUM7Q209lm5
-         GknCX7HphpBgIr3yQ0ojftGnogFE+GcC2097L1KRo8VTAYH8zyp7kdIx/sSAeMyupTnA
-         4Jn48ZM79rKkOQ7lQrsGI6uG4YxN6wyVnzK9Q+iSG52F68MIq/bNyyEQL/jDXRMrRxsL
-         vO9AvFrSME/AX1wDcU5p7HwMDhJ3iuyyXf2YPBqOiFi17OddhqonV+tpwr4zVgMkkg1s
-         jQzpcH8/GLL+7xFivsubXdgJAwwNyp39DDCo20JvKqfP6bUP0xqCATE18v4NRMctUclx
-         8Jag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792032036; x=1792636836;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JEItkXykfQ51k8AnQA9MCb40y60hqHTN5XUgh4Tpq+I=;
-        b=G0Npm6oieHhVUIB2SX13FCX2s/BocBMVt7RDEZ9aDRo1lC88ts8ByZorLH6nfY83h2
-         OwwJlMBzv6yLRfwfuKikh74K1b3tAMULSHpIA+kDe8h2vAJIuvGC1fdHagX5sAtGS1YB
-         TFZYUta42W9dpvwpbA98HER3zMwBipT5G+G5sCyE/hLV4XZ1EWXd8r/5U5MfUV+bNex4
-         igsZ43dcUJxXj/Gcmzsrwk7LUKGo8uB+E4k9jqAOn4Hh/fE8+lZoOT2EvYOY4MnRsiXE
-         jW+jNAn9r5NKuTOcfo9r5oWFzZt4iAXLoQsS3lv0qvBEwZhxR21/GH1Pi7Ae5Fy7dExj
-         nufA==
-X-Forwarded-Encrypted: i=1; AKwUvBwgl8H32AjA5r2T3AjaNq4HEbWKSAyzHkHHAcTH1SUUlRtRR2ZfC0Zp6EHWwocgro3YY6vz1sS3iA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJky3jPMWN0zqLejiqtJtPJbD2B5uJUYKPPIuzI6/vrifhL2Xuw
-	MCkBdR35hebMvEFX1Iiv5NxGN7me0CzFH86FmcP+X2mPf16MMf3rRPIm4R2rE7zP7g==
-X-Gm-Gg: AYBFou2jasIRiAbC7ajt2hwAs5kbyWlR1eX9It0mEuQry3vgR1DV2/koZxfTP8Uh42y
-	bDiDSP20jqlJ5v5m67ekJIuEP4xq2P+XJsF951Gay2l99fPW5ZCuECQtJF0YOZtTrYyiGiqq9QH
-	sb45DuD34YD+u7r4Fn30WIRdYqZsTV4v2OYpVZLxDNosDPGIMrP4fvMRxaShNmwdNyRTe1d/2Ch
-	JYMLAyBfq2qAy1BwW0b9qgYCiNF5j4omSuzREFH+UBpcxMv8RZcsdOvreemN4zgHbh6Cwa3SDY8
-	b3UcPwiPGrx5wXQ5A1lx5F+F5yBOAi6VQtB0EpNYmga866CaIob4X+Anf9IRkIvVfuAIl+xqRsL
-	6yCBt7k0EOwRJCQg6wRUAoem93P9BZSKlzEIIedtnC+tSb3TG02PGkw9ck2HvyAxGd8bzOzsmSk
-	DwPXFZeQBBw+Ca8kGINAjFK4GCObOn/jc8JBZPlDKbDE/Cw1uATT9+JDyudVSXAt0V0UQ3yx9/q
-	yiHsmQRusT5pIHe9oEdPah8mAz63WABlsBF+KJtk5hYXDGgLVUxucNZ3b2hujhlcfhrOQ4C
-X-Received: by 2002:a05:6000:24c4:b0:48b:1c:d6e1 with SMTP id ffacd0b85a97d-48dbace386bmr34023314f8f.43.1792032035872;
-        Wed, 14 Oct 2026 19:40:35 -0700 (PDT)
-Received: from autotest-wegao.qe.prg2.suse.org ([2a07:de40:b240:0:2ad6:ed42:2ad6:ed42])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48de0bc6b82sm16078538f8f.51.2026.10.14.19.40.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2026 19:40:35 -0700 (PDT)
-Date: Thu, 15 Oct 2026 02:40:32 +0000
-From: Wei Gao <wegao@suse.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SBOg7fFc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=+rP+cxw4LyZbHAKQcyd3+FwqG+SpVmgCRVwzAc0KSwU=; b=SBOg7fFck2+GpCGyXASSABg2Dm
+	aRZSbunqoDkWHxbnj8y7Zb8kYIg2eEYkRc8o0SsRPzIu99/5dPkO0QvEAZ32kIlubTZv2akAbwP2g
+	4paSmpRcOEBT01JuozPVR0pQE9maLSOgDBxa2AQjsx4A61GTB7l+NO1yF/mC8LovHbHOwmb5Jnc6U
+	GrTKFqOUG/1eyGBntAN+gVuHR+sd16SaTD1GmmXulE7/ZuP6qzPXZEC3n71YxfRQ7gnD/cSjsgOaM
+	JoASmdxoG5lXIxoedyJXD7OVZTIX4xbi8rivtHP14kSEgX/pTF2bV5bcFDh5J3fOeAMUHV0mD/awI
+	MInLGoYg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.5 #2 (Red Hat Linux))
+	id 1xHFza-0000000Ha8b-1FmW;
+	Thu, 15 Oct 2026 07:35:10 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id F39FA3006DD; Thu, 15 Oct 2026 09:35:08 +0200 (CEST)
+Date: Thu, 15 Oct 2026 09:35:08 +0200
+From: Peter Zijlstra <peterz@infradead.org>
 To: Christian Loehle <christian.loehle@arm.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
+Cc: Wei Gao <wegao@suse.com>, Frederic Weisbecker <frederic@kernel.org>,
 	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Thomas Gleixner <tglx@kernel.org>,
@@ -77,9 +48,10 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1] sched/cputime: Preserve iowait accounting across
  waking interrupts in dyntick-idle
-Message-ID: <atA9IDcejbSs03Zs@autotest-wegao.qe.prg2.suse.org>
+Message-ID: <20261015073508.GH4121339@noisy.programming.kicks-ass.net>
 References: <20261014015258.13967-1-wegao@suse.com>
- <48eb633d-9fbe-4299-8d10-e7686acf5a3f@arm.com>
+ <20261014124934.GE4121339@noisy.programming.kicks-ass.net>
+ <002a3200-81ae-43b3-860f-64135c28438c@arm.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -88,99 +60,33 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <48eb633d-9fbe-4299-8d10-e7686acf5a3f@arm.com>
+In-Reply-To: <002a3200-81ae-43b3-860f-64135c28438c@arm.com>
 
-On Wed, Oct 14, 2026 at 03:14:41PM +0100, Christian Loehle wrote:
-> On 10/14/26 02:52, Wei Gao wrote:
-> > In liburing's test suite, the test/iowait.t test case intermittently fails
-> > with:
-> >     iowait diff too small: 48
-> >     test 1 failed
-> > on tickless systems where IRQ time accounting (CONFIG_IRQ_TIME_ACCOUNTING)
-> > is not enabled.
+On Wed, Oct 14, 2026 at 02:17:52PM +0100, Christian Loehle wrote:
+
+> > Using nr_iowait_cpu() is fundamentally never a fix. It is rolling a dice
+> > and liking random numbers. See the comment that goes with that function.
 > > 
-> > Commit 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
-> > optimized dyntick-idle cputime accounting by avoiding pausing idle
-> > accounting on IRQ entry when IRQ time accounting is disabled.
-> > 
-> > However, this causes iowait time to be erroneously accounted as
-> > CPUTIME_IDLE if the task waiting for I/O is woken up inside the interrupt
-> > handler (such as the 1-second timeout hrtimer in liburing's test/iowait.t):
-> > 
-> > 1. In test/iowait.t, a read request is submitted on an empty pipe and
-> >    io_uring_wait_cqe_timeout() is called with a 1-second timeout. Because
-> >    current->in_iowait is set, rq->nr_iowait on the CPU is incremented
-> >    to 1. When the CPU enters tickless idle, the periodic scheduler tick
-> >    is stopped.
-> > 2. When the 1-second timeout expires, the hrtimer interrupt fires.
-> >    Because irqtime is disabled, kcpustat_irq_enter() does not pause idle
-> >    accounting.
-> > 3. Inside the interrupt handler, io_cqring_timer_wakeup() calls
-> >    wake_up_process(). In ttwu_do_activate(), waking up the task immediately
-> >    decrements rq->nr_iowait from 1 to 0 before the CPU has exited idle.
-> > 4. When the CPU returns from the interrupt and calls tick_nohz_idle_exit()
-> >    -> kcpustat_idle_stop() to settle the elapsed tickless idle duration,
-> >    it checks:
-> >        iowait = nr_iowait_cpu(smp_processor_id()) > 0;
-> >    Because rq->nr_iowait was already decremented by ttwu_do_activate(),
-> >    this evaluates to false. As a result, the entire 1-second idle duration
-> >    spent waiting for I/O is credited to CPUTIME_IDLE instead of
-> >    CPUTIME_IOWAIT, causing diff < 50 and failing the test.
-> 
-> So reading the test, the reason this doesn't fail constantly (on a non-isolated
-> machine) is the massive margins?
-Margins should help, but this case has more chance to failing after
-recent kernel change. It does help track kernel behaviro.
-> It pins the io_uring_wait_cqe_timeout() to CPU0 with either in_iowait=1 or
-> in_iowait=0.
-> It then asserts after 1s that CPU0 got: 
-> a) for in_iowait=0 at most +10 iowait units (<10% CPU time)
-> b) for in_iowait=1 at least +50 iowait units (>50% CPU time)
-> So a) would fail on too many unrelated iowaits, b) would fail on unrelated
-> runnable tasks.
-> 
-> I don't think validating the per-task in_iowait setting via the CPU aggregate
-> is really feasible FWIW.
-> 
-> > 
-> > Fix this by checking nr_iowait_cpu() in kcpustat_irq_enter(). If the CPU is
-> > currently in iowait, pause and settle the elapsed time to CPUTIME_IOWAIT
-> > before the interrupt handler runs. On kcpustat_irq_exit(), resume
-> > accounting if it was paused.
-> > 
-> > Fixes: 7198e3927a14 ("sched/cputime: Handle idle irqtime gracefully")
-> > Signed-off-by: Wei Gao <wegao@suse.com>
-> > ---
-> >  kernel/sched/cputime.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-> > index 06bddaa738e5..e8b56433c61c 100644
-> > --- a/kernel/sched/cputime.c
-> > +++ b/kernel/sched/cputime.c
-> > @@ -496,7 +496,8 @@ void kcpustat_irq_enter(u64 now)
-> >  	struct kernel_cpustat *kc = kcpustat_this_cpu;
-> >  
-> >  	if (!vtime_generic_enabled_this_cpu() &&
-> > -	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
-> > +	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu() ||
-> > +	     nr_iowait_cpu(smp_processor_id()) > 0))
-> >  		kcpustat_idle_stop(kc, now);
-> >  }
-> >  
-> > @@ -510,9 +511,13 @@ void kcpustat_irq_exit(u64 now)
-> >  	 * need to pause nohz accounting. Resume nohz accounting as long
-> >  	 * as the irqtime config is enabled to handle case where irqtime
-> >  	 * accounting got runtime disabled in the middle of an IRQ.
-> > +	 *
-> > +	 * Also resume accounting if it was paused on IRQ enter due to
-> > +	 * iowait.
-> >  	 */
-> >  	if (!vtime_generic_enabled_this_cpu() &&
-> > -	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu()))
-> > +	    (IS_ENABLED(CONFIG_IRQ_TIME_ACCOUNTING) || vtime_accounting_enabled_this_cpu() ||
-> > +	     !kc->idle_elapse))
-> >  		kcpustat_idle_start(kc, now);
-> >  }
-> >  
-> 
+> Speaking of, that comment is stale, menu doesn't use that heuristic anymore.
+
+\o/
+
+> FWIW the remaining aggregated nr_iowait users seem to be accounting/reporting.
+> (cpufreq still uses it, but it comes directly from p->in_iowait).
+
+I see: get_cpu_iowait_time_us() using nr_cpuwait_cpu(), which in turn is
+used for both thermal and cpufreq.
+
+> Given they are exported (/proc/stat procs_blocked and something in s390) I don't
+> see how we can remove this entirely but at least nr_iowait_cpu() as opposed
+> to cpu_has_iowait() could be refactored. The issues are obviously the same still.
+> I'll send a patch.
+
+Right.
+
+> Peter, if you see a path to ever retire iowait (or at least the CPU iowait for now),
+> I'm more than happy to sink some time into it...
+
+Given the exposure in /proc I'm not sure we can *ever* fully get rid of
+the per-cpu usage of iowait, but yeah, reducing in-kernel consumers of
+this number might be somewhat feasible.
