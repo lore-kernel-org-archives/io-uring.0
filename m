@@ -1,106 +1,162 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46E7381EB9
-	for <io-uring@vger.kernel.org>; Fri, 16 Oct 2026 14:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0605528428
+	for <io-uring@vger.kernel.org>; Fri, 16 Oct 2026 16:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792160901; cv=none; b=qeJZ1mUOLuHeavXO2LK3e9/ByL7TTCJ5LyMnsnIi8TwpF578PUzYTmlq8FidZWu0TB+QrbiX68MGgXkBkkEAdJOw4PJ7tBCqrhsw5cbwbplOzSG3Spw6T7fh/3nRvpILRzigcHYsCYa8SXz0VSR320ThPJ2/0mnrBQRr7MFpTok=
+	t=1792167920; cv=none; b=n3sAGDkO+lzOfGAcGGkanF4sWwAAq73cR3+dxAKuvIu0n0Mf6Rneo+kgn1eQQ5zL3/9ukpmYuw83ZpVuaWlcGE++EBn9vwl5uy2rIBMB2U9u1KXS2i5cOjWbuAUEbezvN65OkAelmrB+AWf4VFjhr4xsJQmylreWlg1Tkaic8Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792160901; c=relaxed/simple;
-	bh=Cbnpk6Z2Kh5FYf2uSRupUg3VEKGPV0FhJQUd7YpjTVQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=lgkL73T/xpk/rl2M6yrCnypjxuAGdC8EBRMW9QoAXFNJRg3X9Ui+zAh4ZLMWCtpZMxZcuBkSaTjsiq6KZSs32JVJCBYYVvWdRoTzKbx8XovsmPI1HHSmYgiTdfcKo/Ia26QFTG1vMioWOB+p/vNn/8exkmkcPJn8+JEc3BZq3XU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=Msn0KVP5; arc=none smtp.client-ip=74.125.82.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1792167920; c=relaxed/simple;
+	bh=VvBvQ/30m7x+T/DuyuVFhUktQ2DqxHnhmKpwqj7sqnE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HVGVKcGoXZbip/+6ck9jtm19IfB5+NU8Wvfhv8YkP4jff8QelToW9tQIiDrmR6tx57V/2eE+wcFxHPcoamWsXJmnfm7uLCUpIGYM0sLU9AzooVu0UH77EdVnBuYmXNB1fJXFZr5q0M1aCr2AUu25VTW9sustZE3cA4JPZ0AtrMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hi1rRvYx; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="Msn0KVP5"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-35d7fa491deso24222eec.1
-        for <io-uring@vger.kernel.org>; Fri, 16 Oct 2026 07:28:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hi1rRvYx"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a061a13884so1078395e9.3
+        for <io-uring@vger.kernel.org>; Fri, 16 Oct 2026 09:25:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792160900; x=1792765700; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RnUUwsz7Ni/EGP55kG3R7N5cal4ZwbaWIr1Y673vFW4=;
-        b=Msn0KVP5GA51RDmYo5l9KFPkbJyCpZAsG7evfp27ZsUji+HSimJfDQWrjFmm7Fn8oF
-         mBC8HKrrcdLV5bkMvCAbip8OUdIQF0MVLYR/9VwiE9EvFg1VuNjCivF9jmlwwFbG8M05
-         lVB2dKN74/xjr5c2XrP5jYoipW96XKMyG4awvytDatQtEshRSIvl0f5e8zSh2WXC/4oO
-         qJ5cI5EnLE5lIbB7dqj1VmGiFt9bpDpoguu5sU0opjS41+pui11+WwqGLx8gMKiq2NxZ
-         ScwehT22bRJLke8uq7rtG6Fg5IUKiV+r9Za72fO81W/xPmoRadiJIbzD+qKjZhpCbXJL
-         nesw==
+        d=gmail.com; s=20251104; t=1792167913; x=1792772713; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2h4T4TA9I7ITEJ9LtYDpJnkQ3Na35pl9oB5/mKgUjrY=;
+        b=hi1rRvYxeQk3H0IpSfreI/7wMq14BjUOMJyWDPw4Hgum+fKRlA94KgJJbVqmr7+dgU
+         qM9+jPoKBhCeFdT2ti6iT9IUYsampWW7aRUd9RCl0UKD6yWq+E7Sa2aeBhOjDV/rylyM
+         CJz3Oh6pIBn33T8KE/o9HLELRjSx0mVaeH8qkzs1gTnKHobVCoEW0Lhp0a2J/8wABRI4
+         kLIrM+bw+zyg+8HN+0N1/c8vHJwBvGPbTzDLXUo06QCDR799bVhKkSuST37RnEUJ1MSF
+         sdFN7XaY4owqWP7aatcMrwG44SlV1AiR0Psf4VHJalJE3uuDWHNhktHaZ6gy3Awuqc1v
+         k/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792160900; x=1792765700;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RnUUwsz7Ni/EGP55kG3R7N5cal4ZwbaWIr1Y673vFW4=;
-        b=HgTJvv+lqB0+zNxZcgZbcH22iz9U1PyOTgV/ySH1MVCLv1tlYR1OMaO4VPs6XnXKdn
-         qgT193aKl7fuEwpBBKnM9rSHhsMXg/HUsvHhj4/yxWswMIDXjJDDIbROIYojq3GqEvIf
-         8CBaUIovqvTRH0ACKsMHdSOKVwbziLZH3uX+xZjIZy+kvJmbeHQ0zNHgFdjzLCIAXFAY
-         YwuWO7KFzH9wrAXuKNTW/Dt8UNjNG03o8EwZ9giVuMKLYhXjChQgmiMwTiKyoC4bSnJy
-         bxWaZ5gz164ltx0+pBC1yrnvl5/9n/0WaQNiXd4B5kEuJK5OeOlY0ZJ+vokvNyn99J4a
-         z6Bw==
-X-Gm-Message-State: AFq9FYI1xbxd3pyDpw3r4ds9rGhf5Ka7sPDACkNFY6Hh6+jAnYS3zYP1
-	ggAHE2lHLcpuIPmCtLMuL+s18DmRwvVB6xCW9v7e7d5FJrD2nimAx05PUg383OYVc7c=
-X-Gm-Gg: AYBFou16f7ah6dH26fRfQ1Aij8444a0QJNzRBnpxJ+7Vw2rayH5EP1QYsXix6uaSFiH
-	nacMOEwRZ2tSQxQeraj3M8mfnls2FKXl3CmCBisir7Mq5dhFK2B8sMLb72QD8cDgEYLenzyB24h
-	dt0FtCm1WWgEDauDv/j3zFKYnsbccjCY3zzgNkVNSOUooVSWNwtQqNcop4zB/g1uwRF/ERaXGA9
-	vli94SkzT0Z+GvaRDpkxVMqlpyfMWxUievTFJ+BG6bUz17rDJc6RWlepZD5LkcW04ldxdVP+Wpf
-	f186akrqQKnLlgucc1ZNtzu8ESS2G4tBCnSzRnlHZJRldwmrs+Kj+w5UMqR77kXcqPAjrBOfssp
-	FR8x0J/g4cjVLD6eIShX0fCqplfvEdbrXD3RAiFfmk9MhiJhi9ePAI3gX7+MYoy610ClpzKOmEU
-	Q4ALsKOQoQwQrd60wLDUlw5u8RmAXV0Xrc5yHKwfrLfoV0Sr1Mp/Y11Cj+OUbEK+zTB2B+44JSE
-	7yyRvxwTtQ00qEBbCvNtAhwrtLgZyGMnZCBcXqgzWz66S0MZARE4pnrcw==
-X-Received: by 2002:a05:7300:6708:b0:351:77a3:55f1 with SMTP id 5a478bee46e88-3602eb94623mr3984668eec.19.1792160899122;
-        Fri, 16 Oct 2026 07:28:19 -0700 (PDT)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36081bafa7asm7150945eec.14.2026.10.16.07.28.18
+        d=1e100.net; s=20260707; t=1792167913; x=1792772713;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=2h4T4TA9I7ITEJ9LtYDpJnkQ3Na35pl9oB5/mKgUjrY=;
+        b=KppcPZJfFBAajrNVM/TaxIF/UPvnsvJEFB3cEb2VaNyO0gEDSt4+h3H+upyLxMJ6qe
+         B3sh/UHhGTR7jpjiQ+R9HoSu9XzpkOwWL+N2PE8RGCeX/rZfU2KrDSGhB3ZQLUUExpir
+         eOaqUwkOxJqHtXI1K/0lRP36L9HBh8kdQ7eZZ8BJfRlrfcOO8yl1sJ0X3qZb4bSjtt5/
+         qyuCuj0b9/v9hIGVLODt43LKMMWKovUMrd1PC9gTW2jmWlC0OjrwPXSmgPrW6PKOaM9U
+         mSM5HTdIU+Tvkp8EKMPGsMBXL69aTxWZDpJ5f0d3udoNw/gE6hGlCCfZdjiVVS6HNys+
+         Rw3g==
+X-Gm-Message-State: AFq9FYIedVMBX+jkio3s4jSo+49ED4TDLAlPh+WWAFCMuC3qmhoqAtgE
+	zZq/TvPaawpZ+GnhL8MYib0o8tePigUSmWY7UHMR/t4hx0kVG3HLrSObtbWgBQ==
+X-Gm-Gg: AYBFou3L4w0vVA8PZ9KY5PAEkwws5nrWtSAQTuMdvgubFDoylL8soi8jUL09fIWdolU
+	1Ztdut05MLn+g1TwDYO4ksPdoC8mUtk0c2dh3HbZUnrUzmIHrm6iK+3JJyBkxC/H3ZnhWTPtXZO
+	3RG5DiPacTD2QOQ7JYEBj7fs15niiA/GzMVJGxyElwqfi/DTEgvYxMoEAlfyEQ3EoP8Zvlkb9zZ
+	rK7F07wsGD1C2pefTUyQfGFBBiRpsssJIyt6dK0qJKEr41+v/xVRsE2qGiCB7ZlUK4Dem7i5yDN
+	FOXdM/5/G+KGLRI8cX3Hp/TNWdtIcmMyUNcxd/WC+fcgt1tfxafpzDlRuc9Jb4wn+TpytYMXQk+
+	dMZF+GhTX0QoLLyTGZ8sXThOINn5Yig2CFzbO4oZnm6bP7vLuSe5BgPiTiu18Ix2vNRwhDSV8Ic
+	rlna+k8wVtQAp9JOnLoa+iil6EGaaYtCGiv4v4Kl6tlpEl4eGfuy3buOxhWQ4ZVDo4FUzqy4nGK
+	bvLaBcP1gpyfPmG+LzW0Yqpni3QYoQQRv1DUGDGYr7jctS8zVFYQkYuoA4yuZ+xdMaRkzeQCH6c
+X-Received: by 2002:a05:600c:1395:b0:4a1:d73d:4137 with SMTP id 5b1f17b1804b1-4a1d760f94dmr7097555e9.28.1792167912582;
+        Fri, 16 Oct 2026 09:25:12 -0700 (PDT)
+Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1cca31234sm41728415e9.4.2026.10.16.09.25.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2026 07:28:18 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>
-Cc: Nitesh Shetty <nj.shetty@samsung.com>, 
- Kanchan Joshi <joshi.k@samsung.com>, Anuj Gupta <anuj20.g@samsung.com>, 
- Tushar Gohad <tushar.gohad@intel.com>, 
- William Power <william.power@intel.com>
-In-Reply-To: <b76cf21ee0e2362489c864e43781b20d95fd75f7.1792142588.git.asml.silence@gmail.com>
-References: <b76cf21ee0e2362489c864e43781b20d95fd75f7.1792142588.git.asml.silence@gmail.com>
-Subject: Re: [PATCH] io_uring/dma-buf: allow cloning registered dma-bufs
-Message-Id: <179216089822.2070939.2002360782198878485.b4-ty@b4>
-Date: Fri, 16 Oct 2026 08:28:18 -0600
+        Fri, 16 Oct 2026 09:25:11 -0700 (PDT)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	axboe@kernel.dk
+Subject: [PATCH liburing] examples/zcrx: don't forget to sync dmabuf
+Date: Fri, 16 Oct 2026 17:25:05 +0100
+Message-ID: <73b2654e41519acb2ec310ba1d6dc99cbafcbdfd.1792167723.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
 
+dma-bufs are not always coherent and we need to sync it before
+accessing. Use proper dma-buf API for that.
 
-On Fri, 16 Oct 2026 10:26:55 +0100, Pavel Begunkov wrote:
-> One problem that was brought up is that the file table size is often a
-> limiting factor when working with dma-bufs, which is quite an old
-> problem. With a single io_uring people can work it around by closing
-> the dma-buf fd after registration, but for more complex cases we need
-> a way to dynamically register it into another ring. We also need to
-> deduplicate internal registrations as each creates a new attachment and
-> related structures, which could involve large allocations and iommu
-> mappings. Solve it by enabling io_uring buffer cloning.
-> 
-> [...]
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+---
+ examples/zcrx.c | 40 +++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 39 insertions(+), 1 deletion(-)
 
-Applied, thanks!
-
-[1/1] io_uring/dma-buf: allow cloning registered dma-bufs
-      commit: f57b957778a33d98e15e394ab426e93c3ead659c
-
-Best regards,
+diff --git a/examples/zcrx.c b/examples/zcrx.c
+index b55b07ce..47036a33 100644
+--- a/examples/zcrx.c
++++ b/examples/zcrx.c
+@@ -39,6 +39,7 @@
+ 
+ #include <linux/memfd.h>
+ #include <linux/udmabuf.h>
++#include <linux/dma-buf.h>
+ 
+ #include "liburing.h"
+ #include "helpers.h"
+@@ -103,12 +104,46 @@ static unsigned long area_token;
+ static bool stop;
+ static __u32 zcrx_id;
+ 
+-static int dmabuf_fd;
++static int dmabuf_fd = -1;
+ static int memfd;
+ 
+ static int listen_fd;
+ static int target_cpu = -1;
+ 
++static void dma_buf_begin_cpu_access(void)
++{
++	struct dma_buf_sync sync = {
++		.flags = DMA_BUF_SYNC_START | DMA_BUF_SYNC_RW,
++	};
++	int ret;
++
++	if (dmabuf_fd < 0)
++		return;
++
++	ret = ioctl(dmabuf_fd, DMA_BUF_IOCTL_SYNC, &sync);
++	if (ret) {
++		fprintf(stderr, "sync failed %i\n", errno);
++		exit(1);
++	}
++}
++
++static void dma_buf_end_cpu_access(void)
++{
++	struct dma_buf_sync sync = {
++		.flags = DMA_BUF_SYNC_END | DMA_BUF_SYNC_RW,
++	};
++	int ret;
++
++	if (dmabuf_fd < 0)
++		return;
++
++	ret = ioctl(dmabuf_fd, DMA_BUF_IOCTL_SYNC, &sync);
++	if (ret) {
++		fprintf(stderr, "sync failed %i\n", errno);
++		exit(1);
++	}
++}
++
+ static int get_sock_cpu(int sockfd)
+ {
+ 	int cpu;
+@@ -373,6 +408,8 @@ static void verify_data(__u8 *data, size_t size, unsigned long seq)
+ 	if (!cfg_verify_data)
+ 		return;
+ 
++	dma_buf_begin_cpu_access();
++
+ 	for (i = 0; i < size; i++) {
+ 		__u8 expected = (__u8)'a' + (seq + i) % 26;
+ 		__u8 v = data[i];
+@@ -382,6 +419,7 @@ static void verify_data(__u8 *data, size_t size, unsigned long seq)
+ 				(unsigned)i, expected, v, (int)expected - v,
+ 				seq, seq + i);
+ 	}
++	dma_buf_end_cpu_access();
+ }
+ 
+ static unsigned rq_nr_queued(struct io_uring_zcrx_rq *rq)
 -- 
-Jens Axboe
-
-
+2.54.0
 
