@@ -1,91 +1,66 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=199.89.1.14
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792437187;
-	b=fc+jvOUJtafDrl4RNWvtcdhlIjDKyJoLdXe5ntET3UwJHAtVN1BmMjYfQwFEv/MoEtN0
-	 yDX+WF75PZC5HUkJdzZV1jD0ThVEcAuR8fTtiEyUNObNonujSCWUV+xX9sa0b7x0/13RX
-	 hOQo4JT8zdXO6oC2Lbn06iAC9AK8lyPKniKQkJOBzxg44XF+wcNK/Ygu+OZNqv97955l8
-	 az2KthXCWP41jy+f9nTPDxbYIlCjhOcWmOncrRwCp8m5mqG9tYUgySb5rQrOHaGyhax+E
-	 P4UhScM8I60b5FueuGLkKGqPgsHJWIMKRAhKuBMdBpnuPREeq6zERZuIKmDfEWtDfUw==
+	t=1792442016;
+	b=V7XykbKZJS4QrSTvihdVOFm4DEO62Cjfcsp+FXl8ZntDMhGpTRQFdvC+qT3Bx7YAMOVY
+	 Hn1NmEejtd0Ye617k7S9CrtFAjTbcpQSMMpPhEkQgcuHw1V78wgW4RHQs/HPfEAYpFDud
+	 QnqPX08/qc1PN/SGNsbpZ3S2lCCPNvQs6S269D+ApH4lXJpHCKGlkX0V/z0Xde2HLJrYa
+	 UcSs4AnFw+Xh0q7sSrYAxMlSpgy/aQwQU+3mR3oEwMRXL5RQ74cxTlA2r+K1xorHIxT9a
+	 lIjY3m7EOxoGpJ4WIe8yDZqdOJ/FvUiaQMrLsYQtVY8FSsEDPIyUgdXLKWbzdYwleDw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792437187;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
-	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Mailer;
-	bh=JlYuJFL698MPXVE8UPk93QJm/Q3q10vd5sQJv1hUa+M=;
-	b=pujBTOa/nfiIXnIZOIbPy3lNg6oG5rllXk2XLLY0OXwTb8xMOSY0kjC5KquNnEVrpzwK
-	 eePKQE/lNd9R+J04m4pBn/MXwm1PRGjmiM9cIokpQVPMOepf16wAg4hiqXakTy2Ti15m5
-	 li/E3Pn7QNdh47mN8ktzA1opf3r4aTaEddCSs+KDvHCYNAfinz8UI2QQuL5wXfeKPJZ++
-	 fx+NgUBZhFqrAtwGdBzPZIzAA9AuEoOGFhHnfo2R4cXaoDNAOBIhdRolOtHx9MftYcWEA
-	 NdRXdy9MI3/fsWeGdnIYJ3o5uwMHgMkgjoB6N9fxC1SpV99fJ1OrwMWOdKo07ANIjHA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792442016;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Virus-Scanned:Received:
+	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
+	 References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=ZqoytXf5ITNo48qVxQ8B8oufJFRCfKTNHeMZXX0L3jA=;
+	b=lJP+4MuWdpLrd9ktCN3RL/6EimDYY2dbeEGc4GCvCtuI+mymhT/QyN9ol0ElcakM+wbs
+	 3i5zIk7aTa1XLbZ4c8y2bwqvKnioRBRukWQxd+bdQ/ptj5EAddoPsQ1SdSdcsTp+zhRxw
+	 YL4Qyew45CQic/YsR8OVMxEqW6FmrkVwAOEWIW1qU9qCBORXH/zSfuSNNuOYfcZlJWw8R
+	 c4i9pAcRReo8UwwZlAVBIM57RQVVCzt12HbEo1ET+jUCEBADMfFj/X/b05itNixn6HRvj
+	 55YkJfd9h6p2XwTODkvD6vE6SIPwe+OoR8KmAkuFNqjjKT9JH3ZdZfwoAMW8U3Wm8gQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=ehcUHhqd;
-	arc=none smtp.remote-ip=209.85.210.53
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=acm.org;
+	spf=pass smtp.mailfrom=acm.org;
+	dkim=pass header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=Qi+fcTNn;
+	arc=none smtp.remote-ip=199.89.1.14
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A4F606A319
-	for <io-uring@vger.kernel.org>; Mon, 19 Oct 2026 19:13:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 89A4F606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5883F606A31C;
+	Mon, 19 Oct 2026 20:33:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5883F606A31C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=ehcUHhqd
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-847ac7ccd85so1071325a34.3
-        for <io-uring@vger.kernel.org>; Mon, 19 Oct 2026 12:13:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792437185; x=1793041985; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JlYuJFL698MPXVE8UPk93QJm/Q3q10vd5sQJv1hUa+M=;
-        b=ehcUHhqdv7LAsfYWK9WpM7vkkCvXaZnvosnqo7AqRtmWKd2hRMSZOu3mtYiXX9DUB6
-         P65CFuXOdhVpi0F/LS+ta328YpW80vsOPoSyTfqu6ncXmNMZV9tSS2gqfpV4arVmGhsL
-         5WamlmOYi830m0yrB++Shi5d8uG0RhafYPdWNeEz5e4E4FavY+SjM3r8DgunhCWFwPSQ
-         OiRP0GXzSIQ0LZnmya2uSeQoTWMib2scV+qCTPOkOasY4Lc7AeWiP1KizpST3UUCwTde
-         /sNkvtmmgPkdlgido/6lO7l2j+Dx6Zp9u/58DRqnbvcQIPJB8bmgAD2MJSOROa3EJbol
-         ASaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792437185; x=1793041985;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JlYuJFL698MPXVE8UPk93QJm/Q3q10vd5sQJv1hUa+M=;
-        b=T6hOdozrIvxWfEKzQLZxSytWEmShCEErA2J0xHzh5/d8VIRBS861J83/2itz82dF8O
-         neVYJNqCCc5AUJKEdUHKuVF7BLsqk/u2on6LhKMt7GK0MEfEfv2FG3yNBnXrDdBrhJdJ
-         UWvN9TuBJf9wq5PtoHhxXhhpkMrOny8kJ+iQzzj2XOdk84S2jE3VP7M+DrpHJ9oDXrPf
-         gwuLDuJIOeDXi3KYR2CZEd8TjcBVYhyXneybOzyQPQOIF1V5f0/Nrcj1y09C580N3Gxj
-         1o91PylDXzuvnOnUBgo8+WYrhbyqc8rgG9FDSNUY0ucaqHycS5rPIFji9uXpwYVFhZKg
-         Rj0A==
-X-Gm-Message-State: AFq9FYLcVgPniP3K26RpR2AFF92ZGuTkQRQhQMs+aekj+uLXkqBn4dv9
-	gvFFvSN+abyFkNtffj6UHH9Aw3mKqyb7H74OLQ+5YNtSjaj/G8lSGovxz+ywamlDBvPwKpXDmp8
-	j7GPzbeY=
-X-Gm-Gg: AYBFou397Pyqj4WVNzkOHBGb7ObgzbYfncZIL8eoC0uFXxub48yMA6TELcD3Y7trLfN
-	acVo/Qev1ETI/JM0YCqK0dBLS04T7U2n/jw5vHAYdEdJwQfhFYU8NWuRJct8NtX05rasocecjB7
-	b615uj2xmh/hYc6CF/YqpiKFoR92FGjxvvWm/vanBmw/W42qQnVe2Xh+F8S+w4Rvwy5x4IUaQ7/
-	OENbb0JzgEubjvVKmphBTLLDmpq85TULIIhvH9F4twjrSfIPxRUuyb2M5vJxqBqpNrVrKhoJAmm
-	RUTAWxM36yPpJhcCzuLM52819stEr5inK6A0wOHu/0j1r7MIyM095YhOmW4nHCf3mwyd3j1GNVx
-	3/xS8SHdAZ9PU4NirVn+aHSejT4RzRJZzfSyqn7Q/CZpmGU1XR5N4U0kTUhhxS13Jvqs7xE8usd
-	H8S6jxgpkLnkqJfuysjB3IVmMlwt673mwCzXkF/GmF4DM+Ij44Fk9/NMX0JII0AmVsC2Pv9XGsI
-	6NlsICZLoIQuBP3mCAMpB6Esag1wYHD4JQRLpWk5pa2g4DWQOg+9G5d0t3XJITSNQ==
-X-Received: by 2002:a05:6830:6738:b0:80c:d34f:5f5a with SMTP id 46e09a7af769-844fffc14b7mr6946604a34.19.1792437184957;
-        Mon, 19 Oct 2026 12:13:04 -0700 (PDT)
-Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-8462659e3f0sm6669149a34.17.2026.10.19.12.13.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Oct 2026 12:13:02 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Junyeong Lee <jylee5498@gmail.com>
-Cc: greg@kroah.com, linux-kernel@vger.kernel.org, stable@vger.kernel.org
-In-Reply-To: <20261019152100.63565-1-jylee5498@gmail.com>
-References: <20261019152100.63565-1-jylee5498@gmail.com>
-Subject: Re: [PATCH] io_uring/waitid: prevent cancel reference wrap
-Message-Id: <179243718143.3127071.15080151622998954631.b4-ty@b4>
-Date: Mon, 19 Oct 2026 13:13:01 -0600
+	dkim=pass (2048-bit key, unprotected) header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=Qi+fcTNn
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4j7nLl5dr8z1XM4Tn;
+	Mon, 19 Oct 2026 20:33:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1792442012; x=1795034013; bh=ZqoytXf5ITNo48qVxQ8B8ouf
+	JFRCfKTNHeMZXX0L3jA=; b=Qi+fcTNnDhW7cf5w9SHuU+qUyUA5byaq0TVPUT7j
+	Alt6hePI0FRosAOEIaMwMRKQY5AANGKwqXn1EX/PD33YhEzKUyktpccPl+KJq5jk
+	swQNMiyCJ5R2YDU85EX7qygQInVhOSEmOoUsDCz+J6kxN48f2jWP3hbx4/DooIEo
+	iLOIWUGcaZY4/56wp4tlR2d2S6uJBAtfP+eWT7B4QGrHlcxN7lI81+R+pab/Yq1Q
+	0JwL31thmCPfH8HxdAI0rcglFhHHhro/igB3QOcDCmtqJs7BDOr6BZyR0gUbK7Mt
+	WDiKWFS8y2FhqcRDZQakSgqaJ8uC3X6wWKH0J9ZsvOsJSQ==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 1iO_oSIpXFxk; Mon, 19 Oct 2026 20:33:32 +0000 (UTC)
+Received: from [IPV6:2a00:79e0:2ed2:d:80ed:7b96:75c0:6989] (unknown [104.135.182.41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4j7nLg5kNVz1XM4Tl;
+	Mon, 19 Oct 2026 20:33:31 +0000 (UTC)
+Message-ID: <035f0183-a748-4eaa-a6a6-a358944535fa@acm.org>
+Date: Mon, 19 Oct 2026 13:33:30 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -95,35 +70,45 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] scsi: sr: release CDDA request before copying to
+ userspace
+To: Wang Yingjie <x-professor@outlook.com>,
+ "James.Bottomley@HansenPartnership.com"
+ <James.Bottomley@HansenPartnership.com>, "mkp@kernel.org" <mkp@kernel.org>
+Cc: "yangxiuwei@kylinos.cn" <yangxiuwei@kylinos.cn>,
+ "axboe@kernel.dk" <axboe@kernel.dk>,
+ "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+ "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <cover.1792237341.git.x-professor@outlook.com>
+ <94d7bdf7391f208b74ba98988c2a52c939d689e6.1792237341.git.x-professor@outlook.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <94d7bdf7391f208b74ba98988c2a52c939d689e6.1792237341.git.x-professor@outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
 
+On 10/18/26 8:41 AM, Wang Yingjie wrote:
+> diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+> index c36c54ecd354..de43d6e56479 100644
+> --- a/drivers/scsi/sr.c
+> +++ b/drivers/scsi/sr.c
+> @@ -968,8 +968,11 @@ static int sr_read_cdda_bpc(struct cdrom_device_info *cdi, void __user *ubuf,
+>   		ret = -EIO;
+>   	}
+>   
+> +	blk_mq_free_request(rq);
+>   	if (blk_rq_unmap_user(bio))
+>   		ret = -EFAULT;
+> +	return ret;
+> +
+>   out_put_request:
+>   	blk_mq_free_request(rq);
+>   	return ret;
 
-On Tue, 20 Oct 2026 00:21:00 +0900, Junyeong Lee wrote:
-> io_waitid packs the cancellation state into bit 31 of ->refs and
-> uses bits 30:0 as a 31-bit reference counter:
-> 
->   #define IO_WAITID_CANCEL_FLAG BIT(31)
->   #define IO_WAITID_REF_MASK    GENMASK(30, 0)
-> 
-> __io_waitid_cancel() marks a request canceled, then increments the low
-> bits of ->refs to claim completion ownership. When another path owns the
-> request, the increment remains even though cancellation returns false.
-> The request remains discoverable by cancellation, so repeated failed
-> attempts can wrap the 31-bit reference field to zero. A later cancellation
-> can claim ownership and complete the request a second time.
-> 
-> [...]
+This change triggers a use-after-free because blk_mq_free_request() 
+calls bio_put(), isn't it?
 
-Applied, thanks!
-
-[1/1] io_uring/waitid: prevent cancel reference wrap
-      commit: 98787d3fa4e99564d2b2bc21255b21f670c450d0
-
-Best regards,
--- 
-Jens Axboe
-
-
-
+Bart.
