@@ -1,89 +1,75 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FD6277026;
-	Mon, 19 Oct 2026 09:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A206A4F7986
+	for <io-uring@vger.kernel.org>; Mon, 19 Oct 2026 13:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792401367; cv=none; b=d7DD6tCK0UCwXgHMQ0/dyJ0XsgzVWNHLqNzNKIlsJH0zN/B/OLGnfdWkoM/AbaK16ATuC3f0FH16sgwfMMkrllxiO9i1jDsIq7EysYg3Ijsoj70822Q5L2vhct4/rrhNjyqHh7mDXgfxk4RD72LZ83FQG06IA6QXswS2R/j2hwg=
+	t=1792417249; cv=none; b=b1aRLQ8TNIgy7zNJa1jSgkO1SqZCNnEbdVNaSPhsA6JwiFou723ej65sn+szDLe/KGmqIW2J7nrukUb82RHDeBdrSo0DOKbUrBwy8L7n5WSlKs6ArrBTEPcfX0x0iufpywEwrhlPMGIOoxkrIJEzezsZhaHx9rnVrislYd3nKFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792401367; c=relaxed/simple;
-	bh=88L7hie2tDkWe7PZYJG3j2OUPcoz6V6ev/d6mTgZGwU=;
+	s=arc-20240116; t=1792417249; c=relaxed/simple;
+	bh=hUhBVpSTJR79fZOx3XriD8gVhMiXrasOdf5lG9lo7Vc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PU6d/1Ik4vofrXalVL1SAZkOb5rh/D8JONcEjgEUMY8j7Qbs2u2hwndoNH1kaZoLgBIAG7KqYy5GNzzd8maKDsIUanCaTqEk4htfImRSqwbYQnIHCpJ/ck4Od6MrkZvpUo1bUEKfeVdPzVRTHanaYDoRC0ZjET/APPXGvw82pBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ghGHOwZ6; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=NiyW3Nok; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=yC77sQaB; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=OXbTTu5b; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	 Content-Type:Content-Disposition:In-Reply-To; b=T5nUcXhdy9Z7d57JsnsOYLd0PiXEf4wrOgiKezyCr6bAFtzDFyH6FDZGSkSziQ9xoZpg9rF16M034pJag7skpIsEI6Uv4Ob/Vv0IDjwu8K3cmjRvDdXZ6pVXY7OqgA51ljxzdQo0xudtjuBTy78aq3iJz943t+nywuKSymUlUJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E4ZMtBvY; arc=none smtp.client-ip=74.125.82.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ghGHOwZ6";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="NiyW3Nok";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="yC77sQaB";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="OXbTTu5b"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 36E7721C13;
-	Mon, 19 Oct 2026 09:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1792401364; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=ghGHOwZ6JxMIYAZ26rWhTpweaoCboTRlTL999bMVvyF0E2aZvlajC6BK/JwQUb+GP8T6vZ
-	QpYJUF6W+y1mzomrimeyLNCvmnyrxjwp7Seri96i1piyel8vRzZVgO5dZWa2mhLkRaC+hO
-	33rSbF30BBO4HAdoMOLbGOQBAaetndA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1792401364;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=NiyW3NokfsPA3E7a9inhFGaT20Sl0YlKV0Mjp7kg8WBDh3ren76IclmzfKPO6t+0UBeewT
-	Aln5ixT4mweAfjAA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=yC77sQaB;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=OXbTTu5b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1792401363; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=yC77sQaBlmmo4b7SixoP8v0ykVb8nEozZqjSpHaFK0Q0fFqDF87llv3DaPBzNzh5CWKXxE
-	8gosP/5itJsjOS62NqMDVHZ6RE8KHwU6Z6TD/DQLBDRiRDdTI6GbVTal3EcB41/okvGfzs
-	XYhpDE6XhOp3uEX3iDXLm00HlOVNL9U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1792401363;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7yu3tr/XKjY08A8K99OkNRH8Z7mvGFgqqz1CA7bGCoQ=;
-	b=OXbTTu5bfXVm5PferY6twjbDiPg/4EpFJsGB4+Iw+QGZxYgpoXGqIFOBisjJhNvUhGnAuO
-	Hh+gTeNTZwQ1Z6AQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id ECE25134B3;
-	Mon, 19 Oct 2026 09:16:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 1ML/MNLf1WrwFAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Mon, 19 Oct 2026 09:16:02 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 772FAA1413; Mon, 19 Oct 2026 11:16:02 +0200 (CEST)
-Date: Mon, 19 Oct 2026 11:16:02 +0200
-From: Jan Kara <jack@suse.cz>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, linuxppc-dev@lists.ozlabs.org, 
-	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	freedreno@lists.freedesktop.org, linux-media@vger.kernel.org, wine-devel@list.winehq.org, 
-	linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] file: simplify and harden cleanup handling
-Message-ID: <p4eitjefwpwhfouwhmvxmelxl3yncv3vjdi7wsgu7rna2zorqd@rlvbcpzcpbid>
-References: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E4ZMtBvY"
+Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-157fe9d771bso706209c88.0
+        for <io-uring@vger.kernel.org>; Mon, 19 Oct 2026 06:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792417247; x=1793022047; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cCjmpspcPpS38WYBBQYovAwzUdEJHovl54RGs3q/tTo=;
+        b=E4ZMtBvYVsg3rqDO+GlC0suXYVEkRTuT2UOqcs0w8zJy9D3W3WxzQzrIIX5Fx6anJk
+         5aSgLqZ3M7PUnkiKvdhW4LttWGyS6Fmfz1WWdhjdS9RvysAlZorGIuD+cQU7FPUqpRgr
+         rSJewsqbOe92NDN5yI6qg534d4hvUyjXWO9QJvwCeD5PecbkOF00UXNXmxmyhlSKeqe6
+         Vi5b6KZWh4UwLqKzxeZRVsp28/0D1p3yEuOizepFM9es94hU3YxfH4nV/f/yl1TcKnNt
+         8TeTjds58zE7PtgGxnpMrPNLDxbEjAV80VpWpKMKooyHg+4m4NtvkBiWumq0ONHJQVrZ
+         KMCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792417247; x=1793022047;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cCjmpspcPpS38WYBBQYovAwzUdEJHovl54RGs3q/tTo=;
+        b=bJMJ/yBf1UeJF8baNUBgDvCmm61OIlIklQihu3uYEL7SLpF+/JmA8ol3BIZB9SOjtn
+         AyfljmBtRHM1JD+EsMP+9laT8x0sE3irgZBpIHqDic+gtM61H07EWKsoThPRdDlV7U9k
+         +qkT39pBBsJ235m7p1ao7w4yM0+41TkDZqU6WSzC1aFTGpJmzPN4Uqjk/yGSoKM7y87E
+         d0LbCeuYBHB4vxryqcqg217n97BM192TQsj7XCGaFmz2+n2u9RnVdT4ZzAB2qNkfTmKv
+         L33jh5NBpOeuppHKveKNGOJgtITKdPS6OCYMBNrxaALzRQV1bgIKKeDPTSP5kR/epnkO
+         l8IQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzrKcWAV1IJ9i0vXbNxHT5fNno4QFZTq1s8wu4hzzA5IOeuI6laMKjFrCeXkznvndCnYNXhvra/uQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLH9mzGfHqymNjyIaSAnxG2kJuAT4X5Pm9IThA95fVFmxvbeGYQ
+	OIn8pKyxpZ2D34YXW2VVpjrV96vCOZzuBZaaT4ePgsZ3c+WtlB+tX1I=
+X-Gm-Gg: AYBFou39d8j+/kgsSoeyMgZfDEYNJpP4GMb0MpdX7V2e14elDay89AWQpKy/T2NUZvJ
+	qR+jsNQvbfD5FcyBp59TRAuXkvGFxo2MTOYdNN/umMT0i5MJRuWDX/MwCEauJryMsHYyPqGzyfv
+	v5iZoxu14ptQUvlSkc6jD736tu2E4Hj2Zzb9zA08eO1pW6xFbyUIBLkRwZ6r0DdoPXEk7SeQ8WO
+	O7bydI5Vgihigrdqp7iBbwuLPRNywptv9hpxwQT93E1T0zGmp/WGPvKc5OM1XnzpEbLVJWVQeJU
+	8r11f3VhoCKTx5hH2mutj49X5pIv8CP6C7iGuS3M3rDp63CvbDnUZiqsj4VGYOsAalSR1gUeJn+
+	iwupAQnJBPPJidkwWzTEsXRqafGjhntqj8Encs/JqoqqdmTdABwH3l1PaJ0J0euPWHIBsKX8EE5
+	Q0KkCRl3vHXWz4rL0AxY93V3Y03TYPZAF1+al6kOEm+24zl7ffUkOrovJ+M3CJQ6YQVbDv1uPFA
+	SDhPYa1dFiuJbCL+KcL0Jod8+tHLjXsRcL0/MZI3aMwp4dJ
+X-Received: by 2002:a05:7022:170d:b0:143:3617:c595 with SMTP id a92af1059eb24-1850c223bb9mr10480854c88.1.1792417231454;
+        Mon, 19 Oct 2026 06:40:31 -0700 (PDT)
+Received: from anuj-MacBookPro ([2406:7400:63:e55a:9f78:eb3b:17e1:f1b6])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1831ba424a6sm29078300c88.17.2026.10.19.06.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 06:40:30 -0700 (PDT)
+Date: Mon, 19 Oct 2026 19:10:22 +0530
+From: Anuj Gupta <anuj1072538@gmail.com>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: kbusch@kernel.org, hch@lst.de, sagi@grimberg.me, axboe@kernel.dk, 
+	joshi.k@samsung.com, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, 
+	io-uring@vger.kernel.org, Anuj Gupta <anuj20.g@samsung.com>
+Subject: Re: [PATCH] nvme/io_uring: enable dma-buf backed passthrough I/O
+Message-ID: <vx4ugjq6wol6elipmwkuhtpk3qnanpwou6g73dxrjona3nepd4@pvetkgijfsx5>
+References: <20261016103453.1129150-1-anuj1072538@gmail.com>
+ <79627452-98d3-4e8d-9c37-ceda0796d59c@gmail.com>
 Precedence: bulk
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -92,90 +78,115 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 36E7721C13
-X-Rspamd-Action: no action
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:email,suse.cz:dkim,suse.com:email];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
-X-Spam-Score: -4.01
+In-Reply-To: <79627452-98d3-4e8d-9c37-ceda0796d59c@gmail.com>
 
-On Thu 17-09-26 11:09:41, Christian Brauner wrote:
-> The cleanup guards rely on unnecessary infrastructure and make the code
-> more complicated to follow than it needs to be. Clean it up. Also shrink
-> the struct a bit and get rid of the unnecessary error variable. We can
-> just make this more ergonomic by using fdf->fd directly. Also expose the
-> struct itself as const and hide the actual underlying local variable
-> behind a UNIQUE_ID() named variable so we avoid risking shadow variables
-> and polluting callsites. Code generation wise the outcome is exactly the
-> same but simpler.
+On Sun, Oct 18, 2026 at 11:06:16PM +0100, Pavel Begunkov wrote:
+> On 10/16/26 11:34, Anuj Gupta wrote:
+> > From: Anuj Gupta <anuj20.g@samsung.com>
+> > diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+> > index 3aa5d2f2dfbb..6343da1f6c05 100644
+> > --- a/drivers/nvme/host/ioctl.c
+> > +++ b/drivers/nvme/host/ioctl.c
+> > @@ -458,6 +458,7 @@ static enum rq_end_io_ret nvme_uring_cmd_end_io(struct request *req,
+> >   			status = blk_status_to_errno(err);
+> >   	}
+> >   	io_uring_cmd_set_res32(ioucmd, status, result);
+> > +	io_uring_cmd_detach_dmabuf(ioucmd);
 > 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+> It's not great spilling the responsibility for [de,a]ttaching
+> between nvme and uring_cmd code. Is there a way to stash it
+> all under io_uring?
 
-I know I'm really late but FWIW this looks really great! I know this is in
-PR to Linus so feel free to ignore:
+The natural place would be __io_uring_cmd_done(), but that runs from
+task_work, while the ref has to be dropped at hardware completion, like
+io_complete_rw() does.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Hooking io_uring_cmd_do_in_task_lazy() would avoid changing the NVMe
+call site, but would add a non-obvious side effect to a generic
+task_work helper. How about a separate helper that drivers call from
+end_io instead? This keeps the dma-buf handling in io_uring while NVMe
+only reports that it has finished accessing the data.
 
-;)
-								Honza
+Something like this on top of this patch:
 
-> ---
-> Christian Brauner (4):
->       file: simplify FD_PREPARE()
->       file: declare the FD_PREPARE() variable with __cleanup() directly
->       cleanup: remove CLASS_INIT()
->       file: make struct fd_prepare const and kill its err field
-> 
->  arch/powerpc/platforms/cell/spufs/inode.c |  12 +--
->  drivers/gpio/gpiolib-cdev.c               |  18 ++---
->  drivers/gpu/drm/msm/msm_perfcntr.c        |   4 +-
->  drivers/media/mc/mc-request.c             |   8 +-
->  drivers/misc/ntsync.c                     |   6 +-
->  fs/eventfd.c                              |   4 +-
->  fs/eventpoll.c                            |   6 +-
->  fs/file.c                                 |   8 +-
->  fs/namespace.c                            |  12 +--
->  fs/nsfs.c                                 |   4 +-
->  fs/xfs/xfs_handle.c                       |   6 +-
->  include/linux/cleanup.h                   |   7 --
->  include/linux/file.h                      | 130 +++++++++++-------------------
->  io_uring/mock_file.c                      |   8 +-
->  kernel/bpf/bpf_iter.c                     |   6 +-
->  kernel/bpf/token.c                        |   6 +-
->  mm/userfaultfd.c                          |   6 +-
->  net/core/scm.c                            |   8 +-
->  net/handshake/netlink.c                   |   8 +-
->  net/kcm/kcmsock.c                         |   6 +-
->  20 files changed, 117 insertions(+), 156 deletions(-)
-> ---
-> base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
-> change-id: 20260917-work-file-fd_prepare-ea5966d68a95
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index 6343da1f6c05..6a7d1cc7b716 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -458,7 +458,6 @@ static enum rq_end_io_ret nvme_uring_cmd_end_io(struct request *req,
+ 			status = blk_status_to_errno(err);
+ 	}
+ 	io_uring_cmd_set_res32(ioucmd, status, result);
+-	io_uring_cmd_detach_dmabuf(ioucmd);
+ 
+ 	/*
+ 	 * For IOPOLL, check if this completion is happening in the context
+@@ -473,7 +472,7 @@ static enum rq_end_io_ret nvme_uring_cmd_end_io(struct request *req,
+ 			blk_rq_unmap_user(pdu->bio);
+ 		__io_uring_cmd_done(ioucmd, 0);
+ 	} else {
+-		io_uring_cmd_do_in_task_lazy(ioucmd, nvme_uring_task_cb);
++		io_uring_cmd_hw_done(ioucmd, nvme_uring_task_cb);
+ 	}
+ 	return RQ_END_IO_FREE;
+ }
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index 33e0ebeea5a0..0a89f5faf88c 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -70,7 +70,8 @@ int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 				  size_t uvec_segs,
+ 				  int ddir, struct iov_iter *iter,
+ 				  unsigned issue_flags);
+-void io_uring_cmd_detach_dmabuf(struct io_uring_cmd *ioucmd);
++void io_uring_cmd_hw_done(struct io_uring_cmd *ioucmd,
++			  io_req_tw_func_t task_work_cb);
+ 
+ /*
+  * Completes the request, i.e. posts an io_uring CQE and deallocates @ioucmd
+@@ -138,7 +139,8 @@ static inline int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 	return -EOPNOTSUPP;
+ }
+ 
+-static inline void io_uring_cmd_detach_dmabuf(struct io_uring_cmd *ioucmd)
++static inline void io_uring_cmd_hw_done(struct io_uring_cmd *ioucmd,
++					io_req_tw_func_t task_work_cb)
+ {
+ }
+ 
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 0e0509edec6f..11a8ed1ba03a 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -50,12 +50,6 @@ void io_uring_cmd_cleanup(struct io_kiocb *req)
+ 	io_req_uring_cleanup(req, 0);
+ }
+ 
+-void io_uring_cmd_detach_dmabuf(struct io_uring_cmd *ioucmd)
+-{
+-	io_detach_dmabuf_map(cmd_to_io_kiocb(ioucmd));
+-}
+-EXPORT_SYMBOL_GPL(io_uring_cmd_detach_dmabuf);
+-
+ bool io_uring_try_cancel_uring_cmd(struct io_ring_ctx *ctx,
+ 				   struct io_uring_task *tctx)
+ {
+@@ -146,6 +140,18 @@ void __io_uring_cmd_do_in_task(struct io_uring_cmd *ioucmd,
+ }
+ EXPORT_SYMBOL_GPL(__io_uring_cmd_do_in_task);
+ 
++/*
++ * Queue completion in task context after dropping references that must be
++ * released at hardware completion rather than from task_work.
++ */
++void io_uring_cmd_hw_done(struct io_uring_cmd *ioucmd,
++			  io_req_tw_func_t task_work_cb)
++{
++	io_detach_dmabuf_map(cmd_to_io_kiocb(ioucmd));
++	__io_uring_cmd_do_in_task(ioucmd, task_work_cb, IOU_F_TWQ_LAZY_WAKE);
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_hw_done);
++
+ /*
+  * Called by consumers of io_uring_cmd, if they originally returned
+  * -EIOCBQUEUED upon receiving the command.
