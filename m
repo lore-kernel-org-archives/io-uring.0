@@ -1,87 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792457675;
-	b=yjLZ7EI8BUEOCoEpG0WnqzvSVhzUoBmxxS4NFoFEqmoeCrq8yqsCdfKuF1YHv0JTDqsR
-	 fpddMqlOUHTX3EsyEjo1pnH2pwchEQ+Fiz5wVck7LC2CWHoVg0H88logb6VqNDAxWfALM
-	 v3FxiYzyMexLOX61nNVYlI7WBgYFRj0YV5VksP9xc8v71f18eEpO6ckfiYmmEAQvk3pmK
-	 1K+G1D4t67fG0CrHvTUpshR/rEpDolM+bSGgOc4rVxBjsS6Xh6t/iph90A+SQFPFGH/5n
-	 lXZLAcG/+Jkyc1spIbPyPfxI0a3yWK6REBWwEQtsZyVMSANGimo/qU3ZaE+FiFubwYA==
+	t=1792464425;
+	b=C4H/GGE8IeF/mbxM/sxvVuwotDmtbknXP+5wvpjaW8pM8hagjaF0X8Dc69V4qfcFlkRG
+	 sT+IHE1quwa75/aWkmvx1R29wncVDVj7qC75XvobURvcUvRzo968qSSXaIBNi1CSJB4rP
+	 BHh6mIiY0PKjCYR9bodLJ8sEjShCSjfZk4ZV87Tgygt2NFAyJDfh6cjX83/h5OOXDO/o1
+	 nOSi/XvehL00MsCjmkSpPqNdQyimD8BIrhdGScoO2cpNtxVATQ9R0mrk9eT3/9sudlN1S
+	 0MbyW6UWCIYs6kvxhGNy/up0ibxKOQXUNDV+Ir/kVu/HmM2woDHR6IAbse1pg8UZBaw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792457675;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792464425;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=QZ7Pz6/D14wpEk1Ddz2f2Hy8tiok/YGXHe6Nz544rD4=;
-	b=ASCBnAuCi97qiIyihgC5dPLGjLfednyS3mXp1bbnxWgU6MpI02fXHbsvMTv8hCjS0YrS
-	 3qGfX+IwadZWVIe6h8v5BHOw+KJYlL0naVSoe1ddtzSSBfom/PoLQOqFEqrRxSSTNP6di
-	 jE9yribw6Djegbi75Ayy5T5Dy+x/TOK34hD0fQ9JjHt9l2BvvIPwPewjU3mlJ+JlvmXii
-	 d+mRA2ZJ2nqOvDFivIQQEFdA4DybOm6r3vx+cl6XPQbQc7UiLdEEFhb8RWuikwLSw5Msn
-	 SDzMZ3AtfoHLSBSYExNU2bNX54dBy+qP0CbTJ+7lqFUZXI7BHYIqq6jO/t2F+CgCkYQ==
+	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To;
+	bh=huBS00dBdE2TLgMpn1rL7Ix8kCPl76AlMErCkEyg/DU=;
+	b=kF80s2GuS72Reh+2c14IN5L1w8pFC3D0XueD0g31x/0gsQxt/RZNjielU4kO0qRKHQJg
+	 8KhYDipBSgnM6nXLKl9sJm07g5i07DVE9TGOIc52Uug6x+RO+zSpinvv4uoRreSGuVXyi
+	 col14uhurCgZ+J2WNgzSW9Qvrc6lB+PNk0Xj5MiC5EWc6skjouA2hQm7cT44XInsXVp8K
+	 x2P4TFPP9EZZLf9xfZ6YxJRBQgx9bXEStJFRGl//UQvXCRKi6elKbKzpAZAPPTMgFt3i1
+	 vxdWuMxzOP29wDnagRlWaQKZ5FF7e4HxDNJtf+jdK0zdrlWwI6KvEZ/sEq3gIB0Lz4A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=PkMfJZUO;
-	arc=none smtp.remote-ip=209.85.161.53
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	dmarc=pass header.from=suse.com;
+	spf=pass smtp.mailfrom=suse.com;
+	dkim=pass header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b="AzfGC/0e";
+	arc=none smtp.remote-ip=209.85.128.54
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0217606A31A
-	for <io-uring@vger.kernel.org>; Tue, 20 Oct 2026 00:54:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0217606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E21F606A322
+	for <io-uring@vger.kernel.org>; Tue, 20 Oct 2026 02:46:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0E21F606A322
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=PkMfJZUO
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6df0b02fe91so135083eaf.0
-        for <io-uring@vger.kernel.org>; Mon, 19 Oct 2026 17:54:28 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=suse.com header.i=@suse.com header.a=rsa-sha256 header.s=google header.b=AzfGC/0e
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4a01933b584so19278165e9.0
+        for <io-uring@vger.kernel.org>; Mon, 19 Oct 2026 19:46:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792457668; x=1793062468; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QZ7Pz6/D14wpEk1Ddz2f2Hy8tiok/YGXHe6Nz544rD4=;
-        b=PkMfJZUOFRCxLcMlRL0ZVTWuCLtlBoNPC9FNtc1Iavq5b3XBGwzw0hQlrucBM3w2R/
-         MpDcL55XZEkJEsaqs+VKX/LQR+rB6ZPywqquFh4wB0qBym+bFZz+PBkbdQBrix8u4DIx
-         xoJX5gtSj7Dn1FNRMpgA/JAY5NUFwsyxd6SvQ3NgyZ8UkY2McGVv3AsJbwCi84oHPO9j
-         Z1Mw6ndyCbMtuXYXqpOy6lLKjDxhfEHZvstkZGPW+uvx8+iVwYeohIYPK0dFnfGIDrsZ
-         x+t9LyaivIOuH/MY3cJP+vWcY5QMAMYCSIeJaPZu8NE6O3FAy2cKenK1W6zBoIAdtf4w
-         7ghw==
+        d=suse.com; s=google; t=1792464417; x=1793069217; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=huBS00dBdE2TLgMpn1rL7Ix8kCPl76AlMErCkEyg/DU=;
+        b=AzfGC/0e2RFbadfbmzaXeM8fbz+ptSile2LRdISaYkRDYe+P/tbKRckYlvJCPTY6aW
+         fz8eUQHg/qF0PJraIP84QK1h4syJsgD2PFKyNF48TfHh7eQ1VgagOldU4ikhAQAomIEK
+         K7Za67ZiCLV5201C2RR2LS2ISlxCTy5wGXnYeuxlfxogpymqkj33UX0fEXEIjlyZJO0O
+         JbTqfnuXSHfD4lwAbROfOlEbCYZ7DGYDncripNIznUyJkzkGv04FDUxp6o1M3pwk5GFO
+         hjOKBBX8dG1008eW+FVDgeyuxP/EE8qhAG5lkkKI33Vq0scYFeUIUJmUA0wp/i9pdgN/
+         w9eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792457668; x=1793062468;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QZ7Pz6/D14wpEk1Ddz2f2Hy8tiok/YGXHe6Nz544rD4=;
-        b=emiZJljHft5Ms2LkaV7r6iOad2KTaTFPOr+4yvQGM+QFBUu2Ue3ymXcsd3Edyb9e7/
-         xen9XDQkDESecviZmPOKvH8Gnm1LpfS/DRkpnyQZZq+tDVeU25bAa0SyQ/kuR9/ZjBvt
-         Y8cB3GuvxUu2NPPE2LXXzDoaK63H2zHSvrRfRc7mJmb2ARj2VfTEz4iPU5+tB46EdheT
-         12VytmzLmM1eoHYkLZ/DhO4j98iCushoaLeqICF+Uxfp19e/sAP2IH9kOLNgKKC8fY/F
-         Y5YPnENFkcOdv+yAH58CDjYK2L/Ny4w2BrzaIDbNVIAWwWq+I1d+ttYrvMHsoPn9FnpM
-         cPYg==
-X-Forwarded-Encrypted: i=1; AKwUvByGqmUzpzmE3z2/xoH39cbQV6ynflbhyU7jSgiRdJ5yOdloYOafooCW1sS5s8UVNjWNYa/V0t3DRg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLcMXhjG23qvLqTSqt4ZZFMi8tmvC3b31mRD4RLt5UGRsHBRT4e
-	0mGrtZS0flBW0o9JwHCw4NWrZGyL4vuSmO5m/lh5V20wHuMCYjgJ4jKDJxGjPayFUc4=
-X-Gm-Gg: AYBFou1WZ+wcHzc1+rHnOYqmHcGnhH4LFZoVqBG4xI4amwKOp8Cxi9wbcSmKMjYnKNc
-	jOEo93t2RY9GvxZRukkoS2XoEgrDHH7/vBUad4rktPUAHJul5S0WEH5xeFqrZxlSNujeV/oaZ+D
-	k5N0sbecaIBGrdGUYXNLa24e1+eS/LY1paG/S5oPnuy1wkmuChi8txIW2TKfGD3h7GjW/1fTUln
-	gy6PAGghfHvyLhHLmC62wzo37qkDk04jgoC07jZRig/O/KZgAD0Hz4q2G7jVUmz3SfYMQcBd27D
-	/4TedxbrcSL1Pfz1Vlq6JqCvCs4ksFpFo+i6HgBgVIUTWsSx+IZrA88vz8LKUt9fnzwjnhegwbc
-	Kudl36C6xer/UCoX9zHKmc+wwAWOZ5glG2CzSGxZnDNIgXo7TdfZowTshbWskWZLXd9GgpBXmD+
-	idN6PpLcJVXwxNWENmoA+QIOt1ISHtP//zsvDPPOabk+XWm2D7ENH7RP5bEcdo7xuoFwPO73IgZ
-	dO3FGE4zd3H+lKo84tarmQuKqMhKSF4xN/NqMS0oKPBl+8oj2Wu0FGfAQ==
-X-Received: by 2002:a05:6820:2224:b0:6f8:2e98:cfd7 with SMTP id 006d021491bc7-707b9615335mr482415eaf.9.1792457667825;
-        Mon, 19 Oct 2026 17:54:27 -0700 (PDT)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-842a4a00f0asm9634317a34.5.2026.10.19.17.54.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Oct 2026 17:54:27 -0700 (PDT)
-Message-ID: <6bc4e237-353b-462f-b388-3844821dd67f@kernel.dk>
-Date: Mon, 19 Oct 2026 18:54:25 -0600
+        d=1e100.net; s=20260707; t=1792464417; x=1793069217;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=huBS00dBdE2TLgMpn1rL7Ix8kCPl76AlMErCkEyg/DU=;
+        b=qDK1gofvhjl82QVRWSdTgD+ma1x3aYkGIMcNiY74Q9h4TLl1YRipZNM6B2I/YT7j70
+         T8TJaWcVVNTOGpDuMo+R0u111xM6eJtC1FpsmmCZM4AnKAlJeN4fesPRrk9sZE9fJ2k1
+         LqPLQ7vEWnARMrffx6Z45fn47nGaQ/kY36YX0VYZV+GpeoUxiJFZ9EwF64PexnhMOgGi
+         eOfIttCeeqKdmpHMvK26THWfGEapqEJ8PvUPY79XNwqOVL7R3pwo5fl9z6wqDUuKXFJ0
+         xdYWNQQZtOtMzJLxpxGG+xRN68b28SqgHYO/hwdND8UcHUIjkZ3Jt71Bhz4v7Jqu8zu/
+         ZT7Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwRNeZloPul7LP0A5cWE1ZFtsnXgJXoQ9Je+9c9z/9J3BWWlMURuNt2qsfCQVOfaiZzi6Ovsy8vow==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLWTzgSxyiGkpGZurUIYybNKTY/XeRrAnWErwl29tXLDNijAoTI
+	+Q8kmzcvmVDW4NM9SvpckkySo+Bv31iH5wNCWOui/XOITEC5B/tK5SIjhxpio0293Q==
+X-Gm-Gg: AYBFou0NNIFD6Mkc3yBvtdsCteq8LH4PtloKAfv+L5nLE1qQaY23QS+96V8kJiJ8p3+
+	LVt4/2TAuo05NhGmSEvht50nGcle6qe+THHoYq90MYD5es4xxPpBQh0ewEWtxTDYaG8TUL0iTyL
+	A9Jz1nQpvEgdipVlHr6ZDbnfLnFar8No3tAs1AYEB92G8QisRnY7t9XmWKF6yxFTB6e6LYN6tfd
+	d4cp7vxLea4ShsQgSxZ8nUyZOk40YsCUt0vBpRwoCKx5Qqs/5Df4KKfKjCn2GH7iKWCjUS95Njx
+	JssQ2PA0ISf1sxo9UizRLwDnSgUuhn7VCBUsBBwgCOjsdCyRchY01fd7YjyaUwX2rWX9g5Z2hO3
+	cBV2xQGEhJi3cvC/RW3HJdhkI8JHgzr6yhaeyBkjRoPZnR56bxjC/BlpZa1sxsD4+m8yW1zYTJY
+	HkIS2Q31udEpOsXxDN41eo9zBjgYsKKIs1pI7FLC8+fyIuxF9CjnUFGNP4k/hKsrwkVfZG510GR
+	K6a5RmLn98Bk07NBU9wXoUvk+7oMDDI/JRmUAr2OpRs5mAs2DfSLIW+6ufAQgKhuFvmW5SE
+X-Received: by 2002:a05:600c:4e45:b0:4a1:e11f:b2d5 with SMTP id 5b1f17b1804b1-4a1e11fc187mr137769875e9.2.1792464417460;
+        Mon, 19 Oct 2026 19:46:57 -0700 (PDT)
+Received: from autotest-wegao.qe.prg2.suse.org ([2a07:de40:b240:0:2ad6:ed42:2ad6:ed42])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1f37f7fc3sm20894195e9.2.2026.10.19.19.46.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Oct 2026 19:46:57 -0700 (PDT)
+Date: Tue, 20 Oct 2026 02:46:55 +0000
+From: Wei Gao <wegao@suse.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] io_uring: clear IO_RING_F_DRAIN_ACTIVE on drain
+ completion flush
+Message-ID: <atbWH7hdrvLQJhOl@autotest-wegao.qe.prg2.suse.org>
+References: <20261018070154.16944-1-wegao@suse.com>
+ <ae73d8b4-c2b9-4a9c-adca-8c995ac92975@kernel.dk>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -91,71 +97,60 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring/futex: return a wait's data to the cache when it
- fails to arm
-To: Austin Schuh <austin.linux@gmail.com>
-Cc: peterz@infradead.org, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20261019231243.802569-1-austin.linux@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20261019231243.802569-1-austin.linux@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ae73d8b4-c2b9-4a9c-adca-8c995ac92975@kernel.dk>
 
-On 10/19/26 5:12 PM, Austin Schuh wrote:
-> io_futex_wait() takes its io_futex_data from ctx->futex_cache, and a
-> completed wait gives it back in io_futex_complete().  A wait that fails
-> to arm kfree()s it instead.
+On Mon, Oct 19, 2026 at 02:50:16PM -0600, Jens Axboe wrote:
+> On 10/18/26 1:01 AM, Wei Gao wrote:
+> > Fix:
+> > Make io_queue_deferred() return a bool indicating whether any drain
+> > request was active or deferred. In __io_submit_flush_completions(), track
+> > whether any completing request had REQ_F_IO_DRAIN. Clear
+> > IO_RING_F_DRAIN_ACTIVE only when a drained request has completed
+> > (has_drain), no drain was active or deferred (!drain_dispatched), and
+> > ctx->defer_list is empty. This prevents premature clearance if an
+> > unrelated completion flushes while a drain request is still executing
+> > in io-wq.
 > 
-> The usual failure is -EAGAIN from futex_wait_setup(): the futex word no
-> longer holds the expected value.  That is routine for a waiter that
-> re-arms with the value it last read, since the word changes whenever
-> there is something to wake for.  Each such failure takes an object out
-> of the cache for good, so the cache drains and from then on waits
-> allocate.
+> Didn't quite feel right to me, below is with some LLM assistance
+> to try and get to the bottom of it.
 > 
-> The cache exists so that arming a wait doesn't have to go to the slab
-> allocator, and that matters most to the waiters that re-arm the most:
-> event loops, often real-time ones.  A kmalloc() or kfree() that misses
-> the per-CPU slab takes the node's list_lock, shared with every other
-> user of that kmalloc size on the system, and may go on to the page
-> allocator.
+> Thanks for digging into this. I don't think it's just a race with a
+> slow io-wq free, though. DRAIN_ACTIVE is still set when the next request gets initialized, so it's forced async and goes through the defer list
+> every time, even if the drain request is freed in time.een read.
 > 
-> On PREEMPT_RT list_lock is a sleeping lock.  A real-time task that
-> finds it held waits for the holder, which may be any task on any CPU,
-> to get to run and release it.  Priority inheritance boosts the holder
-> only up to the waiter's priority, so the waiter still sits behind
-> whatever outranks that on the holder's CPU, such as threaded interrupt
-> handlers.  Re-arming a futex wait should not depend on any of that.
+> Basing the clear off any REQ_F_IO_DRAIN request in the flush is not
+> enough:
 > 
-> Put the data back in the cache on that path too, while the submit lock
-> still protects it.
+> - A drain request marked REQ_F_REISSUE counts as has_drain, but
+>   io_free_batch_list() punts it back to io-wq in that same flush. With
+>   an empty defer list, we clear DRAIN_ACTIVE while the drain is still
+>   pending.
 > 
-> In an event loop re-arming one IORING_OP_FUTEX_WAIT per message under
-> load, 0.39 arms per message failed with -EAGAIN, and io_futex_wait() did
-> 0.39 kmalloc()s and kfree()s per message.  With this change, 100,000
-> waits that all fail with -EAGAIN do one kmalloc() in total.
+> - A second IOSQE_IO_DRAIN request that fails init after io_init_drain()
+>   has run gets completed via io_req_defer_failed() right away. If that
+>   happens while an earlier drain is still running in io-wq, we end the
+>   drain, and the next request is issued before the earlier drain
+>   completes.
+> 
+> It also only works if the drain request completes through the flush.
+> Without DEFER_TASKRUN, io-wq posts the CQE directly from
+> io_req_complete_post(), so the application can see the CQE and submit
+> before anything clears the flag.
+> 
+> A drain request dispatched from the defer list always runs alone, so
+> we can just remember which one it is and end the drain when its CQE is
+> flushed, and have io-wq complete drain requests via task_work so that
+> happens under ->uring_lock. Something like the below. Can you give it
+> a spin with your reproducer?
+Thanks a lot for the thorough explanation and pointing out the edge cases.
+Your proposed fix works as expected. I ran 10,000 iterations of test with 
+your patch applied, and all tests passed without hitting the timeout.
 
-Patches like this have been posted before, and my question is
-always "is this a common case?"? Reading this:
-
-> Notes:
->     Based on for-7.4/io_uring (5b01d5955ac2).  Built for arm64 with
->     PREEMPT_RT, W=1, no new warnings.  The numbers are from an equivalent
->     change on 6.18.39-rt on a Jetson Orin Nano, counting kmem:kmalloc/kfree
->     by call site with bpftrace while a test loops on IORING_OP_FUTEX_WAIT
->     with a value the futex word doesn't hold.  Happy to turn that into
->     a liburing test if it's useful.
-
-makes me very much think "nope, not at all", as it's a deliberately
-failing test case. And yes if you keep issuing failing waits,
-then it'll drain the cache. The cache is for the hot FAST path,
-which is not an error path.
-
-Hmm?
-
--- 
-Jens Axboe
-
+Feel free to add:
+Tested-by: Wei Gao wegao@suse.com
+> 
+> 
+> -- 
+> Jens Axboe
