@@ -1,101 +1,57 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.172
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792474189;
-	b=eqF6Ayc/Yk5682D7X3ONyWNAy/ftEwY2u81BtCdSjrAcjVYJOqLi/LvsF9ya4yYjM9Ed
-	 pdC1oVjCzrHaBqIWp7epeZ0xragDmas/fH37TVxftrdg9quKRZHclZ+Xe+bKGnTYvJjzR
-	 0/VT8hRWfRQt6/JxSkSazQEEV5Olmei7xRUWe1WCo/5T18WepSeRTdXtnFn3LqJm1D2Em
-	 hvcJgswjxUklfKD9srPTMOZNNaiHiPrnqCmFtl/ofc0sCHLfg3HOcVCoJwRWpz1OUvfEk
-	 XGHrcjQ6SCYrdW0QlyJWCFiZgrlvtpvYNIRCHLqW2mnrG2QeXG6OtIaNmpSYRLmAU+Q==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792474189;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
-	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=tHAjKdka0IAEGQfm3qc8oW1fRsGpvdXl9O5QyjZFVAg=;
-	b=tdcqL8bGs6jAvm25H2G2Ku+T1SgmtgIhtAUDPrfwMaqUYJvYOrJLrEoaLayth2hUFQRc
-	 GWbppWFsdIPc62zC8baXj5tcR05lZzapAReapE9B2lB7b5DM4brNbb4BQ+Dz9mQUwQUqZ
-	 fx5dnbFNjNcA2EmnNQMjyv9s2qVR8E55UFR41eMIOQzTGmMedZTBLFTscruG+JkxrHnAx
-	 qYq+5TgrE057peyHG17u5u4BxlsXF91RZ5gB1xsp7weCoqFQNd1EuX7ApNXXIyliwWU5E
-	 g9PN3gdbHA8WEuFRNws5sHXk5VQUQJ05yYoDc7eOv54csUv8EeH1XXJ3PTlJE1N2opw==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=n5+kTXHa;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.222.172
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=115.124.30.97
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792478714;
+	b=HwgcKC7hbmAhDu0hawv1jnECfv1T2uTH4+D/kQXZbK5FMcvkP9Lb26Tnc1t8EtzoZ+s8
+	 dj35Mar+DMw7/S9EHyYVOOOgPzapo/CHVHfr6Xw0RYALWf9qH48+xtPng7JkPqI4pmH+y
+	 lKQbmSyh3xNMj/tHpmeyjnjBxqRhpyzg5vwonvu7YEVpz3OBYYx68JM40PpEQuUkCh7xL
+	 Z996xyy//Orr0X0UN+0f9/WiQlLgz069y10hJm31r45XhM3XV8yWSWLwo4Z/2m3EKGiaC
+	 m3KMIxOUwW1zYDA+6iC6qmbFTe3q2pKcOPeGdt1/bu6g0/GYpHSWeerAIOuOCtaXG0A==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792478714;
+	h=DMARC-Filter:DKIM-Signature:X-Alimail-AntiSpam:Received:From:To:Cc:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=+UdPCHMg1FScbhxVPW4mzgiUXb1gccMlfPmwASjRzO8=;
+	b=RDawTpgSQqnkbLp7BCLLTnaoknWwKRfcHkP9Fak6XhQwl9xsmBN0B6sMlYIeTz0iI7u5
+	 8fXco5vPjpI0iKt8L79NZXrriq4ZybIQCIas3kfYtVfvKrgMAWepMxIiTecX8LdSYU0sY
+	 e7QgqG5xKXVdQMDVMIFU3McnFfY6T1EYnpWJcOFLqYz8qoYrN3/s5x52486eMjeMVmq5u
+	 ULPNSeN+NCMKCx7Aql+3CC8PSXr0oTO99uyimOG9ldBVofvVqudw5ypoll3ybtF7kZleF
+	 ltwfiY7Khz4ehvt4vBNYUzM3szA8iw+O2UHvpDLsuJAanrDsWehGovdoC4LLfNLy9Fw==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=linux.alibaba.com;
+	spf=pass smtp.mailfrom=linux.alibaba.com;
+	dkim=pass header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=mTMGPEP8;
+	arc=none smtp.remote-ip=115.124.30.97
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6F50606A31A
-	for <io-uring@vger.kernel.org>; Tue, 20 Oct 2026 05:29:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A6F50606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8568606A320;
+	Tue, 20 Oct 2026 06:45:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D8568606A320
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=n5+kTXHa
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-93f2b8cf037so225270085a.1
-        for <io-uring@vger.kernel.org>; Mon, 19 Oct 2026 22:29:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792474187; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SSDsnOGoibYzPVuFz4vFO5RbksH4qBzZ+fG3umgRtu8JrOmJmUTJK/ttRRNyeacdit
-         ntEHHXvAFxlFoEhPBSbWO8ctjMewV61eJ7r7FFTcw1530+IdUZ2yN+PadmijwGoAJLga
-         El7hnCvkPpxpYnLvgA2Thd6gruN8btDIy9PpY0iWVINDXSTTJgkiONNGGCDSZr1PKFuW
-         3X1yhR7UvGpYkNeKKd3P/p6KZgWLZWKNO8qBs9uXz/T4cD6y4rmcosPXSoBdWJKKa5+j
-         O+oDjXtFBdXOA+9hSjDgzoP/rWc1sWERzo3oFMuPeE58NbV4xnLAmtFpeh7XGKDQsIBw
-         Yyag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tHAjKdka0IAEGQfm3qc8oW1fRsGpvdXl9O5QyjZFVAg=;
-        fh=xR+Mpav1xwMgEy/Zm0HxIzOCcFAJ8/1kM0WiEBEbMBc=;
-        b=Cu87iKNVpDAXgyrRT6Z75Rhf16OaO3qTDFKdep3AV5nmb+qWfJQvMmfqwYnHREQdZc
-         oWXYC52o7KAj2wlo1YdZdVjiFcsuVvZlDnwAs2dkF3fTYB62Zge4dCwcuBSdhs2BlluX
-         0sQnvMwgvjTYP19QyQ168soyRf2fTJ3ONOXvFAqlI/IMddhfUyXzUJ7EI0iBQnxgWD17
-         MphHBlseQRr6G9qBW0Hd+w2tuPB53q0e4IGRDgbjO5AAXXV07+ZRJAJSDyhSDeWD/Zjo
-         jTjocVFKFpYYtexM7gVQG79DhFB16sCpWqApZPTYkgjqx+jfxNkmQLM3BtRFEGzCeBQN
-         PHng==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792474187; x=1793078987; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=tHAjKdka0IAEGQfm3qc8oW1fRsGpvdXl9O5QyjZFVAg=;
-        b=n5+kTXHasuicYviffMU8HhNzFbnSLJolY/w0BEX+uxjFA8ePrLtwQdWpizr6WVFfi8
-         LrAUqDxcEqbkqllSHdwLmdrsIeN/YqHqeQL/dT5rcO5lHroYB9rjLnqdKteK8FM4Nw4J
-         jtWtLrcNEHHhk+PZhLmWUhYLScXdnxAFoTVhBriwUkd8XBLMGdRHmSwBOAZ6GY2XXQbb
-         vMuRoidzoU/Gd0jpucqoqETdJBcoRxdgiq75jbheoXtWZCAEOfmSaIiHvYzWJ0NflAvW
-         CNcY3w3Xafer+Cp4BkAZxjqAs+pA74VpWOCc6zbmG72CMDCgzpfc86I++Wk7JoIoEg5e
-         hvIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792474187; x=1793078987;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=tHAjKdka0IAEGQfm3qc8oW1fRsGpvdXl9O5QyjZFVAg=;
-        b=YEncqUf/TU/zdC/HgQqncGE/R+ediyz3v33dxXoi8DgvXMHgXw5Ghdh/yJv09Vw59V
-         aVNwbZnHKhrYbSkTyripNmGVRe0oB4IITNw1Oz48QuJvB/lasJqCLIaD9mm/lpDkIoz9
-         /FYxfyzA6b2YMEps76uxuE/bAZl8yT9U/w4WhHSXJFlizB1hCzDHrOJAGkUGY8CGVCSv
-         6SMG68FqUkr+YXaYo7gwKBYMBHqyXpoWHMjhtXOy+AZBJRTuMeqEmml1G7fqM9yUDj7K
-         17IEkCuATBeAb9iRGqqcrDjG4tq2Hi+MP4E/RWT0ghSdaUIJC2fGp6dJPDd0Zt5j3m0c
-         30Ig==
-X-Forwarded-Encrypted: i=1; AKwUvBz1FXtFfZKF7S3aVEp3u43M6B1SWUJyMlZpBMkTYzjSB+EBJQOz0j3ppolB+BJlfB0RKL1KqR5Vuw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLCoYcFD8zBAzmMkYC8bEMrocjpeZBbT8RIGg2vUJZV1KlWKhlM
-	a3jmKYvXM+bXaUPWPfs1YKRMFRcU/qV6K1utshn/BHq5mGG+RBQGQKUDorgj+R7+Yxqi9U55/Wv
-	YkNYz3ari7mYOPC3F2k7vuo/Gm6c8ZzvWVV0P
-X-Gm-Gg: AYBFou0YzrRh0yJGllKFXuFr28S3Th7RV/pHkyQ9q4fdr3BV9nHXPIn2bgJL2H6JEzz
-	ycuGQ1XzC1BI2LCJK44TKbpQuQcZmXg5i+GVdZaiMxZJj+W4LqmgLxoxCE3SttIsXOFsWXmMyOy
-	gNREXZ0WQ7tzzW+ajhAiBOKa4hXgSqYSIYyzAMOSqYwsH9aMRxjXFatIftrk13tayUYkaWl9285
-	DteeLLVbASrPLxsmRW/RdkIXqX4nD7NWf8DpAlrHSZQCaQk48FMHd53SQIJBIqiL2UBeZqIGReO
-	1FAchyebisEc+G1QmzU7ZUib8T3KjNM8tA9fmmi+SfteRQB+/a8a7cPqXQ81+tcE5r6A6mlSznl
-	xhCyS1z9JUBEixuC6ScTJCHWeA4CS0mpB8HJAJjh2+VHmhdp1AxLUWuSCT6BI/Z7xd+IzUkK3ox
-	BljmTECKGLfeM=
-X-Received: by 2002:a05:620a:3950:b0:93f:2463:f78f with SMTP id
- af79cd13be357-93f29d81cb5mr1631822685a.62.1792474187518; Mon, 19 Oct 2026
- 22:29:47 -0700 (PDT)
+	dkim=pass (1024-bit key, unprotected) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.a=rsa-sha256 header.s=default header.b=mTMGPEP8
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1792478703; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=+UdPCHMg1FScbhxVPW4mzgiUXb1gccMlfPmwASjRzO8=;
+	b=mTMGPEP8wdouMygJ7+/zizkD1I7UjUsp1ngnTY1DZ+HCQ7Foj8l7Rz/nT87TAvvxeNT48r+QDvAvzIGQezigHUfJfEuiudI+oUFwKaozrYp0BaP7W12h78CJkSIr4tvBxMM5Tgdu49vK4adOW5tDdPdz7I935/1cwaBCDl/nm5w=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=xiangzao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0XDBupRa_1792478692;
+Received: from banye.tbsite.net(mailfrom:xiangzao@linux.alibaba.com fp:SMTPD_---0XDBupRa_1792478692 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 20 Oct 2026 14:45:03 +0800
+From: Yuanhe Shu <xiangzao@linux.alibaba.com>
+To: Jens Axboe <axboe@kernel.dk>,
+	io-uring@vger.kernel.org
+Cc: Pavel Begunkov <asml.silence@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	xiangzao@linux.alibaba.com
+Subject: [PATCH 0/2] io_uring: add schedule points to request freeing loops
+Date: Tue, 20 Oct 2026 14:44:50 +0800
+Message-ID: <20261020064452.3633250-1-xiangzao@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.7
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -105,99 +61,76 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-References: <20261019231243.802569-1-austin.linux@gmail.com> <6bc4e237-353b-462f-b388-3844821dd67f@kernel.dk>
-In-Reply-To: <6bc4e237-353b-462f-b388-3844821dd67f@kernel.dk>
-From: Austin Schuh <austin.linux@gmail.com>
-Date: Mon, 19 Oct 2026 22:29:36 -0700
-X-Gm-Features: AclHuK-3C03Y2foM4nH1_Fagl2dH4K7q2dr8npdWhOWTe2qyEiaSppZtHzBVMF8
-Message-ID: <CABsbf=Gnw0+u80oebHZf24m94YSHDxFtYY2-Bq_=bMfvqUUvkg@mail.gmail.com>
-Subject: Re: [PATCH] io_uring/futex: return a wait's data to the cache when it
- fails to arm
-To: Jens Axboe <axboe@kernel.dk>
-Cc: peterz@infradead.org, io-uring@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 19, 2026 at 5:54=E2=80=AFPM Jens Axboe <axboe@kernel.dk> wrote:
-> Patches like this have been posted before, and my question is
-> always "is this a common case?"? Reading this:
->
-> > Notes:
-> >     Based on for-7.4/io_uring (5b01d5955ac2).  Built for arm64 with
-> >     PREEMPT_RT, W=3D1, no new warnings.  The numbers are from an equiva=
-lent
-> >     change on 6.18.39-rt on a Jetson Orin Nano, counting kmem:kmalloc/k=
-free
-> >     by call site with bpftrace while a test loops on IORING_OP_FUTEX_WA=
-IT
-> >     with a value the futex word doesn't hold.  Happy to turn that into
-> >     a liburing test if it's useful.
->
-> makes me very much think "nope, not at all", as it's a deliberately
-> failing test case. And yes if you keep issuing failing waits,
-> then it'll drain the cache. The cache is for the hot FAST path,
-> which is not an error path.
+An I/O stress test on a production v6.6-based debug kernel (stress-ng -a 1
+--class io -t 7h on a 384-CPU machine) hit the soft lockup watchdog
+twice.  The kernel was built with KASAN, kmemleak, lockdep and
+CONFIG_PREEMPT_NONE=y.  Both lockups occurred while a CPU was busy
+in an io_uring request freeing loop that has no scheduling point:
 
-Fair on the test case, it only showed the mechanism.  But for an event
-loop, -EAGAIN from a futex wait isn't an error path.  Right before
-io_uring_enter() re-arms the wait that just fired, the event loop loads
-its futex word.  If the word has already changed, it handles the
-new message and re-arms with the new value instead.  A message published
-between that load and futex_wait_setup() checking the word makes the
-wait return -EAGAIN, and that is how the loop learns there is more to
-do.  The window can be shrunk, but not removed; nearly all of what is
-left is inside io_uring_enter().
+1) A stress-ng worker looped in io_free_batch_list(), reached from
+   exit-time task_work, until the machine panicked on "softlockup:
+   hung tasks".
 
-Here's how often that happens, measured on a Jetson Orin Nano running
-for-7.4/io_uring with PREEMPT_RT.  The event loops are AOS (a robotics
-framework).  Each one keeps one IORING_OP_FUTEX_WAIT armed per channel,
-on the channel's queue index, and re-arms it after every wake.  One
-channel: a SCHED_FIFO 40 publisher at 2 kHz with a SCHED_FIFO 40
-subscriber, then low-priority processes publishing and subscribing on
-the same channel as well, then interrupt and system load on top.
-bpftrace on fexit:io_futex_wait counted, per process, the waits armed
-(IORING_OP_FUTEX_WAIT issued) and how many of them returned -EAGAIN
-instead of sleeping.  Two minutes each:
+2) A completion fallback work item held uring_lock for 671 seconds
+   in that same free loop, until the watchdog fired again
+   ("BUG: soft lockup - CPU#61 stuck for 671s").
 
-                             real-time subscriber    low-priority procs
-                 messages/s  arms/s  -EAGAIN  rate   arms/s  -EAGAIN  rate
-  pair only           2,000   2,000        0    0%        -        -     -
-  + low-priority     12,200  11,020    1,292   12%   14,760    1,229    8%
-  + load             12,200   9,830    2,797   28%    4,120      377    9%
+The field kernel is v6.6-based, so to check whether the same
+weakness exists in current mainline, I tried to reproduce the
+pattern on v7.3-rc7 on a 192-CPU debug kernel (KASAN, kmemleak,
+lockdep; preempt=none - see the note below), with a test
+that submits 32K requests per ring and then kills the rings.  I
+don't know whether real workloads hit these exact loops on
+mainline as hard as our test does, but the loops clearly have the
+same unbounded shape:
 
-(messages/s is everything published on the channel, arms/s and
--EAGAIN are per second.  A subscriber arms fewer times than messages
-arrive because one wake can cover several messages.  Under load the
-low-priority processes arm less often because the load takes their CPUs.)
+- A single io_free_batch_list() call freeing a 32K completion batch
+  took 443ms with no scheduling point in between.
 
-In all, 2,520 and 3,170 arms a second failed in the last two runs.
-bpftrace also read the futex word as each failed arm returned.  Of the
-683,303 failures across both runs, 88% found the word exactly one
-message past the value the wait was armed with.  So the arm raced a
-single publish, not a backlog.  Load makes it more likely because the
-stretch between that load and the kernel's check gets longer.
+- Killing 48 rings at once made one __io_req_caches_free() call
+  drain a single cache for up to 13 seconds, with 8 kworkers each
+  stuck for over 12 seconds; a separate run with 96 rings produced
+  97 soft lockup warnings during teardown (the stack is in patch 2).
 
-Timed from syscall entry to io_futex_wait() returning, 74% of the
-real-time subscriber's failures came within 6 us.  For the low-priority
-processes, which can be preempted in there, a third took more than
-40 us.
+With this series applied, the same 96-ring run produces zero
+kworker soft lockup warnings: all 97 drain-path warnings are gone.
+This series targets the request freeing and cache draining paths;
+the submission loop itself may need a separate treatment and is
+intentionally left out of this series.
 
-Without the patch, each of those failures is a kfree() and then a
-kmalloc() on the next arm: about 3,000 a second here, from a slab cache
-shared system-wide, and more the busier the system gets.  On PREEMPT_RT
-the slab slow path's list_lock is a sleeping lock, which is where this
-started for us.  The patch doesn't change the armed path at all; it
-only stops the cache from draining.
+The free loops are the remaining gap: the CQ overflow flush already
+drops the lock and reschedules (eac2ca2d682f), and io_add_buffers(),
+io_remove_buffers_legacy(), the fdinfo dump loops and the tctx
+teardown all iterate with a cond_resched() in the loop.  These two
+request freeing loops have none.  The debug options amplify the
+per-request cost, but the loops are otherwise bounded only by the
+number of completed or cached requests.  No functional change is
+intended; the patches only add scheduling points to long loops,
+and cond_resched() only invokes the scheduler if need_resched()
+is set.  Unlike the overflow flush resched point, these do not drop
+the lock or leave any critical section, so they introduce no
+reordering concerns.
 
-I can send a v2 with these numbers and this explanation in the commit
-message, in place of the synthetic test.
+Note: the mainline test was booted with preempt=none to match
+the production kernel above.  On x86 this required a local Kconfig
+adjustment to disable PREEMPT_LAZY; this is a test-environment
+detail and does not change the fix.  cond_resched() is the standard
+schedule point on PREEMPT_NONE/VOLUNTARY kernels.
 
-What I'm after is a futex wait an event loop can reliably re-arm without
-latency spikes.  Is there a better way to avoid the allocation here?  If
-you'd rather not have every failure refill the cache, I can limit it to
--EAGAIN, the one failure an event loop hits in normal operation, and
-keep the kfree() for the rest.
+Tested with CONFIG_DEBUG_ATOMIC_SLEEP and CONFIG_PROVE_LOCKING
+enabled; no might_sleep or scheduling-while-atomic warnings during
+the reproduction runs.
 
-Thanks for the prompt reply!
-  Austin
+Yuanhe Shu (2):
+  io_uring: add a schedule point in io_free_batch_list()
+  io_uring: add a schedule point in __io_req_caches_free()
+
+ io_uring/io_uring.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+base-commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+-- 
+2.43.7
+
