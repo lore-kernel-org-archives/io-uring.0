@@ -1,94 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.177
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792507102;
-	b=rXLOtQQEZA4CtneJVuzZydo96tDrU+1xIvPDkrSy70bRFR92pLGjW0/eHmILAFTSShc5
-	 ZR+iEsT7hArvTzesgRmmunGb6lSSvZnL3xeTmuQlbSWAwd7wVwKlpmBwA9Xi5hxWKfli6
-	 7jzmrIGq3CpcCrWD3jDfI+LCVKMJzv8xkmgPqCb3bQX+qbV7Y3A5m7e2cdHREHJxXwxsz
-	 8WRJ69l2MazL9EK9QbOPYxhrpWn0nLPu3p2awUCyF5DByMfkCdgSwg5TYlaVeCdLabsLb
-	 BrHBsrzq6Nco2YwCrcKzmU9XBH7MozQhTdDHr0UQtq+ProPj8t0/uTd6CoV5zRJvCPw==
+	t=1792568736;
+	b=uJdPyRDP63O4rONhN6RSf2S2uBbl1RV8LMCegORTRR7bOKRgVnh0HYQQczcgONRIy6ir
+	 zvSYn7A/ySFxr6ZYihE0TIwjyQKfrLfDtdCn/6aS7XLBITiZ/EsBGvipwEzPloRcntLne
+	 UvyjA4uhACeD40SWYf+aLV9wRwD8I5DyhqM+ZBQ6vunQxxQvzLc8ZoyFwhhnKoU9RhXnZ
+	 ypPQBqIPv6wexcSYhvdk2I2wir0yeXwaPywJMASZmXFAPBTViHAGwX3+IHla/LdyubO0/
+	 yjL2SIQdcb9c6hUZXfIGMyDaokg7qyebXdai3qd7so+OpjPmlWxZlXDt1rDQOZQipsA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792507102;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792568736;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
-	bh=Ydds0wfIIdkgoDQLLGcqP7OMvBg/Q29sYJtmtfAyW88=;
-	b=Olw5XF3ho2zU6nEcxWCapKlRVCuEWbJcOF6QWDQhzBPV0wZ1Ywk/epbX+4xw+O4wX9x2
-	 RP3MNvqkBxW1NuAFzDLy9r3fd/3ZyLmiQ64l8aREHEPEGFeAmuYThKzCPzwhpra7PZHck
-	 3U7+bbvOyL+3mTXZBDU50K6koGnOnqe0KczwcBpGEV0uhrllYc43+f0N3Gz+XAZXTiaR0
-	 CNAsiAPGOXa4VEkuJJsr4I2PWGtYUspFDUwz8HVnjd5/yIZM/zVBVF/wclR2vKMKHNPoc
-	 K+H0tBQRrosY0pv5OY9YgZyn0tmDkQ2BtkOwVv4RflHM6HEUgCz1Ovhdec+wspHnPZw==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=VbSlF666/qtELADyJnYbEb4dVJFod2JtONLzJEpZbCw=;
+	b=GiVgQEybZYnJhLiz+TxKKIuMsyNkwLHnqhM1GYrea2NkIJsaFVN2zakJH5qKh3VmYoR7
+	 yHQGwrwROMnmNaXfIyxudOvAdpvkNQdg4ZV4VKzlarRgZNeznloPF0QlExo+9sNYPBdoc
+	 6y19iC1zN6O+p89FYD6+ZgIAKEodnb+RCFNACmAPirkXCc/sjjhDz0KN8Mnko9gQV2qDS
+	 2nPC66+EjZjCRMWCAeiw5xRsgPqkcfkANAiXUWCr0NgqTNk+YzvuB10ndkPr8Zgdp92tL
+	 PsTbjMcUvB4fqtIoL0RQoR5rNa87ZyXEfenJYLVOKPOBEhhSyDUwh05PPPKZLL4gswg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=m2NZWL5N;
-	arc=none smtp.remote-ip=74.125.82.45
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=T+LwCzYD;
+	arc=none smtp.remote-ip=74.125.82.177
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A641606A31B
-	for <io-uring@vger.kernel.org>; Tue, 20 Oct 2026 14:38:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9A641606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA52606A31A
+	for <io-uring@vger.kernel.org>; Wed, 21 Oct 2026 07:45:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3AA52606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=m2NZWL5N
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1517bda04a0so2794257c88.0
-        for <io-uring@vger.kernel.org>; Tue, 20 Oct 2026 07:38:21 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=T+LwCzYD
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-3535bf8b3e0so821100eec.0
+        for <io-uring@vger.kernel.org>; Wed, 21 Oct 2026 00:45:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792507101; x=1793111901; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Ydds0wfIIdkgoDQLLGcqP7OMvBg/Q29sYJtmtfAyW88=;
-        b=m2NZWL5NjZ2r44cDJg2ObJXAzX8Oq7pwI5/+OjSqY7KwPjqMRunLc7Vhw0EY2b9Hqk
-         xjD5bWNFxLECfk3ZmRFjfa9XUgZWC6U2K9+mATCHQCayDCAKzezUqDx8GGaIvpm2kkuL
-         HH1fVsLaQ2z0mG10qre2bnVOfZ1AbPvF9mLHeP2dIaF4VPwOOIwlz8QO0puMbf8BeLM0
-         b5MJyZ1GtmsDfhCfHMVWCfmknH8dSyYHlXib9RUBtNGz/yK75cTsoJQ7ZyPMitV9wMr4
-         Teba6QRNK5aL4RtwtGEm5JGbwjFpd7eE+7w8i8spYh9D0ow3AJzP1UwopyiEzRwbLB+k
-         6mCA==
+        d=gmail.com; s=20251104; t=1792568735; x=1793173535; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VbSlF666/qtELADyJnYbEb4dVJFod2JtONLzJEpZbCw=;
+        b=T+LwCzYD/+r3BD1t+gyX97/dXd8OAFO5P+jNDQbK6LBfuQBk/f5tFHQ5H1+1yTFkny
+         fz1z60u+HaatTEwFW5AdQ2dQaf+TzVc0F3dC3a6bnqthoU6GqAa3HfCItZr68hXCmkiN
+         dwVgHJlE0TBg0buaRuftRj3qfT8gjqO+gJwjNbfX6FpYzM5Y2+1i5SE59OjVNm3J8t4b
+         sxW4sPnqXAdKtqgEtv2YIBzgA5dUWuXnJBAerRFL5WfdCyNsxMWCnVlp3MMZakD9/rZg
+         PrdWPeI7joEvJHx9HIIsQ6TetsbqF0N8xt+r1swkmcRbjU3aEoP3fS9tRqkXzQDn2iFy
+         W7sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792507101; x=1793111901;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ydds0wfIIdkgoDQLLGcqP7OMvBg/Q29sYJtmtfAyW88=;
-        b=C+WfV9+5e5lHTgWxe15Rx0J9lLEC4UzGD+Tjmy+OJG1ZiM3GNKLlQSCj1wuCfblOVy
-         m6NECCx/6YSr4vngYFBgOH970pkb55+kDsVyi350uMafX2x/oVPfZ5r7NVjqRIn2JjAW
-         E37qchsJ3omwj6dAl9ets5/LraY75hNMEnrSXxKAIIHTXOZU6jKGNwhL58P2bmeubGUv
-         ZTDqd2Ocix/oSLdTV5XcWKklMYyfEY9m0Hz7GZSRwjckg726HDp6pGNLjVSQLgryH2W2
-         whgnnzhPEZpQa+3/3C0r8OMFBb1KWXTqBmpT+slNDpM7kul8RHn9WP0DJmZ38/JQb/KK
-         H+hw==
-X-Forwarded-Encrypted: i=1; AKwUvBwI2D1Jqj3jht+gQPoZPbxVq8iRqOaC+Z+y49tOYdGGBauIeE5S1D6kHVC6pxttFcOFSM3t1UQvIg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLqtozhzD76sKVi6Knb5QbcT+KyyszsStj3CKz0W0L4/5TB+b/L
-	zl41klx9tYFQq++he/YWNmLw/1vS+A2e8w8UPdKX0kzMCNK8Moa9L47/A3q/HY3ZwBZPRY3QsmU
-	iRvU+z1w=
-X-Gm-Gg: AYBFou1oYRQZfhzFLBYoNYnbx9+XpNGPYph+JYryxOQX7XwuD9mUmHxRUVxuzKjR5vq
-	R7UY5+hBIj5s3Yak1gZWeXC8kY2EtGW4tL6xUvVjZq8jgtt1PvB305NzduWPDGmmqAY+Z2C/DzP
-	ua2k+sxiZ84HhhUWzA4wgsT6zxQLxxqaav35MrRV4g33wwjbiToPUW+D9cD7eyeIeyBKel4MLhn
-	sgYehuLPa7F0L81R5RIAYEAN/r47bGGR6JtEMQA4UjUAtgcPJKmYz8PLkfT0R+qF990nhNDI15n
-	4Wn4nw2abjheNX/zjOh7Zbclf1xOvdymSsOn4R/lvJ3gZqWmVKDs4/WVx0t7g3wplsSC1RIG+HB
-	AawIv4n5y+BK51HgtCQFO57KzEnR4fqzBl3FA4Dr1KmgLJwtj8jpQYSCd+lKKFatQ/CwNYNyc14
-	oZg20u+eDU2DUW82YxSB+scY1yX63PWVFAGuZSdU7y2fZi7BrssHXcVjqV6EOyvUu9T3it47Auy
-	HXDxu2nqbV+yDHSpZ5evjhAXNcmUjtug9qUt6OVwxcOfpkCeUQ5bAHcOujHnr0RxRoUd+YVF20=
-X-Received: by 2002:a05:701b:420e:20b0:144:c123:4036 with SMTP id a92af1059eb24-185134dd5f7mr15402776c88.35.1792507100657;
-        Tue, 20 Oct 2026 07:38:20 -0700 (PDT)
-Received: from xps16.local ([155.98.132.5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36082f7f6e0sm46679675eec.27.2026.10.20.07.38.19
+        d=1e100.net; s=20260707; t=1792568735; x=1793173535;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=VbSlF666/qtELADyJnYbEb4dVJFod2JtONLzJEpZbCw=;
+        b=Dl+6lFlD1mjzZTpTA6yy99TSyyjjIMd5ugd+CVvHAJ6E9nodo2hV0WwE+mOqzHkbD1
+         rkfi6uFkHNqyc2ubbdsqTfwE/MXoUZ8xprw7PWKyGMfo/j7lmD3Xdo5Ei5ga9iVN78eG
+         kAmoyeGVVCbKh1+50kaDOU6faQhY9WlIyPtEV6IGQHBXoRbXg3vcKkY++7hesY4X5vUv
+         fIvqiR1qXh8Wi4RDNH7QzgQu6wem5P2dMdNv2qJKHsKVbzJicRWCbD5+II3ZOXHZaeqZ
+         K8rdYpyrKH9MiiaKfOyHWkrZevopyiOQuRBDzzlHMpMcwsyUXGzcCUrfvaG4qbqNGHg1
+         ntAQ==
+X-Gm-Message-State: AFq9FYLmFamgzZSmrjWHzhuPnuW41x6Jg08sqyxb9EV10R8Fp7Yc7RsV
+	8SsvD8hjqXLRbldKXjYsoN9Y21nfKm6fl1sW547C5N8fkWWks9Q7BVMOCUjMS4Dl
+X-Gm-Gg: AYBFou0prb8TT4I8O1QDKO/DFwhsHMhaqUqqO3fKL04NKwQXWqAe+BrLTUonV5Eus/8
+	vq9F+fn+XLWayirMq4VhyUG5Y1ub3PaYodBhBgABx4/74Lw+9HYFm5Fp8lJIpYAV+8nF+QKQGCN
+	T1fjaOj4OyBYZ5xjl54VIt6szuP02Ta84vx17y6sVQxJXU0jQ0zs0dJUimoIdWxUVd/aVqZzas8
+	dTE48NrXiONMPxEjb3a9F7gbub1Q7fXNN2PXc9XeXscBsMLmg/679lQxdSbyxQ5Acs3acfw9T7l
+	di/76K76YGV4AuV5GY7aDKyqPT2LEDAUqZ89AM2UYDBanP+ZRelAiB2bFL0oJuYKoFzBj3QzO7f
+	xyuhKRI4GjwuGnZP46VtZoD+1pnmxv17uoN9hWRRaFg2lYdSVvGervdSGtaQ0DEAJO4PWhku3MS
+	9QxUDtcdE6aX4GX4zGN42MVQJ+rk8R4qSFSL/upbCfM0fbxUqUZmNB9tIc4YybTze1DSf5rzd05
+	TK74QYe8waKBsuZ1oq2iH8Z4xtiv2vw7e+Y65Y7sIAHTqlU9o9YJz0544kU3AvA5Mn/0CVAQKzI
+	xDZb676cHUKbNhc=
+X-Received: by 2002:a05:693c:2a0b:b0:351:bb8f:540c with SMTP id 5a478bee46e88-3674df47953mr2365876eec.35.1792568735108;
+        Wed, 21 Oct 2026 00:45:35 -0700 (PDT)
+Received: from Athena ([36.255.108.104])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367412b24e3sm4352662eec.19.2026.10.21.00.45.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Oct 2026 07:38:19 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Austin Schuh <austin.linux@gmail.com>
-Cc: peterz@infradead.org, io-uring@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20261019231243.802569-1-austin.linux@gmail.com>
-References: <20261019231243.802569-1-austin.linux@gmail.com>
-Subject: Re: [PATCH] io_uring/futex: return a wait's data to the cache when
- it fails to arm
-Message-Id: <179250709922.3332995.6640113026967245594.b4-ty@b4>
-Date: Tue, 20 Oct 2026 08:38:19 -0600
+        Wed, 21 Oct 2026 00:45:34 -0700 (PDT)
+From: Harshal Chavan <harshal24.chavan@gmail.com>
+To: io-uring@vger.kernel.org,
+	axboe@kernel.dk
+Cc: krisman@suse.de,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	Harshal Chavan <harshal24.chavan@gmail.com>
+Subject: [PATCH v7] io_uring/register: add IORING_REGISTER_CLONE_FILES opcode
+Date: Wed, 21 Oct 2026 13:15:17 +0530
+Message-ID: <20261021074517.68961-1-harshal24.chavan@gmail.com>
+X-Mailer: git-send-email 2.55.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -98,33 +95,260 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Transfer-Encoding: 8bit
 
+Currently, if an application wants to duplicate registered file
+descriptors from one io_uring instance to another, it must manually
+unregister and re-register them, incurring unnecessary overhead.
 
-On Mon, 19 Oct 2026 16:12:43 -0700, Austin Schuh wrote:
-> io_futex_wait() takes its io_futex_data from ctx->futex_cache, and a
-> completed wait gives it back in io_futex_complete().  A wait that fails
-> to arm kfree()s it instead.
-> 
-> The usual failure is -EAGAIN from futex_wait_setup(): the futex word no
-> longer holds the expected value.  That is routine for a waiter that
-> re-arms with the value it last read, since the word changes whenever
-> there is something to wake for.  Each such failure takes an object out
-> of the cache for good, so the cache drains and from then on waits
-> allocate.
-> 
-> [...]
+Add IORING_REGISTER_CLONE_FILES to allow direct cloning of the file
+table from a source ring to a destination ring. This implementation
+strictly mirrors the io_clone_buffers UAPI, supporting partial offsets
+and the IORING_REGISTER_DST_REPLACE flag.
 
-Applied, thanks!
+To ensure lock synchronization safety, destination nodes are strictly
+allocated as new, private io_rsrc_nodes rather than sharing references
+across rings.
 
-[1/1] io_uring/futex: return a wait's data to the cache when it fails to arm
-      commit: 02caa5922184e99da04b37fd3336066625ea8e2e
+Signed-off-by: Harshal Chavan <harshal24.chavan@gmail.com>
+---
+v7:
+  - Copy src_node->tag to dst_node in io_clone_file_node (Gabriel).
+v6:
+  - Fixed trailing whitespace checkpatch error.
+v5:
+  - Added missing spacing in comment (Gabriel).
+  - Removed ctx->user and mm_account checks (Gabriel).
+  - Used !! for boolean conversion (Gabriel).
+  - Moved mutex_unlock unconditionally above the out label (Gabriel).
+  - liburing implementation and tests: https://github.com/axboe/liburing/pull/1606
+v4:
+  - Updated Signed-off-by to use real name and moved above the scissors line (Greg KH).
+v3:
+  - Rewrote the cloning loop to allocate private destination nodes via io_rsrc_node_alloc to fix non-atomic ref lock synchronization (Jens).
+  - Maintained partial offset/copy support to mirror io_clone_buffers UAPI (Jens).
+  - Gated the replacement free check on ctx->file_table.data.nr (Gabriel).
+  - Prevented self-cloning by checking ctx == src_ctx (Gabriel).
+  - Removed submitter_task check to allow cross-thread pooling setups (Gabriel).
+v2:
+  - Dropped unrelated whitespace formatting changes from v1.
+---
+ include/uapi/linux/io_uring.h |  12 +++
+ io_uring/register.c           |   6 ++
+ io_uring/rsrc.c               | 140 ++++++++++++++++++++++++++++++++++
+ io_uring/rsrc.h               |   1 +
+ 4 files changed, 159 insertions(+)
 
-Best regards,
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 909fb7aea638..2ba13d30a6cf 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -723,6 +723,9 @@ enum io_uring_register_op {
+ 	/* register bpf filtering programs */
+ 	IORING_REGISTER_BPF_FILTER		= 37,
+ 
++	/* clone registered files from source ring to current ring */
++	IORING_REGISTER_CLONE_FILES		= 38,
++
+ 	/* this goes last */
+ 	IORING_REGISTER_LAST,
+ 
+@@ -845,6 +848,15 @@ enum {
+ 	IORING_REGISTER_DST_REPLACE	= (1U << 1),
+ };
+ 
++struct io_uring_clone_files {
++	__u32 src_fd;
++	__u32 flags;
++	__u32 src_off;
++	__u32 dst_off;
++	__u32 nr;
++	__u32 pad[3];
++};
++
+ struct io_uring_clone_buffers {
+ 	__u32	src_fd;
+ 	__u32	flags;
+diff --git a/io_uring/register.c b/io_uring/register.c
+index dab3eb4258df..057ef27e6e4d 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -978,6 +978,12 @@ static int __io_uring_register(struct io_ring_ctx *ctx, unsigned opcode,
+ 			WRITE_ONCE(ctx->bpf_filters,
+ 				   ctx->restrictions.bpf_filters->filters);
+ 		break;
++	case IORING_REGISTER_CLONE_FILES:
++		ret = -EINVAL;
++		if (!arg || nr_args != 1)
++			break;
++		ret = io_register_clone_files(ctx, arg);
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+index 51b46e624ddd..b4bbfb5ceb30 100644
+--- a/io_uring/rsrc.c
++++ b/io_uring/rsrc.c
+@@ -1501,6 +1501,146 @@ int io_register_clone_buffers(struct io_ring_ctx *ctx, void __user *arg)
+ 	return ret;
+ }
+ 
++static int io_clone_file_node(struct io_ring_ctx *ctx,
++			      struct io_rsrc_node *src_node,
++			      int dst_index,
++			      struct io_file_table *new_table)
++{
++	struct io_rsrc_node *dst_node;
++	struct file *file;
++
++	dst_node = io_rsrc_node_alloc(ctx, IORING_RSRC_FILE);
++	if (!dst_node)
++		return -ENOMEM;
++
++	file = io_slot_file(src_node);
++	get_file(file);
++	io_fixed_file_set(dst_node, file);
++	dst_node->tag = src_node->tag;
++
++	new_table->data.nodes[dst_index] = dst_node;
++	io_file_bitmap_set(new_table, dst_index);
++
++	return 0;
++}
++
++static int io_clone_files(struct io_ring_ctx *ctx, struct io_ring_ctx *src_ctx,
++			  struct io_uring_clone_files *arg)
++{
++	struct io_file_table new_file_table;
++	unsigned int dst_nr = ctx->file_table.data.nr;
++	unsigned int src_nr = src_ctx->file_table.data.nr;
++	unsigned int new_nr, i;
++
++	lockdep_assert_held(&ctx->uring_lock);
++	lockdep_assert_held(&src_ctx->uring_lock);
++
++	if (dst_nr && !(arg->flags & IORING_REGISTER_DST_REPLACE))
++		return -EBUSY;
++
++	if (!src_nr)
++		return -ENXIO;
++
++	if (!arg->nr)
++		arg->nr = src_nr;
++	else if (arg->nr > src_nr)
++		return -EINVAL;
++
++	if (check_add_overflow(arg->src_off, arg->nr, &i) || i > src_nr)
++		return -EINVAL;
++	if (check_add_overflow(arg->dst_off, arg->nr, &i))
++		return -EINVAL;
++
++	new_nr = max(dst_nr, arg->dst_off + arg->nr);
++	if (new_nr > IORING_MAX_FIXED_FILES)
++		return -EINVAL;
++
++	memset(&new_file_table, 0, sizeof(new_file_table));
++	if (!io_alloc_file_tables(ctx, &new_file_table, new_nr))
++		return -ENOMEM;
++
++	for (i = 0; i < min(arg->dst_off, dst_nr); i++) {
++		struct io_rsrc_node *src_node = io_rsrc_node_lookup(&ctx->file_table.data, i);
++
++		if (!src_node)
++			continue;
++		if (io_clone_file_node(ctx, src_node, i, &new_file_table))
++			goto out;
++	}
++
++	for (i = 0; i < arg->nr; i++) {
++		struct io_rsrc_node *src_node = io_rsrc_node_lookup(&src_ctx->file_table.data,
++				arg->src_off + i);
++
++		if (!src_node)
++			continue;
++		if (io_clone_file_node(ctx, src_node, arg->dst_off + i, &new_file_table))
++			goto out;
++	}
++
++	for (i = arg->dst_off + arg->nr; i < dst_nr; i++) {
++		struct io_rsrc_node *src_node = io_rsrc_node_lookup(&ctx->file_table.data, i);
++
++		if (!src_node)
++			continue;
++		if (io_clone_file_node(ctx, src_node, i, &new_file_table))
++			goto out;
++	}
++
++	if (dst_nr)
++		io_free_file_tables(ctx, &ctx->file_table);
++
++	WARN_ON_ONCE(ctx->file_table.data.nr);
++	ctx->file_table = new_file_table;
++	io_file_table_set_alloc_range(ctx, 0, ctx->file_table.data.nr);
++	return 0;
++
++out:
++	io_free_file_tables(ctx, &new_file_table);
++	return -ENOMEM;
++}
++
++int io_register_clone_files(struct io_ring_ctx *ctx, void __user *arg)
++{
++	struct io_uring_clone_files clone_arg;
++	struct io_ring_ctx *src_ctx;
++	bool registered_src;
++	struct file *file;
++	int ret;
++
++	if (copy_from_user(&clone_arg, arg, sizeof(clone_arg)))
++		return -EFAULT;
++	if (clone_arg.flags &
++	    ~(IORING_REGISTER_SRC_REGISTERED | IORING_REGISTER_DST_REPLACE))
++		return -EINVAL;
++
++	if (memchr_inv(clone_arg.pad, 0, sizeof(clone_arg.pad)))
++		return -EINVAL;
++
++	registered_src = !!(clone_arg.flags & IORING_REGISTER_SRC_REGISTERED);
++	file = io_uring_ctx_get_file(clone_arg.src_fd, registered_src);
++	if (IS_ERR(file))
++		return PTR_ERR(file);
++
++	src_ctx = file->private_data;
++	if (src_ctx == ctx) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	mutex_unlock(&ctx->uring_lock);
++	lock_two_rings(ctx, src_ctx);
++
++	ret = io_clone_files(ctx, src_ctx, &clone_arg);
++
++	mutex_unlock(&src_ctx->uring_lock);
++
++out:
++	if (!registered_src)
++		fput(file);
++	return ret;
++}
++
+ void io_vec_free(struct iou_vec *iv)
+ {
+ 	if (!iv->iovec)
+diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
+index 9ef88383b363..10b66f3e2492 100644
+--- a/io_uring/rsrc.h
++++ b/io_uring/rsrc.h
+@@ -71,6 +71,7 @@ int io_prep_reg_iovec(struct io_kiocb *req, struct iou_vec *iv,
+ 			const struct iovec __user *uvec, size_t uvec_segs);
+ 
+ int io_register_clone_buffers(struct io_ring_ctx *ctx, void __user *arg);
++int io_register_clone_files(struct io_ring_ctx *ctx, void __user *arg);
+ int io_sqe_buffers_unregister(struct io_ring_ctx *ctx);
+ int io_sqe_buffers_register(struct io_ring_ctx *ctx, void __user *arg,
+ 			    unsigned int nr_args, u64 __user *tags);
 -- 
-Jens Axboe
-
-
+2.55.0
 
