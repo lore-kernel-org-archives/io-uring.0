@@ -1,91 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792586891;
-	b=NNSGQxlGZepO27LbD5ydyU6UA1siDwYl9U/yOhbfS3rwoO3/F8hd1V3bL0QZimM700R/
-	 Hx7nbq/K1tA2d8NOa0QjGTYU8zfTSY6Yzg+rGy8RJYGL2OlyE806K/FAPcE9yVsImFNGS
-	 RVfAV9lsdrExid0Z6pFPkFXil1VLHak492v4dcLXjWf2Rf2XNCYNv6udQFzj5gsy2kIsN
-	 cfXsYyYHivfhnYkGT0KDBLrkDmMo8Oyg5WtknHBKUGqQ+lMdrx2fLWhW4ld72MKnF32o+
-	 zZi2ptXnAgxqTwKy5pYhUqDldGcbxgIR9YRDKExUo1Q3bhKm4KMcpgfCibP6J3oE/qw==
+	t=1792592593;
+	b=J5ZHbuwrJVrEjTJNOX3ihRToOLpf2MhIK9T1LXwys353NQk/MUUWILFe2lujT1tWmhmx
+	 XhRf2LA76q5AlG1KnxPxCBb4gjFUEgz661Rt4BP1DaR1vKvCh6cglUJny2SARrqey3MAP
+	 jki6dR15dMvKQzqhxJHSFn53tAY7dY2G92pdQh+XXQP74HTWnjy/4teMrMMhditC8axih
+	 ju1ZHwYK2lYL96eqYxVfDfCDkAr5q8yjl7fu7qrMZAcmjIG7By4Cun2gJ4OV4TC4oYsMm
+	 a8cOygfOHAwn+EGSgh4SaAMvmu4ot8VX92ONemYJz7MCUDqXK0usJKjkOhO1xg6sIrQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792586891;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792592593;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=JLImEMh2jmdTGmR3AppLWOEEmaJkCk/wux66wL5OuA8=;
-	b=0X8MpLy+rjYmg6ck/uHRh9AgRkioI47VJtUlBpuW31qCz2ATpYJEpkFUM0zhBg6qVi4V
-	 l9Th4QJv9lm3XcuTdW3s0OuBbGGLU/Ah/q6C3I91+KKE/ZNUG68zHEBUTYE6D872p1ufr
-	 IsSoA7kJFZ6P4XTayYSpCjIs5sasbag6oV4Nt72Zv+P3LIJtDynvIz0PIsgp0RfG38091
-	 chDmq47UnFiXX67h7gr3AIy5ZkXZu3EKMGL03LuhW5NjPdxVz2EXvc9uCwBnS369Z6Bb1
-	 KG+SUA1FAQlL3PKsOkwDvLZzocG5x6iydiGqKcL0tPMtEGN9Ap/qrMTVsOdsnww+fXg==
+	bh=Ry0ejq2iOovIh50a5iLZlHQmAJp0KdXz+qWiCMyE90s=;
+	b=PHsWdsdTFh1EPyTBr5YN2RUiInQ6Gk2yEmF7zMU2ukjnBAWzw9y8cMJka7vJOqTEue3u
+	 YQje0uI3RMypfbjWsgnf37IQZipvZJ85RWwYmKIgJ/9EdCMJi8exvRymCLzhPKNvw88kd
+	 rBlHBtvYIuYKhVtAmFMywugCbxUxBZFLuy+JumOLruo1LmNE8mW3olmLEZlrazguhfxlY
+	 DhqBFL0FjRFSTQM/uwyYXYtn2ikxmXEZmivm6ptSxSK4DkOymm56U7ISIsUMNzvVLbYO+
+	 eDmW8TI31WogpBNCSkRrmiCt77x73uM8Op077SY90i09CNLJZ9uUBVqlKPPT1XIuc5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TWzLynu6;
-	arc=none smtp.remote-ip=209.85.128.175
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UmrN72zC;
+	arc=none smtp.remote-ip=209.85.128.43
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276C7606A320
-	for <io-uring@vger.kernel.org>; Wed, 21 Oct 2026 12:48:10 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 276C7606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D22606A323
+	for <io-uring@vger.kernel.org>; Wed, 21 Oct 2026 14:23:12 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B5D22606A323
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=TWzLynu6
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-8b0f59a5fdaso5639767b3.3
-        for <io-uring@vger.kernel.org>; Wed, 21 Oct 2026 05:48:10 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UmrN72zC
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4a018792ab3so6752605e9.0
+        for <io-uring@vger.kernel.org>; Wed, 21 Oct 2026 07:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792586890; x=1793191690; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JLImEMh2jmdTGmR3AppLWOEEmaJkCk/wux66wL5OuA8=;
-        b=TWzLynu6MErm73XYM/fyyYTkuBYizVmnQTQ1/4Eg/N+/eEfmudKGYVVzdou76HCti0
-         4SjydKA/3KabhH0uUdjh0i2pFwewrla1n9iWv5OunRcU3F/O0dIMD57IqRIqFBfk0pqR
-         v8Oy8G6v93SOKKfPYlOsuBEOgvbjAZhvEqVjrM/Oseral/eoEOR+1U0ufPhePTI3fw2G
-         ufAOpEuH0FOdNQQfmk35wQvRQMrup8StMaQKEMxNG3qAq8RSJqdA1R9IEhduCAMUL89/
-         0g6PDGdI5RYNH5yqPxvw0xKYtU3RdDSyL4v/h9EZ1MmQjw+Xx2+zKQJDtWsm2VepHohD
-         yQqg==
+        d=gmail.com; s=20251104; t=1792592591; x=1793197391; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Ry0ejq2iOovIh50a5iLZlHQmAJp0KdXz+qWiCMyE90s=;
+        b=UmrN72zCxsSETrtXgFu1j3IULAxtC3xJczMlP7lP2PcHwldVuoMlyDYQqycuGBWZA1
+         y6UNV0K35EQgUtcF+BbxS5YF6SLD/pH96aKKzbMUmTuJKhHoU9HfAS2dodFs1gHILpoh
+         f8W1T2XIkQH0ojDxb/mjKnDxHKEPnJE4xfd1+wnet4R0hmM75lrK0LADdQBs6RuhltzS
+         /10fFDKI8nnhI3p8iUg++UjM603kachz10zn2bNWObtPgrRiGauJmGKlfsv3d88O51Dz
+         1w36jFtVIb4Lr6Cen6OILMPUgkZMyOhWKWwiuTyhntW8olf6CGUULgy4KQZuNVJT5D8O
+         F0EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792586890; x=1793191690;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JLImEMh2jmdTGmR3AppLWOEEmaJkCk/wux66wL5OuA8=;
-        b=yxdjFDwryheBALTFOjclonKszU/0nNZPkGPZJBM2NRTzhWV9wnucBI/OxruGbJo97v
-         lXbWnhfSTHunkjxgEdPCu/+Dpn5e+hw0PHHiB1sYFFUT5KcZQElUlbw4GFYo7K9gU42I
-         56P8d1cHqNO8kv9OaOCrVJYnGxiuw1B/52csr2nqfiC35UPETnO5oP58YV1RaKnFX2ng
-         taWLNNWkF3JWP9pYuuMTk4kET2l1Uk/3dwWQ/RTu+vX5kn9cCrHMSV+y+CpVWGnXhYwq
-         tXi9j6Xu+kMPmAZCIHeUUuveF4TQmTpqE/SGYhikqhxqK+Kbw3H1ET0+GZDAUEMpyeEu
-         qwOg==
-X-Gm-Message-State: AFq9FYI+22ZXSVsCYU0N9fQXQTRysZD7tVDGNcHqmXrhlQgHxHa++oB7
-	rJlRx9dWG4Cu4KsnX/UOW9zMlxO2KO/2yQHist668GzGxahVIEeOdJr+
-X-Gm-Gg: AYBFou1KHTk7JyEKl1QGm7BPWvHvxJ8Pigi5WreVp1dsxCoCyFejuAeLeflCKek0AR+
-	wNgPd/dbq3YzVV9B5Ra7NRdvfsCYIvEq3z+FHM8ZoPr8piHCULjDwJzQXImAfbkU/G+t8AH9Zl4
-	IFeogn/5kTM70EB5211F/wvW4Ru0M1HnfZW+x+WBDMgd/eGQsBduXcOoaTv802WTh9JnA85X6ss
-	8yuMeyIRu93WgSUj+uBc/Ap4OA0obac+xwhJBfbnuq38ayhDK5mBHVaMqr+vKpWNAWTqlMJmDBC
-	OA4fsOe+9x4X0VJCVTf4mboh6NStLpaR/i3fNFs8Dw5Mey9xdP0t39BkgaXJClR+NCFkCWR460I
-	OypIPWdCzVdKh87m9TZ2ynikxj+PPPcux6HkL7848R9qVTFj3HiN9sn9nIgWEunoa+dXB4GFNqi
-	TrAn8rjYzx68LbgRvh/fUcYYTTcLaPlsfFM4QCIz+wG28X5IbbJaqDNC7eW+ZLSR52XCB+0k5m6
-	kwiWeEkNJAbsJiiSFQvRsLAZj4ZirqmIZqX1v8A9cYJpOTPJN0E3Q==
-X-Received: by 2002:a05:690c:f83:b0:8a5:b046:e00 with SMTP id 00721157ae682-8b133d190damr9916487b3.27.1792586890066;
-        Wed, 21 Oct 2026 05:48:10 -0700 (PDT)
-Received: from debian.lan ([172.245.89.240])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-8b1300e85a3sm10089387b3.25.2026.10.21.05.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Oct 2026 05:48:09 -0700 (PDT)
-From: Maks Ivanov <mi9992828@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org,
-	linux-block@vger.kernel.org
-Subject: Re: Question about asynchronous blk-mq tag waiting for io_uring
-Date: Wed, 21 Oct 2026 15:46:50 +0300
-Message-ID: <20261021124651.17398-1-mi9992828@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <956e10db-bcc1-4e6d-a0ce-b5f5fe25354e@kernel.dk>
-References: <956e10db-bcc1-4e6d-a0ce-b5f5fe25354e@kernel.dk>
+        d=1e100.net; s=20260707; t=1792592591; x=1793197391;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Ry0ejq2iOovIh50a5iLZlHQmAJp0KdXz+qWiCMyE90s=;
+        b=p/QPN5GZn/i6MFAMsjXs4WuZvruyBp2X0RJ/Nh1Q5HvF6xyFqIr+WVkNYEbFphm101
+         OC8gvTD/PvvxvOXuXTMbQ6d9beoCWI7LLRYq1zJXFl+50zVxFGYuVJ6P8/dVXM9onySa
+         V16rihm6MYKu3dummqPU9201CP4XkWK5D6AJKAOhP6ZK22tO28FIqdmARQAbWFpcSTek
+         JNPy5dR8hmoRCkY8mXJH41XAmJ4SSChn7qNemlKmg1ORr0SGp+cEWYiGtPK5LwU9BWk+
+         lzmrIOqSSHVpucj2f4/lAZ+aB0niBzqil3a0T8KMO2+eKtvy2Vu/r//2lLd0/mgIFm9a
+         Ij1A==
+X-Forwarded-Encrypted: i=1; AKwUvBwLwbDVCsnyodsg+PgHf0FDDKFF4B05J0Nl51R4P8xyKrsojZZE0OMwivakGBKF7cWolkC6xQpbjQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIhD/bXwKBG3oLWkkN1xpYeLbMoMLZBacEOEhNu27mswsn70XpA
+	y4UDLQtKGG1wYP/pmIpSlM/zeEOgV2dXHzwpN8P4B3PQVPwhq3aECUs8
+X-Gm-Gg: AYBFou0TyMbWkIhwr9276L+weoZU/EdaPiItSwFL9sBJcYm4RzhSPtC2xHSdTlB3xtU
+	BovXT2XTVr8BxgA7pqyeYua/KXsIzQi5jBYv69VevOCWIoaFNiZVHb7iIgD4f+pKxJxDNcPsN0P
+	8anO3Y7n5QZFm4GL3P3tG4sdgiS3MmsdRGtgtXlANnQPLJUfBrVeN5QUNcYc43SOxJMhNx8cTL3
+	ZOfvyocT4KdKZN6wqQT38PBV2VeB16+FD9gDcGStz+onOVv90Zj98nTqj0tkvnA5Qfv7hJ2CYen
+	DxQhn+SCgtjE44ePqA3qq2gCDZxN6IIq/UcDLUDpd6pfeiUdODi7TCDk86H8szu5B8RcwXLwvnf
+	JweL1U693EgyhViLjiQ5swn2EB8uvBgweHHxh0lJWm7s64yEl16VWFOIKBAzatp+4RjA3nHwWUj
+	JfW2/JmFPrE7Uj/5RrqvLlvKTDu1s+5J15qAxorB/Jb0QsgKFNQ1OugcMX97zYMoc1hSMzXBu2k
+	JGOQVpZMcLkZuqTBjgFoos10DsXQojTVIxIMqoN7JEIpHoEdgZRWeQZfVsq6R62kFEpU2bA6HML
+	I7gY/P0h/zADhs3pAM7vvSbiYqUsYclWZ9+Ti7vjfNILOvYZmOHzF9PrpOqhiJGIpl7tq1gujlk
+	pGPnx7hk=
+X-Received: by 2002:a05:600d:864d:10b0:49f:e941:d6e with SMTP id 5b1f17b1804b1-4a1fdd399dbmr32967835e9.21.1792592589343;
+        Wed, 21 Oct 2026 07:23:09 -0700 (PDT)
+Received: from [10.54.182.141] (82-132-213-19.dab.02.net. [82.132.213.19])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1fb80ef02sm83229375e9.5.2026.10.21.07.23.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Oct 2026 07:23:07 -0700 (PDT)
+Message-ID: <d0c8cc97-6a21-4c64-b55d-16af783fdb59@gmail.com>
+Date: Wed, 21 Oct 2026 15:23:09 +0100
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -95,10 +93,60 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] nvme/io_uring: enable dma-buf backed passthrough I/O
+To: Anuj Gupta <anuj1072538@gmail.com>
+Cc: kbusch@kernel.org, hch@lst.de, sagi@grimberg.me, axboe@kernel.dk,
+ joshi.k@samsung.com, linux-nvme@lists.infradead.org,
+ linux-block@vger.kernel.org, io-uring@vger.kernel.org,
+ Anuj Gupta <anuj20.g@samsung.com>
+References: <20261016103453.1129150-1-anuj1072538@gmail.com>
+ <79627452-98d3-4e8d-9c37-ceda0796d59c@gmail.com>
+ <vx4ugjq6wol6elipmwkuhtpk3qnanpwou6g73dxrjona3nepd4@pvetkgijfsx5>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <vx4ugjq6wol6elipmwkuhtpk3qnanpwou6g73dxrjona3nepd4@pvetkgijfsx5>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for the detailed answers. I'll continue investigating this proble=
-m.=0D
-=0D
---=0D
-Maks Ivanov=0D
+Hi Anuj,
+
+On 10/19/26 14:40, Anuj Gupta wrote:
+> On Sun, Oct 18, 2026 at 11:06:16PM +0100, Pavel Begunkov wrote:
+>> On 10/16/26 11:34, Anuj Gupta wrote:
+>>> From: Anuj Gupta <anuj20.g@samsung.com>
+>>> diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+>>> index 3aa5d2f2dfbb..6343da1f6c05 100644
+>>> --- a/drivers/nvme/host/ioctl.c
+>>> +++ b/drivers/nvme/host/ioctl.c
+>>> @@ -458,6 +458,7 @@ static enum rq_end_io_ret nvme_uring_cmd_end_io(struct request *req,
+>>>    			status = blk_status_to_errno(err);
+>>>    	}
+>>>    	io_uring_cmd_set_res32(ioucmd, status, result);
+>>> +	io_uring_cmd_detach_dmabuf(ioucmd);
+>>
+>> It's not great spilling the responsibility for [de,a]ttaching
+>> between nvme and uring_cmd code. Is there a way to stash it
+>> all under io_uring?
+> 
+> The natural place would be __io_uring_cmd_done(), but that runs from
+> task_work, while the ref has to be dropped at hardware completion, like
+> io_complete_rw() does.
+
+It may queue a task work but is called from whenever. It would work
+if we drop there and in __io_uring_cmd_do_in_task(), but I agree
+with you that it might be confusing to the user.
+
+> Hooking io_uring_cmd_do_in_task_lazy() would avoid changing the NVMe
+> call site, but would add a non-obvious side effect to a generic
+> task_work helper. How about a separate helper that drivers call from
+> end_io instead? This keeps the dma-buf handling in io_uring while NVMe
+> only reports that it has finished accessing the data.
+
+Sounds the same, but I don't have a better answer, so either is
+fine with me. At least with your versions we can add a warning
+for misbehaving users.
+
+-- 
+Pavel Begunkov
+
