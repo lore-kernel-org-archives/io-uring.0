@@ -1,93 +1,69 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=67.231.153.30
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792682848;
-	b=Ibcc9ZPM6vwMJ3VOdaFLbvepjj6Zq1ccJjR/1FyAPjw4WmcBxKCJjaW9HpnW9tdPJLs6
-	 +I+E9jS8I/H2Fi2QPQY2bcGOLIL/BSsZoStp7+vce96mP+yUkTzp+fXVj+wHrK9BmD5L8
-	 S2bA4w3pxPfqX0bfwZFovL1IaFqs3QjzSa5HXr4fj2kZ57wJAxyK+ilv17QtyuU5MJwgw
-	 Jjp/WDhPRmSRjbY//Wfg9xnmE+86S2JxIdORMMEqXYlxEtpEfcweeuGQBUlojuF05mMoS
-	 msGO9Ci/kKB27j+1QHv8aILY7T4WRyMf6wxn/I5ritwgr7/STp1moPdvI8pLYteMzJA==
+	t=1792700537;
+	b=0Dl9uIaqHHvYptueo8AAJ3TjfItxB9Lygr127PG6x/g4nD4G6rRr9yh6KXwS3vas5Mw1
+	 +xm22+EdcyfBZRMokItc+UV3JdMfcwYkJFLjkSUNs9XLylkyoaiSII6awQHLYX+v6qGF1
+	 RLlpCbMeHq0GSlXM2vhmmeneysVol4f9wcRY7o5iThOK9QMuWzxlxckrvSXQ0P99xX4vL
+	 tgUvTh5C2Kyzz+LTgSd8BTTANCusuNCfBLq08mFHXsikwHuBbz7uM8MlUK80Vu99+Ia+7
+	 HPlF4y92JRuDmEnD/AkoRC7tzNF45hBovqxv7KHGYDH83jSeozquStRqvsQJg5sa6Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792682848;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
-	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Mailer;
-	bh=FXOE4N6n0/t2DcXYw4BhESic6bUh9806SUYcFnKtZVk=;
-	b=T5Loropxqtem2orZ+dUK5WY8WOx2Dr6XqKfyR5iwoIjJSPEEOb+Epia0PJaoPyb1qNBr
-	 IP5yuP79bFqVMb6yM+SciS2TrEocI+RwdMKmPNY6pFnO56wLJb8VU3oM5Rxp45OXmMa7y
-	 Ult10PMFZQrlZiNrwyHG1kkn7puJ8TBmlMfde/2Rvdefrd4Nd9K2EWX0CFiGyo/ZUD3QD
-	 ZYIFrFjhYII92dkIu76QXfgzCO0QN2yTJAE1Ufu4yhRdTFu/n8G1NF9qsVtC/Ai3w9WCq
-	 /taO1m1lYSN70tiQONY3d1t12MJslZnvonSG6f3s6YtJ+v8uV1s8MR0sJGSMFKsQW6g==
+	a=rsa-sha256; c=relaxed/relaxed; t=1792700537;
+	h=DMARC-Filter:Received:DKIM-Signature:Received:Received:From:To:CC:
+	 Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Originating-IP:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Info:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+	 X-Proofpoint-Virus-Version;
+	bh=PYNgADVC68CwJP+YNADd/HcGS93CaXKGM5BiCxLiOm0=;
+	b=O9aBcEfR/LT0iMVy6xP/0lltG0RsIsfS49lyKRs7kK9Z4U5n1iOHWCF8P++heSbBt0jX
+	 UaSqQR5YcaTVkg65HW6WY63/DsH71I5sacEVSbIU+rH1BE62NKBQ5LB4fd+1j+W7Y6rvF
+	 l2nsxRSkjSn/4SMWZ/96RIQy0qvMvr+G5A137GMiaRlDjZuYmhknj1Kgy45BQfePzIndi
+	 fYJGb5wkX3fsRarsitfdO34XBuT5aVPHXUei9RKnT5uAfXfp5iehuCp7l8SIMBLAjFuxy
+	 Nvc4VtgG0x10rXwYL8acdNtsY36dFYOUbOtbGnmQiJc54elRRJQ1P3pT/V5UDg0TO/Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=M8kHz8Wn;
-	arc=none smtp.remote-ip=209.85.210.43
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=pass header.from=meta.com;
+	spf=pass smtp.mailfrom=meta.com;
+	dkim=pass header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=aXPXGqRL;
+	arc=none smtp.remote-ip=67.231.153.30
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650ED606A319
-	for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 15:27:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 650ED606A319
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1634606A31B;
+	Thu, 22 Oct 2026 20:22:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C1634606A31B
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=M8kHz8Wn
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-825b40f8a26so1105998a34.1
-        for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 08:27:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792682846; x=1793287646; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FXOE4N6n0/t2DcXYw4BhESic6bUh9806SUYcFnKtZVk=;
-        b=M8kHz8WnpuM1sfJlZ58r/lWloNo5cChvhLL1NURcp/swz1Iy5czMzAmSkLdbu4EpvN
-         fwyx3JnisAlRWkcF2Cp8Q0VYe8rATfaMO55BA055Xz6HuIq2ixvcwKS6sTSOL6TP7TZ0
-         WbvbX5LVIVll3W63+c6voVqom1O6pTIhuF7LHWsvbIipMYbSMYofRo/ROi7Un5dRi63l
-         iS4mNLIR5q7mgv3hL4f6+Ar57Vhb2a4BXXq8Ex7/2efsW8POkKMTqhitMX7XYZQbR4Ab
-         PLDEHorF2qDQ94TGRLcfEGbUVBEqA3AjffVFxRnG+js+2IhyK/PxySFYkHE7FepeIiy4
-         oj3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792682846; x=1793287646;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FXOE4N6n0/t2DcXYw4BhESic6bUh9806SUYcFnKtZVk=;
-        b=pVKCH/6Pq5Ioh0ONwslUBdhSYtH8YaWw4g+1CcQ36w8Dac515UpuCRXxP7z72dpurH
-         i7JG7xBF+UNZ51LS6Yy16130bHzdTx7+ibum7eQnJlIS/RixHnIJkkSEWkBUGY6clOzO
-         t+N0QHQzT5wCjmvLSOP28+m/sV4kmLx/wJuAUUv6ZerNA5XwvicdGJ8rs48EI5RqCg1c
-         6hx8p2ApS6MjVFj0WFNe73ulGs0phHBeytUrB/yQk3KE3vuvUIS0aJRn97pznvzblOj6
-         KRMRJN862N33FjC6PPNjlvEyzgXr9qiTJ5sK2Yrng9ELP8WVVYYnfx1v0FcOR9S/6NcP
-         5GPw==
-X-Gm-Message-State: AFq9FYL5E0d2HJMFY4SkQa0SDgcrXshYcod7zf6dF7xo210Vkg7lvtXj
-	fGvK2AqngdIqMcX851FagYHl5GhGLJxGnFkuMWCWt7WgbChf5zJ/D7+R0+3DA05ns8Y=
-X-Gm-Gg: AYBFou0LXtQzYtm/0yexvMCUXYQHXRfvfqJYtFk8Cnp6TmpfqgnLnytyJ75Rl03ehK+
-	JNu//lPQlLvji9GeT8VshFdIM69FoZoXLZmk00/qu3skOun5w16JFxXdoCYSSMJUePaZgPRdyUx
-	7popMtOdbYWOGTqniqRpREnscAqKNxwqSsBxq0zvaDRT+psHdf/xm4frbl4dtFx9VIq57DYsNLO
-	NEkNfKKYbjeqGnbc4PTcSlDbuXt6vx7RzDzfZWKH0AAK9117iIwFpRTA3NE3J8nlTpAwVRlqxU9
-	ntwYq1z6GXDeVB9vFHaZ10omj8a5HYFwFYw+BIWBlFSEid3pUszmRD3AAUdZfTTMYo5Xs/1xlkY
-	QAWUg2HkhpVqB2gUh8Unv1A2rBqK1R3LcFioVI0Wh08LBPIsInlaES8MPumffZWIHiZrvl2sO86
-	I6r60eTa/jm0VDYjEukfB4vbTGGKbrNoTnHMM2ae4TVkDudDnhpz1Ud8n0ZoVF0YmcX+l5A4iHP
-	9wbbL/BUWnC3e4ohcd/OjGSSD7hZoqtEq2hC351188j1uRQ85uEdeLfvJYaYtE4LTyV8h4ppM/2
-	4nveAIanHIqy/UYxvxF1pQXTrYHFndJ9yBvwV2SwDFryglgDFdQFRt95FQ==
-X-Received: by 2002:a05:6830:6f85:b0:81c:ebf4:9ff8 with SMTP id 46e09a7af769-84d09218548mr4684807a34.30.1792682846415;
-        Thu, 22 Oct 2026 08:27:26 -0700 (PDT)
-Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-84f7752df06sm20431a34.13.2026.10.22.08.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 08:27:25 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: Pavel Begunkov <asml.silence@gmail.com>, Christoph Hellwig <hch@lst.de>, 
- Anuj Gupta <anuj1072538@gmail.com>
-Cc: io-uring@vger.kernel.org, Anuj Gupta <anuj20.g@samsung.com>
-In-Reply-To: <20261022132027.2293931-1-anuj1072538@gmail.com>
-References: <20261022132027.2293931-1-anuj1072538@gmail.com>
-Subject: Re: [PATCH] io_uring/dma-buf: don't fail fixed buffers without
- dma-buf support
-Message-Id: <179268284528.3895788.1637304833081345361.b4-ty@b4>
-Date: Thu, 22 Oct 2026 09:27:25 -0600
+	dkim=pass (2048-bit key, unprotected) header.d=meta.com header.i=@meta.com header.a=rsa-sha256 header.s=pps82601-s2048-2026-q3 header.b=aXPXGqRL
+Received: from pps.filterd (m0528004.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 69MHsoIE1999247;
+	Thu, 22 Oct 2026 13:22:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pps82601-s2048-2026-q3; bh=PYNgADVC6
+	8CwJP+YNADd/HcGS93CaXKGM5BiCxLiOm0=; b=aXPXGqRLJf4CK2BIV/htac63a
+	dSRUZgmfYBCZhVtQh2vPedXiWezIVlYJoqIf503RwoJ2YXaHAejUgXBB+MA8CF4d
+	YhKTfnnyd+qMknaeQFT9q1wiT2hU/5sHim0PvOPCpKMVDIwsJCAFOsDTBiKCTE/y
+	R2GSZv2Fprm5VLHMIQKm7vFqsmF6d7xWnlbK1Zs+i9Zluxwn5jFG0JAcyg2qUuGw
+	LYQRWhgUPxglN/S9TX2LGqOZ1tkU1SBmzuXkbmTvrZL5de/tIQ+PKlpGKTpzYHhJ
+	wIK13+4Y1V1jvOYrP7jf+PYlc1bFOsTFoWmrEx6ORyr8O+4G+GpY3U10sMkjQ==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4hfjf5ks8d-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Thu, 22 Oct 2026 13:22:15 -0700 (PDT)
+Received: from localhost (2620:10d:c0a8:1b::30) by mail.thefacebook.com
+ (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.56; Thu, 22 Oct
+ 2026 20:22:14 +0000
+From: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>
+To: Jens Axboe <axboe@kernel.dk>
+CC: =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@meta.com>,
+        <io-uring@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [RFC PATCH 0/2] io_uring/net: Add bundle support for multishot recvmsg
+Date: Thu, 22 Oct 2026 13:20:21 -0700
+Message-ID: <20261022202106.2474515-1-cleger@meta.com>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -97,25 +73,52 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIyMDA4MCBTYWx0ZWRfX9CFDae28hYBb
+ 7+tL3EA+W3bHlikgnADOS/CcuUKy3UnujFQ94Bu3W+9/jdSZHGo7ntnHucP6kD0Yzr1IZKZ1Pk1
+ yImfo6t8TfhB5dUICR8AA722jE2OfMWxY1mQD87bvpmGppxcTWBe33oL1s7rJ40mmPDQM7898ow
+ AAtToKwU34d6JOWpu+uBQ2Lhk0SfxOtMjnZBznuverQueQSfdcqGPfDumxZyxWixfjoueT4bOe+
+ 58g8Vz8Gl1dGAxOlmpTDj6ysOBfszBGqBVAQ76aRu071JZNk+OsfAgKiwBj3EmOJYMApCm7QM8+
+ RVRZbup0cfrJcdoCZPY4AtqgWrPnZBSf2Tce9plZAJnOkj3U+w2fEW+jiZTmnK3wkINufJPvUTj
+ YRDXFfaZ69pKRAaMsIecEEFM4gBhQ639fr4ZAqzNO7N6qxQlb8sWG1v3DeG42cMZ0mUm5UoqF/Y
+ nGJ807BERl7Ly24l4dQ==
+X-Authority-Analysis: v=2.4 cv=fNisTpae c=1 sm=1 tr=0 ts=6ada7077 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=M51BFTxLslgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=GbPsI2Ihf5RTnMjR_gZv:22
+ a=dh8xkkVarwHNG_fGBwMA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIyMDA4MCBTYWx0ZWRfX1VyfVVdTAmVN
+ Qu4HbxQyTbHCgay/dhNM4PXBMq+cd6oqVzl3krPpJmFWsKdTvRIV8unq2Y7hdYzB6mvQH1goY3J
+ er3OeylhBYlLXM/FvH1wI/QkJ7RQRvM=
+X-Proofpoint-ORIG-GUID: 37qGGeyT2uS7ijvYyEZArCgdHaGPTGlB
+X-Proofpoint-GUID: 37qGGeyT2uS7ijvYyEZArCgdHaGPTGlB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-22_06,2026-10-21_02,2025-10-01_01
 
+IORING_RECVSEND_BUNDLE is currently supported for IORING_OP_RECV but
+rejected with -EINVAL for IORING_OP_RECVMSG, since the recvmsg output
+envelope (struct io_uring_recvmsg_out, name and control data) was never
+accounted for when bundling a receive across multiple provided buffers.
 
-On Thu, 22 Oct 2026 18:50:27 +0530, Anuj Gupta wrote:
-> io_attach_dmabuf_map() is called for every fixed read/write, but returns
-> -EOPNOTSUPP when CONFIG_DMA_SHARED_BUFFER is disabled before checking
-> whether the request uses a dma-buf at all. So READ_FIXED and WRITE_FIXED
-> fail for ordinary registered buffers. Check REQ_F_DMABUF first.
+This series enables bundles for multishot recvmsg. Patch 1 is a
+preparatory refactor with no functional change. Patch 2 adds the bundle
+path for multishot recvmsg.
 
-Applied, thanks!
+Note that contrary to plain recv which handles retry and can append more
+data to a bundle, recvmsg does not support that since each payload is
+associated to an envelope. trying to enqueue more data in an existing
+bundle would leave an envelope in the middle of some payload buffers
+which is not expected at all. The envelope must remain at the start of
+the buffer.
 
-[1/1] io_uring/dma-buf: don't fail fixed buffers without dma-buf support
-      commit: 45b716456dd99488a0cef58482120dc0474aa696
+Clément Léger (2):
+  io_uring/net: Factor out receive buffer selection
+  io_uring/net: Add bundle support for multishot recvmsg
 
-Best regards,
+ io_uring/net.c | 240 ++++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 196 insertions(+), 44 deletions(-)
+
 -- 
-Jens Axboe
-
-
-
+Clément Léger
