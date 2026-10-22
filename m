@@ -1,82 +1,82 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792680350;
-	b=hIK6okNu9nHuuzK2aS3g7Sn/f70YfJZr2BatW2mpFc+H8qvjP9qdufToaJoSpZn5OgBS
-	 0rLsu4LYZ/SDsSkbhJ1uab3Hgy/QpTDF+nIlY9KeB0TElwBExxkvV4GKtApobm9yAYZ3g
-	 evloPcM1wCdaPRtKIEW7mcajoN5PydzgnK+6JOhk0a3ISIxPX9NNBGTYU9DCBEXpiW+V0
-	 ytdlYlohhUDy6tCDaMbwJBpvpXO/a8smW8UyZE/G8OnrZMiO1ils1g3F1JzqweGP1i0/X
-	 r7AHtolgJl+t183Bbh2wId/9PhgAs5vXHJVDNWTFo6eYjrwd6QdWSTLN/NwiboNbalQ==
+	t=1792680356;
+	b=kNOghHNCadXeb82bKXiGePhhoHmzA1v1kQzo3mrt/gF7L6tyPISgxTpbQu2sVwOTxheq
+	 rN9Ez7Wjm6dz5XT9RRpUxm0Q+v2aZVKdAgW8WiCjTQFOspE4sKz6RkMPPEBko2TkdJW2o
+	 p1EGqnct4ty8neP8a6zaRtNe81s9TKR8pd67CwT4e8YjAWgcZ+YgQsWgVzdxhQyPG0eU9
+	 aMTCOhsPv41FHlCafIi/P3Nw8/mOU31qu6slFXDOvpDjboLxyB6PA4GgU+gxc1OyGIZlQ
+	 qs2c9ISNZ7aAc/xrqJ8xFQqjYt+x47Kf2PZXl8aJDIOZO5dBgwp+LqetIykC6r7EwOg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792680350;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792680356;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=8Bvapck2YZWyHBU4/NPzDAoWoqpmu4MGPJ1W1o84MUI=;
-	b=w/U8mazcJRjjfopR3bD4NGlQNtZQCOL/cVphJ8DJXmqMpVga4n7mq3dQ6fH80KjSNvrc
-	 tH//uY/c6NMY2BlV/3vDC7wfzn2MQ+UQjvlIZf05bv2OwP7UiKCNh8DygFEf6baBLPAhm
-	 EiGCQDhqflq+zAfn3GZl0twS7VOnyBr4X475EYTPVAa5Szx6at94XrpA8Not3sVvtlpVE
-	 RnQF5aPylvgTnjTW8Xnj/qkBMa+DqPWbupfbEfblbfa+qDXoD0hRWBaxgrn1kTzTSbMwR
-	 ew92J8dwKGyIrvC2l5ZfQTNOiRPNTOqOJTGcBTvZ45N0nT6GwZQXkassCz0yUkNM50Q==
+	bh=zxlzuK4b3EjXwKJngq0cBhTK9G6JWxv2Wu97XDb3XjU=;
+	b=4rHnKvg3FK1uVaZ9mowetsBp2Q6cvPHUa5nDOwBwTHuiZADHqi/eW21q873VuchFUj1y
+	 SmTSeeKkfZG+r+ky5EnhjFVieM4ohK1tM8U+6VOT+MdB/uembzIXypFOQ3r4Q9Qu+DL7y
+	 tpNghxkZcoXRZiK1h2OZza7wzdoa1L6gQYC03NOS0PumBZAghKvq5shmHRyuKoM+aI7VF
+	 OBplceZmZpc+GmoA5gpURkrtp3fziMjnhuwd+618O74duGLz0C+f8zXZLJOdUn9V/nm2J
+	 g25ghcXBe4mf1kSr92tYBrulqjlnsDrIBTX1li7Iw7HkfA04BhMY9DSoIaj+4jU+WFg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P9SOghJH;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=clhQ+aBH;
 	arc=none smtp.remote-ip=74.125.82.51
 Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75DF606A319
-	for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 14:45:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C75DF606A319
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A58606A321
+	for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 14:45:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 76A58606A321
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=P9SOghJH
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-15dd124bbe7so3613795c88.1
-        for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 07:45:49 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=clhQ+aBH
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1438d9363fbso817567c88.0
+        for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 07:45:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792680349; x=1793285149; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792680356; x=1793285156; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8Bvapck2YZWyHBU4/NPzDAoWoqpmu4MGPJ1W1o84MUI=;
-        b=P9SOghJHObLq9J5Tiaoz7sSrJUBjqbMaAaEVeg6HivGx2sgyt79pFvmte4xPwYiRY1
-         RYvY5bYLVTxgBoLtzQxKxde473SW6YhXxV4Z8MUXBUHgPoHA4gnbJKK9Xzx56YRbeySn
-         WD1srDNYYn29WCupO9wDHleWFMilODG12NQMkdsUgbra1pKBekay/iIAfdUPiMFrvxS0
-         ZEVzUrJmn3LDG4XvYTkH3facur7BERUUC051UA9lckveOTJNsc9ZADXkANI6VayFadPI
-         s9zZNztNMKBHH9KdHCyPzkoYLx5disFyq1C+86eLx0csZhlvd/9V2Ftj/00OyZzc4bi7
-         ejwA==
+        bh=zxlzuK4b3EjXwKJngq0cBhTK9G6JWxv2Wu97XDb3XjU=;
+        b=clhQ+aBHEl1TQ/FS6en8DI3L4SmUryHS6HNBc/jx5g2EbXrPkvKXxv1TAE6pbA+J+W
+         9GeJOQVvfbgqaruY4nuUZMXoucY1S0JbtuLN/6p6/c4Nbx4Lhor5l8t/JhJn7W4gKapj
+         b+k/Llp7XkWfme0uUEX3XpimKzAmh8nxwDdj8tlJ2ypIN7IcXa6yVZ3mboPkRrqoKL5N
+         L3ea6vdCZ/fh4OM4eJwJFRd71d1XOLXgb/5Hf4Jtzo6k2HalPfxtaJ3//0ZptBkRT7O+
+         mvzF30a5sW0oXXc5hNV1m1WbDu1LEfEZjDW9uWzoxs6LiSsPGQSMbjy53c3TRROQuJjK
+         vlrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792680349; x=1793285149;
+        d=1e100.net; s=20260707; t=1792680356; x=1793285156;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8Bvapck2YZWyHBU4/NPzDAoWoqpmu4MGPJ1W1o84MUI=;
-        b=GHxq2x7LLTFEHOn1ZvoQTnxpvcFvrIoRdKFncExz7eipXn3Vj/3PMv7NVvHmcNRyOJ
-         HFqjkF74SAYE4ucAnijLTb3iOWcKK1PH2ndgjiMxq8X8sL8a0glliry/qavwWlu3OkX3
-         Zdzf0cgQ0qrleOI3zLxIkHwrr8IAnwh4ZOKrgZ67fldSADezQARSxKHhzKQILdAieoO4
-         qI/mh0NaUuC8nyxPRJKg3CJSQQY70ASqhVWzAdkrnsAz0PmsEY8DxA5OHqLLQtjJlpc+
-         i+1W8I+5Zx7tHNhGyRcBMifh1bOGzNQEB5vIwXlYPQYggvYnNhIs3+F6nm20QNJGvo1n
-         nYmA==
-X-Gm-Message-State: AFq9FYKDzTgvBBTIQZTejLCP4eRZRbXvjlt/LRRaPiFjh27voiksaNoq
-	VANwi2R5CN29AeSyEVV08WflpHQzq0y5c2K6bGOoGYUVgMB3nTWA/9s=
-X-Gm-Gg: AYBFou3k0Ba8QyVuIa+Bl+aA/6K7L2S1fRg8/HDaDpI7ZdlWpsePSnbtW2iq1cu8e6p
-	ktgr4V8SAtdPX94Uvq0XLVNdLx4RiL9CYh4WyMDZNyRPoLRljVER2+DQrcGzcpqzUXcBXhC8CCG
-	rKMOVEengnJM4xE/aPTB40Ugb3dS2AWuo9cPmW2IcZIrEZArQbU6f3GjLXM/gj/xp2WdwrTOYow
-	chXjY10v8G6w3htUxOPeMuPsF1l1GwBC8KElsrsufyCnTWZJ3/4Mb7n6ZswW/inaJ45B2+iz85K
-	ItqEFgxov1l44Ofsp1I70PTVwnHxPXb2R0sFXZ3tN3bSqalUm1TYKOiYtK9LH3qCuwvQ1EMqIUr
-	Aretowy/dDGcFQM6KiaC5A2Jj96Jcv6CuGfZRe3xUvDkJGQDWZFnXhzvtbS+qW1DtrFVsqHEgPC
-	YgWYbrb7phIhk4+SO1/u0Tis9h2icxYBUb6DNauQzIECpemuFUOKRHmF2NQ3QFs1HwMQ5iJEn+Y
-	0tRWwZH79VDL+sP7eetLfCx+PSRVU9kAUD7rR/jpCqIG7YBivL3IIY5IkId1SyZYRK6Bjeaxjcq
-	E5h86OFVXI2PfH8ZHsUj0fgLTU1qKH9d69oxnHrQhLYjLsBO5zmoLUhluG3C5EJG
-X-Received: by 2002:a05:701b:4284:10b0:14a:9dc3:dd11 with SMTP id a92af1059eb24-190a5999e7fmr7654858c88.18.1792680348543;
-        Thu, 22 Oct 2026 07:45:48 -0700 (PDT)
+        bh=zxlzuK4b3EjXwKJngq0cBhTK9G6JWxv2Wu97XDb3XjU=;
+        b=u2tuLAktnHVLhPFkGdsIpD2XeZ1b3iK5Dxhp/MBClheCX9MWEW3NxQR1xPl12HWyGa
+         qEKdIL0DR2/ZeegcyKvo2W9iY77h6dWzQFokN5W/Ut6fQbse+FdgKqvDYyyO/py3aW6o
+         bXnPti6wKp9nzNp+V1DpQtERS6aOgXdFadWCvIv8DUTb6746Z1lpc+W8LTvKDh1QSmfc
+         Wzbt4HBcN+k2BoQOQoohT8Olq+1BXejPc2rzYTOlYPnqVC+z58cONc/IGusZo8r+vVpj
+         bxHaCwTV0YtRV+sn3d0Hn1GU2W+3hfZxtiZBDMcR8E9IPB+Sna1Hi3sx4e8m6bwpLmZP
+         L7bg==
+X-Gm-Message-State: AFq9FYJ2d1POR+x1LmyMRvrFexTN54XvI3xyCXCz8CsiDWXQA6kLdXgw
+	38haif2E142cOw2k/oMnKVMVO4n3iaIA2p481vNi5orJwuVEtsnjwIi41N7CRrg=
+X-Gm-Gg: AYBFou0n7Zi8qcSqi6rWnifKBih8EuP2uR9DXZnbSKbP/lC00SGSrHKZVQZ+g7DXaGe
+	xjlb2dLRGGKJYFUDTEjj3hsuRsaGgDpbK671gViSIb5Hg0Afc3PY8lhEBYeVpqftLcVc/HEKEeq
+	or8vf8+VTq9uqDBwJ4shkjZLtEowA9Pk9Y+PAj7K5JoLjr1grfXtlS5oZIRjKS6eEB5djw28uOK
+	kKAfSK+P2XxlEThxmzcGHSMaYq+ywGKDsYrBQJR+jDLCa6j4LWeJjzYvNT3juWE65U6hNDBVweA
+	q6PiAesDMTPVroO/3Kp5PkAyikbje6fzysvi/YjaepTqlU6R1CgIuaoXV9aRyEdDycpWGn7pz9W
+	WEB6Jb5tXmExPcZHjMmaYB/A1EOSzHT/AL2d2bw+KArBiB2nt1flCNa4tqGdzi4qsy8vbPvFY9h
+	JHMvUDBTcEkTpWX4/X7oFNKNIaEaEVeVs6fvlxcfPU11KdQ2g6LfhWviTdHm2O5MlS9QUraPgmb
+	KPi0NALJTOYU24bDuSMrHyaOkT/Y/r4yg2M+IHny1Z1JUW8AG078I4sRgZBzuAcVb1pNstoJF++
+	Zv5pcipNzx441w3iydiUUSowqZlh15udHISV4hHDnwk=
+X-Received: by 2002:a05:701b:4241:20b0:15d:d7a2:3a88 with SMTP id a92af1059eb24-192f03cb835mr3210408c88.18.1792680355569;
+        Thu, 22 Oct 2026 07:45:55 -0700 (PDT)
 Received: from anuj-MacBookPro.. ([2406:7400:63:e55a:5016:92c7:7a35:f3ff])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903a275026sm23625880c88.5.2026.10.22.07.45.42
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903a275026sm23625880c88.5.2026.10.22.07.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 07:45:47 -0700 (PDT)
+        Thu, 22 Oct 2026 07:45:54 -0700 (PDT)
 From: Anuj Gupta <anuj1072538@gmail.com>
 To: axboe@kernel.dk,
 	asml.silence@gmail.com,
@@ -95,9 +95,9 @@ Cc: io-uring@vger.kernel.org,
 	fuse-devel@lists.linux.dev,
 	joshi.k@samsung.com,
 	anuj20.g@samsung.com
-Subject: [PATCH v2 1/5] io_uring/rsrc: pass import flags to io_import_reg_buf()
-Date: Thu, 22 Oct 2026 20:14:52 +0530
-Message-ID: <20261022144501.2478417-2-anuj1072538@gmail.com>
+Subject: [PATCH v2 2/5] io_uring/uring_cmd: add import flags to io_uring_cmd_import_fixed()
+Date: Thu, 22 Oct 2026 20:14:53 +0530
+Message-ID: <20261022144501.2478417-3-anuj1072538@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261022144501.2478417-1-anuj1072538@gmail.com>
 References: <20261022144501.2478417-1-anuj1072538@gmail.com>
@@ -114,127 +114,105 @@ Content-Transfer-Encoding: 8bit
 
 From: Anuj Gupta <anuj20.g@samsung.com>
 
-Give io_import_reg_buf() the import flags argument and drop the
-__io_import_reg_buf() variant, which only existed to pass them.
+Add an import flags argument to io_uring_cmd_import_fixed(), so callers
+can opt in to buffer types they support. No flags are defined yet, and
+all callers pass 0.
 
 No functional change.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
+Suggested-by: Pavel Begunkov <asml.silence@gmail.com>
 Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
 ---
- io_uring/net.c       |  6 +++---
- io_uring/rsrc.c      |  6 +++---
- io_uring/rsrc.h      | 13 +++----------
- io_uring/rw.c        |  5 +++--
- io_uring/uring_cmd.c |  2 +-
- 5 files changed, 13 insertions(+), 19 deletions(-)
+ drivers/nvme/host/ioctl.c    | 2 +-
+ drivers/scsi/scsi_bsg.c      | 2 +-
+ fs/fuse/dev_uring.c          | 2 +-
+ include/linux/io_uring/cmd.h | 5 +++--
+ io_uring/uring_cmd.c         | 5 ++++-
+ 5 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index 050ed274170a..63089744d43e 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -644,7 +644,7 @@ int io_send(struct io_kiocb *req, unsigned int issue_flags)
- 	if (req->flags & REQ_F_IMPORT_BUFFER) {
- 		ret = io_import_reg_buf(req, &kmsg->msg.msg_iter,
- 					(u64)(uintptr_t)sr->buf, sr->len,
--					ITER_SOURCE, issue_flags);
-+					ITER_SOURCE, issue_flags, 0);
- 		if (unlikely(ret))
+diff --git a/drivers/nvme/host/ioctl.c b/drivers/nvme/host/ioctl.c
+index 3aa5d2f2dfbb..612d3009dd29 100644
+--- a/drivers/nvme/host/ioctl.c
++++ b/drivers/nvme/host/ioctl.c
+@@ -533,7 +533,7 @@ static int nvme_uring_cmd_io(struct nvme_ctrl *ctrl, struct nvme_ns *ns,
+ 					ddir, &iter, issue_flags);
+ 		else
+ 			ret = io_uring_cmd_import_fixed(d.addr, d.data_len,
+-					ddir, &iter, ioucmd, issue_flags);
++					ddir, &iter, ioucmd, issue_flags, 0);
+ 		if (ret < 0)
  			return ret;
- 		req->flags &= ~REQ_F_IMPORT_BUFFER;
-@@ -1216,7 +1216,7 @@ int io_recv(struct io_kiocb *req, unsigned int issue_flags)
- 	if (req->flags & REQ_F_IMPORT_BUFFER) {
- 		ret = io_import_reg_buf(req, &kmsg->msg.msg_iter,
- 					(u64)(uintptr_t)sr->buf, sr->len,
--					ITER_DEST, issue_flags);
-+					ITER_DEST, issue_flags, 0);
- 		if (unlikely(ret)) {
- 			kmsg->msg.msg_inq = -1;
- 			sel.buf_list = NULL;
-@@ -1509,7 +1509,7 @@ static int io_send_zc_import(struct io_kiocb *req,
- 	if (!(sr->flags & IORING_SEND_VECTORIZED)) {
- 		ret = io_import_reg_buf(notif, &kmsg->msg.msg_iter,
- 					(u64)(uintptr_t)sr->buf, sr->len,
--					ITER_SOURCE, issue_flags);
-+					ITER_SOURCE, issue_flags, 0);
- 	} else {
- 		unsigned uvec_segs = kmsg->msg.msg_iter.nr_segs;
  
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index d64228b0e19e..1abfbb86dae8 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -1365,9 +1365,9 @@ inline struct io_rsrc_node *io_find_buf_node(struct io_kiocb *req,
- 	return NULL;
- }
+diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
+index 5eec248a77a6..e53b417c27b9 100644
+--- a/drivers/scsi/scsi_bsg.c
++++ b/drivers/scsi/scsi_bsg.c
+@@ -87,7 +87,7 @@ static int scsi_bsg_map_user_buffer(struct request *req,
+ 	if (ioucmd->flags & IORING_URING_CMD_FIXED) {
+ 		ret = io_uring_cmd_import_fixed(buf_addr, buf_len,
+ 						is_write ? WRITE : READ,
+-						&iter, ioucmd, issue_flags);
++						&iter, ioucmd, issue_flags, 0);
+ 		if (ret < 0)
+ 			return ret;
+ 		ret = blk_rq_map_user_iov(req->q, req, NULL, &iter, gfp_mask);
+diff --git a/fs/fuse/dev_uring.c b/fs/fuse/dev_uring.c
+index c6dd420c4034..5cc206abccc0 100644
+--- a/fs/fuse/dev_uring.c
++++ b/fs/fuse/dev_uring.c
+@@ -727,7 +727,7 @@ static int fuse_uring_import_payload(struct fuse_ring_ent *ent, int dir,
  
--int __io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
--			u64 buf_addr, size_t len, int ddir,
--			unsigned issue_flags, unsigned import_flags)
-+int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
-+		      u64 buf_addr, size_t len, int ddir,
-+		      unsigned issue_flags, unsigned import_flags)
+ 	if (bufpool_registered(ent->queue))
+ 		err = io_uring_cmd_import_fixed((u64)(uintptr_t)base, len, dir,
+-						iter, ent->cmd, issue_flags);
++						iter, ent->cmd, issue_flags, 0);
+ 	else
+ 		err = import_ubuf(dir, base, len, iter);
+ 
+diff --git a/include/linux/io_uring/cmd.h b/include/linux/io_uring/cmd.h
+index e18d4af62e1a..23fb66a1e2c1 100644
+--- a/include/linux/io_uring/cmd.h
++++ b/include/linux/io_uring/cmd.h
+@@ -64,7 +64,8 @@ static inline void io_uring_cmd_set_res32(struct io_uring_cmd *cmd, s32 ret, u64
+ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter,
+ 			      struct io_uring_cmd *ioucmd,
+-			      unsigned int issue_flags);
++			      unsigned int issue_flags,
++			      unsigned int import_flags);
+ int io_uring_cmd_import_fixed_vec(struct io_uring_cmd *ioucmd,
+ 				  const struct iovec __user *uvec,
+ 				  size_t uvec_segs,
+@@ -124,7 +125,7 @@ int io_buffer_unregister(struct io_uring_cmd *cmd, unsigned int index,
+ static inline int
+ io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			  struct iov_iter *iter, struct io_uring_cmd *ioucmd,
+-			  unsigned int issue_flags)
++			  unsigned int issue_flags, unsigned int import_flags)
  {
- 	struct io_rsrc_node *node;
- 
-diff --git a/io_uring/rsrc.h b/io_uring/rsrc.h
-index 418d236152ff..6226c7862d4e 100644
---- a/io_uring/rsrc.h
-+++ b/io_uring/rsrc.h
-@@ -66,21 +66,14 @@ int io_rsrc_data_alloc(struct io_rsrc_data *data, unsigned nr);
- 
- struct io_rsrc_node *io_find_buf_node(struct io_kiocb *req,
- 				      unsigned issue_flags);
--int __io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
--			u64 buf_addr, size_t len, int ddir,
--			unsigned issue_flags, unsigned import_flags);
-+int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
-+		      u64 buf_addr, size_t len, int ddir,
-+		      unsigned issue_flags, unsigned import_flags);
- int __io_import_reg_vec(int ddir, struct iov_iter *iter,
- 			struct io_kiocb *req, struct iou_vec *vec,
- 			unsigned nr_iovs, unsigned issue_flags,
- 			unsigned import_flags);
- 
--static inline int io_import_reg_buf(struct io_kiocb *req, struct iov_iter *iter,
--				    u64 buf_addr, size_t len, int ddir,
--				    unsigned issue_flags)
--{
--	return __io_import_reg_buf(req, iter, buf_addr, len, ddir, issue_flags, 0);
--}
--
- static inline int io_import_reg_vec(int ddir, struct iov_iter *iter,
- 				    struct io_kiocb *req, struct iou_vec *vec,
- 				    unsigned nr_iovs, unsigned issue_flags)
-diff --git a/io_uring/rw.c b/io_uring/rw.c
-index d33b925a848e..71782a23e16b 100644
---- a/io_uring/rw.c
-+++ b/io_uring/rw.c
-@@ -360,8 +360,9 @@ static int io_init_rw_fixed(struct io_kiocb *req, unsigned int issue_flags,
- 	int ret;
- 
- 	if (!io->bytes_done) {
--		ret = __io_import_reg_buf(req, &io->iter, rw->addr, rw->len, ddir,
--					  issue_flags, IO_REGBUF_IMPORT_ALLOW_DMABUF);
-+		ret = io_import_reg_buf(req, &io->iter, rw->addr, rw->len, ddir,
-+					issue_flags,
-+					IO_REGBUF_IMPORT_ALLOW_DMABUF);
- 		if (ret)
- 			return ret;
- 		iov_iter_save_state(&io->iter, &io->iter_state);
+ 	return -EOPNOTSUPP;
+ }
 diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 73b606899833..45c9c845f5d0 100644
+index 45c9c845f5d0..c2bc9dd242ec 100644
 --- a/io_uring/uring_cmd.c
 +++ b/io_uring/uring_cmd.c
-@@ -279,7 +279,7 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+@@ -272,12 +272,15 @@ int io_uring_cmd(struct io_kiocb *req, unsigned int issue_flags)
+ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter,
+ 			      struct io_uring_cmd *ioucmd,
+-			      unsigned int issue_flags)
++			      unsigned int issue_flags,
++			      unsigned int import_flags)
+ {
+ 	struct io_kiocb *req = cmd_to_io_kiocb(ioucmd);
+ 
  	if (WARN_ON_ONCE(!(ioucmd->flags & IORING_URING_CMD_FIXED)))
  		return -EINVAL;
++	if (WARN_ON_ONCE(import_flags))
++		return -EINVAL;
  
--	return io_import_reg_buf(req, iter, ubuf, len, rw, issue_flags);
-+	return io_import_reg_buf(req, iter, ubuf, len, rw, issue_flags, 0);
+ 	return io_import_reg_buf(req, iter, ubuf, len, rw, issue_flags, 0);
  }
- EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
- 
 -- 
 2.43.0
 
