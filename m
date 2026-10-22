@@ -1,89 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792675238;
-	b=1pYN1SrrKIuBa2g68ZWx5f8Er4y9Iu00g8fZAk/iyehVI+EqHpzpbQlKTyKdjALfkNqZ
-	 86m7EG2psqY0xDkagJgxK4BcxvGe2r4PB9VeOT+Y6zQmRyczgE0gvIx6TlbQpW242IhF2
-	 F3PfBG9SLX+owmgim3F6k+0KMpI4vYokS/uEDZ7Qea5ubnRiW4jaQNkT+358Il9kz1Yhc
-	 l7Dihszs+CvK7mXkiU04I393ejRCDXrTScfXzKZX1CNNs9GNz1iG1w1X5FSwkLAi+SByo
-	 sSIERQJ/1EmWoCQ82BKAFGejFpoZnQQ7toW8jW40E899DVjznLYOr5hGqMsdXauD1jg==
+	t=1792680343;
+	b=jW/EOR5AJoVseEAwume2m1jzjD4Q9fC83Hs5PO0FQOLZAUfpK3+9+xCp/R5ZnYPT0lwr
+	 W1EowNTZkvygXKIqqN3HRVaLSJPFuWBKcvm7uzFN0D03sgwKF1oQfQ428YaGAmYaelYeS
+	 5ZK/zNDCPExfB2s0/6Mg/NC3LkR9/pAOJnIziqrjCHXr3Vjw6vOHyTWDYszznL6zYI5OE
+	 lElGDGuh6PSQwv8c9wlVEXfFtGAFX1v2ILUrYWRRkaKbOh/VyM+XJ3++Rc9d4G/05NJfk
+	 zJtEM9MmuDZQfFugFMBYjV6kjRNhvLb19uHt8hLrIR5oQI/chQBlmty5x48ZODH4lEg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792675238;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792680343;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=mgme4r67JpTEYteRjS8PBWsuR6NoDzjaPbvcjurCp3U=;
-	b=lB068T0iValY8MCtO2lSgQu+BvNS1pQj9nOxXFFNuCMRLRKElpZYhlW6+pEedwU5uavG
-	 T1ab0rtcV6exSWJXJt/ZfZeqRmt5zEkEH1Bdm8mDkXhja0Vp5TGNHw5zs9vYUOH2HMgpY
-	 pSZNx5ygIdBGpwqBgRZWGshRoTZmV9rA58c4YCQeLI5+Ywo+oJ9qSe4FHK0wS8AydYf3t
-	 7qIOJkUXibus1Sz5EXxHLNZ4e1NiOVrhxAcNqHyiV52bkrXloV7IQaq6gtEIlYmBXLBTq
-	 DogslymUD7gnxd1XckoYLQ3VOGQ7wf1BMPIhoV+AQ7eHKlVSUvwG/m9U+xRbB4mZNtQ==
+	bh=YHBFmHAZzkTNwhPEuQe/n0EZjSl7NRJ9RBTHgn7pG6g=;
+	b=dJN4fRf1IFgtEynWtbquYCPEHMJTtEZ5pcfxaak/FX57TAuOg5vDg6y+n1St/Dz+9i2D
+	 wExTUzL9AY9nkgNHZUV0Az7BG4n4bbPj+kvJrhP8fKG7ByyMHql2fDtPryntyssVK3WUs
+	 YyzpwjW0RkJdg/sjapG4quqTqD98MwZgAtGGPer15VFz5Vat+YcdgIM+9iKf1dOut9/cl
+	 GAJkq60ymdBo0Q4wS4tszIyvQMB+uiArrnXIcqGkYIZDHeY56k/AvEnmfhttAyDujpgX6
+	 D9wiq9QOPa3dczAR3e31ZWWnHanH9xaZi6tyN61q7q/MeO9AnD0g2ZcD/vS8QLHOYLg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=B9cqxGsK;
-	arc=none smtp.remote-ip=74.125.82.176
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MX4aGq+Z;
+	arc=none smtp.remote-ip=74.125.82.48
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A03606A332
-	for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 13:20:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 99A03606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4192D606A31D
+	for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 14:45:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4192D606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=B9cqxGsK
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-3514b90bb89so4746235eec.1
-        for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 06:20:37 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=MX4aGq+Z
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-156cbe59524so1556286c88.1
+        for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 07:45:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792675237; x=1793280037; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1792680342; x=1793285142; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mgme4r67JpTEYteRjS8PBWsuR6NoDzjaPbvcjurCp3U=;
-        b=B9cqxGsKdZcWzL9ZpI33nlSrGPE2NeFdUrt9P6G4FZ8hkKoSrA+jBgq4mdDpdKsWyQ
-         N7AZEEINmB+2Oq9zDBY20zNVl8hzb18RBSBzyesLCfSspZBD1T4UC/y4Z26u3L4uK+st
-         WSwtg4Ij05ewKt8YwaQF17Cr99GyHZgyouhBFG7mLjNAF9SaxwUc5OffV1/nVxRFjxsr
-         hRiHaQj7YoefxLU8UespXOLwwd+/FEqcOfAHcj4DVo9M2ifgpAK5DbUNGDVNNctKISM3
-         QRE+LLTPNZ2zaz+CBwf6ZceKtd+Hgb4ij3M49702aDJFnqBZd+mvbgnWDDJ8/UzbJMZu
-         UIiw==
+        bh=YHBFmHAZzkTNwhPEuQe/n0EZjSl7NRJ9RBTHgn7pG6g=;
+        b=MX4aGq+Z76FGWDcCUV1LNuRvEgXiZkCR1eq0l3RwGH0V2h9pF4ulMUXNn5dSFjqW0h
+         dvaIMrGEeu5BEQb/j8zn0XhshvClFROYk4h2ZW28nTXT48T5ArQH931fqAHdUOAFM4p9
+         Cxr5jFg2zRStIh6zh8a6kI/jpDiYNmLNO+1TsZEfy0BZYRKJtdTTP1DjjfMTd3K1k/ym
+         h4t75bJSWIoverA7ahvnVUnActI9LRbH2i9b/Tndc2tMA83g8lseNO+qnb6lWec7zavH
+         S6zcElnkrdUhivd4xhakT/4gvt5ladPKD61Xb1wbseoIaQnK0I72aOoiQF/xw1Ia9BFC
+         6fqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792675237; x=1793280037;
+        d=1e100.net; s=20260707; t=1792680342; x=1793285142;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=mgme4r67JpTEYteRjS8PBWsuR6NoDzjaPbvcjurCp3U=;
-        b=kriRVqLZ8Tx7fgafbe1dwVfYeKvPPJ+eN11PBxmCXVPmwMhkLhc6D55I7HB+Yqymrr
-         fxW2ayK1ikRv49nx6k9NpEuRWok92/XDqOw0SIgnu5WCXcG8FTKs7mJq5ikGrgSXs+x3
-         AyE7Xm71bEsOLtG/1HNOGHtmu+Rk4vQDaF8ZhnMEJMjP+cXGjSEiffYLFrkM/MI65Ch7
-         g3p9eqH9t4RtvlNNH8Yks/4Uyoj8PfbXEUBd+9OEByRlE6Ae0M4q/mXCIaGfnG3a3Xl8
-         sGK/ExzsS6gHVJaNqrIe+EpIidOYD47QtYCXGNkrcBz9PkjK5bYgKsKeDvJcbo1zYG9D
-         4WvQ==
-X-Gm-Message-State: AFq9FYKmIh8e+pNtLzW3MYa87q97b+rWc3rRI/guj+/6grLw+DCkacEk
-	sICiHBz0cu6pjUTgnFNNNltuzHa+TK3XtAcZ1fHDksYSGrouHN9HLCc=
-X-Gm-Gg: AYBFou1AqfYU1P7Z3WjEMPWv5++lWeWtB2LzMwByEOmWVLFiXpzjVqjO1C9huDR1dx1
-	n6LSrG3p5YheuLIhGnLvFWqR7YMHJOwdmM/WdoaU6WfNVjgvHYU2iS3eLapgqUVhzO7uOObtOEr
-	4iTeiFRxHoCkFz14xiflNSt/Lv6IxjrvA/1w7gVfmlXA2uvq1ghq3yFng/9eZ3eXR+lDG6Fay0i
-	doI/S/F/4263+bVgmK0I0KwHrVq2LSlc5TKq8fQWWMoy3EONM8XqZtsqcMJ7GKnRMYUkqGQ/mZR
-	8Zb22mK/D5Enev91oUOONt6HYZ0T9C8ime97abkQ1qRWZlN7TWKTcxG+HrvsQgvzvi5+CmXOWbq
-	N4AXYAtfMfq+iOVFouC7kGByjrJSbr8bW9e+WJSKijwlduzT1tyc5Fv/yDROAqZlgFJtxmRx8E2
-	fH4KAW6HSRLocXVkvK+4QooSDyzRw9lQUymLvo0buyw8khYumZCcJ8I/XLxyoSo4FV1dAE5+Kag
-	d+Xa3WcYg9sfCo2sxyZwI0nuUC8yMG6gZgxbC/I8V0lhvhqdhCZ2VvvYbfoX8D6e3oFESr+cJIW
-	7Q6Te0K1qPJS3dSdxh23/jGwysOB3yJqpiF6TYAmcJn8QgTPcI/0V1F7MXXPjbkQ
-X-Received: by 2002:a05:7301:2024:b0:353:5908:36fc with SMTP id 5a478bee46e88-3674cd33dfdmr6837349eec.17.1792675236487;
-        Thu, 22 Oct 2026 06:20:36 -0700 (PDT)
+        bh=YHBFmHAZzkTNwhPEuQe/n0EZjSl7NRJ9RBTHgn7pG6g=;
+        b=OzVGwZ55sGKRLWh8w1LzRyPmBHBEmM+FDZojiRBnxu0K7Ehgi2cKOc9vHVHMOF7KwQ
+         /44jueMrPBMFwTEPWKYye3zAwtwQ6/oytaPHCxfrKMt8CImp8ApHiLbG6CHrG6vF46+C
+         QdG/gS+Qr0A9xjTX0wvMNmUhtBQawx8WTqUI62xZvovbB8OWAiZckluLoMcEj8ZYktim
+         kJvSHTbBDZs+3N7b8l0n+Nqxl/I9Kn8mIRWUprtZ7NRXeW0CS9BBO17wRGg/NiOxCjg2
+         LnH9pHWpNetfywuM39bETIfvadN+KNggqOC1Lfu8lfNHZUmRoLpf57436GdLwJtcMpzC
+         q0vA==
+X-Gm-Message-State: AFq9FYJ0b1Oa2heRAARHZteDA8xak+/R+urmoxoezuAokvb3+bMD5BHt
+	KVuVZQtZNNsb6zqSmokwWiMLb5dbnWvWYrwoOACHLv1INGaVN2aEA5I=
+X-Gm-Gg: AYBFou2HWQ5q6L8emCnjQJawL2Lbj1u48S2m/hKT+DhX5rlUOsfRyztTyuirYX1YkcS
+	gUE/Mgz9341hVagbLVHYU+aPN2PNin+MoQQVOwRM9WGq38m7xqTD9MUBhLgP4OahpOIHnr610A5
+	A97RFwMeDAOCrTJjA3e1DuUYxXxsEgatsUt41MwNehkXaueJLagZ+w4rJyA68ycPobCcAroUG1W
+	Jv24LFAdfSBMmgdPzrTIL5B6Ka71yDL7JE7yGergwbUlTLltTV/vmYv7IBSNC4dQA05/jwZkugF
+	KY61Jxpo86zDcU/buHBWgfCrhZONNZ5ehcguhKN5QXsfeS6WDtKKI3oRVXlU6WI7gXZ7S+mJ0WL
+	hwuSA5fC+8sRlR+plP/uThgPsifVYEwJmSSM8134RvH/F019bDSOrch9s5FXXg+f2jt1IZaoom3
+	8BxlJtjbWZZEQXb5xoMbNotkvrbn6Nu+e+m0sXJMLjXsiBvI/fKZ9KOPnjjHT0Wu3fkPjGcRNq5
+	7aGSjPYyeSd6rdO4Ntj/495zwApXggcrv8cgItGhkZ4Pz/BZvm5NpItRoe+obL9jpwbF8EdKz7b
+	wAEqBbbaywTYWIbn1LXNc1X2Ey1kMQoyRvHBfv6ycb4=
+X-Received: by 2002:a05:7022:286:20b0:191:17d6:ccdf with SMTP id a92af1059eb24-19117d6ccf9mr5773178c88.8.1792680342117;
+        Thu, 22 Oct 2026 07:45:42 -0700 (PDT)
 Received: from anuj-MacBookPro.. ([2406:7400:63:e55a:5016:92c7:7a35:f3ff])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-367411bc89fsm20383220eec.16.2026.10.22.06.20.33
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1903a275026sm23625880c88.5.2026.10.22.07.45.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Oct 2026 06:20:35 -0700 (PDT)
+        Thu, 22 Oct 2026 07:45:41 -0700 (PDT)
 From: Anuj Gupta <anuj1072538@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Christoph Hellwig <hch@lst.de>
+To: axboe@kernel.dk,
+	asml.silence@gmail.com,
+	kbusch@kernel.org,
+	hch@lst.de,
+	sagi@grimberg.me,
+	James.Bottomley@HansenPartnership.com,
+	mkp@kernel.org,
+	bernd@bsbernd.com,
+	joannelkoong@gmail.com,
+	miklos@szeredi.hu
 Cc: io-uring@vger.kernel.org,
-	Anuj Gupta <anuj20.g@samsung.com>
-Subject: [PATCH] io_uring/dma-buf: don't fail fixed buffers without dma-buf support
-Date: Thu, 22 Oct 2026 18:50:27 +0530
-Message-ID: <20261022132027.2293931-1-anuj1072538@gmail.com>
+	linux-nvme@lists.infradead.org,
+	linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	fuse-devel@lists.linux.dev,
+	joshi.k@samsung.com,
+	anuj20.g@samsung.com
+Subject: [PATCH v2 0/5] dma-buf backed NVMe passthrough I/O
+Date: Thu, 22 Oct 2026 20:14:51 +0530
+Message-ID: <20261022144501.2478417-1-anuj1072538@gmail.com>
 X-Mailer: git-send-email 2.43.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -96,36 +108,56 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Anuj Gupta <anuj20.g@samsung.com>
+This series adds support for dma-buf registered buffers in NVMe
+uring_cmd passthrough.
 
-io_attach_dmabuf_map() is called for every fixed read/write, but returns
--EOPNOTSUPP when CONFIG_DMA_SHARED_BUFFER is disabled before checking
-whether the request uses a dma-buf at all. So READ_FIXED and WRITE_FIXED
-fail for ordinary registered buffers. Check REQ_F_DMABUF first.
+It depends on this fix:
+https://lore.kernel.org/io-uring/20261022132027.2293931-1-anuj1072538@gmail.com/
 
-Fixes: 62e4bf5b25d4 ("io_uring/rsrc: add dmabuf backed registered buffers")
-Signed-off-by: Anuj Gupta <anuj20.g@samsung.com>
----
- io_uring/dma-buf.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Patches 1-2 add import flags to the fixed buffer import helpers, so
+uring_cmd users have to opt in to dma-buf. Patch 3 adds the io_uring
+side, patch 4 lets the block layer map dma-buf iterators for
+passthrough, and patch 5 enables it for the NVMe namespace character
+device.
 
-diff --git a/io_uring/dma-buf.h b/io_uring/dma-buf.h
-index a876a9e5e272..534c06b6879f 100644
---- a/io_uring/dma-buf.h
-+++ b/io_uring/dma-buf.h
-@@ -34,10 +34,10 @@ static inline int io_attach_dmabuf_map(struct io_kiocb *req,
- 	struct dma_buf_io_map *map;
- 	struct io_buf_dma *bd;
- 
--	if (!IS_ENABLED(CONFIG_DMA_SHARED_BUFFER))
--		return -EOPNOTSUPP;
- 	if (!(req->flags & REQ_F_DMABUF))
- 		return 0;
-+	if (!IS_ENABLED(CONFIG_DMA_SHARED_BUFFER))
-+		return -EOPNOTSUPP;
- 
- 	bd = req->buf_node->buf->priv;
- 	map = dma_buf_io_get_map(bd->ctx, nowait);
+Tested with this liburing test:
+https://github.com/anuj7781/liburing/tree/rw-dmabuf-pt
+
+Changes since v1:
+- split into io_uring, block and nvme patches (Christoph)
+- pass import flags to io_import_reg_buf() and
+  io_uring_cmd_import_fixed(), and make callers opt in to dma-buf
+  (Christoph, Pavel)
+- add io_uring_cmd_hw_done(), so nvme no longer handles the dma-buf
+  map (Pavel)
+- warn if task_work is queued with a dma-buf map attached (Pavel)
+- make the -EREMOTEIO conversion explicit and comment it (Christoph)
+- refuse dma-bufs larger than 4GiB on the character device
+
+v1: https://lore.kernel.org/linux-nvme/20261016103453.1129150-1-anuj1072538@gmail.com/
+
+Anuj Gupta (5):
+  io_uring/rsrc: pass import flags to io_import_reg_buf()
+  io_uring/uring_cmd: add import flags to io_uring_cmd_import_fixed()
+  io_uring/uring_cmd: support dma-buf registered buffers
+  block: map dma-buf iterators in blk_rq_map_user_iov()
+  nvme: support dma-buf registered buffers for passthrough
+
+ block/blk-map.c              | 15 ++++++++++++++-
+ drivers/nvme/host/core.c     | 16 ++++++++++++++++
+ drivers/nvme/host/ioctl.c    |  5 +++--
+ drivers/scsi/scsi_bsg.c      |  2 +-
+ fs/fuse/dev_uring.c          |  2 +-
+ include/linux/io_uring/cmd.h | 14 ++++++++++++--
+ io_uring/net.c               |  6 +++---
+ io_uring/rsrc.c              |  6 +++---
+ io_uring/rsrc.h              | 13 +++----------
+ io_uring/rw.c                |  5 +++--
+ io_uring/uring_cmd.c         | 31 +++++++++++++++++++++++++++++--
+ 11 files changed, 88 insertions(+), 27 deletions(-)
+
+
+base-commit: fd13f31ac62abac4df2166bb0a6fbff53b288e0c
+prerequisite-patch-id: 6ad52e1ffc603df71c6855926838f2df402c3ed1
 -- 
 2.43.0
-
