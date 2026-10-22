@@ -1,71 +1,71 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.69
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.71
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792711283;
-	b=JkPq55r/Q6D8bcF4/vLZaLsGKCaFPsUNc7kUe7zOEtLfz0jQWIeBKLfk/IcxEDJC4qHm
-	 JmpoA2YrLkgAnZbeV+sfubJP87VGAXwLMciiJNxj0duhHiF7PTwNOivTUvsFr6L7sP23D
-	 Zb0XrIrM3biaLD/L7IyaP0SJQPd9eCAlkttghaItBEuC1Y2vTLnxj0qLafCgEOPympyoH
-	 uUHst6mvzRC+sknWwjNA2j2vYRQlfKHhCg0rf/OLSegusMVYr7HFMcMk7trmuol69JvFn
-	 2pP5gnpnaLzgXbRPTTUECWKhMBCS4xcEhR12/AI9PdH7HuO8uXgoF9MnziVUD4qskJg==
+	t=1792711284;
+	b=qvrMktfIbwCII5ewzkse+F2lCnazUQ/tfTO4/OWjZ3WzKeJ5nENrUbMNMcQSUimxfQr4
+	 EfgXFutkkyIp2LkJBKA4kqbUCQBcKwy5p5Hx0AGNubxqPgL0qrQnJKEz85aOSNbEShAml
+	 bSbhT/6h3VWoQS6fpmN/6UIm1yOcOhpNglB+xHlcpR4yCemkvdOWBhRjtXK5ogQ+bbyJu
+	 dGijITy43Pp7wXOJFPzfbJ8pMMxR6LJhkNVxyneXdsk/lONgAdk5YpvHFwuoXjZXT1Rfe
+	 g6ysoOZSHG8Ue3vQBYQx9yN7V9fe5bEpSc9X11RL5g4XMuPW+RwzmrLZ5ZPYlgbxHRQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792711283;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792711284;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Received:Date:Mime-Version:X-Mailer:Message-ID:
 	 Subject:From:To:Cc:Content-Type;
-	bh=H66wtRneHdvmEI7Lgz4ecssmEQCX18Fy4sSSzRx3jnk=;
-	b=hJGfzFpBVxmXN5CM9YwBio3P6iIuPbOP9hX5/r/rvmgu1zWYEdytEyJ5mg6+u8SprWTf
-	 PVD62PeVDoWRvDD5LC8xD2wPgrRmas33AaI15k8/YLCiE4qzjkSncDLlxDyqI3SJm/s37
-	 pW5R9WVVU8mzIUkhamWAGYIY0+TniNgCawd8fc6ZzQD/fhi/A6v6CWcJwPxwbQKZPQP4q
-	 lihxr3Hg+bGN9O5PhzR3t4RkOfvN2cs9QzmO+iQp5/qqjZygrZS2FeyuOpU9MzkjHV+ES
-	 ljlwiHf2OE+XzptBKvBh6pkhVq66WPuOfD85MW4wxW1ncqTo09TYsHlViv32nRZlLfQ==
+	bh=OhB3GDRw8d5cRY9z2D4vphubhUsoZarSV8LxVq2K+Hk=;
+	b=V1bmqMcDNkS2o8OUhKs1LHFYWlIFoMzWSO9MiYZrogteWH0FQGcZjNiFFVZXQuBvx4hU
+	 pKhQGVk/oLgCLDEhNopbrQqcdCCnhYRpQJlAdEZMM8HaQe4LXnFEr687qN7XUqrrJWAZP
+	 CilRVLdUqhqhMc0dx43XEcTcWYcl2rhaMn/CM3KYLSJaItQc5FoMsgc0AAX8NyrkrZ4bV
+	 I/jhpIHLkZAx2v8nCdf2cWDZzoTLEj7DDW4gbmxfiXwFGGkB4FzCOhiuVbkEGt3U8pfzl
+	 1ii8jNVqK1tgmxZEYgv2FNVkgHUejgRUxbDYcAFilqXbQJpACKyCp7ZJMyhvWgWfICg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--dmnk.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=ef2exmCS;
-	arc=none smtp.remote-ip=209.85.128.69
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=elZXSmBA;
+	arc=none smtp.remote-ip=209.85.128.71
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0789E606A325
-	for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 23:21:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0789E606A325
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68682606A319
+	for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 23:21:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68682606A319
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmnk.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=ef2exmCS
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4a2065a2ef9so2471645e9.3
-        for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 16:21:22 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=elZXSmBA
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4a1f03f2e8aso1979585e9.1
+        for <io-uring@vger.kernel.org>; Thu, 22 Oct 2026 16:21:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1792711281; x=1793316081; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1792711283; x=1793316083; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:mime-version:date:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=H66wtRneHdvmEI7Lgz4ecssmEQCX18Fy4sSSzRx3jnk=;
-        b=ef2exmCSMGu9BL1RoF7gwp/3JSejse9dIZ8juY9zqk/y4hjxTiYK1V9bakV0AIMNli
-         g5WzOHYD0MnoJzVhzrMYCf0nXOCUedHdoqCr92/KPf8hg7VDyzveaVD5V4iWmJyrC12E
-         dbQ7/gJATs+cWJ0NWd55yutpVpn8pgqac5NGRg2wH1i9tMQxEpFvii6IVYCAT9bz3vPw
-         iX7ZE9LEFgSwa7sRrU/Uht2uLfYJ53B+dXj0Va8H5ZlLF04AtY05bSAty0XeKaERB5vh
-         wR2gEP5wBi4ly1X2dy+kHdam5QJtcKKzFensQddfyRv73VSQVE8eRtGK1ekQO0GnxzfH
-         xCpA==
+        bh=OhB3GDRw8d5cRY9z2D4vphubhUsoZarSV8LxVq2K+Hk=;
+        b=elZXSmBADJP27Ln01A27DyJBEt5JSFK1E0MC5T8p8gB8SNUc6SXuXjMvvCb5xSQRNw
+         O16RfzpVUZT7Yaoz9AIdgELh/6o9wW+gqncwZRJMkvjGSd85H+I54zpjV6RGeKMnN93Y
+         Udok4LANe9O+SeJMjuvgWRPT5ouV21ropvuraa6cZX18NlR434Y1uGLuuabG41Jvjy4C
+         mZzH/OeymK6LUWqD+Q8ZRceZugH0EHgXxfdqWaL5B+XabYXcCCyYrtELyJS8v5Vt34M6
+         yYEuAUz8j6EZUrLmWusTHHHZFzKr82rdCtUuAQ/3UreuzZ2+Xqmt+a8tGNILFe881+Yj
+         jinQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792711281; x=1793316081;
+        d=1e100.net; s=20260707; t=1792711283; x=1793316083;
         h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=H66wtRneHdvmEI7Lgz4ecssmEQCX18Fy4sSSzRx3jnk=;
-        b=Nu2EkSGbymNo1mr6EJqd/c7eDtiLn6UkfLn4DFgKhzmiRXzQ8S1AGPj51tYh5A+ibc
-         7JMlYXZg7HVoVMmAfyg2y5/wAAa3k9QXLaBsX3hL8LJWmeUuYkU86l49TOc459sY6eOd
-         feh73g5mn7yAiLahQvsEbi8fby4u9k0pR36bgNGQYU0mrKuQXA+YTA8kbbNUW39IgjgR
-         LmKCvR3E7jsV9joxFBK2dwzyICGQ4eR+0Swicsp/WmZdZfmpzaOQAiI9N5u+BFD/uyQX
-         cbVbevHhD+wHrBxcDCTukGUafT32nL6404WY+kcxLC1vI3JgRtYKpTLXqZ74kkJ2oQgz
-         17yQ==
-X-Gm-Message-State: AFq9FYIAk+Pd42r4E+ZUwsiNtBH72LHojVsRJx7qNsLsFbYJckouNEnb
-	cR0q7dvnr6cDDTGgPOZR+VMTtF9bBg6zsOZcDj89WrDlaPU+1eUb7SqV00Yc06a/rTOx3ofVfg=
+        bh=OhB3GDRw8d5cRY9z2D4vphubhUsoZarSV8LxVq2K+Hk=;
+        b=rd8X/os/zLYlaV621KpYzfYrVeUhi5cRIJIHiRonrfJlRsIc6Phb50sObP8K6oERPL
+         gPDlDeoEC1b7JWT5Jk3ebXNWMCgjCnJDOZEhxPwBwzMmBu8z6VvILh5u6JST73IIgXjS
+         sx+C8zlqKAWNPB8BrGXYNz6tNhsWXXjaG+Il1k+UP1Y3k1xZWMrPxtrmTXbJj0VBqG9b
+         s8nNBgW8g0NkqxBmxOJs+vfkGb+j/G8ltPj/u+lYRKr0y3XsR9d9PtPgP+Ly4tlqnJ0i
+         qd6T9NsKtoHILyRInNwSkBVmpFc8lYY60HpUUej4TFW207dg3n0EZvIjvGpQ0rv5Pb9R
+         rsXg==
+X-Gm-Message-State: AFq9FYIANhVr19T6+MaqJ/NIYJNhP/wTjisVxxglcoyCp3O5t1hDzCdm
+	Ug7Oo6uDqlxNGnzcjibqUCCsIeKRdpWBkcJ5ZTZ9aG1NenwHb+0VSVMBJ9viU0T58XKl6F8BDg=
 	=
-X-Received: from wmbh5.prod.google.com ([2002:a05:600c:a105:b0:4a1:f1e1:c6d6])
- (user=dmnk job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:4f81:b0:4a1:f377:5c68
- with SMTP id 5b1f17b1804b1-4a211ee5d0fmr6609975e9.34.1792711281356; Thu, 22
- Oct 2026 16:21:21 -0700 (PDT)
-Date: Fri, 23 Oct 2026 01:21:20 +0200
+X-Received: from wmdd7.prod.google.com ([2002:a05:600c:a207:b0:4a1:c221:789b])
+ (user=dmnk job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:a403:b0:4a1:7c56:d4e2
+ with SMTP id 5b1f17b1804b1-4a211dd987dmr6948775e9.16.1792711282711; Thu, 22
+ Oct 2026 16:21:22 -0700 (PDT)
+Date: Fri, 23 Oct 2026 01:21:21 +0200
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -76,47 +76,51 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.56.0.257.gf7497c7d27-goog
-Message-ID: <20261022232120.2537530-1-dmnk@google.com>
-Subject: [PATCH] io_uring/net: mask socket type with SOCK_TYPE_MASK in io_socket_bpf_populate()
+Message-ID: <20261022232121.2538616-1-dmnk@google.com>
+Subject: [PATCH] io_uring/register: enforce per-task restrictions in io_uring_register_blind()
 From: Dominik Maier <dmnk@google.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: io-uring@vger.kernel.org, dmnk+artist@google.com, 
 	Dominik Maier <dmnk@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-When an IORING_OP_SOCKET request is prepared in io_socket_prep(),
-sock->type retains creation flags such as SOCK_CLOEXEC and SOCK_NONBLOCK
-until __sys_socket_file() masks them off with SOCK_TYPE_MASK during
-execution.
+When io_uring_register(2) is invoked with fd == -1, it dispatches
+directly to io_uring_register_blind() without checking
+current->io_uring_restrict.
 
-However, io_socket_bpf_populate() copies sock->type into
-bctx->socket.type without masking off ~SOCK_TYPE_MASK. As a result, a
-cBPF filter inspecting bctx->socket.type against socket types such as
-SOCK_DGRAM or SOCK_STREAM can be bypassed by ORing SOCK_CLOEXEC or
-SOCK_NONBLOCK into the socket type.
+As a result, a task with per-task register restrictions installed via
+IORING_REGISTER_RESTRICTIONS can still invoke blind registration opcodes
+such as IORING_REGISTER_SEND_MSG_RING even when those opcodes are not in
+the task's allowed register_op bitmap.
 
-Mask sock->type with SOCK_TYPE_MASK when populating bctx->socket.type.
+Check current->io_uring_restrict->register_op in
+io_uring_register_blind() before dispatching blind registration opcodes.
 
-Fixes: cff1c26b4223 ("io_uring/net: allow filtering on IORING_OP_SOCKET data")
+Fixes: ed82f35b926b ("io_uring: allow registration of per-task restrictions")
 Assisted-by: ARTIST LLM
 Signed-off-by: Dominik Maier <dmnk@google.com>
 ---
- io_uring/net.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ io_uring/register.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/io_uring/net.c b/io_uring/net.c
-index f5f4f3ce6ef3..5ead8a83a89f 100644
---- a/io_uring/net.c
-+++ b/io_uring/net.c
-@@ -1711,7 +1711,7 @@ void io_socket_bpf_populate(struct io_uring_bpf_ctx *bctx, struct io_kiocb *req)
- 	struct io_socket *sock = io_kiocb_to_cmd(req, struct io_socket);
- 
- 	bctx->socket.family = sock->domain;
--	bctx->socket.type = sock->type;
-+	bctx->socket.type = sock->type & SOCK_TYPE_MASK;
- 	bctx->socket.protocol = sock->protocol;
- }
- 
+diff --git a/io_uring/register.c b/io_uring/register.c
+index dab3eb4258df..5b26a5eddf3b 100644
+--- a/io_uring/register.c
++++ b/io_uring/register.c
+@@ -1010,6 +1010,13 @@ static int io_uring_register_send_msg_ring(void __user *arg, unsigned int nr_arg
+ static int io_uring_register_blind(unsigned int opcode, void __user *arg,
+ 				   unsigned int nr_args)
+ {
++	if (current->io_uring_restrict &&
++	    current->io_uring_restrict->reg_registered) {
++		opcode = array_index_nospec(opcode, IORING_REGISTER_LAST);
++		if (!test_bit(opcode, current->io_uring_restrict->register_op))
++			return -EACCES;
++	}
++
+ 	switch (opcode) {
+ 	case IORING_REGISTER_SEND_MSG_RING:
+ 		return io_uring_register_send_msg_ring(arg, nr_args);
 -- 
 2.56.0.257.gf7497c7d27-goog
 
