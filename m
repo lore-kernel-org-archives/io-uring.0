@@ -1,86 +1,92 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1792935010;
-	b=TkSi+57v3KzXB3S0TJDGq2OK1BrthNWXaH+NN56kyZPCkqeKWwnBHLZK+MjemVAdTsN/
-	 DNetB1aGbT5b3nVsxJNuzZlX0ThPG60yvT5knnV2JNfgMjoTL4e+i5eNdf9IcnUnoTE4R
-	 M6XWALNFP+QCr1Mv4UQ4A3/wPB8XafYK/QbBN4wWepTQ6egIOAuG1zKbTKeAO2aCyTPt6
-	 1hGmyuoeJywgFRMrL8qhu4PLxtYA3IOKh3kfiAaMDeOVtwNou0X0+HQdcXCYn96x1hEcs
-	 /egHyYvHqFoLyODsh7wWJRoBNWF2dts5Tzvgar/+W+2eAXEGM5C52rorbOlpRYznm0A==
+	t=1792971001;
+	b=wPEREVEOKznc3XzEPexmK3ACAbkepDbjJhpGIm7vW7OqqxuaCD2PwVNRNcuGbJtyhywK
+	 xz1lG2vB08iGyO6jOWuRshaANhRfAoA+6RLA8SeEKnW3VMie/QRhWZJhFkX/YbdM6BiZB
+	 IXNIDlgfLaqjSqLdc3RAYkxcJ2jl8FU+PnDiGPeFM/w+rMW9IUyD7bLERLMUyTX7QZz2W
+	 N6a0AugYM+h78KlosrnfT69WkuUd0PF2c10R28yGvDrNksMvdShgOWHjJIiM0VrYrT82+
+	 G/tivQyzeeRPDuYmdEZGmmBhl9NfTrXihaFRqNmeQOie2yHsf7cuuhN2w1o0inp3OPg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792935010;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792971001;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Content-Language:To:Cc:From:Subject:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=JbzvD86YHcBEyz7BEI1bUEiWMcAVsdqKwyAbbxU1r8E=;
-	b=KEfvh8Obgl8anY5uo4pSBRTRfgXp9kpUCdSR5HDz+bkiNIHlrafJRoS2Tx9uBeDhREUH
-	 NpT/eC5hBz6y3ePc4/yHlanJBXVFTXDctQ+3ocxURa9fFUZVLMOdF5HtB4IfA3c1qcgUQ
-	 g0ozVKzI1qUQ6MYYNpL03CkJyNV8FEwCUM4/GCl6+7p2ZZOgKhRVNYfUCaymtxC1Nc5rz
-	 BVZrpaneUoyR2CSnnle1+hCJPNV8g1xDwcvM4HMdbkC+4iir+T0wnLf+Tu92fDFs6RDb9
-	 YFxefwqOrvlqE4jYUH1hb1fjnyEI01p1NmViHtI5g1reh9aN0p979hlUewLI7a1nTuw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding;
+	bh=Cb9GVPbCNDNEnABV4SrbBQzzA6WG5Igi7eFBQcJEZP0=;
+	b=oQNb4v9Ke6cNx2Lud5crCdKNBVVT4AJyEebuURxE9tzD3LQE7KrK7DWELd/rBm1Ng5U/
+	 LqXw+PEXdLw/vJezJYn09YjkCV3622jRCiIocx8RgStg3b1HAkenr2nSBEX3fXSlrJ4dF
+	 RxjDyfkYwq5kceYRYWzh7CNdxQjKWyrrEUw8ymT3hD0lP11R9TKV9upJB6HzKLtppnjv7
+	 1zhV/M30Bii6XNyfFI7bkmzNMbs2TzFOHbixvRpgz/+y0/gb0+1NN8Em5VXLJhGFz2xir
+	 2tVV4F/Xy9kRAjDaaVSPq/OEBJNf9QsKxtncQEC2BTP3zfp7yUwa2OqdazwuKIUfpMQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=kUuWctmL;
-	arc=none smtp.remote-ip=74.125.82.47
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=DYOFP6sS;
+	arc=none smtp.remote-ip=209.85.221.43
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94BD606A31B
-	for <io-uring@vger.kernel.org>; Sun, 25 Oct 2026 13:30:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D94BD606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE12606A31A
+	for <io-uring@vger.kernel.org>; Sun, 25 Oct 2026 23:30:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org ADE12606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=kUuWctmL
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-16079d54c17so1530024c88.0
-        for <io-uring@vger.kernel.org>; Sun, 25 Oct 2026 06:30:09 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=DYOFP6sS
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-48c4649b35bso2506945f8f.3
+        for <io-uring@vger.kernel.org>; Sun, 25 Oct 2026 16:30:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1792935009; x=1793539809; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=JbzvD86YHcBEyz7BEI1bUEiWMcAVsdqKwyAbbxU1r8E=;
-        b=kUuWctmLak5Eh7juuql2f4dAsFLDLLH4cCrjNHb/IFr3xpwqaLHZ40XLa+tSoMF8+a
-         ujBDLBJZOpFIa/f5COIxPWuJsmegR/wo9YGB/kuJNyryQrCJjyK4PYwa27nakIBkx5sN
-         wFHtFnFrZ/6kSLQJPgyCf0j95LjKF5s7hBFfMgB/ZLyMf250FkfjfH8L5VhGdN/ZgFss
-         dfIFkuix8sfs7pf3HboCahMn6nTFH8LnFI4s9namQBDW0jIkHd604PZQvdar1R1EVTJB
-         x8vojzznw9Do5vilI9cKWzxNWSxQfHyJhHT5OqecoVNPYh4udvP38TL9gYblD2Pr3pf/
-         mDIg==
+        d=gmail.com; s=20251104; t=1792970999; x=1793575799; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Cb9GVPbCNDNEnABV4SrbBQzzA6WG5Igi7eFBQcJEZP0=;
+        b=DYOFP6sS27UENc9GFfa575sr42/vT8IOsZa9nNVZP7aTWRuzZmXumUEvucD6upCjjC
+         jhJr8ivLGe/ZbdYgjHVU10rJcvw+ePLbuAfglMMXbG0qRfy7eCVSs2siUsTgs4odAC3m
+         cps6UnmhkDRbFz6bJGkWG5vSFVDz5yK388l2fDp5K/zLztPYCgN73izoHSFLrWHsEjYi
+         ziySmLCvQaILgbmtpk0d4fVtyst1TGzeNYuJCrTKyuwj8wjck/6b4BxjYlf5vLt1t/Cz
+         HLkKq6K/u2L9fduucZpWhVjI3QrCGpt7pAXujWDuPhWWFZpb+PiDaygDjD8ILYIvEi1A
+         2/3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792935009; x=1793539809;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JbzvD86YHcBEyz7BEI1bUEiWMcAVsdqKwyAbbxU1r8E=;
-        b=fjOyw+HEy7eOIIGJ9TQa+F+lpeDfkSWmyp/dMXdHlK6K09gPJTD1QCrqETHGjIHGVF
-         dK+S7UlVWKBNibNT62RWc9kyGu79HwySBMSJCtRT+pe5tdmVyArb+7Kx/wsQlV6NWY/+
-         Q7JlE6OfjQcOQz5ftVnmV3EGBZTAmn1pmTxYLH9W1Ab2pv0j1ahzHt5nQog5SnFzdsck
-         5TZWD98w3YdKcQzTwe3ezCmzYhD1nYEGHmLXE+sxZ+es+HgtyD3w+pPEwibDNGiGpdgJ
-         k52HxA9RXTkJi5wljSOPrLQTMW16c0qLuwj3DNpQlqNEkY8F1x225UtcsxrIENXKpz2U
-         9o9g==
-X-Gm-Message-State: AFq9FYJ7zRrk/mQF0ZUj/67xsuM8Gz6zKj0sUqR1tyAaJQLh8aisDeYc
-	kQ4VV+2pTlWVOMwjdGk82d5QBE5AQ2kN6M9ZAKl+uDhcyu402oi0ZMaUh3rETxUn76ttMBdjce3
-	eSoQ3QtQ=
-X-Gm-Gg: AYBFou177hKe5q8A5vjTMPHRDG4ZaI9LkDFvkyMbpQCRHAZCmku/TccN2KeoYIqejRa
-	8VawZz+wQ8Dg7KQJ2yV/leevuyqKdcEhagJgpR47JNKD37Ur/huX2W75U1IyoJ7TsPtpD+XL14z
-	KnglYsft8OERiMvcM6tkMuRn9uLZYdyUOlMsp0G8vVbi5Zy9QGmJme5lPCjG0wBbagQsQbWwUjj
-	G10AkgZwB+I2tfrg/p77O+EUO1ZL8BvpxI6Oko5z+4X1MFp8ZhDT0180nUsB57nR+Cup5Bxw1So
-	XxdL0fFz7DdWB03wi3qhIGGwAh89lBtu9wdQii/1FzvvzeVMgrDDB36Y5pYv6lkiQTU4hyZ3DO7
-	meBzItyn/P+FHFMOdNg/cXRCp9ZQwKGO3qSP99uTS0Rb7HUR48+m3Z5JsOXdo4NLkXGOv6wKB46
-	qJPhspuqReXklqy7tiBSvWaC4/Tv0b4yFYBAXnGw06M9Tmjyc07+qUdzdnUse2whIp8ODQMzQKD
-	WncBwRstIZT3sZmfVBBlAZbkwUpAT8enXuqYsgtOhHX8GT5Dwo8kmi2yBxkcuNQTVQjjpHSPTeS
-	yD/W1gDbP9n89jGZWzJmTjoUcugSmIF7yaVe/LJE
-X-Received: by 2002:a05:701b:464b:b0:14f:505d:813 with SMTP id a92af1059eb24-1993f2020f1mr5713322c88.41.1792935008917;
-        Sun, 25 Oct 2026 06:30:08 -0700 (PDT)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-369ef6a71a4sm14500641eec.8.2026.10.25.06.30.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Oct 2026 06:30:08 -0700 (PDT)
-Message-ID: <b97140d2-df87-4cdf-9f0b-d5ca404d50da@kernel.dk>
-Date: Sun, 25 Oct 2026 07:30:07 -0600
+        d=1e100.net; s=20260707; t=1792970999; x=1793575799;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Cb9GVPbCNDNEnABV4SrbBQzzA6WG5Igi7eFBQcJEZP0=;
+        b=W6D50GgyeMV+tSDfaYfRQLmGVOpS5/Wu3FiKDBCInKhelmTMZt/vTiLUss3839LTbN
+         WSCmp5lrfU/GS60PhmBDSLmPTGPukxiEbeSe1mUKOsajau7z4aidsmZfjOxelJnphBjj
+         jJWiZnppoDLIyG4XP+5/Q4JlM9trt5cW588PgdqaqQp7EDKB2TwFbuK5gcwtU99SSLCp
+         AacTLD9+PNjymJvsGy8/C6gKbV2sRrO4VF8QlQR1y80nrMQ+j7gSgw7OhAepr96Znmrv
+         +37hfFS9wHPtjF5uGHnVb8KN+Xsn6UutaDJiJZT6ZThPpaZn2gecLZEx/gb6hSYvuZIf
+         r+vg==
+X-Forwarded-Encrypted: i=1; AKwUvBwPNunh9DAcEMCh8n+hNvhly13n7nDJQ1MLDL6VGXMLj8CH2OAGh4GHUKRVShj+mwXteTBD+oxE7A==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLPSwcHo/NBidcqjnxzHR0uqcuxAG/lZGtdVhzW1aDxRbWYZdO4
+	cgIkvvL4rSCXA/0HDZ/sRSoitvy3QuTK4r8/XMhSbx3wkJkTHk52xPlTQtAwb1xw
+X-Gm-Gg: AYBFou04muqL3y8iD/BPuLtR2CzzFBVUjsPdZSDNlBtSnfFcmRUSY1r28MpDYs3P0ye
+	c0EzJpG3mYXbpyDVIa8I/gc5fs1AOQGfPWdWAvsvTBCzBjpPtJ6aF8BaYXNjFlL7gUsLMBKykZk
+	82+V/xHYD8Fkj/WI41xlA4QvP7yunycGj9mK6FaS1dg+rpMXtTxtXsUrPCMAUlHyo8GW+hluXnt
+	WLyZfwqhyOiiUPlnw3H8xUZ76lbaksHxyaLklseMvrUDIVahk8L7oBiJdyalP5nqqf9suu6RAB4
+	0C5/VHkW42cUoi0PkxtUyNjpX4BCsrV33MRLqnVCL9RjVKnYqRY/NhiGgzfkeOHMoFQa5BlBqpZ
+	bWmI0OT1iZHlpOhJ2iRTuPVBWTKq6d9ELwlc2SJU5O9/TxhJIwSWspoO5Um1S2+I8Cik2L3g1aS
+	39MhpK+mQ0ydhLne/Cel5tVpqz7bzlbaDPbVa/TzxJznV2GL1gMwrqEOmB/zJLBHM5BvSn1CYcS
+	E2gkG90nbiFrJkpOJ8WnIPIoS4FYJSS9NfZetNZtIt3vufk
+X-Received: by 2002:a5d:5d03:0:b0:488:57ad:d5c8 with SMTP id ffacd0b85a97d-48e3eb2bcb0mr11789488f8f.3.1792970999011;
+        Sun, 25 Oct 2026 16:29:59 -0700 (PDT)
+Received: from fedora ([2a02:168:fe54:0:500c:846b:8abe:fa7a])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3eb8f37csm10380107f8f.8.2026.10.25.16.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Oct 2026 16:29:57 -0700 (PDT)
+From: Cinq Prairie <notprairie@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Stefan Roesch <shr@devkernel.io>,
+	Jakub Kicinski <kuba@kernel.org>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Cinq Prairie <notprairie@gmail.com>
+Subject: [PATCH] io_uring/napi: drop the single NAPI busy poll special case
+Date: Mon, 26 Oct 2026 00:29:26 +0100
+Message-ID: <20261025232926.17944-1-notprairie@gmail.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -90,131 +96,175 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: io-uring <io-uring@vger.kernel.org>,
- "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring dma-buf support for 7.4
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+io_napi_blocking_busy_loop() has a special case for a single registered
+NAPI: it passes io_napi_busy_loop_should_end() as loop_end to
+napi_busy_loop_rcu() and runs its own loop only once, relying on the
+inner __napi_busy_loop() to spin until that predicate says to stop.
 
-This adds native dma-buf support to the I/O path, exposed through
-io_uring. It's been in development for a while and should be ready
-to go now. Since it depends on both the io_uring and block trees,
-I've deferred sending it out until those were merged. This pull
-request contains:
+napi_busy_loop_rcu() sets NAPI_F_END_ON_RESCHED, so __napi_busy_loop()
+also returns when need_resched() becomes true. io_uring treats that
+return as the end of the busy-poll period and falls through to
+schedule_hrtimeout() for the remainder of the wait timeout. The queue
+is then serviced by the gro_flush_timeout softirq timer instead of
+being actively polled (when napi_defer_hard_irqs/gro_flush_timeout are
+set).
 
-- dma-buf file I/O infrastructure: a dma_buf_io_ctx created through a
-  new ->init_dma_buf_io_ctx file operation, and a dma_buf_io_map holding
-  the device DMA mapping. The two are split so a mapping can be
-  invalidated and re-established underneath a live context, with the map
-  counting in-flight requests so it can be torn down safely.
+With two or more NAPIs, the inner loop runs for a single iteration and
+io_uring's outer loop controls the busy-poll period, honoring
+busy_poll_to. As a result, the same registration behaves differently
+depending on whether one or multiple NAPIs are registered.
 
-- A new iov_iter type for dmabuf maps, and a dma map backed bio type for
-  the block layer, with raw block device support on top.
+Remove the special case so a single NAPI follows the same path as
+multiple NAPIs: the inner loop runs for a single iteration, while
+io_uring continues busy polling until a completion, a signal or the
+deadline. Since commit df8599ee18c0 ("io_uring/napi: cap busy_poll_to
+10 msec"), the deadline is at most 10 ms on every path, so this does not
+extend the busy-poll period beyond what the multi-NAPI path already
+allows.
 
-- nvme-pci backend implementing dma-buf backed requests, including SGL
-  support.
+First observed on a 5.14-based distribution kernel carrying the 6.13
+io_uring NAPI backport, reproduced on io_uring-7.4 at 9c207aa58e54,
+x86-64, HZ=1000, PREEMPT_DYNAMIC (lazy), no CPU isolation, low RX
+traffic, r8169 with one RX queue, prefer_busy_poll, busy_poll_to = wait
+timeout = 10 ms, with a SCHED_FIFO task pinned to the polling CPU
+waking every 1 ms:
 
-- io_uring dmabuf backed registered buffers, built on a reworked buffer
-  registration structure with an extended update path, regbuf import
-  flags, an uncloneable flag for buffer types that can't be cloned, and
-  cloning support for registered dma-bufs.
+  before, 1 NAPI:  busy 0.5-1.5 ms per 10 ms wait, ~0.8M polls/s, CPU ~5%
+  before, 2 NAPIs: busy 10 ms per 10 ms wait,      ~7.2M polls/s, CPU ~100%
+  after,  1 NAPI:  busy 10 ms per 10 ms wait,      ~7.4M polls/s, CPU ~100%
 
-Note that this conflicts with block/fops.c in your tree, as the dma-buf
-rejection in the buffered write fallback landed next to the NOWAIT and
-i_rwsem changes from the block pull. Fixup is trivial, it's just adding
-the iov_iter_is_dmabuf_map() check in the changed
-blkdev_buffered_write().
+Fixes: 8d0c12a80cde ("io-uring: add napi busy poll support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Cinq Prairie <notprairie@gmail.com>
+---
+How the numbers were taken:
+  - bpftrace on entry/return of __io_napi_busy_loop() to measure busy
+  time per wait period
+  - bpftrace on napi:napi_poll tracepoint to count poll rate
+  - bpftrace on the return value of io_napi_busy_loop_should_end() to
+  see whether the loop ended on io_uring's own condition. Before the
+  patch, with one NAPI, it never returned true and every exit came from
+  __napi_busy_loop() breaking on need_resched().
+Code and raw data available on request.
 
-Please pull!
+The asymmetry was found because registering a second dummy NAPI id
+(0xFFFFFFFF, which napi_by_id() never matches) made the busy period
+honor busy_poll_to again. That is what we run as a workaround today.
 
+On the original arm64/CentOs Stream 9/ena system (isolated CPU,
+nohz_full) the trigger was most likely RCU's urgent quiescent-state
+resched_cpu() (not traced) rather than a wakeup, resulting in ~97% of a
+1 s busy_poll_to loss.
 
-The following changes since commit e889b0e4cafddb3d68c3595dc01b7128fd35fbef:
+Alternatives considered: re-entering the singular loop after an early
+return is not viable, as __napi_busy_loop() restarts its deadline on
+entry and would overshoot busy_poll_to. Keeping the singular fast path
+and falling back to the single-shot loop only after an early return
+works, but leaves two code paths for a case whose only benefit was the
+one it was broken for. Happy to switch if preferred.
 
-  io_uring/io-wq: don't call try_to_wake_up() twice in io_wq_worker_wake() (2026-10-12 10:19:52 -0600)
+Only static tracking was tested. Dynamic tracking goes through the same
+loop and is unchanged.
 
-are available in the Git repository at:
+ io_uring/napi.c | 38 ++++++++++----------------------------
+ 1 file changed, 10 insertions(+), 28 deletions(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/for-7.4/io_uring-dmabuf-20261023
+diff --git a/io_uring/napi.c b/io_uring/napi.c
+index 7e698720cd51..5362690a9d17 100644
+--- a/io_uring/napi.c
++++ b/io_uring/napi.c
+@@ -166,28 +166,24 @@ static bool io_napi_busy_loop_should_end(void *data,
+ /*
+  * never report stale entries
+  */
+-static bool static_tracking_do_busy_loop(struct io_ring_ctx *ctx,
+-					 bool (*loop_end)(void *, unsigned long),
+-					 void *loop_end_arg)
++static bool static_tracking_do_busy_loop(struct io_ring_ctx *ctx)
+ {
+ 	struct io_napi_entry *e;
+ 
+ 	list_for_each_entry_rcu(e, &ctx->napi_list, list)
+-		napi_busy_loop_rcu(e->napi_id, loop_end, loop_end_arg,
++		napi_busy_loop_rcu(e->napi_id, NULL, NULL,
+ 				   ctx->napi_prefer_busy_poll, BUSY_POLL_BUDGET);
+ 	return false;
+ }
+ 
+ static bool
+-dynamic_tracking_do_busy_loop(struct io_ring_ctx *ctx,
+-			      bool (*loop_end)(void *, unsigned long),
+-			      void *loop_end_arg)
++dynamic_tracking_do_busy_loop(struct io_ring_ctx *ctx)
+ {
+ 	struct io_napi_entry *e;
+ 	bool is_stale = false;
+ 
+ 	list_for_each_entry_rcu(e, &ctx->napi_list, list) {
+-		napi_busy_loop_rcu(e->napi_id, loop_end, loop_end_arg,
++		napi_busy_loop_rcu(e->napi_id, NULL, NULL,
+ 				   ctx->napi_prefer_busy_poll, BUSY_POLL_BUDGET);
+ 
+ 		if (time_after(jiffies, READ_ONCE(e->timeout)))
+@@ -198,15 +194,13 @@ dynamic_tracking_do_busy_loop(struct io_ring_ctx *ctx,
+ }
+ 
+ static inline bool
+-__io_napi_do_busy_loop(struct io_ring_ctx *ctx,
+-		       bool (*loop_end)(void *, unsigned long),
+-		       void *loop_end_arg)
++__io_napi_do_busy_loop(struct io_ring_ctx *ctx)
+ {
+ 	switch (READ_ONCE(ctx->napi_track_mode)) {
+ 	case IO_URING_NAPI_TRACKING_STATIC:
+-		return static_tracking_do_busy_loop(ctx, loop_end, loop_end_arg);
++		return static_tracking_do_busy_loop(ctx);
+ 	case IO_URING_NAPI_TRACKING_DYNAMIC:
+-		return dynamic_tracking_do_busy_loop(ctx, loop_end, loop_end_arg);
++		return dynamic_tracking_do_busy_loop(ctx);
+ 	default:
+ 		return false;
+ 	}
+@@ -216,24 +210,12 @@ static void io_napi_blocking_busy_loop(struct io_ring_ctx *ctx,
+ 				       struct io_wait_queue *iowq)
+ {
+ 	unsigned long start_time = busy_loop_current_time();
+-	bool (*loop_end)(void *, unsigned long) = NULL;
+-	void *loop_end_arg = NULL;
+ 	bool is_stale = false;
+ 
+-	/* Singular lists use a different napi loop end check function and are
+-	 * only executed once.
+-	 */
+-	if (list_is_singular(&ctx->napi_list)) {
+-		loop_end = io_napi_busy_loop_should_end;
+-		loop_end_arg = iowq;
+-	}
+-
+ 	scoped_guard(rcu) {
+ 		do {
+-			is_stale = __io_napi_do_busy_loop(ctx, loop_end,
+-							  loop_end_arg);
+-		} while (!io_napi_busy_loop_should_end(iowq, start_time) &&
+-			 !loop_end_arg);
++			is_stale = __io_napi_do_busy_loop(ctx);
++		} while (!io_napi_busy_loop_should_end(iowq, start_time));
+ 	}
+ 
+ 	io_napi_remove_stale(ctx, is_stale);
+@@ -403,7 +385,7 @@ int io_napi_sqpoll_busy_poll(struct io_ring_ctx *ctx)
+ 		return 0;
+ 
+ 	scoped_guard(rcu) {
+-		is_stale = __io_napi_do_busy_loop(ctx, NULL, NULL);
++		is_stale = __io_napi_do_busy_loop(ctx);
+ 	}
+ 
+ 	io_napi_remove_stale(ctx, is_stale);
 
-for you to fetch changes up to 45b716456dd99488a0cef58482120dc0474aa696:
-
-  io_uring/dma-buf: don't fail fixed buffers without dma-buf support (2026-10-22 09:27:00 -0600)
-
-----------------------------------------------------------------
-for-7.4/io_uring-dmabuf-20261023
-
-----------------------------------------------------------------
-Anuj Gupta (3):
-      nvme-pci: rename nvme_pci_sgl_set_data to nvme_pci_dma_iter_set_sgl
-      nvme-pci: add SGL support for the dmabuf path
-      io_uring/dma-buf: don't fail fixed buffers without dma-buf support
-
-Keith Busch (2):
-      block: reject dma-bufs larger than 4GiB
-      nvme-pci: detach dma-bufs only on removal
-
-Pavel Begunkov (15):
-      dma-buf: introduce initial file I/O infrastructure
-      iov_iter: add iterator type for dmabuf maps
-      block: always adjust bi_offset on bio_advance_iter
-      block: introduce dma map backed bio type
-      block: add dma-buf support for raw bdev
-      nvme-pci: implement dma-buf backed requests
-      io_uring/rsrc: introduce buf registration structure
-      io_uring/rsrc: extend buffer update
-      io_uring/rsrc: add uncloneable regbuf flag
-      io_uring/rsrc: add regbuf import flags
-      io_uring/rsrc: add dmabuf backed registered buffers
-      block: fix indention for dma-buf checks
-      dma-buf-io: fix typos in kernel docs
-      dma-buf-io: document dma_buf_io_init_map
-      io_uring/dma-buf: allow cloning registered dma-bufs
-
- block/bio.c                    |  15 +-
- block/blk-merge.c              |  52 +++++++
- block/blk-mq.c                 |   6 +
- block/fops.c                   |  29 +++-
- drivers/dma-buf/Makefile       |   2 +-
- drivers/dma-buf/dma-buf-io.c   | 241 ++++++++++++++++++++++++++++++++
- drivers/md/dm-io-rewind.c      |   6 +-
- drivers/nvme/host/Makefile     |   1 +
- drivers/nvme/host/core.c       |  12 ++
- drivers/nvme/host/nvme.h       |   2 +
- drivers/nvme/host/pci-dmabuf.c | 169 ++++++++++++++++++++++
- drivers/nvme/host/pci-dmabuf.h |  75 ++++++++++
- drivers/nvme/host/pci.c        | 247 ++++++++++++++++++++++++++++++++-
- include/linux/bio.h            |  21 +--
- include/linux/blk-mq.h         |   7 +
- include/linux/blk_types.h      |  14 +-
- include/linux/blkdev.h         |   2 +
- include/linux/bvec.h           |   3 +-
- include/linux/dma-buf-io.h     | 126 +++++++++++++++++
- include/linux/fs.h             |   2 +
- include/linux/io_uring_types.h |   5 +
- include/linux/iov_iter.h       |   2 +
- include/linux/uio.h            |  11 ++
- include/uapi/linux/io_uring.h  |  31 ++++-
- io_uring/Makefile              |   1 +
- io_uring/dma-buf.c             |  71 ++++++++++
- io_uring/dma-buf.h             |  76 ++++++++++
- io_uring/rsrc.c                | 178 ++++++++++++++++++------
- io_uring/rsrc.h                |  31 ++++-
- io_uring/rw.c                  |  33 +++--
- lib/iov_iter.c                 |  29 +++-
- 31 files changed, 1414 insertions(+), 86 deletions(-)
- create mode 100644 drivers/dma-buf/dma-buf-io.c
- create mode 100644 drivers/nvme/host/pci-dmabuf.c
- create mode 100644 drivers/nvme/host/pci-dmabuf.h
- create mode 100644 include/linux/dma-buf-io.h
- create mode 100644 io_uring/dma-buf.c
- create mode 100644 io_uring/dma-buf.h
-
+base-commit: 9c207aa58e54ce14723361e4aaad16975ad64dc8
 -- 
-Jens Axboe
+2.54.0
 
