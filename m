@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.12.17
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793003384;
-	b=VaWNF/obmrOA2yPS591P8JSnrve04DcEBuNWFYI8J9jdwfeonotGnV3F530AQx4tzr+6
-	 f2FpvpsG+dpMydxlErPZqNivax/xMiQO/tbdU0Jvvd/rYUs1Fl76mxBmhaJ1+wosmoplV
-	 GdlTDFAJp/baAC/XQXVjsJnim1Zz8y5JMPMTSDID3rygSrGGy7KVIlwte51CWx+EQI/7d
-	 tJpBVlEWZRq/z1Xhfgl6I/MPvL5Cqb6vovgDg5JkjIQKjTHUpiJPgONa1eY+oZgAtT5jy
-	 HZkfRwlH+KdC+KDp7R8MrzlsvECdsQBigfrieqzn5Tjc/ibmyV8ni++SKO/7y5JlDKQ==
+	t=1793003385;
+	b=jmcLWcCj6G8hhvgw7FmLrzClxD6XmiP2LoNZiV6KP2spd9+0OumXociDSpphRP7jRDPp
+	 QYMRH1J6IwRqxMLZMdvcsEIB5gdfbOSISdEy4pzsQTmBpHo59j8XTFle8blSI4diApp9c
+	 x0HTNk5KsO70Jcyuy4BDBIncMjvX5omiUCE+9Yu0z3Q8bmC3JPLMTWzqyDqEWo39jHU8I
+	 /VfoQ2sABzbIVHc/vn+E5mWRUR6cFZsdK6BRNRI9DSZiglsF5T9skJ+K/ka1EBufbR3P1
+	 zg4hhRQd0eeF7vqeQNnOVfSIG8UENNrNMob75lBIvhtSnaMrAtR5BAh4SRHAvvejcSQ==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793003384;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793003385;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
 	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
 	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
@@ -25,64 +25,64 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-id:
 	 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=DUodekpOyPjjjGhk+dhiUqAve6MT0kLd+rkU4t7IN9M=;
-	b=qVmaE0WoHCPwh2CpIDeoh/m8QM0rM+KauwWulf1Br+l5ZG10YCEbk6/gTqd+EjECjOrT
-	 9a8hO2wYeHNHQZS1+Gzzl5y/UKur8wgMYpdgoC4pgqa1vxzMcKMXtJsYNEBiHrs3aMWQd
-	 7I2AX+t1TJx+7Qi+ZMCwMVGW5P8dbdIgnncVoXMQ3OlEs3ss2ubeMDQU86/W+9vzIu9FU
-	 iYDUbVTfJ8pcJkvYC6RafGeTAGltqw/QJ5fNGidS5XceIBXQ01+2xzwqvdPQ1Qx1K/b5n
-	 ZZC7qgMKCY6+cIUz4E1zuVx6cFnptucCbw6QevZvWOOBr/PBRm4JydRZ/xVRjouWcAw==
+	bh=1NnfTiZifvd6YXbXdopTDFngx+b/l/B3BkHXqH+b/gA=;
+	b=yUI0LkzdM+uYhxTFFmp2Fi3Ftas4RpwvcWh8xTj4pThQIPsqeTkQrq7BHgXn1R0fks+X
+	 4vOid3UXSeW7fIwChLHBGBOdipd9UaGa5XlQig/Zn3NxKYqXFUr9QttybOORS4zqW95HJ
+	 aaWR1wf4zw2nEXWFMIlZdTka2pfFhz4SjF1lUhlXihcQng2Q4ob1BbCmaaPf2Bg5oj3ba
+	 +O0N1TVvZgKRTv8LBWxZ2gwdS8p8bZq3CHVEtNuv5L4fxks/6HADLhQTC5wg9xjiPnU2/
+	 iSTob2cjIn6cVgT7BYWJAasWugVcEgjhTzUGZKe895Wro30srIpI9ZgvLlLxbZaDg7w==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=outlook.com;
 	spf=pass smtp.mailfrom=outlook.com;
-	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=DYaNTHw7;
+	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=EeHiMdyH;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.12.17
 Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azolkn19010017.outbound.protection.outlook.com [52.103.12.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E233960A260E;
-	Mon, 26 Oct 2026 08:29:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E233960A260E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9286760A381D;
+	Mon, 26 Oct 2026 08:29:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9286760A381D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=DYaNTHw7
+	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=EeHiMdyH
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=b88gcCk/rUnEJ5MF3kjINkd3H4x/iBPPokVpi7u+kBjqESyeBfexZEe/AUgZ8/qsJl+lSwjSGFaNQAQ9I2T+2uFBTMES/JSh4G8vRp9eA7e8FYkvknnyberDBNudv2raNqsStGBvLNzAc0s3PHJh6zTLgm+TaFdTXfwbnTiBEni+4M7mICnonfTLl/XDVz1xGGNMJFOZLG2z8BG+hUrlGRTMiAsNU9zNX5kS51YMc5G+7IDG4KMiTrIiTjJbX50oEgHwNPosDXLQALTMSpelhof8iL+jRenb8QDx/nyUMJrMm+zuOJlYhJiWwB48ybWDoZkoF1UZjo8yvqNbs/43nw==
+ b=AIGYHELeXZvQQgkHGLygAjYGDN2Tw+Aj1C+k/8vUD4OHDlRgLy312mh5glROM6E69NaaLK6Abl13DaEEkTKe/nRdGHNMq0wfIqqRZCCAjdSoCEbVOzFAYNiNBLIRyLhmWqawg5RRBBCNdIewpfd5JBW6ZRyphXrcdI3nS+NrRSxDCZ3pDPrasXPP3tOQ8U9DxCKNWNNqDj5sGOlgelrUI88R9sqVvuYkY0CYphDYCccFDj0fzpbYdYT7DOIulZMyNjvm0+Kl6ZRztHs3VzkBGFHyYNiMWQA0vZqEIrveKrLoDpJRyt4uD7AybBGpD1u4P0SaP8gDu16mGbcyMmnBKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=DUodekpOyPjjjGhk+dhiUqAve6MT0kLd+rkU4t7IN9M=;
- b=gpZ0MHgdHeEeT7S42wW4Rpewm5sba8IQZKBSPNLRkHMELWHm77TfhobyQAatb53cv9TKS4noGKLOqCh3gSiUT1a55+rC+OM4xK6+wmsUrL2zoZNyl2E1anLGjzJE4sr6OcQegknQ71mpxO+DzsENLT/KVL2OWcapLx5KMRIN64RidjJO2KBA06rRNyoHfy8xDPE0vmC10NEW48aOEkzpQKjppNF102Hwkc3euIuAn1gaaNb3u8JfJq3g0MTB1AfkG7Tl675N5s5HuFBWwmNLWp6bOl5GYbg05meUQr8AsGyzfCV0enTZMbxx5aklXQ7WReW2y+osTxz8abKIJm6yXQ==
+ bh=1NnfTiZifvd6YXbXdopTDFngx+b/l/B3BkHXqH+b/gA=;
+ b=u+x4mH3fyEdpE6h4YPYs526TpnJ4xX8M1kyfC1h+/o0B/+13Yf6pbv2jmGC/v5kvhZ2unXfrTH3IoiG3zlg+J4ApdTXtCfQmKHfZMlJDt7T5VTuOk9LsN/+svJ8J9kUblPeRdbRpc8YmkGhoWH/cINR4IiaVcbPMtKyUq/hId6rkaxjKKZS/uItcO4r7mEYKWg3ipQuQSoGssCayltM3tLgsYNy5NCWaKbRpNhx3/ZCiA6g0qAql1/GIt4PwuVzt3pK0sr0lzOfz5wMyPYJsf47LtbMO8FTJGv2LCtx2RUXuDe1BUsVGKuuJ4S2QRib0xOTzUji7/mOOol+wNmeaog==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DUodekpOyPjjjGhk+dhiUqAve6MT0kLd+rkU4t7IN9M=;
- b=DYaNTHw7qUW6ECdHXHrWCTNlqEuF4FejhC4JNBuosy537gdOgHO+YVmLjyxQcxsZgBt6WV0PxQZT+RC537UePOhNFCM4564+aacm5s/z0/GI/muiYij3fgPzFb25UtV3GbNn8LgSphV9Hjkluc66yRRfSVR7wU7jbPEHxwCmeRpRr+PkkkI2gJIM1/Yos/08Ue2ctTizzTc0MH0WLqxzs93RonVDiPT2b2RtP7AuhpJGBEvqdkH8O6miZR2lWS/FB2YugSmnxIPeAXFZwcoijdhqxNDb1iX9VULE1mVH/85G4dC/61TaSyBqraQNXnqXCRAFhNY7LsCFy2Y+49ww/g==
+ bh=1NnfTiZifvd6YXbXdopTDFngx+b/l/B3BkHXqH+b/gA=;
+ b=EeHiMdyH7nD1qpbkx0b6nzclXHujXunC2FGOenNfNZajr2IIMtURd0nYSTqiWJ+eVYs9dTkJdxi1mWevNIZIDpTYOdAzfDfv0JzyMSUARVQBEwEPB5IkeZZfPBsqUlIl6+d17qVfNpAwt3NthF3W0xeGcI/oQDnFtBHMB0iphKfZ0TJ5rRjHIBh3bS6BOi/c7G4bMkdEjB5nj1aL2HLII8zWZpS1+rxEz1gp6LWdfwzg8OzYOxlVsXl310GMbMKZiTWVncCW96alIErlBKjTWHGQkSSbfeIMFKyo8h9CkzedQFLjsfo2NJpyXeAzX1ULi0PMsDrBS9ooNtbjeewryQ==
 Received: from SA3PR05MB10385.namprd05.prod.outlook.com
  (2603:10b6:806:39d::17) by DSWPR05MB998753.namprd05.prod.outlook.com
  (2603:10b6:8:354::20) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Mon, 26 Oct
- 2026 08:29:39 +0000
+ 2026 08:29:41 +0000
 Received: from SA3PR05MB10385.namprd05.prod.outlook.com
  ([fe80::e22f:a0f5:fcb0:9b0d]) by SA3PR05MB10385.namprd05.prod.outlook.com
  ([fe80::e22f:a0f5:fcb0:9b0d%6]) with mapi id 15.21.0546.021; Mon, 26 Oct 2026
- 08:29:39 +0000
+ 08:29:41 +0000
 From: Yingjie Wang <x-professor@outlook.com>
 To: "Martin K . Petersen" <mkp@kernel.org>, "James E . J . Bottomley"
 	<James.Bottomley@HansenPartnership.com>
 CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, Bart Van Assche
 	<bvanassche@acm.org>, Yang Xiuwei <yangxiuwei@kylinos.cn>, Jens Axboe
 	<axboe@kernel.dk>, "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 5/6] scsi: bsg: clear io_uring sense length on copy failure
-Thread-Topic: [PATCH v2 5/6] scsi: bsg: clear io_uring sense length on copy
- failure
-Thread-Index: AQHdZSQkXyBg5NUQlESRoC1Ss/F7XA==
-Date: Mon, 26 Oct 2026 08:29:39 +0000
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH v2 6/6] scsi: bsg: release io_uring requests in end-I/O
+Thread-Topic: [PATCH v2 6/6] scsi: bsg: release io_uring requests in end-I/O
+Thread-Index: AQHdZSQlwL4bxblsuE2dHhgQENbwtw==
+Date: Mon, 26 Oct 2026 08:29:40 +0000
 Message-ID:
- <43ee84525e456f95cc0efbb6b65c2074cc874e1e.1793003363.git.x-professor@outlook.com>
+ <8f30e238d2b169702308303687e9504c7513ecc8.1793003363.git.x-professor@outlook.com>
 References: <cover.1793003363.git.x-professor@outlook.com>
 In-Reply-To: <cover.1793003363.git.x-professor@outlook.com>
 Accept-Language: en-US, zh-CN
@@ -91,58 +91,60 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SA3PR05MB10385:EE_|DSWPR05MB998753:EE_
-x-ms-office365-filtering-correlation-id: b802a170-91f1-4a06-4cda-08df333b46f2
+x-ms-office365-filtering-correlation-id: d33776e6-8a79-4bf2-222a-08df333b47c4
 x-microsoft-antispam:
- BCL:0;ARA:14566002|15080799012|4140399003|24021099003|39105399006|22121099003|22091999003|24121999003|31061999003|38102599003|8062599012|19110799012|8060799015|25010399006|102099032|440099028|3412199025|4302099013|1602099012|26121999007|10035399007|40105399003;
+ BCL:0;ARA:14566002|15080799012|4140399003|24021099003|39105399006|41001999006|22121099003|22091999003|24121999003|31061999003|38102599003|10092599007|8062599012|19110799012|8060799015|12121999013|16051099003|25010399006|102099032|440099028|3412199025|4302099013|1602099012|12091999003|26121999007|10035399007|40105399003;
 x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?fBf8Aqapl4LHe845n+Kh6j9alVKTiVbmZVfGpGsMqfS6NS3gfaokVMY4Yc?=
- =?iso-8859-1?Q?xAKrnAoxfM6la710aJypE/tTGnYCTOkQkeZao/grGDiPM8O4UWRYPyyX7Q?=
- =?iso-8859-1?Q?zxuJQ8CPYINuKTggbAxiWMm0eH869LP3u+hV7ckhuWcwA4ED8Ol1tFf+/q?=
- =?iso-8859-1?Q?NtJW4gRHO4b8/tzDwaaX4K+3+duFsmym0o2eViIwSPYeLO2/I3Vg5wBcew?=
- =?iso-8859-1?Q?C738LaQwczbzIIQZ026mB7vPBKvBGEgJq3Y3DIm7WAwmKjna9hS7EkQHlL?=
- =?iso-8859-1?Q?CjBzYMZF2u70JkhEThkz95lWTPp4QSXF2oBpL8eGw89YeAf0sfLWkFoWGo?=
- =?iso-8859-1?Q?zk5O4AhDQwmGx1OIdmq73o+/oF3C1x0ZD16n9pun+SGocXEmARyF1/8mtw?=
- =?iso-8859-1?Q?TbO3Ghxt0AcY14kmQ3eoXqiXak77KwrchigSaxdNsXu1tve8kSLZzncZUv?=
- =?iso-8859-1?Q?scYYSJPdyOaS2rYBm156NwFT97m1UA7yPapdlh4p7GoxAao7wqwDgpHM+j?=
- =?iso-8859-1?Q?jO5AMKWn3MT4MxZS0UumKXLmYa3LXqA/M+5S1rxuefXyn1d/EPMypEvnF9?=
- =?iso-8859-1?Q?UynWR1gshPncOLuuLc5YuVVm1SroF+Pzdk/i2VO6+w545MCNxGQkklg9O5?=
- =?iso-8859-1?Q?YOlMzwoODoSsbINZWbUFIiMyRpaXRj/mP4t/q8fO6f4o84+LFEC6Hv41ea?=
- =?iso-8859-1?Q?sblqYILwGNTVybf9CiHF2Y8w4A46O7+tsNORyJW22h0fUjznsDjizg5jzm?=
- =?iso-8859-1?Q?/sOxHZ+AWIdI2ljekaNnx7Vc+OKqRSWuphEri83Q/vV4zx4LjOH+fo1Lfo?=
- =?iso-8859-1?Q?uX/5fjNZ/rKfqypUr306Zrr4/d+vtGCwM+YWsNocWF7W6evhRfBcFHUSv/?=
- =?iso-8859-1?Q?Aa9nn7Idr3OEtG800Hk1wptc8lyKPPES2ffKDBdEDrz0IlYTMAqk1Kv56h?=
- =?iso-8859-1?Q?HCiOCqp7mONJcHiUt8sfFwBInIk2HW71z+2lber7xHosK7j7CFv4Seum2+?=
- =?iso-8859-1?Q?xYNEEpDD/VWPj/DQUBjDwFf8Ug2D0XL8w8YFGZ7Xen4NgBm1JAin4YAd9A?=
- =?iso-8859-1?Q?DWy1O7PGwSVKdGqWGuCb8MCcLUoXW/aSZiMRCS6/jViKyYGLVkg9MAJWJ8?=
- =?iso-8859-1?Q?DRMfiv7AWbjuY+8TLjwv354o/0i+49fBJFmkCok0w9xU1/BdLOm6HjO2jZ?=
- =?iso-8859-1?Q?zeOKPgn7e0e7oA=3D=3D?=
+ =?iso-8859-1?Q?f567+3EHpC7dyQjaZpeGWCUIe/7aBjZZliXXlFGE/kwQF4J4V4yqjVOCCm?=
+ =?iso-8859-1?Q?cdn+4uL0O01+xesShGNC+hP8aI9o5b8CLanRRV+5JGPi2IMKfiYtA3zCCf?=
+ =?iso-8859-1?Q?K6KZ63O7DB99IVMie2zC1FhaYPdjxzWPPFlp5qqYyqihOsqzyOFIA+UzAE?=
+ =?iso-8859-1?Q?5WFfeJOnPHYn6Sr/qPtzBwc5jXtLmeNyOmonN1nzNg5EvQyOjk7qqohH8m?=
+ =?iso-8859-1?Q?CbKT3poHpNGUEIp1xoo+dmZJTInFxk2jSwX8qe0rpQdjajTTtwiWuO+tXq?=
+ =?iso-8859-1?Q?RMCQVGMBE/S6V4adspWgRxoHZAj8Pdbt4Lsh5bFWmHiO/qWbYNL3+wEO8v?=
+ =?iso-8859-1?Q?4lH2JpYYEsAa8lw8q9BmwvE8zhq3isfL6EXIsOR+wwwJg1FKgKt537qIQb?=
+ =?iso-8859-1?Q?7qUQXL1CHvHQp8RuDxsq6eAPLCcEDAL4t/QRUv58rqXzya8Omhpj7ST3Uw?=
+ =?iso-8859-1?Q?GG1yFcD8ce/9rF1VkLuz17kLk6+2DmC6rhX/TtH6JReNye1u8ZIrGomK7A?=
+ =?iso-8859-1?Q?kEtcK15PBorNDtECfgngna9LtuJtgFTKeGcZEga9Les7wfHIpv+OE3jzGe?=
+ =?iso-8859-1?Q?t8oEIQIvJZ6kfOxmcTEQAYB16x3Tvv7sVbhkNh7wdfv6EyhXf69MmPVGOG?=
+ =?iso-8859-1?Q?pcth276/BMBzPizDj08ORt9TtAIGekvFZ2lYeZ9QJ5/vP87GnS25lcA/Q9?=
+ =?iso-8859-1?Q?f/PY5+b5s+PnsufwQa/0FsJteuczwzl0pfWs8DUCn6L6VNvL78hLy0VVO0?=
+ =?iso-8859-1?Q?Wk60YZfNpFuM1fbJ0nwgyUK8sY/Sa4lw2R/yJYrubDLjeO3rGZYkd7BJB6?=
+ =?iso-8859-1?Q?//XRLlU1069gPcoWBdEcMhe6JCmzJ8ImlteIXkh9JGlzeXA4aJSDFNryHa?=
+ =?iso-8859-1?Q?8jeluegFvh791mb4RkBRM3XyuA1uW9lmWix7KsazwSZUtXJ0i6tHwHKjJn?=
+ =?iso-8859-1?Q?3ZPfbwejElQYgtqOu4R8m8TuhZeqMJFZjyOYiykxoqIV3ilju+IKvNTaQF?=
+ =?iso-8859-1?Q?jvD9dhCGoO5NY8gA0EFyvyvGMqITf2w+5y7haWhj6S+YGHTYFoSMKCL4lC?=
+ =?iso-8859-1?Q?Ww3Y/akXx+uGJYLNp9eZEpWCslywgnFPZAd0/15NmPa3r+eVLCkDT01AUw?=
+ =?iso-8859-1?Q?8aPQvSjb0GwxoNXAw0scuWd6VSnIqcM9kmtumSJtix+Nb79tMwPR55CZNz?=
+ =?iso-8859-1?Q?WFYrODB+CZHNfX8jec1Gz/cor9nc7wm+SCfJTeEjO+SduvywgGmjTa3kd7?=
+ =?iso-8859-1?Q?2HPObCLrVWcipsKtE+oWQei8cO4pxADQYdE5U9sHyqUISQ9FWe5GGya25q?=
+ =?iso-8859-1?Q?fq1+O9qaz1a22+vSlUWRBvBUPor9hx/Ah3RlP2pmFEEP5Qk=3D?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?2dv2VjOSnOX2wLNFHbujacHfx5UycPoOEpS46qjhlDFbPA4yc/57hmwTwK?=
- =?iso-8859-1?Q?r5mmCTB3v06wifLmOvDk7s9rm4RpQxnno3cf1gCOiZaQ6OKekuQZFQnBDJ?=
- =?iso-8859-1?Q?FwKYUDz90itf+mP61smQ56yoY2OctyqdreV2Yz/DYG54mn/zrJRgm+sAgK?=
- =?iso-8859-1?Q?T58x4uJ2tchaGC8SB3wu2bNPsskhuOvi7mE6PEjytTuyI/znbfkhQVh1vf?=
- =?iso-8859-1?Q?J9VQcg7PcNtHW5BMUZZCIh3HMIpmcnc0ZKlmDjRRmJI7JqPaDGZRpmffBB?=
- =?iso-8859-1?Q?5xQ0hNzpbXGucmhWghOw6xIkJWbKqi7CcIJLv1XGeoDLXRR9aglEt8SmZQ?=
- =?iso-8859-1?Q?mr1FA1Zpt8dPpslwccyryTb1sPxPe80F4AfLupiRnarL2I69Z8hykq0A9E?=
- =?iso-8859-1?Q?MT6dvAjlyBhV8IMwfv0UIFgw9RhjwDjlStvs50ATErDwNca3iKRazDGZZ1?=
- =?iso-8859-1?Q?LMYwyHn7AHtbGf835oSO2DJBJkzzBOOFThekHnUm+QufHKHtw9gv/N+ViP?=
- =?iso-8859-1?Q?s8H4sebOkJAPc7jxjZj1sJYzYP9QHcGzARtEffWFUBOQ8dLsnIdeRTiQrl?=
- =?iso-8859-1?Q?MmeM33pRceSDAfV5J19Xhp3cDrYtWKmZ3RU5CgGVzmyPeKMIxdzH0rmOmm?=
- =?iso-8859-1?Q?63Fhe2J3NhYrsCs3Rujk+kmv1x/IBWOn+WnYxXSO5YVOVl9GfuTPnqu70W?=
- =?iso-8859-1?Q?j3f1jnrkYz5CT5KBz75T7SsVFmFT1kV4Y3C5YsdSpN+9agkf/Nzz1+UxKH?=
- =?iso-8859-1?Q?jUUbEM9YZyN49v6wNj/UJE3o+wdJi4uEcsPxGRIh4X9rAXkT8WPZufc8Jd?=
- =?iso-8859-1?Q?9F8oxI3dYvBHAFH8zX+mYLdwCsaxhLHB2BI5863H5ULllfwmPSD8nG2JgJ?=
- =?iso-8859-1?Q?i0aplHyuGEPcrpTrGPVZD95H0C8HhJWGLO7J8bSiGO9paGqUOWfk6mmHf6?=
- =?iso-8859-1?Q?Uc1kPW5xiNhnd2js1FPFwUfMz+6Swohq2YmBlaJ4RRg/uewtH9nUWxozre?=
- =?iso-8859-1?Q?DXsoMWEq7+HV6axGeSs4Zg9ypJVVdi7WKaTsK8MIbPeHl4s+bVYadqLhh9?=
- =?iso-8859-1?Q?/9GZ9jO+FPihVKTyOFHPlwYjY0L52ONPoMYw7cqPc8AWorqYRYE98zUoY2?=
- =?iso-8859-1?Q?U0lgTS6h0Pc7lRRWtT6o3+9p10CQicvdQAMhVdW5B28p8L7j1XitkcHjUp?=
- =?iso-8859-1?Q?AXCUBWFi9ofWDEQUakQBGMIX5Yf8zX7Xj6RrL8qosSVbjyOIUN9yDmqhuy?=
- =?iso-8859-1?Q?ixjmE5Ul53z8VNhdj+d7YR7VyzObaURS8wKnJBjUu2oTzlX0Shhl8XUS9P?=
- =?iso-8859-1?Q?7YUIFo71F2nJsRL6OIbcy88vPrJmDDO5IGRbQ0K6XORdeIPVlgu0IQNx9A?=
- =?iso-8859-1?Q?lnGnxURuyNYQ4GdoSq6pM1u6A4c+LRTyG+2AJNfsmZ5atAedIWWj+8q866?=
- =?iso-8859-1?Q?MWTQo27jfFUdShXc?=
+ =?iso-8859-1?Q?gMq3lC7gJIBnY5Bc/Ffmx5vHsxpSAAyxg59CkfV0Fl3Jvbb7QCUwh/WDpS?=
+ =?iso-8859-1?Q?44VWiFcxD0mRuABjOR77i1K7fsNMLeMypXJ1rdGflegrKeh8G3n5uOFMEr?=
+ =?iso-8859-1?Q?+XB1Gzw320sUpLydfAp3+055+ZbiitJT7hLGlKB6E9gcPp7vQ3+N9X37pu?=
+ =?iso-8859-1?Q?VCRFNN/xynKQlW8n3qLBMQTcf9NN3QFufC9v1q/bL2+S0cbsGW0mesJ6s1?=
+ =?iso-8859-1?Q?XCMPKuoqqTPepi/NWB2UKLqNjJpp8Zv2/mOiDZDdLgcBasBaAPyS5orPYe?=
+ =?iso-8859-1?Q?pPY4gJ+kYA0tcZQdjMf2yZBi2qhFsg6+KEH0YddKaUd7tMC6VQQMQULatU?=
+ =?iso-8859-1?Q?exC8W/BTaT0vhF7UCLFwnUO3De2dNneKgrfJ+mROKQ0ybnK1jTAY9tqquP?=
+ =?iso-8859-1?Q?eOhbxXyaXMFQu/0vAQ5t1yL+Dt7z+Jl14tGh+Zvw5qgvAVfmAEUkG+LvYz?=
+ =?iso-8859-1?Q?ikGsqFybNyxbqGM+yyIRpF+EUTmO4P+QJnKuuudayVpj942CQhKe8SLOvz?=
+ =?iso-8859-1?Q?zt9ySvPRKmQPGYgeptkBb8hEgNwRny0cUCMQ+80cISfYZi2QA00GO5bNk+?=
+ =?iso-8859-1?Q?82RzWHoS2kqGBq03YI7yoPkVOQqLpXisZseCYv8KqCixMxxibitHmnt1V6?=
+ =?iso-8859-1?Q?RdBN7zjTmFiX4yJWRtTDlTFSJynEM/wx1DnezkErOmcYbZaWVmEIcR5Y5+?=
+ =?iso-8859-1?Q?rdiUYjvIvW5hoVmSWzLfbZCK4o7wyXMW5/G6eLXSVibHBr1+350KgRAJ4+?=
+ =?iso-8859-1?Q?aweGCqPNE0HPD4iVyNNJqYXnQcA7ag+z6+mN3/PHzbxl/PIyuzo/G60bcy?=
+ =?iso-8859-1?Q?ot7KLi1nV/Q2+UPeHszCNtNihmkpApTXs5A3k++rek8LgCIjmTEkYQVA9N?=
+ =?iso-8859-1?Q?pof20Im47ZiJcB8yJewROwNjnC8T2KROlGAh4LBQQmfEonKrzyvROIqboo?=
+ =?iso-8859-1?Q?fIbEhux8jlS8czZT69kcVQbBssCsDNiqP9hakv0u9JLb6TdPbjWqZNbPRx?=
+ =?iso-8859-1?Q?vWG4iod1r6IyeBnOkDHpP0uv45JqeJNfdPdfGmxMvx4KkYOEfxvOdCNtBf?=
+ =?iso-8859-1?Q?Js7Eh/yN/wcYHGH7nh7ABmEAuueBePo6fX7C7v/VGCM5tTqCt4dy5gbDXK?=
+ =?iso-8859-1?Q?Weo/gerXz0hn37r0Xm1ciIrmEDZgh6W5UBiiND4O8hzngEjnebakGi8PvX?=
+ =?iso-8859-1?Q?ksnjKCG8l9QNhJ93KZT7BI2NJU9xPEqMDKow8RnegEI/DWniQKmvEUiNs0?=
+ =?iso-8859-1?Q?/Whnphbzy5M+4SaaRbCf9GD/0uHxEEnNbqSA4SB1k6W4kxvj6cJ242kuPx?=
+ =?iso-8859-1?Q?0avdPbejGmzZKXOTltOISRGYLChVxKXDC6FfItJA4yMmGixNWtQYg49tM2?=
+ =?iso-8859-1?Q?Sq2rM7/4M5qntSCfd0z+K1zhn7k4QJjTp3fnFWiDfr6WuPlfPIagYztlao?=
+ =?iso-8859-1?Q?5qH9UrBT6e9vivJD?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: io-uring@vger.kernel.org
@@ -158,8 +160,8 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SA3PR05MB10385.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: b802a170-91f1-4a06-4cda-08df333b46f2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2026 08:29:39.5703
+X-MS-Exchange-CrossTenant-Network-Message-Id: d33776e6-8a79-4bf2-222a-08df333b47c4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2026 08:29:40.9512
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -168,39 +170,203 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSWPR05MB998753
 
 From: Yingjie Wang <x-professor@outlook.com>=0A=
 =0A=
-The SCSI BSG io_uring completion reports sense_len_wr in res2 as the=0A=
-number of sense bytes written to the response buffer. If copy_to_user()=0A=
-fails, the callback returns -EFAULT but leaves that field nonzero.=0A=
+The SCSI BSG end-I/O callback returns RQ_END_IO_NONE and leaves the=0A=
+completed request for task work to release. The request therefore=0A=
+retains its tag before task work runs as well as during user copyback.=0A=
+With deferred task work, completing the device command alone does not=0A=
+make that request available to other I/O.=0A=
 =0A=
-Clear the reported sense length on a failed copy, matching the=0A=
-synchronous BSG and SG_IO interfaces. This reporting error predates the=0A=
-request-lifetime changes and can be fixed independently.=0A=
+Save the status, residual count and bounded sense data in end-I/O, then=0A=
+return RQ_END_IO_FREE. Task work can unmap the saved BIO, copy the saved=0A=
+sense data and publish the CQE without accessing the request or scmd.=0A=
+=0A=
+Allocate sense storage at submission only when a nonempty response=0A=
+buffer was requested. Charge this user-triggered allocation to memcg.=0A=
+Do this before acquiring the request, respect nonblocking allocation,=0A=
+and return -EAGAIN for an allocation failure that can be retried in=0A=
+blocking context. Free the storage on submission failure or after=0A=
+task-work copyback. Reuse the snapshot-capacity field for the packed=0A=
+completion result after the end-I/O snapshot, keeping the PDU within=0A=
+32 bytes.=0A=
+=0A=
+Preallocation avoids relying on a non-sleeping allocation in end-I/O=0A=
+to preserve sense data after a command has already completed.=0A=
 =0A=
 Fixes: 7b6d3255e7f8 ("scsi: bsg: add io_uring passthrough handler")=0A=
 Link: https://lore.kernel.org/r/20261022.scsi-copyback-review.31b8d6a70f4c@=
 outlook.com=0A=
+Cc: stable@vger.kernel.org=0A=
 Signed-off-by: Yingjie Wang <x-professor@outlook.com>=0A=
 ---=0A=
- drivers/scsi/scsi_bsg.c | 4 +++-=0A=
- 1 file changed, 3 insertions(+), 1 deletion(-)=0A=
+ drivers/scsi/scsi_bsg.c | 78 ++++++++++++++++++++++++++---------------=0A=
+ 1 file changed, 49 insertions(+), 29 deletions(-)=0A=
 =0A=
 diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c=0A=
-index 650facb16ed23..98c9db1cae653 100644=0A=
+index 98c9db1cae653..fafa5c2cdac0e 100644=0A=
 --- a/drivers/scsi/scsi_bsg.c=0A=
 +++ b/drivers/scsi/scsi_bsg.c=0A=
-@@ -52,8 +52,10 @@ static void scsi_bsg_uring_task_cb(struct io_tw_req tw_r=
-eq, io_tw_token_t tw)=0A=
+@@ -1,6 +1,7 @@=0A=
+ // SPDX-License-Identifier: GPL-2.0=0A=
+ #include <linux/bsg.h>=0A=
+ #include <linux/io_uring/cmd.h>=0A=
++#include <linux/slab.h>=0A=
+ #include <scsi/scsi.h>=0A=
+ #include <scsi/scsi_ioctl.h>=0A=
+ #include <scsi/scsi_cmnd.h>=0A=
+@@ -16,9 +17,13 @@=0A=
+  */=0A=
+ struct scsi_bsg_uring_cmd_pdu {=0A=
+ 	struct bio *bio;		/* mapped user buffer, unmap in task work */=0A=
+-	struct request *req;		/* block request, freed in task work */=0A=
++	u8 *sense_buffer;		/* allocated at submission, freed in task work */=0A=
+ 	u64 response_addr;		/* user space response buffer address */=0A=
+-	u32 max_response_len;		/* user response buffer size */=0A=
++	/* max_response_len is replaced by res2 after the end-I/O snapshot. */=0A=
++	union {=0A=
++		u32 max_response_len;	/* maximum sense snapshot size */=0A=
++		u64 res2;		/* saved completion result */=0A=
++	};=0A=
+ };=0A=
+ static_assert(sizeof(struct scsi_bsg_uring_cmd_pdu) <=3D sizeof_field(stru=
+ct io_uring_cmd, pdu));=0A=
  =0A=
+@@ -28,41 +33,30 @@ static inline struct scsi_bsg_uring_cmd_pdu *scsi_bsg_u=
+ring_cmd_pdu(=0A=
+ 	return io_uring_cmd_to_pdu(ioucmd, struct scsi_bsg_uring_cmd_pdu);=0A=
+ }=0A=
+ =0A=
+-/* Task work: build res2 (layout in uapi/linux/bsg.h) and copy sense to us=
+er. */=0A=
++/* Task work: unmap the saved BIO and copy sense to userspace. */=0A=
+ static void scsi_bsg_uring_task_cb(struct io_tw_req tw_req, io_tw_token_t =
+tw)=0A=
+ {=0A=
+ 	struct io_uring_cmd *ioucmd =3D io_uring_cmd_from_tw(tw_req);=0A=
+ 	struct scsi_bsg_uring_cmd_pdu *pdu =3D scsi_bsg_uring_cmd_pdu(ioucmd);=0A=
+-	struct request *rq =3D pdu->req;=0A=
+-	struct scsi_cmnd *scmd =3D blk_mq_rq_to_pdu(rq);=0A=
+-	u64 res2;=0A=
++	u64 res2 =3D pdu->res2;=0A=
+ 	int ret =3D 0;=0A=
+-	u8 driver_status =3D 0;=0A=
+-	u8 sense_len_wr =3D 0;=0A=
++	u8 sense_len_wr =3D bsg_scsi_res2_sense_len(res2);=0A=
+ =0A=
+ 	if (pdu->bio)=0A=
+ 		ret =3D blk_rq_unmap_user(pdu->bio);=0A=
+ =0A=
+-	if (scsi_status_is_check_condition(scmd->result)) {=0A=
+-		driver_status =3D DRIVER_SENSE;=0A=
+-		if (pdu->response_addr)=0A=
+-			sense_len_wr =3D min_t(unsigned int, pdu->max_response_len,=0A=
+-					     scmd->sense_len);=0A=
+-	}=0A=
+-=0A=
  	if (sense_len_wr) {=0A=
- 		if (copy_to_user(uptr64(pdu->response_addr), scmd->sense_buffer,=0A=
--				 sense_len_wr))=0A=
-+				 sense_len_wr)) {=0A=
+-		if (copy_to_user(uptr64(pdu->response_addr), scmd->sense_buffer,=0A=
++		if (copy_to_user(uptr64(pdu->response_addr), pdu->sense_buffer,=0A=
+ 				 sense_len_wr)) {=0A=
  			ret =3D -EFAULT;=0A=
-+			sense_len_wr =3D 0;=0A=
-+		}=0A=
+-			sense_len_wr =3D 0;=0A=
++			res2 =3D bsg_scsi_res2_build(bsg_scsi_res2_device_status(res2),=0A=
++						   bsg_scsi_res2_driver_status(res2),=0A=
++						   bsg_scsi_res2_host_status(res2), 0,=0A=
++						   bsg_scsi_res2_resid_len(res2));=0A=
+ 		}=0A=
  	}=0A=
  =0A=
- 	res2 =3D bsg_scsi_res2_build(status_byte(scmd->result), driver_status,=0A=
+-	res2 =3D bsg_scsi_res2_build(status_byte(scmd->result), driver_status,=0A=
+-				  host_byte(scmd->result), sense_len_wr,=0A=
+-				  scmd->resid_len);=0A=
+-=0A=
+-	blk_mq_free_request(rq);=0A=
++	kfree(pdu->sense_buffer);=0A=
+ 	io_uring_cmd_done32(ioucmd, ret, res2,=0A=
+ 			    IO_URING_CMD_TASK_WORK_ISSUE_FLAGS);=0A=
+ }=0A=
+@@ -72,9 +66,24 @@ static enum rq_end_io_ret scsi_bsg_uring_cmd_done(struct=
+ request *req,=0A=
+ 						  const struct io_comp_batch *iocb)=0A=
+ {=0A=
+ 	struct io_uring_cmd *ioucmd =3D req->end_io_data;=0A=
++	struct scsi_bsg_uring_cmd_pdu *pdu =3D scsi_bsg_uring_cmd_pdu(ioucmd);=0A=
++	struct scsi_cmnd *scmd =3D blk_mq_rq_to_pdu(req);=0A=
++	u8 driver_status =3D 0;=0A=
++	u8 sense_len =3D 0;=0A=
++=0A=
++	if (scsi_status_is_check_condition(scmd->result)) {=0A=
++		driver_status =3D DRIVER_SENSE;=0A=
++		if (pdu->sense_buffer) {=0A=
++			sense_len =3D min(pdu->max_response_len, scmd->sense_len);=0A=
++			memcpy(pdu->sense_buffer, scmd->sense_buffer, sense_len);=0A=
++		}=0A=
++	}=0A=
++	pdu->res2 =3D bsg_scsi_res2_build(status_byte(scmd->result), driver_statu=
+s,=0A=
++					host_byte(scmd->result), sense_len,=0A=
++					scmd->resid_len);=0A=
+ =0A=
+ 	io_uring_cmd_do_in_task_lazy(ioucmd, scsi_bsg_uring_task_cb);=0A=
+-	return RQ_END_IO_NONE;=0A=
++	return RQ_END_IO_FREE;=0A=
+ }=0A=
+ =0A=
+ static int scsi_bsg_map_user_buffer(struct request *req,=0A=
+@@ -139,10 +148,23 @@ static int scsi_bsg_uring_cmd(struct request_queue *q=
+, struct io_uring_cmd *iouc=0A=
+ 		gfp_mask =3D GFP_NOWAIT;=0A=
+ 	}=0A=
+ =0A=
++	pdu->response_addr =3D READ_ONCE(cmd->response);=0A=
++	pdu->max_response_len =3D min(READ_ONCE(cmd->max_response_len),=0A=
++				    SCSI_SENSE_BUFFERSIZE);=0A=
++	pdu->sense_buffer =3D NULL;=0A=
++	if (pdu->response_addr && pdu->max_response_len) {=0A=
++		pdu->sense_buffer =3D kmalloc(pdu->max_response_len,=0A=
++					    gfp_mask | __GFP_ACCOUNT);=0A=
++		if (!pdu->sense_buffer)=0A=
++			return (issue_flags & IO_URING_F_NONBLOCK) ? -EAGAIN : -ENOMEM;=0A=
++	}=0A=
++=0A=
+ 	req =3D scsi_alloc_request(q, dout_xfer_len ?=0A=
+ 				 REQ_OP_DRV_OUT : REQ_OP_DRV_IN, blk_flags);=0A=
+-	if (IS_ERR(req))=0A=
+-		return PTR_ERR(req);=0A=
++	if (IS_ERR(req)) {=0A=
++		ret =3D PTR_ERR(req);=0A=
++		goto out_free_sense;=0A=
++	}=0A=
+ =0A=
+ 	scmd =3D blk_mq_rq_to_pdu(req);=0A=
+ 	if (request_len > sizeof(scmd->cmnd)) {=0A=
+@@ -162,9 +184,6 @@ static int scsi_bsg_uring_cmd(struct request_queue *q, =
+struct io_uring_cmd *iouc=0A=
+ 		goto out_free_req;=0A=
+ 	}=0A=
+ =0A=
+-	pdu->response_addr =3D cmd->response;=0A=
+-	pdu->max_response_len =3D cmd->max_response_len;=0A=
+-=0A=
+ 	if (dout_xfer_len || din_xfer_len) {=0A=
+ 		bool is_write =3D dout_xfer_len > 0;=0A=
+ 		u64 buf_addr =3D is_write ? dout_xferp : din_xferp;=0A=
+@@ -185,13 +204,14 @@ static int scsi_bsg_uring_cmd(struct request_queue *q=
+, struct io_uring_cmd *iouc=0A=
+ =0A=
+ 	req->end_io =3D scsi_bsg_uring_cmd_done;=0A=
+ 	req->end_io_data =3D ioucmd;=0A=
+-	pdu->req =3D req;=0A=
+ =0A=
+ 	blk_execute_rq_nowait(req, false);=0A=
+ 	return -EIOCBQUEUED;=0A=
+ =0A=
+ out_free_req:=0A=
+ 	blk_mq_free_request(req);=0A=
++out_free_sense:=0A=
++	kfree(pdu->sense_buffer);=0A=
+ 	return ret;=0A=
+ }=0A=
+ =0A=
 -- =0A=
 2.43.0=0A=
 =0A=
