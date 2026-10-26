@@ -1,75 +1,45 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051590;
-	b=aCQMNGcLlU/hA4t6Y9KIxkuBzXrYbrSVZwIK6BQ6o7y8+PfdRSeXtcqMYq3BocadMjHd
-	 mr/DCjCB3VHlFbKdnWHQbImEVJoXkoPCawNyI1fNlfG71Abe+HdqBoK8mJqP4FXcuUJTd
-	 hcyn6z3seAcrRF3mPveBBuKN7qMoteFouL2K+B/rC+lGdCpWlt2oG1PjA3D1kTh1dfjpn
-	 2OcY8GYySnh8QklSLI/1Fso+xxE+IBHsUB7BNS/evGZ49lKfYoNpXGJxUtnVbGx/BdotR
-	 vUq32rgAebn14Atb1rwSHFY5R3/5Qv8S7gP01Dh0E0GuUs/wYpCinNKdQcdofEv529g==
+	t=1793053844;
+	b=GpDNJ4gGZyfLWJ5cV1hGblC8sRyf8zajUKyGXcnI6oDZUzdbWUlplz7OCd3kgcT+d2Yw
+	 ka4FXNAkp+a9VKSmToACWw3HKkvwnw8MVxoT9EIYNVHjvL4YmKH4SH+TrSLKguX+Dojf3
+	 Ae/rF1ooXGLI2Xj7/CEl7ApSUCL2NmDD97Djm2Kzm3IM3H4x5f7k291wbc21ZzCxZ7Gqi
+	 fnmMWnTD0u/3b/gIqnXql0IdCJYdmBHvwN4EwHuZeuBNMIWQQvHKliKx2e7qDB69bxffI
+	 cweerDNk93OYb1DZogS21AL3NF3eMmw/hYXj4kMFUXH7k0X0LoRHp/5iTRGDFfgMDwA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051590;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
-	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
-	 Content-Type;
-	bh=CxmWryDZw0sLLhu4Yu8pG4ro8w6TSaSVJ3F6CzsZUrg=;
-	b=27udN3W/pTxs48LsXaqPdpNPeYBs3E0W1R6BkIZsD+ACmC5ISdkQ/m4tSUfLlvxh7Fbg
-	 88SKBEYM8HOt3m3IOx7Ud3yqYGwqlxF1QLCIfw/SNZth9GW/jT7ReDTzt66C4sK/ZX57E
-	 9dvYg/6z70kq+j83bCwp6V+vylBSyb+gN/XJ6YBEwp7d5ZL47hrcGpaD9RVemC+OW/mxp
-	 k+d1xQrGGwh36OEwzfND6wqlJpAaoTeIdWycfqE2/x7jS1ej/1Dhm6VjY1F0vcwOYZELI
-	 WlObTgx4GaZj/SSZVtGORmiRWaLpaFqJQVSAoFLMLB6Px6/f48/UITRUB8/5k4Yj3Uw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793053844;
+	h=Received:DKIM-Signature:Content-Type:MIME-Version:Message-Id:
+	 In-Reply-To:References:Subject:From:To:Cc:Date;
+	bh=dmscNNXpR9Tlb5LZlm76LmXvzMKP1GvB98Aa5akaxVg=;
+	b=roF2vcylbXjHHmBtey48wbiwzWjbnbqr0abKVkOtfsUyG+f3rKp48NBZ99BOz8h7zs/5
+	 b4ds34yZhn3us/Rc03vRvPeQBw6XLmj8qKcJOYKBAB7hqRtqjcxTP+D9gRFC/KK7BnteV
+	 0nAB+HZErlusxAydn5MHf/I+Yx6nboD37jxhNbZVktg+0+ewNofQDJ2tBeK53yNO1Axd2
+	 lLZb0U4XNJ/BYrN9++oJT7Y8sT+FFNyPGJMuhIflRuRe9GsTxevz34Cdxj0b60xtM4MrS
+	 zjWaWl2YAVVbYzN5jOBbaLfD8EBdiw0BsRVzzcw3jgOy6ZYBm/GrKNpBOGb5+xve0Vw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=google.com;
-	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=vwBVk4Eg;
-	arc=none smtp.remote-ip=209.85.216.72
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dkim=fail reason="signature verification failed" header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dr+bFo+7;
+	arc=none smtp.remote-ip=100.103.45.18
+Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B913606B4C4
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:52:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5B913606B4C4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A93606A31A;
+	Mon, 26 Oct 2026 22:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=vwBVk4Eg
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3ab7f1efe5dso5902405a91.1
-        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 14:52:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1793051576; x=1793656376; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CxmWryDZw0sLLhu4Yu8pG4ro8w6TSaSVJ3F6CzsZUrg=;
-        b=vwBVk4Eg09FolRMa6tRB7d5lsew1CjWLZH1mRph6PMJYmgjTNheP7Sd4o5eGAMvAyY
-         V6sX3O8qxifPaSM8SAimDe/+474bzlMc2Hcqs3VRVifNP9e/pO75qbo0cfoBQ/27vhk+
-         JXvvG9sZISWS1NB0aufLlMc0OIIJHXqaCUXAPnJL4/0XCYPBLthPEcFHCd3d1mhXVjBH
-         uW0/e9bzH62zgLC2NePzoB0tOVy9OUIaj99j0tsvFGNNDGBEBfG+TbAY7CA/G1KN9e2s
-         0j7vDCaNYVA+byW3gUlOfgD/e4GxYBsUCGsfK3BvvvyuSSHn51A+ijlMc9HrDdl/yQvB
-         Gu+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793051576; x=1793656376;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CxmWryDZw0sLLhu4Yu8pG4ro8w6TSaSVJ3F6CzsZUrg=;
-        b=sG33HMPbNs6iBqcDys3+HB+Huu1bwVhMT3P8Qbp6o9kr1nrH7z9FUAp1OK6dc89PA8
-         Z5jUMgrxIyMCpILdyqwPinvcURmkC+6iqZNefu2saE0yMYRCYVYDv3cpSubi8RTF+M4f
-         X/Pg2ygqnnGUkVZSnw/9eI3QqFXUGSYXhFbfmHKXqi25W10MrmiNwCrjeeIcZKW1aMYA
-         Q+8y4z8708VLaKNIbr4fWRoX3My9CM/msD0JoP/VJ9vGSeXp+peW+jFjvgf9VBiGtOKO
-         wpYlo8I4sgXm/uC2N+eD9AWRqffHY+UIP5MT8M1xhwALogA0NaenPYQcX3Y2ktbow5ky
-         VCaA==
-X-Forwarded-Encrypted: i=1; AKwUvBy3EfYn51CEnJYM32INlkQlzUoKozep27s9jNRde8jRyfRg4tXMGPs9K6WJ8QUoS2m5GJHQgMS9Gw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYId8RPRlNowJ9Zmm7ZPsH9uod4e/dHGlsDmPNQy4W+us0AuBrBQ
-	cQrB1/O+eTZLB613TgZ4aa4t2of+1wIy4z5G3wt8eBjo0SvDDNkcF6Ovkz2hSnDlt9mEHb8F/nB
-	O8PSrrQ7uCfRI7gWxZKXWKA==
-X-Received: from pjuy5.prod.google.com ([2002:a17:90a:d705:b0:3a8:211b:6c8b])
- (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3b8f:b0:3ac:450a:f9d4 with SMTP id 98e67ed59e1d1-3adeb16364bmr7181921a91.64.1793051575471;
- Mon, 26 Oct 2026 14:52:55 -0700 (PDT)
-Date: Mon, 26 Oct 2026 21:52:25 +0000
-In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=dr+bFo+7
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46EC1F01825;
+	Mon, 26 Oct 2026 22:30:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1793053843;
+	bh=dmscNNXpR9Tlb5LZlm76LmXvzMKP1GvB98Aa5akaxVg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=dr+bFo+7z5+CTwiGHeYIy9H24IjvPgf4TRxSimSjSs3n/yAhL9aRSZINo/x5mroHe
+	 IomSvINKTXigvFZ4T2r4pQS6DcTQna3EE9nzEaCD82hejA4AZ3C7UlSxPbJbhFSHxy
+	 Di/MXuc0u3/DB8dqNapb7z2siMBwUqQB6nYCMuq4/0PMPiMdvRGNrUrJkXSpvs0w3z
+	 2AT3Q8x/a6nwJyggelSWmXb4qTG5Z6QAbLhvcEzt6dxwgv3iYRFYhWUqc9QXSKF1rA
+	 6AS+VQieQSX/Ma92ZXhyBaeeXWlR1S0w7QnMoMkQeDXfNXkfAbaABsGjNgcpENxttB
+	 vTydLvfW/5xGw==
+Content-Type: multipart/mixed; boundary="===============5289104665204023220=="
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -78,145 +48,82 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
-Mime-Version: 1.0
-References: <20261026215226.3713941-1-jthoughton@google.com>
-X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
-Message-ID: <20261026215226.3713941-10-jthoughton@google.com>
-Subject: [RFC PATCH 09/10] uaccess: Refuse and warn on more user accesses
- without an mm
-From: James Houghton <jthoughton@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Jim Mattson <jmattson@google.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Begunkov <asml.silence@gmail.com>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, David Sterba <dsterba@suse.com>, Chris Mason <mason@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, linux-mm@kvack.org, 
-	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <bce97570ea9665a2f83216d4dfd7ab7ce17d54aa777f761c3d12db430ba21bb9@mail.kernel.org>
+In-Reply-To: <20261026215226.3713941-5-jthoughton@google.com>
+References: <20261026215226.3713941-5-jthoughton@google.com>
+Subject: Re: [RFC PATCH 04/10] stacktrace: Don't unwind the user stack without an mm
+From: bot+bpf-ci@kernel.org
+To: jthoughton@google.com,akpm@linux-foundation.org,viro@zeniv.linux.org.uk
+Cc: tglx@kernel.org,peterz@infradead.org,kees@kernel.org,arnd@arndb.de,david@kernel.org,ljs@kernel.org,liam@infradead.org,vbabka@kernel.org,rppt@kernel.org,surenb@google.com,mhocko@suse.com,seanjc@google.com,pbonzini@redhat.com,jmattson@google.com,axboe@kernel.dk,asml.silence@gmail.com,James.Bottomley@HansenPartnership.com,mkp@kernel.org,dsterba@suse.com,mason@kernel.org,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,jpoimboe@kernel.org,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,linux-mm@kvack.org,linux-fsdevel@vger.kernel.org,kvm@vger.kernel.org,io-uring@vger.kernel.org,linux-scsi@vger.kernel.org,linux-btrfs@vger.kernel.org,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-perf-users@vger.kernel.org,linux-kernel@vger.kernel.org,jthoughton@google.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.
+ org,ihor.solodrai@linux.dev
+Date: Mon, 26 Oct 2026 22:30:42 +0000 (UTC)
 
-Several generic user access paths don't go through the copy helpers
-that check for a NULL current->mm. Add the uaccess_without_mm() check to
-them as well, so that they warn and fail without attempting the access:
+--===============5289104665204023220==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
- - __scoped_user_access_begin(), covering scoped_user_*_access() and
-   get_user_inline()/put_user_inline() on all architectures, including
-   when masked user access is used.
- - strnlen_user().
- - check_zeroed_user().
- - The iov_iter user copy routines that call into architecture-specific
-   helpers: copy_to_user_iter_mc() (copy_mc_to_user()),
-   copy_from_user_iter_nocache() (copy_from_user_inatomic_nontemporal()),
-   copy_from_user_iter_flushcache() (copy_from_user_flushcache()) and
-   zero_to_user_iter() (clear_user()).
+> stacktrace: Don't unwind the user stack without an mm
 
-Only check for a NULL mm here rather than using uaccess_should_fail(),
-so as not to start injecting failures in these paths.
+TL;DR: Commit message only: the Fixes: tag may point at the wrong commit;
+7e8e6816c649, which dropped the !current->mm check, looks like the real
+culprit rather than 214d8ca6ee85.
 
-Paths implemented entirely by architectures, e.g. get_user(),
-put_user(), clear_user(), and direct users of user_access_begin() or
-masked_user_access_begin(), are still not covered.
+> stacktrace: Don't unwind the user stack without an mm
+>
+> stack_trace_save_user() only refuses to unwind the user stack of tasks
+> with PF_KTHREAD set. That doesn't cover all tasks without an mm:
+>  - A user task that has already gone through exit_mm(), e.g. when an
+>    event fires from exit_files(), exit_task_work() or the final context
+>    switch in do_exit().
+>  - PID 1 before it execs init, and usermode helper children before they
+>    exec, which are created with user_mode_thread() and don't have
+>    PF_KTHREAD set. E.g. booting with trace_options=userstacktrace and
+>    an event enabled with trace_event= unwinds PID 1's "user stack"
+>    during initcalls.
+> With the ftrace userstacktrace option enabled, the architecture
+> unwinders then read the user stack without an mm. That access does not
+> reliably fail: the user half of the address space belongs to whatever
+> mm happens to be lazily loaded, if any, so the unwinder may read
+> another task's memory.
+> Use is_user_task() instead, which also checks current->mm, as perf
+> already does for the same reason since commit 76ed27608f7d ("perf:
+> sched: Fix perf crash with new is_user_task() helper"). This also stops
+> unwinding the user stack of PF_USER_WORKER threads, which never run in
+> user space, matching perf.
+> Fixes: 214d8ca6ee85 ("stacktrace: Provide common infrastructure")
+> Signed-off-by: James Houghton <jthoughton@google.com>
 
-Signed-off-by: James Houghton <jthoughton@google.com>
+Is the Fixes: tag pointing at the right commit?
+
+When 214d8ca6ee85 added the ARCH_STACKWALK version of
+stack_trace_save_user(), it guarded the unwind with:
+
+	/* Trace user stack if not a kernel thread */
+	if (!current->mm)
+		return 0;
+
+That check already covers both cases described above (a task past exit_mm(),
+and PID 1 or usermode helpers before exec, which have mm == NULL).
+
+The check was replaced by commit 7e8e6816c649 ("stacktrace: Use PF_KTHREAD to
+check for kernel threads"), which switched it to:
+
+	if (current->flags & PF_KTHREAD)
+		return 0;
+
+That dropped the no-mm protection, which looks like what this patch restores
+via is_user_task().
+
+Should this be:
+
+  Fixes: 7e8e6816c649 ("stacktrace: Use PF_KTHREAD to check for kernel threads")
+
+
 ---
- include/linux/uaccess.h | 2 ++
- lib/iov_iter.c          | 8 ++++++++
- lib/strnlen_user.c      | 3 +++
- lib/usercopy.c          | 3 +++
- 4 files changed, 16 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index eae204f7261b..7d26d2de9599 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -781,6 +781,8 @@ static __always_inline void __scoped_user_rw_access_end(const void *p)
- ({									\
- 	typeof(uptr) __retptr;						\
- 									\
-+	if (uaccess_without_mm())					\
-+		goto elbl;						\
- 	if (can_do_masked_user_access()) {				\
- 		__retptr = masked_user_##mode##_access_begin(uptr);	\
- 	} else {							\
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 21e2ccf1e8f2..a0769874241c 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -204,6 +204,8 @@ static __always_inline
- size_t copy_to_user_iter_mc(void __user *iter_to, size_t progress,
- 			    size_t len, void *from, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	if (access_ok(iter_to, len)) {
- 		from += progress;
- 		instrument_copy_to_user(iter_to, from, len);
-@@ -277,6 +279,8 @@ static __always_inline
- size_t copy_from_user_iter_nocache(void __user *iter_from, size_t progress,
- 				   size_t len, void *to, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	return copy_from_user_inatomic_nontemporal(to + progress, iter_from, len);
- }
- 
-@@ -296,6 +300,8 @@ static __always_inline
- size_t copy_from_user_iter_flushcache(void __user *iter_from, size_t progress,
- 				      size_t len, void *to, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	return copy_from_user_flushcache(to + progress, iter_from, len);
- }
- 
-@@ -451,6 +457,8 @@ static __always_inline
- size_t zero_to_user_iter(void __user *iter_to, size_t progress,
- 			 size_t len, void *priv, void *priv2)
- {
-+	if (uaccess_without_mm())
-+		return len;
- 	return clear_user(iter_to, len);
- }
- 
-diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
-index 4a6574b67f82..45709798eb8f 100644
---- a/lib/strnlen_user.c
-+++ b/lib/strnlen_user.c
-@@ -96,6 +96,9 @@ long strnlen_user(const char __user *str, long count)
- 	if (unlikely(count <= 0))
- 		return 0;
- 
-+	if (uaccess_without_mm())
-+		return 0;
-+
- 	if (can_do_masked_user_access()) {
- 		long retval;
- 
-diff --git a/lib/usercopy.c b/lib/usercopy.c
-index e2f0bf104a59..9146c729c47a 100644
---- a/lib/usercopy.c
-+++ b/lib/usercopy.c
-@@ -48,6 +48,9 @@ int check_zeroed_user(const void __user *from, size_t size)
- 	if (unlikely(size == 0))
- 		return 1;
- 
-+	if (uaccess_without_mm())
-+		return -EFAULT;
-+
- 	from -= align;
- 	size += align;
- 
--- 
-2.56.0.307.g5fe7bd680c-goog
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/40410166379
+--===============5289104665204023220==--
