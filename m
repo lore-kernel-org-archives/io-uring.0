@@ -1,66 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=199.89.1.16
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793030196;
-	b=1PXdCyBpf1iYKjA13ZNVIpZgE4ec0VO0GAbzGpj28eS6taLHjRM76Z4Yi2V5i6HCP5fb
-	 +BRa6zm546BaWZzOQ/7NdWmyiDa31jtFnVDYzlLAJfUZ6c9q5O7BcMTqDF5ngJ96cCyGm
-	 Rj6xGWlXBOXw+32ieUkzfaH2jHoXzyKnlm1qWGzJPGSahcIHE/gyAFuQciyty83IqS4MI
-	 kRCeTS1NG6sPgULJfjN7tOwG/qwMGBUIFkfuV7ufhfFnAI0kX9nR4J/b5gZe29oKDKvhU
-	 mEX5AumFWIOu/sTm71rHoSbyUU4MWTJGFgTOj4kZDRB189j6t166CVbke8BKbc+TLUA==
+	t=1793038400;
+	b=AFmch2k2GmQKfHK7Lsa5pYAqHwRXVIQk7PODeNdeVXkwlklswFZzs45vm9B67OGY9m6M
+	 xgfqzqs7cbTadqtzqh0lLHD/HN9XpgbQqO9Pd5OETW7QOFzxemZrOC4kz5x6TehotyvJz
+	 HVY5OLayO5wqGnKQ+LlF5E8ojj+TjCWCQJhnPsLTBjnRBRAf1KB14TFW8Wf9RCRqgvlAq
+	 sphG3g7BZqGBUhPdbQVP7bEDbmsndB5KhDuuN5TFXOQ3OhejYYFaZifoauNHOjQugWwtx
+	 b13gTGOuxL8XJViQOH+bj3zT/0sFFJkcgOFwUjuDwDTfG4BuvyhaIqWFxJKAMn+whIQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793030196;
-	h=DMARC-Filter:Received:DKIM-Signature:X-Virus-Scanned:Received:
-	 Received:Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:
-	 References:Content-Language:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=2GoPmj1ZmLofWBrMyOcxppGzOSH5vRfw4U/a5/6h2ME=;
-	b=dQKt2r3K4IBD6jGs3YF3YqnDiEX6KlRA1PTe+V5Onol+uXTRoywGOWpcXGSu0Hhw/xfY
-	 2vfG65sqkl92n9ES2YN3NKgDjsz/urEiEpKTZc5/glA6yJ3LnifsxmLcPju2KM+nnJk7+
-	 kyHjjbLDE43S8ecvVEClGS64QfRRjnwB0yo6m25NqOJ8Lb0mqLNYh6IiYkPh/NgvoqdVW
-	 kAx40qUGmHXLVGwwdGOmiaYTvQ8Z1zl4yZJaCkgu30gvjMWfu95ndwfsgU2HrGBqn7CBC
-	 hbPKtgBLzsVJRo82g5HBcckafQCkp9VnPW/0SPYpbLeakknVhFe2K5NT/yBajIKVZtA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793038400;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
+	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:X-Mailer;
+	bh=5chOq6U6GTtF4NKx2As2omT6eU7uon7QFz+o6vw3QJ0=;
+	b=AgxebbG1f1X8/1ff8/k7Wqj0fjQKJuQXbT/Ids4gyyNkLfZSNxB1gXZnkFdOqrtsuko0
+	 KCijnS1yOz/djiPT6lMym5Fs09PwU92esunJdGKEA4lPEd+ETV1lQzFms85hfSkJW8vlh
+	 GsuuY1R0G0EAfQYN/ThsxpmgReXfl/LKZL6IV26vZ2LoF+CdJzWniYXePv2rb7Tml3V0H
+	 SmEES/eo4bHv2fI6DW3UvF8J6wIUqPvZb4+LT3VoVnHMB4S5AjbySk9Un2G4svlVYSeSD
+	 c5aqFDOCIJFBOyMwjVOjtIx6uWpKbjP32TV1kXlXNeAD3KLtWyJzMo3zBH4MDnVP7yg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=acm.org;
-	spf=pass smtp.mailfrom=acm.org;
-	dkim=pass header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=CFz0EqCR;
-	arc=none smtp.remote-ip=199.89.1.16
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=mlVKKmkk;
+	arc=none smtp.remote-ip=74.125.82.49
+Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A14C606A31B;
-	Mon, 26 Oct 2026 15:56:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2A14C606A31B
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC71606A327
+	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 18:13:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8EC71606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=acm.org header.i=@acm.org header.a=rsa-sha256 header.s=mr01 header.b=CFz0EqCR
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4jCysv5DCPzlfvpW;
-	Mon, 26 Oct 2026 15:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1793030192; x=1795622193; bh=2GoPmj1ZmLofWBrMyOcxppGz
-	OSH5vRfw4U/a5/6h2ME=; b=CFz0EqCRRpkaKxNgZD2gnz80gb+xK4IrgHP2uIOb
-	1xwfASfByJrEHN0huo3sKoNPmOs0ifC5Yv8nLBNf1o6EzwirzmUWsf+J2M42I9PF
-	nbiWg3HgJ5p1lUWSewqvgho9m5utg/N/ezYFouYlik3FSM7mu8+ZtAVX30EhnFxL
-	WB1gyusxNjUGmOUDeB30svhB2RuD1yqTxQJEZkNRGPJK+zMNTqOPkcMRG338CG1N
-	/Jb5+EPe3RAY8raVd8m2mNxNRez6b1f/zWzFBREz4G5W5yckL/BtZluXHeMEGnkf
-	X5liwIBizR6JnImgJyTHdkc21Hi1UTMI7p7wxNVFQxVxZQ==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id A3JlEVgOhlsY; Mon, 26 Oct 2026 15:56:32 +0000 (UTC)
-Received: from [IPV6:2a00:79e0:2ed2:d:829f:7082:d079:ed8b] (unknown [104.135.182.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4jCysq64GJzlfvpT;
-	Mon, 26 Oct 2026 15:56:31 +0000 (UTC)
-Message-ID: <6efae213-c75b-435b-888e-f58c32b28bf1@acm.org>
-Date: Mon, 26 Oct 2026 08:56:31 -0700
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=mlVKKmkk
+Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-1931ff67a29so1465418c88.1
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 11:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1793038399; x=1793643199; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5chOq6U6GTtF4NKx2As2omT6eU7uon7QFz+o6vw3QJ0=;
+        b=mlVKKmkk19RI0K3j73BG4MWLjg1vVMDB8Od3VPnrZUUyIwKJUQnUTL6pNA4sdn4onX
+         ZMVDPT0s2FRij0qyjgkgEyYFQ7g5IpHXbdmlDhsJD6g5D4pXv7pmQ6X591+FdmTM2Mnq
+         uHZ3SYxoV9L2QG+pysopFAi7/0jjaMB+RKDzThBzLFRwCmvPl2L8wL9V9x4TDMOoXO92
+         iFO2i984iq3pj/dwC4vQ5y06DU5j2vgcm2ECWhgv9VqNZhsVcl/U0T/psSLrDsrOvtyC
+         4Bm5PFSGHE/3eaKvPCi+XFsaFEVTjw9ngSpDxW7q8c8nQaVBn7qW5gLfqvyZUIcNnodP
+         Eg4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793038399; x=1793643199;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5chOq6U6GTtF4NKx2As2omT6eU7uon7QFz+o6vw3QJ0=;
+        b=paNgdJ0cIdxlrw2MKNvy/d90STxxy6rnKy53ika9Q34SJM6emTrVoY9eX9PYs9QsCT
+         jGy3GcCdmN6f+j93jul4Hr86EoCFg7PzxBj3+GtG4vqwu2KVH4oFG4BRi0GsIUyQPdDD
+         S2FQXjv4bh4oHYqUUH5o+2kuBsiyXZTK6McIT1Jn2pAkApgcfpeltboIIB6p/rkBQrod
+         ABBHVpRo33WNgCDfGDVM1YJ9RHoDKqh70AQUD6tnhR1CVaTYHDu+9y8GG3ndzHdK688G
+         qsloWZC6WcvOJRLCT6Io/pt+1g4Q9VrN8R9zmbzOLaVnY+Lc1mYZ/N6jIvsiup1fNPKT
+         r8yw==
+X-Gm-Message-State: AFq9FYI82Z/I97VEG+dYqiA4Nn+uoQyvXolWyJUo8XRKDKZmTnqme0vf
+	MlmKWIcT5sFEbLiZhyeoZ9sHUyAmimcRYapiwpVz8orwzMysRfqVjMkQJpwMyP4gfQ1ltN/hoWw
+	ATuJMW4o=
+X-Gm-Gg: AYBFou0VRl7hU5ZXFk0wK8+A/oP987Y2eACrepJuZTn2cTbkiDWijsTHDCaAVh33fxJ
+	MKB24Set+8vj2KhDbXQ+SpVSS492Wxc5UZHf+RUpzkZwdwQTGcUxReuAUWzjEf+hEIClWtQHI38
+	oNibDNoo/gJvrMOMDkoWY0HE/+aS0ulAcWLFL1uq9ZWyBKCKsbi7crirKrM6m2MUTf+C38H0+PZ
+	i99BvCTZY0+Ny2Q6a9ouTWc9qCYZRAk6/FGgPQObMeHi44GBRuuBIqJpL2EjKvvB801a37YHN0O
+	JA0XMZMjRZyD2SRQqFXp0WOD0xu8KBut7Gll4aPL4VCefo/f40BUXK4L7nT8NloiSe4Z91FJIwa
+	Yc6W1EArwo77DdxvSUxr8y3btcV2Js7ZogoQUsDf043JjQtguJ6uaXMcR0GhOYIP3MJeNjgP1En
+	f9yW0XjnXoW0U4AcgXu5l8NWuZcxz7Yfy0vcgEszNSooYkMtNGjfESCUfxBV7OZI+7CG92LmVrj
+	Cbut3RbBsk6ozsP116yueKfL5+06ZdcPgR+nBZizQ5oq7Nar9G9PwLOQ8LCKUsecZMEITKh6QdS
+	J4Baz2KpheVXkKK5jwEIvQQb/3RmER/91Nd8nxi4Qd0ScOEhxgtxgK3vUPOg
+X-Received: by 2002:a05:7022:7f12:b0:180:15be:1f9c with SMTP id a92af1059eb24-199361b4ecbmr10447007c88.30.1793038398534;
+        Mon, 26 Oct 2026 11:13:18 -0700 (PDT)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1989ff2ee5asm23576455c88.8.2026.10.26.11.13.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 11:13:17 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: io-uring@vger.kernel.org, Yichong Chen <chenyichong@uniontech.com>
+Cc: linux-kernel@vger.kernel.org, Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <20261023112209.87979-1-chenyichong@uniontech.com>
+References: <20261023112209.87979-1-chenyichong@uniontech.com>
+Subject: Re: [PATCH] io_uring/net: keep recvmsg buffer select length within
+ MAX_RW_COUNT
+Message-Id: <179303839763.792754.8466602423442934526.b4-ty@b4>
+Date: Mon, 26 Oct 2026 12:13:17 -0600
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -70,39 +97,29 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] scsi: bsg: release io_uring requests in end-I/O
-To: Yingjie Wang <x-professor@outlook.com>,
- "Martin K . Petersen" <mkp@kernel.org>,
- "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
- Yang Xiuwei <yangxiuwei@kylinos.cn>, Jens Axboe <axboe@kernel.dk>,
- "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-References: <cover.1793003363.git.x-professor@outlook.com>
- <8f30e238d2b169702308303687e9504c7513ecc8.1793003363.git.x-professor@outlook.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <8f30e238d2b169702308303687e9504c7513ecc8.1793003363.git.x-professor@outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On 10/26/26 1:29 AM, Yingjie Wang wrote:
-> +	pdu->response_addr = READ_ONCE(cmd->response);
-> +	pdu->max_response_len = min(READ_ONCE(cmd->max_response_len),
-> +				    SCSI_SENSE_BUFFERSIZE);
-> +	pdu->sense_buffer = NULL;
-> +	if (pdu->response_addr && pdu->max_response_len) {
-> +		pdu->sense_buffer = kmalloc(pdu->max_response_len,
-> +					    gfp_mask | __GFP_ACCOUNT);
-> +		if (!pdu->sense_buffer)
-> +			return (issue_flags & IO_URING_F_NONBLOCK) ? -EAGAIN : -ENOMEM;
-> +	}
 
-No new kmalloc() calls in the I/O path please. These have a measurable
-performance impact.
+On Fri, 23 Oct 2026 19:22:09 +0800, Yichong Chen wrote:
+> io_recvmsg() takes the transfer length from the ring provided buffer when
+> sqe->len is 0, and such a buffer can be up to 4G. min_ret is an int, so 2G
+> or more makes it negative and the (ret < min_ret) block is skipped, and the
+> oversized length reaches the socket layer unchanged: an empty socket then
+> completes with 0 instead of arming poll, and a short read is reported as
+> complete. Clamp the length to MAX_RW_COUNT, as io_recv() does.
+> 
+> [...]
 
-Thanks,
+Applied, thanks!
 
-Bart.
+[1/1] io_uring/net: keep recvmsg buffer select length within MAX_RW_COUNT
+      commit: 18d3f56eb6e6500a65d81cf265f0fe74fd9ecab6
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
