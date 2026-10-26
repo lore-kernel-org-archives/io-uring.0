@@ -1,13 +1,13 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.12.17
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793003376;
-	b=lRPAMJMt1qF/w/5kBmGT9ln67LH2q8DZJJWnPRXOZ1BHY+Vt1tx0qAOJxJVa/paxNHwf
-	 iPaQt82OlH92gZYi7qCG867sDzCdW9Hd2lJKyLdkD3sRUdqSpd6YstiFuG5NIOC0axWuo
-	 gzrNdl67qnps0pCqQDJxwV8BLp+ChJ7mrze82e6Awqqen/UnchMzLm9wNEFMf8c0y16U4
-	 jwY+ceW99YnpGG0kah9n/RpUOaSlvC4Uod+5YLLfZhNtw6qHfS3uvs1S83nUEdCtha7WI
-	 YOjHcLaeMu2sx1M2pj2ATo2GF6oDUAia5h9EjWVlHsvoy7Pk+J+iJJ8LjSEGClYrLkw==
+	t=1793003383;
+	b=TO4fL+b5f+5G0p9bDYozFeplA+dijJB/kqmjDzrZsVxIm7mOoUMCow521/kTDmsnxrWi
+	 6M0BiJzGXnW+Pa6A4/G5SPyOh0dgez3ls/dpdiUkyflCLzqbu7aBfi0N6nXZEZJ6qETaM
+	 bpcKqeBXAOHmyrwjD90dSl6kbGE0I+MaX9OJBU6cWlOgIuMwDXbnneaHgZINb0YvMRKBT
+	 o9A2VCFzfsjF4xuztwLoLlFQlA0xtYlB8uDEDyN8VqSq6EnNIZK8d8EpjRRghnP06bAm3
+	 OXKhjrLBE5m4P2KLRT9Yl1guRfmhI5/nIQLXLJ1OqKTLF+kLVZw0xBaEWp5F/dIUgVg==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793003376;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793003383;
 	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
 	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
 	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
@@ -25,50 +25,50 @@ ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
 	 X-MS-Exchange-CrossTenant-id:
 	 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg:
 	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=uqiZ+OS5WuKF3Jj/9+43ehfU+xlaXoDXGv+WTIVxFig=;
-	b=ZEBAOo/Ww5uErVMAJH0dLJOiLGGVSf0GVy3AgKK8sLI4SvT/g8FJQCqe/Sx5Ob+8mx7/
-	 gvZoLwnHYmptXLpDwQQOvFtYSmwwKYwsNcM2au3w4svJe7MGey9eWGw1bFDAb7awUmHYe
-	 mKVHxjt4hVuxFSzHOOpJYbwA6HXYi47n2chJRHwRaLFVCjvRvLN3GkuN3RTzqS9S65Izg
-	 o5mFs7J7Ne3zQ+/f+MEaSN9Ij9p1b0mqEYnXxmJxEeRygWG1CQnPJJhZ1Cree8KvsmGxE
-	 1t0DPs2zhPSCM07VJlF0jUo9AcKcd3Oc0K5UkAibNccNQje3roU+JMMgce4U4GY75Jw==
+	bh=kMhx2uOpdPGEEs3JGHCXemnE0ZSHLV0oIvik4GaguNs=;
+	b=WS8oMlnNUQmgqkNPrlnB5SV7l5HmcfRPzJ+pPv5rErH0fePZPXOrR499tuhKjzA65KCg
+	 HN6zZbbXakmzL9+cSL7GdVC4T3Io8mo7ppXwwXbuxkH1UvKBM5HCUaaHKrBf82+fsD0ow
+	 aQtfTKUd7Em38QzNanqjWqkobnKKEWgYu6cD/X5E2GT9rsa8rwYxnRcG1pcsCSBR2x99n
+	 0aTXX0WBiOObUrTkV3E7kC2Ey4TivomOD1dq1cBmleChx0evAIdTCgBaBRSUid1ofXJxy
+	 6fLe/6gs+ibPpic5IoMaKQLkX8LbdRK0XI6KjHRgwCyytE3Mw25MVd0hHgxr+hMmpvg==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=outlook.com;
 	spf=pass smtp.mailfrom=outlook.com;
-	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=crs5dIwi;
+	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=vFvOSUsV;
 	arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.12.17
 Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azolkn19010017.outbound.protection.outlook.com [52.103.12.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA10606A328;
-	Mon, 26 Oct 2026 08:29:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2EA10606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8924D60A263C;
+	Mon, 26 Oct 2026 08:29:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8924D60A263C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=crs5dIwi
+	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=vFvOSUsV
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qjCA23RMzX9H/2qtIorzWIq0NMIfe61Bw8v1r3dfk73jBsNQYVVUTNn51bovLMtxqkZQD1NW9299hPRYbk1z/V0i835MN3vX4hn//yvTKjZ+Qby3xs2IKjWXM0QmomIHTT22a4dvt8uwjTibEDWtU7lQ1nM0EcfGizhMyj9/lpWwArqggHISg+C3XfM/sKRghvoVg/3tU64zKsxWR0dQxySUs9ALbuPx06Dg0H8PHTs6pAjPF0nIsPxQ+c5jLB/2NfHYrmob+Xp9PQ7as5QLDrZ6MdN+tZrWe6fptgyGctK/3pT9bOjMm6lpqYNbBKNEqdYG2cMqbj25mpv6apDhTA==
+ b=AJ1nJEjutTP6RE81pSBKzcv6J12Wc3aNytwkaFB3VSs0ZOKdUDNiwYcgyeLwiu/fJ3uzCL97C34q2JzigbghfCuYL6EigEWW2hjg7QLTo9muitJDXeDLxbyyQFBH73hgn95pddOABuKjftweITl2GoFqRb0ctVAdGpz9ZUr1in+HHKAaNGJHssOfVpQ8d4dRCATPHJcIVSEf+J6XcxTNucb+jVTaEgLVXUcaGohwBw+GyCKoqt6x4EXNxt6b2lEZxftrzo+vvfuTkP/5bFNlWB14aX52+rBn7dzgYTfx5y40tpSHIwnYy8NeYr9luUxhW13pkY4CVncoEp0VBZ94mg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=uqiZ+OS5WuKF3Jj/9+43ehfU+xlaXoDXGv+WTIVxFig=;
- b=H5mMy7pdBT1Oq4l4GcTxRmOtPR1wTtzmT9Vu51i0qGY+dBzer7L6sABHlS7jpef0JiyjIBZFPvG2OYH3zFjjndHGcBfiS62QwU0H3Nm7CXw8cVtVYWHTmNvuawEuc54P931GdGofJWxNuDD1QUyRGanguv5dv+WGeAB9BSmaWh+EHRwgbEoNwNmyrLX7VxqdOjRhDjYbzIHqrHHkxilnC+AW6zuu8qze2Ezt0fukFoAtcCuvFo27kmSDEpedlwjEeniUiNtSN5jewWDY3sxEcNKx9Wwv6NPUBfq8hoMxFROsEPqQc7zXqkx3+t3+cv6VpbusHJChzRxQ4Oi9XCepaQ==
+ bh=kMhx2uOpdPGEEs3JGHCXemnE0ZSHLV0oIvik4GaguNs=;
+ b=hDWEokebIM8bF6Poa+E2DU6G5Ov0X4cJPJ07o9FLrcr9jpGQPxocyh5gp9/dr1ZWPDmjeL6Xt8V9fduVEeTOPiEvxz918GE2YmhH/ahWb1ftpPubVw+Z0Do2aaOVlcwgBeT9mQ2VNpq0RhzxtJ8b08E2yNgta8eoaSrS1I0SkwKbgDa4CSkyqmmjRxoGCbEyJTHEdGCgzjmjwaABf2HlouAGq3ECInyboXCBaZwW1ZgAtM4kd6DwHLVYDL9HEqW/IZuip4UK1w+ieVZdgN2DJmI0oYVRq1Za4NsvJY5RK4Ekb5zcWsvk/kh1A7TEejNPTGq/ioQvFLv/jmZPG7gPJw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uqiZ+OS5WuKF3Jj/9+43ehfU+xlaXoDXGv+WTIVxFig=;
- b=crs5dIwiUI0LOJxGEi3TBQiSb7e8EYXSZn727sHV+MxfjgoVD6OGtpV9+DC8iLg5vB27573cRX7b/VHGpcrS4Jx7R7+tBomTM4i5gyRaa61RNmHZd5Z+fTZbqwCIZm4ewEWULiGxazoxtwrwn1exI1QsNqkqyIBlEJCHbAlvaq5K2cJ277EKL43Q3bU5GMNgoiAsxt0bGE26WEOGWfSevF/STxKbxmuVc9UNRM7nmQDiAdFvemOt5IvRYgUtkuKXbWL5JMC93doQ+Koq+uy9ELZFh2zc0ZLlpYvisYXk1bW8+NJCsweyh3uf2kD12NcU3B2083d08cFBrw7flgVH1g==
+ bh=kMhx2uOpdPGEEs3JGHCXemnE0ZSHLV0oIvik4GaguNs=;
+ b=vFvOSUsVAoxlyLXl0jH0AKeDIc5Ru1Vb9aKxsrPQrzG4vA8C6//BafHIgytIjvX48atb6gDvs+Wb+RpAmueKx0BhjfBP0CooAc0WDyjHsM7ZljRfMM+oyCNiUQwudVDkehMpgxab8+OKHkiiho/AO1vYCw5gscO16wwXCNk6hxLUPMOiIAEf2+RJF2nYacMHW6HVbn53s9OxRDxwzUU8/FMmfUYLGQ7j1+cpsvLGTxMFugzxzONt22nha19FjQ177meShcYT3UuhOONslDaivc+xXP2+Elmy09Fhe4vTV4q6WnOCkYgI2Vm7N7wCiaOIVvokJHSxJ7eoVhsgwVs3bg==
 Received: from SA3PR05MB10385.namprd05.prod.outlook.com
  (2603:10b6:806:39d::17) by DSWPR05MB998753.namprd05.prod.outlook.com
  (2603:10b6:8:354::20) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.22; Mon, 26 Oct
- 2026 08:29:34 +0000
+ 2026 08:29:37 +0000
 Received: from SA3PR05MB10385.namprd05.prod.outlook.com
  ([fe80::e22f:a0f5:fcb0:9b0d]) by SA3PR05MB10385.namprd05.prod.outlook.com
  ([fe80::e22f:a0f5:fcb0:9b0d%6]) with mapi id 15.21.0546.021; Mon, 26 Oct 2026
- 08:29:34 +0000
+ 08:29:36 +0000
 From: Yingjie Wang <x-professor@outlook.com>
 To: "Martin K . Petersen" <mkp@kernel.org>, "James E . J . Bottomley"
 	<James.Bottomley@HansenPartnership.com>
@@ -77,13 +77,13 @@ CC: "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>, Bart Van Assche
 	<axboe@kernel.dk>, "io-uring@vger.kernel.org" <io-uring@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v2 1/6] scsi: core: release SG_IO request before user copyback
-Thread-Topic: [PATCH v2 1/6] scsi: core: release SG_IO request before user
+Subject: [PATCH v2 3/6] scsi: sr: release CDDA request before user copyback
+Thread-Topic: [PATCH v2 3/6] scsi: sr: release CDDA request before user
  copyback
-Thread-Index: AQHdZSQhB4L1ra/HOEm2b4Dhx7D2wg==
-Date: Mon, 26 Oct 2026 08:29:34 +0000
+Thread-Index: AQHdZSQiahEeF//Ick2P1k77WZ0zfg==
+Date: Mon, 26 Oct 2026 08:29:36 +0000
 Message-ID:
- <6dd19ee01f7d2d677ad1b2a9adfb82d663475b2f.1793003363.git.x-professor@outlook.com>
+ <2cdd629d5bfe284041f3410391154821c19fdcf4.1793003363.git.x-professor@outlook.com>
 References: <cover.1793003363.git.x-professor@outlook.com>
 In-Reply-To: <cover.1793003363.git.x-professor@outlook.com>
 Accept-Language: en-US, zh-CN
@@ -92,59 +92,58 @@ X-MS-Has-Attach:
 X-MS-TNEF-Correlator:
 x-ms-publictraffictype: Email
 x-ms-traffictypediagnostic: SA3PR05MB10385:EE_|DSWPR05MB998753:EE_
-x-ms-office365-filtering-correlation-id: f3c23132-27bd-40cf-ca94-08df333b43e6
+x-ms-office365-filtering-correlation-id: daae2cfe-9818-492c-9840-08df333b4554
 x-microsoft-antispam:
  BCL:0;ARA:14566002|15080799012|4140399003|24021099003|39105399006|41001999006|22121099003|22091999003|24121999003|31061999003|38102599003|8062599012|19110799012|8060799015|25010399006|102099032|440099028|3412199025|4302099013|1602099012|12091999003|26121999007|10035399007|40105399003;
 x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?tFCssKUahzdQ61E6SQIl2BKdIt216EBm4E+zA7nZtl3T2EVC5cWJYsIIMd?=
- =?iso-8859-1?Q?9T9WHtnMlU4bgA9vDkkOXNvOrYGcfA1Vy/hR/oqhMrfs2L5tXfvHOHwtpE?=
- =?iso-8859-1?Q?1Z4J+u/imLMMEcZmSG5PA2Ea+CP81p1U0oqwPNZ0ndOJAS4ItxPwu89WBZ?=
- =?iso-8859-1?Q?Q8nGgpTZcj+0/GSWetm/ohYny3i+/F29v5aqL+ETgcCN//9pNPISzQ5NXW?=
- =?iso-8859-1?Q?M+hqGqpN57tAhoAQZ1/+RtuL3uT0zHAbcIKdvh6X5m/5/9joGtPa7RVB10?=
- =?iso-8859-1?Q?cBlKEhBcbgY5e2nSC6QnY2YFhh4bPVRr40GKhAp/tPEK2MUfuk9g38Mh/Z?=
- =?iso-8859-1?Q?8aFmPre/LII2lC14ZJjdS+q60wf/nqwMC1SpDbieH/e348itQJ0i1M9Rmq?=
- =?iso-8859-1?Q?hjTfEoe4EiDqylkqKcBuA5cxkghG5v1wn3VkWswS/RAQKpD0xFDqyo3B6i?=
- =?iso-8859-1?Q?l5x1tdfwXPq5vghgBL1IOc9ZlePhvbH0+RFDS1qmWp3+EWOWhqjs57GIl4?=
- =?iso-8859-1?Q?SiVMytP28arbkUcRmvz4jJF6BISOC8fCYZLG+KAWihON5ZuvOWfMOIgnlv?=
- =?iso-8859-1?Q?1jAj7rOG5drtGSWq+49xzkxnRHkz56FHbgq7RsxpJvplfd1Ilw8nmoFZM6?=
- =?iso-8859-1?Q?xnJJfn0jOlNYWS8J65bYA0XnP9Xtzw5BlA9jT86gRIVk4hjMQHrhH1k4St?=
- =?iso-8859-1?Q?eLPh2OqyGqjho2zJQ5U/9CWzqklhhQnTQbkCpTcKP5BLj2IkiL3lvDKysI?=
- =?iso-8859-1?Q?I8c7G2OJPhoAHQbqyX+4FxowNc8CfsJAj66HystY+Sp5CKjNVwlM+Z7oij?=
- =?iso-8859-1?Q?+bQKTcz3cb3NXT9eroORS7PPB5IC5dz7o1Q1PGlt/p9Ruz+m5d0WwITdPY?=
- =?iso-8859-1?Q?saT+ZWNErpZeHn3b3vcFK4YXrgKjNBNPUEGkyvGnL9a7Ir7biVsRxfPOoB?=
- =?iso-8859-1?Q?1xX9ZozbtVGhSQDepcpIDLv/bhh1EJG6jLdCbfJk0YlSvfEv28StMWiJfa?=
- =?iso-8859-1?Q?4N9/p9mF7sLu35ptg/6hctO5DUxE4S9WDBBN2I0c6tvSQCw+ywTV/kHlHZ?=
- =?iso-8859-1?Q?lHeJrJLu+chBDYKnJi+bYdJ9PHMpRjwu6mdcOpu6x0CamcUJR/S70d6ykX?=
- =?iso-8859-1?Q?tLm5J1Ih9ZNNA43PmP8w7eOFs/B9FOoWBkEV0bKhXAxqhkCKxa8tsJ+D0P?=
- =?iso-8859-1?Q?Y3qSjep+H9+mZ0T24Pck0vOUMulX59l0MG9wMdPL/4tiR2ePIw2VpeC2B+?=
- =?iso-8859-1?Q?/+n+pTHB2cJjT+SvdbDg=3D=3D?=
+ =?iso-8859-1?Q?zY8cXiDMqM2GNOZou364+31ChuqyVnPlMm3krgkUQ51v+Afi2SDo7z9ISj?=
+ =?iso-8859-1?Q?525HGv1YtHRRvZI7CJxweMpweK+tmjupgza9NdrDMv6IYERL0+O+pi6U5I?=
+ =?iso-8859-1?Q?f6F0dYsxhG1SUWuM3xtTHwtn3ML8iUnOP16vqizJhii83sBPprEkKkofBG?=
+ =?iso-8859-1?Q?QdLuoP1La/kjglDRgfvE1NaDNrFfub7WfgP1oOK6zDsqzgLbZ+AX44BZfE?=
+ =?iso-8859-1?Q?mNXDX412urX9OiVfcjuFhIMahmpnh/IFV7j9+RUjyzUABIMg28NmVNjhLQ?=
+ =?iso-8859-1?Q?K4Dr3qJgQjbsMk5lce/4WupxGAiQ0Woz2LvYlO0e+C5gLdoxqhA/eAscCv?=
+ =?iso-8859-1?Q?9XbopOcMHxk1DMr+5kXZ7EAMpMRK/AqFYHtX1gdAKo73sSlEaJVt1yGms/?=
+ =?iso-8859-1?Q?koipZe+LQ8bHzXrLbB0CBdhd/x3ZVlGMJ+M4CYdbMOh/lRbRPmOSmBxC9q?=
+ =?iso-8859-1?Q?Kma+3pU9TOQLjDvrlFQ5CoJIIefhEVkcomIC5cpZW7i4qnQorPkWIUSV0Z?=
+ =?iso-8859-1?Q?BMg8xsiP/sAYwWqOOxPfNbPRq6p1Z9qpxXgsi8L67qPK05PNl9Zv8VMHjk?=
+ =?iso-8859-1?Q?7dZ/StQII7XtZmKIfz0uA3mDejUxo/de71KROA382Vvb9Li/gW+MKoiNH+?=
+ =?iso-8859-1?Q?eJKQNPV4qhtDSlLMFHFnwaYnM5/Fpu2stv42XDo8Ux6pRMBFNx+EncGF5A?=
+ =?iso-8859-1?Q?cN431pzL/IQjPcmwcJzsPADJQLdm4lkjVComUfy9n3c1ZiXqcUG9BfcoqK?=
+ =?iso-8859-1?Q?0GnQ+Gs96537W/5npSD17tGl1K0d1pusnTbQKNMCmTbYlgdRmCiJgiEPn9?=
+ =?iso-8859-1?Q?idchU5sPSHup6pjnhf4rJY0avYVDVZtWlVQSZWHsk5LPwn2V4HrOjbS9Cm?=
+ =?iso-8859-1?Q?Rm1yFqSA9d4PtO/KjyLNQbgChLhwrg1ijjT6h0tPQVkE5Fu3cymfbyFNjt?=
+ =?iso-8859-1?Q?b+SfFguHF0jUb1dqooEVYrH85Fqv6LO75xbTw14+4ppGpi1ooaDpRQEkYi?=
+ =?iso-8859-1?Q?Iu/6kB12N5srG2eybuZ3P2cSiH8gJ3Cx1mpVtzLDjFZ+fowQjpNKf7Yz7D?=
+ =?iso-8859-1?Q?uZ89jIyPPHhOFz0ZLOmf5aaEpikCdIi9Cl5ODPf61rHsfvzvTIVQaFsqMU?=
+ =?iso-8859-1?Q?wgnJDyFfBpExuVE0mjidyC1U5giZ7afkNrZUuOxrQCmB2Jrf6oKioBCWzZ?=
+ =?iso-8859-1?Q?acVDBSF9Xrv17eZT07RJbU5Yluc6csVUXza4GuxeaXXfiiqXNfoUAmoz?=
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?CJaMkpvo/MQEXedfCmmIoTJ+87vm4Oj+fTuj2tAB1WMk2mqry4OZ7MCQAl?=
- =?iso-8859-1?Q?whkmqLockV6kGIpUmSsM18xBM1StZzdM0r2Q2a7HQD5YHAgh2TGuLEYylO?=
- =?iso-8859-1?Q?tVSd+N8srA4barzp7l+tbBy9sr3yUhqOQL2QfP6ytshB8ztWHTjX+VAOhw?=
- =?iso-8859-1?Q?0rqovNTbxhVeCYlHLtD+QzDp7qWSaTZSyO3Z7eJO1JR3qMW2Ft7wY4veyS?=
- =?iso-8859-1?Q?hnvYTMqlA1HFlqOwgKHr+u3hHzhtYTVvu2LhEZErpsNdS/nAsYfYXw5bIU?=
- =?iso-8859-1?Q?O2AOvDsWJPGLcznM02BCceiQTGdLlzqT5cly3exYh+q8Z03k4g7honV+EZ?=
- =?iso-8859-1?Q?Rl60iQ3z2KHNVja6SENCn9ruWKe2yNxa63Pd1K3Mf1aNiCxKTS8jt2x+gL?=
- =?iso-8859-1?Q?lzBvw3qn7If5ElqVoi/86+9UfwCFNEo5/cmgDYiBvQY2q1jj9ezgEjtTsm?=
- =?iso-8859-1?Q?Wmyrb/F0pMFLXBtp4Ox5B07hiPBv6yMHw17SeTJvHeKd0ZWVN8yfZobd1k?=
- =?iso-8859-1?Q?9ChiwCTYI57Zhdmx/doyJ0PAAOIh60SH6VJOZVAsyIsytX1F1AtXCvTl+D?=
- =?iso-8859-1?Q?m0Mu8lnBVVs1pZIu41ZaKlGEsNS/NghXK8VfucPuD4yc/jqbhWycNLNcDT?=
- =?iso-8859-1?Q?aQf+UVW4xu2oawnxs0mWy1nYU+vDmsFvU00YhmFusXi6DQLjDuLhIJxb4O?=
- =?iso-8859-1?Q?bfkn9FSDiLDC5i5cdTOLssRfS4XdBYVMNpk/ziZ82mwUSNZWh2I8qIIov0?=
- =?iso-8859-1?Q?ev47x1n6BZLLzbSg/gPn0LqNjWNaK0TARemPbwjvjFDcJDvcYVr+x1ZRLr?=
- =?iso-8859-1?Q?QrmmcBWOSIvpQhIcayJhihoN+Lx9pNiQ4gB3YTkL0KUxIYlzwqvDr6kNpi?=
- =?iso-8859-1?Q?TTYvRN4SLvcM8OwZCuCpYwKG5N/GTU4RcPsQ1bulvJagNAAJEpwLR4UwiU?=
- =?iso-8859-1?Q?3LJ/dZPii60WNDCWgiFomoI95sHfOfgXuhPWx2Kjjr1eDmnFw6eEJnidG4?=
- =?iso-8859-1?Q?2GuZHo37eJunFV8uKDQGYJMwQx6DS/6Sc/VizZAI7n05TjSetckEl/5+yP?=
- =?iso-8859-1?Q?v9hDi8euvlxgsTy950RdpgE2RdCTJHWRQqfVWHtJ6YZqOe7EigMeLchRif?=
- =?iso-8859-1?Q?AOppm/62qGnD0JHTqbgm3wHj3SH9twH+vrwShaCQxbxZvvi0xfmt3raxn0?=
- =?iso-8859-1?Q?gwHiKBaF52butex5P+m5/akjxLeIG0kDSfytvA8ZleOwklSofsCh/zVZCS?=
- =?iso-8859-1?Q?tjQU64o+JAClGk2TyJTjp1tizryzu5dWD1/+ATHGdElKIH4u0mvTr0YO0a?=
- =?iso-8859-1?Q?69t/HOTXPz2w2+1cH9hG3mUqI22tu2V6Q14DLH6cnLPXsYf8P/XiFzlI8A?=
- =?iso-8859-1?Q?fXm9UIa7VgGblJmGuxv24lFc/JAQWBU0+RQKnqXA6HexmNW0r8/7R0jmFX?=
- =?iso-8859-1?Q?uvzxFEdYRAVKLcTw?=
+ =?iso-8859-1?Q?GO0WZQ4KM38ZboyMt9PnRNR1uYtgauRH5qcltfFVJ/2+I36rK0rNIuzbnL?=
+ =?iso-8859-1?Q?igqdqSS19cDS2BCa5RidBBgLvna8FmbffYr3BEa90OtIEL4EDhf54IQwgs?=
+ =?iso-8859-1?Q?75Ouk84v8xSCxOV0oMFOfzTXIpsntVlPkB3Ye3t/RIBApBHtWZEQ3e9/Xb?=
+ =?iso-8859-1?Q?OTnLOrwtZr2ZJLXSjAMDiPUFaodyqrXyXR0o7XjzTTT4Y0TNqTW4nBkv6h?=
+ =?iso-8859-1?Q?Sanw7T7tO4uuqs6kldD6PSZnYtDcKPlmyRwQqHEscl8sjGA79nfRJBFp8j?=
+ =?iso-8859-1?Q?sgCfqUDpPDeWyQ3Hmy2yvfVwAFXm9Pu9YaLG/kuT6P95ABn2TyZnMe6o9o?=
+ =?iso-8859-1?Q?9Gk16CcIsUKPY4FYO1mvQueBd2TEPPPaF8QBnX/zSVG/o/TIyOFeoWSBH8?=
+ =?iso-8859-1?Q?SWT6hzBBYS3Z69K3e9SAosdg2nYmE6HoY6QxSVMBJGwg+xuW78gPdSyaJ9?=
+ =?iso-8859-1?Q?JG1LwyAGlX9lUPI7wVxe/SpPXfjV3x5LQIZWGuXX5oJlVOsKF/BGQ2cyTF?=
+ =?iso-8859-1?Q?MiyKtWbGrdUdu9x5+GFMLrQTaUz4U9bw+y8T50eBu3MMHfJRZjak+z2xrR?=
+ =?iso-8859-1?Q?7taucpcvDV6CMaDmSMl7cqjKu6zBZ0nAtIlgEjgsZqsNuASa6SZrA+VME/?=
+ =?iso-8859-1?Q?u8jABqZoAVI/1zAIoGfiz1JW0fbIp7U/RGaW/CLxBPx/iFcaCYVAbTz/a0?=
+ =?iso-8859-1?Q?pqUSW5QxxDXcP+DcBdClnygLwYWfzuA9ovrHTQoVSEIOYHO1dVy22umEl6?=
+ =?iso-8859-1?Q?H+iZMuKl58vZSC+vjXAC2tycHKXX6L8bY81vPXg0eO1pfabb9JHZby8xca?=
+ =?iso-8859-1?Q?zpxiPxLDZE/xsDp4p9UunwVP1TVv6mko5urHUpn8HZC45eYJ8DZaVRXt+v?=
+ =?iso-8859-1?Q?uOTF4F+w9JwZzQXlSQ9/hhCIV5yaCj0FUAKB3woOOJwjmzpGOY9YuDNLR4?=
+ =?iso-8859-1?Q?3LBr+c93SRTa9SI0rVJfrXrb9l6kfRLPrAq84AYaGpKr1Z+CL218q5UYTT?=
+ =?iso-8859-1?Q?C1ItBq14d3S4St+HlHseZDADCKBb0xFVENCoIuNWfwU+M/p5lREClHXQ0q?=
+ =?iso-8859-1?Q?T6gCNS1uSovHeoJDMeUqm32g0vFTZN3GcqlJKnuZWhAeUfyZHCMyl1XgYf?=
+ =?iso-8859-1?Q?ojedqBisHCUTdztldIZD7KTZLWvj0e7SH//n3XE6QPWrw61oL54a6jsPpu?=
+ =?iso-8859-1?Q?89IWrvffeeHhAHqNb78MgWoP5I498wXOLKsSpkyLW1tsel4FVwSu+jJfI8?=
+ =?iso-8859-1?Q?X2g8CSSQDZWA6CEBm1fiyjTfe9JG5sM/WumMbebQYhNqZW7oMbgFy73Y90?=
+ =?iso-8859-1?Q?gJ7B7gkKFeGeRptWHv63hjxMKKLyBorc9NjqrH6AsN78x6jVoZdjVlCU4U?=
+ =?iso-8859-1?Q?Dnn2fe+TrfNfa71VATVJsdHqAS7liHLXHlTSFfyDc10bdWsM55nMuv5G1s?=
+ =?iso-8859-1?Q?LIZHEmj8YGwLKTX1?=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 X-Mailing-List: io-uring@vger.kernel.org
@@ -160,8 +159,8 @@ X-OriginatorOrg: outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SA3PR05MB10385.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: f3c23132-27bd-40cf-ca94-08df333b43e6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2026 08:29:34.4738
+X-MS-Exchange-CrossTenant-Network-Message-Id: daae2cfe-9818-492c-9840-08df333b4554
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2026 08:29:36.8417
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -170,74 +169,46 @@ X-MS-Exchange-Transport-CrossTenantHeadersStamped: DSWPR05MB998753
 
 From: Yingjie Wang <x-professor@outlook.com>=0A=
 =0A=
-The block-device SG_IO path retains its completed request while copying=0A=
-sense data and unmapping the user data buffer. Either operation can fault.=
+sr_read_cdda_bpc() retains its completed request while unmapping the user=
 =0A=
-If the fault needs I/O from the same queue and completed requests retain=0A=
-the available tags, the nested I/O cannot make progress.=0A=
+buffer. For a bounced data-in mapping, unmapping can copy to userspace=0A=
+and fault. A fault that needs I/O from the same queue cannot progress if=0A=
+the completed request retains the available tag.=0A=
 =0A=
-Fill the kernel-resident output header and save the bounded sense data=0A=
-before releasing the request. Then perform the user copies and unmap the=0A=
-original BIO chain, preserving the existing sense-copy error precedence.=0A=
-The saved mapping owns its BIO references independently of the request.=0A=
+Release the request after consuming its command result and sense data,=0A=
+before unmapping the original BIO chain saved at submission. No request=0A=
+or SCSI command field is accessed after the release. The mapping's BIO=0A=
+references remain owned by blk_rq_unmap_user().=0A=
 =0A=
-The fixed request pool was introduced by scsi-mq; the later move of this=0A=
-ioctl implementation into drivers/scsi did not introduce the dependency.=0A=
+The scsi-mq request pool introduced this tag dependency. The later move=0A=
+of the CDDA implementation from drivers/cdrom into sr was a relocation.=0A=
 =0A=
 Fixes: d285203cf647 ("scsi: add support for a blk-mq based I/O path.")=0A=
-Link: https://lore.kernel.org/r/20261022.scsi-copyback-review.31b8d6a70f4c@=
-outlook.com=0A=
+Link: https://lore.kernel.org/r/20261022.scsi-cdda-lifetime.8f31a2c97b42@ou=
+tlook.com=0A=
 Cc: stable@vger.kernel.org=0A=
 Signed-off-by: Yingjie Wang <x-professor@outlook.com>=0A=
 ---=0A=
- drivers/scsi/scsi_ioctl.c | 16 ++++++++++++----=0A=
- 1 file changed, 12 insertions(+), 4 deletions(-)=0A=
+ drivers/scsi/sr.c | 3 +++=0A=
+ 1 file changed, 3 insertions(+)=0A=
 =0A=
-diff --git a/drivers/scsi/scsi_ioctl.c b/drivers/scsi/scsi_ioctl.c=0A=
-index 122403ec3ab8d..68e84705634c9 100644=0A=
---- a/drivers/scsi/scsi_ioctl.c=0A=
-+++ b/drivers/scsi/scsi_ioctl.c=0A=
-@@ -393,6 +393,8 @@ static int scsi_complete_sghdr_rq(struct request *rq, s=
-truct sg_io_hdr *hdr,=0A=
- 		struct bio *bio)=0A=
- {=0A=
- 	struct scsi_cmnd *scmd =3D blk_mq_rq_to_pdu(rq);=0A=
-+	u8 sense_buffer[SCSI_SENSE_BUFFERSIZE];=0A=
-+	unsigned int sense_len =3D 0;=0A=
- 	int r, ret =3D 0;=0A=
- =0A=
- 	/*=0A=
-@@ -412,10 +414,16 @@ static int scsi_complete_sghdr_rq(struct request *rq,=
- struct sg_io_hdr *hdr,=0A=
- 	hdr->sb_len_wr =3D 0;=0A=
- =0A=
- 	if (scmd->sense_len && hdr->sbp) {=0A=
--		int len =3D min((unsigned int) hdr->mx_sb_len, scmd->sense_len);=0A=
-+		sense_len =3D min3(hdr->mx_sb_len, scmd->sense_len,=0A=
-+				 sizeof(sense_buffer));=0A=
-+		memcpy(sense_buffer, scmd->sense_buffer, sense_len);=0A=
-+	}=0A=
-+=0A=
-+	blk_mq_free_request(rq);=0A=
- =0A=
--		if (!copy_to_user(hdr->sbp, scmd->sense_buffer, len))=0A=
--			hdr->sb_len_wr =3D len;=0A=
-+	if (sense_len) {=0A=
-+		if (!copy_to_user(hdr->sbp, sense_buffer, sense_len))=0A=
-+			hdr->sb_len_wr =3D sense_len;=0A=
- 		else=0A=
- 			ret =3D -EFAULT;=0A=
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c=0A=
+index 4f2e8d1be6da8..c64c25e9f4047 100644=0A=
+--- a/drivers/scsi/sr.c=0A=
++++ b/drivers/scsi/sr.c=0A=
+@@ -969,8 +969,11 @@ static int sr_read_cdda_bpc(struct cdrom_device_info *=
+cdi, void __user *ubuf,=0A=
+ 		ret =3D -EIO;=0A=
  	}=0A=
-@@ -488,7 +496,7 @@ static int sg_io(struct scsi_device *sdev, struct sg_io=
-_hdr *hdr,=0A=
  =0A=
- 	hdr->duration =3D jiffies_to_msecs(jiffies - start_time);=0A=
- =0A=
--	ret =3D scsi_complete_sghdr_rq(rq, hdr, bio);=0A=
-+	return scsi_complete_sghdr_rq(rq, hdr, bio);=0A=
- =0A=
++	blk_mq_free_request(rq);=0A=
+ 	if (blk_rq_unmap_user(bio))=0A=
+ 		ret =3D -EFAULT;=0A=
++	return ret;=0A=
++=0A=
  out_put_request:=0A=
  	blk_mq_free_request(rq);=0A=
+ 	return ret;=0A=
 -- =0A=
 2.43.0=0A=
 =0A=
