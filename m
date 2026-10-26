@@ -1,93 +1,75 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.198
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793038400;
-	b=inYNFbbWtn5AES1I+wSNKImKYG04BZ4FPdLBF9hzldmRIglWrQ3QQehdY5eM0C8iDGzi
-	 MFxizhoz9Yst5dL1N17/GB0iN0a9GF33vtmY71v8/ZpBDdwxaD4QY5Rj4EnWxKNut22Hf
-	 HuJUfQ2lqW5WFDuUGDSlEDuYG7k/hxQ1u2aF+RD8TQlUHQryCc9sclBZTh1/HOttpfhv9
-	 Sg42PAD1Onu62kIK2mQiFU/I4zHixDzKdKrc8TKUB8xsfMgdNZOzRns3XHK4NG0qqsXip
-	 wqJkQeqYeosY6AESAr1papYf53xy4vBM491uxs7/23CxoqyqWdAirZTdZDYu053DqFg==
+	t=1793051573;
+	b=NhgFRSdkn0ibX8zT6EczEIukmcIuwtgkp6vXhSRvHDt7qHHPvvFfQJJenNT3eE6+EjTG
+	 29Xf4HM6vYoDmWJ7Eo6cF30SNSSibiLxU24QTocCRZzU0aBz/uA+ql348BSozUXCvb6n4
+	 Y/Fn8HXTUkL03VTqPPHN5AvD3/sxn0bt6INxI/zN7PLKZfn+c8kZxezOdg9j6y5MFFL44
+	 mxWHYlSo8GBwD+hkRaF38Xa3YkMFsBFT0unNeU4phBDJSBxNNi87zEztLW/DzdYoK7coE
+	 z9kOdPxBv/jSJHzUynZI21A4agqGiQ4RwEVMXlNejWJhzcubIvunP0amuvjXwFTSDmw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793038400;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793051573;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
-	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:X-Mailer;
-	bh=BGZxAd03i/0YaHod1b+jkyBQpqIXL1mTYVcUoIY96ws=;
-	b=NW9ErD1dC328AJPER40RlX2nB4RExacxneERqIm+oOQVgQ3SQXS9NAiN7Ay7xNPM/SYV
-	 c1A4+OV8KeYAkeV2/R0chXUlpTJShUJWJqa2S6WChznd27VA12K04bZUzziWZ/FkiQ+sp
-	 k/5sjJSCzv/2jy0gHUnESlUvRWupS3ZI2DMlPAPuGawcWRMNtSkkbGpVxfnkvP1y1uxZR
-	 E6MOLCYTuvwswpu3zz7mUsfg9v1ekgLeZ8ibjJuTY2zDInVE0+FTM0jZYSSIzZ/bFaon+
-	 wbn7exGeGDlFZ6NJuZ9TcIBFqhxal09QXEXv/Yq/NOtUXsA2b7qLFpFi/1bSBM0khRw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
+	 Content-Type;
+	bh=OQEJn1r6phHG9JJTEKXNjl8UbrwqhLU2o1gcr6ks6C0=;
+	b=i0BL9xhMTZz9t4Fzdhd1Y7/qIYp7MchTDRr6xOsHDbQGznrdlsbplbdTm+Zxpwx0CV4F
+	 xsrKaiVo2/C87czemko3NKwzl/eZbvWyb5w+URN+lbMCLGPyIAeBlyT84brTO7V9SaqTJ
+	 FsA6NpMOxY0TYoCVyEbwZtdxpjyDkcRM6iKiZVAGId1v+TCTXGSUlub0FPRIhOjw1FOt2
+	 txVnLhEEvEUD7VJ3Dw7RAfLiz3Misi3XpNGzIFjlo7JKAsuLK45NLRLWpe136kOf9Zcwc
+	 TJOY2OokHN9L14hhhbbusH7cH4JoV/oqlfl5Z6fKGJ/+CPMh88qqMdfWZ/S3cSs4MIA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=mIc9FYhy;
-	arc=none smtp.remote-ip=74.125.82.51
-Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=ApDjmBZ2;
+	arc=none smtp.remote-ip=209.85.215.198
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02291606A31F
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 18:13:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 02291606A31F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57A360A3827
+	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:52:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E57A360A3827
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=mIc9FYhy
-Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1931ff67a29so1465357c88.1
-        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 11:13:18 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=ApDjmBZ2
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cd8b299b0abso1865147a12.1
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 14:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1793038398; x=1793643198; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BGZxAd03i/0YaHod1b+jkyBQpqIXL1mTYVcUoIY96ws=;
-        b=mIc9FYhyzWaYR5N6/tWYI0RadP0uQbgwAcPY2pWU7GWToD+eIc6TXd26yUsExZMw5/
-         N9NS8qYKOQVKGBcTyGnSJst2lhOIrNU8SorUNxHJ7kzbcVftxGo4VAsLRwLqMSUuo/jh
-         jz2OZuaQnCwVaqxAyLpTHxilf4yAxcVZeME2NuM09dUkjKuIOkeHKyb+luIWhqt0ukG6
-         E2MCyWnUgwWl5ld6CYwDXPyfsImc0TvJrKIWjNQbYBbtnUNPBcAbuGLWwcoysd2l2eIX
-         qh/9zx4XItyYJ+Flsdt1zCKsZVjdkb08FJe+gaBy2fTiDhitJzwuRRLwQJQ2ydE8j9JP
-         ZvNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793038398; x=1793643198;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1793051572; x=1793656372; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=BGZxAd03i/0YaHod1b+jkyBQpqIXL1mTYVcUoIY96ws=;
-        b=KzlRI7YGht+bsgBUKuyhJ3yix+ezqBFAXkRSTpHS47DW0FOoTNVXpPI4qTZwcomaYl
-         +QBWURUfQOmRYXpNKGJpT0kpc2PcwVJ+iuid+dLOCt7NycP6Hp6OWAHchntuTdKmqJpy
-         HNZLoqUZHdfiqfmVsJhfGZK5SRy/+V48WjwL87f/1bOxVPUNLP0UWi20qOO7g17V9j3I
-         WOCpcwsp1YIKQTuCKgCrCOmgtAmtka06sGMaiqINiWXUo+/9t6+e/65dTWUtjhZxk+Sg
-         cWFaze+Zia04wMq1jnyEHePsvxUH8AE4fKXF84/Xhl02E629+RINsc9ltDkh0y+GigOM
-         aWTQ==
-X-Gm-Message-State: AFq9FYLQEaKTUuHtJ1M4V5+UuYfSVM4+WGOQXdCtR/1lyFNzA6DhskQV
-	WaRIV8BBf8MLhZETSsAQOfXQ+DO0Yd3kKsYc6yRoHLnFco6+HOtMhZ8bQqr/SN7s+yY=
-X-Gm-Gg: AYBFou21fAz3/DdDw+al2BbnDfNOwyGNPWYTRZeMi9AqwuZRv5KcYtAMXL56VpOcDCX
-	xYLfy/4iJ0L2dmvCY0xf9xoG2ejDLwe8GgbdCeX/MguNnFvWQNDmgoadokcFyDHRed6pbM/yO08
-	y5p6gVwvx/WZmElbsmL5ITOErL52fRjo3GZYj52KN+03xoeeWl991r6V2kWgyY2zCpB5q4/g4qE
-	Jm8HRBk0pgHSNzSmCTNdsUN6y5nWR+IGiOsiyKX/138ATWFmlQLpB+BXPMdXeP8z3pSHLp++HZc
-	/ZR05N6++cFKcFyTTJbtFNItsFpZm2FSpDyvhfbYNVSeXT18BHMUkY/iZ5U2rUq2/G+J8K84G4W
-	C8FfIDgOHBaMK8/gqJGtsQdedr4KrWP5dNsc1tHeZlCwwtpEvD554mafrnFu9ru1b49476dwD4C
-	/RkGlD2X3PwR3zqzXyxSSJMg766Di9TMrATMKDqVt2L5mAvFSYLAdAaoJTIo8EAtJitgxZe8rTL
-	Fxe6x9RUJCTvth/3YTl1bha9yq5Epyovg4+l/gMMOqA24nGRo3aYFyScF0zYEu80cBaRar/OYp1
-	Yg+1JxtqKAzhvrswqARvgTJpkIpK92bHzhsLDJQ=
-X-Received: by 2002:a05:7023:885:b0:16e:6e3:9a9f with SMTP id a92af1059eb24-1993639e6efmr13695821c88.34.1793038397474;
-        Mon, 26 Oct 2026 11:13:17 -0700 (PDT)
-Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1989ff2ee5asm23576455c88.8.2026.10.26.11.13.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 11:13:16 -0700 (PDT)
-From: Jens Axboe <axboe@kernel.dk>
-To: io-uring@vger.kernel.org, Yichong Chen <chenyichong@uniontech.com>
-Cc: linux-kernel@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>, 
- Josef Bacik <josef@toxicpanda.com>
-In-Reply-To: <20261023091711.83481-1-chenyichong@uniontech.com>
-References: <20261023091711.83481-1-chenyichong@uniontech.com>
-Subject: Re: [PATCH] io_uring/kbuf: advance head when a pickup empties the
- buffer ring
-Message-Id: <179303839621.792754.2729531624854221506.b4-ty@b4>
-Date: Mon, 26 Oct 2026 12:13:16 -0600
+        bh=OQEJn1r6phHG9JJTEKXNjl8UbrwqhLU2o1gcr6ks6C0=;
+        b=ApDjmBZ2P5IY9M07VtIw4q1PCPK6CpIgTYTWQMTnhd4WbvnSeK4y3f8atnn7QA9cjB
+         pATuIJVRmfxmUb6DVTcY2TSWeqihjk7sAkqWl2p7EJ+Outh4lOM6tfOP5bdm3xMdvvxm
+         Gz5j1WDaxuKn1Qo4ZRLEMmGLuAM8u+S9GjSAdvAH/B5Z9aOkw665P34Qp/haslR+DdAh
+         6Cf+TsLq3VxdxXfhvV5luqaTWzWAuM2gDcXBE0x9iCsw+vaQTyRrV4cFglmiecBVNbcN
+         5aCJa8Oo3N1GkKfrvyeHtHj7KXN2+Rosy5Vsb+br/0l+WNOkW/XGL3x3Tqqyd1sNMI9t
+         cLgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793051572; x=1793656372;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OQEJn1r6phHG9JJTEKXNjl8UbrwqhLU2o1gcr6ks6C0=;
+        b=itfP10JP+qQQFYRwICgghrSyytaSdyLXCGKZ9Vl8+RPLqUt9osqh0lo5z3gnB/VWQ5
+         irc+VOHg0nFtEMPIq/m67X3rmL98++erTbRYyBUoKEXxAUyICT+2Wub1dzKyZGO9MAAO
+         Nc3V19V0R/vyK/9fuD23Mm2bqcpqjw0LImk/BYGCr17Kgkz2k3Yr09ZWIAIc5UCsI905
+         p2xwKRHug92TxC3g9awk+y0DYJs4k0gMMVIEjXWo5o39vWcZKdzx8QF/welXPur/W3e+
+         u8yB0MbZUs+UGxvF/y4RMJHzuOXRL5F0JYxhkgu0BZkUGNR/3SlPqvT/nCGXMZnyoc2m
+         KjtA==
+X-Forwarded-Encrypted: i=1; AKwUvByxUQhKbdjT8qcXtTOCRUJcfoyW+9VMu3I/PiW5jrN4P4av0BQItnuv0y/89kdUPCFhTwCOxk00vw==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ/iPzDlZe2Fi1prn3Z4ZGNiBowRKDsiu4L38po4NBi790oY2QS
+	3BK/QwNjxFRWadnwpFc6QycJwF1a2tXJFeb+gHLFQWpKPth9Mae0m4lDgxZPtFRORfKngOd3M1t
+	H7TBpDmLGiX8QhEaOOTivqw==
+X-Received: from pjbee5.prod.google.com ([2002:a17:90a:fc45:b0:3ad:f864:f94f])
+ (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:4d8c:b0:3ac:a521:95e with SMTP id 98e67ed59e1d1-3adead4f7ebmr6876350a91.47.1793051572060;
+ Mon, 26 Oct 2026 14:52:52 -0700 (PDT)
+Date: Mon, 26 Oct 2026 21:52:21 +0000
+In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -96,31 +78,81 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15.2
+Mime-Version: 1.0
+References: <20261026215226.3713941-1-jthoughton@google.com>
+X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
+Message-ID: <20261026215226.3713941-6-jthoughton@google.com>
+Subject: [RFC PATCH 05/10] perf/core: Don't unwind the user stack without an mm
+From: James Houghton <jthoughton@google.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Sean Christopherson <seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jim Mattson <jmattson@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, David Sterba <dsterba@suse.com>, Chris Mason <mason@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
+get_perf_callchain() only checks is_user_task(current) when the regs it
+is given aren't user mode regs. However, BPF's bpf_get_task_stack() (and
+bpf_get_task_stack_sleepable()) pass task_pt_regs(current) when called on
+the current task, which are user mode regs for a user task, even if that
+task has already gone through exit_mm(), e.g. when called from a program
+attached to exit_files() or to the dying task's final sched_switch.
 
-On Fri, 23 Oct 2026 17:17:11 +0800, Yichong Chen wrote:
-> io_ring_buffers_peek() flags the request with REQ_F_BL_EMPTY if the
-> buffers it picked were the last ones available, comparing head to tail.
-> When the loop breaks because max_len was exhausted the buffer was picked,
-> but head is left pointing at it, so the flag isn't set if it was the last
-> buffer. A bundle receive then retries, finds no buffer, and the request,
-> which has received data, is marked as failed on account of the -ENOBUFS.
-> That severs a link, and ends a multishot.
-> 
-> [...]
+perf_callchain_user() then unwinds the user stack without an mm. That
+access does not reliably fail: the user half of the address space
+belongs to whatever mm happens to be lazily loaded, if any, so the
+unwinder may read another task's memory. This affects e.g. arm64,
+riscv, loongarch and csky, whose perf_callchain_user() doesn't check
+current->mm itself. perf events themselves are not affected, as
+perf_callchain() already clears the user callchain request when
+current is not a user task with an mm.
 
-Applied, thanks!
+Check is_user_task(current) regardless of the regs' mode.
 
-[1/1] io_uring/kbuf: advance head when a pickup empties the buffer ring
-      commit: 8742f4b5a472c347fe568a73468a2d9e4d630b33
+Fixes: fa28dcb82a38 ("bpf: Introduce helper bpf_get_task_stack()")
+Signed-off-by: James Houghton <jthoughton@google.com>
+---
+ kernel/events/callchain.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-Best regards,
+diff --git a/kernel/events/callchain.c b/kernel/events/callchain.c
+index 9d24b6e0c91f..a451ca2a5573 100644
+--- a/kernel/events/callchain.c
++++ b/kernel/events/callchain.c
+@@ -245,11 +245,15 @@ get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+ 	}
+ 
+ 	if (user && !crosstask) {
+-		if (!user_mode(regs)) {
+-			if (!is_user_task(current))
+-				goto exit_put;
++		/*
++		 * Even if @regs are user mode regs, e.g. task_pt_regs(current)
++		 * passed in by bpf_get_task_stack(), current may already have
++		 * gone through exit_mm().
++		 */
++		if (!is_user_task(current))
++			goto exit_put;
++		if (!user_mode(regs))
+ 			regs = task_pt_regs(current);
+-		}
+ 
+ 		if (defer_cookie) {
+ 			/*
 -- 
-Jens Axboe
-
-
+2.56.0.307.g5fe7bd680c-goog
 
