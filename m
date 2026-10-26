@@ -1,92 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
 	t=1793038401;
-	b=suWiDtP/7CGwatlJKt+OpCHXpZUqaVXwiZK1hFVlmycra/FAzBxd36a+YDM7DiY9Qv7e
-	 huyNAnZSbzc5q82gYmLuHtkHXkFRbKj12IQOK9VAsMOplkaAS3lHUJ5dNdn4Ry2y6Komo
-	 vzEALXvPgveFmy9BcIk56AJ9xtjm8mHZ0yiD+1ZE4wX0dYmo0S/mWvseNCbMkWkIxY2zH
-	 DnQwKSU1BuNqIF9aNg4AkILRTMuH02Njd7nVvzbL7UseUSEwo9/8mdmg3oA5Qay64j4dg
-	 qfyFJuYx0r/l/uDQ4snv5UKhDZIgLm60j8N2Dpe1/DNrL8fOawfI85GbC+ek5J6vSjA==
+	b=sWAFCF/Qgy6dmEeyrbqiS3GOtSQiG5+SvDReum74yiuObZPUwkHJ44hVEcb5roAmBVEN
+	 XWVTkv5kNaMSbzwsa9Z1Mw7scmQdKcx8d0l53s1bb4L3by28mbD5451+ifpAnL4v6L5St
+	 EKCNb0WWFjW9AvsUuVpXUHyMG6GaZ/uIsMJ269sJvCcI5O8dWBKRRNUVPw6HX6bqQB5lW
+	 VDqNn0gbVzxo5O9kn0gAxLZQHQeoSG6wHgiAFXOTu+SKBETuAxLwWqSm3ppKZFRjic/gA
+	 QFe/1J2GsWigvQRF5XsAqGyCQ9vaLM3Sl/bt8AbLQalYa00+SoESU8LJfvZ6CEjUIjQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
 	a=rsa-sha256; c=relaxed/relaxed; t=1793038401;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
 	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:X-Mailer;
-	bh=Bt1mstHe0aPPzMoWiifHLBxuP8BhF2Aylnt4ZIJAVNk=;
-	b=KUHKy/b1j/3s6kBO72oBRK4Wd5SD/wHLSDfzzsTMhr8GkjM2RZjAn/HUPlUbXqCh14MS
-	 Fso2ko73c1/+qPZ/LqnOJWUVqNuQZ5ZVyrWHm3r94zNAerfKE651AhRAy/DgKaUSz7o9C
-	 fDwHfNZhzR3ZH8M6VRxG7xmHgAxJm5NPqNM623OBzJUWtg7Bt1uPjHuf4dgR7CkeTOTBa
-	 aktNRF8oN5Dzy3H90ZQhWolzLSLGJGvlKPhrSfKB7/k95/ttzVaHUllmnCRx9MnTLmKLw
-	 Fzu+JzewOdQCWbU9Nzv6FNoiQJ5hXCEo3VqifmODPWyrwkJ9FLq1aZKSaNFxa/sOgIA==
+	bh=NRpSTdUSggLdqJwk7rdsX0iw/e9J7EvfELyhW+hE4Qw=;
+	b=ycAEQMBBOlMlP/64pKMoxqqw9xqpgJrok9neIDHIRkXN/VIsDFnSHEG5iyQpB8qDPIac
+	 cxtpPNe9t4Q+42p7hlSryaR5osu2KuzA3+YlGw3FGe3HQ77a5TRXr0nA+EuKC2VpdqnHu
+	 pv2/H3tinHd/syO8DPdhP44nNuabqgRobqmqaPkG8owW8+J23GvY0wTArlXcD623af/Qd
+	 QGm6cQ2BYqe7p+d4uFTl/TBUV2lOv5aKrRarWr/9yxwjQMG8QfyELfO+bCZ2mz/IwBmtb
+	 6XFCpwWPfJ0czE8ub4Schz3yArEWQYjk0/so9aIKIy/k6YTNT0HV3wWIyqPs0CtIc5w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=rRPxGZbP;
-	arc=none smtp.remote-ip=74.125.82.44
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b="s/pkG7an";
+	arc=none smtp.remote-ip=74.125.82.43
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68238606A332
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 18:13:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68238606A332
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6033060A2600
+	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 18:13:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6033060A2600
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=rRPxGZbP
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-15dd124bbe7so1105272c88.1
-        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 11:13:20 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=s/pkG7an
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-185fd3a4ca3so2716139c88.0
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 11:13:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1793038399; x=1793643199; darn=vger.kernel.org;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1793038400; x=1793643200; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Bt1mstHe0aPPzMoWiifHLBxuP8BhF2Aylnt4ZIJAVNk=;
-        b=rRPxGZbPGVn2FJ12jwrjcJXx0sbEqgV8x16QjbOjNwGRGTovHCPRbTjS4AL/5uKZDZ
-         7fM6HHndhX8cgK8TwhQj45CP5VrVAivXGbw2ImQ7hS0RCc/wtexajeL/aOyckxWOZsG/
-         QJwDbNHIE1Vv30Rf4l13iGij6UjVI2WpLgSzhDsHDDYqHG+mwjs4UkYkumcEVfCKrWDQ
-         2f4EpEfmP8X9t3otHw8S0Fh+D70U5rLmb2ob2K+2+sgfMCmuXsklt1KG7PBWQvO193Ze
-         tTjs08cGFHn5atE+hrKqtIBuBBqO4ofGXBVARzveI42gu9P3xvS422gXs6dmHnpKzH1h
-         aXiQ==
+        bh=NRpSTdUSggLdqJwk7rdsX0iw/e9J7EvfELyhW+hE4Qw=;
+        b=s/pkG7anTRz/Qi9FOAGlomFuzy1DLwu4bfADV/a+BZudH4OJJqnP/ugytxyvH+KVBS
+         /1JrixyVMYHvhQstiFy/s8zZS7/y7rPyOvTPubGAo3bg02JVhJK0OoEU3XukTmQ22hul
+         6MOjWZZOqQnhc4qsb5Wz5QfQf3W3aBxHVLpuLIwoYnn8SyyJ1IJDeQKaGM48fpHyl362
+         rWOXVgEdsmFZUyviF59F6WLwHmL0YcB/FNi8sXygP7ucn39qIamas+uNBPxB3NdPMf34
+         u+EUEfB6kroTkyft6YzJKjRIMumaOmo/ojC0VbQRp7pWj8YYaNNZ8MM7CxJmWTa0gIyz
+         FRBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793038399; x=1793643199;
+        d=1e100.net; s=20260707; t=1793038400; x=1793643200;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Bt1mstHe0aPPzMoWiifHLBxuP8BhF2Aylnt4ZIJAVNk=;
-        b=et8ILzjGOGpXrFk5aah/OxlbsWf8wN031Gjz6aioGiyN0c1D0M3KAKbnLWcd+s67vg
-         Wx3juZwv5BASlzkYAJGPdJOqRARhMAajF63FL2GYF0YwD4QWScUTKGvgcvKiQgW7W4dm
-         RSclWQwSBEMfzHw7fWu3zqP0sLBtPNQhCe4JBvXj/Y8CD88nW6k0oiFq1Y9zkpvCZ89+
-         ElisciG7oUOch4J64OW3pzdEzkYtMCvn4RxjpIj7L/X5YHUl5d9lwUfCmpKXf8eIJArJ
-         SlBSFEx8e7RMtF7mpYE6MJ+ZnXKOQR0qXoRFTS1aZ12ovv+xUKzE+n6pkX7hcaG+La/Y
-         OqrQ==
-X-Gm-Message-State: AFq9FYJckFMyP+LwIPX5IwcPRKxCHBRqiX6DjQBrysPNFUKOkNgyDhEj
-	0dYQlUHqZoEwN6bt/5320F5tGREkye1oHDo2PMqaOFc7N1cQzDVlj+mUI/arjPIEePhPQmCjv76
-	dm4t9ex0=
-X-Gm-Gg: AYBFou05F6I6jyoJ3yc4eC4SV+MRofP5g2WU/sIhzJ6Z71HTAcmZONBPyBQAYhE+NaX
-	klIClSBlq1ieQ7n+XSunDeCXd4/+QAltmrp5V3mypyYVQ9DDb4LmP/T5llb4TCTuHDbz3V5chFn
-	q7+LL7w2arpkoRmifFNvanhUu9/VT6T24a9o9l2HjL6hRiGzVxvgAxeHZbp/hdlU4nacmU7HdXO
-	8ZArIkgopjLTC53T3AZlziPmS9sFQzJ/OvtTwTfXLxF2PZnWwAB6s5uibNHKLbI+t7pttX2T1vR
-	pLdlIicKVjV1ID/NELHcQp5vuO6NmEojQiAXeUbRUNJHZSWR+M9166tGKpzpMc5NDhnTQxFpiNy
-	4+g5F1kQ9ZLnCzOT60b45oSbn4XxjQ2pA9JxSoH9VHYIgRbrqbOTtHwZebMp2vuKHqLNe4HMmB/
-	UA+nEC525S1Q6G3R2ucpaFdXbRE3x35hMZdwYwI1YS9GJZ8YeFGdT8PCJrbzMLj6oQTQTpPrWNh
-	OO4/x4uVHShtGusmYarV0EDSuMHM/JUlwEMhbB848Xouaq1JmRevhfUJ6xkJWNGkx1Ieh9UaeeO
-	8g83TVubZSNDW+d4NoZXbRrDiOiH6QGS0uGfNfw=
-X-Received: by 2002:a05:7022:2227:b0:151:2068:e81f with SMTP id a92af1059eb24-19937022415mr16449905c88.27.1793038399454;
-        Mon, 26 Oct 2026 11:13:19 -0700 (PDT)
+        bh=NRpSTdUSggLdqJwk7rdsX0iw/e9J7EvfELyhW+hE4Qw=;
+        b=FPA5HFrj81fcP2MAqC3miwKsRsO6bjgLxMrunlT+CGvbmnCNyirka+dHCmfZ6sxUbW
+         uHiEbLM76BPXN1AHH5M+l7jdJxFIwfEyZLqeUQl6T3EgBxjYvTjFW2miBsRzBn0asVaF
+         sgGYVIltXErlcdToYPiMy2LU+Ziw3USOZpzAuaSetHTsAhEalpK1feAx3vXk7FNqzAOt
+         Lg77LGFbz1N1YfhFeS5Xfor8rcXor1eOJuHLx5bq36jrBLVkO1nS32cuIEhN3YCkoimH
+         qH52FzPtIJXeo9mz29qqcx2EjphfIDOWMVXshXY+CnAiyZpFp4zTJ9aWAAD5qE9NzxGm
+         ocoA==
+X-Gm-Message-State: AFq9FYITeWi/H2KAZuu2BATtgvG78dqjU6CVdOJk2zI+cYqz4G0OTGzo
+	6zlnqxB1WEyGzlXiSwkCeGOMqcZBuOwnbfQ74suwgl8re8X3eliLRvvMCy0UQZqzWjX5Qpa7T+N
+	stX0vcfo=
+X-Gm-Gg: AYBFou26GCOzo+Li1eo48l5nDUZGvlWNMmi1eZPzhKaAW4kXxkQ6iFL5Wb8/7MTKLXW
+	nb+ArzLWc88uMVBqKAtwf0Z7LBBvCl/C2S0+vPH+2PIr3tQrtHmAM0kr7six1dxv889W7kfOszM
+	VwHGZ7NEixuQbpB2lph6GijbhEydIz/Ax9rrSwVXi9ybIm90YXfvC6BP+Cz9NacrQOvOtOqysNu
+	P6dfOK0oybBu1LN+1TX3C+Zou06DDrb02x0SkqHg62WmBOMQDjDmtUtN6s6Q12Eeule5p1I1bnI
+	dy2NsEcStlPZhVvkvnyYxBMWkMyp4sStfyh70hVBXms+BKSKiMp79IiE9IqdOlswA03/iXA8R4J
+	oCBdqY0kCOMBCZilmBJtuAlTzeTqqw2vrfFtDgaAu8AAneSzjDvtMzOlxOX9HnKXlYugKuVTrQc
+	Zt+9T2VvWP2Zdoi7bz/ndSJIkzvFY4GSH6LggV9QzamM0j5scaqK5aJonVOm1FGB/F0B81IEnTT
+	LNrhSTaKntA5wLXVkXM2meON+EUWf+F3bzk1U6t+v/Y9GFE9V7Df4DL6DE8pOd0DzazMeOcOMJF
+	Ia1CRYTMIojVcuOuKkeoSAw4p8fimkA6xpIgBtk=
+X-Received: by 2002:a05:7022:45:b0:162:e05:e43f with SMTP id a92af1059eb24-19935ce1322mr13359097c88.23.1793038400270;
+        Mon, 26 Oct 2026 11:13:20 -0700 (PDT)
 Received: from [192.168.1.106] ([198.8.77.135])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1989ff2ee5asm23576455c88.8.2026.10.26.11.13.18
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1989ff2ee5asm23576455c88.8.2026.10.26.11.13.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2026 11:13:18 -0700 (PDT)
+        Mon, 26 Oct 2026 11:13:19 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
-To: =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?= <cleger@meta.com>
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20261023144953.3584118-1-cleger@meta.com>
-References: <20261023144953.3584118-1-cleger@meta.com>
-Subject: Re: [PATCH] io_uring/net: Remove useless min_not_zero() usage
-Message-Id: <179303839876.792754.4345795661172032065.b4-ty@b4>
-Date: Mon, 26 Oct 2026 12:13:18 -0600
+To: Dominik Maier <dmnk@google.com>
+Cc: io-uring@vger.kernel.org, dmnk+artist@google.com
+In-Reply-To: <20261022232120.2537530-1-dmnk@google.com>
+References: <20261022232120.2537530-1-dmnk@google.com>
+Subject: Re: [PATCH] io_uring/net: mask socket type with SOCK_TYPE_MASK in
+ io_socket_bpf_populate()
+Message-Id: <179303839963.792754.4413854913656045602.b4-ty@b4>
+Date: Mon, 26 Oct 2026 12:13:19 -0600
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -97,19 +98,28 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Fri, 23 Oct 2026 07:49:52 -0700, Clément Léger wrote:
-> In the else arm, sel->val is necessarily 0 so the min_not_zero() actually
-> always returns kmsg->msg.msg_inq. Remove the min_not_zero() usage and
-> replace it with kmsg->msg.msg_inq.
+On Fri, 23 Oct 2026 01:21:20 +0200, Dominik Maier wrote:
+> When an IORING_OP_SOCKET request is prepared in io_socket_prep(),
+> sock->type retains creation flags such as SOCK_CLOEXEC and SOCK_NONBLOCK
+> until __sys_socket_file() masks them off with SOCK_TYPE_MASK during
+> execution.
+> 
+> However, io_socket_bpf_populate() copies sock->type into
+> bctx->socket.type without masking off ~SOCK_TYPE_MASK. As a result, a
+> cBPF filter inspecting bctx->socket.type against socket types such as
+> SOCK_DGRAM or SOCK_STREAM can be bypassed by ORing SOCK_CLOEXEC or
+> SOCK_NONBLOCK into the socket type.
+> 
+> [...]
 
 Applied, thanks!
 
-[1/1] io_uring/net: Remove useless min_not_zero() usage
-      commit: 70884ea2d636611e547f3da85fbfb8aadfa2ab4d
+[1/1] io_uring/net: mask socket type with SOCK_TYPE_MASK in io_socket_bpf_populate()
+      commit: e66907c3ba229399ecfb4ef032b95a4a071c894e
 
 Best regards,
 -- 
