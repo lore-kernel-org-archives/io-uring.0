@@ -1,111 +1,95 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.49
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793055807;
-	b=cMdObaYyiKyns0ZTB0B6rues1u8aI3Zg8xG8BJXJ+g1cy2n7ekMEgwcTGIiEJYzJS9BW
-	 DwE+NSss+OokbBx2NnYozYmN0GTEzPc8zdoSjaQw/2sKsiZXCNReZAxvOZim/PUDrWNn/
-	 Kyaj608lVv2yYfSUJ6p5idCtxxixYroVwbcbFlSpOknCcomV8Aql8/3iCd1O07zL+Cu8U
-	 KM/DmJP1F+3RU+rkooWHcNDCIEAPV/9OmtejzjHpZvigw1Qt91Kuue2ruRfk0SYq71geJ
-	 Km9X+34uzrRAcsMBAq0mLwodGwCJlzSv3F2rGZNwPhDSqpP2C2kU278u73bCGZnGGYg==
+	t=1793056654;
+	b=ITlyVGMBpAXeJXbELPs1VJ4Rs2HcmqB7Kt3lvVk0Qh/59k1KDMnIanwJhTTbDQZ+GUfN
+	 5Sy2xEnW1vucuCz1xET8zJadfMon3uiy6Xo7jbJGdM4U3xE3++CSazXM+EcAiix1r/J4h
+	 iK7PZxdBxZmSu8sBoiC+PyX/LfD2dgu3YevWDOc1TcRSF6xpfSW4CVXeeyhjc/U4JbUYr
+	 JnBN07Qa2IgiYZkbPeE13DQnTGTnW+f70IxKeCsvRgOfKyFE2/JXDfaO6TvfrekqX8xyk
+	 yhPYvOBjaOy6BIIJMpq7N8jNvJwCr9KvtSsk8fQgiDikjhSL4/oCFWQbuK1Z8NtmyzQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793055807;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=D7+yWhNEfwBLVAnh4DVgwdCxL54hx3J7AhdglfNEalQ=;
-	b=dtCgLSPb6BixXW2pI9v79u1gzjLzx6L+7amjCfBU7LFM9t2YWjwxggGTfDveiT2oyv+i
-	 WAQBiApTEQClw//9HgngNWbHWLcAvEGk2tWoodBjJKxGvuDKA1mBArUNwfb/S2NFw2uke
-	 3zDKU7f/JXWw0IuOTgqZfrdLCg10vvYqrWaifRCJV1YAze9giDO8GwqMyHeI5vQG5FPys
-	 jSMs6oTd9DhlLSvktewX+ZofLKHwZ6J1bdJaqWb6vaFMffD10nOoGuGQEdjFMl5FLIVug
-	 QbZ3VYjA6Xo91JOwOHVGw0M3m4ud/mRhGA6BLHuKY4th7EsJaGIcJ6KJVQvRCOFEFTQ==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793056654;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Content-Transfer-Encoding;
+	bh=ocSMFJitTHLYiF8HUiTTq/2SGtnm5oi8M3HgkaqWxwk=;
+	b=ONX93QZlNt5VH3V8xcX2ez/zuk5TuMK1KwQO8XYWkjyopKighE8uM3HL/2zVid1w6Gbk
+	 /ojgyxrYqekU+Upj9giJO8CvYj2vl4CPsJnIm2nOWGZUNZfd0xGl2QvCFGDRmLkRPLExU
+	 BBjed8s4C1ed9WfoehjOAAGr0t+Zgecg+EcZmMaSOUnA4uPTvAd2tu4QnGFzlg9avt/Ne
+	 +lRQRGsZOWUDa+SUy83ZQ2qiVAHdNtFXoOW8cMhSYOyw4bnYhGmtaxZSe02KhRZAnLX/v
+	 FM+YjUF2u0Z1+Hd0K+2URHpfQWXsvFFGUIc5zBQFfR4IAVUrtaBzksP1/xtQ+fIcuaQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b="YnCT/mJB";
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Z9BmjjcB;
-	arc=none smtp.remote-ip=103.168.172.139
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=LwqZPMZ0;
+	arc=none smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626DC606A31D
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 23:03:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 626DC606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90EF606A31A
+	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 23:17:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E90EF606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=YnCT/mJB;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Z9BmjjcB
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.phl.internal (Postfix) with ESMTP id 875F31380297
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 19:03:26 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Mon, 26 Oct 2026 19:03:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793055790;
-	 x=1793062990; bh=D7+yWhNEfwBLVAnh4DVgwdCxL54hx3J7AhdglfNEalQ=; b=
-	YnCT/mJB73FAGmQIu27ctvo5RESP4K+pTIiK9EhLFaGH8j7kXKQE+tSbzesbfDxs
-	bV+9wV/9mJE87FIh60l/aPw0vUFP1oQOrI5riJBeeRGczFUwDyCLA8/y4BcBY12w
-	wRegLgnRHobHCSF6BA6i0C+reNBRVR2FKTT/gbMwVrLZscUYxkn/44Vw8eG0qSvi
-	tWJdiyjuyg2ickLmpnfR0RB/KUcSZm6NPyieIrb9GtPlZj+tCTyGrh4XFyNGGvj3
-	0mNzbe0+txL9uJr9T4IbJyuT48LYOX1e+ZzKJe7AQTdcUWk+BiA6E+y23Kktm4eF
-	0OdWKJ+MXJqpGpYEJntcLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793055790; x=
-	1793062990; bh=D7+yWhNEfwBLVAnh4DVgwdCxL54hx3J7AhdglfNEalQ=; b=Z
-	9BmjjcB8Ht97U3XpSdkutzu7KGGU83nJYqys9fKA8A8LFo89cKjsWQGjTr4pUO1L
-	aP9kjNesX0okG+vOVw+RbXwBhTP1dlNpD+KBb13+OcK03C9JQt4JuFOOxyE3GGLG
-	ZspFTpPuZDfO6wPr4qEO2A5TQRvlMMTy9lXbOlVikLCqKHWaoSShkmyr2lAQA0MW
-	I75SaI19xADFJtpVucfW5iXU1oSN1+WUXqV2eC8N5VxDvuOCOwE0yDQK4eXGJuSC
-	Y9wL+SsocvtYeidK4mRb5GFh4Lq5vzciH3Z2KUk3zskK7IRDyEhPwx+HWzKZpC0W
-	mE1pSP6ArkmhYFD6hOYlw==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793055790; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+;
-	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
-	s=fm2:rsa-sha256:Hj4DB79nS/iH3fzH0Y9XRDA7i1AEdSyD2xNuLLYUHX24Sql
-	6CTjxzx65AlLUvk0JqX2r/PEfoC0Rmna3+haMc+wbAWicIxcaaGaBLhA8teiLSSa
-	c4wvOSNwn88dfCpXZfAE658vEPWRH6rdG/RTbTrjkem6vv0YHengiGILnmlEbj73
-	L5dn/59Knqi3ZcgsbC8lXUs4g0FpCg2ql6jHtkC4Z35yv8t2EWxjxoYmz5EKGvAr
-	+E3hITyiy52IthnZiz7eDZGhKXRrAMpVb5XBSnfjigmVMJc+yLATqz2CU5AUXUHE
-	T3+GeCTgkbqOLcoq2v591wLFRuP3PCZ0CtkgaRA==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:t7TmO85uHz3Bu9BudK5SiRDodgnhLHm1Jzu0xBGeMzU=:nc6weggs1vuexqOORIgzQ+8Q4IQMXclbAa/HauyeO68=;
-X-ME-Sender: <xms:I9zfarVlhcJ2BCr_X0f-Oqe3MJ-tfizxDxcVqqJu0UTFnur8n55_Vw>
-    <xme:I9zfaua_l0AUV_QUaHlFQ6Xk6c6S9hDoF9LDP0z9ZWTiBfyLFB6bGMt2m3Qf-Wf2r
-    Gp1aY7E3hmIDYnxO6ClUpLNdypmMNJMMAjKb_KTlIEA5DbBcFarl32S>
-X-ME-Proxy-Cause: dmFkZTG2ipuQjn7o/dduxIouS3rexG2Fs38Yf1mgntfcBayDO96egVm+yZQ4lqIIentjs/
-    mqWlr4cScm3wkM9Qig2xKeks6qaebjWFYjqSr1PEW0Un0mkdsaFkbg+xdJQiG2O2dvowLj
-    8E21v7JskZMeciXQK6+wWU3W5TpMrftfB6Bs3P2KNxD6AlDYn9LdKl79i+Pap9CUN0lvH5
-    Kmf7XF9ELL/4XciMlrED2crBvL0Cr1f1u2ohCkkGXPJJyr9NhF3TZ6Ev/Xhe+zrfxeWaDU
-    CHzGxCZtrUFf0j+qOyVHd7hT7F2sM8dBpGw742e3r2mvfUUQKFeZdDheW6KomSHxo+nEDw
-    iI6qO2cDvY1NeToTkMsmxh+Idwqe78oXaZf4JBivXyC6kcFQnAnTHzPS/v1istw/y4OU7I
-    Ig5+4LcAMjuaK21mmbb4bb1DmpocpNGdDRw9yq3nlrcPMsuuD3uvsbn3xyT972zofrrKbr
-    ymQ2KeWkMRr8lrdJKsZ996mCPszGebzucdgyrtSsUPulGKB9lpIv0RpYgf85X7CxFkC5mx
-    0ahqqI390L+Dj1eTAd45HDhy64TtvMVlHqpgXnFPGAYR24gTjdAn2Wh1e+VqFY1QE9IKWw
-    dT6VBuP/aA1R/oxwzZkn1goeGaMw0LOVAE7QiXpixIzvdkU0wv6eIJAHAEFA
-X-ME-Proxy: <xmx:KdzfajHGJ6tf5pxLJ3v2PfbGRd6Rt6Io_8hyQBlkYOXCV7Lb2b01Vw>
-    <xmx:Kdzfapg-6ACQ-dUEsnrl6Ji_ntio6Ly_-zbhQjCdP4T2kZZPc2mbjg>
-    <xmx:KdzfapZpLCwDwzVm3OeHceISOSkLUArE0NE7AI0C6AgT-FmN177JAA>
-    <xmx:Kdzfam27dS94lXZ5VmP_WcqDu7eLBRosip4J-91RpWhTlpq7UwmFJg>
-    <xmx:LtzfasvLSVKrc-K83R8kLrDibnrCdXZT8NkkCjHCIPMKCuEvlTPp1urH>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id C999832A0097; Mon, 26 Oct 2026 19:02:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=LwqZPMZ0
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4a218c463d1so22040335e9.0
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 16:17:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1793056652; x=1793661452; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ocSMFJitTHLYiF8HUiTTq/2SGtnm5oi8M3HgkaqWxwk=;
+        b=LwqZPMZ0VGuMpCHb11pqfADiE3QHngAGBSZEcKxe9PX41UYYCUusAULtFM+rTWUE8x
+         xSSA37ZAKRoJe9r+zMmn+RFMKKMhdIpV7NEocrw661Yr5SGBtfKfqn7wCfCyklIuQqTq
+         OwJy2pB7Aowb13BJueRjs6KKhNcQnE6hC0g/hPJSf3Np0k5hQjoESMN9v66yHWP2s0EE
+         vARKIsfIciGFELYskmexCC38YfgWOVwD1v8kCFu7njrfhvOBm53IEMxVjCzxTvi/8Uaa
+         2oUG2jwudR0/v72vs3uLt4QdpRgMWsDcqu3DFg3IRI9EMnrwOPZYHSSBpyRjs5dh2aIK
+         MX6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793056652; x=1793661452;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ocSMFJitTHLYiF8HUiTTq/2SGtnm5oi8M3HgkaqWxwk=;
+        b=ZHNpB6Gyb35N4ntcBynVvqZTQKs0gjaLOsuQCy82egpbkwXM1vRgq3r2EkoWxBz1lq
+         ooqiWqgkBmj+Hp+u6Uqeq9flnqv0hn7siiYZwr6kz3KRvSbWv1dQfAn7HdpMOyVXuasG
+         84z7dE5LikZvFdLRCrrX8DdGWmcaNWzR5HfSag2OG+AywcJEISrkbiChasRevk1P+9yn
+         +c3+8Jg0Tb4sQX8vfItRWipNbn7Fm9PoGk+eJKdjDfAB6nV/5xO3YoTBrAxidjZXPJWD
+         ukLVPt8KdrFxekNNHhJ1uBjJNRDBkrxOKln/ql3B18WAAQMK4aWNatf1jYIhN+k0cefy
+         5ASw==
+X-Forwarded-Encrypted: i=1; AKwUvBxMuHOuCS9Nb+pso14D7Ksg08GB5fUtWSsx0DXgYqmhbvBRvGfR8jvunw87FiZp87XEQJd+o+lBwQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKS1ks8CMZ1YF6huZZ2CbQ6EwxpmVhGflAF2BUkSAdG9n7mW0gQ
+	lYjqwDi0vt8lHGruqhXgP35pKbiK7NNOfFjeoV1AT1w8CBGp4LXP3PdN
+X-Gm-Gg: AYBFou122bbrerK2I5jyWbi2T06ei/bUywQNpEOnGoLO5zC/jiorOdXFMOOdYrn4Uys
+	guZreCeGwqEmoT0fqWsDKbCETQd8vvqgczrNDlwaJ2rWAoGJWBp4vFRa56DC5f0+EHlgNStajje
+	O8rOt4n+zeSZVzTbTg8ymTK/J5jO7qjgFvXg/sP0IT/3RYcCFtWw4DKAVjVYVIBt8MhvhwhS/ZM
+	NgGPyXR+IShd+xwa7epnhW0HAIpuOWWyB17HFP6ClhEgPbgemOTOzbXGLhJF36mZINeq1CWYCdq
+	8X4aVs+1z3GVp1Q1+buAE02fadlXTVi0dHKugTq9EYA9aaTD2GnBMKXg5v/Jvgo/cEj3EY81WIb
+	cY0bawCKunTaNRyl+PWP7SHfUwmRE4vAbGm9R4anudNO9M4uLAcAzHjVIGjIScXqvkvpRVgea1c
+	CZLBWJaehJQYPs+CDgMQEXqANnpR2fxEcV+TaYYC3GY4ENJi1s6Fb56YuwpRt5XCBsrl6bA5+M0
+	2QX/bU47oz1uQp1A4cJbj2ZpGShYiDUJaoApbfBakeySW8Ksvjlyj1TSdPg95n+0d1UwKqykkHZ
+	cQ==
+X-Received: by 2002:a05:600c:a45:b0:4a1:e11f:b2e1 with SMTP id 5b1f17b1804b1-4a35aca4bbbmr163049215e9.15.1793056652381;
+        Mon, 26 Oct 2026 16:17:32 -0700 (PDT)
+Received: from prairie.home ([2a02:168:fe54:0:500c:846b:8abe:fa7a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a56992dsm213263975e9.6.2026.10.26.16.17.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Oct 2026 16:17:31 -0700 (PDT)
+From: Cinq Prairie <notprairie@gmail.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Stefan Roesch <shr@devkernel.io>,
+	Jakub Kicinski <kuba@kernel.org>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] io_uring/napi: drop the single NAPI busy poll special case
+Date: Tue, 27 Oct 2026 00:17:18 +0100
+Message-ID: <20261026231718.5092-1-notprairie@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <fe5bf816-815b-4a81-b765-2ed36cdd3168@kernel.dk>
+References: 
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -115,78 +99,47 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AmKN4IVPaSCN
-Date: Tue, 27 Oct 2026 00:02:38 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "James Houghton" <jthoughton@google.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>
-Cc: "Thomas Gleixner" <tglx@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Kees Cook" <kees@kernel.org>,
- "David Hildenbrand (Red Hat)" <david@kernel.org>,
- "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
- "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
- "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
- "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
- "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-Id: <3b0a8fc4-d140-4a90-b810-cbc1283fc083@app.fastmail.com>
-In-Reply-To: <20261026215226.3713941-11-jthoughton@google.com>
-References: <20261026215226.3713941-1-jthoughton@google.com>
- <20261026215226.3713941-11-jthoughton@google.com>
-Subject: Re: [RFC PATCH 10/10] uaccess: Move the NULL mm warning out of line
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 26, 2026, at 22:52, James Houghton wrote:
-> uaccess_without_mm() is inlined into every user copy, including every
-> copy_{to,from}_user() call site on architectures that define
-> INLINE_COPY_USER, such as arm64. Each inlined WARN_ON_ONCE() adds its
-> own __bug_table entry.
->
-> Keep the NULL current->mm check inline, but move the warning into a
-> single out-of-line, __cold function, uaccess_warn_without_mm().
->
-> The trade-off is that only the first offending access in the system
-> warns, rather than the first one from each call site. The stack trace
-> still identifies the caller, and the access is refused either way.
->
-> Compared to the base of this series, with defconfig + KVM:
->
->                      inline WARN_ON_ONCE()    out-of-line warning
->   x86_64 total       +5,884 B (+0.014%)       +9,714 B (+0.023%)
->   arm64  total      +40,948 B (+0.10%)       +24,609 B (+0.06%)
->
-> On arm64, this removes the ~16 KB of __bug_table growth, while text
-> size is unchanged, as a call is the same size as the inline brk. On
-> x86_64, the call is larger than the inline ud2 and causes more .cold
-> splitting, so this is a slight regression.
->
-> Signed-off-by: James Houghton <jthoughton@google.com>
-> ---
-> NOTE: This patch is included for reference only, to show the cost of the
->       inline warning.
+On Mon, 26 Oct 2026 07:46:38 -0600, Jens Axboe wrote:
+> Does dropping the single-NAPI path trade the early need_resched() exit
+> for a full busy poll start/stop cycle on every poll?
 
-I would suspect that the growth is larger on architectures that
-don't implement __WARN_FLAGS() but rely on the generic WARN_ON().
+Yes, and without prefer_busy_poll that is a regression. With loop_end
+NULL every lap ends in busy_poll_stop(), which runs the driver poll a
+second time; napi_complete_done() then clears NAPIF_STATE_SCHED and the
+driver unmasks the device interrupt. The next packet raises it, the
+handler calls napi_schedule() and sets SCHED again. As a result the next
+__napi_busy_loop() lap on the polling CPU sees SCHED set and skips
+napi_poll(). The hardware descriptor ring ends up alternating between
+busy-poll and softirq instead of being held by the poller. My numbers
+only covered the early exit case with prefer_busy_poll on, so this did
+not show. Agreed that dropping the fast path isn't acceptable for
+stable.
 
-This would mainly affect 32-bit arm and mips machines, some of which
-are very memory limited, most of the 64-bit architectures have it.
+> but io_napi_busy_loop_should_end() is io_uring's own callback, so could
+> it check an absolute deadline stored in iowq instead of the start_time
+> that net core passes in?
 
-      Arnd
+Yes, that works and is way cleaner than either alternative I explored!
+What I have in mind for v2: store an absolute deadline in iowq and keep
+the singular fast path but drop the "&& !loop_end_arg" so the loop
+re-enters for the remaining budget after a need_resched() exit.
+
+> This isn't a bug, but with the special case gone neither the single nor
+> the multi NAPI path checks need_resched() at all for the whole budget,
+> and the only preemption point is the preempt_enable() between polls
+> inside __napi_busy_loop(). On a kernel without preemption that is up to
+> 10 ms with no cond_resched(). Should the message mention that the
+> single-NAPI case now stops yielding to a woken task on those
+> configurations?
+
+I'm thinking that with the re-entry in place io_uring can cond_resched()
+when the napi loop bailed on a need_resched() then resume, between laps
+it holds nothing from the list and is in sleepable context. That would
+mirror the socket path. Though it also impacts the multi-NAPI path,
+which never yielded so far, so I'd like your preference: include it in
+v2, or keep v2 to the single-NAPI fix and send the yield as a follow-up?
+
+I'll also add numbers for the single-NAPI fast path when it is not cut
+short, before/after, so the cost is visible.
