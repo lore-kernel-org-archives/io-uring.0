@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.199
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.215.199
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051572;
-	b=t0N5ZIsheTInPHkE2QSXfi8i3CquwCmM2zPcovNwrvzrPJklSRhtQhItOoqL+xUM5GmK
-	 U2dtsc4gscInEzOwIFd/rnW90d7S8TscppoMuwJA2y+Uy17ojgC99wtENGE8eKBUgW2Qj
-	 Eb7qXtryjs68P4KxwIPaSOE32CLnFQshKx+89YoCkEvtdQLo+isWl8Fed7vk1WP3TsORh
-	 i/lYkBh9F6/z6EvJ5NeoTAiiFEs9oJYNC4H39Jt9WV07dSiv3Igl8lhurMirJK9SGkG4R
-	 4tA3WeNsEFS9r2qKgXATwLykoL++XSy4bZ78kdMM1yUiUgk043XuOAimL+nbQ95KnPA==
+	t=1793051570;
+	b=JwSSETQboYq1IEjw21+LChSGBcBLnzThjgKSwAbQ073KQBPSdLEbFW2Vr95l7mqOkOEh
+	 06ev67qtSiZwqOUfrBBVDhdsJ/22/29eEhILKUN3Fwh8r3kGqwzQ7BfkMy49FOHiA9RNZ
+	 K+KGMNbm1RzXWe6hVfGIJ+HFDSK6E208y9s2ZfDPM760Yfm9fmVGDz/9LM4ARfUFcKMzw
+	 0XKkBBQtNgmqnIevfVaH+Zt2PCFOfQgFzrTKkZcC31ouyrBVdHGwHzv7m23yxbm8MvcUg
+	 VfREL3stOV9HmEg9/frLABVZI78t3mmsq6hhELPi+3AxKueOfBr3j+U9/Qk6DnZgEVg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051572;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793051570;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=0zQfCS+xbNCI3ecGYMw9q9f4jA1EzYR8/pz81vPbgxA=;
-	b=Re7KYRejT0vHNBlTsxOMsX130xHJ7q2NrL+c4SNsf82TK0zJrOVBffa8WUXCmUWrsoxh
-	 tua89E/7yV0DjTBT/Q6i8mX5khru5eZ8+GuJRDt76o221ePEuYuzV4jk2w2aqk8dwW7VC
-	 AmFGlJNUrxcjTtQ2B4oKYJuAdd8Ng+w5RIMCr8vhr/W+ottkAYeN790K7RuDNw2nZxol7
-	 fkX3+Hyog/TawxWk4fG5Hvysai/dY1QakRS4ST6n9oXcnvNVLRwtA0O4FkMD/tmUDWPES
-	 5/hXwB6UTwRmBvPfmlBCVsucGXB5HVc/BV8tBL+Hr850l0vtSUgQ+p1++8mLANuYl8A==
+	bh=RD5MWqHEB8iYDLFdQXvkJ0xSc6fsoJ0ZXufXHQQ7zgM=;
+	b=rPS3Sra6wQg3f+ik5YOnxqS8dmlO7mz0gcIydmqnYjU/5yI5IgoAdLKJV+bw+PJTGeDb
+	 23VY7LMJVKkYd0UyPkGhd4tNWK5EU8UeYKsZ5nlneHURxcRFyV/8LGxPlpqpcPwUdGDAs
+	 tTSXagu4i7SXgfr1dt6KouTWDgOh+l/siEq8gjVo705D9Xm+4gH7eCWMrpjKJ2BCrcZnM
+	 7duegzBEjfIHt0PYmjDLZHMCdZs7GzvGMZYQLOL7jxbp22nFwwSceOsbx7Zu4n/tWnPFV
+	 1pUaFPNOyEkOBLWedfkK5SmLz5p4nK56iKFXtJRgBhRKF1FuYoqh0dPKUXy3lo1Kj9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Kqiy+Ob4;
-	arc=none smtp.remote-ip=209.85.210.199
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=ttuByBgZ;
+	arc=none smtp.remote-ip=209.85.215.199
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB781606A31E
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:52:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org EB781606A31E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FF6606A336
+	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:52:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A8FF6606A336
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=Kqiy+Ob4
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8a0688a43d3so2443943b3a.0
-        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 14:52:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=ttuByBgZ
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cd5fd34fee0so1863970a12.3
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 14:52:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1793051571; x=1793656371; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1793051569; x=1793656369; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=0zQfCS+xbNCI3ecGYMw9q9f4jA1EzYR8/pz81vPbgxA=;
-        b=Kqiy+Ob4bSiepbdF/N+HCw9a9Ypov8HtKYAWKHLmMbdMoQ6/AQK8N+3/9GSPszOCs/
-         1wDw9g6G84lPjg+5wnqK7GtKOgVXqBV6g60MSjrdYOR6qiIDrhmWrnkvTapXpk3t5+aT
-         hq8wJ5b/uxQvjGqh0YiMIwILe8l+czxItEMT+zJ4ZtkENFNlAT9HnocU0M1kD6x4BmQb
-         r6bsNPbldLhR8EOtCoFFvhafOcZ8Ol+iWaiupqeMir9Atbgnv2A2OMD0tKsJD9WbmYwb
-         osWTHPRSBSi+yCRc08AKi5oB3BSbsJN6aXIdfxr7eCzW6nmLWMpzC3ngMIalK5Ey9Fgw
-         7pHg==
+        bh=RD5MWqHEB8iYDLFdQXvkJ0xSc6fsoJ0ZXufXHQQ7zgM=;
+        b=ttuByBgZyXhz+vCIDU5aBy90hRWqwioXsk1DTyafweNnvz2VRwJpnWhZTDjU/ruhRF
+         +eNkpq2S/OLTAC4WKDyiSOVdOZpoaInxvu9UjK8OVtqVOVGoXQz0xw4USi3sYBtAAjKW
+         xFkNF7RtNx3C8ylvzrtr3yIDJFmQr5Fpx5GMG7lg7Zxkb9Zz76slRyBARq30C4fj/GZc
+         lewXB4OZG8GXpxXvg/Z2Si+lR9m0f1WY60ZFwIRoGIQ8gBxO4HkEYP6M2T1bDHZOH6bh
+         LsWrGaMFI/TsCQGQozWRU1Jk+J5GWR7q6ZBrNLB6qEnTv5RGoUe2N/rfxG8p6ofbEptr
+         6CiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793051571; x=1793656371;
+        d=1e100.net; s=20260707; t=1793051569; x=1793656369;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=0zQfCS+xbNCI3ecGYMw9q9f4jA1EzYR8/pz81vPbgxA=;
-        b=sYgN+r++yUrCwscXuY75keJ/05O1NP7M1pltUJI6qmIm4UB8aE664/l95D/Z8cxQ+g
-         aat6VgzoJQbE4qtr/Wddq3cUM4jCgmr/cb/5WqcQ2BlDMnXgdew7FGvdijHCF1ImcXea
-         M8Ab76Y7JB3vgWQC4MnIefx+JM7A8m0RaAsSojtifk1GBcsI74z1giemRVJ/r7jchJKm
-         NY0dWgVHo/qf0HTgiJur+C72vMcA/39dCres8hWu/q0k+lphzc+pJlNyFgtco6dvtAoH
-         4zfBLj1uku1Ag5Vc89iqKjDKLGGfzF14RaTHwCzssRImB89DRJ8sCDH1cYFgBqGOwkoM
-         F2mA==
-X-Forwarded-Encrypted: i=1; AKwUvBxxRJeoJA5IRksZ4gVXDd+mXi3M1dmYl5nrG1dzXW1zFsNdcLCqqJ8WkWn0QSFvCi4yv0n8q67w8Q==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIS4fKp2WSBPOF1zNoT1Z+qDCLFRNzx4iEJ12MBsL/ka373aR5+
-	RsBw5Fki4DGDW42De88uVgg8ctq68OrIQ4t3jqQZcJqymL78BywzHOIifx5tWt/aIgAqKgW6lPz
-	zHKjl+m/o1XA13KALr77G5A==
-X-Received: from pfbho14.prod.google.com ([2002:a05:6a00:880e:b0:8a0:6a08:e927])
+        bh=RD5MWqHEB8iYDLFdQXvkJ0xSc6fsoJ0ZXufXHQQ7zgM=;
+        b=E/+SomUz1tNPghxkfsgAgNQ0brcd72HuNahAvG+8CL4oCszvpWUYhnRMTbuDGgjPYF
+         2TB1bLV3rjIhG6zbRW3VjNtqinX+H+8ARcyKp4Vm598Dk/Jirecap4F7unI0rnnU5z2C
+         VmWmB4hDMcJX2AUkPxL25Vuu5t0zCnMWtKcxdO+BKKRCJSZjlPH7XQNoq5cnP7EzCsEu
+         XiEjuThPjlLAcJSapUQ7j0zGWUYwFqHSMr04mUUsAXveykb8WLRyhrp5tsEPUM+A3JmN
+         m/+FtIyd1N+QDrwLQFF8w4QYukBoiiOHkmysQnqjzRcIKKjsokfpD9BaPZhbH0p068hU
+         ffIg==
+X-Forwarded-Encrypted: i=1; AKwUvBzj05PAuWNIfLFxtqZMEBii8ku0Lu7N4Ro/ljLXZ5Hzno55s1wdJp0huXPDd9eTOrdrfpZrRHgeMQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJLZH1Mt5XR8KQAENsqpmB7vukjEn9UBHPvqvj5fL29aUtWbJWP
+	gcIgYj2ZBXXt/dWZOkEFbBRu3pV3KwD9A45MiplotUNeKWuEZCaKDrkfXJEPUznB2yaAalJBdBl
+	a8sDNcnV0te5Ws6fs0EsdEg==
+X-Received: from pjps6.prod.google.com ([2002:a17:90a:a106:b0:3ad:c8d8:70c3])
  (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:bd81:b0:87c:e44e:5694 with SMTP id d2e1a72fcca58-8a366b88ce9mr5902881b3a.21.1793051571129;
- Mon, 26 Oct 2026 14:52:51 -0700 (PDT)
-Date: Mon, 26 Oct 2026 21:52:20 +0000
+ 2002:a17:90b:2688:b0:3a8:cb54:e135 with SMTP id 98e67ed59e1d1-3adea899125mr6172313a91.19.1793051568668;
+ Mon, 26 Oct 2026 14:52:48 -0700 (PDT)
+Date: Mon, 26 Oct 2026 21:52:17 +0000
 In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -81,8 +81,9 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261026215226.3713941-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
-Message-ID: <20261026215226.3713941-5-jthoughton@google.com>
-Subject: [RFC PATCH 04/10] stacktrace: Don't unwind the user stack without an mm
+Message-ID: <20261026215226.3713941-2-jthoughton@google.com>
+Subject: [RFC PATCH 01/10] scsi: bsg: Don't copy sense data to user memory
+ when canceled
 From: James Houghton <jthoughton@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
 Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
@@ -105,55 +106,50 @@ Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ke
 	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-stack_trace_save_user() only refuses to unwind the user stack of tasks
-with PF_KTHREAD set. That doesn't cover all tasks without an mm:
+scsi_bsg_uring_task_cb() copies the sense data to the submitter's
+response_addr with copy_to_user(). It runs as io_uring task work, but
+io_uring may also run it with tw.cancel set from other contexts when the
+submitting task can't run it: from a kworker when the submitting task
+has exited (io_tctx_fallback_work()), or from io_cancel_local_task_work()
+when a DEFER_TASKRUN ring is torn down.
 
- - A user task that has already gone through exit_mm(), e.g. when an
-   event fires from exit_files(), exit_task_work() or the final context
-   switch in do_exit().
- - PID 1 before it execs init, and usermode helper children before they
-   exec, which are created with user_mode_thread() and don't have
-   PF_KTHREAD set. E.g. booting with trace_options=userstacktrace and
-   an event enabled with trace_event= unwinds PID 1's "user stack"
-   during initcalls.
+In a kworker, current->mm is NULL, and the copy does not reliably fail:
+the user half of the address space belongs to whatever mm happens to be
+lazily loaded, if any, so up to max_response_len bytes of sense data may
+be written into an unrelated process.
 
-With the ftrace userstacktrace option enabled, the architecture
-unwinders then read the user stack without an mm. That access does not
-reliably fail: the user half of the address space belongs to whatever
-mm happens to be lazily loaded, if any, so the unwinder may read
-another task's memory.
+Don't copy the sense data when the task work is canceled, and complete
+the command with -ECANCELED.
 
-Use is_user_task() instead, which also checks current->mm, as perf
-already does for the same reason since commit 76ed27608f7d ("perf:
-sched: Fix perf crash with new is_user_task() helper"). This also stops
-unwinding the user stack of PF_USER_WORKER threads, which never run in
-user space, matching perf.
-
-Fixes: 214d8ca6ee85 ("stacktrace: Provide common infrastructure")
+Fixes: 7b6d3255e7f8 ("scsi: bsg: add io_uring passthrough handler")
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
- kernel/stacktrace.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/scsi/scsi_bsg.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/stacktrace.c b/kernel/stacktrace.c
-index afb3c116da91..f96a5ec12f6c 100644
---- a/kernel/stacktrace.c
-+++ b/kernel/stacktrace.c
-@@ -228,8 +228,12 @@ unsigned int stack_trace_save_user(unsigned long *store, unsigned int size)
- 		.size	= size,
- 	};
+diff --git a/drivers/scsi/scsi_bsg.c b/drivers/scsi/scsi_bsg.c
+index 5eec248a77a6..3755e33fcdd2 100644
+--- a/drivers/scsi/scsi_bsg.c
++++ b/drivers/scsi/scsi_bsg.c
+@@ -43,9 +43,17 @@ static void scsi_bsg_uring_task_cb(struct io_tw_req tw_req, io_tw_token_t tw)
+ 	if (pdu->bio)
+ 		blk_rq_unmap_user(pdu->bio);
  
--	/* Trace user stack if not a kernel thread */
--	if (current->flags & PF_KTHREAD)
 +	/*
-+	 * Trace user stack only if this is a user task that still has an mm,
-+	 * i.e. not a kernel thread or user worker, and not a task that has
-+	 * already gone through exit_mm().
++	 * If the request is being canceled, e.g. because the submitting task
++	 * has exited, this may run from a kworker or in a different task, so
++	 * don't copy the sense data to the submitter's address.
 +	 */
-+	if (!is_user_task(current))
- 		return 0;
- 
- 	arch_stack_walk_user(consume_entry, &c, task_pt_regs(current));
++	if (unlikely(tw.cancel))
++		ret = -ECANCELED;
++
+ 	if (scsi_status_is_check_condition(scmd->result)) {
+ 		driver_status = DRIVER_SENSE;
+-		if (pdu->response_addr)
++		if (pdu->response_addr && !tw.cancel)
+ 			sense_len_wr = min_t(unsigned int, pdu->max_response_len,
+ 					     scmd->sense_len);
+ 	}
 -- 
 2.56.0.307.g5fe7bd680c-goog
 
