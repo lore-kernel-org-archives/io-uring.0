@@ -1,74 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.72
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793051576;
-	b=JqMDroVx5g11fkfY9h5b1PriqJno8UZYNeAb3LaGa7TlKU6rSCjAIU090tdTHhBfzddS
-	 A8MvB/+nFjjjgz5Im+8Y2/L3+d7v+jRKyuAzVnLtDQ8s3xx7ZSEkLhy1Yc/VHODsgmbCQ
-	 xRkNOpy7ooQ2cVFA1M2SdOXzxbyYykfNCkSYuZh12NkmwNRBMIQZKfynmq0H5AjeTtYd8
-	 6xcA/ukFVeFs7N4teIpw8EJrYZmTTxTCtWxYMORiEAmc0aQofSRAQYtAyZtfzu9Xsh8RB
-	 V3iofbXTv/drOodCbuValAb5pFTY2KXAGEywz2lxoHnC0miLs8MI77ZeWB0islq4HEw==
+	t=1793051577;
+	b=NHakBKUWSffFn6ucwu8vmKN25M8oYAI6TP0IeJNg6NFLXDELgmU8+K7LylJKWQFpMjIr
+	 Z1MC2EtXaHg+HoEGcmE1jqNSGmKtd3r/D/p/vp6CdAuHYl53lPK5Al1jND2XfE4GCWsvZ
+	 JnLTUuM/ok57YazxZbwNuShgddG2qFKjS6yF1uJW+17FYhBQbsRp8g91vruaH7OGUkWlq
+	 yveOowz0bdqy6QL+Q7RWPKucPXANBfkeT6jdA5K1GUSe3NGJbg4Vo5gf/bsixA1ck5qPQ
+	 rJATNwwfj4FlMg6NYmVrx2fsDfiENFJErzliZJnZ6DWUSsrw+HDl9JsZ26zsxVE/NxA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793051576;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793051577;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
 	 Mime-Version:References:X-Mailer:Message-ID:Subject:From:To:Cc:
 	 Content-Type;
-	bh=oogWXdI71uSApWoisQtM4clnwhLv0Vs2bmtqChsuYec=;
-	b=RODJvki4Jz1+4pa1EAmnt1PNZbMayU9xTLGSptPffso88Af24y4yHdkJf5ILe4yh94qU
-	 LKS/ilrVRavRKVA7dKWZdMRjg9OU3P0FL0d3zoS/2KURs3+C7CqT9hu/otkpmUOpnR/OK
-	 6c/R24fA9+YPf9S4D/2OCdjD7C0y8X4Hf5Bq2B/0igmUmPvP84ewtUjD8ObW6wcb9/kvK
-	 U5/5BEidmsLPtbDOLAdWOLW+J71jXkmSWgNhytQ+h/5lYrtkpKQBlMH/5untL+ZJCKSFV
-	 ah/X7p2XgEjJx4hDQwDb/8Bgb5P4v4Me6Q9i3rAUE9B0+oR0HqvWj1odIg/M6LJCcxg==
+	bh=HQqGCLRyEFq1Qmw7LfzuGpexsFHiUvTKIyODgPSn6eE=;
+	b=snGcldl24+bZpFvhIQqacqx9BdZw4Z6YxwJ7kB8QAoQjfwJ3gXYU6JJLLpTG+D5I/fIU
+	 YT7jprv3kIi8dr7COp/DjF+08InRyeQDbCmZbZXQDqemx/s9DYawJqUGPcr3JN9RjxJZn
+	 /GNYl9qPQsNtqZivWmuGXlVwjkyfWTGbAFNQilosH5g0eOJGqUd6fQ47MHo0m9j2NJxOO
+	 JU1A8vKGXiFaJxEUIp+22Z3Cv/bSOwq90hcVgSbRhjUpGbY+zV8FnpraKUblvxDDEMM6O
+	 gbXzJ3K9tDkOLp9QKuTFO59VYi3gPWr5yVslRrMCa+FfS2bTaJ47wyT7/9rCtLsMjxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=google.com;
 	spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com;
-	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=sJPCAyGd;
-	arc=none smtp.remote-ip=209.85.216.72
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=NljNnoBn;
+	arc=none smtp.remote-ip=209.85.216.70
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B13460A3809
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:52:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B13460A3809
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288A8606B4D7
+	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:52:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 288A8606B4D7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthoughton.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=sJPCAyGd
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-3ad98380ccfso5288470a91.1
-        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 14:52:51 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20251104 header.b=NljNnoBn
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3abfcf726dcso5159074a91.2
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 14:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1793051570; x=1793656370; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1793051577; x=1793656377; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oogWXdI71uSApWoisQtM4clnwhLv0Vs2bmtqChsuYec=;
-        b=sJPCAyGdVEm2VhcvIBWqxKdB1ov+NEHAo0t+uGAM/0+qDIoJvuHm7nefnhKXLbxfZu
-         kkzdd/4AnoA114yH/wBhWFkj4bhnTFD/5geQjiLBoAkwcMG8cTAN5yffgV7X8VZkSD6k
-         UqJP6p4PAxwVl8yTZ/Y+9JixBhYbVYFxenEyF+y0YO2Y9TO0Q2mOae4aV4jUlpGMmFIH
-         Y+Azcs1izJVTuxuoeh6BKO/iK8Vap0RGSadypMKvAjvOIsUEPKwpqHb793AvWJQkjEjp
-         +fWxRFzb1QlgIgm+QlrlfCdAQHISYeGneT49/PFezT8s3UQeSh2Ep1POwSjeCezfL9SA
-         lQ4g==
+        bh=HQqGCLRyEFq1Qmw7LfzuGpexsFHiUvTKIyODgPSn6eE=;
+        b=NljNnoBnCKEWYdClg5iFoRmcI0lyi1UrAZMXUfZ/tjZDWl31GrB4dYGaX3lgMwaEe9
+         sSvuvk+VrKe/BrlBSa+zLxxlPcu9ce55+9jizRMJsEhEIyTzUBUl2hgH71oCAfr68T/u
+         smlzWH2tfs7G6O5unHewx8LAc3M0fWH93Z291xhawi3t1+UPeprNzwo5wwRJ71OZ+fzb
+         8VYumrE7MGLRoozBn52Iau/Q07uKtk0epsT7VZYiBIjbJvJk4m4+KZu25TnfeEY6Kdq6
+         nJJfViKz8wRAabQbM2CYeBMxifDy8nj8jX77+BWa32cjBC8Dl3GVwAvOvnPpiIr0GCS7
+         ArQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793051570; x=1793656370;
+        d=1e100.net; s=20260707; t=1793051577; x=1793656377;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=oogWXdI71uSApWoisQtM4clnwhLv0Vs2bmtqChsuYec=;
-        b=TnVhllDBiS+b2hoLWwtJs+gJpunAMJ2j9fn1UeJ++nNt1/kK+/uZbCbDM9+Pv/FbZ5
-         95204PNoGeKAef1SUR6U8SWS84/Xo4SiuAckWCOSzkzaGGSRYd/mVSm+jiNwAhiVluBQ
-         5EsjlOsx0ugYVrZXRqoXWAtTO62vlOl6li1GNrltpgEn7U06JpmKpXF0sw47EHS9NQ3f
-         JoQbGjQkpS3CnsX4w0kUNloubCgYFSnVx2zI3ahn71ogcLHgzYdCwEbjHRQHD5vbo5Tl
-         JLmFVshMYhbcYqppz308JguNlTLEvGE3YNFm25VbluaskihJ9Xux8axxqw+L7C+XRMY1
-         7zeA==
-X-Forwarded-Encrypted: i=1; AKwUvBwaeQgMIlpCifP66DGKlgO7bPA2fUjPBQ+0A14/UCyrcHkmcxysm/WRcLIl+Wr2DAIrgh9yjlTIMA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKMDHTeaE5EC3NZUdIr24EUeuFygc9/8oheXeHtyXmThGSU+SIJ
-	Z4h7EhAaLqGdwUIWO6Sc3fao8IuFQWNoseV5xxBkFOrEyG8GMDYC8Cewck3yNxp9L+9Bg9cBXeW
-	vAzAy9M0G2fWjrTFog8FwZA==
-X-Received: from pjbml16.prod.google.com ([2002:a17:90b:3610:b0:3ab:54fb:2a3d])
+        bh=HQqGCLRyEFq1Qmw7LfzuGpexsFHiUvTKIyODgPSn6eE=;
+        b=j3tocjg721+q9X7ECo/rXcZmaiMS+KaXnGHwMKf3Y7zmo0D6DkvBB2Cv8E9xmbZny2
+         OCcDCH7i/dzv8T4oLJUagWdPA3LMNkZA+dgviKaPmz2e+Pq5bvZFDy6tSb39OqUCdMGG
+         fN0BEmSAjgcQUgfnB2m1mmoD1I3fBaWUfZ7MaAwafCKLSdjz4ZkpAFRciziGXq7/dM4L
+         AC4/fPYCz1QMH+6xMKEwR7CBO4k7uvcWGzmShbusMPupTyWa5lNykIA2pwwCObdIKGiq
+         +IoAKm/jHVUf/8zH68HfBMJvX1v2XfP0x1ziSmMeFBYIMqQMcRkWMfxbBVYsJevoPHnp
+         bU0g==
+X-Forwarded-Encrypted: i=1; AKwUvBxwEsSAI6ijV8cegvv2XQFMENi5rj/hOszH795QmiJgaXfCVhMIlZ32cxTHf1nxEQwiGla331w9cg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJ+SAXrjpK7dZknUnP28p06bvyvb4dQw6RWVSYfQ6PrASKvAn3u
+	r+ZqncNcTqwuIo/mHXTjzstWYALcD5U5/XU86RWNsq/K101yaH18qenGj4TMb2IwUsAad4O2wPL
+	FwS6JxcsxtLumqzPIvg/ruQ==
+X-Received: from pjbst6.prod.google.com ([2002:a17:90b:1fc6:b0:3ac:989f:b65f])
  (user=jthoughton job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:56ce:b0:3a8:9d0d:ca50 with SMTP id 98e67ed59e1d1-3adeaae618emr6704272a91.10.1793051570356;
- Mon, 26 Oct 2026 14:52:50 -0700 (PDT)
-Date: Mon, 26 Oct 2026 21:52:19 +0000
+ 2002:a17:90b:1a92:b0:3a8:211b:6c8c with SMTP id 98e67ed59e1d1-3adeaae6e15mr7057279a91.22.1793051576336;
+ Mon, 26 Oct 2026 14:52:56 -0700 (PDT)
+Date: Mon, 26 Oct 2026 21:52:26 +0000
 In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -81,9 +81,8 @@ Precedence: list
 Mime-Version: 1.0
 References: <20261026215226.3713941-1-jthoughton@google.com>
 X-Mailer: git-send-email 2.56.0.307.g5fe7bd680c-goog
-Message-ID: <20261026215226.3713941-4-jthoughton@google.com>
-Subject: [RFC PATCH 03/10] bpf: Fail sleepable user copy helpers when
- current->mm is NULL
+Message-ID: <20261026215226.3713941-11-jthoughton@google.com>
+Subject: [RFC PATCH 10/10] uaccess: Move the NULL mm warning out of line
 From: James Houghton <jthoughton@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, Alexander Viro <viro@zeniv.linux.org.uk>
 Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
@@ -106,92 +105,76 @@ Cc: Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ke
 	linux-kernel@vger.kernel.org, James Houghton <jthoughton@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Sleepable BPF programs can run on behalf of a kernel thread, or of a
-task that has already gone through exit_mm(). For example, bpf_wq
-callbacks always run from a kworker, bpf_task_work callbacks queued
-late enough run from exit_task_work(), and lsm.s or fentry.s programs
-may be attached to functions called during exit_files(),
-exit_task_work() or from kernel threads (e.g. security_file_release()
-from a kworker running delayed_fput()).
+uaccess_without_mm() is inlined into every user copy, including every
+copy_{to,from}_user() call site on architectures that define
+INLINE_COPY_USER, such as arm64. Each inlined WARN_ON_ONCE() adds its
+own __bug_table entry.
 
-In such contexts, bpf_copy_from_user(), bpf_copy_from_user_str() and
-bpf_copy_from_user{,_str}_dynptr() (when reading from the current task)
-call copy_from_user() or strncpy_from_user() without an mm. That access
-does not reliably fail: the user half of the address space belongs to
-whatever mm happens to be lazily loaded, if any, so the program may read
-another task's memory.
+Keep the NULL current->mm check inline, but move the warning into a
+single out-of-line, __cold function, uaccess_warn_without_mm().
 
-As there is no user memory to read from in this case, fail with -EFAULT
-without attempting the access.
+The trade-off is that only the first offending access in the system
+warns, rather than the first one from each call site. The stack trace
+still identifies the caller, and the access is refused either way.
 
-Fixes: 07be4c4a3e7a ("bpf: Add bpf_copy_from_user() helper.")
-Fixes: 65ab5ac4df01 ("bpf: Add bpf_copy_from_user_str kfunc")
-Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
+Compared to the base of this series, with defconfig + KVM:
+
+                     inline WARN_ON_ONCE()    out-of-line warning
+  x86_64 total       +5,884 B (+0.014%)       +9,714 B (+0.023%)
+  arm64  total      +40,948 B (+0.10%)       +24,609 B (+0.06%)
+
+On arm64, this removes the ~16 KB of __bug_table growth, while text
+size is unchanged, as a call is the same size as the inline brk. On
+x86_64, the call is larger than the inline ud2 and causes more .cold
+splitting, so this is a slight regression.
+
 Signed-off-by: James Houghton <jthoughton@google.com>
 ---
-Tested with a small bpf_wq reproducer: a SEC("syscall") program arms a
-bpf_wq whose callback (which runs in a kworker) calls
-bpf_copy_from_user() on an address in the loader. With the uaccess check
-from later in this series but without this patch, that triggers the new
-WARN from bpf_copy_from_user(); with this patch, the helper returns
--EFAULT without warning. I can turn this into a selftest under
-tools/testing/selftests/bpf if that's useful.
+NOTE: This patch is included for reference only, to show the cost of the
+      inline warning.
 ---
- kernel/bpf/helpers.c     | 11 +++++++++--
- kernel/trace/bpf_trace.c |  4 ++++
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ include/linux/uaccess.h | 8 +++++++-
+ lib/usercopy.c          | 6 ++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 712dca5a2c5b..c4aa8bcaf2bd 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -659,7 +659,11 @@ const struct bpf_func_proto bpf_event_output_data_proto =  {
- BPF_CALL_3(bpf_copy_from_user, void *, dst, u32, size,
- 	   const void __user *, user_ptr)
- {
--	int ret = copy_from_user(dst, user_ptr, size);
-+	int ret = -EFAULT;
+diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
+index 7d26d2de9599..6a5b6c2b3388 100644
+--- a/include/linux/uaccess.h
++++ b/include/linux/uaccess.h
+@@ -66,9 +66,15 @@
+  * that keeps user addresses belonging to a specific mm must check
+  * current->mm against that mm itself (see e.g. KVM's kvm->mm checks).
+  */
++void __cold uaccess_warn_without_mm(void);
 +
-+	/* Sleepable programs may run without an mm, e.g. on kernel threads. */
+ static __always_inline bool uaccess_without_mm(void)
+ {
+-	return WARN_ON_ONCE(!current->mm);
 +	if (likely(current->mm))
-+		ret = copy_from_user(dst, user_ptr, size);
++		return false;
++	/* Warn out of line to keep inlined user copies small. */
++	uaccess_warn_without_mm();
++	return true;
+ }
  
- 	if (unlikely(ret)) {
- 		memset(dst, 0, size);
-@@ -3642,7 +3646,10 @@ __bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void __user
- 	if (unlikely(!dst__sz))
- 		return 0;
+ /*
+diff --git a/lib/usercopy.c b/lib/usercopy.c
+index 9146c729c47a..3d547ecb74df 100644
+--- a/lib/usercopy.c
++++ b/lib/usercopy.c
+@@ -26,6 +26,12 @@ unsigned long _copy_to_user(void __user *to, const void *from, unsigned long n)
+ EXPORT_SYMBOL(_copy_to_user);
+ #endif
  
--	ret = strncpy_from_user(dst, unsafe_ptr__ign, dst__sz - 1);
-+	if (unlikely(!current->mm))
-+		ret = -EFAULT;
-+	else
-+		ret = strncpy_from_user(dst, unsafe_ptr__ign, dst__sz - 1);
- 	if (ret < 0) {
- 		if (flags & BPF_F_PAD_ZEROS)
- 			memset((char *)dst, 0, dst__sz);
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 88c3b5b513ab..793fb3dce5f1 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -3556,6 +3556,8 @@ static __always_inline int copy_user_data_sleepable(void *dst, const void *unsaf
- 	int ret;
- 
- 	if (!tsk) { /* Read from the current task */
-+		if (unlikely(!current->mm))
-+			return -EFAULT;
- 		ret = copy_from_user(dst, (const void __user *)unsafe_src, size);
- 		if (ret)
- 			return -EFAULT;
-@@ -3590,6 +3592,8 @@ static __always_inline int copy_user_str_sleepable(void *dst, const void *unsafe
- 
- 	if (tsk) {
- 		ret = copy_remote_vm_str(tsk, (unsigned long)unsafe_src, dst, size, 0);
-+	} else if (unlikely(!current->mm)) {
-+		ret = -EFAULT;
- 	} else {
- 		ret = strncpy_from_user(dst, (const void __user *)unsafe_src, size - 1);
- 		/* strncpy_from_user does not guarantee NUL termination */
++void __cold uaccess_warn_without_mm(void)
++{
++	WARN_ON_ONCE(1);
++}
++EXPORT_SYMBOL(uaccess_warn_without_mm);
++
+ /**
+  * check_zeroed_user: check if a userspace buffer only contains zero bytes
+  * @from: Source address, in userspace.
 -- 
 2.56.0.307.g5fe7bd680c-goog
 
