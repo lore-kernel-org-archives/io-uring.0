@@ -1,63 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=220.197.31.3
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.141
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793093759;
-	b=CJnNugBcK9gukNeeU7v80Ryq4ucpPEssSseLWyrGYQLD/CysKx/Ienic4zNbkbNQGO8E
-	 5FnQ38ZIEWv2Zs8JN80gANHIdvKP335MDgYKw3t0sir8MmzcDN9eQHhrSHHbnRypsjCnp
-	 3w8ZvVl3uKU2CYqnCuwfRFh2Lraa6oZqgsJ+8zTZ1HJkWHq2HdCIR8wwwQAgaoxY5ky8+
-	 YbKuI3bDkLXmc28MStfZ0wfHSHcOhgKJNXQE8wNiAzY3YP84Oz2tAxjrcYS+2c2QfRn5p
-	 4RxUy22Q5GH2yC/FBqUzdLsO5HGla2VK0sVpyxnYjK9kfcpgl93SNUbFlU8txZ2A3kA==
+	t=1793097347;
+	b=F1C5URmshB617vgVc9KvSgGqCnIbMZXBWtjR20whQJDIfADkRuvdeLhs7l3J1vfPB4S0
+	 hEaKFWuUQvyJgEsjFf7vyQ/p0j07VxZ6ZK7pGJoPhWBukb8ZdrM7ALna5LKAN+MUsrAsW
+	 9wRbGLPXoRuvZyzIZgoU/Bufn2b6CZP6LQdnnN54RakfMuUi9R1xMvE38T4iUkscM5+c0
+	 TcCD429TEDEJ7R0kunMNyd4ALIA64tMVEY777GQC2bn1Pa97EFcrvxay8KJYUw+USfKze
+	 00Y1xnwfOVAe7XPbajVJ3zSur0mMqfC9qtcQ9lQVaj+HxQ0dQEYz0uy7IRsH7Ll27Vg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793093759;
-	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
-	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
-	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:Sender:
-	 X-CM-SenderInfo;
-	bh=7pfwiZQ1QMUC3lRm80MKhMN/yJv3QIp3Bl6CJz+OVbQ=;
-	b=XWu3e8XlqvUryJLCYuX85Kf8znrJ1i+5lZvE6IGbE/cLGBc44eqV5T5eRhbQKPipYxjl
-	 /3XxWeeTv9qNx4+15Eb3JCMDwbsGJwR7b12KuvR42tYJuxFu14ehED3ZxFnqck4r/9Em3
-	 N5Q4zODlynYthXezro1pFADAvRCbyDIv64INk5KZPV4j/IEYfk3UWyQaycUSBuzJKaIg9
-	 me0iUrtUI+kdCjXwZgYj08lC3ZuweepCd39nDsYxBuofLkRUrssuqYqlQX3NWHIuwlD/3
-	 jMiJWKz7m6gfDONOqipkVJr8NcA/v/7j9Pp1wUrwE5ooB2wBjypbD1CE23EmSHHbUAA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793097347;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=cD96WCdctpe4xqBu48fVzWQv2mdj+Q39Vw8+UuE9NOY=;
+	b=Uz1ebRhus0aOgbOb4SUmbgLXr22EWNa1/8nW8zyLBKVxXX3XGnA8ytA0ah85rz7IGjyM
+	 HtG5tnu334zhMyg0XHLKHiBH7+hhjw/ZNwtNOTIDlWnVydAXMyK0f94Ax2eFBeHyllu8f
+	 5zBU7SLnVHlktFrDVFmxddi9PokgeJfFUVlGNaEyQ/uoRI/zxTnJIt4FFsJ5OhR+OrCY1
+	 QRt5Y7hU7KfVlean5q/zQcmtT2Cv1R8YmaMDpZwELJQ0HIPxFk7EC4yRgEML3dux3vNj3
+	 dHAfWqINYoGYgKoKpowyxELQfloDTkI1Dd9HTTCNDjjIh3EwWNxnSlmW5+QlryIVPYg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=163.com;
-	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=dtW0xXrW;
-	arc=none smtp.remote-ip=220.197.31.3
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=g0poesKL;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=wMaGvRgN;
+	arc=none smtp.remote-ip=202.12.124.141
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E90606A31A;
-	Tue, 27 Oct 2026 09:35:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 68E90606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4AB1606A31D
+	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 10:35:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org D4AB1606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=dtW0xXrW
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=7p
-	fwiZQ1QMUC3lRm80MKhMN/yJv3QIp3Bl6CJz+OVbQ=; b=dtW0xXrWYN3Yw8gcEw
-	2932+o0gvyWdZNQKkjT3Err0PtvWoBi8uV29130TVlg1/NEEwLEfM8yf+a5UsZDA
-	A2mWLMDEwdJWtB6v5CG/Gcw2tQtvtUHv/OL3t1CY3tJLQKenUqtMwJ1o9Eexg/Xt
-	nbobo0iuQ6UYvi+GGukMEVBVM=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp1 (Coremail) with SMTP id PCgvCgD3n4FgcOBqzyd0CA--.7090S2;
-	Tue, 27 Oct 2026 17:35:30 +0800 (CST)
-From: Yang Xiuwei <yangxiuwei@kylinos.cn>
-To: x-professor@outlook.com
-Cc: mkp@kernel.org,
-	James.Bottomley@HansenPartnership.com,
-	linux-scsi@vger.kernel.org,
-	bvanassche@acm.org,
-	axboe@kernel.dk,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] scsi: bsg: release io_uring requests in end-I/O
-Date: Tue, 27 Oct 2026 17:35:28 +0800
-Message-Id: <20261027093528.477408-1-yangxiuwei@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20261026094010.1324076-1-yangxiuwei@kylinos.cn>
-References: <cover.1793003363.git.x-professor@outlook.com> <8f30e238d2b169702308303687e9504c7513ecc8.1793003363.git.x-professor@outlook.com> <20261026094010.1324076-1-yangxiuwei@kylinos.cn>
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=g0poesKL;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=wMaGvRgN
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.stl.internal (Postfix) with ESMTP id 214521302966
+	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 06:35:46 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 27 Oct 2026 06:35:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793097324;
+	 x=1793104524; bh=cD96WCdctpe4xqBu48fVzWQv2mdj+Q39Vw8+UuE9NOY=; b=
+	g0poesKLuQGMaU7v25wYb164Iof879cLQ+jrS7Vw6CuhEsyJqwn7PFMO9TEgL555
+	salmD3V/ClUhsKzYPi0e1twlBEQsUQgTWR1AZ4ucxcvSWh0tFF+QsAmR7kyrExiD
+	rs8QFLT2d4K3gWpb7cbvYPqhV9WNtc7sDvVFrq/AeZGLbrsDceBV0QVq1catnKNP
+	0vZraw8GdX+eRczyZn9JW2/ZNbjBM4QFUKd6YGV2yTzJi2ns5fiipJSmFKiJF3sN
+	GoBWeR4K6FMeN3rQg7Q7I4UT9hD0E+qvVgrEVdMfqW0b8abtf0o6SMw5UbAH+FLg
+	hVWbTZEFzS2/5wF4AlN9FA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793097324; x=
+	1793104524; bh=cD96WCdctpe4xqBu48fVzWQv2mdj+Q39Vw8+UuE9NOY=; b=w
+	MaGvRgN74SqlQokg0yGoa0qHrxHvnpo1EgRYl+NAZ2HGjyf2DoHqc5uAKC9rWw6/
+	vV5njRj3VAjVsozr2QciajWKilgp9EVdkzTxKpA/MsGbxExu52PceTGPRcPZsISB
+	KpYKodw2SCDSr9uGfucfgcGE2SA0UG7iid20bXHmKysdvynyqnnRbJjpSNwQ33N1
+	0pa9wUuAxjPIT/YsNOqCEmHDj7Qibp8Oyln4Wr2lT6g2YFOhW7GTB1NdlTnD6Y/N
+	mqImDReIq39YA7WkoOuwESu2xsiCrgirovD+YpK1k72+skpa4xR6mPYjJvlLn92L
+	+KFpP5vjxlM5S0xUcBdYw==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793097324; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+;
+	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
+	s=fm2:rsa-sha256:Oyj0bvaUtc3Dp5xSO5pJjDOunmMVmi0fwBnAnGIJ1Rqk3t6
+	WHts982NMnifurbbd/y0sL+1xFRqNkqAddLmK8yzlXywh3/EHslX0PxH1/PKGQfv
+	S1q14Em4gY7rBIb0CFZ1B4n8GpL5If3JvhrYGgYyi0GolJ5lAwJFGA4L3JBOv+Cc
+	OkyY77Wa+ayxgvP8VIC9E6Ays99NUbiQWqIbWk1XcgP2b99TNOZT3jqvLJPj8RPR
+	7ZNfaOJbV3Vt0CCGAfkFA8N9WHGmcBd0b/wJcv/S8hsRrFOdexyOBdPGsp4dnm8m
+	2B+1jnz6HrVYyFsjzyV/uRK2aONK8jRZ3fIjuQA==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:cKjetnoeFjJorNH+mroEPI71xZFnj0iEAx7opE2N30E=:+7cbM9Ly9xGwj1eAsvoI2B7rTf1bDojBouGfp8ZZDqA=;
+X-ME-Sender: <xms:Yn7gauJPeu1PinbCI2gYx0_jlj2PnQL9uVqEmxziDToBSgj9D_xRbA>
+    <xme:Yn7gag_jv3yDvc0KG6xNU0a3i3tsXlBRwgQXJ5nMfcMcUHLemzagppJ4LiVff77wd
+    kWfJ0mG4Cc1YdeleyjjRgNmR8bhi_EzFH5DKuKtc6zsMLGUhHUiVHY>
+X-ME-Proxy-Cause: dmFkZTFn5p5gNfTa2ln7Ur1M8HLGH3FByI3bMffV+IVuNBxFNqZT4qibdV0911N+HRUSXj
+    K07q1nctC5A6CcFfeLY7jBaLOsZKNIqYeTCeDTItiSfcD8KPMq3RagWnzHGWxZYBxWAiCm
+    A3VT2o0IozuPu/s7pvPmuxDhNCPVlHQtdJeKAQbZtM/B41WPfEm0WHEt7Z4VBmU7Awz3r2
+    CW1Ic84f68hqkyPgXyGKcQw2wWDeenYkz/P7wEtiFmdUVM0amFmkVyW6og0RqG5tm89hZw
+    aKjqOAwHgBmvujhKmrOmxUKnEU58c+GvStpS1gjFmbH3Cw9L2zocbcI2nShgNxT4DZbAQR
+    wgaSkDdcdMc/d9G+mxaz1POpKC9kteRE12RXj5cBt5pww+0ny7yXHoqz13E7ttwMLwV2Zx
+    irGvBcy8nzFHGZLzVSm2bc8v02AbCF8YXzUkvfzziFLvAHlSLPGQdoNZ9j8Z+n4FuXVzNX
+    YX6+5h5244zwOTl9aQiqLa2ox4HvDWrM9qIOP1ddj/Qc6TrOohBTM5knyFzE2y92EKQkba
+    jTOi3P5IOCM4Xz9GLVwUPx/34MQnZ46TWseR6J3W3XI63DkzQUPhI7lmU3qjmL7/C1LwgY
+    Sem/AhqkedQIukr61kUqtibtpdY8TqVUBtJQynB3XFjVXPk3rqiMNJFlIJrQ
+X-ME-Proxy: <xmx:Z37gapHvcVHvMaM3ipgnYUZzm2Ryqqq0XCp7NdxFgDjKT2zqjSy1vg>
+    <xmx:Z37gapt5WD8JfcDqZC3gZOEaTUAl0efsI8damzFuxdzMc9AsHa6DBA>
+    <xmx:Z37gao4LOQoh_k9Rjo00qqoo4baOxCcq29WjL83ZgQ6XABea2d3MPA>
+    <xmx:Z37galm2wjPgXkNjyPJ3HOpQNs8U8c25nqH_wkaWl6-1QurrUIflow>
+    <xmx:bH7gapzWCUwwKYEsxCX9776XutFUkBaJpOGzr7ZN12X60l-MCDK0DRme>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id A3C9932A0093; Tue, 27 Oct 2026 06:35:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -67,23 +115,55 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PCgvCgD3n4FgcOBqzyd0CA--.7090S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUY5r4UUUUU
-Sender: yangxiuwei2025@163.com
-X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6gIHl2rgcGLCDwAA3t
+X-ThreadId: AUJ1OXWu3nCJ
+Date: Tue, 27 Oct 2026 11:33:08 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Houghton" <jthoughton@google.com>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>
+Cc: "Thomas Gleixner" <tglx@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>, "Kees Cook" <kees@kernel.org>,
+ "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
+ "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
+ "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
+ "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <3c125ff6-5426-4f19-8e34-fb564d4b6387@app.fastmail.com>
+In-Reply-To: <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com>
+References: <20261026215226.3713941-1-jthoughton@google.com>
+ <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com>
+Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Yingjie,
+On Tue, Oct 27, 2026, at 01:12, Arnd Bergmann wrote:
+>
+> E.g. on arm64 with CONFIG_ARM64_SW_TTBR0_PAN, the page table base for
+> the current process is only set in user_access_begin() and would
+> not point to any task here. Without ttbr0_pan, it should be
+> covered by cpu_set_reserved_ttbr0() turning off all user space access
+> for kernel threads.
 
-On Mon, 26 Oct 2026, Yang Xiuwei wrote:
-> Tested in a VM: INQUIRY batch latency went from 30us to 42us with this
-> allocation.
+correction: for non-sw_ttbr0_pan, enter_lazy_tlb() does nothing
+on arm64, so it is the same as x86 and the others.
 
-For reference: scsi_mq_init_request() already allocates sense_buffer
-from scsi_sense_cache. A second buffer from that cache, bsg_sense, can
-hold the copy.
-
-Thanks,
-Yang Xiuwei
-
+     Arnd
