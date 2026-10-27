@@ -1,64 +1,111 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.142
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793124677;
-	b=FL6T3TDflLOuZCzK7rbGIxIuY/eX3ycjW5s3Vd0zu3cr01+kivpyR62oYXKW/CKyyRbp
-	 fADnJMgW0QCyuXHKzwnAM8VLBLIGIZ//W2sHjPWTrmNb0WCqavNJZpC0BA+KJHFx3DL4J
-	 uD/zHV9CPG2MaSitFLZwDm8HU5hJV6gsLDHuRfR4ald3XX0YL9ihybLPXzsVbzj7um6m0
-	 3LCjv/HCP2IVSpCN7hhyWwvHfVBWMKhNY+/rL6xQzSX8oqBPl1uRfn/eiR4YSOIisO50U
-	 XJ5JV4B1VHniZo7d+Y1zL4A+bNnhJwVKB7tipUoCDW7mIsjpMjB5Qz912nzYVhSEzQg==
+	t=1793125976;
+	b=rGuomPco9Ey1bYWkcZdt4TLHtylpO0oKKX8l1A2xyOV0SLuzj0mdp4RQ6ohYg4vPEzi4
+	 0OIdfIdt/2VOrnKKVd/sE1PXAl73oaQUn/lNUW/r1QVWz6Z7KRdnjxZf90fiYo2xapwAq
+	 FNIFUUGXzezenaZuSGrbdrlQW6iB0yZwZejN1UwbqBMgPcGTf0qHyjJQBT9FqcRE4ZrD1
+	 FRKw2x61z5mPeXXl2/O/d/llt+Cu0+QbUjqwT3ujJUBme94LSokl/snx5RkmIrUx4UlGM
+	 1zW2unmQ+A7Kv6JCqAKaLHWIhIF/A9agdFOWWVZvMUKQ65eB4lBibgKARca2SDs+zQA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793124677;
-	h=Received:DKIM-Signature:Received:Subject:From:In-Reply-To:References:
-	 X-PR-Tracked-List-Id:X-PR-Tracked-Message-Id:X-PR-Tracked-Remote:
-	 X-PR-Tracked-Commit-Id:X-PR-Merge-Tree:X-PR-Merge-Refname:
-	 X-PR-Merge-Commit-Id:Message-Id:Date:To:Cc;
-	bh=qpD3mjT41t9GE44t0T5p/kvuiG8IUHEz8mrIA+Dwlnc=;
-	b=i9aGLlHJb+dOvGMmyhWnkbJ6AiQDvHxLMtDGObW85T3zSJ5fupgIhygqv5h3IetMdvsK
-	 ZmfZ9upP/WDt0YV1Zv8d1/7X/g7vq3h3lAWVmZS+U3MRzZGO9A2ddZxsq8Sba+8nXx3sk
-	 dD9+x59WytOndYXIEetDV+fW1bVh3CS/8bldOqQnTbyNxqWF+WCHjFu424BMxb+AKnGQW
-	 OOmkM3WdpCXGWP07aolM2+MsMxwNM7wSDsYTXbvqquyiGvqI97NxnGs4ORZCco/DetXO3
-	 JqrXjaM2qW+poy+sKHmyovpC/1XPd9hFSKCru6IXLER6auTtWY+fGizs/4Kmq0Jr+mA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793125976;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
+	 References:Subject:Content-Type:Content-Transfer-Encoding;
+	bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=;
+	b=kxV360ZlFxrQEHrk/e0OJSPsHjX3D7EMk/xUrZVfWZhUtYdGdfvgD9+T1y4R9tiJIwpY
+	 pY50qRvJDMsEUOf+NiCWqW9CHlcFCk6G4N4s1HQvsu5WbykhtorTjwnWr6ST0FKDK0MaC
+	 zqYBDjQg4nM1iX0J9jtyIjihmyhjz4acwvo7Bs8/I/Du/2Euu8/dDnUG4liz3Bs+52Wrb
+	 uwC8S5lYqNI3LgRciqqNK/RiMRyMQv6rg6Ubv0eSruD8aKDquyl3UpHr3hEjjfmNEE+gz
+	 UxzfBAldD0Yhu3PcIq6fpeqWnZncjb+40tx83xY1pJ6oFsDlqq2SN+90o5tviSj8oyQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T8BhAG68;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
+	dmarc=pass header.from=arndb.de;
+	spf=pass smtp.mailfrom=arndb.de;
+	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=nhRbbv7L;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=dqBTENOQ;
+	arc=none smtp.remote-ip=103.168.172.142
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D174606A31D;
-	Tue, 27 Oct 2026 18:11:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E907606A31D
+	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 18:32:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7E907606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=T8BhAG68
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCD11F01825;
-	Tue, 27 Oct 2026 18:11:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793124677;
-	bh=qpD3mjT41t9GE44t0T5p/kvuiG8IUHEz8mrIA+Dwlnc=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc;
-	b=T8BhAG68aWrEhAKg6nsMOO1rCeqY6w3mfXUBKbBiLnm55suNyaytEfn1uke0bg2XV
-	 vfhfXFILJwXpOexIpyXhq7dtcqYzDitNLSsyo0Xf6fPgTBZC2g3tRVPxVNZHIVFI/S
-	 c04Go9fHaZlNeMpGYLOZtJcznaDpmgv9tRzofu+n1EGEVJ/bXS7LzBxGN5lhx9V3rc
-	 Azi2Xh69ZFiNWnLzqVKGb2Q9Kg8TCAFU0FW3Xepinxx6z80lUo+0OyA9XiwgHTtecU
-	 UwCu8RBIJqNDSUJKSWVEk2f0pv15A4QLXuBIXDJi/dMrBkHetOOXx9PyFLVybXo+go
-	 FAHe4RZYYN1hQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 077183AA9AA0;
-	Tue, 27 Oct 2026 18:11:17 +0000 (UTC)
-Subject: Re: [GIT PULL] io_uring dma-buf support for 7.4
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <d38042c3-75f6-41fd-8998-da38f9420354@kernel.dk>
-References: <d38042c3-75f6-41fd-8998-da38f9420354@kernel.dk>
-X-PR-Tracked-List-Id: <linux-block.vger.kernel.org>
-X-PR-Tracked-Message-Id: <d38042c3-75f6-41fd-8998-da38f9420354@kernel.dk>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/for-7.4/io_uring-dmabuf-20261023
-X-PR-Tracked-Commit-Id: 45b716456dd99488a0cef58482120dc0474aa696
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ed02f4f7ad9b5dabae2118e642cbbafe7dc9bb62
-Message-Id: <179312467571.245349.11132213751620462463.pr-tracker-bot@kernel.org>
-Date: Tue, 27 Oct 2026 18:11:15 +0000
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, io-uring <io-uring@vger.kernel.org>, "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
+	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=nhRbbv7L;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=dqBTENOQ
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.phl.internal (Postfix) with ESMTP id A717913801D1
+	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 14:32:54 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 27 Oct 2026 14:32:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1793125958;
+	 x=1793133158; bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=; b=
+	nhRbbv7LCz1ZQpaeWyensFpQo4X/3syWjrNRhf0TPa3WpxX/X2VdpFqv537v9O9I
+	PGhjORRx1kESGQSaPHfa+QRKJpjpqdcACu5FAN3p52dFUSynF/VeBDjNcw+LEo95
+	UNVVfCF+1iy7jr1xBQICX7G6IzE+zAW2IpvIGzT+P30DaFT615CXM7aNuU+rahRd
+	1GUKsYa+gXVhGk/EI4Ywqj2q+VbAxE5UYf7OFubEdoAAzfhu0f2ST004eaCG4GLQ
+	F1D1Q2WkugYqzgcxYwKxVL7pm03H7LMx0dT/XGKTKPQS0mI+iEZcMTRkca0vag3/
+	RDWKomvJBzIYN06yZe7uWA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793125958; x=
+	1793133158; bh=pW0YX5uTyvs0iTQboMCcpjVYnLuET6JVZiidtK9lRiU=; b=d
+	qBTENOQ45NO1fMBSlIFoaed4KzgJDaJVEDwxaWy0AU1ee6zNudEy0DlCDndCnLS6
+	2Mky/tZzM0tAjCf7N4u7bi/4+2ykMhG2ESY1Sf7giCpL6gbAEOpbD5EIxKBbICPt
+	usmzcw6mAAaTgxfbDhYZYxO2tvSv+8uUtfRzlCLEIP3lG32cfLfeY50SbL6O6Io4
+	SgQw2YBRCXwq56w+6p7UjBanfKMGDYqL3wt7dbLsVl8wtknfLVIzXXPvDsCBbGKW
+	AtxiHzQeIKi/D6MVVDwZTvVos2hYu3DWzHZsBX4JLmmgFKlBmi78/sjOEDPTgAML
+	sjhtTrMnUgKadM/vzmJrA==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793125958; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+;
+	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
+	s=fm2:rsa-sha256:Vu0w3AjkaSASnGFBXpGlilZNeHwilORDtkj6aMplJ9FKW4l
+	AwFcRbVXYOkFSIIcmNkJu/qXyB9Hah0CF7aBr0rx0boIVAWBQz8jhh517uZ+cNuJ
+	pIdIdxIL6RW6/I55U4PfooJErwqFidaRtjFJnj61cc9CKPZguIFqPnQof8vhchvI
+	E3BSb+71zLxw5RMUenfSL2G03m1iE5132uWLEbRPOSTab4R8nYbn1YYFwWBt3ggZ
+	As2dV0BvQnX2TyFtfS3X0r4mkQLNp2MWsazt7v2hTRskU0zl+GkJDwALUUUsgJJL
+	qT2sp3ahmbf7pYDRNkJy/kuYNicf2oZO5Gh+5nw==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
+	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:C7HxDmq442sA516hPg1WVqijzSVzVZyCGy6pQZqDYDY=:4/DSvQfZqcYprX4ziRRYVwk6oH+PWA9EoraJfbgloO0=;
+X-ME-Sender: <xms:PO7garY621kKyqojOqTb7yy-_Jxdn-Kzm4gl1mIkpb01V8TjHgldxg>
+    <xme:PO7galNXbgg3oxvhvN_4CaBu9hMm0jyCxqhA6a-T7eDOTCaJJJZAFol5ERGDjsLqK
+    2259_D1ZXy5t5UtRcS7lekN3e5e2Iz3wvWTc8ZMKjdCe5rWsux30H3E>
+X-ME-Proxy-Cause: dmFkZTFBrGBMzD/7DKUk8DMjlpJSCDxpPKrzK68BEfeXOQ/MXmVsz3qalb7yQm7DbWy68D
+    mdR7SERoL7p1SipE/Hgrz7O8Jk/YUwS5P3bCp2T9rw+yUUT025kCXndTxgJzUfF2A/LmwU
+    OoshLwBoL+gLtWMZ1eOjSZC00MjyyUjQsfwaX27BJBN1pGwR2iGIXqOSxLJd8LAZ7Ies03
+    pHbxu2/tinn1z/on12HNzhMOuElx6kqVt1d934g47Fvev3+j+hQdPBK+wKrHQuA/MqaMQm
+    +YwFlvGVG7S2iiDu84WQfMEEhxn2uOBT5zg/mL0ozhSd1uzGOGScjRvF7ClHEfMSlJfxcq
+    YnPF1zz+aUEeQFHBKYIkKYLrgp1kUHAokLo109tnO0NExqhQz8UwJIbWoTRGGabU2W726Z
+    Dhb2CJzkcYCahSEgI2QZnhI9rp+Sax2lb2xVGCjVpBRvKLDXz5qYKxyqd2QqtR2ElCh9YH
+    sk3iHLFKWwH3F6St/x0/gv09bz+pznkee8K/sd27QfN9Gwd3fo2BUAJ25G4dopbDOQnb4A
+    P/8JBDeUxH7I8cBQFkugJH97mQ3vUVptVMshXk/wrMwfeGdw1Y1ScOXkp/5PrPH7+diEiQ
+    JTFMCYOkqnX2m+s2VfejdOjHHP+4aWKR319KAAcE5zQTI+rTtC/ZyD4VTbUg
+X-ME-Proxy: <xmx:Qe7gaoJUmon3FH4sGaBdEIKD5fHQ0oH3bMQFHqz81k9r0kK1FDN-iw>
+    <xmx:Qe7gahWdNxTBRCJjJwTwB9P5rA_fL9OS-9G-iMSBpvVqcHmxmO9j9w>
+    <xmx:Qe7gas_yFzXCxWyV59ZvbLz29NvVSPTASADzMdDMlPDM-V9XYgRHIA>
+    <xmx:Qe7garJelIc0ZjXXdljbcuMtjXIos4JgOEY9ZOwRs4BJzuv-Dex5fA>
+    <xmx:Ru7gaoAQZNTTFpuQBw_xTScK29TJcstSl3feioQOcb1p07_GUyAqFEK0>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 94CBA32A0097; Tue, 27 Oct 2026 14:32:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -67,16 +114,143 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
+MIME-Version: 1.0
+X-ThreadId: AUJ1OXWu3nCJ
+Date: Tue, 27 Oct 2026 19:32:08 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "James Houghton" <jthoughton@google.com>
+Cc: "Andrew Morton" <akpm@linux-foundation.org>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
+ "Kees Cook" <kees@kernel.org>,
+ "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
+ "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
+ "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
+ "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
+ "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
+ "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Ingo Molnar" <mingo@redhat.com>,
+ "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+ "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
+ linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
+In-Reply-To: 
+ <CADrL8HXQdzcroeGN-ACjyy-jSAdBNHiT1_BCVVe0P+Y8ZueiyA@mail.gmail.com>
+References: <20261026215226.3713941-1-jthoughton@google.com>
+ <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com>
+ <CADrL8HXQdzcroeGN-ACjyy-jSAdBNHiT1_BCVVe0P+Y8ZueiyA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The pull request you sent on Sun, 25 Oct 2026 07:29:55 -0600:
+On Tue, Oct 27, 2026, at 18:29, James Houghton wrote:
+> On Mon, Oct 26, 2026 at 5:13=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> =
+wrote:
+>>
+>> E.g. on arm64 with CONFIG_ARM64_SW_TTBR0_PAN, the page table base for
+>> the current process is only set in user_access_begin() and would
+>> not point to any task here. Without ttbr0_pan, it should be
+>> covered by cpu_set_reserved_ttbr0() turning off all user space access
+>> for kernel threads.
+>>
+>> Should this perhaps be addressed in architecture specific code
+>> instead of in a common place?
+>
+> You're right that whether corruption can actually occur depends on the
+> architecture and config. I'll write a note about this in the v2 cover
+> letter.
+>
+> That being said, I still think the right thing to do is to have the
+> new check(s) in common code. Instances of improper uaccesses are still
+> bugs, even if no corruption occurs.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git tags/for-7.4/io_uring-dmabuf-20261023
+I agree we have to do something to prevent the problem for most
+configurations and find any newly introduced bugs.  The questions
+that need to be properly decided are
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ed02f4f7ad9b5dabae2118e642cbbafe7dc9bb62
+ - does there need to be any compile-time configuration to skip
+   the extra checks and/or the warnings?
 
-Thank you!
+ - are there any cheaper ways to make it safe than to add a
+   condition on each user access?
+   E.g. the original lazy mm switch was intended to avoid
+   expensive TLB flushes when switching to a kernel thread and
+   back to the original task on 32-bit x86. On modern CPUs,
+   the MMU can deal with multiple ASIDs cheaply, so turning
+   off user access in a kernel thread may be cheaper than
+   adding code to uaccess depending on the architecture.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>> I would think that user_access_begin() is a more natural place
+>> for the added checks, as this should be called exactly once for
+>> any function that accesses user space and also stays out of the
+>> way of the copy_from_kernel_nofault() etc.
+>
+> user_access_begin() isn't used in a lot of places that I want to
+> catch, including the KVM case. Roughly:
+>
+>   kvm_write_guest_cached() --> __copy_to_user() --> raw_copy_to_user()
+>
+> There's no user_access_begin() in there. :/
+
+Good point, yes. After the changes described in
+https://lwn.net/Articles/1102061/, I had assumed that all
+__copy_{from,to}_user() are going from common code, but it looks
+like the series so far only touches __{get,put}_user().
+
+There are of course few enough of these left that I think
+we can consider doing the same thing here and turn them all
+into the checking version:
+
+$ git grep -wl __copy_'\(from\|to\)'_user  drivers mm virt
+drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+drivers/gpu/drm/i915/i915_gem.c
+drivers/gpu/drm/i915/i915_query.c
+drivers/usb/gadget/udc/atmel_usba_udc.c
+drivers/vhost/scsi.c
+drivers/vhost/vhost.c
+mm/kasan/kasan_test_c.c
+virt/kvm/kvm_main.c
+
+> I do think user_access_begin() should have the new check though, so
+> I've added it in the v2.
+
+I had the details confused here. Seing that user_access_begin()
+and the other accessors always call access_ok() at some
+point, maybe that would be enough?:
+
+--- a/include/asm-generic/access_ok.h
++++ b/include/asm-generic/access_ok.h
+@@ -33,6 +33,9 @@ static inline int __access_ok(const void __user *ptr, =
+unsigned long size)
+        unsigned long limit =3D TASK_SIZE_MAX;
+        unsigned long addr =3D (unsigned long)ptr;
+=20
++       if (WARN_ONCE(!current->mm))
++               return false;
++
+        if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
+            !IS_ENABLED(CONFIG_MMU))
+                return true;
+
+(plus the few extra copies of access_ok()/__access_ok())
+
+As a quick fix I would probably start with just the 'if (!mm) return fal=
+se'
+bit here to get something merged while we still discuss the other
+details.
+
+      Arnd
