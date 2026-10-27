@@ -1,111 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793060029;
-	b=V7lQD07zPcgbb9wiXYS2bSm3E/DsOMogghP2LEp4y2pwreHxJ1HXOa5gaJsLXE9/hw+j
-	 k59kG32pe8hVLfVsUXahy6pTaVp+8AiSInqFXt8TdJbX/Jg1rM8XWuIxtWUCrTWJMUyaf
-	 fz/adcclGuVsBT9kv9jRBtT3gdlt9753ue0G8jwMuC6kryxH+D/w27zGVRFBWaP9MfAE0
-	 mrlzJK6xbSfzS0ZV2oj+Lz+O8yRq7SBeS4D+0DMocf/RbTGKEm5Hzvc7Yqk9JWz2ERMxy
-	 3SZBIvPWzOHLqdYw6/z1n93/jnsFUFXN2ufrMjzYX9IkUJUxLhlVA4nPfza0LIPinSw==
+	t=1793068378;
+	b=E/+wqqdqgudK+Xj1CIkiwANCVJj/WcneAHvBTMUNgvNV1NzJE7WDASiSMx+T0myxqyJb
+	 biNlBvbRk+/4u5p8vSnQwsQii4Q6h4PrHNmW5k/9MVX8Ny6vDLPUpWywvvFvLZ6nTL49v
+	 hpq+Q3AhhqvQOOxgVn4rsUnYFlSrzMgffo9/2tqZuoGiQCk6HocXaGyc0J8lQNFHmZlcA
+	 wIO1L8FxofdPAiHhSVSrdpjxAPSp9XnFjGvTiWrkKEcdM0w7yyPJmTy/caYbhc1PmrL7x
+	 IauGKi8M26F+zoFfaMvz8EFyt4/skBRh+GF1ji8ZpwpRy8EmcPFntc5OW7rSCRu7gFw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793060029;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=si+Qhande5UvxFya2tFMhl+nVzGoE+GcsU0vRngX6G8=;
-	b=CogIJhlir/M1vHeXez5x5CwWFHSvvPwwqC6Rj6GJ70lQ34+M4MciGhQEg0MgVsiF7DsH
-	 Jt1xYlInrk4hombefSrlflP5Edj5ZLDJxxCUpAPmfiyaGKAF8JSgbW/UYNbg5lZkXl9bC
-	 tANapixDRPADTqgAgPrqhaotU1DbZfTZ1C2VDcxBkWqC+Ormvf8gBaeVJQ9GAY+ykUs9D
-	 UzbgO/bCLQTXM1IEIX1aC6Njk1T/HJ3WuPHCXXDEOLmd2z6KJ9RiQbmJz5V87A0+m1NZa
-	 AiMcCf4P/hpixicrt93soHFctZgLfCzuyv9RCSBI4EgQ/X0a5tSwBN517GmkdxjAaWw==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793068378;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=WlmAS3/2b/zwkyDjZK6fZ0f5Hqn5BoF9hu81Kcora6I=;
+	b=Xp2BHgfePcnLr39DytJCgXH1QDF/92Aerd8bStZmbXWyTZ6do3wOPTMcIc8cBldJEUEs
+	 NQagKTWPpFKdHYV8CPLJvHDrMFAgx7js10sILRp0Ee1gM0UUjTfW+vc4ng36h6BkfQU+v
+	 hGROGrJdX6nSNBjDE1/ZU8DtfggnRG2zoXEo+lv2nYjD4SokLzDCZl4Zrg5lxJ/626B+Q
+	 WWou7vvXQNmXgTulxGk9WK0odpul7eYb1em95JPCl6Lqa/pTLVfMr4TCwZY1HN/vJZ1ym
+	 R51lSRf7GBzRUdHuhDo5LKYiIF9r6Yfz1TFeflfri9Uv9eiDTAAVL6L7m4GN4jqay8A==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=arndb.de;
-	spf=pass smtp.mailfrom=arndb.de;
-	dkim=pass header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=U3YGvdOt;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=sNtb+bIv;
-	arc=none smtp.remote-ip=202.12.124.138
-Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b="V6w/7g38";
+	arc=none smtp.remote-ip=74.125.82.51
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F276606A31D
-	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 00:13:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6F276606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CA79606A31F
+	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 02:32:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0CA79606A31F
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=arndb.de header.i=@arndb.de header.a=rsa-sha256 header.s=fm2 header.b=U3YGvdOt;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=sNtb+bIv
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.stl.internal (Postfix) with ESMTP id B9D331302036
-	for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 20:13:42 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Mon, 26 Oct 2026 20:13:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1793060001;
-	 x=1793067201; bh=si+Qhande5UvxFya2tFMhl+nVzGoE+GcsU0vRngX6G8=; b=
-	U3YGvdOtK5z0MLENZikfRWb/SLS3tN5q2KIlnncV8n8B6q/88GUIqRcHk/vGydtQ
-	FS8sX9A1oRc3mRQPJMpF50WBg9qz94gDLC3+879cQZLNq1dxKLVBYjC/iOaTUChX
-	mxYIwZLx1N3S7bbCZ/mImfn8wbd38nHV7hIgmF7vOKzU3+YYZrTQArEcc9rh+B/b
-	KMdlqf5SKzL/f6s1EDnpY7XZ8W3nVEZg2L4msxlrfAqv/Jk0j7ZUlk/GsDSjkXPc
-	ldA/XX4CvvPyKEcROFVx1tYb/KKG9fiNGXG9DUyjX7qxlOooitBLu4KPvsZBp7i9
-	9oEthDoRglV3rZfQE2aOZw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1793060001; x=
-	1793067201; bh=si+Qhande5UvxFya2tFMhl+nVzGoE+GcsU0vRngX6G8=; b=s
-	Ntb+bIvyt+finyiKcLyWraqD04yZyKS+0SUAaPYjEqXDnBV6zHgtFQ/8TfAY9oC2
-	NDiZXZWH0JHbhKyfa1dHcOfE0J4IpkbiAbjxrRL6Y92l1UGmObDGPnVKe7qP6YNt
-	ST33rmDlLN6L8h6ZJEuWP90+wHD72V6+GnQYLlAgKBpi3+n3Tgh5LXp1sVOi4boh
-	Bf6krYfz26TvqByg1xmWAI/FLJ4XaWMrrOUl2SAGfnYbLBUMdXBTuQqeXeSFgFhJ
-	3u/qloOapbu5S9e4vggtczW5heu5UykY3T8a2TZe7BZh1Nhjsya/HZaj/yXAM/kO
-	TVxuIgUxJs7lnyHSGRSHA==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=sign d=arndb.de a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793060001; d=arndb.de;
-	mf=PGFybmRAYXJuZGIuZGU+;
-	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
-	s=fm2:rsa-sha256:UhKwsPeMPQ2yjAdYntl/qEhTbXec2uZlrEgW4KKL5xd9eRI
-	dMlOWOWx95GJNzdrURM7iEPeDP2pP/fysH04BZ9R5/dLqcHzVQx32gDoAXQSby4i
-	uWwhWFoR+LHMCtFYgeXxix2MmqHe5PJbUJh97GmcKidsK7vEEiTqT5Fxw6bbyLIh
-	KAy+1FyvtqQdIT/2fIVtXuLPIZrWBprNqS/4n3AASnPfsX6A11gXEGVF4uMQZj5M
-	YeB7gIY94TTgygGEGlUv/SgWUDjE0MadRMzN9lVeNi50xvOfa6mXVMxohFVmr2hG
-	+vXtGGylqaL23M9/YQexnNXFTJwaYhBC4sr36tQ==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-07;
-	repo=github.com/dkim2wg/interop; date=2026-10-18; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:HO8bCNZuevoE55ZZzGJNSZMW2blajER/wEIsZJ9pK+U=:caeGQziho4FRHDY3cNygzudu2C/MJTIFaWIByauHPSA=;
-X-ME-Sender: <xms:l-zfarV0xYG9cXbLNAjMRS-NGrB533bJUDrO7tw7IQmuiTHIfxDTsA>
-    <xme:l-zfauYiWBD4kCpdnyho0MnGGS33y2LYgKSF3XrgxyjM0QpY1wMBQocd-rpAOPVla
-    nZ0dh4NOasjKIpo07zSdaKi1DqWFf69ISgOfkfcgdJ9b6UCfL3hL_c>
-X-ME-Proxy-Cause: dmFkZTEkf/YaqXBD6OkPCTBsCAQbPu2YW9sbt7UK3+UhRfBeofSSrl6hJkJHf9dF0rJg3N
-    JfESDt4DvGRtzl+GmwBe7qsV2Za2TtScaDpwb+1nPiSEC23L7O5/QDGDDHkkqePFksREHl
-    XU5dvNKC1hdHByCH0NgqiobHBjKrbj9jbD1I59fEdgTH3JMsZ6ZfDuO/z1c68fjUXFLL2r
-    J8hVDQMrH064UmFfogQ8Sz3DesWwtSvTSw63x8Z2kd6ltXcHMkLp3Ud6vNRQYsKU7hjmRl
-    /dP3RtDx62S+ikAxBE3BB1G+xG8JEObZSy6tVfPtEaGsqzPsdEyV7tjpBYy5RPu8eU7BtS
-    pv/NdncJ9PUvwVRDTUHemZZgQCYS4NTDfHPcBktTUdmOVeXMmbEO8J4RkdFLvOctoGnsjm
-    MVxFXKbZLUEIAQ1qS8Q5E64WXtwtwZQLEOfzHiJJZqf8ZryZPcMBmzKQXQ0QwZaN8ISNoJ
-    S/ftgSQ59xD5mN0KYsovSy7v5Z8EmqiU+uzfw84F4PDmfcqLkrFleRwPnXor2ZPToL7Wwl
-    zTDxlH62iD2P8UDUZF6+tWzflaIgNhpxvWwWeDJ+xjJX2nrXZjEv7k2ySwKy1geKMzAXKF
-    fXgvX+juI9JxqNHFvQYpFjKMgWBUIHvrzcyM5V1fLrWdFMQTCqVFLDiOYoUQ
-X-ME-Proxy: <xmx:nOzfajGF0xNsYNmV8YCc2Pd7UeABRUtRBqoYjhYIYDhiMjlpvI7yag>
-    <xmx:nOzfapiRovMD9ZE1E5hDJaY6sWPoZ7pT4XzsIJ-j-hZWrrCg_-UouA>
-    <xmx:nOzfapbAE3BpExg8FlH_xCskPyBv08PzQc5zXuuGtwgjeA7VlWveEQ>
-    <xmx:nOzfam3GHyXyAuCx5jGFzvSyfiLGeSUA3AocyLyTLvC2vt2ZvIcxnw>
-    <xmx:oezfastyPfBJRPG1FGvyHsNW7nf3RRKHw_57JGdRsQgtKDzwvORkdPKN>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 5628B32A0093; Mon, 26 Oct 2026 20:13:11 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.a=rsa-sha256 header.s=20251104 header.b=V6w/7g38
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1846bc43c28so4062678c88.0
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 19:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1793068376; x=1793673176; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WlmAS3/2b/zwkyDjZK6fZ0f5Hqn5BoF9hu81Kcora6I=;
+        b=V6w/7g38m5BsENKK5sMkZ5XIWtJMyxWCywSxzJ0LMTXUITYy8n+ECwqOowHVNRUs20
+         McrbIMNM3zYdr6erQ86IPnx88ygmhkfWLojyFgq/Gy5jgvHg2XABzDQztha0UgPt1VYK
+         IZ9Gi90UxfRnqJuGGYmPR/Pm7Bp48Ms+zV/DQPHC3iYdphgOABdkXXsC4SnTu8es6CnR
+         9/+r1ziIeqdDgvpjGv+BfDp55w0+pY8QMkA6LJnb33+KBzpBEvzHZMqk7y9QuULVPkBD
+         o3qlLojB+Gs0Q0dTG1IQxv1EPILrPwH1G+0yJP6PamhxIvMowJTQo3ezbCwOXsq9KXtk
+         0ZaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793068376; x=1793673176;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WlmAS3/2b/zwkyDjZK6fZ0f5Hqn5BoF9hu81Kcora6I=;
+        b=lut2dyAB32xZQ3Br8J60pSTJ8LF5UWL7UUp7JcK4DdcZsZ0nxALcSaAZ3esmiXiktK
+         4T7o1JiL8xthKURBPVhRmY/abwgbhqoCN8yIs+t4nnBWQv6h8W5DqlA58QIkGRvWYgd2
+         ZZHLyysHgTHruH7Y8SzYFGAf+V2U92tlS8jn5zvV0E93RNxAjsrsH46Z04mISZTwNJzm
+         YoJhGhcKeXY/fZcDGGeWP02gQ5DYiXFSHneWRZGyb8vxWOxCZO3rD0n3ZfuqG4FgdhKU
+         NZtQpwbPrOFPGcaq0/vr/ApO8bYnAD2STWHEVwcRZaSZvXc2YoLqQkx4OcKBYMNW9TOK
+         bH3Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwPeii+amPDkiP1xY3tRqFJW20IWWbTJfMOsTr6R2RY2XJzyIIXOSl760MIZq7i0tw19ihzXtE2BQ==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIEukqPWDDaqvx4zWlSoql1PkmxCNbTQxvLoK7oVPBD8LhvbKTr
+	Fbt1FbPYdlJfDGmMaah4uFC3BXJXgDDLP9O5QNWbUPT/ib+2VOAF0hLzmpQxAnPZjN4=
+X-Gm-Gg: AYBFou2qwJjj9USpwLo5QVwlcHFrXC3xnp4K4Qd6WyMKw2AK039yVrVddzW7NkbtI/7
+	boAi1Q/O/O4EvNKSxbU9kuuvIKvnCAWtFQXAc2paHok/g8Aw11XczShNhJvOhvudZa5rDKhEnle
+	lNhQG6XinnBA0PCcvOgXtaVWPF9ftVxyIWi0fgt8XPMHdhn5/U/XM9P5h7COtOcmhgKP36GDw0U
+	RCmnRjSOUkWwPBL9eFRNxh/qqlM3yCuQaIPKB8l1kSq9cYtZFW88xLIAEIaeBpV+JhmGHN9u8z5
+	lxI01fb7ZKVyYp56CfpEhOXKmj8wJ66t0RXfEP9ilUq/eU8kuaGOum1pBH39PknzfvboJWrNdBN
+	tsNi2Ktu6kBO8lbnrDYEd8uSCIgi0dQZGHNtc4YcQhnuWSMEbAG4NGG2gU9iHrai2Osb7Las8Bc
+	PgwxJt/FR/fOyGrqJZqDsgzzKfIObmQVAX/idjfhGuJJbIzZ3dSGR0iihVMVAvWoU6cuAc9ANKP
+	m1SDcmy5G/72Ibgp68sxPYYCV8TBVbT/Ff0GOsxNe/Bo7z0f6eNrXFYxRQR6XwoqOaP4rZ0+8Vv
+	Q30FhoQj55N0+WSdrloKjHxOvc85MObd6S6en9M=
+X-Received: by 2002:a05:701b:21c3:b0:148:302e:1bed with SMTP id a92af1059eb24-199377d6199mr10284764c88.38.1793068375785;
+        Mon, 26 Oct 2026 19:32:55 -0700 (PDT)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-198a21bc6cbsm28324365c88.16.2026.10.26.19.32.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Oct 2026 19:32:55 -0700 (PDT)
+Message-ID: <51d9c80e-1bfc-43e5-a195-46b4b7612de1@kernel.dk>
+Date: Mon, 26 Oct 2026 20:32:54 -0600
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -115,104 +92,35 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AUJ1OXWu3nCJ
-Date: Tue, 27 Oct 2026 01:12:50 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "James Houghton" <jthoughton@google.com>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>
-Cc: "Thomas Gleixner" <tglx@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>, "Kees Cook" <kees@kernel.org>,
- "David Hildenbrand (Red Hat)" <david@kernel.org>,
- "Lorenzo Stoakes" <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
- "Michal Hocko" <mhocko@suse.com>, "Sean Christopherson" <seanjc@google.com>,
- "Paolo Bonzini" <pbonzini@redhat.com>, "Jim Mattson" <jmattson@google.com>,
- "Jens Axboe" <axboe@kernel.dk>, "Pavel Begunkov" <asml.silence@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <mkp@kernel.org>, "David Sterba" <dsterba@suse.com>,
- "Chris Mason" <mason@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Ingo Molnar" <mingo@redhat.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>, linux-mm@kvack.org,
- linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Message-Id: <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com>
-In-Reply-To: <20261026215226.3713941-1-jthoughton@google.com>
-References: <20261026215226.3713941-1-jthoughton@google.com>
-Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
- current->mm is NULL
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/napi: drop the single NAPI busy poll special
+ case
+To: Cinq Prairie <notprairie@gmail.com>
+Cc: Stefan Roesch <shr@devkernel.io>, Jakub Kicinski <kuba@kernel.org>,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261026231718.5092-1-notprairie@gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261026231718.5092-1-notprairie@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Mon, Oct 26, 2026, at 22:52, James Houghton wrote:
->
-> This series comes out of a set of bugs that were found in KVM where the
-> kernel can sometimes write to a random process's user memory[1]. The KVM
-> fixes at [1] are still required, even with this uaccess series, as noted
-> by Sean here[2] and below in this cover letter. The beginning of this
-> series includes fixes for similar bugs found through static analysis
-> with Claude Opus 5.5. I don't think any of these bugs are more severe
-> than the KVM bugs[1].
->
-> We hit one of the KVM bugs in production, and it was challenging to
-> debug. This series makes such bugs, where the kernel is doing uaccess
-> without an mm, much more obvious.
+On 10/26/26 5:17 PM, Cinq Prairie wrote:
+> I'm thinking that with the re-entry in place io_uring can cond_resched()
+> when the napi loop bailed on a need_resched() then resume, between laps
+> it holds nothing from the list and is in sleepable context. That would
+> mirror the socket path. Though it also impacts the multi-NAPI path,
+> which never yielded so far, so I'd like your preference: include it in
+> v2, or keep v2 to the single-NAPI fix and send the yield as a follow-up?
 
-Nice work!
+Let's keep v2 the single-NAPI fix, and then you can do a follow-up
+on top of that.
 
-> Such an access does not reliably fail. The user portion of the address
-> space belongs to whatever mm happens to be lazily loaded, if any. If
-> the access faults, the fault handler refuses to handle it and the copy
-> fails, but if the page is already mapped, the access silently reads or
-> writes another task's memory.
+> I'll also add numbers for the single-NAPI fast path when it is not cut
+> short, before/after, so the cost is visible.
 
-This sounds like the problem depends a lot on the architecture,
-and to what degree they implement lazy mm switching. If an architecture
-makes all user pointers invalid for a kernel thread, this does not
-actually happen, right?
+Sounds good, thanks!
 
-E.g. on arm64 with CONFIG_ARM64_SW_TTBR0_PAN, the page table base for
-the current process is only set in user_access_begin() and would
-not point to any task here. Without ttbr0_pan, it should be
-covered by cpu_set_reserved_ttbr0() turning off all user space access
-for kernel threads.
+-- 
+Jens Axboe
 
-Should this perhaps be addressed in architecture specific code
-instead of in a common place?
-
-> == The New WARN ==
->
-> The rest of the series makes the generic uaccess helpers WARN_ON_ONCE()
-> and refuse the access when current->mm is NULL:
->
->  - Patch 6 adds uaccess_should_fail(), which combines the existing
->    should_fail_usercopy() fault injection check with the NULL mm check,
->    and uses it in place of should_fail_usercopy(). This covers
->    copy_{to,from}_user() on all architectures (including the masked
->    user access paths, which never call access_ok()), the
->    __copy_{to,from}_user() variants used by KVM's guest memory
->    accessors, the user-backed iov_iter copy routines and
->    strncpy_from_user().
-...
-> The checks are deliberately limited to generic code. Accesses
-> implemented entirely by architectures (get_user(), put_user(),
-> clear_user(), and direct users of user_access_begin() or
-> masked_user_access_begin()) are not covered. Please let me know if the
-> new check should be placed elsewhere.
-
-I would think that user_access_begin() is a more natural place
-for the added checks, as this should be called exactly once for
-any function that accesses user space and also stays out of the
-way of the copy_from_kernel_nofault() etc.
-
-       Arnd
