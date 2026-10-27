@@ -1,93 +1,93 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793075615;
-	b=Whmk8i66UKxXK1ux4b8PpzAjPkPnN/kB2qr+mkE2RelnERjxGkBTYs8ExWPTgN07YSpU
-	 hL03sSw3NBAr/fltFcKtMOUBS1pCsuvil4SBO7w8Z2vJnZQ0JFjjdq5zm52KlQ4dy6PaA
-	 e+z6QUJcH3qSoWRExuD9Q82yJ8QLid8tyIbmfcJ3klIivIEWSFquvnmoDJV7bq9X0RvZH
-	 3U2yGX8ydfjd2e/ksGPDtmupwW0ry7/7mUuxdKSNAoXhsx5UZBQTyYhdWRpEbF8+D0Gvd
-	 uu5bddaBMr4svQBE3Kyh56eWmtd/36UzeluuQBDfMrz7Q+KgJLWRbmxyf+eq7A3dCDg==
+	t=1793075733;
+	b=j6tDEfPQWDzj5WPSyPk4Cjl87hqs/VFEI+rUoA+iGxvyAvGuoj5RAVlMvIYQdfND3xtT
+	 NhqnE5mPLIq2X88tRyR+kvFpWL28MRW/+y7VFs5+ZczVMG/Ce6xjK9lEaBVfo8UtrbXgy
+	 z8DRpXBGGJCqr2b0UYHgkcTVfynwgQhvqDvDtuYz6qlgIspyuUpoBwi+Y4mAZgBpJtL2z
+	 ElPQ1mc2yq4FUDJP5yFGUPfOGNqjXfy5COoq02A0hMJ+Tn3lopa05gVPWiYT8BDe59qzx
+	 ztByzWycF4qcuQB1mY4d0hXOu6AAhsRk3IAmeqCAlRODdrBY2oKEWBoootj25qbYatg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793075615;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793075733;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=dH+o3CTt+7i0neteTltn9mysqIJlLAgcAX45rIORgHI=;
-	b=BIlFMRCJq81aDwM87lcbNfizmrdpsp/OJQV34E44eOdQCdiridU8LvwSf69iyaJCxOJU
-	 ozAIFxdHoOn9YYpmZNo7p80aP15pzY9To9i9IAG+XCAdzo2B3C7tmEwrGne2Dyct+mnKQ
-	 KaweVdLjACihWwcikTrs6A1jP3fFqyiAfSYKX27fxCyo2vY+wAua4EOm2Ks7hdCsJNczY
-	 VqpRuVxX8HV7nlO72MY52Xm86Z0EOg3hWTYWx7QDxW0Turhy2PWvL+Vyb63swleNv94Ya
-	 RohbCo1dJKY9QPUYThriQMt78+d5GMNBPB/Sd2ZreGWAn36PXw8MQr9tXMIxkHBI8SQ==
+	bh=lvPUnqN8PL1OAu56QIuIdIBU70pIUAL/ta7uRi0Zh7A=;
+	b=3DmaliFrpbv9vmZC/uSNBc5qHm4Z377zHC23KaBeHXtjY1ykoaO73njQAv9VaZFpXJ11
+	 AGfjPhxgM1fTemBFaZeweE+s9lEzlqZUZUPOWzpd4p9MzHGyPSPR70jMVzd1S625gkQsX
+	 4gF+nAxYp4kA+tB9YYvhuNtoU7rmONYf4RgjKGoXfOJtFxfFWkVRZb1vfjFq/3p35y+Fw
+	 1HNe0TJB18sr4DBAh82W0KDoIbID3pJkKqKtjM1PGtJWYOHeU4sBwdv+3QSyU6bkgZDgJ
+	 5MnkhMdKkzoi+HqE8h5nWdDV8Vt4oMCv37rS8HXa2aAVi1M56oZTthCH/WyxFLPlm0Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jb8uNkHE;
-	arc=none smtp.remote-ip=209.85.221.51
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UPYhloo7;
+	arc=none smtp.remote-ip=209.85.128.52
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36F8606A31B
-	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 04:33:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B36F8606A31B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CE1606A31E
+	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 04:35:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44CE1606A31E
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=jb8uNkHE
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48df0fa43c5so367922f8f.0
-        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:33:34 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=UPYhloo7
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a5177d78c7so20086785e9.2
+        for <io-uring@vger.kernel.org>; Mon, 26 Oct 2026 21:35:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1793075613; x=1793680413; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1793075731; x=1793680531; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dH+o3CTt+7i0neteTltn9mysqIJlLAgcAX45rIORgHI=;
-        b=jb8uNkHEzsy7JBkCMHrrZsHb72SwM9lGWXuRvK9DBX+c7Gp804CSL2AfBacz1bS3pv
-         QqtCGSu33gJWp7IlceOAB47Selr/0m8KnXYRNOZxXT1vIakBLP/9lV2f+up6JO9bTT/P
-         RLtjMjP0DL4KKIxcXXahICNHAw+fk9hQUglCb1HuhhknTaZhjJ3HqARnjoRQsS8DONd8
-         BkqPh1bS2PZyZlO+biHC5GINIsQhz2e9wYEQpMNq2eTuOrcq/kGR8VQ3pOx02VoA1clR
-         JG2G+7Lhm8Rc8d6n0rSJklFX+wxyVEWTsEgF0ss5MnMCRRA1nIj532c71iepff1LcQqs
-         79GA==
+        bh=lvPUnqN8PL1OAu56QIuIdIBU70pIUAL/ta7uRi0Zh7A=;
+        b=UPYhloo7tHG4yZGHxqzd+x+NKrxSO+DSvv+Bm8VcwLxU9FRWaGJZJieK1GNVo+FxCa
+         FTpi9gVYw+ZVi2M1q6BSPNxQ655nZIYeIZSTwRVvDsZhnu5x/6whUAIma9SW6XsXUEyt
+         5i0h5/sREW2SMBMS3jfwj3kb8Hoij8ghjMNedezW2bNUbfAmMVTKSwVi/PcrR3IyBsVU
+         nvd2wHpk/gAvW0/TsqcVDZRdK8GWHE8eKFmfiwdcgEx0kU8i69veEZ/ScUbqxwemvCVy
+         spGqVA8dILNTpaY+A1SiCRGmtB7E2IMGtxWJdXbD7DfY4s/UvO6FlThz92F0uDAXGUVP
+         o0Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793075613; x=1793680413;
+        d=1e100.net; s=20260707; t=1793075731; x=1793680531;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=dH+o3CTt+7i0neteTltn9mysqIJlLAgcAX45rIORgHI=;
-        b=biZ6kJzZTK6f3M2HqvIEFxyP4LEucQbgYKEU+OC1TsUxRFS0GTfwOkmb4gHS6aZETl
-         jsOstmX673cP7rrkoZOf02GfqePGnvhIOMgWAf9CoQuJ1SsdjmDQSsKdGHi6Ftqyiga4
-         yAm1gT5SvCSSwtONhJqXtPzqiL1bo5JlwBrZ7xEWGqxEjB9Dx36qgdIS8+eWVSNssaUR
-         RMprg1jIehIohaMF2SIGnS4GtXVlvhcos2YAGy2PzgRSTY0ySjY/JmUu7r7Pyi27RII+
-         MCCMYfmJSJyHK3G/rvI4GW6QP8lNeeCH26sY4fX9AJ/zXlfwB93inWvPtSGlpBPflALN
-         yx0g==
-X-Forwarded-Encrypted: i=1; AKwUvBzD9j+Twk9HHH3r4nVhBqcGpxdyet/iRsdf+dtSvkTs8374m84vVmb12IH1VIurCplrFmF2ykgT3g==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLv6ryGciZBsLpbvXuodbDtGCAwzxxtISRxPA+s18by8mZ7OKmZ
-	xsgc9AwNQQtYHKYIaTmV2e0pIP8uZbPbVA9WBzkG9DUgE76iNInLbviY
-X-Gm-Gg: AYBFou0NjJjviPBlhWj2ctc+hLYO3rcoNXb2nMJKPAp4cfMxkkSRlFjuwdt9JSltoxO
-	HMtHdx5xQJdhgbpC/tsx/YdPxWAhUIJ4svbPIHOAZEgurQnFJo0msOzjlG+ijBNzI3vjf6ROO3s
-	V23EfAonAKwlqJXysCdl3G1j17ORZaA0IpBBp+LGcaWhcEqUr0KF6UVR2ttXcPPe1hsmQV4O6tS
-	RYtXB4y/Fzsm6rj2QwpUgYIggknGZQvXX7sblzXx0+EmwPRUMBJGlyfoAGWeUyhmkqlwlzdxi6G
-	72pH5y+MPNgiqgQea5Sy/EZeK3KhSMQ0EDUHrkCjdnmG6Yzn1IYgCNWFdUIMtAGlZGwXQpmHBwY
-	MjwR1xuf6Y6s08PAKB26eypQ9jqZQG2/aRgDFFLzLA0rFJWXtmlyd1xDFM1aZdI1LqQa0au+LEI
-	ptpuv+SHOV8LiKMgix9qH5pdMFGObKRqOX2/CLJrUivSSEiJekPegjDnIxx++uUwWdgWzmtrB1d
-	NTkjwlyK3UCTKOjoxpHKQ4dOdz6Oud2AwZn2R8h1HOWtz+wzwEg+FIM9lBPDEuP1Gdg9XowmLid
-	KPMaHI6gEsV5frMSngbsZb4MR0AQbitwvravvQuFevSPR/qFJjikCsSlyviuk5z0FbRe32KalEZ
-	2yxjf7sMowYSpzaOlev3tt4mcuGUlQvooyH4rlJ3hb5SAtkwPMJqvoD4svLBhUdO2c7TuKX1+m9
-	md0kQsVc3LTQ==
-X-Received: by 2002:a05:6000:4008:b0:48a:fe00:ad1 with SMTP id ffacd0b85a97d-48e55a0afa3mr3439452f8f.6.1793075612981;
-        Mon, 26 Oct 2026 21:33:32 -0700 (PDT)
+        bh=lvPUnqN8PL1OAu56QIuIdIBU70pIUAL/ta7uRi0Zh7A=;
+        b=ok0KoEs4yWNYHnZdZSqpGfSeIzTl4DHpHNdOqiuPdOCIRvxeE4NivFqIWznKA8ykGC
+         nh+6SBkEQlvWBxi5UazO3FnP9AVTgIgMf52YrVu2HSO4hCGxWssVJVUCIlwb7s5yJBl8
+         ssrt+ScDZCus4ZsM0nKilYGm7d7jOwO/2V/SDIwH6Wh2QQjD+Y8WG3xFXbqfctG00KRH
+         0gAwRzZKlVpdz7VfiDhW5dt44fxjK9pcq8YPLq73ZGf+dw4Nv9qVIJ4fyOKsM+Zfxl2k
+         LkW4rg/MzSdIsZuqQK28vtKjYL440IK+zEtqJ6iyrdLnlNFM6SLFG1T3NGivHSlaYwLp
+         f6EA==
+X-Forwarded-Encrypted: i=1; AKwUvBz79u0x5vcaFyh5hc8Li6dBR31+Dn++j3aQ4qxK5ZISB+aqWPyO6TxYPic0UDu0cx9YZ+LgALo93w==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKdWl/8VX/ZHfdCrjrBk4yY6u6XkJpfD3G3+j5oAHqbaKRq3/1H
+	/mZchbjQziHEuTMahfe6f/wNs5uS4mB3O4A4FKGbw0ewyFDr6/hJwHtYasNr5Jqt8C8=
+X-Gm-Gg: AYBFou1HxEj+buseRt09fWLZ8mDWPrYZKgG+DSS600jCKrW8PxyJ/qRaO37yYir4F1P
+	qI+J5O3Y7yiSf7H6thOfp76fra0JwaAdtShGhwV2ekf48suahJk4gnX9zRKCKdz3b6+K5xpVDDr
+	p1KJ4+X2MNLhKdirDc/wKwS7q/ItXSO6y7pQFyKqQBDGb5p/Cp5ZhO4JP1PEuCEigi5zze4QBeJ
+	/3zKFL0deUf62HAncdySJl7UZMlIyz2AxrzDiIKuPcb0HQBlLCX/viwpWDjKt1Q6eeeiUV9dGLe
+	P58G8aRMkQFMavJhPGRRnUsBQMzUoipsLCE257Mdyzfitk48B9jYRfHf8CJhtI4MXxEhQWbOUGW
+	GtigeGy/eyaN/8d0woW/sM80FV5V9ZFWAxcyjrqqTQVbmas0fy/IqXuqi4YMR9Y1wLTBB1/rmRk
+	1wAtMnOLv5P9oXBeGq8ORyYpE/SW9RyyqLmZ1IyO9M9ZLzEQMVh9hO4tqQroE7meSHjUBdAk4Xf
+	3Eq8kZ72UiltRq7n3B10G+r0wsJBTLJAmj9ug80AwVCu3mPLCH73wO8y+6KcAr3k6UBcGk9o7sz
+	tdXYiUaaiaCSS3BVTp+7AYs0ko11OeP3A8FMk/Lsg2qAjpF1w66NlonD2ns6QbX2zsna/0+nH/L
+	Wc+MqWA7TRlo2cWJKvOt9dFyyXEjUFObJ9nkI7XVoPxxRMzDncPFEo/n18QYk75mwkyr+Wx8hFc
+	y1obC03RFyDw==
+X-Received: by 2002:a05:600c:5307:b0:4a1:c5eb:b445 with SMTP id 5b1f17b1804b1-4a35acc41a6mr147390645e9.35.1793075731463;
+        Mon, 26 Oct 2026 21:35:31 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-b2ac-9b01-6900-1f92-d182-4435.310.pool.telefonica.de. [2a02:3100:b2ac:9b01:6900:1f92:d182:4435])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e3ecde7easm20594253f8f.52.2026.10.26.21.33.32
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a35a55e99fsm246720855e9.4.2026.10.26.21.35.29
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 26 Oct 2026 21:33:32 -0700 (PDT)
+        Mon, 26 Oct 2026 21:35:31 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Jens Axboe <axboe@kernel.dk>
 Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	io-uring@vger.kernel.org,
 	regressions@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [REGRESSION] io_uring: requests can overtake consecutive drains
-Date: Tue, 27 Oct 2026 05:33:23 +0100
-Message-Id: <20261027043323.98916-1-kmehltretter@gmail.com>
+Subject: [REGRESSION] io_uring: final close can hang on a stopped submitter
+Date: Tue, 27 Oct 2026 05:35:21 +0100
+Message-Id: <20261027043521.99446-1-kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
@@ -100,39 +100,38 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit ecb6817b769f ("io_uring: end the drain when the drain request
-completes") lets a request submitted after one drain overtake a second
-drain that is still running. This breaks IOSQE_IO_DRAIN ordering for
-both standalone and linked drains.
+Commit 13d3783a55b7 ("io_uring: wait for in-flight requests on ring
+release") can make the final close of a shared ring wait for task_work
+owned by a stopped submitter. The close does not return until that task
+resumes.
 
 An LLM helped with the review and reproducer.
 
-#regzbot introduced: ecb6817b769fd7d71af2c9f446188649020b2e53
+#regzbot introduced: 13d3783a55b758a9fa05b67835afa7e216476c61
 
 Last good: v7.3, c03c1a14507dfaf8b856c2608f9ac216021fc222
 Tested bad: d135ab453a7400a34930bdda1ef4bdc8acfac80e
             (master as of 2026-10-27)
 
-The reproducer uses a default ring and two empty pipes:
+The reproducer uses a default ring and three processes:
 
-  1. Submit P0, a poll on the first pipe.
-  2. Submit D1, a drain NOP.
-  3. Submit D2, a drain poll on the second pipe.
-  4. Wake P0 and wait for D1's CQE.
-  5. Submit an ordinary NOP while D2 remains blocked.
+  1. Submitter B creates the ring and submits POLL_ADD on an empty pipe.
+  2. B forks closer A. A inherits the ring fd but starts without an
+     io_uring task context.
+  3. A unmaps the ring but keeps its fd. B drops its fd and mappings,
+     then stops itself with SIGSTOP.
+  4. After confirming that B is stopped, controller P tells A to close
+     the final ring fd.
+  5. P resumes B after two seconds so the test can finish.
 
-The NOP should remain behind D2. Instead, its CQE appears before the
-second pipe is woken. The same failure occurs when D2 is linked to a NOP.
-An ordinary non-drain poll control still allows the NOP to overtake, as
-expected.
+B keeps both pipe ends open and remains alive until close returns. This
+excludes pipe HUP and process exit as completion sources.
 
 Tested with QEMU 11.0.2, arm64 virt/cortex-a57, two vCPUs,
 CONFIG_IO_URING=y, and CONFIG_PREEMPT=y:
 
-  v7.3: standalone and linked NOPs stayed blocked for 250 ms
-  d135ab453a74: standalone and linked NOPs completed before D2 was woken
-
-No privilege, special device, SQPOLL, or unusual setup flag is required.
+  v7.3: close returned in 0 ms
+  d135ab453a74: close returned after 2005 ms, immediately after B resumed
 
 Regards,
 Karl
