@@ -1,92 +1,74 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.216.70
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793134146;
-	b=ZFEem4dxoB5gJ/BwtPNB/V7AdaYgiHOtfXmWciWgrYxGi4QeABO4JyGfP2XGE/zFiM4E
-	 jpCWml0zGwkR5N8ff2hv4+UmrrHKjVujJ5vu0miapt9vS6wZMcce36KMPzQEij7mgC/Pf
-	 BcHn5RzDsHVJkhYIO1jshyu64EcxdqSGOVYeV5RF+BYmsvu/lgecMHzeDNlBXC9j4LWuY
-	 B9PxalMSKEnTMUlpVhY/+47P8E36rwJMh+oDdLtSzBFRFbVvIip8si6yv3uIf6mlUMa2A
-	 k9dxP2ptlqkOU+tT2gJUaKBp0xi/BUpRe3dlRpujieXFZnUmPLL4W5jNX2TNzOJ5DCw==
+	t=1793135925;
+	b=mKqc07zTLO42rMNhl/vya3Qr9iZ6B8cgB0pLV5ihyODljJ4wjvSf2LkqzgtC+2WLx+0M
+	 5Kkm/NTjLC6uq1veysjGvfDoXFx7oenfGS6sd7iOTe7hnz9fUpZrVMHdVdnxW4uzPHmYp
+	 Hz3B9ulQmvzwEdDfRAxs9Tzxr4KNbr5vzqOExzzg0qGcajPA6Mlvwa/FhMIWS5Z9UwSOw
+	 NXYC5zR+XswdfLo6GjsgJXiM/KOu/1KmHx5K8Q/RV32/5qd8emnjjzgJFAksORdxO0r9T
+	 1bzp/fwZyYfM9B18EiDp6d4VE0jMMt5VqVIu+pw1a7xd3cTUoBR9rVShmssFxylKr2Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793134146;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793135925;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding;
-	bh=0CwhWIrFGwh+OtOYiij9Aw5L8ognFC7BhFUQdRBV25g=;
-	b=p5zKDBxk77NGUZLgbPLiBJ37ZuJpAywPuqcakTsCVDFcXkHpMYek+5zCf535rYyvLvU2
-	 BrgdiNkkwqWZcZVXeMA3UEK38qFnxc8A+KMpu36NTgFYChwlhj2WvH458JjotBvqG49OH
-	 1dJjfmcM64fGfRlMOKvZ6geQcaZPZv11SnFb+nWk42PBJilCvisFLm1Bw5g7gZjJNORoj
-	 WPoMcjhq/Zlt1uB5aErRS5YBeEhV3z3QSComxxTA1ztKc++eQzMXgL6werDHYR+sLvXJc
-	 nQjEe3/4w0qUsD3cQ8T6xOhranlYHaP6SeKyYN/58z6N1+y3M899wTO5gegKwer7HIA==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Received:Date:In-Reply-To:
+	 Mime-Version:References:Message-ID:Subject:From:To:Cc:Content-Type;
+	bh=qUMx95Z2/FLv64tnydT/x/C4fd+wJMNdslwBEILinGo=;
+	b=AXssNn1L34fhHvc0fqACi/IXiwKCnZgvnlCfZ5jwcv8dc+yZyjHLtVgwt/yNPok8Q1Ul
+	 KTdoyHN0a3AHTt1gRRA+/F+whhn5mCmwMQuMjW4BmD96f9zbB2Pg7HDUGq+SkYVxu7Dl+
+	 p5Gvqa+FO9mas1izT83ST0yVHlb7Nj6/Vli5mnB8CNFWIVQXjihZ195GRp+5cwAhkEvvR
+	 ZNCiBXGTUgMkT5lKo7bKRfa5CcQFVgxc8SXGs9uKipArh0LieJ+LubrUpV7g4e48Ko4dU
+	 2QsT4u7RTigouYHa/DGPQYvWFPOadfM4vM8+98aGTltu4dMwTRRwGGh5R8GCQsqCaXw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i4idKlJF;
-	arc=none smtp.remote-ip=209.85.128.53
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=O9t1oNxh;
+	arc=none smtp.remote-ip=209.85.216.70
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD9C606A31D
-	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 20:49:06 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2DD9C606A31D
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7331E606A31E
+	for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 21:18:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7331E606A31E
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=i4idKlJF
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4a215e64962so3105105e9.1
-        for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 13:49:05 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=O9t1oNxh
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-3adc5b185bfso306750a91.3
+        for <io-uring@vger.kernel.org>; Tue, 27 Oct 2026 14:18:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793134144; x=1793738944; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0CwhWIrFGwh+OtOYiij9Aw5L8ognFC7BhFUQdRBV25g=;
-        b=i4idKlJFAdQeiFyVEzCfHl4JdjLGwUYB46fnzJphuGrfOfJl64Xhwmh+vZBGH5KBKU
-         nImD8MAMV+BGgkSrjZJLfA/y9MRJQVPzksCv6Jzag5Q5IOZz2YM1OiMl+ga3JZJNkHNL
-         kc06XAnAOdOEwNGL8oySF2MTtEa+UyTzSDiotBYKs1IPq0CRjKzhckF0hZcduv74Wz7B
-         hvEgeqb0Ay3SIbmQ88wCIdkCd/xSvMBnltVR4MDGoe+DfQa8CGsAwoT78Mh2KqP0Bjyo
-         vVhm8XErx1TI/5m3+xcDCrk7pfSGgXycqLyajQgXb+w9mzc7ieQ7d93effGlDOODvRDi
-         8Y2A==
+        d=google.com; s=20260707; t=1793135924; x=1793740724; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qUMx95Z2/FLv64tnydT/x/C4fd+wJMNdslwBEILinGo=;
+        b=O9t1oNxhj7Xw67fxZOhJmZ8vNAdxWgxOGEEZGK9oId6/aVHLsnFtQlbNQ6bzhC9B0E
+         f9O/mJB1tznoMWpJP5vr6IAfWd7OYL3+vqog/K86lyrB9hPII1dxM6rPxBJ9Kby9+ucJ
+         q3hnsiNT2ru8vSf8egpVYYGw35wKVG80Vu3ezvTOK/2hErKcg9OsAoYftXOMXvmgvOsE
+         USSlpzb9cbn2+MUY6DGfb3+M18AMUDB5o3XD1HYrd07vSA1sr+KPFgLsCAHlt3yIU0CJ
+         46wb1/8vXqcmincC/gKw4zIHqOkFMeY2f47UtXQrgsFIIglqeYn4Rz2uN2mV+APvhSlW
+         0LBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793134144; x=1793738944;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1793135924; x=1793740724;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=0CwhWIrFGwh+OtOYiij9Aw5L8ognFC7BhFUQdRBV25g=;
-        b=r+Hb02SU7RbnoSNTZBZeFg3ep881dJP5YopsItLtqneAGX0p9Dt9fTYwD2A1Z+2HqV
-         rSq6yVHKDZkDzHuT2sZxQ6VknFBJ+UXqAAae1hpfE80UsS0lKGqsNwYQh/6EZ9OtcYVF
-         5uzaVRKkVvReZ8RF/ZabKC+FjcwVfo/Hs3k2nRx9UzVrFJXiFVK+b8YytHELIl8Lv+um
-         wVgRnsrmlxpaWT8wMhPWdHyCmYFo7U81/090e6ucP4K3yKMFUF4sbHhSb6QL8uVaTZD4
-         rgOVz7W6AKTcs+WHkJ0K9hG70SrM76S08iOwk+W19azZaPfyswuOPTRkEAd/E1clcyhU
-         HNGg==
-X-Forwarded-Encrypted: i=1; AKwUvBxU+A8V4AHDFtwCKERWoGRHn4K6bDkW3DDwi/2ZD+XKfFWW171wqSV3fu+nK8EZNm1iov2KeCpBBA==@vger.kernel.org
-X-Gm-Message-State: AFq9FYIhwvvVi+9lt+FPFyh/qA6G9+iEpjsQHMpnbn2jqrjSTvvwdPqm
-	VV9O7lMJpZQP4vNrLM4Rgx7+JzFlYxJ8siOfxAxzWpL0c0Pre26LSRle
-X-Gm-Gg: AYBFou1/pnndQmsQMexF43nLwXHd1MH9A1Ji9n4G2pDipscOP0gZ9OJCLTP67vif8gQ
-	XRB+Kl2d8siSO8SX4lU5JIPyT0N5MiF4V0BM61Y359vfMGYQqpY6lbGL2mZxRz/6k93f2f/W9dQ
-	v7ScBetlum+JBhsN07LmY60JqqBQGdcTSEg1hZRJK8LSrbq6QWFs4Vk4C+zeam7cwZmmGpMfkvg
-	7RviXeFcJ1LdCpThFQt6/fbjMck0SAAreBA3Vt0UykJGbpsfqiJmmKIprF0BtKOzr1LUb7yWH5/
-	MZodOQ/HJiRGhnCIAqIdyztlFkdVkt6ddxvdoKA01xnZRiUSTSJ101hYgpgtl+PrfPx6ZBS4OSN
-	EXTgDXo2ZW3QgU2KJQx6O32NYmua2xvmrmbVXi3WsJAEprRQa8oO4BF8vBGcY3LehUDUFLmIbMi
-	fKRWKaavrv0JxE5uDFMmZYQ90qpm1ZSuLcR3kkkVZI4Ald7cGSpc1mEw8T9JiT8s81HZvgocX02
-	d+xScBiCIlQGFoC+UrKadUFGocuI34PJsy03BBk4TJjNzzEYx9MgkkI
-X-Received: by 2002:a05:600c:811b:b0:4a7:462c:6b9e with SMTP id 5b1f17b1804b1-4a967d96eebmr1828295e9.32.1793134144546;
-        Tue, 27 Oct 2026 13:49:04 -0700 (PDT)
-Received: from prairie.home ([2a02:168:fe54:0:500c:846b:8abe:fa7a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a94ddf8c48sm6931075e9.3.2026.10.27.13.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2026 13:49:03 -0700 (PDT)
-From: Cinq Prairie <notprairie@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Stefan Roesch <shr@devkernel.io>,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Cinq Prairie <notprairie@gmail.com>
-Subject: [PATCH v2] io_uring/napi: don't end the single NAPI busy poll early on need_resched()
-Date: Tue, 27 Oct 2026 21:48:40 +0100
-Message-ID: <20261027204840.7823-1-notprairie@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        bh=qUMx95Z2/FLv64tnydT/x/C4fd+wJMNdslwBEILinGo=;
+        b=a0BHEFTREFVtLWaBkeJMtsggL9Le2TFvQQiOE/nkLiAVvCzcHhL9dIv21lMBt8Lg4L
+         yyAISS43ljnAlcBntkDE/T+I3Bxa9XgRWlKbAXeKbF66O2smD92AeXOQC+KQysRso+p/
+         tiGSk3lifoiwbbgYdf2PuShItVxWq0dsWC+Ng7scLtlir/FKQyuMQGznNSLmx+ajaDAG
+         p8bq886YiYZ3m6ELbfdD0OIbHuI4ciJQ6prjFEEJd9M33I8Tk95mSiMOnItLjcUxARxi
+         PYmNqLKwQ/GHUBBFBpzudN++neKBa5u7NwiLcu1+MWVOi4Qp58YllkXi8XAKVGAM0grO
+         R4Xg==
+X-Forwarded-Encrypted: i=1; AKwUvBzHSxTlEr+gNSJ/bofRARiNRGsc5uMCXQ5SirwGSfbHML/TScqWNozFZkACY2mrIkKKXtnf2KSzkA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYJbb2J+BpJZu6kk18IQHEhS+NYDrMbZ7bbb74eB72YHiAm2yNAG
+	SMkcV2AIaRtol0ggica8Tqr3+dZ6tn99ejN80lprHAEJOMTCAkk6YqZDzNLYISJovKkU3SoqQBl
+	5dUPBog==
+X-Received: from pjvv8.prod.google.com ([2002:a17:90b:5888:b0:3ad:850b:6f1c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:288a:b0:3ac:9706:7739
+ with SMTP id 98e67ed59e1d1-3ae5819e5afmr211698a91.17.1793135923585; Tue, 27
+ Oct 2026 14:18:43 -0700 (PDT)
+Date: Tue, 27 Oct 2026 14:18:42 -0700
+In-Reply-To: <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -95,174 +77,102 @@ List-Subscribe: <mailto:io-uring+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20261026215226.3713941-1-jthoughton@google.com>
+ <14f5f919-55bd-47c6-a1c8-6f1445cce733@app.fastmail.com> <CADrL8HXQdzcroeGN-ACjyy-jSAdBNHiT1_BCVVe0P+Y8ZueiyA@mail.gmail.com>
+ <ac22215d-3e58-4aab-851e-47c30836e058@app.fastmail.com>
+Message-ID: <auEVMrMDqVuKtDqh@google.com>
+Subject: Re: [RFC PATCH 00/10] uaccess: Refuse and warn on user accesses when
+ current->mm is NULL
+From: Sean Christopherson <seanjc@google.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: James Houghton <jthoughton@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Thomas Gleixner <tglx@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, 
+	"David Hildenbrand (Red Hat)" <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, "Vlastimil Babka (SUSE)" <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Jim Mattson <jmattson@google.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Begunkov <asml.silence@gmail.com>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, David Sterba <dsterba@suse.com>, Chris Mason <mason@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org, io-uring@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-btrfs@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-With a single registered NAPI, io_napi_blocking_busy_loop() hands
-io_napi_busy_loop_should_end() to napi_busy_loop_rcu() as loop_end and
-runs its own loop once, relying on __napi_busy_loop() to spin until
-that predicate fires. napi_busy_loop_rcu() sets NAPI_F_END_ON_RESCHED,
-so __napi_busy_loop() also returns on the first need_resched(). io_uring
-treats the return as the end of the busy poll period and sleeps in
-schedule_hrtimeout() for the rest of the wait timeout.
+On Tue, Oct 27, 2026, Arnd Bergmann wrote:
+> On Tue, Oct 27, 2026, at 18:29, James Houghton wrote:
+> >> I would think that user_access_begin() is a more natural place
+> >> for the added checks, as this should be called exactly once for
+> >> any function that accesses user space and also stays out of the
+> >> way of the copy_from_kernel_nofault() etc.
+> >
+> > user_access_begin() isn't used in a lot of places that I want to
+> > catch, including the KVM case. Roughly:
+> >
+> >   kvm_write_guest_cached() --> __copy_to_user() --> raw_copy_to_user()
+> >
+> > There's no user_access_begin() in there. :/
+> 
+> Good point, yes. After the changes described in
+> https://lwn.net/Articles/1102061/, I had assumed that all
+> __copy_{from,to}_user() are going from common code, but it looks
+> like the series so far only touches __{get,put}_user().
+> 
+> There are of course few enough of these left that I think
+> we can consider doing the same thing here and turn them all
+> into the checking version:
+> 
+> $ git grep -wl __copy_'\(from\|to\)'_user  drivers mm virt
+> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
+> drivers/gpu/drm/i915/i915_gem.c
+> drivers/gpu/drm/i915/i915_query.c
+> drivers/usb/gadget/udc/atmel_usba_udc.c
+> drivers/vhost/scsi.c
+> drivers/vhost/vhost.c
+> mm/kasan/kasan_test_c.c
+> virt/kvm/kvm_main.c
+> 
+> > I do think user_access_begin() should have the new check though, so
+> > I've added it in the v2.
+> 
+> I had the details confused here. Seing that user_access_begin()
+> and the other accessors always call access_ok() at some
+> point, maybe that would be enough?:
 
-With two or more NAPIs the inner loop is single-shot and io_uring's own
-loop runs until its predicate is met, so busy_poll_to is honoured. The
-same registration therefore behaves differently for one NAPI than for
-several.
+It would help, but it wouldn't cover everything, e.g. KVM "caches" the access_ok()
+checks well in advance of actually performing a user access.  I don't know that I
+would fixate on KVM too much though, as KVM's memslots infrastructure that begets
+that behavior is quite unique, i.e. it's unlikely other subsystems will have these
+types of bugs *and* elide access_ok() checks at the time of access.  And KVM has
+natural chokepoints for these accesses, so it's easy enough to harden KVM itself.
 
-Make the busy poll deadline absolute, stored in io_wait_queue, so that
-io_napi_busy_loop_should_end() no longer depends on the start_time the
-napi loop snapshots on every entry. The single NAPI loop can then be
-re-entered after an early need_resched() exit if there is budget left,
-and the loop condition drops the "run once" special case. The fast path
-that holds the NAPI across polls is kept.
+The counter-argument is that _if_ there are other subsystems that are caching
+access_ok() checks, then those are probably the subsystems that are most likely
+to mess this up and thus would benefit the most from common hardening.
 
-Measured on io_uring-7.4 at 9c207aa58e54, x86-64, HZ=1000,
-PREEMPT_DYNAMIC (lazy), no CPU isolation, low RX traffic, r8169 with one
-RX queue, prefer_busy_poll, busy_poll_to = wait timeout = 10 ms.
-"waker" is a SCHED_FIFO task pinned to the polling CPU waking every 1 ms:
-
-  1 NAPI, waker, before:  busy 0.5-1.5 ms per 10 ms wait, ~0.8M polls/s
-  1 NAPI, waker, after:   busy 10 ms per 10 ms wait,      ~16.2M polls/s
-  1 NAPI, idle, before:   busy 10 ms per 10 ms wait,      ~15.3M polls/s
-  1 NAPI, idle, after:    busy 10 ms per 10 ms wait,      ~16.2M polls/s
-  2 NAPIs, waker, before: busy 10 ms per 10 ms wait,      ~7.2M polls/s
-  2 NAPIs, waker, after:  busy 10 ms per 10 ms wait,      ~7.1M polls/s
-
-The held-NAPI fast path polls about twice as often as the single-shot
-path used for several NAPIs, which is why it is kept.
-
-Fixes: 8d0c12a80cde ("io-uring: add napi busy poll support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Cinq Prairie <notprairie@gmail.com>
----
-v1 -> v2:
-- keep the single NAPI fast path, make the deadline absolute and
-  re-enter the napi loop after an early need_resched() exit instead of
-  removing the special case (idea from Jens)
-- add numbers for the single NAPI fast path when it is not cut short
-- cond_resched() between laps deferred to a follow-up patch
-v1: https://lore.kernel.org/io-uring/20261025232926.17944-1-notprairie@gmail.com/
-
-Until the follow-up adds a cond_resched() between laps, a pending
-need_resched() makes the single NAPI path fall back to one-poll laps
-(acquire, poll, busy_poll_stop()) for the rest of the wait, i.e. it 
-behaves like the multi NAPI path until the reschedule is serviced.
-
-How the numbers were taken:
-  - bpftrace on entry/return of __io_napi_busy_loop() to measure busy
-  time per wait period
-  - bpftrace on napi:napi_poll tracepoint to count poll rate
-  - bpftrace on the return value of io_napi_busy_loop_should_end() to
-  see whether the loop ended on io_uring's own condition. Before the
-  patch, with one NAPI, it never returned true and every exit came from
-  __napi_busy_loop() breaking on need_resched().
-
-First seen on a 5.14-based distribution kernel (CentOS Stream 9)
-carrying the 6.13 io_uring NAPI backport (arm64, ena, isolated CPU).
-Registering a second unused NAPI id works around it, which is how the
-asymmetry was found.
-
-Only static tracking was tested. Dynamic tracking goes through the same
-loop and is unchanged.
-
- io_uring/io_uring.h |  1 +
- io_uring/napi.c     | 38 ++++++++++++++++++++------------------
- 2 files changed, 21 insertions(+), 18 deletions(-)
-
-diff --git a/io_uring/io_uring.h b/io_uring/io_uring.h
-index 32247529076c..cd2a013143e3 100644
---- a/io_uring/io_uring.h
-+++ b/io_uring/io_uring.h
-@@ -139,6 +139,7 @@ struct io_wait_queue {
- 
- #ifdef CONFIG_NET_RX_BUSY_POLL
- 	ktime_t napi_busy_poll_dt;
-+	ktime_t napi_busy_poll_end;
- 	bool napi_prefer_busy_poll;
- #endif
- };
-diff --git a/io_uring/napi.c b/io_uring/napi.c
-index 7e698720cd51..be3d557db010 100644
---- a/io_uring/napi.c
-+++ b/io_uring/napi.c
-@@ -134,21 +134,21 @@ static inline void io_napi_remove_stale(struct io_ring_ctx *ctx, bool is_stale)
- 		__io_napi_remove_stale(ctx);
- }
- 
--static inline bool io_napi_busy_loop_timeout(ktime_t start_time,
--					     ktime_t bp)
-+static inline bool io_napi_busy_loop_timeout(struct io_wait_queue *iowq)
- {
--	if (bp) {
--		ktime_t end_time = ktime_add(start_time, bp);
--		ktime_t now = net_to_ktime(busy_loop_current_time());
--
--		return ktime_after(now, end_time);
--	}
--
--	return true;
-+	if (!iowq->napi_busy_poll_dt)
-+		return true;
-+	return ktime_after(net_to_ktime(busy_loop_current_time()),
-+			   iowq->napi_busy_poll_end);
- }
- 
-+/*
-+ * The deadline is absolute so that the napi loop, which takes a fresh
-+ * start_time on every entry, can be re-entered for the remaining budget
-+ * after it ends early on need_resched() (NAPI_F_END_ON_RESCHED).
-+ */
- static bool io_napi_busy_loop_should_end(void *data,
--					 unsigned long start_time)
-+					 unsigned long __always_unused start_time)
- {
- 	struct io_wait_queue *iowq = data;
- 
-@@ -156,8 +156,7 @@ static bool io_napi_busy_loop_should_end(void *data,
- 		return true;
- 	if (io_should_wake(iowq) || io_has_work(iowq->ctx))
- 		return true;
--	if (io_napi_busy_loop_timeout(net_to_ktime(start_time),
--				      iowq->napi_busy_poll_dt))
-+	if (io_napi_busy_loop_timeout(iowq))
- 		return true;
- 
- 	return false;
-@@ -215,13 +214,17 @@ __io_napi_do_busy_loop(struct io_ring_ctx *ctx,
- static void io_napi_blocking_busy_loop(struct io_ring_ctx *ctx,
- 				       struct io_wait_queue *iowq)
- {
--	unsigned long start_time = busy_loop_current_time();
-+	ktime_t now = net_to_ktime(busy_loop_current_time());
- 	bool (*loop_end)(void *, unsigned long) = NULL;
- 	void *loop_end_arg = NULL;
- 	bool is_stale = false;
- 
--	/* Singular lists use a different napi loop end check function and are
--	 * only executed once.
-+	iowq->napi_busy_poll_end = ktime_add(now, iowq->napi_busy_poll_dt);
-+
-+	/*
-+	 * With a single NAPI, hand our end check to __napi_busy_loop() so it
-+	 * holds the NAPI for the whole spin. It may return early on
-+	 * need_resched(), so keep going until our own deadline.
- 	 */
- 	if (list_is_singular(&ctx->napi_list)) {
- 		loop_end = io_napi_busy_loop_should_end;
-@@ -232,8 +235,7 @@ static void io_napi_blocking_busy_loop(struct io_ring_ctx *ctx,
- 		do {
- 			is_stale = __io_napi_do_busy_loop(ctx, loop_end,
- 							  loop_end_arg);
--		} while (!io_napi_busy_loop_should_end(iowq, start_time) &&
--			 !loop_end_arg);
-+		} while (!io_napi_busy_loop_should_end(iowq, 0));
- 	}
- 
- 	io_napi_remove_stale(ctx, is_stale);
-
-base-commit: 4a93427e99a8524f3612f29ec8bc0da5f8435a51
--- 
-2.54.0
-
+> --- a/include/asm-generic/access_ok.h
+> +++ b/include/asm-generic/access_ok.h
+> @@ -33,6 +33,9 @@ static inline int __access_ok(const void __user *ptr, unsigned long size)
+>         unsigned long limit = TASK_SIZE_MAX;
+>         unsigned long addr = (unsigned long)ptr;
+>  
+> +       if (WARN_ONCE(!current->mm))
+> +               return false;
+> +
+>         if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
+>             !IS_ENABLED(CONFIG_MMU))
+>                 return true;
+> 
+> (plus the few extra copies of access_ok()/__access_ok())
+> 
+> As a quick fix I would probably start with just the 'if (!mm) return false'
+> bit here to get something merged while we still discuss the other
+> details.
