@@ -1,91 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793206058;
-	b=he5LYlOhxKJEc4WeysEXQLh+pSQDsklySWp/cwfKrI0OjGnrR4fjreDYBfrhn6wEmo3s
-	 IIaNp2RDJDFAoc4Rn/u/Us9ez/OBl3picT2lBOVsIh0A8/L2+uv3netDplcKgyHpFB3Wi
-	 CO4CtS8FSbx7rTDQly7Ayfkd+Xr+A2IfmQ1RQ0R3ywny7Sn7Nvmkw8Ct4A2Ds3d0jgsKN
-	 1NmTHAj7D5JVUQ30SLUYpEAMU0xtMY/WPWU6zjZJm6HZMRssya9DAbb60jL4GcCC+fP/g
-	 c7WssLad0RJcFDmFrBzKXnTlQ8RMjHylwE3inBit+mu59W6v+Ap1QtX0pAOhO/GHJlA==
+	t=1793206059;
+	b=j5HlhKSA09Rg1Gg5a7Z8yPgT+aK07vSY2nGMTorGgj9xpRmZOsV/qLBxdA/FZJqhzqDg
+	 oWDL2CZipgFwRcP+zCXYOGvFy00VpjZNjEc0J0KThnmvGS9JN7KxhlasDX4PXtb+Iz4q4
+	 heOPTnV3/E2/KohgKKquvttWYmhP1DdDlWFlAsxKfkheh1XTAq/g19EKkPOA0PDHeQ7gP
+	 aJHk1wZtvIbk1cUrIqh/ZTHvaWjPcrfTwqeX+2gq21TG0pcUKFy0pYq8gu1brynP4EVmJ
+	 TeScMoi40mPFfrAenF4wAN7qlnz7Pt9rUnNdRODv18cfNBN2hSTQqkPXmh5xWW10JZg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793206058;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206059;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=l8WVltSH1HTBnjkdmYUbVmfhDUOpPOZsDSPZHlfQJvw=;
-	b=swZj9HRC8o5sF+qmk4EI99B7S0uUHBNPeZLq6GGUKiLCG0/D+Z/l+Z7iu/Oi3WiUGvHg
-	 rExCv8qHKwrEgle5DsmpGtFCHY/0W0Xj4u2VTiOuRqTjCqtYovCyx90FQTLKACiOGmK5H
-	 5h+gcM8wQKIR0Gy/szHDQn1XbWHt6h+atvVAZRryxVl7U07Dzk+1eDTb/bs+uUt5s3WXB
-	 PuauAtexgYx0vsCz/Pzn99IItMyTZD9GTJWQEN1yRpC/h5mSx27J/qXJ5l7n4wSIR43K9
-	 cG7cGpy6FndEdZJBCj3PyC8AJ9XpKTjzNwNlSLIdP7SLRwDlekfAabt5Ax5k7L5EQgw==
+	bh=JFjgbk6WFZbmlST+M0GxkdQvyngOIe62skUxbzNLCHU=;
+	b=a/+ZpArmcQeBol1e4YvCuM0uyrV+aErQ3EiP1TfYrvDOklN2Hczpi197uee0drK4yMfy
+	 FoF9HxoTv6GD5ZMxD5Euh0mDmty9jR8Ngodwf6gX20w4dFwziZJ1AriZwbgXhZrAmwWpz
+	 4Xfuzi7KSlVbVCb6xfjg/mfhk/kjWhLLCIqa3IDAlU4qbv8C7uxL+pCnp5RRUwiLA4UvS
+	 w7pCHnK6Z8qWfpmbiS79LSw6NQpWNKBezHZf1M07wResMapZ+8rgUXXH00VjmMCKHq45m
+	 L0fNKinku/y3nT7ARteY0Ar3uGxrJRwYex1XPy/emfbLoka9owCBwNMbjy+5jOtU1RQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KY9DTeQt;
-	arc=none smtp.remote-ip=209.85.210.42
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=YBFNaX3C;
+	arc=none smtp.remote-ip=209.85.161.47
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F2C60A260C
-	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 69F2C60A260C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797CB606A320
+	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 797CB606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KY9DTeQt
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-823e4047037so902859a34.2
-        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:38 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=YBFNaX3C
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6b19e291cc6so1104153eaf.2
+        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206057; x=1793810857; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206058; x=1793810858; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=l8WVltSH1HTBnjkdmYUbVmfhDUOpPOZsDSPZHlfQJvw=;
-        b=KY9DTeQt5UzWEVg1e492nIGOSlTQaJoIRBLm0ccqRCBQGGnUnUtr5DTQZyrmniRiik
-         b+QV7Ykzy9LLg6O+yjGe5gYbG68q9O+biEqfA7mwIYiolubuZ0TcYyJ2S0XvmfU8be5E
-         63Bnp21jHCV6iD8SVecbwDITgC/vlRY/iMbOBaSnDpc0wO6OgssLbVtrWApgfyeEsCLo
-         B4Jgv4ynLQqLSUylujutg2dRVdsVYHNTDJr61XyDo2hsM5nzpizQaMw0lnACLL/oFfc3
-         rtQqLnyw5T+oI0H2iYBj00erEpeBR1F9zpxyaddIgdQCtbvgTmedZrgUNaCSEnpcDSgi
-         PBLA==
+        bh=JFjgbk6WFZbmlST+M0GxkdQvyngOIe62skUxbzNLCHU=;
+        b=YBFNaX3CaTsTqfPcWa2EXTYjxSvYt+16lbpbvDOjMcXh4LugtpPb2gWzYrohLIEQPy
+         gI+C2mc65YfOYd4jl4HY4tt6Nbfo9EN9MZrfu/yP4sJVBytOAtg/x5PIbpdd+BOW6nd/
+         vqMZlbqTQWynx7EvlgOc/qHjual75Zp22FZbIqnnzT0d34WW4Eydw0GKuo6rF9MaMlJi
+         dmSKOnPxppSSfzMAah0v2QAi0/FCiQjS5DLKEsQHH7fJ8ZZvvWF6nRNEPTEHG+h/lALc
+         +Z8mirw+b8UGeNL4LqUM9ie13StCZBJ8EFX6Wr/L9jWxbfw7aJElqhKu8/hRfABMLZ4i
+         gUyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793206057; x=1793810857;
+        d=1e100.net; s=20260707; t=1793206058; x=1793810858;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=l8WVltSH1HTBnjkdmYUbVmfhDUOpPOZsDSPZHlfQJvw=;
-        b=WJqknFXlgl2WuvcGyzhGDEJfzXgFr2cg/7vYSyI2eeQ+wUlN2dBhe78d8dwCC+ZjeF
-         rEF48L+zraY7n+lfka241FuiUqNslWNlXoadI6/gqmiFehMi1v450kJ++zDeMXS3vp2b
-         XN/Bv4Oheq89Q4MP0mE1D5G7kqIm4J/Q7aBayH5p8Xhw6sQKwC9ZHiwOoPlmyMUcumOP
-         PIJOzXSNKCFTBxr/MtkunYWsLY68jVRSbwXVXIDC3zvVZIeQNxGKdz3fzz6EQj8Aiif2
-         sSatxbYnL0QZrVXchJrNb2slBgNiwSJZY3yECLQ5fnl2POblGDqMYt9RLvu/yupWqkRD
-         VYvA==
-X-Gm-Message-State: AFq9FYLPO8igr/AkRSh+z7BVnC1T7i6OeHI1TezXhOVJDwgyZT7XCUf3
-	+avWdZ8Ep269ONlaMO+MpfriYjV9rThbBT9i5/ZF7Id1cDjDOiRT0LLhld5gk5+vPVyd25LHvyq
-	0++3QDRY=
-X-Gm-Gg: AYBFou2k/0lfBQ6ovIPGp83AzScqJ2o1VuMF4c5BQ3Z/54HrfRId0jxaPd8wFrkp2es
-	AfZnYQBQ6yXfnNo7nHed+GEF9ECQGgSOiOjFeOR5P9N0YGmubAqeHmwJuNhfC0YCLpT1g5loGha
-	AQXzRLsxd8OoOrddH+GAJPS9+9qZpdkO622y0WOmtwgB4/HEoHM+Z1lwxS1nXHyQ2H/z+fF/iEL
-	/vhlpipBFyMfi/Vg7rFwXhzhC6T74DVLPN94J31Lm0QEDzalWHAVKivpvwceDkMIzcnyVVr5n1x
-	hkWdpyRqDyNbHKw1C9Nr5WMtnJlvg3bWtdBbLe60Nl4wwP/agIcMgP32+cAAvDNDpgsXMlmDHbX
-	QJpuS8IblSYO+XM+OiU6uPWzwYsNH0jfSLYal25rpEwUgO6Lj3chju7X3J0J4qbgPujnFdLU57M
-	VlQMfDKOAYbZ7Uk5MCfoclV2SSFxczlNdNTC23UEpUm7G34f82gfvG0B/p9yQxBLHxDhFcGg1cB
-	L8PXNanCSZa8GG39iwZmSG/ShDunw+jUqquVURKeXMryh6v54xIScihJmXSpsuzKFlnYeIZ8R5s
-	HxheAl94/vMNO8Y5YJlWlkN+aa3J27g+wXE+xdUjeclvkfwiPz4B3Ax2jweRETXTP/zON2+epA=
-	=
-X-Received: by 2002:a05:6830:44a3:b0:7f6:ec23:7956 with SMTP id 46e09a7af769-85aba80b487mr2409854a34.2.1793206055877;
-        Wed, 28 Oct 2026 09:47:35 -0700 (PDT)
+        bh=JFjgbk6WFZbmlST+M0GxkdQvyngOIe62skUxbzNLCHU=;
+        b=vkDr3xC3jLFmA1ikZvoAF0n5zMpXyaaNIpCwb+EIGsernuc2I8w3Bywdv1L6GZjZ9W
+         FUgQ7FYpVizPjP432cLCM8NljomXuqnn7XhGc+NEJ6bQI11q0zIOb2CyohMERRUM8j0J
+         k/mJgk3kRvL/KlaLgVC9RjdpH/H7q8YbFTWF3YZT8wR14X1AqHz+DYgMvL5sywNie9s/
+         N2Z4IlnqcJFmWwDV3/O3j4nCqQveu+X89jm1BrYmLdxWXdQ3P0jVE0kLhW+Shnseu5lS
+         wOv4/o/nAXmdh+fFtUFI3Mzj8lwn9z0GG7V4VXQOAsxLGQ+0RHM65mXADSwX7U9TNHHM
+         p6fg==
+X-Gm-Message-State: AFq9FYLOw9fPVBoATUwas4kSh/vZjEH267akkbNOLG7CmVU3nIc9KQyw
+	7ZTjTRp/C4s1ZzExBlUzitTXvSCx5hUE6K7+gKkT+FzjRdY+lX2D0BShQeZPP64SVZLSUOzUxHm
+	T7ebfawQ=
+X-Gm-Gg: AYBFou0iAx/7i/BdMNaOpEf6nfEFTlNYeqq/+NsWQ2YzW1tLMwT3PRIxNP5d29GwY8C
+	lMllcEglu/Epd9Xx6kMPep/i4axF3HmnMjmSh916lmQkcN/dz1zyohVa8chwhWbHk0Zvk6f+Yo0
+	Tv3FT66C8tiy6ZF3U063Tw7qR+UDTxPWvdDTKLNJO1nSPPoye6n1/3TGDtjc5nZgRcbQEtocx+s
+	o9RmKou160TZK4bLPxw0fLWQjgatcgKbaMkvSq0V4Vogw+JpDDS0sXxtWH8LTb2flQMypHOTmPr
+	V5aS+22avd4JxaUeK9frwYtuL80IOklL1sDUh2o5PbwUIclhKoi4ucBNqkP35yVqNt/xYn+3e8L
+	Tv1ykmt9tfmryi3EqFlw3X8kJ7/47VoZelzAes2W7o+UUP7DL3LOh2f6CJsWGodoBrRxqtVtv36
+	2OuOtWxldZI1pfit1pwifjCKd3bE6nYSTZ9l+Kdb9X6nWyoUXSHky+YOIhnSEaZKWbIeXW1QM96
+	DgsXznmJuwM69b78cFligd4zRzP95ml8+Wy91TtiVjA2U4Ev2tBSUPatTfX1hrxGPl1SGobNmPK
+	aV/CS/9nIYmG8Hn94CsF3++jRW7DFM8YdTIE4YE89DRHWJeaW2O5eKBHL6FysolHpsHs0jS7laN
+	YXNietkQBWfKlstkwbt8=
+X-Received: by 2002:a05:6820:4c06:b0:70e:177b:eb53 with SMTP id 006d021491bc7-713edca578emr1749832eaf.33.1793206058436;
+        Wed, 28 Oct 2026 09:47:38 -0700 (PDT)
 Received: from xps16 ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.35
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 09:47:35 -0700 (PDT)
+        Wed, 28 Oct 2026 09:47:37 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
-Cc: Josef Bacik <josef@toxicpanda.com>,
+Cc: Chris Mason <mason@kernel.org>,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 01/10] io_uring/io-wq: no new workers once the exit has begun
-Date: Wed, 28 Oct 2026 10:46:49 -0600
-Message-ID: <20261028164732.1264069-2-axboe@kernel.dk>
+Subject: [PATCH 03/10] io_uring: charge tctx nodes and personalities
+Date: Wed, 28 Oct 2026 10:46:51 -0600
+Message-ID: <20261028164732.1264069-4-axboe@kernel.dk>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261028164732.1264069-1-axboe@kernel.dk>
 References: <20261028164732.1264069-1-axboe@kernel.dk>
@@ -100,52 +100,61 @@ Precedence: list
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Josef Bacik <josef@toxicpanda.com>
+From: Chris Mason <mason@kernel.org>
 
-io_wq_exit_start() sets IO_WQ_BIT_EXIT, but worker creation task_work
-queued before that stays queued until io_wq_exit_workers() cancels it.
-In between the task runs its task_work while canceling requests, and a
-worker can still get created.
+The io_tctx_node allocated the first time a task touches a ring, and
+the XArray nodes behind tctx->xa and ctx->personalities, are plain
+GFP_KERNEL. tctx->xa is indexed by the ring pointer, so nearly every
+entry needs nodes of its own, and a task gets one entry per ring it has
+used. 642 threads on 4000 rings held 2.3GB with 59MB charged against a
+64MB memory.max.
 
-That's a problem for exec. begin_new_exec() calls io_uring_task_cancel()
-after de_thread(), when it's supposedly the only thread left, and
-io_wq_exit_workers() only waits for ->worker_done, which a worker
-completes before do_exit(). So the exiting worker is still in the thread
-group, using the mm, files and sighand, while exec replaces them. Easy
-to hit with a signal pending when create_io_thread() fails and the retry
-gets queued right before execve().
+Allocate the node with GFP_KERNEL_ACCOUNT and set XA_FLAGS_ACCOUNT on
+both XArrays.
 
-Cancel the queued creation task_work as soon as the exit bit is set.
-Pending work that isn't otherwise canceled now ends with -ECANCELED when
-the io-wq is destroyed, rather than depending on whether the task
-happened to run its task_work first.
-
-Fixes: 685fe7feedb9 ("io-wq: eliminate the need for a manager thread")
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-[axboe: the barrier is already upstream, see 0e5663856b69, only the
- cancel is new]
+Fixes: 0f2122045b94 ("io_uring: don't rely on weak ->files references")
+Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io-wq.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ io_uring/io_uring.c | 2 +-
+ io_uring/tctx.c     | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index e93cfa82b850..28533174d0da 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -1420,6 +1420,12 @@ void io_wq_exit_start(struct io_wq *wq)
- 	set_bit(IO_WQ_BIT_EXIT, &wq->state);
- 	/* Pairs with task_work_add() in io_queue_worker_create(). */
- 	smp_mb__after_atomic();
-+	/*
-+	 * No more workers from here on. The caller is going to run its task
-+	 * work, and on exec a thread that is created now would still be
-+	 * around, exiting, by the time that the caller must be on its own.
-+	 */
-+	io_wq_cancel_tw_create(wq);
- }
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index e9c65cf0cc51..76de44a91a7b 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -271,7 +271,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
+ 	if (ret)
+ 		goto free_ref;
+ 	init_completion(&ctx->ref_comp);
+-	xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
++	xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1 | XA_FLAGS_ACCOUNT);
+ 	mutex_init(&ctx->uring_lock);
+ 	init_waitqueue_head(&ctx->cq_wait);
+ 	init_waitqueue_head(&ctx->poll_wq);
+diff --git a/io_uring/tctx.c b/io_uring/tctx.c
+index 466b7300e208..4dedcdc44780 100644
+--- a/io_uring/tctx.c
++++ b/io_uring/tctx.c
+@@ -104,7 +104,7 @@ __cold struct io_uring_task *io_uring_alloc_task_context(struct task_struct *tas
+ 	}
  
- static void io_wq_cancel_tw_create(struct io_wq *wq)
+ 	tctx->task = task;
+-	xa_init(&tctx->xa);
++	xa_init_flags(&tctx->xa, XA_FLAGS_ACCOUNT);
+ 	init_waitqueue_head(&tctx->wait);
+ 	atomic_set(&tctx->in_cancel, 0);
+ 	atomic_set(&tctx->inflight_tracked, 0);
+@@ -123,7 +123,7 @@ static int io_tctx_install_node(struct io_ring_ctx *ctx,
+ 	if (xa_load(&tctx->xa, (unsigned long)ctx))
+ 		return 0;
+ 
+-	node = kmalloc_obj(*node);
++	node = kmalloc_obj(*node, GFP_KERNEL_ACCOUNT);
+ 	if (!node)
+ 		return -ENOMEM;
+ 	node->ctx = ctx;
 -- 
 2.56.0
 
