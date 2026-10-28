@@ -1,91 +1,91 @@
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793206061;
-	b=T6rZNdWhFnQnNvbvL6U7MhoPhIwi/of84q3cZ/8joPr+DEQnDzwxHoTc5CXPCsayzIgC
-	 Hh5UfiEuHoSZxDj9LhsYvpFFM2Ozq96x9X8sRHi9PiymnGyiuku4wMraAr+uyUAVXn0HS
-	 pUaTvVYGc/Md8rwIZi9NSSI/A0d9209NRi5NwX0TNcj1fYslAReddN7ABSeaAus+xt/Ps
-	 +RAR6MJVFUL4mnfCJba9kdfpnxVzoQrzz9jgnRroB43xCxBo0BRKTTolJJtwnD5NqC+NA
-	 JJieoeVQe/P4FjhF+F4JUvKIRqR6ZUgyrn85gGmFlkFyq/7WZrE58jUSCx/XH+/JzZQ==
+	t=1793206062;
+	b=X8liSUhWQLiSIFvPvS2pDUXv/yyeIfb9hK2vMJ/2tOe3JX+kw0VLcmizXLhAw3PDiuCx
+	 LGkp78TszIHzFxQ+ZBIhA3QhD/cufhWUqnnViCSFJLfwtwF6Yajw5+3vj07+Xv1UXaMJ5
+	 n/pETKeNyCzll0wfL3i7k/ZKgXeRH1X3BgSrU+JEjrPh079lsIAUvDzMHrSeFL+CQFxcr
+	 duetbFV6dKm2sBGMADZnJEsYQjv3w90FF0J/0BpHM7rhKSjGS3MEJ4uMXd1E5wU6G4dNp
+	 TQmQE/VyPT8RtoJD8BEFIg7uk509o7UH46jyjdxP8jaWRRWOfvYQROacNYbS44nlMLQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793206061;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206062;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=Hf/Bdm/wcfWXHoQ4J6G6Uajj4VcFtjy/5XdsLk2LWik=;
-	b=szNCp4g0xZ8vfJywx39C8gYIiSRK77RndDIv5O2GVuxty1ncTpb/axcB5MKcJ9I8Kgou
-	 JDj7JCtSLdWMsqB9e6hUCsoOgQ337ryGKy+sJKKF+YLLvLr23snKABBGL+maizlgCU7Cg
-	 dwy4sb/zk8jOpg7JJjZ2PHKKFXgGm0MMwPMxV0MM1DEqRFHFelfOwhydTLiX4JZq1SL5E
-	 1PYKIarnwExgwm2YJNWD9bkAToQlTlmsce2J7ZgrEMjDwAOzscbCD7ygVaYZML5GqmrRe
-	 oSYEphklyDHk2qYkDSrMw8wuHyrO7Td3W9eoEfVFFKaSXuj+G4nZJe0GrxVoUstyI8w==
+	bh=fd5UErdXQbkUuMz5MUmHtV+orNLfJZtkQG/h/s3wuLo=;
+	b=jmvaBDwOrJyokV/c3+Rl58+yeBtA2z+K0+XomPuROXXMZISE/GWW92bAwTfqHLyamx/b
+	 28oFkys5KshzY+wQYB1+lLclqwPCpn+07vrtB4Oftt8c5Iwf9Knr/M1wDC97e3gF2A0Tx
+	 LxKsjYgLwQa4PR4/8IkHtSLS8nP7IeMq2Et3fqaF4l0BRan6fHfbNij57JGh84rDXVt0V
+	 AZFcB9stYeYg1QjnAJwhFTG7xn4615yR4Fo4/zIZFMnUxLaHpx4WEzRLg6PPwYhOQtNra
+	 EJBi8xrxBKQI57Zv0ZZYNw1jl+lfDjmsk7fe75CQV0L0j9Ydq4q6BL9jUyhL5FqrQtQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=hv4ZvH3h;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=MblJS07u;
 	arc=none smtp.remote-ip=209.85.210.53
 Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4F4606A320
-	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D4F4606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D22C606A33F
+	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1D22C606A33F
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=hv4ZvH3h
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-84a2bea315dso835663a34.1
-        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:40 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=MblJS07u
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-823b938464fso827275a34.2
+        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206060; x=1793810860; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206061; x=1793810861; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Hf/Bdm/wcfWXHoQ4J6G6Uajj4VcFtjy/5XdsLk2LWik=;
-        b=hv4ZvH3hpNq2tnNePSgvc0QbHPvqheC+ZYYddtKQUeKxGjoNgTGff2AzcyNW6gyTtO
-         /FwInRSDHqajpFfeQHOswsX8hnN2HhFNDM4r1x/NUx8ko3jWEEUtmjl/4ne5osI+zOXg
-         nPyP2I7Ka56lTEMzxvHZOgjAep6+1Co+sl8jTPfrDktqXwuaUxcHguK7GlFSFux+h3fV
-         z19f+y/hl5xm1cu42wVz/+F0FiQJUMyJ2TSmxWhxIGcJtwQKkxHKXtkN3EPInv9i5B9Y
-         t/lu/BiPqvd/8JQj8aMoc67hJKGnZXBW8UQn2qq43kMNozpIZmx4YudRQCT6AgXL2yFt
-         S2VQ==
+        bh=fd5UErdXQbkUuMz5MUmHtV+orNLfJZtkQG/h/s3wuLo=;
+        b=MblJS07uEmZ2U0Af50XOgEoezv6jLytJlLDRj9ZRFiOm09U5Xt/3A/QurJwBgfkjr1
+         kK2r2ydcekcqQOxRE2LStDWur/56he8uSC0YJIXjmEMqeY80/14dOPKAhk2sP3aC96wm
+         7QrV95tbb0XybbsoSxQJ8DG2jHr0bGgaKElfAsoEsFYNQ18kGDbzAKCijpsMoADYu1Z0
+         YeDiEOOweuC2r/AxNUqLMCApaVvjO71k9m4QDAGW/u+brjstlW69tcshacXCC7qy/7ja
+         2B77WaqQcU8CHY9i75MDLivMCK0AfPs+ZRBNo+sJLNP9EZTqhj1rnA30ndlGevD95455
+         IyLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793206060; x=1793810860;
+        d=1e100.net; s=20260707; t=1793206061; x=1793810861;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Hf/Bdm/wcfWXHoQ4J6G6Uajj4VcFtjy/5XdsLk2LWik=;
-        b=spaIDq23bCOmxvS9TzFgzQzDmae8xM/iXFoB1zHVrhwr5F2EE99c2u5PMKGYBfJS0F
-         K11QO7ggpbQeMNje5gflvQ6yIrTJ/25M2/mTKAkj22yPa0bYkSGIHnf0BwW/EotUVicC
-         droAk0DSN0Fxg0I9zyz+CsN/iLmdH6zQ9L9rN1mlcQpqVM+iFSw1fLZ3ORd5X5bSciov
-         +x2c1EGa/c8bPmUlXA5ox0IINzdByK89dXMH/fpViX8XwuNaCD6/UFChmB2iu3VmSZzR
-         JT4j25cOA+z/tKN0PvIv1RhNEnnkvzIF0MmrunPZhFvHGxlb+IIqnKXe/5TxXcQKU2Qt
-         AQpg==
-X-Gm-Message-State: AFq9FYL909R3hF29Dxbt+qJz1XwXCWowOi5//GgkSs18ZpDB8bld26JI
-	nAJSQlyeq2m0NYe8QNkPzkBR/nRiuDzwYik7Kw7v9MLPBclEX7IjDxCedix+DLnU3WIar+hOwgx
-	Nzp145cM=
-X-Gm-Gg: AYBFou3odoluKVYrWg6AAzwcYTqiC6D0G/MGObPXuk4981GbWsQfSwhlaH8qFkt/X5k
-	h1qgufIgIl46WybVXy7XjRCtz+gmwA+/Ux2jlt+R8VDiODGUhMjsmzwBl/FWk/j4iEwPL/EncHr
-	wivWSg9psqKWX9vjZqSt/tVWJXpy2TJwJAPuB9TjJkRo7tgh81DaEoMrx5gACO6/R6L7xCSPaeC
-	/DpQUYF0NKxQIHd/92yH1DKRgo7EyJ29dkFY49PPIFZ+5ywnnLQ4F/W9vQ+qAgi0AJfzdjOV3E9
-	S2RAIxes6mZ0mnG5B5+wIbiCnJi/DpO4ViSQVj0w94yIGqy1pdt6Woq1zZaWERkja/2JBM3fqRF
-	TkiOtkWirlNdi2iL70XAaqRRc82gNJZyplgc7qypxShFARcujc4kKXRA3EOz6hz2FaamlqurZI5
-	P1ds7nmPkNQWBNCVtkws+vwbR6qdtUNHJ+27UhLgTfp1rtosxN6B0SnsKy6HDNJZ1r95kAWfdwM
-	ysfPD4YjUFwZykbgygfQD2xQbx0u/CpIu3L2R2WsSFkqNQUG11jW2x5e5pMks8DJDzfx1pzz5pf
-	Zq1tcdNLaMOBZSR8rYDDYOEmB4lxspK76BrMtj2OqF94cKkCyyrli3b3ruKNuND9L3ZxMdOggg=
+        bh=fd5UErdXQbkUuMz5MUmHtV+orNLfJZtkQG/h/s3wuLo=;
+        b=ii7aXU4zeb32XWgDOgHHrGJhuwyteJ+4WniRdKaF2FnJkTkYt6F+5tDAwEVYEmmQWd
+         GVgWGIsgLH0j/+HVQfM19TZrpgtMexqwesinP3U9iPi96eUNJM+i2HNKq10adzfC+bM3
+         Exk/w3iguaAgPVD7TYTt/Pdz1cW5cDAzv4AR+jOJ3DWg5FNHWRXKKjYvw7X45AH+tenW
+         q6KMMTwfrMkwvNUCIER471B6JJZE01tE83euzw1S0gpAHUyGw1ahC097RE+gM7Lorv8c
+         dpWZd5h5Ag/YgxHHJrY2yQv31tlRzknQU84lgUzR0bef/3G6u28aaBL+PMm8SEWKgx/7
+         zCXw==
+X-Gm-Message-State: AFq9FYLQavnd+sqo2R3hS/o9c5SRl1o7p+9b9x0Q8lWfM2yursRz47zT
+	9SS5Ylhc3o5vgaVogbYlMFadXj5ePnB+GWSg7dovaYNdHGPWuz73tzaPkpXzjbqIGyTdgzf5zWi
+	AEaXpF3I=
+X-Gm-Gg: AYBFou2jNmoCna9JLUDQ5s7I0VL0D/HbnHtTckM46ybwXCZYjgspxxNCYzV6muhwhMV
+	gCQ9kYQbao+EE45JRZkIn5A4erW/BkUJeZ5dmF5q3MBuSsITZK0QmKUz8QuTG+/hK3QerUFpKV9
+	lY6j6ezLijLimalOBA/BXZKgI9g8PgCAx0eXPjjmD7LvjN0kgYUHMXHS4PDUmn3Mq7U7reNlhYy
+	WmFWb2rGOZX79h7BRhVD/+v+BpC71n2t/60ZFgz96vxh+phBPQ8HAXtwGi293Ljmuv4ZJoItlOs
+	YpYxFp8P/CeOSjM/6pEqPiw5cznJT48pieHsd8TChDWzqgP/zxAwImEh9xo94ezpXlhQ0yNL3PN
+	TPgreaqQuE30Nf4xS6FHRX0EF4uAOJxIl51rcbY/yURyCbJNBCiOFjiKyqBfIGtgoNepo3Y71sv
+	RVG1szTvwcQO59to2gXXqWOG+zWS+X9yMJivBodC458ILkwn/IPDZBnNEyvWLVgaQ8748oHZjB/
+	aZVK3HHmYz88qII3JsEGVd0Vrf6RjeRlOF0c5giNDWnUkia0P555EFHpRfi2s/HyRBeqCclgdLL
+	Q2wn9F0jPE9poYcWMfjc3C8a/os2zP7IrXgAYbRFEvmkmoUMLApT0MDUkWQvzKim6S57T87AuA=
 	=
-X-Received: by 2002:a05:6830:25d1:b0:82f:5471:4dd7 with SMTP id 46e09a7af769-85ac11bfa1cmr2652084a34.30.1793206060050;
-        Wed, 28 Oct 2026 09:47:40 -0700 (PDT)
+X-Received: by 2002:a05:6830:44a2:b0:81b:a5aa:e82b with SMTP id 46e09a7af769-85ab996d1b9mr2378914a34.24.1793206061195;
+        Wed, 28 Oct 2026 09:47:41 -0700 (PDT)
 Received: from xps16 ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.38
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 09:47:38 -0700 (PDT)
+        Wed, 28 Oct 2026 09:47:40 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Chris Mason <mason@kernel.org>,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 04/10] io_uring: free XArray nodes left by a failed store
-Date: Wed, 28 Oct 2026 10:46:52 -0600
-Message-ID: <20261028164732.1264069-5-axboe@kernel.dk>
+Subject: [PATCH 05/10] io_uring/bpf-ops: clear bpf_ctx while submitting SQEs
+Date: Wed, 28 Oct 2026 10:46:53 -0600
+Message-ID: <20261028164732.1264069-6-axboe@kernel.dk>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261028164732.1264069-1-axboe@kernel.dk>
 References: <20261028164732.1264069-1-axboe@kernel.dk>
@@ -102,60 +102,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Mason <mason@kernel.org>
 
-A failed xa_store() can leave nodes without entries in the tree, and
-erasing every entry doesn't free those. An XArray needs xa_destroy()
-before it goes away, even an empty one. That was dropped for tctx->xa in
-commit ca6484cd308a ("io_uring: no need to call xa_destroy() on empty
-xarray") over a lockdep report from freeing the tctx in softirq context,
-and ctx->personalities never had it.
+bpf_io_uring_submit_sqes() calls io_submit_sqes() from inside the loop
+program, with current->bpf_ctx set, and requests issued inline run with
+it set too. The socket code uses has_current_bpf_ctx() to recognize
+calls from bpf_setsockopt() and friends, where the caller holds the
+socket lock and has already been vetted, and skips both.
 
-Now that the nodes are charged, a store can fail at memory.max and the
-leaked nodes stay charged. Call xa_destroy() in io_uring_clean_tctx(),
-which the task runs itself in process context before the tctx is freed,
-in the error path of __io_uring_add_tctx_node(), and for
-ctx->personalities in io_ring_ctx_free().
+So a SOCKET_URING_OP_SETSOCKOPT from the SQ passes sockopt_capable()
+without the capability, and runs without lock_sock(). A task with no
+capability can set SO_MARK, IP_TRANSPARENT or TCP_REPAIR, and two
+threads changing IP_OPTIONS on one socket, one through the ring, double
+free in no time. SOCK_DESTROY via IORING_OP_SENDMSG ends up in
+tcp_abort() without the lock the same way.
 
-Fixes: ca6484cd308a ("io_uring: no need to call xa_destroy() on empty xarray")
+Clear the run context around io_submit_sqes(). The SQEs come from
+userspace and must be issued like those of any other ring. They still
+run inside the program's RCU tasks trace read section, so a request
+that sleeps there holds up that grace period, but other request types
+do that already.
+
+Fixes: 890819248a86 ("io_uring/bpf-ops: add kfunc helpers")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 1 +
- io_uring/tctx.c     | 3 +++
- 2 files changed, 4 insertions(+)
+ io_uring/bpf-ops.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 76de44a91a7b..b09859c6e8ab 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2342,6 +2342,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
- 	kvfree(ctx->cancel_table.hbs);
- 	xa_destroy(&ctx->io_bl_xa);
- 	xa_destroy(&ctx->hpage_acct);
-+	xa_destroy(&ctx->personalities);
- 	kfree(ctx);
+diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
+index cf2bd068e331..6c2a587fb1bf 100644
+--- a/io_uring/bpf-ops.c
++++ b/io_uring/bpf-ops.c
+@@ -17,8 +17,22 @@ __bpf_kfunc_start_defs();
+ __bpf_kfunc int bpf_io_uring_submit_sqes(struct iou_ctx *loop_ctx, u32 nr)
+ {
+ 	struct io_ring_ctx *ctx = io_loop_demangle_ctx(loop_ctx);
++	struct bpf_run_ctx *old_run_ctx;
++	int ret;
+ 
+-	return io_submit_sqes(ctx, nr);
++	/*
++	 * The requests come from the SQ, which user space can write, so they
++	 * are issued for the task and not for the BPF program. Hide the run
++	 * context of the program from them. The users of has_current_bpf_ctx(),
++	 * such as sockopt_lock_sock() and sockopt_capable(), take a context for
++	 * a call from a BPF helper, whose caller holds the socket lock already
++	 * and needs no capability.
++	 */
++	old_run_ctx = bpf_set_run_ctx(NULL);
++	ret = io_submit_sqes(ctx, nr);
++	bpf_reset_run_ctx(old_run_ctx);
++
++	return ret;
  }
  
-diff --git a/io_uring/tctx.c b/io_uring/tctx.c
-index 4dedcdc44780..291e30e00e45 100644
---- a/io_uring/tctx.c
-+++ b/io_uring/tctx.c
-@@ -189,6 +189,7 @@ int __io_uring_add_tctx_node(struct io_ring_ctx *ctx)
- 			io_wq_exit_start(tctx->io_wq);
- 			io_wq_put_and_exit(tctx->io_wq);
- 		}
-+		xa_destroy(&tctx->xa);
- 		percpu_counter_destroy(&tctx->inflight);
- 		kfree(tctx);
- 	}
-@@ -250,6 +251,8 @@ __cold void io_uring_clean_tctx(struct io_uring_task *tctx)
- 		io_uring_del_tctx_node(index);
- 		cond_resched();
- 	}
-+	/* A failed xa_store() leaves nodes with no entry behind. */
-+	xa_destroy(&tctx->xa);
- 	if (wq) {
- 		/*
- 		 * Must be after io_uring_del_tctx_node() (removes nodes under
+ __bpf_kfunc
 -- 
 2.56.0
 
