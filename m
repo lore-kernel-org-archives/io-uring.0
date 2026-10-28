@@ -1,91 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.47
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.53
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793206059;
-	b=j5HlhKSA09Rg1Gg5a7Z8yPgT+aK07vSY2nGMTorGgj9xpRmZOsV/qLBxdA/FZJqhzqDg
-	 oWDL2CZipgFwRcP+zCXYOGvFy00VpjZNjEc0J0KThnmvGS9JN7KxhlasDX4PXtb+Iz4q4
-	 heOPTnV3/E2/KohgKKquvttWYmhP1DdDlWFlAsxKfkheh1XTAq/g19EKkPOA0PDHeQ7gP
-	 aJHk1wZtvIbk1cUrIqh/ZTHvaWjPcrfTwqeX+2gq21TG0pcUKFy0pYq8gu1brynP4EVmJ
-	 TeScMoi40mPFfrAenF4wAN7qlnz7Pt9rUnNdRODv18cfNBN2hSTQqkPXmh5xWW10JZg==
+	t=1793206061;
+	b=T6rZNdWhFnQnNvbvL6U7MhoPhIwi/of84q3cZ/8joPr+DEQnDzwxHoTc5CXPCsayzIgC
+	 Hh5UfiEuHoSZxDj9LhsYvpFFM2Ozq96x9X8sRHi9PiymnGyiuku4wMraAr+uyUAVXn0HS
+	 pUaTvVYGc/Md8rwIZi9NSSI/A0d9209NRi5NwX0TNcj1fYslAReddN7ABSeaAus+xt/Ps
+	 +RAR6MJVFUL4mnfCJba9kdfpnxVzoQrzz9jgnRroB43xCxBo0BRKTTolJJtwnD5NqC+NA
+	 JJieoeVQe/P4FjhF+F4JUvKIRqR6ZUgyrn85gGmFlkFyq/7WZrE58jUSCx/XH+/JzZQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793206059;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206061;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=JFjgbk6WFZbmlST+M0GxkdQvyngOIe62skUxbzNLCHU=;
-	b=a/+ZpArmcQeBol1e4YvCuM0uyrV+aErQ3EiP1TfYrvDOklN2Hczpi197uee0drK4yMfy
-	 FoF9HxoTv6GD5ZMxD5Euh0mDmty9jR8Ngodwf6gX20w4dFwziZJ1AriZwbgXhZrAmwWpz
-	 4Xfuzi7KSlVbVCb6xfjg/mfhk/kjWhLLCIqa3IDAlU4qbv8C7uxL+pCnp5RRUwiLA4UvS
-	 w7pCHnK6Z8qWfpmbiS79LSw6NQpWNKBezHZf1M07wResMapZ+8rgUXXH00VjmMCKHq45m
-	 L0fNKinku/y3nT7ARteY0Ar3uGxrJRwYex1XPy/emfbLoka9owCBwNMbjy+5jOtU1RQ==
+	bh=Hf/Bdm/wcfWXHoQ4J6G6Uajj4VcFtjy/5XdsLk2LWik=;
+	b=szNCp4g0xZ8vfJywx39C8gYIiSRK77RndDIv5O2GVuxty1ncTpb/axcB5MKcJ9I8Kgou
+	 JDj7JCtSLdWMsqB9e6hUCsoOgQ337ryGKy+sJKKF+YLLvLr23snKABBGL+maizlgCU7Cg
+	 dwy4sb/zk8jOpg7JJjZ2PHKKFXgGm0MMwPMxV0MM1DEqRFHFelfOwhydTLiX4JZq1SL5E
+	 1PYKIarnwExgwm2YJNWD9bkAToQlTlmsce2J7ZgrEMjDwAOzscbCD7ygVaYZML5GqmrRe
+	 oSYEphklyDHk2qYkDSrMw8wuHyrO7Td3W9eoEfVFFKaSXuj+G4nZJe0GrxVoUstyI8w==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=YBFNaX3C;
-	arc=none smtp.remote-ip=209.85.161.47
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=hv4ZvH3h;
+	arc=none smtp.remote-ip=209.85.210.53
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797CB606A320
-	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 797CB606A320
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4F4606A320
+	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 0D4F4606A320
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=YBFNaX3C
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6b19e291cc6so1104153eaf.2
-        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:39 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=hv4ZvH3h
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-84a2bea315dso835663a34.1
+        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206058; x=1793810858; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206060; x=1793810860; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=JFjgbk6WFZbmlST+M0GxkdQvyngOIe62skUxbzNLCHU=;
-        b=YBFNaX3CaTsTqfPcWa2EXTYjxSvYt+16lbpbvDOjMcXh4LugtpPb2gWzYrohLIEQPy
-         gI+C2mc65YfOYd4jl4HY4tt6Nbfo9EN9MZrfu/yP4sJVBytOAtg/x5PIbpdd+BOW6nd/
-         vqMZlbqTQWynx7EvlgOc/qHjual75Zp22FZbIqnnzT0d34WW4Eydw0GKuo6rF9MaMlJi
-         dmSKOnPxppSSfzMAah0v2QAi0/FCiQjS5DLKEsQHH7fJ8ZZvvWF6nRNEPTEHG+h/lALc
-         +Z8mirw+b8UGeNL4LqUM9ie13StCZBJ8EFX6Wr/L9jWxbfw7aJElqhKu8/hRfABMLZ4i
-         gUyA==
+        bh=Hf/Bdm/wcfWXHoQ4J6G6Uajj4VcFtjy/5XdsLk2LWik=;
+        b=hv4ZvH3hpNq2tnNePSgvc0QbHPvqheC+ZYYddtKQUeKxGjoNgTGff2AzcyNW6gyTtO
+         /FwInRSDHqajpFfeQHOswsX8hnN2HhFNDM4r1x/NUx8ko3jWEEUtmjl/4ne5osI+zOXg
+         nPyP2I7Ka56lTEMzxvHZOgjAep6+1Co+sl8jTPfrDktqXwuaUxcHguK7GlFSFux+h3fV
+         z19f+y/hl5xm1cu42wVz/+F0FiQJUMyJ2TSmxWhxIGcJtwQKkxHKXtkN3EPInv9i5B9Y
+         t/lu/BiPqvd/8JQj8aMoc67hJKGnZXBW8UQn2qq43kMNozpIZmx4YudRQCT6AgXL2yFt
+         S2VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793206058; x=1793810858;
+        d=1e100.net; s=20260707; t=1793206060; x=1793810860;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JFjgbk6WFZbmlST+M0GxkdQvyngOIe62skUxbzNLCHU=;
-        b=vkDr3xC3jLFmA1ikZvoAF0n5zMpXyaaNIpCwb+EIGsernuc2I8w3Bywdv1L6GZjZ9W
-         FUgQ7FYpVizPjP432cLCM8NljomXuqnn7XhGc+NEJ6bQI11q0zIOb2CyohMERRUM8j0J
-         k/mJgk3kRvL/KlaLgVC9RjdpH/H7q8YbFTWF3YZT8wR14X1AqHz+DYgMvL5sywNie9s/
-         N2Z4IlnqcJFmWwDV3/O3j4nCqQveu+X89jm1BrYmLdxWXdQ3P0jVE0kLhW+Shnseu5lS
-         wOv4/o/nAXmdh+fFtUFI3Mzj8lwn9z0GG7V4VXQOAsxLGQ+0RHM65mXADSwX7U9TNHHM
-         p6fg==
-X-Gm-Message-State: AFq9FYLOw9fPVBoATUwas4kSh/vZjEH267akkbNOLG7CmVU3nIc9KQyw
-	7ZTjTRp/C4s1ZzExBlUzitTXvSCx5hUE6K7+gKkT+FzjRdY+lX2D0BShQeZPP64SVZLSUOzUxHm
-	T7ebfawQ=
-X-Gm-Gg: AYBFou0iAx/7i/BdMNaOpEf6nfEFTlNYeqq/+NsWQ2YzW1tLMwT3PRIxNP5d29GwY8C
-	lMllcEglu/Epd9Xx6kMPep/i4axF3HmnMjmSh916lmQkcN/dz1zyohVa8chwhWbHk0Zvk6f+Yo0
-	Tv3FT66C8tiy6ZF3U063Tw7qR+UDTxPWvdDTKLNJO1nSPPoye6n1/3TGDtjc5nZgRcbQEtocx+s
-	o9RmKou160TZK4bLPxw0fLWQjgatcgKbaMkvSq0V4Vogw+JpDDS0sXxtWH8LTb2flQMypHOTmPr
-	V5aS+22avd4JxaUeK9frwYtuL80IOklL1sDUh2o5PbwUIclhKoi4ucBNqkP35yVqNt/xYn+3e8L
-	Tv1ykmt9tfmryi3EqFlw3X8kJ7/47VoZelzAes2W7o+UUP7DL3LOh2f6CJsWGodoBrRxqtVtv36
-	2OuOtWxldZI1pfit1pwifjCKd3bE6nYSTZ9l+Kdb9X6nWyoUXSHky+YOIhnSEaZKWbIeXW1QM96
-	DgsXznmJuwM69b78cFligd4zRzP95ml8+Wy91TtiVjA2U4Ev2tBSUPatTfX1hrxGPl1SGobNmPK
-	aV/CS/9nIYmG8Hn94CsF3++jRW7DFM8YdTIE4YE89DRHWJeaW2O5eKBHL6FysolHpsHs0jS7laN
-	YXNietkQBWfKlstkwbt8=
-X-Received: by 2002:a05:6820:4c06:b0:70e:177b:eb53 with SMTP id 006d021491bc7-713edca578emr1749832eaf.33.1793206058436;
-        Wed, 28 Oct 2026 09:47:38 -0700 (PDT)
+        bh=Hf/Bdm/wcfWXHoQ4J6G6Uajj4VcFtjy/5XdsLk2LWik=;
+        b=spaIDq23bCOmxvS9TzFgzQzDmae8xM/iXFoB1zHVrhwr5F2EE99c2u5PMKGYBfJS0F
+         K11QO7ggpbQeMNje5gflvQ6yIrTJ/25M2/mTKAkj22yPa0bYkSGIHnf0BwW/EotUVicC
+         droAk0DSN0Fxg0I9zyz+CsN/iLmdH6zQ9L9rN1mlcQpqVM+iFSw1fLZ3ORd5X5bSciov
+         +x2c1EGa/c8bPmUlXA5ox0IINzdByK89dXMH/fpViX8XwuNaCD6/UFChmB2iu3VmSZzR
+         JT4j25cOA+z/tKN0PvIv1RhNEnnkvzIF0MmrunPZhFvHGxlb+IIqnKXe/5TxXcQKU2Qt
+         AQpg==
+X-Gm-Message-State: AFq9FYL909R3hF29Dxbt+qJz1XwXCWowOi5//GgkSs18ZpDB8bld26JI
+	nAJSQlyeq2m0NYe8QNkPzkBR/nRiuDzwYik7Kw7v9MLPBclEX7IjDxCedix+DLnU3WIar+hOwgx
+	Nzp145cM=
+X-Gm-Gg: AYBFou3odoluKVYrWg6AAzwcYTqiC6D0G/MGObPXuk4981GbWsQfSwhlaH8qFkt/X5k
+	h1qgufIgIl46WybVXy7XjRCtz+gmwA+/Ux2jlt+R8VDiODGUhMjsmzwBl/FWk/j4iEwPL/EncHr
+	wivWSg9psqKWX9vjZqSt/tVWJXpy2TJwJAPuB9TjJkRo7tgh81DaEoMrx5gACO6/R6L7xCSPaeC
+	/DpQUYF0NKxQIHd/92yH1DKRgo7EyJ29dkFY49PPIFZ+5ywnnLQ4F/W9vQ+qAgi0AJfzdjOV3E9
+	S2RAIxes6mZ0mnG5B5+wIbiCnJi/DpO4ViSQVj0w94yIGqy1pdt6Woq1zZaWERkja/2JBM3fqRF
+	TkiOtkWirlNdi2iL70XAaqRRc82gNJZyplgc7qypxShFARcujc4kKXRA3EOz6hz2FaamlqurZI5
+	P1ds7nmPkNQWBNCVtkws+vwbR6qdtUNHJ+27UhLgTfp1rtosxN6B0SnsKy6HDNJZ1r95kAWfdwM
+	ysfPD4YjUFwZykbgygfQD2xQbx0u/CpIu3L2R2WsSFkqNQUG11jW2x5e5pMks8DJDzfx1pzz5pf
+	Zq1tcdNLaMOBZSR8rYDDYOEmB4lxspK76BrMtj2OqF94cKkCyyrli3b3ruKNuND9L3ZxMdOggg=
+	=
+X-Received: by 2002:a05:6830:25d1:b0:82f:5471:4dd7 with SMTP id 46e09a7af769-85ac11bfa1cmr2652084a34.30.1793206060050;
+        Wed, 28 Oct 2026 09:47:40 -0700 (PDT)
 Received: from xps16 ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.37
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 09:47:37 -0700 (PDT)
+        Wed, 28 Oct 2026 09:47:38 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Chris Mason <mason@kernel.org>,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 03/10] io_uring: charge tctx nodes and personalities
-Date: Wed, 28 Oct 2026 10:46:51 -0600
-Message-ID: <20261028164732.1264069-4-axboe@kernel.dk>
+Subject: [PATCH 04/10] io_uring: free XArray nodes left by a failed store
+Date: Wed, 28 Oct 2026 10:46:52 -0600
+Message-ID: <20261028164732.1264069-5-axboe@kernel.dk>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261028164732.1264069-1-axboe@kernel.dk>
 References: <20261028164732.1264069-1-axboe@kernel.dk>
@@ -102,59 +102,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Mason <mason@kernel.org>
 
-The io_tctx_node allocated the first time a task touches a ring, and
-the XArray nodes behind tctx->xa and ctx->personalities, are plain
-GFP_KERNEL. tctx->xa is indexed by the ring pointer, so nearly every
-entry needs nodes of its own, and a task gets one entry per ring it has
-used. 642 threads on 4000 rings held 2.3GB with 59MB charged against a
-64MB memory.max.
+A failed xa_store() can leave nodes without entries in the tree, and
+erasing every entry doesn't free those. An XArray needs xa_destroy()
+before it goes away, even an empty one. That was dropped for tctx->xa in
+commit ca6484cd308a ("io_uring: no need to call xa_destroy() on empty
+xarray") over a lockdep report from freeing the tctx in softirq context,
+and ctx->personalities never had it.
 
-Allocate the node with GFP_KERNEL_ACCOUNT and set XA_FLAGS_ACCOUNT on
-both XArrays.
+Now that the nodes are charged, a store can fail at memory.max and the
+leaked nodes stay charged. Call xa_destroy() in io_uring_clean_tctx(),
+which the task runs itself in process context before the tctx is freed,
+in the error path of __io_uring_add_tctx_node(), and for
+ctx->personalities in io_ring_ctx_free().
 
-Fixes: 0f2122045b94 ("io_uring: don't rely on weak ->files references")
+Fixes: ca6484cd308a ("io_uring: no need to call xa_destroy() on empty xarray")
 Signed-off-by: Chris Mason <mason@kernel.org>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io_uring.c | 2 +-
- io_uring/tctx.c     | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ io_uring/io_uring.c | 1 +
+ io_uring/tctx.c     | 3 +++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index e9c65cf0cc51..76de44a91a7b 100644
+index 76de44a91a7b..b09859c6e8ab 100644
 --- a/io_uring/io_uring.c
 +++ b/io_uring/io_uring.c
-@@ -271,7 +271,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
- 	if (ret)
- 		goto free_ref;
- 	init_completion(&ctx->ref_comp);
--	xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1);
-+	xa_init_flags(&ctx->personalities, XA_FLAGS_ALLOC1 | XA_FLAGS_ACCOUNT);
- 	mutex_init(&ctx->uring_lock);
- 	init_waitqueue_head(&ctx->cq_wait);
- 	init_waitqueue_head(&ctx->poll_wq);
+@@ -2342,6 +2342,7 @@ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+ 	kvfree(ctx->cancel_table.hbs);
+ 	xa_destroy(&ctx->io_bl_xa);
+ 	xa_destroy(&ctx->hpage_acct);
++	xa_destroy(&ctx->personalities);
+ 	kfree(ctx);
+ }
+ 
 diff --git a/io_uring/tctx.c b/io_uring/tctx.c
-index 466b7300e208..4dedcdc44780 100644
+index 4dedcdc44780..291e30e00e45 100644
 --- a/io_uring/tctx.c
 +++ b/io_uring/tctx.c
-@@ -104,7 +104,7 @@ __cold struct io_uring_task *io_uring_alloc_task_context(struct task_struct *tas
+@@ -189,6 +189,7 @@ int __io_uring_add_tctx_node(struct io_ring_ctx *ctx)
+ 			io_wq_exit_start(tctx->io_wq);
+ 			io_wq_put_and_exit(tctx->io_wq);
+ 		}
++		xa_destroy(&tctx->xa);
+ 		percpu_counter_destroy(&tctx->inflight);
+ 		kfree(tctx);
  	}
- 
- 	tctx->task = task;
--	xa_init(&tctx->xa);
-+	xa_init_flags(&tctx->xa, XA_FLAGS_ACCOUNT);
- 	init_waitqueue_head(&tctx->wait);
- 	atomic_set(&tctx->in_cancel, 0);
- 	atomic_set(&tctx->inflight_tracked, 0);
-@@ -123,7 +123,7 @@ static int io_tctx_install_node(struct io_ring_ctx *ctx,
- 	if (xa_load(&tctx->xa, (unsigned long)ctx))
- 		return 0;
- 
--	node = kmalloc_obj(*node);
-+	node = kmalloc_obj(*node, GFP_KERNEL_ACCOUNT);
- 	if (!node)
- 		return -ENOMEM;
- 	node->ctx = ctx;
+@@ -250,6 +251,8 @@ __cold void io_uring_clean_tctx(struct io_uring_task *tctx)
+ 		io_uring_del_tctx_node(index);
+ 		cond_resched();
+ 	}
++	/* A failed xa_store() leaves nodes with no entry behind. */
++	xa_destroy(&tctx->xa);
+ 	if (wq) {
+ 		/*
+ 		 * Must be after io_uring_del_tctx_node() (removes nodes under
 -- 
 2.56.0
 
