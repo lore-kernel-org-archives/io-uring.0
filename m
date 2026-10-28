@@ -1,58 +1,80 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.18
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793156487;
-	b=SdAkav1lnuiTgnCxvho6KIqQ8h9BpXh7lBujO9veUCH9uiLeRuL19jZqFF7uCN4CydGo
-	 DQY8IxbDY8DGBVOCb1sBES7ksUWd5/aK6N3UQJG1WhNRa/O/Ju9UB8ajHhUngdSbg05DE
-	 uqApISLSXEmo0vF7lWw/Nh8fX9z6iPmtpJFKGY3iL31lQOZjgYxDuP50vEGtG2GkJXmia
-	 eEXl5LWZQ8h7nAh542abE2laf2tDIWzbUCgNV2NeLQkTMSJaFn0KS+idnTkDTA3qBc9Qt
-	 dJ4wWvgRjsJ4wMByK7WMF+pwEN9RQJp1c6aSwvli4f4xvSvgm6yirn3zeppSMDusQrA==
+	t=1793194703;
+	b=mnnAu6adDF5l09D3zJZfDVZBRlnuXg+b5fBQpSURAFwEkKIlHiklU4/NGjk+/GDz7Iqn
+	 zx3N047EW3MMF1W2XPryjjIzFcATpfbC6tPEwSLiJzMLDaO8V+9C2LvALFulmOSwWY4Nl
+	 Hh6nhdZRQ61ltPwSKMHr4tOOVGR2sFs2cJbeucvZBxwOPCk+tYEqt0eIgMK+JhD4bOdqy
+	 6qNTKhvkb7z0C67m+mhyqN3vKxpddAnt+pFhtqk2CrgJEh9kkJ7emNcvL6uVzmOPpMJPu
+	 PqOgu/9mZ1du5QO2DGbYtZehBrNZ5tBEFcIZ24bUknwpcfiuykZ7RSKwSu5TuTvywnQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793156487;
-	h=DMARC-Filter:X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-CID-RHF:X-UUID:X-User:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:To:Cc:References:
-	 Content-Language:From:In-Reply-To:Content-Type:
+	a=rsa-sha256; c=relaxed/relaxed; t=1793194703;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=VBv5hcAUgEzlTojiQ+eEt+6YeW08V6/WtaCaBZ/AZQI=;
-	b=YT4RZNOPDZ/El0DjNHOZuwzfusuNQ4mXS8l19O0F1HkVmJsZfsk12fwIBoJiqTB5lZOg
-	 IxUJT25kWB00rs+TRdYgk+BiwBGv/2jnW6Phr8FBciySsIKLyOtVfzayB+Fbz9ze52Rdf
-	 9t8dF9CAQiFpySIS07Bb/AGu9P/xt+f0pfbXJsLgZZVHaYXWP7ZBidYsopqlUdMwJT3LD
-	 FZzAoBeXg5nNgSETRH3TL/inFDcGePHSKFATcF0Y8jXzzEkS4mWJM0sjoZn6Vi7j/1mzb
-	 JAOSmoXUr6bO+wwhfiWvZ64maQoD6X7x/3TCVqYdvB2G3QhEU8wq+8zNMxHAjHfXztw==
+	bh=SGrVzFmrUDlZQoUFKvoreZt6u8C6Px7i+65Aaq0Snyg=;
+	b=Q5iUDnyJKocsdOBgH/TjzGu+FPs7qxBPvfTAtXFL8XcYcan3ybJcf+4ImUNqGLxyZn7Z
+	 pV9pOXr5C3qJrkpPMzPvlETWNBv5E0VaDf8TuWWwHX/Egm2c6A58oDDW07RZSPdT8cCSB
+	 f6yPC9fTfHiyKBBxcPHXVnMwIb49BYLQQsRZn15bbq5R8UOiRwYgxT40g13TZeDu1qyFS
+	 pDfFz1/M+8BJD5cOT19L4Tgb/vB3qNy8eMBwJ1Yh4kFlGftTJ3PrSTT4l6Ts9+gboCTAO
+	 JS29pSlK+o9csx7UtjvqAJ4qMlUFx+O4Ymst++RoBY3qPUR9J8AiUAo3YwGPD6IY1vg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kylinos.cn;
-	spf=pass smtp.mailfrom=kylinos.cn;
-	arc=none smtp.remote-ip=124.126.103.232
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=iRSXvQlk;
+	arc=none smtp.remote-ip=198.175.65.18
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34778606A321;
-	Wed, 28 Oct 2026 03:01:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 34778606A321
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: d9c973fcd27b11f19a56ed5b684f684d-20261028
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:7f81a148-96a7-4485-ac9b-e83a73b42a4c,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:7db8b62,CLOUDID:7b7f5bdb2756e189ad9093bde4904cfc,BulkI
-	D:nil,BulkQuantity:0,SF:80|81|82|83|102|865|898,TC:nil,Content:0|15|50|99,
-	EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
-	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: d9c973fcd27b11f19a56ed5b684f684d-20261028
-X-User: liwang@kylinos.cn
-Received: from [10.42.16.85] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <liwang@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 374288869; Wed, 28 Oct 2026 11:01:20 +0800
-Message-ID: <36d782c9-d8a2-410e-8bb8-36bb6e9f9549@kylinos.cn>
-Date: Wed, 28 Oct 2026 11:01:17 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C66606A32C;
+	Wed, 28 Oct 2026 13:38:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 44C66606A32C
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=iRSXvQlk
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1793194701; x=1824730701;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=SGrVzFmrUDlZQoUFKvoreZt6u8C6Px7i+65Aaq0Snyg=;
+  b=iRSXvQlkiUrmMGXQ84XqkBpyjd4brbKF7dsorRB4z8XEZGjSZtd+nqmM
+   +7aUf8lmjvgbcNbHe7ZLDVozmrX7RHWLxqcPDAw/431EKWcaaglg+yCtH
+   L5CQEtme8YNPm1thQlSVoaaCnx6XMjzK8e4k4mado9pzaagyQd/tV6Bom
+   iUq/oqB7csvjLAciekv15IrPFHcEBzSqeVmY7MYsjQ++4z5eN4w65Qsd0
+   UKa1wFqPQaakX3b6njVW/mCRxg9rOd0VRo/WUPMqQ8se+pFDubz7a09j+
+   uL+v9q3TXGxiBSvoIdwiBySMUt3iKDEb4GjITbEWnR3691tNcd/IIXZaE
+   Q==;
+X-CSE-ConnectionGUID: FgK1zlarQeewGkdaVDV1lg==
+X-CSE-MsgGUID: TqrdNkQXRqqFNusDKI7QbA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11949"; a="1927166"
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="1927166"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2026 06:38:20 -0700
+X-CSE-ConnectionGUID: xYX52GK9TZiU7Ag8Xwncbw==
+X-CSE-MsgGUID: j/z6PvjDRbC8p2rj8nw3wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,182,1787036400"; 
+   d="scan'208";a="4976735"
+Received: from jf5300-15a101203tc.jf.intel.com (HELO meta-crater2c.jf.intel.com) ([10.54.113.49])
+  by fmviesa005.fm.intel.com with ESMTP; 28 Oct 2026 06:38:20 -0700
+From: Daniel Byrne <daniel1.byrne@intel.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Daniel Byrne <daniel1.byrne@intel.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Josef Bacik <josef@toxicpanda.com>
+Subject: Re: [PATCH] io_uring: don't sleep on a claimed DEFER_TASKRUN wakeup
+Date: Wed, 28 Oct 2026 06:30:40 -0700
+Message-ID: <20261028133040.1833849-1-daniel1.byrne@intel.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <23ea58c1-0692-4f11-80d1-8845971902be@kernel.dk>
+References: <23ea58c1-0692-4f11-80d1-8845971902be@kernel.dk>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -62,51 +84,31 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 0/1] misc: fgds: introduce GPU-File direct I/O via
- dma-buf
-To: Pavel Begunkov <asml.silence@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jens Axboe
- <axboe@kernel.dk>, =?UTF-8?Q?Christian_K=C3=B6nig?=
- <christian.koenig@amd.com>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
- io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- Mengmeng Zhao <zhaomengmeng@kylinos.cn>
-References: <20260908131545.105987-1-liwang@kylinos.cn>
- <20261027090853.30099-1-liwang@kylinos.cn>
- <749e9437-85a6-45fa-b984-b155a1eeddaf@gmail.com>
-Content-Language: en-GB
-From: Li Wang <liwang@kylinos.cn>
-In-Reply-To: <749e9437-85a6-45fa-b984-b155a1eeddaf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+On Mon, 19 Oct 2026 13:05:07 -0600, Jens Axboe wrote:
+> This should already be fixed by proper ordering in my
+> for-7.4/io_uring branch - see:
+>
+> 8257f6ec45ee ("io_uring: don't lose the DEFER_TASKRUN wake up")
+>
+> and
+>
+> 76a82c666abf ("io_uring/cancel: rearm local work wake up before sleep")
+>
+> Please take a look and see if you agree.
 
-On 27/10/2026 21:54, Pavel Begunkov wrote:
-> Hey Li,
-> 
-> On 10/27/26 09:08, Li Wang wrote:
-...
-> 
-> xfs support it a it orthogonal to the uapi question, but it should be
-> implemented in xfs and not side stepped. There is an RFC on the mailing
-> list from Anuj and Nitesh that is trying to do that.
-> Thanks for the feedback!
-As far as we know, Pavel's current work only supports direct data transfer 
-between GPU memory and NVMe raw block devices. As Pavel pointed out, I 
-tended to prefer an implementation that was as non-intrusive to the 
-filesystem as possible. My rationale was that GPU-NVME direct data transfer 
-would ideally not require filesystem opt-in, since there was no readahead, 
-no caching, and no complex metadata operations involved here. In most cases, 
-the filesystem merely helps translate file offsets into disk block addresses. 
-Additionally, adopting an ioctl interface had a smaller impact scope and 
-provided a simpler userspace synchronous operation interface.
+Yes, those two fix it. Setting the state before the count is
+published removes the window my patch detected, and the re-arm after
+prepare_to_wait() closes the cancel path the same way.
 
-We will track the community progress, and we appreciate being let know if 
-there is anything we can help contribute to, as we are active users of 
-this feature.
+My prototype that found this polls DMA device completions in
+TASK_RUNNING between the arm and the sleep. I added a test udelay(100)
+in every 64th io_req_local_work_add() between the mpscq push and
+the cq_wait_nr claim. As a result, we hit the race on v7.3.
+On for-7.4/io_uring, re-arming through io_cq_wait_arm() after its poll,
+we ran race free.
 
 Thanks,
-Li Wang
+
+Daniel
