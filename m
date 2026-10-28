@@ -1,92 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.46
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793206067;
-	b=vSfDHrBhiIOOnvxgH3SHJiu5EplqP3x8fiABlv9bRmsVqstVN8RLNeDLPvOJuI5hLg4Z
-	 Pipff0+LmeQqfy643aI/qcIAUHzKFBE6pZk99Ld57GqyOhTgmNWmf1ECADORnaUXaPNGS
-	 TXUbTdwc1WIdai5ex+XYVvY/IqazqXagHexQAzNyEXAWAbaa2Yz3NShG3tX3qkY8//3Md
-	 8Is2QckHn4C16JDGBDrhdQXFYkoB2M/pGQQQZ25J3v8Mprc0rX6QNxfJ5y5ePYW4LvSXj
-	 UhRy9PRpbSUcFot7cwsKmR5ti6RKWc7+RbEx5IyjgWfeeZ2gth84jq2SRw6EZ/m0qVg==
+	t=1793206068;
+	b=sZ0cliVv/yWGjZ3MNAktLDwHO498crPdYKD+vBj0QGiYyIVDG0PEVSwUagFfDTcWjZWA
+	 Xsl5m1hkSvzxKs2z056td2ztGb8QUlVAe6j9B7NVmS5lJT+4OOxwSfx6ydZkCeUJnPRxy
+	 QsCeUW0ohBX3lJzkUNV8NDxJsMNfm52gwFkNRdEJxqxnT8EVgpC7UZEL66G5jPM2c0yZZ
+	 CK7jHq9woAfw6fN8D4VZVMUOadU2MUfJzbRmsT4WGgGc1BbDTm0Xm0ZeYkqe+pF9TVeDf
+	 QC570G78nNRYbjtgVG5omNpCGnkSYdSAiUevvcsDWhG/YBykqHMrImwHKd2Mu5xy3ow==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793206067;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793206068;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
 	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=OAzx0q/CoMCzcW5ipl7ejGrSoA9Q4FjKiqMCcWPSFUY=;
-	b=XmYKeOwCQqVts1DHlGn6b5YkwqxYSzQClcET86R8KOP4SiL2fGuTLSZfMQG8ib9X9n/c
-	 X+8sB8tpEsdpyfr/BpPYSOsr59FMYiHfuI/O+b3Zo/fWfjI+Da5d89tRgrQx5n4rkl7XN
-	 yj2DKDO6UmjPCEQBwU+vw7GXs/9+H/WdcM5VQ5psUOa9e7FjpTh920gonrGN72pAU2Ryb
-	 cXS07Qmgh/mUQ1CK6LzfhJFmxim2oIXBSUsCv6o1dwnZMd5jmo7tU8MPTbtQbdQXWXiub
-	 OJID8oNtIke+pI5JyCIbm4cXM8ZBYxXNkdsI8ZM1QlriAQWsYelIRZgrVXqkHVTL7Sw==
+	bh=vRiyrxVkng7E0MgTKiyuvtx6z/1B7RyKSbbnlhlfPf8=;
+	b=fbdjiWaW9pGvtq//RtdbSzM+ZJUlFqWXRhxGljGhav7QkxTAeRxudZa5kGQ3tqszA2HT
+	 iGvOaZbXIcqnXaFU1L8cJi0N0QMw0V/s2JWctQ2zXK3mSIgJxmTtJ/TlnZ6XsMtrensB9
+	 nuwA5rGEj0rzYBvOinTDmaORjx3XuPbKrI+/Z0AoT69tZNvCJKLW99qqSFSOK1/wzb9Ut
+	 3Im8jiFIWk8KN3OGxpLOfMZI89SSlZssM7M/7JD58n63J2b7YfpS4CXf8QKc8D2XZUaNV
+	 lqTRgJM1ouyc1WXGAu3MiEhq0W9+N4KyRHX4YW/C/L772cMsG9JKatdikNyb4zV1qeQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=TUWgivuO;
-	arc=none smtp.remote-ip=209.85.161.46
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Kz0nSRJM;
+	arc=none smtp.remote-ip=209.85.210.45
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B4C606A31D
-	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org E3B4C606A31D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391F9606A334
+	for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 16:47:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 391F9606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=TUWgivuO
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6d290b10a35so608836eaf.2
-        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:46 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Kz0nSRJM
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-843b6f8e2c7so1414052a34.1
+        for <io-uring@vger.kernel.org>; Wed, 28 Oct 2026 09:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206066; x=1793810866; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793206067; x=1793810867; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OAzx0q/CoMCzcW5ipl7ejGrSoA9Q4FjKiqMCcWPSFUY=;
-        b=TUWgivuOt4Ise2icyBdNufGJc9dEKhELhqNN0b/icqgsgQ1W+Vp5vIcDmi2Tvrcq2x
-         98oPtbYVSg7Zye7cMNTzwHw2iP+FjgpP1hV2he2RRK9w/uS7kn72W5ULFMbPF2xnyvFq
-         Q+AttdmB0MNwuoAQn26nzp0iWVDJc5gE6IFhAqKSGIpMKDqrg2Nzhj9OMv9OeF8WtvlA
-         YqYkKSG33l1LVOCg7SjfUgUKeWUkXZWYP5aFTZvV2HPPMG81pv1IpChzO2v00BGuJ/B+
-         YnmWb1McMhNrt8ftzVYJ5AEgS6jtVhyPm2ThikcG1j4X4SZTVka1HloB1t83fk86ZxQj
-         uWeQ==
+        bh=vRiyrxVkng7E0MgTKiyuvtx6z/1B7RyKSbbnlhlfPf8=;
+        b=Kz0nSRJMOA7Il4PfnB1xnYIsmoxSHdVO/wIkIljxAPjZvZsiuVsiofUMOEqaug6mN8
+         Akbdi/2hAbA7A4yn/WNsQEpr7hPemb661o+iL2MHc+ufum5/KwLhzgNqGk88po4vAKuQ
+         08Mv1LrImWzaxv5y+6pW70W0MjW9EHFHO9+pAcCbJMBdUATrPJmxnEsu5Hlga4XxStR3
+         ecu0c73LAWKXfzIsIuOwQt4I/bu/p7/3OGxrherCy2ZtazFMoFmOnW7rjNEfD6VYXV1n
+         gVrxwYSx6/VxBRQSJ9x2b+xPOALZNXR1hNbWOUelU9BXFwCM2DvsuGLRSHdfjkrejs8/
+         RPsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793206066; x=1793810866;
+        d=1e100.net; s=20260707; t=1793206067; x=1793810867;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OAzx0q/CoMCzcW5ipl7ejGrSoA9Q4FjKiqMCcWPSFUY=;
-        b=JC2uAYwIY8emje92vWvqkuWGqa6ynqskylkNwJk+rClPdx5EBpwOnvqYYGgbhFUqpj
-         z/cm/cm8HoDbzbWYpRqnXhOauxAu7+y1BMEPKkcZ6vbJFAJiOJvrxFUZ/dQVvFsSm5s9
-         HPoAc22qZCrMGRPdr2PPKUD4CZxZ8g466NiKOuHIY1ppmsi2okpk8jPojHihva54shjD
-         6x/Rf4UhHcwuMRSg5fbDgErwdNV9Qg1Tp0gz2+6QoAMZvYNS8KoKW3az5UTCZeuV0oEM
-         XAPdhGM9JEVBliI1BcjAg+82UwAts6pOb51SdoJYuGCzw4yvevVE1iHv8GMAtCxWjlSE
-         LXBQ==
-X-Gm-Message-State: AFq9FYJ4f1Us7hae80kq3LxfIepxvmgOjz6d7ksdqqkdqFnezbWtUPj3
-	/Dvo+LJcXnY+zDNmxOsBpQYxizGzTTIC8hmfXlY4/zQEn+KMD14038GnkkW678VcIerOCEDkiWQ
-	wCIGawZw=
-X-Gm-Gg: AYBFou0HgimR9XM0uNMnrOKry6O+t+70hXqZvt4pZOAHeUumv/ZMouJL3k4U8rKFF/Q
-	f/Oqfvlyn4DoC+sDs3iCYV//BeQN3kvjBMhnuMrykHZPX5OQItkib/+DZv/pQ59t7rzHk2Oc/GI
-	aPDhrnQyiIcbTEY0vGAwluBLpRPW4P7RyxEHdFLTt7D3vrUFY8XIgqUhsNfTmGoAVSHokKgtZjX
-	Mlv8LCgSCAgQ66B8NAZ5ruYyJnrk60xAGegWqjjVfPgXyHlI3RkeJ8AM0uJMHwFtROgVcbOWzuf
-	Pundl7OQDjYtT6CulvdX5LB+auxHyEO3YHWvNhQ15RIqkTkNY7mRjU04jsMvTBMNcmziRYWwBJG
-	KpsAjdnsVI5kIJfVnrnEShy9FCJ11jZOAju867KN6n0Y7BVsRkBBsYfkbse6W6TgAoUZallMCHr
-	qJjBUJXata5JpLLvebi2yb3I1gQtZJJEfe6kCaEaMI+9duYJSEtUTf3EoP1wCdDS6gtXllJBNnx
-	o6ZYyPfa9VRxi3RE4pU1q5eljfAlDRTx73n9qpjX8Lv8uesk0wLbA57eFF5KN+KuBWoKCW5T6cw
-	jMOlOG55YtQ8DFM1xdUH5xJsOscO9zzAbjBURSORC9Tk8F1FU3sRXsCi2unDLimQzjfkDjbXjWB
-	n5nIJXGCyYcGux7uqKkey
-X-Received: by 2002:a05:6820:807:b0:6f7:6416:a33 with SMTP id 006d021491bc7-713ee66d85amr1672874eaf.39.1793206065948;
-        Wed, 28 Oct 2026 09:47:45 -0700 (PDT)
+        bh=vRiyrxVkng7E0MgTKiyuvtx6z/1B7RyKSbbnlhlfPf8=;
+        b=Gn3LJnWlh4IhoEg/ds6JKn2Vs5Mck5keGvf4repsheH9Gfdrc9J29DupwFMwZt2PMv
+         DQkqcqOZ/tKlftHFahsffPwP1docEqVbUIesm0EB2PB5VMP2oP1H32J73O4S4hNb7XQc
+         1+/Zhcw36T7i+3AugBbphjaH7OeSjKzuPO6Gu4yOSbluGG+vcIxZE7XdGAo50iP4BPF1
+         WtCfxcc3Tl79II8N7Jty+aleJxwmRQOMy1ohLVkF8cNWGL2DvOk+b1F4mQy0mKRXhV2I
+         zGOP3m7J1gXtYuxkv0yJnpk0sRm5WQe+AoTpKbVYyXVVl/HBWHDcCkexa9rP3EiwR+wc
+         NUdw==
+X-Gm-Message-State: AFq9FYIvTEOcDu1X0zjKyMXYsBFnpTcrAZUuwlVF/JB2pxwQSCdmQFgZ
+	gGUSzu8P8Hl9eZeY7usNNEpuSWLu3CGTdXZxXe6ENYCRPC/LuPlca1Z3jOdEH4znHzXNaJ2d0Bf
+	81SFNEE0=
+X-Gm-Gg: AYBFou05mDHw9UhPIsPQPFpulGG91r/fML7cIDNkarP/JD7NfJsGUcgGJeplVb7yanV
+	PEk0Uftqi3jftCQHzYOC90FFqUEbkfwKXiABjVgjrGMrjMcvysJoTHHyJv8tcjrw3DetJHFkNOY
+	JfzDHt3bMbPHrfvA/Eno+V1RaH4Qk5l0sgUdwyzla8PRe+qJWwnDsHjX3O+lR1OcHsDHNfZiC/i
+	6rcbynb2QsHYK8m7OUF+IPXOvrvhR4nOkfg8glrMAqEhg3gBgqynZXYcNQWVpeqKwP7TZr3SzbT
+	6kGyloc58aIQ2DB5fh1eZlqhZ7J2xp3WKjmxu69WZLTXnFzuGwle5GaCJo6OKZfoWXK//5vxd7F
+	spyD+KN1M0ZV3ID5q25kfGklDil+zfIa23LZeahr1Bh6jaWYt6S1mPC/7FSeuFs0yraEwGMwOWZ
+	9ItTu4FqLPbEhV9nZjGy4VBU3airXc6V1LXAS7OIhjrLwWCkvIG/WU5y0Ef5T/+u/BEO9BHWUOr
+	8VjIRM8jQ86gEiSBnPE386otCV1p5S8ERiiY2GiI9en/agfdawMCUmejOzgG5npIbKJczpgP1bg
+	SmiGHqJL4BETNq7Jn4whr4exhMdRpAtVd9IIV8FXq/sH5iXsY8a5k9lzerm/7i3czbxVdc2IwQ=
+	=
+X-Received: by 2002:a05:6830:4120:b0:826:1ccc:8bb9 with SMTP id 46e09a7af769-85ab7040645mr2606771a34.6.1793206067388;
+        Wed, 28 Oct 2026 09:47:47 -0700 (PDT)
 Received: from xps16 ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.44
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85b206f8a41sm2019182a34.25.2026.10.28.09.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2026 09:47:45 -0700 (PDT)
+        Wed, 28 Oct 2026 09:47:46 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: io-uring@vger.kernel.org
 Cc: Kyle Zeng <kylebot@openai.com>,
-	stable@vger.kernel.org,
 	Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 09/10] io_uring/io-wq: save worker type before dropping its reference
-Date: Wed, 28 Oct 2026 10:46:57 -0600
-Message-ID: <20261028164732.1264069-10-axboe@kernel.dk>
+Subject: [PATCH 10/10] io_uring: defer foreign io-wq enqueues to task_work
+Date: Wed, 28 Oct 2026 10:46:58 -0600
+Message-ID: <20261028164732.1264069-11-axboe@kernel.dk>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261028164732.1264069-1-axboe@kernel.dk>
 References: <20261028164732.1264069-1-axboe@kernel.dk>
@@ -103,50 +102,79 @@ Content-Transfer-Encoding: 8bit
 
 From: Kyle Zeng <kylebot@openai.com>
 
-io_wq_cancel_tw_create() inspects cb->func after calling
-io_worker_cancel_cb(). For an existing worker, that call can drop the
-last worker reference and wake io_worker_exit(). If the canceling task
-is preempted, the worker can be unlinked and freed by kfree_rcu() before
-the callback function is inspected. KASAN reports a slab-use-after-free
-read in this path.
+An IOPOLL ring without DEFER_TASKRUN can be reaped by a task other than
+the one that submitted the I/O. If a polled request is marked
+REQ_F_REISSUE, io_free_batch_list() calls io_queue_iowq() with the
+original tctx. Ordinary task exit can tear down tctx->io_wq after
+draining only the tracked requests. The live request pins the task, but
+not its io-wq, so the foreign task can race io_wq_put_and_exit() and
+enqueue through a freed or NULL queue.
 
-Save whether the callback belongs to an unpublished continuation worker
-while its reference is still held, then use the saved result for the
-conditional free. This preserves the existing accounting and frees only
-the worker allocated for the canceled continuation.
+Forward foreign userspace enqueues to the owning task before accessing
+tctx->io_wq. Use a dedicated task_work callback so reissues still go
+straight to io-wq, and fail them if task_work is running in cancellation
+mode. Preserve the existing PF_KTHREAD cancellation path. This also
+covers the other callers of io_queue_iowq() without changing the
+worker-owned enqueue path.
 
-Fixes: e6db6f9398da ("io_uring/io-wq: only free worker if it was allocated for creation")
-Cc: stable@vger.kernel.org
 Signed-off-by: Kyle Zeng <kylebot@openai.com>
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 ---
- io_uring/io-wq.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ io_uring/io_uring.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
 
-diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
-index 28533174d0da..92df54c6f50c 100644
---- a/io_uring/io-wq.c
-+++ b/io_uring/io-wq.c
-@@ -1434,14 +1434,16 @@ static void io_wq_cancel_tw_create(struct io_wq *wq)
- 
- 	while ((cb = task_work_cancel_match(wq->task, io_task_work_match, wq)) != NULL) {
- 		struct io_worker *worker;
-+		bool free_worker;
- 
- 		worker = container_of(cb, struct io_worker, create_work);
--		io_worker_cancel_cb(worker);
- 		/*
- 		 * Only the worker continuation helper has worker allocated and
--		 * hence needs freeing.
-+		 * hence needs freeing. Save this before dropping its reference.
- 		 */
--		if (cb->func == create_worker_cont)
-+		free_worker = cb->func == create_worker_cont;
-+		io_worker_cancel_cb(worker);
-+		if (free_worker)
- 			kfree(worker);
- 	}
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 615933a6e8ff..03724419c4e1 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -423,6 +423,17 @@ static __always_inline bool io_assign_file(struct io_kiocb *req,
+ 	return !!req->file;
  }
+ 
++static void io_req_queue_iowq_tw(struct io_tw_req tw_req, io_tw_token_t tw)
++{
++	struct io_kiocb *req = tw_req.req;
++
++	io_tw_lock(req->ctx, tw);
++	if (unlikely(tw.cancel))
++		io_req_defer_failed(req, -ECANCELED);
++	else
++		io_queue_iowq(req);
++}
++
+ void io_queue_iowq(struct io_kiocb *req)
+ {
+ 	struct io_uring_task *tctx = req->tctx;
+@@ -430,10 +441,17 @@ void io_queue_iowq(struct io_kiocb *req)
+ 	BUG_ON(!tctx);
+ 	lockdep_assert_held(&req->ctx->uring_lock);
+ 
+-	if ((current->flags & PF_KTHREAD) || !tctx->io_wq) {
+-		io_req_task_queue_fail(req, -ECANCELED);
++	if (current->flags & PF_KTHREAD)
++		goto cancel;
++
++	/* Only the submitter can safely access its io-wq during task exit. */
++	if (unlikely(current != tctx->task)) {
++		req->io_task_work.func = io_req_queue_iowq_tw;
++		io_req_task_work_add(req);
+ 		return;
+ 	}
++	if (!tctx->io_wq)
++		goto cancel;
+ 
+ 	/*
+ 	 * The file is looked up as late as possible, as it may be the result
+@@ -462,6 +480,9 @@ void io_queue_iowq(struct io_kiocb *req)
+ 
+ 	trace_io_uring_queue_async_work(req, io_wq_is_hashed(&req->work));
+ 	io_wq_enqueue(tctx->io_wq, &req->work);
++	return;
++cancel:
++	io_req_task_queue_fail(req, -ECANCELED);
+ }
+ 
+ unsigned io_linked_nr(struct io_kiocb *req)
 -- 
 2.56.0
 
