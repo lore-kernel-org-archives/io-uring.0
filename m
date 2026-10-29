@@ -1,167 +1,110 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.20.95
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793291972;
-	b=LX2RDJe5x95symyHvk1AjSdZkk5/VfKct/hNO1vGj6FQQtubVGv62upIkxcrvNIyenmP
-	 pxUXSOs2/46Rze9ZZpgwnafoU5KkiOkuaZn7I360IZUFPeFZLJ285eChqCafvggIhcEXy
-	 ltB08tIq2NO0bf5gMCNRiqiIliyMpj+16GA0C7kz3ixLC9Sa1dkkhrrTbDfcE1VWpdtIy
-	 RGtoCSqWWtTK/9Rrx2K4/RhlVTx75dxyWIFm8H6FYR9sllD2Qc80QSQ3E/D2OZvYhQz2x
-	 Uly1KTDQ6W7AnQGcYBAp0c+Eh0QwyIh3zfc4/Aov4dVq9/oMjMMXbdE+hVe2uOf0xRw==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793291972;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:From:To:CC:Subject:
-	 Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
-	 Accept-Language:Content-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-	 x-ms-publictraffictype:x-ms-traffictypediagnostic:
-	 x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-	 x-microsoft-antispam-message-info:
-	 x-ms-exchange-antispam-messagedata-chunkcount:
-	 x-ms-exchange-antispam-messagedata-0:Content-Type:Content-ID:
-	 Content-Transfer-Encoding:MIME-Version:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-AuthAs:X-MS-Exchange-CrossTenant-AuthSource:
-	 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-originalarrivaltime:
-	 X-MS-Exchange-CrossTenant-fromentityheader:
-	 X-MS-Exchange-CrossTenant-id:
-	 X-MS-Exchange-CrossTenant-rms-persistedconsumerorg:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=51uAHD964PNpqQsBGeHpyNzRygYccfzJj5XyKo8ToPU=;
-	b=Dk8gLufvaddcf48CHGCqD8StykNHuOtl/AV5F8RoMlFSnyDCx91shJt797PkCfzwgOon
-	 m5/aa9NE16Uxeqw0ocpnpJrqd7NwO2s7vaQj0rPyxcd3D4LFSIO7uyXNrf5NNfF37up9K
-	 Zsf6bN4rxx93Et0f+Bx72wmG+1nS3X5z3tOJ/eNjChVDDU9NzENDVPlnOK9SY7KiR3uG9
-	 GINNCxXcXvNPpd/qLb2wXpRiJyOz2pgGNBg4dIhVvuULlxwatuibGUQHUGS51Z+L/2R21
-	 EQ9/1orkYfMUzTZ6KEZBJftLSYrI+yueMaqZur5xt+pL8ZJaa6yF4ZPAzT24KbICVWA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=outlook.com;
-	spf=pass smtp.mailfrom=outlook.com;
-	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=JnnoR1kS;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.103.20.95
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazolkn19013095.outbound.protection.outlook.com [52.103.20.95])
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=202.12.124.159
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793300109;
+	b=cj+h9okWGwzFabBR4eq618FausoZ+VNBZOVPsjmkPT0AIjstjaeZgegbhXx7al1JmRWB
+	 orYi1FmBg1j/yKE4cYe3/D5WTDhr+L4XbFRteJGpgaEIgVSseBW5bOvP2h14VzVfjtmFj
+	 PmZEpl3cB7b4CgLBRP9pnA2tuD1X0IyhPv3TQ/hg6ngNLAKWsF7m0wm6U4SzQeMj8Rg7k
+	 dlYoCTrVdkSG2GPf9ppVGCavPZf+SeHfw+OT9VE3KfKFPmCn7YbWviscF9decv177GnWq
+	 aEi0N8kxMXi391/EdHxHZVYSRBsBLt2E/i12bW0fl4TjdjM/gmcuzcWuvHP7Xx+vSbA==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793300109;
+	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
+	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
+	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
+	 MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=ijoVdBB+CeUh65paN6kuGTG9ToIcwzTc9xfoUwMoOkk=;
+	b=ocfoQSP1yS2r0/X/UeCHC3L5hAy0WT6Y4Ir2dVda+3qBzs5iuRhUV3HNwbodjYb1jhTf
+	 NSO2bI8liDrs+Z7Q14WGsqiMQL4ydjXz/jxlND1paORysl/mzqhvl6DyTvyrShkDQSSmK
+	 t2VPOLZKepdSU7TmUfeT7YIEy3k2YFkCJDj9jFhaX7aH539+vcuLV6psrvonhiRGF5yg9
+	 G6z4k5KuYGhV0N+z9+srmePeWqxd7AZ1QUa/NZetzpctTtHunMbMZE+F4c7Q73eZehgGb
+	 M9rNpqf32Ein0GhK9ae9njI4LUaeqQhyxn+ZSFbJDsjh+Cd2qq88Hlup7u/X1PSKMrA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=none header.from=lalinsky.com;
+	spf=pass smtp.mailfrom=lalinsky.com;
+	dkim=pass header.d=lalinsky.com header.i=@lalinsky.com header.a=rsa-sha256 header.s=fm3 header.b=cVf+jAOH;
+	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Ofyucmd7;
+	arc=none smtp.remote-ip=202.12.124.159
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	 key-exchange X25519 server-signature ECDSA (prime256v1))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F79606A31E;
-	Thu, 29 Oct 2026 16:39:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 11F79606A31E
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1C0606A337
+	for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 18:55:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 2D1C0606A337
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lalinsky.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lalinsky.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=JnnoR1kS
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YR6UeGl9YygRH23c/tUHUCgpQ6pQK9EdSkemzcUOMfYGwTAnj01jyRONH/tC2VlrnTndZDw4EvzWsN99QYVJGOwyFwwf/EGeixSoE2D02ZhWizHvyWw+MXMr40QNIGjIOwZf7BttxIIA/eJQCtzyNXvM7R5pskAq17bBhLQKoh3XXR6thy/yGfKe/2jsWS6tSh7KEKSGSZ4USMNWRy4df8i7rksByprwXF8ukBN/23gzD55LXLQpCjP4DziV9++X0JpkYY0gP4oQoP3fwjl9BZfiDsy2Rfd/fi8wLA6JnERQcXr/lSwtnpCxeVStS8o4ZB7jael8dkIWjzV6lqdNJw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001; h=From:Date:Subject:Message-ID:MIME-Version;
- bh=51uAHD964PNpqQsBGeHpyNzRygYccfzJj5XyKo8ToPU=;
- b=gKgWz+I2Dep1NcBX+fIuxToes/JVo8B8qUmdZTmnuOG/rLTTEGiDqEIyZKxGyHQ+8K+5l5rkuASsWuiN3+kc2ESXOM2uiUD1rD529BpxuzmONKWNdLVrYcYDziXWZWan35guDLOzM2BqkKXHoZz3ZwbP/lvHoZMVqkCsYDQYNkfId5wY9O6l002oOYE4i2KVPr4aYRdDzLRH0tT6lIRhZWlOrF8CJln2A0HamvuNiLWmvgbJ261a6KtS0xwMMvJSLhmvXv+YKz+hDviIUwkblzl7E9SMaf7oKVv4dVxUo9YkSU4xiXeccEfxIRgfus7qNAQUNm+GUvNAFgemC7Rq2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=51uAHD964PNpqQsBGeHpyNzRygYccfzJj5XyKo8ToPU=;
- b=JnnoR1kSBWUTAAZEBCu6ZcXv3ZA+bbYblIcfvF0kdgfLme9qLQtOk50gzSdoZnoHZRL0C3NbsVozWug2WRJx5noYmj3YZJYO4GbL8moqLtYhX8NuUmkHXY2TuWhFOWrTcDtlT3VqZTe0Af3niu5L6PGTHji+QDW2QZYgkXm5PoTd12OcO7Ll06xFX72hHV71gqMSsUC0uKCA+vmCterqAJybpJ2w6CCKqs8ETO/7xbBmnSlkUXVfbCXtfyvauGDL5TMBKmhWd7YxB9EJ8Bh1baZc85hpYc+aHTqpnlgsohpZdIRFiZJvwnEJ0gqw0LmbsSOn6VIhv0IpFdqwQrExSA==
-Received: from SA3PR05MB10385.namprd05.prod.outlook.com
- (2603:10b6:806:39d::17) by PH0PR05MB8253.namprd05.prod.outlook.com
- (2603:10b6:510:b2::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.569.8; Thu, 29 Oct
- 2026 16:39:28 +0000
-Received: from SA3PR05MB10385.namprd05.prod.outlook.com
- ([fe80::e22f:a0f5:fcb0:9b0d]) by SA3PR05MB10385.namprd05.prod.outlook.com
- ([fe80::e22f:a0f5:fcb0:9b0d%6]) with mapi id 15.21.0569.008; Thu, 29 Oct 2026
- 16:39:28 +0000
-From: Yingjie Wang <x-professor@outlook.com>
-To: Yang Xiuwei <yangxiuwei@kylinos.cn>, Bart Van Assche <bvanassche@acm.org>
-CC: "mkp@kernel.org" <mkp@kernel.org>, "James.Bottomley@HansenPartnership.com"
-	<James.Bottomley@HansenPartnership.com>, "axboe@kernel.dk" <axboe@kernel.dk>,
-	"jthoughton@google.com" <jthoughton@google.com>, "linux-scsi@vger.kernel.org"
-	<linux-scsi@vger.kernel.org>, "io-uring@vger.kernel.org"
-	<io-uring@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 6/6] scsi: bsg: release io_uring requests in end-I/O
-Thread-Topic: [PATCH v2 6/6] scsi: bsg: release io_uring requests in end-I/O
-Thread-Index: AQHdZSQlwL4bxblsuE2dHhgQENbwt7cPkbMAgAGRBQCAA5seAA==
-Date: Thu, 29 Oct 2026 16:39:28 +0000
-Message-ID: <20261029.scsi-lifetime-v3-plan.7ad5c4111d3b@outlook.com>
-References: <cover.1793003363.git.x-professor@outlook.com>
- <8f30e238d2b169702308303687e9504c7513ecc8.1793003363.git.x-professor@outlook.com>
- <20261026094010.1324076-1-yangxiuwei@kylinos.cn>
- <20261027093528.477408-1-yangxiuwei@kylinos.cn>
-In-Reply-To: <20261027093528.477408-1-yangxiuwei@kylinos.cn>
-Accept-Language: en-US, zh-CN
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA3PR05MB10385:EE_|PH0PR05MB8253:EE_
-x-ms-office365-filtering-correlation-id: 655517e5-c682-43d5-e64c-08df35db3354
-x-microsoft-antispam:
- BCL:0;ARA:14566002|22121099003|15080799012|25010399006|8060799015|4140399003|22091999003|24121999003|8062599012|19110799012|12121999013|2604032031799003|41001999006|38102599003|31061999003|24021099003|39105399006|12091999003|40105399003|26121999007|102099032|440099028|3412199025;
-x-microsoft-antispam-message-info:
- =?utf-8?B?U3FQbHFqazY5K29RbS9QNzcrQk1xZEdFc09LWFJZYTBxblNEYWd1aVVFVC9r?=
- =?utf-8?B?RGJtWTRXUW1jRlVQS05uZXFKODROVGQ5ZlBBWmVDZkFFUkg2dTFzNUdoU1pS?=
- =?utf-8?B?TjFOV0hTM1daS2ozQklqSmJIT3lRS0Vkc1ZJY1lmZWtkb3A3eE9YWEFla1B3?=
- =?utf-8?B?YTFpTnNRNm1va0xNWitkanltRlprazBIRDdXOVByUEhhL25NNXFrK3MrcVFl?=
- =?utf-8?B?OFdzK2U2NVROK0NsUE1nQUJZYWtITHhvUnFoazQ5M1hPZ0ptVUxqTGI2STd2?=
- =?utf-8?B?RDY4dDFaNWdPWVVsVW43UlpxeDNwdmVjR0pXdUY3TkVHTFNHMklKSmN1bWty?=
- =?utf-8?B?QmM3VkkxMWF5N01hWGY5cWZiaDg2b2NlZ2RWaWEzTUdyNVdEY3pBZS9JZzcy?=
- =?utf-8?B?ekJjVGRjUlgrRFhxQ0E3NHJSRGd1YlhxTjFXOVZPYnhoYlJOY1BxZXJoaGdm?=
- =?utf-8?B?Y01wdXl0eWprd091M081WTFDSVducmJoa2dEeUJWZnRqUmFQaW9yc1NpRjFO?=
- =?utf-8?B?dUx6Q2JnaXViK2ZYZ3dvK0tKamMvejZMVnFKdEFreEFDcGdlR0VyZ2RZUVJr?=
- =?utf-8?B?U2pGU3dNd21hUU9PdEJKYldEMUM1ZmlMRlhVaTBoZHREcWlBS0R2U1ZHRFpz?=
- =?utf-8?B?N1B5TGFiZ2txMEZ0SHpOY3VBTFJFVWRCMEZqelBBOXkyem55VHJPRkhnRERG?=
- =?utf-8?B?SFhiOGxTcVZMeFB5WUhFMU9qVzNsWnlNcHVYREhDU3RDQm9uazdqeWVmSk53?=
- =?utf-8?B?YVdIYVBaRngxSWhFN3Bwbm9xUVNCcTdIaGZyaTBMNEUzaThRM3hVTy9TajZl?=
- =?utf-8?B?MFhqY2RsS3l4NHRpOWZ0MC90Szg1Y1lLeGZPSW96K3ZVajRzTE45dkpIWS94?=
- =?utf-8?B?Z2xNNW11YVpUUzk1bWd2L3FZTm5TVUVFNk4wYThqUEEvYThQZ2NRZ29OeXdu?=
- =?utf-8?B?enhEazdHY1JSd2tRY3JzemswaFcxVDNaT1QzdHlpTjFJak9KRmFGMUt4c3hS?=
- =?utf-8?B?K1NFMnVJQjZ2T3Ayb01iZkkwZTl6c0liNElpS0RTOVlyM0hTUEtubDg4dEx6?=
- =?utf-8?B?Z2Z0RnpKNWplWEhGNUdkZjF6S0NjWm40eFRtNG1CL2hZUmRsL3BmUWlLekZZ?=
- =?utf-8?B?bXIvWDdYZEkrbmJPRE1CNlUyY1dJRllWWjliZjVEbTcycnIxSXlaNW1WT0Fq?=
- =?utf-8?B?M0I3ZGVEQlpCamVUMHlsL3p4YjBkMHR3MVhJMnpQeTk1SVcxMVArYWpuZjIz?=
- =?utf-8?B?clZEaTdXRkVRQ0NQZUlhbjR2MjdLTXRybWhIelFmanQySTltZUxFK3hpMThS?=
- =?utf-8?B?QmRzQlpxV1IzYWYzaGZCVjdyU0hDMVllSUFPQURKdit1TDlUcHR1clVRcDBz?=
- =?utf-8?B?Z3NjT211aXU2dVJUN1dEVzZlWFB0MVdTcGhyZDByMnBLYUZNOXl6dkxhNzJ0?=
- =?utf-8?B?dnpVOEZvbHBEVSsxNzFzMWxCL1dEMVpFMnZJWXAwSGd0L1JiMDZmTXdNbjNj?=
- =?utf-8?B?V2ZrTlFEWmswSVkrUitHU3diZ1dxOVpwc1VRY0U2UEYzREhJMGlkazEwMlhi?=
- =?utf-8?B?WmJCYlJSaWJCTzFrSXYxaEJjRURoRFFBVkFrWkE0ZnB1eFJJTGZFWVNpQi96?=
- =?utf-8?Q?jIT3JUQpqCr259+Kv0lcJVd5lOiH/sI7jS80oCxZNOZ4=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?Z0hzYW5aVDh1eEhRajB4SjBLRHZ6MWR6dmZaSkhSdHBoQlY2Tm1ydm50S1Ja?=
- =?utf-8?B?UEh2RURHRkVYcG1zVzZxZ2hBSmxXUmVTT3ZhTEtRczJxVGdncjBiVWxOdVUw?=
- =?utf-8?B?SVk2REkvUSsvSGt1b3dzWGtLUldiOFQwb2RKYkk0ZUFxOExFcVlCUVdYVVhm?=
- =?utf-8?B?QlBGcVVkY1NFcS9TR3JPbDRHMTZTQzl3VlpHOXFQZksxTjEyQ21XU1JYd3Zj?=
- =?utf-8?B?ZlhtWXpKTklTY2hBSWhPZ1lVdVZOWE01Q1p4MWQ5UHIxL2lpd3dxMysrQ3Fp?=
- =?utf-8?B?OVoxV244ZzNYY3hOdTdYUW0vZVNaVVEwVWxQaTZ0QUp0UlAxdlpKVmlEMlhZ?=
- =?utf-8?B?VW95Ni9RQWFyV2FMVGQxVFB0WkpMcmlnbzZqV04zQ080S0R4WUkzRktlUWRO?=
- =?utf-8?B?cFphZHB4Q3VBeE1UOWN5cE1GVEFRSmo2cENPdzFTSGdFY2lPOWc1dnFBcyti?=
- =?utf-8?B?cCtBOEhYYjhMK0RxRGhORGJqUlF0b0FmVENPa0JZTEQxbTFkQk4zQWJZRkpi?=
- =?utf-8?B?RVVhM2VhYW1IdXNEcXlZSWRtTzc4YU9BYy94MHg2L3N4TDlGUjV1cElvb0hp?=
- =?utf-8?B?UUs0Zy9zN25rM0pOM0NIYWZocnpIWkoxclFNOGdlalBBc1h6TzBiVkJ2ck1y?=
- =?utf-8?B?UnhVL2JzQjFPaUdUanJuS01jVTBabnRYSjYxa3R2U0JVNzhwSk10cWlaODlF?=
- =?utf-8?B?YnhwaWRzUTdVdzhYMXF6NHdNZ2U1a2pTeHFlY2t6SXU2a0E3aTFaL0czVUdh?=
- =?utf-8?B?WmtoQ0E4Y29YY0I4d1NqL1YvbERFVitKUXA4R1ljRW1nSE1SbEkxTkRJbDV1?=
- =?utf-8?B?STFDengxV29mcHBOUG1IbHdoNTczSDZhV3RWc0hpb3BPemNiSS9FK1V3cW1o?=
- =?utf-8?B?NlRQbDg0MjhnZ2NCVTNtZW5Dd3pmZXI5dmErSi9hd2lLejM2aGo2dzdlUlZ3?=
- =?utf-8?B?RTJ5bXRCZTQ4S1NhN2EzakgzT1pGNTVXak0vVGpqYzdqM2oxYjdhTXVoU05R?=
- =?utf-8?B?ZlA2VXpuZUFkeU9veU9OWUt0YlBzWjBRR3lXZEN3MVR6YUtVdVl4eE5xSWdj?=
- =?utf-8?B?UUpUY2xRYVdrckp5QTE1bFg1SXhNc2RHakR0QUVzWlQzOFJoblBFS2phSWg3?=
- =?utf-8?B?cWVCdHEwVTJtQU92MCtCVjB0R0ZIQ1pwNHFraGhNN1I5RWtCeUhnY1h4ZTVT?=
- =?utf-8?B?eXVjSmhUbUlNUHFmQ2lnNlR5NGtiSUs1UERxRU4wOE1mUWcyRkYzQXk3VkJV?=
- =?utf-8?B?dXdjcDFZdEZZY09HRGMwQjEvSlVKeDNFZHBkY3c5L0ZzTHM1Wi9QalhuRDdB?=
- =?utf-8?B?YWtXeEdRaThCOVlKTS8rTkh0Q3J5YWZXYmR4UDJPOWdmS09hSXlGK0NtcjNL?=
- =?utf-8?B?c3p4YmRWaUlLclpJV2ZNWm1vNFQ0eVQ2RzloOUtpS2lrSkZKTUM3T0xabk1Y?=
- =?utf-8?B?Wkd1TjBHNTN4L2lzanpnZTFwbGdKUnJHK3E4MlFJdDAyZnVCTG1KVmlCRDcy?=
- =?utf-8?B?MzZGTFg2d1ZZZ045OE90WjZvQjMwQVVGNWZOZUdNcEI3QS92N1hYMEF5THd2?=
- =?utf-8?B?bWo3SU1UeHFmTXVraW5qM1lVOUh2REVHaGRGUmVZWnAvTzA0UVNlbEZ1dGRx?=
- =?utf-8?B?Q1J0UjlxWnNFRm55ZVJXaStHTGNBUG9odVNrOUtaNmxPMFg1L1FHKzZJNW5X?=
- =?utf-8?B?ckswbEtYNldjNVVieXZCT0UxYnBqUFh1ckV5aXdKanViVG9pK0VOQlVPTXox?=
- =?utf-8?B?SlQvWG9GZTNYV3hEL3l2a0JKd1dJdnFzeEFVSmRaUWpyZnNIbWxTT1R2VWFl?=
- =?utf-8?B?TjNyWnZBeFA1NEJhUExVcDk2NHVvTzMra2theUtDSEI1bFRVQUt1MlJVa0Vt?=
- =?utf-8?Q?4gGUR78Pxj/jS?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A9294835C98BCF46BD142F6493343DE0@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key, unprotected) header.d=lalinsky.com header.i=@lalinsky.com header.a=rsa-sha256 header.s=fm3 header.b=cVf+jAOH;
+	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm2 header.b=Ofyucmd7
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 392377A0144
+	for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 14:55:08 -0400 (EDT)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Thu, 29 Oct 2026 14:55:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lalinsky.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1793300106; x=1793386506; bh=ij
+	oVdBB+CeUh65paN6kuGTG9ToIcwzTc9xfoUwMoOkk=; b=cVf+jAOHdWyIlXut8b
+	sq1NSioi8e3TNmE3VML/ExUcPDYSvc7JAWCTemqOn8xDcccIvyyjc1nEVyRvDnKe
+	/8QBowem5wf2XwdrghZq4uTWdVP3OFpTDHuoNMQbiF17WqFXz7t7ylW+uPR7XQ4L
+	AZp2QC7an7PQE5fv1bUEIgsEer1NeH5napdkxtNf+mImlF0LlVjcUaTGJ5Z4vJC6
+	EssvcGR4GvbiV6FOG9QsFdBNiYrklJeY5aX+DF6QHExSdfDpeN9yQlGQXinElSIr
+	5hnvHVcsxWrbwAgaSzTw1jAOJi87Ia7YrkknSGDY972DsCxMlNz9YlB6PYfWfhs0
+	gugg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1793300106; x=1793386506; bh=ijoVdBB+CeUh65paN6kuGTG9ToIc
+	wzTc9xfoUwMoOkk=; b=Ofyucmd7lVp0NAHd6nfnHxv4yNAamyC5xPUWuJnIREjd
+	E9eaRFwBFTw350JO81ryeuKq6gGfiuxZ+Rsghen2ajYxgfQMEYyyqYn9ZXcpA/ZY
+	2LoxMGQyBlpg50oMLVGXdsJP19XIZwvorrAAEwgqZYLNqUoLcbFSru2E8DYulyLk
+	SdNyUz/LslDhTJ3Zhv8mmqkMRWUztyZ9eTSSreRSJummcThror8G00LCXDXhtr/R
+	a64nzH/lXg/UV81pk/NUoul8FpwblDj2hbOWibj6q02DNE6NjdIyo1P+pplGZnxG
+	rJIRaiRM1TLIdKWeGb09b7z6BYXsILz13Rpdz5hL0w==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=sign d=lalinsky.com a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1793300106; d=lalinsky.com;
+	mf=PGx1a2FzQGxhbGluc2t5LmNvbT4=;
+	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
+	s=fm3:rsa-sha256:oJBAnsUecKmnlv8aSNspgqcjZhM5CNqP8gbct2jZpQZ2+S8
+	oWcKaivtgZRL4KRLW0Tz9A6eDCkum8Pg/T1xWaGxq41+V0wjhSTq+7eOANjlYx3M
+	BYxsE1PQ5ou2HP1Vfp/Nz9uJSB+Yp891CQZYeoRZLYULRVv7xIY93FSw4nq1yBlh
+	T1N05W7q9LcBdfsVChA+UafPWYX1inxhMocNW7ENJ+OrAki90qeNujFcOvgx9OZV
+	crPIDtRh16BbAz6P5EIPmW2KVgYXG7GNcuz+JnHTA9ZZdQfeKefuLFVru247m6gx
+	VdAw/tQouCdyaPznQc5J9WX/ggxDQ999KQJGAGg==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-08;
+	repo=github.com/dkim2wg/interop; date=2026-10-28; sw=lmtpprox;
+	action=mi-m=1; hc=10;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,message-id,mime-version,subject,to;
+Message-Instance: m=1; h=sha256:p2xYIjHogdrGFGIXsyQgOsGUoEIb9PU3CMR+wYSSpX8=:N91KpM6UB4OB8IzWiCtzLElitlTizqV4IqgxSq85CvQ=;
+X-ME-Sender: <xms:iJbjaniyfHW7TJo8yxpznjDcA3g5GNEj5e1V9jnWTixOOmeKwWE-iQ>
+    <xme:iJbjau2gnoCOwodhXsOWB4F9t976yn7AH0_S36g4hnjVelY1JmsVZvw3nuSQQgYwC
+    e7yR8gGR-BLxuxu2_0MD4tsbx3ic70Awu03CbjiyEACfxS-fatnIw>
+X-ME-Proxy-Cause: dmFkZTGjfNYSf4a39q4RGY8M5SIZ5i7wEJMJXTRlHLPEc+0MWisx2g84NSChIAibQrespa
+    4DHJLrlFZGb/LPwSe1PaRYeZOY84penYPi3RbtJm8O2amMS9mDsM/jntIRVNU3+7fgNOAN
+    w61pkBzeiPCxVrX+pm+N7i2UWEUEJRmDXhD6TnLTgFxKKogI3BNw4QM6F8OeFPXkor6gGH
+    BOvodAhTLZy9zyL79aAaUSrF1Qros2y/iUb93fIxsvV5mLFELvZrKNKmTrcIh3eFfMHYH6
+    KlxwHTi9agGOVe4xRGpm32813Lb4JR0cybcJZ7xvWc4GynriJfQTi9IIXnDQ7WXlC6p6sf
+    jbcUN7hMVRSjY2xgpqs+Z30d70iRi4+K1gAjbzVT2GfPokagGT50nbN0/jvKzBCNVHZodO
+    t9ogxYPEpMppFjXNSPYnlRvGprd25DyjFyS2HH25mIGLq5ARpdDYrJ3FPwU+VAyOkyci+2
+    uLyLd1VJTkJ65JNLzvTfC2HF8c1yJnWy1QMUF3My3FrCzn4v1Xa3PEDbA5CByJ+/ScPKTw
+    gPEgQjqnkE6KWqszBxDLvK+JEPRZn+kpWWhgXFFHqnFx+ooq3K/ItFTfKyLuJ1e2uK90kC
+    JhIDOrPnBUtzLF1vgCs9Gt22Lcdjm19ci/fbh4NObfTPdbPuyNywHBcoz5Ug
+X-ME-Proxy: <xmx:iZbjaqOnuKceUHnFPVbOLd27kcr8B4sT5o0jAmyePB_b5wF4nkcKjg>
+    <xmx:iZbjam4bWlxoCxcifQZbE_GzlUaBrebSBYK68eW12T3g6i11eBjfAQ>
+    <xmx:iZbjao3_MN6rYg3zPtW9cd9ExQhIbnVtgrA6X5F2-zXy7jAOsWsXPA>
+    <xmx:iZbjanZoCRrTYvTXgindyD3a5sJtZDHd1svnO3tTb4EMKc4YG7Xypw>
+    <xmx:ipbjah9y_ekI8X-OGDYbs7muVIIY97X15f0fhmEbRAMeD1f4ZuB5e1rD>
+Feedback-ID: ib6f146ff:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 74187F80093; Thu, 29 Oct 2026 14:55:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -171,37 +114,186 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR05MB10385.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 655517e5-c682-43d5-e64c-08df35db3354
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Oct 2026 16:39:28.4875
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR05MB8253
+Date: Thu, 29 Oct 2026 19:54:44 +0100
+From: =?UTF-8?Q?Luk=C3=A1=C5=A1_Lalinsk=C3=BD?= <lukas@lalinsky.com>
+To: "Jens Axboe" <axboe@kernel.dk>
+Cc: io-uring@vger.kernel.org
+Message-Id: <a5589b66-9a20-4b1c-a0f1-1b5b31af3667@app.fastmail.com>
+Subject: io_uring: SENDMSG/WRITEV return -EAGAIN on O_NONBLOCK socket after peer
+ half-close
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-SGkgWWFuZywgQmFydCwKCk9uIFR1ZSwgT2N0IDI3LCAyMDI2LCBZYW5nIFhpdXdlaSB3cm90ZToK
-PiBGb3IgcmVmZXJlbmNlOiBzY3NpX21xX2luaXRfcmVxdWVzdCgpIGFscmVhZHkgYWxsb2NhdGVz
-IHNlbnNlX2J1ZmZlcgo+IGZyb20gc2NzaV9zZW5zZV9jYWNoZS4gQSBzZWNvbmQgYnVmZmVyIGZy
-b20gdGhhdCBjYWNoZSwgYnNnX3NlbnNlLCBjYW4KPiBob2xkIHRoZSBjb3B5LgoKVGhhbmtzIGZv
-ciB0aGUgc3VnZ2VzdGlvbi4gSSB0cmllZCBhbGxvY2F0aW5nIGEgc2Vjb25kIGJ1ZmZlciBmcm9t
-CnNjc2lfc2Vuc2VfY2FjaGUgaW4gZW5kLUkvTyBmb3IgQ0hFQ0sgQ09ORElUSU9OIHJlc3BvbnNl
-cy4gV2l0aCAxNgpjb21tYW5kcyBpbiBmbGlnaHQsIGFsbCByZXR1cm5pbmcgQ0hFQ0sgQ09ORElU
-SU9OLCB0aGUgdmFyaWFudCBhZGRlZAo0LjUgdG8gNS4yIHVzIHBlciBjb21tYW5kIG9uIGEgS0FT
-QU4ga2VybmVsIGNvbXBhcmVkIHdpdGgga2VlcGluZyB0aGUKcmVxdWVzdCB1bnRpbCB0YXNrIHdv
-cmsuIFdpdGhvdXQgZGVidWcgb3B0aW9ucywgdGhlIGRpZmZlcmVuY2Ugd2FzCndpdGhpbiBydW4t
-dG8tcnVuIG5vaXNlLgoKRm9yIHYzLCBJIHdpbGwgbGVhdmUgb3V0IHRoZSBhZGRpdGlvbmFsIGFs
-bG9jYXRpb24uIEVuZC1JL08gd2lsbCBmcmVlCnJlcXVlc3RzIHRoYXQgZG8gbm90IG5lZWQgYSBz
-ZW5zZSBjb3B5LCBhcyBOVk1lIHBhc3N0aHJvdWdoIGRvZXMuIEZvcgpzZW5zZS1iZWFyaW5nIHJl
-cXVlc3RzLCB0YXNrIHdvcmsgd2lsbCBzYXZlIHRoZSBzZW5zZSBkYXRhIG9uIHRoZSBzdGFjawph
-bmQgZnJlZSB0aGUgcmVxdWVzdCBiZWZvcmUgdXNlciBjb3B5YmFjay4gVGhlIHRhZyB3aWxsIHN0
-aWxsIGJlIGhlbGQKdW50aWwgdGhhdCBwb2ludC4KClJlamVjdGluZyBJT1JJTkdfU0VUVVBfREVG
-RVJfVEFTS1JVTiB3b3VsZCBub3QgYWRkcmVzcyBmYXVsdHMgZHVyaW5nCm9yZGluYXJ5IHRhc2sg
-d29yayBlaXRoZXIuIFRoZSBzZW5zZS1sZW5ndGggZml4IGZyb20gdjIgNS82IGlzIGZvbGRlZApp
-bnRvIHYzIDUvNi4KCkkgd2lsbCBhbHNvIGFjY291bnQgZm9yIEphbWVzIEhvdWdodG9uJ3MgY2Fu
-Y2VsbGF0aW9uIGZpeCB3aGVuIHJlYmFzaW5nLApzaW5jZSBpdCB0b3VjaGVzIHRoZSBzYW1lIGNh
-bGxiYWNrLgoKSSBwbGFuIHRvIHNlbmQgdjMgYWZ0ZXIgLXJjMSwgb25jZSB0aGUgcHJlcmVxdWlz
-aXRlcyBhcmUgaW4gcGxhY2UuCgpUaGFua3MsCllpbmdqaWUK
+Hi,
+
+IORING_OP_SENDMSG can complete with -EAGAIN even though MSG_DONTWAIT
+was not used. It happens when the send is waiting for buffer space, the
+peer calls shutdown(SHUT_WR), and the socket has O_NONBLOCK set.
+
+IORING_OP_SEND in the same situation keeps waiting and completes
+normally once the peer reads. So does SENDMSG on a socket without
+O_NONBLOCK. IORING_OP_WRITEV behaves the same way as SENDMSG.
+
+I consider this a bug. Based on previous discussions [1][2], io_uring
+should ignore O_NONBLOCK for operations that take a per-call nonblock
+flag. SENDMSG mostly does: on the full socket the request doesn't fail
+immediately, it waits. It only fails after the peer half-closes. At the
+very least it's inconsistent, because SEND and SENDMSG/WRITEV behave
+differently on the same socket.
+
+There is no good option for handling the error. Resubmitting fails
+again the same way. Waiting for writability with
+IORING_OP_POLL_ADD(POLLOUT) doesn't work after a half-close either, it
+completes immediately with POLLRDHUP, even though POLLRDHUP wasn't
+requested. The only workarounds are dropping the O_NONBLOCK flag, or
+using a separate epoll to wait for writability.
+
+If I'm reading the code correctly, after the half-close EPOLLRDHUP
+keeps waking the request's internal poll. The request runs out of
+APOLL_MAX_RETRY and is punted to io-wq, where the blocking attempt goes
+through __sys_sendmsg_sock() -> ____sys_sendmsg(). That function turns
+O_NONBLOCK into MSG_DONTWAIT, so the attempt returns -EAGAIN instead of
+blocking. io_send() calls sock_sendmsg() directly, which is why SEND
+blocks in the worker instead. WRITEV seems to hit the same thing in
+sock_write_iter(), and IORING_OP_RECVMSG through ____sys_recvmsg(),
+after enough wakeups that find no data.
+
+We hit this in zio, an async runtime for Zig, via an HTTP/2 server's
+half-close tests [3]. ringline, a Rust io_uring runtime, hit it
+independently on 6.12 and 7.1 [4], and libosmocore seems to have hit
+the same -EAGAIN and worked around it by clearing O_NONBLOCK [5]. We'll
+work around it in zio for now.
+
+Here is a minimal reproducer:
+
+/*
+ * IORING_OP_SENDMSG or IORING_OP_WRITEV with flags 0 is parked on a
+ * full AF_UNIX stream socket. If the socket has O_NONBLOCK and the
+ * peer then calls shutdown(SHUT_WR), the request completes with
+ * -EAGAIN. IORING_OP_SEND, or any of them without O_NONBLOCK, keeps
+ * waiting and completes once the peer reads.
+ *
+ * Build: cc -O2 -Wall -o sendmsg_eagain sendmsg_eagain.c -luring
+ */
+#include <errno.h>
+#include <fcntl.h>
+#include <liburing.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/utsname.h>
+#include <unistd.h>
+
+#define CHECK(x) do { if (!(x)) { perror(#x); exit(2); } } while (0)
+
+enum { OP_SEND, OP_SENDMSG, OP_WRITEV };
+static const char *const op_names[] = {
+	"SEND   ", "SENDMSG", "WRITEV ",
+};
+
+static char buf[65536];
+
+static int run(int op, int nonblock)
+{
+	struct __kernel_timespec ts = { .tv_sec = 1 };
+	struct iovec iov = { .iov_base = buf, .iov_len = sizeof(buf) };
+	struct msghdr msg = { .msg_iov = &iov, .msg_iovlen = 1 };
+	struct io_uring_sqe *sqe;
+	struct io_uring_cqe *cqe;
+	struct io_uring ring;
+	char sink[65536];
+	int sv[2], ret, res;
+
+	CHECK(socketpair(AF_UNIX, SOCK_STREAM, 0, sv) == 0);
+	if (nonblock)
+		CHECK(fcntl(sv[0], F_SETFL,
+			    fcntl(sv[0], F_GETFL) | O_NONBLOCK) == 0);
+
+	/* Fill the send buffer. */
+	while (send(sv[0], buf, sizeof(buf), MSG_DONTWAIT) > 0)
+		;
+	CHECK(errno == EAGAIN);
+
+	ret = io_uring_queue_init(4, &ring, 0);
+	if (ret) {
+		fprintf(stderr, "queue_init: %s\n", strerror(-ret));
+		exit(2);
+	}
+	sqe = io_uring_get_sqe(&ring);
+	if (op == OP_SEND)
+		io_uring_prep_send(sqe, sv[0], buf, sizeof(buf), 0);
+	else if (op == OP_SENDMSG)
+		io_uring_prep_sendmsg(sqe, sv[0], &msg, 0);
+	else
+		io_uring_prep_writev(sqe, sv[0], &iov, 1, 0);
+	CHECK(io_uring_submit(&ring) == 1);
+
+	/* The request must be waiting for space, not completed. */
+	CHECK(io_uring_peek_cqe(&ring, &cqe) == -EAGAIN);
+
+	CHECK(shutdown(sv[1], SHUT_WR) == 0);
+
+	ret = io_uring_wait_cqe_timeout(&ring, &cqe, &ts);
+	if (ret == 0) {
+		res = cqe->res;
+		printf("%s O_NONBLOCK=%d: res=%d after peer shutdown\n",
+		       op_names[op], nonblock, res);
+	} else {
+		CHECK(ret == -ETIME);
+		/* Still waiting after 1s: drain the peer until done. */
+		do {
+			while (recv(sv[1], sink, sizeof(sink),
+				    MSG_DONTWAIT) > 0)
+				;
+			ts.tv_sec = 0;
+			ts.tv_nsec = 10 * 1000 * 1000;
+			ret = io_uring_wait_cqe_timeout(&ring, &cqe,
+							&ts);
+		} while (ret == -ETIME);
+		CHECK(ret == 0);
+		res = cqe->res;
+		printf("%s O_NONBLOCK=%d: res=%d after peer read\n",
+		       op_names[op], nonblock, res);
+	}
+	io_uring_cqe_seen(&ring, cqe);
+	io_uring_queue_exit(&ring);
+	close(sv[0]);
+	close(sv[1]);
+	return res == sizeof(buf) ? 0 : 1;
+}
+
+int main(void)
+{
+	struct utsname u;
+	int op, fail = 0;
+
+	CHECK(uname(&u) == 0);
+	printf("kernel %s, liburing %d.%d\n", u.release,
+	       io_uring_major_version(), io_uring_minor_version());
+	for (op = OP_SEND; op <= OP_WRITEV; op++) {
+		fail |= run(op, 0);
+		fail |= run(op, 1);
+	}
+	return fail;
+}
+
+Output:
+
+kernel 7.0.0-38-generic, liburing 2.5
+SEND    O_NONBLOCK=0: res=65536 after peer read
+SEND    O_NONBLOCK=1: res=65536 after peer read
+SENDMSG O_NONBLOCK=0: res=65536 after peer read
+SENDMSG O_NONBLOCK=1: res=-11 after peer shutdown
+WRITEV  O_NONBLOCK=0: res=65536 after peer read
+WRITEV  O_NONBLOCK=1: res=-11 after peer shutdown
+
+The relevant code is unchanged in current master.
+
+[1] https://lore.kernel.org/io-uring/e83c9ef0-8016-2c4a-9dd0-b2a1318238ef@kernel.dk/
+[2] https://github.com/axboe/liburing/issues/1270
+[3] https://github.com/lalinsky/zio/issues/864
+[4] https://github.com/ringline-rs/ringline/issues/603
+[5] https://gerrit.osmocom.org/c/libosmocore/+/41671
+
+Lukas
