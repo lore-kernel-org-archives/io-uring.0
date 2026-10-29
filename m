@@ -1,94 +1,94 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.54
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793289009;
-	b=NOD2iOWjqsI2yYeT6Ju0bzSNFmUI1kDje1QNsCpmxz8Mw+7ppbr4t4Rdydmn9ERV5W1R
-	 qfd9R+YOLCT8bZ8sk9ZU0wPhUCxMmC3+/FVbdDbEzQoGAggbhrPIxDUsy+X8Nh9+3UdD6
-	 +asXbxVXcZ1Fny6zY/4y7ZmV0WIqkn+yGvIhsL1ldN/r/3X22aWpLB5bCS524bNRn+du3
-	 fOqLXJoj617GAgKN3WkKJY4L0i7yBYwZnDSOB3bGBf0vhvYsA9rS4z6xuk6J5tnVwq5wL
-	 Kkm/5Nq8uHo0Vsdno5MamFaxJEcJqGSiunfuXvUcGQzaIyqWwr1dmiqi7eSVOPqaOTw==
+	t=1793289015;
+	b=FiXiQ2rSx+xPSzdcvMXRKkH4wfKGI7KPMTOk6PaqQRNbDzTDxwfXjyyBdy4vNbW033Q5
+	 jqWq4iqSFK8ZKdHyZTccfjPZs3IAYggiQ76s6OMKu15qQltgU8Fx9/kq0aZWo+o2X41z8
+	 NuyKapADBzxKaAyaZbEVsl0SDNJPd13/z10QD0yqCFKSBEqAPn6fqFYVNont6FbCGA56S
+	 RQWGFOUSbrr6SUJgCnisTWWvrjXHpOF8snN+aYR5b1dVKxcbG2D9TLlz00vCLx/qZCKkP
+	 170ybS7sGavuv92C9eFnIiGhvEtXJTiwt8hMreVpdxv+7r4E2bWuCMrKMocwrxkpk3w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793289009;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793289015;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
 	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:X-Mailer;
-	bh=KO2zCYqPM97Qlfn39fdTx9d78CfkFYYHVPWw93WarAo=;
-	b=Ij11V9HUGQ/2OIgW3W3V5nvK1Uc9WAma4LqWr9xtnZ2IzoFy9d77hZ1Nijdis3Z81qi6
-	 ETzeT00zsWgfZUi3aXFksYC0ouvKfnPBFx8na6XXlippzebMclp69U6pAhPyLIVbyiGDi
-	 /be4nsQK6FpdIoYJ1CADjCmn7+JKx0WsOL/UQfB33pKDPTTQ8a6WhKE6ew23J+1R7CXWX
-	 mWwwpbC6WOUCoe1jwBnvPwtUyyrVcHApQefG/NtTc9w0/muVykxZ/rg7V/Q2jVf1dgvBn
-	 tQy1Q9EG2EQwHuH9IhCIz9Dz8EyLrBDTqIZ2RPRkE7fKGZCVKjdEs2pOGmsNGnD70VA==
+	bh=aJzBEwj2+x4j6CDStwSGH+/h447AGr3HtflqjrkNNp8=;
+	b=Ed1UBjycraLoY0UW+nSvLjdv9gDyU2ksOqMQfeuYp9IwXtWlB/0BYXpL7O/Ymclhmrmz
+	 dTDDpdmMimJFMSSVgq27U70TYeKrHXDqMyqRdnRl8rewaDFRnt3ccIlDE17j8Jcl2UwFV
+	 IvmoElEtTH+JieoTzkG06DJ5FolSN2GaIvgjtDuU9VEhZfv+vU2ijYvjNePKP293RAWTm
+	 YH3S07aIn2UXaDoHzx+OU5HZcHnDfH6FzToAHIYUJJalyoE5xXqQZSyp41EdBZwDLa+z8
+	 Tx31Dn4kJw1NlZdGDpFSk/g84s9AUtuMCNW3TUh0q3htgKIeqooKYtRclrmUSPEx4JA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=d04nNPdM;
-	arc=none smtp.remote-ip=209.85.160.42
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=sPn9Zjxu;
+	arc=none smtp.remote-ip=209.85.160.54
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899D3606A31C
-	for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 15:50:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 899D3606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F1DB606A31D
+	for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 15:50:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 5F1DB606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=d04nNPdM
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-4932b13c4ccso1386614fac.3
-        for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 08:50:08 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=sPn9Zjxu
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-47b47de8b4cso1373459fac.3
+        for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 08:50:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793289007; x=1793893807; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793289008; x=1793893808; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KO2zCYqPM97Qlfn39fdTx9d78CfkFYYHVPWw93WarAo=;
-        b=d04nNPdMCFhdZh07rdXdALecsU4fJmwyvWTLaH34u3kWvbcz+0PYJU2U4bmYL4cFkb
-         B9Tv5/73PMmPa/Z1c/iZTcbLsWovJDhaCfI7eWqeNLDOtHtF33jvcLCdTkTUK5df+161
-         BW8INF6Dhaz6UY0VVpE7bKAp9p15nizULbqM2HWxjHY8MS7auDu/JkupScPAkFPxoYkK
-         4DgRpAx/vgqCm8o4hrBQsfh4TN5QMi7f1pWDNjy7BiYkvOX45Spddc0y+RsoEk6g8mKH
-         GWiTgJjzMNKYFsV44zfC0T5zxdxu00L+EJoU2hoQcPm5C+qb3pqWpDu3RwijOZjcE6Ge
-         mwvg==
+        bh=aJzBEwj2+x4j6CDStwSGH+/h447AGr3HtflqjrkNNp8=;
+        b=sPn9Zjxu/OgUIzLpljYFMA3n+mK4KEEUft17iahwWOyuzygHD6vArleT8TDLvcGFyz
+         ztbKajILsvA+3IUrxTWIisN+VMPap49vjpQfimOkVfmpFR1bSnbc5LU7gFtTYLTbpRxh
+         IKWA943bwIzlf4RkYYQWuSeZQVSUPGX/uvJSUXIbh7lJTjHySrj6oCT9kHAOvdCgx73c
+         mAHxVIbgR0MBRzt6h6jwOl5xRh10mOVv8cpxCb3G2860Q8uk5IsPqBZ0rMEeHS1EK34e
+         ZrwcRh6AgPYcd0vvJoW5TCEaFByyb9LdQgTQbkzedvI9m4XQ7SjU/WzTJQcf7ALid+VX
+         H7ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793289007; x=1793893807;
+        d=1e100.net; s=20260707; t=1793289008; x=1793893808;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
          :subject:references:in-reply-to:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=KO2zCYqPM97Qlfn39fdTx9d78CfkFYYHVPWw93WarAo=;
-        b=uBwt8ouaaeWHDCdqpo1xQi7wE6mRwhMuXXSWrOFcoeUuoQrQQ6YUNf3krivzg4gRCf
-         HVOAPju1pquFrRsjBuiwqylXdaIKA6SSPY25VRpmWlqL9dI0I0NcsWkCXsNBWZOG/bUD
-         IHtSkTvXkLz5mDyl5wW/BmK6lrpzxuSDFX7WAliTNW6CyZbDiiSebI1AY1K0eiE1cPJy
-         GpDLgQ91nY4j64TtXEid8EkiKrlw5ti8TIDr5oP1SsmiWgkdk6xRVm/b0tsiiTJ4iW+y
-         dVKgNesML1lPK8jy7P9J2KR417b8SmqVWcJ6HbsaaI0GsJi88oYsDfDjD3VVNoDdb9J9
-         qelA==
-X-Gm-Message-State: AFq9FYJKPK7WcRttH7U943l1YmJsfAK73o9kALxgEZ4cT4803IcuN7ww
-	ZfMJ0RfobLpQGm9+BfwNZy8ewahAJLcHrz0G3DT2WntqzpCBW//8BOy8xB0kzSoq88La0zU8Czf
-	TDddES1U=
-X-Gm-Gg: AYBFou3J1868Fio5sCB2o7KrwLWLNzDO987tK6sn4Lmem2eodDfqubRHPdXCvf3v47y
-	Cv7OCsKdZ7K/+Sj6OEzWaSDRIUthZJtuzGh2lddUFThXDuj7Ohi4kZtXpcqxwL3TDzXEfAhSHFR
-	NkdRKDYMsfav5BM6+elUjMqUo1i6CsCVkXpzdLHEnLiQy8WSr8b3a9pJ/VFifqloIf/8kFvpt/I
-	OpzJkZjRaI6Z/+H5pmuSDAAJ2E1zsw1Dd4il8c0KccJyN5JrRezEC40dhst7xvCLAvpwo5TR8Xu
-	i09GDktQg0l753xCnXP1m1PUKa7G9BJZnJak7LH+kECJUQuPlT2MYZ7cMaPHQ3x4qV0XMoOYLxI
-	80XBqIrl1rBp8rF8icvviv0V8xi9qqYA+BlBDTToj6bEfv5rH6JQ2UFXnAlczXgkWM331/uiH7X
-	TpmI85hRfUu4IgRysduBv4w0cIXuJZJFfN67PVXygvO/4U82lKcMelHPvQWi3wPPI/zLiGgIql+
-	92rJ0+2ztVeOMx6KtFqMaD6spzZ6oKxuh+Fy7FKD8EhijLYms5JYjG552Mg/xHAFL56CBcDklfj
-	2408njp0u5FRY+i5XnIb3U7hYBRghWVCfg79Byyl5OXaEvFpFOgwLqpF3htBSl71KG7z8DxmZuX
-	BebUJHUG7rB8=
-X-Received: by 2002:a05:6870:9f08:b0:475:e235:905 with SMTP id 586e51a60fabf-4a8bba79bfcmr3909108fac.35.1793289007293;
-        Thu, 29 Oct 2026 08:50:07 -0700 (PDT)
+        bh=aJzBEwj2+x4j6CDStwSGH+/h447AGr3HtflqjrkNNp8=;
+        b=1J2pj/lJCkLulWNH9ByPUlEcMgq0K6KV1Eu+EI9dQiMDexoGuTJwznRRh1QIUwzFs+
+         JllarWUW/O1UOkacK49Rs2YDg+NTIicy44c36c71QlMQ4LTn+Tw41sJPBK0p4GDgzrRf
+         wIujJjGKV5qyfR5nDU7rkMNWjvvgXE0rLNQh0TSPyJ+1KxawGsZqZ9PZwJ/czbCZLPBx
+         qlhNbPh7QmO4+v6VL/2ljYpzuB0xltl8JmZvSSvnWhKCT/M9iz6CD7/sqC2Bn2f6+m8n
+         /i+lp1YFS4CdneR6drM1AwyboIopiKBIXy1UXwIDZDnG7KWvsegchq3ltOG2weZ618/T
+         oeug==
+X-Gm-Message-State: AFq9FYJ/vwXp5hwmRXpV0QGbLEiXsSKfPYCbsd2LoTw8V4a+JF+nE9NT
+	x812Ytncz7q677IDAIhvXvH3TKJpXKbrbfVJ3GpoeXmT5Lnmh4oU3EHaOo7X1BIvkdv75iCZOq1
+	CIbWvaZs=
+X-Gm-Gg: AYBFou02ZrUlcSaZnVSZwY4zBWVlqK4IUfIsOxtkwL35RjdsdqNHf8okPHU9ziPCcrX
+	r2vXYD1eAgotBWcpoqdeAQRFDpgzru0yZKq/WoQgrmATL4sUPurPl4GJkBuwGcmnRPZiHrsYL0o
+	mZKiAovCiNXdyBH9tLwCeeb4FSoDwflE+eKD+KO+JTq3cMYI54TJQEi8IgKaHJaEsEqI3+qJrOd
+	6l7ShY+MTwYv9prQu1KCIaOte1o4ibnbFcJicIqb8DmYZf+Bs943juyiHuNVMczX3wicLh8wPuv
+	a2wQ8SA5FTZ+wgv0jBTHJ7yzyrYDoca358e/yewZbuI/hRyyPCzdwMvzI3HGF//OQX0p9dwt7B0
+	wXqtj/gedtnqqO+T7rocUiV/YXvv2KJthXAy1C9AEpjgCAplGQMBWoe02DCK9OYOuDdfWl/iQ+L
+	nCcDSRw62Rs5zWo1V4NtJhzIzYkhn70KLrIQPETxTxmF4OtlfCHZ5e0xmVo2NkrRJWbrWwK3Wak
+	IWoa9b619i9YTRJvXLn6DcYwQO7i/35K7mySD8x9v9toqD1MZdoWKV+QSYrwu3cTjMpxrGiMeb3
+	0YOjqT5/v+I6P/eXhW+zz3vDc5BmFA9bbkI93jshFOtOF0HQKExyrXhZW4ANHUrFMZByrT7gn0b
+	OzYx8wLo3AA==
+X-Received: by 2002:a05:6870:a58b:b0:48f:e21e:1e6d with SMTP id 586e51a60fabf-4a8bb5b9483mr4141687fac.48.1793289008181;
+        Thu, 29 Oct 2026 08:50:08 -0700 (PDT)
 Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a901ff3779sm124024fac.4.2026.10.29.08.50.06
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4a901ff3779sm124024fac.4.2026.10.29.08.50.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2026 08:50:06 -0700 (PDT)
+        Thu, 29 Oct 2026 08:50:07 -0700 (PDT)
 From: Jens Axboe <axboe@kernel.dk>
 To: Cheng Yongkang <teel4res@gmail.com>
 Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <179328314078.648427.13761781546953594668@gmail.com>
-References: <179328314078.648427.13761781546953594668@gmail.com>
-Subject: Re: [PATCH] io_uring/timeout: count cancelled timeouts in
- cq_timeouts
-Message-Id: <179328900650.1492023.7191895676873527353.b4-ty@b4>
-Date: Thu, 29 Oct 2026 09:50:06 -0600
+In-Reply-To: <179328314078.648427.10086632105828535293@gmail.com>
+References: <179328314078.648427.10086632105828535293@gmail.com>
+Subject: Re: [PATCH] io_uring/net: fix multishot recv length limit
+ accounting
+Message-Id: <179328900747.1492023.9396413933198916424.b4-ty@b4>
+Date: Thu, 29 Oct 2026 09:50:07 -0600
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -104,19 +104,20 @@ X-Mailer: b4 0.15.2
 
 
 On Thu, 29 Oct 2026 07:12:20 -0700, Cheng Yongkang wrote:
-> io_timeout_cancel() posts the cancelled timeout's -ECANCELED CQE without
-> advancing ctx->cq_timeouts.  io_timeout_fn() and io_kill_timeout()
-> advance it for every timeout CQE they post, and io_flush_timeouts()
-> computes the number of non-timeout completions as
-> 
->     seq = cached_cq_tail - cq_timeouts
+> io_recv_finish() debits sr->mshot_total_len with min_t(int, sel->val,
+> sr->mshot_total_len).  sel->val is the cumulative byte count of the
+> request: on a bundle retry the receive path adds sr->done_io back to the
+> return value, and the bundle branch in io_recv_finish() recovers the new
+> bytes with this_ret = sel->val - sr->done_io.  The debit therefore uses
+> the wrong value after a bundle retry, and the int cast truncates a limit
+> above INT_MAX.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] io_uring/timeout: count cancelled timeouts in cq_timeouts
-      commit: 1c8b49851543f41fc8bb18bcd1f15cc93d14b530
+[1/1] io_uring/net: fix multishot recv length limit accounting
+      commit: 3e3aebb7570ccdde5cc49c9bfc8fd3a436b71b0c
 
 Best regards,
 -- 
