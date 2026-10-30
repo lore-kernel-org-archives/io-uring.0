@@ -1,80 +1,90 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.47.207.181
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.221.44
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793336641;
-	b=jBI7fsKgqU0mBT+5fS2kunBI189qRZrKtAVHAwMvxhYUfQXrWSsUnFjuZ7w7tTrS4VY5
-	 DFgGYAriA/HtQvDfIrBNNLzWYyaCupE98uG9t/1M/1Asx4wF9f/FURx6clYXMHRXCUvOl
-	 /OLFmj8NmdSYOS7/8/b1aYRuDVlMA2C3FLpXZHNQzE1gjRhEBQkCYpnnLdamuofMhP6HH
-	 1nPBUIu7ZaRtLeaOpC+55eYfKbck/hgoLvsXzxItcZWWjWb8AQmz2V9X1xztys/VQXrN6
-	 4H+OltRn2JRK2vPmWL4fymgk4itUwhQnDvKaD+fKtbGoB/iUNu0TtQkbjy3DEw2ykKw==
+	t=1793355971;
+	b=K+FWfHJbleIQi3P7TQtUMaFMjNIkhf86Enszm/72OdDP3HsmdPPtQHXj971OVH/DEs85
+	 oGHqMuYVjcchvn+r0ZcQdkM9lwv+UxiWxkrvMUDCUtjZKZbAJzuJkWNOHmp5f63H/5XJh
+	 0f6U56MTf9pXt1dc9jU/npju2Gh8NzLNo+r9iNuZOcJ2Z9feXe+foHBzNoFL+0dfpZQlv
+	 S9aCCGeLbkhRNkQz9JLYkEzGAN5pyCeneEZRRPLNF601lklmMlMvAbcCIImIulHUFXnO+
+	 k2+TVHVld7zix1ZBW6CwysgKfFf2lLK+zUbyqhR8x/cfsekwfvstVIaOaiRBiCx+zNQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793336641;
-	h=DMARC-Filter:DKIM-Signature:DKIM-Signature:Received:Received:From:To:
-	 Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:X-Smtpcorp-Track:Feedback-ID:
-	 X-Report-Abuse;
-	bh=Wbl/xuEn0Kwx8i0cp0FlXtd52MgQLMm91QNASCMIyoY=;
-	b=nP0jpZpVGBiruG1cuKjms/zZhTfF0TGRkrtgxtDGkKyRcmE34fH1BnU8VAqdAeecSq83
-	 igBpQmG1YWeJMX3LnpZ1niGDvEY7BG0RPmKV2hH67dEL+B8OqlB9EpWhTGING+/giVru9
-	 3od6g21h+YjO6Ijn5eUSBxfiUHfotOBdMA7oje3GVL87SRFmV9wtAwtZJGtVzX1aNq6/Y
-	 s/DgxMBzlxjVkcqNM2yiUpKGW8j7HJmxBNVVYPjLkBhP4U1o5LAbc3E+Fex+N8lBGqENf
-	 gi2c7pvp2h9pyZwb5099tlLeXHA8YnVAL7W2bJZvjNSPm8p/dJzU8hB0IhAFWl+RfEg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793355971;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=qUelzvzI0I1/N8qXjV1BcthIIh2qTCSRp7SQgDbPekE=;
+	b=Yz3t8a5MhFS8x9ATW2R04+XKO04qCMdIn0CC8PqeARLWNbTuJXZhFaFnbZXt5rp4hhYw
+	 +Hc9gRYeSStidiOomvdY2x9ZlmhBRsXqv3ja2nbeWLWPz6LezI/XO0xUPoXUlkudYeriK
+	 3N4+dMy8szs2XSt9b1hfaLoTc0IyQ3Vu5mCwqMWJ5/C+Fo+YMEJuN5YaWubZJFyTyfvJ4
+	 TNXfrfrg3nYby4wdfVJJ57wOpfFZGWThFyeOUA9Qllt45rcdD8eiHgbDGFteD+RGfrB6Q
+	 5uoHLVyk3UQLYK/eXfAVV7vB2olBD2g7p3DxoTwaLOyo/rGaWGdPJbb2uxJSfEUeYCw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=shangen.org;
-	spf=pass smtp.mailfrom=em879706.shangen.org;
-	dkim=fail reason="unknown key version" header.d=smtpservice.net header.i=@smtpservice.net header.a=rsa-sha256 header.s=miusa0.a1-4.dyn header.b=2at8sClP;
-	dkim=pass header.d=shangen.org header.i=@shangen.org header.a=rsa-sha256 header.s=s879706 header.b=TdPg9cgL;
-	arc=none smtp.remote-ip=103.47.207.181
-Received: from a2i949.smtp2go.com (a2i949.smtp2go.com [103.47.207.181])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PhLMcOaL;
+	arc=none smtp.remote-ip=209.85.221.44
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA16606A31A
-	for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 05:04:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8AA16606A31A
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shangen.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=em879706.shangen.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E242606A31D
+	for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 10:26:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 4E242606A31D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="unknown key version" header.d=smtpservice.net header.i=@smtpservice.net header.a=rsa-sha256 header.s=miusa0.a1-4.dyn header.b=2at8sClP;
-	dkim=pass (2048-bit key, unprotected) header.d=shangen.org header.i=@shangen.org header.a=rsa-sha256 header.s=s879706 header.b=TdPg9cgL
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=smtpservice.net; s=miusa0.a1-4.dyn; x=1793337541; h=Feedback-ID:
-	X-Smtpcorp-Track:Message-ID:Date:Subject:To:From:Reply-To:Sender:
-	List-Unsubscribe:List-Unsubscribe-Post;
-	bh=Wbl/xuEn0Kwx8i0cp0FlXtd52MgQLMm91QNASCMIyoY=; b=2at8sClPNXYV5au1MDE3PC0eXn
-	ejWYZCMcssnovDj6drgg//UT/t3+zBj8i1wRixsrHOdbvgIhNC+a1tkbJUAd7xLCJg270SpV3bCJ0
-	GHt4dk/7kY/rMuCr60+ipQ6NdUd9TyjdKZpBqrXjaEC55hVcJtlvnk4eaWRH0WKIIqsSn8mvXZ8xC
-	GYDS+3Dy+SQr+IAIcAfN6otX3iNEfLTwZUX0Cpeo+OxANzkLD6XJv0sn14glh+VacOkIVaukh1YyI
-	1KS8YITBFWw//MTe14q4BBRVSTriI1VJBZFp7CcC1zyJhWuyX8LsgnTy2sY5BBeUkhMmm4Zb/kMv9
-	NTZrfx5Q==;
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shangen.org;
- i=@shangen.org; q=dns/txt; s=s879706; t=1793336641; h=from : subject :
- to : message-id : date;
- bh=Wbl/xuEn0Kwx8i0cp0FlXtd52MgQLMm91QNASCMIyoY=;
- b=TdPg9cgLleD6g915echBxdsV9qJxeWv3cW09k8lr53VPwD6gWyJs0xysNNnX32EMSD+GR
- RXXOoPlXqGof1msXqJs5Yem/SNnKcvKaOTlE+Az3FB4xWQl9YsQs2KP2mPkSggk/BJ8x1Pa
- NHvylLwox+Q8hG536lQ8CDA9uJdYql3V82nLKte3VOpwRTMTAFuBsGy1toVBWrUiLRuA78w
- kQZh3P+pvo9+uAhPwFnJ4sihKpJTXsPtPLE2rQiWvicY9MvTkBGFNxHoNtU6y3hfbnWCxa+
- GZ/lSB+rDr0wGujmuopi7VGJSUdCev3shem46L81NuirykNrYBzqe6HzJRVQ==
-Received: from [10.143.42.182] (helo=SmtpCorp) by smtpcorp.com with esmtpsa
- (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
- (Exim 4.94.2-S2G) (envelope-from <sim@shangen.org>)
- id 1xMemT-gL4QLv-P3; Fri, 30 Oct 2026 05:03:57 +0000
-Received: from [10.195.244.224] (helo=sse-laptop.lan)
- by smtpcorp.com with esmtpsa
- (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256:X25519)
- (Exim 4.100.1) (envelope-from <sim@shangen.org>)
- id 1xMemT-FnQW0hPtGB2-hP6T; Fri, 30 Oct 2026 05:03:57 +0000
-From: Shang En Sim <sim@shangen.org>
-To: Jens Axboe <axboe@kernel.dk>,
-	io-uring@vger.kernel.org
-Cc: Shang En Sim <sim@shangen.org>, Peter Zijlstra <peterz@infradead.org>,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH 2/2] io_uring/poll: cancel all matching requests in one pass
-Date: Fri, 30 Oct 2026 00:03:17 -0500
-Message-ID: <20261030050319.1448530-3-sim@shangen.org>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261030050319.1448530-1-sim@shangen.org>
-References: <20261030050319.1448530-1-sim@shangen.org>
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=PhLMcOaL
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-48dfaa3fa12so980591f8f.0
+        for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 03:26:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793355970; x=1793960770; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qUelzvzI0I1/N8qXjV1BcthIIh2qTCSRp7SQgDbPekE=;
+        b=PhLMcOaL7tR16t9O6qwnKaq504i2yptLi47qNgV2oTRgaJFinkcAjXKqL5IyImiZtT
+         SP97MVdHIjdTbyfAFuD7U2d6bVxWfhydX0ZOhHdPc0l5OeQ+E9c+PSj6Rf4MLvAV9dRa
+         cLD8CqB18+b5RCnqDP/SbF9KotPj17RkpymGVZef9iNn8w/r+UfrIuj6Nep9ElZ28bjf
+         qKWVOaDHUGTmSZuLNgsKzw0EgGZFipgVCdG0lzH8bCGTiciYoyATJl9h748ncbkk0418
+         WE/xegpkV4LyN4mWZ3GeIFEnBBrL9gjhvziGkyy0ia56EMIZDyW6cn4RHfAnJFwhE41Z
+         cFhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793355970; x=1793960770;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=qUelzvzI0I1/N8qXjV1BcthIIh2qTCSRp7SQgDbPekE=;
+        b=beTT3qz7Q2G+XaL9WZa0qs3pfF8jYiW19A/UPDC/8EZ9xG6hyPhDck0PqZQz3mti7m
+         uOI4i1qmyEkh6HjEZrT5AdCBldD9R3utgmSTplFp8Ctqc9hEzBd96FC7S4fFApvedSja
+         slrKS2pdF/Q4anSqIRMwH3Knv+KPRfIH88xZhG+k10sN1xmYX51jmgs30gLz9P4c2xrk
+         i4KEtdRg2Zq/qQ3HJ49qG5Hf565KWmZ0mSlAlSXZyZooLYEVmMi5UwYqS0XdI7OubptH
+         pwsR1pxfvmHRLaVqLvLw/oqk7TPnyhPMABopAEdyqUQEbVfUUm00uDqaCJurTBJZYXxf
+         Ef/w==
+X-Forwarded-Encrypted: i=1; AKwUvBzilrGuVhnodaN1uxAQAqw7o9DbK8j7wEziY+i72wgNbSmQOU0AfcjohjWk0nZQHwCOCxxrpL+iDg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYIusuvItxm2BPftV1630S36LJ13gOPVpwG7Jv1jaqy8JYPNzSY4
+	Zbq1bbD9jDarn9m4D0/LJVxFLGi1PthryvtJRA0GhTlY0JY8agw1jPgF
+X-Gm-Gg: AYBFou1Y9DUJpswTYxDDr0leIjVgjvdI9BVT19zDhpK0j+yACqAOZS0rbURakoHc+jM
+	D8TgSz7cAdVDm6L8ft7hSGAlhWk2h96JDVgL8MSn42ISWrkl12qwaABHDRe7Is+eCwCf9nyJkVq
+	sRk78m+t2ikhvv9b1AR9fHCXeY4TS/BjZGhz4IMvg3WFXKcIRuRJqOc8IyBlmxrGOBMfHrB2Tja
+	H7x/5TpVGvqraBesDHO3GzKLJdXrPYGwsa2Wl8NOHxOfYPAE4uIRaTQsl4JkK8edkPOeDnWLHy5
+	ThCtib4Lhm69U5whLDJE7oTYL7pTCc56GN7jeA92QmAFCiKDXT2LkUfXmUKHFUE6vdz9FaG1mZ7
+	2Zpwj2BAnb9iHCZK6PCdsseOrl1WNB/4Pn18JDeqhZOudZAm6NpXio2U+c/Q9LReaXqEUInrD5Y
+	YrXNUhUp/F4rWMDCjPwtYB/MqK87FhqjYDnYeaJYS70uXnQut5uk9CNjBtkhD3DF0M9ogi61fS+
+	noHFt3/DnMYkuntg9nPS4xDpEKIvh2So7/sTTRRxA3dMswUKP+RcNweRESrE0tidWi6+YT9J+hK
+	gUD8gVPtMGOSVO9C/tB+mG0BijjzYV1Y62swIAA9Qdm2Lc9qHfx3Lw7T2qS4ur0DwM/u34uq2Jx
+	Zhl3oCLu8kM2eEJCCcB7o0NOIG0rFF6Vh7SWKTWcGmP6afvxVBJxWvrALODyNrSppy7AKo9yGXy
+	o9RQ==
+X-Received: by 2002:adf:e011:0:10b0:48e:6c3f:f7b2 with SMTP id ffacd0b85a97d-48e6c3ff7d7mr5879996f8f.23.1793355969523;
+        Fri, 30 Oct 2026 03:26:09 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b80ecbsm2527884f8f.35.2026.10.30.03.26.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Oct 2026 03:26:08 -0700 (PDT)
+Message-ID: <bcafcbcf-9503-4fe5-82e4-ab9f8a3cb687@gmail.com>
+Date: Fri, 30 Oct 2026 10:26:09 +0000
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -84,112 +94,94 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Smtpcorp-Track: fcDV38W2G6Tl.idCa3tc26CNF.7BJn9QhQDwX
-Feedback-ID: 879706m:879706aL5FzMA:879706sz-CVcCaXL
-X-Report-Abuse: Please forward a copy of this message, including all headers,
- to <abuse-report@smtp2go.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] block: only fail dma-buf bios that need block layer PI
+To: Kyle Bader <kbader@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Cc: Kyle Bader <kbader@ibm.com>, Anuj Gupta <anuj20.g@samsung.com>,
+ Kanchan Joshi <joshi.k@samsung.com>, Christoph Hellwig <hch@lst.de>,
+ Keith Busch <kbusch@kernel.org>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Tushar Gohad <tushar.gohad@intel.com>, linux-block@vger.kernel.org,
+ io-uring@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20261029155821.2983229-1-kbader@redhat.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20261029155821.2983229-1-kbader@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-With IORING_ASYNC_CANCEL_ALL, __io_async_cancel() calls io_try_cancel()
-until nothing is found, and io_poll_cancel() cancels one request per
-call, starting each lookup at the beginning of the hash. A cancelled
-request stays hashed until its task work runs, so every lookup walks
-past the ones already cancelled. Cancelling K of N pending polls visits
-about K*N/2 requests in one io_uring_enter(), with uring_lock held.
+On 10/29/26 15:58, Kyle Bader wrote:
+> From: Kyle Bader <kbader@ibm.com>
+> 
+> All dma-buf (P2P) I/O to a device with integrity data is rejected
+> today, at registration and in blk_mq_submit_bio(). Only a bio for which
+> the block layer generates or verifies PI needs that. The block layer
+> then walks the bio_vecs, and a dma-buf bio has none.
+> 
+> Reject only those bios, and remove the check at registration. Then a
+> submitter that attaches its own PI, for example with
+> IORING_RW_ATTR_FLAG_PI, can do dma-buf I/O to such a device.
 
-A single CANCEL_FD|ALL on 80000 polls on one eventfd takes 17.06s,
-0.02s with this change. With voluntary preemption the soft lockup
-watchdog fires:
+Looks good,
 
-  watchdog: BUG: soft lockup - CPU#1 stuck for 26s! [repro:100]
-  RIP: 0010:io_cancel_req_match+0x19/0xa0
-   io_poll_cancel+0x73/0x170
-   io_try_cancel+0x7b/0xf0
-   __io_async_cancel+0x41/0x110
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
-Walk the hash once and cancel every match, as io_cancel_remove() does
-for futex and waitid. Cancel by user_data only needs its own bucket.
-__io_async_cancel() still loops until nothing is found, so a request
-that io-wq parks in the poll hash meanwhile is still cancelled.
+It's also enticing to shove it under the existing
+bio_integrity_action() check, but it can be done later.
 
-A cancel that matches one request now walks the whole hash twice instead
-of stopping at the match.
 
-Cc: stable@vger.kernel.org
-Fixes: 8e29da69fead ("io_uring: add support for IORING_ASYNC_CANCEL_ALL")
-Signed-off-by: Shang En Sim <sim@shangen.org>
----
- io_uring/cancel.c |  2 +-
- io_uring/poll.c   | 39 +++++++++++++++++++++++++++++++++++++--
- 2 files changed, 38 insertions(+), 3 deletions(-)
+> Link: https://lore.kernel.org/all/bbb87d6b-b7a3-487a-8be4-27f3f9ce4a1b@samsung.com/
+> Assisted-by: LLM
+> Reviewed-by: Anuj Gupta <anuj20.g@samsung.com>
+> Signed-off-by: Kyle Bader <kbader@ibm.com>
+> ---
+> v2: a shorter commit message (Christoph), and Anuj's Reviewed-by. The
+> code is the same as in v1, so the tests of v1 still apply.
+> 
+> v1: https://lore.kernel.org/all/20261028181412.1919506-1-kbader@redhat.com/
+> 
+>   block/blk-mq.c | 9 ++++++++-
+>   block/fops.c   | 2 --
+>   2 files changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 7fff1305b..3fc9fdeb3 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -3138,8 +3138,15 @@ void blk_mq_submit_bio(struct bio *bio)
+>   		goto queue_exit;
+>   	}
+>   
+> +	/*
+> +	 * The block layer cannot generate or verify PI for a dma-buf bio, as
+> +	 * that walks the data pages.  Only fail the bio if it needs that, not
+> +	 * if the submitter attached its own integrity payload or if PI
+> +	 * generation or verification is turned off for the device.
+> +	 */
+>   	if (unlikely(op_is_dmabuf(bio->bi_opf) &&
+> -		     bdev_has_integrity_csum(bio->bi_bdev))) {
+> +		     bdev_has_integrity_csum(bio->bi_bdev) &&
+> +		     (bio_integrity_action(bio) & BI_ACT_CHECK))) {
+>   		bio_endio_status(bio, BLK_STS_NOTSUPP);
+>   		goto queue_exit;
+>   	}
+> diff --git a/block/fops.c b/block/fops.c
+> index 01bc8afe3..5c8024011 100644
+> --- a/block/fops.c
+> +++ b/block/fops.c
+> @@ -947,8 +947,6 @@ static int blkdev_init_dma_buf_io_ctx(struct file *file,
+>   		return -EINVAL;
+>   	if (!disk->fops->init_dma_buf_io_ctx)
+>   		return -EOPNOTSUPP;
+> -	if (bdev_has_integrity_csum(bdev))
+> -		return -EOPNOTSUPP;
+>   	return disk->fops->init_dma_buf_io_ctx(bdev, ctx);
+>   }
+>   
+> 
+> base-commit: 45b716456dd99488a0cef58482120dc0474aa696
 
-diff --git a/io_uring/cancel.c b/io_uring/cancel.c
-index 50a65fbc6ff0..e3d9fe8fc982 100644
---- a/io_uring/cancel.c
-+++ b/io_uring/cancel.c
-@@ -198,7 +198,7 @@ static int __io_async_cancel(struct io_cancel_data *cd,
- 			break;
- 		if (!all)
- 			return ret;
--		/* futex and waitid return how many they cancelled */
-+		/* poll, futex and waitid return how many they cancelled */
- 		nr += max(ret, 1);
- 	} while (1);
- 
-diff --git a/io_uring/poll.c b/io_uring/poll.c
-index 4f04bda42f7f..9b73b0d88a0e 100644
---- a/io_uring/poll.c
-+++ b/io_uring/poll.c
-@@ -827,12 +827,47 @@ static int io_poll_disarm(struct io_kiocb *req)
- 	return 0;
- }
- 
-+/*
-+ * Cancel every request matching @cd in one pass. Cancelled requests stay
-+ * hashed until their task work runs, so finding them one at a time would
-+ * walk past all the earlier ones on each lookup.
-+ */
-+static int io_poll_cancel_all(struct io_ring_ctx *ctx, struct io_cancel_data *cd)
-+{
-+	unsigned int nr_buckets = 1U << ctx->cancel_table.hash_bits;
-+	unsigned int i = 0;
-+	struct hlist_node *tmp;
-+	struct io_kiocb *req;
-+	int nr = 0;
-+
-+	if (!(cd->flags & (IORING_ASYNC_CANCEL_FD | IORING_ASYNC_CANCEL_OP |
-+			   IORING_ASYNC_CANCEL_ANY))) {
-+		/* keyed by user_data, so only one bucket can match */
-+		i = hash_long(cd->data, ctx->cancel_table.hash_bits);
-+		nr_buckets = i + 1;
-+	}
-+
-+	for (; i < nr_buckets; i++) {
-+		struct io_hash_bucket *hb = &ctx->cancel_table.hbs[i];
-+
-+		hlist_for_each_entry_safe(req, tmp, &hb->list, hash_node) {
-+			if (!io_cancel_req_match(req, cd))
-+				continue;
-+			io_poll_cancel_req(req);
-+			nr++;
-+		}
-+	}
-+	return nr ?: -ENOENT;
-+}
-+
- static int __io_poll_cancel(struct io_ring_ctx *ctx, struct io_cancel_data *cd)
- {
- 	struct io_kiocb *req;
- 
--	if (cd->flags & (IORING_ASYNC_CANCEL_FD | IORING_ASYNC_CANCEL_OP |
--			 IORING_ASYNC_CANCEL_ANY))
-+	if (cd->flags & (IORING_ASYNC_CANCEL_ALL | IORING_ASYNC_CANCEL_ANY))
-+		return io_poll_cancel_all(ctx, cd);
-+
-+	if (cd->flags & (IORING_ASYNC_CANCEL_FD | IORING_ASYNC_CANCEL_OP))
- 		req = io_poll_file_find(ctx, cd);
- 	else
- 		req = io_poll_find(ctx, false, cd);
 -- 
-2.56.0
+Pavel Begunkov
 
