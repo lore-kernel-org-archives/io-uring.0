@@ -1,105 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793363998;
-	b=CdxIMCY+ff52Bq771kL+JvBzGA0j52QTBR3MInH5u0U65sezWanlQp/fmcKqPKYcpBUT
-	 i96BsCQONKkXt0ReqXWPDHLa9ujQCZFYQTMPkpVOkKnnQ5ZNlblGlSa1TSmMse+o0kbh8
-	 ewt8s5xsP9tqen8CdArTOI2pLp58SK8WPGF877DLMwj/7Y7/On7Ah9z72SKyY3FPmqp31
-	 apmB7vOTq1JEcXFJsPZCO/PUXUum/fDgoyfzZDjuCVLDluLNQxpoXhO3P+5s7Cu3MJOcJ
-	 /USRvrbkJ3CAeEds5/EYxK8+1TqgCGpggGfgGnoTI6ejJU95rcU8PeRAOchGIi+9n5g==
+	t=1793365650;
+	b=WoiX5Omm+4hXrNtCgvR6jRKwdRrcdHemgZtSfMjFAVq4AOAyeCcGAPglkrog7OWjLobb
+	 WQNKsAU8uatLhBXoXKaGHOB4umCueYRUyHE49MDBmk+o/PTU17U4TW2iAniC7DIlINykv
+	 ZloP/JHQTuZ/mYQCxs04WxGRHoWh04k83pkONipnPNWVLYY0Nyjeg1cvzcmb/OwDyURZ2
+	 YYFJAd4HgfQLOtayJZMaWH0c92QTR8j5AClIjoF5Bp4JxT1dG70oWuVdefDT+ctweE31I
+	 t+aBs3HGzHM7Av3SsViM/Bt++binh78oYVPE50le1k1TWxQ75Azqb8ib1zWaqyGgM9g==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793363998;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793365650;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:X-Google-Original-From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Type:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
 	 Content-Transfer-Encoding;
-	bh=Ed13n90ye5Czp3pxuz2kTfn9JK5IM878W6MtBdLVE2U=;
-	b=bBPkCKfAr3K56TPXQZ4707bri3p9arr5SbM8n6kdV4kG4xi+4pPxTDFSWMJ+t14CmCGO
-	 TREQhpj5ueB6DOAq7DpIAOAMCevoRSliedxqtzNv70Y5S9sFlP2kILkl+dvxvQFefUhkO
-	 JiSB3LaUhcenP2Vj5oiXbtr8nj4PvzrN6WP27WdHMP6XGMseYW+YPqAtRhzMPgoDHO+aq
-	 vF5665NpQYab9LTk9DQ0dqicU99bDDThszn4GQ/aGwLaXfLjgGrGu43JLEAH/foO+aQcF
-	 LVJGmlvThuZA6ZiI1+kjHnDKxWdWktNVzWauQJ9LiavurE8Zhcin6nILYKD4sgptJnA==
+	bh=dgy35YKL0QXBV1sZCL+Uc2tsoFMI5Glg4M8+gsdeA5I=;
+	b=vNJdmZKzwuV1AOwgoLPUVl1FDQdW6kGM9alGKRfw1EcJGfeZBuO8W3Z5YjukK2Y1uqM1
+	 CwsZFBUfH0aFIZ8on4GVl4zKRWRTbzpLpY0iY+y/G2fXgB3ErmrX3pC7LZW43K2FdYeXF
+	 FcI8daASsT7cuHsA0W3WEMk8hanBHa6fxOQhcy/qudxpYcVBBFuN6+PfcyCd7glkiMMlS
+	 yFJkOdPXBYsBtnm91bKz5PSOTKtnWRwvUQqL3jiashNsYr1MgA7ZM9fjV4sZdE6VREXGW
+	 AutKujxGeD0iCbHC8R8rJweVQB7w4gh3CuS7jmtsMaIzrWb//YRXIyDqYhZSWYYMvpw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JTfFdqh8;
-	arc=none smtp.remote-ip=209.85.128.44
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=lcW4F7Iu;
+	arc=none smtp.remote-ip=74.125.82.48
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60ECD606A322
-	for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 12:39:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 60ECD606A322
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74CD606A31A
+	for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 13:07:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A74CD606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JTfFdqh8
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4a5087a5348so4804805e9.0
-        for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 05:39:58 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=lcW4F7Iu
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1846bc43c28so765205c88.0
+        for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 06:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793363997; x=1793968797; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ed13n90ye5Czp3pxuz2kTfn9JK5IM878W6MtBdLVE2U=;
-        b=JTfFdqh8j9+fKMxKHItTl2oqC4vxgdOAEHzXs0OazO/r1yFB59l7h0fLFfPqMPAanA
-         jYDmylhiHlXm9FkDQWRtFAB3CSRFuq5Vx6Xh0oCEge/Rc6bUI1C5gHSBBfuVScKblTLE
-         EKyntDiNuuzrmioqTrutj84ytMNpJXEN4Wk19CTY73fEf2I9LWyeLywIK9d/h0jpnHgm
-         0u7/c8S4qbdaXryeJqacM7aeXz6rGs2ZZff1PFUrbY/ZcVp8cRDL/1yxcyNjwUgeBQto
-         73dofAhf/FIabkPaZwOyFeupMJ22iROyZ5CVAhvjAHXTd0L6BWTO6j8Iy3Zz9s39lMWf
-         SvHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793363997; x=1793968797;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793365649; x=1793970449; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ed13n90ye5Czp3pxuz2kTfn9JK5IM878W6MtBdLVE2U=;
-        b=HGUt/Hq+U3PHm4Nf7SOwrZGDdrKwXqdtAyc+gDtGnCHlQpwD0rtPwFMiMXAyLMW1u0
-         RrCPtWO3TfTtBnDQeldib1BI/wnV49PdScoXTQXAPrVT2ncns7il1QE/EiRoJyDhz7n5
-         E9vvFGbkVzy+bUFiw9uBrT9OJJFgaVL18kys19rPBjgAjTW2kifzb01tBzvsvkmnqXlP
-         V9RmWHfCtdf2KPB0tAAg/qv6xB0mJJk2dpgVoRh5b7VdjYYLCLwiWT0S2U34cKULZ2lY
-         OW8/Z/DuOXYGOzStDoMSP016Cfp9g70pb17VENFuvsfZ7Z0a0RRosUkPNL5LPqMbwP5B
-         d5yA==
-X-Forwarded-Encrypted: i=1; AKwUvBwqQj+BQnkvOM35RdvoJzEzu/L7USvy4s+aC1LBApPQdn9YPliTrhlj2+PjXlS+6pVm43IdPEVuEg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYLALe0zrEtPB2wbaNmSVeFEbkSTSDhf5lei+T/39Z1ci+TicQXh
-	/9Xd3q3PWZykEhNN0d+m5saOpa7sdH3IvO6rjo+zX0e7vEudxbJSmEQh
-X-Gm-Gg: AYBFou3wahT83OrqjjVT0w01IZ1C0ETnxbRNFF+RZ9RQeuypE8JDoCHacB5UAlVsSvK
-	wDRjKHn5Z6zNmUfp1aNv4lUA4Biq5ajxQh8ADjna8Jb3x3iddFNOmAoD9hk31TAs/wWxIHtctdY
-	8vL1wPimjadxbBwunybODU8k86gAV30Qp41a49FwZozdHRQ9DEm1aFU+Jm9yG61YUXqWVmvyBtp
-	QKkBDEYV4SSkr4M583MSexnPVVGrOkNMxwCbNbhPKY+fKS41iRHK46N4htXHDEbSXcoBcixzL2W
-	f1FQAZ0Ey8WSCil2TfpHTOfAjkzJc0MiJ90SQu4fetkGUeRO9EI3H4xlUBos7UlEpgsdsqm2KHF
-	5tdJ7z4tFGtZlmBiRXCc04G3x/LgK7kNzvCYqWP41kW4FoU2jyaHn89PerV/O59J6u12fZzEu3a
-	yYnD210no6sLNt/nYtNIsBqWv10jU/L49ZjPYSzKPjFIb82CQlVsbIePwHABCuqFc794+mJlvq8
-	jGQZ7cABdO0x3r/oYqxvJIRfV9SSDJvqs6V1bj4061QzWJuqLd7X3tKbZPqmJzbM4sSu4uHj0MQ
-	UIDgByy73bj/R5E752QzWfS8zuWmqtfZYdYoV+NR95E4Ucqf4M0zQe7LXULw8NaJp4L382wgGZo
-	k6FWaeKlOY86n4Muiuug=
-X-Received: by 2002:adf:e307:0:b0:48d:bafc:a409 with SMTP id ffacd0b85a97d-48e6e4fde69mr4213621f8f.26.1793363996784;
-        Fri, 30 Oct 2026 05:39:56 -0700 (PDT)
-Received: from meven-thinkpad.home (2a01cb088745e00090de407b41070a01.ipv6.abo.wanadoo.fr. [2a01:cb08:8745:e000:90de:407b:4107:a01])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71b78a4csm3088971f8f.23.2026.10.30.05.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2026 05:39:56 -0700 (PDT)
-From: "=?UTF-8?q?M=C3=A9ven=20Car?=" <meven29@gmail.com>
-X-Google-Original-From: =?UTF-8?q?M=C3=A9ven=20Car?= <meven@kde.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	io-uring@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 3/3] io_uring: set times inline when the filesystem cannot sleep
-Date: Fri, 30 Oct 2026 13:39:45 +0100
-Message-ID: <20261030123945.1704118-4-meven@kde.org>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261030123945.1704118-1-meven@kde.org>
-References: <20261030123945.1704118-1-meven@kde.org>
+        bh=dgy35YKL0QXBV1sZCL+Uc2tsoFMI5Glg4M8+gsdeA5I=;
+        b=lcW4F7IuLgid/qDqelQO9UUp/XCACLUQcJCGVwPi7t17Byni9TB1h+98XRSOTg9bot
+         Z4eRGYv1qldKgQTYxII/O8S3GD1Conth/N67FP6FxsPa+cmHAQVWbhNmptQKjdOkt3Ys
+         lwoGC0HthhgCDpj9iSpeLnoXsLdf+bYAbQNqEwxM6lRMBe6WarAeaigUUPTNxUhXeZ0+
+         NLRs7P4nxUHYe9m7dXirkMM57gTqfafhUn9g2aVX/lJlMmhVlh83T2n+cceDDEaDvIlG
+         53BRrJZnr7i1BSJ25LG627FKqqWSAY3dGlIVEgFzq/u4wH2VocfE7qGD3YjwFp3omoUD
+         ewbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793365649; x=1793970449;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dgy35YKL0QXBV1sZCL+Uc2tsoFMI5Glg4M8+gsdeA5I=;
+        b=TfluZIE5iINKTKGclyKTPftGZ2QatGO9nqw5I0qTMdWpjXHXJ8T/quk5WIYBt0frWf
+         zeDX87SBO0e3i2LHDECdk96N2UW6zyau5vhAS2qK0pFJDwI39iJpPpuB8cjDn2UEQoRk
+         mpb9Zm/UAADwo0HNzk/uyJ/eKKJ+hLxJtLBgfWB6UzRH/b5cdMERNVIIRqTvB797OLrw
+         TbRW8U01d3fNCNtPAjgIovsRwww/A6RfhNDK0LD5A+2QkfVUqlwVqf13QfW8METP9l8L
+         lKOJrnsYVciuJeZUd8hd9rxFg8GsIfjlIxh02Pbdn5OdE0bu897KPVzK5srpXDlq/p0p
+         geMw==
+X-Forwarded-Encrypted: i=1; AKwUvBwThuUKNMm1fbHzh8na6oe3jw203eyC8G10JKEhTDJTRbCAl7iGPwS1mw3nV6Jxwg23afoZ4QIsEg==@vger.kernel.org
+X-Gm-Message-State: AFq9FYLtHz46HoTILNFht8/3edO7IcWiDJQ98wBCIYwtssB96jb9b42B
+	ur3aTvQfjjd3LlZU0ZRX4JUt9zjhEsBXhehpQdDGBevnQgwvUc69AYs8n98q+QDT62M=
+X-Gm-Gg: AYBFou1wj+U8K8jdwyQF4v0tYgae5TWxgFQtDmIhqtUkteJ58X7xQ0F15O5wauVzOaG
+	r16g4gI/W9njj91d0+cr5SpMwZd+FWZsuhyOW3ZJxMRD6NiA3t1GNafrdmjwNhftrT2zr72imar
+	aoaJFkY9aAwd7YUdXYaYJIRd66kzxSEHbsXGFjsg9wBayfdIyASzP5NDX0UJTUqug6llVg5n7ac
+	lslBSYlmZn6il/Ffvqifu0pucwlTG6PfJxe3URAHXK24ZWIhvahvtEvEsAK4ZMNugVIyh4lsXfc
+	gVp3rRXrzdTb13gx/yQEOgPADscVvcABMOZyfOV/E6qxZK7B42YczmKeZwfLJDlQzKeOSHNJ+Yb
+	fwhEGHNE4Q5ciA6zP+0m77NoIM2gmAeInMNw3Vx9yjpqpKu9oZYFSfSJzzIs8BQdYznYC3fRge+
+	FAXFpwrIS9sXGHlb7xIYwZzGPyBg3ARS2CyFlCiYe5933h5v3w/1T1102WI0jl6miBeWboWJaeN
+	wLyJC7WtSqPE/xudbUpYGM2WzCpnbCMeso0+Z17ObD6ndIWCAPzufoj1CmZstrMagfZxFj1G2dx
+	97+HD448TidTqETyugYYSgn5Dp7q5UqfpbuDyNCGVd4XZ2yjGOV5qmTmls/0VumoGWncPJdaPpU
+	ActKOW40Jyn7Z
+X-Received: by 2002:a05:7022:1706:b0:1ac:7044:2bad with SMTP id a92af1059eb24-1ac70442d69mr2633208c88.36.1793365648427;
+        Fri, 30 Oct 2026 06:07:28 -0700 (PDT)
+Received: from [192.168.1.106] ([198.8.77.135])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a42a5fb97sm8929732eec.23.2026.10.30.06.07.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Oct 2026 06:07:26 -0700 (PDT)
+Message-ID: <61bb0fc9-d629-4987-ad18-c5eb46074dbf@kernel.dk>
+Date: Fri, 30 Oct 2026 07:07:25 -0600
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -109,277 +93,35 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring/io-wq: save worker type before dropping its
+ reference
+To: Kyle Zeng <kylebot@openai.com>, io-uring@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, outbounddisclosures@openai.com
+References: <20261030042101.73491-1-kylebot@openai.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261030042101.73491-1-kylebot@openai.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-IORING_OP_UTIMENSAT always went to io-wq. On tmpfs the setattr only
-changes the inode in memory, so the handoff to a worker cost more than
-the work: 2000 files took 7 ms with utimensat(2) and 20 ms through the
-ring.
+On 10/29/26 10:21 PM, Kyle Zeng wrote:
+> io_wq_cancel_tw_create() inspects cb->func after calling
+> io_worker_cancel_cb(). For an existing worker, that call can drop the
+> last worker reference and wake io_worker_exit(). If the canceling task
+> is preempted, the worker can be unlinked and freed by kfree_rcu() before
+> the callback function is inspected. KASAN reports a slab-use-after-free
+> read in this path.
+> 
+> Save whether the callback belongs to an unpublished continuation worker
+> while its reference is still held, then use the saved result for the
+> conditional free. This preserves the existing accounting and frees only
+> the worker allocated for the canceled continuation.
 
-Try the request inline first. The lookup uses LOOKUP_CACHED, and the
-freeze protection and the inode lock are only tried, the former with
-the new mnt_want_write_trylock(). A filesystem whose ->setattr() never
-sleeps for a change of times alone says so with
-FS_SETATTR_TIMES_NOWAIT, which tmpfs sets. Any other filesystem, an
-uncached path, a contended lock or a delegation returns -EAGAIN, and
-io_uring sends the request to io-wq as before.
+This is already posted and queued up:
 
-Signed-off-by: Méven Car <meven@kde.org>
----
- fs/internal.h      |  3 ++-
- fs/namespace.c     | 20 +++++++++++++++++++
- fs/utimes.c        | 48 +++++++++++++++++++++++++++++++++++++---------
- include/linux/fs.h |  1 +
- io_uring/fs.c      | 26 +++++++++++++++----------
- mm/shmem.c         |  3 ++-
- 6 files changed, 80 insertions(+), 21 deletions(-)
+https://lore.kernel.org/io-uring/20261028164732.1264069-10-axboe@kernel.dk/T/#u
 
-diff --git a/fs/internal.h b/fs/internal.h
-index 985b2bc5895e..e991b63bb714 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -64,7 +64,7 @@ int filename_symlinkat(struct filename *from, int newdfd, struct filename *to);
- int filename_linkat(int olddfd, struct filename *old, int newdfd,
- 			struct filename *new, int flags);
- int filename_utimensat(int dfd, struct filename *name,
--		       struct timespec64 *times, int flags);
-+		       struct timespec64 *times, int flags, bool nowait);
- int vfs_tmpfile(struct mnt_idmap *idmap,
- 		const struct path *parentpath,
- 		struct file *file, umode_t mode);
-@@ -86,6 +86,7 @@ extern int sb_prepare_remount_readonly(struct super_block *);
- extern void __init mnt_init(void);
- 
- int mnt_get_write_access_file(struct file *file);
-+int mnt_want_write_trylock(struct vfsmount *m);
- void mnt_put_write_access_file(struct file *file);
- 
- extern void dissolve_on_fput(struct vfsmount *);
-diff --git a/fs/namespace.c b/fs/namespace.c
-index ae5dc64f8b45..f4aadd4e1958 100644
---- a/fs/namespace.c
-+++ b/fs/namespace.c
-@@ -499,6 +499,26 @@ int mnt_want_write(struct vfsmount *m)
- }
- EXPORT_SYMBOL_GPL(mnt_want_write);
- 
-+/**
-+ * mnt_want_write_trylock - get write access to a mount without waiting
-+ * @m: the mount on which to take a write
-+ *
-+ * Like mnt_want_write(), but returns -EAGAIN instead of waiting when the
-+ * filesystem is frozen.  When the write operation is finished,
-+ * mnt_drop_write() must be called.
-+ */
-+int mnt_want_write_trylock(struct vfsmount *m)
-+{
-+	int ret;
-+
-+	if (!sb_start_write_trylock(m->mnt_sb))
-+		return -EAGAIN;
-+	ret = mnt_get_write_access(m);
-+	if (ret)
-+		sb_end_write(m->mnt_sb);
-+	return ret;
-+}
-+
- /**
-  * mnt_get_write_access_file - get write access to a file's mount
-  * @file: the file who's mount on which to take a write
-diff --git a/fs/utimes.c b/fs/utimes.c
-index 8072f05ac8dc..f70ad9003fa9 100644
---- a/fs/utimes.c
-+++ b/fs/utimes.c
-@@ -18,7 +18,9 @@ static bool nsec_valid(long nsec)
- 	return nsec >= 0 && nsec <= 999999999;
- }
- 
--int vfs_utimes(const struct path *path, struct timespec64 *times)
-+/* With @nowait, returns -EAGAIN instead of sleeping */
-+static int __vfs_utimes(const struct path *path, struct timespec64 *times,
-+			bool nowait)
- {
- 	int error;
- 	struct iattr newattrs;
-@@ -34,9 +36,17 @@ int vfs_utimes(const struct path *path, struct timespec64 *times)
- 			times = NULL;
- 	}
- 
--	error = mnt_want_write(path->mnt);
--	if (error)
--		goto out;
-+	if (nowait) {
-+		if (!(inode->i_sb->s_type->fs_flags & FS_SETATTR_TIMES_NOWAIT))
-+			return -EAGAIN;
-+		error = mnt_want_write_trylock(path->mnt);
-+		if (error)
-+			goto out;
-+	} else {
-+		error = mnt_want_write(path->mnt);
-+		if (error)
-+			goto out;
-+	}
- 
- 	newattrs.ia_valid = ATTR_CTIME | ATTR_MTIME | ATTR_ATIME;
- 	if (times) {
-@@ -63,24 +73,40 @@ int vfs_utimes(const struct path *path, struct timespec64 *times)
- 		newattrs.ia_valid |= ATTR_TOUCH;
- 	}
- retry_deleg:
--	inode_lock(inode);
-+	if (!nowait) {
-+		inode_lock(inode);
-+	} else if (!inode_trylock(inode)) {
-+		error = -EAGAIN;
-+		goto drop;
-+	}
- 	error = notify_change(mnt_idmap(path->mnt), path->dentry, &newattrs,
- 			      &delegated_inode);
- 	inode_unlock(inode);
- 	if (is_delegated(&delegated_inode)) {
-+		if (nowait) {
-+			iput(delegated_inode.di_inode);
-+			delegated_inode.di_inode = NULL;
-+			error = -EAGAIN;
-+			goto drop;
-+		}
- 		error = break_deleg_wait(&delegated_inode);
- 		if (!error)
- 			goto retry_deleg;
- 	}
--
-+drop:
- 	mnt_drop_write(path->mnt);
- out:
- 	return error;
- }
-+
-+int vfs_utimes(const struct path *path, struct timespec64 *times)
-+{
-+	return __vfs_utimes(path, times, false);
-+}
- EXPORT_SYMBOL_GPL(vfs_utimes);
- 
- int filename_utimensat(int dfd, struct filename *name,
--		       struct timespec64 *times, int flags)
-+		       struct timespec64 *times, int flags, bool nowait)
- {
- 	struct path path;
- 	int lookup_flags = 0, error;
-@@ -90,13 +116,17 @@ int filename_utimensat(int dfd, struct filename *name,
- 
- 	if (!(flags & AT_SYMLINK_NOFOLLOW))
- 		lookup_flags |= LOOKUP_FOLLOW;
-+	if (nowait)
-+		lookup_flags |= LOOKUP_CACHED;
- 
- retry:
- 	error = filename_lookup(dfd, name, lookup_flags, &path, NULL);
- 	if (error)
- 		return error;
--	error = vfs_utimes(&path, times);
-+	error = __vfs_utimes(&path, times, nowait);
- 	path_put(&path);
-+	if (nowait && error == -ESTALE)
-+		return -EAGAIN;
- 	if (retry_estale(error, lookup_flags)) {
- 		lookup_flags |= LOOKUP_REVAL;
- 		goto retry;
-@@ -108,7 +138,7 @@ static int do_utimes_path(int dfd, const char __user *filename,
- 		struct timespec64 *times, int flags)
- {
- 	CLASS(filename_uflags, name)(filename, flags);
--	return filename_utimensat(dfd, name, times, flags);
-+	return filename_utimensat(dfd, name, times, flags, false);
- }
- 
- static int do_utimes_fd(int fd, struct timespec64 *times, int flags)
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index f9d1e05e8ae6..d1800fba15d8 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2296,6 +2296,7 @@ struct file_system_type {
- #define FS_POWER_FREEZE		256	/* Always freeze on suspend/hibernate */
- #define FS_USERNS_MOUNT_RESTRICTED 512	/* Restrict mount in userns if not already visible */
- #define FS_USERNS_DELEGATABLE	1024	/* Can be mounted inside userns from outside */
-+#define FS_SETATTR_TIMES_NOWAIT	2048	/* ->setattr() of times alone never sleeps */
- #define FS_RENAME_DOES_D_MOVE	32768	/* FS will handle d_move() during rename() internally. */
- 	int (*init_fs_context)(struct fs_context *);
- 	const struct fs_parameter_spec *parameters;
-diff --git a/io_uring/fs.c b/io_uring/fs.c
-index 85e0a1cb6b47..79f6f39ce267 100644
---- a/io_uring/fs.c
-+++ b/io_uring/fs.c
-@@ -356,38 +356,44 @@ int io_utimensat_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- 		if (ut->dfd == AT_FDCWD)
- 			return -EFAULT;
- 		ut->flags |= IO_UTIMENSAT_NO_PATH;
--		goto out;
-+		return 0;
- 	}
- 	err = delayed_getname_uflags(&ut->filename, fname, ut->flags);
- 	if (unlikely(err))
- 		return err;
- 	req->flags |= REQ_F_NEED_CLEANUP;
--out:
--	req->flags |= REQ_F_FORCE_ASYNC;
- 	return 0;
- }
- 
--static int __io_utimensat(struct io_utimensat *ut, struct filename *name)
-+static int __io_utimensat(struct io_utimensat *ut, struct filename *name,
-+			  bool force_nonblock)
- {
- 	int flags = ut->flags & (AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH);
- 
--	return filename_utimensat(ut->dfd, name, ut->times, flags);
-+	return filename_utimensat(ut->dfd, name, ut->times, flags,
-+				  force_nonblock);
- }
- 
- int io_utimensat(struct io_kiocb *req, unsigned int issue_flags)
- {
- 	struct io_utimensat *ut = io_kiocb_to_cmd(req, struct io_utimensat);
-+	bool force_nonblock = issue_flags & IO_URING_F_NONBLOCK;
- 	int ret = 0;
- 
--	WARN_ON_ONCE((issue_flags & IO_URING_F_NONBLOCK) &&
--		     !(ut->flags & IO_UTIMENSAT_NOOP));
--
- 	if (ut->flags & IO_UTIMENSAT_NO_PATH) {
- 		CLASS(filename_kernel, name)("");
--		ret = __io_utimensat(ut, name);
-+		ret = __io_utimensat(ut, name, force_nonblock);
-+		if (ret == -EAGAIN && force_nonblock)
-+			return -EAGAIN;
- 	} else if (!(ut->flags & IO_UTIMENSAT_NOOP)) {
- 		CLASS(filename_complete_delayed, name)(&ut->filename);
--		ret = __io_utimensat(ut, name);
-+		ret = __io_utimensat(ut, name, force_nonblock);
-+		if (ret == -EAGAIN && force_nonblock) {
-+			ret = putname_to_delayed(&ut->filename,
-+						 no_free_ptr(name));
-+			if (likely(!ret))
-+				return -EAGAIN;
-+		}
- 	}
- 
- 	req->flags &= ~REQ_F_NEED_CLEANUP;
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 897fa2b61346..405b39fc5d0e 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -5310,7 +5310,8 @@ static struct file_system_type shmem_fs_type = {
- 	.parameters	= shmem_fs_parameters,
- #endif
- 	.kill_sb	= kill_anon_super,
--	.fs_flags	= FS_USERNS_MOUNT | FS_ALLOW_IDMAP | FS_MGTIME,
-+	.fs_flags	= FS_USERNS_MOUNT | FS_ALLOW_IDMAP | FS_MGTIME |
-+			  FS_SETATTR_TIMES_NOWAIT,
- };
- 
- #if defined(CONFIG_SYSFS) && defined(CONFIG_TMPFS)
 -- 
-2.56.0
+Jens Axboe
 
