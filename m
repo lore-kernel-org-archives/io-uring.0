@@ -1,98 +1,103 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.82.170
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793323595;
-	b=sd5wBjKwQpwOKz02eRkJHw85edJXe3TMXA7t6yCYyhI3sHuixENgz5bmFsOSngNFFT71
-	 +YmuAoefIdTGtPEQ05atpL2BbJjodhoV5pmDPlqNoCxddAxttMqApw181WxvATrqwaP5i
-	 0vTz3xx1SsEtnEyndhnnBNgEfYEHYnhRDemw5a6ypfTe2SYdSXo5Ji6KWBdeJ+ffUNZHI
-	 XUe/RbS2ibkqWFdNARIf3+sX7hR7WZvpoBuIjhzXhEN70ybbal42ml8Zk1MsmxG/zLu2v
-	 pDKvXD8yya3lQi2V7loeuS5D2actodnJJsC/OKrb61vA2UGfApGkSe7jUXBuMSBttWQ==
+	t=1793324751;
+	b=s549h1LIYKlsnXyu0L6imXYjxpSWwJRYMm7MobIlApeU4IVLitZPHYW7L/6IzCc2y1El
+	 Wk938V3chCVuzfb6P1HRauRJt1qoNgFGDlmOte8t9x2jwLC0mc3Uu7OXwoNJvUnrPfUn+
+	 J7dr+yLjmhJCM2CH1+flhTGUmqChIP/X01XkZJgym3gANbXACFjuHb2ZvgNHmrOLROdg0
+	 JWNZXNcIkWTZ3BZqcmXAEs6VSope2bW0dlOKyMnCU4v7xusFFMp7vDDCykWj+Lk3sH0zq
+	 mM+nlTBcoWuMdj3IIoCKm98HEjccOheLfhjahObUcf4Nb3wBE+0znvcaS3PxDh5tluQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793323595;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793324751;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding;
-	bh=fWTHFAviHWukcsFlILsrZzqQ7AftBNGP9ajHposfJNA=;
-	b=2pqfpfMqlLk48IwVxmX+cOLtvbn7MOFd8GwgFWqpgKyAc47nWSop2gLExC0Pz/pYT+Jr
-	 lqT3U26UehPH9muEqFuW9Mwbo/Gjm0qZX5s69sf3cvtIHYh0IS2Dkq2ETgL4XAJnoOHcY
-	 TWtlVN8ydUSmtD2R02/qkKjmHx4Tg+9uzsC86FjjF87NYC2wdQ85K14fFPWKa24bI+uZ5
-	 EbiAAWo6Q8d5dknB4fq9Kn+Zo4Rahwy1WLfbR3qNzihfFZ3EGVXZCYA1/Ejx5Pbo/Pvkx
-	 yfwpb14A6UihGupT1lUFgzPPLU6iGCFbTjMYsTu9NRRP1V820YcTFpaPF5i0/VTEPtw==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=8e/IpuSYW9d0QekEXFx6bT2Oe0C5XCSMgDyLhp7uw80=;
+	b=Vnx4wbwQpInl8telu7bqjaX8dlTU64iVxu0yuqR1lX/XNLGsX+vcxhIm+sndx4eUiBwy
+	 b341sxN5//7lJKJcEIJG1MhyOdROrpbYlFg/BGc5f9709q1Q1qqh2IX1/t0rPW9u77Kcg
+	 0ltVW+0gNEoSrf1wzQM89FuDK4oEucvjbDNzcjaB1MuRMWtc4fQqNVNnoEYt1403Hd0cL
+	 VSZZYJlgd4WRW1cgpstx9Kloo4ZnuNKo4GtjMFLTm8/57LddIOJzANKiQImAELrFNkQMP
+	 e81p8CfOS0Ve3a0ox529Xj/e2Hjch/b5zV5peN4m78hhSLxg3CZRG9qoMa+xhPz9AWw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ElieNJlp;
-	arc=none smtp.remote-ip=209.85.128.50
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=grwei3CL;
+	arc=none smtp.remote-ip=74.125.82.170
+Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6F1606A31A
-	for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 01:26:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8B6F1606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1DA606A31D
+	for <io-uring@vger.kernel.org>; Fri, 30 Oct 2026 01:45:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org BF1DA606A31D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ElieNJlp
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4a140e7405dso1528425e9.3
-        for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 18:26:35 -0700 (PDT)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=grwei3CL
+Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-36a1947498bso451090eec.1
+        for <io-uring@vger.kernel.org>; Thu, 29 Oct 2026 18:45:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793323594; x=1793928394; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:reply-to
-         :references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=fWTHFAviHWukcsFlILsrZzqQ7AftBNGP9ajHposfJNA=;
-        b=ElieNJlp4DR9PeO29n6vlGgtOlyMtAUxUKHJEPMCEcWaZu2FKnBn/u/TsgNoR3uKGw
-         OTg3z6zYpAvNGIBRpY1gRPsQd0+ZQLdG8tdNEiK6VKb201TlopN7O3UIK5NEgpyKi8c8
-         dR1szSb44CkpvvOxVmQplD+hdjUnWFrNQjCskHVTxPuO06HcQ1UvK4uLNdOV66EEIDVg
-         88EzzWl7K4kZ3bXnZxvHtGadmlaDhQvaenSaV5Z6DcF8TDz26awgqYojWB8xneYUU+sR
-         QZgTFnBKOXVRbhbQjElmNcjZUH0OPf8YRaXnl80RGyysr5hrMGK3pikEE7kRr4leNmYc
-         2skw==
+        d=gmail.com; s=20260707; t=1793324750; x=1793929550; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=8e/IpuSYW9d0QekEXFx6bT2Oe0C5XCSMgDyLhp7uw80=;
+        b=grwei3CLBhH0n+t8FMxoVn41EIUIORxUG2gg4NQl76HodYhPBrH0i3O0LFwy+YwR9F
+         Y051WwR9tNWc/ViI9NCrkq0e+VhlF9WP+auwSRu3BpwQupNVW7sc9g0CmfuXfbHUWl0f
+         vycTRltBoygYfYV7wjOQlqh2PB0iPhRLF3CLsuJgzgurCZQdfSMjmSalpoABRFupELBC
+         H/i3fQFZAG+AkxZydEHe6Q1P0nv4v2WjaOap6wF7wuLTNgxa3DSNWV5Ur4+ctIYebVvj
+         X9DJckYCVvSAmy8MMCGC1w6M9njEsUD7ESz1VtNyY149Q4CtSAAY0jbb7rjX9zPYx8Rw
+         hm1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793323594; x=1793928394;
-        h=content-transfer-encoding:content-type:mime-version:reply-to
-         :references:in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fWTHFAviHWukcsFlILsrZzqQ7AftBNGP9ajHposfJNA=;
-        b=SM5rNBrPeVQn1ZVpT6tGZNK64Hki5jIb+MqdBV2AaWypxIhMtT4dJ+VxP25tViS9dN
-         W0/VIn5G7OhGKfRPrNUCNFSwGeTCDSnQ7N1YyLZW4aQNNs8f01CbIJYHujb8A1LtCdcL
-         5jghYFwEjF+7RPFwGEuDe0HVA8fOQg2Yp5Zq8E2dmejqbCP4cFF9GJOaNIvPFrMkbcVi
-         UO8PIuuIzDOWww5/xQzZXviRNWE9DpbAHKCBO48qyQo8JL3DdYZUwCqJv1B0dS7S+jI1
-         oEidQUXzHAn/2ApZ/q3i+JeNjSBRcLURD+389r/48Rs9p1XXcWpYZZdbRfzxyOVzwbcd
-         8aGA==
-X-Forwarded-Encrypted: i=1; AKwUvBxqR47iRfLj+pij/vr5mlZv8VUlkZ88UT5EFX2zItNJ9iPFKi4+Lj3UgUZEAGXJnXmAPs3+z/juKg==@vger.kernel.org
-X-Gm-Message-State: AFq9FYKQd3dHs++Qz0g7LRtn6vJgaZiRc2fPrLQMB7Utyh04FzcMO7J6
-	OIS8xteaSTk2pp+UfteRyvmn9aGlLyMdCOrjas40t1Mr2apXFPeG5x02
-X-Gm-Gg: AYBFou0Ox0/PZ7cR4srFL9i2Xjv8Q72ZWEJWRIYoJAgnabxzrS0RgKzhZGa+Gmv5+Tr
-	g6YO2SPmvnIL+XB8BlBzV7cgGBFaFSxTsmtYzIhKhQmOAYTkXCnC4sb6grdERkEWUyZoHEy89Jq
-	kqMPsUO82wfe4Cldvw39/T6HAaCloymKIwWNxl/qHEBLJl9c2LMGN7FFoQqCtfXRO5O4Sk59Uh6
-	58Xj/p5MCfEF87UOo68IpN+GJcfqnQ9pmh5EdZREziwsUl5p4vDJVuzF1cjJJ26nFDtezHtyVNx
-	QjOK1r3Ex8OKrFGMUKAWpr9lPHb2gOjUoDhhHN4znS5e1KaVkWxftkmwCzHGn2u7B7DzSRmhdB5
-	TmFOWzgi2cvh3wOedGLkt8mR6MgyelryrzffjzttPo0ZG0O/Okr4xf/NTJe+ZqiQNmrF6mCd1Nv
-	stgfzrPoket40rxadiCD7RD5sPOnFGXuasLlxjityZhXzMFeBTDMDR7RMrKQFSOwvP7BEuhXcZP
-	oAWaj3AG4mlKtouuxIZkqO0YekxW6r87UJzmmssw+24G+Z02Yu4LlKY5Q7g0D7RoV3NW+tFeu97
-	5q9k1oWmXQr7q2cdwvvizfM7GOUnhE3OJ35LDBFsdy+KXNR+XhO/CdFCGy2xt/ywZolzGAuEWsY
-	xEtV99FGpBvDZ03diyJlxkYQTS0p8kot5sFMLIZI6sRpz/NRdVSgJ1AzliTtPaPvoVr00Q6c47h
-	PK/OJfMg==
-X-Received: by 2002:a05:600c:6216:b0:4a3:5aea:21e5 with SMTP id 5b1f17b1804b1-4ac1737c533mr13785495e9.9.1793323593584;
-        Thu, 29 Oct 2026 18:26:33 -0700 (PDT)
-Received: from MacBook-Pro-von-Karl.localdomain (dynamic-077-007-148-028.77.7.pool.telefonica.de. [77.7.148.28])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48e71ba7168sm252187f8f.55.2026.10.29.18.26.30
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 29 Oct 2026 18:26:31 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Chris Mason <mason@kernel.org>,
-	io-uring@vger.kernel.org
-Subject: Re: [PATCH 08/10] io_uring/cancel: drop sqd->lock while SQPOLL waits
-Date: Fri, 30 Oct 2026 02:25:06 +0100
-Message-Id: <20261030012506.10611-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20261028164732.1264069-9-axboe@kernel.dk>
-References: <20261028164732.1264069-1-axboe@kernel.dk> <20261028164732.1264069-9-axboe@kernel.dk>
-Reply-To: Karl Mehltretter <kmehltretter@gmail.com>
+        d=1e100.net; s=20260707; t=1793324750; x=1793929550;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8e/IpuSYW9d0QekEXFx6bT2Oe0C5XCSMgDyLhp7uw80=;
+        b=v8A0zS9Z9MysycJclRP07IhUDI5mseFT1xkc7UP+rjCkztgOpHBDdwPZElpciekHxk
+         26lxuwn0NZ09h093xPD6Q9FAGd0rUcyhPRYkUWbF56rrpTR8T4BIsdcqBVRB3n2z3uX5
+         pw431LF5f4rZIOdvgaNm3U5MrKMU8ZCwvHnEdVUrJsl99IOs2sreABjxC82nije5YU3Q
+         dSACVo8MkCOJ0UpGMzAbOLG9hFAMLvuoFH47LLqAj8HCFX+KuRXOGhJkvjzgKQZEDwDv
+         fGyccPqef507m7pa0eHVteg/A22xwT1/yaJZILvJhFIwjqpM9qM/epRVL4Ri2YN/HRNH
+         MVcg==
+X-Gm-Message-State: AFq9FYL5OCWfAyUcJrBPcou/IJl+8olFASBMMqa+VFgmgtgK9bQigPz8
+	GEIKix3u5nQdmJAz2i4F2yOAM9R/Mltw6pBFSW/IMzEqKHnKA+DhmZAdYgoFvGY=
+X-Gm-Gg: AYBFou3+FJmaFXgaoJ8t57mWE4XhGW/AF4TGTbYYNBDne45YWBlxLxOM5ohC1gMaTEd
+	DOoGJE09uI+GCfu0LKDSd1ux0C1hNQDMLwQgvHQ1Im1zFxsrO+fFqakyRbbru6e/yaBCvk6SxDm
+	xZS380aKDT60+Tse8cY05XBbCWGJI7IzVkdR8VNQIpZJSSmw8Vf46YQaJ2T8f7A2fawL41cUjoq
+	UyfmBd2bbTyG41HOdbFu5AnTRn+QhPn/rZvj4zg4DXX1fqdqLS8AmRPN4nGZGu49B/8KxXRe13p
+	CxCaEvrVvM7D/VPioqPk9xJEyqfLN/qfIQs56i+M9i2Mb3VrWb2ELob6xEV7Ak7KzCFz8T8KpEu
+	ZdwX/M1qZb1eu/6/AMukx1YmunzL3XFQEnyBYHVqaRD0zWcnogsMsLkbwSUcxKXu1l1Sps9wQy6
+	opdg7NdPvPG38rhWRKlAsgeHtVe2k/01gcVqte5MpeCW5GrpckuazbeAYUIu5KHllHlbSXmbuA6
+	Llvf8Njg0by5yzj7FtCfDPTqjk8m8xvZVSFsmhOS2CvbHkln+R+bl/x2Hu+HiuGqe/0H77foqfS
+	YEMLTX4J7DXCb/kT+9Bk2ipVLmDcAa6B/gwRRBI2jaiV+ePySEtB+1vzmI3Zf4BDEov25oHWDHU
+	3K3NguzjR016xUpI2X/VaAGodfnkhZgmo+wm9CA==
+X-Received: by 2002:a05:693c:8806:10b0:369:f97f:72c1 with SMTP id 5a478bee46e88-36a4241bbd5mr1678012eec.36.1793324749832;
+        Thu, 29 Oct 2026 18:45:49 -0700 (PDT)
+Received: from anuj-MacBookPro.. ([2406:7400:63:75fd:f9a4:4062:7980:1324])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36a428fa380sm2209020eec.12.2026.10.29.18.45.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Oct 2026 18:45:49 -0700 (PDT)
+From: Anuj Gupta <anuj1072538@gmail.com>
+To: axboe@kernel.dk,
+	asml.silence@gmail.com,
+	kbusch@kernel.org,
+	hch@lst.de,
+	sagi@grimberg.me,
+	James.Bottomley@HansenPartnership.com,
+	mkp@kernel.org,
+	bernd@bsbernd.com,
+	joannelkoong@gmail.com,
+	miklos@szeredi.hu
+Cc: io-uring@vger.kernel.org,
+	linux-nvme@lists.infradead.org,
+	linux-block@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	fuse-devel@lists.linux.dev,
+	joshi.k@samsung.com,
+	anuj20.g@samsung.com
+Subject: [PATCH v3 0/5] dma-buf backed NVMe passthrough I/O
+Date: Fri, 30 Oct 2026 07:15:35 +0530
+Message-ID: <20261030014540.3065403-1-anuj1072538@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -102,53 +107,60 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-> diff --git a/io_uring/cancel.c b/io_uring/cancel.c
-> index 6f7a6cf356c2..79b5c133319b 100644
-> --- a/io_uring/cancel.c
-> +++ b/io_uring/cancel.c
-> @@ -703,7 +703,16 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
->  		}
->  
->  		if (loop) {
-> +			/*
-> +			 * A request that runs in io-wq and doesn't end makes
-> +			 * each round come here. Don't hold sqd->lock for that
-> +			 * long either.
-> +			 */
-> +			if (sqd)
-> +				mutex_unlock(&sqd->lock);
->  			cond_resched();
-> +			if (sqd)
-> +				mutex_lock(&sqd->lock);
->  			continue;
->  		}
+This series adds support for dma-buf registered buffers in NVMe
+uring_cmd passthrough.
 
-Doesn't dropping sqd->lock here allow IORING_SETUP_ATTACH_WQ to attach
-to an SQPOLL thread that is already exiting?
+Patches 1-2 add import flags to the fixed buffer import helpers, so
+uring_cmd users have to opt in to dma-buf. Patch 3 adds the io_uring
+side, patch 4 lets the block layer map dma-buf iterators for
+passthrough, and patch 5 enables it for the NVMe namespace character
+device.
 
-io_sq_offload_create() checks !sqd->thread under sqd->lock to avoid
-attaching to a dying thread:
+Tested with this liburing test:
+https://github.com/anuj7781/liburing/tree/rw-dmabuf-pt
 
-	/* don't attach to a dying SQPOLL thread, would be racy */
-	ret = (attached && !sqd->thread) ? -ENXIO : 0;
+Changes since v2:
+- return -EOPNOTSUPP when the controller has no dma-buf support (Pavel)
 
-Previously, once io_sq_thread() left its main loop, it held sqd->lock
-across io_uring_cancel_generic() until it cleared sqd->thread. With this
-unlock, io_sq_offload_create() can take sqd->lock while cancellation is
-waiting, see sqd->thread still set, add the new ctx to sqd->ctx_list,
-and succeed. io_sq_thread() then finishes canceling, clears sqd->thread,
-and exits without ever servicing the new ring.
+v2: https://lore.kernel.org/linux-block/20261022144501.2478417-1-anuj1072538@gmail.com/
 
-When testing this race in a VM, io_uring_setup() succeeds instead of
-failing with -ENXIO, and the new ring immediately fails with -EOWNERDEAD
-on io_uring_enter().
+Changes since v1:
+- split into io_uring, block and nvme patches (Christoph)
+- pass import flags to io_import_reg_buf() and
+  io_uring_cmd_import_fixed(), and make callers opt in to dma-buf
+  (Christoph, Pavel)
+- add io_uring_cmd_hw_done(), so nvme no longer handles the dma-buf
+  map (Pavel)
+- warn if task_work is queued with a dma-buf map attached (Pavel)
+- make the -EREMOTEIO conversion explicit and comment it (Christoph)
+- refuse dma-bufs larger than 4GiB on the character device
 
-Maybe io_sq_thread() could set an exiting bit in sqd->state before
-calling io_uring_cancel_generic(), and io_sq_offload_create() could
-check that alongside !sqd->thread?
+v1: https://lore.kernel.org/linux-nvme/20261016103453.1129150-1-anuj1072538@gmail.com/
 
-Thanks,
-Karl
+Anuj Gupta (5):
+  io_uring/rsrc: pass import flags to io_import_reg_buf()
+  io_uring/uring_cmd: add import flags to io_uring_cmd_import_fixed()
+  io_uring/uring_cmd: support dma-buf registered buffers
+  block: map dma-buf iterators in blk_rq_map_user_iov()
+  nvme: support dma-buf registered buffers for passthrough
+
+ block/blk-map.c              | 15 ++++++++++++++-
+ drivers/nvme/host/core.c     | 16 ++++++++++++++++
+ drivers/nvme/host/ioctl.c    |  5 +++--
+ drivers/scsi/scsi_bsg.c      |  2 +-
+ fs/fuse/dev_uring.c          |  2 +-
+ include/linux/io_uring/cmd.h | 14 ++++++++++++--
+ io_uring/net.c               |  6 +++---
+ io_uring/rsrc.c              |  6 +++---
+ io_uring/rsrc.h              | 13 +++----------
+ io_uring/rw.c                |  5 +++--
+ io_uring/uring_cmd.c         | 31 +++++++++++++++++++++++++++++--
+ 11 files changed, 88 insertions(+), 27 deletions(-)
+
+
+base-commit: 70866cfa169d5ee149364267289e71d50f9a7ae9
+-- 
+2.43.0
+
