@@ -1,61 +1,54 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.213
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.200
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793499719;
-	b=pDqQX01p5LGhg47UmXiDGaaFcEA4cAAwAqdNGfd6FRTmVThl0Dh3iIMEexnoDfE8Zsmu
-	 cqQjFZ6+tqVm8/WUaFnTCR5JpzD151cYGG8ZIaqhIzopesjaITUMsUz6KjnFESd/zBzgf
-	 TCOWxd21Sf90Z2X4qnNiYyw0LSjggeiHlqFqMwR8260sT0i3cpPNOdEKU5obKcNwDCw/I
-	 duWTFr4icCL6QpIyIskmuTGmtPoUgWCvHlMLj0kB5S1+wC3rSCAfbNlWlG1XmNZo46dFN
-	 1AO7OJCe5uRT7DQ6wfN1bxyh6ucYj9kYNkYJ2lvkg4zMxrobH3JGhgBhxv+5sess87w==
+	t=1793557529;
+	b=oFjlQCIWYMvebt1CgLsNCpsGbUPq30fLOYzdz2h2xXoOqVAy32XpJDWfP6s0UT3rj6vM
+	 dkUkXhP+dpdWYhzArYgbYFvYIc4k262CgMea0XCEO8IIMrw8gSPKlf80X8lPzs4lHuTaz
+	 Jb/TUx2lffgRv/ZF8TsVKretcsbl8tvgKCuJ/kxC1Plemrop6lZBE9/pfonvqjf5u97sq
+	 0IMabX6nEOQZ4s+gXq4aN8iOUU5AW9AipIAGUVUf28RNQ4+biuXW4SFJ/hMn3vRUqEQFu
+	 ClZmVY3vKgGEW09vaCBthYnBgRwhuh6oDEwxtbkRwbdUjXESEnNs9+JIxoNxHUKWyxw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793499719;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=Pg87gFc6D5vPj6Z68gMhcX5RARC2NQRQPzk8oYKjjSc=;
-	b=Z9TLlK9tzR/7aoI4irD/kcarp1dCb2C7PyL8r0KX+6ah8Afv+DL8MAdTv1N630VDGWai
-	 rVj3vu5IsXSgeuhokBf9gnjDixdhF1bxpheLcoIMUVFAR7R2dfZByUQjTBQYBWurA4bOE
-	 lipoNPBr3uw31cTLOTxIpU/hI6o7RHScx3+ORRiubfsAlcFkCr7UDIweCR9axz99Qp4bZ
-	 RqIJpIReWI/OnBS219uQ2YMFgcfkI3GNW4qPrhlyaO97bmNI0JzgvXQ1XY5+o2T6dGDA8
-	 Jbcb9NP7ZqBT0FFJ4L26Cbh4qJUMdZEsgLbvY6QXPAAlS45iTaZ2AtHrbNmlCURwbaA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793557529;
+	h=DMARC-Filter:Received:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
+	 X-Gm-Message-State:MIME-Version:X-Received:Date:
+	 X-Google-Appengine-App-Id:X-Google-Appengine-App-Id-Alias:Message-ID:
+	 Subject:From:To:Content-Type;
+	bh=/0Lr19vplzCZOi4BIjIOhosAo/z3alkdeJXutRk7xYU=;
+	b=KHYOBWwvoFAQCrjh7THQq8kKQcr48mgAzuzy0zGfFzzw6u2HbgafGezuGUnAQURoc4zb
+	 diDpn6gosN3cZ76sB2VIUZNLpI0eOQcnuqN87Qd7YBZ+yR6dagHAglyCGuzzFfRrQVqS0
+	 Vuo2jWz7kFTxcURQlp0tr3JC7D2+L8Tdf0VJBGcSWeCBrp9Ia1aLQCNL7WQZ8bFWF/pf8
+	 AK4wHYM6CuJkn+s/djtjBIoCZwGzWao9L2nj7XAVjt5xwDfTFBn5+RIeHuFYdmMQAGYt8
+	 BoOzZDhyx1YuViDy5MK/mFIJUBlPd+JOnVWKMN2LEKqszVRNC/EWSBW7AhxKEf+aYPg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MtU+qDmv;
-	arc=none smtp.remote-ip=95.215.58.213
-Received: from mta1.migadu.com (out-213.mta1.migadu.com [95.215.58.213])
+	dmarc=fail header.from=syzkaller.appspotmail.com;
+	spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com;
+	arc=none smtp.remote-ip=209.85.167.200
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79B7606A327
-	for <io-uring@vger.kernel.org>; Sun,  1 Nov 2026 02:21:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A79B7606A327
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=MtU+qDmv
-X-Envelope-To: io-uring@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=lPd+L3Fi5L/JRb8mgYsEPFBFLc/EK/FoHzehgXk/yCE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793499715; v=1; x=1794104515;
- b=MtU+qDmvGwEezhnxq1/Osl48o/WbBTXtEJ5vMyCs3UC9AGmqBI5U9kFR7Ok9AKWWhECQT9eR
- aLJ5mZa4ceeTS24uf18t6Zdu0iGEGF0Xx4BuF5qki7jqwdEyQGpoFHMghUzN7XY/R1XEmRZB0LF
- piFLg/6zeHN1+TFnWNQbBDew=
-X-Envelope-To: io-uring@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7c5fdc765f8b831e;
-	Sun, 01 Nov 2026 02:21:55 +0000
-X-Mizu-Trace-ID: 7c5fdc765f8b831e
-X-Migadu-Flow: FLOW_OUT
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Meta kernel team <kernel-team@meta.com>,
-	io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH] io_uring/sqpoll: do the return-to-userspace work in the SQPOLL thread
-Date: Sat, 31 Oct 2026 19:21:46 -0700
-Message-ID: <20261101022146.309201-1-shakeel.butt@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BEFC606A324
+	for <io-uring@vger.kernel.org>; Sun,  1 Nov 2026 18:25:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7BEFC606A324
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-4a41f46d629so4008596b6e.3
+        for <io-uring@vger.kernel.org>; Sun, 01 Nov 2026 10:25:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793557528; x=1794162328;
+        h=content-type:to:from:subject:message-id:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/0Lr19vplzCZOi4BIjIOhosAo/z3alkdeJXutRk7xYU=;
+        b=TFZ1l3af7in87gusD2PMCu+rCfnP6OUWG1RpY07j050eHrEatRKYx14rOVa1m1KuGD
+         Xtcdc2or1pQJTF2XFO+6IDuhGaTdMmx5bXzMkE5eO7CRHVsZ4s7+P0yvQT1ETrAkhJ7O
+         JbUGdY0Zy9MXhvxFPpCDprnNkStGEZu7yg0r2MBiTLUbVbYIwSHzFVcDEAQIAspfmZZG
+         jlGgadTIVg19MeNl+PC8QAksFVx553WAsxNtJ3ii42941xJhaygBsWcCOOyo46KD/Q+C
+         I34xuKVYxoSP4JTNPjtkrj9I/fjLu3fDH1karO94kCLVnCFvL4GTNfFFPgjqL4klHpl2
+         oY5Q==
+X-Forwarded-Encrypted: i=1; AKwUvByAxKq1magtMpXWspJuc5shHgTRhhKTL6lOBQSzZkYg2bKg+MbOjJ/xFEchsG6z8Q3xBF5UYC6z4Q==@vger.kernel.org
+X-Gm-Message-State: AFq9FYKGeKCRtwjTW0OUBOcJdQ87EjkbmQpGdq35DKt7Hr04eJieUXoQ
+	7LOLKDEsFO9pCilyypp6Fr54odbsnFBtfE+YuLdUUH2DCoedibddXHh2wCIaJMQQ3u+Hbq13DmA
+	B5KH6/mS5B7acGmsaiRlhmp80ZuST6qoXlsAuWvqBypenf8mqgEj9uoVcmIo=
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -65,69 +58,120 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6808:c2c6:b0:557:4340:4d47 with SMTP id
+ 5614622812f47-5640ddc4293mr5175214b6e.35.1793557528456; Sun, 01 Nov 2026
+ 10:25:28 -0800 (PST)
+Date: Sun, 01 Nov 2026 10:25:28 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6ae78418.6552420f.2a0efc.005a.GAE@google.com>
+Subject: [syzbot] [io-uring?] WARNING in io_sq_thread_stop
+From: syzbot <syzbot+675af112519ca34f5502@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The SQPOLL thread never returns to userspace. io_sq_tw() runs its
-task_work, but the rest of resume_user_mode_work(), like memory.high
-reclaim and block cgroup throttling, only runs when the thread exits.
-So memory.high reclaim only happens inside a charge, with sqd->lock and
-ctx->uring_lock held, and not at all if the charges can't block.
+Hello,
 
-This used to work. The loop called io_run_task_work(), which does this
-work since commit b5d3ae202fbf ("io_uring: handle TIF_NOTIFY_RESUME
-when checking for task_work"). Commit af5d68f8892f ("io_uring/sqpoll:
-manage task_work privately") replaced that call with io_sq_tw().
+syzbot found the following issue on:
 
-Call resume_user_mode_work() at the top of the loop when
-TIF_NOTIFY_RESUME is set, with sqd->lock dropped. It runs once per pass,
-so a pass that charges two or more batches still reclaims inside the
-charge, as before.
+HEAD commit:    bd5c762ac051 Merge tag 'scsi-misc' of git://git.kernel.org..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=176b0981580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=27aa0e260943f70b
+dashboard link: https://syzkaller.appspot.com/bug?extid=675af112519ca34f5502
+compiler:       Debian clang version 22.1.8 (1~deb13u4), Debian LLD 22.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1096ccb1580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1496ccb1580000
 
-Tested in a VM with memory.high=64M and swap on zram. An SQPOLL ring
-reads 256M from /dev/zero into untouched memory, 64K at a time. Before,
-the thread made 337 calls to __mem_cgroup_handle_over_high(), all from
-inside the charge. After, it makes 704, all from the top of the loop.
-memory.peak stays at 64M. With 1M reads, 296 of its 385 calls still come
-from inside the charge. Both runs take about 50% longer, and the extra
-time is in the handler, which now runs more often. Without memory.high
-pressure, the test never calls resume_user_mode_work() and the times
-do not change. Lockdep showed no warnings, also with io_uring_register()
-racing for sqd->lock.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/63d7454ecf30/disk-bd5c762a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/07607d1cf7ed/vmlinux-bd5c762a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2eb94eb9d0af/bzImage-bd5c762a.xz
 
-Fixes: af5d68f8892f ("io_uring/sqpoll: manage task_work privately")
-Cc: stable@vger.kernel.org
-Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
+The issue was bisected to:
+
+commit 22d9db9fd64a493525d692b32c556875b7254665
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Fri Oct 30 13:27:28 2026 +0000
+
+    io_uring/sqpoll: don't attach to a thread that is canceling
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1024562d580000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1224562d580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1424562d580000
+
+AI-generated root cause summary:
+When an io_uring SQPOLL thread terminates prematurely (e.g., due to a fatal
+signal), io_sq_thread() sets the IO_SQ_THREAD_SHOULD_STOP bit in sqd->state
+before exiting. Later, when the ring is cleaned up during io_ring_exit_work(),
+io_put_sq_data() calls io_sq_thread_stop(), which checks
+WARN_ON_ONCE(test_bit(IO_SQ_THREAD_SHOULD_STOP, &sqd->state)) under the
+assumption that the stop bit is not yet set. This causes a benign WARN_ON_ONCE
+to trigger; subsequent cleanup proceeds normally without leaking memory or
+corrupting state.
+
+full analysis:  https://syzkaller.appspot.com/x/ai_root_cause?x=675af112519ca34f5502
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+675af112519ca34f5502@syzkaller.appspotmail.com
+Fixes: 22d9db9fd64a ("io_uring/sqpoll: don't attach to a thread that is canceling")
+
+------------[ cut here ]------------
+test_bit(IO_SQ_THREAD_SHOULD_STOP, &sqd->state)
+WARNING: io_uring/sqpoll.c:88 at io_sq_thread_stop+0x17e/0x1a0 io_uring/sqpoll.c:88, CPU#0: kworker/u8:2/48
+Modules linked in:
+CPU: 0 UID: 0 PID: 48 Comm: kworker/u8:2 Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/07/2026
+Workqueue: iou_exit io_ring_exit_work
+RIP: 0010:io_sq_thread_stop+0x17e/0x1a0 io_uring/sqpoll.c:88
+Code: c6 05 cb df e9 0b 01 48 c7 c7 a0 da ea 8b be 26 00 00 00 48 c7 c2 e0 da ea 8b e8 dd 05 ce fc e9 4f ff ff ff e8 e3 d8 f2 fc 90 <0f> 0b 90 e9 e1 fe ff ff e8 d5 d8 f2 fc 90 0f 0b 90 e9 6e ff ff ff
+RSP: 0018:ffffc90000ba7890 EFLAGS: 00010293
+RAX: ffffffff84d5061d RBX: ffff888030ac3400 RCX: ffff888022291f40
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: dffffc0000000000 R11: ffffed10061586ab R12: 0000000000000001
+R13: 0000000000000000 R14: ffff888030ac3550 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff888124718000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055556aef1340 CR3: 000000003f44e000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ io_put_sq_data+0x8a/0x150 io_uring/sqpoll.c:105
+ io_sq_thread_finish+0x1fd/0x240 io_uring/sqpoll.c:130
+ io_ring_ctx_free+0x2d/0x5e0 io_uring/io_uring.c:2322
+ io_ring_exit_work+0x5b1/0x640 io_uring/io_uring.c:2658
+ process_one_work kernel/workqueue.c:3495 [inline]
+ process_scheduled_works+0xc3d/0x1630 kernel/workqueue.c:3578
+ worker_thread+0xa47/0xfb0 kernel/workqueue.c:3659
+ kthread+0x38b/0x470 kernel/kthread.c:436
+ ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-There was similar code pattern in the same function i.e.
-unlock/cond-resched/lock. I kept this separate for easy backport.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
- io_uring/sqpoll.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
-index 49c52284ecdd..0fef4d3f4472 100644
---- a/io_uring/sqpoll.c
-+++ b/io_uring/sqpoll.c
-@@ -348,6 +348,18 @@ static int io_sq_thread(void *data)
- 			timeout = jiffies + sqd->sq_thread_idle;
- 		}
- 
-+		/*
-+		 * The SQPOLL thread never returns to userspace, so do the
-+		 * return-to-userspace work, like memory.high reclaim, here.
-+		 * It can sleep for a long time, so drop sqd->lock.
-+		 */
-+		if (test_thread_flag(TIF_NOTIFY_RESUME)) {
-+			mutex_unlock(&sqd->lock);
-+			resume_user_mode_work(NULL);
-+			mutex_lock(&sqd->lock);
-+			sqd->sq_cpu = raw_smp_processor_id();
-+		}
-+
- 		cap_entries = !list_is_singular(&sqd->ctx_list);
- 		list_for_each_entry(ctx, &sqd->ctx_list, sqd_list) {
- 			int ret;
--- 
-2.53.0-Meta
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
