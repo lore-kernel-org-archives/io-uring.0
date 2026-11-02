@@ -1,101 +1,100 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.178
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793646411;
-	b=dtDlheHi5nh1Zw4L4SVznDwadu/lvtva7K+v5wC9GTS0E9Jk5bQhcwrxKeyfDK/17POW
-	 X9lFAxav7r6au1QDyRPBB2e736RKMzLhgCaarzA1cW4aK7xJ3dAuUOxhZjrfoGUTL8bHM
-	 EQHL/u2pSSKZGMoyX8w7jaG2BDMb+4HiOqhlLKwUv5Mfi0dqTDLXM0Yr7WmT2Z/1Ftian
-	 0eC/aYGpVrPAja4o5uOxyKAkDNsZgIp/PldBuAzLP9cBRG0QmfcRGFWLubGptbbQaDniu
-	 y0HOInLrsFLSrBdFUyd1hYd1CsQbUPP1SVv2FTTnq5ko0Y0I1M6xhuzVRi8Xiwgxfcg==
+	t=1793648379;
+	b=BEzXd1IseEMs/iMG66nydVb7Eb0RffJJtgqOSSxbYErlgu4FEvTKCkYmVVz9gihsa17v
+	 R2wYmg9mHHsYNnOeOZQQvm0tiGjfmhZZJ/biETFFiXl7hqcTk2U0rxOQhsS6oL+AGn5wh
+	 hU9PLuE8WmLPNMWxH22y31meBwitTcOMR20Hz8UuD8srLToHuBZwxCBru807rLI2HM3SY
+	 ttlrKOwuwCDbnWl823HuLMfH8Dh4VyaxC+dbo1yIeYGBRG/XpIPEclNX6rtbBPIY5N5vY
+	 z6z4IUBq8RwcyBaHTo6kx4cJSvdkfmZZseNOinz8fh4xOyV7oKdweNPp8DNKkBC7fKA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793646411;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793648379;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=CoGzdrvvaViECSeg3PiBflj+0qzs8BGFy96FG4d/cj8=;
-	b=HhvbJJWT2BSLTQ6MsydeowOIlBa+wbiAA9anKHzS2rb0WwVFkEInl/pPFt68OEjCMPpR
-	 Eq31wNFCqvGGzu0PO1No0AN+ufQbUEEupeTs9j5f3Ca+iPo34W6EAXfxSyoqxQLjPANCE
-	 M9SOqtrCNOz06Rb6p+udhkvjcorwwJjBruT/EAzMGdYhtybu96QBzlcKA5mMjIdYkXQun
-	 H7zI0bMLk8is5W1PdTkH19mVAYDDZl2S5rbVIseOgsYsP1GIhJRvCTSogk/LNapY0xqIS
-	 4ztbP4sWRhBs3Uf8IBx5BSLvXG1/t9ItqDD7EZ7rtf8GnGnPMrJv1HiPsWYkFdm8Tjw==
+	bh=fILK0wI2UqUr5itU/0Cq58lsYc1ISo7g+t7NVEUk9BU=;
+	b=RsCNw2ymEDXzLxkc7PHcDxojp9Zut4T8xVvymn1z3FutRWH5OU/ZOk3vkOFRN6VSk/97
+	 VtbzhWgTRC1ki+96a47kyBrs5tp+t5wJAizjC8QmbtFAweK5MslHakpfMg3nng8FTyne0
+	 s6zFN1N65VrNAf08a7KurPK7xzgPztVPEDgaUa0cwUdSvWNZ5Sa9x8N33RNAly6gglUKP
+	 NGSMuOpP/nTVEvvFz83BZZWvq8ww+J0/bWP7uALwmeb2NVhBMGEmRZ49+kpIOLRqNV5VS
+	 lEn541n58YdUUcK9uxk10idx/MjP7M4cxLiW6BU/v9o0GBZqLXmLmbgF567qxZYVSFA==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tnNnjlYE;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.45
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	dmarc=pass header.from=paul-moore.com;
+	spf=pass smtp.mailfrom=paul-moore.com;
+	dkim=pass header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=NhlqvCEA;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=209.85.210.178
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F01606A326
-	for <io-uring@vger.kernel.org>; Mon,  2 Nov 2026 19:06:50 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C8F01606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9E6606A327
+	for <io-uring@vger.kernel.org>; Mon,  2 Nov 2026 19:39:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 9D9E6606A327
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=tnNnjlYE
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-67a2efec15cso3072988d50.0
-        for <io-uring@vger.kernel.org>; Mon, 02 Nov 2026 11:06:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793646410; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=paul-moore.com header.i=@paul-moore.com header.a=rsa-sha256 header.s=google header.b=NhlqvCEA
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-8a064dcfcfdso1214646b3a.2
+        for <io-uring@vger.kernel.org>; Mon, 02 Nov 2026 11:39:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793648378; cv=none;
         d=google.com; s=arc-20260327;
-        b=p4Gy1JvZ+Ry6jyZSLrsDUEVzuK+GudoroEgfBty4N1TH2EGHX7/mkuS0+yaVEoS8hy
-         vlSfxb0w84XHxsCZGNgGcxZNwhujwfLeDnURNB0gmmXTm4jVIMpy5n41R59fNAtxF24D
-         pTd13IBY2EFoy4t1LPvn4PueQyok8SFzZ4yf/eB8YmGCWAJoc15N6XTz3hdiuYIDu/m7
-         aLGxj07eNukX15CyEbjmktQiaHWqIMf+97YTFxsdQpY756M/gyUsRop0ubA1Sb6lqRXn
-         QdsppM/U4b8Y0MZ1EkRtLrn2oNY54HpYvME2Gql7DVQHpMjc8dy8Tgj8lQj21FnMmeAB
-         vfGA==
+        b=j+qe3UEFNOfYSrq1wprNKInt/Fth2WY6H4hYPz/iOyjSxm4QMXMJmwT4ooFTLLYKHu
+         vebeLRkKHZ1nZdGOoYLJvHjFaAnbRpHGgEF0uirUdQvvL7WPPqfGoiKvoTeXeC0Pk4M4
+         agbEHtPvH6sy7rvuV57r9t1ZHQ1dY0IeD2y3eu+EhakNGtwUA8hDpNl9F/W5m6w5Z3M0
+         Z5WDVo3LNM0oO83BnPPIXlDY/8R0A8iJDvCdkFE3WFTlCrI8oqFbJpiervH5EMfxqYUv
+         eoq7QVl/3GFD6Im83eUG85/U4hEdZ5EA6lsqPcDS/Ke046MQgKwv5X+2ReJeqBt4sccZ
+         G5yA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=CoGzdrvvaViECSeg3PiBflj+0qzs8BGFy96FG4d/cj8=;
-        fh=JXiNUgq4m0L6z6nUN+Z/GtlyjWwh/sYOGrherJD1CVw=;
-        b=JnHoRl4l8vXK7NRrne8lyjuKl0ffj/mRGEg/w3SkpFc+SR/YJdU3RA+VLy/JxWC1Dt
-         SfEjCvygvUZ1AJXWwQEOhpHwZSVeXTHviJSzmXKBqGU5p1LVdaeeIwPmbbjXZCFq9ToV
-         FaheH6tPXYv3IDi4PFoS+A3awe7ItYMGL0+s8b0PifIjMbcTFZKYs+6+/k5LWG6ayXWr
-         09h+POVlxgQLA91RJupwxBW2S0FNENEAermKfisj1AU+O/Ro6DEyXw7vRn7UH28cbAEX
-         Ivl7n6jJGEb0gGm0sGCVQrZCunVdmoLFFmQ1jonKHChDakTp4ZuwU7XJnj54sVG0tUOl
-         QFYA==;
+        bh=fILK0wI2UqUr5itU/0Cq58lsYc1ISo7g+t7NVEUk9BU=;
+        fh=rqeVkB/dXJ0/HAnrw2tJW5tW9jBJhXhnOhgC+S93tQE=;
+        b=guJBT7dt73D2ltjZlJ0p+O/k2Cc2fn3V/CH+gnm2cSnHVDpP2ngAIp/9dOmCH3tEcM
+         CohvHRTtWt6dQvbu8ANAT905Dq6bYxD6PTxBOF9KB+ac4MnLMfkjFdbzhfDZKoaBRHZW
+         b9qR/Z0+0N1Urr6fWr4Lz02Dqw4+GLE+Gbzt4ItXVMthRsZE+VxpOhtP7A1Vj/NfL93t
+         F1o8+GvFm55Zj62+FtOyK2dHNCHce1eqdmS3vbAL3qvR0fVqoL8YDUkNfVxKj9bHH+vt
+         hhtRdJf5cl1jCxO72W0qKQoEj7lNQf0wK0MWLa/UtXWHw+sORzD0c9BTkSiTmQ8sLD9t
+         1yDQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793646410; x=1794251210; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1793648378; x=1794253178; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=CoGzdrvvaViECSeg3PiBflj+0qzs8BGFy96FG4d/cj8=;
-        b=tnNnjlYEC10sRjaX8VVbgcAd8IKKiRclExe8oUiilq9oJbJXGXPaFX7svfDWA5VLcT
-         dOrwbO+NBopmy9Rrtc6LeuIOKlv9sNYHZeMG9OC5fE9TOe9mWgw2wNWZQtspd9LRsAK2
-         C6/Fd8cuZZCW6A0ONYIN37BzGXlDL9/3Cq419MKJAvuV+BEd67LaqKQwLsTh3j9I0VSq
-         caiKXG/Jt2mJ+QGF8dd5beMFmncSCIGhzIqJjv2AeR6ntBD/ovF5X+Z9WgKo7D5LXKy7
-         EJ1DiHzkPdusb/TESQq1QJDbStCB4CUmD/ziqBshYiv2TZsxjLh0ZHwxzhWc8cEUWunN
-         yyGg==
+        bh=fILK0wI2UqUr5itU/0Cq58lsYc1ISo7g+t7NVEUk9BU=;
+        b=NhlqvCEAqNeQh82h66VjeQRCvmLs88bUiMN8vsKnqKJ9wOlSOkwk3pTRZNEo2Wk7dK
+         HZv/BWl8uEe1rlLq4Esk4h0lNwnLc7ae2Ug4sIcT0bKI7VrNR03T1LZQUc4K6ZwzXmn6
+         He3DDsns3zqXONgEkB7fjVVE0uQ4EfO58HLmbhylcYi+XV4OsEafFtSN66UNdGEqLvGf
+         6+P0rp5Bbft2KMHvVeggiGD6wOnDjs5EEn+ovAV85fjamgZf+13AnKK26O49HqVD+JId
+         Nx6Te9tI8mE+yrOdmnPFjh4Tt7FpFJqRk8cVNQb3naMOyfjmKyriiJkGVwtVtYKbw4fR
+         FC6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793646410; x=1794251210;
+        d=1e100.net; s=20260707; t=1793648378; x=1794253178;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CoGzdrvvaViECSeg3PiBflj+0qzs8BGFy96FG4d/cj8=;
-        b=knSK+qimCWf0p9SMlvM38WCC1syPVpxH/qBW1J0Ejnyasv8naQNKsDW0Y++pgVy6Tk
-         rFB9rOOBT3m+8TnvrGhluk4R/o/RWV44/3QhQFIWjBY2KbH1UaraIhbpiTgorB+/vC1W
-         tCZEzAHVhzOID2rC1NWRbWMJP9yGri5x3Y7TApQ+6m1fM1oGqlxADhq7Q+75ycz0lPu7
-         4ylPH7+107W6guRSrzIg5sE+Z9/fhO4GQxDNPp+/JhG4u6V5W4R46adF7kGPJsFipdss
-         KJ6rH83CzQZZafSzLCALpCLywX04F8krHcoLtC7jf1JqdDAZYld0iBU8ntX2mAMCId3B
-         XG2A==
-X-Forwarded-Encrypted: i=1; AKwUvByAzelDV5iLRQk0mhqvoeBFxtMfdASKbSYE9EHe6qvg1FSEpNP9pvujT/daGQY/ve+MhaxBUBLmIA==@vger.kernel.org
-X-Gm-Message-State: APuU4Z9qYlxseaHD1/KkO+zmPo34p8PP8xXpZnhw/VGX8M3O5HB6kQ21
-	BAB9i/rGO78jVbo8SfMmO5rMX9rdpMbmY4Rz81i4vJ/3qgsr7LPRaR7yL7eMflBmDGw97fNKbH8
-	g3WtT5nL8TAWY/PdjVWLymQ28KGWwG1I=
-X-Gm-Gg: AYBFou1BYgVqINBpP08XUYkXery+CaBs6bLMQpmP6o0MEzLr2TqHHVTBEGrEIDb09L4
-	Tw7pg+ZYPEj0jJ5Wn2YUwtBrZ/zh3po4+14bxBV52HX8YhjwpvMwenB28bAE3jL/PJS064ZN/jH
-	f9RnajqtDC0ar8Rcoh58hFNwRe+LlFKXP/IffVnx5m/PIEm2Q42qByvwanywQN6x5yxe6SxiZJu
-	z6hGYl2KbP0/wCsQB046RC1BMAhfTZkUC20nDkIhCKPuP8h3o4NcBBcs8N1ES10SfOpkVEanOXh
-	zFQnFZX6w7hfySjLKtzpIego3kAX+HrQtwgURASIoWyzPRaR4b0uZC4M4rGrYOV/fJVxUmTCTie
-	/Q6tXL960SOHJXCSsd5nH/PtBbyO6BuO9jGE/tWy3JxF5hM4SIFaZNOgAlYnLRo28hxTSyuxAga
-	T9jzcaM/fBbQMssYkpqcCstFnhyA7rmCdiWhOvx7baLn7fXQeHIiyGwG757A==
-X-Received: by 2002:a05:690e:1c20:b0:679:90f4:3223 with SMTP id
- 956f58d0204a3-67a8d3987b5mr8777022d50.9.1793646409776; Mon, 02 Nov 2026
- 11:06:49 -0800 (PST)
+        bh=fILK0wI2UqUr5itU/0Cq58lsYc1ISo7g+t7NVEUk9BU=;
+        b=HzEODTW3ZrRvqlQol0wJe61wdt77jnkdhPnuTlXRVL4rMKM3CVkqmgctG+385eYkTT
+         cjscXCiwQlVSLG2/67oMlSSF4YPSDKQtP3kkuU6lwdn5ztM+BMOMQ/BC90oO8b3fQDbG
+         HntRwmh1qClL+pH4sppIH7ZfT8ALyEPujeGvNPSdTlf1uI5ZYkNz6G17IMqv/qTyhcNE
+         CElI2MflK9E/1fdvp9sROkY1QrWsNXMABYF9sfKdRmx+tOl2c7fUSDqkQeZE/rdOBkwR
+         XOQC+hM3X/fcAorxOijTqYeympCgBxR8A2kRM4uVBlvRooq+o7JDo8KNb5c+uZUVWr+7
+         hrGg==
+X-Forwarded-Encrypted: i=1; AKwUvBydHfN3LJLzkDP0MpaltqNpAOucGs4KI7VlBs35QJcaTzYqfiLldTeikLrY5Dw8mHEl+a+zsMZfNw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z9NikC+d3Epc6dzrkqQVjGtVanAqE6XjAYQ+uBKe0FrJAKumbqm
+	/Mc3pWWMwHXZdMV6knJ9lk0PK2nfkY5WXVMGjkA8NxVR35QTAJ7xwUbZLo8IX/diut/6jESt59E
+	15acZenAMrc/lQO3fpsALGJHTkuiroVEgxM4p8ZUO
+X-Gm-Gg: AYBFou2yVYl9Y0OOUHASrhXkI++ijiwBPubNMhQTl388bwZ70nuDUbqGsADxZk5j7nW
+	6MDKPWm4wqlsFaINwBFChVdE13kJQ7Fi9hJUQmoJn/hc1J3NlFQevouApRX1Z/2II/8I1yVFg5d
+	uQalnwS/SOlh6f+e+fai8t9T7z7/YxYdzfXnUl9EdFFUswY5RMH3b8LfJAQOEUg/pyEIwZbZU3Y
+	QyKWTnOzECwJA+NEDs78obxYPTMCMGfess1n306weDs4m9oRRPzWC8agU+aXvUnnNGCBV04yBMb
+	tEddSI6ZRVVz8BUDI37cC/3f1KFsHAOUwrap6sy4EERNYVbc3X6APmunD7Vm8ioCvNwPX+I3eT8
+	f9iyKCs96ExogukJ21EDOj3b2i0IxY8NrNm8BIC63jx6/yxJ8S6cpOJd2uRLHRSNM5hXc
+X-Received: by 2002:a05:6a00:3c89:b0:8a0:3307:c46c with SMTP id
+ d2e1a72fcca58-8a9bea6b19cmr8445171b3a.36.1793648377853; Mon, 02 Nov 2026
+ 11:39:37 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -107,15 +106,15 @@ Precedence: list
 MIME-Version: 1.0
 References: <20261102130540.252894-1-omosnacek@gmail.com> <CAEjxPJ4hxdvV-r8chmF3RAi9RJX=-4AqntG01=fWUhh4-xP+ew@mail.gmail.com>
 In-Reply-To: <CAEjxPJ4hxdvV-r8chmF3RAi9RJX=-4AqntG01=fWUhh4-xP+ew@mail.gmail.com>
-From: Stephen Smalley <stephen.smalley.work@gmail.com>
-Date: Mon, 2 Nov 2026 14:06:38 -0500
-X-Gm-Features: AclHuK9UEiLULgDNF_R4Op6pxR3pAD5yp_wmeU60kO8Lo7f2jaleNkGh11hTlfk
-Message-ID: <CAEjxPJ6X3Hvd5eOCxmqaNWi-vqbGEj6rULHiFJGgD41uPxAm7w@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 2 Nov 2026 14:39:25 -0500
+X-Gm-Features: AclHuK_N7t88qS7YSGZ1TxDpP4hXHc3j5T0g0RysETh1DoLdW5UuZOpzEfeNB98
+Message-ID: <CAHC9VhRU1WZrsnw4q+vA_pKGGPs6kydHZsLbycWzbN27ygLXdg@mail.gmail.com>
 Subject: Re: [RFC PATCH] af_unix: introduce MSG_CMSG_SEALED
-To: =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>
-Cc: Eric Dumazet <edumazet@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+To: Stephen Smalley <stephen.smalley.work@gmail.com>
+Cc: =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>, 
+	Eric Dumazet <edumazet@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, Jakub Kicinski <kuba@kernel.org>, James Morris <jmorris@namei.org>, 
 	"Serge E. Hallyn" <serge@hallyn.com>, Simon Horman <horms@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
 	netdev@vger.kernel.org, selinux@vger.kernel.org, 
 	linux-security-module@vger.kernel.org, io-uring@vger.kernel.org, 
@@ -264,8 +263,13 @@ s,
 > (new) permission that governs whether a process can pass along these
 > sealed fds so that we do not entirely lose control over their use.
 
-One other design point: you are creating the envelope with
-anon_inode_getfile(); consider using anon_inode_getfile_secure()
-instead so that security_inode_init_security_anon() can give the
-envelope a labelable context, which SELinux could then use to label
-and control envelope use directly.
+I've only given this a quick look, but I'm also not excited about the
+LSM hook being conditional on the "sealed" flag.  I'd prefer for the
+security_file_receive() hook to catch all the files, but take an
+additional bool argument indicating the sealed state; this would allow
+individual LSMs to decide how best to handle this.
+
+  security_file_receive(struct file *file, bool sealed)
+
+--=20
+paul-moore.com
