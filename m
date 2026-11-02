@@ -1,100 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.50
 ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793625222;
-	b=NV9p90FepVxefDxg0tSwvsuQc46j3UBn8ulEsK1Iv+N1OUsrnfMriArMjOTXFS6Tl5Yh
-	 /2/ujtrhL+2l/5CZ1jJfsOaJf+QzJk+MGEhQiLBHgsVtbXdyh33bdXVUucdw5ZasoJEo1
-	 qdN5+aJj2g4VNnCSuif4lTJvWCs2bRXIiIcWZxQkZpG0e0AMBM3OUG3jhwC8p1Qsk46kx
-	 xgTpRZHYEn/ZQM3tHTt7mRG1DEJdYYcfqDLZsQTf+XjknoYPARNLYEMN2uUZPBiapUNjR
-	 ivkv06LyYxaSb97CplJQapHJ3IYeltGFS73fyeAGea6BgFa9VPBFFcRsWRZ7AzJISlw==
+	t=1793632470;
+	b=J1+HUoLv2sVE+Gjfp1pEmL0l6zc7tCQ+5pLC4qtf9rQYyqfx1hKC9MfVLkqgN/cVIWA/
+	 e4dUnnFbARphEEvnGya/IX7UTt+BLMCt3X/zb3TP6SfxpAlmQBJNbY8k9hsKI1LOON5aJ
+	 SlTHZu28mV5LGqJc+XREq0ICJORNx2EofqI9/A4yV/lNcMirnDm71BnOIXdoBweSdbMkz
+	 YhJYZX14XzYWpjzEubMd3UztWr06rmSylH7hZbustF/BPRrW1fImk+RzRtqO8ap+75DMq
+	 9EZYvWXm3XCdNJ2rEb+4rjItG0uqTagryM1dwzCikKPM/u/Mb2MQnVroxt/rbkU86BA==
 ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793625222;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793632470;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
 	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-	bh=rC8xVMt0ftVC1MA0/AxMx0dm+YERO32RQqLOxWhbSdM=;
-	b=NuYdXZOQOnA6AbeyJhOVGv1ZhSRq/U9j/coB8ikxcgNeFvgeuIphtsTkBxhtftK1+MPJ
-	 mRGseBwy6WbzwWQaSF2ILDPKbL9Iy25HKIBqILclAHm9ncTs78GXhbxTa5V5QAwPb4L+R
-	 fK0YQR9M4i3Y4KZ06KuR63nUhjwQ1NJmkLpnIMjDw8a8eSoZ2hJqG0TcCENVIMFLnjNDJ
-	 vmT9X2TSqA2/ptEkupoIK0ZFypjqEEZOR8VXziYC2iBinL3B+rgFHgsxS8I7ox9312Y41
-	 k7DbHUNDp9um6Z7bdekVkMiKAZKibHrydCU23nxymKoY5zBWX0+ENKZzSwbpbp79uMQ==
+	bh=aOdCxZO55hUw/6I077tI6EL/o28ur2wlUbUGRR4UyJU=;
+	b=BfY6zKshPFpqw9k9I0wOjUatiqzu5eX2WXYmbBc1gT8H5CeFn4EdUu1mJ+A+p06p/RzA
+	 UHuOsX2XV4UqFfjNlBr4tgly3CveKUndu57E3hYuWEeP/AHdQbBe5oN/gGKe3lh9JKdwm
+	 wzt1AF6Jm+QgZLpqeBQ2DgyEczd5fK+HTpvvxb/rV7Adz+vcYoGcFaphdF1+wesrHIZXv
+	 ylVx49+mnX5WWo+wi0flELB6sK+SG7MA5rr/U5qfhf+zj59uZPZBupdsMa0qpNI9U+xSd
+	 hzrDDhYCNrdqPSnTWP9Xspthny/KGq9gxId25EhQtznxVUdcShgo99d4rINuE3OCuWQ==
 ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o9Bv0lrt;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.82.50
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="UK/Ov2Zm";
+	arc=pass header.oldest-pass=0 smtp.remote-ip=74.125.224.50
+Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D8D606A32F
-	for <io-uring@vger.kernel.org>; Mon,  2 Nov 2026 13:13:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 45D8D606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7288460B1DBF
+	for <io-uring@vger.kernel.org>; Mon,  2 Nov 2026 15:14:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7288460B1DBF
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=o9Bv0lrt
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-15ea896ddc8so5071084c88.0
-        for <io-uring@vger.kernel.org>; Mon, 02 Nov 2026 05:13:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1793625220; cv=none;
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UK/Ov2Zm
+Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-67a2bd0c297so2551742d50.2
+        for <io-uring@vger.kernel.org>; Mon, 02 Nov 2026 07:14:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793632468; cv=none;
         d=google.com; s=arc-20260327;
-        b=dv7S0eDKqC3liaELAp9NqZmtpC2491lnOBDm37k7ZCg0PmFJ6isMBfH8kK4bTMXJrS
-         YZrzwK+bRV6vPtKJ8ZUzM9bYVG8y7RR3Af8t3TRx8Iu10ydYQIuXEv8A3xIA6Qxcdaeu
-         hnvAosg+ThNnWE5LpSquGzjXhqwJZHYyapV1BiDGhLGdy9w98wPQkuOw2rQEchA+IpLa
-         0ENHdYuby8ZscuoCiu1J96frSJ4Qoo1Ju/zZQTg1xkERsf1uFCSkBNgGSiVW6XaLuLVB
-         9MdxC9yambmAwBPJpIPD4uxBqSXrCJBOJOE0dHnDmA3kqfS7Of6IdGYHjL5wU5/RW9RY
-         36wQ==
+        b=Nlw9k4h68k2G2tyC7TSvS+ufTj7Htbiz51IX276ckDcU0+fbOY4QYxnWMWp3YMOMeC
+         8e3DHVL0mvv5vrFD8Cxmq0qBOlilKcEy8gwOS+pUSLdpDDz+XtGJhIGaXfhYvAwssOcf
+         4t2+vrE1Lg/Q8KLR5hJA01tSqpQl9CbTLTFUqS303jrmGvjo84Wc/cubIKO6ENc5Nil+
+         2rOifbTN/SgiqlbKQEO5GiOW4Jb7A3HBR+w/ChSurVUPv9vt5UMwmzps6Pz+u3bFaUdK
+         sNLkovv42WYo3G5OqXov8f/vMi5DGkoSYPBGgN64SjDns1ibBc+kjHw3vRkc6hO2xk/J
+         RO6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rC8xVMt0ftVC1MA0/AxMx0dm+YERO32RQqLOxWhbSdM=;
-        fh=QjMBX3nFSqVd1uAACijGgqlo2aR58hd1EjlgjbJeaOM=;
-        b=EOBCF+OQa3liXM6ucKMUNEmFpmfXOgSprrwL6LJC8uj+R3+FnIbqs0jqY5/In8wu4Y
-         bHJAu6sEnXlTVrdaIyImoAuQNP+2oWG3QOX3S7PdttcHRThStaPwXO/4XRZylfqGy0kJ
-         CWVNxzLJlGWPKhbHc2sA7X9eId6q4XZUSflOOeMy0eoU+HjI3yVbIdxLf2xHC3ml3rWY
-         MmM7J3z/nLf57AWFxPS2aFtARCUXvAHiIjvGzxFAc4EHl3DLj0bn++AqfLCBCO4DmqFd
-         s9DK6ZTXcpcEH/aDvlbVEwmUaedsA0jypgAB/KmUF/kJ5yp4lKaSoKYv+r8jCZ9BZb9U
-         jV4Q==;
+        bh=aOdCxZO55hUw/6I077tI6EL/o28ur2wlUbUGRR4UyJU=;
+        fh=y8RB4dgXtRgcX6waPTAZwLywStPs1bT0y0COxitm5T4=;
+        b=joy68qvUlTvG9wyN9Zqeq/h7RR+8qk1B1a6rNmfItxTR5pqm4ThGK/cR2RubuYPnlA
+         bM5alRcn7ddCUDEpE9LGKG4BH+9KhzDBvQZIO0AyASVzXsFew0i2i7Lhmk4VzXQW10Gs
+         jFOii1Yf46Rz/UfT+R88mkNtwaVw1OGeqrZb5R0GKEv6vTqsnegg62OVnS5PAgPMFZhe
+         0UfpGYM/9hBxEDH68bVpDhmN55DhEFsaBDpRljgvfXeSllmP6tQy8HEOitYIy6aTZnvG
+         iXsPRo+Jn9ImD1zX0Sgzyfhcf10x/iPj9ITAjN0L8Ca9STcsEE8t7v+QvdRA98iP7+KE
+         0s8Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793625220; x=1794230020; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793632468; x=1794237268; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=rC8xVMt0ftVC1MA0/AxMx0dm+YERO32RQqLOxWhbSdM=;
-        b=o9Bv0lrtHh2cwTJJVMUH4k06fPh+ZUF1Xl51YCyt5LSal/HMFyjV6eP5ndcJg+7iVj
-         WTAY3phbzSA8x/6rfLnLvb4bDnZ8Y4PG1EA0o2RPOfRyLwq6jcyjm/QiNRIf9j5AQQsJ
-         l2LCkDlG//3sWy/odK1wwz5yKvgETNvSW47fduZrW/zlPZQm2Hr6OF9occ90dnwda9pH
-         15peHnhylM0gwl1DeCkmpBva8CbqeJR2lmvPc9gUGtCRkIGAVwQC32c4UK+T3jOODMWv
-         8UTKrgc631symoPetFblG9qRPrnzh0NbDQA57q01cYj3VhCGGF8OfpP+shjngzwAm22m
-         UCwQ==
+        bh=aOdCxZO55hUw/6I077tI6EL/o28ur2wlUbUGRR4UyJU=;
+        b=UK/Ov2ZmZrdzn6wtpyN4IuP0s2NI94uQI7yYBJibP6aHf1CPcffmPVYaLkzYSc7pZm
+         Q+awmbVw7SIAx9igzH2GxMbpkJkUZWNm5FYtB1KlYDTmR1d4BJDrwn+eZuXuDN3hfkKi
+         wic6ZSVgM3Y1UqylgTszFO6RuIHOCzlfX7DyBHr6w+fBZfeaHkL3L5lbBc4iRYJCXspt
+         9pzWytIy2fjqQ7RVqjA8Iyg0vs6YCR+ISjcat8IZewOZC+HDkTF+GC7SBwr94lTftIlb
+         iXOhyfTyOpSiHWGkM8CQhvl9wo0AmvYC/zHu1qJMn7diEAHe+U1q3JmLq16spCqaJO9l
+         ToNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793625220; x=1794230020;
+        d=1e100.net; s=20260707; t=1793632468; x=1794237268;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=rC8xVMt0ftVC1MA0/AxMx0dm+YERO32RQqLOxWhbSdM=;
-        b=0NIdY5GTqoYAgbqHDdHuTNzmnxyFvt5AnfKIV947m88/GrSnBKuv93Qbu62VXQQQ5b
-         BQ17WI6yzyqZvbeD/qyhz3at1o/8M5vXe6q3NyxiAkhE0L6FPI1ni0SlDZAn0BU/kAD8
-         7/suKxuIDlwHUu3kqJtna40tkzBDgKhFMmAx9yfLohx0VaBe6Xd8nGTR0hmO2aYDOLfD
-         b6VEpV4RApFzf2kw5LLPoNXQAHuWC7UvTpjDUBVO2Jk2HHWcQcH/mQ2iUfz2KRApboZ9
-         NQU+GUUd4EV49ws42iwNcTCRYInVaovFUDFfFS0c6AUdQvza5szrIbMECxUZwVVZJlfU
-         AfeQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy9k/BVgPcO2r4OPXfQhLXUp0PH3p4tzn9KemZrvhNcWpFiIP+LM9dUUgNJngo++qxwl2LEqhxosw==@vger.kernel.org
-X-Gm-Message-State: AFq9FYJasUUbsGr4GaanOl3oZsF8JX6YTdhu7enrleP0DyaWrn3m2XrB
-	D8zjkaluJIIn1svj2COxmiwk79PGGfbtPSSqpmUBzuA/Ye+9iiGOfpcRQ+iEvvBa/e/8gTl1nZB
-	2VEaJ0nLtBSV693eT9PBz8KEepXje4XA=
-X-Gm-Gg: AYBFou3JXKs2qL5CVIsyhQrDwyCeuy2QITSujH470Wsct1akjNvYRjILycQW8JCH22N
-	R+iQUwe8msbqFgfNpBpzM92BBr22ln+MxbT0PkfuHrLjUSa9wZxRiKN+fh3u9PqcKdvzzwluxFy
-	Zy1qHnKPujYFmy3I8wcGMxO7Yum9AmzIzUnrIVXGzgVv9f1h4/kqAfTuHQSKli8IVOi3wsJwAKt
-	UcJ3UpW8zUQMPWXssJeQyIkTvB838jwPW8rfEDuLi5vfdzw7O7I9HQdbXcP7EX+bq3uXvCjmjPW
-	habGXO7ckje6U59up+Rt4d3BstiucnF3gc+kmC+E8clRPUMOU64sUmBXrY8EqwGuyziHqS0+36Z
-	e9gCGzwCCPJNnz+6vlh+PeL6cSdz2WDtq9p9JQhoaPAjN1at1+k9ZucPWEJKdWZpwZuH3
-X-Received: by 2002:a05:701b:230e:b0:14a:8cff:fbb8 with SMTP id
- a92af1059eb24-1ac5bbb5053mr14722111c88.28.1793625220279; Mon, 02 Nov 2026
- 05:13:40 -0800 (PST)
+        bh=aOdCxZO55hUw/6I077tI6EL/o28ur2wlUbUGRR4UyJU=;
+        b=RaunwZxyEyJLqzEVVKiLnHqbxkOl4SoeTKDmOnKXi1VVuUCdmYENXDSjLOSCLX6jDu
+         Bu8ZbHgUJ54iIhksyvZu+grYfLaYUjxEw0Ss6y6b8QoP3rtLf2dumtmokl+gDkaptkXp
+         WkuvfsjdPitlM1jYf5cwOTs2iyzvX+1n6z7pTNKgZNaaTh74lV0ce0F/orCUQd3clwl/
+         49bYhu7rYlSyCyVYnASeNDg12M0zxE/q8Ab6myT50MvqBUo9WR3VBRKEuKbJJoHaPkK5
+         c63GLZxNAOwVBL8vzrrRmLlSuERC9t0Zez7vLHrZqdkMez5lwnabfuJ9ryP5WJXGFBlM
+         HOsQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzf0307vfm0L+2pD4gNCpXXvaQMatlTDQiufeOimpvzMwCC+Ps4CFYqyPnq/oqRZArtyxiZTtKnqw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z9UKHzyMi3RIG+SDT8G70nWQ1wB95SVcsj+3oVMXO597X34z6XI
+	PhZOVj5OuViJY+Hi9TEbRm4qFBYhEGFHLYY09wSRYCC0kWQT+vjAijRpBs7PXFmLCRufyLC9s+6
+	w+QzlmqLH1G25dP0Q/0655nogGsrNmM8=
+X-Gm-Gg: AYBFou0H84oDZzyAAwTfOj0WDGnh1NwMT6/6y0nflwa9F2zYShOx01yZ1JVRDxb/yWs
+	2YyDOwS6ft3gKOoI/yOXl0VhmipCYsmNtVaTFaHKf54KPBHLrVn2ibHR3GEUpRwpn+WCldBAtmv
+	v7V5Sj8zLUJc7i3Z9bRacQlN6ORFi5edvyJIyibaDOZFF80o87wnoK/vtP9MQH9cqz0BQA2XJu7
+	DKxDLtOOkA0sfJtzD56oAl7J6hANZSewMUlBjwk/5cV8gMADCS8+RWWhzIOSo/+BJLvlE2UqhDp
+	5o/xaTNatCKr+4xVnIP2tZyR0E46kYhNjH2Z16oCrnKub8mJ03NgJQ6G0Dlx+tcHflCzbErUERw
+	2DRuW/F/Dj4d3eW6f1yHMzpSWYUhT6JCFkS7/KpjK18QTkB2EcLFHa8QVBss4h8vLr6LxI8vbpt
+	L2p4OznYcjw8RhP8ZTWoClPnukdsvU6J2JW8aGKwXm+Mgwb1YSk1EFZL1hvA==
+X-Received: by 2002:a05:690e:1201:b0:679:28ad:d8d8 with SMTP id
+ 956f58d0204a3-67ba5118897mr8055833d50.104.1793632468374; Mon, 02 Nov 2026
+ 07:14:28 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -106,23 +107,24 @@ Precedence: list
 MIME-Version: 1.0
 References: <20261102130540.252894-1-omosnacek@gmail.com>
 In-Reply-To: <20261102130540.252894-1-omosnacek@gmail.com>
-From: =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>
-Date: Mon, 2 Nov 2026 14:13:28 +0100
-X-Gm-Features: AclHuK9Lk_3jmZnqSr1tjOillycrUr-WcgCLTZN6r2TRwhWtp1BoaHKbHJvYD28
-Message-ID: <CAAUqJDvsDi5ceO3ri5cJP4WJbZeUdpJe9F4cv8OU4=wBzVeBAw@mail.gmail.com>
+From: Stephen Smalley <stephen.smalley.work@gmail.com>
+Date: Mon, 2 Nov 2026 10:14:17 -0500
+X-Gm-Features: AclHuK_S3LwuvSZEIcs1e2WEC4WgX3S0M8bKoabDzHzf2mxELuht56K17Z9rPEg
+Message-ID: <CAEjxPJ4hxdvV-r8chmF3RAi9RJX=-4AqntG01=fWUhh4-xP+ew@mail.gmail.com>
 Subject: Re: [RFC PATCH] af_unix: introduce MSG_CMSG_SEALED
-To: Eric Dumazet <edumazet@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Simon Horman <horms@kernel.org>, 
-	Jens Axboe <axboe@kernel.dk>, netdev@vger.kernel.org, selinux@vger.kernel.org, 
+To: =?UTF-8?B?T25kcmVqIE1vc27DocSNZWs=?= <omosnacek@gmail.com>
+Cc: Eric Dumazet <edumazet@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Simon Horman <horms@kernel.org>, Jens Axboe <axboe@kernel.dk>, 
+	netdev@vger.kernel.org, selinux@vger.kernel.org, 
 	linux-security-module@vger.kernel.org, io-uring@vger.kernel.org, 
 	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2 Nov 2026 at 14:05, Ondrej Mosn=C3=A1=C4=8Dek <omosnacek@gmail.com=
-> wrote:
+On Mon, Nov 2, 2026 at 8:05=E2=80=AFAM Ondrej Mosn=C3=A1=C4=8Dek <omosnacek=
+@gmail.com> wrote:
 >
 > Currently, when a process receives a file through AF_UNIX's SCM_RIGHTS
 > mechanism, the security_file_receive() LSM hook is calledto allow LSMs
@@ -189,23 +191,67 @@ On Mon, 2 Nov 2026 at 14:05, Ondrej Mosn=C3=A1=C4=8Dek <omosnacek@gmail.com=
 > Related: https://github.com/fedora-selinux/selinux-policy/issues/3287
 > Signed-off-by: Ondrej Mosn=C3=A1=C4=8Dek <omosnacek@gmail.com>
 > ---
->  arch/alpha/include/uapi/asm/socket.h    |  2 +
->  arch/mips/include/uapi/asm/socket.h     |  2 +
->  arch/parisc/include/uapi/asm/socket.h   |  2 +
->  arch/sparc/include/uapi/asm/socket.h    |  2 +
->  include/linux/socket.h                  |  4 +-
->  include/net/scm.h                       |  2 +-
->  include/uapi/asm-generic/socket.h       |  2 +
->  io_uring/net.c                          |  2 +-
->  net/compat.c                            |  3 +-
->  net/core/scm.c                          | 81 +++++++++++++++++++++----
->  net/core/sock.c                         |  9 +++
->  net/socket.c                            |  2 +-
->  tools/include/uapi/asm-generic/socket.h |  2 +
->  13 files changed, 97 insertions(+), 18 deletions(-)
 
-See also this RFC patch for selinux-testsuite
-(https://github.com/SELinuxProject/selinux-testsuite) that I used to
-test this patch:
-https://lore.kernel.org/selinux/20261102130834.253605-1-omosnacek@gmail.com=
-/
+> diff --git a/net/core/scm.c b/net/core/scm.c
+> index ae38f3c1165c..08822b2a1f22 100644
+> --- a/net/core/scm.c
+> +++ b/net/core/scm.c
+> @@ -114,10 +127,29 @@ static int scm_fp_copy(struct cmsghdr *cmsg, struct=
+ scm_fp_list **fplp)
+>
+>                 if (fd < 0 || !(file =3D fget_raw(fd)))
+>                         return -EBADF;
+> -               /* don't allow io_uring files */
+> -               if (io_is_uring_fops(file)) {
+> -                       fput(file);
+> -                       return -EINVAL;
+> +
+> +               if (sealed) {
+> +                       /* Only allow sealed files */
+> +                       if (file->f_op !=3D &envelope_ops)
+> +                               return -EINVAL;
+
+This leaks a file reference.
+
+> +
+> +                       file =3D (struct file *)file->private_data;
+
+This fails to take a reference to the underlying file but will later get fp=
+ut().
+
+> +
+> +                       /*
+> +                        * No need to check for io_uring files here as th=
+e
+> +                        * underlying file had already successfully passe=
+d the
+> +                        * check when it was first sent.
+> +                        */
+> +               } else {
+> +                       /* Don't allow sealed files */
+> +                       if (file->f_op =3D=3D &envelope_ops)
+> +                               return -EINVAL;
+
+This also leaks a file reference.
+
+> @@ -365,18 +398,37 @@ static int scm_max_fds(struct msghdr *msg)
+>  }
+>
+>  int scm_recv_one_fd(struct file *f, int __user *ufd, unsigned int flags,
+> -                   bool notrunc)
+> +                   bool notrunc, bool sealed)
+>  {
+> +       struct file *f_received;
+>         int error;
+>
+>         if (!ufd)
+>                 return -EFAULT;
+>
+> -       error =3D security_file_receive(f);
+> -       if (error)
+> -               return notrunc ? put_user(error, ufd) : error;
+
+Design point: I would suggest adding and using a new LSM hook that
+allows security modules (like SELinux) to still be able to check a
+(new) permission that governs whether a process can pass along these
+sealed fds so that we do not entirely lose control over their use.
