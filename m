@@ -1,75 +1,106 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=203.205.221.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.128.51
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793606754;
-	b=Qo2jXkvUR3VwR38Ti/vklrtgEGnVvUNgHcvSiuZBG/1Ku5zqVXRUgi3kNalvp/WwDQsM
-	 oRm2HCuncMjDTAJT3Db6syHCtTod8NAuSn+DzyxPN6KoVuwyhgXRuAFJziDxFfnMe9xL6
-	 Q6OaRJ8j66/7434+bC8rfTjWCxIydYM4nicrgXTPPDgQH8CNV0US2INtEiLDi3xN3XGhO
-	 f110PZvpwTVTxXcJ1KeEBsdBnaZsnMSD0uNXfilOG2Y87ASKdBB6EswOUGzgNsNbZ0do3
-	 c26eaAwKtINzq/liTYav3iGHF0DtGJTioyoFR3CHEk3+tvtwSwpGppHhS/FpolqBsJg==
+	t=1793624746;
+	b=u1MLgQB0hAWJMZk2tdNu74AX4D4hrkSeR1K8GB9cfPMVYfLCAIwzdL3sqOA5CfTKWci/
+	 ysayRAB0MrV4ucFPOu3ov5ifhWxkucUK+PzlEWuxsAHritf5msTbTElj9iBDxO9gNCp4M
+	 zt7LEwgLAOz+t+srce76RTlvPwummHNigEOXvWd+0FyQljJz/E5xTI39B+mlMAtK+shcu
+	 euAe1JLySlcrJ2LsSHHhqWCx1LZX+yA4xQGROZCWAP2593NgmbkX/LRdBwInOwlGtHU3m
+	 cPWzM6swE+UPc1bxdbTX7eWh9qfxAWWxxbqFGHt58ElqtGkC5DIGz8pzecqrYEUJl6A==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793606754;
-	h=DMARC-Filter:DKIM-Signature:Received:X-QQ-mid:Message-ID:
-	 X-QQ-XMAILINFO:X-QQ-XMRINFO:From:To:Cc:Subject:Date:X-OQ-MSGID:
-	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=DtwsatCPLKsCoVZYHI1d8zrdN2X3Ni/Ad7zKOiieJFI=;
-	b=UxsEeQB8z4zYfNgw5M3R1kGvCQLuFw8XVcuenRKSof8/Xy+7cHWJ9D50/qj/VG1yb7FS
-	 QoWDWM1Ib4wfmoNFxYUZV7uFr6GC3pAP1nv76VQKjqZmeC61mnFNwNmGk2qggXo7LrmBk
-	 uf7UBTbSAT1vqSlaBIU6Tw4YERH6MaBiDGtlPUgB5UUdnlrYTPrpUtscfqCcoTwydbpzK
-	 Nj4xQyRCKl0kE89fkadmYC5r2JDO5uLCPGEsWP36IWhUyOfwh8P5+JbYuMriaYG0bzumh
-	 CWlHLEQdJxWPGULdsE5k84N7ONZUuMeKcRcbWR26CI4tvnAsuIs4rMRqgIbuAtE2mnA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793624746;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=2/g1xL5iGwG1omHrmHgnmCBZ/PbDFU5IAnXkvWs0rU8=;
+	b=VELIy7D1QYt/vQN5BmEwK/YpV63tcnmRyEVYS4BrKssNd+ygmntnkm0gwwiLSPMk1C92
+	 ANC3D1c1ZMrF6pIOVgDFIz4tbG37Ws7cNVq/+BS/5OY25b/JDOO6cSzLtDe7uTJYXnfOu
+	 3dcV7vmSB1t/19144KjtyOfYW89WYQeI3gDUG4A8G7cF8ECIA2mjbchmjaexukL9Iv1pE
+	 MASFquliKe67taJMQ2nnk14yGh/Jih8T6XGnrZB/fBrDAFmbCCmL7p1mbMzyb2wJWwgL9
+	 +Pi3j4k23p5mpLmefjDl1/lDURV3/rMuuMBTByIGg1+hrYXHn7zQJ4YJ7Kks994ykaA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=qq.com;
-	spf=pass smtp.mailfrom=qq.com;
-	dkim=pass header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=ffvHWdjz;
-	arc=none smtp.remote-ip=203.205.221.173
-Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	dmarc=pass header.from=gmail.com;
+	spf=pass smtp.mailfrom=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="D9/S9EAi";
+	arc=none smtp.remote-ip=209.85.128.51
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A107606A32F;
-	Mon,  2 Nov 2026 08:05:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1A107606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7A8606A32D
+	for <io-uring@vger.kernel.org>; Mon,  2 Nov 2026 13:05:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3D7A8606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=qq.com header.i=@qq.com header.a=rsa-sha256 header.s=s201512 header.b=ffvHWdjz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1793606745; bh=DtwsatCPLKsCoVZYHI1d8zrdN2X3Ni/Ad7zKOiieJFI=;
-	h=From:To:Cc:Subject:Date;
-	b=ffvHWdjzZ3fycMPJRy0hxAI4WRuP2tKh81mB0lkaCi7Fjmvfe7rpQgWRzRO3unzXI
-	 mtwqgKaon2qR3ffM9+U3wywWhGuzu9cakpwejvNYmN9gWfEemZ+FsrxknG4POceD9t
-	 IRjQNIRBX/IIKXXM9rMPlCu5NxFvvT0+z96e76A0=
-Received: from shuai-VMware-Virtual-Platform.. ([117.158.156.199])
-	by newxmesmtplogicsvrsza73-0.qq.com (NewEsmtp) with SMTP
-	id 16A838C7; Mon, 02 Nov 2026 16:05:42 +0800
-X-QQ-mid: xmsmtpt1793606742tqdo72d4m
-Message-ID: <tencent_BB08960D79E0261B5C1EB1E589787734E907@qq.com>
-X-QQ-XMAILINFO: MllZffuBkEb5gdDMGD5ishy48tSBJhTo/zjvt2SavbjZ31QFyvExS8/+qgOwTG
-	 My7uoP65pcyebXkDY/t/NExtkCCilOGBCmvDvqbRMxhvCvF0OPDyErUxtXkseonTAjy74bRs4rEC
-	 Dp5n+qabBOEZiku4AafP/EG0rtYbz34aRbBrQisgnJuSvvFlvogB8V+3mB7ugRaIXYbre4SJkZZb
-	 JpMhQwDuviu51WEo5mdguNno+latYKIh2pZLQvpXKuw5gFEOBj3Xd04tEI/gil1aNz0K142B3pel
-	 yuRGs00dsE+W0fbchanvlHzqBH3wBUjkBHgd600iNBQ2KMXvUiUZpguQlRsasV/2iM4ET+GMCwHQ
-	 xLDljeIzzyflqtMGs6fniQKt58LbCftMtaHufcFKr3P14zTlwnnne374SOOaTp0r2Yrv893MptYU
-	 kDUg2cZyzR66K4A70n9iNpERDr6vcsrO0yhXSpvQzSD8hQmkbSH2fgjfwhu3POzu/2Po95fUzvEc
-	 JJs8Kul3EUz4NSBPUX7a/yLRnuCCNzY4hAl01Xg9dvG/HdXk7rw9gC8jM7eSm/nfH3rfs/01lI3V
-	 GpX8Yzyec4ZIRs7n7xIvl/f/Sal6+JWNn/21VeD6dVMM6OaCBWmVFfmAAtbCqLKiLnQSpUAfbGXH
-	 nPGMqxKTQd1MC1A8rp0IzbnATuSpoKuw3C7bN1Zxmyo3ujTlmqep4DgoDe8xQWnYqnnEnBxpGP1g
-	 L/fqZRa6RVFzKhkVkVnP1Un1313V/FFoyLLhfGtl2wBYDCwFiIG7gB0KfpmnTJCXlD4t4Upqmjuk
-	 UyW0B5iS1b5jnVHzmLtlpbvoezu4xghMkKpJi6Us8meCEUCRmTOCph5q+MrPO3oWlRSvPqqFIoV3
-	 C0qEdpw3b2e8aJoz1nDGsGslZByDnE6K5TaGSps1pMzzWZyuW+DiBhj/wNwE1OMlXfmybN/T7Xhp
-	 0vKRA8zswMYhaRbDEZlBNbA32HV5nbfLX7jJLfKDPHP6Hx07azEHOJiUcqLYQ+SamKNb5aqPPqAU
-	 SoqqhRvSKP92xO8tg3N5TObp1Kz7rrU5IcdFbycqCtrcu8GfV6mpBDiysHBxnEQdwoNVg/LXMbgf
-	 Q/wdKMrCBYWkSZIxwCLxZccwmgQg==
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-From: Shuai Liu <847807867@qq.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzbot+675af112519ca34f5502@syzkaller.appspotmail.com,
-	Shuai Liu <847807867@qq.com>
-Subject: [PATCH] io_uring/sqpoll: don't set IO_SQ_THREAD_SHOULD_STOP on thread exit
-Date: Mon,  2 Nov 2026 16:05:42 +0800
-X-OQ-MSGID: <20261102080542.214144-1-847807867@qq.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=D9/S9EAi
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4a214af2076so22620915e9.0
+        for <io-uring@vger.kernel.org>; Mon, 02 Nov 2026 05:05:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20260707; t=1793624743; x=1794229543; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2/g1xL5iGwG1omHrmHgnmCBZ/PbDFU5IAnXkvWs0rU8=;
+        b=D9/S9EAiM4U3YwX9Fq+R2/twHKsOr6RHGoCPd6j6+sZL33de8LQ1lj/bFMZ4NaiXRy
+         /K4VnigemD4+VqDY0hchVHT6sPvVLpjM8Z9sq/4t/m+SaM0CJW2VlF2qWQ4nD8zgVzzT
+         ADN2anmU0+N0l93HJhzGF/rn23AaKvUac8zezVVLv7ffba4YhMrIg4yYa7ZW1floAKUD
+         E74hi/fACYkYjv/7C8Lt0IR5C5W4Hph7Ei+hf2dry0AIKw6sWcxcOlO11QQA2vRT43a9
+         POLOaDAbcMBVXf9KOrJ5Q/Wd/gJOKqFdgfv5uVMhn0b7YV40mFY3vlVIBbhHgf9kX1oD
+         CvNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793624743; x=1794229543;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2/g1xL5iGwG1omHrmHgnmCBZ/PbDFU5IAnXkvWs0rU8=;
+        b=GWvF0EZmSORMh7jIiZvFA3Q9b3/KNI+URdgtgWO9l5dLkD0/0lpMBc2EsRsNiwQzU7
+         RW7fsccovWn5tgm0Nj8JOqzA55InRMLfdXZw/GhyZPvOV+GLxB2vCrDbKkOAifzZ6jNl
+         v7VRd1eHFIHfo9TV8dY7f9xzrUtQZKDrTsj1GYJ5nC6vNDNrTYwXbuBVN5YU2n5K4ZWY
+         WF1iG6ze/tJ9IKichGd0pRi01qjNnns/6aGRYEPE7o3fEEpTCbLwZiOoanQwP2bAhCYW
+         WK46MD3+j3XaiP8R3I99az78Q2ut1iA1ENED4hsNLT84nch87c4emdwB/QoUNIhK4hth
+         HOaQ==
+X-Forwarded-Encrypted: i=1; AKwUvBys+qyFbERKB4imJjhB+xW5libhTUEBuZOZDwAWbtwuTst56+Y5/JQhxWBtCo2W0T7WWanelRc6SA==@vger.kernel.org
+X-Gm-Message-State: AFq9FYImMFH3fGF7JLnpk3Wg9nNLZ1YJgiO3zqozGbtwdkmzEIjpaeHA
+	y74n+7wD3p38TjeD4Lh/6R19JItM517JTXKgkSHQpRVUTdLz0YeTw8ju
+X-Gm-Gg: AYBFou2GNLufrrbxjocdMST5q8IHiDrnPuMOCQCe6O8BOP992G/jQ4+WMxo6r6YCzts
+	5tO0beJ9TQEh45gdVSX45TxhO5WlAHwSteaH/mPyXdgD6HRn0QPAKMpShQVuoLBom+kzJvF6xTJ
+	QCXqdEEL6eF7erNhSZBcBWoSs5mxSWwbncMVDZLauH+23veOLi+TRPnkogI5k8lyTsqa2atO4QD
+	68fC7ymbEcZ4KxFXckZne4l0IMyAKm2OZw7slXY10BiSW9X7+XZKSIyCeN1MPuRcchQa6CRcNg6
+	F7w9TV+WhVPU1ujW0u/co0Of2Ul3LsFyAK71n/5lUAFtmVGtr+MuRvqhF+vtib+8fQeQ56MLU6o
+	PYlK2Y3pzeRpASAozRzxIBs9y7B8a8LZ8lgaz6s/8VhVovywla+QDa2ut4+Rq+bBNoo2rfmEhT2
+	D6roH1P0kr0KUxi/192pI3t7+1Wy/FwTQ/0EZleLxN4i/daJOVdaULkbFbFZnsc8s8AFwdiyjZe
+	dsmr4e8H0bHgUtGHwUtyjYWl6baAQhvH4ewYsgIdcVJRVW1RinAdI9eaziEAPkYjUcwxsWyj9L8
+	xzJL/ZTPp/UfbS8+sN4ENAo+WvNpxpUsH5vBJZf2YS5jHHb+J/Tsmf2A15gF1Vt0cySXGcy4IQT
+	33pZsKVMygw==
+X-Received: by 2002:a05:600c:6087:b0:49f:f099:6fb1 with SMTP id 5b1f17b1804b1-4ac17753befmr226189025e9.15.1793624743352;
+        Mon, 02 Nov 2026 05:05:43 -0800 (PST)
+Received: from omos-acer.lan (109-81-86-162.rct.o2.cz. [109.81.86.162])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4aa813d2640sm340857865e9.6.2026.11.02.05.05.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Nov 2026 05:05:42 -0800 (PST)
+From: =?UTF-8?q?Ondrej=20Mosn=C3=A1=C4=8Dek?= <omosnacek@gmail.com>
+To: Eric Dumazet <edumazet@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Simon Horman <horms@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	netdev@vger.kernel.org,
+	selinux@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] af_unix: introduce MSG_CMSG_SEALED
+Date: Mon,  2 Nov 2026 14:05:40 +0100
+Message-ID: <20261102130540.252894-1-omosnacek@gmail.com>
+X-Mailer: git-send-email 2.54.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -79,83 +110,396 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-io_sq_thread_stop() carries a WARN_ON_ONCE() asserting that
-IO_SQ_THREAD_SHOULD_STOP isn't set yet, i.e. that stopping the SQPOLL
-thread is never attempted twice. Since commit 22d9db9fd64a
-("io_uring/sqpoll: don't attach to a thread that is canceling"), the
-SQPOLL thread itself sets that bit on its way out, so that
-io_sq_offload_create() won't attach a new ring to a thread that is
-canceling.
+Currently, when a process receives a file through AF_UNIX's SCM_RIGHTS
+mechanism, the security_file_receive() LSM hook is calledto allow LSMs
+like SELinux to validate the receiver's access to the received file
+(similarly to a process inheriting file descriptors through execve(2)).
 
-When the thread exits on a fatal signal, the bit is thus set before the
-ring teardown gets to io_sq_thread_stop(), which now triggers the
-warning on every such exit:
+However, there are cases (such as dbus daemon/dbus-broker) where the
+receiver doesn't intend to access the received file and merely wants to
+forward it to a third process. In this case the forwarding process would
+need to have the appropriate r/w access to the file in order to receive
+it, even though it will never actually acess it. That leads to the
+security policy having to grant the forwarder access to a potentially
+wide range of files (in case of dbus-broker basically all files), which
+is not ideal.
 
-  WARNING: io_uring/sqpoll.c:88 at io_sq_thread_stop
-  Workqueue: iou_exit io_ring_exit_work
-  Call Trace:
-   io_put_sq_data
-   io_sq_thread_finish
-   io_ring_ctx_free
-   io_ring_exit_work
+This patch adds a new CMSG flag MSG_CMSG_SEALED that, when passed to
+recvmsg(2), wraps any received files into an opaque anonymous inode with
+the name "[envelope]", skipping the security_file_receive() LSM check.
+The returned "[envelope]" file descriptor can't be used in any
+meaningful way other than being passed forward via sendmsg(2) with the
+MSG_CMSG_SEALED flag. In that case the original file is unwrapped and
+sent via SCM_RIGHTS to the receiver. The receiver can then either
+receive the file as normal (subject to the LSM check) or again "sealed"
+in the "[envelope]" anon inode for further forwarding.
 
-Introduce a separate IO_SQ_THREAD_EXITING bit for the thread marking
-itself as on its way out, and check it in io_sq_offload_create() along
-with IO_SQ_THREAD_SHOULD_STOP. IO_SQ_THREAD_SHOULD_STOP regains its
-original meaning, "a stop has been requested", and the WARN_ON_ONCE()
-holds again.
+Note that sending the "[envelope]" file is only allowed with the
+MSG_CMSG_SEALED flag set, to make the unsealing explicit and avoid
+unexpected behavior. Attempting to send it without this flag will fail
+with an error. This also avoids recursive nesting of "[envelope]" files,
+which would only make this feature harder to audit for possible issues.
 
-Reproduced with an SQPOLL ring and an immediate fatal signal: the
-warning fires on v7.3.0+ (22d9db9fd64a present) and is gone with this
-change.
+This patch also adds a simple read-only sockopt for UNIX sockets that
+allows userspace to determine if this feature is present (passing
+unknown CMSG flags unfortunately doesn't lead to an error currently).
+The minimal code to do so can look like this:
 
-Reported-by: syzbot+675af112519ca34f5502@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=675af112519ca34f5502
-Fixes: 22d9db9fd64a ("io_uring/sqpoll: don't attach to a thread that is canceling")
-Signed-off-by: Shuai Liu <847807867@qq.com>
+    #ifndef SO_RIGHTS_SEALED_SUPPORTED
+    #define SO_RIGHTS_SEALED_SUPPORTED 88
+    #endif
+
+    #include <sys/socket.h>
+    #include <unistd.h>
+    #include <stdbool.h>
+
+    bool MSG_CMSG_SEALED_supported(void)
+    {
+        int sock, ret;
+        socklen_t optlen = 0;
+
+        sock = socket(AF_UNIX, SOCK_STREAM, 0);
+        if (sock < 0) {
+            /* handle error */
+            /* ... */
+        }
+
+        ret = getsockopt(sock, SOL_SOCKET, SO_RIGHTS_SEALED_SUPPORTED,
+                         NULL, &optlen);
+        close(sock);
+
+        return ret == 0;
+    }
+
+Related: https://github.com/fedora-selinux/selinux-policy/issues/3286
+Related: https://github.com/fedora-selinux/selinux-policy/issues/3287
+Signed-off-by: Ondrej Mosnáček <omosnacek@gmail.com>
 ---
- io_uring/sqpoll.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ arch/alpha/include/uapi/asm/socket.h    |  2 +
+ arch/mips/include/uapi/asm/socket.h     |  2 +
+ arch/parisc/include/uapi/asm/socket.h   |  2 +
+ arch/sparc/include/uapi/asm/socket.h    |  2 +
+ include/linux/socket.h                  |  4 +-
+ include/net/scm.h                       |  2 +-
+ include/uapi/asm-generic/socket.h       |  2 +
+ io_uring/net.c                          |  2 +-
+ net/compat.c                            |  3 +-
+ net/core/scm.c                          | 81 +++++++++++++++++++++----
+ net/core/sock.c                         |  9 +++
+ net/socket.c                            |  2 +-
+ tools/include/uapi/asm-generic/socket.h |  2 +
+ 13 files changed, 97 insertions(+), 18 deletions(-)
 
-diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
-index c833e776320d..bbfb1a6e6668 100644
---- a/io_uring/sqpoll.c
-+++ b/io_uring/sqpoll.c
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index 5d3524c26b2b..cd9fce1d9432 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -161,6 +161,8 @@
+ 
+ #define SO_PEERPIDFD_THREAD    87
+ 
++#define SO_RIGHTS_SEALED_SUPPORTED	88
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index 245a43f52fb1..393898479ce6 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -172,6 +172,8 @@
+ 
+ #define SO_PEERPIDFD_THREAD    87
+ 
++#define SO_RIGHTS_SEALED_SUPPORTED	88
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index f23710e1c671..055b532ccc14 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -153,6 +153,8 @@
+ 
+ #define SO_PEERPIDFD_THREAD	0x4055
+ 
++#define SO_RIGHTS_SEALED_SUPPORTED	0x4056
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index b35b25bdefc2..e152e2bdf42e 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -154,6 +154,8 @@
+ 
+ #define SO_PEERPIDFD_THREAD      0x0060
+ 
++#define SO_RIGHTS_SEALED_SUPPORTED	0x0061
++
+ #if !defined(__KERNEL__)
+ 
+ 
+diff --git a/include/linux/socket.h b/include/linux/socket.h
+index b17fdb7d38a7..90e4bc5d3f91 100644
+--- a/include/linux/socket.h
++++ b/include/linux/socket.h
+@@ -345,7 +345,9 @@ struct ucred {
+ #define MSG_SOCK_DEVMEM 0x2000000	/* Receive devmem skbs as cmsg */
+ #define MSG_ZEROCOPY	0x4000000	/* Use user data in kernel path */
+ #define MSG_SPLICE_PAGES 0x8000000	/* Splice the pages from the iterator in sendmsg() */
+-#define MSG_FASTOPEN	0x20000000	/* Send data in TCP SYN */
++#define MSG_CMSG_SEALED  0x10000000	/* Seal file descriptors received
++					   through SCM_RIGHTS */
++#define MSG_FASTOPEN     0x20000000	/* Send data in TCP SYN */
+ #define MSG_CMSG_CLOEXEC 0x40000000	/* Set close_on_exec for file
+ 					   descriptor received through
+ 					   SCM_RIGHTS */
+diff --git a/include/net/scm.h b/include/net/scm.h
+index b68a143f42de..53b999868104 100644
+--- a/include/net/scm.h
++++ b/include/net/scm.h
+@@ -108,7 +108,7 @@ void scm_recv_unix(struct socket *sock, struct msghdr *msg,
+ 		   struct scm_cookie *scm, int flags);
+ 
+ int scm_recv_one_fd(struct file *f, int __user *ufd, unsigned int flags,
+-		    bool notrunc);
++		    bool notrunc, bool sealed);
+ 
+ #endif /* __LINUX_NET_SCM_H */
+ 
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index 56fed7ab27ab..14bf06367ef1 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -156,6 +156,8 @@
+ 
+ #define SO_PEERPIDFD_THREAD	87
+ 
++#define SO_RIGHTS_SEALED_SUPPORTED	88
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
+diff --git a/io_uring/net.c b/io_uring/net.c
+index eeab88e77fd8..b579d542b7e2 100644
+--- a/io_uring/net.c
++++ b/io_uring/net.c
+@@ -992,7 +992,7 @@ static int io_recvmsg_multishot(struct socket *sock, struct io_sr_msg *io,
+ 
+ 	if (kmsg->namelen)
+ 		kmsg->msg.msg_name = &hdr.addr;
+-	kmsg->msg.msg_flags = flags & (MSG_CMSG_CLOEXEC|MSG_CMSG_COMPAT);
++	kmsg->msg.msg_flags = flags & (MSG_CMSG_CLOEXEC | MSG_CMSG_SEALED | MSG_CMSG_COMPAT);
+ 	kmsg->msg.msg_namelen = 0;
+ 
+ 	if (sock->file->f_flags & O_NONBLOCK)
+diff --git a/net/compat.c b/net/compat.c
+index 6bdf4a2c9077..29816b47f675 100644
+--- a/net/compat.c
++++ b/net/compat.c
+@@ -296,7 +296,8 @@ void scm_detach_fds_compat(struct msghdr *msg, struct scm_cookie *scm, bool notr
+ 	int err = 0, i;
+ 
+ 	for (i = 0; i < fdmax; i++) {
+-		err = scm_recv_one_fd(scm->fp->fp[i], cmsg_data + i, o_flags, notrunc);
++		err = scm_recv_one_fd(scm->fp->fp[i], cmsg_data + i, o_flags, notrunc,
++				      msg->msg_flags & MSG_CMSG_SEALED);
+ 		if (err < 0)
+ 			break;
+ 	}
+diff --git a/net/core/scm.c b/net/core/scm.c
+index ae38f3c1165c..08822b2a1f22 100644
+--- a/net/core/scm.c
++++ b/net/core/scm.c
 @@ -29,6 +29,7 @@
- enum {
- 	IO_SQ_THREAD_SHOULD_STOP = 0,
- 	IO_SQ_THREAD_SHOULD_PARK,
-+	IO_SQ_THREAD_EXITING,
- };
+ #include <linux/slab.h>
+ #include <linux/errqueue.h>
+ #include <linux/io_uring.h>
++#include <linux/anon_inodes.h>
  
- void io_sq_thread_unpark(struct io_sq_data *sqd)
-@@ -436,9 +437,12 @@ static int io_sq_thread(void *data)
- 	/*
- 	 * Cancelation drops sqd->lock while it waits, and a ring could attach
- 	 * to a thread that is on its way out. A fatal signal doesn't set the
--	 * bit, so set it here for io_sq_offload_create() to see.
-+	 * stop bit, so mark the thread as exiting here for
-+	 * io_sq_offload_create() to see. IO_SQ_THREAD_SHOULD_STOP is left
-+	 * alone, as it means a stop has been requested via
-+	 * io_sq_thread_stop().
- 	 */
--	set_bit(IO_SQ_THREAD_SHOULD_STOP, &sqd->state);
-+	set_bit(IO_SQ_THREAD_EXITING, &sqd->state);
- 	io_uring_cancel_generic(true, sqd);
- 	rcu_assign_pointer(sqd->thread, NULL);
- 	put_task_struct(current);
-@@ -510,7 +514,8 @@ __cold int io_sq_offload_create(struct io_ring_ctx *ctx,
- 		/* don't attach to a dying SQPOLL thread, would be racy */
- 		ret = 0;
- 		if (attached && (!sqd->thread ||
--		    test_bit(IO_SQ_THREAD_SHOULD_STOP, &sqd->state)))
-+		    test_bit(IO_SQ_THREAD_SHOULD_STOP, &sqd->state) ||
-+		    test_bit(IO_SQ_THREAD_EXITING, &sqd->state)))
- 			ret = -ENXIO;
- 		io_sq_thread_unpark(sqd);
+ #include <linux/uaccess.h>
  
+@@ -66,7 +67,19 @@ static __inline__ int scm_check_creds(struct ucred *creds)
+ 	return -EPERM;
+ }
+ 
+-static int scm_fp_copy(struct cmsghdr *cmsg, struct scm_fp_list **fplp)
++static int envelope_release(struct inode *inode, struct file *file)
++{
++	struct file *inner = file->private_data;
++
++	fput(inner);
++	return 0;
++}
++
++static const struct file_operations envelope_ops = {
++	.release = envelope_release,
++};
++
++static int scm_fp_copy(struct cmsghdr *cmsg, struct scm_fp_list **fplp, bool sealed)
+ {
+ 	int *fdp = (int*)CMSG_DATA(cmsg);
+ 	struct scm_fp_list *fpl = *fplp;
+@@ -114,10 +127,29 @@ static int scm_fp_copy(struct cmsghdr *cmsg, struct scm_fp_list **fplp)
+ 
+ 		if (fd < 0 || !(file = fget_raw(fd)))
+ 			return -EBADF;
+-		/* don't allow io_uring files */
+-		if (io_is_uring_fops(file)) {
+-			fput(file);
+-			return -EINVAL;
++
++		if (sealed) {
++			/* Only allow sealed files */
++			if (file->f_op != &envelope_ops)
++				return -EINVAL;
++
++			file = (struct file *)file->private_data;
++
++			/*
++			 * No need to check for io_uring files here as the
++			 * underlying file had already successfully passed the
++			 * check when it was first sent.
++			 */
++		} else {
++			/* Don't allow sealed files */
++			if (file->f_op == &envelope_ops)
++				return -EINVAL;
++
++			/* don't allow io_uring files */
++			if (io_is_uring_fops(file)) {
++				fput(file);
++				return -EINVAL;
++			}
+ 		}
+ 		if (unix_get_socket(file))
+ 			fpl->count_unix++;
+@@ -203,7 +235,8 @@ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *p)
+ 		case SCM_RIGHTS:
+ 			if (!ops || ops->family != PF_UNIX)
+ 				goto error;
+-			err=scm_fp_copy(cmsg, &p->fp);
++			err = scm_fp_copy(cmsg, &p->fp,
++					  msg->msg_flags & MSG_CMSG_SEALED);
+ 			if (err<0)
+ 				goto error;
+ 			break;
+@@ -365,18 +398,37 @@ static int scm_max_fds(struct msghdr *msg)
+ }
+ 
+ int scm_recv_one_fd(struct file *f, int __user *ufd, unsigned int flags,
+-		    bool notrunc)
++		    bool notrunc, bool sealed)
+ {
++	struct file *f_received;
+ 	int error;
+ 
+ 	if (!ufd)
+ 		return -EFAULT;
+ 
+-	error = security_file_receive(f);
+-	if (error)
+-		return notrunc ? put_user(error, ufd) : error;
++	if (sealed) {
++		/*
++		 * Receive fd sealed in an "envelope" anonymous fd.
++		 * This will install a special file that can be unsealed
++		 * upon sending to another process, otherwise the underlying
++		 * file will not be accessible to this process, avoiding the
++		 * need to pass the LSM check below.
++		 */
++		f_received = anon_inode_getfile("[envelope]", &envelope_ops, f,
++						O_RDONLY);
++		if (IS_ERR(f_received))
++			return PTR_ERR(f_received);
++
++		get_file(f);
++	} else {
++		error = security_file_receive(f);
++		if (error)
++			return notrunc ? put_user(error, ufd) : error;
+ 
+-	FD_PREPARE(fdf, flags, get_file(f));
++		f_received = get_file(f);
++	}
++
++	FD_PREPARE(fdf, flags, f_received);
+ 	if (fdf->fd < 0)
+ 		return fdf->fd;
+ 
+@@ -384,7 +436,9 @@ int scm_recv_one_fd(struct file *f, int __user *ufd, unsigned int flags,
+ 	if (error)
+ 		return error;
+ 
+-	__receive_sock(fdf->file);
++	if (!sealed)
++		__receive_sock(fdf->file);
++
+ 	return fd_publish(fdf);
+ }
+ 
+@@ -407,7 +461,8 @@ void scm_detach_fds(struct msghdr *msg, struct scm_cookie *scm, bool notrunc)
+ 	}
+ 
+ 	for (i = 0; i < fdmax; i++) {
+-		err = scm_recv_one_fd(scm->fp->fp[i], cmsg_data + i, o_flags, notrunc);
++		err = scm_recv_one_fd(scm->fp->fp[i], cmsg_data + i, o_flags, notrunc,
++				      msg->msg_flags & MSG_CMSG_SEALED);
+ 		if (err < 0)
+ 			break;
+ 	}
+diff --git a/net/core/sock.c b/net/core/sock.c
+index e7405be8941f..68a447d8bf52 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1959,6 +1959,15 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
+ 		v.val = sk->sk_scm_rights;
+ 		break;
+ 
++	case SO_RIGHTS_SEALED_SUPPORTED:
++		if (!sk_is_unix(sk))
++			return -EOPNOTSUPP;
++
++		/* Just succeed without returning anything, signaling
++		 * support.
++		 */
++		break;
++
+ 	case SO_PEERCRED:
+ 	{
+ 		struct ucred peercred;
+diff --git a/net/socket.c b/net/socket.c
+index 2e3b5737c481..dbb3c7c6ff66 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -2921,7 +2921,7 @@ static int ____sys_recvmsg(struct socket *sock, struct msghdr *msg_sys,
+ 
+ 	msg_sys->msg_name = &addr;
+ 	cmsg_ptr = (unsigned long)msg_sys->msg_control;
+-	msg_sys->msg_flags = flags & (MSG_CMSG_CLOEXEC|MSG_CMSG_COMPAT);
++	msg_sys->msg_flags = flags & (MSG_CMSG_CLOEXEC | MSG_CMSG_SEALED | MSG_CMSG_COMPAT);
+ 
+ 	/* We assume all kernel code knows the size of sockaddr_storage */
+ 	msg_sys->msg_namelen = 0;
+diff --git a/tools/include/uapi/asm-generic/socket.h b/tools/include/uapi/asm-generic/socket.h
+index f333a0ac4ee4..fb9e98a7b370 100644
+--- a/tools/include/uapi/asm-generic/socket.h
++++ b/tools/include/uapi/asm-generic/socket.h
+@@ -147,6 +147,8 @@
+ 
+ #define SO_PASSRIGHTS		83
+ 
++#define SO_RIGHTS_SEALED_SUPPORTED	88
++
+ #if !defined(__KERNEL__)
+ 
+ #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
 -- 
-2.43.0
+2.54.0
 
