@@ -1,78 +1,55 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1793711198;
-	b=12BJELe/Y7zID5N4BY9MXH5WpuMKIGneMAAFmqbxOkO3E0yB6FccxTjWE/eX6ZwsbslT
-	 /lcu4UhMhpCBijRwaW+OqPeTCqREJUt4A4H5E07IbQQnCte9gqcLCPXUuRDCXMvEm3uUS
-	 UEVfBmHYPhBeC4A6x1yQWVL7YVzQAS9mL57V/1aF/vzzVKAWYWhnsmq0110zPqr7nLUXo
-	 i7XdkQ6cfa+V/qGzqvy/NUgX34eF7Dx2yMYNAm9VRbar1JyCVgQXxEDSQiivjbUO4jG1T
-	 QZ6mi3uMuyhX+YP6YO5n0SAi9YQ+d0havA2bJnkVB1+7U7AiGD6SGvSKcVNMs8J4h7A==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793711198;
-	h=Received:DKIM-Signature:Received:From:Date:Subject:MIME-Version:
-	 Content-Type:Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=T7dNxYtDoMA2dfCWOGYnCjA+jSBrv6GabrxLztBDz60=;
-	b=zL/TmKP55caeEx1wuu00wXugjA3jQEOvkZrFP6iC1JC7IFtOebNR7AZ1lMSx9VcLmEeQ
-	 vBoLAUIJMh11SoSgiE2ciVL0vlLXfLTrccQnyKWt0WUU+lCLno0hf63VgCWTmzXn/oaFS
-	 zzYNboqBv1/aJOpElJK1lapE2ggV7lDu+TG5bGmJiKQRDKW6m22GPKVD4ZfgZ9RIuFYhj
-	 SMYZbKSf9AKyhIGREjNMH6uFR7hlgZuasyqRKWtf5QQXZlR5qxNZqlTwDCqhfTw5vF882
-	 VGJyhXH3CWActgLYwjAEcHWcyGLnCfAyAadu8zTKaxatf7vRJm6lYV5H4OGme9ZHKdA==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e6nl0lWw;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=144.76.82.148
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1793711195;
+	b=0EiLEkJMEUcEO6ZWSyR26CZzj1aptMzEDq66oHDyVw5b0dx+OkpmdQJnJHwdMpMBlNFn
+	 WqaAC+BIzXUfbkIyyIbtPCxOLlovImRQDij0RTm2biAqGaigrUxJEfMloOprD8akYdoiU
+	 Apmr3C5nTQ/bsv/yP1zINj8VwrnZVxMvCtpXDGHnbsSOdBCoOQ8A5nfh1I/PNEMmUnusZ
+	 4pi7eJ/FgI4SWAiZdsKsB3MQb12nCDac1fITNGSgmYaJ6wkO8tD0oPyxMrQPS2a2+H7TO
+	 6wrwVQR6TziNW2r81m5hHZj6XJIe9I1501e8FJyogaeWBtXcdSI3JuLbUpIcNNlyceQ==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793711195;
+	h=DMARC-Filter:DKIM-Signature:Received:Message-ID:Date:MIME-Version:
+	 User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+	 Content-Type:Content-Transfer-Encoding;
+	bh=Sm8eBtV1xdp4zAa6YXthLgHufsLnCQQpa5HRuwqjWGo=;
+	b=FJ10m+O4Vvpy+yLm4qwBMtNHiyZEaEarp8tnvh9uumX3cGG/zX9E/2Ug4/zGKmLXdigE
+	 MFR8nbkXzh3rx6nx4Ag1EzfXsrdoJr3ZkdqWa1BMQiABD2izf1r5YTUpXgGefGFiqC35S
+	 ZZ5u8bVDkoLcfQ4wm3kBwO9/ZRLXZqpTjtA3j032vTLDpYzhyMyVgAuQHhl5hRo68NluM
+	 0Eu3IMZ8AR0Pw/pnc4JrA6z/tJsOlWQhPWd8CB6PeM1tXJmi2EUvL61kuNepFnEP2GadP
+	 Ozu00YfROlVzZuuR3Q0Y0oR9LfpTk+HhxZ/8m8T681GB0vRx0jCAqJrChNdCHu6xvYg==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=samba.org;
+	spf=pass smtp.mailfrom=samba.org;
+	dkim=pass header.d=samba.org header.i=@samba.org header.a=rsa-sha256 header.s=42 header.b=okGQ0kfZ;
+	arc=none smtp.remote-ip=144.76.82.148
+Received: from hr2.samba.org (hr2.samba.org [144.76.82.148])
+	(using TLSv1.3 with cipher TLS_CHACHA20_POLY1305_SHA256 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687FE606D83B;
-	Tue,  3 Nov 2026 13:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99D260850A8;
+	Tue,  3 Nov 2026 13:06:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A99D260850A8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=samba.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samba.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=e6nl0lWw
-Authentication-Results: smtp.kernel.org; arc=none smtp.remote-ip=100.80.115.77
-ARC-Seal: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256; cv=none;
-	t=1793711198;
-	b=zTFOo7/48oZW8XGkM1C4cI8Wx76qJGYtHDytOMOwdDkxw+qy7jisRGUl2u8whnYId1j0
-	 x4WawsNpan6ExOXcxBQ9VYulmCxzh3TOZM7HXuTlqwg2nW37t4VgjdrTEmxYLRVDShiKD
-	 KGkCBpY8wpFQrtY8FC7USQp+mMXdKTyLk8L7TsYtnElzRlv1f0W8zmkGAeXexbRQmFh6J
-	 TSZU83JkvEXcJ/+klNh1xo9uTKONsGoHNvwe+0g4d9RXHxQ+ER9Z7iWHKHf9qEX1LXz8x
-	 THJql2mUn0cnUFRwoBnB7YtRCWd/G1Zg5Gqq31Gms+RiiU6zgw0Hqo4gbNkG3SkCxaw==
-ARC-Message-Signature: i=1; d=kernel.org; s=arc20260519; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793711198;
-	h=DKIM-Signature:Received:From:Date:Subject:MIME-Version:Content-Type:
-	 Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
-	 X-Developer-Signature:X-Developer-Key:X-Endpoint-Received:
-	 X-Original-From:Reply-To:Content-Transfer-Encoding;
-	bh=T7dNxYtDoMA2dfCWOGYnCjA+jSBrv6GabrxLztBDz60=;
-	b=OpKsOhgJFBp+8Vjlz3a6BE7sdunJscAL90PnngmDcYIo2xl+9K7Y9VDG07SlTRZbdhca
-	 wInMx6KsIv4gAxNond/LzuCMWB8iZMP79Azb2Jwy+yeawP84UV3a2qS8VvIu4ioKHlI8r
-	 zbAy3zSWqNjiSTE6mvSD58b375WqMTKB2ASVpxsjq1cJ1a13mmVUBCKNONecg43D36AHQ
-	 yQtkFBLnq/LpWRIDUtQVL/Gwgq3TkFNBqonfFWiA0Uzyy9pehjou7Wh4qRRyAM2zkcgCu
-	 5hwE9O+m2UQPsGfjX5bsuTmJD+iSnuOcV7IspbeUGvbwzAbpW32dT45Y/jKzL6m3Cbw==
-ARC-Authentication-Results: i=1; smtp.kernel.org; 
-	arc=none smtp.remote-ip=100.80.115.77
-Received: from lkml.kernel.org (nexus.subspace.kernel.org [100.80.115.77])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by smtp.kernel.org (Postfix) with ESMTPS id 6EB561F0181A;
-	Tue,  3 Nov 2026 13:06:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793711198;
-	bh=T7dNxYtDoMA2dfCWOGYnCjA+jSBrv6GabrxLztBDz60=;
-	h=From:Date:Subject:To:Cc:Reply-To;
-	b=e6nl0lWw/o/fXvt6qYtXQN5Lz8qQMiINE8JOJGqYNEC+VWr/ygbtTlmaf8xNcnNR+
-	 MWxPaNd89kcm0/QYkyUS/u3qwN3TfOHXRmfoJijo6s8XaqIVkMfRyt9ErpfTfVdrYq
-	 DJOUfdXRSwUzuRmvVSiu1OK+EK09KmtuSYyplEcxCYje9myekTRTfWyRuf0GwYrxNo
-	 T1r8nPtaeLjGBeO/zz7usYt4eoDLmdkNKN4OGChKGWu9LWCFmLZHqSGcDnQSXAL8+2
-	 uGWAkLPF6FY3lOx4h/vKobJxC3dCawmFi8AtNLztzdCD7+oJlqjURyUU+PFmKjWSPs
-	 Uzko2m2P/Ticg==
-Received: from nexus.subspace.kernel.org (localhost [IPv6:::1])
-	by lkml.kernel.org (Postfix) with ESMTP id C0E4D46962;
-	Tue,  3 Nov 2026 13:06:25 +0000 (UTC)
-From: Daan De Meyer via B4 Relay <devnull+daan.amutable.com@kernel.org>
-Date: Tue, 03 Nov 2026 14:06:18 +0100
-Subject: [PATCH] btrfs: add io_uring interface for BTRFS_IOC_DEFRAG_RANGE
+	dkim=pass (3072-bit key, unprotected) header.d=samba.org header.i=@samba.org header.a=rsa-sha256 header.s=42 header.b=okGQ0kfZ
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+	s=42; h=From:Cc:To:Date:Message-ID;
+	bh=Sm8eBtV1xdp4zAa6YXthLgHufsLnCQQpa5HRuwqjWGo=; b=okGQ0kfZR6mrUlaKfdWRPwy7pB
+	ClSdB9O/OBJ+chZFgiv03XevWUUjIyBILk9BUbjgtnafp98eDUC+nZHUMPX1zXqI98nOMiK1EeOMS
+	7aev26NTuSPHTtDHMcno7Twne45XuisPSDFbi+7XtjE9zFug9ScfdXF9Y1HqN5CsrvCZg0TjvcD6t
+	8v3qhSoBwB/Bs+itW+B0bcubZJ//14nVFa7e9oVobwgqMwJHSaXcXpazZ6On0bV8bIXNymZxRY54b
+	O6d/MO7FSzpSzz1QdtiYsoTow/km3RpsgKNAJKuV7ng4sTIFZloFnUY+f2VYKh4i2N3iqnRabQC7M
+	fSYvocaZWFp7prHFRyVwDW0u2MnTZ95dePJ8jJM+9o8KEF01+rghnD4wjAO+gDPKTeSK3bxeVnKU0
+	oW29qF5NR3i9vjQQ/L8XynTzqALcJVJaDkz2igp2gXoB28LftmIz97iZlCYAPesr+eIkB0UpX6GMq
+	hIiLv0JdiOQfkcWn/PVT6sGo;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+	by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+	(Exim)
+	id 1xOEDa-00000007tbJ-1uxh;
+	Tue, 03 Nov 2026 13:06:26 +0000
+Message-ID: <03f82274-2749-4529-bf98-ede7cc79ad08@samba.org>
+Date: Tue, 3 Nov 2026 14:06:25 +0100
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -82,246 +59,100 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20261103-btrfs-uring-defrag-v1-1-50bf656a71cd@amutable.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQrCMBBFr1Jm7UBTmypeRVwk6SQdwSgzqQild
- zfR5fv89zZQEiaFS7eB0JuVn7mCOXQQFpcTIc+VYeiHyZj+iL5IVFyFc8KZoriEwziGkzXnyTo
- LVXwJRf78otfbn3X1dwqlldrDOyX04nJY2vRwWkhg37/J++NjjwAAAA==
-X-Change-ID: 20261103-btrfs-uring-defrag-244c751865a5
-To: David Sterba <dsterba@suse.com>, Chris Mason <mason@kernel.org>
-Cc: linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
- Daan De Meyer <daan@amutable.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1793711183; l=9013;
- i=daan@amutable.com; s=20260712; h=from:subject:message-id;
- bh=aeyr1gniHen92wxzU6GnzI504bi8iU5pRP9wYYntiMQ=;
- b=yUWn9HAoPS04U7CjCiZznhQO6x7z32uO3IkcDEHe8u/k2X0GC0XiZtQGjYgEWOp3xa9h2i14F
- pIL0BwTPdscAdIYTH8gUvDYIREo38Swtwq+IrFVyJF8C2cPgDAnY9mK
-X-Developer-Key: i=daan@amutable.com; a=ed25519;
- pk=I1l+WwrtmzRgofA5SQ1wTuJi18fjh91w+f5uRkFeZEA=
-X-Endpoint-Received: by B4 Relay for daan@amutable.com/20260712 with
- auth_id=868
-X-Original-From: Daan De Meyer <daan@amutable.com>
-Reply-To: daan@amutable.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] fs: add RWF_DIRECT for preadv2/pwritev2/io_uring to set
+ IOCB_DIRECT per io
+To: Christoph Hellwig <hch@lst.de>, Christian Brauner <brauner@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+ Jan Kara <jack@suse.cz>, io-uring@vger.kernel.org, linux-api@vger.kernel.org
+References: <20261012184642.558349-1-metze@samba.org>
+ <20261021-kontakt-hauen-albern-9053a385d79e@brauner>
+ <20261103080718.GA4109@lst.de>
+Content-Language: en-US
+From: Stefan Metzmacher <metze@samba.org>
+In-Reply-To: <20261103080718.GA4109@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-From: Daan De Meyer <daan@amutable.com>
+Am 03.11.26 um 09:07 schrieb Christoph Hellwig:
+> On Wed, Oct 21, 2026 at 01:04:06PM +0200, Christian Brauner wrote:
+>> On Mon, Oct 12, 2026 at 08:46:42PM +0200, Stefan Metzmacher wrote:
+>>> It's useful to control this per io request instead of using O_DIRECT
+>>> for the file descriptor.
+>>
+>> @Christoph thoughts on this?
+> 
+> Puh.  This goes right into a big discussion right now.  We've
+> traditionally said mixing buffered and direct I/O is madness, and
+> that's certainly not untrue.  On the other hand people find this
+> useful - nfsd is now making heavy use of it, and a few year ago
+> there was a paper on how the lustre backend really gained by doing
+> that.  So while some folks like Dave Chinner still get really angry
+> at the idea of mixing the modes, I feel the ship has sailed and we
+> need to make it work as good as possible.  For some cases like
+> mmap'ed I/O it will always introduce data corruption, but we'd at
+> least make sure there's nothing exploitable.  And the direct user
+> exposed flag would open lots of these exploit vectors.
+Userspace can already mix the modes on the same file today, by
+opening it twice, once with and once without O_DIRECT, or even on a
+single struct file with fcntl(F_SETFL, O_DIRECT). The patch requires
+FMODE_CAN_ODIRECT in kiocb_set_rw_flags(), the same check open() and
+fcntl() do for O_DIRECT, so it doesn't allow direct I/O on files
+that couldn't do it before.
 
-btrfs_uring_cmd() only handles the encoded read and write ioctls, so a
-program that drives its I/O through io_uring has to defragment a file
-with the ioctl from a separate thread. We're working on a
-systemd-journald change that needs this. On btrfs, every writeback of a
-journal file allocates a new extent, and journald defragments each
-finished part of the file from a helper thread with
-BTRFS_IOC_DEFRAG_RANGE.
+The use case is Samba: SMB3 clients request unbuffered I/O per
+request (SMB2_READFLAG_READ_UNBUFFERED and
+SMB2_WRITEFLAG_WRITE_UNBUFFERED). Samba wants to use a strategy
+similar to NFSD_IO_DIRECT in nfsd: for reads the range is aligned
+down and up to the STATX_DIOALIGN values and read with RWF_DIRECT,
+for writes the aligned middle is written with RWF_DIRECT and the
+unaligned head and tail (if any) with RWF_DONTCACHE (or plain
+buffered I/O if the file system doesn't support it). Without
+RWF_DIRECT Samba would have to keep a second O_DIRECT file
+descriptor for every open, which only hides the mixing from the
+kernel.
 
-Let's accept BTRFS_IOC_DEFRAG_RANGE as a uring command. The command
-calls btrfs_ioctl_defrag(), so it runs the same checks in the same order
-and returns the same errors as the ioctl. Before that, it calls the LSM
-ioctl hook like the ioctl syscall does, so that a policy that denies the
-ioctl also denies the command. security_uring_cmd() isn't enough for
-that. Smack checks read access in security_uring_cmd(), and it checks
-write access in the ioctl hook for this ioctl. A caller with
-CAP_SYS_ADMIN also skips inode_permission(), so nothing else checks the
-label. overlayfs calls security_file_ioctl() the same way.
+> There's also issues where file systems still check O_DIRECT for
+> behavior and not IOCB_DIRECT, and this would increase the problems
+> with that compared to the existing in-kernel only users.
+> NFS for example has quite a few O_DIRECT checks, and some of them
+> feel wrong for this.
 
-The arguments are passed inline in the command area of a 128-byte SQE,
-either on an IORING_SETUP_SQE128 ring or as IORING_OP_URING_CMD128 on an
-IORING_SETUP_SQE_MIXED ring. The 48-byte struct doesn't fit in the 16
-bytes of command data of a 64-byte SQE. The encoded commands pass a
-pointer in addr instead, but the command would then read the arguments in
-io-wq after io_uring_enter() has returned. That breaks the promise of
-IORING_FEAT_SUBMIT_STABLE. io_uring copies the SQE before it queues the
-command to io-wq, so inline arguments are stable on every path, including
-IOSQE_ASYNC. The other SQE fields and the rest of the command area must be
-zero, so that they can carry flags later.
+Right, that's the real difference: with two opens or F_SETFL the
+O_DIRECT in file->f_flags always matches IOCB_DIRECT, with RWF_DIRECT
+it doesn't, and FMODE_CAN_ODIRECT alone doesn't tell whether a file
+system copes with that. For some file systems FMODE_CAN_ODIRECT is
+still only derived from ->direct_IO = noop_direct_IO in
+do_dentry_open(), so it just means that O_DIRECT can be opened.
+cifs.ko is an example: with cache=loose cifs_file_write_iter()
+decides by O_DIRECT, so an RWF_DIRECT write would be written
+unbuffered by netfs, but without the cache invalidation and oplock
+reset cifs does for O_DIRECT.
 
-The command only handles regular files. The ioctl on a directory
-defragments the subvolume tree, which isn't an operation on the file.
-btrfs_dir_file_operations has no uring_cmd, so io_uring returns
--EOPNOTSUPP for a directory.
+So what about making it opt-in as a start, like RWF_DONTCACHE with
+FOP_DONTCACHE? A new FOP_DIRECT_PER_IO would be set by file systems
+that base their I/O decisions on IOCB_DIRECT, all others return
+-EOPNOTSUPP for RWF_DIRECT. Once all file systems that set
+FMODE_CAN_ODIRECT also set FOP_DIRECT_PER_IO, the flag could be
+removed again and RWF_DIRECT would just depend on FMODE_CAN_ODIRECT.
 
-btrfs_defrag_file() takes the inode lock, reads pages and throttles on
-dirty pages, and mnt_want_write_file() sleeps while the filesystem is
-frozen. Like the encoded write command, the command returns -EAGAIN when
-io_uring issues it with IO_URING_F_NONBLOCK. It does all of its work when
-io_uring issues it again from io-wq, and it keeps nothing in the PDU in
-between.
+I looked at the local file systems Samba typically exports in
+v7.4-rc1: xfs, ext4, btrfs and f2fs (and also ext2, exfat, gfs2,
+nilfs2, zonefs, ntfs and ceph) decide per I/O based on
+iocb->ki_flags & IOCB_DIRECT, falling back to buffered I/O per
+request where direct I/O isn't possible (e.g. ext4 for encrypted,
+verity or inline data files, nilfs2 for writes) or failing it with
+-EOPNOTSUPP (f2fs for atomic write files, ntfs for compressed or
+encrypted files). O_DIRECT in file->f_flags is only used for
+checks at open time (or the start of an f2fs atomic write), so they
+could set FOP_DIRECT_PER_IO right away.
 
-struct btrfs_ioctl_defrag_range_args has no padding, and pahole shows the
-same layout and a size of 48 bytes on i386 and on x86-64. The command
-therefore needs no compat variant.
+Others like cifs, nfs, 9p, overlayfs and the other backing file
+users, ntfs3, erofs, ocfs2 and fuse have O_DIRECT dependencies in
+their open or I/O paths, they just wouldn't set FOP_DIRECT_PER_IO
+for now. Fixing them is independent of RWF_DIRECT.
 
-We tested the command with a liburing program on a loop-mounted btrfs.
-It gave the same results and the same errors as the ioctl, on fragmented
-files, on invalid arguments, on read-only mounts and under Smack.
+Should I send a v2 that adds FOP_DIRECT_PER_IO and sets it for the
+file systems listed above?
 
-Signed-off-by: Daan De Meyer <daan@amutable.com>
----
-This lets a program that drives its I/O through io_uring defragment a btrfs
-file without a thread for the ioctl. A systemd-journald change we're working
-on defragments each finished part of a journal file and needs this.
-
-The command takes struct btrfs_ioctl_defrag_range_args inline in a 128-byte
-SQE, either on an IORING_SETUP_SQE128 ring or as IORING_OP_URING_CMD128 on an
-IORING_SETUP_SQE_MIXED ring. A pointer in addr would be read in io-wq after
-io_uring_enter() returns, which breaks IORING_FEAT_SUBMIT_STABLE. The
-unused SQE fields and the rest of the command area must be zero.
-
-The command calls the LSM ioctl hook and then btrfs_ioctl_defrag() from
-io-wq, so it runs the same checks in the same order and returns the same
-errors as the ioctl. A liburing test compared both paths on fragmented
-files, invalid arguments, read-only snapshots, read-only mounts, read-only
-filesystems, unprivileged callers and a Smack policy, and found no
-difference. The ioctl results match an unpatched kernel.
----
- fs/btrfs/ioctl.c | 88 ++++++++++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 69 insertions(+), 19 deletions(-)
-
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index f3e2afe221be..49429946804d 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -2442,7 +2442,8 @@ static noinline int btrfs_ioctl_snap_destroy(struct file *file,
- 	return ret;
- }
- 
--static int btrfs_ioctl_defrag(struct file *file, void __user *argp)
-+static int btrfs_ioctl_defrag(struct file *file, void __user *argp,
-+			      const struct btrfs_ioctl_defrag_range_args *args)
- {
- 	struct inode *inode = file_inode(file);
- 	struct btrfs_root *root = BTRFS_I(inode)->root;
-@@ -2487,30 +2488,32 @@ static int btrfs_ioctl_defrag(struct file *file, void __user *argp)
- 			goto out;
- 		}
- 
--		if (argp) {
-+		if (args) {
-+			range = *args;
-+		} else if (argp) {
- 			if (copy_from_user(&range, argp, sizeof(range))) {
- 				ret = -EFAULT;
- 				goto out;
- 			}
--			if (range.flags & ~BTRFS_DEFRAG_RANGE_FLAGS_SUPP) {
--				ret = -EOPNOTSUPP;
--				goto out;
--			}
--			if ((range.flags & BTRFS_DEFRAG_RANGE_COMPRESS) &&
--			    (range.flags & BTRFS_DEFRAG_RANGE_NOCOMPRESS)) {
--				ret = -EINVAL;
--				goto out;
--			}
--			/* Compression or no-compression require to start the IO. */
--			if ((range.flags & BTRFS_DEFRAG_RANGE_COMPRESS) ||
--			    (range.flags & BTRFS_DEFRAG_RANGE_NOCOMPRESS)) {
--				range.flags |= BTRFS_DEFRAG_RANGE_START_IO;
--				range.extent_thresh = (u32)-1;
--			}
- 		} else {
- 			/* the rest are all set to zero by kzalloc */
- 			range.len = (u64)-1;
- 		}
-+		if (range.flags & ~BTRFS_DEFRAG_RANGE_FLAGS_SUPP) {
-+			ret = -EOPNOTSUPP;
-+			goto out;
-+		}
-+		if ((range.flags & BTRFS_DEFRAG_RANGE_COMPRESS) &&
-+		    (range.flags & BTRFS_DEFRAG_RANGE_NOCOMPRESS)) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+		/* Compression or no-compression require to start the IO. */
-+		if ((range.flags & BTRFS_DEFRAG_RANGE_COMPRESS) ||
-+		    (range.flags & BTRFS_DEFRAG_RANGE_NOCOMPRESS)) {
-+			range.flags |= BTRFS_DEFRAG_RANGE_START_IO;
-+			range.extent_thresh = (u32)-1;
-+		}
- 		ret = btrfs_defrag_file(BTRFS_I(file_inode(file)), &file->f_ra,
- 					&range, BTRFS_OLDEST_GENERATION, 0);
- 		if (ret > 0)
-@@ -4999,6 +5002,50 @@ static int btrfs_uring_encoded_write(struct io_uring_cmd *cmd, unsigned int issu
- 	return ret;
- }
- 
-+static int btrfs_uring_defrag(struct io_uring_cmd *cmd, unsigned int issue_flags)
-+{
-+	const size_t cmd_size = 2 * sizeof(struct io_uring_sqe) -
-+				offsetof(struct io_uring_sqe, cmd);
-+	const struct io_uring_sqe *sqe = cmd->sqe;
-+	const struct btrfs_ioctl_defrag_range_args *args;
-+	int ret;
-+
-+	/*
-+	 * btrfs_ioctl_defrag() sleeps on the inode lock and on page reads, and
-+	 * mnt_want_write_file() sleeps while the filesystem is frozen. We return
-+	 * -EAGAIN so that io_uring issues the command again from io-wq.
-+	 */
-+	if (issue_flags & IO_URING_F_NONBLOCK)
-+		return -EAGAIN;
-+
-+	/*
-+	 * The arguments don't fit in the command area of a 64-byte SQE, so they
-+	 * are passed inline in a 128-byte SQE. We don't take a pointer to the
-+	 * arguments. io-wq would read them after io_uring_enter() has returned,
-+	 * and the application may have reused the memory by then. io_uring
-+	 * copies the SQE itself before it queues the command to io-wq.
-+	 */
-+	if (!(issue_flags & IO_URING_F_SQE128))
-+		return -EINVAL;
-+	if (sqe->addr || sqe->len || sqe->uring_cmd_flags || sqe->buf_index ||
-+	    sqe->file_index)
-+		return -EINVAL;
-+	args = io_uring_sqe128_cmd(sqe, struct btrfs_ioctl_defrag_range_args);
-+	if (memchr_inv(sqe->cmd + sizeof(*args), 0, cmd_size - sizeof(*args)))
-+		return -EINVAL;
-+
-+	/*
-+	 * The ioctl syscall calls the LSM ioctl hook before btrfs_ioctl(). We
-+	 * call it too, so that a policy that denies the ioctl also denies the
-+	 * command.
-+	 */
-+	ret = security_file_ioctl(cmd->file, BTRFS_IOC_DEFRAG_RANGE, 0);
-+	if (ret)
-+		return ret;
-+
-+	return btrfs_ioctl_defrag(cmd->file, NULL, args);
-+}
-+
- int btrfs_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
- {
- 	if (btrfs_is_shutdown(inode_to_fs_info(file_inode(cmd->file))))
-@@ -5016,6 +5063,9 @@ int btrfs_uring_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
- 	case BTRFS_IOC_ENCODED_WRITE_32:
- #endif
- 		return btrfs_uring_encoded_write(cmd, issue_flags);
-+
-+	case BTRFS_IOC_DEFRAG_RANGE:
-+		return btrfs_uring_defrag(cmd, issue_flags);
- 	}
- 
- 	return -EINVAL;
-@@ -5558,9 +5608,9 @@ long btrfs_ioctl(struct file *file, unsigned int
- 	case BTRFS_IOC_DEFAULT_SUBVOL:
- 		return btrfs_ioctl_default_subvol(file, argp);
- 	case BTRFS_IOC_DEFRAG:
--		return btrfs_ioctl_defrag(file, NULL);
-+		return btrfs_ioctl_defrag(file, NULL, NULL);
- 	case BTRFS_IOC_DEFRAG_RANGE:
--		return btrfs_ioctl_defrag(file, argp);
-+		return btrfs_ioctl_defrag(file, argp, NULL);
- 	case BTRFS_IOC_RESIZE:
- 		return btrfs_ioctl_resize(file, argp);
- 	case BTRFS_IOC_ADD_DEV:
-
----
-base-commit: c339f4010dea8b0d754f84ace70cd1b089878ef8
-change-id: 20261103-btrfs-uring-defrag-244c751865a5
-
-Best regards,
---  
-Daan De Meyer <daan@amutable.com>
-
-
+metze
