@@ -1,85 +1,85 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.7
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=74.125.229.2
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793745818;
-	b=GdJnTBL9UjmY0jM02JNAJw2iG50qY/HKpbEHBr8RpOwpDF4CLc6wFGxXFY5ASg3eltGF
-	 9mcN87v+2NWIVTIo0xVyXfcxExleV9D2Jc+UXB17E1f3fBiHp2/OfEKPPBF/qpsgKRAxT
-	 ZN69FMa/HdI+1xgJHxp84HXZhm0Ih72wCWgYYwdOKl/K8e6qWvMt9nn1XCe4vxXe2Uwuj
-	 wYjoJMhlGXY+r+UiNTPqEaOh/47HEipMtYz/1dc7v79PbLXcbEpIasvJkNitiDYJhywsl
-	 mQyedP+/LEN2fxctR0ofy9TgppAsApJpsb9pQhAXfCGDx9HpCnhGEBZFJaZ6zYO3Xmw==
+	t=1793745820;
+	b=fc5qaMHMaIjDF7kDrz2JdEojxojH4QuhBCwjR+AKz0ebhVJuKuqIGjPsZbjCw+tbhHGd
+	 n+rhCznKXKUhGTaBrtOIxSxXBXBNGAkDxJpT1KW9tPzWM7rXf5ffc3ss2edAM2jQg69Nv
+	 gF3i/yhLjryib9r02Su2WpAHCbX5/+MiR9n5RU7Nm/tj8F9ECB8W4nIl26Z6fBHRbSn/E
+	 eEy1byFkMdGZpxbn4svWj//vLeIlNBYEFGN8jXwETL5v7M2mDsQHwEDUC13ZKMNtwP5ZW
+	 FPEFhGp/ErEHvqFMb3LJr/t1pPlDQbWSDSbjfQUkTFSEDKhVplIodGc6mkaScBNTBhA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793745818;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793745820;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
 	 Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
 	 Content-Type:Content-Disposition:In-Reply-To;
-	bh=TEsmJhHG6UzOUAsN1CLfuPQCNGFTSJjKfJhnGZfHeUo=;
-	b=IqI/3ZNVMYv4En4Ln0sbwLT4o4gcUpMMZfJCUBUQBygFeTU/QFp2qqXE+42KnfHF/wgp
-	 s528O6/amNhS+1Jkhet6SGQyJSPJJJRFKAUEZSLTRdDewXp4zVCPV1hz1KpKB4ZNFHC4Z
-	 Bn2SpR7bJHCDm+f/OF4HYUFmatS17gke9mDDybY0YbZ425UWLMScMOTSRLRu1BM4pylnh
-	 60QIY8hEBMTr58VpbV6Sx062v9PVYy3b5aLHn4f/M/QA0TXoPoDiPku7pMIGxSKpocubb
-	 VZ6QRnh0JkkmrMnnOzPYjKYNMuaruFsg0qfCcDbMsLOMz/nETUqNYqg6USi5UtBjoQQ==
+	bh=IhCBPBTLwLGQ2yRs8VzMKJOKNOT0+JfZ5wDmbhkJDiQ=;
+	b=0hyY5+cdr4H77ob4IqxD902IrPAMzwhqWMLyTsN+obbZ2Z9VtYNZpETij7SNFA+HX745
+	 4+QezRiOaDoiQ4m2EEyoQJTZHbCakeMfOQ8q2cHTbwMSll/mgYxgznHv0s3vtQ5txbIJ4
+	 WECqydyR28Ciormcpjr1Ftk8kXRog2zBKTLWOHNT4tyORtk4Nqwz7MZVa++c9rRrFFs2K
+	 HZc7vwvIdzz0Gr4p8jynelGLPBJBuyR8Jbr7PFZeKhOfqMeG1IyoduxXRKq9Xu/BMQvi1
+	 ef47BNSjZEJIuS5jEhJwuaSVolwBdTZeyDZ/nEGIFjbrdppOmQyVRzK9h4Eihl6rGzw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=gmail.com;
 	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="nSm1Ta/L";
-	arc=none smtp.remote-ip=74.125.229.7
-Received: from mail-dy2-f7.google.com (mail-dy2-f7.google.com [74.125.229.7])
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=elZzqx0I;
+	arc=none smtp.remote-ip=74.125.229.2
+Received: from mail-dy2-f2.google.com (mail-dy2-f2.google.com [74.125.229.2])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587BA606A328
-	for <io-uring@vger.kernel.org>; Tue,  3 Nov 2026 22:43:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 587BA606A328
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59369606A33C
+	for <io-uring@vger.kernel.org>; Tue,  3 Nov 2026 22:43:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 59369606A33C
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=nSm1Ta/L
-Received: by mail-dy2-f7.google.com with SMTP id 5a478bee46e88-369f126a526so40646eec.0
-        for <io-uring@vger.kernel.org>; Tue, 03 Nov 2026 14:43:38 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=elZzqx0I
+Received: by mail-dy2-f2.google.com with SMTP id 5a478bee46e88-327b1d5824fso32664eec.1
+        for <io-uring@vger.kernel.org>; Tue, 03 Nov 2026 14:43:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793745817; x=1794350617; darn=vger.kernel.org;
+        d=gmail.com; s=20260707; t=1793745818; x=1794350618; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=TEsmJhHG6UzOUAsN1CLfuPQCNGFTSJjKfJhnGZfHeUo=;
-        b=nSm1Ta/LRGVYs7LSmDicg4qmLY+G3QKwOL6aUalRgmoK+cIOBxQOc6eQQ72XYNymGk
-         1WjM6CiaaNZpDFPIYFWywDYD28bYZqKUI1qOJ9/6cCvuKVnmzVEIZtYlWX4uQeL4rDrQ
-         In/H52J/vIpQLculr4W56KeYPDFPpiXr6NGH8+4lDLej8vMr0dCSTMnR7J8/gsJvj5wy
-         fduWdiVgaax7kmUfpEagXnqcGhgF9AnPobHCc9NBLlWIWb5xxZ2OqVEMkisW5E3iVAmj
-         sXonf6pxJ8mRtSHNJK+vrB0K0nak3/2yF3P+RlcjY2hdbBw59GdWH/6OmT+LHjGpWCo7
-         S7iA==
+        bh=IhCBPBTLwLGQ2yRs8VzMKJOKNOT0+JfZ5wDmbhkJDiQ=;
+        b=elZzqx0I9zUMK6X1CLUpsfa4tiVNA4Al3XQoNBswiAzn7PdnkFah/8QEJ78wE+73+6
+         vcn4lTEjiGv5nQ2lU4XVFQC1Z+iAOcAtw2XjQuVRwOfN6os4LS3pSxrEHJdD49oka5qo
+         /rzXXfKf5TyRoI9+yPg0GBcAMdBWGgPmqqBv/ym0Y/GjO99OCCJyxaisq6Jv+KcRwJNS
+         kKZs5VE2vs73M8KiLA5B5S3AwP/uag67O7cQCXiUriJlXPwQT/A7NJivpSoGaBtFLmf6
+         A1+/1gsnouh4JM/sLtAVWxBkzq0L9Kvfs7iIefUdIAejv+SYym/2GiHcN69H/0/3aXER
+         SpjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793745817; x=1794350617;
+        d=1e100.net; s=20260707; t=1793745818; x=1794350618;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TEsmJhHG6UzOUAsN1CLfuPQCNGFTSJjKfJhnGZfHeUo=;
-        b=2ThIeYzDTJzdonr7ZL9HGaIIi0CjXQ8DeMjcyJZ2l9CvIHxQxlw7vODv06EkE2qK+q
-         b+g5I3YrSJqnAsV2B522bNa2InjVeMUXHwpkIFZnm5BP9aiLXgIqPvQS6whnLhvS8O0m
-         Qx1RTuSxO02DZmcWhxdiKyd/bx6NHwmGUiDMkwoQr2KmXOARBepYaa8Vkg+HEPR/PnWu
-         ljlCA9f+cWluH8lmZUf04peASf1v2uVlVvY0k1D6B8Gdt0+dPLgPccPFItaH/dab1HCh
-         Jnfkmz2MKRSthv7RMk4xDC/F4dvNAAzwoPKZY553uXQSSkzfWkRMW5YbbaD2ScMGs6j1
-         bpVw==
-X-Forwarded-Encrypted: i=1; AKwUvBx4C99FuTL1YmxBqN9gTjJOi589VJDiuTezCl0C8xmLeBkwriML/4fbRG1oSj7S+YzshcdqLIRFXg==@vger.kernel.org
-X-Gm-Message-State: APuU4Z+Uqs9OBQwxHr1xpviMq5dYPCc7Fv+RQHyUSVwa8r3LS6LUrTSF
-	S1nPgRgdERf28NTrK3kBP3ktlZBqjmqvR+SV/K3Flms9BoDqMJOI8UY9
-X-Gm-Gg: AYBFou0ZplKd5pVfpxJDemkvc0mslcQ1hLjIPxmNVayuKbeM6y9/wwiSDcpUtYC/Bj4
-	u/qaXoccy6yKxkQRhnbXnlmYez3EV+1fN27K8ynXSjiNjOyK2tMaNliEIyfLIvLFuAkkF9Ww1zg
-	VGRWp+RzbvcRv/DZfC1cR1ElfnePPf6sV/sGDNbgLuduPuCQ/jUG6qbxfr6NYJeNwJsIzeb764o
-	e2EMrLbvuEbsvGwjYIJ+v7hGnj1Fnz3frq+fwgFKTwIyjCIR0vxh086Wk+9DzjeDjNx8oZxsfWt
-	V1z+VVhhjfeRX0CSjoRUQ2H0aFpCvoMsOAK/XIINBySzRBbRkTdd1C0ePmh+v8Jiyew2MLSkbFI
-	C7J+L1vl7TBPkMivEhTq+1gR6j1ZkpfmlvcvDyjIT73aAGfsK7uPJlUDvxdpUqdZ4lKVRzg27yZ
-	GSUlw8KcqCMuJeSOFO7FAHbypWKs0ZWI+zF8VOV9e6auU6X/hGhib2uMmxWubG7IpK+eZTaUgF8
-	D4HjwCCNpFEoNVw4HcldqmIu3MxTAZ/PNhZzt+6iPOzkI6Zi88RKEVAS0S0HcI62kl0pMNObQRD
-	a8t4dYyQn7iMi+YBzYsYjg==
-X-Received: by 2002:a05:693c:87c2:20b0:36a:6ae5:23e2 with SMTP id 5a478bee46e88-36a6ae52e67mr10824936eec.17.1793745816953;
-        Tue, 03 Nov 2026 14:43:36 -0800 (PST)
-Received: from localhost ([2a03:2880:9ff:64::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca39b8eb3sm1372736eec.27.2026.11.03.14.43.36
+        bh=IhCBPBTLwLGQ2yRs8VzMKJOKNOT0+JfZ5wDmbhkJDiQ=;
+        b=hA3zL1tG2tlPwcwD7eYREXYbzV2JKG5FjuWDE2YzTq0ejrTATW9AYDgDPQbmdOog+J
+         lbzFqplNnzqCRWJhp3kcQ9GfN88oZphb4R6A9spAPa5CuVkBnjGiQefGnl4AAaJPenkD
+         L2pnnhm/mwuP2VZNkNqODLVS3FJCxXrp7Ugn3evaqOYHVJtpoI/pZ9gggyMvUR9m70sI
+         DXgiUbVw9zTtWkxshXgeY/pWAa2cUH4ASoLtqERi5gA2sU+K9j1MyYhRGmCtxwtmco6W
+         0MdqpmEJ7M1yTS3jws7SMmjNWWrE3s8/miDPgTpi5lF2MlD2/yEzSgA82ksW8n9md4/e
+         dRMw==
+X-Forwarded-Encrypted: i=1; AKwUvBxzpVLUwhI37woT7fEho33sfkBmd2HIkbTfzOC1D5r7RAsLodtj6qcDEmZItgjwZEkkoaSLq/8D+g==@vger.kernel.org
+X-Gm-Message-State: APuU4Z/7rBZprNzvtY+umBvQV/lO/CG06nSMIUrFIc/kWUY/CJeyND56
+	lV7IwaKj8bMTfMGZm2u3d4sBRyfuyg1eR4FXLuMoSeC1fN15vE+J5u8D
+X-Gm-Gg: AYBFou3T0QCDlX5uov81mvrIWnAKScoC6FfleK5E/Ajg4l5POBau7k5eq7Ury91XU8t
+	vJUs0n8c/ShclsJSQdTbsSZnPPszIgPl8HflzWtjM/YuYG0sQDwigG2o8E4wwI0Z2BaAJDtywXC
+	OMCKJVJZPsoYbNucXwQD4wEY61BhtmS98+A5mSmQ7guXv+4tdLzVg4Fv92BiGsdaRN+DVj+acTM
+	Wz+5z+bfshedIccWHh3by8VGukg6uIEwSHyRhT9LR1KF+Q96aoXs7J+Jqms29ZF3Z3hMs4Kx34h
+	ryerTi9zAGmwjSm7RoTX9cPBeW8Ie41EybgFRy3M72s2Z50DOk62wUBkUvGyfTtOakuC3GvlmmB
+	7V5EYGUbflZQ8TrtxVZehOyqfiztfApJJ98g38sqaoa7YoVFyugdo2JEynEupPd4XV/vDOn71s0
+	QNgHnD6zqw91nOJHt0+OVvzgcU5OQgB73vw7MhFh0yFK6shppyEZL+iZiF26QcHBqwZ2IiszjF2
+	MR31aMVefyIcRhPPIi5YIdlbfVpaDQmlNo0LBGpZDoR3zbQtzr6X8QUaS1SjsJsVOuoYYq8OddM
+	YoaZ0pvUWxYaN2JJSRunxQ==
+X-Received: by 2002:a05:693c:8204:b0:369:f3e3:4277 with SMTP id 5a478bee46e88-36a424596e2mr23371850eec.38.1793745818528;
+        Tue, 03 Nov 2026 14:43:38 -0800 (PST)
+Received: from localhost ([2a03:2880:9ff:69::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-36ca38a6d3dsm1323591eec.7.2026.11.03.14.43.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2026 14:43:36 -0800 (PST)
-Date: Tue, 3 Nov 2026 14:42:13 -0800
+        Tue, 03 Nov 2026 14:43:37 -0800 (PST)
+Date: Tue, 3 Nov 2026 14:42:22 -0800
 From: Stanislav Fomichev <sdf.kernel@gmail.com>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
@@ -91,11 +91,11 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Bobby Eshleman <bobbyeshleman@meta.com>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
 	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>
-Subject: Re: [PATCH net-next v2 2/4] netmem: store memory provider private
- pointer directly in struct net_iov
-Message-ID: <aupiPcDWNkZAucKe@devvm16445.scu0.facebook.com>
+Subject: Re: [PATCH net-next v2 1/4] net: fix skb->unreadable propagation in
+ skb_split() and skb_shift()
+Message-ID: <aupjSE3HVsbuEzsh@devvm16445.scu0.facebook.com>
 References: <20261102231827.4088254-1-almasrymina@google.com>
- <20261102231827.4088254-3-almasrymina@google.com>
+ <20261102231827.4088254-2-almasrymina@google.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -107,19 +107,31 @@ Precedence: list
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261102231827.4088254-3-almasrymina@google.com>
+In-Reply-To: <20261102231827.4088254-2-almasrymina@google.com>
 
 On 11/02, Mina Almasry wrote:
+> skb_split() and skb_shift() do not accurately maintain skb->unreadable
+> when moving fragments between skbs:
+> 
+> - skb_split_inside_header() moves all fragments out of skb into skb1
+>   (leaving skb with nr_frags == 0 and only host-readable linear memory),
+>   but leaves skb->unreadable set on skb.
+> - skb_split_no_header() unconditionally copies skb->unreadable to skb1
+>   even if 0 fragments were moved to skb1 (k == 0), and leaves
+>   skb->unreadable set on skb when splitting at skb_headlen(skb) moves
+>   all fragments into skb1 (!skb_shinfo(skb)->nr_frags).
+> - skb_shift() neither propagates skb->unreadable to target skb when
+>   shifting unreadable fragments into an empty skb, nor clears
+>   skb->unreadable after all fragments are shifted out of skb.
+> 
+> Fix all three cases so skb->unreadable accurately tracks whether the
+> remaining fragments in each skb are unreadable.
+> 
+> This issue is theoretical and was found by manual code inspection and
+> LLM review; it was not triggered in production. Verified with the
+> net_core KUnit test suite; not tested on real hardware.
+> 
+> Fixes: 65249feb6b3d ("net: add support for skbs with unreadable frags")
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
 
-[..]
-
-> Resolving the memory provider instance from a struct net_iov currently
-> chases niov->owner (struct net_iov_area) and then dereferences the
-> provider-specific container struct (such as net_devmem_dmabuf_binding
-> or io_zcrx_area->ifq).
-
-Chasing niov->owner is true, but I don't see another dereference you're
-talking about? net_devmem_iov_binding does container_of to get from
-area to the binding (and the area is the first member of the binding,
-so it is a already a nop). And IIRC, iou has a similar arrangement.
-So I'd vote to keep things as is unless you explain what I'm missing.
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
