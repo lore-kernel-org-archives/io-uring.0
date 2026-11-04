@@ -1,56 +1,97 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.42
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793803586;
-	b=ZecSLmMNnxRkTn8bQIFj835YN13agpGL/WqFKWhACBSyVGsOmWNG/4PR/0kQ8r/MOIUb
-	 qJ3r0CtOJyNTsLqWPpUPq8JkZQjzFyk/AV6nJjci9AxvVWt5dWWspBwNKQfcQMYWwKKFw
-	 zL4TGAsc425ebtpDp5+RRrCzacIvPm/OacQpxuWVE7KBT+376vPi9hnc6JYNVX6EUZhRh
-	 dxIGL6+7NRljpT8P8+PfchqRDQ6jwM++iupVykHbrwOvpIZ8X3R9akdLu/31tMGIYh7uo
-	 Hxb3bMrVd9E/2U8UreZrOPwNWME1Ub4nlK8QrxonJXDLgWNy0l7Odu5piai0vSNuKng==
+	t=1793804854;
+	b=GnXWzqpcz3ovRvhwvn39AWVStfWMIpU8JIEuz6XbIzNUsTqLVd8U/xzwX6pBBCiXXLyy
+	 wbE/66nlSSpbK22Kl0+OJO/qqgTDue549tZd6hhv4MNcB0ZWAKSwktKiDnpMrQ8slJ8YJ
+	 rE/EaVtJuX8D7CTiML0R2sPAykR5rKS57fkEuUAlGMtNPRC7t80i+wB1WwcFRJNmz1Fab
+	 dST1ExzTF2ld5MsFeaIQaXcEvlOjI5sX0daidGhtPPycM0/yvfaXrb6ZJbMycRJeUYIPj
+	 m9fReYHvd3zrisM87qNyPqAPGL0Mq2s4wjQHT3RIG7fyfN7jQ5342FxhNhRjZJt8kVg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793803586;
-	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:X-Mailer:
-	 MIME-Version:Content-Transfer-Encoding;
-	bh=ZmB0cOk9CeDJ4AVUd+j92L9AZOJTIyuo4so8WOnVl9E=;
-	b=1dM+gHR9wDeZukbo9kM9tNItfIgIW3svMPV+YqIYDrhP3gfuyFQp4qylg3JJfwpBOHCt
-	 z9QrlhAMe84B1HmKdh4RGH3+9uuR2Yw8G5knn7JoKyOTDz8AhcU5m3CWBZT5tNWU6O14o
-	 2h6yS3UhBrfDBArg75+JGBH4+o9R1lZ2t9G5QzeBtSKZMMC5VbVeHmHXyuYV00KOxOoRi
-	 qDBYf+K0PCYCmMwEkp6DwIDH1SOLuUpuk2YT5UJZTK+w0fZnxwQgrbwEx0UR/H3O839PM
-	 5AvDdNiQ0vpIqCEtwF70WoMeorV2KD2Ip1v+vLYsklVKskBxxkWCMP81bvdCKLZZgqg==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793804854;
+	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding:X-Mailer;
+	bh=52M0Mx3QqLQFvHEpAisibJWPHYozvMJfANyGg7k/AzQ=;
+	b=AAzRDCLCcUzKcS+fvC3GENzR1Oo0alCpbsCVUyhGPC6BaCDQ5WMrhMrw3DxrdhIXtEKK
+	 y0tDXQxa5dbl8/KCXzqboYY/QSvEoW0qocMvkUv+QKJpVyL57Wg4WDJq7BefzuLWbqps9
+	 j+skCPdw1K5udU+U6P+M/8yH8v8O1Aa0YckgZHBEIBRfHBEd34lorFImbGI9PPUvWIxh7
+	 1zn9WFGx0NDVCeORySqapdLiZpokVyLrq/J7fh5CzYWwWETp6j+j73zz7iWeN4qXSsg/1
+	 wKwnbzya/zjBSNvaj7JG2WrVaNTDMLK51m/3kN9bzJ7pquEOkBRDb9t7QT0Wv4lrNsg==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nFjjaOIF;
-	arc=none smtp.remote-ip=100.103.45.18
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1))
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KOx9SHdU;
+	arc=none smtp.remote-ip=209.85.161.42
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BB8606A32E;
-	Wed,  4 Nov 2026 14:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7A6606D818
+	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 15:07:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8C7A6606D818
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20260515 header.b=nFjjaOIF
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A7901F000C1;
-	Wed,  4 Nov 2026 14:46:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1793803585;
-	bh=ZmB0cOk9CeDJ4AVUd+j92L9AZOJTIyuo4so8WOnVl9E=;
-	h=From:To:Cc:Subject:Date;
-	b=nFjjaOIFMBRsegOkw3+2nao5ayTBeNTVAr5+T460q1LEQa8fCE3nu+f/nkZv7jMwO
-	 6gODodh3kL9NphnW5LcXXCa6U5arTCYp2VzDWFOl31kZoSxHlFQ185ZvY2Xvoszf2/
-	 yF+ULoSHW+8H88impaRvlV8B/k0Nvs90zsg4TlgLj1z+cz33oIdn1N5qNBN2h0ZuHh
-	 Z2Hk3uhj9JhbzVYP3/lY9NxqdRjofRKSS7o5UUc07quDN2eW4gimxnQIWfTBpkuiMC
-	 zzhiAHX26uzL+CaSpvvUabCkhWNkNHr2irYj06YQUFVdOcm1VrgAO+611HHgotPhMJ
-	 vQrPpA31pe70w==
-From: Sasha Levin <sashal@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Pavel Begunkov <asml.silence@gmail.com>,
-	Breno Leitao <leitao@debian.org>,
-	io-uring@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/io_uring: cast optval through uintptr_t in mini_liburing.h
-Date: Wed,  4 Nov 2026 09:46:23 -0500
-Message-ID: <20261104144623.3803717-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=KOx9SHdU
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6de2f213b7aso364850eaf.0
+        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 07:07:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793804852; x=1794409652; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=52M0Mx3QqLQFvHEpAisibJWPHYozvMJfANyGg7k/AzQ=;
+        b=KOx9SHdUEll96Op2QsIzCBrIWWCmZ2+ruKEdyzkwfLr2LjnDrSJIV4Ay9x00LI/xDj
+         eAB4pYrp3HN1ACvtIv8hAR7KIr3wdGmByYgXxUn0nrT2Zz5Hv9gxFWGrNl4ryqg9U/Dh
+         5cQC77vJkN3xKzbs9h2/y2/o9Tnddr3FsL86inDGwNQSzTPfE76upOHgw7mzAc2GXfGS
+         GWQyCmRGzR7/y0LupP7NQalHleWahuN6h/3rtQZeDG6dLNO2mPcziU2U0xTUb4NjL+80
+         yVEtPauJFpSjvnaRpCLFcWS1f3bwVu64DfY5zzrTSTAqKvNzcLFIL7hJF1lJWwv5Lauo
+         hFbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1793804852; x=1794409652;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=52M0Mx3QqLQFvHEpAisibJWPHYozvMJfANyGg7k/AzQ=;
+        b=FNZ5IX5viBJFTHsWztOaGsYfhAHTBbUs+DMq/ewKPzTTh1D/kfnsdcf/abZVRhyrMz
+         OU1glBnL1AAlxycoABSlDdZveTdJNiac9r1a9abi9I00k1uUv2rOdzYvJDcpOZUKF3xL
+         3x2jKG0MyaAU9KSVZ6KHaiDiN5+6b2dP49zQWN/zVg/xoPNej+0PyNCsbchSyDjd6Gup
+         3op8GBbMQMVKIE7VrmfkKuETlc3K9hL0FSG8FUHaK0jxqfa2apjVIOHc1vkOzQIwwMn9
+         hyUyOXSV12EdLTjA8OcZKXfx++5srCt/7SOvu6sSsXVed9kbs9d7xTwXheG8vO2YHRnp
+         9qJQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx6YFgA2t4n+yYSGrpL8B0UJ9FPcNPxntJ0kHwuKUa2Bv332sO4GoWWQP7mrlxz4B2mluG+Z8up/Q==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8Rdk9bGgWgJAFgbZuMBuGeoTq64Wo6/zxrdFtkkBJ163YLd7dG
+	lhyOK/FszB2Sd3RCMQPGrFXdJm4BqKJJJYS7950zFpCPNLsGl2erAmVf6iE06CFOywk=
+X-Gm-Gg: AYBFou1bCVj30i3UFzJsJVGegdXLjhZvWXXHmVFDR04Pjeq/vtut83p8KBPDcKS302z
+	BUvaA4qAk/YrRl3GtLmYkbxNmhYjepWol1VbUPdZ5alUspiE/GZ7Xhp4eRFt3eubhhK8RaW5STG
+	ya63tsP+GOdafye0mJGpuEJaC46mEpUtozdrNAs8RlckeuQ35Sr369MUWA7Q8V3Cv2mmMSr2xZU
+	uecG726rf9cPkUwSwCdWXKKx1WClXBdO51MQN5Dcg08fjlozlP19eQP5sEZxuJXk1M5F7ugwEAF
+	HNJUAU+SqhWKegYPd1/wCzhSKenXxSuVTUFX6wVSjxgzQXpTYFLe4wzOft2MIordQgQPy1tLvMJ
+	Ui/QdLdMUY+5oRHsrCHHk6IQBzGlu9u3JzL36W7g3ugvX7Ct1GKpzJQ4DNVF7BLI6MXNEsXzc7O
+	xmeDF4u2cO0v9TVsIsVFcPOLmIQcnha/hQtUftACACnrkOkl+pIAV6yWZ7oeRGm0MhiopetJYUZ
+	gDyhfUBFNyjfGxkUhuXa9GL2hHBJqNdaegxqvuWLIMf+UDf3vAzzQWAOM1OglPnEOC9GrBJNRGH
+	BrRPpCvGuLxZ9sZkcsmzWEq/k8MYXxZihgJVeqQXTNRJFdbYE/m8GlIn9fTUayQM72ZGYWiLX0H
+	JLwhNKpdWGw==
+X-Received: by 2002:a05:6820:a284:20b0:6f6:61c5:d929 with SMTP id 006d021491bc7-714f29beb3emr6788172eaf.38.1793804852411;
+        Wed, 04 Nov 2026 07:07:32 -0800 (PST)
+Received: from [192.168.2.38] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-716c0cdb22dsm1886033eaf.0.2026.11.04.07.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Nov 2026 07:07:31 -0800 (PST)
+From: Jens Axboe <axboe@kernel.dk>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Pavel Begunkov <asml.silence@gmail.com>, 
+ Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org, 
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20261104144623.3803717-1-sashal@kernel.org>
+References: <20261104144623.3803717-1-sashal@kernel.org>
+Subject: Re: [PATCH v2] selftests/io_uring: cast optval through uintptr_t
+ in mini_liburing.h
+Message-Id: <179380485099.4021488.15926225621505501263.b4-ty@b4>
+Date: Wed, 04 Nov 2026 08:07:30 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -60,50 +101,29 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-io_uring_prep_cmd() puts the optval pointer into the 64-bit optval field
-of the SQE with a plain cast, which warns on 32-bit architectures:
 
-  mini_liburing.h:272:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+On Wed, 04 Nov 2026 09:46:23 -0500, Sasha Levin wrote:
+> io_uring_prep_cmd() puts the optval pointer into the 64-bit optval field
+> of the SQE with a plain cast, which warns on 32-bit architectures:
+> 
+>   mini_liburing.h:272:23: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+> 
+> Cast through uintptr_t, and include <stdint.h> for it.
+> 
+> [...]
 
-Cast through uintptr_t, and include <stdint.h> for it.
+Applied, thanks!
 
-Reviewed-by: Breno Leitao <leitao@debian.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-v2: include <stdint.h> for uintptr_t (Breno).
-v1: https://lore.kernel.org/r/20261103163926.641431-1-sashal@kernel.org
+[1/1] selftests/io_uring: cast optval through uintptr_t in mini_liburing.h
+      commit: 699e7ba5915c8b2c76e257e157464f2bfe7ab8bb
 
-Found with 32-bit builds of the selftests (gcc 16 and clang 21 with
--m32, with and without -D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64);
-KernelCI's 32-bit arm builds show the same warnings. The changed files
-build without them now, and the x86_64 builds don't change.
-
- tools/include/io_uring/mini_liburing.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/include/io_uring/mini_liburing.h b/tools/include/io_uring/mini_liburing.h
-index 44be4446feda5..6afe7efb44978 100644
---- a/tools/include/io_uring/mini_liburing.h
-+++ b/tools/include/io_uring/mini_liburing.h
-@@ -3,6 +3,7 @@
- #include <linux/io_uring.h>
- #include <sys/mman.h>
- #include <sys/syscall.h>
-+#include <stdint.h>
- #include <stdio.h>
- #include <string.h>
- #include <unistd.h>
-@@ -269,7 +270,7 @@ static inline void io_uring_prep_cmd(struct io_uring_sqe *sqe, int op,
- 
- 	sqe->level = level;
- 	sqe->optname = optname;
--	sqe->optval = (unsigned long long)optval;
-+	sqe->optval = (unsigned long long)(uintptr_t)optval;
- 	sqe->optlen = optlen;
- }
- 
+Best regards,
 -- 
-2.53.0
+Jens Axboe
+
+
 
