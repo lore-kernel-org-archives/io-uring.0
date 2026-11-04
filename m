@@ -1,87 +1,89 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.47
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793807853;
-	b=OSjIByCVwCxFrK7Crm9v7fgJff5jHZDa9KdAtA8cQjDnfnRgjyx1VNikdMkiKyfh3jp0
-	 lKiX+kNyMWSUagrW/+7/r4zjqzpX+vyima6ZPWi/GaFZapi2XMAPIcVYK9GmARGwnln04
-	 haKqQaazJGWY3apFt8T00rH8NZEkORJrtyKTNQ1uiilhDl98wUyHfWI6N5V7muwLGbNHo
-	 Jgl/5H7cXQHqPHSyyHdlQX4Ws+c6m424UN0Nf3drXSX8tsYT+ujxiW9qsjvtWfqFzVKYd
-	 4oCWg8X084RGKUE0GQopC0uBEVLeUqQXvfetkGeYP3MyFktazFMUOMhqMRNvP40ps4w==
+	t=1793808871;
+	b=4WRChAUjnkSm5Jsq7YzS426CMvU+J2t53cFjYusSht7VQEPHD7ciV6hygL5WsRihIPTe
+	 UlherAXibiHq40YUqawuBO92JMi7PHXF3pquBu585ESVvkWKpyYzcH9YrbeJxqsBNXErp
+	 FzeYOG1HoZy1klnvyhiCEtkvlDN7L3+nVMfEIqhA7MbLgtPcs8eXWEaDpLDmr/SeEDaPd
+	 k/DuEFAz2YysYfaQwJAIBiKoXsip+tZ2VKEnjRA1x9miij0ajM2j070oF8GZd7Ky0fE4I
+	 9tAeuYWnoR39QM9FNNkfV7r6pCquxtHITRyWxs6RVjQN0swWzevAChQlDILggbRCxSA==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793807853;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793808871;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
-	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=Kk7WaUVAPHjwSZ8WgmPUlAUmwEhJpE2sjlLBaU/kUfY=;
-	b=jg6OcV3dUVwcM/7xQwSdx2Eqax62VjRqvalgEpve92AO2JWOrG/ukHe0vwZlJnMO/tl8
-	 rfszjzPnpsrXEJVoVdnuhDOZb9YSWXk2yGKjCQs3/oeUw0RocMWO+1eWyGPIdkIE+gWfR
-	 KvAZM/Op81KYYVCnF0m5+3UMP8UGJAVOh6kqI4yzg9M+NjzYw4olKw6IUU98Prs5RPb1Q
-	 JSH4oMXDQZsNO10oCgSZe9OIMgjIEb9qu1fs1xzWfNqTpY9JMhVq1tt8j3vIugYRaoKPp
-	 v9kyK15jxc8NGSxWLXGcqDBDxgNYCsTo0KSUJaXTy4N5455SY+WDqlS1pLidrIVFcRw==
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+	 Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding;
+	bh=2ZRVEb3uxaxxpFesD6mkqxkpYWx/oMieXN2/50UShAY=;
+	b=uuyju9n4OLJCCrTSIoZvV09IBx5qI7yPpZPz7SlseQcOo4C53M9t1KVvwyW9EXdztaOl
+	 YMmckuIdkD1Q8tGtG+r0CkKnelFuUzJQnAfUK7pzOiKiBPyLrBqe+tXSPqW8Taq4JV5/N
+	 avaBGepgiKTpZxUuBPLUAlp1sbRqPuyB9p72fPPswQSq/amk5Mma97EjgtCYMXnSbIdDH
+	 z6sbYRkWwDpNtZcMzCf7FAKhtfc9Nkg/X30MZWdbcFLaF3XCzZ/aFFJpSX4ba9B4OmIH6
+	 wfHJagvpBKGbuII6xt+amN6DZy8ablPGygMvAYRgcCM8D7+YoyXI/urmNRO+h9+rbUw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Rh+5Wr6X;
-	arc=none smtp.remote-ip=209.85.160.52
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=IuSJLkep;
+	arc=none smtp.remote-ip=209.85.210.47
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7963260A260D
-	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 15:57:31 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7963260A260D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8573C606A337
+	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 16:14:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 8573C606A337
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Rh+5Wr6X
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-483c607ccb4so553568fac.0
-        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 07:57:31 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=IuSJLkep
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-85a5455bd3cso465267a34.3
+        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 08:14:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793807850; x=1794412650; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793808868; x=1794413668; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Kk7WaUVAPHjwSZ8WgmPUlAUmwEhJpE2sjlLBaU/kUfY=;
-        b=Rh+5Wr6X0oJFm7cUtmnB780WmqbM/ENM3a8i2ARjLYHWZFLrgnXMokIAg9EzVsahYr
-         RjoQ6dClfy1+V69Qqaf8SZLKHdaQierrZ2THnuYOS3F60chX6B/5exw+4FHxXh5VtOIs
-         kwN6mfyJssWVU+e6UI/1TLMWxBg8VhXwI/Rf3vaaopL9niHXsEL3TTkOjGOF28lO2YPA
-         o20ctc06w5gQGEFeiLEl4NHfsHQ3p4byMxd66mKvn1JScKFb3EOmNE6/Z6AE63IlYQUw
-         CBiIz3CVAyEZhh9M1zNDg9y2aX0N2N5qXm2AFoXGPwZyPzDt/inp8Bfa4L8zSPx7MJyf
-         Vu3Q==
+        bh=2ZRVEb3uxaxxpFesD6mkqxkpYWx/oMieXN2/50UShAY=;
+        b=IuSJLkepLgOArjmNbY3qRy4/aW97zsadqKol5nVhQIjaLRZbMapm1gA7KVin7hCcIb
+         XqbvwN5IRjwz32rI7YvqZJYAZIAw3c+5OTUYV92u9/URZU+PFf7Jk9HGtGAFPw36fGl4
+         LIqSP3X0ArMMI5cw2fEHT3N/v8BiiNH3y6PVpR6fx/KzH+99By4wr/bTFUIk+rhl0ad3
+         XCmwBdYcfT8kWo/x+iYkwx8l5KfJcWaoqL5thS/Q6hbb3lLG0bPh5f7dMGXPekdZdC+r
+         dHS8p+mGCpuXaIIB/wMS0/nvmm1dg15mBpmkz+ZXXOgnShD+GMAhhsFhZtjKlKeef4Kd
+         m1JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793807850; x=1794412650;
+        d=1e100.net; s=20260707; t=1793808868; x=1794413668;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Kk7WaUVAPHjwSZ8WgmPUlAUmwEhJpE2sjlLBaU/kUfY=;
-        b=tMw62x4aUOCWFhtZuJvJoiptBm1IpEElIJi7LpM/vUTgwwrrln/8HyW+XWwbz3GU/b
-         O8YCuk/vDmEg8AF75ue6aJqvjjqfMJSsuVG1VRXuEzegOSLXYchLBc9XWY4cM/nJ1mw7
-         UwLZJNqSr8CVy0nOmF7wfpz9oWjrcyFi3yNPC2RroBn412xerI6oB0GrdokyDz149E4C
-         ATWWTMrk/CwwB5yYVv0GLbRgQnNp5epQR/s6e3Hp+XqIfD5+MZ6Wca0X+YdmWs8krqJ+
-         7ipGC2oJRGKX8cJpAz2vGO/jLW/DVbiWJa1P7NX8MyqxMCgX5xvf/k+NQDeLt9vyGtZr
-         7PXQ==
-X-Gm-Message-State: APuU4Z9e7O+bkYv/zXbFX8f3kaXlDInuNisGkr6Q5k4ZmltBVdO89Vn3
-	EnhYNKVs0014BvXEy1QdlbgHn3GOrg0TnURocb4wupSXConetQjchcLm8VUxyC6Iwqk=
-X-Gm-Gg: AYBFou0P+n3dqa9LGvZ+cV+cmYMx4L4pgA7OU/rt+dGQB04cCmV2FzBzF8CUxal3iQA
-	dsbCycimDDNaa8XfgsbFBE0lr8OG5h2cI6nGaehJVBPA3KI6PcyLiHaGiywFyZqObRYWAFoFCYc
-	q0jl+vYLKjz2zmy2D/7RWH3TbBWYgIn0iYrlRUF5IQA6sf6KxpAvWvBncqk56gmaOphu7+xxSx1
-	gUlR9xBV65GA1bs1XWvxyhhlqFnKke5J81QDCKR+rUikw9kYsYhW9LAI9hXLw++ejG6mF82qjRt
-	sAhrCIhQX9YfHfHTIeB4c2n8o9Ba80QvekRAjXv3Ws5rWz86/BKqlC7rOn09CUmb6EyQOyliX8n
-	s4MEoyDEThLvMdf0EP3LNw0D+F7ZNJp638zgj2VGN7ZaA/CaOn/KvooIG6NxXMcDTIC938WG4L0
-	4X22QRWl3xdMXey5DKolVwa2LcLdbA5oo8bKc9Txt1NYXY9djdOdjBmFqiGHebDduF+R18K92eh
-	Z/nhcJXGMY3BByigkzT/4m7xdpGYwbSD3j2U5W6NcfCpFoFdT1cLTGD0oGkFnHUZks+ApGSvIle
-	O7WxuyeC/lcSml1MYaQ1fo042PlFapBe10/m+1HBmEBAdfCiko5gXIVQU3OXrMqV7MqeSYDexor
-	UnH+IyMPzcbzHfXQZxVdiVHttHBEcxQ==
-X-Received: by 2002:a05:6871:2b17:b0:494:895e:c3e2 with SMTP id 586e51a60fabf-4a90764ca88mr11054199fac.20.1793807850283;
-        Wed, 04 Nov 2026 07:57:30 -0800 (PST)
+        bh=2ZRVEb3uxaxxpFesD6mkqxkpYWx/oMieXN2/50UShAY=;
+        b=jsHv220EXYGcEkDRBSlwFWKcj//vRyuz48f+fFiLWwcLxc/thhfYbqvNuct2dD3L6f
+         1G+BkYtbdSSgouTvKbaaeOQ1osJP124xyJpaPX0Pe8LvSLOfvLdW76KDhrgIrOVZZO21
+         3t0ltFfPb/Ag1x+6DHSnK9E42HONptvIGrtiz6VhlCmQt4TnwxyDnZ5B+iN5jYA5mFl8
+         jL6XJNbFbKdGFjsTg4q1BNED5hTfBYpzkP+/MsK4T4KPbtfHECA4rvyG7P5yE452p4oB
+         yrbHX7nMSG4aoahN3F7BplIENlEhojLn52613Er7k5YCVnzYLD3kgS5OIHBZCvxaUvAv
+         xWVQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwyo270/JAv7SC/4SmnowIhMITPAKa7KMDjwTXLEvmqsujJ3I25Ezzc96m7Bt27wco5KjUDyIprsQ==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8ck9SHdT3R5NXiXJN7EDWOjS7wzLpj3Y+jhhV8HquFtNr7/kVk
+	Y/eZV0VQdZlwNgDKIdAzPxXykgh8iuTnb/M7n54vIGGX/bKeesblNkyGv9SginMHlAc=
+X-Gm-Gg: AYBFou3NOYxodjB2jN+V4xPhYlT9DTAuRmePM5iKnIVzaq55LGIOfbFJdehtbgp6gLs
+	hVVvSYX6suGv11VXit+HC1j285psYg3n0lCwmy+ZZcgpih+t239zBhmb+/W9BkwKzC6FSudBhrA
+	IH24r84ZYmM0fKpCQbZxpRAL3ke7SoLF3b7aXMbav2xQWaVVGrH1ludSb54SkEsGe3pZEQTKD9L
+	47lJOkjJVfPC5uaTws2zkmZAdffz8HynwwXJmXQnDcQIN+RRaqE76Bb5ftlatekqnwTnE697v13
+	aaS5Lwq4YrNej3ZhTQ3pYSYvh5oVg/j70E+uFMIPE8AZYQ2PxehUp+542mX61Hzb+uCOouixPyv
+	sAH7uVkaP6My/LzGOV94mmBAlWMwEZLg2s4paBcSudYs26Yw7gCm8zqZSqIHWtdqsW1LSI37Vc5
+	3jENbRncXrireBLkUDPP3sXDtDKDeuleJJGZH12SXMFSWEvn0N3SDHGcN104bQqbVLFGQGWihfS
+	1BPEpO/ye7jmMjHEHbCEt6B+Ynu4wxEzIBnFhXN5S2IwkGCUjnLJbKl/VEsF7pZiczpgAIRH7gC
+	tpBZHWZ4QxQ4D8UlEDB0H4RAC7AkvANvYAZnyWSPOStaW2VueZKQ0ysxT/NJSTxnobKdXTXScpQ
+	dv3IvDjqC
+X-Received: by 2002:a05:6830:2695:b0:805:2785:fad5 with SMTP id 46e09a7af769-85d36536870mr10734286a34.27.1793808868398;
+        Wed, 04 Nov 2026 08:14:28 -0800 (PST)
 Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4acea5f93b7sm2261237fac.12.2026.11.04.07.57.28
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-85ef3a1da87sm2246465a34.3.2026.11.04.08.14.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2026 07:57:29 -0800 (PST)
-Message-ID: <b0cf7a92-02ca-431e-9210-f76b205487fe@kernel.dk>
-Date: Wed, 4 Nov 2026 08:57:28 -0700
+        Wed, 04 Nov 2026 08:14:26 -0800 (PST)
+Message-ID: <1a338198-527e-418c-9e0f-2b619ea84e71@kernel.dk>
+Date: Wed, 4 Nov 2026 09:14:25 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -92,73 +94,41 @@ List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] io_uring: only wait for in-flight requests if the closing
- task uses the ring
-To: sariorkunemin@gmail.com
-Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20261104-io-uring-wait-inflight-v1-1-4361a0905e20@gmail.com>
+Subject: Re: [PATCH io_uring] io_uring/zcrx: don't sync for cpu dma-bufs
+To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc: netdev@vger.kernel.org
+References: <2cf944dd571364e249af5fefcab07bc670bce842.1793623006.git.asml.silence@gmail.com>
 Content-Language: en-US
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20261104-io-uring-wait-inflight-v1-1-4361a0905e20@gmail.com>
+In-Reply-To: <2cf944dd571364e249af5fefcab07bc670bce842.1793623006.git.asml.silence@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/4/26 4:56 AM, orkunsari via B4 Relay wrote:
-> From: orkunsari <sariorkunemin@gmail.com>
+On 11/3/26 5:11 PM, Pavel Begunkov wrote:
+> dma-bufs follow different from normal memory rules, we don't need to
+> sync it for the user. If the user space wants to directly access it, it
+> should use proper primitives like DMA_BUF_IOCTL_SYNC.
 > 
-> Since commit 13d3783a55b7 ("io_uring: wait for in-flight requests on
-> ring release"), the task dropping the last reference to a ring file
-> waits in io_ring_ctx_wait_inflight() until every request on the ring
-> has completed, and only a fatal signal ends the wait early.  The
-> requests may belong to other tasks and may not complete for an
-> unbounded time, e.g. a read on a FUSE file whose server never replies.
-> A process that merely received the ring fd over a UNIX socket and
-> closes it then blocks in close(2) for as long as those requests stay
-> in flight.
+> Fixes: a5c98e9424573 ("io_uring/zcrx: dmabuf backed zerocopy receive")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  io_uring/zcrx.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> The comment in io_ring_ctx_wait_and_kill() states that the wait is
-> meant for requests owned by the task closing the ring.  Only tasks that
-> created or submitted to a ring have a node for it in their
-> io_uring_task, so skip the wait for any other task and leave the
-> remaining requests to io_ring_exit_work() as before.
-> 
-> A thread of the same process that never attached to the ring no longer
-> waits either when it drops the last reference.  A task that is attached
-> can still be held up by requests submitted by other tasks; that case
-> is not addressed here.
-
-Fix looks fine, few things to sort out on your end:
-
-> This was found by AI-assisted code review (Claude Code).  The fix has
-> been build-tested with W=1 only; no reproducer was run.
-
-Just drop this.
-
-Also fix silly double spaces in commit message, thanks LLM, and
-verbosity is also overkill.
-
-Signed-off-by is a legal contract, use a real identity, not some
-handle.
-
-> @@ -2547,7 +2547,16 @@ static __cold void io_ring_ctx_wait_inflight(struct io_ring_ctx *ctx)
+> diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+> index 6d7abb1636e7..17e554bb774f 100644
+> --- a/io_uring/zcrx.c
+> +++ b/io_uring/zcrx.c
+> @@ -1425,6 +1425,8 @@ static int io_pp_zc_init(struct page_pool *pp)
+>  	if (pp->p.dma_dir != DMA_FROM_DEVICE)
+>  		return -EOPNOTSUPP;
 >  
->  	if (current->flags & (PF_KTHREAD | PF_EXITING))
->  		return;
-> -	if (tctx && atomic_read(&tctx->in_cancel))
-> +	/*
-> +	 * Tasks that have attached to this ring (created it, submitted to it,
-> +	 * registered its fd, ...) have a node for it in their io_uring_task.
-> +	 * A task without one owns no requests here, e.g. one that received
-> +	 * the fd over a socket, and must not be made to wait for requests it
-> +	 * has no control over.
-> +	 */
-> +	if (!tctx || !xa_load(&tctx->xa, (unsigned long)ctx))
-> +		return;
-> +	if (atomic_read(&tctx->in_cancel))
+> +	if (!ifq->kern_readable)
+> +		pp->dma_sync_for_cpu = false;
 
-Similarly, this comment is way too long. Cut it down.
-
-Resend with those things fixed, thanks.
+Should this clear ->dma_sync as well for this? That'd bring it
+closer to what devmem does.
 
 -- 
 Jens Axboe
