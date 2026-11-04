@@ -1,88 +1,88 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.43
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793805163;
-	b=S1LxX3j9l+wWtCtr0fbf+7mpLkrK3KcZHyTuzV1enC98hmRaRYy7wWCERmDWk1WKPfIA
-	 8xzv9K3le2iaug+UKzkpjQIgGdQp0q+R5lFByiUStQQvW8IOJaoT0bOkM8nu+BznySPfy
-	 un2z0PApztbnjWd4eS/J6WAO3RhVu0U0GOnQeUy8oJ1dIuU9SZPKtRvrCpD1Z/CA7xBSa
-	 gk5u5n0/CXV+mSeo3tyoJkWG6ZDnGNDKJE+x21NrygCBcHE4Tx75LmCIJWp3zEO6hEAbd
-	 qQhNm3/ncYe5IU6FSCMKc5ocvQezu73gjCT1BSgD7mUj9rvm+dcVxE4yvfUUE9FjXTg==
+	t=1793805320;
+	b=wC2PydPPMKKOAPAMyr27gfhov0rGvDuxKEIdT/6+r/Kaajyp2Zqfq/2LrswRVpI8p6ol
+	 wWiE+bqEw+ROBWnNwgckj6WmjWumaMB4MK78XQFAO6L+C2myJOJXfMlsjOmzYmSNdFrfd
+	 kyYwOWYlu9CmwcRuJ9dAh9NkQhLk7VB0PDt7tvhAI/3dftYvB+KXGiNLbXPaZyk33RIgm
+	 rlAL9AMGuxG9Xhg+nLluSLI02CtRtf583bE2OwuJt9N5GskhbiOQZ7KiYFyluLDueeF5+
+	 aWxu9t92Ej7nC0bI1H7PRHMQWKgEWxwNNWjzLJvp1oMpbK9VQtdtxYb09hdZOu8C+Yw==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793805163;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793805320;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
 	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
 	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
 	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
-	bh=f81nS/eoKUUcZf5XKYgHZ958Mlh4VUYL+dqm5PCCe8o=;
-	b=xIRTQJ0dqw3B6faL9Mv0alailBk5qRGBv/cQN3spB1nquJE99k5VkO2zwzLP01mD1T7N
-	 gt1w7v02+scdkQol/BCeVP29HVRP1+DkLdcsTTlETc+LyPW13s6OMV77qjJiJrqrHxrve
-	 gX1RLU8X2uHsRQ1ZxoShtZVuTN2l7RW8IV7Rp26WIhr6oTqssg3pOcK3P9oB2dPD8J2cE
-	 /wpRcYGP8lq1D87LkzUIrPp0l8p7oSG7sMJ6R1X1zwh/hQLZMBtJtUECe14mksAcZaf6D
-	 b/OkrPbGst9p723icQubfpRyZrvkQasqgRamyr2660tYTqv01R/RxZ7H+6oYq2/k+Hw==
+	bh=0gro88bVjgpS9PImXHUesfvn8PgtBvOLbzKklCGIDb0=;
+	b=PdS5F4lbyAXTXkGnCqiD77wRluw7YEYbXsqR2PRc8CUqj3tdtzjyOOJKe6+ZKlAbRjVx
+	 UdSNx+K1/I0Brv39wZGMh3HFOFBpvikZBWklubjZN2EoSGvRCFPDj7qye4yQXa/qfFIhK
+	 1t2o4BvCe0FXUjS3D8RFmjVfbmtXkzd1reszX5Zm4fHlfv5yWejZ7TeniTAbgo8xsxd+c
+	 hrQzsQfmOZcJKUfwTKvPyjgj++M8p+XPMhUo39ydaena1QwszyZWyRr5BtoH/CO1TbG2x
+	 csJ2ss55Fy6aSbyz0XzRm7rLTCnkzMUVw6Q/DtrdKhsu8UbZH0zJyYPsdhm0+nSYXdA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b="jid3eRo/";
-	arc=none smtp.remote-ip=209.85.167.178
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=kEjV88t+;
+	arc=none smtp.remote-ip=209.85.161.43
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E628606D83A
-	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 15:12:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 6E628606D83A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621BF606D80A
+	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 15:15:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 621BF606D80A
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=jid3eRo/
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-53ec2cc397aso388025b6e.1
-        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 07:12:42 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=kEjV88t+
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-6ddef424972so615988eaf.3
+        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 07:15:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793805161; x=1794409961; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793805318; x=1794410118; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=f81nS/eoKUUcZf5XKYgHZ958Mlh4VUYL+dqm5PCCe8o=;
-        b=jid3eRo/reWq7duG1LvK87LawfyOLtCRxikd6FDiPLSTmoqO/6O63Hy/6xXcqD1fMY
-         vvLsJZTRFB+81eo1gxDP+vaFVJc/L7YLJazxj7Hol6rrCfSFYk3DbYm6NdWg8Lpx4pMQ
-         f7yUcLER3Q6BanDMX5R1WExI5ZQEpwZae5icjgf78a1K6iqRTXsOXy1YYhDlfINxCbzy
-         B45vokwN470gKmD2xjniryCODxglNrLFBBrCKoJZ59zlVKoXYC9IPuQEyiP4mWZKB4n2
-         ciRv2hv7d/e1jRdfyEGWzJmwOsBzNGDKWQZDPP5eC1vuHStXpAmtVVpMr9xSlr0L+xBx
-         /NKQ==
+        bh=0gro88bVjgpS9PImXHUesfvn8PgtBvOLbzKklCGIDb0=;
+        b=kEjV88t+x9D7SLkFzZtS2GEBJYrKUhicTeVFdU+nx9HxZXSCSjgg51J6UZWec1boJn
+         v6FJQXQpXvazU/oUgvdiLyfBhntSBfb+yf2tJuGuGosySR+LR3u/JC2bfGxrr49T0jWb
+         4IefDG52WoZIliCJpbga6VU/YtHN2uUMq1jajUQX6J1mfx4YfpsTAUAkIIPe0SuCYnxd
+         sIYsQnOhbaM/ksUp6Tovd1031cO4Mmo5sz4V+/5MlvgEfakEcSZdstY4bdVvzzT1XnSs
+         IpXuGphA+0h6KdpQ+hj3aDD6CzuRE7JeE4yZPU9gohdQt9AulZft5nWN7ljV6z31xv5e
+         qmAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793805161; x=1794409961;
+        d=1e100.net; s=20260707; t=1793805318; x=1794410118;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=f81nS/eoKUUcZf5XKYgHZ958Mlh4VUYL+dqm5PCCe8o=;
-        b=wZLs/kYftO/DlSJmSX16DuCYP6av/nszMKcZfUryAbUDobUs4gqYRecyA9H6DAqEgE
-         zcnJBdHKSrj3eodikpj2GkfPRjuua3kRfMTxAJrUZdUkWUB8bgUrUesQTlBYdv1Xmakp
-         fB+w7Uw4Ce2prz7CAMKj4Zk/9uNyUE18vUD+DMDW7pTlbgiIRdnC/ijTx59X6N76LZFf
-         xs0hoxOnCNosmLeD39B/dv/wbs3LUma6p4fenH1/DN6//Q0AxhHnoElr04lZM99O5/uC
-         m7Hn26ddi5tE891D2z5UCkl2JRCXVf7+t+j56thJNPZQq8uX/6oUajUNbXTwm9PJdTyT
-         Dykw==
-X-Gm-Message-State: APuU4Z///lVFd9jnMISDSvNPPO/uTu3f68nlbqMEfiLAfXcOUtR87cLP
-	elsgFbTkpFCxkEs5UTXSCgheq9gCJDzSLim0ILN0nAtdOcLe6BGn8NAoWr70gBZN9WgCq20m7V2
-	nfBr7G8Q=
-X-Gm-Gg: AYBFou1vgtn/SAFjlNdWFjyD8y5tgwpaW9m70gT22Q3RLxLi7oqnxogjb2XqMQc8uux
-	1GY8rpg628dOWrXhzXQVU+MGG/3sHYnKOQYfkMj+qV1wFZaKAn+xFl4T3iuIbDStxIvKg4OjulQ
-	2flzbW5MFD8X7QByxGjlEO3Fi7a8JaYbHg72If/ci6NDcKIzt2HWFPC87hl9gPzMRRdGDRPQSb8
-	RzXjkBzqU2huMK9x8DPpvSFH2ONlXb7ONOEKcsDJPb1VzFuQbaelhJiH9r3VEu2QOlxL1dPP+mp
-	H0wBJW07q4LDlbDYUOggmpNrQ76BvP0WHDmx3+/PUwD7MrKhn/X8TyndgARY45v+Ny7pp/JWjz0
-	W3gG8TkVSXzQuOPuWUp1EcQ1poRkxN1jW9kKU4nnAywdB1b1z5n/MLcNxfyCIF0/gA/0GI3yFb0
-	qUW+xiaqIbM1MkfJL+xm39kamT8dX/krlvo6EyCazDost7CsHgh7Jx3xLS9d5tf7RCCglPA9ZOm
-	dXeeeOZmCwov98LdG1ChUtUzFWgcUB5duABSZBh6ByrwUjMYKKj+K5VAIJ0TSrO0agaTXx8i9S9
-	L/iN2iE8cou5o9EvCMThU6f4e0aUENi7zld4fw64/37SBItu5AdQlsr0AdhrdGt9dtk9KLQRiZD
-	ifGtDhgo3
-X-Received: by 2002:a05:6808:3505:b0:4f6:1ef7:6cd9 with SMTP id 5614622812f47-5640de4145emr11179698b6e.64.1793805161270;
-        Wed, 04 Nov 2026 07:12:41 -0800 (PST)
+        bh=0gro88bVjgpS9PImXHUesfvn8PgtBvOLbzKklCGIDb0=;
+        b=2ADg5424taecib+YG186uRh36bjPZz5ETdC+qCr00pHZEGR2xg6rCdKmuckqUjYCzY
+         z0tUr+MU5CusBxXmscRsLJc3VlOBXYPXClzbwtv9+v4ChHDeRnuiqCzK5/wAocujbFwv
+         Jl4DiVFA4uUvKF78VkP0hgGGcKvQ+gPeDEniXJlKePLEgJNnOYQ5Ko86lzZPCuhJp6xN
+         +/xGjp1Au9aeBzNUksJfVEo+rnLJdK8ClRJEKHzIcNE/RRXUymmezGqT3sHlGLzr6XLf
+         mcp12AQkMP7Ceb6HX4/KclWbrt5ieekfhaNdg+mHC/Snok92WTCjrxhN8VAk8PmQliDD
+         2+QA==
+X-Gm-Message-State: APuU4Z+hnvCYFcHOjqMxarsl3TmUV7NWEBh/y8rZUP6n6HHsOWDn7sKm
+	JA7oTBd3r7oiyEqsZxiAdNSDcC7w02f0vTjT2rTW7HGbt/Xz3t3TllI0/Mm5JslskHo+y4xj3pG
+	wsXOff9Y=
+X-Gm-Gg: AYBFou2KZ9tXbSoVvUYjgtslPKN6dus+ifL0iKtvYJuh4WeHDpt1LWxWciv75JDu6k7
+	WVMZMy0x7vXax558hUYCaOSoZJM8U4R8qDByp8IIrgVPw+u0bx1jJSz4ZTVJfHnWSg2o1fauFSs
+	RzB7NmDnxLJ2ZrEfSvRWmvFGB31UEeuXNCyNO1BWZ6uUoMNjyYav1lQsKt8nV3dUgF0Lh95lhGI
+	4wEDW0DKjsAyxxG3kZjqed38emJa+8c5DfdBGzNZ8yuCEia9mD2Kesb3lyFD+ZuztMxAs+SNz9V
+	1FzSP6IJ4MZNcBUmA3n+6lheCN7ap/DOlje93G8wIHYOB0C5gJ801Qh4X/oIap727j/3Elv0zxd
+	EnRUcqAnE0unT8Hlof6dJMIfa8aWbyxRm+kBi9prOmE6om/h8nFIjSv7z8zDhQZ4mzDEW//T30D
+	aKAJaYPaS2eKoeBaySFC/vq3u/hMrrvgYThahZW4Tt/VS73wt8WU95/0CPpu/17PGEhD+bDOLc/
+	TioEadq2WAEC7T7HMzZv9zDqlUuUhQv4cFtQ6brguQhasT/Pgnn5HhNWDf9r4fXoAAavquSFLpC
+	LpTlg605YEg8JfIeJ+cTfFxOBL6ZrukHT7Le+l6BwFKaG44tAWM7YKDh4slFOvmrPlFPXWaNehQ
+	nZFmnsfOA
+X-Received: by 2002:a05:6820:615:b0:715:21d1:b81 with SMTP id 006d021491bc7-71521d11e6cmr5123920eaf.80.1793805318210;
+        Wed, 04 Nov 2026 07:15:18 -0800 (PST)
 Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-567a9f41424sm1850696b6e.9.2026.11.04.07.12.40
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-716c1254321sm1833033eaf.4.2026.11.04.07.15.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2026 07:12:40 -0800 (PST)
-Message-ID: <7cd23f57-dbf3-4175-8a4d-25b099aac4b5@kernel.dk>
-Date: Wed, 4 Nov 2026 08:12:39 -0700
+        Wed, 04 Nov 2026 07:15:17 -0800 (PST)
+Message-ID: <f1d4cf26-a603-47fc-bac7-c7257630717d@kernel.dk>
+Date: Wed, 4 Nov 2026 08:15:15 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -104,29 +104,11 @@ In-Reply-To: <20261104092818.70521-1-0xbeac@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/4/26 2:28 AM, BeaCox wrote:
-> io_files_update_with_index_alloc() installs a fixed file via
-> io_fixed_fd_install(), which drops ->uring_lock when the request runs on
-> io-wq, then put_user()s the allocated slot back to userspace.  If that
-> faults, the error path calls __io_close_fixed() by slot index after
-> re-taking the lock.
-> 
-> The slot can be closed and reused between the install and that cleanup:
-> another fixed CLOSE plus open/accept/pipe/socket, or a FILES_UPDATE, can
-> put an unrelated file into the same slot.  The error path then removes
-> that file instead of the one this request installed, ending an unrelated
-> file's fixed-table reference early.  This is a correctness/DoS issue, not
-> a use-after-free: fixed-file requests hold an io_rsrc_node reference, so
-> the node and file stay alive until they are done.
-> 
-> Hold ->uring_lock across __io_fixed_fd_install() and put_user(), and do
-> the failure cleanup with io_fixed_fd_remove() under the same lock.  This
-> is the same class as io_pipe_fixed() (CVE-2026-99265); faulting while
-> holding ->uring_lock is fine, the registration paths already do it.
+> Signed-off-by: BeaCox <0xbeac@gmail.com>
 
-Fix looks fine to me, but it's not a CVE kind of bug. Neither is the
-one referenced, I'll get that one invalidated.
+Missed this - that won't fly, you need to use a real identity, not
+some leet handle. Please resend with that corrected if you want
+this patch included.
 
 -- 
 Jens Axboe
-
