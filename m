@@ -1,93 +1,91 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.50
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.161.45
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793809110;
-	b=yr64FycNhs3qbQo/xPmPQZQB+OfC6QbNMrTTHPVTD1niXqRgWDvFnc2PzIfKkspFLqSk
-	 SU7rnJuvMTUz2OsGEaXe8ga6f4zL9H5HtbF5Ct6Z2j/+CttFEluH5l8yX50VWgDJi3jKY
-	 vKTK5TLFAJIQuXNLExOUsU7/siTKyABOkeXGHsEGTGVemHjH4iijbE3ob8hr8sSq87IY6
-	 H7mKhuWtm9OP5dRmhmsOi9VDjCTNeqWa/4S0tbc2FjthNf4JFCcgKpLIaxdvbhTEFWe1w
-	 ik121RMsst3CEDCgD1/CPLtQBBilPstIBfKed7nJM2vi9d/drjdqopULLbxhn+85cGQ==
+	t=1793809115;
+	b=aewGYH9+/DKn2E6ujOO2Pm04GPUC/46ZRYC1aBiPU6HHT6WOu5GuYnZ2Qk0BxFc4Ml70
+	 pGbs8pPyASLnqoKUflO0SfEYPKC6Fguko2pWpWuszbIX9xOTRXEJIjOBy3IN6n3UrpA9b
+	 kSaFNs3mVPyZH9huVgRZw0YXa0CLkMWynM/GDae3n7UkMYQrh6vRztIpEJYk7Rc8vVr7c
+	 E6X3yLtLpsS/H8zvQKWY1pzWLKdJ8oUyEx6HcQKGieHwgTA0VEMWU5eXSf1XSGLRd3r15
+	 RcJjvUUypmVzri5pDo1EZLgP5aY1zQb9EtjC+innjTG8LVPPxtuJ62cC9TVmWHdpGDQ==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793809110;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793809115;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:In-Reply-To:
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:In-Reply-To:
 	 References:Subject:Message-Id:Date:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:X-Mailer;
-	bh=ffgGmkTnKfMjsylvKYr40/ecH94exTgaX+mw6xwKZrs=;
-	b=Ch5wjdP3x/vff2jllNZuVbeu2tAd4w/dorq2vKPFiwtvH7RQ0N6oCOqg9B9SrVW7WX1y
-	 TtwXy2FMisEk7ZI8uHL80Bisp4MlZJOnCo2m4xwy4QJqgqTHSsQs2uyNUJN7SACGL4mNP
-	 HMaPg2flrihzvwmesTMy3xMqwguD0tcQHbW/8fLqJABc4yYOepj0Pyxcf+sAH6zB0NzZM
-	 jlF0QniMeMCmL8oBmqVJ6YRiD2KLgnkB7UKqe0XZF8UasX6XWXCAP7SoEL+ahdFrwSQ0k
-	 6hgp7fQBx+v04mZutMdhLvEhQPqTUZfL6gFAvHpl6l1/u2A2sP99/ZY38iWz98GW32w==
+	bh=Ll065Iwva0dmxU/IZy6URbTXN/3yl3VrT+LTedVkzNk=;
+	b=GzYqD0K8dgrgO7rHz8YrfoX/UBGCWk/z9qMI8kXbNp3ieRzkq1L0w9p112Rr+450mxOB
+	 0sV9bYwH1WtASUZHZeiy4f8wzHuuGi9Yp1be8NCYZ8khAUiteB+3wWmycpn9MmNh+RuNa
+	 go8uXZ1RdtSKnFtRoXifCjr/uwoPtUBgf1B2MSJk48etJ1VPRRKeeedd2ij6auAW7LylI
+	 npzDd6gMoelAA2ivasKqT6KLfEtAeE5WRPeyRn7sCWQ+6SMC/ZuKpD+zGnFQdP4aJCeyW
+	 HsOlUlDqE3lEvY3USccRoK+SlHgg/v3T7v0vMbTc1fapA4gkZATmBcweiYsWvl/QX9Q==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=none header.from=kernel.dk;
 	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=W+CyjG5V;
-	arc=none smtp.remote-ip=209.85.210.50
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=eCwhvCcH;
+	arc=none smtp.remote-ip=209.85.161.45
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3D5606EE99
-	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 16:18:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 1B3D5606EE99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B02606EE9D
+	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 16:18:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 43B02606EE9D
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=W+CyjG5V
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-845f3fa7f38so355298a34.3
-        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 08:18:29 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=eCwhvCcH
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6df5e315bd1so735539eaf.2
+        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 08:18:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793809109; x=1794413909; darn=vger.kernel.org;
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793809114; x=1794413914; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :subject:references:in-reply-to:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ffgGmkTnKfMjsylvKYr40/ecH94exTgaX+mw6xwKZrs=;
-        b=W+CyjG5Vu6IoqiNe31MzZY7sVtmEPpEjzO0iIAHIQaxXjc8AKt6SMD3nTk0RtmPSSA
-         SySa8pxuu0j8SF/02AKbiSaFZ8/93xS7cgwRC0Ele0yE2xUvKPb1iHajmw8CdGMYvfay
-         5hiaXSL11zflBZkcGTF7yOAahPXSdK13aGUsVRPEUWZ8FqfX+aIRZqX7csvE68/xhOVh
-         69tz5Mpcpj7WI1Sd/6WDb4vfn/Vwk76ebDPNf/xdhRCjkAJfU2G1LiGCENAIjNIp5ajB
-         s8ciJL8/1y38/m2E0y8iOL6S1med8KrQFD68H4ikw6M0kXRKC1OHKPO68KBBX2Hk1dPt
-         J9KA==
+        bh=Ll065Iwva0dmxU/IZy6URbTXN/3yl3VrT+LTedVkzNk=;
+        b=eCwhvCcHuVOutn8KRFUSn8HUBBSJoNUSAVZI9FHQ8E1galHlsXe2BKEEl/W8WFlwst
+         bK7PDz9N0DMGEiORCqTPgfxVEQu/mVtGxootoadDh7sjD+yrUcfhap5i9USb2aQOvpl4
+         68ur+HHUXyEqDHPelYBDpgni93culBTEstSNxshczYMeANm5Y331cpbSsEhPQSI462Uv
+         EBqG3ccwyRRcjASkyNDBaulNVrft39PFITfzEyGr+2nlz2OWaYlyG1fSLhI09eqXI3i6
+         d1W5Fb3y8hRowgYdd9d5VbvGolHaVm1qyd/IVnbc5o+JiszNxrb8NUJ+8tnLDmHHV13b
+         pd7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793809109; x=1794413909;
+        d=1e100.net; s=20260707; t=1793809114; x=1794413914;
         h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ffgGmkTnKfMjsylvKYr40/ecH94exTgaX+mw6xwKZrs=;
-        b=anbTjCrUANKPJ4+FPH3v0Ub4eU4gCMjMWXXngkyOGiA0bVYtPJD06iQZhNNqzziOAi
-         G2FE+348080XznlN4Q5xCQytOgCIlXkNL1lAN+bd49YoCZcp0uVc/xRl9TX7EQyTlX25
-         2k6NVO1kGd+TbHY6N1yaBugoMSeLGJkyo6awCSbMcgEu1joakqrMDoHMTDMeE2xcgXpg
-         Ia/AAqaRmOc8E5r6I96fpjEnl5U28B7GRPrO1R1eOa9ZUZZlSI0CKqkAjp/oA7jhoqJU
-         X7+3XhtxPxx/GH4bj0c+7elDoovpBeg2wNDbU9faCTrzyOTHSjJGTYYZxnPwMmW79vZU
-         0A/A==
-X-Gm-Message-State: APuU4Z9nJVsgfh+0CjHbe2IrRWnliJ4cOVFFKCpnYF6SVHsebs/Kq0db
-	1Ov++6sSH7c1PqEKfcv8nj2oBg6P7HodYaZz4RNvTtJGpxcGKuZWIg5y4Gvgxv1rfTo=
-X-Gm-Gg: AYBFou2RGRJCxllM/WBYKsK0svShB4gFHmphag1uTh86IvPI3cWo+vJ4McUa1tVudIX
-	ViT1skndmR8PLnaV7SfEaTnKzn/Nw76pf+AN55f3UX7iQPNWeZEpSU5D365yrOk0L/Cofud34Ck
-	kEIF+eHPxlJ9KgijSJ/OR1UFHKL0nbJlfhkw/gAyTLSjAkivIqMRwLqoBN/zKH/6kQUNhDy82RP
-	Ba915S9CLRx0PgUPr5G/3Sm3zEIrQ7a0C2P+dHmc7QeQ0hk3NkR/jmWkCTk8MumMYmp9OMhBn6a
-	MHVk0oPQhHnQnvcNRUCZhwSmG9g/Q1RSR7bG44uWi5RVy5ZujTG/Wv9AUSK/9H5jke/UPlJimXp
-	Em9E9TmVJyHQxWp5qR3aoi8rAGb8lfoV2AkagHp7sCVt+TT5GYILttmNHoz52hckqaKTkLC8nlN
-	B02ur1AVcc7aTY4Qto20iSQmRspZ3ALKjR/1EOyibM7wcU93CcJOT4pZsrSI4g+8Z74BN5soamM
-	gFdyyBLT/9nOkpxJpJjmUO/3kzKzxAHgIA4kLa2dxvZTBMjIlv1SftuUtY1PPwJVDM9LAABZ2uG
-	JVck8qWrNsIkbz200wSMsnLVcVR0XeJ/rbscVMRwmLIYF/dS66lHnR4MRoWry0lDq2fuiNHiJSs
-	uriYCtJZSQw==
-X-Received: by 2002:a05:6808:1b2c:b0:4e5:2f2e:45b4 with SMTP id 5614622812f47-5640dc2a7a3mr10879028b6e.21.1793809108449;
-        Wed, 04 Nov 2026 08:18:28 -0800 (PST)
+         :subject:references:in-reply-to:to:from:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Ll065Iwva0dmxU/IZy6URbTXN/3yl3VrT+LTedVkzNk=;
+        b=ztWIrFDvqqaI5litT6PEexBwHbvAWdVIjrhds8rUnLDz5hw9XMRL/Qyh5/2oT7cOf7
+         9+2QsOPnOSkY1trpQ7Kq+CtBq2yuogvBqCgjC7d3MHn7Xcp5MiQyyZEDcs+iqgMjz/Of
+         sQJ4x3kemV51UxqhQlrDbJ29Yc5d8z6skBVlv8qj2JF2WOKwaj2i0IP0cKrovD5isYKU
+         YjWAmWuymRtG6Mkv+Q5XAmdmjKwcdn/RabzZ9zpNvsJP/yyzx+quicx589sBrhLKjsNL
+         UBX1xyBkLAbiz0rKxzijfebB5CD6rMNBCg4ldCZxjilPNBACh9KFExxJGs4tqGWa83u1
+         fL6A==
+X-Gm-Message-State: APuU4Z/+9HFtNOPBjDpn0pRbUl6YU577lzk0uRp1c0vLzpMcdP/p1kox
+	78/tYTWIPRz6xUNC6XXxqFZY3FVf2zkpfUC1xQ/23FQdGUbJaapikwrZSAUuagTezcw=
+X-Gm-Gg: AYBFou0lHtqDBafV/XmBD8kB6tH3O87NGtZ0s3U4oJUFUaWncQl4rA438M4/18p/XwA
+	w5B0Ef/vT9lRbBp8h5KxI1TgfpjwkmsqU7JumFlKQcGvxgQ/Fy6iH4F+BmDuZClnndzcU2rycPR
+	B5+AlxwvwdaZjrwyYKYKsZ0PJjC1CGDaH29iWo512p8LR2ZwB24JgwrYOVtLTCpVWfP5soUxtur
+	N4lHq5+3P26svUsRhxxP/z0SwzZ1FnftW6+3fShq/j9Ad5kzceQyT3QV+syVFXS+1I79CvkKSAq
+	lA9fHPiwNxnJ0K8dy9CU3yY90ss5DPbmqN4uoQqrTBZKKXw6dYDnP5poM6J6PcKmohV13m6IVSO
+	2tJ99VhnoJohgb9vZRtBhYhWunmGOtPLSLjcXPfAUWcZPqN1e+0Let6i79bsVrCLBqoYV2TqlYW
+	Lcw+dUxojdAcD8c8Jgj7UFBJGs4jgR9nekEIQK2DbrVT8KS1rgxOEPpDYWOd7U34W5Oj5QLUQnH
+	S7cYA5wPkDspBg+oMHJD8+P/Nv13tCqu+0RBbLGtNTcc1489n1OVo55HwvgleQOpsDCJYMVToGK
+	fVgiwcti2Lliy8M0/sgMt1ss/5n9PI38H/ZfvTFrWisDaPhca5eAs2Mm9tjylVVeAo0wc2AZRHt
+	DOBPBjtWhZA==
+X-Received: by 2002:a05:6808:118b:b0:4f5:97bf:e56b with SMTP id 5614622812f47-5640deeb619mr11922414b6e.17.1793809114001;
+        Wed, 04 Nov 2026 08:18:34 -0800 (PST)
 Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-567a9fdfa53sm1897499b6e.15.2026.11.04.08.18.25
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-567a9fdfa53sm1897499b6e.15.2026.11.04.08.18.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 08:18:26 -0800 (PST)
+        Wed, 04 Nov 2026 08:18:29 -0800 (PST)
 From: Jens Axboe <axboe@kernel.dk>
-To: Yuansheng Yang <0xbeac@gmail.com>
-Cc: io-uring@vger.kernel.org
-In-Reply-To: <20261104154655.81876-1-0xbeac@gmail.com>
-References: <20261104154655.81876-1-0xbeac@gmail.com>
-Subject: Re: [PATCH RESEND] io_uring/rsrc: hold uring_lock across
- index-alloc put_user
-Message-Id: <179380910563.4062229.5945785102447310306.b4-ty@b4>
-Date: Wed, 04 Nov 2026 09:18:25 -0700
+To: io-uring@vger.kernel.org, Ioannis Coward <ioanniscrd@gmail.com>
+In-Reply-To: <20261104104707.2031280-1-ioanniscrd@gmail.com>
+References: <20261104104707.2031280-1-ioanniscrd@gmail.com>
+Subject: Re: [PATCH] io_uring/wait: don't sleep on an already expired
+ timeout
+Message-Id: <179380910852.4062229.12350044283128485606.b4-ty@b4>
+Date: Wed, 04 Nov 2026 09:18:28 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -102,27 +100,28 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15.2
 
 
-On Wed, 04 Nov 2026 23:46:55 +0800, Yuansheng Yang wrote:
-> io_files_update_with_index_alloc() installs a fixed file via
-> io_fixed_fd_install(), which drops ->uring_lock when the request runs on
-> io-wq, then put_user()s the allocated slot back to userspace.  If that
-> faults, the error path calls __io_close_fixed() by slot index after
-> re-taking the lock.
+On Wed, 04 Nov 2026 10:47:07 +0000, Ioannis Coward wrote:
+> When io_cqring_wait() gets to the point of sleeping and the wait's timeout
+> has already passed, io_cqring_schedule_timeout() still arms an hrtimer
+> for it and calls schedule(). The timer fires right away, but only after
+> the task has switched to idle, so getting -ETIME back costs a round trip
+> through idle plus a timer interrupt.
 > 
-> The slot can be closed and reused between the install and that cleanup:
-> another fixed CLOSE plus open/accept/pipe/socket, or a FILES_UPDATE, can
-> put an unrelated file into the same slot.  The error path then removes
-> that file instead of the one this request installed, ending an unrelated
-> file's fixed-table reference early.  This is a correctness/DoS issue, not
-> a use-after-free: fixed-file requests hold an io_rsrc_node reference, so
-> the node and file stay alive until they are done.
+> NAPI busy polling hits this on every wait that times out.
+> __io_napi_busy_loop() caps the busy poll at the remaining timeout, so when
+> the loop runs to its end without a completion, the timeout has expired by
+> the time we get here. The task then stops polling for several usec, and
+> packets that arrive meanwhile are left to the device interrupt. This
+> affects one of our production workloads, which currently works around it
+> by having another thread signal an eventfd on the ring before the timeout
+> expires.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] io_uring/rsrc: hold uring_lock across index-alloc put_user
-      commit: d7c7037253f6935af243570635d71b4920b5a4ea
+[1/1] io_uring/wait: don't sleep on an already expired timeout
+      commit: 99b6efa810675d99c04216574a189aa4bf031cfd
 
 Best regards,
 -- 
