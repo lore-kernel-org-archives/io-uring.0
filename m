@@ -1,87 +1,87 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.160.52
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793807219;
-	b=1Wki8mYb226g1WuCbfEr+JIKwhqTmWO1eLGBWZcMGj0KI2YgWpoOBo8wVK8B1lY3Ye1H
-	 Q7UKf+FIFTSeHwrSYDXAivOiCZ0n/hmUMkPkJiMgOFskS7TPcW9a1J9S8P5vruad7V8eG
-	 qQX2/DHN3x2n/Oks2CSNTCSnPZzTaeenBPIdVJ+JRR1viaJywg3mPcq7QJgv/A7UVuMnc
-	 b00gVQJmnKvpLF9EtIpf9SUGSOR4nWKeDokKcUk44uZRyAQQdySUk8cOy7C4aLlcBmpv4
-	 HId7dSMPCLB8mqZUh1gqA50aSAY8fHj/NvYtVEwemVtGjFWzq7GdB36hxvOV9An/T1w==
+	t=1793807853;
+	b=OSjIByCVwCxFrK7Crm9v7fgJff5jHZDa9KdAtA8cQjDnfnRgjyx1VNikdMkiKyfh3jp0
+	 lKiX+kNyMWSUagrW/+7/r4zjqzpX+vyima6ZPWi/GaFZapi2XMAPIcVYK9GmARGwnln04
+	 haKqQaazJGWY3apFt8T00rH8NZEkORJrtyKTNQ1uiilhDl98wUyHfWI6N5V7muwLGbNHo
+	 Jgl/5H7cXQHqPHSyyHdlQX4Ws+c6m424UN0Nf3drXSX8tsYT+ujxiW9qsjvtWfqFzVKYd
+	 4oCWg8X084RGKUE0GQopC0uBEVLeUqQXvfetkGeYP3MyFktazFMUOMhqMRNvP40ps4w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793807219;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793807853;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
-	 Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
-	bh=4iSX/nWU8rMCqRdOx/hltZVoYHeJpLYWf61qQIJ2Cg4=;
-	b=Vz4tqdB+CCc9qGhweur1mux4/rpX79HFof/UBWzvIeQ2t1YwD0/DxQPAyPMo4fEZ3JPI
-	 3VSluxR8CI2nsOcVTYYz0GAYAzmlvd9KwoTxrayihehgLprDQsA2RwH56R+5daZVOS6Sd
-	 xb+DkZNvYVhQPpU7jV8Og908HEq34zMJjfExUwtoMZ8ctshvQZR6iBEcUseYoPqvKoRdu
-	 iwGV15WgbS04qqXTfaXjlzh7czTJYJiRT8hvQ8F9fEpedPaSuY7aTqamwsYEbNNGGf8/Z
-	 IzBJkVpG6FOQXu11NL7k+5iH2W/0NYkjD8/PyVGtMx5AIKRRn7/sJkoRf0E7qB7oPGA==
+	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
+	 MIME-Version:User-Agent:Subject:To:Cc:References:Content-Language:
+	 From:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+	bh=Kk7WaUVAPHjwSZ8WgmPUlAUmwEhJpE2sjlLBaU/kUfY=;
+	b=jg6OcV3dUVwcM/7xQwSdx2Eqax62VjRqvalgEpve92AO2JWOrG/ukHe0vwZlJnMO/tl8
+	 rfszjzPnpsrXEJVoVdnuhDOZb9YSWXk2yGKjCQs3/oeUw0RocMWO+1eWyGPIdkIE+gWfR
+	 KvAZM/Op81KYYVCnF0m5+3UMP8UGJAVOh6kqI4yzg9M+NjzYw4olKw6IUU98Prs5RPb1Q
+	 JSH4oMXDQZsNO10oCgSZe9OIMgjIEb9qu1fs1xzWfNqTpY9JMhVq1tt8j3vIugYRaoKPp
+	 v9kyK15jxc8NGSxWLXGcqDBDxgNYCsTo0KSUJaXTy4N5455SY+WDqlS1pLidrIVFcRw==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=gmail.com;
-	spf=pass smtp.mailfrom=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b9d7Xvq7;
-	arc=none smtp.remote-ip=209.85.210.171
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	dmarc=none header.from=kernel.dk;
+	spf=pass smtp.mailfrom=kernel.dk;
+	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Rh+5Wr6X;
+	arc=none smtp.remote-ip=209.85.160.52
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0004606D812
-	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 15:46:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org C0004606D812
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7963260A260D
+	for <io-uring@vger.kernel.org>; Wed,  4 Nov 2026 15:57:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7963260A260D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=b9d7Xvq7
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-8a070755c8cso550922b3a.0
-        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 07:46:58 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=Rh+5Wr6X
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-483c607ccb4so553568fac.0
+        for <io-uring@vger.kernel.org>; Wed, 04 Nov 2026 07:57:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20260707; t=1793807218; x=1794412018; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4iSX/nWU8rMCqRdOx/hltZVoYHeJpLYWf61qQIJ2Cg4=;
-        b=b9d7Xvq7UcCxwI0UY5MepvczFSZfomz6wD6OU8cFdh0QX16pPRcpA6L4+e9FpRqIqo
-         EwnQGXEmakoBOqKpIQIxrd6c/ofcSfUm6gpBb7dWELKh2cLWUS/wH07LeMhdSauqwBmP
-         jgaAHWbMUr9khNPQoBvl4BEJZMa0fb/EIk1wHc3DWYNtM3Js1UIfBY2YUlI1RuBJMKDR
-         y/cGwgMLQOFKepbWthFCgWUvHu7VfUfO/JF5JI4xcjnhF0C88ZVMrlvL3Pp+ouRiFmtp
-         PJ95xg3i9l8vX4Vum+LVzbgUdIFAlhidZr4xTURkJ5syKNV1fq1B3Ue28c9jJxlWkeYJ
-         liSg==
+        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793807850; x=1794412650; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Kk7WaUVAPHjwSZ8WgmPUlAUmwEhJpE2sjlLBaU/kUfY=;
+        b=Rh+5Wr6X0oJFm7cUtmnB780WmqbM/ENM3a8i2ARjLYHWZFLrgnXMokIAg9EzVsahYr
+         RjoQ6dClfy1+V69Qqaf8SZLKHdaQierrZ2THnuYOS3F60chX6B/5exw+4FHxXh5VtOIs
+         kwN6mfyJssWVU+e6UI/1TLMWxBg8VhXwI/Rf3vaaopL9niHXsEL3TTkOjGOF28lO2YPA
+         o20ctc06w5gQGEFeiLEl4NHfsHQ3p4byMxd66mKvn1JScKFb3EOmNE6/Z6AE63IlYQUw
+         CBiIz3CVAyEZhh9M1zNDg9y2aX0N2N5qXm2AFoXGPwZyPzDt/inp8Bfa4L8zSPx7MJyf
+         Vu3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793807218; x=1794412018;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1793807850; x=1794412650;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=4iSX/nWU8rMCqRdOx/hltZVoYHeJpLYWf61qQIJ2Cg4=;
-        b=vyZ35pybXFRQhv0ef3GFQc0543YO0tQgALHVlg/kJuwo96TZ8xPIAzbAal8b93lpyc
-         eXk6TPQSVcBjjU+zs9a0BWF50AauODTc0kcIXCUS6AmwMLDjPikCZo/GiQ1moZR62e8s
-         3Wv761THS5685ABX+Z1YLcdAZZyd2sPp5qFaHvczGDIcTI++/0T1zLl1f3m2wVdVe+eS
-         0SjdUYrdA7tlHqwkhJ+nZOMZspYx8QKJXIyApTHfTXnxrsTYKSpowGqRQt1UYPIqh4wJ
-         EDxODtYK4L40LTv8d1f58L2eGZz5CjAmBzxW94bKhRLi3U2CTL36WcwC4byVBuJuYDzm
-         YpIA==
-X-Gm-Message-State: APuU4Z8OkU2oopvqAbkUMt8q+osPnbjMkvLg44STEkL7qQPGCns1vt3D
-	KrSB0u8oo2oJXI01DEPm8MaZgqD8clA8OlYIj+iB7AZWNgvkJ+c4WWpHMKOhPLCz
-X-Gm-Gg: AYBFou2wJ2+NkIHkASeL3BYrRUAkuoesyW9uIooCn4sKR+4F7J12pzmiDwIPQAj+f8G
-	apqrnXmYufUpuq1gz7nEJEy2jCuvA8KN9XorKBzhDqIUchPO89MmKlpdQ/tR+2sCN7s7vzxjBq8
-	Eo3aG02o/pWwJoneoExD0KVw9HLgsLYwNvYGPj82YAl4ekPnV9xt7u12LJ2hUTuFqNAnwlwMdpX
-	Liu+d4Oh3D/4PbgFT/wqLPOhksn66cKq6CKXMzIYxNzyoCNZrTvKMzy6hUuCqpNm4Gm0h4IwxB7
-	10UwJv98DGpM87EwctBEtqjLJQJeeoOyLqgF85SkM1F0b+tF74pHgPuuc8PRe47p+/4zbe7/9Jz
-	FODLzd8SeBi/uwy9S1doyUXM070PJUN/eNGGIfNDG8jPBkqJodutoa1ontK//OXFmcDkSNwQ6Sr
-	529UmzMi9snZXAq/+3y8w9ol57xoZ6sxVX5I3BKJ3n0c64xpr5n1NxgK8C2GK3LLD9QBFWdLIJs
-	5fjbZu/FI3GippsoDttwANILNMUtgUR58NBmKrxoVDywLdxGczT/KOm6C/MMJZ/asP8d52dvBUP
-	vzOuYQ4PAcJFcAHvA7bggZj7/lG3PGgjYKrVAaFCzv6i0V8=
-X-Received: by 2002:a05:6a00:44c5:b0:89e:a122:fa28 with SMTP id d2e1a72fcca58-8a9be589f16mr12906931b3a.12.1793807217910;
-        Wed, 04 Nov 2026 07:46:57 -0800 (PST)
-Received: from ubuntu24.vpn.host.chaitin.net ([124.77.157.93])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8b09b569495sm1176805b3a.37.2026.11.04.07.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2026 07:46:57 -0800 (PST)
-From: Yuansheng Yang <0xbeac@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org
-Subject: [PATCH RESEND] io_uring/rsrc: hold uring_lock across index-alloc put_user
-Date: Wed,  4 Nov 2026 23:46:55 +0800
-Message-ID: <20261104154655.81876-1-0xbeac@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=Kk7WaUVAPHjwSZ8WgmPUlAUmwEhJpE2sjlLBaU/kUfY=;
+        b=tMw62x4aUOCWFhtZuJvJoiptBm1IpEElIJi7LpM/vUTgwwrrln/8HyW+XWwbz3GU/b
+         O8YCuk/vDmEg8AF75ue6aJqvjjqfMJSsuVG1VRXuEzegOSLXYchLBc9XWY4cM/nJ1mw7
+         UwLZJNqSr8CVy0nOmF7wfpz9oWjrcyFi3yNPC2RroBn412xerI6oB0GrdokyDz149E4C
+         ATWWTMrk/CwwB5yYVv0GLbRgQnNp5epQR/s6e3Hp+XqIfD5+MZ6Wca0X+YdmWs8krqJ+
+         7ipGC2oJRGKX8cJpAz2vGO/jLW/DVbiWJa1P7NX8MyqxMCgX5xvf/k+NQDeLt9vyGtZr
+         7PXQ==
+X-Gm-Message-State: APuU4Z9e7O+bkYv/zXbFX8f3kaXlDInuNisGkr6Q5k4ZmltBVdO89Vn3
+	EnhYNKVs0014BvXEy1QdlbgHn3GOrg0TnURocb4wupSXConetQjchcLm8VUxyC6Iwqk=
+X-Gm-Gg: AYBFou0P+n3dqa9LGvZ+cV+cmYMx4L4pgA7OU/rt+dGQB04cCmV2FzBzF8CUxal3iQA
+	dsbCycimDDNaa8XfgsbFBE0lr8OG5h2cI6nGaehJVBPA3KI6PcyLiHaGiywFyZqObRYWAFoFCYc
+	q0jl+vYLKjz2zmy2D/7RWH3TbBWYgIn0iYrlRUF5IQA6sf6KxpAvWvBncqk56gmaOphu7+xxSx1
+	gUlR9xBV65GA1bs1XWvxyhhlqFnKke5J81QDCKR+rUikw9kYsYhW9LAI9hXLw++ejG6mF82qjRt
+	sAhrCIhQX9YfHfHTIeB4c2n8o9Ba80QvekRAjXv3Ws5rWz86/BKqlC7rOn09CUmb6EyQOyliX8n
+	s4MEoyDEThLvMdf0EP3LNw0D+F7ZNJp638zgj2VGN7ZaA/CaOn/KvooIG6NxXMcDTIC938WG4L0
+	4X22QRWl3xdMXey5DKolVwa2LcLdbA5oo8bKc9Txt1NYXY9djdOdjBmFqiGHebDduF+R18K92eh
+	Z/nhcJXGMY3BByigkzT/4m7xdpGYwbSD3j2U5W6NcfCpFoFdT1cLTGD0oGkFnHUZks+ApGSvIle
+	O7WxuyeC/lcSml1MYaQ1fo042PlFapBe10/m+1HBmEBAdfCiko5gXIVQU3OXrMqV7MqeSYDexor
+	UnH+IyMPzcbzHfXQZxVdiVHttHBEcxQ==
+X-Received: by 2002:a05:6871:2b17:b0:494:895e:c3e2 with SMTP id 586e51a60fabf-4a90764ca88mr11054199fac.20.1793807850283;
+        Wed, 04 Nov 2026 07:57:30 -0800 (PST)
+Received: from [192.168.2.38] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4acea5f93b7sm2261237fac.12.2026.11.04.07.57.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Nov 2026 07:57:29 -0800 (PST)
+Message-ID: <b0cf7a92-02ca-431e-9210-f76b205487fe@kernel.dk>
+Date: Wed, 4 Nov 2026 08:57:28 -0700
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -91,88 +91,75 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] io_uring: only wait for in-flight requests if the closing
+ task uses the ring
+To: sariorkunemin@gmail.com
+Cc: io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20261104-io-uring-wait-inflight-v1-1-4361a0905e20@gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20261104-io-uring-wait-inflight-v1-1-4361a0905e20@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-io_files_update_with_index_alloc() installs a fixed file via
-io_fixed_fd_install(), which drops ->uring_lock when the request runs on
-io-wq, then put_user()s the allocated slot back to userspace.  If that
-faults, the error path calls __io_close_fixed() by slot index after
-re-taking the lock.
+On 11/4/26 4:56 AM, orkunsari via B4 Relay wrote:
+> From: orkunsari <sariorkunemin@gmail.com>
+> 
+> Since commit 13d3783a55b7 ("io_uring: wait for in-flight requests on
+> ring release"), the task dropping the last reference to a ring file
+> waits in io_ring_ctx_wait_inflight() until every request on the ring
+> has completed, and only a fatal signal ends the wait early.  The
+> requests may belong to other tasks and may not complete for an
+> unbounded time, e.g. a read on a FUSE file whose server never replies.
+> A process that merely received the ring fd over a UNIX socket and
+> closes it then blocks in close(2) for as long as those requests stay
+> in flight.
+> 
+> The comment in io_ring_ctx_wait_and_kill() states that the wait is
+> meant for requests owned by the task closing the ring.  Only tasks that
+> created or submitted to a ring have a node for it in their
+> io_uring_task, so skip the wait for any other task and leave the
+> remaining requests to io_ring_exit_work() as before.
+> 
+> A thread of the same process that never attached to the ring no longer
+> waits either when it drops the last reference.  A task that is attached
+> can still be held up by requests submitted by other tasks; that case
+> is not addressed here.
 
-The slot can be closed and reused between the install and that cleanup:
-another fixed CLOSE plus open/accept/pipe/socket, or a FILES_UPDATE, can
-put an unrelated file into the same slot.  The error path then removes
-that file instead of the one this request installed, ending an unrelated
-file's fixed-table reference early.  This is a correctness/DoS issue, not
-a use-after-free: fixed-file requests hold an io_rsrc_node reference, so
-the node and file stay alive until they are done.
+Fix looks fine, few things to sort out on your end:
 
-Hold ->uring_lock across __io_fixed_fd_install() and put_user(), and do
-the failure cleanup with io_fixed_fd_remove() under the same lock.  This
-is the same class as the io_pipe_fixed() fix; faulting while holding
-->uring_lock is fine, the registration paths already do it.
+> This was found by AI-assisted code review (Claude Code).  The fix has
+> been build-tested with W=1 only; no reproducer was run.
 
-Fixes: a7c41b4687f5 ("io_uring: let IORING_OP_FILES_UPDATE support choosing fixed file slots")
-Signed-off-by: Yuansheng Yang <0xbeac@gmail.com>
----
-Resending with corrected Signed-off-by and without the CVE reference (being invalidated); no code changes.
+Just drop this.
 
- io_uring/rsrc.c | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+Also fix silly double spaces in commit message, thanks LLM, and
+verbosity is also overkill.
 
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index e0345c3e76..6c85eb50f0 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -570,13 +570,14 @@ int io_files_update_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
- static int io_files_update_with_index_alloc(struct io_kiocb *req,
- 					    unsigned int issue_flags)
- {
-+	struct io_ring_ctx *ctx = req->ctx;
- 	struct io_rsrc_update *up = io_kiocb_to_cmd(req, struct io_rsrc_update);
- 	__s32 __user *fds = u64_to_user_ptr(up->arg);
- 	unsigned int done;
- 	struct file *file;
- 	int ret, fd;
- 
--	if (!req->ctx->file_table.data.nr)
-+	if (!ctx->file_table.data.nr)
- 		return -ENXIO;
- 
- 	for (done = 0; done < up->nr_args; done++) {
-@@ -590,15 +591,28 @@ static int io_files_update_with_index_alloc(struct io_kiocb *req,
- 			ret = -EBADF;
- 			break;
- 		}
--		ret = io_fixed_fd_install(req, issue_flags, file,
--					  IORING_FILE_INDEX_ALLOC);
--		if (ret < 0)
-+		/*
-+		 * io_fixed_fd_install() drops ->uring_lock when running on
-+		 * io-wq, leaving a window where the slot can be closed and
-+		 * reused before put_user() faults.  Keep the lock and undo
-+		 * the install under it.  Faulting under ->uring_lock is fine,
-+		 * registration paths already do that.
-+		 */
-+		io_ring_submit_lock(ctx, issue_flags);
-+		ret = __io_fixed_fd_install(ctx, file,
-+					    IORING_FILE_INDEX_ALLOC);
-+		if (ret < 0) {
-+			io_ring_submit_unlock(ctx, issue_flags);
-+			fput(file);
- 			break;
-+		}
- 		if (put_user(ret, &fds[done])) {
--			__io_close_fixed(req->ctx, issue_flags, ret);
-+			io_fixed_fd_remove(ctx, ret);
-+			io_ring_submit_unlock(ctx, issue_flags);
- 			ret = -EFAULT;
- 			break;
- 		}
-+		io_ring_submit_unlock(ctx, issue_flags);
- 	}
- 
- 	if (done)
+Signed-off-by is a legal contract, use a real identity, not some
+handle.
+
+> @@ -2547,7 +2547,16 @@ static __cold void io_ring_ctx_wait_inflight(struct io_ring_ctx *ctx)
+>  
+>  	if (current->flags & (PF_KTHREAD | PF_EXITING))
+>  		return;
+> -	if (tctx && atomic_read(&tctx->in_cancel))
+> +	/*
+> +	 * Tasks that have attached to this ring (created it, submitted to it,
+> +	 * registered its fd, ...) have a node for it in their io_uring_task.
+> +	 * A task without one owns no requests here, e.g. one that received
+> +	 * the fd over a socket, and must not be made to wait for requests it
+> +	 * has no control over.
+> +	 */
+> +	if (!tctx || !xa_load(&tctx->xa, (unsigned long)ctx))
+> +		return;
+> +	if (atomic_read(&tctx->in_cancel))
+
+Similarly, this comment is way too long. Cut it down.
+
+Resend with those things fixed, thanks.
+
 -- 
-2.43.0
+Jens Axboe
 
