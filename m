@@ -1,51 +1,51 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.167
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.214
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793971245;
-	b=xsxXXUKdnpnSRUKtmpw24gQa/+LR4XzA70ABl8b6hUa0xF4Eb/6cJ4FvFVyObzoIkK+Y
-	 mfwUY6bNX4veI+wtxASLAT6vwXozbXMxPuU3iQj3HYIDax7ptJL4qFXZs1qKI7kfUr74y
-	 yHAc+3OS2IEpwp7d2qvA6DkDj1mqNMHs4k+9sJE1fgVAwlSXo9fRbIQazz6+3fjbl/oSb
-	 eQ+kuw/I7jQVPF018BwgQn78M15vB3Sc8mnDtIFDby6lbryxr9KbXCrYFTGgN3krfeX/I
-	 Lx9FCjQrp/a0vXA2I6GkC+fv9V5tejLqVsIIi+x3tldmXf493DySR1foOJeYLyaVQ+w==
+	t=1793971259;
+	b=rttUlzxJdCvTWIvBPXjeC2CuvddNF0C+2kLp4dZF8Bfr5dmS0zceDOqYX2OvuKgVVNkx
+	 xzHhOvtYytkhIpBh2xHqbJnChCPm4/VTph4qiqd8BAkUePagHZdHGBe4a5kO7Vc3L/Uzg
+	 eFXQiy/+5h3JL/WYv8w7Blw77VafwMPrAifMM+ZYbcDNVj8ZjsdvlNa2BhjG9a5zXLijJ
+	 xgLGMLkhEjqx/PUQt0hwpZdk89gbd6Iq8yfZdN59chVUyDa/iWDadgdrE/7v/k1RQlBAY
+	 /GvZifcGuDZF1SCd/J4zeST6uLKwhgA7xR/yBM6OzEg9Iu93435xc5xkrYc4JUExG7w==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793971245;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793971259;
 	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
 	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:
 	 Content-Transfer-Encoding;
-	bh=fUXCYLhn52D7jjqtCGZ+7rWovE/XUiCSennV1JjWXTc=;
-	b=Tja8I3Cr4bmzxxOCgF6ve0xA6OleInSaqxMr28tqwve/R11Q75OCsiRvVfdMZOgI9HiF
-	 VIy3O2svEyuClI6fmDIukP6E1aBd6TnpjpHQr/qLhq9wzgHkF935ITlSZEK90S5p8bKkn
-	 s23aDZSjefKiHbk3jvbpMe0HUIKQ6MbzqFpP3bt1icdu3eQJooUZnYKmg+v6jAzvoy8nw
-	 vt2wWZEmKYPr4XXihmMt6qI/np5YgQN9RTqJ2Bun3AM1guK60sc5+SQawoueIFFoPGO5A
-	 IfMApGIHXjOX0Ovbp8Fb0rR5r2abbFsHjUlb64XmHnUijyq/5MmBdPYb3BFX8WJMJQw==
+	bh=mBQnCmi6lRqH8GAi8YV/xcgTg4V0TO+wKEtX2yDXFxQ=;
+	b=uAc1qQpvIO6u3ktuNgKswBwW3yT4WwD13K8Dj9dEXN7w2M4gnJ0qBXHvk1X+y1jEvFm3
+	 f1nywWhOnhMJt1Pry3EAp6gftnEEZZnA0ZI7ZLG3rGHk0Z8kQ70zJX68evd2nODbG1R8J
+	 RkS5Ab2V7h3oNbyrdAlUZ8wkFSQusd8DKAiIQ46tl01x4u9AMg3EP7r6T3njd2WMEivJi
+	 6b3yZ428iQBvg6j+peI0oN4yJ5WUN1KbUNIqW1pjKr5vPxqmXBQmK5g1RYriz2jX7K4a9
+	 KYQdQ8J+ihuToZ8K0ipSZEBLZkQ+7inGmNOCMCfB5YSMnNLQnR3h46EKmOGXQmnJBGA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
 	dmarc=pass header.from=linux.dev;
 	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AWU+oP3u;
-	arc=none smtp.remote-ip=91.218.175.167
-Received: from mta0.migadu.com (out-167.mta0.migadu.com [91.218.175.167])
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AeWGSHSw;
+	arc=none smtp.remote-ip=95.215.58.214
+Received: from mta1.migadu.com (out-214.mta1.migadu.com [95.215.58.214])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C307606A32F
-	for <io-uring@vger.kernel.org>; Fri,  6 Nov 2026 13:20:44 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 3C307606A32F
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FAD606A334
+	for <io-uring@vger.kernel.org>; Fri,  6 Nov 2026 13:20:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org F0FAD606A334
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AWU+oP3u
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=AeWGSHSw
 X-Envelope-To: io-uring@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ojgBXCCljWWMx/by6O5nBZ1cYADUOJnAnHqRvmqKFno=;
+DKIM-Signature: a=rsa-sha256; bh=dKQ/3LCCVbNcrSr0Tnyt8Yullo0Ku/Vkln3W2FNUdns=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1793971243; v=1; x=1794576043;
- b=AWU+oP3uE+Bp9M4NHthTv7q7awqULRAk7AJ+yUdGd8HP3gv4OZ3L3y2iim+wbp8ZY+SmjP6f
- RQOZ8k1aHyjLLkndQT62PYK+Mb5tL6fxCe7tCZ6NDOnwdYBj1Z+KZlsMEmliGrhC5h4dkKcDQnt
- /zsj+KNoWYeiGHHuaHTmkkzg=
+ t=1793971256; v=1; x=1794576056;
+ b=AeWGSHSw5gCUCbueF62VSkT4cd4H1UWyOnuiftbsvsH889tMmC2ju0ZopLoCA7ztdQoWRGFj
+ Ah9CMYssyGipSVl+fOz0aQ50JMH5mol+kXYjs90BTdwmZzGC1/1QzVy/MXrru2z9UISsupQEMQg
+ oQNHTipoer+T01odkijK4tPs=
 X-Envelope-To: io-uring@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fd2f547758ebbf7f;
-	Fri, 06 Nov 2026 13:20:43 +0000
-X-Mizu-Trace-ID: fd2f547758ebbf7f
+Received: by smtp.migadu.com with ESMTPS id 178d9492481963cf;
+	Fri, 06 Nov 2026 13:20:55 +0000
+X-Mizu-Trace-ID: 178d9492481963cf
 X-Migadu-Flow: FLOW_OUT
 From: Tao Cui <cui.tao@linux.dev>
 To: akpm@linux-foundation.org,
@@ -93,9 +93,9 @@ Cc: linux-mm@kvack.org,
 	vbabka@suse.cz,
 	cui.tao@linux.dev,
 	cuitao@kylinos.cn
-Subject: [PATCH 6/7] io_uring: account the ring context and SQPOLL thread data to memcg
-Date: Fri,  6 Nov 2026 21:18:28 +0800
-Message-ID: <20261106131829.3228926-7-cui.tao@linux.dev>
+Subject: [PATCH 7/7] io_uring: account the remaining per-object allocations to memcg
+Date: Fri,  6 Nov 2026 21:18:29 +0800
+Message-ID: <20261106131829.3228926-8-cui.tao@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261106131829.3228926-1-cui.tao@linux.dev>
 References: <20261106131829.3228926-1-cui.tao@linux.dev>
@@ -112,85 +112,85 @@ Content-Transfer-Encoding: 8bit
 
 From: Tao Cui <cuitao@kylinos.cn>
 
-The io_ring_ctx and the SQPOLL io_sqd are the last per-ring allocations
-made with plain GFP_KERNEL.  The larger surfaces around them are
-already charged: io_mapped_ubuf and io_rsrc_node since commit
-075d5837bafc ("io_uring/rsrc: charge buffer arrays and nodes to memcg"),
-the tctx node and its XArrays since commit 0b34e7b20a48 ("io_uring:
-charge tctx nodes and personalities").
+A handful of io_uring allocations still scale with user controlled
+counts on plain GFP_KERNEL: the per-ring io-wq and its workers, the
+alloc cache entry arrays, the provided buffer peek and import iovec
+arrays, and the registered eventfd contexts.  The tctx side is covered
+by commit 0b34e7b20a48 ("io_uring: charge tctx nodes and
+personalities").
 
-Charge the context and the SQPOLL thread data the same way.
+Charge what is left.
 
 Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 ---
- io_uring/io_uring.c | 2 +-
- io_uring/rsrc.c     | 3 ++-
- io_uring/sqpoll.c   | 2 +-
- io_uring/tctx.c     | 4 ++--
+ io_uring/alloc_cache.c | 3 ++-
+ io_uring/eventfd.c     | 2 +-
+ io_uring/io-wq.c       | 4 ++--
+ io_uring/kbuf.c        | 2 +-
  4 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 03724419c4e1..d39cdde49a9f 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -229,7 +229,7 @@ static __cold struct io_ring_ctx *io_ring_ctx_alloc(struct io_uring_params *p)
- 	int hash_bits;
- 	bool ret;
+diff --git a/io_uring/alloc_cache.c b/io_uring/alloc_cache.c
+index 58423888b736..f41df1878633 100644
+--- a/io_uring/alloc_cache.c
++++ b/io_uring/alloc_cache.c
+@@ -22,7 +22,8 @@ bool io_alloc_cache_init(struct io_alloc_cache *cache,
+ 			 unsigned max_nr, unsigned int size,
+ 			 unsigned int init_bytes)
+ {
+-	cache->entries = kvmalloc_array(max_nr, sizeof(void *), GFP_KERNEL);
++	cache->entries = kvmalloc_array(max_nr, sizeof(void *),
++				      GFP_KERNEL_ACCOUNT);
+ 	if (!cache->entries)
+ 		return true;
  
--	ctx = kzalloc_obj(*ctx);
-+	ctx = kzalloc_obj(*ctx, GFP_KERNEL_ACCOUNT);
- 	if (!ctx)
- 		return NULL;
+diff --git a/io_uring/eventfd.c b/io_uring/eventfd.c
+index 63fe6e5d79ba..52f5d5b85f30 100644
+--- a/io_uring/eventfd.c
++++ b/io_uring/eventfd.c
+@@ -132,7 +132,7 @@ int io_eventfd_register(struct io_ring_ctx *ctx, void __user *arg,
+ 	if (copy_from_user(&fd, fds, sizeof(*fds)))
+ 		return -EFAULT;
  
-diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
-index e0345c3e764e..9a971c983686 100644
---- a/io_uring/rsrc.c
-+++ b/io_uring/rsrc.c
-@@ -825,7 +825,8 @@ static bool io_coalesce_buffer(struct page ***pages, int *nr_pages,
- 	unsigned i, j;
+-	ev_fd = kmalloc_obj(*ev_fd);
++	ev_fd = kmalloc_obj(*ev_fd, GFP_KERNEL_ACCOUNT);
+ 	if (!ev_fd)
+ 		return -ENOMEM;
  
- 	/* Store head pages only*/
--	new_array = kvmalloc_objs(struct page *, nr_folios);
-+	new_array = kvmalloc_objs(struct page *, nr_folios,
-+				  GFP_KERNEL_ACCOUNT);
- 	if (!new_array)
- 		return false;
+diff --git a/io_uring/io-wq.c b/io_uring/io-wq.c
+index 92df54c6f50c..98f3aa378baf 100644
+--- a/io_uring/io-wq.c
++++ b/io_uring/io-wq.c
+@@ -981,7 +981,7 @@ static bool create_io_worker(struct io_wq *wq, struct io_wq_acct *acct)
  
-diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
-index d387488db2de..b82d3a285337 100644
---- a/io_uring/sqpoll.c
-+++ b/io_uring/sqpoll.c
-@@ -172,7 +172,7 @@ static struct io_sq_data *io_get_sq_data(struct io_uring_params *p,
- 			return sqd;
- 	}
+ 	__set_current_state(TASK_RUNNING);
  
--	sqd = kzalloc_obj(*sqd);
-+	sqd = kzalloc_obj(*sqd, GFP_KERNEL_ACCOUNT);
- 	if (!sqd)
+-	worker = kzalloc_obj(*worker);
++	worker = kzalloc_obj(*worker, GFP_KERNEL_ACCOUNT);
+ 	if (!worker) {
+ fail:
+ 		atomic_dec(&acct->nr_running);
+@@ -1358,7 +1358,7 @@ struct io_wq *io_wq_create(unsigned bounded, struct io_wq_data *data)
+ 	if (WARN_ON_ONCE(!bounded))
+ 		return ERR_PTR(-EINVAL);
+ 
+-	wq = kzalloc_obj(struct io_wq);
++	wq = kzalloc_obj(struct io_wq, GFP_KERNEL_ACCOUNT);
+ 	if (!wq)
  		return ERR_PTR(-ENOMEM);
  
-diff --git a/io_uring/tctx.c b/io_uring/tctx.c
-index b4fecea3ea47..6673393100ec 100644
---- a/io_uring/tctx.c
-+++ b/io_uring/tctx.c
-@@ -23,7 +23,7 @@ static struct io_wq *io_init_wq_offload(struct io_ring_ctx *ctx,
- 	mutex_lock(&ctx->uring_lock);
- 	hash = ctx->hash_map;
- 	if (!hash) {
--		hash = kzalloc_obj(*hash);
-+		hash = kzalloc_obj(*hash, GFP_KERNEL_ACCOUNT);
- 		if (!hash) {
- 			mutex_unlock(&ctx->uring_lock);
- 			return ERR_PTR(-ENOMEM);
-@@ -85,7 +85,7 @@ __cold struct io_uring_task *io_uring_alloc_task_context(struct task_struct *tas
- 	struct io_uring_task *tctx;
- 	int ret;
- 
--	tctx = kzalloc_obj(*tctx);
-+	tctx = kzalloc_obj(*tctx, GFP_KERNEL_ACCOUNT);
- 	if (unlikely(!tctx))
- 		return ERR_PTR(-ENOMEM);
- 
+diff --git a/io_uring/kbuf.c b/io_uring/kbuf.c
+index abf44f5dba26..bc6e552a91dd 100644
+--- a/io_uring/kbuf.c
++++ b/io_uring/kbuf.c
+@@ -288,7 +288,7 @@ static int io_ring_buffers_peek(struct io_kiocb *req, struct buf_sel_arg *arg,
+ 	 * a speculative peek operation.
+ 	 */
+ 	if (arg->mode & KBUF_MODE_EXPAND && nr_avail > nr_iovs && arg->max_len) {
+-		iov = kmalloc_objs(struct iovec, nr_avail);
++		iov = kmalloc_objs(struct iovec, nr_avail, GFP_KERNEL_ACCOUNT);
+ 		if (unlikely(!iov))
+ 			return -ENOMEM;
+ 		arg->iovs = iov;
 -- 
 2.43.0
 
