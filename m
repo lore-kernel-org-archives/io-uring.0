@@ -1,87 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=209.85.167.174
-ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793981122;
-	b=Ivy178I0jY3r04v0787OAeIRQ/X6/uc8Eaf9FxMlZGMseSx2Wj6ORUkME/9SEsf6slHG
-	 ZdHNrDMSHj3qsWd7VLofFxWig9dViAnol5FY8HBoFRS8ZjKZhqceOwnC+baU1R/wiKYA2
-	 R07Zs2YwFcx55Jg4NardVYhno0MPtllpHACRZX41JJyYs8yyo5CnfEyH2FfrOliIp27lP
-	 f4XZNM8kCnGmlZz+vJMivTmkboa7qrcdQJJ1MJFiQyWVDtmsR43s2gedWJ5UkJb/I5nIB
-	 OhC0x2XMecFPKNvFIf9U5JhVj+TYg4n59z6BMr5e8wAix/9pE8DH3k4Mr4xsyIA+gnw==
-ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793981122;
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.remote-ip=209.85.128.49
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=fail;
+	t=1793985930;
+	b=k9i+CGHUl9hVf+rGeAcXaRg9hzr2biBN1ZAFdDZiqjQoCYloZHZmCx6X6OAsq7naAlwr
+	 z+uvXNt9es9HDnQQPP10yTf4urutv4SunMDtyR6zgXQilXRJZTVpEbjOSFctCmDVI6ovi
+	 tFMeXhPrMXEByjbHO17xNvgJbiZ+giIu2yYh5plLCijAsEGrhv39SSPnf46V+uY5g+Kbo
+	 rNWjWcW9r898sTMx5i0UummtvikKh1r0Nn1Ai/gZRjiMNsIJtoTjbd+6mp7ivBi4lBbwo
+	 /75Kmqzo2gm3K2ihxSaiWb4g41Sryt8a8tYCtyLQfDkmBcFzaGTl3A4ZwDlqFzMDNWw==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1793985930;
 	h=DMARC-Filter:Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
-	 MIME-Version:User-Agent:Content-Language:To:Cc:From:Subject:
-	 Content-Type:Content-Transfer-Encoding;
-	bh=Yh1P7typjwfvNkmCJPQQU4gLuzaVgd4vyadmBDFWeCs=;
-	b=T1YCwRL3c6eTUou2sTOcpfvCNmlbK6vo8UUWuzks5biJTA6PF79K0HDKHATMjH5VtBs1
-	 K8dayWVISwNInbiuKMUhb9T/RhdzLTpa9JLyVBNFOB9bDcFZxPbEVkIpzQb5fnXteKGz4
-	 rNeqNd1n3oWhM3efpNh18gSF9L5Qx3sd+GgMiASUY1v6N4IP5vp7pDWv+9aptm4XNTJon
-	 IcB2H2j0X7rTxJxyCBNbokuAdLrI4zRotMQXX34QABRGOOyyvYkaxkHOL98vlRSaKUAOM
-	 atMYV49b552OMX6I0tcxWeZZiZmcqgbbJKdqB4qDg4EXpW03Etn0PlPlojMxY4qu13A==
-ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=kernel.dk;
-	spf=pass smtp.mailfrom=kernel.dk;
-	dkim=pass header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=fHY2ezz5;
-	arc=none smtp.remote-ip=209.85.167.174
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	 X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:X-Gm-Features:
+	 Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
+	bh=fUrJNblI2O1hZNjcXmW6nSh+tuR5hYmiGJK5WvnJCM8=;
+	b=lCclWzfQY0wwbr0RUj/4JHEWv76GDTfH/sGULNRyJ+PyT9716BiEtWGv2xBGUc5qZYaE
+	 VSPs+8zehis3X4CqUf0MWlq81Zmq6OILU8+Y0DE+D8aU06E/05oDKBtb6w1OddvazWOJP
+	 YLFwsxuBcU0n1a0q1IoiyEuh5ZTbM7nBYQNfEJst9+SZ53YDsuQkSlxUHGUl8eYGFeNx2
+	 PBN+URoar+9l6zCeG2AB/b+EkJLLD01gGXxqh1fJXA3e1jAcoKSq9YEMvblWKkdOxM5FM
+	 s5/I+efUfMK1jBoWCmfpuOMoGFyrRSVd/Fnsn6ZHv97wMgMrhspxFz3pMLpWT+mdUtg==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=google.com;
+	spf=pass smtp.mailfrom=google.com;
+	dkim=pass header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b="ewlCk/lT";
+	arc=fail smtp.remote-ip=209.85.128.49
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E41606A326
-	for <io-uring@vger.kernel.org>; Fri,  6 Nov 2026 16:05:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 19E41606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49114606A329
+	for <io-uring@vger.kernel.org>; Fri,  6 Nov 2026 17:25:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 49114606A329
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=kernel-dk.20260707.gappssmtp.com header.i=@kernel-dk.20260707.gappssmtp.com header.a=rsa-sha256 header.s=20260707 header.b=fHY2ezz5
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-5642e0910a3so280501b6e.0
-        for <io-uring@vger.kernel.org>; Fri, 06 Nov 2026 08:05:20 -0800 (PST)
+	dkim=pass (2048-bit key, unprotected) header.d=google.com header.i=@google.com header.a=rsa-sha256 header.s=20260707 header.b=ewlCk/lT
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4b6266b5bc4so1395e9.1
+        for <io-uring@vger.kernel.org>; Fri, 06 Nov 2026 09:25:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1793985929; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XiwqHrAmsXn34HYZ8j8ls01PfTdp1T6EVyoOgCYydf/aCoIATyWDLst2eTcAjB/39K
+         Zf0V8tiSoccP6SbVWYP/q/6F4653ismQtWrCSEDpPpizEIqH3oQ1O3QdVIcGe5eTzmm7
+         gjJo9oumuSiTPunIopnBnq42JtyaAAfiG5a062EFKneD3xaGnDHadd3TGYLEivdnm6rZ
+         +qauqKEU2NF9UI9MPdMnf1yJrRVvR5F9nsMoqynRnOpA2Dwj+kJENP/HLan2nBEPHdno
+         7lw/DaCZvcdWzo6lLGAWI6cq6dao0Af44rI4CFXE3G7OKSemkZ0yH5/5SGGZ7jfbKMLL
+         fQGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=fUrJNblI2O1hZNjcXmW6nSh+tuR5hYmiGJK5WvnJCM8=;
+        fh=PvQKbxHWz7btIC5DqYjD4JPF95UJYIaKdZ7dKeSAEJw=;
+        b=kVgDMcNUpg7ixqg5DHNVkQhzVSW2wmAC5zSYd3mPiruDr5OymJDZXdLzJJDNZfXAsF
+         WHoDKv+ssHIp9JfzCyDPQzooVt4LF+NbJ82YVM69iBjhnAuPhrQx+snjZ1CL3oJ7lPqM
+         7YBKpAcif7kmGVwVn/edWyG57AgGoh/T4eq5jP47+30tiSif7Ov3nCe9PrbZZ3zqhCH+
+         rb3wbHlPACwmM64qb+YvSonuvkUa3purW595U/uCGxwony5cqMvS1jtNdIxdrj4oOxn0
+         7RXPYy4LaO2OiyqKuraDIqZLFUUy22Hsiv1ClJmgVWBOaXKjRvss3frUb/JsdS5xuJ/r
+         YcUA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20260707.gappssmtp.com; s=20260707; t=1793981120; x=1794585920; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Yh1P7typjwfvNkmCJPQQU4gLuzaVgd4vyadmBDFWeCs=;
-        b=fHY2ezz5x0Xv9nGN0dYOs/GppeZ/feF5kWk/+Eo8NLtX3lxLAR98raticoSQZLcd7v
-         CzjGoXjM7i4PBdccsDVc3dVY6f+p6l7g+dfyM/ILcNUpqrl+GMMf6A67s2/K3DsEtuO1
-         XzirZTC4U4GxeQfVmTEMQeqw7ZEXEJa40reBrCDejyTabWv0SvzkzlgnSbdGf44s4s+r
-         bXTk1y1W0f1ILmPzATheO57Ix8jRbUjmFrAduK8/tiT1RrYScvdM9tFagZ+K0IHO6ho1
-         E/kzA3HPCyxoHUcnyEfIjOy81cTVX6Qn34oY97zzcBre5VvGBZ9BP6o1p06VwkRTdGjA
-         fslw==
+        d=google.com; s=20260707; t=1793985929; x=1794590729; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fUrJNblI2O1hZNjcXmW6nSh+tuR5hYmiGJK5WvnJCM8=;
+        b=ewlCk/lTPeKUbMBQjEFxdvXeSJcIPNy2WZqd3RMZR0f4utguz18d1I/25cveVMzzFo
+         RT7lseKNhSlQDjNcDMIS/DhwPwUeEMuf3p3QA2SuaR2YWynu3cJ86aMi1V+rohgW/ueU
+         wdYBRPMGl9NpfqRBybmsYTfqpJAAsq2YUA3wBescnBCrmLOck2h5FL8JtaVfjtntUhMa
+         atBGAqnYj6CPAyn1iWAem1TaZV6cbQ3Ry89bYsb3Y3ddSg87IS5+y0t3k5n/93i7MVsR
+         kOjiJQAHUQ9kOMLGGhlfbBtqgDPKlex2gLuJNJ4aUDDAFXSR7PLhJYKjThP1OZfQlk1U
+         nw6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1793981120; x=1794585920;
-        h=content-transfer-encoding:content-type:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1793985929; x=1794590729;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Yh1P7typjwfvNkmCJPQQU4gLuzaVgd4vyadmBDFWeCs=;
-        b=TdGt1fSnMD+zvGeowzcOnUAAjxbinkQ0m/KR48ZFq+fX+JcNn3LBbQCMwA+9yBECqy
-         tCXCoRoFx28n1w/uPE7poNPLEGhcfG97iSyr3KgbaGI1CVtmivV+0B5d0Ku0OsA0f6zf
-         Y14Ccr/3YO2oL74n9mSfae2mr1NcZtrjEnX6oLij6numUQEp/E2Jl9RrZY7KqsFUgR6W
-         q6dZiCS08/BWbxvHyyZxeoGdwBpjnDX/+sjUwU2nw17/dUQpRmUet5/EojMlpHBWAlD3
-         1R1xFp+EuICcLJukOry+0e3EslKiTPCUuCraAlv/AzVUaBN6eFvfEl8Uuxs4z9yUCkAM
-         aJhg==
-X-Gm-Message-State: APuU4Z99IaoMM8y99fouoQql+eNpoQvp9fUbWhPg/P6nOk9xAoiz6w3o
-	RjW9KDoTN8xXY9/2KYFZ2qolaeMs7gXOYUAQKrDeyLOFsMiAW+Oe5R2S1GY2IDC1pINNUSlBDyV
-	arJB5nYU=
-X-Gm-Gg: AYBFou2/QzRU6cJTb/P2ZPhwpYHTaS3qhV6EynqIoJR4aiCj/HNjtVM7GLIX8+2nT8V
-	/UMcG0AQ7S/BIVX7GBQREG2/S5KUExf2zRG2gII/LbbopIvZZp9lfVg3x06LSKz6ratntSyTnwx
-	AAb/Br2vXQdD0DobJeAxqwqmfTAO+BH+ENcJbX7pbt25pc0GQfzQRm6gc2f+LxyHoQEdDZ3UsEI
-	SQ7eMOiT9woxmEgPhtM813O/ljBtSAvYCVpXh4hpR3+wqmRzmtRqKxwnOTm18+LmSGACMLR9orL
-	oqUJYAw+69Ss+GkdYyDS9PrapHm7fNkpkaYuesWT/6899DGiGIa79iXCEaLHUZkDjKRn3pEJhjV
-	w11fNpanfXfUYbB2eCxtsHR1c8idqhvx+7sIK8sgr4tZYUGuUna7Wol59hT4LjTPXh+WPmiN4Rr
-	lO/JVo9AiMQZV4GaH0zgCUL+5MItduql5v/xgZjq1awy2YImqtJd6fwFvYRUaWmQgdzYtiMtVKR
-	Vwc5y0nG+7itWe5EwOfRgCSgJYG1/9wD6m/x+TOoLdyUJiq1+NdqmBB5mhZ6hVACvkDzs9K0Qt2
-	PtAZ0yc8jwD2CiB8/X2D389cuUbglCsbEz2AC/52ABfIAAkHfs0Sc1TU/q6CMg/asRXRJ83Moe3
-	3CawoBFYZrANQ90pZ7uur/+dR6msGnA==
-X-Received: by 2002:a05:6808:11c6:b0:53b:6f4e:5176 with SMTP id 5614622812f47-567e14af7d8mr2034170b6e.66.1793981119801;
-        Fri, 06 Nov 2026 08:05:19 -0800 (PST)
-Received: from [192.168.2.38] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-567e7e5f6e2sm1764628b6e.11.2026.11.06.08.05.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Nov 2026 08:05:18 -0800 (PST)
-Message-ID: <b57ad47d-6610-4488-8d16-84aaec530888@kernel.dk>
-Date: Fri, 6 Nov 2026 09:05:17 -0700
+        bh=fUrJNblI2O1hZNjcXmW6nSh+tuR5hYmiGJK5WvnJCM8=;
+        b=n3woA4j4X44J8bw32VIq9iNS0FTqIoMrzQoX5DH7hIxUV4U07rf7JmVUU2FJjce1vi
+         V5ddSekfkpW3WWNy1t8ZwQ+Ndl7DQUYgMcEhEFb8C/CWgwg+6t4/f09prBsqDFyJob3o
+         2APhw3EYnbt16Q2pkVi7jufyEX9ARRNjxLKcH1giz4qMfZLxaBZv6fQarF3eDduzWiZS
+         UjCLLXBTI1SkJsWYMQeMcvzVjMBR+JvopOcuiGsUC0D97TzsJ69NUK0jdm8giSLTaHzI
+         BnKlyu1LNqtWfdCiFyjaOxd8xa/AYHTJQRr8Bd5j+9NtqqXegXlnZERqdl7TystkXByS
+         i/7A==
+X-Forwarded-Encrypted: i=1; AKwUvBxtPEEGT9W8a+SJaNQb/5X08Rn57wmq9aqku9ZnKQ4KELTxdxpIDB6D931lHH9L0isCfUUavCzxzw==@vger.kernel.org
+X-Gm-Message-State: APuU4Z8xEk4QBw/CCuQfYzWEVxbaMAgV6uaNAAADPiypcaLKpR4zDLLO
+	Wh5M1/vFypyJJWt7/XT4lHAbch52AdrUS7HBiCQ99bQokG+2ZwFeOyUDCBKb8xrG7S1/PAQWKan
+	q3kVbXyXZTe9bRgm0qkubKtcWNKOqIMbu7bNUdepV
+X-Gm-Gg: AYBFou2Ywjq6fLc2DyUAfBJBVTr2Qi9biOAR9otvmAQP9O8n861bP7Ydf3xKZpm2erj
+	opFDqHp1mCAT2In6gleSvrfrxSoAwLU8gNZVfysC8RiFzKQdGpxxdAFOJh60I1nInGE5Fj5y0mi
+	4FdprkxzjrdY8sKbIxxxj8E2cf3+dIXakWJZNZAqNqHNWjHCOABUm6mmb7VATvAcQu7dTHyC/uO
+	dobpW6ImAQSMcZ/mRoXtF3t3mTxmw4rPlnIUC32vO7R7NID92PKIM9RfVhy6ZBRl1r2BYpP+wA1
+	T0qzDbC59DBUY4M4+F66VM3naR/AjY5TAfLzAWICvNlT/48BtD/R7hEyhjlzWsXyRKyLOfLCSGo
+	BN9U2qkZqhPT6oE9Cy6vluhHC0J1LynM+vlig2rNZ2+2nfpQ8mJMi1RRNPo8wGVVVBtEOWAseF9
+	oLx9NRx40GMTL+iwFw2dEpdWJP+lGqoxK85oSLIcDj4Yru
+X-Received: by 2002:a05:600d:644f:20b0:4a2:a8c:22ae with SMTP id
+ 5b1f17b1804b1-4b78a315689mr14125e9.12.1793985928307; Fri, 06 Nov 2026
+ 09:25:28 -0800 (PST)
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -91,103 +105,88 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: io-uring <io-uring@vger.kernel.org>
-From: Jens Axboe <axboe@kernel.dk>
-Subject: [GIT PULL] io_uring fixes for 7.4-rc2
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20261106131829.3228926-1-cui.tao@linux.dev> <20261106131829.3228926-3-cui.tao@linux.dev>
+ <1e18fcfd-785d-43cc-afd6-d181bf8305eb@amd.com>
+In-Reply-To: <1e18fcfd-785d-43cc-afd6-d181bf8305eb@amd.com>
+From: "T.J. Mercier" <tjmercier@google.com>
+Date: Fri, 6 Nov 2026 09:25:16 -0800
+X-Gm-Features: AclHuK_zmhBLd-fBLwMoqE-7QVB_DAT0nisVVyTe7VWHd67XlQDn1ECR61povKo
+Message-ID: <CABdmKX0nCB2hT+iMh=BB-nC=fUBPof8YvjvO-gtEw+zcHZgvZA@mail.gmail.com>
+Subject: Re: [PATCH 2/7] dma-buf/udmabuf: account the page array metadata to memcg
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Tao Cui <cui.tao@linux.dev>, akpm@linux-foundation.org, dgilbert@interlog.com, 
+	mkp@kernel.org, loberman@redhat.com, jmeneghi@redhat.com, kraxel@redhat.com, 
+	vivek.kasireddy@intel.com, mst@redhat.com, jasowangio@gmail.com, 
+	eperezma@redhat.com, stefanha@redhat.com, sgarzare@redhat.com, 
+	rostedt@goodmis.org, vdonnefort@google.com, mhiramat@kernel.org, jgg@ziepe.ca, 
+	kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org, 
+	James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org, 
+	phasta@kernel.org, joro@8bytes.org, will@kernel.org, 
+	linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org, 
+	kvm@vger.kernel.org, virtualization@lists.linux.dev, 
+	linux-trace-kernel@vger.kernel.org, iommu@lists.linux.dev, 
+	io-uring@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bobbyeshleman@meta.com, mathieu.desnoyers@efficios.com, robin.murphy@arm.com, 
+	mason@kernel.org, aesteve@redhat.com, harry@kernel.org, vbabka@suse.cz, 
+	cuitao@kylinos.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Fri, Nov 6, 2026 at 5:23=E2=80=AFAM Christian K=C3=B6nig <christian.koen=
+ig@amd.com> wrote:
+>
+> On 11/6/26 14:18, Tao Cui wrote:
+> > From: Tao Cui <cuitao@kylinos.cn>
+> >
+> > udmabuf pins the pages of a memfd and hands them out as a dma-buf.  The
+> > data pages keep the accounting of the memfd they were instantiated in,
+> > but the bookkeeping around them does not: the page pointer array and
+> > the pinned_folios array, both sized by the buffer page count, plus the
+> > transient folios array sized by the memfd folio count, are plain
+> > GFP_KERNEL.  A 1GB buffer costs about 4MB of uncharged SUnreclaim
+> > memory, and size_limit_mb defaults to INT_MAX.
+> >
+> > Charge the three kvmalloc allocations so the creator pays for the
+> > metadata it induces.  The system heap in the same subsystem already
+> > accounts its buffer allocation;
 
-io_uring fixes for this week. This pull request contains:
+Only if the mem_accounting param is set to true. We (Android)
+currently depend on it being disabled because system heap buffers
+don't have a single owner for their entire lifetime (ownership often
+changes immediately after they are allocated), and the kernel doesn't
+have the ability to switch who is charged for the buffer memory quite
+yet. Albert is working hard on it at the moment.
 
-- Only wait for in-flight requests on ring release if the closing task
-  actually uses the ring.
+Could you update the message to note the mem_accounting param pls?
 
-- SQPOLL fixes: do the return-to-userspace work in the SQPOLL thread,
-  as memory.high reclaim and blkcg throttling otherwise only ran at
-  thread exit, and don't set the stop bit on thread exit, which
-  tripped a WARN_ON_ONCE() in the ring teardown.
+> > the data pages here stay with the
+> > memfd.
 
-- Don't poll a writer for a read side hangup or for urgent data, as a
-  half-closed peer or unread OOB data kept the async poll of a send
-  ready on every re-arm.
+memfd / udmabuf is a little special because it uses shmem for the
+backing store, which is already tracked by memcg under all conditions
+(except hugetlb). We don't currently use udmabuf, so the lack of memcg
+charge transfer for udmabuf is not an issue. But once we get charge
+transfer working for the system heap it'd be good to follow up with
+udmabuf.
 
-- Cancel all matching poll requests in one pass for CANCEL_ALL rather
-  than restarting the hash walk per request.
+> T.J. needs to take a look here, but I fear that this might break uAPI.
 
-- Hold uring_lock across the put_user() for the index-alloc file
-  install.
+Thanks for looping me in Christian. The buffer allocations cost
+gigabytes, but these metadata arrays are only 4MB per 1GB of buffer,
+so I don't expect charging them to break anyone. Leaving them
+uncharged is an accounting gap though, since someone could spam many
+udmabufs from the same memfd and only pay for the memfd pages once. So
+this change is ok with me.
 
-- Don't arm an hrtimer and schedule for a wait whose timeout has
-  already expired.
+> A lot of the DMA-buf resources are intentionally not charged against memc=
+g.
+>
+> Regards,
+> Christian.
+>
+> >
+> > Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 
-- Add a feature flag for the dma-buf registered buffer support.
-
-- selftests 32-bit cast fix
-
-Please pull!
-
-
-The following changes since commit 6628e7d4c6b25c8d18f1345e3a20d21829aae7e4:
-
-  Linux 7.4-rc1 (2026-11-01 13:26:31 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux tags/io_uring-7.4-20261106
-
-for you to fetch changes up to cf6542493e35ab9e72ac07da10a178ac78db5a16:
-
-  io_uring: only wait for in-flight requests if the closing task uses the ring (2026-11-04 10:25:14 -0700)
-
-----------------------------------------------------------------
-io_uring-7.4-20261106
-
-----------------------------------------------------------------
-Ioannis Coward (1):
-      io_uring/wait: don't sleep on an already expired timeout
-
-Jens Axboe (2):
-      io_uring/poll: don't poll a writer for a read side hangup
-      io_uring/poll: don't poll a writer for urgent data
-
-Orkun Emin Sar? (1):
-      io_uring: only wait for in-flight requests if the closing task uses the ring
-
-Pavel Begunkov (1):
-      io_uring: add feature flag for dma-buf support
-
-Sasha Levin (1):
-      selftests/io_uring: cast optval through uintptr_t in mini_liburing.h
-
-Shakeel Butt (1):
-      io_uring/sqpoll: do the return-to-userspace work in the SQPOLL thread
-
-Shang En Sim (2):
-      io_uring/cancel: count all requests that a CANCEL_ALL cancels
-      io_uring/poll: cancel all matching requests in one pass
-
-Shuai Liu (1):
-      io_uring/sqpoll: don't set IO_SQ_THREAD_SHOULD_STOP on thread exit
-
-Yuansheng Yang (1):
-      io_uring/rsrc: hold uring_lock across index-alloc put_user
-
- include/uapi/linux/io_uring.h          |  1 +
- io_uring/cancel.c                      |  3 +-
- io_uring/io_uring.c                    |  5 ++-
- io_uring/io_uring.h                    |  3 +-
- io_uring/poll.c                        | 62 +++++++++++++++++++++++---
- io_uring/rsrc.c                        | 21 ++++++---
- io_uring/sqpoll.c                      | 21 +++++++--
- io_uring/wait.c                        |  8 ++++
- tools/include/io_uring/mini_liburing.h |  3 +-
- 9 files changed, 108 insertions(+), 19 deletions(-)
-
--- 
-Jens Axboe
-
+With the commit message updated to mention the mem_accounting param:
+Reviewed-by: T.J. Mercier <tjmercier@google.com>
