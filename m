@@ -1,111 +1,101 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=95.215.58.48
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1793966676;
-	b=biL/aK4zT+JXeng+Ts2uIHHsWFALWtEUiRyvbyqnc/eH/nkwgKZng8DzOL57fDy34dc9
-	 T6Q09Fl/veXDB2s7CcDIAqk9+9tgb+2IUFgzcan42Jhc19YCZuq7rUEUV1tJI/gW+OOGz
-	 RxbSExx+hZ8DXhgDt/iUusm021hLHGDWR9lzz7Z+vptbeARysd5F9lgOjAFW8yE9SMM4h
-	 Qd04xkkNA+vRIfNpJngFk/S+je6aO3PqWnJnNz3zC9HkofifN9ir7bUt7H6WDRvYpf8CL
-	 YMZWxVhxY85eX9dR5DHsV/crL2AWb9+14a0I+ATmKjSKjzLeCfqLrCuZkGQp1s/pD8Q==
+	t=1793971144;
+	b=ru0e9zhkkQNRSka2pSRYYRqf5WhYfRAHiAj231y9os/1T3fR1wikwN4tiov7DF6/j2y7
+	 vQcAUqG2vitHAuCIOFbA3UFJnlvd8QbACYlW8S9K3s3j7I7Y6/bKbQQ5XIbHhZrEASZaJ
+	 +Qh7IE7v5KshAyyAbjrKoULJaMBl360z8zZr+0G8O+Kd/S+QO9DIPs1VApeq2Qpi7wboz
+	 dmKWxeFb/+g3JlkIZso/SLJe7uueQjHspaPTHLnjPU87b17pdzIgPQHHuNVCPHKOvaM21
+	 xkgHgsfHVfd/UQZIsAq2u7Br0vCzAj+G8LiYozcPvSV48dFQzN27NPPhUScN23Jolwg==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1793966676;
-	h=DMARC-Filter:Received:Received:DKIM-Signature:DKIM-Signature:
-	 X-DKIM2-Info:DKIM2-Signature:X-DKIM2-Info:Message-Instance:
-	 X-ME-Sender:X-ME-Proxy-Cause:X-ME-Proxy:Feedback-ID:Received:X-Mailer:
-	 MIME-Version:X-ThreadId:Date:From:To:Cc:Message-Id:In-Reply-To:
-	 References:Subject:Content-Type:Content-Transfer-Encoding;
-	bh=mQPghIdCwc0e98l2yQke423qVKfB2niFRxcXLsZIMCo=;
-	b=zvBp+JCyWn+/+nhPPtM9LCHT7+VZOiJVhnROnwgE6jG9BZUcYCQuAAjXZ0OhFDdnsaSH
-	 eOXuY2JtvBOuPGD5c2oYQPQ5vijD/f6xQyHqTEQTU7mmZkkA6kZnte8tuE60gaJqrKwun
-	 qTy9jDKdlvKRQIVFt2Xo+yPrkIgkiFi6vE/rMHA5zcwYrdYctalPUTlVEjqfwwm/92eUU
-	 GXHOzvskym8L/h/RZ0jley9+iPOBb5NiHCCyWjgxN/NYKBWo0jXUuezYAW8pjuNpWZYbN
-	 Y3ZyXDrVHxDypFNuVlskpQUM4KRmKpl8EP769OUkKQvCPolE23g89517xPv1qM0I4LA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1793971144;
+	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
+	 X-Mizu-Trace-ID:X-Migadu-Flow:From:To:Cc:Subject:Date:Message-ID:
+	 X-Mailer:MIME-Version:Content-Transfer-Encoding;
+	bh=q5je5xTRpjfx4LjGIZHPjYuGaotAGI4cWt3i0iD11+Y=;
+	b=m2OQ+AtXad3oXLM0+8RJED7gReGGWnKzog8Vg1GAerAOnas0hyJA8+QIJVGbJ/iApg1O
+	 4FhzGuFjgzhShoUYwYzRUpjeUcinBNsIq1XQlAFHRhqh0dN6KR+rFgtVvodwAug9iQTf8
+	 Ekyb6LRYE+PGIPNqHKFrRZwnbtBuXHpYEA/N2BMH1ArrK/49/LiFAXf776tdplbFL9OhM
+	 33lmeYGPhio2ag67XJ5aqHE884DhF01YvHDOqsqjYvsVCec6I1s2knc/AjCfnBa7g9FwI
+	 02+QEJdmrVcQXQrE27nuQ4axJhrqp2EAKiCuhbeHItCKA5taDH6ZkvhIc7hmzCaS1XQ==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=none header.from=lalinsky.com;
-	spf=pass smtp.mailfrom=lalinsky.com;
-	dkim=pass header.d=lalinsky.com header.i=@lalinsky.com header.a=rsa-sha256 header.s=fm1 header.b=QQ9lAwef;
-	dkim=pass header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=clEt2v3f;
-	arc=none smtp.remote-ip=103.168.172.150
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	dmarc=pass header.from=linux.dev;
+	spf=pass smtp.mailfrom=linux.dev;
+	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=b3PIHqeQ;
+	arc=none smtp.remote-ip=95.215.58.48
+Received: from mta1.migadu.com (out-48.mta1.migadu.com [95.215.58.48])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87FB7606A32F
-	for <io-uring@vger.kernel.org>; Fri,  6 Nov 2026 12:04:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 87FB7606A32F
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lalinsky.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lalinsky.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9B8606A32D
+	for <io-uring@vger.kernel.org>; Fri,  6 Nov 2026 13:19:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 7D9B8606A32D
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=lalinsky.com header.i=@lalinsky.com header.a=rsa-sha256 header.s=fm1 header.b=QQ9lAwef;
-	dkim=pass (2048-bit key, unprotected) header.d=messagingengine.com header.i=@messagingengine.com header.a=rsa-sha256 header.s=fm3 header.b=clEt2v3f
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfout.phl.internal (Postfix) with ESMTP id 6F95BEC0181
-	for <io-uring@vger.kernel.org>; Fri,  6 Nov 2026 07:04:34 -0500 (EST)
-Received: from ams-imap-11 ([10.64.2.31])
-  by ams-compute-02.internal (MEProxy); Fri, 06 Nov 2026 07:04:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lalinsky.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1793966673;
-	 x=1794053073; bh=mQPghIdCwc0e98l2yQke423qVKfB2niFRxcXLsZIMCo=; b=
-	QQ9lAwefsWJa2TZa5LNG9Dez22OxRiTOihFS2faBAqr4yVdm44gmzWetEhkw3eUF
-	z2ZT+kFYV7SK9VcdKfyNjGzI9jLMb8PURG/9e75wOvlTCrTnvTOcCvq7rh5eMG6H
-	HfSvwLDJVcy16ORgvSFyM8Bc8c0Ur4bzLrfH17FIT0zBGceevGUFr1F6fkbB6BY/
-	6Mx8CwdLGGgWfrdn1HQrv/gAiDQZRDRc87r3baqWTjdvG5xwf+nLtjkrbgIqcU4v
-	/CFxOnL0awr3zUtlTuu/zXX3L0sC6TOvehIlZIEMOJSlQwESaSKbPx0OvQEzM6Oj
-	uWGn7dG2bzUMvsVmP2+dzw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1793966673; x=
-	1794053073; bh=mQPghIdCwc0e98l2yQke423qVKfB2niFRxcXLsZIMCo=; b=c
-	lEt2v3f2pXb8xFLk+fvZ7GnvL4+NTuUMxKlfhGJNp6p2n64FrZE25DP/u4A13HrY
-	RKG/mEF9Z7XpRAFE3Tt8gUKBbyFOSeiVd9NmeIk3XQ5He0Cd6eOSRCuAquM9beHS
-	/cBlSBsoWX46j/qAp7wP4TCghJcLj9O3e9nXLAulEpIF95kQEpE0TifB2EjPxgdn
-	xUHQ7TqK2EHfKJQbWMhxyIRBvJ6gM6jMnHTvet3NIydcgFC95klDjM38PEfkmBVe
-	2RT0Gubvpz+gf55zVrPc2gejVT6OUeQs1WnIPypm6HPlBqD8La2t4F7Nh0deLUtB
-	JZ4gfyIhPRNcOShOZKQwg==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=sign d=lalinsky.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1793966673; d=lalinsky.com;
-	mf=PGx1a2FzQGxhbGluc2t5LmNvbT4=;
-	rt=PGlvLXVyaW5nQHZnZXIua2VybmVsLm9yZz4=;
-	s=fm1:rsa-sha256:ldWBtBmoxkuY6Yq3MluIgRDVjQsX2y8rGrMr76tmWNxEdmZ
-	k7Wu+Y9GeRJE3ab9tngBFKGAb/VaJQiZbSWyZ9DFh/hTEE3x9OnWa3an7U8deZhT
-	YYX/PmLN6rb53MDwFjmdP0s8eS/G6JG6/DrNjZNusBwyu+wXqOTxbOEjZQEesZvx
-	p8BmGhXSh8WQUTOxpeFRhEGQvCla+oVciHriu3rx0Y/oWT7wX7+Phd4013ePQh8S
-	74lrRQCCf5fOpAjwhuzfkDxZKgyKJssri95Y5VDsqpqzGSLxCJGVUTdQxhmk1YdH
-	E+ZDA4AGhNiJUpPFA7N4QRYrr5qW0TLKW/pkQrg==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-09;
-	repo=github.com/dkim2wg/interop; date=2026-11-03; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
-	from,in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:IXYcccXNY5OJPpwBE+rUgxPHAVjooj/HAyV2KKk06tc=:ipSWFawutvcQb4mcvK7apMf1vYlc6AK3sxDdRFVZpYM=;
-X-ME-Sender: <xms:T8LtamBrZ3WG4-E3-SPnWxP4FdUrWMjoY0PtXcqXf_ZNcMeeACUlKA>
-    <xme:T8LtarXLj_-51pPCnEdwNT2VArHv33O8n-SKuHt2kmUn89Rr2WWcpt3OMHyE-aDhK
-    rXDPHkD8FT5pnnKFi2o2rGY0g4mRmINqNr0gZNu366u4McFVV035Xfg>
-X-ME-Proxy-Cause: dmFkZTGEYWpCSGjGEAv4I/tdYgRv9Ippwo2xEaZcaLEnjppE/CQNocpi6p3YUWBrdApUMW
-    +t7OByGauxw/pmKoQAB62M9dUncaUpJtJVhdroCFrduUvn0njACrB1Lil9Z9fsl7agKXHC
-    nt352o6XEmq+Mk5PgU8RCkgtZ8KVirLtX5fMdNIDx4Xo42Z76qTdcUxk8gZ5gn9ccFGhUR
-    mvF0jz3mA6JIAtT5QMbdxFOyn1xFvtlJovXx6Ayky0ct8662U4VgtAQ63tT/L2AadHObMh
-    05I6vhCT+sOyiwQkJt+OBzPUIkEordgoK6a9DU5N3lWrFKgEvMFkwKJWb9sFfKq4MNJsKw
-    G2psegFak6ESQS7tOseOa7BWaXjR6Sn8QrVFJQKBJIwuTPCP1m2AROAytEN1NCjXAB7tJe
-    mHlMMdejn2AxnSSxLHmynlG3OB4t5nqXEr53cv1j64/YQht8f2+azIfBMY3eOdFpXXwH+I
-    mlE7D7GQO9wxBxTlHeWLlLB/tvgvazFBHsZ08h0sWTqL/KaucaLyLPanCmLu7uMbVGLn1B
-    Db9tdDpCecdjVQuyeIv4s+Tqq4768+RO14bxQxiN9ltanSSKLp72BOnOe7S1kPI+9CoouG
-    maVMPRx7EzdOLoClXbXhPEYVQDOvoP9kMAziYiwHLj2C/wUXT0Uv7FtVTPaQ
-X-ME-Proxy: <xmx:UMLtaotq40BWFGUZWUIwBlmAISHqoTomG69FP4-8ClBzZetRLscKdA>
-    <xmx:UMLtajaIi9zcN02aHux79BzVeGMjw7AgirlAtQMdZuQHtVfJA51KXQ>
-    <xmx:UMLtarUAWJM0M0agO2TnHToy9crGOXqLRaXZ8RoKAJoJlsOi6R-C0Q>
-    <xmx:UMLtan7Wjgd8Y5750Aa-h_Ca4-zgfubRNcdVT1H-v7sMRBBm1LT7kw>
-    <xmx:UcLtaicWQ2kUL2wczhWGTyiKYN9Uqk_qyyNQMKXCe33RDgmfavQGxMCA>
-Feedback-ID: ib6f146ff:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id F239EF80096; Fri,  6 Nov 2026 07:04:30 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=b3PIHqeQ
+X-Envelope-To: io-uring@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=4zwexF7Wz01Eu+onBHbqwklyRz49GNwu5fYWiMpNDo0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1793971140; v=1; x=1794575940;
+ b=b3PIHqeQrojtLU4Y4VNCZ8rRt61bMFIDsLuTUcbsprTA2BhGn7Ms48fbXm2i4k5LuneFaPZL
+ efns+y5W7XbtNLWmXja8lX760spiEjNqVLTfDK+0ec9BwB0YmskmQOe7C4oP0x7xojKGDPefOnz
+ x3cM79fsW0CNI8761sGgxJNA=
+X-Envelope-To: io-uring@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 26aa00f910ee51dc;
+	Fri, 06 Nov 2026 13:19:00 +0000
+X-Mizu-Trace-ID: 26aa00f910ee51dc
+X-Migadu-Flow: FLOW_OUT
+From: Tao Cui <cui.tao@linux.dev>
+To: akpm@linux-foundation.org,
+	dgilbert@interlog.com,
+	mkp@kernel.org,
+	loberman@redhat.com,
+	jmeneghi@redhat.com,
+	kraxel@redhat.com,
+	vivek.kasireddy@intel.com,
+	mst@redhat.com,
+	jasowangio@gmail.com,
+	eperezma@redhat.com,
+	stefanha@redhat.com,
+	sgarzare@redhat.com,
+	rostedt@goodmis.org,
+	vdonnefort@google.com,
+	mhiramat@kernel.org,
+	jgg@ziepe.ca,
+	kevin.tian@intel.com,
+	axboe@kernel.dk
+Cc: linux-mm@kvack.org,
+	James.Bottomley@HansenPartnership.com,
+	sumit.semwal@linaro.org,
+	christian.koenig@amd.com,
+	phasta@kernel.org,
+	joro@8bytes.org,
+	will@kernel.org,
+	linux-scsi@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org,
+	kvm@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	linux-trace-kernel@vger.kernel.org,
+	iommu@lists.linux.dev,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bobbyeshleman@meta.com,
+	mathieu.desnoyers@efficios.com,
+	robin.murphy@arm.com,
+	mason@kernel.org,
+	aesteve@redhat.com,
+	tjmercier@google.com,
+	harry@kernel.org,
+	vbabka@suse.cz,
+	cui.tao@linux.dev,
+	cuitao@kylinos.cn
+Subject: [PATCH 0/7] memcg: account the remaining uncharged kernel allocations
+Date: Fri,  6 Nov 2026 21:18:22 +0800
+Message-ID: <20261106131829.3228926-1-cui.tao@linux.dev>
+X-Mailer: git-send-email 2.53.0
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -115,43 +105,86 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-X-ThreadId: AtQvM2r7VJWF
-Date: Fri, 06 Nov 2026 13:04:10 +0100
-From: =?UTF-8?Q?Luk=C3=A1=C5=A1_Lalinsk=C3=BD?= <lukas@lalinsky.com>
-To: "Jens Axboe" <axboe@kernel.dk>
-Cc: io-uring@vger.kernel.org
-Message-Id: <7526dc5c-fbc1-4b26-96a1-f416d5bb4106@app.fastmail.com>
-In-Reply-To: <3face247-a7b6-4f87-9863-5ad40cc272a0@kernel.dk>
-References: <a5589b66-9a20-4b1c-a0f1-1b5b31af3667@app.fastmail.com>
- <b06ee030-51b0-433b-9988-148615e35ad1@kernel.dk>
- <6fdd17d9-0ab9-45ac-b45f-fccf085372a8@app.fastmail.com>
- <5475728c-6cd9-4d61-bcee-5c8a42f1951d@app.fastmail.com>
- <3face247-a7b6-4f87-9863-5ad40cc272a0@kernel.dk>
-Subject: Re: io_uring: SENDMSG/WRITEV return -EAGAIN on O_NONBLOCK socket after peer
- half-close
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 3, 2026, at 5:00 PM, Jens Axboe wrote:
-> Can you try with this on top?
+From: Tao Cui <cuitao@kylinos.cn>
 
-Hi Jens,
+Kernel memory that scales with user controlled input is supposed to be
+charged to the memcg of the task that induces it, so that memory.max
+contains the damage and the accounting is honest.  Sweeping the
+interfaces that let unprivileged or delegated users drive kernel
+allocations turned up seven more places where the charge is missing.
+Every fix is one flag; the interesting part is who can pull the lever
+and how much a pull buys.
 
-I tested the three patches together on current master. Everything I
-know of is fixed:
+An open sg fd reserves up to max_sectors worth of buffer, SG_MAX_QUEUE
+(16) commands can be in flight per fd, and the fd count is bounded only
+by RLIMIT_NOFILE.  udmabuf metadata costs about 4MB of SUnreclaim per
+GB of buffer with size_limit_mb defaulting to INT_MAX.  vhost holds
+roughly 150KB of resident kernel memory per SET_OWNER, and
+/dev/vhost-net is handed to containers by device plugins.  A ftrace
+instance allocates two full sets of per-cpu ring buffers the moment it
+is created, about 1.375MB per cpu per set, gated by tracefs permissions
+alone.  iommufd's hw_queue contiguity check allocates an array sized by
+a u64 from userspace, frees it when the check fails, and can be
+repeated in a tight loop.  io_uring still leaves the ring context, the
+SQPOLL thread data, io-wq, the alloc cache arrays, the kbuf iovecs and
+the registered eventfds uncharged.  The rsrc and tctx surfaces are
+already charged by commit 075d5837bafc ("io_uring/rsrc: charge buffer
+arrays and nodes to memcg") and commit 0b34e7b20a48 ("io_uring: charge
+tctx nodes and personalities"); patches 6-7 pick up what those did not.
 
-- After the peer's half-close, a waiting SEND, SENDMSG or WRITEV keeps
-  waiting and completes normally once the peer reads, with or without
-  O_NONBLOCK.
-- The same now holds when the peer has sent urgent data that the
-  application doesn't read.
-- A RECVMSG that is woken repeatedly without data no longer completes
-  with -EAGAIN.
-- The cancel now finds the send, both after a half-close and with
-  unread urgent data, and the send completes with -ECANCELED.
+Verified on next-20261104 under qemu, same config with and without the
+series, everything builtin: eight sg fds with 1MB reserved buffers
+charge 8MB with the series and nothing without; resizing the global
+trace buffer to 16MB per cpu charges 67MB against 0 before; four 512MB
+udmabuf buffers charge around 8MB of metadata; sixteen vhost SET_OWNER
+calls charge 4MB; 1000 io_uring rings charge 7.6MB on top of what the
+in-tree charging already accounts.  All slab allocations in the series
+are served by kmalloc caches, so they keep charging under the
+SLAB_MAY_ACCOUNT opt-in rule queued in slab/for-next; the tracing patch
+accounts page allocations, which are not affected by it.
 
-Our runtime's test suite also passes on the patched kernel.
+Two in-flight series overlap but do not collide.  The dma-heap explicit
+memcg charging series moves dma-buf data page charging to an explicit
+path and removes __GFP_ACCOUNT from the system heap, while patch 2 here
+accounts udmabuf metadata only, which that series does not see; if it
+lands first, the system heap reference in patch 2 wants dropping.  The
+io_uring patches sit on top of the charging Mason and Jens already
+merged, and cite those commits as the in-tree predecessors.
 
-Thanks!
+I am sending these in one thread so the class is visible in one place.
+If any of you would rather take your piece through your own tree, an
+ack is all I need and I will split the series.
 
-Lukas
+Tao Cui (7):
+  scsi: sg and st: account the command buffer memory to memcg
+  dma-buf/udmabuf: account the page array metadata to memcg
+  vhost: account the per-device kernel allocations to memcg
+  tracing: account ring buffer pages and trace_array metadata to memcg
+  iommufd: account the hw_queue page array to memcg
+  io_uring: account the ring context and SQPOLL thread data to memcg
+  io_uring: account the remaining per-object allocations to memcg
+
+ drivers/dma-buf/udmabuf.c      |  7 ++++---
+ drivers/iommu/iommufd/viommu.c |  3 ++-
+ drivers/scsi/sg.c              | 23 ++++++++++++++++++++---
+ drivers/scsi/st.c              |  7 ++++---
+ drivers/vhost/net.c            | 14 ++++++++------
+ drivers/vhost/vhost.c          | 16 ++++++++++------
+ drivers/vhost/vsock.c          |  5 +++--
+ io_uring/alloc_cache.c         |  3 ++-
+ io_uring/eventfd.c             |  2 +-
+ io_uring/io-wq.c               |  4 ++--
+ io_uring/io_uring.c            |  2 +-
+ io_uring/kbuf.c                |  2 +-
+ io_uring/rsrc.c                |  3 ++-
+ io_uring/sqpoll.c              |  2 +-
+ io_uring/tctx.c                |  4 ++--
+ kernel/trace/ring_buffer.c     |  8 +++++++-
+ kernel/trace/trace.c           |  6 +++---
+ 17 files changed, 73 insertions(+), 38 deletions(-)
+
+-- 
+2.43.0
+
