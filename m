@@ -1,54 +1,65 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=91.218.175.77
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=117.135.210.4
 ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
-	t=1794191586;
-	b=LCHtM/hRTw8iBkIIMKi83fT0IZn0LOVqhtHd1xD2nMphApfo8qRhaTqMABpjXbmmODUY
-	 OUqbFBv19TG+tqtloM6aPci8pWQ/Lfw4RAEJ+65V/u2+k9/wBWiFTpMO0A+i6a7Vd2DGn
-	 54rtwOOORytXgEmjxn5a80lZ8GOK02/1uS1oh9J5QIBogf2QjBr2ZxA/iy7FadaMdVoRz
-	 T8TLbKbuNKp/wdEH3oX9tF4N6K5Gfk1GiPGVDhLvB0mnDAfO5M37skZFBTNpksjIUAx0/
-	 fPTUYRa1KfQdjhNYksJp1DUVgzIcIgct3LYn7TTkcDYIYjNw+eFztU/O74q/cqbg4ng==
+	t=1794192725;
+	b=ZKtB/hRRzZ5lqv00cgNwFcHdYVktO3ELWQFSKuz7B1rfIRbi4VDWttcet3qWL3nh/mKF
+	 0cb9h7ao/kBF37yFHg2KZfjySdBltYPnDDm5dcwOhgCd8QmmyEADS8cm7pXGxXFDyO7h6
+	 Fb/MAjgucmegrrQuf/YQNa2Si6XPUSmCq8c+e/5lNLYsAHTKb1QMa1kaztUpfEXdMdX6a
+	 /8P5d19Qu/8HvpYiAQz7jBRftDHE9hcteRQuMsZ8sHX1QmKTrcLnAi4sj3YP9fxsK/Dv6
+	 4MeETKXtf/fW9IGmlJUG5ddbHGKoztsUXzabR3bQ2pHuH/KPkUd6526ZwUwHjLBvU5Q==
 ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1794191586;
-	h=DMARC-Filter:X-Envelope-To:DKIM-Signature:X-Envelope-To:Received:
-	 X-Mizu-Trace-ID:X-Migadu-Flow:Message-ID:Date:MIME-Version:User-Agent:
-	 Cc:Subject:To:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding;
-	bh=kB3IFpQ0ZIO1cp7bsYqiegxOLRHS/D0OEp5d5P2E9bs=;
-	b=bj51UBB75ElOgA/Fysmadcj0Kx8sSmHbnFerPHl8/zZbW4cc89q6RDDcP6xIfXcHrqXq
-	 14fqrGLhFKaUT434OAH8TOaoHfX1RYZCc/Zchr58Lp7iLnCxBaxQ9MrxjKSbnfyQd1cjC
-	 4XHbELslUoZ6atziPaYz5wyn8Zrd00EWomGWxNvAXTx103Wd8xX9uGMsZ1ECaE/mdgUge
-	 gqn9vhLRvG5dNBXva7WVu9njWHLPtdAsE7UHHHgPqOerHqSWgJTFrb2hIdE4WDUtmZmfy
-	 2xYkn4UPnisBlAmO5O7CSLJH0YAJVPw3wkoFzYxkUUFPsmqC4wQHfv272qHTjwp+9XA==
+	a=rsa-sha256; c=relaxed/relaxed; t=1794192725;
+	h=DMARC-Filter:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+	 Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+	 Content-Transfer-Encoding:X-CM-TRANSID:X-Coremail-Antispam:Sender:
+	 X-CM-SenderInfo;
+	bh=0IVgJm9SwBtqm3JEH4p4DgqeS4PG7F4ayQmUO2+CLgM=;
+	b=ONgTQcWk5acFEzmOIJKCELU9CxJ2dGQGc/Oyvb/LMUpbc1xGIZuKCS+ie0qnMP8ZUmji
+	 4a5CMpHUECyuCKTSGdmfHRdnk9ds+wMre2Mr7unZ9/ZsTzvDsZiPNXu+N+jNEeNktNegg
+	 KYftyFSoGKte23gna7WBoJB43jfexjfIss/vE3w9+D7BglQIIi4ScwpQt/uGegT9NbXXs
+	 WeRiyRF4sfGv5uzm57uUsUTnXSb/jqTM0Slp/2kIBY4jFjBkV+DCz0NLfrU9nnSgbIlUp
+	 15Z2Hxx77JYOwmPj8t7qXuR3YIROIIH6EGNO9kyc861xYkZzXH+oX276wV22Y33NFxA==
 ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=linux.dev;
-	spf=pass smtp.mailfrom=linux.dev;
-	dkim=pass header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ojX0EpIo;
-	arc=none smtp.remote-ip=91.218.175.77
-Received: from mta0.migadu.com (out-77.mta0.migadu.com [91.218.175.77])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	dmarc=none header.from=kylinos.cn;
+	spf=pass smtp.mailfrom=163.com;
+	dkim=pass header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b="hh/ehNtT";
+	arc=none smtp.remote-ip=117.135.210.4
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC968606A326
-	for <io-uring@vger.kernel.org>; Mon,  9 Nov 2026 02:33:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org AC968606A326
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96BA606A325;
+	Mon,  9 Nov 2026 02:52:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org A96BA606A325
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=linux.dev header.i=@linux.dev header.a=rsa-sha256 header.s=key1 header.b=ojX0EpIo
-X-Envelope-To: io-uring@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=nmqRaiM/EiJNizjn79AmK4k2MmWrkYTwEz2GWquosKA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1794191583; v=1; x=1794796383;
- b=ojX0EpIoXW4Q3WWoKTSHFyYfVB5/NGKPMoZkCmCbZqBScUyhu6sLm3yjkz3APWW4PPjlGsGs
- 08BhfDJF0/bIs+cEwtmQZ/pXWdCFPiZK/kLkGbfQD3yI047xH2MZMmKuO4QwBQXVhNIdwf/A+O3
- H3ZmjPkz0bDxno5X6rlhxv2w=
-X-Envelope-To: io-uring@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id fa418301c63af391;
-	Mon, 09 Nov 2026 02:33:03 +0000
-X-Mizu-Trace-ID: fa418301c63af391
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c6bf9ef4-5a61-4f4f-ab39-11d1ddf59d64@linux.dev>
-Date: Mon, 9 Nov 2026 10:32:01 +0800
+	dkim=pass (1024-bit key, unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256 header.s=s110527 header.b=hh/ehNtT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=0I
+	VgJm9SwBtqm3JEH4p4DgqeS4PG7F4ayQmUO2+CLgM=; b=hh/ehNtTirXnykZrAB
+	F+Zj+3J3BVQ0bh/uAmJ7M9vNjUv/idcL4jYPwdmmgMi71gSgrdW0IbMXa4Jdp03M
+	fYcbQ1Ie8RxklmVUHRhIFiiw7+KLx254o8Y6MaoKrvExXH/Yx3mOkXuUbrF57YER
+	ZNqTnCC4saGC9xeZHwIuQ3FuI=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgCX2nMiNfFq6L9SEw--.17801S2;
+	Mon, 09 Nov 2026 10:51:15 +0800 (CST)
+From: Yang Xiuwei <yangxiuwei@kylinos.cn>
+To: x-professor@outlook.com
+Cc: mkp@kernel.org,
+	James.Bottomley@HansenPartnership.com,
+	axboe@kernel.dk,
+	linux-scsi@vger.kernel.org,
+	bvanassche@acm.org,
+	jthoughton@google.com,
+	asml.silence@gmail.com,
+	io-uring@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 5/6] io_uring/cmd: allow reusing SQE storage for completion data
+Date: Mon,  9 Nov 2026 10:51:14 +0800
+Message-Id: <20261109025114.433681-1-yangxiuwei@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <a4ec8431c2f36172348449b872faf26d7d6d4d7a.1794045010.git.x-professor@outlook.com>
+References: <cover.1794045010.git.x-professor@outlook.com> <a4ec8431c2f36172348449b872faf26d7d6d4d7a.1794045010.git.x-professor@outlook.com>
 X-Mailing-List: io-uring@vger.kernel.org
 List-Id: <io-uring.vger.kernel.org>
 List-Post: <mailto:io-uring@vger.kernel.org>
@@ -58,98 +69,31 @@ List-Unsubscribe: <mailto:io-uring+unsubscribe@vger.kernel.org>
 List-Owner: <mailto:io-uring+owner@vger.kernel.org>
 Precedence: list
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, akpm@linux-foundation.org, dgilbert@interlog.com,
- mkp@kernel.org, loberman@redhat.com, jmeneghi@redhat.com, kraxel@redhat.com,
- vivek.kasireddy@intel.com, mst@redhat.com, jasowangio@gmail.com,
- eperezma@redhat.com, stefanha@redhat.com, sgarzare@redhat.com,
- rostedt@goodmis.org, vdonnefort@google.com, mhiramat@kernel.org,
- jgg@ziepe.ca, kevin.tian@intel.com, axboe@kernel.dk, linux-mm@kvack.org,
- James.Bottomley@hansenpartnership.com, sumit.semwal@linaro.org,
- phasta@kernel.org, joro@8bytes.org, will@kernel.org,
- linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
- kvm@vger.kernel.org, virtualization@lists.linux.dev,
- linux-trace-kernel@vger.kernel.org, iommu@lists.linux.dev,
- io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
- bobbyeshleman@meta.com, mathieu.desnoyers@efficios.com,
- robin.murphy@arm.com, mason@kernel.org, aesteve@redhat.com,
- harry@kernel.org, vbabka@suse.cz, cuitao@kylinos.cn
-Subject: Re: [PATCH 2/7] dma-buf/udmabuf: account the page array metadata to
- memcg
-To: "T.J. Mercier" <tjmercier@google.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-References: <20261106131829.3228926-1-cui.tao@linux.dev>
- <20261106131829.3228926-3-cui.tao@linux.dev>
- <1e18fcfd-785d-43cc-afd6-d181bf8305eb@amd.com>
- <CABdmKX0nCB2hT+iMh=BB-nC=fUBPof8YvjvO-gtEw+zcHZgvZA@mail.gmail.com>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <CABdmKX0nCB2hT+iMh=BB-nC=fUBPof8YvjvO-gtEw+zcHZgvZA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgCX2nMiNfFq6L9SEw--.17801S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrurW8KFyrCFyrJF1DWFW3Wrg_yoWxuFX_Cr
+	Z8tr1xArW3G3Z3KwsxKFZavw4qgay5Cr1kW395ur9xX343uas5CryDJr4Fk3Waqa12qFs8
+	Gr93Z34xJrnrGjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUZ2-7UUUUU==
+Sender: yangxiuwei2025@163.com
+X-CM-SenderInfo: p1dqw55lxzvxisqskqqrwthudrp/xtbC6QRt-WrxNSTgVgAA3B
 
-Hello，Christian，T.J.
+Hi Yingjie,
 
-在 2026/11/7 01:25, T.J. Mercier 写道:
-> On Fri, Nov 6, 2026 at 5:23 AM Christian König <christian.koenig@amd.com> wrote:
->>
->> On 11/6/26 14:18, Tao Cui wrote:
->>> From: Tao Cui <cuitao@kylinos.cn>
->>>
->>> udmabuf pins the pages of a memfd and hands them out as a dma-buf.  The
->>> data pages keep the accounting of the memfd they were instantiated in,
->>> but the bookkeeping around them does not: the page pointer array and
->>> the pinned_folios array, both sized by the buffer page count, plus the
->>> transient folios array sized by the memfd folio count, are plain
->>> GFP_KERNEL.  A 1GB buffer costs about 4MB of uncharged SUnreclaim
->>> memory, and size_limit_mb defaults to INT_MAX.
->>>
->>> Charge the three kvmalloc allocations so the creator pays for the
->>> metadata it induces.  The system heap in the same subsystem already
->>> accounts its buffer allocation;
-> 
-> Only if the mem_accounting param is set to true. We (Android)
-> currently depend on it being disabled because system heap buffers
-> don't have a single owner for their entire lifetime (ownership often
-> changes immediately after they are allocated), and the kernel doesn't
-> have the ability to switch who is charged for the buffer memory quite
-> yet. Albert is working hard on it at the moment.
-> 
-> Could you update the message to note the mem_accounting param pls?
-> 
->>> the data pages here stay with the
->>> memfd.
-> 
-> memfd / udmabuf is a little special because it uses shmem for the
-> backing store, which is already tracked by memcg under all conditions
-> (except hugetlb). We don't currently use udmabuf, so the lack of memcg
-> charge transfer for udmabuf is not an issue. But once we get charge
-> transfer working for the system heap it'd be good to follow up with
-> udmabuf.
-> 
->> T.J. needs to take a look here, but I fear that this might break uAPI.
-> 
-> Thanks for looping me in Christian. The buffer allocations cost
-> gigabytes, but these metadata arrays are only 4MB per 1GB of buffer,
-> so I don't expect charging them to break anyone. Leaving them
-> uncharged is an accounting gap though, since someone could spam many
-> udmabufs from the same memfd and only pay for the memfd pages once. So
-> this change is ok with me.
-> 
->> A lot of the DMA-buf resources are intentionally not charged against memcg.
->>
->> Regards,
->> Christian.
->>
->>>
->>> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
-> 
-> With the commit message updated to mention the mem_accounting param:
-> Reviewed-by: T.J. Mercier <tjmercier@google.com>
-Thanks, Christian，T.J.
+On Sat, 7 Nov 2026 at 09:50, Yingjie Wang wrote:
+> uring_cmd requests already allocate enough asynchronous state to hold a
+> copied 128-byte SQE. Once a driver has consumed every SQE field and
+> committed to asynchronous completion, that storage is no longer needed.
 
-I'll update the commit message to clarify the mem_accounting parameter
-and pick up your Reviewed-by tag in v2.
+> Add a helper that transfers the storage to the driver until command
+> completion without growing the request or adding an allocation.
 
-Tao
+io_async_cmd is io_uring's own async state. sqes[] is what
+io_uring_cmd_sqe_copy() points ioucmd->sqe at. Giving that buffer to
+scsi_bsg couples the driver to the io_uring layout and lifetime.
+
+Preallocating the buffer in bsg itself may be a better fit.
+
+Thanks,
+Yang Xiuwei
 
